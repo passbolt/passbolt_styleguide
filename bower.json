@@ -1,0 +1,20 @@
+{
+  "name": "passbolt_styleguide",
+  "version": "0.0.1",
+  "authors": [
+    "remy@passbolt.com"
+  ],
+  "description": "Common assets used by Passbolt components",
+  "keywords": [
+    "passbolt"
+  ],
+  "license": "GPL v3",
+  "homepage": "www.passbolt.com",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
