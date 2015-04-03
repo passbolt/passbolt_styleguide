@@ -1323,11 +1323,11 @@ a.button.disabled:active {
   /* logo */
   /* workspace title */
 }
-.header .first {
+.header.first {
   background: #333333;
   height: 2.375em;
 }
-.header .second {
+.header.second {
   background: #eeeeee;
 }
 .header .navigation.pimary {
@@ -1351,7 +1351,7 @@ a.button.disabled:active {
   color: #eeeeee;
 }
 .header .navigation.pimary li a:active,
-.header .navigation.pimary li:focus {
+.header .navigation.pimary li a:focus {
   color: #2894df;
 }
 .header .navigation.pimary .home a {

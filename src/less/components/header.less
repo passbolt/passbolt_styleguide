@@ -1,10 +1,10 @@
 /* headers */
 .header {
-	.first {
+	&.first {
 		background:@background-dark;
 		height: 2.375em;
 	}
-	.second {
+	&.second {
 		background:@background-lighter;
 	}
 
@@ -23,13 +23,14 @@
 				color: @grey;
 				text-decoration: none;
 				display: inline-block;
-			}
-			a:hover {
-				color: @grey-lighter;
-			}
-			a:active,
-			&:focus {
-				color: @font-focus;
+
+				&:hover {
+					color: @grey-lighter;
+				}
+				&:active,
+				&:focus {
+					color: @font-focus;
+				}
 			}
 		}
 
