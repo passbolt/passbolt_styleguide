@@ -1,4 +1,155 @@
 /* ==========================================================================
+ *	Helper classes
+ * ========================================================================== */
+/*
+ * Image replacement
+ */
+.ir {
+  background-color: transparent;
+  border: 0;
+  overflow: hidden;
+  /* IE 6/7 fallback */
+  *text-indent: -9999px;
+}
+.ir:before {
+  content: "";
+  display: block;
+  width: 0;
+  height: 150%;
+}
+/*
+ * Hide from both screenreaders and browsers: h5bp.com/u
+ */
+.hidden,
+i.no-text + span {
+  display: none !important;
+  visibility: hidden;
+}
+/*
+ * Hide only visually, but have it available for screenreaders: h5bp.com/v
+ */
+.visuallyhidden {
+  border: 0;
+  clip: rect(0 0 0 0);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
+}
+/*
+ * Extends the .visuallyhidden class to allow the element to be focusable
+ * when navigated to via the keyboard: h5bp.com/p
+ */
+.visuallyhidden.focusable:active,
+.visuallyhidden.focusable:focus {
+  clip: auto;
+  height: auto;
+  margin: 0;
+  overflow: visible;
+  position: static;
+  width: auto;
+}
+/*
+ * Hide visually and from screenreaders, but maintain layout
+ */
+.invisible {
+  visibility: hidden;
+}
+.clearfix {
+  /*
+ * For IE 6/7 only
+ * Include this rule to trigger hasLayout and contain floats.
+ */
+  zoom: 1;
+  /*
+ * Clearfix: contain floats
+ *
+ * For modern browsers
+ * 1. The space content is one way to avoid an Opera bug when the
+ *	`contenteditable` attribute is included anywhere else in the document.
+ *	Otherwise it causes space to appear at the top and bottom of elements
+ *	that receive the `clearfix` class.
+ * 2. The use of `table` rather than `block` is only necessary if using
+ *	`:before` to contain the top-margins of child elements.
+ */
+}
+.clearfix:before,
+.clearfix:after {
+  content: "";
+  display: table;
+}
+.clearfix:after {
+  clear: both;
+}
+/*
+ * Border radius
+ */
+.rounded {
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+}
+/* position shortcuts */
+.left {
+  float: left;
+}
+.right {
+  float: right;
+}
+/* ellipsis */
+.ellipsis {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -o-text-overflow: ellipsis;
+  -ms-text-overflow: ellipsis;
+}
+/* palette */
+/* borders */
+/* font */
+/* background */
+/* shadows */
+/* body */
+body {
+  color: #333333;
+}
+/* links */
+a:link,
+a:visited {
+  color: #333333;
+}
+a:hover {
+  color: #2894df;
+}
+a:active,
+a:focus {
+  outline: 0;
+  color: #2894df;
+  border: 0;
+}
+/* colors for messages */
+.message.error {
+  color: #d40101;
+}
+.message.success {
+  color: #4F8A10;
+}
+.message.warning {
+  color: #9F6000;
+}
+.message.info,
+.message.information,
+.message.notice {
+  color: #00529B;
+}
+/* scrollbar */
+/* todos */
+.todo {
+  background: #ffffcc !important;
+}
+/* ==========================================================================
  * Reset is a mix of :
  *
  * Meyer Reset v2.0 | Public Domain
@@ -527,114 +678,6 @@ table td {
   text-align: left;
   font-weight: normal;
 }
-/* ==========================================================================
- *	Helper classes
- * ========================================================================== */
-/*
- * Image replacement
- */
-.ir {
-  background-color: transparent;
-  border: 0;
-  overflow: hidden;
-  /* IE 6/7 fallback */
-  *text-indent: -9999px;
-}
-.ir:before {
-  content: "";
-  display: block;
-  width: 0;
-  height: 150%;
-}
-/*
- * Hide from both screenreaders and browsers: h5bp.com/u
- */
-.hidden,
-i.no-text + span {
-  display: none !important;
-  visibility: hidden;
-}
-/*
- * Hide only visually, but have it available for screenreaders: h5bp.com/v
- */
-.visuallyhidden {
-  border: 0;
-  clip: rect(0 0 0 0);
-  height: 1px;
-  margin: -1px;
-  overflow: hidden;
-  padding: 0;
-  position: absolute;
-  width: 1px;
-}
-/*
- * Extends the .visuallyhidden class to allow the element to be focusable
- * when navigated to via the keyboard: h5bp.com/p
- */
-.visuallyhidden.focusable:active,
-.visuallyhidden.focusable:focus {
-  clip: auto;
-  height: auto;
-  margin: 0;
-  overflow: visible;
-  position: static;
-  width: auto;
-}
-/*
- * Hide visually and from screenreaders, but maintain layout
- */
-.invisible {
-  visibility: hidden;
-}
-.clearfix {
-  /*
- * For IE 6/7 only
- * Include this rule to trigger hasLayout and contain floats.
- */
-  zoom: 1;
-  /*
- * Clearfix: contain floats
- *
- * For modern browsers
- * 1. The space content is one way to avoid an Opera bug when the
- *	`contenteditable` attribute is included anywhere else in the document.
- *	Otherwise it causes space to appear at the top and bottom of elements
- *	that receive the `clearfix` class.
- * 2. The use of `table` rather than `block` is only necessary if using
- *	`:before` to contain the top-margins of child elements.
- */
-}
-.clearfix:before,
-.clearfix:after {
-  content: "";
-  display: table;
-}
-.clearfix:after {
-  clear: both;
-}
-/*
- * Border radius
- */
-.rounded {
-  -webkit-border-radius: 3px;
-  -moz-border-radius: 3px;
-  border-radius: 3px;
-}
-/* position shortcuts */
-.left {
-  float: left;
-}
-.right {
-  float: right;
-}
-/* ellipsis */
-.ellipsis {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  -o-text-overflow: ellipsis;
-  -ms-text-overflow: ellipsis;
-}
 /*
  * Animate.css - http://daneden.me/animate
  * Licensed under the MIT license
@@ -681,32 +724,18 @@ i.no-text + span {
 /*
  * Typography
  */
-/* lato
-@font-face {
-  font-family: 'Lato';
-  font-style: normal;
-  font-weight: 400;
-  src: local('Lato Regular'), local('Lato-Regular'), url(../../fonts/lato-regular.woff) format('woff');
-}
-@font-face {
-  font-family: 'Lato';
-  font-style: normal;
-  font-weight: 700;
-  src: local('Lato Bold'), local('Lato-Bold'), url(../../fonts/lato-bold.woff) format('woff');
-}
-*/
 /* opensans */
 @font-face {
   font-family: 'Open Sans';
   font-style: normal;
   font-weight: 400;
-  src: local('Open Sans'), local('OpenSans'), url(../../fonts/opensans-regular.woff) format('woff');
+  src: local('Open Sans'), local('OpenSans'), url('../fonts/opensans-regular.woff') format('woff');
 }
 @font-face {
   font-family: 'Open Sans';
   font-style: normal;
   font-weight: 700;
-  src: local('Open Sans Bold'), local('OpenSans-Bold'), url(../../fonts/opensans-bold.woff) format('woff');
+  src: local('Open Sans Bold'), local('OpenSans-Bold'), url('../fonts/opensans-bold.woff') format('woff');
 }
 body {
   font-family: 'Open Sans', Verdana, sans-serif;
@@ -725,49 +754,6 @@ h2 {
 p {
   margin: .2em 0;
 }
-/* palette */
-/* borders */
-/* font */
-/* background */
-/* shadows */
-/* body */
-body {
-  color: #333333;
-}
-/* links */
-a:link,
-a:visited {
-  color: #333333;
-}
-a:hover {
-  color: #2894df;
-}
-a:active,
-a:focus {
-  outline: 0;
-  color: #2894df;
-  border: 0;
-}
-/* colors for messages */
-.message.error {
-  color: #d40101;
-}
-.message.success {
-  color: #4F8A10;
-}
-.message.warning {
-  color: #9F6000;
-}
-.message.info,
-.message.information,
-.message.notice {
-  color: #00529B;
-}
-/* scrollbar */
-/* todos */
-.todo {
-  background: #ffffcc !important;
-}
 /**
  * Shiny! Shiny!
  * @credit Entypo pictograms awesomeness by Daniel Bruce — www.entypo.com
@@ -775,15 +761,15 @@ a:focus {
  */
 @font-face {
   font-family: 'entypo';
-  src: url('../../fonts/entypo.eot');
-  src: url('../../fonts/entypo.eot?#iefix') format('embedded-opentype'), url('../../fonts/entypo.woff') format('woff'), url('../../fonts/entypo.ttf') format('truetype'), url('../../fonts/entypo.svg#entypo') format('svg');
+  src: url('../fonts/entypo.eot');
+  src: url('../fonts/entypo.eot?#iefix') format('embedded-opentype'), url('../fonts/entypo.woff') format('woff'), url('../fonts/entypo.ttf') format('truetype'), url('../fonts/entypo.svg#entypo') format('svg');
   font-weight: normal;
   font-style: normal;
 }
 @font-face {
   font-family: 'entypo-social';
-  src: url('../../fonts/entypo-social.eot');
-  src: url('../../fonts/entypo-social.eot?#iefix') format('embedded-opentype'), url('../../fonts/entypo-social.woff') format('woff'), url('../../fonts/entypo-social.ttf') format('truetype'), url('../../fonts/entypo-social.svg#entypo-social') format('svg');
+  src: url('../fonts/entypo-social.eot');
+  src: url('../fonts/entypo-social.eot?#iefix') format('embedded-opentype'), url('../fonts/entypo-social.woff') format('woff'), url('../fonts/entypo-social.ttf') format('truetype'), url('../fonts/entypo-social.svg#entypo-social') format('svg');
   font-weight: normal;
   font-style: normal;
 }
@@ -1630,59 +1616,63 @@ span.select-box:before {
   height: 100%;
 }
 /* headers */
-.header.first {
+.header {
+  /* top navigation */
+  /* logo */
+  /* workspace title */
+}
+.header .first {
   background: #333333;
   height: 2.375em;
 }
-.header.second {
+.header .second {
   background: #eeeeee;
 }
-/* top navigation */
-.header .navigation.primary li {
+.header .navigation.pimary {
+  /* home button is special */
+}
+.header .navigation.pimary li {
   padding: .5em 1em 0 .25em;
   height: 1.75em;
   float: left;
 }
-.header .navigation.primary li.right {
+.header .navigation.pimary li .right {
   float: right;
   margin-right: 1em;
 }
-.header .navigation.primary li a {
+.header .navigation.pimary li a {
   color: #dddddd;
   text-decoration: none;
   display: inline-block;
 }
-.header .navigation.primary li a:hover {
+.header .navigation.pimary li a:hover {
   color: #eeeeee;
 }
-.header .navigation.primary li a:active,
-.header .navigation.primary li a:focus {
+.header .navigation.pimary li a:active,
+.header .navigation.pimary li:focus {
   color: #2894df;
 }
-/* home button is special */
-.header .navigation.primary .home a {
+.header .navigation.pimary .home a {
   margin-left: 1em;
   width: 1.250em;
   height: 1.250em;
-  background: transparent url(../../img/icon20_white.png) 0 0 no-repeat;
+  background: transparent url('../img/logo/icon20_white.png') 0 0 no-repeat;
 }
-.header .navigation.primary .home a:focus,
-.header .navigation.primary .home:hover a {
-  background: transparent url(../../img/icon20.png) 0 0 no-repeat;
+.header .navigation.pimary .home a:focus,
+.header .navigation.pimary .home:hover a {
+  background: transparent url('../img/logo/icon20.png') 0 0 no-repeat;
 }
-.header .navigation.primary .home a span {
+.header .navigation.pimary .home a span {
   display: none;
 }
-/* logo */
-.logo {
+.header .logo {
   margin: 4% 0 0 .5em;
 }
-.logo img {
+.header .logo img {
   max-width: 100%;
   max-height: 55px;
 }
-/* workspace title */
-h1.workspace-title {
+.header h1.workspace-title {
   display: none;
 }
 /* Progress bar */
@@ -1880,10 +1870,10 @@ h1.workspace-title {
   filter: alpha(opacity=90);
 }
 .tree .node.open .node-ctrl a {
-  background: transparent url('../../img/controls/tree-ctrl.png') center -9px no-repeat;
+  background: transparent url('../img/controls/tree-ctrl.png') center -9px no-repeat;
 }
 .tree .node.close .node-ctrl a {
-  background: transparent url('../../img/controls/tree-ctrl.png') center 4px no-repeat;
+  background: transparent url('../img/controls/tree-ctrl.png') center 4px no-repeat;
 }
 .more-ctrl span,
 .node-ctrl span {
@@ -1932,12 +1922,12 @@ h1.workspace-title {
   opacity: 0.5;
   filter: alpha(opacity=50);
   border: 1px solid #dddddd;
-  background: transparent url('../../img/controls/tree-ctrl.png') center -9px no-repeat;
+  background: transparent url('../img/controls/tree-ctrl.png') center -9px no-repeat;
 }
 .tree .row:hover .right-cell a:hover {
   opacity: 0.9;
   filter: alpha(opacity=90);
-  background: #ffffff url('../../img/controls/tree-ctrl.png') center -9px no-repeat;
+  background: #ffffff url('../img/controls/tree-ctrl.png') center -9px no-repeat;
 }
 /* Events */
 .tree .row.drop-over {
