@@ -1653,7 +1653,8 @@ span.select-box:before {
   color: #2894df;
 }
 .header .navigation.primary .home a {
-  margin-left: 1em;
+  margin-top: .125em;
+  margin-left: .5em;
   width: 1.250em;
   height: 1.250em;
   background: transparent url('../img/logo/icon20_white.png') 0 0 no-repeat;
@@ -1666,11 +1667,11 @@ span.select-box:before {
   display: none;
 }
 .header .logo {
-  margin: 4% 0 0 .5em;
+  margin: 1.125em 0 0 1em;
+  max-width: 80%;
 }
 .header .logo img {
-  max-width: 100%;
-  max-height: 55px;
+  max-width: 150px;
 }
 .header h1.workspace-title {
   display: none;
@@ -2654,18 +2655,30 @@ input[type="search"]::-webkit-search-cancel-button {
   vertical-align: 6%;
 }
 /* password */
-.tableview table td.password pre:before {
-  content: "••••••••••••••••";
-  height: 24px;
+.tableview table td.password a {
+  background: transparent url('../img/logo/icon20_grey.png') no-repeat right top;
+  height: 20px;
+  width: 20px;
+  display: inline-block;
+  width: 130px;
+  margin-top: 2px;
+}
+.tableview table td.password a:before {
+  content: "••••••••••";
+  font-size: 1.8em;
+  line-height: 0.8em;
   width: 90%;
   color: #333333;
+  display: inline-block;
+}
+.tableview table td.password a:hover {
+  background: transparent url('../img/logo/icon20.png') no-repeat right top;
+}
+.tableview table td.password a > span {
+  display: none;
 }
 .tableview table td.password pre {
-  height: 24px;
-  width: 90%;
-  overflow: hidden;
-  color: #FFF;
-  margin: 0;
+  display: none;
 }
 /*
  * Footer
