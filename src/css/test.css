@@ -106,6 +106,10 @@ i.no-text + span {
   -o-text-overflow: ellipsis;
   -ms-text-overflow: ellipsis;
 }
+/* force display of a block inline */
+.inline {
+  display: inline-block;
+}
 /* palette */
 /* borders */
 /* font */
@@ -191,11 +195,11 @@ a:focus {
   margin-left: .5em;
   width: 1.250em;
   height: 1.250em;
-  background: transparent url('../img/logo/icon20_white.png') 0 0 no-repeat;
+  background: transparent url('../img/logo/icon-20_white.png') 0 0 no-repeat;
 }
 .header .navigation.primary .home a:focus,
 .header .navigation.primary .home:hover a {
-  background: transparent url('../img/logo/icon20.png') 0 0 no-repeat;
+  background: transparent url('../img/logo/icon-20.png') 0 0 no-repeat;
 }
 .header .navigation.primary .home a span {
   display: none;
