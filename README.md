@@ -26,3 +26,4 @@ Make sure Grunt watch for less changes and compile them into CSS
 ```
 
 Edit one LESS file to see if it works!
+
