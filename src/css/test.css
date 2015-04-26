@@ -133,6 +133,12 @@ a:focus {
   color: #2894df;
   border: 0;
 }
+p a {
+  border-bottom: 1px solid #dddddd;
+}
+p a:hover {
+  border-bottom: 1px solid #2894df;
+}
 /* colors for messages */
 .message.error {
   color: #d40101;

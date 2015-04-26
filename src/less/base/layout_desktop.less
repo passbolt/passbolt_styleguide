@@ -64,6 +64,7 @@
 .panel.middle {
 	width:82%;
 	left:18%;
+	overflow:hidden;
 }
 .col2 {
 	width:47%;
@@ -78,9 +79,6 @@
 	width:81.5%;
 	left:18%;
 }
-.panel.middle {
-	overflow:hidden;
-}
 .panel.aside {
 	position:absolute;
 	right:2em;
@@ -89,3 +87,18 @@
 	height:100%;
 }
 
+/* hide left collumn when there is no space */
+@media all and (max-width: 980px) {
+	.col1, .panel.left {
+		display:none;
+	}
+	.panel.middle,
+	.col2_3 {
+		width:98%;
+		left:1%;
+	}
+	.col2 {
+		width:55%;
+		left:1%;
+	}
+}

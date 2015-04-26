@@ -5,10 +5,10 @@
 	<title>Passbolt - The simple password management system</title>
 	<base href="../src/">
 	<meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
-	<link rel="stylesheet" type="text/css" href="css/setup.css">
+	<link rel="stylesheet" type="text/css" href="css/setup.css"><meta http-equiv="pragma" content="no-cache" />
 </head>
 <body>
-<div id="container" class="page">
+<div id="container" class="page setup setup-step1">
 	<!-- first header -->
 	<div class="header first">
 		<nav>
@@ -56,15 +56,40 @@
 		</div>
 		<!-- main -->
 		<div class="panel middle">
-			<h3>Plugin check</h3>
-			<h3>Why do I need a plugin</h3>
+			<div class="grid grid-responsive-12">
+				<div class="row">
+					<div class="col7">
+						<div class="plugin-check-wrapper">
+							<h3>Plugin check</h3>
+							<div class="plugin-check firefox error">
+								<p class="message">An add-on is required to use Passbolt. Download it at <a href="#">addons.mozilla.org</a>.</p>
+							</div>
+						</div>
+						<div class="why-plugin-wrapper">
+							<h3>Why do I need a plugin</h3>
+							<p>
+								Passbolt requires a browser add-on to guarantee that your secret key and your master password are never accessible to any website (including passbolt.com itself).
+								This is also the only way to guarantee that the core cryptographic libraries cannot be tampered with.
+								<a href="#">Learn more</a>
+							</p>
+						</div>
+						<a href="#" class="button primary big">retry</a>
+					</div>
+					<div class="col5 last">
+						<div class="video-wrapper">
+							<iframe width="400" height="300" src="https://www.youtube.com/embed/u-vDLf7cmf0" frameborder="0" allowfullscreen></iframe>
+						</div>
+					</div>
+				</div>
+
+			</div>
 		</div>
+
 	</div>
 
 	<!-- footer -->
 	<div class="footer">
-		<span class="copyright">&copy; 2015 passbolt.com </span> •
-		<span class="version">x.xx.xx</span>
+		<span class="copyright">&copy; 2015 passbolt.com </span>
 	</div>
 </div>
 </body>

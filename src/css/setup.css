@@ -133,6 +133,12 @@ a:focus {
   color: #2894df;
   border: 0;
 }
+p a {
+  border-bottom: 1px solid #dddddd;
+}
+p a:hover {
+  border-bottom: 1px solid #2894df;
+}
 /* colors for messages */
 .message.error {
   color: #d40101;
@@ -753,8 +759,8 @@ h1 {
   /* 24px base 16 */
 }
 h2 {
-  font-size: 1.5em;
-  /* 24px base 16 */
+  font-size: 1.250em;
+  /* 20px base 16 */
 }
 h3 {
   font-size: 1.125em;
@@ -1046,6 +1052,10 @@ a.button {
   -webkit-border-radius: .286em;
   -moz-border-radius: .286em;
   border-radius: .286em;
+}
+a.button.big {
+  font-size: 1em;
+  margin-top: 1em;
 }
 input.button.primary,
 button.primary,
@@ -1533,6 +1543,7 @@ span.select-box:before {
 .panel.middle {
   width: 82%;
   left: 18%;
+  overflow: hidden;
 }
 .col2 {
   width: 47%;
@@ -1547,15 +1558,180 @@ span.select-box:before {
   width: 81.5%;
   left: 18%;
 }
-.panel.middle {
-  overflow: hidden;
-}
 .panel.aside {
   position: absolute;
   right: 2em;
   width: 20em;
   bottom: 0;
   height: 100%;
+}
+/* hide left collumn when there is no space */
+@media all and (max-width: 980px) {
+  .col1,
+  .panel.left {
+    display: none;
+  }
+  .panel.middle,
+  .col2_3 {
+    width: 98%;
+    left: 1%;
+  }
+  .col2 {
+    width: 55%;
+    left: 1%;
+  }
+}
+/*
+	One% CSS Grid - 12 Columns Fluid CSS Grid System
+
+	Why One% ? Let’s count ...
+		we have 12 columns (magic number divided by 2, 3, 4, 6)
+		for 12 columns we need 11 margins
+		so if we count margin 3%, then 3% * 11 margins = 33%
+		and if we count width of 1 column 5.5%, than 5.5% * 12 columns = 66%
+		in the end we have 33% + 66% = 99% aaand ???
+		1% is still here so that's the name - One%
+
+	1200px - perfectly fits 1280 screens
+			12 columns
+			margin 3% / 36px (full-width)
+			col1 5.5% / 66px (full-width)
+*/
+/*
+ * Main container for all
+ */
+.grid-responsive-12,
+.grid {
+  margin: 0 auto;
+  padding: 0 0 0 1%;
+  max-width: 1220px;
+}
+.grid-responsive-12 .row,
+.grid .row {
+  clear: both;
+  padding: 0 10px;
+}
+.grid-responsive-12 .row .col1,
+.grid .row .col1,
+.grid-responsive-12 .row .col2,
+.grid .row .col2,
+.grid-responsive-12 .row .col3,
+.grid .row .col3,
+.grid-responsive-12 .row .col4,
+.grid .row .col4,
+.grid-responsive-12 .row .col5,
+.grid .row .col5,
+.grid-responsive-12 .row .col6,
+.grid .row .col6,
+.grid-responsive-12 .row .col7,
+.grid .row .col7,
+.grid-responsive-12 .row .col8,
+.grid .row .col8,
+.grid-responsive-12 .row .col9,
+.grid .row .col9,
+.grid-responsive-12 .row .col10,
+.grid .row .col10,
+.grid-responsive-12 .row .col11,
+.grid .row .col11 {
+  float: none;
+  width: 99%;
+}
+.grid-responsive-12 .row .col1 img,
+.grid .row .col1 img,
+.grid-responsive-12 .row .col2 img,
+.grid .row .col2 img,
+.grid-responsive-12 .row .col3 img,
+.grid .row .col3 img,
+.grid-responsive-12 .row .col4 img,
+.grid .row .col4 img,
+.grid-responsive-12 .row .col5 img,
+.grid .row .col5 img,
+.grid-responsive-12 .row .col6 img,
+.grid .row .col6 img,
+.grid-responsive-12 .row .col7 img,
+.grid .row .col7 img,
+.grid-responsive-12 .row .col8 img,
+.grid .row .col8 img,
+.grid-responsive-12 .row .col9 img,
+.grid .row .col9 img,
+.grid-responsive-12 .row .col10 img,
+.grid .row .col10 img,
+.grid-responsive-12 .row .col11 img,
+.grid .row .col11 img,
+.grid-responsive-12 .row .col12 img,
+.grid .row .col12 img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+/*
+ * large devices
+ */
+@media all and (min-width: 768px) {
+  /*
+	 * Common columns definitions
+	 */
+  .grid .row .col1,
+  .grid .row .col2,
+  .grid .row .col3,
+  .grid .row .col4,
+  .grid .row .col5,
+  .grid .row .col6,
+  .grid .row .col7,
+  .grid .row .col8,
+  .grid .row .col9,
+  .grid .row .col10,
+  .grid .row .col11,
+  .grid .row .col12 {
+    float: left;
+    margin: 0 3% 0 0;
+  }
+  .grid .row .last {
+    margin-right: 0;
+  }
+  .grid .row .col1 {
+    width: 5.5%;
+  }
+  .grid .row .col2 {
+    width: 14%;
+  }
+  .grid .row .col3 {
+    width: 22.5%;
+  }
+  .grid .row .col4 {
+    width: 31%;
+  }
+  .grid .row .col5 {
+    width: 39.5%;
+  }
+  .grid .row .col6 {
+    width: 48%;
+  }
+  .grid .row .col7 {
+    width: 56.5%;
+  }
+  .grid .row .col8 {
+    width: 65%;
+  }
+  .grid .row .col9 {
+    width: 73.5%;
+  }
+  .grid .row .col10 {
+    width: 82%;
+  }
+  .grid .row .col11 {
+    width: 90.5%;
+  }
+  .grid .row .col12 {
+    width: 99%;
+    margin: 0;
+  }
+  .grid .row .push1 {
+    margin-left: 5.5%;
+  }
+  .grid .row .push2 {
+    margin-left: 14%;
+  }
 }
 /*
  * shadow on scroll
@@ -1839,22 +2015,45 @@ span.select-box:before {
  * Footer
  */
 .footer {
+  padding: 0.833em 1.5% 0 .5%;
+  text-align: right;
+  font-size: .75em;
+  /* 12px */
   margin-top: 0em;
   width: 98%;
   height: 2em;
   background: #FFF;
   border-top: 1px solid #dddddd;
+  bottom: 0;
+  position: fixed;
+  z-index: 990;
 }
-@media all and (min-width: 768px) {
-  .footer {
-    bottom: 0;
-    position: absolute;
-    padding: 0.833em 1.5% 0 .5%;
-    font-size: .75em;
-    /* 12px */
-    z-index: 990;
-    text-align: right;
-  }
+.plugin-check {
+  padding: 1em;
+}
+.plugin-check.firefox {
+  background: transparent url('../img/third_party/firefox_logo.png') 1em center no-repeat;
+  background-size: 9.375em auto;
+  /* 150px */
+}
+.plugin-check.success {
+  background-color: #edf7eb;
+}
+.plugin-check.error {
+  background-color: #fce6e8;
+}
+.plugin-check .message {
+  font-weight: normal;
+  margin-left: 10.375em;
+  padding: .5em 1em;
+}
+.video-wrapper {
+  padding: 1em;
+}
+.video-wrapper iframe {
+  width: 100%;
+  min-height: 250px;
+  height: auto;
 }
 /* left panel navigation */
 .panel .navigation a {
@@ -1877,4 +2076,7 @@ span.select-box:before {
 }
 .panel .navigation li a {
   font-weight: bold;
+}
+.setup .video-wrapper {
+  margin-top: 2em;
 }

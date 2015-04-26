@@ -133,6 +133,12 @@ a:focus {
   color: #2894df;
   border: 0;
 }
+p a {
+  border-bottom: 1px solid #dddddd;
+}
+p a:hover {
+  border-bottom: 1px solid #2894df;
+}
 /* colors for messages */
 .message.error {
   color: #d40101;
@@ -753,8 +759,8 @@ h1 {
   /* 24px base 16 */
 }
 h2 {
-  font-size: 1.5em;
-  /* 24px base 16 */
+  font-size: 1.250em;
+  /* 20px base 16 */
 }
 h3 {
   font-size: 1.125em;
@@ -1046,6 +1052,10 @@ a.button {
   -webkit-border-radius: .286em;
   -moz-border-radius: .286em;
   border-radius: .286em;
+}
+a.button.big {
+  font-size: 1em;
+  margin-top: 1em;
 }
 input.button.primary,
 button.primary,
@@ -1533,6 +1543,7 @@ span.select-box:before {
 .panel.middle {
   width: 82%;
   left: 18%;
+  overflow: hidden;
 }
 .col2 {
   width: 47%;
@@ -1547,15 +1558,28 @@ span.select-box:before {
   width: 81.5%;
   left: 18%;
 }
-.panel.middle {
-  overflow: hidden;
-}
 .panel.aside {
   position: absolute;
   right: 2em;
   width: 20em;
   bottom: 0;
   height: 100%;
+}
+/* hide left collumn when there is no space */
+@media all and (max-width: 980px) {
+  .col1,
+  .panel.left {
+    display: none;
+  }
+  .panel.middle,
+  .col2_3 {
+    width: 98%;
+    left: 1%;
+  }
+  .col2 {
+    width: 55%;
+    left: 1%;
+  }
 }
 /*
  * shadow on scroll
@@ -2703,22 +2727,18 @@ input[type="search"]::-webkit-search-cancel-button {
  * Footer
  */
 .footer {
+  padding: 0.833em 1.5% 0 .5%;
+  text-align: right;
+  font-size: .75em;
+  /* 12px */
   margin-top: 0em;
   width: 98%;
   height: 2em;
   background: #FFF;
   border-top: 1px solid #dddddd;
-}
-@media all and (min-width: 768px) {
-  .footer {
-    bottom: 0;
-    position: absolute;
-    padding: 0.833em 1.5% 0 .5%;
-    font-size: .75em;
-    /* 12px */
-    z-index: 990;
-    text-align: right;
-  }
+  bottom: 0;
+  position: fixed;
+  z-index: 990;
 }
 /* complexity and progress bar */
 .dialog .progress {
