@@ -702,15 +702,24 @@ body {
   font-family: 'Open Sans', Verdana, sans-serif;
   font-size: 100%;
   line-height: 1.42;
-  color: #666;
   font-weight: 400;
 }
 /* titles */
 h1 {
-  font-size: 1.6em;
+  font-size: 1.5em;
+  /* 24px base 16 */
 }
 h2 {
-  font-size: 1.6em;
+  font-size: 1.5em;
+  /* 24px base 16 */
+}
+h3 {
+  font-size: 1.125em;
+  /* 18px base 16 */
+  display: block;
+  padding-bottom: .333em;
+  /* 6px */
+  border-bottom: 1px dotted #dddddd;
 }
 p {
   margin: .2em 0;
@@ -1325,7 +1334,7 @@ a.button.disabled:active {
 .header {
   /* top navigation */
   /* logo */
-  /* workspace title */
+  /* do not show h1 in header */
 }
 .header.first {
   background: #333333;
@@ -1379,7 +1388,7 @@ a.button.disabled:active {
 .header .logo img {
   max-width: 150px;
 }
-.header h1.workspace-title {
+.header h1 {
   display: none;
 }
 /*
