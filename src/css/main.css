@@ -2515,28 +2515,11 @@ input[type="search"]::-webkit-search-cancel-button {
   -moz-box-shadow: 0px 0px 10px 0px #dddddd;
   -webkit-box-shadow: 0px 0px 10px 0px #dddddd;
   box-shadow: 0px 0px 10px 0px #dddddd;
+  /* general resource information */
 }
-.panel.aside .resource .dialog-close {
-  position: absolute;
-  right: 1em;
-  top: 1em;
-}
-/* general resource information */
 .panel.aside .resource {
   padding: .5em 1em 1em 1em;
-}
-.panel.aside .resource li,
-.panel.aside .resource p {
-  font-size: .875em;
-}
-.panel.aside .resource li .label {
-  width: 30%;
-  display: inline-block;
-  margin-right: 10%;
-}
-.panel.aside .resource li .value {
-  width: 50%;
-  display: inline-block;
+  /** description edit **/
 }
 .panel.aside .resource h3 {
   margin-top: .5em;
@@ -2546,25 +2529,103 @@ input[type="search"]::-webkit-search-cancel-button {
   padding-bottom: .313em;
   border-bottom: 1px dotted #dddddd;
 }
-.panel.aside .resource .section-action {
-  float: right;
-  margin-top: -2.2em;
-  padding: 0;
+.panel.aside .resource li,
+.panel.aside .resource p {
+  font-size: .875em;
 }
-/** description edit **/
-.panel.aside textarea.resource_description {
+.panel.aside .resource li {
+  /*
+ * For IE 6/7 only
+ * Include this rule to trigger hasLayout and contain floats.
+ */
+  /*
+ * Clearfix: contain floats
+ *
+ * For modern browsers
+ * 1. The space content is one way to avoid an Opera bug when the
+ *	`contenteditable` attribute is included anywhere else in the document.
+ *	Otherwise it causes space to appear at the top and bottom of elements
+ *	that receive the `clearfix` class.
+ * 2. The use of `table` rather than `block` is only necessary if using
+ *	`:before` to contain the top-margins of child elements.
+ */
+  /*
+ * For IE 6/7 only
+ * Include this rule to trigger hasLayout and contain floats.
+ */
+  zoom: 1;
+  /*
+ * Clearfix: contain floats
+ *
+ * For modern browsers
+ * 1. The space content is one way to avoid an Opera bug when the
+ *	`contenteditable` attribute is included anywhere else in the document.
+ *	Otherwise it causes space to appear at the top and bottom of elements
+ *	that receive the `clearfix` class.
+ * 2. The use of `table` rather than `block` is only necessary if using
+ *	`:before` to contain the top-margins of child elements.
+ */
+}
+.panel.aside .resource li:before,
+.panel.aside .resource li:after {
+  content: "";
+  display: table;
+}
+.panel.aside .resource li:after {
+  clear: both;
+}
+.panel.aside .resource li:before,
+.panel.aside .resource li:after {
+  content: "";
+  display: table;
+}
+.panel.aside .resource li:after {
+  clear: both;
+}
+.panel.aside .resource li .label {
+  width: 30%;
+  display: inline-block;
+  margin-right: 10%;
+  float: left;
+  height: 1.8em;
+}
+.panel.aside .resource li .value {
+  width: 50%;
+  display: inline-block;
+  float: left;
+  height: 1.8em;
+}
+.panel.aside .resource textarea.resource_description {
   height: 2.3em;
   float: left;
   font-size: .775em;
   min-width: 21.5em;
   border: 1px solid #dddddd;
 }
-.panel.aside .resource-description-edit-wrapper input[type=submit] {
+.panel.aside .resource .resource-description-edit-wrapper input[type=submit] {
   float: right;
   font-size: .700em;
   width: auto;
   margin: 0;
   padding: .300em .6em .300em .6em;
+}
+.panel.aside .resource .dialog-close {
+  position: absolute;
+  right: 1em;
+  top: 1em;
+}
+.panel.aside .resource .section-action {
+  float: right;
+  margin-top: -1.65em;
+  padding: 0;
+}
+.panel.aside .resource .detailed-information li .label,
+.panel.aside .resource .detailed-information li .value {
+  line-height: 1.8em;
+}
+.panel.aside .resource .detailed-information li.password .value {
+  height: 1.6em;
+  padding-top: 0.2em;
 }
 /* tabs */
 .tabs {
@@ -2676,6 +2737,7 @@ input[type="search"]::-webkit-search-cancel-button {
 .tableview table .m-cell {
   width: 10em;
   max-width: 10em;
+  vertical-align: middle;
 }
 .tableview table .l-cell {
   width: 12em;
@@ -2696,32 +2758,6 @@ input[type="search"]::-webkit-search-cancel-button {
 .tableview table th span,
 .tableview table td span {
   vertical-align: 6%;
-}
-/* password */
-.tableview table td.password a {
-  background: transparent url('../img/logo/icon-20_grey.png') no-repeat right top;
-  height: 20px;
-  width: 20px;
-  display: inline-block;
-  width: 130px;
-  margin-top: 2px;
-}
-.tableview table td.password a:before {
-  content: "••••••••••";
-  font-size: 1.8em;
-  line-height: 0.8em;
-  width: 90%;
-  color: #333333;
-  display: inline-block;
-}
-.tableview table td.password a:hover {
-  background: transparent url('../img/logo/icon-20.png') no-repeat right top;
-}
-.tableview table td.password a > span {
-  display: none;
-}
-.tableview table td.password pre {
-  display: none;
 }
 /*
  * Footer
