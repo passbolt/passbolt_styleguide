@@ -27,7 +27,7 @@
 			</div>
 		</div>
 		<div class="col2_3">
-			<h2>Welcome to passbolt! Let's take 5 min to setup your system.</h2>
+			<h2>Import an existing key or <a href="../demo/setup2a.html" class="button primary">create</a> an new one</h2>
 		</div>
 	</div>
 
@@ -36,11 +36,11 @@
 		<div class="panel left">
 			<div class="navigation wizard">
 				<ul>
-					<li class="selected">
-						<a href="#">1. Get the plugin</a>
+					<li class="">
+						<a href="../demo/setup1.html">1. Get the plugin</a>
 					</li>
-					<li class="disabled">
-						2. Define your keys
+					<li class="selected">
+						<a href="../demo/setup2b.html">2. Import your keys</a>
 					</li>
 					<li class="disabled">
 						3. Set a master password
@@ -57,32 +57,42 @@
 		<!-- main -->
 		<div class="panel middle">
 			<div class="grid grid-responsive-12">
-				<div class="row">
-					<div class="col7">
-						<div class="plugin-check-wrapper">
-							<h3>Plugin check</h3>
-							<div class="plugin-check firefox error">
-								<p class="message">An add-on is required to use Passbolt. Download it at <a href="#">addons.mozilla.org</a>.</p>
+				<form>
+					<div class="row">
+						<!-- left collumn -->
+						<div class="col6">
+							<h3>Import a key</h3>
+							<div class="input file">
+								<div class="dropzone">
+									Drag and drop your GPG key file here.
+								</div>
+								<div class="input-wrapper">
+									<div class="input-wrapper-2">
+										<input name="data[Key][file]" value="" id="KeyFile" type="file">
+									</div>
+								</div>
 							</div>
 						</div>
-						<div class="why-plugin-wrapper">
-							<h3>Why do I need a plugin</h3>
-							<p>
-								Passbolt requires a browser add-on to guarantee that your secret key and your master password are never accessible to any website (including passbolt.com itself).
-								This is also the only way to guarantee that the core cryptographic libraries cannot be tampered with.
-								<a href="#">Learn more</a>
-							</p>
+
+						<!-- right collumn -->
+						<div class="col6 last">
+							<h3>or copy paste your key bellow</h3>
+							<div class="input textarea gpgkey">
+								<textarea name="data[Key][ascii]" class="fluid code" id="KeyAscii"></textarea>
+							</div>
 						</div>
-						<div class="submit-input-wrapper">
-							<a href="../demo/setup12.html" class="button primary big">retry</a>
+
+					</div>
+
+					<div class="row last">
+						<div class="input-wrapper">
+							<a href="../demo/setup12.html" class="button cancel big">cancel</a>
+							<a href="../demo/setup3b.html" class="button primary next big">next</a>
 						</div>
 					</div>
-					<div class="col5 last">
-						<div class="video-wrapper">
-							<iframe width="400" height="300" src="https://www.youtube.com/embed/u-vDLf7cmf0" frameborder="0" allowfullscreen></iframe>
-						</div>
-					</div>
-				</div>
+
+				</form>
+
 			</div>
 		</div>
 

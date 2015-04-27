@@ -37,7 +37,7 @@
 			<div class="navigation wizard">
 				<ul>
 					<li class="selected">
-						<a href="#">1. Get the plugin</a>
+						<a href="../demo/setup1.html">1. Get the plugin</a>
 					</li>
 					<li class="disabled">
 						2. Define your keys
@@ -61,20 +61,28 @@
 					<div class="col7">
 						<div class="plugin-check-wrapper">
 							<h3>Plugin check</h3>
-							<div class="plugin-check firefox error">
+							<div class="plugin-check firefox success">
 								<p class="message">An add-on is required to use Passbolt. Download it at <a href="#">addons.mozilla.org</a>.</p>
 							</div>
 						</div>
 						<div class="why-plugin-wrapper">
-							<h3>Why do I need a plugin</h3>
+							<h3>Url Check</h3>
 							<p>
-								Passbolt requires a browser add-on to guarantee that your secret key and your master password are never accessible to any website (including passbolt.com itself).
-								This is also the only way to guarantee that the core cryptographic libraries cannot be tampered with.
-								<a href="#">Learn more</a>
+								You are about to register the plugin to work with the following domain. Please confirm that this is a domain managed by an organisation you trust:
 							</p>
-						</div>
-						<div class="submit-input-wrapper">
-							<a href="../demo/setup12.html" class="button primary big">retry</a>
+							<form>
+								<div class="input text disabled">
+									<input type="text" value="https://demo.passbolt.com" disabled="disabled"/>
+								</div>
+								<div class="input checkbox">
+									<input type="checkbox" id="checkbox1" value="legit"/>
+									<label for="checkbox1">I've checked and this domain is legit</label>
+								</div>
+
+								<div class="submit-input-wrapper">
+									<a href="../demo/setup2a.html" class="button primary big disabled">next</a>
+								</div>
+							</form>
 						</div>
 					</div>
 					<div class="col5 last">
@@ -83,6 +91,7 @@
 						</div>
 					</div>
 				</div>
+
 			</div>
 		</div>
 
