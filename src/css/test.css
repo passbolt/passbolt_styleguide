@@ -133,6 +133,12 @@ a:focus {
   color: #2894df;
   border: 0;
 }
+p a {
+  border-bottom: 1px solid #dddddd;
+}
+p a:hover {
+  border-bottom: 1px solid #2894df;
+}
 /* colors for messages */
 .message.error {
   color: #d40101;
@@ -157,7 +163,7 @@ a:focus {
 .header {
   /* top navigation */
   /* logo */
-  /* workspace title */
+  /* do not show h1 in header */
 }
 .header.first {
   background: #333333;
@@ -211,6 +217,6 @@ a:focus {
 .header .logo img {
   max-width: 150px;
 }
-.header h1.workspace-title {
+.header h1 {
   display: none;
 }

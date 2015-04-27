@@ -133,6 +133,12 @@ a:focus {
   color: #2894df;
   border: 0;
 }
+p a {
+  border-bottom: 1px solid #dddddd;
+}
+p a:hover {
+  border-bottom: 1px solid #2894df;
+}
 /* colors for messages */
 .message.error {
   color: #d40101;
@@ -745,15 +751,24 @@ body {
   font-family: 'Open Sans', Verdana, sans-serif;
   font-size: 100%;
   line-height: 1.42;
-  color: #666;
   font-weight: 400;
 }
 /* titles */
 h1 {
-  font-size: 1.6em;
+  font-size: 1.5em;
+  /* 24px base 16 */
 }
 h2 {
-  font-size: 1.6em;
+  font-size: 1.250em;
+  /* 20px base 16 */
+}
+h3 {
+  font-size: 1.125em;
+  /* 18px base 16 */
+  display: block;
+  padding-bottom: .333em;
+  /* 6px */
+  border-bottom: 1px dotted #dddddd;
 }
 p {
   margin: .2em 0;
@@ -1037,6 +1052,10 @@ a.button {
   -webkit-border-radius: .286em;
   -moz-border-radius: .286em;
   border-radius: .286em;
+}
+a.button.big {
+  font-size: 1em;
+  margin-top: 1em;
 }
 input.button.primary,
 button.primary,
@@ -1491,7 +1510,7 @@ span.select-box:before {
   top: 7em;
   height: 3em;
 }
-/* main workspace panels */
+/* main workspace panel */
 .panel {
   height: 100%;
 }
@@ -1501,6 +1520,15 @@ span.select-box:before {
   height: auto;
   padding: 0;
 }
+/* its position depends on how many headers are there */
+.header.second + .panel.main {
+  top: 7em;
+}
+.header.third + .panel.main {
+  top: 10em;
+  border-top: 1px solid #dddddd;
+}
+/* collumns */
 .panel,
 .col1,
 .col2,
@@ -1510,15 +1538,16 @@ span.select-box:before {
 }
 .col1,
 .panel.left {
-  width: 14.5%;
+  width: 17.5%;
 }
 .panel.middle {
-  width: 85%;
-  left: 15%;
+  width: 82%;
+  left: 18%;
+  overflow: hidden;
 }
 .col2 {
-  width: 50%;
-  left: 15%;
+  width: 47%;
+  left: 18%;
 }
 .col3,
 .panel.right {
@@ -1526,11 +1555,8 @@ span.select-box:before {
   left: 75%;
 }
 .col2_3 {
-  width: 84.5%;
-  left: 15%;
-}
-.panel.middle {
-  overflow: hidden;
+  width: 81.5%;
+  left: 18%;
 }
 .panel.aside {
   position: absolute;
@@ -1539,8 +1565,173 @@ span.select-box:before {
   bottom: 0;
   height: 100%;
 }
-.panel.main {
-  border-top: 1px solid #dddddd;
+/* hide left collumn when there is no space */
+@media all and (max-width: 980px) {
+  .col1,
+  .panel.left {
+    display: none;
+  }
+  .panel.middle,
+  .col2_3 {
+    width: 98%;
+    left: 1%;
+  }
+  .col2 {
+    width: 55%;
+    left: 1%;
+  }
+}
+/*
+	One% CSS Grid - 12 Columns Fluid CSS Grid System
+
+	Why One% ? Let’s count ...
+		we have 12 columns (magic number divided by 2, 3, 4, 6)
+		for 12 columns we need 11 margins
+		so if we count margin 3%, then 3% * 11 margins = 33%
+		and if we count width of 1 column 5.5%, than 5.5% * 12 columns = 66%
+		in the end we have 33% + 66% = 99% aaand ???
+		1% is still here so that's the name - One%
+
+	1200px - perfectly fits 1280 screens
+			12 columns
+			margin 3% / 36px (full-width)
+			col1 5.5% / 66px (full-width)
+*/
+/*
+ * Main container for all
+ */
+.grid-responsive-12,
+.grid {
+  margin: 0 auto;
+  padding: 0 0 0 1%;
+  max-width: 1220px;
+}
+.grid-responsive-12 .row,
+.grid .row {
+  clear: both;
+  padding: 0 10px;
+}
+.grid-responsive-12 .row .col1,
+.grid .row .col1,
+.grid-responsive-12 .row .col2,
+.grid .row .col2,
+.grid-responsive-12 .row .col3,
+.grid .row .col3,
+.grid-responsive-12 .row .col4,
+.grid .row .col4,
+.grid-responsive-12 .row .col5,
+.grid .row .col5,
+.grid-responsive-12 .row .col6,
+.grid .row .col6,
+.grid-responsive-12 .row .col7,
+.grid .row .col7,
+.grid-responsive-12 .row .col8,
+.grid .row .col8,
+.grid-responsive-12 .row .col9,
+.grid .row .col9,
+.grid-responsive-12 .row .col10,
+.grid .row .col10,
+.grid-responsive-12 .row .col11,
+.grid .row .col11 {
+  float: none;
+  width: 99%;
+}
+.grid-responsive-12 .row .col1 img,
+.grid .row .col1 img,
+.grid-responsive-12 .row .col2 img,
+.grid .row .col2 img,
+.grid-responsive-12 .row .col3 img,
+.grid .row .col3 img,
+.grid-responsive-12 .row .col4 img,
+.grid .row .col4 img,
+.grid-responsive-12 .row .col5 img,
+.grid .row .col5 img,
+.grid-responsive-12 .row .col6 img,
+.grid .row .col6 img,
+.grid-responsive-12 .row .col7 img,
+.grid .row .col7 img,
+.grid-responsive-12 .row .col8 img,
+.grid .row .col8 img,
+.grid-responsive-12 .row .col9 img,
+.grid .row .col9 img,
+.grid-responsive-12 .row .col10 img,
+.grid .row .col10 img,
+.grid-responsive-12 .row .col11 img,
+.grid .row .col11 img,
+.grid-responsive-12 .row .col12 img,
+.grid .row .col12 img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+/*
+ * large devices
+ */
+@media all and (min-width: 768px) {
+  /*
+	 * Common columns definitions
+	 */
+  .grid .row .col1,
+  .grid .row .col2,
+  .grid .row .col3,
+  .grid .row .col4,
+  .grid .row .col5,
+  .grid .row .col6,
+  .grid .row .col7,
+  .grid .row .col8,
+  .grid .row .col9,
+  .grid .row .col10,
+  .grid .row .col11,
+  .grid .row .col12 {
+    float: left;
+    margin: 0 3% 0 0;
+  }
+  .grid .row .last {
+    margin-right: 0;
+  }
+  .grid .row .col1 {
+    width: 5.5%;
+  }
+  .grid .row .col2 {
+    width: 14%;
+  }
+  .grid .row .col3 {
+    width: 22.5%;
+  }
+  .grid .row .col4 {
+    width: 31%;
+  }
+  .grid .row .col5 {
+    width: 39.5%;
+  }
+  .grid .row .col6 {
+    width: 48%;
+  }
+  .grid .row .col7 {
+    width: 56.5%;
+  }
+  .grid .row .col8 {
+    width: 65%;
+  }
+  .grid .row .col9 {
+    width: 73.5%;
+  }
+  .grid .row .col10 {
+    width: 82%;
+  }
+  .grid .row .col11 {
+    width: 90.5%;
+  }
+  .grid .row .col12 {
+    width: 99%;
+    margin: 0;
+  }
+  .grid .row .push1 {
+    margin-left: 5.5%;
+  }
+  .grid .row .push2 {
+    margin-left: 14%;
+  }
 }
 /*
  * shadow on scroll
@@ -1623,7 +1814,7 @@ span.select-box:before {
 .header {
   /* top navigation */
   /* logo */
-  /* workspace title */
+  /* do not show h1 in header */
 }
 .header.first {
   background: #333333;
@@ -1677,7 +1868,7 @@ span.select-box:before {
 .header .logo img {
   max-width: 150px;
 }
-.header h1.workspace-title {
+.header h1 {
   display: none;
 }
 /* Progress bar */
@@ -1820,20 +2011,51 @@ span.select-box:before {
 .dialog .submit-wrapper .cancel {
   margin-top: .5em;
 }
-/* tree.less */
-.panel .navigation {
-  font-size: .938em;
+/*
+ * Footer
+ */
+.footer {
+  padding: 0.833em 1.5% 0 .5%;
+  text-align: right;
+  font-size: .75em;
+  /* 12px */
+  margin-top: 0em;
+  width: 98%;
+  height: 2em;
+  background: #FFF;
+  border-top: 1px solid #dddddd;
+  bottom: 0;
+  position: fixed;
+  z-index: 990;
 }
-.panel .navigation.first {
-  border-bottom: 1px dotted #dddddd;
-  padding: .625em;
-  padding-right: .3125em;
-  margin-bottom: .625em;
+.plugin-check {
+  padding: 1em;
 }
-.panel .navigation.last {
-  padding-right: .3125em;
-  /* 5px */
+.plugin-check.firefox {
+  background: transparent url('../img/third_party/firefox_logo.png') 1em center no-repeat;
+  background-size: 9.375em auto;
+  /* 150px */
 }
+.plugin-check.success {
+  background-color: #edf7eb;
+}
+.plugin-check.error {
+  background-color: #fce6e8;
+}
+.plugin-check .message {
+  font-weight: normal;
+  margin-left: 10.375em;
+  padding: .5em 1em;
+}
+.video-wrapper {
+  padding: 1em;
+}
+.video-wrapper iframe {
+  width: 100%;
+  min-height: 250px;
+  height: auto;
+}
+/* left panel navigation */
 .panel .navigation a {
   color: #333333;
   display: block;
@@ -1841,121 +2063,20 @@ span.select-box:before {
 .panel .navigation a:hover {
   text-decoration: none;
 }
-.panel .navigation .row:hover {
-  background: #eeeeee;
+.panel .navigation {
+  padding-top: 1em;
 }
-.panel .navigation .row.selected {
+.panel .navigation li {
+  color: #dddddd;
+  font-size: 0.938em;
+  /* 15px from 16px base */
+  padding-left: 1.333em;
+  /* 20px */
+  padding-top: .667em;
+}
+.panel .navigation li a {
   font-weight: bold;
 }
-/* shortcut */
-.panel .navigation.shortcuts a {
-  padding: .125em .313em;
-  /* 2px 5px */
-}
-/* tree */
-.tree ul {
-  padding-left: .625em;
-  /* 10px */
-}
-.tree .row {
-  float: left;
-  width: 100%;
-}
-.tree .node-ctrl a {
-  width: 1em;
-  height: 1em;
-  display: block;
-  margin-top: .15em;
-  opacity: 0.5;
-  filter: alpha(opacity=50);
-  padding-left: .3125em;
-}
-.tree .node-ctrl a:hover {
-  opacity: .9;
-  filter: alpha(opacity=90);
-}
-.tree .node.open .node-ctrl a {
-  background: transparent url('../img/controls/tree-ctrl.png') center -9px no-repeat;
-}
-.tree .node.close .node-ctrl a {
-  background: transparent url('../img/controls/tree-ctrl.png') center 4px no-repeat;
-}
-.more-ctrl span,
-.node-ctrl span {
-  display: none;
-}
-/* row layout: fixed fluid fixed */
-.tree .main-cell-wrapper {
-  float: left;
-  width: 100%;
-}
-.tree .main-cell {
-  margin: 0 1em 0 1em ;
-  padding-left: .625em;
-}
-.tree .left-cell {
-  float: left;
-  width: 1em ;
-  margin-left: -100%;
-}
-.tree .right-cell {
-  float: right;
-  width: 1em ;
-  margin-left: -1.4em;
-  padding-right: .25em;
-}
-/* don't show nodes if parent is closed */
-.tree .node.close ul {
-  display: none;
-}
-/* ellipsis on long node text */
-.tree .main-cell span {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  -o-text-overflow: ellipsis;
-  -ms-text-overflow: ellipsis;
-  display: block;
-}
-/* row action is a button */
-.tree .row .right-cell a {
-  height: 1em;
-  margin-top: .125em;
-  width: 1em;
-}
-.tree .row:hover .right-cell a {
-  opacity: 0.5;
-  filter: alpha(opacity=50);
-  border: 1px solid #dddddd;
-  background: transparent url('../img/controls/tree-ctrl.png') center -9px no-repeat;
-}
-.tree .row:hover .right-cell a:hover {
-  opacity: 0.9;
-  filter: alpha(opacity=90);
-  background: #ffffff url('../img/controls/tree-ctrl.png') center -9px no-repeat;
-}
-/* Events */
-.tree .row.drop-over {
-  background-color: #eeeeee;
-}
-/*
- * Footer
- */
-.footer {
-  margin-top: 0em;
-  width: 98%;
-  height: 2em;
-  background: #FFF;
-  border-top: 1px solid #dddddd;
-}
-@media all and (min-width: 768px) {
-  .footer {
-    bottom: 0;
-    position: absolute;
-    padding: 0.833em 1.5% 0 .5%;
-    font-size: .75em;
-    /* 12px */
-    z-index: 990;
-    text-align: right;
-  }
+.setup .video-wrapper {
+  margin-top: 2em;
 }
