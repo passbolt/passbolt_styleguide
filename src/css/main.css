@@ -1235,18 +1235,9 @@ input[type=text]:focus {
   box-shadow: inset 1px 1px 2px rgba(0, 0, 0, 0.2);
   border: 1px solid #2a9ceb;
 }
-.textarea.disabled textarea,
-.textarea.disabled textarea:hover,
-.textarea.disabled textarea:focus,
-.input.disabled input[type=password],
-.input.password.disabled input[type=password]:hover,
-.input.password.disabled input[type=password]:focus,
-.input.disabled input[type=search],
-.input.search.disabled input[type=search]:hover,
-.input.search.disabled input[type=search]:focus,
-.input.disabled input[type=text],
-.input.text.disabled input[type=text]:hover,
-.input.text.disabled input[type=text]:focus {
+input[type=password]:disabled,
+input[type=search]:disabled,
+input[type=text]:disabled {
   border: 1px solid #dddddd;
   -webkit-box-shadow: 0 0 0 0;
   -moz-box-shadow: 0 0 0 0;
@@ -1404,6 +1395,7 @@ select.fluid {
 /* headers */
 .header.first {
   /* height:2.375em; //already defined in header */
+  height: 2.375em;
 }
 .header.second {
   top: 2.375em;
@@ -1485,15 +1477,9 @@ select.fluid {
     width: 98%;
     left: 1%;
   }
-  .panel.middle {
-    overflow-y: scroll;
-  }
   .col2 {
     width: 55%;
     left: 1%;
-  }
-  .header {
-    overflow-x: hidden;
   }
 }
 /*
@@ -2821,6 +2807,7 @@ div.secret-copy > pre {
  * 2. The use of `table` rather than `block` is only necessary if using
  *	`:before` to contain the top-margins of child elements.
  */
+  width: 90%;
 }
 .input-password-wrapper:before,
 .input-password-wrapper:after {
