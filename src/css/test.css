@@ -139,21 +139,6 @@ p a {
 p a:hover {
   border-bottom: 1px solid #2894df;
 }
-/* colors for messages */
-.message.error {
-  color: #d40101;
-}
-.message.success {
-  color: #4F8A10;
-}
-.message.warning {
-  color: #9F6000;
-}
-.message.info,
-.message.information,
-.message.notice {
-  color: #00529B;
-}
 /* scrollbar */
 /* todos */
 .todo {

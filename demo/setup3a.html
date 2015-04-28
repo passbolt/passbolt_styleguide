@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>Passbolt - The simple password management system</title>
+	<base href="../src/">
+	<meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+	<link rel="stylesheet" type="text/css" href="css/setup.css"><meta http-equiv="pragma" content="no-cache" />
+</head>
+<body>
+<div id="container" class="page setup">
+	<!-- first header -->
+	<div class="header first">
+		<nav>
+			<div class="primary navigation top">
+				<!-- no top links at setup -->
+			</div>
+		</nav>
+	</div>
+
+	<!-- second header -->
+	<div class="header second">
+		<div class="col1">
+			<div class="logo">
+				<img src="img/logo/logo.png" alt="passbolt">
+				<h1><span>Passbolt</span></h1>
+			</div>
+		</div>
+		<div class="col2_3">
+			<h2>Now let's setup your master password!</h2>
+		</div>
+	</div>
+
+	<div class="panel main ">
+		<!-- wizard steps -->
+		<div class="panel left">
+			<div class="navigation wizard">
+				<ul>
+					<li class="">
+						<a href="../demo/setup1.html">1. Get the plugin</a>
+					</li>
+					<li class="">
+						<a href="../demo/setup2a.html">2. Define your keys</a>
+					</li>
+					<li class="selected">
+						<a href="../demo/setup3a.html">3. Set a master password</a>
+					</li>
+					<li class="disabled">
+						4. Set a security token
+					</li>
+					<li class="disabled">
+						5. Login!
+					</li>
+				</ul>
+			</div>
+		</div>
+		<!-- main -->
+		<div class="panel middle">
+			<div class="grid grid-responsive-12">
+				<form>
+					<div class="row">
+						<!-- left collumn -->
+						<div class="col7">
+							<h3>Create a new key</h3>
+							<p>This password is the only password you will need to remember from now on so make sure you choose it wisely! </p>
+							<div class="input-password-wrapper">
+								<div class="input password required">
+									<label for="js_field_password" class="hidden">New master password</label>
+									<input name="passbolt.model.User.password" type="password" id="js_field_password" placeholder="enter your password here">
+									<input class="required hidden" maxlength="50" type="text" id="js_field_password_clear" style="display: none;">
+								</div>
+								<ul class="actions inline">
+									<li>
+										<a href="#" id="js_show_pwd_button" class="button toggle mad_controller_component_button_controller mad_view_view js_component ready">
+											<i class="icon eye big no-text"></i>
+											<span>view</span>
+										</a>
+									</li>
+									<li>
+										<a href="#" id="js_gen_pwd_button" class="button mad_controller_component_button_controller mad_view_view js_component ready">
+											<i class="icon key big no-text"></i>
+											<span>generate</span>
+										</a>
+									</li>
+								</ul>
+								<div id="js_user_pwd_strength" class="password-complexity">
+									<span class="progress"><span class="progress-bar very_strong"></span></span>
+									<span class="complexity-text">complexity: <strong>fair</strong></span>
+								</div>
+							</div>
+							<div class="password-hints">
+								<p>Some tips for choosing a strong password:</p>
+								<ul>
+									<li class="success">It is at least 8 char in length</li>
+									<li class="error">It contains lower and uppercase character</li>
+									<li>It contains letters and numbers</li>
+									<li>It contains special characters (like / or * or %)</li>
+									<li>It is not part of a dictionary</li>
+								</ul>
+
+							</div>
+						</div>
+
+						<!-- right collumn -->
+						<div class="col4 last">
+
+						</div>
+
+					</div>
+
+					<div class="row last">
+						<div class="input-wrapper">
+							<a href="../demo/setup2a.html" class="button cancel big">cancel</a>
+							<a href="#" class="button primary next big">next</a>
+						</div>
+					</div>
+
+				</form>
+
+			</div>
+		</div>
+
+	</div>
+
+	<!-- footer -->
+	<div class="footer">
+		<span class="copyright">&copy; 2015 passbolt.com </span>
+	</div>
+</div>
+</body>
+</html>
