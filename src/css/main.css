@@ -922,6 +922,9 @@ span + .icon {
 .icon.levelup:before {
   content: '\21B0';
 }
+.icon.camera:before {
+  content: '\1F4F7';
+}
 /** notification messages **/
 .notification_status .icon.success:before {
   content: '\2713';
@@ -3242,6 +3245,154 @@ div.secret-copy > pre {
 .panel.aside .resource .detailed-information li.password .value {
   height: 1.6em;
   padding-top: 0.2em;
+}
+.passbolt_controller_preference_workspace_controller .section.detailed-information {
+  /*
+ * For IE 6/7 only
+ * Include this rule to trigger hasLayout and contain floats.
+ */
+  /*
+ * Clearfix: contain floats
+ *
+ * For modern browsers
+ * 1. The space content is one way to avoid an Opera bug when the
+ *	`contenteditable` attribute is included anywhere else in the document.
+ *	Otherwise it causes space to appear at the top and bottom of elements
+ *	that receive the `clearfix` class.
+ * 2. The use of `table` rather than `block` is only necessary if using
+ *	`:before` to contain the top-margins of child elements.
+ */
+  /*
+ * For IE 6/7 only
+ * Include this rule to trigger hasLayout and contain floats.
+ */
+  zoom: 1;
+  /*
+ * Clearfix: contain floats
+ *
+ * For modern browsers
+ * 1. The space content is one way to avoid an Opera bug when the
+ *	`contenteditable` attribute is included anywhere else in the document.
+ *	Otherwise it causes space to appear at the top and bottom of elements
+ *	that receive the `clearfix` class.
+ * 2. The use of `table` rather than `block` is only necessary if using
+ *	`:before` to contain the top-margins of child elements.
+ */
+}
+.passbolt_controller_preference_workspace_controller .section.detailed-information:before,
+.passbolt_controller_preference_workspace_controller .section.detailed-information:after {
+  content: "";
+  display: table;
+}
+.passbolt_controller_preference_workspace_controller .section.detailed-information:after {
+  clear: both;
+}
+.passbolt_controller_preference_workspace_controller .section.detailed-information:before,
+.passbolt_controller_preference_workspace_controller .section.detailed-information:after {
+  content: "";
+  display: table;
+}
+.passbolt_controller_preference_workspace_controller .section.detailed-information:after {
+  clear: both;
+}
+.passbolt_controller_preference_workspace_controller .section.detailed-information .avatar {
+  float: left;
+}
+.passbolt_controller_preference_workspace_controller .section.detailed-information .avatar img {
+  border: 1px solid #dddddd;
+  padding: 0;
+}
+.passbolt_controller_preference_workspace_controller .section.detailed-information .avatar .edit {
+  width: 201px;
+  height: 50px;
+  background: transparent url('../img/controls/overlay-opacity-50.png') repeat;
+  color: #fff;
+  margin-top: -50px;
+  position: relative;
+}
+.passbolt_controller_preference_workspace_controller .section.detailed-information .avatar .edit a {
+  color: #fff;
+  display: block;
+  /*
+ * For IE 6/7 only
+ * Include this rule to trigger hasLayout and contain floats.
+ */
+  /*
+ * Clearfix: contain floats
+ *
+ * For modern browsers
+ * 1. The space content is one way to avoid an Opera bug when the
+ *	`contenteditable` attribute is included anywhere else in the document.
+ *	Otherwise it causes space to appear at the top and bottom of elements
+ *	that receive the `clearfix` class.
+ * 2. The use of `table` rather than `block` is only necessary if using
+ *	`:before` to contain the top-margins of child elements.
+ */
+  /*
+ * For IE 6/7 only
+ * Include this rule to trigger hasLayout and contain floats.
+ */
+  zoom: 1;
+  /*
+ * Clearfix: contain floats
+ *
+ * For modern browsers
+ * 1. The space content is one way to avoid an Opera bug when the
+ *	`contenteditable` attribute is included anywhere else in the document.
+ *	Otherwise it causes space to appear at the top and bottom of elements
+ *	that receive the `clearfix` class.
+ * 2. The use of `table` rather than `block` is only necessary if using
+ *	`:before` to contain the top-margins of child elements.
+ */
+}
+.passbolt_controller_preference_workspace_controller .section.detailed-information .avatar .edit a:before,
+.passbolt_controller_preference_workspace_controller .section.detailed-information .avatar .edit a:after {
+  content: "";
+  display: table;
+}
+.passbolt_controller_preference_workspace_controller .section.detailed-information .avatar .edit a:after {
+  clear: both;
+}
+.passbolt_controller_preference_workspace_controller .section.detailed-information .avatar .edit a:before,
+.passbolt_controller_preference_workspace_controller .section.detailed-information .avatar .edit a:after {
+  content: "";
+  display: table;
+}
+.passbolt_controller_preference_workspace_controller .section.detailed-information .avatar .edit a:after {
+  clear: both;
+}
+.passbolt_controller_preference_workspace_controller .section.detailed-information .avatar .edit a i.icon {
+  display: block;
+  float: left;
+}
+.passbolt_controller_preference_workspace_controller .section.detailed-information .avatar .edit a i.icon:before {
+  display: block;
+  float: left;
+  width: 48px;
+  height: 48px;
+  line-height: 1.4em;
+  font-size: 3em;
+  text-align: center;
+}
+.passbolt_controller_preference_workspace_controller .section.detailed-information .avatar .edit a span.text {
+  display: block;
+  width: 130px;
+  float: left;
+  margin-left: 0;
+  padding: 0.5em 0.5em 0 0.5em;
+  font-size: 0.8em;
+}
+.passbolt_controller_preference_workspace_controller .section.detailed-information > ul {
+  float: left;
+  margin-left: 2em;
+}
+.passbolt_controller_preference_workspace_controller .section.detailed-information > ul li {
+  margin-bottom: 1.5em;
+}
+.passbolt_controller_preference_workspace_controller .section.detailed-information > ul li p > em {
+  margin-top: 0.8em;
+  font-size: 0.8em;
+  display: block;
 }
 .loading-screen {
   width: 100%;
