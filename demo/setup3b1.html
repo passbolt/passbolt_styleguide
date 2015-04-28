@@ -39,11 +39,11 @@
 					<li class="">
 						<a href="../demo/setup1.html">1. Get the plugin</a>
 					</li>
-					<li class="">
+					<li class="selected">
 						<a href="../demo/setup2b.html">2. Import your keys</a>
 					</li>
-					<li class="selected">
-						<a href="../demo/setup3b.html">3. Review key info</a>
+					<li class="disabled">
+						3. Set a master password
 					</li>
 					<li class="disabled">
 						4. Set a security token
@@ -65,11 +65,17 @@
 							<table class="table-info">
 								<tr>
 									<td>Owner Name</td>
-									<td>Mr. Testy Test</td>
+									<td class="warning">
+										Mr. Testy Test
+										<span class="alt side">Testy Test</span>
+									</td>
 								</tr>
 								<tr>
 									<td>Owner Email</td>
-									<td>test@passbolt.com</td>
+									<td class="warning">
+										test@passbolt
+										<span class="alt side">test1@passbolt.com</span>
+									</td>
 								</tr>
 								<tr>
 									<td>Key Id</td>
@@ -100,11 +106,17 @@
 
 						<!-- right collumn -->
 						<div class="col5 last">
-							<div class="message success side-message">
-								<strong>Success!</strong>
-								Nice one, it looks like a valid key with your key information matching the name and email provided by your passbolt administrator.
-								<br><br>
-								You are good to go!
+							<div class="message warning side-message">
+								<p>
+									<strong>Warning:</strong> the name and email selected by your administrator do not match the name and email and your key. Passbolt will use the information provided by the administrator to identify yourself.
+								</p>
+								<p>
+									While this is not a deal breaker this may lead to some confusions.
+									<a href="#">Learn more.</a>
+								</p>
+								<p class="small">
+									Note: Passbolt do not support multiple user identities at the moment.
+								</p>
 							</div>
 						</div>
 

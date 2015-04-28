@@ -27,7 +27,7 @@
 			</div>
 		</div>
 		<div class="col2_3">
-			<h2>Let's make sure you imported the right key</h2>
+			<h2>D'oh, this is not going to work!</h2>
 		</div>
 	</div>
 
@@ -39,11 +39,11 @@
 					<li class="">
 						<a href="../demo/setup1.html">1. Get the plugin</a>
 					</li>
-					<li class="">
+					<li class="selected">
 						<a href="../demo/setup2b.html">2. Import your keys</a>
 					</li>
-					<li class="selected">
-						<a href="../demo/setup3b.html">3. Review key info</a>
+					<li class="disabled">
+						3. Set a master password
 					</li>
 					<li class="disabled">
 						4. Set a security token
@@ -65,11 +65,15 @@
 							<table class="table-info">
 								<tr>
 									<td>Owner Name</td>
-									<td>Mr. Testy Test</td>
+									<td>
+										Mr. Testy Test
+									</td>
 								</tr>
 								<tr>
 									<td>Owner Email</td>
-									<td>test@passbolt.com</td>
+									<td>
+										test@passbolt
+									</td>
 								</tr>
 								<tr>
 									<td>Key Id</td>
@@ -85,7 +89,7 @@
 								</tr>
 								<tr>
 									<td>Expires</td>
-									<td>18 march 2019 21:00</td>
+									<td class="error">18 march 2014 21:00</td>
 								</tr>
 								<tr>
 									<td>Key Length</td>
@@ -93,18 +97,27 @@
 								</tr>
 								<tr>
 									<td>Algorithm</td>
-									<td>RSA</td>
+									<td class="error">DSA</td>
 								</tr>
 							</table>
 						</div>
 
 						<!-- right collumn -->
 						<div class="col5 last">
-							<div class="message success side-message">
-								<strong>Success!</strong>
-								Nice one, it looks like a valid key with your key information matching the name and email provided by your passbolt administrator.
-								<br><br>
-								You are good to go!
+							<div class="message error side-message">
+								<p>
+									<strong>Error:</strong> There is a problem with this key.
+									Here are the issues you need fix before continuing:
+								</p>
+									<ul>
+										<li>1. The key is expired.</li>
+										<li>2. The private key was not found.</li>
+									</ul>
+								<p>
+									You need to fix that by either
+										<a href="../demo/setup2b.html">importing another key</a> or
+										<a href="../demo/setup2a.html">generating a new one</a>.
+								</p>
 							</div>
 						</div>
 
@@ -113,7 +126,7 @@
 					<div class="row last">
 						<div class="input-wrapper">
 							<a href="../demo/setup2b.html" class="button cancel big">cancel</a>
-							<a href="#" class="button primary next big">next</a>
+							<a href="#" class="button primary next big disabled">next</a>
 						</div>
 					</div>
 

@@ -756,7 +756,7 @@ h3 {
   border-bottom: 1px dotted #dddddd;
 }
 p {
-  margin: .2em 0;
+  margin: .25em 0;
 }
 .code {
   font-family: "Courier New", Courier, monospace;
@@ -1465,7 +1465,13 @@ select.fluid {
   bottom: 0;
   height: 100%;
 }
-/* hide left collumn when there is no space */
+/* if the other grid is used
+   don't center the grid inside main panel */
+.panel.main .grid-responsive-12 {
+  float: left;
+  width: 100%;
+}
+/* hide left column when there is no space */
 @media all and (max-width: 980px) {
   .col1,
   .panel.left {
@@ -1994,12 +2000,103 @@ select.fluid {
 .message.warning {
   background: #ffefc1;
 }
-.table-info td {
-  padding: .5em;
+table.table-info {
+  border-collapse: separate;
+}
+table.table-info td {
+  border: 0.25em solid #ffffff;
+  padding: .25em .5em;
+  padding-right: 1em;
   color: #888888;
 }
-.table-info td + td {
+table.table-info td.warning {
+  background: #ffefc1;
+}
+table.table-info td.error {
+  background: #ffe4e4;
+}
+table.table-info td .alt.side {
+  color: #888888;
+  float: right;
+}
+table.table-info td .alt.side:before {
+  content: "(";
+}
+table.table-info td .alt.side:after {
+  content: ")";
+}
+table.table-info td + td {
   color: #333333;
+  padding-right: .5em;
+  padding: .25em .5em;
+}
+/**
+ * Based on Farbtastic Color Picker 1.2
+ * © 2008 Steven Wittens / © 2015 Passbolt
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ */
+.colorpicker {
+  margin-top: 1.5em;
+}
+.colorpicker .input.color {
+  float: left;
+  margin-top: 70px;
+  margin-left: 240px;
+}
+.colorpicker .input input[type=text].token {
+  width: 3em;
+  font-size: 24px;
+  border: none;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+}
+.colorpicker .farbtastic {
+  position: relative;
+}
+.colorpicker .farbtastic * {
+  position: absolute;
+  cursor: crosshair;
+}
+.colorpicker .farbtastic,
+.colorpicker .farbtastic .wheel {
+  width: 195px;
+  height: 195px;
+}
+.colorpicker .farbtastic .color,
+.colorpicker .farbtastic .overlay {
+  top: 47px;
+  left: 47px;
+  width: 101px;
+  height: 101px;
+}
+.colorpicker .farbtastic .wheel {
+  background: url('../img/controls/colorpicker/wheel.png') no-repeat;
+  width: 195px;
+  height: 195px;
+}
+.colorpicker .farbtastic .overlay {
+  background: url('../img/controls/colorpicker/mask.png') no-repeat;
+}
+.colorpicker .farbtastic .marker {
+  width: 17px;
+  height: 17px;
+  margin: -8px 0 0 -8px;
+  overflow: hidden;
+  background: url('../img/controls/colorpicker/marker.png') no-repeat;
 }
 /*
 	image input is a 2 collumn fixed / fluid layout
@@ -2160,8 +2257,12 @@ select.fluid {
 .setup .video-wrapper {
   margin-top: 2em;
 }
+.setup h2 {
+  margin-top: 1em;
+}
 .setup h2 .button {
   margin-right: 0.3em;
+  margin-top: -5px;
 }
 .setup .why-plugin-wrapper p {
   padding-bottom: 1em;
@@ -2179,5 +2280,16 @@ select.fluid {
 .setup .side-message {
   margin-top: 3em;
   margin-left: 1em;
-  font-size: 1.125em;
+  font-size: 1em;
+  margin-right: 2em;
+}
+.setup .side-message ul,
+.setup .side-message p {
+  padding-bottom: 1em;
+}
+.setup .side-message a {
+  border-color: #333333;
+}
+.setup .side-message a:hover {
+  border-color: #2894df;
 }

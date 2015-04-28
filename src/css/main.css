@@ -756,7 +756,7 @@ h3 {
   border-bottom: 1px dotted #dddddd;
 }
 p {
-  margin: .2em 0;
+  margin: .25em 0;
 }
 .code {
   font-family: "Courier New", Courier, monospace;
@@ -1465,7 +1465,13 @@ select.fluid {
   bottom: 0;
   height: 100%;
 }
-/* hide left collumn when there is no space */
+/* if the other grid is used
+   don't center the grid inside main panel */
+.panel.main .grid-responsive-12 {
+  float: left;
+  width: 100%;
+}
+/* hide left column when there is no space */
 @media all and (max-width: 980px) {
   .col1,
   .panel.left {
