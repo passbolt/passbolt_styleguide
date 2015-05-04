@@ -1139,7 +1139,11 @@ a.button.disabled:hover,
 input[type=submit].disabled:active,
 input.button.disabled:active,
 button.disabled:active,
-a.button.disabled:active {
+a.button.disabled:active,
+input[type=submit].disabled:focus,
+input.button.disabled:focus,
+button.disabled:focus,
+a.button.disabled:focus {
   -webkit-box-shadow: 0 0 0;
   -moz-box-shadow: 0 0 0;
   box-shadow: 0 0 0;
@@ -1295,7 +1299,7 @@ textarea {
 }
 /* text and textarea */
 /*
-	Radio
+	Checkboxes and Radio
 */
 .checkboxlist .input.checkbox label,
 .radiolist .input.radio label {
@@ -1305,7 +1309,6 @@ textarea {
 .checkbox label {
   font-weight: normal;
   display: inline;
-  font-size: 1em;
 }
 /* radio and checkboxes */
 /*
@@ -1408,77 +1411,142 @@ select.fluid {
  */
 .scroll {
   overflow-y: scroll;
-  background: -webkit-linear-gradient(#ffffff 30%, rgba(255, 255, 255, 0)), -webkit-linear-gradient(rgba(255, 255, 255, 0), #ffffff 70%) bottom, -webkit-radial-gradient(50% 0, rgba(0, 0, 0, 0.2), transparent 70%), -webkit-radial-gradient(50% 100%, rgba(0, 0, 0, 0.2), transparent 70%) bottom;
+  background: linear-gradient(#ffffff 30%, rgba(255, 255, 255, 0)), linear-gradient(rgba(255, 255, 255, 0), #ffffff 70%) 0 100%, radial-gradient(farthest-side at 75% 0, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0)), radial-gradient(farthest-side at 75% 100%, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0)) 0 100%;
   background-repeat: no-repeat;
-  background-size: 100% 2.5em, 100% 2.5em, 100% .31250em, 100% .31250em;
+  background-color: white;
+  background-size: 100% 10px, 100% 10px, 100% 5px, 100% 5px;
+  /* Opera doesn't support this in the shorthand */
   background-attachment: local, local, scroll, scroll;
 }
 /*
  * Scrollbar styling with native webkit support
- */
+
 .cssscrollbar ::-webkit-scrollbar {
-  width: .625em;
-  /* 10px */
+	width:.625em;
 }
 .cssscrollbar ::-webkit-scrollbar-track {
-  background: #ffffff;
+	background:@scrollbar-background;
 }
 .cssscrollbar ::-webkit-scrollbar-thumb {
-  background: #888888;
+	background:@scrollbar;
 }
 .cssscrollbar ::-webkit-scrollbar-thumb:window-inactive {
-  background: #ffffff;
+	background:@scrollbar-background;
 }
+*/
 /*
  * Styles needed by jScrollPane fallback
- */
+
 .no-cssscrollbar .jspContainer {
-  overflow: hidden;
-  position: relative;
+	overflow: hidden;
+	position: relative;
 }
 .no-cssscrollbar .jspPane {
-  position: absolute;
+	position: absolute;
 }
 .no-cssscrollbar .jspVerticalBar {
-  position: absolute;
-  top: 0;
-  right: 0;
-  width: 10px;
-  height: 100%;
+	position: absolute;
+	top: 0;
+	right: 0;
+	width: 10px;
+	height: 100%;
 }
 .no-cssscrollbar .jspHorizontalBar {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: .625em;
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	width: 100%;
+	height: .625em;
 }
 .no-cssscrollbar .jspVerticalBar *,
 .no-cssscrollbar .jspHorizontalBar * {
-  margin: 0;
-  padding: 0;
+	margin: 0;
+	padding: 0;
 }
 .no-cssscrollbar .jspCap {
-  display: none;
+	display: none;
 }
 .no-cssscrollbar .jspHorizontalBar .jspCap {
-  float: left;
+	float: left;
 }
 .no-cssscrollbar .jspTrack {
-  background: #ffffff;
-  position: relative;
+	background: @scrollbar-background;
+	position: relative;
 }
 .no-cssscrollbar .jspDrag {
-  background: #888888;
-  position: relative;
-  top: 0;
-  left: 0;
-  cursor: pointer;
+	background:@scrollbar;
+	position: relative;
+	top: 0;
+	left: 0;
+	cursor: pointer;
 }
 .no-cssscrollbar .jspHorizontalBar .jspTrack,
 .no-cssscrollbar .jspHorizontalBar .jspDrag {
-  float: left;
-  height: 100%;
+	float: left;
+	height: 100%;
+}
+*/
+/* Small Progress bar */
+.progress-bar {
+  background: #ffffff;
+  width: 100%;
+  height: 2px;
+  display: block;
+}
+.progress-bar span {
+  background: #d40101;
+  height: 2px;
+  display: block;
+}
+.progress-details {
+  display: none;
+}
+/* larger progress bar */
+.progress-bar-wrapper {
+  border: 1px solid #dddddd;
+  height: 10px;
+  display: block;
+  margin: 2em 0;
+  padding: 2px;
+}
+.progress-bar-wrapper .progress-bar.big {
+  width: 100%;
+  height: 10px;
+  display: block;
+  clear: both;
+  /* indefinite loading */
+}
+.progress-bar-wrapper .progress-bar.big .progress {
+  background: #d40101;
+  width: 5%;
+  height: 5px;
+  display: block;
+  height: 10px;
+}
+.progress-bar-wrapper .progress-bar.big.infinite {
+  background: #d40101;
+}
+.progress-bar-wrapper .progress-bar.big.infinite .progress {
+  width: 100%;
+  overflow: hidden;
+  background: url('../img/controls/infinite-bar.gif') repeat-x;
+  -moz-opacity: 0.5;
+  -khtml-opacity: 0.5;
+  opacity: 0.5;
+  -ms-filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=5);
+  filter: progid:DXImageTransform.Microsoft.Alpha(opacity=5);
+  filter: alpha(opacity=5);
+}
+/*
+	Contextual loading bar
+	  it is situated at the bottom of the workspace
+*/
+.update-loading-bar {
+  position: absolute;
+  display: block;
+  width: 100%;
+  bottom: 2em;
+  z-index: 991;
 }
 .autocomplete-content {
   border: 1px solid #dddddd;
@@ -1498,7 +1566,7 @@ select.fluid {
 .dialog-wrapper {
   position: absolute;
   width: 100%;
-  z-index: 990;
+  z-index: 999;
   background: rgba(255, 255, 255, 0.9);
   height: 100%;
 }
@@ -1528,16 +1596,25 @@ select.fluid {
   font-size: 0.7em;
   color: #888888;
 }
-.dialog .dialog-close {
+/* close dialog cross */
+.dialog a.dialog-close,
+.dialog a.dialog-close:hover {
+  display: block;
   float: right;
-  right: 1em;
   margin-top: -2.5em;
-  padding: .25em .25em 0em .25em;
-  width: 1em;
-  text-align: center;
-  border: 1px solid transparent;
+  border: 0;
 }
-.dialog .dialog-close:hover {
+.dialog a.dialog-close .icon.close {
+  padding-top: 15px;
+  width: 30px;
+  height: 15px;
+  text-align: center;
+  display: block;
+  vertical-align: baseline;
+  line-height: 0;
+  border: 1px solid #eeeeee;
+}
+.dialog a.dialog-close:hover .icon.close {
   border: 1px solid #dddddd;
 }
 /* content */
@@ -1547,11 +1624,12 @@ select.fluid {
 /* inputs */
 .dialog .form-content {
   background: #FFF;
-  font-size: .813em;
-  padding: 1em 1.5em 1em 2em;
+  padding: .813em 1.25em .813em 1.5em;
 }
 .dialog label {
   clear: both;
+  font-size: 0.938em;
+  /* 14/16 */
 }
 .dialog input[type=text] {
   width: 92%;
@@ -1564,10 +1642,12 @@ select.fluid {
 .dialog textarea {
   width: 92%;
 }
-.dialog .error {
+.dialog input + .message.error {
   display: block;
-  width: 100%;
   clear: both;
+  width: 92%;
+  padding-bottom: .5em;
+  font-size: .813em;
 }
 /* submit / cancel */
 .dialog .submit-wrapper {
@@ -1579,11 +1659,54 @@ select.fluid {
 .dialog .submit-wrapper .cancel,
 .dialog .submit-wrapper .button {
   float: left;
-  margin-left: 2em;
-  font-size: 16px;
+  margin-left: 1.125em;
+  font-size: 1.125em;
 }
 .dialog .submit-wrapper .cancel {
   margin-top: .5em;
+  font-size: 1em;
+}
+/* tabs */
+.tabs {
+  border-bottom: 1px solid #dddddd;
+  width: 100%;
+}
+.tabs-nav {
+  border-bottom: 1px solid #dddddd;
+}
+.tabs-nav li {
+  display: inline;
+}
+.tabs-nav li div {
+  display: inline-block;
+}
+.tabs-nav li a {
+  display: inline-block;
+  padding: .4em 1.75em;
+  margin-left: 1.25em;
+  font-size: 15px;
+}
+.tabs-nav li a.selected {
+  margin-bottom: -1px;
+  border: 1px solid #dddddd;
+  border-bottom: 1px solid #FFF;
+  background: #ffffff;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+  -webkit-border-bottom-left-radius: 0;
+  -webkit-border-bottom-right-radius: 0;
+  -moz-border-radius-bottomleft: 0;
+  -moz-border-radius-bottomright: 0;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+/* tab content */
+.tab-content {
+  display: none;
+}
+.tab-content.selected {
+  display: block;
 }
 .profile .section.detailed-information h4 {
   margin-bottom: .626em;
@@ -1604,6 +1727,251 @@ select.fluid {
 .profile .section.detailed-information .avatar img {
   width: 2.875em;
   padding: 0.1250em;
+}
+.security-token {
+  font-size: 0.813em;
+  padding: .5em 1em;
+  text-align: center;
+  position: absolute;
+  display: inline-block;
+  margin-left: -4em;
+  width: 2em;
+  border: 1px solid #dddddd;
+}
+input:focus + .security-token {
+  border: 1px solid #2894df;
+}
+/**
+ * Based on Farbtastic Color Picker 1.2
+ * © 2008 Steven Wittens / © 2015 Passbolt
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ */
+.colorpicker {
+  margin-top: 1.5em;
+}
+.colorpicker .input.color {
+  float: left;
+  margin-top: 70px;
+  margin-left: 240px;
+}
+.colorpicker .input input[type=text].token {
+  width: 3em;
+  font-size: 24px;
+  border: none;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+  text-align: center;
+}
+.colorpicker .farbtastic {
+  position: relative;
+}
+.colorpicker .farbtastic * {
+  position: absolute;
+  cursor: crosshair;
+}
+.colorpicker .farbtastic,
+.colorpicker .farbtastic .wheel {
+  width: 195px;
+  height: 195px;
+}
+.colorpicker .farbtastic .color,
+.colorpicker .farbtastic .overlay {
+  top: 47px;
+  left: 47px;
+  width: 101px;
+  height: 101px;
+}
+.colorpicker .farbtastic .wheel {
+  background: url('../img/controls/colorpicker/wheel.png') no-repeat;
+  width: 195px;
+  height: 195px;
+}
+.colorpicker .farbtastic .overlay {
+  background: url('../img/controls/colorpicker/mask.png') no-repeat;
+}
+.colorpicker .farbtastic .marker {
+  width: 17px;
+  height: 17px;
+  margin: -8px 0 0 -8px;
+  overflow: hidden;
+  background: url('../img/controls/colorpicker/marker.png') no-repeat;
+}
+/*
+	image input is a 2 collumn fixed / fluid layout
+		with preview on the left
+		and info and input field on the right
+*/
+.input.file.image .image-wrapper.avatar {
+  width: 50px;
+  float: left;
+}
+.input.file.image .input-wrapper {
+  float: right;
+  width: 100%;
+  margin-left: -50px;
+}
+.input.file.image .input-wrapper-2 {
+  margin-left: 50px;
+  padding-left: 1em;
+}
+/* file dropzone */
+.input.file .dropzone {
+  width: 100%;
+  border: 3px dotted #dddddd;
+  height: 15em;
+  text-align: center;
+  display: block;
+  line-height: 15em;
+  margin-bottom: 1em;
+  color: #888888;
+}
+/*
+	Password fields in passbolt have complexity "progress bar"
+	and a custom layout to accomodate buttons on the left end
+*/
+.input-password-wrapper {
+  /*
+ * For IE 6/7 only
+ * Include this rule to trigger hasLayout and contain floats.
+ */
+  /*
+ * Clearfix: contain floats
+ *
+ * For modern browsers
+ * 1. The space content is one way to avoid an Opera bug when the
+ *	`contenteditable` attribute is included anywhere else in the document.
+ *	Otherwise it causes space to appear at the top and bottom of elements
+ *	that receive the `clearfix` class.
+ * 2. The use of `table` rather than `block` is only necessary if using
+ *	`:before` to contain the top-margins of child elements.
+ */
+  /*
+ * For IE 6/7 only
+ * Include this rule to trigger hasLayout and contain floats.
+ */
+  zoom: 1;
+  /*
+ * Clearfix: contain floats
+ *
+ * For modern browsers
+ * 1. The space content is one way to avoid an Opera bug when the
+ *	`contenteditable` attribute is included anywhere else in the document.
+ *	Otherwise it causes space to appear at the top and bottom of elements
+ *	that receive the `clearfix` class.
+ * 2. The use of `table` rather than `block` is only necessary if using
+ *	`:before` to contain the top-margins of child elements.
+ */
+  width: 100%;
+}
+.input-password-wrapper:before,
+.input-password-wrapper:after {
+  content: "";
+  display: table;
+}
+.input-password-wrapper:after {
+  clear: both;
+}
+.input-password-wrapper:before,
+.input-password-wrapper:after {
+  content: "";
+  display: table;
+}
+.input-password-wrapper:after {
+  clear: both;
+}
+.input-password-wrapper .input.password input {
+  width: 61.5%;
+  float: left;
+}
+.input-password-wrapper .actions.inline {
+  float: right;
+  width: 33%;
+}
+.input-password-wrapper .actions.inline .button {
+  float: left;
+  margin-left: .5em;
+  margin-right: 0;
+}
+.input-password-wrapper .password-complexity .complexity-text {
+  float: right;
+  clear: right;
+  width: 31.5%;
+  font-size: 11px;
+  text-align: left;
+  padding-left: 0;
+}
+.input-password-wrapper .password-complexity .progress {
+  width: 66.5%;
+  border: 1px solid #dddddd;
+  height: 7px;
+  display: block;
+  clear: both;
+  margin: .25em 0 .5em 0;
+  float: left;
+}
+.input-password-wrapper .password-complexity .progress-bar {
+  background: #000000;
+  width: 1%;
+  height: 5px;
+  display: block;
+  float: left;
+  margin: 1px;
+}
+.input-password-wrapper .password-complexity .progress-bar.very_weak {
+  background: #000000;
+  width: 5%;
+}
+.input-password-wrapper .password-complexity .progress-bar.weak {
+  background: #d40101;
+  width: 10%;
+}
+.input-password-wrapper .password-complexity .progress-bar.fair {
+  background: #fce94f;
+  width: 60%;
+}
+.input-password-wrapper .password-complexity .progress-bar.strong {
+  background: #66CC00;
+  width: 80%;
+}
+.input-password-wrapper .password-complexity .progress-bar.very_strong {
+  background: #009900;
+  width: 99.5%;
+}
+.password-hints li:before {
+  content: "●";
+  color: #f3f3f3;
+  padding-right: .5em;
+}
+.password-hints li.success:before {
+  color: #009900;
+}
+.password-hints li.error:before {
+  color: #d40101;
+}
+#passbolt-iframe-secret-edition {
+  width: 100%;
+  display: block;
+  height: 5em;
+}
+.master-password.dialog label {
+  margin-bottom: 1em;
+}
+.master-password.dialog input[type=password] {
+  width: 80%;
 }
 /**
  * Needed for Firefox plugin

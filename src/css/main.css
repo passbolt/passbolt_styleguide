@@ -1139,7 +1139,11 @@ a.button.disabled:hover,
 input[type=submit].disabled:active,
 input.button.disabled:active,
 button.disabled:active,
-a.button.disabled:active {
+a.button.disabled:active,
+input[type=submit].disabled:focus,
+input.button.disabled:focus,
+button.disabled:focus,
+a.button.disabled:focus {
   -webkit-box-shadow: 0 0 0;
   -moz-box-shadow: 0 0 0;
   box-shadow: 0 0 0;
@@ -1295,7 +1299,7 @@ textarea {
 }
 /* text and textarea */
 /*
-	Radio
+	Checkboxes and Radio
 */
 .checkboxlist .input.checkbox label,
 .radiolist .input.radio label {
@@ -1305,7 +1309,6 @@ textarea {
 .checkbox label {
   font-weight: normal;
   display: inline;
-  font-size: 1em;
 }
 /* radio and checkboxes */
 /*
@@ -1520,78 +1523,81 @@ select.fluid {
  */
 .scroll {
   overflow-y: scroll;
-  background: -webkit-linear-gradient(#ffffff 30%, rgba(255, 255, 255, 0)), -webkit-linear-gradient(rgba(255, 255, 255, 0), #ffffff 70%) bottom, -webkit-radial-gradient(50% 0, rgba(0, 0, 0, 0.2), transparent 70%), -webkit-radial-gradient(50% 100%, rgba(0, 0, 0, 0.2), transparent 70%) bottom;
+  background: linear-gradient(#ffffff 30%, rgba(255, 255, 255, 0)), linear-gradient(rgba(255, 255, 255, 0), #ffffff 70%) 0 100%, radial-gradient(farthest-side at 75% 0, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0)), radial-gradient(farthest-side at 75% 100%, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0)) 0 100%;
   background-repeat: no-repeat;
-  background-size: 100% 2.5em, 100% 2.5em, 100% .31250em, 100% .31250em;
+  background-color: white;
+  background-size: 100% 10px, 100% 10px, 100% 5px, 100% 5px;
+  /* Opera doesn't support this in the shorthand */
   background-attachment: local, local, scroll, scroll;
 }
 /*
  * Scrollbar styling with native webkit support
- */
+
 .cssscrollbar ::-webkit-scrollbar {
-  width: .625em;
-  /* 10px */
+	width:.625em;
 }
 .cssscrollbar ::-webkit-scrollbar-track {
-  background: #ffffff;
+	background:@scrollbar-background;
 }
 .cssscrollbar ::-webkit-scrollbar-thumb {
-  background: #888888;
+	background:@scrollbar;
 }
 .cssscrollbar ::-webkit-scrollbar-thumb:window-inactive {
-  background: #ffffff;
+	background:@scrollbar-background;
 }
+*/
 /*
  * Styles needed by jScrollPane fallback
- */
+
 .no-cssscrollbar .jspContainer {
-  overflow: hidden;
-  position: relative;
+	overflow: hidden;
+	position: relative;
 }
 .no-cssscrollbar .jspPane {
-  position: absolute;
+	position: absolute;
 }
 .no-cssscrollbar .jspVerticalBar {
-  position: absolute;
-  top: 0;
-  right: 0;
-  width: 10px;
-  height: 100%;
+	position: absolute;
+	top: 0;
+	right: 0;
+	width: 10px;
+	height: 100%;
 }
 .no-cssscrollbar .jspHorizontalBar {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: .625em;
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	width: 100%;
+	height: .625em;
 }
 .no-cssscrollbar .jspVerticalBar *,
 .no-cssscrollbar .jspHorizontalBar * {
-  margin: 0;
-  padding: 0;
+	margin: 0;
+	padding: 0;
 }
 .no-cssscrollbar .jspCap {
-  display: none;
+	display: none;
 }
 .no-cssscrollbar .jspHorizontalBar .jspCap {
-  float: left;
+	float: left;
 }
 .no-cssscrollbar .jspTrack {
-  background: #ffffff;
-  position: relative;
+	background: @scrollbar-background;
+	position: relative;
 }
 .no-cssscrollbar .jspDrag {
-  background: #888888;
-  position: relative;
-  top: 0;
-  left: 0;
-  cursor: pointer;
+	background:@scrollbar;
+	position: relative;
+	top: 0;
+	left: 0;
+	cursor: pointer;
 }
 .no-cssscrollbar .jspHorizontalBar .jspTrack,
 .no-cssscrollbar .jspHorizontalBar .jspDrag {
-  float: left;
-  height: 100%;
+	float: left;
+	height: 100%;
 }
+*/
 /* headers */
 .header {
   /* top navigation */
@@ -1853,6 +1859,9 @@ input[type="search"]::-webkit-search-cancel-button {
   height: 2px;
   display: block;
 }
+.progress-details {
+  display: none;
+}
 /* larger progress bar */
 .progress-bar-wrapper {
   border: 1px solid #dddddd;
@@ -1919,6 +1928,38 @@ input[type="search"]::-webkit-search-cancel-button {
     background: transparent;
     font-weight: normal;
   }
+}
+/*
+	do not show javascript needed warning if js is enabled
+	this needs modernizer to work
+*/
+.js .message.no-js {
+  display: none;
+}
+.cookies .message.no-cookies {
+  display: none;
+}
+/* message styling per types */
+.message {
+  padding: 1em;
+}
+.message a {
+  border-bottom: 1px solid #888888;
+}
+.message a:hover {
+  border-bottom: 1px solid #2894df;
+}
+.message.error {
+  background: #ffe4e4;
+}
+.message.success {
+  background: #edf7eb;
+}
+.message.notice {
+  background: #daecf9;
+}
+.message.warning {
+  background: #ffefc1;
 }
 /*
   	Copy secret component
@@ -2020,7 +2061,7 @@ div.secret-copy > pre {
 .dialog-wrapper {
   position: absolute;
   width: 100%;
-  z-index: 990;
+  z-index: 999;
   background: rgba(255, 255, 255, 0.9);
   height: 100%;
 }
@@ -2050,16 +2091,25 @@ div.secret-copy > pre {
   font-size: 0.7em;
   color: #888888;
 }
-.dialog .dialog-close {
+/* close dialog cross */
+.dialog a.dialog-close,
+.dialog a.dialog-close:hover {
+  display: block;
   float: right;
-  right: 1em;
   margin-top: -2.5em;
-  padding: .25em .25em 0em .25em;
-  width: 1em;
-  text-align: center;
-  border: 1px solid transparent;
+  border: 0;
 }
-.dialog .dialog-close:hover {
+.dialog a.dialog-close .icon.close {
+  padding-top: 15px;
+  width: 30px;
+  height: 15px;
+  text-align: center;
+  display: block;
+  vertical-align: baseline;
+  line-height: 0;
+  border: 1px solid #eeeeee;
+}
+.dialog a.dialog-close:hover .icon.close {
   border: 1px solid #dddddd;
 }
 /* content */
@@ -2069,11 +2119,12 @@ div.secret-copy > pre {
 /* inputs */
 .dialog .form-content {
   background: #FFF;
-  font-size: .813em;
-  padding: 1em 1.5em 1em 2em;
+  padding: .813em 1.25em .813em 1.5em;
 }
 .dialog label {
   clear: both;
+  font-size: 0.938em;
+  /* 14/16 */
 }
 .dialog input[type=text] {
   width: 92%;
@@ -2086,10 +2137,12 @@ div.secret-copy > pre {
 .dialog textarea {
   width: 92%;
 }
-.dialog .error {
+.dialog input + .message.error {
   display: block;
-  width: 100%;
   clear: both;
+  width: 92%;
+  padding-bottom: .5em;
+  font-size: .813em;
 }
 /* submit / cancel */
 .dialog .submit-wrapper {
@@ -2101,11 +2154,12 @@ div.secret-copy > pre {
 .dialog .submit-wrapper .cancel,
 .dialog .submit-wrapper .button {
   float: left;
-  margin-left: 2em;
-  font-size: 16px;
+  margin-left: 1.125em;
+  font-size: 1.125em;
 }
 .dialog .submit-wrapper .cancel {
   margin-top: .5em;
+  font-size: 1em;
 }
 /* dropdown */
 .dropdown {
@@ -2764,7 +2818,7 @@ div.secret-copy > pre {
 /* main content */
 .tableview-content {
   top: 2em;
-  bottom: 0;
+  bottom: 45px;
   padding: 0;
   position: absolute;
   width: 100%;
@@ -3088,7 +3142,7 @@ div.secret-copy > pre {
  * 2. The use of `table` rather than `block` is only necessary if using
  *	`:before` to contain the top-margins of child elements.
  */
-  width: 90%;
+  width: 100%;
 }
 .input-password-wrapper:before,
 .input-password-wrapper:after {
@@ -3107,25 +3161,28 @@ div.secret-copy > pre {
   clear: both;
 }
 .input-password-wrapper .input.password input {
-  width: 63%;
+  width: 61.5%;
   float: left;
 }
 .input-password-wrapper .actions.inline {
   float: right;
-  margin-right: .5em;
-  width: 28%;
+  width: 33%;
 }
 .input-password-wrapper .actions.inline .button {
   float: left;
+  margin-left: .5em;
+  margin-right: 0;
 }
 .input-password-wrapper .password-complexity .complexity-text {
   float: right;
   clear: right;
-  width: 28%;
+  width: 31.5%;
   font-size: 11px;
+  text-align: left;
+  padding-left: 0;
 }
 .input-password-wrapper .password-complexity .progress {
-  width: 67%;
+  width: 66.5%;
   border: 1px solid #dddddd;
   height: 7px;
   display: block;
@@ -3172,16 +3229,98 @@ div.secret-copy > pre {
 .password-hints li.error:before {
   color: #d40101;
 }
+#passbolt-iframe-secret-edition {
+  width: 100%;
+  display: block;
+  height: 5em;
+}
+/**
+ * Based on Farbtastic Color Picker 1.2
+ * © 2008 Steven Wittens / © 2015 Passbolt
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ */
+.colorpicker {
+  margin-top: 1.5em;
+}
+.colorpicker .input.color {
+  float: left;
+  margin-top: 70px;
+  margin-left: 240px;
+}
+.colorpicker .input input[type=text].token {
+  width: 3em;
+  font-size: 24px;
+  border: none;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+  text-align: center;
+}
+.colorpicker .farbtastic {
+  position: relative;
+}
+.colorpicker .farbtastic * {
+  position: absolute;
+  cursor: crosshair;
+}
+.colorpicker .farbtastic,
+.colorpicker .farbtastic .wheel {
+  width: 195px;
+  height: 195px;
+}
+.colorpicker .farbtastic .color,
+.colorpicker .farbtastic .overlay {
+  top: 47px;
+  left: 47px;
+  width: 101px;
+  height: 101px;
+}
+.colorpicker .farbtastic .wheel {
+  background: url('../img/controls/colorpicker/wheel.png') no-repeat;
+  width: 195px;
+  height: 195px;
+}
+.colorpicker .farbtastic .overlay {
+  background: url('../img/controls/colorpicker/mask.png') no-repeat;
+}
+.colorpicker .farbtastic .marker {
+  width: 17px;
+  height: 17px;
+  margin: -8px 0 0 -8px;
+  overflow: hidden;
+  background: url('../img/controls/colorpicker/marker.png') no-repeat;
+}
 .input-password-wrapper {
   overflow: hidden;
 }
 /* password share tab */
+.dialog .share-tab {
+  /* list of existing permissions settings */
+  /* message */
+  /* form to add new permissions */
+}
 .dialog .share-tab .form-content {
   padding: 1em;
 }
-/* list of existing permissions settings */
-.dialog .share-tab .scroll {
-  max-height: 21.25em;
+.dialog .share-tab .permission-edit {
+  padding: 0em;
+}
+.dialog .share-tab .permissions.scroll {
+  height: 19em;
+  margin: 0;
 }
 .dialog .share-tab .row {
   /*
@@ -3215,8 +3354,11 @@ div.secret-copy > pre {
  * 2. The use of `table` rather than `block` is only necessary if using
  *	`:before` to contain the top-margins of child elements.
  */
-  padding: .5em;
+  font-size: .813em;
+  padding: .825em .5em .5em 1em;
   border-bottom: 1px dotted #dddddd;
+  /* user summary */
+  /* row actions */
 }
 .dialog .share-tab .row:before,
 .dialog .share-tab .row:after {
@@ -3257,10 +3399,15 @@ div.secret-copy > pre {
 .dialog .share-tab .row .rights {
   float: left;
   margin-top: .5em;
+  width: 25%;
+}
+.dialog .share-tab .row .rights select {
+  width: 95%;
+  font-size: 1em;
 }
 .dialog .share-tab .row .actions {
   float: right;
-  margin-top: .55em;
+  margin-top: 1em;
 }
 .dialog .share-tab .row .actions a {
   font-size: 1.125em;
@@ -3280,7 +3427,10 @@ div.secret-copy > pre {
 .dialog .share-tab .row.inherited-permission .inherited-actions a {
   color: #888888;
 }
-/* form to add new permissions */
+.dialog .share-tab .message {
+  font-size: 0.813em;
+  padding-left: 2em;
+}
 .dialog .share-tab .form-content.permission-add {
   padding: 0 1.5em 1em 1.5em;
   /*
@@ -3331,17 +3481,69 @@ div.secret-copy > pre {
 .dialog .share-tab .form-content.permission-add:after {
   clear: both;
 }
+.dialog .share-tab .form-content.permission-add label {
+  padding-bottom: .5em;
+  padding-top: 1em;
+}
 .dialog .share-tab .form-content.permission-add .autocomplete input {
-  width: 53%;
-  margin-right: 4%;
+  width: 45%;
+  margin-right: 2%;
   float: left;
-  font-size: 1em;
 }
 .dialog .share-tab .form-content.permission-add .autocomplete-content {
   width: 52%;
 }
 .dialog .share-tab .form-content.permission-add .perm-type {
   margin-right: 4%;
+}
+.dialog .share-tab .form-content.permission-add .actions {
+  /*
+ * For IE 6/7 only
+ * Include this rule to trigger hasLayout and contain floats.
+ */
+  /*
+ * Clearfix: contain floats
+ *
+ * For modern browsers
+ * 1. The space content is one way to avoid an Opera bug when the
+ *	`contenteditable` attribute is included anywhere else in the document.
+ *	Otherwise it causes space to appear at the top and bottom of elements
+ *	that receive the `clearfix` class.
+ * 2. The use of `table` rather than `block` is only necessary if using
+ *	`:before` to contain the top-margins of child elements.
+ */
+  /*
+ * For IE 6/7 only
+ * Include this rule to trigger hasLayout and contain floats.
+ */
+  zoom: 1;
+  /*
+ * Clearfix: contain floats
+ *
+ * For modern browsers
+ * 1. The space content is one way to avoid an Opera bug when the
+ *	`contenteditable` attribute is included anywhere else in the document.
+ *	Otherwise it causes space to appear at the top and bottom of elements
+ *	that receive the `clearfix` class.
+ * 2. The use of `table` rather than `block` is only necessary if using
+ *	`:before` to contain the top-margins of child elements.
+ */
+}
+.dialog .share-tab .form-content.permission-add .actions:before,
+.dialog .share-tab .form-content.permission-add .actions:after {
+  content: "";
+  display: table;
+}
+.dialog .share-tab .form-content.permission-add .actions:after {
+  clear: both;
+}
+.dialog .share-tab .form-content.permission-add .actions:before,
+.dialog .share-tab .form-content.permission-add .actions:after {
+  content: "";
+  display: table;
+}
+.dialog .share-tab .form-content.permission-add .actions:after {
+  clear: both;
 }
 .dialog .share-tab .form-content.permission-add .actions input {
   padding: 0.3em 1em;
@@ -3350,6 +3552,17 @@ div.secret-copy > pre {
   clear: both;
   display: block;
   float: left;
+}
+.dialog .share-tab .form-content.permission-add .select select {
+  width: 7em;
+  font-size: 1em;
+}
+.dialog .share-tab .form-content.permission-add .button {
+  font-size: 1em;
+  line-height: 1.5em;
+}
+.dialog .share-tab .form-content.permission-add .message {
+  padding-left: 0;
 }
 .dialog .organize-tab .current-folder {
   background: #f3f3f3;
@@ -3478,6 +3691,10 @@ div.secret-copy > pre {
   width: 25px !important;
   height: 25px !important;
 }
+/*
+ * Password workspace
+ * @todo better namespacing
+ */
 /* drag n drop */
 #js_dragged_resource {
   padding: 6px 10px;
@@ -3490,9 +3707,17 @@ div.secret-copy > pre {
 #js_dragged_resource span.name {
   font-weight: bold;
 }
+/* sidebar */
 .panel.aside .resource .detailed-information li.password .value {
   height: 1.6em;
   padding-top: 0.2em;
+}
+/* hide left column when there is no space */
+@media all and (max-width: 980px) {
+  .tableview .js_grid_column_owner,
+  .tableview .js_grid_column_modified {
+    display: none;
+  }
 }
 .passbolt_controller_preference_workspace_controller .section.detailed-information {
   /*

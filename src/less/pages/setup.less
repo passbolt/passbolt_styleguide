@@ -24,6 +24,16 @@
 
 	.input-password-wrapper {
 		margin-top:1.5em;
+		width:92%;
+
+		.input.password input {
+			width:60%;
+		}
+		.password-complexity {
+			.progress {
+				width:64%;
+			}
+		}
 	}
 
 	.first-password-wrapper {
@@ -92,5 +102,20 @@
 	.col2 {
 		width:55%;
 		left:1%;
+	}
+
+	.input-password-wrapper {
+		.input.password ,
+		.actions.inline {
+			position: relative;
+			float: none;
+			clear: both;
+		}
+		.actions.inline {
+			width:100%;
+		}
+		.input.password input[type=password]{
+			width:87%;
+		}
 	}
 }
