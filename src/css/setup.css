@@ -2679,17 +2679,6 @@ table.table-info td + td {
   margin-left: 50px;
   padding-left: 1em;
 }
-/* file dropzone */
-.input.file .dropzone {
-  width: 100%;
-  border: 3px dotted #dddddd;
-  height: 15em;
-  text-align: center;
-  display: block;
-  line-height: 15em;
-  margin-bottom: 1em;
-  color: #888888;
-}
 /*
 	Password fields in passbolt have complexity "progress bar"
 	and a custom layout to accomodate buttons on the left end
@@ -2825,6 +2814,7 @@ table.table-info td + td {
 .setup {
   /* first step */
   /* login password step main form */
+  /* import key */
   /* last row is for cancel / submit buttons */
   /* gpg textare is tall */
   /* big feedback message blocks */
@@ -2867,6 +2857,13 @@ table.table-info td + td {
 }
 .setup .first-password-wrapper {
   padding-top: 1em;
+}
+.setup .import-key-wrapper .input {
+  margin-top: 1em;
+  margin-right: 1em;
+}
+.setup .import-key-wrapper .input.file .help-text {
+  margin-left: 1em;
 }
 .setup .row.last {
   padding-top: 1.5em;

@@ -1,6 +1,5 @@
 <!doctype html>
-<html lang="en">
-<head>
+<html lang="en"><head>
 	<meta charset="utf-8">
 	<title>Passbolt - The simple password management system</title>
 	<base href="../src/">
@@ -8,7 +7,7 @@
 	<link rel="stylesheet" type="text/css" href="css/setup.css"><meta http-equiv="pragma" content="no-cache" />
 </head>
 <body>
-<div id="container" class="page setup">
+<div class="page setup" id="container">
 	<!-- first header -->
 	<div class="header first">
 		<nav>
@@ -22,82 +21,65 @@
 	<div class="header second">
 		<div class="col1">
 			<div class="logo">
-				<img src="img/logo/logo.png" alt="passbolt">
+				<img alt="passbolt" src="img/logo/logo.png">
 				<h1><span>Passbolt</span></h1>
 			</div>
 		</div>
 		<div class="col2_3">
-			<h2>Import an existing key or <a href="../demo/setup2a.html" class="button primary">create</a> an new one</h2>
+			<h2 id="js_step_title">Import an existing key or <a class="button primary" href="#" id="js_setup_goto_define_key">create</a> a new one!</h2>
 		</div>
 	</div>
 
 	<div class="panel main ">
 		<!-- wizard steps -->
 		<div class="panel left">
-			<div class="navigation wizard">
-				<ul>
-					<li class="">
-						<a href="../demo/setup1.html">1. Get the plugin</a>
-					</li>
-					<li class="selected">
-						<a href="../demo/setup2b.html">2. Import your keys</a>
-					</li>
-					<li class="disabled">
-						3. Review key info
-					</li>
-					<li class="disabled">
-						4. Set a security token
-					</li>
-					<li class="disabled">
-						5. Login!
-					</li>
-				</ul>
+			<div id="js_menu" class="navigation wizard"><ul>
+
+				<li class="past">
+					<a href="#">1. Get the plugin</a>
+				</li>
+				<li class="selected">
+					<a href="#">2. Import your key</a>
+				</li>
+				<li class="disabled">
+					3. Review key info
+				</li>
+				<li class="disabled">
+					4. Set a security token
+				</li>
+				<li class="disabled">
+					5. Login !
+				</li>
+
+			</ul>
 			</div>
 		</div>
 		<!-- main -->
 		<div class="panel middle">
 			<div class="grid grid-responsive-12">
-				<form>
-					<div class="row">
-						<!-- left collumn -->
-						<div class="col6">
-							<h3>Import public & secret key from a file</h3>
-							<div class="input file">
-								<div class="dropzone">
-									Drag and drop your GPG key file here.
-								</div>
-								<div class="input-wrapper">
-									<div class="input-wrapper-2">
-										<input name="data[Key][file]" value="" id="KeyFile" type="file">
-									</div>
-								</div>
-							</div>
+				<div id="js_step_content" class="row import-key-wrapper">
+					<div class="col6">
+						<h3>Copy paste your public and private key below</h3>
+						<div class="input textarea gpgkey">
+							<textarea id="js_setup_import_key_text" class="fluid code" name="data[Key][ascii]" placeholder=""></textarea>
 						</div>
-
-						<!-- right collumn -->
-						<div class="col6 last">
-							<h3>or copy paste your key bellow</h3>
-							<div class="input textarea gpgkey">
-								<textarea name="data[Key][ascii]" class="fluid code" id="KeyAscii"></textarea>
-							</div>
+						<div class="input file">
+							<input type="submit" id="js_setup_import_key_browse" value="Browse..." name="data[Key][file]">
+							<span class="help-text">Or select a file from your computer</span>
 						</div>
-
+						<div id="KeyErrorMessage" class="message error hidden"></div>
 					</div>
 
-					<div class="row last">
-						<div class="input-wrapper">
-							<a href="../demo/setup12.html" class="button cancel big">cancel</a>
-							<a href="../demo/setup3b.html" class="button primary next big">next</a>
-						</div>
+				</div>
+				<div class="row last">
+					<div id="js_step_actions" class="submit-input-wrapper">
+						<a class="button primary big js-state-enabled enabled" href="#" id="js_setup_cancel_step">Cancel</a>
+						<a class="button primary big js-state-disabled disabled" href="#" id="js_setup_submit_step">Next</a>
 					</div>
-
-				</form>
-
+				</div>
 			</div>
 		</div>
-
 	</div>
-
 	<!-- footer -->
 	<div class="footer">
 		<span class="copyright">&copy; 2015 passbolt.com </span>

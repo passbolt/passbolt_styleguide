@@ -1831,17 +1831,6 @@ input:focus + .security-token {
   margin-left: 50px;
   padding-left: 1em;
 }
-/* file dropzone */
-.input.file .dropzone {
-  width: 100%;
-  border: 3px dotted #dddddd;
-  height: 15em;
-  text-align: center;
-  display: block;
-  line-height: 15em;
-  margin-bottom: 1em;
-  color: #888888;
-}
 /*
 	Password fields in passbolt have complexity "progress bar"
 	and a custom layout to accomodate buttons on the left end
