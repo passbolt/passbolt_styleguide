@@ -18,10 +18,6 @@
 		margin-top:-5px;
 	}
 
-	.why-plugin-wrapper p {
-		padding-bottom:1em;
-	}
-
 	.input-password-wrapper {
 		margin-top:1.5em;
 		width:92%;
@@ -36,9 +32,27 @@
 		}
 	}
 
+	/* first step */
+	.why-plugin-wrapper {
+		 p {
+			 padding-bottom: 1em;
+		 }
+		input[type=text] {
+			width:80%;
+		}
+		label {
+			font-size: 1em;
+		}
+		.checkbox {
+			padding:.5em 0;
+		}
+	}
+
+	/* login password step main form */
 	.first-password-wrapper {
 		padding-top:1em;
 	}
+
 	/* last row is for cancel / submit buttons */
 	.row.last {
 		padding-top:1.5em;
@@ -50,6 +64,7 @@
 		width:95%;
 	}
 
+	/* big feedback message blocks */
 	.side-message {
 		margin-top:3em;
 		margin-left:1em;
@@ -66,7 +81,28 @@
 			border-color:@blue;
 		}
 	}
+
+	/* backup step */
+	.backup-prompt {
+		.clearfix();
+		margin:2em 0;
+		.button {
+			margin-top:.25em;
+			float:left;
+			min-width:110px;
+			width:20%;
+			.icon {
+				padding-right:1em;
+			}
+		}
+		.help-text {
+			float:left;
+			margin-left:5%;
+			width:60%;
+		}
+	}
 }
+
 /* hide left column when there is no space */
 @media all and (min-width: 980px) {
 

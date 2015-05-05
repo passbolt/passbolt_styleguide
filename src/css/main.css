@@ -918,6 +918,9 @@ span + .icon {
 .icon.paperplane:before {
   content: '\1F53F';
 }
+.icon.download:before {
+  content: '\1F4E5';
+}
 /** notification messages **/
 .notification_status .icon.success:before {
   content: '\2713';
@@ -1912,21 +1915,45 @@ input[type="search"]::-webkit-search-cancel-button {
 /*
  * Notification
  */
+.notification-container {
+  font-size: .75em;
+  /* 12px */
+  width: 100%;
+}
+.notification-container .message {
+  float: left;
+  margin-left: 25%;
+  width: 50%;
+}
 @media all and (min-width: 768px) {
   .notification-container {
     bottom: 0;
     position: absolute;
     z-index: 992;
-    width: 100%;
     height: 2em;
     margin: 0;
     padding-top: 0.833em;
-    font-size: .75em;
-    /* 12px */
   }
-  .notification .message {
-    background: transparent;
+  .notification-container .notification .message {
+    margin: 0;
+    padding: 0;
+    width: 60%;
+    float: none;
+    background: #ffffff;
     font-weight: normal;
+    /* colors for messages */
+  }
+  .notification-container .notification .message.error {
+    color: #d40101;
+  }
+  .notification-container .notification .message.success {
+    color: #009900;
+  }
+  .notification-container .notification .message.warning {
+    color: #9f6000;
+  }
+  .notification-container .notification .message.notice {
+    color: #2894df;
   }
 }
 /*
@@ -2019,7 +2046,7 @@ div.secret-copy:after {
 div.secret-copy > a {
   background: transparent url('../img/controls/password-dots.png') no-repeat left top;
   display: inline-block;
-  width: 148px;
+  width: 92px;
   height: 20px;
   float: left;
 }
@@ -2033,6 +2060,7 @@ div.secret-copy > a:after {
   width: 20px;
   height: 20px;
   float: right;
+  margin-right: -30px;
 }
 div.secret-copy > a:hover:after {
   background: transparent url('../img/logo/icon-20.png') no-repeat center center;
@@ -2631,6 +2659,7 @@ div.secret-copy > pre {
 .panel.aside .resource h3,
 .panel.aside .user h3 {
   margin-top: .5em;
+  border: 0;
 }
 .panel.aside .resource h4,
 .panel.aside .user h4 {
@@ -2735,12 +2764,12 @@ div.secret-copy > pre {
 .panel.aside .user .dialog-close {
   position: absolute;
   right: 1em;
-  top: 2em;
+  top: 1em;
 }
 .panel.aside .resource .section-action,
 .panel.aside .user .section-action {
   float: right;
-  margin-top: -1.65em;
+  margin-top: -2.25em;
   padding: 0;
 }
 .panel.aside .resource .detailed-information li .label,
@@ -2834,7 +2863,7 @@ div.secret-copy > pre {
 .tableview table th,
 .tableview table td {
   text-align: left;
-  padding: .25em 0;
+  padding: .25em .125em;
   vertical-align: middle;
   white-space: nowrap;
   overflow: hidden;
@@ -2869,7 +2898,7 @@ div.secret-copy > pre {
 .tableview table tbody tr.selected,
 .tableview table tbody tr:hover {
   height: 1em;
-  background: #ffffcc;
+  background: #fffacc;
 }
 .tableview table .checkbox label {
   display: none;
@@ -3712,9 +3741,16 @@ div.secret-copy > pre {
   height: 1.6em;
   padding-top: 0.2em;
 }
+/* unused collumn
+	@todo: remove html
+*/
+.js_grid_column_owner,
+.js_grid_column_copyLogin,
+.js_grid_column_copySecret {
+  display: none;
+}
 /* hide left column when there is no space */
 @media all and (max-width: 980px) {
-  .tableview .js_grid_column_owner,
   .tableview .js_grid_column_modified {
     display: none;
   }

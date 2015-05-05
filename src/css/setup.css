@@ -918,6 +918,9 @@ span + .icon {
 .icon.paperplane:before {
   content: '\1F53F';
 }
+.icon.download:before {
+  content: '\1F4E5';
+}
 /** notification messages **/
 .notification_status .icon.success:before {
   content: '\2713';
@@ -2101,21 +2104,45 @@ select.fluid {
 /*
  * Notification
  */
+.notification-container {
+  font-size: .75em;
+  /* 12px */
+  width: 100%;
+}
+.notification-container .message {
+  float: left;
+  margin-left: 25%;
+  width: 50%;
+}
 @media all and (min-width: 768px) {
   .notification-container {
     bottom: 0;
     position: absolute;
     z-index: 992;
-    width: 100%;
     height: 2em;
     margin: 0;
     padding-top: 0.833em;
-    font-size: .75em;
-    /* 12px */
   }
-  .notification .message {
-    background: transparent;
+  .notification-container .notification .message {
+    margin: 0;
+    padding: 0;
+    width: 60%;
+    float: none;
+    background: #ffffff;
     font-weight: normal;
+    /* colors for messages */
+  }
+  .notification-container .notification .message.error {
+    color: #d40101;
+  }
+  .notification-container .notification .message.success {
+    color: #009900;
+  }
+  .notification-container .notification .message.warning {
+    color: #9f6000;
+  }
+  .notification-container .notification .message.notice {
+    color: #2894df;
   }
 }
 /* Dialog */
@@ -2796,8 +2823,12 @@ table.table-info td + td {
 	Mostly extra padding here and there
 */
 .setup {
+  /* first step */
+  /* login password step main form */
   /* last row is for cancel / submit buttons */
   /* gpg textare is tall */
+  /* big feedback message blocks */
+  /* backup step */
 }
 .setup .video-wrapper {
   margin-top: 2em;
@@ -2812,9 +2843,6 @@ table.table-info td + td {
   margin-right: 0.3em;
   margin-top: -5px;
 }
-.setup .why-plugin-wrapper p {
-  padding-bottom: 1em;
-}
 .setup .input-password-wrapper {
   margin-top: 1.5em;
   width: 92%;
@@ -2824,6 +2852,18 @@ table.table-info td + td {
 }
 .setup .input-password-wrapper .password-complexity .progress {
   width: 64%;
+}
+.setup .why-plugin-wrapper p {
+  padding-bottom: 1em;
+}
+.setup .why-plugin-wrapper input[type=text] {
+  width: 80%;
+}
+.setup .why-plugin-wrapper label {
+  font-size: 1em;
+}
+.setup .why-plugin-wrapper .checkbox {
+  padding: .5em 0;
 }
 .setup .first-password-wrapper {
   padding-top: 1em;
@@ -2850,6 +2890,70 @@ table.table-info td + td {
 }
 .setup .side-message a:hover {
   border-color: #2894df;
+}
+.setup .backup-prompt {
+  /*
+ * For IE 6/7 only
+ * Include this rule to trigger hasLayout and contain floats.
+ */
+  /*
+ * Clearfix: contain floats
+ *
+ * For modern browsers
+ * 1. The space content is one way to avoid an Opera bug when the
+ *	`contenteditable` attribute is included anywhere else in the document.
+ *	Otherwise it causes space to appear at the top and bottom of elements
+ *	that receive the `clearfix` class.
+ * 2. The use of `table` rather than `block` is only necessary if using
+ *	`:before` to contain the top-margins of child elements.
+ */
+  /*
+ * For IE 6/7 only
+ * Include this rule to trigger hasLayout and contain floats.
+ */
+  zoom: 1;
+  /*
+ * Clearfix: contain floats
+ *
+ * For modern browsers
+ * 1. The space content is one way to avoid an Opera bug when the
+ *	`contenteditable` attribute is included anywhere else in the document.
+ *	Otherwise it causes space to appear at the top and bottom of elements
+ *	that receive the `clearfix` class.
+ * 2. The use of `table` rather than `block` is only necessary if using
+ *	`:before` to contain the top-margins of child elements.
+ */
+  margin: 2em 0;
+}
+.setup .backup-prompt:before,
+.setup .backup-prompt:after {
+  content: "";
+  display: table;
+}
+.setup .backup-prompt:after {
+  clear: both;
+}
+.setup .backup-prompt:before,
+.setup .backup-prompt:after {
+  content: "";
+  display: table;
+}
+.setup .backup-prompt:after {
+  clear: both;
+}
+.setup .backup-prompt .button {
+  margin-top: .25em;
+  float: left;
+  min-width: 110px;
+  width: 20%;
+}
+.setup .backup-prompt .button .icon {
+  padding-right: 1em;
+}
+.setup .backup-prompt .help-text {
+  float: left;
+  margin-left: 5%;
+  width: 60%;
 }
 /* hide left column when there is no space */
 @media all and (min-width: 980px) {
