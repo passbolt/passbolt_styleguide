@@ -6,55 +6,59 @@
       img {
         border: 1px solid @border-default;
         padding: 0;
+				width:12.5em;
+				height:12.5em;
+				margin:.5em 1em 0 0;
       }
       .edit {
-        width: 201px;
-        height: 50px;
+        width: 12.5em;
+        height: 3.125em;
         background: transparent url('@{images}/controls/overlay-opacity-50.png') repeat;
+				border: 1px solid transparent;
         color: #fff;
-        margin-top: -55px;
+				margin:-3.25em 0 2em 0;
         position: relative;
+
         a {
           color: #fff;
           display: block;
-          height: 50px;
+          height: 3.125em;
           .clearfix();
+
           i.icon {
             display: block;
             float: left;
             &:before {
               display: block;
               float: left;
-              width: 48px;
-              height: 48px;
+              width: 1em;
+              height: 1em;
               line-height: 1.4em;
               font-size: 3em;
               text-align: center;
             }
           }
-          span.text {
+          .help-text {
             display: block;
-            width: 130px;
+						font-size: 0.813em; /* 13/16px */
+            width: 10em; /* 130/13 */
             float: left;
             margin-left: 0;
             padding: 0.5em 0.5em 0 0.5em;
-            font-size: 0.8em;
           }
         }
       }
     }
-
-    > ul {
-      float: left;
-      margin-left: 2em;
-      li {
-        margin-bottom: 1.5em;
-        p > em {
-          margin-top: 0.8em;
-          font-size: 0.8em;
-          display: block;
-        }
-      }
-    }
   }
+}
+
+
+/* hide icons if there is no space */
+@media all and (max-width: 950px) {
+	.passbolt_controller_preference_workspace_controller .section.detailed-information {
+		.avatar {
+			float:none;
+		}
+	}
+
 }

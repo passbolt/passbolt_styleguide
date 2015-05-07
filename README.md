@@ -49,6 +49,7 @@ This is how bower knows a new version is available in the project using the pack
   git commit -am 'X.X.X'
   git tag -a X.X.X -m 'X.X.X'
   git push origin X.X.X
+  git push
 
 in your project using the bower package you can then run:
 
