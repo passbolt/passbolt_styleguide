@@ -996,7 +996,8 @@ label {
   color: #bbb;
 }
 /* moz placeholder */
-:-moz-placeholder {
+:-moz-placeholder,
+::-moz-placeholder {
   color: #bbb;
 }
 /*

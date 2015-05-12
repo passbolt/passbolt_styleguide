@@ -1299,7 +1299,8 @@ label {
   color: #bbb;
 }
 /* moz placeholder */
-:-moz-placeholder {
+:-moz-placeholder,
+::-moz-placeholder {
   color: #bbb;
 }
 /*
@@ -3821,6 +3822,21 @@ table.table-info.horizontal tbody tr:nth-child(even) {
   width: 61.5%;
   float: left;
 }
+.input-password-wrapper .input.password.has-encrypted-secret input {
+  /* fallback placeholder */
+  /* webkit placeholder */
+  /* moz placeholder */
+}
+.input-password-wrapper .input.password.has-encrypted-secret input.placeholder {
+  color: #333333;
+}
+.input-password-wrapper .input.password.has-encrypted-secret input::-webkit-input-placeholder {
+  color: #333333;
+}
+.input-password-wrapper .input.password.has-encrypted-secret input::-moz-placeholder,
+.input-password-wrapper .input.password.has-encrypted-secret input:-moz-placeholder {
+  color: #333333;
+}
 .input-password-wrapper .actions.inline {
   float: right;
   width: 32%;
@@ -4437,10 +4453,10 @@ table.table-info.horizontal tbody tr:nth-child(even) {
   }
 }
 /* TODO replace by page level selector */
-.page.profile .main.panel .middle {
+.page.settings .main.panel .middle {
   overflow-y: auto;
 }
-.page.profile .profile-detailed-information {
+.page.settings .profile-detailed-information {
   /*
  * For IE 6/7 only
  * Include this rule to trigger hasLayout and contain floats.
@@ -4473,33 +4489,33 @@ table.table-info.horizontal tbody tr:nth-child(even) {
  *	`:before` to contain the top-margins of child elements.
  */
 }
-.page.profile .profile-detailed-information:before,
-.page.profile .profile-detailed-information:after {
+.page.settings .profile-detailed-information:before,
+.page.settings .profile-detailed-information:after {
   content: "";
   display: table;
 }
-.page.profile .profile-detailed-information:after {
+.page.settings .profile-detailed-information:after {
   clear: both;
 }
-.page.profile .profile-detailed-information:before,
-.page.profile .profile-detailed-information:after {
+.page.settings .profile-detailed-information:before,
+.page.settings .profile-detailed-information:after {
   content: "";
   display: table;
 }
-.page.profile .profile-detailed-information:after {
+.page.settings .profile-detailed-information:after {
   clear: both;
 }
-.page.profile .profile-detailed-information .avatar {
+.page.settings .profile-detailed-information .avatar {
   float: left;
 }
-.page.profile .profile-detailed-information .avatar img {
+.page.settings .profile-detailed-information .avatar img {
   border: 1px solid #dddddd;
   padding: 0;
   width: 12.5em;
   height: 12.5em;
   margin: .5em 1em 0 0;
 }
-.page.profile .profile-detailed-information .avatar .edit {
+.page.settings .profile-detailed-information .avatar .edit {
   width: 12.5em;
   height: 3.125em;
   background: transparent url('../img/controls/overlay-opacity-50.png') repeat;
@@ -4508,7 +4524,7 @@ table.table-info.horizontal tbody tr:nth-child(even) {
   margin: -3.25em 0 2em 0;
   position: relative;
 }
-.page.profile .profile-detailed-information .avatar .edit a {
+.page.settings .profile-detailed-information .avatar .edit a {
   color: #fff;
   display: block;
   height: 3.125em;
@@ -4544,27 +4560,27 @@ table.table-info.horizontal tbody tr:nth-child(even) {
  *	`:before` to contain the top-margins of child elements.
  */
 }
-.page.profile .profile-detailed-information .avatar .edit a:before,
-.page.profile .profile-detailed-information .avatar .edit a:after {
+.page.settings .profile-detailed-information .avatar .edit a:before,
+.page.settings .profile-detailed-information .avatar .edit a:after {
   content: "";
   display: table;
 }
-.page.profile .profile-detailed-information .avatar .edit a:after {
+.page.settings .profile-detailed-information .avatar .edit a:after {
   clear: both;
 }
-.page.profile .profile-detailed-information .avatar .edit a:before,
-.page.profile .profile-detailed-information .avatar .edit a:after {
+.page.settings .profile-detailed-information .avatar .edit a:before,
+.page.settings .profile-detailed-information .avatar .edit a:after {
   content: "";
   display: table;
 }
-.page.profile .profile-detailed-information .avatar .edit a:after {
+.page.settings .profile-detailed-information .avatar .edit a:after {
   clear: both;
 }
-.page.profile .profile-detailed-information .avatar .edit a i.icon {
+.page.settings .profile-detailed-information .avatar .edit a i.icon {
   display: block;
   float: left;
 }
-.page.profile .profile-detailed-information .avatar .edit a i.icon:before {
+.page.settings .profile-detailed-information .avatar .edit a i.icon:before {
   display: block;
   float: left;
   width: 1em;
@@ -4573,7 +4589,7 @@ table.table-info.horizontal tbody tr:nth-child(even) {
   font-size: 3em;
   text-align: center;
 }
-.page.profile .profile-detailed-information .avatar .edit a .help-text {
+.page.settings .profile-detailed-information .avatar .edit a .help-text {
   display: block;
   font-size: 0.813em;
   /* 13/16px */
@@ -4583,15 +4599,15 @@ table.table-info.horizontal tbody tr:nth-child(even) {
   margin-left: 0;
   padding: 0.5em 0.5em 0 0.5em;
 }
-.page.profile .key-export .actions {
+.page.settings .key-export .actions {
   margin: 1em 0;
 }
-.page.profile .key-export .input.textarea.gpgkey textarea.fluid.code {
+.page.settings .key-export .input.textarea.gpgkey textarea.fluid.code {
   height: 27em;
 }
 /* hide icons if there is no space */
 @media all and (max-width: 950px) {
-  .page.profile .profile-detailed-information .avatar {
+  .page.settings .profile-detailed-information .avatar {
     float: none;
   }
 }
