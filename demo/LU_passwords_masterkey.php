@@ -37,7 +37,7 @@
 </head>
 <body>
 <!-- main -->
-<div id="container" class="page">
+<div id="container" class="page password">
 	<div class="mad_event_event_bus"></div>
 	<div class="passbolt_controller_app_controller mad_view_view js_component ready"
 			 id="js_app_controller">

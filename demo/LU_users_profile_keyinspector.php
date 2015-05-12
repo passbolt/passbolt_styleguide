@@ -4,7 +4,7 @@
 	<?php include('includes/LU_meta.php'); ?>
 </head>
 <body>
-<div id="container" class="page profile">
+<div id="container" class="page settings keys">
 	<div class="mad_event_event_bus"></div>
 	<div id="js_app_controller" class="passbolt_controller_app_controller mad_view_view js_component ready">
 		<!-- LU_passwords -->

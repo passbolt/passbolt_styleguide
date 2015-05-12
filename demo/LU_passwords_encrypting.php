@@ -49,7 +49,7 @@
 </head>
 <body>
 <!-- main -->
-<div id="container" class="page">
+<div id="container" class="page password">
 	<div class="mad_event_event_bus"></div>
 	<div id="ee22ae38-0500-ed38-57b2-d24993e0f884" class="mad_devel_devel">
 		<div class="mad_devel_devel_sidebar_controller mad_view_view js_component ready"

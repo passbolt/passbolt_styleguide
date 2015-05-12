@@ -49,7 +49,7 @@
 </head>
 <body>
 <!-- main -->
-<div class="page" id="container">
+<div class="page password" id="container">
 <div class="mad_event_event_bus"></div>
 <div class="mad_devel_devel" id="56f7227c-8515-7c7b-fadb-1d88beb5e974">
     <div id="js-devel-sidebar-ctl"
