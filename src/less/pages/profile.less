@@ -1,5 +1,11 @@
-.passbolt_controller_preference_workspace_controller {
-  .section.detailed-information {
+/* TODO replace by page level selector */
+//.js_preference_workspace {
+.page.profile {
+	.main.panel .middle {
+		overflow-y:auto;
+	}
+
+	.profile-detailed-information {
     .clearfix();
     .avatar {
       float: left;
@@ -50,15 +56,31 @@
       }
     }
   }
+	.key-export {
+		.actions {
+			margin:1em 0;
+		}
+		.input.textarea.gpgkey textarea.fluid.code {
+			height:27em;
+		}
+	}
 }
-
 
 /* hide icons if there is no space */
 @media all and (max-width: 950px) {
-	.passbolt_controller_preference_workspace_controller .section.detailed-information {
+	.page.profile .profile-detailed-information {
 		.avatar {
 			float:none;
 		}
 	}
+}
 
+/* table info is hard to fit because of fingerprint */
+@media (max-width: 1280px) {
+	.key-info .table-info {
+		font-size:	0.875em	;
+		.select select {
+			font-size:		0.929em	;
+		}
+	}
 }

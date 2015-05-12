@@ -1178,6 +1178,58 @@ a.button.disabled:focus {
   border: 1px solid #bbbbbb;
 }
 /* duo */
+.duo-wrapper {
+  /*
+ * For IE 6/7 only
+ * Include this rule to trigger hasLayout and contain floats.
+ */
+  /*
+ * Clearfix: contain floats
+ *
+ * For modern browsers
+ * 1. The space content is one way to avoid an Opera bug when the
+ *	`contenteditable` attribute is included anywhere else in the document.
+ *	Otherwise it causes space to appear at the top and bottom of elements
+ *	that receive the `clearfix` class.
+ * 2. The use of `table` rather than `block` is only necessary if using
+ *	`:before` to contain the top-margins of child elements.
+ */
+  /*
+ * For IE 6/7 only
+ * Include this rule to trigger hasLayout and contain floats.
+ */
+  zoom: 1;
+  /*
+ * Clearfix: contain floats
+ *
+ * For modern browsers
+ * 1. The space content is one way to avoid an Opera bug when the
+ *	`contenteditable` attribute is included anywhere else in the document.
+ *	Otherwise it causes space to appear at the top and bottom of elements
+ *	that receive the `clearfix` class.
+ * 2. The use of `table` rather than `block` is only necessary if using
+ *	`:before` to contain the top-margins of child elements.
+ */
+}
+.duo-wrapper:before,
+.duo-wrapper:after {
+  content: "";
+  display: table;
+}
+.duo-wrapper:after {
+  clear: both;
+}
+.duo-wrapper:before,
+.duo-wrapper:after {
+  content: "";
+  display: table;
+}
+.duo-wrapper:after {
+  clear: both;
+}
+.duo-wrapper .button {
+  float: left;
+}
 .button.duo:nth-child(1) {
   margin-right: 0;
   -webkit-border-top-right-radius: 0;
@@ -1596,7 +1648,7 @@ select.fluid {
  * 2. The use of `table` rather than `block` is only necessary if using
  *	`:before` to contain the top-margins of child elements.
  */
-  padding: 0 10px;
+  padding: 0;
 }
 .grid-responsive-12 .row:before,
 .grid .row:before,
@@ -2432,6 +2484,22 @@ input[type="search"]::-webkit-search-cancel-button {
 .message.warning {
   background: #ffefc1;
 }
+/* big side info message blocks on setup or profile pages */
+.side-message {
+  margin-left: 1em;
+  font-size: 1em;
+  margin-right: 2em;
+}
+.side-message ul,
+.side-message p {
+  padding-bottom: 1em;
+}
+.side-message a {
+  border-color: #333333;
+}
+.side-message a:hover {
+  border-color: #2894df;
+}
 /*
   	Copy secret component
   		This is what is used to copy a secret in the clipboard
@@ -2948,7 +3016,7 @@ div.secret-copy > pre {
   font-size: .875em;
   width: auto;
 }
-/* tree.less */
+/* left panel navigation */
 .panel .navigation {
   font-size: .938em;
 }
@@ -2962,20 +3030,24 @@ div.secret-copy > pre {
   padding-right: .3125em;
   /* 5px */
 }
-.panel .navigation a {
+.panel .navigation .row a {
   padding: .125em .313em;
   /* 2px 5px */
   color: #333333;
   display: block;
 }
-.panel .navigation a a:hover {
+.panel .navigation .row a a:hover {
   text-decoration: none;
-}
-.panel .navigation .row:hover {
   background: #eeeeee;
+}
+.panel .navigation ul ul {
+  margin-left: .666666em;
 }
 .panel .navigation .selected {
   font-weight: bold;
+}
+.panel .navigation .selected li {
+  font-weight: normal;
 }
 /* tree */
 .tree {
@@ -3412,35 +3484,60 @@ div.secret-copy > pre {
     bottom: 0px;
   }
 }
-table.table-info {
+table.table-info,
+table.table-info.vertical {
   border-collapse: separate;
 }
-table.table-info td {
-  border: 0.25em solid #ffffff;
-  padding: .25em .5em;
-  padding-right: 1em;
+table.table-info td,
+table.table-info.vertical td {
+  padding: .625em;
+  padding-right: 1.25em;
   color: #888888;
 }
-table.table-info td.warning {
+table.table-info td.warning,
+table.table-info.vertical td.warning {
   background: #ffefc1;
 }
-table.table-info td.error {
+table.table-info td.error,
+table.table-info.vertical td.error {
   background: #ffe4e4;
 }
-table.table-info td .alt.side {
+table.table-info td .alt.side,
+table.table-info.vertical td .alt.side {
   color: #888888;
   float: right;
 }
-table.table-info td .alt.side:before {
+table.table-info td .alt.side:before,
+table.table-info.vertical td .alt.side:before {
   content: "(";
 }
-table.table-info td .alt.side:after {
+table.table-info td .alt.side:after,
+table.table-info.vertical td .alt.side:after {
   content: ")";
 }
-table.table-info td + td {
+table.table-info td + td,
+table.table-info.vertical td + td {
   color: #333333;
-  padding-right: .5em;
-  padding: .25em .5em;
+  padding-right: .625em;
+}
+/* horizontal tableview */
+table.table-info.horizontal {
+  width: 100%;
+  border-collapse: separate;
+  padding: 0;
+  border: 1px solid #dddddd;
+  margin-bottom: 1em;
+}
+table.table-info.horizontal td,
+table.table-info.horizontal th {
+  padding: .5em;
+  margin: 0;
+}
+table.table-info.horizontal th {
+  border-bottom: 1px solid #dddddd;
+}
+table.table-info.horizontal tbody tr:nth-child(even) {
+  background: #f3f3f3;
 }
 /**
  * Tooltips!
@@ -3882,6 +3979,11 @@ table.table-info td + td {
   overflow: hidden;
   background: url('../img/controls/colorpicker/marker.png') no-repeat;
 }
+/* gpg textarea is large and tall */
+.gpgkey.input.textarea textarea {
+  height: 24em;
+  width: 95%;
+}
 .input-password-wrapper {
   overflow: hidden;
 }
@@ -4186,6 +4288,7 @@ table.table-info td + td {
 .folder-add .input.text {
   width: 25em;
 }
+/* sidebar / user details in overview */
 .panel.aside .user .header {
   /*
  * For IE 6/7 only
@@ -4274,6 +4377,7 @@ table.table-info td + td {
   right: 1em;
   top: 1.6em;
 }
+/* tabel view adjustments for avatar */
 .tableview-header th.cell_multipleSelect {
   width: 3%;
 }
@@ -4292,6 +4396,10 @@ table.table-info td + td {
 .tableview-content td.cell_avatar img {
   width: 25px !important;
   height: 25px !important;
+}
+/* login history icon collumn centerign */
+.login-history td:first-child {
+  text-align: center;
 }
 /*
  * Password workspace
@@ -4328,7 +4436,11 @@ table.table-info td + td {
     display: none;
   }
 }
-.passbolt_controller_preference_workspace_controller .section.detailed-information {
+/* TODO replace by page level selector */
+.page.profile .main.panel .middle {
+  overflow-y: auto;
+}
+.page.profile .profile-detailed-information {
   /*
  * For IE 6/7 only
  * Include this rule to trigger hasLayout and contain floats.
@@ -4361,33 +4473,33 @@ table.table-info td + td {
  *	`:before` to contain the top-margins of child elements.
  */
 }
-.passbolt_controller_preference_workspace_controller .section.detailed-information:before,
-.passbolt_controller_preference_workspace_controller .section.detailed-information:after {
+.page.profile .profile-detailed-information:before,
+.page.profile .profile-detailed-information:after {
   content: "";
   display: table;
 }
-.passbolt_controller_preference_workspace_controller .section.detailed-information:after {
+.page.profile .profile-detailed-information:after {
   clear: both;
 }
-.passbolt_controller_preference_workspace_controller .section.detailed-information:before,
-.passbolt_controller_preference_workspace_controller .section.detailed-information:after {
+.page.profile .profile-detailed-information:before,
+.page.profile .profile-detailed-information:after {
   content: "";
   display: table;
 }
-.passbolt_controller_preference_workspace_controller .section.detailed-information:after {
+.page.profile .profile-detailed-information:after {
   clear: both;
 }
-.passbolt_controller_preference_workspace_controller .section.detailed-information .avatar {
+.page.profile .profile-detailed-information .avatar {
   float: left;
 }
-.passbolt_controller_preference_workspace_controller .section.detailed-information .avatar img {
+.page.profile .profile-detailed-information .avatar img {
   border: 1px solid #dddddd;
   padding: 0;
   width: 12.5em;
   height: 12.5em;
   margin: .5em 1em 0 0;
 }
-.passbolt_controller_preference_workspace_controller .section.detailed-information .avatar .edit {
+.page.profile .profile-detailed-information .avatar .edit {
   width: 12.5em;
   height: 3.125em;
   background: transparent url('../img/controls/overlay-opacity-50.png') repeat;
@@ -4396,7 +4508,7 @@ table.table-info td + td {
   margin: -3.25em 0 2em 0;
   position: relative;
 }
-.passbolt_controller_preference_workspace_controller .section.detailed-information .avatar .edit a {
+.page.profile .profile-detailed-information .avatar .edit a {
   color: #fff;
   display: block;
   height: 3.125em;
@@ -4432,27 +4544,27 @@ table.table-info td + td {
  *	`:before` to contain the top-margins of child elements.
  */
 }
-.passbolt_controller_preference_workspace_controller .section.detailed-information .avatar .edit a:before,
-.passbolt_controller_preference_workspace_controller .section.detailed-information .avatar .edit a:after {
+.page.profile .profile-detailed-information .avatar .edit a:before,
+.page.profile .profile-detailed-information .avatar .edit a:after {
   content: "";
   display: table;
 }
-.passbolt_controller_preference_workspace_controller .section.detailed-information .avatar .edit a:after {
+.page.profile .profile-detailed-information .avatar .edit a:after {
   clear: both;
 }
-.passbolt_controller_preference_workspace_controller .section.detailed-information .avatar .edit a:before,
-.passbolt_controller_preference_workspace_controller .section.detailed-information .avatar .edit a:after {
+.page.profile .profile-detailed-information .avatar .edit a:before,
+.page.profile .profile-detailed-information .avatar .edit a:after {
   content: "";
   display: table;
 }
-.passbolt_controller_preference_workspace_controller .section.detailed-information .avatar .edit a:after {
+.page.profile .profile-detailed-information .avatar .edit a:after {
   clear: both;
 }
-.passbolt_controller_preference_workspace_controller .section.detailed-information .avatar .edit a i.icon {
+.page.profile .profile-detailed-information .avatar .edit a i.icon {
   display: block;
   float: left;
 }
-.passbolt_controller_preference_workspace_controller .section.detailed-information .avatar .edit a i.icon:before {
+.page.profile .profile-detailed-information .avatar .edit a i.icon:before {
   display: block;
   float: left;
   width: 1em;
@@ -4461,7 +4573,7 @@ table.table-info td + td {
   font-size: 3em;
   text-align: center;
 }
-.passbolt_controller_preference_workspace_controller .section.detailed-information .avatar .edit a .help-text {
+.page.profile .profile-detailed-information .avatar .edit a .help-text {
   display: block;
   font-size: 0.813em;
   /* 13/16px */
@@ -4471,10 +4583,25 @@ table.table-info td + td {
   margin-left: 0;
   padding: 0.5em 0.5em 0 0.5em;
 }
+.page.profile .key-export .actions {
+  margin: 1em 0;
+}
+.page.profile .key-export .input.textarea.gpgkey textarea.fluid.code {
+  height: 27em;
+}
 /* hide icons if there is no space */
 @media all and (max-width: 950px) {
-  .passbolt_controller_preference_workspace_controller .section.detailed-information .avatar {
+  .page.profile .profile-detailed-information .avatar {
     float: none;
+  }
+}
+/* table info is hard to fit because of fingerprint */
+@media (max-width: 1280px) {
+  .key-info .table-info {
+    font-size: 0.875em	;
+  }
+  .key-info .table-info .select select {
+    font-size: 0.929em	;
   }
 }
 html.loading .loading-screen {

@@ -28,7 +28,11 @@
 							<?php include('includes/LU_nav_tree_passwords.php'); ?>
 						</div>
 						<div class="panel middle">
-							<?php include('includes/LU_breadcrumbs_passwords.php'); ?>
+							<?php
+							$_GET['breadcrumbs'] = array(
+								'all passwords' => '../demo/LU_passwords.php'
+							);
+							include('includes/LU_breadcrumbs.php'); ?>
 							<?php include('includes/LU_tableview_passwords.php'); ?>
 						</div>
 					</div>

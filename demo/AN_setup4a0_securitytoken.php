@@ -73,10 +73,12 @@
 						<div class="col4 last">
 							<h3>Wait, why do I need this?</h3>
 							<p>
-							This token is used to prevent malicious web pages to trick you by mimicking passbolt dialogs in order to to steal your data (aka. protect you from phishing attacks).
+							This token is used to prevent malicious web pages to trick you by mimicking passbolt dialogs in order to
+								to steal your data (aka. protect you from phishing attacks).
 							</p>
 							<p>
-							This visual cue will be shown whenever we ask you for your master password and other sensitive places to help make sure you are dealing with an authentic passbolt dialog and not a fake one!
+							This visual cue will be shown whenever we ask you for your master password and other sensitive places
+								to help make sure you are dealing with an authentic passbolt dialog and not a fake one!
 							</p>
 							<p><a href="#">Learn more</a>.</p>
 						</div>
@@ -96,7 +98,7 @@
 		</div>
 
 	</div>
-	<?php includes('includes/AN_footer'); ?>
+	<?php include('includes/AN_footer.php'); ?>
 </div>
 </body>
 </html>

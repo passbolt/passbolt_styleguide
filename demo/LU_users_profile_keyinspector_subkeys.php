@@ -25,13 +25,17 @@
 				<div id="js_passbolt_preferenceWorkspace_controller" class="passbolt_controller_preference_workspace_controller mad_view_view tab-content ready selected">
 					<div class="js_preference_workspace">
 						<div class="panel left">
-							<?php include('includes/LU_nav_shortcuts_profile.php'); ?>
+							<?php
+							$_GET['shortcuts'] = 'subkeys';
+							include('includes/LU_nav_shortcuts_profile.php'); ?>
 						</div>
 						<div class="panel middle">
 							<?php
 							$_GET['breadcrumbs'] = array(
 								'all users' => '../demo/LU_users.php',
-								'test user' => '../demo/LU_users_profile.php'
+								'test user' => '../demo/LU_users_profile.php',
+								'key inspector' => '../demo/LU_users_profile_keyinspector.php',
+								'sub keys' => '../demo/LU_users_profile_keyinspector_subkeys.php'
 							);
 							include('includes/LU_breadcrumbs.php'); ?>
 							<div id="js_wk_preference_main"
@@ -41,56 +45,7 @@
 											 class="passbolt_controller_component_profile_controller mad_view_view tab-content ready selected">
 										<div class="grid grid-responsive-12">
 											<div class="row">
-
-												<div class="profile col8">
-													<h3>Profile</h3>
-													<div class="section profile-detailed-information">
-														<div class="avatar">
-															<div class="value">
-																<img src="img/avatar/user_medium.png" alt="profile picture">
-															</div>
-															<div class="edit">
-																<a title="Change Avatar" href="#"
-																	 class="edit-avatar-action">
-																	<i class="icon camera"></i>
-																	<span class="help-text">Click here to upload a new picture.</span>
-																</a>
-															</div>
-														</div>
-														<table class="table-info">
-															<tr>
-																<td>Name</td>
-																<td>Mr. Testy test this is a very long test</td>
-															</tr>
-															<tr>
-																<td>Email</td>
-																<td>test@passbolt</td>
-															</tr>
-															<tr>
-																<td>Role</td>
-																<td>Admin</td>
-															</tr>
-															<tr>
-																<td>Created</td>
-																<td>18 march 2013 21:00</td>
-															</tr>
-															<tr>
-																<td>Modified</td>
-																<td>18 march 2019 21:00</td>
-															</tr>
-															<tr>
-																<td>Public Key</td>
-																<td>292F8400D09A70DB
-																	<p>
-																		<em>Note: Sorry it is not possible to change your key at the moment.
-																			<a href="#">learn more ›</a></em>
-																	</p>
-																</td>
-															</tr>
-														</table>
-													</div>
-												</div>
-
+												<h1>TODO: subkeys</h1>
 											</div>
 										</div>
 									</div>

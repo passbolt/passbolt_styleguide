@@ -45,7 +45,6 @@
 										</div>
 									</div>
 								</div>
-
 							</li>
 							<li id="7b1b5b41-1dcc-aec3-71fc-125c2ae4cb05" class="todo ready">
 								<div class="row">
@@ -55,8 +54,6 @@
 										</div>
 									</div>
 								</div>
-
-
 							</li>
 						</ul>
 					</div>

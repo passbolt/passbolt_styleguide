@@ -84,13 +84,8 @@
 
 			</div>
 		</div>
-
 	</div>
-
-	<!-- footer -->
-	<div class="footer">
-		<span class="copyright">&copy; 2015 passbolt.com </span>
-	</div>
+	<?php include('includes/AN_footer.php'); ?>
 </div>
 </body>
 </html>

@@ -109,7 +109,7 @@
 
 	</div>
 
-	<?php includes('includes/AN_footer'); ?>
+	<?php include('includes/AN_footer.php'); ?>
 </div>
 </body>
 </html>

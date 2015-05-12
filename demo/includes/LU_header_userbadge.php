@@ -3,15 +3,15 @@
 			 class="user profile dropdown passbolt_controller_component_profile_dropdown_controller mad_view_component_button_dropdown js_component ready">
 		<div class="center-cell-wrapper">
 			<div class="details center-cell">
-				<span class="name">Kevin Muller</span>
-				<span class="email">kevin@passbolt.com</span>
+				<span class="name">Test User</span>
+				<span class="email">test@passbolt.com</span>
 			</div>
 		</div>
 		<div class="picture left-cell">
 			<img src="img/avatar/user.png" alt="your picture">
 		</div>
 		<div class="more right-cell">
-			<a href="#"><span>more</span></a>
+			<a href="../demo/LU_users_profile.php"><span>more</span></a>
 		</div>
 		<ul class="dropdown-content right mad_controller_component_menu_controller mad_view_component_tree menu ready"
 				id="7f698bbc-95d5-c5f7-c35a-c3225a5aa45b">
