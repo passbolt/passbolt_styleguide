@@ -20,8 +20,13 @@
 					</div>
 				</div>
 				<div class="plugin-check-wrapper">
+					<div class="plugin-check firefox warning">
+						<p class="message">Firefox plugin is installed but is not configured. <a href="../demo/AN_register.php">Please register</a>!</p>
+					</div>
+				</div>
+				<div class="plugin-check-wrapper">
 					<div class="plugin-check firefox success">
-						<p class="message">Nice one! Firefox plugin is installed and up to date. You are good to go!.</p>
+						<p class="message">Nice one! Firefox plugin is installed and configured. You are good to go!.</p>
 					</div>
 				</div>
 				<p>
@@ -34,7 +39,7 @@
 					<h1><a href="#"><span>Passbolt</span></a></h1>
 				</div>
 				<div class="users login form">
-					<form action="../demo/" id="UserLoginForm" method="post" accept-charset="utf-8">
+					<form action="../demo/LU_passwords.php" id="UserLoginForm" method="post" accept-charset="utf-8">
 						<input type="hidden" name="_method" value="POST"/>
 						<fieldset>
 							<legend>Please enter your username and password</legend>

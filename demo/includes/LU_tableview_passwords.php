@@ -4,7 +4,7 @@
 			<thead>
 			<tr>
 				<th class="js_grid_column js_grid_column_multipleSelect selections s-cell">
-					<!--input type="checkbox" value="all" id="checkbox-select-all" disabled="disabled"-->
+					<input type="checkbox" value="all" id="checkbox-select-all" disabled="disabled">
 					<div class="input checkbox"><label for="checkbox-select-all">select all</label></div>
 				</th>
 				<th class="js_grid_column js_grid_column_favorite selections s-cell">

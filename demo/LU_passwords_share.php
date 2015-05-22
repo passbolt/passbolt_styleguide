@@ -175,7 +175,7 @@
                                 </div>
                             </div>
                             <div class="js_form_element_wrapper js_form_secret_wrapper">
-                                <label for="js_field_secret">Password</label>
+                                <label for="js_field_secret_data_0">Password</label>
 
                                 <div class="js_secret_edit_form passbolt_controller_form_secret_create_form_controller mad_view_form_form_view js_component ready"
                                      id="js_secret_edit_0">

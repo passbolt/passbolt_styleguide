@@ -991,7 +991,7 @@ bUc7GhPlveuIfkeHrQzHs8eq6YUkFCZJ+k2VQ14P3RLk2ibE4+B8YHW4V7TSk6tI
 														 id="2620916c-18d0-5f72-b2a5-799dfc6b9398"
 														 name="data[Resource][id]"
 														 class="js_resource_id required mad_form_element_textbox_controller mad_view_form_element_textbox_view js_component ready"
-														 maxlength="36" type="hidden">
+														 type="hidden">
 
 											<div class="input text required js_form_element_wrapper">
                         <textarea id="4187d830-a008-d7be-dbef-c17063290de9"
@@ -1027,7 +1027,7 @@ bUc7GhPlveuIfkeHrQzHs8eq6YUkFCZJ+k2VQ14P3RLk2ibE4+B8YHW4V7TSk6tI
 											<li class="comment-wrapper">
 												<div class="comment add">
 													<div class="author profile picture"><a href="#"><img
-														src="img/user.png"></a></div>
+														src="img/user.png" alt="comment author picture" ></a></div>
 													<div class="form-content">
 														<div class="input textarea required">
 															<label for="Comment">Add a comment</label>
@@ -1035,17 +1035,17 @@ bUc7GhPlveuIfkeHrQzHs8eq6YUkFCZJ+k2VQ14P3RLk2ibE4+B8YHW4V7TSk6tI
 																		 id="9b6d6cc6-d2c4-64df-b87c-1f755aa4f4f8"
 																		 name="data[comment][parent_id]"
 																		 class="js_comment_parent_id required mad_form_element_textbox_controller mad_view_form_element_textbox_view js_component ready"
-																		 maxlength="36" type="hidden">
+																		 type="hidden">
 															<input value="50d77ff9-fdd8-4035-b7c6-1b63d7a10fce"
 																		 id="e77d526a-6be7-f061-6426-09e026cf535a"
 																		 name="data[comment][foreign_id]"
 																		 class="js_comment_foreign_id required mad_form_element_textbox_controller mad_view_form_element_textbox_view js_component ready"
-																		 maxlength="36" type="hidden">
+																		 type="hidden">
 															<input value="Resource"
 																		 id="8d465103-f2ba-99f9-2eab-53c34ba05adf"
 																		 name="data[comment][foreign_model]"
 																		 class="js_comment_foreign_model required mad_form_element_textbox_controller mad_view_form_element_textbox_view js_component ready"
-																		 maxlength="36" type="hidden">
+																		 type="hidden">
                                     <textarea
 																			id="46ce112a-1995-31b8-9f31-dddb097abc72"
 																			name="data[comment][content]"

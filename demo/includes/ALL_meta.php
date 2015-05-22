@@ -1,5 +1,4 @@
 	<meta charset="utf-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 	<base href="../src/">
 	<meta name="viewport" content="width=device-width">
 	<script type="text/javascript" src="js/modernizr.js"></script>
