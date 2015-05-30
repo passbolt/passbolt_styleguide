@@ -2177,7 +2177,7 @@ select.fluid {
 .notification-container {
   font-size: .75em;
   /* 12px */
-  width: 100%;
+  width: 80%;
 }
 .notification-container .message {
   float: left;
