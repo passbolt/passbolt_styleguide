@@ -1645,16 +1645,3 @@ html body .button.processing {
   position: fixed;
   z-index: 990;
 }
-/* config page specifics */
-.config.page grid {
-  margin-bottom: 2em;
-}
-.config.page textarea {
-  height: 7em;
-}
-.advanced {
-  margin-bottom: .5em;
-}
-.advanced .target-advanced-settings {
-  display: none;
-}
