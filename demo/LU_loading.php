@@ -1,5 +1,5 @@
 <!doctype html>
-<html class="no-js no-passboltplugin version alpha loading" lang="en">
+<html class="no-js no-passboltplugin version alpha launching" lang="en">
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
@@ -10,8 +10,8 @@
 	<script type="text/javascript" src="js/modernizr.js"></script>
 <body>
 <div class="container page">
-	<div class="loading-screen">
-		<div class="loading-screen-holder">
+	<div class="launching-screen">
+		<div class="launching-screen-holder">
 			<div class="logo">
 				<h1><span>Passbolt</span></h1>
 			</div>
