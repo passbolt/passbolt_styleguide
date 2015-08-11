@@ -1,10 +1,10 @@
 <?php
 /**
- * LOGIN: there is no passbolt plugin
+ * LOGIN: the user uses chrome instead of firefox
  */
 ?>
 <!doctype html>
-<html class="no-js no-passboltplugin version alpha" lang="en">
+<html class="no-js no-passboltplugin no-firefox version alpha" lang="en">
 <head>
 	<title>Login</title>
 	<?php include('includes/ALL_meta.php'); ?>
@@ -20,13 +20,16 @@
 			<div class="col6 push1 information">
 				<h2>Download the plugin to get started!</h2>
 				<div class="plugin-check-wrapper">
-					<div class="plugin-check firefox error">
-						<p class="message">An add-on is required to use Passbolt. Download it at <a href="https://github.com/passbolt/passbolt_ff/raw/develop/passbolt-firefox-addon.xpi">addons.mozilla.org</a>.</p>
+					<div class="plugin-check chrome error">
+						<p class="message">
+							Passbolt is not available for your browser. Try with <a href="https://firefox.mozilla.org/">firefox.mozilla.org</a>.
+						</p>
 					</div>
 				</div>
 				<p>
-					Passbolt is a simple password manager that allows you to easily share secrets with your team without making compromises on security!
-					<a href="#">learn more</a>.
+					The chrome plugin is currently not available. Don't worry, we aim at enabling more browsers in the future.
+					Thanks to consider supporting us financially to this feature move a bit more quickly.
+					<a href="#">Support us</a>.
 				</p>
 			</div>
 			<div class="col4 push1 last">
@@ -38,7 +41,7 @@
 						<i class="icon huge download" ></i>
 					</div>
 					<div class="actions-wrapper center">
-						<a class="button primary big" href="../demo/AN_login_noconfig.php">Download the plugin</a>
+						<a class="button primary" href="#">Download firefox</a>
 					</div>
 				</div>
 			</div>

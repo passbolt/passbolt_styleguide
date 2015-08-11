@@ -1,10 +1,10 @@
 <?php
 /**
- * LOGIN: there is no passbolt plugin
+ * LOGIN: stage 0 server key verification failed
  */
 ?>
 <!doctype html>
-<html class="no-js no-passboltplugin version alpha" lang="en">
+<html class="no-js passboltplugin passboltplugin-config version alpha" lang="en">
 <head>
 	<title>Login</title>
 	<?php include('includes/ALL_meta.php'); ?>
@@ -18,16 +18,18 @@
 	<div class="grid">
 		<div class="row">
 			<div class="col6 push1 information">
-				<h2>Download the plugin to get started!</h2>
+				<h2>Welcome back!</h2>
 				<div class="plugin-check-wrapper">
-					<div class="plugin-check firefox error">
-						<p class="message">An add-on is required to use Passbolt. Download it at <a href="https://github.com/passbolt/passbolt_ff/raw/develop/passbolt-firefox-addon.xpi">addons.mozilla.org</a>.</p>
+					<div class="plugin-check firefox success">
+						<p class="message">Nice one! Firefox plugin is installed and configured. You are good to go!.</p>
 					</div>
 				</div>
-				<p>
-					Passbolt is a simple password manager that allows you to easily share secrets with your team without making compromises on security!
-					<a href="#">learn more</a>.
-				</p>
+				<div class="plugin-check-wrapper">
+					<div class="plugin-check gpg error">
+						<p class="message">The server identity is not verified.
+							It fails to validate the key: <a href="#">C7FF4211</a></p>
+					</div>
+				</div>
 			</div>
 			<div class="col4 push1 last">
 				<div class="logo">
@@ -35,10 +37,8 @@
 				</div>
 				<div class="users login form">
 					<div class="feedback">
-						<i class="icon huge download" ></i>
-					</div>
-					<div class="actions-wrapper center">
-						<a class="button primary big" href="../demo/AN_login_noconfig.php">Download the plugin</a>
+						<i class="icon huge cycle rotate" ></i>
+						<p>Login is disabled as it is not safe to log in. <a href="#">Learn more</a>.</p>
 					</div>
 				</div>
 			</div>

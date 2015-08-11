@@ -1,10 +1,10 @@
 <?php
 /**
- * LOGIN: there is no passbolt plugin
+ * LOGIN: the user did not register or does not have a configured plugin
  */
 ?>
 <!doctype html>
-<html class="no-js no-passboltplugin version alpha" lang="en">
+<html class="no-js passboltplugin no-passboltplugin-config version alpha" lang="en">
 <head>
 	<title>Login</title>
 	<?php include('includes/ALL_meta.php'); ?>
@@ -18,10 +18,10 @@
 	<div class="grid">
 		<div class="row">
 			<div class="col6 push1 information">
-				<h2>Download the plugin to get started!</h2>
+				<h2>Almost there, please register!</h2>
 				<div class="plugin-check-wrapper">
-					<div class="plugin-check firefox error">
-						<p class="message">An add-on is required to use Passbolt. Download it at <a href="https://github.com/passbolt/passbolt_ff/raw/develop/passbolt-firefox-addon.xpi">addons.mozilla.org</a>.</p>
+					<div class="plugin-check firefox warning">
+						<p class="message">Firefox plugin is installed but is not configured. <a href="../demo/AN_register.php">Please register</a>!</p>
 					</div>
 				</div>
 				<p>
@@ -35,10 +35,11 @@
 				</div>
 				<div class="users login form">
 					<div class="feedback">
-						<i class="icon huge download" ></i>
+						<i class="icon huge rocket" ></i>
+						<p>You need an account to login.</p>
 					</div>
 					<div class="actions-wrapper center">
-						<a class="button primary big" href="../demo/AN_login_noconfig.php">Download the plugin</a>
+						<a class="button primary big" href="../demo/AN_login_stage0.php">Register</a>
 					</div>
 				</div>
 			</div>
