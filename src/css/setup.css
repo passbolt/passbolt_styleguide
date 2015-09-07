@@ -2347,6 +2347,7 @@ select.fluid {
 .dialog textarea {
   width: 92%;
 }
+.dialog textarea + .message.error,
 .dialog input + .message.error {
   display: block;
   clear: both;
