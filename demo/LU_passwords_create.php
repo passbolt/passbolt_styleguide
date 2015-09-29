@@ -4,10 +4,12 @@
     <?php include('includes/LU_meta.php'); ?>
 </head>
 <body>
-<?php include('includes/dialogs/LU_password_share.php'); ?>
 <div id="container" class="page password">
     <div class="mad_event_event_bus"></div>
     <div id="js_app_controller" class="passbolt_controller_app_controller mad_view_view js_component ready">
+        <!-- edit dialog -->
+        <?php include('includes/dialogs/LU_password_create.php');?>
+        <!-- LU_passwords -->
         <?php include('includes/LU_loadingbar.php'); ?>
         <?php include('includes/LU_notifications.php'); ?>
         <?php include('includes/LU_header_first.php'); ?>
@@ -20,7 +22,6 @@
             <?php include('includes/LU_header_third_title_passwords.php'); ?>
             <?php include('includes/LU_header_third_actions_passwords.php'); ?>
         </div>
-        <?php include('includes/LU_footer.php'); ?>
         <div id="js_app_panel_main" class="panel main mad_controller_component_tab_controller mad_view_component_tab js_component ready">
             <div class="js_tabs_content tabs-content">
                 <div id="js_passbolt_passwordWorkspace_controller" class="passbolt_controller_password_workspace_controller mad_view_view tab-content ready selected">

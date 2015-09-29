@@ -934,7 +934,7 @@ select:disabled {
 .input.date:after {
   position: absolute;
   content: ' ';
-  z-index: 99999;
+  z-index: 790;
   width: 20px;
   height: 20px;
   background: transparent url('../img/controls/calendar.png') center center no-repeat;
@@ -1242,9 +1242,6 @@ html body .button.processing {
   font-weight: normal;
   font-style: normal;
 }
-a.no-text {
-  text-decoration: none;
-}
 .icon:before,
 .icon.social:before {
   font-family: "entypo";
@@ -1297,6 +1294,9 @@ span + .icon {
   margin-right: 1.357em;
 }
 /* no text */
+a.no-text {
+  text-decoration: none;
+}
 .button .icon.no-text {
   padding-right: .9em;
 }
@@ -1932,7 +1932,7 @@ span + .icon {
   border-top: 1px solid #dddddd;
   bottom: 0;
   position: fixed;
-  z-index: 990;
+  z-index: 890;
 }
 /* pre launch page */
 .prelaunch .logo {
