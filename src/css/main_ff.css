@@ -1771,6 +1771,7 @@ select.fluid {
   font-size: .813em;
 }
 .dialog .submit-wrapper {
+  margin: 0;
   border-top: 1px solid #dddddd;
   clear: both;
   width: 100%;
@@ -1859,17 +1860,17 @@ select.fluid {
   padding: 0.1250em;
 }
 .security-token {
-  font-size: 0.813em;
+  font-size: 1em;
   padding: .5em 1em;
   text-align: center;
   position: absolute;
   display: inline-block;
-  margin-left: -4em;
+  margin-left: -4.125em;
+  margin-top: .0625em;
   width: 2em;
-  border: 1px solid #dddddd;
-}
-input:focus + .security-token {
-  border: 1px solid #2894df;
+  border: 0;
+  border-left: 1px solid #bbbbbb;
+  line-height: 1.125em;
 }
 /**
  * Based on Farbtastic Color Picker 1.2

@@ -2,9 +2,7 @@
 <html style="" class=" js no-websqldatabase draganddrop cssscrollbar" lang="en">
 <head>
 	<meta charset="utf-8">
-	<title>Passbolt - The simple password management system</title>
-	<base href="../src/">
-	<meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+	<?php include('includes/ALL_meta.php'); ?>
 	<link rel="stylesheet" type="text/css" href="css/main.css">
 	<link rel="stylesheet" type="text/css" href="css/external.css">
 	<script type="application/javascript">
@@ -2114,7 +2112,7 @@ bUc7GhPlveuIfkeHrQzHs8eq6YUkFCZJ+k2VQ14P3RLk2ibE4+B8YHW4V7TSk6tI
 		<span class="version">v.2.13.3</span>
 	</div>
 </footer>
-<iframe class="passbolt-plugin-dialog" src="LU_iframe_masterkey.php"
+<iframe class="passbolt-plugin-dialog" src="../demo/LU_iframe_masterkey.php"
 				id="passbolt-iframe-master-password" frameborder="0"></iframe>
 </body>
 </html>
