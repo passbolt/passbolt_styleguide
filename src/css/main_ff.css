@@ -336,7 +336,7 @@ button,
 input,
 select,
 textarea {
-  font-family: sans-serif;
+  font-family: "Open Sans", Verdana, sans-serif;
 }
 /* ==========================================================================
    Links
@@ -1356,16 +1356,18 @@ input[type=password],
 input[type=search],
 textarea {
   font-size: 16px;
+  line-height: 24px;
   color: #333333;
   background: #ffffff;
   width: 14em;
   /* 20 char (default input length) x .7em (average char length) */
-  padding: .563em .625em .375em .625em;
+  padding: .375em .625em .375em .625em;
   display: inline-block;
   margin-bottom: .5em;
   -webkit-appearance: none;
   border: 1px solid #cccccc;
   border-top: 1px solid #bbbbbb;
+  vertical-align: middle;
 }
 textarea:hover,
 input[type=password]:hover,
@@ -1861,7 +1863,7 @@ select.fluid {
 }
 .security-token {
   font-size: 1em;
-  padding: .5em 1em;
+  padding: .375em 1em;
   text-align: center;
   position: absolute;
   display: inline-block;
@@ -1870,7 +1872,8 @@ select.fluid {
   width: 2em;
   border: 0;
   border-left: 1px solid #bbbbbb;
-  line-height: 1.125em;
+  line-height: 1.5em;
+  vertical-align: middle;
 }
 /**
  * Based on Farbtastic Color Picker 1.2
