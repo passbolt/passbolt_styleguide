@@ -26,3 +26,6 @@
   min-height: 13.438em;
   margin-top: .5em;
 }
+#passbolt-iframe-master-password {
+  z-index: 992;
+}
