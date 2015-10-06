@@ -9,6 +9,8 @@ module.exports = function(grunt) {
 			css: [
 				'build/css/*.css',
 				'src/css/*.css',
+				'!src/css/perfect-scrollbar.css',
+				'!build/css/perfect-scrollbar.min.css'
 			]
 		},
 		lesslint: {
@@ -38,7 +40,7 @@ module.exports = function(grunt) {
 			minify: {
 				expand: true,
 				cwd: 'src/css/',
-				src: ['*.css', '!*.min.css'],
+				src: ['*.css', '!*.min.css','!build/css/perfect-scrollbar.min.css'],
 				dest: 'build/css/',
 				ext: '.min.css'
 			}
