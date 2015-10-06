@@ -7,7 +7,7 @@
 			<ul>
 				<li class="username">
 					<span class="label">Username</span>
-					<span class="value">passbolt</span>
+					<span class="value">This passbolt username is outrageously long</span>
 				</li>
 				<li class="password">
 					<div class="label">Password</div>
@@ -36,7 +36,7 @@ ULXDyPFYyxRBJGYNY6jWE736zd495vMfqlFzD0Ssf7K4oKGDMy6ag/mP6AyP5IBc
 				<li class="url">
 					<span class="label">URL</span>
         <span class="value">
-        <a href="https://salesforce.com" target="_blank">https://salesforce.com</a>
+        <a href="https://thisisaverylongurltotest.com/theellipsis#com" target="_blank">https://thisisaverylongurltotest.com/theellipsis#com</a>
         </span>
 				</li>
 				<li class="modified">
@@ -45,7 +45,7 @@ ULXDyPFYyxRBJGYNY6jWE736zd495vMfqlFzD0Ssf7K4oKGDMy6ag/mP6AyP5IBc
 				</li>
 				<li class="modified-by">
 					<span class="label">Modified by</span>
-					<span class="value">anonymous@passbolt.com</span>
+					<span class="value">verylongemailyesindeed@passbolt.com</span>
 				</li>
 				<li class="owner">
 					<span class="label">Owner</span>

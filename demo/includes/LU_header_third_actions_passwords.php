@@ -8,6 +8,12 @@
 				</a>
 			</li>
 			<li>
+				<a id="js_wk_menu_secretcopy_button" href="#" class="button mad_component_button js_component mad_view ready">
+					<i class="icon copy"></i>
+					<span>copy</span>
+				</a>
+			</li>
+			<li>
 				<a id="js_wk_menu_edition_button" href="../demo/LU_passwords_edit.php" class="button mad_component_button js_component mad_view ready">
 					<i class="icon edit"></i>
 					<span>edit</span>
@@ -20,7 +26,7 @@
 				</a>
 			</li>
 			<li>
-				<a id="js_wk_menu_deletion_button" href="#" class="button mad_component_button js_component mad_view ready">
+				<a id="js_wk_menu_delete_button" href="#" class="button mad_component_button js_component mad_view ready">
 					<i class="icon delete"></i>
 					<span>delete</span>
 				</a>
