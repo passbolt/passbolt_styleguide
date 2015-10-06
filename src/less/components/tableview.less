@@ -45,8 +45,8 @@
 	.ellipsis();
   }
   .s-cell {
-	  width:10px;
-	  max-width:10px;
+	  width:15px;
+	  max-width: 15px;
   }
   .s2-cell {
 	  width:40px;
@@ -70,15 +70,22 @@
 	  display:none;
   }
   .checkbox input{
-	  margin-top:0px;
+	  margin-top:0;
 	  float:left;
   }
   th span,
   td span {
 	  vertical-align:6%;
   }
-  .cell_favorite i:before {
-	vertical-align: -1px;
+
+  /* fav fix */
+  th.cell_favorite,
+  td.cell_favorite {
+	width:20px;
+	max-width: 20px;
+	i:before {
+	  vertical-align: -1px;
+	}
   }
 }
 /* hide secondary actions if there is no space */
