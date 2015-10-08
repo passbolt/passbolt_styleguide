@@ -5,13 +5,6 @@
 			<div id="js_passbolt_passwordWorkspaceMenu_controller"
 					 class="passbolt_controller_component_password_workspace_menu_controller mad_view_view tab-content selected selection">
 				<li>
-					<a id="js_wk_menu_creation_button" href="#"
-						 class="button mad_controller_component_button_controller mad_view_view js_component ready">
-						<i class="icon create"></i>
-						<span>create</span>
-					</a>
-				</li>
-				<li>
 					<a id="js_wk_menu_edition_button" href="#"
 						 class="button mad_controller_component_button_controller mad_view_view js_component disabled"
 						 disabled="disabled">
