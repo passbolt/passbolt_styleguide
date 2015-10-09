@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" class="version alpha">
+<html class="no-js passboltplugin version alpha" lang="en">
 <head>
 	<?php include('includes/AN_meta_setup.php'); ?>
 </head>

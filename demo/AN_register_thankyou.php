@@ -5,7 +5,7 @@
 	<?php include('includes/ALL_meta.php'); ?>
 	<link rel="stylesheet" type="text/css" href="css/login.css" />
 <body>
-<div class="container register thank-you page">
+<div id="container" class="register thank-you page">
 	<?php include('includes/ALL_top_warning_messages.php'); ?>
 	<?php include('includes/AN_header_first.php'); ?>
 	<!-- main -->

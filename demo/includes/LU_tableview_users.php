@@ -4,9 +4,9 @@
 			<thead>
 			<tr>
 
-				<th class="js_grid_column js_grid_column_multipleSelect cell_multipleSelect selections cell_multipleSelect s-cell">
-					<div class="input checkbox"><label for="checkbox-select-all">select
-							all</label></div>
+				<th class="js_grid_column js_grid_column_multipleSelect selections s-cell">
+					<input type="checkbox" value="all" id="checkbox-select-all-people" disabled="disabled">
+					<div class="input checkbox"><label for="checkbox-select-all-people">select all</label></div>
 				</th>
 
 				<th class="js_grid_column js_grid_column_avatar s-cell cell_avatar">
@@ -50,7 +50,7 @@
 
 				<td class="js_grid_column_avatar s-cell cell_avatar">
 					<div title="">
-						<img src="img/avatar/user.png" width="25" height="25">
+						<img src="img/avatar/user.png" width="25" height="25" alt="avatar picture">
 					</div>
 				</td>
 
@@ -92,7 +92,7 @@
 
 				<td class="js_grid_column_avatar s-cell cell_avatar">
 					<div title="">
-						<img src="img/avatar/user.png"
+						<img src="img/avatar/user.png" alt="avatar picture"
 								 width="25" height="25">
 					</div>
 				</td>
@@ -134,7 +134,7 @@
 
 				<td class="js_grid_column_avatar s-cell cell_avatar">
 					<div title="">
-						<img src="img/avatar/user.png" width="25" height="25">
+						<img src="img/avatar/user.png" width="25" height="25" alt="avatar picture">
 					</div>
 				</td>
 
@@ -175,7 +175,7 @@
 
 				<td class="js_grid_column_avatar s-cell cell_avatar">
 					<div title="">
-						<img src="img/avatar/user.png"
+						<img src="img/avatar/user.png" alt="avatar picture"
 								 width="25" height="25">
 					</div>
 				</td>
@@ -217,7 +217,7 @@
 
 				<td class="js_grid_column_avatar s-cell cell_avatar">
 					<div title="">
-						<img src="img/avatar/user.png" width="25" height="25">
+						<img src="img/avatar/user.png" width="25" height="25" alt="avatar picture">
 					</div>
 				</td>
 
@@ -258,7 +258,7 @@
 
 				<td class="js_grid_column_avatar s-cell cell_avatar">
 					<div title="">
-						<img src="img/avatar/user.png"
+						<img src="img/avatar/user.png" alt="avatar picture"
 								 width="25" height="25">
 					</div>
 				</td>
@@ -300,7 +300,7 @@
 
 				<td class="js_grid_column_avatar s-cell cell_avatar">
 					<div title="">
-						<img src="img/avatar/user.png" width="25" height="25">
+						<img src="img/avatar/user.png" width="25" height="25" alt="avatar picture">
 					</div>
 				</td>
 
@@ -341,7 +341,7 @@
 
 				<td class="js_grid_column_avatar s-cell cell_avatar">
 					<div title="">
-						<img src="img/avatar/user.png"
+						<img src="img/avatar/user.png" alt="avatar picture"
 								 width="25" height="25">
 					</div>
 				</td>
@@ -383,7 +383,7 @@
 
 				<td class="js_grid_column_avatar s-cell cell_avatar">
 					<div title="">
-						<img src="img/avatar/user.png" width="25" height="25">
+						<img src="img/avatar/user.png" width="25" height="25" alt="avatar picture">
 					</div>
 				</td>
 
@@ -465,7 +465,7 @@
 
 				<td class="js_grid_column_avatar s-cell cell_avatar">
 					<div title="">
-						<img src="img/avatar/user.png" width="25" height="25">
+						<img src="img/avatar/user.png" width="25" height="25" alt="avatar picture">
 					</div>
 				</td>
 
@@ -506,7 +506,7 @@
 
 				<td class="js_grid_column_avatar s-cell cell_avatar">
 					<div title="">
-						<img src="img/avatar/user.png" width="25" height="25">
+						<img src="img/avatar/user.png" width="25" height="25" alt="avatar picture">
 					</div>
 				</td>
 
@@ -547,7 +547,7 @@
 
 				<td class="js_grid_column_avatar s-cell cell_avatar">
 					<div title="">
-						<img src="img/avatar/user.png"
+						<img src="img/avatar/user.png" alt="avatar picture"
 								 width="25" height="25">
 					</div>
 				</td>
@@ -589,7 +589,7 @@
 
 				<td class="js_grid_column_avatar s-cell cell_avatar">
 					<div title="">
-						<img src="img/avatar/user.png" width="25" height="25">
+						<img src="img/avatar/user.png" width="25" height="25" alt="avatar picture">
 					</div>
 				</td>
 
@@ -630,7 +630,7 @@
 
 				<td class="js_grid_column_avatar s-cell cell_avatar">
 					<div title="">
-						<img src="img/avatar/user.png" width="25" height="25">
+						<img src="img/avatar/user.png" width="25" height="25" alt="avatar picture">
 					</div>
 				</td>
 
@@ -671,7 +671,7 @@
 
 				<td class="js_grid_column_avatar s-cell cell_avatar">
 					<div title="">
-						<img src="img/avatar/user.png" width="25" height="25">
+						<img src="img/avatar/user.png" width="25" height="25" alt="avatar picture">
 					</div>
 				</td>
 
@@ -712,7 +712,7 @@
 
 				<td class="js_grid_column_avatar s-cell cell_avatar">
 					<div title="">
-						<img src="img/avatar/user.png"
+						<img src="img/avatar/user.png" alt="avatar picture"
 								 width="25" height="25">
 					</div>
 				</td>
@@ -754,7 +754,7 @@
 
 				<td class="js_grid_column_avatar s-cell cell_avatar">
 					<div title="">
-						<img src="img/avatar/user.png" width="25" height="25">
+						<img src="img/avatar/user.png" width="25" height="25" alt="avatar picture">
 					</div>
 				</td>
 

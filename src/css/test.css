@@ -20,10 +20,8 @@
 /*
  * Hide from both screenreaders and browsers: h5bp.com/u
  */
-.hidden,
-i.no-text + span {
-  display: none !important;
-  visibility: hidden;
+.hidden {
+  display: none;
 }
 /*
  * Hide only visually, but have it available for screenreaders: h5bp.com/v
@@ -37,13 +35,13 @@ i.no-text + span {
   padding: 0;
   position: absolute;
   width: 1px;
+  /*
+   * Extends the .visuallyhidden class to allow the element to be focusable
+   * when navigated to via the keyboard: h5bp.com/p
+   */
 }
-/*
- * Extends the .visuallyhidden class to allow the element to be focusable
- * when navigated to via the keyboard: h5bp.com/p
- */
-.visuallyhidden.focusable:active,
-.visuallyhidden.focusable:focus {
+.visuallyhidden .focusable:active,
+.visuallyhidden .focusable:focus {
   clip: auto;
   height: auto;
   margin: 0;
@@ -109,6 +107,33 @@ i.no-text + span {
 /* force display of a block inline */
 .inline {
   display: inline-block;
+}
+/* make something spin */
+@-webkit-keyframes rotate {
+  from {
+    -webkit-transform: rotate(0deg);
+  }
+  to {
+    -webkit-transform: rotate(-360deg);
+  }
+}
+@-moz-keyframes rotate {
+  from {
+    -moz-transform: rotate(0deg);
+  }
+  to {
+    -moz-transform: rotate(-360deg);
+  }
+}
+.rotate {
+  -webkit-animation-name: rotate;
+  -webkit-animation-duration: 4s;
+  -webkit-animation-iteration-count: infinite;
+  -webkit-animation-timing-function: linear;
+  -moz-animation-name: rotate;
+  -moz-animation-duration: 4s;
+  -moz-animation-iteration-count: infinite;
+  -moz-animation-timing-function: linear;
 }
 /* palette */
 /* borders */
@@ -253,7 +278,7 @@ p a:hover {
 /* Base styles for the tooltip's directional arrow */
 .tooltip:before,
 [data-tooltip]:before {
-  z-index: 1001;
+  z-index: 990;
   border: 6px solid transparent;
   background: transparent;
   content: "";
@@ -261,7 +286,7 @@ p a:hover {
 /* Base styles for the tooltip's content area */
 .tooltip:after,
 [data-tooltip]:after {
-  z-index: 1000;
+  z-index: 990;
   padding: 8px;
   width: 160px;
   background-color: #000;

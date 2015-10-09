@@ -7,7 +7,7 @@
 			<ul>
 				<li class="username">
 					<span class="label">Username</span>
-					<span class="value">passbolt</span>
+					<span class="value">This passbolt username is outrageously long</span>
 				</li>
 				<li class="password">
 					<div class="label">Password</div>
@@ -36,7 +36,7 @@ ULXDyPFYyxRBJGYNY6jWE736zd495vMfqlFzD0Ssf7K4oKGDMy6ag/mP6AyP5IBc
 				<li class="url">
 					<span class="label">URL</span>
         <span class="value">
-        <a href="https://salesforce.com" target="_blank">https://salesforce.com</a>
+        <a href="https://thisisaverylongurltotest.com/theellipsis#com" target="_blank">https://thisisaverylongurltotest.com/theellipsis#com</a>
         </span>
 				</li>
 				<li class="modified">
@@ -45,7 +45,7 @@ ULXDyPFYyxRBJGYNY6jWE736zd495vMfqlFzD0Ssf7K4oKGDMy6ag/mP6AyP5IBc
 				</li>
 				<li class="modified-by">
 					<span class="label">Modified by</span>
-					<span class="value">anonymous@passbolt.com</span>
+					<span class="value">verylongemailyesindeed@passbolt.com</span>
 				</li>
 				<li class="owner">
 					<span class="label">Owner</span>
@@ -60,7 +60,7 @@ ULXDyPFYyxRBJGYNY6jWE736zd495vMfqlFzD0Ssf7K4oKGDMy6ag/mP6AyP5IBc
 			<!-- edit description form -->
 			<div id="js_rs_details_edit_description" class="passbolt_controller_form_resource_edit_description_form_controller mad_view_form_form_view js_component hidden" style="display: none;">
 				<div class="form-content resource-description-edit-wrapper">
-					<input name="data[Resource][id]" class="js_resource_id required mad_form_element_textbox_controller mad_view_form_element_textbox_view js_component ready" maxlength="36" type="hidden" id="8e192271-d9a6-f2cd-9df6-668036758079" value="50d77ff9-c358-4dfb-be34-1b63d7a10fce">
+					<input name="data[Resource][id]" class="js_resource_id required mad_form_element_textbox_controller mad_view_form_element_textbox_view js_component ready" type="hidden" id="8e192271-d9a6-f2cd-9df6-668036758079" value="50d77ff9-c358-4dfb-be34-1b63d7a10fce">
 					<div class="input text required js_form_element_wrapper">
 						<textarea name="data[Resource][description]" class="js_resource_description required mad_form_element_textbox_controller mad_view_form_element_textbox_view js_component ready" maxlength="150" placeholder="enter description" id="58f97456-996e-2145-53dc-39afba44b116"></textarea>
 						<div class="js_resource_description_feedback message mad_form_feedback_controller mad_view_view js_component ready" id="4eb2ad34-b9fe-8eca-c9f7-796a5f1ca76f">
@@ -82,13 +82,13 @@ ULXDyPFYyxRBJGYNY6jWE736zd495vMfqlFzD0Ssf7K4oKGDMy6ag/mP6AyP5IBc
 				<ul>
 					<li class="comment-wrapper">
 						<div class="comment add">
-							<div class="author profile picture"><a href="#"><img src="img/user.png"></a></div>
+							<div class="author profile picture"><a href="#"><img src="img/user.png" img src="img/user.png"></a></div>
 							<div class="form-content">
 								<div class="input textarea required">
 									<label for="Comment">Add a comment</label>
-									<input name="data[comment][parent_id]" class="js_comment_parent_id required mad_form_element_textbox_controller mad_view_form_element_textbox_view js_component ready" maxlength="36" type="hidden" id="65dc1a98-1956-6e45-469e-aa3a14594313" value="">
-									<input name="data[comment][foreign_id]" class="js_comment_foreign_id required mad_form_element_textbox_controller mad_view_form_element_textbox_view js_component ready" maxlength="36" type="hidden" id="ad5759eb-14aa-75c9-980d-03fd0e8b42d3" value="50d77ff9-c358-4dfb-be34-1b63d7a10fce">
-									<input name="data[comment][foreign_model]" class="js_comment_foreign_model required mad_form_element_textbox_controller mad_view_form_element_textbox_view js_component ready" maxlength="36" type="hidden" id="09c3963e-8553-24ff-c440-ddadc4534aa6" value="Resource">
+									<input name="data[comment][parent_id]" class="js_comment_parent_id required mad_form_element_textbox_controller mad_view_form_element_textbox_view js_component ready" type="hidden" id="65dc1a98-1956-6e45-469e-aa3a14594313" value="">
+									<input name="data[comment][foreign_id]" class="js_comment_foreign_id required mad_form_element_textbox_controller mad_view_form_element_textbox_view js_component ready" type="hidden" id="ad5759eb-14aa-75c9-980d-03fd0e8b42d3" value="50d77ff9-c358-4dfb-be34-1b63d7a10fce">
+									<input name="data[comment][foreign_model]" class="js_comment_foreign_model required mad_form_element_textbox_controller mad_view_form_element_textbox_view js_component ready" type="hidden" id="09c3963e-8553-24ff-c440-ddadc4534aa6" value="Resource">
 									<textarea name="data[comment][content]" class="js_comment_content required mad_form_element_textbox_controller mad_view_form_element_textbox_view js_component ready" maxlength="150" placeholder="add a comment" id="6caa3f6e-7329-c311-96fc-fdf273854703"></textarea>
 									<div class="js_comment_content_feedback message mad_form_feedback_controller mad_view_view js_component ready" id="75124d45-31db-635c-e73f-b26711e01f55">
 									</div>

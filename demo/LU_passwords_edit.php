@@ -8,7 +8,7 @@
 	<div class="mad_event_event_bus"></div>
 	<div id="js_app_controller" class="passbolt_controller_app_controller mad_view_view js_component ready">
 		<!-- edit dialog -->
-		<?php include('includes/dialogs/password_edit.php');?>
+		<?php include('includes/dialogs/LU_password_edit.php');?>
 		<!-- LU_passwords -->
 		<?php include('includes/LU_loadingbar.php'); ?>
 		<?php include('includes/LU_notifications.php'); ?>
@@ -19,7 +19,7 @@
 			<?php include('includes/LU_header_userbadge.php'); ?>
 		</div>
 		<div class="header third">
-			<?php include('includes/LU_header_third_title_passwords.php'); ?>
+			<?php include('includes/LU_header_third_main_action_passwords.php'); ?>
 			<?php include('includes/LU_header_third_actions_passwords.php'); ?>
 		</div>
 		<div id="js_app_panel_main" class="panel main mad_controller_component_tab_controller mad_view_component_tab js_component ready">
