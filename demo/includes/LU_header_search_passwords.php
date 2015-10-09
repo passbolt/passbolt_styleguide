@@ -7,7 +7,7 @@
 							 class="required mad_form_element_textbox_controller mad_view_form_element_textbox_view js_component ready"
 							 maxlength="50" type="search" placeholder="search passwords">
 			</div>
-			<button value="search">
+			<button value="search" class="no-text">
 				<i class="icon search"></i>
 				<span class="text visuallyhidden">search</span>
 			</button>

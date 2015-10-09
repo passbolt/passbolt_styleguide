@@ -3,35 +3,33 @@
 	<div class="dialog">
 		<div class="dialog-header">
 			<h2>Edit<span class="dialog-header-subtitle">shared resource</span></h2>
-			<a href="#" class="dialog-close"><i class="icon close no-text"></i><span>close</span></a>
+			<a href="../demo/LU_passwords.php" class="dialog-close"><i class="icon close no-text"></i><span>close</span></a>
 		</div>
 		<div class="js_dialog_content dialog-content">
 			<div class="passbolt_controller_component_resource_actions_tab_controller mad_view_component_tab tabs ready"
 					 id="d53f19e2-0c9a-6edb-ff47-4ca7510609af">
-				<ul id="4b72ab88-8185-d06f-0546-6d16c605541a"
-						class="js_tabs_nav tabs-nav mad_controller_component_menu_controller mad_view_component_tree menu ready">
-					<li id="js_tab_nav_js_rs_edit" class="ready">
+				<ul id="084bf580-cd05-5742-10ec-b5ad4cea08a1" class="js_tabs_nav tabs-nav mad_component_menu menu mad_view_component_tree ready">
+					<li id="js_tab_nav_js_rs_edit" class="ready" data-view-id="370">
 						<div class="row">
 							<div class="main-cell-wrapper">
 								<div class="main-cell">
-									<a class="selected" href="#"><span>Edit</span></a>
+									<a class="selected" href="../demo/LU_passwords_edit.php"><span>Edit</span></a>
 								</div>
 							</div>
 						</div>
-					</li>
-					<li id="js_tab_nav_js_rs_permission" class="ready">
-						<div class="row">
+					</li><li id="js_tab_nav_js_rs_permission" class="ready" data-view-id="374">
+						<div class="row selected">
 							<div class="main-cell-wrapper">
 								<div class="main-cell">
-									<a href="#"><span>Share</span></a>
+									<a class="" href="../demo/LU_passwords_share.php"><span>Share</span></a>
 								</div>
 							</div>
 						</div>
 					</li>
 				</ul>
-
 				<div class="js_tabs_content tabs-content">
 					<form
+						action="../demo/LU_passwords.php"
 						class="passbolt_controller_form_resource_create_form_controller mad_view_form_form_view tab-content ready selected"
 						id="js_rs_edit">
 						<div class="form-content">
@@ -107,7 +105,7 @@
 						</div>
 						<div class="submit-wrapper clearfix">
 							<input class="button primary" value="save" type="submit">
-							<a href="#" class="js-dialog-cancel cancel">cancel</a>
+							<a href="../demo/LU_passwords.php" class="js-dialog-cancel cancel">cancel</a>
 						</div>
 					</form>
 				</div>

@@ -1,9 +1,11 @@
 {
   "name": "passbolt_styleguide",
-  "version": "0.0.32",
+  "version": "0.1.9",
   "main": "build/css/main.min.css",
   "authors": [
-    "remy@passbolt.com"
+    "remy@passbolt.com",
+    "kevin@passbolt.com",
+    "cedric@passbolt.com"
   ],
   "description": "Common assets used by Passbolt components",
   "keywords": [

@@ -1,71 +1,63 @@
 <div class="col2_3 actions-wrapper">
-	<ul id="js_wsp_primary_menu"
-			class="actions mad_controller_component_tab_controller mad_view_component_tab js_component ready">
-		<div class="js_tabs_content tabs-content">
-			<div id="js_passbolt_passwordWorkspaceMenu_controller"
-					 class="passbolt_controller_component_password_workspace_menu_controller mad_view_view tab-content selected selection">
-				<li>
-					<a id="js_wk_menu_edition_button" href="#"
-						 class="button mad_controller_component_button_controller mad_view_view js_component disabled"
-						 disabled="disabled">
-						<i class="icon edit"></i>
-						<span>edit</span>
+	<div id="js_wsp_primary_menu_wrapper" class="actions">
+		<ul class="passbolt_component_password_workspace_menu js_component mad_view selection" id="665c45ec-1780-87cf-1230-be4fe8684479">
+
+			<li>
+				<a id="js_wk_menu_secretcopy_button" href="#" class="button mad_component_button js_component mad_view ready">
+					<i class="icon copy"></i>
+					<span>copy</span>
+				</a>
+			</li>
+			<li>
+				<a id="js_wk_menu_edition_button" href="../demo/LU_passwords_edit.php" class="button mad_component_button js_component mad_view ready">
+					<i class="icon edit"></i>
+					<span>edit</span>
+				</a>
+			</li>
+			<li>
+				<a id="js_wk_menu_sharing_button" href="../demo/LU_passwords_share.php" class="button mad_component_button js_component mad_view ready">
+					<i class="icon share"></i>
+					<span>share</span>
+				</a>
+			</li>
+			<li>
+				<div class="dropdown">
+					<a id="js_wk_menu_more_button" href="#" class="button mad_component_button_dropdown js_component mad_view_component_button_dropdown ready">
+						<span>more</span>
+						<i class="icon after arrowdown"></i>
 					</a>
-				</li>
-				<li>
-					<a id="js_wk_menu_sharing_button" href="#"
-						 class="button mad_controller_component_button_controller mad_view_view js_component disabled"
-						 disabled="disabled">
-						<i class="icon share"></i>
-						<span>share</span>
-					</a>
-				</li>
-				<li>
-					<div class="dropdown">
-						<a id="js_wk_menu_more_button" href="#"
-							 class="button mad_controller_component_button_dropdown_controller mad_view_component_button_dropdown js_component ready">
-							<span>more</span>
-							<i class="icon after arrowdown"></i>
-						</a>
-						<ul
-							class="dropdown-content mad_controller_component_menu_controller mad_view_component_tree menu ready"
-							id="a5f2b1d6-1b9b-6f87-dd9a-72da32a373a3">
-							<li id="ac3aef2b-b5db-47e6-fadc-064f94f64770" class="todo ready">
-								<div class="row">
-									<div class="main-cell-wrapper">
-										<div class="main-cell">
-											<a href="#"><span>copy login to clipboard</span></a>
-										</div>
+					<ul id="de8625c7-312f-e28b-db01-bf3123d0d433" class="dropdown-content mad_component_menu menu mad_view_component_tree ready">
+						<li id="ceb12fee-d370-a60c-8596-a559e560f4e6" class="todo ready" data-view-id="10">
+							<div class="row">
+								<div class="main-cell-wrapper">
+									<div class="main-cell">
+										<a href="#"><span>copy login to clipboard</span></a>
 									</div>
 								</div>
-							</li>
-							<li id="7b1b5b41-1dcc-aec3-71fc-125c2ae4cb05" class="todo ready">
-								<div class="row">
-									<div class="main-cell-wrapper">
-										<div class="main-cell">
-											<a href="#"><span>copy password to clipboard</span></a>
-										</div>
+							</div>
+						</li>
+						<li id="9609c19d-7c4f-be67-7c97-5b82720049f8" class="todo ready" data-view-id="11">
+							<div class="row">
+								<div class="main-cell-wrapper">
+									<div class="main-cell">
+										<a href="#"><span>copy password to clipboard</span></a>
 									</div>
 								</div>
-							</li>
-						</ul>
-					</div>
-				</li>
-			</div>
-			<div id="js_passbolt_peopleWorkspaceMenu_controller"
-					 class="passbolt_controller_component_people_workspace_menu_controller"></div>
-			<div id="js_passbolt_preferenceWorkspaceMenu_controller"
-					 class="passbolt_controller_component_preference_workspace_menu_controller"></div>
-		</div>
-	</ul>
-	<ul id="js_wsp_secondary_menu"
-			class="actions secondary passbolt_controller_component_workspace_secondary_menu_controller mad_view_view js_component ready">
-		<li>
-			<a id="js_wk_secondary_menu_view_sidebar_button" href="#"
-				 class="button toggle mad_controller_component_toggle_button_controller mad_view_view js_component ready">
-				<i class="icon layout eye big no-text"></i>
-				<span>view sidebar</span>
-			</a>
-		</li>
-	</ul>
+							</div>
+						</li>
+					</ul>
+				</div>
+			</li>
+		</ul>
+	</div>
+	<div id="js_wsp_secondary_menu_wrapper" class="actions secondary">
+		<ul class="passbolt_component_workspace_secondary_menu js_component mad_view ready" id="b59038b5-ed72-a48a-06e1-fb06523b5bfd">
+			<li>
+				<a id="js_wk_secondary_menu_view_sidebar_button" href="#" class="button toggle mad_component_toggle_button js_component mad_view ready">
+					<i class="icon layout eye big no-text"></i>
+					<span>view sidebar</span>
+				</a>
+			</li>
+		</ul>
+	</div>
 </div>
