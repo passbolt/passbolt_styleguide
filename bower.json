@@ -1,6 +1,6 @@
 {
   "name": "passbolt_styleguide",
-  "version": "0.1.9",
+  "version": "0.1.10",
   "main": "build/css/main.min.css",
   "authors": [
     "remy@passbolt.com",
