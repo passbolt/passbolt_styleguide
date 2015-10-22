@@ -4,7 +4,7 @@
  */
 ?>
 <!doctype html>
-<html class="no-js passboltplugin no-passboltplugin-config version alpha" lang="en">
+<html class="passbolt no-js passboltplugin no-passboltplugin-config version alpha" lang="en">
 <head>
 	<title>Login</title>
 	<?php include('includes/ALL_meta.php'); ?>

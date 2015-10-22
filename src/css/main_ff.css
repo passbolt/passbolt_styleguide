@@ -2174,12 +2174,18 @@ select.fluid {
   height: 24em;
   width: 95%;
 }
+.master-password.dialog {
+  /* PASSBOLT-1108 */
+}
 .master-password.dialog label {
   margin-bottom: 1em;
 }
 .master-password.dialog input[type=text],
 .master-password.dialog input[type=password] {
   width: 80%;
+}
+.master-password.dialog .input.checkbox {
+  visibility: hidden;
 }
 .master-password.login-form input[type=text],
 .master-password.login-form input[type=password] {

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html class="no-js no-passboltplugin version alpha" lang="en">
+<html class="passbolt no-js no-passboltplugin version alpha" lang="en">
 <head>
 	<meta charset="utf-8"/>
 	<!--

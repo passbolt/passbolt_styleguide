@@ -4,7 +4,7 @@
  */
 ?>
 <!doctype html>
-<html class="no-js passboltplugin passboltplugin-config version alpha" lang="en">
+<html class="passbolt no-js passboltplugin passboltplugin-config version alpha" lang="en">
 <head>
     <title>Login | Passbolt</title>
     <?php include('includes/ALL_meta.php'); ?>
@@ -16,7 +16,7 @@
 
     <!-- main -->
     <div class="grid">
-        <div class="row">
+        <div class="row js_main-login-section">
             <div class="col6 push1 information">
                 <h2>Welcome back!</h2>
                 <div class="plugin-check-wrapper">

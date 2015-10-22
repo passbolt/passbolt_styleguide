@@ -1,5 +1,5 @@
 <!doctype html>
-<html class="no-js no-passboltplugin version alpha launching" lang="en">
+<html class="passbolt no-js no-passboltplugin version alpha launching" lang="en">
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
