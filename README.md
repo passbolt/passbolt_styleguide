@@ -7,6 +7,7 @@
 	The password management solution
 	(c) 2012-2015 passbolt.com
 
+
 Install
 =========
 
