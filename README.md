@@ -31,29 +31,33 @@ Edit one LESS file to see if it works!
 How to update the styleguide?
 =========
 
-We are using bower to manage the styleguide package in project using it.
-Checkout bower documentation: http://bower.io/docs/creating-packages/
+We are using npm to manage the styleguide package in project using it.
+Checkout npm documentation: https://docs.npmjs.com/developers
 
 In a nutshell, once you are done changing, make sure you change the version
-number in the bower.json and package.json.
+number in the package.json.
 
 	{
-	  "name": "passbolt_styleguide",
+	  "name": "passbolt-styleguide",
 	  "version": "X.X.X",
 	  [...]
 	}
 
 You need to commit your changes and tag the new version of the styleguide.
-This is how bower knows a new version is available in the project using the package.
+This is how npm knows a new version is available in the project using the package.
 
   git commit -am 'X.X.X'
   git tag -a X.X.X -m 'X.X.X'
   git push origin X.X.X
   git push
+  
+Then we publish it again with
+
+  npm publish
 
 in your project using the bower package you can then run:
 
-  bower update
+  npm update
 
 You should also have a grunt task to manage the copy/pasting in the right place such as
 

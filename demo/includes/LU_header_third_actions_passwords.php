@@ -1,12 +1,7 @@
 <div class="col2_3 actions-wrapper">
 	<div id="js_wsp_primary_menu_wrapper" class="actions">
 		<ul class="passbolt_component_password_workspace_menu js_component mad_view selection" id="665c45ec-1780-87cf-1230-be4fe8684479">
-			<li>
-				<a id="js_wk_menu_creation_button" href="../demo/LU_passwords_create.php" class="button mad_component_button js_component mad_view ready">
-					<i class="icon create"></i>
-					<span>create</span>
-				</a>
-			</li>
+
 			<li>
 				<a id="js_wk_menu_secretcopy_button" href="#" class="button mad_component_button js_component mad_view ready">
 					<i class="icon copy"></i>
@@ -23,12 +18,6 @@
 				<a id="js_wk_menu_sharing_button" href="../demo/LU_passwords_share.php" class="button mad_component_button js_component mad_view ready">
 					<i class="icon share"></i>
 					<span>share</span>
-				</a>
-			</li>
-			<li>
-				<a id="js_wk_menu_delete_button" href="#" class="button mad_component_button js_component mad_view ready">
-					<i class="icon delete"></i>
-					<span>delete</span>
 				</a>
 			</li>
 			<li>

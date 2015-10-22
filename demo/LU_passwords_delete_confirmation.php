@@ -16,7 +16,7 @@
 			<?php include('includes/LU_header_userbadge.php'); ?>
 		</div>
 		<div class="header third">
-			<?php include('includes/LU_header_third_main_action_passwords.php'); ?>
+			<?php include('includes/LU_header_third_title_passwords.php'); ?>
 			<?php include('includes/LU_header_third_actions_passwords.php'); ?>
 		</div>
 		<div id="js_app_panel_main" class="panel main mad_controller_component_tab_controller mad_view_component_tab js_component ready">
@@ -34,7 +34,6 @@
 							);
 							include('includes/LU_breadcrumbs.php'); ?>
 							<?php include('includes/LU_tableview_passwords.php'); ?>
-							<?php include('includes/LU_aside_passwords.php'); ?>
 						</div>
 					</div>
 				</div>
@@ -43,5 +42,6 @@
 	</div>
 </div>
 <?php include('includes/LU_footer.php'); ?>
+<iframe class="passbolt-plugin-dialog" src="../demo/LU_iframe_delete_confirmation.php" id="passbolt-iframe-delete-confirmation" frameborder="0"></iframe>
 </body>
 </html>
