@@ -20,7 +20,7 @@
 /*
  * Hide from both screenreaders and browsers: h5bp.com/u
  */
-.hidden {
+html body .hidden {
   display: none;
 }
 /*
@@ -3009,7 +3009,7 @@ table.table-info.horizontal tbody tr:nth-child(even) {
   padding-left: 0;
 }
 .input-password-wrapper .password-complexity .progress {
-  width: 66.5%;
+  width: 66%;
   border: 1px solid #dddddd;
   height: 7px;
   display: block;
