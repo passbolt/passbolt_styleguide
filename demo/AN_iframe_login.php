@@ -16,7 +16,7 @@
 </head>
 <body>
 <div class="login-form master-password ">
-    <form target="_parent" action="../demo/AN_login_stage1a.php">
+<!--    <form target="_parent" >-->
 
         <div class="input text required">
             <label for="UserUsername">Username</label>
@@ -30,9 +30,11 @@
             <div class="message helptext">Please enter your secret key password</div>
         </div>
         <div class="submit-wrapper clearfix">
-            <input type="submit" value="login" class="button primary big">
+            <a href="#" class="button primary big">
+                login
+            </a>
         </div>
-    </form>
+<!--    </form>-->
 </div>
 </body>
 </html>
