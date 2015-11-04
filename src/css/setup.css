@@ -3206,6 +3206,58 @@ table.table-info.horizontal tbody tr:nth-child(even) {
 .setup .why-plugin-wrapper div.input.checkbox {
   padding: .5em 0;
 }
+.setup .why-plugin-wrapper div.input div.message.error {
+  /*
+ * For IE 6/7 only
+ * Include this rule to trigger hasLayout and contain floats.
+ */
+  /*
+ * Clearfix: contain floats
+ *
+ * For modern browsers
+ * 1. The space content is one way to avoid an Opera bug when the
+ *	`contenteditable` attribute is included anywhere else in the document.
+ *	Otherwise it causes space to appear at the top and bottom of elements
+ *	that receive the `clearfix` class.
+ * 2. The use of `table` rather than `block` is only necessary if using
+ *	`:before` to contain the top-margins of child elements.
+ */
+  /*
+ * For IE 6/7 only
+ * Include this rule to trigger hasLayout and contain floats.
+ */
+  zoom: 1;
+  /*
+ * Clearfix: contain floats
+ *
+ * For modern browsers
+ * 1. The space content is one way to avoid an Opera bug when the
+ *	`contenteditable` attribute is included anywhere else in the document.
+ *	Otherwise it causes space to appear at the top and bottom of elements
+ *	that receive the `clearfix` class.
+ * 2. The use of `table` rather than `block` is only necessary if using
+ *	`:before` to contain the top-margins of child elements.
+ */
+  width: 65%;
+  margin-left: 20%;
+  padding-left: .625em;
+}
+.setup .why-plugin-wrapper div.input div.message.error:before,
+.setup .why-plugin-wrapper div.input div.message.error:after {
+  content: "";
+  display: table;
+}
+.setup .why-plugin-wrapper div.input div.message.error:after {
+  clear: both;
+}
+.setup .why-plugin-wrapper div.input div.message.error:before,
+.setup .why-plugin-wrapper div.input div.message.error:after {
+  content: "";
+  display: table;
+}
+.setup .why-plugin-wrapper div.input div.message.error:after {
+  clear: both;
+}
 .setup .first-password-wrapper {
   padding-top: 1em;
 }
