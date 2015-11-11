@@ -3897,7 +3897,7 @@ table.table-info.horizontal tbody tr:nth-child(even) {
 }
 /*
 	Password fields in passbolt have complexity "progress bar"
-	and a custom layout to accomodate buttons on the left end
+	and a custom layout to accommodate buttons on the left end
 */
 .input-password-wrapper {
   /*
@@ -4138,7 +4138,6 @@ table.table-info.horizontal tbody tr:nth-child(even) {
 .dialog .share-tab {
   /* list of existing permissions settings */
   /* message */
-  /* form to add new permissions */
 }
 .dialog .share-tab .form-content {
   padding: 1em;
@@ -4271,8 +4270,11 @@ table.table-info.horizontal tbody tr:nth-child(even) {
   font-size: 0.813em;
   padding-left: 2em;
 }
-.dialog .share-tab .form-content.permission-add {
-  padding: 0 1.5em 1em 1.5em;
+/*
+	form to add new permissions
+	basically this form is embedded in an iframe released by the plugin
+*/
+.passboltplugin .form-content.permission-add {
   /*
  * For IE 6/7 only
  * Include this rule to trigger hasLayout and contain floats.
@@ -4305,38 +4307,39 @@ table.table-info.horizontal tbody tr:nth-child(even) {
  *	`:before` to contain the top-margins of child elements.
  */
 }
-.dialog .share-tab .form-content.permission-add:before,
-.dialog .share-tab .form-content.permission-add:after {
+.passboltplugin .form-content.permission-add:before,
+.passboltplugin .form-content.permission-add:after {
   content: "";
   display: table;
 }
-.dialog .share-tab .form-content.permission-add:after {
+.passboltplugin .form-content.permission-add:after {
   clear: both;
 }
-.dialog .share-tab .form-content.permission-add:before,
-.dialog .share-tab .form-content.permission-add:after {
+.passboltplugin .form-content.permission-add:before,
+.passboltplugin .form-content.permission-add:after {
   content: "";
   display: table;
 }
-.dialog .share-tab .form-content.permission-add:after {
+.passboltplugin .form-content.permission-add:after {
   clear: both;
 }
-.dialog .share-tab .form-content.permission-add label {
+.passboltplugin .form-content.permission-add label {
   padding-bottom: .5em;
   padding-top: 1em;
+  font-size: 0.938em;
 }
-.dialog .share-tab .form-content.permission-add .autocomplete input {
+.passboltplugin .form-content.permission-add .autocomplete input {
   width: 45%;
-  margin-right: 2%;
   float: left;
 }
-.dialog .share-tab .form-content.permission-add .autocomplete-content {
+.passboltplugin .form-content.permission-add .autocomplete-content {
   width: 45%;
 }
-.dialog .share-tab .form-content.permission-add .perm-type {
+.passboltplugin .form-content.permission-add .perm-type {
+  margin-left: 2%;
   margin-right: 4%;
 }
-.dialog .share-tab .form-content.permission-add .actions {
+.passboltplugin .form-content.permission-add .actions {
   /*
  * For IE 6/7 only
  * Include this rule to trigger hasLayout and contain floats.
@@ -4369,39 +4372,39 @@ table.table-info.horizontal tbody tr:nth-child(even) {
  *	`:before` to contain the top-margins of child elements.
  */
 }
-.dialog .share-tab .form-content.permission-add .actions:before,
-.dialog .share-tab .form-content.permission-add .actions:after {
+.passboltplugin .form-content.permission-add .actions:before,
+.passboltplugin .form-content.permission-add .actions:after {
   content: "";
   display: table;
 }
-.dialog .share-tab .form-content.permission-add .actions:after {
+.passboltplugin .form-content.permission-add .actions:after {
   clear: both;
 }
-.dialog .share-tab .form-content.permission-add .actions:before,
-.dialog .share-tab .form-content.permission-add .actions:after {
+.passboltplugin .form-content.permission-add .actions:before,
+.passboltplugin .form-content.permission-add .actions:after {
   content: "";
   display: table;
 }
-.dialog .share-tab .form-content.permission-add .actions:after {
+.passboltplugin .form-content.permission-add .actions:after {
   clear: both;
 }
-.dialog .share-tab .form-content.permission-add .actions input {
+.passboltplugin .form-content.permission-add .actions input {
   padding: 0.3em 1em;
 }
-.dialog .share-tab .form-content.permission-add .checkbox {
+.passboltplugin .form-content.permission-add .checkbox {
   clear: both;
   display: block;
   float: left;
 }
-.dialog .share-tab .form-content.permission-add .select select {
+.passboltplugin .form-content.permission-add .select select {
   width: 7em;
   font-size: 1em;
 }
-.dialog .share-tab .form-content.permission-add .button {
+.passboltplugin .form-content.permission-add .button {
   font-size: 1em;
   line-height: 1.5em;
 }
-.dialog .share-tab .form-content.permission-add .message {
+.passboltplugin .form-content.permission-add .message {
   padding-left: 0;
 }
 /* hide icons if there is no space */
@@ -4409,10 +4412,6 @@ table.table-info.horizontal tbody tr:nth-child(even) {
   .dialog .share-tab .row .user,
   .dialog .share-tab .row .group {
     width: 45%;
-  }
-  .dialog .share-tab .form-content.permission-add .autocomplete input,
-  .dialog .share-tab .form-content.permission-add .autocomplete-content {
-    width: 90%;
   }
 }
 .dialog .organize-tab .current-folder {

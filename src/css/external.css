@@ -16,8 +16,16 @@
   display: block;
   height: 5em;
 }
+#passbolt-iframe-password-share {
+  width: 100%;
+  display: block;
+  height: 5em;
+}
 @media all and (max-width: 440px) {
   #passbolt-iframe-secret-edition {
+    height: 8em;
+  }
+  #passbolt-iframe-password-share {
     height: 8em;
   }
 }

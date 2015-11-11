@@ -87,40 +87,46 @@
 		font-size:0.813em;
 		padding-left:2em;
 	}
+}
 
-	/* form to add new permissions */
+/*
+	form to add new permissions
+	basically this form is embedded in an iframe released by the plugin
+*/
+.passboltplugin {
 	.form-content.permission-add {
-		padding:0 1.5em 1em 1.5em;
+//		padding: 0 1.5em 1em 1.5em;
 		.clearfix();
 
 		label {
 			padding-bottom: .5em;
-			padding-top:1em;
+			padding-top: 1em;
+			font-size: 0.938em;
 		}
 		.autocomplete input {
-			width:45%;
-			margin-right:2%;
-			float:left;
+			width: 45%;
+			float: left;
 		}
 		.autocomplete-content {
-			width:45%;
+			width: 45%;
 		}
 		.perm-type {
-			margin-right:4%;
+			margin-left: 2%;
+			margin-right: 4%;
 		}
 		.actions {
 			.clearfix();
 		}
 		.actions input {
-			padding:0.3em 1em;
+			padding: 0.3em 1em;
 		}
 		.checkbox {
 			clear: both;
-			display:block;
-			float:left;
+			display: block;
+			float: left;
 		}
-		.select select{
-			width:7em;
+		.select select {
+			width: 7em;
 			font-size: 1em;
 		}
 		.button {
@@ -128,7 +134,7 @@
 			line-height: 1.5em;
 		}
 		.message {
-			padding-left:0;
+			padding-left: 0;
 		}
 	}
 }
@@ -140,11 +146,13 @@
 		.row .group {
 			width:45%;
 		}
+	}
+	.passboltplugin {
 		.form-content.permission-add {
-			.autocomplete input,
-			.autocomplete-content {
-				width:90%;
-			}
+//			.autocomplete input,
+//			.autocomplete-content {
+//				width:90%;
+//			}
 		}
 	}
 }

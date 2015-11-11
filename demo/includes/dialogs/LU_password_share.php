@@ -210,33 +210,34 @@
                             <span>You need to save to apply the changes.</span>
                         </div>
                         <div class="form-content permission-add">
-                            <form class="mad_form perm-create-form clearfix mad_view_form ready" id="js_permission_add_form"><input value="" class="mad_form_textbox form-element mad_view_form_textbox ready" id="js_perm_create_form_aro" type="hidden">
-                                <div class="input text autocomplete">
-                                    <label for="js_perm_create_form_aro_auto_cplt">Share with people</label>
-                                    <input class="mad_form_autocomplete form-element mad_view_form_textbox ready" maxlength="50" id="js_perm_create_form_aro_auto_cplt" placeholder="" autocomplete="off" data-view-id="376" type="text"><ul style="display: none;" class="mad_component_tree autocomplete-content mad_view_component_tree hidden" id="145cdddd-f707-e911-3120-b62015df57c4"></ul>
-                                </div>
-                                <div class="select left perm-type">
-                                    <select id="js_perm_create_form_type" class="permission mad_form_dropdown form-element mad_view_form_element ready">
-
-                                        <option value="0" data-view-id="377">deny</option>
-
-                                        <option value="1" data-view-id="378">can read</option>
-
-                                        <option value="3" data-view-id="379">can create</option>
-
-                                        <option value="7" data-view-id="380">can update</option>
-
-                                        <option value="15" data-view-id="381">is owner</option>
-
-                                    </select>
-                                </div>
-                                <div class="actions">
-                                    <input id="js_perm_create_form_add_btn" class="button primary" value="add" type="submit">
-                                </div>
-                                <div class="input blank">
-                                    <div id="js_perm_create_form_feedback" class="message mad_form_feedback js_component mad_view ready"></div>
-                                </div>
-                            </form>
+							<iframe src="../demo/LU_iframe_permissioninput.php" id="passbolt-iframe-password-share" frameborder="0"></iframe>
+<!--                            <form class="mad_form perm-create-form clearfix mad_view_form ready" id="js_permission_add_form"><input value="" class="mad_form_textbox form-element mad_view_form_textbox ready" id="js_perm_create_form_aro" type="hidden">-->
+<!--                                <div class="input text autocomplete">-->
+<!--                                    <label for="js_perm_create_form_aro_auto_cplt">Share with people</label>-->
+<!--                                    <input class="mad_form_autocomplete form-element mad_view_form_textbox ready" maxlength="50" id="js_perm_create_form_aro_auto_cplt" placeholder="" autocomplete="off" data-view-id="376" type="text"><ul style="display: none;" class="mad_component_tree autocomplete-content mad_view_component_tree hidden" id="145cdddd-f707-e911-3120-b62015df57c4"></ul>-->
+<!--                                </div>-->
+<!--                                <div class="select left perm-type">-->
+<!--                                    <select id="js_perm_create_form_type" class="permission mad_form_dropdown form-element mad_view_form_element ready">-->
+<!---->
+<!--                                        <option value="0" data-view-id="377">deny</option>-->
+<!---->
+<!--                                        <option value="1" data-view-id="378">can read</option>-->
+<!---->
+<!--                                        <option value="3" data-view-id="379">can create</option>-->
+<!---->
+<!--                                        <option value="7" data-view-id="380">can update</option>-->
+<!---->
+<!--                                        <option value="15" data-view-id="381">is owner</option>-->
+<!---->
+<!--                                    </select>-->
+<!--                                </div>-->
+<!--                                <div class="actions">-->
+<!--                                    <input id="js_perm_create_form_add_btn" class="button primary" value="add" type="submit">-->
+<!--                                </div>-->
+<!--                                <div class="input blank">-->
+<!--                                    <div id="js_perm_create_form_feedback" class="message mad_form_feedback js_component mad_view ready"></div>-->
+<!--                                </div>-->
+<!--                            </form>-->
                         </div>
                         <div class="submit-wrapper clearfix">
                             <input id="js_rs_share_save" class="button primary" value="save" data-view-id="375" type="submit">
