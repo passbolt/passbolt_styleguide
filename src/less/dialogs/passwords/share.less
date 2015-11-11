@@ -89,13 +89,13 @@
 	}
 }
 
-/*
-	form to add new permissions
-	basically this form is embedded in an iframe released by the plugin
-*/
 .passboltplugin {
+	/*
+		form to add new permissions
+		basically this form is embedded in an iframe released by the plugin
+	*/
 	.form-content.permission-add {
-//		padding: 0 1.5em 1em 1.5em;
+		position:relative;
 		.clearfix();
 
 		label {
@@ -104,15 +104,15 @@
 			font-size: 0.938em;
 		}
 		.autocomplete input {
-			width: 45%;
+			width: 48%;
 			float: left;
 		}
 		.autocomplete-content {
-			width: 45%;
+			width: 46%;
 		}
 		.perm-type {
 			margin-left: 2%;
-			margin-right: 4%;
+			margin-right: 2%;
 		}
 		.actions {
 			.clearfix();
@@ -135,6 +135,47 @@
 		}
 		.message {
 			padding-left: 0;
+		}
+	}
+
+	/*
+		autocomplete users results
+		basically this list of users is embedded in an iframe released by the plugin
+	*/
+	.autocomplete-content {
+
+		.row {
+			.clearfix();
+			font-size:.813em;
+			padding:.825em .5em .5em 1em;
+			border-bottom:1px dotted @border-default;
+
+			&:last-child {
+				border:0;
+			}
+
+			/* user summary */
+			.avatar img {
+				width:36px;
+				height:36px;
+				float:left;
+			}
+			.user,
+			.group {
+				width:70%;
+				float:left;
+				padding-left:1em;
+				padding-right:1em;
+			}
+			.name {
+				display:block;
+				.ellipsis();
+			}
+			.details {
+				color:@font-light;
+				.ellipsis();
+				display:block;
+			}
 		}
 	}
 }

@@ -19,7 +19,15 @@
 #passbolt-iframe-password-share {
   width: 100%;
   display: block;
-  height: 5em;
+  height: 6em;
+}
+#passbolt-iframe-password-share-autocomplete {
+  width: 49%;
+  height: 10em;
+  position: absolute;
+  top: 6em;
+  z-index: 898;
+  border: 1px solid #DDD;
 }
 @media all and (max-width: 440px) {
   #passbolt-iframe-secret-edition {

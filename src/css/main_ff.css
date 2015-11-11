@@ -1707,13 +1707,9 @@ select.fluid {
   z-index: 991;
 }
 .autocomplete-content {
-  border: 1px solid #dddddd;
   background: #ffffff;
-  float: left;
   position: absolute;
-  min-width: 13em;
   z-index: 898;
-  padding-top: .25em;
   width: 100%;
 }
 .autocomplete input + .autocomplete-content {
@@ -2327,11 +2323,18 @@ select.fluid {
   font-size: 0.813em;
   padding-left: 2em;
 }
-/*
-	form to add new permissions
-	basically this form is embedded in an iframe released by the plugin
-*/
+.passboltplugin {
+  /*
+		form to add new permissions
+		basically this form is embedded in an iframe released by the plugin
+	*/
+  /*
+		autocomplete users results
+		basically this list of users is embedded in an iframe released by the plugin
+	*/
+}
 .passboltplugin .form-content.permission-add {
+  position: relative;
   /*
  * For IE 6/7 only
  * Include this rule to trigger hasLayout and contain floats.
@@ -2386,15 +2389,15 @@ select.fluid {
   font-size: 0.938em;
 }
 .passboltplugin .form-content.permission-add .autocomplete input {
-  width: 45%;
+  width: 48%;
   float: left;
 }
 .passboltplugin .form-content.permission-add .autocomplete-content {
-  width: 45%;
+  width: 46%;
 }
 .passboltplugin .form-content.permission-add .perm-type {
   margin-left: 2%;
-  margin-right: 4%;
+  margin-right: 2%;
 }
 .passboltplugin .form-content.permission-add .actions {
   /*
@@ -2463,6 +2466,91 @@ select.fluid {
 }
 .passboltplugin .form-content.permission-add .message {
   padding-left: 0;
+}
+.passboltplugin .autocomplete-content .row {
+  /*
+ * For IE 6/7 only
+ * Include this rule to trigger hasLayout and contain floats.
+ */
+  /*
+ * Clearfix: contain floats
+ *
+ * For modern browsers
+ * 1. The space content is one way to avoid an Opera bug when the
+ *	`contenteditable` attribute is included anywhere else in the document.
+ *	Otherwise it causes space to appear at the top and bottom of elements
+ *	that receive the `clearfix` class.
+ * 2. The use of `table` rather than `block` is only necessary if using
+ *	`:before` to contain the top-margins of child elements.
+ */
+  /*
+ * For IE 6/7 only
+ * Include this rule to trigger hasLayout and contain floats.
+ */
+  zoom: 1;
+  /*
+ * Clearfix: contain floats
+ *
+ * For modern browsers
+ * 1. The space content is one way to avoid an Opera bug when the
+ *	`contenteditable` attribute is included anywhere else in the document.
+ *	Otherwise it causes space to appear at the top and bottom of elements
+ *	that receive the `clearfix` class.
+ * 2. The use of `table` rather than `block` is only necessary if using
+ *	`:before` to contain the top-margins of child elements.
+ */
+  font-size: .813em;
+  padding: .825em .5em .5em 1em;
+  border-bottom: 1px dotted #dddddd;
+  /* user summary */
+}
+.passboltplugin .autocomplete-content .row:before,
+.passboltplugin .autocomplete-content .row:after {
+  content: "";
+  display: table;
+}
+.passboltplugin .autocomplete-content .row:after {
+  clear: both;
+}
+.passboltplugin .autocomplete-content .row:before,
+.passboltplugin .autocomplete-content .row:after {
+  content: "";
+  display: table;
+}
+.passboltplugin .autocomplete-content .row:after {
+  clear: both;
+}
+.passboltplugin .autocomplete-content .row:last-child {
+  border: 0;
+}
+.passboltplugin .autocomplete-content .row .avatar img {
+  width: 36px;
+  height: 36px;
+  float: left;
+}
+.passboltplugin .autocomplete-content .row .user,
+.passboltplugin .autocomplete-content .row .group {
+  width: 70%;
+  float: left;
+  padding-left: 1em;
+  padding-right: 1em;
+}
+.passboltplugin .autocomplete-content .row .name {
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -o-text-overflow: ellipsis;
+  -ms-text-overflow: ellipsis;
+}
+.passboltplugin .autocomplete-content .row .details {
+  color: #888888;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -o-text-overflow: ellipsis;
+  -ms-text-overflow: ellipsis;
+  display: block;
 }
 /* hide icons if there is no space */
 @media all and (max-width: 480px) {
