@@ -21,19 +21,6 @@
 	<input maxlength="50" id="js_perm_create_form_aro_auto_cplt" placeholder="start typing a person name" autocomplete="off" type="text">
 	<div class="security-token">CKR</div>
 </div>
-
-<div class="select left perm-type">
-	<select id="js_perm_create_form_type" class="permission">
-		<option value="1" data-view-id="229">can read</option>
-		<option value="7" data-view-id="230">can update</option>
-		<option value="15" data-view-id="231">is owner</option>
-	</select>
-</div>
-
-<div class="actions">
-	<input id="js_perm_create_form_add_btn" class="button primary" value="add" type="submit">
-</div>
-
 <div class="input blank">
 	<div id="js_perm_create_form_feedback" class="message"></div>
 </div>

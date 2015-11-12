@@ -87,95 +87,13 @@
 		font-size:0.813em;
 		padding-left:2em;
 	}
-}
 
-.passboltplugin {
-	/*
-		form to add new permissions
-		basically this form is embedded in an iframe released by the plugin
-	*/
 	.form-content.permission-add {
-		position:relative;
 		.clearfix();
 
-		label {
-			padding-bottom: .5em;
-			padding-top: 1em;
-			font-size: 0.938em;
-		}
-		.autocomplete input {
-			width: 48%;
-			float: left;
-		}
-		.autocomplete-content {
-			width: 46%;
-		}
-		.perm-type {
-			margin-left: 2%;
-			margin-right: 2%;
-		}
-		.actions {
-			.clearfix();
-		}
-		.actions input {
-			padding: 0.3em 1em;
-		}
-		.checkbox {
-			clear: both;
-			display: block;
-			float: left;
-		}
-		.select select {
-			width: 7em;
-			font-size: 1em;
-		}
-		.button {
-			font-size: 1em;
-			line-height: 1.5em;
-		}
-		.message {
-			padding-left: 0;
-		}
-	}
-
-	/*
-		autocomplete users results
-		basically this list of users is embedded in an iframe released by the plugin
-	*/
-	.autocomplete-content {
-
-		.row {
-			.clearfix();
-			font-size:.813em;
-			padding:.825em .5em .5em 1em;
-			border-bottom:1px dotted @border-default;
-
-			&:last-child {
-				border:0;
-			}
-
-			/* user summary */
-			.avatar img {
-				width:36px;
-				height:36px;
-				float:left;
-			}
-			.user,
-			.group {
-				width:70%;
-				float:left;
-				padding-left:1em;
-				padding-right:1em;
-			}
-			.name {
-				display:block;
-				.ellipsis();
-			}
-			.details {
-				color:@font-light;
-				.ellipsis();
-				display:block;
-			}
+		#passbolt-password-share-autocomplete-wrapper {
+			position:relative;
+			width:100%;
 		}
 	}
 }

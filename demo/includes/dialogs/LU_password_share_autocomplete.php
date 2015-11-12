@@ -211,7 +211,9 @@
                         </div>
                         <div class="form-content permission-add">
 							<iframe src="../demo/LU_iframe_permissioninput.php" id="passbolt-iframe-password-share" frameborder="0"></iframe>
-							<iframe src="../demo/LU_iframe_permissioninput_autocomplete.php" id="passbolt-iframe-password-share-autocomplete" frameborder="0"></iframe>
+							<div id="passbolt-password-share-autocomplete-wrapper">
+								<iframe src="../demo/LU_iframe_permissioninput_autocomplete.php" id="passbolt-iframe-password-share-autocomplete" frameborder="0"></iframe>
+							</div>
                         </div>
                         <div class="submit-wrapper clearfix">
                             <input id="js_rs_share_save" class="button primary" value="save" data-view-id="375" type="submit">
