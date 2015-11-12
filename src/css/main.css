@@ -4311,6 +4311,10 @@ table.table-info.horizontal tbody tr:nth-child(even) {
 }
 /* hide icons if there is no space */
 @media all and (max-width: 480px) {
+  .dialog .share-tab .permissions.scroll {
+    height: auto;
+    margin: 0;
+  }
   .dialog .share-tab .row .user,
   .dialog .share-tab .row .group {
     width: 45%;
