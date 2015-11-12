@@ -20,7 +20,7 @@
 /*
  * Hide from both screenreaders and browsers: h5bp.com/u
  */
-.hidden {
+html body .hidden {
   display: none;
 }
 /*
@@ -1475,7 +1475,7 @@ textarea {
 	.notice			- can be used for example messages prior validation
 	.error			 - error messages used for validation issues
 */
-form .input .message {
+.input .message {
   font-weight: bold;
   padding: 0;
   padding-left: .25em;
@@ -1484,21 +1484,24 @@ form .input .message {
   border: 0;
   /* colors for messages */
 }
-form .input .message.error {
+.input .message.error {
   color: #d40101;
 }
-form .input .message.success {
+.input .message.success {
   color: #009900;
 }
-form .input .message.warning {
+.input .message.warning {
   color: #9f6000;
 }
-form .input .message.notice {
+.input .message.notice {
   color: #2894df;
 }
-form .input .message.helptext {
+.input .message.helptext {
   color: #888888;
   font-weight: normal;
+}
+form .input .message {
+  background-color: transparent;
 }
 .input.error label {
   color: #d40101;
@@ -1732,6 +1735,9 @@ select.fluid {
   /* content */
   /* inputs */
   /* submit / cancel */
+}
+.dialog.medium {
+  max-width: 36em;
 }
 .dialog .dialog-header {
   padding: 0.5em 1em 0 1em;
@@ -1995,7 +2001,7 @@ select.fluid {
 }
 /*
 	Password fields in passbolt have complexity "progress bar"
-	and a custom layout to accommodate buttons on the left end
+	and a custom layout to accomodate buttons on the left end
 */
 .input-password-wrapper {
   /*
@@ -2084,7 +2090,7 @@ select.fluid {
   padding-left: 0;
 }
 .input-password-wrapper .password-complexity .progress {
-  width: 66.5%;
+  width: 66%;
   border: 1px solid #dddddd;
   height: 7px;
   display: block;
@@ -2500,6 +2506,16 @@ select.fluid {
   .dialog .share-tab .row .group {
     width: 45%;
   }
+}
+.dialog.key-info table {
+  margin-top: 1em;
+}
+.dialog.key-info table tr td {
+  padding: 0.5em 0 0.5em 0;
+}
+.dialog.key-info table tr td.label {
+  padding-right: 4em;
+  color: #888888;
 }
 /**
  * Needed for Firefox plugin

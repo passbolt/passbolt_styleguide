@@ -56,7 +56,7 @@ Then we publish it again with
 
   npm publish
 
-in your project using the bower package you can then run:
+in your project using the npm package you can then run:
 
   npm update
 
