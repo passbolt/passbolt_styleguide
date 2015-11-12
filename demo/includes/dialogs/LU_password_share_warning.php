@@ -204,6 +204,39 @@
 										</a>
 
 									</div>
+								</li><li id="dc8d196f-f7e9-3531-a9de-b15a3b48b11b" class="row direct-permission permission-updated" data-view-id="409">
+									<div class="avatar">
+										<img src="img/avatar/user.png" data-view-id="409">
+									</div>
+									<div class="group">
+										<span class="name">Betty Holberton</span>
+										<span class="details"><a href="#">betty@passbolt.com</a></span>
+									</div>
+									<div class="select rights">
+										<form id="js_share_rs_perm_dc8d196f-f7e9-3531-a9de-b15a3b48b11b" class="js_perm_edit_form" data-view-id="409">
+											<select id="6888c00a-34db-5867-f19b-17a6d279971f" class="js_share_rs_perm_type permission mad_form_dropdown form-element mad_view_form_element ready">
+
+												<option value="0" data-view-id="413">deny</option>
+
+												<option value="1" data-view-id="414">can read</option>
+
+												<option value="3" data-view-id="415">can create</option>
+
+												<option value="7" data-view-id="416">can update</option>
+
+												<option value="15" data-view-id="417">is owner</option>
+
+											</select>
+										</form>
+									</div>
+									<div class="actions">
+
+										<a href="#" class="js_perm_delete close" title="remove" data-view-id="412">
+											<i class="icon close no-text"></i>
+											<span>remove</span>
+										</a>
+
+									</div>
 								</li></ul>
 						</div>
 						<div id="js_permissions_changes" class="warning message">

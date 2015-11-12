@@ -4123,6 +4123,7 @@ table.table-info.horizontal tbody tr:nth-child(even) {
 /* password share tab */
 .dialog .share-tab {
   /* list of existing permissions settings */
+  /* new/updated permissions */
   /* message */
 }
 .dialog .share-tab .form-content {
@@ -4251,6 +4252,9 @@ table.table-info.horizontal tbody tr:nth-child(even) {
 }
 .dialog .share-tab .row.inherited-permission .inherited-actions a {
   color: #888888;
+}
+.dialog .share-tab .row.permission-updated .avatar img {
+  border: 1px solid #ff4500;
 }
 .dialog .share-tab .message {
   font-size: 0.813em;
