@@ -50,9 +50,8 @@
 																<img src="img/avatar/user_medium.png" alt="profile picture">
 															</div>
 															<div class="edit">
-																<a title="Change Avatar" href="#"
-																	 class="edit-avatar-action">
-																	<i class="icon camera"></i>
+																<a title="Change Avatar" href="#" class="edit-avatar-action">
+																	<i class="fa fa-camera"></i>
 																	<span class="help-text">Click here to upload a new picture.</span>
 																</a>
 															</div>

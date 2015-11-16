@@ -8,8 +8,8 @@
 							 maxlength="50" type="search" placeholder="search people">
 			</div>
 			<button value="search">
-				<i class="icon search"></i>
-				<span class="text visuallyhidden">search</span>
+				<i class="fa fa-search"></i>
+				<span class="visuallyhidden">search</span>
 			</button>
 		</form>
 	</div>

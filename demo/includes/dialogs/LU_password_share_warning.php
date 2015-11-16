@@ -2,7 +2,9 @@
     <div class="dialog">
         <div class="dialog-header">
             <h2>Share<span class="dialog-header-subtitle">Inkscape2</span></h2>
-            <a href="#" class="dialog-close"><i class="icon close no-text"></i><span>close</span></a>
+            <a href="#" class="dialog-close">
+                <i class="fa fa-fw fa-close"></i><span class="visuallyhidden">close</span>
+            </a>
         </div>
         <div class="js_dialog_content dialog-content"><div class="passbolt_component_resource_actions_tab tabs mad_view_component_tab ready" id="daaba01d-a85c-0b23-c896-86ec393f8d11">
                 <ul id="084bf580-cd05-5742-10ec-b5ad4cea08a1" class="js_tabs_nav tabs-nav mad_component_menu menu mad_view_component_tree ready">
@@ -102,8 +104,7 @@
                                     <div class="actions">
 
                                         <a href="#" class="js_perm_delete close" title="remove" data-view-id="385">
-                                            <i class="icon close no-text"></i>
-                                            <span>remove</span>
+                                            <i class="fa fa-times-circle"></i><span class="visuallyhidden">remove</span>
                                         </a>
 
                                     </div>
@@ -135,8 +136,7 @@
                                     <div class="actions">
 
                                         <a href="#" class="js_perm_delete close" title="remove" data-view-id="394">
-                                            <i class="icon close no-text"></i>
-                                            <span>remove</span>
+                                            <i class="fa fa-times-circle"></i><span class="visuallyhidden">remove</span>
                                         </a>
 
                                     </div>
@@ -168,8 +168,7 @@
                                     <div class="actions">
 
                                         <a href="#" class="js_perm_delete close" title="remove" data-view-id="403">
-                                            <i class="icon close no-text"></i>
-                                            <span>remove</span>
+                                            <i class="fa fa-times-circle"></i><span class="visuallyhidden">remove</span>
                                         </a>
 
                                     </div>
@@ -201,8 +200,7 @@
                                     <div class="actions">
 
                                         <a href="#" class="js_perm_delete close" title="remove" data-view-id="412">
-                                            <i class="icon close no-text"></i>
-                                            <span>remove</span>
+                                            <i class="fa fa-times-circle"></i><span class="visuallyhidden">remove</span>
                                         </a>
 
                                     </div>

@@ -3,7 +3,10 @@
 	<div class="dialog">
 		<div class="dialog-header">
 			<h2>Edit<span class="dialog-header-subtitle">shared resource</span></h2>
-			<a href="../demo/LU_passwords.php" class="dialog-close"><i class="icon close no-text"></i><span>close</span></a>
+			<a href="../demo/LU_passwords.php" class="dialog-close">
+				<i class="fa fa-close"></i><span class="visuallyhidden">close</span>
+			</a>
+
 		</div>
 		<div class="js_dialog_content dialog-content">
 			<div class="passbolt_controller_component_resource_actions_tab_controller mad_view_component_tab tabs ready"

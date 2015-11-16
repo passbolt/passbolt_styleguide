@@ -37,7 +37,7 @@
                 </div>
                 <div class="users login form">
                     <div class="feedback">
-                        <i class="icon huge hourglass rotate" ></i>
+                        <i class="fa huge fa-clock-o" ></i>
                         <p>The login session expired. You can try again in <span class="countdown">10</span> seconds. </p>
                     </div>
                 </div>

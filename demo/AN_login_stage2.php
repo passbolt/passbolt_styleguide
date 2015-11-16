@@ -37,7 +37,7 @@
                 </div>
                 <div class="users login form">
                     <div class="feedback">
-                        <i class="icon huge cycle rotate" ></i>
+                        <i class="fa fa-cog fa-spin huge" ></i>
                         <p>Initiating login<br> please wait...</p>
                     </div>
                 </div>

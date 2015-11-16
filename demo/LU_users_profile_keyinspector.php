@@ -103,7 +103,7 @@
 														</li>
 														<li>
 															<a href="#" class="button">
-																<i class="icon download"></i>
+																<i class="fa fa-fw fa-download"></i>
 																<span>download</span></a>
 														</li>
 													</ul>

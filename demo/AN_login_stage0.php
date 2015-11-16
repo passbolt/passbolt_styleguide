@@ -37,8 +37,8 @@
 				</div>
 				<div class="users login form">
 					<div class="feedback">
-						<i class="icon huge cycle rotate" ></i>
-						<p>Check server key,<br> please wait...</p>
+						<i class="fa fa-cog fa-spin huge" ></i>
+						<p>Checking server key,<br> please wait...</p>
 					</div>
 				</div>
 			</div>

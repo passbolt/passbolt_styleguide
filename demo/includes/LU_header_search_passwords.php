@@ -8,7 +8,7 @@
 							 maxlength="50" type="search" placeholder="search passwords">
 			</div>
 			<button value="search" class="no-text">
-				<i class="icon search"></i>
+				<i class="fa fa-fw fa-search"></i>
 				<span class="text visuallyhidden">search</span>
 			</button>
 		</form>

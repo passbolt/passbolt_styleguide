@@ -35,7 +35,7 @@
 				</div>
 				<div class="users login form">
 					<div class="feedback">
-						<i class="icon huge rocket" ></i>
+						<i class="fa huge fa-rocket" ></i>
 						<p>You need an account to login.</p>
 					</div>
 					<div class="actions-wrapper center">

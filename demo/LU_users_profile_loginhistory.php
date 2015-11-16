@@ -60,8 +60,8 @@
 														<tbody>
 															<tr>
 																<td>
-																	<i class="icon check no-text"></i>
-																	<span>success</span>
+																	<i class="fa fa-check-square"></i>
+																	<span class="visuallyhidden">success</span>
 																</td>
 																<td>success</td>
 																<td>192.168.102.120</td>
@@ -69,8 +69,8 @@
 															</tr>
 															<tr>
 																<td>
-																	<i class="icon warning no-text"></i>
-																	<span>warning</span>
+																	<i class="fa fa-warning"></i>
+																	<span class="visuallyhidden">warning</span>
 																</td>
 																<td>warning</td>
 																<td>192.168.102.122</td>
@@ -78,35 +78,8 @@
 															</tr>
 															<tr>
 																<td>
-																	<i class="icon block no-text"></i>
-																	<span>error</span>
-																</td>
-																<td>error</td>
-																<td>192.168.102.120</td>
-																<td>22 Mar 2015 @ 12:31</td>
-															</tr>
-															<tr>
-																<td>
-																	<i class="icon check no-text"></i>
-																	<span>success</span>
-																</td>
-																<td>success</td>
-																<td>192.168.102.120</td>
-																<td>22 Mar 2015 @ 12:31</td>
-															</tr>
-															<tr>
-																<td>
-																	<i class="icon warning no-text"></i>
-																	<span>warning</span>
-																</td>
-																<td>warning</td>
-																<td>192.168.102.121</td>
-																<td>22 Mar 2015 @ 12:31</td>
-															</tr>
-															<tr>
-																<td>
-																	<i class="icon block no-text"></i>
-																	<span>error</span>
+																	<i class="fa fa-ban"></i>
+																	<span class="visuallyhidden">error</span>
 																</td>
 																<td>error</td>
 																<td>192.168.102.120</td>

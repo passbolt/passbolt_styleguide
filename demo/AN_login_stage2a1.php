@@ -37,7 +37,7 @@
                 </div>
                 <div class="users login form">
                     <div class="feedback">
-                        <i class="icon huge retry " ></i>
+                        <i class="fa fa-repeat huge" ></i>
                         <p>Your login session expired.</p>
                     </div>
                     <div class="actions-wrapper center">

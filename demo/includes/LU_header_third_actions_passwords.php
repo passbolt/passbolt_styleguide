@@ -4,19 +4,19 @@
 
 			<li>
 				<a id="js_wk_menu_secretcopy_button" href="#" class="button mad_component_button js_component mad_view ready">
-					<i class="icon copy"></i>
+					<i class="fa fa-fw fa-copy"></i>
 					<span>copy</span>
 				</a>
 			</li>
 			<li>
 				<a id="js_wk_menu_edition_button" href="../demo/LU_passwords_edit.php" class="button mad_component_button js_component mad_view ready">
-					<i class="icon edit"></i>
+					<i class="fa fa-fw fa-edit"></i>
 					<span>edit</span>
 				</a>
 			</li>
 			<li>
 				<a id="js_wk_menu_sharing_button" href="../demo/LU_passwords_share.php" class="button mad_component_button js_component mad_view ready">
-					<i class="icon share"></i>
+					<i class="fa fa-fw fa-share"></i>
 					<span>share</span>
 				</a>
 			</li>
@@ -24,7 +24,7 @@
 				<div class="dropdown">
 					<a id="js_wk_menu_more_button" href="#" class="button mad_component_button_dropdown js_component mad_view_component_button_dropdown ready">
 						<span>more</span>
-						<i class="icon after arrowdown"></i>
+						<i class="fa fa-fw fa-caret-down"></i></a>
 					</a>
 					<ul id="de8625c7-312f-e28b-db01-bf3123d0d433" class="dropdown-content mad_component_menu menu mad_view_component_tree ready">
 						<li id="ceb12fee-d370-a60c-8596-a559e560f4e6" class="todo ready" data-view-id="10">
@@ -54,8 +54,8 @@
 		<ul class="passbolt_component_workspace_secondary_menu js_component mad_view ready" id="b59038b5-ed72-a48a-06e1-fb06523b5bfd">
 			<li>
 				<a id="js_wk_secondary_menu_view_sidebar_button" href="#" class="button toggle mad_component_toggle_button js_component mad_view ready">
-					<i class="icon layout eye big no-text"></i>
-					<span>view sidebar</span>
+					<i class="fa fa-eye fa-lg"></i>
+					<span class="visuallyhidden">view sidebar</span>
 				</a>
 			</li>
 		</ul>

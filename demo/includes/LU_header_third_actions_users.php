@@ -5,18 +5,10 @@
 			<div id="js_passbolt_passwordWorkspaceMenu_controller"
 					 class="passbolt_controller_component_password_workspace_menu_controller mad_view_view tab-content selected selection">
 				<li>
-					<a id="js_wk_menu_creation_button" href="#"
-							class="button mad_controller_component_button_controller mad_view_view js_component ready disabled"
-							disabled="disabled">
-						<i class="icon create"></i>
-						<span>create</span>
-					</a>
-				</li>
-				<li>
 					<a id="js_wk_menu_edition_button" href="#"
 						 class="button mad_controller_component_button_controller mad_view_view js_component disabled"
 						 disabled="disabled">
-						<i class="icon edit"></i>
+						<i class="fa fa-fw fa-edit"></i>
 						<span>edit</span>
 					</a>
 				</li>
@@ -24,8 +16,8 @@
 					<a id="js_wk_menu_edition_button" href="#"
 						 class="button mad_controller_component_button_controller mad_view_view js_component disabled"
 						 disabled="disabled">
-						<i class="icon delete"></i>
-						<span>edit</span>
+						<i class="fa fa-fw fa-trash"></i>
+						<span>delete</span>
 					</a>
 				</li>
 			</div>
@@ -36,8 +28,8 @@
 		<li>
 			<a id="js_wk_secondary_menu_view_sidebar_button" href="#"
 				 class="button toggle mad_controller_component_toggle_button_controller mad_view_view js_component ready">
-				<i class="icon layout eye big no-text"></i>
-				<span>view sidebar</span>
+				<i class="fa fa-lg fa-eye"></i>
+				<span class="visuallyhidden">view sidebar</span>
 			</a>
 		</li>
 	</ul>

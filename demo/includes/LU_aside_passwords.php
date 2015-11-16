@@ -1,7 +1,7 @@
 <div class="panel aside js_wsp_pwd_sidebar_second passbolt_controller_component_resource_details_controller passbolt_view_component_resource_details js_component ready" style="" id="3963e538-ddd9-e84d-1c1e-88cdddd2e1de">
 	<div class="resource">
 		<h3>salesforce account</h3>
-		<a href="#" class="dialog-close"><i class="icon close no-text"></i><span>close</span></a>
+		<a href="#" class="dialog-close"><i class="fa fa-fw fa-close"></i><span class="visuallyhidden">close</span></a>
 		<div class="detailed-information">
 			<h4>Information</h4>
 			<ul>
@@ -77,12 +77,20 @@ ULXDyPFYyxRBJGYNY6jWE736zd495vMfqlFzD0Ssf7K4oKGDMy6ag/mP6AyP5IBc
 		<!-- Comments management -->
 		<div class="comments clearfix passbolt_controller_component_comments_controller passbolt_view_component_comments js_component ready" id="js_rs_details_comments">
 			<h4>Comments</h4>
-			<a href="#" class="section-action"><i class="icon create no-text"></i><span>create</span></a>
+			<a href="#" class="section-action">
+				<i class="fa fa-create"></i>
+				<span class="visuallyhidden">create</span>
+			</a>
 			<div id="js_rs_details_comments_add_form" class="passbolt_controller_form_comment_create_form_controller mad_view_form_form_view js_component hidden" style="display: none;">
 				<ul>
 					<li class="comment-wrapper">
 						<div class="comment add">
-							<div class="author profile picture"><a href="#"><img src="img/user.png" img src="img/user.png"></a></div>
+							<div class="author profile picture">
+								<a href="#">
+									<img src="img/user.png" img src="img/user.png">
+								</a>
+							</div>
+
 							<div class="form-content">
 								<div class="input textarea required">
 									<label for="Comment">Add a comment</label>
@@ -123,8 +131,7 @@ ULXDyPFYyxRBJGYNY6jWE736zd495vMfqlFzD0Ssf7K4oKGDMy6ag/mP6AyP5IBc
 									<!-- <li><a href="#"><i class="icon reply no-text"></i><span>reply</span></a></li>-->
 									<li>
 										<a href="#">
-											<i class="icon delete no-text"></i>
-											<span>delete</span>
+											<i class="fa fa-trash"></i><span class="visuallyhidden">remove</span>
 										</a>
 									</li>
 								</ul>

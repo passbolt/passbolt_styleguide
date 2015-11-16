@@ -9,7 +9,7 @@
 						 href="../demo/LU_users_profile_edit.php"
 						 data-tooltip="sorry it is not possible to add another key at the moment"
 						>
-						<i class="icon add"></i>
+						<i class="fa fa-fw fa-plus-circle"></i>
 						<span>add</span>
 					</a>
 				</li>
@@ -18,7 +18,7 @@
 						 href="../demo/LU_users_profile_edit.php"
 						 data-tooltip="sorry it is not possible to revoke an existing key at the moment"
 						>
-						<i class="icon edit"></i>
+						<i class="fa fa-fw fa-ban"></i>
 						<span>revoke</span>
 					</a>
 				</li>

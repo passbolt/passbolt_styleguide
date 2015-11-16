@@ -37,7 +37,7 @@
 				</div>
 				<div class="users login form">
 					<div class="feedback">
-						<i class="icon huge cycle rotate" ></i>
+						<i class="fa fa-warning huge" ></i>
 						<p>Login is disabled as it is not safe to log in. <a href="#">Learn more</a>.</p>
 					</div>
 				</div>

@@ -54,8 +54,8 @@
 							<p>All good! The secret key is stored in your add-on and ready to use.</p>
 							<div class="success message backup-prompt">
 								<a href="../demo/AN_setup4a0_securitytoken.php" class="button primary next big">
-									<i class="icon download"></i>
-									download
+									<i class="fa fa-fw fa-download"></i>
+									<span>download</span>
 								</a>
 								<span class="help-text">Take some time to make a backup of your key (and store it in a safe location).</span>
 							</div>

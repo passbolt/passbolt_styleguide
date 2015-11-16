@@ -24,7 +24,7 @@
 					<h1><a href="#"><span>Passbolt</span></a></h1>
 				</div>
 				<div class="register thank-you form feedback">
-					<div class="graphical-feedback"><i class="icon huge paperplane"></i></div>
+					<div class="graphical-feedback"><i class="fa fa-envelope-o huge"></i></div>
 					<p><strong>Email sent!</strong> Please check your spam folder if you do not hear from us after a while.</p>
 				</div>
 			</div>

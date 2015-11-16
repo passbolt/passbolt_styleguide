@@ -26,15 +26,15 @@
 	<ul class="actions inline">
 		<li>
 			<a href="#" id="js_show_pwd_button" class="button toggle mad_controller_component_button_controller mad_view_view js_component ready">
-				<i class="icon eye big no-text"></i>
-				<span>view</span>
+				<i class="fa fa-eye fa-fw fa-lg"></i>
+				<span class="visuallyhidden">view</span>
 			</a>
 		</li>
 		<li>
 			<a href="#" id="js_gen_pwd_button" class="button mad_controller_component_button_controller mad_view_view js_component ready tooltip-right always-show large"
 				 data-tooltip="generate a random password">
-				<i class="icon key big no-text"></i>
-				<span>generate</span>
+				<i class="fa fa-magic fa-fw fa-lg"></i>
+				<span class="visuallyhidden">generate</span>
 			</a>
 		</li>
 	</ul>

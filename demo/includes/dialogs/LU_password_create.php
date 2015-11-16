@@ -2,7 +2,10 @@
     <div class="dialog">
         <div class="dialog-header">
             <h2>Create Password</h2>
-            <a href="../demo/LU_passwords.php" class="dialog-close"><i class="icon close no-text"></i><span>close</span></a>
+            <a href="../demo/LU_passwords.php" class="dialog-close">
+                <i class="fa fa-fw fa-close"></i>
+                <span class="visuallyhidden">close</span>
+            </a>
         </div>
         <div class="js_dialog_content dialog-content">
             <form action='../demo/LU_passwords.php' class="passbolt_form_resource_create form mad_view_form ready" id="3997083d-e933-b5b6-9de3-58727f931817">

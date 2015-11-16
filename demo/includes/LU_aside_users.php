@@ -8,15 +8,16 @@
 				<span class="username">cedric@passbolt.com</span>
 			</h3>
 		</div>
-		<a href="#" class="dialog-close"><i
-				class="icon close no-text"></i><span>close</span></a>
+		<a href="#" class="dialog-close">
+			<i class="fa fa-fw fa-close"></i><span class="visuallyhidden">close</span>
+		</a>
 
 		<div class="detailed-information">
 			<h4>Information</h4>
 			<ul>
 				<li class="username">
 					<span class="label">Password</span>
-					<span class="value">**********</span>
+					<span class="value">••••••••••••••</span>
 				</li>
 				<li class="password">
 					<span class="label">Role</span>
