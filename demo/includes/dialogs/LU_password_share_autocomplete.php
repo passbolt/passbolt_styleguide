@@ -100,7 +100,8 @@
                                     <div class="actions">
 
                                         <a href="#" class="js_perm_delete close" title="remove" data-view-id="385">
-                                            <i class="fa fa-times-circle"></i><span class="visuallyhidden">remove</span>
+                                            <i class="fa fa-times-circle"></i>
+                                            <span class="visuallyhidden">remove</span>
                                         </a>
 
                                     </div>
@@ -132,7 +133,8 @@
                                     <div class="actions">
 
                                         <a href="#" class="js_perm_delete close" title="remove" data-view-id="394">
-                                            <i class="fa fa-times-circle"></i><span class="visuallyhidden">remove</span>
+                                            <i class="fa fa-times-circle"></i>
+                                            <span class="visuallyhidden">remove</span>
                                         </a>
 
                                     </div>
@@ -164,7 +166,8 @@
                                     <div class="actions">
 
                                         <a href="#" class="js_perm_delete close" title="remove" data-view-id="403">
-                                            <i class="fa fa-times-circle"></i><span class="visuallyhidden">remove</span>
+                                            <i class="fa fa-times-circle"></i>
+                                            <span class="visuallyhidden">remove</span>
                                         </a>
 
                                     </div>
@@ -196,7 +199,8 @@
                                     <div class="actions">
 
                                         <a href="#" class="js_perm_delete close" title="remove" data-view-id="412">
-                                            <i class="fa fa-times-circle"></i><span class="visuallyhidden">remove</span>
+                                            <i class="fa fa-times-circle"></i>
+                                            <span class="visuallyhidden">remove</span>
                                         </a>
 
                                     </div>
@@ -208,7 +212,7 @@
                         <div class="form-content permission-add">
 							<iframe src="../demo/LU_iframe_permissioninput.php" id="passbolt-iframe-password-share" frameborder="0"></iframe>
 							<div id="passbolt-password-share-autocomplete-wrapper">
-								<iframe src="../demo/LU_iframe_permissioninput_autocomplete.php" id="passbolt-iframe-password-share-autocomplete" frameborder="0" class="hidden"></iframe>
+								<iframe src="../demo/LU_iframe_permissioninput_autocomplete.php" id="passbolt-iframe-password-share-autocomplete" frameborder="0"></iframe>
 							</div>
                         </div>
                         <div class="submit-wrapper clearfix">

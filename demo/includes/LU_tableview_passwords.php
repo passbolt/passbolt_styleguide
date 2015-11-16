@@ -39,7 +39,7 @@
 			</thead>
 		</table>
 	</div>
-	<div class="tableview-content">
+	<div class="tableview-content scroll">
 		<table>
 			<tbody>
 			<tr class="" id="17c66127-0c5e-3510-a497-2e6a105109db" data-view-id="1419">
