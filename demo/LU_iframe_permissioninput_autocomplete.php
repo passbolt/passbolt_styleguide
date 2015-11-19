@@ -20,9 +20,7 @@
 					var emptyHtml = '<div class="row"> \
 						<div class="main-cell-wrapper"> \
 							<div class="main-cell"> \
-								<a href="#"> \
-									No user found \
-								</a> \
+								No user found \
 							</div> \
 						</div> \
 					</div>';
