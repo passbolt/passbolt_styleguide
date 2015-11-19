@@ -3,6 +3,20 @@
 <head>
     <?php include('includes/LU_meta.php'); ?>
 	<script type="text/javascript" src="js/jquery.js"></script>
+	<style>
+		/** The following style will be applied dynamically */
+		#passbolt-iframe-password-share {
+			height: 5.1em;
+		}
+		#passbolt-iframe-password-share-autocomplete {
+			height: 10em;
+		}
+		@media all and (max-width: 440px) {
+			#passbolt-iframe-password-share-autocomplete {
+				height: 17.5em;
+			}
+		}
+	</style>
 </head>
 <body>
 <?php include('includes/dialogs/LU_password_share_autocomplete.php'); ?>
