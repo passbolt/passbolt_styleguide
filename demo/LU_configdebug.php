@@ -53,7 +53,13 @@
 						<a href="#useranddomainanchor">1. User and domain</a>
 					</li>
 					<li class="selected">
-						<a href="#keysettingsanchor">2. Key settings</a>
+						<a href="#mykeysettingsanchor">2. My key settings</a>
+					</li>
+					<li class="selected">
+						<a href="#serverkeysettingsanchor">3. Server public key</a>
+					</li>
+					<li class="selected">
+						<a href="#localstorageanchor">4. Local storage</a>
 					</li>
 				</ul>
 			</div>
@@ -217,14 +223,56 @@
 						</div>
 					</div>
 				</div>
+
+				<!-- Local storage -->
+				<div class="row localstoragesettings">
+					<div class="col12">
+						<a name="localstorageanchor"></a>
+						<h2>Browser plugin local storage</h2>
+						<div class="message warning">
+							<strong>Warning:</strong> This section allows you to view the variables stored by passbolt in the local storage.
+							Your can flush them. It is for development purposes only. It can break the integrity of your password and data.
+							Use at your own risks!
+						</div>
+						<div class="user settings feedback"></div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col12 last">
+						<h3>Local storage</h3>
+
+						<div class="json text">
+							<pre id="localStorage">
+{
+  "extensionId": "passbolt-firefox-plugin@passbolt.com",
+  "extensionBasePath": "resource://passbolt-firefox-addon-at-passbolt-dot-com",
+  "baseUrl": "http://passbolt.com",
+  "setupBootstrapRegex": "(.*)/setup/install/([a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[0-5][a-fA-F0-9]{3}-[089aAbB][a-fA-F0-9]{3}-[a-fA-F0-9]{12})/([a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[0-5][a-fA-F0-9]{3}-[089aAbB][a-fA-F0-9]{3}-[a-fA-F0-9]{12})",
+  "debug": true,
+  "user.id": "cd49eb9e-73a2-3433-a018-6ed993d421e8",
+  "user.username": "ada@passbolt.com",
+  "user.firstname": "Ada",
+  "user.lastname": "Lovelace",
+  "user.settings.securityToken.code": "CAC",
+  "user.settings.securityToken.color": "#FF0000",
+  "user.settings.securityToken.textColor": "#FFFFFF",
+  "user.settings.trustedDomain": "http://192.168.99.100:8081"
+}
+							</pre>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="submit-input-wrapper">
+						<input value="flush local storage" id="js_flush_conf" type="submit" class="button primary big"/>
+					</div>
+				</div>
+
 			</div>
 		</div>
-	</div>
-
-	<!-- main -->
-	<div class="grid">
 
 	</div>
+
 
 	<!-- footer -->
 	<footer>
