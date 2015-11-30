@@ -31,9 +31,27 @@
 						</div>
 					</div>
 				</li>
+				<li id="067a31de-232c-32a0-8a6d-56c3bfdf83b0" class="users ready">
+					<div class="row">
+						<div class="main-cell-wrapper">
+							<div class="main-cell">
+								<a href="../demo"><span>help</span></a>
+							</div>
+						</div>
+					</div>
+				</li>
 			</ul>
 			<ul id="js_app_navigation_right"
 					class="right passbolt_controller_component_app_navigation_right_controller mad_view_component_tree menu ready">
+				<li id="ea699358-a04d-179f-cc6c-64e7bd7f4254" class="logout ready">
+					<div class="row">
+						<div class="main-cell-wrapper">
+							<div class="main-cell">
+								<a href="../demo/LU_users_profile.php"><span>settings</span></a>
+							</div>
+						</div>
+					</div>
+				</li>
 				<li id="ea699358-a04d-179f-cc6c-64e7bd7f4254" class="logout ready">
 					<div class="row">
 						<div class="main-cell-wrapper">

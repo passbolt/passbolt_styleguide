@@ -25,19 +25,19 @@
 	</div>
 	<ul class="actions inline">
 		<li>
-			<a href="#" id="js_show_pwd_button" class="button toggle mad_controller_component_button_controller mad_view_view js_component ready">
+			<a href="#" id="js_secret_view" class="button toggle">
 				<i class="fa fa-eye fa-fw fa-lg"></i>
 				<span class="visuallyhidden">view</span>
 			</a>
 		</li>
 		<li>
-			<a href="#" id="js_gen_pwd_button" class="button mad_controller_component_button_controller mad_view_view js_component ready tooltip-right always-show large"
-				 data-tooltip="generate a random password">
+			<a href="#" id="js_secret_generate" class="button">
 				<i class="fa fa-magic fa-fw fa-lg"></i>
 				<span class="visuallyhidden">generate</span>
 			</a>
 		</li>
 	</ul>
+
 	<div id="js_user_pwd_strength" class="password-complexity">
 		<span class="progress"><span class="progress-bar fair"></span></span>
 		<span class="complexity-text">complexity: <strong>excellent</strong></span>

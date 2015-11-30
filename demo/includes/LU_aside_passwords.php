@@ -1,145 +1,199 @@
-<div class="panel aside js_wsp_pwd_sidebar_second passbolt_controller_component_resource_details_controller passbolt_view_component_resource_details js_component ready" style="" id="3963e538-ddd9-e84d-1c1e-88cdddd2e1de">
-	<div class="resource">
-		<h3>salesforce account</h3>
-		<a href="#" class="dialog-close"><i class="fa fa-fw fa-close"></i><span class="visuallyhidden">close</span></a>
+<div class="panel aside js_wsp_pwd_sidebar_second passbolt_component_resource_sidebar js_component passbolt_view_component_resource_sidebar ready" id="js_pwd_details" style="display: block;"><div class="sidebar resource">
+		<h3>Inkscape</h3>
+		<a class="js_sidebar_close dialog-close" href="#">
+			<i class="fa fa-close"></i>
+			<span class="visuallyhidden">close</span>
+		</a>
 		<div class="detailed-information">
 			<h4>Information</h4>
 			<ul>
 				<li class="username">
 					<span class="label">Username</span>
-					<span class="value">This passbolt username is outrageously long</span>
+					<span class="value">vector</span>
 				</li>
 				<li class="password">
 					<div class="label">Password</div>
 					<div class="value">
 						<div class="secret-copy">
-							<a href="#copy_secret">
+							<a data-view-id="364" href="#copy_secret" id="sidebar_secret_copy_17c66127-0c5e-3510-a497-2e6a105109db">
 								<span>copy password to clipboard</span>
 							</a>
-            <pre>-----BEGIN PGP MESSAGE-----
-Version: GnuPG v1.4.12 (GNU/Linux)
+					<pre>-----BEGIN PGP MESSAGE-----
+Version: GnuPG v2
 
-hQEMAyFwuC5Agdg+AQf8CmYO8RKn4K8TFCwmJhB8/fkZY6rwhb3nu74N0P9Odq92
-X9W43MuinoN5dFZXUwqGVZAjspm5w/yRXKOKm/uzyy7+J4qrY5Jn/YfB9S3CGT50
-r0lekGXXPJI12LFdD9qt4ZK6ZrSZZyvWkBcn7170g2RzT33rV6oynMHERYIv6KGp
-SNO00F2VlvzTjk9HBGlNCtZfHrasiBXSXiQdWVXR+25qQTZZLKstY+Bz4GPwlWF5
-AAZDVVtXqLuV2J2kSVwgBzOL1nszV341jzodLNznyzOcYc/ZudWMnbjRepprPP7w
-+65y5KMHrj4STDn3RT5ePd0T4KQNdQJqHLBEY5oSL9JHATVugbrQH1GYlDZujJN4
-ULXDyPFYyxRBJGYNY6jWE736zd495vMfqlFzD0Ssf7K4oKGDMy6ag/mP6AyP5IBc
-0zBObSZRJ/8=
-=30SP
+hQIMA1P90Qk1JHA+AQ/9GgY50mw+3DPUSxw3eWn1jLOU2JB6GwQyIZELmL3GYti9
+UbDvfukqCpg0CUMd5a4oLBXodgJwVy0QuquSOeJm3KOVFGeXX9S/dTZ9TVT/GLNg
+hncHBfueyvSOFBOuIYiCEfy45uFgZXskDRsgNVgdHFqnrWxwE9niY0XqOM9XfWwc
+ljpGC91sl+0O+hr3SwZARb8lnHo8msC6A0vsQJjokwvzYD0/1wc+G7XLV4v1O+mF
+vxrkHHLIoqDzXhjpYoX4ICDKoYlWsiW8JZ2MrPuVc6RUux2F5ShQipHnYuWyUAL1
+P2klKLTo8Gsx2tjyZo4F1UOl6nrcJ0v2RaoZsX4h+864zKMiJHNOmi7ceJ54hJJG
+RFqC/LfFiCOI5UNnbZHMVjRW7bmv7nBqtZBQjF7RUi3POO+lcd/2ZEeBOEhOwkZs
+oXxse3CJcOipkl1vGrPvmRKMo+fXTZXZieS70Qyqs5oWKOtCQ3j+riTxcigloWmQ
+GYn/Qdrj1yYMo5IymvENNjBtV2XIitfuONnGstcDLHa2gIuRkM2B3CssEgO7H3Ru
+JDhw/UESPrRzwDfgPn++4f8tyUq7HnK2TZXzkNS38+FymUPUVb7ZX3xfR0sqf0kT
+uF4krZNHk9NrkgXyV3TBs2evhgbhj3Skvjr+LvsGHsam+iJ+J5BHO6xOTDSBVerS
+QQH+gWDO7lFbZkicx5QQsm3Uh972vcQUq6sVWh2YFEmj3Lw/S1bE5O0ZMHdVaM3y
+uCZO5HNTgrf3rZ4wc7jtI6Nk
+=VQqd
 -----END PGP MESSAGE-----
 </pre>
 						</div>
 					</div>
 				</li>
-				<li class="url">
+				<li class="uri">
 					<span class="label">URL</span>
-        <span class="value">
-        <a href="https://thisisaverylongurltotest.com/theellipsis#com" target="_blank">https://thisisaverylongurltotest.com/theellipsis#com</a>
-        </span>
+			<span class="value">
+				<a data-view-id="365" target="_blank" href="https://inkscape.org/">https://inkscape.org/</a>
+			</span>
 				</li>
 				<li class="modified">
 					<span class="label">Modified</span>
-					<span class="value">2 years ago</span>
+					<span class="value">a day ago</span>
 				</li>
 				<li class="modified-by">
 					<span class="label">Modified by</span>
-					<span class="value">verylongemailyesindeed@passbolt.com</span>
-				</li>
-				<li class="owner">
-					<span class="label">Owner</span>
 					<span class="value">anonymous@passbolt.com</span>
 				</li>
+				<li class="created-by">
+					<span class="label">Owner</span>
+					<span class="value">edith@passbolt.com</span>
+				</li>
+				<!--<li class="expire">-->
+				<!--<span class="label">Expire</span>-->
+				<!--<span class="value">never</span>-->
+				<!--</li>-->
+				<!--<li class="strength">
+                    <span class="label">Strength</span>
+                    <span>
+                        -
+                    </span>
+                </li>-->
 			</ul>
 		</div>
 		<!-- Description management -->
-		<div class="description passbolt_controller_component_sidebar_section_sidebar_section_description_controller passbolt_view_component_sidebar_section_sidebar_section_description js_component ready" id="js_rs_details_description">
-			<h4>Description</h4>
-			<p class="description_content">salesforce account description</p>
+		<div id="js_rs_details_description" class="description passbolt_component_sidebar_section_description js_component passbolt_view_component_sidebar_section_description ready"><h4>Description</h4>
+
+			<a id="js_edit_description_button" class="edit_description_button section-action" href="#">
+				<i class="fa fa-fw fa-edit"></i>
+				<span class="visuallyhidden">edit</span>
+			</a>
+
+			<p class="description_content">Inkscape is a professional vector graphics editor. It is free and open source.</p>
 			<!-- edit description form -->
-			<div id="js_rs_details_edit_description" class="passbolt_controller_form_resource_edit_description_form_controller mad_view_form_form_view js_component hidden" style="display: none;">
-				<div class="form-content resource-description-edit-wrapper">
-					<input name="data[Resource][id]" class="js_resource_id required mad_form_element_textbox_controller mad_view_form_element_textbox_view js_component ready" type="hidden" id="8e192271-d9a6-f2cd-9df6-668036758079" value="50d77ff9-c358-4dfb-be34-1b63d7a10fce">
+			<div id="js_rs_details_edit_description" class="passbolt_form_resource_edit_description form mad_view_form hidden" style="display: none;"><div class="form-content resource-description-edit-wrapper">
+					<input type="hidden" class="js_resource_id required mad_form_textbox form-element mad_view_form_textbox ready" name="data[Resource][id]" id="fea26624-592a-20e2-52d0-51f86413d7da" value="17c66127-0c5e-3510-a497-2e6a105109db">
 					<div class="input text required js_form_element_wrapper">
-						<textarea name="data[Resource][description]" class="js_resource_description required mad_form_element_textbox_controller mad_view_form_element_textbox_view js_component ready" maxlength="150" placeholder="enter description" id="58f97456-996e-2145-53dc-39afba44b116"></textarea>
-						<div class="js_resource_description_feedback message mad_form_feedback_controller mad_view_view js_component ready" id="4eb2ad34-b9fe-8eca-c9f7-796a5f1ca76f">
+						<textarea data-view-id="366" placeholder="enter description" maxlength="150" class="js_resource_description required mad_form_textbox form-element mad_view_form_textbox ready" name="data[Resource][description]" id="e2ffe169-bc70-b2af-1c91-6d9c900d41c6"></textarea>
+						<div class="js_resource_description_feedback message mad_form_feedback js_component mad_view ready" id="a788eb82-39c0-e249-47ed-add66a43c018">
 						</div>
 					</div>
 					<div class="actions">
-						<input type="submit" class="button resource-submit" value="save">
+						<input type="submit" value="save" class="button resource-submit">
 					</div>
 				</div>
-			</div>
-		</div>
+			</div></div>
 		<!-- Tags management -->
-		<div class="tags clearfix" id="js_rs_details_tags"></div>
+		<div id="js_rs_details_tags" class="tags clearfix"></div>
 		<!-- Comments management -->
-		<div class="comments clearfix passbolt_controller_component_comments_controller passbolt_view_component_comments js_component ready" id="js_rs_details_comments">
-			<h4>Comments</h4>
-			<a href="#" class="section-action">
-				<i class="fa fa-create"></i>
-				<span class="visuallyhidden">create</span>
-			</a>
-			<div id="js_rs_details_comments_add_form" class="passbolt_controller_form_comment_create_form_controller mad_view_form_form_view js_component hidden" style="display: none;">
-				<ul>
+		<div id="js_rs_details_comments" class="comments clearfix passbolt_component_comments js_component passbolt_view_component_comments ready"><h4>Comments</h4>
+			<a class="js_add_comment section-action" href="#"><i class="fa fa-fw fa-plus-circle"></i><span class="visuallyhidden">create</span></a>
+			<div id="js_rs_details_comments_add_form" class="passbolt_form_comment_create form mad_view_form ready" style=""><ul>
 					<li class="comment-wrapper">
-						<div class="comment add">
-							<div class="author profile picture">
-								<a href="#">
-									<img src="img/user.png" img src="img/user.png">
-								</a>
-							</div>
-
-							<div class="form-content">
-								<div class="input textarea required">
-									<label for="Comment">Add a comment</label>
-									<input name="data[comment][parent_id]" class="js_comment_parent_id required mad_form_element_textbox_controller mad_view_form_element_textbox_view js_component ready" type="hidden" id="65dc1a98-1956-6e45-469e-aa3a14594313" value="">
-									<input name="data[comment][foreign_id]" class="js_comment_foreign_id required mad_form_element_textbox_controller mad_view_form_element_textbox_view js_component ready" type="hidden" id="ad5759eb-14aa-75c9-980d-03fd0e8b42d3" value="50d77ff9-c358-4dfb-be34-1b63d7a10fce">
-									<input name="data[comment][foreign_model]" class="js_comment_foreign_model required mad_form_element_textbox_controller mad_view_form_element_textbox_view js_component ready" type="hidden" id="09c3963e-8553-24ff-c440-ddadc4534aa6" value="Resource">
-									<textarea name="data[comment][content]" class="js_comment_content required mad_form_element_textbox_controller mad_view_form_element_textbox_view js_component ready" maxlength="150" placeholder="add a comment" id="6caa3f6e-7329-c311-96fc-fdf273854703"></textarea>
-									<div class="js_comment_content_feedback message mad_form_feedback_controller mad_view_view js_component ready" id="75124d45-31db-635c-e73f-b26711e01f55">
+						<form class="form comment add" id="js_comment_add_form">
+							<div class="wrap-right-collumn">
+								<div class="right-collumn">
+									<div class="form-content">
+										<input type="hidden" class="js_comment_parent_id required mad_form_textbox form-element mad_view_form_textbox success" name="data[comment][parent_id]" id="d1d6dc84-07be-7bfe-f1e9-fb3b822778ef" value="">
+										<input type="hidden" class="js_comment_foreign_id required mad_form_textbox form-element mad_view_form_textbox success" name="data[comment][foreign_id]" id="a78119d7-fc25-3929-0369-10f9903451e4" value="17c66127-0c5e-3510-a497-2e6a105109db">
+										<input type="hidden" class="js_comment_foreign_model required mad_form_textbox form-element mad_view_form_textbox success" name="data[comment][foreign_model]" id="267f9d06-58a3-9b6f-e7c4-6f2e1270d66e" value="Resource">
+										<div class="input textarea required">
+											<label for="js_field_comment_content">Add a comment</label>
+											<textarea data-view-id="368" placeholder="add a comment" maxlength="150" class="js_comment_content required mad_form_textbox form-element mad_view_form_textbox success" name="data[comment][content]" id="js_field_comment_content"></textarea>
+											<div class="js_comment_content_feedback message mad_form_feedback js_component mad_view success" id="3f0c54bf-9007-a18f-dcd4-4c6c792b8cac"></div>
+										</div>
+										<div class="metadata">
+											<span class="author username"><a href="#">You</a></span>
+											<span class="modified">right now</span>
+										</div>
+										<div class="actions">
+											<a class="button comment-submit" href="#"><span>send</span></a>
+										</div>
 									</div>
 								</div>
-								<div class="metadata">
-									<span class="author username"><a href="#">You</a></span>
-									<span class="modified">right now</span>
-								</div>
-								<div class="actions">
-									<a href="#" class="button comment-submit"><span>send</span></a>
-								</div>
 							</div>
-						</div>
+							<div class="left-collumn">
+								<div class="author profile picture"><a href="#"><img data-view-id="367" alt="Ada Lovelace avatar" src="img/avatar/user.png"></a></div>
+							</div>
+						</form>
 					</li>
 				</ul>
 			</div>
-			<ul id="js_rs_details_comments_list" class="passbolt_controller_component_comments_list_controller passbolt_view_component_comments_list tree ready">
-				<li class="comment-wrapper" id="aaa00000-cccc-11d1-a0c5-080027796c4c">
+			<ul id="js_rs_details_comments_list" class="passbolt_component_comments_list tree passbolt_view_component_comments_list ready">
+				<li data-view-id="372" id="56546239-2db8-4ab9-b634-0958ac110004" class="comment-wrapper">
 					<div class="comment">
-						<div class="author profile picture"><a href="#">
-								<img src="img/avatar/user.png" alt="user avatar">
-							</a>
-						</div>
-						<div class="content-wrapper">
-							<p>this is a short comment</p>
-							<div class="metadata">
-								<span class="author username"><a href="#">Ismail Guennouni</a></span>
-								<span class="modified">2 years ago</span>
+						<div class="wrap-right-collumn">
+							<div class="right-collumn">
+								<div class="content-wrapper">
+									<p>This is a long comment that spread accross multiple lines. Hopefully the layout is
+									not broken. You never know with these cheeky ones.</p>
+									<div class="metadata">
+										<span class="author username"><a href="#">Ada Lovelace</a></span>
+										<span class="modified">6 hours ago</span>
+									</div>
+									<div class="actions">
+										<ul>
+											<li>
+												<a class="js_delete_comment" href="#">
+													<i class="fa fa-fw fa-trash"></i>
+													<span class="visuallyhidden">delete</span>
+												</a>
+											</li>
+										</ul>
+									</div>
+								</div>
 							</div>
-							<div class="actions">
-								<ul>
-									<!-- <li><a href="#"><i class="icon reply no-text"></i><span>reply</span></a></li>-->
-									<li>
-										<a href="#">
-											<i class="fa fa-trash"></i><span class="visuallyhidden">remove</span>
-										</a>
-									</li>
-								</ul>
+						</div>
+						<div class="left-collumn">
+							<div class="author profile picture">
+								<a href="#">
+									<img data-view-id="373" alt="comment author picture" src="img/avatar/user.png">
+								</a>
 							</div>
 						</div>
 					</div>
 				</li>
-			</ul>
-		</div>
+				<li data-view-id="370" id="56546232-c3a0-4bb2-aed8-05c1ac110005" class="comment-wrapper">
+					<div class="comment">
+						<div class="wrap-right-collumn">
+							<div class="right-collumn">
+								<div class="content-wrapper">
+									<p>This is a short comment.</p>
+									<div class="metadata">
+										<span class="author username"><a href="#">Ada Lovelace</a></span>
+										<span class="modified">One year ago</span>
+									</div>
+									<div class="actions">
+										<ul>
+											<li>
+												<a class="js_delete_comment" href="#">
+													<i class="fa fa-fw fa-trash"></i>
+													<span class="visuallyhidden">delete</span>
+												</a>
+											</li>
+										</ul>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="left-collumn">
+							<div class="author profile picture">
+								<a href="#">
+									<img data-view-id="373" alt="comment author picture" src="img/avatar/user.png">
+								</a>
+							</div>
+						</div>
+					</div>
+					</div>
+				</li></ul></div>
 	</div>
 </div>

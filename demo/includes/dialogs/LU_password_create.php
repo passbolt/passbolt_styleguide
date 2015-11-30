@@ -41,8 +41,7 @@
                             <textarea name="passbolt.model.Secret.data" id="js_field_secret_data_0" class="form_field hidden js_field_secret_data" data-view-id="421"></textarea>
                         </div>
 
-                        <iframe src="../demo/LU_iframe_passwordinput.php" id="passbolt-iframe-secret-edition"
-                                frameborder="0"></iframe>
+                        <iframe src="../demo/LU_iframe_passwordinput.php" id="passbolt-iframe-secret-edition" frameborder="0"></iframe>
 
                     </div>
                     <div class="input textarea js_form_element_wrapper">
