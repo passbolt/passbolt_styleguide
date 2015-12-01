@@ -45,7 +45,7 @@
 										<div class="grid grid-responsive-12">
 											<div class="row">
 
-												<!-- left collumn -->
+												<!-- left column -->
 												<div class="col6 key-info">
 													<h3>Information for public and secret key</h3>
 													<table class="table-info">

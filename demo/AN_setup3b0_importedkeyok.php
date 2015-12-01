@@ -48,7 +48,7 @@
 		<div class="panel middle">
 			<div class="grid grid-responsive-12">
 				<div class="row">
-					<!-- left collumn -->
+					<!-- left column -->
 					<div class="col7">
 						<h3>Information for public and secret key</h3>
 						<table class="table-info">
@@ -87,7 +87,7 @@
 						</table>
 					</div>
 
-					<!-- right collumn -->
+					<!-- right column -->
 					<div class="col5 last">
 						<div class="message success side-message">
 							<strong>Success!</strong>

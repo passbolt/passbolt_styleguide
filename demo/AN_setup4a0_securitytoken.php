@@ -52,7 +52,7 @@
 			<div class="grid grid-responsive-12">
 				<form>
 					<div class="row">
-						<!-- left collumn -->
+						<!-- left column -->
 						<div class="col7">
 							<h3>Set a security token</h3>
 							<p>Please choose a color and three letters (or remember the combination we conveniently generated for you.</p>
@@ -69,7 +69,7 @@
 
 						</div>
 
-						<!-- right collumn -->
+						<!-- right column -->
 						<div class="col4 last">
 							<h3>Wait, why do I need this?</h3>
 							<p>

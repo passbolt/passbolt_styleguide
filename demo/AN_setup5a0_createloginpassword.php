@@ -49,7 +49,7 @@
 			<div class="grid grid-responsive-12">
 				<form>
 					<div class="row">
-						<!-- left collumn -->
+						<!-- left column -->
 						<div class="col7">
 							<h3>This is your password to login in the application itself</h3>
 							<p>Cheer up. The good news is you can now use your freshly configured plugin to generate and store it! That's right you do not need to remember it.</p>
@@ -97,7 +97,7 @@
 							</div>
 						</div>
 
-						<!-- right collumn -->
+						<!-- right column -->
 						<div class="col4 last"></div>
 
 					</div>

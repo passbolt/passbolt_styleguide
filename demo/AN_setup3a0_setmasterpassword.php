@@ -49,7 +49,7 @@
 			<div class="grid grid-responsive-12">
 				<form>
 					<div class="row">
-						<!-- left collumn -->
+						<!-- left column -->
 						<div class="col7">
 							<h3>Set your passphrase</h3>
 							<p>This password is the only password you will need to remember from now on so make sure you choose it wisely! </p>
@@ -88,7 +88,7 @@
 							</div>
 						</div>
 
-						<!-- right collumn -->
+						<!-- right column -->
 						<div class="col4 last">
 
 						</div>

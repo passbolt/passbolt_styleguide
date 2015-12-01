@@ -106,8 +106,8 @@ uCZO5HNTgrf3rZ4wc7jtI6Nk
 				<li class="comment-wrapper">
 					<form class="form comment add" id="js_comment_add_form">
 						<div class="form-content">
-							<div class="wrap-right-collumn">
-								<div class="right-collumn">
+							<div class="wrap-right-column">
+								<div class="right-column">
 									<input type="hidden" class="js_comment_parent_id required mad_form_textbox form-element mad_view_form_textbox success" name="data[comment][parent_id]" id="8bc8cf1e-5954-c03b-d381-cc7d014d4c66" value="">
 									<input type="hidden" class="js_comment_foreign_id required mad_form_textbox form-element mad_view_form_textbox success" name="data[comment][foreign_id]" id="99dfe89a-8998-b75f-4aab-c1828592466c" value="17c66127-0c5e-3510-a497-2e6a105109db">
 									<input type="hidden" class="js_comment_foreign_model required mad_form_textbox form-element mad_view_form_textbox success" name="data[comment][foreign_model]" id="153262a3-50dc-ccb4-87f8-7f8fd3f45da0" value="Resource">
@@ -127,7 +127,7 @@ uCZO5HNTgrf3rZ4wc7jtI6Nk
 									</div>
 								</div>
 							</div>
-							<div class="left-collumn">
+							<div class="left-column">
 								<div class="author profile picture"><a href="#"><img data-view-id="367" alt="Ada Lovelace avatar" src="img/avatar/user.png"></a></div>
 							</div>
 						</div>

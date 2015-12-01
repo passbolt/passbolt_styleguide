@@ -49,7 +49,7 @@
 			<div class="grid grid-responsive-12">
 				<form>
 					<div class="row">
-						<!-- left collumn -->
+						<!-- left column -->
 						<div class="col7">
 							<h3>Generating the secret and public key</h3>
 
@@ -61,7 +61,7 @@
 
 						</div>
 
-						<!-- right collumn -->
+						<!-- right column -->
 						<div class="col4 last"></div>
 
 					</div>

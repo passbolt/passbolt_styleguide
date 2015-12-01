@@ -49,7 +49,7 @@
 			<div class="grid grid-responsive-12">
 				<form>
 					<div class="row">
-						<!-- left collumn -->
+						<!-- left column -->
 						<div class="col6">
 							<h3>Create a new key</h3>
 							<div class="input text required">
@@ -78,7 +78,7 @@
 							</div>
 						</div>
 
-						<!-- right collumn -->
+						<!-- right column -->
 						<div class="col4 last">
 							<h3>Advanced settings</h3>
 							<div class="input select required">

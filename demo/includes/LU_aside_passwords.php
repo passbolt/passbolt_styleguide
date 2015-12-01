@@ -100,8 +100,8 @@ uCZO5HNTgrf3rZ4wc7jtI6Nk
 			<div id="js_rs_details_comments_add_form" class="passbolt_form_comment_create form mad_view_form ready" style=""><ul>
 					<li class="comment-wrapper">
 						<form class="form comment add" id="js_comment_add_form">
-							<div class="wrap-right-collumn">
-								<div class="right-collumn">
+							<div class="wrap-right-column">
+								<div class="right-column">
 									<div class="form-content">
 										<input type="hidden" class="js_comment_parent_id required mad_form_textbox form-element mad_view_form_textbox success" name="data[comment][parent_id]" id="d1d6dc84-07be-7bfe-f1e9-fb3b822778ef" value="">
 										<input type="hidden" class="js_comment_foreign_id required mad_form_textbox form-element mad_view_form_textbox success" name="data[comment][foreign_id]" id="a78119d7-fc25-3929-0369-10f9903451e4" value="17c66127-0c5e-3510-a497-2e6a105109db">
@@ -121,7 +121,7 @@ uCZO5HNTgrf3rZ4wc7jtI6Nk
 									</div>
 								</div>
 							</div>
-							<div class="left-collumn">
+							<div class="left-column">
 								<div class="author profile picture"><a href="#"><img data-view-id="367" alt="Ada Lovelace avatar" src="img/avatar/user.png"></a></div>
 							</div>
 						</form>
@@ -131,8 +131,8 @@ uCZO5HNTgrf3rZ4wc7jtI6Nk
 			<ul id="js_rs_details_comments_list" class="passbolt_component_comments_list tree passbolt_view_component_comments_list ready">
 				<li data-view-id="372" id="56546239-2db8-4ab9-b634-0958ac110004" class="comment-wrapper">
 					<div class="comment">
-						<div class="wrap-right-collumn">
-							<div class="right-collumn">
+						<div class="wrap-right-column">
+							<div class="right-column">
 								<div class="content-wrapper">
 									<p>This is a long comment that spread accross multiple lines. Hopefully the layout is
 									not broken. You never know with these cheeky ones.</p>
@@ -153,7 +153,7 @@ uCZO5HNTgrf3rZ4wc7jtI6Nk
 								</div>
 							</div>
 						</div>
-						<div class="left-collumn">
+						<div class="left-column">
 							<div class="author profile picture">
 								<a href="#">
 									<img data-view-id="373" alt="comment author picture" src="img/avatar/user.png">
@@ -164,8 +164,8 @@ uCZO5HNTgrf3rZ4wc7jtI6Nk
 				</li>
 				<li data-view-id="370" id="56546232-c3a0-4bb2-aed8-05c1ac110005" class="comment-wrapper">
 					<div class="comment">
-						<div class="wrap-right-collumn">
-							<div class="right-collumn">
+						<div class="wrap-right-column">
+							<div class="right-column">
 								<div class="content-wrapper">
 									<p>This is a short comment.</p>
 									<div class="metadata">
@@ -185,7 +185,7 @@ uCZO5HNTgrf3rZ4wc7jtI6Nk
 								</div>
 							</div>
 						</div>
-						<div class="left-collumn">
+						<div class="left-column">
 							<div class="author profile picture">
 								<a href="#">
 									<img data-view-id="373" alt="comment author picture" src="img/avatar/user.png">

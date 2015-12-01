@@ -3355,7 +3355,7 @@ select.fluid {
   top: 10em;
   border-top: 1px solid #dddddd;
 }
-/* collumns */
+/* columns */
 .panel,
 .col1,
 .col2,
@@ -4773,16 +4773,16 @@ input[type="search"]::-webkit-search-cancel-button {
   clear: both;
   margin: .5em 0;
   width: 100%;
-  /* mini fixed fluid 2 collumns layout */
+  /* mini fixed fluid 2 columns layout */
 }
-.comments .wrap-right-collumn {
+.comments .wrap-right-column {
   float: left;
   width: 100%;
 }
-.comments .right-collumn {
+.comments .right-column {
   margin-left: 2.5em;
 }
-.comments .left-collumn {
+.comments .left-column {
   float: left;
   width: 2em;
   margin-left: -100%;
@@ -6237,7 +6237,7 @@ table.table-info.horizontal tbody tr:nth-child(even) {
   width: 25px !important;
   height: 25px !important;
 }
-/* login history icon collumn centerign */
+/* login history icon column centerign */
 .login-history td:first-child {
   text-align: center;
 }
@@ -6262,7 +6262,7 @@ table.table-info.horizontal tbody tr:nth-child(even) {
   height: 1.6em;
   padding-top: 0.2em;
 }
-/* unused collumn
+/* unused column
 	@todo: remove html
 */
 .js_grid_column_owner,
