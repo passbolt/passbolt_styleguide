@@ -16,6 +16,7 @@
 <link rel="stylesheet" type="text/css" href="css/main.css">
 <link rel="stylesheet" type="text/css" href="css/external.css">
 <script src="js/modernizr.js"></script>
+<script src="js/jquery.js"></script>
 <script type="application/javascript">
 	var cakephpConfig = {
 		app: {
