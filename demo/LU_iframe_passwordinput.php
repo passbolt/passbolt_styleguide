@@ -19,7 +19,7 @@
 <div class="input-password-wrapper">
 	<div class="input password required">
 		<label for="js_field_password" class="hidden">New master password</label>
-		<input name="passbolt.model.User.password" type="password" id="js_field_password" placeholder="enter your password here">
+		<input name="passbolt.model.User.password" type="password" id="js_field_password" placeholder="enter your password here" value="<?php echo isset($_GET['password']) ? $_GET['password'] : ''; ?>">
 		<input class="required hidden" maxlength="50" type="text" id="js_field_password_clear">
 		<div class="security-token">CKR</div>
 	</div>
@@ -38,9 +38,15 @@
 		</li>
 	</ul>
 
-	<div id="js_user_pwd_strength" class="password-complexity">
-		<span class="progress"><span class="progress-bar fair"></span></span>
-		<span class="complexity-text">complexity: <strong>excellent</strong></span>
+	<div id="js_user_pwd_strength" class="password-complexity <?php echo isset($_GET['complexity']) ? $_GET['complexity'] : 'fair'; ?>">
+		<span class="progress"><span class="progress-bar <?php echo isset($_GET['complexity']) ? $_GET['complexity'] : 'fair'; ?>"></span></span>
+    <?php
+    $complexityText = isset($_GET['complexity']) ? $_GET['complexity'] : 'fair';
+    if ($complexityText == 'not_available') {
+      $complexityText = '--';
+    }
+    ?>
+		<span class="complexity-text">complexity: <strong><?php echo $complexityText; ?></strong></span>
 	</div>
 </div>
 </div>

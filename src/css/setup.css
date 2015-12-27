@@ -4741,6 +4741,9 @@ table.table-info.horizontal tbody tr:nth-child(even) {
   text-align: left;
   padding-left: 0;
 }
+.input-password-wrapper .password-complexity.not_available .complexity-text {
+  color: #dddddd;
+}
 .input-password-wrapper .password-complexity .progress {
   width: 64%;
   border: 1px solid #dddddd;
@@ -4752,7 +4755,7 @@ table.table-info.horizontal tbody tr:nth-child(even) {
 }
 .input-password-wrapper .password-complexity .progress-bar {
   background: #000000;
-  width: 1%;
+  width: 0%;
   height: 5px;
   display: block;
   float: left;
