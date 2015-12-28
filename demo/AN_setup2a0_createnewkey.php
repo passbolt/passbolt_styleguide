@@ -99,7 +99,8 @@
 
 							<div class="input date">
 								<label for="KeyExpire">Key Expire</label>
-								<input name="data[Key][expire]" class="required fluid" id="KeyExpire" required="required" type="text" placeholder="dd/mm/yyyy">
+								<input name="data[Key][expire]" class="required fluid" id="KeyExpire" disabled="disabled" required="required" type="text" placeholder="dd/mm/yyyy">
+								<span class="input-addon"><i class="fa fa-calendar fa-fw"></i></span>
 							</div>
 
 						</div>
