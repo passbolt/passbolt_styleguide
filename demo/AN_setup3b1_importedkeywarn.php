@@ -61,9 +61,8 @@
 							</tr>
 							<tr>
 								<td>Owner Email</td>
-								<td class="warning">
+								<td>
 									test@passbolt
-									<span class="alt side">test1@passbolt.com</span>
 								</td>
 							</tr>
 							<tr>
@@ -97,7 +96,7 @@
 					<div class="col5 last">
 						<div class="message warning side-message">
 							<p>
-								<strong>Warning:</strong> the name and email selected by your administrator do not match the name and email and your key. Passbolt will use the information provided by the administrator to identify yourself.
+								<strong>Warning:</strong> the name selected by your administrator do not match the name in your key. Passbolt will use the information provided by the administrator to identify yourself.
 							</p>
 							<p>
 								While this is not a deal breaker this may lead to some confusions.
