@@ -9,7 +9,7 @@
 	<div id="js_app_controller" class="passbolt_controller_app_controller mad_view_view js_component ready">
 		<!-- edit dialog -->
 		<?php
-    $password_complexity = 'not_available';
+    $password="passwordclear";
     include('includes/dialogs/LU_password_edit.php');
     ?>
 		<!-- LU_passwords -->

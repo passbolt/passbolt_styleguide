@@ -1,5 +1,15 @@
 <!-- top navigation -->
 <div class="header first">
+<script type="application/javascript">
+	$(function() {
+		if ($("#container.page").hasClass('password')) {
+			$("#js_app_navigation_left .password .row").addClass('selected');
+		} else if ($("#container.page").hasClass('people')) {
+			$("#js_app_navigation_left .user .row").addClass('selected');
+		}
+	});
+</script>
+
 	<nav>
 		<div class="primary navigation top">
 			<ul id="js_app_navigation_left"
@@ -13,8 +23,8 @@
 						</div>
 					</div>
 				</li>
-				<li id="31a2d90f-6c19-8475-0603-8bbb2e0130df" class="passwords ready">
-					<div class="row">
+				<li id="31a2d90f-6c19-8475-0603-8bbb2e0130df" class="password ready">
+					<div class="row selected">
 						<div class="main-cell-wrapper">
 							<div class="main-cell">
 								<a href="../demo/LU_passwords.php"><span>passwords</span></a>
@@ -22,7 +32,7 @@
 						</div>
 					</div>
 				</li>
-				<li id="067a31de-232c-32a0-8a6d-56c3bfdf83b0" class="users ready">
+				<li id="067a31de-232c-32a0-8a6d-56c3bfdf83b0" class="user ready">
 					<div class="row">
 						<div class="main-cell-wrapper">
 							<div class="main-cell">

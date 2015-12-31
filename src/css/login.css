@@ -139,36 +139,8 @@ html body .hidden {
 /* borders */
 /* font */
 /* background */
-/* shadows */
-/* body */
-body {
-  color: #333333;
-}
-/* links */
-a:link,
-a:visited {
-  color: #333333;
-}
-a:hover {
-  color: #2894df;
-}
-a:active,
-a:focus {
-  outline: 0;
-  color: #2894df;
-  border: 0;
-}
-p a {
-  border-bottom: 1px solid #dddddd;
-}
-p a:hover {
-  border-bottom: 1px solid #2894df;
-}
 /* scrollbar */
-/* todos */
-.todo {
-  background: #ffffcc !important;
-}
+/* shadows */
 /* ==========================================================================
  * Reset is a mix of :
  *
@@ -697,6 +669,34 @@ table th,
 table td {
   text-align: left;
   font-weight: normal;
+}
+/* body */
+body {
+  color: #333333;
+}
+/* links */
+a:link,
+a:visited {
+  color: #333333;
+}
+a:hover {
+  color: #2894df;
+}
+a:active,
+a:focus {
+  outline: 0;
+  color: #2894df;
+  border: 0;
+}
+p a {
+  border-bottom: 1px solid #dddddd;
+}
+p a:hover {
+  border-bottom: 1px solid #2894df;
+}
+/* todos */
+.todo {
+  background: #ffffcc !important;
 }
 /*
  * Typography
@@ -3674,6 +3674,9 @@ html body .button.processing {
 .header .navigation.primary li a:active,
 .header .navigation.primary li a:focus {
   color: #2894df;
+}
+.header .navigation.primary li .row.selected a {
+  color: #ffffff;
 }
 .header .navigation.primary .home a {
   margin-top: .125em;

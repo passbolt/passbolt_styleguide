@@ -92,7 +92,7 @@
 											<textarea name="passbolt.model.Secret.data" id="js_field_secret_data_0"
 																class="form_field hidden js_field_secret_data mad_form_element_textbox_controller mad_view_form_element_textbox_view js_component ready"></textarea>
 								</div>
-								<iframe src="../demo/LU_iframe_passwordinput.php" id="passbolt-iframe-secret-edition"
+								<iframe src="../demo/LU_iframe_passwordinput.php?complexity=<?php echo isset($password_complexity) ? $password_complexity : 'fair' ?><?php echo isset($password) ? "&password=$password" : '' ?>" id="passbolt-iframe-secret-edition"
 												frameborder="0"></iframe>
 							</div>
 							<div class="input textarea js_form_element_wrapper">
