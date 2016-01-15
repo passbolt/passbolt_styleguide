@@ -31,6 +31,9 @@
 				<div class="input text required">
 					<label for="js_master_password">You need your master password to continue.</label>
 					<input type="password" placeholder="password" id="js_master_password" maxlength="50">
+					<!-- The field below is invisible and used to receive the first focus after the iframe is loaded -->
+					<!-- This way we can control and treat the events received next -->
+					<input type="text" id="js_master_password_focus_first" class="focus_first">
 					<div class="security-token">CKR</div>
 				</div>
 
@@ -42,7 +45,7 @@
 			</div>
 
 			<div class="submit-wrapper clearfix">
-				<input type="submit" value="OK" class="button primary" id="master-password-submit">
+				<a class="button primary" id="master-password-submit">OK</a>
 				<a class="js-dialog-close cancel" href="#">cancel</a>
 			</div>
 		</div>
