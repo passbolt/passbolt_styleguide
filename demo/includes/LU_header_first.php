@@ -24,7 +24,7 @@
 					</div>
 				</li>
 				<li id="31a2d90f-6c19-8475-0603-8bbb2e0130df" class="password ready">
-					<div class="row">
+					<div class="row selected">
 						<div class="main-cell-wrapper">
 							<div class="main-cell">
 								<a href="../demo/LU_passwords.php"><span>passwords</span></a>

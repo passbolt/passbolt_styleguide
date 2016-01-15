@@ -61,8 +61,9 @@
 								</tr>
 								<tr>
 									<td>Owner Email</td>
-									<td>
+									<td class="error">
 										test@passbolt
+										<span class="alt side">test1@passbolt.com</span>
 									</td>
 								</tr>
 								<tr>
@@ -100,8 +101,9 @@
 									Here are the issues you need fix before continuing:
 								</p>
 									<ul>
-										<li>1. The key is expired.</li>
-										<li>2. The private key was not found.</li>
+										<li>1. the email selected by your administrator do not match the email in your key.</li>
+										<li>2. The key is expired.</li>
+										<li>3. The private key was not found.</li>
 									</ul>
 								<p>
 									You need to fix that by either

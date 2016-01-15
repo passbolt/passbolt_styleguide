@@ -85,9 +85,9 @@ html body .hidden {
  * Border radius
  */
 .rounded {
-  -webkit-border-radius: 3px;
-  -moz-border-radius: 3px;
-  border-radius: 3px;
+  -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
+  border-radius: 2px;
 }
 /* position shortcuts */
 .left {
@@ -139,36 +139,8 @@ html body .hidden {
 /* borders */
 /* font */
 /* background */
-/* shadows */
-/* body */
-body {
-  color: #333333;
-}
-/* links */
-a:link,
-a:visited {
-  color: #333333;
-}
-a:hover {
-  color: #2894df;
-}
-a:active,
-a:focus {
-  outline: 0;
-  color: #2894df;
-  border: 0;
-}
-p a {
-  border-bottom: 1px solid #dddddd;
-}
-p a:hover {
-  border-bottom: 1px solid #2894df;
-}
 /* scrollbar */
-/* todos */
-.todo {
-  background: #ffffcc !important;
-}
+/* shadows */
 /* headers */
 .header {
   /* top navigation */
@@ -207,7 +179,7 @@ p a:hover {
   color: #2894df;
 }
 .header .navigation.primary li .row.selected a {
-  color: #2894df;
+  color: #ffffff;
 }
 .header .navigation.primary .home a {
   margin-top: .125em;

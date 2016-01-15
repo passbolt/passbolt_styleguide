@@ -14,6 +14,7 @@
 <base href="../src/">
 <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
 <link rel="stylesheet" type="text/css" href="css/main.css">
+<link rel="stylesheet" type="text/css" href="css/devel.css">
 <link rel="stylesheet" type="text/css" href="css/external.css">
 <script src="js/modernizr.js"></script>
 <script src="js/jquery.js"></script>
