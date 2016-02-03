@@ -26,7 +26,6 @@
 				</div>
 				<p>
 					Passbolt is a simple password manager that allows you to easily share secrets with your team without making compromises on security!
-					<a href="#">learn more</a>.
 				</p>
 			</div>
 			<div class="col4 push1 last">
@@ -46,7 +45,7 @@
 		<div class="row">
 			<?php include('includes/AN_promoblock_github.php'); ?>
 			<?php include('includes/AN_promoblock_chromeplugin.php'); ?>
-			<?php include('includes/AN_promoblock_donate.php'); ?>
+			<?php //include('includes/AN_promoblock_donate.php'); ?>
 		</div>
 	</div>
 </div>

@@ -85,9 +85,9 @@ html body .hidden {
  * Border radius
  */
 .rounded {
-  -webkit-border-radius: 2px;
-  -moz-border-radius: 2px;
-  border-radius: 2px;
+  -webkit-border-radius: 0.214em;
+  -moz-border-radius: 0.214em;
+  border-radius: 0.214em;
 }
 /* position shortcuts */
 .left {
@@ -781,7 +781,7 @@ h3 {
   border-bottom: 1px dotted #dddddd;
 }
 p {
-  margin: .25em 0;
+  margin: 0 0 .75em 0;
 }
 .code {
   font-family: "Courier New", Courier, monospace;
@@ -2852,9 +2852,9 @@ a.button {
   background-image: -webkit-linear-gradient(top, #f3f3f3, #eeeeee);
   background-image: -o-linear-gradient(top, #f3f3f3, #eeeeee);
   background-image: linear-gradient(top, #f3f3f3, #eeeeee);
-  -webkit-border-radius: 2px;
-  -moz-border-radius: 2px;
-  border-radius: 2px;
+  -webkit-border-radius: 0.214em;
+  -moz-border-radius: 0.214em;
+  border-radius: 0.214em;
 }
 /* size and position adjustments */
 .submit {
@@ -2946,6 +2946,8 @@ a.button.disabled {
   color: #888888;
   background: #ffffff;
   border: 1px solid #dddddd;
+  text-shadow: none;
+  font-weight: normal;
 }
 /* inactive */
 input[type=submit].disabled:hover,
@@ -3443,7 +3445,7 @@ input[type=text].fluid {
   position: fixed;
   display: block;
   width: 100%;
-  bottom: 2.125em;
+  bottom: 2.35em;
   z-index: 991;
 }
 /* Dialog */
@@ -3511,15 +3513,15 @@ input[type=text].fluid {
   vertical-align: baseline;
   line-height: 0;
   border: 1px solid #eeeeee;
-  -webkit-border-radius: 2px;
-  -moz-border-radius: 2px;
-  border-radius: 2px;
+  -webkit-border-radius: 0.214em;
+  -moz-border-radius: 0.214em;
+  border-radius: 0.214em;
 }
 .dialog a.dialog-close:hover .fa-close {
   border: 1px solid #dddddd;
-  -webkit-border-radius: 2px;
-  -moz-border-radius: 2px;
-  border-radius: 2px;
+  -webkit-border-radius: 0.214em;
+  -moz-border-radius: 0.214em;
+  border-radius: 0.214em;
 }
 .dialog .dialog-content {
   position: relative;
@@ -3604,9 +3606,9 @@ input[type=text].fluid {
   border: 1px solid #dddddd;
   border-bottom: 1px solid #FFF;
   background: #ffffff;
-  -webkit-border-radius: 2px;
-  -moz-border-radius: 2px;
-  border-radius: 2px;
+  -webkit-border-radius: 0.214em;
+  -moz-border-radius: 0.214em;
+  border-radius: 0.214em;
   -webkit-border-bottom-left-radius: 0;
   -webkit-border-bottom-right-radius: 0;
   -moz-border-radius-bottomleft: 0;
@@ -3688,9 +3690,9 @@ input[type=text].fluid {
   width: 3em;
   font-size: 24px;
   border: none;
-  -webkit-border-radius: 2px;
-  -moz-border-radius: 2px;
-  border-radius: 2px;
+  -webkit-border-radius: 0.214em;
+  -moz-border-radius: 0.214em;
+  border-radius: 0.214em;
   text-align: center;
 }
 .colorpicker .farbtastic {
@@ -4060,6 +4062,9 @@ input[type=text].fluid {
 .master-password.login-form input[type=text],
 .master-password.login-form input[type=password] {
   width: 80%;
+}
+.master-password.login-form .submit-wrapper .button {
+  margin-top: .5em;
 }
 /* password share tab */
 .dialog .share-tab {

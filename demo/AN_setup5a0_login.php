@@ -51,21 +51,23 @@
 					<div class="row">
 						<!-- left collumn -->
 						<div class="col7">
-							<h3>Please wait... you are being redirected to the login page</h3>
-							<p>Everything is in order, you can now sign in in passbolt.</p>
+							<h3>The setup is complete</h3>
+							<div class="message success">
+								<strong>
+									<i class="fa fa-check-circle"></i> Success!</strong>
+								You have completed successfully the setup, thank you!
+								You will soon be redirected to the login page.
+							</div>
+							<div class="input-wrapper">
+								<a href="../demo/LU_passwords.php" class="button primary next big processing">login!</a>
+								<a href="/login">Click here if you can't wait</a>.
+							</div>
+							<p>
 						</div>
-
 						<!-- right collumn -->
-						<div class="col4 last"></div>
-
-					</div>
-
-					<div class="row last">
-						<div class="input-wrapper">
-							<a href="../demo/LU_passwords.php" class="button primary next big processing">login!</a>
+						<div class="col4 last">
 						</div>
 					</div>
-
 				</form>
 
 			</div>

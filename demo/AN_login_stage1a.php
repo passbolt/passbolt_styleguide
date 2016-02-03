@@ -44,7 +44,7 @@
             <?php include('includes/AN_promoblock_github.php'); ?>
             <?php include('includes/AN_promoblock_chromeplugin.php'); ?>
             <?php include('includes/AN_promoblock_donate.php'); ?>
-        </div>holidays specia
+        </div>
     </div>
 </div>
 <?php include('includes/AN_footer.php'); ?>

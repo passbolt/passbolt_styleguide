@@ -1,0 +1,30 @@
+/* left panel navigation */
+.panel .navigation {
+	margin-top:1em;
+
+	a {
+		color:@font-default;
+		display:block;
+		&:hover {
+			text-decoration:none;
+		}
+	}
+
+	li {
+		color:@grey;
+		font-size:0.938em; /* 15px from 16px base */
+		padding:.469em 0 .469em 1.333em;
+		border-left: 5px solid @background-default;
+
+		&:hover {
+			color:@black;
+			border-left: 5px solid @border-default;
+		}
+
+		&.selected {
+			font-weight:bold;
+			border-left: 5px solid @red;
+		}
+	}
+
+}

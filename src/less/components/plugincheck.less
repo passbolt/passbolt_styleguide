@@ -36,6 +36,17 @@
 	.message {
 		font-weight: normal;
 		margin-left: 180px;
-		padding:.5em 1em;
+		padding:.5em 1em .25em 1em;
+	}
+}
+@media all and (max-width: 980px) {
+	.plugin-check {
+		&.firefox, &.chrome, &.gpg, &.gpg.success, &.chrome.error {
+			background-image: none;
+		}
+		.message {
+			margin-left: 0px;
+			padding:.5em 1em;
+		}
 	}
 }

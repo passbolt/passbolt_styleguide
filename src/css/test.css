@@ -85,9 +85,9 @@ html body .hidden {
  * Border radius
  */
 .rounded {
-  -webkit-border-radius: 2px;
-  -moz-border-radius: 2px;
-  border-radius: 2px;
+  -webkit-border-radius: 0.214em;
+  -moz-border-radius: 0.214em;
+  border-radius: 0.214em;
 }
 /* position shortcuts */
 .left {
@@ -196,7 +196,7 @@ html body .hidden {
   display: none;
 }
 .header .logo {
-  margin: 1.125em 0 0 1em;
+  margin: 1.25em 0 0 1em;
   max-width: 80%;
 }
 .header .logo img {

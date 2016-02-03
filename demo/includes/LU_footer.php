@@ -1,10 +1,15 @@
 <!-- footer -->
 <footer>
 	<div class="footer">
-		<span class="copyright">2015 &copy; Passbolt.com</span> •
-		<span class="version">v.2.15.5</span>
+		<ul class="footer-links">
+			<li><a href="https://www.passbolt.com/licence">Terms</a></li>
+			<li><a href="https://www.passbolt.com/privacy">Privacy</a></li>
+			<li><a href="https://www.passbolt.com/licence">Licence</a></li>
+			<li><a href="https://www.passbolt.com/about" class="tooltip-left" data-tooltip="v.0.1.0 / v.0.2.0"><i class="fa fa-heart-o"></i></a></li>
+		</ul>
 	</div>
 </footer>
+
 <link rel="stylesheet" type="text/css" href="css/perfect-scrollbar.min.css" />
 <script src='js/jquery.js'></script>
 <script src='js/perfect-scrollbar.jquery.min.js'></script>

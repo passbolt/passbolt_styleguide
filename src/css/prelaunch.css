@@ -85,9 +85,9 @@ html body .hidden {
  * Border radius
  */
 .rounded {
-  -webkit-border-radius: 2px;
-  -moz-border-radius: 2px;
-  border-radius: 2px;
+  -webkit-border-radius: 0.214em;
+  -moz-border-radius: 0.214em;
+  border-radius: 0.214em;
 }
 /* position shortcuts */
 .left {
@@ -738,7 +738,7 @@ h3 {
   border-bottom: 1px dotted #dddddd;
 }
 p {
-  margin: .25em 0;
+  margin: 0 0 .75em 0;
 }
 .code {
   font-family: "Courier New", Courier, monospace;
@@ -1022,9 +1022,9 @@ a.button {
   background-image: -webkit-linear-gradient(top, #f3f3f3, #eeeeee);
   background-image: -o-linear-gradient(top, #f3f3f3, #eeeeee);
   background-image: linear-gradient(top, #f3f3f3, #eeeeee);
-  -webkit-border-radius: 2px;
-  -moz-border-radius: 2px;
-  border-radius: 2px;
+  -webkit-border-radius: 0.214em;
+  -moz-border-radius: 0.214em;
+  border-radius: 0.214em;
 }
 /* size and position adjustments */
 .submit {
@@ -1116,6 +1116,8 @@ a.button.disabled {
   color: #888888;
   background: #ffffff;
   border: 1px solid #dddddd;
+  text-shadow: none;
+  font-weight: normal;
 }
 /* inactive */
 input[type=submit].disabled:hover,
@@ -3367,6 +3369,8 @@ html body .button.processing {
 .grid .row .col11 {
   float: none;
   width: 99%;
+  box-sizing: border-box;
+  padding: .5em;
   /*
  * For IE 6/7 only
  * Include this rule to trigger hasLayout and contain floats.
@@ -3572,7 +3576,7 @@ html body .button.processing {
 /*
  * large devices
  */
-@media all and (min-width: 768px) {
+@media all and (min-width: 960px) {
   /*
 	 * Common columns definitions
 	 */
@@ -3590,6 +3594,7 @@ html body .button.processing {
   .grid .row .col12 {
     float: left;
     margin: 0 3% 0 0;
+    padding: 0;
   }
   .grid .row .last {
     margin-right: 0;
@@ -3636,6 +3641,67 @@ html body .button.processing {
   }
   .grid .row .push2 {
     margin-left: 14%;
+  }
+}
+/*
+ * Utilities
+ */
+@media all and (max-width: 768px) {
+  .hidden-xs {
+    display: none;
+  }
+}
+.panel.middle .grid {
+  padding-bottom: 2em;
+}
+/* Scrolling in middle panel in full width */
+@media all and (min-width: 980px) {
+  .panel.middle {
+    overflow-y: scroll;
+  }
+}
+.header h2 {
+  margin-top: 1em;
+}
+.header h2 .button {
+  margin-right: 0.3em;
+  margin-top: -5px;
+}
+/* reset layout styles on smaller screen */
+@media all and (max-width: 980px) {
+  .page,
+  .panel,
+  .header.second + .panel.main,
+  .header.first,
+  .header.second,
+  .col1,
+  .col2,
+  .col3,
+  .col2_3 {
+    position: relative;
+    width: auto;
+    height: auto;
+    display: block;
+    margin: 0;
+    top: auto;
+    overflow: auto;
+  }
+  .header.second {
+    text-align: center;
+    margin-bottom: 2em;
+  }
+  .col1,
+  .panel.left {
+    display: none;
+  }
+  .panel.middle,
+  .col2_3 {
+    width: 98%;
+    left: 1%;
+  }
+  .col2 {
+    width: 55%;
+    left: 1%;
   }
 }
 /* headers */
@@ -3693,7 +3759,7 @@ html body .button.processing {
   display: none;
 }
 .header .logo {
-  margin: 1.125em 0 0 1em;
+  margin: 1.25em 0 0 1em;
   max-width: 80%;
 }
 .header .logo img {
@@ -3706,7 +3772,7 @@ html body .button.processing {
  * Footer
  */
 .footer {
-  padding: 0.833em 1.5% 0 .5%;
+  padding: 1.167em 1.5% 0 .5%;
   text-align: right;
   font-size: .75em;
   /* 12px */
@@ -3718,6 +3784,14 @@ html body .button.processing {
   bottom: 0;
   position: fixed;
   z-index: 890;
+}
+.footer .footer-links {
+  width: 100%;
+  margin-top: -0.25em;
+}
+.footer .footer-links li {
+  display: inline;
+  margin-right: 1.5em;
 }
 /* pre launch page */
 .prelaunch .logo {
