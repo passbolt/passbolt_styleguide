@@ -14,10 +14,9 @@
 		 (c) 2014 passbolt.com
 
 	 -->
-	<base href="https://www.passbolt.com/">
+	<base href="../src/">
 	<meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
 	<link rel="shortcut icon" type="image/x-icon" href="favicon.ico" />
-
 	<link rel="stylesheet" type="text/css" href="css/prelaunch.css" />
 </head>
 <body>

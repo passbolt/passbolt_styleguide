@@ -3666,7 +3666,7 @@ html body .button.processing {
   }
 }
 .header h2 {
-  margin: 1em 0 01em .5em;
+  margin: 1em 0 1em .5em;
 }
 .header h2 .button {
   margin-right: 0.3em;
@@ -3836,16 +3836,9 @@ html body .button.processing {
   .prelaunch input[type=email] {
     border: 1px solid #2894df;
     border-radius: 3px;
-    font-size: 1.125em;
     width: 14em;
-    padding: 0.278em 0.5em;
     margin-bottom: 0.5em;
-  }
-  .prelaunch input[type="submit"].button {
-    display: inline-block;
-  }
-  .prelaunch .button.primary {
-    height: 2.1em;
+    padding: .25em .5em .3em .5em;
   }
   .prelaunch .logo {
     background: transparent url('../img/logo/logo_white.png') 0 0 no-repeat;

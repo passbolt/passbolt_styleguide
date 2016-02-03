@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 	<title>Passbolt - Privacy Policy</title>
-	<?php include('includes/AN_meta_setup.php'); ?>
+	<?php include('includes/AA_meta.php'); ?>
 </head>
 <body>
 <div id="container" class="page background">
