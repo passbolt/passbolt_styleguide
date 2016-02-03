@@ -19,7 +19,7 @@
 <div class="input-password-wrapper">
 	<div class="input password required">
 		<label for="js_field_password" class="hidden">New master password</label>
-		<input name="passbolt.model.User.password" type="password" id="js_field_password" placeholder="enter your password here" value="<?php echo isset($_GET['password']) ? $_GET['password'] : ''; ?>">
+		<input name="passbolt.model.User.password" type="password" id="js_field_password" placeholder="decrypting..." value="<?php echo isset($_GET['password']) ? $_GET['password'] : ''; ?>" class="<?php echo isset($_GET['js_field_password_class']) ? $_GET['js_field_password_class'] : ''; ?>">
 		<input class="required hidden" maxlength="50" type="text" id="js_field_password_clear">
 		<div class="security-token">CKR</div>
 	</div>

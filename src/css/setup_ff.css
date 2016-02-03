@@ -3733,6 +3733,11 @@ input[type=text].fluid {
   height: auto;
   display: block;
 }
+.grid-responsive-12 .row .col5 img.illustration,
+.grid .row .col5 img.illustration {
+  max-width: 275px;
+  margin: 2em auto;
+}
 /*
  * large devices
  */
@@ -3821,7 +3826,7 @@ input[type=text].fluid {
   }
 }
 .header h2 {
-  margin-top: 1em;
+  margin: 1em 0 01em .5em;
 }
 .header h2 .button {
   margin-right: 0.3em;
@@ -4820,6 +4825,9 @@ table.table-info.horizontal tbody tr:nth-child(even) {
   box-sizing: padding-box;
   width: 64%;
   float: left;
+}
+.input-password-wrapper .input.password input[type=password].decrypting {
+  background: transparent url(../img/controls/loading.gif) no-repeat 72% center;
 }
 .input-password-wrapper .input.password.has-encrypted-secret input {
   /* fallback placeholder */

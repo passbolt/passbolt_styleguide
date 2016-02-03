@@ -3573,6 +3573,11 @@ html body .button.processing {
   height: auto;
   display: block;
 }
+.grid-responsive-12 .row .col5 img.illustration,
+.grid .row .col5 img.illustration {
+  max-width: 275px;
+  margin: 2em auto;
+}
 /*
  * large devices
  */
@@ -3661,7 +3666,7 @@ html body .button.processing {
   }
 }
 .header h2 {
-  margin-top: 1em;
+  margin: 1em 0 01em .5em;
 }
 .header h2 .button {
   margin-right: 0.3em;

@@ -3705,6 +3705,11 @@ input[type=text].fluid {
   height: auto;
   display: block;
 }
+.grid-responsive-12 .row .col5 img.illustration,
+.grid .row .col5 img.illustration {
+  max-width: 275px;
+  margin: 2em auto;
+}
 /*
  * large devices
  */

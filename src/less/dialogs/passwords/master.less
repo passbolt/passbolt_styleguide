@@ -8,7 +8,15 @@
 		width:80%;
 	}
 
-    /* PASSBOLT-1108 */
+	// Invisible field that Will receive the first focus
+	// before the master password field.
+	input.focus_first {
+		border-width: 0;
+		font-size: 0;
+		line-height: 0;
+	}
+
+	/* PASSBOLT-1108 */
 	.input.checkbox {
 	  visibility: hidden;
 	}

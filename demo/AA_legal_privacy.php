@@ -75,7 +75,7 @@
 
 					</div>
 					<div class="col5 last">
-						<img src="../src/img/illustrations/legal_275.jpg" style="width:275px; padding:30px;text-align: center; "/>
+						<img src="../src/img/illustrations/legal_275.jpg" class="illustration" alt="Three little birds"/>
 					</div>
 				</div>
 
