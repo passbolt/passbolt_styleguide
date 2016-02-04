@@ -788,6 +788,12 @@ p {
   font-size: 0.688em;
   /* 11px base 16 */
 }
+article ul li {
+  list-style: circle;
+  margin-left: 1em;
+  padding-left: .5em;
+  margin-bottom: .5em;
+}
 /*!
  *  Font Awesome 4.4.0 by @davegandy - http://fontawesome.io - @fontawesome
  *  License - http://fontawesome.io/license (Font: SIL OFL 1.1, CSS: MIT License)

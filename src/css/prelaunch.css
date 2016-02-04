@@ -745,6 +745,12 @@ p {
   font-size: 0.688em;
   /* 11px base 16 */
 }
+article ul li {
+  list-style: circle;
+  margin-left: 1em;
+  padding-left: .5em;
+  margin-bottom: .5em;
+}
 /*
 	Base form components styling
 	Check components/form for more advanced/fancy input
