@@ -31,7 +31,7 @@
 						<a href="../demo/AA_legal_privacy.php" >Privacy</a>
 					</li>
 					<li class="">
-						<a href="#" >Terms</a>
+						<a href="../demo/AA_legal_terms.php" >Terms</a>
 					</li>
 					<li class="">
 						<a href="#" >Licence</a>

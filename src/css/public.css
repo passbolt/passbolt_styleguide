@@ -4681,3 +4681,17 @@ table.table-info.horizontal tbody tr:nth-child(even) {
 .tooltip-left.large:after {
   margin-top: 6px;
 }
+.tldr {
+  background: #f3f3f3;
+  padding: 2em 1em 1em 1em;
+}
+.tldr .tldr i {
+  margin-right: .5em;
+}
+/* reset layout styles on smaller screen */
+@media all and (min-width: 980px) {
+  .tldr {
+    margin-top: 3em;
+    max-width: 20em;
+  }
+}
