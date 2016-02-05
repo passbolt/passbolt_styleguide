@@ -737,6 +737,7 @@ h3 {
   /* 6px */
   border-bottom: 1px dotted #dddddd;
 }
+/* paragraph */
 p {
   margin: 0 0 .75em 0;
 }
@@ -745,11 +746,16 @@ p {
   font-size: 0.688em;
   /* 11px base 16 */
 }
+/* lists */
 article ul li {
   list-style: circle;
   margin-left: 1em;
   padding-left: .5em;
   margin-bottom: .5em;
+}
+article ul.double {
+  width: 48%;
+  float: left;
 }
 /*
 	Base form components styling
@@ -3578,11 +3584,6 @@ html body .button.processing {
   width: 100%;
   height: auto;
   display: block;
-}
-.grid-responsive-12 .row .col5 img.illustration,
-.grid .row .col5 img.illustration {
-  max-width: 275px;
-  margin: 2em auto;
 }
 /*
  * large devices

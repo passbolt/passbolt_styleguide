@@ -780,6 +780,7 @@ h3 {
   /* 6px */
   border-bottom: 1px dotted #dddddd;
 }
+/* paragraph */
 p {
   margin: 0 0 .75em 0;
 }
@@ -788,11 +789,16 @@ p {
   font-size: 0.688em;
   /* 11px base 16 */
 }
+/* lists */
 article ul li {
   list-style: circle;
   margin-left: 1em;
   padding-left: .5em;
   margin-bottom: .5em;
+}
+article ul.double {
+  width: 48%;
+  float: left;
 }
 /*!
  *  Font Awesome 4.4.0 by @davegandy - http://fontawesome.io - @fontawesome
@@ -3739,11 +3745,6 @@ input[type=text].fluid {
   height: auto;
   display: block;
 }
-.grid-responsive-12 .row .col5 img.illustration,
-.grid .row .col5 img.illustration {
-  max-width: 275px;
-  margin: 2em auto;
-}
 /*
  * large devices
  */
@@ -4681,6 +4682,48 @@ table.table-info.horizontal tbody tr:nth-child(even) {
 .tooltip-left.large:after {
   margin-top: 6px;
 }
+.col4 img.illustration,
+.col5 img.illustration {
+  max-width: 275px;
+  margin: 2em auto;
+}
+.tldr.photoalbum .photo {
+  border: 0.5em solid #ffffff;
+  box-shadow: 2px 2px 10px #dddddd;
+}
+.tldr.photoalbum .photo.photo-1,
+.tldr.photoalbum .photo.photo-3 {
+  display: none;
+}
+/* Don't show fancy photo on mobile */
+@media all and (min-width: 980px) {
+  .tldr.photoalbum .photo.photo-1 {
+    display: inline;
+    margin-top: 3em;
+    -ms-transform: rotate(7deg);
+    /* IE 9 */
+    -webkit-transform: rotate(7deg);
+    /* Chrome, Safari, Opera */
+    transform: rotate(7deg);
+  }
+  .tldr.photoalbum .photo.photo-2 {
+    -ms-transform: rotate(-7deg);
+    /* IE 9 */
+    -webkit-transform: rotate(-7deg);
+    /* Chrome, Safari, Opera */
+    transform: rotate(-7deg);
+    margin-top: -4em;
+  }
+  .tldr.photoalbum .photo.photo-3 {
+    display: inline;
+    -ms-transform: rotate(5deg);
+    /* IE 9 */
+    -webkit-transform: rotate(5deg);
+    /* Chrome, Safari, Opera */
+    transform: rotate(5deg);
+    margin-left: 2em;
+  }
+}
 .tldr {
   background: #f3f3f3;
   padding: 2em 1em 1em 1em;
@@ -4691,9 +4734,18 @@ table.table-info.horizontal tbody tr:nth-child(even) {
 .tldr.alt {
   background: #FFF;
   text-align: center;
+  margin-top: 0em;
+  padding-top: 0;
 }
 .tldr.alt .illustration {
   margin-top: 0em;
+}
+.tldr .madeinindia {
+  margin-top: 2em;
+}
+.tldr .madeinindia i {
+  color: #d40101;
+  margin-right: 0;
 }
 /* reset layout styles on smaller screen */
 @media all and (min-width: 980px) {
