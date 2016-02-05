@@ -4685,8 +4685,15 @@ table.table-info.horizontal tbody tr:nth-child(even) {
   background: #f3f3f3;
   padding: 2em 1em 1em 1em;
 }
-.tldr .tldr i {
-  margin-right: .5em;
+.tldr i {
+  margin-right: 1em;
+}
+.tldr.alt {
+  background: #FFF;
+  text-align: center;
+}
+.tldr.alt .illustration {
+  margin-top: 0em;
 }
 /* reset layout styles on smaller screen */
 @media all and (min-width: 980px) {
