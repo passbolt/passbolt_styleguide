@@ -53,7 +53,7 @@
 <!-- footer -->
 <footer>
 	<div class="footer">
-		<span class="copyright">&copy 2016 Bolt Software pvt. ltd.</span>
+		<span class="copyright">&copy 2016 Bolt Softwares pvt. ltd.</span>
 	</div>
 </footer>
 <!-- Piwik -->
