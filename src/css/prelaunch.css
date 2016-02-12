@@ -699,6 +699,49 @@ p a:hover {
   background: #ffffcc !important;
 }
 /*
+ * Animate.css - http://daneden.me/animate
+ * Licensed under the MIT license
+ * Copyright (c) 2013 Daniel Eden
+ */
+.animated {
+  -webkit-animation-duration: 0.5s;
+  animation-duration: 0.5s;
+  -webkit-animation-fill-mode: both;
+  animation-fill-mode: both;
+  position: fixed;
+}
+/* fadeinup */
+@-webkit-keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    -webkit-transform: translateY(20px);
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    -webkit-transform: translateY(0);
+    transform: translateY(0);
+  }
+}
+@keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    -webkit-transform: translateY(20px);
+    -ms-transform: translateY(20px);
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    -webkit-transform: translateY(0);
+    -ms-transform: translateY(0);
+    transform: translateY(0);
+  }
+}
+.fadeInUp {
+  -webkit-animation-name: fadeInUp;
+  animation-name: fadeInUp;
+}
+/*
  * Typography
  */
 /* opensans */
@@ -757,508 +800,16 @@ article ul.double {
   width: 48%;
   float: left;
 }
-/*
-	Base form components styling
-	Check components/form for more advanced/fancy input
-*/
-/* input label */
-label {
-  font-weight: bold;
-  font-size: 1.125em;
-  /* 18px */
-  padding: .2em;
-  display: block;
-}
-/*
-	Required Label
-
-	Description	: Label and input are wrapped in <div.text.required>. Additional <span> with a star is included. Input also get the required class.
-	.required		- additional red star
-*/
-.required label:after {
-  content: " *";
-  color: #D40000;
-  font-weight: bold;
-}
-/* fallback placeholder */
-.placeholder {
-  color: #bbb;
-}
-/* webkit placeholder */
-::-webkit-input-placeholder {
-  color: #bbb;
-}
-/* moz placeholder */
-:-moz-placeholder,
-::-moz-placeholder {
-  color: #bbb;
-}
-/*
-	Generic Form Item
-
-	Description	: labels and input are wrapped in a <div.text>
-
-	:hover			 - subtle hover highlight
-	:active			- inset box shadow
-	.disabled		- grey out to indicate it cannot be used
-*/
-input[type=text],
-input[type=password],
-input[type=search],
-textarea {
-  font-size: 16px;
-  line-height: 24px;
-  color: #333333;
-  background: #ffffff;
-  width: 14em;
-  /* 20 char (default input length) x .7em (average char length) */
-  padding: .375em .625em .375em .625em;
-  display: inline-block;
-  margin-bottom: .5em;
-  -webkit-appearance: none;
-  border: 1px solid #cccccc;
-  border-top: 1px solid #bbbbbb;
-  vertical-align: middle;
-  -ms-box-sizing: content-box;
-  -moz-box-sizing: content-box;
-  -webkit-box-sizing: content-box;
-  box-sizing: content-box;
-}
-textarea:hover,
-input[type=password]:hover,
-input[type=search]:hover,
-input[type=text]:hover {
-  border: 1px solid #bbbbbb;
-}
-textarea:focus,
-input[type=password]:focus,
-input[type=search]:focus,
-input[type=text]:focus {
-  -webkit-box-shadow: inset 1px 1px 2px rgba(255, 255, 255, 0.2);
-  -moz-box-shadow: inset 1px 1px 2px rgba(0, 0, 0, 0.2);
-  box-shadow: inset 1px 1px 2px rgba(0, 0, 0, 0.2);
-  border: 1px solid #2a9ceb;
-}
-input[type=password]:disabled,
-input[type=search]:disabled,
-input[type=text]:disabled {
-  border: 1px solid #dddddd;
-  -webkit-box-shadow: 0 0 0 0;
-  -moz-box-shadow: 0 0 0 0;
-  box-shadow: 0 0 0 0;
-  cursor: normal;
-  background: #f3f3f3;
-}
-/*
-	Textarea Textfield
-	Description	: textarea.textarea is pretty much the same than div.input.text.
-
-	.required		- additional red star
-	.lage		 	 - make the box bigger
-*/
-textarea {
-  height: 3.6em;
-  /* 4 char (default input length) x 1em (average char length) + .6em (padding) */
-}
-.textarea.large textarea {
-  width: 30em;
-  height: 7em;
-}
-/* text and textarea */
-.text.input .input-addon,
-.date.input .input-addon {
-  position: absolute;
-  margin-left: -2.625em;
-}
-.text.input .input-addon i,
-.date.input .input-addon i {
-  font-size: 16px;
-  width: 1.250em;
-  border: 1px solid #cccccc;
-  border-top: 1px solid #bbbbbb;
-  line-height: 24px;
-  color: #333333;
-  background: #ffffff;
-  padding: .375em .625em .375em .625em;
-}
-.text.input input:hover + .input-addon i,
-.date.input input:hover + .input-addon i {
-  border: 1px solid #bbbbbb;
-}
-.text.input input:focus + .input-addon i,
-.date.input input:focus + .input-addon i {
-  border: 1px solid #2a9ceb;
-}
-.text.input input:disabled + .input-addon i,
-.date.input input:disabled + .input-addon i {
-  background: #f3f3f3;
-  border: 1px solid #dddddd;
-}
-/* icons for input */
-/*
-	Checkboxes and Radio
-*/
-.checkboxlist .input.checkbox label,
-.radiolist .input.radio label {
-  font-weight: normal;
-  display: inline;
-}
-.checkbox label {
-  font-weight: normal;
-  display: inline;
-}
-/* radio and checkboxes */
-/*
-	Messages for validation error and example
-
-	Description	: <div.text.error>, <div.text.success>, can be used to add status messages or example.
-								 Additional messages are wrapped in <.error-message>, <.success-messages>
-
-	.success		 - can be used for instant validation feedback
-	.notice			- can be used for example messages prior validation
-	.error			 - error messages used for validation issues
-*/
-.input .message {
-  font-weight: bold;
-  padding: 0;
-  padding-left: .25em;
-  margin-bottom: .25em;
-  background-color: transparent;
-  border: 0;
-  /* colors for messages */
-}
-.input .message.error {
-  color: #d40101;
-}
-.input .message.success {
-  color: #009900;
-}
-.input .message.warning {
-  color: #9f6000;
-}
-.input .message.notice {
-  color: #2894df;
-}
-.input .message.helptext {
-  color: #888888;
-  font-weight: normal;
-}
-.form-content .input .message,
-form .input .message {
-  background-color: transparent;
-}
-.input.error label {
-  color: #d40101;
-}
-input.error,
-textarea.error,
-select.error {
-  border: 1px solid #d40101;
-}
-form .input .inline.message {
-  display: inline-block;
-}
-/* error messages */
-select {
-  font-size: 16px;
-  color: #333333;
-  background: #ffffff;
-  width: 15.375em;
-  /* 20 char (default input length) x .7em (average char length) */
-  padding: .375em .625em .375em .625em;
-  line-height: 24px;
-  margin-bottom: .5em;
-  border: 1px solid #cccccc;
-  border-top: 1px solid #bbbbbb;
-  display: inline-block;
-  -ms-box-sizing: content-box;
-  -moz-box-sizing: content-box;
-  -webkit-box-sizing: content-box;
-  box-sizing: content-box;
-}
-select:disabled {
-  background: #f3f3f3;
-}
-/* select */
-input[type=file] {
-  width: 100%;
-  color: #333333;
-}
-/* file upload input */
-/* layout and shortcuts */
-select.fluid,
-textarea.fluid,
-input[type=password].fluid,
-input[type=text].fluid {
-  width: 80%;
-}
-.submit-wrapper {
-  margin-top: .5em;
-}
-/* shortcut classes for layout */
-/*
-	Generic buttons
-	Description	: We support <input[submit]>, <input.button>, <button> and <a.button>
-
-	:hover			- Subtle hover highlight and box shadow
-	:active			- Inset box shadow and 1px offset
-	.disabled		- Dims the button to indicate it cannot be used
-*/
-input[type=submit],
-input.button,
-button,
-a.button {
-  position: relative;
-  font-size: 0.875em;
-  /*	14px */
-  padding: .429em 1.225em .429em 1.225em ;
-  /* 6px 16px */
-  display: inline-block;
-  zoom: 1;
-  /* zoom and *display = ie7 hack for display:inline-block */
-  *display: inline;
-  vertical-align: baseline;
-  margin-right: .5em;
-  outline: none;
-  cursor: pointer;
-  text-align: center;
-  text-decoration: none;
-  border: 1px solid #cccccc;
-  color: #333333;
-  font-weight: bold;
-  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.8);
-  background: #eeeeee;
-  background-image: -moz-linear-gradient(top, #f3f3f3, #eeeeee);
-  background-image: -ms-linear-gradient(top, #f3f3f3, #eeeeee);
-  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(background-lightest), to(#eeeeee));
-  background-image: -webkit-linear-gradient(top, #f3f3f3, #eeeeee);
-  background-image: -o-linear-gradient(top, #f3f3f3, #eeeeee);
-  background-image: linear-gradient(top, #f3f3f3, #eeeeee);
-  -webkit-border-radius: 0.214em;
-  -moz-border-radius: 0.214em;
-  border-radius: 0.214em;
-}
-/* size and position adjustments */
-.submit {
-  display: inline-block;
-  /* in case there is a div wrapper */
-}
-input.button.big {
-  font-size: 1.125em;
-}
-a.button.big {
-  font-size: 1em;
-  height: 1.5em;
-  margin-top: 1em;
-  min-width: 3em;
-}
-input.button.primary,
-button.primary,
-a.button.primary {
-  background: #2894df;
-  border: 1px solid #2894df;
-  color: #FFF;
-  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.2);
-}
-input.button.primary:hover,
-button.primary:hover,
-a.button.primary:hover,
-input.button.primary:active,
-button.primary:active,
-a.button.primary:active {
-  border: 1px solid #2a9ceb;
-  background: #2a9ceb;
-}
-input.button.primary:focus,
-button.primary:focus,
-a.button.primary:focus {
-  border: 1px solid #2894df;
-  background: #2a9ceb;
-}
-a.button.cancel,
-a.button.cancel:focus,
-a.button.cancel:hover,
-a.button.cancel:active,
-a.button.dim,
-a.button.dim:focus,
-a.button.dim:hover,
-a.button.dim:active {
-  background: #ffffff;
-  font-weight: normal;
-}
-/* hover */
-input[type=submit]:hover,
-input.button:hover,
-button:hover,
-a.button:hover {
-  text-decoration: none;
-  background: #eeeeee;
-  background-image: -moz-linear-gradient(top, #f3f3f3, #eeeeee);
-  background-image: -ms-linear-gradient(top, #f3f3f3, #eeeeee);
-  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(background-lightest), to(#eeeeee));
-  background-image: -webkit-linear-gradient(top, #f3f3f3, #eeeeee);
-  background-image: -o-linear-gradient(top, #f3f3f3, #eeeeee);
-  background-image: linear-gradient(top, #f3f3f3, #eeeeee);
-  border: 1px solid #bbbbbb;
-}
-/* focus */
-input[type=submit]:focus,
-input.button:focus,
-button:focus,
-a.button:focus {
-  border: 1px solid #2894df;
-}
-/* active */
-input[type=submit]:active,
-input.button:active,
-button:active,
-a.button:active {
-  background: #ededed;
-  position: relative;
-  -webkit-box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.2);
-  -moz-box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.2);
-  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.2);
-  border: 1px solid #cccccc;
-}
-input[type=submit].disabled,
-input.button.disabled,
-button.disabled,
-a.button.disabled {
-  cursor: default;
-  color: #888888;
-  background: #ffffff;
-  border: 1px solid #dddddd;
-  text-shadow: none;
-  font-weight: normal;
-}
-/* inactive */
-input[type=submit].disabled:hover,
-input.button.disabled:hover,
-button.disabled:hover,
-a.button.disabled:hover,
-input[type=submit].disabled:active,
-input.button.disabled:active,
-button.disabled:active,
-a.button.disabled:active,
-input[type=submit].disabled:focus,
-input.button.disabled:focus,
-button.disabled:focus,
-a.button.disabled:focus {
-  -webkit-box-shadow: 0 0 0;
-  -moz-box-shadow: 0 0 0;
-  box-shadow: 0 0 0;
-  top: 0;
-  background: #ffffff;
-  border: 1px solid #dddddd;
-}
-/* toggle selected */
-.toggle.button.selected {
-  background: #E0E0E0;
-  -webkit-box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.2);
-  -moz-box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.2);
-  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.2);
-  border: 1px solid #bbbbbb;
-}
-/* duo */
-.duo-wrapper {
-  /*
- * For IE 6/7 only
- * Include this rule to trigger hasLayout and contain floats.
- */
-  /*
- * Clearfix: contain floats
- *
- * For modern browsers
- * 1. The space content is one way to avoid an Opera bug when the
- *	`contenteditable` attribute is included anywhere else in the document.
- *	Otherwise it causes space to appear at the top and bottom of elements
- *	that receive the `clearfix` class.
- * 2. The use of `table` rather than `block` is only necessary if using
- *	`:before` to contain the top-margins of child elements.
- */
-  /*
- * For IE 6/7 only
- * Include this rule to trigger hasLayout and contain floats.
- */
-  zoom: 1;
-  /*
- * Clearfix: contain floats
- *
- * For modern browsers
- * 1. The space content is one way to avoid an Opera bug when the
- *	`contenteditable` attribute is included anywhere else in the document.
- *	Otherwise it causes space to appear at the top and bottom of elements
- *	that receive the `clearfix` class.
- * 2. The use of `table` rather than `block` is only necessary if using
- *	`:before` to contain the top-margins of child elements.
- */
-}
-.duo-wrapper:before,
-.duo-wrapper:after {
-  content: "";
-  display: table;
-}
-.duo-wrapper:after {
-  clear: both;
-}
-.duo-wrapper:before,
-.duo-wrapper:after {
-  content: "";
-  display: table;
-}
-.duo-wrapper:after {
-  clear: both;
-}
-.duo-wrapper .button {
-  float: left;
-}
-.button.duo:nth-child(1) {
-  margin-right: 0;
-  -webkit-border-top-right-radius: 0;
-  -webkit-border-bottom-right-radius: 0;
-  -moz-border-radius-topright: 0;
-  -moz-border-radius-bottomright: 0;
-  border-top-right-radius: 0;
-  border-bottom-right-radius: 0;
-}
-.button.duo:nth-child(2) {
-  margin-left: 0;
-  border-left: 0;
-  -webkit-border-top-left-radius: 0;
-  -webkit-border-bottom-left-radius: 0;
-  -moz-border-radius-topleft: 0;
-  -moz-border-radius-bottomleft: 0;
-  border-top-left-radius: 0;
-  border-bottom-left-radius: 0;
-}
-/* processing state */
-html body .button.processing {
-  background: #ffffff;
-  border: 1px solid #ffffff;
-}
-.button.processing:after {
-  line-height: 2.25em;
-  width: 100%;
-  height: 100%;
-  position: absolute;
-  content: " ";
-  top: -2px;
-  left: -2px;
-  background: #ffffff url('../img/controls/loading.gif') center center no-repeat;
-  border: 1px solid #CCC;
-  border-radius: 5px;
-  padding: 1px;
-}
 /*!
- *  Font Awesome 4.4.0 by @davegandy - http://fontawesome.io - @fontawesome
+ *  Font Awesome 4.5.0 by @davegandy - http://fontawesome.io - @fontawesome
  *  License - http://fontawesome.io/license (Font: SIL OFL 1.1, CSS: MIT License)
  */
 /* FONT PATH
  * -------------------------- */
 @font-face {
   font-family: 'FontAwesome';
-  src: url('../fonts/fontawesome-webfont.eot?v=4.4.0');
-  src: url('../fonts/fontawesome-webfont.eot?#iefix&v=4.4.0') format('embedded-opentype'), url('../fonts/fontawesome-webfont.woff2?v=4.4.0') format('woff2'), url('../fonts/fontawesome-webfont.woff?v=4.4.0') format('woff'), url('../fonts/fontawesome-webfont.ttf?v=4.4.0') format('truetype'), url('../fonts/fontawesome-webfont.svg?v=4.4.0#fontawesomeregular') format('svg');
+  src: url('../fonts/fontawesome-webfont.eot?v=4.5.0');
+  src: url('../fonts/fontawesome-webfont.eot?#iefix&v=4.5.0') format('embedded-opentype'), url('../fonts/fontawesome-webfont.woff2?v=4.5.0') format('woff2'), url('../fonts/fontawesome-webfont.woff?v=4.5.0') format('woff'), url('../fonts/fontawesome-webfont.ttf?v=4.5.0') format('truetype'), url('../fonts/fontawesome-webfont.svg?v=4.5.0#fontawesomeregular') format('svg');
   font-weight: normal;
   font-style: normal;
 }
@@ -3275,6 +2826,675 @@ html body .button.processing {
 .fa-fonticons:before {
   content: "\f280";
 }
+.fa-reddit-alien:before {
+  content: "\f281";
+}
+.fa-edge:before {
+  content: "\f282";
+}
+.fa-credit-card-alt:before {
+  content: "\f283";
+}
+.fa-codiepie:before {
+  content: "\f284";
+}
+.fa-modx:before {
+  content: "\f285";
+}
+.fa-fort-awesome:before {
+  content: "\f286";
+}
+.fa-usb:before {
+  content: "\f287";
+}
+.fa-product-hunt:before {
+  content: "\f288";
+}
+.fa-mixcloud:before {
+  content: "\f289";
+}
+.fa-scribd:before {
+  content: "\f28a";
+}
+.fa-pause-circle:before {
+  content: "\f28b";
+}
+.fa-pause-circle-o:before {
+  content: "\f28c";
+}
+.fa-stop-circle:before {
+  content: "\f28d";
+}
+.fa-stop-circle-o:before {
+  content: "\f28e";
+}
+.fa-shopping-bag:before {
+  content: "\f290";
+}
+.fa-shopping-basket:before {
+  content: "\f291";
+}
+.fa-hashtag:before {
+  content: "\f292";
+}
+.fa-bluetooth:before {
+  content: "\f293";
+}
+.fa-bluetooth-b:before {
+  content: "\f294";
+}
+.fa-percent:before {
+  content: "\f295";
+}
+/*
+	Generic buttons
+	Description	: We support <input[submit]>, <input.button>, <button> and <a.button>
+
+	:hover			- Subtle hover highlight and box shadow
+	:active			- Inset box shadow and 1px offset
+	.disabled		- Dims the button to indicate it cannot be used
+*/
+input[type=submit],
+input.button,
+button,
+a.button {
+  position: relative;
+  font-size: 0.875em;
+  /*	14px */
+  padding: .429em 1.225em .429em 1.225em ;
+  /* 6px 16px */
+  display: inline-block;
+  zoom: 1;
+  /* zoom and *display = ie7 hack for display:inline-block */
+  *display: inline;
+  vertical-align: baseline;
+  margin-right: .5em;
+  outline: none;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+  border: 1px solid #cccccc;
+  color: #333333;
+  font-weight: bold;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.8);
+  background: #eeeeee;
+  background-image: -moz-linear-gradient(top, #f3f3f3, #eeeeee);
+  background-image: -ms-linear-gradient(top, #f3f3f3, #eeeeee);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(background-lightest), to(#eeeeee));
+  background-image: -webkit-linear-gradient(top, #f3f3f3, #eeeeee);
+  background-image: -o-linear-gradient(top, #f3f3f3, #eeeeee);
+  background-image: linear-gradient(top, #f3f3f3, #eeeeee);
+  -webkit-border-radius: 0.214em;
+  -moz-border-radius: 0.214em;
+  border-radius: 0.214em;
+}
+/* size and position adjustments */
+.submit {
+  display: inline-block;
+  /* in case there is a div wrapper */
+}
+input.button.big {
+  font-size: 1.125em;
+}
+a.button.big {
+  font-size: 1em;
+  height: 1.5em;
+  margin-top: 1em;
+  min-width: 3em;
+}
+input.button.primary,
+button.primary,
+a.button.primary {
+  background: #2894df;
+  border: 1px solid #2894df;
+  color: #FFF;
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.2);
+}
+input.button.primary:hover,
+button.primary:hover,
+a.button.primary:hover,
+input.button.primary:active,
+button.primary:active,
+a.button.primary:active {
+  border: 1px solid #2a9ceb;
+  background: #2a9ceb;
+}
+input.button.primary:focus,
+button.primary:focus,
+a.button.primary:focus {
+  border: 1px solid #2894df;
+  background: #2a9ceb;
+}
+a.button.cancel,
+a.button.cancel:focus,
+a.button.cancel:hover,
+a.button.cancel:active,
+a.button.dim,
+a.button.dim:focus,
+a.button.dim:hover,
+a.button.dim:active {
+  background: #ffffff;
+  font-weight: normal;
+}
+/* hover */
+input[type=submit]:hover,
+input.button:hover,
+button:hover,
+a.button:hover {
+  text-decoration: none;
+  background: #eeeeee;
+  background-image: -moz-linear-gradient(top, #f3f3f3, #eeeeee);
+  background-image: -ms-linear-gradient(top, #f3f3f3, #eeeeee);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(background-lightest), to(#eeeeee));
+  background-image: -webkit-linear-gradient(top, #f3f3f3, #eeeeee);
+  background-image: -o-linear-gradient(top, #f3f3f3, #eeeeee);
+  background-image: linear-gradient(top, #f3f3f3, #eeeeee);
+  border: 1px solid #bbbbbb;
+}
+/* focus */
+input[type=submit]:focus,
+input.button:focus,
+button:focus,
+a.button:focus {
+  border: 1px solid #2894df;
+}
+/* active */
+input[type=submit]:active,
+input.button:active,
+button:active,
+a.button:active {
+  background: #ededed;
+  position: relative;
+  -webkit-box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.2);
+  -moz-box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.2);
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.2);
+  border: 1px solid #cccccc;
+}
+input[type=submit].disabled,
+input.button.disabled,
+button.disabled,
+a.button.disabled {
+  cursor: default;
+  color: #888888;
+  background: #ffffff;
+  border: 1px solid #dddddd;
+  text-shadow: none;
+  font-weight: normal;
+}
+/* inactive */
+input[type=submit].disabled:hover,
+input.button.disabled:hover,
+button.disabled:hover,
+a.button.disabled:hover,
+input[type=submit].disabled:active,
+input.button.disabled:active,
+button.disabled:active,
+a.button.disabled:active,
+input[type=submit].disabled:focus,
+input.button.disabled:focus,
+button.disabled:focus,
+a.button.disabled:focus {
+  -webkit-box-shadow: 0 0 0;
+  -moz-box-shadow: 0 0 0;
+  box-shadow: 0 0 0;
+  top: 0;
+  background: #ffffff;
+  border: 1px solid #dddddd;
+}
+/* toggle selected */
+.toggle.button.selected {
+  background: #E0E0E0;
+  -webkit-box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.2);
+  -moz-box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.2);
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.2);
+  border: 1px solid #bbbbbb;
+}
+/* duo */
+.duo-wrapper {
+  /*
+ * For IE 6/7 only
+ * Include this rule to trigger hasLayout and contain floats.
+ */
+  /*
+ * Clearfix: contain floats
+ *
+ * For modern browsers
+ * 1. The space content is one way to avoid an Opera bug when the
+ *	`contenteditable` attribute is included anywhere else in the document.
+ *	Otherwise it causes space to appear at the top and bottom of elements
+ *	that receive the `clearfix` class.
+ * 2. The use of `table` rather than `block` is only necessary if using
+ *	`:before` to contain the top-margins of child elements.
+ */
+  /*
+ * For IE 6/7 only
+ * Include this rule to trigger hasLayout and contain floats.
+ */
+  zoom: 1;
+  /*
+ * Clearfix: contain floats
+ *
+ * For modern browsers
+ * 1. The space content is one way to avoid an Opera bug when the
+ *	`contenteditable` attribute is included anywhere else in the document.
+ *	Otherwise it causes space to appear at the top and bottom of elements
+ *	that receive the `clearfix` class.
+ * 2. The use of `table` rather than `block` is only necessary if using
+ *	`:before` to contain the top-margins of child elements.
+ */
+}
+.duo-wrapper:before,
+.duo-wrapper:after {
+  content: "";
+  display: table;
+}
+.duo-wrapper:after {
+  clear: both;
+}
+.duo-wrapper:before,
+.duo-wrapper:after {
+  content: "";
+  display: table;
+}
+.duo-wrapper:after {
+  clear: both;
+}
+.duo-wrapper .button {
+  float: left;
+}
+.button.duo:nth-child(1) {
+  margin-right: 0;
+  -webkit-border-top-right-radius: 0;
+  -webkit-border-bottom-right-radius: 0;
+  -moz-border-radius-topright: 0;
+  -moz-border-radius-bottomright: 0;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+.button.duo:nth-child(2) {
+  margin-left: 0;
+  border-left: 0;
+  -webkit-border-top-left-radius: 0;
+  -webkit-border-bottom-left-radius: 0;
+  -moz-border-radius-topleft: 0;
+  -moz-border-radius-bottomleft: 0;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+/* processing state */
+html body .button.processing {
+  background: #ffffff;
+  border: 1px solid #ffffff;
+}
+.button.processing:after {
+  line-height: 2.25em;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  content: " ";
+  top: -2px;
+  left: -2px;
+  background: #ffffff url('../img/controls/loading.gif') center center no-repeat;
+  border: 1px solid #CCC;
+  border-radius: 5px;
+  padding: 1px;
+}
+/*
+	Base form components styling
+	Check components/form for more advanced/fancy input
+*/
+/* input label */
+label {
+  font-weight: bold;
+  font-size: 1.125em;
+  /* 18px */
+  padding: .2em;
+  display: block;
+}
+/*
+	Required Label
+
+	Description	: Label and input are wrapped in <div.text.required>. Additional <span> with a star is included. Input also get the required class.
+	.required		- additional red star
+*/
+.required label:after {
+  content: " *";
+  color: #D40000;
+  font-weight: bold;
+}
+/* fallback placeholder */
+.placeholder {
+  color: #bbb;
+}
+/* webkit placeholder */
+::-webkit-input-placeholder {
+  color: #bbb;
+}
+/* moz placeholder */
+:-moz-placeholder,
+::-moz-placeholder {
+  color: #bbb;
+}
+/*
+	Generic Form Item
+
+	Description	: labels and input are wrapped in a <div.text>
+
+	:hover			 - subtle hover highlight
+	:active			- inset box shadow
+	.disabled		- grey out to indicate it cannot be used
+*/
+input[type=text],
+input[type=password],
+input[type=search],
+textarea {
+  font-size: 16px;
+  line-height: 24px;
+  color: #333333;
+  background: #ffffff;
+  width: 14em;
+  /* 20 char (default input length) x .7em (average char length) */
+  padding: .375em .625em .375em .625em;
+  display: inline-block;
+  margin-bottom: .5em;
+  -webkit-appearance: none;
+  border: 1px solid #cccccc;
+  border-top: 1px solid #bbbbbb;
+  vertical-align: middle;
+  -ms-box-sizing: content-box;
+  -moz-box-sizing: content-box;
+  -webkit-box-sizing: content-box;
+  box-sizing: content-box;
+}
+textarea:hover,
+input[type=password]:hover,
+input[type=search]:hover,
+input[type=text]:hover {
+  border: 1px solid #bbbbbb;
+}
+textarea:focus,
+input[type=password]:focus,
+input[type=search]:focus,
+input[type=text]:focus {
+  -webkit-box-shadow: inset 1px 1px 2px rgba(255, 255, 255, 0.2);
+  -moz-box-shadow: inset 1px 1px 2px rgba(0, 0, 0, 0.2);
+  box-shadow: inset 1px 1px 2px rgba(0, 0, 0, 0.2);
+  border: 1px solid #2a9ceb;
+}
+input[type=password]:disabled,
+input[type=search]:disabled,
+input[type=text]:disabled {
+  border: 1px solid #dddddd;
+  -webkit-box-shadow: 0 0 0 0;
+  -moz-box-shadow: 0 0 0 0;
+  box-shadow: 0 0 0 0;
+  cursor: normal;
+  background: #f3f3f3;
+}
+/*
+	Textarea Textfield
+	Description	: textarea.textarea is pretty much the same than div.input.text.
+
+	.required		- additional red star
+	.lage		 	 - make the box bigger
+*/
+textarea {
+  height: 3.6em;
+  /* 4 char (default input length) x 1em (average char length) + .6em (padding) */
+}
+.textarea.large textarea {
+  width: 30em;
+  height: 7em;
+}
+/* text and textarea */
+.text.input .input-addon,
+.date.input .input-addon {
+  position: absolute;
+  margin-left: -2.625em;
+}
+.text.input .input-addon i,
+.date.input .input-addon i {
+  font-size: 16px;
+  width: 1.250em;
+  border: 1px solid #cccccc;
+  border-top: 1px solid #bbbbbb;
+  line-height: 24px;
+  color: #333333;
+  background: #ffffff;
+  padding: .375em .625em .375em .625em;
+}
+.text.input input:hover + .input-addon i,
+.date.input input:hover + .input-addon i {
+  border: 1px solid #bbbbbb;
+}
+.text.input input:focus + .input-addon i,
+.date.input input:focus + .input-addon i {
+  border: 1px solid #2a9ceb;
+}
+.text.input input:disabled + .input-addon i,
+.date.input input:disabled + .input-addon i {
+  background: #f3f3f3;
+  border: 1px solid #dddddd;
+}
+/* icons for input */
+/*
+	Checkboxes and Radio
+*/
+.checkboxlist .input.checkbox label,
+.radiolist .input.radio label {
+  font-weight: normal;
+  display: inline;
+}
+.checkbox label {
+  font-weight: normal;
+  display: inline;
+}
+/* radio and checkboxes */
+/*
+	Messages for validation error and example
+
+	Description	: <div.text.error>, <div.text.success>, can be used to add status messages or example.
+								 Additional messages are wrapped in <.error-message>, <.success-messages>
+
+	.success		 - can be used for instant validation feedback
+	.notice			- can be used for example messages prior validation
+	.error			 - error messages used for validation issues
+*/
+.input .message {
+  font-weight: bold;
+  padding: 0;
+  padding-left: .25em;
+  margin-bottom: .25em;
+  background-color: transparent;
+  border: 0;
+  /* colors for messages */
+}
+.input .message.error {
+  color: #d40101;
+}
+.input .message.success {
+  color: #009900;
+}
+.input .message.warning {
+  color: #9f6000;
+}
+.input .message.notice {
+  color: #2894df;
+}
+.input .message.helptext {
+  color: #888888;
+  font-weight: normal;
+}
+.form-content .input .message,
+form .input .message {
+  background-color: transparent;
+}
+.input.error label {
+  color: #d40101;
+}
+input.error,
+textarea.error,
+select.error {
+  border: 1px solid #d40101;
+}
+form .input .inline.message {
+  display: inline-block;
+}
+/* error messages */
+select {
+  font-size: 16px;
+  color: #333333;
+  background: #ffffff;
+  width: 15.375em;
+  /* 20 char (default input length) x .7em (average char length) */
+  padding: .375em .625em .375em .625em;
+  line-height: 24px;
+  margin-bottom: .5em;
+  border: 1px solid #cccccc;
+  border-top: 1px solid #bbbbbb;
+  display: inline-block;
+  -ms-box-sizing: content-box;
+  -moz-box-sizing: content-box;
+  -webkit-box-sizing: content-box;
+  box-sizing: content-box;
+}
+select:disabled {
+  background: #f3f3f3;
+}
+/* select */
+input[type=file] {
+  width: 100%;
+  color: #333333;
+}
+/* file upload input */
+/* layout and shortcuts */
+select.fluid,
+textarea.fluid,
+input[type=password].fluid,
+input[type=text].fluid {
+  width: 80%;
+}
+.submit-wrapper {
+  margin-top: .5em;
+}
+/* shortcut classes for layout */
+/*
+ * Page layout
+ */
+.page {
+  min-width: 320px;
+}
+.page,
+.panel,
+.header {
+  width: 100%;
+}
+.page,
+.panel {
+  position: absolute;
+  overflow: auto;
+}
+.header {
+  overflow: hidden;
+}
+.page {
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+/* headers */
+.header.first {
+  /* height:2.375em; //already defined in header */
+  height: 2.375em;
+}
+.header.second {
+  top: 2.375em;
+  height: 4.5em;
+}
+.header.third {
+  top: 6.875em;
+  height: 3em;
+}
+/* main workspace panel */
+.panel {
+  height: 100%;
+}
+.panel.main {
+  top: 10em;
+  bottom: 2.0em;
+  height: auto;
+  padding: 0;
+}
+/* its position depends on how many headers are there */
+.header.second + .panel.main {
+  top: 6.875em;
+}
+.header.third + .panel.main {
+  top: 10em;
+  border-top: 1px solid #dddddd;
+}
+/* columns */
+.panel,
+.col1,
+.col2,
+.col3,
+.col2_3 {
+  position: absolute;
+}
+.col1,
+.panel.left {
+  width: 17.5%;
+}
+.panel.middle {
+  width: 82%;
+  left: 18%;
+  overflow: hidden;
+}
+.panel.middle.scroll {
+  overflow-y: scroll;
+}
+.col2 {
+  width: 50%;
+  left: 18%;
+}
+.col3,
+.panel.right {
+  width: 24%;
+  left: 75%;
+}
+.col2_3 {
+  width: 81.5%;
+  left: 18%;
+}
+/* if the other grid is used
+   don't center the grid inside main panel */
+.panel.main .grid-responsive-12 {
+  float: left;
+  width: 99%;
+}
+/* hide left column when there is no space */
+@media all and (max-width: 980px) {
+  .col1,
+  .panel.left {
+    display: none;
+  }
+  .panel.middle,
+  .col2_3 {
+    width: 98%;
+    left: 1%;
+  }
+  .col2 {
+    width: 72%;
+    left: 1%;
+  }
+}
+/* reduce font-size for small screen */
+@media all and (max-width: 480px) {
+  .page {
+    font-size: .835em;
+  }
+}
 /*
 	One% CSS Grid - 12 Columns Fluid CSS Grid System
 
@@ -3716,6 +3936,86 @@ html body .button.processing {
     left: 1%;
   }
 }
+/*
+ * shadow on scroll
+ */
+.scroll {
+  overflow-y: scroll;
+  background: linear-gradient(#ffffff 30%, rgba(255, 255, 255, 0)), linear-gradient(rgba(255, 255, 255, 0), #ffffff 70%) 0 100%, radial-gradient(farthest-side at 75% 0, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0)), radial-gradient(farthest-side at 75% 100%, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0)) 0 100%;
+  background-repeat: no-repeat;
+  background-color: white;
+  background-size: 100% 10px, 100% 10px, 100% 5px, 100% 5px;
+  /* Opera doesn't support this in the shorthand */
+  background-attachment: local, local, scroll, scroll;
+}
+/*
+ * Scrollbar styling with native webkit support
+
+.cssscrollbar ::-webkit-scrollbar {
+	width:.625em;
+}
+.cssscrollbar ::-webkit-scrollbar-track {
+	background:@scrollbar-background;
+}
+.cssscrollbar ::-webkit-scrollbar-thumb {
+	background:@scrollbar;
+}
+.cssscrollbar ::-webkit-scrollbar-thumb:window-inactive {
+	background:@scrollbar-background;
+}
+*/
+/*
+ * Styles needed by jScrollPane fallback
+
+.no-cssscrollbar .jspContainer {
+	overflow: hidden;
+	position: relative;
+}
+.no-cssscrollbar .jspPane {
+	position: absolute;
+}
+.no-cssscrollbar .jspVerticalBar {
+	position: absolute;
+	top: 0;
+	right: 0;
+	width: 10px;
+	height: 100%;
+}
+.no-cssscrollbar .jspHorizontalBar {
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	width: 100%;
+	height: .625em;
+}
+.no-cssscrollbar .jspVerticalBar *,
+.no-cssscrollbar .jspHorizontalBar * {
+	margin: 0;
+	padding: 0;
+}
+.no-cssscrollbar .jspCap {
+	display: none;
+}
+.no-cssscrollbar .jspHorizontalBar .jspCap {
+	float: left;
+}
+.no-cssscrollbar .jspTrack {
+	background: @scrollbar-background;
+	position: relative;
+}
+.no-cssscrollbar .jspDrag {
+	background:@scrollbar;
+	position: relative;
+	top: 0;
+	left: 0;
+	cursor: pointer;
+}
+.no-cssscrollbar .jspHorizontalBar .jspTrack,
+.no-cssscrollbar .jspHorizontalBar .jspDrag {
+	float: left;
+	height: 100%;
+}
+*/
 /* headers */
 .header {
   /* top navigation */
