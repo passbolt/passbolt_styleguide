@@ -6265,6 +6265,9 @@ table.table-info.horizontal tbody tr:nth-child(even) {
 .dialog-wrapper.session-expired-dialog {
   z-index: 994;
 }
+.dialog-wrapper.session-expired-dialog .dialog-close {
+  display: none;
+}
 /* sidebar / user details in overview */
 .panel.aside .user .header {
   /*
