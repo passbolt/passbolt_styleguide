@@ -6262,6 +6262,9 @@ table.table-info.horizontal tbody tr:nth-child(even) {
 .folder-add .input.text {
   width: 25em;
 }
+.dialog-wrapper.session-expired-dialog {
+  z-index: 994;
+}
 /* sidebar / user details in overview */
 .panel.aside .user .header {
   /*
