@@ -2,24 +2,9 @@
 <html class="no-js passbolt version alpha" lang="en">
 <head>
 	<meta charset="utf-8">
-	<title>Welcome | Passbolt</title>
-	<!--
-			 ____                  __          ____
-			/ __ \____  _____ ____/ /_  ____  / / /_
-		   / /_/ / __ `/ ___/ ___/ __ \/ __ \/ / __/
-		  / ____/ /_/ (__  |__  ) /_/ / /_/ / / /_
-		 /_/    \__,_/____/____/_.___/\____/_/\__/
-
-		 Open source password manager for teams
-		 © 2016 Bolt Softwares Pvt Ltd
-
-	 -->
-	<base href="../src/">
-	<meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
-	<meta name="description" content="Open source password manager for teams">
-	<link rel="shortcut icon" type="image/x-icon" href="favicon.ico" />
+	<title>Thank you! | Passbolt</title>
+	<?php include('includes/AA_meta.php'); ?>
 	<link rel="stylesheet" type="text/css" href="css/prelaunch.css" />
-
 </head>
 <body>
 <!-- main - html5 -->
