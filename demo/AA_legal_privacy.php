@@ -1,8 +1,10 @@
 <!doctype html>
 <html lang="en">
 <head>
+	<meta charset="utf-8">
 	<title>Passbolt - Privacy Policy</title>
 	<?php include('includes/AA_meta.php'); ?>
+	<link rel="stylesheet" type="text/css" href="css/public.css">
 </head>
 <body>
 <div id="container" class="page background">
