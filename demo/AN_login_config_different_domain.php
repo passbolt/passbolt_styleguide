@@ -24,10 +24,11 @@
 						<p class="message">
 							Firefox plugin is installed but is already configured for another domain :<br>
 							<a href="#" class="trusteddomain">https://www.passbolt.com</a><br>
-							You can <a href="../demo/AN_register.php">register again</a> for this domain,
-							but you will lose your account on the existing domain. Proceed with caution.</p>
+						</p>
 					</div>
 				</div>
+				<p>You can <a href="../demo/AN_register.php">register again</a> for this domain,
+					but you will lose your account on the existing domain. Proceed with caution.</p>
 			</div>
 			<div class="col4 push1 last">
 				<div class="logo">
