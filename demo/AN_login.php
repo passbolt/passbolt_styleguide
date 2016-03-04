@@ -30,7 +30,7 @@
 			</div>
 			<div class="col4 push1 last">
 				<div class="logo">
-					<h1><a href="#"><span>Passbolt</span></a></h1>
+					<h1><span class="visuallyhidden">Passbolt</span></h1>
 				</div>
 				<div class="users login form">
 					<div class="feedback">

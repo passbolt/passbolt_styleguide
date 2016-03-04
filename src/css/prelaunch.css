@@ -3455,7 +3455,7 @@ input[type=text].fluid {
   overflow-y: scroll;
 }
 .col2 {
-  width: 50%;
+  width: 70%;
   left: 18%;
 }
 .col3,
@@ -3485,14 +3485,8 @@ input[type=text].fluid {
     left: 1%;
   }
   .col2 {
-    width: 72%;
+    width: 80%;
     left: 1%;
-  }
-}
-/* reduce font-size for small screen */
-@media all and (max-width: 480px) {
-  .page {
-    font-size: .835em;
   }
 }
 /*

@@ -4209,9 +4209,9 @@ html body .button.processing {
 .page.register .logo,
 .page.login .logo {
   background: transparent url('../img/logo/logo.png') 0 10px no-repeat;
-  width: 260px;
-  height: 60px;
-  margin-top: .5em;
+  width: 250px;
+  height: 50px;
+  margin-top: 1em;
 }
 .page.register .logo span,
 .page.login .logo span {
@@ -4301,4 +4301,12 @@ html body .button.processing {
   width: 100%;
   font-size: 1.250em;
   font-weight: bold;
+}
+/* CSS for serving the retina image to devices with a high "device-pixel-ratio": */
+@media only screen and (-moz-min-device-pixel-ratio: 1.5), only screen and (-o-min-device-pixel-ratio: 3/2), only screen and (-webkit-min-device-pixel-ratio: 1.5), only screen and (min-devicepixel-ratio: 1.5), only screen and (min-resolution: 1.5dppx) {
+  .page.register .logo,
+  .page.login .logo {
+    background: transparent url('../img/logo/logo@2x.png') 0 10px no-repeat;
+    background-size: 187px 36px;
+  }
 }

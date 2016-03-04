@@ -3651,6 +3651,7 @@ input[type=text].fluid {
     box-shadow: none;
     width: 100%;
     max-width: 100%;
+    margin-bottom: 2.5em;
   }
 }
 /* tabs */
@@ -3759,8 +3760,10 @@ input[type=text].fluid {
   margin-left: 240px;
 }
 .colorpicker .input input[type=text].token {
-  width: 3em;
-  font-size: 24px;
+  width: 4em;
+  font-size: 1.25em;
+  height: auto;
+  line-height: 2em;
   border: none;
   -webkit-border-radius: 0.214em;
   -moz-border-radius: 0.214em;
