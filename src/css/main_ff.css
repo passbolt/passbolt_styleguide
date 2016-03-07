@@ -4363,6 +4363,9 @@ input[type=text].fluid {
   padding-right: 4em;
   color: #888888;
 }
+#loginSubmit {
+  margin-left: 2px;
+}
 /**
  * Needed for Firefox plugin
  * see. http://stackoverflow.com.80bola.com/questions/24357596/firefox-extension-custom-fonts

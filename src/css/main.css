@@ -4038,6 +4038,18 @@ input[type=text].fluid {
 .header h1 {
   display: none;
 }
+/* CSS for serving the retina image to devices with a high "device-pixel-ratio": */
+@media only screen and (-moz-min-device-pixel-ratio: 1.5), only screen and (-o-min-device-pixel-ratio: 3/2), only screen and (-webkit-min-device-pixel-ratio: 1.5), only screen and (min-devicepixel-ratio: 1.5), only screen and (min-resolution: 1.5dppx) {
+  .header .navigation.primary .home a {
+    background: transparent url('../img/logo/icon-48_white.png') 0 0 no-repeat;
+    background-size: 20px 20px;
+  }
+  .header .navigation.primary .home a:focus,
+  .header .navigation.primary .home:hover a {
+    background: transparent url('../img/logo/icon-48.png') 0 0 no-repeat;
+    background-size: 20px 20px;
+  }
+}
 /* search */
 .search {
   margin-top: 1em;
