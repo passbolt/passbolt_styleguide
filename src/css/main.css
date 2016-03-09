@@ -6044,7 +6044,7 @@ table.table-info.horizontal tbody tr:nth-child(even) {
   padding: 0em;
 }
 .dialog .share-tab .permissions.scroll {
-  height: 19em;
+  max-height: 19em;
   margin: 0;
 }
 .dialog .share-tab .row {
