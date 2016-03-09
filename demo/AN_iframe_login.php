@@ -28,7 +28,7 @@
 		<div class="message helptext">Please enter your secret key password</div>
 	</div>
 	<div class="submit-wrapper clearfix">
-		<a id="loginSubmit" href="#" class="button primary big">login</a>
+		<a id="loginSubmit" href="#" class="button primary big disabled processing">login</a>
 	</div>
 </div>
 </body>
