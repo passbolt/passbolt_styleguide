@@ -25,5 +25,10 @@
 	<div id="js_perm_create_form_feedback" class="message"></div>
 </div>
 </div>
+<script type="application/javascript">
+	resizeIframe('#passbolt-iframe-password-share', {
+		width: '100%'
+	});
+</script>
 </body>
 </html>
