@@ -35,135 +35,55 @@
 					<div class="passbolt_component_permissions share-tab tab-content passbolt_view_component_permissions ready selected" id="js_rs_permission">
 						<div class="form-content permission-edit">
 							<ul id="js_permissions_list" class="permissions scroll mad_component_tree mad_view_component_tree ready">
-								<li id="44a51f44-6f9f-3c03-af9b-3e80fd50c1f6" class="row direct-permission" data-view-id="382">
+								<?php include('includes/permissions/permissions_list.php'); ?>
+								<li id="603fb13a-6bcf-04b9-8795-d52565808650" class="row direct-permission permission-updated" data-view-id="400">
 									<div class="avatar">
-										<img src="img/avatar/user.png" data-view-id="383">
+										<img src="img/avatar/user.png"  data-view-id="401">
 									</div>
 									<div class="group">
-										<span class="name">Ada Lovelace</span>
-										<span class="details"><a href="#">ada@passbolt.com</a></span>
+										<span class="name">Frances Allen</span>
+										<span class="details"><a href="#">frances@passbolt.com</a></span>
 									</div>
 									<div class="select rights">
-										<form id="js_share_rs_perm_44a51f44-6f9f-3c03-af9b-3e80fd50c1f6" class="js_perm_edit_form" data-view-id="384">
-											<select id="298a420e-8be2-0ef9-d7a3-a13a2f8c8908" class="js_share_rs_perm_type permission mad_form_dropdown form-element mad_view_form_element ready">
-
-												<option value="0" data-view-id="386">deny</option>
-
-												<option value="1" data-view-id="387">can read</option>
-
-												<option value="3" data-view-id="388">can create</option>
-
-												<option value="7" data-view-id="389">can update</option>
-
-												<option value="15" data-view-id="390">is owner</option>
-
+										<form id="js_share_rs_perm_603fb13a-6bcf-04b9-8795-d52565808650" class="js_perm_edit_form" data-view-id="402">
+											<select id="js_share_perm_type_603fb13a-6bcf-04b9-8795-d52565808650" class="js_share_rs_perm_type permission mad_form_dropdown form-element mad_view_form_dropdown ready">
+												<option value="1" data-view-id="376">can read</option>
+												<option value="7" data-view-id="377">can update</option>
+												<option value="15" data-view-id="378">is owner</option>
 											</select>
 										</form>
 									</div>
 									<div class="actions">
-
-										<a href="#" class="js_perm_delete close" title="remove" data-view-id="385">
-											<i class="fa fa-times-circle"></i><span class="visuallyhidden">remove</span>
+										<a id="js_share_perm_delete_603fb13a-6bcf-04b9-8795-d52565808650" href="#" class="js_perm_delete close mad_component_button js_component mad_view ready" title="remove" data-view-id="403">
+											<i class="fa fa-times-circle"></i>
+											<span class="visuallyhidden">remove</span>
 										</a>
-
 									</div>
-								</li><li id="1132c9d7-b066-345a-a249-2f9334b99f04" class="row direct-permission" data-view-id="391">
+								</li><li id="1792c272-fa47-4961-78b0-f5fffc4de27c" class="row direct-permission permission-updated" data-view-id="407">
 									<div class="avatar">
-										<img src="img/avatar/user.png" data-view-id="392">
+										<img src="img/avatar/user.png"  data-view-id="408">
 									</div>
 									<div class="group">
-										<span class="name">Betty Holberton</span>
-										<span class="details"><a href="#">betty@passbolt.com</a></span>
+										<span class="name">Kathleen Antonelli</span>
+										<span class="details"><a href="#">kathleen@passbolt.com</a></span>
 									</div>
 									<div class="select rights">
-										<form id="js_share_rs_perm_1132c9d7-b066-345a-a249-2f9334b99f04" class="js_perm_edit_form" data-view-id="393">
-											<select id="51842e43-34d9-ace0-b617-82b6e933ca55" class="js_share_rs_perm_type permission mad_form_dropdown form-element mad_view_form_element ready">
-
-												<option value="0" data-view-id="395">deny</option>
-
-												<option value="1" data-view-id="396">can read</option>
-
-												<option value="3" data-view-id="397">can create</option>
-
-												<option value="7" data-view-id="398">can update</option>
-
-												<option value="15" data-view-id="399">is owner</option>
-
+										<form id="js_share_rs_perm_1792c272-fa47-4961-78b0-f5fffc4de27c" class="js_perm_edit_form" data-view-id="409">
+											<select id="js_share_perm_type_1792c272-fa47-4961-78b0-f5fffc4de27c" class="js_share_rs_perm_type permission mad_form_dropdown form-element mad_view_form_dropdown ready">
+												<option value="1" data-view-id="376">can read</option>
+												<option value="7" data-view-id="377">can update</option>
+												<option value="15" data-view-id="378">is owner</option>
 											</select>
 										</form>
 									</div>
 									<div class="actions">
-
-										<a href="#" class="js_perm_delete close" title="remove" data-view-id="394">
-											<i class="fa fa-times-circle"></i><span class="visuallyhidden">remove</span>
+										<a id="js_share_perm_delete_1792c272-fa47-4961-78b0-f5fffc4de27c" href="#" class="js_perm_delete close mad_component_button js_component mad_view ready" title="remove" data-view-id="410">
+											<i class="fa fa-times-circle"></i>
+											<span class="visuallyhidden">remove</span>
 										</a>
-
 									</div>
-								</li><li id="e29abaab-bef6-3a2b-ab53-029c30d7da87" class="row direct-permission" data-view-id="400">
-									<div class="avatar">
-										<img src="img/avatar/user.png" data-view-id="401">
-									</div>
-									<div class="group">
-										<span class="name">Carol Shaw</span>
-										<span class="details"><a href="#">carol@passbolt.com</a></span>
-									</div>
-									<div class="select rights">
-										<form id="js_share_rs_perm_e29abaab-bef6-3a2b-ab53-029c30d7da87" class="js_perm_edit_form" data-view-id="402">
-											<select id="e6614c4d-d722-d8e0-03dd-2e50ff58ddba" class="js_share_rs_perm_type permission mad_form_dropdown form-element mad_view_form_element ready">
-
-												<option value="0" data-view-id="404">deny</option>
-
-												<option value="1" data-view-id="405">can read</option>
-
-												<option value="3" data-view-id="406">can create</option>
-
-												<option value="7" data-view-id="407">can update</option>
-
-												<option value="15" data-view-id="408">is owner</option>
-
-											</select>
-										</form>
-									</div>
-									<div class="actions">
-
-										<a href="#" class="js_perm_delete close" title="remove" data-view-id="403">
-											<i class="fa fa-times-circle"></i><span class="visuallyhidden">remove</span>
-										</a>
-
-									</div>
-								</li><li id="468f753b-4317-39b8-a49d-79881820ee30" class="row direct-permission" data-view-id="409">
-									<div class="avatar">
-										<img src="img/avatar/user.png" data-view-id="410">
-									</div>
-									<div class="group">
-										<span class="name">Edith Clarke</span>
-										<span class="details"><a href="#">edith@passbolt.com</a></span>
-									</div>
-									<div class="select rights">
-										<form id="js_share_rs_perm_468f753b-4317-39b8-a49d-79881820ee30" class="js_perm_edit_form" data-view-id="411">
-											<select id="6888c00a-34db-5867-f19b-17a6d279971f" class="js_share_rs_perm_type permission mad_form_dropdown form-element mad_view_form_element ready">
-
-												<option value="0" data-view-id="413">deny</option>
-
-												<option value="1" data-view-id="414">can read</option>
-
-												<option value="3" data-view-id="415">can create</option>
-
-												<option value="7" data-view-id="416">can update</option>
-
-												<option value="15" data-view-id="417">is owner</option>
-
-											</select>
-										</form>
-									</div>
-									<div class="actions">
-
-										<a href="#" class="js_perm_delete close" title="remove" data-view-id="412">
-											<i class="fa fa-times-circle"></i><span class="visuallyhidden">remove</span>
-										</a>
-
-									</div>
-								</li></ul>
+								</li>
+							</ul>
 						</div>
 						<div id="js_permissions_changes" class="warning message ">
 							<span>You need to save to apply the changes.</span>
@@ -183,3 +103,4 @@
             </div></div>
     </div>
 </div>
+
