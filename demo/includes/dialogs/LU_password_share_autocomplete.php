@@ -36,7 +36,7 @@
                         <div id="js_permissions_changes" class="warning message hidden">
                             <span>You need to save to apply the changes.</span>
                         </div>
-                        <div class="form-content permission-add">
+                        <div class="permission-add">
 							<iframe src="../demo/LU_iframe_permissioninput.php" id="passbolt-iframe-password-share" frameborder="0"></iframe>
 							<div id="passbolt-password-share-autocomplete-wrapper">
 								<iframe src="../demo/LU_iframe_permissioninput_autocomplete.php" id="passbolt-iframe-password-share-autocomplete" frameborder="0"></iframe>

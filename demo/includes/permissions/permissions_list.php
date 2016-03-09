@@ -79,30 +79,3 @@
         </a>
     </div>
 </li>
-<li id="1f26f05f-2797-3017-a168-fcf3af373186" class="row direct-permission" data-view-id="393">
-    <div class="avatar">
-        <img src="img/avatar/user.png" data-view-id="394">
-    </div>
-    <div class="group">
-        <span class="name">Dame Steve Shirley</span>
-        <span class="details"><a href="#">dame@passbolt.com</a></span>
-    </div>
-    <div class="select rights">
-        <form id="js_share_rs_perm_1f26f05f-2797-3017-a168-fcf3af373186" class="js_perm_edit_form" data-view-id="395">
-            <select id="js_share_perm_type_1f26f05f-2797-3017-a168-fcf3af373186"
-                    class="js_share_rs_perm_type permission mad_form_dropdown form-element mad_view_form_dropdown ready">
-                <option value="1" data-view-id="376">can read</option>
-                <option value="7" data-view-id="377">can update</option>
-                <option value="15" data-view-id="378">is owner</option>
-            </select>
-        </form>
-    </div>
-    <div class="actions">
-        <a id="js_share_perm_delete_1f26f05f-2797-3017-a168-fcf3af373186" href="#"
-           class="js_perm_delete close mad_component_button js_component mad_view ready" title="remove"
-           data-view-id="396">
-            <i class="fa fa-times-circle"></i>
-            <span class="visuallyhidden">remove</span>
-        </a>
-    </div>
-</li>
