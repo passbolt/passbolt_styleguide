@@ -6,7 +6,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="shortcut icon" type="image/x-icon" href="img/webroot/favicon.ico" />
 	<link rel="stylesheet" type="text/css" href="../src/css/public.css">
-	<script src="../src/js/jquery.js"></script>
+	<script src="../src/js/jquery-2.1.3.min.js"></script>
 	<script src="../src/js/bootstrap-scrollspy.js"></script>
 	<script src="../src/js/list.min.js"></script>
 	<script src="../src/js/list.fuzzysearch.min.js"></script>
@@ -19,7 +19,7 @@
 	<!-- second header -->
 	<div class="header second">
 		<div class="col1">
-			<div class="logo no-text">
+			<div class="logo no-img">
 				<h1><span>Passbolt</span></h1>
 			</div>
 		</div>
@@ -28,7 +28,7 @@
 			<!-- if js is enabled only -->
 			<div>
 				<form class="search ready">
-					<div class="input search required">
+					<div class="input required">
 						<label for="filter_faq">Search</label>
 						<input id="filter_faq" maxlength="50" placeholder="search frequently asked questions" type="search" class="fuzzy-search">
 					</div>
@@ -70,7 +70,7 @@
 		<!-- main -->
 		<div class="panel middle" data-spy="scroll" data-target=".scrollspy">
 			<div class="grid grid-responsive-12">
-				<article>
+				<article class="faq">
 					<ul class="list">
 					<li>
 					<div class="row">
@@ -198,14 +198,11 @@
 </div>
 
 <script>
-	var faqList = new List('faq-list', {
-		valueNames: ['question','answer'],
-		plugins: [ListFuzzySearch({
-			searchClass: "fuzzy-search",
-			location: 0,
-			distance: 100,
-			threshold: 0.9
-		})]
+	$(function() {
+		var faqlist = new List('faq-list', {
+			valueNames: ['question', 'answer'],
+			plugins: [ ListFuzzySearch() ]
+		});
 	});
 </script>
 </body>

@@ -3373,6 +3373,7 @@ html body .button.processing {
   .header.second {
     text-align: center;
     margin-bottom: 2em;
+    height: 4.5em;
   }
   .col1,
   .panel.left {
@@ -3837,6 +3838,12 @@ html body .button.processing {
 .header .logo img {
   max-width: 150px;
 }
+.header .logo.no-img {
+  background: transparent url('../img/logo/logo.png') 0 0 no-repeat;
+  background-size: 150px auto;
+  width: 150px;
+  height: 30px;
+}
 .header h1 {
   display: none;
 }
@@ -3850,6 +3857,10 @@ html body .button.processing {
   .header .navigation.primary .home:hover a {
     background: transparent url('../img/logo/icon-48.png') 0 0 no-repeat;
     background-size: 20px 20px;
+  }
+  .header .logo.no-img {
+    background: transparent url('../img/logo/logo@2x.png') 0 0 no-repeat;
+    background-size: 150px auto;
   }
 }
 /*

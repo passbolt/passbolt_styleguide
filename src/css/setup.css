@@ -3915,6 +3915,7 @@ input[type=text].fluid {
   .header.second {
     text-align: center;
     margin-bottom: 2em;
+    height: 4.5em;
   }
   .col1,
   .panel.left {
@@ -4071,6 +4072,12 @@ input[type=text].fluid {
 .header .logo img {
   max-width: 150px;
 }
+.header .logo.no-img {
+  background: transparent url('../img/logo/logo.png') 0 0 no-repeat;
+  background-size: 150px auto;
+  width: 150px;
+  height: 30px;
+}
 .header h1 {
   display: none;
 }
@@ -4084,6 +4091,10 @@ input[type=text].fluid {
   .header .navigation.primary .home:hover a {
     background: transparent url('../img/logo/icon-48.png') 0 0 no-repeat;
     background-size: 20px 20px;
+  }
+  .header .logo.no-img {
+    background: transparent url('../img/logo/logo@2x.png') 0 0 no-repeat;
+    background-size: 150px auto;
   }
 }
 /* Small Progress bar */

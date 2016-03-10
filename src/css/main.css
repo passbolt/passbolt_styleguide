@@ -4035,6 +4035,12 @@ input[type=text].fluid {
 .header .logo img {
   max-width: 150px;
 }
+.header .logo.no-img {
+  background: transparent url('../img/logo/logo.png') 0 0 no-repeat;
+  background-size: 150px auto;
+  width: 150px;
+  height: 30px;
+}
 .header h1 {
   display: none;
 }
@@ -4049,22 +4055,31 @@ input[type=text].fluid {
     background: transparent url('../img/logo/icon-48.png') 0 0 no-repeat;
     background-size: 20px 20px;
   }
+  .header .logo.no-img {
+    background: transparent url('../img/logo/logo@2x.png') 0 0 no-repeat;
+    background-size: 150px auto;
+  }
 }
 /* search */
+.inline-search,
 .search {
   margin-top: 1em;
 }
+.inline-search legend,
 .search legend,
+.inline-search label,
 .search label {
   display: none;
   width: 10em;
 }
+.inline-search input[type=search],
 .search input[type=search] {
   float: left;
   width: 65%;
   margin-bottom: 0;
   padding: .313em .625em;
 }
+.inline-search button,
 .search button {
   height: 2.571em;
   /* 36px */
@@ -4073,6 +4088,7 @@ input[type=text].fluid {
   border-left: 0;
   border-radius: 0px 2px 2px 0px;
 }
+.inline-search button .fa-search,
 .search button .fa-search {
   font-size: 1.4em;
 }
@@ -4083,6 +4099,7 @@ input[type="search"]::-webkit-search-cancel-button {
 }
 /* rescale on small screen */
 @media all and (max-width: 480px) {
+  .inline-search input[type=search],
   .search input[type=search] {
     width: 55%;
   }

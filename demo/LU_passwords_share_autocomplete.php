@@ -2,7 +2,7 @@
 <html class=" js websqldatabase draganddrop cssscrollbar" lang="en">
 <head>
     <?php include('includes/LU_meta.php'); ?>
-	<script type="text/javascript" src="js/jquery.js"></script>
+	<script type="text/javascript" src="js/jquery-2.1.3.min.js"></script>
 	<style>
 		/** The following style will be applied dynamically */
 		#passbolt-iframe-password-share {

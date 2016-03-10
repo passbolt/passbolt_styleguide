@@ -70,6 +70,14 @@
 		img {
 			max-width: 150px;
 		}
+
+		// transition class until we remove all the img tags from html
+		&.no-img {
+			background: transparent url('@{images}/logo/logo.png') 0 0 no-repeat;
+			background-size: 150px auto;
+			width:150px;
+			height:30px;
+		}
 	}
 
 	/* do not show h1 in header */
@@ -93,6 +101,15 @@ only screen and (min-resolution: 1.5dppx) {
 		a:focus, &:hover a {
 			background: transparent url('@{images}/logo/icon-48.png') 0 0 no-repeat;
 			background-size: 20px 20px;
+		}
+	}
+
+	.header .logo {
+
+		// transition class until we remove all the img tags from html
+		&.no-img {
+			background: transparent url('@{images}/logo/logo@2x.png') 0 0 no-repeat;
+			background-size: 150px auto;
 		}
 	}
 }
