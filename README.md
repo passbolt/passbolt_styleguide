@@ -15,17 +15,19 @@ This is the official styleguide for Passbolt the open source password manager fo
 This styleguide is used to extend, minify and test the stylesheets used by the different
 passbolt components such as the website, the firefox addon, etc.
 
-In /demo you can copy of the page HTML so that you can test them out. You will need a
-simple php webserver, since we use it to factorise some of the includes. Apart from this
-the HTML is static.
+In /demo you can find a copy of each of the page HTML (or main states in case of the one page client)
+so that you can test them out. You will need a simple php webserver, since we use it to factorise
+some of the includes. Apart from this the HTML is static.
 
 In /src and /build you can find the assets that are used by other projects, like the images
 the less files, the minified css files, fonts, etc.
+
 
 Legal
 ==========
 
 Images and logos in /src/img/third_party belongs to their respective owner.
+
 Other images are distributed under creative common BY-NC-SA
 https://creativecommons.org/licenses/by-nc-sa/3.0/
 

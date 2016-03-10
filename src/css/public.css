@@ -4435,6 +4435,7 @@ input[type=text].fluid {
   color: #333333;
   border-left: 5px solid #dddddd;
 }
+.panel .navigation li.active,
 .panel .navigation li.selected {
   font-weight: bold;
   border-left: 5px solid #d40101;
@@ -4819,5 +4820,42 @@ table.table-info.horizontal tbody tr:nth-child(even) {
   .tldr {
     margin-top: 3em;
     max-width: 20em;
+  }
+}
+/* search */
+.search {
+  margin-top: 1em;
+}
+.search legend,
+.search label {
+  display: none;
+  width: 10em;
+}
+.search input[type=search] {
+  float: left;
+  width: 65%;
+  margin-bottom: 0;
+  padding: .313em .625em;
+}
+.search button {
+  height: 2.571em;
+  /* 36px */
+  float: left;
+  margin-left: -2px;
+  border-left: 0;
+  border-radius: 0px 2px 2px 0px;
+}
+.search button .fa-search {
+  font-size: 1.4em;
+}
+/* remove webkit search input decoration and cancel button */
+input[type="search"]::-webkit-search-decoration,
+input[type="search"]::-webkit-search-cancel-button {
+  display: none;
+}
+/* rescale on small screen */
+@media all and (max-width: 480px) {
+  .search input[type=search] {
+    width: 55%;
   }
 }
