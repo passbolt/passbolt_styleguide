@@ -44,3 +44,13 @@
 		}
 	};
 </script>
+<script type="application/javascript">
+	function resizeElement(selector, dimension) {
+		if (typeof dimension.height != 'undefined') {
+			$(selector).css('height', dimension.height);
+		}
+		if (typeof dimension.width != 'undefined') {
+			$(selector).css('width', dimension.width);
+		}
+	}
+</script>
