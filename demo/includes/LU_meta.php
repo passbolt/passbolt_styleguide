@@ -19,7 +19,7 @@
 <link rel="stylesheet" type="text/css" href="css/devel.css">
 <link rel="stylesheet" type="text/css" href="css/external.css">
 <script src="js/modernizr.js"></script>
-<script src="js/jquery.js"></script>
+<script src="js/jquery-2.1.3.min.js"></script>
 <script type="application/javascript">
 	var cakephpConfig = {
 		app: {

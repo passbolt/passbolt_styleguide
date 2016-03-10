@@ -1,7 +1,7 @@
 <base href="../src/">
 <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
 <link rel="stylesheet" type="text/css" href="css/main_ff.css">
-<script src="js/jquery.js"></script>
+<script src="js/jquery-2.1.3.min.js"></script>
 <script type="application/javascript">
 	var resizeIframe = function(selector, options) {
 		// Get the dimension of the current document.
