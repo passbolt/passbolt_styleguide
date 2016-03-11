@@ -4775,6 +4775,20 @@ table.table-info.horizontal tbody tr:nth-child(even) {
 .tldr.photoalbum .photo.photo-3 {
   display: none;
 }
+article figure {
+  width: 100%;
+  text-align: center;
+  padding: 1em 0;
+}
+article figure img {
+  margin: auto;
+  position: relative;
+}
+article figure .legend {
+  display: inline-block;
+  margin-top: .5em;
+  font-style: italic;
+}
 /* Don't show fancy photo on mobile */
 @media all and (min-width: 980px) {
   .tldr.photoalbum .photo.photo-1 {

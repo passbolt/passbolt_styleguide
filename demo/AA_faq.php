@@ -41,7 +41,7 @@
 		</div>
 	</div>
 
-	<div class="panel main ">
+	<div class="panel main">
 		<!-- wizard steps -->
 		<div class="panel left">
 			<div class="navigation wizard scrollspy" role="navigation">
@@ -134,6 +134,31 @@
 						</div>
 						<div class="col5 last"></div>
 					</div>
+					</li>
+					<li>
+						<div class="row">
+							<div class="col7">
+								<h3 class="question">What is a "security token" and why is it important?</h3>
+								<div class="answer">
+									<p>
+										This token is used to prevent malicious web pages to trick you by mimicking
+										passbolt dialogs in order to to steal your data, e.g. to protect your from
+										phishing attacks.
+									</p>
+									<figure>
+										<img src="../src/img/screenshots/LU_security_token.png" src="example of a security token"
+											 style="max-width:450px;">
+										<span class="legend">fig. example of security token</span>
+									</figure>
+									<p>
+										This cue will be shown whenever we ask you for your master password and
+										other sensitive places to help make sure you are dealing with an authentic
+										passbolt dialog and not a fake one!
+									</p>
+								</div>
+							</div>
+							<div class="col5 last"></div>
+						</div>
 					</li>
 					<li>
 					<div class="row">
