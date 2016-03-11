@@ -135,6 +135,7 @@ html body .hidden {
   -moz-animation-iteration-count: infinite;
   -moz-animation-timing-function: linear;
 }
+/* list */
 /* palette */
 /* borders */
 /* font */
@@ -4877,14 +4878,20 @@ input[type="search"]::-webkit-search-cancel-button {
     width: 55%;
   }
 }
-.faq ul {
+.faq ul.list {
   margin: 0;
   padding: 0;
 }
-.faq ul li {
+.faq ul.list li {
   list-style-type: none;
   margin: 0;
   padding: 0;
+}
+.faq ul.list ul li {
+  list-style: circle;
+  margin-left: 1em;
+  padding-left: .5em;
+  margin-bottom: .5em;
 }
 /* reset layout styles on smaller screen */
 @media all and (max-width: 980px) {

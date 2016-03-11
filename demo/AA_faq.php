@@ -75,14 +75,12 @@
 					<li>
 					<div class="row">
 						<div class="col7">
-							<div>
-								<h2 id="introduction">Frequently Asked Questions</h2>
-								<h3 class="question">What is passbolt?</h3>
-								<div class="answer">
+							<h2 id="introduction">Frequently Asked Questions</h2>
+							<h3 class="question">What is passbolt?</h3>
+							<div class="answer">
 								<p>
 									Passbolt is a password manager that allows people to securely share and store credentials. For instance, the wifi password of your office, or the administrator password of a router, or your organisation social media account password, can be secured using Passbolt.
 								</p>
-								</div>
 							</div>
 						</div>
 						<div class="col5 last">
