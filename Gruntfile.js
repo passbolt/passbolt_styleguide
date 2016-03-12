@@ -26,6 +26,18 @@ module.exports = function(grunt) {
 				ext: ".css"
 			}
 		},
+		shell: {
+			'publish': {
+				options: {
+					stderr: false
+				},
+				command: "git commit -am '<%= pkg.version %>';" +
+								 "git tag -a <%= pkg.version %> -m '<%= pkg.version %>';" +
+								 "git push origin <%= pkg.version %>;" +
+								 "git push;" +
+								 "npm publish;"
+			}
+		},
 		cssmin: {
 			options: {
 				banner: '/**!\n'+
@@ -64,17 +76,12 @@ module.exports = function(grunt) {
 	// Initialise
 
 	grunt.loadNpmTasks('grunt-contrib-cssmin');
-
 	grunt.loadNpmTasks('grunt-contrib-concat');
-
 	grunt.loadNpmTasks('grunt-contrib-clean');
-
 	grunt.loadNpmTasks('grunt-lesslint');
-
 	grunt.loadNpmTasks('grunt-contrib-less');
-
 	grunt.loadNpmTasks('grunt-contrib-watch');
-
+	grunt.loadNpmTasks('grunt-shell');
 
 	// ========================================================================
 	// Register Tasks
@@ -88,6 +95,13 @@ module.exports = function(grunt) {
 
 	// Run 'grunt css' to compile LESS into CSS, combine and minify
 	grunt.registerTask('css', ['clean:css', 'less', 'cssmin']);
+
+	// Tag and publish the styleguide
+	grunt.registerTask('styleguide-publish', [ 'shell:publish']);
+
+	// 'grunt' will check code quality, and if no errors,
+	// compile LESS to CSS, and minify and concatonate all JS and CSS
+	grunt.registerTask('default', [ 'clean', 'less', 'cssmin']);
 
 	// 'grunt' will check code quality, and if no errors,
 	// compile LESS to CSS, and minify and concatonate all JS and CSS

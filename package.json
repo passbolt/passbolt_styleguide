@@ -1,8 +1,8 @@
 {
   "name": "passbolt-styleguide",
-  "version": "0.3.31",
-  "license": "GNU Affero General Public License http://www.gnu.org/licenses/agpl-3.0.en.html",
-  "copyright": "Copyright 2015, Bolt Softwares Private Ltd",
+  "version": "0.3.32",
+  "license": "AGPL-3.0",
+  "copyright": "Copyright 2016, Bolt Softwares Private Ltd",
   "description": "Passbolt styleguide contains common styling assets used by the different sites, plugin, etc.",
   "repository": "https://github.com/passbolt/passbolt_styleguide",
   "devDependencies": {
@@ -15,6 +15,7 @@
     "grunt-contrib-less": "~0.8.2",
     "grunt-contrib-uglify": "~0.2.7",
     "grunt-contrib-watch": "~0.5.3",
+    "grunt-shell": "~1.1.1",
     "grunt-lesslint": "~0.15.0"
   }
 }

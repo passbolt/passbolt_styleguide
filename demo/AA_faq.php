@@ -10,6 +10,7 @@
 	<script src="../src/js/bootstrap-scrollspy.js"></script>
 	<script src="../src/js/list.min.js"></script>
 	<script src="../src/js/list.fuzzysearch.min.js"></script>
+	<script src="../src/js/imagelightbox.min.js"></script>
 </head>
 <body id="faq-list">
 <div id="container" class="page background">
@@ -92,23 +93,22 @@
 					</div>
 					</li>
 					<li>
-					<div class="row">
-						<div class="col7">
-							<div>
-								<h3 class="question">Why does my organisation need a password manager?</h3>
+						<div class="row">
+							<div class="col7">
+								<h3 class="question">What functionalities do you support?</h3>
 								<div class="answer">
-								<p>
-									A password manager allows you to comfortably implement best security practices and therefore reduces risks for you and your organisation.
-								</p><p>
-									With a password manager you can prevent your team from reusing the same password on multiple systems. You can also make sure they generate stronger passwords by default, since they do not have to remember them anymore. It also makes it easier to rotate credentials, e.g. help you change your passwords regularly,  every 40 days for example.
-								</p><p>
-									Additionally, having an overview of who has access to what, allows you to reset passwords when somebody leaves your organisation. Reciprocally it can also help facilitate when someone is joining your team, since a new member can easily be given access to the all the password they need. It also prevents loss of credentials since you can perform backups.
-								</p>
+									<p>
+										Here is an overview of the key functionality of Passbolt at present (in blue), and
+										what we have in mind for the future (in white). Click on the picture to enlarge.
+									</p>
+									<figure>
+										<a href="../src/img/diagrams/functional_overview.png" class="lightbox">
+											<img alt="Passbolt Functional Overview" src="../src/img/diagrams/functional_overview.png"/>
+										</a>
+									</figure>
 								</div>
 							</div>
 						</div>
-						<div class="col5 last"></div>
-					</div>
 					</li>
 					<li>
 					<div class="row">
@@ -226,6 +226,8 @@
 			valueNames: ['question', 'answer'],
 			plugins: [ ListFuzzySearch() ]
 		});
+
+
 	});
 </script>
 </body>

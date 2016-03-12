@@ -4762,19 +4762,13 @@ table.table-info.horizontal tbody tr:nth-child(even) {
 .tooltip-left.large:after {
   margin-top: 6px;
 }
+/* picture in sidebar */
 .col4 img.illustration,
 .col5 img.illustration {
   max-width: 275px;
   margin: 2em auto;
 }
-.tldr.photoalbum .photo {
-  border: 0.5em solid #ffffff;
-  box-shadow: 2px 2px 10px #dddddd;
-}
-.tldr.photoalbum .photo.photo-1,
-.tldr.photoalbum .photo.photo-3 {
-  display: none;
-}
+/* figure in article */
 article figure {
   width: 100%;
   text-align: center;
@@ -4789,33 +4783,43 @@ article figure .legend {
   margin-top: .5em;
   font-style: italic;
 }
-/* Don't show fancy photo on mobile */
-@media all and (min-width: 980px) {
-  .tldr.photoalbum .photo.photo-1 {
-    display: inline;
-    margin-top: 3em;
-    -ms-transform: rotate(7deg);
-    /* IE 9 */
-    -webkit-transform: rotate(7deg);
-    /* Chrome, Safari, Opera */
-    transform: rotate(7deg);
+/* lightbox */
+#imagelightbox {
+  position: absolute;
+  z-index: 9999;
+  -ms-touch-action: none;
+  touch-action: none;
+  overflow: hidden;
+}
+#imagelightbox-overlay {
+  overflow: hidden;
+  background-color: #ffffff;
+  background-color: rgba(255, 255, 255, 0.9);
+  position: fixed;
+  z-index: 9998;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+#imagelightbox-overlay {
+  -webkit-animation: fade-in 0.25s linear;
+  animation: fade-in 0.25s linear;
+}
+@-webkit-keyframes fade-in {
+  from {
+    opacity: 0;
   }
-  .tldr.photoalbum .photo.photo-2 {
-    -ms-transform: rotate(-7deg);
-    /* IE 9 */
-    -webkit-transform: rotate(-7deg);
-    /* Chrome, Safari, Opera */
-    transform: rotate(-7deg);
-    margin-top: -4em;
+  to {
+    opacity: 1;
   }
-  .tldr.photoalbum .photo.photo-3 {
-    display: inline;
-    -ms-transform: rotate(5deg);
-    /* IE 9 */
-    -webkit-transform: rotate(5deg);
-    /* Chrome, Safari, Opera */
-    transform: rotate(5deg);
-    margin-left: 2em;
+}
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
   }
 }
 .tldr {
@@ -4914,5 +4918,43 @@ input[type="search"]::-webkit-search-cancel-button {
   }
   .header.second .col2.search-wrapper input[type=search] {
     width: 70%;
+  }
+}
+/* credit photo album */
+.tldr.photoalbum .photo {
+  border: 0.5em solid #ffffff;
+  box-shadow: 2px 2px 10px #dddddd;
+}
+.tldr.photoalbum .photo.photo-1,
+.tldr.photoalbum .photo.photo-3 {
+  display: none;
+}
+/* Don't show fancy photo on mobile */
+@media all and (min-width: 980px) {
+  .tldr.photoalbum .photo.photo-1 {
+    display: inline;
+    margin-top: 3em;
+    -ms-transform: rotate(7deg);
+    /* IE 9 */
+    -webkit-transform: rotate(7deg);
+    /* Chrome, Safari, Opera */
+    transform: rotate(7deg);
+  }
+  .tldr.photoalbum .photo.photo-2 {
+    -ms-transform: rotate(-7deg);
+    /* IE 9 */
+    -webkit-transform: rotate(-7deg);
+    /* Chrome, Safari, Opera */
+    transform: rotate(-7deg);
+    margin-top: -4em;
+  }
+  .tldr.photoalbum .photo.photo-3 {
+    display: inline;
+    -ms-transform: rotate(5deg);
+    /* IE 9 */
+    -webkit-transform: rotate(5deg);
+    /* Chrome, Safari, Opera */
+    transform: rotate(5deg);
+    margin-left: 2em;
   }
 }
