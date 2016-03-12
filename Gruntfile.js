@@ -31,11 +31,13 @@ module.exports = function(grunt) {
 				options: {
 					stderr: false
 				},
-				command: "git commit -am '<%= pkg.version %>';" +
-								 "git tag -a <%= pkg.version %> -m '<%= pkg.version %>';" +
-								 "git push origin <%= pkg.version %>;" +
-								 "git push;" +
-								 "npm publish;"
+				command: [
+					'git commit -am \'<%= pkg.version %>\'',
+					'git tag -a <%= pkg.version %> -m \'<%= pkg.version %>\'',
+					'git push origin <%= pkg.version %>',
+					'git push',
+					'npm publish'
+				].join('&&')
 			}
 		},
 		cssmin: {
