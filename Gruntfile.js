@@ -29,7 +29,7 @@ module.exports = function(grunt) {
 		shell: {
 			'publish': {
 				options: {
-					stderr: false
+					stdout: true
 				},
 				command: [
 					'git commit -am \'<%= pkg.version %>\'',
