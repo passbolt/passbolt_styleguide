@@ -5981,6 +5981,9 @@ table.table-info.horizontal tbody tr:nth-child(even) {
     font-size: .831em;
     margin-top: .5em;
   }
+  .fa.fa-lg {
+    line-height: 1;
+  }
 }
 /**
  * Based on Farbtastic Color Picker 1.2

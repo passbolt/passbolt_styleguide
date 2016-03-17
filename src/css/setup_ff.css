@@ -5026,6 +5026,9 @@ table.table-info.horizontal tbody tr:nth-child(even) {
     font-size: .831em;
     margin-top: .5em;
   }
+  .fa.fa-lg {
+    line-height: 1;
+  }
 }
 .dialog.key-info table {
   margin-top: 1em;
