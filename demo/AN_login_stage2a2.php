@@ -19,16 +19,14 @@
         <div class="row js_main-login-section">
             <div class="col6 push1 information">
                 <h2>Welcome back!</h2>
-                <div class="plugin-check-wrapper">
+                <div class="plugin-chec
+            },k-wrapper">
                     <div class="plugin-check firefox success">
                         <p class="message">Nice one! Firefox plugin is installed and configured. You are good to go!.</p>
                     </div>
                 </div>
                 <div class="plugin-check-wrapper">
-                    <div class="plugin-check gpg success">
-                        <p class="message">Server identity is verified!
-                            View the key: <a href="#">C7FF4211</a></p>
-                    </div>
+	                <div class="plugin-check gpg error"><p class="message">There is no user associated with this key</p><p></p></div>
                 </div>
             </div>
             <div class="col4 push1 last">
