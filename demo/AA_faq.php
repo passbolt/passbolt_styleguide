@@ -27,7 +27,7 @@
 		<div class="col2 search-wrapper">
 			<h2 class="visuallyhidden"><span>Frequently Asked questions</span></h2>
 			<!-- if js is enabled only -->
-			<div>
+			<div class="js-only">
 				<form class="search ready">
 					<div class="input required">
 						<label for="filter_faq">Search</label>
@@ -47,6 +47,9 @@
 		<div class="panel left">
 			<div class="navigation wizard scrollspy" role="navigation">
 				<ul class="nav">
+					<li>
+						<h2><a href="#">FAQ sections</a></h2>
+					</li>
 					<li>
 						<a href="#introduction">Introduction</a>
 					</li>
@@ -71,12 +74,19 @@
 		<!-- main -->
 		<div class="panel middle" data-spy="scroll" data-target=".scrollspy">
 			<div class="grid grid-responsive-12">
+				<span id="introduction"></span>
+				<?php $_GET['breadcrumbs'] = array(
+						'home' => 'AA_home.php',
+						'help' => 'AA_help.php',
+						'faq' => 'AA_faq.php'
+				);
+				include('includes/LU_breadcrumbs.php'); ?>
 				<article class="faq">
 					<ul class="list">
 					<li>
 					<div class="row">
 						<div class="col7">
-							<h2 id="introduction">Frequently Asked Questions</h2>
+							<h2 >Frequently Asked Questions</h2>
 							<h3 class="question">What is passbolt?</h3>
 							<div class="answer">
 								<p>

@@ -46,6 +46,15 @@
 			<div class="grid grid-responsive-12">
 				<article>
 					<div class="row">
+						<div class="col12">
+							<?php $_GET['breadcrumbs'] = array(
+									'home' => '/',
+									'help' => '/help'
+							);
+							include('includes/LU_breadcrumbs.php'); ?>
+						</div>
+					</div>
+					<div class="row">
 						<div class="col7">
 							<div>
 								<h2>Privacy Policy</h2>

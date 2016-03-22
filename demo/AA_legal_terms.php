@@ -46,6 +46,16 @@
 			<div class="grid grid-responsive-12">
 			<article>
 				<div class="row">
+					<div class="col12">
+						<?php $_GET['breadcrumbs'] = array(
+								'home' => '/',
+								'legal' => '/legal',
+								'terms of service' => '/terms'
+						);
+						include('includes/LU_breadcrumbs.php'); ?>
+					</div>
+				</div>
+				<div class="row">
 					<div class="col7">
 						<div>
 							<h2>Terms of Service</h2>

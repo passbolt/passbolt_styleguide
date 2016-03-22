@@ -8,6 +8,7 @@
   border-bottom: 1px solid @border-default;
   ul {
     padding-top: 0.2em;
+    margin-left:0;
     li {
       display: inline;
       font-size: .8em; /* 12px/base16>15 */
@@ -18,6 +19,7 @@
       }
       &:first-child {
         margin-left: 0;
+        padding-left:0;
       }
       &:first-child:before {
         content: "";
@@ -27,10 +29,4 @@
   div.main-cell {
     display: inline;
   }
-}
-
-@media all and (max-width: 600px) {
-	.breadcrumbs {
-		display:none;
-	}
 }

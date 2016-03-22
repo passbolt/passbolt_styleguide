@@ -3440,7 +3440,7 @@ input[type=text].fluid {
 }
 .panel.main {
   top: 10em;
-  bottom: 2.0em;
+  bottom: 2em;
   height: auto;
   padding: 0;
 }
@@ -3492,14 +3492,14 @@ input[type=text].fluid {
   width: 99%;
 }
 /* hide left column when there is no space */
-@media all and (max-width: 980px) {
+@media all and (max-width: 1024px) {
   .col1,
   .panel.left {
     display: none;
   }
   .panel.middle,
   .col2_3 {
-    width: 98%;
+    width: 99%;
     left: 1%;
   }
   .col2 {
@@ -3508,20 +3508,8 @@ input[type=text].fluid {
   }
 }
 /*
-	One% CSS Grid - 12 Columns Fluid CSS Grid System
-
-	Why One% ? Let’s count ...
-		we have 12 columns (magic number divided by 2, 3, 4, 6)
-		for 12 columns we need 11 margins
-		so if we count margin 3%, then 3% * 11 margins = 33%
-		and if we count width of 1 column 5.5%, than 5.5% * 12 columns = 66%
-		in the end we have 33% + 66% = 99% aaand ???
-		1% is still here so that's the name - One%
-
-	1200px - perfectly fits 1280 screens
-			12 columns
-			margin 3% / 36px (full-width)
-			col1 5.5% / 66px (full-width)
+	Grid Layout
+	@credit: One% CSS Grid - 12 Columns Fluid CSS Grid System
 */
 /*
  * Main container for all
@@ -3529,7 +3517,7 @@ input[type=text].fluid {
 .grid-responsive-12,
 .grid {
   margin: 0 auto;
-  padding: 0 0 0 1%;
+  padding: 0;
   max-width: 1220px;
 }
 .grid-responsive-12 .row,
@@ -3565,7 +3553,7 @@ input[type=text].fluid {
  * 2. The use of `table` rather than `block` is only necessary if using
  *	`:before` to contain the top-margins of child elements.
  */
-  padding: 0;
+  padding: 0 .5em 0 1em;
 }
 .grid-responsive-12 .row:before,
 .grid .row:before,
@@ -3610,11 +3598,14 @@ input[type=text].fluid {
 .grid-responsive-12 .row .col10,
 .grid .row .col10,
 .grid-responsive-12 .row .col11,
-.grid .row .col11 {
+.grid .row .col11,
+.grid-responsive-12 .row .col12,
+.grid .row .col12 {
+  position: relative;
+  left: auto;
   float: none;
   width: 99%;
   box-sizing: border-box;
-  padding: .5em;
   /*
  * For IE 6/7 only
  * Include this rule to trigger hasLayout and contain floats.
@@ -3669,6 +3660,8 @@ input[type=text].fluid {
 .grid .row .col10:before,
 .grid-responsive-12 .row .col11:before,
 .grid .row .col11:before,
+.grid-responsive-12 .row .col12:before,
+.grid .row .col12:before,
 .grid-responsive-12 .row .col1:after,
 .grid .row .col1:after,
 .grid-responsive-12 .row .col2:after,
@@ -3690,7 +3683,9 @@ input[type=text].fluid {
 .grid-responsive-12 .row .col10:after,
 .grid .row .col10:after,
 .grid-responsive-12 .row .col11:after,
-.grid .row .col11:after {
+.grid .row .col11:after,
+.grid-responsive-12 .row .col12:after,
+.grid .row .col12:after {
   content: "";
   display: table;
 }
@@ -3715,7 +3710,9 @@ input[type=text].fluid {
 .grid-responsive-12 .row .col10:after,
 .grid .row .col10:after,
 .grid-responsive-12 .row .col11:after,
-.grid .row .col11:after {
+.grid .row .col11:after,
+.grid-responsive-12 .row .col12:after,
+.grid .row .col12:after {
   clear: both;
 }
 .grid-responsive-12 .row .col1:before,
@@ -3740,6 +3737,8 @@ input[type=text].fluid {
 .grid .row .col10:before,
 .grid-responsive-12 .row .col11:before,
 .grid .row .col11:before,
+.grid-responsive-12 .row .col12:before,
+.grid .row .col12:before,
 .grid-responsive-12 .row .col1:after,
 .grid .row .col1:after,
 .grid-responsive-12 .row .col2:after,
@@ -3761,7 +3760,9 @@ input[type=text].fluid {
 .grid-responsive-12 .row .col10:after,
 .grid .row .col10:after,
 .grid-responsive-12 .row .col11:after,
-.grid .row .col11:after {
+.grid .row .col11:after,
+.grid-responsive-12 .row .col12:after,
+.grid .row .col12:after {
   content: "";
   display: table;
 }
@@ -3786,7 +3787,9 @@ input[type=text].fluid {
 .grid-responsive-12 .row .col10:after,
 .grid .row .col10:after,
 .grid-responsive-12 .row .col11:after,
-.grid .row .col11:after {
+.grid .row .col11:after,
+.grid-responsive-12 .row .col12:after,
+.grid .row .col12:after {
   clear: both;
 }
 .grid-responsive-12 .row .col1 img,
@@ -3820,7 +3823,7 @@ input[type=text].fluid {
 /*
  * large devices
  */
-@media all and (min-width: 960px) {
+@media all and (min-width: 780px) {
   /*
 	 * Common columns definitions
 	 */
@@ -3885,6 +3888,14 @@ input[type=text].fluid {
   }
   .grid .row .push2 {
     margin-left: 14%;
+  }
+}
+/*
+ * large devices
+ */
+@media all and (min-width: 1024px) {
+  .grid .row {
+    padding: 0;
   }
 }
 /*
@@ -4210,7 +4221,7 @@ input[type="search"]::-webkit-search-cancel-button {
   display: block;
 }
 /* hide left column when there is no space */
-@media all and (max-width: 980px) {
+@media all and (max-width: 1024px) {
   .user.profile {
     display: block;
     width: auto;
@@ -4233,6 +4244,7 @@ input[type="search"]::-webkit-search-cancel-button {
 }
 .breadcrumbs ul {
   padding-top: 0.2em;
+  margin-left: 0;
 }
 .breadcrumbs ul li {
   display: inline;
@@ -4246,17 +4258,13 @@ input[type="search"]::-webkit-search-cancel-button {
 }
 .breadcrumbs ul li:first-child {
   margin-left: 0;
+  padding-left: 0;
 }
 .breadcrumbs ul li:first-child:before {
   content: "";
 }
 .breadcrumbs div.main-cell {
   display: inline;
-}
-@media all and (max-width: 600px) {
-  .breadcrumbs {
-    display: none;
-  }
 }
 /* actions */
 .header.third .main-action-wrapper {
@@ -4287,14 +4295,14 @@ input[type="search"]::-webkit-search-cancel-button {
   float: left;
 }
 /* hide secondary actions if there is no space */
-@media all and (max-width: 980px) {
+@media all and (max-width: 1024px) {
   .header.third .actions-wrapper .dropdown,
   .header.third .actions-wrapper .actions.secondary {
     display: none;
   }
 }
 /* hide icons if there is no space */
-@media all and (max-width: 980px) {
+@media all and (max-width: 1024px) {
   .header.third .actions-wrapper .actions i {
     display: none;
   }
@@ -5346,7 +5354,7 @@ input[type="search"]::-webkit-search-cancel-button {
   margin-top: -2.75em;
 }
 /* place sidebar on top of everything when there is no space */
-@media all and (max-width: 980px) {
+@media all and (max-width: 1024px) {
   .panel.aside {
     position: absolute;
     right: 0em;
@@ -6296,6 +6304,41 @@ table.table-info.horizontal tbody tr:nth-child(even) {
 .dialog-wrapper.session-expired-dialog .dialog-close {
   display: none;
 }
+/*
+ * Password workspace
+ * @todo better namespacing
+ */
+/* drag n drop */
+#js_dragged_resource {
+  padding: 6px 10px;
+  background-color: #ffffff;
+  border: 1px solid #dddddd;
+  -webkit-box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  -moz-box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+#js_dragged_resource span.name {
+  font-weight: bold;
+}
+/* sidebar */
+.panel.aside .resource .detailed-information li.password .value {
+  height: 1.6em;
+  padding-top: 0.2em;
+}
+/* unused column
+	@todo: remove html
+*/
+.js_grid_column_owner,
+.js_grid_column_copyLogin,
+.js_grid_column_copySecret {
+  display: none;
+}
+/* hide left column when there is no space */
+@media all and (max-width: 1024px) {
+  .tableview .js_grid_column_modified {
+    display: none;
+  }
+}
 /* sidebar / user details in overview */
 .panel.aside .user .header {
   /*
@@ -6401,41 +6444,6 @@ table.table-info.horizontal tbody tr:nth-child(even) {
 /* login history icon column centerign */
 .login-history td:first-child {
   text-align: center;
-}
-/*
- * Password workspace
- * @todo better namespacing
- */
-/* drag n drop */
-#js_dragged_resource {
-  padding: 6px 10px;
-  background-color: #ffffff;
-  border: 1px solid #dddddd;
-  -webkit-box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  -moz-box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-}
-#js_dragged_resource span.name {
-  font-weight: bold;
-}
-/* sidebar */
-.panel.aside .resource .detailed-information li.password .value {
-  height: 1.6em;
-  padding-top: 0.2em;
-}
-/* unused column
-	@todo: remove html
-*/
-.js_grid_column_owner,
-.js_grid_column_copyLogin,
-.js_grid_column_copySecret {
-  display: none;
-}
-/* hide left column when there is no space */
-@media all and (max-width: 980px) {
-  .tableview .js_grid_column_modified {
-    display: none;
-  }
 }
 /* TODO replace by page level selector */
 .page.settings .main.panel .middle {

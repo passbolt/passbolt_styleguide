@@ -1,16 +1,14 @@
 .panel.middle .grid {
 	padding-bottom:2em;
-}
+	max-width:100%;
 
-/* Scrolling in middle panel in full width */
-@media all and (min-width: 980px) {
-	.panel.middle {
-		overflow-y: scroll;
+	.breadcrumbs {
+		border-bottom:1px dotted @border-default;
 	}
 }
 .header {
 	h2 {
-		margin: 1em 0 1em .5em;
+		margin: 1em 0;
 
 		.button {
 			margin-right: 0.3em;
@@ -18,8 +16,19 @@
 		}
 	}
 }
+
+/* Scrolling in middle panel in full width */
+@media all and (min-width: 1024px) {
+	.panel.middle {
+		overflow-y: scroll;
+	}
+	.panel.main {
+		bottom:2.45em;
+	}
+}
+
 /* reset layout styles on smaller screen */
-@media all and (max-width: 980px) {
+@media all and (max-width: 1024px) {
 	.page, .panel,
 	.header.second + .panel.main, .header.first,
 	.header.second, .col1, .col2, .col3, .col2_3 {
@@ -35,7 +44,11 @@
 	.header.second {
 		text-align: center;
 		margin-bottom: 2em;
-		height:4.5em;
+		height:auto;
+		h2 {
+			max-width:98%;
+			padding-left:1%;
+		}
 	}
 
 	.col1, .panel.left {
@@ -47,7 +60,6 @@
 		width: 98%;
 		left: 1%;
 	}
-
 	.col2 {
 		width: 55%;
 		left: 1%;

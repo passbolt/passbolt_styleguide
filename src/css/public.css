@@ -3423,7 +3423,7 @@ input[type=text].fluid {
 }
 .panel.main {
   top: 10em;
-  bottom: 2.0em;
+  bottom: 2em;
   height: auto;
   padding: 0;
 }
@@ -3475,14 +3475,14 @@ input[type=text].fluid {
   width: 99%;
 }
 /* hide left column when there is no space */
-@media all and (max-width: 980px) {
+@media all and (max-width: 1024px) {
   .col1,
   .panel.left {
     display: none;
   }
   .panel.middle,
   .col2_3 {
-    width: 98%;
+    width: 99%;
     left: 1%;
   }
   .col2 {
@@ -3491,20 +3491,8 @@ input[type=text].fluid {
   }
 }
 /*
-	One% CSS Grid - 12 Columns Fluid CSS Grid System
-
-	Why One% ? Let’s count ...
-		we have 12 columns (magic number divided by 2, 3, 4, 6)
-		for 12 columns we need 11 margins
-		so if we count margin 3%, then 3% * 11 margins = 33%
-		and if we count width of 1 column 5.5%, than 5.5% * 12 columns = 66%
-		in the end we have 33% + 66% = 99% aaand ???
-		1% is still here so that's the name - One%
-
-	1200px - perfectly fits 1280 screens
-			12 columns
-			margin 3% / 36px (full-width)
-			col1 5.5% / 66px (full-width)
+	Grid Layout
+	@credit: One% CSS Grid - 12 Columns Fluid CSS Grid System
 */
 /*
  * Main container for all
@@ -3512,7 +3500,7 @@ input[type=text].fluid {
 .grid-responsive-12,
 .grid {
   margin: 0 auto;
-  padding: 0 0 0 1%;
+  padding: 0;
   max-width: 1220px;
 }
 .grid-responsive-12 .row,
@@ -3548,7 +3536,7 @@ input[type=text].fluid {
  * 2. The use of `table` rather than `block` is only necessary if using
  *	`:before` to contain the top-margins of child elements.
  */
-  padding: 0;
+  padding: 0 .5em 0 1em;
 }
 .grid-responsive-12 .row:before,
 .grid .row:before,
@@ -3593,11 +3581,14 @@ input[type=text].fluid {
 .grid-responsive-12 .row .col10,
 .grid .row .col10,
 .grid-responsive-12 .row .col11,
-.grid .row .col11 {
+.grid .row .col11,
+.grid-responsive-12 .row .col12,
+.grid .row .col12 {
+  position: relative;
+  left: auto;
   float: none;
   width: 99%;
   box-sizing: border-box;
-  padding: .5em;
   /*
  * For IE 6/7 only
  * Include this rule to trigger hasLayout and contain floats.
@@ -3652,6 +3643,8 @@ input[type=text].fluid {
 .grid .row .col10:before,
 .grid-responsive-12 .row .col11:before,
 .grid .row .col11:before,
+.grid-responsive-12 .row .col12:before,
+.grid .row .col12:before,
 .grid-responsive-12 .row .col1:after,
 .grid .row .col1:after,
 .grid-responsive-12 .row .col2:after,
@@ -3673,7 +3666,9 @@ input[type=text].fluid {
 .grid-responsive-12 .row .col10:after,
 .grid .row .col10:after,
 .grid-responsive-12 .row .col11:after,
-.grid .row .col11:after {
+.grid .row .col11:after,
+.grid-responsive-12 .row .col12:after,
+.grid .row .col12:after {
   content: "";
   display: table;
 }
@@ -3698,7 +3693,9 @@ input[type=text].fluid {
 .grid-responsive-12 .row .col10:after,
 .grid .row .col10:after,
 .grid-responsive-12 .row .col11:after,
-.grid .row .col11:after {
+.grid .row .col11:after,
+.grid-responsive-12 .row .col12:after,
+.grid .row .col12:after {
   clear: both;
 }
 .grid-responsive-12 .row .col1:before,
@@ -3723,6 +3720,8 @@ input[type=text].fluid {
 .grid .row .col10:before,
 .grid-responsive-12 .row .col11:before,
 .grid .row .col11:before,
+.grid-responsive-12 .row .col12:before,
+.grid .row .col12:before,
 .grid-responsive-12 .row .col1:after,
 .grid .row .col1:after,
 .grid-responsive-12 .row .col2:after,
@@ -3744,7 +3743,9 @@ input[type=text].fluid {
 .grid-responsive-12 .row .col10:after,
 .grid .row .col10:after,
 .grid-responsive-12 .row .col11:after,
-.grid .row .col11:after {
+.grid .row .col11:after,
+.grid-responsive-12 .row .col12:after,
+.grid .row .col12:after {
   content: "";
   display: table;
 }
@@ -3769,7 +3770,9 @@ input[type=text].fluid {
 .grid-responsive-12 .row .col10:after,
 .grid .row .col10:after,
 .grid-responsive-12 .row .col11:after,
-.grid .row .col11:after {
+.grid .row .col11:after,
+.grid-responsive-12 .row .col12:after,
+.grid .row .col12:after {
   clear: both;
 }
 .grid-responsive-12 .row .col1 img,
@@ -3803,7 +3806,7 @@ input[type=text].fluid {
 /*
  * large devices
  */
-@media all and (min-width: 960px) {
+@media all and (min-width: 780px) {
   /*
 	 * Common columns definitions
 	 */
@@ -3871,6 +3874,14 @@ input[type=text].fluid {
   }
 }
 /*
+ * large devices
+ */
+@media all and (min-width: 1024px) {
+  .grid .row {
+    padding: 0;
+  }
+}
+/*
  * Utilities
  */
 @media all and (max-width: 768px) {
@@ -3880,22 +3891,29 @@ input[type=text].fluid {
 }
 .panel.middle .grid {
   padding-bottom: 2em;
+  max-width: 100%;
 }
-/* Scrolling in middle panel in full width */
-@media all and (min-width: 980px) {
-  .panel.middle {
-    overflow-y: scroll;
-  }
+.panel.middle .grid .breadcrumbs {
+  border-bottom: 1px dotted #dddddd;
 }
 .header h2 {
-  margin: 1em 0 1em .5em;
+  margin: 1em 0;
 }
 .header h2 .button {
   margin-right: 0.3em;
   margin-top: -5px;
 }
+/* Scrolling in middle panel in full width */
+@media all and (min-width: 1024px) {
+  .panel.middle {
+    overflow-y: scroll;
+  }
+  .panel.main {
+    bottom: 2.45em;
+  }
+}
 /* reset layout styles on smaller screen */
-@media all and (max-width: 980px) {
+@media all and (max-width: 1024px) {
   .page,
   .panel,
   .header.second + .panel.main,
@@ -3916,7 +3934,11 @@ input[type=text].fluid {
   .header.second {
     text-align: center;
     margin-bottom: 2em;
-    height: 4.5em;
+    height: auto;
+  }
+  .header.second h2 {
+    max-width: 98%;
+    padding-left: 1%;
   }
   .col1,
   .panel.left {
@@ -4205,6 +4227,39 @@ input[type=text].fluid {
     color: #2894df;
   }
 }
+/*
+ * Breadcrumbs
+ */
+.breadcrumbs {
+  height: 2em;
+  padding: .1875em 0 .1875em 0;
+  margin-bottom: 0;
+  border-bottom: 1px solid #dddddd;
+}
+.breadcrumbs ul {
+  padding-top: 0.2em;
+  margin-left: 0;
+}
+.breadcrumbs ul li {
+  display: inline;
+  font-size: .8em;
+  /* 12px/base16>15 */
+  margin-left: .25em;
+}
+.breadcrumbs ul li:before {
+  content: "›";
+  margin-right: .5em;
+}
+.breadcrumbs ul li:first-child {
+  margin-left: 0;
+  padding-left: 0;
+}
+.breadcrumbs ul li:first-child:before {
+  content: "";
+}
+.breadcrumbs div.main-cell {
+  display: inline;
+}
 /* Dialog */
 .dialog-wrapper {
   position: absolute;
@@ -4404,7 +4459,7 @@ input[type=text].fluid {
   margin-left: 180px;
   padding: .5em 1em .25em 1em;
 }
-@media all and (max-width: 980px) {
+@media all and (max-width: 1024px) {
   .plugin-check.firefox,
   .plugin-check.chrome,
   .plugin-check.gpg,
@@ -4429,6 +4484,10 @@ input[type=text].fluid {
 .panel .navigation {
   margin-top: 1em;
 }
+.panel .navigation h2 {
+  padding: 0;
+  margin: 0;
+}
 .panel .navigation a {
   color: #333333;
   display: block;
@@ -4437,7 +4496,6 @@ input[type=text].fluid {
   text-decoration: none;
 }
 .panel .navigation li {
-  color: #dddddd;
   font-size: 0.938em;
   /* 15px from 16px base */
   padding: .469em 0 .469em 1.333em;
@@ -4846,7 +4904,7 @@ article figure .legend {
   margin-right: 0;
 }
 /* reset layout styles on smaller screen */
-@media all and (min-width: 980px) {
+@media all and (min-width: 1024px) {
   .tldr {
     margin-top: 3em;
     max-width: 20em;
@@ -4912,13 +4970,100 @@ input[type="search"]::-webkit-search-cancel-button {
   margin-bottom: .5em;
 }
 /* reset layout styles on smaller screen */
-@media all and (max-width: 980px) {
+@media all and (max-width: 1024px) {
   .header.second .col2.search-wrapper {
+    min-height: 4em;
     width: 95%;
   }
   .header.second .col2.search-wrapper input[type=search] {
     width: 70%;
   }
+}
+.tile {
+  display: block;
+  margin-bottom: 1em;
+  border: 1px solid #f3f3f3;
+  padding: 1em;
+  padding-top: 0;
+  -webkit-border-radius: 0.214em;
+  -moz-border-radius: 0.214em;
+  border-radius: 0.214em;
+  /*
+ * For IE 6/7 only
+ * Include this rule to trigger hasLayout and contain floats.
+ */
+  /*
+ * Clearfix: contain floats
+ *
+ * For modern browsers
+ * 1. The space content is one way to avoid an Opera bug when the
+ *	`contenteditable` attribute is included anywhere else in the document.
+ *	Otherwise it causes space to appear at the top and bottom of elements
+ *	that receive the `clearfix` class.
+ * 2. The use of `table` rather than `block` is only necessary if using
+ *	`:before` to contain the top-margins of child elements.
+ */
+  /*
+ * For IE 6/7 only
+ * Include this rule to trigger hasLayout and contain floats.
+ */
+  zoom: 1;
+  /*
+ * Clearfix: contain floats
+ *
+ * For modern browsers
+ * 1. The space content is one way to avoid an Opera bug when the
+ *	`contenteditable` attribute is included anywhere else in the document.
+ *	Otherwise it causes space to appear at the top and bottom of elements
+ *	that receive the `clearfix` class.
+ * 2. The use of `table` rather than `block` is only necessary if using
+ *	`:before` to contain the top-margins of child elements.
+ */
+}
+.tile:before,
+.tile:after {
+  content: "";
+  display: table;
+}
+.tile:after {
+  clear: both;
+}
+.tile:before,
+.tile:after {
+  content: "";
+  display: table;
+}
+.tile:after {
+  clear: both;
+}
+.tile:hover {
+  border: 1px solid #dddddd;
+}
+.tile.alt {
+  background: #eeeeee;
+}
+.tile .tile-teaser {
+  font-size: 3em;
+  float: left;
+  width: 30%;
+  padding-top: .25em;
+  color: #888888;
+}
+.tile .tile-title {
+  float: right;
+  font-weight: bold;
+  padding: 1em 0 .5em 0;
+  margin-left: 0;
+  width: 70%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -o-text-overflow: ellipsis;
+  -ms-text-overflow: ellipsis;
+}
+.tile .tile-description {
+  float: right;
+  width: 70%;
 }
 /* credit photo album */
 .tldr.photoalbum .photo {
@@ -4930,7 +5075,7 @@ input[type="search"]::-webkit-search-cancel-button {
   display: none;
 }
 /* Don't show fancy photo on mobile */
-@media all and (min-width: 980px) {
+@media all and (min-width: 1024px) {
   .tldr.photoalbum .photo.photo-1 {
     display: inline;
     margin-top: 3em;
