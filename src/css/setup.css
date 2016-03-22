@@ -3584,7 +3584,6 @@ input[type=text].fluid {
 .grid .row .col11,
 .grid-responsive-12 .row .col12,
 .grid .row .col12 {
-  position: relative;
   left: auto;
   float: none;
   width: 99%;
@@ -3810,6 +3809,9 @@ input[type=text].fluid {
   /*
 	 * Common columns definitions
 	 */
+  .grid .row {
+    padding: 0;
+  }
   .grid .row .col1,
   .grid .row .col2,
   .grid .row .col3,
