@@ -59,8 +59,10 @@ article ul {
 }
 article ol {
 	list-style-type: decimal;
-	li {
-		.bulletlist();
+	li { /* more margin needed for long numbered lists */
+		margin-left: 2em;
+		padding-left: 1em;
+		margin-bottom: .5em;
 	}
 	&.upper-roman {list-style-type: upper-roman;}
 	&.lower-alpha {list-style-type: lower-alpha;}

@@ -813,8 +813,9 @@ article ol {
   list-style-type: decimal;
 }
 article ol li {
-  margin-left: 1.1em;
-  padding-left: .5em;
+  /* more margin needed for long numbered lists */
+  margin-left: 2em;
+  padding-left: 1em;
   margin-bottom: .5em;
 }
 article ol.upper-roman {
