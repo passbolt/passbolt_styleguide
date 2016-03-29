@@ -115,7 +115,7 @@
 						</div>
 						<div class="col5 last">
 							<div class="tldr">
-								<h4 class="visuallyhidden">Cookie and Tracking (Summary)</h4>
+								<h4 class="">Cookie and Tracking (Summary)</h4>
 								<p>
 									<i class="fa fa-thumbs-o-up"></i> Respect "<a href="https://en.wikipedia.org/wiki/Do_Not_Track" target="_blank" rel="nofollow">Do Not Track</a>"
 								</p>

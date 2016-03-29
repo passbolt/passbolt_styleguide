@@ -1,8 +1,9 @@
 .tldr {
 	background:@grey-lightest;
-	padding:2em 1em 1em 1em;
+	padding:1em;
 	i {
 		margin-right: 1em;
+		padding-left:.5em;
 	}
 	&.alt {
 		background:#FFF;
@@ -20,6 +21,16 @@
 			color:@red;
 			margin-right:0;
 		}
+	}
+	h4 {
+		margin-top:.5em;
+	}
+	h4.visuallyhidden + p,
+	p {
+		margin-top:.75em;
+	}
+	h4 + p {
+		margin-top:0;
 	}
 }
 

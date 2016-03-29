@@ -793,7 +793,7 @@ p {
 /* lists */
 article ul li {
   list-style: circle;
-  margin-left: 1em;
+  margin-left: 1.1em;
   padding-left: .5em;
   margin-bottom: .5em;
 }
@@ -4884,10 +4884,11 @@ article figure .legend {
 }
 .tldr {
   background: #f3f3f3;
-  padding: 2em 1em 1em 1em;
+  padding: 1em;
 }
 .tldr i {
   margin-right: 1em;
+  padding-left: .5em;
 }
 .tldr.alt {
   background: #FFF;
@@ -4904,6 +4905,16 @@ article figure .legend {
 .tldr .madeinindia i {
   color: #d40101;
   margin-right: 0;
+}
+.tldr h4 {
+  margin-top: .5em;
+}
+.tldr h4.visuallyhidden + p,
+.tldr p {
+  margin-top: .75em;
+}
+.tldr h4 + p {
+  margin-top: 0;
 }
 /* reset layout styles on smaller screen */
 @media all and (min-width: 1024px) {
@@ -4967,7 +4978,7 @@ input[type="search"]::-webkit-search-cancel-button {
 }
 .faq ul.list ul li {
   list-style: circle;
-  margin-left: 1em;
+  margin-left: 1.1em;
   padding-left: .5em;
   margin-bottom: .5em;
 }
