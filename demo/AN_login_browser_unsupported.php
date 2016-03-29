@@ -18,17 +18,17 @@
 	<div class="grid">
 		<div class="row">
 			<div class="col6 push1 information">
-				<h2>Download the plugin to get started!</h2>
 				<div class="plugin-check-wrapper">
-					<div class="plugin-check chrome error">
+					<h2>Download firefox!</h2>
+					<div class="plugin-check firefox error">
 						<p class="message">
-							Passbolt is not available for your browser. Try with <a href="https://firefox.mozilla.org/">firefox.mozilla.org</a>.
+							Passbolt is not available for your browser. Try with <a href="https://www.mozilla.org/firefox">Mozilla Firefox</a>.
 						</p>
 					</div>
 				</div>
 				<p>
-					The chrome plugin is currently not available. Don't worry, we aim at enabling more browsers in the future.
-					Thanks to consider supporting us financially to this feature move a bit more quickly.
+					Don't worry, we aim at enabling more browsers in the future. Thanks to consider supporting us
+					financially to this feature move a bit more quickly.
 					<a href="#">Support us</a>.
 				</p>
 			</div>
@@ -41,7 +41,7 @@
 						<i class="fa huge fa-download" ></i>
 					</div>
 					<div class="actions-wrapper center">
-						<a class="button primary" href="#">Download firefox</a>
+						<a class="button primary" href="https://www.mozilla.org/firefox">Download firefox</a>
 					</div>
 				</div>
 			</div>
@@ -49,7 +49,7 @@
 		<div class="row">
 			<?php include('includes/AN_promoblock_github.php'); ?>
 			<?php include('includes/AN_promoblock_chromeplugin.php'); ?>
-			<?php include('includes/AN_promoblock_donate.php'); ?>
+			<?php //include('includes/AN_promoblock_donate.php'); ?>
 		</div>
 	</div>
 </div>
