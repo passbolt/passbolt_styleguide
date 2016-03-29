@@ -791,8 +791,10 @@ p {
   /* 11px base 16 */
 }
 /* lists */
+article ul {
+  list-style-type: circle;
+}
 article ul li {
-  list-style: circle;
   margin-left: 1.1em;
   padding-left: .5em;
   margin-bottom: .5em;
@@ -800,6 +802,26 @@ article ul li {
 article ul.double {
   width: 48%;
   float: left;
+}
+article ul.disc {
+  list-style-type: disc;
+}
+article ul.square {
+  list-style-type: square;
+}
+article ol {
+  list-style-type: decimal;
+}
+article ol li {
+  margin-left: 1.1em;
+  padding-left: .5em;
+  margin-bottom: .5em;
+}
+article ol.upper-roman {
+  list-style-type: upper-roman;
+}
+article ol.lower-alpha {
+  list-style-type: lower-alpha;
 }
 /*!
  *  Font Awesome 4.5.0 by @davegandy - http://fontawesome.io - @fontawesome
@@ -4977,7 +4999,6 @@ input[type="search"]::-webkit-search-cancel-button {
   padding: 0;
 }
 .faq ul.list ul li {
-  list-style: circle;
   margin-left: 1.1em;
   padding-left: .5em;
   margin-bottom: .5em;

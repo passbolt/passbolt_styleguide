@@ -45,10 +45,23 @@ p {
 }
 
 /* lists */
-article ul li {
-	.bulletlist();
+article ul {
+	list-style-type: circle;
+	li {
+		.bulletlist();
+	}
+	&.double {
+		width:48%;
+		float:left;
+	}
+	&.disc {list-style-type: disc;}
+	&.square {list-style-type: square;}
 }
-article ul.double {
-	width:48%;
-	float:left;
+article ol {
+	list-style-type: decimal;
+	li {
+		.bulletlist();
+	}
+	&.upper-roman {list-style-type: upper-roman;}
+	&.lower-alpha {list-style-type: lower-alpha;}
 }
