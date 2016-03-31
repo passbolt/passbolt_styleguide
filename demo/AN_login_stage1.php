@@ -32,9 +32,7 @@
 				</div>
 			</div>
 			<div class="col4 push1 last">
-				<div class="logo">
-					<h1><a href="#"><span>Passbolt</span></a></h1>
-				</div>
+				<div class="logo"><h1><span>Passbolt</span></h1></div>
 				<div class="users login form">
 					<iframe id="passbolt-iframe-login-form" src="../demo/AN_iframe_login.php" frameborder="0"></iframe>
 				</div>

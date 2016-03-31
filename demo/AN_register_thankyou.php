@@ -20,9 +20,7 @@
 				<?php include('includes/AN_agreement_notice.php');?>
 			</div>
 			<div class="col4 push1 last">
-				<div class="logo">
-					<h1><a href="#"><span>Passbolt</span></a></h1>
-				</div>
+				<div class="logo"><h1><span>Passbolt</span></h1></div>
 				<div class="register thank-you form feedback">
 					<div class="graphical-feedback"><i class="fa fa-envelope-o huge"></i></div>
 					<p><strong>Email sent!</strong> Please check your spam folder if you do not hear from us after a while.</p>

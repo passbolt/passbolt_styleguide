@@ -4014,8 +4014,7 @@ input[type=text].fluid {
 /* headers */
 .header {
   /* top navigation */
-  /* logo */
-  /* do not show h1 in header */
+  /* logo positioning */
 }
 .header.first {
   background: #333333;
@@ -4069,18 +4068,6 @@ input[type=text].fluid {
   margin: 1.25em 0 0 1em;
   max-width: 80%;
 }
-.header .logo img {
-  max-width: 150px;
-}
-.header .logo.no-img {
-  background: transparent url('../img/logo/logo.png') 0 0 no-repeat;
-  background-size: 150px auto;
-  width: 150px;
-  height: 30px;
-}
-.header h1 {
-  display: none;
-}
 /* CSS for serving the retina image to devices with a high "device-pixel-ratio": */
 @media only screen and (-moz-min-device-pixel-ratio: 1.5), only screen and (-o-min-device-pixel-ratio: 3/2), only screen and (-webkit-min-device-pixel-ratio: 1.5), only screen and (min-devicepixel-ratio: 1.5), only screen and (min-resolution: 1.5dppx) {
   .header .navigation.primary .home a {
@@ -4092,9 +4079,34 @@ input[type=text].fluid {
     background: transparent url('../img/logo/icon-48.png') 0 0 no-repeat;
     background-size: 20px 20px;
   }
-  .header .logo.no-img {
+}
+.logo img {
+  max-width: 150px;
+}
+.logo.no-img {
+  background: transparent url('../img/logo/logo.png') 0 0 no-repeat;
+  background-size: 150px auto;
+  width: 150px;
+  height: 30px;
+}
+.logo h1 {
+  display: none;
+}
+.logo.bigger {
+  background: transparent url('../img/logo/logo.png') 0 0 no-repeat;
+  background-size: 200px auto;
+  width: 200px;
+  height: 50px;
+}
+/* CSS for serving the retina image to devices with a high "device-pixel-ratio": */
+@media only screen and (-moz-min-device-pixel-ratio: 1.5), only screen and (-o-min-device-pixel-ratio: 3/2), only screen and (-webkit-min-device-pixel-ratio: 1.5), only screen and (min-devicepixel-ratio: 1.5), only screen and (min-resolution: 1.5dppx) {
+  .logo.no-img {
     background: transparent url('../img/logo/logo@2x.png') 0 0 no-repeat;
     background-size: 150px auto;
+  }
+  .logo.bigger {
+    background: transparent url('../img/logo/logo@2x.png') 0 0 no-repeat;
+    background-size: 200px auto;
   }
 }
 /* search */
@@ -5823,17 +5835,17 @@ table.table-info.horizontal tbody tr:nth-child(even) {
  * Footer
  */
 .footer {
+  margin-top: 0em;
+  position: fixed;
+  bottom: 0;
   padding: 1.167em 1.5% 0 .5%;
   text-align: right;
   font-size: .75em;
   /* 12px */
-  margin-top: 0em;
   width: 98%;
   height: 2em;
   background: #FFF;
   border-top: 1px solid #dddddd;
-  bottom: 0;
-  position: fixed;
   z-index: 890;
 }
 .footer .footer-links {
@@ -6329,41 +6341,6 @@ table.table-info.horizontal tbody tr:nth-child(even) {
 .dialog-wrapper.session-expired-dialog .dialog-close {
   display: none;
 }
-/*
- * Password workspace
- * @todo better namespacing
- */
-/* drag n drop */
-#js_dragged_resource {
-  padding: 6px 10px;
-  background-color: #ffffff;
-  border: 1px solid #dddddd;
-  -webkit-box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  -moz-box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-}
-#js_dragged_resource span.name {
-  font-weight: bold;
-}
-/* sidebar */
-.panel.aside .resource .detailed-information li.password .value {
-  height: 1.6em;
-  padding-top: 0.2em;
-}
-/* unused column
-	@todo: remove html
-*/
-.js_grid_column_owner,
-.js_grid_column_copyLogin,
-.js_grid_column_copySecret {
-  display: none;
-}
-/* hide left column when there is no space */
-@media all and (max-width: 1024px) {
-  .tableview .js_grid_column_modified {
-    display: none;
-  }
-}
 /* sidebar / user details in overview */
 .panel.aside .user .header {
   /*
@@ -6469,6 +6446,41 @@ table.table-info.horizontal tbody tr:nth-child(even) {
 /* login history icon column centerign */
 .login-history td:first-child {
   text-align: center;
+}
+/*
+ * Password workspace
+ * @todo better namespacing
+ */
+/* drag n drop */
+#js_dragged_resource {
+  padding: 6px 10px;
+  background-color: #ffffff;
+  border: 1px solid #dddddd;
+  -webkit-box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  -moz-box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+#js_dragged_resource span.name {
+  font-weight: bold;
+}
+/* sidebar */
+.panel.aside .resource .detailed-information li.password .value {
+  height: 1.6em;
+  padding-top: 0.2em;
+}
+/* unused column
+	@todo: remove html
+*/
+.js_grid_column_owner,
+.js_grid_column_copyLogin,
+.js_grid_column_copySecret {
+  display: none;
+}
+/* hide left column when there is no space */
+@media all and (max-width: 1024px) {
+  .tableview .js_grid_column_modified {
+    display: none;
+  }
 }
 /* TODO replace by page level selector */
 .page.settings .main.panel .middle {

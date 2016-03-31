@@ -19,11 +19,7 @@
 
     <!-- second header -->
     <div class="header second">
-        <div class="col1">
-            <div class="logo no-img">
-                <h1><span>Passbolt</span></h1>
-            </div>
-        </div>
+        <?php include('includes/AN_logo.php'); ?>
         <div class="col2_3">
             <h2>Need some help? We got your back!</h2>
         </div>
@@ -38,7 +34,7 @@
                         <h2>Getting started</h2>
                     </li>
                     <li>
-                        <a href="#">Frequently asked questions</a>
+                        <a href="#">FAQ</a>
                     </li>
                     <li>
                         <a href="#">End user manual</a>
@@ -83,7 +79,7 @@
                     <div class="col4">
                         <a class="tile first" href="AA_legal_terms.php">
                             <span class="tile-teaser"><i class="fa fa-compass fa-fw"></i></span>
-                            <span class="tile-title">Frequently Asked Questions</span>
+                            <span class="tile-title">FAQ</span>
                             <span class="tile-description">Everybody have to starts somewhere.</span>
                         </a>
                     </div>

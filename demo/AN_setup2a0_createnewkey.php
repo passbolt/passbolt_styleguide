@@ -10,12 +10,7 @@
 
 	<!-- second header -->
 	<div class="header second">
-		<div class="col1">
-			<div class="logo">
-				<img src="img/logo/logo.png" alt="passbolt">
-				<h1><span>Passbolt</span></h1>
-			</div>
-		</div>
+		<?php include('includes/AN_logo.php'); ?>
 		<div class="col2_3">
 			<h2>Create a new key or <a href="../demo/AN_setup2b0_importkey.php" class="button primary">import</a> an existing one</h2>
 		</div>

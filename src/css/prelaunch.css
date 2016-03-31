@@ -4062,8 +4062,7 @@ input[type=text].fluid {
 /* headers */
 .header {
   /* top navigation */
-  /* logo */
-  /* do not show h1 in header */
+  /* logo positioning */
 }
 .header.first {
   background: #333333;
@@ -4117,18 +4116,6 @@ input[type=text].fluid {
   margin: 1.25em 0 0 1em;
   max-width: 80%;
 }
-.header .logo img {
-  max-width: 150px;
-}
-.header .logo.no-img {
-  background: transparent url('../img/logo/logo.png') 0 0 no-repeat;
-  background-size: 150px auto;
-  width: 150px;
-  height: 30px;
-}
-.header h1 {
-  display: none;
-}
 /* CSS for serving the retina image to devices with a high "device-pixel-ratio": */
 @media only screen and (-moz-min-device-pixel-ratio: 1.5), only screen and (-o-min-device-pixel-ratio: 3/2), only screen and (-webkit-min-device-pixel-ratio: 1.5), only screen and (min-devicepixel-ratio: 1.5), only screen and (min-resolution: 1.5dppx) {
   .header .navigation.primary .home a {
@@ -4140,26 +4127,51 @@ input[type=text].fluid {
     background: transparent url('../img/logo/icon-48.png') 0 0 no-repeat;
     background-size: 20px 20px;
   }
-  .header .logo.no-img {
+}
+.logo img {
+  max-width: 150px;
+}
+.logo.no-img {
+  background: transparent url('../img/logo/logo.png') 0 0 no-repeat;
+  background-size: 150px auto;
+  width: 150px;
+  height: 30px;
+}
+.logo h1 {
+  display: none;
+}
+.logo.bigger {
+  background: transparent url('../img/logo/logo.png') 0 0 no-repeat;
+  background-size: 200px auto;
+  width: 200px;
+  height: 50px;
+}
+/* CSS for serving the retina image to devices with a high "device-pixel-ratio": */
+@media only screen and (-moz-min-device-pixel-ratio: 1.5), only screen and (-o-min-device-pixel-ratio: 3/2), only screen and (-webkit-min-device-pixel-ratio: 1.5), only screen and (min-devicepixel-ratio: 1.5), only screen and (min-resolution: 1.5dppx) {
+  .logo.no-img {
     background: transparent url('../img/logo/logo@2x.png') 0 0 no-repeat;
     background-size: 150px auto;
+  }
+  .logo.bigger {
+    background: transparent url('../img/logo/logo@2x.png') 0 0 no-repeat;
+    background-size: 200px auto;
   }
 }
 /*
  * Footer
  */
 .footer {
+  margin-top: 0em;
+  position: fixed;
+  bottom: 0;
   padding: 1.167em 1.5% 0 .5%;
   text-align: right;
   font-size: .75em;
   /* 12px */
-  margin-top: 0em;
   width: 98%;
   height: 2em;
   background: #FFF;
   border-top: 1px solid #dddddd;
-  bottom: 0;
-  position: fixed;
   z-index: 890;
 }
 .footer .footer-links {

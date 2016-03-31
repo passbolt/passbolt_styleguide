@@ -62,27 +62,10 @@
 		}
 	}
 
-	/* logo */
+	/* logo positioning */
 	.logo {
 		margin: 1.25em 0 0 1em;
 		max-width: 80%;
-
-		img {
-			max-width: 150px;
-		}
-
-		// transition class until we remove all the img tags from html
-		&.no-img {
-			background: transparent url('@{images}/logo/logo.png') 0 0 no-repeat;
-			background-size: 150px auto;
-			width:150px;
-			height:30px;
-		}
-	}
-
-	/* do not show h1 in header */
-	h1 {
-		display:none;
 	}
 
 }
@@ -104,12 +87,4 @@ only screen and (min-resolution: 1.5dppx) {
 		}
 	}
 
-	.header .logo {
-
-		// transition class until we remove all the img tags from html
-		&.no-img {
-			background: transparent url('@{images}/logo/logo@2x.png') 0 0 no-repeat;
-			background-size: 150px auto;
-		}
-	}
 }

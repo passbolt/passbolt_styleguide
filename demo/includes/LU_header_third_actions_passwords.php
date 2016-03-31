@@ -54,7 +54,7 @@
 		<ul class="passbolt_component_workspace_secondary_menu js_component mad_view ready" id="b59038b5-ed72-a48a-06e1-fb06523b5bfd">
 			<li>
 				<a id="js_wk_secondary_menu_view_sidebar_button" href="#" class="button toggle mad_component_toggle_button js_component mad_view ready">
-					<i class="fa fa-eye fa-lg"></i>
+					<i class="fa fa-info-circle fa-lg"></i>
 					<span class="visuallyhidden">view sidebar</span>
 				</a>
 			</li>

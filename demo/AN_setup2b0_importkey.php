@@ -10,12 +10,7 @@
 
 	<!-- second header -->
 	<div class="header second">
-		<div class="col1">
-			<div class="logo">
-				<img alt="passbolt" src="img/logo/logo.png">
-				<h1><span>Passbolt</span></h1>
-			</div>
-		</div>
+		<?php include('includes/AN_logo.php'); ?>
 		<div class="col2_3">
 			<h2 id="js_step_title">Import an existing key or <a class="button primary" href="#" id="js_setup_goto_define_key">create</a> a new one!</h2>
 		</div>

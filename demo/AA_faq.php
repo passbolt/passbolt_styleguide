@@ -19,11 +19,7 @@
 
 	<!-- second header -->
 	<div class="header second">
-		<div class="col1">
-			<div class="logo no-img">
-				<h1><span>Passbolt</span></h1>
-			</div>
-		</div>
+		<?php include('includes/AN_logo.php'); ?>
 		<div class="col2 search-wrapper">
 			<h2 class="visuallyhidden"><span>Frequently Asked questions</span></h2>
 			<!-- if js is enabled only -->
@@ -86,7 +82,7 @@
 					<li>
 					<div class="row">
 						<div class="col7">
-							<h2 >Frequently Asked Questions</h2>
+							<h2>Frequently Asked Questions</h2>
 							<h3 class="question">What is passbolt?</h3>
 							<div class="answer">
 								<p>
@@ -229,7 +225,6 @@
 	</div>
 	<?php include('includes/AN_footer.php'); ?>
 </div>
-
 <script>
 	$(function() {
 		var faqlist = new List('faq-list', {

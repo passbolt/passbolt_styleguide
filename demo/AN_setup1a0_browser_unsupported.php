@@ -11,12 +11,7 @@
 
 	<!-- second header -->
 	<div class="header second">
-		<div class="col1">
-			<div class="logo">
-				<img src="img/logo/logo.png" alt="passbolt">
-				<h1><span>Passbolt</span></h1>
-			</div>
-		</div>
+		<?php include('includes/AN_logo.php'); ?>
 		<div class="col2_3">
 			<h2>Welcome to passbolt! Let's take 5 min to setup your system.</h2>
 		</div>

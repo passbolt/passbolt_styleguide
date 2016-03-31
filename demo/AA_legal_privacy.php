@@ -13,12 +13,7 @@
 
 	<!-- second header -->
 	<div class="header second">
-		<div class="col1">
-			<div class="logo">
-				<img src="img/logo/logo.png" alt="passbolt">
-				<h1><span>Passbolt</span></h1>
-			</div>
-		</div>
+		<?php include('includes/AN_logo.php'); ?>
 		<div class="col2_3">
 			<h2>TL;DR: We respect your privacy!</h2>
 		</div>
@@ -36,7 +31,7 @@
 						<a href="../demo/AA_legal_terms.php" >Terms</a>
 					</li>
 					<li>
-						<a href="../demo/AA_legal_credits.php" >Credits</a>
+						<a href="../demo/AA_about_credits.php" >Credits</a>
 					</li>
 				</ul>
 			</div>
