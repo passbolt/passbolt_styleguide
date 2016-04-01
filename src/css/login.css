@@ -136,6 +136,15 @@ html body .hidden {
   -moz-animation-timing-function: linear;
 }
 /* list */
+/* seriously? */
+.blink {
+  animation: blinker 1s linear infinite;
+}
+@keyframes blinker {
+  50% {
+    opacity: 0.0;
+  }
+}
 /* palette */
 /* borders */
 /* font */
@@ -3359,6 +3368,9 @@ html body .button.processing {
   border-radius: 5px;
   padding: 1px;
 }
+.button-spacer {
+  margin-right: .5em;
+}
 .panel.middle .grid {
   padding-bottom: 2em;
   max-width: 100%;
@@ -3907,10 +3919,10 @@ html body .button.processing {
   display: none;
 }
 .logo.bigger {
-  background: transparent url('../img/logo/logo.png') 0 0 no-repeat;
+  background: transparent url('../img/logo/logo@2x.png') 0 0 no-repeat;
   background-size: 200px auto;
   width: 200px;
-  height: 50px;
+  height: 45px;
 }
 /* CSS for serving the retina image to devices with a high "device-pixel-ratio": */
 @media only screen and (-moz-min-device-pixel-ratio: 1.5), only screen and (-o-min-device-pixel-ratio: 3/2), only screen and (-webkit-min-device-pixel-ratio: 1.5), only screen and (min-devicepixel-ratio: 1.5), only screen and (min-resolution: 1.5dppx) {

@@ -136,6 +136,15 @@ html body .hidden {
   -moz-animation-timing-function: linear;
 }
 /* list */
+/* seriously? */
+.blink {
+  animation: blinker 1s linear infinite;
+}
+@keyframes blinker {
+  50% {
+    opacity: 0.0;
+  }
+}
 /* palette */
 /* borders */
 /* font */
@@ -3163,6 +3172,9 @@ html body .button.processing {
   border-radius: 5px;
   padding: 1px;
 }
+.button-spacer {
+  margin-right: .5em;
+}
 /*
 	Base form components styling
 	Check components/form for more advanced/fancy input
@@ -4141,10 +4153,10 @@ input[type=text].fluid {
   display: none;
 }
 .logo.bigger {
-  background: transparent url('../img/logo/logo.png') 0 0 no-repeat;
+  background: transparent url('../img/logo/logo@2x.png') 0 0 no-repeat;
   background-size: 200px auto;
   width: 200px;
-  height: 50px;
+  height: 45px;
 }
 /* CSS for serving the retina image to devices with a high "device-pixel-ratio": */
 @media only screen and (-moz-min-device-pixel-ratio: 1.5), only screen and (-o-min-device-pixel-ratio: 3/2), only screen and (-webkit-min-device-pixel-ratio: 1.5), only screen and (min-devicepixel-ratio: 1.5), only screen and (min-resolution: 1.5dppx) {
@@ -5002,30 +5014,6 @@ input[type="search"]::-webkit-search-cancel-button {
     width: 55%;
   }
 }
-.faq ul.list {
-  margin: 0;
-  padding: 0;
-}
-.faq ul.list li {
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
-}
-.faq ul.list ul li {
-  margin-left: 1.1em;
-  padding-left: .5em;
-  margin-bottom: .5em;
-}
-/* reset layout styles on smaller screen */
-@media all and (max-width: 1024px) {
-  .header.second .col2.search-wrapper {
-    min-height: 4em;
-    width: 95%;
-  }
-  .header.second .col2.search-wrapper input[type=search] {
-    width: 70%;
-  }
-}
 .tile {
   display: block;
   margin-bottom: 1em;
@@ -5645,6 +5633,30 @@ button.swiper-pagination-bullet {
     transform: rotate(360deg);
   }
 }
+.faq ul.list {
+  margin: 0;
+  padding: 0;
+}
+.faq ul.list li {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+.faq ul.list ul li {
+  margin-left: 1.1em;
+  padding-left: .5em;
+  margin-bottom: .5em;
+}
+/* reset layout styles on smaller screen */
+@media all and (max-width: 1024px) {
+  .header.second .col2.search-wrapper {
+    min-height: 4em;
+    width: 95%;
+  }
+  .header.second .col2.search-wrapper input[type=search] {
+    width: 70%;
+  }
+}
 /* credit photo album */
 .tldr.photoalbum .photo {
   border: 0.5em solid #ffffff;
@@ -5686,6 +5698,22 @@ button.swiper-pagination-bullet {
 .home .page-row {
   padding: 1em;
 }
+.home .page-row .grid {
+  margin: auto;
+  max-width: 1000px;
+}
+.home .footer {
+  position: relative;
+  margin: 2em 0 0 0;
+}
+/* larger screen */
+@media all and (min-width: 440px) {
+  .home h2 {
+    margin: 1em auto;
+    text-align: center;
+    font-size: 2em;
+  }
+}
 .home .page-row.three-little-birds .logo {
   margin: 1em 0;
 }
@@ -5694,29 +5722,38 @@ button.swiper-pagination-bullet {
 }
 .home .page-row.three-little-birds .call-to-action .button {
   font-size: 1.125em;
-  margin: auto;
+  display: inline-block;
+  margin-top: 1em;
 }
-.home .page-row.features .swiper-container .swiper-slide {
-  background-position: center;
-  background-size: cover;
-  width: 100%;
-  height: 320px;
-}
-.home .page-row.features .swiper-container .swiper-slide h3 {
-  display: block;
-  text-align: center;
-  border: 0;
-}
-.home .page-row.features .swiper-container .swiper-slide img {
-  width: 100%;
-}
-.home .page-row.features .swiper-container .swiper-button-prev,
-.home .page-row.features .swiper-container .swiper-button-next {
+.home .page-row.three-little-birds .scroll-prompt {
   display: none;
 }
+/* even larger screen */
+@media all and (min-width: 800px) {
+  .home .page-row.three-little-birds {
+    min-height: 500px;
+    height: 75%;
+    background: #fafafa url('../img/background/mandala_bird1.jpg') 200% center no-repeat;
+    background-size: 85% auto;
+  }
+  .home .page-row.three-little-birds .logo {
+    margin: 5% 0 2% 3%;
+  }
+  .home .page-row.three-little-birds .teaser-text {
+    width: 50%;
+    max-width: 24em;
+    font-size: 1.75em;
+    margin: 0 0 3% 3%;
+    text-align: left;
+  }
+  .home .page-row.three-little-birds .call-to-action .button {
+    font-size: 1.125em;
+    margin: 0 0 3% 3%;
+    display: inline;
+  }
+}
 .home .page-row.usp {
-  margin: auto;
-  max-width: 1000px;
+  padding-bottom: 3em;
 }
 .home .page-row.usp .tile {
   border: 0;
@@ -5754,35 +5791,154 @@ button.swiper-pagination-bullet {
   background: transparent url('../img/third_party/jenkins_90.png') left center no-repeat;
   background-size: 60px auto;
 }
-.home .footer {
-  position: relative;
-  margin: 2em 0 0 0;
+.home .page-row.usp .call-to-action {
+  text-align: center;
+  margin-top: 1em;
+  margin-bottom: 2em;
+  font-size: 1.125em;
 }
 /* larger screen */
 @media all and (min-width: 440px) {
-  .home h2 {
-    margin: 1em auto;
-    text-align: center;
-    font-size: 2em;
+  .page-row.usp .tile {
+    padding: 1em 0 .5em 0;
   }
-  .home .page-row.three-little-birds {
-    height: 70%;
-    background: #fafafa url('../img/background/mandala_bird1.jpg') 200% center no-repeat;
-    background-size: 85% auto;
+  .page-row.usp .tile .tile-teaser i {
+    font-size: 1em;
+    display: block;
+    margin: auto;
+    height: 90px;
+    width: 100%;
   }
-  .home .page-row.three-little-birds .logo {
-    margin: 5% 0 2% 10%;
+  .page-row.usp .tile .tile-teaser i.docker {
+    background: transparent url('../img/third_party/docker_90.png') center center no-repeat;
+    background-size: 90px auto;
   }
-  .home .page-row.three-little-birds .teaser-text {
-    max-width: 33%;
-    font-size: 1.75em;
-    margin: 0 0 0 10%;
-    text-align: left;
+  .page-row.usp .tile .tile-teaser i.slack {
+    background: transparent url('../img/third_party/slack_90.png') center center no-repeat;
+    background-size: 70px auto;
   }
-  .home .page-row.three-little-birds .call-to-action .button {
-    font-size: 1.125em;
-    margin: 0 0 0 10%;
-    display: inline;
+  .page-row.usp .tile .tile-teaser i.gnupg {
+    background: transparent url('../img/third_party/gnupg_90.png') center center no-repeat;
+    background-size: 80px auto;
+  }
+  .page-row.usp .tile .tile-teaser i.opensource {
+    background: transparent url('../img/third_party/opensource_90.png') center center no-repeat;
+    background-size: 70px auto;
+  }
+  .page-row.usp .tile .tile-teaser i.json {
+    background: transparent url('../img/third_party/json_90.png') center center no-repeat;
+    background-size: 70px auto;
+  }
+  .page-row.usp .tile .tile-teaser i.jenkins {
+    background: transparent url('../img/third_party/jenkins_90.png') center center no-repeat;
+    background-size: 80px auto;
+  }
+}
+/* CSS for serving the retina image to devices with a high "device-pixel-ratio": */
+@media only screen and (-moz-min-device-pixel-ratio: 1.5) and (min-width: 440px), only screen and (-o-min-device-pixel-ratio: 3/2) and (min-width: 440px), only screen and (-webkit-min-device-pixel-ratio: 1.5) and (min-width: 440px), only screen and (min-devicepixel-ratio: 1.5) and (min-width: 440px), only screen and (min-resolution: 1.5dppx) and (min-width: 440px) {
+  .home .page-row.usp .tile .tile-teaser i {
+    background-size: 90px auto;
+  }
+  .home .page-row.usp .tile .tile-teaser i.docker {
+    background: transparent url('../img/third_party/docker_180.png') center center no-repeat;
+    background-size: 80px auto;
+  }
+  .home .page-row.usp .tile .tile-teaser i.slack {
+    background: transparent url('../img/third_party/slack_180.png') center center no-repeat;
+    background-size: 80px auto;
+  }
+  .home .page-row.usp .tile .tile-teaser i.gnupg {
+    background: transparent url('../img/third_party/gnupg_180.png') center center no-repeat;
+    background-size: 80px auto;
+  }
+  .home .page-row.usp .tile .tile-teaser i.opensource {
+    background: transparent url('../img/third_party/opensource_180.png') center center no-repeat;
+    background-size: 80px auto;
+  }
+  .home .page-row.usp .tile .tile-teaser i.json {
+    background: transparent url('../img/third_party/json_180.png') center center no-repeat;
+    background-size: 80px auto;
+  }
+  .home .page-row.usp .tile .tile-teaser i.jenkins {
+    background: transparent url('../img/third_party/jenkins_180.png') center center no-repeat;
+    background-size: 80px auto;
+  }
+}
+.home .page-row.api {
+  color: #ffffff;
+  background: transparent url('../img/background/blueprint.jpg') center center repeat;
+  text-shadow: 1px 1px #333;
+  padding-bottom: 4em;
+}
+.home .page-row.api h2 {
+  text-align: left;
+}
+/* even larger screen */
+@media all and (min-width: 800px) {
+  .home .page-row.api {
+    height: 525px;
+    margin: 0;
+    padding: 0;
+  }
+  .home .page-row.api h2 {
+    margin-top: 2em;
+  }
+  .home .page-row.api .api-wrapper {
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    position: absolute;
+    height: 525px;
+    background: transparent url('../img/diagrams/sequence_diagram_gpg_authenticate.png') 200% 7em no-repeat;
+    background-size: 75% auto;
+    -moz-box-shadow: inset 0 16px 16px -16px #333333, inset 0 -16px 16px -16px #333333;
+    -webkit-box-shadow: inset 0 16px 16px -16px #333333, inset 0 -16px 16px -16px #333333;
+    box-shadow: inset 0 16px 16px -16px #333333, inset 0 -16px 16px -16px #333333;
+  }
+}
+/* my kind of screen */
+@media all and (min-width: 1280px) {
+  .home .page-row.api .api-wrapper {
+    background-size: 100% auto;
+    background: transparent url('../img/diagrams/sequence_diagram_gpg_authenticate.png') 130% 7em no-repeat;
+  }
+}
+/* hold on a sec kind of screen */
+@media all and (min-width: 1500px) {
+  .home .page-row.api .api-wrapper {
+    background: transparent url('../img/diagrams/sequence_diagram_gpg_authenticate.png') 90% 7em no-repeat;
+  }
+}
+.home .page-row.features {
+  margin-bottom: 2em;
+}
+.home .page-row.features h2 + h2 {
+  color: #888888;
+}
+.home .page-row.features .swiper-container .swiper-slide {
+  background-position: center;
+  background-size: cover;
+  width: 100%;
+  height: 320px;
+}
+.home .page-row.features .swiper-container .swiper-slide h3 {
+  display: block;
+  text-align: center;
+  border: 0;
+}
+.home .page-row.features .swiper-container .swiper-slide img {
+  width: 100%;
+}
+.home .page-row.features .swiper-container .swiper-button-prev,
+.home .page-row.features .swiper-container .swiper-button-next {
+  display: none;
+}
+/* larger screen */
+@media all and (min-width: 440px) {
+  .home .page-row.features h2 + h2 {
+    font-size: 1.5em;
+    margin-top: -1em;
+    padding-top: 0;
   }
   .home .page-row.features .swiper-container {
     max-width: 1600px;
@@ -5799,68 +5955,136 @@ button.swiper-pagination-bullet {
   .home .page-row.features .swiper-container .swiper-button-next {
     display: block;
   }
-  .home .page-row.usp .tile {
-    padding: 1em 0 .5em 0;
+}
+.home .page-row.signup .newsletter label {
+  color: #888888;
+}
+.home .page-row.signup .newsletter input[type=email] {
+  margin: .5em 2em .5em 0em;
+  width: 95%;
+  padding: .225em;
+}
+.home .page-row.signup .newsletter .smallprint {
+  font-size: .75em;
+  padding: 1em .125em;
+}
+.home .page-row.signup .social {
+  text-align: center;
+  padding-top: .5em;
+  font-size: 3.5em;
+}
+/* larger screen */
+@media all and (min-width: 440px) {
+  .home .page-row.signup .newsletter {
+    font-size: 1.25em;
   }
-  .home .page-row.usp .tile .tile-teaser i {
-    font-size: 1em;
-    display: block;
-    margin: auto;
-    width: 90px;
-    height: 90px;
-  }
-  .home .page-row.usp .tile .tile-teaser i.docker {
-    background: transparent url('../img/third_party/docker_90.png') center center no-repeat;
-    background-size: 90px auto;
-  }
-  .home .page-row.usp .tile .tile-teaser i.slack {
-    background: transparent url('../img/third_party/slack_90.png') center center no-repeat;
-    background-size: 70px auto;
-  }
-  .home .page-row.usp .tile .tile-teaser i.gnupg {
-    background: transparent url('../img/third_party/gnupg_90.png') center center no-repeat;
-    background-size: 80px auto;
-  }
-  .home .page-row.usp .tile .tile-teaser i.opensource {
-    background: transparent url('../img/third_party/opensource_90.png') center center no-repeat;
-    background-size: 70px auto;
-  }
-  .home .page-row.usp .tile .tile-teaser i.json {
-    background: transparent url('../img/third_party/json_90.png') center center no-repeat;
-    background-size: 70px auto;
-  }
-  .home .page-row.usp .tile .tile-teaser i.jenkins {
-    background: transparent url('../img/third_party/jenkins_90.png') center center no-repeat;
-    background-size: 80px auto;
+  .home .page-row.signup .newsletter .smallprint {
+    padding-top: 0;
   }
 }
-/* CSS for serving the retina image to devices with a high "device-pixel-ratio": */
-@media only screen and (-moz-min-device-pixel-ratio: 1.5) and (min-width: 440px), only screen and (-o-min-device-pixel-ratio: 3/2) and (min-width: 440px), only screen and (-webkit-min-device-pixel-ratio: 1.5) and (min-width: 440px), only screen and (min-devicepixel-ratio: 1.5) and (min-width: 440px), only screen and (min-resolution: 1.5dppx) and (min-width: 440px) {
-  .home .tile .tile-teaser i {
-    background-size: 90px auto;
+.home .page-row.cli {
+  text-shadow: 2px 2px #000;
+  background: #333333;
+  color: #ffffff;
+  -moz-box-shadow: inset 0 16px 16px -16px #000000, inset 0 -16px 16px -16px #000000;
+  -webkit-box-shadow: inset 0 16px 16px -16px #000000, inset 0 -16px 16px -16px #000000;
+  box-shadow: inset 0 16px 16px -16px #000000, inset 0 -16px 16px -16px #000000;
+}
+.home .page-row.cli h2 {
+  text-align: left;
+}
+.home .page-row.cli h2 + p {
+  font-size: 1.25em;
+}
+.home .page-row.cli .cli-window {
+  display: none;
+}
+.home .page-row.cli .button {
+  margin-bottom: 2em;
+}
+/* larger screen */
+@media all and (min-width: 780px) {
+  .home .page-row.cli {
+    background: #333333 url('../img/background/hepteract.jpg') 200% -8% no-repeat;
+    background-attachment: fixed;
   }
-  .home .tile .tile-teaser i.docker {
-    background: transparent url('../img/third_party/docker_180.png') center center no-repeat;
-    background-size: 80px auto;
+  .home .page-row.cli .cli-window {
+    display: block;
+    border-radius: .25em;
+    margin: 3em auto 4em auto;
+    float: right;
+    max-width: 500px;
+    background: #111;
+    -webkit-box-shadow: 10px 10px 22px -10px rgba(0, 0, 0, 0.75);
+    -moz-box-shadow: 10px 10px 22px -10px rgba(0, 0, 0, 0.75);
+    box-shadow: 10px 10px 22px -10px rgba(0, 0, 0, 0.75);
   }
-  .home .tile .tile-teaser i.slack {
-    background: transparent url('../img/third_party/slack_180.png') center center no-repeat;
-    background-size: 80px auto;
+  .home .page-row.cli .cli-window:before {
+    margin: .33em .5em;
+    border-radius: .75em;
+    width: .75em;
+    height: .75em;
+    background: #d40101;
+    position: absolute;
+    content: ' ';
   }
-  .home .tile .tile-teaser i.gnupg {
-    background: transparent url('../img/third_party/gnupg_180.png') center center no-repeat;
-    background-size: 80px auto;
+  .home .page-row.cli .cli-window .cli-header {
+    border-radius: .25em;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    height: 1.33em;
+    width: 100%;
+    background: #CCC;
   }
-  .home .tile .tile-teaser i.opensource {
-    background: transparent url('../img/third_party/opensource_180.png') center center no-repeat;
-    background-size: 80px auto;
+  .home .page-row.cli .cli-window .cli-header:before {
+    margin: .33em .5em;
+    border-radius: .75em;
+    width: .75em;
+    height: .75em;
+    background: #d40101;
+    position: absolute;
+    content: ' ';
+    margin-left: 1.60em;
+    background: #ffbd2e;
   }
-  .home .tile .tile-teaser i.json {
-    background: transparent url('../img/third_party/json_180.png') center center no-repeat;
-    background-size: 80px auto;
+  .home .page-row.cli .cli-window .cli-header:after {
+    margin: .33em .5em;
+    border-radius: .75em;
+    width: .75em;
+    height: .75em;
+    background: #d40101;
+    position: absolute;
+    content: ' ';
+    margin-left: 2.75em;
+    background: #009900;
   }
-  .home .tile .tile-teaser i.jenkins {
-    background: transparent url('../img/third_party/jenkins_180.png') center center no-repeat;
-    background-size: 80px auto;
+  .home .page-row.cli .cli-window .cli-code {
+    padding: 1em 2em 1em 2em;
+    color: #00aa00;
+    font-size: 13px;
+  }
+}
+.thankyou.page .grid {
+  text-align: center;
+}
+.thankyou.page .grid h2 {
+  font-size: 2em;
+}
+.thankyou.page .grid h2 + h2 {
+  font-size: 1.5em;
+  color: #888888;
+}
+.thankyou.page .grid .social {
+  font-size: 4em;
+}
+@media all and (min-width: 780px) {
+  .thankyou.page {
+    height: 100%;
+    position: absolute;
+    background: transparent url('../img/background/mandala.jpg') top center no-repeat;
+    background-size: cover;
+  }
+  .thankyou.page .grid {
+    padding-top: 4.5em;
   }
 }

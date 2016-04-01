@@ -136,6 +136,15 @@ html body .hidden {
   -moz-animation-timing-function: linear;
 }
 /* list */
+/* seriously? */
+.blink {
+  animation: blinker 1s linear infinite;
+}
+@keyframes blinker {
+  50% {
+    opacity: 0.0;
+  }
+}
 /* palette */
 /* borders */
 /* font */

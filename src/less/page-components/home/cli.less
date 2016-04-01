@@ -1,0 +1,81 @@
+.home .page-row.cli {
+  text-shadow: 2px 2px #000;
+  background: @background-dark;
+  color: @white;
+  -moz-box-shadow: inset 0 16px 16px -16px #000, inset 0 -16px 16px -16px #000;
+  -webkit-box-shadow: inset 0 16px 16px -16px #000, inset 0 -16px 16px -16px #000;
+  box-shadow: inset 0  16px 16px -16px #000, inset 0 -16px 16px -16px #000;
+
+  h2 {
+    text-align: left;
+  }
+  h2 + p {
+    font-size:1.25em;
+  }
+  .cli-window {
+    display:none;
+  }
+  .button {
+    margin-bottom:2em;
+  }
+}
+
+
+/* larger screen */
+@media all and (min-width: 780px) {
+  .home .page-row.cli {
+    background: @background-dark url('@{images}/background/hepteract.jpg') 200% -8% no-repeat;
+    background-attachment: fixed;
+
+    .cli-window {
+      display:block;
+      border-radius:.25em;
+      margin:3em auto 4em auto;
+      float:right;
+      max-width:500px;
+      background:#111;
+      -webkit-box-shadow: 10px 10px 22px -10px rgba(0,0,0,0.75);
+      -moz-box-shadow: 10px 10px 22px -10px rgba(0,0,0,0.75);
+      box-shadow: 10px 10px 22px -10px rgba(0,0,0,0.75);
+
+      .cli-fake-button() {
+        margin:.33em .5em;
+        border-radius:.75em;
+        width:.75em;
+        height:.75em;
+        background:@red;
+        position:absolute;
+        content:' ';
+      }
+
+      &:before {
+        .cli-fake-button();
+      }
+
+      .cli-header {
+        border-radius:.25em;
+        border-bottom-left-radius: 0;
+        border-bottom-right-radius: 0;
+        height:1.33em;
+        width:100%;
+        background:#CCC;
+
+        &:before {
+          .cli-fake-button();
+          margin-left:1.60em;
+          background:#ffbd2e;
+        }
+        &:after {
+          .cli-fake-button();
+          margin-left:2.75em;
+          background:@green;
+        }
+      }
+      .cli-code {
+        padding:1em 2em 1em 2em;
+        color:#00aa00;
+        font-size:13px;
+      }
+    }
+  }
+}

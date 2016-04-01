@@ -156,9 +156,18 @@ html body .hidden {
 .rotate {
 	.rotate();
 }
+
 /* list */
 .bulletlist () {
 	margin-left:1.1em;
 	padding-left:.5em;
 	margin-bottom:.5em;
+}
+
+/* seriously? */
+.blink {
+	animation: blinker 1s linear infinite;
+}
+@keyframes blinker {
+	50% { opacity: 0.0; }
 }
