@@ -5745,11 +5745,12 @@ button.swiper-pagination-bullet {
     font-size: 1.75em;
     margin: 0 0 3% 3%;
     text-align: left;
+    line-height: 1.666em;
   }
   .home .page-row.three-little-birds .call-to-action .button {
     font-size: 1.125em;
-    margin: 0 0 3% 3%;
-    display: inline;
+    margin: .25em 0 3% 3%;
+    display: inline-block;
   }
 }
 .home .page-row.usp {

@@ -17,31 +17,30 @@
 
 /* even larger screen */
 @media all and (min-width: 800px) {
-  .home {
-    .page-row {
+  .home .page-row.three-little-birds {
 
-      &.three-little-birds {
-        min-height: 500px;
-        height: 75%;
-        background: #FAFAFA url('@{images}/background/mandala_bird1.jpg') 200% center no-repeat;
-        background-size: 85% auto;
 
-        .logo {
-          margin: 5% 0 2% 3%;
-        }
-        .teaser-text {
-          width: 50%;
-          max-width: 24em;
-          font-size: 1.75em;
-          margin: 0 0 3% 3%;
-          text-align: left;
-        }
-        .call-to-action .button {
-          font-size: 1.125em;
-          margin: 0 0 3% 3%;
-          display: inline;
-        }
-      }
+    min-height: 500px;
+    height: 75%;
+    background: #FAFAFA url('@{images}/background/mandala_bird1.jpg') 200% center no-repeat;
+    background-size: 85% auto;
+
+    .logo {
+      margin: 5% 0 2% 3%;
     }
+    .teaser-text {
+      width: 50%;
+      max-width: 24em;
+      font-size: 1.75em;
+      margin: 0 0 3% 3%;
+      text-align: left;
+      line-height:1.666em;
+    }
+    .call-to-action .button {
+      font-size: 1.125em;
+      margin: .25em 0 3% 3%;
+      display: inline-block;
+    }
+
   }
 }

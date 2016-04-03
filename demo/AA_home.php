@@ -36,7 +36,7 @@
 
     <div class="page-row features">
         <h2>Available now on firefox!</h2>
-        <h2>Support for chrome is on the roadmap of course.</h2>
+        <h2>and yes, a chrome add-on is on the roadmap</h2>
         <div class="swiper-container">
             <div class="swiper-wrapper">
                 <div class="swiper-slide">
@@ -66,7 +66,7 @@
                     <h2>Coming soon to a terminal near you!</h2>
                     <p>
                         Because system administrator appreciation day should be everyday we started building
-                        a client base on nodejs. Come join us!
+                        a client based on nodejs. Come join us!
                     </p>
                     <a href="#" class="button cancel big">
                         <i class="fa fa-fw fa-github"></i>
@@ -111,7 +111,7 @@ please enter passphrase: <span class="blink seriously">█</span>
                         <div class="tile-teaser"><i class="slack"></i></div>
                         <div class="tile-title">Built for teams</div>
                         <div class="tile-description">
-                            Works with tools your team already use such as your email client and chat.
+                            It works with tools your team already uses such as your email client and chat.
                         </div>
                     </div>
                     <div class="tile">
@@ -123,16 +123,16 @@ please enter passphrase: <span class="blink seriously">█</span>
                     </div>
                     <div class="tile">
                         <div class="tile-teaser"><i class="json"></i></div>
-                        <div class="tile-title">API & extensible design</div>
+                        <div class="tile-title">Extensible by design</div>
                         <div class="tile-description">
-                            Build on top of our API to get more of your password solution.
+                            Start building on top of our API to get more of your password solution.
                         </div>
                     </div>
                 </div>
                 <div class="col6 last">
                     <div class="tile first">
                         <div class="tile-teaser"><i class="gnupg"></i></div>
-                        <div class="tile-title">Built on security standards</div>
+                        <div class="tile-title">Embrace open security standards</div>
                         <div class="tile-description">
                             Secrets are encrypted in a browser extension using GPG and sent over SSL.
                         </div>
@@ -169,12 +169,16 @@ please enter passphrase: <span class="blink seriously">█</span>
                     <h2>Discover passbolt API</h2>
                     <div class="teaser-text">
                         <p>
-                            Our long term vision is to play nice with others. We aim to provide integration other
+                            Our long term vision is to play nice with others. We aim to provide integrations with other
                             password managers, keyrings and user management services instead of trying to replace them.
                         </p>
                         <p>
                             Obviously there is still a long way to go, but for now you can already build custom
                             integrations by taking advantage of the JSON API.
+                        </p>
+                        <p>
+                            Did we mention we also provide a styleguide in case you want to customize passbolt look
+                            and feel?
                         </p>
                     </div>
                     <div class="call-to-action">
@@ -224,7 +228,6 @@ please enter passphrase: <span class="blink seriously">█</span>
                     <a href="https://www.github.com/passsbolt">
                         <i class="fa fa-fw fa-github-square"></i>
                     </a>
-
                 </div>
             </div>
         </div>
