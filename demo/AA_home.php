@@ -232,9 +232,9 @@ please enter passphrase: <span class="blink seriously">█</span>
                         <i class="fa fa-fw fa-twitter-square"></i>
                     </a>
                     <a href="https://www.facebook.com/passbolt">
-                        <i class="fa fa-facebook-square"></i>
+                        <i class="fa fa-fw fa-"></i>
                     </a>
-                    <a href="https://www.github.com/passsbolt">
+                    <a href="https://www.github.com/passbolt">
                         <i class="fa fa-fw fa-github-square"></i>
                     </a>
                 </div>
