@@ -5,8 +5,6 @@
     <title>Passbot | The open source password manager for teams</title>
     <?php include('includes/AA_meta.php'); ?>
     <link rel="stylesheet" type="text/css" href="css/public.css" />
-    <style>
-    </style>
 </head>
 <body>
 <div id="container" class="page home">
@@ -40,16 +38,15 @@
         <div class="swiper-container">
             <div class="swiper-wrapper">
                 <div class="swiper-slide">
-                    <img src="../src/img/screenshots/teaser-screenshot-login.png" />
-                    <div class="swiper-lazy-preloader swiper-lazy-preloader-white"></div>
+                    <img src="../src/img/screenshots/screentest.png" />
                     <h3>Authenticate using your gpg key</h3>
                 </div>
                 <div class="swiper-slide">
-                    <img src="../src/img/screenshots/teaser-screenshot-share.png" />
+                    <img src="../src/img/screenshots/screentest.png" />
                     <h3>Share passwords with your team</h3>
                 </div>
                 <div class="swiper-slide">
-                    <img src="../src/img/screenshots/teaser-screenshot4.png" />
+                    <img src="../src/img/screenshots/screentest.png" />
                     <h3>Search and filter on passwords</h3>
                 </div>
             </div>
