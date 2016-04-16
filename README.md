@@ -8,6 +8,14 @@
 	(c) 2016 Bolt Softwares Pvt Ltd
 
 
+Licence
+==============
+
+Passbolt is distributed under [Affero General Public License v3](http://www.gnu.org/licenses/agpl-3.0.html)
+
+Images and logos in /src/img/third_party belongs to their respective owner.
+
+
 About
 =========
 
@@ -21,22 +29,6 @@ some of the includes. Apart from this the HTML is static.
 
 In /src and /build you can find the assets that are used by other projects, like the images
 the less files, the minified css files, fonts, etc.
-
-
-Legal
-==========
-
-Images and logos in /src/img/third_party belongs to their respective owner.
-
-Other images are distributed under creative common BY-NC-SA
-https://creativecommons.org/licenses/by-nc-sa/3.0/
-
-Unless otherwise noted, the HTML, PHP, CSS, LESS and JS code is available under the
-Free Software Foundation's GNU AGPL v3.0.
-http://www.gnu.org/licenses/agpl-3.0.html
-
-Learn more about Passbolt terms and conditions here:
-https://www.passbolt.com/terms
 
 
 Install
