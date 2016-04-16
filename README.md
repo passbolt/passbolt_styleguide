@@ -8,7 +8,7 @@
 	(c) 2016 Bolt Softwares Pvt Ltd
 
 
-Licence
+License
 ==============
 
 Passbolt is distributed under [Affero General Public License v3](http://www.gnu.org/licenses/agpl-3.0.html)
