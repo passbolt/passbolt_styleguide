@@ -43,8 +43,8 @@
 								<img src="img/avatar/user.png"/>
 							</div>
 							<div class="user">
-								<span class="name">Frances Allen</span>
-								<span class="details" title="57DE7D79ABE733A235EB1F84CDF8FC8682945D3E">57DE7D79ABE733A235EB1F84CDF8FC8682945D3E</span>
+								<span class="name">Frances Allen (57DE7D79)</span>
+								<span class="details" title="frances@passbolt.com">frances@passbolt.com</span>
 							</div>
 						</a>
 					</div>
@@ -60,8 +60,8 @@
 								<img src="img/avatar/user.png"/>
 							</div>
 							<div class="user">
-								<span class="name">Kathleen Antonelli</span>
-								<span class="details" title="57DE7D79ABE733A235EB1F84CDF8FC8682945D3E">57DE7D79ABE733A235EB1F84CDF8FC8682945D3E</span>
+								<span class="name">Kathleen Antonelli (12345678)</span>
+								<span class="details" title="kathleen@passbolt.com">kathleen@passbolt.com</span>
 							</div>
 						</a>
 					</div>
@@ -77,8 +77,8 @@
 								<img src="img/avatar/user.png"/>
 							</div>
 							<div class="user">
-								<span class="name">Jean Bartik</span>
-								<span class="details" title="57DE7D79ABE733A235EB1F84CDF8FC8682945D3E">57DE7D79ABE733A235EB1F84CDF8FC8682945D3E</span>
+								<span class="name">Jean Bartik (87654321)</span>
+								<span class="details" title="jean@passbolt.com">jean@passbolt.com</span>
 							</div>
 						</a>
 					</div>
@@ -94,8 +94,8 @@
 								<img src="img/avatar/user.png"/>
 							</div>
 							<div class="user">
-								<span class="name">Edith Clarke</span>
-								<span class="details" title="57DE7D79ABE733A235EB1F84CDF8FC8682945D3E">57DE7D79ABE733A235EB1F84CDF8FC8682945D3E</span>
+								<span class="name">Edith Clarke (12345678)</span>
+								<span class="details" title="edith@passbolt.com">edith@passbolt.com</span>
 							</div>
 						</a>
 					</div>
@@ -111,8 +111,8 @@
 								<img src="img/avatar/user.png"/>
 							</div>
 							<div class="user">
-								<span class="name">Irène Greif</span>
-								<span class="details" title="57DE7D79ABE733A235EB1F84CDF8FC8682945D3E">57DE7D79ABE733A235EB1F84CDF8FC8682945D3E</span>
+								<span class="name">Irène Greif (87654321)</span>
+								<span class="details" title="irene@passbolt.com">irene@passbolt.com</span>
 							</div>
 						</a>
 					</div>
