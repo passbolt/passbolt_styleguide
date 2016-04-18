@@ -807,6 +807,7 @@ article ul li {
   margin-left: 1.1em;
   padding-left: .5em;
   margin-bottom: .5em;
+  list-style-type: circle;
 }
 article ul.double {
   width: 48%;
@@ -5646,6 +5647,7 @@ button.swiper-pagination-bullet {
   margin-left: 1.1em;
   padding-left: .5em;
   margin-bottom: .5em;
+  list-style-type: circle;
 }
 /* reset layout styles on smaller screen */
 @media all and (max-width: 1024px) {
