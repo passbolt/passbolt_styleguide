@@ -6122,6 +6122,13 @@ table.table-info.horizontal tbody tr:nth-child(even) {
 .input-password-wrapper {
   overflow: hidden;
 }
+.input-password-wrapper .message.error {
+  display: block;
+  clear: both;
+  width: 92%;
+  padding-bottom: .5em;
+  font-size: .813em;
+}
 /* password share tab */
 .dialog .share-tab {
   /* list of existing permissions settings */

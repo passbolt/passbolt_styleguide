@@ -4193,6 +4193,16 @@ input[type=text].fluid {
     max-height: none;
   }
 }
+.input-password-wrapper {
+  overflow: hidden;
+}
+.input-password-wrapper .message.error {
+  display: block;
+  clear: both;
+  width: 92%;
+  padding-bottom: .5em;
+  font-size: .813em;
+}
 .master-password.dialog {
   /* PASSBOLT-1108 */
 }
