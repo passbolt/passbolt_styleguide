@@ -792,7 +792,7 @@ h3 {
 }
 /* paragraph */
 p {
-  margin: 0 0 .75em 0;
+  margin: 0 0 1em 0;
 }
 .code {
   font-family: "Courier New", Courier, monospace;
@@ -802,6 +802,7 @@ p {
 /* lists */
 article ul {
   list-style-type: circle;
+  margin: 0 0 1em 0;
 }
 article ul li {
   margin-left: 1.1em;
@@ -820,6 +821,7 @@ article ul.square {
   list-style-type: square;
 }
 article ol {
+  margin: 0 0 1em 0;
   list-style-type: decimal;
 }
 article ol li {
