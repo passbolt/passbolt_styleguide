@@ -66,17 +66,17 @@
 								</div>
 							</div>
 
-							<div class="input text required js_form_element_wrapper">
+							<div class="input text js_form_element_wrapper">
 								<label for="js_field_username">Username</label>
 								<input name="passbolt.model.Resource.username"
-											 class="required mad_form_element_textbox_controller mad_view_form_element_textbox_view js_component ready"
+											 class="mad_form_element_textbox_controller mad_view_form_element_textbox_view js_component ready"
 											 maxlength="50" id="js_field_username" placeholder="name" type="text">
 
 								<div id="js_field_username_feedback"
 										 class="message mad_form_feedback_controller mad_view_view js_component ready">
 								</div>
 							</div>
-							<div class="js_form_element_wrapper js_form_secret_wrapper">
+							<div class="required js_form_element_wrapper js_form_secret_wrapper">
 								<label for="js_field_secret">Password</label>
 
 								<div id="js_secret_edit_0"

@@ -27,13 +27,13 @@
                         </div>
                     </div>
 
-                    <div class="input text required js_form_element_wrapper">
+                    <div class="input text js_form_element_wrapper">
                         <label for="js_field_username">Username</label>
                         <input name="passbolt.model.Resource.username" class="required mad_form_textbox form-element mad_view_form_textbox ready" maxlength="50" id="js_field_username" placeholder="name" type="text">
                         <div id="js_field_username_feedback" class="message mad_form_feedback js_component mad_view ready">
                         </div>
                     </div>
-                    <div class="js_form_element_wrapper js_form_secret_wrapper">
+                    <div class="required js_form_element_wrapper js_form_secret_wrapper">
                         <label for="js_field_secret_data_0">Password</label>
                         <div id="js_secret_edit_0" class="js_secret_edit_form">
                             <input name="passbolt.model.Secret.id" id="js_field_secret_id_0" class="js_field_secret_id form_field" type="hidden">

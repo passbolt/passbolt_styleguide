@@ -25,20 +25,18 @@
                         <div id="js_field_uri_feedback" class="message mad_form_feedback js_component mad_view success"></div>
                     </div>
 
-                    <div class="input text required js_form_element_wrapper error">
-                        <label class="error" for="js_field_username">Username</label>
-                        <input name="passbolt.model.Resource.username" class="required mad_form_textbox form-element mad_view_form_textbox error" maxlength="50" id="js_field_username" placeholder="name" type="text">
-                        <div id="js_field_username_feedback" class="message mad_form_feedback js_component mad_view error">This information is required</div>
+                    <div class="input text js_form_element_wrapper">
+                        <label for="js_field_username">Username</label>
+                        <input name="passbolt.model.Resource.username" class="mad_form_textbox form-element mad_view_form_textbox" maxlength="50" id="js_field_username" placeholder="name" type="text">
                     </div>
-                    <div class="js_form_element_wrapper js_form_secret_wrapper">
+                    <div class="input text required js_form_element_wrapper js_form_secret_wrapper error">
                         <label for="js_field_secret_data_0">Password</label>
+                        <iframe src="../demo/LU_iframe_passwordinput_error.php" id="passbolt-iframe-secret-edition" frameborder="0"></iframe>
                         <div id="js_secret_edit_0" class="js_secret_edit_form">
                             <input name="passbolt.model.Secret.id" id="js_field_secret_id_0" class="js_field_secret_id form_field" type="hidden">
                             <input name="passbolt.model.Secret.user_id" id="js_field_secret_user_id_0" class="js_field_secret_user_id form_field" type="hidden">
                             <textarea name="passbolt.model.Secret.data" id="js_field_secret_data_0" class="form_field hidden js_field_secret_data" data-view-id="363"></textarea>
                         </div>
-                        <iframe src="../demo/LU_iframe_passwordinput.php" id="passbolt-iframe-secret-edition" frameborder="0"></iframe>
-
                     </div>
                     <div class="input textarea js_form_element_wrapper">
                         <label for="js_field_description">Description</label>
