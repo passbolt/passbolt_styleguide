@@ -19,8 +19,7 @@
         <div class="row js_main-login-section">
             <div class="col6 push1 information">
                 <h2>Welcome back!</h2>
-                <div class="plugin-chec
-            },k-wrapper">
+                <div class="plugin-check-wrapper">
                     <div class="plugin-check firefox success">
                         <p class="message">Nice one! Firefox plugin is installed and configured. You are good to go!.</p>
                     </div>

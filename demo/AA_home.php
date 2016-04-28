@@ -1,5 +1,5 @@
 <!doctype html>
-<html class="no-js" lang="en">
+<html class="alpha version no-js" lang="en">
 <head>
     <meta charset="utf-8">
     <title>Passbot | The open source password manager for teams</title>

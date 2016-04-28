@@ -1,5 +1,5 @@
 <!doctype html>
-<html class=" js websqldatabase draganddrop cssscrollbar" lang="en">
+<html class="alpha version js websqldatabase draganddrop cssscrollbar" lang="en">
 <head>
 <?php include('includes/LU_meta.php'); ?>
 </head>
