@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" class="alpha version">
 <head>
     <meta charset="utf-8">
     <title>Frequently Asked Questions | Passbolt</title>
