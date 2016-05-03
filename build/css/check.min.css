@@ -7,4 +7,4 @@
  * @license		AGPL-3.0
  */
 
-.cake-sql-log td,.cake-sql-log th{overflow:visible;white-space:normal;border:1px solid #eee;padding:1em}.cake-sql-log{margin-top:3em}.cake-sql-log thead{background:#eee}.cake-sql-log th{padding:.5em;font-weigth:bold}
+.page.status{margin-bottom:2.5em}.page.status .grid{padding-bottom:2em}.page.status #url-rewriting-warning{display:none}.page.status .grid .message{padding:.75em 1em;margin-bottom:.5em}.cake-error{display:none}

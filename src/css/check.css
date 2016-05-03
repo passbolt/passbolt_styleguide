@@ -1,0 +1,17 @@
+.page.status {
+  margin-bottom: 2.5em;
+}
+.page.status .grid {
+  padding-bottom: 2em;
+}
+.page.status #url-rewriting-warning {
+  display: none;
+}
+.page.status .grid .message {
+  padding: .75em 1em ;
+  margin-bottom: .5em;
+}
+/* Don't display cake errors, we provide feedback */
+.cake-error {
+  display: none;
+}
