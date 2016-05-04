@@ -4205,9 +4205,6 @@ input[type=text].fluid {
   padding-bottom: .5em;
   font-size: .813em;
 }
-.master-password.dialog {
-  /* PASSBOLT-1108 */
-}
 .master-password.dialog label {
   margin-bottom: 1em;
 }
@@ -4219,9 +4216,6 @@ input[type=text].fluid {
   border-width: 0;
   font-size: 0;
   line-height: 0;
-}
-.master-password.dialog .input.checkbox {
-  visibility: hidden;
 }
 .master-password.login-form input[type=text],
 .master-password.login-form input[type=password] {
