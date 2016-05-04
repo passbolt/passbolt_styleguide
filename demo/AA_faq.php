@@ -84,6 +84,9 @@
 						<div class="col7">
 							<h2>Frequently Asked Questions</h2>
 							<h3 class="question">What is passbolt?</h3>
+							<video controls>
+								<source src="../src/video/an_install_plugin_firefox_864.mp4" type="video/mp4" />
+							</video>
 							<div class="answer">
 								<p>
 									Passbolt is a password manager that allows people to securely share and store credentials. For instance, the wifi password of your office, or the administrator password of a router, or your organisation social media account password, can be secured using Passbolt.

@@ -4074,6 +4074,14 @@ input[type=text].fluid {
 	height: 100%;
 }
 */
+video {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+article video {
+  margin: 1em 0;
+}
 /* headers */
 .header {
   /* top navigation */
