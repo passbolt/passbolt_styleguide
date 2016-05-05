@@ -3,7 +3,7 @@
 			 class="user profile dropdown passbolt_controller_component_profile_dropdown_controller mad_view_component_button_dropdown js_component ready">
 		<div class="center-cell-wrapper">
 			<div class="details center-cell">
-				<span class="name">Great a garbo</span>
+				<span class="name">User a garbo</span>
 				<span class="email">great@passbolt.com</span>
 			</div>
 		</div>
