@@ -106,6 +106,7 @@
 							<div class="col7">
 								<h3 class="question">What functionalities do you support?</h3>
 								<div class="answer">
+									<img src="../src/img/diagrams/howitworks.svg" alt="How it works">
 									<p>
 										Here is an overview of the key functionality of Passbolt at present (in blue), and
 										what we have in mind for the future (in white). Click on the picture to enlarge.

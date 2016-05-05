@@ -110,7 +110,29 @@ please enter passphrase: <span class="blink seriously">█</span>
             </div>
         </div>
     </div>
-
+    <div class="page-row howitworks">
+        <h2>How does collaboration works in passbolt?</h2>
+        <div class="grid grid-responsive-12">
+            <div class="row">
+                <div class="col12">
+                    <img src="../src/img/diagrams/howitworks.svg" alt="diagram showing how it works"/>
+                    <div class="visuallyhidden">
+                        <ol>
+                            <li>Ada have a password to share with betty</li>
+                            <li>Ada encrypt the secret using passbolt plugin,</li>
+                            <li>and Betty public key!</li>
+                            <li>The the secret is sent encrypted over HTTPS</li>
+                            <li>and stored on the passbolt server!</li>
+                            <li>Betty receive and email notification</li>
+                            <li>Betty logs in passsbolt with the CLI or web app</li>
+                            <li>Then using her private key,</li>
+                            <li>Betty decrypts the password and uses it to login!</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="page-row usp">
         <h2>How is passbolt different from other password managers?</h2>
         <div class="grid grid-responsive-12">
@@ -232,7 +254,7 @@ please enter passphrase: <span class="blink seriously">█</span>
                         <i class="fa fa-fw fa-twitter-square"></i>
                     </a>
                     <a href="https://www.facebook.com/passbolt">
-                        <i class="fa fa-fw fa-"></i>
+                        <i class="fa fa-fw fa-facebook-square"></i>
                     </a>
                     <a href="https://www.github.com/passbolt">
                         <i class="fa fa-fw fa-github-square"></i>
@@ -240,8 +262,8 @@ please enter passphrase: <span class="blink seriously">█</span>
                 </div>
             </div>
         </div>
-
     </div>
+
 <?php include('includes/AN_footer.php'); ?>
 </div>
 <script src="js/jquery-2.1.3.min.js"></script>

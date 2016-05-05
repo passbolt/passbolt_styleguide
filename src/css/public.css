@@ -5996,6 +5996,11 @@ button.swiper-pagination-bullet {
     display: block;
   }
 }
+.page.home .howitworks img {
+  width: 100%;
+  max-width: 700px;
+  margin: auto;
+}
 .home .page-row.signup .newsletter label {
   color: #888888;
 }
