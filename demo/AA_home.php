@@ -118,13 +118,13 @@ please enter passphrase: <span class="blink seriously">█</span>
                     <img src="../src/img/diagrams/howitworks.svg" alt="diagram showing how it works"/>
                     <div class="visuallyhidden">
                         <ol>
-                            <li>Ada have a password to share with betty</li>
-                            <li>Ada encrypt the secret using passbolt plugin,</li>
+                            <li>Ada has a password to share with betty</li>
+                            <li>Ada encrypts the password using passbolt plugin,</li>
                             <li>and Betty public key!</li>
-                            <li>The the secret is sent encrypted over HTTPS</li>
+                            <li>The the password is sent encrypted over HTTPS</li>
                             <li>and stored on the passbolt server!</li>
-                            <li>Betty receive and email notification</li>
-                            <li>Betty logs in passsbolt with the CLI or web app</li>
+                            <li>Betty receives and email notification</li>
+                            <li>Betty logs in to passsbolt with the CLI or web app</li>
                             <li>Then using her private key,</li>
                             <li>Betty decrypts the password and uses it to login!</li>
                         </ol>
