@@ -4195,7 +4195,7 @@ input[type="search"]::-webkit-search-cancel-button {
   background-image: -o-linear-gradient(top, #f3f3f3, #eeeeee);
   background-image: linear-gradient(top, #f3f3f3, #eeeeee);
   /* fixed fluid fixed layout */
-  /* remaing user card styling */
+  /* user card styling */
 }
 .user.profile .more {
   background: #eeeeee;
@@ -4239,26 +4239,27 @@ input[type="search"]::-webkit-search-cancel-button {
   float: left;
   height: 2.8125em;
   font-size: .9em;
-  padding: .3125em .625em;
+  padding: .3125em 1em;
   /* 5/10px */
-}
-.user.profile .details .name {
-  font-weight: bold;
-  padding-top: .0625em;
 }
 .user.profile .details .name,
 .user.profile .details .email {
   width: 100%;
+  float: left;
   clear: both;
   text-overflow: clip;
   word-wrap: break-word;
   overflow: hidden;
-  height: 1.25em;
-  float: left;
   display: inline-block;
 }
+.user.profile .details .name {
+  font-weight: bold;
+  padding-top: 0;
+}
+.user.profile .details .email {
+  padding-bottom: 0;
+}
 .user.profile .more a {
-  background: blue;
   display: block;
   background: transparent url('../img/controls/tree-ctrl.png') center -9px no-repeat;
   margin-top: 1em;

@@ -39,7 +39,7 @@
 		margin-left: -1.75em;
 	}
 
-	/* remaing user card styling */
+	/* user card styling */
 	.picture img {
 		width: 2.875em; /* 46px */
 		padding: 0.1250em; /* 2px */
@@ -49,12 +49,8 @@
 		float: left;
 		height: 2.8125em;
 		font-size: .9em;
-		padding: .3125em .625em; /* 5/10px */
+		padding: .3125em 1em; /* 5/10px */
 
-		.name {
-			font-weight: bold;
-			padding-top: .0625em;
-		}
 		.name,
 		.email {
 			width: 100%;
@@ -63,13 +59,17 @@
 			text-overflow: clip;
 			word-wrap: break-word;
 			overflow: hidden;
-			height: 1.25em;
-			float: left;
 			display: inline-block;
+		}
+		.name {
+			font-weight: bold;
+			padding-top:0;
+		}
+		.email {
+			padding-bottom:0;
 		}
 	}
 	.more a {
-		background: blue;
 		display: block;
 		background: transparent url('@{images}/controls/tree-ctrl.png') center -9px no-repeat;
 		margin-top: 1em;
