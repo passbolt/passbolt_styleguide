@@ -42,17 +42,17 @@ Install
 
 Install grunt
 ```
-	npm install -g grunt-cli
+npm install -g grunt-cli
 ```
 
 Install the needed modules defined in the grunt config
 ```
-	npm install
+npm install
 ```
 
 Make sure Grunt watch for less changes and compile them into CSS
 ```
-	grunt watch
+grunt watch
 ```
 
 Edit one LESS file to see if it works!
@@ -67,33 +67,21 @@ Checkout npm documentation: https://docs.npmjs.com/developers
 In a nutshell, once you are done changing, make sure you change the version
 number in the package.json.
 ```
-	{
-	  "name": "passbolt-styleguide",
-	  "version": "X.X.X",
-	  [...]
-	}
+{
+  "name": "passbolt-styleguide",
+  "version": "X.X.X",
+  [...]
+}
 ```
 
 You need to commit your changes and tag the new version of the styleguide.
 This is how npm knows a new version is available in the project using the package.
 ```
-	git commit -am 'X.X.X'
-	git tag -a X.X.X -m 'X.X.X'
-	git push origin X.X.X
-	git push
+grunt styleguide-publish
 ```
 
-Then we publish it again with
+in your project you should also have a grunt task to manage the copy/pasting in the right place such as
 ```
-	npm publish
-```
-
-in your project using the npm package you can then run:
-```
-	npm update
+grunt styleguide-update
 ```
 
-You should also have a grunt task to manage the copy/pasting in the right place such as
-```
-	grunt styleguide-deploy
-```
