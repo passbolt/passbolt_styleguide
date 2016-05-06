@@ -1,0 +1,68 @@
+.page.roadmap {
+  .page-row.intro .grid,
+  .page-row.roadmap .grid {
+    margin: auto;
+    max-width: 1200px;
+  }
+  .page-row.signup {
+    background:#FAFAFA;
+    border-top:1px solid @grey-lightest;
+    margin-bottom:0;
+  }
+
+  .cards {
+    border:0;
+    .tile-description {
+      font-size:.9em;
+    }
+    .tile-teaser i {
+      border:1px solid @grey-lightest;
+      background:@grey-lightest;
+      border-radius: 50%;
+      font-size: 1em;
+      display: block;
+      margin-top:.125em;
+      width: 70px;
+      height: 70px;
+
+      &.docker {
+        background: transparent url('@{images}/third_party/docker_90.png') center center no-repeat;
+        background-size: 90px auto;
+      }
+      &.slack {
+        background: transparent url('@{images}/third_party/slack_90.png') center center no-repeat;
+        background-size: 70px auto;
+      }
+    }
+  }
+}
+
+/* even larger screen */
+@media all and (min-width: 800px) {
+  .page.roadmap {
+    .page-row.intro {
+      min-height: 400px;
+      height: 45%;
+      background: #FAFAFA url('@{images}/illustrations/birds2_850.png') 90% center no-repeat;
+      background-size: 35% auto;
+
+      h1 {
+        margin: 5% 0 2% .3em;
+        padding-left:0;
+        max-width: 24em;
+        font-size:3em;
+      }
+      h1 + p {
+        width: 50%;
+        max-width: 25em;
+        font-size: 1.75em;
+        padding-left:0;
+        margin: 0 0 3% .5em;
+        text-align: left;
+        line-height:1.666em;
+      }
+    }
+    .page-row.roadmap {
+    }
+  }
+}

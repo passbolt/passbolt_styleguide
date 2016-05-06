@@ -5111,6 +5111,224 @@ input[type="search"]::-webkit-search-cancel-button {
   float: right;
   width: 70%;
 }
+.card {
+  /*
+ * For IE 6/7 only
+ * Include this rule to trigger hasLayout and contain floats.
+ */
+  /*
+ * Clearfix: contain floats
+ *
+ * For modern browsers
+ * 1. The space content is one way to avoid an Opera bug when the
+ *	`contenteditable` attribute is included anywhere else in the document.
+ *	Otherwise it causes space to appear at the top and bottom of elements
+ *	that receive the `clearfix` class.
+ * 2. The use of `table` rather than `block` is only necessary if using
+ *	`:before` to contain the top-margins of child elements.
+ */
+  /*
+ * For IE 6/7 only
+ * Include this rule to trigger hasLayout and contain floats.
+ */
+  zoom: 1;
+  /*
+ * Clearfix: contain floats
+ *
+ * For modern browsers
+ * 1. The space content is one way to avoid an Opera bug when the
+ *	`contenteditable` attribute is included anywhere else in the document.
+ *	Otherwise it causes space to appear at the top and bottom of elements
+ *	that receive the `clearfix` class.
+ * 2. The use of `table` rather than `block` is only necessary if using
+ *	`:before` to contain the top-margins of child elements.
+ */
+  margin-bottom: 1.25em;
+  padding: .5em;
+  border: 1px solid #f3f3f3;
+}
+.card:before,
+.card:after {
+  content: "";
+  display: table;
+}
+.card:after {
+  clear: both;
+}
+.card:before,
+.card:after {
+  content: "";
+  display: table;
+}
+.card:after {
+  clear: both;
+}
+.card.backlog,
+.card.progress,
+.card.completed {
+  border-bottom-left-radius: 5px;
+  border-top-left-radius: 5px;
+}
+.card.backlog {
+  border-left: 5px solid #d40101;
+  border-bottom-left-radius: 5px;
+  border-top-left-radius: 5px;
+}
+.card.progress {
+  border-left: 5px solid #fcd500;
+}
+.card.completed {
+  border-left: 5px solid #009900;
+}
+.card .content-wrapper {
+  float: left;
+  width: 100%;
+}
+.card .content-wrapper .content {
+  margin-left: 90px;
+  padding: .5em;
+}
+.card .content-wrapper .content .title {
+  font-weight: bold;
+  padding-bottom: .25em;
+}
+.card .content-wrapper .content .description {
+  font-size: .875em;
+}
+.card .teaser {
+  float: left;
+  width: 90px;
+  margin-left: -100%;
+}
+.card .teaser i {
+  width: 70px;
+  height: 70px;
+  display: block;
+  margin: .5em;
+  border: 1px solid #f3f3f3;
+  background: #dddddd;
+  border-radius: 50%;
+}
+.card .teaser i.passbolt {
+  background: transparent url('../img/logo/icon-90.jpg') center center no-repeat;
+  background-size: 60px auto;
+}
+.card .teaser i.accessibility {
+  background: transparent url('../img/papericon/accessibility_90.png') center center no-repeat;
+  background-size: 50px auto;
+}
+.card .teaser i.check {
+  background: transparent url('../img/papericon/check_90.png') center center no-repeat;
+  background-size: 40px auto;
+}
+.card .teaser i.comment {
+  background: transparent url('../img/papericon/comment_90.png') center center no-repeat;
+  background-size: 40px auto;
+}
+.card .teaser i.email {
+  background: transparent url('../img/papericon/email_90.png') center center no-repeat;
+  background-size: 40px auto;
+}
+.card .teaser i.fingerprint {
+  background: transparent url('../img/papericon/fingerprint_90.png') center center no-repeat;
+  background-size: 50px auto;
+}
+.card .teaser i.folder {
+  background: transparent url('../img/papericon/folder_90.png') center center no-repeat;
+  background-size: 40px auto;
+}
+.card .teaser i.groups {
+  background: transparent url('../img/papericon/groups_90.png') center center no-repeat;
+  background-size: 50px auto;
+}
+.card .teaser i.help {
+  background: transparent url('../img/papericon/help_90.png') center center no-repeat;
+  background-size: 50px auto;
+}
+.card .teaser i.i18n {
+  background: transparent url('../img/papericon/i18n_90.png') center center no-repeat;
+  background-size: 50px auto;
+}
+.card .teaser i.keyring {
+  background: transparent url('../img/papericon/keyring_90.png') center center no-repeat;
+  background-size: 45px auto;
+}
+.card .teaser i.ldap {
+  background: transparent url('../img/papericon/ldap_90.png') center center no-repeat;
+  background-size: 50px auto;
+}
+.card .teaser i.lock {
+  background: transparent url('../img/papericon/lock_90.png') center center no-repeat;
+  background-size: 50px auto;
+}
+.card .teaser i.lock2 {
+  background: transparent url('../img/papericon/lock2_90.png') center center no-repeat;
+  background-size: 60px auto;
+}
+.card .teaser i.monitor {
+  background: transparent url('../img/papericon/monitor_90.png') center center no-repeat;
+  background-size: 50px auto;
+}
+.card .teaser i.notification {
+  background: transparent url('../img/papericon/notification_90.png') center center no-repeat;
+  background-size: 50px auto;
+}
+.card .teaser i.search {
+  background: transparent url('../img/papericon/search_90.png') center center no-repeat;
+  background-size: 50px auto;
+}
+.card .teaser i.security {
+  background: transparent url('../img/papericon/security_90.png') center center no-repeat;
+  background-size: 50px auto;
+}
+.card .teaser i.share {
+  background: transparent url('../img/papericon/share_90.png') center center no-repeat;
+  background-size: 50px auto;
+}
+.card .teaser i.star {
+  background: transparent url('../img/papericon/star_90.png') center center no-repeat;
+  background-size: 40px auto;
+}
+.card .teaser i.sync {
+  background: transparent url('../img/papericon/sync_90.png') center center no-repeat;
+  background-size: 50px auto;
+}
+.card .teaser i.terminal {
+  background: transparent url('../img/papericon/terminal_90.png') center center no-repeat;
+  background-size: 50px auto;
+}
+.card .teaser i.android {
+  background: transparent url('../img/third_party/android_90.png') center center no-repeat;
+  background-size: 60px auto;
+}
+.card .teaser i.chrome {
+  background: transparent url('../img/third_party/chrome_90.jpg') center center no-repeat;
+  background-size: 50px auto;
+}
+.card .teaser i.docker {
+  background: transparent url('../img/third_party/docker_90.png') center center no-repeat;
+  background-size: 50px auto;
+}
+.card .teaser i.firefox {
+  background: transparent url('../img/third_party/firefox_90.jpg') center center no-repeat;
+  background-size: 50px auto;
+}
+.card .teaser i.keypassx {
+  background: transparent url('../img/third_party/keypassx_90.jpg') center center no-repeat;
+  background-size: 50px auto;
+}
+.card .teaser i.jenkins {
+  background: transparent url('../img/third_party/jenkins_90.png') center center no-repeat;
+  background-size: 50px auto;
+}
+.card .teaser i.swagger {
+  background: transparent url('../img/third_party/swagger_90.png') center center no-repeat;
+  background-size: 60px auto;
+}
+.card .teaser i.slack {
+  background: transparent url('../img/third_party/slack_90.png') center center no-repeat;
+  background-size: 40px auto;
+}
 .swiper-container {
   margin: 0 auto;
   position: relative;
@@ -5731,19 +5949,23 @@ button.swiper-pagination-bullet {
     margin-left: 2em;
   }
 }
-.home .page-row {
+.home .page-row,
+.featured .page-row {
   padding: 1em;
 }
-.home .page-row .grid {
+.home .page-row .grid,
+.featured .page-row .grid {
   margin: auto;
   max-width: 1000px;
 }
-.home .footer {
+.home .footer,
+.featured .footer {
   position: relative;
-  margin: 2em 0 0 0;
+  margin: 0;
 }
 /* larger screen */
 @media all and (min-width: 440px) {
+  .featured h2,
   .home h2 {
     margin: 1em auto;
     text-align: center;
@@ -6001,29 +6223,32 @@ button.swiper-pagination-bullet {
   max-width: 700px;
   margin: auto;
 }
-.home .page-row.signup .newsletter label {
+.page-row.signup {
+  padding-bottom: 3em;
+}
+.page-row.signup .newsletter label {
   color: #888888;
 }
-.home .page-row.signup .newsletter input[type=email] {
+.page-row.signup .newsletter input[type=email] {
   margin: .5em 2em .5em 0em;
   width: 95%;
   padding: .225em;
 }
-.home .page-row.signup .newsletter .smallprint {
+.page-row.signup .newsletter .smallprint {
   font-size: .75em;
   padding: 1em .125em;
 }
-.home .page-row.signup .social {
+.page-row.signup .social {
   text-align: center;
   padding-top: .5em;
   font-size: 3.5em;
 }
 /* larger screen */
 @media all and (min-width: 440px) {
-  .home .page-row.signup .newsletter {
+  .page-row.signup .newsletter {
     font-size: 1.25em;
   }
-  .home .page-row.signup .newsletter .smallprint {
+  .page-row.signup .newsletter .smallprint {
     padding-top: 0;
   }
 }
@@ -6131,5 +6356,63 @@ button.swiper-pagination-bullet {
   }
   .thankyou.page .grid {
     padding-top: 4.5em;
+  }
+}
+.page.roadmap .page-row.intro .grid,
+.page.roadmap .page-row.roadmap .grid {
+  margin: auto;
+  max-width: 1200px;
+}
+.page.roadmap .page-row.signup {
+  background: #FAFAFA;
+  border-top: 1px solid #f3f3f3;
+  margin-bottom: 0;
+}
+.page.roadmap .cards {
+  border: 0;
+}
+.page.roadmap .cards .tile-description {
+  font-size: .9em;
+}
+.page.roadmap .cards .tile-teaser i {
+  border: 1px solid #f3f3f3;
+  background: #f3f3f3;
+  border-radius: 50%;
+  font-size: 1em;
+  display: block;
+  margin-top: .125em;
+  width: 70px;
+  height: 70px;
+}
+.page.roadmap .cards .tile-teaser i.docker {
+  background: transparent url('../img/third_party/docker_90.png') center center no-repeat;
+  background-size: 90px auto;
+}
+.page.roadmap .cards .tile-teaser i.slack {
+  background: transparent url('../img/third_party/slack_90.png') center center no-repeat;
+  background-size: 70px auto;
+}
+/* even larger screen */
+@media all and (min-width: 800px) {
+  .page.roadmap .page-row.intro {
+    min-height: 400px;
+    height: 45%;
+    background: #fafafa url('../img/illustrations/birds2_850.png') 90% center no-repeat;
+    background-size: 35% auto;
+  }
+  .page.roadmap .page-row.intro h1 {
+    margin: 5% 0 2% .3em;
+    padding-left: 0;
+    max-width: 24em;
+    font-size: 3em;
+  }
+  .page.roadmap .page-row.intro h1 + p {
+    width: 50%;
+    max-width: 25em;
+    font-size: 1.75em;
+    padding-left: 0;
+    margin: 0 0 3% .5em;
+    text-align: left;
+    line-height: 1.666em;
   }
 }

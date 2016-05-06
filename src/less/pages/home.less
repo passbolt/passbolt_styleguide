@@ -1,4 +1,5 @@
-.home {
+.home,
+.featured {
   .page-row {
     padding: 1em;
 
@@ -9,12 +10,13 @@
   }
   .footer {
     position:relative;
-    margin:2em 0 0 0;
+    margin:0;
   }
 }
 
 /* larger screen */
 @media all and (min-width: 440px) {
+  .featured,
   .home {
     h2 {
       margin:1em auto;
@@ -29,5 +31,5 @@
 @import "../page-components/home/api.less";
 @import "../page-components/home/features.less";
 @import "../page-components/home/howitworks.less";
-@import "../page-components/home/signup.less";
+@import "../page-components/signup.less";
 @import "../page-components/home/cli.less";
