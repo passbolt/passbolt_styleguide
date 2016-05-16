@@ -31,7 +31,7 @@
 						<a href="../demo/AN_setup2a0_createnewkey.php">2. Define your keys</a>
 					</li>
 					<li class="">
-						<a href="../demo/AN_setup3a0_setmasterpassword.php">3. Set a master password</a>
+						<a href="../demo/AN_setup3a0_setmasterpassword.php">3. Set a passphrase</a>
 					</li>
 					<li class="selected">
 						<a href="../demo/AN_setup4a0_securitytoken.php">4. Set a security token</a>
@@ -72,7 +72,7 @@
 								to steal your data (aka. protect you from phishing attacks).
 							</p>
 							<p>
-							This visual cue will be shown whenever we ask you for your master password and other sensitive places
+							This visual cue will be shown whenever we ask you for your passphrase and other sensitive places
 								to help make sure you are dealing with an authentic passbolt dialog and not a fake one!
 							</p>
 							<p><a href="#">Learn more</a>.</p>

@@ -29,7 +29,7 @@
 						2. Define your keys
 					</li>
 					<li class="disabled">
-						3. Set a master password
+						3. Set a passphrase
 					</li>
 					<li class="disabled">
 						4. Set a security token

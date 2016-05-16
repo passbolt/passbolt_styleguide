@@ -28,7 +28,7 @@
 						<a href="../demo/AN_setup2a0_createnewkey.php">2. Define your keys</a>
 					</li>
 					<li class="disabled">
-						3. Set a master password
+						3. Set a passphrase
 					</li>
 					<li class="disabled">
 						4. Set a security token
