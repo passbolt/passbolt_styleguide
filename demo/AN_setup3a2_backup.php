@@ -28,7 +28,7 @@
 						<a href="../demo/AN_setup2a0_createnewkey.php">2. Define your keys</a>
 					</li>
 					<li class="selected">
-						<a href="../demo/AN_setup3a0_setmasterpassword.php">3. Set a master password</a>
+						<a href="../demo/AN_setup3a0_setmasterpassword.php">3. Set a passphrase</a>
 					</li>
 					<li class="disabled">
 						4. Set a security token
@@ -57,15 +57,15 @@
 							<p>
 								You should always make a backup. If you loose this key (by breaking or loosing your computer
 								and not having a backup for example), your encrypted data will be lost even if you remember
-								your master password.
+								your passphrase.
 							</p>
 						</div>
 					</div>
 					<div class="col4 last">
 						<h3>Pro tips</h3>
 						<p>
-							The secret key is itself encrypted with the master password, so it is only usable if one knows
-							the master password.<br><br>
+							The secret key is itself encrypted with the passphrase, so it is only usable if one knows
+							the passphrase.<br><br>
 							It is a good practice to store a backup in a different location.
 							You can, for example, print it and mail it to a family member (along with a nice postcard!) and ask them to keep it somewhere safe.
 							<br><br>

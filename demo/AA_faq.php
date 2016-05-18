@@ -161,7 +161,7 @@
 										<span class="legend">fig. example of security token</span>
 									</figure>
 									<p>
-										This cue will be shown whenever we ask you for your master password and
+										This cue will be shown whenever we ask you for your passphrase and
 										other sensitive places to help make sure you are dealing with an authentic
 										passbolt dialog and not a fake one!
 									</p>

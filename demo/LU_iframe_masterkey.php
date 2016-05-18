@@ -18,7 +18,7 @@
 <div class="dialog-wrapper">
 	<div class="dialog master-password">
 		<div class="dialog-header">
-			<h2>Please enter your master password</h2>
+			<h2>Please enter your passphrase</h2>
 			<a class="dialog-close js-dialog-close" href="#">
 				<i class="fa fa-close"></i>
 				<span class="visuallyhidden">close</span>
@@ -29,7 +29,7 @@
 			<div class="form-content">
 
 				<div class="input text required">
-					<label for="js_master_password">You need your master password to continue.</label>
+					<label for="js_master_password">You need your passphrase to continue.</label>
 					<input type="password" placeholder="password" id="js_master_password" maxlength="50">
 					<!-- The field below is invisible and used to receive the first focus after the iframe is loaded -->
 					<!-- This way we can control and treat the events received next -->

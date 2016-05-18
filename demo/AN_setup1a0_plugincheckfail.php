@@ -29,7 +29,7 @@
 						2. Define your keys
 					</li>
 					<li class="disabled">
-						3. Set a master password
+						3. Set a passphrase
 					</li>
 					<li class="disabled">
 						4. Set a security token
@@ -54,7 +54,7 @@
 						<div class="why-plugin-wrapper">
 							<h3>Why do I need a plugin</h3>
 							<p>
-								Passbolt requires a browser add-on to guarantee that your secret key and your master password are never accessible to any website (including passbolt.com itself).
+								Passbolt requires a browser add-on to guarantee that your secret key and your passphrase are never accessible to any website (including passbolt.com itself).
 								This is also the only way to guarantee that the core cryptographic libraries cannot be tampered with.
 								<a href="#">Learn more</a>
 							</p>

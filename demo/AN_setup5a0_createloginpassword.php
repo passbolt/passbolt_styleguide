@@ -28,7 +28,7 @@
 						<a href="../demo/AN_setup2a0_createnewkey.php">2. Define your keys</a>
 					</li>
 					<li class="">
-						<a href="../demo/AN_setup3a0_setmasterpassword.php">3. Set a master password</a>
+						<a href="../demo/AN_setup3a0_setmasterpassword.php">3. Set a passphrase</a>
 					</li>
 					<li class="">
 						<a href="../demo/AN_setup4a0_securitytoken.php">4. Set a security token</a>
@@ -64,7 +64,7 @@
 
 								<div class="input-password-wrapper">
 									<div class="input password required">
-										<label for="js_field_password" class="hidden">New master password</label>
+										<label for="js_field_password" class="hidden">New passphrase</label>
 										<input name="passbolt.model.User.password" type="password" id="js_field_password" placeholder="enter your password here">
 										<input class="required hidden" maxlength="50" type="text" id="js_field_password_clear">
 									</div>

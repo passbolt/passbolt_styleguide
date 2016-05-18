@@ -12,7 +12,7 @@
 	<div class="header second">
 		<?php include('includes/AN_logo.php'); ?>
 		<div class="col2_3">
-			<h2>Now let's setup your master password!</h2>
+			<h2>Now let's setup your passphrase!</h2>
 		</div>
 	</div>
 
@@ -28,7 +28,7 @@
 						<a href="../demo/AN_setup2a0_createnewkey.php">2. Define your keys</a>
 					</li>
 					<li class="selected">
-						<a href="../demo/AN_setup3a0_setmasterpassword.php">3. Set a master password</a>
+						<a href="../demo/AN_setup3a0_setmasterpassword.php">3. Set a passphrase</a>
 					</li>
 					<li class="disabled">
 						4. Set a security token
@@ -51,7 +51,7 @@
 
 							<div class="input-password-wrapper">
 								<div class="input password required">
-									<label for="js_field_password" class="hidden">New master password</label>
+									<label for="js_field_password" class="hidden">New passphrase</label>
 									<input name="passbolt.model.User.password" type="password" id="js_field_password" placeholder="enter your password here">
 									<input class="required hidden" maxlength="50" type="text" id="js_field_password_clear" style="display: none;">
 								</div>

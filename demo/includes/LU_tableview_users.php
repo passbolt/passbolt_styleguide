@@ -347,14 +347,14 @@
 				</td>
 
 				<td class="js_grid_column_name m-cell">
-					<div title="Ismail Guennouni">
-						Ismail Guennouni
+					<div title="Ada Lovelace">
+						Ada Lovelace
 					</div>
 				</td>
 
 				<td class="js_grid_column_username m-cell">
-					<div title="ismail@passbolt.com">
-						ismail@passbolt.com
+					<div title="ada@passbolt.com">
+						ada@passbolt.com
 					</div>
 				</td>
 
