@@ -45,6 +45,15 @@
 								</div>
 							</div>
 						</li>
+						<li id="9609c19d-7c4f-be67-7c97-5b82720049f8" class="todo ready disabled" data-view-id="11">
+							<div class="row">
+								<div class="main-cell-wrapper">
+									<div class="main-cell">
+										<a href="#"><span>delete</span></a>
+									</div>
+								</div>
+							</div>
+						</li>
 					</ul>
 				</div>
 			</li>
