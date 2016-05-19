@@ -2929,13 +2929,13 @@ article ol.lower-alpha {
   text-rendering: auto;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  /* favorites */
 }
-/* favorites */
-.icon.fav:before {
+.icon .fav:before {
   content: "\f005";
   color: #dddddd;
 }
-.icon.unfav:before {
+.icon .unfav:before {
   content: "\f005";
   color: #d40101;
 }
