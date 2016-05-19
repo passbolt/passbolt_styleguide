@@ -4400,10 +4400,10 @@ article video {
 #loginSubmit {
   margin-left: 2px;
 }
-html body .button {
+html body a.button {
   height: 1.5em;
 }
-html body .button i.fa {
+html body a.button i.fa {
   margin-top: .125em;
 }
 /**

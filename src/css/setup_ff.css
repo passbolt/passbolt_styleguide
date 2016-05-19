@@ -5320,10 +5320,10 @@ table.table-info.horizontal tbody tr:nth-child(even) {
     width: 87%;
   }
 }
-html body .button {
+html body a.button {
   height: 1.5em;
 }
-html body .button i.fa {
+html body a.button i.fa {
   margin-top: .125em;
 }
 /**

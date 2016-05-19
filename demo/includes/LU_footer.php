@@ -13,6 +13,7 @@
 <link rel="stylesheet" type="text/css" href="css/perfect-scrollbar.min.css" />
 <script src="js/jquery-2.1.3.min.js"></script>
 <script src='js/perfect-scrollbar.jquery.min.js'></script>
+<script src='js/more_button.js'></script>
 <script>
 	$(function() {
 		$('.tableview-content').perfectScrollbar();
