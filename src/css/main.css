@@ -2929,13 +2929,13 @@ article ol.lower-alpha {
   text-rendering: auto;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  /* favorites */
 }
-/* favorites */
-.icon.fav:before {
+.icon .fav:before {
   content: "\f005";
   color: #dddddd;
 }
-.icon.unfav:before {
+.icon .unfav:before {
   content: "\f005";
   color: #d40101;
 }
@@ -4213,6 +4213,14 @@ input[type="search"]::-webkit-search-cancel-button {
 }
 .user.profile .dropdown-content.visible {
   display: block;
+}
+.user.profile.dropdown.pressed .more {
+  background: #ffffff;
+  border: 0;
+}
+.user.profile.dropdown.pressed .dropdown-content {
+  border-top: 1px dotted #dddddd;
+  background: #ffffff;
 }
 /* hide left column when there is no space */
 @media all and (max-width: 1024px) {
