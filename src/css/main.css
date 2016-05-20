@@ -4227,6 +4227,86 @@ input[type="search"]::-webkit-search-cancel-button {
     display: none;
   }
 }
+.usercard-col-2 {
+  /*
+ * For IE 6/7 only
+ * Include this rule to trigger hasLayout and contain floats.
+ */
+  /*
+ * Clearfix: contain floats
+ *
+ * For modern browsers
+ * 1. The space content is one way to avoid an Opera bug when the
+ *	`contenteditable` attribute is included anywhere else in the document.
+ *	Otherwise it causes space to appear at the top and bottom of elements
+ *	that receive the `clearfix` class.
+ * 2. The use of `table` rather than `block` is only necessary if using
+ *	`:before` to contain the top-margins of child elements.
+ */
+  /*
+ * For IE 6/7 only
+ * Include this rule to trigger hasLayout and contain floats.
+ */
+  zoom: 1;
+  /*
+ * Clearfix: contain floats
+ *
+ * For modern browsers
+ * 1. The space content is one way to avoid an Opera bug when the
+ *	`contenteditable` attribute is included anywhere else in the document.
+ *	Otherwise it causes space to appear at the top and bottom of elements
+ *	that receive the `clearfix` class.
+ * 2. The use of `table` rather than `block` is only necessary if using
+ *	`:before` to contain the top-margins of child elements.
+ */
+  margin: 0 0 1em 0;
+}
+.usercard-col-2:before,
+.usercard-col-2:after {
+  content: "";
+  display: table;
+}
+.usercard-col-2:after {
+  clear: both;
+}
+.usercard-col-2:before,
+.usercard-col-2:after {
+  content: "";
+  display: table;
+}
+.usercard-col-2:after {
+  clear: both;
+}
+.usercard-col-2:last-of-type {
+  margin-bottom: 0;
+}
+.usercard-col-2 .content-wrapper {
+  float: left;
+  width: 100%;
+}
+.usercard-col-2 .content-wrapper .content {
+  margin-left: 28px;
+  padding: 0 1em 0 1em;
+}
+.usercard-col-2 .content-wrapper .content .name {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -o-text-overflow: ellipsis;
+  -ms-text-overflow: ellipsis;
+}
+.usercard-col-2 .content-wrapper .content .subinfo {
+  color: #888888;
+}
+.usercard-col-2 .avatar {
+  float: left;
+  width: 28px;
+  margin-left: -100%;
+}
+.usercard-col-2 .avatar img {
+  width: 28px;
+  height: 28px;
+}
 /*
  * Breadcrumbs
  */
@@ -5335,6 +5415,13 @@ input[type="search"]::-webkit-search-cancel-button {
   box-sizing: border-box;
   width: 100%;
 }
+.panel.aside .resource .shared-with .usercard-col-2 .name,
+.panel.aside .user .shared-with .usercard-col-2 .name,
+.panel.aside .resource .shared-with .usercard-col-2 .subinfo,
+.panel.aside .user .shared-with .usercard-col-2 .subinfo {
+  font-size: 0.875em;
+  line-height: 1.25em;
+}
 .panel.aside .resource .dialog-close,
 .panel.aside .user .dialog-close {
   position: absolute;
@@ -6107,22 +6194,27 @@ table.table-info.horizontal tbody tr:nth-child(even) {
   font-size: .813em;
 }
 /* password share tab */
-.dialog .share-tab {
+.dialog .share-tab,
+.sidebar .shared-with {
   /* list of existing permissions settings */
   /* new/updated permissions */
   /* message */
 }
-.dialog .share-tab .form-content {
+.dialog .share-tab .form-content,
+.sidebar .shared-with .form-content {
   padding: 1em;
 }
-.dialog .share-tab .permission-edit {
+.dialog .share-tab .permission-edit,
+.sidebar .shared-with .permission-edit {
   padding: 0em;
 }
-.dialog .share-tab .permissions.scroll {
+.dialog .share-tab .permissions.scroll,
+.sidebar .shared-with .permissions.scroll {
   max-height: 19em;
   margin: 0;
 }
-.dialog .share-tab .row {
+.dialog .share-tab .row,
+.sidebar .shared-with .row {
   /*
  * For IE 6/7 only
  * Include this rule to trigger hasLayout and contain floats.
@@ -6161,37 +6253,48 @@ table.table-info.horizontal tbody tr:nth-child(even) {
   /* row actions */
 }
 .dialog .share-tab .row:before,
-.dialog .share-tab .row:after {
+.sidebar .shared-with .row:before,
+.dialog .share-tab .row:after,
+.sidebar .shared-with .row:after {
   content: "";
   display: table;
 }
-.dialog .share-tab .row:after {
+.dialog .share-tab .row:after,
+.sidebar .shared-with .row:after {
   clear: both;
 }
 .dialog .share-tab .row:before,
-.dialog .share-tab .row:after {
+.sidebar .shared-with .row:before,
+.dialog .share-tab .row:after,
+.sidebar .shared-with .row:after {
   content: "";
   display: table;
 }
-.dialog .share-tab .row:after {
+.dialog .share-tab .row:after,
+.sidebar .shared-with .row:after {
   clear: both;
 }
-.dialog .share-tab .row:last-child {
+.dialog .share-tab .row:last-child,
+.sidebar .shared-with .row:last-child {
   border: 0;
 }
-.dialog .share-tab .row .avatar img {
+.dialog .share-tab .row .avatar img,
+.sidebar .shared-with .row .avatar img {
   width: 36px;
   height: 36px;
   float: left;
 }
 .dialog .share-tab .row .user,
-.dialog .share-tab .row .group {
+.sidebar .shared-with .row .user,
+.dialog .share-tab .row .group,
+.sidebar .shared-with .row .group {
   width: 52%;
   float: left;
   padding-left: 1em;
   padding-right: 1em;
 }
-.dialog .share-tab .row .name {
+.dialog .share-tab .row .name,
+.sidebar .shared-with .row .name {
   display: block;
   white-space: nowrap;
   overflow: hidden;
@@ -6199,7 +6302,8 @@ table.table-info.horizontal tbody tr:nth-child(even) {
   -o-text-overflow: ellipsis;
   -ms-text-overflow: ellipsis;
 }
-.dialog .share-tab .row .details a {
+.dialog .share-tab .row .details a,
+.sidebar .shared-with .row .details a {
   color: #888888;
   white-space: nowrap;
   overflow: hidden;
@@ -6208,45 +6312,56 @@ table.table-info.horizontal tbody tr:nth-child(even) {
   -ms-text-overflow: ellipsis;
   display: block;
 }
-.dialog .share-tab .row .rights {
+.dialog .share-tab .row .rights,
+.sidebar .shared-with .row .rights {
   float: left;
   margin-top: .5em;
   width: 25%;
 }
-.dialog .share-tab .row .rights select {
+.dialog .share-tab .row .rights select,
+.sidebar .shared-with .row .rights select {
   width: 95%;
   font-size: 1em;
 }
-.dialog .share-tab .row .actions {
+.dialog .share-tab .row .actions,
+.sidebar .shared-with .row .actions {
   float: right;
   margin-top: 1em;
 }
-.dialog .share-tab .row .actions a {
+.dialog .share-tab .row .actions a,
+.sidebar .shared-with .row .actions a {
   font-size: 1.125em;
   padding: .25em .5em .2em .5em;
   border: 1px solid transparent;
 }
-.dialog .share-tab .row .actions a:hover {
+.dialog .share-tab .row .actions a:hover,
+.sidebar .shared-with .row .actions a:hover {
   border: 1px solid #dddddd;
 }
-.dialog .share-tab .row.inherited-permission .inherited-actions {
+.dialog .share-tab .row.inherited-permission .inherited-actions,
+.sidebar .shared-with .row.inherited-permission .inherited-actions {
   display: none;
   float: right;
 }
-.dialog .share-tab .row.inherited-permission:hover .inherited-actions {
+.dialog .share-tab .row.inherited-permission:hover .inherited-actions,
+.sidebar .shared-with .row.inherited-permission:hover .inherited-actions {
   display: block;
 }
-.dialog .share-tab .row.inherited-permission .inherited-actions a {
+.dialog .share-tab .row.inherited-permission .inherited-actions a,
+.sidebar .shared-with .row.inherited-permission .inherited-actions a {
   color: #888888;
 }
-.dialog .share-tab .row.permission-updated .avatar img {
+.dialog .share-tab .row.permission-updated .avatar img,
+.sidebar .shared-with .row.permission-updated .avatar img {
   border: 1px solid #ff4500;
 }
-.dialog .share-tab .message {
+.dialog .share-tab .message,
+.sidebar .shared-with .message {
   font-size: 0.813em;
   padding-left: 2em;
 }
-.dialog .share-tab .permission-add {
+.dialog .share-tab .permission-add,
+.sidebar .shared-with .permission-add {
   background-color: #ffffff;
   padding: 0 1em 1em 1em;
   /*
@@ -6282,24 +6397,36 @@ table.table-info.horizontal tbody tr:nth-child(even) {
  */
 }
 .dialog .share-tab .permission-add:before,
-.dialog .share-tab .permission-add:after {
+.sidebar .shared-with .permission-add:before,
+.dialog .share-tab .permission-add:after,
+.sidebar .shared-with .permission-add:after {
   content: "";
   display: table;
 }
-.dialog .share-tab .permission-add:after {
+.dialog .share-tab .permission-add:after,
+.sidebar .shared-with .permission-add:after {
   clear: both;
 }
 .dialog .share-tab .permission-add:before,
-.dialog .share-tab .permission-add:after {
+.sidebar .shared-with .permission-add:before,
+.dialog .share-tab .permission-add:after,
+.sidebar .shared-with .permission-add:after {
   content: "";
   display: table;
 }
-.dialog .share-tab .permission-add:after {
+.dialog .share-tab .permission-add:after,
+.sidebar .shared-with .permission-add:after {
   clear: both;
 }
-.dialog .share-tab .permission-add #passbolt-password-share-autocomplete-wrapper {
+.dialog .share-tab .permission-add #passbolt-password-share-autocomplete-wrapper,
+.sidebar .shared-with .permission-add #passbolt-password-share-autocomplete-wrapper {
   position: relative;
   width: 100%;
+}
+.sidebar .sharedwith .row .user,
+.sidebar .sharedwith .row .group {
+  width: 75%;
+  padding-top: 0;
 }
 /* hide icons if there is no space */
 @media all and (max-width: 480px) {
@@ -6337,6 +6464,87 @@ table.table-info.horizontal tbody tr:nth-child(even) {
 }
 .dialog-wrapper.session-expired-dialog .dialog-close {
   display: none;
+}
+/*
+ * Password workspace
+ * @todo better namespacing
+ */
+/* drag n drop */
+#js_dragged_resource {
+  padding: 6px 10px;
+  background-color: #ffffff;
+  border: 1px solid #dddddd;
+  -webkit-box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  -moz-box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+#js_dragged_resource span.name {
+  font-weight: bold;
+}
+/* sidebar */
+.panel.aside .resource .detailed-information li.password .value {
+  height: 1.6em;
+  padding-top: 0.2em;
+}
+/* unused column
+	@todo: remove html
+*/
+.js_grid_column_owner,
+.js_grid_column_copyLogin,
+.js_grid_column_copySecret {
+  display: none;
+}
+/* hide left column when there is no space */
+@media all and (max-width: 1024px) {
+  .tableview .js_grid_column_modified {
+    display: none;
+  }
+}
+/* Define state where there are no passwords, and the filter all items */
+.page.password .tableview.all_items.empty .tableview-header {
+  /* No tableview-header */
+  display: none;
+}
+.page.password .tableview.all_items.empty .tableview-content {
+  background: transparent url('../img/illustrations/nest.png') center 75% no-repeat;
+  background-size: 80%;
+  /* No tableview-header */
+  border: 0;
+  top: 0;
+  /* Tablet version */
+  /* Normal screen version */
+}
+@media all and (min-width: 780px) {
+  .page.password .tableview.all_items.empty .tableview-content {
+    background-position: center 60%;
+    background-size: 50%;
+  }
+}
+@media all and (min-width: 1024px) {
+  .page.password .tableview.all_items.empty .tableview-content {
+    background-position: center 70%;
+    background-size: 40%;
+  }
+}
+.page.password .tableview.all_items.empty .empty-content {
+  text-align: center;
+  margin: 3em 0.5em 0.67em 0.5em;
+}
+.page.password .tableview.all_items.empty .empty-content h1 {
+  font-size: 1.5em;
+}
+.page.password .tableview.all_items.empty .empty-content p {
+  font-size: 1em;
+  line-height: 1.5em;
+}
+@media all and (min-width: 780px) {
+  .page.password .tableview.all_items.empty .empty-content h1 {
+    font-size: 2.2em;
+  }
+  .page.password .tableview.all_items.empty .empty-content p {
+    font-size: 1.2em;
+    line-height: 1.8em;
+  }
 }
 /* sidebar / user details in overview */
 .panel.aside .user .header {
@@ -6443,87 +6651,6 @@ table.table-info.horizontal tbody tr:nth-child(even) {
 /* login history icon column centerign */
 .login-history td:first-child {
   text-align: center;
-}
-/*
- * Password workspace
- * @todo better namespacing
- */
-/* drag n drop */
-#js_dragged_resource {
-  padding: 6px 10px;
-  background-color: #ffffff;
-  border: 1px solid #dddddd;
-  -webkit-box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  -moz-box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-}
-#js_dragged_resource span.name {
-  font-weight: bold;
-}
-/* sidebar */
-.panel.aside .resource .detailed-information li.password .value {
-  height: 1.6em;
-  padding-top: 0.2em;
-}
-/* unused column
-	@todo: remove html
-*/
-.js_grid_column_owner,
-.js_grid_column_copyLogin,
-.js_grid_column_copySecret {
-  display: none;
-}
-/* hide left column when there is no space */
-@media all and (max-width: 1024px) {
-  .tableview .js_grid_column_modified {
-    display: none;
-  }
-}
-/* Define state where there are no passwords, and the filter all items */
-.page.password .tableview.all_items.empty .tableview-header {
-  /* No tableview-header */
-  display: none;
-}
-.page.password .tableview.all_items.empty .tableview-content {
-  background: transparent url('../img/illustrations/nest.png') center 75% no-repeat;
-  background-size: 80%;
-  /* No tableview-header */
-  border: 0;
-  top: 0;
-  /* Tablet version */
-  /* Normal screen version */
-}
-@media all and (min-width: 780px) {
-  .page.password .tableview.all_items.empty .tableview-content {
-    background-position: center 60%;
-    background-size: 50%;
-  }
-}
-@media all and (min-width: 1024px) {
-  .page.password .tableview.all_items.empty .tableview-content {
-    background-position: center 70%;
-    background-size: 40%;
-  }
-}
-.page.password .tableview.all_items.empty .empty-content {
-  text-align: center;
-  margin: 3em 0.5em 0.67em 0.5em;
-}
-.page.password .tableview.all_items.empty .empty-content h1 {
-  font-size: 1.5em;
-}
-.page.password .tableview.all_items.empty .empty-content p {
-  font-size: 1em;
-  line-height: 1.5em;
-}
-@media all and (min-width: 780px) {
-  .page.password .tableview.all_items.empty .empty-content h1 {
-    font-size: 2.2em;
-  }
-  .page.password .tableview.all_items.empty .empty-content p {
-    font-size: 1.2em;
-    line-height: 1.8em;
-  }
 }
 /* TODO replace by page level selector */
 .page.settings .main.panel .middle {
