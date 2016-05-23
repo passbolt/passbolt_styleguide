@@ -2931,11 +2931,11 @@ article ol.lower-alpha {
   -moz-osx-font-smoothing: grayscale;
   /* favorites */
 }
-.icon .fav:before {
+.icon.fav:before {
   content: "\f005";
   color: #dddddd;
 }
-.icon .unfav:before {
+.icon.unfav:before {
   content: "\f005";
   color: #d40101;
 }
