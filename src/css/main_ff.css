@@ -4182,22 +4182,27 @@ article video {
   margin-top: .5em;
 }
 /* password share tab */
-.dialog .share-tab {
+.dialog .share-tab,
+.sidebar .shared-with {
   /* list of existing permissions settings */
   /* new/updated permissions */
   /* message */
 }
-.dialog .share-tab .form-content {
+.dialog .share-tab .form-content,
+.sidebar .shared-with .form-content {
   padding: 1em;
 }
-.dialog .share-tab .permission-edit {
+.dialog .share-tab .permission-edit,
+.sidebar .shared-with .permission-edit {
   padding: 0em;
 }
-.dialog .share-tab .permissions.scroll {
+.dialog .share-tab .permissions.scroll,
+.sidebar .shared-with .permissions.scroll {
   max-height: 19em;
   margin: 0;
 }
-.dialog .share-tab .row {
+.dialog .share-tab .row,
+.sidebar .shared-with .row {
   /*
  * For IE 6/7 only
  * Include this rule to trigger hasLayout and contain floats.
@@ -4236,37 +4241,48 @@ article video {
   /* row actions */
 }
 .dialog .share-tab .row:before,
-.dialog .share-tab .row:after {
+.sidebar .shared-with .row:before,
+.dialog .share-tab .row:after,
+.sidebar .shared-with .row:after {
   content: "";
   display: table;
 }
-.dialog .share-tab .row:after {
+.dialog .share-tab .row:after,
+.sidebar .shared-with .row:after {
   clear: both;
 }
 .dialog .share-tab .row:before,
-.dialog .share-tab .row:after {
+.sidebar .shared-with .row:before,
+.dialog .share-tab .row:after,
+.sidebar .shared-with .row:after {
   content: "";
   display: table;
 }
-.dialog .share-tab .row:after {
+.dialog .share-tab .row:after,
+.sidebar .shared-with .row:after {
   clear: both;
 }
-.dialog .share-tab .row:last-child {
+.dialog .share-tab .row:last-child,
+.sidebar .shared-with .row:last-child {
   border: 0;
 }
-.dialog .share-tab .row .avatar img {
+.dialog .share-tab .row .avatar img,
+.sidebar .shared-with .row .avatar img {
   width: 36px;
   height: 36px;
   float: left;
 }
 .dialog .share-tab .row .user,
-.dialog .share-tab .row .group {
+.sidebar .shared-with .row .user,
+.dialog .share-tab .row .group,
+.sidebar .shared-with .row .group {
   width: 52%;
   float: left;
   padding-left: 1em;
   padding-right: 1em;
 }
-.dialog .share-tab .row .name {
+.dialog .share-tab .row .name,
+.sidebar .shared-with .row .name {
   display: block;
   white-space: nowrap;
   overflow: hidden;
@@ -4274,7 +4290,8 @@ article video {
   -o-text-overflow: ellipsis;
   -ms-text-overflow: ellipsis;
 }
-.dialog .share-tab .row .details a {
+.dialog .share-tab .row .details a,
+.sidebar .shared-with .row .details a {
   color: #888888;
   white-space: nowrap;
   overflow: hidden;
@@ -4283,45 +4300,56 @@ article video {
   -ms-text-overflow: ellipsis;
   display: block;
 }
-.dialog .share-tab .row .rights {
+.dialog .share-tab .row .rights,
+.sidebar .shared-with .row .rights {
   float: left;
   margin-top: .5em;
   width: 25%;
 }
-.dialog .share-tab .row .rights select {
+.dialog .share-tab .row .rights select,
+.sidebar .shared-with .row .rights select {
   width: 95%;
   font-size: 1em;
 }
-.dialog .share-tab .row .actions {
+.dialog .share-tab .row .actions,
+.sidebar .shared-with .row .actions {
   float: right;
   margin-top: 1em;
 }
-.dialog .share-tab .row .actions a {
+.dialog .share-tab .row .actions a,
+.sidebar .shared-with .row .actions a {
   font-size: 1.125em;
   padding: .25em .5em .2em .5em;
   border: 1px solid transparent;
 }
-.dialog .share-tab .row .actions a:hover {
+.dialog .share-tab .row .actions a:hover,
+.sidebar .shared-with .row .actions a:hover {
   border: 1px solid #dddddd;
 }
-.dialog .share-tab .row.inherited-permission .inherited-actions {
+.dialog .share-tab .row.inherited-permission .inherited-actions,
+.sidebar .shared-with .row.inherited-permission .inherited-actions {
   display: none;
   float: right;
 }
-.dialog .share-tab .row.inherited-permission:hover .inherited-actions {
+.dialog .share-tab .row.inherited-permission:hover .inherited-actions,
+.sidebar .shared-with .row.inherited-permission:hover .inherited-actions {
   display: block;
 }
-.dialog .share-tab .row.inherited-permission .inherited-actions a {
+.dialog .share-tab .row.inherited-permission .inherited-actions a,
+.sidebar .shared-with .row.inherited-permission .inherited-actions a {
   color: #888888;
 }
-.dialog .share-tab .row.permission-updated .avatar img {
+.dialog .share-tab .row.permission-updated .avatar img,
+.sidebar .shared-with .row.permission-updated .avatar img {
   border: 1px solid #ff4500;
 }
-.dialog .share-tab .message {
+.dialog .share-tab .message,
+.sidebar .shared-with .message {
   font-size: 0.813em;
   padding-left: 2em;
 }
-.dialog .share-tab .permission-add {
+.dialog .share-tab .permission-add,
+.sidebar .shared-with .permission-add {
   background-color: #ffffff;
   padding: 0 1em 1em 1em;
   /*
@@ -4357,24 +4385,36 @@ article video {
  */
 }
 .dialog .share-tab .permission-add:before,
-.dialog .share-tab .permission-add:after {
+.sidebar .shared-with .permission-add:before,
+.dialog .share-tab .permission-add:after,
+.sidebar .shared-with .permission-add:after {
   content: "";
   display: table;
 }
-.dialog .share-tab .permission-add:after {
+.dialog .share-tab .permission-add:after,
+.sidebar .shared-with .permission-add:after {
   clear: both;
 }
 .dialog .share-tab .permission-add:before,
-.dialog .share-tab .permission-add:after {
+.sidebar .shared-with .permission-add:before,
+.dialog .share-tab .permission-add:after,
+.sidebar .shared-with .permission-add:after {
   content: "";
   display: table;
 }
-.dialog .share-tab .permission-add:after {
+.dialog .share-tab .permission-add:after,
+.sidebar .shared-with .permission-add:after {
   clear: both;
 }
-.dialog .share-tab .permission-add #passbolt-password-share-autocomplete-wrapper {
+.dialog .share-tab .permission-add #passbolt-password-share-autocomplete-wrapper,
+.sidebar .shared-with .permission-add #passbolt-password-share-autocomplete-wrapper {
   position: relative;
   width: 100%;
+}
+.sidebar .sharedwith .row .user,
+.sidebar .sharedwith .row .group {
+  width: 75%;
+  padding-top: 0;
 }
 /* hide icons if there is no space */
 @media all and (max-width: 480px) {

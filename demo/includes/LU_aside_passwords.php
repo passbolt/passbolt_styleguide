@@ -92,6 +92,51 @@ uCZO5HNTgrf3rZ4wc7jtI6Nk
 					</div>
 				</div>
 			</div></div>
+		<!-- Shared with management -->
+		<div id="js_rs_details_sharedwith" class="sharedwith passbolt_component_sidebar_section_sharedwith js_component passbolt_view_component_sidebar_section_sharedwith ready"><h4>Shared with</h4>
+
+			<a id="js_edit_sharedwith_button" class="edit_shared_with_button section-action" href="#">
+				<i class="fa fa-fw fa-edit"></i>
+				<span class="visuallyhidden">modify</span>
+			</a>
+			<div class="js_rs_details_shared-with_list">
+				<ul class="shared-with ready">
+					<li data-view-id="372" class="usercard-col-2">
+						<div class="content-wrapper">
+							<div class="content">
+								<div class="name">Ada Lovelace (ada@passbolt.com)</div>
+								<div class="subinfo">can read</div>
+							</div>
+						</div>
+						<div class="avatar">
+							<img data-view-id="373" src="img/avatar/user.png">
+						</div>
+					</li>
+					<li data-view-id="372" class="usercard-col-2">
+						<div class="content-wrapper">
+							<div class="content">
+								<div class="name">Jean René Bergamotte (jean.rene.bergamotte@passbolt.com)</div>
+								<div class="subinfo">can update</div>
+							</div>
+						</div>
+						<div class="avatar">
+							<img data-view-id="373" src="img/avatar/user.png">
+						</div>
+					</li>
+					<li data-view-id="372" class="usercard-col-2">
+						<div class="content-wrapper">
+							<div class="content">
+								<div class="name">Bo Goss (bogoss@passbolt.com)</div>
+								<div class="subinfo">is owner</div>
+							</div>
+						</div>
+						<div class="avatar">
+							<img data-view-id="373" src="img/avatar/user.png">
+						</div>
+					</li>
+				</ul>
+			</div>
+		</div>
 		<!-- Tags management -->
 		<div id="js_rs_details_tags" class="tags clearfix"></div>
 		<!-- Comments management -->
