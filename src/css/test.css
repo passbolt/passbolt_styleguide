@@ -178,6 +178,7 @@ html body .hidden {
 .header .navigation.primary li a {
   color: #dddddd;
   text-decoration: none;
+  border: 0;
   display: inline-block;
 }
 .header .navigation.primary li a:hover {

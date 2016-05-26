@@ -698,10 +698,10 @@ a:focus {
   color: #2894df;
   border: 0;
 }
-p a {
+a {
   border-bottom: 1px solid #dddddd;
 }
-p a:hover {
+a:hover {
   border-bottom: 1px solid #2894df;
 }
 /* todos */
@@ -3297,6 +3297,7 @@ input[type=text]:disabled {
 textarea {
   height: 3.6em;
   /* 4 char (default input length) x 1em (average char length) + .6em (padding) */
+  line-height: 16px;
 }
 .textarea.large textarea {
   width: 30em;
@@ -3567,7 +3568,6 @@ article video {
   -webkit-box-shadow: 0px 0px 10px 0px #dddddd;
   box-shadow: 0px 0px 10px 0px #dddddd;
   /* header */
-  /* close dialog cross */
   /* content */
   /* inputs */
   /* submit / cancel */
@@ -3593,32 +3593,6 @@ article video {
   padding-left: 1em;
   font-size: 0.7em;
   color: #888888;
-}
-.dialog a.dialog-close,
-.dialog a.dialog-close:hover {
-  display: block;
-  float: right;
-  margin-top: -2.5em;
-  border: 0;
-}
-.dialog a.dialog-close .fa-close {
-  padding-top: 15px;
-  width: 30px;
-  height: 15px;
-  text-align: center;
-  display: block;
-  vertical-align: baseline;
-  line-height: 0;
-  border: 1px solid #eeeeee;
-  -webkit-border-radius: 0.214em;
-  -moz-border-radius: 0.214em;
-  border-radius: 0.214em;
-}
-.dialog a.dialog-close:hover .fa-close {
-  border: 1px solid #dddddd;
-  -webkit-border-radius: 0.214em;
-  -moz-border-radius: 0.214em;
-  border-radius: 0.214em;
 }
 .dialog .dialog-content {
   position: relative;
@@ -3668,6 +3642,36 @@ article video {
   margin-top: .5em;
   font-size: 1em;
 }
+.dialog .dialog-close,
+.dialog .dialog-close:hover {
+  display: block;
+  float: right;
+  margin-top: -2.5em;
+  border: 0;
+}
+.dialog-close,
+.dialog-close:hover {
+  border: 0;
+}
+.dialog-close .fa-close {
+  padding-top: 15px;
+  width: 30px;
+  height: 15px;
+  text-align: center;
+  display: block;
+  vertical-align: baseline;
+  line-height: 0;
+  border: 1px solid #eeeeee;
+  -webkit-border-radius: 0.214em;
+  -moz-border-radius: 0.214em;
+  border-radius: 0.214em;
+}
+.dialog-close:hover .fa-close {
+  border: 1px solid #dddddd;
+  -webkit-border-radius: 0.214em;
+  -moz-border-radius: 0.214em;
+  border-radius: 0.214em;
+}
 /* reduce font-size for small screen */
 @media all and (max-width: 480px) {
   .dialog {
@@ -3698,6 +3702,7 @@ article video {
   padding: .4em 1.75em;
   margin-left: 1.25em;
   font-size: 15px;
+  border: 0;
 }
 .tabs-nav li a.selected {
   margin-bottom: -1px;
@@ -4276,7 +4281,7 @@ article video {
 .sidebar .shared-with .row .user,
 .dialog .share-tab .row .group,
 .sidebar .shared-with .row .group {
-  width: 52%;
+  width: 50%;
   float: left;
   padding-left: 1em;
   padding-right: 1em;
@@ -4299,6 +4304,7 @@ article video {
   -o-text-overflow: ellipsis;
   -ms-text-overflow: ellipsis;
   display: block;
+  border: 0;
 }
 .dialog .share-tab .row .rights,
 .sidebar .shared-with .row .rights {
@@ -4339,9 +4345,9 @@ article video {
 .sidebar .shared-with .row.inherited-permission .inherited-actions a {
   color: #888888;
 }
-.dialog .share-tab .row.permission-updated .avatar img,
-.sidebar .shared-with .row.permission-updated .avatar img {
-  border: 1px solid #ff4500;
+.dialog .share-tab .row.permission-updated,
+.sidebar .shared-with .row.permission-updated {
+  background: #FFFAE7;
 }
 .dialog .share-tab .message,
 .sidebar .shared-with .message {
