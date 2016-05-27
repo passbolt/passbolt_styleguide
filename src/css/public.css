@@ -6354,17 +6354,17 @@ button.swiper-pagination-bullet {
 .page.services .page-row.intro {
   background: #FAFAFA;
 }
-.page.services .service-teaser {
+.page.services .service .service-teaser {
   display: none;
 }
-.page.services .button {
+.page.services .service .button {
   margin-bottom: 1em;
 }
 /* even larger screen */
 @media all and (min-width: 800px) {
   .page.services {
-    background: #fafafa url('../img/illustrations/birds3_850.png') 95% -2em no-repeat;
-    background-size: 40% auto;
+    background: #fafafa url('../img/illustrations/birds3_850.png') 95% -0.5% no-repeat;
+    background-size: 42% auto;
   }
   .page.services .signup {
     background: #FFF;
@@ -6373,18 +6373,44 @@ button.swiper-pagination-bullet {
     text-align: center;
     margin: 3em 0 5em 0;
   }
-  .page.services .service-title {
+  .page.services .service .service-title {
     margin-bottom: 0;
   }
-  .page.services .service-description {
+  .page.services .service .service-description {
     font-size: 1.25em;
     text-align: center;
     padding: 1em;
   }
-  .page.services .button {
+  .page.services .service .service-teaser {
+    margin: auto;
+    margin-top: 1em;
+    padding: .25em;
+    background: #333333;
+    color: #ffffff;
+    display: block;
+    border-radius: 50%;
+    font-size: 2em;
+    width: 3em;
+    height: 3em;
+  }
+  .page.services .service .service-teaser i.fa-rocket {
+    font-size: 2em;
+    margin-top: .25em;
+    margin-left: -0.125em;
+  }
+  .page.services .service .service-teaser i.fa-paint-brush {
+    font-size: 1.75em;
+    margin-top: .35em;
+    margin-left: -0.125em;
+  }
+  .page.services .service .service-teaser i.fa-database {
+    font-size: 1.65em;
+    margin-top: .45em;
+  }
+  .page.services .service .button {
     font-size: 1.25em;
   }
-  .page.services .main {
+  .page.services .service .main {
     padding-bottom: 2.5em;
     padding-top: 1em;
     margin-top: -1em;
@@ -6392,7 +6418,7 @@ button.swiper-pagination-bullet {
     background: #ffffff;
     border: 1px solid #dddddd;
   }
-  .page.services .sub {
+  .page.services .service .sub {
     border-radius: 3px;
     padding-bottom: 1em;
     border: 1px solid #dddddd;
@@ -6415,31 +6441,5 @@ button.swiper-pagination-bullet {
     margin: 0 0 1em .5em;
     text-align: left;
     line-height: 1.666em;
-  }
-  .page.services .service-teaser {
-    margin: auto;
-    margin-top: 1em;
-    padding: .25em;
-    background: #333333;
-    color: #ffffff;
-    display: block;
-    border-radius: 50%;
-    font-size: 2em;
-    width: 3em;
-    height: 3em;
-  }
-  .page.services .service-teaser i.fa-rocket {
-    font-size: 2em;
-    margin-top: .25em;
-    margin-left: -0.125em;
-  }
-  .page.services .service-teaser i.fa-paint-brush {
-    font-size: 1.75em;
-    margin-top: .35em;
-    margin-left: -0.125em;
-  }
-  .page.services .service-teaser i.fa-database {
-    font-size: 1.65em;
-    margin-top: .45em;
   }
 }

@@ -16,7 +16,7 @@
                 <div class="col12">
                     <h1>Services</h1>
                     <p>
-                        Do you want to fastrack a feature? Do you need help to deploy passbolt on your own servers?
+                        Do you want to fast-track a feature? Do you need some support to deploy passbolt on your own servers?
                         We are here to help!
                     </p>
                 </div>
@@ -33,10 +33,10 @@
                     </div>
                     <h2 class="service-title">Integration</h2>
                     <div class="service-description">
-                        Do you need help to customize passbolt to your organization look and feel?
                         Do you want to integrate passbolt with another service such as LDAP?
+                        Do you need help to customize passbolt to match your own branding?
                     </div>
-                    <a href="#" class="button cancel big">Contact us!</a>
+                    <a href="#" class="button  big">Get in touch!</a>
                 </div>
                 <div class="col4 main">
                     <div class="service-teaser">
@@ -58,7 +58,7 @@
                         You do not want to roll out passbolt on your own and would like us
                         to install and maintain it for you? Do you need some support to secure your installation?
                     </div>
-                    <a href="#" class="button cancel big">Contact us!</a>
+                    <a class="button cancel big disabled">Coming soon</a>
                 </div>
             </div>
             <div class="row">
