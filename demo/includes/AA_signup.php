@@ -13,20 +13,22 @@
                             <label for="RegistrationEmail">Signup to the newsletter</label>
                             <input name="data[Registration][email]" class="required fluid" placeholder="Your email" type="email" id="RegistrationEmail" required="required"/></div>
                         <div class="submit"><input  class="button primary" type="submit" value="subscribe"/></div>
-                        <div class="smallprint"><a href="#">We respect your privacy.</div>
+                        <div class="smallprint"><a href="#">We respect your privacy.</a></div>
                     </form>
                 </div>
             </div>
-            <div class="col4 last social">
-                <a href="https://www.twitter.com/passbolt">
-                    <i class="fa fa-fw fa-twitter-square"></i>
-                </a>
-                <a href="https://www.facebook.com/passbolt">
-                    <i class="fa fa-fw fa-facebook-square"></i>
-                </a>
-                <a href="https://www.github.com/passbolt">
-                    <i class="fa fa-fw fa-github-square"></i>
-                </a>
+            <div class="col4 last">
+                <div class="social">
+                    <a href="https://www.twitter.com/passbolt">
+                        <i class="fa fa-fw fa-twitter-square"></i>
+                    </a>
+                    <a href="https://www.facebook.com/passbolt">
+                        <i class="fa fa-fw fa-facebook-square"></i>
+                    </a>
+                    <a href="https://www.github.com/passbolt">
+                        <i class="fa fa-fw fa-github-square"></i>
+                    </a>
+                </div>
             </div>
         </div>
     </div>

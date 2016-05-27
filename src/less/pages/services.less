@@ -1,0 +1,101 @@
+.page.services {
+  .page-row.intro {
+    background: #FAFAFA;
+  }
+
+  .service-teaser {
+    display:none;
+  }
+  .button {
+    margin-bottom:1em;
+  }
+}
+
+/* even larger screen */
+@media all and (min-width: 800px) {
+  .page.services {
+    background: #FAFAFA url('@{images}/illustrations/birds3_850.png') 95% -2em no-repeat;
+    background-size: 40% auto;
+    .signup {
+      background:#FFF;
+    }
+    .service {
+      text-align: center;
+      margin:3em 0 5em 0;
+    }
+
+    .service-title {
+      margin-bottom: 0;
+    }
+    .service-description {
+      font-size:1.25em;
+      text-align: center;
+      padding:1em;
+    }
+
+    .button {
+      font-size:1.25em;
+    }
+    .main {
+      padding-bottom:2.5em;
+      padding-top:1em;
+      margin-top:-1em;
+      border-radius: 3px;
+      background: @white;
+      border:1px solid @border-default;
+    }
+
+    .sub {
+      border-radius: 3px;
+      padding-bottom:1em;
+      border:1px solid @border-default;
+      background: @grey-lightest;
+    }
+
+    .page-row.intro {
+      background:transparent;
+      h1 {
+        margin: 5% 0 2% .3em;
+        padding-left:0;
+        max-width: 24em;
+        font-size:3em;
+      }
+      h1 + p {
+        width: 50%;
+        max-width: 25em;
+        font-size: 1.75em;
+        padding-left:0;
+        margin: 0 0 1em .5em;
+        text-align: left;
+        line-height:1.666em;
+      }
+    }
+    .service-teaser {
+      margin:auto;
+      margin-top:1em;
+      padding:.25em;
+      background:@black;
+      color:@white;
+      display:block;
+      border-radius:50%;
+      font-size:2em;
+      width:3em;
+      height:3em;
+
+      i.fa-rocket {
+        font-size:2em;
+        margin-top:.25em;
+        margin-left:-.125em;
+      }
+      i.fa-paint-brush {
+        font-size:1.75em;
+        margin-top:.35em;
+        margin-left:-.125em;
+      }
+      i.fa-database {
+        font-size:1.65em;
+        margin-top:.45em;
+      }
+    }
+  }
+}

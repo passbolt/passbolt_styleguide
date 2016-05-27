@@ -2,13 +2,13 @@
 <html class="alpha version no-js" lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Passbot | The open source password manager for teams</title>
+    <title>Passbolt | The open source password manager for teams</title>
     <?php include('includes/AA_meta.php'); ?>
     <link rel="stylesheet" type="text/css" href="css/public.css" />
 </head>
 <body>
 <div id="container" class="page home">
-<?php include('includes/AA_header_prelaunch.php'); ?>
+<?php include('includes/AA_header.php'); ?>
     <div class="page-row three-little-birds">
         <div class="grid grid-responsive-12">
             <div class="row ">

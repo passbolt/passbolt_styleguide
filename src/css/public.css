@@ -793,6 +793,7 @@ h3 {
 /* paragraph */
 p {
   margin: 0 0 1em 0;
+  line-height: 1.5em;
 }
 .code {
   font-family: "Courier New", Courier, monospace;
@@ -5822,12 +5823,13 @@ button.swiper-pagination-bullet {
   z-index: 999;
 }
 .social {
-  margin-top: 1.5em;
   text-align: center;
+  float: left;
+  margin-top: 1.75em;
 }
 .social a {
-  border: 0;
   font-size: 3.5em;
+  border: 0;
 }
 .faq ul.list {
   margin: 0;
@@ -6168,6 +6170,9 @@ button.swiper-pagination-bullet {
 }
 .page-row.signup {
   padding-bottom: 3em;
+  background: #FAFAFA;
+  border-top: 1px solid #f3f3f3;
+  margin-bottom: 0;
 }
 .page-row.signup .newsletter label {
   color: #888888;
@@ -6298,11 +6303,6 @@ button.swiper-pagination-bullet {
   margin: auto;
   max-width: 1200px;
 }
-.page.roadmap .page-row.signup {
-  background: #FAFAFA;
-  border-top: 1px solid #f3f3f3;
-  margin-bottom: 0;
-}
 .page.roadmap .cards {
   border: 0;
 }
@@ -6349,5 +6349,97 @@ button.swiper-pagination-bullet {
     margin: 0 0 3% .5em;
     text-align: left;
     line-height: 1.666em;
+  }
+}
+.page.services .page-row.intro {
+  background: #FAFAFA;
+}
+.page.services .service-teaser {
+  display: none;
+}
+.page.services .button {
+  margin-bottom: 1em;
+}
+/* even larger screen */
+@media all and (min-width: 800px) {
+  .page.services {
+    background: #fafafa url('../img/illustrations/birds3_850.png') 95% -2em no-repeat;
+    background-size: 40% auto;
+  }
+  .page.services .signup {
+    background: #FFF;
+  }
+  .page.services .service {
+    text-align: center;
+    margin: 3em 0 5em 0;
+  }
+  .page.services .service-title {
+    margin-bottom: 0;
+  }
+  .page.services .service-description {
+    font-size: 1.25em;
+    text-align: center;
+    padding: 1em;
+  }
+  .page.services .button {
+    font-size: 1.25em;
+  }
+  .page.services .main {
+    padding-bottom: 2.5em;
+    padding-top: 1em;
+    margin-top: -1em;
+    border-radius: 3px;
+    background: #ffffff;
+    border: 1px solid #dddddd;
+  }
+  .page.services .sub {
+    border-radius: 3px;
+    padding-bottom: 1em;
+    border: 1px solid #dddddd;
+    background: #f3f3f3;
+  }
+  .page.services .page-row.intro {
+    background: transparent;
+  }
+  .page.services .page-row.intro h1 {
+    margin: 5% 0 2% .3em;
+    padding-left: 0;
+    max-width: 24em;
+    font-size: 3em;
+  }
+  .page.services .page-row.intro h1 + p {
+    width: 50%;
+    max-width: 25em;
+    font-size: 1.75em;
+    padding-left: 0;
+    margin: 0 0 1em .5em;
+    text-align: left;
+    line-height: 1.666em;
+  }
+  .page.services .service-teaser {
+    margin: auto;
+    margin-top: 1em;
+    padding: .25em;
+    background: #333333;
+    color: #ffffff;
+    display: block;
+    border-radius: 50%;
+    font-size: 2em;
+    width: 3em;
+    height: 3em;
+  }
+  .page.services .service-teaser i.fa-rocket {
+    font-size: 2em;
+    margin-top: .25em;
+    margin-left: -0.125em;
+  }
+  .page.services .service-teaser i.fa-paint-brush {
+    font-size: 1.75em;
+    margin-top: .35em;
+    margin-left: -0.125em;
+  }
+  .page.services .service-teaser i.fa-database {
+    font-size: 1.65em;
+    margin-top: .45em;
   }
 }
