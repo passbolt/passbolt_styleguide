@@ -38,6 +38,7 @@
 					</div>
 					<div class="actions-wrapper center">
 						<a class="button primary big" href="../demo/AN_login_stage0.php">Register</a>
+						<a href="#">Already a member?</a>
 					</div>
 				</div>
 			</div>
