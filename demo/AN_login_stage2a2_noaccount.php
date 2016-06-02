@@ -35,10 +35,11 @@
                 <div class="users login form">
 	                <div class="feedback">
 		                <i class="fa fa-meh-o huge" ></i>
-		                <p>Your account doesn't exist on server. Contact your admin.</p>
+		                <p>The account configured doesn't exist.</p>
 	                </div>
                     <div class="actions-wrapper center">
-                        <a class="button primary big" href="../demo/AN_login_stage0.php">register again</a>
+                        <a class="button primary big" href="../demo/AN_login_stage0.php">register again</a><br><br>
+	                    <a href="../demo/AN_recover.php">or recover an existing account</a>
                     </div>
                 </div>
             </div>
