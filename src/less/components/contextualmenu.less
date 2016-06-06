@@ -12,13 +12,18 @@
 	font-size:.875em; /* 14px */
 	display:block;
 	padding:.357em .714em; /* 5px 10px */
+	border:0;
 }
 .contextual-menu a:hover {
 	color:@font-default;
 	background:@background-lighter;
 }
 .contextual-menu li.disabled a {
-  color:@grey-lighter;
+  color:@grey;
+  &:hover {
+	color:@font-default;
+	background:@background-lighter;
+  }
 }
 .contextual-menu .separator-before {
 	border-top:1px solid @border-default;

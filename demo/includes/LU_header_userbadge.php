@@ -11,7 +11,7 @@
 			<img src="img/avatar/user.png" alt="your picture">
 		</div>
 		<div class="more right-cell">
-			<a href="../demo/LU_users_profile.php"><span>more</span></a>
+			<a href="#"><span>more</span></a>
 		</div>
 		<ul class="dropdown-content right mad_controller_component_menu_controller mad_view_component_tree menu ready"
 				id="7f698bbc-95d5-c5f7-c35a-c3225a5aa45b">
@@ -19,7 +19,7 @@
 				<div class="row">
 					<div class="main-cell-wrapper">
 						<div class="main-cell">
-							<a href="#"><span>my profile</span></a>
+							<a href="../demo/LU_users_profile.php"><span>my profile</span></a>
 						</div>
 					</div>
 				</div>
@@ -54,3 +54,14 @@
 		</ul>
 	</div>
 </div>
+<script>
+	$(function() {
+		$('#js_app_profile_dropdown .more').click(function() {
+			$('#js_app_profile_dropdown .dropdown-content').css('display','block');
+			return false;
+		});
+		$('html body').click(function(){
+			$('#js_app_profile_dropdown .dropdown-content').css('display','none');
+		});
+	});
+</script>
