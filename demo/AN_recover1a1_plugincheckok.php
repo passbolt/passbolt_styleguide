@@ -22,7 +22,7 @@
 			<div class="navigation wizard">
 				<ul>
 					<li class="selected">
-						<a href="../demo/AN_setup1a0_plugincheckfail.php">1. Security checks</a>
+						<a href="../demo/AN_recover1a1_plugincheckok.php">1. Security checks</a>
 					</li>
 					<li class="disabled">
 						2. Import key
@@ -68,15 +68,15 @@
 								</div>
 
 								<div class="submit-input-wrapper">
-									<a href="../demo/AN_setup2a0_createnewkey.php" class="button primary big disabled">next</a>
+									<a href="../demo/AN_recover2b0_importkey.php" class="button primary big disabled">next</a>
 								</div>
 							</form>
 						</div>
 					</div>
 					<div class="col5 last">
-						<div class="video-wrapper">
-							<iframe width="400" height="300" src="https://www.youtube.com/embed/u-vDLf7cmf0" frameborder="0" allowfullscreen></iframe>
-						</div>
+<!--						<div class="video-wrapper">-->
+<!--							<iframe width="400" height="300" src="https://www.youtube.com/embed/u-vDLf7cmf0" frameborder="0" allowfullscreen></iframe>-->
+<!--						</div>-->
 					</div>
 				</div>
 

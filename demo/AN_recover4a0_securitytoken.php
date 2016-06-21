@@ -25,13 +25,13 @@
 			<div class="navigation wizard">
 				<ul>
 					<li class="">
-						<a href="../demo/AN_setup1a0_plugincheckfail.php">1. Security checks</a>
+						<a href="../demo/AN_recover1a1_plugincheckok.php">1. Security checks</a>
 					</li>
 					<li class="">
-						<a href="../demo/AN_setup2a0_createnewkey.php">2. Import your key</a>
+						<a href="../demo/AN_recover2b0_importkey.php">2. Import your key</a>
 					</li>
 					<li class="selected">
-						<a href="../demo/AN_setup4a0_securitytoken.php">4. Set a new security token</a>
+						<a href="../demo/AN_recover4a0_securitytoken.php">4. Set a new security token</a>
 					</li>
 					<li class="disabled">
 						5. Login!
@@ -65,22 +65,20 @@
 						<div class="col4 last">
 							<h3>I forgot, why do I need this?</h3>
 							<p>
-							This token is used to prevent malicious web pages to trick you by mimicking passbolt dialogs in order to
+								This token is used to prevent malicious web pages to trick you by mimicking passbolt dialogs in order to
 								to steal your data (aka. protect you from phishing attacks).
 							</p>
 							<p>
-							This visual cue will be shown whenever we ask you for your passphrase and other sensitive places
+								This visual cue will be shown whenever we ask you for your passphrase and other sensitive places
 								to help make sure you are dealing with an authentic passbolt dialog and not a fake one!
 							</p>
-							<p><a href="#">Learn more</a>.</p>
 						</div>
-
 					</div>
 
 					<div class="row last">
 						<div class="input-wrapper">
-							<a href="../demo/AN_setup3b0_importedkeyok.php" class="button cancel big">cancel</a>
-							<a href="../demo/AN_setup5a0_createloginpassword.php" class="button primary next big">next</a>
+							<a href="../demo/AN_recover2b0_importkey.php" class="button cancel big">cancel</a>
+							<a href="../demo/AN_recover5a0_login.php" class="button primary next big">next</a>
 						</div>
 					</div>
 

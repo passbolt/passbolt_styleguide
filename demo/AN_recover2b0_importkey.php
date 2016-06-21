@@ -20,20 +20,18 @@
 		<!-- wizard steps -->
 		<div class="panel left">
 			<div id="js_menu" class="navigation wizard"><ul>
-
-				<li class="past">
-					<a href="#">1. Security checks</a>
+				<li class="">
+					<a href="../demo/AN_recover1a1_plugincheckok.php">1. Security checks</a>
 				</li>
 				<li class="selected">
-					<a href="#">2. Import your key</a>
+					<a href="../demo/AN_recover2b0_importkey.php">2. Import your key</a>
 				</li>
 				<li class="disabled">
-					4. Set a new security token
+					<a href="#">4. Set a new security token</a>
 				</li>
 				<li class="disabled">
-					5. Login !
+					<a href="#">5. Login!</a>
 				</li>
-
 			</ul>
 			</div>
 		</div>
@@ -53,19 +51,22 @@
 						<div id="KeyErrorMessage" class="message error hidden"></div>
 					</div>
 					<div class="col4 last">
-						<h3>What private key do I need?</h3>
-						<div class="message warning">
-							<p>The private key is the key that was generated (or imported) during the initial setup.
-							If it was generated, then you have to use the backup of your key here (remember the big warning after the generation?). If it was imported, you can use the same key.</p>
-							<p><strong>Please note:</strong> If you don't have a backup of your key, you will not be able to recover your account.</p>
-						</div>
+						<h3>What is this private key?</h3>
+						<p>
+							The key you need here is the key that was generated (or that you imported) during your first setup.
+							Remember, during the initial setup, there was a step where you were asked to make a backup.
+							You need this file now.
+						</p>
+						<h3>What if I don't have it?</h3>
+						<p>
+							If you don't have a backup of your key, you will not be able to recover your account.
+						<p>
 					</div>
-
 				</div>
 				<div class="row last">
 					<div id="js_step_actions" class="submit-input-wrapper">
-						<a class="button primary big js-state-enabled enabled" href="../demo/AN_setup1a1_plugincheckok.php" id="js_setup_cancel_step">Cancel</a>
-						<a class="button primary big js-state-disabled disabled" href="../demo/AN_setup3b1_importedkeywarn.php" id="js_setup_submit_step">Next</a>
+						<a class="button primary big js-state-enabled enabled" href="../demo/AN_recover1a1_plugincheckok.php" id="js_setup_cancel_step">Cancel</a>
+						<a class="button primary big js-state-disabled disabled" href="../demo/AN_recover4a0_securitytoken.php" id="js_setup_submit_step">Next</a>
 					</div>
 				</div>
 			</div>
