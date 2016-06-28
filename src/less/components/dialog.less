@@ -39,31 +39,6 @@
 		}
 	}
 
-	/* close dialog cross */
-	a.dialog-close {
-		&,&:hover {
-			display: block;
-			float: right;
-			margin-top: -2.5em;
-			border: 0;
-		}
-		.fa-close {
-			padding-top: 15px;
-			width: 30px;
-			height: 15px;
-			text-align: center;
-			display: block;
-			vertical-align: baseline;
-			line-height: 0;
-			border: 1px solid @background-lighter;
-			.rounded();
-		}
-		&:hover .fa-close {
-			border:1px solid @background-light;
-			.rounded();
-		}
-	}
-
 	/* content */
 	.dialog-content {
 		position:relative;
@@ -116,6 +91,34 @@
 			margin-top: .5em;
 			font-size: 1em;
 		}
+	}
+	.dialog-close {
+		&, &:hover {
+			display: block;
+			float: right;
+			margin-top: -2.5em;
+			border: 0;
+		}
+	}
+}
+.dialog-close {
+	&,&:hover {
+		border:0;
+	}
+	.fa-close {
+		padding-top: 15px;
+		width: 30px;
+		height: 15px;
+		text-align: center;
+		display: block;
+		vertical-align: baseline;
+		line-height: 0;
+		border: 1px solid @background-lighter;
+		.rounded();
+	}
+	&:hover .fa-close {
+		border:1px solid @background-light;
+		.rounded();
 	}
 }
 

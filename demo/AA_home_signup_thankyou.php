@@ -9,7 +9,7 @@
 <body>
 <!-- main - html5 -->
 <div id="container" class="page thankyou">
-<?php include('includes/AA_header_prelaunch.php'); ?>
+<?php include('includes/AA_header.php'); ?>
 	<div class="grid grid-responsive-12">
 		<div class="row bird2">
 			<div class="col12 last">

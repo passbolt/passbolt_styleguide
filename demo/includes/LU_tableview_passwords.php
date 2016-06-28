@@ -1,41 +1,36 @@
-<div id="js_wsp_pwd_browser" class="tableview passbolt_component_password_browser passbolt_view_component_password_browser selection"><div class="tableview-header">
+<div id="js_wsp_pwd_browser" class="tableview passbolt_component_password_browser passbolt_view_component_password_browser selection">
+	<div class="tableview-header">
 		<table>
 			<thead>
-			<tr>
-
-				<th class="js_grid_column js_grid_column_multipleSelect cell_multipleSelect selections s-cell" data-view-id="1410">
-					<div class="input checkbox"><input name="select all" value="checkbox-select-all" id="checkbox-select-all" disabled="disabled" type="checkbox"><label for="checkbox-select-all">select all</label> 					</div>
-				</th>
-
-				<th class="js_grid_column js_grid_column_favorite cell_favorite selections s-cell" data-view-id="1411">
-					<a href="#"><i class="icon fav"></i><span class="visuallyhidden">fav</span></a>
-				</th>
-
-				<th class="js_grid_column js_grid_column_name cell_name m-cell" data-view-id="1412">
-					Resource
-				</th>
-
-				<th class="js_grid_column js_grid_column_username cell_username m-cell" data-view-id="1413">
-					Username
-				</th>
-
-				<th class="js_grid_column js_grid_column_secret cell_secret m-cell password" data-view-id="1414">
-					Password
-				</th>
-
-				<th class="js_grid_column js_grid_column_uri cell_uri l-cell" data-view-id="1415">
-					URI
-				</th>
-
-				<th class="js_grid_column js_grid_column_modified cell_modified m-cell" data-view-id="1416">
-					Modified
-				</th>
-
-				<th class="js_grid_column js_grid_column_owner cell_owner m-cell" data-view-id="1417">
-					Owner
-				</th>
-
-			</tr>
+				<tr>
+					<th class="js_grid_column js_grid_column_multipleSelect cell_multipleSelect selections s-cell" data-view-id="1410">
+						<div class="input checkbox">
+							<input name="select all" value="checkbox-select-all" id="checkbox-select-all" disabled="disabled" type="checkbox">
+							<label for="checkbox-select-all">select all</label>
+						</div>
+					</th>
+					<th class="js_grid_column js_grid_column_favorite cell_favorite selections s-cell" data-view-id="1411">
+						<a href="#"><i class="icon fav"></i><span class="visuallyhidden">fav</span></a>
+					</th>
+					<th class="js_grid_column js_grid_column_name cell_name m-cell" data-view-id="1412">
+						Resource
+					</th>
+					<th class="js_grid_column js_grid_column_username cell_username m-cell" data-view-id="1413">
+						Username
+					</th>
+					<th class="js_grid_column js_grid_column_secret cell_secret m-cell password" data-view-id="1414">
+						Password
+					</th>
+					<th class="js_grid_column js_grid_column_uri cell_uri l-cell" data-view-id="1415">
+						URI
+					</th>
+					<th class="js_grid_column js_grid_column_modified cell_modified m-cell" data-view-id="1416">
+						Modified
+					</th>
+					<th class="js_grid_column js_grid_column_owner cell_owner m-cell" data-view-id="1417">
+						Owner
+					</th>
+				</tr>
 			</thead>
 		</table>
 	</div>
@@ -55,7 +50,7 @@
 				</td>
 
 				<td class="js_grid_column_favorite cell_favorite selections s-cell" data-view-id="1422">
-					<div title="" data-view-id="1423"><div class="passbolt_component_favorite js_component passbolt_view_component_favorite ready" id="favorite_17c66127-0c5e-3510-a497-2e6a105109db"><a href="#" class="no-text">
+					<div title="" data-view-id="1423"><div class="passbolt_component_favorite js_component passbolt_view_component_favorite ready" id="favorite_17c66127-0c5e-3510-a497-2e6a105109db"><a href="#" class="">
 								<i class="icon fav" data-view-id="1438"></i>
 								<span class="visuallyhidden">fav</span>
 							</a>
@@ -98,7 +93,7 @@ Tfgwnb1pn59J7OvJeB6emDPq
 
 				<td class="js_grid_column_uri cell_uri l-cell" data-view-id="1430">
 					<div title="https://inkscape.org/" data-view-id="1431">
-						https://inkscape.org/
+						<a href="#">https://inkscape.org/</a>
 					</div>
 				</td>
 
@@ -127,7 +122,7 @@ Tfgwnb1pn59J7OvJeB6emDPq
 				</td>
 
 				<td class="js_grid_column_favorite cell_favorite selections s-cell" data-view-id="1442">
-					<div title="" data-view-id="1443"><div class="passbolt_component_favorite js_component passbolt_view_component_favorite ready" id="favorite_2af40344-b330-30a8-ac26-64b2776f07e0"><a href="#" class="no-text">
+					<div title="" data-view-id="1443"><div class="passbolt_component_favorite js_component passbolt_view_component_favorite ready" id="favorite_2af40344-b330-30a8-ac26-64b2776f07e0"><a href="#" class="">
 								<i class="icon unfav" data-view-id="1458"></i>
 								<span class="visuallyhidden">fav</span>
 							</a>
@@ -170,7 +165,7 @@ YuP5nxbBQBVneIOHDvg5Uros
 
 				<td class="js_grid_column_uri cell_uri l-cell" data-view-id="1450">
 					<div title="https://www.enlightenment.org/" data-view-id="1451">
-						https://www.enlightenment.org/
+						<a href="#">https://www.enlightenment.org/</a>
 					</div>
 				</td>
 
@@ -199,7 +194,7 @@ YuP5nxbBQBVneIOHDvg5Uros
 				</td>
 
 				<td class="js_grid_column_favorite cell_favorite selections s-cell" data-view-id="1462">
-					<div title="" data-view-id="1463"><div class="passbolt_component_favorite js_component passbolt_view_component_favorite ready" id="favorite_31bf093f-dd27-391d-ae9d-f511ef41dd12"><a href="#" class="no-text">
+					<div title="" data-view-id="1463"><div class="passbolt_component_favorite js_component passbolt_view_component_favorite ready" id="favorite_31bf093f-dd27-391d-ae9d-f511ef41dd12"><a href="#" class="">
 								<i class="icon fav" data-view-id="1478"></i>
 								<span class="visuallyhidden">fav</span>
 							</a>
@@ -242,7 +237,7 @@ qZIPdx1rBYAAJY51U4o=
 
 				<td class="js_grid_column_uri cell_uri l-cell" data-view-id="1470">
 					<div title="https://fsfe.org/index.en.html" data-view-id="1471">
-						https://fsfe.org/index.en.html
+						<a href="#">https://fsfe.org/index.en.html</a>
 					</div>
 				</td>
 
@@ -271,7 +266,7 @@ qZIPdx1rBYAAJY51U4o=
 				</td>
 
 				<td class="js_grid_column_favorite cell_favorite selections s-cell" data-view-id="1482">
-					<div title="" data-view-id="1483"><div class="passbolt_component_favorite js_component passbolt_view_component_favorite ready" id="favorite_4241e122-62d8-340c-a607-150d8ca0c5c5"><a href="#" class="no-text">
+					<div title="" data-view-id="1483"><div class="passbolt_component_favorite js_component passbolt_view_component_favorite ready" id="favorite_4241e122-62d8-340c-a607-150d8ca0c5c5"><a href="#" class="">
 								<i class="icon fav" data-view-id="1498"></i>
 								<span class="visuallyhidden">fav</span>
 							</a>
@@ -314,7 +309,7 @@ StCzcVynJ8qVKWWX9WJn77UUTrtEyyku5OE=
 
 				<td class="js_grid_column_uri cell_uri l-cell" data-view-id="1490">
 					<div title="bower.io" data-view-id="1491">
-						bower.io
+						<a href="#">bower.io</a>
 					</div>
 				</td>
 
@@ -344,7 +339,7 @@ StCzcVynJ8qVKWWX9WJn77UUTrtEyyku5OE=
 
 				<td class="js_grid_column_favorite cell_favorite selections s-cell" data-view-id="1502">
 					<div title="" data-view-id="1503"><div class="passbolt_component_favorite js_component passbolt_view_component_favorite ready" id="favorite_4a2f98e8-b326-3384-aa2b-c3c9a81be3f7">
-						<a href="#" class="no-text">
+						<a href="#" class="">
 							<i class="icon fav" data-view-id="1518"></i>
 							<span class="visuallyhidden">fav</span>
 						</a>
@@ -387,7 +382,7 @@ R+4mU1ishf2K34pgkgejVeXhaQKh
 
 				<td class="js_grid_column_uri cell_uri l-cell" data-view-id="1510">
 					<div title="ftp://192.168.1.1" data-view-id="1511">
-						ftp://192.168.1.1
+						<a href="#">ftp://192.168.1.1</a>
 					</div>
 				</td>
 
@@ -416,7 +411,7 @@ R+4mU1ishf2K34pgkgejVeXhaQKh
 				</td>
 
 				<td class="js_grid_column_favorite cell_favorite selections s-cell" data-view-id="1522">
-					<div title="" data-view-id="1523"><div class="passbolt_component_favorite js_component passbolt_view_component_favorite ready" id="favorite_524b4f8c-b842-38d6-a542-6bf714df6099"><a href="#" class="no-text">
+					<div title="" data-view-id="1523"><div class="passbolt_component_favorite js_component passbolt_view_component_favorite ready" id="favorite_524b4f8c-b842-38d6-a542-6bf714df6099"><a href="#" class="">
 								<i class="icon fav" data-view-id="1538"></i>
 								<span class="visuallyhidden">fav</span>
 							</a>
@@ -459,7 +454,7 @@ QAHyo+qrtGnuhlp5rXM+dVT1mAwsSW4mmM9qpJq7LOVMC2AcvsVDKQhl5iyEtzfq
 
 				<td class="js_grid_column_uri cell_uri l-cell" data-view-id="1530">
 					<div title="cakephp.org" data-view-id="1531">
-						cakephp.org
+						<a href="#">cakephp.org</a>
 					</div>
 				</td>
 
@@ -488,7 +483,7 @@ QAHyo+qrtGnuhlp5rXM+dVT1mAwsSW4mmM9qpJq7LOVMC2AcvsVDKQhl5iyEtzfq
 				</td>
 
 				<td class="js_grid_column_favorite cell_favorite selections s-cell" data-view-id="1542">
-					<div title="" data-view-id="1543"><div class="passbolt_component_favorite js_component passbolt_view_component_favorite ready" id="favorite_664735b2-4be7-36d9-a9f8-08d42998faf8"><a href="#" class="no-text">
+					<div title="" data-view-id="1543"><div class="passbolt_component_favorite js_component passbolt_view_component_favorite ready" id="favorite_664735b2-4be7-36d9-a9f8-08d42998faf8"><a href="#" class="">
 								<i class="icon fav" data-view-id="1558"></i>
 								<span class="visuallyhidden">fav</span>
 							</a>
@@ -531,7 +526,7 @@ QQEDSFzJoO2iBFRT5zwBVBl/hQBeRWXBNY0mcIB/XCWCRoMIEKHN0OwCLCfJIPxK
 
 				<td class="js_grid_column_uri cell_uri l-cell" data-view-id="1550">
 					<div title="https://www.docker.com/" data-view-id="1551">
-						https://www.docker.com/
+						<a href="#">https://www.docker.com/</a>
 					</div>
 				</td>
 
@@ -560,7 +555,7 @@ QQEDSFzJoO2iBFRT5zwBVBl/hQBeRWXBNY0mcIB/XCWCRoMIEKHN0OwCLCfJIPxK
 				</td>
 
 				<td class="js_grid_column_favorite cell_favorite selections s-cell" data-view-id="1562">
-					<div title="" data-view-id="1563"><div class="passbolt_component_favorite js_component passbolt_view_component_favorite ready" id="favorite_8010a5ef-1e57-3981-abd1-98521c2622d6"><a href="#" class="no-text">
+					<div title="" data-view-id="1563"><div class="passbolt_component_favorite js_component passbolt_view_component_favorite ready" id="favorite_8010a5ef-1e57-3981-abd1-98521c2622d6"><a href="#" class="">
 								<i class="icon fav" data-view-id="1578"></i>
 								<span class="visuallyhidden">fav</span>
 							</a>
@@ -603,7 +598,7 @@ mbZs5gRvcF5waNXoH4jbhbE=
 
 				<td class="js_grid_column_uri cell_uri l-cell" data-view-id="1570">
 					<div title="http://fr.groland.wikia.com/wiki/Grogle" data-view-id="1571">
-						http://fr.groland.wikia.com/wiki/Grogle
+						<a href="#">http://fr.groland.wikia.com/wiki/Grogle</a>
 					</div>
 				</td>
 
@@ -632,7 +627,7 @@ mbZs5gRvcF5waNXoH4jbhbE=
 				</td>
 
 				<td class="js_grid_column_favorite cell_favorite selections s-cell" data-view-id="1582">
-					<div title="" data-view-id="1583"><div class="passbolt_component_favorite js_component passbolt_view_component_favorite ready" id="favorite_a93321f2-7aed-3d77-a2d1-7e058f41b7b9"><a href="#" class="no-text">
+					<div title="" data-view-id="1583"><div class="passbolt_component_favorite js_component passbolt_view_component_favorite ready" id="favorite_a93321f2-7aed-3d77-a2d1-7e058f41b7b9"><a href="#" class="">
 								<i class="icon fav" data-view-id="1598"></i>
 								<span class="visuallyhidden">fav</span>
 							</a>
@@ -675,7 +670,7 @@ clguxvRkrQvitJI1I439S/RlIIo=
 
 				<td class="js_grid_column_uri cell_uri l-cell" data-view-id="1590">
 					<div title="canjs.com" data-view-id="1591">
-						canjs.com
+						<a href="#">canjs.com</a>
 					</div>
 				</td>
 
@@ -704,7 +699,7 @@ clguxvRkrQvitJI1I439S/RlIIo=
 				</td>
 
 				<td class="js_grid_column_favorite cell_favorite selections s-cell" data-view-id="1602">
-					<div title="" data-view-id="1603"><div class="passbolt_component_favorite js_component passbolt_view_component_favorite ready" id="favorite_a9b3ae3c-9d12-39a3-afda-a4863b918989"><a href="#" class="no-text">
+					<div title="" data-view-id="1603"><div class="passbolt_component_favorite js_component passbolt_view_component_favorite ready" id="favorite_a9b3ae3c-9d12-39a3-afda-a4863b918989"><a href="#" class="">
 								<i class="icon fav" data-view-id="1618"></i>
 								<span class="visuallyhidden">fav</span>
 							</a>
@@ -747,7 +742,7 @@ Iw82x8qh7m0gA16+sGtV07kV
 
 				<td class="js_grid_column_uri cell_uri l-cell" data-view-id="1610">
 					<div title="passbolt.dev" data-view-id="1611">
-						passbolt.dev
+						<a href="#">passbolt.dev</a>
 					</div>
 				</td>
 
@@ -776,7 +771,7 @@ Iw82x8qh7m0gA16+sGtV07kV
 				</td>
 
 				<td class="js_grid_column_favorite cell_favorite selections s-cell" data-view-id="1622">
-					<div title="" data-view-id="1623"><div class="passbolt_component_favorite js_component passbolt_view_component_favorite ready" id="favorite_b84103c2-3b50-3250-a5bb-9fb2272c3cca"><a href="#" class="no-text">
+					<div title="" data-view-id="1623"><div class="passbolt_component_favorite js_component passbolt_view_component_favorite ready" id="favorite_b84103c2-3b50-3250-a5bb-9fb2272c3cca"><a href="#" class="">
 								<i class="icon fav" data-view-id="1638"></i>
 								<span class="visuallyhidden">fav</span>
 							</a>
@@ -819,7 +814,7 @@ FaULSm7ToToLApfA/Jz04qBk8mzRlQ==
 
 				<td class="js_grid_column_uri cell_uri l-cell" data-view-id="1630">
 					<div title="centos.org" data-view-id="1631">
-						centos.org
+						<a href="#">centos.org</a>
 					</div>
 				</td>
 
@@ -848,7 +843,7 @@ FaULSm7ToToLApfA/Jz04qBk8mzRlQ==
 				</td>
 
 				<td class="js_grid_column_favorite cell_favorite selections s-cell" data-view-id="1642">
-					<div title="" data-view-id="1643"><div class="passbolt_component_favorite js_component passbolt_view_component_favorite ready" id="favorite_c1a19589-752f-3b9f-a0be-e258a077af59"><a href="#" class="no-text">
+					<div title="" data-view-id="1643"><div class="passbolt_component_favorite js_component passbolt_view_component_favorite ready" id="favorite_c1a19589-752f-3b9f-a0be-e258a077af59"><a href="#" class="">
 								<i class="icon fav" data-view-id="1658"></i>
 								<span class="visuallyhidden">fav</span>
 							</a>
@@ -891,7 +886,7 @@ jEKdXIFaXAQzwp/+zfFcmZQofks=
 
 				<td class="js_grid_column_uri cell_uri l-cell" data-view-id="1650">
 					<div title="https://soutenir.framasoft.org/" data-view-id="1651">
-						https://soutenir.framasoft.org/
+						<a href="#">https://soutenir.framasoft.org/</a>
 					</div>
 				</td>
 
@@ -920,7 +915,7 @@ jEKdXIFaXAQzwp/+zfFcmZQofks=
 				</td>
 
 				<td class="js_grid_column_favorite cell_favorite selections s-cell" data-view-id="1662">
-					<div title="" data-view-id="1663"><div class="passbolt_component_favorite js_component passbolt_view_component_favorite ready" id="favorite_cf6bf684-8f38-338d-a7c1-65011e7d3ded"><a href="#" class="no-text">
+					<div title="" data-view-id="1663"><div class="passbolt_component_favorite js_component passbolt_view_component_favorite ready" id="favorite_cf6bf684-8f38-338d-a7c1-65011e7d3ded"><a href="#" class="">
 								<i class="icon fav" data-view-id="1678"></i>
 								<span class="visuallyhidden">fav</span>
 							</a>
@@ -963,7 +958,7 @@ qotaXR0jUY4Z23FqrgNIb+qq
 
 				<td class="js_grid_column_uri cell_uri l-cell" data-view-id="1670">
 					<div title="gnupg.org" data-view-id="1671">
-						gnupg.org
+						<a href="#">gnupg.org</a>
 					</div>
 				</td>
 
@@ -992,7 +987,7 @@ qotaXR0jUY4Z23FqrgNIb+qq
 				</td>
 
 				<td class="js_grid_column_favorite cell_favorite selections s-cell" data-view-id="1682">
-					<div title="" data-view-id="1683"><div class="passbolt_component_favorite js_component passbolt_view_component_favorite ready" id="favorite_d547d43a-9f21-30f6-ae31-66f9258bbe17"><a href="#" class="no-text">
+					<div title="" data-view-id="1683"><div class="passbolt_component_favorite js_component passbolt_view_component_favorite ready" id="favorite_d547d43a-9f21-30f6-ae31-66f9258bbe17"><a href="#" class="">
 								<i class="icon fav" data-view-id="1698"></i>
 								<span class="visuallyhidden">fav</span>
 							</a>
@@ -1035,7 +1030,7 @@ PwESOPt0kzyKlTeYIrwJezwHfKK6EPQSWaotmO4osdrYn3Fc2wnpNj+5B1x+1MPF
 
 				<td class="js_grid_column_uri cell_uri l-cell" data-view-id="1690">
 					<div title="getcomposer.org" data-view-id="1691">
-						getcomposer.org
+						<a href="#">getcomposer.org</a>
 					</div>
 				</td>
 
@@ -1064,7 +1059,7 @@ PwESOPt0kzyKlTeYIrwJezwHfKK6EPQSWaotmO4osdrYn3Fc2wnpNj+5B1x+1MPF
 				</td>
 
 				<td class="js_grid_column_favorite cell_favorite selections s-cell" data-view-id="1702">
-					<div title="" data-view-id="1703"><div class="passbolt_component_favorite js_component passbolt_view_component_favorite ready" id="favorite_e5b4e2bd-29fd-3dc8-aca0-401e55a343ae"><a href="#" class="no-text">
+					<div title="" data-view-id="1703"><div class="passbolt_component_favorite js_component passbolt_view_component_favorite ready" id="favorite_e5b4e2bd-29fd-3dc8-aca0-401e55a343ae"><a href="#" class="">
 								<i class="icon fav" data-view-id="1718"></i>
 								<span class="visuallyhidden">fav</span>
 							</a>
@@ -1107,7 +1102,7 @@ oaGvP4FhuwaCtf3Y091F
 
 				<td class="js_grid_column_uri cell_uri l-cell" data-view-id="1710">
 					<div title="git-scm.com" data-view-id="1711">
-						git-scm.com
+						<a href="#">git-scm.com</a>
 					</div>
 				</td>
 

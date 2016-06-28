@@ -11,12 +11,12 @@
 <body >
 <div  id="faq-list" class="page background">
 	<!-- first header -->
-	<?php include('includes/AA_header_prelaunch.php'); ?>
+	<?php include('includes/AA_header.php'); ?>
 
 	<!-- second header -->
 	<div class="header second">
 		<div class="col1">
-			<div class="logo no-text">
+			<div class="logo ">
 				<h1><span>Passbolt</span></h1>
 			</div>
 		</div>

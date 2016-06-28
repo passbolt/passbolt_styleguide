@@ -698,10 +698,10 @@ a:focus {
   color: #2894df;
   border: 0;
 }
-p a {
+a {
   border-bottom: 1px solid #dddddd;
 }
-p a:hover {
+a:hover {
   border-bottom: 1px solid #2894df;
 }
 /* todos */
@@ -750,6 +750,7 @@ h3 {
 /* paragraph */
 p {
   margin: 0 0 1em 0;
+  line-height: 1.5em;
 }
 .code {
   font-family: "Courier New", Courier, monospace;
@@ -2981,6 +2982,7 @@ input[type=text]:disabled {
 textarea {
   height: 3.6em;
   /* 4 char (default input length) x 1em (average char length) + .6em (padding) */
+  line-height: 16px;
 }
 .textarea.large textarea {
   width: 30em;
@@ -3867,6 +3869,7 @@ html body .button.processing {
 .header .navigation.primary li a {
   color: #dddddd;
   text-decoration: none;
+  border: 0;
   display: inline-block;
 }
 .header .navigation.primary li a:hover {
@@ -3963,6 +3966,9 @@ html body .button.processing {
   display: inline;
   margin-right: 1.5em;
 }
+.footer .footer-links a {
+  border: 0;
+}
 /*
 	do not show javascript needed warning if js is enabled
 	this needs modernizer to work
@@ -4004,12 +4010,6 @@ html body .button.processing {
 .side-message ul,
 .side-message p {
   padding-bottom: 1em;
-}
-.side-message a {
-  border-color: #333333;
-}
-.side-message a:hover {
-  border-color: #2894df;
 }
 .plugin-check {
   padding: 1em;

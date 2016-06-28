@@ -15,7 +15,7 @@
 <body id="faq-list">
 <div id="container" class="page background">
     <!-- first header -->
-    <?php include('includes/AA_header_prelaunch.php'); ?>
+    <?php include('includes/AA_header.php'); ?>
 
     <!-- second header -->
     <div class="header second">

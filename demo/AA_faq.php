@@ -15,7 +15,7 @@
 <body id="faq-list">
 <div id="container" class="page background">
 	<!-- first header -->
-	<?php include('includes/AA_header_prelaunch.php'); ?>
+	<?php include('includes/AA_header.php'); ?>
 
 	<!-- second header -->
 	<div class="header second">
@@ -131,7 +131,7 @@
 									Absolutely. The entire passbolt solution is composed of a free software. Our source code is made available in such a way that all of our users have the rights to :
 								</p>
 								<ul>
-									<li>Use the software for any purpose,</li>
+									<li>Use the software for <a href="#">any purpose</a>,</li>
 									<li>Change the software to suit their needs,</li>
 									<li>Share the software with their friends and neighbors,</li>
 									<li>Distribute the software and the changes they make.</li>
@@ -181,9 +181,6 @@
 								</p>
 								<p>
 									Our goal in selecting the AGPL v3.0, as our default license is to require that enhancements are released back to the community. Traditional open source licences such as GPL often do not achieve this when the software is runs as a web application, e.g. as hosted application available through a network.
-								</p>
-								<p>
-									If the AGPL v3 does not satisfy your organisation, commercial licenses are available. Feel free to contact us for more details.
 								</p>
 								</div>
 							</div>

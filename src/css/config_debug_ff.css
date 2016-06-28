@@ -765,6 +765,7 @@ h3 {
 /* paragraph */
 p {
   margin: 0 0 1em 0;
+  line-height: 1.5em;
 }
 .code {
   font-family: "Courier New", Courier, monospace;
@@ -3252,6 +3253,7 @@ input[type=text]:disabled {
 textarea {
   height: 3.6em;
   /* 4 char (default input length) x 1em (average char length) + .6em (padding) */
+  line-height: 16px;
 }
 .textarea.large textarea {
   width: 30em;
@@ -3940,6 +3942,7 @@ input[type=text].fluid {
 .header .navigation.primary li a {
   color: #dddddd;
   text-decoration: none;
+  border: 0;
   display: inline-block;
 }
 .header .navigation.primary li a:hover {
@@ -4036,6 +4039,9 @@ input[type=text].fluid {
   display: inline;
   margin-right: 1.5em;
 }
+.footer .footer-links a {
+  border: 0;
+}
 /* tabs */
 .tabs {
   border-bottom: 1px solid #dddddd;
@@ -4055,6 +4061,7 @@ input[type=text].fluid {
   padding: .4em 1.75em;
   margin-left: 1.25em;
   font-size: 15px;
+  border: 0;
 }
 .tabs-nav li a.selected {
   margin-bottom: -1px;
@@ -4143,12 +4150,6 @@ input[type=text].fluid {
 .side-message p {
   padding-bottom: 1em;
 }
-.side-message a {
-  border-color: #333333;
-}
-.side-message a:hover {
-  border-color: #2894df;
-}
 /* gpg textarea is large and tall */
 .gpgkey.input.textarea textarea {
   height: 24em;
@@ -4219,10 +4220,8 @@ table.table-info.horizontal tbody tr:nth-child(even) {
 }
 .panel .navigation a {
   color: #333333;
+  border: 0;
   display: block;
-}
-.panel .navigation a:hover {
-  text-decoration: none;
 }
 .panel .navigation li {
   font-size: 0.938em;
