@@ -4299,11 +4299,13 @@ html body .button.processing {
  * Additional styles for login and register
  */
 .page.register h2,
+.page.recover h2,
 .page.login h2 {
   font-size: 2em;
   margin-top: 1em;
 }
 .page.register .logo,
+.page.recover .logo,
 .page.login .logo {
   background: transparent url('../img/logo/logo.png') 0 10px no-repeat;
   width: 250px;
@@ -4311,79 +4313,98 @@ html body .button.processing {
   margin-top: 1em;
 }
 .page.register .logo span,
+.page.recover .logo span,
 .page.login .logo span {
   display: none;
 }
 .page.register .form,
+.page.recover .form,
 .page.login .form {
   background: #f3f3f3;
   padding: 4% 5% 6% 5%;
   margin-top: 1%;
 }
 .page.register .form form input[type=text],
+.page.recover .form form input[type=text],
 .page.login .form form input[type=text],
 .page.register .form form input[type=password],
+.page.recover .form form input[type=password],
 .page.login .form form input[type=password] {
   width: 90%;
 }
 .page.register .form fieldset,
+.page.recover .form fieldset,
 .page.login .form fieldset {
   margin: 0;
   border: 0;
 }
 .page.register .form legend,
+.page.recover .form legend,
 .page.login .form legend {
   display: none;
 }
 .page.register .form .actions-wrapper .secondary,
+.page.recover .form .actions-wrapper .secondary,
 .page.login .form .actions-wrapper .secondary {
   margin-left: 1em;
 }
 .page.register .form .submit,
+.page.recover .form .submit,
 .page.login .form .submit {
   margin-left: 2%;
 }
 .page.register .form .submit input,
+.page.recover .form .submit input,
 .page.login .form .submit input {
   padding: .7em 1.5em;
 }
 .page.register .form .actions-wrapper.center,
+.page.recover .form .actions-wrapper.center,
 .page.login .form .actions-wrapper.center {
   text-align: center;
 }
 .page.register .chrome-plugin-block p img,
+.page.recover .chrome-plugin-block p img,
 .page.login .chrome-plugin-block p img {
   width: 160px;
   margin-top: 20px;
 }
 .page.register .github-block .button,
+.page.recover .github-block .button,
 .page.login .github-block .button,
 .page.register .donate-block .donate.button,
+.page.recover .donate-block .donate.button,
 .page.login .donate-block .donate.button {
   margin-top: 20px;
 }
 .page.register .message-wrapper,
+.page.recover .message-wrapper,
 .page.login .message-wrapper,
 .page.register .plugin-check-wrapper,
+.page.recover .plugin-check-wrapper,
 .page.login .plugin-check-wrapper {
   margin-bottom: 1em;
 }
 .page.register .information p,
+.page.recover .information p,
 .page.login .information p {
   font-size: 1.25em;
   margin-bottom: 1em;
 }
 .page.register .information p.message,
+.page.recover .information p.message,
 .page.login .information p.message {
   font-size: 1.125em;
   margin-bottom: .425em;
 }
 .page.register .row + .row,
+.page.recover .row + .row,
 .page.login .row + .row {
   padding-top: .5em;
   padding-bottom: 2.5em;
 }
 .page.register .feedback .fa.huge,
+.page.recover .feedback .fa.huge,
 .page.login .feedback .fa.huge {
   font-size: 160px;
   color: #CCC;
@@ -4393,6 +4414,7 @@ html body .button.processing {
   display: block;
 }
 .page.register .feedback p,
+.page.recover .feedback p,
 .page.login .feedback p {
   text-align: center;
   width: 100%;
