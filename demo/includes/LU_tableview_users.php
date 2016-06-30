@@ -25,6 +25,10 @@
 					Modified
 				</th>
 
+				<th class="js_grid_column js_grid_column_last_logged_in m-cell">
+					Last logged in
+				</th>
+
 			</tr>
 			</thead>
 		</table>
@@ -72,6 +76,12 @@
 					</div>
 				</td>
 
+				<td class="js_grid_column_last_logged_in m-cell">
+					<div title="6 days ago">
+						1 day ago
+					</div>
+				</td>
+
 			</tr>
 			<tr id="50cdea9c-7e80-4eb6-b4cc-2f4fd7a10fce" class="selected">
 
@@ -115,6 +125,12 @@
 					</div>
 				</td>
 
+				<td class="js_grid_column_last_logged_in m-cell">
+					<div title="6 days ago">
+						1 day ago
+					</div>
+				</td>
+
 			</tr>
 			<tr id="50cdea9c-4380-4eb6-b4cc-2f4fd7a10fce">
 
@@ -153,6 +169,12 @@
 				<td class="js_grid_column_modified m-cell">
 					<div title="6 days ago">
 						6 days ago
+					</div>
+				</td>
+
+				<td class="js_grid_column_last_logged_in m-cell">
+					<div title="6 days ago">
+						1 day ago
 					</div>
 				</td>
 
@@ -198,6 +220,12 @@
 					</div>
 				</td>
 
+				<td class="js_grid_column_last_logged_in m-cell">
+					<div title="6 days ago">
+						1 day ago
+					</div>
+				</td>
+
 			</tr>
 			<tr id="533d37a0-aa11-4945-9b11-1663a0a895dc">
 
@@ -236,6 +264,12 @@
 				<td class="js_grid_column_modified m-cell">
 					<div title="6 days ago">
 						6 days ago
+					</div>
+				</td>
+
+				<td class="js_grid_column_last_logged_in m-cell">
+					<div title="6 days ago">
+						1 day ago
 					</div>
 				</td>
 
@@ -281,6 +315,12 @@
 					</div>
 				</td>
 
+				<td class="js_grid_column_last_logged_in m-cell">
+					<div title="6 days ago">
+						1 day ago
+					</div>
+				</td>
+
 			</tr>
 			<tr id="50cdea9c-f214-4549-9807-2f4fd7a10fce">
 
@@ -319,6 +359,12 @@
 				<td class="js_grid_column_modified m-cell">
 					<div title="6 days ago">
 						6 days ago
+					</div>
+				</td>
+
+				<td class="js_grid_column_last_logged_in m-cell">
+					<div title="6 days ago">
+						1 day ago
 					</div>
 				</td>
 
@@ -364,6 +410,12 @@
 					</div>
 				</td>
 
+				<td class="js_grid_column_last_logged_in m-cell">
+					<div title="6 days ago">
+						1 day ago
+					</div>
+				</td>
+
 			</tr>
 			<tr id="533d37a0-bc80-4945-9b11-1663c0a895dc">
 
@@ -402,6 +454,12 @@
 				<td class="js_grid_column_modified m-cell">
 					<div title="6 days ago">
 						6 days ago
+					</div>
+				</td>
+
+				<td class="js_grid_column_last_logged_in m-cell">
+					<div title="6 days ago">
+						1 day ago
 					</div>
 				</td>
 
@@ -446,6 +504,12 @@
 					</div>
 				</td>
 
+				<td class="js_grid_column_last_logged_in m-cell">
+					<div title="6 days ago">
+						1 day ago
+					</div>
+				</td>
+
 			</tr>
 			<tr id="533d346d-d378-4acc-affd-1663c0a895dc">
 
@@ -487,6 +551,12 @@
 					</div>
 				</td>
 
+				<td class="js_grid_column_last_logged_in m-cell">
+					<div title="6 days ago">
+						1 day ago
+					</div>
+				</td>
+
 			</tr>
 			<tr id="533d32c0-1f30-438c-8f26-1768c0a895dc">
 
@@ -525,6 +595,12 @@
 				<td class="js_grid_column_modified m-cell">
 					<div title="6 days ago">
 						6 days ago
+					</div>
+				</td>
+
+				<td class="js_grid_column_last_logged_in m-cell">
+					<div title="6 days ago">
+						1 day ago
 					</div>
 				</td>
 
@@ -570,6 +646,12 @@
 					</div>
 				</td>
 
+				<td class="js_grid_column_last_logged_in m-cell">
+					<div title="6 days ago">
+						1 day ago
+					</div>
+				</td>
+
 			</tr>
 			<tr id="533d3564-03e8-4963-94a7-178cc0a895dc">
 
@@ -608,6 +690,12 @@
 				<td class="js_grid_column_modified m-cell">
 					<div title="6 days ago">
 						6 days ago
+					</div>
+				</td>
+
+				<td class="js_grid_column_last_logged_in m-cell">
+					<div title="6 days ago">
+						1 day ago
 					</div>
 				</td>
 
@@ -652,6 +740,12 @@
 					</div>
 				</td>
 
+				<td class="js_grid_column_last_logged_in m-cell">
+					<div title="6 days ago">
+						1 day ago
+					</div>
+				</td>
+
 			</tr>
 			<tr id="eeee6042-c5cd-11e1-a0c5-080027796c51">
 
@@ -690,6 +784,12 @@
 				<td class="js_grid_column_modified m-cell">
 					<div title="6 days ago">
 						6 days ago
+					</div>
+				</td>
+
+				<td class="js_grid_column_last_logged_in m-cell">
+					<div title="6 days ago">
+						1 day ago
 					</div>
 				</td>
 
@@ -735,6 +835,12 @@
 					</div>
 				</td>
 
+				<td class="js_grid_column_last_logged_in m-cell">
+					<div title="6 days ago">
+						1 day ago
+					</div>
+				</td>
+
 			</tr>
 			<tr id="bbd56042-c5cd-11e1-a0c5-080027796c4c">
 
@@ -773,6 +879,12 @@
 				<td class="js_grid_column_modified m-cell">
 					<div title="6 days ago">
 						6 days ago
+					</div>
+				</td>
+
+				<td class="js_grid_column_last_logged_in m-cell">
+					<div title="6 days ago">
+						1 day ago
 					</div>
 				</td>
 

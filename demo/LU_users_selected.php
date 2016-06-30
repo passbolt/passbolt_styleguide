@@ -33,6 +33,7 @@
 							);
 							include('includes/LU_breadcrumbs.php'); ?>
 							<?php include('includes/LU_tableview_users.php'); ?>
+							<?php include('includes/LU_aside_users.php'); ?>
 						</div>
 					</div>
 				</div>
