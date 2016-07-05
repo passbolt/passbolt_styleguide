@@ -13,20 +13,20 @@
 
 				</th>
 
-				<th class="js_grid_column js_grid_column_name m-cell">
-					User
+				<th class="js_grid_column js_grid_column_name m-cell sortable sorted sort-asc">
+					<a href="#">User</a>
 				</th>
 
-				<th class="js_grid_column js_grid_column_username m-cell">
-					Username
+				<th class="js_grid_column js_grid_column_username m-cell sortable">
+					<a href="#">Username</a>
 				</th>
 
-				<th class="js_grid_column js_grid_column_modified m-cell">
-					Modified
+				<th class="js_grid_column js_grid_column_modified m-cell sortable">
+					<a href="#">Modified</a>
 				</th>
 
-				<th class="js_grid_column js_grid_column_last_logged_in m-cell">
-					Last logged in
+				<th class="js_grid_column js_grid_column_last_logged_in m-cell sortable">
+					<a href="#">Last logged in</a>
 				</th>
 
 			</tr>

@@ -12,23 +12,23 @@
 					<th class="js_grid_column js_grid_column_favorite cell_favorite selections s-cell" data-view-id="1411">
 						<a href="#"><i class="icon fav"></i><span class="visuallyhidden">fav</span></a>
 					</th>
-					<th class="js_grid_column js_grid_column_name cell_name m-cell" data-view-id="1412">
-						Resource
+					<th class="js_grid_column js_grid_column_name cell_name m-cell sortable" data-view-id="1412">
+						<a href="#">Resource</a>
 					</th>
-					<th class="js_grid_column js_grid_column_username cell_username m-cell" data-view-id="1413">
-						Username
+					<th class="js_grid_column js_grid_column_username cell_username m-cell sortable" data-view-id="1413">
+						<a href="#">Username</a>
 					</th>
 					<th class="js_grid_column js_grid_column_secret cell_secret m-cell password" data-view-id="1414">
 						Password
 					</th>
-					<th class="js_grid_column js_grid_column_uri cell_uri l-cell" data-view-id="1415">
-						URI
+					<th class="js_grid_column js_grid_column_uri cell_uri l-cell sortable" data-view-id="1415">
+						<a href="#">URI</a>
 					</th>
-					<th class="js_grid_column js_grid_column_modified cell_modified m-cell" data-view-id="1416">
-						Modified
+					<th class="js_grid_column js_grid_column_modified cell_modified m-cell sortable sorted sort-desc" data-view-id="1416">
+						<a href="#">Modified</a>
 					</th>
-					<th class="js_grid_column js_grid_column_owner cell_owner m-cell" data-view-id="1417">
-						Owner
+					<th class="js_grid_column js_grid_column_owner cell_owner m-cell sortable" data-view-id="1417">
+						<a href="#">Owner</a>
 					</th>
 				</tr>
 			</thead>
@@ -122,7 +122,8 @@ Tfgwnb1pn59J7OvJeB6emDPq
 				</td>
 
 				<td class="js_grid_column_favorite cell_favorite selections s-cell" data-view-id="1442">
-					<div title="" data-view-id="1443"><div class="passbolt_component_favorite js_component passbolt_view_component_favorite ready" id="favorite_2af40344-b330-30a8-ac26-64b2776f07e0"><a href="#" class="">
+					<div title="" data-view-id="1443"><div class="passbolt_component_favorite js_component passbolt_view_component_favorite ready" id="favorite_2af40344-b330-30a8-ac26-64b2776f07e0">
+							<a href="#" class="">
 								<i class="icon unfav" data-view-id="1458"></i>
 								<span class="visuallyhidden">fav</span>
 							</a>

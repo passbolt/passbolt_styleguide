@@ -11,10 +11,23 @@
 .tableview-header {
 	height:2.125em;
 	overflow-y:scroll;
-		padding-top:.125em;
+	padding-top:.125em;
 }
 .tableview-header table {
 	width:100%;
+
+	th.sortable.sorted {
+		a:after {
+			padding-left: 0.75em;
+			font: normal normal normal 14px/1 FontAwesome;
+		}
+		&.sort-desc a:after {
+			content: "\f0d7";
+		}
+		&.sort-asc a:after {
+			content: "\f0d8";
+		}
+	}
 }
 
 /* main content */
