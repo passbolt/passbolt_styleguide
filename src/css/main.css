@@ -4452,7 +4452,6 @@ input[type="search"]::-webkit-search-cancel-button {
 .progress-bar-wrapper .progress-bar.big .progress {
   background: #d40101;
   width: 5%;
-  height: 5px;
   display: block;
   height: 10px;
 }
@@ -5999,6 +5998,7 @@ table.table-info.horizontal tbody tr:nth-child(even) {
 	and a custom layout to accomodate buttons on the left end
 */
 .input-password-wrapper {
+  max-width: 500px;
   /*
  * For IE 6/7 only
  * Include this rule to trigger hasLayout and contain floats.
@@ -6030,7 +6030,7 @@ table.table-info.horizontal tbody tr:nth-child(even) {
  * 2. The use of `table` rather than `block` is only necessary if using
  *	`:before` to contain the top-margins of child elements.
  */
-  width: 100%;
+  width: 99%;
 }
 .input-password-wrapper:before,
 .input-password-wrapper:after {
@@ -6050,7 +6050,7 @@ table.table-info.horizontal tbody tr:nth-child(even) {
 }
 .input-password-wrapper .input.password input {
   box-sizing: padding-box;
-  width: 64%;
+  width: 61%;
   float: left;
 }
 .input-password-wrapper .input.password input[type=password].decrypting {
@@ -6073,19 +6073,21 @@ table.table-info.horizontal tbody tr:nth-child(even) {
 }
 .input-password-wrapper .actions.inline {
   float: right;
-  width: 32%;
+  width: 30%;
 }
 .input-password-wrapper .actions.inline .button {
   float: left;
-  margin-right: .5em;
   width: 3.75em;
   padding-left: 0;
   padding-right: 0;
 }
+.input-password-wrapper .actions.inline .button + .button {
+  margin-left: .5em;
+}
 .input-password-wrapper .password-complexity .complexity-text {
   float: right;
   clear: right;
-  width: 31.5%;
+  width: 30%;
   font-size: 11px;
   text-align: left;
   padding-left: 0;
@@ -6094,7 +6096,7 @@ table.table-info.horizontal tbody tr:nth-child(even) {
   color: #dddddd;
 }
 .input-password-wrapper .password-complexity .progress {
-  width: 64%;
+  width: 65.5%;
   border: 1px solid #dddddd;
   height: 7px;
   display: block;
@@ -6104,7 +6106,7 @@ table.table-info.horizontal tbody tr:nth-child(even) {
 }
 .input-password-wrapper .password-complexity .progress-bar {
   background: #000000;
-  width: 0%;
+  width: 0;
   height: 5px;
   display: block;
   float: left;

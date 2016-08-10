@@ -40,6 +40,7 @@
 
 	<div id="js_user_pwd_strength" class="password-complexity <?php echo isset($_GET['complexity']) ? $_GET['complexity'] : 'fair'; ?>">
 		<span class="progress"><span class="progress-bar <?php echo isset($_GET['complexity']) ? $_GET['complexity'] : 'fair'; ?>"></span></span>
+		<span class="complexity-text">complexity: <strong>mediocre</strong></span>
     <?php
     $complexityText = isset($_GET['complexity']) ? $_GET['complexity'] : 'fair';
     if ($complexityText == 'not_available') {

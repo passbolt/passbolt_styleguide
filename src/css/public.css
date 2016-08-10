@@ -4148,7 +4148,6 @@ article video {
 .progress-bar-wrapper .progress-bar.big .progress {
   background: #d40101;
   width: 5%;
-  height: 5px;
   display: block;
   height: 10px;
 }
