@@ -4449,6 +4449,9 @@ article video {
 #loginSubmit {
   margin-left: 2px;
 }
+.progress-bar-wrapper .progress-bar.big.infinite {
+  width: 0;
+}
 html body a.button {
   height: 1.5em;
 }
