@@ -19,7 +19,9 @@
 			<div class="form-content">
 
 				<div class="progress-bar-wrapper">
-					<span class="progress-bar big " id="js_progress_bar_container"><span class="progress" id="js_progress_bar"></span></span>
+					<span class="progress-bar big infinite" id="js_progress_bar_container">
+						<span class="progress"></span>
+					</span>
 				</div>
 
 				<div class="progress-details">
@@ -34,5 +36,8 @@
 		</div>
 	</div>
 </div>
+<script type="text/javascript">
+	$('.progress-bar-wrapper .progress-bar.big.infinite').width('20%');
+</script>
 </body>
 </html>
