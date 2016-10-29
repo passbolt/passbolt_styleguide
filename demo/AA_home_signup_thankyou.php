@@ -4,7 +4,7 @@
 	<meta charset="utf-8">
 	<title>Thank you! | Passbolt</title>
 	<?php include('includes/AA_meta.php'); ?>
-	<link rel="stylesheet" type="text/css" href="css/public.css" />
+	<?php include('includes/AA_header_scripts.php'); ?>
 </head>
 <body>
 <!-- main - html5 -->

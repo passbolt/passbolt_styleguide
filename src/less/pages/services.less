@@ -15,7 +15,7 @@
 /* even larger screen */
 @media all and (min-width: 800px) {
   .page.services {
-    background: #FAFAFA url('@{images}/illustrations/birds3_850.png') 95% -.5% no-repeat;
+//    background: #FAFAFA url('@{images}/illustrations/birds3_850.png') 95% -.5% no-repeat;
     background-size: 42% auto;
 
     .signup {
@@ -23,7 +23,7 @@
     }
     .service {
       text-align: center;
-      margin:3em 0 5em 0;
+      margin:-10em 0 5em 0;
       .service-title {
         margin-bottom: 0;
       }
@@ -32,11 +32,14 @@
         text-align: center;
         padding:1em;
       }
+      .support .service-description {
+        height: 170px;
+      }
       .service-teaser {
         margin:auto;
         margin-top:1em;
         padding:.25em;
-        background:@black;
+        background:@red;
         color:@white;
         display:block;
         border-radius:50%;
@@ -49,14 +52,14 @@
           margin-top:.25em;
           margin-left:-.125em;
         }
-        i.fa-paint-brush {
-          font-size:1.75em;
-          margin-top:.35em;
+        i.fa-phone {
+          font-size:2em;
+          margin-top:.30em;
           margin-left:-.125em;
         }
-        i.fa-database {
-          font-size:1.65em;
-          margin-top:.45em;
+        i.fa-cloud {
+          font-size:1.75em;
+          margin-top:.35em;
         }
       }
       .button {
@@ -79,20 +82,18 @@
       }
     }
     .page-row.intro {
-      background:transparent;
+      background:#FAFAFA;
+      min-height: 400px;
       h1 {
-        margin: 5% 0 2% .3em;
         padding-left:0;
-        max-width: 24em;
         font-size:3em;
+        text-align: center;
       }
       h1 + p {
-        width: 50%;
-        max-width: 25em;
+        text-align: center;
         font-size: 1.75em;
         padding-left:0;
-        margin: 0 0 1em .5em;
-        text-align: left;
+        text-align: center;
         line-height:1.666em;
       }
     }

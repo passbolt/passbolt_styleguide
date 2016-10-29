@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <title>Passbolt | The open source password manager for teams</title>
     <?php include('includes/AA_meta.php'); ?>
-    <link rel="stylesheet" type="text/css" href="css/public.css" />
+	<?php include('includes/AA_header_scripts.php'); ?>
 </head>
 <body>
 <div id="container" class="page home">

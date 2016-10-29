@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <title>Passbolt | The open source password manager for teams</title>
     <?php include('includes/AA_meta.php'); ?>
-    <link rel="stylesheet" type="text/css" href="css/public.css" />
+	<?php include('includes/AA_header_scripts.php'); ?>
 </head>
 <body>
 <div id="container" class="page services featured">
@@ -16,8 +16,7 @@
                 <div class="col12">
                     <h1>Services</h1>
                     <p>
-                        Do you want to fast-track a feature? Do you need some support to deploy passbolt on your own servers?
-                        We are here to help!
+                        Want more from passbolt? We are here to help!
                     </p>
                 </div>
             </div>
@@ -27,18 +26,28 @@
     <div class="page-row service">
         <div class="grid grid-responsive-12">
             <div class="row">
-                <div class="col4 sub">
+                <div class="support col4 sub">
                     <div class="service-teaser">
-                        <i class="fa fa-fw fa-paint-brush"></i>
+                        <i class="fa fa-fw fa-phone"></i>
                     </div>
-                    <h2 class="service-title">Integration</h2>
+                    <h2 class="service-title">Support</h2>
                     <div class="service-description">
-                        Do you want to integrate passbolt with another service such as LDAP?
-                        Do you need help to customize passbolt to match your own branding?
+                        Do you want the passbolt team to be behind you in case of issue ? We provide phone and email support with SLA.
                     </div>
-                    <a href="#" class="button  big">Get in touch!</a>
+	                <a href="../demo/AA_contact.php" class="button primary big">Get in touch!</a>
                 </div>
-                <div class="col4 main">
+	            <div class="cloud col4 main">
+		            <div class="service-teaser">
+			            <i class="fa fa-fw fa-cloud"></i>
+		            </div>
+		            <h2 class="service-title">Cloud Hosting</h2>
+		            <div class="service-description">
+			            Skip the technical setup and get passbolt in the Cloud.
+			            Your passwords will be hosted on our servers, while still giving you full ownership of your data.
+		            </div>
+		            <a href="../demo/AA_contact.php" class="button primary big">Get in touch!</a>
+	            </div>
+                <div class="feature col4 sub last">
                     <div class="service-teaser">
                         <i class="fa fa-fw fa-rocket"></i>
                     </div>
@@ -47,18 +56,7 @@
                         You really want to start using passbolt but there is this one feature that you cannot live
                         without? Partner with us to get it out of the door more quickly!
                     </div>
-                    <a href="#" class="button primary big">Contact us</a>
-                </div>
-                <div class="col4 sub last">
-                    <div class="service-teaser">
-                        <i class="fa fa-fw fa-database"></i>
-                    </div>
-                    <h2 class="service-title">Hosting</h2>
-                    <div class="service-description">
-                        You do not want to roll out passbolt on your own and would like us
-                        to install and maintain it for you? Do you need some support to secure your installation?
-                    </div>
-                    <a class="button cancel big disabled">Coming soon</a>
+	                <a href="../demo/AA_contact.php" class="button primary big">Get in touch!</a>
                 </div>
             </div>
             <div class="row">

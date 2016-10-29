@@ -11,6 +11,7 @@
     <script src="../src/js/list.min.js"></script>
     <script src="../src/js/list.fuzzysearch.min.js"></script>
     <script src="../src/js/imagelightbox.min.js"></script>
+	<script src="js/greedynav.js"></script>
 </head>
 <body id="faq-list">
 <div id="container" class="page background">

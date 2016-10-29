@@ -1,5 +1,7 @@
 /* headers */
 .header {
+  overflow: visible !important;
+
 	&.first {
 		background:@background-dark;
 		height: 2.375em;
@@ -7,6 +9,77 @@
 	&.second {
 		background:@background-lighter;
 	}
+
+  /** Responsive behavior for menu */
+  .greedy {
+    .navigation.primary {
+      // Keep space on the right for the button.
+      padding-right: 5em;
+
+      // More button. (responsive version).
+      button {
+        position: absolute;
+        top: 0;
+        right: 0;
+        padding: 0 1rem 0 1.5rem;
+        outline: 0;
+        border: 0;
+        font-size: 1rem;
+        font-weight: normal;
+        background: @grey-darker;
+        padding: .45em 1em .45em 1em;
+        -webkit-border-radius: 0;
+        -moz-border-radius: 0;
+        border-radius: 0;
+        text-shadow:none;
+        color: @white;
+        margin: 0;
+      }
+      button.hidden {
+        transition: none;
+        width: 0;
+        padding: 0;
+        overflow: hidden;
+      }
+      button::after {
+        content: attr(count);
+        display: inline-flex;
+        width: 21px;
+        height: 21px;
+        align-items: center;
+        justify-content: center;
+        background: @black;
+        color: @grey-lighter;
+        border-radius: 50%;
+        font-size: 0.7em;
+        line-height: 0.7em;
+        margin-left: 0.5rem;
+      }
+
+      ul.hidden-links {
+        position: absolute;
+        background: @grey-lighter;
+        right: 0;
+        top: 100%;
+
+        &.hidden {
+          display: none;
+        }
+
+        li {
+          padding: 0.5rem;
+          float: none;
+          min-width: 85px;
+
+          a {
+            color: #404040;
+            padding-right: 1rem;
+          }
+        }
+      }
+    }
+  }
+  /** End responsive behavior **/
 
 	/* top navigation */
 	.navigation.primary {
