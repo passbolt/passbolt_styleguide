@@ -6240,13 +6240,16 @@ button.swiper-pagination-bullet {
   border-top: 1px solid #f3f3f3;
   margin-bottom: 0;
 }
-.page-row.signup .newsletter label {
+.page-row.signup .newsletter div.input.email {
+  margin-right: 1em;
+}
+.page-row.signup .newsletter div.input.email label {
   color: #888888;
 }
-.page-row.signup .newsletter input[type=email] {
-  margin: .5em 2em .5em 0em;
+.page-row.signup .newsletter div.input.email input[type=email] {
   width: 95%;
-  padding: .225em;
+  font-size: 1em;
+  margin-top: 0.4em;
 }
 .page-row.signup .newsletter .smallprint {
   font-size: .75em;
