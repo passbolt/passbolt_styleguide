@@ -3225,6 +3225,7 @@ label {
 	.disabled		- grey out to indicate it cannot be used
 */
 input[type=text],
+input[type=email],
 input[type=password],
 input[type=search],
 textarea {
@@ -3249,13 +3250,15 @@ textarea {
 textarea:hover,
 input[type=password]:hover,
 input[type=search]:hover,
-input[type=text]:hover {
+input[type=text]:hover,
+input[type=email]:hover {
   border: 1px solid #bbbbbb;
 }
 textarea:focus,
 input[type=password]:focus,
 input[type=search]:focus,
-input[type=text]:focus {
+input[type=text]:focus,
+input[type=email]:focus {
   -webkit-box-shadow: inset 1px 1px 2px rgba(255, 255, 255, 0.2);
   -moz-box-shadow: inset 1px 1px 2px rgba(0, 0, 0, 0.2);
   box-shadow: inset 1px 1px 2px rgba(0, 0, 0, 0.2);
@@ -3263,7 +3266,8 @@ input[type=text]:focus {
 }
 input[type=password]:disabled,
 input[type=search]:disabled,
-input[type=text]:disabled {
+input[type=text]:disabled,
+input[type=email]:disabled {
   border: 1px solid #dddddd;
   -webkit-box-shadow: 0 0 0 0;
   -moz-box-shadow: 0 0 0 0;
@@ -4089,6 +4093,7 @@ article video {
 .header .greedy .navigation.primary ul.hidden-links li a {
   color: #404040;
   padding-right: 1rem;
+  display: block;
 }
 .header .navigation.primary {
   /* home button is special */
@@ -6515,18 +6520,9 @@ button.swiper-pagination-bullet {
 .page.contacts .contact .form-wrapper form div.input {
   width: 100%;
 }
-.page.contacts .contact .form-wrapper form div.input label {
-  font-size: 1em;
-}
 .page.contacts .contact .form-wrapper form div.input input,
 .page.contacts .contact .form-wrapper form div.input textarea {
-  margin: .1em 2em .5em 0em;
-  width: 95%;
-  padding: .5em;
-  font-size: 0.8em;
-  line-height: 1.2em;
-  border: 1px solid #dddddd;
-  color: #333333;
+  width: 96%;
 }
 .page.contacts .contact .form-wrapper form div.input.message {
   padding: 0;
@@ -6564,24 +6560,7 @@ button.swiper-pagination-bullet {
     padding: 5%;
   }
   .page.contacts .contact .form-wrapper form div.input {
-    width: 100%;
     margin-bottom: 0.5em;
-  }
-  .page.contacts .contact .form-wrapper form div.input label {
-    font-size: 1.1em;
-  }
-  .page.contacts .contact .form-wrapper form div.input input,
-  .page.contacts .contact .form-wrapper form div.input textarea {
-    margin: .1em 2em .5em 0em;
-    width: 95%;
-    padding: .225em;
-    font-size: 1.3em;
-    line-height: 1.4em;
-    border: 1px solid #dddddd;
-    color: #333333;
-  }
-  .page.contacts .contact .form-wrapper form div.input input[disabled] {
-    color: #888888;
   }
   .page.contacts .contact .form-wrapper form div.input.message {
     padding: 0;

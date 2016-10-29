@@ -3242,6 +3242,7 @@ label {
 	.disabled		- grey out to indicate it cannot be used
 */
 input[type=text],
+input[type=email],
 input[type=password],
 input[type=search],
 textarea {
@@ -3266,13 +3267,15 @@ textarea {
 textarea:hover,
 input[type=password]:hover,
 input[type=search]:hover,
-input[type=text]:hover {
+input[type=text]:hover,
+input[type=email]:hover {
   border: 1px solid #bbbbbb;
 }
 textarea:focus,
 input[type=password]:focus,
 input[type=search]:focus,
-input[type=text]:focus {
+input[type=text]:focus,
+input[type=email]:focus {
   -webkit-box-shadow: inset 1px 1px 2px rgba(255, 255, 255, 0.2);
   -moz-box-shadow: inset 1px 1px 2px rgba(0, 0, 0, 0.2);
   box-shadow: inset 1px 1px 2px rgba(0, 0, 0, 0.2);
@@ -3280,7 +3283,8 @@ input[type=text]:focus {
 }
 input[type=password]:disabled,
 input[type=search]:disabled,
-input[type=text]:disabled {
+input[type=text]:disabled,
+input[type=email]:disabled {
   border: 1px solid #dddddd;
   -webkit-box-shadow: 0 0 0 0;
   -moz-box-shadow: 0 0 0 0;
@@ -4041,6 +4045,7 @@ article video {
 .header .greedy .navigation.primary ul.hidden-links li a {
   color: #404040;
   padding-right: 1rem;
+  display: block;
 }
 .header .navigation.primary {
   /* home button is special */
@@ -6615,6 +6620,87 @@ table.table-info.horizontal tbody tr:nth-child(even) {
 .dialog-wrapper.session-expired-dialog .dialog-close {
   display: none;
 }
+/*
+ * Password workspace
+ * @todo better namespacing
+ */
+/* drag n drop */
+#js_dragged_resource {
+  padding: 6px 10px;
+  background-color: #ffffff;
+  border: 1px solid #dddddd;
+  -webkit-box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  -moz-box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+#js_dragged_resource span.name {
+  font-weight: bold;
+}
+/* sidebar */
+.panel.aside .resource .detailed-information li.password .value {
+  height: 1.6em;
+  padding-top: 0.2em;
+}
+/* unused column
+	@todo: remove html
+*/
+.js_grid_column_owner,
+.js_grid_column_copyLogin,
+.js_grid_column_copySecret {
+  display: none;
+}
+/* hide left column when there is no space */
+@media all and (max-width: 1024px) {
+  .tableview .js_grid_column_modified {
+    display: none;
+  }
+}
+/* Define state where there are no passwords, and the filter all items */
+.page.password .tableview.all_items.empty .tableview-header {
+  /* No tableview-header */
+  display: none;
+}
+.page.password .tableview.all_items.empty .tableview-content {
+  background: transparent url('../img/illustrations/nest.png') center 75% no-repeat;
+  background-size: 80%;
+  /* No tableview-header */
+  border: 0;
+  top: 0;
+  /* Tablet version */
+  /* Normal screen version */
+}
+@media all and (min-width: 780px) {
+  .page.password .tableview.all_items.empty .tableview-content {
+    background-position: center 60%;
+    background-size: 50%;
+  }
+}
+@media all and (min-width: 1024px) {
+  .page.password .tableview.all_items.empty .tableview-content {
+    background-position: center 70%;
+    background-size: 40%;
+  }
+}
+.page.password .tableview.all_items.empty .empty-content {
+  text-align: center;
+  margin: 3em 0.5em 0.67em 0.5em;
+}
+.page.password .tableview.all_items.empty .empty-content h1 {
+  font-size: 1.5em;
+}
+.page.password .tableview.all_items.empty .empty-content p {
+  font-size: 1em;
+  line-height: 1.5em;
+}
+@media all and (min-width: 780px) {
+  .page.password .tableview.all_items.empty .empty-content h1 {
+    font-size: 2.2em;
+  }
+  .page.password .tableview.all_items.empty .empty-content p {
+    font-size: 1.2em;
+    line-height: 1.8em;
+  }
+}
 /* sidebar / user details in overview */
 .panel.aside .user .header {
   /*
@@ -6715,87 +6801,6 @@ table.table-info.horizontal tbody tr:nth-child(even) {
 /* login history icon column centerign */
 .login-history td:first-child {
   text-align: center;
-}
-/*
- * Password workspace
- * @todo better namespacing
- */
-/* drag n drop */
-#js_dragged_resource {
-  padding: 6px 10px;
-  background-color: #ffffff;
-  border: 1px solid #dddddd;
-  -webkit-box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  -moz-box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-}
-#js_dragged_resource span.name {
-  font-weight: bold;
-}
-/* sidebar */
-.panel.aside .resource .detailed-information li.password .value {
-  height: 1.6em;
-  padding-top: 0.2em;
-}
-/* unused column
-	@todo: remove html
-*/
-.js_grid_column_owner,
-.js_grid_column_copyLogin,
-.js_grid_column_copySecret {
-  display: none;
-}
-/* hide left column when there is no space */
-@media all and (max-width: 1024px) {
-  .tableview .js_grid_column_modified {
-    display: none;
-  }
-}
-/* Define state where there are no passwords, and the filter all items */
-.page.password .tableview.all_items.empty .tableview-header {
-  /* No tableview-header */
-  display: none;
-}
-.page.password .tableview.all_items.empty .tableview-content {
-  background: transparent url('../img/illustrations/nest.png') center 75% no-repeat;
-  background-size: 80%;
-  /* No tableview-header */
-  border: 0;
-  top: 0;
-  /* Tablet version */
-  /* Normal screen version */
-}
-@media all and (min-width: 780px) {
-  .page.password .tableview.all_items.empty .tableview-content {
-    background-position: center 60%;
-    background-size: 50%;
-  }
-}
-@media all and (min-width: 1024px) {
-  .page.password .tableview.all_items.empty .tableview-content {
-    background-position: center 70%;
-    background-size: 40%;
-  }
-}
-.page.password .tableview.all_items.empty .empty-content {
-  text-align: center;
-  margin: 3em 0.5em 0.67em 0.5em;
-}
-.page.password .tableview.all_items.empty .empty-content h1 {
-  font-size: 1.5em;
-}
-.page.password .tableview.all_items.empty .empty-content p {
-  font-size: 1em;
-  line-height: 1.5em;
-}
-@media all and (min-width: 780px) {
-  .page.password .tableview.all_items.empty .empty-content h1 {
-    font-size: 2.2em;
-  }
-  .page.password .tableview.all_items.empty .empty-content p {
-    font-size: 1.2em;
-    line-height: 1.8em;
-  }
 }
 /* TODO replace by page level selector */
 .page.settings .main.panel .middle {

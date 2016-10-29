@@ -3242,6 +3242,7 @@ label {
 	.disabled		- grey out to indicate it cannot be used
 */
 input[type=text],
+input[type=email],
 input[type=password],
 input[type=search],
 textarea {
@@ -3266,13 +3267,15 @@ textarea {
 textarea:hover,
 input[type=password]:hover,
 input[type=search]:hover,
-input[type=text]:hover {
+input[type=text]:hover,
+input[type=email]:hover {
   border: 1px solid #bbbbbb;
 }
 textarea:focus,
 input[type=password]:focus,
 input[type=search]:focus,
-input[type=text]:focus {
+input[type=text]:focus,
+input[type=email]:focus {
   -webkit-box-shadow: inset 1px 1px 2px rgba(255, 255, 255, 0.2);
   -moz-box-shadow: inset 1px 1px 2px rgba(0, 0, 0, 0.2);
   box-shadow: inset 1px 1px 2px rgba(0, 0, 0, 0.2);
@@ -3280,7 +3283,8 @@ input[type=text]:focus {
 }
 input[type=password]:disabled,
 input[type=search]:disabled,
-input[type=text]:disabled {
+input[type=text]:disabled,
+input[type=email]:disabled {
   border: 1px solid #dddddd;
   -webkit-box-shadow: 0 0 0 0;
   -moz-box-shadow: 0 0 0 0;
@@ -4106,6 +4110,7 @@ article video {
 .header .greedy .navigation.primary ul.hidden-links li a {
   color: #404040;
   padding-right: 1rem;
+  display: block;
 }
 .header .navigation.primary {
   /* home button is special */
