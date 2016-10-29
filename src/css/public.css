@@ -6527,10 +6527,6 @@ button.swiper-pagination-bullet {
 .page.contacts .contact .form-wrapper form div.input.message {
   padding: 0;
 }
-.page.contacts .contact .form-wrapper form div.input.message textarea {
-  font-size: 1.2em;
-  padding: 0.5em;
-}
 .page.contacts .contact .form-wrapper form div.submit {
   margin-top: 1em;
 }
@@ -6561,13 +6557,6 @@ button.swiper-pagination-bullet {
   }
   .page.contacts .contact .form-wrapper form div.input {
     margin-bottom: 0.5em;
-  }
-  .page.contacts .contact .form-wrapper form div.input.message {
-    padding: 0;
-  }
-  .page.contacts .contact .form-wrapper form div.input.message textarea {
-    font-size: 1.2em;
-    padding: 0.5em;
   }
   .page.contacts .contact .form-wrapper form div.submit {
     margin-top: 1em;
