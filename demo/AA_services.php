@@ -32,7 +32,7 @@
                     </div>
                     <h2 class="service-title">Support</h2>
                     <div class="service-description">
-                        Do you want the passbolt team to be behind you in case of issue ? We provide phone and email support with SLA.
+	                    Take advantage of a flexible, customizable support SLA with direct phone and email access to passbolt team. We got your back.
                     </div>
 	                <a href="../demo/AA_contact.php" class="button primary big">Get in touch!</a>
                 </div>
@@ -42,8 +42,7 @@
 		            </div>
 		            <h2 class="service-title">Cloud Hosting</h2>
 		            <div class="service-description">
-			            Skip the technical setup and get passbolt in the Cloud.
-			            Your passwords will be hosted on our servers, while still giving you full ownership of your data.
+			            Get passbolt hosted on our servers. Let us take care of the setup and updates while retaining full ownership of your data.
 		            </div>
 		            <a href="../demo/AA_contact.php" class="button primary big">Get in touch!</a>
 	            </div>
@@ -51,10 +50,9 @@
                     <div class="service-teaser">
                         <i class="fa fa-fw fa-rocket"></i>
                     </div>
-                    <h2 class="service-title">Feature boost</h2>
+                    <h2 class="service-title">Feature Boost</h2>
                     <div class="service-description">
-                        You really want to start using passbolt but there is this one feature that you cannot live
-                        without? Partner with us to get it out of the door more quickly!
+	                    Want to use passbolt but there is this one feature that you cannot live without? Partner with us to get it out of the door!
                     </div>
 	                <a href="../demo/AA_contact.php" class="button primary big">Get in touch!</a>
                 </div>

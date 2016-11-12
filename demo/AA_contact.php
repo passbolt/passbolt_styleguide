@@ -42,7 +42,7 @@
 						</div>
 						<div class="inline service input required">
 							<label for="MessageSubject">What would you like to talk about?</label>
-							<input name="data[Message][subject]" class="required fluid" placeholder="subject" id="RegistrationEmail" required="required" type="text" disabled="disabled" value="Cloud Hosting">
+							<input name="data[Message][subject]" class="required fluid" placeholder="subject" id="RegistrationEmail" required="required" type="text" value="Cloud Hosting">
 						</div>
 						<div class="inline message input required">
 							<label for="RegistrationEmail">Your message</label>

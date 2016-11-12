@@ -224,6 +224,7 @@ html body .hidden {
 .header .greedy .navigation.primary ul.hidden-links li a {
   color: #404040;
   padding-right: 1rem;
+  display: block;
 }
 .header .navigation.primary {
   /* home button is special */
