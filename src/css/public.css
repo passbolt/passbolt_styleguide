@@ -325,9 +325,11 @@ textarea {
 a {
   outline: 0;
   text-decoration: none;
+  cursor: pointer;
 }
 a:hover {
   text-decoration: none;
+  cursor: pointer;
 }
 /* ==========================================================================
    Typography
@@ -4118,6 +4120,9 @@ article video {
 .header .navigation.primary li .row.selected a {
   color: #ffffff;
 }
+.header .navigation.primary li .row.selected a:focus {
+  color: #2894df;
+}
 .header .navigation.primary .home a {
   margin-top: .125em;
   margin-left: .5em;
@@ -4502,10 +4507,6 @@ article video {
 .plugin-check.gpg.success {
   background: #edf7eb url('../img/third_party/gnupg_logo.png') 2em center no-repeat;
   background-size: 150px auto;
-}
-.plugin-check.chrome.error {
-  background: #ffe4e4 url('../img/third_party/ChromeWebStore_disabled.png') 0.5em center no-repeat;
-  background-size: 180px auto;
 }
 .plugin-check.success {
   background-color: #edf7eb;

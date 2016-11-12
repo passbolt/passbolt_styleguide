@@ -18,7 +18,7 @@
 					<div class="row">
 						<div class="main-cell-wrapper">
 							<div class="main-cell">
-								<a href="../demo/LU_passwords.php"><span>home</span></a>
+								<a href="../demo/LU_passwords.php" tabindex="1"><span>home</span></a>
 							</div>
 						</div>
 					</div>
@@ -27,7 +27,7 @@
 					<div class="row selected">
 						<div class="main-cell-wrapper">
 							<div class="main-cell">
-								<a href="../demo/LU_passwords.php"><span>passwords</span></a>
+								<a role="button" tabindex="2"><span>passwords</span></a>
 							</div>
 						</div>
 					</div>
@@ -36,7 +36,7 @@
 					<div class="row">
 						<div class="main-cell-wrapper">
 							<div class="main-cell">
-								<a href="../demo/LU_users.php"><span>users</span></a>
+								<a role="button" tabindex="3"><span>users</span></a>
 							</div>
 						</div>
 					</div>
@@ -45,7 +45,7 @@
 					<div class="row">
 						<div class="main-cell-wrapper">
 							<div class="main-cell">
-								<a href="../demo"><span>help</span></a>
+								<a href="../demo" tabindex="4"><span>help</span></a>
 							</div>
 						</div>
 					</div>

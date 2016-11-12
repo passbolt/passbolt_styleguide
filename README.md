@@ -84,4 +84,3 @@ in your project you should also have a grunt task to manage the copy/pasting in 
 ```
 grunt styleguide-update
 ```
-

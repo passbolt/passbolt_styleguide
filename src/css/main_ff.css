@@ -325,9 +325,11 @@ textarea {
 a {
   outline: 0;
   text-decoration: none;
+  cursor: pointer;
 }
 a:hover {
   text-decoration: none;
+  cursor: pointer;
 }
 /* ==========================================================================
    Typography

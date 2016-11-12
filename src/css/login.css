@@ -325,9 +325,11 @@ textarea {
 a {
   outline: 0;
   text-decoration: none;
+  cursor: pointer;
 }
 a:hover {
   text-decoration: none;
+  cursor: pointer;
 }
 /* ==========================================================================
    Typography
@@ -3944,6 +3946,9 @@ html body .button.processing {
 .header .navigation.primary li .row.selected a {
   color: #ffffff;
 }
+.header .navigation.primary li .row.selected a:focus {
+  color: #2894df;
+}
 .header .navigation.primary .home a {
   margin-top: .125em;
   margin-left: .5em;
@@ -4091,10 +4096,6 @@ html body .button.processing {
 .plugin-check.gpg.success {
   background: #edf7eb url('../img/third_party/gnupg_logo.png') 2em center no-repeat;
   background-size: 150px auto;
-}
-.plugin-check.chrome.error {
-  background: #ffe4e4 url('../img/third_party/ChromeWebStore_disabled.png') 0.5em center no-repeat;
-  background-size: 180px auto;
 }
 .plugin-check.success {
   background-color: #edf7eb;
@@ -4428,8 +4429,14 @@ html body .button.processing {
 .page.register .chrome-plugin-block p img,
 .page.recover .chrome-plugin-block p img,
 .page.login .chrome-plugin-block p img {
+  margin-top: .8em;
   width: 160px;
-  margin-top: 20px;
+}
+.page.register .firefox-plugin-block p img,
+.page.recover .firefox-plugin-block p img,
+.page.login .firefox-plugin-block p img {
+  margin-top: .8em;
+  width: 120px;
 }
 .page.register .github-block .button,
 .page.recover .github-block .button,
@@ -4437,7 +4444,7 @@ html body .button.processing {
 .page.register .donate-block .donate.button,
 .page.recover .donate-block .donate.button,
 .page.login .donate-block .donate.button {
-  margin-top: 20px;
+  margin-top: .5em;
 }
 .page.register .message-wrapper,
 .page.recover .message-wrapper,
@@ -4468,11 +4475,12 @@ html body .button.processing {
 .page.register .feedback .fa.huge,
 .page.recover .feedback .fa.huge,
 .page.login .feedback .fa.huge {
-  font-size: 160px;
-  color: #CCC;
+  font-size: 144px;
+  color: #dddddd;
   text-align: center;
   padding: 0;
   margin: 0;
+  margin-top: 16px;
   display: block;
 }
 .page.register .feedback p,
