@@ -3914,8 +3914,8 @@ article video {
   clear: both;
 }
 .input-password-wrapper .input.password input {
-  box-sizing: padding-box;
-  width: 61%;
+  box-sizing: border-box;
+  width: 65.5%;
   float: left;
 }
 .input-password-wrapper .input.password input[type=password].decrypting {
@@ -3962,8 +3962,9 @@ article video {
 }
 .input-password-wrapper .password-complexity .progress {
   width: 65.5%;
+  box-sizing: border-box;
   border: 1px solid #dddddd;
-  height: 7px;
+  height: 10px;
   display: block;
   clear: both;
   margin: .25em 0 .5em 0;
@@ -3972,7 +3973,7 @@ article video {
 .input-password-wrapper .password-complexity .progress-bar {
   background: #000000;
   width: 0;
-  height: 5px;
+  height: 6px;
   display: block;
   float: left;
   margin: 1px;
@@ -4047,7 +4048,6 @@ article video {
 .form-content.permission-add label {
   padding-bottom: .5em;
   padding-top: 1em;
-  font-size: 0.938em;
 }
 .form-content.permission-add .autocomplete input {
   width: 100%;
@@ -4056,6 +4056,10 @@ article video {
 }
 .form-content.permission-add .message {
   padding-left: 0;
+}
+.form-content.permission-add .security-token {
+  right: .063em;
+  top: 3.25em;
 }
 /*
 	autocomplete users results
