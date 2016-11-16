@@ -3207,6 +3207,8 @@ label {
   font-weight: bold;
   font-size: 1.125em;
   /* 18px */
+  line-height: 1.333333em;
+  /* 24px */
   padding: .2em;
   display: block;
 }
@@ -4048,6 +4050,7 @@ article video {
 .form-content.permission-add label {
   padding-bottom: .5em;
   padding-top: 1em;
+  height: 1.5em;
 }
 .form-content.permission-add .autocomplete input {
   width: 100%;
@@ -4059,7 +4062,9 @@ article video {
 }
 .form-content.permission-add .security-token {
   right: .063em;
-  top: 3.25em;
+  top: 3.375em;
+  line-height: 24px;
+  height: 24px;
 }
 /*
 	autocomplete users results

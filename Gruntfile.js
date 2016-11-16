@@ -100,6 +100,7 @@ module.exports = function(grunt) {
 
 	// Tag and publish the styleguide
 	grunt.registerTask('styleguide-publish', [ 'shell:publish']);
+	grunt.registerTask('publish', [ 'shell:publish']);
 
 	// 'grunt' will check code quality, and if no errors,
 	// compile LESS to CSS, and minify and concatonate all JS and CSS
