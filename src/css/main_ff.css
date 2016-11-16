@@ -3612,7 +3612,9 @@ article video {
 .dialog label {
   clear: both;
   font-size: 0.938em;
-  /* 14/16 */
+  /* 15px */
+  line-height: 1.6em;
+  /* 24px */
 }
 .dialog input[type=text] {
   width: 92%;
