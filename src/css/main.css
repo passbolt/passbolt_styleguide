@@ -3998,19 +3998,19 @@ article video {
   position: absolute;
   top: 0;
   right: 0;
-  padding: 0 1rem 0 1.5rem;
   outline: 0;
   border: 0;
-  font-size: 1rem;
+  font-size: 1em;
   font-weight: normal;
   background: #888888;
-  padding: .45em 1em .45em 1em;
+  padding: .45em 1em .42em 1em;
   -webkit-border-radius: 0;
   -moz-border-radius: 0;
   border-radius: 0;
   text-shadow: none;
   color: #ffffff;
   margin: 0;
+  min-width: 7.5em;
 }
 .header .greedy .navigation.primary button.hidden {
   transition: none;
@@ -4034,22 +4034,31 @@ article video {
 }
 .header .greedy .navigation.primary ul.hidden-links {
   position: absolute;
-  background: #eeeeee;
   right: 0;
   top: 100%;
+  z-index: 999;
 }
 .header .greedy .navigation.primary ul.hidden-links.hidden {
   display: none;
 }
 .header .greedy .navigation.primary ul.hidden-links li {
-  padding: 0.5rem;
   float: none;
-  min-width: 85px;
+  padding: 0;
+  margin: 0;
+  display: block;
 }
 .header .greedy .navigation.primary ul.hidden-links li a {
-  color: #404040;
-  padding-right: 1rem;
-  display: block;
+  min-width: 5.5em;
+  background: #f3f3f3;
+  color: #888888;
+  padding: .5em 1em;
+  float: right;
+  display: inline-block;
+}
+.header .greedy .navigation.primary ul.hidden-links li a:hover,
+.header .greedy .navigation.primary ul.hidden-links li a:active {
+  background: #eeeeee;
+  color: #333333;
 }
 .header .navigation.primary {
   /* home button is special */
@@ -6630,6 +6639,87 @@ table.table-info.horizontal tbody tr:nth-child(even) {
 .dialog-wrapper.session-expired-dialog .dialog-close {
   display: none;
 }
+/*
+ * Password workspace
+ * @todo better namespacing
+ */
+/* drag n drop */
+#js_dragged_resource {
+  padding: 6px 10px;
+  background-color: #ffffff;
+  border: 1px solid #dddddd;
+  -webkit-box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  -moz-box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+#js_dragged_resource span.name {
+  font-weight: bold;
+}
+/* sidebar */
+.panel.aside .resource .detailed-information li.password .value {
+  height: 1.6em;
+  padding-top: 0.2em;
+}
+/* unused column
+	@todo: remove html
+*/
+.js_grid_column_owner,
+.js_grid_column_copyLogin,
+.js_grid_column_copySecret {
+  display: none;
+}
+/* hide left column when there is no space */
+@media all and (max-width: 1024px) {
+  .tableview .js_grid_column_modified {
+    display: none;
+  }
+}
+/* Define state where there are no passwords, and the filter all items */
+.page.password .tableview.all_items.empty .tableview-header {
+  /* No tableview-header */
+  display: none;
+}
+.page.password .tableview.all_items.empty .tableview-content {
+  background: transparent url('../img/illustrations/nest.png') center 75% no-repeat;
+  background-size: 80%;
+  /* No tableview-header */
+  border: 0;
+  top: 0;
+  /* Tablet version */
+  /* Normal screen version */
+}
+@media all and (min-width: 780px) {
+  .page.password .tableview.all_items.empty .tableview-content {
+    background-position: center 60%;
+    background-size: 50%;
+  }
+}
+@media all and (min-width: 1024px) {
+  .page.password .tableview.all_items.empty .tableview-content {
+    background-position: center 70%;
+    background-size: 40%;
+  }
+}
+.page.password .tableview.all_items.empty .empty-content {
+  text-align: center;
+  margin: 3em 0.5em 0.67em 0.5em;
+}
+.page.password .tableview.all_items.empty .empty-content h1 {
+  font-size: 1.5em;
+}
+.page.password .tableview.all_items.empty .empty-content p {
+  font-size: 1em;
+  line-height: 1.5em;
+}
+@media all and (min-width: 780px) {
+  .page.password .tableview.all_items.empty .empty-content h1 {
+    font-size: 2.2em;
+  }
+  .page.password .tableview.all_items.empty .empty-content p {
+    font-size: 1.2em;
+    line-height: 1.8em;
+  }
+}
 /* sidebar / user details in overview */
 .panel.aside .user .header {
   /*
@@ -6730,87 +6820,6 @@ table.table-info.horizontal tbody tr:nth-child(even) {
 /* login history icon column centerign */
 .login-history td:first-child {
   text-align: center;
-}
-/*
- * Password workspace
- * @todo better namespacing
- */
-/* drag n drop */
-#js_dragged_resource {
-  padding: 6px 10px;
-  background-color: #ffffff;
-  border: 1px solid #dddddd;
-  -webkit-box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  -moz-box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-}
-#js_dragged_resource span.name {
-  font-weight: bold;
-}
-/* sidebar */
-.panel.aside .resource .detailed-information li.password .value {
-  height: 1.6em;
-  padding-top: 0.2em;
-}
-/* unused column
-	@todo: remove html
-*/
-.js_grid_column_owner,
-.js_grid_column_copyLogin,
-.js_grid_column_copySecret {
-  display: none;
-}
-/* hide left column when there is no space */
-@media all and (max-width: 1024px) {
-  .tableview .js_grid_column_modified {
-    display: none;
-  }
-}
-/* Define state where there are no passwords, and the filter all items */
-.page.password .tableview.all_items.empty .tableview-header {
-  /* No tableview-header */
-  display: none;
-}
-.page.password .tableview.all_items.empty .tableview-content {
-  background: transparent url('../img/illustrations/nest.png') center 75% no-repeat;
-  background-size: 80%;
-  /* No tableview-header */
-  border: 0;
-  top: 0;
-  /* Tablet version */
-  /* Normal screen version */
-}
-@media all and (min-width: 780px) {
-  .page.password .tableview.all_items.empty .tableview-content {
-    background-position: center 60%;
-    background-size: 50%;
-  }
-}
-@media all and (min-width: 1024px) {
-  .page.password .tableview.all_items.empty .tableview-content {
-    background-position: center 70%;
-    background-size: 40%;
-  }
-}
-.page.password .tableview.all_items.empty .empty-content {
-  text-align: center;
-  margin: 3em 0.5em 0.67em 0.5em;
-}
-.page.password .tableview.all_items.empty .empty-content h1 {
-  font-size: 1.5em;
-}
-.page.password .tableview.all_items.empty .empty-content p {
-  font-size: 1em;
-  line-height: 1.5em;
-}
-@media all and (min-width: 780px) {
-  .page.password .tableview.all_items.empty .empty-content h1 {
-    font-size: 2.2em;
-  }
-  .page.password .tableview.all_items.empty .empty-content p {
-    font-size: 1.2em;
-    line-height: 1.8em;
-  }
 }
 /* TODO replace by page level selector */
 .page.settings .main.panel .middle {

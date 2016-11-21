@@ -3945,19 +3945,19 @@ input[type=text].fluid {
   position: absolute;
   top: 0;
   right: 0;
-  padding: 0 1rem 0 1.5rem;
   outline: 0;
   border: 0;
-  font-size: 1rem;
+  font-size: 1em;
   font-weight: normal;
   background: #888888;
-  padding: .45em 1em .45em 1em;
+  padding: .45em 1em .42em 1em;
   -webkit-border-radius: 0;
   -moz-border-radius: 0;
   border-radius: 0;
   text-shadow: none;
   color: #ffffff;
   margin: 0;
+  min-width: 7.5em;
 }
 .header .greedy .navigation.primary button.hidden {
   transition: none;
@@ -3981,22 +3981,31 @@ input[type=text].fluid {
 }
 .header .greedy .navigation.primary ul.hidden-links {
   position: absolute;
-  background: #eeeeee;
   right: 0;
   top: 100%;
+  z-index: 999;
 }
 .header .greedy .navigation.primary ul.hidden-links.hidden {
   display: none;
 }
 .header .greedy .navigation.primary ul.hidden-links li {
-  padding: 0.5rem;
   float: none;
-  min-width: 85px;
+  padding: 0;
+  margin: 0;
+  display: block;
 }
 .header .greedy .navigation.primary ul.hidden-links li a {
-  color: #404040;
-  padding-right: 1rem;
-  display: block;
+  min-width: 5.5em;
+  background: #f3f3f3;
+  color: #888888;
+  padding: .5em 1em;
+  float: right;
+  display: inline-block;
+}
+.header .greedy .navigation.primary ul.hidden-links li a:hover,
+.header .greedy .navigation.primary ul.hidden-links li a:active {
+  background: #eeeeee;
+  color: #333333;
 }
 .header .navigation.primary {
   /* home button is special */

@@ -1,9 +1,10 @@
-/*
- GreedyNav.js - http://lukejacksonn.com/actuate
- Licensed under the MIT license - http://opensource.org/licenses/MIT
- Copyright (c) 2015 Luke Jackson
+/**
+ * GreedyNav.js, Passbolt edition
+ *
+ * @licence Licensed under the MIT license - http://opensource.org/licenses/MIT
+ * @copyright (c) 2015 Luke Jackson, Bolt Softwares pvt ltd
+ * @source https://github.com/lukejacksonn/GreedyNav
  */
-
 $(function() {
 
     var $btn = $('nav.greedy button');
@@ -12,7 +13,7 @@ $(function() {
 
     var numOfItems = 0;
     var totalSpace = 0;
-    var closingTime = 1000;
+    var closingTime = 2000;
     var breakWidths = [];
 
     // Get initial state
@@ -67,7 +68,14 @@ $(function() {
     }).on('mouseenter', function() {
         // Mouse is back, cancel the timer
         clearTimeout(timer);
-    })
+    });
+
+    // close when clicking somewhere else
+    $('body').click(function(e) {
+        if($(e.target).closest('nav.greedy').length === 0) {
+            $hlinks.addClass('hidden');
+        }
+    });
 
     check();
 
