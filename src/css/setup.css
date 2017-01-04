@@ -3360,16 +3360,18 @@ textarea {
 	Messages for validation error and example
 
 	Description	: <div.text.error>, <div.text.success>, can be used to add status messages or example.
-								 Additional messages are wrapped in <.error-message>, <.success-messages>
+	Additional messages are wrapped in <.error-message>, <.success-messages>
 
-	.success		 - can be used for instant validation feedback
-	.notice			- can be used for example messages prior validation
-	.error			 - error messages used for validation issues
+	.success - can be used for instant validation feedback
+	.notice - can be used for example messages prior validation
+	.error - error messages used for validation issues
 */
 .input .message {
   font-weight: bold;
   padding: 0;
   padding-left: .25em;
+  padding-bottom: .5em;
+  font-size: .813em;
   margin-bottom: .25em;
   background-color: transparent;
   border: 0;
@@ -3395,13 +3397,9 @@ textarea {
 form .input .message {
   background-color: transparent;
 }
+textarea.error label,
 .input.error label {
   color: #d40101;
-}
-input.error,
-textarea.error,
-select.error {
-  border: 1px solid #d40101;
 }
 form .input .inline.message {
   display: inline-block;
@@ -4399,8 +4397,6 @@ article video {
   display: block;
   clear: both;
   width: 92%;
-  padding-bottom: .5em;
-  font-size: .813em;
 }
 .dialog .submit-wrapper {
   margin: 0;
@@ -5181,7 +5177,7 @@ table.table-info.horizontal tbody tr:nth-child(even) {
 .setup .why-plugin-wrapper p {
   padding-bottom: 1em;
 }
-.setup .why-plugin-wrapper div.input {
+.setup .why-plugin-wrapper .input {
   /*
  * For IE 6/7 only
  * Include this rule to trigger hasLayout and contain floats.
@@ -5214,47 +5210,47 @@ table.table-info.horizontal tbody tr:nth-child(even) {
  *	`:before` to contain the top-margins of child elements.
  */
 }
-.setup .why-plugin-wrapper div.input:before,
-.setup .why-plugin-wrapper div.input:after {
+.setup .why-plugin-wrapper .input:before,
+.setup .why-plugin-wrapper .input:after {
   content: "";
   display: table;
 }
-.setup .why-plugin-wrapper div.input:after {
+.setup .why-plugin-wrapper .input:after {
   clear: both;
 }
-.setup .why-plugin-wrapper div.input:before,
-.setup .why-plugin-wrapper div.input:after {
+.setup .why-plugin-wrapper .input:before,
+.setup .why-plugin-wrapper .input:after {
   content: "";
   display: table;
 }
-.setup .why-plugin-wrapper div.input:after {
+.setup .why-plugin-wrapper .input:after {
   clear: both;
 }
-.setup .why-plugin-wrapper div.input label {
+.setup .why-plugin-wrapper .input label {
   font-size: 1em;
 }
-.setup .why-plugin-wrapper div.input.text {
+.setup .why-plugin-wrapper .input.text {
   padding-bottom: 0.5em;
 }
-.setup .why-plugin-wrapper div.input.text input[type=text] {
+.setup .why-plugin-wrapper .input.text input[type=text] {
   width: 65%;
   float: left;
 }
-.setup .why-plugin-wrapper div.input.text label {
+.setup .why-plugin-wrapper .input.text label {
   width: 20%;
   float: left;
   padding: .475em .625em .475em 0;
 }
-.setup .why-plugin-wrapper div.input.text a.more {
+.setup .why-plugin-wrapper .input.text a.more {
   padding: .475em 0 .475em .625em;
   text-decoration: underline;
   float: left;
   border: 0;
 }
-.setup .why-plugin-wrapper div.input.checkbox {
+.setup .why-plugin-wrapper .input.checkbox {
   padding: .5em 0;
 }
-.setup .why-plugin-wrapper div.input div.message.error {
+.setup .why-plugin-wrapper .input .message.error {
   /*
  * For IE 6/7 only
  * Include this rule to trigger hasLayout and contain floats.
@@ -5290,20 +5286,20 @@ table.table-info.horizontal tbody tr:nth-child(even) {
   margin-left: 20%;
   padding-left: .625em;
 }
-.setup .why-plugin-wrapper div.input div.message.error:before,
-.setup .why-plugin-wrapper div.input div.message.error:after {
+.setup .why-plugin-wrapper .input .message.error:before,
+.setup .why-plugin-wrapper .input .message.error:after {
   content: "";
   display: table;
 }
-.setup .why-plugin-wrapper div.input div.message.error:after {
+.setup .why-plugin-wrapper .input .message.error:after {
   clear: both;
 }
-.setup .why-plugin-wrapper div.input div.message.error:before,
-.setup .why-plugin-wrapper div.input div.message.error:after {
+.setup .why-plugin-wrapper .input .message.error:before,
+.setup .why-plugin-wrapper .input .message.error:after {
   content: "";
   display: table;
 }
-.setup .why-plugin-wrapper div.input div.message.error:after {
+.setup .why-plugin-wrapper .input .message.error:after {
   clear: both;
 }
 .setup .first-password-wrapper {

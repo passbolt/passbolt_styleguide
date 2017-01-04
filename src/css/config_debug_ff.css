@@ -3315,16 +3315,18 @@ textarea {
 	Messages for validation error and example
 
 	Description	: <div.text.error>, <div.text.success>, can be used to add status messages or example.
-								 Additional messages are wrapped in <.error-message>, <.success-messages>
+	Additional messages are wrapped in <.error-message>, <.success-messages>
 
-	.success		 - can be used for instant validation feedback
-	.notice			- can be used for example messages prior validation
-	.error			 - error messages used for validation issues
+	.success - can be used for instant validation feedback
+	.notice - can be used for example messages prior validation
+	.error - error messages used for validation issues
 */
 .input .message {
   font-weight: bold;
   padding: 0;
   padding-left: .25em;
+  padding-bottom: .5em;
+  font-size: .813em;
   margin-bottom: .25em;
   background-color: transparent;
   border: 0;
@@ -3350,13 +3352,9 @@ textarea {
 form .input .message {
   background-color: transparent;
 }
+textarea.error label,
 .input.error label {
   color: #d40101;
-}
-input.error,
-textarea.error,
-select.error {
-  border: 1px solid #d40101;
 }
 form .input .inline.message {
   display: inline-block;
