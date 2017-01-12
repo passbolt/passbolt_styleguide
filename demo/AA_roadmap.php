@@ -68,11 +68,8 @@
                 'title' => 'Risk analysis',
                 'description' => 'A complete review of the security risks and mitigations in place.',
                 'teaser' => 'lock2'
-            ],[
-                'title' => 'Slack plugin',
-                'description' => 'Receive notifications in your team chat when someone does something important.',
-                'teaser' => 'slack'
-            ],[
+            ],
+            [
                 'title' => 'Multi device support',
                 'description' => 'Install passbolt on another computer or recover your account after a system reinstall.',
                 'teaser' => 'sync'

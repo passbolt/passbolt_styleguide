@@ -5337,10 +5337,6 @@ input[type="search"]::-webkit-search-cancel-button {
   background: transparent url('../img/third_party/swagger_90.png') center center no-repeat;
   background-size: 60px auto;
 }
-.card .teaser i.slack {
-  background: transparent url('../img/third_party/slack_90.png') center center no-repeat;
-  background-size: 40px auto;
-}
 .swiper-container {
   margin: 0 auto;
   position: relative;
@@ -6051,8 +6047,8 @@ button.swiper-pagination-bullet {
   background: transparent url('../img/third_party/docker_90.png') left center no-repeat;
   background-size: 60px auto;
 }
-.home .page-row.usp .tile i.slack {
-  background: transparent url('../img/third_party/slack_90.png') left center no-repeat;
+.home .page-row.usp .tile i.team {
+  background: transparent url('../img/papericon/email_90.png') left center no-repeat;
   background-size: 60px auto;
 }
 .home .page-row.usp .tile i.gnupg {
@@ -6093,9 +6089,9 @@ button.swiper-pagination-bullet {
     background: transparent url('../img/third_party/docker_90.png') center center no-repeat;
     background-size: 90px auto;
   }
-  .page-row.usp .tile .tile-teaser i.slack {
-    background: transparent url('../img/third_party/slack_90.png') center center no-repeat;
-    background-size: 70px auto;
+  .page-row.usp .tile .tile-teaser i.team {
+    background: transparent url('../img/papericon/email_90.png') center center no-repeat;
+    background-size: 60px auto;
   }
   .page-row.usp .tile .tile-teaser i.gnupg {
     background: transparent url('../img/third_party/gnupg_90.png') center center no-repeat;
@@ -6123,9 +6119,9 @@ button.swiper-pagination-bullet {
     background: transparent url('../img/third_party/docker_180.png') center center no-repeat;
     background-size: 80px auto;
   }
-  .home .page-row.usp .tile .tile-teaser i.slack {
-    background: transparent url('../img/third_party/slack_180.png') center center no-repeat;
-    background-size: 80px auto;
+  .home .page-row.usp .tile .tile-teaser i.team {
+    background: transparent url('../img/papericon/email_90.png') center center no-repeat;
+    background-size: 70px auto;
   }
   .home .page-row.usp .tile .tile-teaser i.gnupg {
     background: transparent url('../img/third_party/gnupg_180.png') center center no-repeat;
@@ -6402,8 +6398,8 @@ button.swiper-pagination-bullet {
   background: transparent url('../img/third_party/docker_90.png') center center no-repeat;
   background-size: 90px auto;
 }
-.page.roadmap .cards .tile-teaser i.slack {
-  background: transparent url('../img/third_party/slack_90.png') center center no-repeat;
+.page.roadmap .cards .tile-teaser i.team {
+  background: transparent url('../img/papericon/email_90.png') center center no-repeat;
   background-size: 70px auto;
 }
 /* even larger screen */

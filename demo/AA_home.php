@@ -139,7 +139,7 @@ please enter passphrase: <span class="blink seriously">█</span>
             <div class="row">
                 <div class="col6">
                     <div class="tile">
-                        <div class="tile-teaser"><i class="slack"></i></div>
+                        <div class="tile-teaser"><i class="team"></i></div>
                         <div class="tile-title">Built for teams</div>
                         <div class="tile-description">
                             It works with tools your team already uses such as your email client and chat.
