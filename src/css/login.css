@@ -2136,9 +2136,6 @@ article ol.lower-alpha {
 .fa-space-shuttle:before {
   content: "\f197";
 }
-.fa-slack:before {
-  content: "\f198";
-}
 .fa-envelope-square:before {
   content: "\f199";
 }
@@ -4451,14 +4448,6 @@ html body .button.processing {
 .page.login .firefox-plugin-block p img {
   margin-top: .8em;
   width: 120px;
-}
-.page.register .github-block .button,
-.page.recover .github-block .button,
-.page.login .github-block .button,
-.page.register .donate-block .donate.button,
-.page.recover .donate-block .donate.button,
-.page.login .donate-block .donate.button {
-  margin-top: .5em;
 }
 .page.register .message-wrapper,
 .page.recover .message-wrapper,

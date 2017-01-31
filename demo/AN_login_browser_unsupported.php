@@ -45,9 +45,9 @@
 			</div>
 		</div>
 		<div class="row">
+			<?php include('includes/AN_promoblock_cloud.php'); ?>
+			<?php include('includes/AN_promoblock_passboltpro.php'); ?>
 			<?php include('includes/AN_promoblock_github.php'); ?>
-			<?php include('includes/AN_promoblock_chromeplugin.php'); ?>
-			<?php //include('includes/AN_promoblock_donate.php'); ?>
 		</div>
 	</div>
 </div>
