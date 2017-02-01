@@ -3828,6 +3828,12 @@ html body .button.processing {
   .grid .row .push2 {
     margin-left: 14%;
   }
+  .grid .row .push3 {
+    margin-left: 22.5%;
+  }
+  .grid .row .push4 {
+    margin-left: 31%;
+  }
 }
 /*
  * large devices

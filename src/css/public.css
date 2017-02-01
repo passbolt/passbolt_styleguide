@@ -3423,117 +3423,6 @@ input[type=text].fluid {
 }
 /* shortcut classes for layout */
 /*
- * Page layout
- */
-.page {
-  min-width: 320px;
-}
-.page,
-.panel,
-.header {
-  width: 100%;
-}
-.page,
-.panel {
-  position: absolute;
-  overflow: auto;
-}
-.header {
-  overflow: hidden;
-}
-.page {
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-}
-/* headers */
-.header.first {
-  /* height:2.375em; //already defined in header */
-  height: 2.375em;
-}
-.header.second {
-  top: 2.375em;
-  height: 4.5em;
-}
-.header.third {
-  top: 6.875em;
-  height: 3em;
-}
-/* main workspace panel */
-.panel {
-  height: 100%;
-}
-.panel.main {
-  top: 10em;
-  bottom: 2em;
-  height: auto;
-  padding: 0;
-}
-/* its position depends on how many headers are there */
-.header.second + .panel.main {
-  top: 6.875em;
-}
-.header.third + .panel.main {
-  top: 10em;
-  border-top: 1px solid #dddddd;
-}
-/* columns */
-.panel,
-.col1,
-.col2,
-.col3,
-.col2_3 {
-  position: absolute;
-}
-.col1,
-.panel.left {
-  width: 17.5%;
-}
-.panel.middle {
-  width: 82%;
-  left: 18%;
-  overflow: hidden;
-}
-.panel.middle.scroll {
-  overflow-y: scroll;
-}
-.col2 {
-  width: 70%;
-  left: 18%;
-}
-.col3,
-.panel.right {
-  width: 24%;
-  left: 75%;
-}
-.col2_3 {
-  width: 81.5%;
-  left: 18%;
-}
-/* if the other grid is used
-   don't center the grid inside main panel */
-.panel.main .grid-responsive-12 {
-  float: left;
-  width: 99%;
-}
-/* hide left column when there is no space */
-@media all and (max-width: 1024px) {
-  .col1,
-  .panel.left {
-    display: none;
-  }
-  .panel.middle,
-  .col2_3 {
-    width: 99%;
-    left: 1%;
-  }
-  .col2 {
-    width: 80%;
-    left: 1%;
-  }
-}
-/*
 	Grid Layout
 	@credit: One% CSS Grid - 12 Columns Fluid CSS Grid System
 */
@@ -3916,6 +3805,12 @@ input[type=text].fluid {
   }
   .grid .row .push2 {
     margin-left: 14%;
+  }
+  .grid .row .push3 {
+    margin-left: 22.5%;
+  }
+  .grid .row .push4 {
+    margin-left: 31%;
   }
 }
 /*
@@ -6423,8 +6318,34 @@ button.swiper-pagination-bullet {
     line-height: 1.666em;
   }
 }
+.page.services.cloud .page-row.intro .service-teaser,
+.page.services.pro .page-row.intro .service-teaser {
+  margin: 0;
+}
 .page.services .page-row.intro {
   background: #FAFAFA;
+}
+.page.services .page-row.intro .service-teaser {
+  margin: auto;
+  margin-top: 1em;
+  padding: .25em;
+  background: #d40101;
+  color: #ffffff;
+  display: block;
+  border-radius: 50%;
+  font-size: 2em;
+  width: 3em;
+  height: 3em;
+  text-align: center;
+}
+.page.services .page-row.intro .service-teaser i.fa-cloud {
+  font-size: 1.75em;
+  margin-top: .35em;
+}
+.page.services .page-row.intro .service-teaser i.fa-cubes {
+  font-size: 1.75em;
+  margin-top: .3em;
+  margin-left: .1em;
 }
 .page.services .service .service-teaser {
   display: none;
@@ -6432,17 +6353,56 @@ button.swiper-pagination-bullet {
 .page.services .service .button {
   margin-bottom: 1em;
 }
+.page.services .service-details .presentation {
+  text-align: left;
+  border-top: 1px solid #f3f3f3;
+  margin-top: 1em;
+}
+.page.services .service-details .presentation h2 {
+  text-align: left;
+  margin-bottom: 0.1em;
+  font-size: 1.5em;
+}
+.page.services .service-details .presentation h3 {
+  margin-top: 0;
+  margin-bottom: 1em;
+  border: 0;
+  color: #888888;
+}
+.page.services .service-details .presentation p {
+  font-size: 1em;
+  margin-bottom: 2em;
+}
+.page.services .service-details ul.features {
+  margin-top: 0.5em;
+  text-align: left;
+  font-size: 1em;
+}
+.page.services .service-details ul.features li {
+  margin-bottom: 0.3em;
+}
+.page.services .service-details ul.features li div {
+  display: inline-block;
+  margin-left: 0.5em;
+}
 /* even larger screen */
 @media all and (min-width: 800px) {
   .page.services {
     background-size: 42% auto;
+  }
+  .page.services.cloud .page-row.intro .service-teaser,
+  .page.services.pro .page-row.intro .service-teaser {
+    margin: 1em auto;
   }
   .page.services .signup {
     background: #FFF;
   }
   .page.services .service {
     text-align: center;
-    margin: -10em 0 5em 0;
+    margin: 0 0 5em 0;
+  }
+  .page.services .service.pull-up {
+    margin-top: -10em;
   }
   .page.services .service .service-title {
     margin-bottom: 0;
@@ -6469,10 +6429,10 @@ button.swiper-pagination-bullet {
     margin-top: .25em;
     margin-left: -0.125em;
   }
-  .page.services .service .service-teaser i.fa-phone {
+  .page.services .service .service-teaser i.fa-cubes {
     font-size: 2em;
-    margin-top: .30em;
-    margin-left: -0.125em;
+    margin-top: .2em;
+    margin-left: .1em;
   }
   .page.services .service .service-teaser i.fa-cloud {
     font-size: 1.75em;
@@ -6509,6 +6469,32 @@ button.swiper-pagination-bullet {
     padding-left: 0;
     text-align: center;
     line-height: 1.666em;
+  }
+  .page.services .service-details .presentation {
+    text-align: center;
+    border-top: 1px solid #f3f3f3;
+    margin-top: 1em;
+  }
+  .page.services .service-details .presentation h2 {
+    text-align: center;
+    font-size: 2em;
+  }
+  .page.services .service-details .presentation h3 {
+    margin-bottom: 2em;
+  }
+  .page.services .service-details .presentation p {
+    font-size: 1.2em;
+    margin-bottom: 2em;
+  }
+  .page.services .service-details ul.features {
+    font-size: 1.2em;
+  }
+  .page.services .service-details ul.features li {
+    margin-bottom: 0.3em;
+  }
+  .page.services .service-details ul.features li div {
+    width: 80%;
+    float: right;
   }
 }
 .page.contacts .page-row.intro {
