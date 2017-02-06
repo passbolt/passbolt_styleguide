@@ -36,7 +36,7 @@
 		            <li class="col3">
 			            <i class="fa fa-fw fa-check"></i><div>Access premium features</div>
 		            </li>
-		            <li class="col3 last">
+		            <li class="col3">
 			            <i class="fa fa-fw fa-check"></i><div>Keep full data ownership</div>
 		            </li>
 		            <li class="col3 last">

@@ -36,7 +36,7 @@
 		            <li class="col3">
 			            <i class="fa fa-fw fa-check"></i><div>Setup assistance</div>
 		            </li>
-		            <li class="col3 last">
+		            <li class="col3">
 			            <i class="fa fa-fw fa-check"></i><div>Premium features</div>
 		            </li>
 		            <li class="col3 last">
