@@ -1,4 +1,4 @@
-<?php if(true) : ?>
+<?php if(false) : ?>
 <div class="navigation last tree categories">
 	<ul id="js_wsp_pwd_category_chooser">
 		<!-- disabled for now -->
@@ -14,7 +14,7 @@
 						<a href="#" title="Very long category no really super long"><span>Very long category no really super long</span></a>
 					</div>
 				</div>
-				<div class="left-cell node-ctrl">
+				<div class="left-cell tree-node-ctrl">
 					<a href="#open"><span>open/close</span></a>
 				</div>
 				<div class="right-cell more-ctrl">
@@ -29,7 +29,7 @@
 								<a href="#"><span>Category</span></a>
 							</div>
 						</div>
-						<div class="left-cell node-ctrl">
+						<div class="left-cell tree-node-ctrl">
 							<a href="#open"><span>open/close</span></a>
 						</div>
 						<div class="right-cell more-ctrl">
@@ -44,7 +44,7 @@
 										<a href="#"><span>Leaf category</span></a>
 									</div>
 								</div>
-								<div class="left-cell node-ctrl">
+								<div class="left-cell tree-node-ctrl">
 									<a href="#open"><span>open/close</span></a>
 								</div>
 								<div class="right-cell more-ctrl">

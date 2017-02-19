@@ -25,6 +25,7 @@
 					<div class="js_workspace">
 						<div class="panel left">
 							<?php include('includes/LU_nav_shortcuts_users.php'); ?>
+							<?php include('includes/LU_nav_tree_groups.php'); ?>
 						</div>
 						<div class="panel middle">
 							<?php

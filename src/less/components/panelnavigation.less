@@ -4,22 +4,21 @@
 
 	&.first {
 		border-bottom:1px dotted @border-default;
-		padding:.625em;
-		padding-right:.3125em;
+		padding:.625em 0;
 		margin-bottom:.625em;
 	}
 	&.last {
 		padding-right:.3125em; /* 5px */
 	}
-	.row a {
+	.row:hover {
+		background:@background-lightest;
+	}
+	a {
 		border:0;
 		padding:.125em .313em; /* 2px 5px */
+		padding-left:1em;
 		color: @font-default;
 		display: block;
-
-		&:hover {
-			background:@background-lightest;
-		}
 	}
 	ul ul {
 		margin-left:.666666em;

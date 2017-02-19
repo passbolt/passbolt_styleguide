@@ -5279,23 +5279,23 @@ input[type="search"]::-webkit-search-cancel-button {
 }
 .panel .navigation.first {
   border-bottom: 1px dotted #dddddd;
-  padding: .625em;
-  padding-right: .3125em;
+  padding: .625em 0;
   margin-bottom: .625em;
 }
 .panel .navigation.last {
   padding-right: .3125em;
   /* 5px */
 }
-.panel .navigation .row a {
+.panel .navigation .row:hover {
+  background: #f3f3f3;
+}
+.panel .navigation a {
   border: 0;
   padding: .125em .313em;
   /* 2px 5px */
+  padding-left: 1em;
   color: #333333;
   display: block;
-}
-.panel .navigation .row a:hover {
-  background: #f3f3f3;
 }
 .panel .navigation ul ul {
   margin-left: .666666em;
@@ -5306,66 +5306,51 @@ input[type="search"]::-webkit-search-cancel-button {
 .panel .navigation .selected li {
   font-weight: normal;
 }
-/* tree */
+/* left sidebar workspace tree */
 .tree {
-  /* row layout: fixed fluid fixed */
-  /* don't show nodes if parent is closed */
+  /*
+		Tree row layout:
+		  fixed left-cell (contain tree-node-ctrl)
+		  fluid main-cell
+		  fixed right-cell
+	*/
+  /*
+		Alternative layout:
+		  no left-cell = flat tree
+		  fluid main-cell
+		  fixed right-cell
+	*/
   /* ellipsis on long node text */
-  /* row action is a button */
-  /* Events */
-}
-.tree ul {
-  padding-left: .625em;
-  /* 10px */
+  /*
+		Left Cell
+	*/
+  /*
+		Left Cell
+	*/
+  /* Events & visibility */
+  /* do not show text */
+  /* don't show nodes if parent is closed */
 }
 .tree .row {
   float: left;
   width: 100%;
-}
-.tree .node-ctrl a {
-  width: 1em;
-  height: 1em;
-  display: block;
-  margin-top: .15em;
-  opacity: 0.5;
-  filter: alpha(opacity=50);
-  padding-left: .3125em;
-}
-.tree .node-ctrl a:hover {
-  opacity: .9;
-  filter: alpha(opacity=90);
-}
-.tree .node.open .node-ctrl a {
-  background: transparent url('../img/controls/tree-ctrl.png') center -9px no-repeat;
-}
-.tree .node.close .node-ctrl a {
-  background: transparent url('../img/controls/tree-ctrl.png') center 4px no-repeat;
-}
-.tree .more-ctrl span,
-.tree .node-ctrl span {
-  display: none;
+  margin-left: .5em;
 }
 .tree .main-cell-wrapper {
   float: left;
   width: 100%;
 }
 .tree .main-cell {
-  margin: 0 1em 0 1em ;
-  padding-left: .625em;
+  margin: 0 1.5em 0 .5em;
 }
-.tree .left-cell {
-  float: left;
-  width: 1em ;
-  margin-left: -100%;
+.tree.flat .row {
+  margin-left: 0;
 }
-.tree .right-cell {
-  float: right;
-  width: 1em ;
-  margin-left: -1.4em;
-  padding-right: .25em;
+.tree.flat .main-cell {
+  margin: 0 1.5em 0 0;
 }
-.tree .node.close ul {
-  display: none;
+.tree .row:hover {
+  background: #f3f3f3;
 }
 .tree .main-cell span {
   white-space: nowrap;
@@ -5375,24 +5360,59 @@ input[type="search"]::-webkit-search-cancel-button {
   -ms-text-overflow: ellipsis;
   display: block;
 }
-.tree .row .right-cell a {
-  height: 1em;
-  margin-top: .125em;
-  width: 1em;
+.tree .left-cell {
+  float: left;
+  width: 1em ;
+  margin-left: -100%;
 }
-.tree .row:hover .right-cell a {
+.tree .left-cell.tree-node-ctrl a {
+  width: 1em;
+  height: 1em;
+  margin: 0;
+  padding: 0;
+  display: block;
+  margin-top: .25em;
   opacity: 0.5;
   filter: alpha(opacity=50);
-  border: 1px solid #dddddd;
+}
+.tree .left-cell.tree-node-ctrl a:hover {
+  opacity: .9;
+  filter: alpha(opacity=90);
+}
+.tree .node.open .left-cell.tree-node-ctrl a {
   background: transparent url('../img/controls/tree-ctrl.png') center -9px no-repeat;
 }
+.tree .node.close .left-cell.tree-node-ctrl a {
+  background: transparent url('../img/controls/tree-ctrl.png') center 4px no-repeat;
+}
+.tree .right-cell {
+  float: right;
+  width: 1em ;
+  height: 1em;
+  margin-right: .4em;
+  margin-top: -1.35em;
+}
+.tree .row .right-cell a {
+  height: 1em;
+  width: 1em;
+  padding: 0;
+}
+.tree .row:hover .right-cell a {
+  border: 1px solid #dddddd;
+  background: #ffffff url('../img/controls/tree-ctrl.png') center -9px no-repeat;
+}
 .tree .row:hover .right-cell a:hover {
-  opacity: 0.9;
-  filter: alpha(opacity=90);
   background: #ffffff url('../img/controls/tree-ctrl.png') center -9px no-repeat;
 }
 .tree .row.drop-over {
   background-color: #eeeeee;
+}
+.tree .more-ctrl span,
+.tree .tree-node-ctrl span {
+  display: none;
+}
+.tree .node.close ul {
+  display: none;
 }
 .contextual-menu {
   position: absolute;
