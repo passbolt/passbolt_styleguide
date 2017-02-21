@@ -243,12 +243,12 @@
 /* Tooltip container */
 .tooltip-alt {
 	cursor: pointer;
-	position: relative;
 	display: inline-block;
 	border-bottom: 0;
 
 	/* Tooltip text */
 	.tooltip-text {
+		position: absolute;
 		visibility: hidden;
 		width: 180px;
 		background-color: #000;
@@ -270,21 +270,19 @@
 		-webkit-transform: translate3d(0, 0, 0);
 		-moz-transform: translate3d(0, 0, 0);
 		transform: translate3d(0, 0, 0);
-		position: absolute;
-		z-index: 1;
+		z-index: 99999;
 
 		/* only right for now */
 		&.right {
-			top: -5px;
-			left: 100%;
+			margin-left:1em;
+			margin-top:-1.75em;
 			&::after {
 				content: " ";
 				position: absolute;
 				top: 1.125em;
 				right: 100%;
 				margin-top: -5px;
-				border-width: 5px;
-				border-style: solid;
+				border: 5px @black solid;
 				border-color: transparent hsla(0, 0%, 20%, 0.9) transparent transparent;
 			}
 		}

@@ -1,9 +1,7 @@
 <div id="49ef6f0e-9ee8-ee74-1261-80191e19c8ff" class="mad_component_dialog edit-password-dialog dialog-wrapper mad_view_component_dialog ready">
     <div class="dialog">
-        <div class="dialog-header">
-            <h2>Share<span class="dialog-header-subtitle">Inkscape2</span></h2>
-            <a href="../demo/LU_passwords.php" class="dialog-close"><i class="fa fa-fw fa-close"></i><span class="visuallyhidden">close</span></a>
-        </div>
+        <?php include('includes/dialogs/share/LU_share_dialog_header.php'); ?>
+        
         <div class="js_dialog_content dialog-content">
             <div class="passbolt_component_resource_actions_tab tabs mad_view_component_tab ready" id="daaba01d-a85c-0b23-c896-86ec393f8d11">
                 <?php include('includes/dialogs/navigation/LU_password_share_tabs.php'); ?>
@@ -11,24 +9,10 @@
                 <div class="js_tabs_content tabs-content">
                     <form style="display: none;" class="passbolt_form_resource_create tab-content mad_view_form hidden" id="js_rs_edit"></form>
                     <div class="passbolt_component_permissions share-tab tab-content passbolt_view_component_permissions ready selected" id="js_rs_permission">
-                        <div class="form-content permission-edit">
-                            <ul id="js_permissions_list" class="permissions scroll mad_component_tree mad_view_component_tree ready">
-                                <?php include('includes/dialogs/permissions/LU_permissions_list.php'); ?>
-                            </ul>
-                        </div>
-                        <div id="js_permissions_changes" class="warning message hidden">
-                            <span>You need to save to apply the changes.</span>
-                        </div>
-                        <div class="permission-add">
-							<iframe src="../demo/LU_iframe_permissioninput.php" id="passbolt-iframe-password-share" frameborder="0"></iframe>
-							<div id="passbolt-password-share-autocomplete-wrapper">
-								<iframe src="../demo/LU_iframe_permissioninput_autocomplete.php" id="passbolt-iframe-password-share-autocomplete" frameborder="0" class="hidden"></iframe>
-							</div>
-                        </div>
-                        <div class="submit-wrapper clearfix">
-                            <input id="js_rs_share_save" class="button primary" value="save" data-view-id="375" type="submit">
-                            <a href="../demo/LU_passwords.php" class="js-dialog-cancel cancel">cancel</a>
-                        </div>
+                        <?php include('includes/dialogs/share/LU_permissions_list.php'); ?>
+                        <?php include('includes/dialogs/share/LU_permission_warning.php'); ?>
+                        <?php include('includes/dialogs/share/LU_permission_add.php'); ?>
+                        <?php include('includes/dialogs/share/LU_permission_dialog_buttons.php'); ?>
                     </div>
                 </div>
             </div>

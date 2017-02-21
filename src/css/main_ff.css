@@ -4367,7 +4367,6 @@ article video {
 }
 .dialog .share-tab .row .details .more_details,
 .sidebar .shared-with .row .details .more_details {
-  position: absolute;
   margin-left: .5em;
   margin-top: 0;
 }

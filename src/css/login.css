@@ -4358,13 +4358,13 @@ html body .button.processing {
 /* Tooltip container */
 .tooltip-alt {
   cursor: pointer;
-  position: relative;
   display: inline-block;
   border-bottom: 0;
   /* Tooltip text */
   /* Ease the tooltip left when you mouse over the tooltip container */
 }
 .tooltip-alt .tooltip-text {
+  position: absolute;
   visibility: hidden;
   width: 180px;
   background-color: #000;
@@ -4377,13 +4377,12 @@ html body .button.processing {
   -webkit-transform: translate3d(0, 0, 0);
   -moz-transform: translate3d(0, 0, 0);
   transform: translate3d(0, 0, 0);
-  position: absolute;
-  z-index: 1;
+  z-index: 99999;
   /* only right for now */
 }
 .tooltip-alt .tooltip-text.right {
-  top: -5px;
-  left: 100%;
+  margin-left: 1em;
+  margin-top: -1.75em;
 }
 .tooltip-alt .tooltip-text.right::after {
   content: " ";
@@ -4391,8 +4390,7 @@ html body .button.processing {
   top: 1.125em;
   right: 100%;
   margin-top: -5px;
-  border-width: 5px;
-  border-style: solid;
+  border: 5px #333333 solid;
   border-color: transparent rgba(51, 51, 51, 0.9) transparent transparent;
 }
 .tooltip-alt:hover .tooltip-text {
