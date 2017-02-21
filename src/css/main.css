@@ -5331,6 +5331,13 @@ input[type="search"]::-webkit-search-cancel-button {
   /* do not show text */
   /* don't show nodes if parent is closed */
 }
+.tree h3 {
+  border: 0;
+  font-size: 1em;
+  padding-left: .5em;
+  margin: 0 1.5em 0 .5em;
+  color: #888888;
+}
 .tree .row {
   float: left;
   width: 100%;
