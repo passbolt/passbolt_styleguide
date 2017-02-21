@@ -4299,17 +4299,90 @@ article video {
   padding-left: 1em;
   padding-right: 1em;
 }
-.dialog .share-tab .row .name,
-.sidebar .shared-with .row .name {
-  display: block;
+.dialog .share-tab .row .details,
+.sidebar .shared-with .row .details {
+  /*
+ * For IE 6/7 only
+ * Include this rule to trigger hasLayout and contain floats.
+ */
+  /*
+ * Clearfix: contain floats
+ *
+ * For modern browsers
+ * 1. The space content is one way to avoid an Opera bug when the
+ *	`contenteditable` attribute is included anywhere else in the document.
+ *	Otherwise it causes space to appear at the top and bottom of elements
+ *	that receive the `clearfix` class.
+ * 2. The use of `table` rather than `block` is only necessary if using
+ *	`:before` to contain the top-margins of child elements.
+ */
+  /*
+ * For IE 6/7 only
+ * Include this rule to trigger hasLayout and contain floats.
+ */
+  zoom: 1;
+  /*
+ * Clearfix: contain floats
+ *
+ * For modern browsers
+ * 1. The space content is one way to avoid an Opera bug when the
+ *	`contenteditable` attribute is included anywhere else in the document.
+ *	Otherwise it causes space to appear at the top and bottom of elements
+ *	that receive the `clearfix` class.
+ * 2. The use of `table` rather than `block` is only necessary if using
+ *	`:before` to contain the top-margins of child elements.
+ */
+}
+.dialog .share-tab .row .details:before,
+.sidebar .shared-with .row .details:before,
+.dialog .share-tab .row .details:after,
+.sidebar .shared-with .row .details:after {
+  content: "";
+  display: table;
+}
+.dialog .share-tab .row .details:after,
+.sidebar .shared-with .row .details:after {
+  clear: both;
+}
+.dialog .share-tab .row .details:before,
+.sidebar .shared-with .row .details:before,
+.dialog .share-tab .row .details:after,
+.sidebar .shared-with .row .details:after {
+  content: "";
+  display: table;
+}
+.dialog .share-tab .row .details:after,
+.sidebar .shared-with .row .details:after {
+  clear: both;
+}
+.dialog .share-tab .row .details .name,
+.sidebar .shared-with .row .details .name {
+  float: left;
+  max-width: 200px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   -o-text-overflow: ellipsis;
   -ms-text-overflow: ellipsis;
 }
-.dialog .share-tab .row .details a,
-.sidebar .shared-with .row .details a {
+.dialog .share-tab .row .details .more_details,
+.sidebar .shared-with .row .details .more_details {
+  position: absolute;
+  margin-left: .5em;
+  margin-top: 0;
+}
+.dialog .share-tab .row .details .email,
+.sidebar .shared-with .row .details .email {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -o-text-overflow: ellipsis;
+  -ms-text-overflow: ellipsis;
+  font-weight: bold;
+  padding-bottom: .125em;
+}
+.dialog .share-tab .row .permission_changes a,
+.sidebar .shared-with .row .permission_changes a {
   color: #888888;
   white-space: nowrap;
   overflow: hidden;
@@ -4358,8 +4431,8 @@ article video {
 .sidebar .shared-with .row.inherited-permission .inherited-actions a {
   color: #888888;
 }
-.dialog .share-tab .row.permission-updated,
-.sidebar .shared-with .row.permission-updated {
+.dialog .share-tab .permission-updated,
+.sidebar .shared-with .permission-updated {
   background: #FFFAE7;
 }
 .dialog .share-tab .message,

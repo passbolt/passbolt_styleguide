@@ -4351,6 +4351,59 @@ html body .button.processing {
 .tooltip-left.large:after {
   margin-top: 6px;
 }
+/*
+	More complex tooltips
+	That allows HTML in them
+*/
+/* Tooltip container */
+.tooltip-alt {
+  cursor: pointer;
+  position: relative;
+  display: inline-block;
+  border-bottom: 0;
+  /* Tooltip text */
+  /* Ease the tooltip left when you mouse over the tooltip container */
+}
+.tooltip-alt .tooltip-text {
+  visibility: hidden;
+  width: 180px;
+  background-color: #000;
+  background-color: rgba(51, 51, 51, 0.9);
+  color: #fff;
+  padding: .5em 1em;
+  -webkit-transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out, -webkit-transform 0.2s cubic-bezier(0.71, 1.7, 0.77, 1.24);
+  -moz-transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out, -moz-transform 0.2s cubic-bezier(0.71, 1.7, 0.77, 1.24);
+  transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out, transform 0.2s cubic-bezier(0.71, 1.7, 0.77, 1.24);
+  -webkit-transform: translate3d(0, 0, 0);
+  -moz-transform: translate3d(0, 0, 0);
+  transform: translate3d(0, 0, 0);
+  position: absolute;
+  z-index: 1;
+  /* only right for now */
+}
+.tooltip-alt .tooltip-text.right {
+  top: -5px;
+  left: 100%;
+}
+.tooltip-alt .tooltip-text.right::after {
+  content: " ";
+  position: absolute;
+  top: 1.125em;
+  right: 100%;
+  margin-top: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: transparent rgba(51, 51, 51, 0.9) transparent transparent;
+}
+.tooltip-alt:hover .tooltip-text {
+  -webkit-transform: translateX(12px);
+  -moz-transform: translateX(12px);
+  transform: translateX(12px);
+  visibility: visible;
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";
+  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100);
+  opacity: 1;
+}
 .version.alpha body:before {
   content: "alpha";
   background: #d40101 none repeat scroll 0% 0%;

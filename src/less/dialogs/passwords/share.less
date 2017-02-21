@@ -38,11 +38,25 @@
 			padding-left:1em;
 			padding-right:1em;
 		}
-		.name {
-			display:block;
-			.ellipsis();
+		.details {
+			.clearfix();
+			.name {
+				float:left;
+				max-width:200px;
+				.ellipsis();
+			}
+			.more_details {
+				position:absolute;
+				margin-left:.5em;
+				margin-top:0;
+			}
+			.email {
+				.ellipsis();
+				font-weight:bold;
+				padding-bottom:.125em;
+			}
 		}
-		.details a {
+		.permission_changes a {
 			color:@font-light;
 			.ellipsis();
 			display:block;
@@ -85,7 +99,7 @@
 	}
 
 	/* new/updated permissions */
-	.row.permission-updated {
+	.permission-updated {
 		background: #FFFAE7;
 
 	}

@@ -6070,6 +6070,59 @@ table.table-info.horizontal tbody tr:nth-child(even) {
   margin-top: 6px;
 }
 /*
+	More complex tooltips
+	That allows HTML in them
+*/
+/* Tooltip container */
+.tooltip-alt {
+  cursor: pointer;
+  position: relative;
+  display: inline-block;
+  border-bottom: 0;
+  /* Tooltip text */
+  /* Ease the tooltip left when you mouse over the tooltip container */
+}
+.tooltip-alt .tooltip-text {
+  visibility: hidden;
+  width: 180px;
+  background-color: #000;
+  background-color: rgba(51, 51, 51, 0.9);
+  color: #fff;
+  padding: .5em 1em;
+  -webkit-transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out, -webkit-transform 0.2s cubic-bezier(0.71, 1.7, 0.77, 1.24);
+  -moz-transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out, -moz-transform 0.2s cubic-bezier(0.71, 1.7, 0.77, 1.24);
+  transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out, transform 0.2s cubic-bezier(0.71, 1.7, 0.77, 1.24);
+  -webkit-transform: translate3d(0, 0, 0);
+  -moz-transform: translate3d(0, 0, 0);
+  transform: translate3d(0, 0, 0);
+  position: absolute;
+  z-index: 1;
+  /* only right for now */
+}
+.tooltip-alt .tooltip-text.right {
+  top: -5px;
+  left: 100%;
+}
+.tooltip-alt .tooltip-text.right::after {
+  content: " ";
+  position: absolute;
+  top: 1.125em;
+  right: 100%;
+  margin-top: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: transparent rgba(51, 51, 51, 0.9) transparent transparent;
+}
+.tooltip-alt:hover .tooltip-text {
+  -webkit-transform: translateX(12px);
+  -moz-transform: translateX(12px);
+  transform: translateX(12px);
+  visibility: visible;
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";
+  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100);
+  opacity: 1;
+}
+/*
  * Footer
  */
 .footer {
@@ -6485,17 +6538,90 @@ table.table-info.horizontal tbody tr:nth-child(even) {
   padding-left: 1em;
   padding-right: 1em;
 }
-.dialog .share-tab .row .name,
-.sidebar .shared-with .row .name {
-  display: block;
+.dialog .share-tab .row .details,
+.sidebar .shared-with .row .details {
+  /*
+ * For IE 6/7 only
+ * Include this rule to trigger hasLayout and contain floats.
+ */
+  /*
+ * Clearfix: contain floats
+ *
+ * For modern browsers
+ * 1. The space content is one way to avoid an Opera bug when the
+ *	`contenteditable` attribute is included anywhere else in the document.
+ *	Otherwise it causes space to appear at the top and bottom of elements
+ *	that receive the `clearfix` class.
+ * 2. The use of `table` rather than `block` is only necessary if using
+ *	`:before` to contain the top-margins of child elements.
+ */
+  /*
+ * For IE 6/7 only
+ * Include this rule to trigger hasLayout and contain floats.
+ */
+  zoom: 1;
+  /*
+ * Clearfix: contain floats
+ *
+ * For modern browsers
+ * 1. The space content is one way to avoid an Opera bug when the
+ *	`contenteditable` attribute is included anywhere else in the document.
+ *	Otherwise it causes space to appear at the top and bottom of elements
+ *	that receive the `clearfix` class.
+ * 2. The use of `table` rather than `block` is only necessary if using
+ *	`:before` to contain the top-margins of child elements.
+ */
+}
+.dialog .share-tab .row .details:before,
+.sidebar .shared-with .row .details:before,
+.dialog .share-tab .row .details:after,
+.sidebar .shared-with .row .details:after {
+  content: "";
+  display: table;
+}
+.dialog .share-tab .row .details:after,
+.sidebar .shared-with .row .details:after {
+  clear: both;
+}
+.dialog .share-tab .row .details:before,
+.sidebar .shared-with .row .details:before,
+.dialog .share-tab .row .details:after,
+.sidebar .shared-with .row .details:after {
+  content: "";
+  display: table;
+}
+.dialog .share-tab .row .details:after,
+.sidebar .shared-with .row .details:after {
+  clear: both;
+}
+.dialog .share-tab .row .details .name,
+.sidebar .shared-with .row .details .name {
+  float: left;
+  max-width: 200px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   -o-text-overflow: ellipsis;
   -ms-text-overflow: ellipsis;
 }
-.dialog .share-tab .row .details a,
-.sidebar .shared-with .row .details a {
+.dialog .share-tab .row .details .more_details,
+.sidebar .shared-with .row .details .more_details {
+  position: absolute;
+  margin-left: .5em;
+  margin-top: 0;
+}
+.dialog .share-tab .row .details .email,
+.sidebar .shared-with .row .details .email {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -o-text-overflow: ellipsis;
+  -ms-text-overflow: ellipsis;
+  font-weight: bold;
+  padding-bottom: .125em;
+}
+.dialog .share-tab .row .permission_changes a,
+.sidebar .shared-with .row .permission_changes a {
   color: #888888;
   white-space: nowrap;
   overflow: hidden;
@@ -6544,8 +6670,8 @@ table.table-info.horizontal tbody tr:nth-child(even) {
 .sidebar .shared-with .row.inherited-permission .inherited-actions a {
   color: #888888;
 }
-.dialog .share-tab .row.permission-updated,
-.sidebar .shared-with .row.permission-updated {
+.dialog .share-tab .permission-updated,
+.sidebar .shared-with .permission-updated {
   background: #FFFAE7;
 }
 .dialog .share-tab .message,

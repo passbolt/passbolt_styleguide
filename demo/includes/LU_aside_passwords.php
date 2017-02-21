@@ -126,12 +126,12 @@ uCZO5HNTgrf3rZ4wc7jtI6Nk
 					<li data-view-id="372" class="usercard-col-2">
 						<div class="content-wrapper">
 							<div class="content">
-								<div class="name">Bo Goss (bogoss@passbolt.com)</div>
-								<div class="subinfo">is owner</div>
+								<div class="name">IT-Support (group)</div>
+								<div class="subinfo">can update</div>
 							</div>
 						</div>
 						<div class="avatar">
-							<img data-view-id="373" src="img/avatar/user.png">
+							<img data-view-id="373" src="img/avatar/group_default.png">
 						</div>
 					</li>
 				</ul>

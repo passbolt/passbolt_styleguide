@@ -4,7 +4,7 @@
 
 			<li>
 				<a id="js_wk_menu_secretcopy_button" href="#" class="button mad_component_button js_component mad_view ready">
-					<i class="fa fa-fw fa-copy"></i>
+					<i class="fa fa-fw fa-clipboard"></i>
 					<span>copy</span>
 				</a>
 			</li>
