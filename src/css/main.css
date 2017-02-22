@@ -4445,6 +4445,7 @@ input[type="search"]::-webkit-search-cancel-button {
   padding-left: .625em;
 }
 .header.third .main-action-wrapper .button {
+  float: left;
   font-size: .875em;
 }
 .header.third .actions-wrapper {
@@ -4453,6 +4454,7 @@ input[type="search"]::-webkit-search-cancel-button {
 .header.third .actions-wrapper .actions .button {
   font-size: .875em;
   min-width: 4em;
+  float: left;
 }
 .header.third .actions-wrapper .actions li {
   display: inline;
@@ -4463,9 +4465,6 @@ input[type="search"]::-webkit-search-cancel-button {
 .header.third .actions-wrapper .actions.secondary .button {
   font-size: .875em;
   min-width: 1em;
-}
-.header.third .actions-wrapper .actions a.button {
-  float: left;
 }
 /* hide secondary actions if there is no space */
 @media all and (max-width: 1024px) {
@@ -4877,7 +4876,8 @@ input[type="search"]::-webkit-search-cancel-button {
 .dropdown {
   float: left;
 }
-.dropdown.pressed .button {
+.dropdown .button:focus {
+  border: 1px solid #dddddd;
   background: #ffffff;
   z-index: 801;
   border-bottom: 0;
@@ -4895,12 +4895,11 @@ input[type="search"]::-webkit-search-cancel-button {
   position: absolute;
   min-width: 13em;
   z-index: 800;
-  padding-top: .25em;
+  padding: .25em 0;
 }
 .button + .dropdown-content {
-  margin-top: 1.99em;
-  margin-left: 2px;
-  margin-right: 7px;
+  margin-top: 2em;
+  margin-bottom: 2em;
 }
 .dropdown-content.right {
   right: 0;
@@ -4911,15 +4910,10 @@ input[type="search"]::-webkit-search-cancel-button {
   font-size: .938em;
   border: 0;
 }
-.dropdown-content li a,
-.dropdown-content li .checkbox {
+.dropdown-content li a {
   padding: .313em .626em;
   /* 5px */
 }
-.dropdown-content li .checkbox label {
-  padding: 0;
-}
-.dropdown-content li .checkbox:hover,
 .dropdown-content li a:hover {
   background: #eeeeee;
   text-decoration: none;
@@ -4965,24 +4959,6 @@ input[type="search"]::-webkit-search-cancel-button {
 .dropdownmenu li {
   position: relative;
   padding: 3px 7em 3px 30px;
-}
-.dropdownmenu .node.closed .node {
-  display: none;
-}
-.dropdownmenu .node .control {
-  position: absolute;
-  display: block;
-  width: 10px;
-  height: 10px;
-  top: 0;
-  right: 0.1em;
-  margin-top: .4em;
-}
-.dropdownmenu .node .control span {
-  display: none;
-}
-.dropdown .checkbox {
-  font-size: .85em;
 }
 .profile .section.detailed-information h4 {
   margin-bottom: .626em;

@@ -2,7 +2,8 @@
 .dropdown {
 	float:left;
 }
-.dropdown.pressed .button {
+.dropdown .button:focus {
+	border:1px solid @grey;
 	background:@background-default;
 	z-index:801;
 	border-bottom:0;
@@ -20,12 +21,11 @@
 	position:absolute;
 	min-width:13em;
 	z-index:800;
-	padding-top:.25em;
+	padding:.25em 0;
 }
 .button + .dropdown-content {
-	margin-top:1.99em;
-	margin-left:2px;
-	margin-right:7px;
+	margin-top:2em;
+	margin-bottom:2em;
 }
 .dropdown-content.right {
 	right:0;
@@ -36,14 +36,9 @@
 	font-size:.938em;
 	border:0;
 }
-.dropdown-content li a,
-.dropdown-content li .checkbox {
+.dropdown-content li a {
 	padding:.313em .626em; /* 5px */
 }
-.dropdown-content li .checkbox label {
-	padding:0;
-}
-.dropdown-content li .checkbox:hover,
 .dropdown-content li a:hover {
 	background:@grey-lighter;
 	text-decoration:none;
@@ -86,23 +81,4 @@
 .dropdownmenu li {
 	position:relative;
 	padding:3px 7em 3px 30px;
-}
-.dropdownmenu .node.closed .node {
-	display:none;
-}
-.dropdownmenu .node .control {
-	position:absolute;
-	display:block;
-	width:10px;
-	height:10px;
-	top:0;
-	right:0.1em;
-	margin-top:.4em;
-}
-.dropdownmenu .node .control span {
-	display:none;
-}
-
-.dropdown .checkbox {
-	font-size:.85em;
 }

@@ -16,7 +16,7 @@
 			<?php include('includes/LU_header_userbadge.php'); ?>
 		</div>
 		<div class="header third">
-			<?php include('includes/LU_header_third_main_action_passwords.php'); ?>
+			<?php include('includes/LU_header_third_main_action_users.php'); ?>
 			<?php include('includes/LU_header_third_actions_users.php'); ?>
 		</div>
 		<div id="js_app_panel_main" class="panel main mad_controller_component_tab_controller mad_view_component_tab js_component ready">

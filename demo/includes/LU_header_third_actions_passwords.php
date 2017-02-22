@@ -26,7 +26,7 @@
 						<span>more</span>
 						<i class="fa fa-fw fa-caret-down"></i></a>
 					</a>
-					<ul id="de8625c7-312f-e28b-db01-bf3123d0d433" class="dropdown-content mad_component_menu menu mad_view_component_tree ready">
+					<ul id="js_wk_menu_more_button_dropdown" class="dropdown-content mad_component_menu menu mad_view_component_tree ready">
 						<li id="ceb12fee-d370-a60c-8596-a559e560f4e6" class="todo ready" data-view-id="10">
 							<div class="row">
 								<div class="main-cell-wrapper">
@@ -56,6 +56,20 @@
 						</li>
 					</ul>
 				</div>
+				<script>
+					// SAMPLE INTERACTION - Not for production
+					$(function() {
+						$('#js_wk_menu_more_button').click(function(){
+							$('#js_wk_menu_more_button_dropdown').toggleClass('visible');
+							return false;
+						});
+					});
+					$('body').click(function(e) {
+						if($(e.target).closest('#js_wk_menu_more_button_dropdown').length === 0) {
+							$('#js_wk_menu_more_button_dropdown').removeClass('visible');
+						}
+					});
+				</script>
 			</li>
 		</ul>
 	</div>

@@ -74,11 +74,11 @@
 					<div class="main-cell">
 						<a href="#">
 							<div class="avatar">
-								<img src="img/avatar/user.png"/>
+								<img src="img/avatar/group_default.png"/>
 							</div>
 							<div class="user">
-								<span class="name">Jean Bartik (87654321)</span>
-								<span class="details" title="jean@passbolt.com">jean@passbolt.com</span>
+								<span class="name">IT Support</span>
+								<span class="details" title="5 members">5 Members</span>
 							</div>
 						</a>
 					</div>
