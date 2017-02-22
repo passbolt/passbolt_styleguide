@@ -28,7 +28,7 @@
 		<li>
 			<a id="js_wk_secondary_menu_view_sidebar_button" href="#"
 				 class="button toggle mad_controller_component_toggle_button_controller mad_view_view js_component ready">
-				<i class="fa fa-lg fa-eye"></i>
+				<i class="fa fa-lg fa-info-circle"></i>
 				<span class="visuallyhidden">view sidebar</span>
 			</a>
 		</li>

@@ -109,18 +109,18 @@ uCZO5HNTgrf3rZ4wc7jtI6Nk
 							</div>
 						</div>
 						<div class="avatar">
-							<img data-view-id="373" src="img/avatar/user.png">
+							<img data-view-id="373" src="img/avatar/user.png" alt="picture of ada">
 						</div>
 					</li>
 					<li data-view-id="372" class="usercard-col-2">
 						<div class="content-wrapper">
 							<div class="content">
-								<div class="name">Jean René Bergamotte (jean.rene.bergamotte@passbolt.com)</div>
+								<div class="name">Betty Holberton (betty.holberton@passbolt.com)</div>
 								<div class="subinfo">can update</div>
 							</div>
 						</div>
 						<div class="avatar">
-							<img data-view-id="373" src="img/avatar/user.png">
+							<img data-view-id="373" src="img/avatar/user.png" alt="picture of betty">
 						</div>
 					</li>
 					<li data-view-id="372" class="usercard-col-2">
@@ -131,7 +131,7 @@ uCZO5HNTgrf3rZ4wc7jtI6Nk
 							</div>
 						</div>
 						<div class="avatar">
-							<img data-view-id="373" src="img/avatar/group_default.png">
+							<img data-view-id="373" src="img/avatar/group_default.png" alt="picture of it-support">
 						</div>
 					</li>
 				</ul>

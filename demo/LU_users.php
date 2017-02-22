@@ -24,16 +24,18 @@
 				<div class="passbolt_controller_password_workspace_controller mad_view_view tab-content ready selected">
 					<div class="js_workspace">
 						<div class="panel left">
-							<?php include('includes/LU_nav_shortcuts_users.php'); ?>
+							<?php include('includes/LU_nav_shortcuts_users2.php'); ?>
 							<?php include('includes/LU_nav_tree_groups.php'); ?>
 						</div>
 						<div class="panel middle">
 							<?php
 							$_GET['breadcrumbs'] = array(
-								'all users' => '../demo/LU_users.php'
+								'all users' => '../demo/LU_users.php',
+								'IT Support (group)' => '../demo/LU_users.php'
 							);
 							include('includes/LU_breadcrumbs.php'); ?>
-							<?php include('includes/LU_tableview_users.php'); ?>
+							<?php include('includes/LU_tableview_users_group_selected.php'); ?>
+							<?php include('includes/LU_aside_group.php'); ?>
 						</div>
 					</div>
 				</div>

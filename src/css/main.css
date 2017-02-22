@@ -4381,7 +4381,7 @@ input[type="search"]::-webkit-search-cancel-button {
   width: 100%;
 }
 .usercard-col-2 .content-wrapper .content {
-  margin-left: 28px;
+  margin-left: 36px;
   padding: 0 1em 0 1em;
 }
 .usercard-col-2 .content-wrapper .content .name {
@@ -4396,12 +4396,12 @@ input[type="search"]::-webkit-search-cancel-button {
 }
 .usercard-col-2 .avatar {
   float: left;
-  width: 28px;
+  width: 36px;
   margin-left: -100%;
 }
 .usercard-col-2 .avatar img {
-  width: 28px;
-  height: 28px;
+  width: 36px;
+  height: 36px;
 }
 /*
  * Breadcrumbs
@@ -5301,7 +5301,7 @@ input[type="search"]::-webkit-search-cancel-button {
 		Left Cell
 	*/
   /*
-		Left Cell
+		Right Cell
 	*/
   /* Events & visibility */
   /* do not show text */
@@ -5379,12 +5379,18 @@ input[type="search"]::-webkit-search-cancel-button {
   height: 1em;
   width: 1em;
   padding: 0;
+  opacity: 0;
+  filter: alpha(opacity=0);
+  border: 1px solid #dddddd;
 }
 .tree .row:hover .right-cell a {
-  border: 1px solid #dddddd;
+  opacity: .8;
+  filter: alpha(opacity=70);
   background: #ffffff url('../img/controls/tree-ctrl.png') center -9px no-repeat;
 }
 .tree .row:hover .right-cell a:hover {
+  opacity: 1;
+  filter: alpha(opacity=100);
   background: #ffffff url('../img/controls/tree-ctrl.png') center -9px no-repeat;
 }
 .tree .row.drop-over {
@@ -5448,34 +5454,42 @@ input[type="search"]::-webkit-search-cancel-button {
   -moz-box-shadow: 0px 0px 10px 0px #dddddd;
   -webkit-box-shadow: 0px 0px 10px 0px #dddddd;
   box-shadow: 0px 0px 10px 0px #dddddd;
-  /* general resource information */
+  /* three types of sidebar */
 }
 .panel.aside .resource,
+.panel.aside .group,
 .panel.aside .user {
   padding: .5em 1em 1em 1em;
 }
 .panel.aside .resource h3,
+.panel.aside .group h3,
 .panel.aside .user h3 {
   margin-top: .5em;
   border: 0;
 }
 .panel.aside .resource h4,
+.panel.aside .group h4,
 .panel.aside .user h4 {
   margin-bottom: 1em;
   padding-bottom: .313em;
   border-bottom: 1px dotted #dddddd;
 }
 .panel.aside .resource li,
+.panel.aside .group li,
 .panel.aside .user li,
 .panel.aside .resource .message,
+.panel.aside .group .message,
 .panel.aside .user .message,
 .panel.aside .resource .comment p,
+.panel.aside .group .comment p,
 .panel.aside .user .comment p,
 .panel.aside .resource .comment .metadata,
+.panel.aside .group .comment .metadata,
 .panel.aside .user .comment .metadata {
   font-size: .875em;
 }
 .panel.aside .resource li,
+.panel.aside .group li,
 .panel.aside .user li {
   /*
  * For IE 6/7 only
@@ -5510,28 +5524,35 @@ input[type="search"]::-webkit-search-cancel-button {
  */
 }
 .panel.aside .resource li:before,
+.panel.aside .group li:before,
 .panel.aside .user li:before,
 .panel.aside .resource li:after,
+.panel.aside .group li:after,
 .panel.aside .user li:after {
   content: "";
   display: table;
 }
 .panel.aside .resource li:after,
+.panel.aside .group li:after,
 .panel.aside .user li:after {
   clear: both;
 }
 .panel.aside .resource li:before,
+.panel.aside .group li:before,
 .panel.aside .user li:before,
 .panel.aside .resource li:after,
+.panel.aside .group li:after,
 .panel.aside .user li:after {
   content: "";
   display: table;
 }
 .panel.aside .resource li:after,
+.panel.aside .group li:after,
 .panel.aside .user li:after {
   clear: both;
 }
 .panel.aside .resource li .label,
+.panel.aside .group li .label,
 .panel.aside .user li .label {
   width: 30%;
   display: inline-block;
@@ -5540,6 +5561,7 @@ input[type="search"]::-webkit-search-cancel-button {
   height: 1.8em;
 }
 .panel.aside .resource li .value,
+.panel.aside .group li .value,
 .panel.aside .user li .value {
   width: 60%;
   display: inline-block;
@@ -5547,6 +5569,7 @@ input[type="search"]::-webkit-search-cancel-button {
   height: 1.8em;
 }
 .panel.aside .resource li span,
+.panel.aside .group li span,
 .panel.aside .user li span {
   white-space: nowrap;
   overflow: hidden;
@@ -5555,38 +5578,43 @@ input[type="search"]::-webkit-search-cancel-button {
   -ms-text-overflow: ellipsis;
 }
 .panel.aside .resource .description .description_content,
+.panel.aside .group .description .description_content,
 .panel.aside .user .description .description_content {
   font-size: .875em;
 }
 .panel.aside .resource .description textarea,
+.panel.aside .group .description textarea,
 .panel.aside .user .description textarea {
   box-sizing: border-box;
   width: 100%;
 }
-.panel.aside .resource .shared-with .usercard-col-2 .name,
-.panel.aside .user .shared-with .usercard-col-2 .name,
-.panel.aside .resource .shared-with .usercard-col-2 .subinfo,
-.panel.aside .user .shared-with .usercard-col-2 .subinfo {
-  font-size: 0.875em;
-  line-height: 1.25em;
+.panel.aside .resource .usercard-col-2 .subinfo,
+.panel.aside .group .usercard-col-2 .subinfo,
+.panel.aside .user .usercard-col-2 .subinfo {
+  font-size: 0.929em;
+  /* 13px */
 }
 .panel.aside .resource .dialog-close,
+.panel.aside .group .dialog-close,
 .panel.aside .user .dialog-close {
   position: absolute;
   right: .5em;
   top: .5em;
 }
 .panel.aside .resource .button,
+.panel.aside .group .button,
 .panel.aside .user .button {
   float: right;
 }
 .panel.aside .resource .section-action,
+.panel.aside .group .section-action,
 .panel.aside .user .section-action {
   float: right;
   margin-top: -2.75em;
   border: 0;
 }
 .panel.aside .resource .key-information textarea,
+.panel.aside .group .key-information textarea,
 .panel.aside .user .key-information textarea {
   min-height: 30em;
   font-size: .625em;
@@ -5724,18 +5752,26 @@ input[type="search"]::-webkit-search-cancel-button {
   width: 15px;
   max-width: 15px;
 }
+.tableview table .s1-cell {
+  width: 25px;
+  max-width: 25px;
+}
 .tableview table .s2-cell {
   width: 40px;
   max-width: 40px;
 }
 .tableview table .m-cell {
-  width: 10em;
-  max-width: 10em;
+  width: 9em;
+  max-width: 9em;
   vertical-align: middle;
 }
 .tableview table .l-cell {
-  width: 12em;
-  max-width: 12em;
+  width: 14em;
+  max-width: 14em;
+}
+.tableview table .xl-cell {
+  width: 19em;
+  max-width: 19em;
 }
 .tableview table tbody tr.selected,
 .tableview table tbody tr:hover {
@@ -6765,7 +6801,8 @@ table.table-info.horizontal tbody tr:nth-child(even) {
   display: none;
 }
 /* sidebar / user details in overview */
-.panel.aside .user .header {
+.panel.aside .user .header,
+.panel.aside .group .header {
   /*
  * For IE 6/7 only
  * Include this rule to trigger hasLayout and contain floats.
@@ -6799,28 +6836,36 @@ table.table-info.horizontal tbody tr:nth-child(even) {
  */
 }
 .panel.aside .user .header:before,
-.panel.aside .user .header:after {
+.panel.aside .group .header:before,
+.panel.aside .user .header:after,
+.panel.aside .group .header:after {
   content: "";
   display: table;
 }
-.panel.aside .user .header:after {
+.panel.aside .user .header:after,
+.panel.aside .group .header:after {
   clear: both;
 }
 .panel.aside .user .header:before,
-.panel.aside .user .header:after {
+.panel.aside .group .header:before,
+.panel.aside .user .header:after,
+.panel.aside .group .header:after {
   content: "";
   display: table;
 }
-.panel.aside .user .header:after {
+.panel.aside .user .header:after,
+.panel.aside .group .header:after {
   clear: both;
 }
-.panel.aside .user .header img {
+.panel.aside .user .header img,
+.panel.aside .group .header img {
   float: left;
   width: 55px;
   height: 55px;
   border: 1px solid #dddddd;
 }
-.panel.aside .user .header h3 {
+.panel.aside .user .header h3,
+.panel.aside .group .header h3 {
   float: left;
   width: 67%;
   margin: 0;
@@ -6829,23 +6874,28 @@ table.table-info.horizontal tbody tr:nth-child(even) {
   vertical-align: middle;
   border: 0;
 }
-.panel.aside .user .header h3 span.name {
+.panel.aside .user .header h3 span.name,
+.panel.aside .group .header h3 span.name {
   font-size: 1.2em;
 }
-.panel.aside .user .header h3 span.username {
+.panel.aside .user .header h3 span.username,
+.panel.aside .group .header h3 span.username {
   font-size: 0.8em;
   color: #888888;
   font-weight: normal;
 }
-.panel.aside .user li.key {
+.panel.aside .user li.key,
+.panel.aside .group li.key {
   margin-bottom: 0.5em;
 }
-.panel.aside .user li.key a.button.copy-public-key {
+.panel.aside .user li.key a.button.copy-public-key,
+.panel.aside .group li.key a.button.copy-public-key {
   padding-top: 0.2em;
   padding-bottom: 0.2em;
   font-size: 0.75em;
 }
-.panel.aside .user li textarea {
+.panel.aside .user li textarea,
+.panel.aside .group li textarea {
   width: 100%;
 }
 /* tabel view adjustments for avatar */

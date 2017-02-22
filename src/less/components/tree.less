@@ -80,7 +80,7 @@
 	}
 
 	/*
-		Left Cell
+		Right Cell
 	*/
 	.right-cell {
 		float: right;
@@ -93,12 +93,18 @@
 		height:1em;
 		width:1em;
 		padding:0;
+		opacity:0;
+		filter:alpha(opacity=0);
+		border:1px solid @border-default;
 	}
 	.row:hover .right-cell a {
-		border:1px solid @border-default;
+		opacity:.8;
+		filter:alpha(opacity=80);
 		background: @white url('@{images}/controls/tree-ctrl.png') center -9px no-repeat;
 	}
 	.row:hover .right-cell a:hover {
+		opacity:1;
+		filter:alpha(opacity=100);
 		background: @white url('@{images}/controls/tree-ctrl.png') center -9px no-repeat;
 	}
 
@@ -116,6 +122,4 @@
 	.node.close ul{
 		display:none;
 	}
-
-
 }

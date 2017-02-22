@@ -2,16 +2,17 @@
  * Sidebar
  */
 .panel.aside {
-	position:absolute;
-	right:2em;
-	width:22em;
-	bottom:0;
-	height:100%;
-	background:@background-default;
-	.box-shadow();
+  position:absolute;
+  right:2em;
+  width:22em;
+  bottom:0;
+  height:100%;
+  background:@background-default;
+  .box-shadow();
 
-  /* general resource information */
+  /* three types of sidebar */
   .resource,
+  .group,
   .user {
     padding:.5em 1em 1em 1em;
 
@@ -63,10 +64,9 @@
       }
     }
 
-    .shared-with .usercard-col-2 {
-      .name, .subinfo {
-        font-size: 0.875em;
-        line-height: 1.25em;
+    .usercard-col-2 {
+      .subinfo {
+        font-size: 0.929em; /* 13px */
       }
     }
 
@@ -94,14 +94,14 @@
 }
 /* place sidebar on top of everything when there is no space */
 @media all and (max-width: 1024px) {
-	.panel.aside {
-		position: absolute;
-		right: 0em;
-		width: 100%;
-		bottom: 0;
-		top:0;
-		height: 100%;
-	}
+  .panel.aside {
+    position: absolute;
+    right: 0em;
+    width: 100%;
+    bottom: 0;
+    top:0;
+    height: 100%;
+  }
 }
 @media all and (min-width: 1280px) {
   .panel.aside {
