@@ -5,7 +5,7 @@
 			<img src="img/avatar/group_default.png">
 			<h3>
 				<span class="name">IT Support</span>
-				<span class="username">group</span>
+				<span class="type">group</span>
 			</h3>
 		</div>
 		<a href="#" class="dialog-close">

@@ -3,13 +3,13 @@
 <head>
 	<meta charset="utf-8">
 	<title>Passbolt - Privacy Policy</title>
-	<?php include('includes/AA_meta.php'); ?>
-	<?php include('includes/AA_header_scripts.php'); ?>
+	<?php include('includes/meta/AA_meta.php'); ?>
+	<?php include('includes/headers/AA_header_scripts.php'); ?>
 </head>
 <body>
 <div id="container" class="page background">
 	<!-- first header -->
-	<?php include('includes/AA_header.php'); ?>
+	<?php include('includes/headers/AA_header.php'); ?>
 
 	<!-- second header -->
 	<div class="header second">

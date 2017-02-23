@@ -1,13 +1,13 @@
 <!doctype html>
 <html lang="en" class="version alpha no-passboltplugin">
 <head>
-	<?php include('includes/AN_meta_setup.php'); ?>
+	<?php include('includes/meta/AN_meta_setup.php'); ?>
 	<link rel="stylesheet" type="text/css" href="css/devel.css" />
 </head>
 <body>
 <div id="container" class="page setup">
 	<!-- first header -->
-	<?php include('includes/AN_header_first_setup.php'); ?>
+	<?php include('includes/headers/AN_header_first_setup.php'); ?>
 
 	<!-- second header -->
 	<div class="header second">

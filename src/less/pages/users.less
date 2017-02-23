@@ -17,13 +17,18 @@
       display: table-cell;
       vertical-align: middle;
       border: 0;
-      span.name {
+      .name {
         font-size: 1.2em;
+        display:block;
+        .ellipsis();
       }
-      span.username {
+      .type,
+      .username {
         font-size: 0.8em;
         color: @font-light;
         font-weight: normal;
+        display:block;
+        .ellipsis();
       }
     }
   }

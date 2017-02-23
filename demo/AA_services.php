@@ -3,12 +3,12 @@
 <head>
     <meta charset="utf-8">
     <title>Passbolt | The open source password manager for teams</title>
-    <?php include('includes/AA_meta.php'); ?>
-	<?php include('includes/AA_header_scripts.php'); ?>
+    <?php include('includes/meta/AA_meta.php'); ?>
+	<?php include('includes/headers/AA_header_scripts.php'); ?>
 </head>
 <body>
 <div id="container" class="page services featured">
-    <?php include('includes/AA_header.php'); ?>
+    <?php include('includes/headers/AA_header.php'); ?>
 
     <div class="page-row intro">
         <div class="grid grid-responsive-12">

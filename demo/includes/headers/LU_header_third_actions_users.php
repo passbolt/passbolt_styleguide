@@ -27,10 +27,20 @@
 			class="actions secondary passbolt_controller_component_workspace_secondary_menu_controller mad_view_view js_component ready">
 		<li>
 			<a id="js_wk_secondary_menu_view_sidebar_button" href="#"
-				 class="button toggle mad_controller_component_toggle_button_controller mad_view_view js_component ready">
+				 class="button toggle selected mad_controller_component_toggle_button_controller mad_view_view js_component ready">
 				<i class="fa fa-lg fa-info-circle"></i>
 				<span class="visuallyhidden">view sidebar</span>
 			</a>
 		</li>
 	</ul>
+	<script>
+		// DEMO ONLY -- Not for production use
+		// Show hide sidebar
+		$(function() {
+			$('.aside .dialog-close').click(function(){
+				$('.aside').toggleClass('hidden');
+				return false;
+			});
+		});
+	</script>
 </div>

@@ -5335,6 +5335,15 @@ input[type="search"]::-webkit-search-cancel-button {
 .tree .row:hover {
   background: #f3f3f3;
 }
+.tree .main-cell h3 {
+  margin: 0 .25em 0 1em;
+  padding: .25em 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -o-text-overflow: ellipsis;
+  -ms-text-overflow: ellipsis;
+}
 .tree .main-cell span {
   white-space: nowrap;
   overflow: hidden;
@@ -5373,7 +5382,7 @@ input[type="search"]::-webkit-search-cancel-button {
   width: 1em ;
   height: 1em;
   margin-right: .4em;
-  margin-top: -1.35em;
+  margin-top: -1.4em;
 }
 .tree .row .right-cell a {
   height: 1em;
@@ -5383,9 +5392,10 @@ input[type="search"]::-webkit-search-cancel-button {
   filter: alpha(opacity=0);
   border: 1px solid #dddddd;
 }
+.tree .row .right-cell a:focus,
 .tree .row:hover .right-cell a {
   opacity: .8;
-  filter: alpha(opacity=70);
+  filter: alpha(opacity=80);
   background: #ffffff url('../img/controls/tree-ctrl.png') center -9px no-repeat;
 }
 .tree .row:hover .right-cell a:hover {
@@ -5407,14 +5417,14 @@ input[type="search"]::-webkit-search-cancel-button {
   position: absolute;
   background: #ffffff;
   border: 1px solid #dddddd;
-  width: 11.25em;
-  /* 180px */
+  width: 12em;
   -moz-box-shadow: 0px 0px 10px 0px #dddddd;
   -webkit-box-shadow: 0px 0px 10px 0px #dddddd;
   box-shadow: 0px 0px 10px 0px #dddddd;
   z-index: 993;
   left: 11.25em;
   display: none;
+  padding: .25em 0;
 }
 .contextual-menu a {
   font-size: .875em;
@@ -6874,15 +6884,29 @@ table.table-info.horizontal tbody tr:nth-child(even) {
   vertical-align: middle;
   border: 0;
 }
-.panel.aside .user .header h3 span.name,
-.panel.aside .group .header h3 span.name {
+.panel.aside .user .header h3 .name,
+.panel.aside .group .header h3 .name {
   font-size: 1.2em;
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -o-text-overflow: ellipsis;
+  -ms-text-overflow: ellipsis;
 }
-.panel.aside .user .header h3 span.username,
-.panel.aside .group .header h3 span.username {
+.panel.aside .user .header h3 .type,
+.panel.aside .group .header h3 .type,
+.panel.aside .user .header h3 .username,
+.panel.aside .group .header h3 .username {
   font-size: 0.8em;
   color: #888888;
   font-weight: normal;
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -o-text-overflow: ellipsis;
+  -ms-text-overflow: ellipsis;
 }
 .panel.aside .user li.key,
 .panel.aside .group li.key {

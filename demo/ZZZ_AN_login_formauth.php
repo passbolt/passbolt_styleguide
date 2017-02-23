@@ -2,12 +2,12 @@
 <html class="passbolt no-js no-passboltplugin version alpha" lang="en">
 <head>
 	<title>Login</title>
-	<?php include('includes/ALL_meta.php'); ?>
+	<?php include('includes/meta/ALL_meta.php'); ?>
 	<link rel="stylesheet" type="text/css" href="css/login.css" />
 <body>
 <div id="container" class="login page">
 <?php include('includes/ALL_top_warning_messages.php'); ?>
-<?php include('includes/AN_header_first.php'); ?>
+<?php include('includes/headers/AN_header_first.php'); ?>
 
 	<!-- main -->
 	<div class="grid">
@@ -59,9 +59,9 @@
 			</div>
 		</div>
 		<div class="row">
-			<?php include('includes/AN_promoblock_github.php'); ?>
-			<?php include('includes/AN_promoblock_chromeplugin.php'); ?>
-			<?php include('includes/AN_promoblock_donate.php'); ?>
+			<?php include('includes/promoblocks/AN_promoblock_github.php'); ?>
+			<?php include('includes/promoblocks/AN_promoblock_chromeplugin.php'); ?>
+			<?php include('includes/promoblocks/AN_promoblock_donate.php'); ?>
 		</div>
 	</div>
 </div>

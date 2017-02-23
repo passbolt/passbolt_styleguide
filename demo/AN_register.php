@@ -2,13 +2,13 @@
 <html class="passbolt no-js no-passboltplugin version alpha" lang="en">
 <head>
 	<title>Register</title>
-	<?php include('includes/ALL_meta.php'); ?>
+	<?php include('includes/meta/ALL_meta.php'); ?>
 	<link rel="stylesheet" type="text/css" href="css/login.css" />
 	<link rel="stylesheet" type="text/css" href="css/devel.css" />
 <body>
 <div id="container" class="register page">
 	<?php include('includes/ALL_top_warning_messages.php'); ?>
-	<?php include('includes/AN_header_first.php'); ?>
+	<?php include('includes/headers/AN_header_first.php'); ?>
 
 	<!-- main -->
 	<div class="grid">
@@ -48,9 +48,9 @@
 			</div>
 		</div>
 		<div class="row">
-			<?php include('includes/AN_promoblock_cloud.php'); ?>
-			<?php include('includes/AN_promoblock_passboltpro.php'); ?>
-			<?php include('includes/AN_promoblock_github.php'); ?>
+			<?php include('includes/promoblocks/AN_promoblock_cloud.php'); ?>
+			<?php include('includes/promoblocks/AN_promoblock_passboltpro.php'); ?>
+			<?php include('includes/promoblocks/AN_promoblock_github.php'); ?>
 		</div>
 	</div>
 </div>

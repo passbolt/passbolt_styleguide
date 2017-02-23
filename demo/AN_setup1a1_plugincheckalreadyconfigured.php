@@ -1,12 +1,12 @@
 <!doctype html>
 <html class="passbolt no-js passboltplugin version alpha" lang="en">
 <head>
-	<?php include('includes/AN_meta_setup.php'); ?>
+	<?php include('includes/meta/AN_meta_setup.php'); ?>
 </head>
 <body>
 <div id="container" class="page setup">
 	<!-- first header -->
-	<?php include('includes/AN_header_first_setup.php'); ?>
+	<?php include('includes/headers/AN_header_first_setup.php'); ?>
 
 	<!-- second header -->
 	<div class="header second">

@@ -1,7 +1,7 @@
 <!doctype html>
 <html class=" js websqldatabase draganddrop cssscrollbar" lang="en">
 <head>
-	<?php include('includes/LU_meta.php'); ?>
+	<?php include('includes/meta/LU_meta.php'); ?>
 </head>
 <body>
 <div id="container" class="page settings keys">
@@ -10,15 +10,15 @@
 		<!-- LU_passwords -->
 		<?php include('includes/LU_loadingbar.php'); ?>
 		<?php include('includes/LU_notifications.php'); ?>
-		<?php include('includes/LU_header_first.php'); ?>
+		<?php include('includes/headers/LU_header_first.php'); ?>
 		<div class="header second">
-			<?php include('includes/LU_header_second_logo.php'); ?>
-			<?php include('includes/LU_header_search_users.php'); ?>
-			<?php include('includes/LU_header_userbadge.php'); ?>
+			<?php include('includes/headers/LU_header_second_logo.php'); ?>
+			<?php include('includes/headers/LU_header_search_users.php'); ?>
+			<?php include('includes/headers/LU_header_userbadge.php'); ?>
 		</div>
 		<div class="header third">
-			<?php include('includes/LU_header_third_title_profile.php'); ?>
-			<?php include('includes/LU_header_third_actions_profile_keyinspector.php'); ?>
+			<?php include('includes/headers/LU_header_third_title_profile.php'); ?>
+			<?php include('includes/headers/LU_header_third_actions_profile_keyinspector.php'); ?>
 		</div>
 		<div class="panel main mad_controller_component_tab_controller mad_view_component_tab js_component ready" id="js_app_panel_main">
 			<div class="js_tabs_content tabs-content">
@@ -27,7 +27,7 @@
 						<div class="panel left">
 							<?php
 							$_GET['shortcuts'] = 'keyinspector';
-							include('includes/LU_nav_shortcuts_profile.php'); ?>
+							include('includes/nav/LU_nav_shortcuts_profile.php'); ?>
 						</div>
 						<div class="panel middle">
 						<?php

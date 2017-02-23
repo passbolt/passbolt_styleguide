@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
 <head>
-    <?php include('includes/LU_meta_iframe.php'); ?>
+    <?php include('includes/meta/LU_meta_iframe.php'); ?>
 </head>
 <body>
 <div class="dialog-wrapper session-expired-dialog">

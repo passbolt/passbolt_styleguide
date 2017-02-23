@@ -1,7 +1,4 @@
-﻿﻿<ul style="position: absolute; left: 537px; top: 232.883px;"
-     class="mad_component_contextual_menu contextual-menu mad_view_component_contextual_menu ready"
-     id="js_contextual_menu"
-    >
+﻿﻿<ul id="js_contextual_menu" class="mad_component_contextual_menu contextual-menu mad_view_component_contextual_menu ready" >
     <li id="js_password_browser_menu_copy_username" class="ready closed" data-view-id="369">
         <div class="row">
             <div class="main-cell-wrapper">
@@ -66,6 +63,7 @@
     </li>
 </ul>
 <script>
+    // DEMO ONLY -- not for production use
     $(function() {
         var mouse = { x: -1, y: -1 };
         $(document).mousemove(function(event) {

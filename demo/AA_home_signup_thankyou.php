@@ -3,13 +3,13 @@
 <head>
 	<meta charset="utf-8">
 	<title>Thank you! | Passbolt</title>
-	<?php include('includes/AA_meta.php'); ?>
-	<?php include('includes/AA_header_scripts.php'); ?>
+	<?php include('includes/meta/AA_meta.php'); ?>
+	<?php include('includes/headers/AA_header_scripts.php'); ?>
 </head>
 <body>
 <!-- main - html5 -->
 <div id="container" class="page thankyou">
-<?php include('includes/AA_header.php'); ?>
+<?php include('includes/headers/AA_header.php'); ?>
 	<div class="grid grid-responsive-12">
 		<div class="row bird2">
 			<div class="col12 last">

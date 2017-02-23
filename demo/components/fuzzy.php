@@ -11,7 +11,7 @@
 <body >
 <div  id="faq-list" class="page background">
 	<!-- first header -->
-	<?php include('includes/AA_header.php'); ?>
+	<?php include('includes/headers/AA_header.php'); ?>
 
 	<!-- second header -->
 	<div class="header second">

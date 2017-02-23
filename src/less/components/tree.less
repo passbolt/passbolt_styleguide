@@ -45,6 +45,12 @@
 		background:@grey-lightest;
 	}
 	/* ellipsis on long node text */
+	.main-cell h3 {
+		margin: 0 .25em 0 1em;
+		padding:.25em 0;
+		.ellipsis();
+	}
+
 	.main-cell span {
 		.ellipsis();
 		display:block;
@@ -87,7 +93,7 @@
 		width: 1em ;
 		height:1em;
 		margin-right:.4em;
-		margin-top:-1.35em;
+		margin-top:-1.4em;
 	}
 	.row .right-cell a {
 		height:1em;
@@ -97,6 +103,7 @@
 		filter:alpha(opacity=0);
 		border:1px solid @border-default;
 	}
+	.row  .right-cell a:focus,
 	.row:hover .right-cell a {
 		opacity:.8;
 		filter:alpha(opacity=80);
