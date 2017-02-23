@@ -12,16 +12,7 @@
                 <p>
                     <strong>You are about to delete the group "IT Support"!</strong>
                 </p>
-                <p>This group currently own 5 passwords. Please select a group manager to transfer
-                the ownership to. Other users in this group will lose access to these passwords.</p>
-                <div class="input select required">
-                    <label for="Owner">New Owner</label>
-                    <select name="data[User][uuid]" id="OwnerId" class="fluid">
-                        <option value="<UUID>" selected="selected">Ada Lovelace (ada@passbolt.com)</option>
-                        <option value="<UUID>" >Betty Holberton (betty@passbolt.com)</option>
-                        <option value="<UUID>" >Carol Shaw (carol@passbolt.com)</option>
-                    </select>
-                </div>
+                <p>This group is not associated with any password. You are good to go!</p>
             </div>
 
             <div class="submit-wrapper clearfix">
