@@ -2903,9 +2903,8 @@ article ol.lower-alpha {
 	.disabled		- Dims the button to indicate it cannot be used
 */
 input[type=submit],
-input.button,
 button,
-a.button {
+.button {
   position: relative;
   font-size: 0.875em;
   /*	14px */
@@ -2950,45 +2949,50 @@ a.button.big {
   margin-top: 1em;
   min-width: 3em;
 }
-input.button.primary,
-button.primary,
-a.button.primary {
+/* primary */
+.button.primary,
+button.primary {
   background: #2894df;
   border: 1px solid #2894df;
   color: #FFF;
   text-shadow: 0 1px 0 rgba(0, 0, 0, 0.2);
 }
-input.button.primary:hover,
+.button.primary:hover,
 button.primary:hover,
-a.button.primary:hover,
-input.button.primary:active,
 button.primary:active,
-a.button.primary:active {
+.button.primary:active {
   border: 1px solid #2a9ceb;
   background: #2a9ceb;
 }
-input.button.primary:focus,
-button.primary:focus,
-a.button.primary:focus {
+.button.primary:focus,
+button.primary:focus {
   border: 1px solid #2894df;
   background: #2a9ceb;
 }
-a.button.cancel,
-a.button.cancel:focus,
-a.button.cancel:hover,
-a.button.cancel:active,
-a.button.dim,
-a.button.dim:focus,
-a.button.dim:hover,
-a.button.dim:active {
+/* warning */
+.button.warning,
+.button.warning:hover,
+.button.warning:focus,
+.button.warning:active {
+  background: #d40101;
+  border: 1px solid #d40101;
+}
+/* cancel */
+.button.cancel,
+.button.cancel:focus,
+.button.cancel:hover,
+.button.cancel:active,
+.button.dim,
+.button.dim:focus,
+.button.dim:hover,
+.button.dim:active {
   background: #ffffff;
   font-weight: normal;
 }
 /* hover */
 input[type=submit]:hover,
-input.button:hover,
-button:hover,
-a.button:hover {
+.button:hover,
+button:hover {
   text-decoration: none;
   background: #eeeeee;
   background-image: -moz-linear-gradient(top, #f3f3f3, #eeeeee);
@@ -3001,16 +3005,13 @@ a.button:hover {
 }
 /* focus */
 input[type=submit]:focus,
-input.button:focus,
-button:focus,
-a.button:focus {
+.button:focus,
+button:focus {
   border: 1px solid #2894df;
 }
 /* active */
-input[type=submit]:active,
-input.button:active,
-button:active,
-a.button:active {
+input[type=submit]:active button:active,
+.button:active {
   background: #ededed;
   position: relative;
   -webkit-box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.2);
@@ -3019,9 +3020,8 @@ a.button:active {
   border: 1px solid #cccccc;
 }
 input[type=submit].disabled,
-input.button.disabled,
 button.disabled,
-a.button.disabled {
+.button.disabled {
   cursor: default;
   color: #888888;
   background: #ffffff;
@@ -3031,17 +3031,14 @@ a.button.disabled {
 }
 /* inactive */
 input[type=submit].disabled:hover,
-input.button.disabled:hover,
+.button.disabled:hover,
 button.disabled:hover,
-a.button.disabled:hover,
 input[type=submit].disabled:active,
-input.button.disabled:active,
 button.disabled:active,
-a.button.disabled:active,
+.button.disabled:active,
 input[type=submit].disabled:focus,
-input.button.disabled:focus,
 button.disabled:focus,
-a.button.disabled:focus {
+.button.disabled:focus {
   -webkit-box-shadow: 0 0 0;
   -moz-box-shadow: 0 0 0;
   box-shadow: 0 0 0;

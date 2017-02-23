@@ -7,7 +7,7 @@
 <div class="dialog-wrapper">
 	<div class="dialog confirm">
 		<div class="dialog-header">
-			<h2>Do you really want to delete password ?</h2>
+			<h2>Do you really want to delete password?</h2>
 			<a class="dialog-close js-dialog-close" href="#">
 				<i class="fa fa-close"></i>
 				<span class="visuallyhidden">close</span>
@@ -16,7 +16,7 @@
 		<div class="js_dialog_content dialog-content">
 			<div class="form-content">
 				<p>
-					Please confirm you really want to delete the password. Ater clicking ok, the password will be <strong>deleted permanently</strong>.
+					Please confirm you really want to delete the password. After clicking ok, the password will be <strong>deleted permanently</strong>.
 				</p>
 			</div>
 
