@@ -4,14 +4,14 @@
 	<?php include('includes/meta/LU_meta.php'); ?>
 </head>
 <body>
-<div id="container" class="page password">
+<?php include('includes/nav/LU_nav_tree_groups_contextual_menu.php'); ?>
+<div id="container" class="page people">
 	<div class="mad_event_event_bus"></div>
 	<div id="js_app_controller" class="passbolt_controller_app_controller mad_view_view js_component ready">
 		<!-- edit dialog -->
-		<?php $password = "passwordclear";
-    		include('includes/dialogs/LU_password_edit.php');
-    	?>
-		<!-- LU_passwords -->
+		<?php include('includes/dialogs/LU_user_edit_group.php'); ?>
+		
+		<!-- regular underlying workspace -->
 		<?php include('includes/LU_loadingbar.php'); ?>
 		<?php include('includes/LU_notifications.php'); ?>
 		<?php include('includes/headers/LU_header_first.php'); ?>
@@ -21,24 +21,26 @@
 			<?php include('includes/headers/LU_header_userbadge.php'); ?>
 		</div>
 		<div class="header third">
-			<?php include('includes/headers/LU_header_third_main_action_passwords.php'); ?>
-			<?php include('includes/headers/LU_header_third_actions_passwords.php'); ?>
+			<?php include('includes/headers/LU_header_third_main_action_users.php'); ?>
+			<?php include('includes/headers/LU_header_third_actions_users.php'); ?>
 		</div>
 		<div id="js_app_panel_main" class="panel main mad_controller_component_tab_controller mad_view_component_tab js_component ready">
 			<div class="js_tabs_content tabs-content">
-				<div id="js_passbolt_passwordWorkspace_controller" class="passbolt_controller_password_workspace_controller mad_view_view tab-content ready selected">
+				<div class="passbolt_controller_password_workspace_controller mad_view_view tab-content ready selected">
 					<div class="js_workspace">
 						<div class="panel left">
-							<?php include('includes/nav/LU_nav_shortcuts_passwords.php'); ?>
-							<?php include('includes/nav/LU_nav_tree_passwords.php'); ?>
+							<?php include('includes/nav/LU_nav_shortcuts_users2.php'); ?>
+							<?php include('includes/nav/LU_nav_tree_groups.php'); ?>
 						</div>
 						<div class="panel middle">
 							<?php
 							$_GET['breadcrumbs'] = array(
-								'all passwords' => '../demo/LU_passwords.php'
+								'all users' => '../demo/LU_users.php',
+								'IT Support (group)' => '../demo/LU_users.php'
 							);
 							include('includes/LU_breadcrumbs.php'); ?>
-							<?php include('includes/tableviews/LU_tableview_passwords.php'); ?>
+							<?php include('includes/tableviews/LU_tableview_users_group_selected.php'); ?>
+							<?php include('includes/sidebars/LU_aside_group.php'); ?>
 						</div>
 					</div>
 				</div>

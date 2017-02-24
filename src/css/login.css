@@ -2890,7 +2890,7 @@ label {
   /* 18px */
   line-height: 1.333333em;
   /* 24px */
-  padding: .2em;
+  padding: .25em 0;
   display: block;
 }
 /*
@@ -3028,13 +3028,11 @@ textarea {
 	Checkboxes and Radio
 */
 .checkboxlist .input.checkbox label,
-.radiolist .input.radio label {
+.radiolist .input.radio label,
+input[type=checkbox] + label {
   font-weight: normal;
   display: inline;
-}
-.checkbox label {
-  font-weight: normal;
-  display: inline;
+  margin-left: .25em;
 }
 /* radio and checkboxes */
 /*
@@ -3043,32 +3041,23 @@ textarea {
 	Description	: <div.text.error>, <div.text.success>, can be used to add status messages or example.
 	Additional messages are wrapped in <.error-message>, <.success-messages>
 
-	.success - can be used for instant validation feedback
-	.notice - can be used for example messages prior validation
-	.error - error messages used for validation issues
+	.error - can be used for validation feedback
+	.helptext - can be used for example messages prior validation
 */
 .input .message {
-  font-weight: bold;
   padding: 0;
   padding-left: .25em;
   padding-bottom: .5em;
   font-size: .813em;
+  margin-top: .125em;
   margin-bottom: .25em;
   background-color: transparent;
   border: 0;
   /* colors for messages */
 }
 .input .message.error {
+  font-weight: bold;
   color: #d40101;
-}
-.input .message.success {
-  color: #009900;
-}
-.input .message.warning {
-  color: #9f6000;
-}
-.input .message.notice {
-  color: #2894df;
 }
 .input .message.helptext {
   color: #888888;

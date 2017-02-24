@@ -4,32 +4,23 @@
 	Description	: <div.text.error>, <div.text.success>, can be used to add status messages or example.
 	Additional messages are wrapped in <.error-message>, <.success-messages>
 
-	.success - can be used for instant validation feedback
-	.notice - can be used for example messages prior validation
-	.error - error messages used for validation issues
+	.error - can be used for validation feedback
+	.helptext - can be used for example messages prior validation
 */
 .input .message {
-	font-weight:bold;
 	padding:0;
 	padding-left:.25em;
 	padding-bottom:.5em;
 	font-size:.813em;
+	margin-top:.125em;
 	margin-bottom:.25em;
 	background-color:transparent;
 	border:0;
 
 	/* colors for messages */
 	&.error {
+		font-weight:bold;
 		color: @red;
-	}
-	&.success {
-		color:@green;
-	}
-	&.warning {
-		color:@orange;
-	}
-	&.notice {
-		color:@blue;
 	}
   	&.helptext {
 	  	color:@grey-darker;
