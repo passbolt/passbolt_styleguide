@@ -5,7 +5,7 @@
                 Edit User
                 <span class="dialog-header-subtitle">Ada Lovelace</span>
             </h2>
-            <a class="dialog-close" href="../demo/LU_users.php">
+            <a class="dialog-close" href="../demo/AD_users.php">
                 <i class="fa fa-close"></i>
                 <span class="visuallyhidden">close</span>
             </a>
@@ -17,7 +17,7 @@
                         <div class="row">
                             <div class="main-cell-wrapper">
                                 <div class="main-cell">
-                                    <a href="../demo/LU_users_edit.php"><span>Account</span></a>
+                                    <a href="../demo/AD_users_edit_user.php"><span>Account</span></a>
                                 </div>
                             </div>
                         </div>
@@ -26,7 +26,7 @@
                         <div class="row selected">
                             <div class="main-cell-wrapper">
                                 <div class="main-cell">
-                                    <a class="selected" href="../demo/LU_users_edit_group.php"><span>Groups</span></a>
+                                    <a class="selected" href="../demo/AD_users_edit_user_group.php"><span>Groups</span></a>
                                 </div>
                             </div>
                         </div>
@@ -38,7 +38,10 @@
                         <?php include('includes/dialogs/share/LU_permissions_list_group_empty.php'); ?>
                         <?php include('includes/dialogs/share/LU_permission_warning_group_empty.php'); ?>
                         <?php include('includes/dialogs/share/LU_permission_add_group.php'); ?>
-                        <?php include('includes/dialogs/share/LU_permission_dialog_buttons.php'); ?>
+                        <div class="submit-wrapper clearfix">
+                            <a class="button primary" href="../demo/AD_users.php">save</a>
+                            <a class="js-dialog-cancel cancel" href="../demo/AD_users.php">cancel</a>
+                        </div>
                     </div>
                 </div>
             </div>

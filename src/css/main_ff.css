@@ -4199,6 +4199,11 @@ article video {
 .dialog .share-tab .permission-edit,
 .sidebar .shared-with .permission-edit {
   padding: 0em;
+  border-bottom: 1px solid #f3f3f3;
+}
+.dialog .share-tab.group .permission-edit,
+.sidebar .shared-with.group .permission-edit {
+  border-top: 1px solid #f3f3f3;
 }
 .dialog .share-tab .permissions.scroll,
 .sidebar .shared-with .permissions.scroll {
@@ -4280,7 +4285,7 @@ article video {
 .sidebar .shared-with .row .user,
 .dialog .share-tab .row .group,
 .sidebar .shared-with .row .group {
-  width: 50%;
+  width: 48%;
   float: left;
   padding-left: 1em;
   padding-right: 1em;
@@ -4344,7 +4349,7 @@ article video {
 .dialog .share-tab .row .details .name,
 .sidebar .shared-with .row .details .name {
   float: left;
-  max-width: 200px;
+  max-width: 190px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -4381,7 +4386,7 @@ article video {
 .sidebar .shared-with .row .rights {
   float: left;
   margin-top: .5em;
-  width: 25%;
+  width: 27%;
 }
 .dialog .share-tab .row .rights select,
 .sidebar .shared-with .row .rights select {
@@ -4424,6 +4429,10 @@ article video {
 .sidebar .shared-with .message {
   font-size: 0.813em;
   padding-left: 2em;
+}
+.dialog .share-tab .message.empty-permission,
+.sidebar .shared-with .message.empty-permission {
+  margin-top: -1em;
 }
 .dialog .share-tab .permission-add,
 .sidebar .shared-with .permission-add {

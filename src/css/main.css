@@ -4864,6 +4864,7 @@ input[type="search"]::-webkit-search-cancel-button {
 }
 .dropdown .button:focus {
   border: 1px solid #dddddd;
+  color: #333333;
   background: #ffffff;
   z-index: 801;
   border-bottom: 0;
@@ -6465,6 +6466,11 @@ table.table-info.horizontal tbody tr:nth-child(even) {
 .dialog .share-tab .permission-edit,
 .sidebar .shared-with .permission-edit {
   padding: 0em;
+  border-bottom: 1px solid #f3f3f3;
+}
+.dialog .share-tab.group .permission-edit,
+.sidebar .shared-with.group .permission-edit {
+  border-top: 1px solid #f3f3f3;
 }
 .dialog .share-tab .permissions.scroll,
 .sidebar .shared-with .permissions.scroll {
@@ -6546,7 +6552,7 @@ table.table-info.horizontal tbody tr:nth-child(even) {
 .sidebar .shared-with .row .user,
 .dialog .share-tab .row .group,
 .sidebar .shared-with .row .group {
-  width: 50%;
+  width: 48%;
   float: left;
   padding-left: 1em;
   padding-right: 1em;
@@ -6610,7 +6616,7 @@ table.table-info.horizontal tbody tr:nth-child(even) {
 .dialog .share-tab .row .details .name,
 .sidebar .shared-with .row .details .name {
   float: left;
-  max-width: 200px;
+  max-width: 190px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -6647,7 +6653,7 @@ table.table-info.horizontal tbody tr:nth-child(even) {
 .sidebar .shared-with .row .rights {
   float: left;
   margin-top: .5em;
-  width: 25%;
+  width: 27%;
 }
 .dialog .share-tab .row .rights select,
 .sidebar .shared-with .row .rights select {
@@ -6690,6 +6696,10 @@ table.table-info.horizontal tbody tr:nth-child(even) {
 .sidebar .shared-with .message {
   font-size: 0.813em;
   padding-left: 2em;
+}
+.dialog .share-tab .message.empty-permission,
+.sidebar .shared-with .message.empty-permission {
+  margin-top: -1em;
 }
 .dialog .share-tab .permission-add,
 .sidebar .shared-with .permission-add {
@@ -6907,6 +6917,11 @@ table.table-info.horizontal tbody tr:nth-child(even) {
 .panel.aside .user li textarea,
 .panel.aside .group li textarea {
   width: 100%;
+}
+/* edit group dialog */
+.edit-group-dialog .permission-edit {
+  margin-top: -1em;
+  border-top: 1px solid #f3f3f3;
 }
 /* tabel view adjustments for avatar */
 .page.people .tableview-header th.cell_avatar {

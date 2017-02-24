@@ -7,6 +7,10 @@
 
 	.permission-edit {
 		padding:0em;
+		border-bottom:1px solid @grey-lightest;
+	}
+	&.group .permission-edit {
+		border-top:1px solid @grey-lightest;
 	}
 
 	/* list of existing permissions settings */
@@ -33,7 +37,7 @@
 		}
 		.user,
 		.group {
-			width:50%;
+			width:48%;
 			float:left;
 			padding-left:1em;
 			padding-right:1em;
@@ -42,7 +46,7 @@
 			.clearfix();
 			.name {
 				float:left;
-				max-width:200px;
+				max-width:190px;
 				.ellipsis();
 			}
 			.more_details {
@@ -64,7 +68,7 @@
 		.rights {
 			float:left;
 			margin-top:.5em;
-			width:25%;
+			width:27%;
 			select {
 				width:95%;
 				font-size: 1em;
@@ -108,7 +112,9 @@
 		font-size:0.813em;
 		padding-left:2em;
 	}
-
+	.message.empty-permission {
+		margin-top:-1em;
+	}
 	.permission-add {
 		background-color: @white;
 		padding: 0 1em 1em 1em;

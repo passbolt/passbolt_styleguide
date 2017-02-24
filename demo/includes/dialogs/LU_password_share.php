@@ -10,7 +10,6 @@
                     <form style="display: none;" class="passbolt_form_resource_create tab-content mad_view_form hidden" id="js_rs_edit"></form>
                     <div class="passbolt_component_permissions share-tab tab-content passbolt_view_component_permissions ready selected" id="js_rs_permission">
                         <?php include('includes/dialogs/share/LU_permissions_list.php'); ?>
-                        <?php include('includes/dialogs/share/LU_permission_warning.php'); ?>
                         <?php include('includes/dialogs/share/LU_permission_add.php'); ?>
                         <?php include('includes/dialogs/share/LU_permission_dialog_buttons.php'); ?>
                     </div>

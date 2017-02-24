@@ -1,8 +1,8 @@
 <div class="dialog-wrapper">
-    <div class="dialog confirm">
+    <div class="dialog confirm delete-group-dialog">
         <div class="dialog-header">
             <h2>Are you sure?</h2>
-            <a class="dialog-close js-dialog-close" href="#">
+            <a class="dialog-close js-dialog-close" href="../demo/AD_users.php">
                 <i class="fa fa-close"></i>
                 <span class="visuallyhidden">close</span>
             </a>
@@ -25,8 +25,8 @@
             </div>
 
             <div class="submit-wrapper clearfix">
-                <input type="submit" value="delete group" class="button primary warning">
-                <a class="js-dialog-close cancel" href="#">cancel</a>
+                <a class="button primary warning" href="../demo/AD_users.php">delete group</a>
+                <a class="js-dialog-cancel cancel" href="../demo/AD_users.php">cancel</a>
             </div>
         </div>
     </div>
