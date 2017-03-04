@@ -10,8 +10,8 @@
 	];
 ?>
 
-<div class="navigation flat tree groups">
-	<ul>
+<div class="navigation flat tree groups passbolt_component_groups js_component mad_view ready">
+	<ul id="js_wsp_users_groups_menu">
 		<li class="open node root group-header">
 			<div class="row title">
 				<div class="main-cell-wrapper">
@@ -26,7 +26,7 @@
 		</li>
 	</ul>
 
-	<ul>
+	<ul id="js_wsp_users_groups_list" class="passbolt_component_groups_list tree mad_view_component_tree ready">
 <?php foreach($groups as $group): ?>
 		<li class="open node root group-item">
 			<div class="row <?php if($group['Group']['selected']) echo 'selected'; ?>">
