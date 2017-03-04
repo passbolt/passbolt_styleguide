@@ -9,6 +9,7 @@
 		['Group' => ['name' => 'Social Media', 'selected' => false, 'editable' => false]]
 	];
 ?>
+
 <div class="navigation flat tree groups">
 	<ul>
 		<li class="open node root group-header">
@@ -23,6 +24,9 @@
 				</div>
 			</div>
 		</li>
+	</ul>
+
+	<ul>
 <?php foreach($groups as $group): ?>
 		<li class="open node root group-item">
 			<div class="row <?php if($group['Group']['selected']) echo 'selected'; ?>">
