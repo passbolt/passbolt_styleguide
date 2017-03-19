@@ -9,27 +9,27 @@
                 <span class="visuallyhidden">close</span>
             </a>
         </div>
-        <div class="js_dialog_content dialog-content share-tab">
-            <form id="c5c77b2a-dee0-2362-8e1b-9256e49bc0bd" class="passbolt_form_user_create form mad_view_form ready"></form>
-            <div class="form-content">
-                <input name="passbolt.model.User.active" id="js_field_user_active" class="form_field mad_form_textbox form-element mad_view_form_textbox ready" value="" type="hidden">
-                <div class="input text required clearfix">
-                    <label for="js_field_group_name">Group Name</label>
-                    <input name="passbolt.model.Group.name" class="required mad_form_textbox form-element mad_view_form_textbox ready" maxlength="50" id="js_field_group_name" placeholder="group name" type="text">
-                    <div id="js_field_group_name_feedback" class="message mad_form_feedback js_component mad_view ready">
+        <div class="js_dialog_content dialog-content">
+            <div id="56ccb992-111e-7e68-c988-09cf96c793fe" class="passbolt_component_group_edit share-tab edit-group-dialog passbolt_view_component_group_edit ready">
+                <form id="js_group_edit_form" class="passbolt_form_group_create group_edit_form form mad_view_form ready">
+                    <div class="form-content">
+                        <div class="input text required clearfix">
+                            <label for="js_field_name">Group Name</label>
+                            <input name="passbolt.model.Group.name" class="required mad_form_textbox form-element mad_view_form_textbox ready" maxlength="50" id="js_field_name" placeholder="group name" type="text">
+                            <div id="js_field_name_feedback" class="message mad_form_feedback js_component mad_view ready">
+                            </div>
+                        </div>
                     </div>
+                </form>
+                <?php
+                $groupUsersEmpty = true;
+                include('includes/dialogs/share/AD_permissions_list_create_group.php');
+                ?>
+                <?php include('includes/dialogs/share/AD_permission_add_group_people.php'); ?>
+                <div class="submit-wrapper clearfix">
+                    <a class="button primary" href="../demo/AD_users.php">save</a>
+                    <a class="js-dialog-cancel cancel" href="../demo/AD_users.php">cancel</a>
                 </div>
-                <div class="input required">
-                    <label for="js_field_group_permission">Group members</label>
-                </div>
-            </div>
-            <div class="message warning empty-permission">
-                The group is empty, please add a group manager.
-            </div>
-            <?php include('includes/dialogs/share/AD_permission_add_group_people.php'); ?>
-            <div class="submit-wrapper clearfix">
-                <a class="button primary" href="../demo/AD_users.php">save</a>
-                <a class="js-dialog-cancel cancel" href="../demo/AD_users.php">cancel</a>
             </div>
         </div>
     </div>

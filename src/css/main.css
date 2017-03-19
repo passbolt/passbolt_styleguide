@@ -6769,6 +6769,27 @@ table.table-info.horizontal tbody tr:nth-child(even) {
   width: 75%;
   padding-top: 0;
 }
+.edit-group-dialog .group_edit_form .form-content {
+  padding-bottom: 0;
+}
+.edit-group-dialog .group_members {
+  margin-top: -0.5em;
+}
+.edit-group-dialog .group_members .message.warning.empty-permission {
+  margin-top: 0px;
+}
+.edit-group-dialog .group_members ul.permissions {
+  display: block;
+}
+.edit-group-dialog .group_members .message.warning.empty-permission {
+  display: none;
+}
+.edit-group-dialog .group_members.empty ul.permissions {
+  display: none;
+}
+.edit-group-dialog .group_members.empty .message.warning.empty-permission {
+  display: block;
+}
 /* hide icons if there is no space */
 @media all and (max-width: 480px) {
   .dialog .share-tab .permissions.scroll {

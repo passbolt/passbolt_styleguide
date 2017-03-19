@@ -16,11 +16,17 @@
   display: block;
   height: 5em;
 }
-#passbolt-iframe-password-share {
+#passbolt-iframe-password-share,
+#passbolt-iframe-group-edit {
   width: 100%;
   display: block;
 }
-#passbolt-iframe-password-share-autocomplete {
+#passbolt-group-edit-autocomplete-wrapper {
+  position: relative;
+  width: 100%;
+}
+#passbolt-iframe-password-share-autocomplete,
+#passbolt-iframe-group-edit-autocomplete {
   position: absolute;
   top: 0;
   left: 0;
@@ -31,7 +37,8 @@
   #passbolt-iframe-secret-edition {
     height: 8em;
   }
-  #passbolt-iframe-password-share-autocomplete {
+  #passbolt-iframe-password-share-autocomplete,
+  #passbolt-iframe-group-edit-autocomplete {
     top: 0;
     position: relative;
   }
