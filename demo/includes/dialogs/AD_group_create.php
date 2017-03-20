@@ -13,7 +13,7 @@
             <div id="56ccb992-111e-7e68-c988-09cf96c793fe" class="passbolt_component_group_edit share-tab edit-group-dialog passbolt_view_component_group_edit ready">
                 <form id="js_group_edit_form" class="passbolt_form_group_create group_edit_form form mad_view_form ready">
                     <div class="form-content">
-                        <div class="input text required clearfix">
+                        <div class="input text required clearfix js_form_element_wrapper">
                             <label for="js_field_name">Group Name</label>
                             <input name="passbolt.model.Group.name" class="required mad_form_textbox form-element mad_view_form_textbox ready" maxlength="50" id="js_field_name" placeholder="group name" type="text">
                             <div id="js_field_name_feedback" class="message mad_form_feedback js_component mad_view ready">

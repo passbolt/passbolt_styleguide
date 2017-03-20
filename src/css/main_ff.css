@@ -4505,6 +4505,12 @@ article video {
 .edit-group-dialog .group_edit_form .form-content {
   padding-bottom: 0;
 }
+.edit-group-dialog .group_edit_form .form-content .input.text input[type="text"] {
+  width: 95%;
+}
+.edit-group-dialog .group_edit_form .form-content .input.text .message {
+  padding-left: 0;
+}
 .edit-group-dialog .group_members {
   margin-top: -0.5em;
 }
