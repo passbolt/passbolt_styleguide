@@ -3453,7 +3453,7 @@ input[type=text].fluid {
 }
 .panel.main {
   top: 10em;
-  bottom: 2em;
+  bottom: 2.45em;
   height: auto;
   padding: 0;
 }
@@ -5290,7 +5290,8 @@ input[type="search"]::-webkit-search-cancel-button {
 .tree .row {
   float: left;
   width: 100%;
-  margin-left: .5em;
+  padding-left: .5em;
+  box-sizing: border-box;
 }
 .tree .main-cell-wrapper {
   float: left;
@@ -5697,11 +5698,11 @@ input[type="search"]::-webkit-search-cancel-button {
 /* main content */
 .tableview-content {
   top: 2.125em;
-  bottom: 45px;
+  bottom: 2.45em;
   padding: 0;
   position: absolute;
   width: 100%;
-  border-top: 1px solid #DDD;
+  border-top: 1px solid #dddddd;
   overflow-y: scroll;
 }
 .tableview-content table {
@@ -5760,10 +5761,13 @@ input[type="search"]::-webkit-search-cancel-button {
   height: 1em;
   background: #FFFAE7;
 }
-.tableview table .checkbox label {
+.tableview table .input.checkbox {
+  padding-top: 2px;
+}
+.tableview table .input.checkbox label {
   display: none;
 }
-.tableview table .checkbox input {
+.tableview table .input.checkbox input {
   margin-top: 0;
   float: left;
 }
@@ -5775,10 +5779,6 @@ input[type="search"]::-webkit-search-cancel-button {
 .tableview table td.cell_favorite {
   width: 20px;
   max-width: 20px;
-}
-.tableview table th.cell_favorite i:before,
-.tableview table td.cell_favorite i:before {
-  vertical-align: -1px;
 }
 /* hide secondary actions if there is no space */
 @media all and (max-width: 600px) {

@@ -38,11 +38,11 @@
 /* main content */
 .tableview-content {
 	top:2.125em;
-	bottom:45px;
+	bottom:2.45em;
 	padding:0;
 	position:absolute;
 	width:100%;
-	border-top:1px solid #DDD;
+	border-top:1px solid @border-default;
 	overflow-y:scroll;
 }
 .tableview-content table {
@@ -95,12 +95,16 @@
 		height:1em;
 		background:#FFFAE7;
 	}
-	.checkbox label {
-		display:none;
-	}
-	.checkbox input{
-		margin-top:0;
-		float:left;
+	.input.checkbox {
+		padding-top:2px;
+
+		label {
+			display: none;
+		}
+		input {
+			margin-top: 0;
+			float: left;
+		}
 	}
 	th span,
 	td span {
@@ -112,9 +116,6 @@
 	td.cell_favorite {
 		width:20px;
 		max-width: 20px;
-		i:before {
-			vertical-align: -1px;
-		}
 	}
 }
 /* hide secondary actions if there is no space */
