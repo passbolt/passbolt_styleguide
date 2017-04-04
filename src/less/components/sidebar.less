@@ -63,13 +63,6 @@
         width:100%;
       }
     }
-
-    .usercard-col-2 {
-      .subinfo {
-        font-size: 0.929em; /* 13px */
-      }
-    }
-
     .dialog-close {
       position:absolute;
       right:.5em;
@@ -91,7 +84,14 @@
       line-height:normal;
     }
   }
+  .sharedwith {
+      .user, .group {
+        width: 75%;
+        padding-top: 0;
+      }
+  }
 }
+
 /* place sidebar on top of everything when there is no space */
 @media all and (max-width: 1024px) {
   .panel.aside {

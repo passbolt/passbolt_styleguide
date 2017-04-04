@@ -3390,23 +3390,7 @@ form .input .inline.message {
 /* error messages */
 select {
   font-size: 16px;
-  color: #333333;
-  background: #ffffff;
-  width: 15.375em;
-  /* 20 char (default input length) x .7em (average char length) */
-  padding: .375em .625em .375em .625em;
-  line-height: 24px;
-  margin-bottom: .5em;
-  border: 1px solid #cccccc;
-  border-top: 1px solid #bbbbbb;
-  display: inline-block;
-  -ms-box-sizing: content-box;
-  -moz-box-sizing: content-box;
-  -webkit-box-sizing: content-box;
-  box-sizing: content-box;
-}
-select:disabled {
-  background: #f3f3f3;
+  margin: .55em 0;
 }
 /* select */
 input[type=file] {
@@ -4379,6 +4363,8 @@ input[type="search"]::-webkit-search-cancel-button {
 }
 .usercard-col-2 .content-wrapper .content .subinfo {
   color: #888888;
+  font-size: 0.929em;
+  /* 13px */
 }
 .usercard-col-2 .avatar {
   float: left;
@@ -5585,12 +5571,6 @@ input[type="search"]::-webkit-search-cancel-button {
   box-sizing: border-box;
   width: 100%;
 }
-.panel.aside .resource .usercard-col-2 .subinfo,
-.panel.aside .group .usercard-col-2 .subinfo,
-.panel.aside .user .usercard-col-2 .subinfo {
-  font-size: 0.929em;
-  /* 13px */
-}
 .panel.aside .resource .dialog-close,
 .panel.aside .group .dialog-close,
 .panel.aside .user .dialog-close {
@@ -5616,6 +5596,11 @@ input[type="search"]::-webkit-search-cancel-button {
   min-height: 30em;
   font-size: .625em;
   line-height: normal;
+}
+.panel.aside .sharedwith .user,
+.panel.aside .sharedwith .group {
+  width: 75%;
+  padding-top: 0;
 }
 /* place sidebar on top of everything when there is no space */
 @media all and (max-width: 1024px) {
@@ -6442,43 +6427,11 @@ table.table-info.horizontal tbody tr:nth-child(even) {
   transform: rotate(45deg);
   z-index: 999;
 }
-.input-password-wrapper {
-  overflow: hidden;
-}
-.input-password-wrapper .message.error {
-  display: block;
-  clear: both;
-  width: 92%;
-  padding-bottom: .5em;
-  font-size: .813em;
-}
-/* password share tab */
-.dialog .share-tab,
-.sidebar .shared-with {
-  /* list of existing permissions settings */
-  /* new/updated permissions */
-  /* message */
-}
-.dialog .share-tab .form-content,
-.sidebar .shared-with .form-content {
-  padding: 1em;
-}
-.dialog .share-tab .permission-edit,
-.sidebar .shared-with .permission-edit {
-  padding: 0em;
-  border-bottom: 1px solid #f3f3f3;
-}
-.dialog .share-tab.group .permission-edit,
-.sidebar .shared-with.group .permission-edit {
-  border-top: 1px solid #f3f3f3;
-}
-.dialog .share-tab .permissions.scroll,
-.sidebar .shared-with .permissions.scroll {
+.permissions.scroll {
   max-height: 19em;
   margin: 0;
 }
-.dialog .share-tab .row,
-.sidebar .shared-with .row {
+.permissions .row {
   /*
  * For IE 6/7 only
  * Include this rule to trigger hasLayout and contain floats.
@@ -6511,54 +6464,44 @@ table.table-info.horizontal tbody tr:nth-child(even) {
  *	`:before` to contain the top-margins of child elements.
  */
   font-size: .813em;
-  padding: .825em .5em .5em 1em;
+  padding: 1em .5em .875em 1em;
   border-bottom: 1px dotted #dddddd;
   /* user summary */
   /* row actions */
+  /* new/updated permissions */
 }
-.dialog .share-tab .row:before,
-.sidebar .shared-with .row:before,
-.dialog .share-tab .row:after,
-.sidebar .shared-with .row:after {
+.permissions .row:before,
+.permissions .row:after {
   content: "";
   display: table;
 }
-.dialog .share-tab .row:after,
-.sidebar .shared-with .row:after {
+.permissions .row:after {
   clear: both;
 }
-.dialog .share-tab .row:before,
-.sidebar .shared-with .row:before,
-.dialog .share-tab .row:after,
-.sidebar .shared-with .row:after {
+.permissions .row:before,
+.permissions .row:after {
   content: "";
   display: table;
 }
-.dialog .share-tab .row:after,
-.sidebar .shared-with .row:after {
+.permissions .row:after {
   clear: both;
 }
-.dialog .share-tab .row:last-child,
-.sidebar .shared-with .row:last-child {
+.permissions .row:last-child {
   border: 0;
 }
-.dialog .share-tab .row .avatar img,
-.sidebar .shared-with .row .avatar img {
+.permissions .row .avatar img {
   width: 36px;
   height: 36px;
   float: left;
 }
-.dialog .share-tab .row .user,
-.sidebar .shared-with .row .user,
-.dialog .share-tab .row .group,
-.sidebar .shared-with .row .group {
+.permissions .row .user,
+.permissions .row .group {
   width: 48%;
   float: left;
   padding-left: 1em;
   padding-right: 1em;
 }
-.dialog .share-tab .row .details,
-.sidebar .shared-with .row .details {
+.permissions .row .details {
   /*
  * For IE 6/7 only
  * Include this rule to trigger hasLayout and contain floats.
@@ -6591,30 +6534,23 @@ table.table-info.horizontal tbody tr:nth-child(even) {
  *	`:before` to contain the top-margins of child elements.
  */
 }
-.dialog .share-tab .row .details:before,
-.sidebar .shared-with .row .details:before,
-.dialog .share-tab .row .details:after,
-.sidebar .shared-with .row .details:after {
+.permissions .row .details:before,
+.permissions .row .details:after {
   content: "";
   display: table;
 }
-.dialog .share-tab .row .details:after,
-.sidebar .shared-with .row .details:after {
+.permissions .row .details:after {
   clear: both;
 }
-.dialog .share-tab .row .details:before,
-.sidebar .shared-with .row .details:before,
-.dialog .share-tab .row .details:after,
-.sidebar .shared-with .row .details:after {
+.permissions .row .details:before,
+.permissions .row .details:after {
   content: "";
   display: table;
 }
-.dialog .share-tab .row .details:after,
-.sidebar .shared-with .row .details:after {
+.permissions .row .details:after {
   clear: both;
 }
-.dialog .share-tab .row .details .name,
-.sidebar .shared-with .row .details .name {
+.permissions .row .details .name {
   float: left;
   max-width: 190px;
   white-space: nowrap;
@@ -6623,13 +6559,11 @@ table.table-info.horizontal tbody tr:nth-child(even) {
   -o-text-overflow: ellipsis;
   -ms-text-overflow: ellipsis;
 }
-.dialog .share-tab .row .details .more_details,
-.sidebar .shared-with .row .details .more_details {
+.permissions .row .details .more_details {
   margin-left: .5em;
   margin-top: 0;
 }
-.dialog .share-tab .row .details .email,
-.sidebar .shared-with .row .details .email {
+.permissions .row .details .email {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -6638,8 +6572,7 @@ table.table-info.horizontal tbody tr:nth-child(even) {
   font-weight: bold;
   padding-bottom: .125em;
 }
-.dialog .share-tab .row .permission_changes,
-.sidebar .shared-with .row .permission_changes {
+.permissions .row .permission_changes {
   color: #888888;
   white-space: nowrap;
   overflow: hidden;
@@ -6649,60 +6582,49 @@ table.table-info.horizontal tbody tr:nth-child(even) {
   display: block;
   border: 0;
 }
-.dialog .share-tab .row .rights,
-.sidebar .shared-with .row .rights {
+.permissions .row .rights {
   float: left;
   margin-top: .5em;
   width: 27%;
 }
-.dialog .share-tab .row .rights select,
-.sidebar .shared-with .row .rights select {
-  width: 95%;
+.permissions .row .rights select {
+  margin: 0;
   font-size: 1em;
 }
-.dialog .share-tab .row .actions,
-.sidebar .shared-with .row .actions {
+.permissions .row .actions {
   float: right;
-  margin-top: 1em;
+  margin-top: .55em;
 }
-.dialog .share-tab .row .actions a,
-.sidebar .shared-with .row .actions a {
+.permissions .row .actions a {
   font-size: 1.125em;
   padding: .25em .5em .2em .5em;
   border: 1px solid transparent;
 }
-.dialog .share-tab .row .actions a:hover,
-.sidebar .shared-with .row .actions a:hover {
+.permissions .row .actions a:hover {
   border: 1px solid #dddddd;
 }
-.dialog .share-tab .row.inherited-permission .inherited-actions,
-.sidebar .shared-with .row.inherited-permission .inherited-actions {
-  display: none;
-  float: right;
-}
-.dialog .share-tab .row.inherited-permission:hover .inherited-actions,
-.sidebar .shared-with .row.inherited-permission:hover .inherited-actions {
-  display: block;
-}
-.dialog .share-tab .row.inherited-permission .inherited-actions a,
-.sidebar .shared-with .row.inherited-permission .inherited-actions a {
-  color: #888888;
-}
-.dialog .share-tab .permission-updated,
-.sidebar .shared-with .permission-updated {
+.permissions .row.permission-updated {
   background: #FFFAE7;
 }
-.dialog .share-tab .message,
-.sidebar .shared-with .message {
-  font-size: 0.813em;
-  padding-left: 2em;
+.dialog {
+  /* message */
 }
-.dialog .share-tab .message.empty-permission,
-.sidebar .shared-with .message.empty-permission {
-  margin-top: -1em;
+.dialog .message.empty-permission {
+  font-size: 0.875em;
+  padding-left: 1em;
 }
-.dialog .share-tab .permission-add,
-.sidebar .shared-with .permission-add {
+/* hide icons if there is no space */
+@media all and (max-width: 480px) {
+  .dialog .permissions.scroll {
+    height: auto;
+    margin: 0;
+  }
+  .dialog .permissions .row .user,
+  .dialog .permissions .row .group {
+    width: 45%;
+  }
+}
+.dialog .permission-add {
   background-color: #ffffff;
   padding: 0 1em 1em 1em;
   /*
@@ -6737,37 +6659,76 @@ table.table-info.horizontal tbody tr:nth-child(even) {
  *	`:before` to contain the top-margins of child elements.
  */
 }
-.dialog .share-tab .permission-add:before,
-.sidebar .shared-with .permission-add:before,
-.dialog .share-tab .permission-add:after,
-.sidebar .shared-with .permission-add:after {
+.dialog .permission-add:before,
+.dialog .permission-add:after {
   content: "";
   display: table;
 }
-.dialog .share-tab .permission-add:after,
-.sidebar .shared-with .permission-add:after {
+.dialog .permission-add:after {
   clear: both;
 }
-.dialog .share-tab .permission-add:before,
-.sidebar .shared-with .permission-add:before,
-.dialog .share-tab .permission-add:after,
-.sidebar .shared-with .permission-add:after {
+.dialog .permission-add:before,
+.dialog .permission-add:after {
   content: "";
   display: table;
 }
-.dialog .share-tab .permission-add:after,
-.sidebar .shared-with .permission-add:after {
+.dialog .permission-add:after {
   clear: both;
 }
-.dialog .share-tab .permission-add #passbolt-password-share-autocomplete-wrapper,
-.sidebar .shared-with .permission-add #passbolt-password-share-autocomplete-wrapper {
+.dialog .permission-add #passbolt-password-share-autocomplete-wrapper {
   position: relative;
   width: 100%;
 }
-.sidebar .sharedwith .row .user,
-.sidebar .sharedwith .row .group {
-  width: 75%;
-  padding-top: 0;
+.dialog .permission-edit {
+  padding: 0em;
+  border-bottom: 1px solid #f3f3f3;
+}
+.input-password-wrapper {
+  overflow: hidden;
+}
+.input-password-wrapper .message.error {
+  display: block;
+  clear: both;
+  width: 92%;
+  padding-bottom: .5em;
+  font-size: .813em;
+}
+/* password share tab */
+.dialog .share-tab {
+  /* message */
+}
+.dialog .share-tab .message {
+  font-size: 0.875em;
+  padding-left: 1em;
+}
+.dialog .organize-tab .current-folder {
+  background: #f3f3f3;
+  padding: .5em 1em;
+}
+.dialog .organize-tab .current-folder .folder-name {
+  font-weight: bold;
+}
+.dialog .organize-tab .tree {
+  height: 20.125em;
+  border: 1px solid #dddddd;
+}
+.dialog .organize-tab .selected {
+  background: #f3f3f3;
+}
+.dialog .organize-tab .selected {
+  background: #f3f3f3;
+}
+.folder-add .input.text {
+  width: 25em;
+}
+.dialog-wrapper.session-expired-dialog {
+  z-index: 994;
+}
+.dialog-wrapper.session-expired-dialog .dialog-close {
+  display: none;
+}
+.dialog .group .permission-edit {
+  border-top: 1px solid #f3f3f3;
 }
 .edit-group-dialog .group_edit_form .form-content {
   padding-bottom: 0;
@@ -6795,43 +6756,6 @@ table.table-info.horizontal tbody tr:nth-child(even) {
 }
 .edit-group-dialog .group_members.empty .message.warning.empty-permission {
   display: block;
-}
-/* hide icons if there is no space */
-@media all and (max-width: 480px) {
-  .dialog .share-tab .permissions.scroll {
-    height: auto;
-    margin: 0;
-  }
-  .dialog .share-tab .row .user,
-  .dialog .share-tab .row .group {
-    width: 45%;
-  }
-}
-.dialog .organize-tab .current-folder {
-  background: #f3f3f3;
-  padding: .5em 1em;
-}
-.dialog .organize-tab .current-folder .folder-name {
-  font-weight: bold;
-}
-.dialog .organize-tab .tree {
-  height: 20.125em;
-  border: 1px solid #dddddd;
-}
-.dialog .organize-tab .selected {
-  background: #f3f3f3;
-}
-.dialog .organize-tab .selected {
-  background: #f3f3f3;
-}
-.folder-add .input.text {
-  width: 25em;
-}
-.dialog-wrapper.session-expired-dialog {
-  z-index: 994;
-}
-.dialog-wrapper.session-expired-dialog .dialog-close {
-  display: none;
 }
 /* sidebar / user details in overview */
 .panel.aside .user .header,
@@ -6969,28 +6893,13 @@ table.table-info.horizontal tbody tr:nth-child(even) {
 }
 /*
  * Password workspace
- * @todo better namespacing
  */
-/* drag n drop */
-#js_dragged_resource {
-  padding: 6px 10px;
-  background-color: #ffffff;
-  border: 1px solid #dddddd;
-  -webkit-box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  -moz-box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-}
-#js_dragged_resource span.name {
-  font-weight: bold;
-}
 /* sidebar */
 .panel.aside .resource .detailed-information li.password .value {
   height: 1.6em;
   padding-top: 0.2em;
 }
-/* unused column
-	@todo: remove html
-*/
+/* unused columns */
 .js_grid_column_owner,
 .js_grid_column_copyLogin,
 .js_grid_column_copySecret {

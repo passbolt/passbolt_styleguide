@@ -3390,23 +3390,7 @@ form .input .inline.message {
 /* error messages */
 select {
   font-size: 16px;
-  color: #333333;
-  background: #ffffff;
-  width: 15.375em;
-  /* 20 char (default input length) x .7em (average char length) */
-  padding: .375em .625em .375em .625em;
-  line-height: 24px;
-  margin-bottom: .5em;
-  border: 1px solid #cccccc;
-  border-top: 1px solid #bbbbbb;
-  display: inline-block;
-  -ms-box-sizing: content-box;
-  -moz-box-sizing: content-box;
-  -webkit-box-sizing: content-box;
-  box-sizing: content-box;
-}
-select:disabled {
-  background: #f3f3f3;
+  margin: .55em 0;
 }
 /* select */
 input[type=file] {
