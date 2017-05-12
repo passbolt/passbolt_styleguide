@@ -25,10 +25,10 @@
 			<div class="navigation wizard">
 				<ul>
 					<li class="">
-						<a href="../demo/AA_legal_privacy.php" >Privacy</a>
+						<a href="../demo/AA_legal_terms.php" >Privacy</a>
 					</li>
 					<li>
-						<a href="../demo/AA_legal_privacy.php" >Terms</a>
+						<a href="../demo/AA_legal_terms.php" >Terms</a>
 					</li>
 					<li class="selected">
 						<a href="../demo/AA_about_credits.php" >Credits</a>
