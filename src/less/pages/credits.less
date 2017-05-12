@@ -1,41 +1,7 @@
 /* credit photo album */
-.tldr.photoalbum {
-	.photo {
-		border: .5em solid @background-default;
-		box-shadow: 2px 2px 10px @grey;
-
-		&.photo-1, &.photo-3 {
-			display: none;
-		}
+.tldr.sponsors {
+	img {
+		margin-top:2em;
+		max-width:240px;
 	}
-}
-
-/* Don't show fancy photo on mobile */
-@media all and (min-width: 1024px) {
-	.tldr.photoalbum {
-		.photo {
-
-			&.photo-1 {
-				display:inline;
-				margin-top:3em;
-				-ms-transform: rotate(7deg); /* IE 9 */
-				-webkit-transform: rotate(7deg); /* Chrome, Safari, Opera */
-				transform: rotate(7deg);
-			}
-			&.photo-2 {
-				-ms-transform: rotate(-7deg); /* IE 9 */
-				-webkit-transform: rotate(-7deg); /* Chrome, Safari, Opera */
-				transform: rotate(-7deg);
-				margin-top:-4em;
-			}
-			&.photo-3 {
-				display:inline;
-				-ms-transform: rotate(5deg); /* IE 9 */
-				-webkit-transform: rotate(5deg); /* Chrome, Safari, Opera */
-				transform: rotate(5deg);
-				margin-left:2em;
-			}
-		}
-	}
-
 }
