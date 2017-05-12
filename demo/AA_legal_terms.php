@@ -56,7 +56,7 @@
 							<h2>Terms of Service</h2>
 							<p>
 								This website, www.passbolt.com and its subdomains (collectively referred to as the "Site" in these Terms of Service)
-								is owned and operated by Bolt Softwares Private Limited ("we", "us" or "Passbolt"). By using and accessing our Site,
+								is owned and operated by Passbolt SARL ("we", "us" or "Passbolt"). By using and accessing our Site,
 								you ("you", "user" or, "end user") agree to these Terms of Service (collectively, the "Terms of Service", “Terms and
 								conditions” or "Agreement").
 							</p><p>
@@ -97,7 +97,7 @@
 								their new creations under identical terms.
 							</p>
 							<p>
-								Commercial licenses are also available from Bolt Softwares Pvt. Ltd on request.
+								Commercial licenses are also available from Passbolt SARL on request.
 							</p>
 						</div>
 					</div>

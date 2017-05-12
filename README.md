@@ -5,7 +5,7 @@
 	  /_/    \__,_/____/____/_.___/\____/_/\__/
 
 	The password management solution
-	(c) 2016 Bolt Softwares Pvt Ltd
+	(c) 2017 Passbolt SARL
 
 
 License

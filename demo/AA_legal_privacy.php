@@ -54,7 +54,7 @@
 							<div>
 								<h2>Privacy Policy</h2>
 								<p>
-									This website, passbolt.com is owned and operated by Bolt Softwares Private Limited ("we", "us" or "passbolt"). By using and accessing our Site, you ("you", "user" or, "end user") agree to the terms of our Privacy Policy (collectively, the "privacy policy").
+									This website, passbolt.com is owned and operated by Passbolt SARL ("we", "us" or "passbolt"). By using and accessing our Site, you ("you", "user" or, "end user") agree to the terms of our Privacy Policy (collectively, the "privacy policy").
 								</p>
 								<p>
 									This Privacy Policy is effective with respect to any data that we’ve collected, or collect, about and/or from you, according to our <a href="#">Terms of Service</a>.
