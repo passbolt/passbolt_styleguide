@@ -24,23 +24,20 @@
   .group_members {
     margin-top: -0.5em;
 
-    .message.warning.empty-permission {
+    .message.warning.feedback {
       margin-top: 0px;
+      span {
+        display: block;
+      }
     }
 
     ul.permissions {
       display: block;
     }
-    .message.warning.empty-permission {
-      display: none;
-    }
 
     &.empty {
       ul.permissions {
         display: none;
-      }
-      .message.warning.empty-permission {
-        display: block;
       }
     }
   }
