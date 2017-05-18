@@ -3966,6 +3966,143 @@ html body .button.processing {
     background-size: 20px 20px;
   }
 }
+/* Dialog */
+.dialog-wrapper {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: 800;
+  background: rgba(255, 255, 255, 0.9);
+  overflow: auto;
+}
+.dialog {
+  position: relative;
+  max-width: 30em;
+  border: 1px solid #dddddd;
+  background: #f3f3f3;
+  margin: auto;
+  margin-top: 1%;
+  /* some space for the footer / notification area in case it is really tall */
+  margin-bottom: 3em;
+  -moz-box-shadow: 0px 0px 10px 0px #dddddd;
+  -webkit-box-shadow: 0px 0px 10px 0px #dddddd;
+  box-shadow: 0px 0px 10px 0px #dddddd;
+  /* header */
+  /* content */
+  /* inputs */
+  /* submit / cancel */
+}
+.dialog.medium {
+  max-width: 36em;
+}
+.dialog .dialog-header {
+  padding: 0.5em 1em 0 1em;
+  height: 3em;
+}
+.dialog .dialog-header h2 {
+  margin: .25em 2em .5em .2em;
+  font-size: 1.2em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -o-text-overflow: ellipsis;
+  -ms-text-overflow: ellipsis;
+}
+.dialog .dialog-header .dialog-header-subtitle {
+  padding-top: 0.3em;
+  padding-left: 1em;
+  font-size: 0.7em;
+  color: #888888;
+}
+.dialog .dialog-content {
+  position: relative;
+}
+.dialog .form-content {
+  background: #FFF;
+  padding: .813em 1.25em .813em 1.5em;
+}
+.dialog label {
+  clear: both;
+  font-size: 0.938em;
+  /* 15px */
+  line-height: 1.6em;
+  /* 24px */
+}
+.dialog input[type=text] {
+  width: 92%;
+  float: left;
+}
+.dialog .short input {
+  width: 64%;
+  float: left;
+}
+.dialog textarea {
+  width: 92%;
+}
+.dialog textarea + .message.error,
+.dialog input + .message.error {
+  display: block;
+  clear: both;
+  width: 92%;
+}
+.dialog .submit-wrapper {
+  margin: 0;
+  border-top: 1px solid #dddddd;
+  clear: both;
+  width: 100%;
+  padding: .75em 0;
+}
+.dialog .submit-wrapper .cancel,
+.dialog .submit-wrapper .button {
+  float: left;
+  margin-left: 1.125em;
+  font-size: 1.125em;
+}
+.dialog .submit-wrapper .cancel {
+  margin-top: .5em;
+  font-size: 1em;
+}
+.dialog .dialog-close,
+.dialog .dialog-close:hover {
+  display: block;
+  float: right;
+  margin-top: -2.5em;
+  border: 0;
+}
+.dialog-close,
+.dialog-close:hover {
+  border: 0;
+}
+.dialog-close .fa-close {
+  padding-top: 15px;
+  width: 30px;
+  height: 15px;
+  text-align: center;
+  display: block;
+  vertical-align: baseline;
+  line-height: 0;
+  border: 1px solid #eeeeee;
+  -webkit-border-radius: 0.214em;
+  -moz-border-radius: 0.214em;
+  border-radius: 0.214em;
+}
+.dialog-close:hover .fa-close {
+  border: 1px solid #dddddd;
+  -webkit-border-radius: 0.214em;
+  -moz-border-radius: 0.214em;
+  border-radius: 0.214em;
+}
+/* reduce font-size for small screen */
+@media all and (max-width: 480px) {
+  .dialog {
+    margin: 0;
+    border: 0;
+    box-shadow: none;
+    width: 100%;
+    max-width: 100%;
+    margin-bottom: 2.5em;
+  }
+}
 .logo img {
   max-width: 150px;
 }
@@ -4399,9 +4536,9 @@ html body .button.processing {
 /*
  * Additional styles for login and register
  */
-.page.register h2,
-.page.recover h2,
-.page.login h2 {
+.page.register .grid .row h2,
+.page.recover .grid .row h2,
+.page.login .grid .row h2 {
   font-size: 2em;
   margin-top: 1em;
 }
