@@ -4666,3 +4666,27 @@ html body .button.processing {
     background-size: 187px 36px;
   }
 }
+/* Special error page treatment for larger screen */
+@media all and (min-width: 460px) {
+  .page.error .grid {
+    text-align: center;
+    width: 100%;
+    margin-bottom: 2.5em;
+  }
+  .page.error.error-404 .row,
+  .page.error.error-500 .row,
+  .page.error.error-400 .row {
+    max-width: 400px;
+    margin: auto;
+    padding-top: 440px;
+  }
+  .page.error.error-404 .grid {
+    background: transparent url('../img/illustrations/birds6_850.png') center 1.5em no-repeat;
+    background-size: 500px auto;
+  }
+  .page.error.error-400 .grid,
+  .page.error.error-500 .grid {
+    background: transparent url('../img/illustrations/birds3_850.png') center 3em no-repeat;
+    background-size: 640px auto;
+  }
+}

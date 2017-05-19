@@ -1,27 +1,29 @@
 .thankyou.page {
-
-  .grid {
-    text-align: center;
-
-    h2 {
-      font-size:2em;
-    }
-    h2 + h2 {
-      font-size: 1.5em;
-      color:@font-light;
-    }
-  }
+	.row {
+		text-align: center;
+	}
+	.social {
+		margin-top:0;
+		width:100%;
+		font-size:.75em;
+	}
 }
-
 @media all and (min-width: 780px) {
   .thankyou.page {
     height:100%;
     position:absolute;
-    background: transparent url('@{images}/background/mandala.jpg') top center no-repeat;
     background-size: cover;
 
     .grid {
-      padding-top:4.5em;
+			background: transparent url('@{images}/illustrations/birds7_850.png') center 2em no-repeat;
+			background-size: 420px auto;
+			margin-bottom:2.5em;
     }
+    .row {
+    	margin:auto;
+			max-width: 400px;
+			padding-top:400px;
+    }
+
   }
 }

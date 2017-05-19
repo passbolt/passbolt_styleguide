@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <title>Passbolt | The open source password manager for teams</title>
     <?php include('includes/meta/AA_meta.php'); ?>
-	<?php include('includes/headers/AA_header_scripts.php'); ?>
+		<?php include('includes/headers/AA_header_scripts.php'); ?>
 </head>
 <body>
 <div id="container" class="page services featured">
@@ -63,11 +63,8 @@
             </div>
         </div>
     </div>
-
     <?php include('includes/AA_signup.php'); ?>
-
     <?php include('includes/AN_footer.php'); ?>
 </div>
-</body>
 </body>
 </html>

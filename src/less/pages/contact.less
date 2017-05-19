@@ -1,6 +1,6 @@
 .page.contacts {
   .page-row.intro {
-    background: #FAFAFA;
+    background: @grey-lightest;
   }
   .service {
     .service-teaser {
@@ -11,27 +11,23 @@
     }
   }
 
-  .contact {
-    .form-wrapper {
-      form {
-        div.input{
-          width: 100%;
+	.form-wrapper {
+		form {
+			.input{
+				width: 100%;
 
-          input, textarea {
-            width: 96%;
-          }
+				input, textarea {
+					width: 96%;
+				}
+				&.message {
+					padding: 0;
+				}
 
-          &.message {
-            padding: 0;
-          }
-
-        }
-
-        div.submit {
-          margin-top: 1em;
-        }
-      }
-    }
+			}
+			.submit {
+				margin-top: 1em;
+			}
+		}
   }
 }
 
@@ -39,60 +35,38 @@
 @media all and (min-width: 800px) {
   .page.contacts {
     .page-row.intro {
-      background:#FAFAFA;
+			background: @background-lightest;
       min-height: 400px;
+			text-align:center;
+
       h1 {
         padding-left:0;
         font-size:3em;
-        text-align: center;
       }
       h1 + p {
-        text-align: center;
         font-size: 1.75em;
         padding-left:0;
-        text-align: center;
         line-height:1.666em;
       }
     }
 
-    .contact {
-      .form-wrapper {
-        margin: -10em 0 5em 18%;
-        background-color: @grey-lightest;
-        border: 1px solid @border-default;
+		.form-wrapper {
+			margin: -10em 0 5em 18%;
+			background-color: @grey-lighter;
+			border: 1px solid @border-default;
 
-        form {
-          padding: 5%;
+			form {
+				padding: 5%;
 
-          div.input{
-            margin-bottom: 0.5em;
-
-          }
-
-          div.submit {
-            margin-top: 1em;
-          }
-        }
-      }
-    }
+				.input{
+					margin-bottom: 0.5em;
+				}
+				.submit {
+					margin-top: 1em;
+				}
+			}
+		}
   }
 
-  .page.contacts_confirmation {
-    .page-row.intro {
-      background: #FAFAFA;
-      h1 {
-        padding-left: 0;
-        font-size: 3em;
-        text-align: center;
-      }
-      h1 + p {
-        text-align: center;
-        font-size: 1.75em;
-        padding-left: 0;
-        text-align: center;
-        line-height: 1.666em;
-      }
-    }
-  }
 }
 

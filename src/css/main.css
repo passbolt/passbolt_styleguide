@@ -6754,6 +6754,72 @@ table.table-info.horizontal tbody tr:nth-child(even) {
 .edit-group-dialog .group_members.empty ul.permissions {
   display: none;
 }
+/*
+ * Password workspace
+ */
+/* sidebar */
+.panel.aside .resource .detailed-information li.password .value {
+  height: 1.6em;
+  padding-top: 0.2em;
+}
+/* unused columns */
+.js_grid_column_owner,
+.js_grid_column_copyLogin,
+.js_grid_column_copySecret {
+  display: none;
+}
+/* hide left column when there is no space */
+@media all and (max-width: 1024px) {
+  .tableview .js_grid_column_modified {
+    display: none;
+  }
+}
+/* Define state where there are no passwords, and the filter all items */
+.page.password .tableview.all_items.empty .tableview-header {
+  /* No tableview-header */
+  display: none;
+}
+.page.password .tableview.all_items.empty .tableview-content {
+  background: transparent url('../img/illustrations/nest.png') center 75% no-repeat;
+  background-size: 80%;
+  /* No tableview-header */
+  border: 0;
+  top: 0;
+  /* Tablet version */
+  /* Normal screen version */
+}
+@media all and (min-width: 780px) {
+  .page.password .tableview.all_items.empty .tableview-content {
+    background-position: center 60%;
+    background-size: 50%;
+  }
+}
+@media all and (min-width: 1024px) {
+  .page.password .tableview.all_items.empty .tableview-content {
+    background-position: center 70%;
+    background-size: 40%;
+  }
+}
+.page.password .tableview.all_items.empty .empty-content {
+  text-align: center;
+  margin: 3em 0.5em 0.67em 0.5em;
+}
+.page.password .tableview.all_items.empty .empty-content h1 {
+  font-size: 1.5em;
+}
+.page.password .tableview.all_items.empty .empty-content p {
+  font-size: 1em;
+  line-height: 1.5em;
+}
+@media all and (min-width: 780px) {
+  .page.password .tableview.all_items.empty .empty-content h1 {
+    font-size: 2.2em;
+  }
+  .page.password .tableview.all_items.empty .empty-content p {
+    font-size: 1.2em;
+    line-height: 1.8em;
+  }
+}
 /* sidebar / user details in overview */
 .panel.aside .user .header,
 .panel.aside .group .header {
@@ -6887,72 +6953,6 @@ table.table-info.horizontal tbody tr:nth-child(even) {
 /* login history icon column centerign */
 .login-history td:first-child {
   text-align: center;
-}
-/*
- * Password workspace
- */
-/* sidebar */
-.panel.aside .resource .detailed-information li.password .value {
-  height: 1.6em;
-  padding-top: 0.2em;
-}
-/* unused columns */
-.js_grid_column_owner,
-.js_grid_column_copyLogin,
-.js_grid_column_copySecret {
-  display: none;
-}
-/* hide left column when there is no space */
-@media all and (max-width: 1024px) {
-  .tableview .js_grid_column_modified {
-    display: none;
-  }
-}
-/* Define state where there are no passwords, and the filter all items */
-.page.password .tableview.all_items.empty .tableview-header {
-  /* No tableview-header */
-  display: none;
-}
-.page.password .tableview.all_items.empty .tableview-content {
-  background: transparent url('../img/illustrations/nest.png') center 75% no-repeat;
-  background-size: 80%;
-  /* No tableview-header */
-  border: 0;
-  top: 0;
-  /* Tablet version */
-  /* Normal screen version */
-}
-@media all and (min-width: 780px) {
-  .page.password .tableview.all_items.empty .tableview-content {
-    background-position: center 60%;
-    background-size: 50%;
-  }
-}
-@media all and (min-width: 1024px) {
-  .page.password .tableview.all_items.empty .tableview-content {
-    background-position: center 70%;
-    background-size: 40%;
-  }
-}
-.page.password .tableview.all_items.empty .empty-content {
-  text-align: center;
-  margin: 3em 0.5em 0.67em 0.5em;
-}
-.page.password .tableview.all_items.empty .empty-content h1 {
-  font-size: 1.5em;
-}
-.page.password .tableview.all_items.empty .empty-content p {
-  font-size: 1em;
-  line-height: 1.5em;
-}
-@media all and (min-width: 780px) {
-  .page.password .tableview.all_items.empty .empty-content h1 {
-    font-size: 2.2em;
-  }
-  .page.password .tableview.all_items.empty .empty-content p {
-    font-size: 1.2em;
-    line-height: 1.8em;
-  }
 }
 /* TODO replace by page level selector */
 .page.settings .main.panel .middle {
@@ -7142,4 +7142,28 @@ html.launching .launching-screen p {
 }
 .launching-screen {
   display: none;
+}
+/* Special error page treatment for larger screen */
+@media all and (min-width: 460px) {
+  .page.error .grid {
+    text-align: center;
+    width: 100%;
+    margin-bottom: 2.5em;
+  }
+  .page.error.error-404 .row,
+  .page.error.error-500 .row,
+  .page.error.error-400 .row {
+    max-width: 400px;
+    margin: auto;
+    padding-top: 440px;
+  }
+  .page.error.error-404 .grid {
+    background: transparent url('../img/illustrations/birds6_850.png') center 1.5em no-repeat;
+    background-size: 500px auto;
+  }
+  .page.error.error-400 .grid,
+  .page.error.error-500 .grid {
+    background: transparent url('../img/illustrations/birds3_850.png') center 3em no-repeat;
+    background-size: 640px auto;
+  }
 }

@@ -5921,7 +5921,7 @@ button.swiper-pagination-bullet {
 .social {
   text-align: center;
   float: left;
-  margin-top: 1.75em;
+  margin-top: 1em;
 }
 .social a {
   font-size: 3.5em;
@@ -6252,6 +6252,9 @@ button.swiper-pagination-bullet {
   font-size: .75em;
   padding: 1em .125em;
 }
+.page-row.signup .social {
+  margin-top: 1.75em;
+}
 /* larger screen */
 @media all and (min-width: 440px) {
   .page-row.signup .newsletter {
@@ -6343,25 +6346,29 @@ button.swiper-pagination-bullet {
     font-size: 13px;
   }
 }
-.thankyou.page .grid {
+.thankyou.page .row {
   text-align: center;
 }
-.thankyou.page .grid h2 {
-  font-size: 2em;
-}
-.thankyou.page .grid h2 + h2 {
-  font-size: 1.5em;
-  color: #888888;
+.thankyou.page .social {
+  margin-top: 0;
+  width: 100%;
+  font-size: .75em;
 }
 @media all and (min-width: 780px) {
   .thankyou.page {
     height: 100%;
     position: absolute;
-    background: transparent url('../img/background/mandala.jpg') top center no-repeat;
     background-size: cover;
   }
   .thankyou.page .grid {
-    padding-top: 4.5em;
+    background: transparent url('../img/illustrations/birds7_850.png') center 2em no-repeat;
+    background-size: 420px auto;
+    margin-bottom: 2.5em;
+  }
+  .thankyou.page .row {
+    margin: auto;
+    max-width: 400px;
+    padding-top: 400px;
   }
 }
 .page.roadmap .page-row.intro .grid,
@@ -6600,7 +6607,7 @@ button.swiper-pagination-bullet {
   }
 }
 .page.contacts .page-row.intro {
-  background: #FAFAFA;
+  background: #f3f3f3;
 }
 .page.contacts .service .service-teaser {
   display: none;
@@ -6608,62 +6615,71 @@ button.swiper-pagination-bullet {
 .page.contacts .service .button {
   margin-bottom: 1em;
 }
-.page.contacts .contact .form-wrapper form div.input {
+.page.contacts .form-wrapper form .input {
   width: 100%;
 }
-.page.contacts .contact .form-wrapper form div.input input,
-.page.contacts .contact .form-wrapper form div.input textarea {
+.page.contacts .form-wrapper form .input input,
+.page.contacts .form-wrapper form .input textarea {
   width: 96%;
 }
-.page.contacts .contact .form-wrapper form div.input.message {
+.page.contacts .form-wrapper form .input.message {
   padding: 0;
 }
-.page.contacts .contact .form-wrapper form div.submit {
+.page.contacts .form-wrapper form .submit {
   margin-top: 1em;
 }
 /* even larger screen */
 @media all and (min-width: 800px) {
   .page.contacts .page-row.intro {
-    background: #FAFAFA;
+    background: #f3f3f3;
     min-height: 400px;
+    text-align: center;
   }
   .page.contacts .page-row.intro h1 {
     padding-left: 0;
     font-size: 3em;
-    text-align: center;
   }
   .page.contacts .page-row.intro h1 + p {
     font-size: 1.75em;
     padding-left: 0;
-    text-align: center;
     line-height: 1.666em;
   }
-  .page.contacts .contact .form-wrapper {
+  .page.contacts .form-wrapper {
     margin: -10em 0 5em 18%;
-    background-color: #f3f3f3;
+    background-color: #eeeeee;
     border: 1px solid #dddddd;
   }
-  .page.contacts .contact .form-wrapper form {
+  .page.contacts .form-wrapper form {
     padding: 5%;
   }
-  .page.contacts .contact .form-wrapper form div.input {
+  .page.contacts .form-wrapper form .input {
     margin-bottom: 0.5em;
   }
-  .page.contacts .contact .form-wrapper form div.submit {
+  .page.contacts .form-wrapper form .submit {
     margin-top: 1em;
   }
-  .page.contacts_confirmation .page-row.intro {
-    background: #FAFAFA;
-  }
-  .page.contacts_confirmation .page-row.intro h1 {
-    padding-left: 0;
-    font-size: 3em;
+}
+/* Special error page treatment for larger screen */
+@media all and (min-width: 460px) {
+  .page.error .grid {
     text-align: center;
+    width: 100%;
+    margin-bottom: 2.5em;
   }
-  .page.contacts_confirmation .page-row.intro h1 + p {
-    font-size: 1.75em;
-    padding-left: 0;
-    text-align: center;
-    line-height: 1.666em;
+  .page.error.error-404 .row,
+  .page.error.error-500 .row,
+  .page.error.error-400 .row {
+    max-width: 400px;
+    margin: auto;
+    padding-top: 440px;
+  }
+  .page.error.error-404 .grid {
+    background: transparent url('../img/illustrations/birds6_850.png') center 1.5em no-repeat;
+    background-size: 500px auto;
+  }
+  .page.error.error-400 .grid,
+  .page.error.error-500 .grid {
+    background: transparent url('../img/illustrations/birds3_850.png') center 3em no-repeat;
+    background-size: 640px auto;
   }
 }
