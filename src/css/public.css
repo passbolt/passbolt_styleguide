@@ -5980,40 +5980,49 @@ button.swiper-pagination-bullet {
     font-size: 2em;
   }
 }
-.home .page-row.three-little-birds .logo {
+.home .page-row.hero2 .logo {
   margin: 1em 0;
 }
-.home .page-row.three-little-birds .teaser-text {
+.home .page-row.hero2 .teaser-text {
   font-size: 1.5em;
 }
-.home .page-row.three-little-birds .call-to-action .button {
+.home .page-row.hero2 .call-to-action .button {
   font-size: 1.125em;
   display: inline-block;
   margin-top: 1em;
 }
-.home .page-row.three-little-birds .scroll-prompt {
+.home .page-row.hero2 .scroll-prompt {
   display: none;
 }
-/* even larger screen */
-@media all and (min-width: 800px) {
-  .home .page-row.three-little-birds {
-    min-height: 500px;
-    height: 75%;
-    background: #fafafa url('../img/background/mandala_bird1.jpg') 200% center no-repeat;
-    background-size: 85% auto;
+/* large screen */
+@media all and (min-width: 1000px) {
+  .home .page-row.hero2 {
+    max-width: 1150px;
+    min-height: 450px;
+    background: #ffffff url('../img/background/cloud.jpg') right center no-repeat;
+    margin: auto;
+    position: relative;
   }
-  .home .page-row.three-little-birds .logo {
-    margin: 5% 0 2% 3%;
+  .home .page-row.hero2 .birds-bg {
+    position: absolute;
+    z-index: 9998;
+    right: 0;
+    width: 727px;
+    height: 557px;
+    margin-top: -2.5em;
+    background: transparent url('../img/background/flying_birds1.png') center center no-repeat;
   }
-  .home .page-row.three-little-birds .teaser-text {
-    width: 50%;
-    max-width: 24em;
-    font-size: 1.75em;
-    margin: 0 0 3% 3%;
+  .home .page-row.hero2 .logo {
+    margin: 5% 0 1em 3%;
+  }
+  .home .page-row.hero2 .teaser-text {
+    width: 18em;
+    font-size: 1.5em;
+    margin: 0 0 1em 3%;
     text-align: left;
     line-height: 1.666em;
   }
-  .home .page-row.three-little-birds .call-to-action .button {
+  .home .page-row.hero2 .call-to-action .button {
     font-size: 1.125em;
     margin: .25em 0 3% 3%;
     display: inline-block;
@@ -6176,54 +6185,130 @@ button.swiper-pagination-bullet {
     background: transparent url('../img/diagrams/sequence_diagram_gpg_authenticate.png') 90% 7em no-repeat;
   }
 }
-.home .page-row.features {
-  margin-bottom: 4em;
+.home .features {
+  position: relative;
+  padding: 0;
+  margin: auto;
+  margin-bottom: 1em;
 }
-.home .page-row.features h2 + h2 {
-  color: #888888;
+.home .features .swiper-container {
+  margin: 2em 1em 1em 1em;
+  max-width: 540px;
+  height: 230px;
+  background: transparent url('../img/controls/loading.gif') center center no-repeat;
 }
-.home .page-row.features .swiper-container .swiper-slide {
-  background-position: center;
-  background-size: cover;
-  width: 100%;
-  height: 340px;
+.home .features .swiper-slide.LU_passwords {
+  background: transparent url('../img/screenshots/v1.5/LU_passwords_450.jpg') center center no-repeat;
+  background-size: 100% auto;
 }
-.home .page-row.features .swiper-container .swiper-slide h3 {
-  display: block;
-  text-align: center;
-  border: 0;
+.home .features .swiper-slide.LU_passwords_share {
+  background: transparent url('../img/screenshots/v1.5/LU_passwords_share_450.jpg') center center no-repeat;
+  background-size: 100% auto;
 }
-.home .page-row.features .swiper-container .swiper-slide img {
-  width: 100%;
+.home .features .swiper-slide.LU_passwords_edit {
+  background: transparent url('../img/screenshots/v1.5/LU_passwords_edit_450.jpg') center center no-repeat;
+  background-size: 100% auto;
 }
-.home .page-row.features .swiper-container .swiper-button-prev,
-.home .page-row.features .swiper-container .swiper-button-next {
+.home .features .swiper-slide.LU_users {
+  background: transparent url('../img/screenshots/v1.5/LU_users_450.jpg') center center no-repeat;
+  background-size: 100% auto;
+}
+.home .features .swiper-slide.AN_login {
+  background: transparent url('../img/screenshots/v1.5/AN_login_450.jpg') center center no-repeat;
+  background-size: 100% auto;
+}
+.home .features .swiper-pagination {
+  position: relative;
+}
+.home .features .swiper-pagination .swiper-pagination-bullet {
+  width: 1em;
+  height: 1em;
+  margin-right: 1em;
+}
+.home .features .swiper-pagination .swiper-pagination-bullet:last-child {
+  margin-right: 0;
+}
+.home .features .swiper-button-prev,
+.home .features .swiper-button-next {
   display: none;
 }
-/* larger screen */
-@media all and (min-width: 440px) {
-  .home .page-row.features {
-    padding: 0;
+@media all and (min-width: 550px) {
+  .home .features .swiper-container {
+    margin: 2em;
+    max-width: 940px;
+    height: 350px;
   }
-  .home .page-row.features h2 + h2 {
-    font-size: 1.5em;
-    margin-top: -1em;
-    padding-top: 0;
+  .home .features .swiper-slide.LU_passwords {
+    background: transparent url('../img/screenshots/v1.5/LU_passwords_940.jpg') center center no-repeat;
+    background-size: 100% auto;
   }
-  .home .page-row.features .swiper-container {
-    max-width: 1600px;
-    margin: 1em auto;
-    padding: 1em 0 2em 0;
+  .home .features .swiper-slide.LU_passwords_share {
+    background: transparent url('../img/screenshots/v1.5/LU_passwords_share_940.jpg') center center no-repeat;
+    background-size: 100% auto;
   }
-  .home .page-row.features .swiper-container .swiper-slide {
-    background-position: center;
-    background-size: cover;
-    width: 550px;
+  .home .features .swiper-slide.LU_passwords_edit {
+    background: transparent url('../img/screenshots/v1.5/LU_passwords_edit_940.jpg') center center no-repeat;
+    background-size: 100% auto;
+  }
+  .home .features .swiper-slide.LU_users {
+    background: transparent url('../img/screenshots/v1.5/LU_users_940.jpg') center center no-repeat;
+    background-size: 100% auto;
+  }
+  .home .features .swiper-slide.AN_login {
+    background: transparent url('../img/screenshots/v1.5/AN_login_940.jpg') center center no-repeat;
+    background-size: 100% auto;
+  }
+  .home .features .swiper-pagination {
+    position: relative;
+  }
+  .home .features .swiper-pagination .swiper-pagination-bullet {
+    width: .75em;
+    height: .75em;
+    margin-right: .5em;
+  }
+  .home .features .swiper-button-prev,
+  .home .features .swiper-button-next {
+    display: block;
+  }
+}
+@media all and (min-width: 750px) {
+  .home .features .swiper-container {
     height: 450px;
   }
-  .home .page-row.features .swiper-container .swiper-button-prev,
-  .home .page-row.features .swiper-container .swiper-button-next {
-    display: block;
+}
+/* larger screen */
+@media all and (min-width: 940px) {
+  .home .features {
+    max-width: 1100px;
+  }
+  .home .features .swiper-container {
+    width: 940px;
+    max-width: 940px;
+    height: 588px;
+    margin: 2em auto;
+    -webkit-box-shadow: 0px 5px 17px 0px rgba(0, 0, 0, 0.41);
+    -moz-box-shadow: 0px 5px 17px 0px rgba(0, 0, 0, 0.41);
+    box-shadow: 0px 5px 17px 0px rgba(0, 0, 0, 0.41);
+  }
+  .home .features .swiper-slide.LU_passwords {
+    background: transparent url('../img/screenshots/v1.5/LU_passwords.jpg') center center no-repeat;
+    background-size: 100% auto;
+  }
+  .home .features .swiper-slide.LU_passwords_share {
+    background: transparent url('../img/screenshots/v1.5/LU_passwords_share.jpg') center center no-repeat;
+    background-size: 100% auto;
+  }
+  .home .features .swiper-slide.LU_passwords_edit {
+    background: transparent url('../img/screenshots/v1.5/LU_passwords_edit.jpg') center center no-repeat;
+    background-size: 100% auto;
+  }
+  .home .features .swiper-slide.LU_users {
+    background: transparent url('../img/screenshots/v1.5/LU_users.jpg') center center no-repeat;
+    background-size: 100% auto;
+  }
+  .home .features .swiper-slide.AN_login {
+    background: transparent url('../img/screenshots/v1.5/AN_login.jpg') center center no-repeat;
+    background-size: 100% auto;
   }
 }
 .page.home .howitworks img {

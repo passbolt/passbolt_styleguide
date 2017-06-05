@@ -65,5 +65,4 @@
     <?php include('includes/AN_footer.php'); ?>
 </div>
 </body>
-</body>
 </html>
