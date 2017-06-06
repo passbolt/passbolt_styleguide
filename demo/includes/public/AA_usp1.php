@@ -1,7 +1,10 @@
-
 <div class="page-row usp">
-	<h2>How is passbolt different from other password managers?</h2>
 	<div class="grid grid-responsive-12">
+		<div class="row">
+			<div class="col12">
+					<h2>How is passbolt different from other password managers?</h2>
+			</div>
+		</div>
 		<div class="row">
 			<div class="col6">
 				<div class="tile">
@@ -52,7 +55,7 @@
 		</div>
 		<div class="row call-to-action">
 			<div class="col12">
-				<a href="AN_login.php" class="button primary big">Try out the demo!</a>
+				<a href="AN_login.php" class="button primary big">Frequently asked questions</a>
 			</div>
 		</div>
 	</div>

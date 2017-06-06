@@ -1,18 +1,13 @@
-<div class="page-row cli">
+<div class="page-row tech">
 	<div class="grid grid-responsive-12">
 		<div class="row">
-			<div class="col5">
-				<h2>Coming soon to a terminal near you!</h2>
-				<p>
-					Because system administrator appreciation day should be everyday we started building
-					a client based on nodejs. Come join us!
-				</p>
-				<a href="#" class="button cancel big">
-					<i class="fa fa-fw fa-github"></i>
-					Show me the code!
-				</a>
+			<div class="col12">
+				<h2>Free as in freedom</h2>
+				<h3>100% open source, no strings attached</h3>
 			</div>
-			<div class="col7 last">
+		</div>
+		<div class="row">
+			<div class="col6 push1">
 				<div class="cli-window">
 					<div class="cli-header"><span class="visuallyhidden">Command line example</span></div>
 					<div class="cli-code">
@@ -30,12 +25,23 @@ k7pogSmKC4bCiEWy/NGlZz6hscz0hN89c+tx3wjFRsXnGsvKVnRCM
 FN/pSWklYlym1Se+0banl3/EPve2
 =Bhgw
 -----END PGP MESSAGE-----
-
-$ gpg --decrypt $(passbolt get last)
-please enter passphrase: <span class="blink seriously">█</span>
+<span class="blink seriously">█</span>
 </pre>
 					</div>
 				</div>
+			</div>
+			<div class="col5 tech-usp last">
+				<ul class="checklist">
+					<li>Fully auditable code</li>
+					<li>Extendable JSON API</li>
+					<li>OpenPGP security</li>
+					<li>Self-hosted</li>
+					<li>AGPL, CC-BY-SA</li>
+				</ul>
+				<a href="#" class="button cancel big">
+					<i class="fa fa-fw fa-github"></i>
+					Show me the code!
+				</a>
 			</div>
 		</div>
 	</div>

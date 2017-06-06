@@ -839,6 +839,11 @@ article ol.upper-roman {
 article ol.lower-alpha {
   list-style-type: lower-alpha;
 }
+ul.checklist li:before {
+  content: '✔';
+  width: 1em;
+  margin-right: 1em;
+}
 /*!
  *  Font Awesome 4.5.0 by @davegandy - http://fontawesome.io - @fontawesome
  *  License - http://fontawesome.io/license (Font: SIL OFL 1.1, CSS: MIT License)
@@ -5971,13 +5976,19 @@ button.swiper-pagination-bullet {
   position: relative;
   margin: 0;
 }
-/* larger screen */
-@media all and (min-width: 440px) {
+.home h3 {
+  border: 0;
+}
+@media all and (min-width: 940px) {
   .featured h2,
   .home h2 {
     margin: 1em auto;
     text-align: center;
     font-size: 2em;
+  }
+  .featured h3,
+  .home h3 {
+    text-align: center;
   }
 }
 .home .page-row.hero2 .logo {
@@ -6013,18 +6024,18 @@ button.swiper-pagination-bullet {
     background: transparent url('../img/background/flying_birds1.png') center center no-repeat;
   }
   .home .page-row.hero2 .logo {
-    margin: 5% 0 1em 3%;
+    margin: 5% 0 1em 4%;
   }
   .home .page-row.hero2 .teaser-text {
     width: 18em;
     font-size: 1.5em;
-    margin: 0 0 1em 3%;
+    margin: 0 0 1em 4%;
     text-align: left;
     line-height: 1.666em;
   }
   .home .page-row.hero2 .call-to-action .button {
     font-size: 1.125em;
-    margin: .25em 0 3% 3%;
+    margin: .25em 0 3% 4%;
     display: inline-block;
   }
 }
@@ -6311,11 +6322,6 @@ button.swiper-pagination-bullet {
     background-size: 100% auto;
   }
 }
-.page.home .howitworks img {
-  width: 100%;
-  max-width: 700px;
-  margin: auto;
-}
 .page-row.signup {
   padding-bottom: 3em;
   background: #FAFAFA;
@@ -6349,7 +6355,253 @@ button.swiper-pagination-bullet {
     padding-top: 0;
   }
 }
-.home .page-row.cli {
+.page-row.signup-alt h3 {
+  color: #888888;
+}
+.page-row.signup-alt .smallprint {
+  margin-top: .5em;
+}
+@media all and (min-width: 1024px) {
+  .page-row.signup-alt {
+    margin-bottom: 0;
+    padding: 0;
+    position: relative;
+    background: linear-gradient(to bottom, #ffffff 0%, #f3f3f3 100%);
+  }
+  .page-row.signup-alt h2 {
+    text-align: left;
+    margin-left: 0;
+    margin-bottom: 0;
+  }
+  .page-row.signup-alt h3 {
+    text-align: left;
+    font-size: 1.5em;
+    margin: 0.25em 0;
+  }
+  .page-row.signup-alt input[type=email] {
+    font-size: 1.125em;
+    line-height: 1.5em;
+    margin-top: .25em;
+    margin-right: .125em;
+    width: 18em;
+  }
+  .page-row.signup-alt .signup-alt-wrapper {
+    margin-top: 2em;
+    min-height: 400px;
+    background: transparent url('../img/background/birds4_850.png') right -140px no-repeat;
+  }
+}
+@media all and (min-width: 1100px) {
+  .page-row.signup-alt .birds-bg2 {
+    z-index: 9999;
+    top: -100px;
+    position: absolute;
+    background: transparent url('../img/background/birds42_850.png') left top no-repeat;
+    width: 340px;
+    height: 340px;
+    background-size: contain;
+  }
+}
+.page-row.sponsors {
+  margin-bottom: 2em;
+}
+.page-row.sponsors .sponsors-list {
+  /*
+ * For IE 6/7 only
+ * Include this rule to trigger hasLayout and contain floats.
+ */
+  /*
+ * Clearfix: contain floats
+ *
+ * For modern browsers
+ * 1. The space content is one way to avoid an Opera bug when the
+ *	`contenteditable` attribute is included anywhere else in the document.
+ *	Otherwise it causes space to appear at the top and bottom of elements
+ *	that receive the `clearfix` class.
+ * 2. The use of `table` rather than `block` is only necessary if using
+ *	`:before` to contain the top-margins of child elements.
+ */
+  /*
+ * For IE 6/7 only
+ * Include this rule to trigger hasLayout and contain floats.
+ */
+  zoom: 1;
+  /*
+ * Clearfix: contain floats
+ *
+ * For modern browsers
+ * 1. The space content is one way to avoid an Opera bug when the
+ *	`contenteditable` attribute is included anywhere else in the document.
+ *	Otherwise it causes space to appear at the top and bottom of elements
+ *	that receive the `clearfix` class.
+ * 2. The use of `table` rather than `block` is only necessary if using
+ *	`:before` to contain the top-margins of child elements.
+ */
+}
+.page-row.sponsors .sponsors-list:before,
+.page-row.sponsors .sponsors-list:after {
+  content: "";
+  display: table;
+}
+.page-row.sponsors .sponsors-list:after {
+  clear: both;
+}
+.page-row.sponsors .sponsors-list:before,
+.page-row.sponsors .sponsors-list:after {
+  content: "";
+  display: table;
+}
+.page-row.sponsors .sponsors-list:after {
+  clear: both;
+}
+.page-row.sponsors .sponsors-list a {
+  float: left;
+  clear: both;
+  margin-top: .25em;
+  font-size: 1.125em;
+  text-decoration: underline;
+  border: 0;
+}
+@media all and (min-width: 960px) {
+  .page-row.sponsors h2 {
+    margin-bottom: .5em;
+  }
+  .page-row.sponsors h3 {
+    margin-top: 0;
+    font-size: 1.5em;
+    color: #888888;
+  }
+  .page-row.sponsors .sponsors-list {
+    /*
+ * For IE 6/7 only
+ * Include this rule to trigger hasLayout and contain floats.
+ */
+    /*
+ * Clearfix: contain floats
+ *
+ * For modern browsers
+ * 1. The space content is one way to avoid an Opera bug when the
+ *	`contenteditable` attribute is included anywhere else in the document.
+ *	Otherwise it causes space to appear at the top and bottom of elements
+ *	that receive the `clearfix` class.
+ * 2. The use of `table` rather than `block` is only necessary if using
+ *	`:before` to contain the top-margins of child elements.
+ */
+    /*
+ * For IE 6/7 only
+ * Include this rule to trigger hasLayout and contain floats.
+ */
+    zoom: 1;
+    /*
+ * Clearfix: contain floats
+ *
+ * For modern browsers
+ * 1. The space content is one way to avoid an Opera bug when the
+ *	`contenteditable` attribute is included anywhere else in the document.
+ *	Otherwise it causes space to appear at the top and bottom of elements
+ *	that receive the `clearfix` class.
+ * 2. The use of `table` rather than `block` is only necessary if using
+ *	`:before` to contain the top-margins of child elements.
+ */
+    width: 960px;
+    margin: auto;
+    text-align: center;
+  }
+  .page-row.sponsors .sponsors-list:before,
+  .page-row.sponsors .sponsors-list:after {
+    content: "";
+    display: table;
+  }
+  .page-row.sponsors .sponsors-list:after {
+    clear: both;
+  }
+  .page-row.sponsors .sponsors-list:before,
+  .page-row.sponsors .sponsors-list:after {
+    content: "";
+    display: table;
+  }
+  .page-row.sponsors .sponsors-list:after {
+    clear: both;
+  }
+  .page-row.sponsors .sponsors-list a {
+    font-size: 1em;
+    margin-top: 0;
+    clear: none;
+    width: 250px;
+    height: 100px;
+    float: left;
+    text-decoration: none;
+  }
+  .page-row.sponsors .sponsors-list a span {
+    /*
+   * Extends the .visuallyhidden class to allow the element to be focusable
+   * when navigated to via the keyboard: h5bp.com/p
+   */
+    border: 0;
+    clip: rect(0 0 0 0);
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    width: 1px;
+    /*
+   * Extends the .visuallyhidden class to allow the element to be focusable
+   * when navigated to via the keyboard: h5bp.com/p
+   */
+  }
+  .page-row.sponsors .sponsors-list a span .focusable:active,
+  .page-row.sponsors .sponsors-list a span .focusable:focus {
+    clip: auto;
+    height: auto;
+    margin: 0;
+    overflow: visible;
+    position: static;
+    width: auto;
+  }
+  .page-row.sponsors .sponsors-list a span .focusable:active,
+  .page-row.sponsors .sponsors-list a span .focusable:focus {
+    clip: auto;
+    height: auto;
+    margin: 0;
+    overflow: visible;
+    position: static;
+    width: auto;
+  }
+  .page-row.sponsors .sponsors-list .ministry {
+    margin: 1em 2.5em 2em 2em;
+    width: 350px;
+    background: transparent url('../img/third_party/ministry_of_economy_luxembourg_logo.png') 0 0 no-repeat;
+    background-size: 100% auto;
+  }
+  .page-row.sponsors .sponsors-list .luxinnovation {
+    margin-top: 2.25em;
+    background: transparent url('../img/third_party/luxinnovation_logo.svg') 0 center no-repeat;
+    background-size: 100% auto;
+  }
+  .page-row.sponsors .sponsors-list .virtua {
+    background: transparent url('../img/third_party/virtua_logo.png') center center no-repeat;
+    background-size: 80% auto;
+    margin: auto;
+    position: relative;
+    display: block;
+    float: none;
+    margin-top: 130px;
+    height: 50px;
+  }
+  .page-row.sponsors .sponsors-list .technoport {
+    margin-top: 3em;
+    background: transparent url('../img/third_party/technoport_logo.png') 0 center no-repeat;
+    background-size: 90% auto;
+  }
+  .page-row.sponsors .cta {
+    margin: 2em auto;
+    position: relative;
+    display: block;
+    width: 150px;
+  }
+}
+.home .page-row.tech {
   text-shadow: 2px 2px #000;
   background: #333333;
   color: #ffffff;
@@ -6357,36 +6609,63 @@ button.swiper-pagination-bullet {
   -webkit-box-shadow: inset 0 16px 16px -16px #000000, inset 0 -16px 16px -16px #000000;
   box-shadow: inset 0 16px 16px -16px #000000, inset 0 -16px 16px -16px #000000;
 }
-.home .page-row.cli h2 {
-  text-align: left;
+.home .page-row.tech h3 {
+  margin: 0 0 1em 0;
 }
-.home .page-row.cli h2 + p {
+.home .page-row.tech .tech-usp {
+  position: relative;
+  float: none;
+  margin: auto;
+}
+.home .page-row.tech .tech-usp ul.checklist {
+  float: left;
   font-size: 1.25em;
+  margin-bottom: .25em;
 }
-.home .page-row.cli .cli-window {
+.home .page-row.tech .tech-usp ul.checklist li {
+  padding-top: .25em;
+}
+.home .page-row.tech .cli-window {
   display: none;
 }
-.home .page-row.cli .button {
+.home .page-row.tech .button {
+  float: left;
+  clear: both;
   margin-bottom: 2em;
 }
 /* larger screen */
-@media all and (min-width: 780px) {
-  .home .page-row.cli {
-    background: #333333 url('../img/background/hepteract.jpg') 200% -8% no-repeat;
-    background-attachment: fixed;
+@media all and (min-width: 1100px) {
+  .home .page-row.tech {
+    padding-bottom: 0;
   }
-  .home .page-row.cli .cli-window {
+  .home .page-row.tech h2 {
+    margin: 1em 0 .5em 0;
+  }
+  .home .page-row.tech h3 {
+    font-size: 1.5em;
+  }
+  .home .page-row.tech .tech-usp {
+    float: left;
+    margin-top: 2.5em;
+    margin-left: 2.5em;
+  }
+  .home .page-row.tech ul.checklist {
+    font-size: 1.5em;
+    margin-bottom: .5em;
+  }
+  .home .page-row.tech ul.checklist li {
+    padding-top: .5em;
+  }
+  .home .page-row.tech .cli-window {
     display: block;
-    border-radius: .25em;
-    margin: 3em auto 4em auto;
-    float: right;
-    max-width: 500px;
+    border-radius: .25em .25em 0 0;
+    margin: 0 0 0 -1.75em;
+    float: left;
+    width: 940px;
     background: #111;
-    -webkit-box-shadow: 10px 10px 22px -10px rgba(0, 0, 0, 0.75);
-    -moz-box-shadow: 10px 10px 22px -10px rgba(0, 0, 0, 0.75);
-    box-shadow: 10px 10px 22px -10px rgba(0, 0, 0, 0.75);
+    box-shadow: 5px -5px 22px -10px rgba(0, 0, 0, 0.75);
   }
-  .home .page-row.cli .cli-window:before {
+  .home .page-row.tech .cli-window:before {
     margin: .33em .5em;
     border-radius: .75em;
     width: .75em;
@@ -6395,7 +6674,7 @@ button.swiper-pagination-bullet {
     position: absolute;
     content: ' ';
   }
-  .home .page-row.cli .cli-window .cli-header {
+  .home .page-row.tech .cli-window .cli-header {
     border-radius: .25em;
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
@@ -6403,7 +6682,7 @@ button.swiper-pagination-bullet {
     width: 100%;
     background: #CCC;
   }
-  .home .page-row.cli .cli-window .cli-header:before {
+  .home .page-row.tech .cli-window .cli-header:before {
     margin: .33em .5em;
     border-radius: .75em;
     width: .75em;
@@ -6414,7 +6693,7 @@ button.swiper-pagination-bullet {
     margin-left: 1.60em;
     background: #ffbd2e;
   }
-  .home .page-row.cli .cli-window .cli-header:after {
+  .home .page-row.tech .cli-window .cli-header:after {
     margin: .33em .5em;
     border-radius: .75em;
     width: .75em;
@@ -6425,10 +6704,10 @@ button.swiper-pagination-bullet {
     margin-left: 2.75em;
     background: #009900;
   }
-  .home .page-row.cli .cli-window .cli-code {
+  .home .page-row.tech .cli-window .cli-code {
     padding: 1em 2em 1em 2em;
     color: #00aa00;
-    font-size: 13px;
+    font-size: 14px;
   }
 }
 .thankyou.page .row {
