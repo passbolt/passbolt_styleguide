@@ -10,7 +10,11 @@
         <div class="js_dialog_content dialog-content">
             <div class="form-content">
                 <p><strong>You are trying to delete the user "ada@passbolt.com"!</strong></p>
-                <p>This user is the sole owner of 1 password: test. You need to transfer the ownership to other users before you can proceed.</p>
+                <p>
+                    This user is the sole owner of 1 password: apache.<br/>
+                    This user is the sole group manager of 1 group: Freelancer.<br/><br/>
+                    You need to transfer the ownership to other users before you can proceed.
+                </p>
             </div>
 
             <div class="submit-wrapper clearfix">
