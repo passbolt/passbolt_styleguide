@@ -4,7 +4,7 @@
 		<!-- disabled for now -->
 	</ul>
 </div>
-<?php elseif(true) : ?>
+<?php elseif(false) : ?>
 <div class="navigation last tree categories">
 	<ul>
 		<li class="open node root">
@@ -63,7 +63,7 @@ else:
 ?>
 <div class="navigation flat tree categories passbolt_component_password_categories js_component mad_view ready" id="js_wsp_pwd_password_categories"><ul id="js_wsp_pwd_password_categories_chooser">
 		<li class="open node root group-header">
-			<div class="row title">
+			<div class="row title no-hover">
 				<div class="main-cell-wrapper">
 					<div class="main-cell">
 						<h3>Shared with my groups</h3>
