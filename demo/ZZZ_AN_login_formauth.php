@@ -16,7 +16,7 @@
 				<h2>Welcome back!</h2>
 				<div class="plugin-check-wrapper">
 					<div class="plugin-check firefox error">
-						<p class="message">An add-on is required to use Passbolt. Download it at <a href="https://github.com/passbolt/passbolt_ff/raw/develop/passbolt-firefox-addon.xpi">addons.mozilla.org</a>.</p>
+						<p class="message">An add-on is required to use Passbolt. Download it at <a href="https://github.com/passbolt/passbolt_browser_extension/raw/develop/passbolt-firefox-addon.xpi">addons.mozilla.org</a>.</p>
 					</div>
 				</div>
 				<div class="plugin-check-wrapper">
