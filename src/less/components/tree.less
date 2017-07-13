@@ -11,7 +11,7 @@
 	.row {
 		float:left;
 		width:100%;
-		padding-left:.5em;
+		padding-left:0.5em;
 		box-sizing: border-box;
 	}
 
@@ -37,6 +37,7 @@
 	*/
 	&.flat .row {
 		margin-left:0;
+		padding-left:0;
 	}
 	&.flat .main-cell {
 		margin: 0 1.5em 0 0; // no left cell = no margin left
@@ -44,6 +45,9 @@
 
 	.row:hover {
 		background:@grey-lightest;
+	}
+	.row.no-hover:hover {
+		background:transparent;
 	}
 	/* ellipsis on long node text */
 	.main-cell h3 {
