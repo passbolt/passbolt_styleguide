@@ -5532,6 +5532,7 @@ input[type="search"]::-webkit-search-cancel-button {
 .panel.aside .group .description .description_content,
 .panel.aside .user .description .description_content {
   font-size: .875em;
+  white-space: pre;
 }
 .panel.aside .resource .description textarea,
 .panel.aside .group .description textarea,
