@@ -1,6 +1,6 @@
 <base href="../src/">
 <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
-<link rel="stylesheet" type="text/css" href="css/main_ff.css">
+<link rel="stylesheet" type="text/css" href="css/main_webext.css">
 <script src="js/jquery-2.1.3.min.js"></script>
 <script type="application/javascript">
 	var resizeIframe = function(selector, options) {

@@ -16,7 +16,7 @@
 	<title>Passbolt config</title>
 	<meta name="viewport" content="width=device-width">
 	<script src="../src/js/lib/modernizr.js"></script>
-	<link rel="stylesheet" media="all" href="../src/css/config_debug_ff.css"/>
+	<link rel="stylesheet" media="all" href="../src/css/config_debug_webext.css"/>
 </head>
 <body>
 <div id="container" class="config page debug plugin">
