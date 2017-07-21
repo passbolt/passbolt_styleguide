@@ -4,8 +4,8 @@
 		<div class="header">
 			<img src="img/avatar/user.png">
 			<h3>
-				<span class="name">Cedric Alfonsi</span>
-				<span class="username">cedric@passbolt.com</span>
+				<span class="name">Ada Lovelace</span>
+				<span class="username">ada@passbolt.com</span>
 			</h3>
 		</div>
 		<a href="#" class="dialog-close">
@@ -15,10 +15,6 @@
 		<div class="detailed-information">
 			<h4>Information</h4>
 			<ul>
-				<li class="username">
-					<span class="label">Password</span>
-					<span class="value">••••••••••••••</span>
-				</li>
 				<li class="password">
 					<span class="label">Role</span>
 					<span class="value">User</span>
@@ -26,6 +22,33 @@
 				<li class="modified">
 					<span class="label">Modified</span>
 					<span class="value">6 days ago</span>
+				</li>
+			</ul>
+		</div>
+		<div class="groups">
+			<h4>Groups</h4>
+			<ul>
+				<li class="permission usercard-col-2">
+					<div class="content-wrapper">
+						<div class="content">
+							<div class="name">Human resource</div>
+							<div class="subinfo">Member</div>
+						</div>
+					</div>
+					<div class="avatar">
+						<img src="img/avatar/group_default.png">
+					</div>
+				</li>
+				<li class="permission usercard-col-2">
+					<div class="content-wrapper">
+						<div class="content">
+							<div class="name">IT support</div>
+							<div class="subinfo">Group manager</div>
+						</div>
+					</div>
+					<div class="avatar">
+						<img src="img/avatar/group_default.png">
+					</div>
 				</li>
 			</ul>
 		</div>
