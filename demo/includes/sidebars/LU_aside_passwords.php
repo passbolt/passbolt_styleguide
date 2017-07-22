@@ -78,7 +78,9 @@ uCZO5HNTgrf3rZ4wc7jtI6Nk
 				<span class="visuallyhidden">edit</span>
 			</a>
 
-			<p class="description_content">Inkscape is a professional vector graphics editor. It is free and open source.</p>
+			<p class="description_content">Inkscape is a professional vector graphics editor.
+
+>>>      It is free and open source.</p>
 			<!-- edit description form -->
 			<div id="js_rs_details_edit_description" class="passbolt_form_resource_edit_description form mad_view_form hidden" style="display: none;"><div class="form-content resource-description-edit-wrapper">
 					<input type="hidden" class="js_resource_id required mad_form_textbox form-element mad_view_form_textbox ready" name="data[Resource][id]" id="fea26624-592a-20e2-52d0-51f86413d7da" value="17c66127-0c5e-3510-a497-2e6a105109db">

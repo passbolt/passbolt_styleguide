@@ -4125,6 +4125,10 @@ article video {
   font-size: 0;
   line-height: 0;
 }
+.master-password.dialog div.input.checkbox,
+.master-password.dialog div.input.select {
+  display: inline;
+}
 .master-password.login-form input[type=text],
 .master-password.login-form input[type=password] {
   width: 80%;
