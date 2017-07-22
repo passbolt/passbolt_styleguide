@@ -5236,6 +5236,11 @@ input[type="search"]::-webkit-search-cancel-button {
 .card .content-wrapper .content .description {
   font-size: .875em;
 }
+.card .content-wrapper .content .eta {
+  padding-top: .25em;
+  color: #888888;
+  font-size: .875em;
+}
 .card .teaser {
   float: left;
   width: 90px;

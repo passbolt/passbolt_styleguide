@@ -58,21 +58,24 @@ if (isset($_GET['cards'])) {
 			[
 				'title' => 'Email notifications',
 				'description' => 'Receive email notifications when someone changed a password, posted a comment, etc.',
+				'eta' => 'June 2018',
 				'teaser' => 'email'
 			],[
 				'title' => 'Passbolt CLI',
 				'description' => 'A simple command line interface prototype as an alternative to the web client.',
-				'teaser' => 'terminal'
+                'eta' => 'Sept 2018',
+                'teaser' => 'terminal'
 			],[
 				'title' => 'API Documentation',
 				'description' => 'Api documentation done in swagger to allow people to build new integrations.',
-				'teaser' => 'swagger'
+                'eta' => 'Sept 2018',
+                'teaser' => 'swagger'
 			],[
 				'title' => 'Risk analysis',
 				'description' => 'A complete review of the security risks and mitigations in place.',
-				'teaser' => 'lock2'
-			],
-			[
+                'eta' => 'Dec 2018',
+                'teaser' => 'lock2'
+			], [
 				'title' => 'Multi device support',
 				'description' => 'Install passbolt on another computer or recover your account after a system reinstall.',
 				'teaser' => 'sync'
@@ -141,6 +144,7 @@ if (isset($_GET['cards'])) {
 								<div class="content">
 									<div class="title"><?php echo $card['title']; ?></div>
 									<div class="description"><?php echo $card['description']; ?></div>
+									<div class="eta"><?php echo $card['eta']; ?></div>
 								</div>
 							</div>
 							<div class="teaser">
