@@ -15,6 +15,10 @@
 		<div class="detailed-information">
 			<h4>Information</h4>
 			<ul>
+				<li class="status">
+					<span class="label">Status</span>
+					<span class="value">Activation pending</span>
+				</li>
 				<li class="password">
 					<span class="label">Role</span>
 					<span class="value">User</span>
