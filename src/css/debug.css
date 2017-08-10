@@ -1,15 +1,21 @@
+/* palette */
+/* borders */
+/* font */
+/* background */
+/* scrollbar */
+/* shadows */
 .cake-sql-log td,
 .cake-sql-log th {
   overflow: visible;
   white-space: normal;
-  border: 1px solid #eee;
+  border: 1px solid #dddddd;
   padding: 1em;
 }
 .cake-sql-log {
   margin-top: 3em;
 }
 .cake-sql-log thead {
-  background: #eee;
+  background: #eeeeee;
 }
 .cake-sql-log th {
   padding: .5em;

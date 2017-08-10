@@ -1,29 +1,28 @@
 /* body */
 body {
-  color: @black;
+  color: @font-default;
 }
 
 /* links */
 a:link, a:visited {
-  color: @black;
+  color: @font-default;
 }
 a:hover {
-  color:@blue;
+  color:@font-focus;
 }
 a:active, a:focus {
   outline: 0;
-  color:@blue;
+  color:@font-focus;
   border:0;
 }
 a {
-  border-bottom:1px solid @grey;
+  border-bottom:1px solid @border-default;
 }
 a:hover {
-  border-bottom:1px solid @blue;
+  border-bottom:1px solid @border-focus;
 }
-
 
 /* todos */
 .todo {
-  background:#ffffcc !important;
+  background:@yellow-lightest !important;
 }

@@ -31,7 +31,7 @@
         -moz-border-radius: 0;
         border-radius: 0;
         text-shadow:none;
-        color: @white;
+        color: @font-inverse;
         margin: 0;
 		min-width: 7.5em;
       }
@@ -49,7 +49,7 @@
         align-items: center;
         justify-content: center;
         background: @black;
-        color: @grey-lighter;
+        color: @font-lighter;
         border-radius: 50%;
         font-size: 0.7em;
         line-height: 0.7em;
@@ -74,13 +74,13 @@
 
           a {
 			min-width: 5.5em;
-			background: @grey-lightest;
-            color: @grey-darker;
+			background:@background-lightest;
+            color: @font-default;
             padding: .5em 1em;
             float:right;
             display: inline-block;
           	&:hover, &:active {
-			  background: @grey-lighter;
+			  background:@background-lighter;
 			  color:@black;
           	}
           }
@@ -104,13 +104,13 @@
 			}
 
 			a {
-				color: @grey;
+				color: @font-inverse-dark;
 				text-decoration: none;
 				border:0;
 				display: inline-block;
 
 				&:hover {
-					color: @grey-lighter;
+					color: @font-inverse;
 				}
 				&:active,
 				&:focus {
@@ -122,10 +122,10 @@
 		li {
 			.row.selected {
 				a {
-					color: @white;
+					color: @font-inverse;
 				}
 				a:focus {
-					color: @blue;
+					color: @font-focus;
 				}
 			}
 		}

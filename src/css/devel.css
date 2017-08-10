@@ -30,18 +30,18 @@
   right: 0;
   bottom: 0;
   width: 250px;
-  background-color: #070707;
+  background-color: #333333;
   z-index: 99;
   display: none;
 }
 .devel-sidebar-menu-wrapper ul li a {
-  color: #C0C0C0;
+  color: #ffffff;
   display: block;
-  border-bottom: 1px solid #222;
+  border-bottom: 1px solid #bbbbbb;
   padding: .5em 1em;
 }
 .devel-sidebar-menu-wrapper ul li a:hover {
-  background: #222;
+  background: #333333;
 }
 .dialog-wrapper-devel-components-browser .dialog {
   max-width: 90%;
@@ -67,7 +67,7 @@
 .cake-sql-log th {
   overflow: visible;
   white-space: normal;
-  border: 1px solid #eee;
+  border: 1px solid #dddddd;
   padding: 1em;
 }
 .cake-sql-log th {
@@ -75,7 +75,7 @@
   font-weigth: bold;
 }
 .cake-sql-log thead {
-  background: #eee;
+  background: #dddddd;
 }
 .page ~ .devel-sql-trace {
   position: absolute;

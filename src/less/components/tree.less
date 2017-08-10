@@ -5,7 +5,7 @@
 		font-size:1em;
 		padding-left:.5em;
 		margin: 0 1.5em 0 .5em;
-		color: @grey-darker;
+		color: @font-default;
 	}
 
 	.row {
@@ -44,7 +44,7 @@
 	}
 
 	.row:hover {
-		background:@grey-lightest;
+		background:@background-lightest;
 	}
 	.row.no-hover:hover {
 		background:transparent;
@@ -112,12 +112,12 @@
 	.row:hover .right-cell a {
 		opacity:.8;
 		filter:alpha(opacity=80);
-		background: @white url('@{images}/controls/tree-ctrl.png') center -9px no-repeat;
+		background: @background-default url('@{images}/controls/tree-ctrl.png') center -9px no-repeat;
 	}
 	.row:hover .right-cell a:hover {
 		opacity:1;
 		filter:alpha(opacity=100);
-		background: @white url('@{images}/controls/tree-ctrl.png') center -9px no-repeat;
+		background: @background-default url('@{images}/controls/tree-ctrl.png') center -9px no-repeat;
 	}
 
 	/* Events & visibility */

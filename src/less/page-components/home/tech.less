@@ -1,7 +1,7 @@
 .home .page-row.tech {
   text-shadow: 2px 2px #000;
   background: @background-dark;
-  color: @white;
+  color: @font-inverse;
   -moz-box-shadow: inset 0 16px 16px -16px #000, inset 0 -16px 16px -16px #000;
   -webkit-box-shadow: inset 0 16px 16px -16px #000, inset 0 -16px 16px -16px #000;
   box-shadow: inset 0  16px 16px -16px #000, inset 0 -16px 16px -16px #000;
@@ -62,7 +62,7 @@
       margin:0 0 0 -1.75em;
       float:left;
       width:940px;
-      background:#111;
+      background:@blacker;
       box-shadow: 5px -5px 22px -10px rgba(0,0,0,0.75);
 
       .cli-fake-button() {
@@ -85,12 +85,12 @@
         border-bottom-right-radius: 0;
         height:1.33em;
         width:100%;
-        background:#CCC;
+        background:@background-light;
 
         &:before {
           .cli-fake-button();
           margin-left:1.60em;
-          background:#ffbd2e;
+          background: @yellow;
         }
         &:after {
           .cli-fake-button();
@@ -100,7 +100,7 @@
       }
       .cli-code {
         padding:1em 2em 1em 2em;
-        color:#00aa00;
+        color:@green;
         font-size:14px;
       }
     }

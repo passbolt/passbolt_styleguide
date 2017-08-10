@@ -1,10 +1,10 @@
 /**!
  * @name		passbolt-styleguide
- * @version		v1.6.4
- * @date		2017-08-09
+ * @version		v1.6.5
+ * @date		2017-08-10
  * @copyright	Copyright 2017 Passbolt SARL
  * @source		https://github.com/passbolt/passbolt_styleguide
  * @license		AGPL-3.0
  */
 
-.cake-sql-log td,.cake-sql-log th{overflow:visible;white-space:normal;border:1px solid #eee;padding:1em}.cake-sql-log{margin-top:3em}.cake-sql-log thead{background:#eee}.cake-sql-log th{padding:.5em;font-weigth:bold}
+.cake-sql-log td,.cake-sql-log th{overflow:visible;white-space:normal;border:1px solid #ddd;padding:1em}.cake-sql-log{margin-top:3em}.cake-sql-log thead{background:#eee}.cake-sql-log th{padding:.5em;font-weigth:bold}

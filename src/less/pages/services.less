@@ -11,7 +11,7 @@
   }
 
   .page-row.intro {
-    background: #FAFAFA;
+    background: @background-lightest;
 
     .service-teaser {
       margin:auto;
@@ -51,7 +51,7 @@
   .service-details {
     .presentation {
       text-align: left;
-      border-top: 1px solid #f3f3f3;
+      border-top: 1px solid @border-lightest;
       margin-top: 1em;
       h2 {
         text-align: left;
@@ -62,7 +62,7 @@
         margin-top:0;
         margin-bottom:1em;
         border:0;
-        color: @grey-darker;
+        color: @font-default;
       }
       p {
         font-size:1em;
@@ -108,7 +108,7 @@
     }
 
     .signup {
-      background:#FFF;
+      background: @background-default;
     }
     .service {
       &.pull-up{
@@ -160,7 +160,7 @@
         padding-top:1em;
         margin-top:-1em;
         border-radius: 3px;
-        background: @white;
+        background: @background-default;
         border:1px solid @border-default;
       }
 
@@ -168,11 +168,11 @@
         border-radius: 3px;
         padding-bottom:1em;
         border:1px solid @border-default;
-        background: @grey-lightest;
+        background:@background-lightest;
       }
     }
     .page-row.intro {
-      background:#FAFAFA;
+      background:@background-lightest;
       min-height: 400px;
       h1 {
         padding-left:0;
@@ -193,7 +193,7 @@
     .service-details {
       .presentation {
         text-align: center;
-        border-top: 1px solid #f3f3f3;
+        border-top: 1px solid @border-lightest;
         margin-top: 1em;
         h2 {
           text-align: center;
@@ -219,6 +219,4 @@
       }
     }
   }
-
-
 }

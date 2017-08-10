@@ -406,13 +406,6 @@ hr {
   height: 0;
 }
 /**
- * Address styling not present in IE 6/7/8/9.
- */
-mark {
-  background: #ff0;
-  color: #000;
-}
-/**
  * Address margins set differently in IE 6/7.
  */
 p,
@@ -523,14 +516,6 @@ figure {
  */
 form {
   margin: 0;
-}
-/**
- * Define consistent border, margin, and padding.
- */
-fieldset {
-  border: 1px solid #c0c0c0;
-  margin: 0 2px;
-  padding: 0.35em 0.625em 0.75em;
 }
 /**
  * 1. Correct color not being inherited in IE 6/7/8/9.
@@ -708,7 +693,7 @@ a:hover {
 }
 /* todos */
 .todo {
-  background: #ffffcc !important;
+  background: #fffae7 !important;
 }
 /*
  * Typography
@@ -2864,21 +2849,21 @@ label {
 */
 .required label:after {
   content: " *";
-  color: #D40000;
+  color: #d40101;
   font-weight: bold;
 }
 /* fallback placeholder */
 .placeholder {
-  color: #bbb;
+  color: #969696;
 }
 /* webkit placeholder */
 ::-webkit-input-placeholder {
-  color: #bbb;
+  color: #969696;
 }
 /* moz placeholder */
 :-moz-placeholder,
 ::-moz-placeholder {
-  color: #bbb;
+  color: #969696;
 }
 /*
 	Generic Form Item
@@ -2927,7 +2912,7 @@ input[type=email]:focus {
   -webkit-box-shadow: inset 1px 1px 2px rgba(255, 255, 255, 0.2);
   -moz-box-shadow: inset 1px 1px 2px rgba(0, 0, 0, 0.2);
   box-shadow: inset 1px 1px 2px rgba(0, 0, 0, 0.2);
-  border: 1px solid #2a9ceb;
+  border: 1px solid #2894df;
 }
 input[type=password]:disabled,
 input[type=search]:disabled,
@@ -2979,7 +2964,7 @@ textarea {
 }
 .text.input input:focus + .input-addon i,
 .date.input input:focus + .input-addon i {
-  border: 1px solid #2a9ceb;
+  border: 1px solid #2894df;
 }
 .text.input input:disabled + .input-addon i,
 .date.input input:disabled + .input-addon i {
@@ -3119,19 +3104,21 @@ a.button.big {
 button.primary {
   background: #2894df;
   border: 1px solid #2894df;
-  color: #FFF;
+  color: #ffffff;
   text-shadow: 0 1px 0 rgba(0, 0, 0, 0.2);
 }
 .button.primary:hover,
-button.primary:hover,
-button.primary:active,
-.button.primary:active {
+button.primary:hover {
+  color: #ffffff;
   border: 1px solid #2a9ceb;
   background: #2a9ceb;
 }
+button.primary:active,
+.button.primary:active,
 .button.primary:focus,
 button.primary:focus {
-  border: 1px solid #2894df;
+  color: #ffffff;
+  border: 1px solid #4271b7;
   background: #2a9ceb;
 }
 /* warning */
@@ -3139,8 +3126,14 @@ button.primary:focus {
 .button.warning:hover,
 .button.warning:focus,
 .button.warning:active {
+  color: #ffffff;
   background: #d40101;
   border: 1px solid #d40101;
+  text-shadow: none;
+}
+.button.warning:focus,
+.button.warning:active {
+  border: 1px solid #92000c;
 }
 /* cancel */
 .button.cancel,
@@ -3158,6 +3151,7 @@ button.primary:focus {
 input[type=submit]:hover,
 .button:hover,
 button:hover {
+  color: #333333;
   text-decoration: none;
   background: #eeeeee;
   background-image: -moz-linear-gradient(top, #f3f3f3, #eeeeee);
@@ -3172,17 +3166,19 @@ button:hover {
 input[type=submit]:focus,
 .button:focus,
 button:focus {
+  color: #2894df;
   border: 1px solid #2894df;
 }
 /* active */
 input[type=submit]:active button:active,
 .button:active {
-  background: #ededed;
+  color: #2894df;
+  border: 1px solid #2894df;
+  background: #eeeeee;
   position: relative;
   -webkit-box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.2);
   -moz-box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.2);
   box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.2);
-  border: 1px solid #cccccc;
 }
 input[type=submit].disabled,
 button.disabled,
@@ -3213,7 +3209,7 @@ button.disabled:focus,
 }
 /* toggle selected */
 .toggle.button.selected {
-  background: #E0E0E0;
+  background: #eeeeee;
   -webkit-box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.2);
   -moz-box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.2);
   box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.2);
@@ -3305,7 +3301,7 @@ html body .button.processing {
   top: -1px;
   left: -1px;
   background: #ffffff url('../img/controls/loading.gif') center center no-repeat;
-  border: 1px solid #CCC;
+  border: 1px solid #bbbbbb;
   border-radius: 5px;
   padding: 1px;
 }
@@ -3834,7 +3830,7 @@ html body .button.processing {
   align-items: center;
   justify-content: center;
   background: #333333;
-  color: #eeeeee;
+  color: #969696;
   border-radius: 50%;
   font-size: 0.7em;
   line-height: 0.7em;
@@ -3858,7 +3854,7 @@ html body .button.processing {
 .header .greedy .navigation.primary ul.hidden-links li a {
   min-width: 5.5em;
   background: #f3f3f3;
-  color: #888888;
+  color: #333333;
   padding: .5em 1em;
   float: right;
   display: inline-block;
@@ -3887,7 +3883,7 @@ html body .button.processing {
   display: inline-block;
 }
 .header .navigation.primary li a:hover {
-  color: #eeeeee;
+  color: #ffffff;
 }
 .header .navigation.primary li a:active,
 .header .navigation.primary li a:focus {
@@ -3975,13 +3971,13 @@ html body .button.processing {
   padding-top: 0.3em;
   padding-left: 1em;
   font-size: 0.7em;
-  color: #888888;
+  color: #333333;
 }
 .dialog .dialog-content {
   position: relative;
 }
 .dialog .form-content {
-  background: #FFF;
+  background: #ffffff;
   padding: .813em 1.25em .813em 1.5em;
 }
 .dialog label {
@@ -4108,7 +4104,7 @@ html body .button.processing {
   /* 12px */
   width: 98%;
   height: 2em;
-  background: #FFF;
+  background: #ffffff;
   border-top: 1px solid #dddddd;
   z-index: 890;
 }
@@ -4153,7 +4149,7 @@ html body .button.processing {
   background: #daecf9;
 }
 .message.warning {
-  background: #ffefc1;
+  background: #fef0bf;
 }
 /* big side info message blocks on setup or profile pages */
 .side-message {
@@ -4191,7 +4187,7 @@ html body .button.processing {
   background-color: #ffe4e4;
 }
 .plugin-check.warning {
-  background-color: #ffefc1;
+  background-color: #fef0bf;
 }
 .plugin-check.notice {
   background-color: #daecf9;
@@ -4273,9 +4269,9 @@ html body .button.processing {
   z-index: 990;
   padding: 8px;
   width: 160px;
-  background-color: #000;
+  background-color: #333333;
   background-color: rgba(51, 51, 51, 0.9);
-  color: #fff;
+  color: #ffffff;
   content: attr(data-tooltip);
   font-size: 14px;
   line-height: 1.2em;
@@ -4298,7 +4294,7 @@ html body .button.processing {
 .tooltip-top:before {
   margin-left: -6px;
   margin-bottom: -12px;
-  border-top-color: #000;
+  border-top-color: #333333;
   border-top-color: rgba(51, 51, 51, 0.9);
 }
 /* Horizontally align top/bottom tooltips */
@@ -4339,7 +4335,7 @@ html body .button.processing {
   margin-right: -12px;
   margin-bottom: 0;
   border-top-color: transparent;
-  border-left-color: #000;
+  border-left-color: #333333;
   border-left-color: rgba(51, 51, 51, 0.9);
 }
 .tooltip-left:hover:before,
@@ -4363,7 +4359,7 @@ html body .button.processing {
   margin-top: -12px;
   margin-bottom: 0;
   border-top-color: transparent;
-  border-bottom-color: #000;
+  border-bottom-color: #333333;
   border-bottom-color: rgba(51, 51, 51, 0.9);
 }
 .tooltip-bottom:hover:before,
@@ -4386,7 +4382,7 @@ html body .button.processing {
   margin-bottom: 0;
   margin-left: -12px;
   border-top-color: transparent;
-  border-right-color: #000;
+  border-right-color: #333333;
   border-right-color: rgba(51, 51, 51, 0.9);
 }
 .tooltip-right:hover:before,
@@ -4437,9 +4433,9 @@ html body .button.processing {
   position: absolute;
   visibility: hidden;
   width: 180px;
-  background-color: #000;
+  background-color: #333333;
   background-color: rgba(51, 51, 51, 0.9);
-  color: #fff;
+  color: #ffffff;
   padding: .5em 1em;
   -webkit-transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out, -webkit-transform 0.2s cubic-bezier(0.71, 1.7, 0.77, 1.24);
   -moz-transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out, -moz-transform 0.2s cubic-bezier(0.71, 1.7, 0.77, 1.24);

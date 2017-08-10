@@ -201,7 +201,7 @@ html body .hidden {
   align-items: center;
   justify-content: center;
   background: #333333;
-  color: #eeeeee;
+  color: #969696;
   border-radius: 50%;
   font-size: 0.7em;
   line-height: 0.7em;
@@ -225,7 +225,7 @@ html body .hidden {
 .header .greedy .navigation.primary ul.hidden-links li a {
   min-width: 5.5em;
   background: #f3f3f3;
-  color: #888888;
+  color: #333333;
   padding: .5em 1em;
   float: right;
   display: inline-block;
@@ -254,7 +254,7 @@ html body .hidden {
   display: inline-block;
 }
 .header .navigation.primary li a:hover {
-  color: #eeeeee;
+  color: #ffffff;
 }
 .header .navigation.primary li a:active,
 .header .navigation.primary li a:focus {
@@ -355,9 +355,9 @@ html body .hidden {
   z-index: 990;
   padding: 8px;
   width: 160px;
-  background-color: #000;
+  background-color: #333333;
   background-color: rgba(51, 51, 51, 0.9);
-  color: #fff;
+  color: #ffffff;
   content: attr(data-tooltip);
   font-size: 14px;
   line-height: 1.2em;
@@ -380,7 +380,7 @@ html body .hidden {
 .tooltip-top:before {
   margin-left: -6px;
   margin-bottom: -12px;
-  border-top-color: #000;
+  border-top-color: #333333;
   border-top-color: rgba(51, 51, 51, 0.9);
 }
 /* Horizontally align top/bottom tooltips */
@@ -421,7 +421,7 @@ html body .hidden {
   margin-right: -12px;
   margin-bottom: 0;
   border-top-color: transparent;
-  border-left-color: #000;
+  border-left-color: #333333;
   border-left-color: rgba(51, 51, 51, 0.9);
 }
 .tooltip-left:hover:before,
@@ -445,7 +445,7 @@ html body .hidden {
   margin-top: -12px;
   margin-bottom: 0;
   border-top-color: transparent;
-  border-bottom-color: #000;
+  border-bottom-color: #333333;
   border-bottom-color: rgba(51, 51, 51, 0.9);
 }
 .tooltip-bottom:hover:before,
@@ -468,7 +468,7 @@ html body .hidden {
   margin-bottom: 0;
   margin-left: -12px;
   border-top-color: transparent;
-  border-right-color: #000;
+  border-right-color: #333333;
   border-right-color: rgba(51, 51, 51, 0.9);
 }
 .tooltip-right:hover:before,
@@ -519,9 +519,9 @@ html body .hidden {
   position: absolute;
   visibility: hidden;
   width: 180px;
-  background-color: #000;
+  background-color: #333333;
   background-color: rgba(51, 51, 51, 0.9);
-  color: #fff;
+  color: #ffffff;
   padding: .5em 1em;
   -webkit-transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out, -webkit-transform 0.2s cubic-bezier(0.71, 1.7, 0.77, 1.24);
   -moz-transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out, -moz-transform 0.2s cubic-bezier(0.71, 1.7, 0.77, 1.24);
