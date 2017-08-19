@@ -4157,15 +4157,12 @@ article video {
   height: 2px;
   display: block;
 }
-.progress-details {
-  display: none;
-}
 /* larger progress bar */
 .progress-bar-wrapper {
   border: 1px solid #dddddd;
   height: 10px;
   display: block;
-  margin: 2em 0;
+  margin: 2em 0 0 0;
   padding: 2px;
 }
 .progress-bar-wrapper .progress-bar.big {
@@ -4194,6 +4191,13 @@ article video {
   -ms-filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=5);
   filter: progid:DXImageTransform.Microsoft.Alpha(opacity=5);
   filter: alpha(opacity=5);
+}
+.progress-details {
+  color: #888888;
+  margin: 0.5em 0 1.5em 0;
+}
+.progress-details .progress-percent {
+  float: right;
 }
 /*
 	Contextual loading bar

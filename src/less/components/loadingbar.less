@@ -10,16 +10,13 @@
 	height:2px;
 	display:block;
 }
-.progress-details {
-	display:none;
-}
 
 /* larger progress bar */
 .progress-bar-wrapper {
 	border:1px solid @border-default;
 	height:10px;
 	display:block;
-	margin:2em 0;
+	margin:2em 0 0 0;
 	padding:2px;
 
 	.progress-bar.big {
@@ -55,6 +52,14 @@
 
 	}
 
+}
+
+.progress-details {
+	color: @grey-darker;
+	margin:0.5em 0 1.5em 0;
+	.progress-percent {
+		float: right;
+	}
 }
 
 /*

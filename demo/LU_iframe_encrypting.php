@@ -24,8 +24,8 @@
 				</div>
 
 				<div class="progress-details">
-					<span class="progress-step-label" id="js_progress_step_label">completed</span>
-					<span style="float:right" class="progress-percent"><span id="js_progress_percent">100</span>%</span>
+					<span class="progress-step-label" id="js_progress_step_label">encrypting 1/300</span>
+					<span style="float:right" class="progress-percent"><span id="js_progress_percent">3</span>%</span>
 				</div>
 
 			</div>
