@@ -3068,6 +3068,7 @@ button.disabled:active,
 input[type=submit].disabled:focus,
 button.disabled:focus,
 .button.disabled:focus {
+  color: #888888;
   -webkit-box-shadow: 0 0 0;
   -moz-box-shadow: 0 0 0;
   box-shadow: 0 0 0;
