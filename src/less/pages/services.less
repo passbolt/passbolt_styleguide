@@ -1,12 +1,65 @@
+.page.services.featured{
+  .service-col {
+    h3 {
+      font-weight:normal;
+      padding:0 0.5em;
+      margin-top:0.2em;
+      border:0;
+    }
+  }
+
+  .service-description {
+    padding-top:0 !important;
+    ul {
+      min-height: 275px;
+      li {
+        padding:0.4em;
+        font-size:0.8em;
+        border-top:1px solid @grey;
+      }
+    }
+  }
+
+  .page-row.intro {
+    min-height: 310px;
+  }
+
+  .pricing {
+    font-weight:bold;
+    font-size:1.1em;
+  }
+
+  .demo_cta {
+    margin-top: 4em;
+    border-top:1px solid @grey-lighter;
+    padding-top:1em;
+
+    p {
+      font-size: 2em;
+      margin-bottom: 0.5em;
+    }
+  }
+}
+
 .page.services {
 
   // Exception for mobile version, for
   // service details page. (cloud and pro).
   // Top icon shouldn't be centered.
   &.cloud,
-  &.pro {
-    .page-row.intro .service-teaser {
-      margin:0;
+  &.pro,
+  &.community {
+    .page-row.intro {
+      min-height:130px;
+      h1 {
+        margin:0;
+      }
+      p {
+        margin:0;
+      }
+      .service-teaser {
+        margin:0;
+      }
     }
   }
 
@@ -51,7 +104,6 @@
   .service-details {
     .presentation {
       text-align: left;
-      border-top: 1px solid @border-lightest;
       margin-top: 1em;
       h2 {
         text-align: left;
@@ -89,6 +141,81 @@
       }
     }
   }
+  
+  .registration.form {
+    text-align: left;
+    div.input{
+      input[type=text],
+      input[type=email]{
+        width:85%;
+      }
+    }
+    select {
+      width:89%;
+    }
+    em {
+      display: block;
+      color: @grey-dark;
+      font-size:0.8em;
+      width: 90%;
+    }
+    .email {
+      em {
+        margin:0;
+      }
+    }
+
+    .sponsorship {
+      margin:1em 0 2em;
+      .sponsorship-options {
+        width: 86%;
+        margin-top:1em;
+        padding:1em 0.5em;
+        background-color: @grey-lighter;
+        ul {
+          li {
+            list-style-type: none;
+            display: inline-block;
+            width:20%;
+            label {
+              display: inline-block;
+              padding:0 0 0 0.3em;
+            }
+            input[type=radio] + label {
+              font-weight:normal;
+            }
+            input[type=radio]:checked + label {
+              font-weight:bold;
+            }
+          }
+        }
+      }
+    }
+    em {
+      margin-top:1em;
+    }
+  }
+
+  .sponsorhip-details {
+    background-color: @grey-lighter;
+    padding:1em;
+    text-align: left;
+    h3 {
+      text-align: left !important;
+      margin:0 !important;
+    }
+    p {
+      font-size:1em !important;
+      margin:0 0 0.5em 0 !important;
+    }
+    ul {
+      margin: 1em 0 0 1.6em;
+      li {
+        font-size:1em;
+        margin-bottom: 0.5em;
+      }
+    }
+  }
 }
 
 
@@ -101,7 +228,8 @@
     // Cancel mobile exception.
     // Top icon should be centered.
     &.cloud,
-    &.pro {
+    &.pro,
+    &.community{
       .page-row.intro .service-teaser {
         margin: 1em auto;
       }
@@ -137,15 +265,15 @@
         width:3em;
         height:3em;
 
-        i.fa-rocket {
-          font-size:2em;
-          margin-top:.25em;
-          margin-left:-.125em;
+        i.fa-group {
+          font-size: 1.8em;
+          margin-top: .32em;
+          margin-left: 0.05em;
         }
-        i.fa-cubes {
+        i.fa-star {
           font-size:2em;
-          margin-top:.2em;
-          margin-left:.1em;
+          margin-top: .25em;
+          margin-left: .05em;
         }
         i.fa-cloud {
           font-size:1.75em;
@@ -193,8 +321,7 @@
     .service-details {
       .presentation {
         text-align: center;
-        border-top: 1px solid @border-lightest;
-        margin-top: 1em;
+        margin-top: 2em;
         h2 {
           text-align: center;
           font-size:2em;
@@ -206,9 +333,12 @@
           font-size:1.2em;
           margin-bottom:2em;
         }
+
       }
       ul.features {
         font-size: 1.2em;
+        border-bottom:1px solid @grey-lightest;
+        padding-bottom:1em;
         li {
           margin-bottom:0.3em;
           div {
@@ -219,4 +349,31 @@
       }
     }
   }
+}
+
+.page.services.community.download {
+  .page-row.intro {
+    padding: 1em;
+    min-height: 130px;
+  }
+  
+  .presentation {
+    text-align: center;
+    p.headline {
+      font-weight:bold;
+      font-size:1.5em;
+    }
+  }
+  .step {
+    text-align: center;
+    div.illustration,
+    h2,
+    p {
+      text-align: center;
+      a.button {
+        margin-bottom:1em;
+      }
+    }
+  }
+
 }

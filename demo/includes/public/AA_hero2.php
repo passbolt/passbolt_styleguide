@@ -13,8 +13,8 @@
 					</p>
 				</div>
 				<div class="call-to-action">
-					<a href="AN_login.php" class="button primary">
-						Try out the demo!
+					<a href="../demo/AA_services.php" class="button primary">
+						Get passbolt
 					</a>
 				</div>
 			</div>

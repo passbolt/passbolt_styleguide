@@ -6793,8 +6793,57 @@ button.swiper-pagination-bullet {
     line-height: 1.666em;
   }
 }
+.page.services.featured .service-col h3 {
+  font-weight: normal;
+  padding: 0 0.5em;
+  margin-top: 0.2em;
+  border: 0;
+}
+.page.services.featured .service-description {
+  padding-top: 0 !important;
+}
+.page.services.featured .service-description ul {
+  min-height: 275px;
+}
+.page.services.featured .service-description ul li {
+  padding: 0.4em;
+  font-size: 0.8em;
+  border-top: 1px solid #dddddd;
+}
+.page.services.featured .page-row.intro {
+  min-height: 310px;
+}
+.page.services.featured .pricing {
+  font-weight: bold;
+  font-size: 1.1em;
+}
+.page.services.featured .demo_cta {
+  margin-top: 4em;
+  border-top: 1px solid #eeeeee;
+  padding-top: 1em;
+}
+.page.services.featured .demo_cta p {
+  font-size: 2em;
+  margin-bottom: 0.5em;
+}
+.page.services.cloud .page-row.intro,
+.page.services.pro .page-row.intro,
+.page.services.community .page-row.intro {
+  min-height: 130px;
+}
+.page.services.cloud .page-row.intro h1,
+.page.services.pro .page-row.intro h1,
+.page.services.community .page-row.intro h1 {
+  margin: 0;
+}
+.page.services.cloud .page-row.intro p,
+.page.services.pro .page-row.intro p,
+.page.services.community .page-row.intro p {
+  margin: 0;
+}
 .page.services.cloud .page-row.intro .service-teaser,
-.page.services.pro .page-row.intro .service-teaser {
+.page.services.pro .page-row.intro .service-teaser,
+.page.services.community .page-row.intro .service-teaser {
   margin: 0;
 }
 .page.services .page-row.intro {
@@ -6830,7 +6879,6 @@ button.swiper-pagination-bullet {
 }
 .page.services .service-details .presentation {
   text-align: left;
-  border-top: 1px solid #f3f3f3;
   margin-top: 1em;
 }
 .page.services .service-details .presentation h2 {
@@ -6863,13 +6911,80 @@ button.swiper-pagination-bullet {
   display: inline-block;
   margin-left: 0.5em;
 }
+.page.services .registration.form {
+  text-align: left;
+}
+.page.services .registration.form div.input input[type=text],
+.page.services .registration.form div.input input[type=email] {
+  width: 85%;
+}
+.page.services .registration.form select {
+  width: 89%;
+}
+.page.services .registration.form em {
+  display: block;
+  color: #969696;
+  font-size: 0.8em;
+  width: 90%;
+}
+.page.services .registration.form .email em {
+  margin: 0;
+}
+.page.services .registration.form .sponsorship {
+  margin: 1em 0 2em;
+}
+.page.services .registration.form .sponsorship .sponsorship-options {
+  width: 86%;
+  margin-top: 1em;
+  padding: 1em 0.5em;
+  background-color: #eeeeee;
+}
+.page.services .registration.form .sponsorship .sponsorship-options ul li {
+  list-style-type: none;
+  display: inline-block;
+  width: 20%;
+}
+.page.services .registration.form .sponsorship .sponsorship-options ul li label {
+  display: inline-block;
+  padding: 0 0 0 0.3em;
+}
+.page.services .registration.form .sponsorship .sponsorship-options ul li input[type=radio] + label {
+  font-weight: normal;
+}
+.page.services .registration.form .sponsorship .sponsorship-options ul li input[type=radio]:checked + label {
+  font-weight: bold;
+}
+.page.services .registration.form em {
+  margin-top: 1em;
+}
+.page.services .sponsorhip-details {
+  background-color: #eeeeee;
+  padding: 1em;
+  text-align: left;
+}
+.page.services .sponsorhip-details h3 {
+  text-align: left !important;
+  margin: 0 !important;
+}
+.page.services .sponsorhip-details p {
+  font-size: 1em !important;
+  margin: 0 0 0.5em 0 !important;
+}
+.page.services .sponsorhip-details ul {
+  margin: 1em 0 0 1.6em;
+}
+.page.services .sponsorhip-details ul li {
+  font-size: 1em;
+  margin-bottom: 0.5em;
+}
 /* even larger screen */
 @media all and (min-width: 800px) {
   .page.services {
     background-size: 42% auto;
   }
   .page.services.cloud .page-row.intro .service-teaser,
-  .page.services.pro .page-row.intro .service-teaser {
+  .page.services.pro .page-row.intro .service-teaser,
+  .page.services.community .page-row.intro .service-teaser {
     margin: 1em auto;
   }
   .page.services .signup {
@@ -6902,15 +7017,15 @@ button.swiper-pagination-bullet {
     width: 3em;
     height: 3em;
   }
-  .page.services .service .service-teaser i.fa-rocket {
+  .page.services .service .service-teaser i.fa-group {
+    font-size: 1.8em;
+    margin-top: .32em;
+    margin-left: 0.05em;
+  }
+  .page.services .service .service-teaser i.fa-star {
     font-size: 2em;
     margin-top: .25em;
-    margin-left: -0.125em;
-  }
-  .page.services .service .service-teaser i.fa-cubes {
-    font-size: 2em;
-    margin-top: .2em;
-    margin-left: .1em;
+    margin-left: .05em;
   }
   .page.services .service .service-teaser i.fa-cloud {
     font-size: 1.75em;
@@ -6950,8 +7065,7 @@ button.swiper-pagination-bullet {
   }
   .page.services .service-details .presentation {
     text-align: center;
-    border-top: 1px solid #f3f3f3;
-    margin-top: 1em;
+    margin-top: 2em;
   }
   .page.services .service-details .presentation h2 {
     text-align: center;
@@ -6966,6 +7080,8 @@ button.swiper-pagination-bullet {
   }
   .page.services .service-details ul.features {
     font-size: 1.2em;
+    border-bottom: 1px solid #f3f3f3;
+    padding-bottom: 1em;
   }
   .page.services .service-details ul.features li {
     margin-bottom: 0.3em;
@@ -6974,6 +7090,30 @@ button.swiper-pagination-bullet {
     width: 80%;
     float: right;
   }
+}
+.page.services.community.download .page-row.intro {
+  padding: 1em;
+  min-height: 130px;
+}
+.page.services.community.download .presentation {
+  text-align: center;
+}
+.page.services.community.download .presentation p.headline {
+  font-weight: bold;
+  font-size: 1.5em;
+}
+.page.services.community.download .step {
+  text-align: center;
+}
+.page.services.community.download .step div.illustration,
+.page.services.community.download .step h2,
+.page.services.community.download .step p {
+  text-align: center;
+}
+.page.services.community.download .step div.illustration a.button,
+.page.services.community.download .step h2 a.button,
+.page.services.community.download .step p a.button {
+  margin-bottom: 1em;
 }
 .page.contacts .page-row.intro {
   background: #f3f3f3;
