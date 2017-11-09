@@ -22,7 +22,8 @@
     <div class="header second">
         <?php include('includes/AN_logo.php'); ?>
         <div class="col2_3">
-            <h2>Need some help? We got your back!</h2>
+            <h2>Need some help?
+                <a href="https://community.passbolt.com" class="">Ask the community!</a></h2>
         </div>
     </div>
 

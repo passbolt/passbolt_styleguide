@@ -3865,13 +3865,13 @@ html body .button.processing {
   background: #eeeeee;
   color: #333333;
 }
-.header .navigation.primary {
-  /* home button is special */
-}
 .header .navigation.primary li {
-  padding: .5em 1em 0 .25em;
+  padding: .5em;
   height: 1.75em;
   float: left;
+}
+.header .navigation.primary li:first-child {
+  padding-left: 1em;
 }
 .header .navigation.primary li.right {
   float: right;
@@ -3896,35 +3896,9 @@ html body .button.processing {
 .header .navigation.primary li .row.selected a:focus {
   color: #2894df;
 }
-.header .navigation.primary .home a {
-  margin-top: .125em;
-  margin-left: .5em;
-  width: 1.250em;
-  height: 1.250em;
-  background: transparent url('../img/logo/icon-20_white.png') 0 0 no-repeat;
-}
-.header .navigation.primary .home a:focus,
-.header .navigation.primary .home:hover a {
-  background: transparent url('../img/logo/icon-20.png') 0 0 no-repeat;
-}
-.header .navigation.primary .home a span {
-  display: none;
-}
 .header .logo {
   margin: 1.25em 0 0 1em;
   max-width: 80%;
-}
-/* CSS for serving the retina image to devices with a high "device-pixel-ratio": */
-@media only screen and (-moz-min-device-pixel-ratio: 1.5), only screen and (-o-min-device-pixel-ratio: 3/2), only screen and (-webkit-min-device-pixel-ratio: 1.5), only screen and (min-devicepixel-ratio: 1.5), only screen and (min-resolution: 1.5dppx) {
-  .header .navigation.primary .home a {
-    background: transparent url('../img/logo/icon-48_white.png') 0 0 no-repeat;
-    background-size: 20px 20px;
-  }
-  .header .navigation.primary .home a:focus,
-  .header .navigation.primary .home:hover a {
-    background: transparent url('../img/logo/icon-48.png') 0 0 no-repeat;
-    background-size: 20px 20px;
-  }
 }
 /* Dialog */
 .dialog-wrapper {

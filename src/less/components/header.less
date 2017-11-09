@@ -94,10 +94,13 @@
 	.navigation.primary {
 
 		li {
-			padding: .5em 1em 0 .25em;
+			padding: .5em;
 			height: 1.75em;
 			float: left;
 
+            &:first-child {
+              padding-left:1em;
+            }
 			&.right {
 				float: right;
 				margin-right: 1em;
@@ -129,47 +132,11 @@
 				}
 			}
 		}
-
-		/* home button is special */
-		.home {
-			a {
-				margin-top:.125em;
-				margin-left: .5em;
-				width: 1.250em;
-				height: 1.250em;
-				background: transparent url('@{images}/logo/icon-20_white.png') 0 0 no-repeat;
-			}
-			a:focus, &:hover a {
-				background: transparent url('@{images}/logo/icon-20.png') 0 0 no-repeat;
-			}
-			a span {
-				display: none;
-			}
-		}
 	}
 
 	/* logo positioning */
 	.logo {
 		margin: 1.25em 0 0 1em;
 		max-width: 80%;
-	}
-
-}
-
-/* CSS for serving the retina image to devices with a high "device-pixel-ratio": */
-@media only screen and (-moz-min-device-pixel-ratio: 1.5),
-only screen and (-o-min-device-pixel-ratio: 3/2),
-only screen and (-webkit-min-device-pixel-ratio: 1.5),
-only screen and (min-devicepixel-ratio: 1.5),
-only screen and (min-resolution: 1.5dppx) {
-	.header .navigation.primary .home {
-		a {
-			background: transparent url('@{images}/logo/icon-48_white.png') 0 0 no-repeat;
-			background-size: 20px 20px;
-		}
-		a:focus, &:hover a {
-			background: transparent url('@{images}/logo/icon-48.png') 0 0 no-repeat;
-			background-size: 20px 20px;
-		}
 	}
 }
