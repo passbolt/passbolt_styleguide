@@ -41,12 +41,12 @@ module.exports = function(grunt) {
 		cssmin: {
 			options: {
 				banner: '/**!\n'+
-								' * @name\t\t<%= pkg.name %>\n'+
-								' * @version\t\tv<%= pkg.version %>\n' +
-								' * @date\t\t<%= grunt.template.today("yyyy-mm-dd") %>\n' +
-								' * @copyright\t<%= pkg.copyright %>\n' +
-								' * @source\t\t<%= pkg.repository %>\n'+
-								' * @license\t\t<%= pkg.license %>\n */\n',
+						' * @name\t\t<%= pkg.name %>\n'+
+						' * @version\t\tv<%= pkg.version %>\n' +
+						' * @date\t\t<%= grunt.template.today("yyyy-mm-dd") %>\n' +
+						' * @copyright\t<%= pkg.copyright %>\n' +
+						' * @source\t\t<%= pkg.repository %>\n'+
+						' * @license\t\t<%= pkg.license %>\n */\n',
 				footer: '/* @license-end */'
 			},
 			minify: {

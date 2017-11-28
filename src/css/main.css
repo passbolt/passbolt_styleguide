@@ -3395,10 +3395,6 @@ input[type=text].fluid {
   bottom: 0;
 }
 /* headers */
-.header.first {
-  /* height:2.375em; //already defined in header */
-  height: 2.375em;
-}
 .header.second {
   top: 2.375em;
   height: 4.5em;
@@ -3526,7 +3522,7 @@ input[type=text].fluid {
  * 2. The use of `table` rather than `block` is only necessary if using
  *	`:before` to contain the top-margins of child elements.
  */
-  padding: 0 .5em 0 1em;
+  padding: 0 .5em 0 .5em;
 }
 .grid-responsive-12 .row:before,
 .grid .row:before,
@@ -3574,10 +3570,6 @@ input[type=text].fluid {
 .grid .row .col11,
 .grid-responsive-12 .row .col12,
 .grid .row .col12 {
-  left: auto;
-  float: none;
-  width: 99%;
-  box-sizing: border-box;
   /*
  * For IE 6/7 only
  * Include this rule to trigger hasLayout and contain floats.
@@ -3609,6 +3601,10 @@ input[type=text].fluid {
  * 2. The use of `table` rather than `block` is only necessary if using
  *	`:before` to contain the top-margins of child elements.
  */
+  left: auto;
+  float: none;
+  width: 99%;
+  box-sizing: border-box;
 }
 .grid-responsive-12 .row .col1:before,
 .grid .row .col1:before,
@@ -3800,7 +3796,7 @@ input[type=text].fluid {
 	 * Common columns definitions
 	 */
   .grid .row {
-    padding: 0;
+    padding: 0 .5em 0 .5em;
   }
   .grid .row .col1,
   .grid .row .col2,
@@ -3816,7 +3812,6 @@ input[type=text].fluid {
   .grid .row .col12 {
     float: left;
     margin: 0 3% 0 0;
-    padding: 0;
   }
   .grid .row .last {
     margin-right: 0;
@@ -3872,14 +3867,6 @@ input[type=text].fluid {
   }
 }
 /*
- * large devices
- */
-@media all and (min-width: 1024px) {
-  .grid .row {
-    padding: 0;
-  }
-}
-/*
  * Utilities
  */
 @media all and (max-width: 768px) {
@@ -3910,90 +3897,66 @@ article video {
 /* headers */
 .header {
   overflow: visible !important;
-  /** Responsive behavior for menu */
-  /** End responsive behavior **/
   /* top navigation */
   /* logo positioning */
 }
 .header.first {
   background: #333333;
-  height: 2.375em;
 }
 .header.second {
   background: #eeeeee;
 }
-.header .greedy .navigation.primary {
-  padding-right: 5em;
+.header .navigation.primary {
+  /*
+ * For IE 6/7 only
+ * Include this rule to trigger hasLayout and contain floats.
+ */
+  /*
+ * Clearfix: contain floats
+ *
+ * For modern browsers
+ * 1. The space content is one way to avoid an Opera bug when the
+ *	`contenteditable` attribute is included anywhere else in the document.
+ *	Otherwise it causes space to appear at the top and bottom of elements
+ *	that receive the `clearfix` class.
+ * 2. The use of `table` rather than `block` is only necessary if using
+ *	`:before` to contain the top-margins of child elements.
+ */
+  /*
+ * For IE 6/7 only
+ * Include this rule to trigger hasLayout and contain floats.
+ */
+  zoom: 1;
+  /*
+ * Clearfix: contain floats
+ *
+ * For modern browsers
+ * 1. The space content is one way to avoid an Opera bug when the
+ *	`contenteditable` attribute is included anywhere else in the document.
+ *	Otherwise it causes space to appear at the top and bottom of elements
+ *	that receive the `clearfix` class.
+ * 2. The use of `table` rather than `block` is only necessary if using
+ *	`:before` to contain the top-margins of child elements.
+ */
 }
-.header .greedy .navigation.primary button {
-  position: absolute;
-  top: 0;
-  right: 0;
-  outline: 0;
-  border: 0;
-  font-size: 1em;
-  font-weight: normal;
-  background: #888888;
-  padding: .45em 1em .42em 1em;
-  -webkit-border-radius: 0;
-  -moz-border-radius: 0;
-  border-radius: 0;
-  text-shadow: none;
-  color: #ffffff;
-  margin: 0;
-  min-width: 7.5em;
+.header .navigation.primary:before,
+.header .navigation.primary:after {
+  content: "";
+  display: table;
 }
-.header .greedy .navigation.primary button.hidden {
-  transition: none;
-  width: 0;
-  padding: 0;
-  overflow: hidden;
+.header .navigation.primary:after {
+  clear: both;
 }
-.header .greedy .navigation.primary button::after {
-  content: attr(count);
-  display: inline-flex;
-  width: 21px;
-  height: 21px;
-  align-items: center;
-  justify-content: center;
-  background: #333333;
-  color: #969696;
-  border-radius: 50%;
-  font-size: 0.7em;
-  line-height: 0.7em;
-  margin-left: 0.5rem;
+.header .navigation.primary:before,
+.header .navigation.primary:after {
+  content: "";
+  display: table;
 }
-.header .greedy .navigation.primary ul.hidden-links {
-  position: absolute;
-  right: 0;
-  top: 100%;
-  z-index: 999;
-}
-.header .greedy .navigation.primary ul.hidden-links.hidden {
-  display: none;
-}
-.header .greedy .navigation.primary ul.hidden-links li {
-  float: none;
-  padding: 0;
-  margin: 0;
-  display: block;
-}
-.header .greedy .navigation.primary ul.hidden-links li a {
-  min-width: 5.5em;
-  background: #f3f3f3;
-  color: #333333;
-  padding: .5em 1em;
-  float: right;
-  display: inline-block;
-}
-.header .greedy .navigation.primary ul.hidden-links li a:hover,
-.header .greedy .navigation.primary ul.hidden-links li a:active {
-  background: #eeeeee;
-  color: #333333;
+.header .navigation.primary:after {
+  clear: both;
 }
 .header .navigation.primary li {
   padding: .5em;
-  height: 1.75em;
   float: left;
 }
 .header .navigation.primary li:first-child {

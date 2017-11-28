@@ -2,141 +2,60 @@
 .header {
   overflow: visible !important;
 
-	&.first {
-		background:@background-dark;
-		height: 2.375em;
-	}
-	&.second {
-		background:@background-lighter;
-	}
+  &.first {
+    background:@background-dark;
+  }
+  &.second {
+    background:@background-lighter;
+  }
 
-  /** Responsive behavior for menu */
-  .greedy {
-    .navigation.primary {
-      // Keep space on the right for the button.
-      padding-right: 5em;
+  /* top navigation */
+  .navigation.primary {
+    .clearfix();
 
-      // More button. (responsive version).
-      button {
-        position: absolute;
-        top: 0;
-        right: 0;
-        outline: 0;
-        border: 0;
-        font-size: 1em;
-        font-weight: normal;
-        background: @grey-darker;
-        padding: .45em 1em .42em 1em;
-        -webkit-border-radius: 0;
-        -moz-border-radius: 0;
-        border-radius: 0;
-        text-shadow:none;
-        color: @font-inverse;
-        margin: 0;
-		min-width: 7.5em;
+    li {
+      padding: .5em;
+      float: left;
+
+      &:first-child {
+        padding-left:1em;
       }
-      button.hidden {
-        transition: none;
-        width: 0;
-        padding: 0;
-        overflow: hidden;
-      }
-      button::after {
-        content: attr(count);
-        display: inline-flex;
-        width: 21px;
-        height: 21px;
-        align-items: center;
-        justify-content: center;
-        background: @black;
-        color: @font-lighter;
-        border-radius: 50%;
-        font-size: 0.7em;
-        line-height: 0.7em;
-        margin-left: 0.5rem;
+      &.right {
+        float: right;
+        margin-right: 1em;
       }
 
-      ul.hidden-links {
-        position: absolute;
-        right: 0;
-        top: 100%;
-		  z-index:999;
+      a {
+        color: @font-inverse-dark;
+        text-decoration: none;
+        border:0;
+        display: inline-block;
 
-        &.hidden {
-          display: none;
+        &:hover {
+          color: @font-inverse;
         }
+        &:active,
+        &:focus {
+          color: @font-focus;
+        }
+      }
+    }
 
-        li {
-          float: none;
-          padding:0;
-          margin:0;
-          display: block;
-
-          a {
-			min-width: 5.5em;
-			background:@background-lightest;
-            color: @font-default;
-            padding: .5em 1em;
-            float:right;
-            display: inline-block;
-          	&:hover, &:active {
-			  background:@background-lighter;
-			  color:@black;
-          	}
-          }
+    li {
+      .row.selected {
+        a {
+          color: @font-inverse;
+        }
+        a:focus {
+          color: @font-focus;
         }
       }
     }
   }
-  /** End responsive behavior **/
 
-	/* top navigation */
-	.navigation.primary {
-
-		li {
-			padding: .5em;
-			height: 1.75em;
-			float: left;
-
-            &:first-child {
-              padding-left:1em;
-            }
-			&.right {
-				float: right;
-				margin-right: 1em;
-			}
-
-			a {
-				color: @font-inverse-dark;
-				text-decoration: none;
-				border:0;
-				display: inline-block;
-
-				&:hover {
-					color: @font-inverse;
-				}
-				&:active,
-				&:focus {
-					color: @font-focus;
-				}
-			}
-		}
-
-		li {
-			.row.selected {
-				a {
-					color: @font-inverse;
-				}
-				a:focus {
-					color: @font-focus;
-				}
-			}
-		}
-	}
-
-	/* logo positioning */
-	.logo {
-		margin: 1.25em 0 0 1em;
-		max-width: 80%;
-	}
+  /* logo positioning */
+  .logo {
+    margin: 1.25em 0 0 1em;
+    max-width: 80%;
+  }
 }

@@ -3420,10 +3420,6 @@ input[type=text].fluid {
   bottom: 0;
 }
 /* headers */
-.header.first {
-  /* height:2.375em; //already defined in header */
-  height: 2.375em;
-}
 .header.second {
   top: 2.375em;
   height: 4.5em;
@@ -3551,7 +3547,7 @@ input[type=text].fluid {
  * 2. The use of `table` rather than `block` is only necessary if using
  *	`:before` to contain the top-margins of child elements.
  */
-  padding: 0 .5em 0 1em;
+  padding: 0 .5em 0 .5em;
 }
 .grid-responsive-12 .row:before,
 .grid .row:before,
@@ -3599,10 +3595,6 @@ input[type=text].fluid {
 .grid .row .col11,
 .grid-responsive-12 .row .col12,
 .grid .row .col12 {
-  left: auto;
-  float: none;
-  width: 99%;
-  box-sizing: border-box;
   /*
  * For IE 6/7 only
  * Include this rule to trigger hasLayout and contain floats.
@@ -3634,6 +3626,10 @@ input[type=text].fluid {
  * 2. The use of `table` rather than `block` is only necessary if using
  *	`:before` to contain the top-margins of child elements.
  */
+  left: auto;
+  float: none;
+  width: 99%;
+  box-sizing: border-box;
 }
 .grid-responsive-12 .row .col1:before,
 .grid .row .col1:before,
@@ -3825,7 +3821,7 @@ input[type=text].fluid {
 	 * Common columns definitions
 	 */
   .grid .row {
-    padding: 0;
+    padding: 0 .5em 0 .5em;
   }
   .grid .row .col1,
   .grid .row .col2,
@@ -3841,7 +3837,6 @@ input[type=text].fluid {
   .grid .row .col12 {
     float: left;
     margin: 0 3% 0 0;
-    padding: 0;
   }
   .grid .row .last {
     margin-right: 0;
@@ -3894,14 +3889,6 @@ input[type=text].fluid {
   }
   .grid .row .push4 {
     margin-left: 31%;
-  }
-}
-/*
- * large devices
- */
-@media all and (min-width: 1024px) {
-  .grid .row {
-    padding: 0;
   }
 }
 /*
@@ -4000,90 +3987,66 @@ article video {
 /* headers */
 .header {
   overflow: visible !important;
-  /** Responsive behavior for menu */
-  /** End responsive behavior **/
   /* top navigation */
   /* logo positioning */
 }
 .header.first {
   background: #333333;
-  height: 2.375em;
 }
 .header.second {
   background: #eeeeee;
 }
-.header .greedy .navigation.primary {
-  padding-right: 5em;
+.header .navigation.primary {
+  /*
+ * For IE 6/7 only
+ * Include this rule to trigger hasLayout and contain floats.
+ */
+  /*
+ * Clearfix: contain floats
+ *
+ * For modern browsers
+ * 1. The space content is one way to avoid an Opera bug when the
+ *	`contenteditable` attribute is included anywhere else in the document.
+ *	Otherwise it causes space to appear at the top and bottom of elements
+ *	that receive the `clearfix` class.
+ * 2. The use of `table` rather than `block` is only necessary if using
+ *	`:before` to contain the top-margins of child elements.
+ */
+  /*
+ * For IE 6/7 only
+ * Include this rule to trigger hasLayout and contain floats.
+ */
+  zoom: 1;
+  /*
+ * Clearfix: contain floats
+ *
+ * For modern browsers
+ * 1. The space content is one way to avoid an Opera bug when the
+ *	`contenteditable` attribute is included anywhere else in the document.
+ *	Otherwise it causes space to appear at the top and bottom of elements
+ *	that receive the `clearfix` class.
+ * 2. The use of `table` rather than `block` is only necessary if using
+ *	`:before` to contain the top-margins of child elements.
+ */
 }
-.header .greedy .navigation.primary button {
-  position: absolute;
-  top: 0;
-  right: 0;
-  outline: 0;
-  border: 0;
-  font-size: 1em;
-  font-weight: normal;
-  background: #888888;
-  padding: .45em 1em .42em 1em;
-  -webkit-border-radius: 0;
-  -moz-border-radius: 0;
-  border-radius: 0;
-  text-shadow: none;
-  color: #ffffff;
-  margin: 0;
-  min-width: 7.5em;
+.header .navigation.primary:before,
+.header .navigation.primary:after {
+  content: "";
+  display: table;
 }
-.header .greedy .navigation.primary button.hidden {
-  transition: none;
-  width: 0;
-  padding: 0;
-  overflow: hidden;
+.header .navigation.primary:after {
+  clear: both;
 }
-.header .greedy .navigation.primary button::after {
-  content: attr(count);
-  display: inline-flex;
-  width: 21px;
-  height: 21px;
-  align-items: center;
-  justify-content: center;
-  background: #333333;
-  color: #969696;
-  border-radius: 50%;
-  font-size: 0.7em;
-  line-height: 0.7em;
-  margin-left: 0.5rem;
+.header .navigation.primary:before,
+.header .navigation.primary:after {
+  content: "";
+  display: table;
 }
-.header .greedy .navigation.primary ul.hidden-links {
-  position: absolute;
-  right: 0;
-  top: 100%;
-  z-index: 999;
-}
-.header .greedy .navigation.primary ul.hidden-links.hidden {
-  display: none;
-}
-.header .greedy .navigation.primary ul.hidden-links li {
-  float: none;
-  padding: 0;
-  margin: 0;
-  display: block;
-}
-.header .greedy .navigation.primary ul.hidden-links li a {
-  min-width: 5.5em;
-  background: #f3f3f3;
-  color: #333333;
-  padding: .5em 1em;
-  float: right;
-  display: inline-block;
-}
-.header .greedy .navigation.primary ul.hidden-links li a:hover,
-.header .greedy .navigation.primary ul.hidden-links li a:active {
-  background: #eeeeee;
-  color: #333333;
+.header .navigation.primary:after {
+  clear: both;
 }
 .header .navigation.primary li {
   padding: .5em;
-  height: 1.75em;
   float: left;
 }
 .header .navigation.primary li:first-child {
@@ -4115,6 +4078,78 @@ article video {
 .header .logo {
   margin: 1.25em 0 0 1em;
   max-width: 80%;
+}
+/**
+ * @credit: https://github.com/lukejacksonn/GreedyNav
+ */
+.greedy .navigation.primary {
+  padding-right: 5em;
+}
+.greedy .navigation.primary button {
+  position: absolute;
+  top: 0;
+  right: 0;
+  outline: 0;
+  border: 0;
+  font-size: 1em;
+  font-weight: normal;
+  background: #888888;
+  padding: .45em 1em .42em 1em;
+  -webkit-border-radius: 0;
+  -moz-border-radius: 0;
+  border-radius: 0;
+  text-shadow: none;
+  color: #ffffff;
+  margin: 0;
+  min-width: 7.5em;
+}
+.greedy .navigation.primary button.hidden {
+  transition: none;
+  width: 0;
+  padding: 0;
+  overflow: hidden;
+}
+.greedy .navigation.primary button::after {
+  content: attr(count);
+  display: inline-flex;
+  width: 21px;
+  height: 21px;
+  align-items: center;
+  justify-content: center;
+  background: #333333;
+  color: #969696;
+  border-radius: 50%;
+  font-size: 0.7em;
+  line-height: 0.7em;
+  margin-left: 0.5rem;
+}
+.greedy .navigation.primary ul.hidden-links {
+  position: absolute;
+  right: 0;
+  top: 100%;
+  z-index: 999;
+}
+.greedy .navigation.primary ul.hidden-links.hidden {
+  display: none;
+}
+.greedy .navigation.primary ul.hidden-links li {
+  float: none;
+  padding: 0;
+  margin: 0;
+  display: block;
+}
+.greedy .navigation.primary ul.hidden-links li a {
+  min-width: 5.5em;
+  background: #f3f3f3;
+  color: #333333;
+  padding: .5em 1em;
+  float: right;
+  display: inline-block;
+}
+.greedy .navigation.primary ul.hidden-links li a:hover,
+.greedy .navigation.primary ul.hidden-links li a:active {
+  background: #eeeeee;
+  color: #333333;
 }
 .logo img {
   max-width: 150px;
@@ -5912,6 +5947,55 @@ button.swiper-pagination-bullet {
   font-size: 3.5em;
   border: 0;
 }
+.ribbon {
+  position: absolute;
+  right: -5px;
+  top: -5px;
+  z-index: 1;
+  overflow: hidden;
+  width: 75px;
+  height: 75px;
+  text-align: right;
+}
+.ribbon span {
+  font-size: 10px;
+  font-weight: bold;
+  color: #ffffff;
+  text-transform: uppercase;
+  text-align: center;
+  line-height: 20px;
+  transform: rotate(45deg);
+  -webkit-transform: rotate(45deg);
+  width: 100px;
+  display: block;
+  background: #009900;
+  box-shadow: 0 3px 10px -5px #000000;
+  position: absolute;
+  top: 19px;
+  right: -21px;
+}
+.ribbon span::before {
+  content: "";
+  position: absolute;
+  left: 0px;
+  top: 100%;
+  z-index: -1;
+  border-left: 3px solid #009900;
+  border-right: 3px solid transparent;
+  border-bottom: 3px solid transparent;
+  border-top: 3px solid #009900;
+}
+.ribbon span::after {
+  content: "";
+  position: absolute;
+  right: 0px;
+  top: 100%;
+  z-index: -1;
+  border-left: 3px solid transparent;
+  border-right: 3px solid #009900;
+  border-bottom: 3px solid transparent;
+  border-top: 3px solid #009900;
+}
 .faq ul.list {
   margin: 0;
   padding: 0;
@@ -7171,4 +7255,36 @@ button.swiper-pagination-bullet {
     background: transparent url('../img/illustrations/birds3_850.png') center 3em no-repeat;
     background-size: 640px auto;
   }
+}
+.page.start .grid {
+  max-width: 860px;
+}
+.page.start .intro {
+  padding-top: 1em;
+  text-align: center;
+}
+.page.start .big-choice {
+  margin: 1em 0;
+  border: 1px solid #eaeaea;
+  padding: 1em;
+  padding-bottom: 1.5em;
+  min-height: 10em;
+  border-radius: .25em;
+  position: relative;
+}
+.page.start .big-choice:hover {
+  border: 1px solid #dddddd;
+}
+.page.start h3 {
+  border: 0;
+  padding: .5em 0 1em 0;
+  margin: 0;
+}
+.page.start .help {
+  background: #f0f7fd;
+  border: 1px solid #f0f7fd;
+}
+.page.start .help:hover {
+  background: #f0f7fd;
+  border: 1px solid #f0f7fd;
 }
