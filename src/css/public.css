@@ -7256,6 +7256,10 @@ button.swiper-pagination-bullet {
     background-size: 640px auto;
   }
 }
+.page.start h2 {
+  color: #666666;
+  font-weight: normal;
+}
 .page.start .grid {
   max-width: 860px;
 }
@@ -7281,6 +7285,7 @@ button.swiper-pagination-bullet {
   margin: 0;
 }
 .page.start .help {
+  margin-bottom: 5em;
   background: #f0f7fd;
   border: 1px solid #f0f7fd;
 }

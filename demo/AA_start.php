@@ -15,21 +15,21 @@
             <div class="row">
                 <div class="col12 last intro">
                     <h1>How would you like to use passbolt?</h1>
-                    <p>Your passbolt browser extension is not configured to point to any server right now.<br>
+                    <h2>Your passbolt browser extension is not configured to point to any server right now.<br>
                         Passbolt requires a server to work.
                         So let's take a few minutes to get you started.
-                    </p>
+                    </h2>
                 </div>
             </div>
             <div class="row">
                 <div class="col6">
                     <div class="big-choice">
-                        <h3>Hosted by passbolt</h3>
+                        <h3>Cloud hosting</h3>
                         <p>
                             Choose this option if you do not have your own server, and you want us
                             to take care of the setup and maintenance for you.
                         </p>
-                        <a href="#" class="disabled button"><i class="fa fa-cloud-upload fa-fw"></i>  Coming soon!</a>
+                        <a href="#" class="dim button"><i class="fa fa-cloud-upload fa-fw"></i>  Coming soon!</a>
                     </div>
                 </div>
                 <div class="col6 last">
@@ -48,21 +48,21 @@
             <div class="row">
                 <div class="col6">
                     <div class="big-choice">
-                        <h3>Hosted by you</h3>
+                        <h3>Self hosted</h3>
                         <p>
                             If you already have your own server running, please follow the setup link
                             in your mailbox. Otherwise you can install a new server.
                         </p>
-                        <a href="#" class="button"><i class="fa fa-book fa-fw"></i> Installation manual</a>
+                        <a href="#" class="button dim"><i class="fa fa-book fa-fw"></i> Installation manual</a>
                     </div>
                 </div>
                 <div class="col6 last">
                     <div class="big-choice help">
                         <h3>Hmm... Help?</h3>
-                        <p>You are not sure why you landed here and would like to get some help.
-                            It's ok, all have to start somewhere.</p>
-                        <a href="#" class="button"><i class="fa fa-life-bouy fa-fw"></i> Online help</a>
-                        <a href="#">or ask the community</a>
+                        <p>You are not sure why you landed here or you would like to get some more information first.
+                            Don't worry we got your back.</p>
+                        <a href="#" class="button"><i class="fa fa-life-bouy fa-fw"></i> Online help</a> or
+                        <a href="#">ask the community</a>
                     </div>
                 </div>
             </div>
