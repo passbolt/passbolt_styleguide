@@ -8,34 +8,36 @@
 	.helptext - can be used for example messages prior validation
 */
 .input .message {
-	padding:0;
-	padding-left:.25em;
-	padding-bottom:.5em;
-	font-size:.813em;
-	margin-top:.125em;
-	margin-bottom:.25em;
-	background-color:transparent;
-	border:0;
+    padding: 0;
+    padding-left: .25em;
+    padding-bottom: .5em;
+    font-size: .813em;
+    margin-top: .125em;
+    margin-bottom: .25em;
+    background-color: transparent;
+    border: 0;
 
-	/* colors for messages */
-	&.error {
-		font-weight:bold;
-		color: @red;
-	}
-  	&.helptext {
-	  	color:@font-light;
-	  	font-weight:normal;
-	}
+    /* colors for messages */
+    &.error {
+        font-weight: bold;
+        color: @red;
+    }
+    &.helptext {
+        color: @font-light;
+        font-weight: normal;
+    }
 }
 
 .form-content .input .message,
 form .input .message {
-  background-color: transparent;
+    background-color: transparent;
 }
+
 textarea.error label,
 .input.error label {
-	color: @red;
+    color: @red;
 }
+
 form .input .inline.message {
-	display:inline-block;
+    display: inline-block;
 }

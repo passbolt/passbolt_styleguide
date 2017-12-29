@@ -1,72 +1,72 @@
 .page.contacts {
-  .page-row.intro {
-    background: @background-lightest;
-  }
-  .service {
-    .service-teaser {
-      display:none;
+    .page-row.intro {
+        background: @background-lightest;
     }
-    .button {
-      margin-bottom:1em;
+    .service {
+        .service-teaser {
+            display: none;
+        }
+        .button {
+            margin-bottom: 1em;
+        }
     }
-  }
 
-	.form-wrapper {
-		form {
-			.input{
-				width: 100%;
+    .form-wrapper {
+        form {
+            .input {
+                width: 100%;
 
-				input, textarea {
-					width: 96%;
-				}
-				&.message {
-					padding: 0;
-				}
+                input, textarea {
+                    width: 96%;
+                }
+                &.message {
+                    padding: 0;
+                }
 
-			}
-			.submit {
-				margin-top: 1em;
-			}
-		}
-  }
+            }
+            .submit {
+                margin-top: 1em;
+            }
+        }
+    }
 }
 
 /* even larger screen */
 @media all and (min-width: 800px) {
-  .page.contacts {
-    .page-row.intro {
-			background: @background-lightest;
-      min-height: 400px;
-			text-align:center;
+    .page.contacts {
+        .page-row.intro {
+            background: @background-lightest;
+            min-height: 400px;
+            text-align: center;
 
-      h1 {
-        padding-left:0;
-        font-size:3em;
-      }
-      h1 + p {
-        font-size: 1.75em;
-        padding-left:0;
-        line-height:1.666em;
-      }
+            h1 {
+                padding-left: 0;
+                font-size: 3em;
+            }
+            h1 + p {
+                font-size: 1.75em;
+                padding-left: 0;
+                line-height: 1.666em;
+            }
+        }
+
+        .form-wrapper {
+            margin: -10em 0 5em 18%;
+            background-color: @background-lightest;
+            border: 1px solid @border-default;
+
+            form {
+                padding: 5%;
+
+                .input {
+                    margin-bottom: 0.5em;
+                }
+                .submit {
+                    margin-top: 1em;
+                }
+            }
+        }
     }
-
-		.form-wrapper {
-			margin: -10em 0 5em 18%;
-			background-color: @background-lightest;
-			border: 1px solid @border-default;
-
-			form {
-				padding: 5%;
-
-				.input{
-					margin-bottom: 0.5em;
-				}
-				.submit {
-					margin-top: 1em;
-				}
-			}
-		}
-  }
 
 }
 

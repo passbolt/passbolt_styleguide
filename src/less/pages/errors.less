@@ -1,28 +1,28 @@
 /* Special error page treatment for larger screen */
 @media all and (min-width: 460px) {
-	.page.error {
-		.grid {
-			text-align: center;
-			width:100%;
-			margin-bottom:2.5em;
-		}
-		&.error-404,
-		&.error-500,
-		&.error-400 {
-			.row {
-				max-width: 400px;
-				margin:auto;
-				padding-top:440px;
-			}
-		}
-		&.error-404 .grid {
-				background: transparent url('@{images}/illustrations/birds6_850.png') center 1.5em no-repeat;
-				background-size: 500px auto;
-		}
-		&.error-400 .grid ,
-		&.error-500 .grid {
-				background: transparent url('@{images}/illustrations/birds3_850.png') center 3em no-repeat;
-				background-size: 640px auto;
-		}
-	}
+    .page.error {
+        .grid {
+            text-align: center;
+            width: 100%;
+            margin-bottom: 2.5em;
+        }
+        &.error-404,
+        &.error-500,
+        &.error-400 {
+            .row {
+                max-width: 400px;
+                margin: auto;
+                padding-top: 440px;
+            }
+        }
+        &.error-404 .grid {
+            background: transparent url('@{images}/illustrations/birds6_850.png') center 1.5em no-repeat;
+            background-size: 500px auto;
+        }
+        &.error-400 .grid,
+        &.error-500 .grid {
+            background: transparent url('@{images}/illustrations/birds3_850.png') center 3em no-repeat;
+            background-size: 640px auto;
+        }
+    }
 }

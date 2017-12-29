@@ -1,42 +1,42 @@
 .usercard-col-2(@avatar-size) {
-  .clearfix();
-  margin: 0 0 1em 0;
+    .clearfix();
+    margin: 0 0 1em 0;
 
-  &:last-of-type{
-    margin-bottom: 0;
-  }
-
-  .content-wrapper {
-    float: left;
-    width: 100%;
-
-    .content {
-      margin-left: @avatar-size;
-      padding:0 1em 0 1em;
-
-      .name {
-        .ellipsis();
-      }
-
-      .subinfo {
-        color: @font-default;
-        font-size: 0.929em; /* 13px */
-      }
+    &:last-of-type {
+        margin-bottom: 0;
     }
-  }
 
-  .avatar {
-    float: left;
-    width: @avatar-size;
-    margin-left: -100%;
+    .content-wrapper {
+        float: left;
+        width: 100%;
 
-    img {
-      width: @avatar-size;
-      height: @avatar-size;
+        .content {
+            margin-left: @avatar-size;
+            padding: 0 1em 0 1em;
+
+            .name {
+                .ellipsis();
+            }
+
+            .subinfo {
+                color: @font-default;
+                font-size: 0.929em; /* 13px */
+            }
+        }
     }
-  }
+
+    .avatar {
+        float: left;
+        width: @avatar-size;
+        margin-left: -100%;
+
+        img {
+            width: @avatar-size;
+            height: @avatar-size;
+        }
+    }
 }
 
 .usercard-col-2 {
-  .usercard-col-2(36px);
+    .usercard-col-2(36px);
 }

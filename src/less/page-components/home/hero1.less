@@ -1,46 +1,45 @@
 .home .page-row.three-little-birds {
-  .logo {
-    margin: 1em 0;
-  }
-  .teaser-text {
-    font-size: 1.5em;
-  }
-  .call-to-action .button {
-    font-size: 1.125em;
-    display: inline-block;
-    margin-top: 1em;
-  }
-  .scroll-prompt {
-    display: none;
-  }
+    .logo {
+        margin: 1em 0;
+    }
+    .teaser-text {
+        font-size: 1.5em;
+    }
+    .call-to-action .button {
+        font-size: 1.125em;
+        display: inline-block;
+        margin-top: 1em;
+    }
+    .scroll-prompt {
+        display: none;
+    }
 }
 
 /* even larger screen */
 @media all and (min-width: 800px) {
-  .home .page-row.three-little-birds {
+    .home .page-row.three-little-birds {
 
+        min-height: 500px;
+        height: 75%;
+        background: @background-lightest url('@{images}/background/mandala_bird1.jpg') 200% center no-repeat;
+        background-size: 85% auto;
 
-    min-height: 500px;
-    height: 75%;
-    background: @background-lightest url('@{images}/background/mandala_bird1.jpg') 200% center no-repeat;
-    background-size: 85% auto;
+        .logo {
+            margin: 5% 0 2% 3%;
+        }
+        .teaser-text {
+            width: 50%;
+            max-width: 24em;
+            font-size: 1.75em;
+            margin: 0 0 3% 3%;
+            text-align: left;
+            line-height: 1.666em;
+        }
+        .call-to-action .button {
+            font-size: 1.125em;
+            margin: .25em 0 3% 3%;
+            display: inline-block;
+        }
 
-    .logo {
-      margin: 5% 0 2% 3%;
     }
-    .teaser-text {
-      width: 50%;
-      max-width: 24em;
-      font-size: 1.75em;
-      margin: 0 0 3% 3%;
-      text-align: left;
-      line-height:1.666em;
-    }
-    .call-to-action .button {
-      font-size: 1.125em;
-      margin: .25em 0 3% 3%;
-      display: inline-block;
-    }
-
-  }
 }

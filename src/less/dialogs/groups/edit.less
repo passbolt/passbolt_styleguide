@@ -1,44 +1,44 @@
 .dialog .group .permission-edit {
-  border-top:1px solid @grey-lightest;
+    border-top: 1px solid @grey-lightest;
 }
 
 // Exception for group edit dialog and form.
 .edit-group-dialog {
-  .group_edit_form {
-    .form-content {
-      padding-bottom:0;
+    .group_edit_form {
+        .form-content {
+            padding-bottom: 0;
 
-      .input.text {
-        input[type="text"] {
-          width: 95%;
+            .input.text {
+                input[type="text"] {
+                    width: 95%;
+                }
+                .message {
+                    // Cancel padding-left:20px that was set for .message.
+                    padding-left: 0;
+                }
+            }
         }
-        .message {
-          // Cancel padding-left:20px that was set for .message.
-          padding-left:0;
+    }
+
+    // Empty and not empty state for group members.
+    .group_members {
+        margin-top: -0.5em;
+
+        .message.warning.feedback {
+            margin-top: 0px;
+            span {
+                display: block;
+            }
         }
-      }
-    }
-  }
 
-  // Empty and not empty state for group members.
-  .group_members {
-    margin-top: -0.5em;
+        ul.permissions {
+            display: block;
+        }
 
-    .message.warning.feedback {
-      margin-top: 0px;
-      span {
-        display: block;
-      }
+        &.empty {
+            ul.permissions {
+                display: none;
+            }
+        }
     }
-
-    ul.permissions {
-      display: block;
-    }
-
-    &.empty {
-      ul.permissions {
-        display: none;
-      }
-    }
-  }
 }

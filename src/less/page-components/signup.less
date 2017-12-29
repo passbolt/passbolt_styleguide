@@ -1,40 +1,40 @@
 .page-row.signup {
-  padding-bottom:3em;
-  background:@background-lightest;
-  border-top:1px solid @grey-lightest;
-  margin-bottom:0;
+    padding-bottom: 3em;
+    background: @background-lightest;
+    border-top: 1px solid @grey-lightest;
+    margin-bottom: 0;
 
-  .newsletter {
-    div.input.email {
-      margin-right: 1em;
-      label {
-        color: @font-lighter;
-      }
-      input[type=email] {
-        width: 95%;
-        font-size: 1em;
-        margin-top: 0.4em;
-      }
+    .newsletter {
+        div.input.email {
+            margin-right: 1em;
+            label {
+                color: @font-lighter;
+            }
+            input[type=email] {
+                width: 95%;
+                font-size: 1em;
+                margin-top: 0.4em;
+            }
+        }
+        .smallprint {
+            font-size: .75em;
+            padding: 1em .125em;
+        }
     }
-    .smallprint {
-      font-size: .75em;
-      padding: 1em .125em;
+    .social {
+        margin-top: 1.75em;
     }
-  }
-	.social {
-		margin-top:1.75em;
-	}
 }
 
 /* larger screen */
 @media all and (min-width: 440px) {
-  .page-row.signup {
-    .newsletter {
-      font-size: 1.25em;
+    .page-row.signup {
+        .newsletter {
+            font-size: 1.25em;
 
-      .smallprint {
-        padding-top: 0;
-      }
+            .smallprint {
+                padding-top: 0;
+            }
+        }
     }
-  }
 }

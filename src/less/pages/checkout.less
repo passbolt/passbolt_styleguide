@@ -1,53 +1,52 @@
 .checkout.page {
-  form.stripe {
-    width: 480px;
-    margin: 20px auto;
+    form.stripe {
+        width: 480px;
+        margin: 20px auto;
 
+        .field {
+            border: 1px solid @border-input;
+            width: 82.5%;
+            padding-left: .5em;
+        }
 
-    .field {
-      border: 1px solid @border-input;
-      width: 82.5%;
-      padding-left:.5em;
-    }
+        .field::-webkit-input-placeholder {
+            color: #CFD7E0;
+        }
+        .field::-moz-placeholder {
+            color: #CFD7E0;
+        }
+        .field:-ms-input-placeholder {
+            color: #CFD7E0;
+        }
 
-    .field::-webkit-input-placeholder {
-      color: #CFD7E0;
-    }
-    .field::-moz-placeholder {
-      color: #CFD7E0;
-    }
-    .field:-ms-input-placeholder {
-      color: #CFD7E0;
-    }
+        .outcome {
+            float: left;
+            width: 100%;
+            padding-top: 8px;
+            min-height: 24px;
+            text-align: center;
+        }
 
-    .outcome {
-      float: left;
-      width: 100%;
-      padding-top: 8px;
-      min-height: 24px;
-      text-align: center;
-    }
+        .success, .error {
+            display: none;
+            font-size: 13px;
+        }
 
-    .success, .error {
-      display: none;
-      font-size: 13px;
-    }
+        .success.visible, .error.visible {
+            display: inline;
+        }
 
-    .success.visible, .error.visible {
-      display: inline;
-    }
+        .error {
+            color: #E4584C;
+        }
 
-    .error {
-      color: #E4584C;
-    }
+        .success {
+            color: #666EE8;
+        }
 
-    .success {
-      color: #666EE8;
+        .success .token {
+            font-weight: 500;
+            font-size: 13px;
+        }
     }
-
-    .success .token {
-      font-weight: 500;
-      font-size: 13px;
-    }
-  }
 }

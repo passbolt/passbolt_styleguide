@@ -1,0 +1,15 @@
+.accordion {
+    a:before {
+        margin-top: .25em;
+        margin-left: -1.5em;
+        width: 13px;
+        height: 13px;
+        border: 1px solid blue;
+        position: absolute;
+        content: ' ';
+        background: transparent url('@{images}/controls/tree-ctrl.png') center 2px no-repeat;
+    }
+    a.closed:before {
+        background: transparent url('@{images}/controls/tree-ctrl.png') center 16px no-repeat;
+    }
+}

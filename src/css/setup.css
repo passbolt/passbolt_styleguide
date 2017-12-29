@@ -36,9 +36,9 @@ html body .hidden {
   position: absolute;
   width: 1px;
   /*
-   * Extends the .visuallyhidden class to allow the element to be focusable
-   * when navigated to via the keyboard: h5bp.com/p
-   */
+     * Extends the .visuallyhidden class to allow the element to be focusable
+     * when navigated to via the keyboard: h5bp.com/p
+     */
 }
 .visuallyhidden .focusable:active,
 .visuallyhidden .focusable:focus {
@@ -57,21 +57,21 @@ html body .hidden {
 }
 .clearfix {
   /*
- * For IE 6/7 only
- * Include this rule to trigger hasLayout and contain floats.
- */
+     * For IE 6/7 only
+     * Include this rule to trigger hasLayout and contain floats.
+     */
   zoom: 1;
   /*
- * Clearfix: contain floats
- *
- * For modern browsers
- * 1. The space content is one way to avoid an Opera bug when the
- *	`contenteditable` attribute is included anywhere else in the document.
- *	Otherwise it causes space to appear at the top and bottom of elements
- *	that receive the `clearfix` class.
- * 2. The use of `table` rather than `block` is only necessary if using
- *	`:before` to contain the top-margins of child elements.
- */
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
 }
 .clearfix:before,
 .clearfix:after {
@@ -2901,7 +2901,7 @@ button,
   position: relative;
   font-size: 0.875em;
   /*	14px */
-  padding: .429em 1.225em .429em 1.225em ;
+  padding: .429em 1.225em .429em 1.225em;
   /* 6px 16px */
   display: inline-block;
   zoom: 1;
@@ -3062,36 +3062,36 @@ button.disabled:focus,
 /* duo */
 .duo-wrapper {
   /*
- * For IE 6/7 only
- * Include this rule to trigger hasLayout and contain floats.
- */
+     * For IE 6/7 only
+     * Include this rule to trigger hasLayout and contain floats.
+     */
   /*
- * Clearfix: contain floats
- *
- * For modern browsers
- * 1. The space content is one way to avoid an Opera bug when the
- *	`contenteditable` attribute is included anywhere else in the document.
- *	Otherwise it causes space to appear at the top and bottom of elements
- *	that receive the `clearfix` class.
- * 2. The use of `table` rather than `block` is only necessary if using
- *	`:before` to contain the top-margins of child elements.
- */
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
   /*
- * For IE 6/7 only
- * Include this rule to trigger hasLayout and contain floats.
- */
+     * For IE 6/7 only
+     * Include this rule to trigger hasLayout and contain floats.
+     */
   zoom: 1;
   /*
- * Clearfix: contain floats
- *
- * For modern browsers
- * 1. The space content is one way to avoid an Opera bug when the
- *	`contenteditable` attribute is included anywhere else in the document.
- *	Otherwise it causes space to appear at the top and bottom of elements
- *	that receive the `clearfix` class.
- * 2. The use of `table` rather than `block` is only necessary if using
- *	`:before` to contain the top-margins of child elements.
- */
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
 }
 .duo-wrapper:before,
 .duo-wrapper:after {
@@ -3492,36 +3492,36 @@ input[type=text].fluid {
 .grid-responsive-12 .row,
 .grid .row {
   /*
- * For IE 6/7 only
- * Include this rule to trigger hasLayout and contain floats.
- */
+     * For IE 6/7 only
+     * Include this rule to trigger hasLayout and contain floats.
+     */
   /*
- * Clearfix: contain floats
- *
- * For modern browsers
- * 1. The space content is one way to avoid an Opera bug when the
- *	`contenteditable` attribute is included anywhere else in the document.
- *	Otherwise it causes space to appear at the top and bottom of elements
- *	that receive the `clearfix` class.
- * 2. The use of `table` rather than `block` is only necessary if using
- *	`:before` to contain the top-margins of child elements.
- */
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
   /*
- * For IE 6/7 only
- * Include this rule to trigger hasLayout and contain floats.
- */
+     * For IE 6/7 only
+     * Include this rule to trigger hasLayout and contain floats.
+     */
   zoom: 1;
   /*
- * Clearfix: contain floats
- *
- * For modern browsers
- * 1. The space content is one way to avoid an Opera bug when the
- *	`contenteditable` attribute is included anywhere else in the document.
- *	Otherwise it causes space to appear at the top and bottom of elements
- *	that receive the `clearfix` class.
- * 2. The use of `table` rather than `block` is only necessary if using
- *	`:before` to contain the top-margins of child elements.
- */
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
   padding: 0 .5em 0 .5em;
 }
 .grid-responsive-12 .row:before,
@@ -3571,36 +3571,36 @@ input[type=text].fluid {
 .grid-responsive-12 .row .col12,
 .grid .row .col12 {
   /*
- * For IE 6/7 only
- * Include this rule to trigger hasLayout and contain floats.
- */
+     * For IE 6/7 only
+     * Include this rule to trigger hasLayout and contain floats.
+     */
   /*
- * Clearfix: contain floats
- *
- * For modern browsers
- * 1. The space content is one way to avoid an Opera bug when the
- *	`contenteditable` attribute is included anywhere else in the document.
- *	Otherwise it causes space to appear at the top and bottom of elements
- *	that receive the `clearfix` class.
- * 2. The use of `table` rather than `block` is only necessary if using
- *	`:before` to contain the top-margins of child elements.
- */
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
   /*
- * For IE 6/7 only
- * Include this rule to trigger hasLayout and contain floats.
- */
+     * For IE 6/7 only
+     * Include this rule to trigger hasLayout and contain floats.
+     */
   zoom: 1;
   /*
- * Clearfix: contain floats
- *
- * For modern browsers
- * 1. The space content is one way to avoid an Opera bug when the
- *	`contenteditable` attribute is included anywhere else in the document.
- *	Otherwise it causes space to appear at the top and bottom of elements
- *	that receive the `clearfix` class.
- * 2. The use of `table` rather than `block` is only necessary if using
- *	`:before` to contain the top-margins of child elements.
- */
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
   left: auto;
   float: none;
   width: 99%;
@@ -3793,8 +3793,8 @@ input[type=text].fluid {
  */
 @media all and (min-width: 780px) {
   /*
-	 * Common columns definitions
-	 */
+     * Common columns definitions
+     */
   .grid .row {
     padding: 0 .5em 0 .5em;
   }
@@ -3973,36 +3973,36 @@ article video {
 }
 .header .navigation.primary {
   /*
- * For IE 6/7 only
- * Include this rule to trigger hasLayout and contain floats.
- */
+     * For IE 6/7 only
+     * Include this rule to trigger hasLayout and contain floats.
+     */
   /*
- * Clearfix: contain floats
- *
- * For modern browsers
- * 1. The space content is one way to avoid an Opera bug when the
- *	`contenteditable` attribute is included anywhere else in the document.
- *	Otherwise it causes space to appear at the top and bottom of elements
- *	that receive the `clearfix` class.
- * 2. The use of `table` rather than `block` is only necessary if using
- *	`:before` to contain the top-margins of child elements.
- */
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
   /*
- * For IE 6/7 only
- * Include this rule to trigger hasLayout and contain floats.
- */
+     * For IE 6/7 only
+     * Include this rule to trigger hasLayout and contain floats.
+     */
   zoom: 1;
   /*
- * Clearfix: contain floats
- *
- * For modern browsers
- * 1. The space content is one way to avoid an Opera bug when the
- *	`contenteditable` attribute is included anywhere else in the document.
- *	Otherwise it causes space to appear at the top and bottom of elements
- *	that receive the `clearfix` class.
- * 2. The use of `table` rather than `block` is only necessary if using
- *	`:before` to contain the top-margins of child elements.
- */
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
 }
 .header .navigation.primary:before,
 .header .navigation.primary:after {
@@ -4899,36 +4899,36 @@ table.table-info.horizontal tbody tr:nth-child(even) {
 .input-password-wrapper {
   max-width: 500px;
   /*
- * For IE 6/7 only
- * Include this rule to trigger hasLayout and contain floats.
- */
+     * For IE 6/7 only
+     * Include this rule to trigger hasLayout and contain floats.
+     */
   /*
- * Clearfix: contain floats
- *
- * For modern browsers
- * 1. The space content is one way to avoid an Opera bug when the
- *	`contenteditable` attribute is included anywhere else in the document.
- *	Otherwise it causes space to appear at the top and bottom of elements
- *	that receive the `clearfix` class.
- * 2. The use of `table` rather than `block` is only necessary if using
- *	`:before` to contain the top-margins of child elements.
- */
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
   /*
- * For IE 6/7 only
- * Include this rule to trigger hasLayout and contain floats.
- */
+     * For IE 6/7 only
+     * Include this rule to trigger hasLayout and contain floats.
+     */
   zoom: 1;
   /*
- * Clearfix: contain floats
- *
- * For modern browsers
- * 1. The space content is one way to avoid an Opera bug when the
- *	`contenteditable` attribute is included anywhere else in the document.
- *	Otherwise it causes space to appear at the top and bottom of elements
- *	that receive the `clearfix` class.
- * 2. The use of `table` rather than `block` is only necessary if using
- *	`:before` to contain the top-margins of child elements.
- */
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
   width: 99%;
 }
 .input-password-wrapper:before,
@@ -4953,7 +4953,7 @@ table.table-info.horizontal tbody tr:nth-child(even) {
   float: left;
 }
 .input-password-wrapper .input.password input[type=password].decrypting {
-  background: transparent url(../img/controls/loading.gif) no-repeat 72% center;
+  background: transparent url('../img/controls/loading.gif') no-repeat 72% center;
 }
 .input-password-wrapper .input.password.has-encrypted-secret input {
   /* fallback placeholder */
@@ -5104,36 +5104,36 @@ table.table-info.horizontal tbody tr:nth-child(even) {
 }
 .setup .why-plugin-wrapper .input {
   /*
- * For IE 6/7 only
- * Include this rule to trigger hasLayout and contain floats.
- */
+     * For IE 6/7 only
+     * Include this rule to trigger hasLayout and contain floats.
+     */
   /*
- * Clearfix: contain floats
- *
- * For modern browsers
- * 1. The space content is one way to avoid an Opera bug when the
- *	`contenteditable` attribute is included anywhere else in the document.
- *	Otherwise it causes space to appear at the top and bottom of elements
- *	that receive the `clearfix` class.
- * 2. The use of `table` rather than `block` is only necessary if using
- *	`:before` to contain the top-margins of child elements.
- */
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
   /*
- * For IE 6/7 only
- * Include this rule to trigger hasLayout and contain floats.
- */
+     * For IE 6/7 only
+     * Include this rule to trigger hasLayout and contain floats.
+     */
   zoom: 1;
   /*
- * Clearfix: contain floats
- *
- * For modern browsers
- * 1. The space content is one way to avoid an Opera bug when the
- *	`contenteditable` attribute is included anywhere else in the document.
- *	Otherwise it causes space to appear at the top and bottom of elements
- *	that receive the `clearfix` class.
- * 2. The use of `table` rather than `block` is only necessary if using
- *	`:before` to contain the top-margins of child elements.
- */
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
 }
 .setup .why-plugin-wrapper .input:before,
 .setup .why-plugin-wrapper .input:after {
@@ -5177,36 +5177,36 @@ table.table-info.horizontal tbody tr:nth-child(even) {
 }
 .setup .why-plugin-wrapper .input .message.error {
   /*
- * For IE 6/7 only
- * Include this rule to trigger hasLayout and contain floats.
- */
+     * For IE 6/7 only
+     * Include this rule to trigger hasLayout and contain floats.
+     */
   /*
- * Clearfix: contain floats
- *
- * For modern browsers
- * 1. The space content is one way to avoid an Opera bug when the
- *	`contenteditable` attribute is included anywhere else in the document.
- *	Otherwise it causes space to appear at the top and bottom of elements
- *	that receive the `clearfix` class.
- * 2. The use of `table` rather than `block` is only necessary if using
- *	`:before` to contain the top-margins of child elements.
- */
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
   /*
- * For IE 6/7 only
- * Include this rule to trigger hasLayout and contain floats.
- */
+     * For IE 6/7 only
+     * Include this rule to trigger hasLayout and contain floats.
+     */
   zoom: 1;
   /*
- * Clearfix: contain floats
- *
- * For modern browsers
- * 1. The space content is one way to avoid an Opera bug when the
- *	`contenteditable` attribute is included anywhere else in the document.
- *	Otherwise it causes space to appear at the top and bottom of elements
- *	that receive the `clearfix` class.
- * 2. The use of `table` rather than `block` is only necessary if using
- *	`:before` to contain the top-margins of child elements.
- */
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
   width: 65%;
   margin-left: 20%;
   padding-left: .625em;
@@ -5245,36 +5245,36 @@ table.table-info.horizontal tbody tr:nth-child(even) {
 }
 .setup .backup-prompt {
   /*
- * For IE 6/7 only
- * Include this rule to trigger hasLayout and contain floats.
- */
+     * For IE 6/7 only
+     * Include this rule to trigger hasLayout and contain floats.
+     */
   /*
- * Clearfix: contain floats
- *
- * For modern browsers
- * 1. The space content is one way to avoid an Opera bug when the
- *	`contenteditable` attribute is included anywhere else in the document.
- *	Otherwise it causes space to appear at the top and bottom of elements
- *	that receive the `clearfix` class.
- * 2. The use of `table` rather than `block` is only necessary if using
- *	`:before` to contain the top-margins of child elements.
- */
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
   /*
- * For IE 6/7 only
- * Include this rule to trigger hasLayout and contain floats.
- */
+     * For IE 6/7 only
+     * Include this rule to trigger hasLayout and contain floats.
+     */
   zoom: 1;
   /*
- * Clearfix: contain floats
- *
- * For modern browsers
- * 1. The space content is one way to avoid an Opera bug when the
- *	`contenteditable` attribute is included anywhere else in the document.
- *	Otherwise it causes space to appear at the top and bottom of elements
- *	that receive the `clearfix` class.
- * 2. The use of `table` rather than `block` is only necessary if using
- *	`:before` to contain the top-margins of child elements.
- */
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
   margin: 2em 0;
 }
 .setup .backup-prompt:before,

@@ -2,34 +2,34 @@
  * Breadcrumbs
  */
 .breadcrumbs {
-  height: 2em;
-  padding: .1875em 0 .1875em 0;
-  margin-bottom: 0;
-  border-bottom: 1px solid @border-default;
-  ul {
-    padding-top: 0.2em;
-    margin-left:0;
-    li {
-      display: inline;
-      font-size: .8em; /* 12px/base16>15 */
-      margin-left: .25em;
-      &:before {
-        content: "›";
-        margin-right: .5em;
-      }
-      &:first-child {
+    height: 2em;
+    padding: .1875em 0 .1875em 0;
+    margin-bottom: 0;
+    border-bottom: 1px solid @border-default;
+    ul {
+        padding-top: 0.2em;
         margin-left: 0;
-        padding-left:0;
-      }
-      &:first-child:before {
-        content: "";
-      }
+        li {
+            display: inline;
+            font-size: .8em; /* 12px/base16>15 */
+            margin-left: .25em;
+            &:before {
+                content: "›";
+                margin-right: .5em;
+            }
+            &:first-child {
+                margin-left: 0;
+                padding-left: 0;
+            }
+            &:first-child:before {
+                content: "";
+            }
+        }
+        a {
+            border: 0;
+        }
     }
-    a {
-      border:0;
+    div.main-cell {
+        display: inline;
     }
-  }
-  div.main-cell {
-    display: inline;
-  }
 }

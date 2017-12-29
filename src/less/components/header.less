@@ -1,61 +1,61 @@
 /* headers */
 .header {
-  overflow: visible !important;
+    overflow: visible !important;
 
-  &.first {
-    background:@background-dark;
-  }
-  &.second {
-    background:@background-lighter;
-  }
-
-  /* top navigation */
-  .navigation.primary {
-    .clearfix();
-
-    li {
-      padding: .5em;
-      float: left;
-
-      &:first-child {
-        padding-left:1em;
-      }
-      &.right {
-        float: right;
-        margin-right: 1em;
-      }
-
-      a {
-        color: @font-inverse-dark;
-        text-decoration: none;
-        border:0;
-        display: inline-block;
-
-        &:hover {
-          color: @font-inverse;
-        }
-        &:active,
-        &:focus {
-          color: @font-focus;
-        }
-      }
+    &.first {
+        background: @background-dark;
+    }
+    &.second {
+        background: @background-lighter;
     }
 
-    li {
-      .row.selected {
-        a {
-          color: @font-inverse;
-        }
-        a:focus {
-          color: @font-focus;
-        }
-      }
-    }
-  }
+    /* top navigation */
+    .navigation.primary {
+        .clearfix();
 
-  /* logo positioning */
-  .logo {
-    margin: 1.25em 0 0 1em;
-    max-width: 80%;
-  }
+        li {
+            padding: .5em;
+            float: left;
+
+            &:first-child {
+                padding-left: 1em;
+            }
+            &.right {
+                float: right;
+                margin-right: 1em;
+            }
+
+            a {
+                color: @font-inverse-dark;
+                text-decoration: none;
+                border: 0;
+                display: inline-block;
+
+                &:hover {
+                    color: @font-inverse;
+                }
+                &:active,
+                &:focus {
+                    color: @font-focus;
+                }
+            }
+        }
+
+        li {
+            .row.selected {
+                a {
+                    color: @font-inverse;
+                }
+                a:focus {
+                    color: @font-focus;
+                }
+            }
+        }
+    }
+
+    /* logo positioning */
+    .logo {
+        margin: 1.25em 0 0 1em;
+        max-width: 80%;
+    }
 }

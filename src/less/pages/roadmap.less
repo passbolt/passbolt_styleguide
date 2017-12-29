@@ -1,63 +1,63 @@
 .page.roadmap {
-  .page-row.intro .grid,
-  .page-row.roadmap .grid {
-    margin: auto;
-    max-width: 1200px;
-  }
-
-  .cards {
-    border:0;
-    .tile-description {
-      font-size:.9em;
+    .page-row.intro .grid,
+    .page-row.roadmap .grid {
+        margin: auto;
+        max-width: 1200px;
     }
-    .tile-teaser i {
-      border:1px solid @grey-lightest;
-      background:@background-lightest;
-      border-radius: 50%;
-      font-size: 1em;
-      display: block;
-      margin-top:.125em;
-      width: 70px;
-      height: 70px;
 
-      &.docker {
-        background: transparent url('@{images}/third_party/docker_90.png') center center no-repeat;
-        background-size: 90px auto;
-      }
-      &.team {
-        background: transparent url('@{images}/papericon/email_90.png') center center no-repeat;
-        background-size: 70px auto;
-      }
+    .cards {
+        border: 0;
+        .tile-description {
+            font-size: .9em;
+        }
+        .tile-teaser i {
+            border: 1px solid @grey-lightest;
+            background: @background-lightest;
+            border-radius: 50%;
+            font-size: 1em;
+            display: block;
+            margin-top: .125em;
+            width: 70px;
+            height: 70px;
+
+            &.docker {
+                background: transparent url('@{images}/third_party/docker_90.png') center center no-repeat;
+                background-size: 90px auto;
+            }
+            &.team {
+                background: transparent url('@{images}/papericon/email_90.png') center center no-repeat;
+                background-size: 70px auto;
+            }
+        }
     }
-  }
 }
 
 /* even larger screen */
 @media all and (min-width: 800px) {
-  .page.roadmap {
-    .page-row.intro {
-      min-height: 400px;
-      height: 45%;
-      background: @background-lightest url('@{images}/illustrations/birds2_850.png') 90% center no-repeat;
-      background-size: 35% auto;
+    .page.roadmap {
+        .page-row.intro {
+            min-height: 400px;
+            height: 45%;
+            background: @background-lightest url('@{images}/illustrations/birds2_850.png') 90% center no-repeat;
+            background-size: 35% auto;
 
-      h1 {
-        margin: 5% 0 2% .3em;
-        padding-left:0;
-        max-width: 24em;
-        font-size:3em;
-      }
-      h1 + p {
-        width: 50%;
-        max-width: 25em;
-        font-size: 1.5em;
-        padding-left:0;
-        margin: 0 0 .5em .5em;
-        text-align: left;
-      }
-      .button.primary {
-        margin: .5em 0 3% .5em;
-      }
+            h1 {
+                margin: 5% 0 2% .3em;
+                padding-left: 0;
+                max-width: 24em;
+                font-size: 3em;
+            }
+            h1 + p {
+                width: 50%;
+                max-width: 25em;
+                font-size: 1.5em;
+                padding-left: 0;
+                margin: 0 0 .5em .5em;
+                text-align: left;
+            }
+            .button.primary {
+                margin: .5em 0 3% .5em;
+            }
+        }
     }
-  }
 }

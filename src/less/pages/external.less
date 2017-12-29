@@ -4,64 +4,68 @@
  */
 /* iframe wrapper */
 .passbolt-plugin-dialog {
-	position: absolute;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 100%;
-	z-index: 500;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 500;
 }
 
 #passbolt-iframe-secret-edition {
-	width:100%;
-	display:block;
-	height:5em;
+    width: 100%;
+    display: block;
+    height: 5em;
 }
 
 #passbolt-iframe-password-share,
-#passbolt-iframe-group-edit{
-	width:100%;
-	display:block;
-	// the height should be dynamically set regarding the iframe content.
-	// see the plugin html helper resizeIframe() function.
+#passbolt-iframe-group-edit {
+    width: 100%;
+    display: block;
+    // the height should be dynamically set regarding the iframe content.
+    // see the plugin html helper resizeIframe() function.
 }
 
 #passbolt-group-edit-autocomplete-wrapper {
-	position:relative;
-	width:100%;
+    position: relative;
+    width: 100%;
 }
 
 #passbolt-iframe-password-share-autocomplete,
-#passbolt-iframe-group-edit-autocomplete{
-	position:absolute;
-	top:0;
-	left:0;
-	width:100%;
-	z-index:898;
+#passbolt-iframe-group-edit-autocomplete {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 898;
 }
 
 @media all and (max-width: 440px) {
-	#passbolt-iframe-secret-edition {
-		height:8em;
-	}
-	#passbolt-iframe-password-share-autocomplete,
-	#passbolt-iframe-group-edit-autocomplete{
-		top:0;
-		position:relative;
-		// the height should be dynamically set regarding the iframe content.
-		// see the plugin html helper resizeIframe() function.
-	}
+    #passbolt-iframe-secret-edition {
+        height: 8em;
+    }
+
+    #passbolt-iframe-password-share-autocomplete,
+    #passbolt-iframe-group-edit-autocomplete {
+        top: 0;
+        position: relative;
+        // the height should be dynamically set regarding the iframe content.
+        // see the plugin html helper resizeIframe() function.
+    }
 }
+
 #passbolt-iframe-login-form {
-	width: 100%;
-	height: 16.6em;
-	margin-top:.5em;
-  padding-left:.5em;
-  margin-bottom:-6%;
+    width: 100%;
+    height: 16.6em;
+    margin-top: .5em;
+    padding-left: .5em;
+    margin-bottom: -6%;
 }
+
 #passbolt-iframe-master-password {
-	z-index: 992;
+    z-index: 992;
 }
+
 #passbolt-iframe-progress-dialog {
-	z-index: 993;
+    z-index: 993;
 }

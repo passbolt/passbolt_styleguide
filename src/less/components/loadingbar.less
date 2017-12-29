@@ -1,65 +1,66 @@
 /* Small Progress bar */
 .progress-bar {
-	background:transparent;
-	width:100%;
-	height:2px;
-	display:block;
+    background: transparent;
+    width: 100%;
+    height: 2px;
+    display: block;
 }
+
 .progress-bar span {
-	background:@red;
-	height:2px;
-	display:block;
+    background: @red;
+    height: 2px;
+    display: block;
 }
 
 /* larger progress bar */
 .progress-bar-wrapper {
-	border:1px solid @border-default;
-	height:10px;
-	display:block;
-	margin:2em 0 0 0;
-	padding:2px;
+    border: 1px solid @border-default;
+    height: 10px;
+    display: block;
+    margin: 2em 0 0 0;
+    padding: 2px;
 
-	.progress-bar.big {
-		width:100%;
-		height:10px;
-		display:block;
-		clear:both;
+    .progress-bar.big {
+        width: 100%;
+        height: 10px;
+        display: block;
+        clear: both;
 
-		.progress {
-			background: @red;
-			width: 5%;
-			display: block;
-			height:10px;
-		}
+        .progress {
+            background: @red;
+            width: 5%;
+            display: block;
+            height: 10px;
+        }
 
-		/* indefinite loading */
-		&.infinite {
-			background: @red;
+        /* indefinite loading */
+        &.infinite {
+            background: @red;
 
-			.progress{
-				width: 100%;
-				overflow: hidden;
-				background:  url('@{images}/controls/infinite-bar.gif') repeat-x;
-				-moz-opacity: 0.5;
-				-khtml-opacity: 0.5;
-				opacity: 0.5;
-				-ms-filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=5);
-				filter: progid:DXImageTransform.Microsoft.Alpha(opacity=5);
-				filter: alpha(opacity=5);
+            .progress {
+                width: 100%;
+                overflow: hidden;
+                background: url('@{images}/controls/infinite-bar.gif') repeat-x;
+                -moz-opacity: 0.5;
+                -khtml-opacity: 0.5;
+                opacity: 0.5;
+                -ms-filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=5);
+                filter: progid:DXImageTransform.Microsoft.Alpha(opacity=5);
+                filter: alpha(opacity=5);
 
-			}
-		}
+            }
+        }
 
-	}
+    }
 
 }
 
 .progress-details {
-	color: @grey-darker;
-	margin:0.5em 0 1.5em 0;
-	.progress-percent {
-		float: right;
-	}
+    color: @grey-darker;
+    margin: 0.5em 0 1.5em 0;
+    .progress-percent {
+        float: right;
+    }
 }
 
 /*
@@ -67,10 +68,10 @@
 	  it is situated at the bottom of the workspace
 */
 .update-loading-bar {
-	position:fixed;
-	display:block;
-	width:100%;
-	bottom:2.35em;
-	z-index:991;
+    position: fixed;
+    display: block;
+    width: 100%;
+    bottom: 2.35em;
+    z-index: 991;
 }
 

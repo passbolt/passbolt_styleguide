@@ -2,79 +2,79 @@
  * @credit: https://github.com/lukejacksonn/GreedyNav
  */
 .greedy {
-  .navigation.primary {
-    // Keep space on the right for the button.
-    padding-right: 5em;
+    .navigation.primary {
+        // Keep space on the right for the button.
+        padding-right: 5em;
 
-    // More button. (responsive version).
-    button {
-      position: absolute;
-      top: 0;
-      right: 0;
-      outline: 0;
-      border: 0;
-      font-size: 1em;
-      font-weight: normal;
-      background: @grey-darker;
-      padding: .45em 1em .42em 1em;
-      -webkit-border-radius: 0;
-      -moz-border-radius: 0;
-      border-radius: 0;
-      text-shadow:none;
-      color: @font-inverse;
-      margin: 0;
-      min-width: 7.5em;
-    }
-    button.hidden {
-      transition: none;
-      width: 0;
-      padding: 0;
-      overflow: hidden;
-    }
-    button::after {
-      content: attr(count);
-      display: inline-flex;
-      width: 21px;
-      height: 21px;
-      align-items: center;
-      justify-content: center;
-      background: @black;
-      color: @font-lighter;
-      border-radius: 50%;
-      font-size: 0.7em;
-      line-height: 0.7em;
-      margin-left: 0.5rem;
-    }
-
-    ul.hidden-links {
-      position: absolute;
-      right: 0;
-      top: 100%;
-      z-index:999;
-
-      &.hidden {
-        display: none;
-      }
-
-      li {
-        float: none;
-        padding:0;
-        margin:0;
-        display: block;
-
-        a {
-          min-width: 5.5em;
-          background:@background-lightest;
-          color: @font-default;
-          padding: .5em 1em;
-          float:right;
-          display: inline-block;
-          &:hover, &:active {
-            background:@background-lighter;
-            color:@black;
-          }
+        // More button. (responsive version).
+        button {
+            position: absolute;
+            top: 0;
+            right: 0;
+            outline: 0;
+            border: 0;
+            font-size: 1em;
+            font-weight: normal;
+            background: @grey-darker;
+            padding: .45em 1em .42em 1em;
+            -webkit-border-radius: 0;
+            -moz-border-radius: 0;
+            border-radius: 0;
+            text-shadow: none;
+            color: @font-inverse;
+            margin: 0;
+            min-width: 7.5em;
         }
-      }
+        button.hidden {
+            transition: none;
+            width: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+        button::after {
+            content: attr(count);
+            display: inline-flex;
+            width: 21px;
+            height: 21px;
+            align-items: center;
+            justify-content: center;
+            background: @black;
+            color: @font-lighter;
+            border-radius: 50%;
+            font-size: 0.7em;
+            line-height: 0.7em;
+            margin-left: 0.5rem;
+        }
+
+        ul.hidden-links {
+            position: absolute;
+            right: 0;
+            top: 100%;
+            z-index: 999;
+
+            &.hidden {
+                display: none;
+            }
+
+            li {
+                float: none;
+                padding: 0;
+                margin: 0;
+                display: block;
+
+                a {
+                    min-width: 5.5em;
+                    background: @background-lightest;
+                    color: @font-default;
+                    padding: .5em 1em;
+                    float: right;
+                    display: inline-block;
+                    &:hover, &:active {
+                        background: @background-lighter;
+                        color: @black;
+                    }
+                }
+            }
+        }
     }
-  }
 }
