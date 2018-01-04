@@ -14,20 +14,12 @@
 		<div class="primary navigation top">
 			<ul id="js_app_navigation_left"
 					class="left passbolt_controller_component_app_navigation_left_controller mad_view_component_tree menu ready">
-				<li id="0cd2189d-84fd-597b-3970-66be2971d0d2" class="home ready">
-					<div class="row">
-						<div class="main-cell-wrapper">
-							<div class="main-cell">
-								<a href="../demo/LU_passwords.php" tabindex="1"><span>home</span></a>
-							</div>
-						</div>
-					</div>
-				</li>
+
 				<li id="31a2d90f-6c19-8475-0603-8bbb2e0130df" class="password ready">
 					<div class="row selected">
 						<div class="main-cell-wrapper">
 							<div class="main-cell">
-								<a role="button" tabindex="2"><span>passwords</span></a>
+								<a href="../demo/LU_passwords.php" role="button" tabindex="2"><span>passwords</span></a>
 							</div>
 						</div>
 					</div>
@@ -36,7 +28,7 @@
 					<div class="row">
 						<div class="main-cell-wrapper">
 							<div class="main-cell">
-								<a role="button" tabindex="3"><span>users</span></a>
+								<a href="../demo/LU_users.php" role="button" tabindex="3"><span>users</span></a>
 							</div>
 						</div>
 					</div>

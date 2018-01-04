@@ -1,9 +1,7 @@
 /*
  * Comment thread with add/edit form
  */
-.comments {
-    clear: both;
-    margin: .5em 0;
+.panel.aside .comments {
     width: 100%;
 
     /* mini fixed fluid 2 columns layout */
@@ -66,13 +64,13 @@
         }
 
         /* actions */
+        .form-content {
+            margin-left:.5em;
+        }
         .actions {
             float: right;
             margin-top: -2.25em;
             margin-right: 0;
-            a {
-                border: 0;
-            }
         }
 
         /* triangle bubble */
@@ -86,28 +84,6 @@
             border-right: 10px solid @grey-lighter;
             margin-left: -1.8em;
             margin-top: -.5em;
-        }
-    }
-
-    .form-content {
-        margin: 0 0 1em .5em;
-        .clearfix();
-
-        label {
-            display: none;
-        }
-        textarea {
-            font-size: 0.875em;
-            height: 5em;
-            width: 100%;
-            box-sizing: border-box;
-        }
-        .metadata {
-            margin-left: 0;
-        }
-        .button {
-            margin-top: -.25em;
-            margin-right: 0;
         }
     }
 

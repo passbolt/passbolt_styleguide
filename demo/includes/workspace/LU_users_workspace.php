@@ -1,5 +1,3 @@
-    <?php include('includes/LU_loadingbar.php'); ?>
-    <?php include('includes/LU_notifications.php'); ?>
     <?php include('includes/headers/LU_header_first.php'); ?>
     <div class="header second">
         <?php include('includes/headers/LU_header_second_logo.php'); ?>

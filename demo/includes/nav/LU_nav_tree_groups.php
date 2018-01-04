@@ -10,7 +10,7 @@
 	];
 ?>
 
-<div id="js_wsp_users_groups" class="navigation flat tree groups passbolt_component_groups js_component mad_view ready">
+<div id="js_wsp_users_groups" class="navigation groups passbolt_component_groups js_component mad_view ready">
 	<ul id="js_wsp_users_groups_menu">
 		<li class="open node root group-header">
 			<div class="row title">
@@ -20,7 +20,7 @@
 					</div>
 				</div>
 				<div class="right-cell more-ctrl">
-					<a href="#"><span>more</span></a>
+					<a href="#" class="filter"><span>more</span></a>
 				</div>
 			</div>
 		</li>

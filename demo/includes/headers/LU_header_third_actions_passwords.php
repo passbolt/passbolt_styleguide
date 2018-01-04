@@ -56,7 +56,7 @@
 						</li>
 					</ul>
 				</div>
-				<script>
+				<script type="application/javascript">
 					// SAMPLE INTERACTION - Not for production
 					$(function() {
 						$('#js_wk_menu_more_button').click(function(){

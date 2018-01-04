@@ -1,19 +1,22 @@
 <?php include(dirname(__DIR__) . '../../fixtures/tags.php'); ?>
-<div class="navigation flat tree closed accordion groups passbolt_component_password_filters js_component mad_view ready" id="js_wsp_pwd_password_filter_group">
-    <ul id="js_wsp_pwd_password_filter_group_selector">
-        <li class="open node root group-header">
+<div id="js_wsp_password_filter_tags" class="open navigation accordion js_component mad_view ready">
+    <ul id="js_wsp_pwd_password_filter_tag_selector" class="accordion-header">
+        <li class="open node root">
             <div class="row title">
                 <div class="main-cell-wrapper">
                     <div class="main-cell">
-                        <h3><a href="#">Filter by tags</a></h3>
+                        <h3><a href="#" class="accordion-trigger">Filter by tags</a></h3>
                     </div>
+                </div>
+                <div class="right-cell more-ctrl">
+                    <a href="#" class="filter"><span>more</span></a>
                 </div>
             </div>
         </li>
     </ul>
-    <ul id="js_wsp_password_filter_groups_list" class="passbolt_component_password_filters_groups_list tree passbolt_view_component_groups_list ready">
-<?php $i =0; foreach ($tags as $tag) : $i++; ?>
-            <li class="open node root group-item" id="group_<?= $tag['id']; ?>" data-view-id="<?= $i; ?>">
+    <ul id="js_wsp_password_filter_tags_list" class="accordion-content">
+<?php foreach ($tags as $i => $tag) : ?>
+            <li class="open node root tag-item" id="tag_<?= $tag['id']; ?>" data-view-id="<?= $i; ?>">
                 <div class="row">
                     <div class="main-cell-wrapper">
                         <div class="main-cell">
@@ -25,3 +28,17 @@
 <?php endforeach; ?>
     </ul>
 </div>
+<script type="application/javascript">
+  $(function () {
+    $('.accordion-header').click(function (e) {
+      var $content = $(this).next();
+      if ($content.is(':hidden')) {
+        $content.slideDown(50);
+      } else {
+        $content.slideUp(25);
+      }
+      $content.parent().toggleClass('closed');
+      return false;
+    });
+  });
+</script>

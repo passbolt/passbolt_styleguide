@@ -3,19 +3,18 @@
 <head>
 	<meta charset="utf-8"/>
 	<!--
-				 ____                  __          ____
-				/ __ \____  _____ ____/ /_  ____  / / /_
-			 / /_/ / __ `/ ___/ ___/ __ \/ __ \/ / __/
-			/ ____/ /_/ (__  |__  ) /_/ / /_/ / / /_
+			 ____                  __          ____
+			/ __ \____  _____ ____/ /_  ____  / / /_
+		   / /_/ / __ `/ ___/ ___/ __ \/ __ \/ / __/
+		  / ____/ /_/ (__  |__  ) /_/ / /_/ / / /_
 		 /_/    \__,_/____/____/_.___/\____/_/\__/
 
 		 The password management solution
-		 (c) 2015 passbolt.com
+		 (c) 2018 Passbolt SARL
 
 	-->
 	<title>Passbolt config</title>
 	<meta name="viewport" content="width=device-width">
-	<script src="../src/js/lib/modernizr.js"></script>
 	<link rel="stylesheet" media="all" href="../src/css/config_debug_webext.css"/>
 </head>
 <body>

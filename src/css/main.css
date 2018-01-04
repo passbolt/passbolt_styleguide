@@ -708,18 +708,6 @@ a:hover {
   position: fixed;
 }
 /* fadeinup */
-@-webkit-keyframes fadeInUp {
-  0% {
-    opacity: 0;
-    -webkit-transform: translateY(20px);
-    transform: translateY(20px);
-  }
-  100% {
-    opacity: 1;
-    -webkit-transform: translateY(0);
-    transform: translateY(0);
-  }
-}
 @keyframes fadeInUp {
   0% {
     opacity: 0;
@@ -734,8 +722,32 @@ a:hover {
     transform: translateY(0);
   }
 }
+@keyframes fadeOutUp {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+    transform: translate3d(0, -100%, 0);
+  }
+}
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translate3d(0, -100%, 0);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.fadeInDown {
+  animation-name: fadeInDown;
+}
+.fadeOutUp {
+  animation-name: fadeOutUp;
+}
 .fadeInUp {
-  -webkit-animation-name: fadeInUp;
   animation-name: fadeInUp;
 }
 /*
@@ -788,15 +800,15 @@ p {
   /* 11px base 16 */
 }
 /*!
- *  Font Awesome 4.5.0 by @davegandy - http://fontawesome.io - @fontawesome
+ *  Font Awesome 4.7.0 by @davegandy - http://fontawesome.io - @fontawesome
  *  License - http://fontawesome.io/license (Font: SIL OFL 1.1, CSS: MIT License)
  */
 /* FONT PATH
  * -------------------------- */
 @font-face {
   font-family: 'FontAwesome';
-  src: url('../fonts/fontawesome-webfont.eot?v=4.5.0');
-  src: url('../fonts/fontawesome-webfont.eot?#iefix&v=4.5.0') format('embedded-opentype'), url('../fonts/fontawesome-webfont.woff2?v=4.5.0') format('woff2'), url('../fonts/fontawesome-webfont.woff?v=4.5.0') format('woff'), url('../fonts/fontawesome-webfont.ttf?v=4.5.0') format('truetype'), url('../fonts/fontawesome-webfont.svg?v=4.5.0#fontawesomeregular') format('svg');
+  src: url('../fonts/fontawesome-webfont.eot?v=4.7.0');
+  src: url('../fonts/fontawesome-webfont.eot?#iefix&v=4.7.0') format('embedded-opentype'), url('../fonts/fontawesome-webfont.woff2?v=4.7.0') format('woff2'), url('../fonts/fontawesome-webfont.woff?v=4.7.0') format('woff'), url('../fonts/fontawesome-webfont.ttf?v=4.7.0') format('truetype'), url('../fonts/fontawesome-webfont.svg?v=4.7.0#fontawesomeregular') format('svg');
   font-weight: normal;
   font-style: normal;
 }
@@ -907,31 +919,31 @@ p {
   }
 }
 .fa-rotate-90 {
-  filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=1);
+  -ms-filter: "progid:DXImageTransform.Microsoft.BasicImage(rotation=1)";
   -webkit-transform: rotate(90deg);
   -ms-transform: rotate(90deg);
   transform: rotate(90deg);
 }
 .fa-rotate-180 {
-  filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=2);
+  -ms-filter: "progid:DXImageTransform.Microsoft.BasicImage(rotation=2)";
   -webkit-transform: rotate(180deg);
   -ms-transform: rotate(180deg);
   transform: rotate(180deg);
 }
 .fa-rotate-270 {
-  filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
+  -ms-filter: "progid:DXImageTransform.Microsoft.BasicImage(rotation=3)";
   -webkit-transform: rotate(270deg);
   -ms-transform: rotate(270deg);
   transform: rotate(270deg);
 }
 .fa-flip-horizontal {
-  filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=0, mirror=1);
+  -ms-filter: "progid:DXImageTransform.Microsoft.BasicImage(rotation=0, mirror=1)";
   -webkit-transform: scale(-1, 1);
   -ms-transform: scale(-1, 1);
   transform: scale(-1, 1);
 }
 .fa-flip-vertical {
-  filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=2, mirror=1);
+  -ms-filter: "progid:DXImageTransform.Microsoft.BasicImage(rotation=2, mirror=1)";
   -webkit-transform: scale(1, -1);
   -ms-transform: scale(1, -1);
   transform: scale(1, -1);
@@ -2127,6 +2139,9 @@ p {
 .fa-space-shuttle:before {
   content: "\f197";
 }
+.fa-slack:before {
+  content: "\f198";
+}
 .fa-envelope-square:before {
   content: "\f199";
 }
@@ -2169,7 +2184,7 @@ p {
 .fa-digg:before {
   content: "\f1a6";
 }
-.fa-pied-piper:before {
+.fa-pied-piper-pp:before {
   content: "\f1a7";
 }
 .fa-pied-piper-alt:before {
@@ -2295,6 +2310,7 @@ p {
   content: "\f1ce";
 }
 .fa-ra:before,
+.fa-resistance:before,
 .fa-rebel:before {
   content: "\f1d0";
 }
@@ -2617,6 +2633,7 @@ p {
   content: "\f23e";
 }
 .fa-battery-4:before,
+.fa-battery:before,
 .fa-battery-full:before {
   content: "\f240";
 }
@@ -2869,6 +2886,255 @@ p {
 }
 .fa-percent:before {
   content: "\f295";
+}
+.fa-gitlab:before {
+  content: "\f296";
+}
+.fa-wpbeginner:before {
+  content: "\f297";
+}
+.fa-wpforms:before {
+  content: "\f298";
+}
+.fa-envira:before {
+  content: "\f299";
+}
+.fa-universal-access:before {
+  content: "\f29a";
+}
+.fa-wheelchair-alt:before {
+  content: "\f29b";
+}
+.fa-question-circle-o:before {
+  content: "\f29c";
+}
+.fa-blind:before {
+  content: "\f29d";
+}
+.fa-audio-description:before {
+  content: "\f29e";
+}
+.fa-volume-control-phone:before {
+  content: "\f2a0";
+}
+.fa-braille:before {
+  content: "\f2a1";
+}
+.fa-assistive-listening-systems:before {
+  content: "\f2a2";
+}
+.fa-asl-interpreting:before,
+.fa-american-sign-language-interpreting:before {
+  content: "\f2a3";
+}
+.fa-deafness:before,
+.fa-hard-of-hearing:before,
+.fa-deaf:before {
+  content: "\f2a4";
+}
+.fa-glide:before {
+  content: "\f2a5";
+}
+.fa-glide-g:before {
+  content: "\f2a6";
+}
+.fa-signing:before,
+.fa-sign-language:before {
+  content: "\f2a7";
+}
+.fa-low-vision:before {
+  content: "\f2a8";
+}
+.fa-viadeo:before {
+  content: "\f2a9";
+}
+.fa-viadeo-square:before {
+  content: "\f2aa";
+}
+.fa-snapchat:before {
+  content: "\f2ab";
+}
+.fa-snapchat-ghost:before {
+  content: "\f2ac";
+}
+.fa-snapchat-square:before {
+  content: "\f2ad";
+}
+.fa-pied-piper:before {
+  content: "\f2ae";
+}
+.fa-first-order:before {
+  content: "\f2b0";
+}
+.fa-yoast:before {
+  content: "\f2b1";
+}
+.fa-themeisle:before {
+  content: "\f2b2";
+}
+.fa-google-plus-circle:before,
+.fa-google-plus-official:before {
+  content: "\f2b3";
+}
+.fa-fa:before,
+.fa-font-awesome:before {
+  content: "\f2b4";
+}
+.fa-handshake-o:before {
+  content: "\f2b5";
+}
+.fa-envelope-open:before {
+  content: "\f2b6";
+}
+.fa-envelope-open-o:before {
+  content: "\f2b7";
+}
+.fa-linode:before {
+  content: "\f2b8";
+}
+.fa-address-book:before {
+  content: "\f2b9";
+}
+.fa-address-book-o:before {
+  content: "\f2ba";
+}
+.fa-vcard:before,
+.fa-address-card:before {
+  content: "\f2bb";
+}
+.fa-vcard-o:before,
+.fa-address-card-o:before {
+  content: "\f2bc";
+}
+.fa-user-circle:before {
+  content: "\f2bd";
+}
+.fa-user-circle-o:before {
+  content: "\f2be";
+}
+.fa-user-o:before {
+  content: "\f2c0";
+}
+.fa-id-badge:before {
+  content: "\f2c1";
+}
+.fa-drivers-license:before,
+.fa-id-card:before {
+  content: "\f2c2";
+}
+.fa-drivers-license-o:before,
+.fa-id-card-o:before {
+  content: "\f2c3";
+}
+.fa-quora:before {
+  content: "\f2c4";
+}
+.fa-free-code-camp:before {
+  content: "\f2c5";
+}
+.fa-telegram:before {
+  content: "\f2c6";
+}
+.fa-thermometer-4:before,
+.fa-thermometer:before,
+.fa-thermometer-full:before {
+  content: "\f2c7";
+}
+.fa-thermometer-3:before,
+.fa-thermometer-three-quarters:before {
+  content: "\f2c8";
+}
+.fa-thermometer-2:before,
+.fa-thermometer-half:before {
+  content: "\f2c9";
+}
+.fa-thermometer-1:before,
+.fa-thermometer-quarter:before {
+  content: "\f2ca";
+}
+.fa-thermometer-0:before,
+.fa-thermometer-empty:before {
+  content: "\f2cb";
+}
+.fa-shower:before {
+  content: "\f2cc";
+}
+.fa-bathtub:before,
+.fa-s15:before,
+.fa-bath:before {
+  content: "\f2cd";
+}
+.fa-podcast:before {
+  content: "\f2ce";
+}
+.fa-window-maximize:before {
+  content: "\f2d0";
+}
+.fa-window-minimize:before {
+  content: "\f2d1";
+}
+.fa-window-restore:before {
+  content: "\f2d2";
+}
+.fa-times-rectangle:before,
+.fa-window-close:before {
+  content: "\f2d3";
+}
+.fa-times-rectangle-o:before,
+.fa-window-close-o:before {
+  content: "\f2d4";
+}
+.fa-bandcamp:before {
+  content: "\f2d5";
+}
+.fa-grav:before {
+  content: "\f2d6";
+}
+.fa-etsy:before {
+  content: "\f2d7";
+}
+.fa-imdb:before {
+  content: "\f2d8";
+}
+.fa-ravelry:before {
+  content: "\f2d9";
+}
+.fa-eercast:before {
+  content: "\f2da";
+}
+.fa-microchip:before {
+  content: "\f2db";
+}
+.fa-snowflake-o:before {
+  content: "\f2dc";
+}
+.fa-superpowers:before {
+  content: "\f2dd";
+}
+.fa-wpexplorer:before {
+  content: "\f2de";
+}
+.fa-meetup:before {
+  content: "\f2e0";
+}
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+.sr-only-focusable:active,
+.sr-only-focusable:focus {
+  position: static;
+  width: auto;
+  height: auto;
+  margin: 0;
+  overflow: visible;
+  clip: auto;
 }
 .icon {
   display: inline-block;
@@ -4147,15 +4413,24 @@ input[type="search"]::-webkit-search-cancel-button {
 }
 .user.profile .more a {
   display: block;
-  background: transparent url('../img/controls/tree-ctrl.png') center -9px no-repeat;
-  margin-top: 1em;
-  opacity: .5;
-  filter: alpha(opacity=50);
   border: 0;
+  color: #666666;
+}
+.user.profile .more a:after {
+  position: absolute;
+  content: "\f0d7";
+  /* caret down */
+  font: normal normal normal 1em FontAwesome;
+  text-rendering: auto;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  width: 1em;
+  height: 1em;
+  margin-left: -2em;
+  margin-top: 1em;
 }
 .user.profile .more a:hover {
-  opacity: .9;
-  filter: alpha(opacity=90);
+  color: #000000;
 }
 .user.profile .more a span {
   visibility: hidden;
@@ -4439,46 +4714,38 @@ input[type="search"]::-webkit-search-cancel-button {
  * Notification
  */
 .notification-container {
-  font-size: .75em;
-  /* 12px */
-  width: 80%;
+  font-size: .85em;
+  top: 0;
+  position: absolute;
+  z-index: 991;
+  height: 2em;
+  padding-top: 1em;
+  width: 60%;
+  margin-left: 20%;
 }
-.notification-container .message {
+.notification-container .notification {
+  position: relative;
+  left: 50%;
   float: left;
-  margin-left: 25%;
-  width: 50%;
 }
-@media all and (min-width: 768px) {
-  .notification-container {
-    bottom: 0;
-    position: absolute;
-    z-index: 991;
-    height: 2em;
-    margin: 0;
-    padding-top: 1.167em;
-  }
-  .notification-container .notification .message {
-    margin: 0;
-    margin-top: -0.25em;
-    padding: 0;
-    width: 60%;
-    float: none;
-    background: #ffffff;
-    font-weight: normal;
-    /* colors for messages */
-  }
-  .notification-container .notification .message.error {
-    color: #d40101;
-  }
-  .notification-container .notification .message.success {
-    color: #009900;
-  }
-  .notification-container .notification .message.warning {
-    color: #9f6000;
-  }
-  .notification-container .notification .message.notice {
-    color: #2894df;
-  }
+.notification-container .notification .message {
+  box-shadow: 0px 0px 10px 0px #333333;
+  border-radius: 2px;
+  padding: .5em 1em;
+  position: relative;
+  left: -50%;
+  float: left;
+  background: #fef0bf;
+  border: 1px solid #fccd28;
+  color: #000000;
+  font-weight: normal;
+  width: auto;
+}
+.notification-container .notification .message strong {
+  text-transform: capitalize;
+}
+.notification-container .notification .message strong:after {
+  content: ':';
 }
 /*
 	do not show javascript needed warning if js is enabled
@@ -4625,8 +4892,6 @@ input[type="search"]::-webkit-search-cancel-button {
   margin-top: 1%;
   /* some space for the footer / notification area in case it is really tall */
   margin-bottom: 3em;
-  -moz-box-shadow: 0px 0px 10px 0px #dddddd;
-  -webkit-box-shadow: 0px 0px 10px 0px #dddddd;
   box-shadow: 0px 0px 10px 0px #dddddd;
   /* header */
   /* content */
@@ -4814,8 +5079,6 @@ input[type="search"]::-webkit-search-cancel-button {
   z-index: 800;
   background: #ffffff;
   border: 1px solid #dddddd;
-  -moz-box-shadow: 0px 0px 10px 0px #dddddd;
-  -webkit-box-shadow: 0px 0px 10px 0px #dddddd;
   box-shadow: 0px 0px 10px 0px #dddddd;
 }
 .dropdownmenu ul {
@@ -4825,8 +5088,6 @@ input[type="search"]::-webkit-search-cancel-button {
   left: 100%;
   background: #ffffff;
   border: 1px solid #dddddd;
-  -moz-box-shadow: 0px 0px 10px 0px #dddddd;
-  -webkit-box-shadow: 0px 0px 10px 0px #dddddd;
   box-shadow: 0px 0px 10px 0px #dddddd;
 }
 .dropdownmenu li {
@@ -4857,91 +5118,124 @@ input[type="search"]::-webkit-search-cancel-button {
   margin-top: .25em;
 }
 /* tags */
-.tags .tags-edit-wrapper textarea {
-  height: 2.3em;
-  float: left;
-  font-size: .775em;
-  min-width: 21.5em;
-  border: 1px solid #cccccc;
-}
-.tags .tags-edit-wrapper input[type=submit] {
-  float: right;
-  margin: 0;
-  font-size: .700em;
-  width: auto;
-  padding: .300em .6em .300em .6em;
-}
 .tags .tag {
-  padding: .2em .5em;
-}
-.tags li {
+  padding: .125em .5em;
   float: left;
-}
-/* tag as a link */
-.tags a.tag {
-  float: left;
-  height: 1em;
-  line-height: 1em;
   position: relative;
-  padding-left: .8em;
-  margin-left: 1em;
-  margin-bottom: .25em;
+  margin: 0 .5em .5em 0;
+  text-decoration: none;
+  border-radius: 3px;
+  border: 1px solid #2894df;
+  background: #ffffff;
+  color: #2894df;
+}
+.tags .tag:active,
+.tags .tag:hover {
   background: #2a9ceb;
   color: #ffffff;
-  text-decoration: none;
-  -moz-border-radius: 4px;
-  -webkit-border-radius: 4px;
-  border-radius: 4px;
 }
-/* left triangle */
-.tags a.tag:before {
-  content: "";
-  float: left;
-  position: absolute;
-  top: 0;
-  left: -0.575em;
-  width: 0;
-  height: 0;
-  border-color: transparent #2a9ceb transparent transparent;
-  border-style: solid;
-  border-width: .75em .75em .75em 0;
+.tag-editor {
+  margin-bottom: 1em;
 }
-/* left dot */
-.tags a.tag:after {
+.tag-editor .message {
+  font-size: 1em;
+  margin-top: .5em;
+}
+.tag-editor .tag {
+  padding-right: 0;
+}
+.tag-editor .tag-delete {
+  margin-left: .25em;
+  border-left: 1px dotted #2894df;
+  padding-left: .5em;
+  padding-right: .5em;
+  font-size: .75em;
+  vertical-align: 10%;
+  cursor: pointer;
+}
+.tag-editor .tag:hover:after {
+  border-color: #bbbbbb;
+}
+.tag-editor .tag-editor-input-wrapper {
+  /*
+     * For IE 6/7 only
+     * Include this rule to trigger hasLayout and contain floats.
+     */
+  /*
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
+  /*
+     * For IE 6/7 only
+     * Include this rule to trigger hasLayout and contain floats.
+     */
+  zoom: 1;
+  /*
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
+  min-height: 5em;
+  padding: .5em;
+  border: 1px solid #dddddd;
+}
+.tag-editor .tag-editor-input-wrapper:before,
+.tag-editor .tag-editor-input-wrapper:after {
   content: "";
-  position: absolute;
-  top: .55em;
-  left: .1em;
+  display: table;
+}
+.tag-editor .tag-editor-input-wrapper:after {
+  clear: both;
+}
+.tag-editor .tag-editor-input-wrapper:before,
+.tag-editor .tag-editor-input-wrapper:after {
+  content: "";
+  display: table;
+}
+.tag-editor .tag-editor-input-wrapper:after {
+  clear: both;
+}
+.tag-editor input[type=text] {
+  padding: 0;
+  font-size: 1em;
+  box-shadow: none;
+  width: 3em;
   float: left;
-  width: 5px;
-  height: 5px;
-  -moz-border-radius: 2px;
-  -webkit-border-radius: 2px;
-  border-radius: 2px;
-  background: #ffffff;
+  border: 1px solid blue;
 }
 /*
  * Comment thread with add/edit form
  */
-.comments {
-  clear: both;
-  margin: .5em 0;
+.panel.aside .comments {
   width: 100%;
   /* mini fixed fluid 2 columns layout */
 }
-.comments .wrap-right-column {
+.panel.aside .comments .wrap-right-column {
   float: left;
   width: 100%;
 }
-.comments .right-column {
+.panel.aside .comments .right-column {
   margin-left: 2.5em;
 }
-.comments .left-column {
+.panel.aside .comments .left-column {
   float: left;
   width: 2em;
   margin-left: -100%;
 }
-.comments .comment {
+.panel.aside .comments .comment {
   padding-bottom: .5em;
   /*
      * For IE 6/7 only
@@ -4979,44 +5273,44 @@ input[type="search"]::-webkit-search-cancel-button {
   /* actions */
   /* triangle bubble */
 }
-.comments .comment:before,
-.comments .comment:after {
+.panel.aside .comments .comment:before,
+.panel.aside .comments .comment:after {
   content: "";
   display: table;
 }
-.comments .comment:after {
+.panel.aside .comments .comment:after {
   clear: both;
 }
-.comments .comment:before,
-.comments .comment:after {
+.panel.aside .comments .comment:before,
+.panel.aside .comments .comment:after {
   content: "";
   display: table;
 }
-.comments .comment:after {
+.panel.aside .comments .comment:after {
   clear: both;
 }
-.comments .comment p {
+.panel.aside .comments .comment p {
   background: #eeeeee;
   padding: 1em;
   margin-left: 10px;
 }
-.comments .comment .author.picture {
+.panel.aside .comments .comment .author.picture {
   width: 2em;
   height: 2em;
   margin-top: .25em;
 }
-.comments .comment .author.picture img {
+.panel.aside .comments .comment .author.picture img {
   width: 2em;
   height: 2em;
 }
-.comments .comment .author.picture a {
+.panel.aside .comments .comment .author.picture a {
   border: 0;
 }
-.comments .comment .metadata {
+.panel.aside .comments .comment .metadata {
   font-style: italic;
   margin: .5em 0 1em 1em;
 }
-.comments .comment .metadata .author.username {
+.panel.aside .comments .comment .metadata .author.username {
   max-width: 48%;
   white-space: nowrap;
   overflow: hidden;
@@ -5024,10 +5318,10 @@ input[type="search"]::-webkit-search-cancel-button {
   -o-text-overflow: ellipsis;
   -ms-text-overflow: ellipsis;
 }
-.comments .comment .metadata .author.username:after {
+.panel.aside .comments .comment .metadata .author.username:after {
   content: ', ';
 }
-.comments .comment .metadata .modified {
+.panel.aside .comments .comment .metadata .modified {
   max-width: 48%;
   padding-right: 2px;
   color: #969696;
@@ -5037,15 +5331,15 @@ input[type="search"]::-webkit-search-cancel-button {
   -o-text-overflow: ellipsis;
   -ms-text-overflow: ellipsis;
 }
-.comments .comment .actions {
+.panel.aside .comments .comment .form-content {
+  margin-left: .5em;
+}
+.panel.aside .comments .comment .actions {
   float: right;
   margin-top: -2.25em;
   margin-right: 0;
 }
-.comments .comment .actions a {
-  border: 0;
-}
-.comments .comment p:before {
+.panel.aside .comments .comment p:before {
   content: ' ';
   position: absolute;
   width: 1px;
@@ -5056,164 +5350,54 @@ input[type="search"]::-webkit-search-cancel-button {
   margin-left: -1.8em;
   margin-top: -0.5em;
 }
-.comments .form-content {
-  margin: 0 0 1em .5em;
-  /*
-     * For IE 6/7 only
-     * Include this rule to trigger hasLayout and contain floats.
-     */
-  /*
-     * Clearfix: contain floats
-     *
-     * For modern browsers
-     * 1. The space content is one way to avoid an Opera bug when the
-     *	`contenteditable` attribute is included anywhere else in the document.
-     *	Otherwise it causes space to appear at the top and bottom of elements
-     *	that receive the `clearfix` class.
-     * 2. The use of `table` rather than `block` is only necessary if using
-     *	`:before` to contain the top-margins of child elements.
-     */
-  /*
-     * For IE 6/7 only
-     * Include this rule to trigger hasLayout and contain floats.
-     */
-  zoom: 1;
-  /*
-     * Clearfix: contain floats
-     *
-     * For modern browsers
-     * 1. The space content is one way to avoid an Opera bug when the
-     *	`contenteditable` attribute is included anywhere else in the document.
-     *	Otherwise it causes space to appear at the top and bottom of elements
-     *	that receive the `clearfix` class.
-     * 2. The use of `table` rather than `block` is only necessary if using
-     *	`:before` to contain the top-margins of child elements.
-     */
-}
-.comments .form-content:before,
-.comments .form-content:after {
-  content: "";
-  display: table;
-}
-.comments .form-content:after {
-  clear: both;
-}
-.comments .form-content:before,
-.comments .form-content:after {
-  content: "";
-  display: table;
-}
-.comments .form-content:after {
-  clear: both;
-}
-.comments .form-content label {
-  display: none;
-}
-.comments .form-content textarea {
-  font-size: 0.875em;
-  height: 5em;
-  width: 100%;
-  box-sizing: border-box;
-}
-.comments .form-content .metadata {
-  margin-left: 0;
-}
-.comments .form-content .button {
-  margin-top: -0.25em;
-  margin-right: 0;
-}
 /* left panel navigation */
 .panel .navigation {
   font-size: .938em;
+  /* first block have a delimiter */
+  /*
+        Navigation row
+    */
 }
 .panel .navigation.first {
   border-bottom: 1px dotted #dddddd;
   padding: .625em 0;
   margin-bottom: .625em;
 }
-.panel .navigation.last {
-  padding-right: .3125em;
-  /* 5px */
+.panel .navigation .row {
+  float: left;
+  width: 100%;
+  box-sizing: border-box;
+  /*
+            Row layout
+              fluid main-cell
+              fixed right-cell
+        */
+  /*
+            Right Cell
+        */
+  /* title cell is higher than normal cell
+           this centers the right cell vertically accordingly
+         */
 }
 .panel .navigation .row:hover {
   background: #f3f3f3;
 }
-.panel .navigation a {
-  border: 0;
-  padding: .125em .313em;
-  /* 2px 5px */
-  padding-left: 1em;
-  color: #333333;
-  display: block;
-}
-.panel .navigation ul ul {
-  margin-left: .666666em;
-}
-.panel .navigation .selected {
-  font-weight: bold;
-}
-.panel .navigation .selected li {
-  font-weight: normal;
-}
-/* left sidebar workspace tree */
-.tree {
-  /*
-        Tree row layout:
-          fixed left-cell (contain tree-node-ctrl)
-          fluid main-cell
-          fixed right-cell
-    */
-  /*
-        Alternative layout:
-          no left-cell = flat tree
-          fluid main-cell
-          fixed right-cell
-    */
-  /* ellipsis on long node text */
-  /*
-        Left Cell
-    */
-  /*
-        Right Cell
-    */
-  /* Events & visibility */
-  /* do not show text */
-  /* don't show nodes if parent is closed */
-}
-.tree h3 {
-  border: 0;
-  font-size: 1em;
-  padding-left: .5em;
-  margin: 0 1.5em 0 .5em;
-  color: #333333;
-}
-.tree .row {
-  float: left;
-  width: 100%;
-  padding-left: 0.5em;
-  box-sizing: border-box;
-}
-.tree .main-cell-wrapper {
-  float: left;
-  width: 100%;
-}
-.tree .main-cell {
-  margin: 0 1.5em 0 .5em;
-}
-.tree.flat .row {
-  margin-left: 0;
-  padding-left: 0;
-}
-.tree.flat .main-cell {
-  margin: 0 1.5em 0 0;
-}
-.tree .row:hover {
-  background: #f3f3f3;
-}
-.tree .row.no-hover:hover {
+.panel .navigation .row.no-hover:hover {
   background: transparent;
 }
-.tree .main-cell h3 {
+.panel .navigation .row.selected {
+  font-weight: bold;
+}
+.panel .navigation .row .main-cell-wrapper {
+  float: left;
+  width: 100%;
+}
+.panel .navigation .row .main-cell {
+  margin: 0 1.5em 0 0;
+}
+.panel .navigation .row .main-cell h3 {
+  border: 0;
+  font-size: 1em;
   margin: 0 .25em 0 1em;
   padding: .25em 0;
   white-space: nowrap;
@@ -5222,11 +5406,13 @@ input[type="search"]::-webkit-search-cancel-button {
   -o-text-overflow: ellipsis;
   -ms-text-overflow: ellipsis;
 }
-.tree .main-cell h3 a {
-  margin-left: 1em;
-  padding-left: 0;
+.panel .navigation .row .main-cell h3 a {
+  /* suppress a padding so that it looks the same
+                        for all title if it is a link or not */
+  padding-top: 0;
+  padding-bottom: 0;
 }
-.tree .main-cell span {
+.panel .navigation .row .main-cell span {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -5234,74 +5420,99 @@ input[type="search"]::-webkit-search-cancel-button {
   -ms-text-overflow: ellipsis;
   display: block;
 }
-.tree .left-cell {
-  float: left;
-  width: 1em;
-  margin-left: -100%;
-}
-.tree .left-cell.tree-node-ctrl a {
-  width: 1em;
-  height: 1em;
-  margin: 0;
-  padding: 0;
+.panel .navigation .row .main-cell a {
+  border: 0;
+  padding: .125em .313em;
+  /* 2px 5px */
+  padding-left: 1em;
+  color: #333333;
   display: block;
-  margin-top: .25em;
-  opacity: 0.5;
-  filter: alpha(opacity=50);
 }
-.tree .left-cell.tree-node-ctrl a:hover {
-  opacity: .9;
-  filter: alpha(opacity=90);
-}
-.tree .node.open .left-cell.tree-node-ctrl a {
-  background: transparent url('../img/controls/tree-ctrl.png') center -9px no-repeat;
-}
-.tree .node.close .left-cell.tree-node-ctrl a {
-  background: transparent url('../img/controls/tree-ctrl.png') center 4px no-repeat;
-}
-.tree .right-cell {
+.panel .navigation .row .right-cell {
   float: right;
   width: 1em;
   height: 1em;
-  margin-right: .4em;
-  margin-top: -1.4em;
+  margin-right: 1em;
+  margin-top: -1.5em;
 }
-.tree .row .right-cell a {
-  height: 1em;
+.panel .navigation .row .right-cell a {
+  display: none;
   width: 1em;
+  height: 1em;
+  padding: .125em;
+  color: #888888;
+  border: 1px solid transparent;
+}
+.panel .navigation .row .right-cell a:after {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  content: "\f0fe";
+  font: normal normal normal 14px/1 FontAwesome;
+  line-height: 16px;
+  text-align: center;
+  vertical-align: center;
+}
+.panel .navigation .row .right-cell a.filter:after {
+  content: "\f0b0";
+}
+.panel .navigation .row .right-cell a:hover {
+  color: #2894df;
+  background: #ffffff;
+}
+.panel .navigation .row .right-cell span {
+  /*
+     * Extends the .visuallyhidden class to allow the element to be focusable
+     * when navigated to via the keyboard: h5bp.com/p
+     */
+  border: 0;
+  clip: rect(0 0 0 0);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
   padding: 0;
-  opacity: 0;
-  filter: alpha(opacity=0);
+  position: absolute;
+  width: 1px;
+  /*
+     * Extends the .visuallyhidden class to allow the element to be focusable
+     * when navigated to via the keyboard: h5bp.com/p
+     */
+}
+.panel .navigation .row .right-cell span .focusable:active,
+.panel .navigation .row .right-cell span .focusable:focus {
+  clip: auto;
+  height: auto;
+  margin: 0;
+  overflow: visible;
+  position: static;
+  width: auto;
+}
+.panel .navigation .row .right-cell span .focusable:active,
+.panel .navigation .row .right-cell span .focusable:focus {
+  clip: auto;
+  height: auto;
+  margin: 0;
+  overflow: visible;
+  position: static;
+  width: auto;
+}
+.panel .navigation .row.title .right-cell {
+  margin-top: -1.625em;
+}
+.panel .navigation .row:hover {
+  background: #f3f3f3;
+}
+.panel .navigation .row:hover .right-cell a {
+  display: block;
+}
+.panel .navigation .row:hover .right-cell a.filter {
   border: 1px solid #dddddd;
-}
-.tree .row .right-cell a:focus,
-.tree .row:hover .right-cell a {
-  opacity: .8;
-  filter: alpha(opacity=80);
-  background: #ffffff url('../img/controls/tree-ctrl.png') center -9px no-repeat;
-}
-.tree .row:hover .right-cell a:hover {
-  opacity: 1;
-  filter: alpha(opacity=100);
-  background: #ffffff url('../img/controls/tree-ctrl.png') center -9px no-repeat;
-}
-.tree .row.drop-over {
-  background-color: #eeeeee;
-}
-.tree .more-ctrl span,
-.tree .tree-node-ctrl span {
-  display: none;
-}
-.tree .node.close ul {
-  display: none;
 }
 .contextual-menu {
   position: absolute;
   background: #ffffff;
   border: 1px solid #dddddd;
   width: 12em;
-  -moz-box-shadow: 0px 0px 10px 0px #dddddd;
-  -webkit-box-shadow: 0px 0px 10px 0px #dddddd;
   box-shadow: 0px 0px 10px 0px #dddddd;
   z-index: 993;
   left: 11.25em;
@@ -5339,50 +5550,82 @@ input[type="search"]::-webkit-search-cancel-button {
 .panel.aside {
   position: absolute;
   right: 2em;
-  width: 22em;
+  min-width: 25em;
+  width: 30%;
   bottom: 0;
   height: 100%;
   background: #ffffff;
-  -moz-box-shadow: 0px 0px 10px 0px #dddddd;
-  -webkit-box-shadow: 0px 0px 10px 0px #dddddd;
   box-shadow: 0px 0px 10px 0px #dddddd;
-  /* three types of sidebar */
+  /* Controls */
+  /** SECTIONS **/
+  /** Sidebar forms **/
 }
-.panel.aside .resource,
-.panel.aside .group,
-.panel.aside .user {
-  padding: .5em 1em 1em 1em;
-}
-.panel.aside .resource h3,
-.panel.aside .group h3,
-.panel.aside .user h3 {
-  margin-top: .5em;
+.panel.aside .sidebar-header h3 {
+  padding: 1em;
+  margin: 0;
   border: 0;
 }
-.panel.aside .resource h4,
-.panel.aside .group h4,
-.panel.aside .user h4 {
-  margin-bottom: 1em;
-  padding-bottom: .313em;
-  border-bottom: 1px dotted #dddddd;
+.panel.aside .sidebar-header .dialog-close {
+  position: absolute;
+  right: 1em;
+  top: 1em;
 }
-.panel.aside .resource li,
-.panel.aside .group li,
-.panel.aside .user li,
-.panel.aside .resource .message,
-.panel.aside .group .message,
-.panel.aside .user .message,
-.panel.aside .resource .comment p,
-.panel.aside .group .comment p,
-.panel.aside .user .comment p,
-.panel.aside .resource .comment .metadata,
-.panel.aside .group .comment .metadata,
-.panel.aside .user .comment .metadata {
+.panel.aside .sidebar-section {
+  margin-top: -1px;
+  border-bottom: 1px solid #f3f3f3;
+  border-top: 1px solid #f3f3f3;
   font-size: .875em;
 }
-.panel.aside .resource li,
-.panel.aside .group li,
-.panel.aside .user li {
+.panel.aside .sidebar-section h4 {
+  font-size: 1.125em;
+  padding: 1em 1.125em;
+  margin: 0;
+  display: block;
+}
+.panel.aside .sidebar-section .accordion-content {
+  margin: 0 1.25em 1.5em 1.25em;
+  padding-top: .5em;
+}
+.panel.aside .sidebar-section .accordion-content .section-action {
+  font-size: 1.125em;
+  position: absolute;
+  margin-top: -2.85em;
+  right: 3.25em;
+  background: #ffffff;
+  width: 1.125em;
+  height: 1.125em;
+  z-index: 401;
+  border: 0;
+}
+.panel.aside .sidebar-section .accordion-content span {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -o-text-overflow: ellipsis;
+  -ms-text-overflow: ellipsis;
+}
+.panel.aside .sidebar-section .accordion-content .label {
+  width: 30%;
+  display: inline-block;
+  margin-right: 10%;
+  float: left;
+  height: 1.8em;
+}
+.panel.aside .sidebar-section .accordion-content .value {
+  width: 60%;
+  display: inline-block;
+  float: left;
+  height: 1.8em;
+}
+.panel.aside .description .description_content {
+  white-space: pre-line;
+}
+.panel.aside .key-information textarea {
+  min-height: 30em;
+  line-height: normal;
+}
+.panel.aside .form-content {
+  margin: 0 0 .5em 0;
   /*
      * For IE 6/7 only
      * Include this rule to trigger hasLayout and contain floats.
@@ -5415,102 +5658,35 @@ input[type="search"]::-webkit-search-cancel-button {
      *	`:before` to contain the top-margins of child elements.
      */
 }
-.panel.aside .resource li:before,
-.panel.aside .group li:before,
-.panel.aside .user li:before,
-.panel.aside .resource li:after,
-.panel.aside .group li:after,
-.panel.aside .user li:after {
+.panel.aside .form-content:before,
+.panel.aside .form-content:after {
   content: "";
   display: table;
 }
-.panel.aside .resource li:after,
-.panel.aside .group li:after,
-.panel.aside .user li:after {
+.panel.aside .form-content:after {
   clear: both;
 }
-.panel.aside .resource li:before,
-.panel.aside .group li:before,
-.panel.aside .user li:before,
-.panel.aside .resource li:after,
-.panel.aside .group li:after,
-.panel.aside .user li:after {
+.panel.aside .form-content:before,
+.panel.aside .form-content:after {
   content: "";
   display: table;
 }
-.panel.aside .resource li:after,
-.panel.aside .group li:after,
-.panel.aside .user li:after {
+.panel.aside .form-content:after {
   clear: both;
 }
-.panel.aside .resource li .label,
-.panel.aside .group li .label,
-.panel.aside .user li .label {
-  width: 30%;
-  display: inline-block;
-  margin-right: 10%;
-  float: left;
-  height: 1.8em;
+.panel.aside .form-content label {
+  display: none;
 }
-.panel.aside .resource li .value,
-.panel.aside .group li .value,
-.panel.aside .user li .value {
-  width: 60%;
-  display: inline-block;
-  float: left;
-  height: 1.8em;
-}
-.panel.aside .resource li span,
-.panel.aside .group li span,
-.panel.aside .user li span {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  -o-text-overflow: ellipsis;
-  -ms-text-overflow: ellipsis;
-}
-.panel.aside .resource .description .description_content,
-.panel.aside .group .description .description_content,
-.panel.aside .user .description .description_content {
-  font-size: .875em;
-  white-space: pre-line;
-}
-.panel.aside .resource .description textarea,
-.panel.aside .group .description textarea,
-.panel.aside .user .description textarea {
-  box-sizing: border-box;
+.panel.aside .form-content textarea {
+  font-size: 1em;
   width: 100%;
+  box-sizing: border-box;
+  height: 5em;
 }
-.panel.aside .resource .dialog-close,
-.panel.aside .group .dialog-close,
-.panel.aside .user .dialog-close {
-  position: absolute;
-  right: .5em;
-  top: .5em;
-}
-.panel.aside .resource .button,
-.panel.aside .group .button,
-.panel.aside .user .button {
+.panel.aside .form-content .button {
   float: right;
-}
-.panel.aside .resource .section-action,
-.panel.aside .group .section-action,
-.panel.aside .user .section-action {
-  float: right;
-  margin-top: -2.75em;
-  border: 0;
-}
-.panel.aside .resource .key-information textarea,
-.panel.aside .group .key-information textarea,
-.panel.aside .user .key-information textarea {
-  min-height: 30em;
-  font-size: .625em;
-  line-height: normal;
-}
-.panel.aside .sharedwith .user,
-.panel.aside .sharedwith .group {
-  width: 75%;
-  padding-top: 0;
+  margin-top: -0.25em;
+  margin-right: 0;
 }
 /* place sidebar on top of everything when there is no space */
 @media all and (max-width: 1024px) {
@@ -5521,11 +5697,6 @@ input[type="search"]::-webkit-search-cancel-button {
     bottom: 0;
     top: 0;
     height: 100%;
-  }
-}
-@media all and (min-width: 1280px) {
-  .panel.aside {
-    width: 25em;
   }
 }
 /* tabs */
@@ -6595,6 +6766,158 @@ table.table-info.horizontal tbody tr:nth-child(even) {
   padding: 0em;
   border-bottom: 1px solid #f3f3f3;
 }
+.accordion .accordion-header {
+  /*
+     * For IE 6/7 only
+     * Include this rule to trigger hasLayout and contain floats.
+     */
+  /*
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
+  /*
+     * For IE 6/7 only
+     * Include this rule to trigger hasLayout and contain floats.
+     */
+  zoom: 1;
+  /*
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
+}
+.accordion .accordion-header:before,
+.accordion .accordion-header:after {
+  content: "";
+  display: table;
+}
+.accordion .accordion-header:after {
+  clear: both;
+}
+.accordion .accordion-header:before,
+.accordion .accordion-header:after {
+  content: "";
+  display: table;
+}
+.accordion .accordion-header:after {
+  clear: both;
+}
+.accordion .accordion-header a {
+  color: #333333;
+  display: block;
+}
+.accordion .accordion-header a:hover {
+  color: #000000;
+}
+.accordion .accordion-content {
+  /*
+     * For IE 6/7 only
+     * Include this rule to trigger hasLayout and contain floats.
+     */
+  /*
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
+  /*
+     * For IE 6/7 only
+     * Include this rule to trigger hasLayout and contain floats.
+     */
+  zoom: 1;
+  /*
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
+}
+.accordion .accordion-content:before,
+.accordion .accordion-content:after {
+  content: "";
+  display: table;
+}
+.accordion .accordion-content:after {
+  clear: both;
+}
+.accordion .accordion-content:before,
+.accordion .accordion-content:after {
+  content: "";
+  display: table;
+}
+.accordion .accordion-content:after {
+  clear: both;
+}
+.accordion.closed .accordion-content {
+  display: none;
+}
+.accordion.sidebar-section .accordion-header a {
+  border: 0;
+}
+.accordion.sidebar-section .accordion-header a:after {
+  position: absolute;
+  right: 1.5em;
+  margin-top: .25em;
+  content: "\f0d7";
+  /* caret down */
+  font: normal normal normal 1em FontAwesome;
+  text-rendering: auto;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  width: 1em;
+  height: 1em;
+  text-align: center;
+  z-index: 400;
+  color: #888888;
+}
+.accordion.sidebar-section .accordion-header a:hover:after {
+  color: #333333;
+}
+.accordion.sidebar-section.closed .accordion-header a:after {
+  content: "\f0da";
+  /* caret right */
+}
+.accordion.navigation .accordion-header .main-cell a:before {
+  margin-left: -1.25em;
+  margin-top: .25em;
+  content: "\f0d7";
+  /* caret down */
+  font: normal normal normal 1em FontAwesome;
+  text-rendering: auto;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  width: 1em;
+  height: 1em;
+  position: absolute;
+  text-align: center;
+}
+.accordion.navigation.closed .accordion-header .main-cell a:before {
+  content: "\f0da";
+  /* caret right */
+}
 .input-password-wrapper {
   overflow: hidden;
 }
@@ -6667,8 +6990,8 @@ table.table-info.horizontal tbody tr:nth-child(even) {
   display: none;
 }
 /* sidebar / user details in overview */
-.panel.aside .user .header,
-.panel.aside .group .header {
+.panel.aside .user .sidebar-header,
+.panel.aside .group .sidebar-header {
   /*
      * For IE 6/7 only
      * Include this rule to trigger hasLayout and contain floats.
@@ -6701,47 +7024,48 @@ table.table-info.horizontal tbody tr:nth-child(even) {
      *	`:before` to contain the top-margins of child elements.
      */
 }
-.panel.aside .user .header:before,
-.panel.aside .group .header:before,
-.panel.aside .user .header:after,
-.panel.aside .group .header:after {
+.panel.aside .user .sidebar-header:before,
+.panel.aside .group .sidebar-header:before,
+.panel.aside .user .sidebar-header:after,
+.panel.aside .group .sidebar-header:after {
   content: "";
   display: table;
 }
-.panel.aside .user .header:after,
-.panel.aside .group .header:after {
+.panel.aside .user .sidebar-header:after,
+.panel.aside .group .sidebar-header:after {
   clear: both;
 }
-.panel.aside .user .header:before,
-.panel.aside .group .header:before,
-.panel.aside .user .header:after,
-.panel.aside .group .header:after {
+.panel.aside .user .sidebar-header:before,
+.panel.aside .group .sidebar-header:before,
+.panel.aside .user .sidebar-header:after,
+.panel.aside .group .sidebar-header:after {
   content: "";
   display: table;
 }
-.panel.aside .user .header:after,
-.panel.aside .group .header:after {
+.panel.aside .user .sidebar-header:after,
+.panel.aside .group .sidebar-header:after {
   clear: both;
 }
-.panel.aside .user .header img,
-.panel.aside .group .header img {
+.panel.aside .user .sidebar-header img,
+.panel.aside .group .sidebar-header img {
+  margin: 1em 0 1em 1em;
   float: left;
   width: 55px;
   height: 55px;
   border: 1px solid #dddddd;
 }
-.panel.aside .user .header h3,
-.panel.aside .group .header h3 {
+.panel.aside .user .sidebar-header h3,
+.panel.aside .group .sidebar-header h3 {
   float: left;
   width: 67%;
-  margin: 0;
+  margin-top: 1em;
   padding: 0 0 0 1em;
   display: table-cell;
   vertical-align: middle;
   border: 0;
 }
-.panel.aside .user .header h3 .name,
-.panel.aside .group .header h3 .name {
+.panel.aside .user .sidebar-header h3 .name,
+.panel.aside .group .sidebar-header h3 .name {
   font-size: 1.2em;
   display: block;
   white-space: nowrap;
@@ -6750,10 +7074,10 @@ table.table-info.horizontal tbody tr:nth-child(even) {
   -o-text-overflow: ellipsis;
   -ms-text-overflow: ellipsis;
 }
-.panel.aside .user .header h3 .type,
-.panel.aside .group .header h3 .type,
-.panel.aside .user .header h3 .username,
-.panel.aside .group .header h3 .username {
+.panel.aside .user .sidebar-header h3 .type,
+.panel.aside .group .sidebar-header h3 .type,
+.panel.aside .user .sidebar-header h3 .username,
+.panel.aside .group .sidebar-header h3 .username {
   font-size: 0.8em;
   color: #969696;
   font-weight: normal;

@@ -54,7 +54,7 @@
 		</ul>
 	</div>
 </div>
-<script>
+<script type="application/javascript">
 	$(function() {
 		$('#js_app_profile_dropdown .more').click(function() {
 			$('#js_app_profile_dropdown .dropdown-content').css('display','block');

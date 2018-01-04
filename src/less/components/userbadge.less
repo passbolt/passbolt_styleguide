@@ -72,15 +72,23 @@
     }
     .more a {
         display: block;
-        background: transparent url('@{images}/controls/tree-ctrl.png') center -9px no-repeat;
-        margin-top: 1em;
-        opacity: .5;
-        filter: alpha(opacity=50);
         border: 0;
+        color:@font-dim;
 
+        &:after {
+            position:absolute;
+            content: "\f0d7"; /* caret down */
+            font: normal normal normal 1em FontAwesome;
+            text-rendering: auto;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            width:1em;
+            height:1em;
+            margin-left:-2em;
+            margin-top: 1em;
+        }
         &:hover {
-            opacity: .9;
-            filter: alpha(opacity=90);
+            color:@blacker;
         }
         span {
             visibility: hidden;

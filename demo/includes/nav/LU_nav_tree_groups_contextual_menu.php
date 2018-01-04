@@ -49,7 +49,7 @@
         </div>
     </li>
 </ul>
-<script>
+<script type="application/javascript">
     // DEMO ONLY -- not for production use
     $(function() {
         // group header actions

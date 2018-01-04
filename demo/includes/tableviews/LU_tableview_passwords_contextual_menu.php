@@ -62,7 +62,7 @@
         </div>
     </li>
 </ul>
-<script>
+<script type="application/javascript">
     // DEMO ONLY -- not for production use
     $(function() {
         var mouse = { x: -1, y: -1 };

@@ -2,7 +2,7 @@
 <html>
 <head>
 	<?php include('includes/meta/LU_meta_iframe.php'); ?>
-	<script type="text/javascript" src="js/jquery-2.1.3.min.js"></script>
+	<script type="text/javascript" src="js/jquery-2.2.4.min.js"></script>
 	<script type="application/javascript">
 		$(document).ready(function () {
 			$(window).one('click', function (ev) {

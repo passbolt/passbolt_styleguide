@@ -7,17 +7,17 @@ $tags = [
     ],
     [
         'id' => '',
-        'name' => 'beta',
+        'name' => 'alpha/beta',
         'created' => '2017-12-29 13:39:25',
     ],
     [
         'id' => '',
-        'name' => 'charly',
+        'name' => 'alpha/beta/charly',
         'created' => '2017-12-29 13:39:25',
     ],
     [
         'id' => '',
-        'name' => 'delta',
+        'name' => 'alpha/delta',
         'created' => '2017-12-29 13:39:25',
     ],
     [

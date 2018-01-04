@@ -1,15 +1,76 @@
 .accordion {
-    a:before {
-        margin-top: .25em;
-        margin-left: -1.5em;
-        width: 13px;
-        height: 13px;
-        border: 1px solid blue;
-        position: absolute;
-        content: ' ';
-        background: transparent url('@{images}/controls/tree-ctrl.png') center 2px no-repeat;
+    .accordion-header {
+        .clearfix();
+
+        a {
+            color:@font-default;
+            display:block;
+        }
+        a:hover {
+            color:@blacker;
+        }
     }
-    a.closed:before {
-        background: transparent url('@{images}/controls/tree-ctrl.png') center 16px no-repeat;
+    .accordion-content {
+        .clearfix();
+    }
+    &.closed {
+        .accordion-content {
+            display: none;
+        }
+    }
+}
+.accordion.sidebar-section {
+    .accordion-header {
+        a {
+            border:0;
+        }
+        a:after{
+            position:absolute;
+            right:1.5em;
+            margin-top: .25em;
+            content: "\f0d7"; /* caret down */
+            font: normal normal normal 1em FontAwesome;
+            text-rendering: auto;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            width:1em;
+            height:1em;
+            text-align: center;
+            z-index:400;
+            color:@font-light;
+        }
+        a:hover:after {
+            color:@font-default;
+        }
+    }
+    &.closed .accordion-header {
+        a:after{
+            content: "\f0da"; /* caret right */
+        }
+    }
+}
+
+.accordion.navigation {
+    .accordion-header .main-cell {
+        a:before {
+            margin-left: -1.25em;
+            margin-top: .25em;
+            content: "\f0d7"; /* caret down */
+            font: normal normal normal 1em FontAwesome;
+            text-rendering: auto;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            width:1em;
+            height:1em;
+            position: absolute;
+            text-align: center;
+        }
+    }
+    &.closed {
+        .accordion-header .main-cell  {
+            a:before {
+                content: "\f0da"; /* caret right */
+            }
+        }
     }
 }
