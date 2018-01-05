@@ -9,156 +9,98 @@
             <i class="fa fa-fw fa-edit"></i>
             <span class="visuallyhidden">edit</span>
         </a>
-        <ul id="js_rs_details_tags_list" class="tags">
+        <ul id="js_rs_details_tags_list" class="tags tags-list">
 <?php foreach ($tags as $i => $tag) : ?>
             <li>
                 <a href="#" class="tag"><?= $tag['name']; ?></a>
             </li>
 <?php endforeach; ?>
         </ul>
-        <div id="js_edit_tags_form" class="tags-edit-wrapper form hidden">
+        <div id="js_edit_tags_form" class="tags-edit-wrapper hidden form">
             <div class="form-content">
                 <div id="js_tags_editor" class="input tag-editor">
                     <div class="tag-editor-input-wrapper">
                         <div class="tags">
+                            <!-- predefined value can be set with
                             <div class="tag">
                                 <span class="tag-content">alpha</span>
-                                <span class="tag-delete"><i class="fa fa-times"></i></span>
+                                <span class="tag-delete" role="button"><i class="fa fa-times"></i></span>
                             </div>
-                            <div class="tag">
-                                <span class="tag-content">beta</span>
-                                <span class="tag-delete"><i class="fa fa-times"></i></span>
-                            </div>
-                            <div class="tag">
-                                <span class="tag-content">charly</span>
-                                <span class="tag-delete"><i class="fa fa-times"></i></span>
-                            </div>
+                            -->
                         </div>
-                        <input id="js_tag_editor_input_text" type="text" value="test"/>
+                        <div id="js_tag_editor_input_text" class='tag-editor-input' contenteditable="true"></div>
                     </div>
                     <div class="message error hidden">
                         Enter tags separated by commas.
                     </div>
                 </div>
                 <div class="actions">
-                    <a id="js_edit_tags_form_button" class="button tag-submit" href="#"><span>save</span></a>
+                    <a id="js_tags_editor_submit" class="button tag-editor-submit" href="#"><span>save</span></a>
                 </div>
             </div>
         </div>
     </div>
 </div>
 <script type="application/javascript">
-  // Demo only
-  function escapeHtml(unsafe) {
-    return unsafe
-      .replace(/&/g, "&amp;")
-      .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;")
-      .replace(/"/g, "&quot;")
-      .replace(/'/g, "&#039;")
-      .replace(/\n/g, "")
-      .replace(/\t/g, "")
-      .trim();
-  }
+  $(function() {
+    var tagListSelector = '#js_rs_details_tags_list';
+    var editTagsSelector = '.edit_tags_button';
+    var tagEditorSelector = '#js_edit_tags_form';
+    var tagEditorInputText = '#js_tag_editor_input_text';
 
-  // Control the behavior inside the editor
-  function tag_editor() {
-    function onFocus() {
-      $('#js_tag_editor_input_text').focus();
+    // Functionalities to be provided by Madjs / Appjs
+    function getStartTags() {
+      var tags = [];
+      $(tagListSelector + ' .tag').each(function () {
+        tags.push($(this).html());
+      });
+      return tags;
     }
 
-    // Add the tag to the existing list
-    function createTag(tag) {
-      // keep \n in template for regular spacing
-      var html = '<div class="tag">\n' +
-        '<span class="tag-content">' + escapeHtml(tag) + '</span>\n' +
-        '<span class="tag-delete"><i class="fa fa-times"></i></span>\n' +
-        '</div>';
-      $('#js_tags_editor .tags').append(html);
-      bindDeleteButtons();
+    // Show the editor
+    function bindEditButton() {
+      $(editTagsSelector).click(function () {
+        $(tagEditorSelector).removeClass("hidden");
+        $(tagListSelector).addClass("hidden");
+        $(tagEditorInputText).focus(); // give input focus
+        return false;
+      });
     }
+    bindEditButton();
 
-    // Get the current value of the text input
-    function getInputValue() {
-      return $('#js_tag_editor_input_text').val();
-    }
+    // When tagEdit fires on save event callback
+    function onSave(tags) {
+      // remove old list
+      $(tagListSelector).empty();
 
-    // Reset the value of the tag text input
-    function resetInputValue() {
-      $('#js_tag_editor_input_text').val('');
-    }
-
-    // When user press backspace
-    function onPressDelete(event) {
-      if(!$('#js_tag_editor_input_text').val()) {
-        $('#js_tags_editor .tag').last().remove();
-        event.preventDefault();
+      // if there is no tag display something
+      if (tags.length === 0) {
+        var html = "<div class='edit_tags_button'>There is no tag, click here to add one.</div>";
+        $(tagListSelector).append(html);
+        bindEditButton();
+      } else {
+        // add the tags to the sidebar
+        tags.forEach(function(tag) {
+          var html = '<li><div class="tag">' + tag + '</div></li>';
+          $(tagListSelector).append(html);
+        });
       }
+
+      $(tagListSelector).removeClass("hidden");
+      $(tagEditorSelector).addClass("hidden");
     }
 
-    // When user press enter (or , or ;)
-    function onPressEnter(event) {
-      if(getInputValue()) {
-        createTag(getInputValue());
-        resetInputValue();
-      }
-      event.preventDefault();
-    }
-
-    // When user paste in the field
-    function onPaste(event) {
-      var pastedData = event.originalEvent.clipboardData.getData('text');
-      var tags = pastedData.split(new RegExp(',|;', 'g'));
+    // When tagEditor fires change event callback
+    function onChange (tags) {
       console.log(tags);
-      tags.forEach(function(tag) {
-        createTag(tag);
-      });
-      resetInputValue();
     }
 
-    // give focus to input text when clicking wherever
-    $('#js_tags_editor').click(function () {
-      onFocus();
+    // The TagEditor setup itself
+    $(tagEditorSelector).tagEditor({
+      startTags : getStartTags(),
+      onSave : onSave,
+      onChange : onChange
     });
 
-    // delete tag clicking on a tag 'x'
-    function bindDeleteButtons() {
-      $('#js_tags_editor .tag-delete').click(function () {
-        $(this).parent().remove();
-      });
-    }
-
-    // handle pasting in input
-    $('#js_tag_editor_input_text').bind("paste", function(e) {
-      onPaste(e);
-    });
-
-    // Handle typing in the input
-    $("#js_tag_editor_input_text").keypress(function(event) {
-      if (event.which === 8) { /* on delete */
-        onPressDelete(event);
-        return;
-      }
-      if (event.which === 13 || event.which === 44 || event.which === 39) { /* on enter or , or ; */
-        onPressEnter(event);
-        return;
-      }
-    });
-
-    $("#js_edit_tags_form_button").click(function() {
-      $("#js_edit_tags_form").addClass("hidden");
-      $("#js_rs_details_tags_list").removeClass("hidden");
-      return false;
-    });
-
-    $("#js_edit_tags_form").removeClass("hidden");
-    $("#js_rs_details_tags_list").addClass("hidden");
-    $('#js_tag_editor_input_text').val();
-    bindDeleteButtons();
-    return false;
-  }
-
-  $("#js_edit_tags_button").click(tag_editor);
-  tag_editor();
-
+  });
 </script>

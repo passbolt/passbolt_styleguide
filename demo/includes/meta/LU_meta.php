@@ -19,6 +19,7 @@
 <link rel="stylesheet" type="text/css" href="css/devel.css">
 <link rel="stylesheet" type="text/css" href="css/external.css">
 <script src="js/jquery-2.2.4.min.js"></script>
+<script src="js/jquery.tag-editor.js"></script>
 <script type="application/javascript">
 	var cakephpConfig = {
 		app: {

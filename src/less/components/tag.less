@@ -1,6 +1,10 @@
 /* tags */
 .tags {
     .tag {
+        word-wrap: break-word;       /* Internet Explorer 5.5+ */
+        white-space: -webkit-pre-wrap; /* Newer versions of Chrome/Safari*/
+        word-break: break-all;
+        white-space: normal;
         padding: .125em .5em;
         float: left;
         position: relative;
@@ -18,7 +22,9 @@
         }
     }
 }
-
+.tags-list {
+    .clearfix();
+}
 .tag-editor {
     margin-bottom:1em;
 
@@ -45,14 +51,21 @@
         .clearfix();
         min-height:5em;
         padding: .5em;
-        border: 1px solid @border-default;
+        border: 1px solid @border-input;
+        border-top: 1px solid @border-input-light;
+
+        &.input-focus {
+           border-color: @border-focus;
+        }
     }
-    input[type=text] {
-        padding: 0;
-        font-size: 1em;
+
+    .tag-editor-input {
+        min-height:1.5em;
+        padding: .25em .5em .25em .5em;
         box-shadow: none;
-        width: 3em;
+        min-width: 3em;
+        max-width: 24em;
         float: left;
-        border: 1px solid blue;
+        overflow: hidden;
     }
 }
