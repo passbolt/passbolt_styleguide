@@ -13,6 +13,6 @@
 		</div>
         <?php include('includes/sidebars/sections/group_info.php'); ?>
         <?php include('includes/sidebars/sections/group_members.php'); ?>
-
 	</div>
 </div>
+<?php include('includes/sidebars/sidebar.php') ?>
