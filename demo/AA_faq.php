@@ -5,7 +5,7 @@
 	<title>Frequently Asked Questions | Passbolt</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="shortcut icon" type="image/x-icon" href="img/webroot/favicon.ico" />
-	<link rel="stylesheet" type="text/css" href="../src/css/public.css">
+    <link rel="stylesheet" type="text/css" href="../src/css/help.css">
 	<script src="../src/js/jquery-2.2.4.min.js"></script>
 	<script src="../src/js/bootstrap-scrollspy.js"></script>
 	<script src="../src/js/list.min.js"></script>
@@ -21,22 +21,7 @@
 	<!-- second header -->
 	<div class="header second">
 		<?php include('includes/AN_logo.php'); ?>
-		<div class="col2 search-wrapper">
-			<h2 class="visuallyhidden"><span>Frequently Asked questions</span></h2>
-			<!-- if js is enabled only -->
-			<div class="js-only">
-				<form class="search ready">
-					<div class="input required">
-						<label for="filter_faq">Search</label>
-						<input id="filter_faq" maxlength="50" placeholder="search frequently asked questions" type="search" class="fuzzy-search">
-					</div>
-					<button value="search">
-						<i class="fa fa-fw fa-search"></i>
-						<span class="text visuallyhidden">search</span>
-					</button>
-				</form>
-			</div>
-		</div>
+		<?php include('includes/AA_search.php'); ?>
 	</div>
 
 	<div class="panel main">

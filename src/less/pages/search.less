@@ -1,0 +1,36 @@
+.page.search {
+    .search-results {
+        h2 {
+            margin-bottom:.25em;
+            font-size:1.125em
+        }
+        a {
+            color: @blue;
+            border:0;
+        }
+        a:hover {
+            border-bottom:1px solid @blue;
+        }
+        a:visited {
+            color: purple;
+        }
+        a:hover:visited {
+            border-bottom:1px solid purple;
+        }
+        a.url {
+            color:@green;
+            font-size:0.938em;
+        }
+        a.url:hover {
+            border:0;
+        }
+        p {
+            font-size:0.938em;
+        }
+    }
+    .no-result .suggestions {
+        li {
+            .bulletlist();
+        }
+    }
+}

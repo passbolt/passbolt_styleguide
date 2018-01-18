@@ -802,6 +802,48 @@ p {
   font-size: 0.688em;
   /* 11px base 16 */
 }
+/* lists */
+article ul {
+  list-style-type: circle;
+  margin: 0 0 1em 0;
+}
+article ul li {
+  margin-left: 1.1em;
+  padding-left: .5em;
+  margin-bottom: .5em;
+  list-style-type: circle;
+}
+article ul.double {
+  width: 48%;
+  float: left;
+}
+article ul.disc {
+  list-style-type: disc;
+}
+article ul.square {
+  list-style-type: square;
+}
+article ol {
+  margin: 0 0 1em 0;
+  list-style-type: decimal;
+}
+article ol li {
+  /* more margin needed for long numbered lists */
+  margin-left: 2em;
+  padding-left: 1em;
+  margin-bottom: .5em;
+}
+article ol.upper-roman {
+  list-style-type: upper-roman;
+}
+article ol.lower-alpha {
+  list-style-type: lower-alpha;
+}
+ul.checklist li:before {
+  content: '✔';
+  width: 1em;
+  margin-right: 1em;
+}
 /*!
  *  Font Awesome 4.7.0 by @davegandy - http://fontawesome.io - @fontawesome
  *  License - http://fontawesome.io/license (Font: SIL OFL 1.1, CSS: MIT License)
@@ -3139,23 +3181,6 @@ p {
   overflow: visible;
   clip: auto;
 }
-.icon {
-  display: inline-block;
-  font: normal normal normal 14px/1 FontAwesome;
-  font-size: inherit;
-  text-rendering: auto;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  /* favorites */
-}
-.icon.fav:before {
-  content: "\f005";
-  color: #dddddd;
-}
-.icon.unfav:before {
-  content: "\f005";
-  color: #d40101;
-}
 /*
 	Generic buttons
 	Description	: We support <input[submit]>, <input.button>, <button> and <a.button>
@@ -4149,6 +4174,71 @@ input[type=text].fluid {
     display: none;
   }
 }
+.panel.middle .grid {
+  padding-bottom: 2em;
+  max-width: 100%;
+}
+.panel.middle .grid .breadcrumbs {
+  border-bottom: 1px dotted #dddddd;
+}
+.header h2 {
+  margin: 1em 0;
+}
+.header h2 .button {
+  margin-right: 0.3em;
+  margin-top: -5px;
+}
+/* Scrolling in middle panel in full width */
+@media all and (min-width: 1024px) {
+  .panel.middle {
+    overflow-y: scroll;
+  }
+  .panel.main {
+    bottom: 2.45em;
+  }
+}
+/* reset layout styles on smaller screen */
+@media all and (max-width: 1024px) {
+  .page,
+  .panel,
+  .header.second + .panel.main,
+  .header.first,
+  .header.second,
+  .col1,
+  .col2,
+  .col3,
+  .col2_3 {
+    position: relative;
+    width: auto;
+    height: auto;
+    display: block;
+    margin: 0;
+    top: auto;
+    overflow: auto;
+  }
+  .header.second {
+    text-align: center;
+    margin-bottom: 2em;
+    height: auto;
+  }
+  .header.second h2 {
+    max-width: 98%;
+    padding-left: 1%;
+  }
+  .col1,
+  .panel.left {
+    display: none;
+  }
+  .panel.middle,
+  .col2_3 {
+    width: 98%;
+    left: 1%;
+  }
+  .col2 {
+    width: 55%;
+    left: 1%;
+  }
+}
 /*
  * shadow on scroll
  */
@@ -4264,6 +4354,78 @@ article video {
   margin: 1.25em 0 0 1em;
   max-width: 80%;
 }
+/**
+ * @credit: https://github.com/lukejacksonn/GreedyNav
+ */
+.greedy .navigation.primary {
+  padding-right: 5em;
+}
+.greedy .navigation.primary button {
+  position: absolute;
+  top: 0;
+  right: 0;
+  outline: 0;
+  border: 0;
+  font-size: 1em;
+  font-weight: normal;
+  background: #888888;
+  padding: .45em 1em .42em 1em;
+  -webkit-border-radius: 0;
+  -moz-border-radius: 0;
+  border-radius: 0;
+  text-shadow: none;
+  color: #ffffff;
+  margin: 0;
+  min-width: 7.5em;
+}
+.greedy .navigation.primary button.hidden {
+  transition: none;
+  width: 0;
+  padding: 0;
+  overflow: hidden;
+}
+.greedy .navigation.primary button::after {
+  content: attr(count);
+  display: inline-flex;
+  width: 21px;
+  height: 21px;
+  align-items: center;
+  justify-content: center;
+  background: #333333;
+  color: #969696;
+  border-radius: 50%;
+  font-size: 0.7em;
+  line-height: 0.7em;
+  margin-left: 0.5rem;
+}
+.greedy .navigation.primary ul.hidden-links {
+  position: absolute;
+  right: 0;
+  top: 100%;
+  z-index: 999;
+}
+.greedy .navigation.primary ul.hidden-links.hidden {
+  display: none;
+}
+.greedy .navigation.primary ul.hidden-links li {
+  float: none;
+  padding: 0;
+  margin: 0;
+  display: block;
+}
+.greedy .navigation.primary ul.hidden-links li a {
+  min-width: 5.5em;
+  background: #f3f3f3;
+  color: #333333;
+  padding: .5em 1em;
+  float: right;
+  display: inline-block;
+}
+.greedy .navigation.primary ul.hidden-links li a:hover,
+.greedy .navigation.primary ul.hidden-links li a:active {
+  background: #eeeeee;
+  color: #333333;
+}
 .logo img {
   max-width: 150px;
 }
@@ -4291,360 +4453,6 @@ article video {
   .logo.bigger {
     background: transparent url('../img/logo/logo@2x.png') 0 0 no-repeat;
     background-size: 200px auto;
-  }
-}
-/* search */
-form.search {
-  margin-top: 1em;
-}
-form.search legend,
-form.search label {
-  display: none;
-  width: 10em;
-}
-form.search input[type=search] {
-  float: left;
-  width: 65%;
-  margin-bottom: 0;
-  padding: .313em .625em;
-}
-form.search button {
-  height: 2.571em;
-  /* 36px */
-  float: left;
-  margin-left: -2px;
-  border-left: 0;
-  border-radius: 0px 2px 2px 0px;
-}
-form.search button .fa-search {
-  font-size: 1.4em;
-}
-/* remove webkit search input decoration and cancel button */
-input[type="search"]::-webkit-search-decoration,
-input[type="search"]::-webkit-search-cancel-button {
-  display: none;
-}
-/* rescale on small screen */
-@media all and (max-width: 480px) {
-  form.search input[type=search] {
-    width: 55%;
-  }
-}
-/*
- * Profile user card
- */
-.user.profile {
-  max-width: 18em;
-  width: 80%;
-  float: right;
-  border: 1px solid #dddddd;
-  margin-top: .5em;
-  overflow: hidden;
-  background: #eeeeee;
-  background-image: -moz-linear-gradient(top, #f3f3f3, #eeeeee);
-  background-image: -ms-linear-gradient(top, #f3f3f3, #eeeeee);
-  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(background-lightest), to(#eeeeee));
-  background-image: -webkit-linear-gradient(top, #f3f3f3, #eeeeee);
-  background-image: -o-linear-gradient(top, #f3f3f3, #eeeeee);
-  background-image: linear-gradient(top, #f3f3f3, #eeeeee);
-  /* fixed fluid fixed layout */
-  /* user card styling */
-}
-.user.profile .more {
-  background: #eeeeee;
-  background-image: -moz-linear-gradient(top, #f3f3f3, #eeeeee);
-  background-image: -ms-linear-gradient(top, #f3f3f3, #eeeeee);
-  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(background-lightest), to(#eeeeee));
-  background-image: -webkit-linear-gradient(top, #f3f3f3, #eeeeee);
-  background-image: -o-linear-gradient(top, #f3f3f3, #eeeeee);
-  background-image: linear-gradient(top, #f3f3f3, #eeeeee);
-  border-left: 1px dotted #dddddd;
-}
-.user.profile .left-cell,
-.user.profile .right-cell,
-.user.profile .center-cell-wrapper {
-  float: left;
-  height: 3.125em;
-  /* 50px */
-}
-.user.profile .center-cell-wrapper {
-  width: 100%;
-}
-.user.profile .center-cell {
-  margin: 0 1.75em 0 3.125em;
-  overflow: hidden;
-}
-.user.profile .left-cell {
-  width: 3.125em;
-  margin-left: -100%;
-}
-.user.profile .right-cell {
-  width: 1.6875em;
-  margin-left: -1.75em;
-}
-.user.profile .picture img {
-  width: 2.875em;
-  /* 46px */
-  padding: 0.1250em;
-  /* 2px */
-}
-.user.profile .details {
-  float: left;
-  height: 2.8125em;
-  font-size: .9em;
-  padding: .3125em 1em;
-  /* 5/10px */
-}
-.user.profile .details .name,
-.user.profile .details .email {
-  width: 100%;
-  float: left;
-  clear: both;
-  text-overflow: clip;
-  word-wrap: break-word;
-  overflow: hidden;
-  display: inline-block;
-  line-height: normal;
-}
-.user.profile .details .name {
-  font-weight: bold;
-  padding-top: 0;
-}
-.user.profile .details .email {
-  padding-bottom: 0;
-}
-.user.profile .more a {
-  display: block;
-  border: 0;
-  color: #666666;
-}
-.user.profile .more a:after {
-  position: absolute;
-  content: "\f0d7";
-  /* caret down */
-  font: normal normal normal 1em FontAwesome;
-  text-rendering: auto;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  width: 1em;
-  height: 1em;
-  margin-left: -2em;
-  margin-top: 1em;
-}
-.user.profile .more a:hover {
-  color: #000000;
-}
-.user.profile .more a span {
-  visibility: hidden;
-}
-.user.profile .dropdown-content {
-  top: 59px;
-  max-width: 18em;
-  width: 80%;
-}
-.user.profile .dropdown-content.visible {
-  display: block;
-}
-.user.profile.dropdown.pressed .more {
-  background: #ffffff;
-  border: 0;
-}
-.user.profile.dropdown.pressed .dropdown-content {
-  border-top: 1px dotted #dddddd;
-  background: #ffffff;
-}
-/* hide left column when there is no space */
-@media all and (max-width: 1024px) {
-  .user.profile {
-    display: block;
-    width: auto;
-  }
-  .user.profile .center-cell {
-    display: none;
-  }
-  .user.profile .right-cell {
-    display: none;
-  }
-}
-.usercard-col-2 {
-  /*
-     * For IE 6/7 only
-     * Include this rule to trigger hasLayout and contain floats.
-     */
-  /*
-     * Clearfix: contain floats
-     *
-     * For modern browsers
-     * 1. The space content is one way to avoid an Opera bug when the
-     *	`contenteditable` attribute is included anywhere else in the document.
-     *	Otherwise it causes space to appear at the top and bottom of elements
-     *	that receive the `clearfix` class.
-     * 2. The use of `table` rather than `block` is only necessary if using
-     *	`:before` to contain the top-margins of child elements.
-     */
-  /*
-     * For IE 6/7 only
-     * Include this rule to trigger hasLayout and contain floats.
-     */
-  zoom: 1;
-  /*
-     * Clearfix: contain floats
-     *
-     * For modern browsers
-     * 1. The space content is one way to avoid an Opera bug when the
-     *	`contenteditable` attribute is included anywhere else in the document.
-     *	Otherwise it causes space to appear at the top and bottom of elements
-     *	that receive the `clearfix` class.
-     * 2. The use of `table` rather than `block` is only necessary if using
-     *	`:before` to contain the top-margins of child elements.
-     */
-  margin: 0 0 1em 0;
-}
-.usercard-col-2:before,
-.usercard-col-2:after {
-  content: "";
-  display: table;
-}
-.usercard-col-2:after {
-  clear: both;
-}
-.usercard-col-2:before,
-.usercard-col-2:after {
-  content: "";
-  display: table;
-}
-.usercard-col-2:after {
-  clear: both;
-}
-.usercard-col-2:last-of-type {
-  margin-bottom: 0;
-}
-.usercard-col-2 .content-wrapper {
-  float: left;
-  width: 100%;
-}
-.usercard-col-2 .content-wrapper .content {
-  margin-left: 36px;
-  padding: 0 1em 0 1em;
-}
-.usercard-col-2 .content-wrapper .content .name {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  -o-text-overflow: ellipsis;
-  -ms-text-overflow: ellipsis;
-}
-.usercard-col-2 .content-wrapper .content .subinfo {
-  color: #333333;
-  font-size: 0.929em;
-  /* 13px */
-}
-.usercard-col-2 .avatar {
-  float: left;
-  width: 36px;
-  margin-left: -100%;
-}
-.usercard-col-2 .avatar img {
-  width: 36px;
-  height: 36px;
-}
-/*
- * Breadcrumbs
- */
-.breadcrumbs {
-  height: 2em;
-  padding: .1875em 0 .1875em 0;
-  margin-bottom: 0;
-  border-bottom: 1px solid #dddddd;
-}
-.breadcrumbs ul {
-  padding-top: 0.2em;
-  margin-left: 0;
-}
-.breadcrumbs ul li {
-  display: inline;
-  font-size: .8em;
-  /* 12px/base16>15 */
-  margin-left: .25em;
-}
-.breadcrumbs ul li:before {
-  content: "›";
-  margin-right: .5em;
-}
-.breadcrumbs ul li:first-child {
-  margin-left: 0;
-  padding-left: 0;
-}
-.breadcrumbs ul li:first-child:before {
-  content: "";
-}
-.breadcrumbs ul a {
-  border: 0;
-}
-.breadcrumbs div.main-cell {
-  display: inline;
-}
-/* actions */
-.header.third .main-action-wrapper {
-  margin-top: .5em;
-  padding-left: .625em;
-}
-.header.third .main-action-wrapper .button {
-  float: left;
-  font-size: .875em;
-}
-.header.third .actions-wrapper {
-  margin-top: .5em;
-}
-.header.third .actions-wrapper .actions .button {
-  font-size: .875em;
-  min-width: 4em;
-  float: left;
-}
-.header.third .actions-wrapper .actions li {
-  display: inline;
-}
-.header.third .actions-wrapper .actions.secondary {
-  float: right;
-}
-.header.third .actions-wrapper .actions.secondary .button {
-  font-size: .875em;
-  min-width: 1em;
-}
-/* hide secondary actions if there is no space */
-@media all and (max-width: 1024px) {
-  .header.third .actions-wrapper .dropdown,
-  .header.third .actions-wrapper .actions.secondary {
-    display: none;
-  }
-}
-/* hide icons if there is no space */
-@media all and (max-width: 1024px) {
-  .header.third .actions-wrapper .actions i {
-    display: none;
-  }
-  .header.third .actions-wrapper .actions i + span {
-    margin-left: 0;
-  }
-  .header.third .actions-wrapper .actions .disabled {
-    display: none;
-  }
-}
-/* hide text and only show icon if there is even less space */
-@media all and (max-width: 540px) {
-  .header.third .actions-wrapper .actions i {
-    display: block;
-  }
-  .header.third .actions-wrapper .actions a.button {
-    min-width: 1em;
-    font-size: 1em;
-  }
-  .header.third .actions-wrapper .actions i + span {
-    margin-left: 0;
-    display: none;
-  }
-  .header.third .actions-wrapper .actions .disabled {
-    display: none;
   }
 }
 /* Small Progress bar */
@@ -4750,131 +4558,40 @@ input[type="search"]::-webkit-search-cancel-button {
   content: ':';
 }
 /*
-	do not show javascript needed warning if js is enabled
-	this needs modernizer to work
-*/
-.js .message.no-js {
-  display: none;
+ * Breadcrumbs
+ */
+.breadcrumbs {
+  height: 2em;
+  padding: .1875em 0 .1875em 0;
+  margin-bottom: 0;
+  border-bottom: 1px solid #dddddd;
 }
-.cookies .message.no-cookies {
-  display: none;
+.breadcrumbs ul {
+  padding-top: 0.2em;
+  margin-left: 0;
 }
-/* message styling per types */
-.message {
-  padding: 1em;
+.breadcrumbs ul li {
+  display: inline;
+  font-size: .8em;
+  /* 12px/base16>15 */
+  margin-left: .25em;
 }
-.message a {
-  border-bottom: 1px solid #888888;
+.breadcrumbs ul li:before {
+  content: "›";
+  margin-right: .5em;
 }
-.message a:hover {
-  border-bottom: 1px solid #2894df;
+.breadcrumbs ul li:first-child {
+  margin-left: 0;
+  padding-left: 0;
 }
-.message.error {
-  background: #ffe4e4;
-}
-.message.success {
-  background: #edf7eb;
-}
-.message.notice {
-  background: #daecf9;
-}
-.message.warning {
-  background: #fef0bf;
-}
-/* big side info message blocks on setup or profile pages */
-.side-message {
-  margin-left: 1em;
-  font-size: 1em;
-  margin-right: 2em;
-}
-.side-message ul,
-.side-message p {
-  padding-bottom: 1em;
-}
-/*
-  	Copy secret component
-  		This is what is used to copy a secret in the clipboard
-*/
-#container.page .secret-copy {
-  overflow: visible;
-  display: table-cell;
-  vertical-align: middle;
-  /*
-     * For IE 6/7 only
-     * Include this rule to trigger hasLayout and contain floats.
-     */
-  /*
-     * Clearfix: contain floats
-     *
-     * For modern browsers
-     * 1. The space content is one way to avoid an Opera bug when the
-     *	`contenteditable` attribute is included anywhere else in the document.
-     *	Otherwise it causes space to appear at the top and bottom of elements
-     *	that receive the `clearfix` class.
-     * 2. The use of `table` rather than `block` is only necessary if using
-     *	`:before` to contain the top-margins of child elements.
-     */
-  /*
-     * For IE 6/7 only
-     * Include this rule to trigger hasLayout and contain floats.
-     */
-  zoom: 1;
-  /*
-     * Clearfix: contain floats
-     *
-     * For modern browsers
-     * 1. The space content is one way to avoid an Opera bug when the
-     *	`contenteditable` attribute is included anywhere else in the document.
-     *	Otherwise it causes space to appear at the top and bottom of elements
-     *	that receive the `clearfix` class.
-     * 2. The use of `table` rather than `block` is only necessary if using
-     *	`:before` to contain the top-margins of child elements.
-     */
-}
-#container.page .secret-copy:before,
-#container.page .secret-copy:after {
+.breadcrumbs ul li:first-child:before {
   content: "";
-  display: table;
 }
-#container.page .secret-copy:after {
-  clear: both;
-}
-#container.page .secret-copy:before,
-#container.page .secret-copy:after {
-  content: "";
-  display: table;
-}
-#container.page .secret-copy:after {
-  clear: both;
-}
-#container.page .secret-copy > a {
-  background: transparent url('../img/controls/password-dots.png') no-repeat left top;
-  display: inline-block;
-  width: 92px;
-  height: 20px;
-  float: left;
+.breadcrumbs ul a {
   border: 0;
 }
-#container.page .secret-copy > a:hover {
-  background: transparent url('../img/controls/password-dots.png') no-repeat left bottom;
-}
-#container.page .secret-copy > a:after {
-  background: transparent url('../img/logo/icon-20_grey.png') no-repeat center center;
-  display: inline-block;
-  content: '';
-  width: 20px;
-  height: 20px;
-  float: right;
-  margin-right: -30px;
-}
-#container.page .secret-copy > a:hover:after {
-  background: transparent url('../img/logo/icon-20.png') no-repeat center center;
-}
-#container.page .secret-copy > a > span {
-  display: none;
-}
-#container.page .secret-copy > pre {
-  display: none;
+.breadcrumbs div.main-cell {
+  display: inline;
 }
 /* Dialog */
 .dialog-wrapper {
@@ -5011,947 +4728,160 @@ input[type="search"]::-webkit-search-cancel-button {
     margin-bottom: 2.5em;
   }
 }
-/* dropdown */
-.dropdown {
-  float: left;
-}
-.dropdown .button:focus {
-  border: 1px solid #dddddd;
-  color: #333333;
-  background: #ffffff;
-  z-index: 801;
-  border-bottom: 0;
-  -webkit-border-bottom-right-radius: 0;
-  -webkit-border-bottom-left-radius: 0;
-  -moz-border-radius-bottomright: 0;
-  -moz-border-radius-bottomleft: 0;
-  border-bottom-right-radius: 0;
-  border-bottom-left-radius: 0;
-}
-.dropdown-content {
-  border: 1px solid #dddddd;
-  background: #ffffff;
-  float: left;
-  position: absolute;
-  min-width: 13em;
-  z-index: 800;
-  padding: .25em 0;
-}
-.button + .dropdown-content {
-  margin-top: 2em;
-  margin-bottom: 2em;
-}
-.dropdown-content.right {
-  right: 0;
-}
-.dropdown-content li a {
-  display: block;
-  min-width: 9em;
-  font-size: .938em;
-  border: 0;
-}
-.dropdown-content li a {
-  padding: .313em .626em;
-  /* 5px */
-}
-.dropdown-content li a:hover {
-  background: #eeeeee;
-  text-decoration: none;
-  color: #333333;
-}
-.dropdown-content li .separator-before {
-  border-top: 1px solid #dddddd;
-}
-.dropdown-content li .separator-after {
-  border-bottom: 1px solid #dddddd;
-}
-.dropdown-content li.disabled a {
-  color: #969696;
-}
-.dropdown-content {
-  display: none;
-}
-.dropdown-content.visible {
-  display: block;
-}
-/* dropdown menu */
-.dropdownmenu {
-  list-style: none;
-  position: absolute;
-  z-index: 800;
-  background: #ffffff;
-  border: 1px solid #dddddd;
-  box-shadow: 0px 0px 10px 0px #dddddd;
-}
-.dropdownmenu ul {
-  list-style: none;
-  position: absolute;
-  top: 0;
-  left: 100%;
-  background: #ffffff;
-  border: 1px solid #dddddd;
-  box-shadow: 0px 0px 10px 0px #dddddd;
-}
-.dropdownmenu li {
-  position: relative;
-  padding: 3px 7em 3px 30px;
-}
-.profile .section.detailed-information h4 {
-  margin-bottom: .626em;
-  padding-bottom: .313em;
-  border-bottom: 1px dotted #dddddd;
-}
-.profile .section .section-action {
-  padding-left: 1em;
-}
-.profile .section.detailed-information li .label {
-  float: left;
-  width: 6em;
-  color: #969696;
-}
-.profile .section.detailed-information li .value {
-  display: inline-block;
-}
-.profile .section.detailed-information .avatar img {
-  width: 2.875em;
-  padding: 0.1250em;
-}
-.profile .edit-avatar-action .fa {
-  margin-top: .25em;
-}
-/* tags */
-.tags .tag {
-  word-wrap: break-word;
-  /* Internet Explorer 5.5+ */
-  white-space: -webkit-pre-wrap;
-  /* Newer versions of Chrome/Safari*/
-  word-break: break-all;
-  white-space: normal;
-  padding: .125em .5em;
-  float: left;
-  position: relative;
-  margin: 0 .5em .5em 0;
-  text-decoration: none;
-  border-radius: 3px;
-  border: 1px solid #2894df;
-  background: #ffffff;
-  color: #2894df;
-}
-.tags .tag:active,
-.tags .tag:hover {
-  background: #2a9ceb;
-  color: #ffffff;
-}
-.tags-list {
-  /*
-     * For IE 6/7 only
-     * Include this rule to trigger hasLayout and contain floats.
-     */
-  /*
-     * Clearfix: contain floats
-     *
-     * For modern browsers
-     * 1. The space content is one way to avoid an Opera bug when the
-     *	`contenteditable` attribute is included anywhere else in the document.
-     *	Otherwise it causes space to appear at the top and bottom of elements
-     *	that receive the `clearfix` class.
-     * 2. The use of `table` rather than `block` is only necessary if using
-     *	`:before` to contain the top-margins of child elements.
-     */
-  /*
-     * For IE 6/7 only
-     * Include this rule to trigger hasLayout and contain floats.
-     */
-  zoom: 1;
-  /*
-     * Clearfix: contain floats
-     *
-     * For modern browsers
-     * 1. The space content is one way to avoid an Opera bug when the
-     *	`contenteditable` attribute is included anywhere else in the document.
-     *	Otherwise it causes space to appear at the top and bottom of elements
-     *	that receive the `clearfix` class.
-     * 2. The use of `table` rather than `block` is only necessary if using
-     *	`:before` to contain the top-margins of child elements.
-     */
-}
-.tags-list:before,
-.tags-list:after {
-  content: "";
-  display: table;
-}
-.tags-list:after {
-  clear: both;
-}
-.tags-list:before,
-.tags-list:after {
-  content: "";
-  display: table;
-}
-.tags-list:after {
-  clear: both;
-}
-.tag-editor {
-  margin-bottom: 1em;
-}
-.tag-editor .message {
-  font-size: 1em;
-  margin-top: .5em;
-}
-.tag-editor .tag {
-  padding-right: 0;
-}
-.tag-editor .tag-delete {
-  margin-left: .25em;
-  border-left: 1px dotted #2894df;
-  padding-left: .5em;
-  padding-right: .5em;
-  font-size: .75em;
-  vertical-align: 10%;
-  cursor: pointer;
-}
-.tag-editor .tag:hover:after {
-  border-color: #bbbbbb;
-}
-.tag-editor .tag-editor-input-wrapper {
-  /*
-     * For IE 6/7 only
-     * Include this rule to trigger hasLayout and contain floats.
-     */
-  /*
-     * Clearfix: contain floats
-     *
-     * For modern browsers
-     * 1. The space content is one way to avoid an Opera bug when the
-     *	`contenteditable` attribute is included anywhere else in the document.
-     *	Otherwise it causes space to appear at the top and bottom of elements
-     *	that receive the `clearfix` class.
-     * 2. The use of `table` rather than `block` is only necessary if using
-     *	`:before` to contain the top-margins of child elements.
-     */
-  /*
-     * For IE 6/7 only
-     * Include this rule to trigger hasLayout and contain floats.
-     */
-  zoom: 1;
-  /*
-     * Clearfix: contain floats
-     *
-     * For modern browsers
-     * 1. The space content is one way to avoid an Opera bug when the
-     *	`contenteditable` attribute is included anywhere else in the document.
-     *	Otherwise it causes space to appear at the top and bottom of elements
-     *	that receive the `clearfix` class.
-     * 2. The use of `table` rather than `block` is only necessary if using
-     *	`:before` to contain the top-margins of child elements.
-     */
-  min-height: 5em;
-  padding: .5em;
-  border: 1px solid #cccccc;
-  border-top: 1px solid #bbbbbb;
-}
-.tag-editor .tag-editor-input-wrapper:before,
-.tag-editor .tag-editor-input-wrapper:after {
-  content: "";
-  display: table;
-}
-.tag-editor .tag-editor-input-wrapper:after {
-  clear: both;
-}
-.tag-editor .tag-editor-input-wrapper:before,
-.tag-editor .tag-editor-input-wrapper:after {
-  content: "";
-  display: table;
-}
-.tag-editor .tag-editor-input-wrapper:after {
-  clear: both;
-}
-.tag-editor .tag-editor-input-wrapper.input-focus {
-  border-color: #2894df;
-}
-.tag-editor .tag-editor-input {
-  min-height: 1.5em;
-  padding: .25em .5em .25em .5em;
-  box-shadow: none;
-  min-width: 3em;
-  max-width: 24em;
-  float: left;
-  overflow: hidden;
-}
 /*
- * Comment thread with add/edit form
+ * Footer
  */
-.panel.aside .comments {
-  width: 100%;
-  /* mini fixed fluid 2 columns layout */
-}
-.panel.aside .comments .wrap-right-column {
-  float: left;
-  width: 100%;
-}
-.panel.aside .comments .right-column {
-  margin-left: 2.5em;
-}
-.panel.aside .comments .left-column {
-  float: left;
-  width: 2em;
-  margin-left: -100%;
-}
-.panel.aside .comments .comment {
-  padding-bottom: .5em;
-  /*
-     * For IE 6/7 only
-     * Include this rule to trigger hasLayout and contain floats.
-     */
-  /*
-     * Clearfix: contain floats
-     *
-     * For modern browsers
-     * 1. The space content is one way to avoid an Opera bug when the
-     *	`contenteditable` attribute is included anywhere else in the document.
-     *	Otherwise it causes space to appear at the top and bottom of elements
-     *	that receive the `clearfix` class.
-     * 2. The use of `table` rather than `block` is only necessary if using
-     *	`:before` to contain the top-margins of child elements.
-     */
-  /*
-     * For IE 6/7 only
-     * Include this rule to trigger hasLayout and contain floats.
-     */
-  zoom: 1;
-  /*
-     * Clearfix: contain floats
-     *
-     * For modern browsers
-     * 1. The space content is one way to avoid an Opera bug when the
-     *	`contenteditable` attribute is included anywhere else in the document.
-     *	Otherwise it causes space to appear at the top and bottom of elements
-     *	that receive the `clearfix` class.
-     * 2. The use of `table` rather than `block` is only necessary if using
-     *	`:before` to contain the top-margins of child elements.
-     */
-  /* picture */
-  /* username and date */
-  /* actions */
-  /* triangle bubble */
-}
-.panel.aside .comments .comment:before,
-.panel.aside .comments .comment:after {
-  content: "";
-  display: table;
-}
-.panel.aside .comments .comment:after {
-  clear: both;
-}
-.panel.aside .comments .comment:before,
-.panel.aside .comments .comment:after {
-  content: "";
-  display: table;
-}
-.panel.aside .comments .comment:after {
-  clear: both;
-}
-.panel.aside .comments .comment p {
-  background: #eeeeee;
-  padding: 1em;
-  margin-left: 10px;
-}
-.panel.aside .comments .comment .author.picture {
-  width: 2em;
+.footer {
+  margin-top: 0em;
+  position: fixed;
+  bottom: 0;
+  padding: 1.167em 1.5% 0 .5%;
+  text-align: right;
+  font-size: .75em;
+  /* 12px */
+  width: 98%;
   height: 2em;
-  margin-top: .25em;
+  background: #ffffff;
+  border-top: 1px solid #dddddd;
+  z-index: 890;
 }
-.panel.aside .comments .comment .author.picture img {
-  width: 2em;
-  height: 2em;
+.footer .footer-links {
+  width: 100%;
+  margin-top: -0.25em;
 }
-.panel.aside .comments .comment .author.picture a {
+.footer .footer-links li {
+  display: inline;
+  margin-right: 1.5em;
+}
+.footer .footer-links a {
   border: 0;
 }
-.panel.aside .comments .comment .metadata {
-  font-style: italic;
-  margin: .5em 0 1em 1em;
+.plugin-check {
+  padding: 1em;
 }
-.panel.aside .comments .comment .metadata .author.username {
-  max-width: 48%;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  -o-text-overflow: ellipsis;
-  -ms-text-overflow: ellipsis;
+.plugin-check.firefox {
+  background: transparent url('../img/third_party/firefox_logo.png') 1.5em center no-repeat;
+  background-size: 150px auto;
 }
-.panel.aside .comments .comment .metadata .author.username:after {
-  content: ', ';
+.plugin-check.chrome {
+  background: transparent url('../img/third_party/ChromeWebStore.png') 0.5em center no-repeat;
+  background-size: 180px auto;
 }
-.panel.aside .comments .comment .metadata .modified {
-  max-width: 48%;
-  padding-right: 2px;
-  color: #969696;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  -o-text-overflow: ellipsis;
-  -ms-text-overflow: ellipsis;
+.plugin-check.gpg {
+  background: transparent url('../img/third_party/gnupg_logo_disabled.png') 2em center no-repeat;
+  background-size: 150px auto;
 }
-.panel.aside .comments .comment .form-content {
-  margin-left: .5em;
+.plugin-check.gpg.success {
+  background: #edf7eb url('../img/third_party/gnupg_logo.png') 2em center no-repeat;
+  background-size: 150px auto;
 }
-.panel.aside .comments .comment .actions {
-  float: right;
-  margin-top: -2.25em;
-  margin-right: 0;
+.plugin-check.success {
+  background-color: #edf7eb;
 }
-.panel.aside .comments .comment p:before {
-  content: ' ';
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  border-top: 10px solid transparent;
-  border-bottom: 10px solid transparent;
-  border-right: 10px solid #eeeeee;
-  margin-left: -1.8em;
-  margin-top: -0.5em;
+.plugin-check.error {
+  background-color: #ffe4e4;
+}
+.plugin-check.warning {
+  background-color: #fef0bf;
+}
+.plugin-check.notice {
+  background-color: #daecf9;
+}
+.plugin-check .message {
+  font-weight: normal;
+  margin-left: 180px;
+  padding: .5em 1em .25em 1em;
+}
+@media all and (max-width: 1024px) {
+  .plugin-check.firefox,
+  .plugin-check.chrome,
+  .plugin-check.gpg,
+  .plugin-check.gpg.success,
+  .plugin-check.chrome.error {
+    background-image: none;
+  }
+  .plugin-check .message {
+    margin-left: 0px;
+    padding: .5em 1em;
+  }
+}
+.video-wrapper {
+  padding: 1em;
+}
+.video-wrapper iframe {
+  width: 100%;
+  min-height: 250px;
+  height: auto;
 }
 /* left panel navigation */
 .panel .navigation {
-  font-size: .938em;
-  /* first block have a delimiter */
-  /*
-        Navigation row
-    */
+  margin-top: 1em;
 }
-.panel .navigation.first {
-  border-bottom: 1px dotted #dddddd;
-  padding: .625em 0;
-  margin-bottom: .625em;
-}
-.panel .navigation .row {
-  float: left;
-  width: 100%;
-  box-sizing: border-box;
-  /*
-            Row layout
-              fluid main-cell
-              fixed right-cell
-        */
-  /*
-            Right Cell
-        */
-  /* title cell is higher than normal cell
-           this centers the right cell vertically accordingly
-         */
-}
-.panel .navigation .row:hover {
-  background: #f3f3f3;
-}
-.panel .navigation .row.no-hover:hover {
-  background: transparent;
-}
-.panel .navigation .row.selected {
-  font-weight: bold;
-}
-.panel .navigation .row .main-cell-wrapper {
-  float: left;
-  width: 100%;
-}
-.panel .navigation .row .main-cell {
-  margin: 0 1.5em 0 0;
-}
-.panel .navigation .row .main-cell h3 {
-  border: 0;
-  font-size: 1em;
-  margin: 0 .25em 0 1em;
-  padding: .25em 0;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  -o-text-overflow: ellipsis;
-  -ms-text-overflow: ellipsis;
-}
-.panel .navigation .row .main-cell h3 a {
-  /* suppress a padding so that it looks the same
-                        for all title if it is a link or not */
-  padding-top: 0;
-  padding-bottom: 0;
-}
-.panel .navigation .row .main-cell span {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  -o-text-overflow: ellipsis;
-  -ms-text-overflow: ellipsis;
-  display: block;
-}
-.panel .navigation .row .main-cell a {
-  border: 0;
-  padding: .125em .313em;
-  /* 2px 5px */
-  padding-left: 1em;
-  color: #333333;
-  display: block;
-}
-.panel .navigation .row .right-cell {
-  float: right;
-  width: 1em;
-  height: 1em;
-  margin-right: 1em;
-  margin-top: -1.5em;
-}
-.panel .navigation .row .right-cell a {
-  display: none;
-  width: 1em;
-  height: 1em;
-  padding: .125em;
-  color: #888888;
-  border: 1px solid transparent;
-}
-.panel .navigation .row .right-cell a:after {
-  position: absolute;
-  width: 16px;
-  height: 16px;
-  content: "\f0fe";
-  font: normal normal normal 14px/1 FontAwesome;
-  line-height: 16px;
-  text-align: center;
-  vertical-align: center;
-}
-.panel .navigation .row .right-cell a.filter:after {
-  content: "\f0b0";
-}
-.panel .navigation .row .right-cell a:hover {
-  color: #2894df;
-  background: #ffffff;
-}
-.panel .navigation .row .right-cell span {
-  /*
-     * Extends the .visuallyhidden class to allow the element to be focusable
-     * when navigated to via the keyboard: h5bp.com/p
-     */
-  border: 0;
-  clip: rect(0 0 0 0);
-  height: 1px;
-  margin: -1px;
-  overflow: hidden;
+.panel .navigation h2 {
   padding: 0;
-  position: absolute;
-  width: 1px;
-  /*
-     * Extends the .visuallyhidden class to allow the element to be focusable
-     * when navigated to via the keyboard: h5bp.com/p
-     */
-}
-.panel .navigation .row .right-cell span .focusable:active,
-.panel .navigation .row .right-cell span .focusable:focus {
-  clip: auto;
-  height: auto;
   margin: 0;
-  overflow: visible;
-  position: static;
-  width: auto;
 }
-.panel .navigation .row .right-cell span .focusable:active,
-.panel .navigation .row .right-cell span .focusable:focus {
-  clip: auto;
-  height: auto;
-  margin: 0;
-  overflow: visible;
-  position: static;
-  width: auto;
-}
-.panel .navigation .row.title .right-cell {
-  margin-top: -1.625em;
-}
-.panel .navigation .row:hover {
-  background: #f3f3f3;
-}
-.panel .navigation .row:hover .right-cell a {
-  display: block;
-}
-.panel .navigation .row:hover .right-cell a.filter {
-  border: 1px solid #dddddd;
-}
-.contextual-menu {
-  position: absolute;
-  background: #ffffff;
-  border: 1px solid #dddddd;
-  width: 12em;
-  box-shadow: 0px 0px 10px 0px #dddddd;
-  z-index: 993;
-  left: 11.25em;
-  display: none;
-  padding: .25em 0;
-}
-.contextual-menu a {
-  font-size: .875em;
-  /* 14px */
-  display: block;
-  padding: .357em .714em;
-  /* 5px 10px */
-  border: 0;
-}
-.contextual-menu a:hover {
+.panel .navigation a {
   color: #333333;
-  background: #eeeeee;
+  border: 0;
+  display: block;
 }
-.contextual-menu li.disabled a {
-  color: #dddddd;
+.panel .navigation li {
+  font-size: 0.938em;
+  /* 15px from 16px base */
+  padding: .469em 0 .469em 1.333em;
+  border-left: 5px solid #ffffff;
 }
-.contextual-menu li.disabled a:hover {
+.panel .navigation li:hover {
   color: #333333;
-  background: #eeeeee;
+  border-left: 5px solid #dddddd;
 }
-.contextual-menu .separator-before {
-  border-top: 1px solid #dddddd;
-}
-.contextual-menu .separator-after {
-  border-bottom: 1px solid #dddddd;
-}
-/**
- * Sidebar
- */
-.panel.aside {
-  position: absolute;
-  right: 2em;
-  min-width: 25em;
-  width: 30%;
-  bottom: 0;
-  height: 100%;
-  background: #ffffff;
-  box-shadow: 0px 0px 10px 0px #dddddd;
-  /* Controls */
-  /** SECTIONS **/
-  /** Sidebar forms **/
-}
-.panel.aside .sidebar-header h3 {
-  padding: 1em;
-  margin: 0;
-  border: 0;
-}
-.panel.aside .sidebar-header .dialog-close {
-  position: absolute;
-  right: 1em;
-  top: 1em;
-}
-.panel.aside .sidebar-section {
-  margin-top: -1px;
-  border-bottom: 1px solid #f3f3f3;
-  border-top: 1px solid #f3f3f3;
-  font-size: .875em;
-}
-.panel.aside .sidebar-section h4 {
-  font-size: 1.125em;
-  padding: 1em 1.125em;
-  margin: 0;
-  display: block;
-}
-.panel.aside .sidebar-section .accordion-content {
-  margin: 0 1.25em 1.5em 1.25em;
-  padding-top: .5em;
-}
-.panel.aside .sidebar-section .accordion-content .section-action {
-  font-size: 1.125em;
-  position: absolute;
-  margin-top: -2.85em;
-  right: 3.25em;
-  background: #ffffff;
-  width: 1.125em;
-  height: 1.125em;
-  z-index: 401;
-  border: 0;
-}
-.panel.aside .sidebar-section .accordion-content span {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  -o-text-overflow: ellipsis;
-  -ms-text-overflow: ellipsis;
-}
-.panel.aside .sidebar-section .accordion-content .label {
-  width: 30%;
-  display: inline-block;
-  margin-right: 10%;
-  float: left;
-  height: 1.8em;
-}
-.panel.aside .sidebar-section .accordion-content .value {
-  width: 60%;
-  display: inline-block;
-  float: left;
-  height: 1.8em;
-}
-.panel.aside .description .description_content {
-  white-space: pre-line;
-}
-.panel.aside .key-information textarea {
-  min-height: 30em;
-  line-height: normal;
-}
-.panel.aside .form-content {
-  margin: 0 0 .5em 0;
-  /*
-     * For IE 6/7 only
-     * Include this rule to trigger hasLayout and contain floats.
-     */
-  /*
-     * Clearfix: contain floats
-     *
-     * For modern browsers
-     * 1. The space content is one way to avoid an Opera bug when the
-     *	`contenteditable` attribute is included anywhere else in the document.
-     *	Otherwise it causes space to appear at the top and bottom of elements
-     *	that receive the `clearfix` class.
-     * 2. The use of `table` rather than `block` is only necessary if using
-     *	`:before` to contain the top-margins of child elements.
-     */
-  /*
-     * For IE 6/7 only
-     * Include this rule to trigger hasLayout and contain floats.
-     */
-  zoom: 1;
-  /*
-     * Clearfix: contain floats
-     *
-     * For modern browsers
-     * 1. The space content is one way to avoid an Opera bug when the
-     *	`contenteditable` attribute is included anywhere else in the document.
-     *	Otherwise it causes space to appear at the top and bottom of elements
-     *	that receive the `clearfix` class.
-     * 2. The use of `table` rather than `block` is only necessary if using
-     *	`:before` to contain the top-margins of child elements.
-     */
-}
-.panel.aside .form-content:before,
-.panel.aside .form-content:after {
-  content: "";
-  display: table;
-}
-.panel.aside .form-content:after {
-  clear: both;
-}
-.panel.aside .form-content:before,
-.panel.aside .form-content:after {
-  content: "";
-  display: table;
-}
-.panel.aside .form-content:after {
-  clear: both;
-}
-.panel.aside .form-content label {
-  display: none;
-}
-.panel.aside .form-content textarea {
-  font-size: 1em;
-  width: 100%;
-  box-sizing: border-box;
-  height: 5em;
-}
-.panel.aside .form-content .button {
-  float: right;
-  margin-top: -0.25em;
-  margin-right: 0;
-}
-/* place sidebar on top of everything when there is no space */
-@media all and (max-width: 1024px) {
-  .panel.aside {
-    position: absolute;
-    right: 0em;
-    width: 100%;
-    bottom: 0;
-    top: 0;
-    height: 100%;
-  }
-}
-/* tabs */
-.tabs {
-  border-bottom: 1px solid #dddddd;
-  width: 100%;
-}
-.tabs-nav {
-  border-bottom: 1px solid #dddddd;
-}
-.tabs-nav li {
-  display: inline;
-}
-.tabs-nav li div {
-  display: inline-block;
-}
-.tabs-nav li a {
-  display: inline-block;
-  padding: .4em 1.75em;
-  margin-left: 1.25em;
-  font-size: 15px;
-  border: 0;
-}
-.tabs-nav li a.selected {
-  margin-bottom: -1px;
-  border: 1px solid #dddddd;
-  border-bottom: 1px solid #ffffff;
-  background: #ffffff;
-  -webkit-border-radius: 0.214em;
-  -moz-border-radius: 0.214em;
-  border-radius: 0.214em;
-  -webkit-border-bottom-left-radius: 0;
-  -webkit-border-bottom-right-radius: 0;
-  -moz-border-radius-bottomleft: 0;
-  -moz-border-radius-bottomright: 0;
-  border-bottom-left-radius: 0;
-  border-bottom-right-radius: 0;
-}
-/* tab content */
-.tab-content {
-  display: none;
-}
-.tab-content.selected {
-  display: block;
+.panel .navigation li.active,
+.panel .navigation li.selected {
+  font-weight: bold;
+  border-left: 5px solid #d40101;
 }
 /*
- * Main Workspace - Table View
- */
-.tableview {
-  position: relative;
-  font-size: .9375em;
-  /* 15px */
-  height: 100%;
-}
-/* header */
-.tableview-header {
-  height: 2.125em;
-  overflow-y: scroll;
-  padding-top: .125em;
-}
-.tableview-header table {
-  width: 100%;
-}
-.tableview-header table th.sortable.sorted a:after {
-  padding-left: 0.75em;
-  font: normal normal normal 14px/1 FontAwesome;
-  -moz-osx-font-smoothing: grayscale;
-  color: #333333;
-}
-.tableview-header table th.sortable.sorted a:hover:after {
-  color: #2a9ceb;
-}
-.tableview-header table th.sortable.sorted.sort-desc a:after {
-  content: "\f0d7";
-}
-.tableview-header table th.sortable.sorted.sort-asc a:after {
-  content: "\f0d8";
-}
-/* main content */
-.tableview-content {
-  top: 2.125em;
-  bottom: 2.45em;
-  padding: 0;
-  position: absolute;
-  width: 100%;
-  border-top: 1px solid #dddddd;
-  overflow-y: scroll;
-}
-.tableview-content table {
-  width: 100%;
-}
-/* rows */
-.tableview table {
-  /* fav fix */
-}
-.tableview table a {
-  border: 0;
-}
-.tableview table th,
-.tableview table td {
-  text-align: left;
-  padding: .25em;
-  vertical-align: middle;
-}
-.tableview table th {
-  font-weight: bold;
-}
-.tableview table td div {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  -o-text-overflow: ellipsis;
-  -ms-text-overflow: ellipsis;
-}
-.tableview table .s-cell {
-  width: 15px;
-  max-width: 15px;
-}
-.tableview table .s1-cell {
-  width: 25px;
-  max-width: 25px;
-}
-.tableview table .s2-cell {
-  width: 40px;
-  max-width: 40px;
-}
-.tableview table .m-cell {
-  width: 9em;
-  max-width: 9em;
-  vertical-align: middle;
-}
-.tableview table .l-cell {
-  width: 14em;
-  max-width: 14em;
-}
-.tableview table .xl-cell {
-  width: 19em;
-  max-width: 19em;
-}
-.tableview table tbody tr.selected,
-.tableview table tbody tr:hover {
-  height: 1em;
-  background: #fffae7;
-}
-.tableview table tbody tr.inactive {
-  color: #969696;
-}
-.tableview table .input.checkbox {
-  padding-top: 2px;
-}
-.tableview table .input.checkbox label {
+	do not show javascript needed warning if js is enabled
+	this needs modernizer to work
+*/
+.js .message.no-js {
   display: none;
 }
-.tableview table .input.checkbox input {
-  margin-top: 0;
-  float: left;
+.cookies .message.no-cookies {
+  display: none;
 }
-.tableview table th span,
-.tableview table td span {
-  vertical-align: 6%;
+/* message styling per types */
+.message {
+  padding: 1em;
 }
-.tableview table th.cell_favorite,
-.tableview table td.cell_favorite {
-  width: 20px;
-  max-width: 20px;
+.message a {
+  border-bottom: 1px solid #888888;
 }
-/* hide secondary actions if there is no space */
-@media all and (max-width: 600px) {
-  .tableview table tbody td {
-    display: block;
-  }
-  .tableview table tbody td.s-cell,
-  .tableview table tbody td.s2-cell,
-  .tableview table tbody td.m-cell,
-  .tableview table tbody td.l-cell {
-    max-width: 90%;
-    width: 90%;
-    padding: .5em;
-  }
-  .tableview table tbody td.s-cell {
-    display: none;
-  }
-  .tableview table tbody tr:nth-child(odd) {
-    background: #f3f3f3;
-  }
-  .tableview thead {
-    display: none;
-  }
-  .tableview-content {
-    top: 0;
-    border: 0;
-    bottom: 0px;
-  }
+.message a:hover {
+  border-bottom: 1px solid #2894df;
+}
+.message.error {
+  background: #ffe4e4;
+}
+.message.success {
+  background: #edf7eb;
+}
+.message.notice {
+  background: #daecf9;
+}
+.message.warning {
+  background: #fef0bf;
+}
+/* big side info message blocks on setup or profile pages */
+.side-message {
+  margin-left: 1em;
+  font-size: 1em;
+  margin-right: 2em;
+}
+.side-message ul,
+.side-message p {
+  padding-bottom: 1em;
 }
 table.table-info,
 table.table-info.vertical {
@@ -6266,387 +5196,153 @@ table.table-info.horizontal tbody tr:nth-child(even) {
   filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100);
   opacity: 1;
 }
-/*
- * Footer
- */
-.footer {
-  margin-top: 0em;
-  position: fixed;
-  bottom: 0;
-  padding: 1.167em 1.5% 0 .5%;
-  text-align: right;
-  font-size: .75em;
-  /* 12px */
-  width: 98%;
-  height: 2em;
-  background: #ffffff;
-  border-top: 1px solid #dddddd;
-  z-index: 890;
+/* picture in sidebar */
+.col4 img.illustration,
+.col5 img.illustration {
+  max-width: 275px;
+  margin: 2em auto;
 }
-.footer .footer-links {
+/* figure in article */
+article figure {
   width: 100%;
-  margin-top: -0.25em;
+  text-align: center;
+  padding: 1em 0;
 }
-.footer .footer-links li {
-  display: inline;
-  margin-right: 1.5em;
+article figure img {
+  margin: auto;
+  position: relative;
 }
-.footer .footer-links a {
-  border: 0;
+article figure .legend {
+  display: inline-block;
+  margin-top: .5em;
+  font-style: italic;
 }
-/*
-	Password fields in passbolt have complexity "progress bar"
-	and a custom layout to accomodate buttons on the left end
-*/
-.input-password-wrapper {
-  max-width: 500px;
-  /*
-     * For IE 6/7 only
-     * Include this rule to trigger hasLayout and contain floats.
-     */
-  /*
-     * Clearfix: contain floats
-     *
-     * For modern browsers
-     * 1. The space content is one way to avoid an Opera bug when the
-     *	`contenteditable` attribute is included anywhere else in the document.
-     *	Otherwise it causes space to appear at the top and bottom of elements
-     *	that receive the `clearfix` class.
-     * 2. The use of `table` rather than `block` is only necessary if using
-     *	`:before` to contain the top-margins of child elements.
-     */
-  /*
-     * For IE 6/7 only
-     * Include this rule to trigger hasLayout and contain floats.
-     */
-  zoom: 1;
-  /*
-     * Clearfix: contain floats
-     *
-     * For modern browsers
-     * 1. The space content is one way to avoid an Opera bug when the
-     *	`contenteditable` attribute is included anywhere else in the document.
-     *	Otherwise it causes space to appear at the top and bottom of elements
-     *	that receive the `clearfix` class.
-     * 2. The use of `table` rather than `block` is only necessary if using
-     *	`:before` to contain the top-margins of child elements.
-     */
-  width: 99%;
+/* lightbox */
+#imagelightbox {
+  position: absolute;
+  z-index: 9999;
+  -ms-touch-action: none;
+  touch-action: none;
+  overflow: hidden;
 }
-.input-password-wrapper:before,
-.input-password-wrapper:after {
-  content: "";
-  display: table;
+#imagelightbox-overlay {
+  overflow: hidden;
+  background-color: #ffffff;
+  background-color: rgba(255, 255, 255, 0.9);
+  position: fixed;
+  z-index: 9998;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
 }
-.input-password-wrapper:after {
-  clear: both;
+#imagelightbox-overlay {
+  -webkit-animation: fade-in 0.25s linear;
+  animation: fade-in 0.25s linear;
 }
-.input-password-wrapper:before,
-.input-password-wrapper:after {
-  content: "";
-  display: table;
+@-webkit-keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
-.input-password-wrapper:after {
-  clear: both;
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
-.input-password-wrapper .input.password input {
-  box-sizing: border-box;
-  width: 65.5%;
-  float: left;
+.tldr {
+  background: #f3f3f3;
+  padding: 1em;
 }
-.input-password-wrapper .input.password input[type=password].decrypting {
-  background: transparent url('../img/controls/loading.gif') no-repeat 72% center;
+.tldr i {
+  margin-right: 1em;
+  padding-left: .5em;
 }
-.input-password-wrapper .input.password.has-encrypted-secret input {
-  /* fallback placeholder */
-  /* webkit placeholder */
-  /* moz placeholder */
+.tldr.alt {
+  background: #ffffff;
+  text-align: center;
+  margin-top: 0em;
+  padding-top: 0;
 }
-.input-password-wrapper .input.password.has-encrypted-secret input.placeholder {
-  color: #333333;
+.tldr.alt .illustration {
+  margin-top: 2em;
 }
-.input-password-wrapper .input.password.has-encrypted-secret input::-webkit-input-placeholder {
-  color: #333333;
+.tldr .madeinindia {
+  margin-top: 2em;
 }
-.input-password-wrapper .input.password.has-encrypted-secret input::-moz-placeholder,
-.input-password-wrapper .input.password.has-encrypted-secret input:-moz-placeholder {
-  color: #333333;
-}
-.input-password-wrapper .actions.inline {
-  float: right;
-  width: 30%;
-}
-.input-password-wrapper .actions.inline .button {
-  float: left;
-  width: 3.75em;
-  padding-left: 0;
-  padding-right: 0;
-}
-.input-password-wrapper .actions.inline .button + .button {
-  margin-left: .5em;
-}
-.input-password-wrapper .password-complexity .complexity-text {
-  float: right;
-  clear: right;
-  width: 30%;
-  font-size: 11px;
-  text-align: left;
-  padding-left: 0;
-}
-.input-password-wrapper .password-complexity.not_available .complexity-text {
-  color: #dddddd;
-}
-.input-password-wrapper .password-complexity .progress {
-  width: 65.5%;
-  box-sizing: border-box;
-  border: 1px solid #dddddd;
-  height: 10px;
-  display: block;
-  clear: both;
-  margin: .25em 0 .5em 0;
-  float: left;
-}
-.input-password-wrapper .password-complexity .progress-bar {
-  background: #000000;
-  width: 0;
-  height: 6px;
-  display: block;
-  float: left;
-  margin: 1px;
-}
-.input-password-wrapper .password-complexity .progress-bar.very_weak {
-  background: #000000;
-  width: 5%;
-}
-.input-password-wrapper .password-complexity .progress-bar.weak {
-  background: #d40101;
-  width: 10%;
-}
-.input-password-wrapper .password-complexity .progress-bar.fair {
-  background: #ffbd2e;
-  width: 60%;
-}
-.input-password-wrapper .password-complexity .progress-bar.strong {
-  background: #66cc00;
-  width: 80%;
-}
-.input-password-wrapper .password-complexity .progress-bar.very_strong {
-  background: #009900;
-  width: 99.5%;
-}
-.password-hints li:before {
-  content: "●";
-  color: #dddddd;
-  padding-right: .5em;
-}
-.password-hints li.success:before {
-  color: #009900;
-}
-.password-hints li.error:before {
+.tldr .madeinindia i {
   color: #d40101;
+  margin-right: 0;
 }
-@media all and (max-width: 400px) {
-  .input-password-wrapper .input.password,
-  .input-password-wrapper .actions.inline {
-    position: relative;
-    float: none;
-    clear: both;
-  }
-  .input-password-wrapper .actions.inline {
-    width: 50%;
-    float: left;
-  }
-  .input-password-wrapper .input.password input[type=password] {
-    width: 87%;
-  }
-  .input-password-wrapper .password-complexity .progress {
-    display: none;
-  }
-  .input-password-wrapper .password-complexity .complexity-text {
-    float: left;
-    width: 50%;
-    font-size: .831em;
-    margin-top: .5em;
-  }
-  .fa.fa-lg {
-    line-height: 1;
+.tldr h4 {
+  margin-top: .5em;
+}
+.tldr h4.visuallyhidden + p,
+.tldr p {
+  margin-top: .75em;
+}
+.tldr h4 + p {
+  margin-top: 0;
+}
+/* reset layout styles on smaller screen */
+@media all and (min-width: 1024px) {
+  .tldr {
+    margin-top: 3em;
+    max-width: 20em;
   }
 }
-/**
- * Based on Farbtastic Color Picker 1.2
- * © 2008 Steven Wittens / © 2015 Passbolt
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
- */
-.colorpicker {
-  margin-top: 1.5em;
+/* search */
+form.search {
+  margin-top: 1em;
 }
-.colorpicker .input.color {
+form.search legend,
+form.search label {
+  display: none;
+  width: 10em;
+}
+form.search input[type=search] {
   float: left;
-  margin-top: 70px;
-  margin-left: 240px;
+  width: 65%;
+  margin-bottom: 0;
+  padding: .313em .625em;
 }
-.colorpicker .input input[type=text].token {
-  width: 4em;
-  font-size: 1.25em;
-  height: auto;
-  line-height: 2em;
-  border: none;
+form.search button {
+  height: 2.571em;
+  /* 36px */
+  float: left;
+  margin-left: -2px;
+  border-left: 0;
+  border-radius: 0px 2px 2px 0px;
+}
+form.search button .fa-search {
+  font-size: 1.4em;
+}
+/* remove webkit search input decoration and cancel button */
+input[type="search"]::-webkit-search-decoration,
+input[type="search"]::-webkit-search-cancel-button {
+  display: none;
+}
+/* rescale on small screen */
+@media all and (max-width: 480px) {
+  form.search input[type=search] {
+    width: 55%;
+  }
+}
+.tile {
+  display: block;
+  margin-bottom: 1em;
+  border: 1px solid #f3f3f3;
+  padding: 1em;
+  padding-top: 0;
   -webkit-border-radius: 0.214em;
   -moz-border-radius: 0.214em;
   border-radius: 0.214em;
-  text-align: center;
-}
-.colorpicker .farbtastic {
-  position: relative;
-}
-.colorpicker .farbtastic * {
-  position: absolute;
-  cursor: crosshair;
-}
-.colorpicker .farbtastic,
-.colorpicker .farbtastic .wheel {
-  width: 195px;
-  height: 195px;
-}
-.colorpicker .farbtastic .color,
-.colorpicker .farbtastic .overlay {
-  top: 47px;
-  left: 47px;
-  width: 101px;
-  height: 101px;
-}
-.colorpicker .farbtastic .wheel {
-  background: url('../img/controls/colorpicker/wheel.png') no-repeat;
-  width: 195px;
-  height: 195px;
-}
-.colorpicker .farbtastic .overlay {
-  background: url('../img/controls/colorpicker/mask.png') no-repeat;
-}
-.colorpicker .farbtastic .marker {
-  width: 17px;
-  height: 17px;
-  margin: -8px 0 0 -8px;
-  overflow: hidden;
-  background: url('../img/controls/colorpicker/marker.png') no-repeat;
-}
-/* gpg textarea is large and tall */
-.gpgkey.input.textarea textarea {
-  height: 24em;
-  width: 95%;
-}
-.version.alpha body:before {
-  content: "alpha";
-  background: #d40101 none repeat scroll 0% 0%;
-}
-.version.beta body:before {
-  content: "beta";
-  background: #2894df none repeat scroll 0% 0%;
-}
-.version body:before {
-  position: fixed;
-  width: 130px;
-  height: 25px;
-  bottom: 15px;
-  left: -40px;
-  text-align: center;
-  font-size: 13px;
-  font-family: sans-serif;
-  text-transform: uppercase;
-  font-weight: 700;
-  color: #ffffff;
-  line-height: 27px;
-  transform: rotate(45deg);
-  z-index: 999;
-}
-.permissions.scroll {
-  max-height: 19em;
-  margin: 0;
-}
-.permissions .row {
-  /*
-     * For IE 6/7 only
-     * Include this rule to trigger hasLayout and contain floats.
-     */
-  /*
-     * Clearfix: contain floats
-     *
-     * For modern browsers
-     * 1. The space content is one way to avoid an Opera bug when the
-     *	`contenteditable` attribute is included anywhere else in the document.
-     *	Otherwise it causes space to appear at the top and bottom of elements
-     *	that receive the `clearfix` class.
-     * 2. The use of `table` rather than `block` is only necessary if using
-     *	`:before` to contain the top-margins of child elements.
-     */
-  /*
-     * For IE 6/7 only
-     * Include this rule to trigger hasLayout and contain floats.
-     */
-  zoom: 1;
-  /*
-     * Clearfix: contain floats
-     *
-     * For modern browsers
-     * 1. The space content is one way to avoid an Opera bug when the
-     *	`contenteditable` attribute is included anywhere else in the document.
-     *	Otherwise it causes space to appear at the top and bottom of elements
-     *	that receive the `clearfix` class.
-     * 2. The use of `table` rather than `block` is only necessary if using
-     *	`:before` to contain the top-margins of child elements.
-     */
-  font-size: .813em;
-  padding: 1em .5em .875em 1em;
-  border-bottom: 1px dotted #dddddd;
-  /* user summary */
-  /* row actions */
-  /* new/updated permissions */
-}
-.permissions .row:before,
-.permissions .row:after {
-  content: "";
-  display: table;
-}
-.permissions .row:after {
-  clear: both;
-}
-.permissions .row:before,
-.permissions .row:after {
-  content: "";
-  display: table;
-}
-.permissions .row:after {
-  clear: both;
-}
-.permissions .row:last-child {
-  border: 0;
-}
-.permissions .row .avatar img {
-  width: 36px;
-  height: 36px;
-  float: left;
-}
-.permissions .row .user,
-.permissions .row .group {
-  width: 48%;
-  float: left;
-  padding-left: 1em;
-  padding-right: 1em;
-}
-.permissions .row .details {
   /*
      * For IE 6/7 only
      * Include this rule to trigger hasLayout and contain floats.
@@ -6679,767 +5375,294 @@ table.table-info.horizontal tbody tr:nth-child(even) {
      *	`:before` to contain the top-margins of child elements.
      */
 }
-.permissions .row .details:before,
-.permissions .row .details:after {
+.tile:before,
+.tile:after {
   content: "";
   display: table;
 }
-.permissions .row .details:after {
+.tile:after {
   clear: both;
 }
-.permissions .row .details:before,
-.permissions .row .details:after {
+.tile:before,
+.tile:after {
   content: "";
   display: table;
 }
-.permissions .row .details:after {
+.tile:after {
   clear: both;
 }
-.permissions .row .details .name {
-  float: left;
-  max-width: 190px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  -o-text-overflow: ellipsis;
-  -ms-text-overflow: ellipsis;
-}
-.permissions .row .details .more_details {
-  margin-left: .5em;
-  margin-top: 0;
-}
-.permissions .row .details .email {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  -o-text-overflow: ellipsis;
-  -ms-text-overflow: ellipsis;
-  font-weight: bold;
-  padding-bottom: .125em;
-}
-.permissions .row .permission_changes {
-  color: #969696;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  -o-text-overflow: ellipsis;
-  -ms-text-overflow: ellipsis;
-  display: block;
-  border: 0;
-}
-.permissions .row .rights {
-  float: left;
-  margin-top: .5em;
-  width: 27%;
-}
-.permissions .row .rights select {
-  margin: 0;
-  font-size: 1em;
-}
-.permissions .row .actions {
-  float: right;
-  margin-top: .55em;
-}
-.permissions .row .actions a {
-  font-size: 1.125em;
-  padding: .25em .5em .2em .5em;
-  border: 1px solid transparent;
-}
-.permissions .row .actions a:hover {
+.tile:hover {
   border: 1px solid #dddddd;
 }
-.permissions .row.permission-updated {
-  background: #fffae7;
+.tile.alt {
+  background: #eeeeee;
 }
-.dialog {
-  /* message */
-}
-.dialog .message.empty-permission {
-  font-size: 0.875em;
-  padding-left: 1em;
-}
-/* hide icons if there is no space */
-@media all and (max-width: 480px) {
-  .dialog .permissions.scroll {
-    height: auto;
-    margin: 0;
-  }
-  .dialog .permissions .row .user,
-  .dialog .permissions .row .group {
-    width: 45%;
-  }
-}
-.dialog .permission-add {
-  background-color: #ffffff;
-  padding: 0 1em 1em 1em;
-  /*
-     * For IE 6/7 only
-     * Include this rule to trigger hasLayout and contain floats.
-     */
-  /*
-     * Clearfix: contain floats
-     *
-     * For modern browsers
-     * 1. The space content is one way to avoid an Opera bug when the
-     *	`contenteditable` attribute is included anywhere else in the document.
-     *	Otherwise it causes space to appear at the top and bottom of elements
-     *	that receive the `clearfix` class.
-     * 2. The use of `table` rather than `block` is only necessary if using
-     *	`:before` to contain the top-margins of child elements.
-     */
-  /*
-     * For IE 6/7 only
-     * Include this rule to trigger hasLayout and contain floats.
-     */
-  zoom: 1;
-  /*
-     * Clearfix: contain floats
-     *
-     * For modern browsers
-     * 1. The space content is one way to avoid an Opera bug when the
-     *	`contenteditable` attribute is included anywhere else in the document.
-     *	Otherwise it causes space to appear at the top and bottom of elements
-     *	that receive the `clearfix` class.
-     * 2. The use of `table` rather than `block` is only necessary if using
-     *	`:before` to contain the top-margins of child elements.
-     */
-}
-.dialog .permission-add:before,
-.dialog .permission-add:after {
-  content: "";
-  display: table;
-}
-.dialog .permission-add:after {
-  clear: both;
-}
-.dialog .permission-add:before,
-.dialog .permission-add:after {
-  content: "";
-  display: table;
-}
-.dialog .permission-add:after {
-  clear: both;
-}
-.dialog .permission-add #passbolt-password-share-autocomplete-wrapper {
-  position: relative;
-  width: 100%;
-}
-.dialog .permission-edit {
-  padding: 0em;
-  border-bottom: 1px solid #f3f3f3;
-}
-.accordion .accordion-header {
-  /*
-     * For IE 6/7 only
-     * Include this rule to trigger hasLayout and contain floats.
-     */
-  /*
-     * Clearfix: contain floats
-     *
-     * For modern browsers
-     * 1. The space content is one way to avoid an Opera bug when the
-     *	`contenteditable` attribute is included anywhere else in the document.
-     *	Otherwise it causes space to appear at the top and bottom of elements
-     *	that receive the `clearfix` class.
-     * 2. The use of `table` rather than `block` is only necessary if using
-     *	`:before` to contain the top-margins of child elements.
-     */
-  /*
-     * For IE 6/7 only
-     * Include this rule to trigger hasLayout and contain floats.
-     */
-  zoom: 1;
-  /*
-     * Clearfix: contain floats
-     *
-     * For modern browsers
-     * 1. The space content is one way to avoid an Opera bug when the
-     *	`contenteditable` attribute is included anywhere else in the document.
-     *	Otherwise it causes space to appear at the top and bottom of elements
-     *	that receive the `clearfix` class.
-     * 2. The use of `table` rather than `block` is only necessary if using
-     *	`:before` to contain the top-margins of child elements.
-     */
-}
-.accordion .accordion-header:before,
-.accordion .accordion-header:after {
-  content: "";
-  display: table;
-}
-.accordion .accordion-header:after {
-  clear: both;
-}
-.accordion .accordion-header:before,
-.accordion .accordion-header:after {
-  content: "";
-  display: table;
-}
-.accordion .accordion-header:after {
-  clear: both;
-}
-.accordion .accordion-header a {
-  color: #333333;
-  display: block;
-}
-.accordion .accordion-header a:hover {
-  color: #000000;
-}
-.accordion .accordion-content {
-  /*
-     * For IE 6/7 only
-     * Include this rule to trigger hasLayout and contain floats.
-     */
-  /*
-     * Clearfix: contain floats
-     *
-     * For modern browsers
-     * 1. The space content is one way to avoid an Opera bug when the
-     *	`contenteditable` attribute is included anywhere else in the document.
-     *	Otherwise it causes space to appear at the top and bottom of elements
-     *	that receive the `clearfix` class.
-     * 2. The use of `table` rather than `block` is only necessary if using
-     *	`:before` to contain the top-margins of child elements.
-     */
-  /*
-     * For IE 6/7 only
-     * Include this rule to trigger hasLayout and contain floats.
-     */
-  zoom: 1;
-  /*
-     * Clearfix: contain floats
-     *
-     * For modern browsers
-     * 1. The space content is one way to avoid an Opera bug when the
-     *	`contenteditable` attribute is included anywhere else in the document.
-     *	Otherwise it causes space to appear at the top and bottom of elements
-     *	that receive the `clearfix` class.
-     * 2. The use of `table` rather than `block` is only necessary if using
-     *	`:before` to contain the top-margins of child elements.
-     */
-}
-.accordion .accordion-content:before,
-.accordion .accordion-content:after {
-  content: "";
-  display: table;
-}
-.accordion .accordion-content:after {
-  clear: both;
-}
-.accordion .accordion-content:before,
-.accordion .accordion-content:after {
-  content: "";
-  display: table;
-}
-.accordion .accordion-content:after {
-  clear: both;
-}
-.accordion.closed .accordion-content {
-  display: none;
-}
-.accordion.sidebar-section .accordion-header a {
-  border: 0;
-}
-.accordion.sidebar-section .accordion-header a:after {
-  position: absolute;
-  right: 1.5em;
-  margin-top: .25em;
-  content: "\f0d7";
-  /* caret down */
-  font: normal normal normal 1em FontAwesome;
-  text-rendering: auto;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  width: 1em;
-  height: 1em;
-  text-align: center;
-  z-index: 400;
+.tile .tile-teaser {
+  font-size: 3em;
+  float: left;
+  width: 30%;
+  padding-top: .25em;
   color: #888888;
 }
-.accordion.sidebar-section .accordion-header a:hover:after {
-  color: #333333;
-}
-.accordion.sidebar-section.closed .accordion-header a:after {
-  content: "\f0da";
-  /* caret right */
-}
-.accordion.navigation .accordion-header .main-cell a:before {
-  margin-left: -1.25em;
-  margin-top: .25em;
-  content: "\f0d7";
-  /* caret down */
-  font: normal normal normal 1em FontAwesome;
-  text-rendering: auto;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  width: 1em;
-  height: 1em;
-  position: absolute;
-  text-align: center;
-}
-.accordion.navigation.closed .accordion-header .main-cell a:before {
-  content: "\f0da";
-  /* caret right */
-}
-.input-password-wrapper {
-  overflow: hidden;
-}
-.input-password-wrapper .message.error {
-  display: block;
-  clear: both;
-  width: 92%;
-  padding-bottom: .5em;
-  font-size: .813em;
-}
-/* password share tab */
-.dialog .share-tab {
-  /* message */
-}
-.dialog .share-tab .message {
-  font-size: 0.875em;
-  padding-left: 1em;
-}
-.dialog .organize-tab .current-folder {
-  background: #f3f3f3;
-  padding: .5em 1em;
-}
-.dialog .organize-tab .current-folder .folder-name {
+.tile .tile-title {
+  float: right;
   font-weight: bold;
-}
-.dialog .organize-tab .tree {
-  height: 20.125em;
-  border: 1px solid #dddddd;
-}
-.dialog .organize-tab .selected {
-  background: #f3f3f3;
-}
-.dialog .organize-tab .selected {
-  background: #f3f3f3;
-}
-.folder-add .input.text {
-  width: 25em;
-}
-.dialog-wrapper.session-expired-dialog {
-  z-index: 994;
-}
-.dialog-wrapper.session-expired-dialog .dialog-close {
-  display: none;
-}
-.dialog .group .permission-edit {
-  border-top: 1px solid #f3f3f3;
-}
-.edit-group-dialog .group_edit_form .form-content {
-  padding-bottom: 0;
-}
-.edit-group-dialog .group_edit_form .form-content .input.text input[type="text"] {
-  width: 95%;
-}
-.edit-group-dialog .group_edit_form .form-content .input.text .message {
-  padding-left: 0;
-}
-.edit-group-dialog .group_members {
-  margin-top: -0.5em;
-}
-.edit-group-dialog .group_members .message.warning.feedback {
-  margin-top: 0px;
-}
-.edit-group-dialog .group_members .message.warning.feedback span {
-  display: block;
-}
-.edit-group-dialog .group_members ul.permissions {
-  display: block;
-}
-.edit-group-dialog .group_members.empty ul.permissions {
-  display: none;
-}
-/* sidebar / user details in overview */
-.panel.aside .user .sidebar-header,
-.panel.aside .group .sidebar-header {
-  /*
-     * For IE 6/7 only
-     * Include this rule to trigger hasLayout and contain floats.
-     */
-  /*
-     * Clearfix: contain floats
-     *
-     * For modern browsers
-     * 1. The space content is one way to avoid an Opera bug when the
-     *	`contenteditable` attribute is included anywhere else in the document.
-     *	Otherwise it causes space to appear at the top and bottom of elements
-     *	that receive the `clearfix` class.
-     * 2. The use of `table` rather than `block` is only necessary if using
-     *	`:before` to contain the top-margins of child elements.
-     */
-  /*
-     * For IE 6/7 only
-     * Include this rule to trigger hasLayout and contain floats.
-     */
-  zoom: 1;
-  /*
-     * Clearfix: contain floats
-     *
-     * For modern browsers
-     * 1. The space content is one way to avoid an Opera bug when the
-     *	`contenteditable` attribute is included anywhere else in the document.
-     *	Otherwise it causes space to appear at the top and bottom of elements
-     *	that receive the `clearfix` class.
-     * 2. The use of `table` rather than `block` is only necessary if using
-     *	`:before` to contain the top-margins of child elements.
-     */
-}
-.panel.aside .user .sidebar-header:before,
-.panel.aside .group .sidebar-header:before,
-.panel.aside .user .sidebar-header:after,
-.panel.aside .group .sidebar-header:after {
-  content: "";
-  display: table;
-}
-.panel.aside .user .sidebar-header:after,
-.panel.aside .group .sidebar-header:after {
-  clear: both;
-}
-.panel.aside .user .sidebar-header:before,
-.panel.aside .group .sidebar-header:before,
-.panel.aside .user .sidebar-header:after,
-.panel.aside .group .sidebar-header:after {
-  content: "";
-  display: table;
-}
-.panel.aside .user .sidebar-header:after,
-.panel.aside .group .sidebar-header:after {
-  clear: both;
-}
-.panel.aside .user .sidebar-header img,
-.panel.aside .group .sidebar-header img {
-  margin: 1em 0 1em 1em;
-  float: left;
-  width: 55px;
-  height: 55px;
-  border: 1px solid #dddddd;
-}
-.panel.aside .user .sidebar-header h3,
-.panel.aside .group .sidebar-header h3 {
-  float: left;
-  width: 67%;
-  margin-top: 1em;
-  padding: 0 0 0 1em;
-  display: table-cell;
-  vertical-align: middle;
-  border: 0;
-}
-.panel.aside .user .sidebar-header h3 .name,
-.panel.aside .group .sidebar-header h3 .name {
-  font-size: 1.2em;
-  display: block;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  -o-text-overflow: ellipsis;
-  -ms-text-overflow: ellipsis;
-}
-.panel.aside .user .sidebar-header h3 .type,
-.panel.aside .group .sidebar-header h3 .type,
-.panel.aside .user .sidebar-header h3 .username,
-.panel.aside .group .sidebar-header h3 .username {
-  font-size: 0.8em;
-  color: #969696;
-  font-weight: normal;
-  display: block;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  -o-text-overflow: ellipsis;
-  -ms-text-overflow: ellipsis;
-}
-.panel.aside .user li.key,
-.panel.aside .group li.key {
-  margin-bottom: 0.5em;
-}
-.panel.aside .user li.key a.button.copy-public-key,
-.panel.aside .group li.key a.button.copy-public-key {
-  padding-top: 0.2em;
-  padding-bottom: 0.2em;
-  font-size: 0.75em;
-}
-.panel.aside .user li textarea,
-.panel.aside .group li textarea {
-  width: 100%;
-}
-/* edit group dialog */
-.edit-group-dialog .permission-edit {
-  margin-top: -1em;
-  border-top: 1px solid #f3f3f3;
-}
-/* tabel view adjustments for avatar */
-.page.people .tableview-header th.cell_avatar {
-  width: 45px;
-}
-.page.people .tableview-content td.cell_avatar {
-  margin: 0;
-  text-align: left;
-  width: 45px;
-}
-.page.people .tableview-content td.cell_avatar img {
-  width: 25px !important;
-  height: 25px !important;
-}
-/* login history icon column centerign */
-.login-history td:first-child {
-  text-align: center;
-}
-/*
- * Password workspace
- */
-/* sidebar */
-.panel.aside .resource .detailed-information li.password .value {
-  height: 1.6em;
-  padding-top: 0.2em;
-}
-/* unused columns */
-.js_grid_column_owner,
-.js_grid_column_copyLogin,
-.js_grid_column_copySecret {
-  display: none;
-}
-/* hide left column when there is no space */
-@media all and (max-width: 1024px) {
-  .tableview .js_grid_column_modified {
-    display: none;
-  }
-}
-/* Define state where there are no passwords, and the filter all items */
-.page.password .tableview.all_items.empty .tableview-header {
-  /* No tableview-header */
-  display: none;
-}
-.page.password .tableview.all_items.empty .tableview-content {
-  background: transparent url('../img/illustrations/nest.png') center 75% no-repeat;
-  background-size: 80%;
-  /* No tableview-header */
-  border: 0;
-  top: 0;
-  /* Tablet version */
-  /* Normal screen version */
-}
-@media all and (min-width: 780px) {
-  .page.password .tableview.all_items.empty .tableview-content {
-    background-position: center 60%;
-    background-size: 50%;
-  }
-}
-@media all and (min-width: 1024px) {
-  .page.password .tableview.all_items.empty .tableview-content {
-    background-position: center 70%;
-    background-size: 40%;
-  }
-}
-.page.password .tableview.all_items.empty .empty-content {
-  text-align: center;
-  margin: 3em 0.5em 0.67em 0.5em;
-}
-.page.password .tableview.all_items.empty .empty-content h1 {
-  font-size: 1.5em;
-}
-.page.password .tableview.all_items.empty .empty-content p {
-  font-size: 1em;
-  line-height: 1.5em;
-}
-@media all and (min-width: 780px) {
-  .page.password .tableview.all_items.empty .empty-content h1 {
-    font-size: 2.2em;
-  }
-  .page.password .tableview.all_items.empty .empty-content p {
-    font-size: 1.2em;
-    line-height: 1.8em;
-  }
-}
-/* TODO replace by page level selector */
-.page.settings .main.panel .middle {
-  overflow-y: auto;
-}
-.page.settings .profile-detailed-information {
-  /*
-     * For IE 6/7 only
-     * Include this rule to trigger hasLayout and contain floats.
-     */
-  /*
-     * Clearfix: contain floats
-     *
-     * For modern browsers
-     * 1. The space content is one way to avoid an Opera bug when the
-     *	`contenteditable` attribute is included anywhere else in the document.
-     *	Otherwise it causes space to appear at the top and bottom of elements
-     *	that receive the `clearfix` class.
-     * 2. The use of `table` rather than `block` is only necessary if using
-     *	`:before` to contain the top-margins of child elements.
-     */
-  /*
-     * For IE 6/7 only
-     * Include this rule to trigger hasLayout and contain floats.
-     */
-  zoom: 1;
-  /*
-     * Clearfix: contain floats
-     *
-     * For modern browsers
-     * 1. The space content is one way to avoid an Opera bug when the
-     *	`contenteditable` attribute is included anywhere else in the document.
-     *	Otherwise it causes space to appear at the top and bottom of elements
-     *	that receive the `clearfix` class.
-     * 2. The use of `table` rather than `block` is only necessary if using
-     *	`:before` to contain the top-margins of child elements.
-     */
-}
-.page.settings .profile-detailed-information:before,
-.page.settings .profile-detailed-information:after {
-  content: "";
-  display: table;
-}
-.page.settings .profile-detailed-information:after {
-  clear: both;
-}
-.page.settings .profile-detailed-information:before,
-.page.settings .profile-detailed-information:after {
-  content: "";
-  display: table;
-}
-.page.settings .profile-detailed-information:after {
-  clear: both;
-}
-.page.settings .profile-detailed-information .avatar {
-  float: left;
-}
-.page.settings .profile-detailed-information .avatar img {
-  border: 1px solid #dddddd;
-  padding: 0;
-  width: 12.5em;
-  height: 12.5em;
-  margin: .5em 1em 0 0;
-}
-.page.settings .profile-detailed-information .avatar .edit {
-  width: 12.5em;
-  height: 3.125em;
-  background: transparent url('../img/controls/overlay-opacity-50.png') repeat;
-  border: 1px solid transparent;
-  color: #ffffff;
-  margin: -3.25em 0 2em 0;
-  position: relative;
-}
-.page.settings .profile-detailed-information .avatar .edit a {
-  color: #ffffff;
-  display: block;
-  height: 3.125em;
-  /*
-     * For IE 6/7 only
-     * Include this rule to trigger hasLayout and contain floats.
-     */
-  /*
-     * Clearfix: contain floats
-     *
-     * For modern browsers
-     * 1. The space content is one way to avoid an Opera bug when the
-     *	`contenteditable` attribute is included anywhere else in the document.
-     *	Otherwise it causes space to appear at the top and bottom of elements
-     *	that receive the `clearfix` class.
-     * 2. The use of `table` rather than `block` is only necessary if using
-     *	`:before` to contain the top-margins of child elements.
-     */
-  /*
-     * For IE 6/7 only
-     * Include this rule to trigger hasLayout and contain floats.
-     */
-  zoom: 1;
-  /*
-     * Clearfix: contain floats
-     *
-     * For modern browsers
-     * 1. The space content is one way to avoid an Opera bug when the
-     *	`contenteditable` attribute is included anywhere else in the document.
-     *	Otherwise it causes space to appear at the top and bottom of elements
-     *	that receive the `clearfix` class.
-     * 2. The use of `table` rather than `block` is only necessary if using
-     *	`:before` to contain the top-margins of child elements.
-     */
-}
-.page.settings .profile-detailed-information .avatar .edit a:before,
-.page.settings .profile-detailed-information .avatar .edit a:after {
-  content: "";
-  display: table;
-}
-.page.settings .profile-detailed-information .avatar .edit a:after {
-  clear: both;
-}
-.page.settings .profile-detailed-information .avatar .edit a:before,
-.page.settings .profile-detailed-information .avatar .edit a:after {
-  content: "";
-  display: table;
-}
-.page.settings .profile-detailed-information .avatar .edit a:after {
-  clear: both;
-}
-.page.settings .profile-detailed-information .avatar .edit a i.fa {
-  display: block;
-  float: left;
-}
-.page.settings .profile-detailed-information .avatar .edit a i.fa:before {
-  display: block;
-  float: left;
-  width: 1em;
-  height: 1em;
-  line-height: 1.4em;
-  font-size: 1.5em;
-  text-align: center;
-  padding: .25em .5em;
-}
-.page.settings .profile-detailed-information .avatar .edit a .help-text {
-  display: block;
-  font-size: 0.813em;
-  /* 13/16px */
-  width: 10em;
-  /* 130/13 */
-  float: left;
+  padding: 1em 0 .5em 0;
   margin-left: 0;
-  padding: 0.5em 0.5em 0 0.5em;
+  width: 70%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -o-text-overflow: ellipsis;
+  -ms-text-overflow: ellipsis;
 }
-.page.settings .key-export .actions {
-  margin: 1em 0;
+.tile .tile-description {
+  float: right;
+  width: 70%;
 }
-.page.settings .key-export .input.textarea.gpgkey textarea.fluid.code {
-  height: 27em;
+.card {
+  /*
+     * For IE 6/7 only
+     * Include this rule to trigger hasLayout and contain floats.
+     */
+  /*
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
+  /*
+     * For IE 6/7 only
+     * Include this rule to trigger hasLayout and contain floats.
+     */
+  zoom: 1;
+  /*
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
+  margin-bottom: 1.25em;
+  padding: .5em;
+  border: 1px solid #f3f3f3;
 }
-/* hide icons if there is no space */
-@media all and (max-width: 950px) {
-  .page.settings .profile-detailed-information .avatar {
-    float: none;
-  }
+.card:before,
+.card:after {
+  content: "";
+  display: table;
 }
-/* table info is hard to fit because of fingerprint */
-@media (max-width: 1280px) {
-  .key-info .table-info {
-    font-size: 0.875em;
-  }
-  .key-info .table-info .select select {
-    font-size: 0.929em;
-  }
+.card:after {
+  clear: both;
 }
-html.launching .launching-screen {
-  display: block;
+.card:before,
+.card:after {
+  content: "";
+  display: table;
+}
+.card:after {
+  clear: both;
+}
+.card.backlog,
+.card.progress,
+.card.completed {
+  border-bottom-left-radius: 5px;
+  border-top-left-radius: 5px;
+}
+.card.backlog {
+  border-left: 5px solid #d40101;
+  border-bottom-left-radius: 5px;
+  border-top-left-radius: 5px;
+}
+.card.progress {
+  border-left: 5px solid #ffbd2e;
+}
+.card.completed {
+  border-left: 5px solid #009900;
+}
+.card .content-wrapper {
+  float: left;
   width: 100%;
-  height: 100%;
-  position: absolute;
-  z-index: 999;
-  background: #ffffff;
 }
-html.launching .launching-screen .launching-screen-holder {
-  width: 20%;
-  margin: auto;
-  margin-top: 7em;
+.card .content-wrapper .content {
+  margin-left: 90px;
+  padding: .5em;
 }
-html.launching .launching-screen p {
-  margin: 1em 0;
-  font-size: .75em;
+.card .content-wrapper .content .title {
+  font-weight: bold;
+  padding-bottom: .25em;
 }
-.launching-screen {
-  display: none;
+.card .content-wrapper .content .description {
+  font-size: .875em;
+}
+.card .content-wrapper .content .eta {
+  padding-top: .25em;
+  color: #969696;
+  font-size: .875em;
+}
+.card .teaser {
+  float: left;
+  width: 90px;
+  margin-left: -100%;
+}
+.card .teaser i {
+  width: 70px;
+  height: 70px;
+  display: block;
+  margin: .5em;
+  border: 1px solid #f3f3f3;
+  background: #dddddd;
+  border-radius: 50%;
+}
+.card .teaser i.passbolt {
+  background: transparent url('../img/logo/icon-90.jpg') center center no-repeat;
+  background-size: 60px auto;
+}
+.card .teaser i.accessibility {
+  background: transparent url('../img/papericon/accessibility_90.png') center center no-repeat;
+  background-size: 50px auto;
+}
+.card .teaser i.check {
+  background: transparent url('../img/papericon/check_90.png') center center no-repeat;
+  background-size: 40px auto;
+}
+.card .teaser i.comment {
+  background: transparent url('../img/papericon/comment_90.png') center center no-repeat;
+  background-size: 40px auto;
+}
+.card .teaser i.email {
+  background: transparent url('../img/papericon/email_90.png') center center no-repeat;
+  background-size: 40px auto;
+}
+.card .teaser i.fingerprint {
+  background: transparent url('../img/papericon/fingerprint_90.png') center center no-repeat;
+  background-size: 50px auto;
+}
+.card .teaser i.folder {
+  background: transparent url('../img/papericon/folder_90.png') center center no-repeat;
+  background-size: 40px auto;
+}
+.card .teaser i.groups {
+  background: transparent url('../img/papericon/groups_90.png') center center no-repeat;
+  background-size: 50px auto;
+}
+.card .teaser i.help {
+  background: transparent url('../img/papericon/help_90.png') center center no-repeat;
+  background-size: 50px auto;
+}
+.card .teaser i.i18n {
+  background: transparent url('../img/papericon/i18n_90.png') center center no-repeat;
+  background-size: 50px auto;
+}
+.card .teaser i.keyring {
+  background: transparent url('../img/papericon/keyring_90.png') center center no-repeat;
+  background-size: 45px auto;
+}
+.card .teaser i.ldap {
+  background: transparent url('../img/papericon/ldap_90.png') center center no-repeat;
+  background-size: 50px auto;
+}
+.card .teaser i.lock {
+  background: transparent url('../img/papericon/lock_90.png') center center no-repeat;
+  background-size: 50px auto;
+}
+.card .teaser i.lock2 {
+  background: transparent url('../img/papericon/lock2_90.png') center center no-repeat;
+  background-size: 60px auto;
+}
+.card .teaser i.monitor {
+  background: transparent url('../img/papericon/monitor_90.png') center center no-repeat;
+  background-size: 50px auto;
+}
+.card .teaser i.notification {
+  background: transparent url('../img/papericon/notification_90.png') center center no-repeat;
+  background-size: 50px auto;
+}
+.card .teaser i.search {
+  background: transparent url('../img/papericon/search_90.png') center center no-repeat;
+  background-size: 50px auto;
+}
+.card .teaser i.security {
+  background: transparent url('../img/papericon/security_90.png') center center no-repeat;
+  background-size: 50px auto;
+}
+.card .teaser i.share {
+  background: transparent url('../img/papericon/share_90.png') center center no-repeat;
+  background-size: 50px auto;
+}
+.card .teaser i.star {
+  background: transparent url('../img/papericon/star_90.png') center center no-repeat;
+  background-size: 40px auto;
+}
+.card .teaser i.sync {
+  background: transparent url('../img/papericon/sync_90.png') center center no-repeat;
+  background-size: 50px auto;
+}
+.card .teaser i.terminal {
+  background: transparent url('../img/papericon/terminal_90.png') center center no-repeat;
+  background-size: 50px auto;
+}
+.card .teaser i.android {
+  background: transparent url('../img/third_party/android_90.png') center center no-repeat;
+  background-size: 60px auto;
+}
+.card .teaser i.chrome {
+  background: transparent url('../img/third_party/chrome_90.jpg') center center no-repeat;
+  background-size: 50px auto;
+}
+.card .teaser i.docker {
+  background: transparent url('../img/third_party/docker_90.png') center center no-repeat;
+  background-size: 50px auto;
+}
+.card .teaser i.firefox {
+  background: transparent url('../img/third_party/firefox_90.jpg') center center no-repeat;
+  background-size: 50px auto;
+}
+.card .teaser i.keypassx {
+  background: transparent url('../img/third_party/keypassx_90.jpg') center center no-repeat;
+  background-size: 50px auto;
+}
+.card .teaser i.jenkins {
+  background: transparent url('../img/third_party/jenkins_90.png') center center no-repeat;
+  background-size: 50px auto;
+}
+.card .teaser i.swagger {
+  background: transparent url('../img/third_party/swagger_90.png') center center no-repeat;
+  background-size: 60px auto;
+}
+.faq ul.list {
+  margin: 0;
+  padding: 0;
+}
+.faq ul.list li {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+.faq ul.list ul li {
+  margin-left: 1.1em;
+  padding-left: .5em;
+  margin-bottom: .5em;
+  list-style-type: circle;
+}
+/* reset layout styles on smaller screen */
+@media all and (max-width: 1024px) {
+  .header.second .col2.search-wrapper {
+    min-height: 4em;
+    width: 95%;
+  }
+  .header.second .col2.search-wrapper input[type=search] {
+    width: 70%;
+  }
 }
 /* Special error page treatment for larger screen */
 @media all and (min-width: 460px) {
@@ -7464,4 +5687,37 @@ html.launching .launching-screen p {
     background: transparent url('../img/illustrations/birds3_850.png') center 3em no-repeat;
     background-size: 640px auto;
   }
+}
+.page.search .search-results h2 {
+  margin-bottom: .25em;
+  font-size: 1.125em;
+}
+.page.search .search-results a {
+  color: #2894df;
+  border: 0;
+}
+.page.search .search-results a:hover {
+  border-bottom: 1px solid #2894df;
+}
+.page.search .search-results a:visited {
+  color: purple;
+}
+.page.search .search-results a:hover:visited {
+  border-bottom: 1px solid purple;
+}
+.page.search .search-results a.url {
+  color: #009900;
+  font-size: 0.938em;
+}
+.page.search .search-results a.url:hover {
+  border: 0;
+}
+.page.search .search-results p {
+  font-size: 0.938em;
+}
+.page.search .no-result .suggestions li {
+  margin-left: 1.1em;
+  padding-left: .5em;
+  margin-bottom: .5em;
+  list-style-type: circle;
 }
