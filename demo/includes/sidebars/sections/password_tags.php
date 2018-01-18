@@ -1,4 +1,4 @@
-<?php include(dirname(__DIR__) . '../../fixtures/tags.php'); ?>
+<?php include(dirname(__DIR__) . '/../../fixtures/tags.php'); ?>
 <!-- Tags management -->
 <div id="js_rs_details_tags" class="clearfix accordion open sidebar-section">
     <div class="accordion-header">
