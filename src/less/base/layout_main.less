@@ -54,6 +54,10 @@
     bottom: 2.45em;
     height: auto;
     padding: 0;
+
+    .row {
+        padding-left:0;
+    }
 }
 
 /* its position depends on how many headers are there */
@@ -117,6 +121,10 @@
         display: none;
     }
 
+    .header.second {
+        height: 4.5em;
+    }
+
     .panel.middle,
     .col2_3 {
         width: 99%;
@@ -126,6 +134,12 @@
     .col2 {
         width: 80%;
         left: 1%;
+    }
+
+    .panel.main {
+        .row {
+            padding-left:.5em;
+        }
     }
 }
 

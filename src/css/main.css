@@ -3688,6 +3688,9 @@ input[type=text].fluid {
   height: auto;
   padding: 0;
 }
+.panel.main .row {
+  padding-left: 0;
+}
 /* its position depends on how many headers are there */
 .header.second + .panel.main {
   top: 6.875em;
@@ -3741,6 +3744,9 @@ input[type=text].fluid {
   .panel.left {
     display: none;
   }
+  .header.second {
+    height: 4.5em;
+  }
   .panel.middle,
   .col2_3 {
     width: 99%;
@@ -3749,6 +3755,9 @@ input[type=text].fluid {
   .col2 {
     width: 80%;
     left: 1%;
+  }
+  .panel.main .row {
+    padding-left: .5em;
   }
 }
 /*

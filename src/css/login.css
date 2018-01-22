@@ -3608,7 +3608,6 @@ html body .button.processing {
   .col2_3 {
     position: relative;
     width: auto;
-    height: auto;
     display: block;
     margin: 0;
     top: auto;
@@ -3616,8 +3615,7 @@ html body .button.processing {
   }
   .header.second {
     text-align: center;
-    margin-bottom: 2em;
-    height: auto;
+    margin-bottom: 2.5em;
   }
   .header.second h2 {
     max-width: 98%;

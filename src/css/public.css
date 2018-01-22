@@ -3713,6 +3713,9 @@ input[type=text].fluid {
   height: auto;
   padding: 0;
 }
+.panel.main .row {
+  padding-left: 0;
+}
 /* its position depends on how many headers are there */
 .header.second + .panel.main {
   top: 6.875em;
@@ -3766,6 +3769,9 @@ input[type=text].fluid {
   .panel.left {
     display: none;
   }
+  .header.second {
+    height: 4.5em;
+  }
   .panel.middle,
   .col2_3 {
     width: 99%;
@@ -3774,6 +3780,9 @@ input[type=text].fluid {
   .col2 {
     width: 80%;
     left: 1%;
+  }
+  .panel.main .row {
+    padding-left: .5em;
   }
 }
 /*
@@ -4210,7 +4219,6 @@ input[type=text].fluid {
   .col2_3 {
     position: relative;
     width: auto;
-    height: auto;
     display: block;
     margin: 0;
     top: auto;
@@ -4218,8 +4226,7 @@ input[type=text].fluid {
   }
   .header.second {
     text-align: center;
-    margin-bottom: 2em;
-    height: auto;
+    margin-bottom: 2.5em;
   }
   .header.second h2 {
     max-width: 98%;
@@ -5293,7 +5300,8 @@ article figure .legend {
 /* reset layout styles on smaller screen */
 @media all and (min-width: 1024px) {
   .tldr {
-    margin-top: 3em;
+    margin-top: 1em;
+    margin-bottom: 3em;
     max-width: 20em;
   }
 }
@@ -6268,16 +6276,6 @@ button.swiper-pagination-bullet {
   padding-left: .5em;
   margin-bottom: .5em;
   list-style-type: circle;
-}
-/* reset layout styles on smaller screen */
-@media all and (max-width: 1024px) {
-  .header.second .col2.search-wrapper {
-    min-height: 4em;
-    width: 95%;
-  }
-  .header.second .col2.search-wrapper input[type=search] {
-    width: 70%;
-  }
 }
 /* credit photo album */
 .tldr.sponsors img {
