@@ -4,112 +4,108 @@
 .page.register,
 .page.recover,
 .page.login {
-	.grid .row h2 {
-		font-size:2em;
-		margin-top:1em;
-	}
+    .grid .row h2 {
+        font-size: 2em;
+        margin-top: 1em;
+    }
 
-	.logo {
-		background: transparent url('@{images}/logo/logo.png') 0 10px no-repeat;
-		width: 250px;
-		height: 50px;
-		margin-top:1em;
+    .logo {
+        background: transparent url('@{images}/logo/logo.png') 0 10px no-repeat;
+        width: 250px;
+        height: 50px;
+        margin-top: 1em;
 
-		span {
-			display:none;
-		}
-	}
+        span {
+            display: none;
+        }
+    }
 
-	.form {
-		background: @background-lightest;
-		padding: 4% 5% 6% 5%;
-		margin-top: 1%;
+    .form {
+        background: @background-lightest;
+        padding: 4% 5% 6% 5%;
+        margin-top: 1%;
 
-		// form styles used by register, login form is in an iframe controlled by main_webext
-		form {
-		  input[type=text], input[type=password] {
-				width:90%;
-		  }
-		}
-		fieldset {
-			margin: 0;
-			border: 0;
-		}
-		legend {
-			display: none;
-		}
-		.actions-wrapper .secondary {
-			margin-left:1em;
-		}
-		.submit {
-			margin-left:2%;
-			input {
-				padding:.7em 1.5em;
-			}
-		}
-		.actions-wrapper.center {
-			text-align:center;
-		}
-	}
+        // form styles used by register, login form is in an iframe controlled by main_webext
+        form {
+            input[type=text], input[type=password] {
+                width: 90%;
+            }
+        }
+        fieldset {
+            margin: 0;
+            border: 0;
+        }
+        legend {
+            display: none;
+        }
+        .actions-wrapper .secondary {
+            margin-left: 1em;
+        }
+        .submit {
+            margin-left: 2%;
+            input {
+                padding: .7em 1.5em;
+            }
+        }
+        .actions-wrapper.center {
+            text-align: center;
+        }
+    }
 
-	.chrome-plugin-block p img {
-		margin-top:.8em;
-		width: 160px;
-	}
-	.firefox-plugin-block p img {
-		margin-top:.8em;
-		width: 120px;
-	}
+    .chrome-plugin-block p img {
+        margin-top: .8em;
+        width: 160px;
+    }
+    .firefox-plugin-block p img {
+        margin-top: .8em;
+        width: 120px;
+    }
 
-	.message-wrapper,
-	.plugin-check-wrapper {
-		margin-bottom:1em;
-	}
-	.information p {
-		font-size: 1.25em;
-		margin-bottom: 1em;
+    .message-wrapper,
+    .plugin-check-wrapper {
+        margin-bottom: 1em;
+    }
+    .information p {
+        font-size: 1.25em;
+        margin-bottom: 1em;
 
-		&.message {
-			font-size: 1.125em;
-			margin-bottom: .425em;
-		}
-	}
+        &.message {
+            font-size: 1.125em;
+            margin-bottom: .425em;
+        }
+    }
 
-	.row + .row {
-		padding-top:.5em;
-		padding-bottom:2.5em;
-	}
+    .row + .row {
+        padding-top: .5em;
+        padding-bottom: 2.5em;
+    }
 
-	.feedback {
-		.fa.huge {
-			font-size:144px;
-			color:@font-lightest;
-			text-align:center;
-			padding:0;
-		  	margin:0;
-		  	margin-top:16px;
-			display:block;
-		}
-		p {
-			text-align: center;
-			width:100%;
-			font-size: 1.250em;
-		  	font-weight:bold;
-		}
-	}
+    .feedback {
+        .fa.huge {
+            font-size: 144px;
+            color: @font-lightest;
+            text-align: center;
+            padding: 0;
+            margin: 0;
+            margin-top: 16px;
+            display: block;
+        }
+        p {
+            text-align: center;
+            width: 100%;
+            font-size: 1.250em;
+            font-weight: bold;
+        }
+    }
 }
 
 /* CSS for serving the retina image to devices with a high "device-pixel-ratio": */
-@media only screen and (-moz-min-device-pixel-ratio: 1.5),
-	only screen and (-o-min-device-pixel-ratio: 3/2),
-	only screen and (-webkit-min-device-pixel-ratio: 1.5),
-	only screen and (min-devicepixel-ratio: 1.5),
-	only screen and (min-resolution: 1.5dppx) {
-	.page.register .logo,
-	.page.login .logo {
-		background: transparent url('@{images}/logo/logo@2x.png') 0 10px no-repeat;
-		background-size: 187px 36px;
-	}
+@media only screen and (-moz-min-device-pixel-ratio: 1.5), only screen and (-o-min-device-pixel-ratio: 3/2), only screen and (-webkit-min-device-pixel-ratio: 1.5), only screen and (min-devicepixel-ratio: 1.5), only screen and (min-resolution: 1.5dppx) {
+    .page.register .logo,
+    .page.login .logo {
+        background: transparent url('@{images}/logo/logo@2x.png') 0 10px no-repeat;
+        background-size: 187px 36px;
+    }
 }
 
 .page.login {

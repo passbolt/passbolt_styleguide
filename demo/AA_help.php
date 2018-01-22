@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="shortcut icon" type="image/x-icon" href="img/webroot/favicon.ico" />
     <link rel="stylesheet" type="text/css" href="../src/css/public.css">
-    <script src="../src/js/jquery-2.1.3.min.js"></script>
+    <script src="../src/js/jquery-2.2.4.min.js"></script>
     <script src="../src/js/bootstrap-scrollspy.js"></script>
     <script src="../src/js/list.min.js"></script>
     <script src="../src/js/list.fuzzysearch.min.js"></script>
@@ -22,7 +22,8 @@
     <div class="header second">
         <?php include('includes/AN_logo.php'); ?>
         <div class="col2_3">
-            <h2>Need some help? We got your back!</h2>
+            <h2>Need some help?
+                <a href="https://community.passbolt.com" class="">Ask the community!</a></h2>
         </div>
     </div>
 
@@ -172,14 +173,12 @@
     <?php include('includes/AN_footer.php'); ?>
 </div>
 
-<script>
+<script type="application/javascript">
     $(function() {
         var faqlist = new List('faq-list', {
             valueNames: ['question', 'answer'],
             plugins: [ ListFuzzySearch() ]
         });
-
-
     });
 </script>
 </body>

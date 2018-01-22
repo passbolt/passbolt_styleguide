@@ -1,5 +1,5 @@
 <?php
- include('fixtures/users_tableview.php');
+ include('fixtures/users.php');
 ?>
 <div id="js_wsp_ppl_browser" class="tableview passbolt_controller_component_user_browser_controller passbolt_view_component_user_browser selection">
 	<div class="tableview-header">

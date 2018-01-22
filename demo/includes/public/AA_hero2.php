@@ -16,6 +16,9 @@
 					<a href="../demo/AA_services.php" class="button primary">
 						Get passbolt
 					</a>
+                    <a href="../demo/AN_login.php" >
+                       Or try the demo
+                    </a>
 				</div>
 			</div>
 		</div>

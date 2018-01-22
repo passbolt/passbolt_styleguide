@@ -25,7 +25,7 @@
 			</li>
 		</ul>
 	</div>
-	<script>
+	<script type="application/javascript">
 		// SAMPLE INTERACTION - Not for production
 		$(function() {
 			$('#user_workspace_create_button').click(function(){

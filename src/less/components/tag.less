@@ -1,69 +1,71 @@
 /* tags */
+.tags {
+    .tag {
+        word-wrap: break-word;       /* Internet Explorer 5.5+ */
+        white-space: -webkit-pre-wrap; /* Newer versions of Chrome/Safari*/
+        word-break: break-all;
+        white-space: normal;
+        padding: .125em .5em;
+        float: left;
+        position: relative;
+        margin: 0 .5em .5em 0;
+        text-decoration: none;
+        border-radius: 3px;
+        border: 1px solid @blue;
+        background: @background-default;
+        color: @blue;
 
-.tags .tags-edit-wrapper textarea{
-	height: 2.3em;
-	float: left;
-	font-size: .775em;
-	min-width: 21.5em;
-	border: 1px solid @border-input;
+        &:active,
+        &:hover {
+            background: @blue-light;
+            color: @font-inverse;
+        }
+    }
 }
+.tags-list {
+    .clearfix();
+}
+.tag-editor {
+    margin-bottom:1em;
 
-.tags .tags-edit-wrapper input[type=submit] {
-	float: right;
-	margin: 0;
-	font-size: .700em;
-	width: auto;
-	margin: 0;
-	padding: .300em .6em .300em .6em;
-}
+    .message {
+        font-size:1em;
+        margin-top:.5em;
+    }
+    .tag {
+        padding-right: 0;
+    }
+    .tag-delete {
+        margin-left: .25em;
+        border-left: 1px dotted @blue;
+        padding-left: .5em;
+        padding-right: .5em;
+        font-size: .75em;
+        vertical-align: 10%;
+        cursor: pointer;
+    }
+    .tag:hover:after {
+        border-color: @border-input-light;
+    }
+    .tag-editor-input-wrapper {
+        .clearfix();
+        min-height:5em;
+        padding: .5em;
+        border: 1px solid @border-input;
+        border-top: 1px solid @border-input-light;
 
-.tags .tag {
-	padding:.2em .5em;
-}
-.tags li {
-	float:left;
-}
+        &.input-focus {
+           border-color: @border-focus;
+        }
+    }
 
-/* tag as a link */
-.tags a.tag {
-	float:left;
-	height:1em;
-	line-height:1em;
-	position:relative;
-	padding-left:.8em;
-	margin-left:1em;
-	margin-bottom:.25em;
-	background:@blue-light;
-	color:@font-inverse;
-	text-decoration:none;
-	-moz-border-radius:4px;
-	-webkit-border-radius:4px;
-	border-radius:4px;
-}
-/* left triangle */
-.tags a.tag:before{
-	content:"";
-	float:left;
-	position:absolute;
-	top:0;
-	left:-0.575em;
-	width:0;
-	height:0;
-	border-color:transparent @blue-light transparent transparent;
-	border-style:solid;
-	border-width:.75em .75em .75em 0;
-}
-/* left dot */
-.tags a.tag:after{
-	content:"";
-	position:absolute;
-	top:.55em;
-	left:.1em;
-	float:left;
-	width:5px;
-	height:5px;
-	-moz-border-radius:2px;
-	-webkit-border-radius:2px;
-	border-radius:2px;
-	background:@background-default;
+    .tag-editor-input {
+        min-height:1.5em;
+        padding: .25em .5em .25em .5em;
+        box-shadow: none;
+        min-width: 3em;
+        max-width: 24em;
+        float: left;
+        overflow: hidden;
+    }
 }

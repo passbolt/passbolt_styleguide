@@ -24,7 +24,7 @@
 </div>
 <!-- should go at page bottom -->
 <script src="js/swiper.jquery.min.js"></script>
-<script>
+<script type="application/javascript">
 	$(document).ready(function () {
 		var mySwiper = new Swiper ('.swiper-container', {
 			// Optional parameters

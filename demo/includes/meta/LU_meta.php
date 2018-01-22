@@ -8,7 +8,7 @@
      /_/    \__,_/____/____/_.___/\____/_/\__/
 
      The password management solution
-     (c) 2015 passbolt.com
+	 (c) 2018 Passbolt SARL
 
  -->
 <base href="../src/">
@@ -18,8 +18,8 @@
 <link rel="stylesheet" type="text/css" href="css/main.css">
 <link rel="stylesheet" type="text/css" href="css/devel.css">
 <link rel="stylesheet" type="text/css" href="css/external.css">
-<script src="js/modernizr.js"></script>
-<script src="js/jquery-2.1.3.min.js"></script>
+<script src="js/jquery-2.2.4.min.js"></script>
+<script src="js/jquery.tag-editor.js"></script>
 <script type="application/javascript">
 	var cakephpConfig = {
 		app: {

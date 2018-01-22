@@ -1,182 +1,182 @@
 .card {
-  .clearfix();
-  margin-bottom:1.25em;
-  padding:.5em;
-  border:1px solid @grey-lightest;
+    .clearfix();
+    margin-bottom: 1.25em;
+    padding: .5em;
+    border: 1px solid @grey-lightest;
 
-  &.backlog, &.progress, &.completed {
-    border-bottom-left-radius: 5px;
-    border-top-left-radius: 5px;
-  }
-  &.backlog {
-    border-left: 5px solid @red;
-    border-bottom-left-radius: 5px;
-    border-top-left-radius: 5px;
-  }
-  &.progress {
-    border-left: 5px solid @yellow;
-  }
-  &.completed {
-    border-left: 5px solid @green;
-  }
-
-  .content-wrapper {
-    float: left;
-    width: 100%;
-
-    .content {
-      margin-left: 90px;
-      padding:.5em;
-
-      .title {
-        font-weight: bold;
-        padding-bottom:.25em;
-      }
-      .description {
-        font-size:.875em;
-      }
-      .eta {
-        padding-top:.25em;
-        color:@font-lighter;
-        font-size:.875em;
-      }
+    &.backlog, &.progress, &.completed {
+        border-bottom-left-radius: 5px;
+        border-top-left-radius: 5px;
     }
-  }
-  .teaser {
-    float: left;
-    width: 90px;
-    margin-left: -100%;
-
-    i {
-      width: 70px;
-      height: 70px;
-      display:block;
-      margin:.5em;
-      border:1px solid @grey-lightest;
-      background:@background-light;
-      border-radius: 50%;
-
-      &.passbolt {
-        background: transparent url('@{images}/logo/icon-90.jpg') center center no-repeat;
-        background-size: 60px auto;
-      }
-
-      // Concepts
-      &.accessibility {
-        background: transparent url('@{images}/papericon/accessibility_90.png') center center no-repeat;
-        background-size: 50px auto;
-      }
-      &.check {
-         background: transparent url('@{images}/papericon/check_90.png') center center no-repeat;
-         background-size: 40px auto;
-      }
-      &.comment {
-        background: transparent url('@{images}/papericon/comment_90.png') center center no-repeat;
-        background-size: 40px auto;
-      }
-      &.email {
-        background: transparent url('@{images}/papericon/email_90.png') center center no-repeat;
-        background-size: 40px auto;
-      }
-      &.fingerprint {
-        background: transparent url('@{images}/papericon/fingerprint_90.png') center center no-repeat;
-        background-size: 50px auto;
-      }
-      &.folder {
-        background: transparent url('@{images}/papericon/folder_90.png') center center no-repeat;
-        background-size: 40px auto;
-      }
-      &.groups {
-        background: transparent url('@{images}/papericon/groups_90.png') center center no-repeat;
-        background-size: 50px auto;
-      }
-      &.help {
-        background: transparent url('@{images}/papericon/help_90.png') center center no-repeat;
-        background-size: 50px auto;
-      }
-      &.i18n {
-        background: transparent url('@{images}/papericon/i18n_90.png') center center no-repeat;
-        background-size: 50px auto;
-      }
-      &.keyring {
-        background: transparent url('@{images}/papericon/keyring_90.png') center center no-repeat;
-        background-size: 45px auto;
-      }
-      &.ldap {
-        background: transparent url('@{images}/papericon/ldap_90.png') center center no-repeat;
-        background-size: 50px auto;
-      }
-      &.lock {
-        background: transparent url('@{images}/papericon/lock_90.png') center center no-repeat;
-        background-size: 50px auto;
-      }
-      &.lock2 {
-        background: transparent url('@{images}/papericon/lock2_90.png') center center no-repeat;
-        background-size: 60px auto;
-      }
-      &.monitor {
-        background: transparent url('@{images}/papericon/monitor_90.png') center center no-repeat;
-        background-size: 50px auto;
-      }
-      &.notification {
-        background: transparent url('@{images}/papericon/notification_90.png') center center no-repeat;
-        background-size: 50px auto;
-      }
-      &.search {
-        background: transparent url('@{images}/papericon/search_90.png') center center no-repeat;
-        background-size: 50px auto;
-      }
-      &.security {
-        background: transparent url('@{images}/papericon/security_90.png') center center no-repeat;
-        background-size: 50px auto;
-      }
-      &.share {
-        background: transparent url('@{images}/papericon/share_90.png') center center no-repeat;
-        background-size: 50px auto;
-      }
-      &.star {
-        background: transparent url('@{images}/papericon/star_90.png') center center no-repeat;
-        background-size: 40px auto;
-      }
-      &.sync {
-        background: transparent url('@{images}/papericon/sync_90.png') center center no-repeat;
-        background-size: 50px auto;
-      }
-      &.terminal {
-        background: transparent url('@{images}/papericon/terminal_90.png') center center no-repeat;
-        background-size: 50px auto;
-      }
-
-      // Brands
-      &.android {
-        background: transparent url('@{images}/third_party/android_90.png') center center no-repeat;
-        background-size: 60px auto;
-      }
-      &.chrome {
-        background: transparent url('@{images}/third_party/chrome_90.jpg') center center no-repeat;
-        background-size: 50px auto;
-      }
-      &.docker {
-        background: transparent url('@{images}/third_party/docker_90.png') center center no-repeat;
-        background-size: 50px auto;
-      }
-      &.firefox {
-        background: transparent url('@{images}/third_party/firefox_90.jpg') center center no-repeat;
-        background-size: 50px auto;
-      }
-      &.keypassx {
-        background: transparent url('@{images}/third_party/keypassx_90.jpg') center center no-repeat;
-        background-size: 50px auto;
-      }
-      &.jenkins {
-        background: transparent url('@{images}/third_party/jenkins_90.png') center center no-repeat;
-        background-size: 50px auto;
-      }
-      &.swagger {
-        background: transparent url('@{images}/third_party/swagger_90.png') center center no-repeat;
-        background-size: 60px auto;
-      }
-
+    &.backlog {
+        border-left: 5px solid @red;
+        border-bottom-left-radius: 5px;
+        border-top-left-radius: 5px;
     }
-  }
+    &.progress {
+        border-left: 5px solid @yellow;
+    }
+    &.completed {
+        border-left: 5px solid @green;
+    }
+
+    .content-wrapper {
+        float: left;
+        width: 100%;
+
+        .content {
+            margin-left: 90px;
+            padding: .5em;
+
+            .title {
+                font-weight: bold;
+                padding-bottom: .25em;
+            }
+            .description {
+                font-size: .875em;
+            }
+            .eta {
+                padding-top: .25em;
+                color: @font-lighter;
+                font-size: .875em;
+            }
+        }
+    }
+    .teaser {
+        float: left;
+        width: 90px;
+        margin-left: -100%;
+
+        i {
+            width: 70px;
+            height: 70px;
+            display: block;
+            margin: .5em;
+            border: 1px solid @grey-lightest;
+            background: @background-light;
+            border-radius: 50%;
+
+            &.passbolt {
+                background: transparent url('@{images}/logo/icon-90.jpg') center center no-repeat;
+                background-size: 60px auto;
+            }
+
+            // Concepts
+            &.accessibility {
+                background: transparent url('@{images}/papericon/accessibility_90.png') center center no-repeat;
+                background-size: 50px auto;
+            }
+            &.check {
+                background: transparent url('@{images}/papericon/check_90.png') center center no-repeat;
+                background-size: 40px auto;
+            }
+            &.comment {
+                background: transparent url('@{images}/papericon/comment_90.png') center center no-repeat;
+                background-size: 40px auto;
+            }
+            &.email {
+                background: transparent url('@{images}/papericon/email_90.png') center center no-repeat;
+                background-size: 40px auto;
+            }
+            &.fingerprint {
+                background: transparent url('@{images}/papericon/fingerprint_90.png') center center no-repeat;
+                background-size: 50px auto;
+            }
+            &.folder {
+                background: transparent url('@{images}/papericon/folder_90.png') center center no-repeat;
+                background-size: 40px auto;
+            }
+            &.groups {
+                background: transparent url('@{images}/papericon/groups_90.png') center center no-repeat;
+                background-size: 50px auto;
+            }
+            &.help {
+                background: transparent url('@{images}/papericon/help_90.png') center center no-repeat;
+                background-size: 50px auto;
+            }
+            &.i18n {
+                background: transparent url('@{images}/papericon/i18n_90.png') center center no-repeat;
+                background-size: 50px auto;
+            }
+            &.keyring {
+                background: transparent url('@{images}/papericon/keyring_90.png') center center no-repeat;
+                background-size: 45px auto;
+            }
+            &.ldap {
+                background: transparent url('@{images}/papericon/ldap_90.png') center center no-repeat;
+                background-size: 50px auto;
+            }
+            &.lock {
+                background: transparent url('@{images}/papericon/lock_90.png') center center no-repeat;
+                background-size: 50px auto;
+            }
+            &.lock2 {
+                background: transparent url('@{images}/papericon/lock2_90.png') center center no-repeat;
+                background-size: 60px auto;
+            }
+            &.monitor {
+                background: transparent url('@{images}/papericon/monitor_90.png') center center no-repeat;
+                background-size: 50px auto;
+            }
+            &.notification {
+                background: transparent url('@{images}/papericon/notification_90.png') center center no-repeat;
+                background-size: 50px auto;
+            }
+            &.search {
+                background: transparent url('@{images}/papericon/search_90.png') center center no-repeat;
+                background-size: 50px auto;
+            }
+            &.security {
+                background: transparent url('@{images}/papericon/security_90.png') center center no-repeat;
+                background-size: 50px auto;
+            }
+            &.share {
+                background: transparent url('@{images}/papericon/share_90.png') center center no-repeat;
+                background-size: 50px auto;
+            }
+            &.star {
+                background: transparent url('@{images}/papericon/star_90.png') center center no-repeat;
+                background-size: 40px auto;
+            }
+            &.sync {
+                background: transparent url('@{images}/papericon/sync_90.png') center center no-repeat;
+                background-size: 50px auto;
+            }
+            &.terminal {
+                background: transparent url('@{images}/papericon/terminal_90.png') center center no-repeat;
+                background-size: 50px auto;
+            }
+
+            // Brands
+            &.android {
+                background: transparent url('@{images}/third_party/android_90.png') center center no-repeat;
+                background-size: 60px auto;
+            }
+            &.chrome {
+                background: transparent url('@{images}/third_party/chrome_90.jpg') center center no-repeat;
+                background-size: 50px auto;
+            }
+            &.docker {
+                background: transparent url('@{images}/third_party/docker_90.png') center center no-repeat;
+                background-size: 50px auto;
+            }
+            &.firefox {
+                background: transparent url('@{images}/third_party/firefox_90.jpg') center center no-repeat;
+                background-size: 50px auto;
+            }
+            &.keypassx {
+                background: transparent url('@{images}/third_party/keypassx_90.jpg') center center no-repeat;
+                background-size: 50px auto;
+            }
+            &.jenkins {
+                background: transparent url('@{images}/third_party/jenkins_90.png') center center no-repeat;
+                background-size: 50px auto;
+            }
+            &.swagger {
+                background: transparent url('@{images}/third_party/swagger_90.png') center center no-repeat;
+                background-size: 60px auto;
+            }
+
+        }
+    }
 }

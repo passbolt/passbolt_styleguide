@@ -1,138 +1,138 @@
-.page.services.featured{
-  .service-col {
-    h3 {
-      font-weight:normal;
-      padding:0 0.5em;
-      margin-top:0.2em;
-      border:0;
+.page.services.featured {
+    .service-col {
+        h3 {
+            font-weight: normal;
+            padding: 0 0.5em;
+            margin-top: 0.2em;
+            border: 0;
+        }
     }
-  }
 
-  .service-description {
-    padding-top:0 !important;
-    ul {
-      min-height: 275px;
-      li {
-        padding:0.4em;
-        font-size:0.8em;
-        border-top:1px solid @grey;
-      }
+    .service-description {
+        padding-top: 0 !important;
+        ul {
+            min-height: 275px;
+            li {
+                padding: 0.4em;
+                font-size: 0.8em;
+                border-top: 1px solid @grey;
+            }
+        }
     }
-  }
 
-  .page-row.intro {
-    min-height: 310px;
-  }
-
-  .pricing {
-    font-weight:bold;
-    font-size:1.1em;
-  }
-
-  .demo_cta {
-    margin-top: 4em;
-    border-top:1px solid @grey-lighter;
-    padding-top:1em;
-
-    p {
-      font-size: 2em;
-      margin-bottom: 1em;
+    .page-row.intro {
+        min-height: 310px;
     }
-  }
+
+    .pricing {
+        font-weight: bold;
+        font-size: 1.1em;
+    }
+
+    .demo_cta {
+        margin-top: 4em;
+        border-top: 1px solid @grey-lighter;
+        padding-top: 1em;
+
+        p {
+            font-size: 2em;
+            margin-bottom: 0.5em;
+        }
+    }
 }
 
 .page.services {
 
-  // Exception for mobile version, for
-  // service details page. (cloud and pro).
-  // Top icon shouldn't be centered.
-  &.cloud,
-  &.pro,
-  &.community {
-    .page-row.intro {
-      min-height:130px;
-      h1 {
-        margin:0;
-      }
-      p {
-        margin:0;
-      }
-      .service-teaser {
-        margin:0;
-      }
-    }
-  }
-
-  .page-row.intro {
-    background: @background-lightest;
-
-    .service-teaser {
-      margin:auto;
-      margin-top:1em;
-      padding:.25em;
-      background:@red;
-      color:@white;
-      display:block;
-      border-radius:50%;
-      font-size:2em;
-      width:3em;
-      height:3em;
-      text-align: center;
-
-      i.fa-cloud {
-        font-size:1.75em;
-        margin-top:.35em;
-      }
-      i.fa-cubes {
-        font-size:1.75em;
-        margin-top:.3em;
-        margin-left:.1em;
-      }
-    }
-  }
-  .service {
-    .service-teaser {
-      display:none;
-    }
-    .button {
-      margin-bottom:1em;
-    }
-  }
-
-  // Used for the page
-  // presenting the service.
-  .service-details {
-    .presentation {
-      text-align: left;
-      margin-top: 1em;
-      h2 {
-        text-align: left;
-        margin-bottom:0.1em;
-        font-size:1.5em;
-      }
-      h3 {
-        margin-top:0;
-        margin-bottom:1em;
-        border:0;
-        color: @font-default;
-      }
-      p {
-        font-size:1em;
-        margin-bottom:2em;
-      }
-    }
-    ul.features {
-      margin-top: 0.5em;
-      text-align: left;
-      font-size: 1em;
-      li {
-        margin-bottom:0.3em;
-
-        // The rule below is to fix a bug in the styleguide
-        // which set a position absolute.
-        &.col3 {
-          position: static;
+    // Exception for mobile version, for
+    // service details page. (cloud and pro).
+    // Top icon shouldn't be centered.
+    &.cloud,
+    &.pro,
+    &.community {
+        .page-row.intro {
+            min-height: 130px;
+            h1 {
+                margin: 0;
+            }
+            p {
+                margin: 0;
+            }
+            .service-teaser {
+                margin: 0;
+            }
         }
+    }
+
+    .page-row.intro {
+        background: @background-lightest;
+
+        .service-teaser {
+            margin: auto;
+            margin-top: 1em;
+            padding: .25em;
+            background: @red;
+            color: @white;
+            display: block;
+            border-radius: 50%;
+            font-size: 2em;
+            width: 3em;
+            height: 3em;
+            text-align: center;
+
+            i.fa-cloud {
+                font-size: 1.75em;
+                margin-top: .35em;
+            }
+            i.fa-cubes {
+                font-size: 1.75em;
+                margin-top: .3em;
+                margin-left: .1em;
+            }
+        }
+    }
+    .service {
+        .service-teaser {
+            display: none;
+        }
+        .button {
+            margin-bottom: 1em;
+        }
+    }
+
+    // Used for the page
+    // presenting the service.
+    .service-details {
+        .presentation {
+            text-align: left;
+            margin-top: 1em;
+            h2 {
+                text-align: left;
+                margin-bottom: 0.1em;
+                font-size: 1.5em;
+            }
+            h3 {
+                margin-top: 0;
+                margin-bottom: 1em;
+                border: 0;
+                color: @font-default;
+            }
+            p {
+                font-size: 1em;
+                margin-bottom: 2em;
+            }
+        }
+        ul.features {
+            margin-top: 0.5em;
+            text-align: left;
+            font-size: 1em;
+            li {
+                margin-bottom: 0.3em;
+
+                // The rule below is to fix a bug in the styleguide
+                // which set a position absolute.
+                &.col3 {
+                    position: static;
+                }
 
         div {
           display: inline-block;
@@ -212,143 +212,142 @@
     }
   }
 
-  .sponsorhip-details {
-    background-color: @grey-lighter;
-    padding:1em;
-    text-align: left;
-    h3 {
-      text-align: left !important;
-      margin:0 !important;
+    .sponsorhip-details {
+        background-color: @grey-lighter;
+        padding: 1em;
+        text-align: left;
+        h3 {
+            text-align: left !important;
+            margin: 0 !important;
+        }
+        p {
+            font-size: 1em !important;
+            margin: 0 0 0.5em 0 !important;
+        }
+        ul {
+            margin: 1em 0 0 1.6em;
+            li {
+                font-size: 1em;
+                margin-bottom: 0.5em;
+            }
+        }
     }
-    p {
-      font-size:1em !important;
-      margin:0 0 0.5em 0 !important;
-    }
-    ul {
-      margin: 1em 0 0 1.6em;
-      li {
-        font-size:1em;
-        margin-bottom: 0.5em;
-      }
-    }
-  }
 }
-
 
 /* even larger screen */
 @media all and (min-width: 800px) {
-  .page.services {
-//    background: #FAFAFA url('@{images}/illustrations/birds3_850.png') 95% -.5% no-repeat;
-    background-size: 42% auto;
+    .page.services {
+        //    background: #FAFAFA url('@{images}/illustrations/birds3_850.png') 95% -.5% no-repeat;
+        background-size: 42% auto;
 
-    // Cancel mobile exception.
-    // Top icon should be centered.
-    &.cloud,
-    &.pro,
-    &.community{
-      .page-row.intro .service-teaser {
-        margin: 1em auto;
-      }
-    }
+        // Cancel mobile exception.
+        // Top icon should be centered.
+        &.cloud,
+        &.pro,
+        &.community {
+            .page-row.intro .service-teaser {
+                margin: 1em auto;
+            }
+        }
 
-    .signup {
-      background: @background-default;
-    }
-    .service {
-      &.pull-up{
-        margin-top:-10em;
-      }
-      text-align: center;
-      margin:0 0 5em 0;
+        .signup {
+            background: @background-default;
+        }
+        .service {
+            &.pull-up {
+                margin-top: -10em;
+            }
+            text-align: center;
+            margin: 0 0 5em 0;
 
-      .service-title {
-        margin-bottom: 0;
-      }
-      .service-description {
-        font-size:1.25em;
-        text-align: center;
-        padding:1em;
-      }
-      .service-teaser {
-        margin:auto;
-        margin-top:1em;
-        padding:.25em;
-        background:@red;
-        color:@white;
-        display:block;
-        border-radius:50%;
-        font-size:2em;
-        width:3em;
-        height:3em;
+            .service-title {
+                margin-bottom: 0;
+            }
+            .service-description {
+                font-size: 1.25em;
+                text-align: center;
+                padding: 1em;
+            }
+            .service-teaser {
+                margin: auto;
+                margin-top: 1em;
+                padding: .25em;
+                background: @red;
+                color: @white;
+                display: block;
+                border-radius: 50%;
+                font-size: 2em;
+                width: 3em;
+                height: 3em;
 
-        i.fa-group {
-          font-size: 1.8em;
-          margin-top: .32em;
-          margin-left: 0.05em;
-        }
-        i.fa-star {
-          font-size:2em;
-          margin-top: .25em;
-          margin-left: .05em;
-        }
-        i.fa-cloud {
-          font-size:1.75em;
-          margin-top:.35em;
-        }
-      }
-      .button {
-        font-size:1.25em;
-      }
-      .main {
-        padding-bottom:2.5em;
-        padding-top:1em;
-        margin-top:-1em;
-        border-radius: 3px;
-        background: @background-default;
-        border:1px solid @border-default;
-      }
+                i.fa-group {
+                    font-size: 1.8em;
+                    margin-top: .32em;
+                    margin-left: 0.05em;
+                }
+                i.fa-star {
+                    font-size: 2em;
+                    margin-top: .25em;
+                    margin-left: .05em;
+                }
+                i.fa-cloud {
+                    font-size: 1.75em;
+                    margin-top: .35em;
+                }
+            }
+            .button {
+                font-size: 1.25em;
+            }
+            .main {
+                padding-bottom: 2.5em;
+                padding-top: 1em;
+                margin-top: -1em;
+                border-radius: 3px;
+                background: @background-default;
+                border: 1px solid @border-default;
+            }
 
-      .sub {
-        border-radius: 3px;
-        padding-bottom:1em;
-        border:1px solid @border-default;
-        background:@background-lightest;
-      }
-    }
-    .page-row.intro {
-      background:@background-lightest;
-      min-height: 400px;
-      h1 {
-        padding-left:0;
-        font-size:3em;
-        text-align: center;
-      }
-      h1 + p {
-        text-align: center;
-        font-size: 1.75em;
-        padding-left:0;
-        text-align: center;
-        line-height:1.666em;
-      }
-    }
+            .sub {
+                border-radius: 3px;
+                padding-bottom: 1em;
+                border: 1px solid @border-default;
+                background: @background-lightest;
+            }
+        }
+        .page-row.intro {
+            background: @background-lightest;
+            min-height: 400px;
+            h1 {
+                padding-left: 0;
+                font-size: 3em;
+                text-align: center;
+            }
+            h1 + p {
+                text-align: center;
+                font-size: 1.75em;
+                padding-left: 0;
+                text-align: center;
+                line-height: 1.666em;
+            }
+        }
 
-    // Used for the page
-    // presenting the service.
-    .service-details {
-      .presentation {
-        text-align: center;
-        margin-top: 2em;
-        h2 {
-          text-align: center;
-          font-size:2em;
-        }
-        h3 {
-          margin-bottom:2em;
-        }
-        p {
-          font-size:1.2em;
-          margin-bottom:2em;
-        }
+        // Used for the page
+        // presenting the service.
+        .service-details {
+            .presentation {
+                text-align: center;
+                margin-top: 2em;
+                h2 {
+                    text-align: center;
+                    font-size: 2em;
+                }
+                h3 {
+                    margin-bottom: 2em;
+                }
+                p {
+                    font-size: 1.2em;
+                    margin-bottom: 2em;
+                }
 
       }
       ul.features {
@@ -380,7 +379,7 @@
     padding: 1em;
     min-height: 130px;
   }
-  
+
   .presentation {
     text-align: center;
     p.headline {

@@ -108,7 +108,7 @@
 
     <?php include('includes/AN_footer.php'); ?>
 </div>
-<script>
+<script type="application/javascript">
 	var handler = StripeCheckout.configure({
 		key: 'pk_test_ppqoAYxccH4fLRPQWmbD9Q9W',
 		image: 'https://stripe.com/img/documentation/checkout/marketplace.png',

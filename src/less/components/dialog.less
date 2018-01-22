@@ -1,134 +1,136 @@
 /* Dialog */
 .dialog-wrapper {
-  position:absolute;
-  width:100%;
-  height:100%;
-	z-index:800;
-	background:rgba(255,255,255,0.9);
-  overflow: auto;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: 800;
+    background: rgba(255, 255, 255, 0.9);
+    overflow: auto;
 }
+
 .dialog {
-	position: relative;
-	max-width: 30em;
-	border: 1px solid @border-default;
-	background: @background-lightest;
-	margin: auto;
-	margin-top: 1%;
+    position: relative;
+    max-width: 30em;
+    border: 1px solid @border-default;
+    background: @background-lightest;
+    margin: auto;
+    margin-top: 1%;
     /* some space for the footer / notification area in case it is really tall */
-  	margin-bottom:3em;
-	.box-shadow();
+    margin-bottom: 3em;
+    .box-shadow();
 
     &.medium {
-      max-width: 36em;
+        max-width: 36em;
     }
 
-	/* header */
-	.dialog-header {
-		padding: 0.5em 1em 0 1em;
-		height: 3em;
-		h2 {
-			margin: .25em 2em .5em .2em;
-			font-size: 1.2em;
-			.ellipsis();
-		}
-		.dialog-header-subtitle {
-			padding-top: 0.3em;
-			padding-left: 1em;
-			font-size: 0.7em;
-			color: @font-default;
-		}
-	}
+    /* header */
+    .dialog-header {
+        padding: 0.5em 1em 0 1em;
+        height: 3em;
+        h2 {
+            margin: .25em 2em .5em .2em;
+            font-size: 1.2em;
+            .ellipsis();
+        }
+        .dialog-header-subtitle {
+            padding-top: 0.3em;
+            padding-left: 1em;
+            font-size: 0.7em;
+            color: @font-default;
+        }
+    }
 
-	/* content */
-	.dialog-content {
-		position:relative;
-	}
+    /* content */
+    .dialog-content {
+        position: relative;
+    }
 
-	/* inputs */
-	.form-content {
-		background:@background-default;
-		padding:.813em 1.25em .813em 1.5em;
-	}
-	label {
-		clear:both;
-		font-size:0.938em; /* 15px */
-		line-height:1.6em; /* 24px */
-	}
-	input[type=text] {
-		width:92%;
-		float:left;
-	}
-	.short input {
-		width:64%;
-		float:left;
-	}
-	textarea {
-		width:92%;
-	}
-  	textarea + .message.error,
-	input + .message.error {
-		display:block;
-		clear:both;
-		width:92%;
-	}
+    /* inputs */
+    .form-content {
+        background: @background-default;
+        padding: .813em 1.25em .813em 1.5em;
+    }
+    label {
+        clear: both;
+        font-size: 0.938em; /* 15px */
+        line-height: 1.6em; /* 24px */
+    }
+    input[type=text] {
+        width: 92%;
+        float: left;
+    }
+    .short input {
+        width: 64%;
+        float: left;
+    }
+    textarea {
+        width: 92%;
+    }
+    textarea + .message.error,
+    input + .message.error {
+        display: block;
+        clear: both;
+        width: 92%;
+    }
 
-	/* submit / cancel */
-	.submit-wrapper {
-	  	margin:0;
-		border-top: 1px solid @border-default;
-		clear: both;
-		width: 100%;
-		padding: .75em 0;
+    /* submit / cancel */
+    .submit-wrapper {
+        margin: 0;
+        border-top: 1px solid @border-default;
+        clear: both;
+        width: 100%;
+        padding: .75em 0;
 
-		.cancel,
-		.button {
-			float: left;
-			margin-left: 1.125em;
-			font-size: 1.125em;
-		}
-		.cancel {
-			margin-top: .5em;
-			font-size: 1em;
-		}
-	}
-	.dialog-close {
-		&, &:hover {
-			display: block;
-			float: right;
-			margin-top: -2.5em;
-			border: 0;
-		}
-	}
+        .cancel,
+        .button {
+            float: left;
+            margin-left: 1.125em;
+            font-size: 1.125em;
+        }
+        .cancel {
+            margin-top: .5em;
+            font-size: 1em;
+        }
+    }
+    .dialog-close {
+        &, &:hover {
+            display: block;
+            float: right;
+            margin-top: -2.5em;
+            border: 0;
+        }
+    }
 }
+
 .dialog-close {
-	&,&:hover {
-		border:0;
-	}
-	.fa-close {
-		padding-top: 15px;
-		width: 30px;
-		height: 15px;
-		text-align: center;
-		display: block;
-		vertical-align: baseline;
-		line-height: 0;
-		border: 1px solid @background-lighter;
-		.rounded();
-	}
-	&:hover .fa-close {
-		border:1px solid @background-light;
-		.rounded();
-	}
+    &, &:hover {
+        border: 0;
+    }
+    .fa-close {
+        padding-top: 15px;
+        width: 30px;
+        height: 15px;
+        text-align: center;
+        display: block;
+        vertical-align: baseline;
+        line-height: 0;
+        border: 1px solid @background-lighter;
+        .rounded();
+    }
+    &:hover .fa-close {
+        border: 1px solid @background-light;
+        .rounded();
+    }
 }
 
 /* reduce font-size for small screen */
 @media all and (max-width: 480px) {
-	.dialog {
-		margin:0;
-		border:0;
-		box-shadow: none;
-		width:100%;
-		max-width:100%;
-		margin-bottom:2.5em;
-	}
+    .dialog {
+        margin: 0;
+        border: 0;
+        box-shadow: none;
+        width: 100%;
+        max-width: 100%;
+        margin-bottom: 2.5em;
+    }
 }

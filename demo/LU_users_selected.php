@@ -7,8 +7,8 @@
 <div id="container" class="page people">
 	<div class="mad_event_event_bus"></div>
 	<div id="js_app_controller" class="passbolt_controller_app_controller mad_view_view js_component ready">
-		<?php include('includes/LU_loadingbar.php'); ?>
-		<?php include('includes/LU_notifications.php'); ?>
+
+
 		<?php include('includes/headers/LU_header_first.php'); ?>
 		<div class="header second">
 			<?php include('includes/headers/LU_header_second_logo.php'); ?>

@@ -1,79 +1,82 @@
 /* sidebar / user details in overview */
 .panel.aside .user,
-.panel.aside .group  {
-  .header {
-    .clearfix();
-    img {
-      float: left;
-      width: 55px;
-      height: 55px;
-      border: 1px solid @border-default;
+.panel.aside .group {
+    .sidebar-header {
+        .clearfix();
+        img {
+            margin:1em 0 1em 1em;
+            float: left;
+            width: 55px;
+            height: 55px;
+            border: 1px solid @border-default;
+        }
+        h3 {
+            float: left;
+            width: 67%;
+            margin-top: 1em;
+            padding: 0 0 0 1em;
+            display: table-cell;
+            vertical-align: middle;
+            border: 0;
+            .name {
+                font-size: 1.2em;
+                display: block;
+                .ellipsis();
+            }
+            .type,
+            .username {
+                font-size: 0.8em;
+                color: @font-lighter;
+                font-weight: normal;
+                display: block;
+                .ellipsis();
+            }
+        }
     }
-    h3 {
-      float: left;
-      width: 67%;
-      margin: 0;
-      padding: 0 0 0 1em;
-      display: table-cell;
-      vertical-align: middle;
-      border: 0;
-      .name {
-        font-size: 1.2em;
-        display:block;
-        .ellipsis();
-      }
-      .type,
-      .username {
-        font-size: 0.8em;
-        color: @font-lighter;
-        font-weight: normal;
-        display:block;
-        .ellipsis();
-      }
+    li {
+        &.key {
+            margin-bottom: 0.5em;
+            a.button.copy-public-key {
+                padding-top: 0.2em;
+                padding-bottom: 0.2em;
+                font-size: 0.75em;
+            }
+        }
+        textarea {
+            width: 100%;
+        }
     }
-  }
-  li {
-    &.key {
-      margin-bottom: 0.5em;
-      a.button.copy-public-key {
-        padding-top: 0.2em;
-        padding-bottom: 0.2em;
-        font-size: 0.75em;
-      }
-    }
-    textarea {
-      width: 100%;
-    }
-  }
 }
+
 /* edit group dialog */
 .edit-group-dialog {
-  .permission-edit {
-    margin-top:-1em;
-    border-top:1px solid @grey-lightest;
-  }
+    .permission-edit {
+        margin-top: -1em;
+        border-top: 1px solid @grey-lightest;
+    }
 }
 
 /* tabel view adjustments for avatar */
 .page.people {
-  .tableview-header {
-    th.cell_avatar {
-      width:45px;
+    .tableview-header {
+        th.cell_avatar {
+            width: 45px;
+        }
     }
-  }
-  .tableview-content {
-    td.cell_avatar {
-      margin:0;
-      text-align: left;
-      width:45px;
-      img {
-        width: 25px !important;
-        height: 25px !important;
-      }
+    .tableview-content {
+        td.cell_avatar {
+            margin: 0;
+            text-align: left;
+            width: 45px;
+            img {
+                width: 25px !important;
+                height: 25px !important;
+            }
+        }
     }
-  }
 }
+
 /* login history icon column centerign */
 .login-history td:first-child {
-	text-align: center;
+    text-align: center;
 }

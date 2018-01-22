@@ -2,110 +2,120 @@
  * Sidebar
  */
 .panel.aside {
-  position:absolute;
-  right:2em;
-  width:22em;
-  bottom:0;
-  height:100%;
-  background:@background-default;
-  .box-shadow();
+    position: absolute;
+    right: 2em;
+    min-width: 25em;
+    width: 30%;
+    bottom: 0;
+    height: 100%;
+    background: @background-default;
+    .box-shadow();
 
-  /* three types of sidebar */
-  .resource,
-  .group,
-  .user {
-    padding:.5em 1em 1em 1em;
-
-    h3 {
-      margin-top:.5em;
-      border:0;
-    }
-    h4 {
-      margin-bottom:1em;
-      padding-bottom:.313em;
-      border-bottom:1px dotted @border-default;
-    }
-
-    li,
-    .message,
-    .comment p,
-    .comment .metadata {
-      font-size:.875em;
-    }
-    li {
-      .clearfix();
-
-      .label {
-        width:30%;
-        display:inline-block;
-        margin-right:10%;
-        float: left;
-        height: 1.8em;
-      }
-      .value {
-        width:60%;
-        display:inline-block;
-        float: left;
-        height: 1.8em;
-      }
-      span {
-        .ellipsis();
-      }
+    /* Controls */
+    .sidebar-header {
+        h3 {
+            padding:1em;
+            margin:0;
+            border: 0;
+        }
+        .dialog-close {
+            position: absolute;
+            right: 1em;
+            top: 1em;
+        }
     }
 
+    .sidebar-section {
+        margin-top:-1px;
+        border-bottom:1px solid @border-lightest;
+        border-top:1px solid @border-lightest;
+        font-size: .875em;
+
+        h4 {
+            font-size: 1.125em;
+            padding: 1em 1.125em;
+            margin:0;
+            display:block;
+        }
+
+        .accordion-content {
+            margin: 0 1.25em 1.5em 1.25em;
+            padding-top:.5em;
+
+            .section-action {
+                font-size: 1.125em;
+                position:absolute;
+                margin-top: -2.85em;
+                right:3.25em;
+                background:@background-default;
+                width:1.125em;
+                height:1.125em;
+                z-index:401;
+                border:0;
+            }
+
+            span {
+                .ellipsis();
+            }
+            .label {
+                width: 30%;
+                display: inline-block;
+                margin-right: 10%;
+                float: left;
+                height: 1.8em;
+            }
+            .value {
+                width: 60%;
+                display: inline-block;
+                float: left;
+                height: 1.8em;
+            }
+        }
+    }
+
+    /** SECTIONS **/
     .description {
-      .description_content {
-        font-size:.875em;
-        white-space: pre-line;
-      }
-
-      textarea {
-        box-sizing: border-box;
-        width:100%;
-      }
+        .description_content {
+            white-space: pre-line;
+        }
     }
-    .dialog-close {
-      position:absolute;
-      right:.5em;
-      top:.5em;
-    }
-    .button  {
-      float:right;
-    }
-
-    .section-action {
-      float:right;
-      margin-top:-2.75em;
-      border:0;
-    }
-
     .key-information textarea {
-      min-height:30em;
-      font-size:.625em;
-      line-height:normal;
+        min-height: 30em;
+        line-height: normal;
     }
-  }
-  .sharedwith {
-      .user, .group {
-        width: 75%;
-        padding-top: 0;
-      }
-  }
+
+    /** Sidebar forms **/
+    .form-content {
+        margin: 0 0 .5em 0;
+        .clearfix();
+
+        label {
+            display: none;
+        }
+        textarea {
+            font-size: 1em;
+            width: 100%;
+            box-sizing: border-box;
+            height: 5em;
+        }
+        .button {
+            float:right;
+            margin-top: -.25em;
+            margin-right: 0;
+        }
+    }
+
+
 }
 
 /* place sidebar on top of everything when there is no space */
 @media all and (max-width: 1024px) {
-  .panel.aside {
-    position: absolute;
-    right: 0em;
-    width: 100%;
-    bottom: 0;
-    top:0;
-    height: 100%;
-  }
-}
-@media all and (min-width: 1280px) {
-  .panel.aside {
-    width: 25em;
-  }
+    .panel.aside {
+        position: absolute;
+        right: 0em;
+        width: 100%;
+        bottom: 0;
+        top: 0;
+        height: 100%;
+    }
 }

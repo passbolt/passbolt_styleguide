@@ -8,7 +8,7 @@
   display: none;
 }
 .page.status .grid .message {
-  padding: .75em 1em ;
+  padding: .75em 1em;
   margin-bottom: .5em;
 }
 /* Don't display cake errors, we provide feedback */

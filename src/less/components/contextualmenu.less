@@ -1,34 +1,39 @@
 .contextual-menu {
-	position:absolute;
-	background:@background-default;
-	border:1px solid @border-default;
-	width:12em;
-	.box-shadow();
-	z-index:993;
-	left:11.25em;
-	display:none;
-	padding:.25em 0;
+    position: absolute;
+    background: @background-default;
+    border: 1px solid @border-default;
+    width: 12em;
+    .box-shadow();
+    z-index: 993;
+    left: 11.25em;
+    display: none;
+    padding: .25em 0;
 }
+
 .contextual-menu a {
-	font-size:.875em; /* 14px */
-	display:block;
-	padding:.357em .714em; /* 5px 10px */
-	border:0;
+    font-size: .875em; /* 14px */
+    display: block;
+    padding: .357em .714em; /* 5px 10px */
+    border: 0;
 }
+
 .contextual-menu a:hover {
-	color:@font-default;
-	background:@background-lighter;
+    color: @font-default;
+    background: @background-lighter;
 }
+
 .contextual-menu li.disabled a {
-  color:@font-lightest;
-  &:hover {
-	color:@font-default;
-	background:@background-lighter;
-  }
+    color: @font-lightest;
+    &:hover {
+        color: @font-default;
+        background: @background-lighter;
+    }
 }
+
 .contextual-menu .separator-before {
-	border-top:1px solid @border-default;
+    border-top: 1px solid @border-default;
 }
+
 .contextual-menu .separator-after {
-	border-bottom:1px solid @border-default;
+    border-bottom: 1px solid @border-default;
 }

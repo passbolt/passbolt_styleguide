@@ -1,104 +1,104 @@
 .permissions {
 
-  &.scroll {
-    max-height: 19em;
-    margin: 0;
-  }
-
-  .row {
-    .clearfix();
-    font-size: .813em;
-    padding: 1em .5em .875em 1em;
-    border-bottom: 1px dotted @border-default;
-
-    &:last-child {
-      border: 0;
+    &.scroll {
+        max-height: 19em;
+        margin: 0;
     }
 
-    /* user summary */
-    .avatar img {
-      width: 36px;
-      height: 36px;
-      float: left;
-    }
-    .user,
-    .group {
-      width: 48%;
-      float: left;
-      padding-left: 1em;
-      padding-right: 1em;
-    }
-    .details {
-      .clearfix();
-      .name {
-        float: left;
-        max-width: 190px;
-        .ellipsis();
-      }
-      .more_details {
-        margin-left: .5em;
-        margin-top: 0;
-      }
-      .email {
-        .ellipsis();
-        font-weight: bold;
-        padding-bottom: .125em;
-      }
-    }
-    .permission_changes {
-      color: @font-lighter;
-      .ellipsis();
-      display: block;
-      border: 0;
-    }
-    .rights {
-      float: left;
-      margin-top: .5em;
-      width: 27%;
-      select {
-        margin:0;
-        font-size: 1em;
-      }
-    }
-    /* row actions */
-    .actions {
-      float: right;
-      margin-top: .55em;
-      a {
-        font-size: 1.125em;
-        padding: .25em .5em .2em .5em;
-        border: 1px solid transparent;
-      }
-      a:hover {
-        border: 1px solid @border-default;
-      }
-    }
+    .row {
+        .clearfix();
+        font-size: .813em;
+        padding: 1em .5em .875em 1em;
+        border-bottom: 1px dotted @border-default;
 
-    /* new/updated permissions */
-    &.permission-updated {
-      background: @yellow-lightest;
+        &:last-child {
+            border: 0;
+        }
+
+        /* user summary */
+        .avatar img {
+            width: 36px;
+            height: 36px;
+            float: left;
+        }
+        .user,
+        .group {
+            width: 48%;
+            float: left;
+            padding-left: 1em;
+            padding-right: 1em;
+        }
+        .details {
+            .clearfix();
+            .name {
+                float: left;
+                max-width: 190px;
+                .ellipsis();
+            }
+            .more_details {
+                margin-left: .5em;
+                margin-top: 0;
+            }
+            .email {
+                .ellipsis();
+                font-weight: bold;
+                padding-bottom: .125em;
+            }
+        }
+        .permission_changes {
+            color: @font-lighter;
+            .ellipsis();
+            display: block;
+            border: 0;
+        }
+        .rights {
+            float: left;
+            margin-top: .5em;
+            width: 27%;
+            select {
+                margin: 0;
+                font-size: 1em;
+            }
+        }
+        /* row actions */
+        .actions {
+            float: right;
+            margin-top: .55em;
+            a {
+                font-size: 1.125em;
+                padding: .25em .5em .2em .5em;
+                border: 1px solid transparent;
+            }
+            a:hover {
+                border: 1px solid @border-default;
+            }
+        }
+
+        /* new/updated permissions */
+        &.permission-updated {
+            background: @yellow-lightest;
+        }
     }
-  }
 }
 
 .dialog {
-  /* message */
-  .message.empty-permission {
-    font-size:0.875em;
-    padding-left:1em;
-  }
+    /* message */
+    .message.empty-permission {
+        font-size: 0.875em;
+        padding-left: 1em;
+    }
 }
 
 /* hide icons if there is no space */
 @media all and (max-width: 480px) {
-  .dialog .permissions {
-    &.scroll {
-      height:auto;
-      margin:0;
+    .dialog .permissions {
+        &.scroll {
+            height: auto;
+            margin: 0;
+        }
+        .row .user,
+        .row .group {
+            width: 45%;
+        }
     }
-    .row .user,
-    .row .group {
-      width:45%;
-    }
-  }
 }

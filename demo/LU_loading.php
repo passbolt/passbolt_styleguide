@@ -7,7 +7,6 @@
 	<base href="../src/">
 	<meta name="viewport" content="width=device-width">
 	<link rel="stylesheet" type="text/css" href="css/main.css" />
-	<script type="text/javascript" src="js/modernizr.js"></script>
 <body>
 <div class="container page">
 	<div class="launching-screen">

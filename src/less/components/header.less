@@ -1,175 +1,61 @@
 /* headers */
 .header {
-  overflow: visible !important;
+    overflow: visible !important;
 
-	&.first {
-		background:@background-dark;
-		height: 2.375em;
-	}
-	&.second {
-		background:@background-lighter;
-	}
+    &.first {
+        background: @background-dark;
+    }
+    &.second {
+        background: @background-lighter;
+    }
 
-  /** Responsive behavior for menu */
-  .greedy {
+    /* top navigation */
     .navigation.primary {
-      // Keep space on the right for the button.
-      padding-right: 5em;
+        .clearfix();
 
-      // More button. (responsive version).
-      button {
-        position: absolute;
-        top: 0;
-        right: 0;
-        outline: 0;
-        border: 0;
-        font-size: 1em;
-        font-weight: normal;
-        background: @grey-darker;
-        padding: .45em 1em .42em 1em;
-        -webkit-border-radius: 0;
-        -moz-border-radius: 0;
-        border-radius: 0;
-        text-shadow:none;
-        color: @font-inverse;
-        margin: 0;
-		min-width: 7.5em;
-      }
-      button.hidden {
-        transition: none;
-        width: 0;
-        padding: 0;
-        overflow: hidden;
-      }
-      button::after {
-        content: attr(count);
-        display: inline-flex;
-        width: 21px;
-        height: 21px;
-        align-items: center;
-        justify-content: center;
-        background: @black;
-        color: @font-lighter;
-        border-radius: 50%;
-        font-size: 0.7em;
-        line-height: 0.7em;
-        margin-left: 0.5rem;
-      }
+        li {
+            padding: .5em;
+            float: left;
 
-      ul.hidden-links {
-        position: absolute;
-        right: 0;
-        top: 100%;
-		  z-index:999;
+            &:first-child {
+                padding-left: 1em;
+            }
+            &.right {
+                float: right;
+                margin-right: 1em;
+            }
 
-        &.hidden {
-          display: none;
+            a {
+                color: @font-inverse-dark;
+                text-decoration: none;
+                border: 0;
+                display: inline-block;
+
+                &:hover {
+                    color: @font-inverse;
+                }
+                &:active,
+                &:focus {
+                    color: @font-focus;
+                }
+            }
         }
 
         li {
-          float: none;
-          padding:0;
-          margin:0;
-          display: block;
-
-          a {
-			min-width: 5.5em;
-			background:@background-lightest;
-            color: @font-default;
-            padding: .5em 1em;
-            float:right;
-            display: inline-block;
-          	&:hover, &:active {
-			  background:@background-lighter;
-			  color:@black;
-          	}
-          }
+            .row.selected {
+                a {
+                    color: @font-inverse;
+                }
+                a:focus {
+                    color: @font-focus;
+                }
+            }
         }
-      }
     }
-  }
-  /** End responsive behavior **/
 
-	/* top navigation */
-	.navigation.primary {
-
-		li {
-			padding: .5em 1em 0 .25em;
-			height: 1.75em;
-			float: left;
-
-			&.right {
-				float: right;
-				margin-right: 1em;
-			}
-
-			a {
-				color: @font-inverse-dark;
-				text-decoration: none;
-				border:0;
-				display: inline-block;
-
-				&:hover {
-					color: @font-inverse;
-				}
-				&:active,
-				&:focus {
-					color: @font-focus;
-				}
-			}
-		}
-
-		li {
-			.row.selected {
-				a {
-					color: @font-inverse;
-				}
-				a:focus {
-					color: @font-focus;
-				}
-			}
-		}
-
-		/* home button is special */
-		.home {
-			a {
-				margin-top:.125em;
-				margin-left: .5em;
-				width: 1.250em;
-				height: 1.250em;
-				background: transparent url('@{images}/logo/icon-20_white.png') 0 0 no-repeat;
-			}
-			a:focus, &:hover a {
-				background: transparent url('@{images}/logo/icon-20.png') 0 0 no-repeat;
-			}
-			a span {
-				display: none;
-			}
-		}
-	}
-
-	/* logo positioning */
-	.logo {
-		margin: 1.25em 0 0 1em;
-		max-width: 80%;
-	}
-
-}
-
-/* CSS for serving the retina image to devices with a high "device-pixel-ratio": */
-@media only screen and (-moz-min-device-pixel-ratio: 1.5),
-only screen and (-o-min-device-pixel-ratio: 3/2),
-only screen and (-webkit-min-device-pixel-ratio: 1.5),
-only screen and (min-devicepixel-ratio: 1.5),
-only screen and (min-resolution: 1.5dppx) {
-	.header .navigation.primary .home {
-		a {
-			background: transparent url('@{images}/logo/icon-48_white.png') 0 0 no-repeat;
-			background-size: 20px 20px;
-		}
-		a:focus, &:hover a {
-			background: transparent url('@{images}/logo/icon-48.png') 0 0 no-repeat;
-			background-size: 20px 20px;
-		}
-	}
+    /* logo positioning */
+    .logo {
+        margin: 1.25em 0 0 1em;
+        max-width: 80%;
+    }
 }

@@ -1,43 +1,45 @@
 .tldr {
-	background:@background-lightest;
-	padding:1em;
-	i {
-		margin-right: 1em;
-		padding-left:.5em;
-	}
-	&.alt {
-		background:@background-default;
-		text-align:center;
-		margin-top:0em;
-		padding-top:0;
+    background: @background-lightest;
+    padding: 1em;
+    i {
+        margin-right: 1em;
+        padding-left: .5em;
+    }
+    &.alt {
+        background: @background-default;
+        text-align: center;
+        margin-top: 0em;
+        padding-top: 0;
 
-		.illustration {
-			margin-top:2em;
-		}
-	}
-	.madeinindia {
-		margin-top:2em;
-		i {
-			color:@red;
-			margin-right:0;
-		}
-	}
-	h4 {
-		margin-top:.5em;
-	}
-	h4.visuallyhidden + p,
-	p {
-		margin-top:.75em;
-	}
-	h4 + p {
-		margin-top:0;
-	}
+        .illustration {
+            margin-top: 2em;
+        }
+    }
+    .madeinindia {
+        margin-top: 2em;
+        i {
+            color: @red;
+            margin-right: 0;
+        }
+    }
+    h4 {
+        margin-top: .5em;
+    }
+    h4.visuallyhidden + p,
+    p {
+        margin-top: .75em;
+    }
+    h4 + p {
+        margin-top: 0;
+    }
 }
 
 /* reset layout styles on smaller screen */
 @media all and (min-width: 1024px) {
-	.tldr {
-		margin-top:3em;
-		max-width:20em;
-	}
+    .tldr {
+        margin-top:1em;
+        margin-bottom: 3em;
+        max-width: 20em;
+    }
 }
+

@@ -1,47 +1,48 @@
 /* palette */
-@white : #FFF;
-@black : #333;
+@white: #FFF;
+@black: #333;
 @blacker: #000;
 
-@blue-light : #2A9CEB;
-@blue : #2894DF;
-@blue-dark : #4271b7;
-@blue-twitter : #4099FF;
-@blue-facebook : #3B5998;
+@blue-light: #2A9CEB;
+@blue: #2894DF;
+@blue-dark: #4271b7;
+@blue-twitter: #4099FF;
+@blue-facebook: #3B5998;
 
 @green-lightest: #EDF7EB;
 @green-light: #66CC00;
-@green : #009900;
+@green: #009900;
 
 @yellow-lightest: #FFFAE7;
 @yellow-light: #FEF0BF;
 @yellow: #FFBD2E;
 @orange: #9F6000;
 
-@red : #D40101;
-@red-dark : #92000C;
+@red: #D40101;
+@red-dark: #92000C;
 
-@grey-darker : #888;
-@grey-dark : #969696;
+@grey-darkest: #666;
+@grey-darker: #888;
+@grey-dark: #969696;
 @grey-2: #BBB;
 @grey-3: #CCC;
-@grey : #DDD;
-@grey-lighter : #EEE;
-@grey-lightest : #F3F3F3;
-
+@grey: #DDD;
+@grey-lighter: #EEE;
+@grey-lightest: #F3F3F3;
 
 /* borders */
 @border-lightest: @grey-lightest;
-@border-lighter : @grey-lighter;
-@border-light : @grey;
-@border-default : @grey;
+@border-lighter: @grey-lighter;
+@border-light: @grey;
+@border-default: @grey;
 @border-input: @grey-3;
 @border-input-light: @grey-2;
-@border-focus : @blue;
-@border-focus-dark : @blue-dark;
+@border-focus: @blue;
+@border-focus-dark: @blue-dark;
 
 /* font */
 @font-default: @black;
+@font-dim: @grey-darkest;
 @font-light: @grey-darker;
 @font-lighter: @grey-dark;
 @font-lightest: @grey; // not WCAG on background default, for decoration only
@@ -57,29 +58,30 @@
 @background-lighter: @grey-lighter;
 @background-lightest: @grey-lightest;
 
-@background-error: lighten(@red,53%);
+@background-error: lighten(@red, 53%);
 @background-success: @green-lightest;
 @background-warning: @yellow-light;
-@background-notice: lighten(@blue,40%);
+@background-notice: lighten(@blue, 40%);
 @background-disabled: @grey-lightest;
 
 /* scrollbar */
-@scrollbar-background : @white;
-@scrollbar : @grey-darker;
+@scrollbar-background: @white;
+@scrollbar: @grey-darker;
 
 .background-gradient() {
-	background:@background-lighter;
-	background-image: -moz-linear-gradient(top, @background-lightest, @background-lighter);
-	background-image: -ms-linear-gradient(top, @background-lightest, @background-lighter);
-	background-image: -webkit-gradient(linear, 0 0, 0 100%, from(background-lightest), to(@background-lighter));
-	background-image: -webkit-linear-gradient(top, @background-lightest, @background-lighter);
-	background-image: -o-linear-gradient(top, @background-lightest, @background-lighter);
-	background-image: linear-gradient(top, @background-lightest, @background-lighter);
+    background: @background-lighter;
+    background-image: -moz-linear-gradient(top, @background-lightest, @background-lighter);
+    background-image: -ms-linear-gradient(top, @background-lightest, @background-lighter);
+    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(background-lightest), to(@background-lighter));
+    background-image: -webkit-linear-gradient(top, @background-lightest, @background-lighter);
+    background-image: -o-linear-gradient(top, @background-lightest, @background-lighter);
+    background-image: linear-gradient(top, @background-lightest, @background-lighter);
 }
 
 /* shadows */
 .box-shadow() {
-	-moz-box-shadow: 0px 0px 10px 0px @background-light;
-	-webkit-box-shadow: 0px 0px 10px 0px @background-light;
-	box-shadow: 0px 0px 10px 0px @background-light;
+    box-shadow: 0px 0px 10px 0px @background-light;
+}
+.box-shadow-dark() {
+    box-shadow: 0px 0px 10px 0px @background-dark;
 }

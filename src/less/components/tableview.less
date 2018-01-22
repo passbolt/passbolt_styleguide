@@ -2,149 +2,154 @@
  * Main Workspace - Table View
  */
 .tableview {
-	position: relative;
-	font-size: .9375em; /* 15px */
-	height: 100%;
+    position: relative;
+    font-size: .9375em; /* 15px */
+    height: 100%;
 }
 
 /* header */
 .tableview-header {
-	height:2.125em;
-	overflow-y:scroll;
-	padding-top:.125em;
+    height: 2.125em;
+    overflow-y: scroll;
+    padding-top: .125em;
 }
-.tableview-header table {
-	width:100%;
 
-	th.sortable.sorted {
-		a:after {
-			padding-left: 0.75em;
-			font: normal normal normal 14px/1 FontAwesome;
-			-moz-osx-font-smoothing: grayscale;
-			color: @font-default;
-		}
-		a:hover:after {
-			color: @blue-light;
-		}
-		&.sort-desc a:after {
-			content: "\f0d7";
-		}
-		&.sort-asc a:after {
-			content: "\f0d8";
-		}
-	}
+.tableview-header table {
+    width: 100%;
+
+    th.sortable.sorted {
+        a:after {
+            padding-left: 0.75em;
+            font: normal normal normal 14px/1 FontAwesome;
+            -moz-osx-font-smoothing: grayscale;
+            color: @font-default;
+        }
+        a:hover:after {
+            color: @blue-light;
+        }
+        &.sort-desc a:after {
+            content: "\f0d7";
+        }
+        &.sort-asc a:after {
+            content: "\f0d8";
+        }
+    }
 }
 
 /* main content */
 .tableview-content {
-	top:2.125em;
-	bottom:2.45em;
-	padding:0;
-	position:absolute;
-	width:100%;
-	border-top:1px solid @border-default;
-	overflow-y:scroll;
+    top: 2.125em;
+    bottom: 2.45em;
+    padding: 0;
+    position: absolute;
+    width: 100%;
+    border-top: 1px solid @border-default;
+    overflow-y: scroll;
 }
+
 .tableview-content table {
-	width:100%;
+    width: 100%;
 }
 
 /* rows */
 .tableview table {
-	a {
-		border:0;
-	}
-	th, td {
-		text-align:left;
-		padding:.25em;
-		vertical-align: middle;
-	}
-	th {
-		font-weight:bold;
-	}
-	td div {
-	.ellipsis();
-	}
-	.s-cell {
-		width:15px;
-		max-width: 15px;
-	}
-	.s1-cell {
-		width:25px;
-		max-width:25px;
-	}
-	.s2-cell {
-		width:40px;
-		max-width:40px;
-	}
-	.m-cell {
-		width:9em;
-		max-width:9em;
-		vertical-align: middle;
-	}
-	.l-cell {
-		width:14em;
-		max-width:14em;
-	}
-	.xl-cell {
-		width:19em;
-		max-width:19em;
-	}
-	tbody tr.selected,
-	tbody tr:hover {
-		height:1em;
-		background:@yellow-lightest;
-	}
-	tbody tr.inactive {
-		color: @font-lighter;
-	}
-	.input.checkbox {
-		padding-top:2px;
+    a {
+        border: 0;
+    }
+    th, td {
+        text-align: left;
+        padding: .25em;
+        vertical-align: middle;
+    }
+    th {
+        font-weight: bold;
+    }
+    td div {
+        .ellipsis();
+    }
+    .s-cell {
+        width: 15px;
+        max-width: 15px;
+    }
+    .s1-cell {
+        width: 25px;
+        max-width: 25px;
+    }
+    .s2-cell {
+        width: 40px;
+        max-width: 40px;
+    }
+    .m-cell {
+        width: 9em;
+        max-width: 9em;
+        vertical-align: middle;
+    }
+    .l-cell {
+        width: 14em;
+        max-width: 14em;
+    }
+    .xl-cell {
+        width: 19em;
+        max-width: 19em;
+    }
+    tbody tr.selected,
+    tbody tr:hover {
+        height: 1em;
+        background: @yellow-lightest;
+    }
+    tbody tr.inactive {
+        color: @font-lighter;
+    }
+    .input.checkbox {
+        padding-top: 2px;
 
-		label {
-			display: none;
-		}
-		input {
-			margin-top: 0;
-			float: left;
-		}
-	}
-	th span,
-	td span {
-		vertical-align:6%;
-	}
+        label {
+            display: none;
+        }
+        input {
+            margin-top: 0;
+            float: left;
+        }
+    }
+    th span,
+    td span {
+        vertical-align: 6%;
+    }
 
-	/* fav fix */
-	th.cell_favorite,
-	td.cell_favorite {
-		width:20px;
-		max-width: 20px;
-	}
+    /* fav fix */
+    th.cell_favorite,
+    td.cell_favorite {
+        width: 20px;
+        max-width: 20px;
+    }
 }
+
 /* hide secondary actions if there is no space */
 @media all and (max-width: 600px) {
-	.tableview table tbody {
-		td {
-			display:block;
-			&.s-cell, &.s2-cell, &.m-cell, &.l-cell {
-				max-width:90%;
-				width:90%;
-				padding:.5em;
-			}
-			&.s-cell {
-				display:none;
-			}
-		}
-		tr:nth-child(odd) {
-			background:@background-lightest;
-		}
-	}
-	.tableview thead	{
-		display:none;
-	}
-	.tableview-content {
-		top:0;
-		border:0;
-		bottom:0px;
-	}
+    .tableview table tbody {
+        td {
+            display: block;
+            &.s-cell, &.s2-cell, &.m-cell, &.l-cell {
+                max-width: 90%;
+                width: 90%;
+                padding: .5em;
+            }
+            &.s-cell {
+                display: none;
+            }
+        }
+        tr:nth-child(odd) {
+            background: @background-lightest;
+        }
+    }
+
+    .tableview thead {
+        display: none;
+    }
+
+    .tableview-content {
+        top: 0;
+        border: 0;
+        bottom: 0px;
+    }
 }

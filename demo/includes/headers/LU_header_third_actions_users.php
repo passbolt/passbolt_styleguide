@@ -33,7 +33,7 @@
 			</a>
 		</li>
 	</ul>
-	<script>
+	<script type="application/javascript">
 		// DEMO ONLY -- Not for production use
 		// Show hide sidebar
 		$(function() {

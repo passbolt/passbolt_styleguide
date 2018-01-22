@@ -1,53 +1,53 @@
 table.table-info,
 table.table-info.vertical {
-	border-collapse: separate;
+    border-collapse: separate;
 
-	td {
-		padding:.625em;
-		padding-right:1.25em;
-		color:@font-lighter;
+    td {
+        padding: .625em;
+        padding-right: 1.25em;
+        color: @font-lighter;
 
-		&.warning {
-			background:@background-warning;
-		}
-		&.error {
-			background:@background-error;
-		}
-		.alt.side {
-			color:@font-lighter;
-			float:right;
-		}
-		.alt.side:before {
-			content: "(";
-		}
-		.alt.side:after {
-			content: ")";
-		}
-	}
+        &.warning {
+            background: @background-warning;
+        }
+        &.error {
+            background: @background-error;
+        }
+        .alt.side {
+            color: @font-lighter;
+            float: right;
+        }
+        .alt.side:before {
+            content: "(";
+        }
+        .alt.side:after {
+            content: ")";
+        }
+    }
 
-	td + td {
-		color:@black;
-		padding-right:.625em;
-	}
+    td + td {
+        color: @black;
+        padding-right: .625em;
+    }
 
 }
 
 /* horizontal tableview */
 table.table-info.horizontal {
-	width:100%;
-	border-collapse: separate;
-	padding:0;
-	border:1px solid @border-default;
-	margin-bottom:1em;
+    width: 100%;
+    border-collapse: separate;
+    padding: 0;
+    border: 1px solid @border-default;
+    margin-bottom: 1em;
 
-	td, th {
-		padding:.5em;
-		margin:0;
-	}
-	th{
-		border-bottom:1px solid @border-default;
-	}
-	tbody tr:nth-child(even) {
-		background:@background-lightest;
-	}
+    td, th {
+        padding: .5em;
+        margin: 0;
+    }
+    th {
+        border-bottom: 1px solid @border-default;
+    }
+    tbody tr:nth-child(even) {
+        background: @background-lightest;
+    }
 }

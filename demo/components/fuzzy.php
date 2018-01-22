@@ -3,7 +3,7 @@
 <head>
 	<meta charset=utf-8 />
 	<base href="../../src/">
-	<script type="text/javascript" src="js/jquery-2.1.3.min.js"></script>
+	<script type="text/javascript" src="js/jquery-2.2.4.min.js"></script>
 	<script src="js/list.min.js"></script>
 	<script src="js/list.fuzzysearch.min.js"></script>
 	<title>JS Bin</title>
@@ -64,7 +64,7 @@
 	<?php include('includes/AN_footer.php'); ?>
 </div>
 
-<script>
+<script type="application/javascript">
 	$(function() {
 		var monkeyList = new List('faq-list', {
 			valueNames: ['name'],

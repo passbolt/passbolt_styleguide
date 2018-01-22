@@ -3,46 +3,35 @@
  */
 
 .notification-container {
-	font-size:.75em; /* 12px */
-	width:80%;
-	.message {
-		float:left;
-		margin-left:25%;
-		width:50%;
-	}
-}
+    font-size:.85em;
+    top: 0;
+    position: absolute;
+    z-index: 991;
+    height: 2em;
+    padding-top: 1em;
+    width:60%;
+    margin-left:20%;
 
-@media all and (min-width: 768px) {
-	.notification-container {
-		bottom:0;
-		position:absolute;
-		z-index:991;
-		height:2em;
-		margin:0;
-		padding-top:1.167em;
+    .notification {
+        position: relative; left: 50%; float: left;
 
-		.notification .message {
-			margin:0;
-			margin-top:-0.250em; // -3px
-			padding:0;
-			width:60%;
-			float:none;
-			background:@background-default;
-			font-weight:normal;
+        .message {
+            .box-shadow-dark();
+            border-radius:2px;
+            padding: .5em 1em;
+            position: relative; left: -50%; float: left;
+            background: @background-warning;
+            border: 1px solid darken(@background-warning, 30%);
+            color:@blacker;
+            font-weight: normal;
+            width:auto;
 
-			/* colors for messages */
-			&.error {
-				color: @red;
-			}
-			&.success {
-				color:@green;
-			}
-			&.warning {
-				color:@orange;
-			}
-			&.notice {
-				color:@blue;
-			}
-		}
-	}
+            strong {
+                text-transform: capitalize;
+            }
+            strong:after {
+                content:':';
+            }
+        }
+    }
 }

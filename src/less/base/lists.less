@@ -1,33 +1,43 @@
 /* lists */
 article ul {
-	list-style-type: circle;
-	margin: 0 0 1em 0;
+    list-style-type: circle;
+    margin: 0 0 1em 0;
 
-	li {
-		.bulletlist();
-	}
-	&.double {
-		width:48%;
-		float:left;
-	}
-	&.disc {list-style-type: disc;}
-	&.square {list-style-type: square;}
+    li {
+        .bulletlist();
+    }
+    &.double {
+        width: 48%;
+        float: left;
+    }
+    &.disc {
+        list-style-type: disc;
+    }
+    &.square {
+        list-style-type: square;
+    }
 }
+
 article ol {
-	margin: 0 0 1em 0;
-	list-style-type: decimal;
-	li { /* more margin needed for long numbered lists */
-		margin-left: 2em;
-		padding-left: 1em;
-		margin-bottom: .5em;
-	}
-	&.upper-roman {list-style-type: upper-roman;}
-	&.lower-alpha {list-style-type: lower-alpha;}
+    margin: 0 0 1em 0;
+    list-style-type: decimal;
+    li { /* more margin needed for long numbered lists */
+        margin-left: 2em;
+        padding-left: 1em;
+        margin-bottom: .5em;
+    }
+    &.upper-roman {
+        list-style-type: upper-roman;
+    }
+    &.lower-alpha {
+        list-style-type: lower-alpha;
+    }
 }
+
 ul.checklist {
-	li:before {
-		content: '✔';
-		width:1em;
-		margin-right:1em;
-	}
+    li:before {
+        content: '✔';
+        width: 1em;
+        margin-right: 1em;
+    }
 }

@@ -8,7 +8,7 @@
     <link rel="stylesheet" type="text/css" href="css/checkout.css" />
 
     <script src="https://js.stripe.com/v3/"></script>
-	<script>
+	<script type="application/javascript">
       $(function() {
         var stripe = Stripe('pk_test_6pRNASCoBOKtIshFeQd4XMUh');
         var elements = stripe.elements();

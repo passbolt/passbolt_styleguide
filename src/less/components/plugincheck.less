@@ -1,48 +1,49 @@
 .plugin-check {
-	padding:1em;
+    padding: 1em;
 
-	&.firefox {
-	  background:transparent url('@{images}/third_party/firefox_logo.png') 1.5em center no-repeat;
-	  background-size: 150px auto;
-	}
-	&.chrome {
-	  background:transparent url('@{images}/third_party/ChromeWebStore.png') 0.5em center no-repeat;
-	  background-size: 180px auto;
-	}
-	&.gpg {
-	  background:transparent url('@{images}/third_party/gnupg_logo_disabled.png') 2em center no-repeat;
-	  background-size: 150px auto;
-	}
-	&.gpg.success {
-	  background:@background-success url('@{images}/third_party/gnupg_logo.png') 2em center no-repeat;
-	  background-size: 150px auto;
-	}
-	&.success {
-		background-color:@background-success;
-	}
-	&.error {
-		background-color:@background-error;
-	}
-	&.warning {
-		background-color:@background-warning;
-	}
-	&.notice {
-		background-color:@background-notice;
-	}
-	.message {
-		font-weight: normal;
-		margin-left: 180px;
-		padding:.5em 1em .25em 1em;
-	}
+    &.firefox {
+        background: transparent url('@{images}/third_party/firefox_logo.png') 1.5em center no-repeat;
+        background-size: 150px auto;
+    }
+    &.chrome {
+        background: transparent url('@{images}/third_party/ChromeWebStore.png') 0.5em center no-repeat;
+        background-size: 180px auto;
+    }
+    &.gpg {
+        background: transparent url('@{images}/third_party/gnupg_logo_disabled.png') 2em center no-repeat;
+        background-size: 150px auto;
+    }
+    &.gpg.success {
+        background: @background-success url('@{images}/third_party/gnupg_logo.png') 2em center no-repeat;
+        background-size: 150px auto;
+    }
+    &.success {
+        background-color: @background-success;
+    }
+    &.error {
+        background-color: @background-error;
+    }
+    &.warning {
+        background-color: @background-warning;
+    }
+    &.notice {
+        background-color: @background-notice;
+    }
+    .message {
+        font-weight: normal;
+        margin-left: 180px;
+        padding: .5em 1em .25em 1em;
+    }
 }
+
 @media all and (max-width: 1024px) {
-	.plugin-check {
-		&.firefox, &.chrome, &.gpg, &.gpg.success, &.chrome.error {
-			background-image: none;
-		}
-		.message {
-			margin-left: 0px;
-			padding:.5em 1em;
-		}
-	}
+    .plugin-check {
+        &.firefox, &.chrome, &.gpg, &.gpg.success, &.chrome.error {
+            background-image: none;
+        }
+        .message {
+            margin-left: 0px;
+            padding: .5em 1em;
+        }
+    }
 }

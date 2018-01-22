@@ -36,9 +36,9 @@ html body .hidden {
   position: absolute;
   width: 1px;
   /*
-   * Extends the .visuallyhidden class to allow the element to be focusable
-   * when navigated to via the keyboard: h5bp.com/p
-   */
+     * Extends the .visuallyhidden class to allow the element to be focusable
+     * when navigated to via the keyboard: h5bp.com/p
+     */
 }
 .visuallyhidden .focusable:active,
 .visuallyhidden .focusable:focus {
@@ -57,21 +57,21 @@ html body .hidden {
 }
 .clearfix {
   /*
- * For IE 6/7 only
- * Include this rule to trigger hasLayout and contain floats.
- */
+     * For IE 6/7 only
+     * Include this rule to trigger hasLayout and contain floats.
+     */
   zoom: 1;
   /*
- * Clearfix: contain floats
- *
- * For modern browsers
- * 1. The space content is one way to avoid an Opera bug when the
- *	`contenteditable` attribute is included anywhere else in the document.
- *	Otherwise it causes space to appear at the top and bottom of elements
- *	that receive the `clearfix` class.
- * 2. The use of `table` rather than `block` is only necessary if using
- *	`:before` to contain the top-margins of child elements.
- */
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
 }
 .clearfix:before,
 .clearfix:after {
@@ -139,6 +139,9 @@ html body .hidden {
 /* seriously? */
 .blink {
   animation: blinker 1s linear infinite;
+}
+.blink-fast {
+  animation: blinker .25s linear infinite;
 }
 @keyframes blinker {
   50% {
@@ -708,18 +711,6 @@ a:hover {
   position: fixed;
 }
 /* fadeinup */
-@-webkit-keyframes fadeInUp {
-  0% {
-    opacity: 0;
-    -webkit-transform: translateY(20px);
-    transform: translateY(20px);
-  }
-  100% {
-    opacity: 1;
-    -webkit-transform: translateY(0);
-    transform: translateY(0);
-  }
-}
 @keyframes fadeInUp {
   0% {
     opacity: 0;
@@ -734,8 +725,32 @@ a:hover {
     transform: translateY(0);
   }
 }
+@keyframes fadeOutUp {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+    transform: translate3d(0, -100%, 0);
+  }
+}
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translate3d(0, -100%, 0);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.fadeInDown {
+  animation-name: fadeInDown;
+}
+.fadeOutUp {
+  animation-name: fadeOutUp;
+}
 .fadeInUp {
-  -webkit-animation-name: fadeInUp;
   animation-name: fadeInUp;
 }
 /*
@@ -830,15 +845,15 @@ ul.checklist li:before {
   margin-right: 1em;
 }
 /*!
- *  Font Awesome 4.5.0 by @davegandy - http://fontawesome.io - @fontawesome
+ *  Font Awesome 4.7.0 by @davegandy - http://fontawesome.io - @fontawesome
  *  License - http://fontawesome.io/license (Font: SIL OFL 1.1, CSS: MIT License)
  */
 /* FONT PATH
  * -------------------------- */
 @font-face {
   font-family: 'FontAwesome';
-  src: url('../fonts/fontawesome-webfont.eot?v=4.5.0');
-  src: url('../fonts/fontawesome-webfont.eot?#iefix&v=4.5.0') format('embedded-opentype'), url('../fonts/fontawesome-webfont.woff2?v=4.5.0') format('woff2'), url('../fonts/fontawesome-webfont.woff?v=4.5.0') format('woff'), url('../fonts/fontawesome-webfont.ttf?v=4.5.0') format('truetype'), url('../fonts/fontawesome-webfont.svg?v=4.5.0#fontawesomeregular') format('svg');
+  src: url('../fonts/fontawesome-webfont.eot?v=4.7.0');
+  src: url('../fonts/fontawesome-webfont.eot?#iefix&v=4.7.0') format('embedded-opentype'), url('../fonts/fontawesome-webfont.woff2?v=4.7.0') format('woff2'), url('../fonts/fontawesome-webfont.woff?v=4.7.0') format('woff'), url('../fonts/fontawesome-webfont.ttf?v=4.7.0') format('truetype'), url('../fonts/fontawesome-webfont.svg?v=4.7.0#fontawesomeregular') format('svg');
   font-weight: normal;
   font-style: normal;
 }
@@ -949,31 +964,31 @@ ul.checklist li:before {
   }
 }
 .fa-rotate-90 {
-  filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=1);
+  -ms-filter: "progid:DXImageTransform.Microsoft.BasicImage(rotation=1)";
   -webkit-transform: rotate(90deg);
   -ms-transform: rotate(90deg);
   transform: rotate(90deg);
 }
 .fa-rotate-180 {
-  filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=2);
+  -ms-filter: "progid:DXImageTransform.Microsoft.BasicImage(rotation=2)";
   -webkit-transform: rotate(180deg);
   -ms-transform: rotate(180deg);
   transform: rotate(180deg);
 }
 .fa-rotate-270 {
-  filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
+  -ms-filter: "progid:DXImageTransform.Microsoft.BasicImage(rotation=3)";
   -webkit-transform: rotate(270deg);
   -ms-transform: rotate(270deg);
   transform: rotate(270deg);
 }
 .fa-flip-horizontal {
-  filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=0, mirror=1);
+  -ms-filter: "progid:DXImageTransform.Microsoft.BasicImage(rotation=0, mirror=1)";
   -webkit-transform: scale(-1, 1);
   -ms-transform: scale(-1, 1);
   transform: scale(-1, 1);
 }
 .fa-flip-vertical {
-  filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=2, mirror=1);
+  -ms-filter: "progid:DXImageTransform.Microsoft.BasicImage(rotation=2, mirror=1)";
   -webkit-transform: scale(1, -1);
   -ms-transform: scale(1, -1);
   transform: scale(1, -1);
@@ -2169,6 +2184,9 @@ ul.checklist li:before {
 .fa-space-shuttle:before {
   content: "\f197";
 }
+.fa-slack:before {
+  content: "\f198";
+}
 .fa-envelope-square:before {
   content: "\f199";
 }
@@ -2211,7 +2229,7 @@ ul.checklist li:before {
 .fa-digg:before {
   content: "\f1a6";
 }
-.fa-pied-piper:before {
+.fa-pied-piper-pp:before {
   content: "\f1a7";
 }
 .fa-pied-piper-alt:before {
@@ -2337,6 +2355,7 @@ ul.checklist li:before {
   content: "\f1ce";
 }
 .fa-ra:before,
+.fa-resistance:before,
 .fa-rebel:before {
   content: "\f1d0";
 }
@@ -2659,6 +2678,7 @@ ul.checklist li:before {
   content: "\f23e";
 }
 .fa-battery-4:before,
+.fa-battery:before,
 .fa-battery-full:before {
   content: "\f240";
 }
@@ -2912,6 +2932,255 @@ ul.checklist li:before {
 .fa-percent:before {
   content: "\f295";
 }
+.fa-gitlab:before {
+  content: "\f296";
+}
+.fa-wpbeginner:before {
+  content: "\f297";
+}
+.fa-wpforms:before {
+  content: "\f298";
+}
+.fa-envira:before {
+  content: "\f299";
+}
+.fa-universal-access:before {
+  content: "\f29a";
+}
+.fa-wheelchair-alt:before {
+  content: "\f29b";
+}
+.fa-question-circle-o:before {
+  content: "\f29c";
+}
+.fa-blind:before {
+  content: "\f29d";
+}
+.fa-audio-description:before {
+  content: "\f29e";
+}
+.fa-volume-control-phone:before {
+  content: "\f2a0";
+}
+.fa-braille:before {
+  content: "\f2a1";
+}
+.fa-assistive-listening-systems:before {
+  content: "\f2a2";
+}
+.fa-asl-interpreting:before,
+.fa-american-sign-language-interpreting:before {
+  content: "\f2a3";
+}
+.fa-deafness:before,
+.fa-hard-of-hearing:before,
+.fa-deaf:before {
+  content: "\f2a4";
+}
+.fa-glide:before {
+  content: "\f2a5";
+}
+.fa-glide-g:before {
+  content: "\f2a6";
+}
+.fa-signing:before,
+.fa-sign-language:before {
+  content: "\f2a7";
+}
+.fa-low-vision:before {
+  content: "\f2a8";
+}
+.fa-viadeo:before {
+  content: "\f2a9";
+}
+.fa-viadeo-square:before {
+  content: "\f2aa";
+}
+.fa-snapchat:before {
+  content: "\f2ab";
+}
+.fa-snapchat-ghost:before {
+  content: "\f2ac";
+}
+.fa-snapchat-square:before {
+  content: "\f2ad";
+}
+.fa-pied-piper:before {
+  content: "\f2ae";
+}
+.fa-first-order:before {
+  content: "\f2b0";
+}
+.fa-yoast:before {
+  content: "\f2b1";
+}
+.fa-themeisle:before {
+  content: "\f2b2";
+}
+.fa-google-plus-circle:before,
+.fa-google-plus-official:before {
+  content: "\f2b3";
+}
+.fa-fa:before,
+.fa-font-awesome:before {
+  content: "\f2b4";
+}
+.fa-handshake-o:before {
+  content: "\f2b5";
+}
+.fa-envelope-open:before {
+  content: "\f2b6";
+}
+.fa-envelope-open-o:before {
+  content: "\f2b7";
+}
+.fa-linode:before {
+  content: "\f2b8";
+}
+.fa-address-book:before {
+  content: "\f2b9";
+}
+.fa-address-book-o:before {
+  content: "\f2ba";
+}
+.fa-vcard:before,
+.fa-address-card:before {
+  content: "\f2bb";
+}
+.fa-vcard-o:before,
+.fa-address-card-o:before {
+  content: "\f2bc";
+}
+.fa-user-circle:before {
+  content: "\f2bd";
+}
+.fa-user-circle-o:before {
+  content: "\f2be";
+}
+.fa-user-o:before {
+  content: "\f2c0";
+}
+.fa-id-badge:before {
+  content: "\f2c1";
+}
+.fa-drivers-license:before,
+.fa-id-card:before {
+  content: "\f2c2";
+}
+.fa-drivers-license-o:before,
+.fa-id-card-o:before {
+  content: "\f2c3";
+}
+.fa-quora:before {
+  content: "\f2c4";
+}
+.fa-free-code-camp:before {
+  content: "\f2c5";
+}
+.fa-telegram:before {
+  content: "\f2c6";
+}
+.fa-thermometer-4:before,
+.fa-thermometer:before,
+.fa-thermometer-full:before {
+  content: "\f2c7";
+}
+.fa-thermometer-3:before,
+.fa-thermometer-three-quarters:before {
+  content: "\f2c8";
+}
+.fa-thermometer-2:before,
+.fa-thermometer-half:before {
+  content: "\f2c9";
+}
+.fa-thermometer-1:before,
+.fa-thermometer-quarter:before {
+  content: "\f2ca";
+}
+.fa-thermometer-0:before,
+.fa-thermometer-empty:before {
+  content: "\f2cb";
+}
+.fa-shower:before {
+  content: "\f2cc";
+}
+.fa-bathtub:before,
+.fa-s15:before,
+.fa-bath:before {
+  content: "\f2cd";
+}
+.fa-podcast:before {
+  content: "\f2ce";
+}
+.fa-window-maximize:before {
+  content: "\f2d0";
+}
+.fa-window-minimize:before {
+  content: "\f2d1";
+}
+.fa-window-restore:before {
+  content: "\f2d2";
+}
+.fa-times-rectangle:before,
+.fa-window-close:before {
+  content: "\f2d3";
+}
+.fa-times-rectangle-o:before,
+.fa-window-close-o:before {
+  content: "\f2d4";
+}
+.fa-bandcamp:before {
+  content: "\f2d5";
+}
+.fa-grav:before {
+  content: "\f2d6";
+}
+.fa-etsy:before {
+  content: "\f2d7";
+}
+.fa-imdb:before {
+  content: "\f2d8";
+}
+.fa-ravelry:before {
+  content: "\f2d9";
+}
+.fa-eercast:before {
+  content: "\f2da";
+}
+.fa-microchip:before {
+  content: "\f2db";
+}
+.fa-snowflake-o:before {
+  content: "\f2dc";
+}
+.fa-superpowers:before {
+  content: "\f2dd";
+}
+.fa-wpexplorer:before {
+  content: "\f2de";
+}
+.fa-meetup:before {
+  content: "\f2e0";
+}
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+.sr-only-focusable:active,
+.sr-only-focusable:focus {
+  position: static;
+  width: auto;
+  height: auto;
+  margin: 0;
+  overflow: visible;
+  clip: auto;
+}
 /*
 	Generic buttons
 	Description	: We support <input[submit]>, <input.button>, <button> and <a.button>
@@ -2926,7 +3195,7 @@ button,
   position: relative;
   font-size: 0.875em;
   /*	14px */
-  padding: .429em 1.225em .429em 1.225em ;
+  padding: .429em 1.225em .429em 1.225em;
   /* 6px 16px */
   display: inline-block;
   zoom: 1;
@@ -3087,36 +3356,36 @@ button.disabled:focus,
 /* duo */
 .duo-wrapper {
   /*
- * For IE 6/7 only
- * Include this rule to trigger hasLayout and contain floats.
- */
+     * For IE 6/7 only
+     * Include this rule to trigger hasLayout and contain floats.
+     */
   /*
- * Clearfix: contain floats
- *
- * For modern browsers
- * 1. The space content is one way to avoid an Opera bug when the
- *	`contenteditable` attribute is included anywhere else in the document.
- *	Otherwise it causes space to appear at the top and bottom of elements
- *	that receive the `clearfix` class.
- * 2. The use of `table` rather than `block` is only necessary if using
- *	`:before` to contain the top-margins of child elements.
- */
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
   /*
- * For IE 6/7 only
- * Include this rule to trigger hasLayout and contain floats.
- */
+     * For IE 6/7 only
+     * Include this rule to trigger hasLayout and contain floats.
+     */
   zoom: 1;
   /*
- * Clearfix: contain floats
- *
- * For modern browsers
- * 1. The space content is one way to avoid an Opera bug when the
- *	`contenteditable` attribute is included anywhere else in the document.
- *	Otherwise it causes space to appear at the top and bottom of elements
- *	that receive the `clearfix` class.
- * 2. The use of `table` rather than `block` is only necessary if using
- *	`:before` to contain the top-margins of child elements.
- */
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
 }
 .duo-wrapper:before,
 .duo-wrapper:after {
@@ -3259,6 +3528,12 @@ input[type=password]:focus,
 input[type=search]:focus,
 input[type=text]:focus,
 input[type=email]:focus {
+  -webkit-box-shadow: inset 1px 1px 2px rgba(255, 255, 255, 0.2);
+  -moz-box-shadow: inset 1px 1px 2px rgba(0, 0, 0, 0.2);
+  box-shadow: inset 1px 1px 2px rgba(0, 0, 0, 0.2);
+  border: 1px solid #2894df;
+}
+.input-focus {
   -webkit-box-shadow: inset 1px 1px 2px rgba(255, 255, 255, 0.2);
   -moz-box-shadow: inset 1px 1px 2px rgba(0, 0, 0, 0.2);
   box-shadow: inset 1px 1px 2px rgba(0, 0, 0, 0.2);
@@ -3420,10 +3695,6 @@ input[type=text].fluid {
   bottom: 0;
 }
 /* headers */
-.header.first {
-  /* height:2.375em; //already defined in header */
-  height: 2.375em;
-}
 .header.second {
   top: 2.375em;
   height: 4.5em;
@@ -3441,6 +3712,9 @@ input[type=text].fluid {
   bottom: 2.45em;
   height: auto;
   padding: 0;
+}
+.panel.main .row {
+  padding-left: 0;
 }
 /* its position depends on how many headers are there */
 .header.second + .panel.main {
@@ -3495,6 +3769,9 @@ input[type=text].fluid {
   .panel.left {
     display: none;
   }
+  .header.second {
+    height: 4.5em;
+  }
   .panel.middle,
   .col2_3 {
     width: 99%;
@@ -3503,6 +3780,9 @@ input[type=text].fluid {
   .col2 {
     width: 80%;
     left: 1%;
+  }
+  .panel.main .row {
+    padding-left: .5em;
   }
 }
 /*
@@ -3521,37 +3801,37 @@ input[type=text].fluid {
 .grid-responsive-12 .row,
 .grid .row {
   /*
- * For IE 6/7 only
- * Include this rule to trigger hasLayout and contain floats.
- */
+     * For IE 6/7 only
+     * Include this rule to trigger hasLayout and contain floats.
+     */
   /*
- * Clearfix: contain floats
- *
- * For modern browsers
- * 1. The space content is one way to avoid an Opera bug when the
- *	`contenteditable` attribute is included anywhere else in the document.
- *	Otherwise it causes space to appear at the top and bottom of elements
- *	that receive the `clearfix` class.
- * 2. The use of `table` rather than `block` is only necessary if using
- *	`:before` to contain the top-margins of child elements.
- */
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
   /*
- * For IE 6/7 only
- * Include this rule to trigger hasLayout and contain floats.
- */
+     * For IE 6/7 only
+     * Include this rule to trigger hasLayout and contain floats.
+     */
   zoom: 1;
   /*
- * Clearfix: contain floats
- *
- * For modern browsers
- * 1. The space content is one way to avoid an Opera bug when the
- *	`contenteditable` attribute is included anywhere else in the document.
- *	Otherwise it causes space to appear at the top and bottom of elements
- *	that receive the `clearfix` class.
- * 2. The use of `table` rather than `block` is only necessary if using
- *	`:before` to contain the top-margins of child elements.
- */
-  padding: 0 .5em 0 1em;
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
+  padding: 0 .5em 0 .5em;
 }
 .grid-responsive-12 .row:before,
 .grid .row:before,
@@ -3599,41 +3879,41 @@ input[type=text].fluid {
 .grid .row .col11,
 .grid-responsive-12 .row .col12,
 .grid .row .col12 {
+  /*
+     * For IE 6/7 only
+     * Include this rule to trigger hasLayout and contain floats.
+     */
+  /*
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
+  /*
+     * For IE 6/7 only
+     * Include this rule to trigger hasLayout and contain floats.
+     */
+  zoom: 1;
+  /*
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
   left: auto;
   float: none;
   width: 99%;
   box-sizing: border-box;
-  /*
- * For IE 6/7 only
- * Include this rule to trigger hasLayout and contain floats.
- */
-  /*
- * Clearfix: contain floats
- *
- * For modern browsers
- * 1. The space content is one way to avoid an Opera bug when the
- *	`contenteditable` attribute is included anywhere else in the document.
- *	Otherwise it causes space to appear at the top and bottom of elements
- *	that receive the `clearfix` class.
- * 2. The use of `table` rather than `block` is only necessary if using
- *	`:before` to contain the top-margins of child elements.
- */
-  /*
- * For IE 6/7 only
- * Include this rule to trigger hasLayout and contain floats.
- */
-  zoom: 1;
-  /*
- * Clearfix: contain floats
- *
- * For modern browsers
- * 1. The space content is one way to avoid an Opera bug when the
- *	`contenteditable` attribute is included anywhere else in the document.
- *	Otherwise it causes space to appear at the top and bottom of elements
- *	that receive the `clearfix` class.
- * 2. The use of `table` rather than `block` is only necessary if using
- *	`:before` to contain the top-margins of child elements.
- */
 }
 .grid-responsive-12 .row .col1:before,
 .grid .row .col1:before,
@@ -3822,10 +4102,10 @@ input[type=text].fluid {
  */
 @media all and (min-width: 780px) {
   /*
-	 * Common columns definitions
-	 */
+     * Common columns definitions
+     */
   .grid .row {
-    padding: 0;
+    padding: 0 .5em 0 .5em;
   }
   .grid .row .col1,
   .grid .row .col2,
@@ -3841,7 +4121,6 @@ input[type=text].fluid {
   .grid .row .col12 {
     float: left;
     margin: 0 3% 0 0;
-    padding: 0;
   }
   .grid .row .last {
     margin-right: 0;
@@ -3897,14 +4176,6 @@ input[type=text].fluid {
   }
 }
 /*
- * large devices
- */
-@media all and (min-width: 1024px) {
-  .grid .row {
-    padding: 0;
-  }
-}
-/*
  * Utilities
  */
 @media all and (max-width: 768px) {
@@ -3948,7 +4219,6 @@ input[type=text].fluid {
   .col2_3 {
     position: relative;
     width: auto;
-    height: auto;
     display: block;
     margin: 0;
     top: auto;
@@ -3956,8 +4226,7 @@ input[type=text].fluid {
   }
   .header.second {
     text-align: center;
-    margin-bottom: 2em;
-    height: auto;
+    margin-bottom: 2.5em;
   }
   .header.second h2 {
     max-width: 98%;
@@ -4000,94 +4269,70 @@ article video {
 /* headers */
 .header {
   overflow: visible !important;
-  /** Responsive behavior for menu */
-  /** End responsive behavior **/
   /* top navigation */
   /* logo positioning */
 }
 .header.first {
   background: #333333;
-  height: 2.375em;
 }
 .header.second {
   background: #eeeeee;
 }
-.header .greedy .navigation.primary {
-  padding-right: 5em;
-}
-.header .greedy .navigation.primary button {
-  position: absolute;
-  top: 0;
-  right: 0;
-  outline: 0;
-  border: 0;
-  font-size: 1em;
-  font-weight: normal;
-  background: #888888;
-  padding: .45em 1em .42em 1em;
-  -webkit-border-radius: 0;
-  -moz-border-radius: 0;
-  border-radius: 0;
-  text-shadow: none;
-  color: #ffffff;
-  margin: 0;
-  min-width: 7.5em;
-}
-.header .greedy .navigation.primary button.hidden {
-  transition: none;
-  width: 0;
-  padding: 0;
-  overflow: hidden;
-}
-.header .greedy .navigation.primary button::after {
-  content: attr(count);
-  display: inline-flex;
-  width: 21px;
-  height: 21px;
-  align-items: center;
-  justify-content: center;
-  background: #333333;
-  color: #969696;
-  border-radius: 50%;
-  font-size: 0.7em;
-  line-height: 0.7em;
-  margin-left: 0.5rem;
-}
-.header .greedy .navigation.primary ul.hidden-links {
-  position: absolute;
-  right: 0;
-  top: 100%;
-  z-index: 999;
-}
-.header .greedy .navigation.primary ul.hidden-links.hidden {
-  display: none;
-}
-.header .greedy .navigation.primary ul.hidden-links li {
-  float: none;
-  padding: 0;
-  margin: 0;
-  display: block;
-}
-.header .greedy .navigation.primary ul.hidden-links li a {
-  min-width: 5.5em;
-  background: #f3f3f3;
-  color: #333333;
-  padding: .5em 1em;
-  float: right;
-  display: inline-block;
-}
-.header .greedy .navigation.primary ul.hidden-links li a:hover,
-.header .greedy .navigation.primary ul.hidden-links li a:active {
-  background: #eeeeee;
-  color: #333333;
-}
 .header .navigation.primary {
-  /* home button is special */
+  /*
+     * For IE 6/7 only
+     * Include this rule to trigger hasLayout and contain floats.
+     */
+  /*
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
+  /*
+     * For IE 6/7 only
+     * Include this rule to trigger hasLayout and contain floats.
+     */
+  zoom: 1;
+  /*
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
+}
+.header .navigation.primary:before,
+.header .navigation.primary:after {
+  content: "";
+  display: table;
+}
+.header .navigation.primary:after {
+  clear: both;
+}
+.header .navigation.primary:before,
+.header .navigation.primary:after {
+  content: "";
+  display: table;
+}
+.header .navigation.primary:after {
+  clear: both;
 }
 .header .navigation.primary li {
-  padding: .5em 1em 0 .25em;
-  height: 1.75em;
+  padding: .5em;
   float: left;
+}
+.header .navigation.primary li:first-child {
+  padding-left: 1em;
 }
 .header .navigation.primary li.right {
   float: right;
@@ -4112,35 +4357,81 @@ article video {
 .header .navigation.primary li .row.selected a:focus {
   color: #2894df;
 }
-.header .navigation.primary .home a {
-  margin-top: .125em;
-  margin-left: .5em;
-  width: 1.250em;
-  height: 1.250em;
-  background: transparent url('../img/logo/icon-20_white.png') 0 0 no-repeat;
-}
-.header .navigation.primary .home a:focus,
-.header .navigation.primary .home:hover a {
-  background: transparent url('../img/logo/icon-20.png') 0 0 no-repeat;
-}
-.header .navigation.primary .home a span {
-  display: none;
-}
 .header .logo {
   margin: 1.25em 0 0 1em;
   max-width: 80%;
 }
-/* CSS for serving the retina image to devices with a high "device-pixel-ratio": */
-@media only screen and (-moz-min-device-pixel-ratio: 1.5), only screen and (-o-min-device-pixel-ratio: 3/2), only screen and (-webkit-min-device-pixel-ratio: 1.5), only screen and (min-devicepixel-ratio: 1.5), only screen and (min-resolution: 1.5dppx) {
-  .header .navigation.primary .home a {
-    background: transparent url('../img/logo/icon-48_white.png') 0 0 no-repeat;
-    background-size: 20px 20px;
-  }
-  .header .navigation.primary .home a:focus,
-  .header .navigation.primary .home:hover a {
-    background: transparent url('../img/logo/icon-48.png') 0 0 no-repeat;
-    background-size: 20px 20px;
-  }
+/**
+ * @credit: https://github.com/lukejacksonn/GreedyNav
+ */
+.greedy .navigation.primary {
+  padding-right: 5em;
+}
+.greedy .navigation.primary button {
+  position: absolute;
+  top: 0;
+  right: 0;
+  outline: 0;
+  border: 0;
+  font-size: 1em;
+  font-weight: normal;
+  background: #888888;
+  padding: .45em 1em .42em 1em;
+  -webkit-border-radius: 0;
+  -moz-border-radius: 0;
+  border-radius: 0;
+  text-shadow: none;
+  color: #ffffff;
+  margin: 0;
+  min-width: 7.5em;
+}
+.greedy .navigation.primary button.hidden {
+  transition: none;
+  width: 0;
+  padding: 0;
+  overflow: hidden;
+}
+.greedy .navigation.primary button::after {
+  content: attr(count);
+  display: inline-flex;
+  width: 21px;
+  height: 21px;
+  align-items: center;
+  justify-content: center;
+  background: #333333;
+  color: #969696;
+  border-radius: 50%;
+  font-size: 0.7em;
+  line-height: 0.7em;
+  margin-left: 0.5rem;
+}
+.greedy .navigation.primary ul.hidden-links {
+  position: absolute;
+  right: 0;
+  top: 100%;
+  z-index: 999;
+}
+.greedy .navigation.primary ul.hidden-links.hidden {
+  display: none;
+}
+.greedy .navigation.primary ul.hidden-links li {
+  float: none;
+  padding: 0;
+  margin: 0;
+  display: block;
+}
+.greedy .navigation.primary ul.hidden-links li a {
+  min-width: 5.5em;
+  background: #f3f3f3;
+  color: #333333;
+  padding: .5em 1em;
+  float: right;
+  display: inline-block;
+}
+.greedy .navigation.primary ul.hidden-links li a:hover,
+.greedy .navigation.primary ul.hidden-links li a:active {
+  background: #eeeeee;
+  color: #333333;
 }
 .logo img {
   max-width: 150px;
@@ -4240,46 +4531,38 @@ article video {
  * Notification
  */
 .notification-container {
-  font-size: .75em;
-  /* 12px */
-  width: 80%;
+  font-size: .85em;
+  top: 0;
+  position: absolute;
+  z-index: 991;
+  height: 2em;
+  padding-top: 1em;
+  width: 60%;
+  margin-left: 20%;
 }
-.notification-container .message {
+.notification-container .notification {
+  position: relative;
+  left: 50%;
   float: left;
-  margin-left: 25%;
-  width: 50%;
 }
-@media all and (min-width: 768px) {
-  .notification-container {
-    bottom: 0;
-    position: absolute;
-    z-index: 991;
-    height: 2em;
-    margin: 0;
-    padding-top: 1.167em;
-  }
-  .notification-container .notification .message {
-    margin: 0;
-    margin-top: -0.25em;
-    padding: 0;
-    width: 60%;
-    float: none;
-    background: #ffffff;
-    font-weight: normal;
-    /* colors for messages */
-  }
-  .notification-container .notification .message.error {
-    color: #d40101;
-  }
-  .notification-container .notification .message.success {
-    color: #009900;
-  }
-  .notification-container .notification .message.warning {
-    color: #9f6000;
-  }
-  .notification-container .notification .message.notice {
-    color: #2894df;
-  }
+.notification-container .notification .message {
+  box-shadow: 0px 0px 10px 0px #333333;
+  border-radius: 2px;
+  padding: .5em 1em;
+  position: relative;
+  left: -50%;
+  float: left;
+  background: #fef0bf;
+  border: 1px solid #fccd28;
+  color: #000000;
+  font-weight: normal;
+  width: auto;
+}
+.notification-container .notification .message strong {
+  text-transform: capitalize;
+}
+.notification-container .notification .message strong:after {
+  content: ':';
 }
 /*
  * Breadcrumbs
@@ -4335,8 +4618,6 @@ article video {
   margin-top: 1%;
   /* some space for the footer / notification area in case it is really tall */
   margin-bottom: 3em;
-  -moz-box-shadow: 0px 0px 10px 0px #dddddd;
-  -webkit-box-shadow: 0px 0px 10px 0px #dddddd;
   box-shadow: 0px 0px 10px 0px #dddddd;
   /* header */
   /* content */
@@ -5019,31 +5300,27 @@ article figure .legend {
 /* reset layout styles on smaller screen */
 @media all and (min-width: 1024px) {
   .tldr {
-    margin-top: 3em;
+    margin-top: 1em;
+    margin-bottom: 3em;
     max-width: 20em;
   }
 }
 /* search */
-.inline-search,
-.search {
+form.search {
   margin-top: 1em;
 }
-.inline-search legend,
-.search legend,
-.inline-search label,
-.search label {
+form.search legend,
+form.search label {
   display: none;
   width: 10em;
 }
-.inline-search input[type=search],
-.search input[type=search] {
+form.search input[type=search] {
   float: left;
   width: 65%;
   margin-bottom: 0;
   padding: .313em .625em;
 }
-.inline-search button,
-.search button {
+form.search button {
   height: 2.571em;
   /* 36px */
   float: left;
@@ -5051,8 +5328,7 @@ article figure .legend {
   border-left: 0;
   border-radius: 0px 2px 2px 0px;
 }
-.inline-search button .fa-search,
-.search button .fa-search {
+form.search button .fa-search {
   font-size: 1.4em;
 }
 /* remove webkit search input decoration and cancel button */
@@ -5062,8 +5338,7 @@ input[type="search"]::-webkit-search-cancel-button {
 }
 /* rescale on small screen */
 @media all and (max-width: 480px) {
-  .inline-search input[type=search],
-  .search input[type=search] {
+  form.search input[type=search] {
     width: 55%;
   }
 }
@@ -5077,36 +5352,36 @@ input[type="search"]::-webkit-search-cancel-button {
   -moz-border-radius: 0.214em;
   border-radius: 0.214em;
   /*
- * For IE 6/7 only
- * Include this rule to trigger hasLayout and contain floats.
- */
+     * For IE 6/7 only
+     * Include this rule to trigger hasLayout and contain floats.
+     */
   /*
- * Clearfix: contain floats
- *
- * For modern browsers
- * 1. The space content is one way to avoid an Opera bug when the
- *	`contenteditable` attribute is included anywhere else in the document.
- *	Otherwise it causes space to appear at the top and bottom of elements
- *	that receive the `clearfix` class.
- * 2. The use of `table` rather than `block` is only necessary if using
- *	`:before` to contain the top-margins of child elements.
- */
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
   /*
- * For IE 6/7 only
- * Include this rule to trigger hasLayout and contain floats.
- */
+     * For IE 6/7 only
+     * Include this rule to trigger hasLayout and contain floats.
+     */
   zoom: 1;
   /*
- * Clearfix: contain floats
- *
- * For modern browsers
- * 1. The space content is one way to avoid an Opera bug when the
- *	`contenteditable` attribute is included anywhere else in the document.
- *	Otherwise it causes space to appear at the top and bottom of elements
- *	that receive the `clearfix` class.
- * 2. The use of `table` rather than `block` is only necessary if using
- *	`:before` to contain the top-margins of child elements.
- */
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
 }
 .tile:before,
 .tile:after {
@@ -5155,36 +5430,36 @@ input[type="search"]::-webkit-search-cancel-button {
 }
 .card {
   /*
- * For IE 6/7 only
- * Include this rule to trigger hasLayout and contain floats.
- */
+     * For IE 6/7 only
+     * Include this rule to trigger hasLayout and contain floats.
+     */
   /*
- * Clearfix: contain floats
- *
- * For modern browsers
- * 1. The space content is one way to avoid an Opera bug when the
- *	`contenteditable` attribute is included anywhere else in the document.
- *	Otherwise it causes space to appear at the top and bottom of elements
- *	that receive the `clearfix` class.
- * 2. The use of `table` rather than `block` is only necessary if using
- *	`:before` to contain the top-margins of child elements.
- */
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
   /*
- * For IE 6/7 only
- * Include this rule to trigger hasLayout and contain floats.
- */
+     * For IE 6/7 only
+     * Include this rule to trigger hasLayout and contain floats.
+     */
   zoom: 1;
   /*
- * Clearfix: contain floats
- *
- * For modern browsers
- * 1. The space content is one way to avoid an Opera bug when the
- *	`contenteditable` attribute is included anywhere else in the document.
- *	Otherwise it causes space to appear at the top and bottom of elements
- *	that receive the `clearfix` class.
- * 2. The use of `table` rather than `block` is only necessary if using
- *	`:before` to contain the top-margins of child elements.
- */
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
   margin-bottom: 1.25em;
   padding: .5em;
   border: 1px solid #f3f3f3;
@@ -5938,6 +6213,55 @@ button.swiper-pagination-bullet {
   font-size: 3.5em;
   border: 0;
 }
+.ribbon {
+  position: absolute;
+  right: -5px;
+  top: -5px;
+  z-index: 1;
+  overflow: hidden;
+  width: 75px;
+  height: 75px;
+  text-align: right;
+}
+.ribbon span {
+  font-size: 10px;
+  font-weight: bold;
+  color: #ffffff;
+  text-transform: uppercase;
+  text-align: center;
+  line-height: 20px;
+  transform: rotate(45deg);
+  -webkit-transform: rotate(45deg);
+  width: 100px;
+  display: block;
+  background: #009900;
+  box-shadow: 0 3px 10px -5px #000000;
+  position: absolute;
+  top: 19px;
+  right: -21px;
+}
+.ribbon span::before {
+  content: "";
+  position: absolute;
+  left: 0px;
+  top: 100%;
+  z-index: -1;
+  border-left: 3px solid #009900;
+  border-right: 3px solid transparent;
+  border-bottom: 3px solid transparent;
+  border-top: 3px solid #009900;
+}
+.ribbon span::after {
+  content: "";
+  position: absolute;
+  right: 0px;
+  top: 100%;
+  z-index: -1;
+  border-left: 3px solid transparent;
+  border-right: 3px solid #009900;
+  border-bottom: 3px solid transparent;
+  border-top: 3px solid #009900;
+}
 .faq ul.list {
   margin: 0;
   padding: 0;
@@ -5952,16 +6276,6 @@ button.swiper-pagination-bullet {
   padding-left: .5em;
   margin-bottom: .5em;
   list-style-type: circle;
-}
-/* reset layout styles on smaller screen */
-@media all and (max-width: 1024px) {
-  .header.second .col2.search-wrapper {
-    min-height: 4em;
-    width: 95%;
-  }
-  .header.second .col2.search-wrapper input[type=search] {
-    width: 70%;
-  }
 }
 /* credit photo album */
 .tldr.sponsors img {
@@ -6007,6 +6321,9 @@ button.swiper-pagination-bullet {
   font-size: 1.125em;
   display: inline-block;
   margin-top: 1em;
+}
+.home .page-row.hero2 .call-to-action .button + a {
+  margin-left: 1em;
 }
 .home .page-row.hero2 .scroll-prompt {
   display: none;
@@ -6413,36 +6730,36 @@ button.swiper-pagination-bullet {
 }
 .page-row.sponsors .sponsors-list {
   /*
- * For IE 6/7 only
- * Include this rule to trigger hasLayout and contain floats.
- */
+     * For IE 6/7 only
+     * Include this rule to trigger hasLayout and contain floats.
+     */
   /*
- * Clearfix: contain floats
- *
- * For modern browsers
- * 1. The space content is one way to avoid an Opera bug when the
- *	`contenteditable` attribute is included anywhere else in the document.
- *	Otherwise it causes space to appear at the top and bottom of elements
- *	that receive the `clearfix` class.
- * 2. The use of `table` rather than `block` is only necessary if using
- *	`:before` to contain the top-margins of child elements.
- */
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
   /*
- * For IE 6/7 only
- * Include this rule to trigger hasLayout and contain floats.
- */
+     * For IE 6/7 only
+     * Include this rule to trigger hasLayout and contain floats.
+     */
   zoom: 1;
   /*
- * Clearfix: contain floats
- *
- * For modern browsers
- * 1. The space content is one way to avoid an Opera bug when the
- *	`contenteditable` attribute is included anywhere else in the document.
- *	Otherwise it causes space to appear at the top and bottom of elements
- *	that receive the `clearfix` class.
- * 2. The use of `table` rather than `block` is only necessary if using
- *	`:before` to contain the top-margins of child elements.
- */
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
 }
 .page-row.sponsors .sponsors-list:before,
 .page-row.sponsors .sponsors-list:after {
@@ -6479,36 +6796,36 @@ button.swiper-pagination-bullet {
   }
   .page-row.sponsors .sponsors-list {
     /*
- * For IE 6/7 only
- * Include this rule to trigger hasLayout and contain floats.
- */
+     * For IE 6/7 only
+     * Include this rule to trigger hasLayout and contain floats.
+     */
     /*
- * Clearfix: contain floats
- *
- * For modern browsers
- * 1. The space content is one way to avoid an Opera bug when the
- *	`contenteditable` attribute is included anywhere else in the document.
- *	Otherwise it causes space to appear at the top and bottom of elements
- *	that receive the `clearfix` class.
- * 2. The use of `table` rather than `block` is only necessary if using
- *	`:before` to contain the top-margins of child elements.
- */
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
     /*
- * For IE 6/7 only
- * Include this rule to trigger hasLayout and contain floats.
- */
+     * For IE 6/7 only
+     * Include this rule to trigger hasLayout and contain floats.
+     */
     zoom: 1;
     /*
- * Clearfix: contain floats
- *
- * For modern browsers
- * 1. The space content is one way to avoid an Opera bug when the
- *	`contenteditable` attribute is included anywhere else in the document.
- *	Otherwise it causes space to appear at the top and bottom of elements
- *	that receive the `clearfix` class.
- * 2. The use of `table` rather than `block` is only necessary if using
- *	`:before` to contain the top-margins of child elements.
- */
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
     width: 960px;
     margin: auto;
     text-align: center;
@@ -6540,9 +6857,9 @@ button.swiper-pagination-bullet {
   }
   .page-row.sponsors .sponsors-list a span {
     /*
-   * Extends the .visuallyhidden class to allow the element to be focusable
-   * when navigated to via the keyboard: h5bp.com/p
-   */
+     * Extends the .visuallyhidden class to allow the element to be focusable
+     * when navigated to via the keyboard: h5bp.com/p
+     */
     border: 0;
     clip: rect(0 0 0 0);
     height: 1px;
@@ -6552,9 +6869,9 @@ button.swiper-pagination-bullet {
     position: absolute;
     width: 1px;
     /*
-   * Extends the .visuallyhidden class to allow the element to be focusable
-   * when navigated to via the keyboard: h5bp.com/p
-   */
+     * Extends the .visuallyhidden class to allow the element to be focusable
+     * when navigated to via the keyboard: h5bp.com/p
+     */
   }
   .page-row.sponsors .sponsors-list a span .focusable:active,
   .page-row.sponsors .sponsors-list a span .focusable:focus {
@@ -6787,11 +7104,13 @@ button.swiper-pagination-bullet {
   .page.roadmap .page-row.intro h1 + p {
     width: 50%;
     max-width: 25em;
-    font-size: 1.75em;
+    font-size: 1.5em;
     padding-left: 0;
-    margin: 0 0 3% .5em;
+    margin: 0 0 .5em .5em;
     text-align: left;
-    line-height: 1.666em;
+  }
+  .page.roadmap .page-row.intro .button.primary {
+    margin: .5em 0 3% .5em;
   }
 }
 .page.services.featured .service-col h3 {
@@ -7192,4 +7511,41 @@ button.swiper-pagination-bullet {
     background: transparent url('../img/illustrations/birds3_850.png') center 3em no-repeat;
     background-size: 640px auto;
   }
+}
+.page.start h2 {
+  color: #666666;
+  font-weight: normal;
+}
+.page.start .grid {
+  max-width: 860px;
+}
+.page.start .intro {
+  padding-top: 1em;
+  text-align: center;
+}
+.page.start .big-choice {
+  margin: 1em 0;
+  border: 1px solid #eaeaea;
+  padding: 1em;
+  padding-bottom: 1.5em;
+  min-height: 10em;
+  border-radius: .25em;
+  position: relative;
+}
+.page.start .big-choice:hover {
+  border: 1px solid #dddddd;
+}
+.page.start h3 {
+  border: 0;
+  padding: .5em 0 1em 0;
+  margin: 0;
+}
+.page.start .help {
+  margin-bottom: 5em;
+  background: #f0f7fd;
+  border: 1px solid #f0f7fd;
+}
+.page.start .help:hover {
+  background: #f0f7fd;
+  border: 1px solid #f0f7fd;
 }

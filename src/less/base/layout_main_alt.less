@@ -1,67 +1,68 @@
 .panel.middle .grid {
-	padding-bottom:2em;
-	max-width:100%;
+    padding-bottom: 2em;
+    max-width: 100%;
 
-	.breadcrumbs {
-		border-bottom:1px dotted @border-default;
-	}
+    .breadcrumbs {
+        border-bottom: 1px dotted @border-default;
+    }
 }
-.header {
-	h2 {
-		margin: 1em 0;
 
-		.button {
-			margin-right: 0.3em;
-			margin-top: -5px;
-		}
-	}
+.header {
+    h2 {
+        margin: 1em 0;
+
+        .button {
+            margin-right: 0.3em;
+            margin-top: -5px;
+        }
+    }
 }
 
 /* Scrolling in middle panel in full width */
 @media all and (min-width: 1024px) {
-	.panel.middle {
-		overflow-y: scroll;
-	}
-	.panel.main {
-		bottom:2.45em;
-	}
+    .panel.middle {
+        overflow-y: scroll;
+    }
+
+    .panel.main {
+        bottom: 2.45em;
+    }
 }
 
 /* reset layout styles on smaller screen */
 @media all and (max-width: 1024px) {
-	.page, .panel,
-	.header.second + .panel.main, .header.first,
-	.header.second, .col1, .col2, .col3, .col2_3 {
-		position: relative;
-		width: auto;
-		height: auto;
-		display: block;
-		margin: 0;
-		top: auto;
-		overflow: auto;
-	}
+    .page, .panel,
+    .header.second + .panel.main, .header.first,
+    .header.second, .col1, .col2, .col3, .col2_3 {
+        position: relative;
+        width: auto;
+        display: block;
+        margin: 0;
+        top: auto;
+        overflow: auto;
+    }
 
-	.header.second {
-		text-align: center;
-		margin-bottom: 2em;
-		height:auto;
-		h2 {
-			max-width:98%;
-			padding-left:1%;
-		}
-	}
+    .header.second {
+        text-align: center;
+        margin-bottom: 2.5em;
+        h2 {
+            max-width: 98%;
+            padding-left: 1%;
+        }
+    }
 
-	.col1, .panel.left {
-		display: none;
-	}
+    .col1, .panel.left {
+        display: none;
+    }
 
-	.panel.middle,
-	.col2_3 {
-		width: 98%;
-		left: 1%;
-	}
-	.col2 {
-		width: 55%;
-		left: 1%;
-	}
+    .panel.middle,
+    .col2_3 {
+        width: 98%;
+        left: 1%;
+    }
+
+    .col2 {
+        width: 55%;
+        left: 1%;
+    }
 }

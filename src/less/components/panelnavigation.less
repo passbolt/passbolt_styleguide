@@ -1,32 +1,136 @@
 /* left panel navigation */
 .panel .navigation {
-	font-size:.938em;
+    font-size: .938em;
 
-	&.first {
-		border-bottom:1px dotted @border-default;
-		padding:.625em 0;
-		margin-bottom:.625em;
-	}
-	&.last {
-		padding-right:.3125em; /* 5px */
-	}
-	.row:hover {
-		background:@background-lightest;
-	}
-	a {
-		border:0;
-		padding:.125em .313em; /* 2px 5px */
-		padding-left:1em;
-		color: @font-default;
-		display: block;
-	}
-	ul ul {
-		margin-left:.666666em;
-	}
-	.selected {
-		font-weight:bold;
-	}
-	.selected li {
-		font-weight:normal;
-	}
+    li {
+        .clearfix();
+    }
+
+    /* first block have a delimiter */
+    &.first {
+        border-bottom: 1px dotted @border-default;
+        padding: .625em 0;
+        margin-bottom: .625em;
+    }
+
+    /*
+        Navigation row
+    */
+    .row {
+        float: left;
+        width: 100%;
+        box-sizing: border-box;
+
+        &:hover {
+            background: @background-lightest;
+        }
+        &.no-hover:hover {
+            background: transparent;
+        }
+        &.selected {
+            font-weight: bold;
+        }
+
+        /*
+            Row layout
+              fluid main-cell
+              fixed right-cell
+        */
+        .main-cell-wrapper {
+            float: left;
+            width: 100%;
+        }
+        .main-cell {
+            margin: 0 1.5em 0 0; // no left cell = no margin left
+
+            h3 {
+                border: 0;
+                font-size: 1em;
+                margin: 0 .25em 0 1em;
+                padding: .25em 0;
+                .ellipsis();
+
+                a {
+                    /* suppress a padding so that it looks the same
+                        for all title if it is a link or not */
+                    padding-top: 0;
+                    padding-bottom: 0;
+                }
+            }
+            span {
+                .ellipsis();
+                display: block;
+            }
+
+            a {
+                border: 0;
+                padding: .125em .313em; /* 2px 5px */
+                padding-left: 1em;
+                color: @font-default;
+                display: block;
+            }
+        }
+
+        /*
+            Right Cell
+        */
+        .right-cell {
+            float: right;
+            width: 1em;
+            height: 1em;
+            margin-right: 1em;
+            margin-top: -1.5em;
+
+            a {
+                display:none;
+                width: 1em;
+                height: 1em;
+                padding: .125em;
+                color:@font-light;
+                border:1px solid transparent;
+            }
+            a:after {
+                position:absolute;
+                width:16px;
+                height:16px;
+                content: "\f0fe";
+                font: normal normal normal 14px/1 FontAwesome;
+                line-height: 16px;
+                text-align: center;
+                vertical-align: center;
+            }
+            a.filter:after {
+                content: "\f0b0";
+            }
+            a:hover {
+                color:@font-focus;
+                background:@background-default;
+            }
+            span {
+                .visuallyhidden();
+            }
+        }
+
+        /* title cell is higher than normal cell
+           this centers the right cell vertically accordingly
+         */
+        &.title {
+            .right-cell {
+                margin-top: -1.625em;
+            }
+        }
+    }
+
+    .row:hover {
+        background: @background-lightest;
+
+        .right-cell {
+            a {
+                display:block;
+            }
+            a.filter {
+                border: 1px solid @border-default;
+            }
+        }
+    }
 }
