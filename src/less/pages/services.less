@@ -36,7 +36,7 @@
 
     p {
       font-size: 2em;
-      margin-bottom: 0.5em;
+      margin-bottom: 1em;
     }
   }
 }
@@ -144,10 +144,21 @@
   
   .registration.form {
     text-align: left;
+    margin-bottom: 3em;
     div.input{
       input[type=text],
       input[type=email]{
         width:85%;
+      }
+
+      &.error {
+        input {
+          border: 1px solid #d40101;
+        }
+        label.error {
+          font-size: 0.8em;
+          margin-top: -0.5em;
+        }
       }
     }
     select {
@@ -167,10 +178,15 @@
 
     .sponsorship {
       margin:1em 0 2em;
+      span.label.error,
+      em{
+        color: #d40101;
+      }
+
       .sponsorship-options {
         width: 86%;
         margin-top:1em;
-        padding:1em 0.5em;
+        padding:1em;
         background-color: @grey-lighter;
         ul {
           li {
@@ -340,6 +356,9 @@
         border-bottom:1px solid @grey-lightest;
         padding-bottom:1em;
         li {
+          i{
+            color: #0bd401;
+          }
           margin-bottom:0.3em;
           div {
             width:80%;
@@ -352,6 +371,11 @@
 }
 
 .page.services.community.download {
+
+  .message {
+    text-align: center;
+    margin-top: 1em;
+  }
   .page-row.intro {
     padding: 1em;
     min-height: 130px;
@@ -366,6 +390,7 @@
   }
   .step {
     text-align: center;
+    margin-bottom: 3em;
     div.illustration,
     h2,
     p {
