@@ -5288,6 +5288,113 @@ input[type="search"]::-webkit-search-cancel-button {
   overflow: hidden;
 }
 /*
+ * jquery-filestyle
+ *
+ * Copyright (c) 2017 Markus Vinicius da Silva Lima
+ * github: https://github.com/markusslima/jquery-filestyle
+ * Version 2.1.0
+ * Licensed under the MIT license.
+ *
+ * Based on the work of Markus da Silva Lima.
+ * Modified by passbolt to match existing styleguide.
+ */
+div.jfilestyle {
+  display: inline-block;
+  margin: 0px 0px 10px 0px;
+  padding: 0px;
+  position: relative;
+  border-collapse: separate;
+}
+div.jfilestyle label,
+div.jfilestyle input {
+  font-family: "Open Sans", Verdana, sans-serif;
+}
+div.jfilestyle input {
+  border: 1px solid #c0c0c0;
+  background: #d9d9d9;
+  margin: 0px -5px 0px 0px;
+  vertical-align: middle;
+  padding: 10px 15px;
+  font-size: 14px;
+  border-radius: 0px;
+  color: #8d8d8d;
+  cursor: default;
+  line-height: normal;
+}
+div.jfilestyle input[type=password]:disabled,
+div.jfilestyle input[type=search]:disabled,
+div.jfilestyle input[type=text]:disabled,
+div.jfilestyle input[type=email]:disabled {
+  background-color: #ffffff;
+  padding: .375em .625em .375em .625em;
+  font-size: 1em;
+  line-height: 24px;
+}
+div.jfilestyle label {
+  display: inline-block;
+  border: 1px solid #cccccc;
+  background: #eeeeee;
+  padding: .65em 1.225em .55em 1.225em;
+  color: #0662ba;
+  vertical-align: middle;
+  line-height: normal;
+  text-align: center;
+  margin: 0px;
+  font-size: .875em;
+  width: auto;
+  font-weight: bold;
+  border-radius: 0 0.214em 0.214em 0;
+}
+div.jfilestyle label[disabled] {
+  pointer-events: none;
+  opacity: 0.6;
+  filter: alpha(opacity=65);
+  cursor: not-allowed;
+}
+div.jfilestyle label:hover {
+  cursor: pointer;
+  opacity: 0.9;
+  border: 1px solid #bbbbbb;
+}
+div.jfilestyle label span {
+  color: #333333;
+}
+div.jfilestyle label span:before {
+  content: '';
+  display: block;
+  width: 1em;
+  height: 1.3em;
+  background: transparent url('../img/fontawesome/upload.svg') center center no-repeat;
+  background-size: 1em 1em;
+  float: left;
+  color: #333333;
+  margin-right: 0.5em;
+}
+div.jfilestyle.primary label {
+  background: #2894df;
+}
+div.jfilestyle.primary label span {
+  color: #ffffff;
+}
+div.jfilestyle.primary label span:before {
+  color: #ffffff;
+}
+div.jfilestyle .jfilestyle-corner input:last-child,
+div.jfilestyle .jfilestyle-corner label:last-child {
+  margin-left: -1px;
+}
+div.jfilestyle .count-jfilestyle {
+  background: #303030;
+  color: #fff;
+  border-radius: 50%;
+  padding: 1px 5px;
+  font-size: 12px;
+  vertical-align: middle;
+}
+.required div.jfilestyle label:after {
+  content: none;
+}
+/*
  * Comment thread with add/edit form
  */
 .panel.aside .comments {
@@ -7108,6 +7215,22 @@ table.table-info.horizontal tbody tr:nth-child(even) {
 }
 .edit-group-dialog .group_members.empty ul.permissions {
   display: none;
+}
+.dialog.import .input-password-wrapper .input.password input {
+  width: 83%;
+}
+.dialog.import .actions.inline {
+  width: 14%;
+}
+.dialog.import .actions.inline .button {
+  height: 1.5em;
+  padding-top: .6em;
+}
+.dialog.import div.jfilestyle {
+  width: 100% !important;
+}
+.dialog.import div.jfilestyle input[type=text]:disabled {
+  width: 60.5% !important;
 }
 /* sidebar / user details in overview */
 .panel.aside .user .sidebar-header,

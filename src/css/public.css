@@ -7233,10 +7233,18 @@ button.swiper-pagination-bullet {
 }
 .page.services .registration.form {
   text-align: left;
+  margin-bottom: 3em;
 }
 .page.services .registration.form div.input input[type=text],
 .page.services .registration.form div.input input[type=email] {
   width: 85%;
+}
+.page.services .registration.form div.input.error input {
+  border: 1px solid #d40101;
+}
+.page.services .registration.form div.input.error label.error {
+  font-size: 0.8em;
+  margin-top: -0.5em;
 }
 .page.services .registration.form select {
   width: 89%;
@@ -7253,10 +7261,14 @@ button.swiper-pagination-bullet {
 .page.services .registration.form .sponsorship {
   margin: 1em 0 2em;
 }
+.page.services .registration.form .sponsorship span.label.error,
+.page.services .registration.form .sponsorship em {
+  color: #d40101;
+}
 .page.services .registration.form .sponsorship .sponsorship-options {
   width: 86%;
   margin-top: 1em;
-  padding: 1em 0.5em;
+  padding: 1em;
   background-color: #eeeeee;
 }
 .page.services .registration.form .sponsorship .sponsorship-options ul li {
@@ -7406,10 +7418,17 @@ button.swiper-pagination-bullet {
   .page.services .service-details ul.features li {
     margin-bottom: 0.3em;
   }
+  .page.services .service-details ul.features li i {
+    color: #0bd401;
+  }
   .page.services .service-details ul.features li div {
     width: 80%;
     float: right;
   }
+}
+.page.services.community.download .message {
+  text-align: center;
+  margin-top: 1em;
 }
 .page.services.community.download .page-row.intro {
   padding: 1em;
@@ -7424,6 +7443,7 @@ button.swiper-pagination-bullet {
 }
 .page.services.community.download .step {
   text-align: center;
+  margin-bottom: 3em;
 }
 .page.services.community.download .step div.illustration,
 .page.services.community.download .step h2,

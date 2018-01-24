@@ -1,0 +1,121 @@
+/*
+ * jquery-filestyle
+ *
+ * Copyright (c) 2017 Markus Vinicius da Silva Lima
+ * github: https://github.com/markusslima/jquery-filestyle
+ * Version 2.1.0
+ * Licensed under the MIT license.
+ *
+ * Based on the work of Markus da Silva Lima.
+ * Modified by passbolt to match existing styleguide.
+ */
+div.jfilestyle {
+  display: inline-block;
+  margin: 0px 0px 10px 0px;
+  padding: 0px;
+  position: relative;
+  border-collapse: separate;
+
+  label,
+  input {
+    font-family: "Open Sans", Verdana, sans-serif;
+  }
+
+  input {
+    border: 1px solid #c0c0c0;
+    background: #d9d9d9;
+    margin: 0px -5px 0px 0px;
+    vertical-align: middle;
+    padding: 10px 15px;
+    font-size: 14px;
+    border-radius: 0px;
+    color: #8d8d8d;
+    cursor: default;
+    line-height: normal;
+
+    &[type=password]:disabled,
+    &[type=search]:disabled,
+    &[type=text]:disabled,
+    &[type=email]:disabled {
+      background-color: @white;
+      // Harmonize padding and font size with other inputs.
+      padding: .375em .625em .375em .625em;
+      font-size: 1em;
+      line-height: 24px;
+    }
+  }
+
+  label {
+    display: inline-block;
+    border: 1px solid @border-input;
+    background: @grey-lighter;
+    padding: .65em 1.225em .55em 1.225em;
+    color: #0662ba;
+    vertical-align: middle;
+    line-height: normal;
+    text-align: center;
+    margin: 0px;
+    font-size: .875em;
+    width: auto;
+    font-weight: bold;
+    border-radius: 0 0.214em 0.214em 0;
+
+    &[disabled] {
+      pointer-events: none;
+      opacity: 0.6;
+      filter: alpha(opacity=65);
+      cursor: not-allowed;
+    }
+    &:hover {
+      cursor: pointer;
+      opacity: 0.9;
+      border: 1px solid @border-input-light;
+    }
+
+    span {
+      color: @black;
+      &:before {
+        content: '';
+        display: block;
+        width: 1em;
+        height: 1.3em;
+        background: transparent url('@{images}/fontawesome/upload.svg') center center no-repeat;
+        background-size: 1em 1em;
+        float: left;
+        color: @black;
+        margin-right:0.5em;
+      }
+    }
+  }
+
+  &.primary {
+    label {
+      background: @blue;
+      span {
+        color: @white;
+        &:before {
+          color: @white;
+        }
+      }
+    }
+  }
+
+  .jfilestyle-corner input:last-child,
+  .jfilestyle-corner label:last-child {
+    margin-left: -1px;
+  }
+
+  .count-jfilestyle {
+    background: #303030;
+    color: #fff;
+    border-radius: 50%;
+    padding: 1px 5px;
+    font-size: 12px;
+    vertical-align: middle;
+  }
+}
+
+// Cancel red star in the label in case of required element.
+.required div.jfilestyle label:after {
+  content: none;
+}
