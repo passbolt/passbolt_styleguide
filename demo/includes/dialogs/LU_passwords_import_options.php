@@ -47,7 +47,7 @@
 
 				</div>
 				<div class="submit-wrapper clearfix">
-					<input class="button primary" value="Continue import" type="submit" onclick="javascript:window.location.href='../demo/LU_passwords_import_result.php'; return false;">
+					<input class="button primary" value="Continue import" type="submit" onclick="javascript:window.location.href='../../LU_passwords_import_result_error.php'; return false;">
 					<a href="../demo/LU_passwords.php" class="js-dialog-cancel cancel">cancel</a>
 				</div>
 			</form>

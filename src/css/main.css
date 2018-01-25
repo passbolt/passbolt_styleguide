@@ -4907,6 +4907,7 @@ input[type="search"]::-webkit-search-cancel-button {
   /* header */
   /* content */
   /* inputs */
+  /* Error display */
   /* submit / cancel */
 }
 .dialog.medium {
@@ -4961,6 +4962,13 @@ input[type="search"]::-webkit-search-cancel-button {
   display: block;
   clear: both;
   width: 92%;
+}
+.dialog .inline-error {
+  color: #d40101;
+  font-weight: bold;
+}
+.dialog .accordion-header a {
+  display: inline;
 }
 .dialog .submit-wrapper {
   margin: 0;
@@ -7100,6 +7108,31 @@ table.table-info.horizontal tbody tr:nth-child(even) {
 }
 .accordion.closed .accordion-content {
   display: none;
+}
+.dialog .accordion .accordion-header {
+  margin-bottom: .5em;
+}
+.dialog .accordion .accordion-header a {
+  display: inline;
+  margin-left: 1em;
+}
+.dialog .accordion .accordion-header a:before {
+  margin-left: -1.25em;
+  margin-top: .25em;
+  content: "\f0d7";
+  /* caret down */
+  font: normal normal normal 1em FontAwesome;
+  text-rendering: auto;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  width: 1em;
+  height: 1em;
+  position: absolute;
+  text-align: center;
+}
+.dialog .accordion.closed .accordion-header a:before {
+  content: "\f0da";
+  /* caret right */
 }
 .accordion.sidebar-section .accordion-header a {
   border: 0;

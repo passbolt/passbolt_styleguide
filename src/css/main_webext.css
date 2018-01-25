@@ -3780,6 +3780,7 @@ article video {
   /* header */
   /* content */
   /* inputs */
+  /* Error display */
   /* submit / cancel */
 }
 .dialog.medium {
@@ -3834,6 +3835,13 @@ article video {
   display: block;
   clear: both;
   width: 92%;
+}
+.dialog .inline-error {
+  color: #d40101;
+  font-weight: bold;
+}
+.dialog .accordion-header a {
+  display: inline;
 }
 .dialog .submit-wrapper {
   margin: 0;
