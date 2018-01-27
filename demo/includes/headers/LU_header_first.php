@@ -49,15 +49,6 @@
 					<div class="row">
 						<div class="main-cell-wrapper">
 							<div class="main-cell">
-								<a href="../demo/LU_users_profile.php"><span>settings</span></a>
-							</div>
-						</div>
-					</div>
-				</li>
-				<li id="ea699358-a04d-179f-cc6c-64e7bd7f4254" class="logout ready">
-					<div class="row">
-						<div class="main-cell-wrapper">
-							<div class="main-cell">
 								<a href="../demo/AN_login.php"><span>logout</span></a>
 							</div>
 						</div>

@@ -3670,6 +3670,9 @@ input[type=text].fluid {
   bottom: 0;
 }
 /* headers */
+.header.first {
+  min-height: 2.4em;
+}
 .header.second {
   top: 2.375em;
   height: 4.5em;
@@ -3740,24 +3743,41 @@ input[type=text].fluid {
 }
 /* hide left column when there is no space */
 @media all and (max-width: 1024px) {
-  .col1,
   .panel.left {
     display: none;
   }
-  .header.second {
+  .header.second .col2 {
+    display: none;
+  }
+  .header.second .col2_3 {
+    display: none;
+  }
+  .header.third {
     height: 4.5em;
   }
-  .panel.middle,
-  .col2_3 {
-    width: 99%;
-    left: 1%;
+  .header.third .col1,
+  .header.third .col2,
+  .header.third .col2_3 {
+    position: relative;
+    float: left;
+    left: auto;
+    width: auto;
   }
-  .col2 {
-    width: 80%;
-    left: 1%;
+  .header.third .col3 {
+    display: none;
+  }
+  .panel.main .panel.left {
+    display: none;
+  }
+  .panel.main .panel.middle {
+    width: 100%;
+    left: 0;
   }
   .panel.main .row {
     padding-left: .5em;
+  }
+  .panel.main .panel.aside {
+    min-width: auto;
   }
 }
 /*
@@ -4335,8 +4355,8 @@ input[type="search"]::-webkit-search-cancel-button {
 }
 /* rescale on small screen */
 @media all and (max-width: 480px) {
-  form.search input[type=search] {
-    width: 55%;
+  form.search {
+    display: none;
   }
 }
 /*
@@ -4423,6 +4443,7 @@ input[type="search"]::-webkit-search-cancel-button {
   padding-bottom: 0;
 }
 .user.profile .more a {
+  position: absolute;
   display: block;
   border: 0;
   color: #666666;
@@ -4605,18 +4626,18 @@ input[type="search"]::-webkit-search-cancel-button {
 .header.third .actions-wrapper {
   margin-top: .5em;
 }
-.header.third .actions-wrapper .actions .button {
+.header.third .actions-wrapper .button {
   font-size: .875em;
   min-width: 4em;
   float: left;
 }
-.header.third .actions-wrapper .actions li {
+.header.third .actions-wrapper li {
   display: inline;
 }
-.header.third .actions-wrapper .actions.secondary {
+.header.third .actions-wrapper .secondary {
   float: right;
 }
-.header.third .actions-wrapper .actions.secondary .button {
+.header.third .actions-wrapper .secondary .button {
   font-size: .875em;
   min-width: 1em;
 }
@@ -4629,30 +4650,41 @@ input[type="search"]::-webkit-search-cancel-button {
 }
 /* hide icons if there is no space */
 @media all and (max-width: 1024px) {
-  .header.third .actions-wrapper .actions i {
+  .header.third .main-action-wrapper i,
+  .header.third .actions-wrapper i {
     display: none;
   }
-  .header.third .actions-wrapper .actions i + span {
+  .header.third .main-action-wrapper i + span,
+  .header.third .actions-wrapper i + span {
     margin-left: 0;
   }
-  .header.third .actions-wrapper .actions .disabled {
+  .header.third .main-action-wrapper #js_wsp_pwd_import_button,
+  .header.third .actions-wrapper #js_wsp_pwd_import_button {
+    display: none;
+  }
+  .header.third .main-action-wrapper .disabled,
+  .header.third .actions-wrapper .disabled {
     display: none;
   }
 }
 /* hide text and only show icon if there is even less space */
 @media all and (max-width: 540px) {
-  .header.third .actions-wrapper .actions i {
+  .header.third .main-action-wrapper a i,
+  .header.third .actions-wrapper a i {
     display: block;
   }
-  .header.third .actions-wrapper .actions a.button {
+  .header.third .main-action-wrapper a.button,
+  .header.third .actions-wrapper a.button {
     min-width: 1em;
     font-size: 1em;
   }
-  .header.third .actions-wrapper .actions i + span {
+  .header.third .main-action-wrapper a i + span,
+  .header.third .actions-wrapper a i + span {
     margin-left: 0;
     display: none;
   }
-  .header.third .actions-wrapper .actions .disabled {
+  .header.third .main-action-wrapper .disabled,
+  .header.third .actions-wrapper .disabled {
     display: none;
   }
 }
@@ -4673,7 +4705,7 @@ input[type="search"]::-webkit-search-cancel-button {
   border: 1px solid #dddddd;
   height: 10px;
   display: block;
-  margin: 2em 0 0 0;
+  margin: 2em 0 1em 0;
   padding: 2px;
 }
 .progress-bar-wrapper .progress-bar.big {
@@ -7647,6 +7679,9 @@ html.launching .launching-screen .launching-screen-holder {
   width: 20%;
   margin: auto;
   margin-top: 7em;
+}
+html.launching .launching-screen .progress-bar-wrapper {
+  margin-bottom: 0;
 }
 html.launching .launching-screen p {
   margin: 1em 0;
