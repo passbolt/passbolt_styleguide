@@ -5,25 +5,39 @@
     <title>Frequently Asked Questions | Passbolt</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="shortcut icon" type="image/x-icon" href="img/webroot/favicon.ico" />
-    <link rel="stylesheet" type="text/css" href="../src/css/public.css">
+    <link rel="stylesheet" type="text/css" href="../src/css/help.css">
     <script src="../src/js/jquery-2.2.4.min.js"></script>
     <script src="../src/js/bootstrap-scrollspy.js"></script>
-    <script src="../src/js/list.min.js"></script>
-    <script src="../src/js/list.fuzzysearch.min.js"></script>
-    <script src="../src/js/imagelightbox.min.js"></script>
-	<script src="js/greedynav.js"></script>
+	<script src="../src/js/greedynav.js"></script>
 </head>
 <body id="faq-list">
-<div id="container" class="page background">
+<div id="container" class="help page help-home background">
     <!-- first header -->
     <?php include('includes/headers/AA_header.php'); ?>
 
     <!-- second header -->
     <div class="header second">
         <?php include('includes/AN_logo.php'); ?>
-        <div class="col2_3">
-            <h2>Need some help?
-                <a href="https://community.passbolt.com" class="">Ask the community!</a></h2>
+        <div class="col2 search-wrapper">
+            <h2 class="visuallyhidden">Help Search</h2>
+            <div>
+                <form class="search ready" action="/search.html" method="get">
+                    <div class="input required">
+                        <label for="search-box">Search</label>
+                        <input id="search-box" name="query" maxlength="64" placeholder="Help search" class="fuzzy-search" type="search">
+                    </div>
+                    <button value="search">
+                        <i class="fa fa-fw fa-search"></i>
+                        <span class="text visuallyhidden">search</span>
+                    </button>
+                </form>
+            </div>
+        </div>
+        <div class="col3">
+            <div class="edit-on-github">
+                <a href="https://github.com/passbolt/passbolt_help/edit/master/{{ page.path }}" class="button">
+                    <i class="fa fa-github-alt fa-fw"></i> Edit on github</a>
+            </div>
         </div>
     </div>
 
@@ -172,14 +186,5 @@
     </div>
     <?php include('includes/AN_footer.php'); ?>
 </div>
-
-<script type="application/javascript">
-    $(function() {
-        var faqlist = new List('faq-list', {
-            valueNames: ['question', 'answer'],
-            plugins: [ ListFuzzySearch() ]
-        });
-    });
-</script>
 </body>
 </html>

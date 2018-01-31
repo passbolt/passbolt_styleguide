@@ -3625,6 +3625,9 @@ input[type=text].fluid {
   bottom: 0;
 }
 /* headers */
+.header.first {
+  min-height: 2.4em;
+}
 .header.second {
   top: 2.375em;
   height: 4.5em;
@@ -3695,24 +3698,41 @@ input[type=text].fluid {
 }
 /* hide left column when there is no space */
 @media all and (max-width: 1024px) {
-  .col1,
   .panel.left {
     display: none;
   }
-  .header.second {
+  .header.second .col2 {
+    display: none;
+  }
+  .header.second .col2_3 {
+    display: none;
+  }
+  .header.third {
     height: 4.5em;
   }
-  .panel.middle,
-  .col2_3 {
-    width: 99%;
-    left: 1%;
+  .header.third .col1,
+  .header.third .col2,
+  .header.third .col2_3 {
+    position: relative;
+    float: left;
+    left: auto;
+    width: auto;
   }
-  .col2 {
-    width: 80%;
-    left: 1%;
+  .header.third .col3 {
+    display: none;
+  }
+  .panel.main .panel.left {
+    display: none;
+  }
+  .panel.main .panel.middle {
+    width: 100%;
+    left: 0;
   }
   .panel.main .row {
     padding-left: .5em;
+  }
+  .panel.main .panel.aside {
+    min-width: auto;
   }
 }
 /*

@@ -32,6 +32,7 @@
 .header.first {
     // let the height be automatically set
     // it breaks the greedy nav on firefox otherwise
+    min-height:2.4em;
 }
 
 .header.second {
@@ -80,7 +81,6 @@
 .panel.left {
     width: 17.5%;
 }
-
 .panel.middle {
     width: 82%;
     left: 18%;
@@ -117,29 +117,48 @@
 /* hide left column when there is no space */
 @media all and (max-width: 1024px) {
 
-    .col1, .panel.left {
+    .panel.left {
         display: none;
     }
 
     .header.second {
+        .col2 {
+            display:none;
+        }
+        .col2_3 {
+            display:none;
+        }
+    }
+
+    .header.third {
         height: 4.5em;
-    }
-
-    .panel.middle,
-    .col2_3 {
-        width: 99%;
-        left: 1%;
-    }
-
-    .col2 {
-        width: 80%;
-        left: 1%;
+        .col1,
+        .col2,
+        .col2_3{
+            position:relative;
+            float:left;
+            left:auto;
+            width:auto;
+        }
+        .col3 {
+            display:none;
+        }
     }
 
     .panel.main {
+        .panel.left {
+            display:none;
+        }
+        .panel.middle {
+            width:100%;
+            left:0;
+        }
         .row {
             padding-left:.5em;
         }
+
+        .panel.aside {
+            min-width:auto;
+        }
     }
 }
-

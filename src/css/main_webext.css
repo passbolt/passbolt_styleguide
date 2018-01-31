@@ -3710,7 +3710,7 @@ article video {
   border: 1px solid #dddddd;
   height: 10px;
   display: block;
-  margin: 2em 0 0 0;
+  margin: 2em 0 1em 0;
   padding: 2px;
 }
 .progress-bar-wrapper .progress-bar.big {

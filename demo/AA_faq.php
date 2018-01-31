@@ -8,8 +8,6 @@
     <link rel="stylesheet" type="text/css" href="../src/css/help.css">
 	<script src="../src/js/jquery-2.2.4.min.js"></script>
 	<script src="../src/js/bootstrap-scrollspy.js"></script>
-	<script src="../src/js/list.min.js"></script>
-	<script src="../src/js/list.fuzzysearch.min.js"></script>
 	<script src="../src/js/imagelightbox.min.js"></script>
 	<script src="../src/js/greedynav.js"></script>
 </head>
@@ -212,13 +210,5 @@
 	</div>
 	<?php include('includes/AN_footer.php'); ?>
 </div>
-<script type="application/javascript">
-	$(function() {
-		var faqlist = new List('faq-list', {
-			valueNames: ['question', 'answer'],
-			plugins: [ ListFuzzySearch() ]
-		});
-	});
-</script>
 </body>
 </html>
