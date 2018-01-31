@@ -23,7 +23,7 @@
                     </p>
                     <div class="accordion error-details closed">
                         <div class="accordion-header">
-                            <a href="#">Errors details</a>
+                            <a role="link">Errors details</a>
                         </div>
                         <div class="accordion-content hidden">
                             <div class="input text">
