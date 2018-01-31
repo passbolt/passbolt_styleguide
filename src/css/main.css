@@ -5374,7 +5374,7 @@ div.jfilestyle label {
   display: inline-block;
   border: 1px solid #cccccc;
   background: #eeeeee;
-  padding: .65em 1.225em .55em 1.225em;
+  padding: .65em 1.225em .6em 1.225em;
   color: #0662ba;
   vertical-align: middle;
   line-height: normal;
@@ -5384,6 +5384,7 @@ div.jfilestyle label {
   width: auto;
   font-weight: bold;
   border-radius: 0 0.214em 0.214em 0;
+  max-height: 18px;
 }
 div.jfilestyle label[disabled] {
   pointer-events: none;
@@ -5396,15 +5397,26 @@ div.jfilestyle label:hover {
   opacity: 0.9;
   border: 1px solid #bbbbbb;
 }
+div.jfilestyle label.primary {
+  background: #2894df;
+  border: 1px solid #2894df;
+}
+div.jfilestyle label.primary span {
+  color: #ffffff;
+}
+div.jfilestyle label.primary span:before {
+  color: #ffffff;
+}
 div.jfilestyle label span {
   color: #333333;
 }
 div.jfilestyle label span:before {
-  content: '';
+  font-family: 'FontAwesome';
+  content: "\f093";
   display: block;
   width: 1em;
   height: 1.3em;
-  background: transparent url('../img/fontawesome/upload.svg') center center no-repeat;
+  line-height: 1.3em;
   background-size: 1em 1em;
   float: left;
   color: #333333;

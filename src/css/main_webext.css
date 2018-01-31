@@ -3967,6 +3967,383 @@ article video {
 .profile .edit-avatar-action .fa {
   margin-top: .25em;
 }
+/**
+ * Tooltips!
+ * credits: Chris Bracco http://cbracco.me/a-simple-css-tooltip/
+ */
+/* Base styles for the element that has a tooltip */
+[data-tooltip],
+.tooltip {
+  position: relative;
+  cursor: pointer;
+}
+/* Base styles for the entire tooltip */
+[data-tooltip]:before,
+[data-tooltip]:after,
+.tooltip:before,
+.tooltip:after {
+  position: absolute;
+  visibility: hidden;
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
+  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
+  opacity: 0;
+  -webkit-transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out, -webkit-transform 0.2s cubic-bezier(0.71, 1.7, 0.77, 1.24);
+  -moz-transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out, -moz-transform 0.2s cubic-bezier(0.71, 1.7, 0.77, 1.24);
+  transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out, transform 0.2s cubic-bezier(0.71, 1.7, 0.77, 1.24);
+  -webkit-transform: translate3d(0, 0, 0);
+  -moz-transform: translate3d(0, 0, 0);
+  transform: translate3d(0, 0, 0);
+  pointer-events: none;
+  text-align: center;
+}
+/* Show the entire tooltip on hover and focus */
+[data-tooltip]:hover:before,
+[data-tooltip]:hover:after,
+[data-tooltip]:focus:before,
+[data-tooltip]:focus:after,
+.tooltip:hover:before,
+.tooltip:hover:after,
+.tooltip:focus:before,
+.tooltip:focus:after,
+.always-show:before,
+.always-show:after {
+  visibility: visible;
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";
+  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100);
+  opacity: 1;
+}
+/* Base styles for the tooltip's directional arrow */
+.tooltip:before,
+[data-tooltip]:before {
+  z-index: 990;
+  border: 6px solid transparent;
+  background: transparent;
+  content: "";
+}
+/* Base styles for the tooltip's content area */
+.tooltip:after,
+[data-tooltip]:after {
+  z-index: 990;
+  padding: 8px;
+  width: 160px;
+  background-color: #333333;
+  background-color: rgba(51, 51, 51, 0.9);
+  color: #ffffff;
+  content: attr(data-tooltip);
+  font-size: 14px;
+  line-height: 1.2em;
+  font-weight: normal;
+  text-shadow: none;
+}
+/* Directions */
+/* Top (default) */
+[data-tooltip]:before,
+[data-tooltip]:after,
+.tooltip:before,
+.tooltip:after,
+.tooltip-top:before,
+.tooltip-top:after {
+  bottom: 100%;
+  left: 50%;
+}
+[data-tooltip]:before,
+.tooltip:before,
+.tooltip-top:before {
+  margin-left: -6px;
+  margin-bottom: -12px;
+  border-top-color: #333333;
+  border-top-color: rgba(51, 51, 51, 0.9);
+}
+/* Horizontally align top/bottom tooltips */
+[data-tooltip]:after,
+.tooltip:after,
+.tooltip-top:after {
+  margin-left: -80px;
+}
+[data-tooltip]:hover:before,
+[data-tooltip]:hover:after,
+[data-tooltip]:focus:before,
+[data-tooltip]:focus:after,
+.tooltip:hover:before,
+.tooltip:hover:after,
+.tooltip:focus:before,
+.tooltip:focus:after,
+.tooltip.always-show:after,
+.tooltip.always-show:before,
+.tooltip-top.always-show:after,
+.tooltip-top.always-show:before,
+.tooltip-top:hover:before,
+.tooltip-top:hover:after,
+.tooltip-top:focus:before,
+.tooltip-top:focus:after {
+  -webkit-transform: translateY(-12px);
+  -moz-transform: translateY(-12px);
+  transform: translateY(-12px);
+}
+/* Left */
+.tooltip-left:before,
+.tooltip-left:after {
+  right: 100%;
+  bottom: 50%;
+  left: auto;
+}
+.tooltip-left:before {
+  margin-left: 0;
+  margin-right: -12px;
+  margin-bottom: 0;
+  border-top-color: transparent;
+  border-left-color: #333333;
+  border-left-color: rgba(51, 51, 51, 0.9);
+}
+.tooltip-left:hover:before,
+.tooltip-left:hover:after,
+.tooltip-left.always-show:after,
+.tooltip-left.always-show:before,
+.tooltip-left:focus:before,
+.tooltip-left:focus:after {
+  -webkit-transform: translateX(-12px);
+  -moz-transform: translateX(-12px);
+  transform: translateX(-12px);
+}
+/* Bottom */
+.tooltip-bottom:before,
+.tooltip-bottom:after {
+  top: 100%;
+  bottom: auto;
+  left: 50%;
+}
+.tooltip-bottom:before {
+  margin-top: -12px;
+  margin-bottom: 0;
+  border-top-color: transparent;
+  border-bottom-color: #333333;
+  border-bottom-color: rgba(51, 51, 51, 0.9);
+}
+.tooltip-bottom:hover:before,
+.tooltip-bottom:hover:after,
+.tooltip-bottom.always-show:after,
+.tooltip-bottom.always-show:before,
+.tooltip-bottom:focus:before,
+.tooltip-bottom:focus:after {
+  -webkit-transform: translateY(12px);
+  -moz-transform: translateY(12px);
+  transform: translateY(12px);
+}
+/* Right */
+.tooltip-right:before,
+.tooltip-right:after {
+  bottom: 50%;
+  left: 100%;
+}
+.tooltip-right:before {
+  margin-bottom: 0;
+  margin-left: -12px;
+  border-top-color: transparent;
+  border-right-color: #333333;
+  border-right-color: rgba(51, 51, 51, 0.9);
+}
+.tooltip-right:hover:before,
+.tooltip-right:hover:after,
+.tooltip-right.always-show:after,
+.tooltip-right.always-show:before,
+.tooltip-right:focus:before,
+.tooltip-right:focus:after {
+  -webkit-transform: translateX(12px);
+  -moz-transform: translateX(12px);
+  transform: translateX(12px);
+}
+/* Move directional arrows down a bit for left/right tooltips */
+.tooltip-left:before,
+.tooltip-right:before {
+  top: 3px;
+}
+/* Vertically center tooltip content for left/right tooltips */
+.tooltip-left:after,
+.tooltip-right:after {
+  margin-left: 0;
+  margin-bottom: -16px;
+}
+/* large width */
+.tooltip.large:after,
+[data-tooltip].large:after {
+  width: 240px;
+}
+.tooltip-right.large:before,
+.tooltip-right.large:after,
+.tooltip-left.large:before,
+.tooltip-left.large:after {
+  margin-top: 6px;
+}
+/*
+	More complex tooltips
+	That allows HTML in them
+*/
+/* Tooltip container */
+.tooltip-alt {
+  cursor: pointer;
+  display: inline-block;
+  border-bottom: 0;
+  /* Tooltip text */
+  /* Ease the tooltip left when you mouse over the tooltip container */
+}
+.tooltip-alt .tooltip-text {
+  position: absolute;
+  visibility: hidden;
+  width: 180px;
+  background-color: #333333;
+  background-color: rgba(51, 51, 51, 0.9);
+  color: #ffffff;
+  padding: .5em 1em;
+  -webkit-transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out, -webkit-transform 0.2s cubic-bezier(0.71, 1.7, 0.77, 1.24);
+  -moz-transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out, -moz-transform 0.2s cubic-bezier(0.71, 1.7, 0.77, 1.24);
+  transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out, transform 0.2s cubic-bezier(0.71, 1.7, 0.77, 1.24);
+  -webkit-transform: translate3d(0, 0, 0);
+  -moz-transform: translate3d(0, 0, 0);
+  transform: translate3d(0, 0, 0);
+  z-index: 99999;
+  /* only right for now */
+}
+.tooltip-alt .tooltip-text.right {
+  margin-left: 1em;
+  margin-top: -1.75em;
+}
+.tooltip-alt .tooltip-text.right::after {
+  content: " ";
+  position: absolute;
+  top: 1.125em;
+  right: 100%;
+  margin-top: -5px;
+  border: 5px #333333 solid;
+  border-color: transparent rgba(51, 51, 51, 0.9) transparent transparent;
+}
+.tooltip-alt:hover .tooltip-text {
+  -webkit-transform: translateX(12px);
+  -moz-transform: translateX(12px);
+  transform: translateX(12px);
+  visibility: visible;
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";
+  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100);
+  opacity: 1;
+}
+/*
+ * jquery-filestyle
+ *
+ * Copyright (c) 2017 Markus Vinicius da Silva Lima
+ * github: https://github.com/markusslima/jquery-filestyle
+ * Version 2.1.0
+ * Licensed under the MIT license.
+ *
+ * Based on the work of Markus da Silva Lima.
+ * Modified by passbolt to match existing styleguide.
+ */
+div.jfilestyle {
+  display: inline-block;
+  margin: 0px 0px 10px 0px;
+  padding: 0px;
+  position: relative;
+  border-collapse: separate;
+}
+div.jfilestyle label,
+div.jfilestyle input {
+  font-family: "Open Sans", Verdana, sans-serif;
+}
+div.jfilestyle input {
+  border: 1px solid #c0c0c0;
+  background: #d9d9d9;
+  margin: 0px -5px 0px 0px;
+  vertical-align: middle;
+  padding: 10px 15px;
+  font-size: 14px;
+  border-radius: 0px;
+  color: #8d8d8d;
+  cursor: default;
+  line-height: normal;
+}
+div.jfilestyle input[type=password]:disabled,
+div.jfilestyle input[type=search]:disabled,
+div.jfilestyle input[type=text]:disabled,
+div.jfilestyle input[type=email]:disabled {
+  background-color: #ffffff;
+  padding: .375em .625em .375em .625em;
+  font-size: 1em;
+  line-height: 24px;
+}
+div.jfilestyle label {
+  display: inline-block;
+  border: 1px solid #cccccc;
+  background: #eeeeee;
+  padding: .65em 1.225em .6em 1.225em;
+  color: #0662ba;
+  vertical-align: middle;
+  line-height: normal;
+  text-align: center;
+  margin: 0px;
+  font-size: .875em;
+  width: auto;
+  font-weight: bold;
+  border-radius: 0 0.214em 0.214em 0;
+  max-height: 18px;
+}
+div.jfilestyle label[disabled] {
+  pointer-events: none;
+  opacity: 0.6;
+  filter: alpha(opacity=65);
+  cursor: not-allowed;
+}
+div.jfilestyle label:hover {
+  cursor: pointer;
+  opacity: 0.9;
+  border: 1px solid #bbbbbb;
+}
+div.jfilestyle label.primary {
+  background: #2894df;
+  border: 1px solid #2894df;
+}
+div.jfilestyle label.primary span {
+  color: #ffffff;
+}
+div.jfilestyle label.primary span:before {
+  color: #ffffff;
+}
+div.jfilestyle label span {
+  color: #333333;
+}
+div.jfilestyle label span:before {
+  font-family: 'FontAwesome';
+  content: "\f093";
+  display: block;
+  width: 1em;
+  height: 1.3em;
+  line-height: 1.3em;
+  background-size: 1em 1em;
+  float: left;
+  color: #333333;
+  margin-right: 0.5em;
+}
+div.jfilestyle.primary label {
+  background: #2894df;
+}
+div.jfilestyle.primary label span {
+  color: #ffffff;
+}
+div.jfilestyle.primary label span:before {
+  color: #ffffff;
+}
+div.jfilestyle .jfilestyle-corner input:last-child,
+div.jfilestyle .jfilestyle-corner label:last-child {
+  margin-left: -1px;
+}
+div.jfilestyle .count-jfilestyle {
+  background: #303030;
+  color: #fff;
+  border-radius: 50%;
+  padding: 1px 5px;
+  font-size: 12px;
+  vertical-align: middle;
+}
+.required div.jfilestyle label:after {
+  content: none;
+}
 .security-token {
   font-size: 1em;
   padding: .375em 1em;
@@ -4441,6 +4818,22 @@ article video {
 }
 .progress-bar-wrapper .progress-bar.big.infinite {
   width: 0;
+}
+.dialog.import .input-password-wrapper .input.password input {
+  width: 83%;
+}
+.dialog.import .actions.inline {
+  width: 14%;
+}
+.dialog.import .actions.inline .button {
+  height: 1.5em;
+  padding-top: .6em;
+}
+.dialog.import div.jfilestyle {
+  width: 100% !important;
+}
+.dialog.import div.jfilestyle input[type=text]:disabled {
+  width: 60.5% !important;
 }
 html body a.button {
   height: 1.5em;
