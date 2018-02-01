@@ -1,5 +1,4 @@
-<div id="a484a5eb-4258-bde9-6b1e-20c6f26204fb"
-		 class="mad_controller_component_dialog_controller mad_view_component_dialog dialog-wrapper ready">
+<div class="dialog-wrapper">
 	<div class="dialog import">
 		<div class="dialog-header">
 			<h2>Something went wrong!</h2>

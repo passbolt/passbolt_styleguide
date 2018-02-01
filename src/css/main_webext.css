@@ -4267,12 +4267,14 @@ div.jfilestyle input[type=email]:disabled {
   padding: .375em .625em .375em .625em;
   font-size: 1em;
   line-height: 24px;
+  border: 1px solid #cccccc;
 }
 div.jfilestyle label {
   display: inline-block;
   border: 1px solid #cccccc;
+  border-left: 0px;
   background: #eeeeee;
-  padding: .65em 1.225em .6em 1.225em;
+  padding: .65em 1.225em .65em 1.225em;
   color: #0662ba;
   vertical-align: middle;
   line-height: normal;
@@ -4294,6 +4296,7 @@ div.jfilestyle label:hover {
   cursor: pointer;
   opacity: 0.9;
   border: 1px solid #bbbbbb;
+  border-left: 0px;
 }
 div.jfilestyle label.primary {
   background: #2894df;
@@ -4819,19 +4822,24 @@ div.jfilestyle .count-jfilestyle {
 .progress-bar-wrapper .progress-bar.big.infinite {
   width: 0;
 }
+.dialog.kdbx-credentials .input-password-wrapper .input.password input,
 .dialog.import .input-password-wrapper .input.password input {
   width: 83%;
 }
+.dialog.kdbx-credentials .actions.inline,
 .dialog.import .actions.inline {
   width: 14%;
 }
+.dialog.kdbx-credentials .actions.inline .button,
 .dialog.import .actions.inline .button {
   height: 1.5em;
   padding-top: .6em;
 }
+.dialog.kdbx-credentials div.jfilestyle,
 .dialog.import div.jfilestyle {
   width: 100% !important;
 }
+.dialog.kdbx-credentials div.jfilestyle input[type=text]:disabled,
 .dialog.import div.jfilestyle input[type=text]:disabled {
   width: 60.5% !important;
 }
