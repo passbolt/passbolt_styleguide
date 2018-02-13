@@ -21,6 +21,12 @@
 				</a>
 			</li>
 			<li>
+				<a id="js_wk_menu_sharing_button" href="#" class="button mad_component_button js_component mad_view ready">
+					<i class="fa fa-fw fa-cloud-download"></i>
+					<span>export</span>
+				</a>
+			</li>
+			<li>
 				<div class="dropdown">
 					<a id="js_wk_menu_more_button" href="#" class="button mad_component_button_dropdown js_component mad_view_component_button_dropdown ready">
 						<span>more</span>
