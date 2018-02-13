@@ -21,7 +21,7 @@
 				</a>
 			</li>
 			<li>
-				<a id="js_wk_menu_sharing_button" href="#" class="button mad_component_button js_component mad_view ready">
+				<a id="js_wk_menu_sharing_button" href="../demo/LU_passwords_export.php" class="button mad_component_button js_component mad_view ready">
 					<i class="fa fa-fw fa-cloud-download"></i>
 					<span>export</span>
 				</a>
