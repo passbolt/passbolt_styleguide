@@ -2,7 +2,7 @@
 $tags = [
     [
         'id' => '',
-        'name' => 'this is a very very long tag, certainly not useful now is it',
+        'name' => 'this is a very very long tag',
         'created' => '2017-12-29 13:39:25',
     ],
     [
