@@ -97,15 +97,26 @@
             width: 100%;
             box-sizing: border-box;
             height: 5em;
+            margin-top:0;
         }
+
+        .cancel,
         .button {
             float:right;
             margin-top: -.25em;
             margin-right: 0;
         }
+        .cancel {
+            margin-right:.5em;
+        }
+
+        .message.notice {
+            padding:.5em;
+            margin:0;
+            font-size:.929em; /* 13px */
+            background:@background-notice;
+        }
     }
-
-
 }
 
 /* place sidebar on top of everything when there is no space */

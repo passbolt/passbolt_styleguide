@@ -1,0 +1,35 @@
+.autocomplete-suggestions {
+    text-align: left;
+    cursor: default;
+    border: 1px solid @border-default;
+    border-top: 0;
+    background: @background-default;
+    .box-shadow();
+    position: absolute;
+    display: none;
+    z-index: 9999;
+    max-height: 120px;
+    overflow: hidden;
+    overflow-y: auto;
+    box-sizing: border-box;
+    width:350px;
+
+    .autocomplete-suggestion {
+        position: relative;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        color: @font-default;
+        font-size: .875em; /* 14px */
+        display: block;
+        padding: .357em .714em; /* 5px 10px */
+        border: 0;
+        b {
+            font-weight: normal;
+            color: @font-default;
+        }
+        &.selected {
+            background: @background-lighter;
+        }
+    }
+}

@@ -33,14 +33,21 @@
                     <div class="message error hidden">
                         Enter tags separated by commas.
                     </div>
+                    <div class="message notice">
+                        <i class="fa fa-fw fa-info-circle"></i>
+                        <strong>Pro tip:</strong> Tags starting with # are shared with all users who have access.
+                        Separate tags using comas.
+                    </div>
                 </div>
                 <div class="actions">
-                    <a id="js_tags_editor_submit" class="button tag-editor-submit" href="#"><span>save</span></a>
+                    <a id="js_tags_editor_submit" class="button tag-editor-submit" role="button"><span>save</span></a>
+                    <a id="js_tags_editor_cancel" class="button cancel tag-editor-cancel" role="button"><span>cancel</span></a>
                 </div>
             </div>
         </div>
     </div>
 </div>
+<script type="application/javascript" src="../src/js/autocomplete.js"></script>
 <script type="application/javascript">
   $(function() {
     var tagListSelector = '#js_rs_details_tags_list';
@@ -102,5 +109,18 @@
       onChange : onChange
     });
 
+    // Autocomplete
+    var auto = new autoComplete({
+      selector: '#js_tag_editor_input_text',
+      minChars: 1,
+      source: function(term, suggest){
+        term = term.toLowerCase();
+        var choices = ['alpha', 'beta', 'charlie', 'echo', 'foxtrot', 'golf', 'hotel', 'india', 'super-long-tag'];
+        var matches = [];
+        for (i=0; i<choices.length; i++)
+          if (~choices[i].toLowerCase().indexOf(term)) matches.push(choices[i]);
+        suggest(matches);
+      }
+    });
   });
 </script>

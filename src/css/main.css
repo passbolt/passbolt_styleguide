@@ -5323,7 +5323,7 @@ input[type="search"]::-webkit-search-cancel-button {
   min-height: 1.5em;
   padding: .25em .5em .25em .5em;
   box-shadow: none;
-  min-width: 3em;
+  min-width: 6em;
   max-width: 24em;
   float: left;
   overflow: hidden;
@@ -5965,11 +5965,23 @@ div.jfilestyle .count-jfilestyle {
   width: 100%;
   box-sizing: border-box;
   height: 5em;
+  margin-top: 0;
 }
+.panel.aside .form-content .cancel,
 .panel.aside .form-content .button {
   float: right;
   margin-top: -0.25em;
   margin-right: 0;
+}
+.panel.aside .form-content .cancel {
+  margin-right: .5em;
+}
+.panel.aside .form-content .message.notice {
+  padding: .5em;
+  margin: 0;
+  font-size: .929em;
+  /* 13px */
+  background: #daecf9;
 }
 /* place sidebar on top of everything when there is no space */
 @media all and (max-width: 1024px) {
@@ -7226,6 +7238,42 @@ table.table-info.horizontal tbody tr:nth-child(even) {
   content: "\f0da";
   /* caret right */
 }
+.autocomplete-suggestions {
+  text-align: left;
+  cursor: default;
+  border: 1px solid #dddddd;
+  border-top: 0;
+  background: #ffffff;
+  box-shadow: 0px 0px 10px 0px #dddddd;
+  position: absolute;
+  display: none;
+  z-index: 9999;
+  max-height: 120px;
+  overflow: hidden;
+  overflow-y: auto;
+  box-sizing: border-box;
+  width: 350px;
+}
+.autocomplete-suggestions .autocomplete-suggestion {
+  position: relative;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: #333333;
+  font-size: .875em;
+  /* 14px */
+  display: block;
+  padding: .357em .714em;
+  /* 5px 10px */
+  border: 0;
+}
+.autocomplete-suggestions .autocomplete-suggestion b {
+  font-weight: normal;
+  color: #333333;
+}
+.autocomplete-suggestions .autocomplete-suggestion.selected {
+  background: #eeeeee;
+}
 .input-password-wrapper {
   overflow: hidden;
 }
@@ -7317,6 +7365,72 @@ table.table-info.horizontal tbody tr:nth-child(even) {
 .dialog.kdbx-credentials div.jfilestyle input[type=text]:disabled,
 .dialog.import div.jfilestyle input[type=text]:disabled {
   width: 60.5% !important;
+}
+/*
+ * Password workspace
+ */
+/* sidebar */
+.panel.aside .resource .detailed-information li.password .value {
+  height: 1.6em;
+  padding-top: 0.2em;
+}
+/* unused columns */
+.js_grid_column_owner,
+.js_grid_column_copyLogin,
+.js_grid_column_copySecret {
+  display: none;
+}
+/* hide left column when there is no space */
+@media all and (max-width: 1024px) {
+  .tableview .js_grid_column_modified {
+    display: none;
+  }
+}
+/* Define state where there are no passwords, and the filter all items */
+.page.password .tableview.all_items.empty .tableview-header {
+  /* No tableview-header */
+  display: none;
+}
+.page.password .tableview.all_items.empty .tableview-content {
+  background: transparent url('../img/illustrations/nest.png') center 75% no-repeat;
+  background-size: 80%;
+  /* No tableview-header */
+  border: 0;
+  top: 0;
+  /* Tablet version */
+  /* Normal screen version */
+}
+@media all and (min-width: 780px) {
+  .page.password .tableview.all_items.empty .tableview-content {
+    background-position: center 60%;
+    background-size: 50%;
+  }
+}
+@media all and (min-width: 1024px) {
+  .page.password .tableview.all_items.empty .tableview-content {
+    background-position: center 70%;
+    background-size: 40%;
+  }
+}
+.page.password .tableview.all_items.empty .empty-content {
+  text-align: center;
+  margin: 3em 0.5em 0.67em 0.5em;
+}
+.page.password .tableview.all_items.empty .empty-content h1 {
+  font-size: 1.5em;
+}
+.page.password .tableview.all_items.empty .empty-content p {
+  font-size: 1em;
+  line-height: 1.5em;
+}
+@media all and (min-width: 780px) {
+  .page.password .tableview.all_items.empty .empty-content h1 {
+    font-size: 2.2em;
+  }
+  .page.password .tableview.all_items.empty .empty-content p {
+    font-size: 1.2em;
+    line-height: 1.8em;
+  }
 }
 /* sidebar / user details in overview */
 .panel.aside .user .sidebar-header,
@@ -7452,72 +7566,6 @@ table.table-info.horizontal tbody tr:nth-child(even) {
 /* login history icon column centerign */
 .login-history td:first-child {
   text-align: center;
-}
-/*
- * Password workspace
- */
-/* sidebar */
-.panel.aside .resource .detailed-information li.password .value {
-  height: 1.6em;
-  padding-top: 0.2em;
-}
-/* unused columns */
-.js_grid_column_owner,
-.js_grid_column_copyLogin,
-.js_grid_column_copySecret {
-  display: none;
-}
-/* hide left column when there is no space */
-@media all and (max-width: 1024px) {
-  .tableview .js_grid_column_modified {
-    display: none;
-  }
-}
-/* Define state where there are no passwords, and the filter all items */
-.page.password .tableview.all_items.empty .tableview-header {
-  /* No tableview-header */
-  display: none;
-}
-.page.password .tableview.all_items.empty .tableview-content {
-  background: transparent url('../img/illustrations/nest.png') center 75% no-repeat;
-  background-size: 80%;
-  /* No tableview-header */
-  border: 0;
-  top: 0;
-  /* Tablet version */
-  /* Normal screen version */
-}
-@media all and (min-width: 780px) {
-  .page.password .tableview.all_items.empty .tableview-content {
-    background-position: center 60%;
-    background-size: 50%;
-  }
-}
-@media all and (min-width: 1024px) {
-  .page.password .tableview.all_items.empty .tableview-content {
-    background-position: center 70%;
-    background-size: 40%;
-  }
-}
-.page.password .tableview.all_items.empty .empty-content {
-  text-align: center;
-  margin: 3em 0.5em 0.67em 0.5em;
-}
-.page.password .tableview.all_items.empty .empty-content h1 {
-  font-size: 1.5em;
-}
-.page.password .tableview.all_items.empty .empty-content p {
-  font-size: 1em;
-  line-height: 1.5em;
-}
-@media all and (min-width: 780px) {
-  .page.password .tableview.all_items.empty .empty-content h1 {
-    font-size: 2.2em;
-  }
-  .page.password .tableview.all_items.empty .empty-content p {
-    font-size: 1.2em;
-    line-height: 1.8em;
-  }
 }
 /* TODO replace by page level selector */
 .page.settings .main.panel .middle {
