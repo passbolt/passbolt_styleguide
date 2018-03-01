@@ -3662,7 +3662,8 @@ input[type=file] {
 select.fluid,
 textarea.fluid,
 input[type=password].fluid,
-input[type=text].fluid {
+input[type=text].fluid,
+input[type=email].fluid {
   width: 80%;
 }
 .submit-wrapper {

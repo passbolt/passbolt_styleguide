@@ -35,13 +35,13 @@
 						<form>
 							<div class="row">
 								<div class="col6">
-									<h3>Copy paste your public and private key below</h3>
+									<h3><?= __('Copy paste your public and private key below'); ?></h3>
 									<div class="input textarea gpgkey">
 										<textarea id="js_setup_import_key_text" class="fluid code" name="data[Key][ascii]" placeholder=""></textarea>
 									</div>
 									<div class="input file">
 										<input type="submit" id="js_setup_import_key_browse" value="Browse..." name="data[Key][file]">
-										<span class="help-text">Or select a file from your computer</span>
+										<span class="help-text"><?= __('Or select a file from your computer'); ?></span>
 									</div>
 									<div id="KeyErrorMessage" class="message error hidden"></div>
 								</div>

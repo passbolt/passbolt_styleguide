@@ -3637,7 +3637,8 @@ input[type=file] {
 select.fluid,
 textarea.fluid,
 input[type=password].fluid,
-input[type=text].fluid {
+input[type=text].fluid,
+input[type=email].fluid {
   width: 80%;
 }
 .submit-wrapper {
@@ -5356,6 +5357,55 @@ table.table-info.horizontal tbody tr:nth-child(even) {
     line-height: 1;
   }
 }
+.ribbon {
+  position: absolute;
+  right: -5px;
+  top: -5px;
+  z-index: 1;
+  overflow: hidden;
+  width: 75px;
+  height: 75px;
+  text-align: right;
+}
+.ribbon span {
+  font-size: 10px;
+  font-weight: bold;
+  color: #ffffff;
+  text-transform: uppercase;
+  text-align: center;
+  line-height: 20px;
+  transform: rotate(45deg);
+  -webkit-transform: rotate(45deg);
+  width: 100px;
+  display: block;
+  background: #009900;
+  box-shadow: 0 3px 10px -5px #000000;
+  position: absolute;
+  top: 19px;
+  right: -21px;
+}
+.ribbon span::before {
+  content: "";
+  position: absolute;
+  left: 0px;
+  top: 100%;
+  z-index: -1;
+  border-left: 3px solid #009900;
+  border-right: 3px solid transparent;
+  border-bottom: 3px solid transparent;
+  border-top: 3px solid #009900;
+}
+.ribbon span::after {
+  content: "";
+  position: absolute;
+  right: 0px;
+  top: 100%;
+  z-index: -1;
+  border-left: 3px solid transparent;
+  border-right: 3px solid #009900;
+  border-bottom: 3px solid transparent;
+  border-top: 3px solid #009900;
+}
 .dialog.key-info table {
   margin-top: 1em;
 }
@@ -5637,6 +5687,43 @@ table.table-info.horizontal tbody tr:nth-child(even) {
 /* Don't display cake errors, we provide feedback */
 .cake-error {
   display: none;
+}
+.page.start h2 {
+  color: #666666;
+  font-weight: normal;
+}
+.page.start .grid {
+  max-width: 860px;
+}
+.page.start .intro {
+  padding-top: 1em;
+  text-align: center;
+}
+.page.start .big-choice {
+  margin: 1em 0;
+  border: 1px solid #eaeaea;
+  padding: 1em;
+  padding-bottom: 1.5em;
+  min-height: 10em;
+  border-radius: .25em;
+  position: relative;
+}
+.page.start .big-choice:hover {
+  border: 1px solid #dddddd;
+}
+.page.start h3 {
+  border: 0;
+  padding: .5em 0 1em 0;
+  margin: 0;
+}
+.page.start .help {
+  margin-bottom: 5em;
+  background: #f0f7fd;
+  border: 1px solid #f0f7fd;
+}
+.page.start .help:hover {
+  background: #f0f7fd;
+  border: 1px solid #f0f7fd;
 }
 html body a.button {
   height: 1.5em;
