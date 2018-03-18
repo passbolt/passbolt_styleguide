@@ -4799,6 +4799,9 @@ div.jfilestyle .count-jfilestyle {
 .master-password.login-form .submit-wrapper .button {
   margin-top: .5em;
 }
+.master-password.login-form .input.checkbox label {
+  font-size: 0.938em;
+}
 /* password share tab */
 .dialog .share-tab {
   /* message */

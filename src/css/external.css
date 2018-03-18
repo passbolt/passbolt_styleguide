@@ -50,6 +50,9 @@
   padding-left: .5em;
   margin-bottom: -6%;
 }
+#passbolt-iframe-login-form.with-remember-me-option {
+  height: 17.9em;
+}
 #passbolt-iframe-master-password {
   z-index: 992;
 }

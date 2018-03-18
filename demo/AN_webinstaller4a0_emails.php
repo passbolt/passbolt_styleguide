@@ -63,6 +63,11 @@
 						</div>
 					</div>
 					<div class="col5 last">
+						<p>&nbsp;</p>
+						<div class="message warning">
+							<strong>Pro tip: a cron job is required</strong><br>
+							Once your installation is complete, do not forget to set a cron job in order to have your emails sent automatically. <br><a href="#">Read the doc</a>
+						</div>
 						<h2>Why do I need a SMTP server?</h2>
 						<p>Passbolt needs an smtp server in order to send invitation emails after an account creation and to send email notifications.</p>
 						<p>You can find configuration examples for some of the most popular email providers in our <a href="https://help.passbolt.com" target="_blank" rel="noopener">knowledge base</a></p>
