@@ -1,0 +1,280 @@
+.page.plans {
+  @pricing-tab-height: 102px;
+
+  .page-row.intro {
+    background: @background-lightest;
+    min-height: 400px;
+
+    .service-teaser {
+      margin: auto;
+      margin-top: 1em;
+      padding: .25em;
+      background: @red;
+      color: @white;
+      display: block;
+      border-radius: 50%;
+      font-size: 2em;
+      width: 3em;
+      height: 3em;
+      text-align: center;
+    }
+  }
+
+  ul.pricing-tabs {
+    position: relative;
+    margin:auto;
+    text-align: center;
+    margin-bottom: -162px;
+    margin-top: 40px;
+
+    li {
+      display: inline-block;
+      width:223px;
+      margin: 0 20px;
+      border-bottom: 4px solid @grey;
+      &.active {
+        border-bottom-color: @blue;
+      }
+
+      a {
+        display: -ms-flexbox;
+        display: flex;
+        -ms-flex-pack: center;
+        justify-content: center;
+        -ms-flex-align: center;
+        align-items: center;
+        padding: 10px 0;
+        color: #444;
+        font-size: 18px;
+        border-bottom:0px;
+
+        &:hover {
+          span {
+            color: @blue;
+          }
+        }
+
+        i {
+          font-size: 2em;
+          margin-right: 0.3em;
+        }
+      }
+    }
+  }
+
+  .tab-content {
+    .intro h2 {
+      margin-top: 163px;
+      margin-bottom:1.5em;
+      font-weight:normal;
+      text-align: center;
+    }
+    .service {
+      &.pull-up {
+        margin-top: -10em;
+      }
+      margin: 0 0 1em 0;
+    }
+
+    .service-col.plan {
+      background-color: #fff;
+      position: relative;
+      border-radius: 3px;
+      padding-bottom: 1em;
+      border: 1px solid @border-default;
+      text-align: center;
+
+      &.highlighted {
+        box-shadow: 0 3px 10px -5px #000000;
+      }
+
+      .plan-description {
+        h2 {
+          background-color: @grey-lightest;
+          padding: 0.3em 0;
+          font-weight: normal;
+          border-bottom: 1px solid @grey;
+          margin: 0;
+        }
+        p {
+          padding-top: 1em;
+          min-height: 1em;
+        }
+      }
+      .plan-pricing{
+        display: -ms-flexbox;
+        display: flex;
+        -ms-flex-align: center;
+        align-items: center;
+
+        .cost-large {
+          font-size: 5em;
+          text-align: right;
+          &.two-digits {
+            letter-spacing: -5px;
+          }
+        }
+        .cost-medium {
+          font-size: 2em;
+          text-align: center;
+          line-height: 1.2em;
+          padding: 0.65em 0 0.5em 0;
+        }
+        .cost-small {
+          font-size: 1em;
+          text-align: left;
+          .smaller {
+            color: @grey-dark;
+            font-size: 0.8em;
+          }
+        }
+      }
+
+      .plan-limit {
+        span {
+          display: block;
+          margin:auto;
+          padding: 0.2em 0;
+          font-size: 1.2em;
+          font-weight:bold;
+        }
+      }
+
+      div.plan-actions {
+        .button {
+          font-size: 1.25em;
+          margin-bottom: 1em;
+        }
+      }
+
+      div.plan-features {
+        font-size: 1.25em;
+        text-align: center;
+        padding: 1em;
+        
+        ul {
+          min-height: 301px;
+          li {
+            padding: 0.4em;
+            font-size: 0.8em;
+            border-top: 1px solid @grey;
+          }
+        }
+        a {
+          border-bottom:0;
+          &.selected {
+            font-weight:bold;
+          }
+        }
+
+        span.smaller {
+          font-size: 0.8em;
+          color: @grey-dark;
+        }
+      }
+    }
+  }
+
+  .community_cta {
+    text-align: center;
+    margin-top: 4em;
+    border-top: 1px solid @grey-lighter;
+    padding-top: 1em;
+
+    p {
+      font-size: 2em;
+      margin-bottom: 0.5em;
+      margin-bottom: 1em;
+    }
+    .button {
+      font-size: 1.25em;
+      margin-bottom:1em;
+    }
+  }
+
+  .compare {
+    @background: @grey-lightest;
+    background: @background;
+    table {
+      width:100%;
+      tr {
+        &.clear {
+          td {
+            background: @background;
+          }
+        }
+        &.plans-title {
+          td {
+            background: @background;
+            font-size:1.2em;
+            padding:0.7em 0 0.7em 0;
+            font-weight:bold;
+          }
+        }
+        &.head {
+          td {
+            background: @grey-dark;
+            color: @white;
+            &:first-child {
+              font-size: 1em;
+              padding-left: 1.7em;
+              text-align: left;
+              font-weight:bold;
+            }
+          }
+        }
+        td {
+          &:first-child {
+            padding-left: 2.5em;
+            text-align: left;
+            width:30%;
+          }
+          width:17.5%;
+          font-size: 0.875em;
+          text-align: center;
+          padding: 0.5em;
+          border-right: 1em solid @background;
+          border-bottom: 1px solid @background;
+          background: @grey-lighter;
+
+          i.fa {
+            color: @green;
+          }
+        }
+
+      }
+    }
+  }
+  .faq {
+    margin-bottom: 2em;
+    h3 {
+      text-align: left;
+    }
+  }
+
+  /* even larger screen */
+  @media all and (min-width: 460px) {
+    .page-row.intro {
+      min-height: 310px;
+    }
+
+    .tab-content {
+      .intro h2 {
+        margin-top: 110px;
+      }
+    }
+
+    ul.pricing-tabs {
+      margin-bottom: -102px;
+      &::before {
+        position: absolute;
+        left: 50%;
+        top: 0;
+        bottom: 0;
+        width: 1px;
+        background-color: #d7d7d7;
+        content: "";
+      }
+    }
+  }
+}
