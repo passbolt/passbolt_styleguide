@@ -2,6 +2,63 @@
 @import "funnel/cart.less";
 
 .page.services.featured {
+  ul.pricing-tabs {
+    position: relative;
+    margin:auto;
+    text-align: center;
+    margin-bottom: -162px;
+    margin-top: 40px;
+
+    li {
+      display: inline-block;
+      width:223px;
+      margin: 0 20px;
+      border-bottom: 4px solid @grey;
+      &.active {
+        border-bottom-color: @blue;
+      }
+
+      a {
+        display: -ms-flexbox;
+        display: flex;
+        -ms-flex-pack: center;
+        justify-content: center;
+        -ms-flex-align: center;
+        align-items: center;
+        padding: 10px 0;
+        color: #444;
+        font-size: 18px;
+        border-bottom:0px;
+
+        &:hover {
+          span {
+            color: @blue;
+          }
+        }
+
+        i {
+          font-size: 2em;
+          margin-right: 0.3em;
+        }
+      }
+    }
+  }
+
+  @media all and (min-width: 460px) {
+    ul.pricing-tabs {
+      margin-bottom: -102px;
+      &::before {
+        position: absolute;
+        left: 50%;
+        top: 0;
+        bottom: 0;
+        width: 1px;
+        background-color: #d7d7d7;
+        content: "";
+      }
+    }
+  }
+
     .service-col {
         h3 {
             font-weight: normal;
@@ -64,6 +121,18 @@
                 margin: 0;
             }
         }
+    }
+    &.cloud {
+      ul.pricing-tabs {
+        margin-bottom:-100px;
+      }
+      .page-row.intro {
+        h2 {
+          margin-top: 110px;
+          font-weight: normal;
+        }
+      }
+
     }
 
     .page-row.intro {

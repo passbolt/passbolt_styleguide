@@ -9,18 +9,27 @@
 <body>
 <div id="container" class="page services cloud featured">
     <?php include('includes/headers/AA_header.php'); ?>
-
+	<ul class="pricing-tabs" role="tablist">
+		<li role="presentation">
+			<a aria-controls="self-hosted" data-toggle="tab" href="../demo/AA_services_pricing.php" role="tab">
+				<span><i class="fa fa-server" aria-hidden="true"></i></span>
+				<span>Self-Hosted</span>
+			</a>
+		</li>
+		<li class="active" role="presentation">
+			<a aria-controls="cloud" data-toggle="tab" href="../demo/AA_services_cloud.php" role="tab">
+				<span><i class="fa fa-cloud" aria-hidden="true"></i></span>
+				<span>Cloud-Hosted</span>
+			</a>
+		</li>
+	</ul>
     <div class="page-row intro">
         <div class="grid grid-responsive-12">
             <div class="row">
                 <div class="col12">
-	                <div class="service-teaser">
-		                <i class="fa fa-fw fa-cloud"></i>
-	                </div>
-                    <h1>Passbolt Cloud</h1>
-                    <p>
+                    <h2>
 	                    Skip the technical setup and <br>get passbolt in the cloud in seconds!
-                    </p>
+                    </h2>
                 </div>
             </div>
         </div>
@@ -29,7 +38,7 @@
     <div class="page-row service-details">
         <div class="grid grid-responsive-12">
             <div class="row">
-	            <ul class="features">
+	            <ul class="features clearfix">
 		            <li class="col3">
 			            <i class="fa fa-fw fa-check"></i><div>Hosted on our secure servers</div>
 		            </li>
