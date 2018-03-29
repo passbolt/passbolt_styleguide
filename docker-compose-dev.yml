@@ -1,0 +1,10 @@
+version: '3.4'
+services:
+
+  passbolt_styleguide:
+    image: php:7-apache
+    volumes:
+      - ./docker/config/000-default.conf:/etc/apache2/sites-available/000-default.conf
+      - .:/var/www/html
+    ports:
+      - 8086:80
