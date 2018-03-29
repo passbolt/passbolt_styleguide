@@ -111,9 +111,60 @@
         }
       }
     }
+  }
 
-    .payment-button {
-      width: 91%;
+  form.stripe {
+    margin: 20px auto;
+
+    .field {
+      border: 1px solid @border-input;
+      padding-left: .5em;
+    }
+
+    .field::-webkit-input-placeholder {
+      color: #CFD7E0;
+    }
+    .field::-moz-placeholder {
+      color: #CFD7E0;
+    }
+    .field:-ms-input-placeholder {
+      color: #CFD7E0;
+    }
+
+    .outcome {
+      float: left;
+      width: 100%;
+      padding-top: 8px;
+      min-height: 24px;
+      text-align: center;
+    }
+
+    .success, .error {
+      display: none;
+      font-size: 13px;
+    }
+
+    .success.visible, .error.visible {
+      display: inline;
+    }
+
+    .error {
+      color: #E4584C;
+    }
+
+    .success {
+      color: #666EE8;
+    }
+
+    .success .token {
+      font-weight: 500;
+      font-size: 13px;
+    }
+    
+    input[type=submit] {
+      width: 100%;
+      text-align: center;
+      margin-top:1em;
     }
   }
 }

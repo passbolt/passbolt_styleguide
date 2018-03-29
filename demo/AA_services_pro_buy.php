@@ -6,9 +6,64 @@
     <?php include('includes/meta/AA_meta.php'); ?>
 	<?php include('includes/headers/AA_header_scripts.php'); ?>
     <script src="js/chosen.jquery.js"></script>
+    <script src="https://js.stripe.com/v3/"></script>
+    <script type="application/javascript">
+        $(function() {
+            var stripe = Stripe('pk_test_6pRNASCoBOKtIshFeQd4XMUh');
+            var elements = stripe.elements();
+
+            var card = elements.create('card', {
+                style: {
+                    base: {
+                        iconColor: '#666EE8',
+                        color: '#31325F',
+                        lineHeight: '40px',
+                        fontWeight: 300,
+                        fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
+                        fontSize: '15px',
+
+                        '::placeholder': {
+                            color: '#CFD7E0',
+                        },
+                    },
+                }
+            });
+            card.mount('#card-element');
+
+            function setOutcome(result) {
+                var successElement = document.querySelector('.success');
+                var errorElement = document.querySelector('.error');
+                successElement.classList.remove('visible');
+                errorElement.classList.remove('visible');
+
+                if (result.token) {
+                    // Use the token to create a charge or a customer
+                    // https://stripe.com/docs/charges
+                    successElement.querySelector('.token').textContent = result.token.id;
+                    successElement.classList.add('visible');
+                } else if (result.error) {
+                    errorElement.textContent = result.error.message;
+                    errorElement.classList.add('visible');
+                }
+            }
+
+            card.on('change', function (event) {
+                setOutcome(event);
+            });
+
+            $('form.stripe').on('submit', function (e) {
+                e.preventDefault();
+                var form = document.querySelector('form');
+                var extraDetails = {
+                    //name: form.querySelector('input[name=cardholder-name]').value,
+                };
+                stripe.createToken(card, extraDetails).then(setOutcome);
+            });
+        });
+    </script>
 </head>
 <body>
-<div id="container" class="page services featured cart">
+<div id="container" class="page services featured cart checkout">
     <?php include('includes/headers/AA_header.php'); ?>
 
 <!--    <div class="page-row intro">-->
@@ -32,6 +87,16 @@
                     <div class="box-content">
                         <form>
                             <div class="singleline clearfix">
+                                <div class="input text">
+                                    <label for="organization_name">Organization name</label>
+                                    <input type="text" id="organization_name" placeholder="Organization name" autocomplete="organization">
+                                </div>
+                                <div class="input text">
+                                    <label for="organization_name">Vat number (if any)</label>
+                                    <input type="text" id="organization_name" placeholder="Vat number">
+                                </div>
+                            </div>
+                            <div class="singleline clearfix">
                                 <div class="input text required">
                                     <label for="first_name">First name</label>
                                     <input type="text" id="first_name" placeholder="First Name" autocomplete="given-name">
@@ -41,19 +106,9 @@
                                     <input type="text" id="last_name" placeholder="Last Name" autocomplete="family-name">
                                 </div>
                             </div>
-                            <div class="singleline clearfix">
-                                <div class="input text required">
-                                    <label for="email_address">Email address</label>
-                                    <input type="email" id="email_address" placeholder="Email address" autocomplete="email">
-                                </div>
-                                <div class="input text required">
-                                    <label for="phone_number">Phone number</label>
-                                    <input type="text" id="phone_number" placeholder="Phone number">
-                                </div>
-                            </div>
-                            <div class="input text">
-                                <label for="organization_name">Organization name</label>
-                                <input type="text" id="organization_name" placeholder="Organization name" autocomplete="organization">
+                            <div class="input text required">
+                                <label for="email_address">Email address</label>
+                                <input type="email" id="email_address" placeholder="Email address" autocomplete="email">
                             </div>
                             <div class="input text required">
                                 <label for="organization_address">Address</label>
@@ -73,10 +128,6 @@
                                 <label for="country">Country</label>
                                 <select name="country" id="country" autocomplete="country-name" data-placeholder="Choose a country" class="chosen-select">
                                 </select>
-                            </div>
-                            <div class="input text field-vat">
-                                <label for="organization_name">Vat number (if any)</label>
-                                <input type="text" id="organization_name" placeholder="Vat number">
                             </div>
                         </form>
                     </div>
@@ -123,9 +174,31 @@
                         </div>
                     </div>
 		        </div>
-                <div class="col6 last checkout">
-                    <a href="https://books.zoho.eu/portal/passbolt/secure?CInvoiceID=2-221a92df47528e1d5f613203ab2cd519376a3701673ee65d27b60f7eb3379cd577724a46555073860ae0ba6fe9e080d616f4794814460a99#/securepayment" class="button primary big payment-button">Proceed to payment</a>
-                </div>
+
+                    <div class="col6 last checkout">
+                        <form class="stripe">
+                            <div class="box">
+                                <h2>Checkout</h2>
+                                <div class="box-content">
+                                    <div class="group">
+                                        <div class="input text required">
+                                            <label for="card-element">Card</label>
+                                            <div id="card-element" class="field"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="submit-wrapper clearfix">
+                                <input type="submit" class="button primary big" value="Pay €264.00">
+                            </div>
+                            <div class="outcome">
+                                <div class="error" role="alert"></div>
+                                <div class="success">
+                                    Success! Your Stripe token is <span class="token"></span>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
 	        </div>
         </div>
     </div>
