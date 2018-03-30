@@ -129,24 +129,39 @@
                                 <select name="country" id="country" autocomplete="country-name" data-placeholder="Choose a country" class="chosen-select">
                                 </select>
                             </div>
+                            <div class="input checkbox terms">
+                                <input type="checkbox">
+                                <label>I agree to the <a href="#">terms and conditions</a></label>
+                            </div>
                         </form>
                     </div>
 		        </div>
 		        <div class="col6 last box payment_info">
-                    <h2>Passbolt Pro - Startup pack</h2>
+                    <h2>Your order</h2>
                     <div class="box-content">
-                        <div class="input text form-group price">
-                            <label class="control-label block" for="quantity">Users</label>
-                            <input name="products[main][quantity]" id="quantity" value="5" min="1" max="9999999" class="form-control input-small" required="required" type="number">
-                            <span class="times">×</span>
-                            <div class="price">
-                                €44.00 <span class="price-side">per user</span>
+                        <div class="order-line">
+                            <div class="item-name">Startup pack</div>
+                            <div class="input text form-group price">
+                                <input name="products[main][quantity]" id="quantity" value="5" min="1" max="9999999" class="form-control input-small quantity" required="required" type="number">
+                                <label class="control-label block label-quantity" for="quantity">users</label>
+                                <span class="times">×</span>
+                                <div class="price-per-user">
+                                    €44.00
+                                </div>
                             </div>
+                            <div class="line-total">€240.00</div>
                         </div>
-                        <p class="license-info">
-                            License validity: forever<br>
-                            Updates: free for one year
-                        </p>
+                        <div class="product-details">
+                            <ul>
+                                <li>Installation: installation scripts, docker, VM, web installer</li>
+                                <li>Community features: all</li>
+                                <li>Premium features: all</li>
+                                <li>Support: 15 requests, next business day</li>
+                                <li>License validity: forever</li>
+                                <li>Updates: free for one year</li>
+                            </ul>
+                            <p>After payment, you will receive the installation instructions and license key by email.</p>
+                        </div>
 
                         <div class="subscription-total">
                             <table class="total-table create">
@@ -164,7 +179,7 @@
                                     </td>
                                 </tr>
                                 <tr class="total">
-                                    <td class="text-right">Order total:</td>
+                                    <td class="text-right">Total:</td>
                                     <td class="text-right total-amount">
                                         <span class="order-total-label">€264.00</span>
                                     </td>
@@ -180,9 +195,10 @@
                             <div class="box">
                                 <h2>Checkout</h2>
                                 <div class="box-content">
+                                    <p>Pay with your credit card via Stripe</p>
                                     <div class="group">
                                         <div class="input text required">
-                                            <label for="card-element">Card</label>
+                                            <label for="card-element">Card Number</label>
                                             <div id="card-element" class="field"></div>
                                         </div>
                                     </div>

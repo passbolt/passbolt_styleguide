@@ -54,23 +54,57 @@
       // Chosen.js field messes up with the margin.
       margin-top: 0.5em;
     }
+    .input.terms {
+      margin-top:1em;
+    }
 
     .payment_info {
-      .times {
-        color: @grey-darker;
-        font-size:0.8em;
-        padding:0 0.5em;
-      }
-      .price {
-        display: inline-block;
-        margin-bottom: 0.4em;
-        .price-side {
-          font-size: 0.8em;
+      .order-line {
+        border-bottom:1px solid @border-default;
+        padding-bottom:0.5em;
+        margin-bottom:0.5em;
+        .times {
+          color: @grey-darker;
+          font-size:0.8em;
+          padding:0 0.2em;
+        }
+        div.item-name {
+          display: inline-block;
+          margin-right: 3em;
+          font-weight:bold;
+        }
+        div.form-group.price {
+          display: inline-block;
+          width:50%;
+          margin-bottom: 0.4em;
+          label.label-quantity, input.quantity, span.times, div.price-per-user {
+            display: inline-block;
+          }
+          input.quantity {
+            width: 35px;
+            font-size:0.8em;
+          }
+          .price-per-user {
+            font-size: 0.9em;
+          }
+        }
+        .line-total {
+          float: right;
+          font-weight:bold;
+          padding-top:0.2em;
         }
       }
-      p.license-info {
-        color: @grey-darker;
+      div.product-details {
+        color: @grey-darkest;
         font-size: 0.9em;
+        ul li {
+          font-size:0.9em;
+          list-style: circle inside;
+        }
+        p {
+          margin-top:1em;
+          font-size: 0.8em;
+        }
       }
 
       .subscription-total {
@@ -84,9 +118,11 @@
           tr {
             &.total {
               border-top: 1px solid @border-default;
+              font-weight:bold;
               td {
                 font-size: 1em;
                 color: @black;
+                font-weight:bold;
               }
             }
             td {
@@ -108,63 +144,67 @@
         .order-total-label {
           color: @blue;
           font-weight:bold;
+          font-size:1.1em;
         }
       }
     }
   }
 
-  form.stripe {
-    margin: 20px auto;
-
-    .field {
-      border: 1px solid @border-input;
-      padding-left: .5em;
-    }
-
-    .field::-webkit-input-placeholder {
-      color: #CFD7E0;
-    }
-    .field::-moz-placeholder {
-      color: #CFD7E0;
-    }
-    .field:-ms-input-placeholder {
-      color: #CFD7E0;
-    }
-
-    .outcome {
-      float: left;
-      width: 100%;
-      padding-top: 8px;
-      min-height: 24px;
-      text-align: center;
-    }
-
-    .success, .error {
-      display: none;
-      font-size: 13px;
-    }
-
-    .success.visible, .error.visible {
-      display: inline;
-    }
-
-    .error {
-      color: #E4584C;
-    }
-
-    .success {
-      color: #666EE8;
-    }
-
-    .success .token {
-      font-weight: 500;
-      font-size: 13px;
-    }
+  div.checkout {
     
-    input[type=submit] {
-      width: 100%;
-      text-align: center;
-      margin-top:1em;
+    form.stripe {
+      margin: 20px auto;
+
+      .field {
+        border: 1px solid @border-input;
+        padding-left: .5em;
+      }
+
+      .field::-webkit-input-placeholder {
+        color: #CFD7E0;
+      }
+      .field::-moz-placeholder {
+        color: #CFD7E0;
+      }
+      .field:-ms-input-placeholder {
+        color: #CFD7E0;
+      }
+
+      .outcome {
+        float: left;
+        width: 100%;
+        padding-top: 8px;
+        min-height: 24px;
+        text-align: center;
+      }
+
+      .success, .error {
+        display: none;
+        font-size: 13px;
+      }
+
+      .success.visible, .error.visible {
+        display: inline;
+      }
+
+      .error {
+        color: #E4584C;
+      }
+
+      .success {
+        color: #666EE8;
+      }
+
+      .success .token {
+        font-weight: 500;
+        font-size: 13px;
+      }
+
+      input[type=submit] {
+        width: 100%;
+        text-align: center;
+        margin-top:1em;
+      }
     }
   }
 }
