@@ -78,11 +78,11 @@
 
     <div class="page-row cart">
         <div class="grid grid-responsive-12">
-	        <div class="row">
+            <div class="row">
                 <div class="col12">
                     <h1>Your order</h1>
                 </div>
-		        <div class="col6 box customer_information">
+                <div class="col6 box customer_information">
                     <h2>Billing information</h2>
                     <div class="box-content">
                         <form>
@@ -96,15 +96,9 @@
                                     <input type="text" id="organization_name" placeholder="Vat number">
                                 </div>
                             </div>
-                            <div class="singleline clearfix">
-                                <div class="input text required">
-                                    <label for="first_name">First name</label>
-                                    <input type="text" id="first_name" placeholder="First Name" autocomplete="given-name">
-                                </div>
-                                <div class="input text required">
-                                    <label for="last_name">Last name</label>
-                                    <input type="text" id="last_name" placeholder="Last Name" autocomplete="family-name">
-                                </div>
+                            <div class="input text required">
+                                <label for="full_name">Full name</label>
+                                <input type="text" id="full_name" placeholder="Full Name" autocomplete="full-name">
                             </div>
                             <div class="input text required">
                                 <label for="email_address">Email address</label>
@@ -131,8 +125,8 @@
                             </div>
                         </form>
                     </div>
-		        </div>
-		        <div class="col6 last box payment_info">
+                </div>
+                <div class="col6 last box payment_info">
                     <h2>Passbolt Pro - Startup pack</h2>
                     <div class="box-content">
                         <div class="input text form-group price">
@@ -173,33 +167,33 @@
                             </table>
                         </div>
                     </div>
-		        </div>
+                </div>
 
-                    <div class="col6 last checkout">
-                        <form class="stripe">
-                            <div class="box">
-                                <h2>Checkout</h2>
-                                <div class="box-content">
-                                    <div class="group">
-                                        <div class="input text required">
-                                            <label for="card-element">Card</label>
-                                            <div id="card-element" class="field"></div>
-                                        </div>
+                <div class="col6 last checkout">
+                    <form class="stripe">
+                        <div class="box">
+                            <h2>Checkout</h2>
+                            <div class="box-content">
+                                <div class="group">
+                                    <div class="input text required">
+                                        <label for="card-element">Card</label>
+                                        <div id="card-element" class="field"></div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="submit-wrapper clearfix">
-                                <input type="submit" class="button primary big" value="Pay €264.00">
+                        </div>
+                        <div class="submit-wrapper clearfix">
+                            <input type="submit" class="button primary big" value="Pay €264.00">
+                        </div>
+                        <div class="outcome">
+                            <div class="error" role="alert"></div>
+                            <div class="success">
+                                Success! Your Stripe token is <span class="token"></span>
                             </div>
-                            <div class="outcome">
-                                <div class="error" role="alert"></div>
-                                <div class="success">
-                                    Success! Your Stripe token is <span class="token"></span>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-	        </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
 
