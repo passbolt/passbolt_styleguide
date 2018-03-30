@@ -78,11 +78,11 @@
 
     <div class="page-row cart">
         <div class="grid grid-responsive-12">
-	        <div class="row">
+            <div class="row">
                 <div class="col12">
                     <h1>Your order</h1>
                 </div>
-		        <div class="col6 box customer_information">
+                <div class="col6 box customer_information">
                     <h2>Billing information</h2>
                     <div class="box-content">
                         <form>
@@ -96,15 +96,9 @@
                                     <input type="text" id="organization_name" placeholder="Vat number">
                                 </div>
                             </div>
-                            <div class="singleline clearfix">
-                                <div class="input text required">
-                                    <label for="first_name">First name</label>
-                                    <input type="text" id="first_name" placeholder="First Name" autocomplete="given-name">
-                                </div>
-                                <div class="input text required">
-                                    <label for="last_name">Last name</label>
-                                    <input type="text" id="last_name" placeholder="Last Name" autocomplete="family-name">
-                                </div>
+                            <div class="input text required">
+                                <label for="full_name">Full name</label>
+                                <input type="text" id="full_name" placeholder="Full Name" autocomplete="full-name">
                             </div>
                             <div class="input text required">
                                 <label for="email_address">Email address</label>
@@ -188,7 +182,7 @@
                             </table>
                         </div>
                     </div>
-		        </div>
+                </div>
 
                     <div class="col6 last checkout">
                         <form class="stripe">
