@@ -167,7 +167,7 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td class="text-right">Vat (10%):</td>
+                                    <td class="text-right">Vat (17%):</td>
                                     <td class="text-right vat">
                                         <span class="vat">€24.00</span>
                                     </td>

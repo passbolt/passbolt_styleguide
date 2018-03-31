@@ -84,6 +84,10 @@
       border: 1px solid @border-default;
       text-align: center;
 
+      &.enterprise {
+
+      }
+
       &.highlighted {
         box-shadow: 0 3px 10px -5px #000000;
       }
@@ -106,9 +110,10 @@
         display: flex;
         -ms-flex-align: center;
         align-items: center;
+        margin-top: 1em;
 
         .cost-large {
-          font-size: 5em;
+          font-size: 4em;
           text-align: right;
           &.two-digits {
             letter-spacing: -5px;
@@ -118,14 +123,14 @@
           font-size: 2em;
           text-align: center;
           line-height: 1.2em;
-          padding: 0.65em 0 0.5em 0;
+          padding: 0.85em 0 0.8em 0;
         }
         .cost-small {
-          font-size: 1em;
+          font-size: 0.8em;
           text-align: left;
           .smaller {
             color: @grey-dark;
-            font-size: 0.8em;
+            font-size: 0.9em;
           }
         }
       }

@@ -42,7 +42,6 @@
 	                <div class="service-col col4 plan startup">
 	                    <div class="plan-description">
 		                    <h2>Startup</h2>
-		                    <p>For small teams</p>
 	                    </div>
 		                <div class="row plan-pricing">
 			                <div class="col6 cost cost-large"> €4 </div>
@@ -52,7 +51,7 @@
 			                <span>up to 5 users</span>
 		                </div>
 		                <div class="plan-actions">
-			                <a href="../demo/AA_services_pro_buy.php" class="button primary big">Buy now</a>
+			                <a href="../demo/AA_services_pro_checkout.php" class="button primary big">Buy now</a>
 		                </div>
 
 	                    <div class="plan-features">
@@ -72,7 +71,6 @@
 			            <div class="ribbon"><span>POPULAR</span></div>
 			            <div class="plan-description">
 				            <h2>Business</h2>
-				            <p>For medium size businesses</p>
 			            </div>
 			            <div class="row plan-pricing">
 				            <div class="col6 cost cost-large two-digits"> €10 </div>
@@ -82,7 +80,7 @@
 				            <span>up to 100 users</span>
 			            </div>
 			            <div class="plan-actions">
-				            <a href="../demo/AA_services_pro_buy.php" class="button primary big">Buy now</a>
+				            <a href="../demo/AA_services_pro_checkout.php" class="button primary big">Buy now</a>
 			            </div>
 			            <div class="plan-features">
 				            <ul>
@@ -100,16 +98,15 @@
 	                <div class="service-col col4 plan enterprise last">
 		                <div class="plan-description">
 			                <h2>Enterprise</h2>
-			                <p>For large teams that need guarantees</p>
 		                </div>
 		                <div class="row plan-pricing">
-			                <div class="col12 cost cost-medium">Tailor-made<br>offer</div>
+			                <div class="col12 cost cost-medium">Tailor-made</div>
 		                </div>
 		                <div class="plan-limit">
 			                <span>unlimited users</span>
 		                </div>
 		                <div class="plan-actions">
-			                <a href="../demo/AA_services_cloud.php" class="button primary big">Contact us</a>
+			                <a href="mailto:sales@passbolt.com" class="button primary big">Contact us</a>
 		                </div>
 	                    <div class="plan-features">
 		                    <ul>
