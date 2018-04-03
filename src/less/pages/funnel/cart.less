@@ -150,61 +150,66 @@
     }
   }
 
-  div.checkout {
-    
-    form.stripe {
-      margin: 20px auto;
+  div.customer_information {
+    .chosen-search-input {
+      margin: 0;
+      padding: 0;
+      line-height: normal;
+    }
+  }
 
-      .field {
-        border: 1px solid @border-input;
-        padding-left: .5em;
-      }
+  div.stripe.checkout {
+    margin: 20px auto;
 
-      .field::-webkit-input-placeholder {
-        color: #CFD7E0;
-      }
-      .field::-moz-placeholder {
-        color: #CFD7E0;
-      }
-      .field:-ms-input-placeholder {
-        color: #CFD7E0;
-      }
+    .field {
+      border: 1px solid @border-input;
+      padding-left: .5em;
+    }
 
-      .outcome {
-        float: left;
-        width: 100%;
-        padding-top: 8px;
-        min-height: 24px;
-        text-align: center;
-      }
+    .field::-webkit-input-placeholder {
+      color: #CFD7E0;
+    }
+    .field::-moz-placeholder {
+      color: #CFD7E0;
+    }
+    .field:-ms-input-placeholder {
+      color: #CFD7E0;
+    }
 
-      .success, .error {
-        display: none;
-        font-size: 13px;
-      }
+    .outcome {
+      float: left;
+      width: 100%;
+      padding-top: 8px;
+      min-height: 24px;
+      text-align: center;
+    }
 
-      .success.visible, .error.visible {
-        display: inline;
-      }
+    .success, .error {
+      display: none;
+      font-size: 13px;
+    }
 
-      .error {
-        color: #E4584C;
-      }
+    .success.visible, .error.visible {
+      display: inline;
+    }
 
-      .success {
-        color: #666EE8;
-      }
+    .error {
+      color: #E4584C;
+    }
 
-      .success .token {
-        font-weight: 500;
-        font-size: 13px;
-      }
+    .success {
+      color: #666EE8;
+    }
 
-      input[type=submit] {
-        width: 100%;
-        text-align: center;
-        margin-top:1em;
-      }
+    .success .token {
+      font-weight: 500;
+      font-size: 13px;
+    }
+
+    input[type=submit] {
+      width: 100%;
+      text-align: center;
+      margin-top:1em;
     }
   }
 }
