@@ -123,6 +123,12 @@
 				                    <br>
 				                    Private slack channel
 			                    </li>
+			                    <li>
+				                    Audit of the installation
+			                    </li>
+			                    <li>
+				                    Certified server key signature
+			                    </li>
 		                    </ul>
 	                    </div>
 	                </div>
