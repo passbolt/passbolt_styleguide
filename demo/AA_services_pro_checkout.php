@@ -123,10 +123,6 @@
                                 <select name="country" id="country" autocomplete="country-name" data-placeholder="Choose a country" class="chosen-select">
                                 </select>
                             </div>
-                            <div class="input checkbox terms">
-                                <input type="checkbox">
-                                <label>I agree to the <a href="#">terms and conditions</a></label>
-                            </div>
                         </form>
                     </div>
 		        </div>
@@ -184,31 +180,35 @@
                     </div>
                 </div>
 
-                    <div class="col6 last checkout">
-                        <form class="stripe">
-                            <div class="box">
-                                <h2>Checkout</h2>
-                                <div class="box-content">
-                                    <p>Pay with your credit card via Stripe</p>
-                                    <div class="group">
-                                        <div class="input text required">
-                                            <label for="card-element">Card Number</label>
-                                            <div id="card-element" class="field"></div>
-                                        </div>
+                <div class="col6 last checkout">
+                    <form class="stripe">
+                        <div class="box">
+                            <h2>Checkout</h2>
+                            <div class="box-content">
+                                <p>Pay with your credit card via Stripe</p>
+                                <div class="group">
+                                    <div class="input text required">
+                                        <label for="card-element">Card Number</label>
+                                        <div id="card-element" class="field"></div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="submit-wrapper clearfix">
-                                <input type="submit" class="button primary big" value="Pay €264.00">
+                        </div>
+                        <div class="input checkbox terms">
+                            <input type="checkbox">
+                            <label>I agree to the <a href="#">terms and conditions</a></label>
+                        </div>
+                        <div class="submit-wrapper clearfix">
+                            <input type="submit" class="button primary big" value="Pay €264.00">
+                        </div>
+                        <div class="outcome">
+                            <div class="error" role="alert"></div>
+                            <div class="success">
+                                Success! Your Stripe token is <span class="token"></span>
                             </div>
-                            <div class="outcome">
-                                <div class="error" role="alert"></div>
-                                <div class="success">
-                                    Success! Your Stripe token is <span class="token"></span>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
+                        </div>
+                    </form>
+                </div>
 	        </div>
         </div>
     </div>
