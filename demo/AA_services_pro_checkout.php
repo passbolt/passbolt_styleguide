@@ -97,9 +97,10 @@
                                         <input type="text" id="organization_name" placeholder="Vat number">
                                     </div>
                                 </div>
-                                <div class="input text required">
+                                <div class="input text required error">
                                     <label for="full_name">Full name</label>
                                     <input type="text" id="full_name" placeholder="Full Name" autocomplete="full-name">
+                                    <label id="full_name--error" class="error" for="full_name">This field is required.</label>
                                 </div>
                                 <div class="input text required">
                                     <label for="email_address">Email address</label>
@@ -119,7 +120,7 @@
                                         <input type="text" id="zip_code" placeholder="Zip Code" autocomplete="postal-code">
                                     </div>
                                 </div>
-                                <div class="input text required">
+                                <div class="input text required country">
                                     <label for="country">Country</label>
                                     <select name="country" id="country" autocomplete="country-name" data-placeholder="Choose a country" class="chosen-select">
                                     </select>
