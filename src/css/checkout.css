@@ -29,11 +29,6 @@
   min-height: 24px;
   text-align: center;
 }
-.checkout.page form.stripe .success,
-.checkout.page form.stripe .error {
-  display: none;
-  font-size: 13px;
-}
 .checkout.page form.stripe .success.visible,
 .checkout.page form.stripe .error.visible {
   display: inline;
