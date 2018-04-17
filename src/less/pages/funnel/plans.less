@@ -69,6 +69,16 @@
       margin-bottom:1.5em;
       font-weight:normal;
       text-align: center;
+
+      span {
+        display: block;
+        font-size:.85em;
+        color:#888;
+        margin:0.2em 0;
+        &.outline {
+          color: @blue;
+        }
+      }
     }
     .service {
       &.pull-up {
@@ -81,7 +91,6 @@
       background-color: #fff;
       position: relative;
       border-radius: 3px;
-      padding-bottom: 1em;
       border: 1px solid @border-default;
       text-align: center;
 
@@ -105,17 +114,31 @@
           padding-top: 1em;
           min-height: 1em;
         }
+
+        margin-bottom:1em;
+      }
+      .plan-discount {
+        font-size: 1.3em;
+        color: @grey-dark;
+        text-decoration: line-through;
       }
       .plan-pricing{
         display: -ms-flexbox;
         display: flex;
         -ms-flex-align: center;
         align-items: center;
-        margin-top: 1em;
 
+        .discounted {
+          text-align: center;
+          display: block;
+        }
         .cost-large {
           font-size: 4em;
           text-align: right;
+          &.float {
+            font-size:3.3em;
+            letter-spacing:-2px;
+          }
           &.two-digits {
             letter-spacing: -5px;
           }
@@ -125,6 +148,10 @@
           text-align: center;
           line-height: 1.2em;
           padding: 0.85em 0 0.8em 0;
+          &.lower {
+            // When other prices are discounted
+            padding-top:1.275em;
+          }
         }
         .cost-small {
           font-size: 0.8em;
@@ -159,7 +186,7 @@
         padding: 1em;
         
         ul {
-          min-height: 366px;
+          min-height: 285px;
           li {
             padding: 0.4em;
             font-size: 0.8em;
@@ -177,6 +204,11 @@
           font-size: 0.8em;
           color: @grey-dark;
         }
+      }
+
+      div.second_cta {
+        background-color: @grey-lightest;
+        padding:0.5em 0;
       }
     }
   }

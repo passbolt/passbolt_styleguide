@@ -29,7 +29,8 @@
 	            <div class="row">
 	                <div class="col12">
 	                    <h2>
-	                        Self-host passbolt on your own server and maintain full control of your infrastructure
+		                    Self-host passbolt on your own server for full control
+		                    <span class="outline">April special offer - early birds get <strong>30%</strong> off!</span>
 	                    </h2>
 	                </div>
 	            </div>
@@ -43,8 +44,11 @@
 	                    <div class="plan-description">
 		                    <h2>Startup</h2>
 	                    </div>
+		                <div class="row plan-discount">
+			                €2 / user / month
+		                </div>
 		                <div class="row plan-pricing">
-			                <div class="col6 cost cost-large"> €4 </div>
+			                <div class="col6 cost cost-large float"> €1.40 </div>
 			                <div class="col6 cost cost-small last">per user<br>per month <br><span class="smaller">(€44 billed annually)</span></div>
 		                </div>
 		                <div class="plan-limit">
@@ -55,25 +59,28 @@
 		                </div>
 
 	                    <div class="plan-features">
-							<ul>
-								<li>Turnkey installation</li>
-								<li>All community features</li>
-								<li>All premium features</li>
-								<li>One year of free updates</li>
-								<li>Perpetual license</li>
-								<li>15 support requests<br>
-									<span class="smaller">(next business day)</span>
-								</li>
-							</ul>
+		                    <ul>
+			                    <li>Turnkey installation</li>
+			                    <li>Premium features</li>
+			                    <li>One year of free updates</li>
+			                    <li>AGPL V3 license</li>
+			                    <li>Limited support requests<br><span class="smaller">(next business day)</span></li>
+		                    </ul>
 	                    </div>
+		                <div class="second_cta">
+			                <a href="#">Try a demo</a>
+		                </div>
 	                </div>
 		            <div class="service-col col4 plan business highlighted">
 			            <div class="ribbon"><span>POPULAR</span></div>
 			            <div class="plan-description">
 				            <h2>Business</h2>
 			            </div>
+			            <div class="row plan-discount">
+				            €4 / user / month
+			            </div>
 			            <div class="row plan-pricing">
-				            <div class="col6 cost cost-large two-digits"> €10 </div>
+				            <div class="col6 cost cost-large float"> €2.60 </div>
 				            <div class="col6 cost cost-small last">per user<br>per month <br><span class="smaller">(€108 billed annually)</span></div>
 			            </div>
 			            <div class="plan-limit">
@@ -85,14 +92,14 @@
 			            <div class="plan-features">
 				            <ul>
 					            <li>Turnkey installation</li>
-					            <li>All community features</li>
-					            <li>All premium features</li>
+					            <li>Premium features</li>
 					            <li>One year of free updates</li>
-					            <li>Perpetual license</li>
-					            <li>Unlimited email support<br>
-						            <span class="smaller">(next business day)</span>
-					            </li>
+					            <li>AGPL V3 license</li>
+					            <li>Unlimited email support<br><span class="smaller">(next business day)</span></li>
 				            </ul>
+			            </div>
+			            <div class="second_cta">
+				            <a href="#">Try a demo</a>
 			            </div>
 		            </div>
 	                <div class="service-col col4 plan enterprise last">
@@ -100,7 +107,7 @@
 			                <h2>Enterprise</h2>
 		                </div>
 		                <div class="row plan-pricing">
-			                <div class="col12 cost cost-medium">Tailor-made</div>
+			                <div class="col12 cost cost-medium lower">Tailor-made</div>
 		                </div>
 		                <div class="plan-limit">
 			                <span>unlimited users</span>
@@ -110,27 +117,19 @@
 		                </div>
 	                    <div class="plan-features">
 		                    <ul>
-			                    <li>Turnkey installation</li>
-			                    <li>All community features</li>
-			                    <li>All premium features</li>
-			                    <li>One year of free updates</li>
-			                    <li>Perpetual license</li>
-			                    <li>Unlimited email support<br>
-				                    <span class="smaller">(SLA < 4 hours during business hours)</span>
-			                    </li>
-			                    <li>
-				                    Phone support
-				                    <br>
-				                    Private slack channel
-			                    </li>
-			                    <li>
-				                    Audit of the installation
-			                    </li>
-			                    <li>
-				                    Certified server key signature
-			                    </li>
+			                    <ul>
+				                    <li>All business features</li>
+				                    <li>Installation support</li>
+				                    <li>On-premise management</li>
+				                    <li>Certified server key signature</li>
+				                    <li>Unlimited email support<br><span class="smaller">(SLA &lt; 4 hours during business hours)</span></li>
+				                    <li>Phone support<br>Private slack channel</li>
+			                    </ul>
 		                    </ul>
 	                    </div>
+		                <div class="second_cta">
+			                <a href="#">Get a quote</a>
+		                </div>
 	                </div>
 	            </div>
 		        <div class="col12 community_cta">
