@@ -11,14 +11,15 @@
         margin: 0 .5em .5em 0;
         text-decoration: none;
         border-radius: 3px;
-        border: 1px solid @blue;
-        background: @background-default;
-        color: @blue;
+        border: 1px solid @tag-border;
+        background: @tag-background;
+        color: @tag-color;
 
         &:active,
         &:hover {
-            background: @blue-light;
-            color: @font-inverse;
+            border: 1px solid @tag-hover-border;
+            background: @tag-hover-background;
+            color: @tag-hover-color;
         }
     }
 }

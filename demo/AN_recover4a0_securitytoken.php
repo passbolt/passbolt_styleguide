@@ -1,8 +1,8 @@
-<!doctype html>
+<?php include('_includes/bootstrap.php'); ?><!doctype html>
 <html lang="en" class="version alpha">
 <head>
 	<?php include('includes/meta/AN_meta_setup.php'); ?>
-	<script type="text/javascript" src="js/jquery-2.2.4.min.js"></script>
+	<script type="text/javascript" src="js/jquery-3.3.1.min.js"></script>
 	<script type="text/javascript" src="js/farbtastic.js"></script>
 	<script type="text/javascript" src="js/colorpicker.js"></script>
 </head>

@@ -1,4 +1,4 @@
-<!doctype html>
+<?php include('_includes/bootstrap.php'); ?><!doctype html>
 <html class="passbolt no-js no-passboltplugin version alpha launching" lang="en">
 <head>
 	<meta charset="utf-8">

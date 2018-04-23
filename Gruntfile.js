@@ -7,22 +7,51 @@ module.exports = function(grunt) {
 		pkg: grunt.file.readJSON('package.json'),
 		clean: {
 			css: [
-				'build/css/*.css',
-				'src/css/*.css',
+				'build/css/*',
+				'src/css/*',
 			]
 		},
-		lesslint: {
-			src: ['src/less/*.less']
-		},
 		less: {
-			files: {
+			public: {
 				expand: true,
 				flatten: true,
 				cwd: "src/less/",
 				src: "*.less",
 				dest: "src/css/",
 				ext: ".css"
-			}
+			},
+      theme_default_api: {
+        expand: true,
+        flatten: true,
+        cwd: "src/less/themes/default/api",
+        src: "*.less",
+        dest: "src/css/themes/default/api",
+        ext: ".css"
+      },
+      theme_default_webext: {
+        expand: true,
+        flatten: true,
+        cwd: "src/less/themes/default/webext",
+        src: "**.less",
+        dest: "src/css/themes/default/webext",
+        ext: ".css"
+      },
+      theme_midgar_api: {
+        expand: true,
+        flatten: true,
+        cwd: "src/less/themes/midgar/api",
+        src: "*.less",
+        dest: "src/css/themes/midgar/api",
+        ext: ".css"
+      },
+      theme_midgar_webext: {
+        expand: true,
+        flatten: true,
+        cwd: "src/less/themes/midgar/webext",
+        src: "**.less",
+        dest: "src/css/themes/midgar/webext",
+        ext: ".css"
+      }
 		},
 		shell: {
 			'publish': {
@@ -49,13 +78,41 @@ module.exports = function(grunt) {
 						' * @license\t\t<%= pkg.license %>\n */\n',
 				footer: '/* @license-end */'
 			},
-			minify: {
+			public: {
 				expand: true,
 				cwd: 'src/css/',
 				src: ['*.css', '!*.min.css'],
 				dest: 'build/css/',
 				ext: '.min.css'
-			}
+			},
+      theme_default_api: {
+        expand: true,
+        cwd: 'src/css/themes/default/api',
+        src: ['*.css', '!*.min.css'],
+        dest: 'build/css/themes/default/api',
+        ext: '.min.css'
+      },
+      theme_default_webext: {
+        expand: true,
+        cwd: 'src/css/themes/default/webext',
+        src: ['*.css', '!*.min.css'],
+        dest: 'build/css/themes/default/webext',
+        ext: '.min.css'
+      },
+      theme_midgar_api: {
+        expand: true,
+        cwd: 'src/css/themes/midgar/api',
+        src: ['*.css', '!*.min.css'],
+        dest: 'build/css/themes/midgar/api',
+        ext: '.min.css'
+      },
+      theme_midgar_webext: {
+        expand: true,
+        cwd: 'src/css/themes/midgar/webext',
+        src: ['*.css', '!*.min.css'],
+        dest: 'build/css/themes/midgar/webext',
+        ext: '.min.css'
+      }
 		},
 		watch: {
 			less: {
@@ -85,13 +142,6 @@ module.exports = function(grunt) {
 
 	// ========================================================================
 	// Register Tasks
-
-	// Run 'grunt test' to view lesslint recommendations
-	grunt.registerTask('test', ['lesslint']);
-
-	// Run 'grunt csslint' to check LESS quality, and if no errors then
-	// compile LESS into CSS, combine and minify
-	grunt.registerTask('csslint', ['lesslint', 'clean:css', 'less', 'cssmin']);
 
 	// Run 'grunt css' to compile LESS into CSS, combine and minify
 	grunt.registerTask('css', ['clean:css', 'less', 'cssmin']);

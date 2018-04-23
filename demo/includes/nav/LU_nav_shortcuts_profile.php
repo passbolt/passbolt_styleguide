@@ -28,6 +28,15 @@
 				</div>
 			</div>
 		</li>
+        <li class="<?php echo isselected('themese'); ?>">
+            <div class="row">
+                <div class="main-cell-wrapper">
+                    <div class="main-cell">
+                        <a href="../demo/LU_users_profile_themes.php"><span>Theme</span></a>
+                    </div>
+                </div>
+            </div>
+        </li>
 		<li class="<?php echo isselected('notifications'); ?>">
 			<div class="row">
 				<div class="main-cell-wrapper">
@@ -37,34 +46,32 @@
 				</div>
 			</div>
 		</li>
-		<li class="<?php echo isselected('keyinspector'); ?>">
-			<div class="row">
-				<div class="main-cell-wrapper">
-					<div class="main-cell">
-						<a href="../demo/LU_users_profile_keyinspector.php"><span>Keys inspector</span></a>
-					</div>
-				</div>
-				<ul>
-					<li class="<?php echo isselected('identities'); ?>">
-						<div class="row">
-							<div class="main-cell-wrapper">
-								<div class="main-cell">
-									<a href="../demo/LU_users_profile_keyinspector_identities.php"><span>Identities</span></a>
-								</div>
-							</div>
-						</div>
-					</li>
-					<li class="<?php echo isselected('subkeys'); ?>">
-						<div class="row">
-							<div class="main-cell-wrapper">
-								<div class="main-cell">
-									<a href="../demo/LU_users_profile_keyinspector_subkeys.php"><span>Subkeys</span></a>
-								</div>
-							</div>
-						</div>
-					</li>
-				</ul>
-			</div>
-		</li>
+        <li class="<?php echo isselected('keyinspector'); ?>">
+            <div class="row">
+                <div class="main-cell-wrapper">
+                    <div class="main-cell">
+                        <a href="../demo/LU_users_profile_keyinspector.php"><span>Keys inspector</span></a>
+                    </div>
+                </div>
+            </div>
+        </li>
+        <li class="<?php echo isselected('identities'); ?>">
+            <div class="row">
+                <div class="main-cell-wrapper">
+                    <div class="main-cell">
+                        <a href="../demo/LU_users_profile_keyinspector_identities.php"><span>Identities</span></a>
+                    </div>
+                </div>
+            </div>
+        </li>
+        <li class="<?php echo isselected('subkeys'); ?>">
+            <div class="row">
+                <div class="main-cell-wrapper">
+                    <div class="main-cell">
+                        <a href="../demo/LU_users_profile_keyinspector_subkeys.php"><span>Subkeys</span></a>
+                    </div>
+                </div>
+            </div>
+        </li>
 	</ul>
 </div>

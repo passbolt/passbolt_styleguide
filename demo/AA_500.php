@@ -1,4 +1,4 @@
-<!doctype html>
+<?php include('_includes/bootstrap.php'); ?><!doctype html>
 <html class="alpha version no-js" lang="en">
 <head>
 	<meta charset="utf-8">

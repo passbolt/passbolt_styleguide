@@ -1,4 +1,4 @@
-<!doctype html>
+<?php include('_includes/bootstrap.php'); ?><!doctype html>
 <html lang="en" class="alpha version">
 <head>
     <meta charset="utf-8">
@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="shortcut icon" type="image/x-icon" href="img/webroot/favicon.ico" />
     <link rel="stylesheet" type="text/css" href="../src/css/help.css">
-    <script src="../src/js/jquery-2.2.4.min.js"></script>
+    <script src="../src/js/jquery-3.3.1.min.js"></script>
     <script src="../src/js/bootstrap-scrollspy.js"></script>
 	<script src="../src/js/greedynav.js"></script>
 </head>

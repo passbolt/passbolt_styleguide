@@ -1,8 +1,8 @@
-<!doctype html>
+<?php include('_includes/bootstrap.php'); ?><!doctype html>
 <html lang="en" class="version alpha no-passboltplugin no-firefox chrome">
 <head>
 	<?php include('includes/meta/AN_meta_setup.php'); ?>
-	<link rel="stylesheet" type="text/css" href="css/devel.css" />
+
 </head>
 <body>
 <div id="container" class="page setup">

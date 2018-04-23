@@ -8,7 +8,7 @@
     width: 30%;
     bottom: 0;
     height: 100%;
-    background: @background-default;
+    background: @sidebar-background;
     .box-shadow();
 
     /* Controls */
@@ -27,9 +27,10 @@
 
     .sidebar-section {
         margin-top:-1px;
-        border-bottom:1px solid @border-lightest;
-        border-top:1px solid @border-lightest;
+        border-bottom:1px solid @sidebar-border;
+        border-top:1px solid @sidebar-border;
         font-size: .875em;
+        background: @sidebar-section-background;
 
         h4 {
             font-size: 1.125em;
@@ -39,15 +40,14 @@
         }
 
         .accordion-content {
-            margin: 0 1.25em 1.5em 1.25em;
-            padding-top:.5em;
+            padding:1em 1.25em 1.5em 1.25em;
+            background: @sidebar-section-header-background;
 
             .section-action {
                 font-size: 1.125em;
                 position:absolute;
-                margin-top: -2.85em;
+                margin-top: -3.35em;
                 right:3.25em;
-                background:@background-default;
                 width:1.125em;
                 height:1.125em;
                 z-index:401;
@@ -114,7 +114,7 @@
             padding:.5em;
             margin:0;
             font-size:.929em; /* 13px */
-            background:@background-notice;
+            background: @background-notice;
         }
     }
 }

@@ -1,159 +1,19 @@
-/* ==========================================================================
- *	Helper classes
- * ========================================================================== */
-/*
- * Image replacement
- */
-.ir {
-  background-color: transparent;
-  border: 0;
-  overflow: hidden;
-  /* IE 6/7 fallback */
-  *text-indent: -9999px;
-}
-.ir:before {
-  content: "";
-  display: block;
-  width: 0;
-  height: 150%;
-}
-/*
- * Hide from both screenreaders and browsers: h5bp.com/u
- */
-html body .hidden {
-  display: none;
-}
-/*
- * Hide only visually, but have it available for screenreaders: h5bp.com/v
- */
-.visuallyhidden {
-  border: 0;
-  clip: rect(0 0 0 0);
-  height: 1px;
-  margin: -1px;
-  overflow: hidden;
-  padding: 0;
-  position: absolute;
-  width: 1px;
-  /*
-     * Extends the .visuallyhidden class to allow the element to be focusable
-     * when navigated to via the keyboard: h5bp.com/p
-     */
-}
-.visuallyhidden .focusable:active,
-.visuallyhidden .focusable:focus {
-  clip: auto;
-  height: auto;
-  margin: 0;
-  overflow: visible;
-  position: static;
-  width: auto;
-}
-/*
- * Hide visually and from screenreaders, but maintain layout
- */
-.invisible {
-  visibility: hidden;
-}
-.clearfix {
-  /*
-     * For IE 6/7 only
-     * Include this rule to trigger hasLayout and contain floats.
-     */
-  zoom: 1;
-  /*
-     * Clearfix: contain floats
-     *
-     * For modern browsers
-     * 1. The space content is one way to avoid an Opera bug when the
-     *	`contenteditable` attribute is included anywhere else in the document.
-     *	Otherwise it causes space to appear at the top and bottom of elements
-     *	that receive the `clearfix` class.
-     * 2. The use of `table` rather than `block` is only necessary if using
-     *	`:before` to contain the top-margins of child elements.
-     */
-}
-.clearfix:before,
-.clearfix:after {
-  content: "";
-  display: table;
-}
-.clearfix:after {
-  clear: both;
-}
-/*
- * Border radius
- */
-.rounded {
-  -webkit-border-radius: 0.214em;
-  -moz-border-radius: 0.214em;
-  border-radius: 0.214em;
-}
-/* position shortcuts */
-.left {
-  float: left;
-}
-.right {
-  float: right;
-}
-/* ellipsis */
-.ellipsis {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  -o-text-overflow: ellipsis;
-  -ms-text-overflow: ellipsis;
-}
-/* force display of a block inline */
-.inline {
-  display: inline-block;
-}
-/* make something spin */
-@-webkit-keyframes rotate {
-  from {
-    -webkit-transform: rotate(0deg);
-  }
-  to {
-    -webkit-transform: rotate(-360deg);
-  }
-}
-@-moz-keyframes rotate {
-  from {
-    -moz-transform: rotate(0deg);
-  }
-  to {
-    -moz-transform: rotate(-360deg);
-  }
-}
-.rotate {
-  -webkit-animation-name: rotate;
-  -webkit-animation-duration: 4s;
-  -webkit-animation-iteration-count: infinite;
-  -webkit-animation-timing-function: linear;
-  -moz-animation-name: rotate;
-  -moz-animation-duration: 4s;
-  -moz-animation-iteration-count: infinite;
-  -moz-animation-timing-function: linear;
-}
-/* list */
-/* seriously? */
-.blink {
-  animation: blinker 1s linear infinite;
-}
-.blink-fast {
-  animation: blinker .25s linear infinite;
-}
-@keyframes blinker {
-  50% {
-    opacity: 0.0;
-  }
-}
 /* palette */
 /* borders */
 /* font */
 /* background */
-/* scrollbar */
+/* buttons */
+/* inputs */
 /* shadows */
+/* logo */
+/* grid */
+/* tabs */
+/* contextual menus */
+/* sidebar */
+/* secret placeholder */
+/* tables */
+/* tags */
+/* tooltip */
 /* ==========================================================================
  * Reset is a mix of :
  *
@@ -670,9 +530,160 @@ table td {
   text-align: left;
   font-weight: normal;
 }
+/* ==========================================================================
+ *	Helper classes
+ * ========================================================================== */
+/*
+ * Image replacement
+ */
+.ir {
+  background-color: transparent;
+  border: 0;
+  overflow: hidden;
+  /* IE 6/7 fallback */
+  *text-indent: -9999px;
+}
+.ir:before {
+  content: "";
+  display: block;
+  width: 0;
+  height: 150%;
+}
+/*
+ * Hide from both screenreaders and browsers: h5bp.com/u
+ */
+html body .hidden {
+  display: none;
+}
+/*
+ * Hide only visually, but have it available for screenreaders: h5bp.com/v
+ */
+.visuallyhidden {
+  border: 0;
+  clip: rect(0 0 0 0);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
+  /*
+     * Extends the .visuallyhidden class to allow the element to be focusable
+     * when navigated to via the keyboard: h5bp.com/p
+     */
+}
+.visuallyhidden .focusable:active,
+.visuallyhidden .focusable:focus {
+  clip: auto;
+  height: auto;
+  margin: 0;
+  overflow: visible;
+  position: static;
+  width: auto;
+}
+/*
+ * Hide visually and from screenreaders, but maintain layout
+ */
+.invisible {
+  visibility: hidden;
+}
+.clearfix {
+  /*
+     * For IE 6/7 only
+     * Include this rule to trigger hasLayout and contain floats.
+     */
+  zoom: 1;
+  /*
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
+}
+.clearfix:before,
+.clearfix:after {
+  content: "";
+  display: table;
+}
+.clearfix:after {
+  clear: both;
+}
+/*
+ * Border radius
+ */
+.rounded {
+  -webkit-border-radius: 0.214em;
+  -moz-border-radius: 0.214em;
+  border-radius: 0.214em;
+}
+/* position shortcuts */
+.left {
+  float: left;
+}
+.right {
+  float: right;
+}
+/* ellipsis */
+.ellipsis {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -o-text-overflow: ellipsis;
+  -ms-text-overflow: ellipsis;
+}
+/* force display of a block inline */
+.inline {
+  display: inline-block;
+}
+/* make something spin */
+@-webkit-keyframes rotate {
+  from {
+    -webkit-transform: rotate(0deg);
+  }
+  to {
+    -webkit-transform: rotate(-360deg);
+  }
+}
+@-moz-keyframes rotate {
+  from {
+    -moz-transform: rotate(0deg);
+  }
+  to {
+    -moz-transform: rotate(-360deg);
+  }
+}
+.rotate {
+  -webkit-animation-name: rotate;
+  -webkit-animation-duration: 4s;
+  -webkit-animation-iteration-count: infinite;
+  -webkit-animation-timing-function: linear;
+  -moz-animation-name: rotate;
+  -moz-animation-duration: 4s;
+  -moz-animation-iteration-count: infinite;
+  -moz-animation-timing-function: linear;
+}
+/* list */
+/* seriously? */
+.blink {
+  animation: blinker 1s linear infinite;
+}
+.blink-fast {
+  animation: blinker .25s linear infinite;
+}
+@keyframes blinker {
+  50% {
+    opacity: 0.0;
+  }
+}
 /* body */
 body {
   color: #333333;
+  background: #ffffff;
 }
 /* links */
 a:link,
@@ -693,10 +704,6 @@ a {
 }
 a:hover {
   border-bottom: 1px solid #2894df;
-}
-/* todos */
-.todo {
-  background: #fffae7 !important;
 }
 /*
  * Animate.css - http://daneden.me/animate
@@ -3209,8 +3216,8 @@ button,
   text-decoration: none;
   border: 1px solid #cccccc;
   color: #333333;
-  font-weight: bold;
-  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.8);
+  font-weight: normal;
+  text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.5);
   background: #eeeeee;
   background-image: -moz-linear-gradient(top, #f3f3f3, #eeeeee);
   background-image: -ms-linear-gradient(top, #f3f3f3, #eeeeee);
@@ -3242,13 +3249,13 @@ button.primary {
   background: #2894df;
   border: 1px solid #2894df;
   color: #ffffff;
-  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.2);
+  text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.2);
 }
 .button.primary:hover,
 button.primary:hover {
-  color: #ffffff;
-  border: 1px solid #2a9ceb;
   background: #2a9ceb;
+  border: 1px solid #2a9ceb;
+  color: #ffffff;
 }
 button.primary:active,
 .button.primary:active,
@@ -3290,13 +3297,13 @@ input[type=submit]:hover,
 button:hover {
   color: #333333;
   text-decoration: none;
-  background: #eeeeee;
-  background-image: -moz-linear-gradient(top, #f3f3f3, #eeeeee);
-  background-image: -ms-linear-gradient(top, #f3f3f3, #eeeeee);
-  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(background-lightest), to(#eeeeee));
-  background-image: -webkit-linear-gradient(top, #f3f3f3, #eeeeee);
-  background-image: -o-linear-gradient(top, #f3f3f3, #eeeeee);
-  background-image: linear-gradient(top, #f3f3f3, #eeeeee);
+  background: #f3f3f3;
+  background-image: -moz-linear-gradient(top, #f3f3f3, #f3f3f3);
+  background-image: -ms-linear-gradient(top, #f3f3f3, #f3f3f3);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(background-lightest), to(#f3f3f3));
+  background-image: -webkit-linear-gradient(top, #f3f3f3, #f3f3f3);
+  background-image: -o-linear-gradient(top, #f3f3f3, #f3f3f3);
+  background-image: linear-gradient(top, #f3f3f3, #f3f3f3);
   border: 1px solid #bbbbbb;
 }
 /* focus */
@@ -3307,7 +3314,8 @@ button:focus {
   border: 1px solid #2894df;
 }
 /* active */
-input[type=submit]:active button:active,
+input[type=submit]:active,
+button:active,
 .button:active {
   color: #2894df;
   border: 1px solid #2894df;
@@ -3337,11 +3345,11 @@ button.disabled:active,
 input[type=submit].disabled:focus,
 button.disabled:focus,
 .button.disabled:focus {
-  color: #888888;
   -webkit-box-shadow: 0 0 0;
   -moz-box-shadow: 0 0 0;
   box-shadow: 0 0 0;
   top: 0;
+  color: #888888;
   background: #ffffff;
   border: 1px solid #dddddd;
 }
@@ -3629,7 +3637,7 @@ input[type=checkbox] + label {
   /* colors for messages */
 }
 .input .message.error {
-  font-weight: bold;
+  font-weight: normal;
   color: #d40101;
 }
 .input .message.helptext {
@@ -3719,6 +3727,9 @@ input[type=email].fluid {
 }
 .panel.main .row {
   padding-left: 0;
+}
+.panel.main .panel.left {
+  background: #ffffff;
 }
 /* its position depends on how many headers are there */
 .header.second + .panel.main {
@@ -3931,6 +3942,7 @@ input[type=email].fluid {
      * 2. The use of `table` rather than `block` is only necessary if using
      *	`:before` to contain the top-margins of child elements.
      */
+  position: relative;
   left: auto;
   float: none;
   width: 99%;
@@ -4141,6 +4153,7 @@ input[type=email].fluid {
   .grid .row .col11,
   .grid .row .col12 {
     float: left;
+    position: relative;
     margin: 0 3% 0 0;
   }
   .grid .row .last {
@@ -4223,9 +4236,6 @@ input[type=email].fluid {
   .panel.middle {
     overflow-y: scroll;
   }
-  .panel.main {
-    bottom: 2.45em;
-  }
 }
 /* reset layout styles on smaller screen */
 @media all and (max-width: 1024px) {
@@ -4260,7 +4270,7 @@ input[type=email].fluid {
   overflow-y: scroll;
   background: linear-gradient(#ffffff 30%, rgba(255, 255, 255, 0)), linear-gradient(rgba(255, 255, 255, 0), #ffffff 70%) 0 100%, radial-gradient(farthest-side at 75% 0, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0)), radial-gradient(farthest-side at 75% 100%, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0)) 0 100%;
   background-repeat: no-repeat;
-  background-color: white;
+  background-color: #ffffff;
   background-size: 100% 10px, 100% 10px, 100% 5px, 100% 5px;
   /* Opera doesn't support this in the shorthand */
   background-attachment: local, local, scroll, scroll;
@@ -4440,9 +4450,6 @@ article video {
   background: #eeeeee;
   color: #333333;
 }
-.logo img {
-  max-width: 150px;
-}
 .logo.no-img {
   background: transparent url('../img/logo/logo.png') 0 0 no-repeat;
   background-size: 150px auto;
@@ -4453,7 +4460,7 @@ article video {
   display: none;
 }
 .logo.bigger {
-  background: transparent url('../img/logo/logo@2x.png') 0 0 no-repeat;
+  background: transparent url('../img/logo/logo.svg') 0 0 no-repeat;
   background-size: 200px auto;
   width: 200px;
   height: 45px;
@@ -4461,11 +4468,11 @@ article video {
 /* CSS for serving the retina image to devices with a high "device-pixel-ratio": */
 @media only screen and (-moz-min-device-pixel-ratio: 1.5), only screen and (-o-min-device-pixel-ratio: 3/2), only screen and (-webkit-min-device-pixel-ratio: 1.5), only screen and (min-devicepixel-ratio: 1.5), only screen and (min-resolution: 1.5dppx) {
   .logo.no-img {
-    background: transparent url('../img/logo/logo@2x.png') 0 0 no-repeat;
+    background: transparent url('../img/logo/logo.svg') 0 0 no-repeat;
     background-size: 150px auto;
   }
   .logo.bigger {
-    background: transparent url('../img/logo/logo@2x.png') 0 0 no-repeat;
+    background: transparent url('../img/logo/logo.svg') 0 0 no-repeat;
     background-size: 200px auto;
   }
 }
@@ -4579,6 +4586,7 @@ article video {
   padding: .1875em 0 .1875em 0;
   margin-bottom: 0;
   border-bottom: 1px solid #dddddd;
+  background: #ffffff;
 }
 .breadcrumbs ul {
   padding-top: 0.2em;
@@ -4884,15 +4892,19 @@ article video {
   border-bottom: 1px solid #2894df;
 }
 .message.error {
+  color: #d40101;
   background: #ffe4e4;
 }
 .message.success {
+  color: #333333;
   background: #edf7eb;
 }
 .message.notice {
+  color: #333333;
   background: #daecf9;
 }
 .message.warning {
+  color: #333333;
   background: #fef0bf;
 }
 /* big side info message blocks on setup or profile pages */
@@ -4913,7 +4925,7 @@ table.table-info td,
 table.table-info.vertical td {
   padding: .625em;
   padding-right: 1.25em;
-  color: #969696;
+  color: #666666;
 }
 table.table-info td.warning,
 table.table-info.vertical td.warning {
@@ -4925,7 +4937,7 @@ table.table-info.vertical td.error {
 }
 table.table-info td .alt.side,
 table.table-info.vertical td .alt.side {
-  color: #969696;
+  color: #666666;
   float: right;
 }
 table.table-info td .alt.side:before,
@@ -4957,8 +4969,14 @@ table.table-info.horizontal th {
 table.table-info.horizontal th {
   border-bottom: 1px solid #dddddd;
 }
-table.table-info.horizontal tbody tr:nth-child(even) {
-  background: #f3f3f3;
+table.table-info.horizontal thead tr {
+  background: #ffffff;
+}
+table.table-info.horizontal tbody {
+  background: #ffffff;
+}
+table.table-info.horizontal tbody tr:nth-child(odd) {
+  background: #ffffff;
 }
 /**
  * Tooltips!
@@ -5020,7 +5038,6 @@ table.table-info.horizontal tbody tr:nth-child(even) {
   padding: 8px;
   width: 160px;
   background-color: #333333;
-  background-color: rgba(51, 51, 51, 0.9);
   color: #ffffff;
   content: attr(data-tooltip);
   font-size: 14px;
@@ -5045,7 +5062,6 @@ table.table-info.horizontal tbody tr:nth-child(even) {
   margin-left: -6px;
   margin-bottom: -12px;
   border-top-color: #333333;
-  border-top-color: rgba(51, 51, 51, 0.9);
 }
 /* Horizontally align top/bottom tooltips */
 [data-tooltip]:after,
@@ -5133,7 +5149,6 @@ table.table-info.horizontal tbody tr:nth-child(even) {
   margin-left: -12px;
   border-top-color: transparent;
   border-right-color: #333333;
-  border-right-color: rgba(51, 51, 51, 0.9);
 }
 .tooltip-right:hover:before,
 .tooltip-right:hover:after,
@@ -5184,7 +5199,6 @@ table.table-info.horizontal tbody tr:nth-child(even) {
   visibility: hidden;
   width: 180px;
   background-color: #333333;
-  background-color: rgba(51, 51, 51, 0.9);
   color: #ffffff;
   padding: .5em 1em;
   -webkit-transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out, -webkit-transform 0.2s cubic-bezier(0.71, 1.7, 0.77, 1.24);
@@ -5207,7 +5221,7 @@ table.table-info.horizontal tbody tr:nth-child(even) {
   right: 100%;
   margin-top: -5px;
   border: 5px #333333 solid;
-  border-color: transparent rgba(51, 51, 51, 0.9) transparent transparent;
+  border-color: transparent #333333 transparent transparent;
 }
 .tooltip-alt:hover .tooltip-text {
   -webkit-transform: translateX(12px);
@@ -5333,14 +5347,18 @@ form.search input[type=search] {
   float: left;
   width: 65%;
   margin-bottom: 0;
+  border-right: 1px solid #ffffff;
   padding: .313em .625em;
+}
+form.search input[type=search]:focus,
+form.search input[type=search]:active {
+  border-right: 1px solid #2894df;
 }
 form.search button {
   height: 2.571em;
   /* 36px */
   float: left;
-  margin-left: -2px;
-  border-left: 0;
+  margin-left: 0;
   border-radius: 0px 2px 2px 0px;
 }
 form.search button .fa-search {

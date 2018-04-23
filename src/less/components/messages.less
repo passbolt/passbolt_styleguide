@@ -14,21 +14,25 @@
 .message {
     padding: 1em;
     a {
-        border-bottom: 1px solid @grey-darker;
+        border-bottom: 1px solid @border-dark;
     }
     a:hover {
         border-bottom: 1px solid @blue;
     }
     &.error {
+        color:@font-error;
         background: @background-error;
     }
     &.success {
+        color:@font-success;
         background: @background-success;
     }
     &.notice {
+        color:@font-notice;
         background: @background-notice;
     }
     &.warning {
+        color:@font-warning;
         background: @background-warning;
     }
 }

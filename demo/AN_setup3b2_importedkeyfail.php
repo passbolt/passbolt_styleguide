@@ -1,4 +1,4 @@
-<!doctype html>
+<?php include('_includes/bootstrap.php'); ?><!doctype html>
 <html lang="en" class="version alpha">
 <head>
 	<?php include('includes/meta/AN_meta_setup.php'); ?>

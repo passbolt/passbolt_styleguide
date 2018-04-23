@@ -1,11 +1,11 @@
-<!doctype html>
+<?php include('_includes/bootstrap.php'); ?><!doctype html>
 <html class="alpha version no-js" lang="en">
 <head>
 	<meta charset="utf-8">
 	<title>Passbolt | Open source password manager for teams</title>
 	<?php include('includes/meta/AA_meta.php'); ?>
 	<?php include('includes/headers/AA_header_scripts.php'); ?>
-	<script src="js/jquery-2.2.4.min.js"></script>
+	<script src="js/jquery-3.3.1.min.js"></script>
 </head>
 <body>
 <div id="container" class="page home">

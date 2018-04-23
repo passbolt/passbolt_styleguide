@@ -1,0 +1,36 @@
+.themes {
+    .theme {
+        float:left;
+        border-radius: 2px;
+
+        a {
+            max-width:275px;
+            display:block;
+            margin:1em;
+            border:1px solid @border-default;
+            padding:1em;
+            .box-shadow();
+            border-radius: 3px;
+
+            &:hover {
+                border:1px solid @button-primary-hover-border;
+            }
+        }
+
+        .theme-desc {
+            padding-top:1em;
+            text-align: center;
+        }
+
+        &.selected {
+            font-weight: bold;
+            a {
+                background: @button-selected-background;
+                -webkit-box-shadow: inset 0 1px 2px rgba(255, 255, 255, .2);
+                -moz-box-shadow: inset 0 1px 2px rgba(0, 0, 0, .2);
+                box-shadow: inset 0 1px 2px rgba(0, 0, 0, .2);
+                border: 1px solid @button-selected-border;
+            }
+        }
+    }
+}
