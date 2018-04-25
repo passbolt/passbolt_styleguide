@@ -29,114 +29,116 @@
 	            <div class="row">
 	                <div class="col12">
 	                    <h2>
-	                        Self-host passbolt on your own server and maintain full control of your infrastructure
+		                    Self-host passbolt on your own server for full control
+		                    <span class="outline">April special offer - early birds get <strong>30%</strong> off!</span>
 	                    </h2>
 	                </div>
 	            </div>
 	        </div>
 	    </div>
 
-        <div class="page-row service pull-up">
-            <div class="grid grid-responsive-12">
-                <div class="row">
-                    <div class="service-col col4 plan startup">
-                        <div class="plan-description">
-                            <h2>Startup</h2>
-                        </div>
-                        <div class="row plan-pricing">
-                            <div class="col6 cost cost-large"> €2 </div>
-                            <div class="col6 cost cost-small last">
-                                per user<br>
-                                per month <br>
-                                <span class="smaller">(€24.00 billed annually)</span>
-                            </div>
-                        </div>
-                        <div class="plan-limit">
-                            <span>up to 15 users</span>
-                        </div>
-                        <div class="plan-actions">
-                            <a href="http://www.passbolt.com/payments/order/fa3e82ca-0932-596f-896f-f18a41619206" class="button primary big">Buy now</a>
-                        </div>
-                        <div class="plan-features">
-                            <ul>
-                                <li>Turnkey installation</li>
-                                <li>Premium features</li>
-                                <li>One year of free updates</li>
-                                <li>AGPL V3 license</li>
-                                <li>Limited support requests<br><span class="smaller">(next business day)</span></li>
-                            </ul>
-                        </div>
-                        <div class="second_cta">
-                            <a href="https://demo.passbolt.com">Try a demo</a>
-                        </div>
-                    </div>
-                    <div class="service-col col4 plan business highlighted">
-                        <div class="ribbon"><span>POPULAR</span></div>
-                        <div class="plan-description">
-                            <h2>Business</h2>
-                        </div>
-                        <div class="row plan-pricing">
-                            <div class="col6 cost cost-large"> €4 </div>
-                            <div class="col6 cost cost-small last">
-                                per user<br>
-                                per month <br>
-                                <span class="smaller">(€48.00 billed annually)</span>
-                            </div>
-                        </div>
-                        <div class="plan-limit">
-                            <span>up to 100 users</span>
-                        </div>
-                        <div class="plan-actions">
-                            <a href="http://www.passbolt.com/payments/order/5a2248cf-972e-5b76-86d7-d31708342ad3" class="button primary big">Buy now</a>
-                        </div>
-                        <div class="plan-features">
-                            <ul>
-                                <li>Turnkey installation</li>
-                                <li>Premium features</li>
-                                <li>One year of free updates</li>
-                                <li>AGPL V3 license</li>
-                                <li>Unlimited email support<br><span class="smaller">(next business day)</span></li>
-                            </ul>
-                        </div>
-                        <div class="second_cta">
-                            <a href="https://demo.passbolt.com">Try a demo</a>
-                        </div>
-                    </div>
-                    <div class="service-col col4 plan enterprise last">
-                        <div class="plan-description">
-                            <h2>Enterprise</h2>
-                        </div>
-                        <div class="row plan-pricing">
-                            <div class="col12 cost cost-medium ">Tailor-made</div>
-                        </div>
-                        <div class="plan-limit">
-                            <span>unlimited users</span>
-                        </div>
-                        <div class="plan-actions">
-                            <a href="http://www.passbolt.com/contact/passbolt-pro-enterprise" class="button primary big">Contact us</a>
-                        </div>
-                        <div class="plan-features">
-                            <ul>
-                                <li>All business pack features</li>
-                                <li>Installation support</li>
-                                <li>On-premise management</li>
-                                <li>Certified server key signature</li>
-                                <li>Unlimited email support<br><span class="smaller">(SLA &lt; 4 hours during business hours)</span></li>
-                                <li>Phone support<br>Private slack channel</li>
-                            </ul>
-                        </div>
-                        <div class="second_cta">
-                            <a href="/contact/passbolt-pro-enterprise">Get a quote</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col12 community_cta">
-                    <p>You don't need support nor premium features?<br><strong>Passbolt community edition</strong> (CE) is for you!</p>
-                    <a href="http://www.passbolt.com/ce" class="button">Get Passbolt CE</a>
-                </div>
-            </div>
-        </div>
+	    <div class="page-row service pull-up">
+	        <div class="grid grid-responsive-12">
+	            <div class="row">
+	                <div class="service-col col4 plan startup">
+	                    <div class="plan-description">
+		                    <h2>Startup</h2>
+	                    </div>
+		                <div class="row plan-discount">
+			                €2 / user / month
+		                </div>
+		                <div class="row plan-pricing">
+			                <div class="col6 cost cost-large float"> €1.40 </div>
+			                <div class="col6 cost cost-small last">per user<br>per month <br><span class="smaller">(€44 billed annually)</span></div>
+		                </div>
+		                <div class="plan-limit">
+			                <span>up to 5 users</span>
+		                </div>
+		                <div class="plan-actions">
+			                <a href="../demo/AA_services_pro_checkout.php" class="button primary big">Buy now</a>
+		                </div>
 
+	                    <div class="plan-features">
+		                    <ul>
+			                    <li>Turnkey installation</li>
+			                    <li>Premium features</li>
+			                    <li>One year of free updates</li>
+			                    <li>AGPL V3 license</li>
+			                    <li>Limited support requests<br><span class="smaller">(next business day)</span></li>
+		                    </ul>
+	                    </div>
+		                <div class="second_cta">
+			                <a href="#">Try a demo</a>
+		                </div>
+	                </div>
+		            <div class="service-col col4 plan business highlighted">
+			            <div class="ribbon"><span>POPULAR</span></div>
+			            <div class="plan-description">
+				            <h2>Business</h2>
+			            </div>
+			            <div class="row plan-discount">
+				            €4 / user / month
+			            </div>
+			            <div class="row plan-pricing">
+				            <div class="col6 cost cost-large float"> €2.60 </div>
+				            <div class="col6 cost cost-small last">per user<br>per month <br><span class="smaller">(€108 billed annually)</span></div>
+			            </div>
+			            <div class="plan-limit">
+				            <span>up to 100 users</span>
+			            </div>
+			            <div class="plan-actions">
+				            <a href="../demo/AA_services_pro_checkout.php" class="button primary big">Buy now</a>
+			            </div>
+			            <div class="plan-features">
+				            <ul>
+					            <li>Turnkey installation</li>
+					            <li>Premium features</li>
+					            <li>One year of free updates</li>
+					            <li>AGPL V3 license</li>
+					            <li>Unlimited email support<br><span class="smaller">(next business day)</span></li>
+				            </ul>
+			            </div>
+			            <div class="second_cta">
+				            <a href="#">Try a demo</a>
+			            </div>
+		            </div>
+	                <div class="service-col col4 plan enterprise last">
+		                <div class="plan-description">
+			                <h2>Enterprise</h2>
+		                </div>
+		                <div class="row plan-pricing">
+			                <div class="col12 cost cost-medium lower">Tailor-made</div>
+		                </div>
+		                <div class="plan-limit">
+			                <span>unlimited users</span>
+		                </div>
+		                <div class="plan-actions">
+			                <a href="mailto:sales@passbolt.com" class="button primary big">Contact us</a>
+		                </div>
+	                    <div class="plan-features">
+		                    <ul>
+			                    <ul>
+				                    <li>All business features</li>
+				                    <li>Installation support</li>
+				                    <li>On-premise management</li>
+				                    <li>Certified server key signature</li>
+				                    <li>Unlimited email support<br><span class="smaller">(SLA &lt; 4 hours during business hours)</span></li>
+				                    <li>Phone support<br>Private slack channel</li>
+			                    </ul>
+		                    </ul>
+	                    </div>
+		                <div class="second_cta">
+			                <a href="#">Get a quote</a>
+		                </div>
+	                </div>
+	            </div>
+		        <div class="col12 community_cta">
+		                <p>You don't need support nor premium features?<br>Passbolt community edition is for you!</p>
+		                <a href="AN_login.php" class="button">Get Community Edition</a>
+	                </div>
+	            </div>
+	        </div>
+	    </div>
 		<div class="page-row compare">
 			<div class="grid grid-responsive-12">
 				<div class="col12">

@@ -164,7 +164,7 @@
                     <h2>Your order</h2>
                     <div class="box-content">
                         <div class="order-line">
-                            <div class="item-name">Startup pack</div>
+                            <div class="item-name">Business pack</div>
                             <div class="input text form-group price">
                                 <input name="products[main][quantity]" id="quantity" value="5" min="1" max="9999999" class="form-control input-small quantity" required="required" type="number">
                                 <label class="control-label block label-quantity" for="quantity">users</label>

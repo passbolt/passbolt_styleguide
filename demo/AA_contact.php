@@ -56,6 +56,7 @@
 								</div>
 						</div>
 				</div>
+	            <p class="direct-email">Or email us directly at <a href="mailto:contact@passbolt.com">contact [at] passbolt [dot] com</a></p>
     </div>
 
     <?php include('includes/AN_footer.php'); ?>
