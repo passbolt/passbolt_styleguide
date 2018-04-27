@@ -3,12 +3,13 @@
 /* font */
 /* background */
 /* buttons */
+/* box shadows */
+/* dropdown menus */
 /* inputs */
-/* shadows */
 /* logo */
 /* grid */
+/* messages */
 /* tabs */
-/* contextual menus */
 /* sidebar */
 /* secret placeholder */
 /* tables */
@@ -682,28 +683,28 @@ html body .hidden {
 }
 /* body */
 body {
-  color: #333333;
-  background: #ffffff;
+  color: #333;
+  background: #FFF;
 }
 /* links */
 a:link,
 a:visited {
-  color: #333333;
+  color: #333;
 }
 a:hover {
-  color: #2894df;
+  color: #2894DF;
 }
 a:active,
 a:focus {
   outline: 0;
-  color: #2894df;
+  color: #2894DF;
   border: 0;
 }
 a {
-  border-bottom: 1px solid #dddddd;
+  border-bottom: 1px solid #DDD;
 }
 a:hover {
-  border-bottom: 1px solid #2894df;
+  border-bottom: 1px solid #2894DF;
 }
 /*
  * Animate.css - http://daneden.me/animate
@@ -797,7 +798,7 @@ h3 {
   display: block;
   padding-bottom: .333em;
   /* 6px */
-  border-bottom: 1px dotted #dddddd;
+  border-bottom: 1px dotted #DDD;
 }
 /* paragraph */
 p {
@@ -914,7 +915,7 @@ ul.checklist li:before {
 }
 .fa-border {
   padding: .2em .25em .15em;
-  border: solid 0.08em #eeeeee;
+  border: solid 0.08em #EEE;
   border-radius: .1em;
 }
 .fa-pull-left {
@@ -3214,17 +3215,17 @@ button,
   cursor: pointer;
   text-align: center;
   text-decoration: none;
-  border: 1px solid #cccccc;
-  color: #333333;
+  border: 1px solid #CCC;
+  color: #333;
   font-weight: normal;
   text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.5);
-  background: #eeeeee;
-  background-image: -moz-linear-gradient(top, #f3f3f3, #eeeeee);
-  background-image: -ms-linear-gradient(top, #f3f3f3, #eeeeee);
-  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(background-lightest), to(#eeeeee));
-  background-image: -webkit-linear-gradient(top, #f3f3f3, #eeeeee);
-  background-image: -o-linear-gradient(top, #f3f3f3, #eeeeee);
-  background-image: linear-gradient(top, #f3f3f3, #eeeeee);
+  background: #EEE;
+  background-image: -moz-linear-gradient(top, #F3F3F3, #EEE);
+  background-image: -ms-linear-gradient(top, #F3F3F3, #EEE);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(background-lightest), to(#EEE));
+  background-image: -webkit-linear-gradient(top, #F3F3F3, #EEE);
+  background-image: -o-linear-gradient(top, #F3F3F3, #EEE);
+  background-image: linear-gradient(top, #F3F3F3, #EEE);
   -webkit-border-radius: 0.214em;
   -moz-border-radius: 0.214em;
   border-radius: 0.214em;
@@ -3246,38 +3247,38 @@ a.button.big {
 /* primary */
 .button.primary,
 button.primary {
-  background: #2894df;
-  border: 1px solid #2894df;
-  color: #ffffff;
+  background: #2894DF;
+  border: 1px solid #2894DF;
+  color: #FFF;
   text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.2);
 }
 .button.primary:hover,
 button.primary:hover {
-  background: #2a9ceb;
-  border: 1px solid #2a9ceb;
-  color: #ffffff;
+  background: #2A9CEB;
+  border: 1px solid #2A9CEB;
+  color: #FFF;
 }
 button.primary:active,
 .button.primary:active,
 .button.primary:focus,
 button.primary:focus {
-  color: #ffffff;
+  color: #FFF;
   border: 1px solid #4271b7;
-  background: #2a9ceb;
+  background: #2A9CEB;
 }
 /* warning */
 .button.warning,
 .button.warning:hover,
 .button.warning:focus,
 .button.warning:active {
-  color: #ffffff;
-  background: #d40101;
-  border: 1px solid #d40101;
+  color: #FFF;
+  background: #D40101;
+  border: 1px solid #D40101;
   text-shadow: none;
 }
 .button.warning:focus,
 .button.warning:active {
-  border: 1px solid #92000c;
+  border: 1px solid #92000C;
 }
 /* cancel */
 .button.cancel,
@@ -3288,38 +3289,38 @@ button.primary:focus {
 .button.dim:focus,
 .button.dim:hover,
 .button.dim:active {
-  background: #ffffff;
+  background: #FFF;
   font-weight: normal;
 }
 /* hover */
 input[type=submit]:hover,
 .button:hover,
 button:hover {
-  color: #333333;
+  color: #333;
   text-decoration: none;
-  background: #f3f3f3;
-  background-image: -moz-linear-gradient(top, #f3f3f3, #f3f3f3);
-  background-image: -ms-linear-gradient(top, #f3f3f3, #f3f3f3);
-  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(background-lightest), to(#f3f3f3));
-  background-image: -webkit-linear-gradient(top, #f3f3f3, #f3f3f3);
-  background-image: -o-linear-gradient(top, #f3f3f3, #f3f3f3);
-  background-image: linear-gradient(top, #f3f3f3, #f3f3f3);
-  border: 1px solid #bbbbbb;
+  background: #F3F3F3;
+  background-image: -moz-linear-gradient(top, #F3F3F3, #F3F3F3);
+  background-image: -ms-linear-gradient(top, #F3F3F3, #F3F3F3);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(background-lightest), to(#F3F3F3));
+  background-image: -webkit-linear-gradient(top, #F3F3F3, #F3F3F3);
+  background-image: -o-linear-gradient(top, #F3F3F3, #F3F3F3);
+  background-image: linear-gradient(top, #F3F3F3, #F3F3F3);
+  border: 1px solid #BBB;
 }
 /* focus */
 input[type=submit]:focus,
 .button:focus,
 button:focus {
-  color: #2894df;
-  border: 1px solid #2894df;
+  color: #2894DF;
+  border: 1px solid #2894DF;
 }
 /* active */
 input[type=submit]:active,
 button:active,
 .button:active {
-  color: #2894df;
-  border: 1px solid #2894df;
-  background: #eeeeee;
+  color: #2894DF;
+  border: 1px solid #2894DF;
+  background: #EEE;
   position: relative;
   -webkit-box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.2);
   -moz-box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.2);
@@ -3329,9 +3330,9 @@ input[type=submit].disabled,
 button.disabled,
 .button.disabled {
   cursor: default;
-  color: #888888;
-  background: #ffffff;
-  border: 1px solid #dddddd;
+  color: #888;
+  background: #FFF;
+  border: 1px solid #DDD;
   text-shadow: none;
   font-weight: normal;
 }
@@ -3349,17 +3350,17 @@ button.disabled:focus,
   -moz-box-shadow: 0 0 0;
   box-shadow: 0 0 0;
   top: 0;
-  color: #888888;
-  background: #ffffff;
-  border: 1px solid #dddddd;
+  color: #888;
+  background: #FFF;
+  border: 1px solid #DDD;
 }
 /* toggle selected */
 .toggle.button.selected {
-  background: #eeeeee;
+  background: #EEE;
   -webkit-box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.2);
   -moz-box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.2);
   box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.2);
-  border: 1px solid #bbbbbb;
+  border: 1px solid #BBB;
 }
 /* duo */
 .duo-wrapper {
@@ -3435,8 +3436,8 @@ button.disabled:focus,
 }
 /* processing state */
 html body .button.processing {
-  background: #ffffff;
-  border: 1px solid #ffffff;
+  background: #FFF;
+  border: 1px solid #FFF;
 }
 .button.processing:after {
   line-height: 2.25em;
@@ -3446,8 +3447,8 @@ html body .button.processing {
   content: " ";
   top: -1px;
   left: -1px;
-  background: #ffffff url('../img/controls/loading.gif') center center no-repeat;
-  border: 1px solid #bbbbbb;
+  background: #FFF url('../img/controls/loading.gif') center center no-repeat;
+  border: 1px solid #BBB;
   border-radius: 5px;
   padding: 1px;
 }
@@ -3476,7 +3477,7 @@ label {
 */
 .required label:after {
   content: " *";
-  color: #d40101;
+  color: #D40101;
   font-weight: bold;
 }
 /* fallback placeholder */
@@ -3508,16 +3509,16 @@ input[type=search],
 textarea {
   font-size: 16px;
   line-height: 24px;
-  color: #333333;
-  background: #ffffff;
+  color: #333;
+  background: #FFF;
   width: 14em;
   /* 20 char (default input length) x .7em (average char length) */
   padding: .375em .625em .375em .625em;
   display: inline-block;
   margin-bottom: .5em;
   -webkit-appearance: none;
-  border: 1px solid #cccccc;
-  border-top: 1px solid #bbbbbb;
+  border: 1px solid #CCC;
+  border-top: 1px solid #BBB;
   vertical-align: middle;
   -ms-box-sizing: content-box;
   -moz-box-sizing: content-box;
@@ -3529,7 +3530,7 @@ input[type=password]:hover,
 input[type=search]:hover,
 input[type=text]:hover,
 input[type=email]:hover {
-  border: 1px solid #bbbbbb;
+  border: 1px solid #BBB;
 }
 textarea:focus,
 input[type=password]:focus,
@@ -3539,24 +3540,24 @@ input[type=email]:focus {
   -webkit-box-shadow: inset 1px 1px 2px rgba(255, 255, 255, 0.2);
   -moz-box-shadow: inset 1px 1px 2px rgba(0, 0, 0, 0.2);
   box-shadow: inset 1px 1px 2px rgba(0, 0, 0, 0.2);
-  border: 1px solid #2894df;
+  border: 1px solid #2894DF;
 }
 .input-focus {
   -webkit-box-shadow: inset 1px 1px 2px rgba(255, 255, 255, 0.2);
   -moz-box-shadow: inset 1px 1px 2px rgba(0, 0, 0, 0.2);
   box-shadow: inset 1px 1px 2px rgba(0, 0, 0, 0.2);
-  border: 1px solid #2894df;
+  border: 1px solid #2894DF;
 }
 input[type=password]:disabled,
 input[type=search]:disabled,
 input[type=text]:disabled,
 input[type=email]:disabled {
-  border: 1px solid #dddddd;
+  border: 1px solid #DDD;
   -webkit-box-shadow: 0 0 0 0;
   -moz-box-shadow: 0 0 0 0;
   box-shadow: 0 0 0 0;
   cursor: normal;
-  background: #f3f3f3;
+  background: #F3F3F3;
 }
 /*
 	Textarea Textfield
@@ -3584,25 +3585,25 @@ textarea {
 .date.input .input-addon i {
   font-size: 16px;
   width: 1.250em;
-  border: 1px solid #cccccc;
-  border-top: 1px solid #bbbbbb;
+  border: 1px solid #CCC;
+  border-top: 1px solid #BBB;
   line-height: 24px;
-  color: #333333;
-  background: #ffffff;
+  color: #333;
+  background: #FFF;
   padding: .375em .625em .375em .625em;
 }
 .text.input input:hover + .input-addon i,
 .date.input input:hover + .input-addon i {
-  border: 1px solid #bbbbbb;
+  border: 1px solid #BBB;
 }
 .text.input input:focus + .input-addon i,
 .date.input input:focus + .input-addon i {
-  border: 1px solid #2894df;
+  border: 1px solid #2894DF;
 }
 .text.input input:disabled + .input-addon i,
 .date.input input:disabled + .input-addon i {
-  background: #f3f3f3;
-  border: 1px solid #dddddd;
+  background: #F3F3F3;
+  border: 1px solid #DDD;
 }
 /* icons for input */
 /*
@@ -3638,10 +3639,10 @@ input[type=checkbox] + label {
 }
 .input .message.error {
   font-weight: normal;
-  color: #d40101;
+  color: #D40101;
 }
 .input .message.helptext {
-  color: #888888;
+  color: #888;
   font-weight: normal;
 }
 .form-content .input .message,
@@ -3650,7 +3651,7 @@ form .input .message {
 }
 textarea.error label,
 .input.error label {
-  color: #d40101;
+  color: #D40101;
 }
 form .input .inline.message {
   display: inline-block;
@@ -3663,7 +3664,7 @@ select {
 /* select */
 input[type=file] {
   width: 100%;
-  color: #333333;
+  color: #333;
 }
 /* file upload input */
 /* layout and shortcuts */
@@ -3737,7 +3738,7 @@ input[type=email].fluid {
 }
 .header.third + .panel.main {
   top: 10em;
-  border-top: 1px solid #dddddd;
+  border-top: 1px solid #DDD;
 }
 /* columns */
 .panel,
@@ -4222,7 +4223,7 @@ input[type=email].fluid {
   max-width: 100%;
 }
 .panel.middle .grid .breadcrumbs {
-  border-bottom: 1px dotted #dddddd;
+  border-bottom: 1px dotted #DDD;
 }
 .header h2 {
   margin: 1em 0;
@@ -4268,9 +4269,9 @@ input[type=email].fluid {
  */
 .scroll {
   overflow-y: scroll;
-  background: linear-gradient(#ffffff 30%, rgba(255, 255, 255, 0)), linear-gradient(rgba(255, 255, 255, 0), #ffffff 70%) 0 100%, radial-gradient(farthest-side at 75% 0, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0)), radial-gradient(farthest-side at 75% 100%, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0)) 0 100%;
+  background: linear-gradient(#FFF 30%, rgba(255, 255, 255, 0)), linear-gradient(rgba(255, 255, 255, 0), #FFF 70%) 0 100%, radial-gradient(farthest-side at 75% 0, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0)), radial-gradient(farthest-side at 75% 100%, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0)) 0 100%;
   background-repeat: no-repeat;
-  background-color: #ffffff;
+  background-color: #FFF;
   background-size: 100% 10px, 100% 10px, 100% 5px, 100% 5px;
   /* Opera doesn't support this in the shorthand */
   background-attachment: local, local, scroll, scroll;
@@ -4290,10 +4291,10 @@ article video {
   /* logo positioning */
 }
 .header.first {
-  background: #333333;
+  background: #333;
 }
 .header.second {
-  background: #eeeeee;
+  background: #EEE;
 }
 .header .navigation.primary {
   /*
@@ -4356,23 +4357,23 @@ article video {
   margin-right: 1em;
 }
 .header .navigation.primary li a {
-  color: #dddddd;
+  color: #DDD;
   text-decoration: none;
   border: 0;
   display: inline-block;
 }
 .header .navigation.primary li a:hover {
-  color: #ffffff;
+  color: #FFF;
 }
 .header .navigation.primary li a:active,
 .header .navigation.primary li a:focus {
-  color: #2894df;
+  color: #2894DF;
 }
 .header .navigation.primary li .row.selected a {
-  color: #ffffff;
+  color: #FFF;
 }
 .header .navigation.primary li .row.selected a:focus {
-  color: #2894df;
+  color: #2894DF;
 }
 .header .logo {
   margin: 1.25em 0 0 1em;
@@ -4392,13 +4393,13 @@ article video {
   border: 0;
   font-size: 1em;
   font-weight: normal;
-  background: #888888;
+  background: #888;
   padding: .45em 1em .42em 1em;
   -webkit-border-radius: 0;
   -moz-border-radius: 0;
   border-radius: 0;
   text-shadow: none;
-  color: #ffffff;
+  color: #FFF;
   margin: 0;
   min-width: 7.5em;
 }
@@ -4415,7 +4416,7 @@ article video {
   height: 21px;
   align-items: center;
   justify-content: center;
-  background: #333333;
+  background: #333;
   color: #969696;
   border-radius: 50%;
   font-size: 0.7em;
@@ -4439,16 +4440,16 @@ article video {
 }
 .greedy .navigation.primary ul.hidden-links li a {
   min-width: 5.5em;
-  background: #f3f3f3;
-  color: #333333;
+  background: #F3F3F3;
+  color: #333;
   padding: .5em 1em;
   float: right;
   display: inline-block;
 }
 .greedy .navigation.primary ul.hidden-links li a:hover,
 .greedy .navigation.primary ul.hidden-links li a:active {
-  background: #eeeeee;
-  color: #333333;
+  background: #EEE;
+  color: #333;
 }
 .logo.no-img {
   background: transparent url('../img/logo/logo.png') 0 0 no-repeat;
@@ -4484,13 +4485,13 @@ article video {
   display: block;
 }
 .progress-bar span {
-  background: #d40101;
+  background: #D40101;
   height: 2px;
   display: block;
 }
 /* larger progress bar */
 .progress-bar-wrapper {
-  border: 1px solid #dddddd;
+  border: 1px solid #DDD;
   height: 10px;
   display: block;
   margin: 2em 0 1em 0;
@@ -4504,13 +4505,13 @@ article video {
   /* indefinite loading */
 }
 .progress-bar-wrapper .progress-bar.big .progress {
-  background: #d40101;
+  background: #D40101;
   width: 5%;
   display: block;
   height: 10px;
 }
 .progress-bar-wrapper .progress-bar.big.infinite {
-  background: #d40101;
+  background: #D40101;
 }
 .progress-bar-wrapper .progress-bar.big.infinite .progress {
   width: 100%;
@@ -4524,7 +4525,7 @@ article video {
   filter: alpha(opacity=5);
 }
 .progress-details {
-  color: #888888;
+  color: #888;
   margin: 0.5em 0 1.5em 0;
 }
 .progress-details .progress-percent {
@@ -4560,15 +4561,15 @@ article video {
   float: left;
 }
 .notification-container .notification .message {
-  box-shadow: 0px 0px 10px 0px #333333;
+  box-shadow: 0px 0px 10px 0px #333;
   border-radius: 2px;
   padding: .5em 1em;
   position: relative;
   left: -50%;
   float: left;
-  background: #fef0bf;
+  background: #FEF0BF;
   border: 1px solid #fccd28;
-  color: #000000;
+  color: #000;
   font-weight: normal;
   width: auto;
 }
@@ -4585,8 +4586,8 @@ article video {
   height: 2em;
   padding: .1875em 0 .1875em 0;
   margin-bottom: 0;
-  border-bottom: 1px solid #dddddd;
-  background: #ffffff;
+  border-bottom: 1px solid #DDD;
+  background: #FFF;
 }
 .breadcrumbs ul {
   padding-top: 0.2em;
@@ -4627,13 +4628,13 @@ article video {
 .dialog {
   position: relative;
   max-width: 30em;
-  border: 1px solid #dddddd;
-  background: #f3f3f3;
+  border: 1px solid #DDD;
+  background: #F3F3F3;
   margin: auto;
   margin-top: 1%;
   /* some space for the footer / notification area in case it is really tall */
   margin-bottom: 3em;
-  box-shadow: 0px 0px 10px 0px #dddddd;
+  box-shadow: 0px 0px 10px 0px #DDD;
   /* header */
   /* content */
   /* inputs */
@@ -4660,13 +4661,13 @@ article video {
   padding-top: 0.3em;
   padding-left: 1em;
   font-size: 0.7em;
-  color: #333333;
+  color: #333;
 }
 .dialog .dialog-content {
   position: relative;
 }
 .dialog .form-content {
-  background: #ffffff;
+  background: #FFF;
   padding: .813em 1.25em .813em 1.5em;
 }
 .dialog label {
@@ -4694,7 +4695,7 @@ article video {
   width: 92%;
 }
 .dialog .inline-error {
-  color: #d40101;
+  color: #D40101;
   font-weight: bold;
 }
 .dialog .accordion-header a {
@@ -4702,7 +4703,7 @@ article video {
 }
 .dialog .submit-wrapper {
   margin: 0;
-  border-top: 1px solid #dddddd;
+  border-top: 1px solid #DDD;
   clear: both;
   width: 100%;
   padding: .75em 0;
@@ -4736,13 +4737,13 @@ article video {
   display: block;
   vertical-align: baseline;
   line-height: 0;
-  border: 1px solid #eeeeee;
+  border: 1px solid #EEE;
   -webkit-border-radius: 0.214em;
   -moz-border-radius: 0.214em;
   border-radius: 0.214em;
 }
 .dialog-close:hover .fa-close {
-  border: 1px solid #dddddd;
+  border: 1px solid #DDD;
   -webkit-border-radius: 0.214em;
   -moz-border-radius: 0.214em;
   border-radius: 0.214em;
@@ -4771,8 +4772,8 @@ article video {
   /* 12px */
   width: 98%;
   height: 2em;
-  background: #ffffff;
-  border-top: 1px solid #dddddd;
+  background: #FFF;
+  border-top: 1px solid #DDD;
   z-index: 890;
 }
 .footer .footer-links {
@@ -4802,17 +4803,17 @@ article video {
   background-size: 150px auto;
 }
 .plugin-check.gpg.success {
-  background: #edf7eb url('../img/third_party/gnupg_logo.png') 2em center no-repeat;
+  background: #EDF7EB url('../img/third_party/gnupg_logo.png') 2em center no-repeat;
   background-size: 150px auto;
 }
 .plugin-check.success {
-  background-color: #edf7eb;
+  background-color: #EDF7EB;
 }
 .plugin-check.error {
   background-color: #ffe4e4;
 }
 .plugin-check.warning {
-  background-color: #fef0bf;
+  background-color: #FEF0BF;
 }
 .plugin-check.notice {
   background-color: #daecf9;
@@ -4852,7 +4853,7 @@ article video {
   margin: 0;
 }
 .panel .navigation a {
-  color: #333333;
+  color: #333;
   border: 0;
   display: block;
 }
@@ -4860,16 +4861,16 @@ article video {
   font-size: 0.938em;
   /* 15px from 16px base */
   padding: .469em 0 .469em 1.333em;
-  border-left: 5px solid #ffffff;
+  border-left: 5px solid #FFF;
 }
 .panel .navigation li:hover {
-  color: #333333;
-  border-left: 5px solid #dddddd;
+  color: #333;
+  border-left: 5px solid #DDD;
 }
 .panel .navigation li.active,
 .panel .navigation li.selected {
   font-weight: bold;
-  border-left: 5px solid #d40101;
+  border-left: 5px solid #D40101;
 }
 /*
 	do not show javascript needed warning if js is enabled
@@ -4886,26 +4887,26 @@ article video {
   padding: 1em;
 }
 .message a {
-  border-bottom: 1px solid #888888;
+  border-bottom: 1px solid #888;
 }
 .message a:hover {
-  border-bottom: 1px solid #2894df;
+  border-bottom: 1px solid #2894DF;
 }
 .message.error {
-  color: #d40101;
+  color: #333;
   background: #ffe4e4;
 }
 .message.success {
-  color: #333333;
-  background: #edf7eb;
+  color: #333;
+  background: #EDF7EB;
 }
 .message.notice {
-  color: #333333;
+  color: #333;
   background: #daecf9;
 }
 .message.warning {
-  color: #333333;
-  background: #fef0bf;
+  color: #333;
+  background: #FEF0BF;
 }
 /* big side info message blocks on setup or profile pages */
 .side-message {
@@ -4925,11 +4926,11 @@ table.table-info td,
 table.table-info.vertical td {
   padding: .625em;
   padding-right: 1.25em;
-  color: #666666;
+  color: #666;
 }
 table.table-info td.warning,
 table.table-info.vertical td.warning {
-  background: #fef0bf;
+  background: #FEF0BF;
 }
 table.table-info td.error,
 table.table-info.vertical td.error {
@@ -4937,7 +4938,7 @@ table.table-info.vertical td.error {
 }
 table.table-info td .alt.side,
 table.table-info.vertical td .alt.side {
-  color: #666666;
+  color: #666;
   float: right;
 }
 table.table-info td .alt.side:before,
@@ -4950,7 +4951,7 @@ table.table-info.vertical td .alt.side:after {
 }
 table.table-info td + td,
 table.table-info.vertical td + td {
-  color: #333333;
+  color: #333;
   padding-right: .625em;
 }
 /* horizontal tableview */
@@ -4958,7 +4959,7 @@ table.table-info.horizontal {
   width: 100%;
   border-collapse: separate;
   padding: 0;
-  border: 1px solid #dddddd;
+  border: 1px solid #DDD;
   margin-bottom: 1em;
 }
 table.table-info.horizontal td,
@@ -4967,16 +4968,16 @@ table.table-info.horizontal th {
   margin: 0;
 }
 table.table-info.horizontal th {
-  border-bottom: 1px solid #dddddd;
+  border-bottom: 1px solid #DDD;
 }
 table.table-info.horizontal thead tr {
-  background: #ffffff;
+  background: #FFF;
 }
 table.table-info.horizontal tbody {
-  background: #ffffff;
+  background: #FFF;
 }
 table.table-info.horizontal tbody tr:nth-child(odd) {
-  background: #ffffff;
+  background: #FFF;
 }
 /**
  * Tooltips!
@@ -5037,8 +5038,8 @@ table.table-info.horizontal tbody tr:nth-child(odd) {
   z-index: 990;
   padding: 8px;
   width: 160px;
-  background-color: #333333;
-  color: #ffffff;
+  background-color: #333;
+  color: #FFF;
   content: attr(data-tooltip);
   font-size: 14px;
   line-height: 1.2em;
@@ -5061,7 +5062,7 @@ table.table-info.horizontal tbody tr:nth-child(odd) {
 .tooltip-top:before {
   margin-left: -6px;
   margin-bottom: -12px;
-  border-top-color: #333333;
+  border-top-color: #333;
 }
 /* Horizontally align top/bottom tooltips */
 [data-tooltip]:after,
@@ -5101,7 +5102,7 @@ table.table-info.horizontal tbody tr:nth-child(odd) {
   margin-right: -12px;
   margin-bottom: 0;
   border-top-color: transparent;
-  border-left-color: #333333;
+  border-left-color: #333;
   border-left-color: rgba(51, 51, 51, 0.9);
 }
 .tooltip-left:hover:before,
@@ -5125,7 +5126,7 @@ table.table-info.horizontal tbody tr:nth-child(odd) {
   margin-top: -12px;
   margin-bottom: 0;
   border-top-color: transparent;
-  border-bottom-color: #333333;
+  border-bottom-color: #333;
   border-bottom-color: rgba(51, 51, 51, 0.9);
 }
 .tooltip-bottom:hover:before,
@@ -5148,7 +5149,7 @@ table.table-info.horizontal tbody tr:nth-child(odd) {
   margin-bottom: 0;
   margin-left: -12px;
   border-top-color: transparent;
-  border-right-color: #333333;
+  border-right-color: #333;
 }
 .tooltip-right:hover:before,
 .tooltip-right:hover:after,
@@ -5198,8 +5199,8 @@ table.table-info.horizontal tbody tr:nth-child(odd) {
   position: absolute;
   visibility: hidden;
   width: 180px;
-  background-color: #333333;
-  color: #ffffff;
+  background-color: #333;
+  color: #FFF;
   padding: .5em 1em;
   -webkit-transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out, -webkit-transform 0.2s cubic-bezier(0.71, 1.7, 0.77, 1.24);
   -moz-transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out, -moz-transform 0.2s cubic-bezier(0.71, 1.7, 0.77, 1.24);
@@ -5220,8 +5221,8 @@ table.table-info.horizontal tbody tr:nth-child(odd) {
   top: 1.125em;
   right: 100%;
   margin-top: -5px;
-  border: 5px #333333 solid;
-  border-color: transparent #333333 transparent transparent;
+  border: 5px #333 solid;
+  border-color: transparent #333 transparent transparent;
 }
 .tooltip-alt:hover .tooltip-text {
   -webkit-transform: translateX(12px);
@@ -5263,7 +5264,7 @@ article figure .legend {
 }
 #imagelightbox-overlay {
   overflow: hidden;
-  background-color: #ffffff;
+  background-color: #FFF;
   background-color: rgba(255, 255, 255, 0.9);
   position: fixed;
   z-index: 9998;
@@ -5293,7 +5294,7 @@ article figure .legend {
   }
 }
 .tldr {
-  background: #f3f3f3;
+  background: #F3F3F3;
   padding: 1em;
 }
 .tldr i {
@@ -5301,7 +5302,7 @@ article figure .legend {
   padding-left: .5em;
 }
 .tldr.alt {
-  background: #ffffff;
+  background: #FFF;
   text-align: center;
   margin-top: 0em;
   padding-top: 0;
@@ -5313,7 +5314,7 @@ article figure .legend {
   margin-top: 2em;
 }
 .tldr .madeinindia i {
-  color: #d40101;
+  color: #D40101;
   margin-right: 0;
 }
 .tldr h4 {
@@ -5347,12 +5348,12 @@ form.search input[type=search] {
   float: left;
   width: 65%;
   margin-bottom: 0;
-  border-right: 1px solid #ffffff;
+  border-right: 1px solid #FFF;
   padding: .313em .625em;
 }
 form.search input[type=search]:focus,
 form.search input[type=search]:active {
-  border-right: 1px solid #2894df;
+  border-right: 1px solid #2894DF;
 }
 form.search button {
   height: 2.571em;
@@ -5378,7 +5379,7 @@ input[type="search"]::-webkit-search-cancel-button {
 .tile {
   display: block;
   margin-bottom: 1em;
-  border: 1px solid #f3f3f3;
+  border: 1px solid #F3F3F3;
   padding: 1em;
   padding-top: 0;
   min-height: 5.8em;
@@ -5435,17 +5436,17 @@ input[type="search"]::-webkit-search-cancel-button {
   clear: both;
 }
 .tile:hover {
-  border: 1px solid #dddddd;
+  border: 1px solid #DDD;
 }
 .tile.alt {
-  background: #eeeeee;
+  background: #EEE;
 }
 .tile .tile-teaser {
   font-size: 3em;
   float: left;
   width: 30%;
   padding-top: .25em;
-  color: #888888;
+  color: #888;
 }
 .tile .tile-title {
   float: right;
@@ -5497,7 +5498,7 @@ input[type="search"]::-webkit-search-cancel-button {
      */
   margin-bottom: 1.25em;
   padding: .5em;
-  border: 1px solid #f3f3f3;
+  border: 1px solid #F3F3F3;
 }
 .card:before,
 .card:after {
@@ -5522,12 +5523,12 @@ input[type="search"]::-webkit-search-cancel-button {
   border-top-left-radius: 5px;
 }
 .card.backlog {
-  border-left: 5px solid #d40101;
+  border-left: 5px solid #D40101;
   border-bottom-left-radius: 5px;
   border-top-left-radius: 5px;
 }
 .card.progress {
-  border-left: 5px solid #ffbd2e;
+  border-left: 5px solid #FFBD2E;
 }
 .card.completed {
   border-left: 5px solid #009900;
@@ -5562,8 +5563,8 @@ input[type="search"]::-webkit-search-cancel-button {
   height: 70px;
   display: block;
   margin: .5em;
-  border: 1px solid #f3f3f3;
-  background: #dddddd;
+  border: 1px solid #F3F3F3;
+  background: #DDD;
   border-radius: 50%;
 }
 .card .teaser i.passbolt {
@@ -6237,7 +6238,7 @@ button.swiper-pagination-bullet {
 .ribbon span {
   font-size: 10px;
   font-weight: bold;
-  color: #ffffff;
+  color: #FFF;
   text-transform: uppercase;
   text-align: center;
   line-height: 20px;
@@ -6343,11 +6344,11 @@ This file is generated by `grunt build`, do not edit it by hand.
   border: 1px solid #aaa;
   border-radius: 5px;
   background-color: #fff;
-  background: -webkit-gradient(linear, left top, left bottom, color-stop(20%, #ffffff), color-stop(50%, #f6f6f6), color-stop(52%, #eeeeee), to(#f4f4f4));
-  background: linear-gradient(#ffffff 20%, #f6f6f6 50%, #eeeeee 52%, #f4f4f4 100%);
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(20%, #fff), color-stop(50%, #f6f6f6), color-stop(52%, #eee), to(#f4f4f4));
+  background: linear-gradient(#fff 20%, #f6f6f6 50%, #eee 52%, #f4f4f4 100%);
   background-clip: padding-box;
-  -webkit-box-shadow: 0 0 3px #ffffff inset, 0 1px 1px rgba(0, 0, 0, 0.1);
-  box-shadow: 0 0 3px #ffffff inset, 0 1px 1px rgba(0, 0, 0, 0.1);
+  -webkit-box-shadow: 0 0 3px #fff inset, 0 1px 1px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0 3px #fff inset, 0 1px 1px rgba(0, 0, 0, 0.1);
   color: #444;
   text-decoration: none;
   white-space: nowrap;
@@ -6494,8 +6495,8 @@ This file is generated by `grunt build`, do not edit it by hand.
   height: auto;
   border: 1px solid #aaa;
   background-color: #fff;
-  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(1%, #eeeeee), color-stop(15%, #ffffff));
-  background-image: linear-gradient(#eeeeee 1%, #ffffff 15%);
+  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(1%, #eee), color-stop(15%, #fff));
+  background-image: linear-gradient(#eee 1%, #fff 15%);
   cursor: text;
 }
 .chosen-container-multi .chosen-choices li {
@@ -6531,13 +6532,13 @@ This file is generated by `grunt build`, do not edit it by hand.
   max-width: 100%;
   border-radius: 3px;
   background-color: #eeeeee;
-  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(20%, #f4f4f4), color-stop(50%, #f0f0f0), color-stop(52%, #e8e8e8), to(#eeeeee));
-  background-image: linear-gradient(#f4f4f4 20%, #f0f0f0 50%, #e8e8e8 52%, #eeeeee 100%);
+  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(20%, #f4f4f4), color-stop(50%, #f0f0f0), color-stop(52%, #e8e8e8), to(#eee));
+  background-image: linear-gradient(#f4f4f4 20%, #f0f0f0 50%, #e8e8e8 52%, #eee 100%);
   background-size: 100% 19px;
   background-repeat: repeat-x;
   background-clip: padding-box;
-  -webkit-box-shadow: 0 0 2px #ffffff inset, 0 1px 0 rgba(0, 0, 0, 0.05);
-  box-shadow: 0 0 2px #ffffff inset, 0 1px 0 rgba(0, 0, 0, 0.05);
+  -webkit-box-shadow: 0 0 2px #fff inset, 0 1px 0 rgba(0, 0, 0, 0.05);
+  box-shadow: 0 0 2px #fff inset, 0 1px 0 rgba(0, 0, 0, 0.05);
   color: #333;
   line-height: 13px;
   cursor: default;
@@ -6562,8 +6563,8 @@ This file is generated by `grunt build`, do not edit it by hand.
   padding-right: 5px;
   border: 1px solid #ccc;
   background-color: #e4e4e4;
-  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(20%, #f4f4f4), color-stop(50%, #f0f0f0), color-stop(52%, #e8e8e8), to(#eeeeee));
-  background-image: linear-gradient(#f4f4f4 20%, #f0f0f0 50%, #e8e8e8 52%, #eeeeee 100%);
+  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(20%, #f4f4f4), color-stop(50%, #f0f0f0), color-stop(52%, #e8e8e8), to(#eee));
+  background-image: linear-gradient(#f4f4f4 20%, #f0f0f0 50%, #e8e8e8 52%, #eee 100%);
   color: #666;
 }
 .chosen-container-multi .chosen-choices li.search-choice-focus {
@@ -6592,8 +6593,8 @@ This file is generated by `grunt build`, do not edit it by hand.
   border: 1px solid #aaa;
   border-bottom-right-radius: 0;
   border-bottom-left-radius: 0;
-  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(20%, #eeeeee), color-stop(80%, #ffffff));
-  background-image: linear-gradient(#eeeeee 20%, #ffffff 80%);
+  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(20%, #eee), color-stop(80%, #fff));
+  background-image: linear-gradient(#eee 20%, #fff 80%);
   -webkit-box-shadow: 0 1px 0 #fff inset;
   box-shadow: 0 1px 0 #fff inset;
 }
@@ -6772,7 +6773,7 @@ This file is generated by `grunt build`, do not edit it by hand.
   .home .page-row.hero2 {
     max-width: 1150px;
     min-height: 450px;
-    background: #ffffff url('../img/background/cloud.jpg') right center no-repeat;
+    background: #FFF url('../img/background/cloud.jpg') right center no-repeat;
     margin: auto;
     position: relative;
   }
@@ -6914,9 +6915,9 @@ This file is generated by `grunt build`, do not edit it by hand.
   }
 }
 .home .page-row.api {
-  color: #ffffff;
+  color: #FFF;
   background: transparent url('../img/background/blueprint.jpg') center center repeat;
-  text-shadow: 1px 1px #333333;
+  text-shadow: 1px 1px #333;
   padding-bottom: 4em;
 }
 .home .page-row.api h2 {
@@ -6940,9 +6941,9 @@ This file is generated by `grunt build`, do not edit it by hand.
     height: 525px;
     background: transparent url('../img/diagrams/sequence_diagram_gpg_authenticate.png') 200% 7em no-repeat;
     background-size: 75% auto;
-    -moz-box-shadow: inset 0 16px 16px -16px #333333, inset 0 -16px 16px -16px #333333;
-    -webkit-box-shadow: inset 0 16px 16px -16px #333333, inset 0 -16px 16px -16px #333333;
-    box-shadow: inset 0 16px 16px -16px #333333, inset 0 -16px 16px -16px #333333;
+    -moz-box-shadow: inset 0 16px 16px -16px #333, inset 0 -16px 16px -16px #333;
+    -webkit-box-shadow: inset 0 16px 16px -16px #333, inset 0 -16px 16px -16px #333;
+    box-shadow: inset 0 16px 16px -16px #333, inset 0 -16px 16px -16px #333;
   }
 }
 /* my kind of screen */
@@ -7086,8 +7087,8 @@ This file is generated by `grunt build`, do not edit it by hand.
 }
 .page-row.signup {
   padding-bottom: 3em;
-  background: #f3f3f3;
-  border-top: 1px solid #f3f3f3;
+  background: #F3F3F3;
+  border-top: 1px solid #F3F3F3;
   margin-bottom: 0;
 }
 .page-row.signup .newsletter div.input.email {
@@ -7118,7 +7119,7 @@ This file is generated by `grunt build`, do not edit it by hand.
   }
 }
 .page-row.signup-alt h3 {
-  color: #333333;
+  color: #333;
 }
 .page-row.signup-alt .smallprint {
   margin-top: .5em;
@@ -7128,7 +7129,7 @@ This file is generated by `grunt build`, do not edit it by hand.
     margin-bottom: 0;
     padding: 0;
     position: relative;
-    background: linear-gradient(to bottom, #ffffff 0%, #f3f3f3 100%);
+    background: linear-gradient(to bottom, #FFF 0%, #F3F3F3 100%);
   }
   .page-row.signup-alt h2 {
     text-align: left;
@@ -7231,7 +7232,7 @@ This file is generated by `grunt build`, do not edit it by hand.
   .page-row.sponsors h3 {
     margin-top: 0;
     font-size: 1.5em;
-    color: #888888;
+    color: #888;
   }
   .page-row.sponsors .sponsors-list {
     /*
@@ -7365,11 +7366,11 @@ This file is generated by `grunt build`, do not edit it by hand.
 }
 .home .page-row.tech {
   text-shadow: 2px 2px #000;
-  background: #333333;
-  color: #ffffff;
-  -moz-box-shadow: inset 0 16px 16px -16px #000000, inset 0 -16px 16px -16px #000000;
-  -webkit-box-shadow: inset 0 16px 16px -16px #000000, inset 0 -16px 16px -16px #000000;
-  box-shadow: inset 0 16px 16px -16px #000000, inset 0 -16px 16px -16px #000000;
+  background: #333;
+  color: #FFF;
+  -moz-box-shadow: inset 0 16px 16px -16px #000, inset 0 -16px 16px -16px #000;
+  -webkit-box-shadow: inset 0 16px 16px -16px #000, inset 0 -16px 16px -16px #000;
+  box-shadow: inset 0 16px 16px -16px #000, inset 0 -16px 16px -16px #000;
 }
 .home .page-row.tech h3 {
   margin: 0 0 1em 0;
@@ -7424,7 +7425,7 @@ This file is generated by `grunt build`, do not edit it by hand.
     margin: 0 0 0 -1.75em;
     float: left;
     width: 940px;
-    background: #000000;
+    background: #000;
     box-shadow: 5px -5px 22px -10px rgba(0, 0, 0, 0.75);
   }
   .home .page-row.tech .cli-window:before {
@@ -7432,7 +7433,7 @@ This file is generated by `grunt build`, do not edit it by hand.
     border-radius: .75em;
     width: .75em;
     height: .75em;
-    background: #d40101;
+    background: #D40101;
     position: absolute;
     content: ' ';
   }
@@ -7442,25 +7443,25 @@ This file is generated by `grunt build`, do not edit it by hand.
     border-bottom-right-radius: 0;
     height: 1.33em;
     width: 100%;
-    background: #dddddd;
+    background: #DDD;
   }
   .home .page-row.tech .cli-window .cli-header:before {
     margin: .33em .5em;
     border-radius: .75em;
     width: .75em;
     height: .75em;
-    background: #d40101;
+    background: #D40101;
     position: absolute;
     content: ' ';
     margin-left: 1.60em;
-    background: #ffbd2e;
+    background: #FFBD2E;
   }
   .home .page-row.tech .cli-window .cli-header:after {
     margin: .33em .5em;
     border-radius: .75em;
     width: .75em;
     height: .75em;
-    background: #d40101;
+    background: #D40101;
     position: absolute;
     content: ' ';
     margin-left: 2.75em;
@@ -7509,8 +7510,8 @@ This file is generated by `grunt build`, do not edit it by hand.
   font-size: .9em;
 }
 .page.roadmap .cards .tile-teaser i {
-  border: 1px solid #f3f3f3;
-  background: #f3f3f3;
+  border: 1px solid #F3F3F3;
+  background: #F3F3F3;
   border-radius: 50%;
   font-size: 1em;
   display: block;
@@ -7531,7 +7532,7 @@ This file is generated by `grunt build`, do not edit it by hand.
   .page.roadmap .page-row.intro {
     min-height: 400px;
     height: 45%;
-    background: #f3f3f3 url('../img/illustrations/birds2_850.png') 90% center no-repeat;
+    background: #F3F3F3 url('../img/illustrations/birds2_850.png') 90% center no-repeat;
     background-size: 35% auto;
   }
   .page.roadmap .page-row.intro h1 {
@@ -7563,8 +7564,8 @@ This file is generated by `grunt build`, do not edit it by hand.
   margin: auto;
   margin-top: 1em;
   padding: .25em;
-  background: #d40101;
-  color: #ffffff;
+  background: #D40101;
+  color: #FFF;
   display: block;
   border-radius: 50%;
   font-size: 2em;
@@ -7583,10 +7584,10 @@ This file is generated by `grunt build`, do not edit it by hand.
   display: inline-block;
   width: 223px;
   margin: 0 20px;
-  border-bottom: 4px solid #dddddd;
+  border-bottom: 4px solid #DDD;
 }
 .page.plans ul.pricing-tabs li.active {
-  border-bottom-color: #2894df;
+  border-bottom-color: #2894DF;
 }
 .page.plans ul.pricing-tabs li a {
   display: -ms-flexbox;
@@ -7601,7 +7602,7 @@ This file is generated by `grunt build`, do not edit it by hand.
   border-bottom: 0px;
 }
 .page.plans ul.pricing-tabs li a:hover span {
-  color: #2894df;
+  color: #2894DF;
 }
 .page.plans ul.pricing-tabs li a i {
   font-size: 2em;
@@ -7620,7 +7621,7 @@ This file is generated by `grunt build`, do not edit it by hand.
   margin: 0.2em 0;
 }
 .page.plans .tab-content .intro h2 span.outline {
-  color: #2894df;
+  color: #2894DF;
 }
 .page.plans .tab-content .service {
   margin: 0 0 1em 0;
@@ -7632,7 +7633,7 @@ This file is generated by `grunt build`, do not edit it by hand.
   background-color: #fff;
   position: relative;
   border-radius: 3px;
-  border: 1px solid #dddddd;
+  border: 1px solid #DDD;
   text-align: center;
 }
 .page.plans .tab-content .service-col.plan.highlighted {
@@ -7642,10 +7643,10 @@ This file is generated by `grunt build`, do not edit it by hand.
   margin-bottom: 1em;
 }
 .page.plans .tab-content .service-col.plan .plan-description h2 {
-  background-color: #f3f3f3;
+  background-color: #F3F3F3;
   padding: 0.3em 0;
   font-weight: normal;
-  border-bottom: 1px solid #dddddd;
+  border-bottom: 1px solid #DDD;
   margin: 0;
 }
 .page.plans .tab-content .service-col.plan .plan-description p {
@@ -7717,7 +7718,7 @@ This file is generated by `grunt build`, do not edit it by hand.
 .page.plans .tab-content .service-col.plan div.plan-features ul li {
   padding: 0.4em;
   font-size: 0.8em;
-  border-top: 1px solid #dddddd;
+  border-top: 1px solid #DDD;
 }
 .page.plans .tab-content .service-col.plan div.plan-features a {
   border-bottom: 0;
@@ -7730,13 +7731,13 @@ This file is generated by `grunt build`, do not edit it by hand.
   color: #969696;
 }
 .page.plans .tab-content .service-col.plan div.second_cta {
-  background-color: #f3f3f3;
+  background-color: #F3F3F3;
   padding: 0.5em 0;
 }
 .page.plans .community_cta {
   text-align: center;
   margin-top: 4em;
-  border-top: 1px solid #eeeeee;
+  border-top: 1px solid #EEE;
   padding-top: 1em;
 }
 .page.plans .community_cta p {
@@ -7765,7 +7766,7 @@ This file is generated by `grunt build`, do not edit it by hand.
 }
 .page.plans .compare table tr.head td {
   background: #969696;
-  color: #ffffff;
+  color: #FFF;
 }
 .page.plans .compare table tr.head td:first-child {
   font-size: 1em;
@@ -7780,7 +7781,7 @@ This file is generated by `grunt build`, do not edit it by hand.
   padding: 0.5em;
   border-right: 1em solid #f7f7f7;
   border-bottom: 1px solid #f7f7f7;
-  background: #eeeeee;
+  background: #EEE;
 }
 .page.plans .compare table tr td:first-child {
   padding-left: 2.5em;
@@ -7823,13 +7824,13 @@ This file is generated by `grunt build`, do not edit it by hand.
 }
 .page.services.featured.cart .box {
   border-radius: 3px;
-  border: 1px solid #dddddd;
+  border: 1px solid #DDD;
 }
 .page.services.featured.cart .box h2 {
-  border-bottom: 1px solid #dddddd;
+  border-bottom: 1px solid #DDD;
   padding: 0.5em 1em;
   margin: 0;
-  background: #f3f3f3;
+  background: #F3F3F3;
   text-align: left;
   font-size: 1.1em;
 }
@@ -7874,12 +7875,12 @@ This file is generated by `grunt build`, do not edit it by hand.
   margin-top: 1em;
 }
 .page.services.featured.cart .cart .payment_info .order-line {
-  border-bottom: 1px solid #dddddd;
+  border-bottom: 1px solid #DDD;
   padding-bottom: 0.5em;
   margin-bottom: 0.5em;
 }
 .page.services.featured.cart .cart .payment_info .order-line .times {
-  color: #888888;
+  color: #888;
   font-size: 0.8em;
   padding: 0 0.2em;
 }
@@ -7912,7 +7913,7 @@ This file is generated by `grunt build`, do not edit it by hand.
   padding-top: 0.2em;
 }
 .page.services.featured.cart .cart .payment_info div.product-details {
-  color: #666666;
+  color: #666;
   font-size: 0.9em;
 }
 .page.services.featured.cart .cart .payment_info div.product-details ul li {
@@ -7926,7 +7927,7 @@ This file is generated by `grunt build`, do not edit it by hand.
 .page.services.featured.cart .cart .payment_info .subscription-total {
   margin: 1em 0 0 0;
   padding-top: 1em;
-  border-top: 1px solid #dddddd;
+  border-top: 1px solid #DDD;
 }
 .page.services.featured.cart .cart .payment_info .subscription-total table.total-table {
   width: auto;
@@ -7934,18 +7935,18 @@ This file is generated by `grunt build`, do not edit it by hand.
   margin-left: auto;
 }
 .page.services.featured.cart .cart .payment_info .subscription-total table.total-table tr.total {
-  border-top: 1px solid #dddddd;
+  border-top: 1px solid #DDD;
   font-weight: bold;
 }
 .page.services.featured.cart .cart .payment_info .subscription-total table.total-table tr.total td {
   font-size: 1em;
-  color: #333333;
+  color: #333;
   font-weight: bold;
 }
 .page.services.featured.cart .cart .payment_info .subscription-total table.total-table tr td {
   text-align: right;
   font-size: 0.9em;
-  color: #666666;
+  color: #666;
 }
 .page.services.featured.cart .cart .payment_info .subscription-total table.total-table tr td:first-child {
   padding-right: 1em;
@@ -7957,7 +7958,7 @@ This file is generated by `grunt build`, do not edit it by hand.
   padding-top: 0.5em;
 }
 .page.services.featured.cart .cart .payment_info .subscription-total .order-total-label {
-  color: #2894df;
+  color: #2894DF;
   font-weight: bold;
   font-size: 1.1em;
 }
@@ -7977,7 +7978,7 @@ This file is generated by `grunt build`, do not edit it by hand.
   margin: 20px auto;
 }
 .page.services.featured.cart div.stripe.checkout .field {
-  border: 1px solid #cccccc;
+  border: 1px solid #CCC;
   padding-left: .5em;
 }
 .page.services.featured.cart div.stripe.checkout .field::-webkit-input-placeholder {
@@ -8034,7 +8035,7 @@ This file is generated by `grunt build`, do not edit it by hand.
   font-size: 2em;
 }
 .page.services.featured.order-complete .order-details span {
-  color: #666666;
+  color: #666;
 }
 .page.services.featured.order-complete .instructions {
   margin: 0 0 4em 0;
@@ -8060,10 +8061,10 @@ This file is generated by `grunt build`, do not edit it by hand.
   display: inline-block;
   width: 223px;
   margin: 0 20px;
-  border-bottom: 4px solid #dddddd;
+  border-bottom: 4px solid #DDD;
 }
 .page.services.featured ul.pricing-tabs li.active {
-  border-bottom-color: #2894df;
+  border-bottom-color: #2894DF;
 }
 .page.services.featured ul.pricing-tabs li a {
   display: -ms-flexbox;
@@ -8078,7 +8079,7 @@ This file is generated by `grunt build`, do not edit it by hand.
   border-bottom: 0px;
 }
 .page.services.featured ul.pricing-tabs li a:hover span {
-  color: #2894df;
+  color: #2894DF;
 }
 .page.services.featured ul.pricing-tabs li a i {
   font-size: 2em;
@@ -8113,7 +8114,7 @@ This file is generated by `grunt build`, do not edit it by hand.
 .page.services.featured .service-description ul li {
   padding: 0.4em;
   font-size: 0.8em;
-  border-top: 1px solid #dddddd;
+  border-top: 1px solid #DDD;
 }
 .page.services.featured .page-row.intro {
   min-height: 310px;
@@ -8124,7 +8125,7 @@ This file is generated by `grunt build`, do not edit it by hand.
 }
 .page.services.featured .demo_cta {
   margin-top: 4em;
-  border-top: 1px solid #eeeeee;
+  border-top: 1px solid #EEE;
   padding-top: 1em;
 }
 .page.services.featured .demo_cta p {
@@ -8159,14 +8160,14 @@ This file is generated by `grunt build`, do not edit it by hand.
   font-weight: normal;
 }
 .page.services .page-row.intro {
-  background: #f3f3f3;
+  background: #F3F3F3;
 }
 .page.services .page-row.intro .service-teaser {
   margin: auto;
   margin-top: 1em;
   padding: .25em;
-  background: #d40101;
-  color: #ffffff;
+  background: #D40101;
+  color: #FFF;
   display: block;
   border-radius: 50%;
   font-size: 2em;
@@ -8202,7 +8203,7 @@ This file is generated by `grunt build`, do not edit it by hand.
   margin-top: 0;
   margin-bottom: 1em;
   border: 0;
-  color: #333333;
+  color: #333;
 }
 .page.services .service-details .presentation p {
   font-size: 1em;
@@ -8261,7 +8262,7 @@ This file is generated by `grunt build`, do not edit it by hand.
   width: 86%;
   margin-top: 1em;
   padding: 1em;
-  background-color: #eeeeee;
+  background-color: #EEE;
 }
 .page.services .registration.form .sponsorship .sponsorship-options ul li {
   list-style-type: none;
@@ -8282,7 +8283,7 @@ This file is generated by `grunt build`, do not edit it by hand.
   margin-top: 1em;
 }
 .page.services .sponsorhip-details {
-  background-color: #eeeeee;
+  background-color: #EEE;
   padding: 1em;
   text-align: left;
 }
@@ -8312,7 +8313,7 @@ This file is generated by `grunt build`, do not edit it by hand.
     margin: 1em auto;
   }
   .page.services .signup {
-    background: #ffffff;
+    background: #FFF;
   }
   .page.services .service {
     text-align: center;
@@ -8337,17 +8338,17 @@ This file is generated by `grunt build`, do not edit it by hand.
     padding-top: 1em;
     margin-top: -1em;
     border-radius: 3px;
-    background: #ffffff;
-    border: 1px solid #dddddd;
+    background: #FFF;
+    border: 1px solid #DDD;
   }
   .page.services .service .sub {
     border-radius: 3px;
     padding-bottom: 1em;
-    border: 1px solid #dddddd;
-    background: #f3f3f3;
+    border: 1px solid #DDD;
+    background: #F3F3F3;
   }
   .page.services .page-row.intro {
-    background: #f3f3f3;
+    background: #F3F3F3;
     min-height: 400px;
   }
   .page.services .page-row.intro h1 {
@@ -8378,7 +8379,7 @@ This file is generated by `grunt build`, do not edit it by hand.
   }
   .page.services .service-details ul.features {
     font-size: 1.2em;
-    border-bottom: 1px solid #f3f3f3;
+    border-bottom: 1px solid #F3F3F3;
     padding-bottom: 1em;
   }
   .page.services .service-details ul.features li {
@@ -8422,7 +8423,7 @@ This file is generated by `grunt build`, do not edit it by hand.
   margin-bottom: 1em;
 }
 .page.contacts .page-row.intro {
-  background: #f3f3f3;
+  background: #F3F3F3;
 }
 .page.contacts .service .service-teaser {
   display: none;
@@ -8449,7 +8450,7 @@ This file is generated by `grunt build`, do not edit it by hand.
 /* even larger screen */
 @media all and (min-width: 800px) {
   .page.contacts .page-row.intro {
-    background: #f3f3f3;
+    background: #F3F3F3;
     min-height: 400px;
     text-align: center;
   }
@@ -8464,8 +8465,8 @@ This file is generated by `grunt build`, do not edit it by hand.
   }
   .page.contacts .form-wrapper {
     margin: -10em 0 5em 18%;
-    background-color: #f3f3f3;
-    border: 1px solid #dddddd;
+    background-color: #F3F3F3;
+    border: 1px solid #DDD;
   }
   .page.contacts .form-wrapper form {
     padding: 5%;
@@ -8502,7 +8503,7 @@ This file is generated by `grunt build`, do not edit it by hand.
   }
 }
 .page.start h2 {
-  color: #666666;
+  color: #666;
   font-weight: normal;
 }
 .page.start .grid {
@@ -8522,7 +8523,7 @@ This file is generated by `grunt build`, do not edit it by hand.
   position: relative;
 }
 .page.start .big-choice:hover {
-  border: 1px solid #dddddd;
+  border: 1px solid #DDD;
 }
 .page.start h3 {
   border: 0;
@@ -8543,7 +8544,7 @@ This file is generated by `grunt build`, do not edit it by hand.
   margin: 20px auto;
 }
 .checkout.page form.stripe .field {
-  border: 1px solid #cccccc;
+  border: 1px solid #CCC;
   width: 82.5%;
   padding-left: .5em;
 }

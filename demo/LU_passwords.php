@@ -1,5 +1,5 @@
 <?php include('_includes/bootstrap.php'); ?><!doctype html>
-<html class="alpha version js websqldatabase draganddrop cssscrollbar" lang="en">
+<html class="passbolt ce edition js websqldatabase draganddrop cssscrollbar" lang="en">
 <head>
 <?php include('includes/meta/LU_meta.php'); ?>
 </head>

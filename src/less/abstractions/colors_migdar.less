@@ -66,9 +66,6 @@
 @font-error: #FF6B70;
 @font-inverse-dark: @midgar-9;
 @font-inverse: @midgar-8;
-@font-success: @white;
-@font-warning: @white;
-@font-notice: @white;
 
 /* buttons */
 @button-text-shadow: 0 1px 0 rgba(0, 0, 0, 1);
@@ -105,17 +102,21 @@
 @button-selected-background: @midgar-2;
 @button-selected-border: @midgar-1;
 
-/* inputs */
-@input-background: @midgar-1;
-@input-background-disabled: @midgar-5;
-
-/* shadows */
+/* box shadows */
 .box-shadow() {
     box-shadow: 0px 0px 10px 0px @blacker;
 }
 .box-shadow-dark() {
     box-shadow: 0px 0px 10px 0px @blacker;
 }
+
+/* dropdown menus */
+@dropdown-background: @midgar-4;
+@dropdown-item-hover-background: @midgar-5;
+
+/* inputs */
+@input-background: @midgar-1;
+@input-background-disabled: @midgar-5;
 
 /* logo */
 @logourl: url('@{images}/logo/logo_white.png');
@@ -128,12 +129,18 @@
 @tableview-header-background: @midgar-4;
 @breadcrumb-background: @midgar-3;
 
+/* messages */
+@message-error-color: @black;
+@message-error-background: @background-error;
+@message-success-color: @black;
+@message-success-background: @background-success;
+@message-notice-color: @black;
+@message-notice-background: @background-notice;
+@message-warning-color: @black;
+@message-warning-background: @background-warning;
+
 /* tabs */
 @tab-selected-background: @background-default;
-
-/* contextual menus */
-@dropdown-background: @midgar-4;
-@dropdown-item-hover-background: @midgar-5;
 
 /* sidebar */
 @panel-background: #353532;
@@ -141,10 +148,6 @@
 @sidebar-border: @border-lightest;
 @sidebar-section-background: @midgar-4;
 @sidebar-section-header-background: @midgar-3;
-
-/* secret placeholder */
-@dot:url('@{images}/controls/dot_white.svg');
-@dot-hover:url('@{images}/controls/dot_red.svg');
 
 /* tables */
 @table-background: @midgar-2;
@@ -162,3 +165,7 @@
 /* tooltip */
 @tooltip-background: @background-lightest;
 @tooltip-color: @font-inverse;
+
+/* secret placeholder */
+@dot:url('@{images}/controls/dot_white.svg');
+@dot-hover:url('@{images}/controls/dot_red.svg');

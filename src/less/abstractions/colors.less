@@ -104,17 +104,21 @@
 @button-selected-background: @background-lighter;
 @button-selected-border: @border-input-light;
 
-/* inputs */
-@input-background: @white;
-@input-background-disabled: @grey-lightest;
-
-/* shadows */
+/* box shadows */
 .box-shadow() {
     box-shadow: 0px 0px 10px 0px @background-light;
 }
 .box-shadow-dark() {
     box-shadow: 0px 0px 10px 0px @background-dark;
 }
+
+/* dropdown menus */
+@dropdown-background: @background-default;
+@dropdown-item-hover-background: @background-lighter;
+
+/* inputs */
+@input-background: @white;
+@input-background-disabled: @grey-lightest;
 
 /* logo */
 @logourl: url('@{images}/logo/logo.png');
@@ -127,12 +131,18 @@
 @tableview-header-background: @background-default;
 @breadcrumb-background: @background-default;
 
+/* messages */
+@message-error-color: @font-default;
+@message-error-background: @background-error;
+@message-success-color: @font-default;
+@message-success-background: @background-success;
+@message-notice-color: @font-default;
+@message-notice-background: @background-notice;
+@message-warning-color: @font-default;
+@message-warning-background: @background-warning;
+
 /* tabs */
 @tab-selected-background: @background-default;
-
-/* contextual menus */
-@dropdown-background: @background-default;
-@dropdown-item-hover-background: @background-lighter;
 
 /* sidebar */
 @panel-background: lighten(@background-default, 10);

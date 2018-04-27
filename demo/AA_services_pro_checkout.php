@@ -152,12 +152,12 @@
                         <div class="submit-wrapper clearfix">
                             <input type="submit" class="button primary big" value="Pay €264.00">
                         </div>
-                        <div class="outcome">
+                        <!--div class="outcome">
                             <div class="error" role="alert"></div>
                             <div class="success">
                                 Success! Your Stripe token is <span class="token"></span>
                             </div>
-                        </div>
+                        </div-->
                     </div>
                 </div>
                 <div class="col6 last box payment_info">
