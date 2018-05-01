@@ -8,7 +8,7 @@
     <meta name="keywords" content="Passbolt, password manager, online password manager, open source password manager">
     <meta name="robots" content="noindex">
     <meta name="viewport" content="width=device-width">
-    <link rel="stylesheet" type="text/css" href="../src/css/themes/<?= $theme; ?>/api/main.css"/>
+    <link rel="stylesheet" type="text/css" href="../src/css/themes/<?= $theme; ?>/api_main.css"/>
 </head>
 <body>
 <div id="container" class="page status">

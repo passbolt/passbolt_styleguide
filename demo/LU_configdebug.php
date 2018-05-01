@@ -15,7 +15,7 @@
 	-->
 	<title>Passbolt config</title>
 	<meta name="viewport" content="width=device-width">
-	<link rel="stylesheet" media="all" href="../src/css/themes/<?= $theme; ?>/webext/config_debug.css"/>
+	<link rel="stylesheet" media="all" href="../src/css/themes/default/ext_config_debug.css"/>
 </head>
 <body>
 <div id="container" class="config page debug plugin">

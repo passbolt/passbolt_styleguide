@@ -3,7 +3,7 @@
 <head>
 	<title>Register</title>
 	<?php include('includes/meta/AN_meta.php'); ?>
-	<link rel="stylesheet" type="text/css" href="css/themes/<?= $theme; ?>/api/login.css" />
+	<link rel="stylesheet" type="text/css" href="css/themes/default/api_login.css" />
 <body>
 <div id="container" class="register page">
 	<?php include('includes/ALL_top_warning_messages.php'); ?>

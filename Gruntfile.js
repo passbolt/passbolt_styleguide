@@ -20,38 +20,22 @@ module.exports = function(grunt) {
 				dest: "src/css/",
 				ext: ".css"
 			},
-      theme_default_api: {
+      theme_default: {
         expand: true,
         flatten: true,
-        cwd: "src/less/themes/default/api",
+        cwd: "src/less/themes/default",
         src: "*.less",
-        dest: "src/css/themes/default/api",
+        dest: "src/css/themes/default",
         ext: ".css"
       },
-      theme_default_webext: {
+      theme_midgar: {
         expand: true,
         flatten: true,
-        cwd: "src/less/themes/default/webext",
-        src: "**.less",
-        dest: "src/css/themes/default/webext",
-        ext: ".css"
-      },
-      theme_midgar_api: {
-        expand: true,
-        flatten: true,
-        cwd: "src/less/themes/midgar/api",
+        cwd: "src/less/themes/midgar",
         src: "*.less",
-        dest: "src/css/themes/midgar/api",
+        dest: "src/css/themes/midgar",
         ext: ".css"
       },
-      theme_midgar_webext: {
-        expand: true,
-        flatten: true,
-        cwd: "src/less/themes/midgar/webext",
-        src: "**.less",
-        dest: "src/css/themes/midgar/webext",
-        ext: ".css"
-      }
 		},
 		shell: {
 			'publish': {
@@ -85,32 +69,18 @@ module.exports = function(grunt) {
 				dest: 'build/css/',
 				ext: '.min.css'
 			},
-      theme_default_api: {
+      theme_default: {
         expand: true,
-        cwd: 'src/css/themes/default/api',
+        cwd: 'src/css/themes/default',
         src: ['*.css', '!*.min.css'],
-        dest: 'build/css/themes/default/api',
+        dest: 'build/css/themes/default',
         ext: '.min.css'
       },
-      theme_default_webext: {
+      theme_midgar: {
         expand: true,
-        cwd: 'src/css/themes/default/webext',
+        cwd: 'src/css/themes/midgar',
         src: ['*.css', '!*.min.css'],
-        dest: 'build/css/themes/default/webext',
-        ext: '.min.css'
-      },
-      theme_midgar_api: {
-        expand: true,
-        cwd: 'src/css/themes/midgar/api',
-        src: ['*.css', '!*.min.css'],
-        dest: 'build/css/themes/midgar/api',
-        ext: '.min.css'
-      },
-      theme_midgar_webext: {
-        expand: true,
-        cwd: 'src/css/themes/midgar/webext',
-        src: ['*.css', '!*.min.css'],
-        dest: 'build/css/themes/midgar/webext',
+        dest: 'build/css/themes/midgar',
         ext: '.min.css'
       }
 		},
