@@ -48,7 +48,7 @@ module.exports = function(grunt) {
 					'git push origin <%= pkg.version %>',
 					'git push',
 					'npm publish'
-				].join('&&')
+				].join('&& ')
 			}
 		},
 		cssmin: {
