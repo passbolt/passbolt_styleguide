@@ -31,7 +31,7 @@
 		});
 	</script>
 </head>
-<body>
+<body class="iframe">
 <div class="autocomplete-content scroll">
 	<ul>
 		<li id="1c137bd7-2838-3c3d-a021-d2986d9126f5">

@@ -14,7 +14,7 @@
 		}
 	</style>
 </head>
-<body>
+<body class="iframe">
 <div class="form-content permission-add">
 <div class="input text autocomplete">
 	<label for="js_perm_create_form_aro_auto_cplt">Add to a group</label>

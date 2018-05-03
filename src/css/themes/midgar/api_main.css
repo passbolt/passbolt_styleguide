@@ -686,6 +686,9 @@ body {
   color: #FFFFFC;
   background: #30302D;
 }
+body.iframe {
+  background: transparent;
+}
 /* links */
 a:link,
 a:visited {

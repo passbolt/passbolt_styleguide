@@ -14,7 +14,7 @@
 		}
 	</style>
 </head>
-<body>
+<body class="iframe">
 <div class="form-content">
 <div class="input-password-wrapper">
 	<div class="input password required">
