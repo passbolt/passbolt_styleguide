@@ -1,11 +1,6 @@
 .logo {
-    img {
-        max-width: 150px;
-    }
-
-    // transition class until we remove all the img tags from html
     &.no-img {
-        background: transparent url('@{images}/logo/logo.png') 0 0 no-repeat;
+        background: transparent @logourl 0 0 no-repeat;
         background-size: 150px auto;
         width: 150px;
         height: 30px;
@@ -15,7 +10,7 @@
     }
 
     &.bigger {
-        background: transparent url('@{images}/logo/logo@2x.png') 0 0 no-repeat;
+        background: transparent @logourl2x 0 0 no-repeat;
         background-size: 200px auto;
         width: 200px;
         height: 45px;
@@ -29,13 +24,12 @@ only screen and (min-devicepixel-ratio: 1.5),
 only screen and (min-resolution: 1.5dppx) {
 
     .logo {
-        // transition class until we remove all the img tags from html
         &.no-img {
-            background: transparent url('@{images}/logo/logo@2x.png') 0 0 no-repeat;
+            background: transparent @logourl2x 0 0 no-repeat;
             background-size: 150px auto;
         }
         &.bigger {
-            background: transparent url('@{images}/logo/logo@2x.png') 0 0 no-repeat;
+            background: transparent @logourl2x 0 0 no-repeat;
             background-size: 200px auto;
         }
     }

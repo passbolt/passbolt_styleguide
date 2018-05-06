@@ -9,10 +9,10 @@
     margin-top: .5em;
     background: @background-lighter;
     overflow: hidden;
-    .background-gradient();
+    .button-background();
 
     .more {
-        .background-gradient();
+        .button-background();
         border-left: 1px dotted @border-default;
     }
 
@@ -99,19 +99,10 @@
         top: 59px;
         max-width: 18em;
         width: 80%;
+        background: @dropdown-background;
 
         &.visible {
             display: block;
-        }
-    }
-    &.dropdown.pressed {
-        .more {
-            background: @background-default;
-            border: 0;
-        }
-        .dropdown-content {
-            border-top: 1px dotted @border-default;
-            background: @background-default;
         }
     }
 }

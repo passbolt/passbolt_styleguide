@@ -1,9 +1,9 @@
-<!doctype html>
+<?php include('_includes/bootstrap.php'); ?><!doctype html>
 <html>
 <head>
 	<?php include('includes/meta/LU_meta_iframe.php'); ?>
 </head>
-<body>
+<body class="iframe">
 <div class="dialog-wrapper">
 	<div class="dialog confirm">
 		<div class="dialog-header">

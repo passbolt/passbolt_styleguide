@@ -1,8 +1,11 @@
 /* body */
 body {
     color: @font-default;
+    background: @background-default;
 }
-
+body.iframe {
+    background: transparent;
+}
 /* links */
 a:link, a:visited {
     color: @font-default;
@@ -24,9 +27,4 @@ a {
 
 a:hover {
     border-bottom: 1px solid @border-focus;
-}
-
-/* todos */
-.todo {
-    background: @yellow-lightest !important;
 }

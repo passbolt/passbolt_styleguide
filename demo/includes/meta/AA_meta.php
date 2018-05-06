@@ -6,7 +6,7 @@
 			 /_/    \__,_/____/____/_.___/\____/_/\__/
 
 			 The open source password manager for teams
-			 (c) 2016 Bolt Software Pvt Ltd
+		     (c) 2018 Passbolt SARL
 
 	-->
 	<base href="../src/">

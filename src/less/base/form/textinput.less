@@ -15,7 +15,7 @@ textarea {
     font-size: 16px; // we dont rely on parent font size for consistancy
     line-height: 24px;
     color: @font-default;
-    background: @background-default;
+    background: @input-background;
     width: 14em; /* 20 char (default input length) x .7em (average char length) */
     padding: .375em .625em .375em .625em;
     display: inline-block;
@@ -64,7 +64,7 @@ input[type=email]:disabled {
     -moz-box-shadow: 0 0 0 0;
     box-shadow: 0 0 0 0;
     cursor: normal;
-    background: @background-disabled;
+    background: @input-background-disabled;
 }
 
 /*

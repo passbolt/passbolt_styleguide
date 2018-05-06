@@ -3,12 +3,12 @@
  */
 .scroll {
     overflow-y: scroll;
-    background: linear-gradient(white 30%, rgba(255, 255, 255, 0)),
-    linear-gradient(rgba(255, 255, 255, 0), white 70%) 0 100%,
+    background: linear-gradient(@background-default 30%, rgba(255, 255, 255, 0)),
+    linear-gradient(rgba(255, 255, 255, 0), @background-default 70%) 0 100%,
     radial-gradient(farthest-side at 75% 0, rgba(0, 0, 0, .2), rgba(0, 0, 0, 0)),
     radial-gradient(farthest-side at 75% 100%, rgba(0, 0, 0, .2), rgba(0, 0, 0, 0)) 0 100%;
     background-repeat: no-repeat;
-    background-color: white;
+    background-color: @background-default;
     background-size: 100% 10px, 100% 10px, 100% 5px, 100% 5px;
 
     /* Opera doesn't support this in the shorthand */

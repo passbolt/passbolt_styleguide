@@ -35,6 +35,7 @@
 @border-lighter: @grey-lighter;
 @border-light: @grey;
 @border-default: @grey;
+@border-dark: @grey-darker;
 @border-input: @grey-3;
 @border-input-light: @grey-2;
 @border-focus: @blue;
@@ -47,9 +48,12 @@
 @font-lighter: @grey-dark;
 @font-lightest: @grey; // not WCAG on background default, for decoration only
 @font-focus: @blue;
-
+@font-error: @red;
 @font-inverse-dark: @grey;
 @font-inverse: @white;
+@font-success: @black;
+@font-warning: @black;
+@font-notice: @black;
 
 /* background */
 @background-default: @white;
@@ -61,14 +65,14 @@
 @background-error: lighten(@red, 53%);
 @background-success: @green-lightest;
 @background-warning: @yellow-light;
+@background-updated: @yellow-lightest;
 @background-notice: lighten(@blue, 40%);
-@background-disabled: @grey-lightest;
+@background-overlay: rgba(255, 255, 255, 0.9);
 
-/* scrollbar */
-@scrollbar-background: @white;
-@scrollbar: @grey-darker;
-
-.background-gradient() {
+/* buttons */
+@button-text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.5);
+@button-primary-text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.2);
+.button-background() {
     background: @background-lighter;
     background-image: -moz-linear-gradient(top, @background-lightest, @background-lighter);
     background-image: -ms-linear-gradient(top, @background-lightest, @background-lighter);
@@ -77,11 +81,93 @@
     background-image: -o-linear-gradient(top, @background-lightest, @background-lighter);
     background-image: linear-gradient(top, @background-lightest, @background-lighter);
 }
+.button-hover-background() {
+    background: @background-lightest;
+    background-image: -moz-linear-gradient(top, @background-lightest, @background-lightest);
+    background-image: -ms-linear-gradient(top, @background-lightest, @background-lightest);
+    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(background-lightest), to(@background-lightest));
+    background-image: -webkit-linear-gradient(top, @background-lightest, @background-lightest);
+    background-image: -o-linear-gradient(top, @background-lightest, @background-lightest);
+    background-image: linear-gradient(top, @background-lightest, @background-lightest);
+}
+@button-primary-background: @blue;
+@button-primary-border: @blue;
+@button-primary-color: @font-inverse;
+@button-primary-hover-background: @blue-light;
+@button-primary-hover-border: @blue-light;
+@button-primary-hover-color: @font-inverse;
 
-/* shadows */
+@button-disabled-color: @font-light;
+@button-disabled-background: @white;
+@button-disabled-border: @border-default;
+
+@button-selected-background: @background-lighter;
+@button-selected-border: @border-input-light;
+
+/* box shadows */
 .box-shadow() {
     box-shadow: 0px 0px 10px 0px @background-light;
 }
 .box-shadow-dark() {
     box-shadow: 0px 0px 10px 0px @background-dark;
 }
+
+/* dropdown menus */
+@dropdown-background: @background-default;
+@dropdown-item-hover-background: @background-lighter;
+
+/* inputs */
+@input-background: @white;
+@input-background-disabled: @grey-lightest;
+
+/* logo */
+@logourl: url('@{images}/logo/logo.png');
+@logourl2x: url('@{images}/logo/logo.svg');
+
+/* grid */
+@tableview-background: @background-default;
+@tableview-background-hover: lighten(@background-lightest,2);
+@tableview-background-selected: @yellow-lightest;
+@tableview-header-background: @background-default;
+@breadcrumb-background: @background-default;
+
+/* messages */
+@message-error-color: @font-default;
+@message-error-background: @background-error;
+@message-success-color: @font-default;
+@message-success-background: @background-success;
+@message-notice-color: @font-default;
+@message-notice-background: @background-notice;
+@message-warning-color: @font-default;
+@message-warning-background: @background-warning;
+
+/* tabs */
+@tab-selected-background: @background-default;
+
+/* sidebar */
+@panel-background: lighten(@background-default, 10);
+@sidebar-background: @background-default;
+@sidebar-border: @border-lightest;
+@sidebar-section-background: @background-default;
+@sidebar-section-header-background: @background-default;
+
+/* secret placeholder */
+@dot:url('@{images}/controls/dot_black.svg');
+@dot-hover:url('@{images}/controls/dot_red.svg');
+
+/* tables */
+@table-background: @background-default;
+@table-border: @border-default;
+@table-row-even-background: @background-default;
+
+/* tags */
+@tag-color: @blue;
+@tag-border: @blue;
+@tag-background: rgba(42,156,235,0.05);
+@tag-hover-color: @font-inverse;
+@tag-hover-border: @blue;
+@tag-hover-background: @blue;
+
+/* tooltip */
+@tooltip-background: @background-dark;
+@tooltip-color: @font-inverse;

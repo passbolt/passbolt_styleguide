@@ -4,7 +4,7 @@
 }
 
 .dropdown .button:focus {
-    border: 1px solid @grey;
+    border: 1px solid @border-default;
     color: @font-default;
     background: @background-default;
     z-index: 801;
@@ -19,7 +19,7 @@
 
 .dropdown-content {
     border: 1px solid @border-default;
-    background: @background-default;
+    background: @dropdown-background;
     float: left;
     position: absolute;
     min-width: 13em;
@@ -48,7 +48,7 @@
 }
 
 .dropdown-content li a:hover {
-    background: @background-lighter;
+    background: @dropdown-item-hover-background;
     text-decoration: none;
     color: @font-default;
 }
@@ -61,7 +61,8 @@
     border-bottom: 1px solid @border-default;
 }
 
-.dropdown-content li.disabled a {
+.dropdown-content li.disabled a,
+.dropdown-content li.disabled a:hover{
     color: @font-lighter;
 }
 

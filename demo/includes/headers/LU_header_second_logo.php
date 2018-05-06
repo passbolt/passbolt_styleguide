@@ -1,5 +1,5 @@
 <div class="col1">
-	<div class="logo">
-		<img src="img/logo/logo.png" alt="passbolt">
-	</div>
+    <div class="logo no-img">
+        <h1><span>Passbolt</span></h1>
+    </div>
 </div>

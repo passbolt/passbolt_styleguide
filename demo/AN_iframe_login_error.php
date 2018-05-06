@@ -1,20 +1,10 @@
-<!doctype html>
+<?php include('_includes/bootstrap.php'); ?><!doctype html>
 <html>
 <head>
     <?php include('includes/meta/LU_meta_iframe.php'); ?>
-    <style>
-        #js_master_password:focus,
-        #js_master_password + .security-token {
-            background:#ffbbbb;
-            color:#000;
-        }
-        #js_master_password:focus + .security-token {
-            background:#000;
-            color:#ffbbbb;
-        }
-    </style>
+    <?php include('includes/meta/LU_security_token_style.php'); ?>
 </head>
-<body>
+<body class="iframe">
 <div class="login-form master-password ">
 	<div class="input text required">
 		<label for="UserUsername">Username</label>

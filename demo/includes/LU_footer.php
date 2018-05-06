@@ -10,4 +10,4 @@
 	</div>
 </footer>
 
-<script src="js/jquery-2.2.4.min.js"></script>
+<script src="js/jquery-3.3.1.min.js"></script>

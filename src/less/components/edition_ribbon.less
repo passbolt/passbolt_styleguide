@@ -1,0 +1,26 @@
+.edition.ce body:before {
+    content: "CE";
+    background: @red none repeat scroll 0% 0%;
+}
+
+.edition.pro body:before {
+    content: "PRO";
+    background: @green none repeat scroll 0% 0%;
+}
+
+.edition body:before {
+    position: fixed;
+    width: 130px;
+    height: 22px;
+    bottom: 8px;
+    left: -47px;
+    text-align: center;
+    font-size: 10px;
+    font-family: sans-serif;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: @font-inverse;
+    line-height: 24px;
+    transform: rotate(45deg);
+    z-index: 999;
+}

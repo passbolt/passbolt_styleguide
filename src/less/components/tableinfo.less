@@ -5,7 +5,7 @@ table.table-info.vertical {
     td {
         padding: .625em;
         padding-right: 1.25em;
-        color: @font-lighter;
+        color: @font-dim;
 
         &.warning {
             background: @background-warning;
@@ -14,7 +14,7 @@ table.table-info.vertical {
             background: @background-error;
         }
         .alt.side {
-            color: @font-lighter;
+            color: @font-dim;
             float: right;
         }
         .alt.side:before {
@@ -26,7 +26,7 @@ table.table-info.vertical {
     }
 
     td + td {
-        color: @black;
+        color: @font-default;
         padding-right: .625em;
     }
 
@@ -47,7 +47,13 @@ table.table-info.horizontal {
     th {
         border-bottom: 1px solid @border-default;
     }
-    tbody tr:nth-child(even) {
-        background: @background-lightest;
+    thead tr {
+        background: @tableview-header-background;
+    }
+    tbody {
+        background:@table-background;
+    }
+    tbody tr:nth-child(odd) {
+        background: @table-row-even-background;
     }
 }

@@ -1,4 +1,4 @@
-<!doctype html>
+<?php include('_includes/bootstrap.php'); ?><!doctype html>
 <html class="passbolt no-js passboltplugin version alpha" lang="en">
 <head>
 	<?php include('includes/meta/AN_meta_setup.php'); ?>
@@ -77,9 +77,6 @@
 						</div>
 					</div>
 					<div class="col5 last">
-						<div class="video-wrapper">
-							<iframe width="400" height="300" src="https://www.youtube.com/embed/u-vDLf7cmf0" frameborder="0" allowfullscreen></iframe>
-						</div>
 					</div>
 				</div>
 

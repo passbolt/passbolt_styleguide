@@ -1,0 +1,171 @@
+/* palette */
+@white: #FFF;
+@black: #333;
+@blacker: #000;
+
+@blue-light: #2A9CEB;
+@blue: #2894DF;
+@blue-dark: #4271b7;
+@blue-twitter: #4099FF;
+@blue-facebook: #3B5998;
+
+@green-lightest: #f4f4d9;
+@green-light: #66CC00;
+@green: #009900;
+
+@yellow-light: #FEF0BF;
+@yellow: #FFBD2E;
+@orange: #9F6000;
+
+@red: #D40101;
+@red-dark: #92000C;
+
+@midgar-1: #0C0C0A;
+@midgar-2: #222220;
+@midgar-3: #30302D;
+@midgar-4: #3B3B39;
+@midgar-5: #444442;
+@midgar-6: #606060;
+@midgar-7: #8B8B89;
+@midgar-8: #EEEEEC;
+@midgar-9: #F3F3F3;
+@midgar-10:#FFFFFC;
+
+/* background */
+@background-default: @midgar-3;
+@background-dark: @midgar-2;
+@background-light: @midgar-4;
+@background-lighter: @midgar-4;
+@background-lightest: @midgar-5;
+
+@background-error: lighten(@red, 53%);
+@background-success: @green-lightest;
+@background-warning: @yellow-light;
+@background-updated: #5C564C;
+@background-notice: @blue;
+@background-overlay: rgba(0, 0, 0, 0.8);
+
+/* borders */
+@border-lightest: @midgar-1;
+@border-lighter: @midgar-1;
+@border-light: @midgar-1;
+@border-default: @midgar-1;
+@border-dark: @midgar-1;
+@border-input: @midgar-2;
+@border-input-light: @midgar-3;
+@border-focus: @blue;
+@border-focus-dark: @blue-dark;
+
+/* font */
+@font-default: @midgar-10;
+@font-dim: lighten(@midgar-7, 25);
+@font-light: @midgar-7;
+@font-lighter: @midgar-7;
+@font-lightest: @midgar-5; // not WCAG on background default, for decoration only
+@font-focus: @blue;
+@font-error: #FF6B70;
+@font-inverse-dark: @midgar-9;
+@font-inverse: @midgar-8;
+
+/* buttons */
+@button-text-shadow: 0 1px 0 rgba(0, 0, 0, 1);
+@button-primary-text-shadow: 0 1px 0 rgba(0, 0, 0, 0.2);
+.button-background() {
+    background: @midgar-5;
+    background-image: -moz-linear-gradient(top, @midgar-5, @midgar-5);
+    background-image: -ms-linear-gradient(top, @midgar-5, @midgar-5);
+    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(@midgar-5), to(@midgar-5));
+    background-image: -webkit-linear-gradient(top, @midgar-5, @midgar-5);
+    background-image: -o-linear-gradient(top, @midgar-5, @midgar-5);
+    background-image: linear-gradient(top, @midgar-5, @midgar-5);
+}
+.button-hover-background() {
+    background: @background-lightest;
+    background-image: -moz-linear-gradient(top, @midgar-6, @midgar-6);
+    background-image: -ms-linear-gradient(top, @midgar-6, @midgar-6);
+    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(@midgar-6), to(@midgar-6));
+    background-image: -webkit-linear-gradient(top, @midgar-6, @midgar-6);
+    background-image: -o-linear-gradient(top, @midgar-6, @midgar-6);
+    background-image: linear-gradient(top, @midgar-6, @midgar-6);
+}
+@button-primary-background: @blue;
+@button-primary-border: @blue;
+@button-primary-color: @white;
+@button-primary-hover-background: @blue-light;
+@button-primary-hover-border: @blue-light;
+@button-primary-hover-color: @white;
+
+@button-disabled-color: @font-light;
+@button-disabled-background: @midgar-4;
+@button-disabled-border: @border-default;
+
+@button-selected-background: @midgar-2;
+@button-selected-border: @midgar-1;
+
+/* box shadows */
+.box-shadow() {
+    box-shadow: 0px 0px 10px 0px @blacker;
+}
+.box-shadow-dark() {
+    box-shadow: 0px 0px 10px 0px @blacker;
+}
+
+/* dropdown menus */
+@dropdown-background: @midgar-4;
+@dropdown-item-hover-background: @midgar-5;
+
+/* inputs */
+@input-background: @midgar-1;
+@input-background-disabled: @midgar-5;
+
+/* logo */
+@logourl: url('@{images}/logo/logo_white.png');
+@logourl2x: url('@{images}/logo/logo_white.svg');
+
+/* grid */
+@tableview-background: @midgar-2;
+@tableview-background-selected: darken(@blue, 30);
+@tableview-background-hover: @midgar-4;
+@tableview-header-background: @midgar-4;
+@breadcrumb-background: @midgar-3;
+
+/* messages */
+@message-error-color: @black;
+@message-error-background: @background-error;
+@message-success-color: @black;
+@message-success-background: @background-success;
+@message-notice-color: @black;
+@message-notice-background: @background-notice;
+@message-warning-color: @black;
+@message-warning-background: @background-warning;
+
+/* tabs */
+@tab-selected-background: @background-default;
+
+/* sidebar */
+@panel-background: #353532;
+@sidebar-background: @midgar-4;
+@sidebar-border: @border-lightest;
+@sidebar-section-background: @midgar-4;
+@sidebar-section-header-background: @midgar-3;
+
+/* tables */
+@table-background: @midgar-2;
+@table-border: @border-default;
+@table-row-even-background: lighten(@midgar-2, 2);
+
+/* tags */
+@tag-color: #d4e4ff;
+@tag-border: #b8d0fd;
+@tag-background: rgba(42,156,235,0.1);
+@tag-hover-color: @blue-light;
+@tag-hover-border: @blue-light;
+@tag-hover-background: @midgar-3;
+
+/* tooltip */
+@tooltip-background: @background-lightest;
+@tooltip-color: @font-inverse;
+
+/* secret placeholder */
+@dot:url('@{images}/controls/dot_white.svg');
+@dot-hover:url('@{images}/controls/dot_red.svg');

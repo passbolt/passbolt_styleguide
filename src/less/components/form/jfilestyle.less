@@ -9,7 +9,7 @@
  * Based on the work of Markus da Silva Lima.
  * Modified by passbolt to match existing styleguide.
  */
-div.jfilestyle {
+.jfilestyle {
   display: inline-block;
   margin: 0px 0px 10px 0px;
   padding: 0px;
@@ -22,8 +22,8 @@ div.jfilestyle {
   }
 
   input {
-    border: 1px solid #c0c0c0;
-    background: #d9d9d9;
+    border: 1px solid @border-default;
+    background: @input-background;
     margin: 0px -5px 0px 0px;
     vertical-align: middle;
     padding: 10px 15px;
@@ -37,7 +37,7 @@ div.jfilestyle {
     &[type=search]:disabled,
     &[type=text]:disabled,
     &[type=email]:disabled {
-      background-color: @white;
+      background-color: @input-background-disabled;
       // Harmonize padding and font size with other inputs.
       padding: .375em .625em .375em .625em;
       font-size: 1em;
@@ -50,7 +50,7 @@ div.jfilestyle {
     display: inline-block;
     border: 1px solid @border-input;
     border-left:0px;
-    background: @grey-lighter;
+    background: @background-light;
     padding: .65em 1.225em .65em 1.225em;
     color: #0662ba;
     vertical-align: middle;
@@ -77,18 +77,18 @@ div.jfilestyle {
     }
 
     &.primary {
-      background: @blue;
-      border: 1px solid @blue;
+      background: @button-primary-background;
+      border: 1px solid @button-primary-border;
       span {
-        color: @white;
+        color: @button-primary-color;
         &:before {
-          color: @white;
+            color: @button-primary-color;
         }
       }
     }
 
     span {
-      color: @black;
+      color: @font-default;
       &:before {
         font-family: 'FontAwesome';
         content: "\f093"; // Upload icon.
@@ -106,11 +106,11 @@ div.jfilestyle {
 
   &.primary {
     label {
-      background: @blue;
+      background: @button-primary-background;
       span {
-        color: @white;
+        color: @button-primary-color;
         &:before {
-          color: @white;
+            color: @button-primary-color;
         }
       }
     }
@@ -123,7 +123,7 @@ div.jfilestyle {
 
   .count-jfilestyle {
     background: #303030;
-    color: #fff;
+    color: @font-inverse;
     border-radius: 50%;
     padding: 1px 5px;
     font-size: 12px;
@@ -132,6 +132,6 @@ div.jfilestyle {
 }
 
 // Cancel red star in the label in case of required element.
-.required div.jfilestyle label:after {
+.required .jfilestyle label:after {
   content: none;
 }

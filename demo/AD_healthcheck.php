@@ -1,5 +1,5 @@
 
-<!doctype html>
+<?php include('_includes/bootstrap.php'); ?><!doctype html>
 <html class="passbolt no-js no-passboltplugin alpha version guest" lang="en">
 <head>
     <meta charset="utf-8">
@@ -8,8 +8,7 @@
     <meta name="keywords" content="Passbolt, password manager, online password manager, open source password manager">
     <meta name="robots" content="noindex">
     <meta name="viewport" content="width=device-width">
-    <link rel="stylesheet" type="text/css" href="../src/css/main.css"/><link rel="stylesheet" type="text/css" href="../src/css/check.css"/>
-    <link rel="stylesheet" type="text/css" href="../src/css/devel.css"/>
+    <link rel="stylesheet" type="text/css" href="../src/css/themes/<?= $theme; ?>/api_main.css"/>
 </head>
 <body>
 <div id="container" class="page status">

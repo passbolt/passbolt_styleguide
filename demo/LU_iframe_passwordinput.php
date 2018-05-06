@@ -1,4 +1,4 @@
-<!doctype html>
+<?php include('_includes/bootstrap.php'); ?><!doctype html>
 <html>
 <head>
 	<?php include('includes/meta/LU_meta_iframe.php'); ?>
@@ -14,7 +14,7 @@
 		}
 	</style>
 </head>
-<body>
+<body class="iframe">
 <div class="form-content">
 <div class="input-password-wrapper">
 	<div class="input password required">

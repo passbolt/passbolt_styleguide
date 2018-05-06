@@ -2,6 +2,7 @@
  * Main Workspace - Table View
  */
 .tableview {
+    background: @tableview-background;
     position: relative;
     font-size: .9375em; /* 15px */
     height: 100%;
@@ -9,6 +10,7 @@
 
 /* header */
 .tableview-header {
+    background: @tableview-header-background;
     height: 2.125em;
     overflow-y: scroll;
     padding-top: .125em;
@@ -45,6 +47,7 @@
     width: 100%;
     border-top: 1px solid @border-default;
     overflow-y: scroll;
+    background: @tableview-background;
 }
 
 .tableview-content table {
@@ -58,7 +61,7 @@
     }
     th, td {
         text-align: left;
-        padding: .25em;
+        padding: .25em .75em;
         vertical-align: middle;
     }
     th {
@@ -92,16 +95,25 @@
         width: 19em;
         max-width: 19em;
     }
-    tbody tr.selected,
-    tbody tr:hover {
+    tbody tr {
         height: 1em;
-        background: @yellow-lightest;
+        &.selected {
+            background: @tableview-background-selected;
+        }
+        &:hover {
+            background: @tableview-background-hover;
+        }
+        &.selected:hover {
+            background: @tableview-background-selected;
+        }
     }
+
     tbody tr.inactive {
         color: @font-lighter;
     }
     .input.checkbox {
         padding-top: 2px;
+        padding-left:.25em;
 
         label {
             display: none;
@@ -119,14 +131,15 @@
     /* fav fix */
     th.cell_favorite,
     td.cell_favorite {
-        width: 20px;
-        max-width: 20px;
+        padding-left:0;
+        padding-right:.25em;
     }
 }
 
 /* hide secondary actions if there is no space */
 @media all and (max-width: 600px) {
     .tableview table tbody {
+        background: @tableview-background-selected;
         td {
             display: block;
             &.s-cell, &.s2-cell, &.m-cell, &.l-cell {
@@ -137,9 +150,6 @@
             &.s-cell {
                 display: none;
             }
-        }
-        tr:nth-child(odd) {
-            background: @background-lightest;
         }
     }
 

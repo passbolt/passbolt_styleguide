@@ -23,9 +23,9 @@ button,
     text-decoration: none;
     border: 1px solid @border-input;
     color: @font-default;
-    font-weight: bold;
-    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.8);
-    .background-gradient();
+    font-weight: normal;
+    text-shadow: @button-text-shadow;
+    .button-background();
     .rounded();
 }
 
@@ -48,17 +48,18 @@ a.button.big {
 /* primary */
 .button.primary,
 button.primary {
-    background: @blue;
-    border: 1px solid @blue;
-    color: @font-inverse;
-    text-shadow: 0 1px 0 rgba(0, 0, 0, 0.2);
+    background: @button-primary-background;
+    border: 1px solid @button-primary-border;
+    color: @button-primary-color;
+    text-shadow: @button-primary-text-shadow;
 }
+
 
 .button.primary:hover,
 button.primary:hover {
-    color: @font-inverse;
-    border: 1px solid @blue-light;
-    background: @blue-light;
+    background: @button-primary-hover-background;
+    border: 1px solid @button-primary-hover-border;
+    color: @button-primary-hover-color;
 }
 
 button.primary:active,
@@ -105,7 +106,7 @@ input[type=submit]:hover,
 button:hover {
     color: @font-default;
     text-decoration: none;
-    .background-gradient();
+    .button-hover-background();
     border: 1px solid @border-input-light;
 }
 
@@ -118,7 +119,7 @@ button:focus {
 }
 
 /* active */
-input[type=submit]:active
+input[type=submit]:active,
 button:active,
 .button:active {
     color: @font-focus;
@@ -134,9 +135,9 @@ input[type=submit].disabled,
 button.disabled,
 .button.disabled {
     cursor: default;
-    color: @font-light;
-    background: @white;
-    border: 1px solid @border-default;
+    color: @button-disabled-color;
+    background: @button-disabled-background;
+    border: 1px solid @button-disabled-border;
     text-shadow: none;
     font-weight: normal;
 }
@@ -151,22 +152,22 @@ button.disabled:active,
 input[type=submit].disabled:focus,
 button.disabled:focus,
 .button.disabled:focus {
-    color: @font-light;
     -webkit-box-shadow: 0 0 0;
     -moz-box-shadow: 0 0 0;
     box-shadow: 0 0 0;
     top: 0;
-    background: @white;
-    border: 1px solid @border-default;
+    color: @button-disabled-color;
+    background: @button-disabled-background;
+    border: 1px solid @button-disabled-border;
 }
 
 /* toggle selected */
 .toggle.button.selected {
-    background: @background-lighter;
+    background: @button-selected-background;
     -webkit-box-shadow: inset 0 1px 2px rgba(255, 255, 255, .2);
     -moz-box-shadow: inset 0 1px 2px rgba(0, 0, 0, .2);
     box-shadow: inset 0 1px 2px rgba(0, 0, 0, .2);
-    border: 1px solid @border-input-light;
+    border: 1px solid @button-selected-border;
 }
 
 /* duo */

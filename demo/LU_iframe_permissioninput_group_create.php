@@ -1,4 +1,4 @@
-<!doctype html>
+<?php include('_includes/bootstrap.php'); ?><!doctype html>
 <html>
 <head>
 	<?php include('includes/meta/LU_meta_iframe.php'); ?>
@@ -14,7 +14,7 @@
 		}
 	</style>
 </head>
-<body>
+<body class="iframe">
 <div class="form-content permission-add">
 <div class="input text autocomplete">
 	<label for="js_perm_create_form_aro_auto_cplt">Add people</label>

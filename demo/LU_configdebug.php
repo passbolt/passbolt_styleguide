@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<?php include('_includes/bootstrap.php'); ?><!doctype html>
 <html class="passbolt no-js no-passboltplugin version alpha" lang="en">
 <head>
 	<meta charset="utf-8"/>
@@ -15,7 +15,7 @@
 	-->
 	<title>Passbolt config</title>
 	<meta name="viewport" content="width=device-width">
-	<link rel="stylesheet" media="all" href="../src/css/config_debug_webext.css"/>
+	<link rel="stylesheet" media="all" href="../src/css/themes/default/ext_config_debug.css"/>
 </head>
 <body>
 <div id="container" class="config page debug plugin">

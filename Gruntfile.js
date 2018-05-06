@@ -7,22 +7,35 @@ module.exports = function(grunt) {
 		pkg: grunt.file.readJSON('package.json'),
 		clean: {
 			css: [
-				'build/css/*.css',
-				'src/css/*.css',
+				'build/css/*',
+				'src/css/*',
 			]
 		},
-		lesslint: {
-			src: ['src/less/*.less']
-		},
 		less: {
-			files: {
+			public: {
 				expand: true,
 				flatten: true,
 				cwd: "src/less/",
 				src: "*.less",
 				dest: "src/css/",
 				ext: ".css"
-			}
+			},
+      theme_default: {
+        expand: true,
+        flatten: true,
+        cwd: "src/less/themes/default",
+        src: "*.less",
+        dest: "src/css/themes/default",
+        ext: ".css"
+      },
+      theme_midgar: {
+        expand: true,
+        flatten: true,
+        cwd: "src/less/themes/midgar",
+        src: "*.less",
+        dest: "src/css/themes/midgar",
+        ext: ".css"
+      },
 		},
 		shell: {
 			'publish': {
@@ -35,7 +48,7 @@ module.exports = function(grunt) {
 					'git push origin <%= pkg.version %>',
 					'git push',
 					'npm publish'
-				].join('&&')
+				].join('&& ')
 			}
 		},
 		cssmin: {
@@ -49,13 +62,27 @@ module.exports = function(grunt) {
 						' * @license\t\t<%= pkg.license %>\n */\n',
 				footer: '/* @license-end */'
 			},
-			minify: {
+			public: {
 				expand: true,
 				cwd: 'src/css/',
 				src: ['*.css', '!*.min.css'],
 				dest: 'build/css/',
 				ext: '.min.css'
-			}
+			},
+      theme_default: {
+        expand: true,
+        cwd: 'src/css/themes/default',
+        src: ['*.css', '!*.min.css'],
+        dest: 'build/css/themes/default',
+        ext: '.min.css'
+      },
+      theme_midgar: {
+        expand: true,
+        cwd: 'src/css/themes/midgar',
+        src: ['*.css', '!*.min.css'],
+        dest: 'build/css/themes/midgar',
+        ext: '.min.css'
+      }
 		},
 		watch: {
 			less: {
@@ -78,20 +105,12 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-contrib-cssmin');
 	grunt.loadNpmTasks('grunt-contrib-concat');
 	grunt.loadNpmTasks('grunt-contrib-clean');
-	grunt.loadNpmTasks('grunt-lesslint');
 	grunt.loadNpmTasks('grunt-contrib-less');
 	grunt.loadNpmTasks('grunt-contrib-watch');
 	grunt.loadNpmTasks('grunt-shell');
 
 	// ========================================================================
 	// Register Tasks
-
-	// Run 'grunt test' to view lesslint recommendations
-	grunt.registerTask('test', ['lesslint']);
-
-	// Run 'grunt csslint' to check LESS quality, and if no errors then
-	// compile LESS into CSS, combine and minify
-	grunt.registerTask('csslint', ['lesslint', 'clean:css', 'less', 'cssmin']);
 
 	// Run 'grunt css' to compile LESS into CSS, combine and minify
 	grunt.registerTask('css', ['clean:css', 'less', 'cssmin']);

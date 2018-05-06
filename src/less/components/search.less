@@ -10,14 +10,18 @@ form.search {
         float: left;
         width: 65%;
         margin-bottom: 0;
+        border-right:1px solid @background-default;
         padding: .313em .625em;
     }
 
+    input[type=search]:focus,
+    input[type=search]:active {
+        border-right:1px solid @blue;
+    }
     button {
         height: 2.571em; /* 36px */
         float: left;
-        margin-left: -2px;
-        border-left: 0;
+        margin-left: 0;
         border-radius: 0px 2px 2px 0px;
         .fa-search {
             font-size: 1.4em;
