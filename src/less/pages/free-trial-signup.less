@@ -1,0 +1,89 @@
+.page.free-trial-signup {
+  background-color: @background-lightest;
+
+  .footer {
+    position: fixed;
+  }
+
+  .page-row.free-trial-signup {
+    padding-top:2em;
+  }
+
+  .decoration {
+    h2 {
+      font-size: 3em;
+      padding:0;
+      margin:0 0 0.5em 0;
+      text-align: left;
+    }
+    p {
+      font-size:1.3em;
+    }
+  }
+
+  .form-wrapper {
+    background-color: @white;
+    padding: 1em 2em 2em 2em;
+    box-shadow: 0 3px 10px -5px #000000;
+    -webkit-border-radius:0.2em;
+    -moz-border-radius:0.2em;
+    border-radius:0.2em;
+
+    form {
+      .singleline {
+        .input.text {
+          &.first-field {
+            margin-right:7%;
+          }
+          width: 46%;
+        }
+      }
+
+      .input {
+        width: 100%;
+
+        &.url{
+          .field-url {
+            width: 100%;
+            border:1px solid @border-input;
+            margin:0;
+            padding:0;
+            -webkit-border-radius: 3px;
+            -moz-border-radius: 3px;
+            border-radius: 3px;
+          }
+          input[type=text] {
+            display: inline-block;
+            border:0;
+            width:32.5%;
+            margin:0;
+            padding-left: 0.2em;
+          }
+          input[type=text]:focus {
+            border:0;
+            -webkit-box-shadow: none;
+            box-shadow: none;
+          }
+          span.base-url {
+            display: inline-block;
+            background-color: @grey-lightest;
+            line-height: 26px;
+            padding: .375em .2em .375em .625em;
+            font-weight:bold;
+            vertical-align: middle;
+            font-size:14px;
+          }
+        }
+
+      }
+      .submit {
+        margin-top: 1.5em;
+      }
+    }
+  }
+}
+
+/* even larger screen */
+@media all and (min-width: 800px) {
+
+}

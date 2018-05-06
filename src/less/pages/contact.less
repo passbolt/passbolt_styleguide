@@ -1,7 +1,6 @@
 .page.contacts {
-    .page-row.intro {
-        background: @background-lightest;
-    }
+    background: @background-lightest;
+
     .service {
         .service-teaser {
             display: none;
@@ -13,6 +12,8 @@
 
     .form-wrapper {
         form {
+            background-color: transparent;
+            box-shadow: none;
             .input {
                 width: 100%;
 
@@ -57,13 +58,17 @@
         .form-wrapper {
             margin: -10em 0 5em 18%;
             background-color: @background-lightest;
-            border: 1px solid @border-default;
 
             form {
                 padding: 5%;
+                background-color: @white;
+                box-shadow: 0 3px 10px -5px #000000;
+                -webkit-border-radius:3px;
+                -moz-border-radius:3px;
+                border-radius:3px;
 
                 .input {
-                    margin-bottom: 0.5em;
+                    margin-bottom: 0 !important;
                 }
                 .submit {
                     margin-top: 1em;
