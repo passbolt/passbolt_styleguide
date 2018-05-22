@@ -26,12 +26,13 @@
 					<form action="/" id="RegistrationsPrelaunchForm" method="post" accept-charset="utf-8" class="public">
 						<div style="display:none;"><input name="_method" value="POST" type="hidden"></div>
 						<div class="singleline clearfix">
-							<label for="first_name">Name</label>
-							<div class="input text first-field">
-								<input type="text" id="first_name" placeholder="First" autocomplete="first-name">
+							<div class="input text first-field required">
+								<label for="CloudInstanceFirstName">Name</label>
+								<input name="data[CloudInstance][first_name]" placeholder="First" autocomplete="first-name" type="text" id="CloudInstanceFirstName" required="required">
 							</div>
-							<div class="input text">
-								<input type="text" id="first_name" placeholder="Last" autocomplete="last-name">
+							<div class="input text last-field required">
+								<label for="CloudInstanceLastName">&nbsp;</label>
+								<input name="data[CloudInstance][last_name]" placeholder="Last" type="text" id="CloudInstanceLastName" required="required">
 							</div>
 						</div>
 						<div class="inline email input required">
@@ -42,12 +43,12 @@
 							<label for="RegistrationEmail">Company name</label>
 							<input name="data[Registration][email]" class="fluid" placeholder="company name" id="RegistrationEmail" type="text">
 						</div>
-						<div class="inline url input">
+						<div class="inline url input error">
 							<label for="RegistrationEmail">URL of your passbolt</label>
 							<div class="field-url">
 								<span class="base-url">https://cloud.passbolt.com/</span><input name="data[Registration][email]" class="fluid" placeholder="my-site" id="RegistrationEmail" type="text">
-							</div>
-
+                            </div>
+                            <label class="error">This url is already in use</label>
 						</div>
 						<div class="submit">
 							<input class="button primary big" value="Start free trial" type="submit">

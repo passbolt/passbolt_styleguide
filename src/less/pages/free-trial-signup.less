@@ -5,6 +5,11 @@
     position: fixed;
   }
 
+  // GRecaptcha position.
+  .grecaptcha-badge {
+    bottom: 50px !important;
+  }
+
   .page-row.free-trial-signup {
     padding-top:6em;
   }
@@ -31,6 +36,11 @@
         .input.text {
           &.first-field {
             margin-right:7%;
+          }
+          &.last-field.required {
+            label::after {
+              content: ' ';
+            }
           }
           width: 46%;
         }
@@ -70,6 +80,9 @@
             font-weight:bold;
             vertical-align: middle;
             font-size:14px;
+          }
+          label.error{
+            margin-top:5px;
           }
         }
 
