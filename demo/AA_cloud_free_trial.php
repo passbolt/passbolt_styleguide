@@ -46,7 +46,7 @@
 						<div class="inline url input error">
 							<label for="RegistrationEmail">URL of your passbolt</label>
 							<div class="field-url">
-								<span class="base-url">https://cloud.passbolt.com/</span><input name="data[Registration][email]" class="fluid" placeholder="my-site" id="RegistrationEmail" type="text">
+								<span class="base-url">https://demo.passbolt.com/</span><input name="data[Registration][email]" class="fluid" placeholder="my-site" id="RegistrationEmail" type="text">
                             </div>
                             <label class="error">This url is already in use</label>
 						</div>
