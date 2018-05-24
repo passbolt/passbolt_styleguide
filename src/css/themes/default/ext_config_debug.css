@@ -3557,7 +3557,7 @@ input[type=checkbox] + label {
 	Messages for validation error and example
 
 	Description	: <div.text.error>, <div.text.success>, can be used to add status messages or example.
-	Additional messages are wrapped in <.error-message>, <.success-messages>
+	Additional messages are wrapped in <.error.message>, <.success.messages>
 
 	.error - can be used for validation feedback
 	.helptext - can be used for example messages prior validation
