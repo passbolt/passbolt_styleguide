@@ -59,6 +59,7 @@
                         <div class="input checkbox terms">
                             <input type="checkbox" name="tos" id="tos" value="value">
                             <label for="tos">I agree to the <a href="#">terms</a> and <a href="#">privacy policy</a>.</label>
+                            <div class="error message">The username should be a valid email address</div>
                         </div>
                         <div class="submit">
 							<input class="button primary big" value="Start free trial" type="submit">
