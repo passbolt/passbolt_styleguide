@@ -3689,11 +3689,11 @@ form.public .error .error.message {
   color: #D40101;
   font-size: 0.8em;
   padding-top: 0;
-  margin: -0.5em 0 0.5em 0;
   font-weight: normal;
 }
 form.public label {
   font-size: 0.9rem;
+  margin-top: .5em;
 }
 form.public .singleline .input.text {
   float: left;
@@ -3717,7 +3717,7 @@ form.public .input input[type="email"],
 form.public .input input[type="password"],
 form.public .input input[type="search"],
 form.public .input textarea {
-  margin-bottom: 1em;
+  margin-bottom: .5em;
   width: 94%;
 }
 form.public .input select {

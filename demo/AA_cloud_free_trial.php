@@ -1,3 +1,4 @@
+<?php $error =true; ?>
 <!doctype html>
 <html class="alpha version no-js" lang="en">
 <head>
@@ -41,10 +42,10 @@
 								<input name="data[CloudInstance][last_name]" placeholder="Last" type="text" id="CloudInstanceLastName" required="required">
 							</div>
 						</div>
-						<div class="inline email input error required">
+						<div class="inline email input <?php if ($error) : ?>error<?php endif;?> required">
                             <label for="RegistrationEmail">Email</label>
                             <input name="data[Registration][email]" class="required fluid" placeholder="your email" id="RegistrationEmail" required="required" type="email">
-                            <div class="error message">The username should be a valid email address</div>
+                            <?php if ($error) : ?><div class="error message">The username should be a valid email address</div><?php endif;?>
                         </div>
 						<div class="inline company input">
 							<label for="RegistrationEmail">Company name</label>
@@ -55,11 +56,12 @@
 							<div class="field-url">
 								<span class="base-url">https://demo.passbolt.com/</span><input name="data[Registration][email]" class="fluid" placeholder="my-site" id="RegistrationEmail" type="text">
                             </div>
+                            <?php if ($error) : ?><div class="error message">This domain is already taken.</div><?php endif;?>
 						</div>
-                        <div class="input checkbox terms">
+                        <div class="input checkbox terms <?php if ($error) : ?>error<?php endif; ?>">
                             <input type="checkbox" name="tos" id="tos" value="value">
                             <label for="tos">I agree to the <a href="#">terms</a> and <a href="#">privacy policy</a>.</label>
-                            <div class="error message">The username should be a valid email address</div>
+                            <?php if ($error) : ?><div class="error message">Please agree with the terms and conditions.</div><?php endif;?>
                         </div>
                         <div class="submit">
 							<input class="button primary big" value="Start free trial" type="submit">
