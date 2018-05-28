@@ -101,7 +101,7 @@
                                     <div class="input text required error">
                                         <label for="full_name">Full name</label>
                                         <input type="text" id="full_name" placeholder="Full Name" autocomplete="full-name">
-                                        <label id="full_name--error" class="error" for="full_name">This field is required.</label>
+                                        <div id="full_name--error" class="message error">This field is required.</div>
                                     </div>
                                     <div class="input text required">
                                         <label for="email_address">Email address</label>

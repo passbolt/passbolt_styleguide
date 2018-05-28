@@ -27,12 +27,10 @@
 	    <div class="page-row intro">
 	        <div class="grid grid-responsive-12">
 	            <div class="row">
-	                <div class="col12">
-	                    <h2>
-		                    Self-host passbolt on your own server for full control
-		                    <span class="outline">April special offer - early birds get <strong>30%</strong> off!</span>
-	                    </h2>
-	                </div>
+                    <h2>
+	                    Self-host passbolt on your own server for full control
+	                    <span class="outline">April special offer - early birds get <strong>30%</strong> off!</span>
+                    </h2>
 	            </div>
 	        </div>
 	    </div>
