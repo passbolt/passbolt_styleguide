@@ -25,13 +25,13 @@
 	</div>
 	<ul class="actions inline">
 		<li>
-			<a href="#" id="js_secret_view" class="button toggle">
+			<a id="js_secret_view" class="button toggle" role="button">
 				<i class="fa fa-eye fa-fw fa-lg"></i>
 				<span class="visuallyhidden">view</span>
 			</a>
 		</li>
 		<li>
-			<a href="#" id="js_secret_generate" class="button">
+			<a id="js_secret_generate" class="button" role="button">
 				<i class="fa fa-magic fa-fw fa-lg"></i>
 				<span class="visuallyhidden">generate</span>
 			</a>
@@ -48,12 +48,20 @@
     }
     ?>
 	</div>
+
+    <div class="input text">
+        <div id="js_field_password_feedback" class="message error">This information is required </div>
+    </div>
 </div>
 </div>
 <script type="application/javascript">
 	resizeIframe('#passbolt-iframe-secret-edition', {
 		width: '100%'
 	});
+	$('#js_secret_view').click(function() {
+        $('#js_field_password').toggleClass('hidden');
+        $('#js_field_password_clear').toggleClass('hidden');
+    });
 </script>
 </body>
 </html>

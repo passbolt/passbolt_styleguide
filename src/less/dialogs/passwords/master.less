@@ -1,19 +1,27 @@
-.master-password.dialog {
+.master-password {
+    width:95%;
 
+    input[type=text] {
+        width: 90%;
+    }
+    input[type=password] {
+        width: calc(90% - 4em);
+    }
+}
+
+.master-password.dialog {
     label {
         margin-bottom: 1em;
-    }
-    input[type=text],
-    input[type=password] {
-        width: 80%;
     }
 
     // Invisible field that Will receive the first focus
     // before the passphrase field.
-    input.focus_first {
+    input[type=text].focus_first {
         border-width: 0;
         font-size: 0;
         line-height: 0;
+        width:1px;
+        height:1px;
     }
 
     div.input.checkbox,
@@ -23,10 +31,7 @@
 }
 
 .master-password.login-form {
-    input[type=text],
-    input[type=password] {
-        width: 80%;
-    }
+
     .submit-wrapper {
         .button {
             margin-top: .5em;

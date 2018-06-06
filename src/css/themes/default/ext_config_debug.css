@@ -788,6 +788,7 @@ p {
 /*!
  *  Font Awesome 4.7.0 by @davegandy - http://fontawesome.io - @fontawesome
  *  License - http://fontawesome.io/license (Font: SIL OFL 1.1, CSS: MIT License)
+ *  @licstart
  */
 /* FONT PATH
  * -------------------------- */
@@ -3122,6 +3123,7 @@ p {
   overflow: visible;
   clip: auto;
 }
+/*!  @licend */
 /*
 	Generic buttons
 	Description	: We support <input[submit]>, <input.button>, <button> and <a.button>
@@ -4276,8 +4278,11 @@ input[type=email].fluid {
   width: 200px;
   height: 45px;
 }
+.header.second .col1 {
+  min-width: 200px;
+}
 /* CSS for serving the retina image to devices with a high "device-pixel-ratio": */
-@media only screen and (-moz-min-device-pixel-ratio: 1.5), only screen and (-o-min-device-pixel-ratio: 3/2), only screen and (-webkit-min-device-pixel-ratio: 1.5), only screen and (min-devicepixel-ratio: 1.5), only screen and (min-resolution: 1.5dppx) {
+@media only screen and (-moz-min-device-pixel-ratio: 1.5), only screen and (-o-min-device-pixel-ratio: 1.5), only screen and (-webkit-min-device-pixel-ratio: 1.5), only screen and (min-devicepixel-ratio: 1.5), only screen and (min-resolution: 1.5dppx) {
   .logo.no-img {
     background: transparent url('../../../img/logo/logo.svg') 0 0 no-repeat;
     background-size: 150px auto;

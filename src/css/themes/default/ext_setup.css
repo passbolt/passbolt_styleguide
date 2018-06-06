@@ -816,6 +816,7 @@ p {
 /*!
  *  Font Awesome 4.7.0 by @davegandy - http://fontawesome.io - @fontawesome
  *  License - http://fontawesome.io/license (Font: SIL OFL 1.1, CSS: MIT License)
+ *  @licstart
  */
 /* FONT PATH
  * -------------------------- */
@@ -3150,6 +3151,7 @@ p {
   overflow: visible;
   clip: auto;
 }
+/*!  @licend */
 .icon {
   display: inline-block;
   font: normal normal normal 14px/1 FontAwesome;
@@ -4375,8 +4377,11 @@ article video {
   width: 200px;
   height: 45px;
 }
+.header.second .col1 {
+  min-width: 200px;
+}
 /* CSS for serving the retina image to devices with a high "device-pixel-ratio": */
-@media only screen and (-moz-min-device-pixel-ratio: 1.5), only screen and (-o-min-device-pixel-ratio: 3/2), only screen and (-webkit-min-device-pixel-ratio: 1.5), only screen and (min-devicepixel-ratio: 1.5), only screen and (min-resolution: 1.5dppx) {
+@media only screen and (-moz-min-device-pixel-ratio: 1.5), only screen and (-o-min-device-pixel-ratio: 1.5), only screen and (-webkit-min-device-pixel-ratio: 1.5), only screen and (min-devicepixel-ratio: 1.5), only screen and (min-resolution: 1.5dppx) {
   .logo.no-img {
     background: transparent url('../../../img/logo/logo.svg') 0 0 no-repeat;
     background-size: 150px auto;
@@ -4508,7 +4513,6 @@ article video {
   margin-bottom: 3em;
   box-shadow: 0px 0px 10px 0px #DDD;
   /* header */
-  /* content */
   /* inputs */
   /* Error display */
   /* submit / cancel */
@@ -4535,12 +4539,12 @@ article video {
   font-size: 0.7em;
   color: #333;
 }
-.dialog .dialog-content {
-  position: relative;
+.dialog .dialog-header .dialog-close {
+  margin-top: -2.5em;
 }
 .dialog .form-content {
   background: #FFF;
-  padding: .813em 1.25em .813em 1.5em;
+  padding: .813em 1.5em .813em 1.5em;
 }
 .dialog label {
   clear: both;
@@ -4549,22 +4553,74 @@ article video {
   line-height: 1.6em;
   /* 24px */
 }
-.dialog input[type=text] {
-  width: 92%;
-  float: left;
-}
-.dialog .short input {
-  width: 64%;
-  float: left;
-}
+.dialog input[type=text],
 .dialog textarea {
-  width: 92%;
+  width: 100%;
+  box-sizing: border-box;
+  /*
+     * For IE 6/7 only
+     * Include this rule to trigger hasLayout and contain floats.
+     */
+  /*
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
+  /*
+     * For IE 6/7 only
+     * Include this rule to trigger hasLayout and contain floats.
+     */
+  zoom: 1;
+  /*
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
+}
+.dialog input[type=text]:before,
+.dialog textarea:before,
+.dialog input[type=text]:after,
+.dialog textarea:after {
+  content: "";
+  display: table;
+}
+.dialog input[type=text]:after,
+.dialog textarea:after {
+  clear: both;
+}
+.dialog input[type=text]:before,
+.dialog textarea:before,
+.dialog input[type=text]:after,
+.dialog textarea:after {
+  content: "";
+  display: table;
+}
+.dialog input[type=text]:after,
+.dialog textarea:after {
+  clear: both;
+}
+.dialog textarea + .message,
+.dialog input + .message {
+  display: none;
+  /* do not show empty placeholders */
 }
 .dialog textarea + .message.error,
 .dialog input + .message.error {
   display: block;
   clear: both;
-  width: 92%;
+  width: 100%;
 }
 .dialog .inline-error {
   color: #D40101;
@@ -4590,15 +4646,11 @@ article video {
   margin-top: .5em;
   font-size: 1em;
 }
-.dialog .dialog-close,
-.dialog .dialog-close:hover {
-  display: block;
-  float: right;
-  margin-top: -2.5em;
-  border: 0;
-}
+/* can also be used outside a dialog, like the sidebar */
 .dialog-close,
 .dialog-close:hover {
+  display: block;
+  float: right;
   border: 0;
 }
 .dialog-close .fa-close {
@@ -4707,14 +4759,6 @@ article video {
     margin-left: 0px;
     padding: .5em 1em;
   }
-}
-.video-wrapper {
-  padding: 1em;
-}
-.video-wrapper iframe {
-  width: 100%;
-  min-height: 250px;
-  height: auto;
 }
 /* left panel navigation */
 .panel .navigation {
@@ -5201,10 +5245,12 @@ table.table-info.horizontal tbody tr:nth-child(odd) {
 }
 /*
 	Password fields in passbolt have complexity "progress bar"
-	and a custom layout to accomodate buttons on the left end
+	and a custom layout to accommodate buttons on the left end
 */
 .input-password-wrapper {
-  max-width: 500px;
+  width: 100%;
+  /* same than default inputs width in dialogs */
+  box-sizing: border-box;
   /*
      * For IE 6/7 only
      * Include this rule to trigger hasLayout and contain floats.
@@ -5236,7 +5282,6 @@ table.table-info.horizontal tbody tr:nth-child(odd) {
      * 2. The use of `table` rather than `block` is only necessary if using
      *	`:before` to contain the top-margins of child elements.
      */
-  width: 99%;
 }
 .input-password-wrapper:before,
 .input-password-wrapper:after {
@@ -5254,13 +5299,17 @@ table.table-info.horizontal tbody tr:nth-child(odd) {
 .input-password-wrapper:after {
   clear: both;
 }
-.input-password-wrapper .input.password input {
-  box-sizing: border-box;
-  width: 65.5%;
+.input-password-wrapper .input.password {
   float: left;
+  width: 65.5%;
+}
+.input-password-wrapper .input.password input[type=text],
+.input-password-wrapper .input.password input[type=password] {
+  width: calc(100% - 4em + 3px);
+  box-sizing: border-box;
 }
 .input-password-wrapper .input.password input[type=password].decrypting {
-  background: transparent url('../../../img/controls/loading.gif') no-repeat 72% center;
+  background: transparent url('../../../img/controls/loading.gif') no-repeat 90% center;
 }
 .input-password-wrapper .input.password.has-encrypted-secret input {
   /* fallback placeholder */
@@ -5339,30 +5388,15 @@ table.table-info.horizontal tbody tr:nth-child(odd) {
   background: #009900;
   width: 99.5%;
 }
-.password-hints li:before {
-  content: "●";
-  color: #DDD;
-  padding-right: .5em;
-}
-.password-hints li.success:before {
-  color: #009900;
-}
-.password-hints li.error:before {
-  color: #D40101;
-}
 @media all and (max-width: 400px) {
-  .input-password-wrapper .input.password,
-  .input-password-wrapper .actions.inline {
-    position: relative;
-    float: none;
-    clear: both;
+  .input-password-wrapper .input.password {
+    float: left;
+    width: 100%;
   }
   .input-password-wrapper .actions.inline {
     width: 50%;
     float: left;
-  }
-  .input-password-wrapper .input.password input[type=password] {
-    width: 87%;
+    margin-bottom: .5em;
   }
   .input-password-wrapper .password-complexity .progress {
     display: none;
@@ -5376,6 +5410,20 @@ table.table-info.horizontal tbody tr:nth-child(odd) {
   .fa.fa-lg {
     line-height: 1;
   }
+}
+.password-hints {
+  margin-top: 1em;
+}
+.password-hints li:before {
+  content: "●";
+  color: #DDD;
+  padding-right: .5em;
+}
+.password-hints li.success:before {
+  color: #009900;
+}
+.password-hints li.error:before {
+  color: #D40101;
 }
 .ribbon {
   position: absolute;
@@ -5457,6 +5505,12 @@ table.table-info.horizontal tbody tr:nth-child(odd) {
 .setup .input-password-wrapper {
   margin-top: 1.5em;
   width: 90%;
+}
+.setup .input-password-wrapper .input.password input[type=text],
+.setup .input-password-wrapper .input.password input[type=password] {
+  width: 100%;
+  /* no security token yet */
+  box-sizing: border-box;
 }
 .setup .why-plugin-wrapper p {
   padding-bottom: 1em;
@@ -5597,7 +5651,7 @@ table.table-info.horizontal tbody tr:nth-child(odd) {
   margin-left: 1em;
 }
 .setup .row.last {
-  padding-top: 1.5em;
+  padding-top: 1em;
 }
 .setup .side-message {
   margin-top: 3em;
