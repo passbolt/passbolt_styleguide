@@ -1,5 +1,5 @@
 <meta charset="utf-8">
-<title>Passbolt - The simple password management system</title>
+<title>Passbolt - The open source password manager for team</title>
 <!--
          ____                  __          ____
         / __ \____  _____ ____/ /_  ____  / / /_
@@ -7,7 +7,7 @@
       / ____/ /_/ (__  |__  ) /_/ / /_/ / / /_
      /_/    \__,_/____/____/_.___/\____/_/\__/
 
-     The password management solution
+    The open source password manager for team
 	 (c) 2018 Passbolt SARL
 
  -->
@@ -16,7 +16,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="shortcut icon" type="image/x-icon" href="img/webroot/favicon.ico" />
 <link rel="stylesheet" type="text/css" href="css/themes/<?= $theme; ?>/api_main.css">
-<link rel="stylesheet" type="text/css" href="css/themes/default/ext_external.css" />
 <script src="js/jquery-3.3.1.min.js"></script>
 <script src="js/jquery.tag-editor.js"></script>
 <script type="application/javascript">

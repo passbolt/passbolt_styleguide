@@ -7805,7 +7805,7 @@ html.launching .launching-screen {
   height: 100%;
   position: absolute;
   z-index: 999;
-  background: #FFF;
+  background: #30302D;
 }
 html.launching .launching-screen .launching-screen-holder {
   width: 20%;
