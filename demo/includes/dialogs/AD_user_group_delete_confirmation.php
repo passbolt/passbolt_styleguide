@@ -12,8 +12,10 @@
                 <p>
                     <strong>You are about to delete the group "IT Support"!</strong>
                 </p>
-                <p>This group currently own 5 passwords. Please select a group manager to transfer
-                the ownership to. Other users in this group will lose access to these passwords.</p>
+                <p>
+                    This group owns 5 passwords. Please select a group manager to replace as the owner.
+                    Other users in this group will lose access to the passwords.
+                </p>
                 <div class="input select required">
                     <label for="Owner">New Owner</label>
                     <select name="data[User][uuid]" id="OwnerId" class="fluid">

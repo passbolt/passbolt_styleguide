@@ -7437,6 +7437,19 @@ table.table-info.horizontal tbody tr:nth-child(odd) {
 .dialog.import div.jfilestyle input[type=text]:disabled {
   width: 57% !important;
 }
+.delete-user-dialog .intro p + p {
+  margin-bottom: .5em;
+}
+.delete-user-dialog .ownership-transfer {
+  max-height: 20em;
+}
+.delete-user-dialog .ownership-transfer li {
+  border-top: 1px dotted #DDD;
+  padding: .5em 1em;
+}
+.delete-user-dialog .ownership-transfer li select {
+  width: 100%;
+}
 /* sidebar / user details in overview */
 .panel.aside .user .sidebar-header,
 .panel.aside .group .sidebar-header {
