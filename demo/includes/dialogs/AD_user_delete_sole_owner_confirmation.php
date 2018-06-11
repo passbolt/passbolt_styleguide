@@ -18,10 +18,11 @@
                 </p>
             </div>
             <div class="ownership-transfer scroll">
+                <h3>Groups</h3>
                 <ul class="ownership-transfer-items">
                     <li>
                         <div class="input select required">
-                            <label for="Owner">IT-Support (Group) new manager:</label>
+                            <label for="Owner">IT-Support new manager:</label>
                             <select name="data[User][uuid]" id="OwnerId" class="fluid">
                                 <option value="<UUID>" selected="selected">Ada Lovelace (ada@passbolt.com)</option>
                                 <option value="<UUID>" >Betty Holberton (betty@passbolt.com)</option>
@@ -31,7 +32,30 @@
                     </li>
                     <li>
                         <div class="input select required">
+                            <label for="Owner">HR new manager:</label>
+                            <select name="data[User][uuid]" id="OwnerId" class="fluid">
+                                <option value="<UUID>" selected="selected">Ada Lovelace (ada@passbolt.com)</option>
+                                <option value="<UUID>" >Betty Holberton (betty@passbolt.com)</option>
+                                <option value="<UUID>" >Carol Shaw (carol@passbolt.com)</option>
+                            </select>
+                        </div>
+                    </li>
+                </ul>
+                <h3>Passwords</h3>
+                <ul class="ownership-transfer-items">
+                    <li>
+                        <div class="input select required">
                             <label for="Owner">Apache (Password) new owner:</label>
+                            <select name="data[User][uuid]" id="OwnerId" class="fluid">
+                                <option value="<UUID>" selected="selected">Ada Lovelace (ada@passbolt.com)</option>
+                                <option value="<UUID>" >Betty Holberton (betty@passbolt.com)</option>
+                                <option value="<UUID>" >Carol Shaw (carol@passbolt.com)</option>
+                            </select>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="input select required">
+                            <label for="Owner">Bower (Password) new owner:</label>
                             <select name="data[User][uuid]" id="OwnerId" class="fluid">
                                 <option value="<UUID>" selected="selected">Ada Lovelace (ada@passbolt.com)</option>
                                 <option value="<UUID>" >Betty Holberton (betty@passbolt.com)</option>

@@ -7439,14 +7439,20 @@ table.table-info.horizontal tbody tr:nth-child(odd) {
   width: 57% !important;
 }
 .delete-user-dialog .intro p + p {
-  margin-bottom: .5em;
+  margin-bottom: 0;
 }
 .delete-user-dialog .ownership-transfer {
   max-height: 20em;
 }
+.delete-user-dialog .ownership-transfer h3 {
+  border: 0;
+  padding: .5em 1.25em;
+  margin: 0;
+  background: #444442;
+}
 .delete-user-dialog .ownership-transfer li {
-  border-top: 1px dotted #0C0C0A;
-  padding: .5em 1em;
+  border-bottom: 1px dotted #0C0C0A;
+  padding: .5em 1.25em;
 }
 .delete-user-dialog .ownership-transfer li select {
   width: 100%;
