@@ -4836,6 +4836,15 @@ input[type="search"]::-webkit-search-cancel-button {
   color: #333;
   background: #ffe4e4;
 }
+.message.error a:link,
+.message.error a:visited {
+  color: #333;
+  border-bottom: 1px dotted #0C0C0A;
+}
+.message.error a:hover {
+  color: #333;
+  border-bottom: 1px solid #0C0C0A;
+}
 .message.success {
   color: #333;
   background: #f4f4d9;

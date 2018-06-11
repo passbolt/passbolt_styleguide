@@ -27,7 +27,7 @@
 				<div class="plugin-check-wrapper">
 					<div class="plugin-check gpg error">
 						<p class="message">There was a problem when trying to
-							communicate with the server (HTTP Code:400)</p>
+                            communicate with the server <a href="#">(HTTP Code:400)</a></p>
 					</div>
 				</div>
 			</div>

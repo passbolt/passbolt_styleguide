@@ -4402,6 +4402,15 @@ html body .button.processing {
   color: #333;
   background: #ffe4e4;
 }
+.message.error a:link,
+.message.error a:visited {
+  color: #333;
+  border-bottom: 1px dotted #888;
+}
+.message.error a:hover {
+  color: #333;
+  border-bottom: 1px solid #888;
+}
 .message.success {
   color: #333;
   background: #EDF7EB;

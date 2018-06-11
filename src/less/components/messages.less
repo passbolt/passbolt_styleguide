@@ -22,6 +22,15 @@
     &.error {
         color: @message-error-color;
         background: @message-error-background;
+
+        a:link, a:visited {
+            color: @message-error-color;
+            border-bottom: 1px dotted @border-dark;
+        }
+        a:hover {
+            color: @message-error-color;
+            border-bottom: 1px solid @border-dark;
+        }
     }
     &.success {
         color:@message-success-color;
