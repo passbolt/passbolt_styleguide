@@ -213,8 +213,9 @@ html body .button.processing {
     content: " ";
     top: -1px;
     left: -1px;
-    background: @background-default url('@{images}/controls/loading.gif') center center no-repeat;
-    border: 1px solid @border-input-light;
+    background: @background-default @loading center center no-repeat;
+    background-size: auto 50% ;
+    border: 1px solid @border-default;
     border-radius: 5px;
     padding: 1px;
 }

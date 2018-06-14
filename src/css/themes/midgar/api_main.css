@@ -9,12 +9,14 @@
 /* logo */
 /* grid */
 /* messages */
-/* tabs */
+/* secret placeholder */
 /* sidebar */
 /* tables */
+/* tabs */
 /* tags */
 /* tooltip */
-/* secret placeholder */
+/* loading animation */
+/* scrollbar */
 /* ==========================================================================
  * Reset is a mix of :
  *
@@ -3427,8 +3429,9 @@ html body .button.processing {
   content: " ";
   top: -1px;
   left: -1px;
-  background: #30302D url('../../../img/controls/loading.gif') center center no-repeat;
-  border: 1px solid #30302D;
+  background: #30302D url('../../../img/controls/loading_dark.svg') center center no-repeat;
+  background-size: auto 50% ;
+  border: 1px solid #0C0C0A;
   border-radius: 5px;
   padding: 1px;
 }
@@ -4212,6 +4215,19 @@ input[type=email].fluid {
   background-size: 100% 10px, 100% 10px, 100% 5px, 100% 5px;
   /* Opera doesn't support this in the shorthand */
   background-attachment: local, local, scroll, scroll;
+}
+::-webkit-scrollbar {
+  width: 1em;
+}
+::-webkit-scrollbar-track {
+  background: #30302D;
+  border-top: 0;
+  border-bottom: 0;
+}
+::-webkit-scrollbar-thumb {
+  background: #606060;
+  border-radius: 1em;
+  border: 4px solid #30302D;
 }
 video {
   display: block;
@@ -6677,7 +6693,7 @@ table.table-info.horizontal tbody tr:nth-child(odd) {
   box-sizing: border-box;
 }
 .input-password-wrapper .input.password input[type=password].decrypting {
-  background: transparent url('../../../img/controls/loading.gif') no-repeat 90% center;
+  background: transparent url('../../../img/controls/loading_dark.svg') no-repeat 90% center;
 }
 .input-password-wrapper .input.password.has-encrypted-secret input {
   /* fallback placeholder */
