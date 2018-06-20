@@ -38,16 +38,39 @@
 	    <div class="page-row service pull-up">
 	        <div class="grid grid-responsive-12">
 	            <div class="row">
-	                <div class="service-col col4 plan startup">
+		            <div class="service-col col3 plan community">
+			            <div class="plan-description">
+				            <h2>Community</h2>
+			            </div>
+			            <div class="row plan-pricing">
+				            <div class="col12 cost cost-medium"> FREE </div>
+			            </div>
+			            <div class="plan-limit">
+				            <span>unlimited users</span>
+			            </div>
+			            <div class="plan-actions">
+				            <a href="../demo/AA_services_pro_checkout.php" class="button primary big">Download</a>
+			            </div>
+
+			            <div class="plan-features">
+				            <ul>
+					            <li>Manual installation</li>
+					            <li><a href="#features">Limited features</a></li>
+					            <li>AGPL V3 license</li>
+					            <li>Community support only</li>
+				            </ul>
+			            </div>
+			            <div class="second_cta">
+				            <a href="#">Get started</a>
+			            </div>
+		            </div>
+	                <div class="service-col col3 plan startup">
 	                    <div class="plan-description">
 		                    <h2>Startup</h2>
 	                    </div>
-		                <div class="row plan-discount">
-			                €2 / user / month
-		                </div>
 		                <div class="row plan-pricing">
-			                <div class="col6 cost cost-large float"> €1.40 </div>
-			                <div class="col6 cost cost-small last">per user<br>per month <br><span class="smaller">(€44 billed annually)</span></div>
+			                <div class="col6 cost cost-large"> €15 </div>
+			                <div class="col6 cost cost-small last">per<br>month</div>
 		                </div>
 		                <div class="plan-limit">
 			                <span>up to 5 users</span>
@@ -58,28 +81,25 @@
 
 	                    <div class="plan-features">
 		                    <ul>
-			                    <li>Turnkey installation</li>
-			                    <li>Premium features</li>
+			                    <li>Easy installation</li>
+			                    <li><a href="#features">All features</a></li>
 			                    <li>One year of free updates</li>
 			                    <li>AGPL V3 license</li>
-			                    <li>Limited support requests<br><span class="smaller">(next business day)</span></li>
+			                    <li>Email support<br><span class="smaller">(next business day)</span></li>
 		                    </ul>
 	                    </div>
 		                <div class="second_cta">
 			                <a href="#">Try a demo</a>
 		                </div>
 	                </div>
-		            <div class="service-col col4 plan business highlighted">
+		            <div class="service-col col3 plan business highlighted">
 			            <div class="ribbon"><span>POPULAR</span></div>
 			            <div class="plan-description">
 				            <h2>Business</h2>
 			            </div>
-			            <div class="row plan-discount">
-				            €4 / user / month
-			            </div>
 			            <div class="row plan-pricing">
-				            <div class="col6 cost cost-large float"> €2.60 </div>
-				            <div class="col6 cost cost-small last">per user<br>per month <br><span class="smaller">(€108 billed annually)</span></div>
+				            <div class="col6 cost cost-large"> €99 </div>
+				            <div class="col6 cost cost-small last">per<br>month</div>
 			            </div>
 			            <div class="plan-limit">
 				            <span>up to 100 users</span>
@@ -89,8 +109,8 @@
 			            </div>
 			            <div class="plan-features">
 				            <ul>
-					            <li>Turnkey installation</li>
-					            <li>Premium features</li>
+					            <li>Easy installation</li>
+					            <li><a href="features">All features</a></li>
 					            <li>One year of free updates</li>
 					            <li>AGPL V3 license</li>
 					            <li>Unlimited email support<br><span class="smaller">(next business day)</span></li>
@@ -100,12 +120,12 @@
 				            <a href="#">Try a demo</a>
 			            </div>
 		            </div>
-	                <div class="service-col col4 plan enterprise last">
+	                <div class="service-col col3 plan enterprise last">
 		                <div class="plan-description">
 			                <h2>Enterprise</h2>
 		                </div>
 		                <div class="row plan-pricing">
-			                <div class="col12 cost cost-medium lower">Tailor-made</div>
+			                <div class="col12 cost cost-medium">Tailor-made</div>
 		                </div>
 		                <div class="plan-limit">
 			                <span>unlimited users</span>
@@ -116,7 +136,8 @@
 	                    <div class="plan-features">
 		                    <ul>
 			                    <ul>
-				                    <li>All business features</li>
+				                    <li>All business pack</li>
+				                    <li>Multi instances</li>
 				                    <li>Installation support</li>
 				                    <li>On-premise management</li>
 				                    <li>Certified server key signature</li>
@@ -171,6 +192,7 @@
 						?>
 						<?= compareRow('Pricing', ['ce' => '', 'startup' => '', 'business' => '', 'enterprise' => ''], 'head'); ?>
 						<?= compareRow('Users limit', ['ce' => 'Unlimited', 'startup' => '5', 'business' => '100', 'enterprise' => 'Unlimited'], ''); ?>
+						<?= compareRow('Instances limit', ['ce' => 'Unlimited', 'startup' => '1', 'business' => '1', 'enterprise' => 'Unlimited'], ''); ?>
 						<?= compareRow('License type', ['ce' => 'AGPL V3', 'startup' => 'AGPL V3', 'business' => 'AGPL V3', 'enterprise' => 'AGPL V3'], ''); ?>
 						<?= compareRow('License validity', ['ce' => 'Perpetual', 'startup' => 'Perpetual', 'business' => 'Perpetual', 'enterprise' => 'Perpetual'], ''); ?>
 						<?= compareRow('Free updates', ['ce' => 'Forever', 'startup' => 'One year', 'business' => 'One year', 'enterprise' => 'One year'], ''); ?>
@@ -204,6 +226,7 @@
 						<?= compareRow('Import (kdbx, csv)', ['ce' => false, 'startup' => true, 'business' => true, 'enterprise' => true], ''); ?>
 						<?= compareRow('Export (kdbx, csv)', ['ce' => false, 'startup' => true, 'business' => true, 'enterprise' => true], ''); ?>
 						<?= compareRow('Tags management', ['ce' => false, 'startup' => true, 'business' => true, 'enterprise' => true], ''); ?>
+						<?= compareRow('Dark theme', ['ce' => false, 'startup' => true, 'business' => true, 'enterprise' => true], ''); ?>
 						<?= compareRow('Folders (coming soon)', ['ce' => false, 'startup' => true, 'business' => true, 'enterprise' => true], ''); ?>
 						<?= compareRow('LDAP (coming soon)', ['ce' => false, 'startup' => true, 'business' => true, 'enterprise' => true], ''); ?>
 						<?= compareRow('Audit logs (coming soon)', ['ce' => false, 'startup' => true, 'business' => true, 'enterprise' => true], ''); ?>

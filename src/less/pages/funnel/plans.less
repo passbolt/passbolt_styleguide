@@ -1,6 +1,11 @@
 .page.plans {
   @pricing-tab-height: 102px;
   @background-light-plus: #f7f7f7;
+  
+  .col3 {
+    // Force display on col3. It is deactivated for obscure reasons.
+    display: block;
+  }
 
   .page-row.intro {
     background: @background-light-plus;
@@ -154,7 +159,7 @@
           }
         }
         .cost-small {
-          font-size: 0.8em;
+          font-size: 1.2em;
           text-align: left;
           .smaller {
             color: @grey-dark;
@@ -186,7 +191,7 @@
         padding: 1em;
         
         ul {
-          min-height: 285px;
+          min-height: 346px;
           li {
             padding: 0.4em;
             font-size: 0.8em;
@@ -313,6 +318,18 @@
         background-color: #d7d7d7;
         content: "";
       }
+    }
+  }
+
+  @media all and (min-width: 1000px) {
+    .grid-responsive-12 {
+      max-width:1000px;
+    }
+  }
+
+  @media all and (min-width: 1220px) {
+    .grid-responsive-12 {
+      max-width:1220px;
     }
   }
 }
