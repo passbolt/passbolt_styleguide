@@ -43,7 +43,7 @@
 				            <h2>Community</h2>
 			            </div>
 			            <div class="row plan-pricing">
-				            <div class="col12 cost cost-medium"> FREE </div>
+				            <div class="col12 cost cost-large align-center"> FREE </div>
 			            </div>
 			            <div class="plan-limit">
 				            <span>unlimited users</span>
@@ -69,8 +69,8 @@
 		                    <h2>Startup</h2>
 	                    </div>
 		                <div class="row plan-pricing">
-			                <div class="col6 cost cost-large"> €15 </div>
-			                <div class="col6 cost cost-small last">per<br>month</div>
+			                <div class="col6 cost cost-large align-right"> €15 </div>
+			                <div class="col6 cost cost-small last align-left">per<br>month</div>
 		                </div>
 		                <div class="plan-limit">
 			                <span>up to 5 users</span>
@@ -98,8 +98,8 @@
 				            <h2>Business</h2>
 			            </div>
 			            <div class="row plan-pricing">
-				            <div class="col6 cost cost-large"> €99 </div>
-				            <div class="col6 cost cost-small last">per<br>month</div>
+				            <div class="col6 cost cost-large align-right"> €99 </div>
+				            <div class="col6 cost cost-small last align-left">per<br>month</div>
 			            </div>
 			            <div class="plan-limit">
 				            <span>up to 100 users</span>
@@ -125,7 +125,7 @@
 			                <h2>Enterprise</h2>
 		                </div>
 		                <div class="row plan-pricing">
-			                <div class="col12 cost cost-medium">Tailor-made</div>
+			                <div class="col12 cost cost-medium align-center">Tailor-made</div>
 		                </div>
 		                <div class="plan-limit">
 			                <span>unlimited users</span>
@@ -149,11 +149,6 @@
 		                <div class="second_cta">
 			                <a href="#">Get a quote</a>
 		                </div>
-	                </div>
-	            </div>
-		        <div class="col12 community_cta">
-		                <p>You don't need support nor premium features?<br>Passbolt community edition is for you!</p>
-		                <a href="AN_login.php" class="button">Get Community Edition</a>
 	                </div>
 	            </div>
 	        </div>
