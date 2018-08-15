@@ -5878,6 +5878,9 @@ input[type="search"]::-webkit-search-cancel-button {
 .panel .navigation .row:hover .right-cell a.filter {
   border: 1px solid #0C0C0A;
 }
+.panel .navigation .empty-content {
+  padding-left: 1em;
+}
 .contextual-menu {
   position: absolute;
   background: #3B3B39;
@@ -7608,6 +7611,35 @@ table.table-info.horizontal tbody tr:nth-child(odd) {
 .login-history td:first-child {
   text-align: center;
 }
+/* Empty search feedback */
+.page.user .tableview.empty .tableview-header {
+  /* No tableview-header */
+  display: none;
+}
+.page.user .tableview.empty .tableview-content {
+  border: 0;
+  top: 0;
+}
+.page.user .tableview.empty .empty-content {
+  text-align: center;
+  margin: 3em 0.5em 0.67em 0.5em;
+}
+.page.user .tableview.empty .empty-content h1 {
+  font-size: 1.5em;
+}
+.page.user .tableview.empty .empty-content p {
+  font-size: 1em;
+  line-height: 1.5em;
+}
+@media all and (min-width: 780px) {
+  .page.user .tableview.empty .empty-content h1 {
+    font-size: 2.2em;
+  }
+  .page.user .tableview.empty .empty-content p {
+    font-size: 1.2em;
+    line-height: 1.8em;
+  }
+}
 /*
  * Password workspace
  */
@@ -7629,47 +7661,49 @@ table.table-info.horizontal tbody tr:nth-child(odd) {
   }
 }
 /* Define state where there are no passwords, and the filter all items */
-.page.password .tableview.all_items.empty .tableview-header {
+.page.password .tableview.empty .tableview-header {
   /* No tableview-header */
   display: none;
 }
-.page.password .tableview.all_items.empty .tableview-content {
-  background: transparent url('../../../img/background/rocket.svg') center 75% no-repeat;
-  background-size: 30%;
+.page.password .tableview.empty .tableview-content {
   /* No tableview-header */
   border: 0;
   top: 0;
+}
+.page.password .tableview.empty.all_items .tableview-content {
+  background: transparent url('../../../img/background/rocket.svg') center 75% no-repeat;
+  background-size: 30%;
   /* Tablet version */
   /* Normal screen version */
 }
 @media all and (min-width: 780px) {
-  .page.password .tableview.all_items.empty .tableview-content {
+  .page.password .tableview.empty.all_items .tableview-content {
     background-position: center 60%;
     background-size: 10%;
   }
 }
 @media all and (min-width: 1024px) {
-  .page.password .tableview.all_items.empty .tableview-content {
+  .page.password .tableview.empty.all_items .tableview-content {
     background-position: center 80%;
     background-size: 20%;
   }
 }
-.page.password .tableview.all_items.empty .empty-content {
+.page.password .tableview.empty .empty-content {
   text-align: center;
   margin: 3em 0.5em 0.67em 0.5em;
 }
-.page.password .tableview.all_items.empty .empty-content h1 {
+.page.password .tableview.empty .empty-content h1 {
   font-size: 1.5em;
 }
-.page.password .tableview.all_items.empty .empty-content p {
+.page.password .tableview.empty .empty-content p {
   font-size: 1em;
   line-height: 1.5em;
 }
 @media all and (min-width: 780px) {
-  .page.password .tableview.all_items.empty .empty-content h1 {
+  .page.password .tableview.empty .empty-content h1 {
     font-size: 2.2em;
   }
-  .page.password .tableview.all_items.empty .empty-content p {
+  .page.password .tableview.empty .empty-content p {
     font-size: 1.2em;
     line-height: 1.8em;
   }

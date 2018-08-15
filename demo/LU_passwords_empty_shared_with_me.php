@@ -29,15 +29,16 @@
 						<div class="panel middle no_passwords">
 							<?php
 							$_GET['breadcrumbs'] = array(
-								'all passwords' => '../demo/LU_passwords.php'
+								'all passwords' => '../demo/LU_passwords.php',
+								'Shared with me' => ''
 							);
 							$emptyGridSettings = [
-								'filter' => 'all_items',
-								'title' => 'Welcome to passbolt!',
-								'subtitle' => 'It does feel a bit empty here. Create your first password<br> or wait for a team member to share one with you.<br>'
+								'filter' => 'shared_with_me',
+								'title' => 'No passwords are shared with you yet.',
+								'subtitle' => 'It does feel a bit empty here. Wait for a team member to share a password with you.'
 							];
 							include('includes/LU_breadcrumbs.php'); ?>
-							<?php include('includes/tableviews/LU_tableview_passwords_empty.php'); ?>
+							<?php include('includes/tableviews/LU_tableview_passwords_empty_filtered.php'); ?>
 						</div>
 					</div>
 				</div>

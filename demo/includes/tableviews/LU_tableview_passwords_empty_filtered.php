@@ -42,7 +42,7 @@
 	</div>
 	<div class="tableview-content scroll">
 		<div class="empty-content">
-			<h1><?= $emptyGridSettings['title'] ?></h1>
+			<h2><?= $emptyGridSettings['title'] ?></h2>
 			<p><?= $emptyGridSettings['subtitle'] ?></p>
 		</div>
 		<table>
