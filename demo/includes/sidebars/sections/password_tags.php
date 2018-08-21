@@ -9,6 +9,7 @@
             <i class="fa fa-fw fa-edit"></i>
             <span class="visuallyhidden">edit</span>
         </a>
+<?php if (!$_GET['empty']) { ?>
         <ul id="js_rs_details_tags_list" class="tags tags-list">
 <?php foreach ($tags as $i => $tag) : ?>
             <li>
@@ -16,6 +17,9 @@
             </li>
 <?php endforeach; ?>
         </ul>
+<?php } else { ?>
+        <em>There is no tag, click edit to add one</em>
+<?php } ?>
         <div id="js_edit_tags_form" class="tags-edit-wrapper hidden form">
             <div class="form-content">
                 <div id="js_tags_editor" class="input tag-editor">

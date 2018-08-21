@@ -29,15 +29,16 @@
 						<div class="panel middle no_passwords">
 							<?php
 							$_GET['breadcrumbs'] = array(
-								'all passwords' => '../demo/LU_passwords.php'
+								'all passwords' => '../demo/LU_passwords.php',
+								'Search : abcdef ghijk' => ''
 							);
 							$emptyGridSettings = [
-								'filter' => 'all_items',
-								'title' => 'Welcome to passbolt!',
-								'subtitle' => 'It does feel a bit empty here. Create your first password<br> or wait for a team member to share one with you.<br>'
+								'filter' => 'search',
+								'title' => 'None of your passwords matched this search.',
+								'subtitle' => 'Try another search or use a the left panel to navigate into your passwords.'
 							];
 							include('includes/LU_breadcrumbs.php'); ?>
-							<?php include('includes/tableviews/LU_tableview_passwords_empty.php'); ?>
+							<?php include('includes/tableviews/LU_tableview_passwords_empty_filtered.php'); ?>
 						</div>
 					</div>
 				</div>
