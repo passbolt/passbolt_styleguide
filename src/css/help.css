@@ -4307,6 +4307,47 @@ video {
 article video {
   margin: 1em 0;
 }
+article table.table-parameters {
+  width: 100%;
+}
+article table.table-parameters thead {
+  background-color: transparent !important;
+}
+article table.table-parameters thead th {
+  background-color: transparent;
+  font-weight: bold;
+  border: 1px solid #DDD;
+  padding: 0.7em 0.5em;
+}
+article table.table-parameters tbody tr:nth-child(even) {
+  background-color: transparent;
+}
+article table.table-parameters tbody tr:nth-child(odd) {
+  background-color: #F3F3F3;
+}
+article table.table-parameters tbody tr td {
+  padding: 0.5em 0.5em;
+  border: 1px solid #DDD;
+}
+article table.table-parameters tbody tr td code {
+  padding: 0.2em 0.3em;
+  background-color: #DDD;
+}
+article table.table-parameters tbody tr td pre {
+  margin: 0;
+  padding: 0;
+  background-color: transparent;
+}
+article table.table-parameters tbody tr td code,
+article table.table-parameters tbody tr td pre {
+  font-family: monospace,serif;
+  font-size: 1em;
+}
+article table.table-parameters tbody tr td em {
+  color: #969696;
+  font-size: 0.8em;
+  font-style: normal;
+}
 /* headers */
 .header {
   overflow: visible !important;
