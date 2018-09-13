@@ -140,7 +140,7 @@
 														<div class="message">This url will be used for places where the passbolt url cannot be guessed, such as links in emails.</div>
 													</div>
 
-													<div class="input text">
+													<div class="input text clearfix">
 														<label>Sync operations</label>
 														<div class="col6">
 															<div class="input checkbox"><input type="checkbox" name="user_create" checked="checked" disabled="disabled"> create users</div>
