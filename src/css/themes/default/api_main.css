@@ -674,11 +674,11 @@ html body .hidden {
   animation: blinker 1s linear infinite;
 }
 .blink-fast {
-  animation: blinker .25s linear infinite;
+  animation: blinker 0.25s linear infinite;
 }
 @keyframes blinker {
   50% {
-    opacity: 0.0;
+    opacity: 0;
   }
 }
 /* body */
@@ -709,17 +709,11 @@ a {
 a:hover {
   border-bottom: 1px solid #2894DF;
 }
-/*
- * Animate.css - http://daneden.me/animate
- * Licensed under the MIT license
- * Copyright (c) 2013 Daniel Eden
- */
 .animated {
   -webkit-animation-duration: 0.5s;
   animation-duration: 0.5s;
   -webkit-animation-fill-mode: both;
   animation-fill-mode: both;
-  position: fixed;
 }
 /* fadeinup */
 @keyframes fadeInUp {
@@ -755,6 +749,28 @@ a:hover {
     transform: none;
   }
 }
+@keyframes pop {
+  0% {
+    opacity: 0;
+    transform: scale(1);
+  }
+  55% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  65% {
+    opacity: 1;
+    transform: scale(1.25);
+  }
+  75% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
 .fadeInDown {
   animation-name: fadeInDown;
 }
@@ -763,6 +779,9 @@ a:hover {
 }
 .fadeInUp {
   animation-name: fadeInUp;
+}
+.pop {
+  animation-name: pop;
 }
 /*
  * Typography
@@ -792,14 +811,14 @@ h1 {
   /* 24px base 16 */
 }
 h2 {
-  font-size: 1.250em;
+  font-size: 1.25em;
   /* 20px base 16 */
 }
 h3 {
   font-size: 1.125em;
   /* 18px base 16 */
   display: block;
-  padding-bottom: .333em;
+  padding-bottom: 0.333em;
   /* 6px */
   border-bottom: 1px dotted #DDD;
 }
@@ -875,9 +894,9 @@ p {
   left: -1.85714286em;
 }
 .fa-border {
-  padding: .2em .25em .15em;
+  padding: 0.2em 0.25em 0.15em;
   border: solid 0.08em #EEE;
-  border-radius: .1em;
+  border-radius: 0.1em;
 }
 .fa-pull-left {
   float: left;
@@ -886,10 +905,10 @@ p {
   float: right;
 }
 .fa.fa-pull-left {
-  margin-right: .3em;
+  margin-right: 0.3em;
 }
 .fa.fa-pull-right {
-  margin-left: .3em;
+  margin-left: 0.3em;
 }
 /* Deprecated as of 4.4.0 */
 .pull-right {
@@ -899,10 +918,10 @@ p {
   float: left;
 }
 .fa.pull-left {
-  margin-right: .3em;
+  margin-right: 0.3em;
 }
 .fa.pull-right {
-  margin-left: .3em;
+  margin-left: 0.3em;
 }
 .fa-spin {
   -webkit-animation: fa-spin 2s infinite linear;
@@ -3181,14 +3200,14 @@ button,
   position: relative;
   font-size: 0.875em;
   /*	14px */
-  padding: .429em 1.225em .429em 1.225em;
+  padding: 0.429em 1.225em 0.429em 1.225em;
   /* 6px 16px */
   display: inline-block;
   zoom: 1;
   /* zoom and *display = ie7 hack for display:inline-block */
   *display: inline;
   vertical-align: baseline;
-  margin-right: .5em;
+  margin-right: 0.5em;
   outline: none;
   cursor: pointer;
   text-align: center;
@@ -3431,7 +3450,7 @@ html body .button.processing {
   padding: 1px;
 }
 .button-spacer {
-  margin-right: .5em;
+  margin-right: 0.5em;
 }
 /*
 	Base form components styling
@@ -3444,7 +3463,7 @@ label {
   /* 18px */
   line-height: 1.333333em;
   /* 24px */
-  padding: .25em 0;
+  padding: 0.25em 0;
   display: block;
 }
 /*
@@ -3491,9 +3510,9 @@ textarea {
   background: #FFF;
   width: 14em;
   /* 20 char (default input length) x .7em (average char length) */
-  padding: .375em .625em .375em .625em;
+  padding: 0.375em 0.625em 0.375em 0.625em;
   display: inline-block;
-  margin-bottom: .5em;
+  margin-bottom: 0.5em;
   -webkit-appearance: none;
   border: 1px solid #CCC;
   border-top: 1px solid #BBB;
@@ -3562,13 +3581,13 @@ textarea {
 .text.input .input-addon i,
 .date.input .input-addon i {
   font-size: 16px;
-  width: 1.250em;
+  width: 1.25em;
   border: 1px solid #CCC;
   border-top: 1px solid #BBB;
   line-height: 24px;
   color: #333;
   background: #FFF;
-  padding: .375em .625em .375em .625em;
+  padding: 0.375em 0.625em 0.375em 0.625em;
 }
 .text.input input:hover + .input-addon i,
 .date.input input:hover + .input-addon i {
@@ -3592,7 +3611,7 @@ textarea {
 input[type=checkbox] + label {
   font-weight: normal;
   display: inline;
-  margin-left: .25em;
+  margin-left: 0.25em;
 }
 /* radio and checkboxes */
 /*
@@ -3606,11 +3625,11 @@ input[type=checkbox] + label {
 */
 .input .message {
   padding: 0;
-  padding-left: .25em;
-  padding-bottom: .5em;
-  font-size: .813em;
-  margin-top: .125em;
-  margin-bottom: .25em;
+  padding-left: 0.25em;
+  padding-bottom: 0.5em;
+  font-size: 0.813em;
+  margin-top: 0.125em;
+  margin-bottom: 0.25em;
   background-color: transparent;
   border: 0;
   /* colors for messages */
@@ -3637,7 +3656,7 @@ form .input .inline.message {
 /* error messages */
 select {
   font-size: 16px;
-  margin: .55em 0;
+  margin: 0.55em 0;
 }
 /* select */
 input[type=file] {
@@ -3654,7 +3673,7 @@ input[type=email].fluid {
   width: 80%;
 }
 .submit-wrapper {
-  margin-top: .5em;
+  margin-top: 0.5em;
 }
 /* shortcut classes for layout */
 /*
@@ -3728,7 +3747,8 @@ input[type=email].fluid {
 }
 .col1,
 .panel.left {
-  width: 17.5%;
+  width: 17.25%;
+  box-sizing: border-box;
 }
 .panel.middle {
   width: 82%;
@@ -3755,7 +3775,10 @@ input[type=email].fluid {
    don't center the grid inside main panel */
 .panel.main .grid-responsive-12 {
   float: left;
-  width: 99%;
+  width: 100%;
+  max-width: none;
+  padding-left: 0.25em;
+  box-sizing: border-box;
 }
 /* hide left column when there is no space */
 @media all and (max-width: 1024px) {
@@ -3790,7 +3813,7 @@ input[type=email].fluid {
     left: 0;
   }
   .panel.main .row {
-    padding-left: .5em;
+    padding-left: 0.5em;
   }
   .panel.main .panel.aside {
     min-width: auto;
@@ -3842,7 +3865,7 @@ input[type=email].fluid {
      * 2. The use of `table` rather than `block` is only necessary if using
      *	`:before` to contain the top-margins of child elements.
      */
-  padding: 0 .5em 0 .5em;
+  padding: 0 0.5em 0 0.5em;
 }
 .grid-responsive-12 .row:before,
 .grid .row:before,
@@ -4117,7 +4140,7 @@ input[type=email].fluid {
      * Common columns definitions
      */
   .grid .row {
-    padding: 0 .5em 0 .5em;
+    padding: 0 0.5em 0 0.5em;
   }
   .grid .row .col1,
   .grid .row .col2,
@@ -4216,6 +4239,143 @@ video {
 article video {
   margin: 1em 0;
 }
+.input.toggle-switch {
+  display: flex;
+  padding-top: 1em;
+  padding-bottom: 0.5em;
+}
+.input.toggle-switch label {
+  padding-top: 0.05em;
+  padding-left: 1em;
+  order: 2;
+  flex: 1;
+  font-weight: normal;
+  font-size: 1em;
+}
+.input.toggle-switch.disabled label {
+  color: #969696;
+}
+.input.toggle-switch .toggle-switch-checkbox {
+  order: -1;
+  flex: 0 0 3em;
+  display: none;
+}
+.input.toggle-switch .toggle-switch-checkbox,
+.input.toggle-switch .toggle-switch-checkbox:after,
+.input.toggle-switch .toggle-switch-checkbox:before,
+.input.toggle-switch .toggle-switch-checkbox *,
+.input.toggle-switch .toggle-switch-checkbox *:after,
+.input.toggle-switch .toggle-switch-checkbox *:before,
+.input.toggle-switch .toggle-switch-checkbox + .toggle-switch-button {
+  box-sizing: border-box;
+}
+.input.toggle-switch .toggle-switch-checkbox::selection,
+.input.toggle-switch .toggle-switch-checkbox:after::selection,
+.input.toggle-switch .toggle-switch-checkbox:before::selection,
+.input.toggle-switch .toggle-switch-checkbox *::selection,
+.input.toggle-switch .toggle-switch-checkbox *:after::selection,
+.input.toggle-switch .toggle-switch-checkbox *:before::selection,
+.input.toggle-switch .toggle-switch-checkbox + .toggle-switch-button::selection {
+  background: none;
+}
+.input.toggle-switch .toggle-switch-button {
+  order: -1;
+  flex: none;
+  outline: 0;
+  display: block;
+  width: 3em;
+  height: 1.5em;
+  position: relative;
+  cursor: pointer;
+  user-select: none;
+  background: #F3F3F3;
+  border-radius: 2em;
+  padding: 2px;
+  transition: all 0.4s ease;
+  border: 1px solid #DDD;
+}
+.input.toggle-switch .toggle-switch-button span {
+  /*
+     * Extends the .visuallyhidden class to allow the element to be focusable
+     * when navigated to via the keyboard: h5bp.com/p
+     */
+  border: 0;
+  clip: rect(0 0 0 0);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
+  /*
+     * Extends the .visuallyhidden class to allow the element to be focusable
+     * when navigated to via the keyboard: h5bp.com/p
+     */
+}
+.input.toggle-switch .toggle-switch-button span .focusable:active,
+.input.toggle-switch .toggle-switch-button span .focusable:focus {
+  clip: auto;
+  height: auto;
+  margin: 0;
+  overflow: visible;
+  position: static;
+  width: auto;
+}
+.input.toggle-switch .toggle-switch-button span .focusable:active,
+.input.toggle-switch .toggle-switch-button span .focusable:focus {
+  clip: auto;
+  height: auto;
+  margin: 0;
+  overflow: visible;
+  position: static;
+  width: auto;
+}
+.input.toggle-switch .toggle-switch-button:hover:after {
+  will-change: padding;
+}
+.input.toggle-switch .toggle-switch-button:active {
+  box-shadow: inset 0 0 0 2em #e8eae9;
+}
+.input.toggle-switch .toggle-switch-button:active:after {
+  padding-right: 0.8em;
+}
+.input.toggle-switch .toggle-switch-button:after,
+.input.toggle-switch .toggle-switch-button:before {
+  position: relative;
+  display: block;
+  content: "";
+  width: 50%;
+  height: 100%;
+}
+.input.toggle-switch .toggle-switch-button:after {
+  left: 0;
+  border-radius: 2em;
+  background: #FFF;
+  transition: left 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), padding 0.3s ease, margin 0.3s ease;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1), 0 4px 0 rgba(0, 0, 0, 0.08);
+}
+.input.toggle-switch .toggle-switch-button:before {
+  display: none;
+}
+.input.toggle-switch .toggle-switch-checkbox:checked + .toggle-switch-button:after {
+  left: 50%;
+}
+.input.toggle-switch .toggle-switch-checkbox:disabled + .toggle-switch-button {
+  background: #FFF;
+  cursor: not-allowed;
+}
+.input.toggle-switch .toggle-switch-checkbox:checked + .toggle-switch-button {
+  background: #66CC00;
+}
+.input.toggle-switch .toggle-switch-checkbox:checked + .toggle-switch-button:active {
+  box-shadow: none;
+}
+.input.toggle-switch .toggle-switch-checkbox:checked + .toggle-switch-button:active:after {
+  margin-left: -0.8em;
+}
+.input.toggle-switch .toggle-switch-checkbox:disabled:checked + .toggle-switch-button {
+  background: #e6ffcc;
+}
 /* headers */
 .header {
   overflow: visible !important;
@@ -4278,7 +4438,7 @@ article video {
   clear: both;
 }
 .header .navigation.primary li {
-  padding: .5em;
+  padding: 0.5em;
   float: left;
 }
 .header .navigation.primary li:first-child {
@@ -4327,7 +4487,7 @@ article video {
   height: 45px;
 }
 /* CSS for serving the retina image to devices with a high "device-pixel-ratio": */
-@media only screen and (-moz-min-device-pixel-ratio: 1.5), only screen and (-o-min-device-pixel-ratio: 3/2), only screen and (-webkit-min-device-pixel-ratio: 1.5), only screen and (min-devicepixel-ratio: 1.5), only screen and (min-resolution: 1.5dppx) {
+@media only screen and (-moz-min-device-pixel-ratio: 1.5), only screen and (-o-min-device-pixel-ratio: 1.5), only screen and (-webkit-min-device-pixel-ratio: 1.5), only screen and (min-devicepixel-ratio: 1.5), only screen and (min-resolution: 1.5dppx) {
   .logo.no-img {
     background: transparent url('../../../img/logo/logo.svg') 0 0 no-repeat;
     background-size: 150px auto;
@@ -4351,7 +4511,7 @@ form.search input[type=search] {
   width: 65%;
   margin-bottom: 0;
   border-right: 1px solid #FFF;
-  padding: .313em .625em;
+  padding: 0.313em 0.625em;
 }
 form.search input[type=search]:focus,
 form.search input[type=search]:active {
@@ -4360,6 +4520,7 @@ form.search input[type=search]:active {
 form.search button {
   height: 2.571em;
   /* 36px */
+  width: 4.5em;
   float: left;
   margin-left: 0;
   border-radius: 0px 2px 2px 0px;
@@ -4386,7 +4547,7 @@ input[type="search"]::-webkit-search-cancel-button {
   width: 80%;
   float: right;
   border: 1px solid #DDD;
-  margin-top: .5em;
+  margin-top: 0.5em;
   overflow: hidden;
   background: #EEE;
   background-image: -moz-linear-gradient(top, #F3F3F3, #EEE);
@@ -4433,14 +4594,14 @@ input[type="search"]::-webkit-search-cancel-button {
 .user.profile .picture img {
   width: 2.875em;
   /* 46px */
-  padding: 0.1250em;
+  padding: 0.125em;
   /* 2px */
 }
 .user.profile .details {
   float: left;
   height: 2.8125em;
-  font-size: .9em;
-  padding: .3125em 1em;
+  font-size: 0.9em;
+  padding: 0.3125em 1em;
   /* 5/10px */
 }
 .user.profile .details .name,
@@ -4595,24 +4756,24 @@ input[type="search"]::-webkit-search-cancel-button {
  */
 .breadcrumbs {
   height: 2em;
-  padding: .1875em 0 .1875em 0;
+  padding: 0.1875em 0 0.1875em 0.1875em;
   margin-bottom: 0;
   border-bottom: 1px solid #DDD;
   background: #FFF;
 }
 .breadcrumbs ul {
   padding-top: 0.2em;
-  margin-left: 0;
+  margin-left: 0.1875em;
 }
 .breadcrumbs ul li {
   display: inline;
-  font-size: .8em;
+  font-size: 0.8em;
   /* 12px/base16>15 */
-  margin-left: .25em;
+  margin-left: 0.25em;
 }
 .breadcrumbs ul li:before {
   content: "›";
-  margin-right: .5em;
+  margin-right: 0.5em;
 }
 .breadcrumbs ul li:first-child {
   margin-left: 0;
@@ -4629,18 +4790,18 @@ input[type="search"]::-webkit-search-cancel-button {
 }
 /* actions */
 .header.third .main-action-wrapper {
-  margin-top: .5em;
-  padding-left: .625em;
+  margin-top: 0.5em;
+  padding-left: 0.625em;
 }
 .header.third .main-action-wrapper .button {
   float: left;
-  font-size: .875em;
+  font-size: 0.875em;
 }
 .header.third .actions-wrapper {
-  margin-top: .5em;
+  margin-top: 0.5em;
 }
 .header.third .actions-wrapper .button {
-  font-size: .875em;
+  font-size: 0.875em;
   min-width: 4em;
   float: left;
 }
@@ -4651,7 +4812,7 @@ input[type="search"]::-webkit-search-cancel-button {
   float: right;
 }
 .header.third .actions-wrapper .secondary .button {
-  font-size: .875em;
+  font-size: 0.875em;
   min-width: 1em;
 }
 /* hide secondary actions if there is no space */
@@ -4770,7 +4931,7 @@ input[type="search"]::-webkit-search-cancel-button {
  * Notification
  */
 .notification-container {
-  font-size: .85em;
+  font-size: 0.85em;
   top: 0;
   position: absolute;
   z-index: 991;
@@ -4787,7 +4948,7 @@ input[type="search"]::-webkit-search-cancel-button {
 .notification-container .notification .message {
   box-shadow: 0px 0px 10px 0px #333;
   border-radius: 2px;
-  padding: .5em 1em;
+  padding: 0.5em 1em;
   position: relative;
   left: -50%;
   float: left;
@@ -4840,14 +5001,68 @@ input[type="search"]::-webkit-search-cancel-button {
   background: #FEF0BF;
 }
 /* big side info message blocks on setup or profile pages */
-.side-message {
+.message.side-message {
   margin-left: 1em;
   font-size: 1em;
   margin-right: 2em;
 }
-.side-message ul,
-.side-message p {
+.message.side-message ul,
+.message.side-message p {
   padding-bottom: 1em;
+}
+/* success animation */
+.message.success.animated {
+  background: #FFF;
+  color: #333;
+  display: flex;
+  font-size: 1.125em;
+}
+.message.success.animated .illustration {
+  flex: 0 0 180px;
+}
+.message.success.animated .additional-information {
+  flex: 1;
+  line-height: 180px;
+  margin-top: 1.5em;
+  padding-left: 1em;
+}
+@keyframes drawCircle {
+  0% {
+    stroke-dashoffset: 180px;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes drawCheck {
+  0% {
+    stroke-dashoffset: 50px;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+.message.success.animated #successAnimationCircle {
+  stroke-dasharray: 180px 180px;
+  stroke: #66CC00;
+}
+.message.success.animated #successAnimationCheck {
+  stroke-dasharray: 50px 50px;
+  stroke: #66CC00;
+}
+.message.success.animated #successAnimation.animated {
+  animation: 1s ease-out 0s 1 both pop;
+}
+.message.success.animated #successAnimation.animated #successAnimationCircle {
+  animation: 1s cubic-bezier(0.77, 0, 0.175, 1) 0s 1 both drawCircle;
+}
+.message.success.animated #successAnimation.animated #successAnimationCheck {
+  animation: 1s cubic-bezier(0.77, 0, 0.175, 1) 0s 1 both drawCheck;
+}
+@media only screen and (max-width: 767px) {
+  .message.success.animated {
+    flex-direction: column;
+  }
 }
 /*
   	Copy secret component
@@ -4955,7 +5170,7 @@ input[type="search"]::-webkit-search-cancel-button {
   height: 3em;
 }
 .dialog .dialog-header h2 {
-  margin: .25em 2em .5em .2em;
+  margin: 0.25em 2em 0.5em 0.2em;
   font-size: 1.2em;
   white-space: nowrap;
   overflow: hidden;
@@ -4974,7 +5189,7 @@ input[type="search"]::-webkit-search-cancel-button {
 }
 .dialog .form-content {
   background: #FFF;
-  padding: .813em 1.25em .813em 1.5em;
+  padding: 0.813em 1.25em 0.813em 1.5em;
 }
 .dialog label {
   clear: both;
@@ -5012,7 +5227,7 @@ input[type="search"]::-webkit-search-cancel-button {
   border-top: 1px solid #DDD;
   clear: both;
   width: 100%;
-  padding: .75em 0;
+  padding: 0.75em 0;
 }
 .dialog .submit-wrapper .cancel,
 .dialog .submit-wrapper .button {
@@ -5021,7 +5236,7 @@ input[type="search"]::-webkit-search-cancel-button {
   font-size: 1.125em;
 }
 .dialog .submit-wrapper .cancel {
-  margin-top: .5em;
+  margin-top: 0.5em;
   font-size: 1em;
 }
 .dialog .dialog-close,
@@ -5089,7 +5304,7 @@ input[type="search"]::-webkit-search-cancel-button {
   position: absolute;
   min-width: 13em;
   z-index: 800;
-  padding: .25em 0;
+  padding: 0.25em 0;
 }
 .button + .dropdown-content {
   margin-top: 2em;
@@ -5101,11 +5316,11 @@ input[type="search"]::-webkit-search-cancel-button {
 .dropdown-content li a {
   display: block;
   min-width: 9em;
-  font-size: .938em;
+  font-size: 0.938em;
   border: 0;
 }
 .dropdown-content li a {
-  padding: .313em .626em;
+  padding: 0.313em 0.626em;
   /* 5px */
 }
 .dropdown-content li a:hover {
@@ -5152,8 +5367,8 @@ input[type="search"]::-webkit-search-cancel-button {
   padding: 3px 7em 3px 30px;
 }
 .profile .section.detailed-information h4 {
-  margin-bottom: .626em;
-  padding-bottom: .313em;
+  margin-bottom: 0.626em;
+  padding-bottom: 0.313em;
   border-bottom: 1px dotted #DDD;
 }
 .profile .section.detailed-information li .label {
@@ -5166,13 +5381,13 @@ input[type="search"]::-webkit-search-cancel-button {
 }
 .profile .section.detailed-information .avatar img {
   width: 2.875em;
-  padding: 0.1250em;
+  padding: 0.125em;
 }
 .profile .section .section-action {
   padding-left: 1em;
 }
 .profile .edit-avatar-action .fa {
-  margin-top: .25em;
+  margin-top: 0.25em;
 }
 /* tags */
 .tags .tag {
@@ -5182,10 +5397,10 @@ input[type="search"]::-webkit-search-cancel-button {
   /* Newer versions of Chrome/Safari*/
   word-break: break-all;
   white-space: normal;
-  padding: .125em .5em;
+  padding: 0.125em 0.5em;
   float: left;
   position: relative;
-  margin: 0 .5em .5em 0;
+  margin: 0 0.5em 0.5em 0;
   text-decoration: none;
   border-radius: 3px;
   border: 1px solid #2894DF;
@@ -5252,17 +5467,17 @@ input[type="search"]::-webkit-search-cancel-button {
 }
 .tag-editor .message {
   font-size: 1em;
-  margin-top: .5em;
+  margin-top: 0.5em;
 }
 .tag-editor .tag {
   padding-right: 0;
 }
 .tag-editor .tag-delete {
-  margin-left: .25em;
+  margin-left: 0.25em;
   border-left: 1px dotted #2894DF;
-  padding-left: .5em;
-  padding-right: .5em;
-  font-size: .75em;
+  padding-left: 0.5em;
+  padding-right: 0.5em;
+  font-size: 0.75em;
   vertical-align: 10%;
   cursor: pointer;
 }
@@ -5302,7 +5517,7 @@ input[type="search"]::-webkit-search-cancel-button {
      *	`:before` to contain the top-margins of child elements.
      */
   min-height: 5em;
-  padding: .5em;
+  padding: 0.5em;
   border: 1px solid #CCC;
   border-top: 1px solid #BBB;
 }
@@ -5327,7 +5542,7 @@ input[type="search"]::-webkit-search-cancel-button {
 }
 .tag-editor .tag-editor-input {
   min-height: 1.5em;
-  padding: .25em .5em .25em .5em;
+  padding: 0.25em 0.5em 0.25em 0.5em;
   box-shadow: none;
   min-width: 6em;
   max-width: 24em;
@@ -5373,7 +5588,7 @@ input[type="search"]::-webkit-search-cancel-button {
 .jfilestyle input[type=text]:disabled,
 .jfilestyle input[type=email]:disabled {
   background-color: #F3F3F3;
-  padding: .375em .625em .375em .625em;
+  padding: 0.375em 0.625em 0.375em 0.625em;
   font-size: 1em;
   line-height: 24px;
   border: 1px solid #CCC;
@@ -5383,13 +5598,13 @@ input[type="search"]::-webkit-search-cancel-button {
   border: 1px solid #CCC;
   border-left: 0px;
   background: #DDD;
-  padding: .65em 1.225em .65em 1.225em;
+  padding: 0.65em 1.225em 0.65em 1.225em;
   color: #0662ba;
   vertical-align: middle;
   line-height: normal;
   text-align: center;
   margin: 0px;
-  font-size: .875em;
+  font-size: 0.875em;
   width: auto;
   font-weight: bold;
   border-radius: 0 0.214em 0.214em 0;
@@ -5476,7 +5691,7 @@ input[type="search"]::-webkit-search-cancel-button {
   margin-left: -100%;
 }
 .panel.aside .comments .comment {
-  padding-bottom: .5em;
+  padding-bottom: 0.5em;
   /*
      * For IE 6/7 only
      * Include this rule to trigger hasLayout and contain floats.
@@ -5537,7 +5752,7 @@ input[type="search"]::-webkit-search-cancel-button {
 .panel.aside .comments .comment .author.picture {
   width: 2em;
   height: 2em;
-  margin-top: .25em;
+  margin-top: 0.25em;
 }
 .panel.aside .comments .comment .author.picture img {
   width: 2em;
@@ -5548,7 +5763,7 @@ input[type="search"]::-webkit-search-cancel-button {
 }
 .panel.aside .comments .comment .metadata {
   font-style: italic;
-  margin: .5em 0 1em 1em;
+  margin: 0.5em 0 1em 1em;
 }
 .panel.aside .comments .comment .metadata .author.username {
   max-width: 48%;
@@ -5572,7 +5787,7 @@ input[type="search"]::-webkit-search-cancel-button {
   -ms-text-overflow: ellipsis;
 }
 .panel.aside .comments .comment .form-content {
-  margin-left: .5em;
+  margin-left: 0.5em;
 }
 .panel.aside .comments .comment .actions {
   float: right;
@@ -5592,7 +5807,7 @@ input[type="search"]::-webkit-search-cancel-button {
 }
 /* left panel navigation */
 .panel .navigation {
-  font-size: .938em;
+  font-size: 0.938em;
   /* first block have a delimiter */
   /*
         Navigation row
@@ -5649,8 +5864,8 @@ input[type="search"]::-webkit-search-cancel-button {
 }
 .panel .navigation.first {
   border-bottom: 1px dotted #DDD;
-  padding: .625em 0;
-  margin-bottom: .625em;
+  padding: 0.625em 0;
+  margin-bottom: 0.625em;
 }
 .panel .navigation .row {
   float: left;
@@ -5687,8 +5902,8 @@ input[type="search"]::-webkit-search-cancel-button {
 .panel .navigation .row .main-cell h3 {
   border: 0;
   font-size: 1em;
-  margin: 0 .25em 0 1em;
-  padding: .25em 0;
+  margin: 0 0.25em 0 1em;
+  padding: 0.25em 0;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -5711,7 +5926,7 @@ input[type="search"]::-webkit-search-cancel-button {
 }
 .panel .navigation .row .main-cell a {
   border: 0;
-  padding: .2em .313em;
+  padding: 0.2em 0.313em;
   /* 2px 5px */
   padding-left: 1em;
   color: #333;
@@ -5728,7 +5943,7 @@ input[type="search"]::-webkit-search-cancel-button {
   display: none;
   width: 1em;
   height: 1em;
-  padding: .125em;
+  padding: 0.125em;
   color: #888;
   border: 1px solid transparent;
 }
@@ -5806,13 +6021,13 @@ input[type="search"]::-webkit-search-cancel-button {
   z-index: 993;
   left: 11.25em;
   display: none;
-  padding: .25em 0;
+  padding: 0.25em 0;
 }
 .contextual-menu a {
-  font-size: .875em;
+  font-size: 0.875em;
   /* 14px */
   display: block;
-  padding: .357em .714em;
+  padding: 0.357em 0.714em;
   /* 5px 10px */
   border: 0;
 }
@@ -5863,7 +6078,7 @@ input[type="search"]::-webkit-search-cancel-button {
   margin-top: -1px;
   border-bottom: 1px solid #F3F3F3;
   border-top: 1px solid #F3F3F3;
-  font-size: .875em;
+  font-size: 0.875em;
   background: #FFF;
 }
 .panel.aside .sidebar-section h4 {
@@ -5914,7 +6129,7 @@ input[type="search"]::-webkit-search-cancel-button {
   line-height: normal;
 }
 .panel.aside .form-content {
-  margin: 0 0 .5em 0;
+  margin: 0 0 0.5em 0;
   /*
      * For IE 6/7 only
      * Include this rule to trigger hasLayout and contain floats.
@@ -5980,12 +6195,12 @@ input[type="search"]::-webkit-search-cancel-button {
   margin-right: 0;
 }
 .panel.aside .form-content .cancel {
-  margin-right: .5em;
+  margin-right: 0.5em;
 }
 .panel.aside .form-content .message.notice {
-  padding: .5em;
+  padding: 0.5em;
   margin: 0;
-  font-size: .929em;
+  font-size: 0.929em;
   /* 13px */
   background: #daecf9;
 }
@@ -6016,7 +6231,7 @@ input[type="search"]::-webkit-search-cancel-button {
 }
 .tabs-nav li a {
   display: inline-block;
-  padding: .4em 1.75em;
+  padding: 0.4em 1.75em;
   margin-left: 1.25em;
   font-size: 15px;
   border: 0;
@@ -6049,7 +6264,7 @@ input[type="search"]::-webkit-search-cancel-button {
 .tableview {
   background: #FFF;
   position: relative;
-  font-size: .9375em;
+  font-size: 0.9375em;
   /* 15px */
   height: 100%;
 }
@@ -6058,7 +6273,7 @@ input[type="search"]::-webkit-search-cancel-button {
   background: #FFF;
   height: 2.125em;
   overflow-y: scroll;
-  padding-top: .125em;
+  padding-top: 0.125em;
 }
 .tableview-header table {
   width: 100%;
@@ -6102,7 +6317,7 @@ input[type="search"]::-webkit-search-cancel-button {
 .tableview table th,
 .tableview table td {
   text-align: left;
-  padding: .25em .75em;
+  padding: 0.25em 0.75em;
   vertical-align: middle;
 }
 .tableview table th {
@@ -6157,7 +6372,7 @@ input[type="search"]::-webkit-search-cancel-button {
 }
 .tableview table .input.checkbox {
   padding-top: 2px;
-  padding-left: .25em;
+  padding-left: 0.25em;
 }
 .tableview table .input.checkbox label {
   display: none;
@@ -6173,7 +6388,7 @@ input[type="search"]::-webkit-search-cancel-button {
 .tableview table th.cell_favorite,
 .tableview table td.cell_favorite {
   padding-left: 0;
-  padding-right: .25em;
+  padding-right: 0.25em;
 }
 /* hide secondary actions if there is no space */
 @media all and (max-width: 600px) {
@@ -6189,7 +6404,7 @@ input[type="search"]::-webkit-search-cancel-button {
   .tableview table tbody td.l-cell {
     max-width: 90%;
     width: 90%;
-    padding: .5em;
+    padding: 0.5em;
   }
   .tableview table tbody td.s-cell {
     display: none;
@@ -6209,7 +6424,7 @@ table.table-info.vertical {
 }
 table.table-info td,
 table.table-info.vertical td {
-  padding: .625em;
+  padding: 0.625em;
   padding-right: 1.25em;
   color: #666;
 }
@@ -6237,7 +6452,7 @@ table.table-info.vertical td .alt.side:after {
 table.table-info td + td,
 table.table-info.vertical td + td {
   color: #333;
-  padding-right: .625em;
+  padding-right: 0.625em;
 }
 /* horizontal tableview */
 table.table-info.horizontal {
@@ -6249,7 +6464,7 @@ table.table-info.horizontal {
 }
 table.table-info.horizontal td,
 table.table-info.horizontal th {
-  padding: .5em;
+  padding: 0.5em;
   margin: 0;
 }
 table.table-info.horizontal th {
@@ -6388,7 +6603,7 @@ table.table-info.horizontal tbody tr:nth-child(odd) {
   margin-bottom: 0;
   border-top-color: transparent;
   border-left-color: #333;
-  border-left-color: rgba(51, 51, 51, 0.9);
+  border-left-color: hsla(0, 0%, 20%, 0.9);
 }
 .tooltip-left:hover:before,
 .tooltip-left:hover:after,
@@ -6412,7 +6627,7 @@ table.table-info.horizontal tbody tr:nth-child(odd) {
   margin-bottom: 0;
   border-top-color: transparent;
   border-bottom-color: #333;
-  border-bottom-color: rgba(51, 51, 51, 0.9);
+  border-bottom-color: hsla(0, 0%, 20%, 0.9);
 }
 .tooltip-bottom:hover:before,
 .tooltip-bottom:hover:after,
@@ -6486,7 +6701,7 @@ table.table-info.horizontal tbody tr:nth-child(odd) {
   width: 180px;
   background-color: #333;
   color: #FFF;
-  padding: .5em 1em;
+  padding: 0.5em 1em;
   -webkit-transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out, -webkit-transform 0.2s cubic-bezier(0.71, 1.7, 0.77, 1.24);
   -moz-transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out, -moz-transform 0.2s cubic-bezier(0.71, 1.7, 0.77, 1.24);
   transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out, transform 0.2s cubic-bezier(0.71, 1.7, 0.77, 1.24);
@@ -6525,9 +6740,9 @@ table.table-info.horizontal tbody tr:nth-child(odd) {
   margin-top: 0em;
   position: fixed;
   bottom: 0;
-  padding: 1.167em 1.5% 0 .5%;
+  padding: 1.167em 1.5% 0 0.5%;
   text-align: right;
-  font-size: .75em;
+  font-size: 0.75em;
   /* 12px */
   width: 98%;
   height: 2em;
@@ -6635,7 +6850,7 @@ table.table-info.horizontal tbody tr:nth-child(odd) {
   padding-right: 0;
 }
 .input-password-wrapper .actions.inline .button + .button {
-  margin-left: .5em;
+  margin-left: 0.5em;
 }
 .input-password-wrapper .password-complexity .complexity-text {
   float: right;
@@ -6655,7 +6870,7 @@ table.table-info.horizontal tbody tr:nth-child(odd) {
   height: 10px;
   display: block;
   clear: both;
-  margin: .25em 0 .5em 0;
+  margin: 0.25em 0 0.5em 0;
   float: left;
 }
 .input-password-wrapper .password-complexity .progress-bar {
@@ -6689,7 +6904,7 @@ table.table-info.horizontal tbody tr:nth-child(odd) {
 .password-hints li:before {
   content: "●";
   color: #DDD;
-  padding-right: .5em;
+  padding-right: 0.5em;
 }
 .password-hints li.success:before {
   color: #009900;
@@ -6717,8 +6932,8 @@ table.table-info.horizontal tbody tr:nth-child(odd) {
   .input-password-wrapper .password-complexity .complexity-text {
     float: left;
     width: 50%;
-    font-size: .831em;
-    margin-top: .5em;
+    font-size: 0.831em;
+    margin-top: 0.5em;
   }
   .fa.fa-lg {
     line-height: 1;
@@ -6836,8 +7051,8 @@ table.table-info.horizontal tbody tr:nth-child(odd) {
      * 2. The use of `table` rather than `block` is only necessary if using
      *	`:before` to contain the top-margins of child elements.
      */
-  font-size: .813em;
-  padding: 1em .5em .875em 1em;
+  font-size: 0.813em;
+  padding: 1em 0.5em 0.875em 1em;
   border-bottom: 1px dotted #DDD;
   /* user summary */
   /* row actions */
@@ -6933,7 +7148,7 @@ table.table-info.horizontal tbody tr:nth-child(odd) {
   -ms-text-overflow: ellipsis;
 }
 .permissions .row .details .more_details {
-  margin-left: .5em;
+  margin-left: 0.5em;
   margin-top: 0;
 }
 .permissions .row .details .email {
@@ -6943,7 +7158,7 @@ table.table-info.horizontal tbody tr:nth-child(odd) {
   -o-text-overflow: ellipsis;
   -ms-text-overflow: ellipsis;
   font-weight: bold;
-  padding-bottom: .125em;
+  padding-bottom: 0.125em;
 }
 .permissions .row .permission_changes {
   color: #969696;
@@ -6957,7 +7172,7 @@ table.table-info.horizontal tbody tr:nth-child(odd) {
 }
 .permissions .row .rights {
   float: left;
-  margin-top: .5em;
+  margin-top: 0.5em;
   width: 27%;
 }
 .permissions .row .rights select {
@@ -6966,11 +7181,11 @@ table.table-info.horizontal tbody tr:nth-child(odd) {
 }
 .permissions .row .actions {
   float: right;
-  margin-top: .55em;
+  margin-top: 0.55em;
 }
 .permissions .row .actions a {
   font-size: 1.125em;
-  padding: .25em .5em .2em .5em;
+  padding: 0.25em 0.5em 0.2em 0.5em;
   border: 1px solid transparent;
 }
 .permissions .row .actions a:hover {
@@ -7165,7 +7380,7 @@ table.table-info.horizontal tbody tr:nth-child(odd) {
   display: none;
 }
 .dialog .accordion .accordion-header {
-  margin-bottom: .5em;
+  margin-bottom: 0.5em;
 }
 .dialog .accordion .accordion-header a {
   display: inline;
@@ -7173,7 +7388,7 @@ table.table-info.horizontal tbody tr:nth-child(odd) {
 }
 .dialog .accordion .accordion-header a:before {
   margin-left: -1.25em;
-  margin-top: .25em;
+  margin-top: 0.25em;
   content: "\f0d7";
   /* caret down */
   font: normal normal normal 1em FontAwesome;
@@ -7195,7 +7410,7 @@ table.table-info.horizontal tbody tr:nth-child(odd) {
 .accordion.sidebar-section .accordion-header a:after {
   position: absolute;
   right: 1.5em;
-  margin-top: .25em;
+  margin-top: 0.25em;
   content: "\f0d7";
   /* caret down */
   font: normal normal normal 1em FontAwesome;
@@ -7217,7 +7432,7 @@ table.table-info.horizontal tbody tr:nth-child(odd) {
 }
 .accordion.navigation .accordion-header .main-cell a:before {
   margin-left: -1.25em;
-  margin-top: .25em;
+  margin-top: 0.25em;
   content: "\f0d7";
   /* caret down */
   font: normal normal normal 1em FontAwesome;
@@ -7255,10 +7470,10 @@ table.table-info.horizontal tbody tr:nth-child(odd) {
   overflow: hidden;
   text-overflow: ellipsis;
   color: #333;
-  font-size: .875em;
+  font-size: 0.875em;
   /* 14px */
   display: block;
-  padding: .357em .714em;
+  padding: 0.357em 0.714em;
   /* 5px 10px */
   border: 0;
 }
@@ -7300,8 +7515,8 @@ table.table-info.horizontal tbody tr:nth-child(odd) {
   display: block;
   clear: both;
   width: 92%;
-  padding-bottom: .5em;
-  font-size: .813em;
+  padding-bottom: 0.5em;
+  font-size: 0.813em;
 }
 /* password share tab */
 .dialog .share-tab {
@@ -7313,7 +7528,7 @@ table.table-info.horizontal tbody tr:nth-child(odd) {
 }
 .dialog .organize-tab .current-folder {
   background: #F3F3F3;
-  padding: .5em 1em;
+  padding: 0.5em 1em;
 }
 .dialog .organize-tab .current-folder .folder-name {
   font-weight: bold;
@@ -7375,7 +7590,7 @@ table.table-info.horizontal tbody tr:nth-child(odd) {
 .dialog.kdbx-credentials .actions.inline .button,
 .dialog.import .actions.inline .button {
   height: 1.5em;
-  padding-top: .6em;
+  padding-top: 0.6em;
 }
 .dialog.kdbx-credentials div.jfilestyle,
 .dialog.import div.jfilestyle {
@@ -7647,7 +7862,7 @@ table.table-info.horizontal tbody tr:nth-child(odd) {
   padding: 0;
   width: 12.5em;
   height: 12.5em;
-  margin: .5em 1em 0 0;
+  margin: 0.5em 1em 0 0;
 }
 .page.settings .profile-detailed-information .avatar .edit {
   width: 12.5em;
@@ -7722,7 +7937,7 @@ table.table-info.horizontal tbody tr:nth-child(odd) {
   line-height: 1.4em;
   font-size: 1.5em;
   text-align: center;
-  padding: .25em .5em;
+  padding: 0.25em 0.5em;
 }
 .page.settings .profile-detailed-information .avatar .edit a .help-text {
   display: block;
@@ -7773,7 +7988,7 @@ html.launching .launching-screen .progress-bar-wrapper {
 }
 html.launching .launching-screen p {
   margin: 1em 0;
-  font-size: .75em;
+  font-size: 0.75em;
 }
 .launching-screen {
   display: none;
@@ -7816,8 +8031,8 @@ html.launching .launching-screen p {
 }
 .page.status .grid .message,
 .page.setup .grid .message {
-  padding: .75em 1em;
-  margin-bottom: .5em;
+  padding: 0.75em 1em;
+  margin-bottom: 0.5em;
 }
 .page.status .grid .input .message,
 .page.setup .grid .input .message {
@@ -7856,4 +8071,19 @@ html.launching .launching-screen p {
   -moz-box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.2);
   box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.2);
   border: 1px solid #BBB;
+}
+.mfa.page p {
+  font-size: 0.875em;
+}
+.mfa.page .input-verify {
+  background: #F3F3F3;
+  padding: 2.5em;
+  margin-top: 3em;
+  max-width: 16em;
+}
+.mfa.page .button-verify {
+  background: #F3F3F3;
+  padding: 2.5em;
+  margin-top: 3em;
+  max-width: 16em;
 }

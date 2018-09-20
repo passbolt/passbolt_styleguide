@@ -28,11 +28,21 @@
 				</div>
 			</div>
 		</li>
-        <li class="<?php echo isselected('themese'); ?>">
+        <li class="<?php echo isselected('themes'); ?>">
             <div class="row">
                 <div class="main-cell-wrapper">
                     <div class="main-cell">
                         <a href="../demo/LU_users_profile_themes.php"><span>Theme</span></a>
+                    </div>
+                </div>
+            </div>
+        </li>
+
+        <li class="<?php echo isselected('mfa'); ?>">
+            <div class="row">
+                <div class="main-cell-wrapper">
+                    <div class="main-cell">
+                        <a href="../demo/LU_users_profile_mfa_01.php"><span>Authentication</span></a>
                     </div>
                 </div>
             </div>
@@ -46,6 +56,8 @@
 				</div>
 			</div>
 		</li>
+
+        <!--
         <li class="<?php echo isselected('keyinspector'); ?>">
             <div class="row">
                 <div class="main-cell-wrapper">
@@ -72,6 +84,6 @@
                     </div>
                 </div>
             </div>
-        </li>
+        </li>-->
 	</ul>
 </div>

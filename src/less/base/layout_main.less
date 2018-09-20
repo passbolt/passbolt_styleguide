@@ -83,7 +83,8 @@
 
 .col1,
 .panel.left {
-    width: 17.5%;
+    width: 17.25%;
+    box-sizing: border-box;
 }
 .panel.middle {
     width: 82%;
@@ -115,7 +116,10 @@
    don't center the grid inside main panel */
 .panel.main .grid-responsive-12 {
     float: left;
-    width: 99%;
+    width: 100%;
+    max-width: none;
+    padding-left:.25em;
+    box-sizing: border-box;
 }
 
 /* hide left column when there is no space */
