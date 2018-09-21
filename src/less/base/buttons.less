@@ -126,8 +126,6 @@ button:active,
     border: 1px solid @border-focus;
     background: @background-lighter;
     position: relative;
-    -webkit-box-shadow: inset 0 1px 2px rgba(255, 255, 255, .2);
-    -moz-box-shadow: inset 0 1px 2px rgba(0, 0, 0, .2);
     box-shadow: inset 0 1px 2px rgba(0, 0, 0, .2);
 }
 
@@ -152,8 +150,6 @@ button.disabled:active,
 input[type=submit].disabled:focus,
 button.disabled:focus,
 .button.disabled:focus {
-    -webkit-box-shadow: 0 0 0;
-    -moz-box-shadow: 0 0 0;
     box-shadow: 0 0 0;
     top: 0;
     color: @button-disabled-color;
@@ -164,8 +160,6 @@ button.disabled:focus,
 /* toggle selected */
 .toggle.button.selected {
     background: @button-selected-background;
-    -webkit-box-shadow: inset 0 1px 2px rgba(255, 255, 255, .2);
-    -moz-box-shadow: inset 0 1px 2px rgba(0, 0, 0, .2);
     box-shadow: inset 0 1px 2px rgba(0, 0, 0, .2);
     border: 1px solid @button-selected-border;
 }
@@ -180,10 +174,6 @@ button.disabled:focus,
 
 .button.duo:nth-child(1) {
     margin-right: 0;
-    -webkit-border-top-right-radius: 0;
-    -webkit-border-bottom-right-radius: 0;
-    -moz-border-radius-topright: 0;
-    -moz-border-radius-bottomright: 0;
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;
 }
@@ -191,10 +181,6 @@ button.disabled:focus,
 .button.duo:nth-child(2) {
     margin-left: 0;
     border-left: 0;
-    -webkit-border-top-left-radius: 0;
-    -webkit-border-bottom-left-radius: 0;
-    -moz-border-radius-topleft: 0;
-    -moz-border-radius-bottomleft: 0;
     border-top-left-radius: 0;
     border-bottom-left-radius: 0;
 }

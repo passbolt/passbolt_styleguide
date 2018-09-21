@@ -50,7 +50,7 @@
 											</div>
                                             <div class="row">
                                                 <div class="col6 last">
-                                                <h3>Passwords</h3>
+                                                <h3>On password changes</h3>
                                                 <div class="input toggle-switch">
                                                     <label for="cb1">When somebody share a password with you</label>
                                                     <input class="toggle-switch-checkbox checkbox" id="cb1" type="checkbox">
@@ -71,7 +71,7 @@
                                                     <input class="toggle-switch-checkbox checkbox" id="cb4" type="checkbox">
                                                     <label class="toggle-switch-button" for="cb4"></label>
                                                 </div>
-                                                <h3>Group Membership</h3>
+                                                <h3>On group membership changes</h3>
                                                 <div class="input toggle-switch">
                                                     <label for="cb5">When a group you are a member of is deleted.</label>
                                                     <input class="toggle-switch-checkbox checkbox" id="cb5" type="checkbox" checked>

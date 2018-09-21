@@ -30,7 +30,7 @@
                             <?php
                             $_GET['breadcrumbs'] = array(
                                 'profile' => '../demo/LU_users_profile.php',
-                                'second factor authentication' => '../demo/LU_users_profile_mfa_01.php',
+                                'multi-factor authentication' => '../demo/LU_users_profile_mfa_01.php',
                                 'setup' => '../demo/LU_users_profile_mfa_02.php'
                             );
                             include('includes/LU_breadcrumbs.php'); ?>

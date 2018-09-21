@@ -51,7 +51,7 @@
 			<div class="row">
 				<div class="main-cell-wrapper">
 					<div class="main-cell">
-						<a href="../demo/LU_users_profile_notifications.php"><span>Notification settings</span></a>
+						<a href="../demo/LU_users_profile_notifications.php"><span>Email notifications</span></a>
 					</div>
 				</div>
 			</div>

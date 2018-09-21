@@ -56,6 +56,8 @@
     @check-length: 50px;
     display:flex;
     font-size:1.125em;
+    border:1px solid @border-light;
+    border-radius:3px;
 
     .illustration {
         flex: 0 0 @circle-length;
@@ -87,23 +89,23 @@
 
     #successAnimationCircle {
         stroke-dasharray: @circle-length @circle-length;
-        stroke: #66CC00;
+        stroke: @green;
     }
 
     #successAnimationCheck {
         stroke-dasharray: @check-length @check-length;
-        stroke: #66CC00;
+        stroke: @green;
     }
 
     #successAnimation.animated {
-        animation: 1s ease-out 0s 1 both pop;
+        animation: .75s ease-out 0s 1 both pop;
 
         #successAnimationCircle {
-            animation: 1s cubic-bezier(0.77, 0, 0.175, 1) 0s 1 both drawCircle;
+            animation: .75s cubic-bezier(0.77, 0, 0.175, 1) 0s 1 both drawCircle;
         }
 
         #successAnimationCheck {
-            animation: 1s cubic-bezier(0.77, 0, 0.175, 1) 0s 1 both drawCheck;
+            animation: .75s cubic-bezier(0.77, 0, 0.175, 1) 0s 1 both drawCheck;
         }
     }
 }

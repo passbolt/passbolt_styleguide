@@ -30,14 +30,14 @@
 							<?php
 							$_GET['breadcrumbs'] = array(
 								'profile' => '../demo/LU_users_profile.php',
-								'second factor authentication' => '../demo/LU_users_profile_mfa01.php'
+								'multi-factor authentication' => '../demo/LU_users_profile_mfa01.php'
 							);
 							include('includes/LU_breadcrumbs.php'); ?>
 
                             <div class="grid grid-responsive-12">
                                 <div class="row">
                                     <div class="col12 last">
-                                        <h3>Second factor authentication</h3>
+                                        <h3>Multi-factor authentication</h3>
                                     </div>
                                 </div>
                             </div>
@@ -49,11 +49,11 @@
                                         <img src="../src/img/diagrams/totp.svg"/>
                                     </div>
                                     <div class="push1 col4 last">
-                                        <h4>What is second factor authentication?</h4>
+                                        <h4>What is multi-factor authentication?</h4>
                                         <div class="message notice">
                                             <p>
                                                 Multi-factor authentication (MFA) is a method of confirming a user's
-                                                identity that requires presenting two or more pieces of evidence (or factors).
+                                                identity that requires presenting two or more pieces of evidence (or factor).
                                             </p>
                                             <a class="button">learn more</a>
                                         </div>

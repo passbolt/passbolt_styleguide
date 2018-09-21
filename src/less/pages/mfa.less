@@ -14,4 +14,42 @@
         margin-top:3em;
         max-width: 16em;
     }
+
+    .mfa-trusted-device {
+        padding:1em;
+        display:flex;
+
+        &:nth-child(even) {
+            background: @background-lightest;
+        }
+        .device {
+            flex:1;
+            font-size:2.5em;
+            text-align: center;
+            color:@font-dim;
+
+            &.current:before {
+                content:'•';
+                color:@green;
+                font-size:.75em;
+                position:absolute;
+                margin-left:-.5em;
+            }
+        }
+        .session {
+            flex:2 0 10em;
+        }
+        .action {
+            flex:1;
+            padding-top:.5em;
+        }
+        table {
+            td, th {
+                padding:0.125em 1em;
+            }
+            th {
+                font-weight: bold;
+            }
+        }
+    }
 }

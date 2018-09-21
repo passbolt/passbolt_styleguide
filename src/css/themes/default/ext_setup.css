@@ -3319,8 +3319,6 @@ button:active,
   border: 1px solid #2894DF;
   background: #EEE;
   position: relative;
-  -webkit-box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.2);
-  -moz-box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.2);
   box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.2);
 }
 input[type=submit].disabled,
@@ -3343,8 +3341,6 @@ button.disabled:active,
 input[type=submit].disabled:focus,
 button.disabled:focus,
 .button.disabled:focus {
-  -webkit-box-shadow: 0 0 0;
-  -moz-box-shadow: 0 0 0;
   box-shadow: 0 0 0;
   top: 0;
   color: #888;
@@ -3354,8 +3350,6 @@ button.disabled:focus,
 /* toggle selected */
 .toggle.button.selected {
   background: #EEE;
-  -webkit-box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.2);
-  -moz-box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.2);
   box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.2);
   border: 1px solid #BBB;
 }
@@ -3414,20 +3408,12 @@ button.disabled:focus,
 }
 .button.duo:nth-child(1) {
   margin-right: 0;
-  -webkit-border-top-right-radius: 0;
-  -webkit-border-bottom-right-radius: 0;
-  -moz-border-radius-topright: 0;
-  -moz-border-radius-bottomright: 0;
   border-top-right-radius: 0;
   border-bottom-right-radius: 0;
 }
 .button.duo:nth-child(2) {
   margin-left: 0;
   border-left: 0;
-  -webkit-border-top-left-radius: 0;
-  -webkit-border-bottom-left-radius: 0;
-  -moz-border-radius-topleft: 0;
-  -moz-border-radius-bottomleft: 0;
   border-top-left-radius: 0;
   border-bottom-left-radius: 0;
 }
@@ -3517,9 +3503,6 @@ textarea {
   border: 1px solid #CCC;
   border-top: 1px solid #BBB;
   vertical-align: middle;
-  -ms-box-sizing: content-box;
-  -moz-box-sizing: content-box;
-  -webkit-box-sizing: content-box;
   box-sizing: content-box;
 }
 textarea:hover,
@@ -3534,14 +3517,10 @@ input[type=password]:focus,
 input[type=search]:focus,
 input[type=text]:focus,
 input[type=email]:focus {
-  -webkit-box-shadow: inset 1px 1px 2px rgba(255, 255, 255, 0.2);
-  -moz-box-shadow: inset 1px 1px 2px rgba(0, 0, 0, 0.2);
   box-shadow: inset 1px 1px 2px rgba(0, 0, 0, 0.2);
   border: 1px solid #2894DF;
 }
 .input-focus {
-  -webkit-box-shadow: inset 1px 1px 2px rgba(255, 255, 255, 0.2);
-  -moz-box-shadow: inset 1px 1px 2px rgba(0, 0, 0, 0.2);
   box-shadow: inset 1px 1px 2px rgba(0, 0, 0, 0.2);
   border: 1px solid #2894DF;
 }
@@ -4816,6 +4795,8 @@ article video {
   color: #333;
   display: flex;
   font-size: 1.125em;
+  border: 1px solid #DDD;
+  border-radius: 3px;
 }
 .message.success.animated .illustration {
   flex: 0 0 180px;
@@ -4844,20 +4825,20 @@ article video {
 }
 .message.success.animated #successAnimationCircle {
   stroke-dasharray: 180px 180px;
-  stroke: #66CC00;
+  stroke: #009900;
 }
 .message.success.animated #successAnimationCheck {
   stroke-dasharray: 50px 50px;
-  stroke: #66CC00;
+  stroke: #009900;
 }
 .message.success.animated #successAnimation.animated {
-  animation: 1s ease-out 0s 1 both pop;
+  animation: 0.75s ease-out 0s 1 both pop;
 }
 .message.success.animated #successAnimation.animated #successAnimationCircle {
-  animation: 1s cubic-bezier(0.77, 0, 0.175, 1) 0s 1 both drawCircle;
+  animation: 0.75s cubic-bezier(0.77, 0, 0.175, 1) 0s 1 both drawCircle;
 }
 .message.success.animated #successAnimation.animated #successAnimationCheck {
-  animation: 1s cubic-bezier(0.77, 0, 0.175, 1) 0s 1 both drawCheck;
+  animation: 0.75s cubic-bezier(0.77, 0, 0.175, 1) 0s 1 both drawCheck;
 }
 @media only screen and (max-width: 767px) {
   .message.success.animated {

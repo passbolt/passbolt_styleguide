@@ -24,9 +24,6 @@ textarea {
     border: 1px solid @border-input;
     border-top: 1px solid @border-input-light;
     vertical-align: middle;
-    -ms-box-sizing: content-box;
-    -moz-box-sizing: content-box;
-    -webkit-box-sizing: content-box;
     box-sizing: content-box;
 }
 
@@ -43,14 +40,10 @@ input[type=password]:focus,
 input[type=search]:focus,
 input[type=text]:focus,
 input[type=email]:focus {
-    -webkit-box-shadow: inset 1px 1px 2px rgba(255, 255, 255, .2);
-    -moz-box-shadow: inset 1px 1px 2px rgba(0, 0, 0, .2);
     box-shadow: inset 1px 1px 2px rgba(0, 0, 0, .2);
     border: 1px solid @border-focus;
 }
 .input-focus {
-    -webkit-box-shadow: inset 1px 1px 2px rgba(255, 255, 255, .2);
-    -moz-box-shadow: inset 1px 1px 2px rgba(0, 0, 0, .2);
     box-shadow: inset 1px 1px 2px rgba(0, 0, 0, .2);
     border: 1px solid @border-focus;
 }

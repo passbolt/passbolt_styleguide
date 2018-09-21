@@ -49,8 +49,8 @@ if (isset($_GET['cards'])) {
 				'description' => 'Manually approve and sign keys to build a network of trust.',
 				'teaser' => 'keyring'
 			],[
-				'title' => 'Second factor authentication',
-				'description' => 'Login requires an additional factor like your phone or fingerprint.',
+				'title' => 'Multi factor authentication',
+				'description' => 'Login requires an additional factor like a phone token.',
 				'teaser' => 'fingerprint'
 			]
 		],
