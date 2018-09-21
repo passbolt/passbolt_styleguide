@@ -31,6 +31,11 @@
 							$_GET['breadcrumbs'] = array(
 								'all passwords' => '../demo/LU_passwords.php'
 							);
+							$emptyGridSettings = [
+								'filter' => 'all_items',
+								'title' => 'Welcome to passbolt!',
+								'subtitle' => 'It does feel a bit empty here. Create your first password<br> or wait for a team member to share one with you.<br>'
+							];
 							include('includes/LU_breadcrumbs.php'); ?>
 							<?php include('includes/tableviews/LU_tableview_passwords_empty.php'); ?>
 						</div>

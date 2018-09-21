@@ -30,30 +30,7 @@
       margin-top:0;
     }
 
-    label {
-      font-size: 1rem;
-      font-weight:normal;
-    }
-
-    .singleline {
-      .input.text {
-        float: left;
-        width: 48%;
-        &:first-child {
-          margin-right:1em;
-        }
-        input[type=text],
-        input[type=email] {
-          width:90%;
-        }
-      }
-    }
     .input.text {
-      width: 100%;
-      input[type=text],
-      input[type=email] {
-        width:94%;
-      }
       select {
         width: 100%;
       }
@@ -181,6 +158,10 @@
     .field {
       border: 1px solid @border-input;
       padding-left: .5em;
+      -webkit-border-radius: 3px;
+      -moz-border-radius: 3px;
+      border-radius: 3px;
+      width:97%;
     }
 
     .field::-webkit-input-placeholder {

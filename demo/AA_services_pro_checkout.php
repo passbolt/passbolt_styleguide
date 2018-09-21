@@ -77,144 +77,147 @@
 <!--    </div>-->
 
     <div class="page-row cart">
-        <div class="grid grid-responsive-12">
-            <div class="row">
-                <div class="col12">
-                    <h1>Your order</h1>
-                </div>
-                <div class="col6">
-                    <div class="box customer_information">
-                        <h2>Billing information</h2>
-                        <div class="box-content">
-                            <form>
-                                <div class="singleline clearfix">
-                                    <div class="input text">
-                                        <label for="organization_name">Organization name</label>
-                                        <input type="text" id="organization_name" placeholder="Organization name" autocomplete="organization">
-                                    </div>
-                                    <div class="input text">
-                                        <label for="organization_name">Vat number (if any)</label>
-                                        <input type="text" id="organization_name" placeholder="Vat number">
-                                    </div>
-                                </div>
-                                <div class="input text required error">
-                                    <label for="full_name">Full name</label>
-                                    <input type="text" id="full_name" placeholder="Full Name" autocomplete="full-name">
-                                    <label id="full_name--error" class="error" for="full_name">This field is required.</label>
-                                </div>
-                                <div class="input text required">
-                                    <label for="email_address">Email address</label>
-                                    <input type="email" id="email_address" placeholder="Email address" autocomplete="email">
-                                </div>
-                                <div class="input text required">
-                                    <label for="organization_address">Address</label>
-                                    <input type="text" id="organization_address" placeholder="Address" autocomplete="street-address">
-                                </div>
-                                <div class="singleline clearfix">
-                                    <div class="input text required">
-                                        <label for="city">City</label>
-                                        <input type="text" id="city" placeholder="City" autocomplete="address-level2">
-                                    </div>
-                                    <div class="input text required">
-                                        <label for="zip_code">Zip code</label>
-                                        <input type="text" id="zip_code" placeholder="Zip Code" autocomplete="postal-code">
-                                    </div>
-                                </div>
-                                <div class="input text required country">
-                                    <label for="country">Country</label>
-                                    <select name="country" id="country" autocomplete="country-name" data-placeholder="Choose a country" class="chosen-select">
-                                    </select>
-                                </div>
-                            </form>
-                        </div>
+        <form class="public">
+            <div class="grid grid-responsive-12">
+                <div class="row">
+                    <div class="col12">
+                        <h1>Your order</h1>
                     </div>
-                    <div class="stripe checkout">
-                        <div class="box">
-                            <h2>Checkout</h2>
+                    <div class="col6">
+                        <div class="box customer_information">
+                            <h2>Billing information</h2>
                             <div class="box-content">
-                                <p>Pay with your credit card via Stripe</p>
-                                <div class="group">
-                                    <div class="input text required">
-                                        <label for="PaymentCardHolderName">Card holder name</label>
-                                        <input name="data[Payment][card_holder_name]" placeholder="Card holder name" required="required" type="text" id="PaymentCardHolderName">
+                                <form>
+                                    <div class="singleline clearfix">
+                                        <div class="input text">
+                                            <label for="organization_name">Organization name</label>
+                                            <input type="text" id="organization_name" placeholder="Organization name" autocomplete="organization">
+                                        </div>
+                                        <div class="input text">
+                                            <label for="organization_name">Vat number (if any)</label>
+                                            <input type="text" id="organization_name" placeholder="Vat number">
+                                        </div>
+                                    </div>
+                                    <div class="input text required error">
+                                        <label for="full_name">Full name</label>
+                                        <input type="text" id="full_name" placeholder="Full Name" autocomplete="full-name">
+                                        <div id="full_name--error" class="message error">This field is required.</div>
                                     </div>
                                     <div class="input text required">
-                                        <label for="card-element">Card Number</label>
-                                        <div id="card-element" class="field"></div>
+                                        <label for="email_address">Email address</label>
+                                        <input type="email" id="email_address" placeholder="Email address" autocomplete="email">
+                                    </div>
+                                    <div class="input text required">
+                                        <label for="organization_address">Address</label>
+                                        <input type="text" id="organization_address" placeholder="Address" autocomplete="street-address">
+                                    </div>
+                                    <div class="singleline clearfix">
+                                        <div class="input text required">
+                                            <label for="city">City</label>
+                                            <input type="text" id="city" placeholder="City" autocomplete="address-level2">
+                                        </div>
+                                        <div class="input text required">
+                                            <label for="zip_code">Zip code</label>
+                                            <input type="text" id="zip_code" placeholder="Zip Code" autocomplete="postal-code">
+                                        </div>
+                                    </div>
+                                    <div class="input text required country">
+                                        <label for="country">Country</label>
+                                        <select name="country" id="country" autocomplete="country-name" data-placeholder="Choose a country" class="chosen-select">
+                                        </select>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="stripe checkout">
+                            <div class="box">
+                                <h2>Checkout</h2>
+                                <div class="box-content">
+                                    <p>Pay with your credit card via Stripe</p>
+                                    <div class="group">
+                                        <div class="input text required">
+                                            <label for="PaymentCardHolderName">Card holder name</label>
+                                            <input name="data[Payment][card_holder_name]" placeholder="Card holder name" required="required" type="text" id="PaymentCardHolderName">
+                                        </div>
+                                        <div class="input text required">
+                                            <label for="card-element">Card Number</label>
+                                            <div id="card-element" class="field"></div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="input checkbox terms">
-                            <input type="checkbox">
-                            <label>I agree to the <a href="#">terms and conditions</a></label>
-                        </div>
-                        <div class="submit-wrapper clearfix">
-                            <input type="submit" class="button primary big" value="Pay €264.00">
-                        </div>
-                        <!--div class="outcome">
-                            <div class="error" role="alert"></div>
-                            <div class="success">
-                                Success! Your Stripe token is <span class="token"></span>
+                            <div class="input checkbox terms">
+                                <input type="checkbox">
+                                <label>I agree to the <a href="#">terms and conditions</a></label>
                             </div>
-                        </div-->
+                            <div class="submit-wrapper clearfix">
+                                <input type="submit" class="button primary big" value="Pay €264.00">
+                            </div>
+                            <!--div class="outcome">
+                                <div class="error" role="alert"></div>
+                                <div class="success">
+                                    Success! Your Stripe token is <span class="token"></span>
+                                </div>
+                            </div-->
+                        </div>
                     </div>
-                </div>
-                <div class="col6 last box payment_info">
-                    <h2>Your order</h2>
-                    <div class="box-content">
-                        <div class="order-line">
-                            <div class="item-name">Business pack</div>
-                            <div class="input text form-group price">
-                                <input name="products[main][quantity]" id="quantity" value="5" min="1" max="9999999" class="form-control input-small quantity" required="required" type="number">
-                                <label class="control-label block label-quantity" for="quantity">users</label>
-                                <span class="times">×</span>
-                                <div class="price-per-user">
-                                    €44.00
+                    <div class="col6 last box payment_info">
+                        <h2>Your order</h2>
+                        <div class="box-content">
+                            <div class="order-line">
+                                <div class="item-name">Business pack</div>
+                                <div class="input text form-group price">
+                                    <input name="products[main][quantity]" id="quantity" value="5" min="1" max="9999999" class="form-control input-small quantity" required="required" type="number">
+                                    <label class="control-label block label-quantity" for="quantity">users</label>
+                                    <span class="times">×</span>
+                                    <div class="price-per-user">
+                                        €44.00
+                                    </div>
                                 </div>
+                                <div class="line-total">€240.00</div>
                             </div>
-                            <div class="line-total">€240.00</div>
-                        </div>
-                        <div class="product-details">
-                            <ul>
-                                <li>Installation: installation scripts, docker, VM, web installer</li>
-                                <li>Community features: all</li>
-                                <li>Premium features: all</li>
-                                <li>Support: 15 requests, next business day</li>
-                                <li>License validity: forever</li>
-                                <li>Updates: free for one year</li>
-                            </ul>
-                            <p>After payment, you will receive the installation instructions and license key by email.</p>
-                        </div>
+                            <div class="product-details">
+                                <ul>
+                                    <li>Installation: installation scripts, docker, VM, web installer</li>
+                                    <li>Community features: all</li>
+                                    <li>Premium features: all</li>
+                                    <li>Support: 15 requests, next business day</li>
+                                    <li>License validity: forever</li>
+                                    <li>Updates: free for one year</li>
+                                </ul>
+                                <p>After payment, you will receive the installation instructions and license key by email.</p>
+                            </div>
 
-                        <div class="subscription-total">
-                            <table class="total-table create">
-                                <tbody>
-                                <tr>
-                                    <td class="text-right">Cost:</td>
-                                    <td class="text-right cost">
-                                        <span class="cost">€240.00</span>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="text-right">Vat (17%):</td>
-                                    <td class="text-right vat">
-                                        <span class="vat">€24.00</span>
-                                    </td>
-                                </tr>
-                                <tr class="total">
-                                    <td class="text-right">Total:</td>
-                                    <td class="text-right total-amount">
-                                        <span class="order-total-label">€264.00</span>
-                                    </td>
-                                </tr>
-                                </tbody>
-                            </table>
+                                <div class="subscription-total">
+                                    <table class="total-table create">
+                                        <tbody>
+                                        <tr>
+                                            <td class="text-right">Cost:</td>
+                                            <td class="text-right cost">
+                                                <span class="cost">€240.00</span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-right">Vat (17%):</td>
+                                            <td class="text-right vat">
+                                                <span class="vat">€24.00</span>
+                                            </td>
+                                        </tr>
+                                        <tr class="total">
+                                            <td class="text-right">Total:</td>
+                                            <td class="text-right total-amount">
+                                                <span class="order-total-label">€264.00</span>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-	        </div>
-        </div>
+            </div>
+        </form>
     </div>
 
     <?php include('includes/AN_footer.php'); ?>

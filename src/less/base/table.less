@@ -1,0 +1,49 @@
+article {
+  table.table-parameters {
+    width:100%;
+
+    thead {
+      background-color: transparent !important;
+      th {
+        background-color: transparent;
+        font-weight:bold;
+        border:1px solid @grey;
+        padding: 0.7em 0.5em;
+      }
+    }
+
+    tbody {
+      tr {
+        &:nth-child(even) {
+          background-color: transparent;
+        }
+        &:nth-child(odd) {
+          background-color: @grey-lightest;
+        }
+
+        td {
+          padding: 0.5em 0.5em;
+          border:1px solid @grey;
+          code {
+            padding: 0.2em 0.3em;
+            background-color: @grey;
+          }
+          pre {
+            margin:0;
+            padding:0;
+            background-color: transparent;
+          }
+          code,pre {
+            font-family: monospace,serif;
+            font-size: 1em;
+          }
+          em {
+            color: @grey-dark;
+            font-size:0.8em;
+            font-style: normal;
+          }
+        }
+      }
+    }
+  }
+}

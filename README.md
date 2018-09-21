@@ -4,8 +4,8 @@
 	   / ____/ /_/ (__  |__  ) /_/ / /_/ / / /_
 	  /_/    \__,_/____/____/_.___/\____/_/\__/
 
-	The password management solution
-	(c) 2017 Passbolt SARL
+	The open source password manager for teams
+	(c) 2018 Passbolt SARL
 
 
 License

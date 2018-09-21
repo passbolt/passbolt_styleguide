@@ -19,6 +19,8 @@
 			}
 		}
 		// Request the application worker to resize the iframe container.
-		window.parent.resizeElement(selector, dimension);
+        if(typeof window.parent.resizeElement !== 'undefined') {
+          window.parent.resizeElement(selector, dimension);
+        }
 	};
 </script>

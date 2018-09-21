@@ -9,7 +9,7 @@
         height: 1.5em;
     }
     .autocomplete input {
-        width: 100%;
+        width: calc(100% - 4em); /* space for security token */
         margin-bottom: 0;
         box-sizing: border-box;
     }
@@ -17,10 +17,7 @@
         padding-left: 0;
     }
     .security-token {
-        right: .063em;
-        top: 3.375em;
-        line-height: 24px;
-        height: 24px;
+        margin-top: 0;
     }
 }
 
@@ -75,7 +72,7 @@
 .autocomplete-content.loading {
     ul {
         height: 20px;
-        background: url('@{images}/controls/loading.gif') no-repeat center center;
+        background: @loading no-repeat center center;
     }
 }
 
