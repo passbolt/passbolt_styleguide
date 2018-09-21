@@ -6,6 +6,7 @@
 		$(function() {
 			$("#ConnectionProtocol").chosen({width: '100%', disable_search: true});
 			$("#DefaultGroupAdminUser").chosen();
+			$("#DefaultUser").chosen();
 		});
 	</script>
 </head>
@@ -27,7 +28,7 @@
 		</div>
 		<div class="header third">
 			<?php include('includes/headers/LU_header_third_title_profile.php'); ?>
-			<?php include('includes/headers/LU_header_third_actions_admin_ldap.php'); ?>
+			<?php include('includes/headers/AD_header_third_actions_admin_ldap.php'); ?>
 			<!-- no action on login history -->
 		</div>
 		<div class="panel main mad_controller_component_tab_controller mad_view_component_tab js_component ready" id="js_app_panel_main">
@@ -58,13 +59,14 @@
 
 												<div class="ldap-configuration-credentials col8">
 													<h3>Credentials</h3>
-													<div class="input text">
+													<div class="radiolist">
 														<label>Directory type</label>
-														<select name="data[ldap][directory_type]" class="required fluid" id="ConnectionType" required="required" disabled="disabled">
-															<option value="1">Active Directory</option>
-															<option value="2">Openldap</option>
-														</select>
-														<div class="message">Active directory and Openldap are supported at the moment. More will come later.</div>
+														<div class="input radio">
+															<input name="data[User][field]" value="1" id="UserField1" type="radio" checked="checked" disabled="disabled">
+															<label for="UserField1">Active Directory</label>
+															<input name="data[User][field]" value="2" id="UserField2" type="radio" disabled="disabled">
+															<label for="UserField2">Open Ldap</label>
+														</div>
 													</div>
 													<div class="input text">
 														<label>Domain</label>
@@ -74,7 +76,7 @@
 														<label>Server url</label>
 														<div class="input text field_protocol_host">
 															<div class="input text protocol">
-																<select name="data[ldap][connection_type]" class="required fluid" id="ConnectionProtocol" required="required">
+																<select name="data[ldap][connection_type]" class="required fluid" id="ConnectionProtocol" required="required" disabled="disabled">
 																	<option value="1">ldap://</option>
 																	<option value="2">ldaps:// (ssl)</option>
 																	<option value="3">ldaps:// (tls)</option>
@@ -89,21 +91,22 @@
 														</div>
 													</div>
 
-													<div class="input text">
-														<label>Username</label>
-														<input type="text" class="required fluid" placeholder="username" disabled="disabled">
+													<div class="singleline clearfix">
+														<div class="input text first-field">
+															<label>Username</label>
+															<input type="text" class="required fluid" placeholder="username" disabled="disabled">
+														</div>
+														<div class="input text last-field">
+															<label>Password</label>
+															<input type="password" class="required fluid" placeholder="password" disabled="disabled">
+														</div>
 													</div>
 													<div class="input text">
-														<label>Password</label>
-														<input type="password" class="required fluid" disabled="disabled">
+														<label>Base DN</label>
+														<input type="text" class="required fluid" placeholder="OU=OrgUsers,DC=mydomain,DC=local" disabled="disabled">
 													</div>
 
 													<h3>Directory configuration</h3>
-													<div class="input text">
-														<label>Base DN</label>
-														<input type="text" class="required fluid" placeholder="Base DN" disabled="disabled">
-														<div class="message">The base DN (default naming context) for the domain. If this is empty then it will be queried from the RootDSE.</div>
-													</div>
 													<div class="input text">
 														<label>Group path</label>
 														<input type="text" class="required fluid" placeholder="Group Path" disabled="disabled">
@@ -138,7 +141,7 @@
 													</div>
 													<div class="input text">
 														<label>Default group admin</label>
-														<select name="data[ldap][defaultGroupAdminUser]" class="required fluid" id="DefaultGroupAdminUser" required="required">
+														<select name="data[ldap][defaultGroupAdminUser]" class="required fluid" id="DefaultGroupAdminUser" required="required" disabled="disabled">
 															<option value="0">- Choose -</option>
 															<option value="1">admin@passbolt.com</option>
 															<option value="2">ada@passbolt.com</option>
@@ -152,13 +155,33 @@
 													<div class="input text clearfix">
 														<label>Sync operations</label>
 														<div class="col6">
-															<div class="input checkbox"><input type="checkbox" name="user_create" checked="checked" disabled="disabled"> create users</div>
-															<div class="input checkbox"><input type="checkbox" name="user_delete" checked="checked" disabled="disabled"> delete users</div>
+															<div class="input toggle-switch">
+																<label for="create_users">Create users</label>
+																<input class="toggle-switch-checkbox checkbox" id="create_users" type="checkbox" checked="checked" disabled="disabled">
+																<label class="toggle-switch-button" for="create_users"></label>
+															</div>
+															<div class="input toggle-switch">
+																<label for="delete_users">Delete users</label>
+																<input class="toggle-switch-checkbox checkbox" id="delete_users" type="checkbox" checked="checked" disabled="disabled">
+																<label class="toggle-switch-button" for="delete_users"></label>
+															</div>
 														</div>
 														<div class="col6 last">
-															<div class="input checkbox"><input type="checkbox" name="group_create" checked="checked" disabled="disabled"> create groups</div>
-															<div class="input checkbox"><input type="checkbox" name="group_delete" checked="checked" disabled="disabled"> delete groups</div>
-															<div class="input checkbox"><input type="checkbox" name="group_update" checked="checked" disabled="disabled"> update group memberships</div>
+															<div class="input toggle-switch">
+																<label for="create_groups">Create groups</label>
+																<input class="toggle-switch-checkbox checkbox" id="delete_users" type="checkbox" checked="checked" disabled="disabled">
+																<label class="toggle-switch-button" for="create_groups"></label>
+															</div>
+															<div class="input toggle-switch">
+																<label for="delete_groups">Delete groups</label>
+																<input class="toggle-switch-checkbox checkbox" id="delete_groups" type="checkbox" checked="checked" disabled="disabled">
+																<label class="toggle-switch-button" for="delete_groups"></label>
+															</div>
+															<div class="input toggle-switch">
+																<label for="update_group_memberships">Update group memberships</label>
+																<input class="toggle-switch-checkbox checkbox" id="update_group_memberships" type="checkbox" checked="checked" disabled="disabled">
+																<label class="toggle-switch-button" for="update_group_memberships"></label>
+															</div>
 														</div>
 													</div>
                                                     <p>&nbsp;</p>
@@ -167,10 +190,10 @@
 
 												<div class="col4 last">
 													<h2>Need help?</h2>
-													<p>Check out our ldap help page</p>
+													<p>Check out our ldap configuration guide</p>
 													<a class="button" href="https://help.passbolt.com/configure/ldap" target="_blank">
 														<i class="fa fa-fw fa-life-ring"></i>
-														<span>Help</span>
+														<span>Read documentation</span>
 													</a>
 												</div>
 

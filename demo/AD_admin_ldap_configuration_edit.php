@@ -28,7 +28,7 @@
 		</div>
 		<div class="header third">
 			<?php include('includes/headers/LU_header_third_title_profile.php'); ?>
-			<?php //include('includes/headers/LU_header_third_actions_profile.php'); ?>
+            <?php include('includes/headers/AD_header_third_actions_admin_ldap_edit.php'); ?>
 			<!-- no action on login history -->
 		</div>
 		<div class="panel main mad_controller_component_tab_controller mad_view_component_tab js_component ready" id="js_app_panel_main">
@@ -153,19 +153,36 @@
 													<div class="input text">
 														<label>Sync operations</label>
 														<div class="col6">
-															<div class="input checkbox"><input type="checkbox" name="user_create" checked="checked"> create users</div>
-															<div class="input checkbox"><input type="checkbox" name="user_delete" checked="checked"> delete users</div>
+                                                            <div class="input toggle-switch">
+                                                                <label for="create_users">Create users</label>
+                                                                <input class="toggle-switch-checkbox checkbox" id="create_users" type="checkbox" checked="checked">
+                                                                <label class="toggle-switch-button" for="create_users"></label>
+                                                            </div>
+                                                            <div class="input toggle-switch">
+                                                                <label for="delete_users">Delete users</label>
+                                                                <input class="toggle-switch-checkbox checkbox" id="delete_users" type="checkbox" checked="checked">
+                                                                <label class="toggle-switch-button" for="delete_users"></label>
+                                                            </div>
 														</div>
 														<div class="col6 last">
-															<div class="input checkbox"><input type="checkbox" name="group_create" checked="checked"> create groups</div>
-															<div class="input checkbox"><input type="checkbox" name="group_delete" checked="checked"> delete groups</div>
-															<div class="input checkbox"><input type="checkbox" name="group_update" checked="checked"> update group memberships</div>
+                                                            <div class="input toggle-switch">
+                                                                <label for="create_groups">Create groups</label>
+                                                                <input class="toggle-switch-checkbox checkbox" id="delete_users" type="checkbox" checked="checked">
+                                                                <label class="toggle-switch-button" for="create_groups"></label>
+                                                            </div>
+                                                            <div class="input toggle-switch">
+                                                                <label for="delete_groups">Delete groups</label>
+                                                                <input class="toggle-switch-checkbox checkbox" id="delete_groups" type="checkbox" checked="checked">
+                                                                <label class="toggle-switch-button" for="delete_groups"></label>
+                                                            </div>
+                                                            <div class="input toggle-switch">
+                                                                <label for="update_group_memberships">Update group memberships</label>
+                                                                <input class="toggle-switch-checkbox checkbox" id="update_group_memberships" type="checkbox" checked="checked">
+                                                                <label class="toggle-switch-button" for="update_group_memberships"></label>
+                                                            </div>
 														</div>
 													</div>
 
-													<div class="input text">
-														<a class="button primary big" href="../demo/AD_admin_ldap_configuration.php">Save settings</a>
-													</div>
 													<p>&nbsp;</p>
 												</div>
 

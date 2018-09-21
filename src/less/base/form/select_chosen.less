@@ -1,6 +1,12 @@
 .chosen-container {
   margin-bottom:.5em;
 
+  &.chosen-disabled {
+    a.chosen-single {
+      border: 1px solid @border-input;
+    }
+  }
+
   a.chosen-single {
     background: @input-background-disabled;
     -webkit-border-radius:0;
@@ -44,6 +50,7 @@
     a.chosen-single {
       background: @input-background;
       border: 1px solid @border-input;
+      border-top:1px solid @border-input-light;
       box-shadow: none;
       div b {
         background-position: -18px 8px;

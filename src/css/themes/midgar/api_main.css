@@ -9,12 +9,14 @@
 /* logo */
 /* grid */
 /* messages */
-/* tabs */
+/* secret placeholder */
 /* sidebar */
 /* tables */
+/* tabs */
 /* tags */
 /* tooltip */
-/* secret placeholder */
+/* loading animation */
+/* scrollbar */
 /* ==========================================================================
  * Reset is a mix of :
  *
@@ -674,11 +676,11 @@ html body .hidden {
   animation: blinker 1s linear infinite;
 }
 .blink-fast {
-  animation: blinker 0.25s linear infinite;
+  animation: blinker .25s linear infinite;
 }
 @keyframes blinker {
   50% {
-    opacity: 0;
+    opacity: 0.0;
   }
 }
 /* body */
@@ -811,14 +813,14 @@ h1 {
   /* 24px base 16 */
 }
 h2 {
-  font-size: 1.25em;
+  font-size: 1.250em;
   /* 20px base 16 */
 }
 h3 {
   font-size: 1.125em;
   /* 18px base 16 */
   display: block;
-  padding-bottom: 0.333em;
+  padding-bottom: .333em;
   /* 6px */
   border-bottom: 1px dotted #0C0C0A;
 }
@@ -835,6 +837,7 @@ p {
 /*!
  *  Font Awesome 4.7.0 by @davegandy - http://fontawesome.io - @fontawesome
  *  License - http://fontawesome.io/license (Font: SIL OFL 1.1, CSS: MIT License)
+ *  @licstart
  */
 /* FONT PATH
  * -------------------------- */
@@ -894,9 +897,9 @@ p {
   left: -1.85714286em;
 }
 .fa-border {
-  padding: 0.2em 0.25em 0.15em;
+  padding: .2em .25em .15em;
   border: solid 0.08em #0C0C0A;
-  border-radius: 0.1em;
+  border-radius: .1em;
 }
 .fa-pull-left {
   float: left;
@@ -905,10 +908,10 @@ p {
   float: right;
 }
 .fa.fa-pull-left {
-  margin-right: 0.3em;
+  margin-right: .3em;
 }
 .fa.fa-pull-right {
-  margin-left: 0.3em;
+  margin-left: .3em;
 }
 /* Deprecated as of 4.4.0 */
 .pull-right {
@@ -918,10 +921,10 @@ p {
   float: left;
 }
 .fa.pull-left {
-  margin-right: 0.3em;
+  margin-right: .3em;
 }
 .fa.pull-right {
-  margin-left: 0.3em;
+  margin-left: .3em;
 }
 .fa-spin {
   -webkit-animation: fa-spin 2s infinite linear;
@@ -3169,6 +3172,7 @@ p {
   overflow: visible;
   clip: auto;
 }
+/*!  @licend */
 .icon {
   display: inline-block;
   font: normal normal normal 14px/1 FontAwesome;
@@ -3200,14 +3204,14 @@ button,
   position: relative;
   font-size: 0.875em;
   /*	14px */
-  padding: 0.429em 1.225em 0.429em 1.225em;
+  padding: .429em 1.225em .429em 1.225em;
   /* 6px 16px */
   display: inline-block;
   zoom: 1;
   /* zoom and *display = ie7 hack for display:inline-block */
   *display: inline;
   vertical-align: baseline;
-  margin-right: 0.5em;
+  margin-right: .5em;
   outline: none;
   cursor: pointer;
   text-align: center;
@@ -3420,13 +3424,14 @@ html body .button.processing {
   content: " ";
   top: -1px;
   left: -1px;
-  background: #30302D url('../../../img/controls/loading.gif') center center no-repeat;
-  border: 1px solid #30302D;
+  background: #30302D url('../../../img/controls/loading_dark.svg') center center no-repeat;
+  background-size: auto 50% ;
+  border: 1px solid #0C0C0A;
   border-radius: 5px;
   padding: 1px;
 }
 .button-spacer {
-  margin-right: 0.5em;
+  margin-right: .5em;
 }
 /*
 	Base form components styling
@@ -3439,7 +3444,7 @@ label {
   /* 18px */
   line-height: 1.333333em;
   /* 24px */
-  padding: 0.25em 0;
+  padding: .25em 0;
   display: block;
 }
 /*
@@ -3479,6 +3484,7 @@ input[type=text],
 input[type=email],
 input[type=password],
 input[type=search],
+input[type=number],
 textarea {
   font-size: 16px;
   line-height: 24px;
@@ -3486,9 +3492,9 @@ textarea {
   background: #0C0C0A;
   width: 14em;
   /* 20 char (default input length) x .7em (average char length) */
-  padding: 0.375em 0.625em 0.375em 0.625em;
+  padding: .375em .625em .375em .625em;
   display: inline-block;
-  margin-bottom: 0.5em;
+  margin-bottom: .5em;
   -webkit-appearance: none;
   border: 1px solid #222220;
   border-top: 1px solid #30302D;
@@ -3499,6 +3505,7 @@ textarea:hover,
 input[type=password]:hover,
 input[type=search]:hover,
 input[type=text]:hover,
+input[type=number]:hover,
 input[type=email]:hover {
   border: 1px solid #30302D;
 }
@@ -3506,7 +3513,7 @@ textarea:focus,
 input[type=password]:focus,
 input[type=search]:focus,
 input[type=text]:focus,
-input[type=email]:focus {
+input[type=number]:focus input[type=email]:focus {
   box-shadow: inset 1px 1px 2px rgba(0, 0, 0, 0.2);
   border: 1px solid #2894DF;
 }
@@ -3517,6 +3524,7 @@ input[type=email]:focus {
 input[type=password]:disabled,
 input[type=search]:disabled,
 input[type=text]:disabled,
+input[type=number]:disabled,
 input[type=email]:disabled {
   border: 1px solid #0C0C0A;
   -webkit-box-shadow: 0 0 0 0;
@@ -3550,13 +3558,13 @@ textarea {
 .text.input .input-addon i,
 .date.input .input-addon i {
   font-size: 16px;
-  width: 1.25em;
+  width: 1.250em;
   border: 1px solid #222220;
   border-top: 1px solid #30302D;
   line-height: 24px;
   color: #FFFFFC;
   background: #0C0C0A;
-  padding: 0.375em 0.625em 0.375em 0.625em;
+  padding: .375em .625em .375em .625em;
 }
 .text.input input:hover + .input-addon i,
 .date.input input:hover + .input-addon i {
@@ -3579,26 +3587,32 @@ textarea {
 .radiolist .input.radio label,
 input[type=checkbox] + label {
   font-weight: normal;
-  display: inline;
-  margin-left: 0.25em;
+  display: inline-block;
+  margin-left: .25em;
+}
+.input.checkbox {
+  padding-top: .5em;
+}
+.radiolist .input.radio {
+  margin-bottom: .5em;
 }
 /* radio and checkboxes */
 /*
 	Messages for validation error and example
 
 	Description	: <div.text.error>, <div.text.success>, can be used to add status messages or example.
-	Additional messages are wrapped in <.error-message>, <.success-messages>
+	Additional messages are wrapped in <.error.message>, <.success.messages>
 
 	.error - can be used for validation feedback
 	.helptext - can be used for example messages prior validation
 */
 .input .message {
   padding: 0;
-  padding-left: 0.25em;
-  padding-bottom: 0.5em;
-  font-size: 0.813em;
-  margin-top: 0.125em;
-  margin-bottom: 0.25em;
+  padding-left: .25em;
+  padding-bottom: .5em;
+  font-size: .813em;
+  margin-top: .125em;
+  margin-bottom: .25em;
   background-color: transparent;
   border: 0;
   /* colors for messages */
@@ -3625,7 +3639,7 @@ form .input .inline.message {
 /* error messages */
 select {
   font-size: 16px;
-  margin: 0.55em 0;
+  margin: .55em 0;
 }
 /* select */
 input[type=file] {
@@ -3642,9 +3656,118 @@ input[type=email].fluid {
   width: 80%;
 }
 .submit-wrapper {
-  margin-top: 0.5em;
+  margin-top: .5em;
 }
 /* shortcut classes for layout */
+.singleline .input.text {
+  float: left;
+  width: 40.2%;
+}
+.singleline .input.text:first-child,
+.singleline .input.text.first-field {
+  margin-right: 2.5%;
+}
+.singleline .input.text input[type="text"],
+.singleline .input.text input[type="email"],
+.singleline .input.text input[type="password"],
+.singleline .input.text input[type="search"] {
+  width: 93%;
+}
+/** Specific layout for connection information */
+.singleline.connection_info.protocol_host_port .input.text.field_protocol_host {
+  border: 0;
+  padding: 0;
+  width: 70%;
+}
+.singleline.connection_info.protocol_host_port .input.text.field_protocol_host .input.text {
+  padding: 0;
+  margin: 0;
+}
+.singleline.connection_info.protocol_host_port .input.text.field_protocol_host .input.text input {
+  margin: 0;
+  border-left: none;
+}
+.singleline.connection_info.protocol_host_port .input.text.field_protocol_host .input.text.host {
+  width: 75%;
+}
+.singleline.connection_info.protocol_host_port .input.text.field_protocol_host .input.text.host input[type=text] {
+  width: 95%;
+}
+.singleline.connection_info.protocol_host_port .input.text.field_protocol_host .input.text.protocol {
+  width: 25%;
+  position: relative;
+}
+.singleline.connection_info.protocol_host_port .input.text.field_protocol_host .input.text.protocol .chosen-container {
+  display: block;
+}
+.singleline.connection_info.protocol_host_port .input.text.field_protocol_host .input.text.protocol .chosen-container a.chosen-single {
+  height: 38px;
+}
+.singleline.connection_info.protocol_host_port .input.text.field_protocol_host .input.text.protocol .chosen-container a.chosen-single div b {
+  background-position: 0px 10px;
+}
+.singleline.connection_info.protocol_host_port .input.text.field_protocol_host .input.text.protocol .chosen-container a.chosen-single span {
+  font-size: 16px;
+  padding: 6px 0 0 0;
+}
+.singleline.connection_info.protocol_host_port .input.text.field_protocol_host .input.text.protocol .chosen-container-active.chosen-with-drop a.chosen-single div b {
+  background-position: -18px 10px;
+}
+.singleline.connection_info.protocol_host_port .input.text.port {
+  width: 9%;
+  margin-left: 1%;
+}
+.singleline.connection_info.protocol_host_port .input.text.port input[type=number] {
+  width: 100%;
+}
+.chosen-container {
+  margin-bottom: .5em;
+}
+.chosen-container.chosen-disabled a.chosen-single {
+  border: 1px solid #222220;
+}
+.chosen-container a.chosen-single {
+  background: #444442;
+  -webkit-border-radius: 0;
+  -moz-border-radius: 0;
+  border-radius: 0;
+  border: 1px solid #222220;
+  border-top: 1px solid #30302D;
+  box-shadow: none;
+  height: 32px;
+}
+.chosen-container a.chosen-single span {
+  font-size: 16px;
+  padding-top: 3px;
+  color: #FFFFFC;
+}
+.chosen-container a.chosen-single div b {
+  background-position: 0 6px;
+}
+.chosen-container .chosen-search input.chosen-search-input[type=text] {
+  width: 95% !important;
+  color: #444442;
+}
+.chosen-container .chosen-drop {
+  border: 1px solid #222220 !important;
+  border-top: 0 !important;
+  -webkit-border-radius: 0 !important;
+  -moz-border-radius: 0 !important;
+  border-radius: 0 !important;
+  background: #0C0C0A !important;
+}
+.chosen-container .chosen-drop .chosen-results {
+  color: #FFFFFC;
+}
+.chosen-container.chosen-container-active.chosen-with-drop a.chosen-single {
+  background: #0C0C0A;
+  border: 1px solid #222220;
+  border-top: 1px solid #30302D;
+  box-shadow: none;
+}
+.chosen-container.chosen-container-active.chosen-with-drop a.chosen-single div b {
+  background-position: -18px 8px;
+}
 /*
  * Page layout
  */
@@ -3746,7 +3869,7 @@ input[type=email].fluid {
   float: left;
   width: 100%;
   max-width: none;
-  padding-left: 0.25em;
+  padding-left: .25em;
   box-sizing: border-box;
 }
 /* hide left column when there is no space */
@@ -3782,7 +3905,7 @@ input[type=email].fluid {
     left: 0;
   }
   .panel.main .row {
-    padding-left: 0.5em;
+    padding-left: .5em;
   }
   .panel.main .panel.aside {
     min-width: auto;
@@ -3834,7 +3957,7 @@ input[type=email].fluid {
      * 2. The use of `table` rather than `block` is only necessary if using
      *	`:before` to contain the top-margins of child elements.
      */
-  padding: 0 0.5em 0 0.5em;
+  padding: 0 .5em 0 .5em;
 }
 .grid-responsive-12 .row:before,
 .grid .row:before,
@@ -4109,7 +4232,7 @@ input[type=email].fluid {
      * Common columns definitions
      */
   .grid .row {
-    padding: 0 0.5em 0 0.5em;
+    padding: 0 .5em 0 .5em;
   }
   .grid .row .col1,
   .grid .row .col2,
@@ -4200,6 +4323,19 @@ input[type=email].fluid {
   /* Opera doesn't support this in the shorthand */
   background-attachment: local, local, scroll, scroll;
 }
+::-webkit-scrollbar {
+  width: 1em;
+}
+::-webkit-scrollbar-track {
+  background: #30302D;
+  border-top: 0;
+  border-bottom: 0;
+}
+::-webkit-scrollbar-thumb {
+  background: #606060;
+  border-radius: 1em;
+  border: 4px solid #30302D;
+}
 video {
   display: block;
   width: 100%;
@@ -4211,10 +4347,10 @@ article video {
 .input.toggle-switch {
   display: flex;
   padding-top: 1em;
-  padding-bottom: 0.5em;
+  padding-bottom: .5em;
 }
 .input.toggle-switch label {
-  padding-top: 0.05em;
+  padding-top: .05em;
   padding-left: 1em;
   order: 2;
   flex: 1;
@@ -4260,7 +4396,7 @@ article video {
   background: #444442;
   border-radius: 2em;
   padding: 2px;
-  transition: all 0.4s ease;
+  transition: all .4s ease;
   border: 1px solid #0C0C0A;
 }
 .input.toggle-switch .toggle-switch-button span {
@@ -4306,7 +4442,7 @@ article video {
   box-shadow: inset 0 0 0 2em #e8eae9;
 }
 .input.toggle-switch .toggle-switch-button:active:after {
-  padding-right: 0.8em;
+  padding-right: .8em;
 }
 .input.toggle-switch .toggle-switch-button:after,
 .input.toggle-switch .toggle-switch-button:before {
@@ -4407,7 +4543,7 @@ article video {
   clear: both;
 }
 .header .navigation.primary li {
-  padding: 0.5em;
+  padding: .5em;
   float: left;
 }
 .header .navigation.primary li:first-child {
@@ -4455,6 +4591,9 @@ article video {
   width: 200px;
   height: 45px;
 }
+.header.second .col1 {
+  min-width: 200px;
+}
 /* CSS for serving the retina image to devices with a high "device-pixel-ratio": */
 @media only screen and (-moz-min-device-pixel-ratio: 1.5), only screen and (-o-min-device-pixel-ratio: 1.5), only screen and (-webkit-min-device-pixel-ratio: 1.5), only screen and (min-devicepixel-ratio: 1.5), only screen and (min-resolution: 1.5dppx) {
   .logo.no-img {
@@ -4480,7 +4619,7 @@ form.search input[type=search] {
   width: 65%;
   margin-bottom: 0;
   border-right: 1px solid #30302D;
-  padding: 0.313em 0.625em;
+  padding: .313em .625em;
 }
 form.search input[type=search]:focus,
 form.search input[type=search]:active {
@@ -4516,7 +4655,7 @@ input[type="search"]::-webkit-search-cancel-button {
   width: 80%;
   float: right;
   border: 1px solid #0C0C0A;
-  margin-top: 0.5em;
+  margin-top: .5em;
   background: #3B3B39;
   overflow: hidden;
   background: #444442;
@@ -4554,14 +4693,14 @@ input[type="search"]::-webkit-search-cancel-button {
 .user.profile .picture img {
   width: 2.875em;
   /* 46px */
-  padding: 0.125em;
+  padding: 0.1250em;
   /* 2px */
 }
 .user.profile .details {
   float: left;
   height: 2.8125em;
-  font-size: 0.9em;
-  padding: 0.3125em 1em;
+  font-size: .9em;
+  padding: .3125em 1em;
   /* 5/10px */
 }
 .user.profile .details .name,
@@ -4716,24 +4855,24 @@ input[type="search"]::-webkit-search-cancel-button {
  */
 .breadcrumbs {
   height: 2em;
-  padding: 0.1875em 0 0.1875em 0.1875em;
+  padding: .1875em 0 .1875em .1875em;
   margin-bottom: 0;
   border-bottom: 1px solid #0C0C0A;
   background: #30302D;
 }
 .breadcrumbs ul {
   padding-top: 0.2em;
-  margin-left: 0.1875em;
+  margin-left: .1875em;
 }
 .breadcrumbs ul li {
   display: inline;
-  font-size: 0.8em;
+  font-size: .8em;
   /* 12px/base16>15 */
-  margin-left: 0.25em;
+  margin-left: .25em;
 }
 .breadcrumbs ul li:before {
   content: "›";
-  margin-right: 0.5em;
+  margin-right: .5em;
 }
 .breadcrumbs ul li:first-child {
   margin-left: 0;
@@ -4750,18 +4889,18 @@ input[type="search"]::-webkit-search-cancel-button {
 }
 /* actions */
 .header.third .main-action-wrapper {
-  margin-top: 0.5em;
-  padding-left: 0.625em;
+  margin-top: .5em;
+  padding-left: .625em;
 }
 .header.third .main-action-wrapper .button {
   float: left;
-  font-size: 0.875em;
+  font-size: .875em;
 }
 .header.third .actions-wrapper {
-  margin-top: 0.5em;
+  margin-top: .5em;
 }
 .header.third .actions-wrapper .button {
-  font-size: 0.875em;
+  font-size: .875em;
   min-width: 4em;
   float: left;
 }
@@ -4772,7 +4911,7 @@ input[type="search"]::-webkit-search-cancel-button {
   float: right;
 }
 .header.third .actions-wrapper .secondary .button {
-  font-size: 0.875em;
+  font-size: .875em;
   min-width: 1em;
 }
 /* hide secondary actions if there is no space */
@@ -4891,7 +5030,7 @@ input[type="search"]::-webkit-search-cancel-button {
  * Notification
  */
 .notification-container {
-  font-size: 0.85em;
+  font-size: .85em;
   top: 0;
   position: absolute;
   z-index: 991;
@@ -4908,7 +5047,7 @@ input[type="search"]::-webkit-search-cancel-button {
 .notification-container .notification .message {
   box-shadow: 0px 0px 10px 0px #000;
   border-radius: 2px;
-  padding: 0.5em 1em;
+  padding: .5em 1em;
   position: relative;
   left: -50%;
   float: left;
@@ -4947,6 +5086,15 @@ input[type="search"]::-webkit-search-cancel-button {
 .message.error {
   color: #333;
   background: #ffe4e4;
+}
+.message.error a:link,
+.message.error a:visited {
+  color: #333;
+  border-bottom: 1px dotted #0C0C0A;
+}
+.message.error a:hover {
+  color: #333;
+  border-bottom: 1px solid #0C0C0A;
 }
 .message.success {
   color: #333;
@@ -5119,7 +5267,6 @@ input[type="search"]::-webkit-search-cancel-button {
   margin-bottom: 3em;
   box-shadow: 0px 0px 10px 0px #000;
   /* header */
-  /* content */
   /* inputs */
   /* Error display */
   /* submit / cancel */
@@ -5132,7 +5279,7 @@ input[type="search"]::-webkit-search-cancel-button {
   height: 3em;
 }
 .dialog .dialog-header h2 {
-  margin: 0.25em 2em 0.5em 0.2em;
+  margin: .25em 2em .5em .2em;
   font-size: 1.2em;
   white-space: nowrap;
   overflow: hidden;
@@ -5146,12 +5293,12 @@ input[type="search"]::-webkit-search-cancel-button {
   font-size: 0.7em;
   color: #FFFFFC;
 }
-.dialog .dialog-content {
-  position: relative;
+.dialog .dialog-header .dialog-close {
+  margin-top: -2.5em;
 }
 .dialog .form-content {
   background: #30302D;
-  padding: 0.813em 1.25em 0.813em 1.5em;
+  padding: .813em 1.5em .813em 1.5em;
 }
 .dialog label {
   clear: both;
@@ -5160,22 +5307,74 @@ input[type="search"]::-webkit-search-cancel-button {
   line-height: 1.6em;
   /* 24px */
 }
-.dialog input[type=text] {
-  width: 92%;
-  float: left;
-}
-.dialog .short input {
-  width: 64%;
-  float: left;
-}
+.dialog input[type=text],
 .dialog textarea {
-  width: 92%;
+  width: 100%;
+  box-sizing: border-box;
+  /*
+     * For IE 6/7 only
+     * Include this rule to trigger hasLayout and contain floats.
+     */
+  /*
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
+  /*
+     * For IE 6/7 only
+     * Include this rule to trigger hasLayout and contain floats.
+     */
+  zoom: 1;
+  /*
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
+}
+.dialog input[type=text]:before,
+.dialog textarea:before,
+.dialog input[type=text]:after,
+.dialog textarea:after {
+  content: "";
+  display: table;
+}
+.dialog input[type=text]:after,
+.dialog textarea:after {
+  clear: both;
+}
+.dialog input[type=text]:before,
+.dialog textarea:before,
+.dialog input[type=text]:after,
+.dialog textarea:after {
+  content: "";
+  display: table;
+}
+.dialog input[type=text]:after,
+.dialog textarea:after {
+  clear: both;
+}
+.dialog textarea + .message,
+.dialog input + .message {
+  display: none;
+  /* do not show empty placeholders */
 }
 .dialog textarea + .message.error,
 .dialog input + .message.error {
   display: block;
   clear: both;
-  width: 92%;
+  width: 100%;
 }
 .dialog .inline-error {
   color: #FF6B70;
@@ -5189,7 +5388,7 @@ input[type="search"]::-webkit-search-cancel-button {
   border-top: 1px solid #0C0C0A;
   clear: both;
   width: 100%;
-  padding: 0.75em 0;
+  padding: .75em 0;
 }
 .dialog .submit-wrapper .cancel,
 .dialog .submit-wrapper .button {
@@ -5198,18 +5397,14 @@ input[type="search"]::-webkit-search-cancel-button {
   font-size: 1.125em;
 }
 .dialog .submit-wrapper .cancel {
-  margin-top: 0.5em;
+  margin-top: .5em;
   font-size: 1em;
 }
-.dialog .dialog-close,
-.dialog .dialog-close:hover {
-  display: block;
-  float: right;
-  margin-top: -2.5em;
-  border: 0;
-}
+/* can also be used outside a dialog, like the sidebar */
 .dialog-close,
 .dialog-close:hover {
+  display: block;
+  float: right;
   border: 0;
 }
 .dialog-close .fa-close {
@@ -5266,7 +5461,7 @@ input[type="search"]::-webkit-search-cancel-button {
   position: absolute;
   min-width: 13em;
   z-index: 800;
-  padding: 0.25em 0;
+  padding: .25em 0;
 }
 .button + .dropdown-content {
   margin-top: 2em;
@@ -5278,11 +5473,11 @@ input[type="search"]::-webkit-search-cancel-button {
 .dropdown-content li a {
   display: block;
   min-width: 9em;
-  font-size: 0.938em;
+  font-size: .938em;
   border: 0;
 }
 .dropdown-content li a {
-  padding: 0.313em 0.626em;
+  padding: .313em .626em;
   /* 5px */
 }
 .dropdown-content li a:hover {
@@ -5329,8 +5524,8 @@ input[type="search"]::-webkit-search-cancel-button {
   padding: 3px 7em 3px 30px;
 }
 .profile .section.detailed-information h4 {
-  margin-bottom: 0.626em;
-  padding-bottom: 0.313em;
+  margin-bottom: .626em;
+  padding-bottom: .313em;
   border-bottom: 1px dotted #0C0C0A;
 }
 .profile .section.detailed-information li .label {
@@ -5343,13 +5538,13 @@ input[type="search"]::-webkit-search-cancel-button {
 }
 .profile .section.detailed-information .avatar img {
   width: 2.875em;
-  padding: 0.125em;
+  padding: 0.1250em;
 }
 .profile .section .section-action {
   padding-left: 1em;
 }
 .profile .edit-avatar-action .fa {
-  margin-top: 0.25em;
+  margin-top: .25em;
 }
 /* tags */
 .tags .tag {
@@ -5359,10 +5554,10 @@ input[type="search"]::-webkit-search-cancel-button {
   /* Newer versions of Chrome/Safari*/
   word-break: break-all;
   white-space: normal;
-  padding: 0.125em 0.5em;
+  padding: .125em .5em;
   float: left;
   position: relative;
-  margin: 0 0.5em 0.5em 0;
+  margin: 0 .5em .5em 0;
   text-decoration: none;
   border-radius: 3px;
   border: 1px solid #b8d0fd;
@@ -5429,17 +5624,17 @@ input[type="search"]::-webkit-search-cancel-button {
 }
 .tag-editor .message {
   font-size: 1em;
-  margin-top: 0.5em;
+  margin-top: .5em;
 }
 .tag-editor .tag {
   padding-right: 0;
 }
 .tag-editor .tag-delete {
-  margin-left: 0.25em;
+  margin-left: .25em;
   border-left: 1px dotted #2894DF;
-  padding-left: 0.5em;
-  padding-right: 0.5em;
-  font-size: 0.75em;
+  padding-left: .5em;
+  padding-right: .5em;
+  font-size: .75em;
   vertical-align: 10%;
   cursor: pointer;
 }
@@ -5479,7 +5674,7 @@ input[type="search"]::-webkit-search-cancel-button {
      *	`:before` to contain the top-margins of child elements.
      */
   min-height: 5em;
-  padding: 0.5em;
+  padding: .5em;
   border: 1px solid #222220;
   border-top: 1px solid #30302D;
 }
@@ -5504,7 +5699,7 @@ input[type="search"]::-webkit-search-cancel-button {
 }
 .tag-editor .tag-editor-input {
   min-height: 1.5em;
-  padding: 0.25em 0.5em 0.25em 0.5em;
+  padding: .25em .5em .25em .5em;
   box-shadow: none;
   min-width: 6em;
   max-width: 24em;
@@ -5550,7 +5745,7 @@ input[type="search"]::-webkit-search-cancel-button {
 .jfilestyle input[type=text]:disabled,
 .jfilestyle input[type=email]:disabled {
   background-color: #444442;
-  padding: 0.375em 0.625em 0.375em 0.625em;
+  padding: .375em .625em .375em .625em;
   font-size: 1em;
   line-height: 24px;
   border: 1px solid #222220;
@@ -5560,13 +5755,13 @@ input[type="search"]::-webkit-search-cancel-button {
   border: 1px solid #222220;
   border-left: 0px;
   background: #3B3B39;
-  padding: 0.65em 1.225em 0.65em 1.225em;
+  padding: .65em 1.225em .65em 1.225em;
   color: #0662ba;
   vertical-align: middle;
   line-height: normal;
   text-align: center;
   margin: 0px;
-  font-size: 0.875em;
+  font-size: .875em;
   width: auto;
   font-weight: bold;
   border-radius: 0 0.214em 0.214em 0;
@@ -5653,7 +5848,7 @@ input[type="search"]::-webkit-search-cancel-button {
   margin-left: -100%;
 }
 .panel.aside .comments .comment {
-  padding-bottom: 0.5em;
+  padding-bottom: .5em;
   /*
      * For IE 6/7 only
      * Include this rule to trigger hasLayout and contain floats.
@@ -5714,7 +5909,7 @@ input[type="search"]::-webkit-search-cancel-button {
 .panel.aside .comments .comment .author.picture {
   width: 2em;
   height: 2em;
-  margin-top: 0.25em;
+  margin-top: .25em;
 }
 .panel.aside .comments .comment .author.picture img {
   width: 2em;
@@ -5725,7 +5920,7 @@ input[type="search"]::-webkit-search-cancel-button {
 }
 .panel.aside .comments .comment .metadata {
   font-style: italic;
-  margin: 0.5em 0 1em 1em;
+  margin: .5em 0 1em 1em;
 }
 .panel.aside .comments .comment .metadata .author.username {
   max-width: 48%;
@@ -5749,7 +5944,7 @@ input[type="search"]::-webkit-search-cancel-button {
   -ms-text-overflow: ellipsis;
 }
 .panel.aside .comments .comment .form-content {
-  margin-left: 0.5em;
+  margin-left: .5em;
 }
 .panel.aside .comments .comment .actions {
   float: right;
@@ -5769,7 +5964,7 @@ input[type="search"]::-webkit-search-cancel-button {
 }
 /* left panel navigation */
 .panel .navigation {
-  font-size: 0.938em;
+  font-size: .938em;
   /* first block have a delimiter */
   /*
         Navigation row
@@ -5826,8 +6021,8 @@ input[type="search"]::-webkit-search-cancel-button {
 }
 .panel .navigation.first {
   border-bottom: 1px dotted #0C0C0A;
-  padding: 0.625em 0;
-  margin-bottom: 0.625em;
+  padding: .625em 0;
+  margin-bottom: .625em;
 }
 .panel .navigation .row {
   float: left;
@@ -5864,8 +6059,8 @@ input[type="search"]::-webkit-search-cancel-button {
 .panel .navigation .row .main-cell h3 {
   border: 0;
   font-size: 1em;
-  margin: 0 0.25em 0 1em;
-  padding: 0.25em 0;
+  margin: 0 .25em 0 1em;
+  padding: .25em 0;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -5888,7 +6083,7 @@ input[type="search"]::-webkit-search-cancel-button {
 }
 .panel .navigation .row .main-cell a {
   border: 0;
-  padding: 0.2em 0.313em;
+  padding: .2em .313em;
   /* 2px 5px */
   padding-left: 1em;
   color: #FFFFFC;
@@ -5905,7 +6100,7 @@ input[type="search"]::-webkit-search-cancel-button {
   display: none;
   width: 1em;
   height: 1em;
-  padding: 0.125em;
+  padding: .125em;
   color: #8B8B89;
   border: 1px solid transparent;
 }
@@ -5974,6 +6169,9 @@ input[type="search"]::-webkit-search-cancel-button {
 .panel .navigation .row:hover .right-cell a.filter {
   border: 1px solid #0C0C0A;
 }
+.panel .navigation .empty-content {
+  padding-left: 1em;
+}
 .contextual-menu {
   position: absolute;
   background: #3B3B39;
@@ -5983,13 +6181,13 @@ input[type="search"]::-webkit-search-cancel-button {
   z-index: 993;
   left: 11.25em;
   display: none;
-  padding: 0.25em 0;
+  padding: .25em 0;
 }
 .contextual-menu a {
-  font-size: 0.875em;
+  font-size: .875em;
   /* 14px */
   display: block;
-  padding: 0.357em 0.714em;
+  padding: .357em .714em;
   /* 5px 10px */
   border: 0;
 }
@@ -6040,7 +6238,7 @@ input[type="search"]::-webkit-search-cancel-button {
   margin-top: -1px;
   border-bottom: 1px solid #0C0C0A;
   border-top: 1px solid #0C0C0A;
-  font-size: 0.875em;
+  font-size: .875em;
   background: #3B3B39;
 }
 .panel.aside .sidebar-section h4 {
@@ -6091,7 +6289,7 @@ input[type="search"]::-webkit-search-cancel-button {
   line-height: normal;
 }
 .panel.aside .form-content {
-  margin: 0 0 0.5em 0;
+  margin: 0 0 .5em 0;
   /*
      * For IE 6/7 only
      * Include this rule to trigger hasLayout and contain floats.
@@ -6157,12 +6355,12 @@ input[type="search"]::-webkit-search-cancel-button {
   margin-right: 0;
 }
 .panel.aside .form-content .cancel {
-  margin-right: 0.5em;
+  margin-right: .5em;
 }
 .panel.aside .form-content .message.notice {
-  padding: 0.5em;
+  padding: .5em;
   margin: 0;
-  font-size: 0.929em;
+  font-size: .929em;
   /* 13px */
   background: #2894DF;
 }
@@ -6193,7 +6391,7 @@ input[type="search"]::-webkit-search-cancel-button {
 }
 .tabs-nav li a {
   display: inline-block;
-  padding: 0.4em 1.75em;
+  padding: .4em 1.75em;
   margin-left: 1.25em;
   font-size: 15px;
   border: 0;
@@ -6222,7 +6420,7 @@ input[type="search"]::-webkit-search-cancel-button {
 .tableview {
   background: #222220;
   position: relative;
-  font-size: 0.9375em;
+  font-size: .9375em;
   /* 15px */
   height: 100%;
 }
@@ -6231,7 +6429,7 @@ input[type="search"]::-webkit-search-cancel-button {
   background: #3B3B39;
   height: 2.125em;
   overflow-y: scroll;
-  padding-top: 0.125em;
+  padding-top: .125em;
 }
 .tableview-header table {
   width: 100%;
@@ -6275,7 +6473,7 @@ input[type="search"]::-webkit-search-cancel-button {
 .tableview table th,
 .tableview table td {
   text-align: left;
-  padding: 0.25em 0.75em;
+  padding: .25em .75em;
   vertical-align: middle;
 }
 .tableview table th {
@@ -6330,7 +6528,7 @@ input[type="search"]::-webkit-search-cancel-button {
 }
 .tableview table .input.checkbox {
   padding-top: 2px;
-  padding-left: 0.25em;
+  padding-left: .25em;
 }
 .tableview table .input.checkbox label {
   display: none;
@@ -6346,7 +6544,7 @@ input[type="search"]::-webkit-search-cancel-button {
 .tableview table th.cell_favorite,
 .tableview table td.cell_favorite {
   padding-left: 0;
-  padding-right: 0.25em;
+  padding-right: .25em;
 }
 /* hide secondary actions if there is no space */
 @media all and (max-width: 600px) {
@@ -6362,7 +6560,7 @@ input[type="search"]::-webkit-search-cancel-button {
   .tableview table tbody td.l-cell {
     max-width: 90%;
     width: 90%;
-    padding: 0.5em;
+    padding: .5em;
   }
   .tableview table tbody td.s-cell {
     display: none;
@@ -6382,7 +6580,7 @@ table.table-info.vertical {
 }
 table.table-info td,
 table.table-info.vertical td {
-  padding: 0.625em;
+  padding: .625em;
   padding-right: 1.25em;
   color: #cacac9;
 }
@@ -6410,7 +6608,7 @@ table.table-info.vertical td .alt.side:after {
 table.table-info td + td,
 table.table-info.vertical td + td {
   color: #FFFFFC;
-  padding-right: 0.625em;
+  padding-right: .625em;
 }
 /* horizontal tableview */
 table.table-info.horizontal {
@@ -6422,7 +6620,7 @@ table.table-info.horizontal {
 }
 table.table-info.horizontal td,
 table.table-info.horizontal th {
-  padding: 0.5em;
+  padding: .5em;
   margin: 0;
 }
 table.table-info.horizontal th {
@@ -6561,7 +6759,7 @@ table.table-info.horizontal tbody tr:nth-child(odd) {
   margin-bottom: 0;
   border-top-color: transparent;
   border-left-color: #222220;
-  border-left-color: hsla(0, 0%, 20%, 0.9);
+  border-left-color: rgba(51, 51, 51, 0.9);
 }
 .tooltip-left:hover:before,
 .tooltip-left:hover:after,
@@ -6585,7 +6783,7 @@ table.table-info.horizontal tbody tr:nth-child(odd) {
   margin-bottom: 0;
   border-top-color: transparent;
   border-bottom-color: #222220;
-  border-bottom-color: hsla(0, 0%, 20%, 0.9);
+  border-bottom-color: rgba(51, 51, 51, 0.9);
 }
 .tooltip-bottom:hover:before,
 .tooltip-bottom:hover:after,
@@ -6659,7 +6857,7 @@ table.table-info.horizontal tbody tr:nth-child(odd) {
   width: 180px;
   background-color: #222220;
   color: #EEEEEC;
-  padding: 0.5em 1em;
+  padding: .5em 1em;
   -webkit-transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out, -webkit-transform 0.2s cubic-bezier(0.71, 1.7, 0.77, 1.24);
   -moz-transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out, -moz-transform 0.2s cubic-bezier(0.71, 1.7, 0.77, 1.24);
   transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out, transform 0.2s cubic-bezier(0.71, 1.7, 0.77, 1.24);
@@ -6698,9 +6896,9 @@ table.table-info.horizontal tbody tr:nth-child(odd) {
   margin-top: 0em;
   position: fixed;
   bottom: 0;
-  padding: 1.167em 1.5% 0 0.5%;
+  padding: 1.167em 1.5% 0 .5%;
   text-align: right;
-  font-size: 0.75em;
+  font-size: .75em;
   /* 12px */
   width: 98%;
   height: 2em;
@@ -6721,10 +6919,12 @@ table.table-info.horizontal tbody tr:nth-child(odd) {
 }
 /*
 	Password fields in passbolt have complexity "progress bar"
-	and a custom layout to accomodate buttons on the left end
+	and a custom layout to accommodate buttons on the left end
 */
 .input-password-wrapper {
-  max-width: 500px;
+  width: 100%;
+  /* same than default inputs width in dialogs */
+  box-sizing: border-box;
   /*
      * For IE 6/7 only
      * Include this rule to trigger hasLayout and contain floats.
@@ -6756,7 +6956,6 @@ table.table-info.horizontal tbody tr:nth-child(odd) {
      * 2. The use of `table` rather than `block` is only necessary if using
      *	`:before` to contain the top-margins of child elements.
      */
-  width: 99%;
 }
 .input-password-wrapper:before,
 .input-password-wrapper:after {
@@ -6774,13 +6973,17 @@ table.table-info.horizontal tbody tr:nth-child(odd) {
 .input-password-wrapper:after {
   clear: both;
 }
-.input-password-wrapper .input.password input {
-  box-sizing: border-box;
-  width: 65.5%;
+.input-password-wrapper .input.password {
   float: left;
+  width: 65.5%;
+}
+.input-password-wrapper .input.password input[type=text],
+.input-password-wrapper .input.password input[type=password] {
+  width: calc(100% - 4em + 3px);
+  box-sizing: border-box;
 }
 .input-password-wrapper .input.password input[type=password].decrypting {
-  background: transparent url('../../../img/controls/loading.gif') no-repeat 72% center;
+  background: transparent url('../../../img/controls/loading_dark.svg') no-repeat 90% center;
 }
 .input-password-wrapper .input.password.has-encrypted-secret input {
   /* fallback placeholder */
@@ -6808,7 +7011,7 @@ table.table-info.horizontal tbody tr:nth-child(odd) {
   padding-right: 0;
 }
 .input-password-wrapper .actions.inline .button + .button {
-  margin-left: 0.5em;
+  margin-left: .5em;
 }
 .input-password-wrapper .password-complexity .complexity-text {
   float: right;
@@ -6828,7 +7031,7 @@ table.table-info.horizontal tbody tr:nth-child(odd) {
   height: 10px;
   display: block;
   clear: both;
-  margin: 0.25em 0 0.5em 0;
+  margin: .25em 0 .5em 0;
   float: left;
 }
 .input-password-wrapper .password-complexity .progress-bar {
@@ -6859,30 +7062,15 @@ table.table-info.horizontal tbody tr:nth-child(odd) {
   background: #009900;
   width: 99.5%;
 }
-.password-hints li:before {
-  content: "●";
-  color: #444442;
-  padding-right: 0.5em;
-}
-.password-hints li.success:before {
-  color: #009900;
-}
-.password-hints li.error:before {
-  color: #D40101;
-}
 @media all and (max-width: 400px) {
-  .input-password-wrapper .input.password,
-  .input-password-wrapper .actions.inline {
-    position: relative;
-    float: none;
-    clear: both;
+  .input-password-wrapper .input.password {
+    float: left;
+    width: 100%;
   }
   .input-password-wrapper .actions.inline {
     width: 50%;
     float: left;
-  }
-  .input-password-wrapper .input.password input[type=password] {
-    width: 87%;
+    margin-bottom: .5em;
   }
   .input-password-wrapper .password-complexity .progress {
     display: none;
@@ -6890,8 +7078,8 @@ table.table-info.horizontal tbody tr:nth-child(odd) {
   .input-password-wrapper .password-complexity .complexity-text {
     float: left;
     width: 50%;
-    font-size: 0.831em;
-    margin-top: 0.5em;
+    font-size: .831em;
+    margin-top: .5em;
   }
   .fa.fa-lg {
     line-height: 1;
@@ -7009,8 +7197,8 @@ table.table-info.horizontal tbody tr:nth-child(odd) {
      * 2. The use of `table` rather than `block` is only necessary if using
      *	`:before` to contain the top-margins of child elements.
      */
-  font-size: 0.813em;
-  padding: 1em 0.5em 0.875em 1em;
+  font-size: .813em;
+  padding: 1em .5em .875em 1em;
   border-bottom: 1px dotted #0C0C0A;
   /* user summary */
   /* row actions */
@@ -7106,7 +7294,7 @@ table.table-info.horizontal tbody tr:nth-child(odd) {
   -ms-text-overflow: ellipsis;
 }
 .permissions .row .details .more_details {
-  margin-left: 0.5em;
+  margin-left: .5em;
   margin-top: 0;
 }
 .permissions .row .details .email {
@@ -7116,7 +7304,7 @@ table.table-info.horizontal tbody tr:nth-child(odd) {
   -o-text-overflow: ellipsis;
   -ms-text-overflow: ellipsis;
   font-weight: bold;
-  padding-bottom: 0.125em;
+  padding-bottom: .125em;
 }
 .permissions .row .permission_changes {
   color: #8B8B89;
@@ -7130,7 +7318,7 @@ table.table-info.horizontal tbody tr:nth-child(odd) {
 }
 .permissions .row .rights {
   float: left;
-  margin-top: 0.5em;
+  margin-top: .5em;
   width: 27%;
 }
 .permissions .row .rights select {
@@ -7139,11 +7327,11 @@ table.table-info.horizontal tbody tr:nth-child(odd) {
 }
 .permissions .row .actions {
   float: right;
-  margin-top: 0.55em;
+  margin-top: .55em;
 }
 .permissions .row .actions a {
   font-size: 1.125em;
-  padding: 0.25em 0.5em 0.2em 0.5em;
+  padding: .25em .5em .2em .5em;
   border: 1px solid transparent;
 }
 .permissions .row .actions a:hover {
@@ -7338,7 +7526,7 @@ table.table-info.horizontal tbody tr:nth-child(odd) {
   display: none;
 }
 .dialog .accordion .accordion-header {
-  margin-bottom: 0.5em;
+  margin-bottom: .5em;
 }
 .dialog .accordion .accordion-header a {
   display: inline;
@@ -7346,7 +7534,7 @@ table.table-info.horizontal tbody tr:nth-child(odd) {
 }
 .dialog .accordion .accordion-header a:before {
   margin-left: -1.25em;
-  margin-top: 0.25em;
+  margin-top: .25em;
   content: "\f0d7";
   /* caret down */
   font: normal normal normal 1em FontAwesome;
@@ -7368,7 +7556,7 @@ table.table-info.horizontal tbody tr:nth-child(odd) {
 .accordion.sidebar-section .accordion-header a:after {
   position: absolute;
   right: 1.5em;
-  margin-top: 0.25em;
+  margin-top: .25em;
   content: "\f0d7";
   /* caret down */
   font: normal normal normal 1em FontAwesome;
@@ -7390,7 +7578,7 @@ table.table-info.horizontal tbody tr:nth-child(odd) {
 }
 .accordion.navigation .accordion-header .main-cell a:before {
   margin-left: -1.25em;
-  margin-top: 0.25em;
+  margin-top: .25em;
   content: "\f0d7";
   /* caret down */
   font: normal normal normal 1em FontAwesome;
@@ -7428,10 +7616,10 @@ table.table-info.horizontal tbody tr:nth-child(odd) {
   overflow: hidden;
   text-overflow: ellipsis;
   color: #FFFFFC;
-  font-size: 0.875em;
+  font-size: .875em;
   /* 14px */
   display: block;
-  padding: 0.357em 0.714em;
+  padding: .357em .714em;
   /* 5px 10px */
   border: 0;
 }
@@ -7466,15 +7654,443 @@ table.table-info.horizontal tbody tr:nth-child(odd) {
   transform: rotate(45deg);
   z-index: 999;
 }
+/*!
+Chosen, a Select Box Enhancer for jQuery and Prototype
+by Patrick Filler for Harvest, http://getharvest.com
+
+Version 1.8.3
+Full source at https://github.com/harvesthq/chosen
+Copyright (c) 2011-2018 Harvest http://getharvest.com
+
+MIT License, https://github.com/harvesthq/chosen/blob/master/LICENSE.md
+This file is generated by `grunt build`, do not edit it by hand.
+*/
+/* @group Base */
+.chosen-container {
+  position: relative;
+  display: inline-block;
+  vertical-align: middle;
+  font-size: 13px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+.chosen-container * {
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+.chosen-container .chosen-drop {
+  position: absolute;
+  top: 100%;
+  z-index: 1010;
+  width: 100%;
+  border: 1px solid #aaa;
+  border-top: 0;
+  background: #fff;
+  -webkit-box-shadow: 0 4px 5px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 4px 5px rgba(0, 0, 0, 0.15);
+  display: none;
+}
+.chosen-container.chosen-with-drop .chosen-drop {
+  display: block;
+}
+.chosen-container a {
+  cursor: pointer;
+}
+.chosen-container .search-choice .group-name,
+.chosen-container .chosen-single .group-name {
+  margin-right: 4px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  font-weight: normal;
+  color: #999999;
+}
+.chosen-container .search-choice .group-name:after,
+.chosen-container .chosen-single .group-name:after {
+  content: ":";
+  padding-left: 2px;
+  vertical-align: top;
+}
+/* @end */
+/* @group Single Chosen */
+.chosen-container-single .chosen-single {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  padding: 0 0 0 8px;
+  height: 25px;
+  border: 1px solid #aaa;
+  border-radius: 5px;
+  background-color: #fff;
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(20%, #fff), color-stop(50%, #f6f6f6), color-stop(52%, #eee), to(#f4f4f4));
+  background: linear-gradient(#fff 20%, #f6f6f6 50%, #eee 52%, #f4f4f4 100%);
+  background-clip: padding-box;
+  -webkit-box-shadow: 0 0 3px #fff inset, 0 1px 1px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0 3px #fff inset, 0 1px 1px rgba(0, 0, 0, 0.1);
+  color: #444;
+  text-decoration: none;
+  white-space: nowrap;
+  line-height: 24px;
+}
+.chosen-container-single .chosen-single input[type="text"] {
+  cursor: pointer;
+  opacity: 0;
+  position: absolute;
+}
+.chosen-container-single .chosen-default {
+  color: #999;
+}
+.chosen-container-single .chosen-single span {
+  display: block;
+  overflow: hidden;
+  margin-right: 26px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.chosen-container-single .chosen-single-with-deselect span {
+  margin-right: 38px;
+}
+.chosen-container-single .chosen-single abbr {
+  position: absolute;
+  top: 6px;
+  right: 26px;
+  display: block;
+  width: 12px;
+  height: 12px;
+  background: url('@images/third_party/chosen-sprite.png') -42px 1px no-repeat;
+  font-size: 1px;
+}
+.chosen-container-single .chosen-single abbr:hover {
+  background-position: -42px -10px;
+}
+.chosen-container-single.chosen-disabled .chosen-single abbr:hover {
+  background-position: -42px -10px;
+}
+.chosen-container-single .chosen-single div {
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: block;
+  width: 18px;
+  height: 100%;
+}
+.chosen-container-single .chosen-single div b {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: url("../../../img/third_party/chosen-sprite.png") no-repeat 0px 2px;
+}
+.chosen-container-single .chosen-search {
+  position: relative;
+  z-index: 1010;
+  margin: 0;
+  padding: 3px 4px;
+  white-space: nowrap;
+}
+.chosen-container-single .chosen-search input[type="text"] {
+  margin: 1px 0;
+  padding: 4px 20px 4px 5px;
+  width: 100%;
+  height: auto;
+  outline: 0;
+  border: 1px solid #aaa;
+  background: url("../../../img/third_party/chosen-sprite.png") no-repeat 100% -20px;
+  font-size: 1em;
+  font-family: sans-serif;
+  line-height: normal;
+  border-radius: 0;
+}
+.chosen-container-single .chosen-drop {
+  margin-top: -1px;
+  border-radius: 0 0 4px 4px;
+  background-clip: padding-box;
+}
+.chosen-container-single.chosen-container-single-nosearch .chosen-search {
+  position: absolute;
+  clip: rect(0, 0, 0, 0);
+}
+/* @end */
+/* @group Results */
+.chosen-container .chosen-results {
+  color: #444;
+  position: relative;
+  overflow-x: hidden;
+  overflow-y: auto;
+  margin: 0 4px 4px 0;
+  padding: 0 0 0 4px;
+  max-height: 240px;
+  -webkit-overflow-scrolling: touch;
+}
+.chosen-container .chosen-results li {
+  display: none;
+  margin: 0;
+  padding: 5px 6px;
+  list-style: none;
+  line-height: 15px;
+  word-wrap: break-word;
+  -webkit-touch-callout: none;
+}
+.chosen-container .chosen-results li.active-result {
+  display: list-item;
+  cursor: pointer;
+}
+.chosen-container .chosen-results li.disabled-result {
+  display: list-item;
+  color: #ccc;
+  cursor: default;
+}
+.chosen-container .chosen-results li.highlighted {
+  background-color: #3875d7;
+  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(20%, #3875d7), color-stop(90%, #2a62bc));
+  background-image: linear-gradient(#3875d7 20%, #2a62bc 90%);
+  color: #fff;
+}
+.chosen-container .chosen-results li.no-results {
+  color: #777;
+  display: list-item;
+  background: #f4f4f4;
+}
+.chosen-container .chosen-results li.group-result {
+  display: list-item;
+  font-weight: bold;
+  cursor: default;
+}
+.chosen-container .chosen-results li.group-option {
+  padding-left: 15px;
+}
+.chosen-container .chosen-results li em {
+  font-style: normal;
+  text-decoration: underline;
+}
+/* @end */
+/* @group Multi Chosen */
+.chosen-container-multi .chosen-choices {
+  position: relative;
+  overflow: hidden;
+  margin: 0;
+  padding: 0 5px;
+  width: 100%;
+  height: auto;
+  border: 1px solid #aaa;
+  background-color: #fff;
+  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(1%, #eee), color-stop(15%, #fff));
+  background-image: linear-gradient(#eee 1%, #fff 15%);
+  cursor: text;
+}
+.chosen-container-multi .chosen-choices li {
+  float: left;
+  list-style: none;
+}
+.chosen-container-multi .chosen-choices li.search-field {
+  margin: 0;
+  padding: 0;
+  white-space: nowrap;
+}
+.chosen-container-multi .chosen-choices li.search-field input[type="text"] {
+  margin: 1px 0;
+  padding: 0;
+  height: 25px;
+  outline: 0;
+  border: 0 !important;
+  background: transparent !important;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+  color: #999;
+  font-size: 100%;
+  font-family: sans-serif;
+  line-height: normal;
+  border-radius: 0;
+  width: 25px;
+}
+.chosen-container-multi .chosen-choices li.search-choice {
+  position: relative;
+  margin: 3px 5px 3px 0;
+  padding: 3px 20px 3px 5px;
+  border: 1px solid #aaa;
+  max-width: 100%;
+  border-radius: 3px;
+  background-color: #eeeeee;
+  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(20%, #f4f4f4), color-stop(50%, #f0f0f0), color-stop(52%, #e8e8e8), to(#eee));
+  background-image: linear-gradient(#f4f4f4 20%, #f0f0f0 50%, #e8e8e8 52%, #eee 100%);
+  background-size: 100% 19px;
+  background-repeat: repeat-x;
+  background-clip: padding-box;
+  -webkit-box-shadow: 0 0 2px #fff inset, 0 1px 0 rgba(0, 0, 0, 0.05);
+  box-shadow: 0 0 2px #fff inset, 0 1px 0 rgba(0, 0, 0, 0.05);
+  color: #333;
+  line-height: 13px;
+  cursor: default;
+}
+.chosen-container-multi .chosen-choices li.search-choice span {
+  word-wrap: break-word;
+}
+.chosen-container-multi .chosen-choices li.search-choice .search-choice-close {
+  position: absolute;
+  top: 4px;
+  right: 3px;
+  display: block;
+  width: 12px;
+  height: 12px;
+  background: url("../../../img/third_party/chosen-sprite.png") -42px 1px no-repeat;
+  font-size: 1px;
+}
+.chosen-container-multi .chosen-choices li.search-choice .search-choice-close:hover {
+  background-position: -42px -10px;
+}
+.chosen-container-multi .chosen-choices li.search-choice-disabled {
+  padding-right: 5px;
+  border: 1px solid #ccc;
+  background-color: #e4e4e4;
+  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(20%, #f4f4f4), color-stop(50%, #f0f0f0), color-stop(52%, #e8e8e8), to(#eee));
+  background-image: linear-gradient(#f4f4f4 20%, #f0f0f0 50%, #e8e8e8 52%, #eee 100%);
+  color: #666;
+}
+.chosen-container-multi .chosen-choices li.search-choice-focus {
+  background: #d4d4d4;
+}
+.chosen-container-multi .chosen-choices li.search-choice-focus .search-choice-close {
+  background-position: -42px -10px;
+}
+.chosen-container-multi .chosen-results {
+  margin: 0;
+  padding: 0;
+}
+.chosen-container-multi .chosen-drop .result-selected {
+  display: list-item;
+  color: #ccc;
+  cursor: default;
+}
+/* @end */
+/* @group Active  */
+.chosen-container-active .chosen-single {
+  border: 1px solid #5897fb;
+  -webkit-box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+}
+.chosen-container-active.chosen-with-drop .chosen-single {
+  border: 1px solid #aaa;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(20%, #eee), color-stop(80%, #fff));
+  background-image: linear-gradient(#eee 20%, #fff 80%);
+  -webkit-box-shadow: 0 1px 0 #fff inset;
+  box-shadow: 0 1px 0 #fff inset;
+}
+.chosen-container-active.chosen-with-drop .chosen-single div {
+  border-left: none;
+  background: transparent;
+}
+.chosen-container-active.chosen-with-drop .chosen-single div b {
+  background-position: -18px 2px;
+}
+.chosen-container-active .chosen-choices {
+  border: 1px solid #5897fb;
+  -webkit-box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+}
+.chosen-container-active .chosen-choices li.search-field input[type="text"] {
+  color: #222 !important;
+}
+/* @end */
+/* @group Disabled Support */
+.chosen-disabled {
+  opacity: 0.5 !important;
+  cursor: default;
+}
+.chosen-disabled .chosen-single {
+  cursor: default;
+}
+.chosen-disabled .chosen-choices .search-choice .search-choice-close {
+  cursor: default;
+}
+/* @end */
+/* @group Right to Left */
+.chosen-rtl {
+  text-align: right;
+}
+.chosen-rtl .chosen-single {
+  overflow: visible;
+  padding: 0 8px 0 0;
+}
+.chosen-rtl .chosen-single span {
+  margin-right: 0;
+  margin-left: 26px;
+  direction: rtl;
+}
+.chosen-rtl .chosen-single-with-deselect span {
+  margin-left: 38px;
+}
+.chosen-rtl .chosen-single div {
+  right: auto;
+  left: 3px;
+}
+.chosen-rtl .chosen-single abbr {
+  right: auto;
+  left: 26px;
+}
+.chosen-rtl .chosen-choices li {
+  float: right;
+}
+.chosen-rtl .chosen-choices li.search-field input[type="text"] {
+  direction: rtl;
+}
+.chosen-rtl .chosen-choices li.search-choice {
+  margin: 3px 5px 3px 0;
+  padding: 3px 5px 3px 19px;
+}
+.chosen-rtl .chosen-choices li.search-choice .search-choice-close {
+  right: auto;
+  left: 4px;
+}
+.chosen-rtl.chosen-container-single .chosen-results {
+  margin: 0 0 4px 4px;
+  padding: 0 4px 0 0;
+}
+.chosen-rtl .chosen-results li.group-option {
+  padding-right: 15px;
+  padding-left: 0;
+}
+.chosen-rtl.chosen-container-active.chosen-with-drop .chosen-single div {
+  border-right: none;
+}
+.chosen-rtl .chosen-search input[type="text"] {
+  padding: 4px 5px 4px 20px;
+  background: url("../../../img/third_party/chosen-sprite.png") no-repeat -30px -20px;
+  direction: rtl;
+}
+.chosen-rtl.chosen-container-single .chosen-single div b {
+  background-position: 6px 2px;
+}
+.chosen-rtl.chosen-container-single.chosen-with-drop .chosen-single div b {
+  background-position: -12px 2px;
+}
+/* @end */
+/* @group Retina compatibility */
+@media only screen and (-webkit-min-device-pixel-ratio: 1.5), only screen and (min-resolution: 144dpi), only screen and (min-resolution: 1.5dppx) {
+  .chosen-rtl .chosen-search input[type="text"],
+  .chosen-container-single .chosen-single abbr,
+  .chosen-container-single .chosen-single div b,
+  .chosen-container-single .chosen-search input[type="text"],
+  .chosen-container-multi .chosen-choices .search-choice .search-choice-close,
+  .chosen-container .chosen-results-scroll-down span,
+  .chosen-container .chosen-results-scroll-up span {
+    background-image: url('../../../img/third_party/chosen-sprite@2x.png') !important;
+    background-size: 52px 37px !important;
+    background-repeat: no-repeat !important;
+  }
+}
+/* @end */
 .input-password-wrapper {
   overflow: hidden;
 }
 .input-password-wrapper .message.error {
   display: block;
   clear: both;
-  width: 92%;
-  padding-bottom: 0.5em;
-  font-size: 0.813em;
+  width: 100%;
+  padding-bottom: .5em;
+  font-size: .813em;
 }
 /* password share tab */
 .dialog .share-tab {
@@ -7486,7 +8102,7 @@ table.table-info.horizontal tbody tr:nth-child(odd) {
 }
 .dialog .organize-tab .current-folder {
   background: #444442;
-  padding: 0.5em 1em;
+  padding: .5em 1em;
 }
 .dialog .organize-tab .current-folder .folder-name {
   font-weight: bold;
@@ -7510,14 +8126,12 @@ table.table-info.horizontal tbody tr:nth-child(odd) {
 .dialog-wrapper.session-expired-dialog .dialog-close {
   display: none;
 }
-.dialog .group .permission-edit {
+.dialog .group .form-content.permission-edit {
   border-top: 1px solid #0C0C0A;
+  margin: 0;
 }
 .edit-group-dialog .group_edit_form .form-content {
   padding-bottom: 0;
-}
-.edit-group-dialog .group_edit_form .form-content .input.text input[type="text"] {
-  width: 95%;
 }
 .edit-group-dialog .group_edit_form .form-content .input.text .message {
   padding-left: 0;
@@ -7537,9 +8151,9 @@ table.table-info.horizontal tbody tr:nth-child(odd) {
 .edit-group-dialog .group_members.empty ul.permissions {
   display: none;
 }
-.dialog.kdbx-credentials .input-password-wrapper .input.password input,
-.dialog.import .input-password-wrapper .input.password input {
-  width: 83%;
+.dialog.kdbx-credentials .input-password-wrapper .input.password,
+.dialog.import .input-password-wrapper .input.password {
+  width: 90%;
 }
 .dialog.kdbx-credentials .actions.inline,
 .dialog.import .actions.inline {
@@ -7548,7 +8162,7 @@ table.table-info.horizontal tbody tr:nth-child(odd) {
 .dialog.kdbx-credentials .actions.inline .button,
 .dialog.import .actions.inline .button {
   height: 1.5em;
-  padding-top: 0.6em;
+  padding-top: .6em;
 }
 .dialog.kdbx-credentials div.jfilestyle,
 .dialog.import div.jfilestyle {
@@ -7556,7 +8170,31 @@ table.table-info.horizontal tbody tr:nth-child(odd) {
 }
 .dialog.kdbx-credentials div.jfilestyle input[type=text]:disabled,
 .dialog.import div.jfilestyle input[type=text]:disabled {
-  width: 60.5% !important;
+  width: 57% !important;
+}
+.delete-user-dialog .intro p + p,
+.delete-group-dialog .intro p + p {
+  margin-bottom: 0;
+}
+.delete-user-dialog .ownership-transfer,
+.delete-group-dialog .ownership-transfer {
+  max-height: 20em;
+}
+.delete-user-dialog .ownership-transfer h3,
+.delete-group-dialog .ownership-transfer h3 {
+  border: 0;
+  padding: .5em 1.25em;
+  margin: 0;
+  background: #444442;
+}
+.delete-user-dialog .ownership-transfer li,
+.delete-group-dialog .ownership-transfer li {
+  border-bottom: 1px dotted #0C0C0A;
+  padding: .5em 1.25em;
+}
+.delete-user-dialog .ownership-transfer li select,
+.delete-group-dialog .ownership-transfer li select {
+  width: 100%;
 }
 /* sidebar / user details in overview */
 .panel.aside .user .sidebar-header,
@@ -7693,6 +8331,35 @@ table.table-info.horizontal tbody tr:nth-child(odd) {
 .login-history td:first-child {
   text-align: center;
 }
+/* Empty search feedback */
+.page.user .tableview.empty .tableview-header {
+  /* No tableview-header */
+  display: none;
+}
+.page.user .tableview.empty .tableview-content {
+  border: 0;
+  top: 0;
+}
+.page.user .tableview.empty .empty-content {
+  text-align: center;
+  margin: 3em 0.5em 0.67em 0.5em;
+}
+.page.user .tableview.empty .empty-content h1 {
+  font-size: 1.5em;
+}
+.page.user .tableview.empty .empty-content p {
+  font-size: 1em;
+  line-height: 1.5em;
+}
+@media all and (min-width: 780px) {
+  .page.user .tableview.empty .empty-content h1 {
+    font-size: 2.2em;
+  }
+  .page.user .tableview.empty .empty-content p {
+    font-size: 1.2em;
+    line-height: 1.8em;
+  }
+}
 /*
  * Password workspace
  */
@@ -7714,47 +8381,49 @@ table.table-info.horizontal tbody tr:nth-child(odd) {
   }
 }
 /* Define state where there are no passwords, and the filter all items */
-.page.password .tableview.all_items.empty .tableview-header {
+.page.password .tableview.empty .tableview-header {
   /* No tableview-header */
   display: none;
 }
-.page.password .tableview.all_items.empty .tableview-content {
-  background: transparent url('../../../img/illustrations/nest.png') center 75% no-repeat;
-  background-size: 80%;
+.page.password .tableview.empty .tableview-content {
   /* No tableview-header */
   border: 0;
   top: 0;
+}
+.page.password .tableview.empty.all_items .tableview-content {
+  background: transparent url('../../../img/background/rocket.svg') center 75% no-repeat;
+  background-size: 30%;
   /* Tablet version */
   /* Normal screen version */
 }
 @media all and (min-width: 780px) {
-  .page.password .tableview.all_items.empty .tableview-content {
+  .page.password .tableview.empty.all_items .tableview-content {
     background-position: center 60%;
-    background-size: 50%;
+    background-size: 10%;
   }
 }
 @media all and (min-width: 1024px) {
-  .page.password .tableview.all_items.empty .tableview-content {
-    background-position: center 70%;
-    background-size: 40%;
+  .page.password .tableview.empty.all_items .tableview-content {
+    background-position: center 80%;
+    background-size: 20%;
   }
 }
-.page.password .tableview.all_items.empty .empty-content {
+.page.password .tableview.empty .empty-content {
   text-align: center;
   margin: 3em 0.5em 0.67em 0.5em;
 }
-.page.password .tableview.all_items.empty .empty-content h1 {
+.page.password .tableview.empty .empty-content h1 {
   font-size: 1.5em;
 }
-.page.password .tableview.all_items.empty .empty-content p {
+.page.password .tableview.empty .empty-content p {
   font-size: 1em;
   line-height: 1.5em;
 }
 @media all and (min-width: 780px) {
-  .page.password .tableview.all_items.empty .empty-content h1 {
+  .page.password .tableview.empty .empty-content h1 {
     font-size: 2.2em;
   }
-  .page.password .tableview.all_items.empty .empty-content p {
+  .page.password .tableview.empty .empty-content p {
     font-size: 1.2em;
     line-height: 1.8em;
   }
@@ -7820,7 +8489,7 @@ table.table-info.horizontal tbody tr:nth-child(odd) {
   padding: 0;
   width: 12.5em;
   height: 12.5em;
-  margin: 0.5em 1em 0 0;
+  margin: .5em 1em 0 0;
 }
 .page.settings .profile-detailed-information .avatar .edit {
   width: 12.5em;
@@ -7895,7 +8564,7 @@ table.table-info.horizontal tbody tr:nth-child(odd) {
   line-height: 1.4em;
   font-size: 1.5em;
   text-align: center;
-  padding: 0.25em 0.5em;
+  padding: .25em .5em;
 }
 .page.settings .profile-detailed-information .avatar .edit a .help-text {
   display: block;
@@ -7934,7 +8603,7 @@ html.launching .launching-screen {
   height: 100%;
   position: absolute;
   z-index: 999;
-  background: #FFF;
+  background: #30302D;
 }
 html.launching .launching-screen .launching-screen-holder {
   width: 20%;
@@ -7946,7 +8615,7 @@ html.launching .launching-screen .progress-bar-wrapper {
 }
 html.launching .launching-screen p {
   margin: 1em 0;
-  font-size: 0.75em;
+  font-size: .75em;
 }
 .launching-screen {
   display: none;
@@ -7989,8 +8658,8 @@ html.launching .launching-screen p {
 }
 .page.status .grid .message,
 .page.setup .grid .message {
-  padding: 0.75em 1em;
-  margin-bottom: 0.5em;
+  padding: .75em 1em;
+  margin-bottom: .5em;
 }
 .page.status .grid .input .message,
 .page.setup .grid .input .message {
@@ -8029,7 +8698,7 @@ html.launching .launching-screen p {
   border: 1px solid #0C0C0A;
 }
 .mfa.page p {
-  font-size: 0.875em;
+  font-size: .875em;
 }
 .mfa.page .input-verify {
   background: #444442;
@@ -8059,7 +8728,7 @@ html.launching .launching-screen p {
 .mfa.page .mfa-trusted-device .device.current:before {
   content: '•';
   color: #009900;
-  font-size: 0.75em;
+  font-size: .75em;
   position: absolute;
   margin-left: -0.5em;
 }
@@ -8068,7 +8737,7 @@ html.launching .launching-screen p {
 }
 .mfa.page .mfa-trusted-device .action {
   flex: 1;
-  padding-top: 0.5em;
+  padding-top: .5em;
 }
 .mfa.page .mfa-trusted-device table td,
 .mfa.page .mfa-trusted-device table th {
