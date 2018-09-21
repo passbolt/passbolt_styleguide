@@ -2,6 +2,12 @@
 <html class=" js websqldatabase draganddrop cssscrollbar" lang="en">
 <head>
 	<?php include('includes/meta/LU_meta.php'); ?>
+	<script type="application/javascript">
+		$(function() {
+			$("#ConnectionProtocol").chosen({width: '100%', disable_search: true});
+			$("#DefaultGroupAdminUser").chosen();
+		});
+	</script>
 </head>
 <body>
 <div id="container" class="page settings login-history">
@@ -64,22 +70,25 @@
 														<label>Domain</label>
 														<input type="text" class="required fluid" placeholder="domain.ext" disabled="disabled">
 													</div>
-													<div class="input text">
-														<label>Host</label>
-														<input type="text" class="required fluid" placeholder="host" disabled="disabled">
+													<div class="singleline connection_info protocol_host_port clearfix">
+														<label>Server url</label>
+														<div class="input text field_protocol_host">
+															<div class="input text protocol">
+																<select name="data[ldap][connection_type]" class="required fluid" id="ConnectionProtocol" required="required">
+																	<option value="1">ldap://</option>
+																	<option value="2">ldaps:// (ssl)</option>
+																	<option value="3">ldaps:// (tls)</option>
+																</select>
+															</div>
+															<div class="input text host">
+																<input type="text" class="required fluid" placeholder="host" disabled="disabled">
+															</div>
+														</div>
+														<div class="input text port">
+															<input type="text" class="required fluid" placeholder="port" disabled="disabled">
+														</div>
 													</div>
-													<div class="input text">
-														<label>Port</label>
-														<input type="text" class="required fluid" placeholder="host" disabled="disabled">
-													</div>
-													<div class="input text">
-														<label>Connection type</label>
-														<select name="data[ldap][connection_type]" class="required fluid" id="ConnectionType" required="required" disabled="disabled">
-															<option value="1">Plain</option>
-															<option value="2">SSL</option>
-															<option value="3">TLS</option>
-														</select>
-													</div>
+
 													<div class="input text">
 														<label>Username</label>
 														<input type="text" class="required fluid" placeholder="username" disabled="disabled">
@@ -129,7 +138,7 @@
 													</div>
 													<div class="input text">
 														<label>Default group admin</label>
-														<select name="data[ldap][defaultGroupAdminUser]" class="required fluid" id="DefaultGroupAdminUser" required="required" disabled="disabled">
+														<select name="data[ldap][defaultGroupAdminUser]" class="required fluid" id="DefaultGroupAdminUser" required="required">
 															<option value="0">- Choose -</option>
 															<option value="1">admin@passbolt.com</option>
 															<option value="2">ada@passbolt.com</option>
@@ -178,6 +187,14 @@
 			</div>
 		</div>
 	</div>
+
 	<?php include('includes/LU_footer.php'); ?>
+	<script type="javascript">
+		$(function() {
+			setTimeout(function(){ console.log('va te faire foutre')}, 1000);
+			$("#ConnectionProtocol").chosen({width: '151px', disable_search: true});
+			$("#DefaultGroupAdminUser").chosen();
+		});
+	</script>
 </body>
 </html>

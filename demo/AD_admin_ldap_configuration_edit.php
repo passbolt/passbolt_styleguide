@@ -2,6 +2,13 @@
 <html class=" js websqldatabase draganddrop cssscrollbar" lang="en">
 <head>
 	<?php include('includes/meta/LU_meta.php'); ?>
+	<script type="application/javascript">
+		$(function() {
+			$("#ConnectionProtocol").chosen({width: '100%', disable_search: true});
+			$("#DefaultGroupAdminUser").chosen();
+			$("#DefaultUser").chosen();
+		});
+	</script>
 </head>
 <body>
 <div id="container" class="page settings login-history">
@@ -52,49 +59,54 @@
 
 												<div class="ldap-configuration-credentials col8">
 													<h3>Credentials</h3>
-													<div class="input text">
+													<div class="radiolist">
 														<label>Directory type</label>
-														<select name="data[ldap][directory_type]" class="required fluid" id="ConnectionType" required="required">
-															<option value="1">Active Directory</option>
-															<option value="2">Openldap</option>
-														</select>
-														<div class="message">Active directory and Openldap are supported at the moment. More will come later.</div>
+														<div class="input radio">
+															<input name="data[User][field]" value="1" id="UserField1" type="radio" checked="checked">
+															<label for="UserField1">Active Directory</label>
+															<input name="data[User][field]" value="2" id="UserField2" type="radio">
+															<label for="UserField2">Open Ldap</label>
+														</div>
 													</div>
 													<div class="input text">
 														<label>Domain</label>
 														<input type="text" class="required fluid" placeholder="domain.ext">
 													</div>
-													<div class="input text">
-														<label>Host</label>
-														<input type="text" class="required fluid" placeholder="host">
+													<div class="singleline connection_info protocol_host_port clearfix">
+														<label>Server url</label>
+														<div class="input text field_protocol_host">
+															<div class="input text protocol">
+																<select name="data[ldap][connection_type]" class="required fluid" id="ConnectionProtocol" required="required">
+																	<option value="1">ldap://</option>
+																	<option value="2">ldaps:// (ssl)</option>
+																	<option value="3">ldaps:// (tls)</option>
+																</select>
+															</div>
+															<div class="input text host">
+																<input type="text" class="required fluid" placeholder="host or ip">
+															</div>
+														</div>
+														<div class="input text port">
+															<input type="number" class="required fluid" placeholder="port" value="389">
+														</div>
+													</div>
+													<div class="singleline clearfix">
+														<div class="input text first-field">
+															<label>Username</label>
+															<input type="text" class="required fluid" placeholder="username">
+														</div>
+														<div class="input text last-field">
+															<label>Password</label>
+															<input type="password" class="required fluid" placeholder="password">
+														</div>
 													</div>
 													<div class="input text">
-														<label>Port</label>
-														<input type="text" class="required fluid" placeholder="host">
-													</div>
-													<div class="input text">
-														<label>Connection type</label>
-														<select name="data[ldap][connection_type]" class="required fluid" id="ConnectionType" required="required">
-															<option value="1">Plain</option>
-															<option value="2">SSL</option>
-															<option value="3">TLS</option>
-														</select>
-													</div>
-													<div class="input text">
-														<label>Username</label>
-														<input type="text" class="required fluid" placeholder="username">
-													</div>
-													<div class="input text">
-														<label>Password</label>
-														<input type="password" class="required fluid">
+														<label>Base DN</label>
+														<input type="text" class="required fluid" placeholder="OU=OrgUsers,DC=mydomain,DC=local">
+														<div class="message">The base DN (default naming context) for the domain. If this is empty then it will be queried from the RootDSE.</div>
 													</div>
 
 													<h3>Directory configuration</h3>
-													<div class="input text">
-														<label>Base DN</label>
-														<input type="text" class="required fluid" placeholder="Base DN">
-														<div class="message">The base DN (default naming context) for the domain. If this is empty then it will be queried from the RootDSE.</div>
-													</div>
 													<div class="input text">
 														<label>Group path</label>
 														<input type="text" class="required fluid" placeholder="Group Path">
@@ -120,7 +132,6 @@
 													<div class="input text">
 														<label>Default admin</label>
 														<select name="data[ldap][defaultUser]" class="required fluid" id="DefaultUser" required="required">
-															<option value="0">- Choose -</option>
 															<option value="1">admin@passbolt.com</option>
 															<option value="2">ada@passbolt.com</option>
 															<option value="3">lynne@passbolt.com</option>
@@ -130,7 +141,6 @@
 													<div class="input text">
 														<label>Default group admin</label>
 														<select name="data[ldap][defaultGroupAdminUser]" class="required fluid" id="DefaultGroupAdminUser" required="required">
-															<option value="0">- Choose -</option>
 															<option value="1">admin@passbolt.com</option>
 															<option value="2">ada@passbolt.com</option>
 															<option value="3">lynne@passbolt.com</option>
@@ -161,16 +171,14 @@
 
 												<div class="col4 last">
 													<h2>Need help?</h2>
-													<p>Check out our ldap help page</p>
+													<p>Check out our ldap configuration guide</p>
 													<a class="button" href="https://help.passbolt.com/configure/ldap" target="_blank">
 														<i class="fa fa-fw fa-life-ring"></i>
-														<span>Help</span>
+														<span>Read documentation</span>
 													</a>
 												</div>
 
 											</div>
-
-
 										</div>
 									</div>
 								</div>
