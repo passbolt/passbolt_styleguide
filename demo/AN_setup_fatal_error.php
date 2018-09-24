@@ -34,7 +34,7 @@
 						<a href="../demo/AN_setup4a0_securitytoken.php">4. Set a security token</a>
 					</li>
 					<li class="selected">
-						<a href="../demo/AN_setup5a0_createloginpassword.php">5. Login!</a>
+						<a href="../demo/AN_setup5a0_login.php">5. Login!</a>
 					</li>
 				</ul>
 			</div>

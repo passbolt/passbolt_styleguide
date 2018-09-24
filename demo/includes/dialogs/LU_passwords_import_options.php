@@ -14,17 +14,18 @@
 						<div class="input password">
 							<label>Keepass password</label>
 							<input name="passbolt.model.Resource.passphrase" maxlength="50" id="js_field_passphrase" placeholder="password" type="password">
-							<input class="required hidden" maxlength="50" type="text" id="js_field_password_clear" style="display: none;">
-						</div>
-						<ul class="actions inline">
-							<li>
-								<a href="#" id="js_secret_view" class="button toggle">
-									<i class="fa fa-eye fa-fw fa-lg"></i>
-									<span class="visuallyhidden">view</span>
-								</a>
-							</li>
-						</ul>
-					</div>
+							<input class="required hidden" maxlength="50" type="text" id="js_field_password_clear">
+                            <ul class="actions inline">
+                                <li>
+                                    <a href="#" id="js_secret_view" class="button toggle">
+                                        <i class="fa fa-eye fa-fw fa-lg"></i>
+                                        <span class="visuallyhidden">view</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+
+                    </div>
 					<div class="input text">
 						<label for="js_field_key_file">Keepass key file (optional)</label>
 						<input class="jfilestyle" name="passbolt.model.Resource.uri" id="js_field_key_file" type="file" data-text="Choose a file" data-placeholder="No key file selected">

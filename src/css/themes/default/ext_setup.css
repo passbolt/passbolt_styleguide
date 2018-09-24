@@ -9,12 +9,13 @@
 /* logo */
 /* grid */
 /* messages */
-/* tabs */
 /* sidebar */
 /* secret placeholder */
 /* tables */
+/* tabs */
 /* tags */
 /* tooltip */
+/* loading animation */
 /* ==========================================================================
  * Reset is a mix of :
  *
@@ -835,6 +836,7 @@ p {
 /*!
  *  Font Awesome 4.7.0 by @davegandy - http://fontawesome.io - @fontawesome
  *  License - http://fontawesome.io/license (Font: SIL OFL 1.1, CSS: MIT License)
+ *  @licstart
  */
 /* FONT PATH
  * -------------------------- */
@@ -3169,6 +3171,7 @@ p {
   overflow: visible;
   clip: auto;
 }
+/*!  @licend */
 .icon {
   display: inline-block;
   font: normal normal normal 14px/1 FontAwesome;
@@ -3430,8 +3433,9 @@ html body .button.processing {
   content: " ";
   top: -1px;
   left: -1px;
-  background: #FFF url('../../../img/controls/loading.gif') center center no-repeat;
-  border: 1px solid #BBB;
+  background: #FFF url('../../../img/controls/loading_light.svg') center center no-repeat;
+  background-size: auto 50% ;
+  border: 1px solid #DDD;
   border-radius: 5px;
   padding: 1px;
 }
@@ -3489,6 +3493,7 @@ input[type=text],
 input[type=email],
 input[type=password],
 input[type=search],
+input[type=number],
 textarea {
   font-size: 16px;
   line-height: 24px;
@@ -3509,6 +3514,7 @@ textarea:hover,
 input[type=password]:hover,
 input[type=search]:hover,
 input[type=text]:hover,
+input[type=number]:hover,
 input[type=email]:hover {
   border: 1px solid #BBB;
 }
@@ -3516,7 +3522,7 @@ textarea:focus,
 input[type=password]:focus,
 input[type=search]:focus,
 input[type=text]:focus,
-input[type=email]:focus {
+input[type=number]:focus input[type=email]:focus {
   box-shadow: inset 1px 1px 2px rgba(0, 0, 0, 0.2);
   border: 1px solid #2894DF;
 }
@@ -3527,6 +3533,7 @@ input[type=email]:focus {
 input[type=password]:disabled,
 input[type=search]:disabled,
 input[type=text]:disabled,
+input[type=number]:disabled,
 input[type=email]:disabled {
   border: 1px solid #DDD;
   -webkit-box-shadow: 0 0 0 0;
@@ -3589,15 +3596,21 @@ textarea {
 .radiolist .input.radio label,
 input[type=checkbox] + label {
   font-weight: normal;
-  display: inline;
+  display: inline-block;
   margin-left: 0.25em;
+}
+.input.checkbox {
+  padding-top: 0.5em;
+}
+.radiolist .input.radio {
+  margin-bottom: 0.5em;
 }
 /* radio and checkboxes */
 /*
 	Messages for validation error and example
 
 	Description	: <div.text.error>, <div.text.success>, can be used to add status messages or example.
-	Additional messages are wrapped in <.error-message>, <.success-messages>
+	Additional messages are wrapped in <.error.message>, <.success.messages>
 
 	.error - can be used for validation feedback
 	.helptext - can be used for example messages prior validation
@@ -3655,6 +3668,67 @@ input[type=email].fluid {
   margin-top: 0.5em;
 }
 /* shortcut classes for layout */
+.singleline .input.text {
+  float: left;
+  width: 40.2%;
+}
+.singleline .input.text:first-child,
+.singleline .input.text.first-field {
+  margin-right: 2.5%;
+}
+.singleline .input.text input[type="text"],
+.singleline .input.text input[type="email"],
+.singleline .input.text input[type="password"],
+.singleline .input.text input[type="search"] {
+  width: 93%;
+}
+/** Specific layout for connection information */
+.singleline.connection_info.protocol_host_port .input.text.field_protocol_host {
+  border: 0;
+  padding: 0;
+  width: 70%;
+}
+.singleline.connection_info.protocol_host_port .input.text.field_protocol_host .input.text {
+  padding: 0;
+  margin: 0;
+}
+.singleline.connection_info.protocol_host_port .input.text.field_protocol_host .input.text input {
+  margin: 0;
+  border-left: none;
+}
+.singleline.connection_info.protocol_host_port .input.text.field_protocol_host .input.text.host {
+  width: 75%;
+}
+.singleline.connection_info.protocol_host_port .input.text.field_protocol_host .input.text.host input[type=text] {
+  width: 95%;
+}
+.singleline.connection_info.protocol_host_port .input.text.field_protocol_host .input.text.protocol {
+  width: 25%;
+  position: relative;
+}
+.singleline.connection_info.protocol_host_port .input.text.field_protocol_host .input.text.protocol .chosen-container {
+  display: block;
+}
+.singleline.connection_info.protocol_host_port .input.text.field_protocol_host .input.text.protocol .chosen-container a.chosen-single {
+  height: 38px;
+}
+.singleline.connection_info.protocol_host_port .input.text.field_protocol_host .input.text.protocol .chosen-container a.chosen-single div b {
+  background-position: 0px 10px;
+}
+.singleline.connection_info.protocol_host_port .input.text.field_protocol_host .input.text.protocol .chosen-container a.chosen-single span {
+  font-size: 16px;
+  padding: 6px 0 0 0;
+}
+.singleline.connection_info.protocol_host_port .input.text.field_protocol_host .input.text.protocol .chosen-container-active.chosen-with-drop a.chosen-single div b {
+  background-position: -18px 10px;
+}
+.singleline.connection_info.protocol_host_port .input.text.port {
+  width: 9%;
+  margin-left: 1%;
+}
+.singleline.connection_info.protocol_host_port .input.text.port input[type=number] {
+  width: 100%;
+}
 /*
  * Page layout
  */
@@ -4256,6 +4330,19 @@ input[type=email].fluid {
   /* Opera doesn't support this in the shorthand */
   background-attachment: local, local, scroll, scroll;
 }
+::-webkit-scrollbar {
+  width: 1em;
+}
+::-webkit-scrollbar-track {
+  background: #F9F9F9;
+  border-top: 0;
+  border-bottom: 0;
+}
+::-webkit-scrollbar-thumb {
+  background: #C1C1C1;
+  border-radius: 1em;
+  border: 4px solid #F9F9F9;
+}
 video {
   display: block;
   width: 100%;
@@ -4373,6 +4460,9 @@ article video {
   background-size: 200px auto;
   width: 200px;
   height: 45px;
+}
+.header.second .col1 {
+  min-width: 200px;
 }
 /* CSS for serving the retina image to devices with a high "device-pixel-ratio": */
 @media only screen and (-moz-min-device-pixel-ratio: 1.5), only screen and (-o-min-device-pixel-ratio: 1.5), only screen and (-webkit-min-device-pixel-ratio: 1.5), only screen and (min-devicepixel-ratio: 1.5), only screen and (min-resolution: 1.5dppx) {
@@ -4507,7 +4597,6 @@ article video {
   margin-bottom: 3em;
   box-shadow: 0px 0px 10px 0px #DDD;
   /* header */
-  /* content */
   /* inputs */
   /* Error display */
   /* submit / cancel */
@@ -4534,12 +4623,12 @@ article video {
   font-size: 0.7em;
   color: #333;
 }
-.dialog .dialog-content {
-  position: relative;
+.dialog .dialog-header .dialog-close {
+  margin-top: -2.5em;
 }
 .dialog .form-content {
   background: #FFF;
-  padding: 0.813em 1.25em 0.813em 1.5em;
+  padding: 0.813em 1.5em 0.813em 1.5em;
 }
 .dialog label {
   clear: both;
@@ -4548,22 +4637,74 @@ article video {
   line-height: 1.6em;
   /* 24px */
 }
-.dialog input[type=text] {
-  width: 92%;
-  float: left;
-}
-.dialog .short input {
-  width: 64%;
-  float: left;
-}
+.dialog input[type=text],
 .dialog textarea {
-  width: 92%;
+  width: 100%;
+  box-sizing: border-box;
+  /*
+     * For IE 6/7 only
+     * Include this rule to trigger hasLayout and contain floats.
+     */
+  /*
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
+  /*
+     * For IE 6/7 only
+     * Include this rule to trigger hasLayout and contain floats.
+     */
+  zoom: 1;
+  /*
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
+}
+.dialog input[type=text]:before,
+.dialog textarea:before,
+.dialog input[type=text]:after,
+.dialog textarea:after {
+  content: "";
+  display: table;
+}
+.dialog input[type=text]:after,
+.dialog textarea:after {
+  clear: both;
+}
+.dialog input[type=text]:before,
+.dialog textarea:before,
+.dialog input[type=text]:after,
+.dialog textarea:after {
+  content: "";
+  display: table;
+}
+.dialog input[type=text]:after,
+.dialog textarea:after {
+  clear: both;
+}
+.dialog textarea + .message,
+.dialog input + .message {
+  display: none;
+  /* do not show empty placeholders */
 }
 .dialog textarea + .message.error,
 .dialog input + .message.error {
   display: block;
   clear: both;
-  width: 92%;
+  width: 100%;
 }
 .dialog .inline-error {
   color: #D40101;
@@ -4589,15 +4730,11 @@ article video {
   margin-top: 0.5em;
   font-size: 1em;
 }
-.dialog .dialog-close,
-.dialog .dialog-close:hover {
-  display: block;
-  float: right;
-  margin-top: -2.5em;
-  border: 0;
-}
+/* can also be used outside a dialog, like the sidebar */
 .dialog-close,
 .dialog-close:hover {
+  display: block;
+  float: right;
   border: 0;
 }
 .dialog-close .fa-close {
@@ -4707,14 +4844,6 @@ article video {
     padding: 0.5em 1em;
   }
 }
-.video-wrapper {
-  padding: 1em;
-}
-.video-wrapper iframe {
-  width: 100%;
-  min-height: 250px;
-  height: auto;
-}
 /* left panel navigation */
 .panel .navigation {
   margin-top: 1em;
@@ -4766,6 +4895,15 @@ article video {
 .message.error {
   color: #333;
   background: #ffe4e4;
+}
+.message.error a:link,
+.message.error a:visited {
+  color: #333;
+  border-bottom: 1px dotted #888;
+}
+.message.error a:hover {
+  color: #333;
+  border-bottom: 1px solid #888;
 }
 .message.success {
   color: #333;
@@ -5256,10 +5394,12 @@ table.table-info.horizontal tbody tr:nth-child(odd) {
 }
 /*
 	Password fields in passbolt have complexity "progress bar"
-	and a custom layout to accomodate buttons on the left end
+	and a custom layout to accommodate buttons on the left end
 */
 .input-password-wrapper {
-  max-width: 500px;
+  width: 100%;
+  /* same than default inputs width in dialogs */
+  box-sizing: border-box;
   /*
      * For IE 6/7 only
      * Include this rule to trigger hasLayout and contain floats.
@@ -5291,7 +5431,6 @@ table.table-info.horizontal tbody tr:nth-child(odd) {
      * 2. The use of `table` rather than `block` is only necessary if using
      *	`:before` to contain the top-margins of child elements.
      */
-  width: 99%;
 }
 .input-password-wrapper:before,
 .input-password-wrapper:after {
@@ -5309,13 +5448,17 @@ table.table-info.horizontal tbody tr:nth-child(odd) {
 .input-password-wrapper:after {
   clear: both;
 }
-.input-password-wrapper .input.password input {
-  box-sizing: border-box;
-  width: 65.5%;
+.input-password-wrapper .input.password {
   float: left;
+  width: 65.5%;
+}
+.input-password-wrapper .input.password input[type=text],
+.input-password-wrapper .input.password input[type=password] {
+  width: calc(100% - 4em + 3px);
+  box-sizing: border-box;
 }
 .input-password-wrapper .input.password input[type=password].decrypting {
-  background: transparent url('../../../img/controls/loading.gif') no-repeat 72% center;
+  background: transparent url('../../../img/controls/loading_light.svg') no-repeat 90% center;
 }
 .input-password-wrapper .input.password.has-encrypted-secret input {
   /* fallback placeholder */
@@ -5394,30 +5537,15 @@ table.table-info.horizontal tbody tr:nth-child(odd) {
   background: #009900;
   width: 99.5%;
 }
-.password-hints li:before {
-  content: "●";
-  color: #DDD;
-  padding-right: 0.5em;
-}
-.password-hints li.success:before {
-  color: #009900;
-}
-.password-hints li.error:before {
-  color: #D40101;
-}
 @media all and (max-width: 400px) {
-  .input-password-wrapper .input.password,
-  .input-password-wrapper .actions.inline {
-    position: relative;
-    float: none;
-    clear: both;
+  .input-password-wrapper .input.password {
+    float: left;
+    width: 100%;
   }
   .input-password-wrapper .actions.inline {
     width: 50%;
     float: left;
-  }
-  .input-password-wrapper .input.password input[type=password] {
-    width: 87%;
+    margin-bottom: 0.5em;
   }
   .input-password-wrapper .password-complexity .progress {
     display: none;
@@ -5431,6 +5559,20 @@ table.table-info.horizontal tbody tr:nth-child(odd) {
   .fa.fa-lg {
     line-height: 1;
   }
+}
+.password-hints {
+  margin-top: 1em;
+}
+.password-hints li:before {
+  content: "●";
+  color: #DDD;
+  padding-right: 0.5em;
+}
+.password-hints li.success:before {
+  color: #009900;
+}
+.password-hints li.error:before {
+  color: #D40101;
 }
 .ribbon {
   position: absolute;
@@ -5512,6 +5654,12 @@ table.table-info.horizontal tbody tr:nth-child(odd) {
 .setup .input-password-wrapper {
   margin-top: 1.5em;
   width: 90%;
+}
+.setup .input-password-wrapper .input.password input[type=text],
+.setup .input-password-wrapper .input.password input[type=password] {
+  width: 100%;
+  /* no security token yet */
+  box-sizing: border-box;
 }
 .setup .why-plugin-wrapper p {
   padding-bottom: 1em;
@@ -5652,7 +5800,7 @@ table.table-info.horizontal tbody tr:nth-child(odd) {
   margin-left: 1em;
 }
 .setup .row.last {
-  padding-top: 1.5em;
+  padding-top: 1em;
 }
 .setup .side-message {
   margin-top: 3em;

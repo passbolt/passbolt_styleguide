@@ -1,6 +1,11 @@
 .page.plans {
   @pricing-tab-height: 102px;
   @background-light-plus: #f7f7f7;
+  
+  .col3 {
+    // Force display on col3. It is deactivated for obscure reasons.
+    display: block;
+  }
 
   .page-row.intro {
     background: @background-light-plus;
@@ -132,9 +137,17 @@
           text-align: center;
           display: block;
         }
-        .cost-large {
-          font-size: 4em;
+        .align-right {
           text-align: right;
+        }
+        .align-left {
+          text-align: left;
+        }
+        .align-center {
+          text-align: center;
+        }
+        .cost-large {
+          font-size: 3.5em;
           &.float {
             font-size:3.3em;
             letter-spacing:-2px;
@@ -145,17 +158,16 @@
         }
         .cost-medium {
           font-size: 2em;
-          text-align: center;
           line-height: 1.2em;
-          padding: 0.85em 0 0.8em 0;
+          padding: 0.7em 0 0.6em 0;
           &.lower {
             // When other prices are discounted
             padding-top:1.275em;
           }
         }
         .cost-small {
-          font-size: 0.8em;
-          text-align: left;
+          font-size: 1.2em;
+          padding-left:0.3em;
           .smaller {
             color: @grey-dark;
             font-size: 0.9em;
@@ -186,7 +198,7 @@
         padding: 1em;
         
         ul {
-          min-height: 285px;
+          min-height: 346px;
           li {
             padding: 0.4em;
             font-size: 0.8em;
@@ -233,6 +245,7 @@
   .compare {
     @background: @background-light-plus;
     background: @background;
+    margin-top:4em;
     table {
       width:100%;
       tr {
@@ -313,6 +326,18 @@
         background-color: #d7d7d7;
         content: "";
       }
+    }
+  }
+
+  @media all and (min-width: 1000px) {
+    .grid-responsive-12 {
+      max-width:1000px;
+    }
+  }
+
+  @media all and (min-width: 1220px) {
+    .grid-responsive-12 {
+      max-width:1220px;
     }
   }
 }

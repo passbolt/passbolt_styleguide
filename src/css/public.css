@@ -9,12 +9,13 @@
 /* logo */
 /* grid */
 /* messages */
-/* tabs */
 /* sidebar */
 /* secret placeholder */
 /* tables */
+/* tabs */
 /* tags */
 /* tooltip */
+/* loading animation */
 /* ==========================================================================
  * Reset is a mix of :
  *
@@ -877,6 +878,7 @@ ul.checklist li:before {
 /*!
  *  Font Awesome 4.7.0 by @davegandy - http://fontawesome.io - @fontawesome
  *  License - http://fontawesome.io/license (Font: SIL OFL 1.1, CSS: MIT License)
+ *  @licstart
  */
 /* FONT PATH
  * -------------------------- */
@@ -3211,6 +3213,7 @@ ul.checklist li:before {
   overflow: visible;
   clip: auto;
 }
+/*!  @licend */
 /*
 	Generic buttons
 	Description	: We support <input[submit]>, <input.button>, <button> and <a.button>
@@ -3455,8 +3458,9 @@ html body .button.processing {
   content: " ";
   top: -1px;
   left: -1px;
-  background: #FFF url('../img/controls/loading.gif') center center no-repeat;
-  border: 1px solid #BBB;
+  background: #FFF url('../img/controls/loading_light.svg') center center no-repeat;
+  background-size: auto 50% ;
+  border: 1px solid #DDD;
   border-radius: 5px;
   padding: 1px;
 }
@@ -3514,6 +3518,7 @@ input[type=text],
 input[type=email],
 input[type=password],
 input[type=search],
+input[type=number],
 textarea {
   font-size: 16px;
   line-height: 24px;
@@ -3534,6 +3539,7 @@ textarea:hover,
 input[type=password]:hover,
 input[type=search]:hover,
 input[type=text]:hover,
+input[type=number]:hover,
 input[type=email]:hover {
   border: 1px solid #BBB;
 }
@@ -3541,7 +3547,7 @@ textarea:focus,
 input[type=password]:focus,
 input[type=search]:focus,
 input[type=text]:focus,
-input[type=email]:focus {
+input[type=number]:focus input[type=email]:focus {
   box-shadow: inset 1px 1px 2px rgba(0, 0, 0, 0.2);
   border: 1px solid #2894DF;
 }
@@ -3552,6 +3558,7 @@ input[type=email]:focus {
 input[type=password]:disabled,
 input[type=search]:disabled,
 input[type=text]:disabled,
+input[type=number]:disabled,
 input[type=email]:disabled {
   border: 1px solid #DDD;
   -webkit-box-shadow: 0 0 0 0;
@@ -3614,15 +3621,21 @@ textarea {
 .radiolist .input.radio label,
 input[type=checkbox] + label {
   font-weight: normal;
-  display: inline;
+  display: inline-block;
   margin-left: 0.25em;
+}
+.input.checkbox {
+  padding-top: 0.5em;
+}
+.radiolist .input.radio {
+  margin-bottom: 0.5em;
 }
 /* radio and checkboxes */
 /*
 	Messages for validation error and example
 
 	Description	: <div.text.error>, <div.text.success>, can be used to add status messages or example.
-	Additional messages are wrapped in <.error-message>, <.success-messages>
+	Additional messages are wrapped in <.error.message>, <.success.messages>
 
 	.error - can be used for validation feedback
 	.helptext - can be used for example messages prior validation
@@ -3680,6 +3693,106 @@ input[type=email].fluid {
   margin-top: 0.5em;
 }
 /* shortcut classes for layout */
+.singleline .input.text {
+  float: left;
+  width: 40.2%;
+}
+.singleline .input.text:first-child,
+.singleline .input.text.first-field {
+  margin-right: 2.5%;
+}
+.singleline .input.text input[type="text"],
+.singleline .input.text input[type="email"],
+.singleline .input.text input[type="password"],
+.singleline .input.text input[type="search"] {
+  width: 93%;
+}
+/** Specific layout for connection information */
+.singleline.connection_info.protocol_host_port .input.text.field_protocol_host {
+  border: 0;
+  padding: 0;
+  width: 70%;
+}
+.singleline.connection_info.protocol_host_port .input.text.field_protocol_host .input.text {
+  padding: 0;
+  margin: 0;
+}
+.singleline.connection_info.protocol_host_port .input.text.field_protocol_host .input.text input {
+  margin: 0;
+  border-left: none;
+}
+.singleline.connection_info.protocol_host_port .input.text.field_protocol_host .input.text.host {
+  width: 75%;
+}
+.singleline.connection_info.protocol_host_port .input.text.field_protocol_host .input.text.host input[type=text] {
+  width: 95%;
+}
+.singleline.connection_info.protocol_host_port .input.text.field_protocol_host .input.text.protocol {
+  width: 25%;
+  position: relative;
+}
+.singleline.connection_info.protocol_host_port .input.text.field_protocol_host .input.text.protocol .chosen-container {
+  display: block;
+}
+.singleline.connection_info.protocol_host_port .input.text.field_protocol_host .input.text.protocol .chosen-container a.chosen-single {
+  height: 38px;
+}
+.singleline.connection_info.protocol_host_port .input.text.field_protocol_host .input.text.protocol .chosen-container a.chosen-single div b {
+  background-position: 0px 10px;
+}
+.singleline.connection_info.protocol_host_port .input.text.field_protocol_host .input.text.protocol .chosen-container a.chosen-single span {
+  font-size: 16px;
+  padding: 6px 0 0 0;
+}
+.singleline.connection_info.protocol_host_port .input.text.field_protocol_host .input.text.protocol .chosen-container-active.chosen-with-drop a.chosen-single div b {
+  background-position: -18px 10px;
+}
+.singleline.connection_info.protocol_host_port .input.text.port {
+  width: 9%;
+  margin-left: 1%;
+}
+.singleline.connection_info.protocol_host_port .input.text.port input[type=number] {
+  width: 100%;
+}
+form.public .error .error-message,
+form.public .error .error.message {
+  color: #D40101;
+  font-size: 0.8em;
+  padding-top: 0;
+  font-weight: normal;
+}
+form.public label {
+  font-size: 0.9rem;
+  margin-top: 0.5em;
+}
+form.public .singleline .input.text {
+  float: left;
+  width: 48%;
+}
+form.public .singleline .input.text:first-child,
+form.public .singleline .input.text.first-field {
+  margin-right: 3%;
+}
+form.public .singleline .input.text input[type="text"],
+form.public .singleline .input.text input[type="email"],
+form.public .singleline .input.text input[type="password"],
+form.public .singleline .input.text input[type="search"] {
+  width: 90%;
+}
+form.public .input {
+  width: 100%;
+}
+form.public .input input[type="text"],
+form.public .input input[type="email"],
+form.public .input input[type="password"],
+form.public .input input[type="search"],
+form.public .input textarea {
+  margin-bottom: 0.5em;
+  width: 94%;
+}
+form.public .input select {
+  width: 100%;
+}
 /*
  * Page layout
  */
@@ -4281,6 +4394,19 @@ input[type=email].fluid {
   /* Opera doesn't support this in the shorthand */
   background-attachment: local, local, scroll, scroll;
 }
+::-webkit-scrollbar {
+  width: 1em;
+}
+::-webkit-scrollbar-track {
+  background: #F9F9F9;
+  border-top: 0;
+  border-bottom: 0;
+}
+::-webkit-scrollbar-thumb {
+  background: #C1C1C1;
+  border-radius: 1em;
+  border: 4px solid #F9F9F9;
+}
 video {
   display: block;
   width: 100%;
@@ -4288,6 +4414,47 @@ video {
 }
 article video {
   margin: 1em 0;
+}
+article table.table-parameters {
+  width: 100%;
+}
+article table.table-parameters thead {
+  background-color: transparent !important;
+}
+article table.table-parameters thead th {
+  background-color: transparent;
+  font-weight: bold;
+  border: 1px solid #DDD;
+  padding: 0.7em 0.5em;
+}
+article table.table-parameters tbody tr:nth-child(even) {
+  background-color: transparent;
+}
+article table.table-parameters tbody tr:nth-child(odd) {
+  background-color: #F3F3F3;
+}
+article table.table-parameters tbody tr td {
+  padding: 0.5em 0.5em;
+  border: 1px solid #DDD;
+}
+article table.table-parameters tbody tr td code {
+  padding: 0.2em 0.3em;
+  background-color: #DDD;
+}
+article table.table-parameters tbody tr td pre {
+  margin: 0;
+  padding: 0;
+  background-color: transparent;
+}
+article table.table-parameters tbody tr td code,
+article table.table-parameters tbody tr td pre {
+  font-family: monospace,serif;
+  font-size: 1em;
+}
+article table.table-parameters tbody tr td em {
+  color: #969696;
+  font-size: 0.8em;
+  font-style: normal;
 }
 /* headers */
 .header {
@@ -4471,6 +4638,9 @@ article video {
   width: 200px;
   height: 45px;
 }
+.header.second .col1 {
+  min-width: 200px;
+}
 /* CSS for serving the retina image to devices with a high "device-pixel-ratio": */
 @media only screen and (-moz-min-device-pixel-ratio: 1.5), only screen and (-o-min-device-pixel-ratio: 1.5), only screen and (-webkit-min-device-pixel-ratio: 1.5), only screen and (min-devicepixel-ratio: 1.5), only screen and (min-resolution: 1.5dppx) {
   .logo.no-img {
@@ -4641,7 +4811,6 @@ article video {
   margin-bottom: 3em;
   box-shadow: 0px 0px 10px 0px #DDD;
   /* header */
-  /* content */
   /* inputs */
   /* Error display */
   /* submit / cancel */
@@ -4668,12 +4837,12 @@ article video {
   font-size: 0.7em;
   color: #333;
 }
-.dialog .dialog-content {
-  position: relative;
+.dialog .dialog-header .dialog-close {
+  margin-top: -2.5em;
 }
 .dialog .form-content {
   background: #FFF;
-  padding: 0.813em 1.25em 0.813em 1.5em;
+  padding: 0.813em 1.5em 0.813em 1.5em;
 }
 .dialog label {
   clear: both;
@@ -4682,22 +4851,74 @@ article video {
   line-height: 1.6em;
   /* 24px */
 }
-.dialog input[type=text] {
-  width: 92%;
-  float: left;
-}
-.dialog .short input {
-  width: 64%;
-  float: left;
-}
+.dialog input[type=text],
 .dialog textarea {
-  width: 92%;
+  width: 100%;
+  box-sizing: border-box;
+  /*
+     * For IE 6/7 only
+     * Include this rule to trigger hasLayout and contain floats.
+     */
+  /*
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
+  /*
+     * For IE 6/7 only
+     * Include this rule to trigger hasLayout and contain floats.
+     */
+  zoom: 1;
+  /*
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
+}
+.dialog input[type=text]:before,
+.dialog textarea:before,
+.dialog input[type=text]:after,
+.dialog textarea:after {
+  content: "";
+  display: table;
+}
+.dialog input[type=text]:after,
+.dialog textarea:after {
+  clear: both;
+}
+.dialog input[type=text]:before,
+.dialog textarea:before,
+.dialog input[type=text]:after,
+.dialog textarea:after {
+  content: "";
+  display: table;
+}
+.dialog input[type=text]:after,
+.dialog textarea:after {
+  clear: both;
+}
+.dialog textarea + .message,
+.dialog input + .message {
+  display: none;
+  /* do not show empty placeholders */
 }
 .dialog textarea + .message.error,
 .dialog input + .message.error {
   display: block;
   clear: both;
-  width: 92%;
+  width: 100%;
 }
 .dialog .inline-error {
   color: #D40101;
@@ -4723,15 +4944,11 @@ article video {
   margin-top: 0.5em;
   font-size: 1em;
 }
-.dialog .dialog-close,
-.dialog .dialog-close:hover {
-  display: block;
-  float: right;
-  margin-top: -2.5em;
-  border: 0;
-}
+/* can also be used outside a dialog, like the sidebar */
 .dialog-close,
 .dialog-close:hover {
+  display: block;
+  float: right;
   border: 0;
 }
 .dialog-close .fa-close {
@@ -4900,6 +5117,15 @@ article video {
 .message.error {
   color: #333;
   background: #ffe4e4;
+}
+.message.error a:link,
+.message.error a:visited {
+  color: #333;
+  border-bottom: 1px dotted #888;
+}
+.message.error a:hover {
+  color: #333;
+  border-bottom: 1px solid #888;
 }
 .message.success {
   color: #333;
@@ -6441,7 +6667,7 @@ This file is generated by `grunt build`, do not edit it by hand.
   display: block;
   width: 12px;
   height: 12px;
-  background: url("../img/third_party/chosen-sprite.png") -42px 1px no-repeat;
+  background: url('@images/third_party/chosen-sprite.png') -42px 1px no-repeat;
   font-size: 1px;
 }
 .chosen-container-single .chosen-single abbr:hover {
@@ -6758,7 +6984,7 @@ This file is generated by `grunt build`, do not edit it by hand.
   .chosen-container-multi .chosen-choices .search-choice .search-choice-close,
   .chosen-container .chosen-results-scroll-down span,
   .chosen-container .chosen-results-scroll-up span {
-    background-image: url("../img/third_party/chosen-sprite@2x.png") !important;
+    background-image: url('../img/third_party/chosen-sprite@2x.png') !important;
     background-size: 52px 37px !important;
     background-repeat: no-repeat !important;
   }
@@ -7031,7 +7257,7 @@ This file is generated by `grunt build`, do not edit it by hand.
   margin: 2em 1em 1em 1em;
   max-width: 540px;
   height: 230px;
-  background: transparent url('../img/controls/loading.gif') center center no-repeat;
+  background: transparent url('../img/controls/loading_light.svg') center center no-repeat;
 }
 .home .features .swiper-slide.LU_passwords {
   background: transparent url('../img/screenshots/v1.5/LU_passwords_450.jpg') center center no-repeat;
@@ -7618,6 +7844,9 @@ This file is generated by `grunt build`, do not edit it by hand.
 .page.plans {
   /* even larger screen */
 }
+.page.plans .col3 {
+  display: block;
+}
 .page.plans .page-row.intro {
   background: #f7f7f7;
   min-height: 400px;
@@ -7730,9 +7959,17 @@ This file is generated by `grunt build`, do not edit it by hand.
   text-align: center;
   display: block;
 }
-.page.plans .tab-content .service-col.plan .plan-pricing .cost-large {
-  font-size: 4em;
+.page.plans .tab-content .service-col.plan .plan-pricing .align-right {
   text-align: right;
+}
+.page.plans .tab-content .service-col.plan .plan-pricing .align-left {
+  text-align: left;
+}
+.page.plans .tab-content .service-col.plan .plan-pricing .align-center {
+  text-align: center;
+}
+.page.plans .tab-content .service-col.plan .plan-pricing .cost-large {
+  font-size: 3.5em;
 }
 .page.plans .tab-content .service-col.plan .plan-pricing .cost-large.float {
   font-size: 3.3em;
@@ -7743,16 +7980,15 @@ This file is generated by `grunt build`, do not edit it by hand.
 }
 .page.plans .tab-content .service-col.plan .plan-pricing .cost-medium {
   font-size: 2em;
-  text-align: center;
   line-height: 1.2em;
-  padding: 0.85em 0 0.8em 0;
+  padding: 0.7em 0 0.6em 0;
 }
 .page.plans .tab-content .service-col.plan .plan-pricing .cost-medium.lower {
   padding-top: 1.275em;
 }
 .page.plans .tab-content .service-col.plan .plan-pricing .cost-small {
-  font-size: 0.8em;
-  text-align: left;
+  font-size: 1.2em;
+  padding-left: 0.3em;
 }
 .page.plans .tab-content .service-col.plan .plan-pricing .cost-small .smaller {
   color: #969696;
@@ -7775,7 +8011,7 @@ This file is generated by `grunt build`, do not edit it by hand.
   padding: 1em;
 }
 .page.plans .tab-content .service-col.plan div.plan-features ul {
-  min-height: 285px;
+  min-height: 346px;
 }
 .page.plans .tab-content .service-col.plan div.plan-features ul li {
   padding: 0.4em;
@@ -7813,6 +8049,7 @@ This file is generated by `grunt build`, do not edit it by hand.
 }
 .page.plans .compare {
   background: #f7f7f7;
+  margin-top: 4em;
 }
 .page.plans .compare table {
   width: 100%;
@@ -7879,6 +8116,16 @@ This file is generated by `grunt build`, do not edit it by hand.
     content: "";
   }
 }
+@media all and (min-width: 1000px) {
+  .page.plans .grid-responsive-12 {
+    max-width: 1000px;
+  }
+}
+@media all and (min-width: 1220px) {
+  .page.plans .grid-responsive-12 {
+    max-width: 1220px;
+  }
+}
 .page.services.featured.cart .error label.error {
   font-size: 0.7em;
   padding-top: 0;
@@ -7904,28 +8151,6 @@ This file is generated by `grunt build`, do not edit it by hand.
 }
 .page.services.featured.cart .cart h1 {
   margin-top: 0;
-}
-.page.services.featured.cart .cart label {
-  font-size: 1rem;
-  font-weight: normal;
-}
-.page.services.featured.cart .cart .singleline .input.text {
-  float: left;
-  width: 48%;
-}
-.page.services.featured.cart .cart .singleline .input.text:first-child {
-  margin-right: 1em;
-}
-.page.services.featured.cart .cart .singleline .input.text input[type=text],
-.page.services.featured.cart .cart .singleline .input.text input[type=email] {
-  width: 90%;
-}
-.page.services.featured.cart .cart .input.text {
-  width: 100%;
-}
-.page.services.featured.cart .cart .input.text input[type=text],
-.page.services.featured.cart .cart .input.text input[type=email] {
-  width: 94%;
 }
 .page.services.featured.cart .cart .input.text select {
   width: 100%;
@@ -8042,6 +8267,10 @@ This file is generated by `grunt build`, do not edit it by hand.
 .page.services.featured.cart div.stripe.checkout .field {
   border: 1px solid #CCC;
   padding-left: 0.5em;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+  width: 97%;
 }
 .page.services.featured.cart div.stripe.checkout .field::-webkit-input-placeholder {
   color: #CFD7E0;
@@ -8484,7 +8713,7 @@ This file is generated by `grunt build`, do not edit it by hand.
 .page.services.community.download .step p a.button {
   margin-bottom: 1em;
 }
-.page.contacts .page-row.intro {
+.page.contacts {
   background: #F3F3F3;
 }
 .page.contacts .service .service-teaser {
@@ -8492,6 +8721,10 @@ This file is generated by `grunt build`, do not edit it by hand.
 }
 .page.contacts .service .button {
   margin-bottom: 1em;
+}
+.page.contacts .form-wrapper form {
+  background-color: transparent;
+  box-shadow: none;
 }
 .page.contacts .form-wrapper form .input {
   width: 100%;
@@ -8528,18 +8761,137 @@ This file is generated by `grunt build`, do not edit it by hand.
   .page.contacts .form-wrapper {
     margin: -10em 0 5em 18%;
     background-color: #F3F3F3;
-    border: 1px solid #DDD;
   }
   .page.contacts .form-wrapper form {
     padding: 5%;
+    background-color: #FFF;
+    box-shadow: 0 3px 10px -5px #000000;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
   }
   .page.contacts .form-wrapper form .input {
-    margin-bottom: 0.5em;
+    margin-bottom: 0 !important;
   }
   .page.contacts .form-wrapper form .submit {
     margin-top: 1em;
   }
 }
+.page.free-trial-signup {
+  background-color: #F3F3F3;
+}
+.page.free-trial-signup .logo.no-img {
+  background: transparent url('../img/logo/logo.svg') 0 0 no-repeat;
+  background-size: 200px auto;
+  width: 200px;
+  height: 35px;
+  margin-top: -1em;
+  margin-bottom: 1.5em;
+  margin-left: 0.5em;
+}
+.page.free-trial-signup .footer {
+  position: fixed;
+}
+.page.free-trial-signup .grecaptcha-badge {
+  bottom: 50px !important;
+}
+.page.free-trial-signup .page-row.free-trial-signup {
+  padding-top: 5em;
+}
+.page.free-trial-signup .decoration h2 {
+  font-size: 3em;
+  padding: 0;
+  margin: 0 0 0.5em 0;
+  text-align: left;
+}
+.page.free-trial-signup .decoration h3 {
+  font-size: 1.5em;
+  text-align: left;
+  font-weight: normal;
+  border: 0;
+  color: #666;
+}
+.page.free-trial-signup .form-wrapper {
+  background-color: #FFF;
+  padding: 1em 2em 2em 2em;
+  box-shadow: 0px 0px 10px 0px #DDD;
+  border-radius: 3px;
+}
+.page.free-trial-signup .form-wrapper form .singleline .input.text {
+  width: 46%;
+}
+.page.free-trial-signup .form-wrapper form .singleline .input.text.first-field {
+  margin-right: 7%;
+}
+.page.free-trial-signup .form-wrapper form .singleline .input.text.last-field.required label::after {
+  content: ' ';
+}
+.page.free-trial-signup .form-wrapper form .input.url .field-url {
+  width: 100%;
+  border: 1px solid #CCC;
+  margin: 0 0 0.5em 0;
+  padding: 0;
+}
+.page.free-trial-signup .form-wrapper form .input.url input[type=text] {
+  display: inline-block;
+  border: 0;
+  width: 32%;
+  margin: 0;
+  padding-left: 0.2em;
+}
+.page.free-trial-signup .form-wrapper form .input.url input[type=text]:focus {
+  border: 0;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}
+.page.free-trial-signup .form-wrapper form .input.url span.base-url {
+  display: inline-block;
+  background-color: #F3F3F3;
+  color: #666;
+  line-height: 26px;
+  padding: 0.375em 0.2em 0.375em 0.625em;
+  font-weight: bold;
+  vertical-align: middle;
+  font-size: 14px;
+}
+.page.free-trial-signup .form-wrapper form .submit {
+  margin-top: 1em;
+}
+.page.free-trial-deployment-progress {
+  background-color: #F3F3F3;
+}
+.page.free-trial-deployment-progress .footer {
+  position: fixed;
+}
+.page.free-trial-deployment-progress p.subtitle {
+  font-size: 1.1em;
+}
+.page.free-trial-deployment-progress .page-row.free-trial-deployment-progress {
+  padding-top: 6em;
+}
+.page.free-trial-deployment-done {
+  background-color: #F3F3F3;
+}
+.page.free-trial-deployment-done .footer {
+  position: fixed;
+}
+.page.free-trial-deployment-done .message.success {
+  -webkit-border-radius: 0.2em;
+  -moz-border-radius: 0.2em;
+  border-radius: 0.2em;
+  border: 1px solid #969696;
+  margin-bottom: 2em;
+}
+.page.free-trial-deployment-done .message.success h1 {
+  margin: 0;
+}
+.page.free-trial-deployment-done p {
+  font-size: 1.1em;
+}
+.page.free-trial-deployment-done .page-row.free-trial-deployment-done {
+  padding-top: 6em;
+}
+/* even larger screen */
 /* Special error page treatment for larger screen */
 @media all and (min-width: 460px) {
   .page.error .grid {

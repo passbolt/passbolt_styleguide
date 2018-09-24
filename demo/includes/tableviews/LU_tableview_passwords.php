@@ -599,7 +599,7 @@ mbZs5gRvcF5waNXoH4jbhbE=
 
 				<td class="js_grid_column_uri cell_uri l-cell" data-view-id="1570">
 					<div title="http://fr.groland.wikia.com/wiki/Grogle" data-view-id="1571">
-						<a href="#">http://fr.groland.wikia.com/wiki/Grogle</a>
+						<a href="#">http://fr.groland.wikia.com/wiki/Grogle/16369b3ac180efe7/16369b3ac180efe7/16369b3ac180efe7</a>
 					</div>
 				</td>
 

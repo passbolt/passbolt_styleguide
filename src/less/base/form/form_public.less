@@ -1,0 +1,48 @@
+form.public {
+  .error {
+    .error-message,
+    .error.message {
+      color:@red;
+      font-size: 0.8em;
+      padding-top: 0;
+      font-weight:normal;
+    }
+  }
+
+  label {
+    font-size: 0.9rem;
+    margin-top:.5em;
+  }
+
+  .singleline {
+    .input.text {
+      float: left;
+      width: 48%;
+      &:first-child, &.first-field {
+        margin-right:3%;
+      }
+      input[type="text"],
+      input[type="email"],
+      input[type="password"],
+      input[type="search"] {
+        width:90%;
+      }
+    }
+  }
+  .input{
+    width: 100%;
+    input[type="text"],
+    input[type="email"],
+    input[type="password"],
+    input[type="search"],
+    textarea {
+      margin-bottom: .5em;
+      width:94%;
+    }
+
+    select {
+      width: 100%;
+    }
+  }
+}
+

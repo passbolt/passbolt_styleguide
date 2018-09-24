@@ -7,7 +7,6 @@
     background: @background-overlay;
     overflow: auto;
 }
-
 .dialog {
     position: relative;
     max-width: 30em;
@@ -38,42 +37,38 @@
             font-size: 0.7em;
             color: @font-default;
         }
-    }
-
-    /* content */
-    .dialog-content {
-        position: relative;
+        .dialog-close {
+            margin-top: -2.5em;
+        }
     }
 
     /* inputs */
     .form-content {
         background: @background-default;
-        padding: .813em 1.25em .813em 1.5em;
+        padding: .813em 1.5em .813em 1.5em;
     }
     label {
         clear: both;
         font-size: 0.938em; /* 15px */
         line-height: 1.6em; /* 24px */
     }
-    input[type=text] {
-        width: 92%;
-        float: left;
+    input[type=text], textarea {
+        width: 100%;
+        box-sizing: border-box;
+        .clearfix();
     }
-    .short input {
-        width: 64%;
-        float: left;
-    }
-    textarea {
-        width: 92%;
+
+    /* Error display */
+    textarea + .message,
+    input + .message {
+        display:none; /* do not show empty placeholders */
     }
     textarea + .message.error,
     input + .message.error {
         display: block;
         clear: both;
-        width: 92%;
+        width: 100%;
     }
-
-    /* Error display */
     .inline-error {
         color:@font-error;
         font-weight: bold;
@@ -101,18 +96,13 @@
             font-size: 1em;
         }
     }
-    .dialog-close {
-        &, &:hover {
-            display: block;
-            float: right;
-            margin-top: -2.5em;
-            border: 0;
-        }
-    }
 }
 
+/* can also be used outside a dialog, like the sidebar */
 .dialog-close {
     &, &:hover {
+        display: block;
+        float: right;
         border: 0;
     }
     .fa-close {

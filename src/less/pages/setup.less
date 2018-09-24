@@ -14,6 +14,13 @@
     .input-password-wrapper {
         margin-top: 1.5em;
         width: 90%;
+        .input.password {
+            input[type=text],
+            input[type=password] {
+                width: 100%; /* no security token yet */
+                box-sizing: border-box;
+            }
+        }
     }
 
     /* first step */
@@ -79,7 +86,7 @@
 
     /* last row is for cancel / submit buttons */
     .row.last {
-        padding-top: 1.5em;
+        padding-top: 1em;
     }
 
     /* big feedback message blocks */

@@ -1,4 +1,4 @@
-<div id="js_wsp_pwd_browser" class="tableview passbolt_component_password_browser passbolt_view_component_password_browser selection all_items empty">
+<div id="js_wsp_pwd_browser" class="tableview passbolt_component_password_browser passbolt_view_component_password_browser selection <?= $emptyGridSettings['filter'] ?> empty">
 	<div class="tableview-header">
 		<table>
 			<thead>
@@ -42,8 +42,8 @@
 	</div>
 	<div class="tableview-content scroll">
 		<div class="empty-content">
-			<h1>Welcome to passbolt!</h1>
-			<p>It does feel a bit empty here. Create your first password<br> or wait for a team member to share one with you.<br></p>
+			<h1><?= $emptyGridSettings['title'] ?></h1>
+			<p><?= $emptyGridSettings['subtitle'] ?></p>
 		</div>
 		<table>
 			<tbody>

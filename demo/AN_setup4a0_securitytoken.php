@@ -83,7 +83,7 @@
 					<div class="row last">
 						<div class="input-wrapper">
 							<a href="../demo/AN_setup3b0_importedkeyok.php" class="button cancel big">cancel</a>
-							<a href="../demo/AN_setup5a0_createloginpassword.php" class="button primary next big">next</a>
+							<a href="../demo/AN_setup5a0_login.php" class="button primary next big">next</a>
 						</div>
 					</div>
 

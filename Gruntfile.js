@@ -1,27 +1,38 @@
 module.exports = function(grunt) {
 
+  var banner = '/**!\n'+
+    ' * @name\t\t<%= pkg.name %>\n'+
+    ' * @version\t\tv<%= pkg.version %>\n' +
+    ' * @date\t\t<%= grunt.template.today("yyyy-mm-dd") %>\n' +
+    ' * @copyright\t<%= pkg.copyright %>\n' +
+    ' * @source\t\t<%= pkg.repository %>\n'+
+    ' * @license\t\t<%= pkg.license %>\n */';
+
 	// ========================================================================
 	// Configure task options
 
 	grunt.initConfig({
 		pkg: grunt.file.readJSON('package.json'),
 		clean: {
-			css: [
+			all: [
 				'build/css/*',
-				'src/css/*'
-			]
+				'src/css/**'
+			],
+      css: [
+        'src/css/**'
+      ]
 		},
 		less: {
+      options: {
+        javascriptEnabled: true
+      },
 			public: {
 				expand: true,
 				flatten: true,
 				cwd: "src/less/",
 				src: "*.less",
 				dest: "src/css/",
-				ext: ".css",
-        options: {
-          javascriptEnabled: true
-        }
+				ext: ".css"
 			},
       theme_anew: {
         expand: true,
@@ -59,20 +70,10 @@ module.exports = function(grunt) {
 					'git push origin <%= pkg.version %>',
 					'git push',
 					'npm publish'
-				].join('&&')
+				].join('&& ')
 			}
 		},
 		cssmin: {
-			options: {
-				banner: '/**!\n'+
-						' * @name\t\t<%= pkg.name %>\n'+
-						' * @version\t\tv<%= pkg.version %>\n' +
-						' * @date\t\t<%= grunt.template.today("yyyy-mm-dd") %>\n' +
-						' * @copyright\t<%= pkg.copyright %>\n' +
-						' * @source\t\t<%= pkg.repository %>\n'+
-						' * @license\t\t<%= pkg.license %>\n */\n',
-				footer: '/* @license-end */'
-			},
 			public: {
 				expand: true,
 				cwd: 'src/css/',
@@ -102,17 +103,57 @@ module.exports = function(grunt) {
         ext: '.min.css'
       }
 		},
+    header: {
+      anew: {
+        options: {
+          text: banner
+        },
+        expand: true,
+        cwd: 'build/css/themes/anew',
+        src: ['*.css', '*.min.css'],
+        dest: 'build/css/themes/anew',
+        ext: '.min.css'
+      },
+      public: {
+        options: {
+          text: banner
+        },
+        expand: true,
+        cwd: 'build/css',
+        src: ['*.css', '*.min.css'],
+        dest: 'build/css',
+        ext: '.min.css'
+      },
+      default: {
+        options: {
+          text: banner
+        },
+        expand: true,
+        cwd: 'build/css/themes/default',
+        src: ['*.min.css'],
+        dest: 'build/css/themes/default',
+        ext: '.min.css'
+      },
+      midgar: {
+        options: {
+          text: banner
+        },
+        expand: true,
+        cwd: 'build/css/themes/midgar',
+        src: ['*.min.css'],
+        dest: 'build/css/themes/midgar',
+        ext: '.min.css'
+      }
+    },
 		watch: {
 			less: {
 				files: [
 					'Gruntfile.js',
 					'package.json',
 					'src/less/*.less',
-					'src/less/**/*.less'],
-				tasks: ['css'],
-				options: {
-					spawn: false
-				}
+					'src/less/**/*.less'
+        ],
+				tasks: ['css']
 			}
 		}
 	});
@@ -125,13 +166,11 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-contrib-clean');
 	grunt.loadNpmTasks('grunt-contrib-less');
 	grunt.loadNpmTasks('grunt-contrib-watch');
+  grunt.loadNpmTasks('grunt-header');
 	grunt.loadNpmTasks('grunt-shell');
 
 	// ========================================================================
 	// Register Tasks
-
-	// Run 'grunt css' to compile LESS into CSS, combine and minify
-	grunt.registerTask('css', ['clean:css', 'less', 'cssmin']);
 
 	// Tag and publish the styleguide
 	grunt.registerTask('styleguide-publish', [ 'shell:publish']);
@@ -139,10 +178,6 @@ module.exports = function(grunt) {
 
 	// 'grunt' will check code quality, and if no errors,
 	// compile LESS to CSS, and minify and concatonate all JS and CSS
-	grunt.registerTask('default', [ 'clean', 'less', 'cssmin']);
-
-	// 'grunt' will check code quality, and if no errors,
-	// compile LESS to CSS, and minify and concatonate all JS and CSS
-	grunt.registerTask('default', [ 'clean', 'less', 'cssmin']);
-
+	grunt.registerTask('default', [ 'clean:all', 'less', 'cssmin', 'header']);
+  grunt.registerTask('css', [ 'clean:css', 'less']);
 };

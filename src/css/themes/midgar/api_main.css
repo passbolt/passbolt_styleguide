@@ -9,12 +9,14 @@
 /* logo */
 /* grid */
 /* messages */
-/* tabs */
+/* secret placeholder */
 /* sidebar */
 /* tables */
+/* tabs */
 /* tags */
 /* tooltip */
-/* secret placeholder */
+/* loading animation */
+/* scrollbar */
 /* ==========================================================================
  * Reset is a mix of :
  *
@@ -835,6 +837,7 @@ p {
 /*!
  *  Font Awesome 4.7.0 by @davegandy - http://fontawesome.io - @fontawesome
  *  License - http://fontawesome.io/license (Font: SIL OFL 1.1, CSS: MIT License)
+ *  @licstart
  */
 /* FONT PATH
  * -------------------------- */
@@ -3169,6 +3172,7 @@ p {
   overflow: visible;
   clip: auto;
 }
+/*!  @licend */
 .icon {
   display: inline-block;
   font: normal normal normal 14px/1 FontAwesome;
@@ -3420,8 +3424,9 @@ html body .button.processing {
   content: " ";
   top: -1px;
   left: -1px;
-  background: #30302D url('../../../img/controls/loading.gif') center center no-repeat;
-  border: 1px solid #30302D;
+  background: #30302D url('../../../img/controls/loading_dark.svg') center center no-repeat;
+  background-size: auto 50% ;
+  border: 1px solid #0C0C0A;
   border-radius: 5px;
   padding: 1px;
 }
@@ -3479,6 +3484,7 @@ input[type=text],
 input[type=email],
 input[type=password],
 input[type=search],
+input[type=number],
 textarea {
   font-size: 16px;
   line-height: 24px;
@@ -3499,6 +3505,7 @@ textarea:hover,
 input[type=password]:hover,
 input[type=search]:hover,
 input[type=text]:hover,
+input[type=number]:hover,
 input[type=email]:hover {
   border: 1px solid #30302D;
 }
@@ -3506,7 +3513,7 @@ textarea:focus,
 input[type=password]:focus,
 input[type=search]:focus,
 input[type=text]:focus,
-input[type=email]:focus {
+input[type=number]:focus input[type=email]:focus {
   box-shadow: inset 1px 1px 2px rgba(0, 0, 0, 0.2);
   border: 1px solid #2894DF;
 }
@@ -3517,6 +3524,7 @@ input[type=email]:focus {
 input[type=password]:disabled,
 input[type=search]:disabled,
 input[type=text]:disabled,
+input[type=number]:disabled,
 input[type=email]:disabled {
   border: 1px solid #0C0C0A;
   -webkit-box-shadow: 0 0 0 0;
@@ -3579,15 +3587,21 @@ textarea {
 .radiolist .input.radio label,
 input[type=checkbox] + label {
   font-weight: normal;
-  display: inline;
+  display: inline-block;
   margin-left: 0.25em;
+}
+.input.checkbox {
+  padding-top: 0.5em;
+}
+.radiolist .input.radio {
+  margin-bottom: 0.5em;
 }
 /* radio and checkboxes */
 /*
 	Messages for validation error and example
 
 	Description	: <div.text.error>, <div.text.success>, can be used to add status messages or example.
-	Additional messages are wrapped in <.error-message>, <.success-messages>
+	Additional messages are wrapped in <.error.message>, <.success.messages>
 
 	.error - can be used for validation feedback
 	.helptext - can be used for example messages prior validation
@@ -3645,6 +3659,115 @@ input[type=email].fluid {
   margin-top: 0.5em;
 }
 /* shortcut classes for layout */
+.singleline .input.text {
+  float: left;
+  width: 40.2%;
+}
+.singleline .input.text:first-child,
+.singleline .input.text.first-field {
+  margin-right: 2.5%;
+}
+.singleline .input.text input[type="text"],
+.singleline .input.text input[type="email"],
+.singleline .input.text input[type="password"],
+.singleline .input.text input[type="search"] {
+  width: 93%;
+}
+/** Specific layout for connection information */
+.singleline.connection_info.protocol_host_port .input.text.field_protocol_host {
+  border: 0;
+  padding: 0;
+  width: 70%;
+}
+.singleline.connection_info.protocol_host_port .input.text.field_protocol_host .input.text {
+  padding: 0;
+  margin: 0;
+}
+.singleline.connection_info.protocol_host_port .input.text.field_protocol_host .input.text input {
+  margin: 0;
+  border-left: none;
+}
+.singleline.connection_info.protocol_host_port .input.text.field_protocol_host .input.text.host {
+  width: 75%;
+}
+.singleline.connection_info.protocol_host_port .input.text.field_protocol_host .input.text.host input[type=text] {
+  width: 95%;
+}
+.singleline.connection_info.protocol_host_port .input.text.field_protocol_host .input.text.protocol {
+  width: 25%;
+  position: relative;
+}
+.singleline.connection_info.protocol_host_port .input.text.field_protocol_host .input.text.protocol .chosen-container {
+  display: block;
+}
+.singleline.connection_info.protocol_host_port .input.text.field_protocol_host .input.text.protocol .chosen-container a.chosen-single {
+  height: 38px;
+}
+.singleline.connection_info.protocol_host_port .input.text.field_protocol_host .input.text.protocol .chosen-container a.chosen-single div b {
+  background-position: 0px 10px;
+}
+.singleline.connection_info.protocol_host_port .input.text.field_protocol_host .input.text.protocol .chosen-container a.chosen-single span {
+  font-size: 16px;
+  padding: 6px 0 0 0;
+}
+.singleline.connection_info.protocol_host_port .input.text.field_protocol_host .input.text.protocol .chosen-container-active.chosen-with-drop a.chosen-single div b {
+  background-position: -18px 10px;
+}
+.singleline.connection_info.protocol_host_port .input.text.port {
+  width: 9%;
+  margin-left: 1%;
+}
+.singleline.connection_info.protocol_host_port .input.text.port input[type=number] {
+  width: 100%;
+}
+.chosen-container {
+  margin-bottom: 0.5em;
+}
+.chosen-container.chosen-disabled a.chosen-single {
+  border: 1px solid #222220;
+}
+.chosen-container a.chosen-single {
+  background: #444442;
+  -webkit-border-radius: 0;
+  -moz-border-radius: 0;
+  border-radius: 0;
+  border: 1px solid #222220;
+  border-top: 1px solid #30302D;
+  box-shadow: none;
+  height: 32px;
+}
+.chosen-container a.chosen-single span {
+  font-size: 16px;
+  padding-top: 3px;
+  color: #FFFFFC;
+}
+.chosen-container a.chosen-single div b {
+  background-position: 0 6px;
+}
+.chosen-container .chosen-search input.chosen-search-input[type=text] {
+  width: 95% !important;
+  color: #444442;
+}
+.chosen-container .chosen-drop {
+  border: 1px solid #222220 !important;
+  border-top: 0 !important;
+  -webkit-border-radius: 0 !important;
+  -moz-border-radius: 0 !important;
+  border-radius: 0 !important;
+  background: #0C0C0A !important;
+}
+.chosen-container .chosen-drop .chosen-results {
+  color: #FFFFFC;
+}
+.chosen-container.chosen-container-active.chosen-with-drop a.chosen-single {
+  background: #0C0C0A;
+  border: 1px solid #222220;
+  border-top: 1px solid #30302D;
+  box-shadow: none;
+}
+.chosen-container.chosen-container-active.chosen-with-drop a.chosen-single div b {
+  background-position: -18px 8px;
+}
 /*
  * Page layout
  */
@@ -4200,6 +4323,19 @@ input[type=email].fluid {
   /* Opera doesn't support this in the shorthand */
   background-attachment: local, local, scroll, scroll;
 }
+::-webkit-scrollbar {
+  width: 1em;
+}
+::-webkit-scrollbar-track {
+  background: #30302D;
+  border-top: 0;
+  border-bottom: 0;
+}
+::-webkit-scrollbar-thumb {
+  background: #606060;
+  border-radius: 1em;
+  border: 4px solid #30302D;
+}
 video {
   display: block;
   width: 100%;
@@ -4454,6 +4590,9 @@ article video {
   background-size: 200px auto;
   width: 200px;
   height: 45px;
+}
+.header.second .col1 {
+  min-width: 200px;
 }
 /* CSS for serving the retina image to devices with a high "device-pixel-ratio": */
 @media only screen and (-moz-min-device-pixel-ratio: 1.5), only screen and (-o-min-device-pixel-ratio: 1.5), only screen and (-webkit-min-device-pixel-ratio: 1.5), only screen and (min-devicepixel-ratio: 1.5), only screen and (min-resolution: 1.5dppx) {
@@ -4948,6 +5087,15 @@ input[type="search"]::-webkit-search-cancel-button {
   color: #333;
   background: #ffe4e4;
 }
+.message.error a:link,
+.message.error a:visited {
+  color: #333;
+  border-bottom: 1px dotted #0C0C0A;
+}
+.message.error a:hover {
+  color: #333;
+  border-bottom: 1px solid #0C0C0A;
+}
 .message.success {
   color: #333;
   background: #f4f4d9;
@@ -5119,7 +5267,6 @@ input[type="search"]::-webkit-search-cancel-button {
   margin-bottom: 3em;
   box-shadow: 0px 0px 10px 0px #000;
   /* header */
-  /* content */
   /* inputs */
   /* Error display */
   /* submit / cancel */
@@ -5146,12 +5293,12 @@ input[type="search"]::-webkit-search-cancel-button {
   font-size: 0.7em;
   color: #FFFFFC;
 }
-.dialog .dialog-content {
-  position: relative;
+.dialog .dialog-header .dialog-close {
+  margin-top: -2.5em;
 }
 .dialog .form-content {
   background: #30302D;
-  padding: 0.813em 1.25em 0.813em 1.5em;
+  padding: 0.813em 1.5em 0.813em 1.5em;
 }
 .dialog label {
   clear: both;
@@ -5160,22 +5307,74 @@ input[type="search"]::-webkit-search-cancel-button {
   line-height: 1.6em;
   /* 24px */
 }
-.dialog input[type=text] {
-  width: 92%;
-  float: left;
-}
-.dialog .short input {
-  width: 64%;
-  float: left;
-}
+.dialog input[type=text],
 .dialog textarea {
-  width: 92%;
+  width: 100%;
+  box-sizing: border-box;
+  /*
+     * For IE 6/7 only
+     * Include this rule to trigger hasLayout and contain floats.
+     */
+  /*
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
+  /*
+     * For IE 6/7 only
+     * Include this rule to trigger hasLayout and contain floats.
+     */
+  zoom: 1;
+  /*
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
+}
+.dialog input[type=text]:before,
+.dialog textarea:before,
+.dialog input[type=text]:after,
+.dialog textarea:after {
+  content: "";
+  display: table;
+}
+.dialog input[type=text]:after,
+.dialog textarea:after {
+  clear: both;
+}
+.dialog input[type=text]:before,
+.dialog textarea:before,
+.dialog input[type=text]:after,
+.dialog textarea:after {
+  content: "";
+  display: table;
+}
+.dialog input[type=text]:after,
+.dialog textarea:after {
+  clear: both;
+}
+.dialog textarea + .message,
+.dialog input + .message {
+  display: none;
+  /* do not show empty placeholders */
 }
 .dialog textarea + .message.error,
 .dialog input + .message.error {
   display: block;
   clear: both;
-  width: 92%;
+  width: 100%;
 }
 .dialog .inline-error {
   color: #FF6B70;
@@ -5201,15 +5400,11 @@ input[type="search"]::-webkit-search-cancel-button {
   margin-top: 0.5em;
   font-size: 1em;
 }
-.dialog .dialog-close,
-.dialog .dialog-close:hover {
-  display: block;
-  float: right;
-  margin-top: -2.5em;
-  border: 0;
-}
+/* can also be used outside a dialog, like the sidebar */
 .dialog-close,
 .dialog-close:hover {
+  display: block;
+  float: right;
   border: 0;
 }
 .dialog-close .fa-close {
@@ -5974,6 +6169,9 @@ input[type="search"]::-webkit-search-cancel-button {
 .panel .navigation .row:hover .right-cell a.filter {
   border: 1px solid #0C0C0A;
 }
+.panel .navigation .empty-content {
+  padding-left: 1em;
+}
 .contextual-menu {
   position: absolute;
   background: #3B3B39;
@@ -6721,10 +6919,12 @@ table.table-info.horizontal tbody tr:nth-child(odd) {
 }
 /*
 	Password fields in passbolt have complexity "progress bar"
-	and a custom layout to accomodate buttons on the left end
+	and a custom layout to accommodate buttons on the left end
 */
 .input-password-wrapper {
-  max-width: 500px;
+  width: 100%;
+  /* same than default inputs width in dialogs */
+  box-sizing: border-box;
   /*
      * For IE 6/7 only
      * Include this rule to trigger hasLayout and contain floats.
@@ -6756,7 +6956,6 @@ table.table-info.horizontal tbody tr:nth-child(odd) {
      * 2. The use of `table` rather than `block` is only necessary if using
      *	`:before` to contain the top-margins of child elements.
      */
-  width: 99%;
 }
 .input-password-wrapper:before,
 .input-password-wrapper:after {
@@ -6774,13 +6973,17 @@ table.table-info.horizontal tbody tr:nth-child(odd) {
 .input-password-wrapper:after {
   clear: both;
 }
-.input-password-wrapper .input.password input {
-  box-sizing: border-box;
-  width: 65.5%;
+.input-password-wrapper .input.password {
   float: left;
+  width: 65.5%;
+}
+.input-password-wrapper .input.password input[type=text],
+.input-password-wrapper .input.password input[type=password] {
+  width: calc(100% - 4em + 3px);
+  box-sizing: border-box;
 }
 .input-password-wrapper .input.password input[type=password].decrypting {
-  background: transparent url('../../../img/controls/loading.gif') no-repeat 72% center;
+  background: transparent url('../../../img/controls/loading_dark.svg') no-repeat 90% center;
 }
 .input-password-wrapper .input.password.has-encrypted-secret input {
   /* fallback placeholder */
@@ -6859,30 +7062,15 @@ table.table-info.horizontal tbody tr:nth-child(odd) {
   background: #009900;
   width: 99.5%;
 }
-.password-hints li:before {
-  content: "●";
-  color: #444442;
-  padding-right: 0.5em;
-}
-.password-hints li.success:before {
-  color: #009900;
-}
-.password-hints li.error:before {
-  color: #D40101;
-}
 @media all and (max-width: 400px) {
-  .input-password-wrapper .input.password,
-  .input-password-wrapper .actions.inline {
-    position: relative;
-    float: none;
-    clear: both;
+  .input-password-wrapper .input.password {
+    float: left;
+    width: 100%;
   }
   .input-password-wrapper .actions.inline {
     width: 50%;
     float: left;
-  }
-  .input-password-wrapper .input.password input[type=password] {
-    width: 87%;
+    margin-bottom: 0.5em;
   }
   .input-password-wrapper .password-complexity .progress {
     display: none;
@@ -7466,13 +7654,441 @@ table.table-info.horizontal tbody tr:nth-child(odd) {
   transform: rotate(45deg);
   z-index: 999;
 }
+/*!
+Chosen, a Select Box Enhancer for jQuery and Prototype
+by Patrick Filler for Harvest, http://getharvest.com
+
+Version 1.8.3
+Full source at https://github.com/harvesthq/chosen
+Copyright (c) 2011-2018 Harvest http://getharvest.com
+
+MIT License, https://github.com/harvesthq/chosen/blob/master/LICENSE.md
+This file is generated by `grunt build`, do not edit it by hand.
+*/
+/* @group Base */
+.chosen-container {
+  position: relative;
+  display: inline-block;
+  vertical-align: middle;
+  font-size: 13px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+.chosen-container * {
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+.chosen-container .chosen-drop {
+  position: absolute;
+  top: 100%;
+  z-index: 1010;
+  width: 100%;
+  border: 1px solid #aaa;
+  border-top: 0;
+  background: #fff;
+  -webkit-box-shadow: 0 4px 5px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 4px 5px rgba(0, 0, 0, 0.15);
+  display: none;
+}
+.chosen-container.chosen-with-drop .chosen-drop {
+  display: block;
+}
+.chosen-container a {
+  cursor: pointer;
+}
+.chosen-container .search-choice .group-name,
+.chosen-container .chosen-single .group-name {
+  margin-right: 4px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  font-weight: normal;
+  color: #999999;
+}
+.chosen-container .search-choice .group-name:after,
+.chosen-container .chosen-single .group-name:after {
+  content: ":";
+  padding-left: 2px;
+  vertical-align: top;
+}
+/* @end */
+/* @group Single Chosen */
+.chosen-container-single .chosen-single {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  padding: 0 0 0 8px;
+  height: 25px;
+  border: 1px solid #aaa;
+  border-radius: 5px;
+  background-color: #fff;
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(20%, #fff), color-stop(50%, #f6f6f6), color-stop(52%, #eee), to(#f4f4f4));
+  background: linear-gradient(#fff 20%, #f6f6f6 50%, #eee 52%, #f4f4f4 100%);
+  background-clip: padding-box;
+  -webkit-box-shadow: 0 0 3px #fff inset, 0 1px 1px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0 3px #fff inset, 0 1px 1px rgba(0, 0, 0, 0.1);
+  color: #444;
+  text-decoration: none;
+  white-space: nowrap;
+  line-height: 24px;
+}
+.chosen-container-single .chosen-single input[type="text"] {
+  cursor: pointer;
+  opacity: 0;
+  position: absolute;
+}
+.chosen-container-single .chosen-default {
+  color: #999;
+}
+.chosen-container-single .chosen-single span {
+  display: block;
+  overflow: hidden;
+  margin-right: 26px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.chosen-container-single .chosen-single-with-deselect span {
+  margin-right: 38px;
+}
+.chosen-container-single .chosen-single abbr {
+  position: absolute;
+  top: 6px;
+  right: 26px;
+  display: block;
+  width: 12px;
+  height: 12px;
+  background: url('@images/third_party/chosen-sprite.png') -42px 1px no-repeat;
+  font-size: 1px;
+}
+.chosen-container-single .chosen-single abbr:hover {
+  background-position: -42px -10px;
+}
+.chosen-container-single.chosen-disabled .chosen-single abbr:hover {
+  background-position: -42px -10px;
+}
+.chosen-container-single .chosen-single div {
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: block;
+  width: 18px;
+  height: 100%;
+}
+.chosen-container-single .chosen-single div b {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: url("../../../img/third_party/chosen-sprite.png") no-repeat 0px 2px;
+}
+.chosen-container-single .chosen-search {
+  position: relative;
+  z-index: 1010;
+  margin: 0;
+  padding: 3px 4px;
+  white-space: nowrap;
+}
+.chosen-container-single .chosen-search input[type="text"] {
+  margin: 1px 0;
+  padding: 4px 20px 4px 5px;
+  width: 100%;
+  height: auto;
+  outline: 0;
+  border: 1px solid #aaa;
+  background: url("../../../img/third_party/chosen-sprite.png") no-repeat 100% -20px;
+  font-size: 1em;
+  font-family: sans-serif;
+  line-height: normal;
+  border-radius: 0;
+}
+.chosen-container-single .chosen-drop {
+  margin-top: -1px;
+  border-radius: 0 0 4px 4px;
+  background-clip: padding-box;
+}
+.chosen-container-single.chosen-container-single-nosearch .chosen-search {
+  position: absolute;
+  clip: rect(0, 0, 0, 0);
+}
+/* @end */
+/* @group Results */
+.chosen-container .chosen-results {
+  color: #444;
+  position: relative;
+  overflow-x: hidden;
+  overflow-y: auto;
+  margin: 0 4px 4px 0;
+  padding: 0 0 0 4px;
+  max-height: 240px;
+  -webkit-overflow-scrolling: touch;
+}
+.chosen-container .chosen-results li {
+  display: none;
+  margin: 0;
+  padding: 5px 6px;
+  list-style: none;
+  line-height: 15px;
+  word-wrap: break-word;
+  -webkit-touch-callout: none;
+}
+.chosen-container .chosen-results li.active-result {
+  display: list-item;
+  cursor: pointer;
+}
+.chosen-container .chosen-results li.disabled-result {
+  display: list-item;
+  color: #ccc;
+  cursor: default;
+}
+.chosen-container .chosen-results li.highlighted {
+  background-color: #3875d7;
+  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(20%, #3875d7), color-stop(90%, #2a62bc));
+  background-image: linear-gradient(#3875d7 20%, #2a62bc 90%);
+  color: #fff;
+}
+.chosen-container .chosen-results li.no-results {
+  color: #777;
+  display: list-item;
+  background: #f4f4f4;
+}
+.chosen-container .chosen-results li.group-result {
+  display: list-item;
+  font-weight: bold;
+  cursor: default;
+}
+.chosen-container .chosen-results li.group-option {
+  padding-left: 15px;
+}
+.chosen-container .chosen-results li em {
+  font-style: normal;
+  text-decoration: underline;
+}
+/* @end */
+/* @group Multi Chosen */
+.chosen-container-multi .chosen-choices {
+  position: relative;
+  overflow: hidden;
+  margin: 0;
+  padding: 0 5px;
+  width: 100%;
+  height: auto;
+  border: 1px solid #aaa;
+  background-color: #fff;
+  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(1%, #eee), color-stop(15%, #fff));
+  background-image: linear-gradient(#eee 1%, #fff 15%);
+  cursor: text;
+}
+.chosen-container-multi .chosen-choices li {
+  float: left;
+  list-style: none;
+}
+.chosen-container-multi .chosen-choices li.search-field {
+  margin: 0;
+  padding: 0;
+  white-space: nowrap;
+}
+.chosen-container-multi .chosen-choices li.search-field input[type="text"] {
+  margin: 1px 0;
+  padding: 0;
+  height: 25px;
+  outline: 0;
+  border: 0 !important;
+  background: transparent !important;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+  color: #999;
+  font-size: 100%;
+  font-family: sans-serif;
+  line-height: normal;
+  border-radius: 0;
+  width: 25px;
+}
+.chosen-container-multi .chosen-choices li.search-choice {
+  position: relative;
+  margin: 3px 5px 3px 0;
+  padding: 3px 20px 3px 5px;
+  border: 1px solid #aaa;
+  max-width: 100%;
+  border-radius: 3px;
+  background-color: #eeeeee;
+  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(20%, #f4f4f4), color-stop(50%, #f0f0f0), color-stop(52%, #e8e8e8), to(#eee));
+  background-image: linear-gradient(#f4f4f4 20%, #f0f0f0 50%, #e8e8e8 52%, #eee 100%);
+  background-size: 100% 19px;
+  background-repeat: repeat-x;
+  background-clip: padding-box;
+  -webkit-box-shadow: 0 0 2px #fff inset, 0 1px 0 rgba(0, 0, 0, 0.05);
+  box-shadow: 0 0 2px #fff inset, 0 1px 0 rgba(0, 0, 0, 0.05);
+  color: #333;
+  line-height: 13px;
+  cursor: default;
+}
+.chosen-container-multi .chosen-choices li.search-choice span {
+  word-wrap: break-word;
+}
+.chosen-container-multi .chosen-choices li.search-choice .search-choice-close {
+  position: absolute;
+  top: 4px;
+  right: 3px;
+  display: block;
+  width: 12px;
+  height: 12px;
+  background: url("../../../img/third_party/chosen-sprite.png") -42px 1px no-repeat;
+  font-size: 1px;
+}
+.chosen-container-multi .chosen-choices li.search-choice .search-choice-close:hover {
+  background-position: -42px -10px;
+}
+.chosen-container-multi .chosen-choices li.search-choice-disabled {
+  padding-right: 5px;
+  border: 1px solid #ccc;
+  background-color: #e4e4e4;
+  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(20%, #f4f4f4), color-stop(50%, #f0f0f0), color-stop(52%, #e8e8e8), to(#eee));
+  background-image: linear-gradient(#f4f4f4 20%, #f0f0f0 50%, #e8e8e8 52%, #eee 100%);
+  color: #666;
+}
+.chosen-container-multi .chosen-choices li.search-choice-focus {
+  background: #d4d4d4;
+}
+.chosen-container-multi .chosen-choices li.search-choice-focus .search-choice-close {
+  background-position: -42px -10px;
+}
+.chosen-container-multi .chosen-results {
+  margin: 0;
+  padding: 0;
+}
+.chosen-container-multi .chosen-drop .result-selected {
+  display: list-item;
+  color: #ccc;
+  cursor: default;
+}
+/* @end */
+/* @group Active  */
+.chosen-container-active .chosen-single {
+  border: 1px solid #5897fb;
+  -webkit-box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+}
+.chosen-container-active.chosen-with-drop .chosen-single {
+  border: 1px solid #aaa;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(20%, #eee), color-stop(80%, #fff));
+  background-image: linear-gradient(#eee 20%, #fff 80%);
+  -webkit-box-shadow: 0 1px 0 #fff inset;
+  box-shadow: 0 1px 0 #fff inset;
+}
+.chosen-container-active.chosen-with-drop .chosen-single div {
+  border-left: none;
+  background: transparent;
+}
+.chosen-container-active.chosen-with-drop .chosen-single div b {
+  background-position: -18px 2px;
+}
+.chosen-container-active .chosen-choices {
+  border: 1px solid #5897fb;
+  -webkit-box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+}
+.chosen-container-active .chosen-choices li.search-field input[type="text"] {
+  color: #222 !important;
+}
+/* @end */
+/* @group Disabled Support */
+.chosen-disabled {
+  opacity: 0.5 !important;
+  cursor: default;
+}
+.chosen-disabled .chosen-single {
+  cursor: default;
+}
+.chosen-disabled .chosen-choices .search-choice .search-choice-close {
+  cursor: default;
+}
+/* @end */
+/* @group Right to Left */
+.chosen-rtl {
+  text-align: right;
+}
+.chosen-rtl .chosen-single {
+  overflow: visible;
+  padding: 0 8px 0 0;
+}
+.chosen-rtl .chosen-single span {
+  margin-right: 0;
+  margin-left: 26px;
+  direction: rtl;
+}
+.chosen-rtl .chosen-single-with-deselect span {
+  margin-left: 38px;
+}
+.chosen-rtl .chosen-single div {
+  right: auto;
+  left: 3px;
+}
+.chosen-rtl .chosen-single abbr {
+  right: auto;
+  left: 26px;
+}
+.chosen-rtl .chosen-choices li {
+  float: right;
+}
+.chosen-rtl .chosen-choices li.search-field input[type="text"] {
+  direction: rtl;
+}
+.chosen-rtl .chosen-choices li.search-choice {
+  margin: 3px 5px 3px 0;
+  padding: 3px 5px 3px 19px;
+}
+.chosen-rtl .chosen-choices li.search-choice .search-choice-close {
+  right: auto;
+  left: 4px;
+}
+.chosen-rtl.chosen-container-single .chosen-results {
+  margin: 0 0 4px 4px;
+  padding: 0 4px 0 0;
+}
+.chosen-rtl .chosen-results li.group-option {
+  padding-right: 15px;
+  padding-left: 0;
+}
+.chosen-rtl.chosen-container-active.chosen-with-drop .chosen-single div {
+  border-right: none;
+}
+.chosen-rtl .chosen-search input[type="text"] {
+  padding: 4px 5px 4px 20px;
+  background: url("../../../img/third_party/chosen-sprite.png") no-repeat -30px -20px;
+  direction: rtl;
+}
+.chosen-rtl.chosen-container-single .chosen-single div b {
+  background-position: 6px 2px;
+}
+.chosen-rtl.chosen-container-single.chosen-with-drop .chosen-single div b {
+  background-position: -12px 2px;
+}
+/* @end */
+/* @group Retina compatibility */
+@media only screen and (-webkit-min-device-pixel-ratio: 1.5), only screen and (min-resolution: 144dpi), only screen and (min-resolution: 1.5dppx) {
+  .chosen-rtl .chosen-search input[type="text"],
+  .chosen-container-single .chosen-single abbr,
+  .chosen-container-single .chosen-single div b,
+  .chosen-container-single .chosen-search input[type="text"],
+  .chosen-container-multi .chosen-choices .search-choice .search-choice-close,
+  .chosen-container .chosen-results-scroll-down span,
+  .chosen-container .chosen-results-scroll-up span {
+    background-image: url('../../../img/third_party/chosen-sprite@2x.png') !important;
+    background-size: 52px 37px !important;
+    background-repeat: no-repeat !important;
+  }
+}
+/* @end */
 .input-password-wrapper {
   overflow: hidden;
 }
 .input-password-wrapper .message.error {
   display: block;
   clear: both;
-  width: 92%;
+  width: 100%;
   padding-bottom: 0.5em;
   font-size: 0.813em;
 }
@@ -7510,14 +8126,12 @@ table.table-info.horizontal tbody tr:nth-child(odd) {
 .dialog-wrapper.session-expired-dialog .dialog-close {
   display: none;
 }
-.dialog .group .permission-edit {
+.dialog .group .form-content.permission-edit {
   border-top: 1px solid #0C0C0A;
+  margin: 0;
 }
 .edit-group-dialog .group_edit_form .form-content {
   padding-bottom: 0;
-}
-.edit-group-dialog .group_edit_form .form-content .input.text input[type="text"] {
-  width: 95%;
 }
 .edit-group-dialog .group_edit_form .form-content .input.text .message {
   padding-left: 0;
@@ -7537,9 +8151,9 @@ table.table-info.horizontal tbody tr:nth-child(odd) {
 .edit-group-dialog .group_members.empty ul.permissions {
   display: none;
 }
-.dialog.kdbx-credentials .input-password-wrapper .input.password input,
-.dialog.import .input-password-wrapper .input.password input {
-  width: 83%;
+.dialog.kdbx-credentials .input-password-wrapper .input.password,
+.dialog.import .input-password-wrapper .input.password {
+  width: 90%;
 }
 .dialog.kdbx-credentials .actions.inline,
 .dialog.import .actions.inline {
@@ -7556,7 +8170,31 @@ table.table-info.horizontal tbody tr:nth-child(odd) {
 }
 .dialog.kdbx-credentials div.jfilestyle input[type=text]:disabled,
 .dialog.import div.jfilestyle input[type=text]:disabled {
-  width: 60.5% !important;
+  width: 57% !important;
+}
+.delete-user-dialog .intro p + p,
+.delete-group-dialog .intro p + p {
+  margin-bottom: 0;
+}
+.delete-user-dialog .ownership-transfer,
+.delete-group-dialog .ownership-transfer {
+  max-height: 20em;
+}
+.delete-user-dialog .ownership-transfer h3,
+.delete-group-dialog .ownership-transfer h3 {
+  border: 0;
+  padding: 0.5em 1.25em;
+  margin: 0;
+  background: #444442;
+}
+.delete-user-dialog .ownership-transfer li,
+.delete-group-dialog .ownership-transfer li {
+  border-bottom: 1px dotted #0C0C0A;
+  padding: 0.5em 1.25em;
+}
+.delete-user-dialog .ownership-transfer li select,
+.delete-group-dialog .ownership-transfer li select {
+  width: 100%;
 }
 /* sidebar / user details in overview */
 .panel.aside .user .sidebar-header,
@@ -7693,6 +8331,35 @@ table.table-info.horizontal tbody tr:nth-child(odd) {
 .login-history td:first-child {
   text-align: center;
 }
+/* Empty search feedback */
+.page.user .tableview.empty .tableview-header {
+  /* No tableview-header */
+  display: none;
+}
+.page.user .tableview.empty .tableview-content {
+  border: 0;
+  top: 0;
+}
+.page.user .tableview.empty .empty-content {
+  text-align: center;
+  margin: 3em 0.5em 0.67em 0.5em;
+}
+.page.user .tableview.empty .empty-content h1 {
+  font-size: 1.5em;
+}
+.page.user .tableview.empty .empty-content p {
+  font-size: 1em;
+  line-height: 1.5em;
+}
+@media all and (min-width: 780px) {
+  .page.user .tableview.empty .empty-content h1 {
+    font-size: 2.2em;
+  }
+  .page.user .tableview.empty .empty-content p {
+    font-size: 1.2em;
+    line-height: 1.8em;
+  }
+}
 /*
  * Password workspace
  */
@@ -7714,47 +8381,49 @@ table.table-info.horizontal tbody tr:nth-child(odd) {
   }
 }
 /* Define state where there are no passwords, and the filter all items */
-.page.password .tableview.all_items.empty .tableview-header {
+.page.password .tableview.empty .tableview-header {
   /* No tableview-header */
   display: none;
 }
-.page.password .tableview.all_items.empty .tableview-content {
-  background: transparent url('../../../img/illustrations/nest.png') center 75% no-repeat;
-  background-size: 80%;
+.page.password .tableview.empty .tableview-content {
   /* No tableview-header */
   border: 0;
   top: 0;
+}
+.page.password .tableview.empty.all_items .tableview-content {
+  background: transparent url('../../../img/background/rocket.svg') center 75% no-repeat;
+  background-size: 30%;
   /* Tablet version */
   /* Normal screen version */
 }
 @media all and (min-width: 780px) {
-  .page.password .tableview.all_items.empty .tableview-content {
+  .page.password .tableview.empty.all_items .tableview-content {
     background-position: center 60%;
-    background-size: 50%;
+    background-size: 10%;
   }
 }
 @media all and (min-width: 1024px) {
-  .page.password .tableview.all_items.empty .tableview-content {
-    background-position: center 70%;
-    background-size: 40%;
+  .page.password .tableview.empty.all_items .tableview-content {
+    background-position: center 80%;
+    background-size: 20%;
   }
 }
-.page.password .tableview.all_items.empty .empty-content {
+.page.password .tableview.empty .empty-content {
   text-align: center;
   margin: 3em 0.5em 0.67em 0.5em;
 }
-.page.password .tableview.all_items.empty .empty-content h1 {
+.page.password .tableview.empty .empty-content h1 {
   font-size: 1.5em;
 }
-.page.password .tableview.all_items.empty .empty-content p {
+.page.password .tableview.empty .empty-content p {
   font-size: 1em;
   line-height: 1.5em;
 }
 @media all and (min-width: 780px) {
-  .page.password .tableview.all_items.empty .empty-content h1 {
+  .page.password .tableview.empty .empty-content h1 {
     font-size: 2.2em;
   }
-  .page.password .tableview.all_items.empty .empty-content p {
+  .page.password .tableview.empty .empty-content p {
     font-size: 1.2em;
     line-height: 1.8em;
   }
@@ -7934,7 +8603,7 @@ html.launching .launching-screen {
   height: 100%;
   position: absolute;
   z-index: 999;
-  background: #FFF;
+  background: #30302D;
 }
 html.launching .launching-screen .launching-screen-holder {
   width: 20%;

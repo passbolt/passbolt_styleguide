@@ -9,7 +9,7 @@
             <span class="visuallyhidden">edit</span>
         </a>
 
-        <p class="description_content">Inkscape is a professional vector graphics editor. It is free and open source.
+        <p class="description_content"><?= !$_GET['empty'] ? 'Inkscape is a professional vector graphics editor. It is free and open source.' : '<em>There is no description, click edit to add one</em>' ?>
         </p>
 
         <!-- edit description form -->
@@ -34,6 +34,7 @@
                 </div>
                 <div class="actions">
                     <input type="submit" value="save" class="button description-submit">
+                    <a class="button cancel tag-editor-cancel" role="button"><span>cancel</span></a>
                 </div>
             </div>
         </div>

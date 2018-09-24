@@ -1,5 +1,5 @@
 <div class="dialog-wrapper">
-    <div class="dialog confirm delete-group-dialog">
+    <div class="dialog confirm delete-user-dialog">
         <div class="dialog-header">
             <h2>Do you really want to delete user ?</h2>
             <a class="dialog-close js-dialog-close" href="../demo/AD_users.php">
@@ -9,7 +9,13 @@
         </div>
         <div class="js_dialog_content dialog-content">
             <div class="form-content">
-                <p>Please confirm you really want to delete the user. After clicking ok, the user will be <strong>deleted permanently</strong>.</p>
+                <p>
+                    <strong>You are about to delete Ada Lovelace.</strong>
+                </p>
+                <p>
+                    Please confirm you really want to delete the user.
+                    The user will be deleted permanently and this action cannot be undone.
+                </p>
             </div>
 
             <div class="submit-wrapper clearfix">
