@@ -1,0 +1,68 @@
+.checkbox {
+    margin-bottom:.8em;
+
+    input[type=checkbox] {
+        position: absolute;
+        opacity: 0;
+
+        & + label {
+            font-weight: normal;
+            position: relative;
+            cursor: pointer;
+            padding: 0;
+        }
+
+        // Box.
+        & + label:before {
+            content: '';
+            margin-top:.2rem;
+            margin-right: 1rem;
+            display: inline-block;
+            vertical-align: text-top;
+            width: 1.6rem;
+            height: 1.6rem;
+            background: @background-default;
+            border: 1px solid @border-default;
+        }
+
+        // Box hover
+        &:hover + label:before {
+            border: 1px solid @border-input-light;
+        }
+
+        // Box focus
+        &:focus + label:before {
+            box-shadow: 0 0 0 .3rem rgba(0, 0, 0, 0.12);
+        }
+
+        // Box checked
+        &:checked + label:before {
+            background: @background-default;
+            border: 1px solid @border-input-light;
+        }
+
+        // Disabled state label.
+        &:disabled + label {
+            color: @button-disabled-border;
+            cursor: auto;
+        }
+
+        // Disabled box.
+        &:disabled + label:before {
+            box-shadow: none;
+            background: @button-disabled-background;
+        }
+
+        // Checkmark. Could be replaced with an image
+        &:checked + label:after {
+            content: '';
+            position: absolute;
+            left: .3rem;
+            top: .5rem;
+            width: 1.2rem;
+            height: 1.2rem;
+            background: transparent url('@{images}/fa/fas/check.svg') center center no-repeat;
+            background-size: 1.2rem 1.2rem;
+        }
+    }
+}

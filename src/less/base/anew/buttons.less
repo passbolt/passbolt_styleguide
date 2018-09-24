@@ -1,0 +1,129 @@
+/*
+	Generic buttons
+*/
+.button {
+    font-size: 1.4rem;
+    padding: .4rem 1.6rem;
+    position: relative;
+    display: inline-block;
+    vertical-align: baseline;
+    margin-right: 1.6rem;
+    outline: none;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    border: 1px solid @border-input;
+    color: @font-default;
+    font-weight: normal;
+    text-shadow: @button-text-shadow;
+    .button-background();
+    .rounded();
+    box-sizing: border-box;
+}
+
+/* sizes */
+.button.small {
+    font-size: 1.4rem;
+    padding: .4rem 1.6rem;
+}
+.button.medium {
+    font-size: 1.6rem;
+    padding: .8rem 1.6rem;
+}
+.button.big {
+    font-size: 1.8rem;
+    padding: 1.6rem 3.2rem;
+}
+
+/* primary */
+.button.primary {
+    background: @button-primary-background;
+    border: 1px solid @button-primary-border;
+    color: @button-primary-color;
+    text-shadow: @button-primary-text-shadow;
+}
+
+.button.primary:hover {
+    background: @button-primary-hover-background;
+    border: 1px solid @button-primary-hover-border;
+    color: @button-primary-hover-color;
+}
+
+.button.primary:active,
+.button.primary:focus{
+    color: @font-inverse;
+    border: 1px solid @border-focus-dark;
+    background: @blue-light;
+}
+
+/* warning */
+.button.warning,
+.button.warning:hover,
+.button.warning:focus,
+.button.warning:active {
+    color: @font-inverse;
+    background: @red;
+    border: 1px solid @red;
+    text-shadow: none;
+}
+
+.button.warning:focus,
+.button.warning:active {
+    border: 1px solid @red-dark;
+}
+
+/* cancel */
+.button.cancel,
+.button.cancel:focus,
+.button.cancel:hover,
+.button.cancel:active,
+.button.dim,
+.button.dim:focus,
+.button.dim:hover,
+.button.dim:active {
+    background: @background-default;
+    font-weight: normal;
+}
+
+/* hover */
+.button:hover {
+    color: @font-default;
+    text-decoration: none;
+    .button-hover-background();
+    border: 1px solid @border-input-light;
+}
+
+/* focus */
+.button:focus {
+    color: @font-focus;
+    border: 1px solid @border-focus;
+}
+
+/* active */
+.button:active {
+    color: @font-focus;
+    border: 1px solid @border-focus;
+    background: @background-lighter;
+    position: relative;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, .2);
+}
+
+/* disabled */
+.button.disabled {
+    cursor: default;
+    color: @button-disabled-color;
+    background: @button-disabled-background;
+    border: 1px solid @button-disabled-border;
+    text-shadow: none;
+    font-weight: normal;
+}
+
+.button.disabled:hover,
+.button.disabled:active,
+.button.disabled:focus {
+    box-shadow: 0 0 0;
+    top: 0;
+    color: @button-disabled-color;
+    background: @button-disabled-background;
+    border: 1px solid @button-disabled-border;
+}

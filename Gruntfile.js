@@ -8,7 +8,7 @@ module.exports = function(grunt) {
 		clean: {
 			css: [
 				'build/css/*',
-				'src/css/*',
+				'src/css/*'
 			]
 		},
 		less: {
@@ -23,6 +23,14 @@ module.exports = function(grunt) {
           javascriptEnabled: true
         }
 			},
+      theme_anew: {
+        expand: true,
+        flatten: true,
+        cwd: "src/less/themes/anew",
+        src: "*.less",
+        dest: "src/css/themes/anew",
+        ext: ".css"
+      },
       theme_default: {
         expand: true,
         flatten: true,
@@ -72,6 +80,13 @@ module.exports = function(grunt) {
 				dest: 'build/css/',
 				ext: '.min.css'
 			},
+      theme_anew: {
+        expand: true,
+        cwd: 'src/css/themes/anew',
+        src: ['*.css', '!*.min.css'],
+        dest: 'build/css/themes/anew',
+        ext: '.min.css'
+      },
       theme_default: {
         expand: true,
         cwd: 'src/css/themes/default',

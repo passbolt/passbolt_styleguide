@@ -1,0 +1,21 @@
+/* links */
+a {
+    border-bottom: 1px solid @border-default;
+    text-decoration: none;
+
+    &:link, &:visited {
+        color: @font-default;
+    }
+    &:hover {
+        color: @font-focus;
+        border-bottom: 1px solid @border-focus;
+    }
+    &a:active, &:focus {
+        outline: 0;
+        color: @font-focus;
+        border: 0;
+    }
+    &.no-border, &:hover.no-border {
+        border-bottom:0;
+    }
+}

@@ -1,0 +1,20 @@
+/* input label */
+label {
+    font-weight: bold;
+    font-size: 1.6rem; /* 16px */
+    line-height: 2.4rem; /* 24px */
+    padding: .8rem 0;
+    display: block;
+}
+
+/*
+	Required Label
+
+	Description	: Label and input are wrapped in <div.text.required>. Additional <span> with a star is included. Input also get the required class.
+	.required		- additional red star
+*/
+.required label:after {
+    content: " *";
+    color: @font-error;
+    font-weight: bold;
+}
