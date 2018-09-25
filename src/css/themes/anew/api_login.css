@@ -343,7 +343,12 @@ body {
   /* =14px */
 }
 h1 {
-  font-size: 1.8rem;
+  font-size: 2.2rem;
+  line-height: 2.4rem;
+}
+h2 {
+  font-size: 1.6rem;
+  line-height: 2.4rem;
 }
 p {
   font-size: 1.4rem;
@@ -440,6 +445,7 @@ body.iframe {
 }
 /* links */
 a {
+  line-height: 1.5rem;
   border-bottom: 1px solid #DDD;
   text-decoration: none;
 }
@@ -451,7 +457,7 @@ a:hover {
   color: #2894DF;
   border-bottom: 1px solid #2894DF;
 }
-aa:active,
+a:active,
 a:focus {
   outline: 0;
   color: #2894DF;
@@ -467,6 +473,7 @@ a:hover.no-border {
 .button {
   font-size: 1.4rem;
   padding: 0.4rem 1.6rem;
+  line-height: 1.5rem;
   position: relative;
   display: inline-block;
   vertical-align: baseline;
@@ -617,6 +624,9 @@ label {
   color: #D40101;
   font-weight: bold;
 }
+.input.error label {
+  color: #D40101;
+}
 /*
 	Generic Form Item
 
@@ -640,7 +650,7 @@ textarea {
   max-width: 64rem;
   padding: 0.6rem 1.2rem;
   display: inline-block;
-  margin-bottom: 0.8em;
+  margin-bottom: 0.8rem;
   border: 1px solid #CCC;
   border-top: 1px solid #BBB;
   vertical-align: middle;
@@ -686,9 +696,6 @@ textarea {
   width: 30rem;
   height: 7rem;
 }
-.checkbox {
-  margin-bottom: 0.8em;
-}
 .checkbox input[type=checkbox] {
   position: absolute;
   opacity: 0;
@@ -698,10 +705,11 @@ textarea {
   position: relative;
   cursor: pointer;
   padding: 0;
+  margin-bottom: 0.8rem;
 }
 .checkbox input[type=checkbox] + label:before {
   content: '';
-  margin-top: 0.2rem;
+  margin-top: 0.3rem;
   margin-right: 1rem;
   display: inline-block;
   vertical-align: text-top;
@@ -732,11 +740,36 @@ textarea {
   content: '';
   position: absolute;
   left: 0.3rem;
-  top: 0.5rem;
+  top: 0.6rem;
   width: 1.2rem;
   height: 1.2rem;
   background: transparent url('../../../img/fa/fas/check.svg') center center no-repeat;
   background-size: 1.2rem 1.2rem;
+}
+/*
+	Messages for validation error and example
+
+	.error - can be used for validation feedback
+	.help - can be used for example messages prior validation
+*/
+.input .message {
+  padding: 0;
+  font-size: 1.4rem;
+  margin-top: 0.2rem;
+  margin-bottom: 1.6rem;
+  background-color: transparent;
+  border: 0;
+  /* colors for messages */
+}
+.input .message.error {
+  font-weight: normal;
+  color: #D40101;
+  background: #FFF;
+}
+.input .message.help {
+  color: #888;
+  font-weight: normal;
+  background: #FFF;
 }
 .logo {
   background: transparent url('../../../img/logo/logo.svg') 0 0 no-repeat;
@@ -744,6 +777,17 @@ textarea {
   width: 20rem;
   height: 4.5rem;
 }
+/*
+    Font Awesome Free 5.3.1 by @fontawesome - https://fontawesome.com
+    @licstart - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License)
+*/
+.fa.icon {
+  width: 1rem;
+  height: 1rem;
+}
+/*
+    @licend
+*/
 /**
  * Tooltips!
  * credits: Chris Bracco http://cbracco.me/a-simple-css-tooltip/
@@ -932,88 +976,141 @@ textarea {
 .tooltip-left.large:after {
   margin-top: 0.6rem;
 }
+.infinite.loading-bar {
+  max-width: 45.2rem;
+  margin: auto auto -0.4rem auto;
+}
+@keyframes drawLine1 {
+  0% {
+    stroke-dashoffset: -40rem;
+  }
+  100% {
+    stroke-dashoffset: 45rem;
+  }
+}
+@keyframes drawLine2 {
+  0% {
+    stroke-dashoffset: 15em;
+  }
+  100% {
+    stroke-dashoffset: -45.2rem;
+  }
+}
+.infinite.loading-bar #svg-loading-bar-line1 {
+  stroke-dasharray: 20rem 45.2rem;
+  stroke: #DE8888;
+}
+.infinite.loading-bar #svg-loading-bar-line2 {
+  stroke: #92000C;
+  stroke-dasharray: 15rem 45.2em;
+}
+.infinite.loading-bar.animated #svg-loading-bar-line1 {
+  animation: drawLine1 2s ease-out 0s alternate infinite none running;
+}
+.infinite.loading-bar.animated #svg-loading-bar-line2 {
+  animation: drawLine2 2s linear 0s normal infinite none running;
+}
 html,
 body {
   height: 100%;
 }
 .login.page {
-  display: grid;
-  height: 100%;
-  grid-template-columns: 1fr 1.5fr 1fr;
-  grid-template-rows: 0.1fr 1fr 0.05fr;
-  grid-gap: 1px;
-  grid-template-areas: ". . ." ". login-form ." "footer footer footer";
-  background: #F3F3F3;
+  padding: 2.4rem;
 }
-.login.page .content {
-  grid-area: login-form;
+.login.page .loading-bar {
+  display: none;
 }
-.login.page .content .logo {
-  margin: 1.6em auto;
-  width: 20rem;
-  background-size: 20rem auto;
-}
-.login.page .content .loading-bar {
-  max-width: 45.2rem;
-  margin: auto auto -0.4rem auto;
-}
-.login.page .content .login-form {
-  box-shadow: 0px 0px 10px 0px #DDD;
-  border-radius: 0.3rem;
-  box-sizing: border-box;
-  max-width: 45.2rem;
-  margin: auto;
-  padding: 3.2rem 3.2rem 6.4rem 3.2rem;
-  background: #FFF;
-}
-.login.page .content .login-form h2 {
-  display: block;
-}
-.login.page .content .login-form .form-actions {
+.login.page .login-form .form-actions {
   text-align: center;
 }
-.login.page .content .login-form .button {
+.login.page .login-form .button {
   width: 100%;
   margin-top: 1.2em;
 }
-.login.page .content .login-form .button + a {
+.login.page .login-form .button + a {
   font-size: 1.6rem;
   line-height: 2.4rem;
   text-align: center;
   display: inline-block;
-  margin-top: 1.6em;
-}
-.login.page .footer {
-  display: grid;
-  grid-area: footer;
-  grid-template-columns: 1fr 1.5fr 1fr;
-  grid-template-rows: 1fr;
-  grid-gap: 1px;
-  grid-template-areas: ". ad version";
-}
-.login.page .ad {
-  grid-area: ad;
-  text-align: center;
-  background: #EEE;
-  max-width: 50rem;
-  margin: auto;
-  border-radius: 0.3rem 0.3rem 0 0;
-  padding: 1.6rem 3.2rem 1rem 3.2rem;
-}
-.login.page .ad .button {
-  font-size: 1rem;
-  padding: 0rem 0.8rem;
-}
-.login.page .version {
-  grid-area: version;
-  text-align: right;
-  padding-right: 1.6rem;
   margin-top: 1.6rem;
 }
-.login.page .version svg {
-  overflow: visible;
-  display: inline-block;
-  font-size: inherit;
-  height: 1.6rem;
-  width: 1.6rem;
+.login.page .login-form-footer {
+  text-align: center;
+  margin-top: 2.4rem;
+}
+.login.page .footer {
+  display: none;
+}
+.login.page .login-form-footer .separator:after {
+  content: '•';
+  padding: 1rem;
+}
+@media only screen and (min-width: 42rem) {
+  body {
+    background: #F3F3F3;
+  }
+  .login.page {
+    padding: 0;
+    display: grid;
+    height: 100%;
+    grid-template-columns: 1fr 1.5fr 1fr;
+    grid-template-rows: 0.1fr 1fr 0.05fr;
+    grid-gap: 1px;
+    grid-template-areas: ". . ." ". login-form ." "footer footer footer";
+  }
+  .login.page .content {
+    grid-area: login-form;
+  }
+  .login.page .content .loading-bar {
+    display: block;
+  }
+  .login.page .content .logo {
+    margin: 1.6em auto;
+    width: 20rem;
+    background-size: 20rem auto;
+  }
+  .login.page .content .login-form {
+    box-shadow: 0px 0px 10px 0px #DDD;
+    border-radius: 0.3rem;
+    box-sizing: border-box;
+    max-width: 45.2rem;
+    margin: auto;
+    padding: 3.2rem 3.2rem 6.4rem 3.2rem;
+    background: #FFF;
+  }
+  .login.page .footer {
+    margin: 1.6rem 0 0 0;
+    display: grid;
+    grid-area: footer;
+    grid-template-columns: 1fr 1.5fr 1fr;
+    grid-template-rows: 1fr;
+    grid-gap: 1px;
+    grid-template-areas: ". ad version";
+  }
+  .login.page .ad {
+    grid-area: ad;
+    text-align: center;
+    background: #EEE;
+    max-width: 50rem;
+    margin: auto;
+    border-radius: 0.3rem 0.3rem 0 0;
+    padding: 1.6rem 3.2rem 1rem 3.2rem;
+  }
+  .login.page .ad .button {
+    font-size: 1rem;
+    padding: 0rem 0.8rem;
+  }
+  .login.page .version {
+    grid-area: version;
+    text-align: right;
+    padding-right: 1.6rem;
+    margin-top: 1.6rem;
+  }
+  .login.page .version svg {
+    overflow: visible;
+    display: inline-block;
+    font-size: inherit;
+    height: 1.6rem;
+    width: 1.6rem;
+  }
 }

@@ -2,89 +2,114 @@ html, body {
     height: 100%;
 }
 .login.page {
-    display: grid;
-    height: 100%;
-    grid-template-columns: 1fr 1.5fr 1fr;
-    grid-template-rows: 0.1fr 1fr 0.05fr;
-    grid-gap: 1px;
-    grid-template-areas: ". . ." ". login-form ." "footer footer footer";
-    background:@background-lightest;
+    padding:2.4rem;
 
-    .content {
-        grid-area: login-form;
-
-        .logo {
-            margin:1.6em auto;
-            width: 20rem;
-            background-size: 20rem auto;
+    .loading-bar {
+        display:none;
+    }
+    .login-form {
+        .form-actions {
+            text-align:center;
         }
-        .loading-bar {
-            max-width:45.2rem;
-            margin:auto auto -0.4rem auto;
+        .button {
+            width:100%;
+            margin-top:1.2em;
         }
-        .login-form {
-            .box-shadow();
-            border-radius: .3rem;
-            box-sizing: border-box;
-            max-width:45.2rem;
-            margin:auto;
-            padding:3.2rem 3.2rem 6.4rem 3.2rem;
-            background:@background-default;
+        .button + a {
+            font-size:1.6rem;
+            line-height: 2.4rem;
+            text-align:center;
+            display: inline-block;
+            margin-top:1.6rem;
+        }
+    }
+    .login-form-footer {
+        text-align: center;
+        margin-top: 2.4rem;
+    }
+    .footer {
+        display:none;
+    }
+    .login-form-footer {
+        .separator:after {
+            content:'•';
+            padding:1rem;
+        }
+    }
+}
+@media only screen and (min-width: 42rem) {
+    body {
+        background:@background-lightest;
+    }
+    .login.page {
+        padding:0;
+        display: grid;
+        height: 100%;
+        grid-template-columns: 1fr 1.5fr 1fr;
+        grid-template-rows: 0.1fr 1fr 0.05fr;
+        grid-gap: 1px;
+        grid-template-areas: ". . ." ". login-form ." "footer footer footer";
 
-            h2 {
+        .content {
+            grid-area: login-form;
+
+            .loading-bar {
                 display:block;
             }
-            .form-actions {
-                text-align: center;
+            .logo {
+                margin:1.6em auto;
+                width: 20rem;
+                background-size: 20rem auto;
             }
+
+            .login-form {
+                .box-shadow();
+                border-radius: .3rem;
+                box-sizing: border-box;
+                max-width:45.2rem;
+                margin:auto;
+                padding:3.2rem 3.2rem 6.4rem 3.2rem;
+                background:@background-default;
+            }
+
+        }
+
+        .footer {
+            margin:1.6rem 0 0 0;
+            display: grid;
+            grid-area: footer;
+            grid-template-columns: 1fr 1.5fr 1fr;
+            grid-template-rows: 1fr;
+            grid-gap: 1px;
+            grid-template-areas: ". ad version";
+        }
+        .ad {
+            grid-area: ad;
+            text-align: center;
+            background:@background-lighter;
+            max-width:50rem;
+            margin:auto;
+            border-radius: .3rem .3rem 0 0;
+            padding:1.6rem 3.2rem 1rem 3.2rem;
+
             .button {
-                width:100%;
-                margin-top:1.2em;
+                font-size:1rem;
+                padding:0rem .8rem;
             }
-            .button + a {
-                font-size:1.6rem;
-                line-height: 2.4rem;
-                text-align:center;
+        }
+        .version {
+            grid-area: version;
+            text-align: right;
+            padding-right:1.6rem;
+            margin-top:1.6rem;
+
+            svg {
+                overflow: visible;
                 display: inline-block;
-                margin-top:1.6em;
+                font-size: inherit;
+                height: 1.6rem;
+                width: 1.6rem;
             }
-        }
-    }
-
-    .footer {
-        display: grid;
-        grid-area: footer;
-        grid-template-columns: 1fr 1.5fr 1fr;
-        grid-template-rows: 1fr;
-        grid-gap: 1px;
-        grid-template-areas: ". ad version";
-    }
-    .ad {
-        grid-area: ad;
-        text-align: center;
-        background:@background-lighter;
-        max-width:50rem;
-        margin:auto;
-        border-radius: .3rem .3rem 0 0;
-        padding:1.6rem 3.2rem 1rem 3.2rem;
-
-        .button {
-            font-size:1rem;
-            padding:0rem .8rem;
-        }
-    }
-    .version {
-        grid-area: version;
-        text-align: right;
-        padding-right:1.6rem;
-        margin-top:1.6rem;
-
-        svg {
-            overflow: visible;
-            display: inline-block;
-            font-size: inherit;
-            height: 1.6rem;
-            width: 1.6rem;
         }
     }
 }

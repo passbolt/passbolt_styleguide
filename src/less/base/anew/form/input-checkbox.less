@@ -1,5 +1,4 @@
 .checkbox {
-    margin-bottom:.8em;
 
     input[type=checkbox] {
         position: absolute;
@@ -10,12 +9,13 @@
             position: relative;
             cursor: pointer;
             padding: 0;
+            margin-bottom: .8rem;
         }
 
         // Box.
         & + label:before {
             content: '';
-            margin-top:.2rem;
+            margin-top:.3rem;
             margin-right: 1rem;
             display: inline-block;
             vertical-align: text-top;
@@ -58,7 +58,7 @@
             content: '';
             position: absolute;
             left: .3rem;
-            top: .5rem;
+            top: .6rem;
             width: 1.2rem;
             height: 1.2rem;
             background: transparent url('@{images}/fa/fas/check.svg') center center no-repeat;

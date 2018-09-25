@@ -1,0 +1,38 @@
+.infinite.loading-bar {
+    @loading-length: 45.2rem;
+    max-width:@loading-length;
+    margin:auto auto -0.4rem auto;
+
+    @keyframes drawLine1 {
+        0% {
+            stroke-dashoffset: -40rem;
+        }
+        100% {
+            stroke-dashoffset: 45rem;
+        }
+    }
+    @keyframes drawLine2 {
+        0% {
+            stroke-dashoffset: 15em;
+        }
+        100% {
+            stroke-dashoffset: -45.2rem;
+        }
+    }
+    #svg-loading-bar-line1 {
+        stroke-dasharray: 20rem @loading-length;
+        stroke: #DE8888;
+    }
+    #svg-loading-bar-line2 {
+        stroke: @red-dark;
+        stroke-dasharray: 15rem 45.2em;
+    }
+    &.animated {
+        #svg-loading-bar-line1 {
+            animation: drawLine1 2s ease-out 0s alternate infinite none running;
+        }
+        #svg-loading-bar-line2 {
+            animation: drawLine2 2s linear 0s normal infinite none running;
+        }
+    }
+}

@@ -1,0 +1,26 @@
+/*
+	Messages for validation error and example
+
+	.error - can be used for validation feedback
+	.help - can be used for example messages prior validation
+*/
+.input .message {
+    padding: 0;
+    font-size: 1.4rem;
+    margin-top: .2rem;
+    margin-bottom: 1.6rem;
+    background-color: transparent;
+    border: 0;
+
+    /* colors for messages */
+    &.error {
+        font-weight: normal;
+        color: @font-error;
+        background:@background-default;
+    }
+    &.help {
+        color: @font-light;
+        font-weight: normal;
+        background:@background-default;
+    }
+}
