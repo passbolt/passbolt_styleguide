@@ -23,7 +23,7 @@
 	<div class="swiper-button-next"></div>
 </div>
 <!-- should go at page bottom -->
-<script src="js/swiper.jquery.min.js"></script>
+<script src="src/js/swiper.jquery.min.js"></script>
 <script type="application/javascript">
 	$(document).ready(function () {
 		var mySwiper = new Swiper ('.swiper-container', {

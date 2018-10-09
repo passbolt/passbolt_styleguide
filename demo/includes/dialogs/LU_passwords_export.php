@@ -2,14 +2,14 @@
 	<div class="dialog export">
 		<div class="dialog-header">
 			<h2>Export passwords</h2>
-			<a href="../demo/LU_passwords.php" class="dialog-close">
+			<a href="demo/LU_passwords.php" class="dialog-close">
 				<i class="fa fa-close"></i><span class="visuallyhidden">close</span>
 			</a>
 
 		</div>
 		<div class="js_dialog_content dialog-content">
 			<form
-				action="../demo/LU_passwords.php"
+				action="demo/LU_passwords.php"
 				class="tab-content ready selected"
 				id="js_rs_export">
 				<div class="form-content">
@@ -26,7 +26,7 @@
 					<p><br><em>28 passwords are going to be exported.</em></p>
 				</div>
 				<div class="submit-wrapper clearfix">
-					<input class="button primary" value="Export" type="submit" onclick="javascript:window.location.href='../demo/LU_passwords.php'; return false;">
+					<input class="button primary" value="Export" type="submit" onclick="javascript:window.location.href='demo/LU_passwords.php'; return false;">
 				</div>
 			</form>
 		</div>

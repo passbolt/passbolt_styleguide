@@ -31,7 +31,7 @@
                     </div>
                     <div class="input text required js_form_element_wrapper js_form_secret_wrapper error">
                         <label for="js_field_secret_data_0">Password</label>
-                        <iframe src="../demo/LU_iframe_passwordinput_error.php" id="passbolt-iframe-secret-edition" frameborder="0"></iframe>
+                        <iframe src="demo/LU_iframe_passwordinput_error.php" id="passbolt-iframe-secret-edition" frameborder="0"></iframe>
                         <div id="js_secret_edit_0" class="js_secret_edit_form">
                             <input name="passbolt.model.Secret.id" id="js_field_secret_id_0" class="js_field_secret_id form_field" type="hidden">
                             <input name="passbolt.model.Secret.user_id" id="js_field_secret_user_id_0" class="js_field_secret_user_id form_field" type="hidden">

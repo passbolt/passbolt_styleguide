@@ -9,7 +9,8 @@
 		     (c) 2018 Passbolt SARL
 
 	-->
-	<base href="../src/">
+<?php if (!isset($base)) { $base = '../'; } ?>
+    <base href="<?= $base; ?>">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel="shortcut icon" type="image/x-icon" href="img/webroot/favicon.ico" />
-	<meta property="og:image:secure_url" content="img/background/og_preview.jpg" />
+	<link rel="shortcut icon" type="image/x-icon" href="src/img/webroot/favicon.ico" />
+	<meta property="og:image:secure_url" content="src/img/background/og_preview.jpg" />

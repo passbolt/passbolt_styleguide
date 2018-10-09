@@ -27,7 +27,7 @@
 					i++;
 				}
 				else {
-					document.location.href='../demo/AA_cloud_free_trial_deployment_done.php';
+					document.location.href='demo/AA_cloud_free_trial_deployment_done.php';
 				}
 			}
 			displayStatus();

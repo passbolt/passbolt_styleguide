@@ -10,9 +10,9 @@
                         <?php include('includes/dialogs/share/LU_permissions_list.php'); ?>
                         <?php include('includes/dialogs/share/LU_permission_warning.php'); ?>
                         <div class="permission-add">
-							<iframe src="../demo/LU_iframe_permissioninput.php" id="passbolt-iframe-password-share" frameborder="0"></iframe>
+							<iframe src="demo/LU_iframe_permissioninput.php" id="passbolt-iframe-password-share" frameborder="0"></iframe>
 							<div id="passbolt-password-share-autocomplete-wrapper">
-								<iframe src="../demo/LU_iframe_permissioninput_autocomplete.php" id="passbolt-iframe-password-share-autocomplete" frameborder="0"></iframe>
+								<iframe src="demo/LU_iframe_permissioninput_autocomplete.php" id="passbolt-iframe-password-share-autocomplete" frameborder="0"></iframe>
 							</div>
                         </div>
                         <?php include('includes/dialogs/share/LU_permission_dialog_buttons.php'); ?>

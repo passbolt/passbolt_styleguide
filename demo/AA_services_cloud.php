@@ -11,13 +11,13 @@
     <?php include('includes/headers/AA_header.php'); ?>
 	<ul class="pricing-tabs" role="tablist">
 		<li role="presentation">
-			<a aria-controls="self-hosted" data-toggle="tab" href="../demo/AA_services_pricing.php" role="tab">
+			<a aria-controls="self-hosted" data-toggle="tab" href="demo/AA_services_pricing.php" role="tab">
 				<span><i class="fa fa-server" aria-hidden="true"></i></span>
 				<span>Self-Hosted</span>
 			</a>
 		</li>
 		<li class="active" role="presentation">
-			<a aria-controls="cloud" data-toggle="tab" href="../demo/AA_services_cloud.php" role="tab">
+			<a aria-controls="cloud" data-toggle="tab" href="demo/AA_services_cloud.php" role="tab">
 				<span><i class="fa fa-cloud" aria-hidden="true"></i></span>
 				<span>Cloud-Hosted</span>
 			</a>

@@ -29,8 +29,8 @@
 						<div class="panel middle">
 							<?php
 							$_GET['breadcrumbs'] = array(
-								'profile' => '../demo/LU_users_profile.php',
-								'themes' => '../demo/LU_users_profile_themes.php'
+								'profile' => 'demo/LU_users_profile.php',
+								'themes' => 'demo/LU_users_profile_themes.php'
 							);
 							include('includes/LU_breadcrumbs.php'); ?>
 							<div class="grid grid-responsive-12">
@@ -38,16 +38,16 @@
                                 <div class="row themes">
                                     <div class="col12">
                                         <div class="theme <?php if ($theme === 'default') echo 'selected'; ?>">
-                                            <a href="../demo/LU_users_profile_themes.php?theme=default">
-                                                <img src="../src/img/themes/default.png">
+                                            <a href="demo/LU_users_profile_themes.php?theme=default">
+                                                <img src="src/img/themes/default.png">
                                                 <div class="theme-desc">
                                                     Default
                                                 </div>
                                             </a>
                                         </div>
                                         <div class="theme <?php if ($theme === 'midgar') echo 'selected'; ?>">
-                                            <a href="../demo/LU_users_profile_themes.php?theme=midgar">
-                                                <img src="../src/img/themes/midgar.png">
+                                            <a href="demo/LU_users_profile_themes.php?theme=midgar">
+                                                <img src="src/img/themes/midgar.png">
                                                 <div class="theme-desc">
                                                     Midgar
                                                 </div>

@@ -25,13 +25,13 @@
 			<div class="navigation wizard">
 				<ul>
 					<li class="">
-						<a href="../demo/AA_legal_terms.php" >Privacy</a>
+						<a href="demo/AA_legal_terms.php" >Privacy</a>
 					</li>
 					<li>
-						<a href="../demo/AA_legal_terms.php" >Terms</a>
+						<a href="demo/AA_legal_terms.php" >Terms</a>
 					</li>
 					<li class="selected">
-						<a href="../demo/AA_about_credits.php" >Credits</a>
+						<a href="demo/AA_about_credits.php" >Credits</a>
 					</li>
 				</ul>
 			</div>
@@ -150,12 +150,12 @@
 						<h1>Sponsors</h1>
 						<div class="tldr alt sponsors">
 							<a href="https://www.luxinnovation.lu/innovate-in-luxembourg/performance-programmes/fit-4-start/">
-								<img src="img/third_party/ministry_of_economy_luxembourg_logo.png" />
-								<img src="img/third_party/luxinnovation_logo.svg"/>
-								<img src="img/third_party/technoport_logo.png" />
+								<img src="src/img//third_party/ministry_of_economy_luxembourg_logo.png" />
+								<img src="src/img//third_party/luxinnovation_logo.svg"/>
+								<img src="src/img//third_party/technoport_logo.png" />
 							</a>
 							<a href="https://www.virtua.ch" target="_blank">
-								<img src="img/third_party/virtua_logo.png"/>
+								<img src="src/img//third_party/virtua_logo.png"/>
 							</a>
 						</div>
 					</div>

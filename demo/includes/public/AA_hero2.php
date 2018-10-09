@@ -13,10 +13,10 @@
 					</p>
 				</div>
 				<div class="call-to-action">
-					<a href="../demo/AA_services_pricing.php" class="button primary">
+					<a href="demo/AA_services_pricing.php" class="button primary">
 						Get passbolt
 					</a>
-                    <a href="../demo/AN_login.php" >
+                    <a href="demo/AN_login.php" >
                        Or try the demo
                     </a>
 				</div>

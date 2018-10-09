@@ -8,7 +8,7 @@
 <head>
 	<title>Login</title>
 	<?php include('includes/meta/AN_meta.php'); ?>
-	<link rel="stylesheet" type="text/css" href="css/themes/default/api_login.css" />
+	<link rel="stylesheet" type="text/css" href="src/css/themes/default/api_login.css" />
 <body>
 <div id="container" class="login page">
 <?php include('includes/ALL_top_warning_messages.php'); ?>
@@ -21,7 +21,7 @@
 				<h2>Almost there, please register!</h2>
 				<div class="plugin-check-wrapper">
 					<div class="plugin-check firefox warning">
-						<p class="message">Firefox plugin is installed but is not configured. <a href="../demo/AN_register.php">Register</a> or <a href="../demo/AN_recover.php">recover your account</a> if you already have one!</p>
+						<p class="message">Firefox plugin is installed but is not configured. <a href="demo/AN_register.php">Register</a> or <a href="demo/AN_recover.php">recover your account</a> if you already have one!</p>
 					</div>
 				</div>
 				<p>
@@ -37,8 +37,8 @@
 						<p>You need an account to login.</p>
 					</div>
 					<div class="actions-wrapper center">
-						<a class="button primary big" href="../demo/AN_login_stage0.php">Register</a>
-						<a href="../demo/AN_recover.php">Have an account?</a>
+						<a class="button primary big" href="demo/AN_login_stage0.php">Register</a>
+						<a href="demo/AN_recover.php">Have an account?</a>
 					</div>
 				</div>
 			</div>

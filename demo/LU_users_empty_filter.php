@@ -30,7 +30,7 @@
 						<div class="panel middle">
 							<?php
 							$_GET['breadcrumbs'] = array(
-								'all users' => '../demo/LU_users.php',
+								'all users' => 'demo/LU_users.php',
 								'Search : abcde fghijk' => ''
 							);
 							include('includes/LU_breadcrumbs.php'); ?>

@@ -9,7 +9,7 @@
             <i class="fa fa-fw fa-edit"></i>
             <span class="visuallyhidden">edit</span>
         </a>
-<?php if (!$_GET['empty']) { ?>
+<?php if (!isset($_GET['empty'])) { ?>
         <ul id="js_rs_details_tags_list" class="tags tags-list">
 <?php foreach ($tags as $i => $tag) : ?>
             <li>
@@ -51,7 +51,7 @@
         </div>
     </div>
 </div>
-<script type="application/javascript" src="../src/js/autocomplete.js"></script>
+<script type="application/javascript" src="src/js/autocomplete.js"></script>
 <script type="application/javascript">
   $(function() {
     var tagListSelector = '#js_rs_details_tags_list';

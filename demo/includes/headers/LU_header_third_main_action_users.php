@@ -9,7 +9,7 @@
 				<div class="row">
 					<div class="main-cell-wrapper">
 						<div class="main-cell">
-							<a href="../demo/AD_users_create_user.php"><span>New user</span></a>
+							<a href="demo/AD_users_create_user.php"><span>New user</span></a>
 						</div>
 					</div>
 				</div>
@@ -18,7 +18,7 @@
 				<div class="row">
 					<div class="main-cell-wrapper">
 						<div class="main-cell">
-							<a href="../demo/AD_users_create_group.php"><span>New group</span></a>
+							<a href="demo/AD_users_create_group.php"><span>New group</span></a>
 						</div>
 					</div>
 				</div>

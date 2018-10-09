@@ -1,7 +1,7 @@
 <div class="section profile-detailed-information">
     <div class="avatar">
         <div class="value">
-            <img src="img/avatar/user_medium.png" alt="profile picture">
+            <img src="src/img/avatar/user_medium.png" alt="profile picture">
         </div>
         <div class="edit">
             <a title="Change Avatar" href="#" class="edit-avatar-action">

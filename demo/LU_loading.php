@@ -18,12 +18,13 @@
          (c) 2018 Passbolt SARL
 
      -->
-    <base href="../src/">
+    <?php if (!isset($base)) { $base = '../'; } ?>
+    <base href="<?= $base; ?>">
     <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="shortcut icon" type="image/x-icon" href="img/webroot/favicon.ico" />
-    <link rel="stylesheet" type="text/css" href="css/themes/<?= $theme; ?>/api_main.css">
-    <link rel="stylesheet" type="text/css" href="css/themes/default/ext_external.css" />
+    <link rel="stylesheet" type="text/css" href="src/css/themes/<?= $theme; ?>/api_main.css">
+    <link rel="stylesheet" type="text/css" href="src/css/themes/default/ext_external.css" />
 </head>
 <body>
 <!-- main -->

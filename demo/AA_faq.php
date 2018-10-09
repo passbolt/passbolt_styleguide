@@ -3,13 +3,12 @@
 <head>
 	<meta charset="utf-8">
 	<title>Frequently Asked Questions | Passbolt</title>
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel="shortcut icon" type="image/x-icon" href="img/webroot/favicon.ico" />
-    <link rel="stylesheet" type="text/css" href="../src/css/help.css">
-	<script src="../src/js/jquery-3.3.1.min.js"></script>
-	<script src="../src/js/bootstrap-scrollspy.js"></script>
-	<script src="../src/js/imagelightbox.min.js"></script>
-	<script src="../src/js/greedynav.js"></script>
+    <?php include('includes/meta/AA_meta.php'); ?>
+    <?php include('includes/headers/AA_header_scripts.php'); ?>
+	<script src="src/js/jquery-3.3.1.min.js"></script>
+	<script src="src/js/bootstrap-scrollspy.js"></script>
+	<script src="src/js/imagelightbox.min.js"></script>
+	<script src="src/js/greedynav.js"></script>
 </head>
 <body id="faq-list">
 <div id="container" class="page background">
@@ -69,7 +68,7 @@
 							<h2>Frequently Asked Questions</h2>
 							<h3 class="question">What is passbolt?</h3>
 							<video controls>
-								<source src="../src/video/an_install_plugin_firefox_864.mp4" type="video/mp4" />
+								<source src="src/video/an_install_plugin_firefox_864.mp4" type="video/mp4" />
 							</video>
 							<div class="answer">
 								<p>
@@ -90,14 +89,14 @@
 							<div class="col7">
 								<h3 class="question">What functionalities do you support?</h3>
 								<div class="answer">
-									<img src="../src/img/diagrams/howitworks.svg" alt="How it works">
+									<img src="src/img/diagrams/howitworks.svg" alt="How it works">
 									<p>
 										Here is an overview of the key functionality of Passbolt at present (in blue), and
 										what we have in mind for the future (in white). Click on the picture to enlarge.
 									</p>
 									<figure>
-										<a href="../src/img/diagrams/functional_overview.png" class="lightbox">
-											<img alt="Passbolt Functional Overview" src="../src/img/diagrams/functional_overview.png"/>
+										<a href="src/img/diagrams/functional_overview.png" class="lightbox">
+											<img alt="Passbolt Functional Overview" src="src/img/diagrams/functional_overview.png"/>
 										</a>
 									</figure>
 								</div>
@@ -140,7 +139,7 @@
 										phishing attacks.
 									</p>
 									<figure>
-										<img src="../src/img/screenshots/LU_security_token.png" src="example of a security token"
+										<img src="src/img/screenshots/LU_security_token.png" src="example of a security token"
 											 style="max-width:450px;">
 										<span class="legend">fig. example of security token</span>
 									</figure>

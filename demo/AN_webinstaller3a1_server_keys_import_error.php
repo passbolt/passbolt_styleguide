@@ -91,8 +91,8 @@
 										</ul>
 										<p>
 											You need to fix that by either
-											<a href="../demo/AN_webinstaller3a1_server_keys_import.php">importing another key</a> or
-											<a href="../demo/AN_webinstaller3a0_server_keys.php">generating a new one</a>.
+											<a href="demo/AN_webinstaller3a1_server_keys_import.php">importing another key</a> or
+											<a href="demo/AN_webinstaller3a0_server_keys.php">generating a new one</a>.
 										</p>
 									</div>
 								</div>
@@ -101,7 +101,7 @@
 
 							<div class="row last">
 								<div class="input-wrapper">
-									<a href="../demo/AN_webinstaller3a1_server_keys_import.php" class="button cancel big">cancel</a>
+									<a href="demo/AN_webinstaller3a1_server_keys_import.php" class="button cancel big">cancel</a>
 									<a href="#" class="button primary next big disabled">next</a>
 								</div>
 							</div>

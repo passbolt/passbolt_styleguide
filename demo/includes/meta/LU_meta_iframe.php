@@ -1,7 +1,8 @@
-<base href="../src/">
+<?php if (!isset($base)) { $base = '../'; } ?>
+<base href="<?= $base; ?>">
 <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
-<link rel="stylesheet" type="text/css" href="css/themes/<?= $theme ?>/ext_iframe.css">
-<script src="js/jquery-3.3.1.min.js"></script>
+<link rel="stylesheet" type="text/css" href="src/css/themes/<?= $theme ?>/ext_iframe.css">
+<script src="src/js/jquery-3.3.1.min.js"></script>
 <script type="application/javascript">
 	var resizeIframe = function(selector, options) {
 		// Get the dimension of the current document.

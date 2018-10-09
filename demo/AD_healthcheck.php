@@ -1,14 +1,9 @@
-
 <?php include('_includes/bootstrap.php'); ?><!doctype html>
 <html class="passbolt no-js no-passboltplugin alpha version guest" lang="en">
 <head>
     <meta charset="utf-8">
     <title>Passbolt | Healthcheck</title>
-    <meta name="description" content="Open source password manager for teams">
-    <meta name="keywords" content="Passbolt, password manager, online password manager, open source password manager">
-    <meta name="robots" content="noindex">
-    <meta name="viewport" content="width=device-width">
-    <link rel="stylesheet" type="text/css" href="../src/css/themes/<?= $theme; ?>/api_main.css"/>
+    <?php include('includes/meta/LU_meta.php'); ?>
 </head>
 <body>
 <div id="container" class="page status">
@@ -18,7 +13,6 @@
             <nav>
                 <div class="top navigation primary">
                     <ul>
-                        <li class="home with-link"><a href="/"><span>passbolt</span></a></li>
                         <li class="left"><a href="/"><span>home</span></a></li>
                         <li class="right"><a href="/login"><span>login</span></a></li>
                         <li class="right"><a href="/register"><span>register</span></a></li>

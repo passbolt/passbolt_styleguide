@@ -2,7 +2,7 @@
 		 style="" id="06b0333e-fa7b-50f2-38e5-26ab6f21d0d1">
 	<div class="user">
 		<div class="sidebar-header">
-			<img src="img/avatar/user.png">
+			<img src="src/img/avatar/user.png">
 			<h3>
 				<span class="name">Ada Lovelace</span>
 				<span class="username">ada@passbolt.com</span>

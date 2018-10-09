@@ -8,7 +8,7 @@
 <head>
     <title>Login</title>
     <?php include('includes/meta/AN_meta.php'); ?>
-    <link rel="stylesheet" type="text/css" href="css/themes/default/api_login.css" />
+    <link rel="stylesheet" type="text/css" href="src/css/themes/default/api_login.css" />
 <body>
 <div id="container" class="login page">
     <?php include('includes/ALL_top_warning_messages.php'); ?>
@@ -34,7 +34,7 @@
 			<div class="col4 push1 last">
 				<div class="logo"><h1><span>Passbolt</span></h1></div>
 				<div class="users login form">
-					<iframe id="passbolt-iframe-login-form" src="../demo/AN_iframe_login.php" frameborder="0"></iframe>
+					<iframe id="passbolt-iframe-login-form" src="demo/AN_iframe_login.php" frameborder="0"></iframe>
 				</div>
 			</div>
 		</div>

@@ -1,18 +1,106 @@
-.mfa.page {
-    p {
-        font-size:.875em;
+#js_mfa_iframe {
+    width:100%;
+    height:calc(100% - 2.5em);
+    position: absolute;
+    box-sizing: border-box;
+    padding:0;
+    margin:0;
+    background: @background-default;
+}
+.mfa.iframe {
+    .grid-responsive-12, .grid {
+        max-width: none;
     }
-    .input-verify {
-        background:@background-lightest;
-        padding:2.5em;
+    .actions-wrapper {
         margin-top:3em;
-        max-width: 16em;
     }
-    .button-verify {
-        background:@background-lightest;
-        padding:2.5em;
-        margin-top:3em;
-        max-width: 16em;
+
+    .totp-setup {
+        .input-verify {
+            float:left;
+            background:@background-lightest;
+            padding:2.5em;
+            max-width:25em;
+            height:262px;
+            min-width:22em;
+            box-sizing: border-box;
+            border:3px solid @background-lightest;
+            border-left:0;
+
+            .helptext {
+                max-width:18em;
+            }
+        }
+        .qrcode {
+            float:left;
+            max-width:262px;
+            box-sizing: border-box;
+            max-height:262px;
+            border:3px solid @background-lightest;
+        }
+    }
+
+    .how-it-works {
+        p {
+            width:28%;
+            float:left;
+            color:@font-dim;
+        }
+        p + p {
+            margin-left: 5%;
+        }
+        p + p + p {
+            margin-left: 8%;
+        }
+
+    }
+
+    .mfa-providers {
+        .clearfix();
+        li {
+            float: left;
+            .rounded();
+            width:12.5em;
+            margin-bottom:2em;
+            margin-right:2em;
+            border:1px solid @border-light;
+            &:hover {
+                border:1px solid @border-default;
+                .box-shadow();
+            }
+        }
+
+        a {
+            border-bottom:1px solid @border-light;
+            display:block;
+            text-align: center;
+
+            span {
+                padding:1em 0 2em 0;
+                display: block;
+            }
+            img{
+                display: block;
+                padding:2em 0 .5em 0;
+                height:5em;
+            }
+
+        }
+        .coming-soon {
+            color: @font-dim;
+            a {
+                cursor:not-allowed;
+            }
+            img {
+                filter: url('@{images}/controls/filter.svg#grayscale');
+                -webkit-filter: grayscale(1);
+                -webkit-transition: all 2s;
+            }
+        }
+        .toggle-switch {
+            padding-left:.5em;
+            background:@background-lightest;
+        }
     }
 
     .mfa-trusted-device {

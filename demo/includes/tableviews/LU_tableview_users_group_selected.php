@@ -55,7 +55,7 @@
 
 				<td class="js_grid_column_avatar s1-cell cell_avatar">
 					<div title="">
-						<img src="img/avatar/user.png" width="25" height="25" alt="avatar picture">
+						<img src="src/img/avatar/user.png" width="25" height="25" alt="avatar picture">
 					</div>
 				</td>
 

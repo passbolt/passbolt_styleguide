@@ -43,7 +43,7 @@
         <div class="row">
             <div class="main-cell-wrapper">
                 <div class="main-cell">
-                    <a href="../demo/AD_users_delete_group_confirmation.php"><span>Delete Group</span></a>
+                    <a href="demo/AD_users_delete_group_confirmation.php"><span>Delete Group</span></a>
                 </div>
             </div>
         </div>

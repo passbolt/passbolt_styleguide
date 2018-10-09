@@ -3,12 +3,8 @@
 <head>
     <meta charset="utf-8">
     <title>Frequently Asked Questions | Passbolt</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="shortcut icon" type="image/x-icon" href="img/webroot/favicon.ico" />
-    <link rel="stylesheet" type="text/css" href="../src/css/help.css">
-    <script src="../src/js/jquery-3.3.1.min.js"></script>
-    <script src="../src/js/bootstrap-scrollspy.js"></script>
-	<script src="../src/js/greedynav.js"></script>
+    <?php include('includes/meta/AA_meta.php'); ?>
+    <link rel="stylesheet" type="text/css" href="src/css/help.css" />
 </head>
 <body id="faq-list">
 <div id="container" class="help page help-home background">

@@ -9,19 +9,19 @@
 				</a>
 			</li>
 			<li>
-				<a id="js_wk_menu_edition_button" href="../demo/LU_passwords_edit.php" class="button mad_component_button js_component mad_view ready">
+				<a id="js_wk_menu_edition_button" href="demo/LU_passwords_edit.php" class="button mad_component_button js_component mad_view ready">
 					<i class="fa fa-fw fa-edit"></i>
 					<span>edit</span>
 				</a>
 			</li>
 			<li>
-				<a id="js_wk_menu_sharing_button" href="../demo/LU_passwords_share.php" class="button mad_component_button js_component mad_view ready">
+				<a id="js_wk_menu_sharing_button" href="demo/LU_passwords_share.php" class="button mad_component_button js_component mad_view ready">
 					<i class="fa fa-fw fa-share"></i>
 					<span>share</span>
 				</a>
 			</li>
 			<li>
-				<a id="js_wk_menu_sharing_button" href="../demo/LU_passwords_export.php" class="button mad_component_button js_component mad_view ready">
+				<a id="js_wk_menu_sharing_button" href="demo/LU_passwords_export.php" class="button mad_component_button js_component mad_view ready">
 					<i class="fa fa-fw fa-cloud-download"></i>
 					<span>export</span>
 				</a>

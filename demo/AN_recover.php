@@ -3,7 +3,7 @@
 <head>
 	<title>Register</title>
 	<?php include('includes/meta/AN_meta.php'); ?>
-	<link rel="stylesheet" type="text/css" href="css/themes/default/api_login.css" />
+	<link rel="stylesheet" type="text/css" href="src/css/themes/default/api_login.css" />
 <body>
 <div id="container" class="register page">
 	<?php include('includes/ALL_top_warning_messages.php'); ?>
@@ -27,7 +27,7 @@
 					<h1><span>Passbolt</span></h1>
 				</div>
 				<div class="users register form">
-					<form action="../demo/AN_recover_thankyou.php" id="UserLoginForm" method="post" accept-charset="utf-8">
+					<form action="demo/AN_recover_thankyou.php" id="UserLoginForm" method="post" accept-charset="utf-8">
 						<input type="hidden" name="_method" value="POST"/>
 						<fieldset>
 							<legend>Please enter your username</legend>

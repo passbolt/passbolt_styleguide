@@ -40,7 +40,7 @@
 							You will soon be redirected to passbolt to complete your account setup.
 						</div>
 						<div class="input-wrapper">
-							<a href="../demo/LU_passwords.php" class="button primary next big processing">login!</a>
+							<a href="demo/LU_passwords.php" class="button primary next big processing">login!</a>
 							<a href="/login">Click here if you can't wait</a>.
 						</div>
 					</div>

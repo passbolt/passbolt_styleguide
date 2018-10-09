@@ -57,8 +57,8 @@
 						</div>
 
 						<div class="submit-input-wrapper">
-							<a href="../demo/AN_webinstaller3a0_server_keys.php" class="button big">cancel</a>
-							<a href="../demo/AN_webinstaller5a0_options.php" class="button big primary">next</a>
+							<a href="demo/AN_webinstaller3a0_server_keys.php" class="button big">cancel</a>
+							<a href="demo/AN_webinstaller5a0_options.php" class="button big primary">next</a>
 						</div>
 					</div>
 					<div class="col5 last">

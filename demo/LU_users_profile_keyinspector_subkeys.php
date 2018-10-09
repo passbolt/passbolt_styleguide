@@ -32,10 +32,10 @@
 						<div class="panel middle">
 							<?php
 							$_GET['breadcrumbs'] = array(
-								'all users' => '../demo/LU_users.php',
-								'test user' => '../demo/LU_users_profile.php',
-								'key inspector' => '../demo/LU_users_profile_keyinspector.php',
-								'sub keys' => '../demo/LU_users_profile_keyinspector_subkeys.php'
+								'all users' => 'demo/LU_users.php',
+								'test user' => 'demo/LU_users_profile.php',
+								'key inspector' => 'demo/LU_users_profile_keyinspector.php',
+								'sub keys' => 'demo/LU_users_profile_keyinspector_subkeys.php'
 							);
 							include('includes/LU_breadcrumbs.php'); ?>
 							<div id="js_wk_preference_main"

@@ -4,7 +4,7 @@
             <h2>
                 Create group
             </h2>
-            <a class="dialog-close" href="../demo/AD_users.php">
+            <a class="dialog-close" href="demo/AD_users.php">
                 <i class="fa fa-close"></i>
                 <span class="visuallyhidden">close</span>
             </a>
@@ -25,8 +25,8 @@
                 <?php include('includes/dialogs/share/AD_permissions_list_create_group.php'); ?>
                 <?php include('includes/dialogs/share/AD_permission_add_group_people.php'); ?>
                 <div class="submit-wrapper clearfix">
-                    <a class="button primary" href="../demo/AD_users.php">save</a>
-                    <a class="js-dialog-cancel cancel" href="../demo/AD_users.php">cancel</a>
+                    <a class="button primary" href="demo/AD_users.php">save</a>
+                    <a class="js-dialog-cancel cancel" href="demo/AD_users.php">cancel</a>
                 </div>
             </div>
         </div>

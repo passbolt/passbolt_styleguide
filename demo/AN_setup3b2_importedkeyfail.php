@@ -22,10 +22,10 @@
 			<div class="navigation wizard">
 				<ul>
 					<li class="">
-						<a href="../demo/AN_setup1a0_plugincheckfail.php">1. Get the plugin</a>
+						<a href="demo/AN_setup1a0_plugincheckfail.php">1. Get the plugin</a>
 					</li>
 					<li class="selected">
-						<a href="../demo/AN_setup2b0_importkey.php">2. Import your keys</a>
+						<a href="demo/AN_setup2b0_importkey.php">2. Import your keys</a>
 					</li>
 					<li class="disabled">
 						3. Set a passphrase
@@ -102,8 +102,8 @@
 									</ul>
 								<p>
 									You need to fix that by either
-										<a href="../demo/AN_setup2b0_importkey.php">importing another key</a> or
-										<a href="../demo/AN_setup2a0_createnewkey.php">generating a new one</a>.
+										<a href="demo/AN_setup2b0_importkey.php">importing another key</a> or
+										<a href="demo/AN_setup2a0_createnewkey.php">generating a new one</a>.
 								</p>
 							</div>
 						</div>
@@ -112,8 +112,8 @@
 
 					<div class="row last">
 						<div class="input-wrapper">
-							<a href="../demo/AN_setup2b0_importkey.php" class="button cancel big">cancel</a>
-							<a href="../demo/AN_setup4a0_securitytoken.php" class="button primary next big disabled">next</a>
+							<a href="demo/AN_setup2b0_importkey.php" class="button cancel big">cancel</a>
+							<a href="demo/AN_setup4a0_securitytoken.php" class="button primary next big disabled">next</a>
 						</div>
 					</div>
 

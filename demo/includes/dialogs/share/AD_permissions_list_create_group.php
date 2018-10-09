@@ -35,8 +35,13 @@ $users = [
 if(!empty($_GET['Users'])) {
     $users = array_merge($users,$_GET['Users']);
 }
+if (isset($groupUsersEmpty)) {
+    $groupUsersEmpty = 'empty';
+} else {
+    $groupUsersEmpty = '';
+}
 ?>
-<div id="js_group_members" class="group_members<?php echo $groupUsersEmpty == true ? ' empty' : '' ?>">
+<div id="js_group_members" class="group_members <?= $groupUsersEmpty ?>">
 	<div class="form-content">
 		<div class="input required">
 			<label for="js_field_group_permission">Group members</label>
@@ -48,7 +53,7 @@ if(!empty($_GET['Users'])) {
                 <li id="<?php echo $user['Permission']['id']; ?>" data-view-id="372"
                     class="row direct-permission <?php if($user['Permission']['updated']) echo 'permission-updated'; ?>" >
                     <div class="avatar">
-                        <img src="<?php echo $user['User']['avatar']; ?>" data-view-id="373">
+                        <img src="src/<?php echo $user['User']['avatar']; ?>" data-view-id="373">
                     </div>
                     <div class="user"> <!-- or class=group -->
                         <div class="details">

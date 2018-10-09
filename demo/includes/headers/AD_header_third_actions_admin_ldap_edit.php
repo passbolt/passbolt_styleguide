@@ -6,14 +6,14 @@
 					 class="passbolt_controller_component_password_workspace_menu_controller mad_view_view tab-content selected selection">
 				<li>
 					<a id="js_wk_menu_edition_button" class="button primary mad_controller_component_button_controller mad_view_view js_component"
-						 href="../demo/AD_admin_ldap_configuration.php">
+						 href="demo/AD_admin_ldap_configuration.php">
 						<i class="fa fa-fw fa-save"></i>
 						<span>save settings</span>
 					</a>
 				</li>
 				<li>
 					<a id="js_wk_menu_edition_button" class="button mad_controller_component_button_controller mad_view_view js_component"
-					   href="../demo/AD_admin_ldap_configuration.php">
+					   href="demo/AD_admin_ldap_configuration.php">
 						<i class="fa fa-fw fa-undo"></i>
 						<span>cancel</span>
 					</a>

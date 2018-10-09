@@ -86,7 +86,7 @@
 
 						        <div class="submit">
 							        <input class="button primary big" id="button-submit" value="Continue" type="submit">
-							        <a href="../demo/AA_services_community_download.php">Skip, and go directly to installation instructions</a>
+							        <a href="demo/AA_services_community_download.php">Skip, and go directly to installation instructions</a>
 						        </div>
 					        </form>
 				        </div>

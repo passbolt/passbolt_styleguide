@@ -53,7 +53,7 @@
 						<div class="message success">You are using an HTTPS secure connection.</div>
 
 						<div class="submit-input-wrapper">
-							<a href="../demo/AN_webinstaller2_license_key.php" class="button primary big">next</a>
+							<a href="demo/AN_webinstaller2_license_key.php" class="button primary big">next</a>
 						</div>
 					</div>
 					<div class="col5 last">

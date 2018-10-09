@@ -144,7 +144,7 @@ if (isset($_GET['cards'])) {
 								<div class="content">
 									<div class="title"><?php echo $card['title']; ?></div>
 									<div class="description"><?php echo $card['description']; ?></div>
-									<div class="eta"><?php echo $card['eta']; ?></div>
+									<div class="eta">June 2018</div>
 								</div>
 							</div>
 							<div class="teaser">

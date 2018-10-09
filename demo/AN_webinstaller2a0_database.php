@@ -63,8 +63,8 @@
 							<input name="data[Db][name]" class="required fluid" id="DbName" required="required" type="text" placeholder="database name">
 						</div>
 
-						<div class="submit-input-wrapper">
-							<a href="../demo/AN_webinstaller3a0_server_keys.php" class="button primary big">save and continue</a>
+						<div class="submit-wrapper">
+							<a href="demo/AN_webinstaller3a0_server_keys.php" class="button primary big">save and continue</a>
 						</div>
 					</div>
 					<div class="col5 last">

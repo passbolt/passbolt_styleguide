@@ -2,7 +2,7 @@
      id="06b0333e-fa7b-50f2-38e5-26ab6f21d0d1">
 	<div class="sidebar group">
 		<div class="sidebar-header">
-			<img src="img/avatar/group_default.png">
+			<img src="src/img/avatar/group_default.png">
 			<h3>
 				<span class="name">IT Support</span>
 				<span class="type">group</span>

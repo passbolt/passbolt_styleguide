@@ -33,9 +33,9 @@
 						<div class="panel middle">
 							<?php
 							$_GET['breadcrumbs'] = array(
-								'administration' => '../demo/LU_users.php',
-								'ldap' => '../demo/LU_users_profile.php',
-								'reports' => '../demo/LU_users_profile_loginhistory.php'
+								'administration' => 'demo/LU_users.php',
+								'ldap' => 'demo/LU_users_profile.php',
+								'reports' => 'demo/LU_users_profile_loginhistory.php'
 							);
 							include('includes/LU_breadcrumbs.php'); ?>
 							<div id="js_wk_preference_main"

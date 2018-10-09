@@ -22,16 +22,16 @@
 			<div class="navigation wizard">
 				<ul>
 					<li class="">
-						<a href="../demo/AN_recover1a1_plugincheckok.php">1. Security checks</a>
+						<a href="demo/AN_recover1a1_plugincheckok.php">1. Security checks</a>
 					</li>
 					<li class="">
-						<a href="../demo/AN_recover2b0_importkey.php">2. Import your key</a>
+						<a href="demo/AN_recover2b0_importkey.php">2. Import your key</a>
 					</li>
 					<li class="">
-						<a href="../demo/AN_recover4a0_securitytoken.php">4. Set a new security token</a>
+						<a href="demo/AN_recover4a0_securitytoken.php">4. Set a new security token</a>
 					</li>
 					<li class="selected">
-						<a href="../demo/AN_recover5a0_login.php">5. Login!</a>
+						<a href="demo/AN_recover5a0_login.php">5. Login!</a>
 					</li>
 				</ul>
 			</div>
@@ -52,7 +52,7 @@
 							</div>
 							<div class="input-wrapper">
 								<a href="#" class="button primary next big processing">login!</a>
-								<a href="../demo/AN_login_stage1.php">Click here if you can't wait</a>.
+								<a href="demo/AN_login_stage1.php">Click here if you can't wait</a>.
 							</div>
 							<p>
 						</div>

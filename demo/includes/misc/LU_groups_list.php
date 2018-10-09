@@ -9,7 +9,7 @@
                     </div>
                 </div>
                 <div class="avatar">
-                    <img data-view-id="573" src="img/avatar/group_default.png" alt="picture of IT support">
+                    <img data-view-id="573" src="src/img/avatar/group_default.png" alt="picture of IT support">
                 </div>
             </li>
             <li data-view-id="574" class="usercard-col-2">
@@ -20,7 +20,7 @@
                     </div>
                 </div>
                 <div class="avatar">
-                    <img data-view-id="574" src="img/avatar/group_default.png" alt="picture of facilities">
+                    <img data-view-id="574" src="src/img/avatar/group_default.png" alt="picture of facilities">
                 </div>
             </li>
             <li data-view-id="575" class="usercard-col-2">
@@ -31,7 +31,7 @@
                     </div>
                 </div>
                 <div class="avatar">
-                    <img data-view-id="575" src="img/avatar/group_default.png" alt="picture of it-support">
+                    <img data-view-id="575" src="src/img/avatar/group_default.png" alt="picture of it-support">
                 </div>
             </li>
         </ul>

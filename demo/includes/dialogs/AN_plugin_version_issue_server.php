@@ -16,7 +16,7 @@
             </div>
             <div class="submit-wrapper clearfix">
 								<a class="button primary" role="link" href="#">Learn more</a>
-                <a class="cancel" role="button" href="../demo/AN_login">or proceed with caution</a>
+                <a class="cancel" role="button" href="demo/AN_login">or proceed with caution</a>
             </div>
         </div>
     </div>

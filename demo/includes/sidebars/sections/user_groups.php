@@ -11,7 +11,7 @@
 				</div>
 			</div>
 			<div class="avatar">
-				<img src="img/avatar/group_default.png">
+				<img src="src/img/avatar/group_default.png">
 			</div>
 		</li>
 		<li class="permission usercard-col-2">
@@ -22,7 +22,7 @@
 				</div>
 			</div>
 			<div class="avatar">
-				<img src="img/avatar/group_default.png">
+				<img src="src/img/avatar/group_default.png">
 			</div>
 		</li>
 	</ul>

@@ -12,7 +12,7 @@
 	<div class="header second">
 		<?php include('includes/AN_logo.php'); ?>
 		<div class="col2_3">
-			<h2>Create a new key or <a href="../demo/AN_setup2b0_importkey.php" class="button primary">import</a> an existing one</h2>
+			<h2>Create a new key or <a href="demo/AN_setup2b0_importkey.php" class="button primary">import</a> an existing one</h2>
 		</div>
 	</div>
 
@@ -22,10 +22,10 @@
 			<div class="navigation wizard">
 				<ul>
 					<li class="">
-						<a href="../demo/AN_setup1a0_plugincheckfail.php">1. Get the plugin</a>
+						<a href="demo/AN_setup1a0_plugincheckfail.php">1. Get the plugin</a>
 					</li>
 					<li class="selected">
-						<a href="../demo/AN_setup2a0_createnewkey.php">2. Define your keys</a>
+						<a href="demo/AN_setup2a0_createnewkey.php">2. Define your keys</a>
 					</li>
 					<li class="disabled">
 						3. Set a passphrase
@@ -62,7 +62,7 @@
 							<div class="input file image ">
 								<label for="UserAvatar">Avatar </label>
 								<div class="image-wrapper avatar">
-									<img src="img/avatar/user.png" alt="avatar preview"/>
+									<img src="src/img//avatar/user.png" alt="avatar preview"/>
 								</div>
 								<div class="input-wrapper">
 									<div class="input-wrapper-2">
@@ -104,8 +104,8 @@
 
 					<div class="row last">
 						<div class="input-wrapper">
-							<a href="../demo/AN_setup1a1_plugincheckok.php" class="button cancel big">cancel</a>
-							<a href="../demo/AN_setup3a0_setmasterpassword.php" class="button primary next big">next</a>
+							<a href="demo/AN_setup1a1_plugincheckok.php" class="button cancel big">cancel</a>
+							<a href="demo/AN_setup3a0_setmasterpassword.php" class="button primary next big">next</a>
 						</div>
 					</div>
 

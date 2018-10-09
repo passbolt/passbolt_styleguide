@@ -24,7 +24,7 @@
 					i++;
 				}
 				else {
-					document.location.href='../demo/AN_webinstaller7a0_createuser.php';
+					document.location.href='demo/AN_webinstaller7a0_createuser.php';
 				}
 			}
 			displayStatus();
@@ -78,8 +78,8 @@
 
 					<div class="row last">
 						<div class="input-wrapper">
-<!--							<a href="../demo/AN_setup3a0_setmasterpassword.php" class="button cancel big">cancel</a>-->
-							<a href="../demo/AN_setup4a0_securitytoken.php" class="button primary next big processing">next</a>
+<!--							<a href="demo/AN_setup3a0_setmasterpassword.php" class="button cancel big">cancel</a>-->
+							<a href="demo/AN_setup4a0_securitytoken.php" class="button primary next big processing">next</a>
 						</div>
 					</div>
 

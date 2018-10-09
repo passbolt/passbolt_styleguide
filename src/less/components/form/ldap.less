@@ -1,0 +1,61 @@
+/** Specific layout for ldap connection information */
+.singleline.connection_info {
+    &.protocol_host_port {
+        .input.text.field_protocol_host {
+            border:0;
+            padding:0;
+            width: 70%;
+
+            .input.text{
+                padding:0;
+                margin:0;
+                input {
+                    margin:0;
+                    border-left:none;
+                }
+
+                &.host {
+                    width: 75%;
+                    input[type=text] {
+                        width:95%;
+                    }
+                }
+
+                &.protocol {
+                    width: 25%;
+                    position: relative;
+                    .chosen-container {
+                        display: block;
+                        a.chosen-single {
+                            height: 38px;
+                            div {
+                                b {
+                                    background-position: 0px 10px;
+                                }
+                            }
+                            span {
+                                font-size: 16px;
+                                padding: 6px 0 0 0;
+                            }
+                        }
+                    }
+                    .chosen-container-active.chosen-with-drop {
+                        a.chosen-single  {
+                            div b {
+                                background-position: -18px 10px;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        .input.text.port {
+            width: 9%;
+            margin-left:1%;
+            input[type=number] {
+                width:100%;
+            }
+        }
+    }
+}

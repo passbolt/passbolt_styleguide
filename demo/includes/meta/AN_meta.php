@@ -10,8 +10,9 @@
 		 (c) 2018 Passbolt SARL
 
 	-->
-	<base href="../src/">
+    <?php if (!isset($base)) { $base = '../'; } ?>
+    <base href="<?= $base; ?>">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel="shortcut icon" type="image/x-icon" href="img/webroot/favicon.ico" />
-	<script type="text/javascript" src="js/modernizr.js"></script>
-	<link rel="stylesheet" type="text/css" href="css/themes/default/ext_external.css" />
+	<link rel="shortcut icon" type="image/x-icon" href="src/img/webroot/favicon.ico" />
+	<script type="text/javascript" src="src/js/modernizr.js"></script>
+	<link rel="stylesheet" type="text/css" href="src/css/themes/default/ext_external.css" />

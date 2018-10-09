@@ -14,7 +14,7 @@
 			<div class="row">
 				<div class="main-cell-wrapper">
 					<div class="main-cell">
-						<a href="../demo/#"><span>Dashboard</span></a>
+						<a href="demo/#"><span>Dashboard</span></a>
 					</div>
 				</div>
 			</div>
@@ -23,7 +23,7 @@
 			<div class="row">
 				<div class="main-cell-wrapper">
 					<div class="main-cell">
-						<a href="../demo/AD_admin_ldap_configuration.php"><span>Ldap configuration</span></a>
+						<a href="demo/AD_admin_ldap_configuration.php"><span>Ldap configuration</span></a>
 					</div>
 				</div>
 			</div>
@@ -32,7 +32,7 @@
             <div class="row">
                 <div class="main-cell-wrapper">
                     <div class="main-cell">
-                        <a href="../demo/AD_admin_ldap_reports.php"><span>Ldap reports</span></a>
+                        <a href="demo/AD_admin_ldap_reports.php"><span>Ldap reports</span></a>
                     </div>
                 </div>
             </div>

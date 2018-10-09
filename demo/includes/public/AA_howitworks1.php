@@ -3,7 +3,7 @@
 	<div class="grid grid-responsive-12">
 		<div class="row">
 			<div class="col12">
-				<img src="../src/img/diagrams/howitworks.svg" alt="diagram showing how it works"/>
+				<img src="src/img/diagrams/howitworks.svg" alt="diagram showing how it works"/>
 				<div class="visuallyhidden">
 					<ol>
 						<li>Ada has a password to share with betty</li>

@@ -3,7 +3,7 @@
 <head>
 	<title>Register</title>
 	<?php include('includes/meta/AN_meta.php'); ?>
-	<link rel="stylesheet" type="text/css" href="css/themes/default/api_login.css" />
+	<link rel="stylesheet" type="text/css" href="src/css/themes/default/api_login.css" />
 <body>
 <div id="container" class="register page">
 	<?php include('includes/ALL_top_warning_messages.php'); ?>
@@ -43,7 +43,7 @@
 						</fieldset>
                         <div class="submit-wrapper clearfix">
                             <input class="button primary big" value="register" data-view-id="423" type="submit">
-                            <a href="../demo/AN_login.php" class="secondary">already a member?</a>
+                            <a href="demo/AN_login.php" class="secondary">already a member?</a>
                         </div>
 					</form>
 				</div>

@@ -51,7 +51,7 @@
                             <div class="author profile picture"><a href="#">
                                     <img data-view-id="367"
                                                                                  alt="Ada Lovelace avatar"
-                                                                                 src="img/avatar/user.png"></a>
+                                                                                 src="src/img/avatar/user.png"></a>
                             </div>
                         </div>
                     </form>
@@ -90,7 +90,7 @@
                     <div class="left-column">
                         <div class="author profile picture">
                             <a href="#">
-                                <img data-view-id="373" alt="comment author picture" src="img/avatar/user.png">
+                                <img data-view-id="373" alt="comment author picture" src="src/img/avatar/user.png">
                             </a>
                         </div>
                     </div>
@@ -122,7 +122,7 @@
                     <div class="left-column">
                         <div class="author profile picture">
                             <a href="#">
-                                <img data-view-id="373" alt="comment author picture" src="img/avatar/user.png">
+                                <img data-view-id="373" alt="comment author picture" src="src/img/avatar/user.png">
                             </a>
                         </div>
                     </div>

@@ -2,13 +2,13 @@
     <div class="dialog">
         <div class="dialog-header">
             <h2>Create Password</h2>
-            <a href="../demo/LU_passwords.php" class="dialog-close">
+            <a href="demo/LU_passwords.php" class="dialog-close">
                 <i class="fa fa-fw fa-close"></i>
                 <span class="visuallyhidden">close</span>
             </a>
         </div>
         <div class="js_dialog_content dialog-content">
-            <form action='../demo/LU_passwords.php' class="passbolt_form_resource_create form mad_view_form ready" id="3997083d-e933-b5b6-9de3-58727f931817">
+            <form action='demo/LU_passwords.php' class="passbolt_form_resource_create form mad_view_form ready" id="3997083d-e933-b5b6-9de3-58727f931817">
                 <div class="form-content">
 
                     <input value="" name="passbolt.model.Resource.Category.id" id="js_field_category_id" class="form_field mad_form_textbox form-element mad_view_form_textbox ready" type="hidden">
@@ -41,7 +41,7 @@
                             <textarea name="passbolt.model.Secret.data" id="js_field_secret_data_0" class="form_field hidden js_field_secret_data" data-view-id="421"></textarea>
                         </div>
 
-                        <iframe src="../demo/LU_iframe_passwordinput.php" id="passbolt-iframe-secret-edition" frameborder="0"></iframe>
+                        <iframe src="demo/LU_iframe_passwordinput.php" id="passbolt-iframe-secret-edition" frameborder="0"></iframe>
 
                     </div>
                     <div class="input textarea js_form_element_wrapper">
@@ -53,7 +53,7 @@
                 </div>
                 <div class="submit-wrapper clearfix">
                     <input class="button primary" value="save" data-view-id="423" type="submit">
-                    <a href="../demo/LU_passwords.php" class="js-dialog-cancel cancel">cancel</a>
+                    <a href="demo/LU_passwords.php" class="js-dialog-cancel cancel">cancel</a>
                 </div>
             </form>
         </div>

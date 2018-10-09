@@ -29,7 +29,7 @@
 						<div class="panel middle no_passwords">
 							<?php
 							$_GET['breadcrumbs'] = array(
-								'all passwords' => '../demo/LU_passwords.php',
+								'all passwords' => 'demo/LU_passwords.php',
 								'Favorite' => ''
 							);
 							$emptyGridSettings = [

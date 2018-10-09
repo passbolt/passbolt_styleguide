@@ -59,8 +59,8 @@
 				</div>
 				<div class="row last">
 					<div id="js_step_actions" class="submit-input-wrapper">
-						<a class="button primary big js-state-enabled enabled" href="../demo/AN_setup1a1_plugincheckok.php" id="js_setup_cancel_step">Cancel</a>
-						<a class="button primary big js-state-disabled disabled" href="../demo/AN_setup3b1_importedkeywarn.php" id="js_setup_submit_step">Next</a>
+						<a class="button primary big js-state-enabled enabled" href="demo/AN_setup1a1_plugincheckok.php" id="js_setup_cancel_step">Cancel</a>
+						<a class="button primary big js-state-disabled disabled" href="demo/AN_setup3b1_importedkeywarn.php" id="js_setup_submit_step">Next</a>
 					</div>
 				</div>
 			</div>

@@ -6,7 +6,7 @@
 					 class="passbolt_controller_component_password_workspace_menu_controller mad_view_view tab-content selected selection">
 				<li>
 					<a id="js_wk_menu_edition_button" class="button mad_controller_component_button_controller mad_view_view js_component"
-						 href="../demo/LU_users_profile_edit.php">
+						 href="demo/LU_users_profile_edit.php">
 						<i class="fa fa-fw fa-edit"></i>
 						<span>edit</span>
 					</a>

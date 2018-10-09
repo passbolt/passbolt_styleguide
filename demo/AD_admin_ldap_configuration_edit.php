@@ -44,9 +44,9 @@
 						<div class="panel middle">
 							<?php
 							$_GET['breadcrumbs'] = array(
-								'administration' => '../demo/LU_users.php',
-								'ldap' => '../demo/LU_users_profile.php',
-								'configuration' => '../demo/LU_users_profile_loginhistory.php'
+								'administration' => 'demo/LU_users.php',
+								'ldap' => 'demo/LU_users_profile.php',
+								'configuration' => 'demo/LU_users_profile_loginhistory.php'
 							);
 							include('includes/LU_breadcrumbs.php'); ?>
 							<div id="js_wk_preference_main"
@@ -61,12 +61,14 @@
 													<h3>Credentials</h3>
 													<div class="radiolist">
 														<label>Directory type</label>
-														<div class="input radio">
-															<input name="data[User][field]" value="1" id="UserField1" type="radio" checked="checked">
-															<label for="UserField1">Active Directory</label>
-															<input name="data[User][field]" value="2" id="UserField2" type="radio">
-															<label for="UserField2">Open Ldap</label>
-														</div>
+                                                        <div class="input radio">
+                                                            <input name="data[User][field]" value="1" id="UserField1" type="radio" checked="checked">
+                                                            <label for="UserField1">Active Directory</label>
+                                                        </div>
+                                                        <div class="input radio">
+                                                            <input name="data[User][field]" value="2" id="UserField2" type="radio">
+                                                            <label for="UserField2">Open Ldap</label>
+                                                        </div>
 													</div>
 													<div class="input text">
 														<label>Domain</label>

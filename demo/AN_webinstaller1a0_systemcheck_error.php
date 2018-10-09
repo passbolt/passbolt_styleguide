@@ -54,7 +54,7 @@
 						<div class="message warning">This web page is not served with HTTPS. It is strongly recommended that you configure your web server with HTTPS before you continue.</div>
 
 						<div class="submit-input-wrapper">
-							<a href="../demo/AN_webinstaller1a1_systemcheck_success.php" class="button primary big">retry</a>
+							<a href="demo/AN_webinstaller1a1_systemcheck_success.php" class="button primary big">retry</a>
 						</div>
 					</div>
 					<div class="col5 last">

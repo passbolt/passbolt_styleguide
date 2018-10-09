@@ -22,7 +22,7 @@
 			<div class="navigation wizard">
 				<ul>
 					<li class="selected">
-						<a href="../demo/AN_setup1a0_plugincheckfail.php">1. Get the plugin</a>
+						<a href="demo/AN_setup1a0_plugincheckfail.php">1. Get the plugin</a>
 					</li>
 					<li class="disabled">
 						2. Define your keys
@@ -63,7 +63,7 @@
 								<div class="input text disabled">
 									<label for="js_setup_domain">Server Key</label>
 									<input name="key_fingerprint" id="js_setup_key_fingerprint" type="text" value="292F8400D09A70DC" disabled="disabled"/>
-									<a href="../demo/AN_setup1a1_plugincheckok_keyinformation.php" class="more" id="js_server_key_info">More</a>
+									<a href="demo/AN_setup1a1_plugincheckok_keyinformation.php" class="more" id="js_server_key_info">More</a>
 								</div>
 								<div class="input checkbox">
 									<input type="checkbox" id="checkbox1" value="legit"/>
@@ -71,7 +71,7 @@
 								</div>
 
 								<div class="submit-input-wrapper">
-									<a href="../demo/AN_setup2a0_createnewkey.php" class="button primary big disabled">next</a>
+									<a href="demo/AN_setup2a0_createnewkey.php" class="button primary big disabled">next</a>
 								</div>
 							</form>
 						</div>

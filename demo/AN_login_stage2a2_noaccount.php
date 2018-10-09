@@ -8,7 +8,7 @@
 <head>
     <title>Login | Passbolt</title>
     <?php include('includes/meta/AN_meta.php'); ?>
-    <link rel="stylesheet" type="text/css" href="css/themes/default/api_login.css" />
+    <link rel="stylesheet" type="text/css" href="src/css/themes/default/api_login.css" />
 <body>
 <div id="container" class="login page">
     <?php include('includes/ALL_top_warning_messages.php'); ?>
@@ -38,8 +38,8 @@
 		                <p>The account configured doesn't exist.</p>
 	                </div>
                     <div class="actions-wrapper center">
-                        <a class="button primary big" href="../demo/AN_login_stage0.php">register again</a><br><br>
-	                    <a href="../demo/AN_recover.php">or recover an existing account</a>
+                        <a class="button primary big" href="demo/AN_login_stage0.php">register again</a><br><br>
+	                    <a href="demo/AN_recover.php">or recover an existing account</a>
                     </div>
                 </div>
             </div>

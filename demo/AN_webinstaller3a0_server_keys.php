@@ -12,7 +12,7 @@
 	<div class="header second">
 		<?php include('includes/AN_logo.php'); ?>
 		<div class="col2_3">
-			<h2>Create a new server key or <a href="../demo/AN_webinstaller3a1_server_keys_import.php" class="button primary">import</a> an existing one</h2>
+			<h2>Create a new server key or <a href="demo/AN_webinstaller3a1_server_keys_import.php" class="button primary">import</a> an existing one</h2>
 		</div>
 	</div>
 
@@ -81,8 +81,8 @@
 
 							<div class="row last">
 								<div class="input-wrapper">
-									<a href="../demo/AN_webinstaller2a0_database.php" class="button cancel big">cancel</a>
-									<a href="../demo/AN_webinstaller4a0_emails.php" class="button primary next big">next</a>
+									<a href="demo/AN_webinstaller2a0_database.php" class="button cancel big">cancel</a>
+									<a href="demo/AN_webinstaller4a0_emails.php" class="button primary next big">next</a>
 								</div>
 							</div>
 

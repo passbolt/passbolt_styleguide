@@ -11,6 +11,6 @@
 	</div>
 </div>
 <?php include('includes/LU_footer.php'); ?>
-<iframe class="passbolt-plugin-dialog" src="../demo/LU_iframe_masterkey.php" id="passbolt-iframe-master-password" frameborder="0"></iframe>
+<iframe class="passbolt-plugin-dialog" src="demo/LU_iframe_masterkey.php" id="passbolt-iframe-master-password" frameborder="0"></iframe>
 </body>
 </html>

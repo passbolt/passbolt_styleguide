@@ -60,7 +60,7 @@
 							</p>
 						</div>
 						<div class="submit-input-wrapper">
-							<a href="../demo/AN_setup1a1_plugincheckok.php" class="button primary big">retry</a>
+							<a href="demo/AN_setup1a1_plugincheckok.php" class="button primary big">retry</a>
 						</div>
 					</div>
 					<div class="col5 last">

@@ -23,7 +23,7 @@
 			<div class="navigation wizard">
 				<ul>
 					<li class="selected">
-						<a href="../demo/AN_setup1a0_plugincheckfail.php">1. Get the plugin</a>
+						<a href="demo/AN_setup1a0_plugincheckfail.php">1. Get the plugin</a>
 					</li>
 					<li class="disabled">
 						2. Define your keys
@@ -72,7 +72,7 @@
 								</div>
 
 								<div class="submit-input-wrapper">
-									<a href="../demo/AN_setup2a0_createnewkey.php" class="button primary big disabled">next</a>
+									<a href="demo/AN_setup2a0_createnewkey.php" class="button primary big disabled">next</a>
 								</div>
 							</form>
 						</div>

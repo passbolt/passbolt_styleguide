@@ -2,7 +2,7 @@
 <html class=" js websqldatabase draganddrop cssscrollbar" lang="en">
 <head>
 	<?php include('includes/meta/LU_meta.php'); ?>
-	<script src="js/jquery-filestyle.js"></script>
+	<script src="src/js/jquery-filestyle.js"></script>
 </head>
 <body>
 <div id="container" class="page password">

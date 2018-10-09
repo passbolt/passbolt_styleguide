@@ -31,7 +31,7 @@
 						<div class="panel middle">
 							<?php
 							$_GET['breadcrumbs'] = array(
-								'all passwords' => '../demo/LU_passwords.php'
+								'all passwords' => 'demo/LU_passwords.php'
 							);
 							include('includes/LU_breadcrumbs.php'); ?>
 							<?php include('includes/tableviews/LU_tableview_passwords.php'); ?>

@@ -22,13 +22,13 @@
 			<div class="navigation wizard">
 				<ul>
 					<li class="">
-						<a href="../demo/AN_setup1a0_plugincheckfail.php">1. Get the plugin</a>
+						<a href="demo/AN_setup1a0_plugincheckfail.php">1. Get the plugin</a>
 					</li>
 					<li class="">
-						<a href="../demo/AN_setup2a0_createnewkey.php">2. Define your keys</a>
+						<a href="demo/AN_setup2a0_createnewkey.php">2. Define your keys</a>
 					</li>
 					<li class="selected">
-						<a href="../demo/AN_setup3a0_setmasterpassword.php">3. Set a passphrase</a>
+						<a href="demo/AN_setup3a0_setmasterpassword.php">3. Set a passphrase</a>
 					</li>
 					<li class="disabled">
 						4. Set a security token
@@ -63,8 +63,8 @@
 
 					<div class="row last">
 						<div class="input-wrapper">
-<!--							<a href="../demo/AN_setup3a0_setmasterpassword.php" class="button cancel big">cancel</a>-->
-							<a href="../demo/AN_setup4a0_securitytoken.php" class="button primary next big processing">next</a>
+<!--							<a href="demo/AN_setup3a0_setmasterpassword.php" class="button cancel big">cancel</a>-->
+							<a href="demo/AN_setup4a0_securitytoken.php" class="button primary next big processing">next</a>
 						</div>
 					</div>
 

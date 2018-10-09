@@ -2,7 +2,7 @@
 	<div class="dialog import">
 		<div class="dialog-header">
 			<h2>Something went wrong!</h2>
-			<a href="../demo/LU_passwords.php" class="dialog-close">
+			<a href="demo/LU_passwords.php" class="dialog-close">
 				<i class="fa fa-close"></i><span class="visuallyhidden">close</span>
 			</a>
 
@@ -10,7 +10,7 @@
 		<div class="js_dialog_content dialog-content">
 
 			<form
-				action="../demo/LU_passwords.php"
+				action="demo/LU_passwords.php"
 				class="tab-content ready selected"
 				id="js_rs_import">
 				<div class="form-content">
@@ -33,7 +33,7 @@
                     </div>
 				</div>
 				<div class="submit-wrapper clearfix">
-					<input class="button primary" value="Ok" type="submit" onclick="javascript:window.location.href='../demo/LU_passwords.php'; return false;">
+					<input class="button primary" value="Ok" type="submit" onclick="javascript:window.location.href='demo/LU_passwords.php'; return false;">
 				</div>
 			</form>
 		</div>

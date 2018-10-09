@@ -14,9 +14,6 @@
 <div id="container" class="page settings login-history">
 	<div class="mad_event_event_bus"></div>
 	<div id="js_app_controller" class="passbolt_controller_app_controller mad_view_view js_component ready">
-		<!-- LU_passwords -->
-
-
 		<?php
 		$role='admin';
 		include('includes/headers/LU_header_first.php');
@@ -44,9 +41,9 @@
 						<div class="panel middle">
 							<?php
 							$_GET['breadcrumbs'] = array(
-								'administration' => '../demo/LU_users.php',
-								'ldap' => '../demo/LU_users_profile.php',
-								'configuration' => '../demo/LU_users_profile_loginhistory.php'
+								'administration' => 'demo/LU_users.php',
+								'ldap' => 'demo/LU_users_profile.php',
+								'configuration' => 'demo/LU_users_profile_loginhistory.php'
 							);
 							include('includes/LU_breadcrumbs.php'); ?>
 							<div id="js_wk_preference_main"
@@ -56,7 +53,6 @@
 											 class="passbolt_controller_component_profile_controller mad_view_view tab-content ready selected">
 										<div class="grid grid-responsive-12">
 											<div class="row">
-
 												<div class="ldap-configuration-credentials col8">
 													<h3>Credentials</h3>
 													<div class="radiolist">
@@ -196,10 +192,7 @@
 														<span>Read documentation</span>
 													</a>
 												</div>
-
 											</div>
-
-
 										</div>
 									</div>
 								</div>

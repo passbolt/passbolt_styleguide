@@ -5,7 +5,7 @@
     <title>Passbolt | The open source password manager for teams</title>
     <?php include('includes/meta/AA_meta.php'); ?>
 	<?php include('includes/headers/AA_header_scripts.php'); ?>
-    <script src="js/chosen.jquery.js"></script>
+    <script src="src/js/chosen.jquery.js"></script>
     <script src="https://js.stripe.com/v3/"></script>
     <script type="application/javascript">
         $(function() {

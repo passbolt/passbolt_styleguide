@@ -1,3 +1,3 @@
-<link rel="stylesheet" type="text/css" href="css/public.css" />
-<script src="js/jquery-3.3.1.min.js"></script>
-<script src="js/greedynav.js"></script>
+<link rel="stylesheet" type="text/css" href="src/css/public.css" />
+<script src="src/js/jquery-3.3.1.min.js"></script>
+<script src="src/js/greedynav.js"></script>

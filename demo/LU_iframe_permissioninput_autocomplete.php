@@ -2,7 +2,7 @@
 <html>
 <head>
 	<?php include('includes/meta/LU_meta_iframe.php'); ?>
-	<script type="text/javascript" src="js/jquery-3.3.1.min.js"></script>
+	<script type="text/javascript" src="src/js/jquery-3.3.1.min.js"></script>
 	<script type="application/javascript">
 		$(document).ready(function () {
 			$(window).one('click', function (ev) {
@@ -40,7 +40,7 @@
 					<div class="main-cell">
 						<a href="#">
 							<div class="avatar">
-								<img src="img/avatar/user.png"/>
+								<img src="src/img//avatar/user.png"/>
 							</div>
 							<div class="user">
 								<span class="name">Frances Allen (57DE7D79)</span>
@@ -57,7 +57,7 @@
 					<div class="main-cell">
 						<a href="#">
 							<div class="avatar">
-								<img src="img/avatar/user.png"/>
+								<img src="src/img//avatar/user.png"/>
 							</div>
 							<div class="user">
 								<span class="name">Kathleen Antonelli (12345678)</span>
@@ -74,7 +74,7 @@
 					<div class="main-cell">
 						<a href="#">
 							<div class="avatar">
-								<img src="img/avatar/group_default.png"/>
+								<img src="src/img//avatar/group_default.png"/>
 							</div>
 							<div class="user">
 								<span class="name">IT Support</span>
@@ -91,7 +91,7 @@
 					<div class="main-cell">
 						<a href="#">
 							<div class="avatar">
-								<img src="img/avatar/user.png"/>
+								<img src="src/img//avatar/user.png"/>
 							</div>
 							<div class="user">
 								<span class="name">Edith Clarke (12345678)</span>
@@ -108,7 +108,7 @@
 					<div class="main-cell">
 						<a href="#">
 							<div class="avatar">
-								<img src="img/avatar/user.png"/>
+								<img src="src/img//avatar/user.png"/>
 							</div>
 							<div class="user">
 								<span class="name">Irène Greif (87654321)</span>
@@ -125,7 +125,7 @@
 		<!--				<div class="main-cell">-->
 		<!--					<a href="#">-->
 		<!--						<div class="avatar">-->
-		<!--							<img src="img/avatar/user.png"/>-->
+		<!--							<img src="src/img//avatar/user.png"/>-->
 		<!--						</div>-->
 		<!--						<div class="user">-->
 		<!--							<span class="name">Betty Holberton</span>-->
@@ -142,7 +142,7 @@
 		<!--				<div class="main-cell">-->
 		<!--					<a href="#">-->
 		<!--						<div class="avatar">-->
-		<!--							<img src="img/avatar/user.png"/>-->
+		<!--							<img src="src/img//avatar/user.png"/>-->
 		<!--						</div>-->
 		<!--						<div class="user">-->
 		<!--							<span class="name">Grace Hopper</span>-->

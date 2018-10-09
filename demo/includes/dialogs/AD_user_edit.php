@@ -5,7 +5,7 @@
                 Edit User
                 <span class="dialog-header-subtitle">Ada Lovelace</span>
             </h2>
-            <a class="dialog-close" href="../demo/AD_users.php">
+            <a class="dialog-close" href="demo/AD_users.php">
                 <i class="fa fa-close"></i>
                 <span class="visuallyhidden">close</span>
             </a>
@@ -16,7 +16,7 @@
                     <div class="row">
                         <div class="main-cell-wrapper">
                             <div class="main-cell">
-                                <a class="selected" href="../demo/AD_users_edit_user.php"><span>Account</span></a>
+                                <a class="selected" href="demo/AD_users_edit_user.php"><span>Account</span></a>
                             </div>
                         </div>
                     </div>
@@ -25,7 +25,7 @@
                     <div class="row selected">
                         <div class="main-cell-wrapper">
                             <div class="main-cell">
-                                <a class="" href="../demo/AD_users_edit_user_group.php"><span>Groups</span></a>
+                                <a class="" href="demo/AD_users_edit_user_group.php"><span>Groups</span></a>
                             </div>
                         </div>
                     </div>
@@ -64,8 +64,8 @@
                     </div>
                 </div>
                 <div class="submit-wrapper clearfix">
-                    <a class="button primary" href="../demo/AD_users.php">save</a>
-                    <a class="js-dialog-cancel cancel" href="../demo/AD_users.php">cancel</a>
+                    <a class="button primary" href="demo/AD_users.php">save</a>
+                    <a class="js-dialog-cancel cancel" href="demo/AD_users.php">cancel</a>
                 </div>
             </form>
         </div>

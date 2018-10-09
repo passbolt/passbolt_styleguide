@@ -8,7 +8,7 @@
 <head>
     <title>Login | Passbolt</title>
     <?php include('includes/meta/AN_meta.php'); ?>
-    <link rel="stylesheet" type="text/css" href="css/themes/default/api_login.css" />
+    <link rel="stylesheet" type="text/css" href="src/css/themes/default/api_login.css" />
 <body>
 <div id="container" class="login page">
     <?php include('includes/ALL_top_warning_messages.php'); ?>
@@ -41,7 +41,7 @@
                         <p>Your login session expired.</p>
                     </div>
                     <div class="actions-wrapper center">
-                        <a class="button primary big" href="../demo/AN_login_stage0.php">retry</a>
+                        <a class="button primary big" href="demo/AN_login_stage0.php">retry</a>
                     </div>
                 </div>
             </div>

@@ -8,7 +8,7 @@
 <head>
 	<title>Login</title>
 	<?php include('includes/meta/AN_meta.php'); ?>
-	<link rel="stylesheet" type="text/css" href="css/themes/default/api_login.css" />
+	<link rel="stylesheet" type="text/css" href="src/css/themes/default/api_login.css" />
 <body>
 <div id="container" class="login page">
 <?php include('includes/ALL_top_warning_messages.php'); ?>
@@ -27,7 +27,7 @@
 						</p>
 					</div>
 				</div>
-				<p>You can <a href="../demo/AN_register.php">register again</a> for this domain, or <a href="../demo/AN_recover.php">recover an existing account</a>
+				<p>You can <a href="demo/AN_register.php">register again</a> for this domain, or <a href="demo/AN_recover.php">recover an existing account</a>
 					but you will lose your account on the existing domain. Proceed with caution.</p>
 			</div>
 			<div class="col4 push1 last">
@@ -38,8 +38,8 @@
 						<p>Firefox plugin is not configured to work with this domain</p>
 					</div>
 					<div class="actions-wrapper center">
-						<a class="button primary big" href="../demo/AN_login_stage0.php">Register for this domain</a><br><br>
-						<a href="../demo/AN_recover.php">or recover an existing account</a>
+						<a class="button primary big" href="demo/AN_login_stage0.php">Register for this domain</a><br><br>
+						<a href="demo/AN_recover.php">or recover an existing account</a>
 					</div>
 				</div>
 			</div>

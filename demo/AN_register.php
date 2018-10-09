@@ -3,7 +3,7 @@
 <head>
 	<title>Register</title>
 	<?php include('includes/meta/AN_meta.php'); ?>
-	<link rel="stylesheet" type="text/css" href="css/themes/default/api_login.css" />
+	<link rel="stylesheet" type="text/css" href="src/css/themes/default/api_login.css" />
 <body>
 <div id="container" class="register page">
 	<?php include('includes/ALL_top_warning_messages.php'); ?>
@@ -37,10 +37,14 @@
 								<input name="data[User][lastname]" class="required fluid" maxlength="50" type="text" id="UserLastname" required="required"/></div>
 							<div class="input text required"><label for="UserUsername">Email</label>
 								<input name="data[User][username]" class="required fluid" maxlength="50" type="text" id="UserUsername" required="required"/></div>
-						</fieldset>
+                            <p>
+                                <input type="checkbox" name="disclaimer" id="disclaimer" value="value" required="required">
+                                <label for="disclaimer" style="font-size:.9em">I understand the disclaimer. I agree with the Terms of Service and Privacy Policy.</label>
+                            </p>
+                        </fieldset>
                         <div class="submit-wrapper clearfix">
                             <input class="button primary big" value="register" data-view-id="423" type="submit">
-                            <a href="../demo/AN_login.php" class="secondary">already a member?</a>
+                            <a href="demo/AN_login.php" class="secondary">already a member?</a>
                         </div>
 					</form>
 				</div>

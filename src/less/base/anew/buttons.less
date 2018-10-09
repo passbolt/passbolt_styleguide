@@ -128,3 +128,22 @@
     background: @button-disabled-background;
     border: 1px solid @button-disabled-border;
 }
+
+
+/* processing state */
+.button.processing {
+    background: @background-default;
+    border: 1px solid @background-default;
+}
+.button.processing:after {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    content: " ";
+    top: -1px;
+    left: -1px;
+    background: @background-default @loading center center no-repeat;
+    background-size: auto 50% ;
+    border: 1px solid @border-default;
+    .rounded();
+}

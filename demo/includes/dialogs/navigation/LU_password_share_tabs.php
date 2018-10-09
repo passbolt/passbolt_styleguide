@@ -3,7 +3,7 @@
         <div class="row">
             <div class="main-cell-wrapper">
                 <div class="main-cell">
-                    <a class="" href="../demo/LU_passwords_edit.php"><span>Edit</span></a>
+                    <a class="" href="demo/LU_passwords_edit.php"><span>Edit</span></a>
                 </div>
             </div>
         </div>
@@ -11,7 +11,7 @@
         <div class="row selected">
             <div class="main-cell-wrapper">
                 <div class="main-cell">
-                    <a class="selected" href="../demo/LU_passwords_share.php"><span>Share</span></a>
+                    <a class="selected" href="demo/LU_passwords_share.php"><span>Share</span></a>
                 </div>
             </div>
         </div>

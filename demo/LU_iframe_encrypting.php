@@ -30,7 +30,7 @@
 
 			</div>
 			<div class="submit-wrapper clearfix">
-				<a href="../demo/LU_passwords.php" class="button primary processing" id="progress-waiting">Close</a>
+				<a href="demo/LU_passwords.php" class="button primary processing" id="progress-waiting">Close</a>
 			</div>
 		</div>
 	</div>

@@ -2,13 +2,13 @@
 	<div class="dialog import">
 		<div class="dialog-header">
 			<h2>Import passwords</h2>
-			<a href="../demo/LU_passwords.php" class="dialog-close">
+			<a href="demo/LU_passwords.php" class="dialog-close">
 				<i class="fa fa-close"></i><span class="visuallyhidden">close</span>
 			</a>
 
 		</div>
 		<div class="dialog-content">
-			<form action="../demo/LU_passwords.php" id="js_rs_import">
+			<form action="demo/LU_passwords.php" id="js_rs_import">
 				<div class="form-content">
 					<div class="input text required error">
 						<label>
@@ -32,8 +32,8 @@
 
 				</div>
 				<div class="submit-wrapper clearfix">
-					<input class="button primary" value="Import" type="submit" onclick="javascript:window.location.href='../demo/LU_passwords_import_options.php'; return false;">
-					<a href="../demo/LU_passwords.php" class="js-dialog-cancel cancel">cancel</a>
+					<input class="button primary" value="Import" type="submit" onclick="javascript:window.location.href='demo/LU_passwords_import_options.php'; return false;">
+					<a href="demo/LU_passwords.php" class="js-dialog-cancel cancel">cancel</a>
 				</div>
 			</form>
 		</div>

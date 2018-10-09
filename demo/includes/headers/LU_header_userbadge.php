@@ -8,7 +8,7 @@
 			</div>
 		</div>
 		<div class="picture left-cell">
-			<img src="img/avatar/user.png" alt="your picture">
+			<img src="src/img/avatar/user.png" alt="your picture">
 		</div>
 		<div class="more right-cell">
 			<a href="#"><span>more</span></a>
@@ -19,7 +19,7 @@
 				<div class="row">
 					<div class="main-cell-wrapper">
 						<div class="main-cell">
-							<a href="../demo/LU_users_profile.php"><span>my profile</span></a>
+							<a href="demo/LU_users_profile.php"><span>my profile</span></a>
 						</div>
 					</div>
 				</div>

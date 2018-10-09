@@ -9,8 +9,8 @@
 	<div id="js_app_controller" class="passbolt_controller_app_controller mad_view_view js_component ready">
         <?php include('includes/workspace/LU_passwords_workspace.php'); ?>
 	</div>
+    <iframe frameborder="0" id="passbolt-iframe-progress-dialog" src="demo/LU_iframe_encrypting.php" class="passbolt-plugin-dialog"></iframe>
 </div>
 <?php include('includes/LU_footer.php'); ?>
-<iframe frameborder="0" id="passbolt-iframe-progress-dialog" src="../demo/LU_iframe_encrypting.php" class="passbolt-plugin-dialog"></iframe>
 </body>
 </html>

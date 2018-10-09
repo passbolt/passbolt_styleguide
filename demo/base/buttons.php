@@ -21,7 +21,7 @@
 		<a href="#" class="button big disabled">.big.disabled</a>
 		<a href="#" class="button primary big">.primary.big</a>
 		<a href="#" class="button primary processing big">.primary.big.processing</a>
-		<a href="#" class="button primary disabled">.primary.disabled</a>
+		<a href="#" class="button big primary disabled">.primary.disabled</a>
 	</div>
 	<h2>Icons with font</h2>
 	<div>
@@ -45,6 +45,20 @@
 			<span class="visuallyhidden">generate</span>
 		</a>
 	</div>
+    <h2>Icons with SVG</h2>
+    <div>
+        <input type="submit" class="button big primary" value="input"/>
+        <input type="button" class="button big primary" value="input2"/>
+        <button class="button big primary">button</button>
+        <a role="button" class="button big primary">button</a>
+    </div>
+    <h2>Icons with SVG</h2>
+    <div>
+        <input type="submit" class="button primary" value="input"/>
+        <input type="button" class="button primary" value="input2"/>
+        <button class="button cancel processing">button</button>
+        <a role="button" class="button cancel loading">button</a>
+    </div>
 </div>
 </body>
 </html>

@@ -2,9 +2,9 @@
 <html lang="en" class="version alpha">
 <head>
 	<?php include('includes/meta/AN_meta_setup.php'); ?>
-	<script type="text/javascript" src="js/jquery-3.3.1.min.js"></script>
-	<script type="text/javascript" src="js/farbtastic.js"></script>
-	<script type="text/javascript" src="js/colorpicker.js"></script>
+	<script type="text/javascript" src="src/js/jquery-3.3.1.min.js"></script>
+	<script type="text/javascript" src="src/js/farbtastic.js"></script>
+	<script type="text/javascript" src="src/js/colorpicker.js"></script>
 </head>
 <body>
 <div id="container" class="page setup">
@@ -25,13 +25,13 @@
 			<div class="navigation wizard">
 				<ul>
 					<li class="">
-						<a href="../demo/AN_recover1a1_plugincheckok.php">1. Security checks</a>
+						<a href="demo/AN_recover1a1_plugincheckok.php">1. Security checks</a>
 					</li>
 					<li class="">
-						<a href="../demo/AN_recover2b0_importkey.php">2. Import your key</a>
+						<a href="demo/AN_recover2b0_importkey.php">2. Import your key</a>
 					</li>
 					<li class="selected">
-						<a href="../demo/AN_recover4a0_securitytoken.php">4. Set a new security token</a>
+						<a href="demo/AN_recover4a0_securitytoken.php">4. Set a new security token</a>
 					</li>
 					<li class="disabled">
 						5. Login!
@@ -77,8 +77,8 @@
 
 					<div class="row last">
 						<div class="input-wrapper">
-							<a href="../demo/AN_recover2b0_importkey.php" class="button cancel big">cancel</a>
-							<a href="../demo/AN_recover5a0_login.php" class="button primary next big">next</a>
+							<a href="demo/AN_recover2b0_importkey.php" class="button cancel big">cancel</a>
+							<a href="demo/AN_recover5a0_login.php" class="button primary next big">next</a>
 						</div>
 					</div>
 

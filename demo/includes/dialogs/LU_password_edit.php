@@ -3,7 +3,7 @@
 	<div class="dialog">
 		<div class="dialog-header">
 			<h2>Edit<span class="dialog-header-subtitle">shared resource</span></h2>
-			<a href="../demo/LU_passwords.php" class="dialog-close">
+			<a href="demo/LU_passwords.php" class="dialog-close">
 				<i class="fa fa-close"></i><span class="visuallyhidden">close</span>
 			</a>
 
@@ -16,7 +16,7 @@
 						<div class="row">
 							<div class="main-cell-wrapper">
 								<div class="main-cell">
-									<a class="selected" href="../demo/LU_passwords_edit.php"><span>Edit</span></a>
+									<a class="selected" href="demo/LU_passwords_edit.php"><span>Edit</span></a>
 								</div>
 							</div>
 						</div>
@@ -24,7 +24,7 @@
 						<div class="row selected">
 							<div class="main-cell-wrapper">
 								<div class="main-cell">
-									<a class="" href="../demo/LU_passwords_share.php"><span>Share</span></a>
+									<a class="" href="demo/LU_passwords_share.php"><span>Share</span></a>
 								</div>
 							</div>
 						</div>
@@ -32,7 +32,7 @@
 				</ul>
 				<div class="js_tabs_content tabs-content">
 					<form
-						action="../demo/LU_passwords.php"
+						action="demo/LU_passwords.php"
 						class="passbolt_controller_form_resource_create_form_controller mad_view_form_form_view tab-content ready selected"
 						id="js_rs_edit">
 						<div class="form-content">
@@ -92,7 +92,7 @@
 											<textarea name="passbolt.model.Secret.data" id="js_field_secret_data_0"
 																class="form_field hidden js_field_secret_data mad_form_element_textbox_controller mad_view_form_element_textbox_view js_component ready"></textarea>
 								</div>
-								<iframe src="../demo/LU_iframe_passwordinput.php?complexity=<?php echo isset($password_complexity) ? $password_complexity : 'fair' ?><?php echo isset($password) ? "&password=$password" : '' ?><?php echo isset($js_field_password_class) ? "&js_field_password_class=$js_field_password_class" : '' ?>" id="passbolt-iframe-secret-edition"
+								<iframe src="demo/LU_iframe_passwordinput.php?complexity=<?php echo isset($password_complexity) ? $password_complexity : 'fair' ?><?php echo isset($password) ? "&password=$password" : '' ?><?php echo isset($js_field_password_class) ? "&js_field_password_class=$js_field_password_class" : '' ?>" id="passbolt-iframe-secret-edition"
 												frameborder="0"></iframe>
 							</div>
 							<div class="input textarea js_form_element_wrapper">
@@ -108,7 +108,7 @@
 						</div>
 						<div class="submit-wrapper clearfix">
 							<input class="button primary" value="save" type="submit">
-							<a href="../demo/LU_passwords.php" class="js-dialog-cancel cancel">cancel</a>
+							<a href="demo/LU_passwords.php" class="js-dialog-cancel cancel">cancel</a>
 						</div>
 					</form>
 				</div>

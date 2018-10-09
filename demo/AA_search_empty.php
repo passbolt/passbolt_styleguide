@@ -3,9 +3,8 @@
 <head>
     <meta charset="utf-8">
     <title>Frequently Asked Questions | Passbolt</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="shortcut icon" type="image/x-icon" href="img/webroot/favicon.ico" />
-    <link rel="stylesheet" type="text/css" href="../src/css/help.css">
+    <?php include('includes/meta/AA_meta.php'); ?>
+    <link rel="stylesheet" type="text/css" href="src/css/help.css">
 </head>
 <body>
 <div id="container" class="page help search background">

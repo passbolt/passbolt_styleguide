@@ -15,7 +15,9 @@
 	-->
 	<title>Passbolt config</title>
 	<meta name="viewport" content="width=device-width">
-	<link rel="stylesheet" media="all" href="../src/css/themes/default/ext_config_debug.css"/>
+    <?php if (!isset($base)) { $base = '../'; } ?>
+    <base href="<?= $base; ?>">
+	<link rel="stylesheet" media="all" href="src/css/themes/default/ext_config_debug.css"/>
 </head>
 <body>
 <div id="container" class="config page debug plugin">
@@ -34,7 +36,7 @@
 	<div class="header second">
 		<div class="col1">
 			<div class="logo">
-				<img src="../src/img/logo/logo.png" alt="passbolt">
+				<img src="src/img/logo/logo.png" alt="passbolt">
 				<h1><span>Passbolt</span></h1>
 			</div>
 		</div>

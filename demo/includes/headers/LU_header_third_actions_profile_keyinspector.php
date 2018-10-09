@@ -6,7 +6,7 @@
 					 class="passbolt_controller_component_password_workspace_menu_controller mad_view_view tab-content selected selection">
 				<li>
 					<a id="js_wk_menu_edition_button" class="button mad_controller_component_button_controller mad_view_view js_component disabled"
-						 href="../demo/LU_users_profile_edit.php"
+						 href="demo/LU_users_profile_edit.php"
 						 data-tooltip="sorry it is not possible to add another key at the moment"
 						>
 						<i class="fa fa-fw fa-plus-circle"></i>
@@ -15,7 +15,7 @@
 				</li>
 				<li>
 					<a id="js_wk_menu_edition_button" class="button mad_controller_component_button_controller mad_view_view js_component disabled"
-						 href="../demo/LU_users_profile_edit.php"
+						 href="demo/LU_users_profile_edit.php"
 						 data-tooltip="sorry it is not possible to revoke an existing key at the moment"
 						>
 						<i class="fa fa-fw fa-ban"></i>
