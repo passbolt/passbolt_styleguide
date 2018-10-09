@@ -11,7 +11,7 @@
         <div class="row">
             <div class="col7 last">
                 <h3>Time based One Time Password (TOTP) is enabled</h3>
-                <div class="success message animated">
+                <div class="success success-large message animated">
                     <div class="illustration">
                         <svg id="successAnimation" class="animated" xmlns="http://www.w3.org/2000/svg" width="170" height="170" viewBox="0 0 70 70">
                             <circle id="successAnimationCircle" cx="35" cy="35" r="24" stroke="#000000" stroke-width="3" stroke-linecap="round" fill="transparent"/>

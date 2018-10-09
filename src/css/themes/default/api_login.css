@@ -4520,17 +4520,17 @@ html body .button.processing {
   padding-bottom: 1em;
 }
 /* success animation */
-.message.success.animated {
+.message.success.success-large.animated {
   background: #FFF;
   color: #333;
   display: flex;
   border: 1px solid #DDD;
   border-radius: 3px;
 }
-.message.success.animated .illustration {
+.message.success.success-large.animated .illustration {
   flex: 0 0 180px;
 }
-.message.success.animated .additional-information {
+.message.success.success-large.animated .additional-information {
   flex: 1;
   line-height: 180px;
   margin-top: 1.5em;
@@ -4552,25 +4552,25 @@ html body .button.processing {
     stroke-dashoffset: 0;
   }
 }
-.message.success.animated #successAnimationCircle {
+.message.success.success-large.animated #successAnimationCircle {
   stroke-dasharray: 180px 180px;
   stroke: #009900;
 }
-.message.success.animated #successAnimationCheck {
+.message.success.success-large.animated #successAnimationCheck {
   stroke-dasharray: 50px 50px;
   stroke: #009900;
 }
-.message.success.animated #successAnimation.animated {
+.message.success.success-large.animated #successAnimation.animated {
   animation: 0.75s ease-out 0s 1 both pop;
 }
-.message.success.animated #successAnimation.animated #successAnimationCircle {
+.message.success.success-large.animated #successAnimation.animated #successAnimationCircle {
   animation: 0.75s cubic-bezier(0.77, 0, 0.175, 1) 0s 1 both drawCircle;
 }
-.message.success.animated #successAnimation.animated #successAnimationCheck {
+.message.success.success-large.animated #successAnimation.animated #successAnimationCheck {
   animation: 0.75s cubic-bezier(0.77, 0, 0.175, 1) 0s 1 both drawCheck;
 }
 @media only screen and (max-width: 767px) {
-  .message.success.animated {
+  .message.success.success-large.animated {
     flex-direction: column;
   }
 }

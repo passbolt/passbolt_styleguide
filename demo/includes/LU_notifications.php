@@ -1,8 +1,7 @@
 <div class="notification-container">
-<!--V1    <div id="js_app_notificator" class="notification col2_3 push_1 passbolt_controller_component_notification_controller">-->
 	<div id="js_app_notificator" class="notification passbolt_controller_component_notification_controller">
-        <span class="message animated fadeInUp error">
-            <strong>error</strong>
+        <span class="message animated fadeInUp success">
+            <strong>Error</strong>
             this is a fake and very long error message
         </span>
 	</div>
