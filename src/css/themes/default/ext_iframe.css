@@ -3926,6 +3926,15 @@ input[type=email].fluid {
   -o-text-overflow: ellipsis;
   -ms-text-overflow: ellipsis;
 }
+.dialog .dialog-header .tooltip-alt {
+  margin-left: 0.3em;
+  font-size: 0.7em;
+  font-weight: normal;
+  color: #333;
+}
+.dialog .dialog-header .tooltip-alt .tooltip-text {
+  white-space: normal;
+}
 .dialog .dialog-header .dialog-header-subtitle {
   padding-top: 0.3em;
   padding-left: 1em;
@@ -4074,6 +4083,116 @@ input[type=email].fluid {
     width: 100%;
     max-width: 100%;
     margin-bottom: 2.5em;
+  }
+}
+/*
+	do not show javascript needed warning if js is enabled
+	this needs modernizer to work
+*/
+.js .message.no-js {
+  display: none;
+}
+.cookies .message.no-cookies {
+  display: none;
+}
+/* message styling per types */
+.message {
+  padding: 1em;
+}
+.message a {
+  border-bottom: 1px solid #888;
+}
+.message a:hover {
+  border-bottom: 1px solid #2894DF;
+}
+.message.error {
+  color: #333;
+  background: #ffe4e4;
+}
+.message.error a:link,
+.message.error a:visited {
+  color: #333;
+  border-bottom: 1px dotted #888;
+}
+.message.error a:hover {
+  color: #333;
+  border-bottom: 1px solid #888;
+}
+.message.success {
+  color: #333;
+  background: #EDF7EB;
+}
+.message.notice {
+  color: #333;
+  background: #daecf9;
+}
+.message.warning {
+  color: #333;
+  background: #FEF0BF;
+}
+/* big side info message blocks on setup or profile pages */
+.message.side-message {
+  margin-left: 1em;
+  font-size: 1em;
+  margin-right: 2em;
+}
+.message.side-message ul,
+.message.side-message p {
+  padding-bottom: 1em;
+}
+/* success animation */
+.message.success.success-large.animated {
+  background: #FFF;
+  color: #333;
+  display: flex;
+  border: 1px solid #DDD;
+  border-radius: 3px;
+}
+.message.success.success-large.animated .illustration {
+  flex: 0 0 180px;
+}
+.message.success.success-large.animated .additional-information {
+  flex: 1;
+  line-height: 180px;
+  margin-top: 1.5em;
+  padding-left: 1em;
+}
+@keyframes drawCircle {
+  0% {
+    stroke-dashoffset: 180px;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes drawCheck {
+  0% {
+    stroke-dashoffset: 50px;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+.message.success.success-large.animated #successAnimationCircle {
+  stroke-dasharray: 180px 180px;
+  stroke: #009900;
+}
+.message.success.success-large.animated #successAnimationCheck {
+  stroke-dasharray: 50px 50px;
+  stroke: #009900;
+}
+.message.success.success-large.animated #successAnimation.animated {
+  animation: 0.75s ease-out 0s 1 both pop;
+}
+.message.success.success-large.animated #successAnimation.animated #successAnimationCircle {
+  animation: 0.75s cubic-bezier(0.77, 0, 0.175, 1) 0s 1 both drawCircle;
+}
+.message.success.success-large.animated #successAnimation.animated #successAnimationCheck {
+  animation: 0.75s cubic-bezier(0.77, 0, 0.175, 1) 0s 1 both drawCheck;
+}
+@media only screen and (max-width: 767px) {
+  .message.success.success-large.animated {
+    flex-direction: column;
   }
 }
 /* tabs */
@@ -4789,6 +4908,262 @@ input[type=email].fluid {
   height: 24em;
   width: 95%;
 }
+.permissions.scroll {
+  max-height: 19em;
+  margin: 0;
+}
+.permissions .row {
+  /*
+     * For IE 6/7 only
+     * Include this rule to trigger hasLayout and contain floats.
+     */
+  /*
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
+  /*
+     * For IE 6/7 only
+     * Include this rule to trigger hasLayout and contain floats.
+     */
+  zoom: 1;
+  /*
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
+  font-size: 0.813em;
+  padding: 1em 0.5em 0.875em 1em;
+  border-bottom: 1px dotted #DDD;
+  /* user summary */
+  /* row actions */
+  /* new/updated permissions */
+}
+.permissions .row:before,
+.permissions .row:after {
+  content: "";
+  display: table;
+}
+.permissions .row:after {
+  clear: both;
+}
+.permissions .row:before,
+.permissions .row:after {
+  content: "";
+  display: table;
+}
+.permissions .row:after {
+  clear: both;
+}
+.permissions .row:last-child {
+  border: 0;
+}
+.permissions .row .avatar img {
+  width: 36px;
+  height: 36px;
+  float: left;
+}
+.permissions .row .user,
+.permissions .row .group {
+  width: 48%;
+  float: left;
+  padding-left: 1em;
+  padding-right: 1em;
+}
+.permissions .row .details {
+  /*
+     * For IE 6/7 only
+     * Include this rule to trigger hasLayout and contain floats.
+     */
+  /*
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
+  /*
+     * For IE 6/7 only
+     * Include this rule to trigger hasLayout and contain floats.
+     */
+  zoom: 1;
+  /*
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
+}
+.permissions .row .details:before,
+.permissions .row .details:after {
+  content: "";
+  display: table;
+}
+.permissions .row .details:after {
+  clear: both;
+}
+.permissions .row .details:before,
+.permissions .row .details:after {
+  content: "";
+  display: table;
+}
+.permissions .row .details:after {
+  clear: both;
+}
+.permissions .row .details .name {
+  float: left;
+  max-width: 190px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -o-text-overflow: ellipsis;
+  -ms-text-overflow: ellipsis;
+}
+.permissions .row .details .more_details {
+  margin-left: 0.5em;
+  margin-top: 0;
+}
+.permissions .row .details .email {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -o-text-overflow: ellipsis;
+  -ms-text-overflow: ellipsis;
+  font-weight: bold;
+  padding-bottom: 0.125em;
+}
+.permissions .row .permission_changes {
+  color: #969696;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -o-text-overflow: ellipsis;
+  -ms-text-overflow: ellipsis;
+  display: block;
+  border: 0;
+}
+.permissions .row .rights {
+  float: left;
+  margin-top: 0.5em;
+  width: 27%;
+}
+.permissions .row .rights select {
+  margin: 0;
+  font-size: 1em;
+}
+.permissions .row .actions {
+  float: right;
+  margin-top: 0.55em;
+}
+.permissions .row .actions a {
+  font-size: 1.125em;
+  padding: 0.25em 0.5em 0.2em 0.5em;
+  border: 1px solid transparent;
+}
+.permissions .row .actions a:hover {
+  border: 1px solid #DDD;
+}
+.permissions .row.permission-updated {
+  background: #FFFAE7;
+}
+.dialog {
+  /* message */
+}
+.dialog .message.empty-permission {
+  font-size: 0.875em;
+  padding-left: 1em;
+}
+/* hide icons if there is no space */
+@media all and (max-width: 480px) {
+  .dialog .permissions.scroll {
+    height: auto;
+    margin: 0;
+  }
+  .dialog .permissions .row .user,
+  .dialog .permissions .row .group {
+    width: 45%;
+  }
+}
+.dialog .permission-add {
+  background-color: #FFF;
+  padding: 0 1em 1em 1em;
+  /*
+     * For IE 6/7 only
+     * Include this rule to trigger hasLayout and contain floats.
+     */
+  /*
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
+  /*
+     * For IE 6/7 only
+     * Include this rule to trigger hasLayout and contain floats.
+     */
+  zoom: 1;
+  /*
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
+}
+.dialog .permission-add:before,
+.dialog .permission-add:after {
+  content: "";
+  display: table;
+}
+.dialog .permission-add:after {
+  clear: both;
+}
+.dialog .permission-add:before,
+.dialog .permission-add:after {
+  content: "";
+  display: table;
+}
+.dialog .permission-add:after {
+  clear: both;
+}
+.dialog .permission-add #passbolt-password-share-autocomplete-wrapper {
+  position: relative;
+  width: 100%;
+}
+.dialog .permission-edit {
+  padding: 0em;
+  border-bottom: 1px solid #F3F3F3;
+}
 /*
 	form to add new permissions
 	basically this form is embedded in a dedicated iframe released by the plugin
@@ -4814,8 +5189,16 @@ input[type=email].fluid {
 	autocomplete users results
 	basically this list of users is embedded in a dedicated iframe released by the plugin
 */
-.autocomplete-content {
+.autocomplete-wrapper {
+  position: relative;
+  /* hide icons if there is no space */
+}
+.autocomplete-wrapper .autocomplete-content {
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
+  z-index: 899;
   padding: 0;
   margin: 0;
   border: 1px solid #DDD;
@@ -4823,7 +5206,7 @@ input[type=email].fluid {
   overflow: auto;
   box-sizing: border-box;
 }
-.autocomplete-content .row {
+.autocomplete-wrapper .autocomplete-content .row {
   /*
      * For IE 6/7 only
      * Include this rule to trigger hasLayout and contain floats.
@@ -4860,38 +5243,38 @@ input[type=email].fluid {
   border-bottom: 1px dotted #DDD;
   /* user summary */
 }
-.autocomplete-content .row:before,
-.autocomplete-content .row:after {
+.autocomplete-wrapper .autocomplete-content .row:before,
+.autocomplete-wrapper .autocomplete-content .row:after {
   content: "";
   display: table;
 }
-.autocomplete-content .row:after {
+.autocomplete-wrapper .autocomplete-content .row:after {
   clear: both;
 }
-.autocomplete-content .row:before,
-.autocomplete-content .row:after {
+.autocomplete-wrapper .autocomplete-content .row:before,
+.autocomplete-wrapper .autocomplete-content .row:after {
   content: "";
   display: table;
 }
-.autocomplete-content .row:after {
+.autocomplete-wrapper .autocomplete-content .row:after {
   clear: both;
 }
-.autocomplete-content .row:last-child {
+.autocomplete-wrapper .autocomplete-content .row:last-child {
   border: 0;
 }
-.autocomplete-content .row .avatar img {
+.autocomplete-wrapper .autocomplete-content .row .avatar img {
   width: 36px;
   height: 36px;
   float: left;
 }
-.autocomplete-content .row .user,
-.autocomplete-content .row .group {
+.autocomplete-wrapper .autocomplete-content .row .user,
+.autocomplete-wrapper .autocomplete-content .row .group {
   width: 75%;
   float: left;
   padding-left: 1em;
   padding-right: 1em;
 }
-.autocomplete-content .row .name {
+.autocomplete-wrapper .autocomplete-content .row .name {
   display: block;
   white-space: nowrap;
   overflow: hidden;
@@ -4899,7 +5282,7 @@ input[type=email].fluid {
   -o-text-overflow: ellipsis;
   -ms-text-overflow: ellipsis;
 }
-.autocomplete-content .row .details {
+.autocomplete-wrapper .autocomplete-content .row .details {
   color: #969696;
   white-space: nowrap;
   overflow: hidden;
@@ -4908,13 +5291,13 @@ input[type=email].fluid {
   -ms-text-overflow: ellipsis;
   display: block;
 }
-.autocomplete-content.loading ul {
-  height: 20px;
+.autocomplete-wrapper .autocomplete-content.loading {
+  height: 2em;
   background: url('../../../img/controls/loading_light.svg') no-repeat center center;
+  background-color: #FFF;
 }
-/* hide icons if there is no space */
 @media all and (max-width: 440px) {
-  .autocomplete-content {
+  .autocomplete-wrapper .autocomplete-content {
     height: auto;
     max-height: none;
   }

@@ -4865,6 +4865,15 @@ article table.table-parameters tbody tr td em {
   -o-text-overflow: ellipsis;
   -ms-text-overflow: ellipsis;
 }
+.dialog .dialog-header .tooltip-alt {
+  margin-left: 0.3em;
+  font-size: 0.7em;
+  font-weight: normal;
+  color: #333;
+}
+.dialog .dialog-header .tooltip-alt .tooltip-text {
+  white-space: normal;
+}
 .dialog .dialog-header .dialog-header-subtitle {
   padding-top: 0.3em;
   padding-left: 1em;

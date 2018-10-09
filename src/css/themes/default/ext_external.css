@@ -25,6 +25,9 @@
   position: relative;
   width: 100%;
 }
+#passbolt-iframe-password-share {
+  z-index: 898;
+}
 #passbolt-iframe-password-share-autocomplete,
 #passbolt-iframe-group-edit-autocomplete {
   position: absolute;
