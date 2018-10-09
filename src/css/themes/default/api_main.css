@@ -675,11 +675,11 @@ html body .hidden {
   animation: blinker 1s linear infinite;
 }
 .blink-fast {
-  animation: blinker 0.25s linear infinite;
+  animation: blinker .25s linear infinite;
 }
 @keyframes blinker {
   50% {
-    opacity: 0;
+    opacity: 0.0;
   }
 }
 /* box shadows */
@@ -813,14 +813,14 @@ h1 {
   /* 24px base 16 */
 }
 h2 {
-  font-size: 1.25em;
+  font-size: 1.250em;
   /* 20px base 16 */
 }
 h3 {
   font-size: 1.125em;
   /* 18px base 16 */
   display: block;
-  padding-bottom: 0.333em;
+  padding-bottom: .333em;
   /* 6px */
   border-bottom: 1px dotted #DDD;
 }
@@ -897,9 +897,9 @@ p {
   left: -1.85714286em;
 }
 .fa-border {
-  padding: 0.2em 0.25em 0.15em;
+  padding: .2em .25em .15em;
   border: solid 0.08em #EEE;
-  border-radius: 0.1em;
+  border-radius: .1em;
 }
 .fa-pull-left {
   float: left;
@@ -908,10 +908,10 @@ p {
   float: right;
 }
 .fa.fa-pull-left {
-  margin-right: 0.3em;
+  margin-right: .3em;
 }
 .fa.fa-pull-right {
-  margin-left: 0.3em;
+  margin-left: .3em;
 }
 /* Deprecated as of 4.4.0 */
 .pull-right {
@@ -921,10 +921,10 @@ p {
   float: left;
 }
 .fa.pull-left {
-  margin-right: 0.3em;
+  margin-right: .3em;
 }
 .fa.pull-right {
-  margin-left: 0.3em;
+  margin-left: .3em;
 }
 .fa-spin {
   -webkit-animation: fa-spin 2s infinite linear;
@@ -3204,14 +3204,14 @@ button,
   position: relative;
   font-size: 0.875em;
   /*	14px */
-  padding: 0.429em 1.225em 0.429em 1.225em;
+  padding: .429em 1.225em .429em 1.225em;
   /* 6px 16px */
   display: inline-block;
   zoom: 1;
   /* zoom and *display = ie7 hack for display:inline-block */
   *display: inline;
   vertical-align: baseline;
-  margin-right: 0.5em;
+  margin-right: .5em;
   outline: none;
   cursor: pointer;
   text-align: center;
@@ -3416,7 +3416,7 @@ html body .button.processing {
   border-radius: 5px;
 }
 .button-spacer {
-  margin-right: 0.5em;
+  margin-right: .5em;
 }
 /*
 	Base form components styling
@@ -3429,7 +3429,7 @@ label {
   /* 16px */
   line-height: 1.333333em;
   /* 24px */
-  padding: 0.5em 0;
+  padding: .5em 0;
   display: block;
 }
 /*
@@ -3477,9 +3477,9 @@ textarea {
   background: #FFF;
   width: 14em;
   /* 20 char (default input length) x .7em (average char length) */
-  padding: 0.375em 0.625em 0.375em 0.625em;
+  padding: .375em .625em .375em .625em;
   display: inline-block;
-  margin-bottom: 0.5em;
+  margin-bottom: .5em;
   -webkit-appearance: none;
   border: 1px solid #CCC;
   border-top: 1px solid #BBB;
@@ -3543,13 +3543,13 @@ textarea {
 .text.input .input-addon i,
 .date.input .input-addon i {
   font-size: 16px;
-  width: 1.25em;
+  width: 1.250em;
   border: 1px solid #CCC;
   border-top: 1px solid #BBB;
   line-height: 24px;
   color: #333;
   background: #FFF;
-  padding: 0.375em 0.625em 0.375em 0.625em;
+  padding: .375em .625em .375em .625em;
 }
 .text.input input:hover + .input-addon i,
 .date.input input:hover + .input-addon i {
@@ -3573,8 +3573,8 @@ textarea {
 input[type=checkbox] + label {
   font-weight: normal;
   display: inline;
-  margin-left: 0.25em;
-  margin-bottom: 0.25em;
+  margin-left: .25em;
+  margin-bottom: .25em;
 }
 /* radio and checkboxes */
 .radiolist {
@@ -3631,12 +3631,12 @@ input[type=checkbox] + label {
 }
 .radiolist .input.radio input {
   float: left;
-  margin-top: 0.55em;
+  margin-top: .55em;
 }
 .radiolist .input.radio input + label {
   font-weight: normal;
   display: inline-block;
-  margin-left: 0.65em;
+  margin-left: .65em;
   font-size: 1em;
   float: left;
   margin-right: 2em;
@@ -3652,11 +3652,11 @@ input[type=checkbox] + label {
 */
 .input .message {
   padding: 0;
-  padding-left: 0.25em;
-  padding-bottom: 0.5em;
-  font-size: 0.813em;
-  margin-top: 0.125em;
-  margin-bottom: 0.25em;
+  padding-left: .25em;
+  padding-bottom: .5em;
+  font-size: .813em;
+  margin-top: .125em;
+  margin-bottom: .25em;
   background-color: transparent;
   border: 0;
   /* colors for messages */
@@ -3683,7 +3683,7 @@ form .input .inline.message {
 /* error messages */
 select {
   font-size: 16px;
-  margin: 0.55em 0;
+  margin: .55em 0;
 }
 /* select */
 input[type=file] {
@@ -3701,7 +3701,7 @@ input[type=email].fluid {
 }
 .submit-input-wrapper,
 .submit-wrapper {
-  margin-top: 0.5em;
+  margin-top: .5em;
 }
 /* shortcut classes for layout */
 .singleline {
@@ -3868,7 +3868,7 @@ input[type=email].fluid {
   float: left;
   width: 100%;
   max-width: none;
-  padding-left: 0.25em;
+  padding-left: .25em;
   box-sizing: border-box;
 }
 /* hide left column when there is no space */
@@ -3904,7 +3904,7 @@ input[type=email].fluid {
     left: 0;
   }
   .panel.main .row {
-    padding-left: 0.5em;
+    padding-left: .5em;
   }
   .panel.main .panel.aside {
     min-width: auto;
@@ -3956,7 +3956,7 @@ input[type=email].fluid {
      * 2. The use of `table` rather than `block` is only necessary if using
      *	`:before` to contain the top-margins of child elements.
      */
-  padding: 0 0.5em 0 0.5em;
+  padding: 0 .5em 0 .5em;
 }
 .grid-responsive-12 .row:before,
 .grid .row:before,
@@ -4231,7 +4231,7 @@ input[type=email].fluid {
      * Common columns definitions
      */
   .grid .row {
-    padding: 0 0.5em 0 0.5em;
+    padding: 0 .5em 0 .5em;
   }
   .grid .row .col1,
   .grid .row .col2,
@@ -4338,10 +4338,10 @@ input[type=email].fluid {
 .input.toggle-switch {
   display: flex;
   padding-top: 1em;
-  padding-bottom: 0.5em;
+  padding-bottom: .5em;
 }
 .input.toggle-switch label {
-  padding-top: 0.15em;
+  padding-top: .15em;
   padding-left: 1em;
   order: 2;
   flex: 1;
@@ -4387,7 +4387,7 @@ input[type=email].fluid {
   background: #F3F3F3;
   border-radius: 2em;
   padding: 2px;
-  transition: all 0.4s ease;
+  transition: all .4s ease;
   border: 1px solid #DDD;
 }
 .input.toggle-switch .toggle-switch-button span {
@@ -4433,7 +4433,7 @@ input[type=email].fluid {
   box-shadow: inset 0 0 0 2em #e8eae9;
 }
 .input.toggle-switch .toggle-switch-button:active:after {
-  padding-right: 0.8em;
+  padding-right: .8em;
 }
 .input.toggle-switch .toggle-switch-button:after,
 .input.toggle-switch .toggle-switch-button:before {
@@ -4534,7 +4534,7 @@ input[type=email].fluid {
   clear: both;
 }
 .header .navigation.primary li {
-  padding: 0.5em;
+  padding: .5em;
   float: left;
 }
 .header .navigation.primary li:first-child {
@@ -4610,7 +4610,7 @@ form.search input[type=search] {
   width: 65%;
   margin-bottom: 0;
   border-right: 1px solid #FFF;
-  padding: 0.313em 0.625em;
+  padding: .313em .625em;
 }
 form.search input[type=search]:focus,
 form.search input[type=search]:active {
@@ -4646,7 +4646,7 @@ input[type="search"]::-webkit-search-cancel-button {
   width: 80%;
   float: right;
   border: 1px solid #DDD;
-  margin-top: 0.5em;
+  margin-top: .5em;
   overflow: hidden;
   background: #EEE;
   background-image: -moz-linear-gradient(top, #F3F3F3, #EEE);
@@ -4693,14 +4693,14 @@ input[type="search"]::-webkit-search-cancel-button {
 .user.profile .picture img {
   width: 2.875em;
   /* 46px */
-  padding: 0.125em;
+  padding: 0.1250em;
   /* 2px */
 }
 .user.profile .details {
   float: left;
   height: 2.8125em;
-  font-size: 0.9em;
-  padding: 0.3125em 1em;
+  font-size: .9em;
+  padding: .3125em 1em;
   /* 5/10px */
 }
 .user.profile .details .name,
@@ -4855,24 +4855,24 @@ input[type="search"]::-webkit-search-cancel-button {
  */
 .breadcrumbs {
   height: 2em;
-  padding: 0.1875em 0 0.1875em 0.1875em;
+  padding: .1875em 0 .1875em .1875em;
   margin-bottom: 0;
   border-bottom: 1px solid #DDD;
   background: #FFF;
 }
 .breadcrumbs ul {
   padding-top: 0.2em;
-  margin-left: 0.1875em;
+  margin-left: .1875em;
 }
 .breadcrumbs ul li {
   display: inline;
-  font-size: 0.8em;
+  font-size: .8em;
   /* 12px/base16>15 */
-  margin-left: 0.25em;
+  margin-left: .25em;
 }
 .breadcrumbs ul li:before {
   content: "›";
-  margin-right: 0.5em;
+  margin-right: .5em;
 }
 .breadcrumbs ul li:first-child {
   margin-left: 0;
@@ -4889,18 +4889,18 @@ input[type="search"]::-webkit-search-cancel-button {
 }
 /* actions */
 .header.third .main-action-wrapper {
-  margin-top: 0.5em;
-  padding-left: 0.625em;
+  margin-top: .5em;
+  padding-left: .625em;
 }
 .header.third .main-action-wrapper .button {
   float: left;
-  font-size: 0.875em;
+  font-size: .875em;
 }
 .header.third .actions-wrapper {
-  margin-top: 0.5em;
+  margin-top: .5em;
 }
 .header.third .actions-wrapper .button {
-  font-size: 0.875em;
+  font-size: .875em;
   min-width: 4em;
   float: left;
 }
@@ -4911,7 +4911,7 @@ input[type="search"]::-webkit-search-cancel-button {
   float: right;
 }
 .header.third .actions-wrapper .secondary .button {
-  font-size: 0.875em;
+  font-size: .875em;
   min-width: 1em;
 }
 /* hide secondary actions if there is no space */
@@ -5030,7 +5030,7 @@ input[type="search"]::-webkit-search-cancel-button {
  * Notification
  */
 .notification-container {
-  font-size: 0.85em;
+  font-size: .85em;
   top: 0;
   position: absolute;
   z-index: 991;
@@ -5047,7 +5047,7 @@ input[type="search"]::-webkit-search-cancel-button {
 .notification-container .notification .message {
   box-shadow: 0px 0px 10px 0px #DDD;
   border-radius: 2px;
-  padding: 0.5em 1em;
+  padding: .5em 1em;
   position: relative;
   left: -50%;
   float: left;
@@ -5278,13 +5278,22 @@ input[type="search"]::-webkit-search-cancel-button {
   height: 3em;
 }
 .dialog .dialog-header h2 {
-  margin: 0.25em 2em 0.5em 0.2em;
+  margin: .25em 2em .5em .2em;
   font-size: 1.2em;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   -o-text-overflow: ellipsis;
   -ms-text-overflow: ellipsis;
+}
+.dialog .dialog-header .tooltip-alt {
+  margin-left: 0.3em;
+  font-size: 0.7em;
+  font-weight: normal;
+  color: #333;
+}
+.dialog .dialog-header .tooltip-alt .tooltip-text {
+  white-space: normal;
 }
 .dialog .dialog-header .dialog-header-subtitle {
   padding-top: 0.3em;
@@ -5297,7 +5306,7 @@ input[type="search"]::-webkit-search-cancel-button {
 }
 .dialog .form-content {
   background: #FFF;
-  padding: 0.813em 1.5em 0.813em 1.5em;
+  padding: .813em 1.5em .813em 1.5em;
 }
 .dialog label {
   clear: both;
@@ -5387,7 +5396,7 @@ input[type="search"]::-webkit-search-cancel-button {
   border-top: 1px solid #DDD;
   clear: both;
   width: 100%;
-  padding: 0.75em 0;
+  padding: .75em 0;
 }
 .dialog .submit-wrapper .cancel,
 .dialog .submit-wrapper .button {
@@ -5396,7 +5405,7 @@ input[type="search"]::-webkit-search-cancel-button {
   font-size: 1.125em;
 }
 .dialog .submit-wrapper .cancel {
-  margin-top: 0.5em;
+  margin-top: .5em;
   font-size: 1em;
 }
 /* can also be used outside a dialog, like the sidebar */
@@ -5460,7 +5469,7 @@ input[type="search"]::-webkit-search-cancel-button {
   position: absolute;
   min-width: 13em;
   z-index: 800;
-  padding: 0.25em 0;
+  padding: .25em 0;
 }
 .button + .dropdown-content {
   margin-top: 2em;
@@ -5472,11 +5481,11 @@ input[type="search"]::-webkit-search-cancel-button {
 .dropdown-content li a {
   display: block;
   min-width: 9em;
-  font-size: 0.938em;
+  font-size: .938em;
   border: 0;
 }
 .dropdown-content li a {
-  padding: 0.313em 0.626em;
+  padding: .313em .626em;
   /* 5px */
 }
 .dropdown-content li a:hover {
@@ -5523,8 +5532,8 @@ input[type="search"]::-webkit-search-cancel-button {
   padding: 3px 7em 3px 30px;
 }
 .profile .section.detailed-information h4 {
-  margin-bottom: 0.626em;
-  padding-bottom: 0.313em;
+  margin-bottom: .626em;
+  padding-bottom: .313em;
   border-bottom: 1px dotted #DDD;
 }
 .profile .section.detailed-information li .label {
@@ -5537,13 +5546,13 @@ input[type="search"]::-webkit-search-cancel-button {
 }
 .profile .section.detailed-information .avatar img {
   width: 2.875em;
-  padding: 0.125em;
+  padding: 0.1250em;
 }
 .profile .section .section-action {
   padding-left: 1em;
 }
 .profile .edit-avatar-action .fa {
-  margin-top: 0.25em;
+  margin-top: .25em;
 }
 /* tags */
 .tags .tag {
@@ -5553,10 +5562,10 @@ input[type="search"]::-webkit-search-cancel-button {
   /* Newer versions of Chrome/Safari*/
   word-break: break-all;
   white-space: normal;
-  padding: 0.125em 0.5em;
+  padding: .125em .5em;
   float: left;
   position: relative;
-  margin: 0 0.5em 0.5em 0;
+  margin: 0 .5em .5em 0;
   text-decoration: none;
   border-radius: 3px;
   border: 1px solid #2894DF;
@@ -5623,17 +5632,17 @@ input[type="search"]::-webkit-search-cancel-button {
 }
 .tag-editor .message {
   font-size: 1em;
-  margin-top: 0.5em;
+  margin-top: .5em;
 }
 .tag-editor .tag {
   padding-right: 0;
 }
 .tag-editor .tag-delete {
-  margin-left: 0.25em;
+  margin-left: .25em;
   border-left: 1px dotted #2894DF;
-  padding-left: 0.5em;
-  padding-right: 0.5em;
-  font-size: 0.75em;
+  padding-left: .5em;
+  padding-right: .5em;
+  font-size: .75em;
   vertical-align: 10%;
   cursor: pointer;
 }
@@ -5673,7 +5682,7 @@ input[type="search"]::-webkit-search-cancel-button {
      *	`:before` to contain the top-margins of child elements.
      */
   min-height: 5em;
-  padding: 0.5em;
+  padding: .5em;
   border: 1px solid #CCC;
   border-top: 1px solid #BBB;
 }
@@ -5698,7 +5707,7 @@ input[type="search"]::-webkit-search-cancel-button {
 }
 .tag-editor .tag-editor-input {
   min-height: 1.5em;
-  padding: 0.25em 0.5em 0.25em 0.5em;
+  padding: .25em .5em .25em .5em;
   box-shadow: none;
   min-width: 6em;
   max-width: 24em;
@@ -5744,7 +5753,7 @@ input[type="search"]::-webkit-search-cancel-button {
 .jfilestyle input[type=text]:disabled,
 .jfilestyle input[type=email]:disabled {
   background-color: #F3F3F3;
-  padding: 0.375em 0.625em 0.375em 0.625em;
+  padding: .375em .625em .375em .625em;
   font-size: 1em;
   line-height: 24px;
   border: 1px solid #CCC;
@@ -5754,13 +5763,13 @@ input[type="search"]::-webkit-search-cancel-button {
   border: 1px solid #CCC;
   border-left: 0px;
   background: #DDD;
-  padding: 0.65em 1.225em 0.65em 1.225em;
+  padding: .65em 1.225em .65em 1.225em;
   color: #0662ba;
   vertical-align: middle;
   line-height: normal;
   text-align: center;
   margin: 0px;
-  font-size: 0.875em;
+  font-size: .875em;
   width: auto;
   font-weight: bold;
   border-radius: 0 0.214em 0.214em 0;
@@ -5847,7 +5856,7 @@ input[type="search"]::-webkit-search-cancel-button {
   margin-left: -100%;
 }
 .panel.aside .comments .comment {
-  padding-bottom: 0.5em;
+  padding-bottom: .5em;
   /*
      * For IE 6/7 only
      * Include this rule to trigger hasLayout and contain floats.
@@ -5908,7 +5917,7 @@ input[type="search"]::-webkit-search-cancel-button {
 .panel.aside .comments .comment .author.picture {
   width: 2em;
   height: 2em;
-  margin-top: 0.25em;
+  margin-top: .25em;
 }
 .panel.aside .comments .comment .author.picture img {
   width: 2em;
@@ -5919,7 +5928,7 @@ input[type="search"]::-webkit-search-cancel-button {
 }
 .panel.aside .comments .comment .metadata {
   font-style: italic;
-  margin: 0.5em 0 1em 1em;
+  margin: .5em 0 1em 1em;
 }
 .panel.aside .comments .comment .metadata .author.username {
   max-width: 48%;
@@ -5943,7 +5952,7 @@ input[type="search"]::-webkit-search-cancel-button {
   -ms-text-overflow: ellipsis;
 }
 .panel.aside .comments .comment .form-content {
-  margin-left: 0.5em;
+  margin-left: .5em;
 }
 .panel.aside .comments .comment .actions {
   float: right;
@@ -5963,7 +5972,7 @@ input[type="search"]::-webkit-search-cancel-button {
 }
 /* left panel navigation */
 .panel .navigation {
-  font-size: 0.938em;
+  font-size: .938em;
   /* first block have a delimiter */
   /*
         Navigation row
@@ -6020,8 +6029,8 @@ input[type="search"]::-webkit-search-cancel-button {
 }
 .panel .navigation.first {
   border-bottom: 1px dotted #DDD;
-  padding: 0.625em 0;
-  margin-bottom: 0.625em;
+  padding: .625em 0;
+  margin-bottom: .625em;
 }
 .panel .navigation .row {
   float: left;
@@ -6058,8 +6067,8 @@ input[type="search"]::-webkit-search-cancel-button {
 .panel .navigation .row .main-cell h3 {
   border: 0;
   font-size: 1em;
-  margin: 0 0.25em 0 1em;
-  padding: 0.25em 0;
+  margin: 0 .25em 0 1em;
+  padding: .25em 0;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -6082,7 +6091,7 @@ input[type="search"]::-webkit-search-cancel-button {
 }
 .panel .navigation .row .main-cell a {
   border: 0;
-  padding: 0.2em 0.313em;
+  padding: .2em .313em;
   /* 2px 5px */
   padding-left: 1em;
   color: #333;
@@ -6099,7 +6108,7 @@ input[type="search"]::-webkit-search-cancel-button {
   display: none;
   width: 1em;
   height: 1em;
-  padding: 0.125em;
+  padding: .125em;
   color: #888;
   border: 1px solid transparent;
 }
@@ -6180,13 +6189,13 @@ input[type="search"]::-webkit-search-cancel-button {
   z-index: 993;
   left: 11.25em;
   display: none;
-  padding: 0.25em 0;
+  padding: .25em 0;
 }
 .contextual-menu a {
-  font-size: 0.875em;
+  font-size: .875em;
   /* 14px */
   display: block;
-  padding: 0.357em 0.714em;
+  padding: .357em .714em;
   /* 5px 10px */
   border: 0;
 }
@@ -6237,7 +6246,7 @@ input[type="search"]::-webkit-search-cancel-button {
   margin-top: -1px;
   border-bottom: 1px solid #F3F3F3;
   border-top: 1px solid #F3F3F3;
-  font-size: 0.875em;
+  font-size: .875em;
   background: #FFF;
 }
 .panel.aside .sidebar-section h4 {
@@ -6288,7 +6297,7 @@ input[type="search"]::-webkit-search-cancel-button {
   line-height: normal;
 }
 .panel.aside .form-content {
-  margin: 0 0 0.5em 0;
+  margin: 0 0 .5em 0;
   /*
      * For IE 6/7 only
      * Include this rule to trigger hasLayout and contain floats.
@@ -6354,12 +6363,12 @@ input[type="search"]::-webkit-search-cancel-button {
   margin-right: 0;
 }
 .panel.aside .form-content .cancel {
-  margin-right: 0.5em;
+  margin-right: .5em;
 }
 .panel.aside .form-content .message.notice {
-  padding: 0.5em;
+  padding: .5em;
   margin: 0;
-  font-size: 0.929em;
+  font-size: .929em;
   /* 13px */
   background: #daecf9;
 }
@@ -6390,7 +6399,7 @@ input[type="search"]::-webkit-search-cancel-button {
 }
 .tabs-nav li a {
   display: inline-block;
-  padding: 0.4em 1.75em;
+  padding: .4em 1.75em;
   margin-left: 1.25em;
   font-size: 15px;
   border: 0;
@@ -6419,7 +6428,7 @@ input[type="search"]::-webkit-search-cancel-button {
 .tableview {
   background: #FFF;
   position: relative;
-  font-size: 0.9375em;
+  font-size: .9375em;
   /* 15px */
   height: 100%;
 }
@@ -6428,7 +6437,7 @@ input[type="search"]::-webkit-search-cancel-button {
   background: #FFF;
   height: 2.125em;
   overflow-y: scroll;
-  padding-top: 0.125em;
+  padding-top: .125em;
 }
 .tableview-header table {
   width: 100%;
@@ -6472,7 +6481,7 @@ input[type="search"]::-webkit-search-cancel-button {
 .tableview table th,
 .tableview table td {
   text-align: left;
-  padding: 0.25em 0.75em;
+  padding: .25em .75em;
   vertical-align: middle;
 }
 .tableview table th {
@@ -6527,7 +6536,7 @@ input[type="search"]::-webkit-search-cancel-button {
 }
 .tableview table .input.checkbox {
   padding-top: 2px;
-  padding-left: 0.25em;
+  padding-left: .25em;
 }
 .tableview table .input.checkbox label {
   display: none;
@@ -6544,7 +6553,7 @@ input[type="search"]::-webkit-search-cancel-button {
 .tableview table td.cell_favorite {
   padding-left: 0;
   padding-top: 4px;
-  padding-right: 0.25em;
+  padding-right: .25em;
 }
 /* hide secondary actions if there is no space */
 @media all and (max-width: 600px) {
@@ -6560,7 +6569,7 @@ input[type="search"]::-webkit-search-cancel-button {
   .tableview table tbody td.l-cell {
     max-width: 90%;
     width: 90%;
-    padding: 0.5em;
+    padding: .5em;
   }
   .tableview table tbody td.s-cell {
     display: none;
@@ -6580,7 +6589,7 @@ table.table-info.vertical {
 }
 table.table-info td,
 table.table-info.vertical td {
-  padding: 0.625em;
+  padding: .625em;
   padding-right: 1.25em;
   color: #666;
 }
@@ -6608,7 +6617,7 @@ table.table-info.vertical td .alt.side:after {
 table.table-info td + td,
 table.table-info.vertical td + td {
   color: #333;
-  padding-right: 0.625em;
+  padding-right: .625em;
 }
 /* horizontal tableview */
 table.table-info.horizontal {
@@ -6620,7 +6629,7 @@ table.table-info.horizontal {
 }
 table.table-info.horizontal td,
 table.table-info.horizontal th {
-  padding: 0.5em;
+  padding: .5em;
   margin: 0;
 }
 table.table-info.horizontal th {
@@ -6759,7 +6768,7 @@ table.table-info.horizontal tbody tr:nth-child(odd) {
   margin-bottom: 0;
   border-top-color: transparent;
   border-left-color: #333;
-  border-left-color: hsla(0, 0%, 20%, 0.9);
+  border-left-color: rgba(51, 51, 51, 0.9);
 }
 .tooltip-left:hover:before,
 .tooltip-left:hover:after,
@@ -6783,7 +6792,7 @@ table.table-info.horizontal tbody tr:nth-child(odd) {
   margin-bottom: 0;
   border-top-color: transparent;
   border-bottom-color: #333;
-  border-bottom-color: hsla(0, 0%, 20%, 0.9);
+  border-bottom-color: rgba(51, 51, 51, 0.9);
 }
 .tooltip-bottom:hover:before,
 .tooltip-bottom:hover:after,
@@ -6857,7 +6866,7 @@ table.table-info.horizontal tbody tr:nth-child(odd) {
   width: 180px;
   background-color: #333;
   color: #FFF;
-  padding: 0.5em 1em;
+  padding: .5em 1em;
   -webkit-transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out, -webkit-transform 0.2s cubic-bezier(0.71, 1.7, 0.77, 1.24);
   -moz-transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out, -moz-transform 0.2s cubic-bezier(0.71, 1.7, 0.77, 1.24);
   transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out, transform 0.2s cubic-bezier(0.71, 1.7, 0.77, 1.24);
@@ -6896,9 +6905,9 @@ table.table-info.horizontal tbody tr:nth-child(odd) {
   margin-top: 0em;
   position: fixed;
   bottom: 0;
-  padding: 1.167em 1.5% 0 0.5%;
+  padding: 1.167em 1.5% 0 .5%;
   text-align: right;
-  font-size: 0.75em;
+  font-size: .75em;
   /* 12px */
   width: 98%;
   height: 2em;
@@ -7011,7 +7020,7 @@ table.table-info.horizontal tbody tr:nth-child(odd) {
   padding-right: 0;
 }
 .input-password-wrapper .actions.inline .button + .button {
-  margin-left: 0.5em;
+  margin-left: .5em;
 }
 .input-password-wrapper .password-complexity .complexity-text {
   float: right;
@@ -7031,7 +7040,7 @@ table.table-info.horizontal tbody tr:nth-child(odd) {
   height: 10px;
   display: block;
   clear: both;
-  margin: 0.25em 0 0.5em 0;
+  margin: .25em 0 .5em 0;
   float: left;
 }
 .input-password-wrapper .password-complexity .progress-bar {
@@ -7070,7 +7079,7 @@ table.table-info.horizontal tbody tr:nth-child(odd) {
   .input-password-wrapper .actions.inline {
     width: 50%;
     float: left;
-    margin-bottom: 0.5em;
+    margin-bottom: .5em;
   }
   .input-password-wrapper .password-complexity .progress {
     display: none;
@@ -7078,8 +7087,8 @@ table.table-info.horizontal tbody tr:nth-child(odd) {
   .input-password-wrapper .password-complexity .complexity-text {
     float: left;
     width: 50%;
-    font-size: 0.831em;
-    margin-top: 0.5em;
+    font-size: .831em;
+    margin-top: .5em;
   }
   .fa.fa-lg {
     line-height: 1;
@@ -7197,8 +7206,8 @@ table.table-info.horizontal tbody tr:nth-child(odd) {
      * 2. The use of `table` rather than `block` is only necessary if using
      *	`:before` to contain the top-margins of child elements.
      */
-  font-size: 0.813em;
-  padding: 1em 0.5em 0.875em 1em;
+  font-size: .813em;
+  padding: 1em .5em .875em 1em;
   border-bottom: 1px dotted #DDD;
   /* user summary */
   /* row actions */
@@ -7294,7 +7303,7 @@ table.table-info.horizontal tbody tr:nth-child(odd) {
   -ms-text-overflow: ellipsis;
 }
 .permissions .row .details .more_details {
-  margin-left: 0.5em;
+  margin-left: .5em;
   margin-top: 0;
 }
 .permissions .row .details .email {
@@ -7304,7 +7313,7 @@ table.table-info.horizontal tbody tr:nth-child(odd) {
   -o-text-overflow: ellipsis;
   -ms-text-overflow: ellipsis;
   font-weight: bold;
-  padding-bottom: 0.125em;
+  padding-bottom: .125em;
 }
 .permissions .row .permission_changes {
   color: #969696;
@@ -7318,7 +7327,7 @@ table.table-info.horizontal tbody tr:nth-child(odd) {
 }
 .permissions .row .rights {
   float: left;
-  margin-top: 0.5em;
+  margin-top: .5em;
   width: 27%;
 }
 .permissions .row .rights select {
@@ -7327,11 +7336,11 @@ table.table-info.horizontal tbody tr:nth-child(odd) {
 }
 .permissions .row .actions {
   float: right;
-  margin-top: 0.55em;
+  margin-top: .55em;
 }
 .permissions .row .actions a {
   font-size: 1.125em;
-  padding: 0.25em 0.5em 0.2em 0.5em;
+  padding: .25em .5em .2em .5em;
   border: 1px solid transparent;
 }
 .permissions .row .actions a:hover {
@@ -7526,7 +7535,7 @@ table.table-info.horizontal tbody tr:nth-child(odd) {
   display: none;
 }
 .dialog .accordion .accordion-header {
-  margin-bottom: 0.5em;
+  margin-bottom: .5em;
 }
 .dialog .accordion .accordion-header a {
   display: inline;
@@ -7534,7 +7543,7 @@ table.table-info.horizontal tbody tr:nth-child(odd) {
 }
 .dialog .accordion .accordion-header a:before {
   margin-left: -1.25em;
-  margin-top: 0.25em;
+  margin-top: .25em;
   content: "\f0d7";
   /* caret down */
   font: normal normal normal 1em FontAwesome;
@@ -7556,7 +7565,7 @@ table.table-info.horizontal tbody tr:nth-child(odd) {
 .accordion.sidebar-section .accordion-header a:after {
   position: absolute;
   right: 1.5em;
-  margin-top: 0.25em;
+  margin-top: .25em;
   content: "\f0d7";
   /* caret down */
   font: normal normal normal 1em FontAwesome;
@@ -7578,7 +7587,7 @@ table.table-info.horizontal tbody tr:nth-child(odd) {
 }
 .accordion.navigation .accordion-header .main-cell a:before {
   margin-left: -1.25em;
-  margin-top: 0.25em;
+  margin-top: .25em;
   content: "\f0d7";
   /* caret down */
   font: normal normal normal 1em FontAwesome;
@@ -7616,10 +7625,10 @@ table.table-info.horizontal tbody tr:nth-child(odd) {
   overflow: hidden;
   text-overflow: ellipsis;
   color: #333;
-  font-size: 0.875em;
+  font-size: .875em;
   /* 14px */
   display: block;
-  padding: 0.357em 0.714em;
+  padding: .357em .714em;
   /* 5px 10px */
   border: 0;
 }
@@ -8084,7 +8093,7 @@ This file is generated by `grunt build`, do not edit it by hand.
 /* @end */
 /* redefinitions */
 .chosen-container {
-  margin-bottom: 0.5em;
+  margin-bottom: .5em;
 }
 .chosen-container.chosen-disabled a.chosen-single {
   border: 1px solid #CCC;
@@ -8185,8 +8194,8 @@ This file is generated by `grunt build`, do not edit it by hand.
   display: block;
   clear: both;
   width: 100%;
-  padding-bottom: 0.5em;
-  font-size: 0.813em;
+  padding-bottom: .5em;
+  font-size: .813em;
 }
 /* password share tab */
 .dialog .share-tab {
@@ -8198,7 +8207,7 @@ This file is generated by `grunt build`, do not edit it by hand.
 }
 .dialog .organize-tab .current-folder {
   background: #F3F3F3;
-  padding: 0.5em 1em;
+  padding: .5em 1em;
 }
 .dialog .organize-tab .current-folder .folder-name {
   font-weight: bold;
@@ -8258,7 +8267,7 @@ This file is generated by `grunt build`, do not edit it by hand.
 .dialog.kdbx-credentials .actions.inline .button,
 .dialog.import .actions.inline .button {
   height: 1.5em;
-  padding-top: 0.6em;
+  padding-top: .6em;
 }
 .dialog.kdbx-credentials div.jfilestyle,
 .dialog.import div.jfilestyle {
@@ -8279,14 +8288,14 @@ This file is generated by `grunt build`, do not edit it by hand.
 .delete-user-dialog .ownership-transfer h3,
 .delete-group-dialog .ownership-transfer h3 {
   border: 0;
-  padding: 0.5em 1.25em;
+  padding: .5em 1.25em;
   margin: 0;
   background: #F3F3F3;
 }
 .delete-user-dialog .ownership-transfer li,
 .delete-group-dialog .ownership-transfer li {
   border-bottom: 1px dotted #DDD;
-  padding: 0.5em 1.25em;
+  padding: .5em 1.25em;
 }
 .delete-user-dialog .ownership-transfer li select,
 .delete-group-dialog .ownership-transfer li select {
@@ -8586,7 +8595,7 @@ This file is generated by `grunt build`, do not edit it by hand.
   padding: 0;
   width: 12.5em;
   height: 12.5em;
-  margin: 0.5em 1em 0 0;
+  margin: .5em 1em 0 0;
 }
 .page.settings .profile-detailed-information .avatar .edit {
   width: 12.5em;
@@ -8661,7 +8670,7 @@ This file is generated by `grunt build`, do not edit it by hand.
   line-height: 1.4em;
   font-size: 1.5em;
   text-align: center;
-  padding: 0.25em 0.5em;
+  padding: .25em .5em;
 }
 .page.settings .profile-detailed-information .avatar .edit a .help-text {
   display: block;
@@ -8712,7 +8721,7 @@ html.launching .launching-screen .progress-bar-wrapper {
 }
 html.launching .launching-screen p {
   margin: 1em 0;
-  font-size: 0.75em;
+  font-size: .75em;
 }
 .launching-screen {
   display: none;
@@ -8755,8 +8764,8 @@ html.launching .launching-screen p {
 }
 .page.status .grid .message,
 .page.setup .grid .message {
-  padding: 0.75em 1em;
-  margin-bottom: 0.5em;
+  padding: .75em 1em;
+  margin-bottom: .5em;
 }
 .page.status .grid .input .message,
 .page.setup .grid .input .message {
@@ -8916,7 +8925,7 @@ html.launching .launching-screen p {
 }
 .mfa.iframe .mfa-providers a img {
   display: block;
-  padding: 2em 0 0.5em 0;
+  padding: 2em 0 .5em 0;
   height: 5em;
 }
 .mfa.iframe .mfa-providers .coming-soon {
@@ -8931,7 +8940,7 @@ html.launching .launching-screen p {
   -webkit-transition: all 2s;
 }
 .mfa.iframe .mfa-providers .toggle-switch {
-  padding-left: 0.5em;
+  padding-left: .5em;
   background: #F3F3F3;
 }
 .mfa.iframe .mfa-trusted-device {
@@ -8950,7 +8959,7 @@ html.launching .launching-screen p {
 .mfa.iframe .mfa-trusted-device .device.current:before {
   content: '•';
   color: #009900;
-  font-size: 0.75em;
+  font-size: .75em;
   position: absolute;
   margin-left: -0.5em;
 }
@@ -8959,7 +8968,7 @@ html.launching .launching-screen p {
 }
 .mfa.iframe .mfa-trusted-device .action {
   flex: 1;
-  padding-top: 0.5em;
+  padding-top: .5em;
 }
 .mfa.iframe .mfa-trusted-device table td,
 .mfa.iframe .mfa-trusted-device table th {

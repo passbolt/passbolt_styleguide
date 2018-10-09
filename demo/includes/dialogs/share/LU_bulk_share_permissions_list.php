@@ -1,4 +1,10 @@
 <?php
+$permissionLabels = [
+    'deny' => 'no access',
+    'read' => 'can read',
+    'update' => 'can update',
+    'owner' => 'is owner'
+];
 $users = [
     [
         'User' => [
@@ -12,7 +18,13 @@ $users = [
             'id' => '002925da-8b35-31ef-ac1e-3f615c2a8f7c',
             'name' => 'owner',
             'change' => 'unchanged',
-            'updated' => false
+            'updated' => false,
+            'disabled' => true
+        ],
+        'permissions' => [
+            'canjs' => 'owner',
+            'enlightenment' => 'owner',
+            'framasoft' => 'owner',
         ]
     ],
     [
@@ -25,9 +37,14 @@ $users = [
         ],
         'Permission' => [
             'id' => '93ba06a7-e912-3ce1-a24b-b9ed766e42c4',
-            'name' => 'update',
+            'name' => 'read',
             'change' => 'unchanged',
             'updated' => false
+        ],
+        'permissions' => [
+            'canjs' => 'read',
+            'enlightenment' => 'read',
+            'framasoft' => 'read',
         ]
     ],
     [
@@ -40,9 +57,14 @@ $users = [
         ],
         'Permission' => [
             'id' => '93ba06a7-e912-3ce1-a24b-b9ed766e42c4',
-            'name' => 'read',
+            'name' => 'varies',
             'change' => 'unchanged',
             'updated' => false
+        ],
+        'permissions' => [
+            'canjs' => 'read',
+            'enlightenment' => 'update',
+            'framasoft' => 'deny',
         ]
     ]
 ];
@@ -57,14 +79,14 @@ if(!empty($_GET['Users'])) {
         <li id="<?php echo $user['Permission']['id']; ?>" data-view-id="372"
             class="row direct-permission <?php if($user['Permission']['updated']) echo 'permission-updated'; ?>" >
             <div class="avatar">
-                <img src="src/<?php echo $user['User']['avatar']; ?>" data-view-id="373">
+                <img src="<?php echo $user['User']['avatar']; ?>" data-view-id="373">
             </div>
             <div class="user"> <!-- or class=group -->
                 <div class="details">
                     <span class="name">
                         <?php echo $user['User']['first_name']; ?> <?php echo $user['User']['last_name']; ?>
                     </span>
-                    <div class="more_details tooltip-alt">
+                    <div href="#" class="more_details tooltip-alt">
                         <i class="fa fa-info-circle"></i>
                         <div class="tooltip-text right">
                             <div class="email"><?php echo $user['User']['email']; ?></div>
@@ -79,11 +101,24 @@ if(!empty($_GET['Users'])) {
             <div class="select rights">
                 <form id="js_share_rs_perm_<?php echo $user['Permission']['id']; ?>" class="js_perm_edit_form" data-view-id="372">
                     <select id="js_share_perm_type_<?php echo $user['Permission']['id']; ?>"
-                            class="js_share_rs_perm_type permission mad_form_dropdown form-element mad_view_form_dropdown">
-                        <option value="1" data-view-id="376" <?php if($user['Permission']['name'] =='read') echo 'selected'; ?>>can read</option>
-                        <option value="7" data-view-id="377" <?php if($user['Permission']['name'] =='update') echo 'selected'; ?>>can update</option>
-                        <option value="15" data-view-id="378" <?php if($user['Permission']['name'] =='owner') echo 'selected'; ?>>is owner</option>
+                            class="js_share_rs_perm_type permission mad_form_dropdown form-element mad_view_form_dropdown"
+                            <?php if($user['Permission']['disabled']) echo 'disabled="disabled"';?>>
+                        <?php if($user['Permission']['name'] == 'varies') : ?>
+                        <option value="" data-view-id="376" <?php if($user['Permission']['name'] == 'varies') echo 'selected'; ?>>varies</option>
+                        <? endif; ?>
+                        <option value="1" data-view-id="376" <?php if($user['Permission']['name'] == 'read') echo 'selected'; ?>>can read</option>
+                        <option value="7" data-view-id="377" <?php if($user['Permission']['name'] == 'update') echo 'selected'; ?>>can update</option>
+                        <option value="15" data-view-id="378" <?php if($user['Permission']['name'] == 'owner') echo 'selected'; ?>>is owner</option>
                     </select>
+                    <?php if($user['Permission']['name'] == 'varies') : ?>
+                        <div href="#" class="more_details tooltip-alt">
+                            <i class="fa fa-info-circle"></i>
+                            <div class="tooltip-text right">
+                                <b>no access</b>: canjs<br>
+                                <b>can read</b>: Enlightenment, docker, kubernetes, CakePHP, passbolt<br>
+                            </div>
+                        </div>
+                    <?php endif; ?>
                 </form>
             </div>
             <div class="actions">

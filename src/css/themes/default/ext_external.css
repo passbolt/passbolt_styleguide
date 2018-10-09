@@ -25,6 +25,9 @@
   position: relative;
   width: 100%;
 }
+#passbolt-iframe-password-share {
+  z-index: 898;
+}
 #passbolt-iframe-password-share-autocomplete,
 #passbolt-iframe-group-edit-autocomplete {
   position: absolute;
@@ -46,8 +49,8 @@
 #passbolt-iframe-login-form {
   width: 100%;
   height: 16.6em;
-  margin-top: 0.5em;
-  padding-left: 0.5em;
+  margin-top: .5em;
+  padding-left: .5em;
   margin-bottom: -6%;
 }
 #passbolt-iframe-login-form.with-remember-me-option {
