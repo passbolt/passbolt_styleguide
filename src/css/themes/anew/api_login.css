@@ -769,24 +769,27 @@ textarea {
 /*
 	Messages for validation error and example
 
-	.error - can be used for validation feedback
-	.help - can be used for example messages prior validation
+	.error-message - can be used for validation feedback
+	.help-message - can be used for example messages prior validation
 */
-.input .message {
+.input .error-message {
   padding: 0;
   font-size: 1.4rem;
   margin-top: 0.2rem;
   margin-bottom: 1.6rem;
   background-color: transparent;
   border: 0;
-  /* colors for messages */
-}
-.input .message.error {
   font-weight: normal;
   color: #D40101;
   background: #FFF;
 }
-.input .message.help {
+.input .help-message {
+  padding: 0;
+  font-size: 1.4rem;
+  margin-top: 0.2rem;
+  margin-bottom: 1.6rem;
+  background-color: transparent;
+  border: 0;
   color: #888;
   font-weight: normal;
   background: #FFF;

@@ -12,7 +12,7 @@
         <div class="header">
             <div class="logo"><span class="visually-hidden">Passbolt</span></div>
         </div>
-        <div class="infinite loading-bar animated">
+        <div class="infinite loading-bar ">
             <svg role="img" aria-label="Loading please wait..." width="452px" height="7px" viewBox="0 0 452 7" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
                     <g id="Login" transform="translate(-374.000000, -251.000000)" fill-rule="nonzero">
@@ -33,15 +33,14 @@
                 <div class="input text required error">
                     <label for="UserUsername">One Type password</label>
                     <input name="data[User][passphrase]" class="required fluid" maxlength="50" id="UserUsername" required="required" value="" type="password">
-                    <div class="error message">This is not a valid passphrase.</div>
+                    <div class="error-message">This is not a valid passphrase.</div>
                 </div>
-                <div class="input checkbox error">
+                <div class="input checkbox">
                     <input name="remember-me" id="rememberMe" type="checkbox">
                     <label for="rememberMe">Do not ask again on this device.</label>
                 </div>
                 <div class="form-actions">
-                    <a href="#" class="button primary big processing">test</a>
-                    <input type="button" class="button primary big processing" role="button" value="login"/>
+                    <button type="submit" class="button primary big processing" role="button">login</button>
                 </div>
             </form>
         </div>
