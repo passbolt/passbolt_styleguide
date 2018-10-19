@@ -675,11 +675,11 @@ html body .hidden {
   animation: blinker 1s linear infinite;
 }
 .blink-fast {
-  animation: blinker 0.25s linear infinite;
+  animation: blinker .25s linear infinite;
 }
 @keyframes blinker {
   50% {
-    opacity: 0;
+    opacity: 0.0;
   }
 }
 /* body */
@@ -812,14 +812,14 @@ h1 {
   /* 24px base 16 */
 }
 h2 {
-  font-size: 1.25em;
+  font-size: 1.250em;
   /* 20px base 16 */
 }
 h3 {
   font-size: 1.125em;
   /* 18px base 16 */
   display: block;
-  padding-bottom: 0.333em;
+  padding-bottom: .333em;
   /* 6px */
   border-bottom: 1px dotted #DDD;
 }
@@ -896,9 +896,9 @@ p {
   left: -1.85714286em;
 }
 .fa-border {
-  padding: 0.2em 0.25em 0.15em;
+  padding: .2em .25em .15em;
   border: solid 0.08em #EEE;
-  border-radius: 0.1em;
+  border-radius: .1em;
 }
 .fa-pull-left {
   float: left;
@@ -907,10 +907,10 @@ p {
   float: right;
 }
 .fa.fa-pull-left {
-  margin-right: 0.3em;
+  margin-right: .3em;
 }
 .fa.fa-pull-right {
-  margin-left: 0.3em;
+  margin-left: .3em;
 }
 /* Deprecated as of 4.4.0 */
 .pull-right {
@@ -920,10 +920,10 @@ p {
   float: left;
 }
 .fa.pull-left {
-  margin-right: 0.3em;
+  margin-right: .3em;
 }
 .fa.pull-right {
-  margin-left: 0.3em;
+  margin-left: .3em;
 }
 .fa-spin {
   -webkit-animation: fa-spin 2s infinite linear;
@@ -3203,14 +3203,14 @@ button,
   position: relative;
   font-size: 0.875em;
   /*	14px */
-  padding: 0.429em 1.225em 0.429em 1.225em;
+  padding: .429em 1.225em .429em 1.225em;
   /* 6px 16px */
   display: inline-block;
   zoom: 1;
   /* zoom and *display = ie7 hack for display:inline-block */
   *display: inline;
   vertical-align: baseline;
-  margin-right: 0.5em;
+  margin-right: .5em;
   outline: none;
   cursor: pointer;
   text-align: center;
@@ -3440,7 +3440,7 @@ html body .button.processing {
   padding: 1px;
 }
 .button-spacer {
-  margin-right: 0.5em;
+  margin-right: .5em;
 }
 /*
 	Base form components styling
@@ -3453,7 +3453,7 @@ label {
   /* 18px */
   line-height: 1.333333em;
   /* 24px */
-  padding: 0.25em 0;
+  padding: .25em 0;
   display: block;
 }
 /*
@@ -3501,9 +3501,9 @@ textarea {
   background: #FFF;
   width: 14em;
   /* 20 char (default input length) x .7em (average char length) */
-  padding: 0.375em 0.625em 0.375em 0.625em;
+  padding: .375em .625em .375em .625em;
   display: inline-block;
-  margin-bottom: 0.5em;
+  margin-bottom: .5em;
   -webkit-appearance: none;
   border: 1px solid #CCC;
   border-top: 1px solid #BBB;
@@ -3567,13 +3567,13 @@ textarea {
 .text.input .input-addon i,
 .date.input .input-addon i {
   font-size: 16px;
-  width: 1.25em;
+  width: 1.250em;
   border: 1px solid #CCC;
   border-top: 1px solid #BBB;
   line-height: 24px;
   color: #333;
   background: #FFF;
-  padding: 0.375em 0.625em 0.375em 0.625em;
+  padding: .375em .625em .375em .625em;
 }
 .text.input input:hover + .input-addon i,
 .date.input input:hover + .input-addon i {
@@ -3597,13 +3597,13 @@ textarea {
 input[type=checkbox] + label {
   font-weight: normal;
   display: inline-block;
-  margin-left: 0.25em;
+  margin-left: .25em;
 }
 .input.checkbox {
-  padding-top: 0.5em;
+  padding-top: .5em;
 }
 .radiolist .input.radio {
-  margin-bottom: 0.5em;
+  margin-bottom: .5em;
 }
 /* radio and checkboxes */
 /*
@@ -3617,11 +3617,11 @@ input[type=checkbox] + label {
 */
 .input .message {
   padding: 0;
-  padding-left: 0.25em;
-  padding-bottom: 0.5em;
-  font-size: 0.813em;
-  margin-top: 0.125em;
-  margin-bottom: 0.25em;
+  padding-left: .25em;
+  padding-bottom: .5em;
+  font-size: .813em;
+  margin-top: .125em;
+  margin-bottom: .25em;
   background-color: transparent;
   border: 0;
   /* colors for messages */
@@ -3648,7 +3648,7 @@ form .input .inline.message {
 /* error messages */
 select {
   font-size: 16px;
-  margin: 0.55em 0;
+  margin: .55em 0;
 }
 /* select */
 input[type=file] {
@@ -3665,7 +3665,7 @@ input[type=email].fluid {
   width: 80%;
 }
 .submit-wrapper {
-  margin-top: 0.5em;
+  margin-top: .5em;
 }
 /* shortcut classes for layout */
 .singleline .input.text {
@@ -3888,7 +3888,7 @@ article video {
   height: 3em;
 }
 .dialog .dialog-header h2 {
-  margin: 0.25em 2em 0.5em 0.2em;
+  margin: .25em 2em .5em .2em;
   font-size: 1.2em;
   white-space: nowrap;
   overflow: hidden;
@@ -3907,7 +3907,7 @@ article video {
 }
 .dialog .form-content {
   background: #FFF;
-  padding: 0.813em 1.5em 0.813em 1.5em;
+  padding: .813em 1.5em .813em 1.5em;
 }
 .dialog label {
   clear: both;
@@ -3997,7 +3997,7 @@ article video {
   border-top: 1px solid #DDD;
   clear: both;
   width: 100%;
-  padding: 0.75em 0;
+  padding: .75em 0;
 }
 .dialog .submit-wrapper .cancel,
 .dialog .submit-wrapper .button {
@@ -4006,7 +4006,7 @@ article video {
   font-size: 1.125em;
 }
 .dialog .submit-wrapper .cancel {
-  margin-top: 0.5em;
+  margin-top: .5em;
   font-size: 1em;
 }
 /* can also be used outside a dialog, like the sidebar */
@@ -4062,7 +4062,7 @@ article video {
 }
 .tabs-nav li a {
   display: inline-block;
-  padding: 0.4em 1.75em;
+  padding: .4em 1.75em;
   margin-left: 1.25em;
   font-size: 15px;
   border: 0;
@@ -4086,8 +4086,8 @@ article video {
   display: block;
 }
 .profile .section.detailed-information h4 {
-  margin-bottom: 0.626em;
-  padding-bottom: 0.313em;
+  margin-bottom: .626em;
+  padding-bottom: .313em;
   border-bottom: 1px dotted #DDD;
 }
 .profile .section.detailed-information li .label {
@@ -4100,13 +4100,13 @@ article video {
 }
 .profile .section.detailed-information .avatar img {
   width: 2.875em;
-  padding: 0.125em;
+  padding: 0.1250em;
 }
 .profile .section .section-action {
   padding-left: 1em;
 }
 .profile .edit-avatar-action .fa {
-  margin-top: 0.25em;
+  margin-top: .25em;
 }
 /**
  * Tooltips!
@@ -4232,7 +4232,7 @@ article video {
   margin-bottom: 0;
   border-top-color: transparent;
   border-left-color: #333;
-  border-left-color: hsla(0, 0%, 20%, 0.9);
+  border-left-color: rgba(51, 51, 51, 0.9);
 }
 .tooltip-left:hover:before,
 .tooltip-left:hover:after,
@@ -4256,7 +4256,7 @@ article video {
   margin-bottom: 0;
   border-top-color: transparent;
   border-bottom-color: #333;
-  border-bottom-color: hsla(0, 0%, 20%, 0.9);
+  border-bottom-color: rgba(51, 51, 51, 0.9);
 }
 .tooltip-bottom:hover:before,
 .tooltip-bottom:hover:after,
@@ -4330,7 +4330,7 @@ article video {
   width: 180px;
   background-color: #333;
   color: #FFF;
-  padding: 0.5em 1em;
+  padding: .5em 1em;
   -webkit-transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out, -webkit-transform 0.2s cubic-bezier(0.71, 1.7, 0.77, 1.24);
   -moz-transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out, -moz-transform 0.2s cubic-bezier(0.71, 1.7, 0.77, 1.24);
   transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out, transform 0.2s cubic-bezier(0.71, 1.7, 0.77, 1.24);
@@ -4401,7 +4401,7 @@ article video {
 .jfilestyle input[type=text]:disabled,
 .jfilestyle input[type=email]:disabled {
   background-color: #F3F3F3;
-  padding: 0.375em 0.625em 0.375em 0.625em;
+  padding: .375em .625em .375em .625em;
   font-size: 1em;
   line-height: 24px;
   border: 1px solid #CCC;
@@ -4411,13 +4411,13 @@ article video {
   border: 1px solid #CCC;
   border-left: 0px;
   background: #DDD;
-  padding: 0.65em 1.225em 0.65em 1.225em;
+  padding: .65em 1.225em .65em 1.225em;
   color: #0662ba;
   vertical-align: middle;
   line-height: normal;
   text-align: center;
   margin: 0px;
-  font-size: 0.875em;
+  font-size: .875em;
   width: auto;
   font-weight: bold;
   border-radius: 0 0.214em 0.214em 0;
@@ -4486,7 +4486,7 @@ article video {
 }
 .security-token {
   font-size: 1em;
-  padding: 0.375em 1em;
+  padding: .375em 1em;
   text-align: center;
   display: inline-block;
   width: 4em;
@@ -4680,7 +4680,7 @@ article video {
   padding-right: 0;
 }
 .input-password-wrapper .actions.inline .button + .button {
-  margin-left: 0.5em;
+  margin-left: .5em;
 }
 .input-password-wrapper .password-complexity .complexity-text {
   float: right;
@@ -4700,7 +4700,7 @@ article video {
   height: 10px;
   display: block;
   clear: both;
-  margin: 0.25em 0 0.5em 0;
+  margin: .25em 0 .5em 0;
   float: left;
 }
 .input-password-wrapper .password-complexity .progress-bar {
@@ -4739,7 +4739,7 @@ article video {
   .input-password-wrapper .actions.inline {
     width: 50%;
     float: left;
-    margin-bottom: 0.5em;
+    margin-bottom: .5em;
   }
   .input-password-wrapper .password-complexity .progress {
     display: none;
@@ -4747,8 +4747,8 @@ article video {
   .input-password-wrapper .password-complexity .complexity-text {
     float: left;
     width: 50%;
-    font-size: 0.831em;
-    margin-top: 0.5em;
+    font-size: .831em;
+    margin-top: .5em;
   }
   .fa.fa-lg {
     line-height: 1;
@@ -4764,7 +4764,7 @@ article video {
 	basically this form is embedded in a dedicated iframe released by the plugin
 */
 .form-content.permission-add label {
-  padding-bottom: 0.5em;
+  padding-bottom: .5em;
   padding-top: 1em;
   height: 1.5em;
 }
@@ -4825,8 +4825,8 @@ article video {
      * 2. The use of `table` rather than `block` is only necessary if using
      *	`:before` to contain the top-margins of child elements.
      */
-  font-size: 0.813em;
-  padding: 0.825em 0.5em 0.5em 1em;
+  font-size: .813em;
+  padding: .825em .5em .5em 1em;
   border-bottom: 1px dotted #DDD;
   /* user summary */
 }
@@ -4896,8 +4896,8 @@ article video {
   display: block;
   clear: both;
   width: 100%;
-  padding-bottom: 0.5em;
-  font-size: 0.813em;
+  padding-bottom: .5em;
+  font-size: .813em;
 }
 .master-password {
   width: 95%;
@@ -4923,7 +4923,7 @@ article video {
   display: inline;
 }
 .master-password.login-form .submit-wrapper .button {
-  margin-top: 0.5em;
+  margin-top: .5em;
 }
 .master-password.login-form .input.checkbox label {
   font-size: 0.938em;
@@ -4963,7 +4963,7 @@ article video {
 .dialog.kdbx-credentials .actions.inline .button,
 .dialog.import .actions.inline .button {
   height: 1.5em;
-  padding-top: 0.6em;
+  padding-top: .6em;
 }
 .dialog.kdbx-credentials div.jfilestyle,
 .dialog.import div.jfilestyle {
@@ -4977,7 +4977,7 @@ html body a.button {
   height: 1.5em;
 }
 html body a.button i.fa {
-  margin-top: 0.125em;
+  margin-top: .125em;
 }
 /**
  * Needed for Firefox plugin
