@@ -5,126 +5,126 @@ if (isset($_GET['cards'])) {
 	$cards = [
 		'backlog' => [
 			[
-				'title' => 'Security audit',
-				'description' => 'An independent 3rd party security review of the code.',
-				'teaser' => 'security'
-			],[
-				'title' => 'Chrome extension',
-				'description' => 'Because not everyone likes red pandas, a chrome plugin is a must.',
-				'teaser' => 'chrome'
-			],[
-				'title' => 'Categories and tags',
-				'description' => 'Organize passwords using tags or a folder tree, just like on a file system.',
-				'teaser' => 'folder'
-			],[
-				'title' => 'Form saving and filling',
-				'description' => 'The plugin can save passwords from login forms, and populate them back.',
-				'teaser' => 'check'
-			],[
-				'title' => 'Groups',
-				'description' => 'Associate people and passwords with groups to easily manage access rights.',
-				'teaser' => 'groups'
-			],[
-				'title' => 'Internationalization',
-				'description' => 'The interface is available in multiple languages. The community can add or edit translations.',
-				'teaser' => 'i18n'
-			],[
-				'title' => 'Accessibility',
-				'description' => 'Better support for screen readers and higher contrast ratio options.',
-				'teaser' => 'accessibility'
-			],[
-				'title' => 'Mobile support',
-				'description' => 'An android and iphone client. Passbolt API also allows to choose which password is available for each device.',
+				'title' => 'Mobile app',
+				'description' => 'Passwords are available on Android and iPhones.',
+				'eta' => 'Q1 2019',
 				'teaser' => 'android'
 			],[
-				'title' => 'Import / Export',
-				'description' => 'Import and export your passwords from/to other password managers.',
+				'title' => 'API Documentation',
+				'description' => 'Api documentation done in swagger. You can build on top of passbolt!',
+				'eta' => 'Q1 2019',
+				'teaser' => 'swagger'
+			],[
+				'title' => 'Files & Secure notes',
+				'description' => 'Store other secrets than a password such as notes.',
+				'eta' => 'Q1 2019',
+				'teaser' => 'securenotes'
+			],[
+				'title' => 'Users/Groups ACL',
+				'description' => 'Define which users/groups can access to which features.',
+				'eta' => 'Q2 2019',
+				'teaser' => 'acl'
+			],[
+				'title' => 'External sharing',
+				'description' => 'Share a password with an external user.',
+				'eta' => 'Q2 2019',
+				'teaser' => 'share'
+			],[
+				'title' => 'Keepass as an offline client',
+				'description' => 'Bi-directional sync with keepass file format to work offline.',
+				'eta' => 'Q3 2019',
 				'teaser' => 'keypassx'
 			],[
-				'title' => 'LDAP Integration',
-				'description' => 'Integrate passbold with your organization user directory.',
-				'teaser' => 'ldap'
-			],[
-				'title' => 'Advanced keyring management',
-				'description' => 'Manually approve and sign keys to build a network of trust.',
-				'teaser' => 'keyring'
-			],[
-				'title' => 'Multi factor authentication',
-				'description' => 'Login requires an additional factor like a phone token.',
-				'teaser' => 'fingerprint'
-			]
+				'title' => 'Internationalization',
+				'description' => 'The interface and documentation are translatable in multiple languages.',
+				'eta' => 'Q3 2019',
+				'teaser' => 'i18n'
+			],
 		],
 		'in progress' => [
 			[
-				'title' => 'Email notifications',
-				'description' => 'Receive email notifications when someone changed a password, posted a comment, etc.',
-				'eta' => 'June 2018',
-				'teaser' => 'email'
+				'title' => 'Quick Access',
+				'description' => 'Simplified app to access passwords from the browser extension.',
+				'eta' => 'Q4 2018',
+				'teaser' => 'quickaccess'
 			],[
-				'title' => 'Passbolt CLI',
-				'description' => 'A simple command line interface prototype as an alternative to the web client.',
-                'eta' => 'Sept 2018',
-                'teaser' => 'terminal'
-			],[
-				'title' => 'API Documentation',
-				'description' => 'Api documentation done in swagger to allow people to build new integrations.',
-                'eta' => 'Sept 2018',
-                'teaser' => 'swagger'
-			],[
-				'title' => 'Risk analysis',
-				'description' => 'A complete review of the security risks and mitigations in place.',
-                'eta' => 'Dec 2018',
-                'teaser' => 'lock2'
-			], [
-				'title' => 'Multi device support',
-				'description' => 'Install passbolt on another computer or recover your account after a system reinstall.',
-				'teaser' => 'sync'
-			],[
-				'title' => 'Guided tour',
-				'description' => 'Get familiar with passbolt features the first time you login.',
-				'teaser' => 'notification'
+				'title' => 'Autofill / Autosave',
+				'description' => 'Passbolt remembers passwords from web pages and populate forms.',
+				'eta' => 'Q4 2018',
+				'teaser' => 'check'
 			],[
 				'title' => 'Audit logs',
-				'description' => 'Browse the access logs to see who is doing what on your passbolt server.',
+				'description' => 'Browse the access logs to see who is doing what on passbolt.',
+				'eta' => 'Q4 2018',
 				'teaser' => 'monitor'
 			],[
-				'title' => 'Improved filtering and sorting options',
-				'description' => 'Search filter your password list as you type. Sort results by collumns.',
-				'teaser' => 'search'
-			]
+				'title' => 'Folders',
+				'description' => 'Organize passwords in folders.',
+				'eta' => 'Q4 2018',
+				'teaser' => 'folder'
+			],[
+				'title' => 'Admin panel',
+				'description' => 'Configure passbolt directly from the admin panel.',
+				'eta' => 'Q4 2018',
+				'teaser' => 'adminpanel'
+			],
 		],
 		'completed' => [
 			[
-				'title' => 'Passbolt Server',
-				'description' => 'The solution foundation, a restful JSON API with some extra magic.',
+				'title' => 'Second factor authentication',
+				'description' => 'Login requires an additional code sent to your phone.',
+				'eta' => 'Q3 2018',
+				'teaser' => 'fingerprint'
+			],
+			[
+				'title' => 'LDAP Integration (Pro)',
+				'description' => 'Integrate passbolt with your organization user directory.',
+				'eta' => 'Q2 2018',
+				'teaser' => 'ldap'
+			],[
+				'title' => 'Import (Pro)',
+				'description' => 'Import your passwords from other password managers.',
+				'eta' => 'Q1 2018',
+				'teaser' => 'sync'
+			],[
+				'title' => 'Export (Pro)',
+				'description' => 'Export your passwords to other password managers.',
+				'eta' => 'Q1 2018',
+				'teaser' => 'keypassx'
+			],[
+				'title' => 'Tags (Pro)',
+				'description' => 'Organize passwords using tags to quickly find them by themes.',
+				'eta' => 'Q1 2018',
+				'teaser' => 'folder'
+			],[
+				'title' => 'API Upgrade',
+				'description' => 'Migration of the passbolt core to CakePHP version 3.',
+				'eta' => 'December 2017',
 				'teaser' => 'passbolt'
 			],[
-				'title' => 'Firefox plugin',
-				'description' => 'A plugin to manage encryption and decryption safely.',
-				'teaser' => 'firefox'
+				'title' => 'API Code review',
+				'description' => 'An independent security audit of the code.',
+				'eta' => 'December 2017',
+				'teaser' => 'security'
 			],[
-				'title' => 'Installation tools',
-				'description' => ' Docker image and install status dashboard.',
-				'teaser' => 'docker'
+				'title' => 'Groups',
+				'description' => 'Associate people and passwords with groups to manage access rights.',
+				'eta' => 'May 2017',
+				'teaser' => 'groups'
 			],[
-				'title' => 'Selenium & unit tests',
-				'description' => 'All major features and bugs are tested against regressions.',
-				'teaser' => 'jenkins'
-			],[
-				'title' => 'Share a password',
-				'description' => 'Share a password and decide who can use or edit a password.',
-				'teaser' => 'share'
-			],[
-				'title' => 'Comment',
-				'description' => 'Browse and reply to comments for a given password.',
+				'title' => 'Comments',
+				'description' => 'Browse and reply to comments on a given password.',
+				'eta' => 'Spring 2016',
 				'teaser' => 'comment'
 			],[
-				'title' => 'Filters',
-				'description' => 'Only see favorites, items you own, password recently edited, etc.',
-				'teaser' => 'star'
+				'title' => 'Filtering and sorting',
+				'description' => 'Filter your password list as you search. Sort results by columns.',
+				'eta' => 'Spring 2016',
+				'teaser' => 'search'
 			],[
 				'title' => 'more...',
-				'description' => 'Check out our release notes for the complete list of released items',
+				'description' => 'Check out our release notes for the complete list of released items.',
+				'eta' => '<a href="https://www.passbolt.com/release/notes">Release notes</a>',
 				'teaser' => 'help'
 			]
 		]
