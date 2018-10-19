@@ -683,6 +683,7 @@ html body .hidden {
     opacity: 0.0;
   }
 }
+/* box shadows */
 /* body */
 body {
   color: #FFFFFC;
@@ -3231,33 +3232,23 @@ button,
   display: inline-block;
   /* in case there is a div wrapper */
 }
-input.button.big {
+.button.big {
   font-size: 1.125em;
 }
-a.button.big {
-  font-size: 1em;
-  height: 1.5em;
-  margin-top: 1em;
-  min-width: 3em;
-}
 /* primary */
-.button.primary,
-button.primary {
+.button.primary {
   background: #2894DF;
   border: 1px solid #2894DF;
   color: #FFF;
   text-shadow: 0 1px 0 rgba(0, 0, 0, 0.2);
 }
-.button.primary:hover,
-button.primary:hover {
+.button.primary:hover {
   background: #2A9CEB;
   border: 1px solid #2A9CEB;
   color: #FFF;
 }
-button.primary:active,
 .button.primary:active,
-.button.primary:focus,
-button.primary:focus {
+.button.primary:focus {
   color: #EEEEEC;
   border: 1px solid #4271b7;
   background: #2A9CEB;
@@ -3289,9 +3280,7 @@ button.primary:focus {
   font-weight: normal;
 }
 /* hover */
-input[type=submit]:hover,
-.button:hover,
-button:hover {
+.button:hover {
   color: #FFFFFC;
   text-decoration: none;
   background: #444442;
@@ -3299,15 +3288,11 @@ button:hover {
   border: 1px solid #30302D;
 }
 /* focus */
-input[type=submit]:focus,
-.button:focus,
-button:focus {
+.button:focus {
   color: #2894DF;
   border: 1px solid #2894DF;
 }
 /* active */
-input[type=submit]:active,
-button:active,
 .button:active {
   color: #2894DF;
   border: 1px solid #2894DF;
@@ -3315,8 +3300,6 @@ button:active,
   position: relative;
   box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.2);
 }
-input[type=submit].disabled,
-button.disabled,
 .button.disabled {
   cursor: default;
   color: #8B8B89;
@@ -3326,14 +3309,8 @@ button.disabled,
   font-weight: normal;
 }
 /* inactive */
-input[type=submit].disabled:hover,
 .button.disabled:hover,
-button.disabled:hover,
-input[type=submit].disabled:active,
-button.disabled:active,
 .button.disabled:active,
-input[type=submit].disabled:focus,
-button.disabled:focus,
 .button.disabled:focus {
   box-shadow: 0 0 0;
   top: 0;
@@ -3428,7 +3405,6 @@ html body .button.processing {
   background-size: auto 50% ;
   border: 1px solid #0C0C0A;
   border-radius: 5px;
-  padding: 1px;
 }
 .button-spacer {
   margin-right: .5em;
@@ -3440,11 +3416,11 @@ html body .button.processing {
 /* input label */
 label {
   font-weight: bold;
-  font-size: 1.125em;
-  /* 18px */
+  font-size: 1em;
+  /* 16px */
   line-height: 1.333333em;
   /* 24px */
-  padding: .25em 0;
+  padding: .5em 0;
   display: block;
 }
 /*
@@ -3587,16 +3563,75 @@ textarea {
 .radiolist .input.radio label,
 input[type=checkbox] + label {
   font-weight: normal;
-  display: inline-block;
+  display: inline;
   margin-left: .25em;
-}
-.input.checkbox {
-  padding-top: .5em;
-}
-.radiolist .input.radio {
-  margin-bottom: .5em;
+  margin-bottom: .25em;
 }
 /* radio and checkboxes */
+.radiolist {
+  /*
+     * For IE 6/7 only
+     * Include this rule to trigger hasLayout and contain floats.
+     */
+  /*
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
+  /*
+     * For IE 6/7 only
+     * Include this rule to trigger hasLayout and contain floats.
+     */
+  zoom: 1;
+  /*
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
+}
+.radiolist:before,
+.radiolist:after {
+  content: "";
+  display: table;
+}
+.radiolist:after {
+  clear: both;
+}
+.radiolist:before,
+.radiolist:after {
+  content: "";
+  display: table;
+}
+.radiolist:after {
+  clear: both;
+}
+.radiolist .input.radio {
+  float: left;
+}
+.radiolist .input.radio input {
+  float: left;
+  margin-top: .55em;
+}
+.radiolist .input.radio input + label {
+  font-weight: normal;
+  display: inline-block;
+  margin-left: .65em;
+  font-size: 1em;
+  float: left;
+  margin-right: 2em;
+}
 /*
 	Messages for validation error and example
 
@@ -3655,10 +3690,60 @@ input[type=text].fluid,
 input[type=email].fluid {
   width: 80%;
 }
+.submit-input-wrapper,
 .submit-wrapper {
   margin-top: .5em;
 }
 /* shortcut classes for layout */
+.singleline {
+  /*
+     * For IE 6/7 only
+     * Include this rule to trigger hasLayout and contain floats.
+     */
+  /*
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
+  /*
+     * For IE 6/7 only
+     * Include this rule to trigger hasLayout and contain floats.
+     */
+  zoom: 1;
+  /*
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
+}
+.singleline:before,
+.singleline:after {
+  content: "";
+  display: table;
+}
+.singleline:after {
+  clear: both;
+}
+.singleline:before,
+.singleline:after {
+  content: "";
+  display: table;
+}
+.singleline:after {
+  clear: both;
+}
 .singleline .input.text {
   float: left;
   width: 40.2%;
@@ -3672,101 +3757,6 @@ input[type=email].fluid {
 .singleline .input.text input[type="password"],
 .singleline .input.text input[type="search"] {
   width: 93%;
-}
-/** Specific layout for connection information */
-.singleline.connection_info.protocol_host_port .input.text.field_protocol_host {
-  border: 0;
-  padding: 0;
-  width: 70%;
-}
-.singleline.connection_info.protocol_host_port .input.text.field_protocol_host .input.text {
-  padding: 0;
-  margin: 0;
-}
-.singleline.connection_info.protocol_host_port .input.text.field_protocol_host .input.text input {
-  margin: 0;
-  border-left: none;
-}
-.singleline.connection_info.protocol_host_port .input.text.field_protocol_host .input.text.host {
-  width: 75%;
-}
-.singleline.connection_info.protocol_host_port .input.text.field_protocol_host .input.text.host input[type=text] {
-  width: 95%;
-}
-.singleline.connection_info.protocol_host_port .input.text.field_protocol_host .input.text.protocol {
-  width: 25%;
-  position: relative;
-}
-.singleline.connection_info.protocol_host_port .input.text.field_protocol_host .input.text.protocol .chosen-container {
-  display: block;
-}
-.singleline.connection_info.protocol_host_port .input.text.field_protocol_host .input.text.protocol .chosen-container a.chosen-single {
-  height: 38px;
-}
-.singleline.connection_info.protocol_host_port .input.text.field_protocol_host .input.text.protocol .chosen-container a.chosen-single div b {
-  background-position: 0px 10px;
-}
-.singleline.connection_info.protocol_host_port .input.text.field_protocol_host .input.text.protocol .chosen-container a.chosen-single span {
-  font-size: 16px;
-  padding: 6px 0 0 0;
-}
-.singleline.connection_info.protocol_host_port .input.text.field_protocol_host .input.text.protocol .chosen-container-active.chosen-with-drop a.chosen-single div b {
-  background-position: -18px 10px;
-}
-.singleline.connection_info.protocol_host_port .input.text.port {
-  width: 9%;
-  margin-left: 1%;
-}
-.singleline.connection_info.protocol_host_port .input.text.port input[type=number] {
-  width: 100%;
-}
-.chosen-container {
-  margin-bottom: .5em;
-}
-.chosen-container.chosen-disabled a.chosen-single {
-  border: 1px solid #222220;
-}
-.chosen-container a.chosen-single {
-  background: #444442;
-  -webkit-border-radius: 0;
-  -moz-border-radius: 0;
-  border-radius: 0;
-  border: 1px solid #222220;
-  border-top: 1px solid #30302D;
-  box-shadow: none;
-  height: 32px;
-}
-.chosen-container a.chosen-single span {
-  font-size: 16px;
-  padding-top: 3px;
-  color: #FFFFFC;
-}
-.chosen-container a.chosen-single div b {
-  background-position: 0 6px;
-}
-.chosen-container .chosen-search input.chosen-search-input[type=text] {
-  width: 95% !important;
-  color: #444442;
-}
-.chosen-container .chosen-drop {
-  border: 1px solid #222220 !important;
-  border-top: 0 !important;
-  -webkit-border-radius: 0 !important;
-  -moz-border-radius: 0 !important;
-  border-radius: 0 !important;
-  background: #0C0C0A !important;
-}
-.chosen-container .chosen-drop .chosen-results {
-  color: #FFFFFC;
-}
-.chosen-container.chosen-container-active.chosen-with-drop a.chosen-single {
-  background: #0C0C0A;
-  border: 1px solid #222220;
-  border-top: 1px solid #30302D;
-  box-shadow: none;
-}
-.chosen-container.chosen-container-active.chosen-with-drop a.chosen-single div b {
-  background-position: -18px 8px;
 }
 /*
  * Page layout
@@ -4336,21 +4326,13 @@ input[type=email].fluid {
   border-radius: 1em;
   border: 4px solid #30302D;
 }
-video {
-  display: block;
-  width: 100%;
-  height: auto;
-}
-article video {
-  margin: 1em 0;
-}
 .input.toggle-switch {
   display: flex;
   padding-top: 1em;
   padding-bottom: .5em;
 }
 .input.toggle-switch label {
-  padding-top: .05em;
+  padding-top: .15em;
   padding-left: 1em;
   order: 2;
   flex: 1;
@@ -5119,18 +5101,17 @@ input[type="search"]::-webkit-search-cancel-button {
   padding-bottom: 1em;
 }
 /* success animation */
-.message.success.animated {
+.message.success.success-large.animated {
   background: #30302D;
   color: #FFFFFC;
   display: flex;
-  font-size: 1.125em;
   border: 1px solid #0C0C0A;
   border-radius: 3px;
 }
-.message.success.animated .illustration {
+.message.success.success-large.animated .illustration {
   flex: 0 0 180px;
 }
-.message.success.animated .additional-information {
+.message.success.success-large.animated .additional-information {
   flex: 1;
   line-height: 180px;
   margin-top: 1.5em;
@@ -5152,25 +5133,25 @@ input[type="search"]::-webkit-search-cancel-button {
     stroke-dashoffset: 0;
   }
 }
-.message.success.animated #successAnimationCircle {
+.message.success.success-large.animated #successAnimationCircle {
   stroke-dasharray: 180px 180px;
   stroke: #009900;
 }
-.message.success.animated #successAnimationCheck {
+.message.success.success-large.animated #successAnimationCheck {
   stroke-dasharray: 50px 50px;
   stroke: #009900;
 }
-.message.success.animated #successAnimation.animated {
+.message.success.success-large.animated #successAnimation.animated {
   animation: 0.75s ease-out 0s 1 both pop;
 }
-.message.success.animated #successAnimation.animated #successAnimationCircle {
+.message.success.success-large.animated #successAnimation.animated #successAnimationCircle {
   animation: 0.75s cubic-bezier(0.77, 0, 0.175, 1) 0s 1 both drawCircle;
 }
-.message.success.animated #successAnimation.animated #successAnimationCheck {
+.message.success.success-large.animated #successAnimation.animated #successAnimationCheck {
   animation: 0.75s cubic-bezier(0.77, 0, 0.175, 1) 0s 1 both drawCheck;
 }
 @media only screen and (max-width: 767px) {
-  .message.success.animated {
+  .message.success.success-large.animated {
     flex-direction: column;
   }
 }
@@ -5286,6 +5267,15 @@ input[type="search"]::-webkit-search-cancel-button {
   text-overflow: ellipsis;
   -o-text-overflow: ellipsis;
   -ms-text-overflow: ellipsis;
+}
+.dialog .dialog-header .tooltip-alt {
+  margin-left: 0.3em;
+  font-size: 0.7em;
+  font-weight: normal;
+  color: #FFFFFC;
+}
+.dialog .dialog-header .tooltip-alt .tooltip-text {
+  white-space: normal;
 }
 .dialog .dialog-header .dialog-header-subtitle {
   padding-top: 0.3em;
@@ -6512,7 +6502,7 @@ input[type="search"]::-webkit-search-cancel-button {
   max-width: 19em;
 }
 .tableview table tbody tr {
-  height: 1em;
+  height: 2em;
 }
 .tableview table tbody tr.selected {
   background: #0e3e60;
@@ -6544,6 +6534,7 @@ input[type="search"]::-webkit-search-cancel-button {
 .tableview table th.cell_favorite,
 .tableview table td.cell_favorite {
   padding-left: 0;
+  padding-top: 4px;
   padding-right: .25em;
 }
 /* hide secondary actions if there is no space */
@@ -8082,6 +8073,102 @@ This file is generated by `grunt build`, do not edit it by hand.
   }
 }
 /* @end */
+/* redefinitions */
+.chosen-container {
+  margin-bottom: .5em;
+}
+.chosen-container.chosen-disabled a.chosen-single {
+  border: 1px solid #222220;
+}
+.chosen-container a.chosen-single {
+  background: #444442;
+  -webkit-border-radius: 0;
+  -moz-border-radius: 0;
+  border-radius: 0;
+  border: 1px solid #222220;
+  border-top: 1px solid #30302D;
+  box-shadow: none;
+  height: 32px;
+}
+.chosen-container a.chosen-single span {
+  font-size: 16px;
+  padding-top: 3px;
+  color: #FFFFFC;
+}
+.chosen-container a.chosen-single div b {
+  background-position: 0 6px;
+}
+.chosen-container .chosen-search input.chosen-search-input[type=text] {
+  width: 95% !important;
+  color: #444442;
+}
+.chosen-container .chosen-drop {
+  border: 1px solid #222220 !important;
+  border-top: 0 !important;
+  -webkit-border-radius: 0 !important;
+  -moz-border-radius: 0 !important;
+  border-radius: 0 !important;
+  background: #0C0C0A !important;
+}
+.chosen-container .chosen-drop .chosen-results {
+  color: #FFFFFC;
+}
+.chosen-container.chosen-container-active.chosen-with-drop a.chosen-single {
+  background: #0C0C0A;
+  border: 1px solid #222220;
+  border-top: 1px solid #30302D;
+  box-shadow: none;
+}
+.chosen-container.chosen-container-active.chosen-with-drop a.chosen-single div b {
+  background-position: -18px 8px;
+}
+/** Specific layout for ldap connection information */
+.singleline.connection_info.protocol_host_port .input.text.field_protocol_host {
+  border: 0;
+  padding: 0;
+  width: 70%;
+}
+.singleline.connection_info.protocol_host_port .input.text.field_protocol_host .input.text {
+  padding: 0;
+  margin: 0;
+}
+.singleline.connection_info.protocol_host_port .input.text.field_protocol_host .input.text input {
+  margin: 0;
+  border-left: none;
+}
+.singleline.connection_info.protocol_host_port .input.text.field_protocol_host .input.text.host {
+  width: 75%;
+}
+.singleline.connection_info.protocol_host_port .input.text.field_protocol_host .input.text.host input[type=text] {
+  width: 95%;
+}
+.singleline.connection_info.protocol_host_port .input.text.field_protocol_host .input.text.protocol {
+  width: 25%;
+  position: relative;
+}
+.singleline.connection_info.protocol_host_port .input.text.field_protocol_host .input.text.protocol .chosen-container {
+  display: block;
+}
+.singleline.connection_info.protocol_host_port .input.text.field_protocol_host .input.text.protocol .chosen-container a.chosen-single {
+  height: 38px;
+}
+.singleline.connection_info.protocol_host_port .input.text.field_protocol_host .input.text.protocol .chosen-container a.chosen-single div b {
+  background-position: 0px 10px;
+}
+.singleline.connection_info.protocol_host_port .input.text.field_protocol_host .input.text.protocol .chosen-container a.chosen-single span {
+  font-size: 16px;
+  padding: 6px 0 0 0;
+}
+.singleline.connection_info.protocol_host_port .input.text.field_protocol_host .input.text.protocol .chosen-container-active.chosen-with-drop a.chosen-single div b {
+  background-position: -18px 10px;
+}
+.singleline.connection_info.protocol_host_port .input.text.port {
+  width: 9%;
+  margin-left: 1%;
+}
+.singleline.connection_info.protocol_host_port .input.text.port input[type=number] {
+  width: 100%;
+}
 .input-password-wrapper {
   overflow: hidden;
 }
@@ -8324,6 +8411,7 @@ This file is generated by `grunt build`, do not edit it by hand.
   width: 45px;
 }
 .page.people .tableview-content td.cell_avatar img {
+  margin-top: 3px;
   width: 25px !important;
   height: 25px !important;
 }
@@ -8697,52 +8785,177 @@ html.launching .launching-screen p {
   box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.2);
   border: 1px solid #0C0C0A;
 }
-.mfa.page p {
-  font-size: .875em;
+#js_mfa_iframe {
+  width: 100%;
+  height: calc(100% - 2.5em);
+  position: absolute;
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+  background: #30302D;
 }
-.mfa.page .input-verify {
+.mfa.iframe .grid-responsive-12,
+.mfa.iframe .grid {
+  max-width: none;
+}
+.mfa.iframe .actions-wrapper {
+  margin-top: 3em;
+}
+.mfa.iframe .totp-setup .input-verify {
+  float: left;
   background: #444442;
   padding: 2.5em;
-  margin-top: 3em;
-  max-width: 16em;
+  max-width: 25em;
+  height: 262px;
+  min-width: 22em;
+  box-sizing: border-box;
+  border: 3px solid #444442;
+  border-left: 0;
 }
-.mfa.page .button-verify {
+.mfa.iframe .totp-setup .input-verify .helptext {
+  max-width: 18em;
+}
+.mfa.iframe .totp-setup .qrcode {
+  float: left;
+  max-width: 262px;
+  box-sizing: border-box;
+  max-height: 262px;
+  border: 3px solid #444442;
+}
+.mfa.iframe .how-it-works p {
+  width: 28%;
+  float: left;
+  color: #cacac9;
+}
+.mfa.iframe .how-it-works p + p {
+  margin-left: 5%;
+}
+.mfa.iframe .how-it-works p + p + p {
+  margin-left: 8%;
+}
+.mfa.iframe .mfa-providers {
+  /*
+     * For IE 6/7 only
+     * Include this rule to trigger hasLayout and contain floats.
+     */
+  /*
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
+  /*
+     * For IE 6/7 only
+     * Include this rule to trigger hasLayout and contain floats.
+     */
+  zoom: 1;
+  /*
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
+}
+.mfa.iframe .mfa-providers:before,
+.mfa.iframe .mfa-providers:after {
+  content: "";
+  display: table;
+}
+.mfa.iframe .mfa-providers:after {
+  clear: both;
+}
+.mfa.iframe .mfa-providers:before,
+.mfa.iframe .mfa-providers:after {
+  content: "";
+  display: table;
+}
+.mfa.iframe .mfa-providers:after {
+  clear: both;
+}
+.mfa.iframe .mfa-providers li {
+  float: left;
+  -webkit-border-radius: 0.214em;
+  -moz-border-radius: 0.214em;
+  border-radius: 0.214em;
+  width: 12.5em;
+  margin-bottom: 2em;
+  margin-right: 2em;
+  border: 1px solid #0C0C0A;
+}
+.mfa.iframe .mfa-providers li:hover {
+  border: 1px solid #0C0C0A;
+  box-shadow: 0px 0px 10px 0px #000;
+}
+.mfa.iframe .mfa-providers a {
+  border-bottom: 1px solid #0C0C0A;
+  display: block;
+  text-align: center;
+}
+.mfa.iframe .mfa-providers a span {
+  padding: 1em 0 2em 0;
+  display: block;
+}
+.mfa.iframe .mfa-providers a img {
+  display: block;
+  padding: 2em 0 .5em 0;
+  height: 5em;
+}
+.mfa.iframe .mfa-providers .coming-soon {
+  color: #cacac9;
+}
+.mfa.iframe .mfa-providers .coming-soon a {
+  cursor: not-allowed;
+}
+.mfa.iframe .mfa-providers .coming-soon img {
+  filter: url('../../../img/controls/filter.svg#grayscale');
+  -webkit-filter: grayscale(1);
+  -webkit-transition: all 2s;
+}
+.mfa.iframe .mfa-providers .toggle-switch {
+  padding-left: .5em;
   background: #444442;
-  padding: 2.5em;
-  margin-top: 3em;
-  max-width: 16em;
 }
-.mfa.page .mfa-trusted-device {
+.mfa.iframe .mfa-trusted-device {
   padding: 1em;
   display: flex;
 }
-.mfa.page .mfa-trusted-device:nth-child(even) {
+.mfa.iframe .mfa-trusted-device:nth-child(even) {
   background: #444442;
 }
-.mfa.page .mfa-trusted-device .device {
+.mfa.iframe .mfa-trusted-device .device {
   flex: 1;
   font-size: 2.5em;
   text-align: center;
   color: #cacac9;
 }
-.mfa.page .mfa-trusted-device .device.current:before {
+.mfa.iframe .mfa-trusted-device .device.current:before {
   content: '•';
   color: #009900;
   font-size: .75em;
   position: absolute;
   margin-left: -0.5em;
 }
-.mfa.page .mfa-trusted-device .session {
+.mfa.iframe .mfa-trusted-device .session {
   flex: 2 0 10em;
 }
-.mfa.page .mfa-trusted-device .action {
+.mfa.iframe .mfa-trusted-device .action {
   flex: 1;
   padding-top: .5em;
 }
-.mfa.page .mfa-trusted-device table td,
-.mfa.page .mfa-trusted-device table th {
+.mfa.iframe .mfa-trusted-device table td,
+.mfa.iframe .mfa-trusted-device table th {
   padding: 0.125em 1em;
 }
-.mfa.page .mfa-trusted-device table th {
+.mfa.iframe .mfa-trusted-device table th {
   font-weight: bold;
 }
