@@ -8977,3 +8977,10 @@ html.launching .launching-screen p {
 .mfa.iframe .mfa-trusted-device table th {
   font-weight: bold;
 }
+.page.administration .workspace-main .grid {
+  position: absolute;
+  bottom: 0;
+  top: 2.125em;
+  padding: 0;
+  overflow-y: scroll;
+}
