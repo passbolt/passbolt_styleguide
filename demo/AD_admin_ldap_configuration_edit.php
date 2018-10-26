@@ -34,24 +34,25 @@
 				<div class="panel left">
 					<?php
 						$_GET['shortcuts'] = 'ldap_configuration';
-						include('includes/nav/AD_nav_administration_ldap.php');
+						include('includes/nav/AD_nav_administration.php');
 					?>
 				</div>
 				<div class="panel middle">
 					<?php
 					$_GET['breadcrumbs'] = array(
-						'administration' => 'demo/AD_admin_ldap_configuration.php',
-						'ldap' => 'demo/AD_admin_ldap_configuration.php',
-						'configuration' => 'demo/AD_admin_ldap_configuration.php',
-						'edit' => 'demo/AD_admin_ldap_configuration_edit.php'
+						'Administration' => 'demo/AD_admin_ldap_configuration.php',
+						'Ldap' => 'demo/AD_admin_ldap_configuration.php',
+						'Configuration' => 'demo/AD_admin_ldap_configuration.php',
+						'Edit' => 'demo/AD_admin_ldap_configuration_edit.php'
 					);
 					include('includes/LU_breadcrumbs.php'); ?>
 					<div id="js_wk_administration_main" class="workspace-main">
 						<div class="grid grid-responsive-12">
 							<div class="row">
-								<div class="ldap-configuration-credentials col8">
+								<div class="ldap-settings enabled col8">
 									<?
 									$_GET['ldap_settings']['edit'] = 1;
+									$_GET['ldap_settings']['enabled'] = 1;
 									include('includes/form/AD_ldap_settings.php') ?>
 									<p>&nbsp;</p>
 								</div>
@@ -74,3 +75,11 @@
 	<?php include('includes/LU_footer.php'); ?>
 </body>
 </html>
+<script type="application/javascript">
+	let disabled = true;
+	$('.toggle-switch-button').on('click', () => {
+		disabled = !disabled;
+	$('.ldap-settings').toggleClass('enabled');
+	$('.toggle-switch-checkbox').attr('checked', !disabled);
+	});
+</script>

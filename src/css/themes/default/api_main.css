@@ -4472,6 +4472,15 @@ input[type=email].fluid {
 .input.toggle-switch .toggle-switch-checkbox:disabled:checked + .toggle-switch-button {
   background: #e6ffcc;
 }
+h1 .input.toggle-switch,
+h2 .input.toggle-switch,
+h3 .input.toggle-switch,
+h4 .input.toggle-switch,
+h5 .input.toggle-switch,
+h6 .input.toggle-switch {
+  float: left;
+  padding: 0.40em 1em 0 0;
+}
 /* headers */
 .header {
   overflow: visible !important;
@@ -8983,4 +8992,34 @@ html.launching .launching-screen p {
   top: 2.125em;
   padding: 0;
   overflow-y: scroll;
+}
+.page.administration .mfa-settings .provider-section .description.enabled {
+  display: none;
+}
+.page.administration .mfa-settings .provider-section .form-content {
+  display: none;
+}
+.page.administration .mfa-settings .provider-section.enabled .form-content {
+  display: block;
+}
+.page.administration .mfa-settings .provider-section.enabled .description.disabled {
+  display: none;
+}
+.page.administration .mfa-settings .provider-section.enabled .description.enabled {
+  display: block;
+}
+.page.administration .ldap-settings .description.enabled {
+  display: none;
+}
+.page.administration .ldap-settings .form-content {
+  display: none;
+}
+.page.administration .ldap-settings.enabled .form-content {
+  display: block;
+}
+.page.administration .ldap-settings.enabled .description.disabled {
+  display: none;
+}
+.page.administration .ldap-settings.enabled .description.enabled {
+  display: block;
 }

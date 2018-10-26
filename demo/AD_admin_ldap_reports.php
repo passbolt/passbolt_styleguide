@@ -27,7 +27,7 @@
 						<div class="panel left">
 							<?php
 								$_GET['shortcuts'] = 'ldap_reports';
-								include('includes/nav/AD_nav_administration_ldap.php');
+								include('includes/nav/AD_nav_administration.php');
 							?>
 						</div>
 						<div class="panel middle">
