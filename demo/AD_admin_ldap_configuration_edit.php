@@ -41,8 +41,8 @@
 					<?php
 					$_GET['breadcrumbs'] = array(
 						'Administration' => 'demo/AD_admin_ldap_configuration.php',
-						'Ldap' => 'demo/AD_admin_ldap_configuration.php',
-						'Configuration' => 'demo/AD_admin_ldap_configuration.php',
+						'Users Directory' => 'demo/AD_admin_ldap_configuration.php',
+						'Settings' => 'demo/AD_admin_ldap_configuration.php',
 						'Edit' => 'demo/AD_admin_ldap_configuration_edit.php'
 					);
 					include('includes/LU_breadcrumbs.php'); ?>

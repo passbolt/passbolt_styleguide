@@ -40,8 +40,8 @@
 					<?php
 					$_GET['breadcrumbs'] = array(
 						'Administration' => 'demo/AD_admin_ldap_configuration.php',
-						'Ldap' => 'demo/AD_admin_ldap_configuration.php',
-						'Configuration' => 'demo/AD_admin_ldap_configuration.php'
+						'Users Directory' => 'demo/AD_admin_ldap_configuration.php',
+						'Settings' => 'demo/AD_admin_ldap_configuration.php'
 					);
 					include('includes/LU_breadcrumbs.php'); ?>
 					<div id="js_wk_administration_main" class="workspace-main">

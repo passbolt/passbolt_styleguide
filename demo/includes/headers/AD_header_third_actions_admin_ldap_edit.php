@@ -1,7 +1,7 @@
 <div class="col2_3 actions-wrapper">
 	<ul id="js_wsp_primary_menu" class="actions ready">
 		<li>
-			<a class="button primary" href="demo/AD_admin_ldap_configuration.php">
+			<a class="button" href="demo/AD_admin_ldap_configuration.php">
 				<i class="fa fa-fw fa-save"></i>
 				<span>save settings</span>
 			</a>

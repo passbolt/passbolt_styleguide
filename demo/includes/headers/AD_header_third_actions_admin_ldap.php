@@ -1,7 +1,7 @@
 <div class="col2_3 actions-wrapper">
 	<ul class="actions ready">
 		<li>
-			<a class="button primary" href="demo/AD_admin_ldap_configuration_edit.php">
+			<a class="button" href="demo/AD_admin_ldap_configuration_edit.php">
 				<i class="fa fa-fw fa-edit"></i>
 				<span>edit</span>
 			</a>

@@ -34,7 +34,7 @@
 					$_GET['breadcrumbs'] = array(
 						'Administration' => 'demo/AD_admin_mda_configuration.php',
 						'Multi factor authentication' => 'demo/AD_admin_mda_configuration.php',
-						'Configuration' => 'demo/AD_admin_mda_configuration.php'
+						'Settings' => 'demo/AD_admin_mda_configuration.php'
 					);
 					include('includes/LU_breadcrumbs.php'); ?>
 					<div id="js_wk_administration_main" class="workspace-main">
