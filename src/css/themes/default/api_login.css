@@ -675,11 +675,11 @@ html body .hidden {
   animation: blinker 1s linear infinite;
 }
 .blink-fast {
-  animation: blinker .25s linear infinite;
+  animation: blinker 0.25s linear infinite;
 }
 @keyframes blinker {
   50% {
-    opacity: 0.0;
+    opacity: 0;
   }
 }
 /* box shadows */
@@ -739,14 +739,14 @@ h1 {
   /* 24px base 16 */
 }
 h2 {
-  font-size: 1.250em;
+  font-size: 1.25em;
   /* 20px base 16 */
 }
 h3 {
   font-size: 1.125em;
   /* 18px base 16 */
   display: block;
-  padding-bottom: .333em;
+  padding-bottom: 0.333em;
   /* 6px */
   border-bottom: 1px dotted #DDD;
 }
@@ -823,9 +823,9 @@ p {
   left: -1.85714286em;
 }
 .fa-border {
-  padding: .2em .25em .15em;
+  padding: 0.2em 0.25em 0.15em;
   border: solid 0.08em #EEE;
-  border-radius: .1em;
+  border-radius: 0.1em;
 }
 .fa-pull-left {
   float: left;
@@ -834,10 +834,10 @@ p {
   float: right;
 }
 .fa.fa-pull-left {
-  margin-right: .3em;
+  margin-right: 0.3em;
 }
 .fa.fa-pull-right {
-  margin-left: .3em;
+  margin-left: 0.3em;
 }
 /* Deprecated as of 4.4.0 */
 .pull-right {
@@ -847,10 +847,10 @@ p {
   float: left;
 }
 .fa.pull-left {
-  margin-right: .3em;
+  margin-right: 0.3em;
 }
 .fa.pull-right {
-  margin-left: .3em;
+  margin-left: 0.3em;
 }
 .fa-spin {
   -webkit-animation: fa-spin 2s infinite linear;
@@ -3110,7 +3110,7 @@ label {
   /* 16px */
   line-height: 1.333333em;
   /* 24px */
-  padding: .5em 0;
+  padding: 0.5em 0;
   display: block;
 }
 /*
@@ -3158,9 +3158,9 @@ textarea {
   background: #FFF;
   width: 14em;
   /* 20 char (default input length) x .7em (average char length) */
-  padding: .375em .625em .375em .625em;
+  padding: 0.375em 0.625em 0.375em 0.625em;
   display: inline-block;
-  margin-bottom: .5em;
+  margin-bottom: 0.5em;
   -webkit-appearance: none;
   border: 1px solid #CCC;
   border-top: 1px solid #BBB;
@@ -3224,13 +3224,13 @@ textarea {
 .text.input .input-addon i,
 .date.input .input-addon i {
   font-size: 16px;
-  width: 1.250em;
+  width: 1.25em;
   border: 1px solid #CCC;
   border-top: 1px solid #BBB;
   line-height: 24px;
   color: #333;
   background: #FFF;
-  padding: .375em .625em .375em .625em;
+  padding: 0.375em 0.625em 0.375em 0.625em;
 }
 .text.input input:hover + .input-addon i,
 .date.input input:hover + .input-addon i {
@@ -3254,8 +3254,8 @@ textarea {
 input[type=checkbox] + label {
   font-weight: normal;
   display: inline;
-  margin-left: .25em;
-  margin-bottom: .25em;
+  margin-left: 0.25em;
+  margin-bottom: 0.25em;
 }
 /* radio and checkboxes */
 .radiolist {
@@ -3312,12 +3312,12 @@ input[type=checkbox] + label {
 }
 .radiolist .input.radio input {
   float: left;
-  margin-top: .55em;
+  margin-top: 0.55em;
 }
 .radiolist .input.radio input + label {
   font-weight: normal;
   display: inline-block;
-  margin-left: .65em;
+  margin-left: 0.65em;
   font-size: 1em;
   float: left;
   margin-right: 2em;
@@ -3333,11 +3333,11 @@ input[type=checkbox] + label {
 */
 .input .message {
   padding: 0;
-  padding-left: .25em;
-  padding-bottom: .5em;
-  font-size: .813em;
-  margin-top: .125em;
-  margin-bottom: .25em;
+  padding-left: 0.25em;
+  padding-bottom: 0.5em;
+  font-size: 0.813em;
+  margin-top: 0.125em;
+  margin-bottom: 0.25em;
   background-color: transparent;
   border: 0;
   /* colors for messages */
@@ -3364,7 +3364,7 @@ form .input .inline.message {
 /* error messages */
 select {
   font-size: 16px;
-  margin: .55em 0;
+  margin: 0.55em 0;
 }
 /* select */
 input[type=file] {
@@ -3382,7 +3382,7 @@ input[type=email].fluid {
 }
 .submit-input-wrapper,
 .submit-wrapper {
-  margin-top: .5em;
+  margin-top: 0.5em;
 }
 /* shortcut classes for layout */
 .singleline {
@@ -3462,14 +3462,14 @@ button,
   position: relative;
   font-size: 0.875em;
   /*	14px */
-  padding: .429em 1.225em .429em 1.225em;
+  padding: 0.429em 1.225em 0.429em 1.225em;
   /* 6px 16px */
   display: inline-block;
   zoom: 1;
   /* zoom and *display = ie7 hack for display:inline-block */
   *display: inline;
   vertical-align: baseline;
-  margin-right: .5em;
+  margin-right: 0.5em;
   outline: none;
   cursor: pointer;
   text-align: center;
@@ -3674,7 +3674,7 @@ html body .button.processing {
   border-radius: 5px;
 }
 .button-spacer {
-  margin-right: .5em;
+  margin-right: 0.5em;
 }
 .panel.middle .grid {
   padding-bottom: 2em;
@@ -3768,7 +3768,7 @@ html body .button.processing {
      * 2. The use of `table` rather than `block` is only necessary if using
      *	`:before` to contain the top-margins of child elements.
      */
-  padding: 0 .5em 0 .5em;
+  padding: 0 0.5em 0 0.5em;
 }
 .grid-responsive-12 .row:before,
 .grid .row:before,
@@ -4043,7 +4043,7 @@ html body .button.processing {
      * Common columns definitions
      */
   .grid .row {
-    padding: 0 .5em 0 .5em;
+    padding: 0 0.5em 0 0.5em;
   }
   .grid .row .col1,
   .grid .row .col2,
@@ -4184,7 +4184,7 @@ html body .button.processing {
   clear: both;
 }
 .header .navigation.primary li {
-  padding: .5em;
+  padding: 0.5em;
   float: left;
 }
 .header .navigation.primary li:first-child {
@@ -4249,7 +4249,7 @@ html body .button.processing {
   height: 3em;
 }
 .dialog .dialog-header h2 {
-  margin: .25em 2em .5em .2em;
+  margin: 0.25em 2em 0.5em 0.2em;
   font-size: 1.2em;
   white-space: nowrap;
   overflow: hidden;
@@ -4277,7 +4277,7 @@ html body .button.processing {
 }
 .dialog .form-content {
   background: #FFF;
-  padding: .813em 1.5em .813em 1.5em;
+  padding: 0.813em 1.5em 0.813em 1.5em;
 }
 .dialog label {
   clear: both;
@@ -4367,7 +4367,7 @@ html body .button.processing {
   border-top: 1px solid #DDD;
   clear: both;
   width: 100%;
-  padding: .75em 0;
+  padding: 0.75em 0;
 }
 .dialog .submit-wrapper .cancel,
 .dialog .submit-wrapper .button {
@@ -4376,7 +4376,7 @@ html body .button.processing {
   font-size: 1.125em;
 }
 .dialog .submit-wrapper .cancel {
-  margin-top: .5em;
+  margin-top: 0.5em;
   font-size: 1em;
 }
 /* can also be used outside a dialog, like the sidebar */
@@ -4452,9 +4452,9 @@ html body .button.processing {
   margin-top: 0em;
   position: fixed;
   bottom: 0;
-  padding: 1.167em 1.5% 0 .5%;
+  padding: 1.167em 1.5% 0 0.5%;
   text-align: right;
-  font-size: .75em;
+  font-size: 0.75em;
   /* 12px */
   width: 98%;
   height: 2em;
@@ -4617,7 +4617,7 @@ html body .button.processing {
 .plugin-check .message {
   font-weight: normal;
   margin-left: 180px;
-  padding: .5em 1em .25em 1em;
+  padding: 0.5em 1em 0.25em 1em;
 }
 @media all and (max-width: 1024px) {
   .plugin-check.firefox,
@@ -4629,7 +4629,7 @@ html body .button.processing {
   }
   .plugin-check .message {
     margin-left: 0px;
-    padding: .5em 1em;
+    padding: 0.5em 1em;
   }
 }
 /**
@@ -4756,7 +4756,7 @@ html body .button.processing {
   margin-bottom: 0;
   border-top-color: transparent;
   border-left-color: #333;
-  border-left-color: rgba(51, 51, 51, 0.9);
+  border-left-color: hsla(0, 0%, 20%, 0.9);
 }
 .tooltip-left:hover:before,
 .tooltip-left:hover:after,
@@ -4780,7 +4780,7 @@ html body .button.processing {
   margin-bottom: 0;
   border-top-color: transparent;
   border-bottom-color: #333;
-  border-bottom-color: rgba(51, 51, 51, 0.9);
+  border-bottom-color: hsla(0, 0%, 20%, 0.9);
 }
 .tooltip-bottom:hover:before,
 .tooltip-bottom:hover:after,
@@ -4854,7 +4854,7 @@ html body .button.processing {
   width: 180px;
   background-color: #333;
   color: #FFF;
-  padding: .5em 1em;
+  padding: 0.5em 1em;
   -webkit-transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out, -webkit-transform 0.2s cubic-bezier(0.71, 1.7, 0.77, 1.24);
   -moz-transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out, -moz-transform 0.2s cubic-bezier(0.71, 1.7, 0.77, 1.24);
   transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out, transform 0.2s cubic-bezier(0.71, 1.7, 0.77, 1.24);
@@ -4947,7 +4947,7 @@ html body .button.processing {
 .page.register .form .submit input,
 .page.recover .form .submit input,
 .page.login .form .submit input {
-  padding: .7em 1.5em;
+  padding: 0.7em 1.5em;
 }
 .page.register .form .actions-wrapper.center,
 .page.recover .form .actions-wrapper.center,
@@ -4957,13 +4957,13 @@ html body .button.processing {
 .page.register .chrome-plugin-block p img,
 .page.recover .chrome-plugin-block p img,
 .page.login .chrome-plugin-block p img {
-  margin-top: .8em;
+  margin-top: 0.8em;
   width: 160px;
 }
 .page.register .firefox-plugin-block p img,
 .page.recover .firefox-plugin-block p img,
 .page.login .firefox-plugin-block p img {
-  margin-top: .8em;
+  margin-top: 0.8em;
   width: 120px;
 }
 .page.register .message-wrapper,
@@ -4984,12 +4984,12 @@ html body .button.processing {
 .page.recover .information p.message,
 .page.login .information p.message {
   font-size: 1.125em;
-  margin-bottom: .425em;
+  margin-bottom: 0.425em;
 }
 .page.register .row + .row,
 .page.recover .row + .row,
 .page.login .row + .row {
-  padding-top: .5em;
+  padding-top: 0.5em;
   padding-bottom: 2.5em;
 }
 .page.register .feedback .fa.huge,
@@ -5008,7 +5008,7 @@ html body .button.processing {
 .page.login .feedback p {
   text-align: center;
   width: 100%;
-  font-size: 1.250em;
+  font-size: 1.25em;
   font-weight: bold;
 }
 /* CSS for serving the retina image to devices with a high "device-pixel-ratio": */

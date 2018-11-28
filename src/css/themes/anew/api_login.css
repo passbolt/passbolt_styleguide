@@ -473,7 +473,7 @@ a:hover.no-border {
 */
 .button {
   font-size: 1.4rem;
-  padding: .4rem 1.6rem;
+  padding: 0.4rem 1.6rem;
   line-height: 1.5rem;
   position: relative;
   display: inline-block;
@@ -502,11 +502,11 @@ a:hover.no-border {
 /* sizes */
 .button.small {
   font-size: 1.4rem;
-  padding: .4rem 1.6rem;
+  padding: 0.4rem 1.6rem;
 }
 .button.medium {
   font-size: 1.6rem;
-  padding: .8rem 1.6rem;
+  padding: 0.8rem 1.6rem;
 }
 .button.big {
   font-size: 1.8rem;
@@ -630,7 +630,7 @@ label {
   /* 16px */
   line-height: 2.4rem;
   /* 24px */
-  padding: .8rem 0;
+  padding: 0.8rem 0;
   display: block;
 }
 /*
@@ -668,9 +668,9 @@ textarea {
   background: #FFF;
   width: 100%;
   max-width: 64rem;
-  padding: .6rem 1.2rem;
+  padding: 0.6rem 1.2rem;
   display: inline-block;
-  margin-bottom: .8rem;
+  margin-bottom: 0.8rem;
   border: 1px solid #CCC;
   border-top: 1px solid #BBB;
   vertical-align: middle;
@@ -725,11 +725,11 @@ textarea {
   position: relative;
   cursor: pointer;
   padding: 0;
-  margin-bottom: .8rem;
+  margin-bottom: 0.8rem;
 }
 .checkbox input[type=checkbox] + label:before {
   content: '';
-  margin-top: .3rem;
+  margin-top: 0.3rem;
   margin-right: 1rem;
   display: inline-block;
   vertical-align: text-top;
@@ -759,8 +759,8 @@ textarea {
 .checkbox input[type=checkbox]:checked + label:after {
   content: '';
   position: absolute;
-  left: .3rem;
-  top: .6rem;
+  left: 0.3rem;
+  top: 0.6rem;
   width: 1.2rem;
   height: 1.2rem;
   background: transparent url('../../../img/fa/fas/check.svg') center center no-repeat;
@@ -775,7 +775,7 @@ textarea {
 .input .error-message {
   padding: 0;
   font-size: 1.4rem;
-  margin-top: .2rem;
+  margin-top: 0.2rem;
   margin-bottom: 1.6rem;
   background-color: transparent;
   border: 0;
@@ -786,7 +786,7 @@ textarea {
 .input .help-message {
   padding: 0;
   font-size: 1.4rem;
-  margin-top: .2rem;
+  margin-top: 0.2rem;
   margin-bottom: 1.6rem;
   background-color: transparent;
   border: 0;
@@ -854,7 +854,7 @@ textarea {
 .tooltip:before,
 [data-tooltip]:before {
   z-index: 990;
-  border: .6rem solid transparent;
+  border: 0.6rem solid transparent;
   background: transparent;
   content: "";
 }
@@ -862,9 +862,9 @@ textarea {
 .tooltip:after,
 [data-tooltip]:after {
   z-index: 990;
-  padding: .4rem;
+  padding: 0.4rem;
   width: 16rem;
-  background-color: rgba(51, 51, 51, 0.9);
+  background-color: hsla(0, 0%, 20%, 0.9);
   color: #FFF;
   content: attr(data-tooltip);
   font-size: 1.4rem;
@@ -888,7 +888,7 @@ textarea {
 .tooltip-top:before {
   margin-left: -0.6rem;
   margin-bottom: -1.2rem;
-  border-top-color: rgba(51, 51, 51, 0.9);
+  border-top-color: hsla(0, 0%, 20%, 0.9);
 }
 /* Horizontally align top/bottom tooltips */
 [data-tooltip]:after,
@@ -926,7 +926,7 @@ textarea {
   margin-right: -1.2rem;
   margin-bottom: 0;
   border-top-color: transparent;
-  border-left-color: rgba(51, 51, 51, 0.9);
+  border-left-color: hsla(0, 0%, 20%, 0.9);
 }
 .tooltip-left:hover:before,
 .tooltip-left:hover:after,
@@ -947,7 +947,7 @@ textarea {
   margin-top: -1.2rem;
   margin-bottom: 0;
   border-top-color: transparent;
-  border-bottom-color: rgba(51, 51, 51, 0.9);
+  border-bottom-color: hsla(0, 0%, 20%, 0.9);
 }
 .tooltip-bottom:hover:before,
 .tooltip-bottom:hover:after,
@@ -980,7 +980,7 @@ textarea {
 /* Move directional arrows down a bit for left/right tooltips */
 .tooltip-left:before,
 .tooltip-right:before {
-  top: .3rem;
+  top: 0.3rem;
 }
 /* Vertically center tooltip content for left/right tooltips */
 .tooltip-left:after,
@@ -997,7 +997,7 @@ textarea {
 .tooltip-right.large:after,
 .tooltip-left.large:before,
 .tooltip-left.large:after {
-  margin-top: .6rem;
+  margin-top: 0.6rem;
 }
 .infinite.loading-bar {
   max-width: 45.2rem;
@@ -1094,7 +1094,7 @@ body {
   }
   .login.page .content .login-form {
     box-shadow: 0px 0px 10px 0px #DDD;
-    border-radius: .3rem;
+    border-radius: 0.3rem;
     box-sizing: border-box;
     max-width: 45.2rem;
     margin: auto;
@@ -1116,12 +1116,12 @@ body {
     background: #EEE;
     max-width: 50rem;
     margin: auto;
-    border-radius: .3rem .3rem 0 0;
+    border-radius: 0.3rem 0.3rem 0 0;
     padding: 1.6rem 3.2rem 1rem 3.2rem;
   }
   .login.page .ad .button {
     font-size: 1rem;
-    padding: 0 .8rem;
+    padding: 0 0.8rem;
   }
   .login.page .version {
     grid-area: version;

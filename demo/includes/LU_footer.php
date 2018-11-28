@@ -10,3 +10,4 @@
 		</ul>
 	</div>
 </footer>
+<script type="text/javascript" src="src/js/accordion.js"></script>

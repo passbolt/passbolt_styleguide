@@ -675,11 +675,11 @@ html body .hidden {
   animation: blinker 1s linear infinite;
 }
 .blink-fast {
-  animation: blinker .25s linear infinite;
+  animation: blinker 0.25s linear infinite;
 }
 @keyframes blinker {
   50% {
-    opacity: 0.0;
+    opacity: 0;
   }
 }
 /* box shadows */
@@ -785,14 +785,14 @@ h1 {
   /* 24px base 16 */
 }
 h2 {
-  font-size: 1.250em;
+  font-size: 1.25em;
   /* 20px base 16 */
 }
 h3 {
   font-size: 1.125em;
   /* 18px base 16 */
   display: block;
-  padding-bottom: .333em;
+  padding-bottom: 0.333em;
   /* 6px */
   border-bottom: 1px dotted #DDD;
 }
@@ -869,9 +869,9 @@ p {
   left: -1.85714286em;
 }
 .fa-border {
-  padding: .2em .25em .15em;
+  padding: 0.2em 0.25em 0.15em;
   border: solid 0.08em #EEE;
-  border-radius: .1em;
+  border-radius: 0.1em;
 }
 .fa-pull-left {
   float: left;
@@ -880,10 +880,10 @@ p {
   float: right;
 }
 .fa.fa-pull-left {
-  margin-right: .3em;
+  margin-right: 0.3em;
 }
 .fa.fa-pull-right {
-  margin-left: .3em;
+  margin-left: 0.3em;
 }
 /* Deprecated as of 4.4.0 */
 .pull-right {
@@ -893,10 +893,10 @@ p {
   float: left;
 }
 .fa.pull-left {
-  margin-right: .3em;
+  margin-right: 0.3em;
 }
 .fa.pull-right {
-  margin-left: .3em;
+  margin-left: 0.3em;
 }
 .fa-spin {
   -webkit-animation: fa-spin 2s infinite linear;
@@ -3159,14 +3159,14 @@ button,
   position: relative;
   font-size: 0.875em;
   /*	14px */
-  padding: .429em 1.225em .429em 1.225em;
+  padding: 0.429em 1.225em 0.429em 1.225em;
   /* 6px 16px */
   display: inline-block;
   zoom: 1;
   /* zoom and *display = ie7 hack for display:inline-block */
   *display: inline;
   vertical-align: baseline;
-  margin-right: .5em;
+  margin-right: 0.5em;
   outline: none;
   cursor: pointer;
   text-align: center;
@@ -3371,7 +3371,7 @@ html body .button.processing {
   border-radius: 5px;
 }
 .button-spacer {
-  margin-right: .5em;
+  margin-right: 0.5em;
 }
 /*
 	Base form components styling
@@ -3384,7 +3384,7 @@ label {
   /* 16px */
   line-height: 1.333333em;
   /* 24px */
-  padding: .5em 0;
+  padding: 0.5em 0;
   display: block;
 }
 /*
@@ -3432,9 +3432,9 @@ textarea {
   background: #FFF;
   width: 14em;
   /* 20 char (default input length) x .7em (average char length) */
-  padding: .375em .625em .375em .625em;
+  padding: 0.375em 0.625em 0.375em 0.625em;
   display: inline-block;
-  margin-bottom: .5em;
+  margin-bottom: 0.5em;
   -webkit-appearance: none;
   border: 1px solid #CCC;
   border-top: 1px solid #BBB;
@@ -3498,13 +3498,13 @@ textarea {
 .text.input .input-addon i,
 .date.input .input-addon i {
   font-size: 16px;
-  width: 1.250em;
+  width: 1.25em;
   border: 1px solid #CCC;
   border-top: 1px solid #BBB;
   line-height: 24px;
   color: #333;
   background: #FFF;
-  padding: .375em .625em .375em .625em;
+  padding: 0.375em 0.625em 0.375em 0.625em;
 }
 .text.input input:hover + .input-addon i,
 .date.input input:hover + .input-addon i {
@@ -3528,8 +3528,8 @@ textarea {
 input[type=checkbox] + label {
   font-weight: normal;
   display: inline;
-  margin-left: .25em;
-  margin-bottom: .25em;
+  margin-left: 0.25em;
+  margin-bottom: 0.25em;
 }
 /* radio and checkboxes */
 .radiolist {
@@ -3586,12 +3586,12 @@ input[type=checkbox] + label {
 }
 .radiolist .input.radio input {
   float: left;
-  margin-top: .55em;
+  margin-top: 0.55em;
 }
 .radiolist .input.radio input + label {
   font-weight: normal;
   display: inline-block;
-  margin-left: .65em;
+  margin-left: 0.65em;
   font-size: 1em;
   float: left;
   margin-right: 2em;
@@ -3607,11 +3607,11 @@ input[type=checkbox] + label {
 */
 .input .message {
   padding: 0;
-  padding-left: .25em;
-  padding-bottom: .5em;
-  font-size: .813em;
-  margin-top: .125em;
-  margin-bottom: .25em;
+  padding-left: 0.25em;
+  padding-bottom: 0.5em;
+  font-size: 0.813em;
+  margin-top: 0.125em;
+  margin-bottom: 0.25em;
   background-color: transparent;
   border: 0;
   /* colors for messages */
@@ -3638,7 +3638,7 @@ form .input .inline.message {
 /* error messages */
 select {
   font-size: 16px;
-  margin: .55em 0;
+  margin: 0.55em 0;
 }
 /* select */
 input[type=file] {
@@ -3656,7 +3656,7 @@ input[type=email].fluid {
 }
 .submit-input-wrapper,
 .submit-wrapper {
-  margin-top: .5em;
+  margin-top: 0.5em;
 }
 /* shortcut classes for layout */
 .singleline {
@@ -3823,7 +3823,7 @@ input[type=email].fluid {
   float: left;
   width: 100%;
   max-width: none;
-  padding-left: .25em;
+  padding-left: 0.25em;
   box-sizing: border-box;
 }
 /* hide left column when there is no space */
@@ -3859,7 +3859,7 @@ input[type=email].fluid {
     left: 0;
   }
   .panel.main .row {
-    padding-left: .5em;
+    padding-left: 0.5em;
   }
   .panel.main .panel.aside {
     min-width: auto;
@@ -3911,7 +3911,7 @@ input[type=email].fluid {
      * 2. The use of `table` rather than `block` is only necessary if using
      *	`:before` to contain the top-margins of child elements.
      */
-  padding: 0 .5em 0 .5em;
+  padding: 0 0.5em 0 0.5em;
 }
 .grid-responsive-12 .row:before,
 .grid .row:before,
@@ -4186,7 +4186,7 @@ input[type=email].fluid {
      * Common columns definitions
      */
   .grid .row {
-    padding: 0 .5em 0 .5em;
+    padding: 0 0.5em 0 0.5em;
   }
   .grid .row .col1,
   .grid .row .col2,
@@ -4352,7 +4352,7 @@ input[type=email].fluid {
   clear: both;
 }
 .header .navigation.primary li {
-  padding: .5em;
+  padding: 0.5em;
   float: left;
 }
 .header .navigation.primary li:first-child {
@@ -4421,9 +4421,9 @@ input[type=email].fluid {
   margin-top: 0em;
   position: fixed;
   bottom: 0;
-  padding: 1.167em 1.5% 0 .5%;
+  padding: 1.167em 1.5% 0 0.5%;
   text-align: right;
-  font-size: .75em;
+  font-size: 0.75em;
   /* 12px */
   width: 98%;
   height: 2em;
@@ -4458,7 +4458,7 @@ input[type=email].fluid {
 }
 .tabs-nav li a {
   display: inline-block;
-  padding: .4em 1.75em;
+  padding: 0.4em 1.75em;
   margin-left: 1.25em;
   font-size: 15px;
   border: 0;
@@ -4482,8 +4482,8 @@ input[type=email].fluid {
   display: block;
 }
 .profile .section.detailed-information h4 {
-  margin-bottom: .626em;
-  padding-bottom: .313em;
+  margin-bottom: 0.626em;
+  padding-bottom: 0.313em;
   border-bottom: 1px dotted #DDD;
 }
 .profile .section.detailed-information li .label {
@@ -4496,13 +4496,13 @@ input[type=email].fluid {
 }
 .profile .section.detailed-information .avatar img {
   width: 2.875em;
-  padding: 0.1250em;
+  padding: 0.125em;
 }
 .profile .section .section-action {
   padding-left: 1em;
 }
 .profile .edit-avatar-action .fa {
-  margin-top: .25em;
+  margin-top: 0.25em;
 }
 /*
 	do not show javascript needed warning if js is enabled
@@ -4625,7 +4625,7 @@ table.table-info.vertical {
 }
 table.table-info td,
 table.table-info.vertical td {
-  padding: .625em;
+  padding: 0.625em;
   padding-right: 1.25em;
   color: #666;
 }
@@ -4653,7 +4653,7 @@ table.table-info.vertical td .alt.side:after {
 table.table-info td + td,
 table.table-info.vertical td + td {
   color: #333;
-  padding-right: .625em;
+  padding-right: 0.625em;
 }
 /* horizontal tableview */
 table.table-info.horizontal {
@@ -4665,7 +4665,7 @@ table.table-info.horizontal {
 }
 table.table-info.horizontal td,
 table.table-info.horizontal th {
-  padding: .5em;
+  padding: 0.5em;
   margin: 0;
 }
 table.table-info.horizontal th {
@@ -4696,7 +4696,7 @@ table.table-info.horizontal tbody tr:nth-child(odd) {
 .panel .navigation li {
   font-size: 0.938em;
   /* 15px from 16px base */
-  padding: .469em 0 .469em 1.333em;
+  padding: 0.469em 0 0.469em 1.333em;
   border-left: 5px solid #FFF;
 }
 .panel .navigation li:hover {
@@ -4738,7 +4738,7 @@ table.table-info.horizontal tbody tr:nth-child(odd) {
   height: 10em;
 }
 .config.page .advanced {
-  margin-bottom: .5em;
+  margin-bottom: 0.5em;
 }
 .config.page .advanced .target-advanced-settings {
   display: none;

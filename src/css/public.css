@@ -675,11 +675,11 @@ html body .hidden {
   animation: blinker 1s linear infinite;
 }
 .blink-fast {
-  animation: blinker .25s linear infinite;
+  animation: blinker 0.25s linear infinite;
 }
 @keyframes blinker {
   50% {
-    opacity: 0.0;
+    opacity: 0;
   }
 }
 /* box shadows */
@@ -813,14 +813,14 @@ h1 {
   /* 24px base 16 */
 }
 h2 {
-  font-size: 1.250em;
+  font-size: 1.25em;
   /* 20px base 16 */
 }
 h3 {
   font-size: 1.125em;
   /* 18px base 16 */
   display: block;
-  padding-bottom: .333em;
+  padding-bottom: 0.333em;
   /* 6px */
   border-bottom: 1px dotted #DDD;
 }
@@ -841,8 +841,8 @@ article ul {
 }
 article ul li {
   margin-left: 1.1em;
-  padding-left: .5em;
-  margin-bottom: .5em;
+  padding-left: 0.5em;
+  margin-bottom: 0.5em;
   list-style-type: circle;
 }
 article ul.double {
@@ -863,7 +863,7 @@ article ol li {
   /* more margin needed for long numbered lists */
   margin-left: 2em;
   padding-left: 1em;
-  margin-bottom: .5em;
+  margin-bottom: 0.5em;
 }
 article ol.upper-roman {
   list-style-type: upper-roman;
@@ -939,9 +939,9 @@ ul.checklist li:before {
   left: -1.85714286em;
 }
 .fa-border {
-  padding: .2em .25em .15em;
+  padding: 0.2em 0.25em 0.15em;
   border: solid 0.08em #EEE;
-  border-radius: .1em;
+  border-radius: 0.1em;
 }
 .fa-pull-left {
   float: left;
@@ -950,10 +950,10 @@ ul.checklist li:before {
   float: right;
 }
 .fa.fa-pull-left {
-  margin-right: .3em;
+  margin-right: 0.3em;
 }
 .fa.fa-pull-right {
-  margin-left: .3em;
+  margin-left: 0.3em;
 }
 /* Deprecated as of 4.4.0 */
 .pull-right {
@@ -963,10 +963,10 @@ ul.checklist li:before {
   float: left;
 }
 .fa.pull-left {
-  margin-right: .3em;
+  margin-right: 0.3em;
 }
 .fa.pull-right {
-  margin-left: .3em;
+  margin-left: 0.3em;
 }
 .fa-spin {
   -webkit-animation: fa-spin 2s infinite linear;
@@ -3229,14 +3229,14 @@ button,
   position: relative;
   font-size: 0.875em;
   /*	14px */
-  padding: .429em 1.225em .429em 1.225em;
+  padding: 0.429em 1.225em 0.429em 1.225em;
   /* 6px 16px */
   display: inline-block;
   zoom: 1;
   /* zoom and *display = ie7 hack for display:inline-block */
   *display: inline;
   vertical-align: baseline;
-  margin-right: .5em;
+  margin-right: 0.5em;
   outline: none;
   cursor: pointer;
   text-align: center;
@@ -3441,7 +3441,7 @@ html body .button.processing {
   border-radius: 5px;
 }
 .button-spacer {
-  margin-right: .5em;
+  margin-right: 0.5em;
 }
 /*
 	Base form components styling
@@ -3454,7 +3454,7 @@ label {
   /* 16px */
   line-height: 1.333333em;
   /* 24px */
-  padding: .5em 0;
+  padding: 0.5em 0;
   display: block;
 }
 /*
@@ -3502,9 +3502,9 @@ textarea {
   background: #FFF;
   width: 14em;
   /* 20 char (default input length) x .7em (average char length) */
-  padding: .375em .625em .375em .625em;
+  padding: 0.375em 0.625em 0.375em 0.625em;
   display: inline-block;
-  margin-bottom: .5em;
+  margin-bottom: 0.5em;
   -webkit-appearance: none;
   border: 1px solid #CCC;
   border-top: 1px solid #BBB;
@@ -3568,13 +3568,13 @@ textarea {
 .text.input .input-addon i,
 .date.input .input-addon i {
   font-size: 16px;
-  width: 1.250em;
+  width: 1.25em;
   border: 1px solid #CCC;
   border-top: 1px solid #BBB;
   line-height: 24px;
   color: #333;
   background: #FFF;
-  padding: .375em .625em .375em .625em;
+  padding: 0.375em 0.625em 0.375em 0.625em;
 }
 .text.input input:hover + .input-addon i,
 .date.input input:hover + .input-addon i {
@@ -3598,8 +3598,8 @@ textarea {
 input[type=checkbox] + label {
   font-weight: normal;
   display: inline;
-  margin-left: .25em;
-  margin-bottom: .25em;
+  margin-left: 0.25em;
+  margin-bottom: 0.25em;
 }
 /* radio and checkboxes */
 .radiolist {
@@ -3656,12 +3656,12 @@ input[type=checkbox] + label {
 }
 .radiolist .input.radio input {
   float: left;
-  margin-top: .55em;
+  margin-top: 0.55em;
 }
 .radiolist .input.radio input + label {
   font-weight: normal;
   display: inline-block;
-  margin-left: .65em;
+  margin-left: 0.65em;
   font-size: 1em;
   float: left;
   margin-right: 2em;
@@ -3677,11 +3677,11 @@ input[type=checkbox] + label {
 */
 .input .message {
   padding: 0;
-  padding-left: .25em;
-  padding-bottom: .5em;
-  font-size: .813em;
-  margin-top: .125em;
-  margin-bottom: .25em;
+  padding-left: 0.25em;
+  padding-bottom: 0.5em;
+  font-size: 0.813em;
+  margin-top: 0.125em;
+  margin-bottom: 0.25em;
   background-color: transparent;
   border: 0;
   /* colors for messages */
@@ -3708,7 +3708,7 @@ form .input .inline.message {
 /* error messages */
 select {
   font-size: 16px;
-  margin: .55em 0;
+  margin: 0.55em 0;
 }
 /* select */
 input[type=file] {
@@ -3726,7 +3726,7 @@ input[type=email].fluid {
 }
 .submit-input-wrapper,
 .submit-wrapper {
-  margin-top: .5em;
+  margin-top: 0.5em;
 }
 /* shortcut classes for layout */
 .singleline {
@@ -3821,7 +3821,7 @@ form.public .input input[type="email"],
 form.public .input input[type="password"],
 form.public .input input[type="search"],
 form.public .input textarea {
-  margin-bottom: .5em;
+  margin-bottom: 0.5em;
   width: 94%;
 }
 form.public .input select {
@@ -3928,7 +3928,7 @@ form.public .input select {
   float: left;
   width: 100%;
   max-width: none;
-  padding-left: .25em;
+  padding-left: 0.25em;
   box-sizing: border-box;
 }
 /* hide left column when there is no space */
@@ -3964,7 +3964,7 @@ form.public .input select {
     left: 0;
   }
   .panel.main .row {
-    padding-left: .5em;
+    padding-left: 0.5em;
   }
   .panel.main .panel.aside {
     min-width: auto;
@@ -4016,7 +4016,7 @@ form.public .input select {
      * 2. The use of `table` rather than `block` is only necessary if using
      *	`:before` to contain the top-margins of child elements.
      */
-  padding: 0 .5em 0 .5em;
+  padding: 0 0.5em 0 0.5em;
 }
 .grid-responsive-12 .row:before,
 .grid .row:before,
@@ -4291,7 +4291,7 @@ form.public .input select {
      * Common columns definitions
      */
   .grid .row {
-    padding: 0 .5em 0 .5em;
+    padding: 0 0.5em 0 0.5em;
   }
   .grid .row .col1,
   .grid .row .col2,
@@ -4552,7 +4552,7 @@ article table.table-parameters tbody tr td em {
   clear: both;
 }
 .header .navigation.primary li {
-  padding: .5em;
+  padding: 0.5em;
   float: left;
 }
 .header .navigation.primary li:first-child {
@@ -4600,7 +4600,7 @@ article table.table-parameters tbody tr td em {
   font-size: 1em;
   font-weight: normal;
   background: #888;
-  padding: .45em 1em .42em 1em;
+  padding: 0.45em 1em 0.42em 1em;
   -webkit-border-radius: 0;
   -moz-border-radius: 0;
   border-radius: 0;
@@ -4648,7 +4648,7 @@ article table.table-parameters tbody tr td em {
   min-width: 5.5em;
   background: #F3F3F3;
   color: #333;
-  padding: .5em 1em;
+  padding: 0.5em 1em;
   float: right;
   display: inline-block;
 }
@@ -4755,7 +4755,7 @@ article table.table-parameters tbody tr td em {
  * Notification
  */
 .notification-container {
-  font-size: .85em;
+  font-size: 0.85em;
   top: 0;
   position: absolute;
   z-index: 991;
@@ -4772,7 +4772,7 @@ article table.table-parameters tbody tr td em {
 .notification-container .notification .message {
   box-shadow: 0px 0px 10px 0px #333;
   border-radius: 2px;
-  padding: .5em 1em;
+  padding: 0.5em 1em;
   position: relative;
   left: -50%;
   float: left;
@@ -4793,24 +4793,24 @@ article table.table-parameters tbody tr td em {
  */
 .breadcrumbs {
   height: 2em;
-  padding: .1875em 0 .1875em .1875em;
+  padding: 0.1875em 0 0.1875em 0.1875em;
   margin-bottom: 0;
   border-bottom: 1px solid #DDD;
   background: #FFF;
 }
 .breadcrumbs ul {
   padding-top: 0.2em;
-  margin-left: .1875em;
+  margin-left: 0.1875em;
 }
 .breadcrumbs ul li {
   display: inline;
-  font-size: .8em;
+  font-size: 0.8em;
   /* 12px/base16>15 */
-  margin-left: .25em;
+  margin-left: 0.25em;
 }
 .breadcrumbs ul li:before {
   content: "›";
-  margin-right: .5em;
+  margin-right: 0.5em;
 }
 .breadcrumbs ul li:first-child {
   margin-left: 0;
@@ -4857,7 +4857,7 @@ article table.table-parameters tbody tr td em {
   height: 3em;
 }
 .dialog .dialog-header h2 {
-  margin: .25em 2em .5em .2em;
+  margin: 0.25em 2em 0.5em 0.2em;
   font-size: 1.2em;
   white-space: nowrap;
   overflow: hidden;
@@ -4885,7 +4885,7 @@ article table.table-parameters tbody tr td em {
 }
 .dialog .form-content {
   background: #FFF;
-  padding: .813em 1.5em .813em 1.5em;
+  padding: 0.813em 1.5em 0.813em 1.5em;
 }
 .dialog label {
   clear: both;
@@ -4975,7 +4975,7 @@ article table.table-parameters tbody tr td em {
   border-top: 1px solid #DDD;
   clear: both;
   width: 100%;
-  padding: .75em 0;
+  padding: 0.75em 0;
 }
 .dialog .submit-wrapper .cancel,
 .dialog .submit-wrapper .button {
@@ -4984,7 +4984,7 @@ article table.table-parameters tbody tr td em {
   font-size: 1.125em;
 }
 .dialog .submit-wrapper .cancel {
-  margin-top: .5em;
+  margin-top: 0.5em;
   font-size: 1em;
 }
 /* can also be used outside a dialog, like the sidebar */
@@ -5031,9 +5031,9 @@ article table.table-parameters tbody tr td em {
   margin-top: 0em;
   position: fixed;
   bottom: 0;
-  padding: 1.167em 1.5% 0 .5%;
+  padding: 1.167em 1.5% 0 0.5%;
   text-align: right;
-  font-size: .75em;
+  font-size: 0.75em;
   /* 12px */
   width: 98%;
   height: 2em;
@@ -5086,7 +5086,7 @@ article table.table-parameters tbody tr td em {
 .plugin-check .message {
   font-weight: normal;
   margin-left: 180px;
-  padding: .5em 1em .25em 1em;
+  padding: 0.5em 1em 0.25em 1em;
 }
 @media all and (max-width: 1024px) {
   .plugin-check.firefox,
@@ -5098,7 +5098,7 @@ article table.table-parameters tbody tr td em {
   }
   .plugin-check .message {
     margin-left: 0px;
-    padding: .5em 1em;
+    padding: 0.5em 1em;
   }
 }
 .video-wrapper {
@@ -5125,7 +5125,7 @@ article table.table-parameters tbody tr td em {
 .panel .navigation li {
   font-size: 0.938em;
   /* 15px from 16px base */
-  padding: .469em 0 .469em 1.333em;
+  padding: 0.469em 0 0.469em 1.333em;
   border-left: 5px solid #FFF;
 }
 .panel .navigation li:hover {
@@ -5253,7 +5253,7 @@ table.table-info.vertical {
 }
 table.table-info td,
 table.table-info.vertical td {
-  padding: .625em;
+  padding: 0.625em;
   padding-right: 1.25em;
   color: #666;
 }
@@ -5281,7 +5281,7 @@ table.table-info.vertical td .alt.side:after {
 table.table-info td + td,
 table.table-info.vertical td + td {
   color: #333;
-  padding-right: .625em;
+  padding-right: 0.625em;
 }
 /* horizontal tableview */
 table.table-info.horizontal {
@@ -5293,7 +5293,7 @@ table.table-info.horizontal {
 }
 table.table-info.horizontal td,
 table.table-info.horizontal th {
-  padding: .5em;
+  padding: 0.5em;
   margin: 0;
 }
 table.table-info.horizontal th {
@@ -5432,7 +5432,7 @@ table.table-info.horizontal tbody tr:nth-child(odd) {
   margin-bottom: 0;
   border-top-color: transparent;
   border-left-color: #333;
-  border-left-color: rgba(51, 51, 51, 0.9);
+  border-left-color: hsla(0, 0%, 20%, 0.9);
 }
 .tooltip-left:hover:before,
 .tooltip-left:hover:after,
@@ -5456,7 +5456,7 @@ table.table-info.horizontal tbody tr:nth-child(odd) {
   margin-bottom: 0;
   border-top-color: transparent;
   border-bottom-color: #333;
-  border-bottom-color: rgba(51, 51, 51, 0.9);
+  border-bottom-color: hsla(0, 0%, 20%, 0.9);
 }
 .tooltip-bottom:hover:before,
 .tooltip-bottom:hover:after,
@@ -5530,7 +5530,7 @@ table.table-info.horizontal tbody tr:nth-child(odd) {
   width: 180px;
   background-color: #333;
   color: #FFF;
-  padding: .5em 1em;
+  padding: 0.5em 1em;
   -webkit-transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out, -webkit-transform 0.2s cubic-bezier(0.71, 1.7, 0.77, 1.24);
   -moz-transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out, -moz-transform 0.2s cubic-bezier(0.71, 1.7, 0.77, 1.24);
   transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out, transform 0.2s cubic-bezier(0.71, 1.7, 0.77, 1.24);
@@ -5580,7 +5580,7 @@ article figure img {
 }
 article figure .legend {
   display: inline-block;
-  margin-top: .5em;
+  margin-top: 0.5em;
   font-style: italic;
 }
 /* lightbox */
@@ -5628,7 +5628,7 @@ article figure .legend {
 }
 .tldr i {
   margin-right: 1em;
-  padding-left: .5em;
+  padding-left: 0.5em;
 }
 .tldr.alt {
   background: #FFF;
@@ -5647,11 +5647,11 @@ article figure .legend {
   margin-right: 0;
 }
 .tldr h4 {
-  margin-top: .5em;
+  margin-top: 0.5em;
 }
 .tldr h4.visuallyhidden + p,
 .tldr p {
-  margin-top: .75em;
+  margin-top: 0.75em;
 }
 .tldr h4 + p {
   margin-top: 0;
@@ -5678,7 +5678,7 @@ form.search input[type=search] {
   width: 65%;
   margin-bottom: 0;
   border-right: 1px solid #FFF;
-  padding: .313em .625em;
+  padding: 0.313em 0.625em;
 }
 form.search input[type=search]:focus,
 form.search input[type=search]:active {
@@ -5775,13 +5775,13 @@ input[type="search"]::-webkit-search-cancel-button {
   font-size: 3em;
   float: left;
   width: 30%;
-  padding-top: .25em;
+  padding-top: 0.25em;
   color: #888;
 }
 .tile .tile-title {
   float: right;
   font-weight: bold;
-  padding: 1em 0 .5em 0;
+  padding: 1em 0 0.5em 0;
   margin-left: 0;
   width: 70%;
   white-space: nowrap;
@@ -5827,7 +5827,7 @@ input[type="search"]::-webkit-search-cancel-button {
      *	`:before` to contain the top-margins of child elements.
      */
   margin-bottom: 1.25em;
-  padding: .5em;
+  padding: 0.5em;
   border: 1px solid #F3F3F3;
 }
 .card:before,
@@ -5869,19 +5869,19 @@ input[type="search"]::-webkit-search-cancel-button {
 }
 .card .content-wrapper .content {
   margin-left: 90px;
-  padding: .5em;
+  padding: 0.5em;
 }
 .card .content-wrapper .content .title {
   font-weight: bold;
-  padding-bottom: .25em;
+  padding-bottom: 0.25em;
 }
 .card .content-wrapper .content .description {
-  font-size: .875em;
+  font-size: 0.875em;
 }
 .card .content-wrapper .content .eta {
-  padding-top: .25em;
+  padding-top: 0.25em;
   color: #969696;
-  font-size: .875em;
+  font-size: 0.875em;
 }
 .card .teaser {
   float: left;
@@ -5892,7 +5892,7 @@ input[type="search"]::-webkit-search-cancel-button {
   width: 70px;
   height: 70px;
   display: block;
-  margin: .5em;
+  margin: 0.5em;
   border: 1px solid #F3F3F3;
   background: #DDD;
   border-radius: 50%;
@@ -7059,8 +7059,8 @@ This file is generated by `grunt build`, do not edit it by hand.
 }
 .faq ul.list ul li {
   margin-left: 1.1em;
-  padding-left: .5em;
-  margin-bottom: .5em;
+  padding-left: 0.5em;
+  margin-bottom: 0.5em;
   list-style-type: circle;
 }
 /* credit photo album */
@@ -7144,7 +7144,7 @@ This file is generated by `grunt build`, do not edit it by hand.
   }
   .home .page-row.hero2 .call-to-action .button {
     font-size: 1.125em;
-    margin: .25em 0 3% 4%;
+    margin: 0.25em 0 3% 4%;
     display: inline-block;
   }
 }
@@ -7196,7 +7196,7 @@ This file is generated by `grunt build`, do not edit it by hand.
 /* larger screen */
 @media all and (min-width: 440px) {
   .page-row.usp .tile {
-    padding: 1em 0 .5em 0;
+    padding: 1em 0 0.5em 0;
   }
   .page-row.usp .tile .tile-teaser i {
     font-size: 1em;
@@ -7382,9 +7382,9 @@ This file is generated by `grunt build`, do not edit it by hand.
     position: relative;
   }
   .home .features .swiper-pagination .swiper-pagination-bullet {
-    width: .75em;
-    height: .75em;
-    margin-right: .5em;
+    width: 0.75em;
+    height: 0.75em;
+    margin-right: 0.5em;
   }
   .home .features .swiper-button-prev,
   .home .features .swiper-button-next {
@@ -7449,8 +7449,8 @@ This file is generated by `grunt build`, do not edit it by hand.
   margin-top: 0.4em;
 }
 .page-row.signup .newsletter .smallprint {
-  font-size: .75em;
-  padding: 1em .125em;
+  font-size: 0.75em;
+  padding: 1em 0.125em;
 }
 .page-row.signup .social {
   margin-top: 1.75em;
@@ -7468,7 +7468,7 @@ This file is generated by `grunt build`, do not edit it by hand.
   color: #333;
 }
 .page-row.signup-alt .smallprint {
-  margin-top: .5em;
+  margin-top: 0.5em;
 }
 @media all and (min-width: 1024px) {
   .page-row.signup-alt {
@@ -7490,8 +7490,8 @@ This file is generated by `grunt build`, do not edit it by hand.
   .page-row.signup-alt input[type=email] {
     font-size: 1.125em;
     line-height: 1.5em;
-    margin-top: .25em;
-    margin-right: .125em;
+    margin-top: 0.25em;
+    margin-right: 0.125em;
     width: 18em;
   }
   .page-row.signup-alt .signup-alt-wrapper {
@@ -7566,14 +7566,14 @@ This file is generated by `grunt build`, do not edit it by hand.
 .page-row.sponsors .sponsors-list a {
   float: left;
   clear: both;
-  margin-top: .25em;
+  margin-top: 0.25em;
   font-size: 1.125em;
   text-decoration: underline;
   border: 0;
 }
 @media all and (min-width: 960px) {
   .page-row.sponsors h2 {
-    margin-bottom: .5em;
+    margin-bottom: 0.5em;
   }
   .page-row.sponsors h3 {
     margin-top: 0;
@@ -7729,10 +7729,10 @@ This file is generated by `grunt build`, do not edit it by hand.
 .home .page-row.tech .tech-usp ul.checklist {
   float: left;
   font-size: 1.25em;
-  margin-bottom: .25em;
+  margin-bottom: 0.25em;
 }
 .home .page-row.tech .tech-usp ul.checklist li {
-  padding-top: .25em;
+  padding-top: 0.25em;
 }
 .home .page-row.tech .cli-window {
   display: none;
@@ -7748,7 +7748,7 @@ This file is generated by `grunt build`, do not edit it by hand.
     padding-bottom: 0;
   }
   .home .page-row.tech h2 {
-    margin: 1em 0 .5em 0;
+    margin: 1em 0 0.5em 0;
   }
   .home .page-row.tech h3 {
     font-size: 1.5em;
@@ -7760,14 +7760,14 @@ This file is generated by `grunt build`, do not edit it by hand.
   }
   .home .page-row.tech ul.checklist {
     font-size: 1.5em;
-    margin-bottom: .5em;
+    margin-bottom: 0.5em;
   }
   .home .page-row.tech ul.checklist li {
-    padding-top: .5em;
+    padding-top: 0.5em;
   }
   .home .page-row.tech .cli-window {
     display: block;
-    border-radius: .25em .25em 0 0;
+    border-radius: 0.25em 0.25em 0 0;
     margin: 0 0 0 -1.75em;
     float: left;
     width: 940px;
@@ -7775,16 +7775,16 @@ This file is generated by `grunt build`, do not edit it by hand.
     box-shadow: 5px -5px 22px -10px rgba(0, 0, 0, 0.75);
   }
   .home .page-row.tech .cli-window:before {
-    margin: .33em .5em;
-    border-radius: .75em;
-    width: .75em;
-    height: .75em;
+    margin: 0.33em 0.5em;
+    border-radius: 0.75em;
+    width: 0.75em;
+    height: 0.75em;
     background: #D40101;
     position: absolute;
     content: ' ';
   }
   .home .page-row.tech .cli-window .cli-header {
-    border-radius: .25em;
+    border-radius: 0.25em;
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
     height: 1.33em;
@@ -7792,21 +7792,21 @@ This file is generated by `grunt build`, do not edit it by hand.
     background: #DDD;
   }
   .home .page-row.tech .cli-window .cli-header:before {
-    margin: .33em .5em;
-    border-radius: .75em;
-    width: .75em;
-    height: .75em;
+    margin: 0.33em 0.5em;
+    border-radius: 0.75em;
+    width: 0.75em;
+    height: 0.75em;
     background: #D40101;
     position: absolute;
     content: ' ';
-    margin-left: 1.60em;
+    margin-left: 1.6em;
     background: #FFBD2E;
   }
   .home .page-row.tech .cli-window .cli-header:after {
-    margin: .33em .5em;
-    border-radius: .75em;
-    width: .75em;
-    height: .75em;
+    margin: 0.33em 0.5em;
+    border-radius: 0.75em;
+    width: 0.75em;
+    height: 0.75em;
     background: #D40101;
     position: absolute;
     content: ' ';
@@ -7825,7 +7825,7 @@ This file is generated by `grunt build`, do not edit it by hand.
 .thankyou.page .social {
   margin-top: 0;
   width: 100%;
-  font-size: .75em;
+  font-size: 0.75em;
 }
 @media all and (min-width: 780px) {
   .thankyou.page {
@@ -7853,7 +7853,7 @@ This file is generated by `grunt build`, do not edit it by hand.
   border: 0;
 }
 .page.roadmap .cards .tile-description {
-  font-size: .9em;
+  font-size: 0.9em;
 }
 .page.roadmap .cards .tile-teaser i {
   border: 1px solid #F3F3F3;
@@ -7861,7 +7861,7 @@ This file is generated by `grunt build`, do not edit it by hand.
   border-radius: 50%;
   font-size: 1em;
   display: block;
-  margin-top: .125em;
+  margin-top: 0.125em;
   width: 70px;
   height: 70px;
 }
@@ -7882,7 +7882,7 @@ This file is generated by `grunt build`, do not edit it by hand.
     background-size: 35% auto;
   }
   .page.roadmap .page-row.intro h1 {
-    margin: 5% 0 2% .3em;
+    margin: 5% 0 2% 0.3em;
     padding-left: 0;
     max-width: 24em;
     font-size: 3em;
@@ -7892,11 +7892,11 @@ This file is generated by `grunt build`, do not edit it by hand.
     max-width: 25em;
     font-size: 1.5em;
     padding-left: 0;
-    margin: 0 0 .5em .5em;
+    margin: 0 0 0.5em 0.5em;
     text-align: left;
   }
   .page.roadmap .page-row.intro .button.primary {
-    margin: .5em 0 3% .5em;
+    margin: 0.5em 0 3% 0.5em;
   }
 }
 .page.plans {
@@ -7912,7 +7912,7 @@ This file is generated by `grunt build`, do not edit it by hand.
 .page.plans .page-row.intro .service-teaser {
   margin: auto;
   margin-top: 1em;
-  padding: .25em;
+  padding: 0.25em;
   background: #D40101;
   color: #FFF;
   display: block;
@@ -7965,7 +7965,7 @@ This file is generated by `grunt build`, do not edit it by hand.
 }
 .page.plans .tab-content .intro h2 span {
   display: block;
-  font-size: .85em;
+  font-size: 0.85em;
   color: #888;
   margin: 0.2em 0;
 }
@@ -8324,7 +8324,7 @@ This file is generated by `grunt build`, do not edit it by hand.
 }
 .page.services.featured.cart div.stripe.checkout .field {
   border: 1px solid #CCC;
-  padding-left: .5em;
+  padding-left: 0.5em;
   -webkit-border-radius: 3px;
   -moz-border-radius: 3px;
   border-radius: 3px;
@@ -8514,7 +8514,7 @@ This file is generated by `grunt build`, do not edit it by hand.
 .page.services .page-row.intro .service-teaser {
   margin: auto;
   margin-top: 1em;
-  padding: .25em;
+  padding: 0.25em;
   background: #D40101;
   color: #FFF;
   display: block;
@@ -8526,12 +8526,12 @@ This file is generated by `grunt build`, do not edit it by hand.
 }
 .page.services .page-row.intro .service-teaser i.fa-cloud {
   font-size: 1.75em;
-  margin-top: .35em;
+  margin-top: 0.35em;
 }
 .page.services .page-row.intro .service-teaser i.fa-cubes {
   font-size: 1.75em;
-  margin-top: .3em;
-  margin-left: .1em;
+  margin-top: 0.3em;
+  margin-left: 0.1em;
 }
 .page.services .service .service-teaser {
   display: none;
@@ -8845,7 +8845,7 @@ This file is generated by `grunt build`, do not edit it by hand.
   height: 35px;
   margin-top: -1em;
   margin-bottom: 1.5em;
-  margin-left: .5em;
+  margin-left: 0.5em;
 }
 .page.free-trial-signup .footer {
   position: fixed;
@@ -8887,7 +8887,7 @@ This file is generated by `grunt build`, do not edit it by hand.
 .page.free-trial-signup .form-wrapper form .input.url .field-url {
   width: 100%;
   border: 1px solid #CCC;
-  margin: 0 0 .5em 0;
+  margin: 0 0 0.5em 0;
   padding: 0;
 }
 .page.free-trial-signup .form-wrapper form .input.url input[type=text] {
@@ -8907,7 +8907,7 @@ This file is generated by `grunt build`, do not edit it by hand.
   background-color: #F3F3F3;
   color: #666;
   line-height: 26px;
-  padding: .375em .2em .375em .625em;
+  padding: 0.375em 0.2em 0.375em 0.625em;
   font-weight: bold;
   vertical-align: middle;
   font-size: 14px;
@@ -8991,7 +8991,7 @@ This file is generated by `grunt build`, do not edit it by hand.
   padding: 1em;
   padding-bottom: 1.5em;
   min-height: 10em;
-  border-radius: .25em;
+  border-radius: 0.25em;
   position: relative;
 }
 .page.start .big-choice:hover {
@@ -8999,7 +8999,7 @@ This file is generated by `grunt build`, do not edit it by hand.
 }
 .page.start h3 {
   border: 0;
-  padding: .5em 0 1em 0;
+  padding: 0.5em 0 1em 0;
   margin: 0;
 }
 .page.start .help {
@@ -9018,7 +9018,7 @@ This file is generated by `grunt build`, do not edit it by hand.
 .checkout.page form.stripe .field {
   border: 1px solid #CCC;
   width: 82.5%;
-  padding-left: .5em;
+  padding-left: 0.5em;
 }
 .checkout.page form.stripe .field::-webkit-input-placeholder {
   color: #CFD7E0;
