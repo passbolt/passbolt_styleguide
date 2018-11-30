@@ -16,7 +16,7 @@ $enabled = isset($_GET['ldap_settings']['enabled']) && $_GET['ldap_settings']['e
 
 <div class="form-content">
     <h3>Credentials</h3>
-    <div class="radiolist">
+    <div class="radiolist required">
         <label>Directory type</label>
         <div class="input radio">
             <input name="data[User][field]" value="1" id="UserField1" type="radio" checked="checked" <?=$disabledAttribute?>>
@@ -27,11 +27,11 @@ $enabled = isset($_GET['ldap_settings']['enabled']) && $_GET['ldap_settings']['e
             <label for="UserField2">Open Ldap</label>
         </div>
     </div>
-    <div class="input text">
+    <div class="input text required">
         <label>Domain</label>
         <input type="text" class="required fluid" placeholder="domain.ext" <?=$disabledAttribute?>>
     </div>
-    <div class="singleline connection_info protocol_host_port clearfix">
+    <div class="singleline connection_info protocol_host_port clearfix required">
         <label>Server url</label>
         <div class="input text field_protocol_host">
             <div class="input text protocol">
@@ -50,16 +50,16 @@ $enabled = isset($_GET['ldap_settings']['enabled']) && $_GET['ldap_settings']['e
         </div>
     </div>
     <div class="singleline clearfix">
-        <div class="input text first-field">
+        <div class="input text first-field required">
             <label>Username</label>
             <input type="text" class="required fluid" placeholder="username" <?=$disabledAttribute?>>
         </div>
-        <div class="input text last-field">
+        <div class="input text last-field required">
             <label>Password</label>
             <input type="password" class="required fluid" placeholder="password" <?=$disabledAttribute?>>
         </div>
     </div>
-    <div class="input text">
+    <div class="input text required">
         <label>Base DN</label>
         <input type="text" class="required fluid" placeholder="OU=OrgUsers,DC=mydomain,DC=local" <?=$disabledAttribute?>>
         <div class="message">The base DN (default naming context) for the domain. If this is empty then it will be queried from the RootDSE.</div>
@@ -72,14 +72,14 @@ $enabled = isset($_GET['ldap_settings']['enabled']) && $_GET['ldap_settings']['e
         <div class="message">Group path is used in addition to the base DN while searching groups.</div>
     </div>
     <div class="input text">
-        <label>User path</label>
-        <input type="text" class="required fluid" placeholder="User Path" <?=$disabledAttribute?>>
-        <div class="message">User path is used in addition to base DN while searching users.</div>
-    </div>
-    <div class="input text">
         <label>Group object class</label>
         <input type="text" class="required fluid" placeholder="GroupObjectClass" <?=$disabledAttribute?>>
         <div class="message">For Openldap only. Defines which group object to use. (Default: posixGroup)</div>
+    </div>
+    <div class="input text">
+        <label>User path</label>
+        <input type="text" class="required fluid" placeholder="User Path" <?=$disabledAttribute?>>
+        <div class="message">User path is used in addition to base DN while searching users.</div>
     </div>
     <div class="input text">
         <label>User object class</label>
@@ -88,7 +88,7 @@ $enabled = isset($_GET['ldap_settings']['enabled']) && $_GET['ldap_settings']['e
     </div>
 
     <h3>Synchronization options</h3>
-    <div class="input text">
+    <div class="input text required">
         <label>Default admin</label>
         <select name="data[ldap][defaultUser]" class="required fluid" id="DefaultUser" required="required" <?=$disabledAttribute?>>
             <option value="1">admin@passbolt.com</option>
@@ -97,7 +97,7 @@ $enabled = isset($_GET['ldap_settings']['enabled']) && $_GET['ldap_settings']['e
         </select>
         <div class="message">The default admin user is the admin user that will perform the operations for the the directory.</div>
     </div>
-    <div class="input text">
+    <div class="input text required">
         <label>Default group admin</label>
         <select name="data[ldap][defaultGroupAdminUser]" class="required fluid" id="DefaultGroupAdminUser" required="required" <?=$disabledAttribute?>>
             <option value="1">admin@passbolt.com</option>
@@ -108,7 +108,24 @@ $enabled = isset($_GET['ldap_settings']['enabled']) && $_GET['ldap_settings']['e
         </select>
         <div class="message">The default group admin user is the admin user that will be the group manager of newly created group.</div>
     </div>
-
+    <div class="input text">
+        <label>Groups parent group</label>
+        <input type="text" class="required fluid" placeholder="group name" <?=$disabledAttribute?>>
+        <div class="message">Synchronize only the groups which are member of this group.</div>
+    </div>
+    <div class="input text">
+        <label>Users parent group</label>
+        <input type="text" class="required fluid" placeholder="group name" <?=$disabledAttribute?>>
+        <div class="message">Synchronize only the users which are member of this group.</div>
+    </div>
+    <div class="input text">
+        <label>Enabled users only</label>
+        <div class="input toggle-switch">
+            <label for="create_users">Synchronize only the users who are enabled</label>
+            <input class="toggle-switch-checkbox checkbox" id="create_users" type="checkbox" checked="checked" <?=$disabledAttribute?>>
+            <label class="toggle-switch-button" for="create_users"></label>
+        </div>
+    </div>
     <div class="input text">
         <label>Sync operations</label>
         <div class="col6">
