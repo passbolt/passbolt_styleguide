@@ -1,8 +1,9 @@
 <?php include('_includes/bootstrap.php'); ?><!doctype html>
+<?php if (!isset($base)) $base = '../../'; ?>
 <html class="no-js no-passboltplugin version alpha" lang="en">
 <head>
     <title>Login</title>
-    <?php include('includes/meta/AN_meta.php'); ?>
+    <?php include('../includes/meta/AN_meta.php'); ?>
     <link rel="stylesheet" type="text/css" href="src/css/themes/anew/api_login.css" />
     <script>
         document.documentElement.classList.add('js');
