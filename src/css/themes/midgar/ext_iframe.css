@@ -3767,8 +3767,6 @@ input[type=email].fluid {
   background-repeat: no-repeat;
   background-color: #30302D;
   background-size: 100% 10px, 100% 10px, 100% 5px, 100% 5px;
-  /* Opera doesn't support this in the shorthand */
-  background-attachment: local, local, scroll, scroll;
 }
 ::-webkit-scrollbar {
   width: 1em;

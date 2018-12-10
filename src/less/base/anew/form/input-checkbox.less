@@ -66,3 +66,24 @@
         }
     }
 }
+.checkbox.small {
+    input[type=checkbox] {
+        & + label {
+            font-size:1.4rem;
+        }
+        & + label:before {
+            margin-top:.2rem;
+            margin-right: 1rem;
+            width: 1.4rem;
+            height: 1.4rem;
+        }
+
+        &:checked + label:after {
+            left: .3rem;
+            top: .7rem;
+            width: 1.1rem;
+            height: 1.1rem;
+            background-size: 1.1rem 1.1rem;
+        }
+    }
+}
