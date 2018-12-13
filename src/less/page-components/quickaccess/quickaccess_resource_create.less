@@ -1,0 +1,91 @@
+.quickaccess {
+    .resource-create {
+        .resource-create-form {
+            max-height:35.1rem;
+        }
+
+        .form-container {
+            padding:0 1.8rem .8rem 1.8rem;
+        }
+        .submit-wrapper {
+            padding:0 1.8rem 1.8rem 1.8rem;
+        }
+        .password {
+            .clearfix();
+
+            input[type=password] {
+                float:left;
+                box-sizing: border-box;
+                width: calc(100% - 7.2rem); // password field - generate - show button
+            }
+            .password-view {
+                float:left;
+                margin-top:.2rem;
+                margin-left:-.1rem;
+                height:2rem;
+                border-radius:0;
+                padding:.6rem .8rem .6rem 1rem;
+                background: @input-background;
+                border: 1px solid @border-input;
+                border-left:0;
+                border-top: 1px solid @border-input-light;
+
+                svg {
+                    margin-top:.2rem;
+                }
+            }
+            input:focus + .password-view {
+                box-shadow: inset -1px 1px 1px rgba(0, 0, 0, .2);
+                border: 1px solid @border-focus;
+                border-left:0;
+            }
+
+            .password-generate {
+                margin-top:.3rem;
+                float:right;
+            }
+
+            .password-strength {
+                .password-strength-value,
+                .password-strength-label {
+                    .visually-hidden();
+                }
+                .password-strength-bar {
+                    float:left;
+                    display:block;
+                    box-sizing: border-box;
+                    width: 18.6rem;
+                    height:.6rem;
+                    border: 1px solid @border-default;
+                }
+                .password-strength-bar-value {
+                    float:left;
+                    height:.2rem;
+                    display:block;
+                    margin:.1rem;
+
+                    &.very_weak {
+                        background: @blacker;
+                        width: 5%;
+                    }
+                    &.weak {
+                        background: @red;
+                        width: 10%;
+                    }
+                    &.fair {
+                        background: @yellow;
+                        width: 60%;
+                    }
+                    &.strong {
+                        background: @green-light;
+                        width: 80%;
+                    }
+                    &.very_strong {
+                        background: @green;
+                        width: 99.5%;
+                    }
+                }
+            }
+        }
+    }
+}
