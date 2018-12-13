@@ -772,8 +772,10 @@ textarea {
   top: 0.6rem;
   width: 1.2rem;
   height: 1.2rem;
-  background: transparent url('../../../img/fa/fas/check.svg') center center no-repeat;
   background-size: 1.2rem 1.2rem;
+  background-color: #333;
+  -webkit-mask-image: url('../../../img/fa/fas/check.svg');
+  mask-image: url('../../../img/fa/fas/check.svg');
 }
 .checkbox.small input[type=checkbox] + label {
   font-size: 1.4rem;

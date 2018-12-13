@@ -1,4 +1,4 @@
-<?php include('_includes/bootstrap.php'); ?><!doctype html>
+<?php include('../_includes/bootstrap.php'); ?><!doctype html>
 <html class="passbolt ce edition" lang="en">
 <head>
     <meta charset="utf-8">
@@ -8,7 +8,7 @@
     <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="shortcut icon" type="image/x-icon" href="src/img/webroot/favicon.ico" />
-    <link rel="stylesheet" type="text/css" href="src/css/themes/default/ext_quickaccess.css"/>
+    <link rel="stylesheet" type="text/css" href="src/css/themes/<?= $theme; ?>/ext_quickaccess.css">
     <script type="text/javascript" src="src/js/simple-scrollbar.js"></script>
     <style>
         .container-item {
@@ -19,7 +19,7 @@
             box-sizing: border-box;
             width:26rem;
             margin-top:3em;
-            box-shadow: 0px 0px 8px 1px rgba(0, 0, 0, 0.1);
+            box-shadow: 0px 0px 8px 1px rgba(0, 0, 0, 0.2);
             margin-left:4em;
             margin-bottom:5em;
         }
