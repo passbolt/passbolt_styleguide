@@ -622,6 +622,12 @@ a:hover.no-border {
   -moz-border-radius: 0.214em;
   border-radius: 0.214em;
 }
+/* toggle selected */
+.button-toggle.selected {
+  background: #EEE;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.2);
+  border: 1px solid #BBB;
+}
 /*
 	Base form components styling
 	Check components/form for more advanced/fancy input
@@ -819,51 +825,215 @@ textarea {
   width: 20rem;
   height: 4.5rem;
 }
-/*
-    Font Awesome Free 5.3.1 by @fontawesome - https://fontawesome.com
-    @licstart - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License)
-*/
-.fa.icon {
-  width: 1rem;
-  height: 1rem;
+.fa.icon svg {
+  width: 1.6rem;
+  height: 1.6rem;
 }
-/*
-    @licend
-*/
-/*
- * shadow on scroll
- */
-.scroll {
-  overflow-y: scroll;
-  background: linear-gradient(#FFF 30%, rgba(255, 255, 255, 0)), linear-gradient(rgba(255, 255, 255, 0), #FFF 70%) 0 100%, radial-gradient(farthest-side at 75% 0, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0)), radial-gradient(farthest-side at 75% 100%, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0)) 0 100%;
+.fa.icon svg path {
+  fill: #888;
+}
+/* lists */
+ul {
+  padding: 0;
+  margin: 0;
+}
+ul li {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+[data-simplebar] {
+  position: relative;
+  flex-direction: column;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-content: flex-start;
+  align-items: flex-start;
+  width: inherit;
+  height: inherit;
+  max-width: inherit;
+  max-height: inherit;
+}
+.simplebar-wrapper {
+  overflow: hidden;
+  width: inherit;
+  height: inherit;
+  max-width: inherit;
+  max-height: inherit;
+}
+.simplebar-mask {
+  direction: inherit;
+  position: absolute;
+  overflow: hidden;
+  padding: 0;
+  margin: 0;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  width: auto !important;
+  height: auto !important;
+  z-index: 0;
+}
+.simplebar-offset {
+  direction: inherit !important;
+  box-sizing: inherit !important;
+  resize: none !important;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  padding: 0;
+  margin: 0;
+  -webkit-overflow-scrolling: touch;
+}
+.simplebar-content {
+  direction: inherit;
+  box-sizing: border-box !important;
+  position: relative;
+  display: block;
+  height: 100%;
+  /* Required for horizontal native scrollbar to not appear if parent is taller than natural height */
+  width: auto;
+  visibility: visible;
+  overflow: scroll;
+  /* Scroll on this element otherwise element can't have a padding applied properly */
+  max-width: 100%;
+  /* Not required for horizontal scroll to trigger */
+  max-height: 100%;
+  /* Needed for vertical scroll to trigger */
+}
+.simplebar-placeholder {
+  max-height: 100%;
+  max-width: 100%;
+  width: 100%;
+  pointer-events: none;
+}
+.simplebar-height-auto-observer-wrapper {
+  box-sizing: inherit !important;
+  height: 100%;
+  width: inherit;
+  max-width: 1px;
+  position: relative;
+  float: left;
+  max-height: 1px;
+  overflow: hidden;
+  z-index: -1;
+  padding: 0;
+  margin: 0;
+  pointer-events: none;
+  flex-grow: inherit;
+  flex-shrink: 0;
+  flex-basis: 0;
+}
+.simplebar-height-auto-observer {
+  box-sizing: inherit;
+  display: block;
+  opacity: 0;
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 1000%;
+  width: 1000%;
+  min-height: 1px;
+  min-width: 1px;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: -1;
+}
+.simplebar-track {
+  z-index: 1;
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+}
+.simplebar-scrollbar {
+  position: absolute;
+  right: 2px;
+  width: 7px;
+  min-height: 10px;
+}
+.simplebar-scrollbar:before {
+  position: absolute;
+  content: "";
+  background: black;
+  border-radius: 7px;
+  left: 0;
+  right: 0;
+  opacity: 0;
+  transition: opacity 0.2s linear;
+}
+.simplebar-track .simplebar-scrollbar.simplebar-visible:before {
+  /* When hovered, remove all transitions from drag handle */
+  opacity: 0.5;
+  transition: opacity 0s linear;
+}
+.simplebar-track.simplebar-vertical {
+  top: 0;
+  width: 11px;
+}
+.simplebar-track.simplebar-vertical .simplebar-scrollbar:before {
+  top: 2px;
+  bottom: 2px;
+}
+.simplebar-track.simplebar-horizontal {
+  left: 0;
+  height: 11px;
+}
+.simplebar-track.simplebar-horizontal .simplebar-scrollbar:before {
+  height: 100%;
+  left: 2px;
+  right: 2px;
+}
+.simplebar-track.simplebar-horizontal .simplebar-scrollbar {
+  right: auto;
+  left: 0;
+  top: 2px;
+  height: 7px;
+  min-height: 0;
+  min-width: 10px;
+  width: auto;
+}
+/* Rtl support */
+[data-simplebar-direction="rtl"] .simplebar-track.simplebar-vertical {
+  right: auto;
+  left: 0;
+}
+.hs-dummy-scrollbar-size {
+  direction: rtl;
+  position: fixed;
+  opacity: 0;
+  visibility: hidden;
+  height: 500px;
+  width: 500px;
+  overflow-y: hidden;
+  overflow-x: scroll;
+}
+/* credit: http://lea.verou.me/2012/04/background-attachment-local/ */
+.scroll-shadow {
+  overflow: auto;
+  background: linear-gradient(white 30%, rgba(255, 255, 255, 0)), linear-gradient(rgba(255, 255, 255, 0), white 70%) 0 100%, /* Shadows */ radial-gradient(50% 0, farthest-side, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0)), radial-gradient(50% 100%, farthest-side, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0)) 0 100%;
+  background: linear-gradient(white 30%, rgba(255, 255, 255, 0)), linear-gradient(rgba(255, 255, 255, 0), white 70%) 0 100%, /* Shadows */ radial-gradient(farthest-side at 50% 0, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0)), radial-gradient(farthest-side at 50% 100%, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0)) 0 100%;
   background-repeat: no-repeat;
-  background-color: #FFF;
-  background-size: 100% 10px, 100% 10px, 100% 5px, 100% 5px;
+  background-color: white;
+  background-size: 100% 40px, 100% 40px, 100% 14px, 100% 14px;
+  /* Opera doesn't support this in the shorthand */
+  background-attachment: local, local, scroll, scroll;
 }
-::-webkit-scrollbar {
-  width: 1em;
+.simplebar-content {
+  /* Opera doesn't support this in the shorthand */
+  overflow: auto;
+  background: linear-gradient(white 30%, rgba(255, 255, 255, 0)), linear-gradient(rgba(255, 255, 255, 0), white 70%) 0 100%, /* Shadows */ radial-gradient(50% 0, farthest-side, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0)), radial-gradient(50% 100%, farthest-side, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0)) 0 100%;
+  background: linear-gradient(white 30%, rgba(255, 255, 255, 0)), linear-gradient(rgba(255, 255, 255, 0), white 70%) 0 100%, /* Shadows */ radial-gradient(farthest-side at 50% 0, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0)), radial-gradient(farthest-side at 50% 100%, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0)) 0 100%;
+  background-repeat: no-repeat;
+  background-color: white;
+  background-size: 100% 40px, 100% 40px, 100% 14px, 100% 14px;
+  /* Opera doesn't support this in the shorthand */
+  background-attachment: local, local, scroll, scroll;
 }
-::-webkit-scrollbar-track {
-  background: #F9F9F9;
-  border-top: 0;
-  border-bottom: 0;
-}
-::-webkit-scrollbar-thumb {
-  background: #C1C1C1;
-  border-radius: 1em;
-  border: 4px solid #F9F9F9;
-}
-.passphrase {
-  width: 100%;
-}
-.passphrase input[type=text] {
-  width: 100%;
-}
-.passphrase input[type=password] {
-  box-sizing: border-box;
-  width: calc(100% - 6.7rem);
-}
-.passphrase .security-token {
+.security-token {
   font-size: 1.6rem;
   padding: 0.6rem 1.6rem;
   text-align: center;
@@ -918,6 +1088,168 @@ textarea {
 .quickaccess:after {
   clear: both;
 }
+.quickaccess h2 {
+  margin: 0;
+  font-size: 1.4rem;
+  font-weight: normal;
+  padding: 0.2rem 1.8rem;
+}
+.quickaccess label {
+  font-size: 1.4rem;
+  padding-top: 0.8rem;
+  padding-bottom: 0.2rem;
+}
+.quickaccess input[type="text"],
+.quickaccess input[type="email"],
+.quickaccess input[type="password"],
+.quickaccess input[type="search"],
+.quickaccess textarea {
+  font-size: 1.4rem;
+  padding: 0.4rem 0.8rem;
+  margin: 0.2rem 0 0.4rem 0;
+}
+.quickaccess .error-message {
+  font-size: 1.2rem;
+  margin-bottom: 0.4rem;
+}
+.quickaccess .passphrase input[type=password] {
+  box-sizing: border-box;
+  width: calc(100% - 4.5rem);
+}
+.quickaccess .security-token {
+  width: 4.5rem;
+  font-size: 1.4rem;
+  margin-top: -0.2rem;
+  padding: 0.4rem 0.8rem;
+}
+.quickaccess .button.button-icon {
+  position: relative;
+  box-sizing: content-box;
+  display: block;
+  margin: 0;
+  padding: 0.8rem;
+  width: 1.6rem;
+  height: 1.6rem;
+  line-height: 2rem;
+  float: right;
+  background: transparent;
+  border: 0;
+}
+.quickaccess a:hover svg path,
+.quickaccess a:active svg path,
+.quickaccess a:focus svg path {
+  fill: #2894DF;
+}
+.quickaccess .back-link {
+  /*
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
+  /*
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
+  background: #F3F3F3;
+}
+.quickaccess .back-link:before,
+.quickaccess .back-link:after {
+  content: "";
+  display: table;
+}
+.quickaccess .back-link:after {
+  clear: both;
+}
+.quickaccess .back-link:before,
+.quickaccess .back-link:after {
+  content: "";
+  display: table;
+}
+.quickaccess .back-link:after {
+  clear: both;
+}
+.quickaccess .back-link .primary-action {
+  display: block;
+  border: 0;
+  float: left;
+  width: 18rem;
+  padding: 1.4rem 1.8rem 1.4rem 1rem;
+}
+.quickaccess .back-link .primary-action .primary-action-title {
+  font-size: 1.4rem;
+}
+.quickaccess .back-link .primary-action .icon {
+  float: left;
+  margin-right: 0.8rem;
+}
+.quickaccess .back-link .primary-action svg path {
+  fill: #969696;
+}
+.quickaccess .back-link .secondary-action {
+  margin-top: 0.6rem;
+  margin-right: 1rem;
+}
+.quickaccess .back-link .secondary-action .icon {
+  float: right;
+}
+.quickaccess .submit-wrapper {
+  /*
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
+  /*
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
+  margin-top: 1.6rem;
+}
+.quickaccess .submit-wrapper:before,
+.quickaccess .submit-wrapper:after {
+  content: "";
+  display: table;
+}
+.quickaccess .submit-wrapper:after {
+  clear: both;
+}
+.quickaccess .submit-wrapper:before,
+.quickaccess .submit-wrapper:after {
+  content: "";
+  display: table;
+}
+.quickaccess .submit-wrapper:after {
+  clear: both;
+}
+.quickaccess .submit-wrapper .button {
+  font-size: 1.6rem;
+  padding: 1.1rem 3.2rem;
+}
 .quickaccess .quickaccess-header {
   /*
      * Clearfix: contain floats
@@ -941,7 +1273,7 @@ textarea {
      * 2. The use of `table` rather than `block` is only necessary if using
      *	`:before` to contain the top-margins of child elements.
      */
-  padding: 1.8rem 1.8rem 1.2rem 1.8rem;
+  padding: 1.8rem 1.8rem 1rem 1.8rem;
 }
 .quickaccess .quickaccess-header:before,
 .quickaccess .quickaccess-header:after {
@@ -973,11 +1305,359 @@ textarea {
   height: 2.2rem;
   border: 0;
 }
-.quickaccess .quickaccess-header .ellipsis svg {
+.quickaccess .quickaccess-header .option-link {
+  margin: -0.8rem -0.8rem 0 0;
+}
+.quickaccess .index-list .submit-wrapper {
+  padding: 0 1.8rem 1.8rem 1.8rem;
+}
+.quickaccess .index-list .list-container {
+  /*
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
+  /*
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
+  max-height: 26.1rem;
+}
+.quickaccess .index-list .list-container:before,
+.quickaccess .index-list .list-container:after {
+  content: "";
+  display: table;
+}
+.quickaccess .index-list .list-container:after {
+  clear: both;
+}
+.quickaccess .index-list .list-container:before,
+.quickaccess .index-list .list-container:after {
+  content: "";
+  display: table;
+}
+.quickaccess .index-list .list-container:after {
+  clear: both;
+}
+.quickaccess .index-list .list-title {
+  background: #DDD;
+}
+.quickaccess .index-list .empty-entry p {
+  position: relative;
+  margin: 0.8rem 3rem 0.8rem 1.6rem;
+}
+.quickaccess .index-list .resource-entry a {
+  color: #333;
+  position: relative;
+  display: block;
+  padding: 1.4rem 2.8rem 1.4rem 1.8rem;
+  border-bottom: 1px solid #DDD;
+}
+.quickaccess .index-list .resource-entry a:after {
+  background: transparent url('../../../img/fa/fas/chevron-right.svg') 23rem center no-repeat;
+  background-size: 1.6rem 1.6rem;
+  content: "";
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.1;
+}
+.quickaccess .index-list .resource-entry a:hover {
+  color: #2894DF;
+}
+.quickaccess .index-list .resource-entry a:hover:after {
+  opacity: 0.4;
+}
+.quickaccess .index-list .resource-entry a .title {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -o-text-overflow: ellipsis;
+  -ms-text-overflow: ellipsis;
+}
+.quickaccess .index-list .resource-entry a .username {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -o-text-overflow: ellipsis;
+  -ms-text-overflow: ellipsis;
+}
+.quickaccess .index-list .resource-entry a .url {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -o-text-overflow: ellipsis;
+  -ms-text-overflow: ellipsis;
+  display: block;
+  font-size: 1.2rem;
+  padding-top: 0.4rem;
+  color: #666;
+}
+.quickaccess .index-list .filter-entry a {
+  color: #333;
+  display: block;
+  border-bottom: 1px solid #DDD;
+  padding: 1.4rem 2.8rem 1.4rem 1.8rem;
+  position: relative;
+}
+.quickaccess .index-list .filter-entry a:after {
+  background: transparent url('../../../img/fa/fas/chevron-right.svg') 23rem center no-repeat;
+  background-size: 1.6rem 1.6rem;
+  content: "";
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.1;
+}
+.quickaccess .index-list .filter-entry a:hover {
+  color: #2894DF;
+}
+.quickaccess .index-list .filter-entry a:hover:after {
+  opacity: 0.4;
+}
+.quickaccess .index-list .filter-entry .icon svg {
+  float: left;
+  margin-right: 0.8rem;
+}
+.login-form {
+  padding: 0 1.8rem 1.8rem 1.8rem;
+}
+.quickaccess .item-browse .properties {
+  padding: 1.2rem 0 0 0;
+}
+.quickaccess .item-browse .properties .property {
+  /*
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
+  /*
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
+}
+.quickaccess .item-browse .properties .property:before,
+.quickaccess .item-browse .properties .property:after {
+  content: "";
+  display: table;
+}
+.quickaccess .item-browse .properties .property:after {
+  clear: both;
+}
+.quickaccess .item-browse .properties .property:before,
+.quickaccess .item-browse .properties .property:after {
+  content: "";
+  display: table;
+}
+.quickaccess .item-browse .properties .property:after {
+  clear: both;
+}
+.quickaccess .item-browse .properties .property a {
+  display: block;
+  border: 0;
+}
+.quickaccess .item-browse .properties .property-value {
+  width: 18rem;
+  float: left;
+  padding: 0 1rem 1.6rem 1.8rem;
+}
+.quickaccess .item-browse .properties .property-name {
+  font-size: 1.3rem;
+  color: #888;
+  width: 18rem;
+  float: left;
+  padding: 0.8rem 1rem 0.4rem 1.8rem;
+}
+.quickaccess .item-browse .properties .property-action {
+  margin-top: 1.8rem;
+  margin-right: 1rem;
+}
+.quickaccess .item-browse .properties .secret-copy {
+  margin-top: 0.4rem;
+  background: transparent url('../../../img/controls/dot_black.svg') repeat-x left 3px;
+  display: inline-block;
+  width: 10.3rem;
+  height: 0.8rem;
+  float: left;
+  border: 0;
+  margin-left: 1.8rem;
+}
+.quickaccess .item-browse .properties .secret-copy:hover {
+  background: transparent url('../../../img/controls/dot_red.svg') repeat-x left 3px;
+}
+.quickaccess .item-browse .submit-wrapper {
+  margin-top: 0;
+  padding: 1.8rem;
+}
+.quickaccess .resource-create .resource-create-form {
+  max-height: 35.1rem;
+}
+.quickaccess .resource-create .form-container {
+  padding: 0 1.8rem 0.8rem 1.8rem;
+}
+.quickaccess .resource-create .submit-wrapper {
+  padding: 0 1.8rem 1.8rem 1.8rem;
+}
+.quickaccess .resource-create .password {
+  /*
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
+  /*
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
+}
+.quickaccess .resource-create .password:before,
+.quickaccess .resource-create .password:after {
+  content: "";
+  display: table;
+}
+.quickaccess .resource-create .password:after {
+  clear: both;
+}
+.quickaccess .resource-create .password:before,
+.quickaccess .resource-create .password:after {
+  content: "";
+  display: table;
+}
+.quickaccess .resource-create .password:after {
+  clear: both;
+}
+.quickaccess .resource-create .password input[type=password] {
+  float: left;
+  box-sizing: border-box;
+  width: calc(100% - 7.2rem);
+}
+.quickaccess .resource-create .password .password-view {
+  float: left;
+  margin-top: 0.2rem;
+  margin-left: -0.1rem;
+  height: 2rem;
+  border-radius: 0;
+  padding: 0.6rem 0.8rem 0.6rem 1rem;
+  background: #FFF;
+  border: 1px solid #CCC;
+  border-left: 0;
+  border-top: 1px solid #BBB;
+}
+.quickaccess .resource-create .password .password-view svg {
+  margin-top: 0.2rem;
+}
+.quickaccess .resource-create .password input:focus + .password-view {
+  box-shadow: inset -1px 1px 1px rgba(0, 0, 0, 0.2);
+  border: 1px solid #2894DF;
+  border-left: 0;
+}
+.quickaccess .resource-create .password .password-generate {
+  margin-top: 0.3rem;
   float: right;
 }
-.quickaccess .quickaccess-header .ellipsis svg path {
-  fill: #333;
+.quickaccess .resource-create .password .password-strength .password-strength-value,
+.quickaccess .resource-create .password .password-strength .password-strength-label {
+  border: 0;
+  clip: rect(0 0 0 0);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
+  /*
+     * Extends the .visuallyhidden class to allow the element to be focusable
+     * when navigated to via the keyboard: h5bp.com/p
+     */
+}
+.quickaccess .resource-create .password .password-strength .password-strength-value .focusable:active,
+.quickaccess .resource-create .password .password-strength .password-strength-label .focusable:active,
+.quickaccess .resource-create .password .password-strength .password-strength-value .focusable:focus,
+.quickaccess .resource-create .password .password-strength .password-strength-label .focusable:focus {
+  clip: auto;
+  height: auto;
+  margin: 0;
+  overflow: visible;
+  position: static;
+  width: auto;
+}
+.quickaccess .resource-create .password .password-strength .password-strength-bar {
+  float: left;
+  display: block;
+  box-sizing: border-box;
+  width: 18.6rem;
+  height: 0.6rem;
+  border: 1px solid #DDD;
+}
+.quickaccess .resource-create .password .password-strength .password-strength-bar-value {
+  float: left;
+  height: 0.2rem;
+  display: block;
+  margin: 0.1rem;
+}
+.quickaccess .resource-create .password .password-strength .password-strength-bar-value.very_weak {
+  background: #000;
+  width: 5%;
+}
+.quickaccess .resource-create .password .password-strength .password-strength-bar-value.weak {
+  background: #D40101;
+  width: 10%;
+}
+.quickaccess .resource-create .password .password-strength .password-strength-bar-value.fair {
+  background: #FFBD2E;
+  width: 60%;
+}
+.quickaccess .resource-create .password .password-strength .password-strength-bar-value.strong {
+  background: #66CC00;
+  width: 80%;
+}
+.quickaccess .resource-create .password .password-strength .password-strength-bar-value.very_strong {
+  background: #009900;
+  width: 99.5%;
 }
 .quickaccess .search {
   /*
@@ -1003,7 +1683,7 @@ textarea {
      *	`:before` to contain the top-margins of child elements.
      */
   background: #F3F3F3;
-  padding: 1.8rem 1.4rem 1rem 1.4rem;
+  padding: 1.2rem 1.4rem 1rem 1.4rem;
 }
 .quickaccess .search:before,
 .quickaccess .search:after {
@@ -1028,20 +1708,14 @@ textarea {
   border-right: 0;
 }
 .quickaccess .search .search-submit {
-  position: relative;
+  margin-top: 0.2rem;
+  height: 2rem;
   border-radius: 0;
-  box-sizing: content-box;
-  display: block;
-  margin: 0;
-  padding: 0.8rem 0.8rem 0.8rem 1.3rem;
+  padding: 0.6rem 0.8rem 0.6rem 1.5rem;
+  background: #FFF;
   border: 1px solid #CCC;
   border-left: 0;
   border-top: 1px solid #BBB;
-  background: #FFF;
-  width: 1.8rem;
-  height: 2rem;
-  line-height: 2rem;
-  float: right;
 }
 .quickaccess .search .search-submit svg {
   margin-top: 0.2rem;
@@ -1050,108 +1724,4 @@ textarea {
   box-shadow: inset -1px 1px 1px rgba(0, 0, 0, 0.2);
   border: 1px solid #2894DF;
   border-left: 0;
-}
-.quickaccess .search svg path {
-  fill: #333;
-}
-.quickaccess .login-form {
-  padding: 0 1.8rem 1.8rem 1.8rem;
-}
-.quickaccess .index-list .submit-wrapper {
-  padding: 0 1.8rem 1.8rem 1.8rem;
-}
-.quickaccess .list-container {
-  max-height: 300px;
-}
-.quickaccess .list-section ul {
-  margin: 0;
-  padding: 0;
-}
-.quickaccess .list-section ul li {
-  list-style-type: none;
-}
-.quickaccess .list-section .list-title {
-  background: #DDD;
-}
-.quickaccess .list-section .list-title h2 {
-  margin: 0;
-  font-size: 1.4rem;
-  font-weight: normal;
-  padding: 0.2rem 1.8rem;
-}
-.quickaccess .list-section .list-items .resource-entry a {
-  color: #333;
-  position: relative;
-  display: block;
-  padding: 1.4rem 2.8rem 1.4rem 1.8rem;
-  border-bottom: 1px solid #DDD;
-}
-.quickaccess .list-section .list-items .resource-entry a:after {
-  background: transparent url('../../../img/fa/fas/chevron-right.svg') 23rem center no-repeat;
-  background-size: 1.6rem 1.6rem;
-  content: "";
-  display: block;
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  opacity: 0.1;
-}
-.quickaccess .list-section .list-items .resource-entry a:hover:after {
-  opacity: 0.4;
-}
-.quickaccess .list-section .list-items .resource-entry a .url {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  -o-text-overflow: ellipsis;
-  -ms-text-overflow: ellipsis;
-  display: block;
-  font-size: 1.2rem;
-  padding-top: 0.4rem;
-  color: #666;
-}
-.quickaccess .list-section .list-items .filter-entry a {
-  color: #333;
-  display: block;
-  border-bottom: 1px solid #DDD;
-  padding: 1.4rem 2.8rem 1.4rem 1.8rem;
-  position: relative;
-}
-.quickaccess .list-section .list-items .filter-entry a:after {
-  background: transparent url('../../../img/fa/fas/chevron-right.svg') 23rem center no-repeat;
-  background-size: 1.6rem 1.6rem;
-  content: "";
-  display: block;
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  opacity: 0.1;
-}
-.quickaccess .list-section .list-items .filter-entry a:hover:after {
-  opacity: 0.4;
-}
-.quickaccess .list-section .list-items .filter-entry .icon svg {
-  float: left;
-  margin-right: 0.8rem;
-}
-.quickaccess .list-section .list-items .filter-entry .icon svg path {
-  fill: #888;
-}
-.quickaccess .submit-wrapper {
-  margin-top: 1.6rem;
-}
-.quickaccess .submit-wrapper .button {
-  font-size: 1.6rem;
-  padding: 1.1rem 3.2rem;
-}
-.quickaccess .icon svg {
-  width: 1.6rem;
-  height: 1.6rem;
-}
-.quickaccess .icon svg path {
-  fill: #888;
 }
