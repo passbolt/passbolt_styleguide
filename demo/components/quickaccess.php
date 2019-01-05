@@ -36,6 +36,7 @@
     <?php include('../includes/quickaccess/quickaccess_search_results.php'); ?>
 </div>
 </div>
+</div>
 <div class="container-item">
     <div class="container-wrapper">
         <?php include('../includes/quickaccess/quickaccess_search_empty.php'); ?>
