@@ -2,7 +2,10 @@
      id="js_pwd_details" >
     <div class="sidebar resource">
         <div class="sidebar-header">
-            <h3>Inkscape</h3>
+            <h3>Inkscape <a class="title-link" title="copy the link to this password">
+                <i class="fa fa-link"></i>
+                <span class="visuallyhidden">copy the link to this password</span>
+            </a></h3>
             <a id="js_wsp_pwd_sidebar_close" class="js_sidebar_close dialog-close" href="#">
                 <i class="fa fa-close"></i>
                 <span class="visuallyhidden">close</span>

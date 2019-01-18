@@ -1,0 +1,29 @@
+.page.administration {
+  .ldap-settings {
+    .description.enabled {
+      display: none;
+    }
+    .form-content {
+      display: none;
+    }
+    &.enabled {
+      .form-content {
+        display: block;
+      }
+      .description {
+        &.disabled {
+          display: none;
+        }
+        &.enabled {
+          display: block;
+        }
+      }
+    }
+  }
+
+  .operation-details textarea {
+    white-space: nowrap;
+    overflow: auto;
+    height: 220px
+  }
+}

@@ -27,15 +27,15 @@
 						<div class="panel left">
 							<?php
 								$_GET['shortcuts'] = 'ldap_reports';
-								include('includes/nav/AD_nav_administration_ldap.php');
+								include('includes/nav/AD_nav_administration.php');
 							?>
 						</div>
 						<div class="panel middle">
 							<?php
 							$_GET['breadcrumbs'] = array(
-								'administration' => 'demo/LU_users.php',
-								'ldap' => 'demo/LU_users_profile.php',
-								'reports' => 'demo/LU_users_profile_loginhistory.php'
+								'Administration' => 'demo/LU_users.php',
+								'Users Directory' => 'demo/LU_users_profile.php',
+								'Reports' => 'demo/LU_users_profile_loginhistory.php'
 							);
 							include('includes/LU_breadcrumbs.php'); ?>
 							<div id="js_wk_preference_main"

@@ -4463,6 +4463,15 @@ input[type=email].fluid {
 .input.toggle-switch .toggle-switch-checkbox:disabled:checked + .toggle-switch-button {
   background: #e6ffcc;
 }
+h1 .input.toggle-switch,
+h2 .input.toggle-switch,
+h3 .input.toggle-switch,
+h4 .input.toggle-switch,
+h5 .input.toggle-switch,
+h6 .input.toggle-switch {
+  float: left;
+  padding: 0.4em 1em 0 0;
+}
 /* headers */
 .header {
   overflow: visible !important;
@@ -6221,6 +6230,15 @@ input[type="search"]::-webkit-search-cancel-button {
   padding: 1em;
   margin: 0;
   border: 0;
+}
+.panel.aside .sidebar-header .title-link {
+  border: 0;
+  color: #cacac9;
+  font-size: 0.875em;
+  margin-left: 0.429em;
+}
+.panel.aside .sidebar-header .title-link:hover {
+  color: #2894DF;
 }
 .panel.aside .sidebar-header .dialog-close {
   position: absolute;
@@ -8961,4 +8979,46 @@ html.launching .launching-screen p {
 }
 .mfa.iframe .mfa-trusted-device table th {
   font-weight: bold;
+}
+.page.administration .workspace-main .grid {
+  position: absolute;
+  bottom: 0;
+  top: 2.125em;
+  padding: 0;
+  overflow-y: scroll;
+}
+.page.administration .mfa-settings .provider-section .description.enabled {
+  display: none;
+}
+.page.administration .mfa-settings .provider-section .form-content {
+  display: none;
+}
+.page.administration .mfa-settings .provider-section.enabled .form-content {
+  display: block;
+}
+.page.administration .mfa-settings .provider-section.enabled .description.disabled {
+  display: none;
+}
+.page.administration .mfa-settings .provider-section.enabled .description.enabled {
+  display: block;
+}
+.page.administration .ldap-settings .description.enabled {
+  display: none;
+}
+.page.administration .ldap-settings .form-content {
+  display: none;
+}
+.page.administration .ldap-settings.enabled .form-content {
+  display: block;
+}
+.page.administration .ldap-settings.enabled .description.disabled {
+  display: none;
+}
+.page.administration .ldap-settings.enabled .description.enabled {
+  display: block;
+}
+.page.administration .operation-details textarea {
+  white-space: nowrap;
+  overflow: auto;
+  height: 220px;
 }
