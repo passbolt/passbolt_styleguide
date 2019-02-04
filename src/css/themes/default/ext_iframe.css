@@ -5352,6 +5352,25 @@ input[type=email].fluid {
   font-size: 0.875em;
   padding-left: 1em;
 }
+.share-password-dialog .processing-wrapper {
+  background-color: #FFF;
+  text-align: center;
+  padding: 1em 0.5em 3em 1em;
+}
+.share-password-dialog .processing-wrapper .processing-text {
+  position: relative;
+  padding-left: 1.5em;
+}
+.share-password-dialog .processing-wrapper .processing-text:before {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  content: " ";
+  top: 0px;
+  left: 0px;
+  background: transparent url('../../../img/controls/loading_light.svg') left center no-repeat;
+  background-size: auto 75% ;
+}
 .dialog.key-info table {
   margin-top: 1em;
 }

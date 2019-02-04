@@ -4,7 +4,8 @@
     <meta charset="utf-8">
     <title>Passbolt | The open source password manager for teams</title>
     <?php include('includes/meta/AA_meta.php'); ?>
-		<?php include('includes/headers/AA_header_scripts.php'); ?>
+	<?php include('includes/headers/AA_header_scripts.php'); ?>
+	<script src="src/js/rangeslider.min.js"></script>
 </head>
 <body>
 <div id="container" class="page featured plans">
