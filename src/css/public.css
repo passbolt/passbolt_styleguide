@@ -711,6 +711,9 @@ a {
 a:hover {
   border-bottom: 1px solid #2894DF;
 }
+html {
+  scroll-behavior: smooth;
+}
 .animated {
   -webkit-animation-duration: 0.5s;
   animation-duration: 0.5s;
@@ -3694,6 +3697,9 @@ input[type=checkbox] + label {
   color: #888;
   font-weight: normal;
 }
+.input .message:empty {
+  display: none;
+}
 .form-content .input .message,
 form .input .message {
   background-color: transparent;
@@ -3791,6 +3797,79 @@ input[type=email].fluid {
 .singleline .input.text input[type="password"],
 .singleline .input.text input[type="search"] {
   width: 93%;
+}
+.form-content .accordion h3.accordion-header a {
+  margin-left: 1em;
+  border: 0;
+}
+.form-content .accordion h3.accordion-header a:hover {
+  border: 0;
+}
+.form-content .accordion h3.accordion-header a:before {
+  margin-left: -1.25em;
+  margin-top: 0.25em;
+  content: "\f0d7";
+  /* caret down */
+  font: normal normal normal 1em FontAwesome;
+  text-rendering: auto;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  width: 1em;
+  height: 1em;
+  position: absolute;
+  text-align: center;
+}
+.form-content .accordion.closed h3.accordion-header a:before {
+  content: "\f0da";
+  /* caret right */
+}
+.form-content table {
+  width: 100%;
+  margin-bottom: 1em;
+}
+.form-content table thead {
+  background-color: transparent !important;
+}
+.form-content table thead th {
+  background-color: transparent;
+  font-weight: bold;
+  border: 1px solid #DDD;
+  padding: 0.7em 0.5em;
+}
+.form-content table tbody tr {
+  font-size: 0.8em;
+  text-align: left;
+}
+.form-content table tbody tr:nth-child(even) {
+  background-color: transparent;
+}
+.form-content table tbody tr:nth-child(odd) {
+  background-color: #F3F3F3;
+  color: #666;
+}
+.form-content table tbody tr td {
+  text-align: left;
+  padding: 0.5em 0.5em;
+  border: 1px solid #DDD;
+}
+.form-content table tbody tr td code {
+  padding: 0.2em 0.3em;
+  background-color: #DDD;
+}
+.form-content table tbody tr td pre {
+  margin: 0;
+  padding: 0;
+  background-color: transparent;
+}
+.form-content table tbody tr td code,
+.form-content table tbody tr td pre {
+  font-family: monospace,serif;
+  font-size: 1em;
+}
+.form-content table tbody tr td em {
+  color: #888;
+  font-size: 0.8em;
+  font-style: normal;
 }
 form.public .error .error-message,
 form.public .error .error.message {

@@ -11,10 +11,11 @@
 	</script>
 </head>
 <body>
-<div id="container" class="page administration login-history">
+<div id="container" class="page administration ldap-configuration-edit">
 	<div class="mad_event_event_bus"></div>
 	<div id="js_app_controller" class="passbolt_controller_app_controller mad_view_view js_component ready">
-		<?php include('includes/dialogs/ldap/AD_ldap_synchronize.php'); ?>
+        <?php include('includes/dialogs/ldap/AD_ldap_synchronize_test_settings.php'); ?>
+		<!-- LU_passwords -->
 		<?php
 		$role='admin';
 		include('includes/headers/LU_header_first.php');
@@ -26,15 +27,15 @@
 		</div>
 		<div class="header third">
 			<?php include('includes/headers/LU_header_third_title_profile.php'); ?>
-			<?php include('includes/headers/AD_header_third_actions_admin_ldap.php'); ?>
+            <?php include('includes/headers/AD_header_third_actions_admin_ldap_edit.php'); ?>
 			<!-- no action on login history -->
 		</div>
 		<div class="panel main ready">
 			<div id="js_administration_workspace">
 				<div class="panel left">
 					<?php
-					$_GET['shortcuts'] = 'ldap_configuration';
-					include('includes/nav/AD_nav_administration.php');
+						$_GET['shortcuts'] = 'ldap_configuration';
+						include('includes/nav/AD_nav_administration.php');
 					?>
 				</div>
 				<div class="panel middle">
@@ -42,14 +43,18 @@
 					$_GET['breadcrumbs'] = array(
 						'Administration' => 'demo/AD_admin_ldap_configuration.php',
 						'Users Directory' => 'demo/AD_admin_ldap_configuration.php',
-						'Settings' => 'demo/AD_admin_ldap_configuration.php'
+						'Settings' => 'demo/AD_admin_ldap_configuration.php',
+						'Edit' => 'demo/AD_admin_ldap_configuration_edit.php'
 					);
 					include('includes/LU_breadcrumbs.php'); ?>
 					<div id="js_wk_administration_main" class="workspace-main">
 						<div class="grid grid-responsive-12">
 							<div class="row">
-								<div class="ldap-settings col8">
-									<? include('includes/form/AD_ldap_settings.php') ?>
+								<div class="ldap-settings enabled col8">
+									<?php
+									$_GET['ldap_settings']['edit'] = 1;
+									$_GET['ldap_settings']['enabled'] = 1;
+									include('includes/form/AD_ldap_settings.php') ?>
 									<p>&nbsp;</p>
 								</div>
 
@@ -68,13 +73,14 @@
 			</div>
 		</div>
 	</div>
-
 	<?php include('includes/LU_footer.php'); ?>
-	<script type="javascript">
-		$(function() {
-			$("#ConnectionProtocol").chosen({width: '151px', disable_search: true});
-			$("#DefaultGroupAdminUser").chosen();
-		});
-	</script>
 </body>
 </html>
+<script type="application/javascript">
+	let disabled = true;
+	$('.toggle-switch-button').on('click', () => {
+		disabled = !disabled;
+	$('.ldap-settings').toggleClass('enabled');
+	$('.toggle-switch-checkbox').attr('checked', !disabled);
+	});
+</script>

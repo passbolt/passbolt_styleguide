@@ -7,11 +7,13 @@
 			$("#ConnectionProtocol").chosen({width: '100%', disable_search: true});
 			$("#DefaultGroupAdminUser").chosen();
 			$("#DefaultUser").chosen();
+			$('.section-sync-options').addClass('closed');
+            $('.section-directory-configuration').addClass('closed');
 		});
 	</script>
 </head>
 <body>
-<div id="container" class="page administration login-history">
+<div id="container" class="page administration ldap-configuration-edit">
 	<div class="mad_event_event_bus"></div>
 	<div id="js_app_controller" class="passbolt_controller_app_controller mad_view_view js_component ready">
 		<!-- LU_passwords -->
@@ -50,7 +52,7 @@
 						<div class="grid grid-responsive-12">
 							<div class="row">
 								<div class="ldap-settings enabled col8">
-									<?
+									<?php
 									$_GET['ldap_settings']['edit'] = 1;
 									$_GET['ldap_settings']['enabled'] = 1;
 									include('includes/form/AD_ldap_settings.php') ?>
@@ -76,7 +78,7 @@
 </body>
 </html>
 <script type="application/javascript">
-	let disabled = true;
+	var disabled = true;
 	$('.toggle-switch-button').on('click', () => {
 		disabled = !disabled;
 	$('.ldap-settings').toggleClass('enabled');

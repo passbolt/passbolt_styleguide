@@ -6,6 +6,12 @@
 				<span>save settings</span>
 			</a>
 		</li>
+        <li>
+            <a class="button" href="demo/AD_admin_ldap_configuration_edit_test_connection.php">
+                <i class="fa fa-fw fa-refresh"></i>
+                <span>test settings</span>
+            </a>
+        </li>
 		<li>
 			<a class="button" href="demo/AD_admin_ldap_configuration.php">
 				<i class="fa fa-fw fa-undo"></i>

@@ -72,7 +72,6 @@
 	<?php include('includes/LU_footer.php'); ?>
 	<script type="javascript">
 		$(function() {
-			setTimeout(function(){ console.log('va te faire foutre')}, 1000);
 			$("#ConnectionProtocol").chosen({width: '151px', disable_search: true});
 			$("#DefaultGroupAdminUser").chosen();
 		});

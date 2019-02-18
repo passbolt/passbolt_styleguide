@@ -1,0 +1,28 @@
+.ldap-test-settings-report {
+  div.directory-structure {
+    border: 1px solid @grey;
+    padding: 0.5em 0 0.5em 0.5em;
+    >ul >li {
+      margin-left: 0.5em;
+    }
+    ul {
+      font-size: 0.8rem;
+      list-style-type: square;
+      list-style-position: inside;
+      li {
+        margin-left: 1em;
+        em {
+          color: @grey-darker;
+          font-size: 0.8em;
+        }
+        &.user {
+          font-weight: normal;
+          list-style-type: circle;
+        }
+        &.group {
+          font-weight: bold;
+        }
+      }
+    }
+  }
+}
