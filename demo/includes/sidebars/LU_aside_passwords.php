@@ -16,6 +16,7 @@
         <?php include('includes/sidebars/sections/password_tags.php'); ?>
         <?php include('includes/sidebars/sections/password_shared.php'); ?>
         <?php include('includes/sidebars/sections/password_comments.php'); ?>
+        <?php include('includes/sidebars/sections/password_activity.php'); ?>
     </div>
 </div>
 <?php include('includes/sidebars/sidebar.php') ?>

@@ -35,8 +35,88 @@
             height: @avatar-size;
         }
     }
+
+    ul.permissions-list {
+        margin-top: 1em;
+        font-size: 0.8em;
+
+        li {
+            .avatar {
+                margin-left: 0;
+                float: left;
+                width: @avatar-size / 2;
+
+                img {
+                    width: @avatar-size / 2;
+                    height: @avatar-size / 2;
+                }
+            }
+            .name {
+                display: inline-block;
+                padding-left:7%;
+                line-height:@avatar-size / 2;
+                &.crossed {
+                    text-decoration: line-through;
+                }
+            }
+            .type{
+                float: right;
+                text-align: right;
+                line-height:@avatar-size / 2;
+                color: @grey-darker;
+                span {
+                    background-color: white;
+                    font-size: 0.8em;
+                    color: white;
+                    padding: 0.1em 0.5em;
+                    border-radius: 0.5em;
+                    &.created {
+                        background-color: @green-light;
+                    }
+                    &.updated {
+                        background-color: @blue-light;
+                    }
+                    &.removed {
+                        background-color: @red-light;
+                    }
+                }
+            }
+        }
+    }
 }
 
 .usercard-col-2 {
     .usercard-col-2(36px);
+}
+
+.usercard-detailed-col-2 {
+    .usercard-col-2(36px);
+
+    padding: 0.5em 0;
+    margin: 0;
+
+    // Animation used to show that an activity is new.
+    @keyframes highlight {
+        from { background-color: @tableview-background-selected; }
+        to { background-color: transparent; }
+    }
+
+    // Style to apply when an activity is new.
+    &.highlight {
+        background-color: @tableview-background-selected;
+        animation-delay: 2s;
+        animation-duration: 5s;
+        animation-name: highlight;
+        animation-fill-mode: forwards;
+    }
+
+    .content-wrapper .content {
+        .name, .subinfo {
+            color: @grey-darker;
+        }
+    }
+
+    .content-wrapper .content .name {
+        white-space: normal;
+    }
 }
