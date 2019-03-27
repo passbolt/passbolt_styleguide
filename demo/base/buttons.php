@@ -56,6 +56,7 @@
     <div>
         <input type="submit" class="button primary" value="input"/>
         <input type="button" class="button primary" value="input2"/>
+        <input type="submit" class="button primary processing" value="input3"/>
         <button class="button cancel processing">button</button>
         <a role="button" class="button cancel loading">button</a>
     </div>
