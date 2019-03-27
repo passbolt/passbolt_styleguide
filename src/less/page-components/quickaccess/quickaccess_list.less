@@ -10,7 +10,20 @@
         .list-title {
             background:@background-light;
         }
-
+        .processing-text {
+            position: relative;
+            padding-left: 2em;
+        }
+        .processing-text:before {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            content: " ";
+            top: 0px;
+            left: 0px;
+            background: transparent @loading left center no-repeat;
+            background-size: auto 75% ;
+        }    
         .empty-entry {
             p {
                 position:relative;
@@ -23,7 +36,9 @@
                 position:relative;
                 display: block;
                 padding: 1.4rem 2.8rem  1.4rem 1.8rem;
+                box-sizing: border-box;
                 border-bottom: 1px solid @border-lighter;
+                .ellipsis();
 
                 &:after {
                     background: transparent url('@{images}/fa/fas/chevron-right.svg') 23rem center no-repeat;
@@ -37,25 +52,24 @@
                     height: 100%;
                     opacity : 0.1;
                 }
+                &:focus {
+                    color: @font-focus;
+                    &:after {
+                        opacity : 0.4;
+                    }
+                }
                 &:hover {
                     color: @font-focus;
                 }
                 &:hover:after {
                     opacity : 0.4;
                 }
-
-                .title {
-                    .ellipsis();
-                }
-                .username {
-                    .ellipsis();
-                }
                 .url {
-                    .ellipsis();
                     display:block;
                     font-size:1.2rem;
                     padding-top:.4rem;
                     color:@font-dim;
+                    .ellipsis();
                 }
             }
         }
@@ -80,6 +94,27 @@
                     height: 100%;
                     opacity : 0.1;
                 }
+                &:hover {
+                    color: @font-focus;
+                }
+                &:hover:after {
+                    opacity : 0.4;
+                }
+            }
+            .icon svg {
+                float:left;
+                margin-right:.8rem;
+            }
+        }
+
+        .option-entry {
+            a {
+                color: @font-default;
+                display:block;
+                border-bottom: 1px solid @border-default;
+                padding: 1.4rem 2.8rem 1.4rem 1.8rem;
+                position:relative;
+
                 &:hover {
                     color: @font-focus;
                 }

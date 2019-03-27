@@ -13,6 +13,11 @@
                 width:18rem;
                 float:left;
                 padding:0 1rem 1.6rem 1.8rem;
+                .ellipsis();
+                &.empty {
+                  font-style: italic;
+                  color: @font-lightest
+                }
             }
             .property-name {
                 font-size:1.3rem;
@@ -24,6 +29,11 @@
             .property-action {
                 margin-top:1.8rem;
                 margin-right:1rem;
+                &.disabled {
+                  path {
+                    fill: @font-lightest; 
+                  }
+                }
             }
             .secret-copy {
                 margin-top:.4rem;

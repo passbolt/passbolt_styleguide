@@ -622,6 +622,13 @@ a:hover.no-border {
   -moz-border-radius: 0.214em;
   border-radius: 0.214em;
 }
+input[type=submit].button.processing {
+  font-size: 0;
+  background: #FFF url('../../../img/controls/loading_light.svg') center center no-repeat;
+  background-size: auto 50% ;
+  border: 1px solid #DDD;
+  border-radius: 5px;
+}
 /* toggle selected */
 .button-toggle.selected {
   background: #EEE;
@@ -696,6 +703,7 @@ input[type=password]:focus,
 input[type=search]:focus,
 input[type=text]:focus,
 input[type=email]:focus {
+  outline: 0;
   box-shadow: inset 1px 1px 2px rgba(0, 0, 0, 0.2);
   border: 1px solid #2894DF;
 }
@@ -1138,6 +1146,9 @@ ul li {
   background: transparent;
   border: 0;
 }
+.quickaccess .button.button-icon.button-toggle.selected {
+  background: #EEE;
+}
 .quickaccess a:hover svg path,
 .quickaccess a:active svg path,
 .quickaccess a:focus svg path {
@@ -1253,6 +1264,25 @@ ul li {
   font-size: 1.6rem;
   padding: 1.1rem 3.2rem;
 }
+.quickaccess .processing-wrapper {
+  background-color: #FFF;
+  text-align: center;
+  margin: 0.8rem 3rem 0.8rem 1.6rem;
+}
+.quickaccess .processing-wrapper .processing-text {
+  position: relative;
+  padding-left: 1em;
+}
+.quickaccess .processing-wrapper .processing-text:before {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  content: " ";
+  top: 0px;
+  left: 0px;
+  background: transparent url('../../../img/controls/loading_light.svg') left center no-repeat;
+  background-size: auto 75% ;
+}
 .quickaccess .quickaccess-header {
   /*
      * Clearfix: contain floats
@@ -1358,6 +1388,20 @@ ul li {
 .quickaccess .index-list .list-title {
   background: #DDD;
 }
+.quickaccess .index-list .processing-text {
+  position: relative;
+  padding-left: 2em;
+}
+.quickaccess .index-list .processing-text:before {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  content: " ";
+  top: 0px;
+  left: 0px;
+  background: transparent url('../../../img/controls/loading_light.svg') left center no-repeat;
+  background-size: auto 75% ;
+}
 .quickaccess .index-list .empty-entry p {
   position: relative;
   margin: 0.8rem 3rem 0.8rem 1.6rem;
@@ -1367,7 +1411,13 @@ ul li {
   position: relative;
   display: block;
   padding: 1.4rem 2.8rem 1.4rem 1.8rem;
+  box-sizing: border-box;
   border-bottom: 1px solid #EEE;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -o-text-overflow: ellipsis;
+  -ms-text-overflow: ellipsis;
 }
 .quickaccess .index-list .resource-entry a:after {
   background: transparent url('../../../img/fa/fas/chevron-right.svg') 23rem center no-repeat;
@@ -1381,36 +1431,28 @@ ul li {
   height: 100%;
   opacity: 0.1;
 }
+.quickaccess .index-list .resource-entry a:focus {
+  color: #2894DF;
+}
+.quickaccess .index-list .resource-entry a:focus:after {
+  opacity: 0.4;
+}
 .quickaccess .index-list .resource-entry a:hover {
   color: #2894DF;
 }
 .quickaccess .index-list .resource-entry a:hover:after {
   opacity: 0.4;
 }
-.quickaccess .index-list .resource-entry a .title {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  -o-text-overflow: ellipsis;
-  -ms-text-overflow: ellipsis;
-}
-.quickaccess .index-list .resource-entry a .username {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  -o-text-overflow: ellipsis;
-  -ms-text-overflow: ellipsis;
-}
 .quickaccess .index-list .resource-entry a .url {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  -o-text-overflow: ellipsis;
-  -ms-text-overflow: ellipsis;
   display: block;
   font-size: 1.2rem;
   padding-top: 0.4rem;
   color: #666;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -o-text-overflow: ellipsis;
+  -ms-text-overflow: ellipsis;
 }
 .quickaccess .index-list .filter-entry a {
   color: #333;
@@ -1438,6 +1480,23 @@ ul li {
   opacity: 0.4;
 }
 .quickaccess .index-list .filter-entry .icon svg {
+  float: left;
+  margin-right: 0.8rem;
+}
+.quickaccess .index-list .option-entry a {
+  color: #333;
+  display: block;
+  border-bottom: 1px solid #DDD;
+  padding: 1.4rem 2.8rem 1.4rem 1.8rem;
+  position: relative;
+}
+.quickaccess .index-list .option-entry a:hover {
+  color: #2894DF;
+}
+.quickaccess .index-list .option-entry a:hover:after {
+  opacity: 0.4;
+}
+.quickaccess .index-list .option-entry .icon svg {
   float: left;
   margin-right: 0.8rem;
 }
@@ -1495,6 +1554,15 @@ ul li {
   width: 18rem;
   float: left;
   padding: 0 1rem 1.6rem 1.8rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -o-text-overflow: ellipsis;
+  -ms-text-overflow: ellipsis;
+}
+.quickaccess .item-browse .properties .property-value.empty {
+  font-style: italic;
+  color: #DDD;
 }
 .quickaccess .item-browse .properties .property-name {
   font-size: 1.3rem;
@@ -1506,6 +1574,9 @@ ul li {
 .quickaccess .item-browse .properties .property-action {
   margin-top: 1.8rem;
   margin-right: 1rem;
+}
+.quickaccess .item-browse .properties .property-action.disabled path {
+  fill: #DDD;
 }
 .quickaccess .item-browse .properties .secret-copy {
   margin-top: 0.4rem;
@@ -1727,4 +1798,87 @@ ul li {
   box-shadow: inset -1px 1px 1px rgba(0, 0, 0, 0.2);
   border: 1px solid #2894DF;
   border-left: 0;
+}
+.quickaccess .passphrase .form-container {
+  padding: 0 1.8rem 0 1.8rem;
+}
+.quickaccess .passphrase .submit-wrapper {
+  padding: 0 1.8rem 1.8rem 1.8rem;
+}
+.quickaccess .passphrase .too-many-attempts-error {
+  margin: 0.8rem 3rem 0.8rem 1.6rem;
+}
+.slideNoTransition-exit {
+  display: none;
+  transform: translateX(0%);
+}
+.slideLeft-enter {
+  transform: translateX(100%);
+}
+.slideLeft-enter-active {
+  transform: translateX(0%);
+  transition: transform 210ms;
+}
+.slideLeft-exit {
+  display: none;
+  transform: translateX(0%);
+}
+.slideLeft-exit-active {
+  transform: translateX(100%);
+  transition: transform 210ms;
+}
+.slideRight-enter {
+  transform: translateX(-100%);
+}
+.slideRight-enter-active {
+  transform: translateX(0%);
+  transition: transform 210ms;
+}
+.slideRight-exit {
+  display: none;
+  transform: translateX(0%);
+}
+.slideRight-exit-active {
+  transform: translateX(100%);
+  transition: transform 210ms;
+}
+.shake {
+  animation: shake 0.42s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+@keyframes shake {
+  10%,
+  90% {
+    transform: translate3d(-1px, 0, 0);
+  }
+  20%,
+  80% {
+    transform: translate3d(2px, 0, 0);
+  }
+  30%,
+  50%,
+  70% {
+    transform: translate3d(-4px, 0, 0);
+  }
+  40%,
+  60% {
+    transform: translate3d(4px, 0, 0);
+  }
+}
+.fade-entering {
+  opacity: 1;
+  animation-name: fadeInOpacity;
+  animation-iteration-count: 1;
+  animation-timing-function: ease-in;
+  animation-duration: 500ms;
+}
+@keyframes fadeInOpacity {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }

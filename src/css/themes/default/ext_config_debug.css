@@ -3370,6 +3370,13 @@ html body .button.processing {
   border: 1px solid #DDD;
   border-radius: 5px;
 }
+input[type=submit].button.processing {
+  font-size: 0;
+  background: #FFF url('../../../img/controls/loading_light.svg') center center no-repeat;
+  background-size: auto 50% ;
+  border: 1px solid #DDD;
+  border-radius: 5px;
+}
 .button-spacer {
   margin-right: 0.5em;
 }

@@ -49,6 +49,9 @@
         background:transparent;
         border:0;
     }
+    .button.button-icon.button-toggle.selected {
+        background: @button-selected-background;
+    }
     a {
         &:hover, &:active, &:focus {
             svg path {
@@ -96,6 +99,26 @@
             padding: 1.1rem 3.2rem;
         }
     }
+    .processing-wrapper {
+        background-color: @background-default;
+        text-align: center;
+        margin:.8rem 3rem .8rem 1.6rem;
+        
+        .processing-text {
+            position: relative;
+            padding-left: 1em;
+        }
+        .processing-text:before {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            content: " ";
+            top: 0px;
+            left: 0px;
+            background: transparent @loading left center no-repeat;
+            background-size: auto 75% ;
+        }
+    }
 }
 @import "quickaccess_header.less";
 @import "quickaccess_list.less";
@@ -103,3 +126,5 @@
 @import "quickaccess_resource_view.less";
 @import "quickaccess_resource_create.less";
 @import "quickaccess_search.less";
+@import "quickaccess_passphrase.less";
+@import "quickaccess_transition.less";

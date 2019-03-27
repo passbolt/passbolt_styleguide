@@ -150,6 +150,13 @@
     border: 1px solid @border-default;
     .rounded();
 }
+input[type=submit].button.processing {
+    font-size: 0;
+    background: @background-default @loading center center no-repeat;
+    background-size: auto 50% ;
+    border: 1px solid @border-default;
+    border-radius: 5px;
+}
 
 /* toggle selected */
 .button-toggle.selected {

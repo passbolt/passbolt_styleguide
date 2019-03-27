@@ -33,6 +33,16 @@
 </div>
 <div class="container-item">
 <div class="container-wrapper">
+    <?php include('../includes/quickaccess/quickaccess_passphrase.php'); ?>
+</div>
+</div>
+<div class="container-item">
+<div class="container-wrapper">
+    <?php include('../includes/quickaccess/quickaccess_passphrase_wrong.php'); ?>
+</div>
+</div>
+<div class="container-item">
+<div class="container-wrapper">
     <?php include('../includes/quickaccess/quickaccess_search_results.php'); ?>
 </div>
 </div>

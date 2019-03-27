@@ -4,7 +4,7 @@
             <span class="visually-hidden">Passbolt</span>
         </a>
     </h1>
-    <a href="#" class="option-link button button-icon">
+    <a class="option-link button button-icon button-toggle">
         <span class="visually-hidden">options</span>
         <span class="fa icon">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 512">
