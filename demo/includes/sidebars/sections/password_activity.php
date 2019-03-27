@@ -9,7 +9,7 @@
                 <li data-view-id="372" class="usercard-detailed-col-2 highlight">
                     <div class="content-wrapper">
                         <div class="content">
-                            <div class="name"><a href="">Ada Lovelace</a> accessed the password <a href="#">Inkscape</a></div>
+                            <div class="name"><span class="creator">Ada Lovelace</span> accessed the password <a href="#">Inkscape</a></div>
                             <div class="subinfo light">1 minute ago</div>
                         </div>
                     </div>
@@ -20,7 +20,7 @@
                 <li data-view-id="372" class="usercard-detailed-col-2">
                     <div class="content-wrapper">
                         <div class="content">
-                            <div class="name"><a href="">Ada Lovelace</a> changed the password <a href="#">Inkscape</a></div>
+                            <div class="name"><a href="" class="creator">Ada Lovelace</a> changed the password <a href="#">Inkscape</a></div>
                             <div class="subinfo light">1 hour ago</div>
                         </div>
                     </div>
@@ -31,7 +31,7 @@
                 <li data-view-id="372" class="usercard-detailed-col-2">
                     <div class="content-wrapper">
                         <div class="content">
-                            <div class="name"><a href="">Ada Lovelace</a> updated the password <a href="#">Inkscape</a> metadata</div>
+                            <div class="name"><a href="" class="creator">Ada Lovelace</a> updated the password <a href="#">Inkscape</a> metadata</div>
                             <div class="subinfo light">1 hour ago</div>
                         </div>
                     </div>
@@ -42,7 +42,7 @@
                 <li data-view-id="372" class="usercard-detailed-col-2">
                     <div class="content-wrapper">
                         <div class="content">
-                            <div class="name"><a href="">Ada Lovelace</a> has shared the password <a href="#">Inkscape</a> with</div>
+                            <div class="name"><a href="" class="creator">Ada Lovelace</a> has shared the password <a href="#">Inkscape</a> with</div>
                             <div class="subinfo light">1 day ago</div>
                             <ul class="permissions-list">
                                 <li class="clearfix">
@@ -56,7 +56,7 @@
                                     <div class="avatar">
                                         <img data-view-id="373" src="src/img/avatar/user.png" alt="picture of ada">
                                     </div>
-                                    <div class="name"><a href="#">Betty Holberton</a> <span class="permission-type"> - is owner</span></div>
+                                    <div class="name"><a href="#" class="creator">Betty Holberton</a> <span class="permission-type"> - is owner</span></div>
                                     <div class="type"> <span class="updated">updated</span></div>
                                 </li>
                                 <li class="clearfix">
@@ -70,7 +70,7 @@
                                     <div class="avatar">
                                         <img data-view-id="373" src="src/img/avatar/user.png" alt="picture of ada">
                                     </div>
-                                    <div class="name crossed"><a href="#">Carol Shaw</a> <span class="permission-type"> - can edit</span></div>
+                                    <div class="name crossed"><a href="#" class="creator">Carol Shaw</a> <span class="permission-type"> - can edit</span></div>
                                     <div class="type"><span class="removed">deleted</span></div>
                                 </li>
                             </ul>
