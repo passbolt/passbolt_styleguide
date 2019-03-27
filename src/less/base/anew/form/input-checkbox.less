@@ -61,8 +61,31 @@
             top: .6rem;
             width: 1.2rem;
             height: 1.2rem;
-            background: transparent url('@{images}/fa/fas/check.svg') center center no-repeat;
             background-size: 1.2rem 1.2rem;
+            background-color: @font-default;
+            -webkit-mask-image: url('@{images}/fa/fas/check.svg');
+            mask-image: url('@{images}/fa/fas/check.svg');
+        }
+    }
+}
+.checkbox.small {
+    input[type=checkbox] {
+        & + label {
+            font-size:1.4rem;
+        }
+        & + label:before {
+            margin-top:.2rem;
+            margin-right: 1rem;
+            width: 1.4rem;
+            height: 1.4rem;
+        }
+
+        &:checked + label:after {
+            left: .3rem;
+            top: .7rem;
+            width: 1.1rem;
+            height: 1.1rem;
+            background-size: 1.1rem 1.1rem;
         }
     }
 }

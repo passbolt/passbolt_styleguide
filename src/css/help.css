@@ -3443,6 +3443,13 @@ html body .button.processing {
   border: 1px solid #DDD;
   border-radius: 5px;
 }
+input[type=submit].button.processing {
+  font-size: 0;
+  background: #FFF url('../img/controls/loading_light.svg') center center no-repeat;
+  background-size: auto 50% ;
+  border: 1px solid #DDD;
+  border-radius: 5px;
+}
 .button-spacer {
   margin-right: 0.5em;
 }
@@ -4469,8 +4476,6 @@ input[type=email].fluid {
   background-repeat: no-repeat;
   background-color: #FFF;
   background-size: 100% 10px, 100% 10px, 100% 5px, 100% 5px;
-  /* Opera doesn't support this in the shorthand */
-  background-attachment: local, local, scroll, scroll;
 }
 ::-webkit-scrollbar {
   width: 1em;
