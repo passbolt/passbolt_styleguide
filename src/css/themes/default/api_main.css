@@ -6593,6 +6593,25 @@ input[type="search"]::-webkit-search-cancel-button {
   float: left;
   height: 1.8em;
 }
+.panel.aside .sidebar-section .accordion-content .processing-wrapper {
+  background-color: #FFF;
+  text-align: center;
+  padding: 0.5em 0;
+}
+.panel.aside .sidebar-section .accordion-content .processing-wrapper .processing-text {
+  position: relative;
+  padding-left: 1.5em;
+}
+.panel.aside .sidebar-section .accordion-content .processing-wrapper .processing-text:before {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  content: " ";
+  top: 0px;
+  left: 0px;
+  background: transparent url('../../../img/controls/loading_light.svg') left center no-repeat;
+  background-size: auto 75% ;
+}
 .panel.aside .description .description_content {
   white-space: pre-line;
 }
