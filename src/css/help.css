@@ -6203,3 +6203,6 @@ input[type="search"]::-webkit-search-cancel-button {
   float: right;
   margin-right: 2em;
 }
+.help.page article .message {
+  margin-bottom: 1em;
+}
