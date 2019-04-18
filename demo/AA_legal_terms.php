@@ -23,10 +23,8 @@
 		<!-- wizard steps -->
 		<div class="panel left">
 			<div class="navigation-help">
+                <h2>Section title</h2>
 				<ul>
-                    <li>
-                        <h2>Section title</h2>
-                    </li>
                     <li>
 						<a href="demo/AA_legal_terms.php" >Privacy</a>
 					</li>

@@ -5170,7 +5170,7 @@ article table.table-parameters tbody tr td em {
 }
 .panel .navigation-help h2 {
   padding: 0;
-  margin: 0;
+  margin: 0 0 0 1.25em;
 }
 .panel .navigation-help a {
   color: #333;
