@@ -5194,33 +5194,53 @@ article table.table-parameters tbody tr td em {
   min-height: 250px;
   height: auto;
 }
-/* left panel navigation */
-.panel .navigation {
+/*
+    left panel navigation
+    Similar to panel navigation setup
+    except there is an option to have several levels
+    and there is no option to have empty list items (all items are working links)
+ */
+.panel .navigation-help {
   margin-top: 1em;
 }
-.panel .navigation h2 {
+.panel .navigation-help h2 {
   padding: 0;
   margin: 0;
 }
-.panel .navigation a {
+.panel .navigation-help a {
   color: #333;
   border: 0;
   display: block;
 }
-.panel .navigation li {
+.panel .navigation-help ul li a {
   font-size: 0.938em;
   /* 15px from 16px base */
   padding: 0.469em 0 0.469em 1.333em;
   border-left: 5px solid #FFF;
 }
-.panel .navigation li:hover {
+.panel .navigation-help ul li a:hover {
   color: #333;
   border-left: 5px solid #DDD;
 }
-.panel .navigation li.active,
-.panel .navigation li.selected {
+.panel .navigation-help ul li ul li a {
+  padding-left: 2.5em;
+  font-weight: normal;
+  border-left: 5px solid #FFF;
+}
+.panel .navigation-help ul li.active a,
+.panel .navigation-help ul li.selected a {
   font-weight: bold;
   border-left: 5px solid #D40101;
+}
+.panel .navigation-help ul li.active ul li a,
+.panel .navigation-help ul li.selected ul li a {
+  padding-left: 2.5em;
+  font-weight: normal;
+  border-left: 5px solid #FFF;
+}
+.panel .navigation-help ul li.active ul li a:hover,
+.panel .navigation-help ul li.selected ul li a:hover {
+  border-left: 5px solid #DDD;
 }
 /*
 	do not show javascript needed warning if js is enabled
