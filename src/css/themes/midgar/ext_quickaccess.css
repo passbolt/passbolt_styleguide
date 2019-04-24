@@ -1635,7 +1635,7 @@ ul li {
 .quickaccess .resource-create .password:after {
   clear: both;
 }
-.quickaccess .resource-create .password input[type=password] {
+.quickaccess .resource-create .password input {
   float: left;
   box-sizing: border-box;
   width: calc(100% - 7.2rem);
