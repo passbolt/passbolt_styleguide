@@ -1,7 +1,7 @@
 /**
  * A simple tagEditor plugin for jQuery
  *
- * @copyright(c) 2018 Passbolt SARL
+ * @copyright(c) 2019 Passbolt SA
  * @licence MIT License
  */
 

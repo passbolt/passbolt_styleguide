@@ -1,12 +1,12 @@
 {
   "name": "passbolt-styleguide",
-  "version": "2.4.11",
+  "version": "2.9.0",
   "license": "AGPL-3.0",
-  "copyright": "Copyright 2018 Passbolt SARL",
+  "copyright": "Copyright 2019 Passbolt SA",
   "description": "Passbolt styleguide contains common styling assets used by the different sites, plugin, etc.",
   "repository": "https://github.com/passbolt/passbolt_styleguide",
   "devDependencies": {
-    "grunt": "^1.0.3",
+    "grunt": "^1.0.4",
     "grunt-contrib-clean": "^2.0.0",
     "grunt-contrib-concat": "^1.0.1",
     "grunt-contrib-copy": "^1.0.0",
@@ -14,10 +14,7 @@
     "grunt-contrib-less": "^2.0.0",
     "grunt-contrib-watch": "^1.1.0",
     "grunt-header": "^1.1.0",
-    "grunt-shell": "~2.1.0"
-  },
-  "dependencies": {
-    "@fortawesome/fontawesome": "^1.1.8",
-    "@fortawesome/fontawesome-free": "^5.3.1"
+    "grunt-shell": "^3.0.1",
+    "@fortawesome/fontawesome-free": "^5.8.1"
   }
 }

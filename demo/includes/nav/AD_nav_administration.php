@@ -7,203 +7,32 @@
 			return 'selected';
 	}
 ?>
-
-<div class="navigation first" >
-	<ul class="ready">
-		<li class="open node root">
-			<div class="row">
+<div class="navigation first">
+	<ul class="clearfix passbolt_controller_component_preference_menu_controller mad_view_component_tree menu ready"
+			id="js_wk_preference_menu">
+		<li>
+			<div class="row <?php echo isselected('mfa'); ?>">
 				<div class="main-cell-wrapper">
 					<div class="main-cell">
-						<a href="#" title="Users Directory Settings"><span>Dashboard</span></a>
+						<a href="demo/AD_admin_mfa_configuration.php"><span>Multi Factor Authentication</span></a>
 					</div>
 				</div>
 			</div>
 		</li>
-	</ul>
-</div>
-
-<div class="navigation accordion" >
-	<ul class="accordion-header">
-		<li class="open node root">
-			<div class="row title">
+		<li>
+			<div class="row <?php echo isselected('ldap_configuration'); ?>">
 				<div class="main-cell-wrapper">
 					<div class="main-cell">
-						<h3><a href="#" title="Access Management">Access Management</a></h3>
+						<a href="demo/AD_admin_ldap_configuration.php"><span>User directory</span></a>
 					</div>
 				</div>
 			</div>
 		</li>
-	</ul>
-	<ul class="accordion-content ready">
-		<li class="open node root">
-			<div class="row">
+		<li>
+			<div class="row <?php echo isselected('email_notifications'); ?>">
 				<div class="main-cell-wrapper">
 					<div class="main-cell">
-						<a href="#" title="Access control list"><span>Access control list</span></a>
-					</div>
-				</div>
-			</div>
-		</li>
-		<li class="open node root">
-			<div class="row">
-				<div class="main-cell-wrapper">
-					<div class="main-cell">
-						<a href="demo/AD_admin_ldap_configuration.php" title="Users Directory Settings"><span>Users directory</span></a>
-					</div>
-				</div>
-			</div>
-		</li>
-	</ul>
-</div>
-
-<div class="navigation accordion" >
-	<ul class="accordion-header">
-		<li class="open node root">
-			<div class="row title">
-				<div class="main-cell-wrapper">
-					<div class="main-cell">
-						<h3><a href="#" title="Access Management">Application</a></h3>
-					</div>
-				</div>
-			</div>
-		</li>
-	</ul>
-	<ul class="accordion-content ready">
-		<li class="open node root">
-			<div class="row">
-				<div class="main-cell-wrapper">
-					<div class="main-cell">
-						<a href="#" title="Email notifications"><span>Import / Export</span></a>
-					</div>
-				</div>
-			</div>
-		</li>
-		<li class="open node root">
-			<div class="row">
-				<div class="main-cell-wrapper">
-					<div class="main-cell">
-						<a href="#" title="Email notifications"><span>Groups</span></a>
-					</div>
-				</div>
-			</div>
-		</li>
-	</ul>
-</div>
-
-
-<div class="navigation accordion" >
-	<ul class="accordion-header">
-		<li class="open node root">
-			<div class="row title">
-				<div class="main-cell-wrapper">
-					<div class="main-cell">
-						<h3><a href="#" title="Access Management">Notification</a></h3>
-					</div>
-				</div>
-			</div>
-		</li>
-	</ul>
-	<ul class="accordion-content ready">
-		<li class="open node root">
-			<div class="row">
-				<div class="main-cell-wrapper">
-					<div class="main-cell">
-						<a href="#" title="Alert notifications"><span>Alerts</span></a>
-					</div>
-				</div>
-			</div>
-		</li>
-		<li class="open node root">
-			<div class="row">
-				<div class="main-cell-wrapper">
-					<div class="main-cell">
-						<a href="#" title="Email notifications"><span>Email</span></a>
-					</div>
-				</div>
-			</div>
-		</li>
-		<li class="open node root">
-			<div class="row">
-				<div class="main-cell-wrapper">
-					<div class="main-cell">
-						<a href="#" title="Slack notifications"><span>Slack</span></a>
-					</div>
-				</div>
-			</div>
-		</li>
-	</ul>
-</div>
-
-<div class="navigation accordion" >
-	<ul class="accordion-header">
-		<li class="open node root">
-			<div class="row title">
-				<div class="main-cell-wrapper">
-					<div class="main-cell">
-						<h3><a href="#" title="Security">Security</a></h3>
-					</div>
-				</div>
-			</div>
-		</li>
-	</ul>
-	<ul class="accordion-content ready">
-		<li class="open node root">
-			<div class="row">
-				<div class="main-cell-wrapper">
-					<div class="main-cell">
-						<a href="#" title="Users Directory Settings"><span>Audit log</span></a>
-					</div>
-				</div>
-			</div>
-		</li>
-		<li class="open node root">
-			<div class="row">
-				<div class="main-cell-wrapper">
-					<div class="main-cell">
-						<a href="demo/AD_admin_mfa_configuration.php" title="Users Directory Settings"><span>Multi factor authentication</span></a>
-					</div>
-				</div>
-			</div>
-		</li>
-		<li class="open node root">
-			<div class="row">
-				<div class="main-cell-wrapper">
-					<div class="main-cell">
-						<a href="#" title="Users Directory Settings"><span>Password rotation</span></a>
-					</div>
-				</div>
-			</div>
-		</li>
-	</ul>
-</div>
-
-<div class="navigation accordion" >
-	<ul class="accordion-header">
-		<li class="open node root">
-			<div class="row title">
-				<div class="main-cell-wrapper">
-					<div class="main-cell">
-						<h3><a href="#" title="Access Management">Reports</a></h3>
-					</div>
-				</div>
-			</div>
-		</li>
-	</ul>
-	<ul class="accordion-content ready">
-		<li class="open node root">
-			<div class="row">
-				<div class="main-cell-wrapper">
-					<div class="main-cell">
-						<a href="demo/AD_admin_ldap_configuration.php" title="Users Directory Settings"><span>Passwords</span></a>
-					</div>
-				</div>
-			</div>
-		</li>
-		<li class="open node root">
-			<div class="row">
-				<div class="main-cell-wrapper">
-					<div class="main-cell">
-						<a href="demo/AD_admin_ldap_configuration.php" title="Users Directory Settings"><span>Users directory</span></a>
+						<a href="demo/AD_admin_email_notifications.php"><span>Email notifications</span></a>
 					</div>
 				</div>
 			</div>
