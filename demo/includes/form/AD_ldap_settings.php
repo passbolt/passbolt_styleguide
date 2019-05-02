@@ -91,6 +91,27 @@ $enabled = isset($_GET['ldap_settings']['enabled']) && $_GET['ldap_settings']['e
                 <input type="text" class="required fluid" placeholder="UserObjectClass" <?=$disabledAttribute?>>
                 <div class="message">For Openldap only. Defines which user object to use. (Default: inetOrgPerson)</div>
             </div>
+            <div class="input text">
+                <label>Use email prefix / suffix?</label>
+                <div class="input toggle-switch">
+                    <label for="create_users">Build email based on a prefix and suffix?</label>
+                    <input class="toggle-switch-checkbox checkbox" id="create_users" type="checkbox" checked="checked" <?=$disabledAttribute?>>
+                    <label class="toggle-switch-button" for="create_users"></label>
+                </div>
+                <div class="message">Use this option when user entries don't include an email address by default</div>
+            </div>
+            <div class="singleline clearfix">
+                <div class="input text first-field">
+                    <label>Email prefix</label>
+                    <input type="text" class="required fluid" placeholder="uid" <?=$disabledAttribute?>>
+                    <div class="message">The attribute you would like to use for the first part of the email (usually uid).</div>
+                </div>
+                <div class="input text last-field">
+                    <label>Email suffix</label>
+                    <input type="text" class="required fluid" placeholder="@your-domain.com" <?=$disabledAttribute?>>
+                    <div class="message">The domain name part of the email (@your-domain-name).</div>
+                </div>
+            </div>
         </div>
     </div>
 

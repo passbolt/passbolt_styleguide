@@ -21,10 +21,23 @@
     }
   }
 
-  .operation-details textarea {
-    font-family: "Courier New", Courier, monospace;
-    font-size: 11px;
-    overflow: auto;
-    height: 220px
+  .ldap-test-settings-report {
+    p.directory-errors.error {
+      padding: 1em 0 0 0;
+      color: @red;
+    }
+
+    .accordion-directory-structure {
+      .error {
+        color: @red;
+      }
+    }
+
+    .accordion-directory-errors textarea {
+      font-family: "Courier New", Courier, monospace;
+      font-size: 11px;
+      overflow: auto;
+      height: 220px
+    }
   }
 }

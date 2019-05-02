@@ -9340,7 +9340,14 @@ html.launching .launching-screen p {
 .page.administration .ldap-settings.enabled .description.enabled {
   display: block;
 }
-.page.administration .operation-details textarea {
+.page.administration .ldap-test-settings-report p.directory-errors.error {
+  padding: 1em 0 0 0;
+  color: #D40101;
+}
+.page.administration .ldap-test-settings-report .accordion-directory-structure .error {
+  color: #D40101;
+}
+.page.administration .ldap-test-settings-report .accordion-directory-errors textarea {
   font-family: "Courier New", Courier, monospace;
   font-size: 11px;
   overflow: auto;
