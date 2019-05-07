@@ -1,5 +1,5 @@
 <div id="a484a5eb-4258-bde9-6b1e-20c6f26204fb" class="dialog-wrapper ready">
-	<div class="dialog ldap-test-settings-report">
+	<div class="dialog">
 		<div class="dialog-header">
 			<h2>Test settings report</h2>
 			<a href="demo/AD_admin_ldap_configuration.php" class="dialog-close">
@@ -7,11 +7,11 @@
 			</a>
 
 		</div>
-		<div class="js_dialog_content dialog-content">
+		<div class="js_dialog_content dialog-content ldap-test-settings-report">
 		<div class="form-content">
 			<p><strong>A connection could be established with your server.</strong></p>
 			<p>4 users and 4 groups were found.</p>
-			<div class="accordion operation-details closed">
+			<div class="accordion directory-list closed">
 				<div class="accordion-header">
 					<a role="link">See list</a>
 				</div>
@@ -20,7 +20,7 @@
                         <tr><td>Groups</td><td>Users</td>
                         <tr>
                             <td>
-                                Finance <em>(1 members)</em><br>
+                                <span class="error">cn=finance,dc=passbolt,dc=local</span><br>
                                 Operations <em>(2 members)</em><br>
                                 Finance <em>(1 members)</em><br>
                                 Operations <em>(2 members)</em><br>
