@@ -1,5 +1,5 @@
 <?php include(dirname(__DIR__) . '../../fixtures/tags.php'); ?>
-<div id="js_wsp_password_filter_tags" class="open navigation accordion js_component mad_view ready">
+<div id="js_wsp_password_filter_tags" class="open navigation tags accordion js_component mad_view ready">
     <ul id="js_wsp_pwd_password_filter_tag_selector" class="accordion-header">
         <li class="open node root">
             <div class="row title">
@@ -15,7 +15,7 @@
         </li>
     </ul>
     <ul id="js_wsp_password_filter_tags_list" class="accordion-content">
-<?php foreach ($tags as $i => $tag) : ?>
+        <?php foreach ($tags as $i => $tag) : ?>
             <li class="open node root tag-item" id="tag_<?= $tag['id']; ?>" data-view-id="<?= $i; ?>">
                 <div class="row">
                     <div class="main-cell-wrapper">
@@ -23,8 +23,11 @@
                             <a href="#" title="Leadership team'" data-view-id="<?= $i; ?>"><span><?= $tag['name']; ?></span></a>
                         </div>
                     </div>
+                    <div class="right-cell more-ctrl" style="float:right;">
+                        <a href="#"><span>more</span></a>
+                    </div>
                 </div>
             </li>
-<?php endforeach; ?>
+        <?php endforeach; ?>
     </ul>
 </div>
