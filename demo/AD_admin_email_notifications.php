@@ -64,8 +64,7 @@
                                                 <div class="ldap-configuration-credentials col8">
                                                     <h3>Email delivery</h3>
                                                     <p>
-                                                        In this section you can adjust which emails will be delivered
-                                                        and which notifications will be ignored.
+                                                        In this section you can choose which email notifications will be sent.
                                                     </p>
                                                     <div class="col6">
                                                         <label>Passwords</label>
@@ -102,7 +101,7 @@
                                                         </div>
                                                         <label>Comments</label>
                                                         <div class="input toggle-switch">
-                                                            <label for="send_comment_add">When a comment is posted, notify the users who have access to the target password.</label>
+                                                            <label for="send_comment_add">When a comment is posted on a password, notify the users who have access to this password.</label>
                                                             <input class="toggle-switch-checkbox checkbox" id="send_comment_add" type="checkbox" checked="checked">
                                                             <label class="toggle-switch-button" for="send_comment_add"></label>
                                                         </div>
@@ -126,13 +125,13 @@
                                                             <label class="toggle-switch-button" for="send_group_user_delete"></label>
                                                         </div>
                                                         <div class="input toggle-switch">
-                                                            <label for="send_group_user_update">When users role in a group change, notify them.</label>
+                                                            <label for="send_group_user_update">When user roles change in a group, notify the corresponding users.</label>
                                                             <input class="toggle-switch-checkbox checkbox" id="send_group_user_update" type="checkbox" checked="checked">
                                                             <label class="toggle-switch-button" for="send_group_user_update"></label>
                                                         </div>
                                                         <label>Group manager</label>
                                                         <div class="input toggle-switch">
-                                                            <label for="send_group_manager_update">When members of a group change, notify the group managers.</label>
+                                                            <label for="send_group_manager_update">When members of a group change, notify the group manager(s).</label>
                                                             <input class="toggle-switch-checkbox checkbox" id="send_group_manager_update" type="checkbox" checked="checked">
                                                             <label class="toggle-switch-button" for="send_group_manager_update"></label>
                                                         </div>
@@ -156,7 +155,7 @@
                                                 <div class="ldap-configuration-credentials col8">
 													<h3>Email content visibility</h3>
                                                     <p>
-                                                        In this section you can adjust the composition of the emails, e.g. which information will be included in the notification.
+                                                        In this section you can adjust the composition of the emails, e.g. which information will be included in the notifications.
                                                     </p>
                                                     <div class="col6">
                                                         <label>Passwords</label>
