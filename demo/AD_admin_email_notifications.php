@@ -70,39 +70,39 @@
                                                     <div class="col6">
                                                         <label>Passwords</label>
                                                         <div class="input toggle-switch">
-                                                            <label for="send_password_create">When a password is created.</label>
+                                                            <label for="send_password_create">When a password is created, notify its creator.</label>
                                                             <input class="toggle-switch-checkbox checkbox" id="send_password_create" type="checkbox" checked="checked">
                                                             <label class="toggle-switch-button" for="send_password_create"></label>
                                                         </div>
                                                         <div class="input toggle-switch">
-                                                            <label for="send_password_update">When a password is updated.</label>
+                                                            <label for="send_password_update">When a password is updated, notify the users who have access to it.</label>
                                                             <input class="toggle-switch-checkbox checkbox" id="send_password_update" type="checkbox" checked="checked">
                                                             <label class="toggle-switch-button" for="send_password_update"></label>
                                                         </div>
                                                         <div class="input toggle-switch">
-                                                            <label for="send_password_delete">When a password is deleted.</label>
+                                                            <label for="send_password_delete">When a password is deleted, notify the users who had access to it.</label>
                                                             <input class="toggle-switch-checkbox checkbox" id="send_password_delete" type="checkbox" checked="checked">
                                                             <label class="toggle-switch-button" for="send_password_delete"></label>
                                                         </div>
                                                         <div class="input toggle-switch">
-                                                            <label for="send_password_share">When a password is shared.</label>
+                                                            <label for="send_password_share">When a password is shared, notify the users who gain access to it.</label>
                                                             <input class="toggle-switch-checkbox checkbox" id="send_password_share" type="checkbox" checked="checked">
                                                             <label class="toggle-switch-button" for="send_password_share"></label>
                                                         </div>
                                                         <label>Registration & recovery</label>
                                                         <div class="input toggle-switch">
-                                                            <label for="send_user_create">When someone is invited to your passbolt server.</label>
+                                                            <label for="send_user_create">When new users are invited to passbolt, notify them.</label>
                                                             <input class="toggle-switch-checkbox checkbox" id="send_user_create" type="checkbox" checked="checked">
                                                             <label class="toggle-switch-button" for="send_user_create"></label>
                                                         </div>
                                                         <div class="input toggle-switch">
-                                                            <label for="send_user_recover">When someone tries to recover their account.</label>
+                                                            <label for="send_user_recover">When users try to recover their account, notify them.</label>
                                                             <input class="toggle-switch-checkbox checkbox" id="send_user_recover" type="checkbox" checked="checked">
                                                             <label class="toggle-switch-button" for="send_user_recover"></label>
                                                         </div>
                                                         <label>Comments</label>
                                                         <div class="input toggle-switch">
-                                                            <label for="send_comment_add">When a comment is posted.</label>
+                                                            <label for="send_comment_add">When a comment is posted, notify the users who have access to the target password.</label>
                                                             <input class="toggle-switch-checkbox checkbox" id="send_comment_add" type="checkbox" checked="checked">
                                                             <label class="toggle-switch-button" for="send_comment_add"></label>
                                                         </div>
@@ -111,28 +111,28 @@
 
                                                         <label>Group membership</label>
                                                         <div class="input toggle-switch">
-                                                            <label for="send_group_delete">When a group someone is a member of, is deleted.</label>
+                                                            <label for="send_group_delete">When a group is deleted, notify the users who were member of it.</label>
                                                             <input class="toggle-switch-checkbox checkbox" id="send_group_delete" type="checkbox" checked="checked">
                                                             <label class="toggle-switch-button" for="send_group_delete"></label>
                                                         </div>
                                                         <div class="input toggle-switch">
-                                                            <label for="send_group_user_add">When someone is added to a group.</label>
+                                                            <label for="send_group_user_add">When users are added to a group, notify them.</label>
                                                             <input class="toggle-switch-checkbox checkbox" id="send_group_user_add" type="checkbox" checked="checked">
                                                             <label class="toggle-switch-button" for="send_group_user_add"></label>
                                                         </div>
                                                         <div class="input toggle-switch">
-                                                            <label for="send_group_user_delete">When someone is removed from a group.</label>
+                                                            <label for="send_group_user_delete">When users are removed from a group, notify them.</label>
                                                             <input class="toggle-switch-checkbox checkbox" id="send_group_user_delete" type="checkbox" checked="checked">
                                                             <label class="toggle-switch-button" for="send_group_user_delete"></label>
                                                         </div>
                                                         <div class="input toggle-switch">
-                                                            <label for="send_group_user_update">When a group member's permission changes.</label>
+                                                            <label for="send_group_user_update">When users role in a group change, notify them.</label>
                                                             <input class="toggle-switch-checkbox checkbox" id="send_group_user_update" type="checkbox" checked="checked">
                                                             <label class="toggle-switch-button" for="send_group_user_update"></label>
                                                         </div>
                                                         <label>Group manager</label>
                                                         <div class="input toggle-switch">
-                                                            <label for="send_group_manager_update">When members change in a group.</label>
+                                                            <label for="send_group_manager_update">When members of a group change, notify the group managers.</label>
                                                             <input class="toggle-switch-checkbox checkbox" id="send_group_manager_update" type="checkbox" checked="checked">
                                                             <label class="toggle-switch-button" for="send_group_manager_update"></label>
                                                         </div>
@@ -159,7 +159,7 @@
                                                         In this section you can adjust the composition of the emails, e.g. which information will be included in the notification.
                                                     </p>
                                                     <div class="col6">
-                                                        <label>Resources</label>
+                                                        <label>Passwords</label>
                                                         <div class="input toggle-switch">
                                                             <label for="content_username">Username</label>
                                                             <input class="toggle-switch-checkbox checkbox" id="content_username" type="checkbox" checked="checked">
