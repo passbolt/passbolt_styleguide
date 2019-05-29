@@ -7,7 +7,12 @@
 
 <body>
     <div id="container" class="page settings smtp-settings">
-        <div id= "js_app_controller" class="ready">
+        <div id="js_app_controller" class="ready">
+            <?php if (!isset($_GET['result'])) { ?>
+                <?php include('includes/dialogs/smtp/AD_smtp_send_test_email.php'); ?>
+            <?php } else { ?>
+                <?php include('includes/dialogs/smtp/AD_smtp_send_test_email_result.php'); ?>
+            <?php } ?>
             <?php
             $role = 'admin';
             include('includes/headers/LU_header_first.php');
@@ -47,7 +52,6 @@
                                                     <div class="ldap-configuration-credentials col8">
                                                         <? include('includes/form/AD_smtp_settings.php') ?>
                                                     </div>
-
                                                     <div class="col4 last">
                                                         <h3>Need some help?</h3>
                                                         <div class="notice message">
@@ -71,6 +75,7 @@
             </div>
         </div>
         <?php include('includes/LU_footer.php'); ?>
+    </div>
 </body>
 
 </html>
