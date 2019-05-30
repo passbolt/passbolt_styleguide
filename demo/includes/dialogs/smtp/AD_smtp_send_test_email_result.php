@@ -8,17 +8,22 @@
         </div>
         <div class="dialog-content">
             <div class="form-content">
-                <p><strong>The email could not be sent.</strong></p>
-                <p class="inline-error">ERROR MESSAGE returned by the server, such as : A connection could not be established with the SMTP server.</p>
-                <div class="error-trace">
-                    <p><a>See debug trace</a></p>
-                    <div class="message error hidden">
-                        <pre>index.min.js:4563 PassboltApiFetchError: Failed to fetch
+                <p class="inline-error">The email could not be sent.</p>
+                <p>A connection could not be established with the SMTP server (Use the error returned by the server).</p>
+                <div class="accordion error-trace closed">
+                    <span class="accordion-header"><a href="#">See debug trace</a></span>
+                    <div class="accordion-content">
+                        <br />
+                        <div class="input text">
+                            <label for="js_field_debug" class="visuallyhidden">Report</label>
+                            <textarea id="js_field_debug">index.min.js:4563 PassboltApiFetchError: Failed to fetch
     at Function.ResourceService.findAll (chrome-extension://plcnjfjccnfooibklhmgbbhhcglljclp/index.min.js:12694:11)
 (anonymous) @ index.min.js:4563
 async function (async)
 (anonymous) @ index.min.js:4560
-(anonymous) @ index.min.js:11898</pre>
+(anonymous) @ index.min.js:11898
+						    </textarea>
+                        </div>
                     </div>
                 </div>
             </div>

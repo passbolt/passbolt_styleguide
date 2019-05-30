@@ -35,7 +35,7 @@
                                 <?php
                                 $_GET['breadcrumbs'] = array(
                                     'administration' => '#',
-                                    'smtp server' => 'demo/AD_admin_smtp_configuration.php',
+                                    'email transport' => 'demo/AD_admin_smtp_configuration.php',
                                     'settings' => 'demo/AD_admin_smtp_configuration.php'
                                 );
                                 include('includes/LU_breadcrumbs.php'); ?>

@@ -41,7 +41,7 @@
 			<div class="row <?php echo isselected('smtp'); ?>">
 				<div class="main-cell-wrapper">
 					<div class="main-cell">
-						<a href="demo/AD_admin_smtp_configuration.php"><span>SMTP server</span></a>
+						<a href="demo/AD_admin_smtp_configuration.php"><span>Email transport</span></a>
 					</div>
 				</div>
 			</div>
