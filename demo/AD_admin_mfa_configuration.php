@@ -25,16 +25,16 @@
 			<div id="js_administration_workspace">
 				<div class="panel left">
 					<?php
-					$_GET['shortcuts'] = 'mfa_configuration';
+					$_GET['shortcuts'] = 'mfa';
 					include('includes/nav/AD_nav_administration.php');
 					?>
 				</div>
 				<div class="panel middle">
 					<?php
 					$_GET['breadcrumbs'] = array(
-						'Administration' => 'demo/AD_admin_mda_configuration.php',
-						'Multi factor authentication' => 'demo/AD_admin_mda_configuration.php',
-						'Settings' => 'demo/AD_admin_mda_configuration.php'
+						'Administration' => 'demo/AD_admin_mfa_configuration.php',
+						'Multi factor authentication' => 'demo/AD_admin_mfa_configuration.php',
+						'Settings' => 'demo/AD_admin_mfa_configuration.php'
 					);
 					include('includes/LU_breadcrumbs.php'); ?>
 					<div id="js_wk_administration_main" class="workspace-main">

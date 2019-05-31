@@ -11,13 +11,13 @@
 		<div class="dialog confirm">
 			<div class="dialog-header">
 				<h2>Edit tag</h2>
-				<a class="dialog-close js-dialog-close" href="demo/LU_passwords.php">
+				<a class="dialog-close js-dialog-close" href="<?= parse_url($_SERVER["REQUEST_URI"], PHP_URL_PATH) ?>">
 					<i class="fa fa-close"></i>
 					<span class="visuallyhidden">close</span>
 				</a>
 			</div>
 			<div class="js_dialog_content dialog-content">
-				<form action="demo/LU_passwords.php" class="ready" id="js_tag_edit_form">
+				<form action="<?= parse_url($_SERVER["REQUEST_URI"], PHP_URL_PATH) ?>" class="ready" id="js_tag_edit_form">
 					<div class="form-content">
 						<input value="50d77ffd-cf28-460e-b35e-1b63d7a10fce,50d77ffc-0414-49dd-9959-1b63d7a10fce" name="passbolt.model.Tag.id" 
 							class="ready" type="hidden">
@@ -33,7 +33,7 @@
 					</div>
 					<div class="submit-wrapper clearfix">
 						<input class="button primary" value="save" type="submit">
-						<a href="demo/LU_passwords.php" class="js-dialog-cancel cancel">cancel</a>
+						<a href="<?= parse_url($_SERVER["REQUEST_URI"], PHP_URL_PATH) ?>" class="js-dialog-cancel cancel">cancel</a>
 					</div>
 				</form>
 			</div>

@@ -11,7 +11,7 @@
 		<div class="dialog confirm">
 			<div class="dialog-header">
 				<h2>Do you really want to delete tag?</h2>
-				<a class="dialog-close js-dialog-close" href="demo/LU_passwords.php">
+				<a class="dialog-close js-dialog-close" href="<?= parse_url($_SERVER["REQUEST_URI"], PHP_URL_PATH) ?>">
 					<i class="fa fa-close"></i>
 					<span class="visuallyhidden">close</span>
 				</a>
@@ -27,8 +27,8 @@
 				</div>
 
 				<div class="submit-wrapper clearfix">
-					<a class="button primary warning" href="demo/LU_passwords.php">Delete tag</a>
-					<a class="js-dialog-close cancel" href="demo/LU_passwords.php">cancel</a>
+					<a class="button primary warning" href="<?= parse_url($_SERVER["REQUEST_URI"], PHP_URL_PATH) ?>">Delete tag</a>
+					<a class="js-dialog-close cancel" href="<?= parse_url($_SERVER["REQUEST_URI"], PHP_URL_PATH) ?>">cancel</a>
 				</div>
 			</div>
 		</div>

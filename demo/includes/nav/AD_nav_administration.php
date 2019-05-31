@@ -46,5 +46,14 @@
 				</div>
 			</div>
 		</li>
+		<li>
+			<div class="row <?php echo isselected('shared_tags'); ?>">
+				<div class="main-cell-wrapper">
+					<div class="main-cell">
+						<a href="demo/AD_admin_shared_tags.php"><span>Tags taxonomy</span></a>
+					</div>
+				</div>
+			</div>
+		</li>
 	</ul>
 </div>
