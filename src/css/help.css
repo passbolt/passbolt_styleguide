@@ -5169,7 +5169,7 @@ article table.table-parameters tbody tr td em {
   margin-top: 1em;
 }
 .panel .navigation-help h2 {
-  padding: 0;
+  padding: 0 0 0.5em 0;
   margin: 0 0 0 1.25em;
 }
 .panel .navigation-help a {
