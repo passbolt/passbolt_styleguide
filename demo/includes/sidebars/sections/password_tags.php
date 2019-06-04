@@ -26,11 +26,10 @@
                     <div class="tag-editor-input-wrapper">
                         <div class="tags">
                             <!-- predefined value can be set with
-                            <div class="tag">
-                                <span class="tag-content">alpha</span>
-                                <span class="tag-delete" role="button"><i class="fa fa-times"></i></span>
-                            </div>
                             -->
+                            <div class="tag">
+                                <span class="tag-content">#shared</span>
+                            </div>
                         </div>
                         <div id="js_tag_editor_input_text" class='tag-editor-input' contenteditable="true"></div>
                     </div>

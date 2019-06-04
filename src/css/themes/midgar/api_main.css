@@ -5910,9 +5910,12 @@ input[type="search"]::-webkit-search-cancel-button {
 .tag-editor .tag {
   padding-right: 0;
 }
+.tag-editor .tag-content {
+  padding-right: 0.5em;
+}
 .tag-editor .tag-delete {
-  margin-left: 0.25em;
   border-left: 1px dotted #2894DF;
+  margin-left: -0.25em;
   padding-left: 0.5em;
   padding-right: 0.5em;
   font-size: 0.75em;
