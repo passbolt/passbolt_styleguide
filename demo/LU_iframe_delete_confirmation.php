@@ -16,6 +16,9 @@
 		<div class="js_dialog_content dialog-content">
 			<div class="form-content">
 				<p>
+					<strong>You are about to delete the password "monsoonIsComing...".</strong>
+				</p>
+				<p>
 					Please confirm you really want to delete the password. After clicking ok, the password will be <strong>deleted permanently</strong>.
 				</p>
 			</div>
