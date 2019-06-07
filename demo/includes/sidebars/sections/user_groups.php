@@ -4,9 +4,9 @@
 	</div>
 
 	<ul class="accordion-content">
-		<?php if (isset($_GET['empty'])) { ?>
+		<?php if (isset($_GET['empty'])): ?>
 			<em>The user is not a member of any group yet.</em>
-		<?php } else { ?>
+		<?php else: ?>
 			<li class="permission usercard-col-2">
 				<div class="content-wrapper">
 					<div class="content">
@@ -29,6 +29,6 @@
 					<img src="src/img/avatar/group_default.png">
 				</div>
 			</li>
-		<?php } ?>
+		<?php endif;?>
 	</ul>
 </div>
