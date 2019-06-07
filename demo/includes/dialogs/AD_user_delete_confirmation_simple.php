@@ -1,7 +1,7 @@
 <div class="dialog-wrapper">
     <div class="dialog confirm delete-user-dialog">
         <div class="dialog-header">
-            <h2>Do you really want to delete user ?</h2>
+            <h2>Delete user?</h2>
             <a class="dialog-close js-dialog-close" href="demo/AD_users.php">
                 <i class="fa fa-close"></i>
                 <span class="visuallyhidden">close</span>
@@ -10,17 +10,16 @@
         <div class="js_dialog_content dialog-content">
             <div class="form-content">
                 <p>
-                    <strong>You are about to delete Ada Lovelace.</strong>
+                    Are you sure you want to delete <strong>Ada Lovelace (adalovelace@xyz.com)</strong>?
                 </p>
                 <p>
-                    Please confirm you really want to delete the user.
-                    The user will be deleted permanently and this action cannot be undone.
+                    Warning: This action can't be undone. All the data associated with this user will be permanently deleted.
                 </p>
             </div>
 
             <div class="submit-wrapper clearfix">
-                <a class="button primary warning" href="demo/AD_users.php">delete user</a>
-                <a class="js-dialog-cancel cancel" href="demo/AD_users.php">cancel</a>
+                <a class="button primary warning" href="demo/AD_users.php">Delete User</a>
+                <a class="js-dialog-cancel cancel" href="demo/AD_users.php">Cancel</a>
             </div>
         </div>
     </div>
