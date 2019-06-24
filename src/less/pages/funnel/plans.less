@@ -99,9 +99,75 @@
       border: 1px solid @border-default;
       text-align: center;
 
-      &.enterprise {
+      .pricing-toggle {
+        margin-top: -1em;
+        ul {
+          width: 100%;
+          margin: auto;
+           li {
+             float: left;
+             margin: 0;
+             padding: 0;
+             width: 50%;
+             border: 0;
+             text-align: center;
+             background-color: @grey-lightest;
+             &.selected {
+               background-color: transparent;
+               a {
+                 border-right: 0;
+                 border-left: 0;
+                 border-top: 1px solid @grey;
+                 border-bottom: 0;
+                 font-weight: bold;
+                 color: @font-default;
+               }
+             }
 
+             a {
+               padding: 0.35em 0;
+               border-bottom: 1px solid @grey;
+               border-right: 1px solid @grey;
+               border-left: 1px solid @grey;
+               display: block;
+               color: @grey-dark;
+               &:hover {
+                 color: @font-default;
+                 font-weight: bold;
+               }
+             }
+           }
+        }
       }
+
+      &.community  {
+        .plan-pricing {
+          margin-top: 50px;
+        }
+        .plan-limit {
+          margin-top: 18px;
+        }
+      }
+
+      &.enterprise {
+        .plan-pricing {
+          margin-top: 50px;
+        }
+        .plan-limit {
+          margin-top: 18px;
+        }
+      }
+
+      &.business {
+        .plan-description h2 {
+          border-bottom: 0;
+        }
+        .plan-pricing {
+          padding-top:  1em;
+        }
+      }
+
+
 
       &.highlighted {
         box-shadow: 0 3px 10px -5px #000000;
@@ -147,13 +213,17 @@
           text-align: center;
         }
         .cost-large {
-          font-size: 3.5em;
+          font-size: 2.5em;
           &.float {
             font-size:3.3em;
             letter-spacing:-2px;
           }
           &.two-digits {
             letter-spacing: -5px;
+          }
+          .frequency {
+            color: @grey-dark;
+            font-size: 1rem;
           }
         }
         .cost-medium {
@@ -175,13 +245,66 @@
         }
       }
 
+      .billing-frequency {
+        color: @grey-dark;
+        font-size: 0.8rem;
+      }
+
       .plan-limit {
+        margin: 1em 0 20px 0;
         span {
-          display: block;
+          display: inline-block;
           margin:auto;
           padding: 0.2em 0;
           font-size: 1.2em;
-          font-weight:bold;
+          &.value {
+            font-weight: bold;
+          }
+        }
+
+
+        .users-quantity-selector {
+          padding-top: 1em;
+          width: 50%;
+          margin: auto;
+
+          .rangeslider.rangeslider--horizontal {
+            height: 12px;
+            border-radius: 5px;
+
+            .rangeslider__fill {
+              background: @blue;
+            }
+
+            .rangeslider__handle {
+              background: none;
+              top: -8px;
+              position: absolute;
+              z-index: 2;
+              width: 15px;
+              height: 15px;
+              border-radius: 100%;
+              background: #ccc;
+              border: #fff 7px solid;
+              box-shadow: 0 0 0 1px #cacaca;
+              cursor: pointer;
+
+              &:after {
+                content: none;
+              }
+            }
+          }
+        }
+
+        .users-quantity-display {
+          margin-top: 0.5em;
+          span.value {
+            font-weight: bold;
+          }
+          span {
+            display: inline-block;
+            font-weight: normal;
+          }
         }
       }
 

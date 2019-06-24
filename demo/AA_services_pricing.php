@@ -5,7 +5,34 @@
     <title>Passbolt | The open source password manager for teams</title>
     <?php include('includes/meta/AA_meta.php'); ?>
 	<?php include('includes/headers/AA_header_scripts.php'); ?>
-	<script src="src/js/rangeslider.min.js"></script>
+
+    <script src = "https://js.chargebee.com/v2/chargebee.js"  data-cb-site = "passbolt-test" > </script>
+
+    <script src="src/js/rangeslider.min.js"></script>
+    <script type="text/javascript">
+        $(function() {
+          $('input[type="range"]').rangeslider({
+            polyfill: false,
+            onSlide: function(position, value) {
+              $('#users-qty').text(value);
+              $('#product-price').text(value * 2);
+              $('#checkout-link').attr('data-cb-plan-quantity', value);
+            }
+          });
+        });
+
+        $("#checkout-link").click(function() {
+          $checkout = $("#checkout-link");
+          $.post(
+            $checkout.attr('href'),
+            {
+              "subscription[plan_quantity]" : 10
+            }
+          );
+          return false;
+
+        });
+    </script>
 </head>
 <body>
 <div id="container" class="page featured plans">
@@ -39,15 +66,18 @@
 	    <div class="page-row service pull-up">
 	        <div class="grid grid-responsive-12">
 	            <div class="row">
-		            <div class="service-col col3 plan community">
+		            <div class="service-col col4 plan community">
 			            <div class="plan-description">
 				            <h2>Community</h2>
 			            </div>
 			            <div class="row plan-pricing">
 				            <div class="col12 cost cost-large align-center"> FREE </div>
 			            </div>
+                        <div class="billing-frequency">
+                            Forever
+                        </div>
 			            <div class="plan-limit">
-				            <span>unlimited users</span>
+                            <span class="value">unlimited</span> <span>users</span>,<br><span>no strings attached.</span>
 			            </div>
 			            <div class="plan-actions">
 				            <a href="demo/AA_services_pro_checkout.php" class="button primary big">Download</a>
@@ -65,48 +95,42 @@
 				            <a href="#">Get started</a>
 			            </div>
 		            </div>
-	                <div class="service-col col3 plan startup">
-	                    <div class="plan-description">
-		                    <h2>Startup</h2>
-	                    </div>
-		                <div class="row plan-pricing">
-			                <div class="col6 cost cost-large align-right"> €15 </div>
-			                <div class="col6 cost cost-small last align-left">per<br>month</div>
-		                </div>
-		                <div class="plan-limit">
-			                <span>up to 5 users</span>
-		                </div>
-		                <div class="plan-actions">
-			                <a href="demo/AA_services_pro_checkout.php" class="button primary big">Buy now</a>
-		                </div>
-
-	                    <div class="plan-features">
-		                    <ul>
-			                    <li>Easy installation</li>
-			                    <li><a href="#features">All features</a></li>
-			                    <li>One year of free updates</li>
-			                    <li>AGPL V3 license</li>
-			                    <li>Email support<br><span class="smaller">(next business day)</span></li>
-		                    </ul>
-	                    </div>
-		                <div class="second_cta">
-			                <a href="#">Try a demo</a>
-		                </div>
-	                </div>
-		            <div class="service-col col3 plan business highlighted">
+		            <div class="service-col col4 plan business highlighted">
 			            <div class="ribbon"><span>POPULAR</span></div>
 			            <div class="plan-description">
 				            <h2>Business</h2>
 			            </div>
+                        <div class="pricing-toggle">
+                            <ul>
+                                <li class="monthly selected">
+                                    <a data-term="monthly">Monthly</a>
+                                </li>
+                                <li class="yearly">
+                                    <a data-term="yearly">Yearly</a>
+                                </li>
+                            </ul>
+                        </div>
 			            <div class="row plan-pricing">
-				            <div class="col6 cost cost-large align-right"> €99 </div>
-				            <div class="col6 cost cost-small last align-left">per<br>month</div>
+                            <div class="col12 cost cost-large">
+                                <span class="currency">€</span><span class="price" id="product-price">10</span>
+                                <span class="frequency">/mo</span>
+                            </div>
 			            </div>
+                        <div class="billing-frequency">
+                            Paid Monthly
+                        </div>
 			            <div class="plan-limit">
-				            <span>up to 100 users</span>
+                            <div class="users-quantity-selector">
+                                <input type="range" min="5" max="200" step="5" value="5">
+                            </div>
+                            <div class="users-quantity-display">
+                                <span class="value" id="users-qty">5</span> <span>users included</span>
+                            </div>
 			            </div>
 			            <div class="plan-actions">
-				            <a href="demo/AA_services_pro_checkout.php" class="button primary big">Buy now</a>
+                            <a id="checkout-link" href="https://passbolt-test.chargebee.com/pages/v2/KWxmOMNUuzfjUDx9mm6S70scduElmcmF3/checkout" class="button primary big" data-cb-plan-quantity = "10">Sign up</a>
+<!--                            <a id="checkout-link" href = "javascript:void(0)"  data-cb-type = "checkout"  data-cb-plan-id = "business-monthly-test"  data-cb-plan-quantity = "50" class="button primary big">Buy now</a>-->
+				            <!-- <a href="demo/AA_services_pro_checkout.php" class="button primary big">Buy now</a> -->
 			            </div>
 			            <div class="plan-features">
 				            <ul>
@@ -119,17 +143,21 @@
 			            </div>
 			            <div class="second_cta">
 				            <a href="#">Try a demo</a>
-			            </div>
+                        </div>
 		            </div>
-	                <div class="service-col col3 plan enterprise last">
+	                <div class="service-col col4 plan enterprise last">
 		                <div class="plan-description">
 			                <h2>Enterprise</h2>
 		                </div>
 		                <div class="row plan-pricing">
-			                <div class="col12 cost cost-medium align-center">Tailor-made</div>
+			                <div class="col12 cost cost-large align-center">Get in touch</div>
 		                </div>
+                        <div class="billing-frequency">
+                            for a custom quote
+                        </div>
 		                <div class="plan-limit">
-			                <span>unlimited users</span>
+                            <span>&nbsp;</span><br>
+			                <span class="value">Unlimited</span> <span>users</span>
 		                </div>
 		                <div class="plan-actions">
 			                <a href="mailto:sales@passbolt.com" class="button primary big">Contact us</a>
