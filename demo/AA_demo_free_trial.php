@@ -1,4 +1,4 @@
-<?php $error = false; ?>
+<?php $error =true; ?>
 <!doctype html>
 <html class="alpha version no-js" lang="en">
 <head>
@@ -8,19 +8,27 @@
 	<?php include('includes/headers/AA_header_scripts.php'); ?>
 </head>
 <body>
-<div id="container" class="page cloud-signup">
-    <div class="page-row cloud-signup">
+<div id="container" class="page featured free-trial-signup">
+    <?php include('includes/headers/AA_header.php'); ?>
+
+    <div class="page-row free-trial-signup">
         <div class="grid grid-responsive-12">
             <div class="row">
 	            <div class="col6 decoration">
+		            <h2>Sign up for a<br> free trial today!</h2>
+                    <p class="message warning"><strong>Warning:</strong>
+                        Demo data will be deleted periodically.
+                        Do not use it to store sensitive information.
+                    </p>
+		            <p class="message notice">
+                        <strong>How it works: </strong>Enter your details in the form and click on "start free trial".
+                        We will then send you an email with a link to get started on a temporary demo instance.
+                    </p>
+	            </div>
+				<div class="col5 push1 last">
                     <div class="logo no-img">
                         <h1><span>Passbolt</span></h1>
                     </div>
-		            <h2>Try Passbolt Cloud for free,<br> your first 14 days are on us. </h2>
-                    <h3>No credit card required. No strings attached.</h3>
-                    <div class="cloud-bg"></div>
-	            </div>
-				<div class="col5 push1 last">
                     <div class=" form-wrapper">
 					<form action="/" id="RegistrationsPrelaunchForm" method="post" accept-charset="utf-8" class="public">
 						<div style="display:none;"><input name="_method" value="POST" type="hidden"></div>
@@ -46,7 +54,7 @@
 						<div class="inline url input ">
 							<label for="RegistrationEmail">URL of your passbolt</label>
 							<div class="field-url">
-								<span class="base-url">https://passbolt.com/</span><input name="data[Registration][email]" class="fluid" placeholder="my-site" id="RegistrationEmail" type="text">
+								<span class="base-url">https://demo.passbolt.com/</span><input name="data[Registration][email]" class="fluid" placeholder="my-site" id="RegistrationEmail" type="text">
                             </div>
                             <?php if ($error) : ?><div class="error message">This domain is already taken.</div><?php endif;?>
 						</div>
@@ -56,7 +64,7 @@
                             <?php if ($error) : ?><div class="error message">Please agree with the terms and conditions.</div><?php endif;?>
                         </div>
                         <div class="submit">
-							<input class="button primary big" value="Get started" type="submit">
+							<input class="button primary big" value="Start free trial" type="submit">
 						</div>
 					</form>
                     </div>
@@ -64,6 +72,8 @@
             </div>
 		</div>
     </div>
+
+    <?php include('includes/AN_footer.php'); ?>
 </div>
 </body>
 </html>

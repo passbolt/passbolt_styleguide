@@ -1,0 +1,170 @@
+.page.cloud-signup {
+    background: linear-gradient( to right, @grey-lightest 0%, @grey-lightest 50%, @white 50%, @white 100% );
+
+    .cloud-bg {
+        position: absolute;
+        margin-left: -144px;
+        width: 650px;
+        height: 330px;
+        background: transparent url('@{images}/illustrations/password_management1_850.png') center center no-repeat;
+        background-size: 100%;
+        margin-top: 2em;
+    }
+
+    .logo.no-img {
+        background: transparent @logourl2x 0 0 no-repeat;
+        background-size: 200px auto;
+        width: 200px;
+        height: 35px;
+        margin-top:-1em;
+        margin-bottom:1.5em;
+    }
+    .footer {
+        position: fixed;
+    }
+
+    // GRecaptcha position.
+    .grecaptcha-badge {
+        bottom: 50px !important;
+    }
+
+    .page-row.cloud-signup {
+        padding-top: 5em;
+    }
+
+    .decoration {
+        padding-left: 1em;
+
+        h2 {
+            font-size: 2em;
+            font-weight: normal;
+            padding: 0;
+            margin: 1.5em 0 0.5em 0;
+            text-align: left;
+        }
+        h3 {
+            font-size:1.2em;
+            text-align: left;
+            font-weight:normal;
+            border:0;
+            color:@grey-dark;
+        }
+    }
+
+    .form-wrapper {
+        padding: 0 4em 0 0;
+        form {
+            .singleline {
+                .input.text {
+                    &.first-field {
+                        margin-right: 7%;
+                    }
+                    &.last-field.required {
+                        label::after {
+                            content: ' ';
+                        }
+                    }
+                    width: 46%;
+                }
+            }
+
+            .input {
+                &.terms {
+                    margin-top: 1em;
+                }
+                &.url {
+                    .field-url {
+                        width: 100%;
+                        border: 1px solid @border-input;
+                        margin: 0 0 .5em 0;
+                        padding: 0;
+                    }
+                    input[type=text] {
+                        display: inline-block;
+                        border: 0;
+                        width: 57%;
+                        margin: 0;
+                        padding-left: 0.2em;
+                    }
+                    input[type=text]:focus {
+                        border: 0;
+                        -webkit-box-shadow: none;
+                        box-shadow: none;
+                    }
+                    span.base-url {
+                        display: inline-block;
+                        background-color: @grey-lightest;
+                        color: @grey-darkest;
+                        line-height: 34px;
+                        padding: .375em .2em .375em .625em;
+                        font-weight: bold;
+                        vertical-align: middle;
+                        font-size: 14px;
+                    }
+                }
+            }
+
+            input[type=text], input[type=email] {
+                line-height: 33px;
+            }
+
+            .submit {
+                margin-top: 2em;
+                width: 100%;
+                input.button {
+                    width: 100%;
+                    padding: 1em 2em;
+                }
+            }
+        }
+    }
+}
+
+.page.cloud-signup-email-sent {
+    .email-sent-instructions {
+        margin-top: 9em;
+        text-align: center;
+
+        .email-sent-bg {
+            background: transparent url('@{images}/illustrations/email.png') top center no-repeat;
+            background-size: auto 100%;
+            height: 175px;
+        }
+        h2 {
+            margin-top: 2em;
+            font-size: 1.2em;
+            font-weight: normal;
+        }
+        p {
+            font-size: 1em;
+            color: @grey-dark;
+            padding-top: 0.5em;
+        }
+    }
+}
+
+@media all and (max-width: 800px) {
+    .page.cloud-signup {
+        background: none;
+
+        .form-wrapper {
+            padding: 0 1em;
+        }
+
+        .cloud-bg {
+            display: none;
+        }
+    }
+
+    .page.cloud-signup-email-sent {
+        .email-sent-instructions {
+            margin-top: 2em;
+            text-align: left;
+            padding: 0 1em;
+
+            .email-sent-bg {
+                background-position: left;
+            }
+        }
+    }
+}
