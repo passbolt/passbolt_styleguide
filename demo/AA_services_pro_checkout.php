@@ -188,6 +188,13 @@
                                 <p>After payment, you will receive the installation instructions and license key by email.</p>
                             </div>
 
+                            <div class="voucher">
+                                <div class="input text">
+                                    <input type="text" placeholder="Any discount code?">
+                                    <a href="#" class="button">Apply</a>
+                                </div>
+                            </div>
+
                                 <div class="subscription-total">
                                     <table class="total-table create">
                                         <tbody>
@@ -207,6 +214,16 @@
                                             <td class="text-right">Total:</td>
                                             <td class="text-right total-amount">
                                                 <span class="order-total-label">€264.00</span>
+                                            </td>
+                                        </tr>
+                                        <tr class="loading">
+                                            <td></td>
+                                            <td class="loading">
+                                                <div class="three-dots-spinner small">
+                                                    <div class="bounce1"></div>
+                                                    <div class="bounce2"></div>
+                                                    <div class="bounce3"></div>
+                                                </div>
                                             </td>
                                         </tr>
                                         </tbody>

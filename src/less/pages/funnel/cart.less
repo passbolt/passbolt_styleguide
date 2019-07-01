@@ -92,8 +92,27 @@
         }
       }
 
+      .voucher {
+        border-top:1px solid @border-default;
+        padding:0.5em 0 0.5em 0;
+        margin-top: 1em;
+        .input.text {
+          input {
+            width: 40%;
+            display: inline-block;
+            margin-top: 0.35em;
+          }
+          a {
+            display: inline-block;
+            padding: 0.375em 0.625em 0.375em 0.625em;
+            margin-bottom: 0.5em;
+            line-height: 25px;
+          }
+        }
+      }
+
       .subscription-total {
-        margin: 1em 0 0 0;
+        margin: 0 0 0 0;
         padding-top: 1em;
         border-top: 1px solid @border-default;
         table.total-table {
