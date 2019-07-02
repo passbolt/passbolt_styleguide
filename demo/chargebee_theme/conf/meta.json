@@ -1,0 +1,439 @@
+{
+    "meta": {
+        "checkout_layout": "two_column",
+        "theme_version": "2.7",
+        "meta_version": "1.3",
+        "bootstrap_version": "3.1.0"
+    },
+    "page": {
+        "meta": {
+            "label": "Page"
+        },
+        "favicon": {
+            "data_type": "image",
+            "label": "Favicon",
+            "desc": "A shortcut icon usually displayed on tabs, address bars and bookmarks of most browsers."
+        }
+    },
+    "header": {
+        "meta": {
+            "label": "Header",
+            "desc": "Header section contains the brand logo/name and navigation links at top of the page."
+        },
+        "logo": {
+            "data_type": "image",
+            "label": "Brand logo",
+            "desc": "A logo to identify your company, product or service to display in the header section."
+        },
+        "use_logo": {
+            "data_type": "boolean",
+            "label": "Use brand logo",
+            "desc": "Whether to show your brand logo in the header. If No, just the brand name will be displayed."
+        },        
+        "center_logo": {
+            "data_type": "boolean",
+            "label": "Center aligned brand Logo",
+            "desc": "If you choose 'No' as an option, the logo would be left aligned in the header section."
+        },
+        "title": {
+            "data_type": "text",
+            "label": "Brand name",
+            "desc": "If you're not using your brand's logo, we recommend you to enter the name of your company here."
+        },
+        "title_color": {
+            "data_type": "color",
+            "label": "Text color",
+            "desc": "Choose a text color for the brand name, it will also be used for the account menu in the customer portal."
+        },
+        "background_color": {
+            "data_type": "color",
+            "label": "Background color",
+            "desc": "Background color for the header section."
+        }
+    },
+    "body": {
+        "meta": {
+            "label": "Body"
+        },
+        "background_color": {
+            "data_type": "color",
+            "label": "Background color"
+        },
+        "background_image": {
+            "data_type": "image",
+            "label": "Background image"
+        },
+        "use_background_image": {
+            "data_type": "boolean",
+            "label": "Use background image?"
+        },
+        "tile_background_image": {
+            "data_type": "boolean",
+            "label": "Tile background image",
+            "desc": "If yes, the image will be tiled across the page."
+        },
+        "line_color": {
+            "data_type": "color",
+            "label": "Divider line color",
+            "desc": "Color of the horizontal divider lines."
+        }
+    },
+    "typography": {
+        "meta": {
+            "label": "Typography",
+            "desc": "Fonts for the text content in the page. If you use typekit for your fonts, ensure you configure the typekit id in Common Settings and configure the fonts here."
+        },        
+        "google_font": {
+            "data_type": "text",
+            "label": "Import google font",
+            "desc": "You can import multiple fonts from Google. For example, to request the fonts Roboto, Raleway, and Lato, use: Roboto|Raleway|Lato"
+        },
+        "body": {
+            "data_type": "text",
+            "label": "Body text font",
+            "desc": "Font used for all the text content on the hosted page."
+        },
+        "heading": {
+            "data_type": "text",
+            "label": "Heading text font",
+            "desc": "Font used for the all the headings on the hosted page."
+        },
+        "title": {
+            "data_type": "text",
+            "label": "Brand name text font",
+            "desc": "Font used for the brand name in the header section."
+        }
+    },
+    "text": {
+        "meta": {
+            "label": "Text Colors",
+            "desc": "Color for the texts displayed in the various body section."
+        },
+        "text_color": {
+            "data_type": "color",
+            "label": "Text color",
+            "desc": "Color of the shown elsewhere in the body."
+        },
+        "heading_text_color": {
+            "data_type": "color",
+            "label": "Heading text color",
+            "desc": "Color of the headings elsewhere in the body."
+        },
+        "link_color": {
+            "data_type": "color",
+            "label": "Hyperlink color"
+        },
+        "link_hover_color": {
+            "data_type": "color",
+            "label": "Hyperlink color on hover"
+        },
+        "field_label_color": {
+            "data_type": "color",
+            "label": "Field label text color",
+            "desc": "The label which are used in forms."
+        },
+        "alter_label_color": {
+            "data_type": "color",
+            "label": "Alternative label text color",
+            "desc": "Not used in Forms"
+        },
+        "help_text_color": {
+            "data_type": "color",
+            "label": "Help text color"
+        },
+        "error_text_color": {
+            "data_type": "color",
+            "label": "Error text color",
+            "desc": "Field error text color"
+        }
+    },
+    "input": {
+        "meta": {
+            "label": "Input Fields",
+            "desc": "All the fields used to collect input from users."
+        },
+        "text_color": {
+            "data_type": "color",
+            "label": "Input text color"
+        },
+        "background_color": {
+            "data_type": "color",
+            "label": "Background color"
+        },
+        "background_focus_color": {
+            "data_type": "color",
+            "label": "Background color on focus"
+        },
+        "border_color": {
+            "data_type": "color",
+            "label": "Border color"
+        },
+        "border_focus_color": {
+            "data_type": "color",
+            "label": "Border color on focus"
+        }
+    },
+    "button": {
+        "meta": {
+            "label": "Buttons",
+            "desc": "Configure the colors for the buttons and button text."
+        },
+        "primary_text_color": {
+            "data_type": "color",
+            "label": "Primary text color",
+            "desc": "Primary refers to the Subscribe, Update Payment Method, Login and Update Details buttons that appear on the checkout, update payment method and customer portal pages."
+        },
+        "primary_background_color": {
+            "data_type": "color",
+            "label": "Primary background color"
+        },
+        "primary_border_color": {
+            "data_type": "color",
+            "label": "Primary border color"
+        },
+        "default_text_color": {
+            "data_type": "color",
+            "label": "Secondary text color",
+            "desc": "Secondary refers to the Apply Coupon and Validate VAT number buttons that appear on the sign up page."
+        },
+        "default_background_color": {
+            "data_type": "color",
+            "label": "Secondary background color"
+        },
+        "default_border_color": {
+            "data_type": "color",
+            "label": "Secondary border color"
+        },
+        "danger_text_color": {
+            "data_type": "color",
+            "label": "Critical action text color",
+            "desc": "Critical button refers to canel subscription on customer portal pages. "
+        },
+        "danger_background_color": {
+            "data_type": "color",
+            "label": "Critical action background color"
+        },
+        "danger_border_color": {
+            "data_type": "color",
+            "label": "Critical action border color"
+        }
+    },
+    "section": {
+        "meta": {
+            "label": "Sections",
+            "desc": "Groups the content inside it such as order summary, account information, payment method information, portal change subscription steps etc. Customize the look of these sections."
+        },
+        "background_color": {
+            "data_type": "color",
+            "label": "Background color"
+        },
+        "border_color": {
+            "data_type": "color",
+            "label": "Border color"
+        },
+        "heading_text_color": {
+            "data_type": "color",
+            "label": "Heading text color",
+            "desc": "Text color for the order summary and existing payment method details section in the hosted checkout and payment method update pages."
+        },
+        "heading_background_color": {
+            "data_type": "color",
+            "label": "Heading background color",
+            "desc": "Background color for the order summary and existing payment method details section in the hosted checkout and payment method update pages."
+        }
+    },
+    "checkout": {
+        "meta": {
+            "label": "Checkout Page",
+            "desc": "Customize the elements that are specific to your checkout page."
+        },
+        "page_title": {
+            "data_type": "text",
+            "label": "Page title",
+            "desc": "The name of your hosted checkout page that appears at the top of your browser tab."
+        },
+        "page_heading": {
+            "data_type": "text",
+            "label": "Page heading",
+            "desc": "Text displayed above the order summary section."
+        },
+        "use_page_heading": {
+            "data_type": "boolean",
+            "label": "Show page heading",
+            "desc": "Whether to show page heading?"
+        },
+        "use_aside": {
+            "data_type": "boolean",
+            "label": "Show sidebar",
+            "desc": "Sidebar shown on the right side of the hosted checkout page."
+        },
+        "aside_content": {
+            "data_type": "textarea",
+            "label": "Sidebar content"
+        }
+    },
+    "thankyou": {
+        "meta": {
+            "label": "Thank You",
+            "desc": "Customize the elements that are specific to the thank page."
+        },
+        "page_title": {
+            "data_type": "text",
+            "label": "Page title",
+            "desc": "The name of your thank page that appears at the top of your browser tab."
+        },
+        "page_heading": {
+            "data_type": "text",
+            "label": "Page heading",
+            "desc": "Heading displayed above the image."
+        },
+        "content": {
+            "data_type": "textarea",
+            "label": "Content",
+            "desc": "Text displayed above the image."
+        },
+        "image": {
+            "data_type": "image",
+            "label": "Image",
+            "desc": "Success/Product image in thank page."
+        }
+    },
+    "card": {
+        "meta": {
+            "label": "Add/Update Payment Method Page",
+            "desc": "Customize the elements that are specific to the add/update payment method page."
+        },
+        "page_title": {
+            "data_type": "text",
+            "label": "Page title",
+            "desc": "The name of your hosted add/update payment method page that appears at the top of your browser tab."
+        },
+        "use_page_heading": {
+            "data_type": "boolean",
+            "label": "Show page heading",
+            "desc": "Whether to show page heading?"
+        },
+        "page_heading": {
+            "data_type": "text",
+            "label": "Page heading",
+            "desc": "Text displayed above the existing payment method details section."
+        },
+        "use_aside": {
+            "data_type": "boolean",
+            "label": "Show sidebar",
+            "desc": "Sidebar shown on the right side of the hosted payment method page."
+        },
+        "aside_content": {
+            "data_type": "textarea",
+            "label": "Sidebar content"
+        }
+    },
+    "customer_portal": {
+        "meta": {
+            "label": "Customer Portal",
+            "desc": "Customize the elements that are specific to the customer portal ."
+        },
+        "page_title": {
+            "data_type": "text",
+            "label": "Page title",
+            "desc": "The name of your portal page that appears at the top of your browser tab."
+        },        
+        "apple_touch_icon": {
+            "data_type": "image",
+            "label": "Apple touch icon",
+            "desc": "Assign a Webpage icon to your customer portal, for customers who use iOS devices." 
+        }
+    },
+    "subscription_status": {
+        "meta": {
+            "label": "Subscription Status",
+            "desc": "Customize the appearance of the susbscription status(trial, active etc.) badge shown in the customer portal."
+        },
+        "text_color": {
+            "data_type": "color",
+            "label": "Text color"
+        },
+        "active": {
+            "data_type": "color",
+            "label": "Active background color"
+        },
+        "in_trial": {
+            "data_type": "color",
+            "label": "Trial background color"
+        },
+        "non_renewing": {
+            "data_type": "color",
+            "label": "Non renewing background color"
+        },
+        "future": {
+            "data_type": "color",
+            "label": "Future background color"
+        },
+        "cancelled": {
+            "data_type": "color",
+            "label": "Cancelled background color"
+        }
+    },
+    "alert": {
+        "meta": {
+            "label": "Customer Portal Alerts",
+            "desc": "Customize the appearance of the info and warning alerts containers."
+        },
+        "info_text_color": {
+            "data_type": "color",
+            "label": "Information text color"
+        },
+        "info_border_color": {
+            "data_type": "color",
+            "label": "Information border color"
+        },
+        "warning_text_color": {
+            "data_type": "color",
+            "label": "Warning text color"
+        },
+        "warning_border_color": {
+            "data_type": "color",
+            "label": "Warning border color"
+        }
+    },
+    "footer": {
+        "meta": {
+            "label": "Footer",
+            "desc": "Configure your footer section."
+        },
+        "content": {
+            "data_type": "textarea",
+            "label": "Content",
+            "desc": "Content for your footer like copyright message and year."
+        },
+        "text_color": {
+            "data_type": "color",
+            "label": "Text color"
+        },
+        "background_color": {
+            "data_type": "color",
+            "label": "Background color"
+        }
+    },
+    "iframe": {
+        "meta": {
+            "label": "IFrame",
+            "desc": "Styles specific for the iframe embedded checkout and payment method hosted pages. For API use only."
+        },
+        "center": {
+            "data_type": "boolean",
+            "label": "Align center",
+            "desc": "Specify whether to align the hosted page at center in the inside the iframe or not."
+        },
+        "border_color": {
+            "data_type": "color",
+            "label": "Border color",
+            "desc": "Border color for the iframe embed hosted page."
+        },
+        "use_border": {
+            "data_type": "boolean",
+            "label": "Show border",
+            "desc": "Whether to show border for the iframe embed hosted page."
+        }
+    }
+}
