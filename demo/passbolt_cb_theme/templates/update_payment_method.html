@@ -14,24 +14,21 @@
         <link href="{{theme_preset_css}}" rel="stylesheet" type="text/css" />
     </head>
     <body>
-        <div class="navbar navbar-static-top">
-            <div class="container">
-                <div data-cb-jshook="attach-locale-dropdown" class="pull-right"></div>
-                <div class="navbar-header">					
-                    {{#header.use_logo}}
-                    <img src="{{header.logo}}" alt="{{{header.title}}}" class="navbar-brand img-responsive">
-                    {{/header.use_logo}}
-                    {{^header.use_logo}}
-                    <span class="navbar-brand">{{{header.title}}}</span>
-                    {{/header.use_logo}}					
-                </div>
+        <header>
+            <div class="header first ">
+                <nav class="greedy">
+                    <div class="top navigation primary">
+                    </div>
+                </nav>
             </div>
-        </div>
+        </header>
         <div class="container">
             {{#card.use_page_heading}}
-            <div class="h3 text-center">
-                {{{card.page_heading}}}
-                <hr class='clearfix dashed'>
+            <div id="cb-wrapper-hp">
+                <div class="h1">
+                    {{{card.page_heading}}}
+                    <hr class='clearfix'>
+                </div>
             </div>
             {{/card.use_page_heading}}
             {{#card.use_aside}}
@@ -52,10 +49,14 @@
             {{/card.use_aside}}
         </div>
         <!--Need sticky footer? Just add the "cb-sticky-footer" id.-->
-        <div class="navbar navbar-static-bottom" id="cb-sticky-footer">
-            <div class="container">
-                {{{footer.content}}}
+        <footer>
+            <div class="footer">
+                <ul class="footer-links">
+                    <li><a href="https://www.passbolt.com/licence">Terms</a></li>
+                    <li><a href="https://www.passbolt.com/privacy">Privacy</a></li>
+                    <li><a href="https://www.passbolt.com/credits">Credits</a></li>
+                </ul>
             </div>
-        </div>         
+        </footer>
     </body>
 </html>

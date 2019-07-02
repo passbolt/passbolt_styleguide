@@ -35,10 +35,13 @@
 /*****************************************************************************
  Bootstrap style override for both Hosted page and Portal.
  *****************************************************************************/
+html {
+    font-size: 100% !important;
+}
 
 /* Body*/
 body {
-    font-size:13px;
+    font-size:100%;
     color:{{text.text_color}};
     font-family:{{typography.body}};
     background:{{body.background_color}} {{#body.use_background_image}}url({{body.background_image}}){{^body.tile_background_image}}no-repeat{{/body.tile_background_image}}{{/body.use_background_image}};
@@ -48,7 +51,7 @@ strong{
 }
 /* Horizontal line */
 hr{
-    border-color:{{body.line_color}};
+    border: 0;
 }
 
 /* hyperlink */
@@ -65,7 +68,7 @@ a:hover,
 
 /* Form field label */
 label{
-    font-weight:normal;
+    font-weight:bold;
     color:{{text.field_label_color}};
 }
 
@@ -73,6 +76,7 @@ label{
 h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
     font-family:{{typography.heading}};
     color:{{text.heading_text_color}};
+    margin: 1em 0;
 }
 
 /*Address on portal billing and shipping details*/
@@ -168,6 +172,8 @@ a.text-danger:hover{
     background:{{button.default_background_color}};
     border-color:{{button.default_border_color}};
     color:{{button.default_text_color}};
+    border-radius: 0.214em;
+    padding: 0.429em 1.225em 0.429em 1.225em;
 }
 
 /*Used on hosted and portal pages for main form submit*/
@@ -180,6 +186,10 @@ a.text-danger:hover{
     background:{{button.primary_background_color}};
     border-color:{{button.primary_border_color}};
     color:{{button.primary_text_color}};
+    font-size: 1.125em;
+    text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.2);
+    padding: 0.55em 1.225em 0.55em 1.225em;
+    line-height: 26px;
 }
 
 /*Used on portal, when cancel a subscription*/
@@ -354,6 +364,14 @@ a.text-danger:hover{
 /*************************************************************
  Header and Footer with Bootstrap and ChargeBee style.
 **************************************************************/
+
+.header.first {
+    background: #333;
+}
+.header.first {
+    min-height: 2.4em;
+}
+
 /* Header*/
 .navbar-static-top{
     background:{{header.background_color}};
@@ -479,9 +497,9 @@ a.text-danger:hover{
     /*box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
     -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
     -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);*/
-    border-radius: 5px;
-    -moz-border-radius: 5px;
-    -webkit-border-radius: 5px;
+    border-radius: 3px;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
     margin-bottom: 15px;
     padding:15px;
     background-color:{{section.background_color}};
@@ -511,6 +529,35 @@ a.text-danger:hover{
     padding: 9px 15px;
     background:{{section.heading_background_color}};
     color:{{section.heading_text_color}};
+    border-bottom: 1px solid {{section.border_color}};
+    font-size: 1.1em;
+    font-weight: bold;
+    border: 1px solid {{section.border_color}};
+}
+
+#cb-payment{
+    padding: 0;
+}
+
+h3#cb-payment-title {
+    padding: 0.5em 1em;
+    margin: 0;
+    font-size: 1.1em;
+    background:{{section.heading_background_color}};
+    color:{{section.heading_text_color}};
+    border-bottom: 1px solid {{section.border_color}};
+    font-weight: bold;
+}
+
+.container > #cb-wrapper-hp > div.h1 {
+    font-weight: bold;
+    font-size: 1.5em;
+    margin: 0.67em 0;
+    margin-top: 1em;
+}
+
+#cb-card-fields {
+    padding: 1em;
 }
 
 /* Order summary items list */
@@ -1150,4 +1197,33 @@ a.text-danger:hover{
     background: none;
     border: none;
     color: {{header.title_color}}
+}
+
+
+.footer {
+    margin-top: 0em;
+    position: fixed;
+    bottom: 0;
+    padding: 1.167em 1.5% 0 0.5%;
+    text-align: right;
+    font-size: 0.75em;
+    width: 100%;
+    height: 3.5em;
+    background: #FFF;
+    border-top: 1px solid #DDD;
+    z-index: 890;
+}
+
+.footer .footer-links {
+    width: 100%;
+    margin-top: -0.25em;
+}
+
+.footer .footer-links li {
+    display: inline;
+    margin-right: 1.5em;
+}
+
+.footer .footer-links a {
+    border: 0;
 }
