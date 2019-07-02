@@ -1,7 +1,7 @@
 {
     "meta": {
         "checkout_layout": "two_column",
-        "theme_version": "2.7",
+        "theme_version": "1.0",
         "meta_version": "1.3",
         "bootstrap_version": "3.1.0"
     },
