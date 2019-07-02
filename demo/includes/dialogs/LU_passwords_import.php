@@ -33,7 +33,7 @@
 				</div>
 				<div class="submit-wrapper clearfix">
 					<input class="button primary" value="Import" type="submit" onclick="javascript:window.location.href='demo/LU_passwords_import_options.php'; return false;">
-					<a href="demo/LU_passwords.php" class="js-dialog-cancel cancel">cancel</a>
+					<a href="demo/LU_passwords.php" class="js-dialog-cancel cancel">Cancel</a>
 				</div>
 			</form>
 		</div>

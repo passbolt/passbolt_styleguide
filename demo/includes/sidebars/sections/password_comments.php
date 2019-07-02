@@ -30,7 +30,7 @@
                                            id="267f9d06-58a3-9b6f-e7c4-6f2e1270d66e" value="Resource">
                                     <div class="input textarea required">
                                         <label for="js_field_comment_content">Add a comment</label>
-                                        <textarea data-view-id="368" placeholder="add a comment" maxlength="150"
+                                        <textarea data-view-id="368" placeholder="Add a comment" maxlength="150"
                                                   class="js_comment_content required mad_form_textbox form-element mad_view_form_textbox success"
                                                   name="data[comment][content]"
                                                   id="js_field_comment_content"></textarea>
@@ -42,7 +42,8 @@
                                         <span class="modified">right now</span>
                                     </div>
                                     <div class="actions">
-                                        <a class="button comment-submit" href="#"><span>send</span></a>
+                                        <a class="button comment-submit" href="#"><span>Add</span></a>
+                                        <a class="button cancel tag-editor-cancel" role="button"><span>Cancel</span></a>
                                     </div>
                                 </div>
                             </div>

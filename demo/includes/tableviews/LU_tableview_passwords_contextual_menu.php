@@ -52,6 +52,15 @@
             </div>
         </div>
     </li>
+    <li id="js_password_browser_menu_export" class="ready closed" data-view-id="374">
+        <div class="row">
+            <div class="main-cell-wrapper">
+                <div class="main-cell">
+                    <a href="#"><span>Export</span></a>
+                </div>
+            </div>
+        </div>
+    </li>
     <li id="js_password_browser_menu_delete" class="ready closed" data-view-id="375">
         <div class="row">
             <div class="main-cell-wrapper">

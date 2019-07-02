@@ -33,8 +33,8 @@
                     </div>
                 </div>
                 <div class="actions">
-                    <input type="submit" value="save" class="button description-submit">
-                    <a class="button cancel tag-editor-cancel" role="button"><span>cancel</span></a>
+                    <input type="submit" value="Save" class="button description-submit">
+                    <a class="button cancel tag-editor-cancel" role="button"><span>Cancel</span></a>
                 </div>
             </div>
         </div>

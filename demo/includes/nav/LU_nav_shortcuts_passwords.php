@@ -14,7 +14,7 @@
 			<div class="row">
 				<div class="main-cell-wrapper">
 					<div class="main-cell">
-						<a href="#"><span>Favorite</span></a>
+						<a href="#"><span>Favorites</span></a>
 					</div>
 				</div>
 			</div>

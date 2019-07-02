@@ -5,31 +5,31 @@
 			<li>
 				<a id="js_wk_menu_secretcopy_button" href="#" class="button mad_component_button js_component mad_view ready">
 					<i class="fa fa-fw fa-clipboard"></i>
-					<span>copy</span>
+					<span>Copy</span>
 				</a>
 			</li>
 			<li>
 				<a id="js_wk_menu_edition_button" href="demo/LU_passwords_edit.php" class="button mad_component_button js_component mad_view ready">
 					<i class="fa fa-fw fa-edit"></i>
-					<span>edit</span>
+					<span>Edit</span>
 				</a>
 			</li>
 			<li>
 				<a id="js_wk_menu_sharing_button" href="demo/LU_passwords_share.php" class="button mad_component_button js_component mad_view ready">
 					<i class="fa fa-fw fa-share"></i>
-					<span>share</span>
+					<span>Share</span>
 				</a>
 			</li>
 			<li>
 				<a id="js_wk_menu_sharing_button" href="demo/LU_passwords_export.php" class="button mad_component_button js_component mad_view ready">
 					<i class="fa fa-fw fa-cloud-download"></i>
-					<span>export</span>
+					<span>Export</span>
 				</a>
 			</li>
 			<li>
 				<div class="dropdown">
 					<a id="js_wk_menu_more_button" href="#" class="button mad_component_button_dropdown js_component mad_view_component_button_dropdown ready">
-						<span>more</span>
+						<span>More</span>
 						<i class="fa fa-fw fa-caret-down"></i></a>
 					</a>
 					<ul id="js_wk_menu_more_button_dropdown" class="dropdown-content mad_component_menu menu mad_view_component_tree ready">
@@ -37,7 +37,7 @@
 							<div class="row">
 								<div class="main-cell-wrapper">
 									<div class="main-cell">
-										<a href="#"><span>copy login to clipboard</span></a>
+										<a href="#"><span>Copy username</span></a>
 									</div>
 								</div>
 							</div>
@@ -46,7 +46,7 @@
 							<div class="row">
 								<div class="main-cell-wrapper">
 									<div class="main-cell">
-										<a href="#"><span>copy password to clipboard</span></a>
+										<a href="#"><span>Copy password</span></a>
 									</div>
 								</div>
 							</div>
@@ -55,7 +55,7 @@
 							<div class="row">
 								<div class="main-cell-wrapper">
 									<div class="main-cell">
-										<a href="#"><span>delete</span></a>
+										<a href="#"><span>Delete</span></a>
 									</div>
 								</div>
 							</div>

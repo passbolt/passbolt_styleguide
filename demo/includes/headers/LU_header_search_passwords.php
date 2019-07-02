@@ -5,11 +5,11 @@
 				<label for="js_app_filter_keywords">Search</label>
 				<input id="js_app_filter_keywords"
 							 class="required mad_form_element_textbox_controller mad_view_form_element_textbox_view js_component ready"
-							 maxlength="50" type="search" placeholder="search passwords">
+							 maxlength="50" type="search" placeholder="Search passwords">
 			</div>
 			<button value="search">
 				<i class="fa fa-fw fa-search"></i>
-				<span class="text visuallyhidden">search</span>
+				<span class="text visuallyhidden">Search</span>
 			</button>
 		</form>
 	</div>

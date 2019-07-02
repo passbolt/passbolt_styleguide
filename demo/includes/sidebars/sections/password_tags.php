@@ -43,8 +43,8 @@
                     </div>
                 </div>
                 <div class="actions">
-                    <a id="js_tags_editor_submit" class="button tag-editor-submit" role="button"><span>save</span></a>
-                    <a id="js_tags_editor_cancel" class="button cancel tag-editor-cancel" role="button"><span>cancel</span></a>
+                    <a id="js_tags_editor_submit" class="button tag-editor-submit" role="button"><span>Save</span></a>
+                    <a id="js_tags_editor_cancel" class="button cancel tag-editor-cancel" role="button"><span>Cancel</span></a>
                 </div>
             </div>
         </div>

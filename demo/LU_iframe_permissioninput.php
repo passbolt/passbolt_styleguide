@@ -18,7 +18,7 @@
 <div class="form-content permission-add">
 <div class="input text autocomplete">
 	<label for="js_perm_create_form_aro_auto_cplt">Share with people or groups</label>
-	<input maxlength="50" id="js_perm_create_form_aro_auto_cplt" placeholder="enter one name or email" autocomplete="off" type="text">
+	<input maxlength="50" id="js_perm_create_form_aro_auto_cplt" placeholder="Enter one name or email" autocomplete="off" type="text">
 	<div class="security-token">CKR</div>
 </div>
 <div class="input blank">
