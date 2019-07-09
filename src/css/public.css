@@ -8141,9 +8141,23 @@ input[type="range"]:focus + .rangeslider .rangeslider__handle {
   width: 223px;
   margin: 0 20px;
   border-bottom: 4px solid #DDD;
+  text-align: left;
+  color: #DDD;
 }
 .page.plans ul.pricing-tabs li.active {
   border-bottom-color: #2894DF;
+}
+.page.plans ul.pricing-tabs li.active a {
+  color: #333;
+}
+.page.plans ul.pricing-tabs li.active a i {
+  color: #333;
+}
+.page.plans ul.pricing-tabs li.active a .offer-text h1 {
+  color: #333;
+}
+.page.plans ul.pricing-tabs li.active a .offer-text span {
+  color: #969696;
 }
 .page.plans ul.pricing-tabs li a {
   display: -ms-flexbox;
@@ -8153,16 +8167,36 @@ input[type="range"]:focus + .rangeslider .rangeslider__handle {
   -ms-flex-align: center;
   align-items: center;
   padding: 10px 0;
-  color: #444;
+  color: #DDD;
   font-size: 18px;
   border-bottom: 0px;
-}
-.page.plans ul.pricing-tabs li a:hover span {
-  color: #2894DF;
 }
 .page.plans ul.pricing-tabs li a i {
   font-size: 2em;
   margin-right: 0.3em;
+  color: #666;
+}
+.page.plans ul.pricing-tabs li a .offer-text {
+  margin-left: 0.8em;
+}
+.page.plans ul.pricing-tabs li a .offer-text h1 {
+  font-size: 1.2em;
+  margin: 0;
+  line-height: 0.8em;
+  color: #666;
+}
+.page.plans ul.pricing-tabs li a .offer-text span {
+  font-size: 0.8em;
+  color: #BBB;
+}
+.page.plans ul.pricing-tabs li a:hover i {
+  color: #2894DF;
+}
+.page.plans ul.pricing-tabs li a:hover .offer-text h1 {
+  color: #2894DF;
+}
+.page.plans ul.pricing-tabs li a:hover .offer-text span {
+  color: #2894DF;
 }
 .page.plans .tab-content .intro h2 {
   margin-top: 163px;
@@ -8231,6 +8265,9 @@ input[type="range"]:focus + .rangeslider .rangeslider__handle {
   color: #333;
   font-weight: bold;
 }
+.page.plans .tab-content .service-col.plan.with-tab-options .plan-description > h2 {
+  border-bottom: 0;
+}
 .page.plans .tab-content .service-col.plan.community .plan-pricing {
   margin-top: 50px;
 }
@@ -8242,9 +8279,6 @@ input[type="range"]:focus + .rangeslider .rangeslider__handle {
 }
 .page.plans .tab-content .service-col.plan.enterprise .plan-limit {
   margin-top: 18px;
-}
-.page.plans .tab-content .service-col.plan.business .plan-description h2 {
-  border-bottom: 0;
 }
 .page.plans .tab-content .service-col.plan.business .plan-pricing {
   padding-top: 1em;
@@ -8498,6 +8532,12 @@ input[type="range"]:focus + .rangeslider .rangeslider__handle {
   .page.plans .grid-responsive-12 {
     max-width: 1220px;
   }
+}
+.page.plans.cloud .tab-content .service-col.plan.business .plan-description h2 {
+  border-bottom: 1px;
+}
+.page.plans.cloud .tab-content .service-col.plan.enterprise .plan-pricing {
+  margin-top: 30px;
 }
 .page.services.featured.cart .error label.error {
   font-size: 0.7em;

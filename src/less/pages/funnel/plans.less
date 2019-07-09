@@ -38,8 +38,20 @@
       width:223px;
       margin: 0 20px;
       border-bottom: 4px solid @grey;
+      text-align: left;
+      color: @grey;
+
+
       &.active {
         border-bottom-color: @blue;
+        a {
+          color: @font-default;
+          i {color:@font-default;}
+          .offer-text {
+            h1 { color: @font-default; }
+            span { color: @grey-dark; }
+          }
+        }
       }
 
       a {
@@ -50,19 +62,35 @@
         -ms-flex-align: center;
         align-items: center;
         padding: 10px 0;
-        color: #444;
+        color: @grey;
         font-size: 18px;
         border-bottom:0px;
-
-        &:hover {
-          span {
-            color: @blue;
-          }
-        }
 
         i {
           font-size: 2em;
           margin-right: 0.3em;
+          color: @grey-darkest;
+        }
+        .offer-text {
+          margin-left: 0.8em;
+          h1 {
+            font-size: 1.2em;
+            margin: 0;
+            line-height: 0.8em;
+            color: @grey-darkest;
+          }
+          span {
+            font-size: 0.8em;
+            color: #BBB;
+          }
+        }
+
+        &:hover {
+          i {color:@blue;}
+          .offer-text {
+            h1 { color: @blue; }
+            span { color: @blue; }
+          }
         }
       }
     }
@@ -140,6 +168,13 @@
         }
       }
 
+      // No border bottom if there are sub tab options.
+      &.with-tab-options {
+        .plan-description > h2 {
+          border-bottom: 0;
+        }
+      }
+
       &.community  {
         .plan-pricing {
           margin-top: 50px;
@@ -159,14 +194,10 @@
       }
 
       &.business {
-        .plan-description h2 {
-          border-bottom: 0;
-        }
         .plan-pricing {
           padding-top:  1em;
         }
       }
-
 
 
       &.highlighted {
@@ -463,4 +494,13 @@
       max-width:1220px;
     }
   }
+}
+
+.page.plans.cloud {
+    .tab-content .service-col.plan.business .plan-description h2 {
+      border-bottom: 1px;
+    }
+     .tab-content .service-col.plan.enterprise .plan-pricing {
+      margin-top: 30px;
+    }
 }
