@@ -56,7 +56,7 @@
                             <?php if ($error) : ?><div class="error message">Please agree with the terms and conditions.</div><?php endif;?>
                         </div>
                         <div class="submit">
-							<input class="button primary big" value="Get started" type="submit">
+                            <button id="submit-button" class="button primary big">Get started</button>
 						</div>
 					</form>
                     </div>
