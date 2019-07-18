@@ -1,0 +1,69 @@
+.page.cloud {
+    background:@grey-lightest;
+    position:absolute;
+    height:100%;
+    width:100%;
+
+    .grid {
+        margin:auto;
+        max-width:100%;
+        font-size:1.25em;
+        padding-top:3em;
+    }
+
+    p {
+        color: @grey-darkest;
+    }
+    .button.primary {
+        font-size:1em;
+        float: left;
+    }
+    .secondary-cta {
+        display:block;
+        float: left;
+        margin-top: 1em;
+        text-align: center;
+        font-size:.8em;
+        margin-left:.5em;
+        clear:left;
+    }
+}
+
+/* hide left column when there is no space */
+@media all and (min-width: 800px) {
+    .page.cloud {
+        &.cloud-archived {
+            background: transparent url('@{images}/illustrations/cloud_archived.svg') right 75% no-repeat;
+            background-size: 400px auto;
+        }
+
+        &.cloud-disabled {
+            background: transparent url('@{images}/illustrations/cloud_disabled.svg') right 75% no-repeat;
+            background-size: 400px auto;
+        }
+    }
+}
+
+@media all and (min-width: 1024px) {
+    .page.cloud {
+        &.cloud-archived {
+            background-size: 800px auto;
+        }
+
+        &.cloud-disabled {
+            background-size: 800px auto;
+        }
+    }
+}
+
+@media all and (min-width: 1500px) {
+    .page.cloud {
+        &.cloud-archived {
+            background-size: 1000px auto;
+        }
+
+        &.cloud-disabled {
+            background-size: 1000px auto;
+        }
+    }
+}

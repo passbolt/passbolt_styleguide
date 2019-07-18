@@ -711,83 +711,6 @@ a {
 a:hover {
   border-bottom: 1px solid #2894DF;
 }
-html {
-  scroll-behavior: smooth;
-}
-.animated {
-  -webkit-animation-duration: 0.5s;
-  animation-duration: 0.5s;
-  -webkit-animation-fill-mode: both;
-  animation-fill-mode: both;
-}
-/* fadeinup */
-@keyframes fadeInUp {
-  0% {
-    opacity: 0;
-    -webkit-transform: translateY(20px);
-    -ms-transform: translateY(20px);
-    transform: translateY(20px);
-  }
-  100% {
-    opacity: 1;
-    -webkit-transform: translateY(0);
-    -ms-transform: translateY(0);
-    transform: translateY(0);
-  }
-}
-@keyframes fadeOutUp {
-  from {
-    opacity: 1;
-  }
-  to {
-    opacity: 0;
-    transform: translate3d(0, -100%, 0);
-  }
-}
-@keyframes fadeInDown {
-  from {
-    opacity: 0;
-    transform: translate3d(0, -100%, 0);
-  }
-  to {
-    opacity: 1;
-    transform: none;
-  }
-}
-@keyframes pop {
-  0% {
-    opacity: 0;
-    transform: scale(1);
-  }
-  55% {
-    opacity: 1;
-    transform: scale(1);
-  }
-  65% {
-    opacity: 1;
-    transform: scale(1.25);
-  }
-  75% {
-    opacity: 1;
-    transform: scale(1);
-  }
-  100% {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-.fadeInDown {
-  animation-name: fadeInDown;
-}
-.fadeOutUp {
-  animation-name: fadeOutUp;
-}
-.fadeInUp {
-  animation-name: fadeInUp;
-}
-.pop {
-  animation-name: pop;
-}
 /*
  * Typography
  */
@@ -796,13 +719,13 @@ html {
   font-family: 'Open Sans';
   font-style: normal;
   font-weight: 400;
-  src: local('Open Sans'), local('OpenSans'), url('../fonts/opensans-regular.woff') format('woff');
+  src: local('Open Sans'), local('OpenSans'), url('../../../fonts/opensans-regular.woff') format('woff');
 }
 @font-face {
   font-family: 'Open Sans';
   font-style: normal;
   font-weight: 700;
-  src: local('Open Sans Bold'), local('OpenSans-Bold'), url('../fonts/opensans-bold.woff') format('woff');
+  src: local('Open Sans Bold'), local('OpenSans-Bold'), url('../../../fonts/opensans-bold.woff') format('woff');
 }
 body {
   font-family: 'Open Sans', Verdana, sans-serif;
@@ -837,48 +760,6 @@ p {
   font-size: 0.688em;
   /* 11px base 16 */
 }
-/* lists */
-article ul {
-  list-style-type: circle;
-  margin: 0 0 1em 0;
-}
-article ul li {
-  margin-left: 1.1em;
-  padding-left: 0.5em;
-  margin-bottom: 0.5em;
-  list-style-type: circle;
-}
-article ul.double {
-  width: 48%;
-  float: left;
-}
-article ul.disc {
-  list-style-type: disc;
-}
-article ul.square {
-  list-style-type: square;
-}
-article ol {
-  margin: 0 0 1em 0;
-  list-style-type: decimal;
-}
-article ol li {
-  /* more margin needed for long numbered lists */
-  margin-left: 2em;
-  padding-left: 1em;
-  margin-bottom: 0.5em;
-}
-article ol.upper-roman {
-  list-style-type: upper-roman;
-}
-article ol.lower-alpha {
-  list-style-type: lower-alpha;
-}
-ul.checklist li:before {
-  content: '✔';
-  width: 1em;
-  margin-right: 1em;
-}
 /*!
  *  Font Awesome 4.7.0 by @davegandy - http://fontawesome.io - @fontawesome
  *  License - http://fontawesome.io/license (Font: SIL OFL 1.1, CSS: MIT License)
@@ -888,8 +769,8 @@ ul.checklist li:before {
  * -------------------------- */
 @font-face {
   font-family: 'FontAwesome';
-  src: url('../fonts/fontawesome-webfont.eot?v=4.7.0');
-  src: url('../fonts/fontawesome-webfont.eot?#iefix&v=4.7.0') format('embedded-opentype'), url('../fonts/fontawesome-webfont.woff2?v=4.7.0') format('woff2'), url('../fonts/fontawesome-webfont.woff?v=4.7.0') format('woff'), url('../fonts/fontawesome-webfont.ttf?v=4.7.0') format('truetype'), url('../fonts/fontawesome-webfont.svg?v=4.7.0#fontawesomeregular') format('svg');
+  src: url('../../../fonts/fontawesome-webfont.eot?v=4.7.0');
+  src: url('../../../fonts/fontawesome-webfont.eot?#iefix&v=4.7.0') format('embedded-opentype'), url('../../../fonts/fontawesome-webfont.woff2?v=4.7.0') format('woff2'), url('../../../fonts/fontawesome-webfont.woff?v=4.7.0') format('woff'), url('../../../fonts/fontawesome-webfont.ttf?v=4.7.0') format('truetype'), url('../../../fonts/fontawesome-webfont.svg?v=4.7.0#fontawesomeregular') format('svg');
   font-weight: normal;
   font-style: normal;
 }
@@ -3219,241 +3100,6 @@ ul.checklist li:before {
 }
 /*!  @licend */
 /*
-	Generic buttons
-	Description	: We support <input[submit]>, <input.button>, <button> and <a.button>
-
-	:hover			- Subtle hover highlight and box shadow
-	:active			- Inset box shadow and 1px offset
-	.disabled		- Dims the button to indicate it cannot be used
-*/
-input[type=submit],
-button,
-.button {
-  position: relative;
-  font-size: 0.875em;
-  /*	14px */
-  padding: 0.429em 1.225em 0.429em 1.225em;
-  /* 6px 16px */
-  display: inline-block;
-  zoom: 1;
-  /* zoom and *display = ie7 hack for display:inline-block */
-  *display: inline;
-  vertical-align: baseline;
-  margin-right: 0.5em;
-  outline: none;
-  cursor: pointer;
-  text-align: center;
-  text-decoration: none;
-  border: 1px solid #CCC;
-  color: #333;
-  font-weight: normal;
-  text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.5);
-  background: #EEE;
-  background-image: -moz-linear-gradient(top, #F3F3F3, #EEE);
-  background-image: -ms-linear-gradient(top, #F3F3F3, #EEE);
-  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(background-lightest), to(#EEE));
-  background-image: -webkit-linear-gradient(top, #F3F3F3, #EEE);
-  background-image: -o-linear-gradient(top, #F3F3F3, #EEE);
-  background-image: linear-gradient(top, #F3F3F3, #EEE);
-  -webkit-border-radius: 0.214em;
-  -moz-border-radius: 0.214em;
-  border-radius: 0.214em;
-}
-/* size and position adjustments */
-.submit {
-  display: inline-block;
-  /* in case there is a div wrapper */
-}
-.button.big {
-  font-size: 1.125em;
-}
-/* primary */
-.button.primary {
-  background: #2894DF;
-  border: 1px solid #2894DF;
-  color: #FFF;
-  text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.2);
-}
-.button.primary:hover {
-  background: #2A9CEB;
-  border: 1px solid #2A9CEB;
-  color: #FFF;
-}
-.button.primary:active,
-.button.primary:focus {
-  color: #FFF;
-  border: 1px solid #4271b7;
-  background: #2A9CEB;
-}
-/* warning */
-.button.warning,
-.button.warning:hover,
-.button.warning:focus,
-.button.warning:active {
-  color: #FFF;
-  background: #D40101;
-  border: 1px solid #D40101;
-  text-shadow: none;
-}
-.button.warning:focus,
-.button.warning:active {
-  border: 1px solid #92000C;
-}
-/* cancel */
-.button.cancel,
-.button.cancel:focus,
-.button.cancel:hover,
-.button.cancel:active,
-.button.dim,
-.button.dim:focus,
-.button.dim:hover,
-.button.dim:active {
-  background: #FFF;
-  font-weight: normal;
-}
-/* hover */
-.button:hover {
-  color: #333;
-  text-decoration: none;
-  background: #F3F3F3;
-  background-image: -moz-linear-gradient(top, #F3F3F3, #F3F3F3);
-  background-image: -ms-linear-gradient(top, #F3F3F3, #F3F3F3);
-  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(background-lightest), to(#F3F3F3));
-  background-image: -webkit-linear-gradient(top, #F3F3F3, #F3F3F3);
-  background-image: -o-linear-gradient(top, #F3F3F3, #F3F3F3);
-  background-image: linear-gradient(top, #F3F3F3, #F3F3F3);
-  border: 1px solid #BBB;
-}
-/* focus */
-.button:focus {
-  color: #2894DF;
-  border: 1px solid #2894DF;
-}
-/* active */
-.button:active {
-  color: #2894DF;
-  border: 1px solid #2894DF;
-  background: #EEE;
-  position: relative;
-  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.2);
-}
-.button.disabled {
-  cursor: default;
-  color: #888;
-  background: #FFF;
-  border: 1px solid #DDD;
-  text-shadow: none;
-  font-weight: normal;
-}
-/* inactive */
-.button.disabled:hover,
-.button.disabled:active,
-.button.disabled:focus {
-  box-shadow: 0 0 0;
-  top: 0;
-  color: #888;
-  background: #FFF;
-  border: 1px solid #DDD;
-}
-/* toggle selected */
-.toggle.button.selected {
-  background: #EEE;
-  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.2);
-  border: 1px solid #BBB;
-}
-/* duo */
-.duo-wrapper {
-  /*
-     * For IE 6/7 only
-     * Include this rule to trigger hasLayout and contain floats.
-     */
-  /*
-     * Clearfix: contain floats
-     *
-     * For modern browsers
-     * 1. The space content is one way to avoid an Opera bug when the
-     *	`contenteditable` attribute is included anywhere else in the document.
-     *	Otherwise it causes space to appear at the top and bottom of elements
-     *	that receive the `clearfix` class.
-     * 2. The use of `table` rather than `block` is only necessary if using
-     *	`:before` to contain the top-margins of child elements.
-     */
-  /*
-     * For IE 6/7 only
-     * Include this rule to trigger hasLayout and contain floats.
-     */
-  zoom: 1;
-  /*
-     * Clearfix: contain floats
-     *
-     * For modern browsers
-     * 1. The space content is one way to avoid an Opera bug when the
-     *	`contenteditable` attribute is included anywhere else in the document.
-     *	Otherwise it causes space to appear at the top and bottom of elements
-     *	that receive the `clearfix` class.
-     * 2. The use of `table` rather than `block` is only necessary if using
-     *	`:before` to contain the top-margins of child elements.
-     */
-}
-.duo-wrapper:before,
-.duo-wrapper:after {
-  content: "";
-  display: table;
-}
-.duo-wrapper:after {
-  clear: both;
-}
-.duo-wrapper:before,
-.duo-wrapper:after {
-  content: "";
-  display: table;
-}
-.duo-wrapper:after {
-  clear: both;
-}
-.duo-wrapper .button {
-  float: left;
-}
-.button.duo:nth-child(1) {
-  margin-right: 0;
-  border-top-right-radius: 0;
-  border-bottom-right-radius: 0;
-}
-.button.duo:nth-child(2) {
-  margin-left: 0;
-  border-left: 0;
-  border-top-left-radius: 0;
-  border-bottom-left-radius: 0;
-}
-/* processing state */
-html body .button.processing {
-  background: #FFF;
-  border: 1px solid #FFF;
-}
-.button.processing:after {
-  line-height: 2.25em;
-  width: 100%;
-  height: 100%;
-  position: absolute;
-  content: " ";
-  top: -1px;
-  left: -1px;
-  background: #FFF url('../img/controls/loading_light.svg') center center no-repeat;
-  background-size: auto 50% ;
-  border: 1px solid #DDD;
-  border-radius: 5px;
-}
-input[type=submit].button.processing {
-  font-size: 0;
-  background: #FFF url('../img/controls/loading_light.svg') center center no-repeat;
-  background-size: auto 50% ;
-  border: 1px solid #DDD;
-  border-radius: 5px;
-}
-.button-spacer {
-  margin-right: 0.5em;
-}
-/*
 	Base form components styling
 	Check components/form for more advanced/fancy input
 */
@@ -3879,147 +3525,239 @@ input[type=email].fluid {
   font-style: normal;
 }
 /*
- * Page layout
- */
-.page {
-  min-width: 320px;
+	Generic buttons
+	Description	: We support <input[submit]>, <input.button>, <button> and <a.button>
+
+	:hover			- Subtle hover highlight and box shadow
+	:active			- Inset box shadow and 1px offset
+	.disabled		- Dims the button to indicate it cannot be used
+*/
+input[type=submit],
+button,
+.button {
+  position: relative;
+  font-size: 0.875em;
+  /*	14px */
+  padding: 0.429em 1.225em 0.429em 1.225em;
+  /* 6px 16px */
+  display: inline-block;
+  zoom: 1;
+  /* zoom and *display = ie7 hack for display:inline-block */
+  *display: inline;
+  vertical-align: baseline;
+  margin-right: 0.5em;
+  outline: none;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+  border: 1px solid #CCC;
+  color: #333;
+  font-weight: normal;
+  text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.5);
+  background: #EEE;
+  background-image: -moz-linear-gradient(top, #F3F3F3, #EEE);
+  background-image: -ms-linear-gradient(top, #F3F3F3, #EEE);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(background-lightest), to(#EEE));
+  background-image: -webkit-linear-gradient(top, #F3F3F3, #EEE);
+  background-image: -o-linear-gradient(top, #F3F3F3, #EEE);
+  background-image: linear-gradient(top, #F3F3F3, #EEE);
+  -webkit-border-radius: 0.214em;
+  -moz-border-radius: 0.214em;
+  border-radius: 0.214em;
 }
-.page,
-.panel,
-.header {
-  width: 100%;
+/* size and position adjustments */
+.submit {
+  display: inline-block;
+  /* in case there is a div wrapper */
 }
-.page,
-.panel {
-  position: absolute;
-  overflow: auto;
+.button.big {
+  font-size: 1.125em;
 }
-.header {
-  overflow: hidden;
+/* primary */
+.button.primary {
+  background: #2894DF;
+  border: 1px solid #2894DF;
+  color: #FFF;
+  text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.2);
 }
-.page {
+.button.primary:hover {
+  background: #2A9CEB;
+  border: 1px solid #2A9CEB;
+  color: #FFF;
+}
+.button.primary:active,
+.button.primary:focus {
+  color: #FFF;
+  border: 1px solid #4271b7;
+  background: #2A9CEB;
+}
+/* warning */
+.button.warning,
+.button.warning:hover,
+.button.warning:focus,
+.button.warning:active {
+  color: #FFF;
+  background: #D40101;
+  border: 1px solid #D40101;
+  text-shadow: none;
+}
+.button.warning:focus,
+.button.warning:active {
+  border: 1px solid #92000C;
+}
+/* cancel */
+.button.cancel,
+.button.cancel:focus,
+.button.cancel:hover,
+.button.cancel:active,
+.button.dim,
+.button.dim:focus,
+.button.dim:hover,
+.button.dim:active {
+  background: #FFF;
+  font-weight: normal;
+}
+/* hover */
+.button:hover {
+  color: #333;
+  text-decoration: none;
+  background: #F3F3F3;
+  background-image: -moz-linear-gradient(top, #F3F3F3, #F3F3F3);
+  background-image: -ms-linear-gradient(top, #F3F3F3, #F3F3F3);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(background-lightest), to(#F3F3F3));
+  background-image: -webkit-linear-gradient(top, #F3F3F3, #F3F3F3);
+  background-image: -o-linear-gradient(top, #F3F3F3, #F3F3F3);
+  background-image: linear-gradient(top, #F3F3F3, #F3F3F3);
+  border: 1px solid #BBB;
+}
+/* focus */
+.button:focus {
+  color: #2894DF;
+  border: 1px solid #2894DF;
+}
+/* active */
+.button:active {
+  color: #2894DF;
+  border: 1px solid #2894DF;
+  background: #EEE;
+  position: relative;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+.button.disabled {
+  cursor: default;
+  color: #888;
+  background: #FFF;
+  border: 1px solid #DDD;
+  text-shadow: none;
+  font-weight: normal;
+}
+/* inactive */
+.button.disabled:hover,
+.button.disabled:active,
+.button.disabled:focus {
+  box-shadow: 0 0 0;
   top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  color: #888;
+  background: #FFF;
+  border: 1px solid #DDD;
 }
-/* headers */
-.header.first {
-  min-height: 2.4em;
+/* toggle selected */
+.toggle.button.selected {
+  background: #EEE;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.2);
+  border: 1px solid #BBB;
 }
-.header.second {
-  top: 2.375em;
-  height: 4.5em;
+/* duo */
+.duo-wrapper {
+  /*
+     * For IE 6/7 only
+     * Include this rule to trigger hasLayout and contain floats.
+     */
+  /*
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
+  /*
+     * For IE 6/7 only
+     * Include this rule to trigger hasLayout and contain floats.
+     */
+  zoom: 1;
+  /*
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
 }
-.header.third {
-  top: 6.875em;
-  height: 3em;
+.duo-wrapper:before,
+.duo-wrapper:after {
+  content: "";
+  display: table;
 }
-/* main workspace panel */
-.panel {
-  height: 100%;
+.duo-wrapper:after {
+  clear: both;
 }
-.panel.main {
-  top: 10em;
-  bottom: 2.45em;
-  height: auto;
-  padding: 0;
+.duo-wrapper:before,
+.duo-wrapper:after {
+  content: "";
+  display: table;
 }
-.panel.main .row {
-  padding-left: 0;
+.duo-wrapper:after {
+  clear: both;
 }
-.panel.main .panel.left {
-  background: #ffffff;
-}
-/* its position depends on how many headers are there */
-.header.second + .panel.main {
-  top: 6.875em;
-}
-.header.third + .panel.main {
-  top: 10em;
-  border-top: 1px solid #DDD;
-}
-/* columns */
-.panel,
-.col1,
-.col2,
-.col3,
-.col2_3 {
-  position: absolute;
-}
-.col1,
-.panel.left {
-  width: 17.25%;
-  box-sizing: border-box;
-}
-.panel.middle {
-  width: 82%;
-  left: 18%;
-  overflow: hidden;
-}
-.panel.middle.scroll {
-  overflow-y: scroll;
-}
-.col2 {
-  width: 70%;
-  left: 18%;
-}
-.col3,
-.panel.right {
-  width: 24%;
-  left: 75%;
-}
-.col2_3 {
-  width: 81.5%;
-  left: 18%;
-}
-/* if the other grid is used
-   don't center the grid inside main panel */
-.panel.main .grid-responsive-12 {
+.duo-wrapper .button {
   float: left;
-  width: 100%;
-  max-width: none;
-  padding-left: 0.25em;
-  box-sizing: border-box;
 }
-/* hide left column when there is no space */
-@media all and (max-width: 1024px) {
-  .panel.left {
-    display: none;
-  }
-  .header.second .col2 {
-    display: none;
-  }
-  .header.second .col2_3 {
-    display: none;
-  }
-  .header.third {
-    height: 4.5em;
-  }
-  .header.third .col1,
-  .header.third .col2,
-  .header.third .col2_3 {
-    position: relative;
-    float: left;
-    left: auto;
-    width: auto;
-  }
-  .header.third .col3 {
-    display: none;
-  }
-  .panel.main .panel.left {
-    display: none;
-  }
-  .panel.main .panel.middle {
-    width: 100%;
-    left: 0;
-  }
-  .panel.main .row {
-    padding-left: 0.5em;
-  }
-  .panel.main .panel.aside {
-    min-width: auto;
-  }
+.button.duo:nth-child(1) {
+  margin-right: 0;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+.button.duo:nth-child(2) {
+  margin-left: 0;
+  border-left: 0;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+/* processing state */
+html body .button.processing {
+  background: #FFF;
+  border: 1px solid #FFF;
+}
+.button.processing:after {
+  line-height: 2.25em;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  content: " ";
+  top: -1px;
+  left: -1px;
+  background: #FFF url('../../../img/controls/loading_light.svg') center center no-repeat;
+  background-size: auto 50% ;
+  border: 1px solid #DDD;
+  border-radius: 5px;
+}
+input[type=submit].button.processing {
+  font-size: 0;
+  background: #FFF url('../../../img/controls/loading_light.svg') center center no-repeat;
+  background-size: auto 50% ;
+  border: 1px solid #DDD;
+  border-radius: 5px;
+}
+.button-spacer {
+  margin-right: 0.5em;
 }
 /*
 	Grid Layout
@@ -4421,125 +4159,6 @@ input[type=email].fluid {
     display: none;
   }
 }
-.panel.middle .grid {
-  padding-bottom: 2em;
-  max-width: 100%;
-}
-.panel.middle .grid .breadcrumbs {
-  border-bottom: 1px dotted #DDD;
-}
-.header h2 {
-  margin: 1em 0;
-}
-.header h2 .button {
-  margin-right: 0.3em;
-  margin-top: -5px;
-}
-/* Scrolling in middle panel in full width */
-@media all and (min-width: 1024px) {
-  .panel.middle {
-    overflow-y: scroll;
-  }
-}
-/* reset layout styles on smaller screen */
-@media all and (max-width: 1024px) {
-  .page,
-  .panel,
-  .header.second + .panel.main,
-  .header.first,
-  .header.second,
-  .col1,
-  .col2,
-  .col3,
-  .col2_3 {
-    position: relative;
-    width: auto;
-    display: block;
-    margin: 0;
-    top: auto;
-    overflow: auto;
-  }
-  .col3 {
-    display: none;
-  }
-  .header.second {
-    text-align: center;
-    margin-bottom: 2.5em;
-  }
-}
-/*
- * shadow on scroll
- */
-.scroll {
-  overflow-y: scroll;
-  background: linear-gradient(#FFF 30%, rgba(255, 255, 255, 0)), linear-gradient(rgba(255, 255, 255, 0), #FFF 70%) 0 100%, radial-gradient(farthest-side at 75% 0, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0)), radial-gradient(farthest-side at 75% 100%, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0)) 0 100%;
-  background-repeat: no-repeat;
-  background-color: #FFF;
-  background-size: 100% 10px, 100% 10px, 100% 5px, 100% 5px;
-}
-::-webkit-scrollbar {
-  width: 1em;
-}
-::-webkit-scrollbar-track {
-  background: #F9F9F9;
-  border-top: 0;
-  border-bottom: 0;
-}
-::-webkit-scrollbar-thumb {
-  background: #C1C1C1;
-  border-radius: 1em;
-  border: 4px solid #F9F9F9;
-}
-video {
-  display: block;
-  width: 100%;
-  height: auto;
-}
-article video {
-  margin: 1em 0;
-}
-article table.table-parameters {
-  width: 100%;
-  margin-bottom: 1em;
-}
-article table.table-parameters thead {
-  background-color: transparent !important;
-}
-article table.table-parameters thead th {
-  background-color: transparent;
-  font-weight: bold;
-  border: 1px solid #DDD;
-  padding: 0.7em 0.5em;
-}
-article table.table-parameters tbody tr:nth-child(even) {
-  background-color: transparent;
-}
-article table.table-parameters tbody tr:nth-child(odd) {
-  background-color: #F3F3F3;
-}
-article table.table-parameters tbody tr td {
-  padding: 0.5em 0.5em;
-  border: 1px solid #DDD;
-}
-article table.table-parameters tbody tr td code {
-  padding: 0.2em 0.3em;
-  background-color: #DDD;
-}
-article table.table-parameters tbody tr td pre {
-  margin: 0;
-  padding: 0;
-  background-color: transparent;
-}
-article table.table-parameters tbody tr td code,
-article table.table-parameters tbody tr td pre {
-  font-family: monospace,serif;
-  font-size: 1em;
-}
-article table.table-parameters tbody tr td em {
-  color: #969696;
-  font-size: 0.8em;
-  font-style: normal;
-}
 /* headers */
 .header {
   overflow: visible !important;
@@ -4635,80 +4254,8 @@ article table.table-parameters tbody tr td em {
   margin: 1.25em 0 0 1em;
   max-width: 80%;
 }
-/**
- * @credit: https://github.com/lukejacksonn/GreedyNav
- */
-.greedy .navigation.primary {
-  padding-right: 5em;
-}
-.greedy .navigation.primary button {
-  position: absolute;
-  top: 0;
-  right: 0;
-  outline: 0;
-  border: 0;
-  font-size: 1em;
-  font-weight: normal;
-  background: #888;
-  padding: 0.45em 1em 0.42em 1em;
-  -webkit-border-radius: 0;
-  -moz-border-radius: 0;
-  border-radius: 0;
-  text-shadow: none;
-  color: #FFF;
-  margin: 0;
-  min-width: 7.5em;
-}
-.greedy .navigation.primary button.hidden {
-  transition: none;
-  width: 0;
-  padding: 0;
-  overflow: hidden;
-}
-.greedy .navigation.primary button::after {
-  content: attr(count);
-  display: inline-flex;
-  width: 21px;
-  height: 21px;
-  align-items: center;
-  justify-content: center;
-  background: #333;
-  color: #969696;
-  border-radius: 50%;
-  font-size: 0.7em;
-  line-height: 0.7em;
-  margin-left: 0.5rem;
-}
-.greedy .navigation.primary ul.hidden-links {
-  position: absolute;
-  right: 0;
-  top: 100%;
-  z-index: 999;
-}
-.greedy .navigation.primary ul.hidden-links.hidden {
-  display: none;
-}
-.greedy .navigation.primary ul.hidden-links li {
-  float: none;
-  padding: 0;
-  margin: 0;
-  display: block;
-}
-.greedy .navigation.primary ul.hidden-links li a {
-  min-width: 5.5em;
-  background: #F3F3F3;
-  color: #333;
-  padding: 0.5em 1em;
-  float: right;
-  display: inline-block;
-}
-.greedy .navigation.primary ul.hidden-links li a:hover,
-.greedy .navigation.primary ul.hidden-links li a:active {
-  background: #EEE;
-  color: #333;
-}
 .logo.no-img {
-  background: transparent url('../img/logo/logo.png') 0 0 no-repeat;
+  background: transparent url('../../../img/logo/logo.png') 0 0 no-repeat;
   background-size: 150px auto;
   width: 150px;
   height: 30px;
@@ -4717,7 +4264,7 @@ article table.table-parameters tbody tr td em {
   display: none;
 }
 .logo.bigger {
-  background: transparent url('../img/logo/logo.svg') 0 0 no-repeat;
+  background: transparent url('../../../img/logo/logo.svg') 0 0 no-repeat;
   background-size: 200px auto;
   width: 200px;
   height: 45px;
@@ -4728,350 +4275,12 @@ article table.table-parameters tbody tr td em {
 /* CSS for serving the retina image to devices with a high "device-pixel-ratio": */
 @media only screen and (-moz-min-device-pixel-ratio: 1.5), only screen and (-o-min-device-pixel-ratio: 1.5), only screen and (-webkit-min-device-pixel-ratio: 1.5), only screen and (min-devicepixel-ratio: 1.5), only screen and (min-resolution: 1.5dppx) {
   .logo.no-img {
-    background: transparent url('../img/logo/logo.svg') 0 0 no-repeat;
+    background: transparent url('../../../img/logo/logo.svg') 0 0 no-repeat;
     background-size: 150px auto;
   }
   .logo.bigger {
-    background: transparent url('../img/logo/logo.svg') 0 0 no-repeat;
+    background: transparent url('../../../img/logo/logo.svg') 0 0 no-repeat;
     background-size: 200px auto;
-  }
-}
-/* Small Progress bar */
-.progress-bar {
-  background: transparent;
-  width: 100%;
-  height: 2px;
-  display: block;
-}
-.progress-bar span {
-  background: #D40101;
-  height: 2px;
-  display: block;
-}
-/* larger progress bar */
-.progress-bar-wrapper {
-  border: 1px solid #DDD;
-  height: 10px;
-  display: block;
-  margin: 2em 0 1em 0;
-  padding: 2px;
-}
-.progress-bar-wrapper .progress-bar.big {
-  width: 100%;
-  height: 10px;
-  display: block;
-  clear: both;
-  /* indefinite loading */
-}
-.progress-bar-wrapper .progress-bar.big .progress {
-  background: #D40101;
-  width: 5%;
-  display: block;
-  height: 10px;
-}
-.progress-bar-wrapper .progress-bar.big.infinite {
-  background: #D40101;
-}
-.progress-bar-wrapper .progress-bar.big.infinite .progress {
-  width: 100%;
-  overflow: hidden;
-  background: url('../img/controls/infinite-bar.gif') repeat-x;
-  -moz-opacity: 0.5;
-  -khtml-opacity: 0.5;
-  opacity: 0.5;
-  -ms-filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=5);
-  filter: progid:DXImageTransform.Microsoft.Alpha(opacity=5);
-  filter: alpha(opacity=5);
-}
-.progress-details {
-  color: #888;
-  margin: 0.5em 0 1.5em 0;
-}
-.progress-details .progress-percent {
-  float: right;
-}
-/*
-	Contextual loading bar
-	  it is situated at the bottom of the workspace
-*/
-.update-loading-bar {
-  position: fixed;
-  display: block;
-  width: 100%;
-  bottom: 2.35em;
-  z-index: 991;
-}
-/*
- * Notification
- */
-.notification-container {
-  font-size: 0.85em;
-  top: 0;
-  position: absolute;
-  z-index: 991;
-  height: 2em;
-  padding-top: 1em;
-  width: 60%;
-  margin-left: 20%;
-}
-.notification-container .notification {
-  position: relative;
-  left: 50%;
-  float: left;
-}
-.notification-container .notification .message {
-  box-shadow: 0px 0px 10px 0px #333;
-  border-radius: 2px;
-  padding: 0.5em 1em;
-  position: relative;
-  left: -50%;
-  float: left;
-  background: #FEF0BF;
-  border: 1px solid #fccd28;
-  color: #000;
-  font-weight: normal;
-  width: auto;
-}
-.notification-container .notification .message strong {
-  text-transform: capitalize;
-}
-.notification-container .notification .message strong:after {
-  content: ':';
-}
-/*
- * Breadcrumbs
- */
-.breadcrumbs {
-  height: 2em;
-  padding: 0.1875em 0 0.1875em 0.1875em;
-  margin-bottom: 0;
-  border-bottom: 1px solid #DDD;
-  background: #FFF;
-}
-.breadcrumbs ul {
-  padding-top: 0.2em;
-  margin-left: 0.1875em;
-}
-.breadcrumbs ul li {
-  display: inline;
-  font-size: 0.8em;
-  /* 12px/base16>15 */
-  margin-left: 0.25em;
-}
-.breadcrumbs ul li:before {
-  content: "›";
-  margin-right: 0.5em;
-}
-.breadcrumbs ul li:first-child {
-  margin-left: 0;
-  padding-left: 0;
-}
-.breadcrumbs ul li:first-child:before {
-  content: "";
-}
-.breadcrumbs ul a {
-  border: 0;
-}
-.breadcrumbs div.main-cell {
-  display: inline;
-}
-/* Dialog */
-.dialog-wrapper {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  z-index: 800;
-  background: rgba(255, 255, 255, 0.9);
-  overflow: auto;
-}
-.dialog {
-  position: relative;
-  max-width: 30em;
-  border: 1px solid #DDD;
-  background: #F3F3F3;
-  margin: auto;
-  margin-top: 1%;
-  /* some space for the footer / notification area in case it is really tall */
-  margin-bottom: 3em;
-  box-shadow: 0px 0px 10px 0px #DDD;
-  /* header */
-  /* inputs */
-  /* Error display */
-  /* submit / cancel */
-}
-.dialog.medium {
-  max-width: 36em;
-}
-.dialog .dialog-header {
-  padding: 0.5em 1em 0 1em;
-  height: 3em;
-}
-.dialog .dialog-header h2 {
-  margin: 0.25em 2em 0.5em 0.2em;
-  font-size: 1.2em;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  -o-text-overflow: ellipsis;
-  -ms-text-overflow: ellipsis;
-}
-.dialog .dialog-header .tooltip-alt {
-  margin-left: 0.3em;
-  font-size: 0.7em;
-  font-weight: normal;
-  color: #333;
-}
-.dialog .dialog-header .tooltip-alt .tooltip-text {
-  white-space: normal;
-}
-.dialog .dialog-header .dialog-header-subtitle {
-  padding-top: 0.3em;
-  padding-left: 1em;
-  font-size: 0.7em;
-  color: #333;
-}
-.dialog .dialog-header .dialog-close {
-  margin-top: -2.5em;
-}
-.dialog .form-content {
-  background: #FFF;
-  padding: 0.813em 1.5em 0.813em 1.5em;
-}
-.dialog label {
-  clear: both;
-  font-size: 0.938em;
-  /* 15px */
-  line-height: 1.6em;
-  /* 24px */
-}
-.dialog input[type=text],
-.dialog textarea {
-  width: 100%;
-  box-sizing: border-box;
-  /*
-     * For IE 6/7 only
-     * Include this rule to trigger hasLayout and contain floats.
-     */
-  /*
-     * Clearfix: contain floats
-     *
-     * For modern browsers
-     * 1. The space content is one way to avoid an Opera bug when the
-     *	`contenteditable` attribute is included anywhere else in the document.
-     *	Otherwise it causes space to appear at the top and bottom of elements
-     *	that receive the `clearfix` class.
-     * 2. The use of `table` rather than `block` is only necessary if using
-     *	`:before` to contain the top-margins of child elements.
-     */
-  /*
-     * For IE 6/7 only
-     * Include this rule to trigger hasLayout and contain floats.
-     */
-  zoom: 1;
-  /*
-     * Clearfix: contain floats
-     *
-     * For modern browsers
-     * 1. The space content is one way to avoid an Opera bug when the
-     *	`contenteditable` attribute is included anywhere else in the document.
-     *	Otherwise it causes space to appear at the top and bottom of elements
-     *	that receive the `clearfix` class.
-     * 2. The use of `table` rather than `block` is only necessary if using
-     *	`:before` to contain the top-margins of child elements.
-     */
-}
-.dialog input[type=text]:before,
-.dialog textarea:before,
-.dialog input[type=text]:after,
-.dialog textarea:after {
-  content: "";
-  display: table;
-}
-.dialog input[type=text]:after,
-.dialog textarea:after {
-  clear: both;
-}
-.dialog input[type=text]:before,
-.dialog textarea:before,
-.dialog input[type=text]:after,
-.dialog textarea:after {
-  content: "";
-  display: table;
-}
-.dialog input[type=text]:after,
-.dialog textarea:after {
-  clear: both;
-}
-.dialog textarea + .message,
-.dialog input + .message {
-  display: none;
-  /* do not show empty placeholders */
-}
-.dialog textarea + .message.error,
-.dialog input + .message.error {
-  display: block;
-  clear: both;
-  width: 100%;
-}
-.dialog .inline-error {
-  color: #D40101;
-  font-weight: bold;
-}
-.dialog .accordion-header a {
-  display: inline;
-}
-.dialog .submit-wrapper {
-  margin: 0;
-  border-top: 1px solid #DDD;
-  clear: both;
-  width: 100%;
-  padding: 0.75em 0;
-}
-.dialog .submit-wrapper .cancel,
-.dialog .submit-wrapper .button {
-  float: left;
-  margin-left: 1.125em;
-  font-size: 1.125em;
-}
-.dialog .submit-wrapper .cancel {
-  margin-top: 0.5em;
-  font-size: 1em;
-}
-/* can also be used outside a dialog, like the sidebar */
-.dialog-close,
-.dialog-close:hover {
-  display: block;
-  float: right;
-  border: 0;
-}
-.dialog-close .fa-close {
-  padding-top: 15px;
-  width: 30px;
-  height: 15px;
-  text-align: center;
-  display: block;
-  vertical-align: baseline;
-  line-height: 0;
-  border: 1px solid #EEE;
-  -webkit-border-radius: 0.214em;
-  -moz-border-radius: 0.214em;
-  border-radius: 0.214em;
-}
-.dialog-close:hover .fa-close {
-  border: 1px solid #DDD;
-  -webkit-border-radius: 0.214em;
-  -moz-border-radius: 0.214em;
-  border-radius: 0.214em;
-}
-/* reduce font-size for small screen */
-@media all and (max-width: 480px) {
-  .dialog {
-    margin: 0;
-    border: 0;
-    box-shadow: none;
-    width: 100%;
-    max-width: 100%;
-    margin-bottom: 2.5em;
   }
 }
 /*
@@ -5102,1098 +4311,58 @@ article table.table-parameters tbody tr td em {
 .footer .footer-links a {
   border: 0;
 }
-.plugin-check {
-  padding: 1em;
-}
-.plugin-check.firefox {
-  background: transparent url('../img/third_party/firefox_logo.png') 1.5em center no-repeat;
-  background-size: 150px auto;
-}
-.plugin-check.chrome {
-  background: transparent url('../img/third_party/ChromeWebStore.png') 0.5em center no-repeat;
-  background-size: 180px auto;
-}
-.plugin-check.gpg {
-  background: transparent url('../img/third_party/gnupg_logo_disabled.png') 2em center no-repeat;
-  background-size: 150px auto;
-}
-.plugin-check.gpg.success {
-  background: #EDF7EB url('../img/third_party/gnupg_logo.png') 2em center no-repeat;
-  background-size: 150px auto;
-}
-.plugin-check.success {
-  background-color: #EDF7EB;
-}
-.plugin-check.error {
-  background-color: #ffe4e4;
-}
-.plugin-check.warning {
-  background-color: #FEF0BF;
-}
-.plugin-check.notice {
-  background-color: #daecf9;
-}
-.plugin-check .message {
-  font-weight: normal;
-  margin-left: 180px;
-  padding: 0.5em 1em 0.25em 1em;
-}
-@media all and (max-width: 1024px) {
-  .plugin-check.firefox,
-  .plugin-check.chrome,
-  .plugin-check.gpg,
-  .plugin-check.gpg.success,
-  .plugin-check.chrome.error {
-    background-image: none;
-  }
-  .plugin-check .message {
-    margin-left: 0px;
-    padding: 0.5em 1em;
-  }
-}
-.video-wrapper {
-  padding: 1em;
-}
-.video-wrapper iframe {
-  width: 100%;
-  min-height: 250px;
-  height: auto;
-}
-/*
-    left panel navigation
-    Similar to panel navigation setup
-    except there is an option to have several levels
-    and there is no option to have empty list items (all items are working links)
- */
-.panel .navigation-help {
-  margin-top: 1em;
-}
-.panel .navigation-help h2 {
-  padding: 0 0 0.5em 0;
-  margin: 0 0 0 1.25em;
-}
-.panel .navigation-help a {
-  color: #333;
-  border: 0;
-  display: block;
-}
-.panel .navigation-help ul li a {
-  font-size: 0.938em;
-  /* 15px from 16px base */
-  padding: 0.469em 0 0.469em 1.333em;
-  border-left: 5px solid #FFF;
-}
-.panel .navigation-help ul li a:hover {
-  color: #333;
-  border-left: 5px solid #DDD;
-}
-.panel .navigation-help ul li ul li a {
-  padding-left: 2.5em;
-  font-weight: normal;
-  border-left: 5px solid #FFF;
-}
-.panel .navigation-help ul li.active a,
-.panel .navigation-help ul li.selected a {
-  font-weight: bold;
-  border-left: 5px solid #D40101;
-}
-.panel .navigation-help ul li.active ul li a,
-.panel .navigation-help ul li.selected ul li a {
-  padding-left: 2.5em;
-  font-weight: normal;
-  border-left: 5px solid #FFF;
-}
-.panel .navigation-help ul li.active ul li a:hover,
-.panel .navigation-help ul li.selected ul li a:hover {
-  border-left: 5px solid #DDD;
-}
-/*
-	do not show javascript needed warning if js is enabled
-	this needs modernizer to work
-*/
-.js .message.no-js {
-  display: none;
-}
-.cookies .message.no-cookies {
-  display: none;
-}
-/* message styling per types */
-.message {
-  padding: 1em;
-}
-.message a {
-  border-bottom: 1px solid #888;
-}
-.message a:hover {
-  border-bottom: 1px solid #2894DF;
-}
-.message.error {
-  color: #333;
-  background: #ffe4e4;
-}
-.message.error a:link,
-.message.error a:visited {
-  color: #333;
-  border-bottom: 1px dotted #888;
-}
-.message.error a:hover {
-  color: #333;
-  border-bottom: 1px solid #888;
-}
-.message.success {
-  color: #333;
-  background: #EDF7EB;
-}
-.message.notice {
-  color: #333;
-  background: #daecf9;
-}
-.message.warning {
-  color: #333;
-  background: #FEF0BF;
-}
-.message p:last-child {
-  margin-bottom: 0;
-}
-/* big side info message blocks on setup or profile pages */
-.message.side-message {
-  margin-left: 1em;
-  font-size: 1em;
-  margin-right: 2em;
-}
-.message.side-message ul,
-.message.side-message p {
-  padding-bottom: 1em;
-}
-/* success animation */
-.message.success.success-large.animated {
-  background: #FFF;
-  color: #333;
-  display: flex;
-  border: 1px solid #DDD;
-  border-radius: 3px;
-}
-.message.success.success-large.animated .illustration {
-  flex: 0 0 180px;
-}
-.message.success.success-large.animated .additional-information {
-  flex: 1;
-  line-height: 180px;
-  margin-top: 1.5em;
-  padding-left: 1em;
-}
-@keyframes drawCircle {
-  0% {
-    stroke-dashoffset: 180px;
-  }
-  100% {
-    stroke-dashoffset: 0;
-  }
-}
-@keyframes drawCheck {
-  0% {
-    stroke-dashoffset: 50px;
-  }
-  100% {
-    stroke-dashoffset: 0;
-  }
-}
-.message.success.success-large.animated #successAnimationCircle {
-  stroke-dasharray: 180px 180px;
-  stroke: #009900;
-}
-.message.success.success-large.animated #successAnimationCheck {
-  stroke-dasharray: 50px 50px;
-  stroke: #009900;
-}
-.message.success.success-large.animated #successAnimation.animated {
-  animation: 0.75s ease-out 0s 1 both pop;
-}
-.message.success.success-large.animated #successAnimation.animated #successAnimationCircle {
-  animation: 0.75s cubic-bezier(0.77, 0, 0.175, 1) 0s 1 both drawCircle;
-}
-.message.success.success-large.animated #successAnimation.animated #successAnimationCheck {
-  animation: 0.75s cubic-bezier(0.77, 0, 0.175, 1) 0s 1 both drawCheck;
-}
-@media only screen and (max-width: 767px) {
-  .message.success.success-large.animated {
-    flex-direction: column;
-  }
-}
-table.table-info,
-table.table-info.vertical {
-  border-collapse: separate;
-}
-table.table-info td,
-table.table-info.vertical td {
-  padding: 0.625em;
-  padding-right: 1.25em;
-  color: #666;
-}
-table.table-info td.warning,
-table.table-info.vertical td.warning {
-  background: #FEF0BF;
-}
-table.table-info td.error,
-table.table-info.vertical td.error {
-  background: #ffe4e4;
-}
-table.table-info td .alt.side,
-table.table-info.vertical td .alt.side {
-  color: #666;
-  float: right;
-}
-table.table-info td .alt.side:before,
-table.table-info.vertical td .alt.side:before {
-  content: "(";
-}
-table.table-info td .alt.side:after,
-table.table-info.vertical td .alt.side:after {
-  content: ")";
-}
-table.table-info td + td,
-table.table-info.vertical td + td {
-  color: #333;
-  padding-right: 0.625em;
-}
-/* horizontal tableview */
-table.table-info.horizontal {
-  width: 100%;
-  border-collapse: separate;
-  padding: 0;
-  border: 1px solid #DDD;
-  margin-bottom: 1em;
-}
-table.table-info.horizontal td,
-table.table-info.horizontal th {
-  padding: 0.5em;
-  margin: 0;
-}
-table.table-info.horizontal th {
-  border-bottom: 1px solid #DDD;
-}
-table.table-info.horizontal thead tr {
-  background: #FFF;
-}
-table.table-info.horizontal tbody {
-  background: #FFF;
-}
-table.table-info.horizontal tbody tr:nth-child(odd) {
-  background: #FFF;
-}
-/**
- * Tooltips!
- * credits: Chris Bracco http://cbracco.me/a-simple-css-tooltip/
- */
-/* Base styles for the element that has a tooltip */
-[data-tooltip],
-.tooltip {
-  position: relative;
-  cursor: pointer;
-}
-/* Base styles for the entire tooltip */
-[data-tooltip]:before,
-[data-tooltip]:after,
-.tooltip:before,
-.tooltip:after {
-  position: absolute;
-  visibility: hidden;
-  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
-  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
-  opacity: 0;
-  -webkit-transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out, -webkit-transform 0.2s cubic-bezier(0.71, 1.7, 0.77, 1.24);
-  -moz-transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out, -moz-transform 0.2s cubic-bezier(0.71, 1.7, 0.77, 1.24);
-  transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out, transform 0.2s cubic-bezier(0.71, 1.7, 0.77, 1.24);
-  -webkit-transform: translate3d(0, 0, 0);
-  -moz-transform: translate3d(0, 0, 0);
-  transform: translate3d(0, 0, 0);
-  pointer-events: none;
-  text-align: center;
-}
-/* Show the entire tooltip on hover and focus */
-[data-tooltip]:hover:before,
-[data-tooltip]:hover:after,
-[data-tooltip]:focus:before,
-[data-tooltip]:focus:after,
-.tooltip:hover:before,
-.tooltip:hover:after,
-.tooltip:focus:before,
-.tooltip:focus:after,
-.always-show:before,
-.always-show:after {
-  visibility: visible;
-  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";
-  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100);
-  opacity: 1;
-}
-/* Base styles for the tooltip's directional arrow */
-.tooltip:before,
-[data-tooltip]:before {
-  z-index: 990;
-  border: 6px solid transparent;
-  background: transparent;
-  content: "";
-}
-/* Base styles for the tooltip's content area */
-.tooltip:after,
-[data-tooltip]:after {
-  z-index: 990;
-  padding: 8px;
-  width: 160px;
-  background-color: #333;
-  color: #FFF;
-  content: attr(data-tooltip);
-  font-size: 14px;
-  line-height: 1.2em;
-  font-weight: normal;
-  text-shadow: none;
-}
-/* Directions */
-/* Top (default) */
-[data-tooltip]:before,
-[data-tooltip]:after,
-.tooltip:before,
-.tooltip:after,
-.tooltip-top:before,
-.tooltip-top:after {
-  bottom: 100%;
-  left: 50%;
-}
-[data-tooltip]:before,
-.tooltip:before,
-.tooltip-top:before {
-  margin-left: -6px;
-  margin-bottom: -12px;
-  border-top-color: #333;
-}
-/* Horizontally align top/bottom tooltips */
-[data-tooltip]:after,
-.tooltip:after,
-.tooltip-top:after {
-  margin-left: -80px;
-}
-[data-tooltip]:hover:before,
-[data-tooltip]:hover:after,
-[data-tooltip]:focus:before,
-[data-tooltip]:focus:after,
-.tooltip:hover:before,
-.tooltip:hover:after,
-.tooltip:focus:before,
-.tooltip:focus:after,
-.tooltip.always-show:after,
-.tooltip.always-show:before,
-.tooltip-top.always-show:after,
-.tooltip-top.always-show:before,
-.tooltip-top:hover:before,
-.tooltip-top:hover:after,
-.tooltip-top:focus:before,
-.tooltip-top:focus:after {
-  -webkit-transform: translateY(-12px);
-  -moz-transform: translateY(-12px);
-  transform: translateY(-12px);
-}
-/* Left */
-.tooltip-left:before,
-.tooltip-left:after {
-  right: 100%;
-  bottom: 50%;
-  left: auto;
-}
-.tooltip-left:before {
-  margin-left: 0;
-  margin-right: -12px;
-  margin-bottom: 0;
-  border-top-color: transparent;
-  border-left-color: #333;
-  border-left-color: hsla(0, 0%, 20%, 0.9);
-}
-.tooltip-left:hover:before,
-.tooltip-left:hover:after,
-.tooltip-left.always-show:after,
-.tooltip-left.always-show:before,
-.tooltip-left:focus:before,
-.tooltip-left:focus:after {
-  -webkit-transform: translateX(-12px);
-  -moz-transform: translateX(-12px);
-  transform: translateX(-12px);
-}
-/* Bottom */
-.tooltip-bottom:before,
-.tooltip-bottom:after {
-  top: 100%;
-  bottom: auto;
-  left: 50%;
-}
-.tooltip-bottom:before {
-  margin-top: -12px;
-  margin-bottom: 0;
-  border-top-color: transparent;
-  border-bottom-color: #333;
-  border-bottom-color: hsla(0, 0%, 20%, 0.9);
-}
-.tooltip-bottom:hover:before,
-.tooltip-bottom:hover:after,
-.tooltip-bottom.always-show:after,
-.tooltip-bottom.always-show:before,
-.tooltip-bottom:focus:before,
-.tooltip-bottom:focus:after {
-  -webkit-transform: translateY(12px);
-  -moz-transform: translateY(12px);
-  transform: translateY(12px);
-}
-/* Right */
-.tooltip-right:before,
-.tooltip-right:after {
-  bottom: 50%;
-  left: 100%;
-}
-.tooltip-right:before {
-  margin-bottom: 0;
-  margin-left: -12px;
-  border-top-color: transparent;
-  border-right-color: #333;
-}
-.tooltip-right:hover:before,
-.tooltip-right:hover:after,
-.tooltip-right.always-show:after,
-.tooltip-right.always-show:before,
-.tooltip-right:focus:before,
-.tooltip-right:focus:after {
-  -webkit-transform: translateX(12px);
-  -moz-transform: translateX(12px);
-  transform: translateX(12px);
-}
-/* Move directional arrows down a bit for left/right tooltips */
-.tooltip-left:before,
-.tooltip-right:before {
-  top: 3px;
-}
-/* Vertically center tooltip content for left/right tooltips */
-.tooltip-left:after,
-.tooltip-right:after {
-  margin-left: 0;
-  margin-bottom: -16px;
-}
-/* large width */
-.tooltip.large:after,
-[data-tooltip].large:after {
-  width: 240px;
-}
-.tooltip-right.large:before,
-.tooltip-right.large:after,
-.tooltip-left.large:before,
-.tooltip-left.large:after {
-  margin-top: 6px;
-}
-/*
-	More complex tooltips
-	That allows HTML in them
-*/
-/* Tooltip container */
-.tooltip-alt {
-  cursor: pointer;
-  display: inline-block;
-  border-bottom: 0;
-  /* Tooltip text */
-  /* Ease the tooltip left when you mouse over the tooltip container */
-}
-.tooltip-alt .tooltip-text {
-  position: absolute;
-  visibility: hidden;
-  width: 180px;
-  background-color: #333;
-  color: #FFF;
-  padding: 0.5em 1em;
-  -webkit-transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out, -webkit-transform 0.2s cubic-bezier(0.71, 1.7, 0.77, 1.24);
-  -moz-transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out, -moz-transform 0.2s cubic-bezier(0.71, 1.7, 0.77, 1.24);
-  transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out, transform 0.2s cubic-bezier(0.71, 1.7, 0.77, 1.24);
-  -webkit-transform: translate3d(0, 0, 0);
-  -moz-transform: translate3d(0, 0, 0);
-  transform: translate3d(0, 0, 0);
-  z-index: 99999;
-  /* only right for now */
-}
-.tooltip-alt .tooltip-text.right {
-  margin-left: 1em;
-  margin-top: -1.75em;
-}
-.tooltip-alt .tooltip-text.right::after {
-  content: " ";
-  position: absolute;
-  top: 1.125em;
-  right: 100%;
-  margin-top: -5px;
-  border: 5px #333 solid;
-  border-color: transparent #333 transparent transparent;
-}
-.tooltip-alt:hover .tooltip-text {
-  -webkit-transform: translateX(12px);
-  -moz-transform: translateX(12px);
-  transform: translateX(12px);
-  visibility: visible;
-  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";
-  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100);
-  opacity: 1;
-}
-/* picture in sidebar */
-.col4 img.illustration,
-.col5 img.illustration {
-  max-width: 275px;
-  margin: 2em auto;
-}
-/* figure in article */
-article figure {
-  width: 100%;
-  text-align: center;
-  padding: 1em 0;
-}
-article figure img {
-  margin: auto;
-  position: relative;
-}
-article figure .legend {
-  display: inline-block;
-  margin-top: 0.5em;
-  margin-bottom: 1em;
-  font-style: italic;
-}
-/* lightbox */
-#imagelightbox {
-  position: absolute;
-  z-index: 9999;
-  -ms-touch-action: none;
-  touch-action: none;
-  overflow: hidden;
-}
-#imagelightbox-overlay {
-  overflow: hidden;
-  background-color: #FFF;
-  background-color: rgba(255, 255, 255, 0.9);
-  position: fixed;
-  z-index: 9998;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-}
-#imagelightbox-overlay {
-  -webkit-animation: fade-in 0.25s linear;
-  animation: fade-in 0.25s linear;
-}
-@-webkit-keyframes fade-in {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-@keyframes fade-in {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-.tldr {
+.page.cloud {
   background: #F3F3F3;
-  padding: 1.5em 1em;
-}
-.tldr i {
-  margin-right: 1em;
-  padding-left: 0.5em;
-}
-.tldr.alt {
-  background: #FFF;
-  text-align: center;
-  margin-top: 0em;
-  padding-top: 0;
-}
-.tldr.alt .illustration {
-  margin-top: 2em;
-}
-.tldr h4 {
-  margin-top: 0.5em;
-}
-.tldr h4 + p {
-  margin-top: 0;
-}
-.tldr p:last-child {
-  margin-bottom: 0;
-}
-/* reset layout styles on smaller screen */
-@media all and (min-width: 1024px) {
-  .tldr {
-    margin-top: 1em;
-    margin-bottom: 3em;
-    max-width: 20em;
-  }
-}
-/* search */
-form.search {
-  margin-top: 1em;
-}
-form.search legend,
-form.search label {
-  display: none;
-  width: 10em;
-}
-form.search input[type=search] {
-  float: left;
-  width: 65%;
-  margin-bottom: 0;
-  border-right: 1px solid #FFF;
-  padding: 0.313em 0.625em;
-}
-form.search input[type=search]:focus,
-form.search input[type=search]:active {
-  border-right: 1px solid #2894DF;
-}
-form.search button {
-  height: 2.571em;
-  /* 36px */
-  width: 4.5em;
-  float: left;
-  margin-left: 0;
-  border-radius: 0px 2px 2px 0px;
-}
-form.search button .fa-search {
-  font-size: 1.4em;
-}
-/* remove webkit search input decoration and cancel button */
-input[type="search"]::-webkit-search-decoration,
-input[type="search"]::-webkit-search-cancel-button {
-  display: none;
-}
-/* rescale on small screen */
-@media all and (max-width: 480px) {
-  form.search {
-    display: none;
-  }
-}
-.tile {
-  display: block;
-  margin-bottom: 1em;
-  border: 1px solid #F3F3F3;
-  padding: 1em;
-  padding-top: 0;
-  min-height: 5.8em;
-  position: relative;
-  -webkit-border-radius: 0.214em;
-  -moz-border-radius: 0.214em;
-  border-radius: 0.214em;
-  /*
-     * For IE 6/7 only
-     * Include this rule to trigger hasLayout and contain floats.
-     */
-  /*
-     * Clearfix: contain floats
-     *
-     * For modern browsers
-     * 1. The space content is one way to avoid an Opera bug when the
-     *	`contenteditable` attribute is included anywhere else in the document.
-     *	Otherwise it causes space to appear at the top and bottom of elements
-     *	that receive the `clearfix` class.
-     * 2. The use of `table` rather than `block` is only necessary if using
-     *	`:before` to contain the top-margins of child elements.
-     */
-  /*
-     * For IE 6/7 only
-     * Include this rule to trigger hasLayout and contain floats.
-     */
-  zoom: 1;
-  /*
-     * Clearfix: contain floats
-     *
-     * For modern browsers
-     * 1. The space content is one way to avoid an Opera bug when the
-     *	`contenteditable` attribute is included anywhere else in the document.
-     *	Otherwise it causes space to appear at the top and bottom of elements
-     *	that receive the `clearfix` class.
-     * 2. The use of `table` rather than `block` is only necessary if using
-     *	`:before` to contain the top-margins of child elements.
-     */
-}
-.tile:before,
-.tile:after {
-  content: "";
-  display: table;
-}
-.tile:after {
-  clear: both;
-}
-.tile:before,
-.tile:after {
-  content: "";
-  display: table;
-}
-.tile:after {
-  clear: both;
-}
-.tile:hover {
-  border: 1px solid #DDD;
-}
-.tile.alt {
-  background: #EEE;
-}
-.tile .tile-teaser {
-  font-size: 3em;
-  float: left;
-  width: 30%;
-  padding-top: 0.25em;
-  color: #888;
-}
-.tile .tile-title {
-  float: right;
-  font-weight: bold;
-  padding: 1em 0 0.5em 0;
-  margin-left: 0;
-  width: 70%;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  -o-text-overflow: ellipsis;
-  -ms-text-overflow: ellipsis;
-}
-.tile .tile-description {
-  float: right;
-  width: 70%;
-}
-.card {
-  /*
-     * For IE 6/7 only
-     * Include this rule to trigger hasLayout and contain floats.
-     */
-  /*
-     * Clearfix: contain floats
-     *
-     * For modern browsers
-     * 1. The space content is one way to avoid an Opera bug when the
-     *	`contenteditable` attribute is included anywhere else in the document.
-     *	Otherwise it causes space to appear at the top and bottom of elements
-     *	that receive the `clearfix` class.
-     * 2. The use of `table` rather than `block` is only necessary if using
-     *	`:before` to contain the top-margins of child elements.
-     */
-  /*
-     * For IE 6/7 only
-     * Include this rule to trigger hasLayout and contain floats.
-     */
-  zoom: 1;
-  /*
-     * Clearfix: contain floats
-     *
-     * For modern browsers
-     * 1. The space content is one way to avoid an Opera bug when the
-     *	`contenteditable` attribute is included anywhere else in the document.
-     *	Otherwise it causes space to appear at the top and bottom of elements
-     *	that receive the `clearfix` class.
-     * 2. The use of `table` rather than `block` is only necessary if using
-     *	`:before` to contain the top-margins of child elements.
-     */
-  margin-bottom: 1.25em;
-  padding: 0.5em;
-  border: 1px solid #F3F3F3;
-}
-.card:before,
-.card:after {
-  content: "";
-  display: table;
-}
-.card:after {
-  clear: both;
-}
-.card:before,
-.card:after {
-  content: "";
-  display: table;
-}
-.card:after {
-  clear: both;
-}
-.card.backlog,
-.card.progress,
-.card.completed {
-  border-bottom-left-radius: 5px;
-  border-top-left-radius: 5px;
-}
-.card.backlog {
-  border-left: 5px solid #D40101;
-  border-bottom-left-radius: 5px;
-  border-top-left-radius: 5px;
-}
-.card.progress {
-  border-left: 5px solid #FFBD2E;
-}
-.card.completed {
-  border-left: 5px solid #009900;
-}
-.card .content-wrapper {
-  float: left;
+  position: absolute;
+  height: 100%;
   width: 100%;
 }
-.card .content-wrapper .content {
-  margin-left: 90px;
-  padding: 0.5em;
+.page.cloud .grid {
+  margin: auto;
+  max-width: 100%;
+  font-size: 1.25em;
+  padding-top: 3em;
 }
-.card .content-wrapper .content .title {
-  font-weight: bold;
-  padding-bottom: 0.25em;
+.page.cloud p {
+  color: #666;
 }
-.card .content-wrapper .content .description {
-  font-size: 0.875em;
-}
-.card .content-wrapper .content .eta {
-  padding-top: 0.25em;
-  color: #969696;
-  font-size: 0.875em;
-}
-.card .teaser {
+.page.cloud .button.primary {
+  font-size: 1em;
   float: left;
-  width: 90px;
-  margin-left: -100%;
 }
-.card .teaser i {
-  width: 70px;
-  height: 70px;
+.page.cloud .secondary-cta {
   display: block;
-  margin: 0.5em;
-  border: 1px solid #F3F3F3;
-  background: #DDD;
-  border-radius: 50%;
-}
-.card .teaser i.passbolt {
-  background: transparent url('../img/logo/icon-90.jpg') center center no-repeat;
-  background-size: 60px auto;
-}
-.card .teaser i.accessibility {
-  background: transparent url('../img/papericon/accessibility_90.png') center center no-repeat;
-  background-size: 50px auto;
-}
-.card .teaser i.acl {
-  background: transparent url('../img/papericon/utilities-tweak-tool_90.png') center center no-repeat;
-  background-size: 45px auto;
-}
-.card .teaser i.adminpanel {
-  background: transparent url('../img/papericon/preferences-other_90.png') center center no-repeat;
-  background-size: 50px auto;
-}
-.card .teaser i.check {
-  background: transparent url('../img/papericon/check_90.png') center center no-repeat;
-  background-size: 40px auto;
-}
-.card .teaser i.comment {
-  background: transparent url('../img/papericon/comment_90.png') center center no-repeat;
-  background-size: 40px auto;
-}
-.card .teaser i.email {
-  background: transparent url('../img/papericon/email_90.png') center center no-repeat;
-  background-size: 40px auto;
-}
-.card .teaser i.fingerprint {
-  background: transparent url('../img/papericon/fingerprint_90.png') center center no-repeat;
-  background-size: 50px auto;
-}
-.card .teaser i.folder {
-  background: transparent url('../img/papericon/folder_90.png') center center no-repeat;
-  background-size: 40px auto;
-}
-.card .teaser i.groups {
-  background: transparent url('../img/papericon/groups_90.png') center center no-repeat;
-  background-size: 50px auto;
-}
-.card .teaser i.help {
-  background: transparent url('../img/papericon/help_90.png') center center no-repeat;
-  background-size: 50px auto;
-}
-.card .teaser i.i18n {
-  background: transparent url('../img/papericon/i18n_90.png') center center no-repeat;
-  background-size: 50px auto;
-}
-.card .teaser i.keyring {
-  background: transparent url('../img/papericon/keyring_90.png') center center no-repeat;
-  background-size: 45px auto;
-}
-.card .teaser i.ldap {
-  background: transparent url('../img/papericon/ldap_90.png') center center no-repeat;
-  background-size: 50px auto;
-}
-.card .teaser i.lock {
-  background: transparent url('../img/papericon/lock_90.png') center center no-repeat;
-  background-size: 50px auto;
-}
-.card .teaser i.lock2 {
-  background: transparent url('../img/papericon/lock2_90.png') center center no-repeat;
-  background-size: 60px auto;
-}
-.card .teaser i.monitor {
-  background: transparent url('../img/papericon/monitor_90.png') center center no-repeat;
-  background-size: 50px auto;
-}
-.card .teaser i.notification {
-  background: transparent url('../img/papericon/notification_90.png') center center no-repeat;
-  background-size: 50px auto;
-}
-.card .teaser i.quickaccess {
-  background: transparent url('../img/papericon/preferences-system-power_90.png') center center no-repeat;
-  background-size: 50px auto;
-}
-.card .teaser i.search {
-  background: transparent url('../img/papericon/search_90.png') center center no-repeat;
-  background-size: 50px auto;
-}
-.card .teaser i.securenotes {
-  background: transparent url('../img/papericon/application-octet-stream_90.png') center center no-repeat;
-  background-size: 50px auto;
-}
-.card .teaser i.security {
-  background: transparent url('../img/papericon/security_90.png') center center no-repeat;
-  background-size: 50px auto;
-}
-.card .teaser i.share {
-  background: transparent url('../img/papericon/share_90.png') center center no-repeat;
-  background-size: 50px auto;
-}
-.card .teaser i.star {
-  background: transparent url('../img/papericon/star_90.png') center center no-repeat;
-  background-size: 40px auto;
-}
-.card .teaser i.sync {
-  background: transparent url('../img/papericon/sync_90.png') center center no-repeat;
-  background-size: 50px auto;
-}
-.card .teaser i.terminal {
-  background: transparent url('../img/papericon/terminal_90.png') center center no-repeat;
-  background-size: 50px auto;
-}
-.card .teaser i.android {
-  background: transparent url('../img/third_party/android_90.png') center center no-repeat;
-  background-size: 60px auto;
-}
-.card .teaser i.chrome {
-  background: transparent url('../img/third_party/chrome_90.jpg') center center no-repeat;
-  background-size: 50px auto;
-}
-.card .teaser i.docker {
-  background: transparent url('../img/third_party/docker_90.png') center center no-repeat;
-  background-size: 50px auto;
-}
-.card .teaser i.firefox {
-  background: transparent url('../img/third_party/firefox_90.jpg') center center no-repeat;
-  background-size: 50px auto;
-}
-.card .teaser i.keypassx {
-  background: transparent url('../img/third_party/keypassx_90.jpg') center center no-repeat;
-  background-size: 50px auto;
-}
-.card .teaser i.jenkins {
-  background: transparent url('../img/third_party/jenkins_90.png') center center no-repeat;
-  background-size: 50px auto;
-}
-.card .teaser i.swagger {
-  background: transparent url('../img/third_party/swagger_90.png') center center no-repeat;
-  background-size: 60px auto;
-}
-.edition.beta body:before {
-  content: "Beta";
-  background: #D40101 none repeat scroll 0% 0%;
-}
-.edition body:before {
-  position: fixed;
-  width: 130px;
-  height: 22px;
-  bottom: 8px;
-  left: -47px;
-  text-align: center;
-  font-size: 10px;
-  font-family: sans-serif;
-  text-transform: uppercase;
-  font-weight: 700;
-  color: #FFF;
-  line-height: 24px;
-  transform: rotate(45deg);
-  z-index: 999;
-}
-.faq ul.list {
-  margin: 0;
-  padding: 0;
-}
-.faq ul.list li {
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
-}
-.faq ul.list ul li {
-  margin-left: 1.1em;
-  padding-left: 0.5em;
-  margin-bottom: 0.5em;
-  list-style-type: circle;
-}
-/* Special error page treatment for larger screen */
-@media all and (min-width: 460px) {
-  .page.error .grid {
-    text-align: center;
-    width: 100%;
-    margin-bottom: 2.5em;
-  }
-  .page.error.error-404 .row,
-  .page.error.error-500 .row,
-  .page.error.error-400 .row {
-    max-width: 400px;
-    margin: auto;
-    padding-top: 440px;
-  }
-  .page.error.error-404 .grid {
-    background: transparent url('../img/illustrations/birds6_850.png') center 1.5em no-repeat;
-    background-size: 500px auto;
-  }
-  .page.error.error-400 .grid,
-  .page.error.error-500 .grid {
-    background: transparent url('../img/illustrations/birds3_850.png') center 3em no-repeat;
-    background-size: 640px auto;
-  }
-}
-.page.search .search-results h2 {
-  margin-bottom: 0.25em;
-  font-size: 1.125em;
-}
-.page.search .search-results a {
-  color: #2894DF;
-  border: 0;
-}
-.page.search .search-results a:hover {
-  border-bottom: 1px solid #2894DF;
-}
-.page.search .search-results a:visited {
-  color: purple;
-}
-.page.search .search-results a:hover:visited {
-  border-bottom: 1px solid purple;
-}
-.page.search .search-results a.url {
-  color: #009900;
-  font-size: 0.938em;
-}
-.page.search .search-results a.url:hover {
-  border: 0;
-}
-.page.search .search-results p {
-  font-size: 0.938em;
-}
-.page.search .no-result .suggestions li {
-  margin-left: 1.1em;
-  padding-left: 0.5em;
-  margin-bottom: 0.5em;
-  list-style-type: circle;
-}
-.help.page .edit-on-github {
+  float: left;
   margin-top: 1em;
+  text-align: center;
+  font-size: 0.8em;
+  margin-left: 0.5em;
+  clear: left;
 }
-.help.page .edit-on-github a {
-  float: right;
-  margin-right: 2em;
+/* hide left column when there is no space */
+@media all and (min-width: 800px) {
+  .page.cloud.cloud-archived {
+    background: transparent url('../../../img/illustrations/cloud_archived.svg') right 75% no-repeat;
+    background-size: 400px auto;
+  }
+  .page.cloud.cloud-disabled {
+    background: transparent url('../../../img/illustrations/cloud_disabled.svg') right 75% no-repeat;
+    background-size: 400px auto;
+  }
 }
-.help.page article .message {
-  margin-bottom: 1em;
+@media all and (min-width: 1024px) {
+  .page.cloud.cloud-archived {
+    background-size: 800px auto;
+  }
+  .page.cloud.cloud-disabled {
+    background-size: 800px auto;
+  }
+}
+@media all and (min-width: 1500px) {
+  .page.cloud.cloud-archived {
+    background-size: 1000px auto;
+  }
+  .page.cloud.cloud-disabled {
+    background-size: 1000px auto;
+  }
 }

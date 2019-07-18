@@ -6672,54 +6672,25 @@ button.swiper-pagination-bullet {
   font-size: 3.5em;
   border: 0;
 }
-.ribbon {
-  position: absolute;
-  right: -5px;
-  top: -5px;
-  z-index: 1;
-  overflow: hidden;
-  width: 75px;
-  height: 75px;
-  text-align: right;
+.edition.beta body:before {
+  content: "Beta";
+  background: #D40101 none repeat scroll 0% 0%;
 }
-.ribbon span {
-  font-size: 10px;
-  font-weight: bold;
-  color: #FFF;
-  text-transform: uppercase;
+.edition body:before {
+  position: fixed;
+  width: 130px;
+  height: 22px;
+  bottom: 8px;
+  left: -47px;
   text-align: center;
-  line-height: 20px;
+  font-size: 10px;
+  font-family: sans-serif;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: #FFF;
+  line-height: 24px;
   transform: rotate(45deg);
-  -webkit-transform: rotate(45deg);
-  width: 100px;
-  display: block;
-  background: #009900;
-  box-shadow: 0 3px 10px -5px #000000;
-  position: absolute;
-  top: 19px;
-  right: -21px;
-}
-.ribbon span::before {
-  content: "";
-  position: absolute;
-  left: 0px;
-  top: 100%;
-  z-index: -1;
-  border-left: 3px solid #009900;
-  border-right: 3px solid transparent;
-  border-bottom: 3px solid transparent;
-  border-top: 3px solid #009900;
-}
-.ribbon span::after {
-  content: "";
-  position: absolute;
-  right: 0px;
-  top: 100%;
-  z-index: -1;
-  border-left: 3px solid transparent;
-  border-right: 3px solid #009900;
-  border-bottom: 3px solid transparent;
-  border-top: 3px solid #009900;
+  z-index: 999;
 }
 /*!
 Chosen, a Select Box Enhancer for jQuery and Prototype

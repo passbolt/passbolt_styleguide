@@ -6008,6 +6008,29 @@ input[type="search"]::-webkit-search-cancel-button {
   float: left;
   overflow: hidden;
 }
+.announcement {
+  margin: 0;
+  top: 0;
+  position: absolute;
+  height: 2em;
+  padding-top: 0.425em;
+  font-size: 0.85em;
+  text-align: center;
+  background: #FEF0BF;
+  color: #000;
+  width: 100%;
+}
+.announcement a {
+  color: #000;
+}
+.announcement .announcement-close {
+  float: right;
+  border: 0;
+  margin-right: 0.5em;
+}
+.announcement + #container.page {
+  top: 2em;
+}
 /*
  * jquery-filestyle
  *
@@ -7964,30 +7987,6 @@ table.table-info.horizontal tbody tr:nth-child(odd) {
 }
 .autocomplete-suggestions .autocomplete-suggestion.selected {
   background: #EEE;
-}
-.edition.ce body:before {
-  content: "CE";
-  background: #D40101 none repeat scroll 0% 0%;
-}
-.edition.pro body:before {
-  content: "PRO";
-  background: #009900 none repeat scroll 0% 0%;
-}
-.edition body:before {
-  position: fixed;
-  width: 130px;
-  height: 22px;
-  bottom: 8px;
-  left: -47px;
-  text-align: center;
-  font-size: 10px;
-  font-family: sans-serif;
-  text-transform: uppercase;
-  font-weight: 700;
-  color: #FFF;
-  line-height: 24px;
-  transform: rotate(45deg);
-  z-index: 999;
 }
 /*!
 Chosen, a Select Box Enhancer for jQuery and Prototype
