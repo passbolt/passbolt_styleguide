@@ -6,7 +6,7 @@
     <?php include('../includes/meta/AN_meta.php'); ?>
     <link rel="stylesheet" type="text/css" href="src/css/themes/default/api_cloud.css" />
 <body>
-<div id="container" class="page cloud cloud-archived">
+<div id="container" class="page cloud cloud-disabled">
     <?php include('../includes/headers/AA_header.php'); ?>
     <div class="grid grid-responsive-12">
         <div class="row">
