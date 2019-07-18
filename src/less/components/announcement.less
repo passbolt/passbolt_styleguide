@@ -1,0 +1,24 @@
+.announcement {
+    margin:0;
+    top:0;
+    position: absolute;
+    height:2em;
+    padding-top:.425em;
+    font-size:.85em;
+    text-align:center;
+    background: @background-warning;
+    color: @blacker;
+    width:100%;
+
+    a {
+        color: @blacker;
+    }
+    .announcement-close {
+        float:right;
+        border:0;
+        margin-right:.5em;
+    }
+}
+.announcement + #container.page {
+    top:2em;
+}
