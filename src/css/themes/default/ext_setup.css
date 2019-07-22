@@ -5699,25 +5699,54 @@ table.table-info.horizontal tbody tr:nth-child(odd) {
 .password-hints li.error:before {
   color: #D40101;
 }
-.edition.beta body:before {
-  content: "Beta";
-  background: #D40101 none repeat scroll 0% 0%;
+.ribbon {
+  position: absolute;
+  right: -5px;
+  top: -5px;
+  z-index: 1;
+  overflow: hidden;
+  width: 75px;
+  height: 75px;
+  text-align: right;
 }
-.edition body:before {
-  position: fixed;
-  width: 130px;
-  height: 22px;
-  bottom: 8px;
-  left: -47px;
-  text-align: center;
+.ribbon span {
   font-size: 10px;
-  font-family: sans-serif;
-  text-transform: uppercase;
-  font-weight: 700;
+  font-weight: bold;
   color: #FFF;
-  line-height: 24px;
+  text-transform: uppercase;
+  text-align: center;
+  line-height: 20px;
   transform: rotate(45deg);
-  z-index: 999;
+  -webkit-transform: rotate(45deg);
+  width: 100px;
+  display: block;
+  background: #009900;
+  box-shadow: 0 3px 10px -5px #000000;
+  position: absolute;
+  top: 19px;
+  right: -21px;
+}
+.ribbon span::before {
+  content: "";
+  position: absolute;
+  left: 0px;
+  top: 100%;
+  z-index: -1;
+  border-left: 3px solid #009900;
+  border-right: 3px solid transparent;
+  border-bottom: 3px solid transparent;
+  border-top: 3px solid #009900;
+}
+.ribbon span::after {
+  content: "";
+  position: absolute;
+  right: 0px;
+  top: 100%;
+  z-index: -1;
+  border-left: 3px solid transparent;
+  border-right: 3px solid #009900;
+  border-bottom: 3px solid transparent;
+  border-top: 3px solid #009900;
 }
 .dialog.key-info table {
   margin-top: 1em;

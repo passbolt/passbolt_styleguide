@@ -14,13 +14,20 @@
         <li class="active" role="presentation">
             <a aria-controls="self-hosted" data-toggle="tab" href="demo/AA_services_pricing.php" role="tab">
                 <span><i class="fa fa-server" aria-hidden="true"></i></span>
-                <span>Self-Hosted</span>
+                <div class="offer-text">
+                    <h1>Passbolt PRO</h1>
+                    <span>You host it</span>
+                </div>
+
             </a>
         </li>
         <li role="presentation">
             <a aria-controls="cloud" data-toggle="tab" href="demo/AA_services_cloud.php" role="tab">
                 <span><i class="fa fa-cloud" aria-hidden="true"></i></span>
-                <span>Cloud-Hosted</span>
+                <div class="offer-text">
+                    <h1>Passbolt Cloud</h1>
+                    <span>We host it</span>
+                </div>
             </a>
         </li>
     </ul>
