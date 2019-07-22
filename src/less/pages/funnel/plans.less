@@ -38,8 +38,26 @@
       width:223px;
       margin: 0 20px;
       border-bottom: 4px solid @grey;
+      text-align: left;
+      color: @grey;
+
+      .activecolors() {
+        color: @font-default;
+        i {color:@font-default;}
+        .offer-text {
+          h1 { color: @font-default; font-weight: normal; }
+          span { color: @grey-dark; }
+        }
+      }
+
       &.active {
         border-bottom-color: @blue;
+        a {
+          .activecolors();
+        }
+      }
+      a:hover{
+        .activecolors();
       }
 
       a {
@@ -50,19 +68,28 @@
         -ms-flex-align: center;
         align-items: center;
         padding: 10px 0;
-        color: #444;
+        color: @grey;
         font-size: 18px;
         border-bottom:0px;
-
-        &:hover {
-          span {
-            color: @blue;
-          }
-        }
 
         i {
           font-size: 2em;
           margin-right: 0.3em;
+          color: @grey-darkest;
+        }
+        .offer-text {
+          margin-left: 0.8em;
+          h1 {
+            font-size: 1.2em;
+            margin: 0;
+            line-height: 0.8em;
+            color: @grey-darkest;
+            font-weight: normal;
+          }
+          span {
+            font-size: 0.8em;
+            color: #BBB;
+          }
         }
       }
     }
@@ -99,9 +126,66 @@
       border: 1px solid @border-default;
       text-align: center;
 
-      &.enterprise {
+      .pricing-toggle {
+        margin-top: -1em;
+        ul {
+          width: 100%;
+          margin: auto;
+           li {
+             float: left;
+             margin: 0;
+             padding: 0;
+             width: 50%;
+             border: 0;
+             text-align: center;
+             background-color: @grey-lightest;
+             &.selected {
+               background-color: transparent;
+               a {
+                 border-right: 0;
+                 border-left: 0;
+                 border-top: 1px solid @grey;
+                 border-bottom: 0;
+                 font-weight: bold;
+                 color: @font-default;
+               }
+             }
 
+             a {
+               padding: 0.35em 0;
+               border-bottom: 1px solid @grey;
+               border-right: 1px solid @grey;
+               border-left: 1px solid @grey;
+               display: block;
+               color: @grey-dark;
+               &:hover {
+                 color: @font-default;
+                 font-weight: bold;
+               }
+             }
+           }
+        }
       }
+
+      // No border bottom if there are sub tab options.
+      &.with-tab-options {
+        .plan-description > h2 {
+          border-bottom: 0;
+        }
+      }
+
+      &.community  {
+        .plan-limit {
+          margin-top: 18px;
+        }
+      }
+
+      &.enterprise {
+        .plan-limit {
+          margin-top: 18px;
+        }
+      }
+
 
       &.highlighted {
         box-shadow: 0 3px 10px -5px #000000;
@@ -132,6 +216,7 @@
         display: flex;
         -ms-flex-align: center;
         align-items: center;
+        margin-top: 1.5em;
 
         .discounted {
           text-align: center;
@@ -147,7 +232,7 @@
           text-align: center;
         }
         .cost-large {
-          font-size: 3.5em;
+          font-size: 2.5em;
           &.float {
             font-size:3.3em;
             letter-spacing:-2px;
@@ -155,11 +240,15 @@
           &.two-digits {
             letter-spacing: -5px;
           }
+          .frequency {
+            color: @grey-dark;
+            font-size: 1rem;
+          }
         }
         .cost-medium {
           font-size: 2em;
           line-height: 1.2em;
-          padding: 0.7em 0 0.6em 0;
+          padding: 0.35em 0 0.2em 0;
           &.lower {
             // When other prices are discounted
             padding-top:1.275em;
@@ -175,13 +264,66 @@
         }
       }
 
+      .billing-frequency {
+        color: @grey-dark;
+        font-size: 0.8rem;
+      }
+
       .plan-limit {
+        margin: 1em 0 20px 0;
         span {
-          display: block;
+          display: inline-block;
           margin:auto;
           padding: 0.2em 0;
           font-size: 1.2em;
-          font-weight:bold;
+          &.value {
+            font-weight: bold;
+          }
+        }
+
+
+        .users-quantity-selector {
+          padding-top: 1em;
+          width: 50%;
+          margin: auto;
+
+          .rangeslider.rangeslider--horizontal {
+            height: 12px;
+            border-radius: 5px;
+
+            .rangeslider__fill {
+              background: @blue;
+            }
+
+            .rangeslider__handle {
+              background: none;
+              top: -8px;
+              position: absolute;
+              z-index: 2;
+              width: 15px;
+              height: 15px;
+              border-radius: 100%;
+              background: #ccc;
+              border: #fff 7px solid;
+              box-shadow: 0 0 0 1px #cacaca;
+              cursor: pointer;
+
+              &:after {
+                content: none;
+              }
+            }
+          }
+        }
+
+        .users-quantity-display {
+          margin-top: 0.5em;
+          span.value {
+            font-weight: bold;
+          }
+          span {
+            display: inline-block;
+            font-weight: normal;
+          }
         }
       }
 
@@ -242,10 +384,29 @@
     }
   }
 
+  .non_profit_cta {
+    text-align: center;
+    border-top: 1px solid @grey-lighter;
+    padding-top: 1em;
+
+    h2{
+      margin: 0.5em 0;
+    }
+    p {
+      font-size: 1.5em;
+      margin-bottom: 0.5em;
+      margin-bottom: 1em;
+    }
+    .button {
+      font-size: 1.25em;
+      margin-bottom:1em;
+    }
+  }
+
   .compare {
     @background: @background-light-plus;
     background: @background;
-    margin-top:4em;
+    margin-top:2em;
     table {
       width:100%;
       tr {
@@ -340,4 +501,13 @@
       max-width:1220px;
     }
   }
+}
+
+.page.plans.cloud {
+    .tab-content .service-col.plan.business .plan-description h2 {
+      border-bottom: 1px solid @grey;
+    }
+     .tab-content .service-col.plan.enterprise .plan-pricing {
+      margin-top: 20px;
+    }
 }
