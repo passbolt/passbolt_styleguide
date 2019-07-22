@@ -8155,8 +8155,22 @@ input[type="range"]:focus + .rangeslider .rangeslider__handle {
 }
 .page.plans ul.pricing-tabs li.active a .offer-text h1 {
   color: #333;
+  font-weight: normal;
 }
 .page.plans ul.pricing-tabs li.active a .offer-text span {
+  color: #969696;
+}
+.page.plans ul.pricing-tabs li a:hover {
+  color: #333;
+}
+.page.plans ul.pricing-tabs li a:hover i {
+  color: #333;
+}
+.page.plans ul.pricing-tabs li a:hover .offer-text h1 {
+  color: #333;
+  font-weight: normal;
+}
+.page.plans ul.pricing-tabs li a:hover .offer-text span {
   color: #969696;
 }
 .page.plans ul.pricing-tabs li a {
@@ -8184,19 +8198,11 @@ input[type="range"]:focus + .rangeslider .rangeslider__handle {
   margin: 0;
   line-height: 0.8em;
   color: #666;
+  font-weight: normal;
 }
 .page.plans ul.pricing-tabs li a .offer-text span {
   font-size: 0.8em;
   color: #BBB;
-}
-.page.plans ul.pricing-tabs li a:hover i {
-  color: #2894DF;
-}
-.page.plans ul.pricing-tabs li a:hover .offer-text h1 {
-  color: #2894DF;
-}
-.page.plans ul.pricing-tabs li a:hover .offer-text span {
-  color: #2894DF;
 }
 .page.plans .tab-content .intro h2 {
   margin-top: 163px;
@@ -8268,20 +8274,11 @@ input[type="range"]:focus + .rangeslider .rangeslider__handle {
 .page.plans .tab-content .service-col.plan.with-tab-options .plan-description > h2 {
   border-bottom: 0;
 }
-.page.plans .tab-content .service-col.plan.community .plan-pricing {
-  margin-top: 50px;
-}
 .page.plans .tab-content .service-col.plan.community .plan-limit {
   margin-top: 18px;
 }
-.page.plans .tab-content .service-col.plan.enterprise .plan-pricing {
-  margin-top: 50px;
-}
 .page.plans .tab-content .service-col.plan.enterprise .plan-limit {
   margin-top: 18px;
-}
-.page.plans .tab-content .service-col.plan.business .plan-pricing {
-  padding-top: 1em;
 }
 .page.plans .tab-content .service-col.plan.highlighted {
   box-shadow: 0 3px 10px -5px #000000;
@@ -8310,6 +8307,7 @@ input[type="range"]:focus + .rangeslider .rangeslider__handle {
   display: flex;
   -ms-flex-align: center;
   align-items: center;
+  margin-top: 1.5em;
 }
 .page.plans .tab-content .service-col.plan .plan-pricing .discounted {
   text-align: center;
@@ -8341,7 +8339,7 @@ input[type="range"]:focus + .rangeslider .rangeslider__handle {
 .page.plans .tab-content .service-col.plan .plan-pricing .cost-medium {
   font-size: 2em;
   line-height: 1.2em;
-  padding: 0.7em 0 0.6em 0;
+  padding: 0.35em 0 0.2em 0;
 }
 .page.plans .tab-content .service-col.plan .plan-pricing .cost-medium.lower {
   padding-top: 1.275em;
@@ -8454,9 +8452,26 @@ input[type="range"]:focus + .rangeslider .rangeslider__handle {
   font-size: 1.25em;
   margin-bottom: 1em;
 }
+.page.plans .non_profit_cta {
+  text-align: center;
+  border-top: 1px solid #EEE;
+  padding-top: 1em;
+}
+.page.plans .non_profit_cta h2 {
+  margin: 0.5em 0;
+}
+.page.plans .non_profit_cta p {
+  font-size: 1.5em;
+  margin-bottom: 0.5em;
+  margin-bottom: 1em;
+}
+.page.plans .non_profit_cta .button {
+  font-size: 1.25em;
+  margin-bottom: 1em;
+}
 .page.plans .compare {
   background: #f7f7f7;
-  margin-top: 4em;
+  margin-top: 2em;
 }
 .page.plans .compare table {
   width: 100%;
@@ -8534,10 +8549,10 @@ input[type="range"]:focus + .rangeslider .rangeslider__handle {
   }
 }
 .page.plans.cloud .tab-content .service-col.plan.business .plan-description h2 {
-  border-bottom: 1px;
+  border-bottom: 1px solid #DDD;
 }
 .page.plans.cloud .tab-content .service-col.plan.enterprise .plan-pricing {
-  margin-top: 30px;
+  margin-top: 20px;
 }
 .page.services.featured.cart .error label.error {
   font-size: 0.7em;

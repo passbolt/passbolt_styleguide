@@ -41,17 +41,23 @@
       text-align: left;
       color: @grey;
 
+      .activecolors() {
+        color: @font-default;
+        i {color:@font-default;}
+        .offer-text {
+          h1 { color: @font-default; font-weight: normal; }
+          span { color: @grey-dark; }
+        }
+      }
 
       &.active {
         border-bottom-color: @blue;
         a {
-          color: @font-default;
-          i {color:@font-default;}
-          .offer-text {
-            h1 { color: @font-default; }
-            span { color: @grey-dark; }
-          }
+          .activecolors();
         }
+      }
+      a:hover{
+        .activecolors();
       }
 
       a {
@@ -78,18 +84,11 @@
             margin: 0;
             line-height: 0.8em;
             color: @grey-darkest;
+            font-weight: normal;
           }
           span {
             font-size: 0.8em;
             color: #BBB;
-          }
-        }
-
-        &:hover {
-          i {color:@blue;}
-          .offer-text {
-            h1 { color: @blue; }
-            span { color: @blue; }
           }
         }
       }
@@ -176,26 +175,14 @@
       }
 
       &.community  {
-        .plan-pricing {
-          margin-top: 50px;
-        }
         .plan-limit {
           margin-top: 18px;
         }
       }
 
       &.enterprise {
-        .plan-pricing {
-          margin-top: 50px;
-        }
         .plan-limit {
           margin-top: 18px;
-        }
-      }
-
-      &.business {
-        .plan-pricing {
-          padding-top:  1em;
         }
       }
 
@@ -229,6 +216,7 @@
         display: flex;
         -ms-flex-align: center;
         align-items: center;
+        margin-top: 1.5em;
 
         .discounted {
           text-align: center;
@@ -260,7 +248,7 @@
         .cost-medium {
           font-size: 2em;
           line-height: 1.2em;
-          padding: 0.7em 0 0.6em 0;
+          padding: 0.35em 0 0.2em 0;
           &.lower {
             // When other prices are discounted
             padding-top:1.275em;
@@ -396,10 +384,29 @@
     }
   }
 
+  .non_profit_cta {
+    text-align: center;
+    border-top: 1px solid @grey-lighter;
+    padding-top: 1em;
+
+    h2{
+      margin: 0.5em 0;
+    }
+    p {
+      font-size: 1.5em;
+      margin-bottom: 0.5em;
+      margin-bottom: 1em;
+    }
+    .button {
+      font-size: 1.25em;
+      margin-bottom:1em;
+    }
+  }
+
   .compare {
     @background: @background-light-plus;
     background: @background;
-    margin-top:4em;
+    margin-top:2em;
     table {
       width:100%;
       tr {
@@ -498,9 +505,9 @@
 
 .page.plans.cloud {
     .tab-content .service-col.plan.business .plan-description h2 {
-      border-bottom: 1px;
+      border-bottom: 1px solid @grey;
     }
      .tab-content .service-col.plan.enterprise .plan-pricing {
-      margin-top: 30px;
+      margin-top: 20px;
     }
 }

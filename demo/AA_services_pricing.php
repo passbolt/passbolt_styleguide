@@ -70,8 +70,10 @@
                             <h2>Startup</h2>
                         </div>
                         <div class="row plan-pricing">
-                            <div class="col6 cost cost-large align-right"> €15 </div>
-                            <div class="col6 cost cost-small last align-left">per<br>month</div>
+                            <div class="col12 cost cost-large">
+                                <span class="price"> €15 </span>
+                                <span class="frequency"> /mo</span>
+                            </div>
                         </div>
                         <div class="plan-limit">
                             <span>up to 5 users</span>
@@ -99,8 +101,10 @@
                             <h2>Business</h2>
                         </div>
                         <div class="row plan-pricing">
-                            <div class="col6 cost cost-large align-right"> €99 </div>
-                            <div class="col6 cost cost-small last align-left">per<br>month</div>
+                            <div class="col12 cost cost-large">
+                                <span class="price"> €99 </span>
+                                <span class="frequency"> /mo</span>
+                            </div>
                         </div>
                         <div class="plan-limit">
                             <span>up to 100 users</span>
@@ -153,6 +157,11 @@
                     </div>
                 </div>
             </div>
+        </div>
+        <div class="non_profit_cta">
+            <h2>Are you non-profit or open source?</h2>
+            <p>We have plans for you.</p>
+            <a class="button big" href="#">Contact us</a>
         </div>
         <div class="page-row compare">
             <div class="grid grid-responsive-12">

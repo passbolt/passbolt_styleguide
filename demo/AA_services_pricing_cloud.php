@@ -53,15 +53,12 @@
 			            </div>
 			            <div class="row plan-pricing">
                             <div class="col12 cost cost-large">
-                                <span class="price"> €3 </span>
-                                <span class="frequency">/user /mo</span>
+                                <span class="price"> €9 </span>
+                                <span class="frequency"> /mo</span>
                             </div>
 			            </div>
-                        <div class="billing-frequency">
-                            Paid Monthly
-                        </div>
                         <div class="plan-limit">
-                            <span class="value">Pay as you go</span>,<br><span>starts from 3 users.</span>
+                            <span>includes 3 users,</span><br><span>then </span> <span class="value">€3</span> <span>per user / mo.</span>
                         </div>
 			            <div class="plan-actions">
 				            <a href="demo/AA_services_pro_checkout.php" class="button primary big">Try 14 days for free</a>
@@ -75,7 +72,7 @@
 				            </ul>
 			            </div>
 			            <div class="second_cta">
-				            <a href="#">Try a demo</a>
+				            <a href="#">Try it now!</a>
 			            </div>
 		            </div>
 	                <div class="service-col col5 plan enterprise last">
@@ -84,9 +81,6 @@
 		                </div>
                         <div class="row plan-pricing">
                             <div class="col12 cost cost-large align-center">Get in touch</div>
-                        </div>
-                        <div class="billing-frequency">
-                            for a custom quote
                         </div>
 
 		                <div class="plan-limit">
@@ -118,7 +112,7 @@
 		<div class="page-row compare">
 			<div class="grid grid-responsive-12">
 				<div class="col12">
-					<h2>Not sure which one to choose?<br> Compare our plans</h2>
+					<h2>Not sure which Cloud offer you need?<br> Compare our plans</h2>
 					<?php
 						function  displayRes($plan) {
 							if(is_bool($plan)) {
@@ -132,69 +126,57 @@
 						function compareRow($title, $plans, $trClass) {
 							return "<tr class=\"$trClass\">
 								<td>$title</td>
-								<td>" . displayRes($plans['ce']) . "</td>
-								<td>" . displayRes($plans['startup']) . "</td>
 								<td>" . displayRes($plans['business']) . "</td>
-								<td>" . displayRes($plans['enterprise']) ."</td>
+								<td>" . displayRes($plans['enterprise']) . "</td>
 							</tr>";
 						}
 					?>
 					<table>
 						<?= compareRow('', [
-							'ce' => 'Community',
-							'startup' => 'Startup',
 							'business' => 'Business',
-							'enterprise' => 'Enterprise'
+							'enterprise' => 'Enterprise',
 						], 'plans-title');
 						?>
-						<?= compareRow('Pricing', ['ce' => '', 'startup' => '', 'business' => '', 'enterprise' => ''], 'head'); ?>
-						<?= compareRow('Users limit', ['ce' => 'Unlimited', 'startup' => '5', 'business' => '100', 'enterprise' => 'Unlimited'], ''); ?>
-						<?= compareRow('Instances limit', ['ce' => 'Unlimited', 'startup' => '1', 'business' => '1', 'enterprise' => 'Unlimited'], ''); ?>
-						<?= compareRow('License type', ['ce' => 'AGPL V3', 'startup' => 'AGPL V3', 'business' => 'AGPL V3', 'enterprise' => 'AGPL V3'], ''); ?>
-						<?= compareRow('License validity', ['ce' => 'Perpetual', 'startup' => 'Perpetual', 'business' => 'Perpetual', 'enterprise' => 'Perpetual'], ''); ?>
-						<?= compareRow('Free updates', ['ce' => 'Forever', 'startup' => 'One year', 'business' => 'One year', 'enterprise' => 'One year'], ''); ?>
+						<?= compareRow('Pricing', ['business' => '', 'enterprise' => ''], 'head'); ?>
+                        <?= compareRow('Pricing model', ['business' => 'per user. Pay as you go.', 'enterprise' => 'tailor made'], ''); ?>
+						<?= compareRow('Price', ['business' => '€9 for 3 users, then €3 per additonal user', 'enterprise' => 'varies'], ''); ?>
+						<?= compareRow('Frequency', ['business' => 'monthly / yearly', 'enterprise' => 'monthly / yearly'], ''); ?>
 
-						<?= compareRow('Support', ['ce' => '', 'startup' => '', 'business' => '', 'enterprise' => ''], 'head'); ?>
-						<?= compareRow('Community support', ['ce' => true, 'startup' => true, 'business' => true, 'enterprise' => true], ''); ?>
-						<?= compareRow('Email support', ['ce' => false, 'startup' => true, 'business' => true, 'enterprise' => true], ''); ?>
-						<?= compareRow('Phone support', ['ce' => false, 'startup' => false, 'business' => false, 'enterprise' => true], ''); ?>
-						<?= compareRow('Slack support', ['ce' => false, 'startup' => false, 'business' => false, 'enterprise' => true], ''); ?>
-						<?= compareRow('SLA', ['ce' => false, 'startup' => 'Next business day', 'business' => 'Next business day', 'enterprise' => '4 hours (business hours)'], ''); ?>
+                        <?= compareRow('Hosting', ['business' => '', 'enterprise' => ''], 'head'); ?>
+                        <?= compareRow('Type', ['business' => 'Multitenant', 'enterprise' => 'Isolated container'], ''); ?>
+                        <?= compareRow('Data backup on demand', ['business' => true, 'enterprise' => true], ''); ?>
+                        <?= compareRow('Custom domain', ['business' => false, 'enterprise' => true], ''); ?>
+                        <?= compareRow('Custom SSL certificate', ['business' => false, 'enterprise' => true], ''); ?>
+                        <?= compareRow('Custom firewall rules', ['business' => false, 'enterprise' => true], ''); ?>
 
-						<?= compareRow('Installation', ['ce' => '', 'startup' => '', 'business' => '', 'enterprise' => ''], 'head'); ?>
-						<?= compareRow('Online documentation', ['ce' => true, 'startup' => true, 'business' => true, 'enterprise' => true], ''); ?>
-						<?= compareRow('Docker container', ['ce' => true, 'startup' => true, 'business' => true, 'enterprise' => true], ''); ?>
-						<?= compareRow('Virtual Machine', ['ce' => false, 'startup' => true, 'business' => true, 'enterprise' => true], ''); ?>
-						<?= compareRow('Installation scripts (debian, centos)', ['ce' => false, 'startup' => true, 'business' => true, 'enterprise' => true], ''); ?>
-						<?= compareRow('Distro package (coming soon)', ['ce' => false, 'startup' => true, 'business' => true, 'enterprise' => true], ''); ?>
-						<?= compareRow('Web installer', ['ce' => false, 'startup' => true, 'business' => true, 'enterprise' => true], ''); ?>
+						<?= compareRow('Support', ['business' => '', 'enterprise' => ''], 'head'); ?>
+						<?= compareRow('Email support', ['business' => true, 'enterprise' => true], ''); ?>
+						<?= compareRow('Phone support', ['business' => false, 'enterprise' => true], ''); ?>
+						<?= compareRow('Slack support', ['business' => false, 'enterprise' => true], ''); ?>
+						<?= compareRow('SLA', ['business' => 'Next business day', 'enterprise' => '4 hours (business days)'], ''); ?>
 
-						<?= compareRow('Community features', ['ce' => '', 'startup' => '', 'business' => '', 'enterprise' => ''], 'head'); ?>
-						<?= compareRow('Password sharing', ['ce' => true, 'startup' => true, 'business' => true, 'enterprise' => true], ''); ?>
-						<?= compareRow('Favorites', ['ce' => true, 'startup' => true, 'business' => true, 'enterprise' => true], ''); ?>
-						<?= compareRow('Filter', ['ce' => true, 'startup' => true, 'business' => true, 'enterprise' => true], ''); ?>
-						<?= compareRow('Search', ['ce' => true, 'startup' => true, 'business' => true, 'enterprise' => true], ''); ?>
-						<?= compareRow('Comments', ['ce' => true, 'startup' => true, 'business' => true, 'enterprise' => true], ''); ?>
-						<?= compareRow('Users management', ['ce' => true, 'startup' => true, 'business' => true, 'enterprise' => true], ''); ?>
-						<?= compareRow('Groups management', ['ce' => true, 'startup' => true, 'business' => true, 'enterprise' => true], ''); ?>
+						<?= compareRow('Features', ['business' => '', 'enterprise' => ''], 'head'); ?>
+						<?= compareRow('Passwords sharing', ['business' => true, 'enterprise' => true], ''); ?>
+						<?= compareRow('Favorites', ['business' => true, 'enterprise' => true], ''); ?>
+						<?= compareRow('Filters', ['business' => true, 'enterprise' => true], ''); ?>
+						<?= compareRow('Search', ['business' => true, 'enterprise' => true], ''); ?>
+						<?= compareRow('Comments', ['business' => true, 'enterprise' => true], ''); ?>
+						<?= compareRow('Users management', ['business' => true, 'enterprise' => true], ''); ?>
+						<?= compareRow('Groups management', ['business' => true, 'enterprise' => true], ''); ?>
+                        <?= compareRow('Passwords activity', ['business' => true, 'enterprise' => true], ''); ?>
 
-						<?= compareRow('Premium features', ['ce' => '', 'startup' => '', 'business' => '', 'enterprise' => ''], 'head'); ?>
-						<?= compareRow('Master passphrase auto-remember policy', ['ce' => false, 'startup' => true, 'business' => true, 'enterprise' => true], ''); ?>
-						<?= compareRow('Import (kdbx, csv)', ['ce' => false, 'startup' => true, 'business' => true, 'enterprise' => true], ''); ?>
-						<?= compareRow('Export (kdbx, csv)', ['ce' => false, 'startup' => true, 'business' => true, 'enterprise' => true], ''); ?>
-						<?= compareRow('Tags management', ['ce' => false, 'startup' => true, 'business' => true, 'enterprise' => true], ''); ?>
-						<?= compareRow('Dark theme', ['ce' => false, 'startup' => true, 'business' => true, 'enterprise' => true], ''); ?>
-						<?= compareRow('Folders (coming soon)', ['ce' => false, 'startup' => true, 'business' => true, 'enterprise' => true], ''); ?>
-						<?= compareRow('LDAP (coming soon)', ['ce' => false, 'startup' => true, 'business' => true, 'enterprise' => true], ''); ?>
-						<?= compareRow('Audit logs (coming soon)', ['ce' => false, 'startup' => true, 'business' => true, 'enterprise' => true], ''); ?>
-						<?= compareRow('Encrypted files (coming soon)', ['ce' => false, 'startup' => true, 'business' => true, 'enterprise' => true], ''); ?>
+						<?= compareRow('Master passphrase auto-remember policy', ['business' => true, 'enterprise' => true], ''); ?>
+						<?= compareRow('Import (kdbx, csv)', ['business' => true, 'enterprise' => true], ''); ?>
+						<?= compareRow('Export (kdbx, csv)', ['business' => true, 'enterprise' => true], ''); ?>
+						<?= compareRow('Tags management', ['business' => true, 'enterprise' => true], ''); ?>
+						<?= compareRow('Dark theme', ['business' => true, 'enterprise' => true], ''); ?>
+                        <?= compareRow('2FA', ['business' => true, 'enterprise' => true], ''); ?>
+                        <?= compareRow('LDAP connector (AD, openldap, freeipa)', ['business' => false, 'enterprise' => true], ''); ?>
 
 						<?= compareRow('',
 							[
-								'ce' => '<a href="#" class="button primary">Download it</a>',
-								'startup' => '<a href="#" class="button primary">Buy now</a>',
-								'business' => '<a href="#" class="button primary">Buy now</a>',
-								'enterprise' => '<a href="#" class="button primary">Contact us</a>'
+								'business' => '<a href="#" class="button primary">Try it for free</a>',
+								'enterprise' => '<a href="#" class="button">Contact us</a>'
 							],
 							'clear'); ?>
 					</table>
