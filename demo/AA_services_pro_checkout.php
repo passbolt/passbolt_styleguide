@@ -82,6 +82,7 @@
                 <div class="row">
                     <div class="col12">
                         <h1>Your order</h1>
+                        <p class="message error">This is an error message</p>
                     </div>
                     <div class="col6">
                         <div class="box customer_information">
@@ -125,6 +126,12 @@
                                         <label for="country">Country</label>
                                         <select name="country" id="country" autocomplete="country-name" data-placeholder="Choose a country" class="chosen-select">
                                         </select>
+                                    </div>
+                                    <div class="input text vat">
+                                        <label for="CustomerOrganizationVat">Vat number</label>
+                                        <div class="field-vat">
+                                            <span class="country-code">LU</span><input name="data[Customer][organization_vat]" placeholder="not applicable (outside EU)" value="" maxlength="16" type="text" disabled="disabled" id="CustomerOrganizationVat">
+                                        </div>
                                     </div>
                                 </form>
                             </div>
