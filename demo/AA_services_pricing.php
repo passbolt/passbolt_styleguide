@@ -22,7 +22,7 @@
             </a>
         </li>
         <li role="presentation">
-            <a aria-controls="cloud" data-toggle="tab" href="demo/AA_services_cloud.php" role="tab">
+            <a aria-controls="cloud" data-toggle="tab" href="demo/AA_services_pricing_cloud.php" role="tab">
                 <span><i class="fa fa-cloud" aria-hidden="true"></i></span>
                 <div class="offer-text">
                     <h1>Passbolt Cloud</h1>
