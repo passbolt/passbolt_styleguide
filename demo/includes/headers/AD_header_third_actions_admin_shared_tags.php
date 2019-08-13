@@ -5,19 +5,19 @@
 				<li>
 					<a class="button " href="demo/AD_admin_shared_tags.php?create=1">
 						<i class="fa fa-fw fa-plus-circle"></i>
-						<span>create</span>
+						<span>Create</span>
 					</a>
 				</li>
 				<li>
 					<a class="button" href="demo/AD_admin_shared_tags.php?edit=1">
 						<i class="fa fa-fw fa-edit"></i>
-						<span>edit</span>
+						<span>Edit</span>
 					</a>
 				</li>
 				<li>
 					<a class="button " href="demo/AD_admin_shared_tags.php?delete=1">
 						<i class="fa fa-fw fa-trash-o"></i>
-						<span>delete</span>
+						<span>Delete</span>
 					</a>
 				</li>
 			</div>

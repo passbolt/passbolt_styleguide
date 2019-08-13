@@ -17,7 +17,7 @@
 						Get passbolt
 					</a>
                     <a href="demo/AN_login.php" >
-                       Or try the demo
+                       Or try the cloud version
                     </a>
 				</div>
 			</div>

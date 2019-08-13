@@ -38,7 +38,19 @@
                 &:focus {
                     color: @font-focus;
                 }
+                &.highlighted {
+                    background-color: @blue;
+                    padding: 0 0.5em 0 0.5em;
+                    -webkit-border-radius: 3px;
+                    -moz-border-radius: 3px;
+                    border-radius: 3px;
+                }
+                &.highlighted:active,
+                &.highlighted:focus{
+                    color: @font-inverse-dark;
+                }
             }
+
         }
 
         li {

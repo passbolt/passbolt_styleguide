@@ -6,20 +6,53 @@
 					 class="passbolt_controller_component_password_workspace_menu_controller mad_view_view tab-content selected selection">
 				<li>
 					<a id="js_wk_menu_edition_button" href="#"
-						 class="button mad_controller_component_button_controller mad_view_view js_component disabled"
+						 class="button mad_controller_component_button_controller mad_view_view js_component "
 						 disabled="disabled">
 						<i class="fa fa-fw fa-edit"></i>
-						<span>edit</span>
+						<span>Edit</span>
 					</a>
 				</li>
 				<li>
 					<a id="js_wk_menu_edition_button" href="#"
-						 class="button mad_controller_component_button_controller mad_view_view js_component disabled"
+						 class="button mad_controller_component_button_controller mad_view_view js_component "
 						 disabled="disabled">
 						<i class="fa fa-fw fa-trash"></i>
-						<span>delete</span>
+						<span>Delete</span>
 					</a>
 				</li>
+                <li>
+                    <div class="dropdown">
+                        <a id="js_wk_menu_more_button" href="#" class="button mad_component_button_dropdown js_component mad_view_component_button_dropdown ready disabled">
+                            <span>More</span>
+                            <i class="fa fa-fw fa-caret-down"></i></a>
+                        </a>
+                        <ul id="js_wk_menu_more_button_dropdown" class="dropdown-content mad_component_menu menu mad_view_component_tree ready">
+                            <li id="ceb12fee-d370-a60c-8596-a559e560f4e6" class="ready disabled" data-view-id="10">
+                                <div class="row">
+                                    <div class="main-cell-wrapper">
+                                        <div class="main-cell">
+                                            <a href="#"><span>Reset MFA</span></a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    <script type="application/javascript">
+                      // SAMPLE INTERACTION - Not for production
+                      $(function() {
+                        $('#js_wk_menu_more_button').click(function(){
+                          $('#js_wk_menu_more_button_dropdown').toggleClass('visible');
+                          return false;
+                        });
+                      });
+                      $('body').click(function(e) {
+                        if($(e.target).closest('#js_wk_menu_more_button_dropdown').length === 0) {
+                          $('#js_wk_menu_more_button_dropdown').removeClass('visible');
+                        }
+                      });
+                    </script>
+                </li>
 			</div>
 		</div>
 	</ul>

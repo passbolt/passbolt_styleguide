@@ -4290,6 +4290,17 @@ input[type=submit].button.processing {
 .header .navigation.primary li a:focus {
   color: #2894DF;
 }
+.header .navigation.primary li a.highlighted {
+  background-color: #2894DF;
+  padding: 0 0.5em 0 0.5em;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+}
+.header .navigation.primary li a.highlighted:active,
+.header .navigation.primary li a.highlighted:focus {
+  color: #DDD;
+}
 .header .navigation.primary li .row.selected a {
   color: #FFF;
 }

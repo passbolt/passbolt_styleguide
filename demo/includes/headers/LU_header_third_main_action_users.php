@@ -2,7 +2,7 @@
 	<div class="dropdown">
 		<a id="user_workspace_create_button" href="#" class="button primary mad_component_button_dropdown js_component mad_view_component_button_dropdown ready">
 			<i class="fa fa-fw fa-plus-circle"></i>
-			<span>create</span>
+			<span>Create</span>
 		</a>
 		<ul id="user_workspace_create_button_dropdown" class="dropdown-content mad_component_menu menu mad_view_component_tree ready">
 			<li id="ceb12fee-d370-a60c-8596-a559e560f4e6" class="ready" data-view-id="10">

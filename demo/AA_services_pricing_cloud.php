@@ -72,7 +72,7 @@
 				            </ul>
 			            </div>
 			            <div class="second_cta">
-				            <a href="#">Try it now!</a>
+				            <a href="#">Get started</a>
 			            </div>
 		            </div>
 	                <div class="service-col col5 plan enterprise last">

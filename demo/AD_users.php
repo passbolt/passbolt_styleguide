@@ -4,6 +4,7 @@
 	<?php include('includes/meta/LU_meta.php'); ?>
 </head>
 <body>
+<?php include('includes/tableviews/LU_tableview_users_contextual_menu.php'); ?>
 <?php include('includes/nav/LU_nav_tree_groups_contextual_menu.php'); ?>
 <div id="container" class="page people">
 	<div class="mad_event_event_bus"></div>

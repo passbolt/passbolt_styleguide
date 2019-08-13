@@ -99,7 +99,7 @@
                             </ul>
                         </div>
                         <div class="second_cta">
-                            <a href="#">Try a demo</a>
+                            <a href="#">Buy now</a>
                         </div>
                     </div>
                     <div class="service-col col3 plan business highlighted">
@@ -129,7 +129,7 @@
                             </ul>
                         </div>
                         <div class="second_cta">
-                            <a href="#">Try a demo</a>
+                            <a href="#">Buy now</a>
                         </div>
                     </div>
                     <div class="service-col col3 plan enterprise last">
