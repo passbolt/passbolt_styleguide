@@ -47,7 +47,7 @@
 						</div>
 
 						<div class="submit-input-wrapper">
-<!--							<a href="demo/AN_webinstaller3a0_server_keys.php" class="button big disabled">cancel</a>-->
+<!--							<a href="demo/AN_webinstaller3a0_server_keys.php" class="button big disabled">Cancel</a>-->
 							<a href="demo/AN_webinstaller8a0_done.php" class="button big primary">Create user account</a>
 						</div>
 					</div>

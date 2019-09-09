@@ -5,8 +5,12 @@
     </div>
     <div class="accordion-content">
         <a class="js_add_comment section-action" href="#">
-            <i class="fa fa-fw fa-plus-circle"></i>
-            <span class="visuallyhidden">create</span>
+        <span class="fa icon">
+            <svg viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg">
+                <path d="M1344 960v-128q0-26-19-45t-45-19h-256v-256q0-26-19-45t-45-19h-128q-26 0-45 19t-19 45v256h-256q-26 0-45 19t-19 45v128q0 26 19 45t45 19h256v256q0 26 19 45t45 19h128q26 0 45-19t19-45v-256h256q26 0 45-19t19-45zm320-64q0 209-103 385.5t-279.5 279.5-385.5 103-385.5-103-279.5-279.5-103-385.5 103-385.5 279.5-279.5 385.5-103 385.5 103 279.5 279.5 103 385.5z"/>
+            </svg>
+        </span>
+            <span class="visuallyhidden">Create</span>
         </a>
         <div id="js_rs_details_comments_add_form" class="passbolt_form_comment_create form mad_view_form ready" style="">
             <ul>
@@ -30,10 +34,18 @@
                                            id="267f9d06-58a3-9b6f-e7c4-6f2e1270d66e" value="Resource">
                                     <div class="input textarea required">
                                         <label for="js_field_comment_content">Add a comment</label>
-                                        <textarea data-view-id="368" placeholder="add a comment" maxlength="150"
+                                        <textarea data-view-id="368" placeholder="Add a comment" maxlength="150"
                                                   class="js_comment_content required mad_form_textbox form-element mad_view_form_textbox success"
                                                   name="data[comment][content]"
                                                   id="js_field_comment_content"></textarea>
+                                                  <div class="message notice">
+                                                    <span class="fa icon">
+                                                        <svg viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg"><path d="M1152 1376v-160q0-14-9-23t-23-9h-96v-512q0-14-9-23t-23-9h-320q-14 0-23 9t-9 23v160q0 14 9 23t23 9h96v320h-96q-14 0-23 9t-9 23v160q0 14 9 23t23 9h448q14 0 23-9t9-23zm-128-896v-160q0-14-9-23t-23-9h-192q-14 0-23 9t-9 23v160q0 14 9 23t23 9h192q14 0 23-9t9-23zm640 416q0 209-103 385.5t-279.5 279.5-385.5 103-385.5-103-279.5-279.5-103-385.5 103-385.5 279.5-279.5 385.5-103 385.5 103 279.5 279.5 103 385.5z"/></svg>
+                                                    </span>
+                                                    <span>
+                                                        <strong>Pro tip:</strong> Comments will not be encrypted.
+                                                    </span>
+                                                </div>
                                         <div class="js_comment_content_feedback message mad_form_feedback js_component mad_view success"
                                              id="3f0c54bf-9007-a18f-dcd4-4c6c792b8cac"></div>
                                     </div>
@@ -42,7 +54,8 @@
                                         <span class="modified">right now</span>
                                     </div>
                                     <div class="actions">
-                                        <a class="button comment-submit" href="#"><span>send</span></a>
+                                    <input type="submit" value="Save" class="button comment-submit">
+                                    <a class="button cancel comment-editor-cancel" role="button"><span>Cancel</span></a>
                                     </div>
                                 </div>
                             </div>
@@ -78,7 +91,9 @@
                                     <ul>
                                         <li>
                                             <a class="js_delete_comment" href="#">
-                                                <i class="fa fa-fw fa-trash"></i>
+                                                <span class="fa icon">
+                                                    <svg viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg"><path d="M704 1376v-704q0-14-9-23t-23-9h-64q-14 0-23 9t-9 23v704q0 14 9 23t23 9h64q14 0 23-9t9-23zm256 0v-704q0-14-9-23t-23-9h-64q-14 0-23 9t-9 23v704q0 14 9 23t23 9h64q14 0 23-9t9-23zm256 0v-704q0-14-9-23t-23-9h-64q-14 0-23 9t-9 23v704q0 14 9 23t23 9h64q14 0 23-9t9-23zm-544-992h448l-48-117q-7-9-17-11h-317q-10 2-17 11zm928 32v64q0 14-9 23t-23 9h-96v948q0 83-47 143.5t-113 60.5h-832q-66 0-113-58.5t-47-141.5v-952h-96q-14 0-23-9t-9-23v-64q0-14 9-23t23-9h309l70-167q15-37 54-63t79-26h320q40 0 79 26t54 63l70 167h309q14 0 23 9t9 23z"/></svg>
+                                                </span>
                                                 <span class="visuallyhidden">delete</span>
                                             </a>
                                         </li>
@@ -110,7 +125,9 @@
                                     <ul>
                                         <li>
                                             <a class="js_delete_comment" href="#">
-                                                <i class="fa fa-fw fa-trash"></i>
+                                                <span class="fa icon">
+                                                    <svg viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg"><path d="M704 1376v-704q0-14-9-23t-23-9h-64q-14 0-23 9t-9 23v704q0 14 9 23t23 9h64q14 0 23-9t9-23zm256 0v-704q0-14-9-23t-23-9h-64q-14 0-23 9t-9 23v704q0 14 9 23t23 9h64q14 0 23-9t9-23zm256 0v-704q0-14-9-23t-23-9h-64q-14 0-23 9t-9 23v704q0 14 9 23t23 9h64q14 0 23-9t9-23zm-544-992h448l-48-117q-7-9-17-11h-317q-10 2-17 11zm928 32v64q0 14-9 23t-23 9h-96v948q0 83-47 143.5t-113 60.5h-832q-66 0-113-58.5t-47-141.5v-952h-96q-14 0-23-9t-9-23v-64q0-14 9-23t23-9h309l70-167q15-37 54-63t79-26h320q40 0 79 26t54 63l70 167h309q14 0 23 9t9 23z"/></svg>
+                                                </span>
                                                 <span class="visuallyhidden">delete</span>
                                             </a>
                                         </li>

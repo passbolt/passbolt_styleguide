@@ -75,23 +75,24 @@
         display: block;
         border: 0;
         color:@font-dim;
+        margin: 13px 0 0 5px;
 
-        &:after {
-            position:absolute;
-            content: "\f0d7"; /* caret down */
-            font: normal normal normal 1em FontAwesome;
-            text-rendering: auto;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-            width:1em;
-            height:1em;
-            margin-left:-2em;
-            margin-top: 1em;
-        }
+        // &:after {
+        //     position:absolute;
+        //     content: "\f0d7"; /* caret down */
+        //     font: normal normal normal 1em FontAwesome;
+        //     text-rendering: auto;
+        //     -webkit-font-smoothing: antialiased;
+        //     -moz-osx-font-smoothing: grayscale;
+        //     width:1em;
+        //     height:1em;
+        //     margin-left:-2em;
+        //     margin-top: 1em;
+        // }
         &:hover {
             color:@blacker;
         }
-        span {
+        span:last-child {
             visibility: hidden;
         }
     }

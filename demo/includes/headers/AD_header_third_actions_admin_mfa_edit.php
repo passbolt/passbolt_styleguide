@@ -9,7 +9,7 @@
 		<li>
 			<a class="button" href="demo/AD_admin_mfa_configuration.php">
 				<i class="fa fa-fw fa-undo"></i>
-				<span>cancel</span>
+				<span>Cancel</span>
 			</a>
 		</li>
 	</ul>

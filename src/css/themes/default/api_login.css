@@ -459,6 +459,7 @@ input[type="submit"] {
 button[disabled],
 html input[disabled] {
   cursor: default;
+  pointer-events: none;
 }
 /**
  * 1. Address box sizing set to content-box in IE 8/9.
@@ -3160,7 +3161,6 @@ textarea {
   /* 20 char (default input length) x .7em (average char length) */
   padding: 0.375em 0.625em 0.375em 0.625em;
   display: inline-block;
-  margin-bottom: 0.5em;
   -webkit-appearance: none;
   border: 1px solid #CCC;
   border-top: 1px solid #BBB;
@@ -3210,6 +3210,7 @@ textarea {
   height: 3.6em;
   /* 4 char (default input length) x 1em (average char length) + .6em (padding) */
   line-height: 16px;
+  resize: none;
 }
 .textarea.large textarea {
   width: 30em;
@@ -3349,9 +3350,6 @@ input[type=checkbox] + label {
 .input .message.helptext {
   color: #888;
   font-weight: normal;
-}
-.input .message:empty {
-  display: none;
 }
 .form-content .input .message,
 form .input .message {
@@ -4482,7 +4480,21 @@ input[type=submit].button.processing {
   -moz-border-radius: 0.214em;
   border-radius: 0.214em;
 }
-.dialog-close:hover .fa-close {
+.dialog-close .fa.icon {
+  padding: 7px 0 7px 0;
+  width: 30px;
+  height: 15px;
+  text-align: center;
+  display: block;
+  vertical-align: baseline;
+  line-height: 15px;
+  border: 1px solid #EEE;
+  -webkit-border-radius: 0.214em;
+  -moz-border-radius: 0.214em;
+  border-radius: 0.214em;
+}
+.dialog-close:hover .fa-close,
+.dialog-close:hover .fa.icon {
   border: 1px solid #DDD;
   -webkit-border-radius: 0.214em;
   -moz-border-radius: 0.214em;

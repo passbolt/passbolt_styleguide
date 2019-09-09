@@ -460,6 +460,7 @@ input[type="submit"] {
 button[disabled],
 html input[disabled] {
   cursor: default;
+  pointer-events: none;
 }
 /**
  * 1. Address box sizing set to content-box in IE 8/9.
@@ -3194,6 +3195,38 @@ p {
   content: "\f005";
   color: #D40101;
 }
+.fa.icon svg {
+  width: 1rem;
+  height: 1rem;
+  display: inline-block;
+  vertical-align: middle;
+  margin-top: -2px;
+}
+a .fa.icon svg:hover,
+h4:hover svg {
+  fill: #2894DF;
+}
+.fa.icon.light svg {
+  fill: #606060;
+}
+a.disabled .fa.icon svg {
+  fill: #EEEEEC;
+  pointer-events: none;
+}
+.disabled .fa.icon svg:hover,
+.button.disabled .fa.icon svg:hover {
+  fill: #EEEEEC;
+}
+.button .fa.icon svg:hover {
+  fill: #FFFFFC;
+}
+.fa.icon.icon-only svg {
+  width: 1.2rem;
+  height: 1.2rem;
+  display: inline-block;
+  vertical-align: middle;
+  margin-top: -2px;
+}
 /*
 	Generic buttons
 	Description	: We support <input[submit]>, <input.button>, <button> and <a.button>
@@ -3480,7 +3513,6 @@ textarea {
   /* 20 char (default input length) x .7em (average char length) */
   padding: 0.375em 0.625em 0.375em 0.625em;
   display: inline-block;
-  margin-bottom: 0.5em;
   -webkit-appearance: none;
   border: 1px solid #222220;
   border-top: 1px solid #30302D;
@@ -3530,6 +3562,7 @@ textarea {
   height: 3.6em;
   /* 4 char (default input length) x 1em (average char length) + .6em (padding) */
   line-height: 16px;
+  resize: none;
 }
 .textarea.large textarea {
   width: 30em;
@@ -3669,9 +3702,6 @@ input[type=checkbox] + label {
 .input .message.helptext {
   color: #8B8B89;
   font-weight: normal;
-}
-.input .message:empty {
-  display: none;
 }
 .form-content .input .message,
 form .input .message {
@@ -4801,24 +4831,12 @@ input[type="search"]::-webkit-search-cancel-button {
   display: block;
   border: 0;
   color: #cacac9;
-}
-.user.profile .more a:after {
-  position: absolute;
-  content: "\f0d7";
-  /* caret down */
-  font: normal normal normal 1em FontAwesome;
-  text-rendering: auto;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  width: 1em;
-  height: 1em;
-  margin-left: -2em;
-  margin-top: 1em;
+  margin: 13px 0 0 5px;
 }
 .user.profile .more a:hover {
   color: #000;
 }
-.user.profile .more a span {
+.user.profile .more a span:last-child {
   visibility: hidden;
 }
 .user.profile .dropdown-content {
@@ -5701,7 +5719,21 @@ input[type="search"]::-webkit-search-cancel-button {
   -moz-border-radius: 0.214em;
   border-radius: 0.214em;
 }
-.dialog-close:hover .fa-close {
+.dialog-close .fa.icon {
+  padding: 7px 0 7px 0;
+  width: 30px;
+  height: 15px;
+  text-align: center;
+  display: block;
+  vertical-align: baseline;
+  line-height: 15px;
+  border: 1px solid #3B3B39;
+  -webkit-border-radius: 0.214em;
+  -moz-border-radius: 0.214em;
+  border-radius: 0.214em;
+}
+.dialog-close:hover .fa-close,
+.dialog-close:hover .fa.icon {
   border: 1px solid #3B3B39;
   -webkit-border-radius: 0.214em;
   -moz-border-radius: 0.214em;
@@ -6246,6 +6278,9 @@ input[type="search"]::-webkit-search-cancel-button {
   margin-left: -1.8em;
   margin-top: -0.5em;
 }
+.panel.aside .comments .comment a.js_delete_comment {
+  border: 0;
+}
 .panel.aside .activity div.actions {
   margin-top: 1em;
   text-align: center;
@@ -6487,7 +6522,7 @@ input[type="search"]::-webkit-search-cancel-button {
   color: #444442;
 }
 .contextual-menu li.disabled a:hover {
-  color: #FFFFFC;
+  color: #444442;
   background: #3B3B39;
 }
 .contextual-menu .separator-before {
@@ -6551,7 +6586,7 @@ input[type="search"]::-webkit-search-cancel-button {
 .panel.aside .sidebar-section .accordion-content .section-action {
   font-size: 1.125em;
   position: absolute;
-  margin-top: -3.35em;
+  margin-top: -3em;
   right: 3.25em;
   width: 1.125em;
   height: 1.125em;
@@ -6679,6 +6714,9 @@ input[type="search"]::-webkit-search-cancel-button {
   font-size: 0.929em;
   /* 13px */
   background: #2894DF;
+}
+.panel.aside .form-content .message.notice span:last-child {
+  display: inline-block;
 }
 /* place sidebar on top of everything when there is no space */
 @media all and (max-width: 1024px) {

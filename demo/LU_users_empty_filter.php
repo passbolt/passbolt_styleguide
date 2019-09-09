@@ -30,8 +30,8 @@
 						<div class="panel middle">
 							<?php
 							$_GET['breadcrumbs'] = array(
-								'all users' => 'demo/LU_users.php',
-								'Search : abcde fghijk' => ''
+								'All users' => 'demo/LU_users.php',
+								'Search: abcde fghijk' => ''
 							);
 							include('includes/LU_breadcrumbs.php'); ?>
 							<?php include('includes/tableviews/LU_tableview_users_empty_filter.php'); ?>

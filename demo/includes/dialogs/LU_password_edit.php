@@ -4,7 +4,10 @@
 		<div class="dialog-header">
 			<h2>Edit<span class="dialog-header-subtitle">shared resource</span></h2>
 			<a href="demo/LU_passwords.php" class="dialog-close">
-				<i class="fa fa-close"></i><span class="visuallyhidden">close</span>
+					<span class="fa icon">
+            <svg viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg"><path d="M1490 1322q0 40-28 68l-136 136q-28 28-68 28t-68-28l-294-294-294 294q-28 28-68 28t-68-28l-136-136q-28-28-28-68t28-68l294-294-294-294q-28-28-28-68t28-68l136-136q28-28 68-28t68 28l294 294 294-294q28-28 68-28t68 28l136 136q28 28 28 68t-28 68l-294 294 294 294q28 28 28 68z"/></svg>
+          </span>
+				<span class="visuallyhidden">Close</span>
 			</a>
 
 		</div>
@@ -43,10 +46,10 @@
 										 type="hidden">
 
 							<div class="input text required error js_form_element_wrapper">
-								<label for="js_field_name">Name</label>
+								<label for="js_field_name">Resource</label>
 								<input name="passbolt.model.Resource.name"
 											 class="required mad_form_element_textbox_controller mad_view_form_element_textbox_view js_component ready"
-											 maxlength="50" id="js_field_name" placeholder="name" type="text">
+											 maxlength="50" id="js_field_name" placeholder="resource name" type="text">
 
 								<div id="js_field_name_feedback"
 										 class="message mad_form_feedback_controller error mad_view_view js_component ready">
@@ -55,7 +58,7 @@
 							</div>
 
 							<div class="input text js_form_element_wrapper">
-								<label for="js_field_uri">URL</label>
+								<label for="js_field_uri">URI</label>
 								<input
 									class="mad_form_element_textbox_controller mad_view_form_element_textbox_view js_component ready"
 									name="passbolt.model.Resource.uri" maxlength="50" id="js_field_uri"
@@ -70,7 +73,7 @@
 								<label for="js_field_username">Username</label>
 								<input name="passbolt.model.Resource.username"
 											 class="mad_form_element_textbox_controller mad_view_form_element_textbox_view js_component ready"
-											 maxlength="50" id="js_field_username" placeholder="name" type="text">
+											 maxlength="50" id="js_field_username" placeholder="username" type="text">
 
 								<div id="js_field_username_feedback"
 										 class="message mad_form_feedback_controller mad_view_view js_component ready">
@@ -99,7 +102,7 @@
 								<label for="js_field_description">Description</label>
 										<textarea name="passbolt.model.Resource.description"
 															class="required mad_form_element_textbox_controller mad_view_form_element_textbox_view js_component ready"
-															maxlength="150" id="js_field_description" placeholder="add a description"></textarea>
+															maxlength="150" id="js_field_description" placeholder="Add a description"></textarea>
 
 								<div id="js_field_description_feedback"
 										 class="message mad_form_feedback_controller mad_view_view js_component ready">
@@ -107,8 +110,8 @@
 							</div>
 						</div>
 						<div class="submit-wrapper clearfix">
-							<input class="button primary" value="save" type="submit">
-							<a href="demo/LU_passwords.php" class="js-dialog-cancel cancel">cancel</a>
+							<input class="button primary" value="Save" type="submit">
+							<a href="demo/LU_passwords.php" class="js-dialog-cancel cancel">Cancel</a>
 						</div>
 					</form>
 				</div>

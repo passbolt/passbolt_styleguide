@@ -49,7 +49,7 @@
 
 							<div class="row last">
 								<div class="input-wrapper">
-									<a href="demo/AN_webinstaller1a1_systemcheck_success.php" class="button cancel big">cancel</a>
+									<a href="demo/AN_webinstaller1a1_systemcheck_success.php" class="button cancel big">Cancel</a>
 									<a href="demo/AN_webinstaller2a0_database.php" class="button primary next big">next</a>
 								</div>
 							</div>

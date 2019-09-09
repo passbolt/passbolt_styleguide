@@ -31,7 +31,7 @@
 						<div class="panel middle">
 							<?php
 							$_GET['breadcrumbs'] = array(
-								'all users' => 'demo/LU_users.php',
+								'All users' => 'demo/LU_users.php',
 								'test user' => 'demo/LU_users_profile.php',
 								'Notification settings' => 'demo/LU_notifications.php'
 							);

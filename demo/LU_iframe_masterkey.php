@@ -8,9 +8,11 @@
 <div class="dialog-wrapper">
 	<div class="dialog master-password">
 		<div class="dialog-header">
-			<h2>Please enter your passphrase</h2>
+			<h2>Passphrase</h2>
 			<a class="dialog-close js-dialog-close" href="#">
-				<i class="fa fa-close"></i>
+			<span class="fa icon">
+                    <svg viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg"><path d="M1490 1322q0 40-28 68l-136 136q-28 28-68 28t-68-28l-294-294-294 294q-28 28-68 28t-68-28l-136-136q-28-28-28-68t28-68l294-294-294-294q-28-28-28-68t28-68l136-136q28-28 68-28t68 28l294 294 294-294q28-28 68-28t68 28l136 136q28 28 28 68t-28 68l-294 294 294 294q28 28 28 68z"/></svg>
+                </span>
 				<span class="visuallyhidden">close</span>
 			</a>
 		</div>
@@ -19,7 +21,7 @@
 			<div class="form-content">
 
 				<div class="input text required">
-					<label for="js_master_password">You need your passphrase to continue.</label>
+					<label for="js_master_password">Enter your passphrase to continue.</label>
                     <!-- The field below is invisible and used to receive the first focus after the iframe is loaded -->
                     <!-- This way we can control and treat the events received next -->
                     <input type="text" id="js_master_password_focus_first" class="focus_first">
@@ -44,7 +46,7 @@
 
 			<div class="submit-wrapper clearfix">
 				<a class="button primary" id="master-password-submit">OK</a>
-				<a class="js-dialog-close cancel" href="#">cancel</a>
+				<a class="js-dialog-close cancel" href="#">Cancel</a>
 			</div>
 		</div>
 	</div>

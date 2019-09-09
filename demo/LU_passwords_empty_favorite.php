@@ -29,13 +29,13 @@
 						<div class="panel middle no_passwords">
 							<?php
 							$_GET['breadcrumbs'] = array(
-								'all passwords' => 'demo/LU_passwords.php',
-								'Favorite' => ''
+								'All items' => 'demo/LU_passwords.php',
+								'Favorites' => ''
 							);
 							$emptyGridSettings = [
 								'filter' => 'favorite',
 								'title' => 'None of your passwords are yet marked as favorite.',
-								'subtitle' => 'Add stars to passwords your want to easily find later.'
+								'subtitle' => 'Add stars to passwords you want to easily find later.'
 							];
 							include('includes/LU_breadcrumbs.php'); ?>
 							<?php include('includes/tableviews/LU_tableview_passwords_empty_filtered.php'); ?>

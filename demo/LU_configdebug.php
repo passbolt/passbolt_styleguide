@@ -117,7 +117,7 @@
 				</div>
 				<div class="row">
 					<div class="submit-input-wrapper">
-						<input value="save" id="js_save_conf" type="submit" class="button primary big"/>
+						<input value="Save" id="js_save_conf" type="submit" class="button primary big"/>
 					</div>
 				</div>
 
@@ -161,7 +161,7 @@
 						</div>
 						<div class="submit">
 							<input type="button" value="browse" id="keyFilepicker" class="button">
-							<input value="save" id="saveKey" type="submit"/>
+							<input value="Save" id="saveKey" type="submit"/>
 						</div>
 						<div class="key-import feedback"></div>
 					</div>
