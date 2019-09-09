@@ -18,14 +18,14 @@
 		</div>
 		<div class="js_dialog_content dialog-content">
 
-			<div class="form-content">
+			<div class="form-content master-passphrase">
 
 				<div class="input text required">
 					<label for="js_master_password">Enter your passphrase to continue.</label>
                     <!-- The field below is invisible and used to receive the first focus after the iframe is loaded -->
                     <!-- This way we can control and treat the events received next -->
                     <input type="text" id="js_master_password_focus_first" class="focus_first">
-					<input type="password" placeholder="password" id="js_master_password" maxlength="50">
+					<input type="password" autofocus placeholder="passphrase" id="js_master_password" maxlength="50">
 					<div class="security-token">CKR</div>
 				</div>
 
@@ -44,6 +44,10 @@
 
 			</div>
 
+			<div class="form-content wrong-passphrase">
+				The operation has been aborted.
+			</div>
+
 			<div class="submit-wrapper clearfix">
 				<a class="button primary" id="master-password-submit">OK</a>
 				<a class="js-dialog-close cancel" href="#">Cancel</a>
@@ -51,5 +55,27 @@
 		</div>
 	</div>
 </div>
+<script type="application/javascript">
+    // DEMO ONLY -- not for production use
+    $(function() {
+		$( document ).ready(function() {
+			$('.form-content.wrong-passphrase').css('display', 'none');
+			$( "#js_master_password" ).focus();
+			var count = 0;
+			$('#master-password-submit').click(function(event){
+				$( "#js_master_password" ).focus();
+				count++;
+				$('label[for="js_master_password"]').text('Please enter a valid passphrase');
+				if (count === 3) {
+					// $('#master-password-submit').text("Cancel");
+					$('.js-dialog-close.cancel').css('display', 'none');
+					$('.form-content.master-passphrase').css('display', 'none');
+					$('.form-content.wrong-passphrase').css('display', 'block');
+					$('.dialog-header').find('h2').text('Wrong Passphrase!');
+				}
+			});
+		});
+	});
+</script>
 </body>
 </html>

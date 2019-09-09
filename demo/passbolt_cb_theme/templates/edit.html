@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <!--Page title-->        
+        <title>{{{customer_portal.page_title}}}</title>
+        <!--Favourite icon-->
+        <link rel="shortcut icon" href='{{page.favicon}}'>
+        <!--Apple touch icon for iOS devices-->
+        <link rel="apple-touch-icon-precomposed" href="{{customer_portal.apple_touch_icon}}">        
+        <meta charset="utf-8">
+        <!--Viewport for Responsive layout-->
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+        <!--Bootstrap & ChargeBee compiled CSS -->
+        <link href="http://themes.chargebee.com/static/app-static-assets/cdn-tpl_theme-1.0.5/stylesheets/core_v2.css" rel="stylesheet" media="screen" type="text/css">
+        <!-- CSS based on the configured preset -->
+        <link href="{{theme_preset_css}}" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <div class="navbar navbar-static-top">
+            <div class="container">
+                <div class="navbar-header pull-left">
+                    {{#header.use_logo}}
+                    <img src="{{header.logo}}" alt="{{{header.title}}}" class="navbar-brand img-responsive">
+                    {{/header.use_logo}}
+                    {{^header.use_logo}}
+                    <span class="navbar-brand">{{{header.title}}}</span>
+                    {{/header.use_logo}}
+                    <!--Navigation menu icon bars on mobile.-->
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                </div>
+                <!--Portal account menu settings.-->
+                <div data-cb-jshook="attach-account-dropdown"></div>
+            </div>
+        </div>
+        <div class="container">
+            <!--chargebee content start-->
+            <div id="__CHARGEBEE_CONTENT__"></div>
+            <!--chargebee content end-->
+        </div>
+        <!--inline style written to push the sticky footer. Will be removed later(until it's fixed).-->
+        <div style="min-height:100px"></div>
+        <!--Need sticky footer? Just add the "cb-sticky-footer" id.-->
+        <div class="navbar navbar-static-bottom" id="cb-sticky-footer">
+            <div class="container">
+                {{{footer.content}}}
+            </div>
+        </div>
+    </body>
+</html>

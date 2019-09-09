@@ -82,6 +82,7 @@
                 <div class="row">
                     <div class="col12">
                         <h1>Your order</h1>
+                        <p class="message error">This is an error message</p>
                     </div>
                     <div class="col6">
                         <div class="box customer_information">
@@ -125,6 +126,12 @@
                                         <label for="country">Country</label>
                                         <select name="country" id="country" autocomplete="country-name" data-placeholder="Choose a country" class="chosen-select">
                                         </select>
+                                    </div>
+                                    <div class="input text vat">
+                                        <label for="CustomerOrganizationVat">Vat number</label>
+                                        <div class="field-vat">
+                                            <span class="country-code">LU</span><input name="data[Customer][organization_vat]" placeholder="not applicable (outside EU)" value="" maxlength="16" type="text" disabled="disabled" id="CustomerOrganizationVat">
+                                        </div>
                                     </div>
                                 </form>
                             </div>
@@ -188,6 +195,13 @@
                                 <p>After payment, you will receive the installation instructions and license key by email.</p>
                             </div>
 
+                            <div class="voucher">
+                                <div class="input text">
+                                    <input type="text" placeholder="Any discount code?">
+                                    <a href="#" class="button">Apply</a>
+                                </div>
+                            </div>
+
                                 <div class="subscription-total">
                                     <table class="total-table create">
                                         <tbody>
@@ -207,6 +221,16 @@
                                             <td class="text-right">Total:</td>
                                             <td class="text-right total-amount">
                                                 <span class="order-total-label">€264.00</span>
+                                            </td>
+                                        </tr>
+                                        <tr class="loading">
+                                            <td></td>
+                                            <td class="loading">
+                                                <div class="three-dots-spinner small">
+                                                    <div class="bounce1"></div>
+                                                    <div class="bounce2"></div>
+                                                    <div class="bounce3"></div>
+                                                </div>
                                             </td>
                                         </tr>
                                         </tbody>

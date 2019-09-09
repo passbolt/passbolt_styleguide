@@ -24,14 +24,25 @@
 					<a href="#">Username</a>
 				</th>
 
-				<th class="js_grid_column js_grid_column_fingerprint l-cell sortable">
-					<a href="#">Fingerprint</a>
-				</th>
+<!--				<th class="js_grid_column js_grid_column_fingerprint l-cell sortable">-->
+<!--					<a href="#">Fingerprint</a>-->
+<!--				</th>-->
 
-				<th class="js_grid_column js_grid_column_group_role m-cell sortable">
-					<a href="#">Group role</a>
-				</th>
+<!--				<th class="js_grid_column js_grid_column_group_role m-cell sortable">-->
+<!--					<a href="#">Group role</a>-->
+<!--				</th>-->
 
+                <th class="js_grid_column js_grid_column_modified m-cell sortable">
+                    <a href="#">Modified</a>
+                </th>
+
+                <th class="js_grid_column js_grid_column_last_logged_in m-cell sortable">
+                    <a href="#">Last logged in</a>
+                </th>
+
+                <th class="js_grid_column js_grid_column_last_2FA m-cell sortable">
+                    <a href="#">MFA</a>
+                </th>
 			</tr>
 			</thead>
 		</table>
@@ -40,8 +51,8 @@
 		<table>
 			<tbody>
 <?php foreach($users as $user) : ?>
-			<tr id="dada6042-c5cd-11e1-a0c5-080027796c51">
-				<td class="js_grid_column_multipleSelect selections cell_multipleSelect s-cell">
+			<tr id="dada6042-c5cd-11e1-a0c5-080027796c51" class="<?php if ($user['User']['username'] == 'betty@passbolt.com') echo 'selected'; ?>">
+				<td class="js_grid_column_multipleSelect selections cell_multipleSelect s-cell ">
 					<div title="">
 						<div id="multiple_select_checkbox_dada6042-c5cd-11e1-a0c5-080027796c51"
 								 class="mad_form_element_checkbox_controller mad_view_form_element_checkbox_view js_checkbox_multiple_select ready">
@@ -71,17 +82,34 @@
 					</div>
 				</td>
 
-				<td class="js_grid_column_fingerprint l-cell">
-					<div title="<?php echo $user['User']['fingerprint']; ?>">
-						<code><?php echo substr($user['User']['fingerprint'],-25); ?></code>
-					</div>
-				</td>
+                <td class="js_grid_column_last_logged_in m-cell">
+                    <div title="last_logged_in">
+                        <?= rand(2, 11); ?> days ago
+                    </div>
+                </td>
 
-				<td class="js_grid_column_group_role m-cell">
-					<div title="<?php echo $user['User']['group_role']; ?>">
-						<?php echo $user['User']['group_role']; ?>
-					</div>
-				</td>
+                <td class="js_grid_column_modified m-cell">
+                    <div title="<?php echo $user['User']['username']; ?>">
+                        <?= rand(2, 11); ?> months ago
+                    </div>
+                </td>
+
+                <td class="js_grid_column_mfa m-cell">
+                    <div title="<?php echo $user['User']['username']; ?>">
+                        <?php if (rand(0, 1)): ?> Disabled <?php else: ?> Enabled <?php endif; ?>
+                    </div>
+                </td>
+<!--				<td class="js_grid_column_fingerprint l-cell">-->
+<!--					<div title="--><?php //echo $user['User']['fingerprint']; ?><!--">-->
+<!--						<code>--><?php //echo substr($user['User']['fingerprint'],-25); ?><!--</code>-->
+<!--					</div>-->
+<!--				</td>-->
+
+<!--				<td class="js_grid_column_group_role m-cell">-->
+<!--					<div title="--><?php //echo $user['User']['group_role']; ?><!--">-->
+<!--						--><?php //echo $user['User']['group_role']; ?>
+<!--					</div>-->
+<!--				</td>-->
 
 			</tr>
 <?php endforeach; ?>

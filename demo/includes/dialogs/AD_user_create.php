@@ -2,7 +2,7 @@
     <div class="dialog">
         <div class="dialog-header">
             <h2>
-                Create a user
+                Add a user
             </h2>
             <a class="dialog-close" href="demo/AD_users.php">
             <span class="fa icon">

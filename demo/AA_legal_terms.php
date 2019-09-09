@@ -61,22 +61,31 @@
 						<div>
 							<h2>Terms of Service</h2>
 							<p>
-								This website, www.passbolt.com and its subdomains (collectively referred to as the "Site" in these Terms of Service)
-								is owned and operated by Passbolt SARL ("we", "us" or "Passbolt"). By using and accessing our Site,
-								you ("you", "user" or, "end user") agree to these Terms of Service (collectively, the "Terms of Service", “Terms and
-								conditions” or "Agreement").
-							</p><p>
-								IF YOU DO NOT AGREE TO THE TERMS OF THIS AGREEMENT, IMMEDIATELY STOP ACCESSING THIS SITE.
-							</p>
+                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas quis iaculis purus,
+                                sed suscipit sapien. Integer gravida tempus odio, id accumsan erat semper in.
+                                Suspendisse ut congue nisi, a blandit neque. Pellentesque ut posuere nisi. Duis
+                                maximus ligula ut dignissim eleifend. Phasellus sed diam rhoncus, luctus neque ut,
+                                ultricies odio. Vivamus sed auctor velit, et scelerisque dui. Vestibulum pretium
+                                lacus ac blandit fermentum. Donec hendrerit commodo leo, non laoreet turpis porta
+                                d. Sed vel ullamcorper ex.
+                            </p>
 						</div>
 						<div>
 							<h3>Intellectual Property</h3>
 							<p>
-								You acknowledge and agree that all content and information on the Site is protected by proprietary rights and laws.
-							<p></p>
-							Unless otherwise noted, we own the intellectual property rights in the website and material on the website. Subject to
-							the licenses below, all our intellectual property rights are reserved.
-							</p>
+                                Aenean dapibus, ante et ultrices consectetur, massa massa condimentum purus, ut
+                                bibendum felis turpis in purus. Sed eu facilisis ipsum, vel consectetur nisl.
+                                Suspendisse sodales lorem sed libero commodo dapibus. Aliquam erat volutpat.
+                                Aliquam vitae finibus libero, quis fringilla eros. Nam sed velit libero. Aliquam
+                                erat volutpat. Cras maximus, urna in pellentesque dignissim, tellus nibh porttitor
+                                lacus, a consectetur enim nibh at elit. Phasellus dui metus, rhoncus vel suscipit
+                                quis, vestibulum id sapien. Maecenas orci orci, rhoncus at arcu at, finibus
+                                pulvinar mi. Aenean sed purus interdum, euismod nisl id, semper sapien.
+                                Etiam tristique vitae metus sed pretium. Pellentesque ultricies, justo quis
+                                accumsan efficitur, mauris arcu tristique purus, eu maximus tellus justo eu
+                                felis. In eu mollis sem, tempor finibus est. Vivamus posuere malesuada neque,
+                                nec molestie lacus viverra in. Donec facilisis lacinia tellus eu tempus.
+                            </p>
 						</div>
 					</div>
 					<div class="col5 last">
@@ -90,31 +99,28 @@
 					<div class="col7">
 						<div>
 							<h3>Licences</h3>
-							<p>
-								Unless otherwise noted, all Passbolt software presented on the Site (including but not limited to Passbolt application
-								and browser extensions, testing and deployment tools, etc.) is available under Free Software Foundation's
-								<a href="http://www.gnu.org/licenses/agpl-3.0.html" target="_blank">GNU AGPL v3.0</a>.
-							</p>
-							<p>
-								Unless otherwise noted, the Site content (including but not limited to articles, blog entry, technical documentation,
-								diagrams and illustrations, etc.) are licensed under
-								<a href="creativecommons.org/licenses/by-nc-sa/3.0/" target="_blank">Creative Commons BY NC SA 3.0 License</a>.
-								This license lets others remix, tweak, and build upon our work non-commercially, as long as they credit us and license
-								their new creations under identical terms.
-							</p>
-							<p>
-								Commercial licenses are also available from Passbolt SARL on request.
-							</p>
+                            <p>
+                                Sed at facilisis risus. Curabitur nec ante lectus. In finibus mollis arcu ac
+                                malesuada. Nulla velit ligula, efficitur ac ultricies in, accumsan nec leo.
+                                Nullam semper faucibus egestas. Praesent nec eleifend libero, id lacinia sem. V
+                                ivamus quis ullamcorper ipsum. Vestibulum laoreet lectus magna. Vestibulum
+                                ultricies nisi suscipit, viverra turpis vel, iaculis orci. Aenean non maximus
+                                nisl. Vestibulum a bibendum enim. Nam eleifend rutrum finibus. Nulla pulvinar,
+                                ex sed pellentesque scelerisque, dui urna posuere nisl, id accumsan risus felis
+                                et purus. Praesent non diam venenatis, pretium libero fringilla, dapibus nulla.
+                                Duis sed ligula elit. Sed volutpat, mi vel pellentesque dapibus, mauris augue
+                                suscipit mauris, eget vulputate ante nisi id turpis.
+                            </p>
 						</div>
 					</div>
 					<div class="col5 last">
 						<div class="tldr">
 							<h4 class="visuallyhidden">Licence Summary</h4>
 							<p>
-								<i class="fa fa-thumbs-o-up"></i> Free Software license for code
+								<i class="fa fa-thumbs-o-up"></i> Nice stuffs
 							</p>
 							<p>
-								<i class="fa fa-thumbs-o-up"></i> Creative Common licence for content
+								<i class="fa fa-thumbs-o-up"></i> Really gud
 							</p>
 						</div>
 					</div>

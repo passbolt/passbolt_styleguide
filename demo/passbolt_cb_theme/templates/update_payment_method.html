@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+    <head>  
+        <!--Page title-->             
+        <title>{{{card.page_title}}}</title>        
+        <!--Favourite icon-->        
+        <link rel="shortcut icon" href='{{page.favicon}}'>        
+        <meta charset="utf-8">
+        <!--Viewport for Responsive layout-->
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+        <!--Bootstrap & ChargeBee compiled CSS -->
+        <link href="http://themes.chargebee.com/static/app-static-assets/cdn-tpl_theme-1.0.5/stylesheets/core_v2.css" rel="stylesheet" media="screen" type="text/css">
+        <!-- CSS based on the configured preset -->
+        <link href="{{theme_preset_css}}" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <header>
+            <div class="header first ">
+                <nav class="greedy">
+                    <div class="top navigation primary">
+                    </div>
+                </nav>
+            </div>
+        </header>
+        <div class="container">
+            {{#card.use_page_heading}}
+            <div id="cb-wrapper-hp">
+                <div class="h1">
+                    {{{card.page_heading}}}
+                    <hr class='clearfix'>
+                </div>
+            </div>
+            {{/card.use_page_heading}}
+            {{#card.use_aside}}
+            <div class="row">
+                <div class="col-sm-8">
+            {{/card.use_aside}}
+                    <!--chargebee content start-->
+                    <div id="__CHARGEBEE_CONTENT__"></div>
+                    <!--chargebee content end-->
+            {{#card.use_aside}}
+                </div>
+                <div class="col-sm-4 hidden-xs">
+                    <div class="cb-well">
+                        <div>{{{card.aside_content}}}</div>
+                    </div>
+                </div>
+            </div>
+            {{/card.use_aside}}
+        </div>
+        <!--Need sticky footer? Just add the "cb-sticky-footer" id.-->
+        <footer>
+            <div class="footer">
+                <ul class="footer-links">
+                    <li><a href="https://www.passbolt.com/licence">Terms</a></li>
+                    <li><a href="https://www.passbolt.com/privacy">Privacy</a></li>
+                    <li><a href="https://www.passbolt.com/credits">Credits</a></li>
+                </ul>
+            </div>
+        </footer>
+    </body>
+</html>

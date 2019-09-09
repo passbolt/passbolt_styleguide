@@ -54,7 +54,7 @@
                     </div>
                 </div>
                 <div class="submit-wrapper clearfix">
-                    <input class="button primary" value="Save" data-view-id="423" type="submit">
+                    <input class="button primary" value="Create" data-view-id="423" type="submit">
                     <a href="demo/LU_passwords.php" class="js-dialog-cancel cancel">Cancel</a>
                 </div>
             </form>
