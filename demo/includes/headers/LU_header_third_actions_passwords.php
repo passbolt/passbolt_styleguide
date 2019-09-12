@@ -50,7 +50,7 @@
 							<div class="row">
 								<div class="main-cell-wrapper">
 									<div class="main-cell">
-										<a href="#"><span>Copy login</span></a>
+										<a href="#"><span>Copy username</span></a>
 									</div>
 								</div>
 							</div>
