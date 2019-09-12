@@ -833,6 +833,20 @@ textarea {
 .fa.icon svg path {
   fill: #8B8B89;
 }
+.app .fa.icon {
+  font-size: 1.33333333em;
+  vertical-align: -15%;
+}
+.app .dialog-close .fa.icon svg {
+  margin-top: -7px;
+}
+.app .fa.icon svg {
+  width: 1rem;
+  height: 1rem;
+}
+.app .fa.icon svg path {
+  fill: #FFFFFC;
+}
 /* lists */
 ul {
   padding: 0;
