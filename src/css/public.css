@@ -3269,12 +3269,14 @@ a.disabled .svg-icon svg {
   fill: #333;
 }
 .svg-icon.icon-only svg {
-  width: 1.2rem;
-  height: 1.2rem;
+  width: 1.1rem;
+  height: 1.1rem;
   display: block;
   margin: auto;
 }
 .svg-icon.icon-only.search svg {
+  width: 1.25rem;
+  height: 1.25rem;
   margin-top: -2px;
 }
 /*
