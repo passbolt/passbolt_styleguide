@@ -12,7 +12,7 @@
 	<div class="header second">
 		<?php include('includes/AN_logo.php'); ?>
 		<div class="col2_3">
-			<h2>Create a new key or <a href="demo/AN_setup2b0_importkey.php" class="button primary">import</a> an existing one</h2>
+			<h2>Create a new key or <a href="demo/AN_setup2b0_importkey.php" class="button primary">Import</a> an existing one</h2>
 		</div>
 	</div>
 
@@ -105,7 +105,7 @@
 					<div class="row last">
 						<div class="input-wrapper">
 							<a href="demo/AN_setup1a1_plugincheckok.php" class="button cancel big">Cancel</a>
-							<a href="demo/AN_setup3a0_setmasterpassword.php" class="button primary next big">next</a>
+							<a href="demo/AN_setup3a0_setmasterpassword.php" class="button primary next big">Next</a>
 						</div>
 					</div>
 

@@ -29,8 +29,8 @@
 						<div class="panel middle">
 							<?php
 							$_GET['breadcrumbs'] = array(
-								'profile' => 'demo/LU_users_profile.php',
-								'multi-factor authentication' => 'demo/LU_users_profile_mfa01.php'
+								'Profile' => 'demo/LU_users_profile.php',
+								'Multi-factor authentication' => 'demo/LU_users_profile_mfa01.php'
 							);
 							include('includes/LU_breadcrumbs.php'); ?>
                             <div id="js_wk_settings_main" class="mad.component.Tab mad.view.component.Tab js_component ready">

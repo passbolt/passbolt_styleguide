@@ -41,7 +41,7 @@
                         <p>Your login session expired.</p>
                     </div>
                     <div class="actions-wrapper center">
-                        <a class="button primary big" href="demo/AN_login_stage0.php">retry</a>
+                        <a class="button primary big" href="demo/AN_login_stage0.php">Retry</a>
                     </div>
                 </div>
             </div>

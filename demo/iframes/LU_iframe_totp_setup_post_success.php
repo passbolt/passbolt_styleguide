@@ -57,7 +57,7 @@
                         <div class="action">
                             <a href="#delete" class="button cancel" role="button">
                                 <i class="fa fa-trash fa-fw"></i>
-                                delete
+                                Delete
                             </a>
                         </div>
                     </li>
@@ -81,7 +81,7 @@
                         <div class="action">
                             <a href="#delete" class="button cancel" role="button">
                                 <i class="fa fa-trash fa-fw"></i>
-                                delete
+                                Delete
                             </a>
                         </div>
                     </li>
@@ -105,7 +105,7 @@
                         <div class="action">
                             <a href="#delete" class="button cancel" role="button">
                                 <i class="fa fa-trash fa-fw"></i>
-                                delete
+                                Delete
                             </a>
                         </div>
                     </li>

@@ -95,16 +95,16 @@
 													<ul class="actions duo-wrapper">
 														<li>
 															<a href="#" class="button selected toggle duo">
-																<span>public</span>
+																<span>Public</span>
 															</a>
 															<a href="#" class="button toggle duo">
-																<span>both</span>
+																<span>Both</span>
 															</a>
 														</li>
 														<li>
 															<a href="#" class="button">
 																<i class="fa fa-fw fa-download"></i>
-																<span>download</span></a>
+																<span>Download</span></a>
 														</li>
 													</ul>
 													<div class="input textarea gpgkey">

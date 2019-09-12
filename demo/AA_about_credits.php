@@ -22,7 +22,7 @@
 	<div class="panel main ">
 		<!-- wizard steps -->
 		<div class="panel left">
-			<div class="navigation wizard">
+			<div class="navigation-help wizard">
 				<ul>
 					<li class="">
 						<a href="demo/AA_legal_terms.php" >Privacy</a>

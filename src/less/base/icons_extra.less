@@ -17,39 +17,50 @@
     }
 }
 
-.fa.icon svg {
-    width: 1rem;
-    height: 1rem;
-    display: inline-block;
-    vertical-align: middle;
-    margin-top: -2px;
+.svg-icon {
+    font: normal normal normal 14px/1 FontAwesome;
+    font-size: inherit;
+    text-rendering: auto;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
-a .fa.icon svg:hover, h4:hover svg {
+.svg-icon svg {
+    width: 0.88rem;
+    height: 0.88rem;
+    display: inline-block;
+    vertical-align: text-top;
+    margin: auto;
+}
+
+a .svg-icon svg:hover, h4:hover svg {
     fill: @font-focus;
 }
 
-.fa.icon.light svg {
+.svg-icon.light svg {
     fill: @grey-darker;
 }
 
-a.disabled .fa.icon svg {
-    fill: @grey-lighter;
+a.disabled .svg-icon svg {
+    fill: @font-light;
     pointer-events: none;
 }
 
-.disabled .fa.icon svg:hover, .button.disabled .fa.icon svg:hover {
-    fill: @grey-lighter;
+.disabled .svg-icon svg:hover, .button.disabled .svg-icon svg:hover {
+    fill: @font-light;
 }
 
-.button .fa.icon svg:hover {
+.button .svg-icon svg:hover {
     fill: @font-default;
 }
 
-.fa.icon.icon-only svg {
+.svg-icon.icon-only svg {
     width: 1.2rem;
     height: 1.2rem;
-    display: inline-block;
-    vertical-align: middle;
+    display: block;
+    margin: auto;
+}
+
+.svg-icon.icon-only.search svg {
     margin-top: -2px;
 }

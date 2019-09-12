@@ -459,6 +459,7 @@ input[type="submit"] {
 button[disabled],
 html input[disabled] {
   cursor: default;
+  pointer-events: none;
 }
 /**
  * 1. Address box sizing set to content-box in IE 8/9.
@@ -3210,10 +3211,14 @@ textarea {
   height: 3.6em;
   /* 4 char (default input length) x 1em (average char length) + .6em (padding) */
   line-height: 16px;
+  resize: none;
 }
 .textarea.large textarea {
   width: 30em;
   height: 7em;
+}
+textarea.message_notice {
+  margin-bottom: 0;
 }
 /* text and textarea */
 .text.input .input-addon,

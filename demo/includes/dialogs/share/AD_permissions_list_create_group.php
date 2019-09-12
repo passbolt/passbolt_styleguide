@@ -44,7 +44,7 @@ if (isset($groupUsersEmpty)) {
 <div id="js_group_members" class="group_members <?= $groupUsersEmpty ?>">
 	<div class="form-content">
 		<div class="input required">
-			<label for="js_field_group_permission">Group members</label>
+			<label for="js_field_group_permission">Group Members</label>
 		</div>
 	</div>
     <div class="form-content permission-edit">

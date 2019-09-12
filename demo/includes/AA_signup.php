@@ -12,7 +12,7 @@
                         <div class="inline email input">
                             <label for="RegistrationEmail">Signup to the newsletter</label>
                             <input name="data[Registration][email]" class="required fluid" placeholder="Your email" type="email" id="RegistrationEmail" required="required"/></div>
-                        <div class="submit"><input  class="button primary" type="submit" value="subscribe"/></div>
+                        <div class="submit"><input  class="button primary" type="submit" value="Subscribe"/></div>
                         <div class="smallprint"><a href="#">We respect your privacy.</a></div>
                     </form>
                 </div>

@@ -39,7 +39,7 @@
                 </p>
                 <p>
                     <em>Note: Sorry it is not possible to change your key at the moment.
-                        <a href="#">learn more ›</a></em>
+                        <a href="#">Learn more ›</a></em>
                 </p>
             </td>
         </tr>

@@ -24,7 +24,7 @@
 	<div class="panel main">
 		<!-- wizard steps -->
 		<div class="panel left">
-			<div class="navigation wizard scrollspy" role="navigation">
+			<div class="navigation-help wizard scrollspy" role="navigation">
 				<ul class="nav">
 					<li>
 						<h2><a href="#">FAQ sections</a></h2>
@@ -55,9 +55,9 @@
 			<div class="grid grid-responsive-12">
 				<span id="introduction"></span>
 				<?php $_GET['breadcrumbs'] = array(
-						'home' => 'AA_home.php',
-						'help' => 'AA_help.php',
-						'faq' => 'AA_faq.php'
+						'Home' => 'AA_home.php',
+						'Help' => 'AA_help.php',
+						'FAQ' => 'AA_faq.php'
 				);
 				include('includes/LU_breadcrumbs.php'); ?>
 				<article class="faq">
@@ -79,7 +79,7 @@
 						<div class="col5 last">
 							<div class="tldr">
 								<p>Do you have a question that is not in this list? Get in touch!</p>
-								<a href="mailto:contact@passbolt.com" class="button primary">contact us</a>
+								<a href="mailto:contact@passbolt.com" class="button primary">Contact us</a>
 							</div>
 						</div>
 					</div>

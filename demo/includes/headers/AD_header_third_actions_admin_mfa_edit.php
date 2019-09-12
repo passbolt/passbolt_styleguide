@@ -3,7 +3,7 @@
 		<li>
 			<a class="button" href="demo/AD_admin_mfa_configuration.php">
 				<i class="fa fa-fw fa-save"></i>
-				<span>save settings</span>
+				<span>Save settings</span>
 			</a>
 		</li>
 		<li>

@@ -3194,36 +3194,45 @@ p {
   content: "\f005";
   color: #D40101;
 }
-.fa.icon svg {
-  width: 1rem;
-  height: 1rem;
-  display: inline-block;
-  vertical-align: middle;
-  margin-top: -2px;
+.svg-icon {
+  font: normal normal normal 14px/1 FontAwesome;
+  font-size: inherit;
+  text-rendering: auto;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
-a .fa.icon svg:hover,
+.svg-icon svg {
+  width: 0.88rem;
+  height: 0.88rem;
+  display: inline-block;
+  vertical-align: text-top;
+  margin: auto;
+}
+a .svg-icon svg:hover,
 h4:hover svg {
   fill: #2894DF;
 }
-.fa.icon.light svg {
+.svg-icon.light svg {
   fill: #888;
 }
-a.disabled .fa.icon svg {
-  fill: #EEE;
+a.disabled .svg-icon svg {
+  fill: #888;
   pointer-events: none;
 }
-.disabled .fa.icon svg:hover,
-.button.disabled .fa.icon svg:hover {
-  fill: #EEE;
+.disabled .svg-icon svg:hover,
+.button.disabled .svg-icon svg:hover {
+  fill: #888;
 }
-.button .fa.icon svg:hover {
+.button .svg-icon svg:hover {
   fill: #333;
 }
-.fa.icon.icon-only svg {
+.svg-icon.icon-only svg {
   width: 1.2rem;
   height: 1.2rem;
-  display: inline-block;
-  vertical-align: middle;
+  display: block;
+  margin: auto;
+}
+.svg-icon.icon-only.search svg {
   margin-top: -2px;
 }
 /*
@@ -3522,6 +3531,7 @@ textarea {
   /* 20 char (default input length) x .7em (average char length) */
   padding: 0.375em 0.625em 0.375em 0.625em;
   display: inline-block;
+  margin-bottom: 0.5em;
   -webkit-appearance: none;
   border: 1px solid #CCC;
   border-top: 1px solid #BBB;
@@ -3576,6 +3586,9 @@ textarea {
 .textarea.large textarea {
   width: 30em;
   height: 7em;
+}
+textarea.message_notice {
+  margin-bottom: 0;
 }
 /* text and textarea */
 .text.input .input-addon,
@@ -3711,6 +3724,9 @@ input[type=checkbox] + label {
 .input .message.helptext {
   color: #888;
   font-weight: normal;
+}
+.input .message:empty {
+  display: none;
 }
 .form-content .input .message,
 form .input .message {
@@ -4182,7 +4198,7 @@ input[type=email].fluid {
   -moz-border-radius: 0.214em;
   border-radius: 0.214em;
 }
-.dialog-close .fa.icon {
+.dialog-close .svg-icon {
   padding: 7px 0 7px 0;
   width: 30px;
   height: 15px;
@@ -4196,7 +4212,7 @@ input[type=email].fluid {
   border-radius: 0.214em;
 }
 .dialog-close:hover .fa-close,
-.dialog-close:hover .fa.icon {
+.dialog-close:hover .svg-icon {
   border: 1px solid #DDD;
   -webkit-border-radius: 0.214em;
   -moz-border-radius: 0.214em;

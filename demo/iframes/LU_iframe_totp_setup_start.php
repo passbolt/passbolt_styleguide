@@ -31,7 +31,7 @@
                         <a href="#" target="_blank" rel="noopener">Google Authenticator</a> or
                         <a href="#" target="_blank" rel="noopener">FreeOTP</a>.
                     </p>
-                    <a class="button">learn more</a>
+                    <a class="button">Learn more</a>
                 </div>
             </div>
         </div>

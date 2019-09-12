@@ -12,13 +12,13 @@
 			   value="test@passbolt.com" disabled="disabled"/>
 	</div>
 	<div class="input text required error">
-		<label for="js_master_password">Master password</label>
-		<input type="password" placeholder="password" id="js_master_password" maxlength="50">
+		<label for="js_master_password">Passphrase</label>
+		<input type="password" placeholder="passphrase" id="js_master_password" maxlength="50">
 		<div class="security-token">CKR</div>
-		<div class="message error">The password you entered is not valid.</div>
+		<div class="message error">This is not a valid passphrase</div>
 	</div>
 	<div class="submit-wrapper clearfix">
-		<a id="loginSubmit" href="#" class="button primary big">login</a>
+		<a id="loginSubmit" href="#" class="button primary big">Login</a>
 	</div>
 </div>
 </body>

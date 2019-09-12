@@ -3445,6 +3445,7 @@ textarea {
   /* 20 char (default input length) x .7em (average char length) */
   padding: 0.375em 0.625em 0.375em 0.625em;
   display: inline-block;
+  margin-bottom: 0.5em;
   -webkit-appearance: none;
   border: 1px solid #CCC;
   border-top: 1px solid #BBB;
@@ -3499,6 +3500,9 @@ textarea {
 .textarea.large textarea {
   width: 30em;
   height: 7em;
+}
+textarea.message_notice {
+  margin-bottom: 0;
 }
 /* text and textarea */
 .text.input .input-addon,
@@ -3634,6 +3638,9 @@ input[type=checkbox] + label {
 .input .message.helptext {
   color: #888;
   font-weight: normal;
+}
+.input .message:empty {
+  display: none;
 }
 .form-content .input .message,
 form .input .message {

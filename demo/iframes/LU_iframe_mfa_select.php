@@ -10,7 +10,7 @@
     <div class="grid grid-responsive-12">
         <div class="row">
             <div class="col12">
-                <h3>Multi factor authentication</h3>
+                <h3>Multi-factor authentication</h3>
             </div>
         </div>
         <div class="row">
@@ -53,13 +53,13 @@
                 </ul>
             </div>
             <div class="col4 last">
-                <h4>What is multi-factor authentication?</h4>
+                <h4>What is Multi-factor authentication?</h4>
                 <div class="message notice">
                     <p>
                         Multi-factor authentication (MFA) is a method of confirming a user's
                         identity that requires presenting two or more pieces of evidence (or factor).
                     </p>
-                    <a class="button">learn more</a>
+                    <a class="button">Learn more</a>
                 </div>
             </div>
         </div>

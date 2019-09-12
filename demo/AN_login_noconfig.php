@@ -26,7 +26,7 @@
 				</div>
 				<p>
 					Passbolt is a simple password manager that allows you to easily share secrets with your team without making compromises on security!
-					<a href="#">learn more</a>.
+					<a href="#">Learn more</a>.
 				</p>
 			</div>
 			<div class="col4 push1 last">

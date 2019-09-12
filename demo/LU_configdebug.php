@@ -160,7 +160,7 @@
 							<textarea id="keyAscii" class="code fluid"></textarea>
 						</div>
 						<div class="submit">
-							<input type="button" value="browse" id="keyFilepicker" class="button">
+							<input type="button" value="Browse" id="keyFilepicker" class="button">
 							<input value="Save" id="saveKey" type="submit"/>
 						</div>
 						<div class="key-import feedback"></div>
@@ -265,7 +265,7 @@
 				</div>
 				<div class="row">
 					<div class="submit-input-wrapper">
-						<input value="flush local storage" id="js_flush_conf" type="submit" class="button primary big"/>
+						<input value="Flush local storage" id="js_flush_conf" type="submit" class="button primary big"/>
 					</div>
 				</div>
 

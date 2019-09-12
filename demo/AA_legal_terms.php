@@ -49,9 +49,9 @@
 				<div class="row">
 					<div class="col12">
 						<?php $_GET['breadcrumbs'] = array(
-								'home' => '/',
-								'legal' => '/legal',
-								'terms of service' => '/terms'
+								'Home' => '/',
+								'Legal' => '/legal',
+								'Terms of service' => '/terms'
 						);
 						include('includes/LU_breadcrumbs.php'); ?>
 					</div>
@@ -91,7 +91,7 @@
 					<div class="col5 last">
 						<div class="tldr">
 							<p>Do you have a question about our terms of service? Get in touch!</p>
-							<a href="mailto:contact@passbolt.com" class="button primary">contact us</a>
+							<a href="mailto:contact@passbolt.com" class="button primary">Contact us</a>
 						</div>
 					</div>
 				</div>

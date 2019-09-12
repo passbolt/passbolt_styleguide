@@ -29,8 +29,8 @@
 						<div class="panel middle">
 							<?php
 							$_GET['breadcrumbs'] = array(
-								'profile' => 'demo/LU_users_profile.php',
-								'themes' => 'demo/LU_users_profile_themes.php'
+								'Profile' => 'demo/LU_users_profile.php',
+								'Themes' => 'demo/LU_users_profile_themes.php'
 							);
 							include('includes/LU_breadcrumbs.php'); ?>
 							<div class="grid grid-responsive-12">

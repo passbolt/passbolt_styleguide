@@ -78,7 +78,7 @@
 					<div class="row last">
 						<div class="input-wrapper">
 							<a href="demo/AN_recover2b0_importkey.php" class="button cancel big">Cancel</a>
-							<a href="demo/AN_recover5a0_login.php" class="button primary next big">next</a>
+							<a href="demo/AN_recover5a0_login.php" class="button primary next big">Next</a>
 						</div>
 					</div>
 
