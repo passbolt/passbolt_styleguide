@@ -3216,6 +3216,10 @@ button,
   border: 1px solid #4271b7;
   background: #2A9CEB;
 }
+.button.primary:active .svg-icon svg,
+.button.primary:focus .svg-icon svg {
+  fill: #FFF;
+}
 /* warning */
 .button.warning,
 .button.warning:hover,
@@ -3225,6 +3229,12 @@ button,
   background: #D40101;
   border: 1px solid #D40101;
   text-shadow: none;
+}
+.button.warning .svg-icon svg,
+.button.warning:hover .svg-icon svg,
+.button.warning:focus .svg-icon svg,
+.button.warning:active .svg-icon svg {
+  fill: #FFF;
 }
 .button.warning:focus,
 .button.warning:active {
@@ -3260,6 +3270,9 @@ button,
   color: #2894DF;
   border: 1px solid #2894DF;
 }
+.button:focus .svg-icon svg {
+  fill: #2894DF;
+}
 /* active */
 .button:active {
   color: #2894DF;
@@ -3268,6 +3281,9 @@ button,
   position: relative;
   box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.2);
 }
+.button:active .svg-icon svg {
+  fill: #2894DF;
+}
 .button.disabled {
   cursor: default;
   color: #888;
@@ -3275,6 +3291,9 @@ button,
   border: 1px solid #DDD;
   text-shadow: none;
   font-weight: normal;
+}
+.button.disabled .svg-icon svg {
+  fill: #888;
 }
 /* inactive */
 .button.disabled:hover,
@@ -3285,6 +3304,11 @@ button,
   color: #888;
   background: #FFF;
   border: 1px solid #DDD;
+}
+.button.disabled:hover .svg-icon svg,
+.button.disabled:active .svg-icon svg,
+.button.disabled:focus .svg-icon svg {
+  fill: #888;
 }
 /* toggle selected */
 .toggle.button.selected {
@@ -3383,6 +3407,12 @@ input[type=submit].button.processing {
 }
 .button-spacer {
   margin-right: 0.5em;
+}
+.button.disabled .svg-icon svg:hover {
+  fill: #888;
+}
+.button .svg-icon svg:hover {
+  fill: #333;
 }
 /*
 	Base form components styling
@@ -4700,6 +4730,9 @@ input[type=email].fluid {
 }
 .message.success.success-large.animated #successAnimation.animated #successAnimationCheck {
   animation: 0.75s cubic-bezier(0.77, 0, 0.175, 1) 0s 1 both drawCheck;
+}
+.message.notice .svg-icon svg {
+  margin-top: -5px;
 }
 @media only screen and (max-width: 767px) {
   .message.success.success-large.animated {

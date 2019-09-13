@@ -25,6 +25,11 @@
     -moz-osx-font-smoothing: grayscale;
 }
 
+.svg-icon + span:not(.visuallyhidden) {
+    margin-left: 3px;
+    display: inline-block;
+}
+
 .svg-icon svg {
     width: 0.88rem;
     height: 0.88rem;
@@ -33,7 +38,7 @@
     margin: auto;
 }
 
-a .svg-icon svg:hover, h4:hover svg {
+a .svg-icon svg:hover {
     fill: @font-focus;
 }
 
@@ -46,12 +51,8 @@ a.disabled .svg-icon svg {
     pointer-events: none;
 }
 
-.disabled .svg-icon svg:hover, .button.disabled .svg-icon svg:hover {
+.disabled .svg-icon svg:hover {
     fill: @font-light;
-}
-
-.button .svg-icon svg:hover {
-    fill: @font-default;
 }
 
 .svg-icon.icon-only svg {
@@ -61,8 +62,3 @@ a.disabled .svg-icon svg {
     margin: auto;
 }
 
-.svg-icon.icon-only.search svg {
-    width: 1.25rem;
-    height: 1.25rem;
-    margin-top: -2px;
-}

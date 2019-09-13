@@ -54,22 +54,15 @@
                                         <span class="modified">right now</span>
                                     </div>
                                     <div class="actions">
-<<<<<<< HEAD
                                     <input type="submit" value="Save" class="button comment-submit">
                                     <a class="button cancel comment-editor-cancel" role="button"><span>Cancel</span></a>
-=======
-                                        <a class="button comment-submit" href="#"><span>Add</span></a>
-                                        <a class="button cancel tag-editor-cancel" role="button"><span>Cancel</span></a>
->>>>>>> 9c4e21ffa6384ea60728462ede5d07f50409f365
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <div class="left-column">
                             <div class="author profile picture"><a href="#">
-                                    <img data-view-id="367"
-                                                                                 alt="Ada Lovelace avatar"
-                                                                                 src="src/img/avatar/user.png"></a>
+                                    <img data-view-id="367" alt="Ada Lovelace avatar" src="src/img/avatar/user.png" /></a>
                             </div>
                         </div>
                     </form>

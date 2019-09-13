@@ -3243,6 +3243,10 @@ ul.checklist li:before {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+.svg-icon + span:not(.visuallyhidden) {
+  margin-left: 3px;
+  display: inline-block;
+}
 .svg-icon svg {
   width: 0.88rem;
   height: 0.88rem;
@@ -3250,8 +3254,7 @@ ul.checklist li:before {
   vertical-align: text-top;
   margin: auto;
 }
-a .svg-icon svg:hover,
-h4:hover svg {
+a .svg-icon svg:hover {
   fill: #2894DF;
 }
 .svg-icon.light svg {
@@ -3261,23 +3264,14 @@ a.disabled .svg-icon svg {
   fill: #888;
   pointer-events: none;
 }
-.disabled .svg-icon svg:hover,
-.button.disabled .svg-icon svg:hover {
+.disabled .svg-icon svg:hover {
   fill: #888;
-}
-.button .svg-icon svg:hover {
-  fill: #333;
 }
 .svg-icon.icon-only svg {
   width: 1.1rem;
   height: 1.1rem;
   display: block;
   margin: auto;
-}
-.svg-icon.icon-only.search svg {
-  width: 1.25rem;
-  height: 1.25rem;
-  margin-top: -2px;
 }
 /*
 	Generic buttons
@@ -3346,6 +3340,10 @@ button,
   border: 1px solid #4271b7;
   background: #2A9CEB;
 }
+.button.primary:active .svg-icon svg,
+.button.primary:focus .svg-icon svg {
+  fill: #FFF;
+}
 /* warning */
 .button.warning,
 .button.warning:hover,
@@ -3355,6 +3353,12 @@ button,
   background: #D40101;
   border: 1px solid #D40101;
   text-shadow: none;
+}
+.button.warning .svg-icon svg,
+.button.warning:hover .svg-icon svg,
+.button.warning:focus .svg-icon svg,
+.button.warning:active .svg-icon svg {
+  fill: #FFF;
 }
 .button.warning:focus,
 .button.warning:active {
@@ -3390,6 +3394,9 @@ button,
   color: #2894DF;
   border: 1px solid #2894DF;
 }
+.button:focus .svg-icon svg {
+  fill: #2894DF;
+}
 /* active */
 .button:active {
   color: #2894DF;
@@ -3398,6 +3405,9 @@ button,
   position: relative;
   box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.2);
 }
+.button:active .svg-icon svg {
+  fill: #2894DF;
+}
 .button.disabled {
   cursor: default;
   color: #888;
@@ -3405,6 +3415,9 @@ button,
   border: 1px solid #DDD;
   text-shadow: none;
   font-weight: normal;
+}
+.button.disabled .svg-icon svg {
+  fill: #888;
 }
 /* inactive */
 .button.disabled:hover,
@@ -3415,6 +3428,11 @@ button,
   color: #888;
   background: #FFF;
   border: 1px solid #DDD;
+}
+.button.disabled:hover .svg-icon svg,
+.button.disabled:active .svg-icon svg,
+.button.disabled:focus .svg-icon svg {
+  fill: #888;
 }
 /* toggle selected */
 .toggle.button.selected {
@@ -3513,6 +3531,12 @@ input[type=submit].button.processing {
 }
 .button-spacer {
   margin-right: 0.5em;
+}
+.button.disabled .svg-icon svg:hover {
+  fill: #888;
+}
+.button .svg-icon svg:hover {
+  fill: #333;
 }
 /*
 	Base form components styling
@@ -5394,6 +5418,9 @@ article table.table-parameters tbody tr td em {
 .message.success.success-large.animated #successAnimation.animated #successAnimationCheck {
   animation: 0.75s cubic-bezier(0.77, 0, 0.175, 1) 0s 1 both drawCheck;
 }
+.message.notice .svg-icon svg {
+  margin-top: -5px;
+}
 @media only screen and (max-width: 767px) {
   .message.success.success-large.animated {
     flex-direction: column;
@@ -5845,6 +5872,11 @@ input[type="search"]::-webkit-search-decoration,
 input[type="search"]::-webkit-search-cancel-button {
   display: none;
 }
+.svg-icon.icon-only.search svg {
+  width: 1.25rem;
+  height: 1.25rem;
+  margin-top: -2px;
+}
 /* rescale on small screen */
 @media all and (max-width: 480px) {
   form.search {
@@ -6265,6 +6297,11 @@ input[type="search"]::-webkit-search-cancel-button {
   padding-left: 0.5em;
   margin-bottom: 0.5em;
   list-style-type: circle;
+}
+.page.search .svg-icon.icon-only.search svg {
+  width: 1.25rem;
+  height: 1.25rem;
+  margin-top: -2px;
 }
 .help.page .edit-on-github {
   margin-top: 1em;
