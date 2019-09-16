@@ -3244,7 +3244,7 @@ ul.checklist li:before {
   -moz-osx-font-smoothing: grayscale;
 }
 .svg-icon + span:not(.visuallyhidden) {
-  margin-left: 3px;
+  margin-left: 2px;
   display: inline-block;
 }
 .svg-icon svg {
