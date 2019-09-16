@@ -5575,6 +5575,7 @@ input[type=email].fluid {
 html body a.button {
   height: 1.5em;
 }
+html body a.button .svg-icon svg,
 html body a.button i.fa {
   margin-top: 0.125em;
 }

@@ -6139,6 +6139,7 @@ table.table-info.horizontal tbody tr:nth-child(odd) {
 html body a.button {
   height: 1.5em;
 }
+html body a.button .svg-icon svg,
 html body a.button i.fa {
   margin-top: 0.125em;
 }
