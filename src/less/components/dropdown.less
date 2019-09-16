@@ -3,7 +3,7 @@
     float: left;
 }
 
-.dropdown .button:focus {
+.dropdown .button:focus, .dropdown .button.create:focus {
     border: 1px solid @border-default;
     color: @font-default;
     background: @background-default;
@@ -15,6 +15,14 @@
     -moz-border-radius-bottomleft: 0;
     border-bottom-right-radius: 0;
     border-bottom-left-radius: 0;
+
+    .svg-icon svg {
+        fill: @font-default;
+    }
+}
+
+.dropdown .button.create .svg-icon svg {
+    fill: @white;
 }
 
 .dropdown-content {

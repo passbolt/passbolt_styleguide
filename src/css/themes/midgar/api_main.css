@@ -5821,7 +5821,8 @@ input[type="search"]::-webkit-search-cancel-button {
 .dropdown {
   float: left;
 }
-.dropdown .button:focus {
+.dropdown .button:focus,
+.dropdown .button.create:focus {
   border: 1px solid #0C0C0A;
   color: #FFFFFC;
   background: #30302D;
@@ -5833,6 +5834,13 @@ input[type="search"]::-webkit-search-cancel-button {
   -moz-border-radius-bottomleft: 0;
   border-bottom-right-radius: 0;
   border-bottom-left-radius: 0;
+}
+.dropdown .button:focus .svg-icon svg,
+.dropdown .button.create:focus .svg-icon svg {
+  fill: #FFFFFC;
+}
+.dropdown .button.create .svg-icon svg {
+  fill: #FFF;
 }
 .dropdown-content {
   border: 1px solid #0C0C0A;

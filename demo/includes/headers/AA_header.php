@@ -9,7 +9,7 @@
                     <li><a href="demo/AA_services_pricing.php"><span>Pricing</span></a></li>
 					<li><a href="demo/AA_roadmap.php"><span>Roadmap</span></a></li>
                     <li><a href="http://community.passbolt.com/"><span>Forum</span></a></li>
-					<li><a href="demo/AA_help.php"><span>Help</span></a></li>                   <li><a href="demo/AA_cloud_free_trial.php" class="highlighted"><span>try it!</span></a></li>
+					<li><a href="demo/AA_help.php"><span>Help</span></a></li>
                     <li><a href="demo/AA_cloud_free_trial.php" class="highlighted"><span>try it!</span></a></li>
                 </ul>
 				<button class="hidden">More</button>
