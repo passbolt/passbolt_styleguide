@@ -1,4 +1,4 @@
-﻿﻿<ul id="js_contextual_menu" class="mad_component_contextual_menu contextual-menu mad_view_component_contextual_menu ready" >
+﻿<ul id="js_contextual_menu" class="mad_component_contextual_menu contextual-menu mad_view_component_contextual_menu ready" >
     <li id="js_password_browser_menu_share" data-view-id="374">
         <div class="row">
             <div class="main-cell-wrapper">
