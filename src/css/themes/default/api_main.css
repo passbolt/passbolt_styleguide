@@ -16,6 +16,7 @@
 /* tags */
 /* tooltip */
 /* loading animation */
+/* svg fill */
 /* ==========================================================================
  * Reset is a mix of :
  *
@@ -3211,9 +3212,13 @@ p {
   display: inline-block;
   vertical-align: text-top;
   margin: auto;
+  fill: #333;
 }
 a .svg-icon svg:hover {
   fill: #2894DF;
+}
+a.button .svg-icon svg:hover {
+  fill: #333;
 }
 .svg-icon.light svg {
   fill: #888;
@@ -3221,6 +3226,7 @@ a .svg-icon svg:hover {
 a.disabled .svg-icon svg {
   fill: #888;
   pointer-events: none;
+  cursor: default;
 }
 .disabled .svg-icon svg:hover {
   fill: #888;
@@ -3657,6 +3663,7 @@ input[type=checkbox] + label {
   display: inline;
   margin-left: 0.25em;
   margin-bottom: 0.25em;
+  cursor: pointer;
 }
 /* radio and checkboxes */
 .radiolist {
@@ -4829,6 +4836,8 @@ input[type="search"]::-webkit-search-cancel-button {
   border: 1px solid #DDD;
   margin-top: 0.5em;
   overflow: hidden;
+  cursor: pointer;
+  border-radius: 3px;
   background: #EEE;
   background-image: -moz-linear-gradient(top, #F3F3F3, #EEE);
   background-image: -ms-linear-gradient(top, #F3F3F3, #EEE);
@@ -4872,10 +4881,9 @@ input[type="search"]::-webkit-search-cancel-button {
   margin-left: -1.75em;
 }
 .user.profile .picture img {
-  width: 2.875em;
-  /* 46px */
-  padding: 0.125em;
-  /* 2px */
+  width: 2.6em;
+  padding: 0.28em 0.35em 0.35em 0.35em;
+  border-radius: 50%;
 }
 .user.profile .details {
   float: left;
@@ -4913,10 +4921,13 @@ input[type="search"]::-webkit-search-cancel-button {
   display: inline-block;
 }
 .user.profile .more a .svg-icon svg {
-  fill: #666;
+  fill: #333;
 }
 .user.profile .more a:hover {
   color: #000;
+}
+.user.profile .more a:hover svg {
+  fill: #333;
 }
 .user.profile .more a span:last-child {
   visibility: hidden;
@@ -5024,6 +5035,7 @@ input[type="search"]::-webkit-search-cancel-button {
 .usercard-col-2 .avatar img {
   width: 36px;
   height: 36px;
+  border-radius: 50%;
 }
 .usercard-col-2 ul.permissions-list {
   margin-top: 1em;
@@ -5037,6 +5049,7 @@ input[type="search"]::-webkit-search-cancel-button {
 .usercard-col-2 ul.permissions-list li .avatar img {
   width: 18px;
   height: 18px;
+  border-radius: 50%;
 }
 .usercard-col-2 ul.permissions-list li .name {
   display: inline-block;
@@ -5151,6 +5164,7 @@ input[type="search"]::-webkit-search-cancel-button {
 .usercard-detailed-col-2 .avatar img {
   width: 36px;
   height: 36px;
+  border-radius: 50%;
 }
 .usercard-detailed-col-2 ul.permissions-list {
   margin-top: 1em;
@@ -5164,6 +5178,7 @@ input[type="search"]::-webkit-search-cancel-button {
 .usercard-detailed-col-2 ul.permissions-list li .avatar img {
   width: 18px;
   height: 18px;
+  border-radius: 50%;
 }
 .usercard-detailed-col-2 ul.permissions-list li .name {
   display: inline-block;
@@ -5256,6 +5271,26 @@ input[type="search"]::-webkit-search-cancel-button {
 }
 .breadcrumbs div.main-cell {
   display: inline;
+}
+.breadcrumbs.folders {
+  background: #EEE;
+  padding: 0.2em;
+  border-bottom: 0;
+  width: 82%;
+  display: inline-block;
+}
+.breadcrumbs.folders ul {
+  display: inline-block;
+  margin-top: -2px;
+  font-size: 1.1em;
+}
+.breadcrumbs.folders ul .svg-icon.folder svg {
+  width: 1rem;
+  height: 1rem;
+  margin-top: -1px;
+}
+.breadcrumbs.folders ul li a:hover .svg-icon.folder svg {
+  fill: #2894DF;
 }
 /* actions */
 .header.third .main-action-wrapper {
@@ -5776,6 +5811,11 @@ input[type="search"]::-webkit-search-cancel-button {
 }
 .dialog .submit-wrapper .cancel,
 .dialog .submit-wrapper .button {
+  float: right;
+  margin-right: 1.125em;
+  font-size: 1.125em;
+}
+.dialog .submit-wrapper .button.secondary {
   float: left;
   margin-left: 1.125em;
   font-size: 1.125em;
@@ -5945,6 +5985,7 @@ input[type="search"]::-webkit-search-cancel-button {
 .profile .section.detailed-information .avatar img {
   width: 2.875em;
   padding: 0.125em;
+  border-radius: 50%;
 }
 .profile .section .section-action {
   padding-left: 1em;
@@ -6114,6 +6155,48 @@ input[type="search"]::-webkit-search-cancel-button {
   max-width: 24em;
   float: left;
   overflow: hidden;
+}
+.tag-dnd-helper,
+.tag-dnd-helper-with-shadow {
+  position: relative;
+  width: 100px;
+  height: 0.6em;
+  background: #2894DF;
+  text-align: center;
+  z-index: 9999999;
+  padding: 0.65em;
+  line-height: 0.75em;
+  color: #FFF;
+  border-radius: 5px;
+}
+.tag-dnd-helper-with-shadow {
+  box-shadow: 6px 6px 0 -1px #2894DF;
+}
+.tag-dnd-helper-with-shadow:after {
+  content: "2";
+  position: absolute;
+  top: -9px;
+  right: -3px;
+  font-size: 0.7em;
+  background: #D40101;
+  color: #FFF;
+  width: 20px;
+  height: 20px;
+  text-align: center;
+  line-height: 20px;
+  border-radius: 50%;
+  box-shadow: 0 0 1px #333;
+}
+.tag-dnd-helper-with-shadow span,
+.tag-dnd-helper span {
+  display: inline-block;
+  width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.tag-drop-focus-in {
+  background-color: #DDD;
 }
 .announcement {
   margin: 0;
@@ -6611,6 +6694,101 @@ input[type="search"]::-webkit-search-cancel-button {
 .panel .navigation .empty-content {
   padding-left: 1em;
 }
+.panel .folders.navigation.first {
+  padding-top: 0;
+}
+.panel .folders.navigation .row .right-cell {
+  margin-top: -1.65em;
+}
+.panel .folders.navigation .row.disabled {
+  cursor: default;
+  pointer-events: none;
+}
+.panel .folders.navigation .row.disabled .main-cell a span.svg-icon.caret-down svg {
+  margin-left: -0.9em;
+  margin-top: 0.4em;
+  width: 1em;
+  height: 1em;
+  position: absolute;
+}
+.panel .folders.navigation .row.disabled .main-cell span.folder-name {
+  color: #888;
+  text-shadow: none;
+  font-weight: normal;
+}
+.panel .folders.navigation .row.disabled .main-cell span.svg-icon svg {
+  fill: #888;
+}
+.panel .folders.navigation .row.disabled .main-cell a:before {
+  color: #888;
+}
+.panel .folders.navigation .row.title .main-cell h3 a {
+  padding-left: 0;
+}
+.panel .folders.navigation .row.title .main-cell h3 a::before,
+.panel .folders.navigation .row.title .main-cell h3 a::after {
+  display: none;
+}
+.panel .folders.navigation .row.title .main-cell h3 .folders-label {
+  margin-left: 1em;
+  cursor: pointer;
+}
+.panel .folders.navigation .row.title .main-cell h3 .folders-label .svg-icon.caret-down svg {
+  margin-left: -1.3em;
+  margin-top: 0.2em;
+  width: 1em;
+  height: 1em;
+  position: absolute;
+}
+.panel .folders.navigation li .row .main-cell span {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -o-text-overflow: ellipsis;
+  -ms-text-overflow: ellipsis;
+  display: inline-block;
+  margin-top: 0.2em;
+  width: calc(100% - 2.5em);
+}
+.panel .folders.navigation li .row .main-cell span.svg-icon {
+  display: inline;
+}
+.panel .folders.navigation li .row .main-cell span.svg-icon.hidden {
+  display: none;
+}
+.panel .folders.navigation li .row .main-cell .svg-icon svg {
+  margin: -0.28em 0.2em 0 0.5em;
+  fill: #333;
+}
+.panel .folders.navigation li .row .main-cell a {
+  padding: 0 0 0 2.5em;
+}
+.panel .folders.navigation li .row .main-cell a span.svg-icon.caret-down svg {
+  margin-left: -0.75em;
+  margin-top: 0.4em;
+  width: 1em;
+  height: 1em;
+  position: absolute;
+}
+.panel .folders.navigation ul {
+  list-style: none;
+  padding: 0;
+}
+.panel .folders.navigation .child .row {
+  padding-left: 0.8em;
+}
+.panel .folders.navigation .child .nested .row {
+  padding-left: 1.8em;
+}
+.rotate-right {
+  transform: rotate(-90deg);
+}
+.folders-label-selected {
+  background: #F3F3F3;
+}
+.folders-label-height {
+  height: 1.8em;
+}
 .contextual-menu {
   position: absolute;
   background: #FFF;
@@ -6673,6 +6851,7 @@ input[type="search"]::-webkit-search-cancel-button {
   color: #666;
   font-size: 0.875em;
   margin-left: 0.429em;
+  vertical-align: bottom;
 }
 .panel.aside .sidebar-header .title-link:hover {
   color: #2894DF;
@@ -7444,6 +7623,9 @@ table.table-info.horizontal tbody tr:nth-child(odd) {
 .input-password-wrapper:after {
   clear: both;
 }
+.input-password-wrapper a.button .svg-icon svg {
+  margin-top: 0.125em;
+}
 .input-password-wrapper .input.password {
   float: left;
   width: 65.5%;
@@ -7698,6 +7880,7 @@ table.table-info.horizontal tbody tr:nth-child(odd) {
   width: 36px;
   height: 36px;
   float: left;
+  border-radius: 50%;
 }
 .permissions .row .user,
 .permissions .row .group {
@@ -8688,6 +8871,221 @@ This file is generated by `grunt build`, do not edit it by hand.
 .dialog-wrapper.session-expired-dialog .dialog-close {
   display: none;
 }
+.edit-folder-dialog .form-content.parent-folder {
+  padding-top: 0;
+  padding-bottom: 1.5em;
+  overflow: hidden;
+}
+.edit-folder-dialog .form-content.parent-folder .folder-change {
+  width: 12%;
+  float: right;
+  border: 1px solid #DDD;
+  height: 2.25em;
+  border-radius: 3px;
+  background: #EEE;
+}
+.edit-folder-dialog .form-content.parent-folder .folder-change .svg-icon.icon-only svg {
+  width: 1.6em;
+  height: 1.6em;
+  vertical-align: middle;
+  margin: 0.3em auto;
+}
+.create-folder-dialog .form-content.parent-folder {
+  padding-top: 0;
+  padding-bottom: 1.5em;
+  overflow: hidden;
+}
+.create-folder-dialog .form-content.parent-folder .folder-change {
+  width: 12%;
+  float: right;
+  border: 1px solid #DDD;
+  height: 2.25em;
+  border-radius: 3px;
+  background: #F3F3F3;
+}
+.create-folder-dialog .form-content.parent-folder .folder-change .svg-icon.icon-only svg {
+  width: 1.6em;
+  height: 1.6em;
+  vertical-align: middle;
+  margin: 0.3em auto;
+}
+.move-folder-dialog .form-content label {
+  clear: both;
+  font-size: 0.938em;
+  line-height: 1.45em;
+  padding: 0;
+  display: block;
+  font-weight: normal;
+  cursor: pointer;
+  margin-top: -2.88em;
+  margin-left: 1.25em;
+}
+.move-folder-dialog .form-content.search-input {
+  padding-bottom: 0;
+}
+.move-folder-dialog .form-content.breadcrumbs {
+  display: flex;
+}
+.move-folder-dialog .form-content.breadcrumbs .breadcrumbs-up {
+  padding: 0 0.7em;
+  border: 1px solid #DDD;
+  border-radius: 3px;
+}
+.move-folder-dialog .form-content.breadcrumbs .breadcrumbs-up .svg-icon svg {
+  width: 1rem;
+  height: 1rem;
+  margin: 3px auto;
+}
+.move-folder-dialog .form-content.breadcrumbs .parent-folders {
+  padding: 0.4em 0.4em 0.4em 0.7em;
+  font-size: 0.9em;
+}
+.move-folder-dialog .form-content.breadcrumbs .parent-folders .svg-icon.folder svg {
+  width: 1.3rem;
+  height: 1.3rem;
+  margin-top: -4px;
+  fill: #666;
+}
+.move-folder-dialog .form-content.breadcrumbs .parent-folders .svg-icon.angle-right svg {
+  width: 0.88rem;
+  height: 0.88rem;
+}
+.move-folder-dialog .form-content.breadcrumbs a {
+  border: none;
+}
+.move-folder-dialog .form-content.breadcrumbs a:hover {
+  color: #333;
+}
+.move-folder-dialog .form-content.breadcrumbs a:hover .svg-icon svg {
+  fill: #333;
+}
+.move-folder-dialog .form-content.folders-list {
+  padding: 0;
+  max-height: 19em;
+}
+.move-folder-dialog .form-content.folders-list:last-child {
+  border-bottom: 0;
+}
+.move-folder-dialog .form-content.folders-list .item {
+  padding: 0.75em 2em;
+  border-bottom: 1px solid #EEE;
+  cursor: pointer;
+}
+.move-folder-dialog .form-content.folders-list .item:hover {
+  background: #EEE;
+}
+.move-folder-dialog .form-content.folders-list .item:hover .svg-icon.angle-right svg {
+  display: inline-block;
+  fill: #333;
+}
+.move-folder-dialog .form-content.folders-list .item span.folder-name {
+  margin-left: 0.4em;
+}
+.move-folder-dialog .form-content.folders-list .item span.role-name {
+  color: #888;
+  font-size: 0.65em;
+  margin-left: 0.4em;
+}
+.move-folder-dialog .form-content.folders-list .svg-icon.folder svg {
+  width: 1.3rem;
+  height: 1.3rem;
+  margin-top: -2px;
+  fill: #666;
+}
+.move-folder-dialog .form-content.folders-list .svg-icon.angle-right svg {
+  width: 1.3em;
+  height: 1.3em;
+  margin: 0;
+  fill: #DDD;
+  float: right;
+}
+.move-folder-dialog .submit-wrapper .new-folder {
+  margin-left: 1.23em;
+  display: inline-block;
+  margin-top: 0.5em;
+}
+.move-folder-dialog .submit-wrapper .new-folder:hover .svg-icon svg {
+  fill: #2894DF;
+}
+.move-folder-dialog .submit-wrapper .new-folder .svg-icon svg {
+  margin-top: 2px;
+}
+.move-folder-dialog .move-search-autocomplete-wrapper {
+  display: none;
+}
+.move-folder-dialog .move-search-autocomplete-wrapper .autocomplete-wrapper {
+  position: relative;
+}
+.move-folder-dialog .move-search-autocomplete-wrapper .autocomplete-wrapper .autocomplete-content {
+  position: absolute;
+  top: -0.5em;
+  left: 0;
+  width: 100%;
+  z-index: 899;
+  padding: 0;
+  margin: 0;
+  border: 1px solid #DDD;
+  max-height: 10em;
+  overflow: auto;
+  box-sizing: border-box;
+}
+.move-folder-dialog .move-search-autocomplete-wrapper .autocomplete-wrapper .autocomplete-content .row:after,
+.move-folder-dialog .move-search-autocomplete-wrapper .autocomplete-wrapper .autocomplete-content .row:before {
+  content: "";
+  display: table;
+}
+.move-folder-dialog .move-search-autocomplete-wrapper .autocomplete-wrapper .autocomplete-content .row {
+  zoom: 1;
+  font-size: 0.9em;
+  padding: 0.825em 0.5em 0.5em 1em;
+}
+.move-folder-dialog .move-search-autocomplete-wrapper .autocomplete-wrapper .autocomplete-content .row .user {
+  width: 75%;
+  float: left;
+  padding-right: 1em;
+  padding-bottom: 1em;
+}
+.move-folder-dialog .move-search-autocomplete-wrapper .autocomplete-wrapper .autocomplete-content .row .name {
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.move-folder-dialog .move-search-autocomplete-wrapper .autocomplete-wrapper .autocomplete-content .row .details {
+  color: #969696;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -o-text-overflow: ellipsis;
+  -ms-text-overflow: ellipsis;
+  display: block;
+}
+.move-folder-dialog .permission-inherit {
+  margin-top: 1.5em;
+  cursor: pointer;
+}
+.move-folder-dialog .permission-inherit .permission-content {
+  margin-left: 1.5em;
+  margin-top: -1.3em;
+  margin-bottom: 1em;
+}
+.move-folder-dialog .permission-inherit .permission-content img {
+  width: 1.65em;
+  height: 1.65em;
+  margin: 1em -0.75em;
+  border: 1px solid #DDD;
+  border-radius: 0.35em;
+  padding: 0.3em;
+}
+.move-folder-dialog .permission-inherit .permission-content .content {
+  margin-top: -3.95em;
+  margin-left: 2.2em;
+}
+.move-folder-dialog .permission-inherit .permission-content .content-info {
+  font-size: 0.75em;
+  color: #888;
+  margin-left: 3em;
+}
 .dialog .group .form-content.permission-edit {
   border-top: 1px solid #F3F3F3;
   margin: 0;
@@ -8848,6 +9246,7 @@ This file is generated by `grunt build`, do not edit it by hand.
   width: 55px;
   height: 55px;
   border: 1px solid #DDD;
+  border-radius: 50%;
 }
 .panel.aside .user .sidebar-header h3,
 .panel.aside .group .sidebar-header h3 {
@@ -8913,8 +9312,9 @@ This file is generated by `grunt build`, do not edit it by hand.
 }
 .page.people .tableview-content td.cell_avatar img {
   margin-top: 3px;
-  width: 25px !important;
-  height: 25px !important;
+  width: 1.7em;
+  height: 1.7em;
+  border-radius: 50%;
 }
 /* login history icon column centerign */
 .login-history td:first-child {
@@ -8956,6 +9356,128 @@ This file is generated by `grunt build`, do not edit it by hand.
 .panel.aside .resource .detailed-information li.password .value {
   height: 1.6em;
   padding-top: 0.2em;
+}
+.panel.aside .resource .sidebar-header {
+  /*
+     * For IE 6/7 only
+     * Include this rule to trigger hasLayout and contain floats.
+     */
+  /*
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
+  /*
+     * For IE 6/7 only
+     * Include this rule to trigger hasLayout and contain floats.
+     */
+  zoom: 1;
+  /*
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
+}
+.panel.aside .resource .sidebar-header:before,
+.panel.aside .resource .sidebar-header:after {
+  content: "";
+  display: table;
+}
+.panel.aside .resource .sidebar-header:after {
+  clear: both;
+}
+.panel.aside .resource .sidebar-header:before,
+.panel.aside .resource .sidebar-header:after {
+  content: "";
+  display: table;
+}
+.panel.aside .resource .sidebar-header:after {
+  clear: both;
+}
+.panel.aside .resource .sidebar-header img {
+  margin: 1em 0 1em 1em;
+  float: left;
+  width: 4em;
+  height: 4em;
+  border: 1px solid #DDD;
+}
+.panel.aside .resource .sidebar-header h3 {
+  float: left;
+  width: 67%;
+  margin-top: 0.88em;
+  padding: 0 0 0 0.6em;
+  display: table-cell;
+  vertical-align: middle;
+  border: 0;
+}
+.panel.aside .resource .sidebar-header h3 .name {
+  font-size: 1.2em;
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -o-text-overflow: ellipsis;
+  -ms-text-overflow: ellipsis;
+}
+.panel.aside .resource .sidebar-header h3 .type,
+.panel.aside .resource .sidebar-header h3 .username {
+  font-size: 0.8em;
+  color: #969696;
+  font-weight: normal;
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -o-text-overflow: ellipsis;
+  -ms-text-overflow: ellipsis;
+}
+.panel.aside .resource .sidebar-header .side-bar-text-label {
+  color: #FFF;
+  width: 1.7em;
+  height: 1.7em;
+  line-height: 1.7em;
+  text-align: center;
+  font-size: 0.8em;
+  margin: 1.1em;
+}
+.panel.aside .resource .sidebar-header .side-bar-text-label + h3 {
+  margin-top: 1em;
+  padding: 0 0 0 0.6em;
+}
+.panel.aside .resource .sidebar-header .logo {
+  margin: 1em 0 1em 1em;
+  float: left;
+  width: 3em;
+  height: 3em;
+  border: 1px solid #DDD;
+  line-height: 3em;
+  text-align: center;
+  border-radius: 50%;
+}
+.panel.aside .resource .sidebar-header .logo .svg-icon svg {
+  width: 1.7rem;
+  height: 1.7rem;
+  vertical-align: middle;
+}
+.panel.aside .resource .sidebar-header .logo img {
+  width: 1.7em;
+  height: 1.7em;
+  display: block;
+  margin: 0.75em auto;
+  float: none;
+  border: 0;
 }
 /* unused columns */
 .js_grid_column_owner,
@@ -9016,6 +9538,70 @@ This file is generated by `grunt build`, do not edit it by hand.
     font-size: 1.2em;
     line-height: 1.8em;
   }
+}
+.passwords-folders-dnd-helper,
+.passwords-folders-dnd-helper-with-shadow {
+  position: relative;
+  width: 6.25em;
+  height: 0.6em;
+  background: #666;
+  border: 1px solid #969696;
+  text-align: center;
+  z-index: 9999999;
+  padding: 0.65em;
+  line-height: 0.7em;
+  color: #FFF;
+  border-radius: 5px;
+}
+.passwords-folders-dnd-helper-with-shadow {
+  box-shadow: 0.25em 0.25em 0 -1px #969696;
+}
+.passwords-folders-dnd-helper-with-shadow:after {
+  content: "2";
+  position: absolute;
+  top: -9px;
+  right: -3px;
+  font-size: 0.7em;
+  background: #D40101;
+  color: #FFF;
+  width: 1.5em;
+  height: 1.5em;
+  text-align: center;
+  line-height: 1.5em;
+  border-radius: 50%;
+  box-shadow: 0 0 1px #333;
+}
+.passwords-folders-dnd-helper-with-shadow span,
+.passwords-folders-dnd-helper span {
+  display: inline-block;
+  width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.passwords-folders-drop-focus-in {
+  background-color: #DDD;
+}
+.page.password .tableview .grid_column_avatar img {
+  border-radius: 50%;
+  width: 1.25em;
+  height: 1.25em;
+  line-height: 1.25em;
+  position: relative;
+  top: 2px;
+}
+.page.password .tableview .grid_column_avatar .svg-icon svg {
+  width: 1.3rem;
+  height: 1.3rem;
+}
+.page.password .tableview .grid_column_avatar .text-label {
+  color: #FFF;
+  width: 1.4em;
+  height: 1.4em;
+  line-height: 1.4em;
+  border-radius: 50%;
+  text-align: center;
+  font-size: 0.88rem;
 }
 /* TODO replace by page level selector */
 .page.settings .main.panel .middle {
@@ -9154,6 +9740,14 @@ This file is generated by `grunt build`, do not edit it by hand.
   font-size: 1.5em;
   text-align: center;
   padding: 0.25em 0.5em;
+}
+.page.settings .profile-detailed-information .avatar .edit a .svg-icon svg {
+  float: left;
+  fill: white;
+  width: 2rem;
+  height: 2rem;
+  margin-top: 0.5em;
+  margin-left: 0.5em;
 }
 .page.settings .profile-detailed-information .avatar .edit a .help-text {
   display: block;

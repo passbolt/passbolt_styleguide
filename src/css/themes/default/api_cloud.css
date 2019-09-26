@@ -16,6 +16,7 @@
 /* tags */
 /* tooltip */
 /* loading animation */
+/* svg fill */
 /* ==========================================================================
  * Reset is a mix of :
  *
@@ -3261,6 +3262,7 @@ input[type=checkbox] + label {
   display: inline;
   margin-left: 0.25em;
   margin-bottom: 0.25em;
+  cursor: pointer;
 }
 /* radio and checkboxes */
 .radiolist {

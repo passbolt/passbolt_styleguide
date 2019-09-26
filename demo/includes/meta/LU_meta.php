@@ -20,6 +20,7 @@
 <link rel="stylesheet" type="text/css" href="src/css/themes/default/ext_external.css" />
 <script src="src/js/jquery-3.3.1.min.js"></script>
 <script src="src/js/jquery.tag-editor.js"></script>
+<script src="src/js/jquery-ui.min.js"></script>
 <script type="application/javascript">
     function resizeElement(selector, dimension) {
         if (typeof dimension.height != 'undefined') {

@@ -9,6 +9,8 @@
     margin-top: .5em;
     background: @background-lighter;
     overflow: hidden;
+    cursor: pointer;
+    border-radius: 3px;
     .button-background();
 
     .more {
@@ -41,8 +43,9 @@
 
     /* user card styling */
     .picture img {
-        width: 2.875em; /* 46px */
-        padding: 0.1250em; /* 2px */
+        width: 2.6em;
+        padding: 0.28em 0.35em 0.35em 0.35em;
+        border-radius: 50%;
     }
 
     .details {
@@ -79,24 +82,14 @@
             margin: 18px 0 0 7px;
             display: inline-block;
         }
-        .svg-icon svg {
-            fill: @grey-darkest;
+	.svg-icon svg {
+            fill: @fill-color;
         }
-
-        // &:after {
-        //     position:absolute;
-        //     content: "\f0d7"; /* caret down */
-        //     font: normal normal normal 1em FontAwesome;
-        //     text-rendering: auto;
-        //     -webkit-font-smoothing: antialiased;
-        //     -moz-osx-font-smoothing: grayscale;
-        //     width:1em;
-        //     height:1em;
-        //     margin-left:-2em;
-        //     margin-top: 1em;
-        // }
         &:hover {
-            color:@blacker;
+            color: @blacker;
+            svg {
+                fill: @fill-hover-color;
+            }
         }
         span:last-child {
             visibility: hidden;

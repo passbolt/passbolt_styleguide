@@ -73,3 +73,44 @@
         overflow: hidden;
     }
 }
+
+.tag-dnd-helper, .tag-dnd-helper-with-shadow {
+    position: relative;
+    width: 100px;
+    height: 0.60em;
+    background: @blue;
+    text-align: center;
+    z-index: 9999999;
+    padding: 0.65em;
+    line-height: 0.75em;
+    color: @white;
+    border-radius: 5px;
+}
+.tag-dnd-helper-with-shadow {
+  box-shadow: 6px 6px 0 -1px @blue;
+}
+.tag-dnd-helper-with-shadow:after {
+    content: "2";
+    position: absolute;
+    top: -9px;
+    right: -3px;
+    font-size: .7em;
+    background: @red;
+    color: @white;
+    width: 20px;
+    height: 20px;
+    text-align: center;
+    line-height: 20px;
+    border-radius: 50%;
+    box-shadow: 0 0 1px @black;
+}
+.tag-dnd-helper-with-shadow span, .tag-dnd-helper span {
+    display: inline-block;
+    width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+.tag-drop-focus-in {
+    background-color: @grey;
+}

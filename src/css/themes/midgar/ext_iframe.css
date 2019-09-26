@@ -17,6 +17,7 @@
 /* tooltip */
 /* loading animation */
 /* scrollbar */
+/* svg fill */
 /* ==========================================================================
  * Reset is a mix of :
  *
@@ -3212,16 +3213,21 @@ p {
   display: inline-block;
   vertical-align: text-top;
   margin: auto;
+  fill: #FFF;
 }
 a .svg-icon svg:hover {
   fill: #2894DF;
 }
+a.button .svg-icon svg:hover {
+  fill: #FFFFFC;
+}
 .svg-icon.light svg {
-  fill: #606060;
+  fill: #EEEEEC;
 }
 a.disabled .svg-icon svg {
   fill: #8B8B89;
   pointer-events: none;
+  cursor: default;
 }
 .disabled .svg-icon svg:hover {
   fill: #8B8B89;
@@ -3648,6 +3654,7 @@ input[type=checkbox] + label {
   display: inline;
   margin-left: 0.25em;
   margin-bottom: 0.25em;
+  cursor: pointer;
 }
 /* radio and checkboxes */
 .radiolist {
@@ -4187,6 +4194,11 @@ input[type=email].fluid {
 }
 .dialog .submit-wrapper .cancel,
 .dialog .submit-wrapper .button {
+  float: right;
+  margin-right: 1.125em;
+  font-size: 1.125em;
+}
+.dialog .submit-wrapper .button.secondary {
   float: left;
   margin-left: 1.125em;
   font-size: 1.125em;
@@ -4417,6 +4429,7 @@ input[type=email].fluid {
 .profile .section.detailed-information .avatar img {
   width: 2.875em;
   padding: 0.125em;
+  border-radius: 50%;
 }
 .profile .section .section-action {
   padding-left: 1em;
@@ -4958,6 +4971,9 @@ input[type=email].fluid {
 .input-password-wrapper:after {
   clear: both;
 }
+.input-password-wrapper a.button .svg-icon svg {
+  margin-top: 0.125em;
+}
 .input-password-wrapper .input.password {
   float: left;
   width: 65.5%;
@@ -5141,6 +5157,7 @@ input[type=email].fluid {
   width: 36px;
   height: 36px;
   float: left;
+  border-radius: 50%;
 }
 .permissions .row .user,
 .permissions .row .group {
@@ -5433,6 +5450,7 @@ input[type=email].fluid {
   width: 36px;
   height: 36px;
   float: left;
+  border-radius: 50%;
 }
 .autocomplete-wrapper .autocomplete-content .row .user,
 .autocomplete-wrapper .autocomplete-content .row .group {

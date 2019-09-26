@@ -34,3 +34,26 @@
         display: inline;
     }
 }
+
+.breadcrumbs.folders {
+    background: @border-lighter;
+    padding: 0.2em;
+    border-bottom: 0;
+    width: 82%;
+    display: inline-block;
+    ul {
+        display: inline-block;
+        margin-top: -2px;
+        font-size: 1.1em;
+        .svg-icon.folder svg{
+            width: 1rem;
+            height: 1rem;
+            margin-top: -1px;
+        }
+        li a:hover {
+            .svg-icon.folder svg{
+                fill: @blue;
+            }
+        }
+    }
+}

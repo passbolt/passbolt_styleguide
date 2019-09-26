@@ -37,12 +37,12 @@
 	<div class="tableview-content scroll">
 		<table>
 			<tbody>
-			<tr class="" id="17c66127-0c5e-3510-a497-2e6a105109db" data-view-id="1419">
+			<tr class="selected" id="17c66127-0c5e-3510-a497-2e6a105109db" data-view-id="1419">
 
 				<td class="js_grid_column_multipleSelect cell_multipleSelect selections s-cell" data-view-id="1420">
 					<div title="" data-view-id="1421"><div class="mad_form_checkbox js_checkbox_multiple_select mad_view_form_checkbox ready" id="multiple_select_checkbox_17c66127-0c5e-3510-a497-2e6a105109db">
 							<div class="input checkbox">
-								<input value="17c66127-0c5e-3510-a497-2e6a105109db" id="checkbox2a18191d-288c-821d-e7c3-6e464f33564c" data-view-id="1436" type="checkbox">
+								<input value="17c66127-0c5e-3510-a497-2e6a105109db" id="checkbox2a18191d-288c-821d-e7c3-6e464f33564c" data-view-id="1436" type="checkbox" checked="checked">
 								<label for="checkbox2a18191d-288c-821d-e7c3-6e464f33564c" data-view-id="1437"></label>
 							</div>
 
@@ -326,7 +326,7 @@ StCzcVynJ8qVKWWX9WJn77UUTrtEyyku5OE=
 					</div>
 				</td>
 
-			</tr><tr class="selected" id="4a2f98e8-b326-3384-aa2b-c3c9a81be3f7" data-view-id="1499">
+			</tr><tr class="" id="4a2f98e8-b326-3384-aa2b-c3c9a81be3f7" data-view-id="1499">
 
 				<td class="js_grid_column_multipleSelect cell_multipleSelect selections s-cell" data-view-id="1500">
 					<div title="" data-view-id="1501"><div class="mad_form_checkbox js_checkbox_multiple_select mad_view_form_checkbox ready" id="multiple_select_checkbox_4a2f98e8-b326-3384-aa2b-c3c9a81be3f7">
@@ -1123,3 +1123,65 @@ oaGvP4FhuwaCtf3Y091F
 		</table>
 	</div>
 </div>
+
+<script type="application/javascript">
+    // DEMO ONLY -- not for production use
+    $(function() {
+
+		$('.tableview-content tr').draggable({
+			cursor: "move",
+			appendTo: "body",
+			helper: function() {
+				let content = $(this).find('td.cell_name')[0].innerText;
+				let helper = $("<div>", {
+					class: "tag-dnd-helper"
+				});
+				if ($(event.target).closest('table').find('input:checkbox:checked').length > 1) {
+					helper = $("<div>", {
+					class: "tag-dnd-helper-with-shadow"
+				});
+				}
+				helper.append(`<span>${content}</span>`);
+				return helper;
+			},
+			start: function (event, ui) {
+				$(event.target).addClass('selected');
+				$(event.target).find('input:checkbox').attr('checked', 'checked');
+			},
+			cursorAt: {
+				top: 5,
+				left: 5
+			},
+			opacity: "0.8",
+			revert:  function(dropped) {
+				let draggable = $(this);
+				draggable.removeClass('selected');
+				draggable.find('input:checkbox').removeAttr('checked');
+				draggable.closest('table').find('tr.selected').removeClass('selected');
+				draggable.closest('table').find('input:checkbox:checked').removeAttr('checked');
+				let hasBeenDroppedBefore = draggable.data('hasBeenDropped');
+				if (hasBeenDroppedBefore) {
+					draggable.animate({ top: 0, left: 0 }, 'slow');
+					return false;
+				} else {
+					return true;
+				}
+			}
+		});
+
+		$('ul#js_wsp_password_filter_tags_list li').droppable({
+			accept: $('.tableview-content tr'),
+			over: function(event, ui) {
+				$(event.target).addClass('tag-drop-focus-in');
+			},
+			out: function(event, ui) {
+				$(event.target).removeClass('tag-drop-focus-in');
+			},
+			drop: function(event, ui) {
+				$(event.target).removeClass('tag-drop-focus-in');
+				$(ui.draggable).data('hasBeenDropped', true);
+				$('#js_app_notificator .message.animated').addClass('fadeInUp').html('<strong>Success</strong> Tagged successfully!')
+			}
+		});
+    });
+</script>

@@ -16,6 +16,7 @@
 /* tags */
 /* tooltip */
 /* loading animation */
+/* svg fill */
 /* ==========================================================================
  * Reset is a mix of :
  *
@@ -3253,9 +3254,13 @@ ul.checklist li:before {
   display: inline-block;
   vertical-align: text-top;
   margin: auto;
+  fill: #333;
 }
 a .svg-icon svg:hover {
   fill: #2894DF;
+}
+a.button .svg-icon svg:hover {
+  fill: #333;
 }
 .svg-icon.light svg {
   fill: #888;
@@ -3263,6 +3268,7 @@ a .svg-icon svg:hover {
 a.disabled .svg-icon svg {
   fill: #888;
   pointer-events: none;
+  cursor: default;
 }
 .disabled .svg-icon svg:hover {
   fill: #888;
@@ -3699,6 +3705,7 @@ input[type=checkbox] + label {
   display: inline;
   margin-left: 0.25em;
   margin-bottom: 0.25em;
+  cursor: pointer;
 }
 /* radio and checkboxes */
 .radiolist {
@@ -5010,6 +5017,26 @@ article table.table-parameters tbody tr td em {
 .breadcrumbs div.main-cell {
   display: inline;
 }
+.breadcrumbs.folders {
+  background: #EEE;
+  padding: 0.2em;
+  border-bottom: 0;
+  width: 82%;
+  display: inline-block;
+}
+.breadcrumbs.folders ul {
+  display: inline-block;
+  margin-top: -2px;
+  font-size: 1.1em;
+}
+.breadcrumbs.folders ul .svg-icon.folder svg {
+  width: 1rem;
+  height: 1rem;
+  margin-top: -1px;
+}
+.breadcrumbs.folders ul li a:hover .svg-icon.folder svg {
+  fill: #2894DF;
+}
 /* Dialog */
 .dialog-wrapper {
   position: absolute;
@@ -5164,6 +5191,11 @@ article table.table-parameters tbody tr td em {
 }
 .dialog .submit-wrapper .cancel,
 .dialog .submit-wrapper .button {
+  float: right;
+  margin-right: 1.125em;
+  font-size: 1.125em;
+}
+.dialog .submit-wrapper .button.secondary {
   float: left;
   margin-left: 1.125em;
   font-size: 1.125em;

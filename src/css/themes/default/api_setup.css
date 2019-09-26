@@ -16,6 +16,7 @@
 /* tags */
 /* tooltip */
 /* loading animation */
+/* svg fill */
 /* ==========================================================================
  * Reset is a mix of :
  *
@@ -3211,9 +3212,13 @@ p {
   display: inline-block;
   vertical-align: text-top;
   margin: auto;
+  fill: #333;
 }
 a .svg-icon svg:hover {
   fill: #2894DF;
+}
+a.button .svg-icon svg:hover {
+  fill: #333;
 }
 .svg-icon.light svg {
   fill: #888;
@@ -3221,6 +3226,7 @@ a .svg-icon svg:hover {
 a.disabled .svg-icon svg {
   fill: #888;
   pointer-events: none;
+  cursor: default;
 }
 .disabled .svg-icon svg:hover {
   fill: #888;
@@ -3657,6 +3663,7 @@ input[type=checkbox] + label {
   display: inline;
   margin-left: 0.25em;
   margin-bottom: 0.25em;
+  cursor: pointer;
 }
 /* radio and checkboxes */
 .radiolist {
@@ -4928,6 +4935,11 @@ input[type=email].fluid {
 }
 .dialog .submit-wrapper .cancel,
 .dialog .submit-wrapper .button {
+  float: right;
+  margin-right: 1.125em;
+  font-size: 1.125em;
+}
+.dialog .submit-wrapper .button.secondary {
   float: left;
   margin-left: 1.125em;
   font-size: 1.125em;
@@ -5672,6 +5684,9 @@ table.table-info.horizontal tbody tr:nth-child(odd) {
 }
 .input-password-wrapper:after {
   clear: both;
+}
+.input-password-wrapper a.button .svg-icon svg {
+  margin-top: 0.125em;
 }
 .input-password-wrapper .input.password {
   float: left;

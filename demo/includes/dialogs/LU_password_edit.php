@@ -1,5 +1,5 @@
 <div id="a484a5eb-4258-bde9-6b1e-20c6f26204fb"
-		 class="mad_controller_component_dialog_controller mad_view_component_dialog dialog-wrapper ready">
+		 class="mad_controller_component_dialog_controller mad_view_component_dialog dialog-wrapper ready create-password-dialog">
 	<div class="dialog">
 		<div class="dialog-header">
 			<h2>Edit<span class="dialog-header-subtitle">shared resource</span></h2>

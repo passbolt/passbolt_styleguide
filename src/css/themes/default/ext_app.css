@@ -16,6 +16,7 @@
 /* tags */
 /* tooltip */
 /* loading animation */
+/* svg fill */
 /*! normalize.css v8.0.0 | MIT License | github.com/necolas/normalize.css */
 /* Document
    ========================================================================== */
@@ -468,6 +469,13 @@ a.no-border,
 a:hover.no-border {
   border-bottom: 0;
 }
+a.disabled {
+  outline: 0;
+  text-decoration: none;
+  cursor: default;
+  color: #888;
+  pointer-events: none;
+}
 /*
 	Generic buttons
 */
@@ -736,6 +744,7 @@ textarea {
 .checkbox input[type=checkbox] {
   position: absolute;
   opacity: 0;
+  cursor: pointer;
 }
 .checkbox input[type=checkbox] + label {
   font-weight: normal;
@@ -784,6 +793,9 @@ textarea {
   background-color: #333;
   -webkit-mask-image: url('../../../img/fa/fas/check.svg');
   mask-image: url('../../../img/fa/fas/check.svg');
+}
+.checkbox.small input[type=checkbox] {
+  cursor: pointer;
 }
 .checkbox.small input[type=checkbox] + label {
   font-size: 1.4rem;
@@ -2004,6 +2016,7 @@ input[type=checkbox] + label {
   display: inline;
   margin-left: 0.25em;
   margin-bottom: 0.25em;
+  cursor: pointer;
 }
 /* radio and checkboxes */
 .radiolist {
@@ -4627,9 +4640,13 @@ input[type=email].fluid {
   display: inline-block;
   vertical-align: text-top;
   margin: auto;
+  fill: #333;
 }
 a .svg-icon svg:hover {
   fill: #2894DF;
+}
+a.button .svg-icon svg:hover {
+  fill: #333;
 }
 .svg-icon.light svg {
   fill: #888;
@@ -4637,6 +4654,7 @@ a .svg-icon svg:hover {
 a.disabled .svg-icon svg {
   fill: #888;
   pointer-events: none;
+  cursor: default;
 }
 .disabled .svg-icon svg:hover {
   fill: #888;
@@ -4864,6 +4882,11 @@ p {
 }
 .dialog .submit-wrapper .cancel,
 .dialog .submit-wrapper .button {
+  float: right;
+  margin-right: 1.125em;
+  font-size: 1.125em;
+}
+.dialog .submit-wrapper .button.secondary {
   float: left;
   margin-left: 1.125em;
   font-size: 1.125em;
@@ -5200,6 +5223,7 @@ p {
   width: 36px;
   height: 36px;
   float: left;
+  border-radius: 50%;
 }
 .permissions .row .user,
 .permissions .row .group {
@@ -5719,6 +5743,7 @@ p {
   width: 36px;
   height: 36px;
   float: left;
+  border-radius: 50%;
 }
 .autocomplete-wrapper .autocomplete-content .row .user,
 .autocomplete-wrapper .autocomplete-content .row .group {
@@ -5801,6 +5826,9 @@ p {
 }
 .input-password-wrapper:after {
   clear: both;
+}
+.input-password-wrapper a.button .svg-icon svg {
+  margin-top: 0.125em;
 }
 .input-password-wrapper .input.password {
   float: left;
@@ -5992,6 +6020,221 @@ p {
 }
 .master-password.login-form .input.checkbox label {
   font-size: 0.938em;
+}
+.edit-folder-dialog .form-content.parent-folder {
+  padding-top: 0;
+  padding-bottom: 1.5em;
+  overflow: hidden;
+}
+.edit-folder-dialog .form-content.parent-folder .folder-change {
+  width: 12%;
+  float: right;
+  border: 1px solid #DDD;
+  height: 2.25em;
+  border-radius: 3px;
+  background: #EEE;
+}
+.edit-folder-dialog .form-content.parent-folder .folder-change .svg-icon.icon-only svg {
+  width: 1.6em;
+  height: 1.6em;
+  vertical-align: middle;
+  margin: 0.3em auto;
+}
+.create-folder-dialog .form-content.parent-folder {
+  padding-top: 0;
+  padding-bottom: 1.5em;
+  overflow: hidden;
+}
+.create-folder-dialog .form-content.parent-folder .folder-change {
+  width: 12%;
+  float: right;
+  border: 1px solid #DDD;
+  height: 2.25em;
+  border-radius: 3px;
+  background: #F3F3F3;
+}
+.create-folder-dialog .form-content.parent-folder .folder-change .svg-icon.icon-only svg {
+  width: 1.6em;
+  height: 1.6em;
+  vertical-align: middle;
+  margin: 0.3em auto;
+}
+.move-folder-dialog .form-content label {
+  clear: both;
+  font-size: 0.938em;
+  line-height: 1.45em;
+  padding: 0;
+  display: block;
+  font-weight: normal;
+  cursor: pointer;
+  margin-top: -2.88em;
+  margin-left: 1.25em;
+}
+.move-folder-dialog .form-content.search-input {
+  padding-bottom: 0;
+}
+.move-folder-dialog .form-content.breadcrumbs {
+  display: flex;
+}
+.move-folder-dialog .form-content.breadcrumbs .breadcrumbs-up {
+  padding: 0 0.7em;
+  border: 1px solid #DDD;
+  border-radius: 3px;
+}
+.move-folder-dialog .form-content.breadcrumbs .breadcrumbs-up .svg-icon svg {
+  width: 1rem;
+  height: 1rem;
+  margin: 3px auto;
+}
+.move-folder-dialog .form-content.breadcrumbs .parent-folders {
+  padding: 0.4em 0.4em 0.4em 0.7em;
+  font-size: 0.9em;
+}
+.move-folder-dialog .form-content.breadcrumbs .parent-folders .svg-icon.folder svg {
+  width: 1.3rem;
+  height: 1.3rem;
+  margin-top: -4px;
+  fill: #666;
+}
+.move-folder-dialog .form-content.breadcrumbs .parent-folders .svg-icon.angle-right svg {
+  width: 0.88rem;
+  height: 0.88rem;
+}
+.move-folder-dialog .form-content.breadcrumbs a {
+  border: none;
+}
+.move-folder-dialog .form-content.breadcrumbs a:hover {
+  color: #333;
+}
+.move-folder-dialog .form-content.breadcrumbs a:hover .svg-icon svg {
+  fill: #333;
+}
+.move-folder-dialog .form-content.folders-list {
+  padding: 0;
+  max-height: 19em;
+}
+.move-folder-dialog .form-content.folders-list:last-child {
+  border-bottom: 0;
+}
+.move-folder-dialog .form-content.folders-list .item {
+  padding: 0.75em 2em;
+  border-bottom: 1px solid #EEE;
+  cursor: pointer;
+}
+.move-folder-dialog .form-content.folders-list .item:hover {
+  background: #EEE;
+}
+.move-folder-dialog .form-content.folders-list .item:hover .svg-icon.angle-right svg {
+  display: inline-block;
+  fill: #333;
+}
+.move-folder-dialog .form-content.folders-list .item span.folder-name {
+  margin-left: 0.4em;
+}
+.move-folder-dialog .form-content.folders-list .item span.role-name {
+  color: #888;
+  font-size: 0.65em;
+  margin-left: 0.4em;
+}
+.move-folder-dialog .form-content.folders-list .svg-icon.folder svg {
+  width: 1.3rem;
+  height: 1.3rem;
+  margin-top: -2px;
+  fill: #666;
+}
+.move-folder-dialog .form-content.folders-list .svg-icon.angle-right svg {
+  width: 1.3em;
+  height: 1.3em;
+  margin: 0;
+  fill: #DDD;
+  float: right;
+}
+.move-folder-dialog .submit-wrapper .new-folder {
+  margin-left: 1.23em;
+  display: inline-block;
+  margin-top: 0.5em;
+}
+.move-folder-dialog .submit-wrapper .new-folder:hover .svg-icon svg {
+  fill: #2894DF;
+}
+.move-folder-dialog .submit-wrapper .new-folder .svg-icon svg {
+  margin-top: 2px;
+}
+.move-folder-dialog .move-search-autocomplete-wrapper {
+  display: none;
+}
+.move-folder-dialog .move-search-autocomplete-wrapper .autocomplete-wrapper {
+  position: relative;
+}
+.move-folder-dialog .move-search-autocomplete-wrapper .autocomplete-wrapper .autocomplete-content {
+  position: absolute;
+  top: -0.5em;
+  left: 0;
+  width: 100%;
+  z-index: 899;
+  padding: 0;
+  margin: 0;
+  border: 1px solid #DDD;
+  max-height: 10em;
+  overflow: auto;
+  box-sizing: border-box;
+}
+.move-folder-dialog .move-search-autocomplete-wrapper .autocomplete-wrapper .autocomplete-content .row:after,
+.move-folder-dialog .move-search-autocomplete-wrapper .autocomplete-wrapper .autocomplete-content .row:before {
+  content: "";
+  display: table;
+}
+.move-folder-dialog .move-search-autocomplete-wrapper .autocomplete-wrapper .autocomplete-content .row {
+  zoom: 1;
+  font-size: 0.9em;
+  padding: 0.825em 0.5em 0.5em 1em;
+}
+.move-folder-dialog .move-search-autocomplete-wrapper .autocomplete-wrapper .autocomplete-content .row .user {
+  width: 75%;
+  float: left;
+  padding-right: 1em;
+  padding-bottom: 1em;
+}
+.move-folder-dialog .move-search-autocomplete-wrapper .autocomplete-wrapper .autocomplete-content .row .name {
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.move-folder-dialog .move-search-autocomplete-wrapper .autocomplete-wrapper .autocomplete-content .row .details {
+  color: #969696;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -o-text-overflow: ellipsis;
+  -ms-text-overflow: ellipsis;
+  display: block;
+}
+.move-folder-dialog .permission-inherit {
+  margin-top: 1.5em;
+  cursor: pointer;
+}
+.move-folder-dialog .permission-inherit .permission-content {
+  margin-left: 1.5em;
+  margin-top: -1.3em;
+  margin-bottom: 1em;
+}
+.move-folder-dialog .permission-inherit .permission-content img {
+  width: 1.65em;
+  height: 1.65em;
+  margin: 1em -0.75em;
+  border: 1px solid #DDD;
+  border-radius: 0.35em;
+  padding: 0.3em;
+}
+.move-folder-dialog .permission-inherit .permission-content .content {
+  margin-top: -3.95em;
+  margin-left: 2.2em;
+}
+.move-folder-dialog .permission-inherit .permission-content .content-info {
+  font-size: 0.75em;
+  color: #888;
+  margin-left: 3em;
 }
 .dialog .group .form-content.permission-edit {
   border-top: 1px solid #F3F3F3;
