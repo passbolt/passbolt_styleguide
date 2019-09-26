@@ -79,24 +79,14 @@
             margin: 18px 0 0 7px;
             display: inline-block;
         }
-        .svg-icon svg {
-            fill: @grey-darkest;
+	.svg-icon svg {
+            fill: @fill-color;
         }
-
-        // &:after {
-        //     position:absolute;
-        //     content: "\f0d7"; /* caret down */
-        //     font: normal normal normal 1em FontAwesome;
-        //     text-rendering: auto;
-        //     -webkit-font-smoothing: antialiased;
-        //     -moz-osx-font-smoothing: grayscale;
-        //     width:1em;
-        //     height:1em;
-        //     margin-left:-2em;
-        //     margin-top: 1em;
-        // }
         &:hover {
-            color:@blacker;
+            color: @blacker;
+            svg {
+                fill: @fill-hover-color;
+            }
         }
         span:last-child {
             visibility: hidden;

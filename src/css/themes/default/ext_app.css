@@ -16,6 +16,7 @@
 /* tags */
 /* tooltip */
 /* loading animation */
+/* svg fill */
 /*! normalize.css v8.0.0 | MIT License | github.com/necolas/normalize.css */
 /* Document
    ========================================================================== */
@@ -4627,9 +4628,13 @@ input[type=email].fluid {
   display: inline-block;
   vertical-align: text-top;
   margin: auto;
+  fill: #333;
 }
 a .svg-icon svg:hover {
   fill: #2894DF;
+}
+a.button .svg-icon svg:hover {
+  fill: #333;
 }
 .svg-icon.light svg {
   fill: #888;
@@ -4637,6 +4642,7 @@ a .svg-icon svg:hover {
 a.disabled .svg-icon svg {
   fill: #888;
   pointer-events: none;
+  cursor: default;
 }
 .disabled .svg-icon svg:hover {
   fill: #888;
@@ -5801,6 +5807,9 @@ p {
 }
 .input-password-wrapper:after {
   clear: both;
+}
+.input-password-wrapper a.button .svg-icon svg {
+  margin-top: 0.125em;
 }
 .input-password-wrapper .input.password {
   float: left;
