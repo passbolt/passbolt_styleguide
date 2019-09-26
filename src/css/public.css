@@ -7569,29 +7569,30 @@ input[type="range"]:focus + .rangeslider .rangeslider__handle {
   margin-bottom: 1em;
 }
 .home .features .swiper-container {
+  border-radius: 3px;
   margin: 2em 1em 1em 1em;
   max-width: 540px;
   height: 230px;
   background: transparent url('../img/controls/loading_light.svg') center center no-repeat;
 }
 .home .features .swiper-slide.LU_passwords {
-  background: transparent url('../img/screenshots/v1.5/LU_passwords_450.jpg') center center no-repeat;
+  background: transparent url('../img/screenshots/v2.11/LU_passwords_450.jpg') center center no-repeat;
   background-size: 100% auto;
 }
-.home .features .swiper-slide.LU_passwords_share {
-  background: transparent url('../img/screenshots/v1.5/LU_passwords_share_450.jpg') center center no-repeat;
+.home .features .swiper-slide.LU_quickaccess {
+  background: transparent url('../img/screenshots/v2.11/LU_quickaccess_450.jpg') center center no-repeat;
   background-size: 100% auto;
 }
-.home .features .swiper-slide.LU_passwords_edit {
-  background: transparent url('../img/screenshots/v1.5/LU_passwords_edit_450.jpg') center center no-repeat;
+.home .features .swiper-slide.LU_share {
+  background: transparent url('../img/screenshots/v2.11/LU_share_450.jpg') center center no-repeat;
   background-size: 100% auto;
 }
 .home .features .swiper-slide.LU_users {
-  background: transparent url('../img/screenshots/v1.5/LU_users_450.jpg') center center no-repeat;
+  background: transparent url('../img/screenshots/v2.11/LU_users_450.jpg') center center no-repeat;
   background-size: 100% auto;
 }
-.home .features .swiper-slide.AN_login {
-  background: transparent url('../img/screenshots/v1.5/AN_login_450.jpg') center center no-repeat;
+.home .features .swiper-slide.LU_mfa {
+  background: transparent url('../img/screenshots/v2.11/LU_mfa_450.jpg') center center no-repeat;
   background-size: 100% auto;
 }
 .home .features .swiper-pagination {
@@ -7616,23 +7617,23 @@ input[type="range"]:focus + .rangeslider .rangeslider__handle {
     height: 350px;
   }
   .home .features .swiper-slide.LU_passwords {
-    background: transparent url('../img/screenshots/v1.5/LU_passwords_940.jpg') center center no-repeat;
+    background: transparent url('../img/screenshots/v2.11/LU_passwords_940.jpg') center center no-repeat;
     background-size: 100% auto;
   }
-  .home .features .swiper-slide.LU_passwords_share {
-    background: transparent url('../img/screenshots/v1.5/LU_passwords_share_940.jpg') center center no-repeat;
+  .home .features .swiper-slide.LU_quickaccess {
+    background: transparent url('../img/screenshots/v2.11/LU_quickaccess_940.jpg') center center no-repeat;
     background-size: 100% auto;
   }
-  .home .features .swiper-slide.LU_passwords_edit {
-    background: transparent url('../img/screenshots/v1.5/LU_passwords_edit_940.jpg') center center no-repeat;
+  .home .features .swiper-slide.LU_share {
+    background: transparent url('../img/screenshots/v2.11/LU_share_940.jpg') center center no-repeat;
     background-size: 100% auto;
   }
   .home .features .swiper-slide.LU_users {
-    background: transparent url('../img/screenshots/v1.5/LU_users_940.jpg') center center no-repeat;
+    background: transparent url('../img/screenshots/v2.11/LU_users_940.jpg') center center no-repeat;
     background-size: 100% auto;
   }
-  .home .features .swiper-slide.AN_login {
-    background: transparent url('../img/screenshots/v1.5/AN_login_940.jpg') center center no-repeat;
+  .home .features .swiper-slide.LU_mfa {
+    background: transparent url('../img/screenshots/v2.11/LU_mfa_940.jpg') center center no-repeat;
     background-size: 100% auto;
   }
   .home .features .swiper-pagination {
@@ -7661,30 +7662,30 @@ input[type="range"]:focus + .rangeslider .rangeslider__handle {
   .home .features .swiper-container {
     width: 940px;
     max-width: 940px;
-    height: 588px;
+    height: 587px;
     margin: 2em auto;
     -webkit-box-shadow: 0px 5px 17px 0px rgba(0, 0, 0, 0.41);
     -moz-box-shadow: 0px 5px 17px 0px rgba(0, 0, 0, 0.41);
     box-shadow: 0px 5px 17px 0px rgba(0, 0, 0, 0.41);
   }
   .home .features .swiper-slide.LU_passwords {
-    background: transparent url('../img/screenshots/v1.5/LU_passwords.jpg') center center no-repeat;
+    background: transparent url('../img/screenshots/v2.11/LU_passwords_1880.jpg') center center no-repeat;
     background-size: 100% auto;
   }
-  .home .features .swiper-slide.LU_passwords_share {
-    background: transparent url('../img/screenshots/v1.5/LU_passwords_share.jpg') center center no-repeat;
+  .home .features .swiper-slide.LU_quickaccess {
+    background: transparent url('../img/screenshots/v2.11/LU_quickaccess_1880.jpg') center center no-repeat;
     background-size: 100% auto;
   }
-  .home .features .swiper-slide.LU_passwords_edit {
-    background: transparent url('../img/screenshots/v1.5/LU_passwords_edit.jpg') center center no-repeat;
+  .home .features .swiper-slide.LU_share {
+    background: transparent url('../img/screenshots/v2.11/LU_share_1880.jpg') center center no-repeat;
     background-size: 100% auto;
   }
   .home .features .swiper-slide.LU_users {
-    background: transparent url('../img/screenshots/v1.5/LU_users.jpg') center center no-repeat;
+    background: transparent url('../img/screenshots/v2.11/LU_users_1880.jpg') center center no-repeat;
     background-size: 100% auto;
   }
-  .home .features .swiper-slide.AN_login {
-    background: transparent url('../img/screenshots/v1.5/AN_login.jpg') center center no-repeat;
+  .home .features .swiper-slide.LU_mfa {
+    background: transparent url('../img/screenshots/v2.11/LU_mfa_1880.jpg') center center no-repeat;
     background-size: 100% auto;
   }
 }
@@ -7945,16 +7946,6 @@ input[type="range"]:focus + .rangeslider .rangeslider__handle {
     background: transparent url('../img/third_party/luxinnovation_logo.svg') 0 center no-repeat;
     background-size: 100% auto;
   }
-  .page-row.sponsors .sponsors-list .virtua {
-    background: transparent url('../img/third_party/virtua_logo.png') center center no-repeat;
-    background-size: 80% auto;
-    margin: auto;
-    position: relative;
-    display: block;
-    float: none;
-    margin-top: 130px;
-    height: 50px;
-  }
   .page-row.sponsors .sponsors-list .technoport {
     margin-top: 3em;
     background: transparent url('../img/third_party/technoport_logo.png') 0 center no-repeat;
@@ -7986,7 +7977,7 @@ input[type="range"]:focus + .rangeslider .rangeslider__handle {
 .home .page-row.tech .tech-usp ul.checklist {
   float: left;
   font-size: 1.25em;
-  margin-bottom: 0.25em;
+  margin-bottom: 1.5em;
 }
 .home .page-row.tech .tech-usp ul.checklist li {
   padding-top: 0.25em;
@@ -8013,7 +8004,6 @@ input[type="range"]:focus + .rangeslider .rangeslider__handle {
   .home .page-row.tech .tech-usp {
     float: left;
     margin-top: 2.5em;
-    margin-left: 2.5em;
   }
   .home .page-row.tech ul.checklist {
     font-size: 1.5em;

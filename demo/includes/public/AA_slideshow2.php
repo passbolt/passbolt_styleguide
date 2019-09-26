@@ -4,17 +4,17 @@
 			<div class="swiper-slide LU_passwords">
 				<h3 class="visuallyhidden">Search and filter on passwords</h3>
 			</div>
-			<div class="swiper-slide LU_passwords_share">
-				<h3 class="visuallyhidden">Share passwords with your team</h3>
-			</div>
-			<div class="swiper-slide LU_passwords_edit">
-				<h3 class="visuallyhidden">Generate strong unique passwords</h3>
-			</div>
 			<div class="swiper-slide LU_users">
 				<h3 class="visuallyhidden">Assign users to groups</h3>
 			</div>
-			<div class="swiper-slide AN_login">
-				<h3 class="visuallyhidden">Authenticate using your gpg key</h3>
+			<div class="swiper-slide LU_share">
+				<h3 class="visuallyhidden">Share passwords with team members</h3>
+			</div>
+			<div class="swiper-slide LU_mfa">
+				<h3 class="visuallyhidden">Use strong authentication</h3>
+			</div>
+			<div class="swiper-slide LU_quickaccess">
+				<h3 class="visuallyhidden">Never forget a password again</h3>
 			</div>
 		</div>
 	</div>

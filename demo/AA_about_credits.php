@@ -154,9 +154,6 @@
 								<img src="src/img//third_party/luxinnovation_logo.svg"/>
 								<img src="src/img//third_party/technoport_logo.png" />
 							</a>
-							<a href="https://www.virtua.ch" target="_blank">
-								<img src="src/img//third_party/virtua_logo.png"/>
-							</a>
 						</div>
 					</div>
 				</div>
