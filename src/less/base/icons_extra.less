@@ -36,19 +36,25 @@
     display: inline-block;
     vertical-align: text-top;
     margin: auto;
+    fill: @fill-color;
 }
 
 a .svg-icon svg:hover {
     fill: @font-focus;
 }
 
+a.button .svg-icon svg:hover {
+    fill: @font-default;
+}
+
 .svg-icon.light svg {
-    fill: @grey-darker;
+    fill: @fill-light-color;
 }
 
 a.disabled .svg-icon svg {
     fill: @font-light;
     pointer-events: none;
+    cursor: default;
 }
 
 .disabled .svg-icon svg:hover {
@@ -61,4 +67,5 @@ a.disabled .svg-icon svg {
     display: block;
     margin: auto;
 }
+
 

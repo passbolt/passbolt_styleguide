@@ -17,6 +17,7 @@
 /* tooltip */
 /* loading animation */
 /* scrollbar */
+/* svg fill */
 /* ==========================================================================
  * Reset is a mix of :
  *
@@ -3212,16 +3213,21 @@ p {
   display: inline-block;
   vertical-align: text-top;
   margin: auto;
+  fill: #FFF;
 }
 a .svg-icon svg:hover {
   fill: #2894DF;
 }
+a.button .svg-icon svg:hover {
+  fill: #FFFFFC;
+}
 .svg-icon.light svg {
-  fill: #606060;
+  fill: #EEEEEC;
 }
 a.disabled .svg-icon svg {
   fill: #8B8B89;
   pointer-events: none;
+  cursor: default;
 }
 .disabled .svg-icon svg:hover {
   fill: #8B8B89;
@@ -4957,6 +4963,9 @@ input[type=email].fluid {
 }
 .input-password-wrapper:after {
   clear: both;
+}
+.input-password-wrapper a.button .svg-icon svg {
+  margin-top: 0.125em;
 }
 .input-password-wrapper .input.password {
   float: left;

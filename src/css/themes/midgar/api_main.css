@@ -17,6 +17,7 @@
 /* tooltip */
 /* loading animation */
 /* scrollbar */
+/* svg fill */
 /* ==========================================================================
  * Reset is a mix of :
  *
@@ -3212,16 +3213,21 @@ p {
   display: inline-block;
   vertical-align: text-top;
   margin: auto;
+  fill: #FFF;
 }
 a .svg-icon svg:hover {
   fill: #2894DF;
 }
+a.button .svg-icon svg:hover {
+  fill: #FFFFFC;
+}
 .svg-icon.light svg {
-  fill: #606060;
+  fill: #EEEEEC;
 }
 a.disabled .svg-icon svg {
   fill: #8B8B89;
   pointer-events: none;
+  cursor: default;
 }
 .disabled .svg-icon svg:hover {
   fill: #8B8B89;
@@ -4895,10 +4901,13 @@ input[type="search"]::-webkit-search-cancel-button {
   display: inline-block;
 }
 .user.profile .more a .svg-icon svg {
-  fill: #444442;
+  fill: #FFF;
 }
 .user.profile .more a:hover {
   color: #000;
+}
+.user.profile .more a:hover svg {
+  fill: #8B8B89;
 }
 .user.profile .more a span:last-child {
   visibility: hidden;
@@ -7425,6 +7434,9 @@ table.table-info.horizontal tbody tr:nth-child(odd) {
 }
 .input-password-wrapper:after {
   clear: both;
+}
+.input-password-wrapper a.button .svg-icon svg {
+  margin-top: 0.125em;
 }
 .input-password-wrapper .input.password {
   float: left;
