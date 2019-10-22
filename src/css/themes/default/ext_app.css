@@ -321,13 +321,13 @@ template {
   font-family: 'Open Sans';
   font-style: normal;
   font-weight: 400;
-  src: local('Open Sans'), local('OpenSans'), url('../../../fonts/opensans-regular.woff') format('woff');
+  src: local('Open Sans'), local('OpenSans'), url('/src/fonts/opensans-regular.woff') format('woff');
 }
 @font-face {
   font-family: 'Open Sans';
   font-style: normal;
   font-weight: 700;
-  src: local('Open Sans Bold'), local('OpenSans-Bold'), url('../../../fonts/opensans-bold.woff') format('woff');
+  src: local('Open Sans Bold'), local('OpenSans-Bold'), url('/src/fonts/opensans-bold.woff') format('woff');
 }
 body {
   font-family: 'Open Sans', Verdana, sans-serif;
@@ -623,7 +623,7 @@ a.disabled {
   content: " ";
   top: -1px;
   left: -1px;
-  background: #FFF url('../../../img/controls/loading_light.svg') center center no-repeat;
+  background: #FFF url('/src/img/controls/loading_light.svg') center center no-repeat;
   background-size: auto 50% ;
   border: 1px solid #DDD;
   -webkit-border-radius: 0.214em;
@@ -632,7 +632,7 @@ a.disabled {
 }
 input[type=submit].button.processing {
   font-size: 0;
-  background: #FFF url('../../../img/controls/loading_light.svg') center center no-repeat;
+  background: #FFF url('/src/img/controls/loading_light.svg') center center no-repeat;
   background-size: auto 50% ;
   border: 1px solid #DDD;
   border-radius: 5px;
@@ -791,8 +791,8 @@ textarea {
   height: 1.2rem;
   background-size: 1.2rem 1.2rem;
   background-color: #333;
-  -webkit-mask-image: url('../../../img/fa/fas/check.svg');
-  mask-image: url('../../../img/fa/fas/check.svg');
+  -webkit-mask-image: url('/src/img/fa/fas/check.svg');
+  mask-image: url('/src/img/fa/fas/check.svg');
 }
 .checkbox.small input[type=checkbox] {
   cursor: pointer;
@@ -812,6 +812,18 @@ textarea {
   width: 1.1rem;
   height: 1.1rem;
   background-size: 1.1rem 1.1rem;
+}
+.app .checkbox input[type=checkbox] + label:before {
+  width: 1rem;
+  height: 1rem;
+  margin-top: 0.1rem;
+  margin-right: 0.5rem;
+}
+.app .checkbox input[type=checkbox]:checked + label:after {
+  left: 0.2rem;
+  top: 0.28rem;
+  width: 0.8rem;
+  height: 0.8rem;
 }
 /*
 	Messages for validation error and example
@@ -842,7 +854,7 @@ textarea {
   background: #FFF;
 }
 .logo {
-  background: transparent url('../../../img/logo/logo.svg') 0 0 no-repeat;
+  background: transparent url('/src/img/logo/logo.svg') 0 0 no-repeat;
   background-size: 20rem auto;
   width: 20rem;
   height: 4.5rem;
@@ -1834,14 +1846,14 @@ html body .button.processing {
   content: " ";
   top: -1px;
   left: -1px;
-  background: #FFF url('../../../img/controls/loading_light.svg') center center no-repeat;
+  background: #FFF url('/src/img/controls/loading_light.svg') center center no-repeat;
   background-size: auto 50% ;
   border: 1px solid #DDD;
   border-radius: 5px;
 }
 input[type=submit].button.processing {
   font-size: 0;
-  background: #FFF url('../../../img/controls/loading_light.svg') center center no-repeat;
+  background: #FFF url('/src/img/controls/loading_light.svg') center center no-repeat;
   background-size: auto 50% ;
   border: 1px solid #DDD;
   border-radius: 5px;
@@ -2276,8 +2288,8 @@ input[type=email].fluid {
  * -------------------------- */
 @font-face {
   font-family: 'FontAwesome';
-  src: url('../../../fonts/fontawesome-webfont.eot?v=4.7.0');
-  src: url('../../../fonts/fontawesome-webfont.eot?#iefix&v=4.7.0') format('embedded-opentype'), url('../../../fonts/fontawesome-webfont.woff2?v=4.7.0') format('woff2'), url('../../../fonts/fontawesome-webfont.woff?v=4.7.0') format('woff'), url('../../../fonts/fontawesome-webfont.ttf?v=4.7.0') format('truetype'), url('../../../fonts/fontawesome-webfont.svg?v=4.7.0#fontawesomeregular') format('svg');
+  src: url('/src/fonts/fontawesome-webfont.eot?v=4.7.0');
+  src: url('/src/fonts/fontawesome-webfont.eot?#iefix&v=4.7.0') format('embedded-opentype'), url('/src/fonts/fontawesome-webfont.woff2?v=4.7.0') format('woff2'), url('/src/fonts/fontawesome-webfont.woff?v=4.7.0') format('woff'), url('/src/fonts/fontawesome-webfont.ttf?v=4.7.0') format('truetype'), url('/src/fonts/fontawesome-webfont.svg?v=4.7.0#fontawesomeregular') format('svg');
   font-weight: normal;
   font-style: normal;
 }
@@ -4673,13 +4685,13 @@ a.disabled .svg-icon svg {
   font-family: 'Open Sans';
   font-style: normal;
   font-weight: 400;
-  src: local('Open Sans'), local('OpenSans'), url('../../../fonts/opensans-regular.woff') format('woff');
+  src: local('Open Sans'), local('OpenSans'), url('/src/fonts/opensans-regular.woff') format('woff');
 }
 @font-face {
   font-family: 'Open Sans';
   font-style: normal;
   font-weight: 700;
-  src: local('Open Sans Bold'), local('OpenSans-Bold'), url('../../../fonts/opensans-bold.woff') format('woff');
+  src: local('Open Sans Bold'), local('OpenSans-Bold'), url('/src/fonts/opensans-bold.woff') format('woff');
 }
 body {
   font-family: 'Open Sans', Verdana, sans-serif;
@@ -4985,7 +4997,7 @@ p {
 .progress-bar-wrapper .progress-bar.big.infinite .progress {
   width: 100%;
   overflow: hidden;
-  background: url('../../../img/controls/infinite-bar.gif') repeat-x;
+  background: url('/src/img/controls/infinite-bar.gif') repeat-x;
   -moz-opacity: 0.5;
   -khtml-opacity: 0.5;
   opacity: 0.5;
@@ -5771,7 +5783,7 @@ p {
 }
 .autocomplete-wrapper .autocomplete-content.loading {
   height: 2em;
-  background: url('../../../img/controls/loading_light.svg') no-repeat center center;
+  background: url('/src/img/controls/loading_light.svg') no-repeat center center;
   background-color: #FFF;
 }
 @media all and (max-width: 440px) {
@@ -5840,7 +5852,7 @@ p {
   box-sizing: border-box;
 }
 .input-password-wrapper .input.password input[type=password].decrypting {
-  background: transparent url('../../../img/controls/loading_light.svg') no-repeat 90% center;
+  background: transparent url('/src/img/controls/loading_light.svg') no-repeat 90% center;
 }
 .input-password-wrapper .input.password.has-encrypted-secret input {
   /* fallback placeholder */
@@ -5989,7 +6001,7 @@ p {
   content: " ";
   top: 0px;
   left: 0px;
-  background: transparent url('../../../img/controls/loading_light.svg') left center no-repeat;
+  background: transparent url('/src/img/controls/loading_light.svg') left center no-repeat;
   background-size: auto 75% ;
 }
 .master-password {
@@ -6235,6 +6247,10 @@ p {
   font-size: 0.75em;
   color: #888;
   margin-left: 3em;
+}
+.share-folder-dialog .permissions .row .actions a {
+  display: inline-block;
+  margin-top: -0.25em;
 }
 .dialog .group .form-content.permission-edit {
   border-top: 1px solid #F3F3F3;
