@@ -18,7 +18,7 @@
           </th>
         
 					<th class="js_grid_column js_grid_column_name cell_name m-cell sortable" data-view-id="1412">
-						<a href="#">Resource</a>
+						<a href="#">Name</a>
 					</th>
 					<th class="js_grid_column js_grid_column_username cell_username m-cell sortable" data-view-id="1413">
 						<a href="#">Username</a>
@@ -76,17 +76,15 @@
 
 				<td class="js_grid_column_username cell_username m-cell" data-view-id="1426">
 					<div title="vector" data-view-id="1427">
-						N/A
 					</div>
 				</td>
 
 				<td class="js_grid_column_secret cell_secret m-cell password" data-view-id="1428">
-					<div title="" data-view-id="1429">N/A</div>
+					<div title="" data-view-id="1429"></div>
 				</td>
 
 				<td class="js_grid_column_uri cell_uri l-cell" data-view-id="1430">
 					<div title="" data-view-id="1431">
-            N/A
 					</div>
 				</td>
 
@@ -137,17 +135,15 @@
 
 				<td class="js_grid_column_username cell_username m-cell" data-view-id="1426">
 					<div title="vector" data-view-id="1427">
-						N/A
 					</div>
 				</td>
 
 				<td class="js_grid_column_secret cell_secret m-cell password" data-view-id="1428">
-					<div title="" data-view-id="1429">N/A</div>
+					<div title="" data-view-id="1429"></div>
 				</td>
 
 				<td class="js_grid_column_uri cell_uri l-cell" data-view-id="1430">
 					<div title="" data-view-id="1431">
-            N/A
 					</div>
 				</td>
 

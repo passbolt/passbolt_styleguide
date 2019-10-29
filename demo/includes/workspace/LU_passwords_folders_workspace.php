@@ -13,7 +13,8 @@
         <div id="js_passbolt_passwordWorkspace_controller" class="passbolt_controller_password_workspace_controller mad_view_view tab-content ready selected">
             <div class="js_workspace">
                 <div class="panel left">
-                    <?php include('includes/nav/LU_nav_shortcuts_passwords_folders.php'); ?>
+                    <?php include('includes/nav/LU_nav_shortcuts_passwords.php'); ?>
+                    <?php include('includes/nav/LU_nav_folders.php'); ?>
                     <?php include('includes/nav/LU_nav_tree_passwords.php'); ?>
                 </div>
                 <div class="panel middle">

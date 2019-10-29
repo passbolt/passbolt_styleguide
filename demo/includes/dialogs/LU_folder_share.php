@@ -26,11 +26,7 @@
                 <div class="permission-add">
                   <div class="input checkbox">
                     <input id="permissions-for-folders"type="checkbox">
-                    <label for="permissions-for-folders">Do not apply permissions to folders</label>
-                  </div>
-                  <div class="input checkbox">
-                    <input id="permissios-for-resources" type="checkbox">
-                    <label for="permissios-for-resources">Do not apply permissions to resources</label>
+                    <label for="permissions-for-folders">Override existing children permissions.</label>
                   </div>
                 </div>
                 <?php include('includes/dialogs/share/LU_permission_dialog_buttons.php'); ?>

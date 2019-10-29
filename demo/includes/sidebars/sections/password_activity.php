@@ -42,7 +42,7 @@
                 <li data-view-id="372" class="usercard-detailed-col-2">
                     <div class="content-wrapper">
                         <div class="content">
-                            <div class="name"><a href="" class="creator">Ada Lovelace</a> has shared the password <a href="#">Inkscape</a> with</div>
+                            <div class="name"><a href="" class="creator">Ada Lovelace</a> shared the password <a href="#">Inkscape</a> with</div>
                             <div class="subinfo light">1 day ago</div>
                             <ul class="permissions-list">
                                 <li class="clearfix">

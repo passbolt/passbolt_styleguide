@@ -1,0 +1,33 @@
+.svg-icon {
+    font: normal normal normal 14px/1 FontAwesome;
+    font-size: inherit;
+    text-rendering: auto;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+
+    svg {
+        width: 0.88rem;
+        height: 0.88rem;
+        display: inline-block;
+        vertical-align: text-top;
+        margin: auto;
+        fill: @fill-color;
+    }
+    &.light svg {
+        fill: @fill-light-color;
+    }
+    &.icon-only svg {
+        width: 1.1rem;
+        height: 1.1rem;
+        display: block;
+        margin: auto;
+    }
+}
+
+.svg-icon + span:not(.visuallyhidden) {
+    margin-left: 2px;
+    display: inline-block;
+}
+
+@import "icons-svg-links.less";
+@import "icons-svg-buttons.less";

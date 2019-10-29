@@ -1,0 +1,15 @@
+a {
+    .svg-icon svg:hover {
+        fill: @font-focus;
+    }
+
+    &.disabled .svg-icon svg {
+        fill: @font-light;
+        pointer-events: none;
+        cursor: default;
+
+        &:hover {
+            fill: @font-light;
+        }
+    }
+}

@@ -13,7 +13,7 @@
 						<a href="#"><i class="icon fav"></i><span class="visuallyhidden">fav</span></a>
 					</th>
 					<th class="js_grid_column js_grid_column_name cell_name m-cell sortable" data-view-id="1412">
-						<a href="#">Resource</a>
+						<a href="#">Name</a>
 					</th>
 					<th class="js_grid_column js_grid_column_username cell_username m-cell sortable" data-view-id="1413">
 						<a href="#">Username</a>

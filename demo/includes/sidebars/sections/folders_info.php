@@ -4,7 +4,7 @@
     </div>
     <ul class="accordion-content">
         <li class="username">
-            <span class="label">Resource</span>
+            <span class="label">Name</span>
             <span class="value">Plants</span>
         </li>
         <li class="modified">
