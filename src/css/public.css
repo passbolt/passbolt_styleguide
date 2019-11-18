@@ -8441,8 +8441,18 @@ input[type="range"]:focus + .rangeslider .rangeslider__handle {
 .page.plans .tab-content .service-col.plan.with-tab-options .plan-description > h2 {
   border-bottom: 0;
 }
+.page.plans .tab-content .service-col.plan.with-tab-options .plan-pricing {
+  margin-top: 4em;
+}
+.page.plans .tab-content .service-col.plan.community .plan-features ul {
+  min-height: 266px;
+}
 .page.plans .tab-content .service-col.plan.community .plan-limit {
   margin-top: 18px;
+}
+.page.plans .tab-content .service-col.plan.business .plan-features ul,
+.page.plans .tab-content .service-col.plan.enterprise .plan-features ul {
+  min-height: 377px;
 }
 .page.plans .tab-content .service-col.plan.enterprise .plan-limit {
   margin-top: 18px;
@@ -8474,7 +8484,7 @@ input[type="range"]:focus + .rangeslider .rangeslider__handle {
   display: flex;
   -ms-flex-align: center;
   align-items: center;
-  margin-top: 1.5em;
+  margin-top: 3em;
 }
 .page.plans .tab-content .service-col.plan .plan-pricing .discounted {
   text-align: center;
@@ -8579,16 +8589,18 @@ input[type="range"]:focus + .rangeslider .rangeslider__handle {
 }
 .page.plans .tab-content .service-col.plan div.plan-features {
   font-size: 1.25em;
-  text-align: center;
+  text-align: left;
   padding: 1em;
 }
-.page.plans .tab-content .service-col.plan div.plan-features ul {
-  min-height: 346px;
+.page.plans .tab-content .service-col.plan div.plan-features p {
+  padding: 0.6em 0;
+  font-size: 0.8em;
+  margin-bottom: 1.5em;
+  color: #969696;
 }
 .page.plans .tab-content .service-col.plan div.plan-features ul li {
-  padding: 0.4em;
+  padding: 0.6em 0.4em;
   font-size: 0.8em;
-  border-top: 1px solid #DDD;
 }
 .page.plans .tab-content .service-col.plan div.plan-features a {
   border-bottom: 0;
@@ -8718,9 +8730,6 @@ input[type="range"]:focus + .rangeslider .rangeslider__handle {
 .page.plans.cloud .tab-content .service-col.plan.business .plan-description h2 {
   border-bottom: 1px solid #DDD;
 }
-.page.plans.cloud .tab-content .service-col.plan.enterprise .plan-pricing {
-  margin-top: 20px;
-}
 .page.services.featured.cart .error label.error {
   font-size: 0.7em;
   padding-top: 0;
@@ -8789,10 +8798,15 @@ input[type="range"]:focus + .rangeslider .rangeslider__handle {
 .page.services.featured.cart .cart .payment_info .order-line div.form-group.price .price-per-user {
   font-size: 0.9em;
 }
+.page.services.featured.cart .cart .payment_info .order-line select.quantity {
+  width: 65px;
+  display: inline-block;
+}
 .page.services.featured.cart .cart .payment_info .order-line .line-total {
+  display: inline-block;
   float: right;
   font-weight: bold;
-  padding-top: 0.2em;
+  padding-top: 0.65em;
 }
 .page.services.featured.cart .cart .payment_info div.product-details {
   color: #666;
@@ -8910,52 +8924,11 @@ input[type="range"]:focus + .rangeslider .rangeslider__handle {
   padding-left: 0.675em;
   line-height: 25px;
 }
-.page.services.featured.cart div.stripe.checkout {
-  margin: 20px auto;
-}
-.page.services.featured.cart div.stripe.checkout .field {
-  border: 1px solid #CCC;
-  padding-left: 0.5em;
-  -webkit-border-radius: 3px;
-  -moz-border-radius: 3px;
-  border-radius: 3px;
+.page.services.featured.cart .submit-wrapper a.primary,
+.page.services.featured.cart .submit-wrapper input.primary {
   width: 97%;
-}
-.page.services.featured.cart div.stripe.checkout .field::-webkit-input-placeholder {
-  color: #CFD7E0;
-}
-.page.services.featured.cart div.stripe.checkout .field::-moz-placeholder {
-  color: #CFD7E0;
-}
-.page.services.featured.cart div.stripe.checkout .field:-ms-input-placeholder {
-  color: #CFD7E0;
-}
-.page.services.featured.cart div.stripe.checkout .outcome {
-  float: left;
-  width: 100%;
-  padding-top: 8px;
-  min-height: 24px;
-  text-align: center;
-}
-.page.services.featured.cart div.stripe.checkout .success.visible,
-.page.services.featured.cart div.stripe.checkout .error.visible {
-  display: inline;
-}
-.page.services.featured.cart div.stripe.checkout .error {
-  color: #E4584C;
-}
-.page.services.featured.cart div.stripe.checkout .success {
-  color: #666EE8;
-}
-.page.services.featured.cart div.stripe.checkout .success .token {
-  font-weight: 500;
-  font-size: 13px;
-}
-.page.services.featured.cart div.stripe.checkout #js_checkout_button {
-  width: 100%;
-  text-align: center;
   margin-top: 1em;
-  padding: 8px 0;
+  padding: 8px;
 }
 .page.services.featured.order-complete h1,
 .page.services.featured.order-complete h2,
