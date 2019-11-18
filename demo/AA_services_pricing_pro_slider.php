@@ -137,7 +137,7 @@
                                 <li><i class="fa fa-long-arrow-right" aria-hidden="true"></i> browser extensions & CLI</li>
                                 <li><i class="fa fa-long-arrow-right" aria-hidden="true"></i> Open API</li>
                                 <li><i class="fa fa-long-arrow-right" aria-hidden="true"></i> Installation scripts, docker container</li>
-                                <li><i class="fa fa-long-arrow-right" aria-hidden="true"></i> Community support <a href="https://community.passbolt.com">(Community forum)</a></li>
+                                <li><i class="fa fa-long-arrow-right" aria-hidden="true"></i> Community support</li>
 				            </ul>
 			            </div>
 			            <div class="second_cta">
