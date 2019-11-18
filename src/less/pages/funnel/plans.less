@@ -172,11 +172,23 @@
         .plan-description > h2 {
           border-bottom: 0;
         }
+        .plan-pricing {
+          margin-top: 4em;
+        }
       }
 
       &.community  {
+        .plan-features ul {
+          min-height: 266px;
+        }
         .plan-limit {
           margin-top: 18px;
+        }
+      }
+
+      &.business, &.enterprise  {
+        .plan-features ul {
+          min-height: 377px;
         }
       }
 
@@ -216,7 +228,7 @@
         display: flex;
         -ms-flex-align: center;
         align-items: center;
-        margin-top: 1.5em;
+        margin-top: 3em;
 
         .discounted {
           text-align: center;
@@ -336,15 +348,20 @@
 
       div.plan-features {
         font-size: 1.25em;
-        text-align: center;
+        text-align: left;
         padding: 1em;
+
+        p {
+          padding: 0.6em 0;
+          font-size: 0.8em;
+          margin-bottom: 1.5em;
+          color: @grey-dark;
+        }
         
         ul {
-          min-height: 346px;
           li {
-            padding: 0.4em;
+            padding: 0.6em 0.4em;
             font-size: 0.8em;
-            border-top: 1px solid @grey;
           }
         }
         a {
@@ -507,7 +524,8 @@
     .tab-content .service-col.plan.business .plan-description h2 {
       border-bottom: 1px solid @grey;
     }
+
      .tab-content .service-col.plan.enterprise .plan-pricing {
-      margin-top: 20px;
+      //margin-top: 20px;
     }
 }

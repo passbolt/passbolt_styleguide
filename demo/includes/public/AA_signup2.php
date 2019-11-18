@@ -10,7 +10,7 @@
                     <form action="/" id="RegistrationsPrelaunchForm" method="post" accept-charset="utf-8">
                     		<div style="display:none;"><input type="hidden" name="_method" value="POST"/></div>
                         <div class="inline email input"><input name="data[Registration][email]" class="required fluid" placeholder="Your email" type="email" id="RegistrationEmail" required="required"/></div>
-                        <div class="submit"><input  class="button primary big" type="submit" value="subscribe"/></div>
+                        <div class="submit"><input  class="button primary big" type="submit" value="Subscribe"/></div>
                         <div class="smallprint"><a href="#">We respect your privacy.</a></div>
                     </form>
                 </div>

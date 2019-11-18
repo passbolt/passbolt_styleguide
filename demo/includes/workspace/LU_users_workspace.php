@@ -19,7 +19,7 @@
                     <div class="panel middle">
                         <?php
                         $_GET['breadcrumbs'] = array(
-                            'all users' => 'demo/LU_users.php',
+                            'All users' => 'demo/LU_users.php',
                             'IT Support (group)' => 'demo/LU_users.php'
                         );
                         include('includes/LU_breadcrumbs.php'); ?>

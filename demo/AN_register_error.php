@@ -32,18 +32,18 @@
 						<fieldset>
 							<legend>Please enter your username and password</legend>
 							<div class="input text required"><label for="UserFirstname">Firstname</label>
-								<input name="data[User][firstname]" class="required fluid" maxlength="50" type="text" id="UserFirstname" required="required"/></div>
+								<input name="data[User][firstname]" class="required fluid" maxlength="50" type="text" id="UserFirstname" required="required" placeholder="firstname" /></div>
 							<div class="input text required error">
 								<label for="UserLastname">Lastname</label>
-								<input name="data[User][lastname]" class="required fluid" maxlength="50" type="text" id="UserLastname" required="required"/>
+								<input name="data[User][lastname]" class="required fluid" maxlength="50" type="text" id="UserLastname" required="required" placeholder="lastname" />
 								<div class="error message">Last name should be between 2 and 64 characters long</div>
 							</div>
 							<div class="input text required"><label for="UserUsername">Email</label>
-								<input name="data[User][username]" class="required fluid" maxlength="50" type="text" id="UserUsername" required="required"/></div>
+								<input name="data[User][username]" class="required fluid" maxlength="50" type="text" id="UserUsername" required="required" placeholder="email" /></div>
 						</fieldset>
                         <div class="submit-wrapper clearfix">
-                            <input class="button primary big" value="register" data-view-id="423" type="submit">
-                            <a href="demo/AN_login.php" class="secondary">already a member?</a>
+                            <input class="button primary big" value="Register" data-view-id="423" type="submit">
+                            <a href="demo/AN_login.php" class="secondary">or already a member?</a>
                         </div>
 					</form>
 				</div>

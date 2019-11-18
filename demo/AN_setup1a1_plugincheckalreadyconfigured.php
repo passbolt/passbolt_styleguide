@@ -74,7 +74,7 @@
 								</div>
 
 								<div class="submit-input-wrapper">
-									<a href="demo/AN_setup2a0_createnewkey.php" class="button primary big disabled">next</a>
+									<a href="demo/AN_setup2a0_createnewkey.php" class="button primary big disabled">Next</a>
 								</div>
 							</form>
 						</div>

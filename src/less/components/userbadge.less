@@ -1,7 +1,7 @@
 /*
  * Profile user card
  */
-.user.profile {
+ .user.profile {
     max-width: 18em;
     width: 80%;
     float: right;
@@ -75,23 +75,20 @@
         display: block;
         border: 0;
         color:@font-dim;
-
-        &:after {
-            position:absolute;
-            content: "\f0d7"; /* caret down */
-            font: normal normal normal 1em FontAwesome;
-            text-rendering: auto;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-            width:1em;
-            height:1em;
-            margin-left:-2em;
-            margin-top: 1em;
+        span.svg-icon {
+            margin: 18px 0 0 7px;
+            display: inline-block;
+        }
+	.svg-icon svg {
+            fill: @fill-color;
         }
         &:hover {
-            color:@blacker;
+            color: @blacker;
+            svg {
+                fill: @fill-hover-color;
+            }
         }
-        span {
+        span:last-child {
             visibility: hidden;
         }
     }

@@ -37,7 +37,7 @@ uCZO5HNTgrf3rZ4wc7jtI6Nk
             </div>
         </li>
         <li class="uri">
-            <span class="label">URL</span>
+            <span class="label">URI</span>
             <span class="value">
 				<a data-view-id="365" target="_blank" href="https://inkscape.org/">https://inkscape.org/</a>
 			</span>

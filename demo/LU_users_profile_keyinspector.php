@@ -32,7 +32,7 @@
 						<div class="panel middle">
 						<?php
 							$_GET['breadcrumbs'] = array(
-								'all users' => 'demo/LU_users.php',
+								'All users' => 'demo/LU_users.php',
 								'test user' => 'demo/LU_users_profile.php',
 								'key inspector' => 'demo/LU_users_profile_keyinspector.php'
 							);
@@ -95,16 +95,16 @@
 													<ul class="actions duo-wrapper">
 														<li>
 															<a href="#" class="button selected toggle duo">
-																<span>public</span>
+																<span>Public</span>
 															</a>
 															<a href="#" class="button toggle duo">
-																<span>both</span>
+																<span>Both</span>
 															</a>
 														</li>
 														<li>
 															<a href="#" class="button">
 																<i class="fa fa-fw fa-download"></i>
-																<span>download</span></a>
+																<span>Download</span></a>
 														</li>
 													</ul>
 													<div class="input textarea gpgkey">

@@ -101,8 +101,8 @@
 
 							<div class="row last">
 								<div class="input-wrapper">
-									<a href="demo/AN_webinstaller3a1_server_keys_import.php" class="button cancel big">cancel</a>
-									<a href="#" class="button primary next big disabled">next</a>
+									<a href="demo/AN_webinstaller3a1_server_keys_import.php" class="button cancel big">Cancel</a>
+									<a href="#" class="button primary next big disabled">Next</a>
 								</div>
 							</div>
 

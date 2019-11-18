@@ -112,8 +112,8 @@
 
 					<div class="row last">
 						<div class="input-wrapper">
-							<a href="demo/AN_setup2b0_importkey.php" class="button cancel big">cancel</a>
-							<a href="demo/AN_setup4a0_securitytoken.php" class="button primary next big disabled">next</a>
+							<a href="demo/AN_setup2b0_importkey.php" class="button cancel big">Cancel</a>
+							<a href="demo/AN_setup4a0_securitytoken.php" class="button primary next big disabled">Next</a>
 						</div>
 					</div>
 

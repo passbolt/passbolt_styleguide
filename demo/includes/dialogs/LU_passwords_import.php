@@ -3,7 +3,10 @@
 		<div class="dialog-header">
 			<h2>Import passwords</h2>
 			<a href="demo/LU_passwords.php" class="dialog-close">
-				<i class="fa fa-close"></i><span class="visuallyhidden">close</span>
+			<span class="svg-icon">
+                    <svg viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg"><path d="M1490 1322q0 40-28 68l-136 136q-28 28-68 28t-68-28l-294-294-294 294q-28 28-68 28t-68-28l-136-136q-28-28-28-68t28-68l294-294-294-294q-28-28-28-68t28-68l136-136q28-28 68-28t68 28l294 294 294-294q28-28 68-28t68 28l136 136q28 28 28 68t-28 68l-294 294 294 294q28 28 28 68z"/></svg>
+								</span>
+								<span class="visuallyhidden">close</span>
 			</a>
 
 		</div>
@@ -22,7 +25,7 @@
                                data-text="Choose a file" data-placeholder="No file selected">
 
 						<div id="js_field_import_feedback" class="message ready error">
-							this is the error message
+							This is the error message
 						</div>
 					</div>
 					<div class="input text">
@@ -33,7 +36,7 @@
 				</div>
 				<div class="submit-wrapper clearfix">
 					<input class="button primary" value="Import" type="submit" onclick="javascript:window.location.href='demo/LU_passwords_import_options.php'; return false;">
-					<a href="demo/LU_passwords.php" class="js-dialog-cancel cancel">cancel</a>
+					<a href="demo/LU_passwords.php" class="js-dialog-cancel cancel">Cancel</a>
 				</div>
 			</form>
 		</div>

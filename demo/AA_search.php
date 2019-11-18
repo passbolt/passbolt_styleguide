@@ -28,9 +28,9 @@
                 <div class="row">
                     <div class="col12">
                         <?php $_GET['breadcrumbs'] = array(
-                            'home' => '/',
-                            'help' => '/help',
-                            'search' => '/search'
+                            'Home' => '/',
+                            'Help' => '/help',
+                            'Search' => '/search'
                         );
                         include('includes/LU_breadcrumbs.php'); ?>
                     </div>

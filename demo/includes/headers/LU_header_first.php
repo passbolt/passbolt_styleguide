@@ -23,7 +23,7 @@ if (!isset($role)) {
 					<div class="row selected">
 						<div class="main-cell-wrapper">
 							<div class="main-cell">
-								<a href="demo/LU_passwords.php" role="button" tabindex="2"><span>passwords</span></a>
+								<a href="demo/LU_passwords.php" role="button" tabindex="2"><span>Passwords</span></a>
 							</div>
 						</div>
 					</div>
@@ -32,7 +32,7 @@ if (!isset($role)) {
 					<div class="row">
 						<div class="main-cell-wrapper">
 							<div class="main-cell">
-								<a href="demo/LU_users.php" role="button" tabindex="3"><span>users</span></a>
+								<a href="demo/LU_users.php" role="button" tabindex="3"><span>Users</span></a>
 							</div>
 						</div>
 					</div>
@@ -42,7 +42,7 @@ if (!isset($role)) {
 					<div class="row">
 						<div class="main-cell-wrapper">
 							<div class="main-cell">
-								<a href="demo/AD_admin_ldap_configuration.php" role="button" tabindex="3"><span>administration</span></a>
+								<a href="demo/AD_admin_ldap_configuration.php" role="button" tabindex="3"><span>Administration</span></a>
 							</div>
 						</div>
 					</div>
@@ -52,7 +52,7 @@ if (!isset($role)) {
 					<div class="row">
 						<div class="main-cell-wrapper">
 							<div class="main-cell">
-								<a href="../demo" tabindex="4"><span>help</span></a>
+								<a href="../demo" tabindex="4"><span>Help</span></a>
 							</div>
 						</div>
 					</div>
@@ -64,7 +64,7 @@ if (!isset($role)) {
 					<div class="row">
 						<div class="main-cell-wrapper">
 							<div class="main-cell">
-								<a href="demo/AN_login.php"><span>logout</span></a>
+								<a href="demo/AN_login.php"><span>Logout</span></a>
 							</div>
 						</div>
 					</div>

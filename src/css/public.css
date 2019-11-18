@@ -16,6 +16,7 @@
 /* tags */
 /* tooltip */
 /* loading animation */
+/* svg fill */
 /* ==========================================================================
  * Reset is a mix of :
  *
@@ -459,6 +460,7 @@ input[type="submit"] {
 button[disabled],
 html input[disabled] {
   cursor: default;
+  pointer-events: none;
 }
 /**
  * 1. Address box sizing set to content-box in IE 8/9.
@@ -3218,6 +3220,65 @@ ul.checklist li:before {
   clip: auto;
 }
 /*!  @licend */
+.icon {
+  display: inline-block;
+  font: normal normal normal 14px/1 FontAwesome;
+  font-size: inherit;
+  text-rendering: auto;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  /* favorites */
+}
+.icon.fav:before {
+  content: "\f005";
+  color: #DDD;
+}
+.icon.unfav:before {
+  content: "\f005";
+  color: #D40101;
+}
+.svg-icon {
+  font: normal normal normal 14px/1 FontAwesome;
+  font-size: inherit;
+  text-rendering: auto;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+.svg-icon + span:not(.visuallyhidden) {
+  margin-left: 2px;
+  display: inline-block;
+}
+.svg-icon svg {
+  width: 0.88rem;
+  height: 0.88rem;
+  display: inline-block;
+  vertical-align: text-top;
+  margin: auto;
+  fill: #333;
+}
+a .svg-icon svg:hover {
+  fill: #2894DF;
+}
+a.button .svg-icon svg:hover {
+  fill: #333;
+}
+.svg-icon.light svg {
+  fill: #888;
+}
+a.disabled .svg-icon svg {
+  fill: #888;
+  pointer-events: none;
+  cursor: default;
+}
+.disabled .svg-icon svg:hover {
+  fill: #888;
+}
+.svg-icon.icon-only svg {
+  width: 1.1rem;
+  height: 1.1rem;
+  display: block;
+  margin: auto;
+}
 /*
 	Generic buttons
 	Description	: We support <input[submit]>, <input.button>, <button> and <a.button>
@@ -3285,6 +3346,10 @@ button,
   border: 1px solid #4271b7;
   background: #2A9CEB;
 }
+.button.primary:active .svg-icon svg,
+.button.primary:focus .svg-icon svg {
+  fill: #FFF;
+}
 /* warning */
 .button.warning,
 .button.warning:hover,
@@ -3294,6 +3359,12 @@ button,
   background: #D40101;
   border: 1px solid #D40101;
   text-shadow: none;
+}
+.button.warning .svg-icon svg,
+.button.warning:hover .svg-icon svg,
+.button.warning:focus .svg-icon svg,
+.button.warning:active .svg-icon svg {
+  fill: #FFF;
 }
 .button.warning:focus,
 .button.warning:active {
@@ -3329,6 +3400,9 @@ button,
   color: #2894DF;
   border: 1px solid #2894DF;
 }
+.button:focus .svg-icon svg {
+  fill: #2894DF;
+}
 /* active */
 .button:active {
   color: #2894DF;
@@ -3337,6 +3411,9 @@ button,
   position: relative;
   box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.2);
 }
+.button:active .svg-icon svg {
+  fill: #2894DF;
+}
 .button.disabled {
   cursor: default;
   color: #888;
@@ -3344,6 +3421,9 @@ button,
   border: 1px solid #DDD;
   text-shadow: none;
   font-weight: normal;
+}
+.button.disabled .svg-icon svg {
+  fill: #888;
 }
 /* inactive */
 .button.disabled:hover,
@@ -3354,6 +3434,11 @@ button,
   color: #888;
   background: #FFF;
   border: 1px solid #DDD;
+}
+.button.disabled:hover .svg-icon svg,
+.button.disabled:active .svg-icon svg,
+.button.disabled:focus .svg-icon svg {
+  fill: #888;
 }
 /* toggle selected */
 .toggle.button.selected {
@@ -3452,6 +3537,12 @@ input[type=submit].button.processing {
 }
 .button-spacer {
   margin-right: 0.5em;
+}
+.button.disabled .svg-icon svg:hover {
+  fill: #888;
+}
+.button .svg-icon svg:hover {
+  fill: #333;
 }
 /*
 	Base form components styling
@@ -3564,10 +3655,14 @@ textarea {
   height: 3.6em;
   /* 4 char (default input length) x 1em (average char length) + .6em (padding) */
   line-height: 16px;
+  resize: none;
 }
 .textarea.large textarea {
   width: 30em;
   height: 7em;
+}
+textarea.message_notice {
+  margin-bottom: 0;
 }
 /* text and textarea */
 .text.input .input-addon,
@@ -5103,7 +5198,21 @@ article table.table-parameters tbody tr td em {
   -moz-border-radius: 0.214em;
   border-radius: 0.214em;
 }
-.dialog-close:hover .fa-close {
+.dialog-close .svg-icon {
+  padding: 7px 0 7px 0;
+  width: 30px;
+  height: 15px;
+  text-align: center;
+  display: block;
+  vertical-align: baseline;
+  line-height: 15px;
+  border: 1px solid #EEE;
+  -webkit-border-radius: 0.214em;
+  -moz-border-radius: 0.214em;
+  border-radius: 0.214em;
+}
+.dialog-close:hover .fa-close,
+.dialog-close:hover .svg-icon {
   border: 1px solid #DDD;
   -webkit-border-radius: 0.214em;
   -moz-border-radius: 0.214em;
@@ -5360,6 +5469,9 @@ article table.table-parameters tbody tr td em {
 }
 .message.success.success-large.animated #successAnimation.animated #successAnimationCheck {
   animation: 0.75s cubic-bezier(0.77, 0, 0.175, 1) 0s 1 both drawCheck;
+}
+.message.notice .svg-icon svg {
+  margin-top: -5px;
 }
 @media only screen and (max-width: 767px) {
   .message.success.success-large.animated {
@@ -5811,6 +5923,11 @@ form.search button .fa-search {
 input[type="search"]::-webkit-search-decoration,
 input[type="search"]::-webkit-search-cancel-button {
   display: none;
+}
+.svg-icon.icon-only.search svg {
+  width: 1.25rem;
+  height: 1.25rem;
+  margin-top: -2px;
 }
 /* rescale on small screen */
 @media all and (max-width: 480px) {
@@ -8314,8 +8431,18 @@ input[type="range"]:focus + .rangeslider .rangeslider__handle {
 .page.plans .tab-content .service-col.plan.with-tab-options .plan-description > h2 {
   border-bottom: 0;
 }
+.page.plans .tab-content .service-col.plan.with-tab-options .plan-pricing {
+  margin-top: 4em;
+}
+.page.plans .tab-content .service-col.plan.community .plan-features ul {
+  min-height: 266px;
+}
 .page.plans .tab-content .service-col.plan.community .plan-limit {
   margin-top: 18px;
+}
+.page.plans .tab-content .service-col.plan.business .plan-features ul,
+.page.plans .tab-content .service-col.plan.enterprise .plan-features ul {
+  min-height: 377px;
 }
 .page.plans .tab-content .service-col.plan.enterprise .plan-limit {
   margin-top: 18px;
@@ -8347,7 +8474,7 @@ input[type="range"]:focus + .rangeslider .rangeslider__handle {
   display: flex;
   -ms-flex-align: center;
   align-items: center;
-  margin-top: 1.5em;
+  margin-top: 3em;
 }
 .page.plans .tab-content .service-col.plan .plan-pricing .discounted {
   text-align: center;
@@ -8452,16 +8579,18 @@ input[type="range"]:focus + .rangeslider .rangeslider__handle {
 }
 .page.plans .tab-content .service-col.plan div.plan-features {
   font-size: 1.25em;
-  text-align: center;
+  text-align: left;
   padding: 1em;
 }
-.page.plans .tab-content .service-col.plan div.plan-features ul {
-  min-height: 346px;
+.page.plans .tab-content .service-col.plan div.plan-features p {
+  padding: 0.6em 0;
+  font-size: 0.8em;
+  margin-bottom: 1.5em;
+  color: #969696;
 }
 .page.plans .tab-content .service-col.plan div.plan-features ul li {
-  padding: 0.4em;
+  padding: 0.6em 0.4em;
   font-size: 0.8em;
-  border-top: 1px solid #DDD;
 }
 .page.plans .tab-content .service-col.plan div.plan-features a {
   border-bottom: 0;
@@ -8591,9 +8720,6 @@ input[type="range"]:focus + .rangeslider .rangeslider__handle {
 .page.plans.cloud .tab-content .service-col.plan.business .plan-description h2 {
   border-bottom: 1px solid #DDD;
 }
-.page.plans.cloud .tab-content .service-col.plan.enterprise .plan-pricing {
-  margin-top: 20px;
-}
 .page.services.featured.cart .error label.error {
   font-size: 0.7em;
   padding-top: 0;
@@ -8662,10 +8788,15 @@ input[type="range"]:focus + .rangeslider .rangeslider__handle {
 .page.services.featured.cart .cart .payment_info .order-line div.form-group.price .price-per-user {
   font-size: 0.9em;
 }
+.page.services.featured.cart .cart .payment_info .order-line select.quantity {
+  width: 65px;
+  display: inline-block;
+}
 .page.services.featured.cart .cart .payment_info .order-line .line-total {
+  display: inline-block;
   float: right;
   font-weight: bold;
-  padding-top: 0.2em;
+  padding-top: 0.65em;
 }
 .page.services.featured.cart .cart .payment_info div.product-details {
   color: #666;
@@ -8783,52 +8914,11 @@ input[type="range"]:focus + .rangeslider .rangeslider__handle {
   padding-left: 0.675em;
   line-height: 25px;
 }
-.page.services.featured.cart div.stripe.checkout {
-  margin: 20px auto;
-}
-.page.services.featured.cart div.stripe.checkout .field {
-  border: 1px solid #CCC;
-  padding-left: 0.5em;
-  -webkit-border-radius: 3px;
-  -moz-border-radius: 3px;
-  border-radius: 3px;
+.page.services.featured.cart .submit-wrapper a.primary,
+.page.services.featured.cart .submit-wrapper input.primary {
   width: 97%;
-}
-.page.services.featured.cart div.stripe.checkout .field::-webkit-input-placeholder {
-  color: #CFD7E0;
-}
-.page.services.featured.cart div.stripe.checkout .field::-moz-placeholder {
-  color: #CFD7E0;
-}
-.page.services.featured.cart div.stripe.checkout .field:-ms-input-placeholder {
-  color: #CFD7E0;
-}
-.page.services.featured.cart div.stripe.checkout .outcome {
-  float: left;
-  width: 100%;
-  padding-top: 8px;
-  min-height: 24px;
-  text-align: center;
-}
-.page.services.featured.cart div.stripe.checkout .success.visible,
-.page.services.featured.cart div.stripe.checkout .error.visible {
-  display: inline;
-}
-.page.services.featured.cart div.stripe.checkout .error {
-  color: #E4584C;
-}
-.page.services.featured.cart div.stripe.checkout .success {
-  color: #666EE8;
-}
-.page.services.featured.cart div.stripe.checkout .success .token {
-  font-weight: 500;
-  font-size: 13px;
-}
-.page.services.featured.cart div.stripe.checkout #js_checkout_button {
-  width: 100%;
-  text-align: center;
   margin-top: 1em;
-  padding: 8px 0;
+  padding: 8px;
 }
 .page.services.featured.order-complete h1,
 .page.services.featured.order-complete h2,

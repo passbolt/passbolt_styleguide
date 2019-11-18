@@ -33,7 +33,7 @@
 					<?php
 					$_GET['breadcrumbs'] = array(
 						'Administration' => 'demo/AD_admin_mfa_configuration.php',
-						'Multi factor authentication' => 'demo/AD_admin_mfa_configuration.php',
+						'Multi-factor authentication' => 'demo/AD_admin_mfa_configuration.php',
 						'Settings' => 'demo/AD_admin_mfa_configuration.php'
 					);
 					include('includes/LU_breadcrumbs.php'); ?>

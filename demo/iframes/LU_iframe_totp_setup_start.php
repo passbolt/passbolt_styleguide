@@ -31,14 +31,14 @@
                         <a href="#" target="_blank" rel="noopener">Google Authenticator</a> or
                         <a href="#" target="_blank" rel="noopener">FreeOTP</a>.
                     </p>
-                    <a class="button">learn more</a>
+                    <a class="button">Learn more</a>
                 </div>
             </div>
         </div>
         <div class="row">
             <div class="col7">
                 <div class="actions-wrapper">
-                    <a class="button cancel" href="demo/iframes/LU_iframe_mfa_select.php">cancel</a>
+                    <a class="button cancel" href="demo/iframes/LU_iframe_mfa_select.php">Cancel</a>
                     <a class="button primary" href="demo/iframes/LU_iframe_totp_setup_get.php">Let's get started!</a>
                 </div>
             </div>

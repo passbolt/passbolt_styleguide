@@ -32,10 +32,10 @@
 						<fieldset>
 							<legend>Please enter your username</legend>
 							<div class="input text required"><label for="UserUsername">Email</label>
-								<input name="data[User][username]" class="required fluid" maxlength="50" type="text" id="UserUsername" required="required"/></div>
+								<input name="data[User][username]" class="required fluid" maxlength="50" placeholder="email" type="text" id="UserUsername" required="required"/></div>
 						</fieldset>
                         <div class="submit-wrapper clearfix">
-                            <input class="button primary big" value="start recovery" type="submit">
+                            <input class="button primary big" value="Start recovery" type="submit">
                         </div>
 					</form>
 				</div>

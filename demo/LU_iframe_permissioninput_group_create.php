@@ -17,8 +17,8 @@
 <body class="iframe">
 <div class="form-content permission-add">
 <div class="input text autocomplete">
-	<label for="js_perm_create_form_aro_auto_cplt">Add people</label>
-	<input maxlength="50" id="js_perm_create_form_aro_auto_cplt" placeholder="start typing a user name" autocomplete="off" type="text">
+	<label for="js_perm_create_form_aro_auto_cplt">Add people to a group</label>
+	<input maxlength="50" id="js_perm_create_form_aro_auto_cplt" placeholder="Start typing a user name" autocomplete="off" type="text">
 	<div class="security-token">CCK</div>
 </div>
 <div class="input blank">

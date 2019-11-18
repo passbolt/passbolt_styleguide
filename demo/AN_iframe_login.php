@@ -12,13 +12,13 @@
 			   value="test@passbolt.com" disabled="disabled"/>
 	</div>
 	<div class="input text required">
-		<label for="js_master_password">Master password</label>
+		<label for="js_master_password">Passphrase</label>
 		<input type="password" placeholder="password" id="js_master_password" maxlength="50">
 		<div class="security-token">CKR</div>
-		<div class="message helptext">Please enter your secret key password</div>
+		<div class="message helptext">Please enter your passphrase</div>
 	</div>
 	<div class="submit-wrapper clearfix">
-		<a id="loginSubmit" href="#" class="button primary big disabled processing">login</a>
+		<a id="loginSubmit" href="#" class="button primary big disabled processing">Login</a>
 	</div>
 </div>
 </body>

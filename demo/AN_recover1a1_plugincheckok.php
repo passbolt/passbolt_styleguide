@@ -68,7 +68,7 @@
 								</div>
 
 								<div class="submit-input-wrapper">
-									<a href="demo/AN_recover2b0_importkey.php" class="button primary big disabled">next</a>
+									<a href="demo/AN_recover2b0_importkey.php" class="button primary big disabled">Next</a>
 								</div>
 							</form>
 						</div>

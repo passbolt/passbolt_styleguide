@@ -74,9 +74,14 @@ input[type=email]:disabled {
 textarea {
     height: 3.6em; /* 4 char (default input length) x 1em (average char length) + .6em (padding) */
     line-height: 16px;
+    resize: none;
 }
 
 .textarea.large textarea {
     width: 30em;
     height: 7em;
+}
+
+textarea.message_notice {
+    margin-bottom: 0;
 }

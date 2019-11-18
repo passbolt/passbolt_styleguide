@@ -39,9 +39,9 @@
                             <div class="panel middle">
                                 <?php
                                 $_GET['breadcrumbs'] = array(
-                                    'administration' => '#',
-                                    'email transport' => 'demo/AD_admin_smtp_configuration.php',
-                                    'settings' => 'demo/AD_admin_smtp_configuration.php'
+                                    'Administration' => '#',
+                                    'Email transport' => 'demo/AD_admin_smtp_configuration.php',
+                                    'Settings' => 'demo/AD_admin_smtp_configuration.php'
                                 );
                                 include('includes/LU_breadcrumbs.php'); ?>
                                 <div class="ready">

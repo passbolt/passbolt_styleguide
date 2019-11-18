@@ -9,8 +9,12 @@
 						 href="demo/LU_users_profile_edit.php"
 						 data-tooltip="sorry it is not possible to add another key at the moment"
 						>
-						<i class="fa fa-fw fa-plus-circle"></i>
-						<span>add</span>
+						<span class="svg-icon">
+							<svg viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg">
+								<path d="M1344 960v-128q0-26-19-45t-45-19h-256v-256q0-26-19-45t-45-19h-128q-26 0-45 19t-19 45v256h-256q-26 0-45 19t-19 45v128q0 26 19 45t45 19h256v256q0 26 19 45t45 19h128q26 0 45-19t19-45v-256h256q26 0 45-19t19-45zm320-64q0 209-103 385.5t-279.5 279.5-385.5 103-385.5-103-279.5-279.5-103-385.5 103-385.5 279.5-279.5 385.5-103 385.5 103 279.5 279.5 103 385.5z" />
+							</svg>
+						</span>
+						<span>Add</span>
 					</a>
 				</li>
 				<li>
@@ -19,7 +23,7 @@
 						 data-tooltip="sorry it is not possible to revoke an existing key at the moment"
 						>
 						<i class="fa fa-fw fa-ban"></i>
-						<span>revoke</span>
+						<span>Revoke</span>
 					</a>
 				</li>
 

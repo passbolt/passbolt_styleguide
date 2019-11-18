@@ -39,8 +39,8 @@
                     <div class="panel middle" style="overflow:hidden">
                         <?php
                         $_GET['breadcrumbs'] = array(
-                            'administration' => '#',
-                            'tags taxonomy' => 'demo/AD_admin_shared_tags.php',
+                            'Administration' => '#',
+                            'Tags taxonomy' => 'demo/AD_admin_shared_tags.php',
                         );
                         include('includes/LU_breadcrumbs.php'); ?>
                         <!-- <h3>Tags taxonomy</h3> -->

@@ -40,14 +40,14 @@
                     <label for="rememberMe">Do not ask again on this device.</label>
                 </div>
                 <div class="form-actions">
-                    <button type="submit" class="button primary big processing" role="button">login</button>
+                    <button type="submit" class="button primary big processing" role="button">Login</button>
                 </div>
             </form>
         </div>
         <div class="login-form-footer">
-            <a href="#privacy">privacy policy</a>
+            <a href="#privacy">Privacy policy</a>
             <span class="separator"></span>
-            <a href="#tos">credits</a>
+            <a href="#tos">Credits</a>
         </div>
     </div>
     <footer class="footer">

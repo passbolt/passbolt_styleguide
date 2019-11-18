@@ -60,7 +60,9 @@
 										<a href="#" id="js_show_pwd_button"
 											 class="button toggle mad_controller_component_button_controller mad_view_view js_component ready tooltip-right always-show large"
 											 	data-tooltip="click here to view in clear text">
-											<i class="fa fa-eye fa-lg"></i>
+												 <span class="svg-icon icon-only">
+													<svg viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg"><path d="M1664 960q-152-236-381-353 61 104 61 225 0 185-131.5 316.5t-316.5 131.5-316.5-131.5-131.5-316.5q0-121 61-225-229 117-381 353 133 205 333.5 326.5t434.5 121.5 434.5-121.5 333.5-326.5zm-720-384q0-20-14-34t-34-14q-125 0-214.5 89.5t-89.5 214.5q0 20 14 34t34 14 34-14 14-34q0-86 61-147t147-61q20 0 34-14t14-34zm848 384q0 34-20 69-140 230-376.5 368.5t-499.5 138.5-499.5-139-376.5-368q-20-35-20-69t20-69q140-229 376.5-368t499.5-139 499.5 139 376.5 368q20 35 20 69z"/></svg>
+												</span>
 											<span class="visuallyhidden">view</span>
 										</a>
 									</li>
@@ -92,8 +94,8 @@
 
 					<div class="row last">
 						<div class="input-wrapper">
-							<a href="demo/AN_setup2a0_createnewkey.php" class="button cancel big">cancel</a>
-							<a href="demo/AN_setup3a1_creatingkeywait.php" class="button primary next big">next</a>
+							<a href="demo/AN_setup2a0_createnewkey.php" class="button cancel big">Cancel</a>
+							<a href="demo/AN_setup3a1_creatingkeywait.php" class="button primary next big">Next</a>
 						</div>
 					</div>
 

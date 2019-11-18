@@ -27,7 +27,7 @@
                                 <a id="js_wk_menu_edition_button" class="button mad_controller_component_button_controller mad_view_view js_component"
                                    href="demo/AD_admin_email_notifications.php">
                                     <i class="fa fa-fw fa-save"></i>
-                                    <span>save settings</span>
+                                    <span>Save settings</span>
                                 </a>
                             </li>
                         </div>
@@ -49,8 +49,8 @@
 						<div class="panel middle">
 							<?php
 							$_GET['breadcrumbs'] = array(
-								'administration' => '#',
-								'email notifications settings' => 'demo/AD_email_notifications.php'
+								'Administration' => '#',
+								'Email notifications settings' => 'demo/AD_email_notifications.php'
 							);
 							include('includes/LU_breadcrumbs.php'); ?>
 							<div id="js_wk_preference_main"

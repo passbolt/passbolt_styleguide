@@ -38,7 +38,7 @@
 		                <p>The account configured doesn't exist.</p>
 	                </div>
                     <div class="actions-wrapper center">
-                        <a class="button primary big" href="demo/AN_login_stage0.php">register again</a><br><br>
+                        <a class="button primary big" href="demo/AN_login_stage0.php">Register again</a><br><br>
 	                    <a href="demo/AN_recover.php">or recover an existing account</a>
                     </div>
                 </div>

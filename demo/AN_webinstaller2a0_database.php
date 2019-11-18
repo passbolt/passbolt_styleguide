@@ -64,7 +64,7 @@
 						</div>
 
 						<div class="submit-wrapper">
-							<a href="demo/AN_webinstaller3a0_server_keys.php" class="button primary big">save and continue</a>
+							<a href="demo/AN_webinstaller3a0_server_keys.php" class="button primary big">Save and continue</a>
 						</div>
 					</div>
 					<div class="col5 last">

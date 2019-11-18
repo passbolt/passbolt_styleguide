@@ -14,7 +14,7 @@
 			<div class="row">
 				<div class="main-cell-wrapper">
 					<div class="main-cell">
-						<a href="#"><span>Favorite</span></a>
+						<a href="#"><span>Favorites</span></a>
 					</div>
 				</div>
 			</div>
@@ -23,7 +23,7 @@
 			<div class="row">
 				<div class="main-cell-wrapper">
 					<div class="main-cell">
-						<a href="#"><span>Recently modified</span></a>
+						<a href="#"><span>Recents</span></a>
 					</div>
 				</div>
 			</div>
@@ -41,7 +41,7 @@
 			<div class="row">
 				<div class="main-cell-wrapper">
 					<div class="main-cell">
-						<a href="#"><span>Items I own</span></a>
+						<a href="#"><span>Owned by me</span></a>
 					</div>
 				</div>
 			</div>

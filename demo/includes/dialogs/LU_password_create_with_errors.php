@@ -1,10 +1,12 @@
 <div id="501a1f88-2696-7a89-5739-4b650e8ea625" class="mad_component_dialog create-password-dialog dialog-wrapper mad_view_component_dialog ready">
     <div class="dialog">
         <div class="dialog-header">
-            <h2>Create Password</h2>
+            <h2>Create a password</h2>
             <a href="#" class="dialog-close">
-                <i class="fa fa-close"></i>
-                <span class="visuallyhidden">close</span>
+            <span class="svg-icon">
+                <svg viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg"><path d="M1490 1322q0 40-28 68l-136 136q-28 28-68 28t-68-28l-294-294-294 294q-28 28-68 28t-68-28l-136-136q-28-28-28-68t28-68l294-294-294-294q-28-28-28-68t28-68l136-136q28-28 68-28t68 28l294 294 294-294q28-28 68-28t68 28l136 136q28 28 28 68t-28 68l-294 294 294 294q28 28 28 68z"/></svg>
+            </span>
+                <span class="visuallyhidden">Close</span>
             </a>
         </div>
         <div class="js_dialog_content dialog-content">
@@ -14,8 +16,8 @@
                     <input value="" name="passbolt.model.Resource.Category.id" id="js_field_category_id" class="form_field mad_form_textbox form-element mad_view_form_textbox ready" type="hidden">
 
                     <div class="input text required js_form_element_wrapper error">
-                        <label class="error" for="js_field_name">Name</label>
-                        <input name="passbolt.model.Resource.name" class="required mad_form_textbox form-element mad_view_form_textbox error" maxlength="50" id="js_field_name" placeholder="name" type="text">
+                        <label class="error" for="js_field_name">Resource</label>
+                        <input name="passbolt.model.Resource.name" class="required mad_form_textbox form-element mad_view_form_textbox error" maxlength="50" id="js_field_name" placeholder="resource name" type="text">
                         <div id="js_field_name_feedback" class="message mad_form_feedback js_component mad_view error">This information is required</div>
                     </div>
 
@@ -27,7 +29,7 @@
 
                     <div class="input text js_form_element_wrapper">
                         <label for="js_field_username">Username</label>
-                        <input name="passbolt.model.Resource.username" class="mad_form_textbox form-element mad_view_form_textbox" maxlength="50" id="js_field_username" placeholder="name" type="text">
+                        <input name="passbolt.model.Resource.username" class="mad_form_textbox form-element mad_view_form_textbox" maxlength="50" id="js_field_username" placeholder="username" type="text">
                     </div>
                     <div class="input text required js_form_element_wrapper js_form_secret_wrapper error">
                         <label for="js_field_secret_data_0">Password</label>
@@ -45,8 +47,8 @@
                     </div>
                 </div>
                 <div class="submit-wrapper clearfix">
-                    <input class="button primary" value="save" data-view-id="365" type="submit">
-                    <a href="#" class="js-dialog-cancel cancel">cancel</a>
+                    <input class="button primary" value="Save" data-view-id="365" type="submit">
+                    <a href="#" class="js-dialog-cancel cancel">Cancel</a>
                 </div>
             </form>
         </div>

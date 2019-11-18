@@ -50,7 +50,7 @@
 							<div class="success message backup-prompt">
 								<a href="demo/AN_setup4a0_securitytoken.php" class="button primary next big">
 									<i class="fa fa-fw fa-download"></i>
-									<span>download</span>
+									<span>Download</span>
 								</a>
 								<span class="help-text">Take some time to make a backup of your key (and store it in a safe location).</span>
 							</div>
@@ -75,8 +75,8 @@
 				</div>
 				<div class="row last">
 					<div class="input-wrapper">
-						<a href="demo/AN_setup3a0_setmasterpassword.php" class="button cancel big">cancel</a>
-						<a href="demo/AN_setup4a0_securitytoken.php" class="button primary next big">next</a>
+						<a href="demo/AN_setup3a0_setmasterpassword.php" class="button cancel big">Cancel</a>
+						<a href="demo/AN_setup4a0_securitytoken.php" class="button primary next big">Next</a>
 					</div>
 				</div>
 			</div>

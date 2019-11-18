@@ -32,19 +32,19 @@
 						<fieldset>
 							<legend>Please enter your username and password</legend>
 							<div class="input text required"><label for="UserFirstname">Firstname</label>
-								<input name="data[User][firstname]" class="required fluid" maxlength="50" type="text" id="UserFirstname" required="required"/></div>
+								<input name="data[User][firstname]" class="required fluid" maxlength="50" type="text" id="UserFirstname" required="required" placeholder="firstname" /></div>
 							<div class="input text required"><label for="UserLastname">Lastname</label>
-								<input name="data[User][lastname]" class="required fluid" maxlength="50" type="text" id="UserLastname" required="required"/></div>
+								<input name="data[User][lastname]" class="required fluid" maxlength="50" type="text" id="UserLastname" required="required" placeholder="lastname" /></div>
 							<div class="input text required"><label for="UserUsername">Email</label>
-								<input name="data[User][username]" class="required fluid" maxlength="50" type="text" id="UserUsername" required="required"/></div>
+								<input name="data[User][username]" class="required fluid" maxlength="50" type="text" id="UserUsername" required="required" placeholder="email" /></div>
                             <p>
                                 <input type="checkbox" name="disclaimer" id="disclaimer" value="value" required="required">
                                 <label for="disclaimer" style="font-size:.9em">I understand the disclaimer. I agree with the Terms of Service and Privacy Policy.</label>
                             </p>
                         </fieldset>
                         <div class="submit-wrapper clearfix">
-                            <input class="button primary big" value="register" data-view-id="423" type="submit">
-                            <a href="demo/AN_login.php" class="secondary">already a member?</a>
+                            <input class="button primary big" value="Register" data-view-id="423" type="submit">
+                            <a href="demo/AN_login.php" class="secondary">or already a member?</a>
                         </div>
 					</form>
 				</div>

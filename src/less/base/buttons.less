@@ -58,6 +58,9 @@ button,
     color: @font-inverse;
     border: 1px solid @border-focus-dark;
     background: @blue-light;
+    .svg-icon svg {
+        fill: @font-inverse;
+    }
 }
 
 /* warning */
@@ -69,6 +72,9 @@ button,
     background: @red;
     border: 1px solid @red;
     text-shadow: none;
+    .svg-icon svg {
+        fill: @font-inverse;
+    }
 }
 
 .button.warning:focus,
@@ -101,6 +107,9 @@ button,
 .button:focus {
     color: @font-focus;
     border: 1px solid @border-focus;
+    .svg-icon svg {
+        fill: @font-focus;
+    }
 }
 
 /* active */
@@ -110,6 +119,9 @@ button,
     background: @background-lighter;
     position: relative;
     box-shadow: inset 0 1px 2px rgba(0, 0, 0, .2);
+    .svg-icon svg {
+        fill: @font-focus;
+    }
 }
 
 .button.disabled {
@@ -119,6 +131,9 @@ button,
     border: 1px solid @button-disabled-border;
     text-shadow: none;
     font-weight: normal;
+    .svg-icon svg {
+        fill: @button-disabled-color;
+    }
 }
 
 /* inactive */
@@ -130,6 +145,9 @@ button,
     color: @button-disabled-color;
     background: @button-disabled-background;
     border: 1px solid @button-disabled-border;
+    .svg-icon svg {
+        fill: @button-disabled-color;
+    }
 }
 
 /* toggle selected */
@@ -190,4 +208,12 @@ input[type=submit].button.processing {
 
 .button-spacer {
     margin-right: .5em;
+}
+
+.button.disabled .svg-icon svg:hover {
+    fill: @font-light;
+}
+
+.button .svg-icon svg:hover {
+    fill: @font-default;
 }

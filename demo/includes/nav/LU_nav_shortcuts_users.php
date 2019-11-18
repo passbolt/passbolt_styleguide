@@ -14,7 +14,7 @@
 			<div class="row">
 				<div class="main-cell-wrapper">
 					<div class="main-cell">
-						<a href="#"><span>Recently modified</span></a>
+						<a href="#"><span>Recents</span></a>
 					</div>
 				</div>
 			</div>

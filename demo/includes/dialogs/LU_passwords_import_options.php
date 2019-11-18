@@ -4,7 +4,10 @@
 		<div class="dialog-header">
 			<h2>Enter the password and/or key file</h2>
 			<a href="#" class="dialog-close">
-				<i class="fa fa-close"></i><span class="visuallyhidden">close</span>
+			<span class="svg-icon">
+                    <svg viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg"><path d="M1490 1322q0 40-28 68l-136 136q-28 28-68 28t-68-28l-294-294-294 294q-28 28-68 28t-68-28l-136-136q-28-28-28-68t28-68l294-294-294-294q-28-28-28-68t28-68l136-136q28-28 68-28t68 28l294 294 294-294q28-28 68-28t68 28l136 136q28 28 28 68t-28 68l-294 294 294 294q28 28 28 68z"/></svg>
+                </span>	
+			<span class="visuallyhidden">close</span>
 			</a>
 		</div>
 		<div class="js_dialog_content dialog-content">
@@ -18,7 +21,9 @@
                             <ul class="actions inline">
                                 <li>
                                     <a href="#" id="js_secret_view" class="button toggle">
-                                        <i class="fa fa-eye fa-fw fa-lg"></i>
+                                        <span class="svg-icon icon-only">
+											<svg viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg"><path d="M1664 960q-152-236-381-353 61 104 61 225 0 185-131.5 316.5t-316.5 131.5-316.5-131.5-131.5-316.5q0-121 61-225-229 117-381 353 133 205 333.5 326.5t434.5 121.5 434.5-121.5 333.5-326.5zm-720-384q0-20-14-34t-34-14q-125 0-214.5 89.5t-89.5 214.5q0 20 14 34t34 14 34-14 14-34q0-86 61-147t147-61q20 0 34-14t14-34zm848 384q0 34-20 69-140 230-376.5 368.5t-499.5 138.5-499.5-139-376.5-368q-20-35-20-69t20-69q140-229 376.5-368t499.5-139 499.5 139 376.5 368q20 35 20 69z"/></svg>
+										</span>
                                         <span class="visuallyhidden">view</span>
                                     </a>
                                 </li>
@@ -34,7 +39,7 @@
 				</div>
 				<div class="submit-wrapper clearfix">
 					<input class="button primary" value="Continue import" type="submit">
-					<a href="#" class="js-dialog-cancel cancel">cancel</a>
+					<a href="#" class="js-dialog-cancel cancel">Cancel</a>
 				</div>
 			</form>
 		</div>
