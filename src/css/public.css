@@ -7688,29 +7688,30 @@ input[type="range"]:focus + .rangeslider .rangeslider__handle {
   margin-bottom: 1em;
 }
 .home .features .swiper-container {
+  border-radius: 3px;
   margin: 2em 1em 1em 1em;
   max-width: 540px;
   height: 230px;
   background: transparent url('../img/controls/loading_light.svg') center center no-repeat;
 }
 .home .features .swiper-slide.LU_passwords {
-  background: transparent url('../img/screenshots/v1.5/LU_passwords_450.jpg') center center no-repeat;
+  background: transparent url('../img/screenshots/v2.11/LU_passwords_450.jpg') center center no-repeat;
   background-size: 100% auto;
 }
-.home .features .swiper-slide.LU_passwords_share {
-  background: transparent url('../img/screenshots/v1.5/LU_passwords_share_450.jpg') center center no-repeat;
+.home .features .swiper-slide.LU_quickaccess {
+  background: transparent url('../img/screenshots/v2.11/LU_quickaccess_450.jpg') center center no-repeat;
   background-size: 100% auto;
 }
-.home .features .swiper-slide.LU_passwords_edit {
-  background: transparent url('../img/screenshots/v1.5/LU_passwords_edit_450.jpg') center center no-repeat;
+.home .features .swiper-slide.LU_share {
+  background: transparent url('../img/screenshots/v2.11/LU_share_450.jpg') center center no-repeat;
   background-size: 100% auto;
 }
 .home .features .swiper-slide.LU_users {
-  background: transparent url('../img/screenshots/v1.5/LU_users_450.jpg') center center no-repeat;
+  background: transparent url('../img/screenshots/v2.11/LU_users_450.jpg') center center no-repeat;
   background-size: 100% auto;
 }
-.home .features .swiper-slide.AN_login {
-  background: transparent url('../img/screenshots/v1.5/AN_login_450.jpg') center center no-repeat;
+.home .features .swiper-slide.LU_mfa {
+  background: transparent url('../img/screenshots/v2.11/LU_mfa_450.jpg') center center no-repeat;
   background-size: 100% auto;
 }
 .home .features .swiper-pagination {
@@ -7735,23 +7736,23 @@ input[type="range"]:focus + .rangeslider .rangeslider__handle {
     height: 350px;
   }
   .home .features .swiper-slide.LU_passwords {
-    background: transparent url('../img/screenshots/v1.5/LU_passwords_940.jpg') center center no-repeat;
+    background: transparent url('../img/screenshots/v2.11/LU_passwords_940.jpg') center center no-repeat;
     background-size: 100% auto;
   }
-  .home .features .swiper-slide.LU_passwords_share {
-    background: transparent url('../img/screenshots/v1.5/LU_passwords_share_940.jpg') center center no-repeat;
+  .home .features .swiper-slide.LU_quickaccess {
+    background: transparent url('../img/screenshots/v2.11/LU_quickaccess_940.jpg') center center no-repeat;
     background-size: 100% auto;
   }
-  .home .features .swiper-slide.LU_passwords_edit {
-    background: transparent url('../img/screenshots/v1.5/LU_passwords_edit_940.jpg') center center no-repeat;
+  .home .features .swiper-slide.LU_share {
+    background: transparent url('../img/screenshots/v2.11/LU_share_940.jpg') center center no-repeat;
     background-size: 100% auto;
   }
   .home .features .swiper-slide.LU_users {
-    background: transparent url('../img/screenshots/v1.5/LU_users_940.jpg') center center no-repeat;
+    background: transparent url('../img/screenshots/v2.11/LU_users_940.jpg') center center no-repeat;
     background-size: 100% auto;
   }
-  .home .features .swiper-slide.AN_login {
-    background: transparent url('../img/screenshots/v1.5/AN_login_940.jpg') center center no-repeat;
+  .home .features .swiper-slide.LU_mfa {
+    background: transparent url('../img/screenshots/v2.11/LU_mfa_940.jpg') center center no-repeat;
     background-size: 100% auto;
   }
   .home .features .swiper-pagination {
@@ -7780,30 +7781,30 @@ input[type="range"]:focus + .rangeslider .rangeslider__handle {
   .home .features .swiper-container {
     width: 940px;
     max-width: 940px;
-    height: 588px;
+    height: 587px;
     margin: 2em auto;
     -webkit-box-shadow: 0px 5px 17px 0px rgba(0, 0, 0, 0.41);
     -moz-box-shadow: 0px 5px 17px 0px rgba(0, 0, 0, 0.41);
     box-shadow: 0px 5px 17px 0px rgba(0, 0, 0, 0.41);
   }
   .home .features .swiper-slide.LU_passwords {
-    background: transparent url('../img/screenshots/v1.5/LU_passwords.jpg') center center no-repeat;
+    background: transparent url('../img/screenshots/v2.11/LU_passwords_1880.jpg') center center no-repeat;
     background-size: 100% auto;
   }
-  .home .features .swiper-slide.LU_passwords_share {
-    background: transparent url('../img/screenshots/v1.5/LU_passwords_share.jpg') center center no-repeat;
+  .home .features .swiper-slide.LU_quickaccess {
+    background: transparent url('../img/screenshots/v2.11/LU_quickaccess_1880.jpg') center center no-repeat;
     background-size: 100% auto;
   }
-  .home .features .swiper-slide.LU_passwords_edit {
-    background: transparent url('../img/screenshots/v1.5/LU_passwords_edit.jpg') center center no-repeat;
+  .home .features .swiper-slide.LU_share {
+    background: transparent url('../img/screenshots/v2.11/LU_share_1880.jpg') center center no-repeat;
     background-size: 100% auto;
   }
   .home .features .swiper-slide.LU_users {
-    background: transparent url('../img/screenshots/v1.5/LU_users.jpg') center center no-repeat;
+    background: transparent url('../img/screenshots/v2.11/LU_users_1880.jpg') center center no-repeat;
     background-size: 100% auto;
   }
-  .home .features .swiper-slide.AN_login {
-    background: transparent url('../img/screenshots/v1.5/AN_login.jpg') center center no-repeat;
+  .home .features .swiper-slide.LU_mfa {
+    background: transparent url('../img/screenshots/v2.11/LU_mfa_1880.jpg') center center no-repeat;
     background-size: 100% auto;
   }
 }
@@ -8064,16 +8065,6 @@ input[type="range"]:focus + .rangeslider .rangeslider__handle {
     background: transparent url('../img/third_party/luxinnovation_logo.svg') 0 center no-repeat;
     background-size: 100% auto;
   }
-  .page-row.sponsors .sponsors-list .virtua {
-    background: transparent url('../img/third_party/virtua_logo.png') center center no-repeat;
-    background-size: 80% auto;
-    margin: auto;
-    position: relative;
-    display: block;
-    float: none;
-    margin-top: 130px;
-    height: 50px;
-  }
   .page-row.sponsors .sponsors-list .technoport {
     margin-top: 3em;
     background: transparent url('../img/third_party/technoport_logo.png') 0 center no-repeat;
@@ -8105,7 +8096,7 @@ input[type="range"]:focus + .rangeslider .rangeslider__handle {
 .home .page-row.tech .tech-usp ul.checklist {
   float: left;
   font-size: 1.25em;
-  margin-bottom: 0.25em;
+  margin-bottom: 1.5em;
 }
 .home .page-row.tech .tech-usp ul.checklist li {
   padding-top: 0.25em;
@@ -8132,7 +8123,6 @@ input[type="range"]:focus + .rangeslider .rangeslider__handle {
   .home .page-row.tech .tech-usp {
     float: left;
     margin-top: 2.5em;
-    margin-left: 2.5em;
   }
   .home .page-row.tech ul.checklist {
     font-size: 1.5em;
@@ -8443,8 +8433,18 @@ input[type="range"]:focus + .rangeslider .rangeslider__handle {
 .page.plans .tab-content .service-col.plan.with-tab-options .plan-description > h2 {
   border-bottom: 0;
 }
+.page.plans .tab-content .service-col.plan.with-tab-options .plan-pricing {
+  margin-top: 4em;
+}
+.page.plans .tab-content .service-col.plan.community .plan-features ul {
+  min-height: 266px;
+}
 .page.plans .tab-content .service-col.plan.community .plan-limit {
   margin-top: 18px;
+}
+.page.plans .tab-content .service-col.plan.business .plan-features ul,
+.page.plans .tab-content .service-col.plan.enterprise .plan-features ul {
+  min-height: 377px;
 }
 .page.plans .tab-content .service-col.plan.enterprise .plan-limit {
   margin-top: 18px;
@@ -8476,7 +8476,7 @@ input[type="range"]:focus + .rangeslider .rangeslider__handle {
   display: flex;
   -ms-flex-align: center;
   align-items: center;
-  margin-top: 1.5em;
+  margin-top: 3em;
 }
 .page.plans .tab-content .service-col.plan .plan-pricing .discounted {
   text-align: center;
@@ -8581,16 +8581,18 @@ input[type="range"]:focus + .rangeslider .rangeslider__handle {
 }
 .page.plans .tab-content .service-col.plan div.plan-features {
   font-size: 1.25em;
-  text-align: center;
+  text-align: left;
   padding: 1em;
 }
-.page.plans .tab-content .service-col.plan div.plan-features ul {
-  min-height: 346px;
+.page.plans .tab-content .service-col.plan div.plan-features p {
+  padding: 0.6em 0;
+  font-size: 0.8em;
+  margin-bottom: 1.5em;
+  color: #969696;
 }
 .page.plans .tab-content .service-col.plan div.plan-features ul li {
-  padding: 0.4em;
+  padding: 0.6em 0.4em;
   font-size: 0.8em;
-  border-top: 1px solid #DDD;
 }
 .page.plans .tab-content .service-col.plan div.plan-features a {
   border-bottom: 0;
@@ -8720,9 +8722,6 @@ input[type="range"]:focus + .rangeslider .rangeslider__handle {
 .page.plans.cloud .tab-content .service-col.plan.business .plan-description h2 {
   border-bottom: 1px solid #DDD;
 }
-.page.plans.cloud .tab-content .service-col.plan.enterprise .plan-pricing {
-  margin-top: 20px;
-}
 .page.services.featured.cart .error label.error {
   font-size: 0.7em;
   padding-top: 0;
@@ -8791,10 +8790,15 @@ input[type="range"]:focus + .rangeslider .rangeslider__handle {
 .page.services.featured.cart .cart .payment_info .order-line div.form-group.price .price-per-user {
   font-size: 0.9em;
 }
+.page.services.featured.cart .cart .payment_info .order-line select.quantity {
+  width: 65px;
+  display: inline-block;
+}
 .page.services.featured.cart .cart .payment_info .order-line .line-total {
+  display: inline-block;
   float: right;
   font-weight: bold;
-  padding-top: 0.2em;
+  padding-top: 0.65em;
 }
 .page.services.featured.cart .cart .payment_info div.product-details {
   color: #666;
@@ -8912,52 +8916,11 @@ input[type="range"]:focus + .rangeslider .rangeslider__handle {
   padding-left: 0.675em;
   line-height: 25px;
 }
-.page.services.featured.cart div.stripe.checkout {
-  margin: 20px auto;
-}
-.page.services.featured.cart div.stripe.checkout .field {
-  border: 1px solid #CCC;
-  padding-left: 0.5em;
-  -webkit-border-radius: 3px;
-  -moz-border-radius: 3px;
-  border-radius: 3px;
+.page.services.featured.cart .submit-wrapper a.primary,
+.page.services.featured.cart .submit-wrapper input.primary {
   width: 97%;
-}
-.page.services.featured.cart div.stripe.checkout .field::-webkit-input-placeholder {
-  color: #CFD7E0;
-}
-.page.services.featured.cart div.stripe.checkout .field::-moz-placeholder {
-  color: #CFD7E0;
-}
-.page.services.featured.cart div.stripe.checkout .field:-ms-input-placeholder {
-  color: #CFD7E0;
-}
-.page.services.featured.cart div.stripe.checkout .outcome {
-  float: left;
-  width: 100%;
-  padding-top: 8px;
-  min-height: 24px;
-  text-align: center;
-}
-.page.services.featured.cart div.stripe.checkout .success.visible,
-.page.services.featured.cart div.stripe.checkout .error.visible {
-  display: inline;
-}
-.page.services.featured.cart div.stripe.checkout .error {
-  color: #E4584C;
-}
-.page.services.featured.cart div.stripe.checkout .success {
-  color: #666EE8;
-}
-.page.services.featured.cart div.stripe.checkout .success .token {
-  font-weight: 500;
-  font-size: 13px;
-}
-.page.services.featured.cart div.stripe.checkout #js_checkout_button {
-  width: 100%;
-  text-align: center;
   margin-top: 1em;
-  padding: 8px 0;
+  padding: 8px;
 }
 .page.services.featured.order-complete h1,
 .page.services.featured.order-complete h2,

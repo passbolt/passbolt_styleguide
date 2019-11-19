@@ -11,12 +11,47 @@
     <script src="src/js/rangeslider.min.js"></script>
     <script type="text/javascript">
         $(function() {
-          $('input[type="range"]').rangeslider({
+          var prevPos = 0,
+            pricePerSeat = 2;
+
+          var $slider = $('input[type="range"]'),
+            $usersQty = $('#users-qty'),
+            $productPrice = $('#product-price'),
+            $checkoutLink = $('#checkout-link');
+
+          function updateText(value) {
+            if (value > 100) {
+              value = (value - (value % 10));
+            }
+            $usersQty.text(value);
+            $productPrice.text(value * pricePerSeat);
+            $checkoutLink.attr('data-cb-plan-quantity', value);
+          }
+
+          $slider.rangeslider({
             polyfill: false,
             onSlide: function(position, value) {
-              $('#users-qty').text(value);
-              $('#product-price').text(value * 2);
-              $('#checkout-link').attr('data-cb-plan-quantity', value);
+              var direction = 1,
+                step = $slider.attr('step');
+
+              if (prevPos == position) {
+                return;
+              } else if (prevPos < position) {
+                direction = 1;
+              } else if (prevPos > position) {
+                direction = 2;
+              }
+              prevPos = position;
+
+              if (value >= 100 && direction == 1 && step == 5) {
+                $slider.attr('step', 10);
+                $slider.rangeslider('update', true);
+              } else if (value <= 100 && direction == 2 && step == 10) {
+                $slider.attr('step', 5);
+                $slider.rangeslider('update', true);
+              }
+
+              updateText(value);
             }
           });
         });
@@ -37,27 +72,35 @@
 <body>
 <div id="container" class="page featured plans">
     <?php include('includes/headers/AA_header.php'); ?>
-	<ul class="pricing-tabs" role="tablist">
-		<li class="active" role="presentation">
-			<a aria-controls="self-hosted" data-toggle="tab" href="demo/AA_services_pricing.php" role="tab">
-				<span><i class="fa fa-server" aria-hidden="true"></i></span>
-				<span>Self-Hosted</span>
-			</a>
-		</li>
-		<li role="presentation">
-			<a aria-controls="cloud" data-toggle="tab" href="demo/AA_services_cloud.php" role="tab">
-				<span><i class="fa fa-cloud" aria-hidden="true"></i></span>
-				<span>Cloud-Hosted</span>
-			</a>
-		</li>
-	</ul>
+    <ul class="pricing-tabs" role="tablist">
+        <li class="active" role="presentation">
+            <a aria-controls="self-hosted" data-toggle="tab" href="demo/AA_services_pricing_pro_slider.php" role="tab">
+                <span><i class="fa fa-server" aria-hidden="true"></i></span>
+                <div class="offer-text">
+                    <h1>Passbolt PRO</h1>
+                    <span>You host it</span>
+                </div>
+
+            </a>
+        </li>
+        <li role="presentation">
+            <a aria-controls="cloud" data-toggle="tab" href="demo/AA_services_pricing_cloud.php" role="tab">
+                <span><i class="fa fa-cloud" aria-hidden="true"></i></span>
+                <div class="offer-text">
+                    <h1>Passbolt Cloud</h1>
+                    <span>We host it</span>
+                </div>
+            </a>
+        </li>
+    </ul>
 	<div class="tab-content clearfix">
 	    <div class="page-row intro">
 	        <div class="grid grid-responsive-12">
 	            <div class="row">
                     <h2>
-	                    Self-host passbolt on your own server for full control
-	                    <span class="outline">April special offer - early birds get <strong>30%</strong> off!</span>
+                        Self-host passbolt on your own server<br>
+                        and keep full data ownership
+                        <!--	                    <span class="outline">April special offer - early birds get <strong>30%</strong> off!</span>-->
                     </h2>
 	            </div>
 	        </div>
@@ -84,15 +127,21 @@
 			            </div>
 
 			            <div class="plan-features">
+                            <p>For the agile team beginning to transition from spreadsheets / keepass to password management practices.</p>
 				            <ul>
-					            <li>Manual installation</li>
-					            <li><a href="#features">Limited features</a></li>
-					            <li>AGPL V3 license</li>
-					            <li>Community support only</li>
+                                <li><i class="fa fa-long-arrow-right" aria-hidden="true"></i> Hosted on your own server</li>
+					            <li><i class="fa fa-long-arrow-right" aria-hidden="true"></i> Passwords management</li>
+                                <li><i class="fa fa-long-arrow-right" aria-hidden="true"></i> Users and groups management</li>
+                                <li><i class="fa fa-long-arrow-right" aria-hidden="true"></i> Granular passwords sharing</li>
+					            <li><i class="fa fa-long-arrow-right" aria-hidden="true"></i> Import / export (csv, xls, kdbx)</li>
+                                <li><i class="fa fa-long-arrow-right" aria-hidden="true"></i> browser extensions & CLI</li>
+                                <li><i class="fa fa-long-arrow-right" aria-hidden="true"></i> Open API</li>
+                                <li><i class="fa fa-long-arrow-right" aria-hidden="true"></i> Installation scripts, docker container</li>
+                                <li><i class="fa fa-long-arrow-right" aria-hidden="true"></i> Community support</li>
 				            </ul>
 			            </div>
 			            <div class="second_cta">
-				            <a href="#">Get started</a>
+				            <a href="#">See all features</a>
 			            </div>
 		            </div>
 		            <div class="service-col col4 plan with-tab-options business highlighted">
@@ -103,10 +152,10 @@
                         <div class="pricing-toggle">
                             <ul>
                                 <li class="monthly selected">
-                                    <a data-term="monthly">Monthly</a>
+                                    <a data-term="yearly">Annual (-10%)</a>
                                 </li>
                                 <li class="yearly">
-                                    <a data-term="yearly">Yearly</a>
+                                    <a data-term="monthly">Monthly</a>
                                 </li>
                             </ul>
                         </div>
@@ -117,7 +166,7 @@
                             </div>
 			            </div>
                         <div class="billing-frequency">
-                            Paid Monthly
+                            Billed annually
                         </div>
 			            <div class="plan-limit">
                             <div class="users-quantity-selector">
@@ -128,21 +177,23 @@
                             </div>
 			            </div>
 			            <div class="plan-actions">
-                            <a id="checkout-link" href="https://passbolt-test.chargebee.com/pages/v2/KWxmOMNUuzfjUDx9mm6S70scduElmcmF3/checkout" class="button primary big" data-cb-plan-quantity = "10">Sign up</a>
-<!--                            <a id="checkout-link" href = "javascript:void(0)"  data-cb-type = "checkout"  data-cb-plan-id = "business-monthly-test"  data-cb-plan-quantity = "50" class="button primary big">Buy now</a>-->
-				            <!-- <a href="demo/AA_services_pro_checkout.php" class="button primary big">Buy now</a> -->
+                            <a id="checkout-link" href="demo/AA_services_pro_checkout.php" class="button primary big" data-cb-plan-quantity = "10">Buy now</a>
 			            </div>
 			            <div class="plan-features">
+                            <p>For teams & businesses that want to improve passwords collaboration while maintaining strict security standards.</p>
 				            <ul>
-					            <li>Easy installation</li>
-					            <li><a href="features">All features</a></li>
-					            <li>One year of free updates</li>
-					            <li>AGPL V3 license</li>
-					            <li>Unlimited email support<br><span class="smaller">(next business day)</span></li>
+                                <li><strong>All features from Community and:</strong></li>
+					            <li><i class="fa fa-long-arrow-right" aria-hidden="true"></i> Tags management</li>
+					            <li><i class="fa fa-long-arrow-right" aria-hidden="true"></i> Ldap connectors</li>
+                                <li><i class="fa fa-long-arrow-right" aria-hidden="true"></i> MFA</li>
+                                <li><i class="fa fa-long-arrow-right" aria-hidden="true"></i> Audit logs</li>
+                                <li><i class="fa fa-long-arrow-right" aria-hidden="true"></i> Dark theme</li>
+					            <li><i class="fa fa-long-arrow-right" aria-hidden="true"></i> VM appliance</li>
+                                <li><i class="fa fa-long-arrow-right" aria-hidden="true"></i> Next business day support</li>
 				            </ul>
 			            </div>
 			            <div class="second_cta">
-				            <a href="#">Try a demo</a>
+				            <a href="#">See all features</a>
                         </div>
 		            </div>
 	                <div class="service-col col4 plan enterprise last">
@@ -163,15 +214,15 @@
 			                <a href="mailto:sales@passbolt.com" class="button primary big">Contact us</a>
 		                </div>
 	                    <div class="plan-features">
+                            <p>Engineered for the enterprise with sophisticated operations and advanced compliance requirements.</p>
 		                    <ul>
 			                    <ul>
-				                    <li>All business pack</li>
-				                    <li>Multi instances</li>
-				                    <li>Installation support</li>
-				                    <li>On-premise management</li>
-				                    <li>Certified server key signature</li>
-				                    <li>Unlimited email support<br><span class="smaller">(SLA &lt; 4 hours during business hours)</span></li>
-				                    <li>Phone support<br>Private slack channel</li>
+                                    <li><strong>All features from Business and:</strong></li>
+				                    <li><i class="fa fa-long-arrow-right" aria-hidden="true"></i> High availability</li>
+				                    <li><i class="fa fa-long-arrow-right" aria-hidden="true"></i> Disaster recovery</li>
+                                    <li><i class="fa fa-long-arrow-right" aria-hidden="true"></i> On-premise management</li>
+				                    <li><i class="fa fa-long-arrow-right" aria-hidden="true"></i> Custom features development</li>
+				                    <li><i class="fa fa-long-arrow-right" aria-hidden="true"></i> 4 hours SLA phone & email support</li>
 			                    </ul>
 		                    </ul>
 	                    </div>

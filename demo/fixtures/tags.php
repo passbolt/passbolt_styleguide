@@ -2,27 +2,17 @@
 $tags = [
     [
         'id' => '',
-        'name' => 'this is a very very long tag',
+        'name' => 'alpha',
         'created' => '2017-12-29 13:39:25',
     ],
     [
         'id' => '',
-        'name' => 'alpha/beta',
+        'name' => 'beta',
         'created' => '2017-12-29 13:39:25',
     ],
     [
         'id' => '',
-        'name' => 'alpha/beta/charly',
-        'created' => '2017-12-29 13:39:25',
-    ],
-    [
-        'id' => '',
-        'name' => 'alpha/delta',
-        'created' => '2017-12-29 13:39:25',
-    ],
-    [
-        'id' => '',
-        'name' => 's',
+        'name' => 'charly',
         'created' => '2017-12-29 13:39:25',
     ]
 ];

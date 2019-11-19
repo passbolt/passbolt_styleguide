@@ -6,61 +6,6 @@
     <?php include('includes/meta/AA_meta.php'); ?>
 	<?php include('includes/headers/AA_header_scripts.php'); ?>
     <script src="src/js/chosen.jquery.js"></script>
-    <script src="https://js.stripe.com/v3/"></script>
-    <script type="application/javascript">
-        $(function() {
-            var stripe = Stripe('pk_test_6pRNASCoBOKtIshFeQd4XMUh');
-            var elements = stripe.elements();
-
-            var card = elements.create('card', {
-                style: {
-                    base: {
-                        iconColor: '#666EE8',
-                        color: '#31325F',
-                        lineHeight: '40px',
-                        fontWeight: 300,
-                        fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
-                        fontSize: '15px',
-
-                        '::placeholder': {
-                            color: '#CFD7E0',
-                        },
-                    },
-                }
-            });
-            card.mount('#card-element');
-
-            function setOutcome(result) {
-                var successElement = document.querySelector('.success');
-                var errorElement = document.querySelector('.error');
-                successElement.classList.remove('visible');
-                errorElement.classList.remove('visible');
-
-                if (result.token) {
-                    // Use the token to create a charge or a customer
-                    // https://stripe.com/docs/charges
-                    successElement.querySelector('.token').textContent = result.token.id;
-                    successElement.classList.add('visible');
-                } else if (result.error) {
-                    errorElement.textContent = result.error.message;
-                    errorElement.classList.add('visible');
-                }
-            }
-
-            card.on('change', function (event) {
-                setOutcome(event);
-            });
-
-            $('form.stripe').on('submit', function (e) {
-                e.preventDefault();
-                var form = document.querySelector('form');
-                var extraDetails = {
-                    //name: form.querySelector('input[name=cardholder-name]').value,
-                };
-                stripe.createToken(card, extraDetails).then(setOutcome);
-            });
-        });
-    </script>
 </head>
 <body>
 <div id="container" class="page services featured cart checkout">
@@ -137,28 +82,12 @@
                             </div>
                         </div>
                         <div class="stripe checkout">
-                            <div class="box">
-                                <h2>Checkout</h2>
-                                <div class="box-content">
-                                    <p>Pay with your credit card via Stripe</p>
-                                    <div class="group">
-                                        <div class="input text required">
-                                            <label for="PaymentCardHolderName">Card holder name</label>
-                                            <input name="data[Payment][card_holder_name]" placeholder="Card holder name" required="required" type="text" id="PaymentCardHolderName">
-                                        </div>
-                                        <div class="input text required">
-                                            <label for="card-element">Card Number</label>
-                                            <div id="card-element" class="field"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
                             <div class="input checkbox terms">
                                 <input type="checkbox">
                                 <label>I agree to the <a href="#">terms and conditions</a></label>
                             </div>
                             <div class="submit-wrapper clearfix">
-                                <input type="submit" class="button primary big" value="Pay €264.00">
+                                <a  class="button primary big" >Checkout</a>
                             </div>
                             <!--div class="outcome">
                                 <div class="error" role="alert"></div>
@@ -174,12 +103,16 @@
                             <div class="order-line">
                                 <div class="item-name">Business pack</div>
                                 <div class="input text form-group price">
-                                    <input name="products[main][quantity]" id="quantity" value="5" min="1" max="9999999" class="form-control input-small quantity" required="required" type="number">
+                                    <select name="products[main][quantity]" id="quantity" class="form-control input-small quantity" required="required">
+                                        <?php
+                                        for($i = 5; $i < 200; $i+=5) {
+                                            ?>
+                                            <option value="<?= $i ?>"><?= $i ?></option>
+                                        <?php
+                                        }
+                                        ?>
+                                    </select>
                                     <label class="control-label block label-quantity" for="quantity">users</label>
-                                    <span class="times">×</span>
-                                    <div class="price-per-user">
-                                        €44.00
-                                    </div>
                                 </div>
                                 <div class="line-total">€240.00</div>
                             </div>

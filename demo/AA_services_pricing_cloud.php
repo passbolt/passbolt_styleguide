@@ -12,7 +12,7 @@
     <?php include('includes/headers/AA_header.php'); ?>
 	<ul class="pricing-tabs" role="tablist">
 		<li role="presentation">
-			<a aria-controls="self-hosted" data-toggle="tab" href="demo/AA_services_pricing.php" role="tab">
+			<a aria-controls="self-hosted" data-toggle="tab" href="demo/AA_services_pricing_pro_slider.php" role="tab">
 				<span><i class="fa fa-server" aria-hidden="true"></i></span>
                 <div class="offer-text">
                     <h1>Passbolt PRO</h1>
@@ -45,8 +45,8 @@
 	    <div class="page-row service pull-up">
 	        <div class="grid grid-responsive-12">
 	            <div class="row">
-                    <div class="col1">&nbsp;</div>
-		            <div class="service-col col5 plan business highlighted">
+                    <div class="col2">&nbsp;</div>
+		            <div class="service-col col4 plan business highlighted">
 			            <div class="ribbon"><span>POPULAR</span></div>
 			            <div class="plan-description">
 				            <h2>Business</h2>
@@ -64,18 +64,19 @@
 				            <a href="demo/AA_services_pro_checkout.php" class="button primary big">Try 14 days for free</a>
 			            </div>
 			            <div class="plan-features">
+                            <p>For agile teams & businesses that want to benefit from all the advantages of open source password management without the on-premise overhead.</p>
 				            <ul>
-					            <li>Hosted on our servers</li>
-					            <li><a href="features">Premium features</a></li>
-					            <li>Data backup on demand</li>
-					            <li>Unlimited email support<br><span class="smaller">(next business day)</span></li>
+					            <li><i class="fa fa-long-arrow-right" aria-hidden="true"></i> Hosted on Passbolt servers, in Europe</li>
+					            <li><i class="fa fa-long-arrow-right" aria-hidden="true"></i> <a href="features">Premium features</a></li>
+					            <li><i class="fa fa-long-arrow-right" aria-hidden="true"></i> Data backup on demand</li>
+					            <li><i class="fa fa-long-arrow-right" aria-hidden="true"></i> Next business day email support</span></li>
 				            </ul>
 			            </div>
 			            <div class="second_cta">
 				            <a href="#">Get started</a>
 			            </div>
 		            </div>
-	                <div class="service-col col5 plan enterprise last">
+	                <div class="service-col col4 plan enterprise last">
 		                <div class="plan-description">
 			                <h2>Enterprise</h2>
 		                </div>
@@ -90,17 +91,16 @@
 			                <a href="mailto:sales@passbolt.com" class="button  big">Contact us</a>
 		                </div>
 	                    <div class="plan-features">
-		                    <ul>
-			                    <ul>
-                                    <li>Hosted on a dedicated instance</li>
-                                    <li><a href="features">Premium features</a></li>
-                                    <li>Data backup on demand</li>
-                                    <li>Custom domain</li>
-                                    <li>Custom SSL certificate</li>
-                                    <li>Custom firewalling</li>
-                                    <li>Email and phone support<br><span class="smaller">(4 hours SLA)</span></li>
-			                    </ul>
-		                    </ul>
+                            <p>Engineered for the enterprise with sophisticated needs and advanced compliance and security requirements.<br>&nbsp;</p>
+                            <ul>
+                                <li><strong>All features from Business and:</strong></li>
+                                <li><i class="fa fa-long-arrow-right" aria-hidden="true"></i> Hosted on an isolated container</li>
+                                <li><i class="fa fa-long-arrow-right" aria-hidden="true"></i> Ldap connectors</li>
+                                <li><i class="fa fa-long-arrow-right" aria-hidden="true"></i> Custom domain</li>
+                                <li><i class="fa fa-long-arrow-right" aria-hidden="true"></i> Your own SSL certificate</li>
+                                <li><i class="fa fa-long-arrow-right" aria-hidden="true"></i> Custom firewall rules</li>
+                                <li><i class="fa fa-long-arrow-right" aria-hidden="true"></i> 4 hours SLA email and phone support</span></li>
+                            </ul>
 	                    </div>
 		                <div class="second_cta">
 			                <a href="#">Get a quote</a>

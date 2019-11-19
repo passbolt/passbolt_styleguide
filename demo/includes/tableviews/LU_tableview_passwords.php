@@ -13,7 +13,7 @@
 						<a href="#"><i class="icon fav"></i><span class="visuallyhidden">fav</span></a>
 					</th>
 					<th class="js_grid_column js_grid_column_name cell_name m-cell sortable" data-view-id="1412">
-						<a href="#">Name</a>
+						<a href="#">Resource</a>
 					</th>
 					<th class="js_grid_column js_grid_column_username cell_username m-cell sortable" data-view-id="1413">
 						<a href="#">Username</a>
@@ -37,152 +37,81 @@
 	<div class="tableview-content scroll">
 		<table>
 			<tbody>
-			<tr class="selected" id="17c66127-0c5e-3510-a497-2e6a105109db" data-view-id="1419">
+            <tr id="4a2f98e8-b326-3384-aa2b-c3c9a81be3f7" data-view-id="1499">
 
-				<td class="js_grid_column_multipleSelect cell_multipleSelect selections s-cell" data-view-id="1420">
-					<div title="" data-view-id="1421"><div class="mad_form_checkbox js_checkbox_multiple_select mad_view_form_checkbox ready" id="multiple_select_checkbox_17c66127-0c5e-3510-a497-2e6a105109db">
-							<div class="input checkbox">
-								<input value="17c66127-0c5e-3510-a497-2e6a105109db" id="checkbox2a18191d-288c-821d-e7c3-6e464f33564c" data-view-id="1436" type="checkbox" checked="checked">
-								<label for="checkbox2a18191d-288c-821d-e7c3-6e464f33564c" data-view-id="1437"></label>
-							</div>
+                <td class="js_grid_column_multipleSelect cell_multipleSelect selections s-cell" data-view-id="1500">
+                    <div title="" data-view-id="1501"><div class="mad_form_checkbox js_checkbox_multiple_select mad_view_form_checkbox ready" id="multiple_select_checkbox_4a2f98e8-b326-3384-aa2b-c3c9a81be3f7">
+                            <div class="input checkbox">
+                                <input value="4a2f98e8-b326-3384-aa2b-c3c9a81be3f7" id="checkbox18e2ee20-7114-9aa2-e1e3-7e7823b86826" data-view-id="1516" type="checkbox">
+                                <label for="checkbox18e2ee20-7114-9aa2-e1e3-7e7823b86826" data-view-id="1517"></label>
+                            </div>
 
-						</div></div>
-				</td>
+                        </div></div>
+                </td>
 
-				<td class="js_grid_column_favorite cell_favorite selections s-cell" data-view-id="1422">
-					<div title="" data-view-id="1423"><div class="passbolt_component_favorite js_component passbolt_view_component_favorite ready" id="favorite_17c66127-0c5e-3510-a497-2e6a105109db"><a href="#" class="">
-								<i class="icon fav" data-view-id="1438"></i>
-								<span class="visuallyhidden">fav</span>
-							</a>
-						</div></div>
-				</td>
+                <td class="js_grid_column_favorite cell_favorite selections s-cell" data-view-id="1502">
+                    <div title="" data-view-id="1503"><div class="passbolt_component_favorite js_component passbolt_view_component_favorite ready" id="favorite_4a2f98e8-b326-3384-aa2b-c3c9a81be3f7">
+                            <a href="#" class="">
+                                <i class="icon fav" data-view-id="1518"></i>
+                                <span class="visuallyhidden">fav</span>
+                            </a>
+                        </div></div>
+                </td>
 
-				<td class="js_grid_column_name cell_name m-cell" data-view-id="1424">
-					<div title="Inkscape" data-view-id="1425">
-						Inkscape
-					</div>
-				</td>
+                <td class="js_grid_column_name cell_name m-cell" data-view-id="1504">
+                    <div title="ftp" data-view-id="1505">
+                        ftp
+                    </div>
+                </td>
 
-				<td class="js_grid_column_username cell_username m-cell" data-view-id="1426">
-					<div title="vector" data-view-id="1427">
-						vector
-					</div>
-				</td>
+                <td class="js_grid_column_username cell_username m-cell" data-view-id="1506">
+                    <div title="user" data-view-id="1507">
+                        user
+                    </div>
+                </td>
 
-				<td class="js_grid_column_secret cell_secret m-cell password" data-view-id="1428">
-					<div title="" data-view-id="1429"><div class="secret-copy"><a id="grid_secret_copy_17c66127-0c5e-3510-a497-2e6a105109db" href="#copy_secret"><span>copy password to clipboard</span></a><pre>-----BEGIN PGP MESSAGE-----
+                <td class="js_grid_column_secret cell_secret m-cell password" data-view-id="1508">
+                    <div title="" data-view-id="1509"><div class="secret-copy"><a id="grid_secret_copy_4a2f98e8-b326-3384-aa2b-c3c9a81be3f7" href="#copy_secret"><span>copy password to clipboard</span></a><pre>-----BEGIN PGP MESSAGE-----
 Version: GnuPG v2
 
-hQIMA1P90Qk1JHA+AQ/+O91ivkKTziW+sdUDXYOD0i0x6jQlwMq8cahsTrrfvGWs
-Mk+FghwubxYPVuD1SafuS0snrzdDSKPJxYxjrRhx9fINlI3cpwM1cA0BpqspTmnA
-IbBDVaq3wt96ICxizSZPtY8PZsDKWP3bJz5M0nGWkQSVQmMOL3UPu8gjlgItpq+m
-05OGFlxRbXU6U5Y4Nj1jtk0NT84SFos3fV5C69DsbXO17vHFVGbkwrQdQMi3Kswd
-5ybYRn1pnH5u8B/qJaZ6LdhoJPb8HQBS/tVjdaXXHR76Z6e29DjVO7LcOA1ghM7s
-gXjK/iRBlGdQHcPhfg6TrHhB/lxTCKQkuIQp4jAWWPrIoGYpIKABGe8+Scc+Ya8s
-Aey88IJI4gXo1S8/fwK/bjYJf7WC0cLNVAns4SbpRwLl6cx4etVSO63YcKv+1GT9
-EpPkBjTY9asvGigmFPOFTa7g1Yz9aPa+B9Dme3SbqY68nR4zC9/MAXzzRxNJYVQi
-HOUEyBgMy+s51bBro86zHKhPBgq/w+hpKxyNRaEDvEz9ODU9nSvihcMjRRBm6gs9
-No7v8Od3I5IluN8ncJz7abJ8cdar6YgIKf+Y8W0QBllk5BwJ1oj8cu32IfX5kMt7
-n9AA4GEUBnEYeMq1Am2Ix61blihVSsUXrfMUxh7t2ShDueQB3rdfNwV8LGUegl7S
-QQHNMHliAmDokKPejY+7mb2znLhmU04EZS9DxFDE3aNmz3/UrGJbJBNsAYdDbQAr
-Tfgwnb1pn59J7OvJeB6emDPq
-=otKj
+hQIMA1P90Qk1JHA+AQ//au7BhAriiVGOdscSFxV70Im7hdkxLcZ7tR+GZxMBLC/8
+kRxVxjKnv8cWxE8pqxk3iKd2iMU29JszSxrU720KKxK+fysR9B1c8A4X3qTTx17j
+gwLM9bmY75sedVWiY7FE+SNukxdwCoys5LQ8o3GaDvRFaAWAVVmXNiiWn39swJDK
+rnwMX8Yu04lXt+osGlrCOPqrmHA4oHvRxfjmLHuMrGRGnRnv3cmTxMINaPIVI6D4
+0UqW/ZaICpmtvfQ+nmZw2G9hUkrqJlvk9ZCgda7BhmoqK2sSOG4XEW/Ca2Pq8k4e
+BIIB0mEC317mNaxpNX9CitKu7RQnvAyD514gIjKVf3qrwg3wvU8SgbZuJ9nT2Gx4
+vj9bVCmgHM/b/3wn0URyldDyNo/Uwq8hWtn2xA24ZabyexaJY5f2VVu6lwrhiOo8
+PD9vRokjVRaoykv/DNd56aAi6XwP5XXq01D/thtJHdBfVrxg1Ne40FNfFpmy+cOx
+E/6aj42Y3KtXfn4w7ECXsRch1DHBPTvCtCBSzrOtf4J7MkJR/Us06tj+zOsMf7KN
+6nlPzh/PPK4NVsXProQVagi3S/Bh/UfEFFF/UQX5av3CEVj6PmlUxIqBFennSbQP
+x3agvKJ2EUWHsg0tepINmghYdoFYoT/7/i2Ag1TQW2cXJvHYYHaYQ1wf5g6ohKfS
+RAEn1syPUgAOFZpdaZp+EwkmiyWVdwjmad2je/gLUeiFRSs+b5HQ62djfgIHKqCq
+R+4mU1ishf2K34pgkgejVeXhaQKh
+=xzh6
 -----END PGP MESSAGE-----
 </pre></div></div>
-				</td>
+                </td>
 
-				<td class="js_grid_column_uri cell_uri l-cell" data-view-id="1430">
-					<div title="https://inkscape.org/" data-view-id="1431">
-						<a href="#">https://inkscape.org/</a>
-					</div>
-				</td>
+                <td class="js_grid_column_uri cell_uri l-cell" data-view-id="1510">
+                    <div title="ftp://192.168.1.1" data-view-id="1511">
+                        <a href="#">ftp://192.168.1.1</a>
+                    </div>
+                </td>
 
-				<td class="js_grid_column_modified cell_modified m-cell" data-view-id="1432">
-					<div title="a day ago" data-view-id="1433">
-						a day ago
-					</div>
-				</td>
+                <td class="js_grid_column_modified cell_modified m-cell" data-view-id="1512">
+                    <div title="a day ago" data-view-id="1513">
+                        a day ago
+                    </div>
+                </td>
 
-				<td class="js_grid_column_owner cell_owner m-cell" data-view-id="1434">
-					<div title="edith@passbolt.com" data-view-id="1435">
-						edith@passbolt.com
-					</div>
-				</td>
+                <td class="js_grid_column_owner cell_owner m-cell" data-view-id="1514">
+                    <div title="edith@passbolt.com" data-view-id="1515">
+                        edith@passbolt.com
+                    </div>
+                </td>
 
-			</tr><tr class="" id="2af40344-b330-30a8-ac26-64b2776f07e0" data-view-id="1439">
-
-				<td class="js_grid_column_multipleSelect cell_multipleSelect selections s-cell" data-view-id="1440">
-					<div title="" data-view-id="1441"><div class="mad_form_checkbox js_checkbox_multiple_select mad_view_form_checkbox ready" id="multiple_select_checkbox_2af40344-b330-30a8-ac26-64b2776f07e0">
-							<div class="input checkbox">
-								<input value="2af40344-b330-30a8-ac26-64b2776f07e0" id="checkbox78f033ee-fdd1-69f8-e913-478f1de61dce" data-view-id="1456" type="checkbox">
-								<label for="checkbox78f033ee-fdd1-69f8-e913-478f1de61dce" data-view-id="1457"></label>
-							</div>
-
-						</div></div>
-				</td>
-
-				<td class="js_grid_column_favorite cell_favorite selections s-cell" data-view-id="1442">
-					<div title="" data-view-id="1443"><div class="passbolt_component_favorite js_component passbolt_view_component_favorite ready" id="favorite_2af40344-b330-30a8-ac26-64b2776f07e0">
-							<a href="#" class="">
-								<i class="icon unfav" data-view-id="1458"></i>
-								<span class="visuallyhidden">fav</span>
-							</a>
-						</div></div>
-				</td>
-
-				<td class="js_grid_column_name cell_name m-cell" data-view-id="1444">
-					<div title="Enlightenment" data-view-id="1445">
-						Enlightenment
-					</div>
-				</td>
-
-				<td class="js_grid_column_username cell_username m-cell" data-view-id="1446">
-					<div title="efl" data-view-id="1447">
-						efl
-					</div>
-				</td>
-
-				<td class="js_grid_column_secret cell_secret m-cell password" data-view-id="1448">
-					<div title="" data-view-id="1449"><div class="secret-copy"><a id="grid_secret_copy_2af40344-b330-30a8-ac26-64b2776f07e0" href="#copy_secret"><span>copy password to clipboard</span></a><pre>-----BEGIN PGP MESSAGE-----
-Version: GnuPG v2
-
-hQIMA1P90Qk1JHA+ARAAmk94xbBp2FjA3k/+YkGgunngmd1NzrzzXc3e/zl4Xuxk
-SDdqQ/T/nLrpf4Y8hEUQehU1/5wAF436bMKZzZ0QWZjtxGurh8GjG9rvciohzn7Y
-s9smkGQxdhIrxiTyqdkloGQjye/bD+E03uNMepauxyXs7r+QJa4hlfjfogrEV7Q9
-2Q9xhGkG2unXtfl+GOUp3AZ3xktLv+5bE5VZU91iqpPNNFTNN8RawMH1SRrhHSu0
-aN+EiwFVmxYxh7PDUWMNgIyxjqDHpUKNh6xWlX5n57x9/yaS1Whb6nPdBt0L142v
-nvwx2sGvLuJtU0A24CiRpNtCMYcjF1zv4SwC466uNVRrAQWQMHVx2n7jDphF+Nd0
-AekZre+1WSUiB1V1fhZNinOn4PDcGv5YpvsdtCrd+yxFcuAS6qZTimih/EHIxx/L
-L9R3t9dAL1TA68nhifmvqD2L5wQOto7soNV68d7xXxdPa0zBOIcO6F8fBLm79KVQ
-bgW95FDWC60AW7OBW1nhwjALkUlI6S8hJyrXRsdQwd5wEbCjg08VBQ7FMX4e+cHI
-lW03BhnyjkFNgj6Kitz2UNCzkqP2QeXKATWCU3PGTeNip3SZ0gWKZ8JcwAyxlGpm
-kHUWh0MIB6qApO6Q83JZsLzPDWdq/xQcnwpA17q3qMD7S+g41YFKtSCHFTpIPZbS
-QQFH57e6KaAJeQEYkmotdlbASzDNgkL7r/8Q1TMs0Sq9E3B7LJLWBjklx8QQR1Fy
-YuP5nxbBQBVneIOHDvg5Uros
-=8rhI
------END PGP MESSAGE-----
-</pre></div></div>
-				</td>
-
-				<td class="js_grid_column_uri cell_uri l-cell" data-view-id="1450">
-					<div title="https://www.enlightenment.org/" data-view-id="1451">
-						<a href="#">https://www.enlightenment.org/</a>
-					</div>
-				</td>
-
-				<td class="js_grid_column_modified cell_modified m-cell" data-view-id="1452">
-					<div title="a day ago" data-view-id="1453">
-						a day ago
-					</div>
-				</td>
-
-				<td class="js_grid_column_owner cell_owner m-cell" data-view-id="1454">
-					<div title="ada@passbolt.com" data-view-id="1455">
-						ada@passbolt.com
-					</div>
-				</td>
-
-			</tr><tr class="" id="31bf093f-dd27-391d-ae9d-f511ef41dd12" data-view-id="1459">
+            </tr>
+			<tr class="" id="31bf093f-dd27-391d-ae9d-f511ef41dd12" data-view-id="1459">
 
 				<td class="js_grid_column_multipleSelect cell_multipleSelect selections s-cell" data-view-id="1460">
 					<div title="" data-view-id="1461"><div class="mad_form_checkbox js_checkbox_multiple_select mad_view_form_checkbox ready" id="multiple_select_checkbox_31bf093f-dd27-391d-ae9d-f511ef41dd12">
@@ -326,79 +255,6 @@ StCzcVynJ8qVKWWX9WJn77UUTrtEyyku5OE=
 					</div>
 				</td>
 
-			</tr><tr class="" id="4a2f98e8-b326-3384-aa2b-c3c9a81be3f7" data-view-id="1499">
-
-				<td class="js_grid_column_multipleSelect cell_multipleSelect selections s-cell" data-view-id="1500">
-					<div title="" data-view-id="1501"><div class="mad_form_checkbox js_checkbox_multiple_select mad_view_form_checkbox ready" id="multiple_select_checkbox_4a2f98e8-b326-3384-aa2b-c3c9a81be3f7">
-							<div class="input checkbox">
-								<input value="4a2f98e8-b326-3384-aa2b-c3c9a81be3f7" id="checkbox18e2ee20-7114-9aa2-e1e3-7e7823b86826" data-view-id="1516" type="checkbox">
-								<label for="checkbox18e2ee20-7114-9aa2-e1e3-7e7823b86826" data-view-id="1517"></label>
-							</div>
-
-						</div></div>
-				</td>
-
-				<td class="js_grid_column_favorite cell_favorite selections s-cell" data-view-id="1502">
-					<div title="" data-view-id="1503"><div class="passbolt_component_favorite js_component passbolt_view_component_favorite ready" id="favorite_4a2f98e8-b326-3384-aa2b-c3c9a81be3f7">
-						<a href="#" class="">
-							<i class="icon fav" data-view-id="1518"></i>
-							<span class="visuallyhidden">fav</span>
-						</a>
-					</div></div>
-				</td>
-
-				<td class="js_grid_column_name cell_name m-cell" data-view-id="1504">
-					<div title="ftp" data-view-id="1505">
-						ftp
-					</div>
-				</td>
-
-				<td class="js_grid_column_username cell_username m-cell" data-view-id="1506">
-					<div title="user" data-view-id="1507">
-						user
-					</div>
-				</td>
-
-				<td class="js_grid_column_secret cell_secret m-cell password" data-view-id="1508">
-					<div title="" data-view-id="1509"><div class="secret-copy"><a id="grid_secret_copy_4a2f98e8-b326-3384-aa2b-c3c9a81be3f7" href="#copy_secret"><span>copy password to clipboard</span></a><pre>-----BEGIN PGP MESSAGE-----
-Version: GnuPG v2
-
-hQIMA1P90Qk1JHA+AQ//au7BhAriiVGOdscSFxV70Im7hdkxLcZ7tR+GZxMBLC/8
-kRxVxjKnv8cWxE8pqxk3iKd2iMU29JszSxrU720KKxK+fysR9B1c8A4X3qTTx17j
-gwLM9bmY75sedVWiY7FE+SNukxdwCoys5LQ8o3GaDvRFaAWAVVmXNiiWn39swJDK
-rnwMX8Yu04lXt+osGlrCOPqrmHA4oHvRxfjmLHuMrGRGnRnv3cmTxMINaPIVI6D4
-0UqW/ZaICpmtvfQ+nmZw2G9hUkrqJlvk9ZCgda7BhmoqK2sSOG4XEW/Ca2Pq8k4e
-BIIB0mEC317mNaxpNX9CitKu7RQnvAyD514gIjKVf3qrwg3wvU8SgbZuJ9nT2Gx4
-vj9bVCmgHM/b/3wn0URyldDyNo/Uwq8hWtn2xA24ZabyexaJY5f2VVu6lwrhiOo8
-PD9vRokjVRaoykv/DNd56aAi6XwP5XXq01D/thtJHdBfVrxg1Ne40FNfFpmy+cOx
-E/6aj42Y3KtXfn4w7ECXsRch1DHBPTvCtCBSzrOtf4J7MkJR/Us06tj+zOsMf7KN
-6nlPzh/PPK4NVsXProQVagi3S/Bh/UfEFFF/UQX5av3CEVj6PmlUxIqBFennSbQP
-x3agvKJ2EUWHsg0tepINmghYdoFYoT/7/i2Ag1TQW2cXJvHYYHaYQ1wf5g6ohKfS
-RAEn1syPUgAOFZpdaZp+EwkmiyWVdwjmad2je/gLUeiFRSs+b5HQ62djfgIHKqCq
-R+4mU1ishf2K34pgkgejVeXhaQKh
-=xzh6
------END PGP MESSAGE-----
-</pre></div></div>
-				</td>
-
-				<td class="js_grid_column_uri cell_uri l-cell" data-view-id="1510">
-					<div title="ftp://192.168.1.1" data-view-id="1511">
-						<a href="#">ftp://192.168.1.1</a>
-					</div>
-				</td>
-
-				<td class="js_grid_column_modified cell_modified m-cell" data-view-id="1512">
-					<div title="a day ago" data-view-id="1513">
-						a day ago
-					</div>
-				</td>
-
-				<td class="js_grid_column_owner cell_owner m-cell" data-view-id="1514">
-					<div title="edith@passbolt.com" data-view-id="1515">
-						edith@passbolt.com
-					</div>
-				</td>
-
 			</tr><tr id="524b4f8c-b842-38d6-a542-6bf714df6099" data-view-id="1519">
 
 				<td class="js_grid_column_multipleSelect cell_multipleSelect selections s-cell" data-view-id="1520">
@@ -471,7 +327,154 @@ QAHyo+qrtGnuhlp5rXM+dVT1mAwsSW4mmM9qpJq7LOVMC2AcvsVDKQhl5iyEtzfq
 					</div>
 				</td>
 
-			</tr><tr id="664735b2-4be7-36d9-a9f8-08d42998faf8" data-view-id="1539">
+			</tr>
+            <tr class="selected" id="17c66127-0c5e-3510-a497-2e6a105109db" data-view-id="1419">
+
+                <td class="js_grid_column_multipleSelect cell_multipleSelect selections s-cell" data-view-id="1420">
+                    <div title="" data-view-id="1421"><div class="mad_form_checkbox js_checkbox_multiple_select mad_view_form_checkbox ready" id="multiple_select_checkbox_17c66127-0c5e-3510-a497-2e6a105109db">
+                            <div class="input checkbox">
+                                <input value="17c66127-0c5e-3510-a497-2e6a105109db" id="checkbox2a18191d-288c-821d-e7c3-6e464f33564c" data-view-id="1436" type="checkbox">
+                                <label for="checkbox2a18191d-288c-821d-e7c3-6e464f33564c" data-view-id="1437"></label>
+                            </div>
+
+                        </div></div>
+                </td>
+
+                <td class="js_grid_column_favorite cell_favorite selections s-cell" data-view-id="1422">
+                    <div title="" data-view-id="1423"><div class="passbolt_component_favorite js_component passbolt_view_component_favorite ready" id="favorite_17c66127-0c5e-3510-a497-2e6a105109db"><a href="#" class="">
+                                <i class="icon fav" data-view-id="1438"></i>
+                                <span class="visuallyhidden">fav</span>
+                            </a>
+                        </div></div>
+                </td>
+
+                <td class="js_grid_column_name cell_name m-cell" data-view-id="1424">
+                    <div title="Inkscape" data-view-id="1425">
+                        Inkscape
+                    </div>
+                </td>
+
+                <td class="js_grid_column_username cell_username m-cell" data-view-id="1426">
+                    <div title="vector" data-view-id="1427">
+                        vector
+                    </div>
+                </td>
+
+                <td class="js_grid_column_secret cell_secret m-cell password" data-view-id="1428">
+                    <div title="" data-view-id="1429"><div class="secret-copy"><a id="grid_secret_copy_17c66127-0c5e-3510-a497-2e6a105109db" href="#copy_secret"><span>copy password to clipboard</span></a><pre>-----BEGIN PGP MESSAGE-----
+Version: GnuPG v2
+
+hQIMA1P90Qk1JHA+AQ/+O91ivkKTziW+sdUDXYOD0i0x6jQlwMq8cahsTrrfvGWs
+Mk+FghwubxYPVuD1SafuS0snrzdDSKPJxYxjrRhx9fINlI3cpwM1cA0BpqspTmnA
+IbBDVaq3wt96ICxizSZPtY8PZsDKWP3bJz5M0nGWkQSVQmMOL3UPu8gjlgItpq+m
+05OGFlxRbXU6U5Y4Nj1jtk0NT84SFos3fV5C69DsbXO17vHFVGbkwrQdQMi3Kswd
+5ybYRn1pnH5u8B/qJaZ6LdhoJPb8HQBS/tVjdaXXHR76Z6e29DjVO7LcOA1ghM7s
+gXjK/iRBlGdQHcPhfg6TrHhB/lxTCKQkuIQp4jAWWPrIoGYpIKABGe8+Scc+Ya8s
+Aey88IJI4gXo1S8/fwK/bjYJf7WC0cLNVAns4SbpRwLl6cx4etVSO63YcKv+1GT9
+EpPkBjTY9asvGigmFPOFTa7g1Yz9aPa+B9Dme3SbqY68nR4zC9/MAXzzRxNJYVQi
+HOUEyBgMy+s51bBro86zHKhPBgq/w+hpKxyNRaEDvEz9ODU9nSvihcMjRRBm6gs9
+No7v8Od3I5IluN8ncJz7abJ8cdar6YgIKf+Y8W0QBllk5BwJ1oj8cu32IfX5kMt7
+n9AA4GEUBnEYeMq1Am2Ix61blihVSsUXrfMUxh7t2ShDueQB3rdfNwV8LGUegl7S
+QQHNMHliAmDokKPejY+7mb2znLhmU04EZS9DxFDE3aNmz3/UrGJbJBNsAYdDbQAr
+Tfgwnb1pn59J7OvJeB6emDPq
+=otKj
+-----END PGP MESSAGE-----
+</pre></div></div>
+                </td>
+
+                <td class="js_grid_column_uri cell_uri l-cell" data-view-id="1430">
+                    <div title="https://inkscape.org/" data-view-id="1431">
+                        <a href="#">https://inkscape.org/</a>
+                    </div>
+                </td>
+
+                <td class="js_grid_column_modified cell_modified m-cell" data-view-id="1432">
+                    <div title="a day ago" data-view-id="1433">
+                        a day ago
+                    </div>
+                </td>
+
+                <td class="js_grid_column_owner cell_owner m-cell" data-view-id="1434">
+                    <div title="edith@passbolt.com" data-view-id="1435">
+                        edith@passbolt.com
+                    </div>
+                </td>
+
+            </tr><tr class="" id="2af40344-b330-30a8-ac26-64b2776f07e0" data-view-id="1439">
+
+                <td class="js_grid_column_multipleSelect cell_multipleSelect selections s-cell" data-view-id="1440">
+                    <div title="" data-view-id="1441"><div class="mad_form_checkbox js_checkbox_multiple_select mad_view_form_checkbox ready" id="multiple_select_checkbox_2af40344-b330-30a8-ac26-64b2776f07e0">
+                            <div class="input checkbox">
+                                <input value="2af40344-b330-30a8-ac26-64b2776f07e0" id="checkbox78f033ee-fdd1-69f8-e913-478f1de61dce" data-view-id="1456" type="checkbox">
+                                <label for="checkbox78f033ee-fdd1-69f8-e913-478f1de61dce" data-view-id="1457"></label>
+                            </div>
+
+                        </div></div>
+                </td>
+
+                <td class="js_grid_column_favorite cell_favorite selections s-cell" data-view-id="1442">
+                    <div title="" data-view-id="1443"><div class="passbolt_component_favorite js_component passbolt_view_component_favorite ready" id="favorite_2af40344-b330-30a8-ac26-64b2776f07e0">
+                            <a href="#" class="">
+                                <i class="icon unfav" data-view-id="1458"></i>
+                                <span class="visuallyhidden">fav</span>
+                            </a>
+                        </div></div>
+                </td>
+
+                <td class="js_grid_column_name cell_name m-cell" data-view-id="1444">
+                    <div title="Enlightenment" data-view-id="1445">
+                        Enlightenment
+                    </div>
+                </td>
+
+                <td class="js_grid_column_username cell_username m-cell" data-view-id="1446">
+                    <div title="efl" data-view-id="1447">
+                        efl
+                    </div>
+                </td>
+
+                <td class="js_grid_column_secret cell_secret m-cell password" data-view-id="1448">
+                    <div title="" data-view-id="1449"><div class="secret-copy"><a id="grid_secret_copy_2af40344-b330-30a8-ac26-64b2776f07e0" href="#copy_secret"><span>copy password to clipboard</span></a><pre>-----BEGIN PGP MESSAGE-----
+Version: GnuPG v2
+
+hQIMA1P90Qk1JHA+ARAAmk94xbBp2FjA3k/+YkGgunngmd1NzrzzXc3e/zl4Xuxk
+SDdqQ/T/nLrpf4Y8hEUQehU1/5wAF436bMKZzZ0QWZjtxGurh8GjG9rvciohzn7Y
+s9smkGQxdhIrxiTyqdkloGQjye/bD+E03uNMepauxyXs7r+QJa4hlfjfogrEV7Q9
+2Q9xhGkG2unXtfl+GOUp3AZ3xktLv+5bE5VZU91iqpPNNFTNN8RawMH1SRrhHSu0
+aN+EiwFVmxYxh7PDUWMNgIyxjqDHpUKNh6xWlX5n57x9/yaS1Whb6nPdBt0L142v
+nvwx2sGvLuJtU0A24CiRpNtCMYcjF1zv4SwC466uNVRrAQWQMHVx2n7jDphF+Nd0
+AekZre+1WSUiB1V1fhZNinOn4PDcGv5YpvsdtCrd+yxFcuAS6qZTimih/EHIxx/L
+L9R3t9dAL1TA68nhifmvqD2L5wQOto7soNV68d7xXxdPa0zBOIcO6F8fBLm79KVQ
+bgW95FDWC60AW7OBW1nhwjALkUlI6S8hJyrXRsdQwd5wEbCjg08VBQ7FMX4e+cHI
+lW03BhnyjkFNgj6Kitz2UNCzkqP2QeXKATWCU3PGTeNip3SZ0gWKZ8JcwAyxlGpm
+kHUWh0MIB6qApO6Q83JZsLzPDWdq/xQcnwpA17q3qMD7S+g41YFKtSCHFTpIPZbS
+QQFH57e6KaAJeQEYkmotdlbASzDNgkL7r/8Q1TMs0Sq9E3B7LJLWBjklx8QQR1Fy
+YuP5nxbBQBVneIOHDvg5Uros
+=8rhI
+-----END PGP MESSAGE-----
+</pre></div></div>
+                </td>
+
+                <td class="js_grid_column_uri cell_uri l-cell" data-view-id="1450">
+                    <div title="https://www.enlightenment.org/" data-view-id="1451">
+                        <a href="#">https://www.enlightenment.org/</a>
+                    </div>
+                </td>
+
+                <td class="js_grid_column_modified cell_modified m-cell" data-view-id="1452">
+                    <div title="a day ago" data-view-id="1453">
+                        a day ago
+                    </div>
+                </td>
+
+                <td class="js_grid_column_owner cell_owner m-cell" data-view-id="1454">
+                    <div title="ada@passbolt.com" data-view-id="1455">
+                        ada@passbolt.com
+                    </div>
+                </td>
+
+            </tr>
+            <tr id="664735b2-4be7-36d9-a9f8-08d42998faf8" data-view-id="1539">
 
 				<td class="js_grid_column_multipleSelect cell_multipleSelect selections s-cell" data-view-id="1540">
 					<div title="" data-view-id="1541"><div class="mad_form_checkbox js_checkbox_multiple_select mad_view_form_checkbox ready" id="multiple_select_checkbox_664735b2-4be7-36d9-a9f8-08d42998faf8">
@@ -1123,65 +1126,3 @@ oaGvP4FhuwaCtf3Y091F
 		</table>
 	</div>
 </div>
-
-<script type="application/javascript">
-    // DEMO ONLY -- not for production use
-    $(function() {
-
-		$('.tableview-content tr').draggable({
-			cursor: "move",
-			appendTo: "body",
-			helper: function() {
-				let content = $(this).find('td.cell_name')[0].innerText;
-				let helper = $("<div>", {
-					class: "tag-dnd-helper"
-				});
-				if ($(event.target).closest('table').find('input:checkbox:checked').length > 1) {
-					helper = $("<div>", {
-					class: "tag-dnd-helper-with-shadow"
-				});
-				}
-				helper.append(`<span>${content}</span>`);
-				return helper;
-			},
-			start: function (event, ui) {
-				$(event.target).addClass('selected');
-				$(event.target).find('input:checkbox').attr('checked', 'checked');
-			},
-			cursorAt: {
-				top: 5,
-				left: 5
-			},
-			opacity: "0.8",
-			revert:  function(dropped) {
-				let draggable = $(this);
-				draggable.removeClass('selected');
-				draggable.find('input:checkbox').removeAttr('checked');
-				draggable.closest('table').find('tr.selected').removeClass('selected');
-				draggable.closest('table').find('input:checkbox:checked').removeAttr('checked');
-				let hasBeenDroppedBefore = draggable.data('hasBeenDropped');
-				if (hasBeenDroppedBefore) {
-					draggable.animate({ top: 0, left: 0 }, 'slow');
-					return false;
-				} else {
-					return true;
-				}
-			}
-		});
-
-		$('ul#js_wsp_password_filter_tags_list li').droppable({
-			accept: $('.tableview-content tr'),
-			over: function(event, ui) {
-				$(event.target).addClass('tag-drop-focus-in');
-			},
-			out: function(event, ui) {
-				$(event.target).removeClass('tag-drop-focus-in');
-			},
-			drop: function(event, ui) {
-				$(event.target).removeClass('tag-drop-focus-in');
-				$(ui.draggable).data('hasBeenDropped', true);
-				$('#js_app_notificator .message.animated').addClass('fadeInUp').html('<strong>Success</strong> Tagged successfully!')
-			}
-		});
-    });
-</script>

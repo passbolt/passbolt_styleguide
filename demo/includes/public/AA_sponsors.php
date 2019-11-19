@@ -11,9 +11,7 @@
 				<a href="#" class="technoport" rel="nofollow"><span>Technoport</span></a>
 				<a href="#" class="ministry" rel="nofollow"><span>Ministère de l'économie du Luxembourg</span></a>
 				<a href="#" class="luxinnovation" rel="nofollow"><span>Luxinnovation</span></a>
-				<a href="#" class="virtua" rel="nofollow"><span>Virtua</span></a>
 			</div>
-			<a href="#" class="cta button big primary">Become a sponsor</a>
 		</div>
 	</div>
 </div>
