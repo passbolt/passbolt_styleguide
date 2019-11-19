@@ -16,7 +16,7 @@
                     <input value="" name="passbolt.model.Resource.Category.id" id="js_field_category_id" class="form_field mad_form_textbox form-element mad_view_form_textbox ready" type="hidden">
 
                     <div class="input text required js_form_element_wrapper">
-                        <label for="js_field_name">Resource</label>
+                        <label for="js_field_name">Name</label>
                         <input name="passbolt.model.Resource.name" class="required mad_form_textbox form-element mad_view_form_textbox ready" maxlength="50" id="js_field_name" placeholder="resource name" type="text">
                         <div id="js_field_name_feedback" class="message mad_form_feedback js_component mad_view ready">
                         </div>
@@ -42,13 +42,11 @@
                             <input name="passbolt.model.Secret.user_id" id="js_field_secret_user_id_0" class="js_field_secret_user_id form_field" type="hidden">
                             <textarea name="passbolt.model.Secret.data" id="js_field_secret_data_0" class="form_field hidden js_field_secret_data" data-view-id="421"></textarea>
                         </div>
-
                         <iframe src="demo/LU_iframe_passwordinput.php" id="passbolt-iframe-secret-edition" frameborder="0"></iframe>
-
                     </div>
                     <div class="input textarea js_form_element_wrapper">
                         <label for="js_field_description">Description</label>
-                        <textarea name="passbolt.model.Resource.description" class="required mad_form_textbox form-element mad_view_form_textbox ready" maxlength="150" id="js_field_description" placeholder="add a description" data-view-id="422">		</textarea>
+                        <textarea name="passbolt.model.Resource.description" class="required mad_form_textbox form-element mad_view_form_textbox ready" maxlength="150" id="js_field_description" placeholder="add a description" data-view-id="422"></textarea>
                         <div id="js_field_description_feedback" class="message mad_form_feedback js_component mad_view ready">
                         </div>
                     </div>

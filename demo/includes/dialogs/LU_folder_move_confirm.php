@@ -18,15 +18,13 @@
 		<div class="js_dialog_content dialog-content">
 			<div class="form-content">
 				<p>
-          You are about to move the <strong>Plants</strong> folder inside the <strong>Books</strong> folder.
-        </p>
-      <p>
-        Warning: This action will apply the folders permissions of the <strong>Plants</strong> to the <strong>Books</strong> folder and all its data. This action cannot be undone.
-      </p>
+                  You are about to move the <strong>Plants</strong> folder inside the <strong>Books</strong> folder.
+                   This action will affect the permissions. This action cannot be undone.
+                </p>
 			</div>
 			<div class="submit-wrapper clearfix">
-        <a class="button secondary" href="demo/LU_folders_move_manage_permission.php">More Options</a>
-				<input type="submit" value="Move" class="button primary" id="master-password-submit">
+                <a class="secondary" href="demo/LU_folders_move_manage_permission.php">More Options</a>
+                <input type="submit" value="Move" class="button primary" id="master-password-submit">
 				<a class="js-dialog-close cancel" href="demo/LU_folders_move.php">Cancel</a>
 			</div>
 		</div>

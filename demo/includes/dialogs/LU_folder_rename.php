@@ -17,7 +17,7 @@
                     <div class="form-content">
                         <div class="input text required clearfix js_form_element_wrapper">
                             <label for="js_field_name">Folder Name</label>
-                            <input name="passbolt.model.Folder.name" class="required mad_form_textbox form-element mad_view_form_textbox ready" maxlength="50" id="js_field_name" placeholder="folder name" type="text" value="Untitled folder">
+                            <input name="passbolt.model.Folder.name" class="required mad_form_textbox form-element mad_view_form_textbox ready" maxlength="50" id="js_field_name" placeholder="Untitled folder" type="text">
                             <div id="js_field_name_feedback" class="message mad_form_feedback js_component mad_view ready">
                             </div>
                         </div>

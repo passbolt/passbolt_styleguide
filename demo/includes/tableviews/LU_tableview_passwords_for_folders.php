@@ -1,11 +1,14 @@
-<div id="js_wsp_pwd_browser" class="tableview passbolt_component_password_browser passbolt_view_component_password_browser selection">
+<div id="js_wsp_pwd_browser"
+     class="tableview passbolt_component_password_browser passbolt_view_component_password_browser selection">
     <div class="tableview-header">
         <table>
             <thead>
             <tr>
-                <th class="js_grid_column js_grid_column_multipleSelect cell_multipleSelect selections s-cell" data-view-id="1410">
+                <th class="js_grid_column js_grid_column_multipleSelect cell_multipleSelect selections s-cell"
+                    data-view-id="1410">
                     <div class="input checkbox">
-                        <input name="select all" value="checkbox-select-all" id="checkbox-select-all" disabled="disabled" type="checkbox">
+                        <input name="select all" value="checkbox-select-all" id="checkbox-select-all"
+                               disabled="disabled" type="checkbox">
                         <label for="checkbox-select-all">select all</label>
                     </div>
                 </th>
@@ -29,7 +32,8 @@
                 <th class="js_grid_column js_grid_column_uri cell_uri l-cell sortable" data-view-id="1415">
                     <a href="#">URI</a>
                 </th>
-                <th class="js_grid_column js_grid_column_modified cell_modified m-cell sortable sorted sort-desc" data-view-id="1416">
+                <th class="js_grid_column js_grid_column_modified cell_modified m-cell sortable sorted sort-desc"
+                    data-view-id="1416">
                     <a href="#">Modified</a>
                 </th>
                 <th class="js_grid_column js_grid_column_owner cell_owner m-cell sortable" data-view-id="1417">
@@ -45,17 +49,21 @@
             <tr class="selected" id="17c66127-0c5e-3510-a497-2e6a105109db" data-view-id="1419">
                 <td class="js_grid_column_multipleSelect cell_multipleSelect selections s-cell" data-view-id="1420">
                     <div title="" data-view-id="1421">
-                        <div class="mad_form_checkbox js_checkbox_multiple_select mad_view_form_checkbox ready" id="multiple_select_checkbox_17c66127-0c5e-3510-a497-2e6a105109db">
-                        <div class="input checkbox">
-                            <input value="17c66127-0c5e-3510-a497-2e6a105109db" id="checkbox2a18191d-288c-821d-e7c3-6e464f33564c" data-view-id="1436" type="checkbox" checked="checked">
-                            <label for="checkbox2a18191d-288c-821d-e7c3-6e464f33564c" data-view-id="1437"></label>
-                        </div>
+                        <div class="mad_form_checkbox js_checkbox_multiple_select mad_view_form_checkbox ready"
+                             id="multiple_select_checkbox_17c66127-0c5e-3510-a497-2e6a105109db">
+                            <div class="input checkbox">
+                                <input value="17c66127-0c5e-3510-a497-2e6a105109db"
+                                       id="checkbox2a18191d-288c-821d-e7c3-6e464f33564c" data-view-id="1436"
+                                       type="checkbox" checked="checked">
+                                <label for="checkbox2a18191d-288c-821d-e7c3-6e464f33564c" data-view-id="1437"></label>
+                            </div>
                         </div>
                     </div>
                 </td>
                 <td class="js_grid_column_favorite cell_favorite selections s-cell" data-view-id="1422">
                     <div title="" data-view-id="1423">
-                        <div class="passbolt_component_favorite js_component passbolt_view_component_favorite ready" id="favorite_17c66127-0c5e-3510-a497-2e6a105109db">
+                        <div class="passbolt_component_favorite js_component passbolt_view_component_favorite ready"
+                             id="favorite_17c66127-0c5e-3510-a497-2e6a105109db">
                             <a href="#" class="">
                                 <i class="icon fav" data-view-id="1438"></i>
                                 <span class="visuallyhidden">fav</span>
@@ -65,9 +73,7 @@
                 </td>
                 <td class="js_grid_column_avatar grid_column_avatar grid_column_avatar s1-cell cell_avatar">
                     <div title="">
-                        <span class="svg-icon">
-                          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"></path></svg>
-                        </span>
+                        <?php include('includes/svg-icons/folder.php'); ?>
                     </div>
                 </td>
                 <td class="js_grid_column_name cell_name m-cell" data-view-id="1424">
@@ -100,9 +106,12 @@
             <tr class="" id="17c66127-0c5e-3510-a497-2e6a105109db" data-view-id="1419">
                 <td class="js_grid_column_multipleSelect cell_multipleSelect selections s-cell" data-view-id="1420">
                     <div title="" data-view-id="1421">
-                        <div class="mad_form_checkbox js_checkbox_multiple_select mad_view_form_checkbox ready" id="multiple_select_checkbox_17c66127-0c5e-3510-a497-2e6a105109db">
+                        <div class="mad_form_checkbox js_checkbox_multiple_select mad_view_form_checkbox ready"
+                             id="multiple_select_checkbox_17c66127-0c5e-3510-a497-2e6a105109db">
                             <div class="input checkbox">
-                                <input value="17c66127-0c5e-3510-a497-2e6a105109db" id="checkbox2a18191d-288c-821d-e7c3-6e464f33564c" data-view-id="1436" type="checkbox">
+                                <input value="17c66127-0c5e-3510-a497-2e6a105109db"
+                                       id="checkbox2a18191d-288c-821d-e7c3-6e464f33564c" data-view-id="1436"
+                                       type="checkbox">
                                 <label for="checkbox2a18191d-288c-821d-e7c3-6e464f33564c" data-view-id="1437"></label>
                             </div>
                         </div>
@@ -110,7 +119,8 @@
                 </td>
                 <td class="js_grid_column_favorite cell_favorite selections s-cell" data-view-id="1422">
                     <div title="" data-view-id="1423">
-                        <div class="passbolt_component_favorite js_component passbolt_view_component_favorite ready" id="favorite_17c66127-0c5e-3510-a497-2e6a105109db">
+                        <div class="passbolt_component_favorite js_component passbolt_view_component_favorite ready"
+                             id="favorite_17c66127-0c5e-3510-a497-2e6a105109db">
                             <a href="#" class="">
                                 <i class="icon fav" data-view-id="1438"></i>
                                 <span class="visuallyhidden">fav</span>
@@ -120,9 +130,7 @@
                 </td>
                 <td class="js_grid_column_avatar grid_column_avatar grid_column_avatar s1-cell cell_avatar">
                     <div title="">
-                        <span class="svg-icon">
-                          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 6h-8l-2-2H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-5 3c1.1 0 2 .9 2 2s-.9 2-2 2-2-.9-2-2 .9-2 2-2zm4 8h-8v-1c0-1.33 2.67-2 4-2s4 .67 4 2v1z"></path></svg>
-                        </span>
+                        <?php include('includes/svg-icons/shared-folder.php'); ?>
                     </div>
                 </td>
                 <td class="js_grid_column_name cell_name m-cell" data-view-id="1424">
@@ -152,24 +160,32 @@
             </tr>
             <tr class="" id="17c66127-0c5e-3510-a497-2e6a105109db" data-view-id="1419">
                 <td class="js_grid_column_multipleSelect cell_multipleSelect selections s-cell" data-view-id="1420">
-                    <div title="" data-view-id="1421"><div class="mad_form_checkbox js_checkbox_multiple_select mad_view_form_checkbox ready" id="multiple_select_checkbox_17c66127-0c5e-3510-a497-2e6a105109db">
+                    <div title="" data-view-id="1421">
+                        <div class="mad_form_checkbox js_checkbox_multiple_select mad_view_form_checkbox ready"
+                             id="multiple_select_checkbox_17c66127-0c5e-3510-a497-2e6a105109db">
                             <div class="input checkbox">
-                                <input value="17c66127-0c5e-3510-a497-2e6a105109db" id="checkbox2a18191d-288c-821d-e7c3-6e464f33564c" data-view-id="1436" type="checkbox">
+                                <input value="17c66127-0c5e-3510-a497-2e6a105109db"
+                                       id="checkbox2a18191d-288c-821d-e7c3-6e464f33564c" data-view-id="1436"
+                                       type="checkbox">
                                 <label for="checkbox2a18191d-288c-821d-e7c3-6e464f33564c" data-view-id="1437"></label>
                             </div>
 
-                        </div></div>
+                        </div>
+                    </div>
                 </td>
 
                 <td class="js_grid_column_favorite cell_favorite selections s-cell" data-view-id="1422">
-                    <div title="" data-view-id="1423"><div class="passbolt_component_favorite js_component passbolt_view_component_favorite ready" id="favorite_17c66127-0c5e-3510-a497-2e6a105109db"><a href="#" class="">
+                    <div title="" data-view-id="1423">
+                        <div class="passbolt_component_favorite js_component passbolt_view_component_favorite ready"
+                             id="favorite_17c66127-0c5e-3510-a497-2e6a105109db"><a href="#" class="">
                                 <i class="icon fav" data-view-id="1438"></i>
                                 <span class="visuallyhidden">fav</span>
                             </a>
-                        </div></div>
+                        </div>
+                    </div>
                 </td>
                 <td class="js_grid_column_avatar grid_column_avatar grid_column_avatar s1-cell cell_avatar">
-                    <div title="" >
+                    <div title="">
                         <img src="image.gif" width="25" height="25" alt="avatar picture">
                     </div>
                 </td>
@@ -186,7 +202,10 @@
                 </td>
 
                 <td class="js_grid_column_secret cell_secret m-cell password" data-view-id="1428">
-                    <div title="" data-view-id="1429"><div class="secret-copy"><a id="grid_secret_copy_17c66127-0c5e-3510-a497-2e6a105109db" href="#copy_secret"><span>copy password to clipboard</span></a><pre>-----BEGIN PGP MESSAGE-----
+                    <div title="" data-view-id="1429">
+                        <div class="secret-copy"><a id="grid_secret_copy_17c66127-0c5e-3510-a497-2e6a105109db"
+                                                    href="#copy_secret"><span>copy password to clipboard</span></a>
+                            <pre>-----BEGIN PGP MESSAGE-----
 Version: GnuPG v2
 
 hQIMA1P90Qk1JHA+AQ/+O91ivkKTziW+sdUDXYOD0i0x6jQlwMq8cahsTrrfvGWs
@@ -204,7 +223,9 @@ QQHNMHliAmDokKPejY+7mb2znLhmU04EZS9DxFDE3aNmz3/UrGJbJBNsAYdDbQAr
 Tfgwnb1pn59J7OvJeB6emDPq
 =otKj
 -----END PGP MESSAGE-----
-</pre></div></div>
+</pre>
+                        </div>
+                    </div>
                 </td>
 
                 <td class="js_grid_column_uri cell_uri l-cell" data-view-id="1430">
@@ -229,26 +250,35 @@ Tfgwnb1pn59J7OvJeB6emDPq
             <tr class="" id="2af40344-b330-30a8-ac26-64b2776f07e0" data-view-id="1439">
 
                 <td class="js_grid_column_multipleSelect cell_multipleSelect selections s-cell" data-view-id="1440">
-                    <div title="" data-view-id="1441"><div class="mad_form_checkbox js_checkbox_multiple_select mad_view_form_checkbox ready" id="multiple_select_checkbox_2af40344-b330-30a8-ac26-64b2776f07e0">
+                    <div title="" data-view-id="1441">
+                        <div class="mad_form_checkbox js_checkbox_multiple_select mad_view_form_checkbox ready"
+                             id="multiple_select_checkbox_2af40344-b330-30a8-ac26-64b2776f07e0">
                             <div class="input checkbox">
-                                <input value="2af40344-b330-30a8-ac26-64b2776f07e0" id="checkbox78f033ee-fdd1-69f8-e913-478f1de61dce" data-view-id="1456" type="checkbox">
+                                <input value="2af40344-b330-30a8-ac26-64b2776f07e0"
+                                       id="checkbox78f033ee-fdd1-69f8-e913-478f1de61dce" data-view-id="1456"
+                                       type="checkbox">
                                 <label for="checkbox78f033ee-fdd1-69f8-e913-478f1de61dce" data-view-id="1457"></label>
                             </div>
 
-                        </div></div>
+                        </div>
+                    </div>
                 </td>
 
                 <td class="js_grid_column_favorite cell_favorite selections s-cell" data-view-id="1442">
-                    <div title="" data-view-id="1443"><div class="passbolt_component_favorite js_component passbolt_view_component_favorite ready" id="favorite_2af40344-b330-30a8-ac26-64b2776f07e0">
+                    <div title="" data-view-id="1443">
+                        <div class="passbolt_component_favorite js_component passbolt_view_component_favorite ready"
+                             id="favorite_2af40344-b330-30a8-ac26-64b2776f07e0">
                             <a href="#" class="">
                                 <i class="icon unfav" data-view-id="1458"></i>
                                 <span class="visuallyhidden">fav</span>
                             </a>
-                        </div></div>
+                        </div>
+                    </div>
                 </td>
                 <td class="js_grid_column_avatar grid_column_avatar grid_column_avatar s1-cell cell_avatar">
-                    <div title="" >
-                        <img src="https://www.google.com/s2/favicons?domain=www.w3.org" width="25" height="25" alt="avatar picture">
+                    <div title="">
+                        <img src="https://www.google.com/s2/favicons?domain=www.w3.org" width="25" height="25"
+                             alt="avatar picture">
                     </div>
                 </td>
                 <td class="js_grid_column_name cell_name m-cell" data-view-id="1444">
@@ -264,7 +294,10 @@ Tfgwnb1pn59J7OvJeB6emDPq
                 </td>
 
                 <td class="js_grid_column_secret cell_secret m-cell password" data-view-id="1448">
-                    <div title="" data-view-id="1449"><div class="secret-copy"><a id="grid_secret_copy_2af40344-b330-30a8-ac26-64b2776f07e0" href="#copy_secret"><span>copy password to clipboard</span></a><pre>-----BEGIN PGP MESSAGE-----
+                    <div title="" data-view-id="1449">
+                        <div class="secret-copy"><a id="grid_secret_copy_2af40344-b330-30a8-ac26-64b2776f07e0"
+                                                    href="#copy_secret"><span>copy password to clipboard</span></a>
+                            <pre>-----BEGIN PGP MESSAGE-----
 Version: GnuPG v2
 
 hQIMA1P90Qk1JHA+ARAAmk94xbBp2FjA3k/+YkGgunngmd1NzrzzXc3e/zl4Xuxk
@@ -282,7 +315,9 @@ QQFH57e6KaAJeQEYkmotdlbASzDNgkL7r/8Q1TMs0Sq9E3B7LJLWBjklx8QQR1Fy
 YuP5nxbBQBVneIOHDvg5Uros
 =8rhI
 -----END PGP MESSAGE-----
-</pre></div></div>
+</pre>
+                        </div>
+                    </div>
                 </td>
 
                 <td class="js_grid_column_uri cell_uri l-cell" data-view-id="1450">
@@ -303,29 +338,39 @@ YuP5nxbBQBVneIOHDvg5Uros
                     </div>
                 </td>
 
-            </tr><tr class="" id="31bf093f-dd27-391d-ae9d-f511ef41dd12" data-view-id="1459">
+            </tr>
+            <tr class="" id="31bf093f-dd27-391d-ae9d-f511ef41dd12" data-view-id="1459">
 
                 <td class="js_grid_column_multipleSelect cell_multipleSelect selections s-cell" data-view-id="1460">
-                    <div title="" data-view-id="1461"><div class="mad_form_checkbox js_checkbox_multiple_select mad_view_form_checkbox ready" id="multiple_select_checkbox_31bf093f-dd27-391d-ae9d-f511ef41dd12">
+                    <div title="" data-view-id="1461">
+                        <div class="mad_form_checkbox js_checkbox_multiple_select mad_view_form_checkbox ready"
+                             id="multiple_select_checkbox_31bf093f-dd27-391d-ae9d-f511ef41dd12">
                             <div class="input checkbox">
-                                <input value="31bf093f-dd27-391d-ae9d-f511ef41dd12" id="checkboxaa74e6ca-5c19-06f8-e2b5-4b775cdf118b" data-view-id="1476" type="checkbox">
+                                <input value="31bf093f-dd27-391d-ae9d-f511ef41dd12"
+                                       id="checkboxaa74e6ca-5c19-06f8-e2b5-4b775cdf118b" data-view-id="1476"
+                                       type="checkbox">
                                 <label for="checkboxaa74e6ca-5c19-06f8-e2b5-4b775cdf118b" data-view-id="1477"></label>
                             </div>
 
-                        </div></div>
+                        </div>
+                    </div>
                 </td>
 
                 <td class="js_grid_column_favorite cell_favorite selections s-cell" data-view-id="1462">
-                    <div title="" data-view-id="1463"><div class="passbolt_component_favorite js_component passbolt_view_component_favorite ready" id="favorite_31bf093f-dd27-391d-ae9d-f511ef41dd12"><a href="#" class="">
+                    <div title="" data-view-id="1463">
+                        <div class="passbolt_component_favorite js_component passbolt_view_component_favorite ready"
+                             id="favorite_31bf093f-dd27-391d-ae9d-f511ef41dd12"><a href="#" class="">
                                 <i class="icon fav" data-view-id="1478"></i>
                                 <span class="visuallyhidden">fav</span>
                             </a>
-                        </div></div>
+                        </div>
+                    </div>
                 </td>
 
                 <td class="js_grid_column_avatar grid_column_avatar grid_column_avatar s1-cell cell_avatar">
-                    <div title="" >
-                        <img src="https://www.google.com/s2/favicons?domain=www.facebook.org" width="25" height="25" alt="avatar picture">
+                    <div title="">
+                        <img src="https://www.google.com/s2/favicons?domain=www.facebook.org" width="25" height="25"
+                             alt="avatar picture">
                     </div>
                 </td>
 
@@ -342,7 +387,10 @@ YuP5nxbBQBVneIOHDvg5Uros
                 </td>
 
                 <td class="js_grid_column_secret cell_secret m-cell password" data-view-id="1468">
-                    <div title="" data-view-id="1469"><div class="secret-copy"><a id="grid_secret_copy_31bf093f-dd27-391d-ae9d-f511ef41dd12" href="#copy_secret"><span>copy password to clipboard</span></a><pre>-----BEGIN PGP MESSAGE-----
+                    <div title="" data-view-id="1469">
+                        <div class="secret-copy"><a id="grid_secret_copy_31bf093f-dd27-391d-ae9d-f511ef41dd12"
+                                                    href="#copy_secret"><span>copy password to clipboard</span></a>
+                            <pre>-----BEGIN PGP MESSAGE-----
 Version: GnuPG v2
 
 hQIMA1P90Qk1JHA+ARAAi3nWAbVUSVuqFs3YkEU9TD4TBBpvtQK6uz1N7IwgEtNz
@@ -360,7 +408,9 @@ PQEkb1k8z5F7cQS9pmBlIKj1XNyC0pBR669UKF54ePSwPFc7SeuhZ1Z/Nna+GLzi
 qZIPdx1rBYAAJY51U4o=
 =YBWi
 -----END PGP MESSAGE-----
-</pre></div></div>
+</pre>
+                        </div>
+                    </div>
                 </td>
 
                 <td class="js_grid_column_uri cell_uri l-cell" data-view-id="1470">
@@ -381,29 +431,39 @@ qZIPdx1rBYAAJY51U4o=
                     </div>
                 </td>
 
-            </tr><tr class="" id="4241e122-62d8-340c-a607-150d8ca0c5c5" data-view-id="1479">
+            </tr>
+            <tr class="" id="4241e122-62d8-340c-a607-150d8ca0c5c5" data-view-id="1479">
 
                 <td class="js_grid_column_multipleSelect cell_multipleSelect selections s-cell" data-view-id="1480">
-                    <div title="" data-view-id="1481"><div class="mad_form_checkbox js_checkbox_multiple_select mad_view_form_checkbox ready" id="multiple_select_checkbox_4241e122-62d8-340c-a607-150d8ca0c5c5">
+                    <div title="" data-view-id="1481">
+                        <div class="mad_form_checkbox js_checkbox_multiple_select mad_view_form_checkbox ready"
+                             id="multiple_select_checkbox_4241e122-62d8-340c-a607-150d8ca0c5c5">
                             <div class="input checkbox">
-                                <input value="4241e122-62d8-340c-a607-150d8ca0c5c5" id="checkbox670f736f-d468-7583-5b31-d9f7795769db" data-view-id="1496" type="checkbox">
+                                <input value="4241e122-62d8-340c-a607-150d8ca0c5c5"
+                                       id="checkbox670f736f-d468-7583-5b31-d9f7795769db" data-view-id="1496"
+                                       type="checkbox">
                                 <label for="checkbox670f736f-d468-7583-5b31-d9f7795769db" data-view-id="1497"></label>
                             </div>
 
-                        </div></div>
+                        </div>
+                    </div>
                 </td>
 
                 <td class="js_grid_column_favorite cell_favorite selections s-cell" data-view-id="1482">
-                    <div title="" data-view-id="1483"><div class="passbolt_component_favorite js_component passbolt_view_component_favorite ready" id="favorite_4241e122-62d8-340c-a607-150d8ca0c5c5"><a href="#" class="">
+                    <div title="" data-view-id="1483">
+                        <div class="passbolt_component_favorite js_component passbolt_view_component_favorite ready"
+                             id="favorite_4241e122-62d8-340c-a607-150d8ca0c5c5"><a href="#" class="">
                                 <i class="icon fav" data-view-id="1498"></i>
                                 <span class="visuallyhidden">fav</span>
                             </a>
-                        </div></div>
+                        </div>
+                    </div>
                 </td>
 
                 <td class="js_grid_column_avatar grid_column_avatar grid_column_avatar s1-cell cell_avatar">
-                    <div title="" >
-                        <img src="https://www.google.com/s2/favicons?domain=www.stackoverflow.org" width="25" height="25" alt="avatar picture">
+                    <div title="">
+                        <img src="https://www.google.com/s2/favicons?domain=www.stackoverflow.org" width="25"
+                             height="25" alt="avatar picture">
                     </div>
                 </td>
 
@@ -420,7 +480,10 @@ qZIPdx1rBYAAJY51U4o=
                 </td>
 
                 <td class="js_grid_column_secret cell_secret m-cell password" data-view-id="1488">
-                    <div title="" data-view-id="1489"><div class="secret-copy"><a id="grid_secret_copy_4241e122-62d8-340c-a607-150d8ca0c5c5" href="#copy_secret"><span>copy password to clipboard</span></a><pre>-----BEGIN PGP MESSAGE-----
+                    <div title="" data-view-id="1489">
+                        <div class="secret-copy"><a id="grid_secret_copy_4241e122-62d8-340c-a607-150d8ca0c5c5"
+                                                    href="#copy_secret"><span>copy password to clipboard</span></a>
+                            <pre>-----BEGIN PGP MESSAGE-----
 Version: GnuPG v2
 
 hQIMA1P90Qk1JHA+AQ//e2JcJFFYA7JZ2ZyANtB7dZqR0zsU5JEgylUNnVvQu1OQ
@@ -438,7 +501,9 @@ SQEJYUXDX112D+X2NfyHFJN7HoyIUA7Yk1UxtWb6bJpZhBzAOnNdpHeTM+VtcYmm
 StCzcVynJ8qVKWWX9WJn77UUTrtEyyku5OE=
 =010Y
 -----END PGP MESSAGE-----
-</pre></div></div>
+</pre>
+                        </div>
+                    </div>
                 </td>
 
                 <td class="js_grid_column_uri cell_uri l-cell" data-view-id="1490">
@@ -459,30 +524,40 @@ StCzcVynJ8qVKWWX9WJn77UUTrtEyyku5OE=
                     </div>
                 </td>
 
-            </tr><tr id="4a2f98e8-b326-3384-aa2b-c3c9a81be3f7" data-view-id="1499">
+            </tr>
+            <tr id="4a2f98e8-b326-3384-aa2b-c3c9a81be3f7" data-view-id="1499">
 
                 <td class="js_grid_column_multipleSelect cell_multipleSelect selections s-cell" data-view-id="1500">
-                    <div title="" data-view-id="1501"><div class="mad_form_checkbox js_checkbox_multiple_select mad_view_form_checkbox ready" id="multiple_select_checkbox_4a2f98e8-b326-3384-aa2b-c3c9a81be3f7">
+                    <div title="" data-view-id="1501">
+                        <div class="mad_form_checkbox js_checkbox_multiple_select mad_view_form_checkbox ready"
+                             id="multiple_select_checkbox_4a2f98e8-b326-3384-aa2b-c3c9a81be3f7">
                             <div class="input checkbox">
-                                <input value="4a2f98e8-b326-3384-aa2b-c3c9a81be3f7" id="checkbox18e2ee20-7114-9aa2-e1e3-7e7823b86826" data-view-id="1516" type="checkbox">
+                                <input value="4a2f98e8-b326-3384-aa2b-c3c9a81be3f7"
+                                       id="checkbox18e2ee20-7114-9aa2-e1e3-7e7823b86826" data-view-id="1516"
+                                       type="checkbox">
                                 <label for="checkbox18e2ee20-7114-9aa2-e1e3-7e7823b86826" data-view-id="1517"></label>
                             </div>
 
-                        </div></div>
+                        </div>
+                    </div>
                 </td>
 
                 <td class="js_grid_column_favorite cell_favorite selections s-cell" data-view-id="1502">
-                    <div title="" data-view-id="1503"><div class="passbolt_component_favorite js_component passbolt_view_component_favorite ready" id="favorite_4a2f98e8-b326-3384-aa2b-c3c9a81be3f7">
+                    <div title="" data-view-id="1503">
+                        <div class="passbolt_component_favorite js_component passbolt_view_component_favorite ready"
+                             id="favorite_4a2f98e8-b326-3384-aa2b-c3c9a81be3f7">
                             <a href="#" class="">
                                 <i class="icon fav" data-view-id="1518"></i>
                                 <span class="visuallyhidden">fav</span>
                             </a>
-                        </div></div>
+                        </div>
+                    </div>
                 </td>
 
                 <td class="js_grid_column_avatar grid_column_avatar grid_column_avatar s1-cell cell_avatar">
-                    <div title="" >
-                        <img src="https://www.google.com/s2/favicons?domain=www.facebook.org" width="25" height="25" alt="avatar picture">
+                    <div title="">
+                        <img src="https://www.google.com/s2/favicons?domain=www.facebook.org" width="25" height="25"
+                             alt="avatar picture">
                     </div>
                 </td>
 
@@ -499,7 +574,10 @@ StCzcVynJ8qVKWWX9WJn77UUTrtEyyku5OE=
                 </td>
 
                 <td class="js_grid_column_secret cell_secret m-cell password" data-view-id="1508">
-                    <div title="" data-view-id="1509"><div class="secret-copy"><a id="grid_secret_copy_4a2f98e8-b326-3384-aa2b-c3c9a81be3f7" href="#copy_secret"><span>copy password to clipboard</span></a><pre>-----BEGIN PGP MESSAGE-----
+                    <div title="" data-view-id="1509">
+                        <div class="secret-copy"><a id="grid_secret_copy_4a2f98e8-b326-3384-aa2b-c3c9a81be3f7"
+                                                    href="#copy_secret"><span>copy password to clipboard</span></a>
+                            <pre>-----BEGIN PGP MESSAGE-----
 Version: GnuPG v2
 
 hQIMA1P90Qk1JHA+AQ//au7BhAriiVGOdscSFxV70Im7hdkxLcZ7tR+GZxMBLC/8
@@ -517,7 +595,9 @@ RAEn1syPUgAOFZpdaZp+EwkmiyWVdwjmad2je/gLUeiFRSs+b5HQ62djfgIHKqCq
 R+4mU1ishf2K34pgkgejVeXhaQKh
 =xzh6
 -----END PGP MESSAGE-----
-</pre></div></div>
+</pre>
+                        </div>
+                    </div>
                 </td>
 
                 <td class="js_grid_column_uri cell_uri l-cell" data-view-id="1510">
@@ -538,29 +618,39 @@ R+4mU1ishf2K34pgkgejVeXhaQKh
                     </div>
                 </td>
 
-            </tr><tr id="524b4f8c-b842-38d6-a542-6bf714df6099" data-view-id="1519">
+            </tr>
+            <tr id="524b4f8c-b842-38d6-a542-6bf714df6099" data-view-id="1519">
 
                 <td class="js_grid_column_multipleSelect cell_multipleSelect selections s-cell" data-view-id="1520">
-                    <div title="" data-view-id="1521"><div class="mad_form_checkbox js_checkbox_multiple_select mad_view_form_checkbox ready" id="multiple_select_checkbox_524b4f8c-b842-38d6-a542-6bf714df6099">
+                    <div title="" data-view-id="1521">
+                        <div class="mad_form_checkbox js_checkbox_multiple_select mad_view_form_checkbox ready"
+                             id="multiple_select_checkbox_524b4f8c-b842-38d6-a542-6bf714df6099">
                             <div class="input checkbox">
-                                <input value="524b4f8c-b842-38d6-a542-6bf714df6099" id="checkboxe09f27e5-5cea-de8d-27b1-12833e2e2678" data-view-id="1536" type="checkbox">
+                                <input value="524b4f8c-b842-38d6-a542-6bf714df6099"
+                                       id="checkboxe09f27e5-5cea-de8d-27b1-12833e2e2678" data-view-id="1536"
+                                       type="checkbox">
                                 <label for="checkboxe09f27e5-5cea-de8d-27b1-12833e2e2678" data-view-id="1537"></label>
                             </div>
 
-                        </div></div>
+                        </div>
+                    </div>
                 </td>
 
                 <td class="js_grid_column_favorite cell_favorite selections s-cell" data-view-id="1522">
-                    <div title="" data-view-id="1523"><div class="passbolt_component_favorite js_component passbolt_view_component_favorite ready" id="favorite_524b4f8c-b842-38d6-a542-6bf714df6099"><a href="#" class="">
+                    <div title="" data-view-id="1523">
+                        <div class="passbolt_component_favorite js_component passbolt_view_component_favorite ready"
+                             id="favorite_524b4f8c-b842-38d6-a542-6bf714df6099"><a href="#" class="">
                                 <i class="icon fav" data-view-id="1538"></i>
                                 <span class="visuallyhidden">fav</span>
                             </a>
-                        </div></div>
+                        </div>
+                    </div>
                 </td>
 
                 <td class="js_grid_column_avatar grid_column_avatar grid_column_avatar s1-cell cell_avatar">
-                    <div title="" >
-                        <img src="https://www.google.com/s2/favicons?domain=www.cakephp.org" width="25" height="25" alt="avatar picture">
+                    <div title="">
+                        <img src="https://www.google.com/s2/favicons?domain=www.cakephp.org" width="25" height="25"
+                             alt="avatar picture">
                     </div>
                 </td>
 
@@ -577,7 +667,10 @@ R+4mU1ishf2K34pgkgejVeXhaQKh
                 </td>
 
                 <td class="js_grid_column_secret cell_secret m-cell password" data-view-id="1528">
-                    <div title="" data-view-id="1529"><div class="secret-copy"><a id="grid_secret_copy_524b4f8c-b842-38d6-a542-6bf714df6099" href="#copy_secret"><span>copy password to clipboard</span></a><pre>-----BEGIN PGP MESSAGE-----
+                    <div title="" data-view-id="1529">
+                        <div class="secret-copy"><a id="grid_secret_copy_524b4f8c-b842-38d6-a542-6bf714df6099"
+                                                    href="#copy_secret"><span>copy password to clipboard</span></a>
+                            <pre>-----BEGIN PGP MESSAGE-----
 Version: GnuPG v2
 
 hQIMA1P90Qk1JHA+AQ/9Fg20W3TIbwnr7d8PeQ4djRekSOc+rfRXymtlvdb+EDxB
@@ -595,7 +688,9 @@ QAHyo+qrtGnuhlp5rXM+dVT1mAwsSW4mmM9qpJq7LOVMC2AcvsVDKQhl5iyEtzfq
 6hER6lscJ2xRturINHmctTQ=
 =jv9Q
 -----END PGP MESSAGE-----
-</pre></div></div>
+</pre>
+                        </div>
+                    </div>
                 </td>
 
                 <td class="js_grid_column_uri cell_uri l-cell" data-view-id="1530">
@@ -616,28 +711,37 @@ QAHyo+qrtGnuhlp5rXM+dVT1mAwsSW4mmM9qpJq7LOVMC2AcvsVDKQhl5iyEtzfq
                     </div>
                 </td>
 
-            </tr><tr id="664735b2-4be7-36d9-a9f8-08d42998faf8" data-view-id="1539">
+            </tr>
+            <tr id="664735b2-4be7-36d9-a9f8-08d42998faf8" data-view-id="1539">
 
                 <td class="js_grid_column_multipleSelect cell_multipleSelect selections s-cell" data-view-id="1540">
-                    <div title="" data-view-id="1541"><div class="mad_form_checkbox js_checkbox_multiple_select mad_view_form_checkbox ready" id="multiple_select_checkbox_664735b2-4be7-36d9-a9f8-08d42998faf8">
+                    <div title="" data-view-id="1541">
+                        <div class="mad_form_checkbox js_checkbox_multiple_select mad_view_form_checkbox ready"
+                             id="multiple_select_checkbox_664735b2-4be7-36d9-a9f8-08d42998faf8">
                             <div class="input checkbox">
-                                <input value="664735b2-4be7-36d9-a9f8-08d42998faf8" id="checkboxb355ece2-ce77-e88c-eb32-22ffe1f9bef2" data-view-id="1556" type="checkbox">
+                                <input value="664735b2-4be7-36d9-a9f8-08d42998faf8"
+                                       id="checkboxb355ece2-ce77-e88c-eb32-22ffe1f9bef2" data-view-id="1556"
+                                       type="checkbox">
                                 <label for="checkboxb355ece2-ce77-e88c-eb32-22ffe1f9bef2" data-view-id="1557"></label>
                             </div>
 
-                        </div></div>
+                        </div>
+                    </div>
                 </td>
 
                 <td class="js_grid_column_favorite cell_favorite selections s-cell" data-view-id="1542">
-                    <div title="" data-view-id="1543"><div class="passbolt_component_favorite js_component passbolt_view_component_favorite ready" id="favorite_664735b2-4be7-36d9-a9f8-08d42998faf8"><a href="#" class="">
+                    <div title="" data-view-id="1543">
+                        <div class="passbolt_component_favorite js_component passbolt_view_component_favorite ready"
+                             id="favorite_664735b2-4be7-36d9-a9f8-08d42998faf8"><a href="#" class="">
                                 <i class="icon fav" data-view-id="1558"></i>
                                 <span class="visuallyhidden">fav</span>
                             </a>
-                        </div></div>
+                        </div>
+                    </div>
                 </td>
 
                 <td class="js_grid_column_avatar grid_column_avatar grid_column_avatar s1-cell cell_avatar">
-                    <div title="" >
+                    <div title="">
                         <img src="image.gif" width="25" height="25" alt="avatar picture">
                     </div>
                 </td>
@@ -655,7 +759,10 @@ QAHyo+qrtGnuhlp5rXM+dVT1mAwsSW4mmM9qpJq7LOVMC2AcvsVDKQhl5iyEtzfq
                 </td>
 
                 <td class="js_grid_column_secret cell_secret m-cell password" data-view-id="1548">
-                    <div title="" data-view-id="1549"><div class="secret-copy"><a id="grid_secret_copy_664735b2-4be7-36d9-a9f8-08d42998faf8" href="#copy_secret"><span>copy password to clipboard</span></a><pre>-----BEGIN PGP MESSAGE-----
+                    <div title="" data-view-id="1549">
+                        <div class="secret-copy"><a id="grid_secret_copy_664735b2-4be7-36d9-a9f8-08d42998faf8"
+                                                    href="#copy_secret"><span>copy password to clipboard</span></a>
+                            <pre>-----BEGIN PGP MESSAGE-----
 Version: GnuPG v2
 
 hQIMA1P90Qk1JHA+AQ//W6lFyU8seoL4sjthnb63WVcZoE1lT4dTbSjbSLbK/LZN
@@ -673,7 +780,9 @@ QQEDSFzJoO2iBFRT5zwBVBl/hQBeRWXBNY0mcIB/XCWCRoMIEKHN0OwCLCfJIPxK
 8BCQnA+D7oMlafwmYj5Y+WD2
 =Uy7e
 -----END PGP MESSAGE-----
-</pre></div></div>
+</pre>
+                        </div>
+                    </div>
                 </td>
 
                 <td class="js_grid_column_uri cell_uri l-cell" data-view-id="1550">
@@ -694,29 +803,39 @@ QQEDSFzJoO2iBFRT5zwBVBl/hQBeRWXBNY0mcIB/XCWCRoMIEKHN0OwCLCfJIPxK
                     </div>
                 </td>
 
-            </tr><tr id="8010a5ef-1e57-3981-abd1-98521c2622d6" data-view-id="1559">
+            </tr>
+            <tr id="8010a5ef-1e57-3981-abd1-98521c2622d6" data-view-id="1559">
 
                 <td class="js_grid_column_multipleSelect cell_multipleSelect selections s-cell" data-view-id="1560">
-                    <div title="" data-view-id="1561"><div class="mad_form_checkbox js_checkbox_multiple_select mad_view_form_checkbox ready" id="multiple_select_checkbox_8010a5ef-1e57-3981-abd1-98521c2622d6">
+                    <div title="" data-view-id="1561">
+                        <div class="mad_form_checkbox js_checkbox_multiple_select mad_view_form_checkbox ready"
+                             id="multiple_select_checkbox_8010a5ef-1e57-3981-abd1-98521c2622d6">
                             <div class="input checkbox">
-                                <input value="8010a5ef-1e57-3981-abd1-98521c2622d6" id="checkboxc633c3c3-ac97-5933-7d46-650390696808" data-view-id="1576" type="checkbox">
+                                <input value="8010a5ef-1e57-3981-abd1-98521c2622d6"
+                                       id="checkboxc633c3c3-ac97-5933-7d46-650390696808" data-view-id="1576"
+                                       type="checkbox">
                                 <label for="checkboxc633c3c3-ac97-5933-7d46-650390696808" data-view-id="1577"></label>
                             </div>
 
-                        </div></div>
+                        </div>
+                    </div>
                 </td>
 
                 <td class="js_grid_column_favorite cell_favorite selections s-cell" data-view-id="1562">
-                    <div title="" data-view-id="1563"><div class="passbolt_component_favorite js_component passbolt_view_component_favorite ready" id="favorite_8010a5ef-1e57-3981-abd1-98521c2622d6"><a href="#" class="">
+                    <div title="" data-view-id="1563">
+                        <div class="passbolt_component_favorite js_component passbolt_view_component_favorite ready"
+                             id="favorite_8010a5ef-1e57-3981-abd1-98521c2622d6"><a href="#" class="">
                                 <i class="icon fav" data-view-id="1578"></i>
                                 <span class="visuallyhidden">fav</span>
                             </a>
-                        </div></div>
+                        </div>
+                    </div>
                 </td>
 
                 <td class="js_grid_column_avatar grid_column_avatar grid_column_avatar s1-cell cell_avatar">
                     <div title="">
-                        <img src="https://www.google.com/s2/favicons?domain=www.google.org" width="25" height="25" alt="avatar picture">
+                        <img src="https://www.google.com/s2/favicons?domain=www.google.org" width="25" height="25"
+                             alt="avatar picture">
                     </div>
                 </td>
 
@@ -733,7 +852,10 @@ QQEDSFzJoO2iBFRT5zwBVBl/hQBeRWXBNY0mcIB/XCWCRoMIEKHN0OwCLCfJIPxK
                 </td>
 
                 <td class="js_grid_column_secret cell_secret m-cell password" data-view-id="1568">
-                    <div title="" data-view-id="1569"><div class="secret-copy"><a id="grid_secret_copy_8010a5ef-1e57-3981-abd1-98521c2622d6" href="#copy_secret"><span>copy password to clipboard</span></a><pre>-----BEGIN PGP MESSAGE-----
+                    <div title="" data-view-id="1569">
+                        <div class="secret-copy"><a id="grid_secret_copy_8010a5ef-1e57-3981-abd1-98521c2622d6"
+                                                    href="#copy_secret"><span>copy password to clipboard</span></a>
+                            <pre>-----BEGIN PGP MESSAGE-----
 Version: GnuPG v2
 
 hQIMA1P90Qk1JHA+AQ/+KuaucFuTc2V6alLUTy/4MJqgsgMsRTl5zzA4t4Q+qKp4
@@ -751,7 +873,9 @@ QAG41NSZ4IlW+ZuOLYTU7bRgCwC4RNjiKz5hgUNmywTn7LHXsu33CfT2aUzvrHTU
 mbZs5gRvcF5waNXoH4jbhbE=
 =oOPi
 -----END PGP MESSAGE-----
-</pre></div></div>
+</pre>
+                        </div>
+                    </div>
                 </td>
 
                 <td class="js_grid_column_uri cell_uri l-cell" data-view-id="1570">
@@ -772,24 +896,33 @@ mbZs5gRvcF5waNXoH4jbhbE=
                     </div>
                 </td>
 
-            </tr><tr id="a93321f2-7aed-3d77-a2d1-7e058f41b7b9" data-view-id="1579">
+            </tr>
+            <tr id="a93321f2-7aed-3d77-a2d1-7e058f41b7b9" data-view-id="1579">
 
                 <td class="js_grid_column_multipleSelect cell_multipleSelect selections s-cell" data-view-id="1580">
-                    <div title="" data-view-id="1581"><div class="mad_form_checkbox js_checkbox_multiple_select mad_view_form_checkbox ready" id="multiple_select_checkbox_a93321f2-7aed-3d77-a2d1-7e058f41b7b9">
+                    <div title="" data-view-id="1581">
+                        <div class="mad_form_checkbox js_checkbox_multiple_select mad_view_form_checkbox ready"
+                             id="multiple_select_checkbox_a93321f2-7aed-3d77-a2d1-7e058f41b7b9">
                             <div class="input checkbox">
-                                <input value="a93321f2-7aed-3d77-a2d1-7e058f41b7b9" id="checkboxad3b9b33-a12b-bfea-e327-4743e4976297" data-view-id="1596" type="checkbox">
+                                <input value="a93321f2-7aed-3d77-a2d1-7e058f41b7b9"
+                                       id="checkboxad3b9b33-a12b-bfea-e327-4743e4976297" data-view-id="1596"
+                                       type="checkbox">
                                 <label for="checkboxad3b9b33-a12b-bfea-e327-4743e4976297" data-view-id="1597"></label>
                             </div>
 
-                        </div></div>
+                        </div>
+                    </div>
                 </td>
 
                 <td class="js_grid_column_favorite cell_favorite selections s-cell" data-view-id="1582">
-                    <div title="" data-view-id="1583"><div class="passbolt_component_favorite js_component passbolt_view_component_favorite ready" id="favorite_a93321f2-7aed-3d77-a2d1-7e058f41b7b9"><a href="#" class="">
+                    <div title="" data-view-id="1583">
+                        <div class="passbolt_component_favorite js_component passbolt_view_component_favorite ready"
+                             id="favorite_a93321f2-7aed-3d77-a2d1-7e058f41b7b9"><a href="#" class="">
                                 <i class="icon fav" data-view-id="1598"></i>
                                 <span class="visuallyhidden">fav</span>
                             </a>
-                        </div></div>
+                        </div>
+                    </div>
                 </td>
 
                 <td class="js_grid_column_avatar grid_column_avatar grid_column_avatar s1-cell cell_avatar">
@@ -811,7 +944,10 @@ mbZs5gRvcF5waNXoH4jbhbE=
                 </td>
 
                 <td class="js_grid_column_secret cell_secret m-cell password" data-view-id="1588">
-                    <div title="" data-view-id="1589"><div class="secret-copy"><a id="grid_secret_copy_a93321f2-7aed-3d77-a2d1-7e058f41b7b9" href="#copy_secret"><span>copy password to clipboard</span></a><pre>-----BEGIN PGP MESSAGE-----
+                    <div title="" data-view-id="1589">
+                        <div class="secret-copy"><a id="grid_secret_copy_a93321f2-7aed-3d77-a2d1-7e058f41b7b9"
+                                                    href="#copy_secret"><span>copy password to clipboard</span></a>
+                            <pre>-----BEGIN PGP MESSAGE-----
 Version: GnuPG v2
 
 hQIMA1P90Qk1JHA+ARAAmus8T8cginhhgUkI9TBZX2iLPHJG27lh+V4/ar1vwhvS
@@ -829,7 +965,9 @@ QwF3fqcCxKNtL/JcB22xNaaSbfQdUQEwMFjNG4N4FdB1NfsL6TL9i0N+i3uLaaF/
 clguxvRkrQvitJI1I439S/RlIIo=
 =9kNz
 -----END PGP MESSAGE-----
-</pre></div></div>
+</pre>
+                        </div>
+                    </div>
                 </td>
 
                 <td class="js_grid_column_uri cell_uri l-cell" data-view-id="1590">
@@ -850,29 +988,39 @@ clguxvRkrQvitJI1I439S/RlIIo=
                     </div>
                 </td>
 
-            </tr><tr id="a9b3ae3c-9d12-39a3-afda-a4863b918989" data-view-id="1599">
+            </tr>
+            <tr id="a9b3ae3c-9d12-39a3-afda-a4863b918989" data-view-id="1599">
 
                 <td class="js_grid_column_multipleSelect cell_multipleSelect selections s-cell" data-view-id="1600">
-                    <div title="" data-view-id="1601"><div class="mad_form_checkbox js_checkbox_multiple_select mad_view_form_checkbox ready" id="multiple_select_checkbox_a9b3ae3c-9d12-39a3-afda-a4863b918989">
+                    <div title="" data-view-id="1601">
+                        <div class="mad_form_checkbox js_checkbox_multiple_select mad_view_form_checkbox ready"
+                             id="multiple_select_checkbox_a9b3ae3c-9d12-39a3-afda-a4863b918989">
                             <div class="input checkbox">
-                                <input value="a9b3ae3c-9d12-39a3-afda-a4863b918989" id="checkboxd1ef1275-8f07-48c9-daef-ed065ac9d6ce" data-view-id="1616" type="checkbox">
+                                <input value="a9b3ae3c-9d12-39a3-afda-a4863b918989"
+                                       id="checkboxd1ef1275-8f07-48c9-daef-ed065ac9d6ce" data-view-id="1616"
+                                       type="checkbox">
                                 <label for="checkboxd1ef1275-8f07-48c9-daef-ed065ac9d6ce" data-view-id="1617"></label>
                             </div>
 
-                        </div></div>
+                        </div>
+                    </div>
                 </td>
 
                 <td class="js_grid_column_favorite cell_favorite selections s-cell" data-view-id="1602">
-                    <div title="" data-view-id="1603"><div class="passbolt_component_favorite js_component passbolt_view_component_favorite ready" id="favorite_a9b3ae3c-9d12-39a3-afda-a4863b918989"><a href="#" class="">
+                    <div title="" data-view-id="1603">
+                        <div class="passbolt_component_favorite js_component passbolt_view_component_favorite ready"
+                             id="favorite_a9b3ae3c-9d12-39a3-afda-a4863b918989"><a href="#" class="">
                                 <i class="icon fav" data-view-id="1618"></i>
                                 <span class="visuallyhidden">fav</span>
                             </a>
-                        </div></div>
+                        </div>
+                    </div>
                 </td>
 
                 <td class="js_grid_column_avatar grid_column_avatar grid_column_avatar s1-cell cell_avatar">
                     <div title="">
-                        <img src="https://www.google.com/s2/favicons?domain=www.reactjs.org" width="25" height="25" alt="avatar picture">
+                        <img src="https://www.google.com/s2/favicons?domain=www.reactjs.org" width="25" height="25"
+                             alt="avatar picture">
                     </div>
                 </td>
 
@@ -889,7 +1037,10 @@ clguxvRkrQvitJI1I439S/RlIIo=
                 </td>
 
                 <td class="js_grid_column_secret cell_secret m-cell password" data-view-id="1608">
-                    <div title="" data-view-id="1609"><div class="secret-copy"><a id="grid_secret_copy_a9b3ae3c-9d12-39a3-afda-a4863b918989" href="#copy_secret"><span>copy password to clipboard</span></a><pre>-----BEGIN PGP MESSAGE-----
+                    <div title="" data-view-id="1609">
+                        <div class="secret-copy"><a id="grid_secret_copy_a9b3ae3c-9d12-39a3-afda-a4863b918989"
+                                                    href="#copy_secret"><span>copy password to clipboard</span></a>
+                            <pre>-----BEGIN PGP MESSAGE-----
 Version: GnuPG v2
 
 hQIMA1P90Qk1JHA+AQ/9Ge/PkrgLg6n68CYZ7HaicsSHki2CweNley107vmQU8Qj
@@ -907,7 +1058,9 @@ QQE0VzR6PL20FCDIAUsKF1Dw1NT//HA1+MF6laRwXz28k7hOKOz95NEh+EOwp2ds
 Iw82x8qh7m0gA16+sGtV07kV
 =KrVC
 -----END PGP MESSAGE-----
-</pre></div></div>
+</pre>
+                        </div>
+                    </div>
                 </td>
 
                 <td class="js_grid_column_uri cell_uri l-cell" data-view-id="1610">
@@ -928,29 +1081,39 @@ Iw82x8qh7m0gA16+sGtV07kV
                     </div>
                 </td>
 
-            </tr><tr id="b84103c2-3b50-3250-a5bb-9fb2272c3cca" data-view-id="1619">
+            </tr>
+            <tr id="b84103c2-3b50-3250-a5bb-9fb2272c3cca" data-view-id="1619">
 
                 <td class="js_grid_column_multipleSelect cell_multipleSelect selections s-cell" data-view-id="1620">
-                    <div title="" data-view-id="1621"><div class="mad_form_checkbox js_checkbox_multiple_select mad_view_form_checkbox ready" id="multiple_select_checkbox_b84103c2-3b50-3250-a5bb-9fb2272c3cca">
+                    <div title="" data-view-id="1621">
+                        <div class="mad_form_checkbox js_checkbox_multiple_select mad_view_form_checkbox ready"
+                             id="multiple_select_checkbox_b84103c2-3b50-3250-a5bb-9fb2272c3cca">
                             <div class="input checkbox">
-                                <input value="b84103c2-3b50-3250-a5bb-9fb2272c3cca" id="checkbox26e84a06-a016-dfd0-478d-1fba0290fceb" data-view-id="1636" type="checkbox">
+                                <input value="b84103c2-3b50-3250-a5bb-9fb2272c3cca"
+                                       id="checkbox26e84a06-a016-dfd0-478d-1fba0290fceb" data-view-id="1636"
+                                       type="checkbox">
                                 <label for="checkbox26e84a06-a016-dfd0-478d-1fba0290fceb" data-view-id="1637"></label>
                             </div>
 
-                        </div></div>
+                        </div>
+                    </div>
                 </td>
 
                 <td class="js_grid_column_favorite cell_favorite selections s-cell" data-view-id="1622">
-                    <div title="" data-view-id="1623"><div class="passbolt_component_favorite js_component passbolt_view_component_favorite ready" id="favorite_b84103c2-3b50-3250-a5bb-9fb2272c3cca"><a href="#" class="">
+                    <div title="" data-view-id="1623">
+                        <div class="passbolt_component_favorite js_component passbolt_view_component_favorite ready"
+                             id="favorite_b84103c2-3b50-3250-a5bb-9fb2272c3cca"><a href="#" class="">
                                 <i class="icon fav" data-view-id="1638"></i>
                                 <span class="visuallyhidden">fav</span>
                             </a>
-                        </div></div>
+                        </div>
+                    </div>
                 </td>
 
                 <td class="js_grid_column_avatar grid_column_avatar grid_column_avatar s1-cell cell_avatar">
                     <div title="">
-                        <img src="https://www.google.com/s2/favicons?domain=www.centos.org" width="25" height="25" alt="avatar picture">
+                        <img src="https://www.google.com/s2/favicons?domain=www.centos.org" width="25" height="25"
+                             alt="avatar picture">
                     </div>
                 </td>
 
@@ -967,7 +1130,10 @@ Iw82x8qh7m0gA16+sGtV07kV
                 </td>
 
                 <td class="js_grid_column_secret cell_secret m-cell password" data-view-id="1628">
-                    <div title="" data-view-id="1629"><div class="secret-copy"><a id="grid_secret_copy_b84103c2-3b50-3250-a5bb-9fb2272c3cca" href="#copy_secret"><span>copy password to clipboard</span></a><pre>-----BEGIN PGP MESSAGE-----
+                    <div title="" data-view-id="1629">
+                        <div class="secret-copy"><a id="grid_secret_copy_b84103c2-3b50-3250-a5bb-9fb2272c3cca"
+                                                    href="#copy_secret"><span>copy password to clipboard</span></a>
+                            <pre>-----BEGIN PGP MESSAGE-----
 Version: GnuPG v2
 
 hQIMA1P90Qk1JHA+AQ//SzhB02sXr3OfwL2588cr8ijfpn8NR6XOLcoTje2OikPp
@@ -985,7 +1151,9 @@ RQFTZYB0T4t8+1yGDyjWF9YKCsp1eaIAhvGqM8Mo/+2H8uQdHi4NfiEPIPFf5i5Z
 FaULSm7ToToLApfA/Jz04qBk8mzRlQ==
 =DKno
 -----END PGP MESSAGE-----
-</pre></div></div>
+</pre>
+                        </div>
+                    </div>
                 </td>
 
                 <td class="js_grid_column_uri cell_uri l-cell" data-view-id="1630">
@@ -1006,29 +1174,39 @@ FaULSm7ToToLApfA/Jz04qBk8mzRlQ==
                     </div>
                 </td>
 
-            </tr><tr id="c1a19589-752f-3b9f-a0be-e258a077af59" data-view-id="1639">
+            </tr>
+            <tr id="c1a19589-752f-3b9f-a0be-e258a077af59" data-view-id="1639">
 
                 <td class="js_grid_column_multipleSelect cell_multipleSelect selections s-cell" data-view-id="1640">
-                    <div title="" data-view-id="1641"><div class="mad_form_checkbox js_checkbox_multiple_select mad_view_form_checkbox ready" id="multiple_select_checkbox_c1a19589-752f-3b9f-a0be-e258a077af59">
+                    <div title="" data-view-id="1641">
+                        <div class="mad_form_checkbox js_checkbox_multiple_select mad_view_form_checkbox ready"
+                             id="multiple_select_checkbox_c1a19589-752f-3b9f-a0be-e258a077af59">
                             <div class="input checkbox">
-                                <input value="c1a19589-752f-3b9f-a0be-e258a077af59" id="checkbox3d706959-60b0-c66b-c92d-041530992eca" data-view-id="1656" type="checkbox">
+                                <input value="c1a19589-752f-3b9f-a0be-e258a077af59"
+                                       id="checkbox3d706959-60b0-c66b-c92d-041530992eca" data-view-id="1656"
+                                       type="checkbox">
                                 <label for="checkbox3d706959-60b0-c66b-c92d-041530992eca" data-view-id="1657"></label>
                             </div>
 
-                        </div></div>
+                        </div>
+                    </div>
                 </td>
 
                 <td class="js_grid_column_favorite cell_favorite selections s-cell" data-view-id="1642">
-                    <div title="" data-view-id="1643"><div class="passbolt_component_favorite js_component passbolt_view_component_favorite ready" id="favorite_c1a19589-752f-3b9f-a0be-e258a077af59"><a href="#" class="">
+                    <div title="" data-view-id="1643">
+                        <div class="passbolt_component_favorite js_component passbolt_view_component_favorite ready"
+                             id="favorite_c1a19589-752f-3b9f-a0be-e258a077af59"><a href="#" class="">
                                 <i class="icon fav" data-view-id="1658"></i>
                                 <span class="visuallyhidden">fav</span>
                             </a>
-                        </div></div>
+                        </div>
+                    </div>
                 </td>
 
                 <td class="js_grid_column_avatar grid_column_avatar grid_column_avatar s1-cell cell_avatar">
                     <div title="">
-                        <img src="https://www.google.com/s2/favicons?domain=www.framasoft.org" width="25" height="25" alt="avatar picture">
+                        <img src="https://www.google.com/s2/favicons?domain=www.framasoft.org" width="25" height="25"
+                             alt="avatar picture">
                     </div>
                 </td>
 
@@ -1045,7 +1223,10 @@ FaULSm7ToToLApfA/Jz04qBk8mzRlQ==
                 </td>
 
                 <td class="js_grid_column_secret cell_secret m-cell password" data-view-id="1648">
-                    <div title="" data-view-id="1649"><div class="secret-copy"><a id="grid_secret_copy_c1a19589-752f-3b9f-a0be-e258a077af59" href="#copy_secret"><span>copy password to clipboard</span></a><pre>-----BEGIN PGP MESSAGE-----
+                    <div title="" data-view-id="1649">
+                        <div class="secret-copy"><a id="grid_secret_copy_c1a19589-752f-3b9f-a0be-e258a077af59"
+                                                    href="#copy_secret"><span>copy password to clipboard</span></a>
+                            <pre>-----BEGIN PGP MESSAGE-----
 Version: GnuPG v2
 
 hQIMA1P90Qk1JHA+AQ/+Otwc8BJME/RJDuug6Dyn5Sf5I6n5JdbXc8oPOsTiSdDH
@@ -1063,7 +1244,9 @@ QwHMATf8GELBlaE1FJIEbo+gf8F1M3ZrR9+wFbiDmH/vnZtmEj69kO35Jf+9LYyc
 jEKdXIFaXAQzwp/+zfFcmZQofks=
 =9Lmi
 -----END PGP MESSAGE-----
-</pre></div></div>
+</pre>
+                        </div>
+                    </div>
                 </td>
 
                 <td class="js_grid_column_uri cell_uri l-cell" data-view-id="1650">
@@ -1084,29 +1267,39 @@ jEKdXIFaXAQzwp/+zfFcmZQofks=
                     </div>
                 </td>
 
-            </tr><tr id="cf6bf684-8f38-338d-a7c1-65011e7d3ded" data-view-id="1659">
+            </tr>
+            <tr id="cf6bf684-8f38-338d-a7c1-65011e7d3ded" data-view-id="1659">
 
                 <td class="js_grid_column_multipleSelect cell_multipleSelect selections s-cell" data-view-id="1660">
-                    <div title="" data-view-id="1661"><div class="mad_form_checkbox js_checkbox_multiple_select mad_view_form_checkbox ready" id="multiple_select_checkbox_cf6bf684-8f38-338d-a7c1-65011e7d3ded">
+                    <div title="" data-view-id="1661">
+                        <div class="mad_form_checkbox js_checkbox_multiple_select mad_view_form_checkbox ready"
+                             id="multiple_select_checkbox_cf6bf684-8f38-338d-a7c1-65011e7d3ded">
                             <div class="input checkbox">
-                                <input value="cf6bf684-8f38-338d-a7c1-65011e7d3ded" id="checkbox21fe46a3-9d24-d84c-871f-9fce8530bf4c" data-view-id="1676" type="checkbox">
+                                <input value="cf6bf684-8f38-338d-a7c1-65011e7d3ded"
+                                       id="checkbox21fe46a3-9d24-d84c-871f-9fce8530bf4c" data-view-id="1676"
+                                       type="checkbox">
                                 <label for="checkbox21fe46a3-9d24-d84c-871f-9fce8530bf4c" data-view-id="1677"></label>
                             </div>
 
-                        </div></div>
+                        </div>
+                    </div>
                 </td>
 
                 <td class="js_grid_column_favorite cell_favorite selections s-cell" data-view-id="1662">
-                    <div title="" data-view-id="1663"><div class="passbolt_component_favorite js_component passbolt_view_component_favorite ready" id="favorite_cf6bf684-8f38-338d-a7c1-65011e7d3ded"><a href="#" class="">
+                    <div title="" data-view-id="1663">
+                        <div class="passbolt_component_favorite js_component passbolt_view_component_favorite ready"
+                             id="favorite_cf6bf684-8f38-338d-a7c1-65011e7d3ded"><a href="#" class="">
                                 <i class="icon fav" data-view-id="1678"></i>
                                 <span class="visuallyhidden">fav</span>
                             </a>
-                        </div></div>
+                        </div>
+                    </div>
                 </td>
 
                 <td class="js_grid_column_avatar grid_column_avatar grid_column_avatar s1-cell cell_avatar">
                     <div title="">
-                        <img src="https://www.google.com/s2/favicons?domain=www.gnupg.org" width="25" height="25" alt="avatar picture">
+                        <img src="https://www.google.com/s2/favicons?domain=www.gnupg.org" width="25" height="25"
+                             alt="avatar picture">
                     </div>
                 </td>
 
@@ -1123,7 +1316,10 @@ jEKdXIFaXAQzwp/+zfFcmZQofks=
                 </td>
 
                 <td class="js_grid_column_secret cell_secret m-cell password" data-view-id="1668">
-                    <div title="" data-view-id="1669"><div class="secret-copy"><a id="grid_secret_copy_cf6bf684-8f38-338d-a7c1-65011e7d3ded" href="#copy_secret"><span>copy password to clipboard</span></a><pre>-----BEGIN PGP MESSAGE-----
+                    <div title="" data-view-id="1669">
+                        <div class="secret-copy"><a id="grid_secret_copy_cf6bf684-8f38-338d-a7c1-65011e7d3ded"
+                                                    href="#copy_secret"><span>copy password to clipboard</span></a>
+                            <pre>-----BEGIN PGP MESSAGE-----
 Version: GnuPG v2
 
 hQIMA1P90Qk1JHA+ARAAjBzeASa1N01SnQl43F1+It2bsgIMNDPfRT99/qOyibk5
@@ -1141,7 +1337,9 @@ QQERa5sXzpNtFk1jKZpvvFlRwro4VmEXEneppC/xkWaSJY/kdgyX6pLQ+qqplmg/
 qotaXR0jUY4Z23FqrgNIb+qq
 =vcyR
 -----END PGP MESSAGE-----
-</pre></div></div>
+</pre>
+                        </div>
+                    </div>
                 </td>
 
                 <td class="js_grid_column_uri cell_uri l-cell" data-view-id="1670">
@@ -1162,29 +1360,39 @@ qotaXR0jUY4Z23FqrgNIb+qq
                     </div>
                 </td>
 
-            </tr><tr id="d547d43a-9f21-30f6-ae31-66f9258bbe17" data-view-id="1679">
+            </tr>
+            <tr id="d547d43a-9f21-30f6-ae31-66f9258bbe17" data-view-id="1679">
 
                 <td class="js_grid_column_multipleSelect cell_multipleSelect selections s-cell" data-view-id="1680">
-                    <div title="" data-view-id="1681"><div class="mad_form_checkbox js_checkbox_multiple_select mad_view_form_checkbox ready" id="multiple_select_checkbox_d547d43a-9f21-30f6-ae31-66f9258bbe17">
+                    <div title="" data-view-id="1681">
+                        <div class="mad_form_checkbox js_checkbox_multiple_select mad_view_form_checkbox ready"
+                             id="multiple_select_checkbox_d547d43a-9f21-30f6-ae31-66f9258bbe17">
                             <div class="input checkbox">
-                                <input value="d547d43a-9f21-30f6-ae31-66f9258bbe17" id="checkboxa4b7ddbc-f676-fc9c-7023-7ceadc79b48e" data-view-id="1696" type="checkbox">
+                                <input value="d547d43a-9f21-30f6-ae31-66f9258bbe17"
+                                       id="checkboxa4b7ddbc-f676-fc9c-7023-7ceadc79b48e" data-view-id="1696"
+                                       type="checkbox">
                                 <label for="checkboxa4b7ddbc-f676-fc9c-7023-7ceadc79b48e" data-view-id="1697"></label>
                             </div>
 
-                        </div></div>
+                        </div>
+                    </div>
                 </td>
 
                 <td class="js_grid_column_favorite cell_favorite selections s-cell" data-view-id="1682">
-                    <div title="" data-view-id="1683"><div class="passbolt_component_favorite js_component passbolt_view_component_favorite ready" id="favorite_d547d43a-9f21-30f6-ae31-66f9258bbe17"><a href="#" class="">
+                    <div title="" data-view-id="1683">
+                        <div class="passbolt_component_favorite js_component passbolt_view_component_favorite ready"
+                             id="favorite_d547d43a-9f21-30f6-ae31-66f9258bbe17"><a href="#" class="">
                                 <i class="icon fav" data-view-id="1698"></i>
                                 <span class="visuallyhidden">fav</span>
                             </a>
-                        </div></div>
+                        </div>
+                    </div>
                 </td>
 
                 <td class="js_grid_column_avatar grid_column_avatar grid_column_avatar s1-cell cell_avatar">
                     <div title="">
-                        <img src="https://www.google.com/s2/favicons?domain=www.docker.org" width="25" height="25" alt="avatar picture">
+                        <img src="https://www.google.com/s2/favicons?domain=www.docker.org" width="25" height="25"
+                             alt="avatar picture">
                     </div>
                 </td>
 
@@ -1201,7 +1409,10 @@ qotaXR0jUY4Z23FqrgNIb+qq
                 </td>
 
                 <td class="js_grid_column_secret cell_secret m-cell password" data-view-id="1688">
-                    <div title="" data-view-id="1689"><div class="secret-copy"><a id="grid_secret_copy_d547d43a-9f21-30f6-ae31-66f9258bbe17" href="#copy_secret"><span>copy password to clipboard</span></a><pre>-----BEGIN PGP MESSAGE-----
+                    <div title="" data-view-id="1689">
+                        <div class="secret-copy"><a id="grid_secret_copy_d547d43a-9f21-30f6-ae31-66f9258bbe17"
+                                                    href="#copy_secret"><span>copy password to clipboard</span></a>
+                            <pre>-----BEGIN PGP MESSAGE-----
 Version: GnuPG v2
 
 hQIMA1P90Qk1JHA+AQ/+N+916XQPXkYhECCaZdKIRaWp/OqP/M1HouPRAsSOEhoJ
@@ -1219,7 +1430,9 @@ PwESOPt0kzyKlTeYIrwJezwHfKK6EPQSWaotmO4osdrYn3Fc2wnpNj+5B1x+1MPF
 8QdXZyJ3zsujyZ9daXRI6g==
 =pRPL
 -----END PGP MESSAGE-----
-</pre></div></div>
+</pre>
+                        </div>
+                    </div>
                 </td>
 
                 <td class="js_grid_column_uri cell_uri l-cell" data-view-id="1690">
@@ -1240,29 +1453,39 @@ PwESOPt0kzyKlTeYIrwJezwHfKK6EPQSWaotmO4osdrYn3Fc2wnpNj+5B1x+1MPF
                     </div>
                 </td>
 
-            </tr><tr id="e5b4e2bd-29fd-3dc8-aca0-401e55a343ae" data-view-id="1699">
+            </tr>
+            <tr id="e5b4e2bd-29fd-3dc8-aca0-401e55a343ae" data-view-id="1699">
 
                 <td class="js_grid_column_multipleSelect cell_multipleSelect selections s-cell" data-view-id="1700">
-                    <div title="" data-view-id="1701"><div class="mad_form_checkbox js_checkbox_multiple_select mad_view_form_checkbox ready" id="multiple_select_checkbox_e5b4e2bd-29fd-3dc8-aca0-401e55a343ae">
+                    <div title="" data-view-id="1701">
+                        <div class="mad_form_checkbox js_checkbox_multiple_select mad_view_form_checkbox ready"
+                             id="multiple_select_checkbox_e5b4e2bd-29fd-3dc8-aca0-401e55a343ae">
                             <div class="input checkbox">
-                                <input value="e5b4e2bd-29fd-3dc8-aca0-401e55a343ae" id="checkboxf2d68318-6351-807d-7635-f79afd5ec1f8" data-view-id="1716" type="checkbox">
+                                <input value="e5b4e2bd-29fd-3dc8-aca0-401e55a343ae"
+                                       id="checkboxf2d68318-6351-807d-7635-f79afd5ec1f8" data-view-id="1716"
+                                       type="checkbox">
                                 <label for="checkboxf2d68318-6351-807d-7635-f79afd5ec1f8" data-view-id="1717"></label>
                             </div>
 
-                        </div></div>
+                        </div>
+                    </div>
                 </td>
 
                 <td class="js_grid_column_favorite cell_favorite selections s-cell" data-view-id="1702">
-                    <div title="" data-view-id="1703"><div class="passbolt_component_favorite js_component passbolt_view_component_favorite ready" id="favorite_e5b4e2bd-29fd-3dc8-aca0-401e55a343ae"><a href="#" class="">
+                    <div title="" data-view-id="1703">
+                        <div class="passbolt_component_favorite js_component passbolt_view_component_favorite ready"
+                             id="favorite_e5b4e2bd-29fd-3dc8-aca0-401e55a343ae"><a href="#" class="">
                                 <i class="icon fav" data-view-id="1718"></i>
                                 <span class="visuallyhidden">fav</span>
                             </a>
-                        </div></div>
+                        </div>
+                    </div>
                 </td>
 
                 <td class="js_grid_column_avatar grid_column_avatar grid_column_avatar s1-cell cell_avatar">
                     <div title="">
-                        <img src="https://www.google.com/s2/favicons?domain=www.gitlab.org" width="25" height="25" alt="avatar picture">
+                        <img src="https://www.google.com/s2/favicons?domain=www.gitlab.org" width="25" height="25"
+                             alt="avatar picture">
                     </div>
                 </td>
 
@@ -1279,7 +1502,10 @@ PwESOPt0kzyKlTeYIrwJezwHfKK6EPQSWaotmO4osdrYn3Fc2wnpNj+5B1x+1MPF
                 </td>
 
                 <td class="js_grid_column_secret cell_secret m-cell password" data-view-id="1708">
-                    <div title="" data-view-id="1709"><div class="secret-copy"><a id="grid_secret_copy_e5b4e2bd-29fd-3dc8-aca0-401e55a343ae" href="#copy_secret"><span>copy password to clipboard</span></a><pre>-----BEGIN PGP MESSAGE-----
+                    <div title="" data-view-id="1709">
+                        <div class="secret-copy"><a id="grid_secret_copy_e5b4e2bd-29fd-3dc8-aca0-401e55a343ae"
+                                                    href="#copy_secret"><span>copy password to clipboard</span></a>
+                            <pre>-----BEGIN PGP MESSAGE-----
 Version: GnuPG v2
 
 hQIMA1P90Qk1JHA+AQ//aWGy9y4Y/sYhkXo74CTkEgbg90MP6rDfW4m8dUrH+UP2
@@ -1297,7 +1523,9 @@ PgGz374rzX9SdxTgSytYoHcq1eTBg0mZzGZ5fKYOLYeQtwcymrLNwnRWN+6uE/so
 oaGvP4FhuwaCtf3Y091F
 =EiUf
 -----END PGP MESSAGE-----
-</pre></div></div>
+</pre>
+                        </div>
+                    </div>
                 </td>
 
                 <td class="js_grid_column_uri cell_uri l-cell" data-view-id="1710">
@@ -1318,19 +1546,20 @@ oaGvP4FhuwaCtf3Y091F
                     </div>
                 </td>
 
-            </tr></tbody>
+            </tr>
+            </tbody>
         </table>
     </div>
 </div>
 
 <script type="application/javascript">
   // DEMO ONLY -- not for production use
-  $(function() {
+  $(function () {
     const draggableElements = $('.tableview-content tr');
     draggableElements.draggable({
       cursor: "move",
       appendTo: "body",
-      helper: function() {
+      helper: function () {
         let content = $(this).find('td.cell_name')[0].innerText;
         let helper = $("<div>", {
           class: "passwords-folders-dnd-helper"
@@ -1352,7 +1581,7 @@ oaGvP4FhuwaCtf3Y091F
         left: 5
       },
       opacity: "0.7",
-      revert:  function(dropped) {
+      revert: function (dropped) {
         let draggable = $(this);
         draggable.removeClass('selected');
         draggable.find('input:checkbox').removeAttr('checked');
@@ -1360,7 +1589,7 @@ oaGvP4FhuwaCtf3Y091F
         draggable.closest('table').find('input:checkbox:checked').removeAttr('checked');
         let hasBeenDroppedBefore = draggable.data('hasBeenDropped');
         if (hasBeenDroppedBefore) {
-          draggable.animate({ top: 0, left: 0 }, 'slow');
+          draggable.animate({top: 0, left: 0}, 'slow');
           return false;
         } else {
           return true;
@@ -1368,7 +1597,7 @@ oaGvP4FhuwaCtf3Y091F
       }
     });
 
-    $('.tableview-content tr').click(function(event){
+    $('.tableview-content tr').click(function (event) {
       if ($(event.target).closest('tr').hasClass('selected')) {
         $(event.target).closest('tr').removeClass('selected');
         $(event.target).closest('tr').find('input:checkbox').removeAttr('checked');
@@ -1382,7 +1611,7 @@ oaGvP4FhuwaCtf3Y091F
 
   });
 
-  $(".js_grid_column_avatar.grid_column_avatar img").on("error", function(event) {
+  $(".js_grid_column_avatar.grid_column_avatar img").on("error", function (event) {
     $(this).hide();
     const str = $(event.target).closest('tr').find('td.js_grid_column_name')[0].innerText,
       firstname = str.substr(0, str.indexOf(' ')).charAt(0),
@@ -1392,6 +1621,7 @@ oaGvP4FhuwaCtf3Y091F
     let labelName = getLabel.toUpperCase();
     $(event.target).closest('tr').find('.js_grid_column_avatar.grid_column_avatar div').css({'background': color}).addClass('text-label').text(labelName);
   });
+
   function getColor(index) {
     const colorsArray = ['dc4242', '4990e2', '4ad4b6', 'da3549', 'd5783b', '7d54d6', 'e259a6', '50e3c2', 'db8d5a', 'cee14a'];
     return `#${colorsArray[index]}`;

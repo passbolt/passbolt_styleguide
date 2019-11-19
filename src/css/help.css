@@ -3242,15 +3242,13 @@ ul.checklist li:before {
   color: #D40101;
 }
 .svg-icon {
-  font: normal normal normal 14px/1 FontAwesome;
+  font: normal normal normal 16px/1 sans-serif;
   font-size: inherit;
   text-rendering: auto;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
 }
 .svg-icon svg {
-  width: 0.88rem;
-  height: 0.88rem;
+  width: 0.875rem;
+  height: 0.875rem;
   display: inline-block;
   vertical-align: text-top;
   margin: auto;
@@ -3263,6 +3261,7 @@ ul.checklist li:before {
   width: 1.1rem;
   height: 1.1rem;
   display: block;
+  vertical-align: text-top;
   margin: auto;
 }
 .svg-icon + span:not(.visuallyhidden) {
@@ -3293,7 +3292,7 @@ a.button .svg-icon svg:hover,
 .button.disabled .svg-icon svg:hover {
   fill: #888;
 }
-a .svg-icon svg:hover {
+a:hover .svg-icon svg {
   fill: #2894DF;
 }
 a.disabled .svg-icon svg {
@@ -3301,7 +3300,7 @@ a.disabled .svg-icon svg {
   pointer-events: none;
   cursor: default;
 }
-a.disabled .svg-icon svg:hover {
+a.disabled:hover .svg-icon svg {
   fill: #888;
 }
 /*
@@ -3318,12 +3317,11 @@ button,
   position: relative;
   font-size: 0.875em;
   /*	14px */
-  padding: 0.429em 1.225em 0.429em 1.225em;
+  min-height: 1.428571em;
+  /* 20px */
+  padding: 0.4285714em 1.225em 0.4285714em 1.225em;
   /* 6px 16px */
   display: inline-block;
-  zoom: 1;
-  /* zoom and *display = ie7 hack for display:inline-block */
-  *display: inline;
   vertical-align: baseline;
   margin-right: 0.5em;
   outline: none;
@@ -4948,7 +4946,6 @@ article table.table-parameters tbody tr td em {
   height: 2em;
   padding: 0.1875em 0 0.1875em 0.1875em;
   margin-bottom: 0;
-  border-bottom: 1px solid #DDD;
   background: #FFF;
 }
 .breadcrumbs ul {
@@ -4977,6 +4974,9 @@ article table.table-parameters tbody tr td em {
 }
 .breadcrumbs div.main-cell {
   display: inline;
+}
+.panel.middle .breadcrumbs {
+  border-bottom: 1px solid #DDD;
 }
 /* Dialog */
 .dialog-wrapper {
@@ -5038,7 +5038,18 @@ article table.table-parameters tbody tr td em {
 }
 .dialog .form-content {
   background: #FFF;
-  padding: 0.813em 1.5em 0.813em 1.5em;
+  padding: 0.813em 1.5em 1.5em 1.5em;
+}
+.dialog p {
+  margin-top: 0.5em;
+  font-size: 1em;
+  /* 15px */
+}
+.dialog p + .checkbox {
+  padding-bottom: 0.5em;
+}
+.dialog p + .checkbox label {
+  font-size: 1em;
 }
 .dialog label {
   clear: both;
@@ -5125,7 +5136,6 @@ article table.table-parameters tbody tr td em {
 }
 .dialog .submit-wrapper {
   margin: 0;
-  border-top: 1px solid #DDD;
   clear: both;
   width: 100%;
   padding: 0.75em 0;
@@ -5133,16 +5143,21 @@ article table.table-parameters tbody tr td em {
 .dialog .submit-wrapper .cancel,
 .dialog .submit-wrapper .button {
   float: right;
-  margin-right: 1.125em;
+  margin-right: 1.25em;
   font-size: 1.125em;
 }
-.dialog .submit-wrapper .button.secondary {
+.dialog .submit-wrapper .button {
+  box-sizing: border-box;
+  min-width: 5em;
+}
+.dialog .submit-wrapper .secondary {
   float: left;
-  margin-left: 1.125em;
-  font-size: 1.125em;
+  margin-left: 1.5em;
+  margin-top: 0.7em;
+  font-size: 1em;
 }
 .dialog .submit-wrapper .cancel {
-  margin-top: 0.5em;
+  margin-top: 0.7em;
   font-size: 1em;
 }
 /* can also be used outside a dialog, like the sidebar */

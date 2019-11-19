@@ -46,7 +46,7 @@
 										 type="hidden">
 
 							<div class="input text required error js_form_element_wrapper">
-								<label for="js_field_name">Resource</label>
+								<label for="js_field_name">Name</label>
 								<input name="passbolt.model.Resource.name"
 											 class="required mad_form_element_textbox_controller mad_view_form_element_textbox_view js_component ready"
 											 maxlength="50" id="js_field_name" placeholder="resource name" type="text">

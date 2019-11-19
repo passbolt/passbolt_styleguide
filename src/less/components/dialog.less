@@ -54,8 +54,20 @@
     /* inputs */
     .form-content {
         background: @background-default;
-        padding: .813em 1.5em .813em 1.5em;
+        padding: .813em 1.5em 1.5em 1.5em;
     }
+
+    p {
+        margin-top:.5em;
+        font-size: 1em; /* 15px */
+    }
+    p + .checkbox {
+        padding-bottom:.5em;
+        & label {
+            font-size: 1em;
+        }
+    }
+
     label {
         clear: both;
         font-size: 0.938em; /* 15px */
@@ -89,7 +101,6 @@
     /* submit / cancel */
     .submit-wrapper {
         margin: 0;
-        border-top: 1px solid @border-default;
         clear: both;
         width: 100%;
         padding: .75em 0;
@@ -97,16 +108,21 @@
         .cancel,
         .button {
             float: right;
-            margin-right: 1.125em;
+            margin-right: 1.25em;
             font-size: 1.125em;
         }
-        .button.secondary {
+        .button {
+            box-sizing: border-box;
+            min-width:5em;
+        }
+        .secondary {
             float: left;
-            margin-left: 1.125em;
-            font-size: 1.125em;
+            margin-left: 1.5em;
+            margin-top: .7em;
+            font-size: 1em;
         }
         .cancel {
-            margin-top: .5em;
+            margin-top: .7em;
             font-size: 1em;
         }
     }
@@ -141,7 +157,8 @@
         border: 1px solid @background-lighter;
         .rounded();
     }
-    &:hover .fa-close, &:hover .svg-icon {
+    &:hover .fa-close,
+    &:hover .svg-icon {
         border: 1px solid @background-light;
         .rounded();
     }

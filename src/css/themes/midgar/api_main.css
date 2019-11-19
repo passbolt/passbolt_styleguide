@@ -3201,15 +3201,13 @@ p {
   color: #D40101;
 }
 .svg-icon {
-  font: normal normal normal 14px/1 FontAwesome;
+  font: normal normal normal 16px/1 sans-serif;
   font-size: inherit;
   text-rendering: auto;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
 }
 .svg-icon svg {
-  width: 0.88rem;
-  height: 0.88rem;
+  width: 0.875rem;
+  height: 0.875rem;
   display: inline-block;
   vertical-align: text-top;
   margin: auto;
@@ -3222,6 +3220,7 @@ p {
   width: 1.1rem;
   height: 1.1rem;
   display: block;
+  vertical-align: text-top;
   margin: auto;
 }
 .svg-icon + span:not(.visuallyhidden) {
@@ -3252,7 +3251,7 @@ a.button .svg-icon svg:hover,
 .button.disabled .svg-icon svg:hover {
   fill: #8B8B89;
 }
-a .svg-icon svg:hover {
+a:hover .svg-icon svg {
   fill: #2894DF;
 }
 a.disabled .svg-icon svg {
@@ -3260,7 +3259,7 @@ a.disabled .svg-icon svg {
   pointer-events: none;
   cursor: default;
 }
-a.disabled .svg-icon svg:hover {
+a.disabled:hover .svg-icon svg {
   fill: #8B8B89;
 }
 /*
@@ -3277,12 +3276,11 @@ button,
   position: relative;
   font-size: 0.875em;
   /*	14px */
-  padding: 0.429em 1.225em 0.429em 1.225em;
+  min-height: 1.428571em;
+  /* 20px */
+  padding: 0.4285714em 1.225em 0.4285714em 1.225em;
   /* 6px 16px */
   display: inline-block;
-  zoom: 1;
-  /* zoom and *display = ie7 hack for display:inline-block */
-  *display: inline;
   vertical-align: baseline;
   margin-right: 0.5em;
   outline: none;
@@ -4899,7 +4897,7 @@ input[type="search"]::-webkit-search-cancel-button {
   border: 0;
   color: #cacac9;
 }
-.user.profile .more a span.svg-icon {
+.user.profile .more a .svg-icon {
   margin: 18px 0 0 7px;
   display: inline-block;
 }
@@ -5221,7 +5219,6 @@ input[type="search"]::-webkit-search-cancel-button {
   height: 2em;
   padding: 0.1875em 0 0.1875em 0.1875em;
   margin-bottom: 0;
-  border-bottom: 1px solid #0C0C0A;
   background: #30302D;
 }
 .breadcrumbs ul {
@@ -5251,6 +5248,9 @@ input[type="search"]::-webkit-search-cancel-button {
 .breadcrumbs div.main-cell {
   display: inline;
 }
+.panel.middle .breadcrumbs {
+  border-bottom: 1px solid #0C0C0A;
+}
 /* actions */
 .header.third .main-action-wrapper {
   margin-top: 0.5em;
@@ -5259,6 +5259,7 @@ input[type="search"]::-webkit-search-cancel-button {
 .header.third .main-action-wrapper .button {
   float: left;
   font-size: 0.875em;
+  min-width: 0.75em;
 }
 .header.third .actions-wrapper {
   margin-top: 0.5em;
@@ -5676,7 +5677,18 @@ input[type="search"]::-webkit-search-cancel-button {
 }
 .dialog .form-content {
   background: #30302D;
-  padding: 0.813em 1.5em 0.813em 1.5em;
+  padding: 0.813em 1.5em 1.5em 1.5em;
+}
+.dialog p {
+  margin-top: 0.5em;
+  font-size: 1em;
+  /* 15px */
+}
+.dialog p + .checkbox {
+  padding-bottom: 0.5em;
+}
+.dialog p + .checkbox label {
+  font-size: 1em;
 }
 .dialog label {
   clear: both;
@@ -5763,7 +5775,6 @@ input[type="search"]::-webkit-search-cancel-button {
 }
 .dialog .submit-wrapper {
   margin: 0;
-  border-top: 1px solid #0C0C0A;
   clear: both;
   width: 100%;
   padding: 0.75em 0;
@@ -5771,16 +5782,21 @@ input[type="search"]::-webkit-search-cancel-button {
 .dialog .submit-wrapper .cancel,
 .dialog .submit-wrapper .button {
   float: right;
-  margin-right: 1.125em;
+  margin-right: 1.25em;
   font-size: 1.125em;
 }
-.dialog .submit-wrapper .button.secondary {
+.dialog .submit-wrapper .button {
+  box-sizing: border-box;
+  min-width: 5em;
+}
+.dialog .submit-wrapper .secondary {
   float: left;
-  margin-left: 1.125em;
-  font-size: 1.125em;
+  margin-left: 1.5em;
+  margin-top: 0.7em;
+  font-size: 1em;
 }
 .dialog .submit-wrapper .cancel {
-  margin-top: 0.5em;
+  margin-top: 0.7em;
   font-size: 1em;
 }
 /* can also be used outside a dialog, like the sidebar */
@@ -6652,111 +6668,6 @@ input[type="search"]::-webkit-search-cancel-button {
 .panel .navigation .empty-content {
   padding-left: 1em;
 }
-.panel .folders.navigation {
-  border: 0;
-  /** nested padding */
-}
-.panel .folders.navigation .folders-label-selected {
-  background: #F3F3F3;
-}
-.panel .folders.navigation .folders-label-height {
-  height: 1.8em;
-}
-.panel .folders.navigation.first {
-  padding-top: 0;
-}
-.panel .folders.navigation .row {
-  /* title row */
-  /* disabled row */
-}
-.panel .folders.navigation .row .main-cell span {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  -o-text-overflow: ellipsis;
-  -ms-text-overflow: ellipsis;
-  display: inline-block;
-  margin-top: 0.2em;
-  width: calc(100% - 2.5em);
-}
-.panel .folders.navigation .row .main-cell span.svg-icon {
-  display: inline;
-}
-.panel .folders.navigation .row .main-cell span.svg-icon.hidden {
-  display: none;
-}
-.panel .folders.navigation .row .main-cell .svg-icon svg {
-  margin: -0.28em 0.2em 0 0.5em;
-  fill: #FFFFFC;
-}
-.panel .folders.navigation .row .main-cell a {
-  padding: 0 0 0 2.5em;
-}
-.panel .folders.navigation .row .main-cell a span.svg-icon.caret-down svg {
-  margin-left: -1em;
-  margin-top: 0.4em;
-  width: 1em;
-  height: 1em;
-  position: absolute;
-}
-.panel .folders.navigation .row .right-cell {
-  margin-top: -1.65em;
-}
-.panel .folders.navigation .row.title .main-cell h3 {
-  padding-top: 0;
-  line-height: 1em;
-  border: 0;
-}
-.panel .folders.navigation .row.title .main-cell h3 a {
-  padding-left: 0;
-}
-.panel .folders.navigation .row.title .main-cell h3 a::before,
-.panel .folders.navigation .row.title .main-cell h3 a::after {
-  display: none;
-}
-.panel .folders.navigation .row.title .main-cell h3 .folders-label {
-  margin-left: 1em;
-  cursor: pointer;
-}
-.panel .folders.navigation .row.title .main-cell h3 .folders-label .svg-icon.caret-down svg {
-  margin-left: -1.3em;
-  margin-top: 0.2em;
-  width: 1em;
-  height: 1em;
-  position: absolute;
-}
-.panel .folders.navigation .row.disabled {
-  cursor: default;
-  pointer-events: none;
-}
-.panel .folders.navigation .row.disabled .main-cell a span.svg-icon.caret-down svg {
-  margin-left: -0.9em;
-  margin-top: 0.4em;
-  width: 1em;
-  height: 1em;
-  position: absolute;
-}
-.panel .folders.navigation .row.disabled .main-cell span.folder-name {
-  color: #8B8B89;
-  text-shadow: none;
-  font-weight: normal;
-}
-.panel .folders.navigation .row.disabled .main-cell span.svg-icon svg {
-  fill: #8B8B89;
-}
-.panel .folders.navigation .row.disabled .main-cell a:before {
-  color: #8B8B89;
-}
-.panel .folders.navigation ul {
-  list-style: none;
-  padding: 0;
-}
-.panel .folders.navigation .child .row {
-  padding-left: 0.8em;
-}
-.panel .folders.navigation .child .nested .row {
-  padding-left: 1.8em;
-}
 .contextual-menu {
   position: absolute;
   background: #3B3B39;
@@ -7591,9 +7502,6 @@ table.table-info.horizontal tbody tr:nth-child(odd) {
 .input-password-wrapper:after {
   clear: both;
 }
-.input-password-wrapper a.button .svg-icon svg {
-  margin-top: 0.125em;
-}
 .input-password-wrapper .input.password {
   float: left;
   width: 65.5%;
@@ -7946,6 +7854,7 @@ table.table-info.horizontal tbody tr:nth-child(odd) {
 }
 .permissions .row .actions {
   float: right;
+  width: 3em;
   margin-top: 0.55em;
 }
 .permissions .row .actions a {
@@ -8773,6 +8682,197 @@ This file is generated by `grunt build`, do not edit it by hand.
 .singleline.connection_info.protocol_host_port .input.text.port input[type=number] {
   width: 100%;
 }
+.input.location {
+  /*
+     * For IE 6/7 only
+     * Include this rule to trigger hasLayout and contain floats.
+     */
+  /*
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
+  /*
+     * For IE 6/7 only
+     * Include this rule to trigger hasLayout and contain floats.
+     */
+  zoom: 1;
+  /*
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
+}
+.input.location:before,
+.input.location:after {
+  content: "";
+  display: table;
+}
+.input.location:after {
+  clear: both;
+}
+.input.location:before,
+.input.location:after {
+  content: "";
+  display: table;
+}
+.input.location:after {
+  clear: both;
+}
+.input.location .location-input {
+  padding: 0.25em 0;
+  margin-bottom: 0.5em;
+  width: 100%;
+  float: left;
+  box-sizing: border-box;
+  border: 1px solid #222220;
+  background: #0C0C0A;
+}
+.input.location .breadcrumbs {
+  font-size: 1.125em;
+  background: transparent;
+  box-sizing: border-box;
+  float: left;
+  width: 79%;
+  padding-left: 0em;
+  margin-top: -0.25em;
+}
+.input.location .breadcrumbs ul {
+  float: left;
+  width: 100%;
+  padding-right: 0.5em;
+  box-sizing: border-box;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+.input.location .breadcrumbs li {
+  display: inline;
+}
+.input.location .button {
+  border: 0;
+  box-sizing: border-box;
+  float: right;
+  width: 19%;
+  margin: 0 0.25em 0 0;
+}
+.panel .folders.navigation {
+  border: 0;
+  /** nested padding */
+}
+.panel .folders.navigation .folders-label-selected {
+  background: #F3F3F3;
+}
+.panel .folders.navigation .folders-label-height {
+  height: 1.8em;
+}
+.panel .folders.navigation.first {
+  padding-top: 0;
+}
+.panel .folders.navigation .row {
+  /* title row */
+  /* disabled row */
+}
+.panel .folders.navigation .row .main-cell span {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -o-text-overflow: ellipsis;
+  -ms-text-overflow: ellipsis;
+  display: inline-block;
+  margin-top: 0.2em;
+  width: calc(100% - 2.5em);
+}
+.panel .folders.navigation .row .main-cell span.svg-icon {
+  display: inline;
+}
+.panel .folders.navigation .row .main-cell span.svg-icon.hidden {
+  display: none;
+}
+.panel .folders.navigation .row .main-cell .svg-icon svg {
+  margin: -0.28em 0.2em 0 0.5em;
+  fill: #FFFFFC;
+}
+.panel .folders.navigation .row .main-cell a {
+  padding: 0 0 0 2.5em;
+}
+.panel .folders.navigation .row .main-cell a span.svg-icon.caret-down svg {
+  margin-left: -1em;
+  margin-top: 0.4em;
+  width: 1em;
+  height: 1em;
+  position: absolute;
+}
+.panel .folders.navigation .row .right-cell {
+  margin-top: -1.65em;
+}
+.panel .folders.navigation .row.title .main-cell h3 {
+  padding-top: 0;
+  line-height: 1em;
+  border: 0;
+}
+.panel .folders.navigation .row.title .main-cell h3 a {
+  padding-left: 0;
+}
+.panel .folders.navigation .row.title .main-cell h3 a::before,
+.panel .folders.navigation .row.title .main-cell h3 a::after {
+  display: none;
+}
+.panel .folders.navigation .row.title .main-cell h3 .folders-label {
+  margin-left: 1em;
+  cursor: pointer;
+}
+.panel .folders.navigation .row.title .main-cell h3 .folders-label .svg-icon.caret-down svg {
+  margin-left: -1.3em;
+  margin-top: 0.2em;
+  width: 1em;
+  height: 1em;
+  position: absolute;
+}
+.panel .folders.navigation .row.disabled {
+  cursor: default;
+  pointer-events: none;
+}
+.panel .folders.navigation .row.disabled .main-cell a span.svg-icon.caret-down svg {
+  margin-left: -0.9em;
+  margin-top: 0.4em;
+  width: 1em;
+  height: 1em;
+  position: absolute;
+}
+.panel .folders.navigation .row.disabled .main-cell span.folder-name {
+  color: #8B8B89;
+  text-shadow: none;
+  font-weight: normal;
+}
+.panel .folders.navigation .row.disabled .main-cell span.svg-icon svg {
+  fill: #8B8B89;
+}
+.panel .folders.navigation .row.disabled .main-cell a:before {
+  color: #8B8B89;
+}
+.panel .folders.navigation ul {
+  list-style: none;
+  padding: 0;
+}
+.panel .folders.navigation .child .row {
+  padding-left: 0.8em;
+}
+.panel .folders.navigation .child .nested .row {
+  padding-left: 1.8em;
+}
 .input-password-wrapper {
   overflow: hidden;
 }
@@ -8836,224 +8936,65 @@ This file is generated by `grunt build`, do not edit it by hand.
 .dialog-wrapper.session-expired-dialog .dialog-close {
   display: none;
 }
-.edit-folder-dialog .form-content.parent-folder {
-  padding-top: 0;
-  padding-bottom: 1.5em;
+.move-folder-dialog .folders-list-wrapper {
+  border-bottom: 1px solid #0C0C0A;
+  border-top: 1px solid #0C0C0A;
+}
+.move-folder-dialog .breadcrumbs {
+  height: auto;
+  padding-bottom: 1em;
+  font-size: 1.2em;
+}
+.move-folder-dialog .breadcrumbs ul {
+  box-sizing: border-box;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   overflow: hidden;
+  margin-right: 2em;
+  margin-left: 0.5em;
+  padding-top: 0.5em;
 }
-.edit-folder-dialog .form-content.parent-folder .folder-change {
-  width: 12%;
-  float: right;
-  border: 1px solid #0C0C0A;
-  height: 2.25em;
-  border-radius: 3px;
-  background: #0C0C0A;
-}
-.edit-folder-dialog .form-content.parent-folder .folder-change .svg-icon.icon-only svg {
-  width: 1.6em;
-  height: 1.6em;
-  vertical-align: middle;
-  margin: 0.3em auto;
-}
-.create-folder-dialog .form-content.parent-folder {
-  padding-top: 0;
-  padding-bottom: 1.5em;
-  overflow: hidden;
-}
-.create-folder-dialog .form-content.parent-folder .folder-change {
-  width: 12%;
-  float: right;
-  border: 1px solid #8B8B89;
-  height: 2.25em;
-  border-radius: 3px;
-  background: #F3F3F3;
-}
-.create-folder-dialog .form-content.parent-folder .folder-change .svg-icon.icon-only svg {
-  width: 1.6em;
-  height: 1.6em;
-  vertical-align: middle;
-  margin: 0.3em auto;
-}
-.move-folder-dialog .form-content label {
-  clear: both;
-  font-size: 0.938em;
-  line-height: 1.45em;
-  padding: 0;
-  display: block;
-  font-weight: normal;
-  cursor: pointer;
-  margin-top: -2.88em;
-  margin-left: 1.25em;
-}
-.move-folder-dialog .form-content.search-input {
-  padding-bottom: 0;
-}
-.move-folder-dialog .form-content.breadcrumbs {
-  display: flex;
-}
-.move-folder-dialog .form-content.breadcrumbs .breadcrumbs-up {
-  padding: 0 0.7em;
-  border: 1px solid #8B8B89;
-  border-radius: 3px;
-}
-.move-folder-dialog .form-content.breadcrumbs .breadcrumbs-up .svg-icon svg {
-  width: 1rem;
-  height: 1rem;
-  margin: 3px auto;
-}
-.move-folder-dialog .form-content.breadcrumbs .parent-folders {
-  padding: 0.4em 0.4em 0.4em 0.7em;
-  font-size: 0.9em;
-}
-.move-folder-dialog .form-content.breadcrumbs .parent-folders .svg-icon.folder svg {
-  width: 1.3rem;
-  height: 1.3rem;
-  margin-top: -4px;
-  fill: #444442;
-}
-.move-folder-dialog .form-content.breadcrumbs .parent-folders .svg-icon.angle-right svg {
-  width: 0.88rem;
-  height: 0.88rem;
-}
-.move-folder-dialog .form-content.breadcrumbs a {
-  border: none;
-}
-.move-folder-dialog .form-content.breadcrumbs a:hover {
-  color: #333;
-}
-.move-folder-dialog .form-content.breadcrumbs a:hover .svg-icon svg {
-  fill: #333;
-}
-.move-folder-dialog .form-content.folders-list {
+.move-folder-dialog .folders-list {
   padding: 0;
   max-height: 19em;
 }
-.move-folder-dialog .form-content.folders-list:last-child {
+.move-folder-dialog .folders-list:last-child {
   border-bottom: 0;
 }
-.move-folder-dialog .form-content.folders-list .item {
-  padding: 0.75em 2em;
-  border-bottom: 1px solid #EEEEEC;
+.move-folder-dialog .folders-list .folders-list-item {
+  user-select: none;
+  padding: 0.75em 1.25em 0.75em 1.5em;
+  border-bottom: 1px solid #0C0C0A;
   cursor: pointer;
 }
-.move-folder-dialog .form-content.folders-list .item:hover {
-  background: #EEEEEC;
+.move-folder-dialog .folders-list .folders-list-item.selected {
+  background: #3B3B39;
 }
-.move-folder-dialog .form-content.folders-list .item:hover .svg-icon.angle-right svg {
-  display: inline-block;
-  fill: #333;
+.move-folder-dialog .folders-list .folders-list-item.selected .folder-view {
+  border: 1px solid #3B3B39;
 }
-.move-folder-dialog .form-content.folders-list .item span.folder-name {
+.move-folder-dialog .folders-list .folders-list-item .folder-name {
   margin-left: 0.4em;
+  user-select: none;
 }
-.move-folder-dialog .form-content.folders-list .item span.role-name {
-  color: #606060;
+.move-folder-dialog .folders-list .folders-list-item .folder-permission {
+  color: #cacac9;
   font-size: 0.65em;
   margin-left: 0.4em;
+  user-select: none;
 }
-.move-folder-dialog .form-content.folders-list .svg-icon.folder svg {
-  width: 1.3rem;
-  height: 1.3rem;
-  margin-top: -2px;
-  fill: #444442;
-}
-.move-folder-dialog .form-content.folders-list .svg-icon.angle-right svg {
-  width: 1.3em;
-  height: 1.3em;
-  margin: 0;
-  fill: #8B8B89;
+.move-folder-dialog .folders-list .folders-list-item .folder-view {
   float: right;
-}
-.move-folder-dialog .submit-wrapper .new-folder {
-  margin-left: 1.23em;
-  display: inline-block;
-  margin-top: 0.5em;
-}
-.move-folder-dialog .submit-wrapper .new-folder:hover .svg-icon svg {
-  fill: #2894DF;
-}
-.move-folder-dialog .submit-wrapper .new-folder .svg-icon svg {
-  margin-top: 2px;
-}
-.move-folder-dialog .move-search-autocomplete-wrapper {
-  display: none;
-}
-.move-folder-dialog .move-search-autocomplete-wrapper .autocomplete-wrapper {
-  position: relative;
-}
-.move-folder-dialog .move-search-autocomplete-wrapper .autocomplete-wrapper .autocomplete-content {
-  position: absolute;
-  top: -0.5em;
-  left: 0;
-  width: 100%;
-  z-index: 899;
-  padding: 0;
-  margin: 0;
-  border: 1px solid #8B8B89;
-  max-height: 10em;
-  overflow: auto;
-  box-sizing: border-box;
-}
-.move-folder-dialog .move-search-autocomplete-wrapper .autocomplete-wrapper .autocomplete-content .row:after,
-.move-folder-dialog .move-search-autocomplete-wrapper .autocomplete-wrapper .autocomplete-content .row:before {
-  content: "";
-  display: table;
-}
-.move-folder-dialog .move-search-autocomplete-wrapper .autocomplete-wrapper .autocomplete-content .row {
-  zoom: 1;
-  font-size: 0.9em;
-  padding: 0.825em 0.5em 0.5em 1em;
-}
-.move-folder-dialog .move-search-autocomplete-wrapper .autocomplete-wrapper .autocomplete-content .row .user {
-  width: 75%;
-  float: left;
-  padding-right: 1em;
-  padding-bottom: 1em;
-}
-.move-folder-dialog .move-search-autocomplete-wrapper .autocomplete-wrapper .autocomplete-content .row .name {
-  display: block;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-.move-folder-dialog .move-search-autocomplete-wrapper .autocomplete-wrapper .autocomplete-content .row .details {
-  color: #3B3B39;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  -o-text-overflow: ellipsis;
-  -ms-text-overflow: ellipsis;
-  display: block;
-}
-.move-folder-dialog .permission-inherit {
-  margin-top: 1.5em;
-  cursor: pointer;
-}
-.move-folder-dialog .permission-inherit .permission-content {
-  margin-left: 1.5em;
-  margin-top: -1.3em;
-  margin-bottom: 1em;
-}
-.move-folder-dialog .permission-inherit .permission-content img {
-  width: 1.65em;
-  height: 1.65em;
-  margin: 1em -0.75em;
-  border: 1px solid #8B8B89;
-  border-radius: 0.35em;
-  padding: 0.3em;
-}
-.move-folder-dialog .permission-inherit .permission-content .content {
-  margin-top: -3.95em;
-  margin-left: 2.2em;
-}
-.move-folder-dialog .permission-inherit .permission-content .content-info {
-  font-size: 0.75em;
-  color: #606060;
-  margin-left: 3em;
-}
-.share-folder-dialog .permissions .row .actions a {
-  display: inline-block;
   margin-top: -0.25em;
+  margin-right: -0.25em;
+  padding: 0.25em 0.5em;
+  border: 1px solid #30302D;
+  -webkit-border-radius: 0.214em;
+  -moz-border-radius: 0.214em;
+  border-radius: 0.214em;
+}
+.move-folder-dialog .folders-list .folders-list-item .folder-view:hover {
+  border: 1px solid #0C0C0A;
 }
 .dialog .group .form-content.permission-edit {
   border-top: 1px solid #0C0C0A;
@@ -9559,8 +9500,9 @@ This file is generated by `grunt build`, do not edit it by hand.
   top: 2px;
 }
 .page.password .tableview .grid_column_avatar .svg-icon svg {
-  width: 1.3rem;
-  height: 1.3rem;
+  width: 1rem;
+  height: 1rem;
+  line-height: 1.25em;
 }
 .page.password .tableview .grid_column_avatar .text-label {
   color: #FFF;
