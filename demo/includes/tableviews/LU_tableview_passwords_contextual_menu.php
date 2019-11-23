@@ -52,7 +52,8 @@
                 </div>
             </div>
         </div>
-    </li><li id="js_password_browser_menu_share" class="disabled closed" data-view-id="375">
+    </li>
+    <li id="js_password_browser_menu_share" class="disabled closed" data-view-id="375">
         <div class="row">
             <div class="main-cell-wrapper">
                 <div class="main-cell">

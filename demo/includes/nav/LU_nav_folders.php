@@ -17,7 +17,7 @@
     </div>
     <ul class="folders-tree">
         <li class="open folder-item">
-            <div class="row" id="plants-li-row" draggable="true">
+            <div class="row selected" id="plants-li-row" draggable="true">
                 <div class="main-cell-wrapper">
                     <div class="main-cell">
                         <a>
@@ -88,7 +88,7 @@
                     <div class="main-cell">
                         <a>
                             <?php include('includes/svg-icons/caret-down.php'); ?>
-                            <?php include('includes/svg-icons/folder.php'); ?>
+                            <?php include('includes/svg-icons/shared-folder.php'); ?>
                             <span title="Beta" class="folder-name">Beta</span>
                         </a>
                     </div>
@@ -197,55 +197,5 @@
           return false;
       });
 
-      const draggableElements = $('ul.folders-tree li .row:not(".disabled")');
-      draggableElements.draggable({
-        cursor: "move",
-        appendTo: "body",
-        start: function( event, ui ) {
-          $(event.target).closest('li').find('.row').addClass('disabled');
-        },
-        helper: function() {
-          let content = $(this).find('span.folder-name')[0].innerText;
-          let helper = $("<div>", {
-            class: "passwords-folders-dnd-helper"
-          });
-          helper.append(`<span>${content}</span>`);
-          return helper;
-        },
-        cursorAt: {
-          top: 5,
-          left: 5
-        },
-        opacity: "0.8",
-        revert:  function(event) {
-          let draggable = $(this);
-          draggable.closest('li').find('.row').removeClass('disabled');
-          let hasBeenDroppedBefore = draggable.data('hasBeenDropped');
-          if (hasBeenDroppedBefore) {
-            draggable.animate({ top: 0, left: 0 }, 'slow');
-            return false;
-          } else {
-            return true;
-          }
-        }
-      });
-
-      $('.folders-tree li .row:not(".disabled")').droppable({
-        accept: function () {
-          return draggableElements || '#4241e122-62d8-340c-a607-150d8ca0c5c5';
-        },
-        over: function(event, ui) {
-          $(event.target).addClass('passwords-folders-drop-focus-in');
-          $(event.target).closest('li').find('.row.disabled').removeClass('passwords-folders-drop-focus-in');
-        },
-        out: function(event, ui) {
-          $(event.target).removeClass('passwords-folders-drop-focus-in');
-        },
-        drop: function(event, ui) {
-          $(event.target).removeClass('passwords-folders-drop-focus-in');
-          $(ui.draggable).data('hasBeenDropped', true);
-          $('#js_app_notificator .message.animated').addClass('fadeInUp').html('<strong>Success</strong> Dropped successfully!')
-        }
-      });
     });
 </script>

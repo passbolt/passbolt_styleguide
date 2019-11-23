@@ -4598,15 +4598,14 @@ input[type=email].fluid {
   color: #D40101;
 }
 .svg-icon {
-  font: normal normal normal 16px/1 sans-serif;
-  font-size: inherit;
+  font-size: 16px;
+  line-height: 16px;
   text-rendering: auto;
 }
 .svg-icon svg {
   width: 0.875rem;
   height: 0.875rem;
   display: inline-block;
-  vertical-align: text-top;
   margin: auto;
   fill: #333;
 }
@@ -4616,15 +4615,15 @@ input[type=email].fluid {
 .svg-icon.icon-only svg {
   width: 1.1rem;
   height: 1.1rem;
-  display: block;
-  vertical-align: text-top;
-  margin: auto;
 }
 .svg-icon + span:not(.visuallyhidden) {
   margin-left: 2px;
   display: inline-block;
 }
-a.button .svg-icon svg:hover,
+.button .svg-icon svg {
+  vertical-align: middle;
+}
+.button:hover .svg-icon svg,
 .button .svg-icon svg:hover {
   fill: #333;
 }
@@ -6028,17 +6027,63 @@ p {
 }
 .move-folder-dialog .breadcrumbs {
   height: auto;
-  padding-bottom: 1em;
+  padding-bottom: 0.625em;
   font-size: 1.2em;
+  padding-top: 0.5em;
+  /*
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
+  /*
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
+}
+.move-folder-dialog .breadcrumbs:before,
+.move-folder-dialog .breadcrumbs:after {
+  content: "";
+  display: table;
+}
+.move-folder-dialog .breadcrumbs:after {
+  clear: both;
+}
+.move-folder-dialog .breadcrumbs:before,
+.move-folder-dialog .breadcrumbs:after {
+  content: "";
+  display: table;
+}
+.move-folder-dialog .breadcrumbs:after {
+  clear: both;
+}
+.move-folder-dialog .breadcrumbs .button {
+  float: left;
+  width: 1.5em;
+  padding: 0.125em 0.25em 0.25em 0.25em;
+  margin-left: 0.5em;
+  margin-right: 0;
 }
 .move-folder-dialog .breadcrumbs ul {
   box-sizing: border-box;
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
-  margin-right: 2em;
-  margin-left: 0.5em;
-  padding-top: 0.5em;
+  float: left;
+  width: calc(100% - 5em);
+  margin-top: -0.125em;
 }
 .move-folder-dialog .folders-list {
   padding: 0;

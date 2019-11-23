@@ -1,0 +1,44 @@
+.drag-and-drop,
+.drag-and-drop-multiple {
+    position: relative;
+    width: 6.25em;
+    height: 1em;
+    background: @grey-darkest;
+    border: 1px solid @grey-dark;
+    text-align: center;
+    z-index: 9999999;
+    padding: 0.65em;
+    line-height: 1em;
+    color: @white;
+    border-radius: 5px;
+
+    span {
+        display: inline-block;
+        width: 100%;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+}
+.drag-and-drop-multiple {
+    box-shadow: 0.25em 0.25em 0 -1px @grey-dark;
+
+    &:after {
+        content: "2";
+        position: absolute;
+        top: -9px;
+        right: -3px;
+        font-size: .7em;
+        background: @red;
+        color: @white;
+        width: 1.5em;
+        height: 1.5em;
+        text-align: center;
+        line-height: 1.5em;
+        border-radius: 50%;
+        box-shadow: 0 0 1px @black;
+    }
+}
+.drop-focus {
+    background-color: @tableview-background-selected;
+}

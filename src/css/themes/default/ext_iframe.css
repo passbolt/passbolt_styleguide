@@ -3200,15 +3200,14 @@ p {
   color: #D40101;
 }
 .svg-icon {
-  font: normal normal normal 16px/1 sans-serif;
-  font-size: inherit;
+  font-size: 16px;
+  line-height: 16px;
   text-rendering: auto;
 }
 .svg-icon svg {
   width: 0.875rem;
   height: 0.875rem;
   display: inline-block;
-  vertical-align: text-top;
   margin: auto;
   fill: #333;
 }
@@ -3218,15 +3217,15 @@ p {
 .svg-icon.icon-only svg {
   width: 1.1rem;
   height: 1.1rem;
-  display: block;
-  vertical-align: text-top;
-  margin: auto;
 }
 .svg-icon + span:not(.visuallyhidden) {
   margin-left: 2px;
   display: inline-block;
 }
-a.button .svg-icon svg:hover,
+.button .svg-icon svg {
+  vertical-align: middle;
+}
+.button:hover .svg-icon svg,
 .button .svg-icon svg:hover {
   fill: #333;
 }

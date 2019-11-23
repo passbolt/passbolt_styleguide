@@ -22,16 +22,17 @@
                 <span class="visuallyhidden">close</span>
             </a>
         </div>
-        <div class="js_dialog_content dialog-content">
+        <div class="dialog-content">
             <div class="breadcrumbs">
-                <a class="button small" href="#" role="button">
+                <a class="button" href="#" role="button">
+                    <?php include('includes/svg-icons/caret-left.php'); ?>
                     <span class="visuallyhidden">Up</span>
                 </a>
                 <ul>
                     <li><a class="parent-folders" href="#" role="button">Folders</a></li>
                     <li><a class="parent-folders" href="#" role="button">All Plants</a></li>
                     <li><a class="parent-folders" href="#" role="button">Succulents</a></li>
-                    <li>Long folder name that shouldn't breaks things surely it can break</li>
+                    <li>Long folder name that shouldn't break things</li>
                 </ul>
             </div>
             <div class="folders-list-wrapper">

@@ -48,10 +48,10 @@
     border-top: 1px solid @border-default;
     overflow-y: scroll;
     background: @tableview-background;
-}
 
-.tableview-content table {
-    width: 100%;
+    table {
+        width: 100%;
+    }
 }
 
 /* rows */
@@ -123,10 +123,6 @@
             float: left;
         }
     }
-    th span,
-    td span {
-        vertical-align: 6%;
-    }
 
     /* fav fix */
     th.cell_favorite,
@@ -134,6 +130,15 @@
         padding-left:0;
         padding-top: 4px;
         padding-right:.25em;
+    }
+
+    td.cell_icon {
+        svg, img {
+            width: 1em;
+            height: 1em;
+            line-height: 1.25em;
+            position: relative;
+        }
     }
 }
 

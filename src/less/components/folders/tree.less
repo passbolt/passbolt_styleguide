@@ -1,6 +1,12 @@
 .panel {
     .folders.navigation {
         border:0;
+
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+
         .folders-label-selected {
             background: @grey-lightest;
         }
@@ -12,6 +18,7 @@
         &.first {
             padding-top: 0;
         }
+
         .row {
             .main-cell {
                 span {
@@ -20,24 +27,30 @@
                     margin-top: 0.2em;
                     width: calc(100% - 2.5em);
                 }
-                span.svg-icon {
+                .svg-icon {
                     display: inline;
                 }
-                span.svg-icon.hidden {
+                .svg-icon.hidden {
                     display: none;
                 }
                 .svg-icon svg {
-                    margin: -0.28em 0.2em 0 0.5em;
+                    width: .83em;
+                    height: .83em;
+                    position: absolute;
+                    margin-top: 0.5em;
                     fill: @font-default;
                 }
                 a {
                     padding: 0 0 0 2.5em;
-                    span.svg-icon.caret-down svg {
-                        margin-left: -1em;
+                    .svg-icon.caret-down svg {
+                        margin-left: -1.2em;
                         margin-top: 0.4em;
                         width: 1em;
                         height: 1em;
                         position: absolute;
+                    }
+                    .folder-name {
+                        margin-left:1.3em;
                     }
                 }
             }
@@ -60,10 +73,11 @@
                             display: none;
                         }
                         .folders-label {
-                            margin-left: 1em;
+                            margin-left: .85em;
                             cursor: pointer;
+
                             .svg-icon.caret-down svg {
-                                margin-left: -1.3em;
+                                margin-left: -1.1em;
                                 margin-top: 0.2em;
                                 width: 1em;
                                 height: 1em;
@@ -79,13 +93,6 @@
                 cursor: default;
                 pointer-events: none;
                 .main-cell {
-                    a span.svg-icon.caret-down svg {
-                        margin-left: -0.9em;
-                        margin-top: 0.4em;
-                        width: 1em;
-                        height: 1em;
-                        position: absolute;
-                    }
                     span.folder-name{
                         color: @font-light;
                         text-shadow: none;
@@ -101,11 +108,6 @@
                 }
             }
 
-        }
-
-        ul {
-            list-style: none;
-            padding: 0;
         }
 
         /** nested padding */

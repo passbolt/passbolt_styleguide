@@ -5,17 +5,28 @@
     }
     .breadcrumbs {
         height:auto;
-        padding-bottom:1em;
+        padding-bottom:.625em;
         font-size:1.2em;
+        padding-top:.5em;
+        .clearfix();
+
+        .button {
+            float:left;
+            width:1.5em;
+            padding:.125em .25em .25em .25em;
+            margin-left:.5em;
+            margin-right:0;
+
+        }
 
         ul {
             box-sizing: border-box;
             text-overflow:ellipsis;
             white-space:nowrap;
             overflow:hidden;
-            margin-right:2em;
-            margin-left:.5em;
-            padding-top:.5em;
+            float:left;
+            width: calc(100% - 5em);
+            margin-top:-.125em;
         }
     }
     .folders-list {

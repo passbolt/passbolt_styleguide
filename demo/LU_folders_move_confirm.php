@@ -8,7 +8,7 @@
     <div class="mad_event_event_bus"></div>
     <div id="js_app_controller" class="passbolt_controller_app_controller mad_view_view js_component ready">
         <!-- delete dialog -->
-        <?php include('includes/dialogs/LU_folder_move_confirm.php');?>
+        <iframe src="demo/includes/dialogs/LU_folder_move_confirm.php" frameborder="0"></iframe>
         <?php include('includes/workspace/LU_passwords_workspace.php'); ?>
     </div>
 </div>
