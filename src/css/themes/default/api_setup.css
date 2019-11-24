@@ -562,6 +562,7 @@ html body .hidden {
 /*
  * Hide only visually, but have it available for screenreaders: h5bp.com/v
  */
+.visually-hidden,
 .visuallyhidden {
   border: 0;
   clip: rect(0 0 0 0);
@@ -576,7 +577,9 @@ html body .hidden {
      * when navigated to via the keyboard: h5bp.com/p
      */
 }
+.visually-hidden .focusable:active,
 .visuallyhidden .focusable:active,
+.visually-hidden .focusable:focus,
 .visuallyhidden .focusable:focus {
   clip: auto;
   height: auto;
@@ -3218,12 +3221,18 @@ p {
   width: 1.1rem;
   height: 1.1rem;
 }
-.svg-icon + span:not(.visuallyhidden) {
-  margin-left: 2px;
-  display: inline-block;
+label .svg-icon svg {
+  fill: #888;
+  pointer-events: none;
+  cursor: default;
+  vertical-align: -0.0714286em;
 }
 .button .svg-icon svg {
   vertical-align: middle;
+}
+.button .svg-icon + span:not(.visuallyhidden) {
+  margin-left: 2px;
+  display: inline-block;
 }
 .button:hover .svg-icon svg,
 .button .svg-icon svg:hover {
@@ -3259,6 +3268,9 @@ a.disabled .svg-icon svg {
 }
 a.disabled:hover .svg-icon svg {
   fill: #888;
+}
+.message .svg-icon svg {
+  vertical-align: 0.125em;
 }
 /*
 	Generic buttons
@@ -3308,6 +3320,47 @@ button,
 .button.big {
   font-size: 1.125em;
 }
+/* hover */
+button:hover,
+.button:hover {
+  color: #333;
+  text-decoration: none;
+  background: #F3F3F3;
+  background-image: -moz-linear-gradient(top, #F3F3F3, #F3F3F3);
+  background-image: -ms-linear-gradient(top, #F3F3F3, #F3F3F3);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(background-lightest), to(#F3F3F3));
+  background-image: -webkit-linear-gradient(top, #F3F3F3, #F3F3F3);
+  background-image: -o-linear-gradient(top, #F3F3F3, #F3F3F3);
+  background-image: linear-gradient(top, #F3F3F3, #F3F3F3);
+  border: 1px solid #BBB;
+}
+/* focus */
+button:focus,
+.button:focus {
+  color: #2894DF;
+  border: 1px solid #2894DF;
+}
+/* active */
+button:active,
+.button:active {
+  color: #2894DF;
+  border: 1px solid #2894DF;
+  background: #EEE;
+  position: relative;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+/* cancel */
+.button.cancel,
+.button.cancel:focus,
+.button.cancel:hover,
+.button.cancel:active,
+.button.dim,
+.button.dim:focus,
+.button.dim:hover,
+.button.dim:active {
+  background: #FFF;
+  font-weight: normal;
+}
 /* primary */
 .button.primary {
   background: #2894DF;
@@ -3339,44 +3392,6 @@ button,
 .button.warning:focus,
 .button.warning:active {
   border: 1px solid #92000C;
-}
-/* cancel */
-.button.cancel,
-.button.cancel:focus,
-.button.cancel:hover,
-.button.cancel:active,
-.button.dim,
-.button.dim:focus,
-.button.dim:hover,
-.button.dim:active {
-  background: #FFF;
-  font-weight: normal;
-}
-/* hover */
-.button:hover {
-  color: #333;
-  text-decoration: none;
-  background: #F3F3F3;
-  background-image: -moz-linear-gradient(top, #F3F3F3, #F3F3F3);
-  background-image: -ms-linear-gradient(top, #F3F3F3, #F3F3F3);
-  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(background-lightest), to(#F3F3F3));
-  background-image: -webkit-linear-gradient(top, #F3F3F3, #F3F3F3);
-  background-image: -o-linear-gradient(top, #F3F3F3, #F3F3F3);
-  background-image: linear-gradient(top, #F3F3F3, #F3F3F3);
-  border: 1px solid #BBB;
-}
-/* focus */
-.button:focus {
-  color: #2894DF;
-  border: 1px solid #2894DF;
-}
-/* active */
-.button:active {
-  color: #2894DF;
-  border: 1px solid #2894DF;
-  background: #EEE;
-  position: relative;
-  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.2);
 }
 .button.disabled {
   cursor: default;
@@ -4963,6 +4978,12 @@ input[type=email].fluid {
   float: right;
   border: 0;
 }
+.dialog-close:active {
+  -webkit-border-radius: 0.214em;
+  -moz-border-radius: 0.214em;
+  border-radius: 0.214em;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.2);
+}
 .dialog-close .fa-close {
   padding-top: 15px;
   width: 30px;
@@ -5219,9 +5240,6 @@ input[type=email].fluid {
 }
 .message.success.success-large.animated #successAnimation.animated #successAnimationCheck {
   animation: 0.75s cubic-bezier(0.77, 0, 0.175, 1) 0s 1 both drawCheck;
-}
-.message.notice .svg-icon svg {
-  margin-top: -5px;
 }
 @media only screen and (max-width: 767px) {
   .message.success.success-large.animated {

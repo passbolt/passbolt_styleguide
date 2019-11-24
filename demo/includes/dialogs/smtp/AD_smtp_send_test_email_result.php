@@ -2,8 +2,7 @@
     <div class="dialog">
         <div class="dialog-header">
             <h2>Send test email</h2>
-            <a href="demo/AD_admin_smtp_configuration.php" class="dialog-close">
-                <?php include('includes/svg-icons/close.php'); ?>
+            <a href="demo/AD_admin_smtp_configuration.php" class="dialog-close" role="button">`
                 <span class="visuallyhidden">close</span>
             </a>
         </div>

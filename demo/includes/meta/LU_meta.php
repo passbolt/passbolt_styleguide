@@ -18,7 +18,7 @@
 <link rel="shortcut icon" type="image/x-icon" href="src/img/webroot/favicon.ico" />
 <link rel="stylesheet" type="text/css" href="src/css/themes/<?= $theme; ?>/api_main.css">
 <link rel="stylesheet" type="text/css" href="src/css/themes/default/ext_external.css" />
-<script src="src/js/jquery-3.3.1.min.js"></script>
+<script src="src/js/jquery-3.4.1.min.js"></script>
 <script src="src/js/jquery.tag-editor.js"></script>
 <script src="src/js/jquery-ui.min.js"></script>
 <script type="application/javascript">

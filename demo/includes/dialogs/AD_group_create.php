@@ -4,7 +4,7 @@
             <h2>
                 Create a group
             </h2>
-            <a class="dialog-close" href="demo/AD_users.php">
+            <a class="dialog-close" role="button" href="demo/AD_users.php">
             <?php include('includes/svg-icons/close.php'); ?>
                 <span class="visuallyhidden">close</span>
             </a>

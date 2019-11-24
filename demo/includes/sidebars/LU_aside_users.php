@@ -7,7 +7,7 @@
 				<span class="name">Ada Lovelace</span>
 				<span class="username">ada@passbolt.com</span>
 			</h3>
-			<a href="#" class="dialog-close">
+			<a href="#" class="dialog-close" role="button">
 			<?php include('includes/svg-icons/close.php'); ?>
 				<span class="visuallyhidden">close</span>
 			</a>

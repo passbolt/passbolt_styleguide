@@ -3,7 +3,7 @@
 	<div class="dialog">
 		<div class="dialog-header">
 			<h2>Edit<span class="dialog-header-subtitle">shared resource</span></h2>
-			<a href="demo/LU_passwords.php" class="dialog-close">
+			<a href="demo/LU_passwords.php" class="dialog-close" role="button">
 					<?php include('includes/svg-icons/close.php'); ?>
 				<span class="visuallyhidden">Close</span>
 			</a>

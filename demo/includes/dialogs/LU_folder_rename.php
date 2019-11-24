@@ -2,7 +2,7 @@
 	<div class="dialog">
 		<div class="dialog-header">
 			<h2>Rename a folder</h2>
-			<a href="demo/LU_passwords_folders.php" class="dialog-close">
+			<a href="demo/LU_passwords_folders.php" class="dialog-close" role="button">
 					<?php include('includes/svg-icons/close.php'); ?>
 				<span class="visuallyhidden">Close</span>
 			</a>

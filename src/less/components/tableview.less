@@ -112,7 +112,7 @@
         color: @font-lighter;
     }
     .input.checkbox {
-        padding-top: 2px;
+        padding-top: 0px;
         padding-left:.25em;
 
         label {
@@ -128,7 +128,7 @@
     th.cell_favorite,
     td.cell_favorite {
         padding-left:0;
-        padding-top: 4px;
+        padding-top: 2px;
         padding-right:.25em;
     }
 
@@ -136,8 +136,11 @@
         svg, img {
             width: 1em;
             height: 1em;
-            line-height: 1.25em;
-            position: relative;
+            position: absolute;
+            margin-top:-.5em;
+        }
+        svg {
+            margin-top:-.55em;
         }
     }
 }

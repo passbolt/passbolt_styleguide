@@ -23,9 +23,14 @@
             <span class="label">Created by</span>
             <span class="value">anonymous@passbolt.com</span>
         </li>
-        <li class="modified-by">
+        <li class="location">
             <span class="label">Location</span>
-            <span class="value"><a href="demo/LU_folders.php">Plants</a></span>
+            <span class="value">
+                <a href="demo/LU_folders.php" class="folder-link">
+                    <?php include('includes/svg-icons/folder.php'); ?>
+                    Folders
+                </a>
+            </span>
         </li>
     </ul>
 </div>

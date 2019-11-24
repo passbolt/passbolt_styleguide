@@ -10,7 +10,7 @@
                 </div>
             </div>
           </h2>
-          <a href="demo/LU_passwords_folders.php" class="dialog-close">
+          <a href="demo/LU_passwords_folders.php" class="dialog-close" role="button">
           <?php include('includes/svg-icons/close.php'); ?>
           <span class="visuallyhidden">close</span></a>
       </div>
@@ -21,12 +21,6 @@
                 <div class="passbolt_component_permissions share-tab tab-content passbolt_view_component_permissions ready selected" id="js_rs_permission">
                 <?php include('includes/dialogs/share/LU_permissions_list_share_folder.php'); ?>
                 <?php include('includes/dialogs/share/LU_permission_add.php'); ?>
-                <div class="permission-add">
-                  <div class="input checkbox">
-                    <input id="permissions-for-folders"type="checkbox">
-                    <label for="permissions-for-folders">Override existing children permissions.</label>
-                  </div>
-                </div>
                 <?php include('includes/dialogs/share/LU_permission_dialog_buttons.php'); ?>
                 </div>
             </div>

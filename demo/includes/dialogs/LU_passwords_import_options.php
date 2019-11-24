@@ -3,7 +3,7 @@
 	<div class="dialog kdbx-credentials">
 		<div class="dialog-header">
 			<h2>Enter the password and/or key file</h2>
-			<a href="#" class="dialog-close">
+			<a href="#" class="dialog-close" role="button">
 			<?php include('includes/svg-icons/close.php'); ?>	
 			<span class="visuallyhidden">close</span>
 			</a>

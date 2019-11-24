@@ -17,7 +17,7 @@
                 <span>Move</span>
                 <span class="dialog-header-subtitle">Beta</span>
             </h2>
-            <a class="dialog-close" href="demo/LU_passwords_folders.php">
+            <a class="dialog-close" role="button" href="demo/LU_passwords_folders.php">
                 <?php include('includes/svg-icons/close.php'); ?>
                 <span class="visuallyhidden">close</span>
             </a>

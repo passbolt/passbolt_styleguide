@@ -2,7 +2,7 @@
 	<div class="dialog">
 		<div class="dialog-header">
 			<h2>Test settings report</h2>
-			<a href="demo/AD_admin_ldap_configuration.php" class="dialog-close">
+			<a href="demo/AD_admin_ldap_configuration.php" class="dialog-close" role="button">
             <?php include('includes/svg-icons/close.php'); ?>    
             <span class="visuallyhidden">close</span>
 			</a>

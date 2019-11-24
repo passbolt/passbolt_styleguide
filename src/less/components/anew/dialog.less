@@ -1,0 +1,129 @@
+/* Dialog */
+.dialog-wrapper {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: 800;
+    background: @background-overlay;
+    overflow: auto;
+}
+.dialog {
+    position: relative;
+    max-width: 30em;
+    border: 1px solid @border-default;
+    background: @background-lightest;
+    margin: auto;
+    margin-top: 1%;
+    /* some space for the footer / notification area in case it is really tall */
+    margin-bottom: 3em;
+    .box-shadow();
+
+    &.medium {
+        max-width: 36em;
+    }
+
+    /* header */
+    .dialog-header {
+        padding: 0.5em 1em 0 1em;
+        height: 3em;
+        h2 {
+            margin: .25em 2em .5em .2em;
+            font-size: 1.2em;
+            .ellipsis();
+        }
+        .tooltip-alt {
+            margin-left: 0.3em;
+            font-size: 0.7em;
+            font-weight: normal;
+            color: @font-default;
+            .tooltip-text {
+                white-space: normal;
+            }
+        }
+        .dialog-header-subtitle {
+            padding-top: 0.3em;
+            padding-left: 1em;
+            font-size: 0.7em;
+            color: @font-default;
+        }
+        .dialog-close {
+            margin-top: -2.5em;
+        }
+    }
+
+    /* inputs */
+    .form-content {
+        background: @background-default;
+        padding: .813em 1.5em 1.5em 1.5em;
+    }
+
+    p {
+        margin-top:.5em;
+        font-size: 1em; /* 15px */
+    }
+    p + .checkbox {
+        padding-bottom:.5em;
+        & label {
+            font-size: 1em;
+        }
+    }
+
+    label {
+        clear: both;
+        font-size: 0.938em; /* 15px */
+        line-height: 1.6em; /* 24px */
+    }
+    input[type=text], textarea {
+        width: 100%;
+        box-sizing: border-box;
+        .clearfix();
+    }
+
+    /* Error display */
+    textarea + .message,
+    input + .message {
+        display:none; /* do not show empty placeholders */
+    }
+    textarea + .message.error,
+    input + .message.error {
+        display: block;
+        clear: both;
+        width: 100%;
+    }
+    .inline-error {
+        color:@font-error;
+        font-weight: bold;
+    }
+    .accordion-header a {
+        display:inline;
+    }
+
+    /* submit / cancel */
+    .submit-wrapper {
+        margin: 0;
+        clear: both;
+        width: 100%;
+        padding: .75em 0;
+
+        .cancel,
+        .button {
+            float: right;
+            margin-right: 1.25em;
+            font-size: 1.125em;
+        }
+        .button {
+            box-sizing: border-box;
+            min-width:5em;
+        }
+        .secondary {
+            float: left;
+            margin-left: 1.5em;
+            margin-top: .7em;
+            font-size: 1em;
+        }
+        .cancel {
+            margin-top: .7em;
+            font-size: 1em;
+        }
+    }
+}

@@ -2,7 +2,7 @@
 	<div class="dialog import">
 		<div class="dialog-header">
 			<h2>Import passwords</h2>
-			<a href="demo/LU_passwords.php" class="dialog-close">
+			<a href="demo/LU_passwords.php" class="dialog-close" role="button">
 			<?php include('includes/svg-icons/close.php'); ?>
 								<span class="visuallyhidden">close</span>
 			</a>

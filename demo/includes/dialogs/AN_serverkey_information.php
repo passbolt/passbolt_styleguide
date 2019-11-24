@@ -2,7 +2,7 @@
 	<div class="dialog medium key-info">
 		<div class="dialog-header">
 			<h2>Please verify the server key</h2>
-			<a href="#" class="dialog-close">
+			<a href="#" class="dialog-close" role="button">
 				<?php include('includes/svg-icons/close.php'); ?>
 				<span class="visuallyhidden">close</span>
 			</a>

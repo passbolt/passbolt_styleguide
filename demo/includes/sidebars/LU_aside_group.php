@@ -7,7 +7,7 @@
 				<span class="name">IT Support</span>
 				<span class="type">group</span>
 			</h3>
-            <a href="#" class="dialog-close">
+            <a href="#" class="dialog-close" role="button">
 				<?php include('includes/svg-icons/close.php'); ?>	
 				<span class="visuallyhidden">close</span>
             </a>

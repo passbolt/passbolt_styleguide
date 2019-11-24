@@ -2,7 +2,7 @@
     <div class="dialog confirm">
         <div class="dialog-header">
             <h2>The folder was updated</h2>
-            <a class="dialog-close" href="demo/LU_passwords_folders.php">
+            <a class="dialog-close" role="button" href="demo/LU_passwords_folders.php">
                 <?php include('includes/svg-icons/close.php'); ?>
                 <span class="visuallyhidden">close</span>
             </a>

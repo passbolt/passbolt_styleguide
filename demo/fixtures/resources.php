@@ -10,10 +10,10 @@ $resources = [
     ],
     [
         'id' => '15cec625-8417-5533-bdb1-a17aec0bf101',
-        'name' => 'Enlightenment',
+        'name' => 'Slack',
         'fav' => true,
-        'username' => 'elf',
-        'uri' => 'https://englithenment.org',
+        'username' => 'slacker',
+        'uri' => 'https://www.slack.com',
         'modified' => 'a day ago'
     ],
     [
@@ -34,10 +34,10 @@ $resources = [
     ],
     [
         'id' => '15cec625-8417-5533-bdb1-a17aec0bf105',
-        'name' => 'ftp',
+        'name' => 'Zoho',
         'fav' => false,
         'username' => 'user',
-        'uri' => 'ftp://192.168.1.1',
+        'uri' => 'https://books.zoho.com',
         'modified' => 'two days ago'
     ],
     [
