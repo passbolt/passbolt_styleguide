@@ -43,7 +43,7 @@
       }
     });
 
-    const draggableElements = $('ul.folders-tree li .row:not(".disabled")');
+    const draggableElements = $('.folders .row:not(".disabled")');
     draggableElements.draggable({
       cursor: "move",
       appendTo: "body",
@@ -76,7 +76,7 @@
       }
     });
 
-    $('.folders-tree li .row:not(".disabled")').droppable({
+    $('.folders .row:not(".disabled")').droppable({
       accept: function () {
         return draggableElements || '#4241e122-62d8-340c-a607-150d8ca0c5c5';
       },
