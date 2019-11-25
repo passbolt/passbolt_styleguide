@@ -22,7 +22,7 @@
                 </p>
 			</div>
 			<div class="submit-wrapper clearfix">
-                <a class="secondary" href="demo/LU_folders_move_manage_permission.php">More Options</a>
+<!--                <a class="secondary" href="demo/LU_folders_move_manage_permission.php">More Options</a>-->
                 <input type="submit" value="Move" class="button primary" id="master-password-submit">
 				<a class="js-dialog-close cancel" href="demo/LU_folders_move.php">Cancel</a>
 			</div>
