@@ -23,7 +23,7 @@
 				<div class="row">
 					<div class="main-cell-wrapper">
 						<div class="main-cell">
-							<a href="demo/LU_users_profile.php"><span>My profile</span></a>
+							<a href="demo/LU_users_profile.php"><span>Profile</span></a>
 						</div>
 					</div>
 				</div>
@@ -32,16 +32,7 @@
 				<div class="row">
 					<div class="main-cell-wrapper">
 						<div class="main-cell">
-							<a href="#"><span>Manage or generate new keys</span></a>
-						</div>
-					</div>
-				</div>
-			</li>
-			<li id="02ce93d8-9795-08b2-9230-f304abef7d8d" class="separator-after ready">
-				<div class="row">
-					<div class="main-cell-wrapper">
-						<div class="main-cell">
-							<a href="#"><span>Manage people</span></a>
+							<a href="demo/LU_users_profile_themes.php"><span>Theme</span></a>
 						</div>
 					</div>
 				</div>

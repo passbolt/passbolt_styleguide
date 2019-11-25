@@ -4881,14 +4881,15 @@ input[type="search"]::-webkit-search-cancel-button {
 }
 .user.profile .details .name,
 .user.profile .details .email {
-  width: 100%;
+  width: calc(100% - 2.6em);
   float: left;
   clear: both;
-  text-overflow: clip;
   word-wrap: break-word;
   overflow: hidden;
   display: inline-block;
   line-height: normal;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 .user.profile .details .name {
   font-weight: bold;
