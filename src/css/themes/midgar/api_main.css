@@ -4829,8 +4829,7 @@ input[type="search"]::-webkit-search-cancel-button {
  * Profile user card
  */
 .user.profile {
-  max-width: 18em;
-  width: 80%;
+  max-width: 16em;
   float: right;
   border: 1px solid #0C0C0A;
   margin-top: 0.5em;
@@ -4884,15 +4883,18 @@ input[type="search"]::-webkit-search-cancel-button {
 }
 .user.profile .details .name,
 .user.profile .details .email {
-  width: calc(100% - 2.6em);
+  width: 11em;
   float: left;
   clear: both;
+  text-overflow: clip;
   word-wrap: break-word;
-  overflow: hidden;
   display: inline-block;
   line-height: normal;
   white-space: nowrap;
+  overflow: hidden;
   text-overflow: ellipsis;
+  -o-text-overflow: ellipsis;
+  -ms-text-overflow: ellipsis;
 }
 .user.profile .details .name {
   font-weight: bold;

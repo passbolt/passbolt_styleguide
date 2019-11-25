@@ -7,7 +7,13 @@
 </head>
 <body>
 <div id="container" class="page iframe">
-    <?php include('../includes/dialogs/passwords/LU_password_create.php'); ?>
+    <div class="contain-item">
+        <div id="app-container" class="container-wrapper">
+            <div id="app" class="app" tabindex="1000">
+<?php include('../includes/dialogs/passwords/LU_password_create.php'); ?>
+            </div>
+        </div>
+    </div>
 </div>
 </body>
 </html>

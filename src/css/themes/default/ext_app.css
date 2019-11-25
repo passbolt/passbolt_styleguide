@@ -692,673 +692,159 @@ html body .hidden {
   }
 }
 /* box shadows */
-/*
-	Generic buttons
-	Description	: We support <input[submit]>, <input.button>, <button> and <a.button>
-
-	:hover			- Subtle hover highlight and box shadow
-	:active			- Inset box shadow and 1px offset
-	.disabled		- Dims the button to indicate it cannot be used
-*/
-input[type=submit],
-button,
-.button {
-  position: relative;
-  font-size: 0.875em;
-  /*	14px */
-  min-height: 1.428571em;
-  /* 20px */
-  padding: 0.4285714em 1.225em 0.4285714em 1.225em;
-  /* 6px 16px */
-  display: inline-block;
-  vertical-align: baseline;
-  margin-right: 0.5em;
-  outline: none;
-  cursor: pointer;
-  text-align: center;
-  text-decoration: none;
-  border: 1px solid #CCC;
+/* body */
+body {
   color: #333;
-  font-weight: normal;
-  text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.5);
-  background: #EEE;
-  background-image: -moz-linear-gradient(top, #F3F3F3, #EEE);
-  background-image: -ms-linear-gradient(top, #F3F3F3, #EEE);
-  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(background-lightest), to(#EEE));
-  background-image: -webkit-linear-gradient(top, #F3F3F3, #EEE);
-  background-image: -o-linear-gradient(top, #F3F3F3, #EEE);
-  background-image: linear-gradient(top, #F3F3F3, #EEE);
-  -webkit-border-radius: 0.214em;
-  -moz-border-radius: 0.214em;
-  border-radius: 0.214em;
+  background: #FFF;
 }
-/* size and position adjustments */
-.submit {
-  display: inline-block;
-  /* in case there is a div wrapper */
+body.iframe {
+  background: transparent;
 }
-.button.big {
-  font-size: 1.125em;
-}
-/* hover */
-button:hover,
-.button:hover {
+/* links */
+a:link,
+a:visited {
   color: #333;
-  text-decoration: none;
-  background: #F3F3F3;
-  background-image: -moz-linear-gradient(top, #F3F3F3, #F3F3F3);
-  background-image: -ms-linear-gradient(top, #F3F3F3, #F3F3F3);
-  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(background-lightest), to(#F3F3F3));
-  background-image: -webkit-linear-gradient(top, #F3F3F3, #F3F3F3);
-  background-image: -o-linear-gradient(top, #F3F3F3, #F3F3F3);
-  background-image: linear-gradient(top, #F3F3F3, #F3F3F3);
-  border: 1px solid #BBB;
 }
-/* focus */
-button:focus,
-.button:focus {
+a:hover {
   color: #2894DF;
-  border: 1px solid #2894DF;
 }
-/* active */
-button:active,
-.button:active {
+a:active,
+a:focus {
+  outline: 0;
   color: #2894DF;
-  border: 1px solid #2894DF;
-  background: #EEE;
-  position: relative;
-  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.2);
-}
-/* cancel */
-.button.cancel,
-.button.cancel:focus,
-.button.cancel:hover,
-.button.cancel:active,
-.button.dim,
-.button.dim:focus,
-.button.dim:hover,
-.button.dim:active {
-  background: #FFF;
-  font-weight: normal;
-}
-/* primary */
-.button.primary {
-  background: #2894DF;
-  border: 1px solid #2894DF;
-  color: #FFF;
-  text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.2);
-}
-.button.primary:hover {
-  background: #2A9CEB;
-  border: 1px solid #2A9CEB;
-  color: #FFF;
-}
-.button.primary:active,
-.button.primary:focus {
-  color: #FFF;
-  border: 1px solid #4271b7;
-  background: #2A9CEB;
-}
-/* warning */
-.button.warning,
-.button.warning:hover,
-.button.warning:focus,
-.button.warning:active {
-  color: #FFF;
-  background: #D40101;
-  border: 1px solid #D40101;
-  text-shadow: none;
-}
-.button.warning:focus,
-.button.warning:active {
-  border: 1px solid #92000C;
-}
-.button.disabled {
-  cursor: default;
-  color: #888;
-  background: #FFF;
-  border: 1px solid #DDD;
-  text-shadow: none;
-  font-weight: normal;
-}
-/* inactive */
-.button.disabled:hover,
-.button.disabled:active,
-.button.disabled:focus {
-  box-shadow: 0 0 0;
-  top: 0;
-  color: #888;
-  background: #FFF;
-  border: 1px solid #DDD;
-}
-/* duo */
-.duo-wrapper {
-  /*
-     * For IE 6/7 only
-     * Include this rule to trigger hasLayout and contain floats.
-     */
-  /*
-     * Clearfix: contain floats
-     *
-     * For modern browsers
-     * 1. The space content is one way to avoid an Opera bug when the
-     *	`contenteditable` attribute is included anywhere else in the document.
-     *	Otherwise it causes space to appear at the top and bottom of elements
-     *	that receive the `clearfix` class.
-     * 2. The use of `table` rather than `block` is only necessary if using
-     *	`:before` to contain the top-margins of child elements.
-     */
-  /*
-     * For IE 6/7 only
-     * Include this rule to trigger hasLayout and contain floats.
-     */
-  zoom: 1;
-  /*
-     * Clearfix: contain floats
-     *
-     * For modern browsers
-     * 1. The space content is one way to avoid an Opera bug when the
-     *	`contenteditable` attribute is included anywhere else in the document.
-     *	Otherwise it causes space to appear at the top and bottom of elements
-     *	that receive the `clearfix` class.
-     * 2. The use of `table` rather than `block` is only necessary if using
-     *	`:before` to contain the top-margins of child elements.
-     */
-}
-.duo-wrapper:before,
-.duo-wrapper:after {
-  content: "";
-  display: table;
-}
-.duo-wrapper:after {
-  clear: both;
-}
-.duo-wrapper:before,
-.duo-wrapper:after {
-  content: "";
-  display: table;
-}
-.duo-wrapper:after {
-  clear: both;
-}
-.duo-wrapper .button {
-  float: left;
-}
-.duo-wrapper .button.duo:nth-child(1) {
-  margin-right: 0;
-  border-top-right-radius: 0;
-  border-bottom-right-radius: 0;
-}
-.duo-wrapper .button.duo:nth-child(2) {
-  margin-left: 0;
-  border-left: 0;
-  border-top-left-radius: 0;
-  border-bottom-left-radius: 0;
-}
-.buttons-spacer,
-.button-spacer {
-  margin-right: 0.5em;
-}
-/* processing state */
-html body .button.processing {
-  background: #FFF;
-  border: 1px solid #FFF;
-}
-.button.processing:after {
-  line-height: 2.25em;
-  width: 100%;
-  height: 100%;
-  position: absolute;
-  content: " ";
-  top: -1px;
-  left: -1px;
-  background: #FFF url('../../../img/controls/loading_light.svg') center center no-repeat;
-  background-size: auto 50% ;
-  border: 1px solid #DDD;
-  border-radius: 5px;
-}
-input[type=submit].button.processing {
-  font-size: 0;
-  background: #FFF url('../../../img/controls/loading_light.svg') center center no-repeat;
-  background-size: auto 50% ;
-  border: 1px solid #DDD;
-  border-radius: 5px;
-}
-/* toggle selected */
-.toggle.button.selected {
-  background: #EEE;
-  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.2);
-  border: 1px solid #BBB;
-}
-/*
-	Base form components styling
-	Check components/form for more advanced/fancy input
-*/
-/* input label */
-label {
-  font-weight: bold;
-  font-size: 1em;
-  /* 16px */
-  line-height: 1.333333em;
-  /* 24px */
-  padding: 0.5em 0;
-  display: block;
-}
-/*
-	Required Label
-
-	Description	: Label and input are wrapped in <div.text.required>. Additional <span> with a star is included. Input also get the required class.
-	.required		- additional red star
-*/
-.required label:after {
-  content: " *";
-  color: #D40101;
-  font-weight: bold;
-}
-/* fallback placeholder */
-.placeholder {
-  color: #969696;
-}
-/* webkit placeholder */
-::-webkit-input-placeholder {
-  color: #969696;
-}
-/* moz placeholder */
-:-moz-placeholder,
-::-moz-placeholder {
-  color: #969696;
-}
-/*
-	Generic Form Item
-
-	Description	: labels and input are wrapped in a <div.text>
-
-	:hover			 - subtle hover highlight
-	:active			- inset box shadow
-	.disabled		- grey out to indicate it cannot be used
-*/
-input[type=text],
-input[type=email],
-input[type=password],
-input[type=search],
-input[type=number],
-textarea {
-  font-size: 16px;
-  line-height: 24px;
-  color: #333;
-  background: #FFF;
-  width: 14em;
-  /* 20 char (default input length) x .7em (average char length) */
-  padding: 0.375em 0.625em 0.375em 0.625em;
-  display: inline-block;
-  margin-bottom: 0.5em;
-  -webkit-appearance: none;
-  border: 1px solid #CCC;
-  border-top: 1px solid #BBB;
-  vertical-align: middle;
-  box-sizing: content-box;
-}
-textarea:hover,
-input[type=password]:hover,
-input[type=search]:hover,
-input[type=text]:hover,
-input[type=number]:hover,
-input[type=email]:hover {
-  border: 1px solid #BBB;
-}
-textarea:focus,
-input[type=password]:focus,
-input[type=search]:focus,
-input[type=text]:focus,
-input[type=number]:focus input[type=email]:focus {
-  box-shadow: inset 1px 1px 2px rgba(0, 0, 0, 0.2);
-  border: 1px solid #2894DF;
-}
-.input-focus {
-  box-shadow: inset 1px 1px 2px rgba(0, 0, 0, 0.2);
-  border: 1px solid #2894DF;
-}
-input[type=password]:disabled,
-input[type=search]:disabled,
-input[type=text]:disabled,
-input[type=number]:disabled,
-input[type=email]:disabled {
-  border: 1px solid #DDD;
-  -webkit-box-shadow: 0 0 0 0;
-  -moz-box-shadow: 0 0 0 0;
-  box-shadow: 0 0 0 0;
-  cursor: normal;
-  background: #F3F3F3;
-}
-/*
-	Textarea Textfield
-	Description	: textarea.textarea is pretty much the same than div.input.text.
-
-	.required		- additional red star
-	.lage		 	 - make the box bigger
-*/
-textarea {
-  height: 3.6em;
-  /* 4 char (default input length) x 1em (average char length) + .6em (padding) */
-  line-height: 16px;
-  resize: none;
-}
-.textarea.large textarea {
-  width: 30em;
-  height: 7em;
-}
-textarea.message_notice {
-  margin-bottom: 0;
-}
-/* text and textarea */
-.text.input .input-addon,
-.date.input .input-addon {
-  position: absolute;
-  margin-left: -2.625em;
-}
-.text.input .input-addon i,
-.date.input .input-addon i {
-  font-size: 16px;
-  width: 1.25em;
-  border: 1px solid #CCC;
-  border-top: 1px solid #BBB;
-  line-height: 24px;
-  color: #333;
-  background: #FFF;
-  padding: 0.375em 0.625em 0.375em 0.625em;
-}
-.text.input input:hover + .input-addon i,
-.date.input input:hover + .input-addon i {
-  border: 1px solid #BBB;
-}
-.text.input input:focus + .input-addon i,
-.date.input input:focus + .input-addon i {
-  border: 1px solid #2894DF;
-}
-.text.input input:disabled + .input-addon i,
-.date.input input:disabled + .input-addon i {
-  background: #F3F3F3;
-  border: 1px solid #DDD;
-}
-/* icons for input */
-/*
-	Checkboxes and Radio
-*/
-.checkboxlist .input.checkbox label,
-.radiolist .input.radio label,
-input[type=checkbox] + label {
-  font-weight: normal;
-  display: inline;
-  margin-left: 0.25em;
-  margin-bottom: 0.25em;
-  cursor: pointer;
-}
-/* radio and checkboxes */
-.radiolist {
-  /*
-     * For IE 6/7 only
-     * Include this rule to trigger hasLayout and contain floats.
-     */
-  /*
-     * Clearfix: contain floats
-     *
-     * For modern browsers
-     * 1. The space content is one way to avoid an Opera bug when the
-     *	`contenteditable` attribute is included anywhere else in the document.
-     *	Otherwise it causes space to appear at the top and bottom of elements
-     *	that receive the `clearfix` class.
-     * 2. The use of `table` rather than `block` is only necessary if using
-     *	`:before` to contain the top-margins of child elements.
-     */
-  /*
-     * For IE 6/7 only
-     * Include this rule to trigger hasLayout and contain floats.
-     */
-  zoom: 1;
-  /*
-     * Clearfix: contain floats
-     *
-     * For modern browsers
-     * 1. The space content is one way to avoid an Opera bug when the
-     *	`contenteditable` attribute is included anywhere else in the document.
-     *	Otherwise it causes space to appear at the top and bottom of elements
-     *	that receive the `clearfix` class.
-     * 2. The use of `table` rather than `block` is only necessary if using
-     *	`:before` to contain the top-margins of child elements.
-     */
-}
-.radiolist:before,
-.radiolist:after {
-  content: "";
-  display: table;
-}
-.radiolist:after {
-  clear: both;
-}
-.radiolist:before,
-.radiolist:after {
-  content: "";
-  display: table;
-}
-.radiolist:after {
-  clear: both;
-}
-.radiolist .input.radio {
-  float: left;
-}
-.radiolist .input.radio input {
-  float: left;
-  margin-top: 0.55em;
-}
-.radiolist .input.radio input + label {
-  font-weight: normal;
-  display: inline-block;
-  margin-left: 0.65em;
-  font-size: 1em;
-  float: left;
-  margin-right: 2em;
-}
-/*
-	Messages for validation error and example
-
-	Description	: <div.text.error>, <div.text.success>, can be used to add status messages or example.
-	Additional messages are wrapped in <.error.message>, <.success.messages>
-
-	.error - can be used for validation feedback
-	.helptext - can be used for example messages prior validation
-*/
-.input .message {
-  padding: 0;
-  padding-left: 0.25em;
-  padding-bottom: 0.5em;
-  font-size: 0.813em;
-  margin-top: 0.125em;
-  margin-bottom: 0.25em;
-  background-color: transparent;
-  border: 0;
-  /* colors for messages */
-}
-.input .message.error {
-  font-weight: normal;
-  color: #D40101;
-}
-.input .message.helptext {
-  color: #888;
-  font-weight: normal;
-}
-.input .message:empty {
-  display: none;
-}
-.form-content .input .message,
-form .input .message {
-  background-color: transparent;
-}
-textarea.error label,
-.input.error label {
-  color: #D40101;
-}
-form .input .inline.message {
-  display: inline-block;
-}
-/* error messages */
-select {
-  font-size: 16px;
-  margin: 0.55em 0;
-}
-/* select */
-input[type=file] {
-  width: 100%;
-  color: #333;
-}
-/* file upload input */
-/* layout and shortcuts */
-select.fluid,
-textarea.fluid,
-input[type=password].fluid,
-input[type=text].fluid,
-input[type=email].fluid {
-  width: 80%;
-}
-.submit-input-wrapper,
-.submit-wrapper {
-  margin-top: 0.5em;
-}
-/* shortcut classes for layout */
-.singleline {
-  /*
-     * For IE 6/7 only
-     * Include this rule to trigger hasLayout and contain floats.
-     */
-  /*
-     * Clearfix: contain floats
-     *
-     * For modern browsers
-     * 1. The space content is one way to avoid an Opera bug when the
-     *	`contenteditable` attribute is included anywhere else in the document.
-     *	Otherwise it causes space to appear at the top and bottom of elements
-     *	that receive the `clearfix` class.
-     * 2. The use of `table` rather than `block` is only necessary if using
-     *	`:before` to contain the top-margins of child elements.
-     */
-  /*
-     * For IE 6/7 only
-     * Include this rule to trigger hasLayout and contain floats.
-     */
-  zoom: 1;
-  /*
-     * Clearfix: contain floats
-     *
-     * For modern browsers
-     * 1. The space content is one way to avoid an Opera bug when the
-     *	`contenteditable` attribute is included anywhere else in the document.
-     *	Otherwise it causes space to appear at the top and bottom of elements
-     *	that receive the `clearfix` class.
-     * 2. The use of `table` rather than `block` is only necessary if using
-     *	`:before` to contain the top-margins of child elements.
-     */
-}
-.singleline:before,
-.singleline:after {
-  content: "";
-  display: table;
-}
-.singleline:after {
-  clear: both;
-}
-.singleline:before,
-.singleline:after {
-  content: "";
-  display: table;
-}
-.singleline:after {
-  clear: both;
-}
-.singleline .input.text {
-  float: left;
-  width: 40.2%;
-}
-.singleline .input.text:first-child,
-.singleline .input.text.first-field {
-  margin-right: 2.5%;
-}
-.singleline .input.text input[type="text"],
-.singleline .input.text input[type="email"],
-.singleline .input.text input[type="password"],
-.singleline .input.text input[type="search"] {
-  width: 93%;
-}
-.form-content .accordion h3.accordion-header a {
-  margin-left: 1em;
   border: 0;
 }
-.form-content .accordion h3.accordion-header a:hover {
-  border: 0;
+a {
+  border-bottom: 1px solid #DDD;
 }
-.form-content .accordion h3.accordion-header a:before {
-  margin-left: -1.25em;
-  margin-top: 0.25em;
-  content: "\f0d7";
-  /* caret down */
-  font: normal normal normal 1em FontAwesome;
-  text-rendering: auto;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  width: 1em;
-  height: 1em;
-  position: absolute;
-  text-align: center;
+a:hover {
+  border-bottom: 1px solid #2894DF;
 }
-.form-content .accordion.closed h3.accordion-header a:before {
-  content: "\f0da";
-  /* caret right */
+html {
+  scroll-behavior: smooth;
 }
-.form-content table {
-  width: 100%;
-  margin-bottom: 1em;
+.animated {
+  -webkit-animation-duration: 0.5s;
+  animation-duration: 0.5s;
+  -webkit-animation-fill-mode: both;
+  animation-fill-mode: both;
 }
-.form-content table thead {
-  background-color: transparent !important;
+/* fadeinup */
+@keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    -webkit-transform: translateY(20px);
+    -ms-transform: translateY(20px);
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    -webkit-transform: translateY(0);
+    -ms-transform: translateY(0);
+    transform: translateY(0);
+  }
 }
-.form-content table thead th {
-  background-color: transparent;
-  font-weight: bold;
-  border: 1px solid #DDD;
-  padding: 0.7em 0.5em;
+@keyframes fadeOutUp {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+    transform: translate3d(0, -100%, 0);
+  }
 }
-.form-content table tbody tr {
-  font-size: 0.8em;
-  text-align: left;
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translate3d(0, -100%, 0);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
 }
-.form-content table tbody tr:nth-child(even) {
-  background-color: transparent;
+@keyframes pop {
+  0% {
+    opacity: 0;
+    transform: scale(1);
+  }
+  55% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  65% {
+    opacity: 1;
+    transform: scale(1.25);
+  }
+  75% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
-.form-content table tbody tr:nth-child(odd) {
-  background-color: #F3F3F3;
-  color: #666;
+.fadeInDown {
+  animation-name: fadeInDown;
 }
-.form-content table tbody tr td {
-  text-align: left;
-  padding: 0.5em 0.5em;
-  border: 1px solid #DDD;
+.fadeOutUp {
+  animation-name: fadeOutUp;
 }
-.form-content table tbody tr td code {
-  padding: 0.2em 0.3em;
-  background-color: #DDD;
+.fadeInUp {
+  animation-name: fadeInUp;
 }
-.form-content table tbody tr td pre {
-  margin: 0;
-  padding: 0;
-  background-color: transparent;
+.pop {
+  animation-name: pop;
 }
-.form-content table tbody tr td code,
-.form-content table tbody tr td pre {
-  font-family: monospace,serif;
-  font-size: 1em;
-}
-.form-content table tbody tr td em {
-  color: #888;
-  font-size: 0.8em;
+/*
+ * Typography
+ */
+/* opensans */
+@font-face {
+  font-family: 'Open Sans';
   font-style: normal;
+  font-weight: 400;
+  src: local('Open Sans'), local('OpenSans'), url('../../../fonts/opensans-regular.woff') format('woff');
+}
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 700;
+  src: local('Open Sans Bold'), local('OpenSans-Bold'), url('../../../fonts/opensans-bold.woff') format('woff');
+}
+body {
+  font-family: 'Open Sans', Verdana, sans-serif;
+  font-size: 100%;
+  line-height: 1.42;
+  font-weight: 400;
+}
+/* titles */
+h1 {
+  font-size: 1.5em;
+  /* 24px base 16 */
+}
+h2 {
+  font-size: 1.25em;
+  /* 20px base 16 */
+}
+h3 {
+  font-size: 1.125em;
+  /* 18px base 16 */
+  display: block;
+  padding-bottom: 0.333em;
+  /* 6px */
+  border-bottom: 1px dotted #DDD;
+}
+/* paragraph */
+p {
+  margin: 0 0 1em 0;
+  line-height: 1.5em;
+}
+.code {
+  font-family: "Courier New", Courier, monospace;
+  font-size: 0.688em;
+  /* 11px base 16 */
 }
 /*!
  *  Font Awesome 4.7.0 by @davegandy - http://fontawesome.io - @fontawesome
@@ -3787,53 +3273,1215 @@ a.disabled:hover .svg-icon svg {
   vertical-align: 0.125em;
 }
 /*
- * Typography
- */
-/* opensans */
-@font-face {
-  font-family: 'Open Sans';
-  font-style: normal;
-  font-weight: 400;
-  src: local('Open Sans'), local('OpenSans'), url('../../../fonts/opensans-regular.woff') format('woff');
+	Generic buttons
+	Description	: We support <input[submit]>, <input.button>, <button> and <a.button>
+
+	:hover			- Subtle hover highlight and box shadow
+	:active			- Inset box shadow and 1px offset
+	.disabled		- Dims the button to indicate it cannot be used
+*/
+input[type=submit],
+button,
+.button {
+  position: relative;
+  font-size: 0.875em;
+  /*	14px */
+  min-height: 1.428571em;
+  /* 20px */
+  padding: 0.4285714em 1.225em 0.4285714em 1.225em;
+  /* 6px 16px */
+  display: inline-block;
+  vertical-align: baseline;
+  margin-right: 0.5em;
+  outline: none;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+  border: 1px solid #CCC;
+  color: #333;
+  font-weight: normal;
+  text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.5);
+  background: #EEE;
+  background-image: -moz-linear-gradient(top, #F3F3F3, #EEE);
+  background-image: -ms-linear-gradient(top, #F3F3F3, #EEE);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(background-lightest), to(#EEE));
+  background-image: -webkit-linear-gradient(top, #F3F3F3, #EEE);
+  background-image: -o-linear-gradient(top, #F3F3F3, #EEE);
+  background-image: linear-gradient(top, #F3F3F3, #EEE);
+  -webkit-border-radius: 0.214em;
+  -moz-border-radius: 0.214em;
+  border-radius: 0.214em;
 }
-@font-face {
-  font-family: 'Open Sans';
-  font-style: normal;
-  font-weight: 700;
-  src: local('Open Sans Bold'), local('OpenSans-Bold'), url('../../../fonts/opensans-bold.woff') format('woff');
+/* size and position adjustments */
+.submit {
+  display: inline-block;
+  /* in case there is a div wrapper */
 }
-body {
-  font-family: 'Open Sans', Verdana, sans-serif;
-  font-size: 100%;
-  line-height: 1.42;
-  font-weight: 400;
-}
-/* titles */
-h1 {
-  font-size: 1.5em;
-  /* 24px base 16 */
-}
-h2 {
-  font-size: 1.25em;
-  /* 20px base 16 */
-}
-h3 {
+.button.big {
   font-size: 1.125em;
-  /* 18px base 16 */
+}
+/* hover */
+button:hover,
+.button:hover {
+  color: #333;
+  text-decoration: none;
+  background: #F3F3F3;
+  background-image: -moz-linear-gradient(top, #F3F3F3, #F3F3F3);
+  background-image: -ms-linear-gradient(top, #F3F3F3, #F3F3F3);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(background-lightest), to(#F3F3F3));
+  background-image: -webkit-linear-gradient(top, #F3F3F3, #F3F3F3);
+  background-image: -o-linear-gradient(top, #F3F3F3, #F3F3F3);
+  background-image: linear-gradient(top, #F3F3F3, #F3F3F3);
+  border: 1px solid #BBB;
+}
+/* focus */
+button:focus,
+.button:focus {
+  color: #2894DF;
+  border: 1px solid #2894DF;
+}
+/* active */
+button:active,
+.button:active {
+  color: #2894DF;
+  border: 1px solid #2894DF;
+  background: #EEE;
+  position: relative;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+/* cancel */
+.button.cancel,
+.button.cancel:focus,
+.button.cancel:hover,
+.button.cancel:active,
+.button.dim,
+.button.dim:focus,
+.button.dim:hover,
+.button.dim:active {
+  background: #FFF;
+  font-weight: normal;
+}
+/* primary */
+.button.primary {
+  background: #2894DF;
+  border: 1px solid #2894DF;
+  color: #FFF;
+  text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.2);
+}
+.button.primary:hover {
+  background: #2A9CEB;
+  border: 1px solid #2A9CEB;
+  color: #FFF;
+}
+.button.primary:active,
+.button.primary:focus {
+  color: #FFF;
+  border: 1px solid #4271b7;
+  background: #2A9CEB;
+}
+/* warning */
+.button.warning,
+.button.warning:hover,
+.button.warning:focus,
+.button.warning:active {
+  color: #FFF;
+  background: #D40101;
+  border: 1px solid #D40101;
+  text-shadow: none;
+}
+.button.warning:focus,
+.button.warning:active {
+  border: 1px solid #92000C;
+}
+.button.disabled {
+  cursor: default;
+  color: #888;
+  background: #FFF;
+  border: 1px solid #DDD;
+  text-shadow: none;
+  font-weight: normal;
+}
+/* inactive */
+.button.disabled:hover,
+.button.disabled:active,
+.button.disabled:focus {
+  box-shadow: 0 0 0;
+  top: 0;
+  color: #888;
+  background: #FFF;
+  border: 1px solid #DDD;
+}
+/* duo */
+.duo-wrapper {
+  /*
+     * For IE 6/7 only
+     * Include this rule to trigger hasLayout and contain floats.
+     */
+  /*
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
+  /*
+     * For IE 6/7 only
+     * Include this rule to trigger hasLayout and contain floats.
+     */
+  zoom: 1;
+  /*
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
+}
+.duo-wrapper:before,
+.duo-wrapper:after {
+  content: "";
+  display: table;
+}
+.duo-wrapper:after {
+  clear: both;
+}
+.duo-wrapper:before,
+.duo-wrapper:after {
+  content: "";
+  display: table;
+}
+.duo-wrapper:after {
+  clear: both;
+}
+.duo-wrapper .button {
+  float: left;
+}
+.duo-wrapper .button.duo:nth-child(1) {
+  margin-right: 0;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+.duo-wrapper .button.duo:nth-child(2) {
+  margin-left: 0;
+  border-left: 0;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+.buttons-spacer,
+.button-spacer {
+  margin-right: 0.5em;
+}
+/* processing state */
+html body .button.processing {
+  background: #FFF;
+  border: 1px solid #FFF;
+}
+.button.processing:after {
+  line-height: 2.25em;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  content: " ";
+  top: -1px;
+  left: -1px;
+  background: #FFF url('../../../img/controls/loading_light.svg') center center no-repeat;
+  background-size: auto 50% ;
+  border: 1px solid #DDD;
+  border-radius: 5px;
+}
+input[type=submit].button.processing {
+  font-size: 0;
+  background: #FFF url('../../../img/controls/loading_light.svg') center center no-repeat;
+  background-size: auto 50% ;
+  border: 1px solid #DDD;
+  border-radius: 5px;
+}
+/* toggle selected */
+.toggle.button.selected {
+  background: #EEE;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.2);
+  border: 1px solid #BBB;
+}
+/*
+	Base form components styling
+	Check components/form for more advanced/fancy input
+*/
+/* input label */
+label {
+  font-weight: bold;
+  font-size: 1em;
+  /* 16px */
+  line-height: 1.333333em;
+  /* 24px */
+  padding: 0.5em 0;
   display: block;
-  padding-bottom: 0.333em;
-  /* 6px */
-  border-bottom: 1px dotted #DDD;
 }
-/* paragraph */
-p {
-  margin: 0 0 1em 0;
-  line-height: 1.5em;
+/*
+	Required Label
+
+	Description	: Label and input are wrapped in <div.text.required>. Additional <span> with a star is included. Input also get the required class.
+	.required		- additional red star
+*/
+.required label:after {
+  content: " *";
+  color: #D40101;
+  font-weight: bold;
 }
-.code {
-  font-family: "Courier New", Courier, monospace;
-  font-size: 0.688em;
-  /* 11px base 16 */
+/* fallback placeholder */
+.placeholder {
+  color: #969696;
+}
+/* webkit placeholder */
+::-webkit-input-placeholder {
+  color: #969696;
+}
+/* moz placeholder */
+:-moz-placeholder,
+::-moz-placeholder {
+  color: #969696;
+}
+/*
+	Generic Form Item
+
+	Description	: labels and input are wrapped in a <div.text>
+
+	:hover			 - subtle hover highlight
+	:active			- inset box shadow
+	.disabled		- grey out to indicate it cannot be used
+*/
+input[type=text],
+input[type=email],
+input[type=password],
+input[type=search],
+input[type=number],
+textarea {
+  font-size: 16px;
+  line-height: 24px;
+  color: #333;
+  background: #FFF;
+  width: 14em;
+  /* 20 char (default input length) x .7em (average char length) */
+  padding: 0.375em 0.625em 0.375em 0.625em;
+  display: inline-block;
+  margin-bottom: 0.5em;
+  -webkit-appearance: none;
+  border: 1px solid #CCC;
+  border-top: 1px solid #BBB;
+  vertical-align: middle;
+  box-sizing: content-box;
+}
+textarea:hover,
+input[type=password]:hover,
+input[type=search]:hover,
+input[type=text]:hover,
+input[type=number]:hover,
+input[type=email]:hover {
+  border: 1px solid #BBB;
+}
+textarea:focus,
+input[type=password]:focus,
+input[type=search]:focus,
+input[type=text]:focus,
+input[type=number]:focus input[type=email]:focus {
+  box-shadow: inset 1px 1px 2px rgba(0, 0, 0, 0.2);
+  border: 1px solid #2894DF;
+}
+.input-focus {
+  box-shadow: inset 1px 1px 2px rgba(0, 0, 0, 0.2);
+  border: 1px solid #2894DF;
+}
+input[type=password]:disabled,
+input[type=search]:disabled,
+input[type=text]:disabled,
+input[type=number]:disabled,
+input[type=email]:disabled {
+  border: 1px solid #DDD;
+  -webkit-box-shadow: 0 0 0 0;
+  -moz-box-shadow: 0 0 0 0;
+  box-shadow: 0 0 0 0;
+  cursor: normal;
+  background: #F3F3F3;
+}
+/*
+	Textarea Textfield
+	Description	: textarea.textarea is pretty much the same than div.input.text.
+
+	.required		- additional red star
+	.lage		 	 - make the box bigger
+*/
+textarea {
+  height: 3.6em;
+  /* 4 char (default input length) x 1em (average char length) + .6em (padding) */
+  line-height: 16px;
+  resize: none;
+}
+.textarea.large textarea {
+  width: 30em;
+  height: 7em;
+}
+textarea.message_notice {
+  margin-bottom: 0;
+}
+/* text and textarea */
+.text.input .input-addon,
+.date.input .input-addon {
+  position: absolute;
+  margin-left: -2.625em;
+}
+.text.input .input-addon i,
+.date.input .input-addon i {
+  font-size: 16px;
+  width: 1.25em;
+  border: 1px solid #CCC;
+  border-top: 1px solid #BBB;
+  line-height: 24px;
+  color: #333;
+  background: #FFF;
+  padding: 0.375em 0.625em 0.375em 0.625em;
+}
+.text.input input:hover + .input-addon i,
+.date.input input:hover + .input-addon i {
+  border: 1px solid #BBB;
+}
+.text.input input:focus + .input-addon i,
+.date.input input:focus + .input-addon i {
+  border: 1px solid #2894DF;
+}
+.text.input input:disabled + .input-addon i,
+.date.input input:disabled + .input-addon i {
+  background: #F3F3F3;
+  border: 1px solid #DDD;
+}
+/* icons for input */
+/*
+	Checkboxes and Radio
+*/
+.checkboxlist .input.checkbox label,
+.radiolist .input.radio label,
+input[type=checkbox] + label {
+  font-weight: normal;
+  display: inline;
+  margin-left: 0.25em;
+  margin-bottom: 0.25em;
+  cursor: pointer;
+}
+/* radio and checkboxes */
+.radiolist {
+  /*
+     * For IE 6/7 only
+     * Include this rule to trigger hasLayout and contain floats.
+     */
+  /*
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
+  /*
+     * For IE 6/7 only
+     * Include this rule to trigger hasLayout and contain floats.
+     */
+  zoom: 1;
+  /*
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
+}
+.radiolist:before,
+.radiolist:after {
+  content: "";
+  display: table;
+}
+.radiolist:after {
+  clear: both;
+}
+.radiolist:before,
+.radiolist:after {
+  content: "";
+  display: table;
+}
+.radiolist:after {
+  clear: both;
+}
+.radiolist .input.radio {
+  float: left;
+}
+.radiolist .input.radio input {
+  float: left;
+  margin-top: 0.55em;
+}
+.radiolist .input.radio input + label {
+  font-weight: normal;
+  display: inline-block;
+  margin-left: 0.65em;
+  font-size: 1em;
+  float: left;
+  margin-right: 2em;
+}
+/*
+	Messages for validation error and example
+
+	Description	: <div.text.error>, <div.text.success>, can be used to add status messages or example.
+	Additional messages are wrapped in <.error.message>, <.success.messages>
+
+	.error - can be used for validation feedback
+	.helptext - can be used for example messages prior validation
+*/
+.input .message {
+  padding: 0;
+  padding-left: 0.25em;
+  padding-bottom: 0.5em;
+  font-size: 0.813em;
+  margin-top: 0.125em;
+  margin-bottom: 0.25em;
+  background-color: transparent;
+  border: 0;
+  /* colors for messages */
+}
+.input .message.error {
+  font-weight: normal;
+  color: #D40101;
+}
+.input .message.helptext {
+  color: #888;
+  font-weight: normal;
+}
+.input .message:empty {
+  display: none;
+}
+.form-content .input .message,
+form .input .message {
+  background-color: transparent;
+}
+textarea.error label,
+.input.error label {
+  color: #D40101;
+}
+form .input .inline.message {
+  display: inline-block;
+}
+/* error messages */
+select {
+  font-size: 16px;
+  margin: 0.55em 0;
+}
+/* select */
+input[type=file] {
+  width: 100%;
+  color: #333;
+}
+/* file upload input */
+/* layout and shortcuts */
+select.fluid,
+textarea.fluid,
+input[type=password].fluid,
+input[type=text].fluid,
+input[type=email].fluid {
+  width: 80%;
+}
+.submit-input-wrapper,
+.submit-wrapper {
+  margin-top: 0.5em;
+}
+/* shortcut classes for layout */
+.singleline {
+  /*
+     * For IE 6/7 only
+     * Include this rule to trigger hasLayout and contain floats.
+     */
+  /*
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
+  /*
+     * For IE 6/7 only
+     * Include this rule to trigger hasLayout and contain floats.
+     */
+  zoom: 1;
+  /*
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
+}
+.singleline:before,
+.singleline:after {
+  content: "";
+  display: table;
+}
+.singleline:after {
+  clear: both;
+}
+.singleline:before,
+.singleline:after {
+  content: "";
+  display: table;
+}
+.singleline:after {
+  clear: both;
+}
+.singleline .input.text {
+  float: left;
+  width: 40.2%;
+}
+.singleline .input.text:first-child,
+.singleline .input.text.first-field {
+  margin-right: 2.5%;
+}
+.singleline .input.text input[type="text"],
+.singleline .input.text input[type="email"],
+.singleline .input.text input[type="password"],
+.singleline .input.text input[type="search"] {
+  width: 93%;
+}
+.form-content .accordion h3.accordion-header a {
+  margin-left: 1em;
+  border: 0;
+}
+.form-content .accordion h3.accordion-header a:hover {
+  border: 0;
+}
+.form-content .accordion h3.accordion-header a:before {
+  margin-left: -1.25em;
+  margin-top: 0.25em;
+  content: "\f0d7";
+  /* caret down */
+  font: normal normal normal 1em FontAwesome;
+  text-rendering: auto;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  width: 1em;
+  height: 1em;
+  position: absolute;
+  text-align: center;
+}
+.form-content .accordion.closed h3.accordion-header a:before {
+  content: "\f0da";
+  /* caret right */
+}
+.form-content table {
+  width: 100%;
+  margin-bottom: 1em;
+}
+.form-content table thead {
+  background-color: transparent !important;
+}
+.form-content table thead th {
+  background-color: transparent;
+  font-weight: bold;
+  border: 1px solid #DDD;
+  padding: 0.7em 0.5em;
+}
+.form-content table tbody tr {
+  font-size: 0.8em;
+  text-align: left;
+}
+.form-content table tbody tr:nth-child(even) {
+  background-color: transparent;
+}
+.form-content table tbody tr:nth-child(odd) {
+  background-color: #F3F3F3;
+  color: #666;
+}
+.form-content table tbody tr td {
+  text-align: left;
+  padding: 0.5em 0.5em;
+  border: 1px solid #DDD;
+}
+.form-content table tbody tr td code {
+  padding: 0.2em 0.3em;
+  background-color: #DDD;
+}
+.form-content table tbody tr td pre {
+  margin: 0;
+  padding: 0;
+  background-color: transparent;
+}
+.form-content table tbody tr td code,
+.form-content table tbody tr td pre {
+  font-family: monospace,serif;
+  font-size: 1em;
+}
+.form-content table tbody tr td em {
+  color: #888;
+  font-size: 0.8em;
+  font-style: normal;
+}
+/*
+ * Page layout
+ */
+.page {
+  min-width: 320px;
+}
+.page,
+.panel,
+.header {
+  width: 100%;
+}
+.page,
+.panel {
+  position: absolute;
+  overflow: auto;
+}
+.header {
+  overflow: hidden;
+}
+.page {
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+/* headers */
+.header.first {
+  min-height: 2.4em;
+}
+.header.second {
+  top: 2.375em;
+  height: 4.5em;
+}
+.header.third {
+  top: 6.875em;
+  height: 3em;
+}
+/* main workspace panel */
+.panel {
+  height: 100%;
+}
+.panel.main {
+  top: 10em;
+  bottom: 2.45em;
+  height: auto;
+  padding: 0;
+}
+.panel.main .row {
+  padding-left: 0;
+}
+.panel.main .panel.left {
+  background: #ffffff;
+}
+/* its position depends on how many headers are there */
+.header.second + .panel.main {
+  top: 6.875em;
+}
+.header.third + .panel.main {
+  top: 10em;
+  border-top: 1px solid #DDD;
+}
+/* columns */
+.panel,
+.col1,
+.col2,
+.col3,
+.col2_3 {
+  position: absolute;
+}
+.col1,
+.panel.left {
+  width: 17.25%;
+  box-sizing: border-box;
+}
+.panel.middle {
+  width: 82%;
+  left: 18%;
+  overflow: hidden;
+}
+.panel.middle.scroll {
+  overflow-y: scroll;
+}
+.col2 {
+  width: 70%;
+  left: 18%;
+}
+.col3,
+.panel.right {
+  width: 24%;
+  left: 75%;
+}
+.col2_3 {
+  width: 81.5%;
+  left: 18%;
+}
+/* if the other grid is used
+   don't center the grid inside main panel */
+.panel.main .grid-responsive-12 {
+  float: left;
+  width: 100%;
+  max-width: none;
+  padding-left: 0.25em;
+  box-sizing: border-box;
+}
+/* hide left column when there is no space */
+@media all and (max-width: 1024px) {
+  .panel.left {
+    display: none;
+  }
+  .header.second .col2 {
+    display: none;
+  }
+  .header.second .col2_3 {
+    display: none;
+  }
+  .header.third {
+    height: 4.5em;
+  }
+  .header.third .col1,
+  .header.third .col2,
+  .header.third .col2_3 {
+    position: relative;
+    float: left;
+    left: auto;
+    width: auto;
+  }
+  .header.third .col3 {
+    display: none;
+  }
+  .panel.main .panel.left {
+    display: none;
+  }
+  .panel.main .panel.middle {
+    width: 100%;
+    left: 0;
+  }
+  .panel.main .row {
+    padding-left: 0.5em;
+  }
+  .panel.main .panel.aside {
+    min-width: auto;
+  }
+}
+/*
+	Grid Layout
+	@credit: One% CSS Grid - 12 Columns Fluid CSS Grid System
+*/
+/*
+ * Main container for all
+ */
+.grid-responsive-12,
+.grid {
+  margin: 0 auto;
+  padding: 0;
+  max-width: 1220px;
+}
+.grid-responsive-12 .row,
+.grid .row {
+  /*
+     * For IE 6/7 only
+     * Include this rule to trigger hasLayout and contain floats.
+     */
+  /*
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
+  /*
+     * For IE 6/7 only
+     * Include this rule to trigger hasLayout and contain floats.
+     */
+  zoom: 1;
+  /*
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
+  padding: 0 0.5em 0 0.5em;
+}
+.grid-responsive-12 .row:before,
+.grid .row:before,
+.grid-responsive-12 .row:after,
+.grid .row:after {
+  content: "";
+  display: table;
+}
+.grid-responsive-12 .row:after,
+.grid .row:after {
+  clear: both;
+}
+.grid-responsive-12 .row:before,
+.grid .row:before,
+.grid-responsive-12 .row:after,
+.grid .row:after {
+  content: "";
+  display: table;
+}
+.grid-responsive-12 .row:after,
+.grid .row:after {
+  clear: both;
+}
+.grid-responsive-12 .row .col1,
+.grid .row .col1,
+.grid-responsive-12 .row .col2,
+.grid .row .col2,
+.grid-responsive-12 .row .col3,
+.grid .row .col3,
+.grid-responsive-12 .row .col4,
+.grid .row .col4,
+.grid-responsive-12 .row .col5,
+.grid .row .col5,
+.grid-responsive-12 .row .col6,
+.grid .row .col6,
+.grid-responsive-12 .row .col7,
+.grid .row .col7,
+.grid-responsive-12 .row .col8,
+.grid .row .col8,
+.grid-responsive-12 .row .col9,
+.grid .row .col9,
+.grid-responsive-12 .row .col10,
+.grid .row .col10,
+.grid-responsive-12 .row .col11,
+.grid .row .col11,
+.grid-responsive-12 .row .col12,
+.grid .row .col12 {
+  /*
+     * For IE 6/7 only
+     * Include this rule to trigger hasLayout and contain floats.
+     */
+  /*
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
+  /*
+     * For IE 6/7 only
+     * Include this rule to trigger hasLayout and contain floats.
+     */
+  zoom: 1;
+  /*
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
+  position: relative;
+  left: auto;
+  float: none;
+  width: 99%;
+  box-sizing: border-box;
+}
+.grid-responsive-12 .row .col1:before,
+.grid .row .col1:before,
+.grid-responsive-12 .row .col2:before,
+.grid .row .col2:before,
+.grid-responsive-12 .row .col3:before,
+.grid .row .col3:before,
+.grid-responsive-12 .row .col4:before,
+.grid .row .col4:before,
+.grid-responsive-12 .row .col5:before,
+.grid .row .col5:before,
+.grid-responsive-12 .row .col6:before,
+.grid .row .col6:before,
+.grid-responsive-12 .row .col7:before,
+.grid .row .col7:before,
+.grid-responsive-12 .row .col8:before,
+.grid .row .col8:before,
+.grid-responsive-12 .row .col9:before,
+.grid .row .col9:before,
+.grid-responsive-12 .row .col10:before,
+.grid .row .col10:before,
+.grid-responsive-12 .row .col11:before,
+.grid .row .col11:before,
+.grid-responsive-12 .row .col12:before,
+.grid .row .col12:before,
+.grid-responsive-12 .row .col1:after,
+.grid .row .col1:after,
+.grid-responsive-12 .row .col2:after,
+.grid .row .col2:after,
+.grid-responsive-12 .row .col3:after,
+.grid .row .col3:after,
+.grid-responsive-12 .row .col4:after,
+.grid .row .col4:after,
+.grid-responsive-12 .row .col5:after,
+.grid .row .col5:after,
+.grid-responsive-12 .row .col6:after,
+.grid .row .col6:after,
+.grid-responsive-12 .row .col7:after,
+.grid .row .col7:after,
+.grid-responsive-12 .row .col8:after,
+.grid .row .col8:after,
+.grid-responsive-12 .row .col9:after,
+.grid .row .col9:after,
+.grid-responsive-12 .row .col10:after,
+.grid .row .col10:after,
+.grid-responsive-12 .row .col11:after,
+.grid .row .col11:after,
+.grid-responsive-12 .row .col12:after,
+.grid .row .col12:after {
+  content: "";
+  display: table;
+}
+.grid-responsive-12 .row .col1:after,
+.grid .row .col1:after,
+.grid-responsive-12 .row .col2:after,
+.grid .row .col2:after,
+.grid-responsive-12 .row .col3:after,
+.grid .row .col3:after,
+.grid-responsive-12 .row .col4:after,
+.grid .row .col4:after,
+.grid-responsive-12 .row .col5:after,
+.grid .row .col5:after,
+.grid-responsive-12 .row .col6:after,
+.grid .row .col6:after,
+.grid-responsive-12 .row .col7:after,
+.grid .row .col7:after,
+.grid-responsive-12 .row .col8:after,
+.grid .row .col8:after,
+.grid-responsive-12 .row .col9:after,
+.grid .row .col9:after,
+.grid-responsive-12 .row .col10:after,
+.grid .row .col10:after,
+.grid-responsive-12 .row .col11:after,
+.grid .row .col11:after,
+.grid-responsive-12 .row .col12:after,
+.grid .row .col12:after {
+  clear: both;
+}
+.grid-responsive-12 .row .col1:before,
+.grid .row .col1:before,
+.grid-responsive-12 .row .col2:before,
+.grid .row .col2:before,
+.grid-responsive-12 .row .col3:before,
+.grid .row .col3:before,
+.grid-responsive-12 .row .col4:before,
+.grid .row .col4:before,
+.grid-responsive-12 .row .col5:before,
+.grid .row .col5:before,
+.grid-responsive-12 .row .col6:before,
+.grid .row .col6:before,
+.grid-responsive-12 .row .col7:before,
+.grid .row .col7:before,
+.grid-responsive-12 .row .col8:before,
+.grid .row .col8:before,
+.grid-responsive-12 .row .col9:before,
+.grid .row .col9:before,
+.grid-responsive-12 .row .col10:before,
+.grid .row .col10:before,
+.grid-responsive-12 .row .col11:before,
+.grid .row .col11:before,
+.grid-responsive-12 .row .col12:before,
+.grid .row .col12:before,
+.grid-responsive-12 .row .col1:after,
+.grid .row .col1:after,
+.grid-responsive-12 .row .col2:after,
+.grid .row .col2:after,
+.grid-responsive-12 .row .col3:after,
+.grid .row .col3:after,
+.grid-responsive-12 .row .col4:after,
+.grid .row .col4:after,
+.grid-responsive-12 .row .col5:after,
+.grid .row .col5:after,
+.grid-responsive-12 .row .col6:after,
+.grid .row .col6:after,
+.grid-responsive-12 .row .col7:after,
+.grid .row .col7:after,
+.grid-responsive-12 .row .col8:after,
+.grid .row .col8:after,
+.grid-responsive-12 .row .col9:after,
+.grid .row .col9:after,
+.grid-responsive-12 .row .col10:after,
+.grid .row .col10:after,
+.grid-responsive-12 .row .col11:after,
+.grid .row .col11:after,
+.grid-responsive-12 .row .col12:after,
+.grid .row .col12:after {
+  content: "";
+  display: table;
+}
+.grid-responsive-12 .row .col1:after,
+.grid .row .col1:after,
+.grid-responsive-12 .row .col2:after,
+.grid .row .col2:after,
+.grid-responsive-12 .row .col3:after,
+.grid .row .col3:after,
+.grid-responsive-12 .row .col4:after,
+.grid .row .col4:after,
+.grid-responsive-12 .row .col5:after,
+.grid .row .col5:after,
+.grid-responsive-12 .row .col6:after,
+.grid .row .col6:after,
+.grid-responsive-12 .row .col7:after,
+.grid .row .col7:after,
+.grid-responsive-12 .row .col8:after,
+.grid .row .col8:after,
+.grid-responsive-12 .row .col9:after,
+.grid .row .col9:after,
+.grid-responsive-12 .row .col10:after,
+.grid .row .col10:after,
+.grid-responsive-12 .row .col11:after,
+.grid .row .col11:after,
+.grid-responsive-12 .row .col12:after,
+.grid .row .col12:after {
+  clear: both;
+}
+.grid-responsive-12 .row .col1 img,
+.grid .row .col1 img,
+.grid-responsive-12 .row .col2 img,
+.grid .row .col2 img,
+.grid-responsive-12 .row .col3 img,
+.grid .row .col3 img,
+.grid-responsive-12 .row .col4 img,
+.grid .row .col4 img,
+.grid-responsive-12 .row .col5 img,
+.grid .row .col5 img,
+.grid-responsive-12 .row .col6 img,
+.grid .row .col6 img,
+.grid-responsive-12 .row .col7 img,
+.grid .row .col7 img,
+.grid-responsive-12 .row .col8 img,
+.grid .row .col8 img,
+.grid-responsive-12 .row .col9 img,
+.grid .row .col9 img,
+.grid-responsive-12 .row .col10 img,
+.grid .row .col10 img,
+.grid-responsive-12 .row .col11 img,
+.grid .row .col11 img,
+.grid-responsive-12 .row .col12 img,
+.grid .row .col12 img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+/*
+ * large devices
+ */
+@media all and (min-width: 780px) {
+  /*
+     * Common columns definitions
+     */
+  .grid .row {
+    padding: 0 0.5em 0 0.5em;
+  }
+  .grid .row .col1,
+  .grid .row .col2,
+  .grid .row .col3,
+  .grid .row .col4,
+  .grid .row .col5,
+  .grid .row .col6,
+  .grid .row .col7,
+  .grid .row .col8,
+  .grid .row .col9,
+  .grid .row .col10,
+  .grid .row .col11,
+  .grid .row .col12 {
+    float: left;
+    position: relative;
+    margin: 0 3% 0 0;
+  }
+  .grid .row .last {
+    margin-right: 0;
+  }
+  .grid .row .col1 {
+    width: 5.5%;
+  }
+  .grid .row .col2 {
+    width: 14%;
+  }
+  .grid .row .col3 {
+    width: 22.5%;
+  }
+  .grid .row .col4 {
+    width: 31%;
+  }
+  .grid .row .col5 {
+    width: 39.5%;
+  }
+  .grid .row .col6 {
+    width: 48%;
+  }
+  .grid .row .col7 {
+    width: 56.5%;
+  }
+  .grid .row .col8 {
+    width: 65%;
+  }
+  .grid .row .col9 {
+    width: 73.5%;
+  }
+  .grid .row .col10 {
+    width: 82%;
+  }
+  .grid .row .col11 {
+    width: 90.5%;
+  }
+  .grid .row .col12 {
+    width: 99%;
+    margin: 0;
+  }
+  .grid .row .push1 {
+    margin-left: 5.5%;
+  }
+  .grid .row .push2 {
+    margin-left: 14%;
+  }
+  .grid .row .push3 {
+    margin-left: 22.5%;
+  }
+  .grid .row .push4 {
+    margin-left: 31%;
+  }
+}
+/*
+ * Utilities
+ */
+@media all and (max-width: 768px) {
+  .hidden-xs {
+    display: none;
+  }
 }
 /*
  * shadow on scroll
@@ -3857,6 +4505,152 @@ p {
   background: #C1C1C1;
   border-radius: 1em;
   border: 4px solid #F9F9F9;
+}
+.input.toggle-switch {
+  display: flex;
+  padding-top: 1em;
+  padding-bottom: 0.5em;
+}
+.input.toggle-switch label {
+  padding-top: 0.15em;
+  padding-left: 1em;
+  order: 2;
+  flex: 1;
+  font-weight: normal;
+  font-size: 1em;
+}
+.input.toggle-switch.disabled label {
+  color: #969696;
+}
+.input.toggle-switch .toggle-switch-checkbox {
+  order: -1;
+  flex: 0 0 3em;
+  display: none;
+}
+.input.toggle-switch .toggle-switch-checkbox,
+.input.toggle-switch .toggle-switch-checkbox:after,
+.input.toggle-switch .toggle-switch-checkbox:before,
+.input.toggle-switch .toggle-switch-checkbox *,
+.input.toggle-switch .toggle-switch-checkbox *:after,
+.input.toggle-switch .toggle-switch-checkbox *:before,
+.input.toggle-switch .toggle-switch-checkbox + .toggle-switch-button {
+  box-sizing: border-box;
+}
+.input.toggle-switch .toggle-switch-checkbox::selection,
+.input.toggle-switch .toggle-switch-checkbox:after::selection,
+.input.toggle-switch .toggle-switch-checkbox:before::selection,
+.input.toggle-switch .toggle-switch-checkbox *::selection,
+.input.toggle-switch .toggle-switch-checkbox *:after::selection,
+.input.toggle-switch .toggle-switch-checkbox *:before::selection,
+.input.toggle-switch .toggle-switch-checkbox + .toggle-switch-button::selection {
+  background: none;
+}
+.input.toggle-switch .toggle-switch-button {
+  order: -1;
+  flex: none;
+  outline: 0;
+  display: block;
+  width: 3em;
+  height: 1.5em;
+  position: relative;
+  cursor: pointer;
+  user-select: none;
+  background: #F3F3F3;
+  border-radius: 2em;
+  padding: 2px;
+  transition: all 0.4s ease;
+  border: 1px solid #DDD;
+}
+.input.toggle-switch .toggle-switch-button span {
+  /*
+     * Extends the .visuallyhidden class to allow the element to be focusable
+     * when navigated to via the keyboard: h5bp.com/p
+     */
+  border: 0;
+  clip: rect(0 0 0 0);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
+  /*
+     * Extends the .visuallyhidden class to allow the element to be focusable
+     * when navigated to via the keyboard: h5bp.com/p
+     */
+}
+.input.toggle-switch .toggle-switch-button span .focusable:active,
+.input.toggle-switch .toggle-switch-button span .focusable:focus {
+  clip: auto;
+  height: auto;
+  margin: 0;
+  overflow: visible;
+  position: static;
+  width: auto;
+}
+.input.toggle-switch .toggle-switch-button span .focusable:active,
+.input.toggle-switch .toggle-switch-button span .focusable:focus {
+  clip: auto;
+  height: auto;
+  margin: 0;
+  overflow: visible;
+  position: static;
+  width: auto;
+}
+.input.toggle-switch .toggle-switch-button:hover:after {
+  will-change: padding;
+}
+.input.toggle-switch .toggle-switch-button:active {
+  box-shadow: inset 0 0 0 2em #e8eae9;
+}
+.input.toggle-switch .toggle-switch-button:active:after {
+  padding-right: 0.8em;
+}
+.input.toggle-switch .toggle-switch-button:after,
+.input.toggle-switch .toggle-switch-button:before {
+  position: relative;
+  display: block;
+  content: "";
+  width: 50%;
+  height: 100%;
+}
+.input.toggle-switch .toggle-switch-button:after {
+  left: 0;
+  border-radius: 2em;
+  background: #FFF;
+  transition: left 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), padding 0.3s ease, margin 0.3s ease;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1), 0 4px 0 rgba(0, 0, 0, 0.08);
+}
+.input.toggle-switch .toggle-switch-button:before {
+  display: none;
+}
+.input.toggle-switch .toggle-switch-checkbox:checked + .toggle-switch-button:after {
+  left: 50%;
+}
+.input.toggle-switch .toggle-switch-checkbox:disabled + .toggle-switch-button {
+  background: #FFF;
+  cursor: not-allowed;
+}
+.input.toggle-switch .toggle-switch-checkbox:checked + .toggle-switch-button {
+  background: #66CC00;
+}
+.input.toggle-switch .toggle-switch-checkbox:checked + .toggle-switch-button:active {
+  box-shadow: none;
+}
+.input.toggle-switch .toggle-switch-checkbox:checked + .toggle-switch-button:active:after {
+  margin-left: -0.8em;
+}
+.input.toggle-switch .toggle-switch-checkbox:disabled:checked + .toggle-switch-button {
+  background: #e6ffcc;
+}
+h1 .input.toggle-switch,
+h2 .input.toggle-switch,
+h3 .input.toggle-switch,
+h4 .input.toggle-switch,
+h5 .input.toggle-switch,
+h6 .input.toggle-switch {
+  float: left;
+  padding: 0.4em 1em 0 0;
 }
 /* Dialog */
 .dialog-wrapper {
