@@ -49,7 +49,7 @@
 			</div>
 
 			<div class="submit-wrapper clearfix">
-				<input type="submit" value="OK" class="button primary" id="master-password-submit">
+				<input type="submit" value="OK" class="button primary">
 				<a href="#" class="button" id="js_keyinfo_help">Help!</a>
 			</div>
 		</div>

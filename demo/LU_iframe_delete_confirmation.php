@@ -24,7 +24,7 @@
 			</div>
 
 			<div class="submit-wrapper clearfix">
-				<input type="submit" value="Delete" class="button primary warning" id="master-password-submit">
+				<input type="submit" value="Delete" class="button primary warning">
 				<a class="js-dialog-close cancel" href="#">Cancel</a>
 			</div>
 		</div>

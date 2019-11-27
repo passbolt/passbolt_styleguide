@@ -5,7 +5,7 @@
     <?php include('includes/meta/LU_security_token_style.php'); ?>
 </head>
 <body class="iframe">
-<div class="login-form master-password ">
+<div class="login-form passphrase-entry">
 	<div class="input text required">
 		<label for="UserUsername">Username</label>
 		<input name="data[User][username]" class="required fluid" maxlength="50" type="text" id="UserUsername" required="required"

@@ -5523,33 +5523,33 @@ input[type=email].fluid {
   padding-bottom: 0.5em;
   font-size: 0.813em;
 }
-.master-password {
+.passphrase-entry {
   width: 95%;
 }
-.master-password input[type=text] {
+.passphrase-entry input[type=text] {
   width: 90%;
 }
-.master-password input[type=password] {
+.passphrase-entry input[type=password] {
   width: calc(90% - 4em);
 }
-.master-password.dialog label {
+.passphrase-entry.dialog label {
   margin-bottom: 1em;
 }
-.master-password.dialog input[type=text].focus_first {
+.passphrase-entry.dialog input[type=text].focus_first {
   border-width: 0;
   font-size: 0;
   line-height: 0;
   width: 1px;
   height: 1px;
 }
-.master-password.dialog div.input.checkbox,
-.master-password.dialog div.input.select {
+.passphrase-entry.dialog div.input.checkbox,
+.passphrase-entry.dialog div.input.select {
   display: inline;
 }
-.master-password.login-form .submit-wrapper .button {
+.passphrase-entry.login-form .submit-wrapper .button {
   margin-top: 0.5em;
 }
-.master-password.login-form .input.checkbox label {
+.passphrase-entry.login-form .input.checkbox label {
   font-size: 0.938em;
 }
 /* password share tab */
