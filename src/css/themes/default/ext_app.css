@@ -3483,6 +3483,11 @@ button:active,
 html body .button.processing {
   background: #FFF;
   border: 1px solid #FFF;
+  cursor: default;
+}
+.button.processing:active,
+.button.processing:hover {
+  border: 1px solid #FFF;
 }
 .button.processing:after {
   line-height: 2.25em;
@@ -4940,7 +4945,7 @@ h6 .input.toggle-switch {
 }
 .progress-details {
   color: #888;
-  margin: 0.5em 0 1.5em 0;
+  margin: 0.5em 0 0.5em 0;
 }
 .progress-details .progress-percent {
   float: right;
@@ -5982,6 +5987,7 @@ h6 .input.toggle-switch {
 }
 .passphrase-entry.dialog label {
   margin-bottom: 1em;
+  margin-left: 0.5em;
 }
 .passphrase-entry.dialog input[type=text].focus_first {
   border-width: 0;
@@ -5989,10 +5995,6 @@ h6 .input.toggle-switch {
   line-height: 0;
   width: 1px;
   height: 1px;
-}
-.passphrase-entry.dialog div.input.checkbox,
-.passphrase-entry.dialog div.input.select {
-  display: inline;
 }
 .passphrase-entry.login-form .submit-wrapper .button {
   margin-top: 0.5em;

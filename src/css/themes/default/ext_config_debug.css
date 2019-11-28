@@ -3455,6 +3455,11 @@ button:active,
 html body .button.processing {
   background: #FFF;
   border: 1px solid #FFF;
+  cursor: default;
+}
+.button.processing:active,
+.button.processing:hover {
+  border: 1px solid #FFF;
 }
 .button.processing:after {
   line-height: 2.25em;

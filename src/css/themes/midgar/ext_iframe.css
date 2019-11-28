@@ -3474,6 +3474,11 @@ button:active,
 html body .button.processing {
   background: #30302D;
   border: 1px solid #30302D;
+  cursor: default;
+}
+.button.processing:active,
+.button.processing:hover {
+  border: 1px solid #30302D;
 }
 .button.processing:after {
   line-height: 2.25em;
@@ -4032,7 +4037,7 @@ input[type=email].fluid {
 }
 .progress-details {
   color: #8B8B89;
-  margin: 0.5em 0 1.5em 0;
+  margin: 0.5em 0 0.5em 0;
 }
 .progress-details .progress-percent {
   float: right;
@@ -5525,6 +5530,7 @@ input[type=email].fluid {
 }
 .passphrase-entry.dialog label {
   margin-bottom: 1em;
+  margin-left: 0.5em;
 }
 .passphrase-entry.dialog input[type=text].focus_first {
   border-width: 0;
@@ -5532,10 +5538,6 @@ input[type=email].fluid {
   line-height: 0;
   width: 1px;
   height: 1px;
-}
-.passphrase-entry.dialog div.input.checkbox,
-.passphrase-entry.dialog div.input.select {
-  display: inline;
 }
 .passphrase-entry.login-form .submit-wrapper .button {
   margin-top: 0.5em;
@@ -5582,6 +5584,9 @@ input[type=email].fluid {
 }
 #loginSubmit {
   margin-left: 2px;
+}
+.login-form .error.message {
+  background: transparent;
 }
 .progress-bar-wrapper .progress-bar.big.infinite {
   width: 0;

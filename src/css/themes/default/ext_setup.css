@@ -3483,6 +3483,11 @@ button:active,
 html body .button.processing {
   background: #FFF;
   border: 1px solid #FFF;
+  cursor: default;
+}
+.button.processing:active,
+.button.processing:hover {
+  border: 1px solid #FFF;
 }
 .button.processing:after {
   line-height: 2.25em;
@@ -4736,7 +4741,7 @@ input[type=email].fluid {
 }
 .progress-details {
   color: #888;
-  margin: 0.5em 0 1.5em 0;
+  margin: 0.5em 0 0.5em 0;
 }
 .progress-details .progress-percent {
   float: right;

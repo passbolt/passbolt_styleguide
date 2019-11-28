@@ -5,8 +5,8 @@
 <head>
     <?php include('../includes/meta/LU_meta_reactapp.php'); ?>
 </head>
-<body>
-<div id="container" class="page iframe">
+<body class="iframe">
+<div id="container" class="page">
     <div class="contain-item">
         <div id="app-container" class="container-wrapper">
             <div id="app" class="app" tabindex="1000">
