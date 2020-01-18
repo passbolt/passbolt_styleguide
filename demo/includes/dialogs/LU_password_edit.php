@@ -1,12 +1,10 @@
 <div id="a484a5eb-4258-bde9-6b1e-20c6f26204fb"
-		 class="mad_controller_component_dialog_controller mad_view_component_dialog dialog-wrapper ready">
+		 class="mad_controller_component_dialog_controller mad_view_component_dialog dialog-wrapper ready create-password-dialog">
 	<div class="dialog">
 		<div class="dialog-header">
 			<h2>Edit<span class="dialog-header-subtitle">shared resource</span></h2>
-			<a href="demo/LU_passwords.php" class="dialog-close">
-					<span class="svg-icon">
-            <svg viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg"><path d="M1490 1322q0 40-28 68l-136 136q-28 28-68 28t-68-28l-294-294-294 294q-28 28-68 28t-68-28l-136-136q-28-28-28-68t28-68l294-294-294-294q-28-28-28-68t28-68l136-136q28-28 68-28t68 28l294 294 294-294q28-28 68-28t68 28l136 136q28 28 28 68t-28 68l-294 294 294 294q28 28 28 68z"/></svg>
-          </span>
+			<a href="demo/LU_passwords.php" class="dialog-close" role="button">
+					<?php include('includes/svg-icons/close.php'); ?>
 				<span class="visuallyhidden">Close</span>
 			</a>
 
@@ -46,7 +44,7 @@
 										 type="hidden">
 
 							<div class="input text required error js_form_element_wrapper">
-								<label for="js_field_name">Resource</label>
+								<label for="js_field_name">Name</label>
 								<input name="passbolt.model.Resource.name"
 											 class="required mad_form_element_textbox_controller mad_view_form_element_textbox_view js_component ready"
 											 maxlength="50" id="js_field_name" placeholder="resource name" type="text">

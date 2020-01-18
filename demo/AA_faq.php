@@ -5,7 +5,7 @@
 	<title>Frequently Asked Questions | Passbolt</title>
     <?php include('includes/meta/AA_meta.php'); ?>
     <?php include('includes/headers/AA_header_scripts.php'); ?>
-	<script src="src/js/jquery-3.3.1.min.js"></script>
+	<script src="src/js/jquery-3.4.1.min.js"></script>
 	<script src="src/js/bootstrap-scrollspy.js"></script>
 	<script src="src/js/imagelightbox.min.js"></script>
 	<script src="src/js/greedynav.js"></script>

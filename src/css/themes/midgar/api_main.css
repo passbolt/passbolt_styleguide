@@ -563,6 +563,7 @@ html body .hidden {
 /*
  * Hide only visually, but have it available for screenreaders: h5bp.com/v
  */
+.visually-hidden,
 .visuallyhidden {
   border: 0;
   clip: rect(0 0 0 0);
@@ -577,7 +578,9 @@ html body .hidden {
      * when navigated to via the keyboard: h5bp.com/p
      */
 }
+.visually-hidden .focusable:active,
 .visuallyhidden .focusable:active,
+.visually-hidden .focusable:focus,
 .visuallyhidden .focusable:focus {
   clip: auto;
   height: auto;
@@ -662,6 +665,7 @@ html body .hidden {
     -moz-transform: rotate(-360deg);
   }
 }
+/* rotations */
 .rotate {
   -webkit-animation-name: rotate;
   -webkit-animation-duration: 4s;
@@ -671,6 +675,9 @@ html body .hidden {
   -moz-animation-duration: 4s;
   -moz-animation-iteration-count: infinite;
   -moz-animation-timing-function: linear;
+}
+.rotate-right {
+  transform: rotate(-90deg);
 }
 /* list */
 /* seriously? */
@@ -3197,46 +3204,74 @@ p {
   color: #D40101;
 }
 .svg-icon {
-  font: normal normal normal 14px/1 FontAwesome;
-  font-size: inherit;
+  font-size: 16px;
+  line-height: 16px;
   text-rendering: auto;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-.svg-icon + span:not(.visuallyhidden) {
-  margin-left: 2px;
-  display: inline-block;
 }
 .svg-icon svg {
-  width: 0.88rem;
-  height: 0.88rem;
+  width: 0.875rem;
+  height: 0.875rem;
   display: inline-block;
-  vertical-align: text-top;
   margin: auto;
   fill: #FFF;
 }
-a .svg-icon svg:hover {
-  fill: #2894DF;
-}
-a.button .svg-icon svg:hover {
-  fill: #FFFFFC;
-}
 .svg-icon.light svg {
   fill: #EEEEEC;
+}
+.svg-icon.icon-only svg {
+  width: 1.1rem;
+  height: 1.1rem;
+}
+label .svg-icon svg {
+  fill: #8B8B89;
+  pointer-events: none;
+  cursor: default;
+  vertical-align: -0.0714286em;
+}
+.button .svg-icon svg {
+  vertical-align: middle;
+}
+.button .svg-icon + span:not(.visuallyhidden) {
+  margin-left: 2px;
+  display: inline-block;
+}
+.button:hover .svg-icon svg,
+.button .svg-icon svg:hover {
+  fill: #FFFFFC;
+}
+/* warning */
+.button.primary:active .svg-icon svg,
+.button.primary:focus .svg-icon svg,
+.button.warning .svg-icon svg,
+.button.warning:hover .svg-icon svg,
+.button.warning:focus .svg-icon svg,
+.button.warning:active .svg-icon svg {
+  fill: #EEEEEC;
+}
+/* focus */
+.button:focus .svg-icon svg,
+.button:active .svg-icon svg {
+  fill: #2894DF;
+}
+.button.disabled .svg-icon svg {
+  fill: #8B8B89;
+}
+.button.disabled .svg-icon svg:hover {
+  fill: #8B8B89;
+}
+a:hover .svg-icon svg {
+  fill: #2894DF;
 }
 a.disabled .svg-icon svg {
   fill: #8B8B89;
   pointer-events: none;
   cursor: default;
 }
-.disabled .svg-icon svg:hover {
+a.disabled:hover .svg-icon svg {
   fill: #8B8B89;
 }
-.svg-icon.icon-only svg {
-  width: 1.1rem;
-  height: 1.1rem;
-  display: block;
-  margin: auto;
+.message .svg-icon svg {
+  vertical-align: 0.125em;
 }
 /*
 	Generic buttons
@@ -3252,12 +3287,11 @@ button,
   position: relative;
   font-size: 0.875em;
   /*	14px */
-  padding: 0.429em 1.225em 0.429em 1.225em;
+  min-height: 1.428571em;
+  /* 20px */
+  padding: 0.4285714em 1.225em 0.4285714em 1.225em;
   /* 6px 16px */
   display: inline-block;
-  zoom: 1;
-  /* zoom and *display = ie7 hack for display:inline-block */
-  *display: inline;
   vertical-align: baseline;
   margin-right: 0.5em;
   outline: none;
@@ -3282,6 +3316,42 @@ button,
 .button.big {
   font-size: 1.125em;
 }
+/* hover */
+button:hover,
+.button:hover {
+  color: #FFFFFC;
+  text-decoration: none;
+  background: #444442;
+  background-image: linear-gradient(top, #606060, #606060);
+  border: 1px solid #30302D;
+}
+/* focus */
+button:focus,
+.button:focus {
+  color: #2894DF;
+  border: 1px solid #2894DF;
+}
+/* active */
+button:active,
+.button:active {
+  color: #2894DF;
+  border: 1px solid #2894DF;
+  background: #3B3B39;
+  position: relative;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+/* cancel */
+.button.cancel,
+.button.cancel:focus,
+.button.cancel:hover,
+.button.cancel:active,
+.button.dim,
+.button.dim:focus,
+.button.dim:hover,
+.button.dim:active {
+  background: #30302D;
+  font-weight: normal;
+}
 /* primary */
 .button.primary {
   background: #2894DF;
@@ -3300,10 +3370,6 @@ button,
   border: 1px solid #4271b7;
   background: #2A9CEB;
 }
-.button.primary:active .svg-icon svg,
-.button.primary:focus .svg-icon svg {
-  fill: #EEEEEC;
-}
 /* warning */
 .button.warning,
 .button.warning:hover,
@@ -3314,54 +3380,9 @@ button,
   border: 1px solid #D40101;
   text-shadow: none;
 }
-.button.warning .svg-icon svg,
-.button.warning:hover .svg-icon svg,
-.button.warning:focus .svg-icon svg,
-.button.warning:active .svg-icon svg {
-  fill: #EEEEEC;
-}
 .button.warning:focus,
 .button.warning:active {
   border: 1px solid #92000C;
-}
-/* cancel */
-.button.cancel,
-.button.cancel:focus,
-.button.cancel:hover,
-.button.cancel:active,
-.button.dim,
-.button.dim:focus,
-.button.dim:hover,
-.button.dim:active {
-  background: #30302D;
-  font-weight: normal;
-}
-/* hover */
-.button:hover {
-  color: #FFFFFC;
-  text-decoration: none;
-  background: #444442;
-  background-image: linear-gradient(top, #606060, #606060);
-  border: 1px solid #30302D;
-}
-/* focus */
-.button:focus {
-  color: #2894DF;
-  border: 1px solid #2894DF;
-}
-.button:focus .svg-icon svg {
-  fill: #2894DF;
-}
-/* active */
-.button:active {
-  color: #2894DF;
-  border: 1px solid #2894DF;
-  background: #3B3B39;
-  position: relative;
-  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.2);
-}
-.button:active .svg-icon svg {
-  fill: #2894DF;
 }
 .button.disabled {
   cursor: default;
@@ -3371,9 +3392,6 @@ button,
   text-shadow: none;
   font-weight: normal;
 }
-.button.disabled .svg-icon svg {
-  fill: #8B8B89;
-}
 /* inactive */
 .button.disabled:hover,
 .button.disabled:active,
@@ -3382,17 +3400,6 @@ button,
   top: 0;
   color: #8B8B89;
   background: #3B3B39;
-  border: 1px solid #0C0C0A;
-}
-.button.disabled:hover .svg-icon svg,
-.button.disabled:active .svg-icon svg,
-.button.disabled:focus .svg-icon svg {
-  fill: #8B8B89;
-}
-/* toggle selected */
-.toggle.button.selected {
-  background: #222220;
-  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.2);
   border: 1px solid #0C0C0A;
 }
 /* duo */
@@ -3448,20 +3455,29 @@ button,
 .duo-wrapper .button {
   float: left;
 }
-.button.duo:nth-child(1) {
+.duo-wrapper .button.duo:nth-child(1) {
   margin-right: 0;
   border-top-right-radius: 0;
   border-bottom-right-radius: 0;
 }
-.button.duo:nth-child(2) {
+.duo-wrapper .button.duo:nth-child(2) {
   margin-left: 0;
   border-left: 0;
   border-top-left-radius: 0;
   border-bottom-left-radius: 0;
 }
+.buttons-spacer,
+.button-spacer {
+  margin-right: 0.5em;
+}
 /* processing state */
 html body .button.processing {
   background: #30302D;
+  border: 1px solid #30302D;
+  cursor: default;
+}
+.button.processing:active,
+.button.processing:hover {
   border: 1px solid #30302D;
 }
 .button.processing:after {
@@ -3484,14 +3500,11 @@ input[type=submit].button.processing {
   border: 1px solid #0C0C0A;
   border-radius: 5px;
 }
-.button-spacer {
-  margin-right: 0.5em;
-}
-.button.disabled .svg-icon svg:hover {
-  fill: #8B8B89;
-}
-.button .svg-icon svg:hover {
-  fill: #FFFFFC;
+/* toggle selected */
+.toggle.button.selected {
+  background: #222220;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.2);
+  border: 1px solid #0C0C0A;
 }
 /*
 	Base form components styling
@@ -3654,6 +3667,7 @@ input[type=checkbox] + label {
   display: inline;
   margin-left: 0.25em;
   margin-bottom: 0.25em;
+  cursor: pointer;
 }
 /* radio and checkboxes */
 .radiolist {
@@ -4797,18 +4811,13 @@ form.search button {
   margin-left: 0;
   border-radius: 0px 2px 2px 0px;
 }
-form.search button .fa-search {
-  font-size: 1.4em;
+form.search button svg {
+  margin-top: 0.125em;
 }
 /* remove webkit search input decoration and cancel button */
 input[type="search"]::-webkit-search-decoration,
 input[type="search"]::-webkit-search-cancel-button {
   display: none;
-}
-.svg-icon.icon-only.search svg {
-  width: 1.25rem;
-  height: 1.25rem;
-  margin-top: -2px;
 }
 /* rescale on small screen */
 @media all and (max-width: 480px) {
@@ -4816,17 +4825,23 @@ input[type="search"]::-webkit-search-cancel-button {
     display: none;
   }
 }
+.avatar img {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+}
 /*
  * Profile user card
  */
 .user.profile {
-  max-width: 18em;
-  width: 80%;
+  max-width: 16em;
   float: right;
   border: 1px solid #0C0C0A;
   margin-top: 0.5em;
   background: #3B3B39;
   overflow: hidden;
+  cursor: pointer;
+  border-radius: 3px;
   background: #444442;
   background-image: linear-gradient(top, #444442, #444442);
   /* fixed fluid fixed layout */
@@ -4860,10 +4875,9 @@ input[type="search"]::-webkit-search-cancel-button {
   margin-left: -1.75em;
 }
 .user.profile .picture img {
-  width: 2.875em;
-  /* 46px */
-  padding: 0.125em;
-  /* 2px */
+  width: 2.6em;
+  padding: 0.28em 0.35em 0.35em 0.35em;
+  border-radius: 50%;
 }
 .user.profile .details {
   float: left;
@@ -4874,14 +4888,18 @@ input[type="search"]::-webkit-search-cancel-button {
 }
 .user.profile .details .name,
 .user.profile .details .email {
-  width: 100%;
+  width: 11em;
   float: left;
   clear: both;
   text-overflow: clip;
   word-wrap: break-word;
-  overflow: hidden;
   display: inline-block;
   line-height: normal;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -o-text-overflow: ellipsis;
+  -ms-text-overflow: ellipsis;
 }
 .user.profile .details .name {
   font-weight: bold;
@@ -4896,7 +4914,7 @@ input[type="search"]::-webkit-search-cancel-button {
   border: 0;
   color: #cacac9;
 }
-.user.profile .more a span.svg-icon {
+.user.profile .more a .svg-icon {
   margin: 18px 0 0 7px;
   display: inline-block;
 }
@@ -5218,7 +5236,6 @@ input[type="search"]::-webkit-search-cancel-button {
   height: 2em;
   padding: 0.1875em 0 0.1875em 0.1875em;
   margin-bottom: 0;
-  border-bottom: 1px solid #0C0C0A;
   background: #30302D;
 }
 .breadcrumbs ul {
@@ -5248,6 +5265,9 @@ input[type="search"]::-webkit-search-cancel-button {
 .breadcrumbs div.main-cell {
   display: inline;
 }
+.panel.middle .breadcrumbs {
+  border-bottom: 1px solid #0C0C0A;
+}
 /* actions */
 .header.third .main-action-wrapper {
   margin-top: 0.5em;
@@ -5256,6 +5276,7 @@ input[type="search"]::-webkit-search-cancel-button {
 .header.third .main-action-wrapper .button {
   float: left;
   font-size: 0.875em;
+  min-width: 0.75em;
 }
 .header.third .actions-wrapper {
   margin-top: 0.5em;
@@ -5371,7 +5392,7 @@ input[type="search"]::-webkit-search-cancel-button {
 }
 .progress-details {
   color: #8B8B89;
-  margin: 0.5em 0 1.5em 0;
+  margin: 0.5em 0 0.5em 0;
 }
 .progress-details .progress-percent {
   float: right;
@@ -5532,9 +5553,6 @@ input[type="search"]::-webkit-search-cancel-button {
 .message.success.success-large.animated #successAnimation.animated #successAnimationCheck {
   animation: 0.75s cubic-bezier(0.77, 0, 0.175, 1) 0s 1 both drawCheck;
 }
-.message.notice .svg-icon svg {
-  margin-top: -5px;
-}
 @media only screen and (max-width: 767px) {
   .message.success.success-large.animated {
     flex-direction: column;
@@ -5673,7 +5691,18 @@ input[type="search"]::-webkit-search-cancel-button {
 }
 .dialog .form-content {
   background: #30302D;
-  padding: 0.813em 1.5em 0.813em 1.5em;
+  padding: 0.813em 1.5em 1.5em 1.5em;
+}
+.dialog p {
+  margin-top: 0.5em;
+  font-size: 1em;
+  /* 15px */
+}
+.dialog p + .checkbox {
+  padding-bottom: 0.5em;
+}
+.dialog p + .checkbox label {
+  font-size: 1em;
 }
 .dialog label {
   clear: both;
@@ -5760,19 +5789,28 @@ input[type="search"]::-webkit-search-cancel-button {
 }
 .dialog .submit-wrapper {
   margin: 0;
-  border-top: 1px solid #0C0C0A;
   clear: both;
   width: 100%;
   padding: 0.75em 0;
 }
 .dialog .submit-wrapper .cancel,
 .dialog .submit-wrapper .button {
-  float: left;
-  margin-left: 1.125em;
+  float: right;
+  margin-right: 1.25em;
   font-size: 1.125em;
 }
+.dialog .submit-wrapper .button {
+  box-sizing: border-box;
+  min-width: 5em;
+}
+.dialog .submit-wrapper .secondary {
+  float: left;
+  margin-left: 1.5em;
+  margin-top: 0.7em;
+  font-size: 1em;
+}
 .dialog .submit-wrapper .cancel {
-  margin-top: 0.5em;
+  margin-top: 0.7em;
   font-size: 1em;
 }
 /* can also be used outside a dialog, like the sidebar */
@@ -5781,6 +5819,12 @@ input[type="search"]::-webkit-search-cancel-button {
   display: block;
   float: right;
   border: 0;
+}
+.dialog-close:active {
+  -webkit-border-radius: 0.214em;
+  -moz-border-radius: 0.214em;
+  border-radius: 0.214em;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.2);
 }
 .dialog-close .fa-close {
   padding-top: 15px;
@@ -5945,10 +5989,6 @@ input[type="search"]::-webkit-search-cancel-button {
 }
 /* tags */
 .tags .tag {
-  word-wrap: break-word;
-  /* Internet Explorer 5.5+ */
-  white-space: -webkit-pre-wrap;
-  /* Newer versions of Chrome/Safari*/
   word-break: break-all;
   white-space: normal;
   padding: 0.125em 0.5em;
@@ -6664,6 +6704,7 @@ input[type="search"]::-webkit-search-cancel-button {
   color: #cacac9;
   font-size: 0.875em;
   margin-left: 0.429em;
+  vertical-align: bottom;
 }
 .panel.aside .sidebar-header .title-link:hover {
   color: #2894DF;
@@ -6988,7 +7029,7 @@ input[type="search"]::-webkit-search-cancel-button {
   color: #8B8B89;
 }
 .tableview table .input.checkbox {
-  padding-top: 2px;
+  padding-top: 0px;
   padding-left: 0.25em;
 }
 .tableview table .input.checkbox label {
@@ -6998,15 +7039,21 @@ input[type="search"]::-webkit-search-cancel-button {
   margin-top: 0;
   float: left;
 }
-.tableview table th span,
-.tableview table td span {
-  vertical-align: 6%;
-}
 .tableview table th.cell_favorite,
 .tableview table td.cell_favorite {
   padding-left: 0;
-  padding-top: 4px;
+  padding-top: 2px;
   padding-right: 0.25em;
+}
+.tableview table td.cell_icon svg,
+.tableview table td.cell_icon img {
+  width: 1em;
+  height: 1em;
+  position: absolute;
+  margin-top: -0.5em;
+}
+.tableview table td.cell_icon svg {
+  margin-top: -0.55em;
 }
 /* hide secondary actions if there is no space */
 @media all and (max-width: 600px) {
@@ -7435,9 +7482,6 @@ table.table-info.horizontal tbody tr:nth-child(odd) {
 .input-password-wrapper:after {
   clear: both;
 }
-.input-password-wrapper a.button .svg-icon svg {
-  margin-top: 0.125em;
-}
 .input-password-wrapper .input.password {
   float: left;
   width: 65.5%;
@@ -7689,8 +7733,6 @@ table.table-info.horizontal tbody tr:nth-child(odd) {
   border: 0;
 }
 .permissions .row .avatar img {
-  width: 36px;
-  height: 36px;
   float: left;
 }
 .permissions .row .user,
@@ -7792,6 +7834,7 @@ table.table-info.horizontal tbody tr:nth-child(odd) {
 }
 .permissions .row .actions {
   float: right;
+  width: 3em;
   margin-top: 0.55em;
 }
 .permissions .row .actions a {
@@ -8619,6 +8662,239 @@ This file is generated by `grunt build`, do not edit it by hand.
 .singleline.connection_info.protocol_host_port .input.text.port input[type=number] {
   width: 100%;
 }
+.input.location {
+  /*
+     * For IE 6/7 only
+     * Include this rule to trigger hasLayout and contain floats.
+     */
+  /*
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
+  /*
+     * For IE 6/7 only
+     * Include this rule to trigger hasLayout and contain floats.
+     */
+  zoom: 1;
+  /*
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
+}
+.input.location:before,
+.input.location:after {
+  content: "";
+  display: table;
+}
+.input.location:after {
+  clear: both;
+}
+.input.location:before,
+.input.location:after {
+  content: "";
+  display: table;
+}
+.input.location:after {
+  clear: both;
+}
+.input.location .location-input {
+  padding: 0.25em 0;
+  margin-bottom: 0.5em;
+  width: 100%;
+  float: left;
+  box-sizing: border-box;
+  border: 1px solid #222220;
+  background: #0C0C0A;
+}
+.input.location .breadcrumbs {
+  font-size: 1.125em;
+  background: transparent;
+  box-sizing: border-box;
+  float: left;
+  width: 79%;
+  padding-left: 0em;
+  margin-top: -0.25em;
+}
+.input.location .breadcrumbs ul {
+  float: left;
+  width: 100%;
+  padding-right: 0.5em;
+  box-sizing: border-box;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+.input.location .breadcrumbs li {
+  display: inline;
+}
+.input.location .button {
+  border: 0;
+  box-sizing: border-box;
+  float: right;
+  width: 19%;
+  margin: 0 0.25em 0 0;
+}
+.panel .folders.navigation {
+  border: 0;
+  /** nested padding */
+}
+.panel .folders.navigation ul {
+  list-style: none;
+  padding: 0;
+}
+.panel .folders.navigation .folders-label-selected {
+  background: #F3F3F3;
+}
+.panel .folders.navigation .folders-label-height {
+  height: 1.8em;
+}
+.panel .folders.navigation.first {
+  padding-top: 0;
+}
+.panel .folders.navigation .row {
+  /* title row */
+  /* disabled row */
+}
+.panel .folders.navigation .row .main-cell span {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -o-text-overflow: ellipsis;
+  -ms-text-overflow: ellipsis;
+  display: inline-block;
+  margin-top: 0.2em;
+  width: calc(100% - 2.5em);
+}
+.panel .folders.navigation .row .main-cell .svg-icon {
+  display: inline;
+}
+.panel .folders.navigation .row .main-cell .svg-icon.hidden {
+  display: none;
+}
+.panel .folders.navigation .row .main-cell .svg-icon svg {
+  width: 0.83em;
+  height: 0.83em;
+  position: absolute;
+  margin-top: 0.5em;
+  fill: #FFFFFC;
+}
+.panel .folders.navigation .row .main-cell a {
+  padding: 0 0 0 2.5em;
+}
+.panel .folders.navigation .row .main-cell a .svg-icon.caret-down svg {
+  margin-left: -1.2em;
+  margin-top: 0.4em;
+  width: 1em;
+  height: 1em;
+  position: absolute;
+}
+.panel .folders.navigation .row .main-cell a .folder-name {
+  margin-left: 1.3em;
+}
+.panel .folders.navigation .row .right-cell {
+  margin-top: -1.65em;
+}
+.panel .folders.navigation .row.title .main-cell h3 {
+  padding-top: 0;
+  line-height: 1em;
+  border: 0;
+}
+.panel .folders.navigation .row.title .main-cell h3 a {
+  padding-left: 0;
+}
+.panel .folders.navigation .row.title .main-cell h3 a::before,
+.panel .folders.navigation .row.title .main-cell h3 a::after {
+  display: none;
+}
+.panel .folders.navigation .row.title .main-cell h3 .folders-label {
+  margin-left: 0.85em;
+  cursor: pointer;
+}
+.panel .folders.navigation .row.title .main-cell h3 .folders-label .svg-icon.caret-down svg {
+  margin-left: -1.1em;
+  margin-top: 0.2em;
+  width: 1em;
+  height: 1em;
+  position: absolute;
+}
+.panel .folders.navigation .row.disabled {
+  cursor: default;
+  pointer-events: none;
+}
+.panel .folders.navigation .row.disabled .main-cell span.folder-name {
+  color: #8B8B89;
+  text-shadow: none;
+  font-weight: normal;
+}
+.panel .folders.navigation .row.disabled .main-cell span.svg-icon svg {
+  fill: #8B8B89;
+}
+.panel .folders.navigation .row.disabled .main-cell a:before {
+  color: #8B8B89;
+}
+.panel .folders.navigation .child .row {
+  padding-left: 0.8em;
+}
+.panel .folders.navigation .child .nested .row {
+  padding-left: 1.8em;
+}
+.drag-and-drop,
+.drag-and-drop-multiple {
+  position: relative;
+  width: 6.25em;
+  height: 1em;
+  background: #444442;
+  border: 1px solid #3B3B39;
+  text-align: center;
+  z-index: 9999999;
+  padding: 0.65em;
+  line-height: 1em;
+  color: #FFF;
+  border-radius: 5px;
+}
+.drag-and-drop span,
+.drag-and-drop-multiple span {
+  display: inline-block;
+  width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.drag-and-drop-multiple {
+  box-shadow: 0.25em 0.25em 0 -1px #3B3B39;
+}
+.drag-and-drop-multiple:after {
+  content: "2";
+  position: absolute;
+  top: -9px;
+  right: -3px;
+  font-size: 0.7em;
+  background: #D40101;
+  color: #FFF;
+  width: 1.5em;
+  height: 1.5em;
+  text-align: center;
+  line-height: 1.5em;
+  border-radius: 50%;
+  box-shadow: 0 0 1px #333;
+}
+.drop-focus {
+  background-color: #0e3e60;
+}
 .input-password-wrapper {
   overflow: hidden;
 }
@@ -8656,31 +8932,126 @@ This file is generated by `grunt build`, do not edit it by hand.
   background: transparent url('../../../img/controls/loading_dark.svg') left center no-repeat;
   background-size: auto 75% ;
 }
-.dialog .organize-tab .current-folder {
-  background: #444442;
-  padding: 0.5em 1em;
-}
-.dialog .organize-tab .current-folder .folder-name {
-  font-weight: bold;
-}
-.dialog .organize-tab .tree {
-  height: 20.125em;
-  border: 1px solid #0C0C0A;
-}
-.dialog .organize-tab .selected {
-  background: #444442;
-}
-.dialog .organize-tab .selected {
-  background: #444442;
-}
-.folder-add .input.text {
-  width: 25em;
-}
 .dialog-wrapper.session-expired-dialog {
   z-index: 994;
 }
 .dialog-wrapper.session-expired-dialog .dialog-close {
   display: none;
+}
+.move-folder-dialog .folders-list-wrapper {
+  border-bottom: 1px solid #0C0C0A;
+  border-top: 1px solid #0C0C0A;
+}
+.move-folder-dialog .breadcrumbs {
+  height: auto;
+  padding-bottom: 0.625em;
+  font-size: 1.2em;
+  padding-top: 0.5em;
+  /*
+     * For IE 6/7 only
+     * Include this rule to trigger hasLayout and contain floats.
+     */
+  /*
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
+  /*
+     * For IE 6/7 only
+     * Include this rule to trigger hasLayout and contain floats.
+     */
+  zoom: 1;
+  /*
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
+}
+.move-folder-dialog .breadcrumbs:before,
+.move-folder-dialog .breadcrumbs:after {
+  content: "";
+  display: table;
+}
+.move-folder-dialog .breadcrumbs:after {
+  clear: both;
+}
+.move-folder-dialog .breadcrumbs:before,
+.move-folder-dialog .breadcrumbs:after {
+  content: "";
+  display: table;
+}
+.move-folder-dialog .breadcrumbs:after {
+  clear: both;
+}
+.move-folder-dialog .breadcrumbs .button {
+  float: left;
+  width: 1.5em;
+  padding: 0.125em 0.25em 0.25em 0.25em;
+  margin-left: 0.5em;
+  margin-right: 0;
+}
+.move-folder-dialog .breadcrumbs ul {
+  box-sizing: border-box;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  float: left;
+  width: calc(100% - 5em);
+  margin-top: -0.125em;
+}
+.move-folder-dialog .folders-list {
+  padding: 0;
+  max-height: 19em;
+}
+.move-folder-dialog .folders-list:last-child {
+  border-bottom: 0;
+}
+.move-folder-dialog .folders-list .folders-list-item {
+  user-select: none;
+  padding: 0.75em 1.25em 0.75em 1.5em;
+  border-bottom: 1px solid #0C0C0A;
+  cursor: pointer;
+}
+.move-folder-dialog .folders-list .folders-list-item.selected {
+  background: #3B3B39;
+}
+.move-folder-dialog .folders-list .folders-list-item.selected .folder-view {
+  border: 1px solid #3B3B39;
+}
+.move-folder-dialog .folders-list .folders-list-item .folder-name {
+  margin-left: 0.4em;
+  user-select: none;
+}
+.move-folder-dialog .folders-list .folders-list-item .folder-permission {
+  color: #cacac9;
+  font-size: 0.65em;
+  margin-left: 0.4em;
+  user-select: none;
+}
+.move-folder-dialog .folders-list .folders-list-item .folder-view {
+  float: right;
+  margin-top: -0.25em;
+  margin-right: -0.25em;
+  padding: 0.25em 0.5em;
+  border: 1px solid #30302D;
+  -webkit-border-radius: 0.214em;
+  -moz-border-radius: 0.214em;
+  border-radius: 0.214em;
+}
+.move-folder-dialog .folders-list .folders-list-item .folder-view:hover {
+  border: 1px solid #0C0C0A;
 }
 .dialog .group .form-content.permission-edit {
   border-top: 1px solid #0C0C0A;
@@ -8842,6 +9213,7 @@ This file is generated by `grunt build`, do not edit it by hand.
   width: 55px;
   height: 55px;
   border: 1px solid #0C0C0A;
+  border-radius: 50%;
 }
 .panel.aside .user .sidebar-header h3,
 .panel.aside .group .sidebar-header h3 {
@@ -8897,18 +9269,22 @@ This file is generated by `grunt build`, do not edit it by hand.
   border-top: 1px solid #0C0C0A;
 }
 /* tabel view adjustments for avatar */
+.page.people .tableview-header th.cell_icon,
 .page.people .tableview-header th.cell_avatar {
   width: 45px;
 }
+.page.people .tableview-content th.cell_icon,
 .page.people .tableview-content td.cell_avatar {
   margin: 0;
   text-align: left;
   width: 45px;
 }
+.page.people .tableview-content th.cell_icon img,
 .page.people .tableview-content td.cell_avatar img {
   margin-top: 3px;
-  width: 25px !important;
-  height: 25px !important;
+  width: 1.7em;
+  height: 1.7em;
+  border-radius: 50%;
 }
 /* login history icon column centerign */
 .login-history td:first-child {
@@ -8946,11 +9322,6 @@ This file is generated by `grunt build`, do not edit it by hand.
 /*
  * Password workspace
  */
-/* sidebar */
-.panel.aside .resource .detailed-information li.password .value {
-  height: 1.6em;
-  padding-top: 0.2em;
-}
 /* unused columns */
 .js_grid_column_owner,
 .js_grid_column_copyLogin,
@@ -8962,6 +9333,132 @@ This file is generated by `grunt build`, do not edit it by hand.
   .tableview .js_grid_column_modified {
     display: none;
   }
+}
+.panel.aside .resource .detailed-information li.password .value {
+  height: 1.6em;
+  padding-top: 0.2em;
+}
+.panel.aside .resource .sidebar-header {
+  /*
+     * For IE 6/7 only
+     * Include this rule to trigger hasLayout and contain floats.
+     */
+  /*
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
+  /*
+     * For IE 6/7 only
+     * Include this rule to trigger hasLayout and contain floats.
+     */
+  zoom: 1;
+  /*
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
+}
+.panel.aside .resource .sidebar-header:before,
+.panel.aside .resource .sidebar-header:after {
+  content: "";
+  display: table;
+}
+.panel.aside .resource .sidebar-header:after {
+  clear: both;
+}
+.panel.aside .resource .sidebar-header:before,
+.panel.aside .resource .sidebar-header:after {
+  content: "";
+  display: table;
+}
+.panel.aside .resource .sidebar-header:after {
+  clear: both;
+}
+.panel.aside .resource .sidebar-header img {
+  margin: 1em 0 1em 1em;
+  float: left;
+  width: 4em;
+  height: 4em;
+  border: 1px solid #0C0C0A;
+}
+.panel.aside .resource .sidebar-header h3 {
+  float: left;
+  width: 67%;
+  margin-top: 0.88em;
+  padding: 0 0 0 0.6em;
+  display: table-cell;
+  vertical-align: middle;
+  border: 0;
+}
+.panel.aside .resource .sidebar-header h3 .name {
+  font-size: 1.2em;
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -o-text-overflow: ellipsis;
+  -ms-text-overflow: ellipsis;
+}
+.panel.aside .resource .sidebar-header h3 .type,
+.panel.aside .resource .sidebar-header h3 .username {
+  font-size: 0.8em;
+  color: #8B8B89;
+  font-weight: normal;
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -o-text-overflow: ellipsis;
+  -ms-text-overflow: ellipsis;
+}
+.panel.aside .resource .sidebar-header .side-bar-text-label {
+  color: #FFF;
+  width: 1.7em;
+  height: 1.7em;
+  line-height: 1.7em;
+  text-align: center;
+  font-size: 0.8em;
+  margin: 1.1em;
+}
+.panel.aside .resource .sidebar-header .side-bar-text-label + h3 {
+  margin-top: 1em;
+  padding: 0 0 0 0.6em;
+}
+.panel.aside .resource .sidebar-header .logo {
+  margin: 1em 0 1em 1em;
+  float: left;
+  width: 3em;
+  height: 3em;
+  border: 1px solid #8B8B89;
+  line-height: 3em;
+  text-align: center;
+  border-radius: 50%;
+}
+.panel.aside .resource .sidebar-header .logo .svg-icon svg {
+  width: 1.5rem;
+  height: 1.5rem;
+  margin-top: 0.75em;
+}
+.panel.aside .resource .sidebar-header .logo img {
+  width: 1.5em;
+  height: 1.5em;
+  display: block;
+  margin: 0.75em auto;
+  float: none;
+  border: 0;
 }
 /* Define state where there are no passwords, and the filter all items */
 .page.password .tableview.empty .tableview-header {
@@ -9148,6 +9645,14 @@ This file is generated by `grunt build`, do not edit it by hand.
   font-size: 1.5em;
   text-align: center;
   padding: 0.25em 0.5em;
+}
+.page.settings .profile-detailed-information .avatar .edit a .svg-icon svg {
+  float: left;
+  fill: white;
+  width: 2rem;
+  height: 2rem;
+  margin-top: 0.5em;
+  margin-left: 0.5em;
 }
 .page.settings .profile-detailed-information .avatar .edit a .help-text {
   display: block;

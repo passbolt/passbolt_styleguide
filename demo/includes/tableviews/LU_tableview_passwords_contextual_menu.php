@@ -35,7 +35,16 @@
             </div>
         </div>
     </li>
-    <li id="js_password_browser_menu_edit" class="ready closed" data-view-id="373">
+    <li id="js_password_browser_menu_open_find_location" class="separator-after ready closed" data-view-id="373">
+        <div class="row">
+            <div class="main-cell-wrapper">
+                <div class="main-cell">
+                    <a href="#"><span>Show in Enclosing folder</span></a>
+                </div>
+            </div>
+        </div>
+    </li>
+    <li id="js_password_browser_menu_edit" class="ready closed" data-view-id="374">
         <div class="row">
             <div class="main-cell-wrapper">
                 <div class="main-cell">
@@ -43,7 +52,8 @@
                 </div>
             </div>
         </div>
-    </li><li id="js_password_browser_menu_share" class="disabled closed" data-view-id="374">
+    </li>
+    <li id="js_password_browser_menu_share" class="disabled closed" data-view-id="375">
         <div class="row">
             <div class="main-cell-wrapper">
                 <div class="main-cell">
@@ -52,7 +62,16 @@
             </div>
         </div>
     </li>
-    <li id="js_password_browser_menu_export" class="ready closed" data-view-id="374">
+    <li id="js_password_browser_menu_move" class="ready closed" data-view-id="376">
+        <div class="row">
+            <div class="main-cell-wrapper">
+                <div class="main-cell">
+                    <a href="demo/LU_folders_move.php"><span>Move</span></a>
+                </div>
+            </div>
+        </div>
+    </li>
+    <li id="js_password_browser_menu_export" class="ready closed" data-view-id="377">
         <div class="row">
             <div class="main-cell-wrapper">
                 <div class="main-cell">
@@ -61,7 +80,7 @@
             </div>
         </div>
     </li>
-    <li id="js_password_browser_menu_delete" class="ready closed" data-view-id="375">
+    <li id="js_password_browser_menu_delete" class="ready closed" data-view-id="378">
         <div class="row">
             <div class="main-cell-wrapper">
                 <div class="main-cell">
@@ -84,6 +103,7 @@
             $('#js_contextual_menu').css('display','block').css('left', mouse.x).css('top', mouse.y);
             return false;
         });
+
         $('html body').click(function(){
             $('#js_contextual_menu').css('display','none');
         });

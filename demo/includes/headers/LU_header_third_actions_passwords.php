@@ -4,36 +4,27 @@
 
 			<li>
 				<a id="js_wk_menu_secretcopy_button" href="#" class="button mad_component_button js_component mad_view ready">
-					<span class="svg-icon">
-						<svg viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg">
-							<path d="M768 1664h896v-640h-416q-40 0-68-28t-28-68v-416h-384v1152zm256-1440v-64q0-13-9.5-22.5t-22.5-9.5h-704q-13 0-22.5 9.5t-9.5 22.5v64q0 13 9.5 22.5t22.5 9.5h704q13 0 22.5-9.5t9.5-22.5zm256 672h299l-299-299v299zm512 128v672q0 40-28 68t-68 28h-960q-40 0-68-28t-28-68v-160h-544q-40 0-68-28t-28-68v-1344q0-40 28-68t68-28h1088q40 0 68 28t28 68v328q21 13 36 28l408 408q28 28 48 76t20 88z"/>
-						</svg>
-					</span>
+                    <?php include('includes/svg-icons/copy.php'); ?>
 					<span>Copy</span>
 				</a>
 			</li>
 			<li>
 				<a id="js_wk_menu_edition_button" href="demo/LU_passwords_edit.php" class="button mad_component_button js_component mad_view ready">
-					<span class="svg-icon">
-						<svg viewBox="0 0 1750 1750" xmlns="http://www.w3.org/2000/svg"><path d="M888 1184l116-116-152-152-116 116v56h96v96h56zm440-720q-16-16-33 1l-350 350q-17 17-1 33t33-1l350-350q17-17 1-33zm80 594v190q0 119-84.5 203.5t-203.5 84.5h-832q-119 0-203.5-84.5t-84.5-203.5v-832q0-119 84.5-203.5t203.5-84.5h832q63 0 117 25 15 7 18 23 3 17-9 29l-49 49q-14 14-32 8-23-6-45-6h-832q-66 0-113 47t-47 113v832q0 66 47 113t113 47h832q66 0 113-47t47-113v-126q0-13 9-22l64-64q15-15 35-7t20 29zm-96-738l288 288-672 672h-288v-288zm444 132l-92 92-288-288 92-92q28-28 68-28t68 28l152 152q28 28 28 68t-28 68z"/></svg>
-					</span>
+                    <?php include('includes/svg-icons/edit.php'); ?>
 					<span>Edit</span>
 				</a>
 			</li>
 			<li>
 				<a id="js_wk_menu_sharing_button" href="demo/LU_passwords_share.php" class="button mad_component_button js_component mad_view ready">
-					<span class="svg-icon">
-							<svg viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg"><path d="M1792 640q0 26-19 45l-512 512q-19 19-45 19t-45-19-19-45v-256h-224q-98 0-175.5 6t-154 21.5-133 42.5-105.5 69.5-80 101-48.5 138.5-17.5 181q0 55 5 123 0 6 2.5 23.5t2.5 26.5q0 15-8.5 25t-23.5 10q-16 0-28-17-7-9-13-22t-13.5-30-10.5-24q-127-285-127-451 0-199 53-333 162-403 875-403h224v-256q0-26 19-45t45-19 45 19l512 512q19 19 19 45z"/></svg>
-					</span>
-					<span>Share</span>
+                    <?php include('includes/svg-icons/share.php'); ?>
+                    <span>Share</span>
 				</a>
 			</li>
 			<li>
 				<a id="js_wk_menu_sharing_button" href="demo/LU_passwords_export.php" class="button mad_component_button js_component mad_view ready">
-					<span class="svg-icon">
-						<svg viewBox="0 0 2048 1792" xmlns="http://www.w3.org/2000/svg"><path d="M1344 928q0-14-9-23t-23-9h-224v-352q0-13-9.5-22.5t-22.5-9.5h-192q-13 0-22.5 9.5t-9.5 22.5v352h-224q-13 0-22.5 9.5t-9.5 22.5q0 14 9 23l352 352q9 9 23 9t23-9l351-351q10-12 10-24zm640 224q0 159-112.5 271.5t-271.5 112.5h-1088q-185 0-316.5-131.5t-131.5-316.5q0-130 70-240t188-165q-2-30-2-43 0-212 150-362t362-150q156 0 285.5 87t188.5 231q71-62 166-62 106 0 181 75t75 181q0 76-41 138 130 31 213.5 135.5t83.5 238.5z"/></svg>
-					</span>	
-					<span>Export</span>
+
+                    <?php include('includes/svg-icons/export.php'); ?>
+                    <span>Export</span>
 				</a>
 			</li>
 			<li>

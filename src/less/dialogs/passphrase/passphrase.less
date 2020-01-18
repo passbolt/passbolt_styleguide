@@ -1,0 +1,42 @@
+.passphrase-entry {
+    width:95%;
+
+    input[type=text] {
+        width: 90%;
+    }
+    input[type=password] {
+        width: calc(90% - 4em);
+    }
+}
+
+.passphrase-entry.dialog {
+    label {
+        margin-bottom: 1em;
+        margin-left:.5em;
+    }
+
+    // Invisible field that Will receive the first focus
+    // before the passphrase field.
+    input[type=text].focus_first {
+        border-width: 0;
+        font-size: 0;
+        line-height: 0;
+        width:1px;
+        height:1px;
+    }
+
+}
+
+.passphrase-entry.login-form {
+
+    .submit-wrapper {
+        .button {
+            margin-top: .5em;
+        }
+    }
+    .input.checkbox {
+        label {
+            font-size: 0.938em;
+        }
+    }
+}

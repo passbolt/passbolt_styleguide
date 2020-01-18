@@ -48,10 +48,10 @@
     border-top: 1px solid @border-default;
     overflow-y: scroll;
     background: @tableview-background;
-}
 
-.tableview-content table {
-    width: 100%;
+    table {
+        width: 100%;
+    }
 }
 
 /* rows */
@@ -112,7 +112,7 @@
         color: @font-lighter;
     }
     .input.checkbox {
-        padding-top: 2px;
+        padding-top: 0px;
         padding-left:.25em;
 
         label {
@@ -123,17 +123,25 @@
             float: left;
         }
     }
-    th span,
-    td span {
-        vertical-align: 6%;
-    }
 
     /* fav fix */
     th.cell_favorite,
     td.cell_favorite {
         padding-left:0;
-        padding-top: 4px;
+        padding-top: 2px;
         padding-right:.25em;
+    }
+
+    td.cell_icon {
+        svg, img {
+            width: 1em;
+            height: 1em;
+            position: absolute;
+            margin-top:-.5em;
+        }
+        svg {
+            margin-top:-.55em;
+        }
     }
 }
 

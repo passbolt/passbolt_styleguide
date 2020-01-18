@@ -2,13 +2,14 @@
  * Profile user card
  */
  .user.profile {
-    max-width: 18em;
-    width: 80%;
+    max-width: 16em;
     float: right;
     border: 1px solid @border-default;
     margin-top: .5em;
     background: @background-lighter;
     overflow: hidden;
+    cursor: pointer;
+    border-radius: 3px;
     .button-background();
 
     .more {
@@ -41,8 +42,9 @@
 
     /* user card styling */
     .picture img {
-        width: 2.875em; /* 46px */
-        padding: 0.1250em; /* 2px */
+        width: 2.6em;
+        padding: 0.28em 0.35em 0.35em 0.35em;
+        border-radius: 50%;
     }
 
     .details {
@@ -53,7 +55,7 @@
 
         .name,
         .email {
-            width: 100%;
+            width:11em;
             float: left;
             clear: both;
             text-overflow: clip;
@@ -61,6 +63,7 @@
             overflow: hidden;
             display: inline-block;
             line-height: normal;
+            .ellipsis();
         }
         .name {
             font-weight: bold;
@@ -75,11 +78,11 @@
         display: block;
         border: 0;
         color:@font-dim;
-        span.svg-icon {
+        .svg-icon {
             margin: 18px 0 0 7px;
             display: inline-block;
         }
-	.svg-icon svg {
+	    .svg-icon svg {
             fill: @fill-color;
         }
         &:hover {

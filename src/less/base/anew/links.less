@@ -19,4 +19,11 @@ a {
     &.no-border, &:hover.no-border {
         border-bottom:0;
     }
+    &.disabled {
+        outline: 0;
+        text-decoration: none;
+        cursor: default;
+        color: @grey-darker;
+        pointer-events: none;
+    }
 }

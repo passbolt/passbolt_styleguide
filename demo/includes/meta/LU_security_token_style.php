@@ -1,10 +1,10 @@
 <style>
-    #js_master_password:focus,
-    #js_master_password ~ .security-token {
+    #passphrase-entry-form-passphrase:focus,
+    #passphrase-entry-form-passphrase {
         background:#ffbbbb;
         color:#000;
     }
-    #js_master_password:focus ~ .security-token {
+    #passphrase-entry-form-passphrase:focus ~ .security-token {
         background:#000;
         color:#ffbbbb;
     }

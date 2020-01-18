@@ -435,6 +435,10 @@ html body .hidden {
   -ms-text-overflow: ellipsis;
 }
 /* box shadows */
+/* rotations */
+.rotate-right {
+  transform: rotate(-90deg);
+}
 /* body */
 html {
   line-height: 1.6rem;
@@ -469,6 +473,13 @@ a:focus {
 a.no-border,
 a:hover.no-border {
   border-bottom: 0;
+}
+a.disabled {
+  outline: 0;
+  text-decoration: none;
+  cursor: default;
+  color: #606060;
+  pointer-events: none;
 }
 /*
 	Generic buttons
@@ -728,6 +739,7 @@ textarea {
 .checkbox input[type=checkbox] {
   position: absolute;
   opacity: 0;
+  cursor: pointer;
 }
 .checkbox input[type=checkbox] + label {
   font-weight: normal;
@@ -776,6 +788,9 @@ textarea {
   background-color: #FFFFFC;
   -webkit-mask-image: url('../../../img/fa/fas/check.svg');
   mask-image: url('../../../img/fa/fas/check.svg');
+}
+.checkbox.small input[type=checkbox] {
+  cursor: pointer;
 }
 .checkbox.small input[type=checkbox] + label {
   font-size: 1.4rem;

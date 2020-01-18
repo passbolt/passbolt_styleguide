@@ -16,6 +16,7 @@
 /* tags */
 /* tooltip */
 /* loading animation */
+/* svg fill */
 /* ==========================================================================
  * Reset is a mix of :
  *
@@ -561,6 +562,7 @@ html body .hidden {
 /*
  * Hide only visually, but have it available for screenreaders: h5bp.com/v
  */
+.visually-hidden,
 .visuallyhidden {
   border: 0;
   clip: rect(0 0 0 0);
@@ -575,7 +577,9 @@ html body .hidden {
      * when navigated to via the keyboard: h5bp.com/p
      */
 }
+.visually-hidden .focusable:active,
 .visuallyhidden .focusable:active,
+.visually-hidden .focusable:focus,
 .visuallyhidden .focusable:focus {
   clip: auto;
   height: auto;
@@ -660,6 +664,7 @@ html body .hidden {
     -moz-transform: rotate(-360deg);
   }
 }
+/* rotations */
 .rotate {
   -webkit-animation-name: rotate;
   -webkit-animation-duration: 4s;
@@ -669,6 +674,9 @@ html body .hidden {
   -moz-animation-duration: 4s;
   -moz-animation-iteration-count: infinite;
   -moz-animation-timing-function: linear;
+}
+.rotate-right {
+  transform: rotate(-90deg);
 }
 /* list */
 /* seriously? */
@@ -3149,6 +3157,93 @@ p {
   clip: auto;
 }
 /*!  @licend */
+.icon {
+  display: inline-block;
+  font: normal normal normal 14px/1 FontAwesome;
+  font-size: inherit;
+  text-rendering: auto;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  /* favorites */
+}
+.icon.fav:before {
+  content: "\f005";
+  color: #DDD;
+}
+.icon.unfav:before {
+  content: "\f005";
+  color: #D40101;
+}
+.svg-icon {
+  font-size: 16px;
+  line-height: 16px;
+  text-rendering: auto;
+}
+.svg-icon svg {
+  width: 0.875rem;
+  height: 0.875rem;
+  display: inline-block;
+  margin: auto;
+  fill: #333;
+}
+.svg-icon.light svg {
+  fill: #888;
+}
+.svg-icon.icon-only svg {
+  width: 1.1rem;
+  height: 1.1rem;
+}
+label .svg-icon svg {
+  fill: #888;
+  pointer-events: none;
+  cursor: default;
+  vertical-align: -0.0714286em;
+}
+.button .svg-icon svg {
+  vertical-align: middle;
+}
+.button .svg-icon + span:not(.visuallyhidden) {
+  margin-left: 2px;
+  display: inline-block;
+}
+.button:hover .svg-icon svg,
+.button .svg-icon svg:hover {
+  fill: #333;
+}
+/* warning */
+.button.primary:active .svg-icon svg,
+.button.primary:focus .svg-icon svg,
+.button.warning .svg-icon svg,
+.button.warning:hover .svg-icon svg,
+.button.warning:focus .svg-icon svg,
+.button.warning:active .svg-icon svg {
+  fill: #FFF;
+}
+/* focus */
+.button:focus .svg-icon svg,
+.button:active .svg-icon svg {
+  fill: #2894DF;
+}
+.button.disabled .svg-icon svg {
+  fill: #888;
+}
+.button.disabled .svg-icon svg:hover {
+  fill: #888;
+}
+a:hover .svg-icon svg {
+  fill: #2894DF;
+}
+a.disabled .svg-icon svg {
+  fill: #888;
+  pointer-events: none;
+  cursor: default;
+}
+a.disabled:hover .svg-icon svg {
+  fill: #888;
+}
+.message .svg-icon svg {
+  vertical-align: 0.125em;
+}
 /*
 	Generic buttons
 	Description	: We support <input[submit]>, <input.button>, <button> and <a.button>
@@ -3163,12 +3258,11 @@ button,
   position: relative;
   font-size: 0.875em;
   /*	14px */
-  padding: 0.429em 1.225em 0.429em 1.225em;
+  min-height: 1.428571em;
+  /* 20px */
+  padding: 0.4285714em 1.225em 0.4285714em 1.225em;
   /* 6px 16px */
   display: inline-block;
-  zoom: 1;
-  /* zoom and *display = ie7 hack for display:inline-block */
-  *display: inline;
   vertical-align: baseline;
   margin-right: 0.5em;
   outline: none;
@@ -3198,6 +3292,47 @@ button,
 .button.big {
   font-size: 1.125em;
 }
+/* hover */
+button:hover,
+.button:hover {
+  color: #333;
+  text-decoration: none;
+  background: #F3F3F3;
+  background-image: -moz-linear-gradient(top, #F3F3F3, #F3F3F3);
+  background-image: -ms-linear-gradient(top, #F3F3F3, #F3F3F3);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(background-lightest), to(#F3F3F3));
+  background-image: -webkit-linear-gradient(top, #F3F3F3, #F3F3F3);
+  background-image: -o-linear-gradient(top, #F3F3F3, #F3F3F3);
+  background-image: linear-gradient(top, #F3F3F3, #F3F3F3);
+  border: 1px solid #BBB;
+}
+/* focus */
+button:focus,
+.button:focus {
+  color: #2894DF;
+  border: 1px solid #2894DF;
+}
+/* active */
+button:active,
+.button:active {
+  color: #2894DF;
+  border: 1px solid #2894DF;
+  background: #EEE;
+  position: relative;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+/* cancel */
+.button.cancel,
+.button.cancel:focus,
+.button.cancel:hover,
+.button.cancel:active,
+.button.dim,
+.button.dim:focus,
+.button.dim:hover,
+.button.dim:active {
+  background: #FFF;
+  font-weight: normal;
+}
 /* primary */
 .button.primary {
   background: #2894DF;
@@ -3216,10 +3351,6 @@ button,
   border: 1px solid #4271b7;
   background: #2A9CEB;
 }
-.button.primary:active .svg-icon svg,
-.button.primary:focus .svg-icon svg {
-  fill: #FFF;
-}
 /* warning */
 .button.warning,
 .button.warning:hover,
@@ -3230,59 +3361,9 @@ button,
   border: 1px solid #D40101;
   text-shadow: none;
 }
-.button.warning .svg-icon svg,
-.button.warning:hover .svg-icon svg,
-.button.warning:focus .svg-icon svg,
-.button.warning:active .svg-icon svg {
-  fill: #FFF;
-}
 .button.warning:focus,
 .button.warning:active {
   border: 1px solid #92000C;
-}
-/* cancel */
-.button.cancel,
-.button.cancel:focus,
-.button.cancel:hover,
-.button.cancel:active,
-.button.dim,
-.button.dim:focus,
-.button.dim:hover,
-.button.dim:active {
-  background: #FFF;
-  font-weight: normal;
-}
-/* hover */
-.button:hover {
-  color: #333;
-  text-decoration: none;
-  background: #F3F3F3;
-  background-image: -moz-linear-gradient(top, #F3F3F3, #F3F3F3);
-  background-image: -ms-linear-gradient(top, #F3F3F3, #F3F3F3);
-  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(background-lightest), to(#F3F3F3));
-  background-image: -webkit-linear-gradient(top, #F3F3F3, #F3F3F3);
-  background-image: -o-linear-gradient(top, #F3F3F3, #F3F3F3);
-  background-image: linear-gradient(top, #F3F3F3, #F3F3F3);
-  border: 1px solid #BBB;
-}
-/* focus */
-.button:focus {
-  color: #2894DF;
-  border: 1px solid #2894DF;
-}
-.button:focus .svg-icon svg {
-  fill: #2894DF;
-}
-/* active */
-.button:active {
-  color: #2894DF;
-  border: 1px solid #2894DF;
-  background: #EEE;
-  position: relative;
-  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.2);
-}
-.button:active .svg-icon svg {
-  fill: #2894DF;
 }
 .button.disabled {
   cursor: default;
@@ -3291,9 +3372,6 @@ button,
   border: 1px solid #DDD;
   text-shadow: none;
   font-weight: normal;
-}
-.button.disabled .svg-icon svg {
-  fill: #888;
 }
 /* inactive */
 .button.disabled:hover,
@@ -3304,17 +3382,6 @@ button,
   color: #888;
   background: #FFF;
   border: 1px solid #DDD;
-}
-.button.disabled:hover .svg-icon svg,
-.button.disabled:active .svg-icon svg,
-.button.disabled:focus .svg-icon svg {
-  fill: #888;
-}
-/* toggle selected */
-.toggle.button.selected {
-  background: #EEE;
-  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.2);
-  border: 1px solid #BBB;
 }
 /* duo */
 .duo-wrapper {
@@ -3369,20 +3436,29 @@ button,
 .duo-wrapper .button {
   float: left;
 }
-.button.duo:nth-child(1) {
+.duo-wrapper .button.duo:nth-child(1) {
   margin-right: 0;
   border-top-right-radius: 0;
   border-bottom-right-radius: 0;
 }
-.button.duo:nth-child(2) {
+.duo-wrapper .button.duo:nth-child(2) {
   margin-left: 0;
   border-left: 0;
   border-top-left-radius: 0;
   border-bottom-left-radius: 0;
 }
+.buttons-spacer,
+.button-spacer {
+  margin-right: 0.5em;
+}
 /* processing state */
 html body .button.processing {
   background: #FFF;
+  border: 1px solid #FFF;
+  cursor: default;
+}
+.button.processing:active,
+.button.processing:hover {
   border: 1px solid #FFF;
 }
 .button.processing:after {
@@ -3405,14 +3481,11 @@ input[type=submit].button.processing {
   border: 1px solid #DDD;
   border-radius: 5px;
 }
-.button-spacer {
-  margin-right: 0.5em;
-}
-.button.disabled .svg-icon svg:hover {
-  fill: #888;
-}
-.button .svg-icon svg:hover {
-  fill: #333;
+/* toggle selected */
+.toggle.button.selected {
+  background: #EEE;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.2);
+  border: 1px solid #BBB;
 }
 /*
 	Base form components styling
@@ -3575,6 +3648,7 @@ input[type=checkbox] + label {
   display: inline;
   margin-left: 0.25em;
   margin-bottom: 0.25em;
+  cursor: pointer;
 }
 /* radio and checkboxes */
 .radiolist {
@@ -4741,9 +4815,6 @@ input[type=email].fluid {
 }
 .message.success.success-large.animated #successAnimation.animated #successAnimationCheck {
   animation: 0.75s cubic-bezier(0.77, 0, 0.175, 1) 0s 1 both drawCheck;
-}
-.message.notice .svg-icon svg {
-  margin-top: -5px;
 }
 @media only screen and (max-width: 767px) {
   .message.success.success-large.animated {
