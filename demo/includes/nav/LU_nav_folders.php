@@ -1,7 +1,7 @@
 <div class="folders navigation first accordion">
-	<div class="accordion-header1">
-		<div class="open node root">
-			<div class="row title">
+    <div class="accordion-header1">
+        <div class="open node root">
+            <div class="row title">
                 <div class="main-cell-wrapper">
                     <div class="main-cell">
                         <h3>
@@ -12,12 +12,12 @@
                         </h3>
                     </div>
                 </div>
-			</div>
+            </div>
         </div>
     </div>
     <ul class="folders-tree">
         <li class="open folder-item">
-            <div class="row selected" id="plants-li-row" draggable="true">
+            <div class="row selected" draggable="true" title="Plants">
                 <div class="main-cell-wrapper">
                     <div class="main-cell">
                         <a>
@@ -33,7 +33,7 @@
             </div>
             <ul>
                 <li class="closed child folder-item">
-                    <div class="row">
+                    <div class="row" draggable="true" title="Cactus">
                         <div class="main-cell-wrapper">
                             <div class="main-cell">
                                 <a>
@@ -49,7 +49,7 @@
                     </div>
                 </li>
                 <li class="closed child folder-item">
-                    <div class="row">
+                    <div class="row" draggable="true" title="Bamboo">
                         <div class="main-cell-wrapper">
                             <div class="main-cell">
                                 <a>
@@ -65,7 +65,7 @@
                     </div>
                 </li>
                 <li class="closed child folder-item">
-                    <div class="row">
+                    <div class="row" draggable="true" title="Bonsai">
                         <div class="main-cell-wrapper">
                             <div class="main-cell">
                                 <a>
@@ -83,7 +83,7 @@
             </ul>
         </li>
         <li class="open folder-item">
-            <div class="row" id="beta-li-row">
+            <div class="row" draggable="true" title="Beta">
                 <div class="main-cell-wrapper">
                     <div class="main-cell">
                         <a>
@@ -99,7 +99,7 @@
             </div>
             <ul>
                 <li class="closed child folder-item">
-                    <div class="row">
+                    <div class="row" draggable="true" title="Square Book">
                         <div class="main-cell-wrapper">
                             <div class="main-cell">
                                 <a>
@@ -115,7 +115,7 @@
                     </div>
                 </li>
                 <li class="open child folder-item">
-                    <div class="row">
+                    <div class="row" draggable="true" title="Famous Painters in the World">
                         <div class="main-cell-wrapper">
                             <div class="main-cell">
                                 <a>
@@ -131,7 +131,7 @@
                     </div>
                     <ul class="nested">
                         <li class="closed child folder-item">
-                            <div class="row disabled">
+                            <div class="row disabled" draggable="true" title="Leonardo Da Vinci">
                                 <div class="main-cell-wrapper">
                                     <div class="main-cell">
                                         <a>
@@ -147,7 +147,7 @@
                             </div>
                         </li>
                         <li class="closed child folder-item">
-                            <div class="row">
+                            <div class="row" draggable="true" title="Pablo Picasso">
                                 <div class="main-cell-wrapper">
                                     <div class="main-cell">
                                         <a>
@@ -170,32 +170,32 @@
 </div>
 
 <script type="application/javascript">
-    // DEMO ONLY -- not for production use
-    $(function() {
-      $('.folders .row .svg-icon.caret-down').click(function(event) {
-        $(event.target).closest('h3').find('.svg-icon.caret-down svg').toggleClass('rotate-right');
-        let $content = $(this).closest('.accordion-header1').next();
-        if ($content.is(':hidden')) {
-            $content.slideDown(50);
-        } else {
-            $content.slideUp(25);
-        }
-        $content.toggleClass('closed');
-        $content.parent().toggleClass('folders-label-height');
-        return false;
-      });
-
-      $('.folders-tree .row .svg-icon.caret-down').click(function(event) {
-        $(event.target).closest('li').find('.svg-icon.caret-down svg').toggleClass('rotate-right');
-        const $content = $(this).closest('li').children('ul');
-          if ($content.is(':hidden')) {
-              $content.slideDown(50);
-          } else {
-              $content.slideUp(25);
-          }
-          $(this).toggleClass('closed');
-          return false;
-      });
-
+  // DEMO ONLY -- not for production use
+  $(function () {
+    $('.folders .row .svg-icon.caret-down').click(function (event) {
+      $(event.target).closest('h3').find('.svg-icon.caret-down svg').toggleClass('rotate-right');
+      let $content = $(this).closest('.accordion-header1').next();
+      if ($content.is(':hidden')) {
+        $content.slideDown(50);
+      } else {
+        $content.slideUp(25);
+      }
+      $content.toggleClass('closed');
+      $content.parent().toggleClass('folders-label-height');
+      return false;
     });
+
+    $('.folders-tree .row .svg-icon.caret-down').click(function (event) {
+      $(event.target).closest('li').find('.svg-icon.caret-down svg').toggleClass('rotate-right');
+      const $content = $(this).closest('li').children('ul');
+      if ($content.is(':hidden')) {
+        $content.slideDown(50);
+      } else {
+        $content.slideUp(25);
+      }
+      $(this).toggleClass('closed');
+      return false;
+    });
+
+  });
 </script>

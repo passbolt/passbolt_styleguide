@@ -10,7 +10,7 @@
         <table>
             <tbody>
             <?php for ($i = 0; $i < sizeof($folders); $i++): $folder = $folders[$i]; ?>
-            <tr class="<?php if (!$i) echo 'selected'; ?>" id="resource<?= $folder['id']; ?>">
+            <tr class="<?php if (!$i) echo 'selected'; ?>" id="resource<?= $folder['id']; ?>" draggable="true" title="<?= $folder['name'] ?>">
                 <td class="js_grid_column_multipleSelect cell_multipleSelect selections s-cell">
                     <div>
                         <div class="mad_form_checkbox js_checkbox_multiple_select mad_view_form_checkbox ready"
@@ -54,7 +54,7 @@
             </tr>
             <?php endfor; ?>
             <?php for ($i = 0; $i < sizeof($resources); $i++): $resource = $resources[$i]; ?>
-            <tr id="resource<?= $resource['id']; ?>">
+            <tr id="resource<?= $resource['id']; ?>" title="<?= $resource['name'] ?>" draggable="true">
                 <td class="js_grid_column_multipleSelect cell_multipleSelect selections s-cell">
                     <div>
                         <div class="mad_form_checkbox js_checkbox_multiple_select mad_view_form_checkbox ready"
