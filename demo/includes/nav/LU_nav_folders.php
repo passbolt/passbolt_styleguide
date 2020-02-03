@@ -1,5 +1,13 @@
-<div class="folders navigation first accordion">
-    <div class="accordion-header1">
+<?php
+    $folders = [
+
+];
+    function renderNode($name) {
+
+    }
+?>
+<div class="folders navigation first">
+    <div class="folders-tree-header">
         <div class="open node root">
             <div class="row title">
                 <div class="main-cell-wrapper">
@@ -129,7 +137,7 @@
                             <a><span>more</span></a>
                         </div>
                     </div>
-                    <ul class="">
+                    <ul>
                         <li class="closed folder-item">
                             <div class="row disabled" draggable="true" title="Leonardo Da Vinci">
                                 <div class="main-cell-wrapper">
@@ -161,6 +169,40 @@
                                     <a><span>more</span></a>
                                 </div>
                             </div>
+                            <ul>
+                                <li class="closed folder-item">
+                                    <div class="row disabled" draggable="true" title="Leonardo Da Vinci">
+                                        <div class="main-cell-wrapper">
+                                            <div class="main-cell">
+                                                <a>
+                                                    <?php include('includes/svg-icons/caret-down.php'); ?>
+                                                    <?php include('includes/svg-icons/shared-folder.php'); ?>
+                                                    <span title="Leonardo Da Vinci" class="folder-name">Leonardo Da Vinci</span>
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <div class="right-cell more-ctrl">
+                                            <a><span>more</span></a>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="closed folder-item">
+                                    <div class="row" draggable="true" title="Pablo Picasso">
+                                        <div class="main-cell-wrapper">
+                                            <div class="main-cell">
+                                                <a>
+                                                    <?php include('includes/svg-icons/caret-down.php'); ?>
+                                                    <?php include('includes/svg-icons/folder.php'); ?>
+                                                    <span title="Pablo Picasso" class="folder-name">Pablo Picasso</span>
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <div class="right-cell more-ctrl">
+                                            <a><span>more</span></a>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
                         </li>
                     </ul>
                 </li>
@@ -174,7 +216,7 @@
   $(function () {
     $('.folders .row .svg-icon.caret-down').click(function (event) {
       $(event.target).closest('h3').find('.svg-icon.caret-down svg').toggleClass('rotate-right');
-      let $content = $(this).closest('.accordion-header1').next();
+      let $content = $(this).closest('.folders-tree-header').next();
       if ($content.is(':hidden')) {
         $content.slideDown(50);
       } else {
@@ -187,7 +229,7 @@
 
     $('.folders-tree .row .svg-icon.caret-down').click(function (event) {
       $(event.target).closest('li').find('.svg-icon.caret-down svg').toggleClass('rotate-right');
-      const $content = $(this).closest('li').ren('ul');
+      const $content = $(this).closest('li').children('ul');
       if ($content.is(':hidden')) {
         $content.slideDown(50);
       } else {
