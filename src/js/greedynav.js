@@ -2,7 +2,7 @@
  * GreedyNav.js, Passbolt edition
  *
  * @licence Licensed under the MIT license - http://opensource.org/licenses/MIT
- * @copyright (c) 2015 Luke Jackson, (c) 2019 Passbolt SA
+ * @copyright (c) 2015 Luke Jackson, (c) 2020 Passbolt SA
  * @source https://github.com/lukejacksonn/GreedyNav
  */
 $(function() {

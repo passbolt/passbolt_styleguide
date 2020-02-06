@@ -15,7 +15,7 @@
          /_/    \__,_/____/____/_.___/\____/_/\__/
 
          The password management solution
-         (c) 2019 Passbolt SA
+         (c) 2020 Passbolt SA
 
      -->
     <?php if (!isset($base)) { $base = '../'; } ?>
