@@ -17,15 +17,15 @@
                 <span>Move</span>
                 <span class="dialog-header-subtitle">Beta</span>
             </h2>
-            <a class="dialog-close" role="button" href="demo/LU_passwords_folders.php">
-                <?php include('includes/svg-icons/close.php'); ?>
+            <a class="dialog-close disabled" role="button" href="demo/LU_passwords_folders.php">
+                <?php include('../includes/svg-icons/close.php'); ?>
                 <span class="visuallyhidden">close</span>
             </a>
         </div>
         <div class="dialog-content">
             <div class="breadcrumbs">
                 <a class="button" href="#" role="button">
-                    <?php include('includes/svg-icons/caret-left.php'); ?>
+                    <?php include('../includes/svg-icons/caret-left.php'); ?>
                     <span class="visuallyhidden">Up</span>
                 </a>
                 <ul>
@@ -40,22 +40,22 @@
                     <?php foreach ($folders as $name => $props) : ?>
                     <li class="folders-list-item <?php if ($props['disabled']) : ?>disabled<?php endif; ?>">
                         <?php if ($props['shared']) : ?>
-                            <?php include('includes/svg-icons/shared-folder.php'); ?>
+                            <?php include('../includes/svg-icons/shared-folder.php'); ?>
                         <?php else : ?>
-                            <?php include('includes/svg-icons/folder.php'); ?>
+                            <?php include('../includes/svg-icons/folder.php'); ?>
                         <?php endif; ?>
                         <span class="folder-name"><?= $name ;?></span>
                         <span class="folder-permission"><?= $props['right']; ?></span>
                         <a class="folder-view" href="#" role="button">
-                            <?php include('includes/svg-icons/caret-right.php'); ?>
+                            <?php include('../includes/svg-icons/caret-right.php'); ?>
                         </a>
                     </li>
                     <?php endforeach; ?>
                 </ul>
             </div>
             <div class="submit-wrapper clearfix">
-              <a class="button primary disabled" href="demo/LU_folders_move_confirm.php">Move</a>
-              <a class="cancel" href="demo/LU_passwords_folders.php">Cancel</a>
+              <a class="button primary disabled" href="demo/LU_folders_move_confirm.php" target="_parent">Move</a>
+              <a class="cancel disabled" href="demo/LU_passwords_folders.php" target="_parent">Cancel</a>
             </div>
         </div>
     </div>

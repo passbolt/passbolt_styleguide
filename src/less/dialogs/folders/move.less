@@ -42,6 +42,15 @@
             border-bottom: 1px solid @border-lighter;
             cursor: pointer;
 
+            &.disabled {
+                color: @font-dim;
+                background: @background-lightest;
+                cursor: default;
+
+                .svg-icon svg {
+                    fill: @font-dim;
+                }
+            }
             &.selected {
                 background: @background-lighter;
                 .folder-view {
@@ -54,7 +63,7 @@
             }
             .folder-permission {
                 color: @font-dim;
-                font-size: 0.65em;
+                font-size: 0.8em;
                 margin-left: 0.4em;
                 user-select: none;
             }

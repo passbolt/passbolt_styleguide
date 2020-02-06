@@ -10,7 +10,8 @@
     <div class="contain-item">
         <div id="app-container" class="container-wrapper">
             <div id="app" class="app" tabindex="1000">
-                <?php include('../includes/dialogs/passphrase/LU_passphrase_entry.php'); ?>
+                <?php $iframeName = '../includes/' . $iframe . '.php'; ?>
+                <?php include($iframeName); ?>
             </div>
         </div>
     </div>

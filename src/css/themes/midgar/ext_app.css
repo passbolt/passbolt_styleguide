@@ -721,6 +721,13 @@ a {
 a:hover {
   border-bottom: 1px solid #2894DF;
 }
+a.disabled {
+  outline: 0;
+  text-decoration: none;
+  cursor: default;
+  color: #606060;
+  pointer-events: none;
+}
 html {
   scroll-behavior: smooth;
 }
@@ -3494,7 +3501,8 @@ html body .button.processing {
   border-radius: 5px;
 }
 input[type=submit].button.processing {
-  font-size: 0;
+  color: transparent;
+  text-shadow: none;
   background: #30302D url('../../../img/controls/loading_dark.svg') center center no-repeat;
   background-size: auto 50% ;
   border: 1px solid #0C0C0A;
@@ -4648,6 +4656,50 @@ h6 .input.toggle-switch {
   float: left;
   padding: 0.4em 1em 0 0;
 }
+.avatar img {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+}
+/*
+ * Breadcrumbs
+ */
+.breadcrumbs {
+  height: 2em;
+  padding: 0.1875em 0 0.1875em 0.1875em;
+  margin-bottom: 0;
+  background: #30302D;
+}
+.breadcrumbs ul {
+  padding-top: 0.2em;
+  margin-left: 0.1875em;
+}
+.breadcrumbs ul li {
+  display: inline;
+  font-size: 0.8em;
+  /* 12px/base16>15 */
+  margin-left: 0.25em;
+}
+.breadcrumbs ul li:before {
+  content: "›";
+  margin-right: 0.5em;
+}
+.breadcrumbs ul li:first-child {
+  margin-left: 0;
+  padding-left: 0;
+}
+.breadcrumbs ul li:first-child:before {
+  content: "";
+}
+.breadcrumbs ul a {
+  border: 0;
+}
+.breadcrumbs div.main-cell {
+  display: inline;
+}
+.panel.middle .breadcrumbs {
+  border-bottom: 1px solid #0C0C0A;
+}
 /* Dialog */
 .dialog-wrapper {
   position: absolute;
@@ -5554,6 +5606,92 @@ h6 .input.toggle-switch {
   filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100);
   opacity: 1;
 }
+.input.location {
+  /*
+     * For IE 6/7 only
+     * Include this rule to trigger hasLayout and contain floats.
+     */
+  /*
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
+  /*
+     * For IE 6/7 only
+     * Include this rule to trigger hasLayout and contain floats.
+     */
+  zoom: 1;
+  /*
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
+}
+.input.location:before,
+.input.location:after {
+  content: "";
+  display: table;
+}
+.input.location:after {
+  clear: both;
+}
+.input.location:before,
+.input.location:after {
+  content: "";
+  display: table;
+}
+.input.location:after {
+  clear: both;
+}
+.input.location .location-input {
+  padding: 0.25em 0;
+  margin-bottom: 0.5em;
+  width: 100%;
+  float: left;
+  box-sizing: border-box;
+  border: 1px solid #222220;
+  background: #0C0C0A;
+}
+.input.location .breadcrumbs {
+  font-size: 1.125em;
+  background: transparent;
+  box-sizing: border-box;
+  float: left;
+  width: 79%;
+  padding-left: 0em;
+  margin-top: -0.25em;
+}
+.input.location .breadcrumbs ul {
+  float: left;
+  width: 100%;
+  padding-right: 0.5em;
+  box-sizing: border-box;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+.input.location .breadcrumbs li {
+  display: inline;
+}
+.input.location .button {
+  border: 0;
+  box-sizing: border-box;
+  float: right;
+  width: 19%;
+  margin: 0 0.25em 0 0;
+}
 .dialog .permission-add {
   background-color: #30302D;
   padding: 0 1em 1em 1em;
@@ -5623,10 +5761,12 @@ h6 .input.toggle-switch {
   height: 1.5em;
 }
 .form-content.permission-add .autocomplete input {
+  margin-bottom: 0;
+}
+.form-content.permission-add .autocomplete.with-token input {
+  box-sizing: border-box;
   width: calc(100% - 4em);
   /* space for security token */
-  margin-bottom: 0;
-  box-sizing: border-box;
 }
 .form-content.permission-add .message {
   padding-left: 0;
@@ -5710,6 +5850,10 @@ h6 .input.toggle-switch {
 }
 .autocomplete-wrapper .autocomplete-content .row:last-child {
   border: 0;
+}
+.autocomplete-wrapper .autocomplete-content .row.selected,
+.autocomplete-wrapper .autocomplete-content .row:hover {
+  background: #444442;
 }
 .autocomplete-wrapper .autocomplete-content .row .avatar img {
   float: left;
@@ -5930,16 +6074,6 @@ h6 .input.toggle-switch {
   vertical-align: middle;
   box-sizing: border-box;
 }
-.input-password-wrapper {
-  overflow: hidden;
-}
-.input-password-wrapper .message.error {
-  display: block;
-  clear: both;
-  width: 100%;
-  padding-bottom: 0.5em;
-  font-size: 0.813em;
-}
 /* password share tab */
 .dialog .share-tab {
   /* message */
@@ -5967,6 +6101,16 @@ h6 .input.toggle-switch {
   background: transparent url('../../../img/controls/loading_dark.svg') left center no-repeat;
   background-size: auto 75% ;
 }
+.input-password-wrapper {
+  overflow: hidden;
+}
+.input-password-wrapper .message.error {
+  display: block;
+  clear: both;
+  width: 100%;
+  padding-bottom: 0.5em;
+  font-size: 0.813em;
+}
 .passphrase-entry {
   width: 95%;
 }
@@ -5986,6 +6130,10 @@ h6 .input.toggle-switch {
   line-height: 0;
   width: 1px;
   height: 1px;
+}
+.passphrase-entry.dialog .input.checkbox,
+.passphrase-entry.dialog .input.select {
+  display: inline;
 }
 .passphrase-entry.login-form .submit-wrapper .button {
   margin-top: 0.5em;
@@ -6079,6 +6227,14 @@ h6 .input.toggle-switch {
   border-bottom: 1px solid #0C0C0A;
   cursor: pointer;
 }
+.move-folder-dialog .folders-list .folders-list-item.disabled {
+  color: #cacac9;
+  background: #444442;
+  cursor: default;
+}
+.move-folder-dialog .folders-list .folders-list-item.disabled .svg-icon svg {
+  fill: #cacac9;
+}
 .move-folder-dialog .folders-list .folders-list-item.selected {
   background: #3B3B39;
 }
@@ -6091,7 +6247,7 @@ h6 .input.toggle-switch {
 }
 .move-folder-dialog .folders-list .folders-list-item .folder-permission {
   color: #cacac9;
-  font-size: 0.65em;
+  font-size: 0.8em;
   margin-left: 0.4em;
   user-select: none;
 }

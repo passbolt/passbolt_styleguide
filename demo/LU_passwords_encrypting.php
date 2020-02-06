@@ -11,6 +11,6 @@
 	</div>
 </div>
 <?php include('includes/LU_footer.php'); ?>
-<iframe id="react-app" src="demo/iframes/LU_progress_dialog.php" frameborder="0"></iframe>
+<iframe id="react-app" src="demo/iframes/LU_iframe_reactapp.php?iframe=dialogs/progress/progress_dialog" frameborder="0"></iframe>
 </body>
 </html>

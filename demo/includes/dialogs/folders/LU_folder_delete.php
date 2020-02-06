@@ -2,8 +2,8 @@
     <div class="dialog confirm">
         <div class="dialog-header">
             <h2>Are you sure?</h2>
-            <a class="dialog-close js-dialog-close" href="demo/LU_passwords_folders.php">
-                <?php include('includes/svg-icons/close.php'); ?>
+            <a class="dialog-close js-dialog-close" href="demo/LU_folders.php" target="_parent">
+                <?php include('../includes/svg-icons/close.php'); ?>
                 <span class="visuallyhidden">close</span>
             </a>
         </div>
@@ -19,8 +19,8 @@
                 </div>
             </div>
             <div class="submit-wrapper clearfix">
-                <a class="button primary warning" role="button" href="demo/LU_passwords_folders.php">Delete</a>
-                <a class="js-dialog-close cancel" href="demo/LU_passwords_folders.php">Cancel</a>
+                <a class="button primary warning" role="button" href="demo/LU_folders.php" target="_parent">Delete</a>
+                <a class="js-dialog-close cancel" href="demo/LU_folders.php" target="_parent">Cancel</a>
             </div>
         </div>
     </div>

@@ -11,7 +11,7 @@ $users = [
             'first_name' => 'Ada',
             'last_name' => 'Lovelace',
             'email' => 'ada@passbolt.com',
-            'avatar' => 'img/avatar/user.png',
+            'avatar' => 'src/img/avatar/user.png',
             'fingerprint' => '3337 88B5 464B 797F DF10  A98F 2FE9 6B47 C7FF 421A'
         ],
         'Permission' => [
@@ -32,14 +32,15 @@ $users = [
             'first_name' => 'Betty',
             'last_name' => 'Holberton with a very long name',
             'email' => 'betty.holberton@passbolt.com',
-            'avatar' => 'img/avatar/user.png',
+            'avatar' => 'src/img/avatar/user.png',
             'fingerprint' => '3337 88B5 464B 797F DF10  A98F 2FE9 6B47 C7FF 421A'
         ],
         'Permission' => [
             'id' => '93ba06a7-e912-3ce1-a24b-b9ed766e42c4',
             'name' => 'read',
             'change' => 'unchanged',
-            'updated' => false
+            'updated' => false,
+            'disabled' => false
         ],
         'permissions' => [
             'canjs' => 'read',
@@ -52,14 +53,15 @@ $users = [
             'first_name' => 'IT-Support',
             'last_name' => '',
             'email' => '5 members',
-            'avatar' => 'img/avatar/group_default.png',
+            'avatar' => 'src/img/avatar/group_default.png',
             'fingerprint' => 'Ada Lovelace, Betty Holberton, Dame Steve Shirley, France Allen'
         ],
         'Permission' => [
             'id' => '93ba06a7-e912-3ce1-a24b-b9ed766e42c4',
             'name' => 'varies',
             'change' => 'unchanged',
-            'updated' => false
+            'updated' => false,
+            'disabled' => false
         ],
         'permissions' => [
             'canjs' => 'read',
@@ -103,12 +105,10 @@ if(!empty($_GET['Users'])) {
                     <select id="js_share_perm_type_<?php echo $user['Permission']['id']; ?>"
                             class="js_share_rs_perm_type permission mad_form_dropdown form-element mad_view_form_dropdown"
                             <?php if($user['Permission']['disabled']) echo 'disabled="disabled"';?>>
-                        <?php if($user['Permission']['name'] == 'varies') : ?>
-                        <option value="" data-view-id="376" <?php if($user['Permission']['name'] == 'varies') echo 'selected'; ?>>varies</option>
-                        <? endif; ?>
-                        <option value="1" data-view-id="376" <?php if($user['Permission']['name'] == 'read') echo 'selected'; ?>>can read</option>
-                        <option value="7" data-view-id="377" <?php if($user['Permission']['name'] == 'update') echo 'selected'; ?>>can update</option>
-                        <option value="15" data-view-id="378" <?php if($user['Permission']['name'] == 'owner') echo 'selected'; ?>>is owner</option>
+                        <option value="0" <?php if($user['Permission']['name'] == 'varies') echo 'selected'; ?>>varies</option>
+                        <option value="1" <?php if($user['Permission']['name'] == 'read') echo 'selected'; ?>>can read</option>
+                        <option value="7" <?php if($user['Permission']['name'] == 'update') echo 'selected'; ?>>can update</option>
+                        <option value="15" <?php if($user['Permission']['name'] == 'owner') echo 'selected'; ?>>is owner</option>
                     </select>
                     <?php if($user['Permission']['name'] == 'varies') : ?>
                         <div href="#" class="more_details tooltip-alt">

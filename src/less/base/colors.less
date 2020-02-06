@@ -28,3 +28,11 @@ a {
 a:hover {
     border-bottom: 1px solid @border-focus;
 }
+
+a.disabled {
+    outline: 0;
+    text-decoration: none;
+    cursor: default;
+    color: @grey-darker;
+    pointer-events: none;
+}

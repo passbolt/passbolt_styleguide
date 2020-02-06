@@ -9,9 +9,11 @@
         height: 1.5em;
     }
     .autocomplete input {
-        width: calc(100% - 4em); /* space for security token */
         margin-bottom: 0;
+    }
+    .autocomplete.with-token input {
         box-sizing: border-box;
+        width: calc(100% - 4em); /* space for security token */
     }
     .message {
         padding-left: 0;
@@ -50,7 +52,10 @@
             &:last-child {
                 border: 0;
             }
-
+            &.selected,
+            &:hover {
+                background: @background-lightest;
+            }
             /* user summary */
             .avatar img {
                 float: left;

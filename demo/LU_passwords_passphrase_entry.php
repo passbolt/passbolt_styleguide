@@ -11,6 +11,6 @@
 	</div>
 </div>
 <?php include('includes/LU_footer.php'); ?>
-<iframe id="react-app" src="demo/iframes/LU_passphrase_entry.php" frameborder="0"></iframe>
+<iframe id="react-app" src="demo/iframes/LU_iframe_reactapp.php?iframe=dialogs/passphrase/LU_passphrase_entry" frameborder="0"></iframe>
 </body>
 </html>

@@ -720,6 +720,13 @@ a {
 a:hover {
   border-bottom: 1px solid #2894DF;
 }
+a.disabled {
+  outline: 0;
+  text-decoration: none;
+  cursor: default;
+  color: #888;
+  pointer-events: none;
+}
 /*
  * Typography
  */
@@ -3856,7 +3863,8 @@ html body .button.processing {
   border-radius: 5px;
 }
 input[type=submit].button.processing {
-  font-size: 0;
+  color: transparent;
+  text-shadow: none;
   background: #FFF url('../../../img/controls/loading_light.svg') center center no-repeat;
   background-size: auto 50% ;
   border: 1px solid #DDD;

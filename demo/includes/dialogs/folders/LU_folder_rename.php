@@ -3,10 +3,9 @@
 		<div class="dialog-header">
 			<h2>Rename a folder</h2>
 			<a href="demo/LU_passwords_folders.php" class="dialog-close" role="button">
-					<?php include('includes/svg-icons/close.php'); ?>
+					<?php include('../includes/svg-icons/close.php'); ?>
 				<span class="visuallyhidden">Close</span>
 			</a>
-
 		</div>
 		<div class="js_dialog_content dialog-content">
 			<div class="passbolt_controller_component_resource_actions_tab_controller mad_view_component_tab tabs ready" id="d53f19e2-0c9a-6edb-ff47-4ca7510609af">
@@ -20,13 +19,12 @@
                             </div>
                         </div>
                     </div>
+                    <div class="submit-wrapper clearfix">
+                      <a class="button primary" href="demo/LU_passwords_folders.php">Save</a>
+                      <a class="js-dialog-cancel cancel" href="demo/LU_passwords_folders.php">Cancel</a>
+                    </div>
                 </form>
-          <div class="submit-wrapper clearfix">
-              <a class="button primary" href="demo/LU_passwords_folders.php">Save</a>
-              <a class="js-dialog-cancel cancel" href="demo/LU_passwords_folders.php">Cancel</a>
-          </div>
-					</form>
-				</div>
+                </div>
 			</div>
 		</div>
 	</div>

@@ -20,6 +20,11 @@ if (isset($_REQUEST['theme']) && in_array($_REQUEST['theme'], $themes)) {
     }
 }
 
+$iframe = null;
+if (isset($_REQUEST['iframe'])) {
+    $iframe = $_REQUEST['iframe'];
+}
+
 /*
  * Config switcher
  * Can be used to redefined variables like $base

@@ -5,7 +5,7 @@
                 <span>New folder</span>
             </h2>
             <a href="demo/LU_passwords_folders.php" class="dialog-close" role="button">
-                <?php include('includes/svg-icons/close.php'); ?>
+                <?php include('../includes/svg-icons/close.php'); ?>
                 <span class="visuallyhidden">Close</span>
             </a>
         </div>
@@ -31,7 +31,7 @@
                     </div>
                 </div>
                 <div class="submit-wrapper clearfix">
-                    <input class="button primary" value="Create" data-view-id="423" type="submit">
+                    <input class="button primary processing" value="Create" data-view-id="423" type="submit">
                     <a class="cancel" href="demo/LU_passwords_folders.php">Cancel</a>
                 </div>
             </form>

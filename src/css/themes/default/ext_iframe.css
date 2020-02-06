@@ -720,6 +720,13 @@ a {
 a:hover {
   border-bottom: 1px solid #2894DF;
 }
+a.disabled {
+  outline: 0;
+  text-decoration: none;
+  cursor: default;
+  color: #888;
+  pointer-events: none;
+}
 html {
   scroll-behavior: smooth;
 }
@@ -3503,7 +3510,8 @@ html body .button.processing {
   border-radius: 5px;
 }
 input[type=submit].button.processing {
-  font-size: 0;
+  color: transparent;
+  text-shadow: none;
   background: #FFF url('../../../img/controls/loading_light.svg') center center no-repeat;
   background-size: auto 50% ;
   border: 1px solid #DDD;
@@ -5392,10 +5400,12 @@ input[type=email].fluid {
   height: 1.5em;
 }
 .form-content.permission-add .autocomplete input {
+  margin-bottom: 0;
+}
+.form-content.permission-add .autocomplete.with-token input {
+  box-sizing: border-box;
   width: calc(100% - 4em);
   /* space for security token */
-  margin-bottom: 0;
-  box-sizing: border-box;
 }
 .form-content.permission-add .message {
   padding-left: 0;
@@ -5480,6 +5490,10 @@ input[type=email].fluid {
 .autocomplete-wrapper .autocomplete-content .row:last-child {
   border: 0;
 }
+.autocomplete-wrapper .autocomplete-content .row.selected,
+.autocomplete-wrapper .autocomplete-content .row:hover {
+  background: #F3F3F3;
+}
 .autocomplete-wrapper .autocomplete-content .row .avatar img {
   float: left;
 }
@@ -5547,6 +5561,10 @@ input[type=email].fluid {
   line-height: 0;
   width: 1px;
   height: 1px;
+}
+.passphrase-entry.dialog .input.checkbox,
+.passphrase-entry.dialog .input.select {
+  display: inline;
 }
 .passphrase-entry.login-form .submit-wrapper .button {
   margin-top: 0.5em;

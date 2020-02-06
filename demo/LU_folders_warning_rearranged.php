@@ -7,11 +7,10 @@
 <div id="container" class="page password">
     <div class="mad_event_event_bus"></div>
     <div id="js_app_controller" class="passbolt_controller_app_controller mad_view_view js_component ready">
-        <!-- move dialog -->
-        <?php include('includes/dialogs/LU_folder_warning_rearranged.php');?>
         <?php include('includes/workspace/LU_passwords_workspace.php'); ?>
     </div>
 </div>
 <?php include('includes/LU_footer.php'); ?>
+<iframe id="react-app" src="demo/iframes/LU_iframe_reactapp.php?iframe=dialogs/folders/LU_folder_warning_rearranged" frameborder="0"></iframe>
 </body>
 </html>

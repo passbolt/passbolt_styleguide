@@ -1,16 +1,9 @@
-<?php include('../../_includes/bootstrap.php'); ?>
-<!doctype html>
-<html>
-<head>
-    <?php include('../../includes/meta/LU_meta_iframe.php'); ?>
-</head>
-<body class="iframe">
 <div class="dialog-wrapper">
 	<div class="dialog confirm">
 		<div class="dialog-header">
 			<h2>Are you sure?</h2>
 			<a class="dialog-close js-dialog-close" href="demo/LU_passwords_folders.php">
-                <?php include('../../includes/svg-icons/close.php'); ?>
+                <?php include('../includes/svg-icons/close.php'); ?>
                 <span class="visuallyhidden">close</span>
 			</a>
 		</div>
@@ -29,5 +22,3 @@
 		</div>
 	</div>
 </div>
-</body>
-</html>
