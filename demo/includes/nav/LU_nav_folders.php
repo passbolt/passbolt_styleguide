@@ -214,6 +214,10 @@
 <script type="application/javascript">
   // DEMO ONLY -- not for production use
   $(function () {
+    setTimeout(() => {
+
+    }, 1000);
+
     $('.folders .row .svg-icon.caret-down').click(function (event) {
       $(event.target).closest('h3').find('.svg-icon.caret-down svg').toggleClass('rotate-right');
       let $content = $(this).closest('.folders-tree-header').next();
