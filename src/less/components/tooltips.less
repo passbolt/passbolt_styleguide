@@ -16,20 +16,10 @@
 .tooltip:after {
     position: absolute;
     visibility: hidden;
-    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
-    filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
     opacity: 0;
-    -webkit-transition: opacity 0.2s ease-in-out,
-    visibility 0.2s ease-in-out,
-    -webkit-transform 0.2s cubic-bezier(0.71, 1.7, 0.77, 1.24);
-    -moz-transition: opacity 0.2s ease-in-out,
-    visibility 0.2s ease-in-out,
-    -moz-transform 0.2s cubic-bezier(0.71, 1.7, 0.77, 1.24);
     transition: opacity 0.2s ease-in-out,
     visibility 0.2s ease-in-out,
     transform 0.2s cubic-bezier(0.71, 1.7, 0.77, 1.24);
-    -webkit-transform: translate3d(0, 0, 0);
-    -moz-transform: translate3d(0, 0, 0);
     transform: translate3d(0, 0, 0);
     pointer-events: none;
     text-align: center;
@@ -47,8 +37,6 @@
 .always-show:before,
 .always-show:after {
     visibility: visible;
-    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";
-    filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100);
     opacity: 1;
 }
 
@@ -248,17 +236,9 @@
         background-color: @background-dark;
         color: @font-inverse;
         padding: .5em 1em;
-        -webkit-transition: opacity 0.2s ease-in-out,
-        visibility 0.2s ease-in-out,
-        -webkit-transform 0.2s cubic-bezier(0.71, 1.7, 0.77, 1.24);
-        -moz-transition: opacity 0.2s ease-in-out,
-        visibility 0.2s ease-in-out,
-        -moz-transform 0.2s cubic-bezier(0.71, 1.7, 0.77, 1.24);
         transition: opacity 0.2s ease-in-out,
         visibility 0.2s ease-in-out,
         transform 0.2s cubic-bezier(0.71, 1.7, 0.77, 1.24);
-        -webkit-transform: translate3d(0, 0, 0);
-        -moz-transform: translate3d(0, 0, 0);
         transform: translate3d(0, 0, 0);
         z-index: 99999;
 
@@ -280,11 +260,8 @@
 
     /* Ease the tooltip left when you mouse over the tooltip container */
     &:hover .tooltip-text {
-        -webkit-transform: translateX(12px);
-        -moz-transform: translateX(12px);
         transform: translateX(12px);
         visibility: visible;
-        -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";
         filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100);
         opacity: 1;
     }

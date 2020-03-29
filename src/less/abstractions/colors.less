@@ -76,20 +76,10 @@
 @button-primary-text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.2);
 .button-background() {
     background: @background-lighter;
-    background-image: -moz-linear-gradient(top, @background-lightest, @background-lighter);
-    background-image: -ms-linear-gradient(top, @background-lightest, @background-lighter);
-    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(background-lightest), to(@background-lighter));
-    background-image: -webkit-linear-gradient(top, @background-lightest, @background-lighter);
-    background-image: -o-linear-gradient(top, @background-lightest, @background-lighter);
     background-image: linear-gradient(top, @background-lightest, @background-lighter);
 }
 .button-hover-background() {
     background: @background-lightest;
-    background-image: -moz-linear-gradient(top, @background-lightest, @background-lightest);
-    background-image: -ms-linear-gradient(top, @background-lightest, @background-lightest);
-    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(background-lightest), to(@background-lightest));
-    background-image: -webkit-linear-gradient(top, @background-lightest, @background-lightest);
-    background-image: -o-linear-gradient(top, @background-lightest, @background-lightest);
     background-image: linear-gradient(top, @background-lightest, @background-lightest);
 }
 @button-primary-background: @blue;

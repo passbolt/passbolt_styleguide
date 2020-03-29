@@ -1,0 +1,123 @@
+.dialog {
+    .form-content {
+        &.permission-add {
+            background-color: @background-default;
+            padding: 0 1em 1em 1em;
+            .clearfix();
+        }
+
+        &.permission-edit {
+            padding: 0em;
+            border-bottom: 1px solid @border-lightest;
+        }
+    }
+
+    .permissions {
+        &.scroll {
+            .scroll-shadow();
+            max-height: 19em;
+            margin: 0;
+        }
+
+        .row {
+            .clearfix();
+            font-size: .813em;
+            padding: .875em .5em .5em .875em;
+            border-bottom: 1px dotted @border-default;
+
+            &:last-child {
+                border: 0;
+            }
+            &.permission-updated {
+                background: @background-updated;
+            }
+
+            /* aro summary */
+            .avatar img {
+                float: left;
+            }
+            .aro {
+                width: 48%;
+                float: left;
+                padding: 0 1em;
+                .aro-details {
+                    margin-top:-.25em;
+                    color: @font-lighter;
+                }
+                .ellipsis {
+                    display:inline-block;
+                    max-width:90%;
+                }
+                .more-details {
+                    .svg-icon {
+                        float: left;
+                    }
+                }
+            }
+
+            .more-details {
+                margin-left:.25em;
+                .svg-icon {
+                    svg {
+                        fill: @font-dim;
+                    }
+                }
+            }
+
+            .rights {
+                float: left;
+                margin-top: .5em;
+                width: 27%;
+                select {
+                    margin: 0;
+                    font-size: 1em;
+                }
+            }
+
+            .remove-item {
+                color: @font-dim;
+                float:right;
+                margin-right:1em;
+                border:0;
+                padding:.625em;
+                width:1em;
+                height:1em;
+
+                /* hover */
+                &:hover {
+                    color: @font-default;
+                    text-decoration: none;
+                }
+
+                /* focus */
+                &:focus {
+                    color: @font-focus;
+                }
+
+                /* active */
+                &:active {
+                    color: @font-focus;
+                    box-shadow: inset 0 1px 2px rgba(0, 0, 0, .2);
+                }
+                &.disabled {
+                    cursor: default;
+                    color: @button-disabled-color;
+                }
+            }
+        }
+    }
+}
+
+/* hide icons if there is no space */
+@media all and (max-width: 480px) {
+    .dialog .permissions {
+        &.scroll {
+            height: auto;
+            margin: 0;
+        }
+        .row .user,
+        .row .group {
+            width: 45%;
+        }
+    }
+}

@@ -500,11 +500,6 @@ a.disabled {
   font-weight: normal;
   text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.5);
   background: #EEE;
-  background-image: -moz-linear-gradient(top, #F3F3F3, #EEE);
-  background-image: -ms-linear-gradient(top, #F3F3F3, #EEE);
-  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(background-lightest), to(#EEE));
-  background-image: -webkit-linear-gradient(top, #F3F3F3, #EEE);
-  background-image: -o-linear-gradient(top, #F3F3F3, #EEE);
   background-image: linear-gradient(top, #F3F3F3, #EEE);
   -webkit-border-radius: 0.214em;
   -moz-border-radius: 0.214em;
@@ -576,11 +571,6 @@ a.disabled {
   color: #333;
   text-decoration: none;
   background: #F3F3F3;
-  background-image: -moz-linear-gradient(top, #F3F3F3, #F3F3F3);
-  background-image: -ms-linear-gradient(top, #F3F3F3, #F3F3F3);
-  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(background-lightest), to(#F3F3F3));
-  background-image: -webkit-linear-gradient(top, #F3F3F3, #F3F3F3);
-  background-image: -o-linear-gradient(top, #F3F3F3, #F3F3F3);
   background-image: linear-gradient(top, #F3F3F3, #F3F3F3);
   border: 1px solid #BBB;
 }
@@ -1054,8 +1044,7 @@ ul li {
 /* credit: http://lea.verou.me/2012/04/background-attachment-local/ */
 .scroll-shadow {
   overflow: auto;
-  background: linear-gradient(#FFF 30%, rgba(255, 255, 255, 0)), linear-gradient(rgba(255, 255, 255, 0), #FFF 70%) 0 100%, /* Shadows */ radial-gradient(50% 0, farthest-side, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0)), radial-gradient(50% 100%, farthest-side, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0)) 0 100%;
-  background: linear-gradient(#FFF 30%, rgba(255, 255, 255, 0)), linear-gradient(rgba(255, 255, 255, 0), #FFF 70%) 0 100%, /* Shadows */ radial-gradient(farthest-side at 50% 0, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0)), radial-gradient(farthest-side at 50% 100%, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0)) 0 100%;
+  background: linear-gradient(#FFF 30%, rgba(255, 255, 255, 0)), linear-gradient(rgba(255, 255, 255, 0), #FFF 70%) 0 100%, /* Shadows */ radial-gradient(farthest-side at 50% 0, rgba(0, 0, 0, 0.08), rgba(0, 0, 0, 0)), radial-gradient(farthest-side at 50% 100%, rgba(0, 0, 0, 0.08), rgba(0, 0, 0, 0)) 0 100%;
   background-repeat: no-repeat;
   background-color: #FFF;
   background-size: 100% 40px, 100% 40px, 100% 14px, 100% 14px;
@@ -1065,8 +1054,7 @@ ul li {
 .simplebar-content {
   /* Opera doesn't support this in the shorthand */
   overflow: auto;
-  background: linear-gradient(#FFF 30%, rgba(255, 255, 255, 0)), linear-gradient(rgba(255, 255, 255, 0), #FFF 70%) 0 100%, /* Shadows */ radial-gradient(50% 0, farthest-side, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0)), radial-gradient(50% 100%, farthest-side, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0)) 0 100%;
-  background: linear-gradient(#FFF 30%, rgba(255, 255, 255, 0)), linear-gradient(rgba(255, 255, 255, 0), #FFF 70%) 0 100%, /* Shadows */ radial-gradient(farthest-side at 50% 0, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0)), radial-gradient(farthest-side at 50% 100%, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0)) 0 100%;
+  background: linear-gradient(#FFF 30%, rgba(255, 255, 255, 0)), linear-gradient(rgba(255, 255, 255, 0), #FFF 70%) 0 100%, /* Shadows */ radial-gradient(farthest-side at 50% 0, rgba(0, 0, 0, 0.08), rgba(0, 0, 0, 0)), radial-gradient(farthest-side at 50% 100%, rgba(0, 0, 0, 0.08), rgba(0, 0, 0, 0)) 0 100%;
   background-repeat: no-repeat;
   background-color: #FFF;
   background-size: 100% 40px, 100% 40px, 100% 14px, 100% 14px;

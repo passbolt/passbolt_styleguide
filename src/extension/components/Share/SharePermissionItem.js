@@ -1,0 +1,171 @@
+import {hot} from "react-hot-loader";
+import React, {Component} from "react";
+import PropTypes from "prop-types";
+import Icon from "../Common/Icons/Icon";
+import SharePermissionDeleteButton from "./SharePermissionDeleteButton";
+
+class SharePermissionItem extends Component {
+
+  constructor(props) {
+    super();
+    this.state = {};
+    if (!Number.isInteger(props.permissionType)) {
+      throw new TypeError('Invalid permission type for share permission item.');
+    }
+    this.state.permissionType = props.permissionType;
+    this.bindEventHandlers();
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.permissionType !== this.props.permissionType) {
+      this.setState({permissionType: this.props.permissionType});
+    }
+  }
+
+  bindEventHandlers() {
+    this.handleUpdate = this.handleUpdate.bind(this);
+    this.handleDelete = this.handleDelete.bind(this);
+  }
+
+  getAroDetails() {
+    if (this.props.aro.profile) {
+      return this.props.aro.username;
+    } else {
+      return 'Group';
+    }
+  }
+
+  isInputDisabled() {
+    return this.props.disabled;
+  }
+
+  getSelectClassName() {
+    if (this.isInputDisabled()) {
+      return 'permission disabled';
+    }
+    return 'permission';
+  }
+
+  getAvatar() {
+    if (this.props.aro.profile) {
+      // return this.props.user.profile.avatar.small;
+      return 'img/avatar/user.png'
+    } else {
+      return 'img/avatar/group_default.png';
+    }
+  }
+
+  getAroName() {
+    if (this.props.aro.profile) {
+      let profile = this.props.aro.profile;
+      return `${profile.first_name} ${profile.last_name}`;
+    } else {
+      return this.props.aro.name;
+    }
+  }
+
+  getClassName() {
+    let className = 'row';
+    if (this.props.updated) {
+      className += ' permission-updated';
+    }
+    return className;
+  }
+
+  handleUpdate(event) {
+    let newType = parseInt(event.target.value);
+    this.props.onUpdate(this.props.id, newType);
+  }
+
+  handleDelete(event) {
+    this.props.onDelete(this.props.id);
+  }
+
+  render() {
+    return(
+      <li id={"permission-item-" + this.props.id} className={this.getClassName()}>
+        <div className="avatar">
+          <img src={this.getAvatar()} alt="Avatar"/>
+        </div>
+
+        <div className="aro">
+          <div className="aro-name">
+            <span className="ellipsis">{this.getAroName()}</span>
+            {(this.props.variesDetails) &&
+            <div className="more-details tooltip-alt">
+              <Icon name='info-circle' />
+              <div className="tooltip-text right">
+                {(this.props.variesDetails[0].length > 0) &&
+                <span><strong>No access: {this.props.variesDetails[0].join(', ')}</strong><br/></span>
+                }
+                {(this.props.variesDetails[1].length > 0) &&
+                <span><strong>Can read: {this.props.variesDetails[1].join(', ')}</strong><br/></span>
+                }
+                {(this.props.variesDetails[7].length > 0) &&
+                <span><strong>Can edit: {this.props.variesDetails[7].join(', ')}</strong><br/></span>
+                }
+                {(this.props.variesDetails[15].length > 0) &&
+                <span><strong>Is owner: {this.props.variesDetails[15].join(', ')}</strong><br/></span>
+                }
+              </div>
+            </div>
+            }
+          </div>
+          <div className="aro-details">
+            <span className="ellipsis">{this.getAroDetails()}</span>
+          </div>
+        </div>
+
+        <div className="select rights">
+          <select name="permissionSelect"
+                  className={this.getSelectClassName()}
+                  value={this.state.permissionType}
+                  disabled={this.isInputDisabled()}
+                  onChange={this.handleUpdate}
+          >
+            <option value="1">can read</option>
+            <option value="7">can update</option>
+            <option value="15">is owner</option>
+            { (this.props.variesDetails) &&
+            <option value="-1">varies</option>
+            }
+          </select>
+
+          {(this.props.variesDetails) &&
+          <div className="more-details tooltip-alt">
+            <Icon name='info-circle' />
+            <div className="tooltip-text right">
+              {(this.props.variesDetails[0].length > 0) &&
+              <span><strong>No access: {this.props.variesDetails[0].join(', ')}</strong><br/></span>
+              }
+              {(this.props.variesDetails[1].length > 0) &&
+              <span><strong>Can read: {this.props.variesDetails[1].join(', ')}</strong><br/></span>
+              }
+              {(this.props.variesDetails[7].length > 0) &&
+              <span><strong>Can edit: {this.props.variesDetails[7].join(', ')}</strong><br/></span>
+              }
+              {(this.props.variesDetails[15].length > 0) &&
+              <span><strong>Is owner: {this.props.variesDetails[15].join(', ')}</strong><br/></span>
+              }
+            </div>
+          </div>
+          }
+        </div>
+
+        <SharePermissionDeleteButton onClose={this.handleDelete} disabled={this.isInputDisabled()}/>
+      </li>
+    );
+  }
+}
+
+SharePermissionItem.propTypes = {
+  id: PropTypes.string, // uuid
+  aro: PropTypes.object, // {id: <uuid>, name: <string>, ...etc}
+  variesDetails: PropTypes.object, // {type: [resource1, ...resourceN]}
+  updated: PropTypes.bool,
+  disabled: PropTypes.bool,
+  onUpdate: PropTypes.func,
+  onDelete: PropTypes.func
+};
+
+export default hot(module)(SharePermissionItem);

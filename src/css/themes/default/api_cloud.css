@@ -3296,8 +3296,6 @@ input[type=text]:disabled,
 input[type=number]:disabled,
 input[type=email]:disabled {
   border: 1px solid #DDD;
-  -webkit-box-shadow: 0 0 0 0;
-  -moz-box-shadow: 0 0 0 0;
   box-shadow: 0 0 0 0;
   cursor: normal;
   background: #F3F3F3;
@@ -3662,11 +3660,6 @@ button,
   font-weight: normal;
   text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.5);
   background: #EEE;
-  background-image: -moz-linear-gradient(top, #F3F3F3, #EEE);
-  background-image: -ms-linear-gradient(top, #F3F3F3, #EEE);
-  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(background-lightest), to(#EEE));
-  background-image: -webkit-linear-gradient(top, #F3F3F3, #EEE);
-  background-image: -o-linear-gradient(top, #F3F3F3, #EEE);
   background-image: linear-gradient(top, #F3F3F3, #EEE);
   -webkit-border-radius: 0.214em;
   -moz-border-radius: 0.214em;
@@ -3686,11 +3679,6 @@ button:hover,
   color: #333;
   text-decoration: none;
   background: #F3F3F3;
-  background-image: -moz-linear-gradient(top, #F3F3F3, #F3F3F3);
-  background-image: -ms-linear-gradient(top, #F3F3F3, #F3F3F3);
-  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(background-lightest), to(#F3F3F3));
-  background-image: -webkit-linear-gradient(top, #F3F3F3, #F3F3F3);
-  background-image: -o-linear-gradient(top, #F3F3F3, #F3F3F3);
   background-image: linear-gradient(top, #F3F3F3, #F3F3F3);
   border: 1px solid #BBB;
 }
