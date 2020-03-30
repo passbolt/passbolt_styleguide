@@ -5315,13 +5315,13 @@ h6 .input.toggle-switch {
   display: inline-block;
   max-width: 90%;
 }
-.dialog .permissions .row .aro .more-details .svg-icon {
+.dialog .permissions .row .aro .tooltip-alt .svg-icon {
   float: left;
 }
-.dialog .permissions .row .more-details {
+.dialog .permissions .row .tooltip-alt {
   margin-left: 0.25em;
 }
-.dialog .permissions .row .more-details .svg-icon svg {
+.dialog .permissions .row .tooltip-alt .svg-icon svg {
   fill: #666;
 }
 .dialog .permissions .row .rights {

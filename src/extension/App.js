@@ -42,6 +42,10 @@ class App extends Component{
     this.setState({showShareDialog: true, showStart:false});
   }
 
+  showMenu() {
+    return !(this.state.showFolderCreateDialog ||
+      this.state.showShareDialog);
+  }
   async getShareFixtures() {
     return await port.request('passbolt.share.get-resources-ids');
   }
@@ -49,6 +53,7 @@ class App extends Component{
   render(){
     return(
       <div id="container" className="page">
+        {this.showMenu() &&
         <div>
           <h1>Demo</h1>
           <ul>
@@ -56,6 +61,7 @@ class App extends Component{
             <li><a onClick={this.showShareDialog.bind(this)}>Share dialog</a></li>
           </ul>
         </div>
+        }
         {this.state.showFolderCreateDialog &&
         <FolderCreateDialog onClose={this.onDialogClose} folderParentId='123e4567-e89b-12d3-a456-426655440000'/>
         }

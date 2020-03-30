@@ -3,6 +3,8 @@ import React, {Component} from "react";
 import PropTypes from "prop-types";
 import Icon from "../Common/Icons/Icon";
 import SharePermissionDeleteButton from "./SharePermissionDeleteButton";
+import TooltipHtml from "../Common/Tooltip/TooltipHtml";
+import ShareVariesDetails from "./ShareVariesDetails";
 
 class SharePermissionItem extends Component {
 
@@ -92,23 +94,9 @@ class SharePermissionItem extends Component {
           <div className="aro-name">
             <span className="ellipsis">{this.getAroName()}</span>
             {(this.props.variesDetails) &&
-            <div className="more-details tooltip-alt">
-              <Icon name='info-circle' />
-              <div className="tooltip-text right">
-                {(this.props.variesDetails[0].length > 0) &&
-                <span><strong>No access: {this.props.variesDetails[0].join(', ')}</strong><br/></span>
-                }
-                {(this.props.variesDetails[1].length > 0) &&
-                <span><strong>Can read: {this.props.variesDetails[1].join(', ')}</strong><br/></span>
-                }
-                {(this.props.variesDetails[7].length > 0) &&
-                <span><strong>Can edit: {this.props.variesDetails[7].join(', ')}</strong><br/></span>
-                }
-                {(this.props.variesDetails[15].length > 0) &&
-                <span><strong>Is owner: {this.props.variesDetails[15].join(', ')}</strong><br/></span>
-                }
-              </div>
-            </div>
+            <TooltipHtml offset={true}>
+              <ShareVariesDetails variesDetails={this.props.variesDetails} />
+            </TooltipHtml>
             }
           </div>
           <div className="aro-details">
@@ -132,23 +120,9 @@ class SharePermissionItem extends Component {
           </select>
 
           {(this.props.variesDetails) &&
-          <div className="more-details tooltip-alt">
-            <Icon name='info-circle' />
-            <div className="tooltip-text right">
-              {(this.props.variesDetails[0].length > 0) &&
-              <span><strong>No access: {this.props.variesDetails[0].join(', ')}</strong><br/></span>
-              }
-              {(this.props.variesDetails[1].length > 0) &&
-              <span><strong>Can read: {this.props.variesDetails[1].join(', ')}</strong><br/></span>
-              }
-              {(this.props.variesDetails[7].length > 0) &&
-              <span><strong>Can edit: {this.props.variesDetails[7].join(', ')}</strong><br/></span>
-              }
-              {(this.props.variesDetails[15].length > 0) &&
-              <span><strong>Is owner: {this.props.variesDetails[15].join(', ')}</strong><br/></span>
-              }
-            </div>
-          </div>
+          <TooltipHtml offset={true}>
+            <ShareVariesDetails variesDetails={this.props.variesDetails} />
+          </TooltipHtml>
           }
         </div>
 
