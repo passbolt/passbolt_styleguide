@@ -44,6 +44,10 @@ export default class ShareChanges {
     return this._changes;
   }
 
+  getResources() {
+    return this._resources;
+  }
+
   /**
    * Check that a user is the original owner of the resources
    * @param {string} userId

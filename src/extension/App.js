@@ -22,7 +22,7 @@ class App extends Component{
     return {
       showStart: true,
       showFolderCreateDialog: false,
-      showShareDialog: false
+      showShareDialog: true
     }
   }
 

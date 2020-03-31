@@ -95,7 +95,8 @@ class Autocomplete extends Component {
 
   closeAutocomplete() {
     this.cache = [];
-    this.setState({processing: false, autocompleteItems: null});
+    this.setState({processing: false, autocompleteItems: null, selected: null});
+    this.props.onClose();
   }
 
   handleKeyDown (event) {
@@ -124,8 +125,9 @@ class Autocomplete extends Component {
   handleSelect(selected) {
     let obj = this.state.autocompleteItems[selected];
     this.cache = [];
-    this.setState({autocompleteItems: null, name: ''});
-    return this.props.onSelect(obj);
+    // this.setState({name: ''});
+    this.props.onSelect(obj);
+    this.closeAutocomplete();
   }
 
   handleInputChange(event) {
@@ -153,12 +155,12 @@ class Autocomplete extends Component {
 
   /**
    *
-   * @returns {Promise<unknown>}
+   * @returns {Promise<void>}
    */
   async handleAutocompleteChange() {
     let keyword = this.state.name;
     if (!keyword) {
-      this.props.onClose();
+      this.closeAutocomplete();
       return;
     }
     try {
@@ -173,8 +175,8 @@ class Autocomplete extends Component {
       });
     } catch (error) {
       console.error(error);
-      this.props.onClose();
-      this.setState({serviceError: error.message, processing: false, autocompleteItems: null, selected: null});
+      this.closeAutocomplete();
+      this.setState({serviceError: error.message});
     }
   }
 
@@ -256,27 +258,27 @@ class Autocomplete extends Component {
             />
           </div>
           {(this.state.processing || this.state.autocompleteItems) &&
-            <div className="autocomplete-wrapper">
-              <div className="autocomplete-content scroll"  ref={this.listRef}>
-                <ul>
-                  {this.state.processing &&
-                    <AutocompleteItemLoading />
+          <div className="autocomplete-wrapper">
+            <div className="autocomplete-content scroll"  ref={this.listRef}>
+              <ul>
+                {this.state.processing &&
+                <AutocompleteItemLoading />
+                }
+                {!this.state.processing && (!this.state.autocompleteItems || !this.state.autocompleteItems.length) &&
+                <AutocompleteItemEmpty />
+                }
+                {!this.state.processing && this.state.autocompleteItems && (this.state.autocompleteItems).map((item, key) => {
+                  if (item.username) {
+                    return <AutocompleteItem key={key} id={key} user={item} selected={this.isItemSelected(key)}
+                                             onClick={this.handleSelect}/>
+                  } else {
+                    return <AutocompleteItem key={key} id={key} group={item} selected={this.isItemSelected(key)}
+                                             onClick={this.handleSelect}/>
                   }
-                  {!this.state.processing && (!this.state.autocompleteItems || !this.state.autocompleteItems.length) &&
-                    <AutocompleteItemEmpty />
-                  }
-                  {!this.state.processing && this.state.autocompleteItems && (this.state.autocompleteItems).map((item, key) => {
-                    if (item.username) {
-                      return <AutocompleteItem key={key} id={key} user={item} selected={this.isItemSelected(key)}
-                                               onClick={this.handleSelect}/>
-                    } else {
-                      return <AutocompleteItem key={key} id={key} group={item} selected={this.isItemSelected(key)}
-                                               onClick={this.handleSelect}/>
-                    }
-                  })}
-                </ul>
-              </div>
+                })}
+              </ul>
             </div>
+          </div>
           }
         </div>
       </div>

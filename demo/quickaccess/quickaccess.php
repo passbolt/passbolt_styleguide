@@ -1,4 +1,4 @@
-<?php include('../_includes/bootstrap.php'); ?><!doctype html>
+<?php include('../legacy/_includes/bootstrap.php'); ?><!doctype html>
 <html class="passbolt ce edition" lang="en">
 <head>
     <meta charset="utf-8">
@@ -28,49 +28,49 @@
 <body>
 <div class="container-item">
 <div class="container-wrapper">
-    <?php include('../includes/quickaccess/quickaccess_login.php'); ?>
+    <?php include('includes/quickaccess_login.php'); ?>
 </div>
 </div>
 <div class="container-item">
 <div class="container-wrapper">
-    <?php include('../includes/quickaccess/quickaccess_passphrase.php'); ?>
+    <?php include('includes/quickaccess_passphrase.php'); ?>
 </div>
 </div>
 <div class="container-item">
 <div class="container-wrapper">
-    <?php include('../includes/quickaccess/quickaccess_passphrase_wrong.php'); ?>
+    <?php include('includes/quickaccess_passphrase_wrong.php'); ?>
 </div>
 </div>
 <div class="container-item">
 <div class="container-wrapper">
-    <?php include('../includes/quickaccess/quickaccess_search_results.php'); ?>
+    <?php include('includes/quickaccess_search_results.php'); ?>
 </div>
 </div>
 </div>
 <div class="container-item">
     <div class="container-wrapper">
-        <?php include('../includes/quickaccess/quickaccess_search_empty.php'); ?>
+        <?php include('includes/quickaccess_search_empty.php'); ?>
     </div>
 </div>
 
 <div class="container-item">
     <div class="container-wrapper">
-        <?php include('../includes/quickaccess/quickaccess_resource_create.php'); ?>
+        <?php include('includes/quickaccess_resource_create.php'); ?>
     </div>
 </div>
 <div class="container-item">
     <div class="container-wrapper">
-        <?php include('../includes/quickaccess/quickaccess_search_filters.php'); ?>
+        <?php include('includes/quickaccess_search_filters.php'); ?>
     </div>
 </div>
 <div class="container-item">
     <div class="container-wrapper">
-        <?php include('../includes/quickaccess/quickaccess_search_filters_results.php'); ?>
+        <?php include('includes/quickaccess_search_filters_results.php'); ?>
     </div>
 </div>
 <div class="container-item">
 <div class="container-wrapper">
-    <?php include('../includes/quickaccess/quickaccess_resource_view.php'); ?>
+    <?php include('includes/quickaccess_resource_view.php'); ?>
 </div>
 </div>
 </body>

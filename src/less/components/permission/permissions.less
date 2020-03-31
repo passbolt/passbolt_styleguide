@@ -48,20 +48,16 @@
                     display:inline-block;
                     max-width:90%;
                 }
-                .tooltip-alt {
-                    .svg-icon {
-                        float: left;
+                .svg-icon {
+                    svg {
+                        position:relative;
+                        top:-.125em;
                     }
                 }
             }
 
             .tooltip-alt {
                 margin-left:.25em;
-                .svg-icon {
-                    svg {
-                        fill: @font-dim;
-                    }
-                }
             }
 
             .rights {
@@ -82,6 +78,7 @@
                 padding:.625em;
                 width:1em;
                 height:1em;
+                margin-top:.125em;
 
                 /* hover */
                 &:hover {
@@ -103,6 +100,52 @@
                     cursor: default;
                     color: @button-disabled-color;
                 }
+            }
+        }
+
+        /* shimmering skeleton when loading */
+        .row.skeleton {
+            height:42px;
+            .avatar {
+                float: left;
+                width:3em;
+                height:3em;
+                background:@input-background-disabled;
+                border-radius:50%;
+            }
+            .aro {
+                .aro-name {
+                    margin-top:.25em;
+                    width: 10em;
+                    height: 1em;
+                    background:@input-background-disabled;
+                    .rounded();
+                }
+                .aro-details {
+                    .rounded();
+                    margin-top:.5em;
+                    width: 7em;
+                    height: 1em;
+                    background:@input-background-disabled;
+                }
+
+            }
+            .select.rights {
+                .rounded();
+                float:left;
+                margin-top:1em;
+                width: 8em;
+                height: 1.2em;
+                background:@input-background-disabled;
+            }
+            .actions {
+                border-radius:50%;
+                float:right;
+                width: 1.5em;
+                height: 1.5em;
+                margin-top:.9em;
+                margin-right:1.5em;
+                background:@input-background-disabled;
             }
         }
     }

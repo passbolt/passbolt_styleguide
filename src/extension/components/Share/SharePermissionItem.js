@@ -126,7 +126,9 @@ class SharePermissionItem extends Component {
           }
         </div>
 
-        <SharePermissionDeleteButton onClose={this.handleDelete} disabled={this.isInputDisabled()}/>
+        <div className="actions">
+          <SharePermissionDeleteButton onClose={this.handleDelete} disabled={this.isInputDisabled()}/>
+        </div>
       </li>
     );
   }

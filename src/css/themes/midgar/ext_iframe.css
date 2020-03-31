@@ -3211,32 +3211,31 @@ p {
   color: #D40101;
 }
 .svg-icon {
-  font-size: 16px;
-  line-height: 16px;
-  text-rendering: auto;
+  display: inline-flex;
+  align-self: center;
 }
 .svg-icon svg {
-  width: 0.875rem;
-  height: 0.875rem;
-  display: inline-block;
-  margin: auto;
   fill: #FFF;
+  height: 1em;
+  width: 1em;
 }
+.svg-icon.baseline svg {
+  top: 0.125em;
+  position: relative;
+}
+.svg-icon.dim svg,
 .svg-icon.light svg {
   fill: #EEEEEC;
 }
 .svg-icon.icon-only svg {
+  position: relative;
+  top: 0.25em;
   width: 1.1rem;
   height: 1.1rem;
 }
-label .svg-icon svg {
-  fill: #8B8B89;
-  pointer-events: none;
-  cursor: default;
-  vertical-align: -0.0714286em;
-}
 .button .svg-icon svg {
-  vertical-align: middle;
+  top: 0.125em;
+  position: relative;
 }
 .button .svg-icon + span:not(.visuallyhidden) {
   margin-left: 2px;
@@ -3276,9 +3275,6 @@ a.disabled .svg-icon svg {
 }
 a.disabled:hover .svg-icon svg {
   fill: #8B8B89;
-}
-.message .svg-icon svg {
-  vertical-align: 0.125em;
 }
 /*
 	Generic buttons
@@ -4099,6 +4095,10 @@ input[type=email].fluid {
   -o-text-overflow: ellipsis;
   -ms-text-overflow: ellipsis;
 }
+.dialog .dialog-header h2 svg {
+  position: relative;
+  top: 0.0625em;
+}
 .dialog .dialog-header .tooltip-alt {
   margin-left: 0.3em;
   font-size: 0.7em;
@@ -4711,6 +4711,12 @@ input[type=email].fluid {
   visibility: visible;
   filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100);
   opacity: 1;
+}
+.tooltip svg,
+.tooltip-alt svg {
+  fill: #cacac9;
+  top: 0.125em;
+  position: relative;
 }
 /*
  * jquery-filestyle
@@ -5492,10 +5498,14 @@ input[type=email].fluid {
   -ms-text-overflow: ellipsis;
   display: block;
 }
-.autocomplete-wrapper .autocomplete-content.loading {
-  height: 2em;
-  background: url('../../../img/controls/loading_dark.svg') no-repeat center center;
+.autocomplete-wrapper .autocomplete-content .loading {
   background-color: #30302D;
+}
+.autocomplete-wrapper .autocomplete-content .loading img {
+  border-radius: 0;
+  width: 1.75em;
+  height: 1.75em;
+  padding: 0.5em 1.5em 0 0.25em;
 }
 @media all and (max-width: 440px) {
   .autocomplete-wrapper .autocomplete-content {

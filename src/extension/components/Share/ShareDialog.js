@@ -9,6 +9,10 @@ import ErrorDialog from "../Common/ErrorDialog/ErrorDialog";
 import Autocomplete from "../Common/Autocomplete/Autocomplete";
 import ShareChanges from "./utility/ShareChanges";
 import SharePermissionItem from "./SharePermissionItem";
+import TooltipHtml from "../Common/Tooltip/TooltipHtml";
+import ShareVariesDetails from "./ShareVariesDetails";
+import SharePermissionDeleteButton from "./SharePermissionDeleteButton";
+import SharePermissionItemSkeleton from "./SharePermissionItemSkeleton";
 
 class ShareDialog extends Component {
   /**
@@ -28,12 +32,15 @@ class ShareDialog extends Component {
    * @returns {void}
    */
   async componentDidMount() {
-    let resources = await port.request('passbolt.share.get-resources', this.props.resourcesIds);
-    this.shareChanges = new ShareChanges(resources);
-    let permissions = this.shareChanges.aggregatePermissionsByAro();
-    this.setState({loading: false, name: '', permissions}, () => {
-      this.scrollToTopOfPermissionsList();
-    });
+    setTimeout(async () => {
+      let resources = await port.request('passbolt.share.get-resources', this.props.resourcesIds);
+      this.shareChanges = new ShareChanges(resources);
+      let permissions = this.shareChanges.aggregatePermissionsByAro();
+      this.setState({loading: false, name: '', permissions}, () => {
+        this.scrollToTopOfPermissionsList();
+      });
+    }, 3000);
+
   }
 
   /**
@@ -246,6 +253,9 @@ class ShareDialog extends Component {
   }
 
   getTitle() {
+    if (this.state.loading) {
+      return `Loading...`;
+    }
     if (this.isAboutItems()) {
       return `Share ${this.props.resourcesIds.length + this.props.foldersIds.length} items`;
     }
@@ -261,6 +271,22 @@ class ShareDialog extends Component {
     if (this.isAboutFolders()) {
       return `Share ${this.props.foldersIds.length} folders`;
     }
+  }
+
+  /**
+   * Return the dialog title tooltip content (multi-share details)
+   * or false in case of single resource share
+   * @returns {false|string} tool
+   */
+  getTooltip() {
+    if (!this.shareChanges) {
+      return '';
+    }
+    const resources = this.shareChanges.getResources();
+    if (!resources || !resources.length || resources.length === 1) {
+      return '';
+    }
+    return resources.map(resource => resource.name).join(', ');
   }
 
   /**
@@ -294,24 +320,33 @@ class ShareDialog extends Component {
     return (
       <div>
         <DialogWrapper className='share-dialog'
-           title={this.getTitle()} onClose={this.handleClose} disabled={this.hasAllInputDisabled()}>
+           title={this.getTitle()} tooltip={this.getTooltip()} onClose={this.handleClose} disabled={this.hasAllInputDisabled()}>
           <form className="share-form" onSubmit={this.handleFormSubmit} noValidate>
             <div className="form-content permission-edit">
+              {(this.state.loading) &&
+              <ul className="permissions scroll">
+                <SharePermissionItemSkeleton/>
+                <SharePermissionItemSkeleton/>
+                <SharePermissionItemSkeleton/>
+              </ul>
+              }
+              {!(this.state.loading) &&
               <ul className="permissions scroll" ref={this.permissionListRef}>
                 {(this.state.permissions && (this.state.permissions).map((permission, key) => {
                   return <SharePermissionItem
-                            id={permission.aro.id}
-                            key={key}
-                            aro={permission.aro}
-                            permissionType={permission.type}
-                            variesDetails={permission.variesDetails}
-                            updated={permission.updated}
-                            disabled={this.hasAllInputDisabled()}
-                            onUpdate={this.handlePermissionUpdate}
-                            onDelete={this.handlePermissionDelete}
+                    id={permission.aro.id}
+                    key={key}
+                    aro={permission.aro}
+                    permissionType={permission.type}
+                    variesDetails={permission.variesDetails}
+                    updated={permission.updated}
+                    disabled={this.hasAllInputDisabled()}
+                    onUpdate={this.handlePermissionUpdate}
+                    onDelete={this.handlePermissionDelete}
                   />
                 }))}
               </ul>
+              }
             </div>
             {(this.hasNoOwner()) &&
               <div className="message error">

@@ -3210,32 +3210,31 @@ p {
   color: #D40101;
 }
 .svg-icon {
-  font-size: 16px;
-  line-height: 16px;
-  text-rendering: auto;
+  display: inline-flex;
+  align-self: center;
 }
 .svg-icon svg {
-  width: 0.875rem;
-  height: 0.875rem;
-  display: inline-block;
-  margin: auto;
   fill: #333;
+  height: 1em;
+  width: 1em;
 }
+.svg-icon.baseline svg {
+  top: 0.125em;
+  position: relative;
+}
+.svg-icon.dim svg,
 .svg-icon.light svg {
   fill: #888;
 }
 .svg-icon.icon-only svg {
+  position: relative;
+  top: 0.25em;
   width: 1.1rem;
   height: 1.1rem;
 }
-label .svg-icon svg {
-  fill: #888;
-  pointer-events: none;
-  cursor: default;
-  vertical-align: -0.0714286em;
-}
 .button .svg-icon svg {
-  vertical-align: middle;
+  top: 0.125em;
+  position: relative;
 }
 .button .svg-icon + span:not(.visuallyhidden) {
   margin-left: 2px;
@@ -3275,9 +3274,6 @@ a.disabled .svg-icon svg {
 }
 a.disabled:hover .svg-icon svg {
   fill: #888;
-}
-.message .svg-icon svg {
-  vertical-align: 0.125em;
 }
 /*
 	Generic buttons
@@ -4673,6 +4669,23 @@ h6 .input.toggle-switch {
   /* Opera doesn't support this in the shorthand */
   background-attachment: local, local, scroll, scroll;
 }
+.shimmer {
+  display: block;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  content: '';
+  animation: shimmer 2s infinite;
+  background: linear-gradient(45deg, rgba(255, 255, 255, 0) 0, rgba(255, 255, 255, 0.1) 30%, rgba(255, 255, 255, 0.5) 50%, rgba(255, 255, 255, 0));
+}
+@keyframes shimmer {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
 .avatar img {
   width: 36px;
   height: 36px;
@@ -4756,6 +4769,10 @@ h6 .input.toggle-switch {
   text-overflow: ellipsis;
   -o-text-overflow: ellipsis;
   -ms-text-overflow: ellipsis;
+}
+.dialog .dialog-header h2 svg {
+  position: relative;
+  top: 0.0625em;
 }
 .dialog .dialog-header .tooltip-alt {
   margin-left: 0.3em;
@@ -5228,6 +5245,9 @@ h6 .input.toggle-switch {
   padding: 0em;
   border-bottom: 1px solid #F3F3F3;
 }
+.dialog .permissions {
+  /* shimmering skeleton when loading */
+}
 .dialog .permissions.scroll {
   /* Opera doesn't support this in the shorthand */
   overflow: auto;
@@ -5315,14 +5335,12 @@ h6 .input.toggle-switch {
   display: inline-block;
   max-width: 90%;
 }
-.dialog .permissions .row .aro .tooltip-alt .svg-icon {
-  float: left;
+.dialog .permissions .row .aro .svg-icon svg {
+  position: relative;
+  top: -0.125em;
 }
 .dialog .permissions .row .tooltip-alt {
   margin-left: 0.25em;
-}
-.dialog .permissions .row .tooltip-alt .svg-icon svg {
-  fill: #666;
 }
 .dialog .permissions .row .rights {
   float: left;
@@ -5341,6 +5359,7 @@ h6 .input.toggle-switch {
   padding: 0.625em;
   width: 1em;
   height: 1em;
+  margin-top: 0.125em;
   /* hover */
   /* focus */
   /* active */
@@ -5359,6 +5378,53 @@ h6 .input.toggle-switch {
 .dialog .permissions .row .remove-item.disabled {
   cursor: default;
   color: #888;
+}
+.dialog .permissions .row.skeleton {
+  height: 42px;
+}
+.dialog .permissions .row.skeleton .avatar {
+  float: left;
+  width: 3em;
+  height: 3em;
+  background: #F3F3F3;
+  border-radius: 50%;
+}
+.dialog .permissions .row.skeleton .aro .aro-name {
+  margin-top: 0.25em;
+  width: 10em;
+  height: 1em;
+  background: #F3F3F3;
+  -webkit-border-radius: 0.214em;
+  -moz-border-radius: 0.214em;
+  border-radius: 0.214em;
+}
+.dialog .permissions .row.skeleton .aro .aro-details {
+  -webkit-border-radius: 0.214em;
+  -moz-border-radius: 0.214em;
+  border-radius: 0.214em;
+  margin-top: 0.5em;
+  width: 7em;
+  height: 1em;
+  background: #F3F3F3;
+}
+.dialog .permissions .row.skeleton .select.rights {
+  -webkit-border-radius: 0.214em;
+  -moz-border-radius: 0.214em;
+  border-radius: 0.214em;
+  float: left;
+  margin-top: 1em;
+  width: 8em;
+  height: 1.2em;
+  background: #F3F3F3;
+}
+.dialog .permissions .row.skeleton .actions {
+  border-radius: 50%;
+  float: right;
+  width: 1.5em;
+  height: 1.5em;
+  margin-top: 0.9em;
+  margin-right: 1.5em;
+  background: #F3F3F3;
 }
 /* hide icons if there is no space */
 @media all and (max-width: 480px) {
@@ -5610,6 +5676,12 @@ h6 .input.toggle-switch {
   filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100);
   opacity: 1;
 }
+.tooltip svg,
+.tooltip-alt svg {
+  fill: #666;
+  top: 0.125em;
+  position: relative;
+}
 .input.location {
   /*
      * For IE 6/7 only
@@ -5827,10 +5899,14 @@ h6 .input.toggle-switch {
   -ms-text-overflow: ellipsis;
   display: block;
 }
-.autocomplete-wrapper .autocomplete-content.loading {
-  height: 2em;
-  background: url('../../../img/controls/loading_light.svg') no-repeat center center;
+.autocomplete-wrapper .autocomplete-content .loading {
   background-color: #FFF;
+}
+.autocomplete-wrapper .autocomplete-content .loading img {
+  border-radius: 0;
+  width: 1.75em;
+  height: 1.75em;
+  padding: 0.5em 1.5em 0 0.25em;
 }
 @media all and (max-width: 440px) {
   .autocomplete-wrapper .autocomplete-content {

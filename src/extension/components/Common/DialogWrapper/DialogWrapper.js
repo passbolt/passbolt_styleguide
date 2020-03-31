@@ -2,6 +2,7 @@ import React, {Component} from "react";
 import DialogCloseButton from "../DialogCloseButton/DialogCloseButton";
 import PropTypes from "prop-types";
 import {hot} from "react-hot-loader";
+import TooltipHtml from "../Tooltip/TooltipHtml";
 
 class DialogWrapper extends Component {
   constructor() {
@@ -36,7 +37,14 @@ class DialogWrapper extends Component {
       <div className={`${this.props.className} dialog-wrapper`}>
         <div className="dialog">
           <div className="dialog-header">
-            <h2><span>{this.props.title}</span></h2>
+            <h2>
+              <span>{this.props.title}</span>
+              {(this.props.tooltip && this.props.tooltip !== '') &&
+                <TooltipHtml>
+                  <span>{this.props.tooltip}</span>
+                </TooltipHtml>
+              }
+            </h2>
             <DialogCloseButton onClose={this.handleClose} disabled={this.props.disabled}/>
           </div>
           <div className="dialog-content">
@@ -51,6 +59,7 @@ class DialogWrapper extends Component {
 DialogWrapper.propTypes = {
   className: PropTypes.string,
   title: PropTypes.string,
+  tooltip: PropTypes.string,
   loading: PropTypes.bool,
   disabled: PropTypes.bool,
   onClose: PropTypes.func

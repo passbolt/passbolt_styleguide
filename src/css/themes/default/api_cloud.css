@@ -3133,32 +3133,31 @@ p {
   color: #D40101;
 }
 .svg-icon {
-  font-size: 16px;
-  line-height: 16px;
-  text-rendering: auto;
+  display: inline-flex;
+  align-self: center;
 }
 .svg-icon svg {
-  width: 0.875rem;
-  height: 0.875rem;
-  display: inline-block;
-  margin: auto;
   fill: #333;
+  height: 1em;
+  width: 1em;
 }
+.svg-icon.baseline svg {
+  top: 0.125em;
+  position: relative;
+}
+.svg-icon.dim svg,
 .svg-icon.light svg {
   fill: #888;
 }
 .svg-icon.icon-only svg {
+  position: relative;
+  top: 0.25em;
   width: 1.1rem;
   height: 1.1rem;
 }
-label .svg-icon svg {
-  fill: #888;
-  pointer-events: none;
-  cursor: default;
-  vertical-align: -0.0714286em;
-}
 .button .svg-icon svg {
-  vertical-align: middle;
+  top: 0.125em;
+  position: relative;
 }
 .button .svg-icon + span:not(.visuallyhidden) {
   margin-left: 2px;
@@ -3198,9 +3197,6 @@ a.disabled .svg-icon svg {
 }
 a.disabled:hover .svg-icon svg {
   fill: #888;
-}
-.message .svg-icon svg {
-  vertical-align: 0.125em;
 }
 /*
 	Base form components styling
