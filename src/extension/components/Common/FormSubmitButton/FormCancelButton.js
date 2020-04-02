@@ -3,9 +3,12 @@ import PropTypes from "prop-types";
 import {hot} from "react-hot-loader";
 
 class FormCancelButton extends Component {
-
-  constructor() {
-    super();
+  /**
+   * Constructor
+   * @param {Object} props
+   */
+  constructor(props) {
+    super(props);
   }
 
   getClassName() {

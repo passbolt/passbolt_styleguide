@@ -17,6 +17,10 @@ import PropTypes from "prop-types";
 import Icon from "../Icons/Icon";
 
 class TooltipHtml extends Component {
+  /**
+   * Constructor
+   * @param {Object} props
+   */
   constructor(props) {
     super(props);
     this.state = {top:null};

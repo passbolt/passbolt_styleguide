@@ -17,8 +17,12 @@ import AppContext from "../../../contexts/AppContext";
 import SvgCloseIcon from "../../../img/svg/close";
 
 class FolderMoveDialog extends Component {
-  constructor() {
-    super();
+  /**
+   * Constructor
+   * @param {Object} props
+   */
+  constructor(props) {
+    super(props);
     this.state = this.getDefaultState();
     this.initEventHandlers();
   }

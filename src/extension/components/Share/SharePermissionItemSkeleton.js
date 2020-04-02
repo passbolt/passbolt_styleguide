@@ -3,9 +3,12 @@ import React, {Component} from "react";
 import SharePermissionDeleteButton from "./SharePermissionDeleteButton";
 
 class SharePermissionItemSkeleton extends Component {
-
+  /**
+   * Constructor
+   * @param {Object} props
+   */
   constructor(props) {
-    super();
+    super(props);
   }
 
   render() {

@@ -21,9 +21,12 @@ import AutocompleteItemEmpty from "./AutocompleteItemEmpty";
 import AutocompleteItemLoading from "./AutocompleteItemLoading";
 
 class Autocomplete extends Component {
-
-  constructor() {
-    super();
+  /**
+   * Constructor
+   * @param {Object} props
+   */
+  constructor(props) {
+    super(props);
     this.bindEventHandlers();
     this.createInputRefs();
     this.state = this.getDefaultState();
@@ -32,6 +35,10 @@ class Autocomplete extends Component {
     this.cacheExpiry = 10000; // in ms (aka 10s)
   }
 
+  /**
+   * getDefaultState
+   * @return {object}
+   */
   getDefaultState() {
     return {
       loading: true,
@@ -47,17 +54,25 @@ class Autocomplete extends Component {
     }
   }
 
+  /**
+   * ComponentDidMount
+   * Invoked immediately after component is inserted into the tree
+   * @return {void}
+   */
   componentDidMount() {
     this.setState({loading: false, name: ''}, () => {
-      if (this.props.autofocus) {
-        this.inputRef.current.focus();
-      }
+      this.inputRef.current.focus();
     });
     document.addEventListener("keydown", this.handleKeyDown);
   }
 
+  /**
+   * componentDidUpdate
+   * Invoked immediately after props are updated
+   * @return {void}
+   */
   componentDidUpdate(prevProps) {
-    if (prevProps.autofocus !== this.props.autofocus) {
+    if (prevProps.disabled !== this.props.disabled) {
       this.inputRef.current.focus();
     }
   }
@@ -125,7 +140,7 @@ class Autocomplete extends Component {
   handleSelect(selected) {
     let obj = this.state.autocompleteItems[selected];
     this.cache = [];
-    // this.setState({name: ''});
+    this.setState({name: ''});
     this.props.onSelect(obj);
     this.closeAutocomplete();
   }
@@ -293,7 +308,6 @@ Autocomplete.propTypes = {
   onOpen: PropTypes.func,
   onClose: PropTypes.func,
   label: PropTypes.string,
-  autofocus: PropTypes.bool,
   disabled: PropTypes.bool
 };
 

@@ -7,12 +7,21 @@ import Autocomplete from "./components/Common/Autocomplete/Autocomplete";
 // import "./App.css";
 
 class App extends Component{
-  constructor() {
-    super();
+  /**
+   * Constructor
+   * @param {Object} props
+   */
+  constructor(props) {
+    super(props);
     this.state = this.getDefaultState();
     this.bindEventHandlers();
   }
 
+  /**
+   * ComponentDidMount
+   * Invoked immediately after component is inserted into the tree
+   * @return {void}
+   */
   async componentDidMount() {
     let shareResources = await port.request('passbolt.share.get-resources-ids');
     this.setState({shareResources});
@@ -22,7 +31,7 @@ class App extends Component{
     return {
       showStart: true,
       showFolderCreateDialog: false,
-      showShareDialog: true
+      showShareDialog: false
     }
   }
 

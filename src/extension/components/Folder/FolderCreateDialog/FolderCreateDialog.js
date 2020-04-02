@@ -20,8 +20,9 @@ class FolderCreateDialog extends Component {
   }
 
   /**
-   * Component did mount
-   * @returns {void}
+   * ComponentDidMount
+   * Invoked immediately after component is inserted into the tree
+   * @return {void}
    */
   componentDidMount() {
     this.setState({loading: false, name: ''}, () => {

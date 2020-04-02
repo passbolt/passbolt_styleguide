@@ -9,9 +9,6 @@ import ErrorDialog from "../Common/ErrorDialog/ErrorDialog";
 import Autocomplete from "../Common/Autocomplete/Autocomplete";
 import ShareChanges from "./utility/ShareChanges";
 import SharePermissionItem from "./SharePermissionItem";
-import TooltipHtml from "../Common/Tooltip/TooltipHtml";
-import ShareVariesDetails from "./ShareVariesDetails";
-import SharePermissionDeleteButton from "./SharePermissionDeleteButton";
 import SharePermissionItemSkeleton from "./SharePermissionItemSkeleton";
 
 class ShareDialog extends Component {
@@ -28,19 +25,18 @@ class ShareDialog extends Component {
   }
 
   /**
-   * Component did mount
-   * @returns {void}
+   * ComponentDidMount
+   * Invoked immediately after component is inserted into the tree
+   * @return {void}
    */
   async componentDidMount() {
-    setTimeout(async () => {
-      let resources = await port.request('passbolt.share.get-resources', this.props.resourcesIds);
-      this.shareChanges = new ShareChanges(resources);
-      let permissions = this.shareChanges.aggregatePermissionsByAro();
-      this.setState({loading: false, name: '', permissions}, () => {
-        this.scrollToTopOfPermissionsList();
-      });
-    }, 3000);
-
+    let resources = await port.request('passbolt.share.get-resources', this.props.resourcesIds);
+    this.shareChanges = new ShareChanges(resources);
+    let permissions = this.shareChanges.aggregatePermissionsByAro();
+    this.setState({loading: false, name: '', permissions}, () => {
+      // scroll at the top of the permission list
+      this.permissionListRef.current.scrollTop = 0;
+    });
   }
 
   /**
@@ -63,22 +59,6 @@ class ShareDialog extends Component {
       serviceError: false,
       serviceErrorMessage: '',
     }
-  }
-
-  handleAutocompleteOpen() {
-    this.setState({autocompleteOpen: true});
-  }
-
-  handleAutocompleteClose() {
-    this.setState({autocompleteOpen: false});
-  }
-
-  scrollToTopOfPermissionsList() {
-    this.permissionListRef.current.scrollTop = 0;
-  }
-
-  scrollToBottomOfPermissionsList() {
-    this.permissionListRef.current.scrollTop = this.permissionListRef.current.scrollHeight;
   }
 
   /**
@@ -123,6 +103,22 @@ class ShareDialog extends Component {
   }
 
   /**
+   * handleAutocompleteOpen
+   * @return {void}
+   */
+  handleAutocompleteOpen() {
+    this.setState({autocompleteOpen: true});
+  }
+
+  /**
+   * handleAutocompleteClose
+   * @return {void}
+   */
+  handleAutocompleteClose() {
+    this.setState({autocompleteOpen: false});
+  }
+
+  /**
    * Handle form submit event.
    * @params {ReactEvent} The react event
    * @returns {void}
@@ -134,7 +130,6 @@ class ShareDialog extends Component {
     if (this.state.autocompleteOpen) {
       return;
     }
-
     // Do not re-submit an already processing form
     if (this.state.processing) {
       return;
@@ -145,7 +140,6 @@ class ShareDialog extends Component {
     }
 
     await this.toggleProcessing();
-
     try {
       await this.shareSave();
       this.displayNotification("success", "The permissions have been changed successfully.");
@@ -155,10 +149,21 @@ class ShareDialog extends Component {
     }
   }
 
+  /**
+   * handleServiceError
+   * @param {string} message
+   * @return {void}
+   */
   handleServiceError (message) {
     this.setState({serviceError: true, serviceErrorMessage: message, processing: false});
   }
 
+  /**
+   * handleAutocompleteSelect
+   * What happens when an item in the autocomplete list is selected
+   * e.g. if it's not already in the list, add it and scroll
+   * @param {object} aro
+   */
   handleAutocompleteSelect(aro) {
     // check if permission is already listed
     let existing = this.state.permissions.filter(permission => permission.aro.id === aro.id);
@@ -173,10 +178,18 @@ class ShareDialog extends Component {
     let permissions = this.state.permissions;
     permissions.push(permission);
     this.setState({permissions}, () => {
-      this.scrollToBottomOfPermissionsList();
+      // scroll at the bottom of the permission list
+      this.permissionListRef.current.scrollTop = this.permissionListRef.current.scrollHeight;
     });
   }
 
+  /**
+   * What happens when the user changes a permission for a group or user
+   * e.g. highlight if it's different than original, update permission list in the state
+   *
+   * @param {string} aroId The aro to update the permissions for
+   * @param {int} type like create, owner, etc.
+   */
   handlePermissionUpdate(aroId, type) {
     this.shareChanges.updateAroPermissions(aroId, type);
     let newPermissions = this.state.permissions.map(permission => {
@@ -189,6 +202,11 @@ class ShareDialog extends Component {
     this.setState({permissions: newPermissions});
   }
 
+  /**
+   * What happens when the user delete a user or group from permission list
+   * e.g. delete permission from the shareChanges and update the state
+   * @param {string} aroId uuid
+   */
   handlePermissionDelete(aroId) {
       this.shareChanges.deleteAroPermissions(aroId);
       let newPermissions = this.state.permissions.filter(permission => (permission.aro.id !== aroId));
@@ -197,12 +215,17 @@ class ShareDialog extends Component {
 
   /**
    * Save the permissions
-   * @returns {Promise<Object>} Folder entity or Error
+   * @returns {Promise<*>} updated aco(s) data or Error
    */
   async shareSave() {
     return await port.request("passbolt.share.save", this.shareChanges.getChanges());
   }
 
+  /**
+   * Get users or groups matching the given keyword
+   * @param {string} keyword
+   * @returns {Promise<Object>} aros,
+   */
   async fetchAutocompleteItems(keyword) {
     let items = await port.request('passbolt.share.search-aros', keyword);
     return items.filter((item) => {
@@ -212,7 +235,7 @@ class ShareDialog extends Component {
   }
 
   /**
-   * Notify the user.
+   * Display a notification on screen
    * @param {string} status Can be success, error or info
    * @param {string} message The message to display
    * @returns {void}
@@ -229,6 +252,10 @@ class ShareDialog extends Component {
     return this.state.processing || this.state.loading;
   }
 
+  /**
+   * Is this share screen handling sharing of multiple Acos?
+   * @returns {boolean}
+   */
   isAboutItems() {
     return this.props.resourcesIds
       && this.props.foldersIds
@@ -236,22 +263,42 @@ class ShareDialog extends Component {
       && this.props.foldersIds.length;
   }
 
+  /**
+   * Is this share screen handling sharing of multiple resources?
+   * @returns {boolean}
+   */
   isAboutResources() {
     return this.props.resourcesIds && this.props.resourcesIds.length > 1;
   }
 
+  /**
+   * Is this share screen handling sharing of multiple folders?
+   * @returns {boolean}
+   */
   isAboutFolders() {
     return this.props.foldersIds && this.props.foldersIds.length > 1;
   }
 
+  /**
+   * Is this share screen handling sharing one folder?
+   * @returns {boolean}
+   */
   isAboutAFolder() {
     return this.props.foldersIds && this.props.foldersIds.length === 1;
   }
 
+  /**
+   * Is this share screen handling sharing one resource?
+   * @returns {boolean}
+   */
   isAboutAResource() {
     return this.props.resourcesIds && this.props.resourcesIds.length === 1;
   }
 
+  /**
+   * Return a relevant title in case of single resource/folder or multiple item share, etc.
+   * @returns {boolean}
+   */
   getTitle() {
     if (this.state.loading) {
       return `Loading...`;
@@ -300,14 +347,27 @@ class ShareDialog extends Component {
     })
   }
 
+  /**
+   * Return true if the permission list does not have at least one owner
+   * @returns {boolean}
+   */
   hasNoOwner() {
     return (this.shareChanges && (this.shareChanges.getResourcesWithNoOwner()).length > 0);
   }
 
+  /**
+   * Return true if the permission list have changed since the start
+   * @returns {null|boolean}
+   */
   hasChanges() {
     return (this.shareChanges && (this.shareChanges.getChanges().length > 0));
   }
 
+  /**
+   * Return true if submit button should be disabled
+   * True if there is no owner, if all input should be disabled, if there is no change since the start
+   * @returns {boolean}
+   */
   hasSubmitDisabled() {
     return this.hasNoOwner() || this.hasAllInputDisabled() || !this.hasChanges();
   }
@@ -369,7 +429,6 @@ class ShareDialog extends Component {
                   onServiceError={this.handleServiceError}
                   onOpen={this.handleAutocompleteOpen}
                   onClose={this.handleAutocompleteClose}
-                  autofocus={true}
                   disabled={this.hasAllInputDisabled()}
                 />
             </div>

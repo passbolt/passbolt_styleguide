@@ -7,9 +7,12 @@ import TooltipHtml from "../Common/Tooltip/TooltipHtml";
 import ShareVariesDetails from "./ShareVariesDetails";
 
 class SharePermissionItem extends Component {
-
+  /**
+   * Constructor
+   * @param {Object} props
+   */
   constructor(props) {
-    super();
+    super(props);
     this.state = {};
     if (!Number.isInteger(props.permissionType)) {
       throw new TypeError('Invalid permission type for share permission item.');
@@ -93,11 +96,6 @@ class SharePermissionItem extends Component {
         <div className="aro">
           <div className="aro-name">
             <span className="ellipsis">{this.getAroName()}</span>
-            {(this.props.variesDetails) &&
-            <TooltipHtml offset={true}>
-              <ShareVariesDetails variesDetails={this.props.variesDetails} />
-            </TooltipHtml>
-            }
           </div>
           <div className="aro-details">
             <span className="ellipsis">{this.getAroDetails()}</span>

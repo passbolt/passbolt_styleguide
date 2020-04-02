@@ -5,8 +5,12 @@ import {hot} from "react-hot-loader";
 import TooltipHtml from "../Tooltip/TooltipHtml";
 
 class DialogWrapper extends Component {
-  constructor() {
-    super();
+  /**
+   * Constructor
+   * @param {Object} props
+   */
+  constructor(props) {
+    super(props);
     this.handleKeyDown = this.handleKeyDown.bind(this);
     this.handleClose = this.handleClose.bind(this);
   }
@@ -24,6 +28,11 @@ class DialogWrapper extends Component {
     }
   }
 
+  /**
+   * ComponentDidMount
+   * Invoked immediately after component is inserted into the tree
+   * @return {void}
+   */
   componentDidMount() {
     document.addEventListener("keydown", this.handleKeyDown);
   }

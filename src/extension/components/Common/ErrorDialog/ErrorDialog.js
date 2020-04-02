@@ -17,6 +17,10 @@ import DialogCloseButton from "../DialogCloseButton/DialogCloseButton";
 import {hot} from "react-hot-loader";
 
 class ErrorDialog extends Component {
+  /**
+   * Constructor
+   * @param {Object} props
+   */
   constructor(props) {
     super(props);
     this.state = this.getDefaultState();
@@ -30,6 +34,11 @@ class ErrorDialog extends Component {
     };
   }
 
+  /**
+   * ComponentDidMount
+   * Invoked immediately after component is inserted into the tree
+   * @return {void}
+   */
   componentDidMount() {
     document.addEventListener("keydown", this.handleKeyDown);
   }

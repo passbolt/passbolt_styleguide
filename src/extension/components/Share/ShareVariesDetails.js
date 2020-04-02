@@ -38,6 +38,6 @@ class ShareVariesDetails extends Component {
 }
 
 ShareVariesDetails.propTypes = {
-  variesDetails: PropTypes.array
+  variesDetails: PropTypes.object
 };
 export default hot(module)(ShareVariesDetails);

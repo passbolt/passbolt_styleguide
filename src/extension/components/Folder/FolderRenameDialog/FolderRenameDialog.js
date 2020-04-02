@@ -22,10 +22,10 @@ class FolderRenameDialog extends Component {
 
   /**
    * Constructor
-   * Initialize state and bind methods
+   * @param {Object} props
    */
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = this.getDefaultState();
     this.bindCallbacks();
     this.createRefs();
@@ -49,6 +49,7 @@ class FolderRenameDialog extends Component {
   /**
    * ComponentDidMount
    * Invoked immediately after component is inserted into the tree
+   * @return {void}
    */
   async componentDidMount() {
     this.loadFolder();
