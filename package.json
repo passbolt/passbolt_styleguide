@@ -6,8 +6,16 @@
   "description": "Passbolt styleguide contains common styling assets used by the different sites, plugin, etc.",
   "repository": "https://github.com/passbolt/passbolt_styleguide",
   "devDependencies": {
+    "@babel/cli": "^7.8.4",
+    "@babel/core": "^7.7.4",
+    "@babel/plugin-transform-runtime": "^7.8.3",
+    "@babel/preset-env": "^7.7.4",
+    "@babel/preset-react": "^7.7.4",
+    "@babel/runtime": "^7.8.4",
     "@fortawesome/fontawesome-free": "^5.9.0",
-    "grunt": "^1.0.4",
+    "babel-loader": "^8.0.4",
+    "debounce-promise": "^3.1.2",
+    "grunt": "^1.1.0",
     "grunt-contrib-clean": "^2.0.0",
     "grunt-contrib-concat": "^1.0.1",
     "grunt-contrib-copy": "^1.0.0",
@@ -15,6 +23,13 @@
     "grunt-contrib-less": "^2.0.0",
     "grunt-contrib-watch": "^1.1.0",
     "grunt-header": "^1.1.0",
-    "grunt-shell": "^3.0.1"
+    "grunt-shell": "^3.0.1",
+    "prop-types": "^15.7.2",
+    "react": "^16.12.0",
+    "react-dom": "^16.12.0",
+    "react-hot-loader": "^4.12.19",
+    "webpack": "^4.41.2",
+    "webpack-cli": "^3.3.10",
+    "webpack-dev-server": "^3.10.2"
   }
 }

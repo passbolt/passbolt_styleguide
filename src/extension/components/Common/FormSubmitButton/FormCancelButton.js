@@ -1,0 +1,40 @@
+import React, { Component} from "react";
+import PropTypes from "prop-types";
+import {hot} from "react-hot-loader";
+
+class FormCancelButton extends Component {
+  /**
+   * Constructor
+   * @param {Object} props
+   */
+  constructor(props) {
+    super(props);
+  }
+
+  getClassName() {
+    let name = 'cancel';
+    if (this.props.disabled) {
+      name += ' disabled';
+    }
+    return name;
+  }
+
+  handleClick() {
+    if (!this.props.disabled) {
+      this.props.onClick();
+    }
+  }
+
+  render() {
+    return (
+      <a className={this.getClassName()} role="button" onClick={this.handleClick.bind(this)}>Cancel</a>
+    )
+  }
+}
+
+FormCancelButton.propTypes = {
+  disabled: PropTypes.bool,
+  onClick: PropTypes.func
+};
+
+export default hot(module)(FormCancelButton);

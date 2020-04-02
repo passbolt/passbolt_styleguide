@@ -71,7 +71,18 @@ module.exports = function(grunt) {
 					'git push',
 					'npm publish'
 				].join('&& ')
-			}
+			},
+      'copy-react-css': {
+        options: {
+          stdout: true
+        },
+        command: [
+          'rm ./demo/extension/public/css/themes/default/ext_app.css',
+          'rm ./demo/extension/public/css/themes/midgar/ext_app.css',
+          'cp ./src/css/themes/default/ext_app.css ./demo/extension/public/css/themes/default/.',
+          'cp ./src/css/themes/midgar/ext_app.css ./demo/extension/public/css/themes/midgar/.'
+        ].join('&& ')
+      }
 		},
 		cssmin: {
 			public: {
@@ -153,7 +164,7 @@ module.exports = function(grunt) {
 					'src/less/*.less',
 					'src/less/**/*.less'
         ],
-				tasks: ['css']
+				tasks: ['css', 'shell:copy-react-css']
 			}
 		}
 	});

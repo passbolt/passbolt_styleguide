@@ -3210,32 +3210,31 @@ p {
   color: #D40101;
 }
 .svg-icon {
-  font-size: 16px;
-  line-height: 16px;
-  text-rendering: auto;
+  display: inline-flex;
+  align-self: center;
 }
 .svg-icon svg {
-  width: 0.875rem;
-  height: 0.875rem;
-  display: inline-block;
-  margin: auto;
   fill: #333;
+  height: 1em;
+  width: 1em;
 }
+.svg-icon.baseline svg {
+  top: 0.125em;
+  position: relative;
+}
+.svg-icon.dim svg,
 .svg-icon.light svg {
   fill: #888;
 }
 .svg-icon.icon-only svg {
+  position: relative;
+  top: 0.25em;
   width: 1.1rem;
   height: 1.1rem;
 }
-label .svg-icon svg {
-  fill: #888;
-  pointer-events: none;
-  cursor: default;
-  vertical-align: -0.0714286em;
-}
 .button .svg-icon svg {
-  vertical-align: middle;
+  top: 0.125em;
+  position: relative;
 }
 .button .svg-icon + span:not(.visuallyhidden) {
   margin-left: 2px;
@@ -3276,9 +3275,6 @@ a.disabled .svg-icon svg {
 a.disabled:hover .svg-icon svg {
   fill: #888;
 }
-.message .svg-icon svg {
-  vertical-align: 0.125em;
-}
 /*
 	Generic buttons
 	Description	: We support <input[submit]>, <input.button>, <button> and <a.button>
@@ -3309,11 +3305,6 @@ button,
   font-weight: normal;
   text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.5);
   background: #EEE;
-  background-image: -moz-linear-gradient(top, #F3F3F3, #EEE);
-  background-image: -ms-linear-gradient(top, #F3F3F3, #EEE);
-  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(background-lightest), to(#EEE));
-  background-image: -webkit-linear-gradient(top, #F3F3F3, #EEE);
-  background-image: -o-linear-gradient(top, #F3F3F3, #EEE);
   background-image: linear-gradient(top, #F3F3F3, #EEE);
   -webkit-border-radius: 0.214em;
   -moz-border-radius: 0.214em;
@@ -3333,11 +3324,6 @@ button:hover,
   color: #333;
   text-decoration: none;
   background: #F3F3F3;
-  background-image: -moz-linear-gradient(top, #F3F3F3, #F3F3F3);
-  background-image: -ms-linear-gradient(top, #F3F3F3, #F3F3F3);
-  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(background-lightest), to(#F3F3F3));
-  background-image: -webkit-linear-gradient(top, #F3F3F3, #F3F3F3);
-  background-image: -o-linear-gradient(top, #F3F3F3, #F3F3F3);
   background-image: linear-gradient(top, #F3F3F3, #F3F3F3);
   border: 1px solid #BBB;
 }
@@ -3617,8 +3603,6 @@ input[type=text]:disabled,
 input[type=number]:disabled,
 input[type=email]:disabled {
   border: 1px solid #DDD;
-  -webkit-box-shadow: 0 0 0 0;
-  -moz-box-shadow: 0 0 0 0;
   box-shadow: 0 0 0 0;
   cursor: normal;
   background: #F3F3F3;
@@ -4842,6 +4826,10 @@ input[type=email].fluid {
   -o-text-overflow: ellipsis;
   -ms-text-overflow: ellipsis;
 }
+.dialog .dialog-header h2 svg {
+  position: relative;
+  top: 0.0625em;
+}
 .dialog .dialog-header .tooltip-alt {
   margin-left: 0.3em;
   font-size: 0.7em;
@@ -5337,14 +5325,8 @@ table.table-info.horizontal tbody tr:nth-child(odd) {
 .tooltip:after {
   position: absolute;
   visibility: hidden;
-  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
-  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
   opacity: 0;
-  -webkit-transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out, -webkit-transform 0.2s cubic-bezier(0.71, 1.7, 0.77, 1.24);
-  -moz-transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out, -moz-transform 0.2s cubic-bezier(0.71, 1.7, 0.77, 1.24);
   transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out, transform 0.2s cubic-bezier(0.71, 1.7, 0.77, 1.24);
-  -webkit-transform: translate3d(0, 0, 0);
-  -moz-transform: translate3d(0, 0, 0);
   transform: translate3d(0, 0, 0);
   pointer-events: none;
   text-align: center;
@@ -5361,8 +5343,6 @@ table.table-info.horizontal tbody tr:nth-child(odd) {
 .always-show:before,
 .always-show:after {
   visibility: visible;
-  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";
-  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100);
   opacity: 1;
 }
 /* Base styles for the tooltip's directional arrow */
@@ -5543,11 +5523,7 @@ table.table-info.horizontal tbody tr:nth-child(odd) {
   background-color: #333;
   color: #FFF;
   padding: 0.5em 1em;
-  -webkit-transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out, -webkit-transform 0.2s cubic-bezier(0.71, 1.7, 0.77, 1.24);
-  -moz-transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out, -moz-transform 0.2s cubic-bezier(0.71, 1.7, 0.77, 1.24);
   transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out, transform 0.2s cubic-bezier(0.71, 1.7, 0.77, 1.24);
-  -webkit-transform: translate3d(0, 0, 0);
-  -moz-transform: translate3d(0, 0, 0);
   transform: translate3d(0, 0, 0);
   z-index: 99999;
   /* only right for now */
@@ -5566,13 +5542,16 @@ table.table-info.horizontal tbody tr:nth-child(odd) {
   border-color: transparent #333 transparent transparent;
 }
 .tooltip-alt:hover .tooltip-text {
-  -webkit-transform: translateX(12px);
-  -moz-transform: translateX(12px);
   transform: translateX(12px);
   visibility: visible;
-  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";
   filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100);
   opacity: 1;
+}
+.tooltip svg,
+.tooltip-alt svg {
+  fill: #666;
+  top: 0.125em;
+  position: relative;
 }
 /**
  * Based on Farbtastic Color Picker 1.2

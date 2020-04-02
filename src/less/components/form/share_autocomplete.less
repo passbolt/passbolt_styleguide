@@ -11,15 +11,16 @@
     .autocomplete input {
         margin-bottom: 0;
     }
-    .autocomplete.with-token input {
-        box-sizing: border-box;
-        width: calc(100% - 4em); /* space for security token */
-    }
     .message {
         padding-left: 0;
     }
     .security-token {
         margin-top: 0;
+    }
+    // legacy to be removed after react migration
+    .autocomplete.with-token input {
+        box-sizing: border-box;
+        width: calc(100% - 4em); /* space for security token */
     }
 }
 
@@ -77,12 +78,16 @@
                 display: block;
             }
         }
-    }
+        & .loading {
+            background-color: @background-default;
 
-    .autocomplete-content.loading {
-        height: 2em;
-        background: @loading no-repeat center center;
-        background-color: @background-default;
+            img {
+                border-radius:0;
+                width:1.75em;
+                height:1.75em;
+                padding:.5em 1.5em 0 .25em;
+            }
+        }
     }
 
     /* hide icons if there is no space */

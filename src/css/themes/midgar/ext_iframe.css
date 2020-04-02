@@ -3211,32 +3211,31 @@ p {
   color: #D40101;
 }
 .svg-icon {
-  font-size: 16px;
-  line-height: 16px;
-  text-rendering: auto;
+  display: inline-flex;
+  align-self: center;
 }
 .svg-icon svg {
-  width: 0.875rem;
-  height: 0.875rem;
-  display: inline-block;
-  margin: auto;
   fill: #FFF;
+  height: 1em;
+  width: 1em;
 }
+.svg-icon.baseline svg {
+  top: 0.125em;
+  position: relative;
+}
+.svg-icon.dim svg,
 .svg-icon.light svg {
   fill: #EEEEEC;
 }
 .svg-icon.icon-only svg {
+  position: relative;
+  top: 0.25em;
   width: 1.1rem;
   height: 1.1rem;
 }
-label .svg-icon svg {
-  fill: #8B8B89;
-  pointer-events: none;
-  cursor: default;
-  vertical-align: -0.0714286em;
-}
 .button .svg-icon svg {
-  vertical-align: middle;
+  top: 0.125em;
+  position: relative;
 }
 .button .svg-icon + span:not(.visuallyhidden) {
   margin-left: 2px;
@@ -3276,9 +3275,6 @@ a.disabled .svg-icon svg {
 }
 a.disabled:hover .svg-icon svg {
   fill: #8B8B89;
-}
-.message .svg-icon svg {
-  vertical-align: 0.125em;
 }
 /*
 	Generic buttons
@@ -3608,8 +3604,6 @@ input[type=text]:disabled,
 input[type=number]:disabled,
 input[type=email]:disabled {
   border: 1px solid #0C0C0A;
-  -webkit-box-shadow: 0 0 0 0;
-  -moz-box-shadow: 0 0 0 0;
   box-shadow: 0 0 0 0;
   cursor: normal;
   background: #444442;
@@ -4101,6 +4095,10 @@ input[type=email].fluid {
   -o-text-overflow: ellipsis;
   -ms-text-overflow: ellipsis;
 }
+.dialog .dialog-header h2 svg {
+  position: relative;
+  top: 0.0625em;
+}
 .dialog .dialog-header .tooltip-alt {
   margin-left: 0.3em;
   font-size: 0.7em;
@@ -4492,14 +4490,8 @@ input[type=email].fluid {
 .tooltip:after {
   position: absolute;
   visibility: hidden;
-  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
-  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
   opacity: 0;
-  -webkit-transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out, -webkit-transform 0.2s cubic-bezier(0.71, 1.7, 0.77, 1.24);
-  -moz-transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out, -moz-transform 0.2s cubic-bezier(0.71, 1.7, 0.77, 1.24);
   transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out, transform 0.2s cubic-bezier(0.71, 1.7, 0.77, 1.24);
-  -webkit-transform: translate3d(0, 0, 0);
-  -moz-transform: translate3d(0, 0, 0);
   transform: translate3d(0, 0, 0);
   pointer-events: none;
   text-align: center;
@@ -4516,8 +4508,6 @@ input[type=email].fluid {
 .always-show:before,
 .always-show:after {
   visibility: visible;
-  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";
-  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100);
   opacity: 1;
 }
 /* Base styles for the tooltip's directional arrow */
@@ -4698,11 +4688,7 @@ input[type=email].fluid {
   background-color: #222220;
   color: #EEEEEC;
   padding: 0.5em 1em;
-  -webkit-transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out, -webkit-transform 0.2s cubic-bezier(0.71, 1.7, 0.77, 1.24);
-  -moz-transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out, -moz-transform 0.2s cubic-bezier(0.71, 1.7, 0.77, 1.24);
   transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out, transform 0.2s cubic-bezier(0.71, 1.7, 0.77, 1.24);
-  -webkit-transform: translate3d(0, 0, 0);
-  -moz-transform: translate3d(0, 0, 0);
   transform: translate3d(0, 0, 0);
   z-index: 99999;
   /* only right for now */
@@ -4721,13 +4707,16 @@ input[type=email].fluid {
   border-color: transparent #222220 transparent transparent;
 }
 .tooltip-alt:hover .tooltip-text {
-  -webkit-transform: translateX(12px);
-  -moz-transform: translateX(12px);
   transform: translateX(12px);
   visibility: visible;
-  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";
   filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100);
   opacity: 1;
+}
+.tooltip svg,
+.tooltip-alt svg {
+  fill: #cacac9;
+  top: 0.125em;
+  position: relative;
 }
 /*
  * jquery-filestyle
@@ -5126,6 +5115,62 @@ input[type=email].fluid {
   height: 24em;
   width: 95%;
 }
+/* To remove after react migration  */
+.dialog .permission-add {
+  background-color: #30302D;
+  padding: 0 1em 1em 1em;
+  /*
+     * For IE 6/7 only
+     * Include this rule to trigger hasLayout and contain floats.
+     */
+  /*
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
+  /*
+     * For IE 6/7 only
+     * Include this rule to trigger hasLayout and contain floats.
+     */
+  zoom: 1;
+  /*
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
+}
+.dialog .permission-add:before,
+.dialog .permission-add:after {
+  content: "";
+  display: table;
+}
+.dialog .permission-add:after {
+  clear: both;
+}
+.dialog .permission-add:before,
+.dialog .permission-add:after {
+  content: "";
+  display: table;
+}
+.dialog .permission-add:after {
+  clear: both;
+}
+.dialog .permission-edit {
+  padding: 0em;
+  border-bottom: 1px solid #0C0C0A;
+}
 .permissions.scroll {
   max-height: 19em;
   margin: 0;
@@ -5322,65 +5367,6 @@ input[type=email].fluid {
     width: 45%;
   }
 }
-.dialog .permission-add {
-  background-color: #30302D;
-  padding: 0 1em 1em 1em;
-  /*
-     * For IE 6/7 only
-     * Include this rule to trigger hasLayout and contain floats.
-     */
-  /*
-     * Clearfix: contain floats
-     *
-     * For modern browsers
-     * 1. The space content is one way to avoid an Opera bug when the
-     *	`contenteditable` attribute is included anywhere else in the document.
-     *	Otherwise it causes space to appear at the top and bottom of elements
-     *	that receive the `clearfix` class.
-     * 2. The use of `table` rather than `block` is only necessary if using
-     *	`:before` to contain the top-margins of child elements.
-     */
-  /*
-     * For IE 6/7 only
-     * Include this rule to trigger hasLayout and contain floats.
-     */
-  zoom: 1;
-  /*
-     * Clearfix: contain floats
-     *
-     * For modern browsers
-     * 1. The space content is one way to avoid an Opera bug when the
-     *	`contenteditable` attribute is included anywhere else in the document.
-     *	Otherwise it causes space to appear at the top and bottom of elements
-     *	that receive the `clearfix` class.
-     * 2. The use of `table` rather than `block` is only necessary if using
-     *	`:before` to contain the top-margins of child elements.
-     */
-}
-.dialog .permission-add:before,
-.dialog .permission-add:after {
-  content: "";
-  display: table;
-}
-.dialog .permission-add:after {
-  clear: both;
-}
-.dialog .permission-add:before,
-.dialog .permission-add:after {
-  content: "";
-  display: table;
-}
-.dialog .permission-add:after {
-  clear: both;
-}
-.dialog .permission-add #passbolt-password-share-autocomplete-wrapper {
-  position: relative;
-  width: 100%;
-}
-.dialog .permission-edit {
-  padding: 0em;
-  border-bottom: 1px solid #0C0C0A;
-}
 /*
 	form to add new permissions
 	basically this form is embedded in a dedicated iframe released by the plugin
@@ -5393,16 +5379,16 @@ input[type=email].fluid {
 .form-content.permission-add .autocomplete input {
   margin-bottom: 0;
 }
-.form-content.permission-add .autocomplete.with-token input {
-  box-sizing: border-box;
-  width: calc(100% - 4em);
-  /* space for security token */
-}
 .form-content.permission-add .message {
   padding-left: 0;
 }
 .form-content.permission-add .security-token {
   margin-top: 0;
+}
+.form-content.permission-add .autocomplete.with-token input {
+  box-sizing: border-box;
+  width: calc(100% - 4em);
+  /* space for security token */
 }
 /*
 	autocomplete users results
@@ -5512,10 +5498,14 @@ input[type=email].fluid {
   -ms-text-overflow: ellipsis;
   display: block;
 }
-.autocomplete-wrapper .autocomplete-content.loading {
-  height: 2em;
-  background: url('../../../img/controls/loading_dark.svg') no-repeat center center;
+.autocomplete-wrapper .autocomplete-content .loading {
   background-color: #30302D;
+}
+.autocomplete-wrapper .autocomplete-content .loading img {
+  border-radius: 0;
+  width: 1.75em;
+  height: 1.75em;
+  padding: 0.5em 1.5em 0 0.25em;
 }
 @media all and (max-width: 440px) {
   .autocomplete-wrapper .autocomplete-content {

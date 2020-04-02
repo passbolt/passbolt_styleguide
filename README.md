@@ -30,7 +30,6 @@ some of the includes. Apart from this the HTML is static.
 In /src and /build you can find the assets that are used by other projects, like the images
 the less files, the minified css files, fonts, etc.
 
-
 Credits
 =========
 
@@ -57,6 +56,16 @@ grunt watch
 
 Edit one LESS file to see if it works!
 
+
+How to run the react demo?
+==========================
+
+After running this command, the react demo will be located at 
+[http://localhost:3000](http://localhost:3000)
+
+```
+webpack-dev-server --mode development
+```
 
 How to update the styleguide?
 =============================
