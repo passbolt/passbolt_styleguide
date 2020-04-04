@@ -2,7 +2,7 @@ const path = require("path");
 const webpack = require("webpack");
 
 module.exports = {
-  entry: "./src/extension/index.js",
+  entry: "./src/react-extension/index.js",
   mode: "development",
   devtool: "inline-source-map",
   module: {
@@ -21,12 +21,12 @@ module.exports = {
   },
   resolve: { extensions: ["*", ".js", ".jsx"] },
   output: {
-    path: path.resolve(__dirname, "demo/extension/dist/"),
+    path: path.resolve(__dirname, "demo/react-extension/dist/"),
     publicPath: "/dist/",
     filename: "bundle.js"
   },
   devServer: {
-    contentBase: path.join(__dirname, "demo/extension/public/"),
+    contentBase: path.join(__dirname, "demo/react-extension/public/"),
     port: 3000,
     publicPath: "http://localhost:3000/dist/",
   },

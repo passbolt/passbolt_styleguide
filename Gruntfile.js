@@ -77,10 +77,13 @@ module.exports = function(grunt) {
           stdout: true
         },
         command: [
-          'rm ./demo/extension/public/css/themes/default/ext_app.css',
-          'rm ./demo/extension/public/css/themes/midgar/ext_app.css',
-          'cp ./src/css/themes/default/ext_app.css ./demo/extension/public/css/themes/default/.',
-          'cp ./src/css/themes/midgar/ext_app.css ./demo/extension/public/css/themes/midgar/.'
+          'rm ./demo/react-appjs/public/css/themes/default/api_reports.css',
+          'cp ./src/css/themes/default/api_reports.css ./demo/react-appjs/public/css/themes/default/.',
+
+          'rm ./demo/react-extension/public/css/themes/default/ext_app.css',
+          'rm ./demo/react-extension/public/css/themes/midgar/ext_app.css',
+          'cp ./src/css/themes/default/ext_app.css ./demo/react-extension/public/css/themes/default/.',
+          'cp ./src/css/themes/midgar/ext_app.css ./demo/react-extension/public/css/themes/midgar/.'
         ].join('&& ')
       }
 		},
