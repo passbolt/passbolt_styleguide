@@ -11,7 +11,6 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         2.13.0
  */
-import {hot} from "react-hot-loader";
 import React, {Component} from "react";
 import PropTypes from "prop-types";
 
@@ -40,4 +39,5 @@ class ShareVariesDetails extends Component {
 ShareVariesDetails.propTypes = {
   variesDetails: PropTypes.object
 };
-export default hot(module)(ShareVariesDetails);
+
+export default ShareVariesDetails;

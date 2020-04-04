@@ -12,7 +12,6 @@
  * @since         2.13.0
  */
 import React, {Component} from "react";
-import {hot} from "react-hot-loader";
 import PropTypes from "prop-types";
 import Icon from "../Icons/Icon";
 
@@ -57,4 +56,4 @@ TooltipHtml.propTypes = {
   // force top position (useful if in a scrolling container)
   offset: PropTypes.bool
 };
-export default hot(module)(TooltipHtml);
+export default TooltipHtml;

@@ -13,7 +13,6 @@
  */
 import React, {Component} from "react";
 import PropTypes from "prop-types";
-import {hot} from "react-hot-loader";
 import debounce from "debounce-promise";
 
 import AutocompleteItem from "./AutocompleteItem";
@@ -311,4 +310,4 @@ Autocomplete.propTypes = {
   disabled: PropTypes.bool
 };
 
-export default hot(module)(Autocomplete);
+export default Autocomplete;

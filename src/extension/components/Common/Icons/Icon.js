@@ -11,8 +11,18 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         2.13.0
  */
+/**
+ * This file contains icons from FontAwesome v3
+ * by Dave Gandy - http://fontawesome.io.
+ *
+ * The Font Awesome font is licensed under the SIL OFL 1.1:
+ * http://scripts.sil.org/OFL
+ *
+ * Font-Awesome-SVG-PNG is licensed under the MIT license
+ * Copyright (c) 2014 Code Charm Ltd
+ * https://github.com/encharm/Font-Awesome-SVG-PNG
+ */
 import React, {Component} from "react";
-import {hot} from "react-hot-loader";
 import PropTypes from "prop-types";
 
 class Icon extends Component {
@@ -157,4 +167,4 @@ class Icon extends Component {
 Icon.propTypes = {
   name: PropTypes.string
 };
-export default hot(module)(Icon);
+export default Icon;

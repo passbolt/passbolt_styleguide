@@ -253,7 +253,7 @@ class FolderRenameDialog extends Component {
           <div className="dialog-header">
             <h2>Rename a folder</h2>
             <a className="dialog-close" onClick={this.handleCloseClick}>
-              <SvgCloseIcon/>
+              <Icon name="close"/>
               <span className="visually-hidden">cancel</span>
             </a>
           </div>

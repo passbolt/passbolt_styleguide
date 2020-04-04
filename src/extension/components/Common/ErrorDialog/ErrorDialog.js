@@ -14,7 +14,6 @@
 import React, {Component} from "react";
 import PropTypes from "prop-types";
 import DialogCloseButton from "../DialogCloseButton/DialogCloseButton";
-import {hot} from "react-hot-loader";
 
 class ErrorDialog extends Component {
   /**
@@ -88,4 +87,4 @@ ErrorDialog.propTypes = {
   onClose: PropTypes.func
 };
 
-export default hot(module)(ErrorDialog);
+export default ErrorDialog;
