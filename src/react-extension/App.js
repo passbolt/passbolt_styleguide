@@ -1,11 +1,26 @@
+/**
+ * Passbolt ~ Open source password manager for teams
+ * Copyright (c) 2020 Passbolt SA (https://www.passbolt.com)
+ *
+ * Licensed under GNU Affero General Public License version 3 of the or any later version.
+ * For full copyright and license information, please see the LICENSE.txt
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @copyright     Copyright (c) 2020 Passbolt SA (https://www.passbolt.com)
+ * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
+ * @link          https://www.passbolt.com Passbolt(tm)
+ * @since         2.13.0
+ */
 import React, { Component} from "react";
-import FolderCreateDialog from "./components/Folder/FolderCreateDialog/FolderCreateDialog";
+
 import ErrorDialog from "./components/Common/ErrorDialog/ErrorDialog";
-import ShareDialog from "./components/Share/ShareDialog";
+import FolderCreateDialog from "./components/Folder/FolderCreateDialog/FolderCreateDialog";
+import FolderRenameDialog from "./components/Folder/FolderRenameDialog/FolderRenameDialog";
+import PassphraseEntryDialog from "./components/Passphrase/PassphraseEntryDialog/PassphraseEntryDialog";
 import PasswordCreateDialog from "./components/Password/PasswordCreateDialog/PasswordCreateDialog";
 import PasswordEditDialog from "./components/Password/PasswordEditDialog/PasswordEditDialog";
 import ProgressDialog from "./components/ProgressDialog/ProgressDialog";
-import PassphraseEntryDialog from "./components/Passphrase/PassphraseEntryDialog/PassphraseEntryDialog";
+import ShareDialog from "./components/Share/ShareDialog";
 
 class App extends Component{
   /**
@@ -94,22 +109,22 @@ class App extends Component{
         <PasswordCreateDialog onClose={this.onDialogClose}/>
         }
         {this.state.showPasswordEditDialog &&
-        <PasswordEditDialog onClose={this.onDialogClose}/>
+        <PasswordEditDialog onClose={this.onDialogClose} id='8e3874ae-4b40-590b-968a-418f704b9d9a'/>
         }
         {this.state.showFolderCreateDialog &&
         <FolderCreateDialog onClose={this.onDialogClose} folderParentId='123e4567-e89b-12d3-a456-426655440000'/>
         }
         {this.state.showFolderRenameDialog &&
-        <FolderRenameDialog onClose={this.onDialogClose}/>
+        <FolderRenameDialog onClose={this.onDialogClose} folderId='0d0a4b82-4757-4389-88bf-3dd18c1b8d75'/>
         }
         {this.state.showPassphraseEntryDialog &&
         <PassphraseEntryDialog onClose={this.onDialogClose}/>
         }
         {this.state.showProgressDialog &&
-        <ProgressDialog onClose={this.onDialogClose}/>
+        <ProgressDialog title="Progress dialog test" message="Please wait..."  goals={3}/>
         }
         {this.state.showShareDialog &&
-        <ShareDialog onClose={this.onDialogClose} resourcesIds={this.state.shareResources} />
+        <ShareDialog onClose={this.onDialogClose} resourcesIds={this.state.shareResources}/>
         }
         {this.state.showErrorDialog &&
         <ErrorDialog onClose={this.onDialogClose} title="test title" message="test message"/>

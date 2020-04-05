@@ -64,7 +64,13 @@ After running this command, the react demo will be located at
 [http://localhost:3000](http://localhost:3000)
 
 ```
-webpack-dev-server --mode development
+webpack-dev-server --mode development --config webpack-appjs.config.js
+```
+
+or
+
+```
+webpack-dev-server --mode development --config webpack-extension.config.js
 ```
 
 How to update the styleguide?

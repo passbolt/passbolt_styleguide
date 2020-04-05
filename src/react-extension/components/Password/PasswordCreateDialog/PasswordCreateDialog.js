@@ -11,11 +11,12 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         2.14.0
  */
-
 import React, {Component} from "react";
 import PropTypes from "prop-types";
+
 import AppContext from "../../../contexts/AppContext";
 import Icon from "../../Common/Icons/Icon";
+import Tooltip from "../../Common/Tooltip/Tooltip";
 
 class PasswordCreateDialog extends Component {
   constructor() {
@@ -390,15 +391,15 @@ class PasswordCreateDialog extends Component {
                   <ul className="actions inline">
                     <li>
                       <a onClick={this.handleViewPasswordButtonClick}
-                        className={`password-view button button-icon button-toggle ${this.state.viewPassword ? "selected" : ""}`}>
-                        <Icon name='view' />
+                        className={`password-view button button-icon toggle ${this.state.viewPassword ? "selected" : ""}`}>
+                        <Icon name='eye-open' big={true}/>
                         <span className="visually-hidden">view</span>
                       </a>
                     </li>
                     <li>
                       <a onClick={this.handleGeneratePasswordButtonClick}
                         className="password-generate button-icon button">
-                        <Icon name='magic-wand' />
+                        <Icon name='magic-wand' big={true}/>
                         <span className="visually-hidden">generate</span>
                       </a>
                     </li>
@@ -415,10 +416,8 @@ class PasswordCreateDialog extends Component {
                   }
                 </div>
                 <div className="input textarea">
-                  <label htmlFor="create-password-form-description">Description
-                    <span className="tooltip tooltip-right" data-tooltip="Do not store sensitive data. This field is not end to end encrypted.">
-                      <Icon name='warning' />
-                    </span>
+                  <label htmlFor="create-password-form-description">Description&nbsp;
+                    <Tooltip message="Do not store sensitive data. Unlike the password, this data is not encrypted." icon="warning" />
                   </label>
                   <textarea id="create-password-form-description" name="description" maxLength="10000"
                     className="required" placeholder="add a description" value={this.state.description}

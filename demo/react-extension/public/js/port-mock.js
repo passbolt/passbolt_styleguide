@@ -7,11 +7,33 @@ function delay(t, v) {
 let scenario = '';
 let scenarioCase = 0;
 
-port = {};
+port = {
+  _listeners: []
+};
 
 port.emit = (eventName, eventObject) => {
   console.log('PORT EMIT: ' + eventName);
   console.log(eventObject);
+};
+
+port.fakeCall = async (eventName, msg) => {
+  if (!port._listeners || !port._listeners.length && typeof port._listeners[eventName] === 'undefined') {
+    return;
+  }
+  const listeners = this._listeners[eventName];
+  for(let i = 0; i < listeners.length; i++) {
+    listeners[i].callback.apply(null, Array.prototype.slice.call(msg, 1));
+  }
+};
+
+port.on = async (eventName, callback) => {
+  if(typeof port._listeners[eventName] === 'undefined') {
+    port._listeners[eventName] = [];
+  }
+  port._listeners[eventName].push({
+    name : name,
+    callback : callback
+  });
 };
 
 port.request = async (eventName, eventObject) => {
@@ -25,6 +47,8 @@ port.request = async (eventName, eventObject) => {
     scenarioCase++;
   }
   switch (eventName) {
+    case 'passbolt.secret-edit.decrypt':
+      return delay(1000, 'fake secret');
     case 'passbolt.folders.create':
       switch(scenarioCase) {
         default:
@@ -34,6 +58,8 @@ port.request = async (eventName, eventObject) => {
           scenarioCase = -1;
           return delay(1000, {'id': '123e4567-e89b-12d3-a456-426655440000', ...eventObject});
       }
+    case 'passbolt.folders.update':
+      return delay(1000, eventObject);
     case 'passbolt.share.save':
         return delay(100, {"header": {}, "body": {}});
     case 'passbolt.share.get-resources-ids':

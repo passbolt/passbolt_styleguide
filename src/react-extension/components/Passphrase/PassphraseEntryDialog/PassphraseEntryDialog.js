@@ -15,6 +15,7 @@ import React, {Component} from "react";
 import PropTypes from "prop-types";
 import AppContext from "../../../contexts/AppContext";
 import UserAbortsOperationError from "../../../lib/errors/userAbortsOperationError";
+import Icon from "../../Common/Icons/Icon";
 
 class PassphraseEntryDialog extends Component {
   constructor(props) {

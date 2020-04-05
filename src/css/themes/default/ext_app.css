@@ -5976,7 +5976,7 @@ h6 .input.toggle-switch {
 }
 .input-password-wrapper .input.password input[type=text],
 .input-password-wrapper .input.password input[type=password] {
-  width: calc(100% - 4em + 3px);
+  width: calc(100% - 3.5em);
   box-sizing: border-box;
 }
 .input-password-wrapper .input.password input[type=password].decrypting {
