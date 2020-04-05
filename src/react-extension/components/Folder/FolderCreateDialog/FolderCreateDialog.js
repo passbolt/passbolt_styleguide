@@ -65,22 +65,22 @@ class FolderCreateDialog extends Component {
   }
 
   /**
-   * Bind event handlers
-   * @returns {void}
-   */
-  bindEventHandlers() {
-    this.handleInputChange = this.handleInputChange.bind(this);
-    this.handleClose = this.handleClose.bind(this);
-    this.handleCloseError = this.handleCloseError.bind(this);
-    this.handleFormSubmit = this.handleFormSubmit.bind(this);
-  }
-
-  /**
    * Create references
    * @returns {void}
    */
   createInputRefs() {
     this.nameRef = React.createRef();
+  }
+
+  /**
+   * Bind event handlers
+   * @returns {void}
+   */
+  bindEventHandlers() {
+    this.handleClose = this.handleClose.bind(this);
+    this.handleCloseError = this.handleCloseError.bind(this);
+    this.handleInputChange = this.handleInputChange.bind(this);
+    this.handleFormSubmit = this.handleFormSubmit.bind(this);
   }
 
   /**
@@ -112,7 +112,7 @@ class FolderCreateDialog extends Component {
    */
   handleInputChange(event) {
     const target = event.target;
-    const value = target.type === "checkbox" ? target.checked : target.value;
+    const value = target.value;
     const name = target.name;
     this.setState({
       [name]: value
@@ -172,6 +172,14 @@ class FolderCreateDialog extends Component {
   }
 
   /**
+   * Focus the first field of the form which is in error state.
+   * @returns {void}
+   */
+  focusFirstFieldError() {
+    this.nameRef.current.focus();
+  }
+
+  /**
    * Create the folder
    * @returns {Promise<Object>} Folder entity or Error
    */
@@ -181,14 +189,6 @@ class FolderCreateDialog extends Component {
       folderParentId: this.props.folderParentId
     };
     return await port.request("passbolt.folders.create", folderDto);
-  }
-
-  /**
-   * Focus the first field of the form which is in error state.
-   * @returns {void}
-   */
-  focusFirstFieldError() {
-    this.nameRef.current.focus();
   }
 
   /**
@@ -211,24 +211,6 @@ class FolderCreateDialog extends Component {
   }
 
   /**
-   * Validate the name input.
-   * @returns {Promise<void>}
-   */
-  validateNameInput() {
-    let nameError = false;
-    const name = this.state.name.trim();
-    if (!name.length) {
-      nameError = "A name is required.";
-    }
-    if (name.length > 64) {
-      nameError = "A name can not be more than 64 char in length.";
-    }
-    return new Promise(resolve => {
-      this.setState({nameError}, resolve);
-    });
-  }
-
-  /**
    * Validate the form.
    * @returns {Promise<boolean>}
    */
@@ -245,6 +227,24 @@ class FolderCreateDialog extends Component {
   async resetValidation() {
     return new Promise(resolve => {
       this.setState({nameError: false}, resolve());
+    });
+  }
+
+  /**
+   * Validate the name input.
+   * @returns {Promise<void>}
+   */
+  validateNameInput() {
+    let nameError = false;
+    const name = this.state.name.trim();
+    if (!name.length) {
+      nameError = "A name is required.";
+    }
+    if (name.length > 64) {
+      nameError = "A name can not be more than 64 char in length.";
+    }
+    return new Promise(resolve => {
+      this.setState({nameError}, resolve);
     });
   }
 
@@ -275,20 +275,18 @@ class FolderCreateDialog extends Component {
                        onClose={this.handleClose} disabled={this.hasAllInputDisabled()}>
           <form className="folder-create-form" onSubmit={this.handleFormSubmit} noValidate>
             <div className="form-content">
-              <div className="input text required clearfix">
+              <div className="input text required">
                 <label htmlFor="folder-name-input">Name</label>
-                <input id="folder-name-input"
-                       name="name"
+                <input id="folder-name-input" name="name"
                        ref={this.nameRef}
-                       maxLength="64" type="text" placeholder="Untitled folder"
+                       type="text" value={this.state.name} placeholder="Untitled folder"
+                       maxLength="64" required="required"
                        disabled={this.hasAllInputDisabled()}
-                       autoFocus={true}
                        onChange={this.handleInputChange}
-                       value={this.state.name}
-                       autoComplete='off'
+                       autoComplete='off' autoFocus={true}
                 />
                 {this.state.nameError &&
-                <div className="error message">{this.state.nameError}</div>
+                  <div className="error message">{this.state.nameError}</div>
                 }
               </div>
             </div>

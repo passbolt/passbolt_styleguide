@@ -13,37 +13,24 @@
  */
 import React, {Component} from "react";
 import PropTypes from "prop-types";
+
 import AppContext from "../../../contexts/AppContext";
-import SvgCloseIcon from "../../../img/svg/close";
-import ErrorDialog from "../../Error/ErrorDialog";
-import browser from "webextension-polyfill";
+import ErrorDialog from "../../Common/ErrorDialog/ErrorDialog";
+import DialogWrapper from "../../Common/DialogWrapper/DialogWrapper";
+import FormSubmitButton from "../../Common/FormSubmitButton/FormSubmitButton";
+import FormCancelButton from "../../Common/FormSubmitButton/FormCancelButton";
 
 class FolderRenameDialog extends Component {
-
   /**
    * Constructor
    * @param {Object} props
+   * @param {Object} context
    */
-  constructor(props) {
-    super(props);
-    this.state = this.getDefaultState();
-    this.bindCallbacks();
-    this.createRefs();
-  }
-
-  /**
-   * Return default state
-   * @returns {Object} default state
-   */
-  getDefaultState() {
-    return {
-      showErrorDialog: false,
-      errorTitle: null,
-      errorMessage: null,
-      name: null,
-      nameError: null,
-      processing: true,
-    };
+  constructor(props, context) {
+    super(props, context);
+    this.state = this.getStateBasedOnContext(context, props,  this.getDefaultState());
+    this.createInputRefs();
+    this.bindEventHandlers();
   }
 
   /**
@@ -52,97 +39,151 @@ class FolderRenameDialog extends Component {
    * @return {void}
    */
   async componentDidMount() {
-    this.loadFolder();
-    this.focusOnNameInput();
-    document.addEventListener("keydown", this.handleKeyDown, false);
+    this.setState({loading:false}, () => {
+      this.nameRef.current.focus();
+    });
   }
 
   /**
-   * componentWillUnmount
-   * Invoked before component is removed from the tree
+   * Return default state
+   * @returns {Object} default state
    */
-  componentWillUnmount(){
-    document.removeEventListener("keydown", this.handleKeyDown, false);
+  getDefaultState() {
+    return {
+      // Dialog states
+      loading: true,
+      processing: false,
+      inlineValidation: false,
+
+      // Error dialog trigger
+      serviceError: false,
+      errorMessage: '',
+
+      // Fields and errors
+      name: 'loading...',
+      nameError: false,
+    };
   }
 
   /**
-   * Bind callbacks methods
+   * Return default state based on context and props
+   * For example if folder doesn't exist then we show an error message
+   * Otherwise set the input name value
+   *
+   * @param context
+   * @param props
+   * @param defaultState
+   * @returns {*}
    */
-  bindCallbacks() {
-    this.handleCloseClick = this.handleCloseClick.bind(this);
-    this.handleKeyDown = this.handleKeyDown.bind(this);
+  getStateBasedOnContext(context, props, defaultState) {
+    const folders = context.folders;
+    const errorMessage = 'The folder could not be found. Maybe it was deleted or you lost access.';
+    if (!folders) {
+      defaultState.serviceError = true;
+      defaultState.errorMessage = errorMessage;
+    }
+    const folder = context.folders.find(item => item.id === props.folderId) || false;
+    if (!folder) {
+      defaultState.serviceError = true;
+      defaultState.errorMessage = errorMessage;
+    } else {
+      defaultState.name = folder.name;
+    }
+    return defaultState;
+  }
+
+  /**
+   * Create references
+   * @returns {void}
+   */
+  createInputRefs() {
+    this.nameRef = React.createRef();
+  }
+
+  /**
+   * Bind event handlers
+   * @returns {void}
+   */
+  bindEventHandlers() {
+    this.handleClose = this.handleClose.bind(this);
+    this.handleCloseError = this.handleCloseError.bind(this);
     this.handleFormSubmit = this.handleFormSubmit.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
-    this.handleNameInputKeyUp = this.handleNameInputKeyUp.bind(this);
   }
 
   /**
-   * Create a ref to store the input DOM element
+   * Handle close button click.
+   * @returns {void}
    */
-  createRefs() {
-    this.nameInputRef = React.createRef();
+  handleClose() {
+    // ignore closing event of main folder create dialog
+    // if service error is displayed on top
+    if (!this.state.serviceError) {
+      this.props.onClose();
+    }
   }
 
   /**
-   * Load current folder info from local storage (name)
-   * @returns {Promise<void>}
+   * Handle close error dialog
+   * @returns {void}
    */
-  async loadFolder() {
-    const storageData = await browser.storage.local.get("folders");
-    if (!storageData) {
-      this.setState({
-        processing: false,
-        showErrorDialog: true,
-        errorMessage: 'The folder could not be found. No folder found.'
-      });
-      return;
-    }
-    const folder = storageData.folders.find(item => item.id === this.props.folderId);
-    if (!folder) {
-      this.setState({
-        processing: false,
-        showErrorDialog: true,
-        errorMessage: 'The folder could not be found. The folder may have been deleted or you may have lost access.'
-      });
-      return;
-    }
+  handleCloseError() {
+    // Close error dialog / we do not close main dialog to allow retry
+    this.setState({serviceError: false, serviceErrorMessage: ''});
+  }
+
+  /**
+   * Handle form input changes.
+   * @params {ReactEvent} The react event
+   * @returns {void}
+   */
+  handleInputChange(event) {
+    const target = event.target;
+    const value = target.value;
+    const name = target.name;
     this.setState({
-      processing: false,
-      name: folder.name
+      [name]: value
+    }, () => {
+      if (this.state.inlineValidation) {
+        this.validate();
+      }
     });
   }
 
   /**
    * Handle form submit event.
    * @params {ReactEvent} The react event
-   * @return {Promise}
+   * @returns {void}
    */
   async handleFormSubmit(event) {
     event.preventDefault();
 
+    // Do not re-submit an already processing form
     if (this.state.processing) {
       return;
     }
 
-    this.setState({processing: true});
+    // After first submit, inline validation is on
+    this.setState({
+      inlineValidation: this.state.inlineValidation || true
+    });
 
-    if (!await this.validate()) {
-      this.setState({processing: false});
-      this.focusOnNameInput();
+    await this.toggleProcessing();
+    await this.validate();
+    if (this.hasValidationError()) {
+      await this.toggleProcessing();
+      this.focusFirstFieldError();
       return;
     }
 
     try {
-      const folderDto = {
-        id: this.props.folderId,
-        name: this.state.name
-      };
-      await port.request("passbolt.folders.update", folderDto);
+      const folder = await this.updateFolder();
       this.displayNotification("success", "The folder was renamed successfully");
+      this.selectAndScrollToFolder(folder.id);
       this.props.onClose();
     } catch (error) {
       this.setState({
-        showErrorDialog: true,
+        serviceError: true,
         errorMessage: error.message,
         processing: false
       });
@@ -150,10 +191,34 @@ class FolderRenameDialog extends Component {
   }
 
   /**
-   * Focus the first field of the form which is in error state.
+   * Toggle processing state
+   * @returns {Promise<void>}
    */
-  focusOnNameInput() {
-    this.nameInputRef.current.focus();
+  async toggleProcessing() {
+    const prev = this.state.processing;
+    return new Promise(resolve => {
+      this.setState({processing: !prev}, resolve());
+    })
+  }
+
+  /**
+   * Focus the first field of the form which is in error state.
+   * @returns {void}
+   */
+  focusFirstFieldError() {
+    this.nameRef.current.focus();
+  }
+
+  /**
+   * Update the folder
+   * @returns {Promise<Object>} Folder entity or Error
+   */
+  async updateFolder() {
+    const folderDto = {
+      id: this.props.folderId,
+      name: this.state.name
+    };
+    return await port.request("passbolt.folders.update", folderDto);
   }
 
   /**
@@ -166,127 +231,102 @@ class FolderRenameDialog extends Component {
   }
 
   /**
-   * Handle form input change.
-   * @params {ReactEvent} The react event.
+   * Select and scroll to a given resource.
+   * @param {string} id The resource id.
+   * @returns {void}
    */
-  handleInputChange(event) {
-    const value = event.target.value;
-    const name = event.target.name;
-    this.setState({
-      [name]: value
-    });
-  }
-
-  /**
-   * Handle name input keyUp event.
-   */
-  async handleNameInputKeyUp() {
-    const state = await this.validateNameInput();
-    this.setState(state);
-  }
-
-  /**
-   * Validate the name input.
-   * @return {Promise<boolean>}
-   */
-  async validateNameInput() {
-    const name = this.state.name.trim();
-    if (!name.length) {
-      this.setState({nameError: "A name is required."});
-      return false;
-    }
-    try {
-      await port.request("passbolt.folders.validate", {name});
-    } catch(error) {
-      this.setState({nameError: error.message});
-      return false;
-    }
-    this.setState({nameError: null});
-    return true;
+  selectAndScrollToFolder(id) {
+    port.emit("passbolt.folders.select-and-scroll-to", id);
   }
 
   /**
    * Validate the form.
-   * @return {Promise<boolean>}
+   * @returns {Promise<boolean>}
    */
   async validate() {
-    return this.validateNameInput();
+    await this.resetValidation();
+    await this.validateNameInput();
+    return this.hasValidationError();
   }
 
   /**
-   * Handle close button click.
+   * Reset validation errors
+   * @returns {Promise<void>}
    */
-  handleCloseClick() {
-    if (this.state.processing) {
-      return;
-    }
-    this.props.onClose();
+  async resetValidation() {
+    return new Promise(resolve => {
+      this.setState({nameError: false}, resolve());
+    });
   }
 
   /**
-   * Handle key down on the component.
-   * @params {ReactEvent} The react event
+   * Validate the name input.
+   * @returns {Promise<void>}
    */
-  handleKeyDown(event) {
-    // Close the dialog when the user presses the "ESC" key.
-    if (event.keyCode === 27) {
-      event.stopPropagation();
-      this.handleCloseClick();
+  validateNameInput() {
+    let nameError = false;
+    const name = this.state.name.trim();
+    if (!name.length) {
+      nameError = "A name is required.";
     }
-    // Submit the dialog when the user presses the "Enter" key.
-    if (event.keyCode === 13) {
-      event.stopPropagation();
-      this.handleFormSubmit();
+    if (name.length > 64) {
+      nameError = "A name can not be more than 64 char in length.";
     }
+    return new Promise(resolve => {
+      this.setState({nameError}, resolve);
+    });
   }
 
+  /**
+   * Return true if the form has some validation error
+   * @returns {boolean}
+   */
+  hasValidationError() {
+    return (this.state.nameError !== false)
+  }
+
+  /**
+   * Should input be disabled? True if state is loading or processing
+   * @returns {boolean}
+   */
+  hasAllInputDisabled() {
+    return this.state.processing || this.state.loading;
+  }
+
+  /**
+   * Render
+   * @returns {*}
+   */
   render() {
     return (
-      <div className="dialog-wrapper" onKeyDown={this.handleKeyDown}>
-        {this.state.showErrorDialog &&
-        <ErrorDialog title={this.state.errorTitle}
-                     message={this.state.errorMessage}
-                     onClose={this.handleCloseClick}/>
-        }
-        {!this.state.showErrorDialog &&
-        <div className="dialog rename-folder-dialog">
-          <div className="dialog-header">
-            <h2>Rename a folder</h2>
-            <a className="dialog-close" onClick={this.handleCloseClick}>
-              <Icon name="close"/>
-              <span className="visually-hidden">cancel</span>
-            </a>
-          </div>
-          <div className="dialog-content">
-            <form onSubmit={this.handleFormSubmit} noValidate>
-              <div className="form-content">
-                {!this.state.name &&
-                <p>Loading...</p>
-                }
-                {this.state.name &&
-                <div className={`input text required ${this.state.nameError ? "error" : ""}`}>
-                  <label htmlFor="rename-folder-form-name">Folder name</label>
-                  <input id="rename-folder-form-name" name="name" type="text" value={this.state.name}
-                         onKeyUp={this.handleNameInputKeyUp} onChange={this.handleInputChange}
-                         disabled={this.state.processing} ref={this.nameInputRef} className="required fluid"
-                         maxLength="255"
-                         required="required" autoComplete="off" autoFocus={true} placeholder="Untitled"
-                  />
-                  {this.state.nameError &&
+      <div>
+        <DialogWrapper className='rename-folder-dialog' title="Rename a folder"
+                       onClose={this.handleClose} disabled={this.hasAllInputDisabled()}>
+          <form className="folder-rename-form" onSubmit={this.handleFormSubmit} noValidate>
+            <div className="form-content">
+              <div className={`input text required ${this.state.nameError ? "error" : ""}`}>
+                <label htmlFor="folder-name-input">Folder name</label>
+                <input id="folder-name-input" name="name"
+                       ref={this.nameRef}
+                       type="text" value={this.state.name} placeholder="Untitled folder"
+                       maxLength="64" required="required"
+                       onChange={this.handleInputChange}
+                       disabled={this.hasAllInputDisabled()}
+                       autoComplete="off" autoFocus={true}
+                />
+                {this.state.nameError &&
                   <div className="name error message">{this.state.nameError}</div>
-                  }
-                </div>
                 }
               </div>
-              <div className="submit-wrapper clearfix">
-                <a role="button" className={ `button primary ${this.state.processing ? "processing" : ""}` }
-                   onClick={this.handleFormSubmit}>Rename</a>
-                <a role="button" className={ `cancel ${this.state.processing ? "disabled" : ""}` }
-                   onClick={this.handleCloseClick}>Cancel</a>
-              </div>
-            </form>
-          </div>
-        </div>
+            </div>
+            <div className="submit-wrapper clearfix">
+              <FormSubmitButton disabled={this.hasAllInputDisabled()} processing={this.state.processing} value="Rename"/>
+              <FormCancelButton disabled={this.hasAllInputDisabled()} onClick={this.handleClose} />
+            </div>
+          </form>
+        </DialogWrapper>
+        {this.state.serviceError &&
+          <ErrorDialog message={this.state.errorMessage} onClose={this.handleCloseError}/>
         }
       </div>
     );
@@ -296,7 +336,6 @@ class FolderRenameDialog extends Component {
 FolderRenameDialog.contextType = AppContext;
 
 FolderRenameDialog.propTypes = {
-  className: PropTypes.string,
   folderId: PropTypes.string,
   onClose: PropTypes.func
 };
