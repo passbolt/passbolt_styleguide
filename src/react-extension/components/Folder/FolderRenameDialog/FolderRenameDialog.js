@@ -79,11 +79,13 @@ class FolderRenameDialog extends Component {
     const folders = context.folders;
     const errorMessage = 'The folder could not be found. Maybe it was deleted or you lost access.';
     if (!folders) {
+      console.error(`No folders context defined.`);
       defaultState.serviceError = true;
       defaultState.errorMessage = errorMessage;
     }
     const folder = context.folders.find(item => item.id === props.folderId) || false;
     if (!folder) {
+      console.error(`Folder ${props.folderId} not found in context.`);
       defaultState.serviceError = true;
       defaultState.errorMessage = errorMessage;
     } else {
@@ -182,6 +184,7 @@ class FolderRenameDialog extends Component {
       this.selectAndScrollToFolder(folder.id);
       this.props.onClose();
     } catch (error) {
+      console.error(error);
       this.setState({
         serviceError: true,
         errorMessage: error.message,

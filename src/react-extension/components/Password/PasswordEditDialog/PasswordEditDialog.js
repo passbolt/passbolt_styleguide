@@ -202,6 +202,7 @@ class PasswordEditDialog extends Component {
         this.setState({processing: false});
       } else {
         // Unexpected error occurred.
+        console.error(error);
         this.setState({
           error: error.message,
           processing: false
@@ -275,6 +276,7 @@ class PasswordEditDialog extends Component {
         isSecretDecrypted: true
       });
     } catch (error) {
+      console.error(error);
       this.setState({
         isSecretDecrypting: false,
         isSecretDecrypted: false

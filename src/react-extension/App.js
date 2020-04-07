@@ -21,6 +21,7 @@ import PasswordCreateDialog from "./components/Password/PasswordCreateDialog/Pas
 import PasswordEditDialog from "./components/Password/PasswordEditDialog/PasswordEditDialog";
 import ProgressDialog from "./components/ProgressDialog/ProgressDialog";
 import ShareDialog from "./components/Share/ShareDialog";
+import FolderDeleteDialog from "./components/Folder/FolderDeleteDialog/FolderDeleteDialog";
 
 class App extends Component{
   /**
@@ -48,6 +49,7 @@ class App extends Component{
       showStart: true,
       showErrorDialog: false,
       showFolderCreateDialog: false,
+      showFolderDeleteDialog: false,
       showFolderRenameDialog: false,
       showPassphraseEntryDialog: false,
       showPasswordCreateDialog: false,
@@ -101,6 +103,7 @@ class App extends Component{
           <h1>Folder</h1>
           <ul>
             <li><a onClick={() => this.onShowDialog('showFolderCreateDialog')}>Create folder dialog</a></li>
+            <li><a onClick={() => this.onShowDialog('showFolderDeleteDialog')}>Delete folder dialog</a></li>
             <li><a onClick={() => this.onShowDialog('showFolderRenameDialog')}>Rename folder dialog</a></li>
           </ul>
         </div>
@@ -116,6 +119,9 @@ class App extends Component{
         }
         {this.state.showFolderRenameDialog &&
         <FolderRenameDialog onClose={this.onDialogClose} folderId='0d0a4b82-4757-4389-88bf-3dd18c1b8d75'/>
+        }
+        {this.state.showFolderDeleteDialog &&
+        <FolderDeleteDialog onClose={this.onDialogClose} folderId='0d0a4b82-4757-4389-88bf-3dd18c1b8d75'/>
         }
         {this.state.showPassphraseEntryDialog &&
         <PassphraseEntryDialog onClose={this.onDialogClose}/>

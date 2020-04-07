@@ -30,6 +30,9 @@ class FormSubmitButton extends Component {
 
   getClassName() {
     let name = 'button primary';
+    if (this.props.warning) {
+      name += ' warning';
+    }
     if (this.props.disabled) {
       name += ' disabled';
     }
@@ -50,10 +53,15 @@ class FormSubmitButton extends Component {
   }
 }
 
+FormSubmitButton.defaultProps = {
+  warning: false
+};
+
 FormSubmitButton.propTypes = {
   processing: PropTypes.bool,
   disabled: PropTypes.bool,
   value: PropTypes.string,
+  warning: PropTypes.bool
 };
 
 export default FormSubmitButton;
