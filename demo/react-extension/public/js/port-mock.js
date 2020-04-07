@@ -60,6 +60,7 @@ port.request = async (eventName, eventObject) => {
       }
     case 'passbolt.folders.update':
       return delay(1000, eventObject);
+    case 'passbolt.folders.delete':
     case 'passbolt.share.save':
         return delay(100, {"header": {}, "body": {}});
     case 'passbolt.share.get-resources-ids':

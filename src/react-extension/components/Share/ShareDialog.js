@@ -157,6 +157,7 @@ class ShareDialog extends Component {
       this.displayNotification("success", "The permissions have been changed successfully.");
       this.props.onClose();
     } catch (error) {
+      console.error(error);
       this.setState({serviceError: true, serviceErrorMessage: error.message, processing: false});
     }
   }

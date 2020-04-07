@@ -115,7 +115,8 @@ class PassphraseEntryDialog extends Component {
   async isValidPassphrase() {
     try {
       await port.request("passbolt.keyring.private.checkpassphrase", this.state.passphrase);
-    } catch (e) {
+    } catch (error) {
+      console.error(error);
       return false;
     }
     return true;

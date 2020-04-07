@@ -96,6 +96,7 @@ class PasswordCreateDialog extends Component {
         this.setState({processing: false});
       } else {
         // Unexpected error occurred.
+        console.error(error);
         this.setState({
           error: error.message,
           processing: false
