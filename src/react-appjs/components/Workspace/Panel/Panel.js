@@ -11,37 +11,41 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         2.13.0
  */
-import React, { Component} from "react";
+import React, {Component} from "react";
 import PropTypes from "prop-types";
 
-import Icon from "../Icons/Icon";
-
-class DialogCloseButton extends Component {
-  handleCloseClick() {
-    this.props.onClose();
+class Panel extends Component {
+  /**
+   * Constructor
+   * @param {Object} props
+   */
+  constructor(props) {
+    super(props);
+    this.state = this.getDefaultState();
   }
 
-  getClassName() {
-    let className = 'dialog-close';
-    if (this.props.disabled) {
-      className += ' disabled';
+  /**
+   * Get default state
+   * @returns {*}
+   */
+  getDefaultState() {
+    return {
+
     }
-    return className;
   }
 
   render() {
     return (
-      <a className={this.getClassName()} onClick={this.handleCloseClick.bind(this)}>
-        <Icon name='close' />
-        <span className="visually-hidden">Close</span>
-      </a>
-    )
+      <div className="panel main">
+        test
+      </div>
+    );
   }
 }
 
-DialogCloseButton.propTypes = {
-  onClose: PropTypes.func,
-  disabled: PropTypes.bool
+Panel.propTypes = {
 };
 
-export default DialogCloseButton;
+
+export default Panel;
+

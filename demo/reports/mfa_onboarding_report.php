@@ -26,7 +26,9 @@
     <link rel="icon" href="src/img/webroot/favicon_192.png" sizes="192x192" />
     <link rel="icon" href="src/img/webroot/favicon_228.png" sizes="228x228" />
     <link rel="stylesheet" type="text/css" href="src/css/themes/default/api_main.css">
+    <script src="src/js/jquery-3.4.1.min.js"></script>
     <script src="src/js/apexcharts.min.js"></script>
+    <script src="src/js/report-widgets.js"></script>
 </head>
 <body class="report report-html">
 <div id="container" class="report report-html">
@@ -63,151 +65,22 @@
             </div>
             <div class="row charts">
                 <div class="col4">
-                    <div class="chart">
-                        <div id="chart1" class="canvas"></div>
-                        <p>Of the users<br>have MFA configured</p>
+                    <div class="report-widget gauge">
+                        <div class="widget-content" data-value="45" data-textradd="%" data-color="green"></div>
+                        <p class="widget-description">Of the users<br>have MFA configured</p>
                     </div>
-                    <script>
-                      var options = {
-                        chart: {
-                          height: 200,
-                          type: 'radialBar',
-                        },
-                        series: [45],
-                        labels: ['total'],
-
-                        plotOptions: {
-                          radialBar: {
-                            hollow: {
-                              margin: 15,
-                              size: "70%"
-                            },
-
-                            dataLabels: {
-                              showOn: "always",
-                              name: {
-                                show: false,
-                              },
-                              value: {
-                                offsetY: 7,
-                                color: "#111",
-                                fontSize: "25px",
-                                show: true,
-                              }
-                            }
-                          }
-                        },
-                        fill: {
-                          type: "solid",
-                          colors: ['#009900']
-                        },
-                        stroke: {
-                          lineCap: "round",
-                        },
-                      }
-
-                      var chart = new ApexCharts(document.querySelector("#chart1"), options);
-                      chart.render();
-                    </script>
                 </div>
                 <div class="col4">
-                    <div class="chart">
-                        <div id="chart2" class="canvas"></div>
-                        <p>Of the admins<br>have MFA configured</p>
+                    <div class="report-widget gauge">
+                        <div class="widget-content" data-value="95" data-textradd="%" data-color="green"></div>
+                        <p class="widget-description">Of the admins<br>have MFA configured</p>
                     </div>
-                    <script>
-                      var options = {
-                        chart: {
-                          height: 200,
-                          type: 'radialBar',
-                        },
-                        series: [70],
-                        labels: ['total'],
-
-                        plotOptions: {
-                          radialBar: {
-                            hollow: {
-                              margin: 15,
-                              size: "70%"
-                            },
-
-                            dataLabels: {
-                              showOn: "always",
-                              name: {
-                                show: false,
-                              },
-                              value: {
-                                offsetY: 7,
-                                color: "#111",
-                                fontSize: "25px",
-                                show: true
-                              }
-                            }
-                          }
-                        },
-                        fill: {
-                          type: "solid",
-                          colors: ['#009900']
-                        },
-                        stroke: {
-                          lineCap: "round",
-                        },
-                      }
-
-                      var chart = new ApexCharts(document.querySelector("#chart2"), options);
-                      chart.render();
-                    </script>
                 </div>
                 <div class="col4 last">
-                    <div class="chart">
-                        <div id="chart3" class="canvas"></div>
-                        <p>Users<br>need to configure MFA</p>
+                    <div class="report-widget gauge">
+                        <div class="widget-content" data-value="5" data-color="red"></div>
+                        <p class="widget-description">Users<br>need to configure MFA</p>
                     </div>
-                    <script>
-                      var options = {
-                        chart: {
-                          height: 200,
-                          type: 'radialBar',
-                        },
-                        series: [5],
-                        labels: ['total'],
-
-                        plotOptions: {
-                          radialBar: {
-                            hollow: {
-                              margin: 15,
-                              size: "70%",
-                            },
-
-                            dataLabels: {
-                              showOn: "always",
-                              name: {
-                                show: false,
-                              },
-                              value: {
-                                offsetY: 7,
-                                color: "#000",
-                                fontSize: "25px",
-                                show: true,
-                                formatter: function (val) {
-                                  return val;
-                                }
-                              }
-                            }
-                          }
-                        },
-                        fill: {
-                          type: "solid",
-                          colors: ['#92000C']
-                        },
-                        stroke: {
-                          lineCap: "round",
-                        },
-                      }
-
-                      var chart = new ApexCharts(document.querySelector("#chart3"), options);
-                      chart.render();
-                    </script>
                 </div>
             </div>
             <div class="row list">

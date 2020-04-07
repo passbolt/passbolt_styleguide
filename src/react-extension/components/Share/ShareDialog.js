@@ -163,7 +163,7 @@ class ShareDialog extends Component {
 
   /**
    * handleServiceError
-   * @param {string} message
+   * @param {string} messagef
    * @return {void}
    */
   handleServiceError (message) {

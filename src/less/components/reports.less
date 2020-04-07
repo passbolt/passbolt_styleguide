@@ -3,6 +3,32 @@ body.report-html {
   padding: 3em 2em;
 }
 
+/**
+Widget styles.
+ */
+.report-widget {
+  // Define the colors that will be used by the graphs inside the widgets.
+  .colors {
+    &.red { color: @red; }
+    &.green { color: @green; }
+  }
+
+  // define widget content
+  &.gauge {
+    div.widget-content {
+
+    }
+    p.widget-description {
+      color: @grey-dark;
+      text-align: center;
+      margin-top: -20px;
+    }
+  }
+}
+
+/**
+Report layout definition.
+ */
 div.report-html {
   margin: auto;
   width: 900px;
@@ -39,14 +65,6 @@ div.report-html {
 
     .row.charts {
       margin-top: 2em;
-
-      .chart {
-        p{
-          color: @grey-dark;
-          text-align: center;
-          margin-top: -20px;
-        }
-      }
     }
 
     .row.list {
@@ -55,7 +73,9 @@ div.report-html {
   }
 }
 
-// Print rules.
+/**
+Print rules.
+ */
 @media print {
   // This takes care of removing the meta information put automatically by the browser on printed page.
   @page { size: auto;  margin: 0mm; }
