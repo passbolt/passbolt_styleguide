@@ -1,0 +1,70 @@
+body.report-html {
+  background-color: @grey-lightest;
+  padding: 3em 2em;
+}
+
+div.report-html {
+  margin: auto;
+  width: 900px;
+  min-height: 1536px;
+  background-color: white;
+  padding: 3em;
+  box-sizing:border-box;
+  .box-shadow();
+
+  .report-header {
+    .creator-info {
+      span.label {
+        display: inline-block;
+        width: 150px;
+        margin-bottom: 0.25em;
+      }
+      span.value {
+        display: inline-block;
+        margin-bottom: 0.25em;
+      }
+    }
+    .company-info{
+      text-align: right;
+      .logo {
+        margin-top: 65px;
+        width: 200px;
+        float: right;
+      }
+    }
+  }
+
+  .report-content {
+    margin-top: 2em;
+
+    .row.charts {
+      margin-top: 2em;
+
+      .chart {
+        p{
+          color: @grey-dark;
+          text-align: center;
+          margin-top: -20px;
+        }
+      }
+    }
+
+    .row.list {
+      margin-top: 3em;
+    }
+  }
+}
+
+// Print rules.
+@media print {
+  // This takes care of removing the meta information put automatically by the browser on printed page.
+  @page { size: auto;  margin: 0mm; }
+
+  body.report-html {
+    background-color: white;
+    div.report-html {
+      min-height: 0 !important;
+      box-shadow: none !important;
+    }
+  }
+}
