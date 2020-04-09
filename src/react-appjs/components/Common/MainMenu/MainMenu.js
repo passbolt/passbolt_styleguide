@@ -13,7 +13,6 @@
  */
 import React, {Component} from "react";
 import PropTypes from "prop-types";
-import Menu from "../Menu/Menu";
 
 class MainMenu extends Component {
   /**
@@ -31,6 +30,9 @@ class MainMenu extends Component {
    */
   getDefaultState() {
     return {
+      // Used for keyboard navigation.
+      // Each new menu item displayed will increment it by 1.
+      tabIndex: 1,
       // menu items list
       menuItems: [
         {
@@ -65,6 +67,8 @@ class MainMenu extends Component {
           "url": "/test/test1.html",
         },
       ],
+
+      // logoutItem
       logoutItem: {
         "id": "logout",
         "name": "Logout",
@@ -74,12 +78,39 @@ class MainMenu extends Component {
     }
   }
 
+  handleClick (e, menuItem) {
+    e.preventDefault();
+    this.props.onClick(menuItem);
+  }
+
+  MenuItem(menuItem) {
+    return (
+      <li className={menuItem.className + ' ' + ( this.state.hidden ? 'hidden' : 'visible' )} key={menuItem.id}>
+        <div className={menuItem.selected ? "row selected" : "row"}>
+          <div className="main-cell-wrapper">
+            <div className="main-cell">
+              <a href={menuItem.url} role="button" tabIndex={this.state.tabIndex++} onClick={(e) => this.handleClick(e, menuItem)}>
+                <span>{menuItem.name}</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </li>
+    );
+  }
+
   render() {
     return (
       <nav>
         <div className="primary navigation top">
-          <Menu className="left" menuItems={this.state.menuItems} onClick={this.props.onClick} />
-          <Menu className="right" menuItems={[this.state.logoutItem]}/>
+          <ul className="left">
+            {(this.state.menuItems && (this.state.menuItems).map((menuItem) => {
+              return this.MenuItem(menuItem);
+            }))}
+          </ul>
+          <ul className="right">
+            {this.MenuItem(this.state.logoutItem)}
+          </ul>
         </div>
       </nav>
     );

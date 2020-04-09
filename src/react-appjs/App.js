@@ -1,6 +1,8 @@
 import React, { Component} from "react";
 import MainMenu from "./components/Common/MainMenu/MainMenu";
 import ReportsWorkspace from "./components/Workspace/Reports/ReportsWorkspace";
+import Footer from "./components/Common/Footer/Footer";
+
 
 class App extends Component{
   /**
@@ -33,11 +35,14 @@ class App extends Component{
 
   render(){
     return(
-      <div id="container" className="page">
-        <div className="header first">
-          <MainMenu onClick={this.handleWorkspaceSelect} />
+      <div>
+        <div id="container" className="page">
+          <div className="header first">
+            <MainMenu onClick={this.handleWorkspaceSelect} />
+          </div>
+          <ReportsWorkspace onMenuItemClick={this.handleWorkspaceSelect}/>
         </div>
-        <ReportsWorkspace onMenuItemClick={this.handleWorkspaceSelect}/>
+        <Footer/>
       </div>
     );
   }

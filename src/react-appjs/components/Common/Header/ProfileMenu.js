@@ -12,7 +12,6 @@
  * @since         2.13.0
  */
 import React, {Component} from "react";
-import Menu from "../../Common/Menu/Menu";
 import PropTypes from "prop-types";
 
 class ProfileMenu extends Component {
@@ -89,6 +88,22 @@ class ProfileMenu extends Component {
     );
   }
 
+  MenuItem(menuItem) {
+    return (
+      <li className={menuItem.className + ' ' + ( this.state.hidden ? 'hidden' : 'visible' )} key={menuItem.id}>
+        <div className={menuItem.selected ? "row selected" : "row"}>
+          <div className="main-cell-wrapper">
+            <div className="main-cell">
+              <a href={menuItem.url} role="button" tabIndex="2" onClick={this.handleMenuItemClick.bind(this)}>
+                <span>{menuItem.name}</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </li>
+    );
+  }
+
   handleToggleMenuClick(e) {
     e.preventDefault();
     this.setState({ open: this.state.open ? false : true });
@@ -105,7 +120,11 @@ class ProfileMenu extends Component {
         <div className="user profile dropdown" onClick={(e) => this.handleToggleMenuClick(e)}>
           {this.UserCard()}
           {this.MoreIcon()}
-          <Menu className={"dropdown-content right" + ' ' + ( this.state.open ? 'visible' : 'hidden' )} menuItems={this.state.menuItems} onClick={this.handleMenuItemClick.bind(this)} />
+          <ul className={"dropdown-content right" + ' ' + ( this.state.open ? 'visible' : 'hidden' )}>
+            {(this.state.menuItems && (this.state.menuItems).map((menuItem) => {
+              return this.MenuItem(menuItem);
+            }))}
+          </ul>
         </div>
       </div>
     );

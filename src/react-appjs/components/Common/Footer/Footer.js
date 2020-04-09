@@ -13,12 +13,8 @@
  */
 import React, {Component} from "react";
 import PropTypes from "prop-types";
-import Logo from "./Logo";
-import SearchBar from "./SearchBar";
-import ProfileMenu from "./ProfileMenu";
-import ActionBar from "../ActionBar/ActionBar";
 
-class WorkspaceHeader extends Component {
+class Footer extends Component {
   /**
    * Constructor
    * @param {Object} props
@@ -34,33 +30,31 @@ class WorkspaceHeader extends Component {
    */
   getDefaultState() {
     return {
-      searchBarOptions: this.props.searchBarOptions || SearchBar.defaultProps
-    }
-  }
 
-  onMenuItemClick(menuItem) {
-    this.props.onMenuItemClick(menuItem);
+    }
   }
 
   render() {
     return (
-      <div>
-         <div className="header second">
-            <Logo/>
-            <SearchBar disabled={this.state.searchBarOptions.disabled} placeholder=" "/>
-            <ProfileMenu onClick={this.onMenuItemClick.bind(this)} />
-         </div>
-        <ActionBar/>
-      </div>
+      <footer>
+        <div className="footer">
+          <ul className="footer-links">
+            <li><a href="https://www.passbolt.com/licence">Terms</a></li>
+            <li><a href="https://www.passbolt.com/privacy">Privacy</a></li>
+            <li><a href="https://www.passbolt.com/credits">Credits</a></li>
+            <li>
+              <a href="https://www.passbolt.com/credits" className="tooltip-left" data-tooltip="v.0.1.0 / v.0.2.0"><i className="fa fa-heart-o"></i></a>
+            </li>
+          </ul>
+        </div>
+      </footer>
     );
   }
 }
 
-WorkspaceHeader.propTypes = {
-  onMenuItemClick: PropTypes.func,
-  searchBarOptions: PropTypes.object,
+Footer.propTypes = {
 };
 
 
-export default WorkspaceHeader;
+export default Footer;
 

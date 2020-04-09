@@ -8878,6 +8878,10 @@ Print rules.
     box-shadow: none !important;
   }
 }
+.workspace-reports-content iframe {
+  width: 100%;
+  min-height: 1536px;
+}
 .input-password-wrapper {
   overflow: hidden;
 }

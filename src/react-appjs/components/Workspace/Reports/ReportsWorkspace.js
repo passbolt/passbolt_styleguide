@@ -13,8 +13,11 @@
  */
 import React, {Component} from "react";
 import PropTypes from "prop-types";
-import WorkspaceHeader from "../WorkspaceHeader/WorkspaceHeader";
-import Panel from "../Panel/Panel";
+import Logo from "../../Common/Header/Logo";
+import SearchBar from "../../Common/Header/SearchBar";
+import ProfileMenu from "../../Common/Header/ProfileMenu";
+import ActionBar from "../../Common/ActionBar/ActionBar";
+import AccordionMenu from "./AccordionMenu";
 
 class ReportsWorkspace extends Component {
   /**
@@ -39,11 +42,72 @@ class ReportsWorkspace extends Component {
     this.props.onMenuItemClick(menuItem);
   }
 
+  BreadCrumb() {
+    return (
+      <div className="breadcrumbs">
+        <ul className="menu">
+          <li>
+            <div className="main-cell">
+              <a href="demo/LU_users.php"><span>All reports</span></a>
+            </div>
+          </li>
+          <li>
+            <div className="main-cell">
+              <a href="demo/LU_users_profile.php"><span>On-boarding</span></a>
+            </div>
+          </li>
+          <li>
+            <div className="main-cell">
+              <a href="demo/LU_users_profile.php"><span>MFA On-boarding</span></a>
+            </div>
+          </li>
+        </ul>
+      </div>
+    );
+  }
+
+  WorkspaceContent() {
+    return (
+      <div className="workspace-reports-content">
+        <div className="tabs-content">
+          <div className="tab-content selected">
+            <iframe src="http://passbolt.local:8086/demo/reports/mfa_onboarding_report.php" width="100%" ></iframe>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  Workspace() {
+    return (
+      <div className="panel main">
+        <div className="tabs-content">
+          <div className="tab-content selected">
+            <div className="reports-workspace">
+              <div className="panel left">
+                <AccordionMenu/>
+              </div>
+              <div className="panel middle">
+                {this.BreadCrumb()}
+                {this.WorkspaceContent()}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   render() {
     return (
       <div>
-        <WorkspaceHeader onMenuItemClick={this.onMenuItemClick.bind(this)} searchBarOptions={{disabled:true}}/>
-        <Panel />
+        <div className="header second">
+          <Logo/>
+          <SearchBar disabled={true} placeholder=" "/>
+          <ProfileMenu onClick={this.onMenuItemClick.bind(this)} />
+        </div>
+        <ActionBar/>
+        {this.Workspace()}
       </div>
     );
   }
