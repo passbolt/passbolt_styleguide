@@ -6,6 +6,23 @@
     z-index: 800;
     background: @background-overlay;
     overflow: auto;
+
+    // Some spinner to be displayed
+    // in case the dialog takes to much time to load
+    .placeholder {
+        position: relative;
+        width: 1em;
+        margin:auto;
+        height:100%;
+        .loading {
+            position: absolute;
+            top:30%;
+            height:2em;
+            width:2em;
+            background: @loading;
+            background-size: 2em 2em;
+        }
+    }
 }
 .dialog {
     position: relative;

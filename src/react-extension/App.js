@@ -47,6 +47,7 @@ class App extends Component{
   getDefaultState() {
     return {
       showStart: true,
+      showLoadingDialogPlaceholder: false,
       showErrorDialog: false,
       showFolderCreateDialog: false,
       showFolderDeleteDialog: false,
@@ -87,53 +88,63 @@ class App extends Component{
     return(
       <div id="container" className="page">
         {this.state.showStart &&
-        <div style={{padding:'1em'}}>
-          <h1>Misc</h1>
-          <ul>
-            <li><a onClick={() => this.onShowDialog('showProgressDialog')}>Progress dialog</a></li>
-            <li><a onClick={() => this.onShowDialog('showPassphraseEntryDialog')}>Passphrase entry dialog</a></li>
-            <li><a onClick={() => this.onShowDialog('showShareDialog')}>Share dialog</a></li>
-            <li><a onClick={() => this.onShowDialog('showErrorDialog')}>Show error dialog</a></li>
-          </ul>
-          <h1>Password</h1>
-          <ul>
-            <li><a onClick={() => this.onShowDialog('showPasswordCreateDialog')}>Create password dialog</a></li>
-            <li><a onClick={() => this.onShowDialog('showPasswordEditDialog')}>Edit password dialog</a></li>
-          </ul>
-          <h1>Folder</h1>
-          <ul>
-            <li><a onClick={() => this.onShowDialog('showFolderCreateDialog')}>Create folder dialog</a></li>
-            <li><a onClick={() => this.onShowDialog('showFolderDeleteDialog')}>Delete folder dialog</a></li>
-            <li><a onClick={() => this.onShowDialog('showFolderRenameDialog')}>Rename folder dialog</a></li>
-          </ul>
-        </div>
+          <div style={{padding:'1em'}}>
+            <h1>Misc</h1>
+            <ul>
+              <li><a onClick={() => this.onShowDialog('showProgressDialog')}>Progress dialog</a></li>
+              <li><a onClick={() => this.onShowDialog('showPassphraseEntryDialog')}>Passphrase entry dialog</a></li>
+              <li><a onClick={() => this.onShowDialog('showShareDialog')}>Share dialog</a></li>
+              <li><a onClick={() => this.onShowDialog('showErrorDialog')}>Show error dialog</a></li>
+              <li><a onClick={() => this.onShowDialog('showLoadingDialogPlaceholder')}>Show loading dialog placeholder</a></li>
+            </ul>
+            <h1>Password</h1>
+            <ul>
+              <li><a onClick={() => this.onShowDialog('showPasswordCreateDialog')}>Create password dialog</a></li>
+              <li><a onClick={() => this.onShowDialog('showPasswordEditDialog')}>Edit password dialog</a></li>
+            </ul>
+            <h1>Folder</h1>
+            <ul>
+              <li><a onClick={() => this.onShowDialog('showFolderCreateDialog')}>Create folder dialog</a></li>
+              <li><a onClick={() => this.onShowDialog('showFolderDeleteDialog')}>Delete folder dialog</a></li>
+              <li><a onClick={() => this.onShowDialog('showFolderRenameDialog')}>Rename folder dialog</a></li>
+            </ul>
+          </div>
+        }
+        {this.state.showLoadingDialogPlaceholder &&
+          <div className={`dialog-wrapper`}>
+            <div className="placeholder">
+              <div className="loading">
+                <span className="visually-hidden">Please wait...</span>
+              </div>
+            </div>
+          </div>
         }
         {this.state.showPasswordCreateDialog &&
-        <PasswordCreateDialog onClose={this.onDialogClose}/>
+          <PasswordCreateDialog onClose={this.onDialogClose}/>
         }
         {this.state.showPasswordEditDialog &&
-        <PasswordEditDialog onClose={this.onDialogClose} id='8e3874ae-4b40-590b-968a-418f704b9d9a'/>
+          <PasswordEditDialog onClose={this.onDialogClose} id='8e3874ae-4b40-590b-968a-418f704b9d9a'/>
         }
         {this.state.showFolderCreateDialog &&
-        <FolderCreateDialog onClose={this.onDialogClose} folderParentId='123e4567-e89b-12d3-a456-426655440000'/>
+          <FolderCreateDialog onClose={this.onDialogClose} folderParentId='123e4567-e89b-12d3-a456-426655440000'/>
         }
         {this.state.showFolderRenameDialog &&
-        <FolderRenameDialog onClose={this.onDialogClose} folderId='0d0a4b82-4757-4389-88bf-3dd18c1b8d75'/>
+          <FolderRenameDialog onClose={this.onDialogClose} folderId='0d0a4b82-4757-4389-88bf-3dd18c1b8d75'/>
         }
         {this.state.showFolderDeleteDialog &&
-        <FolderDeleteDialog onClose={this.onDialogClose} folderId='0d0a4b82-4757-4389-88bf-3dd18c1b8d75'/>
+          <FolderDeleteDialog onClose={this.onDialogClose} folderId='0d0a4b82-4757-4389-88bf-3dd18c1b8d75'/>
         }
         {this.state.showPassphraseEntryDialog &&
-        <PassphraseEntryDialog onClose={this.onDialogClose}/>
+          <PassphraseEntryDialog onClose={this.onDialogClose}/>
         }
         {this.state.showProgressDialog &&
-        <ProgressDialog title="Progress dialog test" message="Please wait..."  goals={3}/>
+          <ProgressDialog title="Progress dialog test" message="Please wait..."  goals={3}/>
         }
         {this.state.showShareDialog &&
-        <ShareDialog onClose={this.onDialogClose} resourcesIds={this.state.shareResources}/>
+          <ShareDialog onClose={this.onDialogClose} resourcesIds={this.state.shareResources}/>
         }
         {this.state.showErrorDialog &&
-        <ErrorDialog onClose={this.onDialogClose} title="test title" message="test message"/>
+          <ErrorDialog onClose={this.onDialogClose} title="test title" message="test message"/>
         }
       </div>
     );

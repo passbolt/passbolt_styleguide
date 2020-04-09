@@ -1,5 +1,3 @@
-import FolderCreateDialog from "../../components/Folder/FolderCreateDialog/FolderCreateDialog";
-
 /**
  * Passbolt ~ Open source password manager for teams
  * Copyright (c) 2019 Passbolt SA (https://www.passbolt.com)

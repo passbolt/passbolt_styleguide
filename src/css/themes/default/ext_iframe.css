@@ -4063,6 +4063,20 @@ input[type=email].fluid {
   background: rgba(255, 255, 255, 0.9);
   overflow: auto;
 }
+.dialog-wrapper .placeholder {
+  position: relative;
+  width: 1em;
+  margin: auto;
+  height: 100%;
+}
+.dialog-wrapper .placeholder .loading {
+  position: absolute;
+  top: 30%;
+  height: 2em;
+  width: 2em;
+  background: url('../../../img/controls/loading_light.svg');
+  background-size: 2em 2em;
+}
 .dialog {
   position: relative;
   max-width: 30em;
