@@ -61,6 +61,7 @@ class UserAvatar extends Component {
   }
 
   handleError() {
+    console.error(`Could not load avatar image url: ${this.getAvatarSrc()}`);
     this.setState({error: true});
   }
 
