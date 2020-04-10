@@ -5,6 +5,7 @@ export default React.createContext({
     "user.settings.securityToken.color": '#FFCC00',
     "user.settings.securityToken.textColor": '#000',
     "user.settings.securityToken.code": 'CKR',
+    "user.settings.trustedDomain": "http://localhost:3001"
   },
   folders: [
     {

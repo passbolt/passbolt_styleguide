@@ -22,6 +22,7 @@ import Autocomplete from "../Common/Autocomplete/Autocomplete";
 import ShareChanges from "./Utility/ShareChanges";
 import SharePermissionItem from "./SharePermissionItem";
 import SharePermissionItemSkeleton from "./SharePermissionItemSkeleton";
+import AppContext from "../../contexts/AppContext";
 
 class ShareDialog extends Component {
   /**
@@ -461,6 +462,8 @@ class ShareDialog extends Component {
     )
   }
 }
+
+ShareDialog.context = AppContext;
 
 ShareDialog.propTypes = {
   resourcesIds: PropTypes.array,

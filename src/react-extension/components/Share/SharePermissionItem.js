@@ -1,12 +1,12 @@
 /**
  * Passbolt ~ Open source password manager for teams
- * Copyright (c) 2019 Passbolt SA (https://www.passbolt.com)
+ * Copyright (c) 2020 Passbolt SA (https://www.passbolt.com)
  *
  * Licensed under GNU Affero General Public License version 3 of the or any later version.
  * For full copyright and license information, please see the LICENSE.txt
  * Redistributions of files must retain the above copyright notice.
  *
- * @copyright     Copyright (c) 2019 Passbolt SA (https://www.passbolt.com)
+ * @copyright     Copyright (c) 2020 Passbolt SA (https://www.passbolt.com)
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         2.13.0
@@ -17,6 +17,9 @@ import PropTypes from "prop-types";
 import SharePermissionDeleteButton from "./SharePermissionDeleteButton";
 import TooltipHtml from "../Common/Tooltip/TooltipHtml";
 import ShareVariesDetails from "./ShareVariesDetails";
+import AppContext from "../../contexts/AppContext";
+import UserAvatar from "../Common/Avatar/UserAvatar";
+import GroupAvatar from "../Common/Avatar/GroupAvatar";
 
 class SharePermissionItem extends Component {
   /**
@@ -33,6 +36,10 @@ class SharePermissionItem extends Component {
     this.bindEventHandlers();
   }
 
+  /**
+   *  Invoked immediately after updating occurs. This method is not called for the initial render.
+   * @param prevProps
+   */
   componentDidUpdate(prevProps) {
     if (prevProps.permissionType !== this.props.permissionType) {
       this.setState({permissionType: this.props.permissionType});
@@ -44,6 +51,10 @@ class SharePermissionItem extends Component {
     this.handleDelete = this.handleDelete.bind(this);
   }
 
+  /**
+   * R
+   * @returns {string} Group or User name
+   */
   getAroDetails() {
     if (this.props.aro.profile) {
       return this.props.aro.username;
@@ -63,15 +74,6 @@ class SharePermissionItem extends Component {
     return 'permission';
   }
 
-  getAvatar() {
-    if (this.props.aro.profile) {
-      // return this.props.user.profile.avatar.small;
-      return 'img/avatar/user.png'
-    } else {
-      return 'img/avatar/group_default.png';
-    }
-  }
-
   getAroName() {
     if (this.props.aro.profile) {
       let profile = this.props.aro.profile;
@@ -79,6 +81,22 @@ class SharePermissionItem extends Component {
     } else {
       return this.props.aro.name;
     }
+  }
+
+  /**
+   * Return true if aro in props is a user
+   * @returns {boolean}
+   */
+  isUser() {
+    return !this.isGroup();
+  }
+
+  /**
+   * Return true if aro in props is a group
+   * @returns {boolean}
+   */
+  isGroup() {
+    return !(this.props.aro && this.props.aro.profile);
   }
 
   getClassName() {
@@ -101,9 +119,12 @@ class SharePermissionItem extends Component {
   render() {
     return(
       <li id={"permission-item-" + this.props.id} className={this.getClassName()}>
-        <div className="avatar">
-          <img src={this.getAvatar()} alt="Avatar"/>
-        </div>
+        {this.isUser() &&
+          <UserAvatar user={this.props.aro} />
+        }
+        {this.isGroup() &&
+          <GroupAvatar group={this.props.aro} />
+        }
 
         <div className="aro">
           <div className="aro-name">
@@ -143,6 +164,8 @@ class SharePermissionItem extends Component {
     );
   }
 }
+
+SharePermissionItem.contextType = AppContext;
 
 SharePermissionItem.propTypes = {
   id: PropTypes.string, // uuid
