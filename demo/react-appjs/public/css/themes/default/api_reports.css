@@ -8860,6 +8860,32 @@ div.report-html .report-content .row.charts {
 div.report-html .report-content .row.list {
   margin-top: 3em;
 }
+div.report-html .report-content table.table-info {
+  border-right: 0;
+  border-left: 0;
+  border-bottom: 0;
+}
+div.report-html .report-content table.table-info tr th:first-of-type,
+div.report-html .report-content table.table-info tr td:first-of-type {
+  width: 30%;
+}
+div.report-html .report-content table.table-info tr td {
+  word-wrap: break-word;
+  color: #666;
+  vertical-align: middle;
+}
+div.report-html .report-content table.table-info tr td + td {
+  color: #666;
+}
+div.report-html .report-content table.table-info tr span.name,
+div.report-html .report-content table.table-info tr span.email {
+  display: block;
+  max-width: 300px;
+}
+div.report-html .report-content table.table-info tr span.email {
+  font-size: 0.8em;
+  color: #969696;
+}
 /**
 Print rules.
  */

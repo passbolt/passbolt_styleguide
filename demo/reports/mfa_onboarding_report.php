@@ -88,8 +88,7 @@
                     <table class="table-info horizontal ">
                         <thead>
                         <tr>
-                            <th>Name</th>
-                            <th>Username</th>
+                            <th>User</th>
                             <th>Active since</th>
                             <th>MFA?</th>
                             <th>Role</th>
@@ -97,22 +96,28 @@
                         </thead>
                         <tbody>
                         <tr>
-                            <td>Ada Lovelace</td>
-                            <td>ada@passbolt.com</td>
+                            <td>
+                                <span class="name">Ada Lovelace</span>
+                                <span class="email">ada@passbolt.com</span>
+                            </td>
                             <td>4 days ago</td>
                             <td>No</td>
                             <td>User</td>
                         </tr>
                         <tr>
-                            <td>Betty Holberton</td>
-                            <td>betty@passbolt.com</td>
+                            <td>
+                                <span class="name">Betty Alberton</span>
+                                <span class="email">betty@passbolt.com</span>
+                            </td>
                             <td>10 days ago</td>
                             <td>No</td>
                             <td>Admin</td>
                         </tr>
                         <tr>
-                            <td>Betty Holberton</td>
-                            <td>betty@passbolt.com</td>
+                            <td>
+                                <span class="name">Some very long name thatwillprobablyneverhappeninreality</span>
+                                <span class="email">Someverylongnamethatwillprobablyneverhappeninreality@passbolt.com</span>
+                            </td>
                             <td>10 days ago</td>
                             <td>No</td>
                             <td>Admin</td>
