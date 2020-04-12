@@ -124,8 +124,21 @@ Print rules.
 
 
 .workspace-reports-content {
+  position: relative;
+  height: 100%;
+
+  .tab-content {
+    top: 0;
+    bottom: 2.45em;
+    padding: 0;
+    position: absolute;
+    width: 100%;
+    overflow-y: hidden;
+    background: #FFF;
+  }
+
   iframe {
     width: 100%;
-    min-height: 1536px;
+    height: 100%;
   }
 }

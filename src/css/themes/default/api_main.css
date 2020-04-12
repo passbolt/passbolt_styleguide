@@ -8902,9 +8902,22 @@ Print rules.
     box-shadow: none !important;
   }
 }
+.workspace-reports-content {
+  position: relative;
+  height: 100%;
+}
+.workspace-reports-content .tab-content {
+  top: 0;
+  bottom: 2.45em;
+  padding: 0;
+  position: absolute;
+  width: 100%;
+  overflow-y: hidden;
+  background: #FFF;
+}
 .workspace-reports-content iframe {
   width: 100%;
-  min-height: 1536px;
+  height: 100%;
 }
 .input-password-wrapper {
   overflow: hidden;
