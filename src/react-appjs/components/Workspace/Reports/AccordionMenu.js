@@ -14,6 +14,13 @@
 import React, {Component} from "react";
 import PropTypes from "prop-types";
 
+import { matchPath } from "react-router"
+
+import {
+  Link,
+  withRouter
+} from "react-router-dom";
+
 class AccordionMenu extends Component {
   /**
    * Constructor
@@ -31,62 +38,7 @@ class AccordionMenu extends Component {
    */
   getDefaultState() {
     return {
-      menuItems: [
-        {
-          "name": "Dashboard"
-        },
-        {
-          "name": "On-boarding",
-          "children": [
-            {
-              "name": "MFA On-boarding report"
-            },
-            {
-              "name": "Employees On-boarding report"
-            },
-            {
-              "name": "Employees drop-out report"
-            }]
-        },
-        {
-          "name": "Users activity",
-          "children": [
-            {
-              "name": "Users log-in report"
-            },
-            {
-              "name": "Users activity report"
-            },
-            {
-              "name": "Users evolution report"
-            }]
-        },
-        {
-          "name": "Groups activity",
-          "children": [
-            {
-              "name": "report 1"
-            },
-            {
-              "name": "report 2"
-            },
-            {
-              "name": "report 3"
-            }]
-        },
-        {
-          "name": "Passwords usage",
-          "children": [
-            {
-              "name": "report 1"
-            },
-            {
-              "name": "report 2"
-            },
-            {
-              "name": "report 3"
-            }]
-        }],
+
     }
   }
 
@@ -97,6 +49,26 @@ class AccordionMenu extends Component {
     childrenElt.classList.toggle('hidden');
   }
 
+  getRoute(item){
+    return "/reports/" + item.slug;
+  }
+
+  checkSelected(menuItem) {
+    let selected = false;
+    if (menuItem.slug) {
+      const match = matchPath(this.props.location.pathname, {
+        path: this.getRoute(menuItem),
+        exact: false,
+        strict: false
+      });
+      if (match) {
+        selected = true;
+      }
+    }
+
+    return selected;
+  }
+
   Head(name) {
     return(
       <ul className="accordion-header">
@@ -105,7 +77,7 @@ class AccordionMenu extends Component {
             <div className="main-cell-wrapper">
               <div className="main-cell">
                 <h3>
-                  <a href="#" onClick={e => this.onClick(e, e.target)} data-id={this.sectionNumber}>{name}</a>
+                  <a onClick={e => this.onClick(e, e.target)} data-id={this.sectionNumber}>{name}</a>
                 </h3>
               </div>
             </div>
@@ -116,9 +88,8 @@ class AccordionMenu extends Component {
   }
 
   Section(section) {
-    this.sectionNumber++;
     return(
-      <div class="section">
+      <div className="section" key={'section_' + this.sectionNumber++}>
         {this.Head(section.name)}
         {section.children &&
           this.Children(section.children)
@@ -139,21 +110,21 @@ class AccordionMenu extends Component {
 
   TopItem(item) {
     return (
-      <ul>
+      <ul key={'top_item_' + this.sectionNumber++} key={'top_item_' + this.sectionNumber++}>
         {this.Item(item)}
       </ul>
     );
   }
 
   Item(item) {
+    const selected = this.checkSelected(item);
+
     return(
-      <li className="open node root group-item">
-        <div className="row">
+      <li className="open node root group-item" key={'item_' + this.sectionNumber++}>
+        <div className={selected?"row selected": "row"}>
           <div className="main-cell-wrapper">
             <div className="main-cell">
-              <a href="#" title={item.name}>
-                <span>{item.name}</span>
-              </a>
+              {this.ReportItemLink(item)}
             </div>
           </div>
         </div>
@@ -161,13 +132,22 @@ class AccordionMenu extends Component {
     );
   }
 
+  ReportItemLink(item){
+    return(
+      <Link to={this.getRoute(item)} title={item.name}>
+        <span>{item.name}</span>
+      </Link>
+    );
+  }
+
   render() {
     return (
       <div className="navigation accordion first">
-        {((this.state.menuItems).map((item) => {
+        {((this.props.items).map((item) => {
           if (item.children) {
             return this.Section(item);
-          } else {
+          }
+          else {
             return this.TopItem(item);
           }
         }))}
@@ -177,8 +157,8 @@ class AccordionMenu extends Component {
 }
 
 AccordionMenu.propTypes = {
-  onMenuItemClick: PropTypes.func,
+  items: PropTypes.array,
 };
 
-export default AccordionMenu;
+export default withRouter(AccordionMenu);
 

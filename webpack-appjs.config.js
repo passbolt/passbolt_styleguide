@@ -29,5 +29,6 @@ module.exports = {
     contentBase: path.join(__dirname, "demo/react-appjs/public/"),
     port: 3000,
     publicPath: "http://localhost:3000/dist/",
+    historyApiFallback: true,
   },
 };

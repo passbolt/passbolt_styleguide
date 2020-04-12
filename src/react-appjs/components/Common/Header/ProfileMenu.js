@@ -13,6 +13,9 @@
  */
 import React, {Component} from "react";
 import PropTypes from "prop-types";
+import UserAvatar from "../../Common/UserAvatar/UserAvatar"
+
+import AppContext from "../../../contexts/AppContext";
 
 class ProfileMenu extends Component {
   /**
@@ -22,6 +25,17 @@ class ProfileMenu extends Component {
   constructor(props) {
     super(props);
     this.state = this.getDefaultState();
+    this.Profile = this.Profile.bind(this);
+  }
+
+  componentDidUpdate() {
+    this.handleLoadingState();
+  }
+
+  handleLoadingState() {
+    if (Object.getOwnPropertyNames(this.context.currentUser).length !== 0 && this.state.loading === true) {
+      this.setState({loading: false, user: this.context.currentUser})
+    }
   }
 
   /**
@@ -32,6 +46,12 @@ class ProfileMenu extends Component {
     return {
       // Whether the menu is opened or not.
       open : false,
+      loading: true,
+
+      user: {},
+
+      appContext: this.context,
+
 
       //  profile menu items list
       menuItems: [
@@ -53,24 +73,38 @@ class ProfileMenu extends Component {
           "className": "logout row",
           "url": "demo/legacy/LU_users_profile",
         },
-      ]
+      ],
     }
   }
 
   UserCard() {
-    return (
-      <div>
-        <div className="center-cell-wrapper">
-          <div className="details center-cell">
-            <span className="name">Ada Lovelace</span>
-            <span className="email">ada@passbolt.com</span>
+    if (this.state.loading) {
+      return (
+        <div>
+          <div className="center-cell-wrapper">
+            <div className="details center-cell">
+              <span className="name">...</span>
+              <span className="email">...</span>
+            </div>
+          </div>
+          <div className="picture left-cell">
+            <img src="img/avatar/user.png" alt="your picture"/>
           </div>
         </div>
-        <div className="picture left-cell">
-          <img src="img/avatar/user.png" alt="your picture"/>
+      );
+    } else {
+      return (
+        <div>
+          <div className="center-cell-wrapper">
+            <div className="details center-cell">
+              <span className="name">{this.state.user.profile.first_name} {this.state.user.profile.last_name}</span>
+              <span className="email">{this.state.user.username}</span>
+            </div>
+          </div>
+          <UserAvatar user={this.state.user} className="picture left-cell" />
         </div>
-      </div>
-    );
+      );
+    }
   }
 
   MoreIcon() {
@@ -114,23 +148,30 @@ class ProfileMenu extends Component {
     this.setState({ open: false });
   }
 
+  Profile() {
+    return (
+      <div className="user profile dropdown" onClick={(e) => this.handleToggleMenuClick(e)}>
+        {this.UserCard()}
+        {this.MoreIcon()}
+        <ul className={"dropdown-content right" + ' ' + ( this.state.open ? 'visible' : 'hidden' )}>
+          {(this.state.menuItems && (this.state.menuItems).map((menuItem) => {
+            return this.MenuItem(menuItem);
+          }))}
+        </ul>
+      </div>
+    );
+  }
+
   render() {
     return (
-      <div className="col3 profile-wrapper">
-        <div className="user profile dropdown" onClick={(e) => this.handleToggleMenuClick(e)}>
-          {this.UserCard()}
-          {this.MoreIcon()}
-          <ul className={"dropdown-content right" + ' ' + ( this.state.open ? 'visible' : 'hidden' )}>
-            {(this.state.menuItems && (this.state.menuItems).map((menuItem) => {
-              return this.MenuItem(menuItem);
-            }))}
-          </ul>
+        <div className="col3 profile-wrapper">
+            <this.Profile />
         </div>
-      </div>
     );
   }
 }
 
+ProfileMenu.contextType = AppContext;
 ProfileMenu.propTypes = {
   onClick: PropTypes.func
 };

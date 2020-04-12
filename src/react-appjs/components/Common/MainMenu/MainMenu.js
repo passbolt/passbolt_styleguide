@@ -13,6 +13,12 @@
  */
 import React, {Component} from "react";
 import PropTypes from "prop-types";
+import { matchPath } from "react-router"
+
+import {
+  Link,
+  withRouter
+} from "react-router-dom";
 
 class MainMenu extends Component {
   /**
@@ -51,8 +57,7 @@ class MainMenu extends Component {
           "id": "reports",
           "name": "Reports",
           "className": "reports",
-          "url": "/test/test1.html",
-          "selected": true
+          "route": "/reports",
         },
         {
           "id": "administration",
@@ -83,15 +88,46 @@ class MainMenu extends Component {
     this.props.onClick(menuItem);
   }
 
+  ItemLink(menuItem) {
+    if (menuItem.route) {
+      return (
+        <Link to={menuItem.route} role="button" tabIndex={this.state.tabIndex++}><span>{menuItem.name}</span></Link>
+      );
+    }
+    else {
+      return(
+        <a href={menuItem.url} role="button" tabIndex={this.state.tabIndex++} onClick={(e) => this.handleClick(e, menuItem)}>
+          <span>{menuItem.name}</span>
+        </a>
+      );
+    }
+  }
+
+  checkSelected(menuItem) {
+    let selected = false;
+    if (menuItem.route) {
+      const match = matchPath(this.props.location.pathname, {
+        path: menuItem.route,
+        exact: false,
+        strict: false
+      });
+      if (match) {
+        selected = true;
+      }
+    }
+
+    return selected;
+  }
+
   MenuItem(menuItem) {
+    const selected = this.checkSelected(menuItem);
+
     return (
       <li className={menuItem.className + ' ' + ( this.state.hidden ? 'hidden' : 'visible' )} key={menuItem.id}>
-        <div className={menuItem.selected ? "row selected" : "row"}>
+        <div className={selected? "row selected" : "row"}>
           <div className="main-cell-wrapper">
             <div className="main-cell">
-              <a href={menuItem.url} role="button" tabIndex={this.state.tabIndex++} onClick={(e) => this.handleClick(e, menuItem)}>
-                <span>{menuItem.name}</span>
-              </a>
+              {this.ItemLink(menuItem)}
             </div>
           </div>
         </div>
@@ -121,5 +157,5 @@ MainMenu.propTypes = {
   onClick: PropTypes.func
 };
 
-export default MainMenu;
+export default withRouter(MainMenu);
 
