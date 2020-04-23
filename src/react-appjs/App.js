@@ -79,6 +79,8 @@ class App extends Component{
     return;
   }
 
+
+
   render(){
     return(
         <AppContext.Provider value={this.state.appContext}>
@@ -93,7 +95,22 @@ class App extends Component{
                     <ReportsWorkspace onMenuItemClick={this.handleWorkspaceSelect}/>
                   </Route>
                   <Route path="/">
-                    <div className="home">This is home</div>
+                    <div className="home">
+                      <div style={{padding:'1em'}}>
+                        <h1>Reports</h1>
+                        <ul>
+                          <li>
+                            <Link to="/reports">Reports dashboard</Link>
+                          </li>
+                          <li>
+                            <Link to="/reports/mfa-users-onboarding">HTML Iframe Report</Link>
+                          </li>
+                          <li>
+                            <Link to="/reports/xxxx">Report doesnt exist</Link>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
                   </Route>
                 </Switch>
               </div>

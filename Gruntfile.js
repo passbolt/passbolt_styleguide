@@ -78,7 +78,9 @@ module.exports = function(grunt) {
         },
         command: [
           'rm ./demo/react-appjs/public/css/themes/default/api_reports.css',
+          'rm ./demo/react-appjs/public/css/themes/midgar/api_reports.css',
           'cp ./src/css/themes/default/api_reports.css ./demo/react-appjs/public/css/themes/default/.',
+          'cp ./src/css/themes/midgar/api_reports.css ./demo/react-appjs/public/css/themes/midgar/.',
 
           'rm ./demo/react-extension/public/css/themes/default/ext_app.css',
           'rm ./demo/react-extension/public/css/themes/midgar/ext_app.css',

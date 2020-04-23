@@ -71,14 +71,18 @@ class ReportsWorkspace extends Component {
 
   Breadcrumb() {
     let { reportSlug } = useParams();
-
     const report = this.reports.findBySlug(reportSlug);
+
 
     let breadcrumbs = [
       <Link to="/reports"><span>All reports</span></Link>
     ];
 
-    if (report) {
+    if(Object.keys(report).length === 0) {
+      breadcrumbs.push(
+        <a><span>error</span></a>
+      );
+    } else {
       breadcrumbs.push(
         <a><span>{report.category}</span></a>
       );
@@ -115,8 +119,19 @@ class ReportsWorkspace extends Component {
     console.error('error while loading iframe');
   }
 
+  ReportError() {
+    return (
+      <p className="message error">The selected report does not exist</p>
+    );
+  }
+
   Report(props) {
     const report = this.reports.findBySlug(props.slug);
+
+    // If report doesn't exist, we display an error.
+    if(Object.keys(report).length === 0) {
+      return <this.ReportError/>
+    }
 
     if (report.slug == "mfa-users-onboarding") {
       return (<iframe src="http://passbolt.local:8086/demo/reports/mfa_onboarding_report.php" width="100%" onLoad={this.onIframeLoaded} onError={this.onIframeError}></iframe>)
@@ -173,10 +188,8 @@ class ReportsWorkspace extends Component {
               <div className="selected selection">
                 <li>
                   <a className="button" onClick={e => this.handlePrint(e)}>
-						        <span className="svg-icon">
-							        <svg viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M448 192V77.25c0-8.49-3.37-16.62-9.37-22.63L393.37 9.37c-6-6-14.14-9.37-22.63-9.37H96C78.33 0 64 14.33 64 32v160c-35.35 0-64 28.65-64 64v112c0 8.84 7.16 16 16 16h48v96c0 17.67 14.33 32 32 32h320c17.67 0 32-14.33 32-32v-96h48c8.84 0 16-7.16 16-16V256c0-35.35-28.65-64-64-64zm-64 256H128v-96h256v96zm0-224H128V64h192v48c0 8.84 7.16 16 16 16h48v96zm48 72c-13.25 0-24-10.75-24-24 0-13.26 10.75-24 24-24s24 10.74 24 24c0 13.25-10.75 24-24 24z"></path>
-							        </svg>
+						        <span className="svg-icon printer">
+							        <svg width="1792" height="1792" viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg"><path d="M448 1536h896v-256h-896v256zm0-640h896v-384h-160q-40 0-68-28t-28-68v-160h-640v640zm1152 64q0-26-19-45t-45-19-45 19-19 45 19 45 45 19 45-19 19-45zm128 0v416q0 13-9.5 22.5t-22.5 9.5h-224v160q0 40-28 68t-68 28h-960q-40 0-68-28t-28-68v-160h-224q-13 0-22.5-9.5t-9.5-22.5v-416q0-79 56.5-135.5t135.5-56.5h64v-544q0-40 28-68t68-28h672q40 0 88 20t76 48l152 152q28 28 48 76t20 88v256h64q79 0 135.5 56.5t56.5 135.5z"/></svg>
 						        </span>
                     <span>&nbsp;Print</span>
                   </a>

@@ -1,3 +1,17 @@
+/**
+React view of reports.
+ */
+#container {
+  .reports-workspace {
+    .accordion.navigation.first {
+      border: none;
+      padding: 0.625em 0 0 0;
+      margin: 0;
+    }
+  }
+}
+
+
 body.report-html {
   background-color: @grey-lightest;
   padding: 3em 2em;
@@ -118,6 +132,8 @@ Print rules.
     div.report-html {
       min-height: 0 !important;
       box-shadow: none !important;
+
+      color: @grey;
     }
   }
 }
@@ -134,7 +150,6 @@ Print rules.
     position: absolute;
     width: 100%;
     overflow-y: hidden;
-    background: #FFF;
   }
 
   iframe {

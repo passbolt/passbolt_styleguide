@@ -46,6 +46,8 @@ class AccordionMenu extends Component {
     e.preventDefault();
     const eltId = elt.dataset.id;
     const childrenElt = document.querySelector("#section-" + eltId);
+    const navParent = elt.closest('.accordion.navigation');
+    navParent.classList.toggle('closed');
     childrenElt.classList.toggle('hidden');
   }
 
@@ -77,7 +79,9 @@ class AccordionMenu extends Component {
             <div className="main-cell-wrapper">
               <div className="main-cell">
                 <h3>
-                  <a onClick={e => this.onClick(e, e.target)} data-id={this.sectionNumber}>{name}</a>
+                  <a onClick={e => this.onClick(e, e.target)} data-id={this.sectionNumber}>
+                    {name}
+                  </a>
                 </h3>
               </div>
             </div>
@@ -89,7 +93,7 @@ class AccordionMenu extends Component {
 
   Section(section) {
     return(
-      <div className="section" key={'section_' + this.sectionNumber++}>
+      <div className="accordion navigation section" key={'section_' + this.sectionNumber++}>
         {this.Head(section.name)}
         {section.children &&
           this.Children(section.children)
@@ -110,9 +114,11 @@ class AccordionMenu extends Component {
 
   TopItem(item) {
     return (
-      <ul key={'top_item_' + this.sectionNumber++} key={'top_item_' + this.sectionNumber++}>
-        {this.Item(item)}
-      </ul>
+      <div className="navigation accordion first" key={'top_item_' + this.sectionNumber++}>
+        <ul>
+          {this.Item(item)}
+        </ul>
+      </div>
     );
   }
 
@@ -142,7 +148,7 @@ class AccordionMenu extends Component {
 
   render() {
     return (
-      <div className="navigation accordion first">
+      <div>
         {((this.props.items).map((item) => {
           if (item.children) {
             return this.Section(item);
