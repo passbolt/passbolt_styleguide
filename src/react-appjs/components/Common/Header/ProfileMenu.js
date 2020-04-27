@@ -59,19 +59,19 @@ class ProfileMenu extends Component {
           "id": "profile",
           "name": "Profile",
           "className": "profile row",
-          "url": "demo/legacy/LU_users_profile",
+          "url": "/app/settings/profile",
         },
         {
           "id": "theme",
           "name": "Theme",
           "className": "theme row",
-          "url": "demo/legacy/LU_users_profile",
+          "url": "/app/settings/theme",
         },
         {
           "id": "logout",
           "name": "Logout",
           "className": "logout row",
-          "url": "demo/legacy/LU_users_profile",
+          "url": "/logout",
         },
       ],
     }

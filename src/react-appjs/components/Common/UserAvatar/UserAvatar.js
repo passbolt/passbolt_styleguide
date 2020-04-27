@@ -22,7 +22,9 @@ class UserAvatar extends Component {
    */
   constructor(props) {
     super(props);
-    this.state = {error: false};
+    this.state = {
+      error: false
+    };
   }
   /**
    * Return true if the user from props contains a valid profile with avatar url properties

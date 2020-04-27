@@ -6,7 +6,19 @@ const categories = {
   passwords_usage: "Passwords Usage",
 };
 
-const reports = [
+const reports_prod = [
+  {
+    "name": "Dashboard",
+    "slug": "dashboard"
+  },
+  {
+    "name": "MFA On-boarding report",
+    "slug": "mfa-users-onboarding",
+    "category": categories.onboarding,
+  }
+];
+
+const reports_dev = [
   {
     "name": "Dashboard",
     "slug": "dashboard"
@@ -19,6 +31,11 @@ const reports = [
   {
     "name": "Report not available on server",
     "slug": "not-available-on-server",
+    "category": categories.onboarding,
+  },
+  {
+    "name": "HTML report loading",
+    "slug": "report-loading",
     "category": categories.onboarding,
   },
   {
@@ -79,4 +96,6 @@ const reports = [
   }
 ];
 
-export default reports;
+const config = process.env.NODE_ENV === 'development' ? reports_dev : reports_prod;
+
+export default config;

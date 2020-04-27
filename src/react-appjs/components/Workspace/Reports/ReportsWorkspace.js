@@ -20,6 +20,7 @@ import Breadcrumbs from "../../Common/Breadcrumbs/Breadcrumbs";
 import AccordionMenu from "./AccordionMenu";
 import reports from "./config/reports";
 import ReportsCollection from './utility/ReportsCollection';
+import HTMLReport from './HTMLReport';
 
 import {
   Link,
@@ -112,7 +113,7 @@ class ReportsWorkspace extends Component {
 
   // Called when IFrame is loaded.
   onIframeLoaded() {
-
+    console.log('Iframe is now loaded');
   }
 
   onIframeError() {
@@ -133,19 +134,31 @@ class ReportsWorkspace extends Component {
       return <this.ReportError/>
     }
 
-    if (report.slug == "mfa-users-onboarding") {
-      return (<iframe src="http://passbolt.local:8086/demo/reports/mfa_onboarding_report.php" width="100%" onLoad={this.onIframeLoaded} onError={this.onIframeError}></iframe>)
-    } else if (report.slug == "not-available-on-server") {
-      return (<iframe src="http://passbolt.local:8086/demo/reports/report_not_available.php" width="100%" onLoad={this.onIframeLoaded} onError={this.onIframeError}></iframe>)
+    if (process.env.NODE_ENV === 'development') {
+      if (report.slug === "mfa-users-onboarding") {
+        return <HTMLReport url="http://passbolt.local:8086/demo/reports/mfa_onboarding_report.php" />
+      } else if (report.slug == "not-available-on-server") {
+        return <HTMLReport url="http://passbolt.local:8086/demo/reports/report_not_available.php" />
+      } else if (report.slug == "report-loading") {
+        return <HTMLReport/>
+      } else {
+        return <h3>Requested report: {report.name}</h3>;
+      }
     } else {
-      return <h3>Requested report: {report.name}</h3>;
+      if (report.slug === "dashboard") {
+        return <h3>Dashboard</h3>;
+
+      } else {
+        const reportUrl = "/reports/" + report.slug;
+        return <HTMLReport url={reportUrl} />
+      }
     }
   }
 
   Workspace() {
     const { match, location, history } = this.props;
     return (
-      <Router>
+      <Router basename="/app">
         <div className="panel main">
           <div className="tabs-content">
             <div className="tab-content selected">
@@ -174,7 +187,7 @@ class ReportsWorkspace extends Component {
 
   handlePrint(e) {
     e.preventDefault();
-    document.getElementById("report-frame").contentWindow.print();
+    document.getElementById("report-iframe").contentWindow.print();
   }
 
   ActionBar() {

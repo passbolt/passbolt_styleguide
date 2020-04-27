@@ -43,40 +43,40 @@ class MainMenu extends Component {
       menuItems: [
         {
           "id": "passwords",
-          "name": "Passwords",
+          "name": "passwords",
           "className": "passwords",
-          "url": "/test/test1.html",
+          "url": "/app/passwords",
         },
         {
           "id": "users",
-          "name": "Users",
+          "name": "users",
           "className": "users",
-          "url": "/test/test1.html",
+          "url": "/app/users",
         },
         {
           "id": "reports",
-          "name": "Reports",
+          "name": "reports",
           "className": "reports",
           "route": "/reports",
         },
         {
           "id": "administration",
-          "name": "Administration",
+          "name": "administration",
           "className": "administration",
-          "url": "/test/test1.html",
+          "url": "/app/administration",
         },
         {
           "id": "help",
-          "name": "Help",
+          "name": "help",
           "className": "administration",
-          "url": "/test/test1.html",
+          "url": "https://help.passbolt.com",
         },
       ],
 
       // logoutItem
       logoutItem: {
         "id": "logout",
-        "name": "Logout",
+        "name": "logout",
         "className": "logout",
         "url": "/logout",
       },

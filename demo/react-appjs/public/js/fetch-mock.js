@@ -1,6 +1,7 @@
 fetch = async function (url) {
   let data = '';
-  if (url === '/settings.json') {
+  console.log('url', url);
+  if (url === '/settings.json?contain[header]=0') {
     data = {
       "app": {
         "version": {
@@ -59,7 +60,7 @@ fetch = async function (url) {
       }
     };
   }
-  if (url === '/me.json') {
+  if (url === '/users/me.json?api-version=v2') {
     data = {
       "header": {
         "id": "511d0592-7ea2-42c1-95f7-829de74e6cac",
@@ -128,7 +129,7 @@ fetch = async function (url) {
       }
     };
   }
-  if (url === '/account/settings.json') {
+  if (url === '/account/settings.json?api-version=v2') {
     data = {
       "header": {
         "id": "c453d51f-3e0f-4438-b8cd-a07876a0503c",
@@ -154,7 +155,9 @@ fetch = async function (url) {
 
   return new Promise((resolve, reject) => {
     setTimeout(() => {
-      resolve(data);
+      const init = { "status" : 200 , "statusText" : "alright" };
+      const response = new Response(JSON.stringify(data), init);
+      resolve(response);
     }, 3000);
   });
 }

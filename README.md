@@ -73,6 +73,19 @@ or
 webpack-dev-server --mode development --config webpack-extension.config.js
 ```
 
+How to compile the react app?
+==========================
+
+```
+./node_modules/.bin/webpack --mode production --config ./webpack-appjs.config.js
+```
+
+Do not forget to copy / paste it inside the passbolt_api (TODO: has to be automated)
+
+```
+cp -f ./build/js/dist/passbolt.react.js ../passbolt_pro_api/webroot/js/app/bundles/passbolt-react/
+```
+
 How to update the styleguide?
 =============================
 
