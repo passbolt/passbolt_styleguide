@@ -3960,6 +3960,11 @@ input[type=email].fluid {
   border-radius: 1em;
   border: 4px solid #F9F9F9;
 }
+.avatar img {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+}
 .logo.no-img {
   background: transparent url('../../../img/logo/logo.png') 0 0 no-repeat;
   background-size: 150px auto;
