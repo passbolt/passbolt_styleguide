@@ -5604,12 +5604,6 @@ input[type=email].fluid {
   padding-right: 4em;
   color: #FFFFFC;
 }
-#loginSubmit {
-  margin-left: 2px;
-}
-.login-form .error.message {
-  background: transparent;
-}
 .progress-bar-wrapper .progress-bar.big.infinite {
   width: 0;
 }

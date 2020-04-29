@@ -1,8 +1,8 @@
 <?php include('_includes/bootstrap.php'); ?><!doctype html>
 <html>
 <head>
-	<?php include('includes/meta/LU_meta_iframe.php'); ?>
-	<script type="text/javascript" src="src/js/jquery-3.4.1.min.js"></script>
+	<?php include('includes/meta/LU_meta_legacy.php'); ?>
+	<script type="text/javascript" src="src/js/jquery-3.5.0.min.js"></script>
 	<script type="application/javascript">
 		$(document).ready(function () {
 			$(window).one('click', function (ev) {

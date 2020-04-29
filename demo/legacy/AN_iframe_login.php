@@ -1,8 +1,7 @@
 <?php include('_includes/bootstrap.php'); ?><!doctype html>
 <html>
 <head>
-    <?php include('includes/meta/LU_meta_iframe.php'); ?>
-    <?php include('includes/meta/LU_security_token_style.php'); ?>
+    <?php include('includes/meta/LU_meta_login.php'); ?>
 </head>
 <body class="iframe">
 <div class="login-form passphrase-entry">

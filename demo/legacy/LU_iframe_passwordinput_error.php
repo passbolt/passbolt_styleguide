@@ -1,7 +1,7 @@
 <?php include('_includes/bootstrap.php'); ?><!doctype html>
 <html>
 <head>
-	<?php include('includes/meta/LU_meta_iframe.php'); ?>
+	<?php include('includes/meta/LU_meta_legacy.php'); ?>
 	<style>
 		#js_field_password:focus,
 		#js_field_password ~ .security-token {

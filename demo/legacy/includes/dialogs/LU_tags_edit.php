@@ -3,7 +3,7 @@
 <html>
 
 <head>
-	<?php include('includes/meta/LU_meta_iframe.php'); ?>
+	<?php include('includes/meta/LU_meta_legacy.php'); ?>
 </head>
 
 <body class="iframe">

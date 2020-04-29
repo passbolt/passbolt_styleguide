@@ -2,7 +2,7 @@
 <html lang="en" class="version alpha">
 <head>
 	<?php include('includes/meta/AN_meta_setup.php'); ?>
-	<script type="text/javascript" src="src/js/jquery-3.4.1.min.js"></script>
+	<script type="text/javascript" src="src/js/jquery-3.5.0.min.js"></script>
 	<script type="text/javascript" src="src/js/farbtastic.js"></script>
 	<script type="text/javascript" src="src/js/colorpicker.js"></script>
 </head>

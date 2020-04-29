@@ -3,10 +3,9 @@
 		<div class="dialog-header">
 			<h2>Import passwords</h2>
 			<a href="demo/legacy/LU_passwords.php" class="dialog-close" role="button">
-			<?php include('includes/svg-icons/close.php'); ?>
-								<span class="visuallyhidden">close</span>
+			<?php include('../includes/svg-icons/close.php'); ?>
+			    <span class="visuallyhidden">close</span>
 			</a>
-
 		</div>
 		<div class="dialog-content">
 			<form action="demo/legacy/LU_passwords.php" id="js_rs_import">

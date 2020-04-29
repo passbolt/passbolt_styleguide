@@ -26,7 +26,7 @@
     <link rel="icon" href="src/img/webroot/favicon_192.png" sizes="192x192" />
     <link rel="icon" href="src/img/webroot/favicon_228.png" sizes="228x228" />
     <link rel="stylesheet" type="text/css" href="src/css/themes/default/api_main.css">
-    <script src="src/js/jquery-3.4.1.min.js"></script>
+    <script src="src/js/jquery-3.5.0.min.js"></script>
     <script src="src/js/apexcharts.min.js"></script>
     <script src="src/js/report-widgets.js"></script>
 </head>
