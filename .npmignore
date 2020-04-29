@@ -8,8 +8,7 @@ src/react-extension
 src/css
 src/less
 src/video
-img/card_teasers
-img/diagrams
-img/papericon
-img/screenshot
-
+src/img/card_teasers
+src/img/diagrams
+src/img/papericon
+src/img/screenshots
