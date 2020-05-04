@@ -1,3 +1,5 @@
+import Dashboard from '../reports/Dashboard';
+import React, {Component} from "react";
 
 const categories = {
   onboarding : "On-boarding",
@@ -9,7 +11,8 @@ const categories = {
 const reports_prod = [
   {
     "name": "Dashboard",
-    "slug": "dashboard"
+    "slug": "dashboard",
+    "component": <Dashboard />
   },
   {
     "name": "MFA On-boarding report",
@@ -21,7 +24,8 @@ const reports_prod = [
 const reports_dev = [
   {
     "name": "Dashboard",
-    "slug": "dashboard"
+    "slug": "dashboard",
+    "component": <Dashboard />
   },
   {
     "name": "MFA On-boarding report",

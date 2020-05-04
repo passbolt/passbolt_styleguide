@@ -141,13 +141,14 @@ class ReportsWorkspace extends Component {
         return <HTMLReport url="http://passbolt.local:8086/demo/reports/report_not_available.php" />
       } else if (report.slug == "report-loading") {
         return <HTMLReport/>
+      } else if (report.component) {
+        return report.component;
       } else {
         return <h3>Requested report: {report.name}</h3>;
       }
     } else {
       if (report.slug === "dashboard") {
-        return <h3>Dashboard</h3>;
-
+        return report.component;
       } else {
         const reportUrl = "/reports/" + report.slug;
         return <HTMLReport url={reportUrl} />

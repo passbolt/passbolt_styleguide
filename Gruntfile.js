@@ -60,6 +60,11 @@ module.exports = function(grunt) {
       },
 		},
 		shell: {
+		  'bundle-reports': {
+		    command: [
+		      'webpack --entry ./src/js/reports/index.js --output-path ./src/react-appjs/lib/ --output-filename reports.js'
+          ].join('&& ')
+      },
 			'publish': {
 				options: {
 					stdout: true
@@ -195,6 +200,8 @@ module.exports = function(grunt) {
 	// Tag and publish the styleguide
 	grunt.registerTask('styleguide-publish', [ 'shell:publish']);
 	grunt.registerTask('publish', [ 'shell:publish']);
+
+  grunt.registerTask('bundle-reports', [ 'shell:bundle-reports']);
 
 	// 'grunt' will check code quality, and if no errors,
 	// compile LESS to CSS, and minify and concatonate all JS and CSS
