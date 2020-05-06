@@ -60,6 +60,11 @@ module.exports = function(grunt) {
       },
 		},
 		shell: {
+		  'bundle-reports': {
+		    command: [
+		      'webpack --entry ./src/js/reports/index.js --output-path ./src/react-appjs/lib/ --output-filename reports.js'
+          ].join('&& ')
+      },
 			'publish': {
 				options: {
 					stdout: true
@@ -78,7 +83,13 @@ module.exports = function(grunt) {
         },
         command: [
           'rm ./demo/react-appjs/public/css/themes/default/api_reports.css',
+          'rm ./demo/react-appjs/public/css/themes/midgar/api_reports.css',
+          'rm ./demo/react-appjs/public/css/themes/default/api_main.css',
+          'rm ./demo/react-appjs/public/css/themes/midgar/api_main.css',
           'cp ./src/css/themes/default/api_reports.css ./demo/react-appjs/public/css/themes/default/.',
+          'cp ./src/css/themes/midgar/api_reports.css ./demo/react-appjs/public/css/themes/midgar/.',
+          'cp ./src/css/themes/default/api_main.css ./demo/react-appjs/public/css/themes/default/.',
+          'cp ./src/css/themes/midgar/api_main.css ./demo/react-appjs/public/css/themes/midgar/.',
 
           'rm ./demo/react-extension/public/css/themes/default/ext_app.css',
           'rm ./demo/react-extension/public/css/themes/midgar/ext_app.css',
@@ -189,6 +200,8 @@ module.exports = function(grunt) {
 	// Tag and publish the styleguide
 	grunt.registerTask('styleguide-publish', [ 'shell:publish']);
 	grunt.registerTask('publish', [ 'shell:publish']);
+
+  grunt.registerTask('bundle-reports', [ 'shell:bundle-reports']);
 
 	// 'grunt' will check code quality, and if no errors,
 	// compile LESS to CSS, and minify and concatonate all JS and CSS

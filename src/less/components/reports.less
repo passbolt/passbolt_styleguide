@@ -1,6 +1,211 @@
-body.report-html {
-  background-color: @grey-lightest;
-  padding: 3em 2em;
+/**
+Mixin for report page display.
+ */
+.report-page-display {
+  margin: auto;
+  width: 900px;
+  min-height: 1536px;
+  background-color: white;
+  padding: 3em;
+  box-sizing:border-box;
+  .box-shadow();
+}
+
+/**
+React view of reports.
+ */
+#container {
+  .reports-workspace {
+    .accordion.navigation.first {
+      border: none;
+      padding: 0.625em 0 0 0;
+      margin: 0;
+    }
+  }
+
+  .workspace-reports-content {
+    position: relative;
+    height: 100%;
+
+    .tab-content {
+      top: 0;
+      bottom: 2.45em;
+      padding: 0;
+      position: absolute;
+      width: 100%;
+      overflow-y: hidden;
+      background-color: @grey-lightest;
+
+      .report-wrapper {
+        top: 0;
+        bottom: 0;
+        position: absolute;
+        width: 100%;
+        //overflow-y: hidden;
+        overflow-y: auto;
+        padding: 0;
+
+        .report-page {
+          .report-page-display();
+          margin-top: 3em;
+
+          .report-loading {
+            text-align: center;
+            padding-top: 10em;
+
+            .spinner {
+              background: transparent @loading center center no-repeat;
+              content: ' ';
+              height: 50px;
+            }
+          }
+        }
+      }
+
+      .report-widget {
+        background-color: @white;
+        padding: 2.6em;
+        border: 1px solid @grey;
+        box-shadow: 0px 0px 10px 0px @shadow;
+        -webkit-border-radius: 5px;
+        -moz-border-radius: 5px;
+        border-radius: 5px;
+
+        h2 {
+          font-weight: normal;
+          line-height: 1em;
+          margin: 0;
+          font-size: 1.45em;
+        }
+
+        &.widget-dashboard-count {
+          position: relative;
+          &.items div.illustration {
+            background: #FF6C70;
+            svg {
+              margin-top: 1.3em;
+            }
+          }
+          &.groups div.illustration {
+            background: #00BA93;
+            svg {
+              margin-top: 0.9em;
+              width: 2.8em;
+              height: 2.8em;
+            }
+          }
+          &.users div.illustration {
+            background: #5BBBFF;
+            svg {
+              margin-top: 1.2em;
+            }
+          }
+
+          div.count {
+            span.number {
+              display: block;
+              font-size: 2.5em;
+              line-height: 1em;
+            }
+            span.label{
+              display: block;
+              font-size: 1.25em;
+              line-height: 1em;
+              margin-top: 0.6em;
+            }
+          }
+          div.illustration {
+            position: absolute;
+            top: 2.5em;
+            right: 2.75em;
+            width: 4.7em;
+            height: 4.7em;
+            -webkit-border-radius: 50%;
+            -moz-border-radius: 50%;
+            border-radius: 50%;
+            background: #5BBBFF;
+            text-align: center;
+
+            svg {
+              margin-top: 1.1em;
+              fill: @white;
+              color: @white;
+              height: 2.2em;
+              width: 2.2em;
+            }
+          }
+
+          div.since {
+            font-size: 0.8em;
+            margin-top: 1.8em;
+            span {
+              color: @green;
+            }
+          }
+        }
+
+        &.widget-dashboard-plots {
+          margin-top: 2em;
+          padding-bottom: 4em;
+
+          &.items .plots .plot-container .bar-container .bar {
+            background: #FF6C70 !important;
+            border:1px solid #FF6C70 !important;
+          }
+
+          .plots {
+            margin-top: 2em;
+            .plot-container {
+              margin-top: 2em;
+
+              .plot {
+                display:inline-block;
+                width: 80%;
+                span.label {
+                  font-size: 1em;
+                }
+                .bar-container {
+                  position: relative;
+                  border: 1px solid @grey;
+                  height: 5px;
+                  margin-top: 0.3em;
+                  .bar {
+                    position: absolute;
+                    top: -1px;
+                    left: -1px;
+                    height: 5px;
+                    border: 1px solid #5BBBFF;
+                    background: #5BBBFF;
+                  }
+                }
+              }
+              .plot-value {
+                width: 15%;
+                font-size: 1.6em;
+                padding: 0.35em 0 0 0.5em;
+                line-height: 1em;
+                float: right;
+              }
+            }
+          }
+        }
+
+        &.widget-login-history {
+          margin-top: 2em;
+          margin-bottom: 3em;
+
+          .chart {
+            margin-top: 2em;
+          }
+        }
+      }
+    }
+
+    iframe {
+      width: 100%;
+      height: 100%;
+    }
+  }
 }
 
 /**
@@ -11,12 +216,16 @@ Widget styles.
   .colors {
     &.red { color: @red; }
     &.green { color: @green; }
+    &.orange { color: @orange; }
+    &.blue { color: #5BBBFF; }
   }
 
   // define widget content
   &.gauge {
     div.widget-content {
-
+      // Fixes a bug with the graph library when the value is set to 0%.
+      // Sets a fixed min-height to compensate.
+      min-height: 220.567px !important;
     }
     p.widget-description {
       color: @grey-dark;
@@ -24,51 +233,112 @@ Widget styles.
       margin-top: -20px;
     }
   }
+
+  &.simple-number {
+    text-align: center;
+    div.widget-content {
+      width: 145px;
+      height: 145px;
+      background-color: @grey-lightest;
+      border-radius: 50%;
+      display: inline-block;
+      margin-top: 20px;
+      border: 5px solid @grey-lightest; // Do not remove. Used for printing.
+
+      span {
+        font-size: 27px;
+        margin-top: 51px;
+        display: inline-block;
+        color: black;
+      }
+    }
+
+    p.widget-description {
+      color: @grey-dark;
+      text-align: center;
+      margin-top: 25px;
+    }
+  }
 }
 
 /**
-Report layout definition.
+Report HTML layout definition.
  */
-div.report-html {
-  margin: auto;
-  width: 900px;
-  min-height: 1536px;
-  background-color: white;
-  padding: 3em;
-  box-sizing:border-box;
-  .box-shadow();
+body.report-html {
+  background-color: @grey-lightest;
+  padding: 3em 2em;
 
-  .report-header {
-    .creator-info {
-      span.label {
-        display: inline-block;
-        width: 150px;
-        margin-bottom: 0.25em;
+  div.report-html {
+    .report-page-display();
+
+    .report-header {
+      .creator-info {
+        span.label {
+          display: inline-block;
+          width: 150px;
+          margin-bottom: 0.25em;
+        }
+
+        span.value {
+          display: inline-block;
+          margin-bottom: 0.25em;
+        }
       }
-      span.value {
-        display: inline-block;
-        margin-bottom: 0.25em;
+
+      .company-info {
+        text-align: right;
+
+        .logo {
+          margin-top: 65px;
+          width: 200px;
+          float: right;
+        }
       }
     }
-    .company-info{
-      text-align: right;
-      .logo {
-        margin-top: 65px;
-        width: 200px;
-        float: right;
-      }
-    }
-  }
 
-  .report-content {
-    margin-top: 2em;
-
-    .row.charts {
+    .report-content {
       margin-top: 2em;
-    }
 
-    .row.list {
-      margin-top: 3em;
+      .row.charts {
+        margin-top: 2em;
+      }
+
+      .row.list {
+        margin-top: 3em;
+      }
+
+      table.table-info {
+        border-right: 0;
+        border-left: 0;
+        border-bottom: 0;
+
+        tr {
+          th:first-of-type,
+          td:first-of-type {
+            width: 30%;
+          }
+
+          td {
+            word-wrap: break-word;
+            color: @grey-darkest;
+            vertical-align: middle;
+
+            & + td {
+              color: @grey-darkest;
+            }
+          }
+
+          span.name, span.email {
+            display: block;
+            max-width: 300px;
+          }
+
+          span.email {
+            font-size: 0.8em;
+            color: @grey-dark;
+          }
+        }
+      }
     }
   }
 }
@@ -85,6 +355,8 @@ Print rules.
     div.report-html {
       min-height: 0 !important;
       box-shadow: none !important;
+
+      color: @grey;
     }
   }
 }

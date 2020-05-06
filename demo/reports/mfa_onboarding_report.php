@@ -27,8 +27,7 @@
     <link rel="icon" href="src/img/webroot/favicon_228.png" sizes="228x228" />
     <link rel="stylesheet" type="text/css" href="src/css/themes/default/api_main.css">
     <script src="src/js/jquery-3.5.0.min.js"></script>
-    <script src="src/js/apexcharts.min.js"></script>
-    <script src="src/js/report-widgets.js"></script>
+    <script src="src/js/passbolt-reports.min.js"></script>
 </head>
 <body class="report report-html">
 <div id="container" class="report report-html">
@@ -66,7 +65,7 @@
             <div class="row charts">
                 <div class="col4">
                     <div class="report-widget gauge">
-                        <div class="widget-content" data-value="45" data-textradd="%" data-color="green"></div>
+                        <div class="widget-content" data-value="0" data-textradd="%" data-color="orange"></div>
                         <p class="widget-description">Of the users<br>have MFA configured</p>
                     </div>
                 </div>
@@ -77,8 +76,10 @@
                     </div>
                 </div>
                 <div class="col4 last">
-                    <div class="report-widget gauge">
-                        <div class="widget-content" data-value="5" data-color="red"></div>
+                    <div class="report-widget simple-number">
+                        <div class="widget-content">
+                            <span>5</span>
+                        </div>
                         <p class="widget-description">Users<br>need to configure MFA</p>
                     </div>
                 </div>
@@ -88,8 +89,7 @@
                     <table class="table-info horizontal ">
                         <thead>
                         <tr>
-                            <th>Name</th>
-                            <th>Username</th>
+                            <th>User</th>
                             <th>Active since</th>
                             <th>MFA?</th>
                             <th>Role</th>
@@ -97,22 +97,28 @@
                         </thead>
                         <tbody>
                         <tr>
-                            <td>Ada Lovelace</td>
-                            <td>ada@passbolt.com</td>
+                            <td>
+                                <span class="name">Ada Lovelace</span>
+                                <span class="email">ada@passbolt.com</span>
+                            </td>
                             <td>4 days ago</td>
                             <td>No</td>
                             <td>User</td>
                         </tr>
                         <tr>
-                            <td>Betty Holberton</td>
-                            <td>betty@passbolt.com</td>
+                            <td>
+                                <span class="name">Betty Alberton</span>
+                                <span class="email">betty@passbolt.com</span>
+                            </td>
                             <td>10 days ago</td>
                             <td>No</td>
                             <td>Admin</td>
                         </tr>
                         <tr>
-                            <td>Betty Holberton</td>
-                            <td>betty@passbolt.com</td>
+                            <td>
+                                <span class="name">Some very long name thatwillprobablyneverhappeninreality</span>
+                                <span class="email">Someverylongnamethatwillprobablyneverhappeninreality@passbolt.com</span>
+                            </td>
                             <td>10 days ago</td>
                             <td>No</td>
                             <td>Admin</td>

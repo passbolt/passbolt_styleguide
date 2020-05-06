@@ -13,7 +13,12 @@
  */
 import React, {Component} from "react";
 import PropTypes from "prop-types";
-import Menu from "../Menu/Menu";
+import { matchPath } from "react-router"
+
+import {
+  Link,
+  withRouter
+} from "react-router-dom";
 
 class MainMenu extends Component {
   /**
@@ -31,55 +36,117 @@ class MainMenu extends Component {
    */
   getDefaultState() {
     return {
+      // Used for keyboard navigation.
+      // Each new menu item displayed will increment it by 1.
+      tabIndex: 1,
       // menu items list
       menuItems: [
         {
           "id": "passwords",
-          "name": "Passwords",
+          "name": "passwords",
           "className": "passwords",
-          "url": "/test/test1.html",
+          "route": "/passwords",
         },
         {
           "id": "users",
-          "name": "Users",
+          "name": "users",
           "className": "users",
-          "url": "/test/test1.html",
+          "url": "/app/users",
         },
         {
           "id": "reports",
-          "name": "Reports",
+          "name": "reports",
           "className": "reports",
-          "url": "/test/test1.html",
-          "selected": true
+          "route": "/reports",
         },
         {
           "id": "administration",
-          "name": "Administration",
+          "name": "administration",
           "className": "administration",
-          "url": "/test/test1.html",
+          "url": "/app/administration",
         },
         {
           "id": "help",
-          "name": "Help",
+          "name": "help",
           "className": "administration",
-          "url": "/test/test1.html",
+          "url": "https://help.passbolt.com",
         },
       ],
+
+      // logoutItem
       logoutItem: {
         "id": "logout",
-        "name": "Logout",
+        "name": "logout",
         "className": "logout",
         "url": "/logout",
       },
     }
   }
 
+  handleClick (e, menuItem) {
+    e.preventDefault();
+    this.props.onClick(menuItem);
+  }
+
+  ItemLink(menuItem) {
+    if (menuItem.route) {
+      return (
+        <Link to={menuItem.route} role="button" tabIndex={this.state.tabIndex++}><span>{menuItem.name}</span></Link>
+      );
+    }
+    else {
+      return(
+        <a href={menuItem.url} role="button" tabIndex={this.state.tabIndex++} onClick={(e) => this.handleClick(e, menuItem)}>
+          <span>{menuItem.name}</span>
+        </a>
+      );
+    }
+  }
+
+  checkSelected(menuItem) {
+    let selected = false;
+    if (menuItem.route) {
+      const match = matchPath(this.props.location.pathname, {
+        path: menuItem.route,
+        exact: false,
+        strict: false
+      });
+      if (match) {
+        selected = true;
+      }
+    }
+
+    return selected;
+  }
+
+  MenuItem(menuItem) {
+    const selected = this.checkSelected(menuItem);
+
+    return (
+      <li className={menuItem.className + ' ' + ( this.state.hidden ? 'hidden' : 'visible' )} key={menuItem.id}>
+        <div className={selected? "row selected" : "row"}>
+          <div className="main-cell-wrapper">
+            <div className="main-cell">
+              {this.ItemLink(menuItem)}
+            </div>
+          </div>
+        </div>
+      </li>
+    );
+  }
+
   render() {
     return (
       <nav>
         <div className="primary navigation top">
-          <Menu className="left" menuItems={this.state.menuItems} onClick={this.props.onClick} />
-          <Menu className="right" menuItems={[this.state.logoutItem]}/>
+          <ul className="left">
+            {(this.state.menuItems && (this.state.menuItems).map((menuItem) => {
+              return this.MenuItem(menuItem);
+            }))}
+          </ul>
+          <ul className="right">
+            {this.MenuItem(this.state.logoutItem)}
+          </ul>
         </div>
       </nav>
     );
@@ -90,5 +157,5 @@ MainMenu.propTypes = {
   onClick: PropTypes.func
 };
 
-export default MainMenu;
+export default withRouter(MainMenu);
 

@@ -21,13 +21,19 @@ module.exports = {
   },
   resolve: { extensions: ["*", ".js", ".jsx"] },
   output: {
-    path: path.resolve(__dirname, "demo/react-appjs/dist/"),
+    path: path.resolve(__dirname, "build/js/dist/"),
     publicPath: "/dist/",
-    filename: "bundle.js"
+    filename: "passbolt.react.js"
   },
   devServer: {
-    contentBase: path.join(__dirname, "demo/react-appjs/public/"),
+    contentBase: path.join(__dirname, "/demo/react-appjs/public/"),
+    compress: true,
     port: 3000,
     publicPath: "http://localhost:3000/dist/",
+    historyApiFallback: {
+      rewrites: [
+        { from: /^\/$/, to: '/index.html' }
+      ]
+    }
   },
 };

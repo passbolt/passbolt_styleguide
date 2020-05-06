@@ -13,12 +13,11 @@
  */
 import React, {Component} from "react";
 import PropTypes from "prop-types";
-import Logo from "./Logo";
-import SearchBar from "./SearchBar";
-import ProfileMenu from "./ProfileMenu";
-import ActionBar from "../ActionBar/ActionBar";
+import {
+  Link,
+} from "react-router-dom";
 
-class WorkspaceHeader extends Component {
+class Breadcrumbs extends Component {
   /**
    * Constructor
    * @param {Object} props
@@ -26,6 +25,8 @@ class WorkspaceHeader extends Component {
   constructor(props) {
     super(props);
     this.state = this.getDefaultState();
+
+    this.itemNumber = 0;
   }
 
   /**
@@ -34,33 +35,37 @@ class WorkspaceHeader extends Component {
    */
   getDefaultState() {
     return {
-      searchBarOptions: this.props.searchBarOptions || SearchBar.defaultProps
+
     }
   }
 
-  onMenuItemClick(menuItem) {
-    this.props.onMenuItemClick(menuItem);
+  Item(item) {
+    return (
+      <li key={this.itemNumber++}>
+        <div className="main-cell">
+          {item}
+        </div>
+      </li>
+      );
   }
 
   render() {
     return (
-      <div>
-         <div className="header second">
-            <Logo/>
-            <SearchBar disabled={this.state.searchBarOptions.disabled} placeholder=" "/>
-            <ProfileMenu onClick={this.onMenuItemClick.bind(this)} />
-         </div>
-        <ActionBar/>
+      <div className="breadcrumbs">
+        <ul className="menu">
+          {(this.props.items && (this.props.items).map((item) => {
+            return this.Item(item);
+          }))}
+        </ul>
       </div>
     );
   }
 }
 
-WorkspaceHeader.propTypes = {
-  onMenuItemClick: PropTypes.func,
-  searchBarOptions: PropTypes.object,
+Breadcrumbs.propTypes = {
+  items: PropTypes.array,
 };
 
 
-export default WorkspaceHeader;
+export default Breadcrumbs;
 

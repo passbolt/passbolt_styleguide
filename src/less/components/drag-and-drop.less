@@ -2,24 +2,35 @@
 .drag-and-drop-multiple {
     position: absolute;
     top: -1000px;
-    width: 6.25em;
-    height: 1em;
     background: @grey-darkest;
     border: 1px solid @grey-dark;
-    text-align: center;
     z-index: 9999999;
     padding: 0.65em;
     line-height: 1em;
     color: @white;
     border-radius: 5px;
 
-    span {
-        display: inline-block;
-        width: 100%;
+    svg {
+        position: absolute;
+        margin-top: -0.85em;
+        margin-left: 0.40em;
+
+        path {
+            fill: @white;
+        }
+    }
+
+    span.message {
+        display: inline;
         overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;
+
+        &.not-allowed {
+            padding-left: 1.85em;
+        }
     }
+
 }
 .drag-and-drop-multiple {
     box-shadow: 0.25em 0.25em 0 -1px @grey-dark;

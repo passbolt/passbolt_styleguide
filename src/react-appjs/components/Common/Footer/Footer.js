@@ -14,7 +14,7 @@
 import React, {Component} from "react";
 import PropTypes from "prop-types";
 
-class Panel extends Component {
+class Footer extends Component {
   /**
    * Constructor
    * @param {Object} props
@@ -36,16 +36,25 @@ class Panel extends Component {
 
   render() {
     return (
-      <div className="panel main">
-        test
-      </div>
+      <footer>
+        <div className="footer">
+          <ul className="footer-links">
+            <li><a href="https://www.passbolt.com/licence">Terms</a></li>
+            <li><a href="https://www.passbolt.com/privacy">Privacy</a></li>
+            <li><a href="https://www.passbolt.com/credits">Credits</a></li>
+            <li>
+              <a href="https://www.passbolt.com/credits" className="tooltip-left" data-tooltip="v.0.1.0 / v.0.2.0"><i className="fa fa-heart-o"></i></a>
+            </li>
+          </ul>
+        </div>
+      </footer>
     );
   }
 }
 
-Panel.propTypes = {
+Footer.propTypes = {
 };
 
 
-export default Panel;
+export default Footer;
 
