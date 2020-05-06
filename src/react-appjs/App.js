@@ -3,6 +3,7 @@ import MainMenu from "./components/Common/MainMenu/MainMenu";
 import ReportsWorkspace from "./components/Workspace/Reports/ReportsWorkspace";
 import Footer from "./components/Common/Footer/Footer";
 import AppContext from "./contexts/AppContext";
+import PasswordsWorkspace from "./components/Workspace/Passwords/PasswordsWorkspace";
 
 import config from "./config/config";
 
@@ -147,6 +148,9 @@ class App extends Component{
           <h1>Reports</h1>
           <ul>
             <li>
+              <Link to="/passwords">Passwords dashboard</Link>
+            </li>
+            <li>
               <Link to="/reports">Reports dashboard</Link>
             </li>
             <li>
@@ -178,6 +182,9 @@ class App extends Component{
                   <MainMenu onClick={this.handleWorkspaceSelect} />
                 </div>
                 <Switch>
+                  <Route path="/passwords">
+                    <PasswordsWorkspace onMenuItemClick={this.handleWorkspaceSelect}/>
+                  </Route>
                   <Route path="/reports">
                     <ReportsWorkspace onMenuItemClick={this.handleWorkspaceSelect}/>
                   </Route>

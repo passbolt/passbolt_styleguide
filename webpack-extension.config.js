@@ -27,7 +27,7 @@ module.exports = {
   },
   devServer: {
     contentBase: path.join(__dirname, "demo/react-extension/public/"),
-    port: 3000,
-    publicPath: "http://localhost:3000/dist/",
+    port: 3001,
+    publicPath: "http://localhost:3001/dist/",
   },
 };

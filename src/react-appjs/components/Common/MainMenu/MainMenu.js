@@ -45,7 +45,7 @@ class MainMenu extends Component {
           "id": "passwords",
           "name": "passwords",
           "className": "passwords",
-          "url": "/app/passwords",
+          "route": "/passwords",
         },
         {
           "id": "users",

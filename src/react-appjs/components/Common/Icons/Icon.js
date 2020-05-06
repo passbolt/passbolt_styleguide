@@ -36,8 +36,13 @@ class Icon extends Component {
   }
 
   render() {
-    return(
-      <span className={this.getClassName()} >
+    return (
+      <span className={this.getClassName()} onClick={this.props.onClick}>
+        {this.props.name === 'ban' &&
+          <svg width="1792" height="1792" viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg">
+            <path d="M1440 893q0-161-87-295l-754 753q137 89 297 89 111 0 211.5-43.5t173.5-116.5 116-174.5 43-212.5zm-999 299l755-754q-135-91-300-91-148 0-273 73t-198 199-73 274q0 162 89 299zm1223-299q0 157-61 300t-163.5 246-245 164-298.5 61-298.5-61-245-164-163.5-246-61-300 61-299.5 163.5-245.5 245-164 298.5-61 298.5 61 245 164 163.5 245.5 61 299.5z"/>
+          </svg>
+        }
         {this.props.name === 'caret-right' &&
         <svg width="1792" height="1792" viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg">
           <path d="M1152 896q0 26-19 45l-448 448q-19 19-45 19t-45-19-19-45v-896q0-26 19-45t45-19 45 19l448 448q19 19 19 45z"/>
@@ -91,6 +96,11 @@ class Icon extends Component {
         {this.props.name === 'folder' &&
         <svg width="1792" height="1792" viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg">
           <path d="M1728 608v704q0 92-66 158t-158 66h-1216q-92 0-158-66t-66-158v-960q0-92 66-158t158-66h320q92 0 158 66t66 158v32h672q92 0 158 66t66 158z"/>
+        </svg>
+        }
+        {this.props.name === 'folder-shared' &&
+        <svg viewBox="2 2 20 20" xmlns="http://www.w3.org/2000/svg">
+          <path d="M20 6h-8l-2-2H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-5 3c1.1 0 2 .9 2 2s-.9 2-2 2-2-.9-2-2 .9-2 2-2zm4 8h-8v-1c0-1.33 2.67-2 4-2s4 .67 4 2v1z"></path>
         </svg>
         }
         {this.props.name === 'heart' &&
@@ -189,12 +199,15 @@ class Icon extends Component {
 }
 
 Icon.defaultProps = {
-  big: false
+  big: false,
+  onClick: function () {
+  }
 };
 
 Icon.propTypes = {
   name: PropTypes.string,
-  big: PropTypes.bool
+  big: PropTypes.bool,
+  onClick: PropTypes.func,
 };
 
 export default Icon;

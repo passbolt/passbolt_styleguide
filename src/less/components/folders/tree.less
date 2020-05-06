@@ -42,6 +42,8 @@
                 }
                 a {
                     padding: 0 0 0 2.5em;
+
+                    .svg-icon.caret-right svg,
                     .svg-icon.caret-down svg {
                         margin-left: -1.2em;
                         margin-top: 0.4em;
@@ -76,6 +78,7 @@
                             margin-left: 1em;
                             cursor: pointer;
 
+                            .svg-icon.caret-right svg,
                             .svg-icon.caret-down svg {
                                 margin-left: -1.20em;
                                 margin-top: 0.25em;
@@ -112,6 +115,9 @@
                     a:before {
                         color: @font-light;
                     }
+                }
+                &.is-dragged {
+                    pointer-events: auto;
                 }
             }
         }
