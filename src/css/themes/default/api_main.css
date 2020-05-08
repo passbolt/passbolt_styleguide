@@ -9545,14 +9545,22 @@ Print rules.
   vertical-align: middle;
   border: 0;
 }
-.panel.aside .resource .sidebar-header h3 .name {
+.panel.aside .resource .sidebar-header h3 .title-wrapper {
+  width: 100%;
+  line-height: 1.2em;
   font-size: 1.2em;
-  display: block;
+}
+.panel.aside .resource .sidebar-header h3 .title-wrapper .name {
+  max-width: 85%;
+  float: left;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   -o-text-overflow: ellipsis;
   -ms-text-overflow: ellipsis;
+}
+.panel.aside .resource .sidebar-header h3 .title-wrapper .title-link .svg-icon {
+  margin-top: 0.25em;
 }
 .panel.aside .resource .sidebar-header h3 .type,
 .panel.aside .resource .sidebar-header h3 .username {

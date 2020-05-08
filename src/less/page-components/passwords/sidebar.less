@@ -25,10 +25,20 @@
                 display: table-cell;
                 vertical-align: middle;
                 border: 0;
-                .name {
+                .title-wrapper {
+                    width: 100%;
+                    line-height: 1.2em;
                     font-size: 1.2em;
-                    display: block;
-                    .ellipsis();
+                    .name {
+                        max-width: 85%;
+                        float: left;
+                        .ellipsis();
+                    }
+                    .title-link {
+                        .svg-icon {
+                            margin-top: 0.25em;
+                        }
+                    }
                 }
                 .type,
                 .username {
