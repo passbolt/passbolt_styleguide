@@ -52,9 +52,8 @@ class FoldersTreeItem extends React.Component {
   /**
    * Handle when the user start dragging the folder.
    * @param {ReactEvent} event The event
-   * @param {Object} folder The folder
    */
-  handleDragStartEvent(event, folder) {
+  handleDragStartEvent(event) {
     const dragging = true;
     this.setState({dragging});
     this.props.onDragStart(event, this.props.folder);
@@ -64,14 +63,23 @@ class FoldersTreeItem extends React.Component {
    * Handle when the user click on the folder left caret.
    * Fold/Unfold the folder.
    * @param {ReactEvent} event The event
-   * @param {Object} folder The folder
    */
-  handleClickLeftCaretEvent(event, folder) {
+  handleClickLeftCaretEvent(event) {
     // Stop the propagation to avoid the listener on the parent (select folder) to react to it.
     event.stopPropagation();
+    if (this.isOpen()) {
+      this.props.onClose(event, this.props.folder);
+    } else {
+      this.props.onOpen(event, this.props.folder);
+    }
+  }
 
-    const open = !this.state.open;
-    this.setState({open});
+  /**
+   * Check if the current folder is open.
+   * @return {boolean}
+   */
+  isOpen() {
+    return this.props.openFolders.some(folder => folder.id === this.props.folder.id);
   }
 
   /**
@@ -116,7 +124,7 @@ class FoldersTreeItem extends React.Component {
     event.preventDefault();
 
     if (this.state.draggingOver) {
-      this.openOnLongDragOver();
+      this.openOnLongDragOver(event);
       return;
     }
 
@@ -127,17 +135,17 @@ class FoldersTreeItem extends React.Component {
 
   /**
    * Open the folder when the user is dragging for a defined period on a folder.
+   * @param {ReactEvent} event The event
    */
-  openOnLongDragOver() {
+  openOnLongDragOver(event) {
     const period = 2000;
-    let open = this.state.open;
+    let open = this.isOpen();
 
     // If already open, leave.
     if (!open) {
       const now = Date.now();
       if (now - this.state.draggingOverSince > period) {
-        open = !open;
-        this.setState({open});
+        this.props.onOpen(event, this.props.folder);
       }
     }
   }
@@ -175,7 +183,7 @@ class FoldersTreeItem extends React.Component {
   }
 
   /**
-   * Check if the folder associated to the component is a child of any of the given folders.
+   * Check if a folder is a child of any of the given folders.
    * @param {object} folder The target folder to check if it is a child
    * @param {array} folders The folders to check for
    */
@@ -371,11 +379,12 @@ class FoldersTreeItem extends React.Component {
     const isSelected = this.isSelected();
     const isDisabled = this.isDisabled();
     const isDragged = this.isDragged();
+    const isOpen = this.isOpen();
     const canDropInto = this.canDropInto();
     const showDropFocus = this.state.draggingOver && canDropInto;
 
     return (
-      <li className={`${this.state.open ? "opened" : "closed"} folder-item`}>
+      <li className={`${isOpen ? "opened" : "closed"} folder-item`}>
         <div className={`row ${isSelected ? "selected" : ""} ${isDisabled ? "disabled" : ""} ${isDragged ? "is-dragged" : ""} ${showDropFocus ? "drop-focus" : ""}`}
           draggable="true"
           onClick={this.handleSelectEvent}
@@ -390,10 +399,10 @@ class FoldersTreeItem extends React.Component {
               <a>
                 {hasChildren &&
                 <Fragment>
-                  {this.state.open &&
+                  {isOpen &&
                   <Icon name="caret-down" onClick={this.handleClickLeftCaretEvent}/>
                   }
-                  {!this.state.open &&
+                  {!isOpen &&
                   <Icon name="caret-right" onClick={this.handleClickLeftCaretEvent}/>
                   }
                 </Fragment>
@@ -414,7 +423,7 @@ class FoldersTreeItem extends React.Component {
           </div>
           }
         </div>
-        {hasChildren && this.state.open &&
+        {hasChildren && isOpen &&
         <ul className="folders-tree">
           {folderChildren.map(folder => {
             return <FoldersTreeItem
@@ -422,11 +431,14 @@ class FoldersTreeItem extends React.Component {
               draggedItems={this.props.draggedItems}
               folder={folder}
               folders={this.props.folders}
+              onClose={this.props.onClose}
               onContextualMenu={this.props.onContextualMenu}
               onDragEnd={this.props.onDragEnd}
               onDragStart={this.props.onDragStart}
               onDrop={this.props.onDrop}
+              onOpen={this.props.onOpen}
               onSelect={this.props.onSelect}
+              openFolders={this.props.openFolders}
               selectedFolder={this.props.selectedFolder}/>;
           })}
         </ul>
@@ -440,11 +452,14 @@ FoldersTreeItem.propTypes = {
   draggedItems: PropTypes.object,
   folders: PropTypes.array,
   folder: PropTypes.object,
+  onClose: PropTypes.func,
   onContextualMenu: PropTypes.func,
   onDragEnd: PropTypes.func,
   onDragStart: PropTypes.func,
   onDrop: PropTypes.func,
+  onOpen: PropTypes.func,
   onSelect: PropTypes.func,
+  openFolders: PropTypes.array,
   selectedFolder: PropTypes.object,
 };
 

@@ -30,7 +30,7 @@ class FoldersTree extends React.Component {
     this.state = this.getDefaultState();
     this.createInputRef();
     this.bindCallbacks();
-    this.initEventHandlers()
+    this.initEventHandlers();
   }
 
   /**
@@ -46,6 +46,7 @@ class FoldersTree extends React.Component {
       dragging: false,
       draggingOverTitle: false,
       open: true,
+      openFolders: [],
       selectedFolder: null,
     };
   }
@@ -68,10 +69,12 @@ class FoldersTree extends React.Component {
     this.handleDragOverTitle = this.handleDragOverTitle.bind(this);
     this.handleDropTitle = this.handleDropTitle.bind(this);
     this.handleFilterWorkspaceEvent = this.handleFilterWorkspaceEvent.bind(this);
-    this.handleFolderSelectEvent = this.handleFolderSelectEvent.bind(this);
+    this.handleFolderCloseEvent = this.handleFolderCloseEvent.bind(this);
     this.handleFolderDragEndEvent = this.handleFolderDragEndEvent.bind(this);
     this.handleFolderDragStartEvent = this.handleFolderDragStartEvent.bind(this);
     this.handleFolderDropEvent = this.handleFolderDropEvent.bind(this);
+    this.handleFolderOpenEvent = this.handleFolderOpenEvent.bind(this);
+    this.handleFolderSelectEvent = this.handleFolderSelectEvent.bind(this);
     this.handleGridDragStartEvent = this.handleGridDragStartEvent.bind(this);
     this.handleGridDragEndEvent = this.handleGridDragEndEvent.bind(this);
     this.handlePluginSelectAndScrollToEvent = this.handlePluginSelectAndScrollToEvent.bind(this);
@@ -96,6 +99,29 @@ class FoldersTree extends React.Component {
       const selectedFolder = null;
       this.setState({selectedFolder});
     }
+  }
+
+  /**
+   * Handle when the user opens a folder.
+   * @param {ReactEvent} event The event
+   * @param {Object} folder The open folder
+   */
+  handleFolderCloseEvent(event, folder) {
+    const openFolders = this.state.openFolders;
+    const folderIndex = openFolders.findIndex(item => item.id === folder.id);
+    openFolders.splice(folderIndex, 1);
+    this.setState({openFolders});
+  }
+
+  /**
+   * Handle when the user opens a folder.
+   * @param {ReactEvent} event The event
+   * @param {Object} folder The open folder
+   */
+  handleFolderOpenEvent(event, folder) {
+    const openFolders = this.state.openFolders;
+    openFolders.push(folder);
+    this.setState({openFolders});
   }
 
   /**
@@ -245,7 +271,18 @@ class FoldersTree extends React.Component {
   handlePluginSelectAndScrollToEvent(event) {
     const folderId = event.data;
     const selectedFolder = this.props.folders.find(folder => folder.id === folderId);
-    this.setState({selectedFolder});
+    const openFolders = this.state.openFolders;
+
+    // If the selected folder has a parent. Open it if not yet open.
+    if (selectedFolder.folder_parent_id) {
+      const isFolderParentOpen = this.state.openFolders.some(item => item.id === selectedFolder.folder_parent_id);
+      if (!isFolderParentOpen) {
+        const folderParent = this.props.folders.find(folder => folder.id === selectedFolder.folder_parent_id);
+        openFolders.push(folderParent);
+      }
+    }
+
+    this.setState({selectedFolder, openFolders});
     this.props.onSelect(selectedFolder);
   }
 
@@ -326,14 +363,6 @@ class FoldersTree extends React.Component {
   }
 
   /**
-   * Check if the section is open.
-   * @returns {boolean}
-   */
-  isOpen() {
-    return this.state.open;
-  }
-
-  /**
    * Sort a list of folders alphabetically
    * @param {array} folders The list of folders to sort
    */
@@ -375,7 +404,7 @@ class FoldersTree extends React.Component {
    */
   render() {
     const isLoading = this.isLoading();
-    const isOpen = this.isOpen();
+    const isOpen = this.state.open;
     const rootFolders = this.getRootFolders();
     const showDropFocus = this.state.draggingOverTitle && this.canDragItems(this.state.draggedItems);
 
@@ -420,10 +449,13 @@ class FoldersTree extends React.Component {
               draggedItems={this.state.draggedItems}
               folder={folder}
               folders={this.props.folders}
+              onClose={this.handleFolderCloseEvent}
               onContextualMenu={this.handleContextualMenuEvent}
               onDragEnd={this.handleFolderDragEndEvent}
               onDragStart={this.handleFolderDragStartEvent}
               onDrop={this.handleFolderDropEvent}
+              onOpen={this.handleFolderOpenEvent}
+              openFolders={this.state.openFolders}
               onSelect={this.handleFolderSelectEvent}
               selectedFolder={this.state.selectedFolder}/>;
           })}
