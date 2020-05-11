@@ -46,8 +46,7 @@ class FoldersTree extends React.Component {
       dragging: false,
       draggingOverTitle: false,
       open: true,
-      openFolders: [],
-      selectedFolder: null,
+      openFolders: []
     };
   }
 
@@ -235,7 +234,6 @@ class FoldersTree extends React.Component {
    */
   handleFolderSelectEvent(event, folder) {
     const selectedFolder = folder;
-    this.setState({selectedFolder});
     this.props.onSelect(selectedFolder);
   }
 
@@ -457,7 +455,7 @@ class FoldersTree extends React.Component {
               onOpen={this.handleFolderOpenEvent}
               openFolders={this.state.openFolders}
               onSelect={this.handleFolderSelectEvent}
-              selectedFolder={this.state.selectedFolder}/>;
+              selectedFolder={this.props.selectedFolder}/>;
           })}
         </ul>
         }
@@ -470,7 +468,8 @@ FoldersTree.propTypes = {
   folders: PropTypes.array,
   onContextualMenu: PropTypes.func,
   onSelect: PropTypes.func,
-  onSelectRoot: PropTypes.func
+  onSelectRoot: PropTypes.func,
+  selectedFolder: PropTypes.object
 };
 
 export default FoldersTree;

@@ -3,7 +3,7 @@ import MainMenu from "./components/Common/MainMenu/MainMenu";
 import ReportsWorkspace from "./components/Workspace/Reports/ReportsWorkspace";
 import Footer from "./components/Common/Footer/Footer";
 import AppContext from "./contexts/AppContext";
-import PasswordsWorkspace from "./components/Workspace/Passwords/PasswordsWorkspace";
+import Workspace from "./components/Workspace/Passwords/Workspace";
 
 import config from "./config/config";
 
@@ -183,7 +183,7 @@ class App extends Component{
                 </div>
                 <Switch>
                   <Route path="/passwords">
-                    <PasswordsWorkspace onMenuItemClick={this.handleWorkspaceSelect}/>
+                    <Workspace onMenuItemClick={this.handleWorkspaceSelect}/>
                   </Route>
                   <Route path="/reports">
                     <ReportsWorkspace onMenuItemClick={this.handleWorkspaceSelect}/>

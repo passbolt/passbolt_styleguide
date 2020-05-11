@@ -20,7 +20,7 @@ import FoldersTree from "./FoldersTree/FoldersTree";
 import FoldersTreeItemContextualMenu from "./FoldersTree/FoldersTreeItemContextualMenu";
 import Grid from "./Grid/Grid";
 
-class PasswordsWorkspace extends Component {
+class Workspace extends Component {
   /**
    * Constructor
    * @param {Object} props
@@ -50,7 +50,8 @@ class PasswordsWorkspace extends Component {
       resources: null,
       selectedResources: [],
       search: "",
-      filterType: "default"
+      filterType: "default",
+      selectedFolder: null
     }
   }
 
@@ -97,8 +98,9 @@ class PasswordsWorkspace extends Component {
    * Handle when the user select a folder.
    * @param {object} folder The selected folder
    */
-  handleFoldersTreeSelectEvent(folder) {
-    console.log(`The user selected the folder ${folder.name}`);
+  handleFoldersTreeSelectEvent(selectedFolder) {
+    console.log(`The user selected the folder ${selectedFolder.name}`);
+    this.setState({selectedFolder});
   }
 
   /**
@@ -106,6 +108,8 @@ class PasswordsWorkspace extends Component {
    */
   handleFoldersTreeSelectRootEvent() {
     console.log("The user selected the root folder");
+    const selectedFolder = null;
+    this.setState({selectedFolder});
   }
 
   /**
@@ -161,6 +165,12 @@ class PasswordsWorkspace extends Component {
           <SearchBar disabled={true} placeholder=" "/>
           <ProfileMenu onClick={this.onMenuItemClick.bind(this)}/>
         </div>
+        <div className="header third">
+          <div className="col1 main-action-wrapper">
+          </div>
+          <div className="col2_3 actions-wrapper">
+          </div>
+        </div>
         <this.ActionBar/>
         <div className="panel main">
           <div className="tabs-content">
@@ -171,7 +181,8 @@ class PasswordsWorkspace extends Component {
                     folders={this.state.folders}
                     onContextualMenu={this.handleFoldersTreeContextualMenuShowEvent}
                     onSelect={this.handleFoldersTreeSelectEvent}
-                    onSelectRoot={this.handleFoldersTreeSelectRootEvent}/>
+                    onSelectRoot={this.handleFoldersTreeSelectRootEvent}
+                    selectedFolder={this.state.selectedFolder}/>
                 </div>
                 <div className="panel middle">
                   <Grid
@@ -191,8 +202,8 @@ class PasswordsWorkspace extends Component {
   }
 }
 
-PasswordsWorkspace.propTypes = {
+Workspace.propTypes = {
   onMenuItemClick: PropTypes.func,
 };
 
-export default PasswordsWorkspace;
+export default Workspace;
