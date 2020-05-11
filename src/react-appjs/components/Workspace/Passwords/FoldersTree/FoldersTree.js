@@ -259,9 +259,9 @@ class FoldersTree extends React.Component {
       return true;
     }
 
-    // The user cannot drag an element if their permission is insufficient, READ on the dragged item and its parent.
+    // The user cannot drag an element if the parent folder is in READ.
     const folderParent = this.props.folders.find(folder => folder.id === item.folder_parent_id);
-    if (folderParent.permission.type < 7 && item.permission.type < 7) {
+    if (folderParent.permission.type < 7) {
       return false;
     }
 

@@ -212,10 +212,9 @@ class FoldersTreeItem extends React.Component {
       return true;
     }
 
-    // The user cannot drag an element if their permission is insufficient:
-    // READ on both the dragged item and its parent.
+    // The user cannot drag an element if the parent folder is in READ.
     const folderParent = this.props.folders.find(folder => folder.id === item.folder_parent_id);
-    if (folderParent.permission.type < 7 && item.permission.type < 7) {
+    if (folderParent.permission.type < 7) {
       return false;
     }
 
@@ -242,6 +241,31 @@ class FoldersTreeItem extends React.Component {
   }
 
   /**
+   * Get the lowest permissions among a list of items
+   * @param {array} items The list of items to look into
+   * @returns {int}
+   */
+  getItemsListLowestPermission(items) {
+    return items.reduce((accumulator, draggedItem) => {
+      if (draggedItem.permission.type < accumulator) {
+        accumulator = draggedItem.permission.type;
+      }
+      return accumulator;
+    }, 15);
+  }
+
+  /**
+   * Get the lowest permissions among all the dragged items.
+   * @returns {int}
+   */
+  getDraggedItemsLowestPermission() {
+    const draggedFoldersLowestPermission = this.getItemsListLowestPermission(this.props.draggedItems.folders);
+    const draggedResourcesLowestPermission = this.getItemsListLowestPermission(this.props.draggedItems.resources);
+
+    return draggedFoldersLowestPermission < draggedResourcesLowestPermission ? draggedFoldersLowestPermission : draggedResourcesLowestPermission;
+  }
+
+  /**
    * Check if the user can drop the content they are dragging into the folder associated to this component.
    * @returns {boolean}
    */
@@ -253,6 +277,14 @@ class FoldersTreeItem extends React.Component {
     // Cannot move content into a folder for with the user has insufficient permission (<UPDATE)
     if (this.props.folder.permission.type < 7) {
       return false;
+    }
+
+    // Cannot move a content in read only into a shared folder.
+    if (!this.props.folder.personal) {
+      const draggedItemsLowestPermission = this.getDraggedItemsLowestPermission();
+      if (draggedItemsLowestPermission < 7) {
+        return false;
+      }
     }
 
     // Cannot move a folder into one of its own children.
