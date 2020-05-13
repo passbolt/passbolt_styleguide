@@ -14,6 +14,7 @@
 import React, {Component} from "react";
 import PropTypes from "prop-types";
 import AppContext from "../../../contexts/AppContext";
+import Config from "../../../legacy/config/config";
 
 class UserAvatar extends Component {
   /**
@@ -22,10 +23,9 @@ class UserAvatar extends Component {
    */
   constructor(props) {
     super(props);
-    this.state = {
-      error: false
-    };
+    this.state = {error: false};
   }
+
   /**
    * Return true if the user from props contains a valid profile with avatar url properties
    * @returns {boolean}
@@ -37,17 +37,20 @@ class UserAvatar extends Component {
       this.props.user.profile.avatar.url &&
       this.props.user.profile.avatar.url.small
   }
+
   propsUrlHasProtocol() {
     return this.props.user.profile.avatar.url.small.startsWith('https://');
   }
+
   formatUrl(url) {
-    // Replace the leading / by nothing., since the base url already has a leading slash.
-    url = url.replace(/^\//g, '');
-    return `${this.context.serverSettings.app.url}${url}`;
+    const trustedDomain = Config.read("user.settings.trustedDomain");
+    return `${trustedDomain}/${url}`;
   }
+
   getPropsUrl() {
     return this.props.user.profile.avatar.url.small;
   }
+
   getAvatarSrc() {
     if (!this.state.error && this.propsHasUrl()) {
       if (this.propsUrlHasProtocol()) {
@@ -58,13 +61,16 @@ class UserAvatar extends Component {
     }
     return this.formatUrl('/img/avatar/user.png');
   }
+
   handleError() {
     console.error(`Could not load avatar image url: ${this.getAvatarSrc()}`);
     this.setState({error: true});
   }
+
   getAltText() {
     return `Avatar of user ${this.props.user.profile.first_name} ${this.props.user.profile.last_name}.`;
   }
+
   render() {
     return(
       <div className={this.props.className? this.props.className : "avatar user-avatar" }>
@@ -73,9 +79,12 @@ class UserAvatar extends Component {
     )
   }
 }
+
 UserAvatar.contextType = AppContext;
+
 UserAvatar.propTypes = {
   user: PropTypes.object,
   className: PropTypes.string
 };
+
 export default UserAvatar;

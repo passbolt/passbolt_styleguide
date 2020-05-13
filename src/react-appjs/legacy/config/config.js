@@ -11,5 +11,9 @@ export default class Config {
 };
 
 const _config = {
-
+  'user': {
+    'settings': {
+      'trustedDomain': ''
+    }
+  }
 };

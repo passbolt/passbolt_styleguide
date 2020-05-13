@@ -19,6 +19,7 @@ import ProfileMenu from "../../Common/Header/ProfileMenu";
 import FoldersTree from "./FoldersTree/FoldersTree";
 import FoldersTreeItemContextualMenu from "./FoldersTree/FoldersTreeItemContextualMenu";
 import Grid from "./Grid/Grid";
+import FolderSidebar from "./FolderSidebar/FolderSidebar";
 
 class Workspace extends Component {
   /**
@@ -49,7 +50,9 @@ class Workspace extends Component {
       resources: null,
       search: "",
       selectedResources: [],
-      selectedFolder: null
+      selectedFolder: null,
+      showFolderSidebar: false,
+      users: null
     }
   }
 
@@ -57,19 +60,65 @@ class Workspace extends Component {
    * Bind callbacks methods
    */
   bindCallbacks() {
+    this.handleEditFolderPermissions = this.handleEditFolderPermissions.bind(this);
     this.handleFoldersTreeContextualMenuHideEvent = this.handleFoldersTreeContextualMenuHideEvent.bind(this);
     this.handleFoldersTreeContextualMenuShowEvent = this.handleFoldersTreeContextualMenuShowEvent.bind(this);
-    this.handleFoldersTreeSelectEvent = this.handleFoldersTreeSelectEvent.bind(this);
-    this.handleFoldersTreeSelectRootEvent = this.handleFoldersTreeSelectRootEvent.bind(this);
+    this.handleSelectFolder = this.handleSelectFolder.bind(this);
+    this.handleSelectRoot = this.handleSelectRoot.bind(this);
     this.handleGridSelectEvent = this.handleGridSelectEvent.bind(this);
     this.handleGridRightSelectEvent = this.handleGridRightSelectEvent.bind(this);
     this.handleSearchEvent = this.handleSearchEvent.bind(this);
   }
 
   async componentDidMount() {
+    this.findFolders();
+    this.findGroups();
+    this.findResources();
+    this.findUsers();
+  }
+
+  /**
+   * Find all folders.
+   * @returns {Promise<void>}
+   */
+  async findFolders() {
     const folders = await port.request('passbolt.folders.find-all');
+    this.setState({folders});
+  }
+
+  /**
+   * Find all groups.
+   * @returns {Promise<void>}
+   */
+  async findGroups() {
+    const groups = await port.request('passbolt.groups.find-all');
+    this.setState({groups});
+  }
+
+  /**
+   * Find all resources.
+   * @returns {Promise<void>}
+   */
+  async findResources() {
     const resources = await port.request('passbolt.resources.find-all');
-    this.setState({folders, resources});
+    this.setState({resources});
+  }
+
+  /**
+   * Find all userS.
+   * @returns {Promise<void>}
+   */
+  async findUsers() {
+    const users = await port.request('passbolt.users.find-all');
+    this.setState({users});
+  }
+
+  /**
+   * Handle when the user edits the folder permissions.
+   * @param {object} folder the folder to edit the permissions
+   */
+  handleEditFolderPermissions(folder) {
+    console.log(`The user edits the permissions of the folder ${folder.name}`);
   }
 
   /**
@@ -94,19 +143,21 @@ class Workspace extends Component {
   }
 
   /**
-   * Handle when the user select a folder.
-   * @param {object} folder The selected folder
+   * Handle when the user selects a folder.
+   * @param {object} selectedFolder The selected folder
    */
-  handleFoldersTreeSelectEvent(selectedFolder) {
-    this.setState({selectedFolder});
+  handleSelectFolder(selectedFolder) {
+    const showFolderSidebar = true;
+    this.setState({selectedFolder, showFolderSidebar});
   }
 
   /**
-   * Handle when the user select the root folder.
+   * Handle when the user selects the root folder.
    */
-  handleFoldersTreeSelectRootEvent() {
+  handleSelectRoot() {
     const selectedFolder = null;
-    this.setState({selectedFolder});
+    const showFolderSidebar = false;
+    this.setState({selectedFolder, showFolderSidebar});
   }
 
   /**
@@ -115,7 +166,8 @@ class Workspace extends Component {
    */
   handleGridSelectEvent(resources) {
     const selectedResources = resources;
-    this.setState({selectedResources});
+    const showFolderSidebar = false;
+    this.setState({selectedResources, showFolderSidebar});
   }
 
   /**
@@ -125,7 +177,8 @@ class Workspace extends Component {
    */
   handleGridRightSelectEvent(event, resource) {
     const selectedResources = [resource];
-    this.setState({selectedResources});
+    const showFolderSidebar = false;
+    this.setState({selectedResources, showFolderSidebar});
   }
 
   /**
@@ -185,8 +238,8 @@ class Workspace extends Component {
                   <FoldersTree
                     folders={this.state.folders}
                     onContextualMenu={this.handleFoldersTreeContextualMenuShowEvent}
-                    onSelect={this.handleFoldersTreeSelectEvent}
-                    onSelectRoot={this.handleFoldersTreeSelectRootEvent}
+                    onSelect={this.handleSelectFolder}
+                    onSelectRoot={this.handleSelectRoot}
                     selectedFolder={this.state.selectedFolder}/>
                 </div>
                 <div className="panel middle">
@@ -197,6 +250,16 @@ class Workspace extends Component {
                     filterType={this.state.filterType}
                     onRightSelect={this.handleGridRightSelectEvent}
                     onSelect={this.handleGridSelectEvent}/>
+                  {this.state.showFolderSidebar &&
+                  <FolderSidebar
+                    folder={this.state.selectedFolder}
+                    folders={this.state.folders}
+                    groups={this.state.groups}
+                    onEditPermissions={this.handleEditFolderPermissions}
+                    onSelectFolderParent={this.handleSelectFolder}
+                    onSelectRoot={this.handleSelectRoot}
+                    users={this.state.users}/>
+                  }
                 </div>
               </div>
             </div>
