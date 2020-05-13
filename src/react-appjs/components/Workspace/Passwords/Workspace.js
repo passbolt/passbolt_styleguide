@@ -44,13 +44,11 @@ class Workspace extends Component {
         show: false,
         top: 0,
       },
-      loading: true,
-      breadcrumbs: [],
+      filterType: "default",
       folders: null,
       resources: null,
-      selectedResources: [],
       search: "",
-      filterType: "default",
+      selectedResources: [],
       selectedFolder: null
     }
   }
@@ -65,6 +63,7 @@ class Workspace extends Component {
     this.handleFoldersTreeSelectRootEvent = this.handleFoldersTreeSelectRootEvent.bind(this);
     this.handleGridSelectEvent = this.handleGridSelectEvent.bind(this);
     this.handleGridRightSelectEvent = this.handleGridRightSelectEvent.bind(this);
+    this.handleSearchEvent = this.handleSearchEvent.bind(this);
   }
 
   async componentDidMount() {
@@ -99,7 +98,6 @@ class Workspace extends Component {
    * @param {object} folder The selected folder
    */
   handleFoldersTreeSelectEvent(selectedFolder) {
-    console.log(`The user selected the folder ${selectedFolder.name}`);
     this.setState({selectedFolder});
   }
 
@@ -107,7 +105,6 @@ class Workspace extends Component {
    * Handle when the user select the root folder.
    */
   handleFoldersTreeSelectRootEvent() {
-    console.log("The user selected the root folder");
     const selectedFolder = null;
     this.setState({selectedFolder});
   }
@@ -117,8 +114,6 @@ class Workspace extends Component {
    * @param {array} resources The selected resources
    */
   handleGridSelectEvent(resources) {
-    console.log(`The user selected the resources`);
-    console.log(resources);
     const selectedResources = resources;
     this.setState({selectedResources});
   }
@@ -129,9 +124,16 @@ class Workspace extends Component {
    * @param {object} resource The selected resource
    */
   handleGridRightSelectEvent(event, resource) {
-    console.log(`The user right selected the resource ${resource.name}`);
     const selectedResources = [resource];
     this.setState({selectedResources});
+  }
+
+  /**
+   * Handle when the user searches.
+   * @param search
+   */
+  handleSearchEvent(search) {
+    this.setState({search});
   }
 
   onMenuItemClick(menuItem) {
@@ -162,7 +164,10 @@ class Workspace extends Component {
         }
         <div className="header second">
           <Logo/>
-          <SearchBar disabled={true} placeholder=" "/>
+          <SearchBar
+            onSearch={this.handleSearchEvent}
+            placeholder="Search passwords"
+            search={this.state.search}/>
           <ProfileMenu onClick={this.onMenuItemClick.bind(this)}/>
         </div>
         <div className="header third">

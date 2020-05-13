@@ -13,6 +13,7 @@
  */
 import React, {Component} from "react";
 import PropTypes from "prop-types";
+import Icon from "../Icons/Icon";
 
 class SearchBar extends Component {
   /**
@@ -22,6 +23,14 @@ class SearchBar extends Component {
   constructor(props) {
     super(props);
     this.state = this.getDefaultState();
+    this.bindCallbacks();
+  }
+
+  /**
+   * Bind callbacks methods
+   */
+  bindCallbacks() {
+    this.handleChangeEvent = this.handleChangeEvent.bind(this);
   }
 
   /**
@@ -29,40 +38,51 @@ class SearchBar extends Component {
    * @returns {*}
    */
   getDefaultState() {
-    return {
-      placeholder : this.props.placeholder || "Search",
-      disabled : this.props.disabled || false,
-    }
+    return {}
+  }
+
+  /**
+   * Handle search input change
+   * @params {ReactEvent} The react event.
+   */
+  handleChangeEvent(event) {
+    const target = event.target;
+    const value = target.value;
+    this.props.onSearch(value);
   }
 
   render() {
     return (
       <div className="col2 search-wrapper">
-          <form className="search">
-            <div className="input search required">
-              <label htmlFor="js_app_filter_keywords">Search</label>
-              <input className="required" maxLength="50" type="search" disabled={this.state.disabled ? 'disabled' : ''}  placeholder={this.state.placeholder} />
-            </div>
-            <button value="search" disabled={this.state.disabled ? 'disabled' : ''}>
-            <span className="svg-icon icon-only search">
-              <svg viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg"><path d="M1216 832q0-185-131.5-316.5t-316.5-131.5-316.5 131.5-131.5 316.5 131.5 316.5 316.5 131.5 316.5-131.5 131.5-316.5zm512 832q0 52-38 90t-90 38q-54 0-90-38l-343-342q-179 124-399 124-143 0-273.5-55.5t-225-150-150-225-55.5-273.5 55.5-273.5 150-225 225-150 273.5-55.5 273.5 55.5 225 150 150 225 55.5 273.5q0 220-124 399l343 343q37 37 37 90z"></path></svg>
-            </span>
+        <form className="search">
+          <div className="input search required">
+            <label htmlFor="js_app_filter_keywords">Search</label>
+            <input className="required" maxLength="50" type="search"
+              disabled={this.props.disabled ? 'disabled' : ''}
+              onChange={this.handleChangeEvent}
+              placeholder={this.props.placeholder}
+              value={this.props.value}/>
+          </div>
+          <button value="search" disabled={this.props.disabled ? 'disabled' : ''}>
+            <Icon name="search"/>
             <span className="visuallyhidden">Search</span>
-            </button>
-          </form>
+          </button>
+        </form>
       </div>
     );
   }
 }
 
 SearchBar.propTypes = {
+  disabled: PropTypes.bool,
+  onSearch: PropTypes.func,
   placeholder: PropTypes.string,
-  disabled: PropTypes.bool
+  value: PropTypes.string,
 };
 
 SearchBar.defaultProps = {
-  placeholder: 'Search',
   disabled: false,
+  placeholder: 'Search',
 };
 
 export default SearchBar;
