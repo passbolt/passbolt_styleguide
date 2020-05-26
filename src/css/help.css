@@ -6307,6 +6307,17 @@ input[type="search"]::-webkit-search-cancel-button {
   border-bottom: 3px solid transparent;
   border-top: 3px solid #009900;
 }
+.ribbon.ribbon-warning span {
+  background: #D40101;
+}
+.ribbon.ribbon-warning span::before {
+  border-left: 3px solid #D40101;
+  border-top: 3px solid #D40101;
+}
+.ribbon.ribbon-warning span::after {
+  border-right: 3px solid #D40101;
+  border-top: 3px solid #D40101;
+}
 .faq ul.list {
   margin: 0;
   padding: 0;

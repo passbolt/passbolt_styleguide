@@ -180,7 +180,7 @@
                     </div>
                     <div class="col4 last">
                         <a class="tile" href="#">
-                            <div class="ribbon"><span>PRO</span></div>
+                            <div class="ribbon ribbon-warning"><span>PRO</span></div>
                             <span class="tile-teaser"><i class="fa fa-balance-scale fa-fw"></i></span>
                             <span class="tile-title">A very pro card</span>
                             <span class="tile-description">Wait. Are you really a pro?</span>

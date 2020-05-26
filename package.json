@@ -1,6 +1,6 @@
 {
   "name": "passbolt-styleguide",
-  "version": "2.13.9",
+  "version": "2.13.10",
   "license": "AGPL-3.0",
   "copyright": "Copyright 2020 Passbolt SA",
   "description": "Passbolt styleguide contains common styling assets used by the different sites, plugin, etc.",
@@ -35,6 +35,6 @@
     "react-router-dom": "^5.1.2",
     "webpack": "^4.41.2",
     "webpack-cli": "^3.3.10",
-    "webpack-dev-server": "^3.10.2"
+    "webpack-dev-server": "^3.11.0"
   }
 }
