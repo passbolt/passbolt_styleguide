@@ -9621,8 +9621,6 @@ Print rules.
   top: 0;
 }
 .page.password .tableview.empty.all_items .tableview-content {
-  background: transparent url('../../../img/background/rocket.svg') center 75% no-repeat;
-  background-size: 30%;
   /* Tablet version */
   /* Normal screen version */
 }
@@ -9640,7 +9638,8 @@ Print rules.
 }
 .page.password .tableview.empty .empty-content {
   text-align: center;
-  margin: 3em 0.5em 0.67em 0.5em;
+  margin: 1em 0.5em 0.67em 0.5em;
+  padding-top: 2em;
 }
 .page.password .tableview.empty .empty-content h1 {
   font-size: 1.5em;
