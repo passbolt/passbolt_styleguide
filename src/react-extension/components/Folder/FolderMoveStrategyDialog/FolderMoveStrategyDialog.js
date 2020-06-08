@@ -247,7 +247,7 @@ class FolderMoveStrategyDialog extends Component {
                            onChange={this.handleInputChange} ref={this.moveOptionChangeRef} checked={this.state.moveOption === 'change'} />
                     <label htmlFor="moveOptionChange">
                       <span className="strategy-name">Change permissions</span>
-                      <span className="strategy-info">Remove previously inherited shared permissions and apply the destination folder permissions.</span>
+                      <span className="strategy-info">Remove old inherited permissions and apply the new destination folder permissions recursively.</span>
                     </label>
                   </div>
                   <div className="input radio last">
