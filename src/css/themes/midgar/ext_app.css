@@ -6300,6 +6300,95 @@ h6 .input.toggle-switch {
 .move-folder-dialog .folders-list .folders-list-item .folder-view:hover {
   border: 1px solid #0C0C0A;
 }
+.move-folder-strategy-dialog p {
+  font-size: 1em;
+  padding-bottom: 0.5em;
+}
+.move-folder-strategy-dialog .radiolist-alt .input.radio {
+  /*
+     * For IE 6/7 only
+     * Include this rule to trigger hasLayout and contain floats.
+     */
+  /*
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
+  /*
+     * For IE 6/7 only
+     * Include this rule to trigger hasLayout and contain floats.
+     */
+  zoom: 1;
+  /*
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
+}
+.move-folder-strategy-dialog .radiolist-alt .input.radio:before,
+.move-folder-strategy-dialog .radiolist-alt .input.radio:after {
+  content: "";
+  display: table;
+}
+.move-folder-strategy-dialog .radiolist-alt .input.radio:after {
+  clear: both;
+}
+.move-folder-strategy-dialog .radiolist-alt .input.radio:before,
+.move-folder-strategy-dialog .radiolist-alt .input.radio:after {
+  content: "";
+  display: table;
+}
+.move-folder-strategy-dialog .radiolist-alt .input.radio:after {
+  clear: both;
+}
+.move-folder-strategy-dialog .radiolist-alt input {
+  float: right;
+  width: 5%;
+  margin-top: 1em;
+  margin-right: 0.75em;
+}
+.move-folder-strategy-dialog .radiolist-alt input:checked + label {
+  border: 1px solid #2894DF;
+}
+.move-folder-strategy-dialog .radiolist-alt input:checked + label:hover {
+  border: 1px solid #2894DF;
+}
+.move-folder-strategy-dialog .radiolist-alt label {
+  border: 1px solid #0C0C0A;
+  border-radius: 2px;
+  padding: 1em;
+  margin-top: -2em;
+  margin-bottom: 1.5em;
+  float: left;
+  width: 93%;
+}
+.move-folder-strategy-dialog .radiolist-alt label:hover {
+  border: 1px solid #222220;
+}
+.move-folder-strategy-dialog .radiolist-alt label .strategy-name {
+  margin-top: -0.5em;
+  padding-top: 0.5em;
+  padding-bottom: 0.5em;
+  font-weight: bold;
+  display: block;
+  font-size: 1em;
+}
+.move-folder-strategy-dialog .radiolist-alt label .strategy-info {
+  font-weight: normal;
+  display: block;
+}
 .dialog .group .form-content.permission-edit {
   border-top: 1px solid #0C0C0A;
   margin: 0;

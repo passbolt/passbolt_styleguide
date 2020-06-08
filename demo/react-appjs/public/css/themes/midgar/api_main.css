@@ -9640,7 +9640,7 @@ Print rules.
 }
 .page.password .tableview.empty .empty-content {
   text-align: center;
-  margin: 1em 0.5em 0.67em 0.5em;
+  margin: 2em 0.5em 0.67em 0.5em;
   padding-top: 2em;
 }
 .page.password .tableview.empty .empty-content h1 {

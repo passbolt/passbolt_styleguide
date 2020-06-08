@@ -1,0 +1,57 @@
+.move-folder-strategy-dialog {
+    p {
+        font-size: 1em;
+        padding-bottom: .5em;
+    }
+    .radiolist-alt {
+        .input.radio {
+            .clearfix();
+            //
+            //&:hover {
+            //    border:1px solid @border-default;
+            //}
+            //&.selected,
+            //&:hover.selected{
+            //    border:1px solid @border-focus;
+            //}
+
+        }
+        input {
+            float:right;
+            width: 5%;
+            margin-top:1em;
+            margin-right:.75em;
+        }
+        input:checked + label {
+            border:1px solid @border-focus;
+            &:hover {
+                border:1px solid @border-focus;
+            }
+        }
+        label {
+            &:hover {
+                border:1px solid @border-input;
+            }
+            border:1px solid @border-light;
+            border-radius:2px;
+            padding:1em;
+            margin-top:-2em;
+            margin-bottom:1.5em;
+            float:left;
+            width: 93%;
+
+            .strategy-name {
+                margin-top:-.5em;
+                padding-top:.5em;
+                padding-bottom:.5em;
+                font-weight: bold;
+                display:block;
+                font-size: 1em;
+            }
+            .strategy-info {
+                font-weight: normal;
+                display:block;
+            }
+        }
+    }
+}
