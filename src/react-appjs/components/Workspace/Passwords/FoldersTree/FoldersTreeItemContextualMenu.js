@@ -53,6 +53,7 @@ class FoldersTreeItemContextualMenu extends React.Component {
     this.handleCreateFolderItemClickEvent = this.handleCreateFolderItemClickEvent.bind(this);
     this.handleRenameFolderItemClickEvent = this.handleRenameFolderItemClickEvent.bind(this);
     this.handleShareFolderItemClickEvent = this.handleShareFolderItemClickEvent.bind(this);
+    this.handleExportFolderItemClickEvent = this.handleExportFolderItemClickEvent.bind(this);
     this.handleDeleteFolderItemClickEvent = this.handleDeleteFolderItemClickEvent.bind(this);
   }
 
@@ -116,6 +117,9 @@ class FoldersTreeItemContextualMenu extends React.Component {
    * Handle click on the create a folder menu option.
    */
   handleCreateFolderItemClickEvent() {
+    if (!this.canUpdate()) {
+      return;
+    }
     const folderParentId = this.props.folder.id;
     Plugin.send('passbolt.plugin.folders.open-create-dialog', {folderParentId});
     this.destroy();
@@ -125,6 +129,9 @@ class FoldersTreeItemContextualMenu extends React.Component {
    * Handle click on the rename a folder menu option.
    */
   handleRenameFolderItemClickEvent() {
+    if (!this.canUpdate()) {
+      return;
+    }
     const folderId = this.props.folder.id;
     Plugin.send('passbolt.plugin.folders.open-rename-dialog', {folderId});
     this.destroy();
@@ -134,8 +141,20 @@ class FoldersTreeItemContextualMenu extends React.Component {
    * Handle click on the share a folder menu option.
    */
   handleShareFolderItemClickEvent() {
+    if (!this.canShare()) {
+      return;
+    }
     const foldersIds = [this.props.folder.id];
     Plugin.send("passbolt.plugin.folders.open-share-dialog", {foldersIds});
+    this.destroy();
+  }
+
+  /**
+   * Handle click on the export a folder menu option.
+   */
+  handleExportFolderItemClickEvent() {
+    const foldersIds = [this.props.folder.id];
+    Plugin.send("passbolt.plugin.export_resources", {"folders": foldersIds});
     this.destroy();
   }
 
@@ -143,6 +162,9 @@ class FoldersTreeItemContextualMenu extends React.Component {
    * Handle click on the delete a folder menu option.
    */
   handleDeleteFolderItemClickEvent() {
+    if (!this.canUpdate()) {
+      return;
+    }
     const folderId = this.props.folder.id;
     Plugin.send('passbolt.plugin.folders.open-delete-dialog', {folderId});
     this.destroy();
@@ -210,6 +232,15 @@ class FoldersTreeItemContextualMenu extends React.Component {
               <div className="main-cell-wrapper">
                 <div className="main-cell">
                   <a onClick={this.handleShareFolderItemClickEvent}><span>Share</span></a>
+                </div>
+              </div>
+            </div>
+          </li>
+          <li key="option-export-folder" className="ready closed">
+            <div className="row">
+              <div className="main-cell-wrapper">
+                <div className="main-cell">
+                  <a onClick={this.handleExportFolderItemClickEvent}><span>Export</span></a>
                 </div>
               </div>
             </div>

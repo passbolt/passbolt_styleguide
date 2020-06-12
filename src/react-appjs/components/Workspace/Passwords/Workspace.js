@@ -20,6 +20,8 @@ import FoldersTree from "./FoldersTree/FoldersTree";
 import FoldersTreeItemContextualMenu from "./FoldersTree/FoldersTreeItemContextualMenu";
 import Grid from "./Grid/Grid";
 import FolderSidebar from "./FolderSidebar/FolderSidebar";
+import Breadcrumbs from "../../Common/Breadcrumbs/Breadcrumbs";
+import PasswordSidebar from "./PasswordSidebar/PasswordSidebar";
 
 class Workspace extends Component {
   /**
@@ -29,7 +31,6 @@ class Workspace extends Component {
   constructor(props) {
     super(props);
     this.state = this.getDefaultState();
-    this.ActionBar = this.ActionBar.bind(this);
     this.bindCallbacks();
   }
 
@@ -50,8 +51,9 @@ class Workspace extends Component {
       resources: null,
       search: "",
       selectedResources: [],
+      selectedResource: null,
+      selectedFolders: [],
       selectedFolder: null,
-      showFolderSidebar: false,
       users: null
     }
   }
@@ -64,9 +66,9 @@ class Workspace extends Component {
     this.handleFoldersTreeContextualMenuHideEvent = this.handleFoldersTreeContextualMenuHideEvent.bind(this);
     this.handleFoldersTreeContextualMenuShowEvent = this.handleFoldersTreeContextualMenuShowEvent.bind(this);
     this.handleSelectFolder = this.handleSelectFolder.bind(this);
-    this.handleSelectRoot = this.handleSelectRoot.bind(this);
-    this.handleGridSelectEvent = this.handleGridSelectEvent.bind(this);
-    this.handleGridRightSelectEvent = this.handleGridRightSelectEvent.bind(this);
+    this.handleSelectRootFolder = this.handleSelectRootFolder.bind(this);
+    this.handleSelectResourcesEvent = this.handleSelectResourcesEvent.bind(this);
+    this.handleRightSelectResourceEvent = this.handleRightSelectResourceEvent.bind(this);
     this.handleSearchEvent = this.handleSearchEvent.bind(this);
   }
 
@@ -105,7 +107,7 @@ class Workspace extends Component {
   }
 
   /**
-   * Find all userS.
+   * Find all users.
    * @returns {Promise<void>}
    */
   async findUsers() {
@@ -147,38 +149,36 @@ class Workspace extends Component {
    * @param {object} selectedFolder The selected folder
    */
   handleSelectFolder(selectedFolder) {
-    const showFolderSidebar = true;
-    this.setState({selectedFolder, showFolderSidebar});
+    const selectedResources = [];
+    const selectedFolders = [selectedFolder];
+    this.setState({selectedFolders, selectedResources});
   }
 
   /**
    * Handle when the user selects the root folder.
    */
-  handleSelectRoot() {
-    const selectedFolder = null;
-    const showFolderSidebar = false;
-    this.setState({selectedFolder, showFolderSidebar});
+  handleSelectRootFolder() {
+    const selectedFolders = [];
+    this.setState({selectedFolders});
   }
 
   /**
    * Handle when the user selects an element in the grid.
    * @param {array} resources The selected resources
    */
-  handleGridSelectEvent(resources) {
+  handleSelectResourcesEvent(resources) {
     const selectedResources = resources;
-    const showFolderSidebar = false;
-    this.setState({selectedResources, showFolderSidebar});
+    this.setState({selectedResources});
   }
 
   /**
    * Handle when the user right selects an element in the grid.
    * @param {ReactEvent} event The event
-   * @param {object} resource The selected resource
+   * @param {object} selectedResource The selected resource
    */
-  handleGridRightSelectEvent(event, resource) {
-    const selectedResources = [resource];
-    const showFolderSidebar = false;
-    this.setState({selectedResources, showFolderSidebar});
+  handleRightSelectResourceEvent(event, selectedResource) {
+    const selectedResources = [selectedResource];
+    this.setState({selectedResource, selectedResources});
   }
 
   /**
@@ -193,18 +193,32 @@ class Workspace extends Component {
     this.props.onMenuItemClick(menuItem);
   }
 
-  ActionBar() {
-    return (
-      <div className="header third">
-        <div className="col1">
-        </div>
-        <div className="col2_3 actions-wrapper">
-        </div>
-      </div>
-    );
+  /**
+   * Get the folder to display the folder for
+   * @returns {null|Object}
+   */
+  getHighlightedFolder() {
+    if (this.state.selectedFolders.length === 1 && !this.state.selectedResources.length) {
+      return this.state.selectedFolders[0];
+    }
+    return null;
+  }
+
+  /**
+   * Get the resource to display the folder for
+   * @returns {null|Object}
+   */
+  getHighlightedResource() {
+    if (this.state.selectedResources.length === 1 && !this.state.selectedFolders.length) {
+      return this.state.selectedResources[0];
+    }
+    return null;
   }
 
   render() {
+    const highlightedFolder = this.getHighlightedFolder();
+    const highlightedResource = this.getHighlightedResource();
+
     return (
       <div>
         {this.state.contextualMenu.show &&
@@ -229,7 +243,6 @@ class Workspace extends Component {
           <div className="col2_3 actions-wrapper">
           </div>
         </div>
-        <this.ActionBar/>
         <div className="panel main">
           <div className="tabs-content">
             <div className="tab-content selected">
@@ -239,25 +252,26 @@ class Workspace extends Component {
                     folders={this.state.folders}
                     onContextualMenu={this.handleFoldersTreeContextualMenuShowEvent}
                     onSelect={this.handleSelectFolder}
-                    onSelectRoot={this.handleSelectRoot}
-                    selectedFolder={this.state.selectedFolder}/>
+                    onSelectRoot={this.handleSelectRootFolder}
+                    selectedFolder={this.state.selectedFolders[0]}/>
                 </div>
                 <div className="panel middle">
+                  <Breadcrumbs/>
                   <Grid
                     resources={this.state.resources}
                     selectedResources={this.state.selectedResources}
                     search={this.state.search}
                     filterType={this.state.filterType}
-                    onRightSelect={this.handleGridRightSelectEvent}
-                    onSelect={this.handleGridSelectEvent}/>
-                  {this.state.showFolderSidebar &&
+                    onRightSelect={this.handleRightSelectResourceEvent}
+                    onSelect={this.handleSelectResourcesEvent}/>
+                  {highlightedFolder &&
                   <FolderSidebar
-                    folder={this.state.selectedFolder}
+                    folder={highlightedFolder}
                     folders={this.state.folders}
                     groups={this.state.groups}
                     onEditPermissions={this.handleEditFolderPermissions}
                     onSelectFolderParent={this.handleSelectFolder}
-                    onSelectRoot={this.handleSelectRoot}
+                    onSelectRoot={this.handleSelectRootFolder}
                     users={this.state.users}/>
                   }
                 </div>

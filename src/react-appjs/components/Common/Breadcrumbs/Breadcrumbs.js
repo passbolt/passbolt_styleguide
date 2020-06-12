@@ -13,9 +13,6 @@
  */
 import React, {Component} from "react";
 import PropTypes from "prop-types";
-import {
-  Link,
-} from "react-router-dom";
 
 class Breadcrumbs extends Component {
   /**
@@ -25,8 +22,6 @@ class Breadcrumbs extends Component {
   constructor(props) {
     super(props);
     this.state = this.getDefaultState();
-
-    this.itemNumber = 0;
   }
 
   /**
@@ -39,22 +34,37 @@ class Breadcrumbs extends Component {
     }
   }
 
-  Item(item) {
-    return (
-      <li key={this.itemNumber++}>
-        <div className="main-cell">
-          {item}
-        </div>
-      </li>
-      );
+  getItems() {
+    const items = [];
+
+    const allItem = {
+      name: "All items"
+    };
+    items.push(allItem);
+
+    return items;
   }
 
+  /**
+   * Render the component
+   * @returns {JSX}
+   */
   render() {
+    const items = this.getItems();
+    let index = 0;
+
     return (
       <div className="breadcrumbs">
         <ul className="menu">
-          {(this.props.items && (this.props.items).map((item) => {
-            return this.Item(item);
+          {(items && items.map((item) => {
+            index++;
+            return (
+              <li key={index}>
+                <div className="main-cell">
+                  {item.name}
+                </div>
+              </li>
+            );
           }))}
         </ul>
       </div>
@@ -63,7 +73,6 @@ class Breadcrumbs extends Component {
 }
 
 Breadcrumbs.propTypes = {
-  items: PropTypes.array,
 };
 
 

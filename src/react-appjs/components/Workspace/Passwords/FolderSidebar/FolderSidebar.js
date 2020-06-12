@@ -16,6 +16,7 @@ import Icon from "../../../Common/Icons/Icon";
 import PropTypes from "prop-types";
 import FolderSidebarInformationSection from "./FolderSidebarInformationSection";
 import FolderSidebarPermissionsSection from "./FolderSidebarPermissionsSection";
+import Clipboard from "../../../../legacy/util/clipboard";
 
 class FolderSidebar extends React.Component {
 
@@ -35,7 +36,7 @@ class FolderSidebar extends React.Component {
    */
   getDefaultState() {
     return {
-      permissions: null,
+      permissions: [],
       permissionsSectionOpen: false
     };
   }
@@ -44,8 +45,25 @@ class FolderSidebar extends React.Component {
    * Bind callbacks methods
    */
   bindCallbacks() {
+    this.handleCloseClick = this.handleCloseClick.bind(this);
+    this.handlePermalinkClick = this.handlePermalinkClick.bind(this);
     this.handlePermissionSectionClose = this.handlePermissionSectionClose.bind(this);
     this.handlePermissionSectionOpen = this.handlePermissionSectionOpen.bind(this);
+  }
+
+  /**
+   * Handle when the user closes the sidebar.
+   */
+  handleCloseClick() {
+    this.props.onClose();
+  }
+
+  /**
+   * Handle when the user copies the permalink.
+   */
+  handlePermalinkClick() {
+    const permalink = `${APP_URL}app/folders/view/${this.props.folder.id}`;
+    Clipboard.copy(permalink, 'permalink');
   }
 
   /**
@@ -60,17 +78,18 @@ class FolderSidebar extends React.Component {
    * Handle when the user opens the permissions section.
    */
   handlePermissionSectionOpen() {
-    this.findPermissions();
     const permissionsSectionOpen = true;
+    this.findFolderPermission();
     this.setState({permissionsSectionOpen});
   }
 
   /**
-   * Get the folder permissions.
+   * Find the folder permissions
+   * @returns {Promise<void>}
    */
-  async findPermissions() {
-    const permissions = await port.request('passbolt.folders.find-permissions');
-    this.setState({permissions});
+  async findFolderPermission() {
+      const permissions = await port.request('passbolt.folders.find-permissions');
+      this.setState({permissions});
   }
 
   /**
@@ -86,16 +105,15 @@ class FolderSidebar extends React.Component {
               <Icon name="folder"/>
             </div>
             <h3>
-              <div className="title-wrapper">
-                <span className="name">{this.props.folder.name}</span>
-                <a className="title-link" title="Copy the link to this password">
-                  <Icon name="link"/>
-                  <span className="visuallyhidden">Copy the link to this password</span>
+              <span className="name">{this.props.folder.name}
+                <a className="title-link" title="Copy the link to this folder"  onClick={this.handlePermalinkClick}>
+                    <i className="fa fa-link"></i>
+                    <span className="visuallyhidden">Copy the link to this folder</span>
                 </a>
-              </div>
+              </span>
               <span className="type">folder</span>
             </h3>
-            <a className="dialog-close">
+            <a className="dialog-close" onClick={this.handleCloseClick}>
               <Icon name="close"/>
               <span className="visuallyhidden">Close</span>
             </a>
@@ -125,10 +143,11 @@ FolderSidebar.propTypes = {
   folder: PropTypes.object,
   folders: PropTypes.array,
   groups: PropTypes.array,
+  onClose: PropTypes.func,
   onSelectFolderParent: PropTypes.func,
   onSelectRoot: PropTypes.func,
   onEditPermissions: PropTypes.func,
-  users: PropTypes.array,
+  users: PropTypes.array
 };
 
 export default FolderSidebar;

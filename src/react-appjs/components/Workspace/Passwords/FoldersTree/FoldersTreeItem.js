@@ -207,14 +207,6 @@ class FoldersTreeItem extends React.Component {
   }
 
   /**
-   * Check if the user is currently dragging content.
-   * @returns {number}
-   */
-  isDragging() {
-    return this.props.draggedItems.folders.length || this.props.draggedItems.resources.length;
-  }
-
-  /**
    * Check if the user can drag an item.
    * @param {object} item The target item
    */
@@ -224,9 +216,20 @@ class FoldersTreeItem extends React.Component {
       return true;
     }
 
-    // The user cannot drag an element if the parent folder is in READ.
     const folderParent = this.props.folders.find(folder => folder.id === item.folder_parent_id);
+
+    // The user can always drag content from a personal folder.
+    if (folderParent.personal) {
+      return true;
+    }
+
+    // The user cannot drag an element if the parent folder is in READ.
     if (folderParent.permission.type < 7) {
+      return false;
+    }
+
+    // The user cannot move folder in READ ONLY from a shared folder.
+    if (item.permission.type < 7) {
       return false;
     }
 
@@ -282,7 +285,7 @@ class FoldersTreeItem extends React.Component {
    * @returns {boolean}
    */
   canDropInto() {
-    if (!this.isDragging()) {
+    if (!this.props.isDragging) {
       return false;
     }
 
@@ -291,7 +294,7 @@ class FoldersTreeItem extends React.Component {
       return false;
     }
 
-    // Cannot move a content in read only into a shared folder.
+    // Cannot move a content in READ ONLY into a shared folder.
     if (!this.props.folder.personal) {
       const draggedItemsLowestPermission = this.getDraggedItemsLowestPermission();
       if (draggedItemsLowestPermission < 7) {
@@ -334,10 +337,17 @@ class FoldersTreeItem extends React.Component {
    */
   isDisabled() {
     // If the user is dragging content, disable the component if:
-    // - The user is not allowed to drag any of the items they are dragging;
+    // - The user is not allowed to drag any of dragged items;
     // - The user is not allowed to drop content in the folder associated to this component.
-    if (this.isDragging()) {
-      return !this.canDragItems(this.props.draggedItems) || !this.canDropInto();
+    if (this.props.isDragging) {
+      const canDragItems = this.canDragItems(this.props.draggedItems);
+      if (!canDragItems) {
+        return true;
+      }
+      const canDropInto = this.canDropInto();
+      if (!canDropInto) {
+        return true;
+      }
     }
 
     return false;
@@ -435,6 +445,7 @@ class FoldersTreeItem extends React.Component {
               draggedItems={this.props.draggedItems}
               folder={folder}
               folders={this.props.folders}
+              isDragging={this.props.isDragging}
               onClose={this.props.onClose}
               onContextualMenu={this.props.onContextualMenu}
               onDragEnd={this.props.onDragEnd}
@@ -456,6 +467,7 @@ FoldersTreeItem.propTypes = {
   draggedItems: PropTypes.object,
   folders: PropTypes.array,
   folder: PropTypes.object,
+  isDragging: PropTypes.bool,
   onClose: PropTypes.func,
   onContextualMenu: PropTypes.func,
   onDragEnd: PropTypes.func,

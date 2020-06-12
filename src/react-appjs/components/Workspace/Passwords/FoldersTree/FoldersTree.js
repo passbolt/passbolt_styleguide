@@ -67,7 +67,6 @@ class FoldersTree extends React.Component {
     this.handleDragLeaveTitle = this.handleDragLeaveTitle.bind(this);
     this.handleDragOverTitle = this.handleDragOverTitle.bind(this);
     this.handleDropTitle = this.handleDropTitle.bind(this);
-    this.handleFilterWorkspaceEvent = this.handleFilterWorkspaceEvent.bind(this);
     this.handleFolderCloseEvent = this.handleFolderCloseEvent.bind(this);
     this.handleFolderDragEndEvent = this.handleFolderDragEndEvent.bind(this);
     this.handleFolderDragStartEvent = this.handleFolderDragStartEvent.bind(this);
@@ -76,28 +75,14 @@ class FoldersTree extends React.Component {
     this.handleFolderSelectEvent = this.handleFolderSelectEvent.bind(this);
     this.handleGridDragStartEvent = this.handleGridDragStartEvent.bind(this);
     this.handleGridDragEndEvent = this.handleGridDragEndEvent.bind(this);
-    this.handlePluginSelectAndScrollToEvent = this.handlePluginSelectAndScrollToEvent.bind(this);
   }
 
   /**
    * Initialize event listeners.
    */
   initEventHandlers() {
-    document.addEventListener('filter_workspace', this.handleFilterWorkspaceEvent);
     document.addEventListener('passbolt.resources.drag-start', this.handleGridDragStartEvent);
     document.addEventListener('passbolt.resources.drag-end', this.handleGridDragEndEvent);
-    document.addEventListener('passbolt.plugin.folders.select-and-scroll-to', this.handlePluginSelectAndScrollToEvent);
-  }
-
-  /**
-   * Handle workspace filtered event.
-   * @param {ReactEvent} event The event
-   */
-  handleFilterWorkspaceEvent(event) {
-    if (event.data.filter.type !== "folder") {
-      const selectedFolder = null;
-      this.setState({selectedFolder});
-    }
   }
 
   /**
@@ -233,8 +218,7 @@ class FoldersTree extends React.Component {
    * @param {Object} folder The folder
    */
   handleFolderSelectEvent(event, folder) {
-    const selectedFolder = folder;
-    this.props.onSelect(selectedFolder);
+    this.props.onSelect(folder);
   }
 
   /**
@@ -263,25 +247,20 @@ class FoldersTree extends React.Component {
   }
 
   /**
-   * Handle when the plugin request the appjs to select and scroll to a folder
-   * @param {ReactEvent} event The event
+   * Open the tree until a given folder
+   * @param {object} folder The folder to scroll to
    */
-  handlePluginSelectAndScrollToEvent(event) {
-    const folderId = event.data;
-    const selectedFolder = this.props.folders.find(folder => folder.id === folderId);
-    const openFolders = this.state.openFolders;
+  openFolderTree(folder) {
+    let openFolders = this.state.openFolders;
 
     // If the selected folder has a parent. Open it if not yet open.
-    if (selectedFolder.folder_parent_id) {
-      const isFolderParentOpen = this.state.openFolders.some(item => item.id === selectedFolder.folder_parent_id);
-      if (!isFolderParentOpen) {
-        const folderParent = this.props.folders.find(folder => folder.id === selectedFolder.folder_parent_id);
-        openFolders.push(folderParent);
+    if (folder.folder_parent_id) {
+      const folderParent = this.props.folders.find(item => item.id === folder.folder_parent_id);
+      if (folderParent) {
+        openFolders = Array.from(new Set([...openFolders, folderParent]));
+        this.setState({openFolders}, () => this.openFolderTree(folderParent));
       }
     }
-
-    this.setState({selectedFolder, openFolders});
-    this.props.onSelect(selectedFolder);
   }
 
   /**
@@ -294,9 +273,20 @@ class FoldersTree extends React.Component {
       return true;
     }
 
-    // The user cannot drag an element if the parent folder is in READ.
     const folderParent = this.props.folders.find(folder => folder.id === item.folder_parent_id);
+
+    // The user can always drag content from a personal folder.
+    if (folderParent.personal) {
+      return true;
+    }
+
+    // The user cannot drag an element if the parent folder is in READ.
     if (folderParent.permission.type < 7) {
+      return false;
+    }
+
+    // The user cannot move folder in READ ONLY from a shared folder.
+    if (item.permission.type < 7) {
       return false;
     }
 
@@ -397,6 +387,14 @@ class FoldersTree extends React.Component {
   }
 
   /**
+   * Check if the user is currently dragging content.
+   * @returns {number}
+   */
+  isDragging() {
+    return this.state.draggedItems.folders.length || this.state.draggedItems.resources.length;
+  }
+
+  /**
    * Render the component
    * @returns {JSX}
    */
@@ -404,14 +402,26 @@ class FoldersTree extends React.Component {
     const isLoading = this.isLoading();
     const isOpen = this.state.open;
     const rootFolders = this.getRootFolders();
-    const showDropFocus = this.state.draggingOverTitle && this.canDragItems(this.state.draggedItems);
+    const isDragging = this.isDragging();
+    let showDropFocus = false;
+    let disabled = false;
+
+    if (isDragging && this.state.draggingOverTitle) {
+      const canDragItems = this.canDragItems(this.state.draggedItems);
+      if (canDragItems) {
+        showDropFocus = true;
+      } else {
+        // Disabled the drop area in order to avoid the drop event to be fired when the user cannot drop content on the root.
+        disabled = true;
+      }
+    }
 
     return (
       <div ref={this.elementRef} className="folders navigation first accordion">
         {this.renderDragFeedback()}
         <div className="accordion-header1">
           <div className={`${isOpen ? "open" : "close"} node root`}>
-            <div className={`row title ${showDropFocus ? "drop-focus" : ""}`}>
+            <div className={`row title ${showDropFocus ? "drop-focus" : ""} ${disabled ? "disabled" : ""}`}>
               <div className="main-cell-wrapper">
                 <div className="main-cell">
                   <h3>
@@ -447,6 +457,7 @@ class FoldersTree extends React.Component {
               draggedItems={this.state.draggedItems}
               folder={folder}
               folders={this.props.folders}
+              isDragging={isDragging}
               onClose={this.handleFolderCloseEvent}
               onContextualMenu={this.handleContextualMenuEvent}
               onDragEnd={this.handleFolderDragEndEvent}
@@ -465,11 +476,11 @@ class FoldersTree extends React.Component {
 }
 
 FoldersTree.propTypes = {
+  selectedFolder: PropTypes.object,
   folders: PropTypes.array,
   onContextualMenu: PropTypes.func,
   onSelect: PropTypes.func,
-  onSelectRoot: PropTypes.func,
-  selectedFolder: PropTypes.object
+  onSelectRoot: PropTypes.func
 };
 
 export default FoldersTree;

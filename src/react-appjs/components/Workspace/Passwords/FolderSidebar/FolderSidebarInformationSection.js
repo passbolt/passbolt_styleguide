@@ -76,7 +76,7 @@ class FolderSidebarInformationSection extends React.Component {
    * @return {string}
    */
   formatDateTimeAgo(date) {
-    return moment.tz(this.props.folder.created, Config.read('app.server_timezone')).fromNow();
+    return moment.tz(date, Config.read('app.server_timezone')).fromNow();
   }
 
   /**
@@ -84,12 +84,16 @@ class FolderSidebarInformationSection extends React.Component {
    * @param {string} userId The user id
    */
   getUserUsername(userId) {
+    let username = "";
+
     if (this.props.users) {
       const user = this.props.users.find(item => item.id === userId);
-      return user.username;
+      if (user) {
+        username = user.username;
+      }
     }
 
-    return "";
+    return username;
   }
 
   /**
@@ -97,13 +101,13 @@ class FolderSidebarInformationSection extends React.Component {
    * @param {string} folderId The folder id
    * @returns {string}
    */
-  getFolderName(folderParentId) {
-    if (folderParentId === null) {
+  getFolderName(folderId) {
+    if (folderId === null) {
       return '/';
     }
 
     if (this.props.folders) {
-      const folder = this.props.folders.find(item => item.id === folderParentId);
+      const folder = this.props.folders.find(item => item.id === folderId);
 
       return folder.name;
     }
