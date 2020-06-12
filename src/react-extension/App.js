@@ -22,6 +22,7 @@ import PasswordEditDialog from "./components/Password/PasswordEditDialog/Passwor
 import ProgressDialog from "./components/ProgressDialog/ProgressDialog";
 import ShareDialog from "./components/Share/ShareDialog";
 import FolderDeleteDialog from "./components/Folder/FolderDeleteDialog/FolderDeleteDialog";
+import FolderMoveStrategyDialog from "./components/Folder/FolderMoveStrategyDialog/FolderMoveStrategyDialog";
 
 class App extends Component{
   /**
@@ -41,7 +42,8 @@ class App extends Component{
    */
   async componentDidMount() {
     let shareResources = await port.request('passbolt.share.get-resources-ids');
-    this.setState({shareResources});
+    let shareFolders = await port.request('passbolt.share.get-folders-ids');
+    this.setState({shareResources, shareFolders});
   }
 
   getDefaultState() {
@@ -52,6 +54,7 @@ class App extends Component{
       showFolderCreateDialog: false,
       showFolderDeleteDialog: false,
       showFolderRenameDialog: false,
+      showFolderMoveStrategyDialog: false,
       showPassphraseEntryDialog: false,
       showPasswordCreateDialog: false,
       showPasswordEditDialog: false,
@@ -63,6 +66,7 @@ class App extends Component{
   async getResetState() {
     const state = this.getDefaultState();
     state.shareResources = this.state.shareResources;
+    state.shareFolders = this.state.shareFolders;
     state.showStart = false;
     return state;
   }
@@ -107,6 +111,7 @@ class App extends Component{
               <li><a onClick={() => this.onShowDialog('showFolderCreateDialog')}>Create folder dialog</a></li>
               <li><a onClick={() => this.onShowDialog('showFolderDeleteDialog')}>Delete folder dialog</a></li>
               <li><a onClick={() => this.onShowDialog('showFolderRenameDialog')}>Rename folder dialog</a></li>
+              <li><a onClick={() => this.onShowDialog('showFolderMoveStrategyDialog')}>Move folder strategy dialog</a></li>
             </ul>
           </div>
         }
@@ -133,6 +138,11 @@ class App extends Component{
         }
         {this.state.showFolderDeleteDialog &&
           <FolderDeleteDialog onClose={this.onDialogClose} folderId='0d0a4b82-4757-4389-88bf-3dd18c1b8d75'/>
+        }
+        {this.state.showFolderMoveStrategyDialog &&
+        <FolderMoveStrategyDialog onClose={this.onDialogClose} folderId='0d0a4b82-4757-4389-88bf-3dd18c1b8d75'
+          resourcesIds={this.state.shareResources} foldersIds={this.state.shareFolders}
+        />
         }
         {this.state.showPassphraseEntryDialog &&
           <PassphraseEntryDialog onClose={this.onDialogClose}/>
