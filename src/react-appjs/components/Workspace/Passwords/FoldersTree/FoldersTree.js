@@ -391,7 +391,7 @@ class FoldersTree extends React.Component {
    * @returns {number}
    */
   isDragging() {
-    return this.state.draggedItems.folders.length || this.state.draggedItems.resources.length;
+    return this.state.draggedItems.folders.length !== 0 || this.state.draggedItems.resources.length !== 0;
   }
 
   /**

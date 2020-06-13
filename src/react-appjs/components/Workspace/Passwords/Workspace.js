@@ -274,6 +274,16 @@ class Workspace extends Component {
                     onSelectRoot={this.handleSelectRootFolder}
                     users={this.state.users}/>
                   }
+                  {highlightedResource &&
+                  <PasswordSidebar
+                    resource={highlightedResource}
+                    folders={this.state.folders}
+                    groups={this.state.groups}
+                    onEditPermissions={this.handleEditFolderPermissions}
+                    onSelectFolderParent={this.handleSelectFolder}
+                    onSelectRoot={this.handleSelectRootFolder}
+                    users={this.state.users}/>
+                  }
                 </div>
               </div>
             </div>

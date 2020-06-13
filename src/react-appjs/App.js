@@ -7,6 +7,8 @@ import Workspace from "./components/Workspace/Passwords/Workspace";
 
 import config from "./config/config";
 
+// @todo Make it a config variable.
+global.APP_URL = "localhost:3000/";
 
 import {
   BrowserRouter as Router,
@@ -52,7 +54,7 @@ class App extends Component{
       "app": {
         "url": baseUrl
       }
-    }
+    };
     this.setState({ "appContext" : { ...this.state.appContext, serverSettings: serverSettings } });
   }
 
