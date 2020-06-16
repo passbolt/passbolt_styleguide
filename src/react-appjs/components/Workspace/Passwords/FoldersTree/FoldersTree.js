@@ -28,7 +28,7 @@ class FoldersTree extends React.Component {
   constructor(props) {
     super(props);
     this.state = this.getDefaultState();
-    this.createInputRef();
+    this.createElementsRef();
     this.bindCallbacks();
     this.initEventHandlers();
   }
@@ -53,9 +53,10 @@ class FoldersTree extends React.Component {
   /**
    * Create DOM nodes or React elements references in order to be able to access them programmatically.
    */
-  createInputRef() {
-    this.elementRef = React.createRef();
+  createElementsRef() {
     this.dragFeedbackElementRef = React.createRef();
+    this.listElement = React.createRef();
+    this.titleElementRef = React.createRef();
   }
 
   /**
@@ -63,7 +64,8 @@ class FoldersTree extends React.Component {
    */
   bindCallbacks() {
     this.handleClickOnTitle = this.handleClickOnTitle.bind(this);
-    this.handleContextualMenuEvent = this.handleContextualMenuEvent.bind(this);
+    this.handleFolderItemContextualMenuEvent = this.handleFolderItemContextualMenuEvent.bind(this);
+    this.handleRootContextualMenuEvent = this.handleRootContextualMenuEvent.bind(this);
     this.handleDragLeaveTitle = this.handleDragLeaveTitle.bind(this);
     this.handleDragOverTitle = this.handleDragOverTitle.bind(this);
     this.handleDropTitle = this.handleDropTitle.bind(this);
@@ -121,8 +123,23 @@ class FoldersTree extends React.Component {
    * @param {int} top The position to display the contextual menu
    * @param left The position to display the contextual menu
    */
-  handleContextualMenuEvent(folder, top, left) {
-    this.props.onContextualMenu(folder, top, left, this.elementRef);
+  handleFolderItemContextualMenuEvent(folder, top, left) {
+    this.props.onFolderContextualMenu(folder, top, left, this.listElement);
+  }
+
+  /**
+   * Handle when the user requests to display the contextual menu on the root folder.
+   * @param {ReactEvent} event The event
+   */
+  handleRootContextualMenuEvent(event) {
+    // Prevent the browser contextual menu to pop up.
+    event.preventDefault();
+    event.stopPropagation();
+
+    const top = event.pageY;
+    const left = event.pageX;
+
+    this.props.onRootFolderContextualMenu(top, left, this.titleElementRef);
   }
 
   /**
@@ -417,7 +434,7 @@ class FoldersTree extends React.Component {
     }
 
     return (
-      <div ref={this.elementRef} className="folders navigation first accordion">
+      <div className="folders navigation first accordion">
         {this.renderDragFeedback()}
         <div className="accordion-header1">
           <div className={`${isOpen ? "open" : "close"} node root`}>
@@ -437,10 +454,12 @@ class FoldersTree extends React.Component {
                       </Fragment>
                       }
                       <span href="demo/LU_folders.php"
+                        ref={this.titleElementRef}
                         onDragOver={this.handleDragOverTitle}
                         onDragLeave={this.handleDragLeaveTitle}
                         onDrop={this.handleDropTitle}
                         onClick={this.handleClickOnTitle}
+                        onContextMenu={this.handleRootContextualMenuEvent}
                       >Folders</span>
                     </span>
                   </h3>
@@ -450,7 +469,7 @@ class FoldersTree extends React.Component {
           </div>
         </div>
         {!isLoading && isOpen &&
-        <ul className="folders-tree ">
+        <ul ref={this.listElement} className="folders-tree">
           {rootFolders.map(folder => {
             return <FoldersTreeItem
               key={`folders-list-${folder.id}`}
@@ -459,7 +478,7 @@ class FoldersTree extends React.Component {
               folders={this.props.folders}
               isDragging={isDragging}
               onClose={this.handleFolderCloseEvent}
-              onContextualMenu={this.handleContextualMenuEvent}
+              onContextualMenu={this.handleFolderItemContextualMenuEvent}
               onDragEnd={this.handleFolderDragEndEvent}
               onDragStart={this.handleFolderDragStartEvent}
               onDrop={this.handleFolderDropEvent}
@@ -478,7 +497,8 @@ class FoldersTree extends React.Component {
 FoldersTree.propTypes = {
   selectedFolder: PropTypes.object,
   folders: PropTypes.array,
-  onContextualMenu: PropTypes.func,
+  onFolderContextualMenu: PropTypes.func,
+  onRootFolderContextualMenu: PropTypes.func,
   onSelect: PropTypes.func,
   onSelectRoot: PropTypes.func
 };
