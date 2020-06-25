@@ -4778,6 +4778,17 @@ article table.table-parameters tbody tr td em {
 .header .navigation.primary li .row.selected a:focus {
   color: #2894DF;
 }
+.header .navigation.primary .github-star {
+  display: none;
+  position: absolute;
+  right: 1em;
+  top: 5px;
+}
+@media all and (min-width: 600px) {
+  .header .navigation.primary .github-star {
+    display: block;
+  }
+}
 .header .logo {
   margin: 1.25em 0 0 1em;
   max-width: 80%;
@@ -5305,6 +5316,12 @@ article table.table-parameters tbody tr td em {
 .footer .footer-links li {
   display: inline;
   margin-right: 1.5em;
+}
+.footer .footer-links li .github-star {
+  display: inline;
+  position: absolute;
+  margin-left: -8em;
+  margin-top: -1px;
 }
 .footer .footer-links a {
   border: 0;
@@ -7533,6 +7550,11 @@ input[type="range"]:focus + .rangeslider .rangeslider__handle {
 }
 .home .page-row.hero2 .scroll-prompt {
   display: none;
+}
+.home .page-row.hero2 .github-star {
+  position: absolute;
+  left: 325px;
+  margin-top: 3px;
 }
 /* large screen */
 @media all and (min-width: 1000px) {

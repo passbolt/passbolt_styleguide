@@ -4570,6 +4570,17 @@ input[type=email].fluid {
 .header .navigation.primary li .row.selected a:focus {
   color: #2894DF;
 }
+.header .navigation.primary .github-star {
+  display: none;
+  position: absolute;
+  right: 1em;
+  top: 5px;
+}
+@media all and (min-width: 600px) {
+  .header .navigation.primary .github-star {
+    display: block;
+  }
+}
 .header .logo {
   margin: 1.25em 0 0 1em;
   max-width: 80%;
@@ -4627,6 +4638,12 @@ input[type=email].fluid {
 .footer .footer-links li {
   display: inline;
   margin-right: 1.5em;
+}
+.footer .footer-links li .github-star {
+  display: inline;
+  position: absolute;
+  margin-left: -8em;
+  margin-top: -1px;
 }
 .footer .footer-links a {
   border: 0;

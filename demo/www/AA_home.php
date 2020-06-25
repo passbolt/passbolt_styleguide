@@ -5,6 +5,8 @@
 	<title>Passbolt | Open source password manager for teams</title>
 	<?php include('includes/meta/AA_meta.php'); ?>
 	<?php include('includes/headers/AA_header_scripts.php'); ?>
+    <!-- Place this tag in your head or just before your close body tag. -->
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
 	<script src="src/js/jquery-3.5.0.min.js"></script>
 </head>
 <body>

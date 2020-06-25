@@ -5,7 +5,10 @@
 			<div class="col12">
 				<div class="logo bigger no-img">
 					<h1><span>Passbolt</span></h1>
-				</div>
+                    <div class="github-star">
+                        <a class="github-button" href="https://github.com/passbolt/passbolt_api" data-size="large" data-show-count="true" aria-label="Star passbolt/passbolt_api on GitHub">Star</a>
+                    </div>
+                </div>
 				<div class="teaser-text">
 					<p>
 						The password manager your team was waiting for.

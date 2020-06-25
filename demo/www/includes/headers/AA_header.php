@@ -12,7 +12,10 @@
 					<li><a href="demo/AA_help.php"><span>Help</span></a></li>
                     <li><a href="demo/AA_cloud_free_trial.php" class="highlighted"><span>try it!</span></a></li>
                 </ul>
-				<button class="hidden">More</button>
+                <div class="github-star">
+                    <a class="github-button" href="https://github.com/passbolt/passbolt_api" data-color-scheme="no-preference: light; light: light; dark: dark;" data-size="large" data-show-count="true" aria-label="Star passbolt/passbolt_api on GitHub">Star</a>
+                </div>
+                <button class="hidden">More</button>
 				<ul class='hidden-links hidden'></ul>
 			</div>
 		</nav>
