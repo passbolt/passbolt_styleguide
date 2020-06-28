@@ -4412,7 +4412,7 @@ input[type=submit].button.processing {
   display: none;
   position: absolute;
   right: 1em;
-  top: 5px;
+  top: 4px;
 }
 @media all and (min-width: 600px) {
   .header .navigation.primary .github-star {
@@ -4740,7 +4740,7 @@ input[type=submit].button.processing {
   margin-left: -8em;
   margin-top: -1px;
 }
-.footer .footer-links a {
+.footer .footer-links a:not(.gh-btn):not(.gh-count) {
   border: 0;
 }
 /*

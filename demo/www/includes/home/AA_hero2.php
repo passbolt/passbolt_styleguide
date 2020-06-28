@@ -6,7 +6,13 @@
 				<div class="logo bigger no-img">
 					<h1><span>Passbolt</span></h1>
                     <div class="github-star">
-                        <a class="github-button" href="https://github.com/passbolt/passbolt_api" data-size="large" data-show-count="true" aria-label="Star passbolt/passbolt_api on GitHub">Star</a>
+                        <span class="github-btn github-stargazers github-btn-large">
+                            <a class="gh-btn" href="https://github.com/passbolt/passbolt_api" rel="noopener noreferrer" target="_blank" aria-label="Star passbolt/passbolt_api on GitHub">
+                                <span class="gh-ico" aria-hidden="true"></span>
+                                <span class="gh-text">Star</span>
+                            </a>
+                            <a class="gh-count" href="https://github.com/passbolt/passbolt_api" rel="noopener noreferrer" target="_blank" aria-label="1,349 stargazers on GitHub">1,349</a>
+                        </span>
                     </div>
                 </div>
 				<div class="teaser-text">
