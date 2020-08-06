@@ -155,11 +155,7 @@ class FoldersTreeItem extends React.Component {
    * @param {ReactEvent} event The event
    */
   handleDropEvent(event) {
-    // The user cannot drop the dragged content on a dragged item.
-    const isDroppingOnDraggedItem = this.props.draggedItems.folders.some(item => item.id === this.props.folder.id);
-    if (!isDroppingOnDraggedItem) {
-      this.props.onDrop(event, this.props.folder);
-    }
+    this.props.onDrop(event, this.props.folder);
 
     // The dragLeave event is not fired when a drop is happening. Cancel the state manually.
     const draggingOver = false;
