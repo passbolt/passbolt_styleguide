@@ -492,6 +492,9 @@ class FoldersTree extends React.Component {
                     </span>
                   </h3>
                 </div>
+                <div className="right-cell more-ctrl">
+                  <a onClick={this.handleRootContextualMenuEvent}><span>more</span></a>
+                </div>
               </div>
             </div>
           </div>
