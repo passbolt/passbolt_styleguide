@@ -214,6 +214,11 @@ class FoldersTree extends React.Component {
    * @param {Object} folder The dragged folder
    */
   handleFolderDragStartEvent(event, folder) {
+    // Firefox ESR 68 fix. Associate data to the drag event.
+    // Call event.preventDefault() on any drop functions.
+    // see example on MDN: https://developer.mozilla.org/en-US/docs/Web/API/Document/dragstart_event
+    event.dataTransfer.setData('text/plain', null);
+
     const dragging = true;
     const draggedItems = {
       folders: [folder],
