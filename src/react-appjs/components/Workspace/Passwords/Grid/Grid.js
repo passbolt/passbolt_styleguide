@@ -205,6 +205,11 @@ class Grid extends React.Component {
   handleDragStartEvent(event, resource) {
     let selectedResources = this.props.selectedResources;
 
+    // Firefox ESR 68 fix. Associate data to the drag event.
+    // Call event.preventDefault() on any drop functions.
+    // see example on MDN: https://developer.mozilla.org/en-US/docs/Web/API/Document/dragstart_event
+    event.dataTransfer.setData('text/plain', null);
+
     if (!this.isResourceSelected(resource)) {
       selectedResources = this.selectResource(resource);
     }

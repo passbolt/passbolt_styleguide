@@ -177,8 +177,14 @@ class FoldersTree extends React.Component {
 
   /**
    * Handle when the user is dropping the content on the title.
+   * @param {ReactEvent} event The event
    */
-  handleDropTitle() {
+  handleDropTitle(event) {
+    // Firefox ESR 68 fix. Prevent event default when data is associated to the drag event to avoid the user to be
+    // redirected to www.null.com
+    // see example on MDN: https://developer.mozilla.org/en-US/docs/Web/API/Document/dragstart_event
+    event.preventDefault();
+
     const folders = this.state.draggedItems.folders.map(folder => folder.id);
     const resources = this.state.draggedItems.resources.map(resource => resource.id);
     const folderParentId = null;
@@ -223,6 +229,11 @@ class FoldersTree extends React.Component {
    * @param {Object} folder The drop folder
    */
   handleFolderDropEvent(event, folder) {
+    // Firefox ESR 68 fix. Prevent event default when data is associated to the drag event to avoid the user to be
+    // redirected to www.null.com
+    // see example on MDN: https://developer.mozilla.org/en-US/docs/Web/API/Document/dragstart_event
+    event.preventDefault();
+
     const folders = this.state.draggedItems.folders.map(folder => folder.id);
     const resources = this.state.draggedItems.resources.map(resource => resource.id);
     const folderParentId = folder.id;
