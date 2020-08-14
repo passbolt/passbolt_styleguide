@@ -1,4 +1,4 @@
-const prod = {
+const config = {
   url: {
     'currentUser': '/users/me.json?api-version=v2',
     'settings': '/settings.json?contain[header]=0',
@@ -6,9 +6,8 @@ const prod = {
   }
 };
 
-// We can modify here the dev config if needed.
-const dev = prod;
-
-const config = process.env.NODE_ENV === 'development' ? dev : prod;
+// We could modify here the dev config if needed.
+//const dev = {};
+//const config = process.env.NODE_ENV === 'development' ? dev : prod;
 
 export default config;

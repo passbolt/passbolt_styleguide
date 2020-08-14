@@ -1,8 +1,9 @@
+<?php include('../../legacy/_includes/bootstrap.php'); ?><!doctype html>
 <html lang="en" class="version alpha">
 <head>
 	<meta charset="UTF-8" />
 	<title>Directional Tooltips with CSS</title>
-	<link rel="stylesheet" type="text/css" href="src/css/themes/default/api/main.css">
+    <link rel="stylesheet" type="text/css" href="../../../src/css/themes/<?= $theme; ?>/api_main.css">
 </head>
 <body>
 <div style="width:640px;margin:auto">

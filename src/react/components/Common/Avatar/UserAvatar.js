@@ -14,7 +14,6 @@
 import React, {Component} from "react";
 import PropTypes from "prop-types";
 import AppContext from "../../../contexts/AppContext";
-import Config from "../../../legacy/config/config";
 
 class UserAvatar extends Component {
   /**
@@ -43,8 +42,13 @@ class UserAvatar extends Component {
   }
 
   formatUrl(url) {
-    const trustedDomain = Config.read("user.settings.trustedDomain");
-    return `${trustedDomain}/${url}`;
+    let baseUrl;
+    if (this.context && this.context.user && this.context.user["user.settings.trustedDomain"]) {
+      baseUrl = this.context.user["user.settings.trustedDomain"];
+    } else {
+      baseUrl = '';
+    }
+    return `${baseUrl}/${url}`;
   }
 
   getPropsUrl() {
@@ -59,7 +63,7 @@ class UserAvatar extends Component {
         return this.formatUrl(this.getPropsUrl());
       }
     }
-    return this.formatUrl('/img/avatar/user.png');
+    return this.formatUrl('img/avatar/user.png');
   }
 
   handleError() {
@@ -68,12 +72,15 @@ class UserAvatar extends Component {
   }
 
   getAltText() {
+    if (!this.props.user.profile) {
+      return '...';
+    }
     return `Avatar of user ${this.props.user.profile.first_name} ${this.props.user.profile.last_name}.`;
   }
 
   render() {
     return(
-      <div className={this.props.className? this.props.className : "avatar user-avatar" }>
+      <div className={this.props.className}>
         <img src={this.getAvatarSrc()} onError={this.handleError.bind(this)} alt={this.getAltText()}/>
       </div>
     )
@@ -81,6 +88,10 @@ class UserAvatar extends Component {
 }
 
 UserAvatar.contextType = AppContext;
+
+UserAvatar.defaultProps = {
+  className: "avatar user-avatar"
+};
 
 UserAvatar.propTypes = {
   user: PropTypes.object,

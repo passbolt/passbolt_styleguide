@@ -15,8 +15,8 @@ import React from "react";
 import PropTypes from "prop-types";
 import moment from "moment";
 import Config from "../../../../legacy/config/config";
-import UserAvatar from "../../../Common/UserAvatar/UserAvatar";
-import GroupAvatar from "../../../Common/UserAvatar/GroupAvatar";
+import UserAvatar from "../../../Common/Avatar/UserAvatar";
+import GroupAvatar from "../../../Common/Avatar/GroupAvatar";
 
 class FolderSidebarActivitySection extends React.Component {
 

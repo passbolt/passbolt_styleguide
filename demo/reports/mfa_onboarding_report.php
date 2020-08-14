@@ -25,12 +25,13 @@
     <link rel="icon" href="src/img/webroot/favicon_128.png" sizes="128x128" />
     <link rel="icon" href="src/img/webroot/favicon_192.png" sizes="192x192" />
     <link rel="icon" href="src/img/webroot/favicon_228.png" sizes="228x228" />
-    <link rel="stylesheet" type="text/css" href="src/css/themes/default/api_main.css">
+    <link rel="stylesheet" type="text/css" href="src/css/themes/default/api_reports.css">
     <script src="src/js/jquery-3.5.0.min.js"></script>
     <script src="src/js/passbolt-reports.min.js"></script>
 </head>
-<body class="report report-html">
-<div id="container" class="report report-html">
+<body>
+<div id="container" class="page printable-report">
+    <div class="page-wrapper">
     <div class="grid">
         <div class="row report-header">
             <div class="col6 creator-info">
@@ -129,7 +130,7 @@
             </div>
         </div>
     </div>
+    </div>
 </div>
-
 </body>
 </html>

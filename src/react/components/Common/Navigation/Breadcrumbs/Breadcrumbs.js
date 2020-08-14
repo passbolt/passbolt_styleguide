@@ -12,6 +12,7 @@
  * @since         2.13.0
  */
 import React, {Component} from "react";
+import {Link} from "react-router-dom";
 import PropTypes from "prop-types";
 
 class Breadcrumbs extends Component {
@@ -21,28 +22,6 @@ class Breadcrumbs extends Component {
    */
   constructor(props) {
     super(props);
-    this.state = this.getDefaultState();
-  }
-
-  /**
-   * Get default state
-   * @returns {*}
-   */
-  getDefaultState() {
-    return {
-
-    }
-  }
-
-  getItems() {
-    const items = [];
-
-    const allItem = {
-      name: "All items"
-    };
-    items.push(allItem);
-
-    return items;
   }
 
   /**
@@ -50,19 +29,23 @@ class Breadcrumbs extends Component {
    * @returns {JSX}
    */
   render() {
-    const items = this.getItems();
     let index = 0;
-
     return (
       <div className="breadcrumbs">
         <ul className="menu">
-          {(items && items.map((item) => {
+          {(this.props.items && this.props.items.map((item) => {
             index++;
             return (
               <li key={index}>
-                <div className="main-cell">
-                  {item.name}
-                </div>
+                {item.link && item.name &&
+                <Link to={item.link}>{item.name}</Link>
+                }
+                {item.url && item.name &&
+                  <a href={item.url}>{item.name}</a>
+                }
+                {!item.url && !item.link && item.name &&
+                  <a href="#">{item.name}</a>
+                }
               </li>
             );
           }))}
@@ -73,8 +56,8 @@ class Breadcrumbs extends Component {
 }
 
 Breadcrumbs.propTypes = {
+  items: PropTypes.array
 };
-
 
 export default Breadcrumbs;
 

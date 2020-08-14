@@ -15,10 +15,10 @@ import React, {Component} from "react";
 import PropTypes from "prop-types";
 
 import AppContext from "../../../contexts/AppContext";
-import ErrorDialog from "../../Common/ErrorDialog/ErrorDialog";
-import DialogWrapper from "../../Common/DialogWrapper/DialogWrapper";
-import FormSubmitButton from "../../Common/FormSubmitButton/FormSubmitButton";
-import FormCancelButton from "../../Common/FormSubmitButton/FormCancelButton";
+import ErrorDialog from "../../Common/Dialog/ErrorDialog/ErrorDialog";
+import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
+import FormSubmitButton from "../../Common/Inputs/FormSubmitButton/FormSubmitButton";
+import FormCancelButton from "../../Common/Inputs/FormSubmitButton/FormCancelButton";
 
 class FolderRenameDialog extends Component {
   /**

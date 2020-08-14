@@ -1,0 +1,33 @@
+table.table-info,
+table.table-info.vertical {
+    border-collapse: separate;
+
+    td {
+        padding: .625em;
+        padding-right: 1.25em;
+        color: @font-dim;
+
+        &.warning {
+            background: @background-warning;
+        }
+        &.error {
+            background: @background-error;
+        }
+        .alt.side {
+            color: @font-dim;
+            float: right;
+        }
+        .alt.side:before {
+            content: "(";
+        }
+        .alt.side:after {
+            content: ")";
+        }
+    }
+
+    td + td {
+        color: @font-default;
+        padding-right: .625em;
+    }
+
+}

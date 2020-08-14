@@ -13,7 +13,7 @@
  */
 import React, { Component} from "react";
 
-import ErrorDialog from "./components/Common/ErrorDialog/ErrorDialog";
+import ErrorDialog from "./components/Common/Dialog/ErrorDialog/ErrorDialog";
 import FolderCreateDialog from "./components/Folder/FolderCreateDialog/FolderCreateDialog";
 import FolderRenameDialog from "./components/Folder/FolderRenameDialog/FolderRenameDialog";
 import PassphraseEntryDialog from "./components/Passphrase/PassphraseEntryDialog/PassphraseEntryDialog";

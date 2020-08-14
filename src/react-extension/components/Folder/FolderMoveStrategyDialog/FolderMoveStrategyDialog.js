@@ -14,9 +14,9 @@
 import React, {Component} from "react";
 import PropTypes from "prop-types";
 import AppContext from "../../../contexts/AppContext";
-import FormSubmitButton from "../../Common/FormSubmitButton/FormSubmitButton";
-import FormCancelButton from "../../Common/FormSubmitButton/FormCancelButton";
-import DialogWrapper from "../../Common/DialogWrapper/DialogWrapper";
+import FormSubmitButton from "../../Common/Inputs/FormSubmitButton/FormSubmitButton";
+import FormCancelButton from "../../Common/Inputs/FormSubmitButton/FormCancelButton";
+import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
 
 class FolderMoveStrategyDialog extends Component {
   /**

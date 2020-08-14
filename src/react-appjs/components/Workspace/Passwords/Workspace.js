@@ -13,16 +13,20 @@
  */
 import React, {Component, Fragment} from "react";
 import PropTypes from "prop-types";
-import Logo from "../../Common/Header/Logo";
-import SearchBar from "../../Common/Header/SearchBar";
-import ProfileMenu from "../../Common/Header/ProfileMenu";
+
+import Logo from "../../Common/Navigation/Header/Logo";
+import SearchBar from "../../Common/Navigation/Search/SearchBar";
+import UserBadgeMenu from "../../Common/Navigation/Header/UserBadgeMenu";
+import Breadcrumbs from "../../Common/Navigation/Breadcrumbs/Breadcrumbs";
+
 import FoldersTree from "./FoldersTree/FoldersTree";
 import FoldersTreeItemContextualMenu from "./FoldersTree/FoldersTreeItemContextualMenu";
 import Grid from "./Grid/Grid";
 import FolderSidebar from "./FolderSidebar/FolderSidebar";
-import Breadcrumbs from "../../Common/Breadcrumbs/Breadcrumbs";
 import PasswordSidebar from "./PasswordSidebar/PasswordSidebar";
 import FoldersTreeRootFolderContextualMenu from "./FoldersTree/FoldersTreeRootFolderContextualMenu";
+import AppContext from "../../../../react/contexts/AppContext";
+import UserAvatar from "../../../../react/components/Common/Avatar/UserAvatar";
 
 class Workspace extends Component {
   /**
@@ -273,7 +277,7 @@ class Workspace extends Component {
             onSearch={this.handleSearchEvent}
             placeholder="Search passwords"
             search={this.state.search}/>
-          <ProfileMenu onClick={this.onMenuItemClick.bind(this)}/>
+          <UserBadgeMenu onClick={this.onMenuItemClick.bind(this)}/>
         </div>
         <div className="header third">
           <div className="col1 main-action-wrapper">
@@ -332,6 +336,8 @@ class Workspace extends Component {
     );
   }
 }
+
+Workspace.contextType = AppContext;
 
 Workspace.propTypes = {
   onMenuItemClick: PropTypes.func,

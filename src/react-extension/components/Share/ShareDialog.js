@@ -14,10 +14,10 @@
 import React, {Component} from "react";
 import PropTypes from "prop-types";
 
-import FormSubmitButton from "../Common/FormSubmitButton/FormSubmitButton";
-import DialogWrapper from "../Common/DialogWrapper/DialogWrapper";
-import FormCancelButton from "../Common/FormSubmitButton/FormCancelButton";
-import ErrorDialog from "../Common/ErrorDialog/ErrorDialog";
+import FormSubmitButton from "../Common/Inputs/FormSubmitButton/FormSubmitButton";
+import DialogWrapper from "../Common/Dialog/DialogWrapper/DialogWrapper";
+import FormCancelButton from "../Common/Inputs/FormSubmitButton/FormCancelButton";
+import ErrorDialog from "../Common/Dialog/ErrorDialog/ErrorDialog";
 import Autocomplete from "../Common/Autocomplete/Autocomplete";
 import ShareChanges from "./Utility/ShareChanges";
 import SharePermissionItem from "./SharePermissionItem";
@@ -165,7 +165,7 @@ class ShareDialog extends Component {
 
   /**
    * handleServiceError
-   * @param {string} messagef
+   * @param {string} message
    * @return {void}
    */
   handleServiceError (message) {

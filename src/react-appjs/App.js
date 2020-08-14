@@ -1,7 +1,7 @@
 import React, { Component} from "react";
-import MainMenu from "./components/Common/MainMenu/MainMenu";
+import MainMenu from "./components/Common/Navigation/MainMenu/MainMenu";
 import ReportsWorkspace from "./components/Workspace/Reports/ReportsWorkspace";
-import Footer from "./components/Common/Footer/Footer";
+import Footer from "./components/Common/Navigation/Footer/Footer";
 import AppContext from "./contexts/AppContext";
 import Workspace from "./components/Workspace/Passwords/Workspace";
 
@@ -31,7 +31,6 @@ class App extends Component{
 
   componentDidMount() {
     this.setState({"loading": false});
-
 
     this.initServerSettingsWithDefaults();
     this.getSettings();
@@ -80,6 +79,7 @@ class App extends Component{
   }
 
   getSettings() {
+    console.log(config);
     fetch(config.url.settings)
     .then(response => {
       return response.json()

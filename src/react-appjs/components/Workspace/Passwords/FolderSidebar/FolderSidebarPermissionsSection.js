@@ -13,8 +13,8 @@
  */
 import React from "react";
 import PropTypes from "prop-types";
-import UserAvatar from "../../../Common/UserAvatar/UserAvatar";
-import GroupAvatar from "../../../Common/UserAvatar/GroupAvatar";
+import UserAvatar from "../../../Common/Avatar/UserAvatar";
+import GroupAvatar from "../../../Common/Avatar/GroupAvatar";
 import Icon from "../../../Common/Icons/Icon";
 
 class FolderSidebarPermissionsSection extends React.Component {

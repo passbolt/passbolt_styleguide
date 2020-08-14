@@ -5548,18 +5548,31 @@ table.table-info.vertical td + td {
 /* horizontal tableview */
 table.table-info.horizontal {
   width: 100%;
-  border-collapse: separate;
+  border-collapse: collapse;
   padding: 0;
   border: 1px solid #DDD;
   margin-bottom: 1em;
 }
+table.table-info.horizontal.with-borders td,
+table.table-info.horizontal.with-borders th {
+  border-right: 1px solid #DDD;
+}
 table.table-info.horizontal td,
 table.table-info.horizontal th {
-  padding: 0.5em;
+  padding: 0.5em 0.5em 0.5em 0.75em;
   margin: 0;
 }
 table.table-info.horizontal th {
   border-bottom: 1px solid #DDD;
+}
+table.table-info.horizontal th a {
+  display: block;
+  border: 0;
+}
+table.table-info.horizontal th a.sortable .svg-icon svg {
+  top: 0.15em;
+  position: relative;
+  margin-left: 0.5em;
 }
 table.table-info.horizontal thead tr {
   background: #FFF;
@@ -5569,6 +5582,35 @@ table.table-info.horizontal tbody {
 }
 table.table-info.horizontal tbody tr:nth-child(odd) {
   background: #FFF;
+}
+table.table-info.horizontal tbody tr:hover {
+  background: #f8f8f8;
+}
+.table-info-pagination .pagination-limit {
+  margin-top: -0.5em;
+  float: left;
+}
+.table-info-pagination .pagination-limit label {
+  float: left;
+  font-weight: normal;
+}
+.table-info-pagination .pagination-limit select {
+  float: left;
+  margin: 0.35em;
+}
+.table-info-pagination .pagination-pages {
+  float: right;
+}
+.table-info-pagination .pagination-pages .page-location {
+  float: left;
+}
+.table-info-pagination .pagination-pages .page-buttons {
+  float: right;
+}
+.table-info-pagination .pagination-pages .button {
+  float: left;
+  margin: -0.5em 0 0 0.75em;
+  padding: 0.35em 0.75em;
 }
 /**
  * Tooltips!

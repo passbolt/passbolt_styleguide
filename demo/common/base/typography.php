@@ -1,9 +1,9 @@
-<!doctype html>
-<html lang="en">
-<head>
-	<meta charset="UTF-8">
-	<title>Form input tests</title>
-	<link rel="stylesheet" type="text/css" href="src/css/themes/default/api/main.css">
+<?php include('../../legacy/_includes/bootstrap.php'); ?><!doctype html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Form input tests</title>
+    <link rel="stylesheet" type="text/css" href="../../../src/css/themes/<?= $theme; ?>/api_main.css">
 </head>
 <body>
 	<div style="width:640px;margin:auto">

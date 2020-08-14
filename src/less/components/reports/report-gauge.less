@@ -1,0 +1,41 @@
+.report-widget {
+    // define widget content
+    &.gauge {
+        div.widget-content {
+            // Fixes a bug with the graph library when the value is set to 0%.
+            // Sets a fixed min-height to compensate.
+            min-height: 220.567px !important;
+        }
+        p.widget-description {
+            color: @grey-dark;
+            text-align: center;
+            margin-top: -20px;
+        }
+    }
+
+    &.simple-number {
+        text-align: center;
+        .widget-content {
+            width: 145px;
+            height: 145px;
+            background-color: @grey-lightest;
+            border-radius: 50%;
+            display: inline-block;
+            margin-top: 20px;
+            border: 5px solid @grey-lightest; // Do not remove. Used for printing.
+
+            span {
+                font-size: 27px;
+                margin-top: 51px;
+                display: inline-block;
+                color: black;
+            }
+        }
+
+        p.widget-description {
+            color: @grey-dark;
+            text-align: center;
+            margin-top: 25px;
+        }
+    }
+}

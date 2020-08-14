@@ -1,9 +1,9 @@
-<?php include('_includes/bootstrap.php'); ?><!doctype html><html lang="en">
+<?php include('../../legacy/_includes/bootstrap.php'); ?><!doctype html>
 <head>
     <meta charset="utf-8">
     <title>Vanilla JavaScript autoComplete</title>
-    <link rel="stylesheet" type="text/css" href="src/css/themes/default/api/main.css">
-    <script src="src/js/autocomplete.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../../src/css/themes/<?= $theme; ?>/api_main.css">
+    <script src="../../../src/js/autocomplete.js"></script>
 </head>
 <body>
 <div id="container" class="page setup">
