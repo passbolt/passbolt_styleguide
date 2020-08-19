@@ -15,7 +15,7 @@ import React, {Component} from "react";
 import PropTypes from "prop-types";
 
 import DialogCloseButton from "../DialogCloseButton/DialogCloseButton";
-import TooltipHtml from "../Tooltip/TooltipHtml";
+import TooltipHtml from "../../Tooltip/TooltipHtml";
 
 class DialogWrapper extends Component {
   /**
