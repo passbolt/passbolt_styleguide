@@ -45,7 +45,7 @@ class PasswordSidebarTagSection extends React.Component {
    */
   bindCallbacks() {
     this.handleTitleClickEvent = this.handleTitleClickEvent.bind(this);
-    this.displayInputTagEditor = this.displayInputTagEditor.bind(this);
+    this.toggleInputTagEditor = this.toggleInputTagEditor.bind(this);
   }
 
   /**
@@ -59,7 +59,7 @@ class PasswordSidebarTagSection extends React.Component {
   /**
    * Display or not the input tag editor
    */
-  displayInputTagEditor() {
+  toggleInputTagEditor() {
     const showTagEditor = !this.state.showTagEditor;
     this.setState({showTagEditor});
   }
@@ -69,6 +69,7 @@ class PasswordSidebarTagSection extends React.Component {
    * @returns {JSX}
    */
   render() {
+    const isOwner = this.props.resource.permission.type === 15;
 
     return (
       <div className={`detailed-information accordion sidebar-section ${this.state.open ? "" : "closed"}`}>
@@ -76,7 +77,7 @@ class PasswordSidebarTagSection extends React.Component {
           <h4><a onClick={this.handleTitleClickEvent} role="button">Tags</a></h4>
         </div>
         <div className="accordion-content">
-          <a className="edit_tags_button section-action" onClick={this.displayInputTagEditor}>
+          <a className="edit_tags_button section-action" onClick={this.toggleInputTagEditor}>
             <Icon name="edit"></Icon>
             <span className="visuallyhidden">edit</span>
           </a>
@@ -84,14 +85,14 @@ class PasswordSidebarTagSection extends React.Component {
           {!this.state.showTagEditor &&
           <TagItemViewer
             tags={this.props.resource.tags}
-            displayInputTagEditor={this.displayInputTagEditor}/>
+            toggleInputTagEditor={this.toggleInputTagEditor}/>
           }
 
           {this.state.showTagEditor &&
           <TagEditor
             tags={this.props.resource.tags}
-            isOwner={this.props.resource.permission.type === 15}
-            displayInputTagEditor={this.displayInputTagEditor}
+            isOwner={isOwner}
+            toggleInputTagEditor={this.toggleInputTagEditor}
             resourceId={this.props.resource.id}/>
           }
 

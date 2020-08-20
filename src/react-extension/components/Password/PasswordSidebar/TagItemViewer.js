@@ -35,7 +35,7 @@ class TagItemViewer extends React.Component {
       <div>
         {!hasTags &&
         <em className="empty-content"
-          onClick={this.props.displayInputTagEditor}>There is no tag, click here to add one</em>
+          onClick={this.props.toggleInputTagEditor}>There is no tag, click here to add one</em>
         }
         {hasTags &&
         <ul className="tags tags-list">
@@ -53,6 +53,7 @@ class TagItemViewer extends React.Component {
 
 TagItemViewer.propTypes = {
   tags: PropTypes.array,
+  toggleInputTagEditor: PropTypes.func
 };
 
 export default TagItemViewer;

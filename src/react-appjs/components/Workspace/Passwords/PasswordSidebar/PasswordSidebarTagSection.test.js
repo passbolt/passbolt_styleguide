@@ -69,7 +69,7 @@ const getDummyResource = function () {
       },
       {
         "id": "0a710aba-4aa9-439b-a434-5f9f6c9f6442",
-        "slug": "dede",
+        "slug": "tardis",
         "is_shared": false
       },
       {
@@ -86,6 +86,41 @@ const getDummyResource = function () {
         "id": "5c6bb083-a499-40ff-a639-6593c87a24bd",
         "slug": "There’s always something to look at if you open your eyes",
         "is_shared": false
+      }
+    ]
+  };
+};
+
+const getDummyResourceWithLastSharedTagNotOwned = function () {
+  return {
+    "id": "8e3874ae-4b40-590b-968a-418f704b9d9a",
+    "name": "apache",
+    "username": "www-data",
+    "uri": "http://www.apache.org/",
+    "description": "Apache is the world's most used web server software.",
+    "deleted": false,
+    "created": "2019-12-05T13:38:43+00:00",
+    "modified": "2019-12-06T13:38:43+00:00",
+    "created_by": "f848277c-5398-58f8-a82a-72397af2d450",
+    "modified_by": "f848277c-5398-58f8-a82a-72397af2d450",
+    "permission": {
+      type: 10
+    },
+    "tags": [
+      {
+        "id": "d4582ccc-1869-43ce-b47f-1c957764e654",
+        "slug": "#test",
+        "is_shared": true
+      },
+      {
+        "id": "0a710aba-4aa9-439b-a434-5f9f6c9f6442",
+        "slug": "tardis",
+        "is_shared": false
+      },
+      {
+        "id": "37d7eeca-71d5-46fb-9f08-831e2bde7781",
+        "slug": "#gallifrey",
+        "is_shared": true
       }
     ]
   };
@@ -111,6 +146,7 @@ const getDummyResourceEmptyTag = function () {
 
 describe("PasswordSidebarTag", () => {
   const resource = getDummyResource();
+  const resourceLastSharedTagNotOwned = getDummyResourceWithLastSharedTagNotOwned();
   const resourceEmptyTag = getDummyResourceEmptyTag();
 
   const getAppContext = function (appContext) {
@@ -510,4 +546,157 @@ describe("PasswordSidebarTag", () => {
     });
 
   });
+
+  it("Remove a tag using the edit icon", () => {
+    const {container} = renderPasswordSidebarTagSection(resource);
+
+    // Click to expand tags
+    const leftClick = {button: 0};
+    const sidebar = container.querySelector(".sidebar-section");
+    fireEvent.click(sidebar, leftClick);
+
+    // Edit icon exists
+    const editIcon = container.querySelector(".edit_tags_button");
+    expect(editIcon).not.toBeNull();
+    fireEvent.click(editIcon, leftClick);
+
+    // Editor input tag exists
+    const editorTagInput = container.querySelector(".tag-editor-input");
+    expect(editorTagInput).not.toBeNull();
+
+    // number of tags and check all name displayed
+    const tags = container.querySelectorAll(".tag");
+    expect(tags).not.toBeNull();
+    expect(tags.length).toBe(6);
+
+    tags.forEach(function (value, index) {
+      expect(value.textContent).toBe(resource.tags[index].slug);
+    });
+    // delete a tag
+    const deleteIcon = container.querySelector(".tag-delete");
+    fireEvent.click(deleteIcon, leftClick);
+
+    // number of tags and check all name displayed except the one deleted
+    const tagsWithOneElementDeleted = container.querySelectorAll(".tag");
+    expect(tagsWithOneElementDeleted).not.toBeNull();
+    expect(tagsWithOneElementDeleted.length).toBe(5);
+    tagsWithOneElementDeleted.forEach(function (value, index) {
+      if(index > 1) {
+        expect(value.textContent).toBe(resource.tags[index+1].slug);
+      } else {
+        expect(value.textContent).toBe(resource.tags[index].slug);
+      }
+    });
+
+  });
+
+  it("Remove a tag using the keyboard", () => {
+    const {container} = renderPasswordSidebarTagSection(resource);
+
+    // Click to expand tags
+    const leftClick = {button: 0};
+    const sidebar = container.querySelector(".sidebar-section");
+    fireEvent.click(sidebar, leftClick);
+
+    // Edit icon exists
+    const editIcon = container.querySelector(".edit_tags_button");
+    expect(editIcon).not.toBeNull();
+    fireEvent.click(editIcon, leftClick);
+
+    // Editor input tag exists
+    const editorTagInput = container.querySelector(".tag-editor-input");
+    expect(editorTagInput).not.toBeNull();
+
+    // number of tags and check all name displayed
+    const tags = container.querySelectorAll(".tag");
+    expect(tags).not.toBeNull();
+    expect(tags.length).toBe(6);
+
+    tags.forEach(function (value, index) {
+      expect(value.textContent).toBe(resource.tags[index].slug);
+    });
+    // delete a tag
+    const backspaceKeyDown = {keyCode: 8};
+    expect(editorTagInput.textContent).toBe("");
+    fireEvent.keyDown(editorTagInput, backspaceKeyDown);
+
+    // number of tags and check all name displayed except the one deleted
+    const tagsWithOneElementDeleted = container.querySelectorAll(".tag");
+    expect(tagsWithOneElementDeleted).not.toBeNull();
+    expect(tagsWithOneElementDeleted.length).toBe(5);
+    tagsWithOneElementDeleted.forEach(function (value, index) {
+        expect(value.textContent).toBe(resource.tags[index].slug);
+    });
+
+  });
+
+  it("Cannot remove shared tags on resources not owned", () => {
+    const {container} = renderPasswordSidebarTagSection(resourceLastSharedTagNotOwned);
+
+    // Click to expand tags
+    const leftClick = {button: 0};
+    const sidebar = container.querySelector(".sidebar-section");
+    fireEvent.click(sidebar, leftClick);
+
+    // Edit icon exists
+    const editIcon = container.querySelector(".edit_tags_button");
+    expect(editIcon).not.toBeNull();
+    fireEvent.click(editIcon, leftClick);
+
+    // Editor input tag exists
+    const editorTagInput = container.querySelector(".tag-editor-input");
+    expect(editorTagInput).not.toBeNull();
+
+    // number of tags and check all name displayed
+    const tags = container.querySelectorAll(".tag");
+    expect(tags).not.toBeNull();
+    expect(tags.length).toBe(3);
+
+    tags.forEach(function (value, index) {
+      expect(value.textContent).toBe(resourceLastSharedTagNotOwned.tags[index].slug);
+    });
+    // try to delete a tag
+    const backspaceKeyDown = {keyCode: 8};
+    expect(editorTagInput.textContent).toBe("");
+    fireEvent.keyDown(editorTagInput, backspaceKeyDown);
+
+    // number of tags and check all name displayed
+    const tagsWithOneElementDeleted = container.querySelectorAll(".tag");
+    expect(tagsWithOneElementDeleted).not.toBeNull();
+    expect(tagsWithOneElementDeleted.length).toBe(3);
+    tagsWithOneElementDeleted.forEach(function (value, index) {
+      expect(value.textContent).toBe(resourceLastSharedTagNotOwned.tags[index].slug);
+    });
+
+    // error message exists
+    const errorInputTag = container.querySelector(".error");
+    expect(errorInputTag).not.toBeNull();
+    expect(errorInputTag.textContent).toBe("This shared tag can't be deleted, you are not the owner");
+
+  });
+
+  it("Hide tag delete icon for resources not owned", () => {
+    const {container} = renderPasswordSidebarTagSection(resourceLastSharedTagNotOwned);
+
+    // Click to expand tags
+    const leftClick = {button: 0};
+    const sidebar = container.querySelector(".sidebar-section");
+    fireEvent.click(sidebar, leftClick);
+
+    // Edit icon exists
+    const editIcon = container.querySelector(".edit_tags_button");
+    expect(editIcon).not.toBeNull();
+    fireEvent.click(editIcon, leftClick);
+
+    // Editor input tag exists
+    const editorTagInput = container.querySelector(".tag-editor-input");
+    expect(editorTagInput).not.toBeNull();
+
+    // number of close icon (only the personal tag)
+    const closeIcon = container.querySelectorAll(".tag-delete");
+    expect(closeIcon).not.toBeNull();
+    expect(closeIcon.length).toBe(1);
+
+  });
+
 });

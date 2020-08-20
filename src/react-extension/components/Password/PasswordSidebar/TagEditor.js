@@ -16,6 +16,8 @@ import PropTypes from "prop-types";
 import Icon from "../../Common/Icons/Icon";
 import AppContext from "../../../contexts/AppContext";
 
+const TAG_MAX_LENGTH = 128;
+
 class TagEditor extends React.Component {
 
   /**
@@ -64,6 +66,8 @@ class TagEditor extends React.Component {
     this.handleEditorClickEvent = this.handleEditorClickEvent.bind(this);
     this.saveTags = this.saveTags.bind(this);
     this.addTagOnEnterOrComma = this.addTagOnEnterOrComma.bind(this);
+    this.deleteTagOnBackspace = this.deleteTagOnBackspace.bind(this);
+    this.deleteTag = this.deleteTag.bind(this);
   }
 
   componentDidMount() {
@@ -84,7 +88,7 @@ class TagEditor extends React.Component {
     if (this.elementRef.current.contains(event.target)) {
       return;
     }
-    this.props.displayInputTagEditor();
+    this.props.toggleInputTagEditor();
   }
 
   /**
@@ -108,26 +112,8 @@ class TagEditor extends React.Component {
    * @param tag
    * @returns {boolean}
    */
-  isTagEditable(tag) {
+  isTagDeletable(tag) {
     return this.props.isOwner || !tag.is_shared
-  }
-
-  /**
-   * Check if the user have the rights to add a tag
-   * @param tag
-   * @returns {boolean}
-   */
-  isTagAddable(tag) {
-    if (!this.props.isOwner && tag.is_shared) {
-      this.setErrorMessage("This shared tag can't be added, you are not the owner");
-      return false;
-    }
-    if (tag.slug.length > 128) {
-      this.setErrorMessage("This tag can't be added, the length cannot exceeds 128");
-      return false;
-    }
-    this.setErrorMessage("");
-    return true;
   }
 
   /**
@@ -138,11 +124,8 @@ class TagEditor extends React.Component {
   isTagAlreadyPresent(slug) {
     const tagAlreadyPresent = this.state.tags.filter(tag => (tag.slug === slug)).shift();
     if (tagAlreadyPresent) {
-      this.blinkTagAlreadyPresent(tagAlreadyPresent.slug);
-      this.setErrorMessage("This tag is already present");
       return true;
     }
-    this.setErrorMessage("");
     return false;
   }
 
@@ -166,23 +149,60 @@ class TagEditor extends React.Component {
   }
 
   /**
+   * if the tag exceed the max length
+   * return true
+   * else false
+   * @param slug
+   * @returns {boolean}
+   */
+  isTagExceedMaxLength(slug) {
+    return slug.length > TAG_MAX_LENGTH
+  }
+
+  /**
+   * Check if the tag is valid or not
+   * @param slug
+   * @returns {boolean}
+   */
+  validateTag(slug) {
+    if (!slug && slug.trim().length === 0) {
+      return false;
+    }
+    if (this.isTagExceedMaxLength(slug.trim())) {
+      this.setErrorMessage(`This tag can't be added, the length cannot exceeds ${TAG_MAX_LENGTH}`);
+      return false;
+    }
+    if (!this.props.isOwner && slug.startsWith("#")) {
+      this.setErrorMessage("This shared tag can't be added, you are not the owner");
+      return false;
+    }
+    if (this.isTagAlreadyPresent(slug.trim())) {
+      this.blinkTagAlreadyPresent(slug.trim());
+      this.setErrorMessage("This tag is already present");
+      this.inputTagRef.current.textContent = "";
+      return false;
+    }
+    return true;
+  }
+
+  /**
    * Check if the tag can be insert or not
    */
   checkTagToInsert() {
     const inputTag = this.inputTagRef.current.textContent;
     const tags = this.state.tags;
-    if (inputTag && inputTag.trim().length !== 0) {
+    if (this.validateTag(inputTag)) {
       const tag = this.createTag(inputTag.trim());
-      if (this.isTagAddable(tag) && !this.isTagAlreadyPresent(inputTag.trim())) {
-        tags.push(tag);
-        this.setState({tags});
-      }
+      tags.push(tag);
+      this.setState({tags});
+      this.setErrorMessage("");
       this.inputTagRef.current.textContent = "";
     }
   }
 
   /**
    * Add tag if key enter or comma
+   * @param event
    */
   addTagOnEnterOrComma(event) {
     // Code for enter is 13 and for comma is 44
@@ -193,12 +213,59 @@ class TagEditor extends React.Component {
   }
 
   /**
+   * Check if the tag can be deleted or not
+   */
+  checkTagToDelete() {
+    const inputTag = this.inputTagRef.current.textContent;
+    if(!inputTag) {
+      const tag = this.state.tags.slice(-1)[0];
+      if (this.isTagDeletable(tag)) {
+        const tags = this.state.tags;
+        tags.pop();
+        this.setState({tags});
+        this.setErrorMessage("");
+      } else {
+        this.setErrorMessage("This shared tag can't be deleted, you are not the owner");
+      }
+    }
+  }
+
+  /**
+   * Delete the tag
+   * @param indexTag
+   */
+  deleteTag(event, indexTag) {
+    // When click on the close button with a long tag cut
+    // the click is detected out of the element and the editor close.
+    // To fix that an immediate stop propagation enable to avoid the editor close.
+    // Need absolutely an immediate propagation to stop other listeners.
+    event.nativeEvent.stopImmediatePropagation();
+    const tags = this.state.tags;
+    tags.splice(indexTag, 1);
+    this.setState({tags});
+  }
+
+  /**
+   * Delete tag if key backspace
+   * @param event
+   */
+  deleteTagOnBackspace(event) {
+    if(event.which === 8) {
+      this.checkTagToDelete();
+    }
+  }
+
+  /**
    * Save all tags
    */
   async saveTags() {
     this.setState({isSubmitted: true})
     this.checkTagToInsert();
-    await this.updateTags();
+    if (!this.state.errorMessage) {
+      await this.updateTags();
+    } else {
+      this.setState({isSubmitted: false});
+    }
   }
 
   /**
@@ -214,7 +281,7 @@ class TagEditor extends React.Component {
       await this.context.port.request("passbolt.resource.update-tags", data);
       this.displayNotification("success", "Tags has been added successfully");
       this.setState({isSubmitted: false})
-      this.props.displayInputTagEditor();
+      this.props.toggleInputTagEditor();
     } catch (error) {
       // Unexpected error occurred.
       console.error(error);
@@ -251,8 +318,8 @@ class TagEditor extends React.Component {
                 <div key={index} className="tag">
                   <span
                     className={`tag-content ellipsis ${this.state.tagAlreadyPresent === tag.slug ? "blink-fast" : ""}`}>{tag.slug}</span>
-                  {this.isTagEditable(tag) &&
-                  <span className="tag-delete "><Icon name="close"></Icon></span>
+                  {this.isTagDeletable(tag) &&
+                  <span className="tag-delete" onClick={ (event) => this.deleteTag(event, index)}><Icon name="close"></Icon></span>
                   }
                 </div>
               )
@@ -260,10 +327,10 @@ class TagEditor extends React.Component {
             </div>
             }
             <div ref={this.inputTagRef} className="tag-editor-input" contentEditable={!this.state.isSubmitted}
-                 suppressContentEditableWarning="true" onKeyPress={this.addTagOnEnterOrComma}>
+                 suppressContentEditableWarning="true" onKeyPress={this.addTagOnEnterOrComma} onKeyDown={this.deleteTagOnBackspace}>
             </div>
           </div>
-          {!this.state.errorMessage &&
+          {!this.state.errorMessage && this.props.isOwner &&
           <div className="message notice">
             <Icon name="info-circle"/>
             <strong>Pro tip:</strong> Tags starting with # are shared with all users who have access. Separate tags
@@ -291,7 +358,7 @@ TagEditor.contextType = AppContext;
 TagEditor.propTypes = {
   tags: PropTypes.array,
   isOwner: PropTypes.bool,
-  displayInputTagEditor: PropTypes.func,
+  toggleInputTagEditor: PropTypes.func,
   resourceId: PropTypes.string
 };
 
