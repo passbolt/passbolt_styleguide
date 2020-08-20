@@ -1,12 +1,12 @@
 /**
  * Passbolt ~ Open source password manager for teams
- * Copyright (c) 2019 Passbolt SA (https://www.passbolt.com)
+ * Copyright (c) 2020 Passbolt SA (https://www.passbolt.com)
  *
  * Licensed under GNU Affero General Public License version 3 of the or any later version.
  * For full copyright and license information, please see the LICENSE.txt
  * Redistributions of files must retain the above copyright notice.
  *
- * @copyright     Copyright (c) 2019 Passbolt SA (https://www.passbolt.com)
+ * @copyright     Copyright (c) 2020 Passbolt SA (https://www.passbolt.com)
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         2.12.0
@@ -14,8 +14,9 @@
 import React, {Component} from "react";
 import PropTypes from "prop-types";
 import AppContext from "../../../contexts/AppContext";
-import UserAbortsOperationError from "../../../lib/errors/userAbortsOperationError";
+import UserAbortsOperationError from "../../../lib/errors/UserAbortsOperationError";
 import Icon from "../../Common/Icons/Icon";
+import Port from "../../../lib/extension/port";
 
 class PassphraseEntryDialog extends Component {
   constructor(props) {
@@ -69,7 +70,7 @@ class PassphraseEntryDialog extends Component {
    */
   close() {
     const error = new UserAbortsOperationError("The dialog has been closed.");
-    port.emit(this.props.requestId, "ERROR", error);
+    Port.get().emit(this.props.requestId, "ERROR", error);
     this.props.onClose();
   }
 
@@ -114,9 +115,8 @@ class PassphraseEntryDialog extends Component {
    */
   async isValidPassphrase() {
     try {
-      await port.request("passbolt.keyring.private.checkpassphrase", this.state.passphrase);
+      await Port.get().request("passbolt.keyring.private.checkpassphrase", this.state.passphrase);
     } catch (error) {
-      console.error(error);
       return false;
     }
     return true;
@@ -138,7 +138,7 @@ class PassphraseEntryDialog extends Component {
       rememberMe = this.state.rememberMeDuration;
     }
 
-    port.emit(this.props.requestId, "SUCCESS", {
+    Port.get().emit(this.props.requestId, "SUCCESS", {
       passphrase: this.state.passphrase,
       rememberMe: rememberMe
     });
@@ -311,7 +311,7 @@ class PassphraseEntryDialog extends Component {
             </form>
           </div>
           }
-          {this.state.attempt == 3 &&
+          {this.state.attempt === 3 &&
           <div className="dialog-content">
             <div className="form-content">
               Your passphrase is wrong! The operation has been aborted.

@@ -1,12 +1,12 @@
 /**
  * Passbolt ~ Open source password manager for teams
- * Copyright (c) 2019 Passbolt SA (https://www.passbolt.com)
+ * Copyright (c) 2020 Passbolt SA (https://www.passbolt.com)
  *
  * Licensed under GNU Affero General Public License version 3 of the or any later version.
  * For full copyright and license information, please see the LICENSE.txt
  * Redistributions of files must retain the above copyright notice.
  *
- * @copyright     Copyright (c) 2019 Passbolt SA (https://www.passbolt.com)
+ * @copyright     Copyright (c) 2020 Passbolt SA (https://www.passbolt.com)
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         2.13.0
@@ -19,6 +19,7 @@ import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
 import ErrorDialog from "../../Common/Dialog/ErrorDialog/ErrorDialog";
 import FormSubmitButton from "../../Common/Inputs/FormSubmitButton/FormSubmitButton";
 import FormCancelButton from "../../Common/Inputs/FormSubmitButton/FormCancelButton";
+import Port from "../../../lib/extension/port";
 
 class FolderCreateDialog extends Component {
   /**
@@ -61,7 +62,7 @@ class FolderCreateDialog extends Component {
       // Fields and errors
       name: 'loading...',
       nameError: false
-    }
+    };
   }
 
   /**
@@ -88,8 +89,10 @@ class FolderCreateDialog extends Component {
    * @returns {void}
    */
   handleClose() {
-    // ignore closing event of main folder create dialog
-    // if service error is displayed on top
+    /*
+     * ignore closing event of main folder create dialog
+     * if service error is displayed on top
+     */
     if (!this.state.serviceError) {
       this.props.onClose();
     }
@@ -100,8 +103,10 @@ class FolderCreateDialog extends Component {
    * @returns {void}
    */
   handleCloseError() {
-    // Close dialog
-    // TODO do not allow retry if parent id does not exist
+    /*
+     * Close dialog
+     * TODO do not allow retry if parent id does not exist
+     */
     this.setState({serviceError: false, serviceErrorMessage: ''});
   }
 
@@ -168,7 +173,7 @@ class FolderCreateDialog extends Component {
     const prev = this.state.processing;
     return new Promise(resolve => {
       this.setState({processing: !prev}, resolve());
-    })
+    });
   }
 
   /**
@@ -186,9 +191,9 @@ class FolderCreateDialog extends Component {
   async createFolder() {
     const folderDto = {
       name: this.state.name,
-      folderParentId: this.props.folderParentId
+      folder_parent_id: this.props.folderParentId
     };
-    return await port.request("passbolt.folders.create", folderDto);
+    return await Port.get().request("passbolt.folders.create", folderDto);
   }
 
   /**
@@ -198,7 +203,7 @@ class FolderCreateDialog extends Component {
    * @returns {void}
    */
   displayNotification(status, message) {
-    port.emit("passbolt.notification.display", {status: status, message: message});
+    Port.get().emit("passbolt.notification.display", {status: status, message: message});
   }
 
   /**
@@ -207,7 +212,7 @@ class FolderCreateDialog extends Component {
    * @returns {void}
    */
   selectAndScrollToFolder(id) {
-    port.emit("passbolt.folders.select-and-scroll-to", id);
+    Port.get().emit("passbolt.folders.select-and-scroll-to", id);
   }
 
   /**
@@ -244,7 +249,7 @@ class FolderCreateDialog extends Component {
       nameError = "A name can not be more than 64 char in length.";
     }
     return new Promise(resolve => {
-      this.setState({nameError}, resolve);
+      this.setState({nameError: nameError}, resolve);
     });
   }
 
@@ -253,7 +258,7 @@ class FolderCreateDialog extends Component {
    * @returns {boolean}
    */
   hasValidationError() {
-    return (this.state.nameError !== false)
+    return (this.state.nameError !== false);
   }
 
   /**
@@ -272,21 +277,21 @@ class FolderCreateDialog extends Component {
     return (
       <div>
         <DialogWrapper className='folder-create-dialog' title="Create a new folder"
-                       onClose={this.handleClose} disabled={this.hasAllInputDisabled()}>
+          onClose={this.handleClose} disabled={this.hasAllInputDisabled()}>
           <form className="folder-create-form" onSubmit={this.handleFormSubmit} noValidate>
             <div className="form-content">
               <div className="input text required">
                 <label htmlFor="folder-name-input">Name</label>
                 <input id="folder-name-input" name="name"
-                       ref={this.nameRef}
-                       type="text" value={this.state.name} placeholder="Untitled folder"
-                       maxLength="64" required="required"
-                       disabled={this.hasAllInputDisabled()}
-                       onChange={this.handleInputChange}
-                       autoComplete='off' autoFocus={true}
+                  ref={this.nameRef}
+                  type="text" value={this.state.name} placeholder="Untitled folder"
+                  maxLength="64" required="required"
+                  disabled={this.hasAllInputDisabled()}
+                  onChange={this.handleInputChange}
+                  autoComplete='off' autoFocus={true}
                 />
                 {this.state.nameError &&
-                  <div className="error message">{this.state.nameError}</div>
+                <div className="error message">{this.state.nameError}</div>
                 }
               </div>
             </div>
@@ -297,12 +302,12 @@ class FolderCreateDialog extends Component {
           </form>
         </DialogWrapper>
         {this.state.serviceError &&
-          <ErrorDialog message={this.state.serviceErrorMessage}
-                       title={`The folder could not be saved.`}
-                       onClose={this.handleCloseError}/>
+        <ErrorDialog message={this.state.serviceErrorMessage}
+          title={`The folder could not be saved.`}
+          onClose={this.handleCloseError}/>
         }
       </div>
-    )
+    );
   }
 }
 

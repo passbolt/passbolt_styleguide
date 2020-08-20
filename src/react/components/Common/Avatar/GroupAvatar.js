@@ -13,7 +13,6 @@
  */
 import React, {Component} from "react";
 import PropTypes from "prop-types";
-import AppContext from "../../../contexts/AppContext";
 
 class GroupAvatar extends Component {
   /**
@@ -22,29 +21,51 @@ class GroupAvatar extends Component {
    */
   constructor(props) {
     super(props);
+    this.state = this.getDefaultState();
   }
 
-  getAvatarSrc(url) {
-    return `${this.context.user["user.settings.trustedDomain"]}/img/avatar/group_default.png`;
+  /**
+   * Get default state
+   * @returns {*}
+   */
+  getDefaultState() {
+    return {
+      error: false
+    }
   }
 
+  /**
+   * Get the avatar url
+   * @returns {string}
+   */
+  getAvatarUrl() {
+    return `${this.props.baseUrl}/img/avatar/group_default.png`;
+  }
+
+  /**
+   * Get image alternative text
+   * @returns {string}
+   */
   getAltText() {
-    return `Avatar of the ${this.props.group.name} group.`;
+    return `Avatar of the ${this.props.name} group.`;
   }
 
+  /**
+   * Render
+   * @returns {JSX}
+   */
   render() {
     return(
       <div className="avatar user-avatar">
-        <img src={this.getAvatarSrc()} alt={this.getAltText()}/>
+        <img src={this.getAvatarUrl()} alt={this.getAltText()}/>
       </div>
     )
   }
 }
 
-GroupAvatar.contextType = AppContext;
-
 GroupAvatar.propTypes = {
-  group: PropTypes.object
+  baseUrl: PropTypes.string,
+  group: PropTypes.object,
 };
 
 export default GroupAvatar;

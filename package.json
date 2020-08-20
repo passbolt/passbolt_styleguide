@@ -36,5 +36,12 @@
     "webpack": "^4.41.2",
     "webpack-cli": "^3.3.10",
     "webpack-dev-server": "^3.11.0"
+  },
+  "dependencies": {
+    "simplebar": "^5.2.1",
+    "webextension-polyfill": "^0.6.0"
+  },
+  "scripts": {
+    "start-extension-dev-server": "webpack-dev-server --mode development --config webpack-extension.config.js"
   }
 }

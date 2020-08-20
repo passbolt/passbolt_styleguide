@@ -1,12 +1,12 @@
 /**
  * Passbolt ~ Open source password manager for teams
- * Copyright (c) 2019 Passbolt SA (https://www.passbolt.com)
+ * Copyright (c) 2020 Passbolt SA (https://www.passbolt.com)
  *
  * Licensed under GNU Affero General Public License version 3 of the or any later version.
  * For full copyright and license information, please see the LICENSE.txt
  * Redistributions of files must retain the above copyright notice.
  *
- * @copyright     Copyright (c) 2019 Passbolt SA (https://www.passbolt.com)
+ * @copyright     Copyright (c) 2020 Passbolt SA (https://www.passbolt.com)
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         2.14.0
@@ -18,6 +18,7 @@ import ErrorDialog from "../../Common/Dialog/ErrorDialog/ErrorDialog";
 import FormSubmitButton from "../../Common/Inputs/FormSubmitButton/FormSubmitButton";
 import FormCancelButton from "../../Common/Inputs/FormSubmitButton/FormCancelButton";
 import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
+import Port from "../../../lib/extension/port";
 
 class FolderDeleteDialog extends Component {
   /**
@@ -37,7 +38,7 @@ class FolderDeleteDialog extends Component {
    * @return {void}
    */
   async componentDidMount() {
-    this.setState({loading:false});
+    this.setState({loading: false});
   }
 
   /**
@@ -113,8 +114,8 @@ class FolderDeleteDialog extends Component {
     this.toggleProcessing();
 
     try {
-      await port.request("passbolt.folders.delete", this.props.folderId, this.state.cascade);
-      this.displayNotification("success", "The folder was deleted." + this.state.cascade);
+      await Port.get().request("passbolt.folders.delete", this.props.folderId, this.state.cascade);
+      this.displayNotification("success", "The folder was deleted.");
       this.props.onClose();
     } catch (error) {
       console.error(error);
@@ -134,7 +135,7 @@ class FolderDeleteDialog extends Component {
     const prev = this.state.processing;
     return new Promise(resolve => {
       this.setState({processing: !prev}, resolve());
-    })
+    });
   }
 
   /**
@@ -143,7 +144,7 @@ class FolderDeleteDialog extends Component {
    * @param {string} message The message to display
    */
   displayNotification(status, message) {
-    port.emit("passbolt.notification.display", {status: status, message: message});
+    Port.get().emit("passbolt.notification.display", {status: status, message: message});
   }
 
   /**
@@ -190,27 +191,27 @@ class FolderDeleteDialog extends Component {
     return (
       <div>
         <DialogWrapper className='folder-create-dialog' title="Are you sure?"
-                       onClose={this.handleClose} disabled={this.hasAllInputDisabled()}>
+          onClose={this.handleClose} disabled={this.hasAllInputDisabled()}>
           <form className="folder-create-form" onSubmit={this.handleFormSubmit} noValidate>
             <div className="form-content">
-                <p>
-                  You're about to delete the folder <strong>{this.state.name}</strong>.
-                  Other users may loose access. This action cannot be undone.
-                </p>
-                <div className="input checkbox">
-                  <input id="delete-cascade" type="checkbox" name="cascade" onChange={this.handleInputChange}
-                         autoFocus={true} disabled={this.hasAllInputDisabled()} />&nbsp;
-                  <label htmlFor="delete-cascade">Also delete items inside this folder.</label>
-                </div>
+              <p>
+                You&apos;re about to delete the folder <strong>{this.state.name}</strong>.
+                Other users may loose access. This action cannot be undone.
+              </p>
+              <div className="input checkbox">
+                <input id="delete-cascade" type="checkbox" name="cascade" onChange={this.handleInputChange}
+                  autoFocus={true} disabled={this.hasAllInputDisabled()} />&nbsp;
+                <label htmlFor="delete-cascade">Also delete items inside this folder.</label>
               </div>
-              <div className="submit-wrapper clearfix">
-                <FormSubmitButton disabled={this.hasAllInputDisabled()} processing={this.state.processing} value="Delete" warning={true}/>
-                <FormCancelButton disabled={this.hasAllInputDisabled()} onClick={this.handleClose} />
-              </div>
-            </form>
-          </DialogWrapper>
+            </div>
+            <div className="submit-wrapper clearfix">
+              <FormSubmitButton disabled={this.hasAllInputDisabled()} processing={this.state.processing} value="Delete" warning={true}/>
+              <FormCancelButton disabled={this.hasAllInputDisabled()} onClick={this.handleClose} />
+            </div>
+          </form>
+        </DialogWrapper>
         {this.state.serviceError &&
-          <ErrorDialog message={this.state.errorMessage} onClose={this.handleCloseError}/>
+        <ErrorDialog message={this.state.errorMessage} onClose={this.handleCloseError}/>
         }
       </div>
     );

@@ -1,12 +1,12 @@
 /**
  * Passbolt ~ Open source password manager for teams
- * Copyright (c) 2019 Passbolt SA (https://www.passbolt.com)
+ * Copyright (c) 2020 Passbolt SA (https://www.passbolt.com)
  *
  * Licensed under GNU Affero General Public License version 3 of the or any later version.
  * For full copyright and license information, please see the LICENSE.txt
  * Redistributions of files must retain the above copyright notice.
  *
- * @copyright     Copyright (c) 2019 Passbolt SA (https://www.passbolt.com)
+ * @copyright     Copyright (c) 2020 Passbolt SA (https://www.passbolt.com)
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         2.12.0
@@ -19,6 +19,7 @@ import ErrorDialog from "../../Common/Dialog/ErrorDialog/ErrorDialog";
 import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
 import FormSubmitButton from "../../Common/Inputs/FormSubmitButton/FormSubmitButton";
 import FormCancelButton from "../../Common/Inputs/FormSubmitButton/FormCancelButton";
+import Port from "../../../lib/extension/port";
 
 class FolderRenameDialog extends Component {
   /**
@@ -39,7 +40,7 @@ class FolderRenameDialog extends Component {
    * @return {void}
    */
   async componentDidMount() {
-    this.setState({loading:false}, () => {
+    this.setState({loading: false}, () => {
       this.nameRef.current.focus();
     });
   }
@@ -118,8 +119,10 @@ class FolderRenameDialog extends Component {
    * @returns {void}
    */
   handleClose() {
-    // ignore closing event of main folder create dialog
-    // if service error is displayed on top
+    /*
+     * ignore closing event of main folder create dialog
+     * if service error is displayed on top
+     */
     if (!this.state.serviceError) {
       this.props.onClose();
     }
@@ -201,7 +204,7 @@ class FolderRenameDialog extends Component {
     const prev = this.state.processing;
     return new Promise(resolve => {
       this.setState({processing: !prev}, resolve());
-    })
+    });
   }
 
   /**
@@ -221,7 +224,7 @@ class FolderRenameDialog extends Component {
       id: this.props.folderId,
       name: this.state.name
     };
-    return await port.request("passbolt.folders.update", folderDto);
+    return await Port.get().request("passbolt.folders.update", folderDto);
   }
 
   /**
@@ -230,7 +233,7 @@ class FolderRenameDialog extends Component {
    * @param {string} message The message to display
    */
   displayNotification(status, message) {
-    port.emit("passbolt.notification.display", {status: status, message: message});
+    Port.get().emit("passbolt.notification.display", {status: status, message: message});
   }
 
   /**
@@ -239,7 +242,7 @@ class FolderRenameDialog extends Component {
    * @returns {void}
    */
   selectAndScrollToFolder(id) {
-    port.emit("passbolt.folders.select-and-scroll-to", id);
+    Port.get().emit("passbolt.folders.select-and-scroll-to", id);
   }
 
   /**
@@ -276,7 +279,7 @@ class FolderRenameDialog extends Component {
       nameError = "A name can not be more than 64 char in length.";
     }
     return new Promise(resolve => {
-      this.setState({nameError}, resolve);
+      this.setState({nameError: nameError}, resolve);
     });
   }
 
@@ -285,7 +288,7 @@ class FolderRenameDialog extends Component {
    * @returns {boolean}
    */
   hasValidationError() {
-    return (this.state.nameError !== false)
+    return (this.state.nameError !== false);
   }
 
   /**
@@ -304,21 +307,21 @@ class FolderRenameDialog extends Component {
     return (
       <div>
         <DialogWrapper className='rename-folder-dialog' title="Rename a folder"
-                       onClose={this.handleClose} disabled={this.hasAllInputDisabled()}>
+          onClose={this.handleClose} disabled={this.hasAllInputDisabled()}>
           <form className="folder-rename-form" onSubmit={this.handleFormSubmit} noValidate>
             <div className="form-content">
               <div className={`input text required ${this.state.nameError ? "error" : ""}`}>
                 <label htmlFor="folder-name-input">Folder name</label>
                 <input id="folder-name-input" name="name"
-                       ref={this.nameRef}
-                       type="text" value={this.state.name} placeholder="Untitled folder"
-                       maxLength="64" required="required"
-                       onChange={this.handleInputChange}
-                       disabled={this.hasAllInputDisabled()}
-                       autoComplete="off" autoFocus={true}
+                  ref={this.nameRef}
+                  type="text" value={this.state.name} placeholder="Untitled folder"
+                  maxLength="64" required="required"
+                  onChange={this.handleInputChange}
+                  disabled={this.hasAllInputDisabled()}
+                  autoComplete="off" autoFocus={true}
                 />
                 {this.state.nameError &&
-                  <div className="name error message">{this.state.nameError}</div>
+                <div className="name error message">{this.state.nameError}</div>
                 }
               </div>
             </div>
@@ -329,7 +332,7 @@ class FolderRenameDialog extends Component {
           </form>
         </DialogWrapper>
         {this.state.serviceError &&
-          <ErrorDialog message={this.state.errorMessage} onClose={this.handleCloseError}/>
+        <ErrorDialog message={this.state.errorMessage} onClose={this.handleCloseError}/>
         }
       </div>
     );

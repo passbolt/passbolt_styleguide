@@ -120,7 +120,7 @@ class UserBadgeMenu extends Component {
               <span className="email">{this.getCurrentUserUsername()}</span>
             </div>
           </div>
-          <UserAvatar user={this.getCurrentUser()} className="picture left-cell" />
+          <UserAvatar user={this.getCurrentUser()} className="picture left-cell" baseUrl={this.context.user["user.settings.trustedDomain"]}/>
           <div className="more right-cell">
             <a onClick={(e) => this.handleToggleMenuClick(e)}>
               <Icon name="caret-down" />

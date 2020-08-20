@@ -17,6 +17,8 @@ import AppContext from "../../../contexts/AppContext";
 import FormSubmitButton from "../../Common/Inputs/FormSubmitButton/FormSubmitButton";
 import FormCancelButton from "../../Common/Inputs/FormSubmitButton/FormCancelButton";
 import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
+import UserAbortsOperationError from "../../../lib/errors/UserAbortsOperationError";
+import Port from "../../../lib/extension/port";
 
 class FolderMoveStrategyDialog extends Component {
   /**
@@ -38,7 +40,7 @@ class FolderMoveStrategyDialog extends Component {
    * @return {void}
    */
   async componentDidMount() {
-    this.setState({loading:false, moveOption: 'change'});
+    this.setState({loading: false, moveOption: 'change'});
     this.moveOptionChangeRef.current.focus();
   }
 
@@ -115,7 +117,7 @@ class FolderMoveStrategyDialog extends Component {
     await this.toggleProcessing();
 
     try {
-      await port.request("passbolt.folders.set-move-strategy", this.props.folderId, this.state.moveOption);
+      Port.get().emit(this.props.requestId, "SUCCESS", {moveOption: this.state.moveOption});
       this.props.onClose();
     } catch (error) {
       console.error(error);
@@ -135,7 +137,7 @@ class FolderMoveStrategyDialog extends Component {
     const prev = this.state.processing;
     return new Promise(resolve => {
       this.setState({processing: !prev}, resolve());
-    })
+    });
   }
 
   /**
@@ -158,6 +160,8 @@ class FolderMoveStrategyDialog extends Component {
     if (this.state.processing) {
       return;
     }
+    const error = new UserAbortsOperationError("The dialog has been closed.");
+    Port.get().emit(this.props.requestId, "ERROR", error);
     this.props.onClose();
   }
 
@@ -237,28 +241,28 @@ class FolderMoveStrategyDialog extends Component {
     return (
       <div>
         <DialogWrapper className='move-folder-strategy-dialog' title="How do you want to proceed?"
-                       onClose={this.handleClose} disabled={this.hasAllInputDisabled()}>
+          onClose={this.handleClose} disabled={this.hasAllInputDisabled()}>
           <form className="folder-create-form" onSubmit={this.handleFormSubmit} noValidate>
             <div className="form-content">
               <p>{this.getIntroMessage()}</p>
-                <div className="radiolist-alt">
-                  <div className="input radio">
-                    <input name="moveOption" value="change" id="moveOptionChange" type="radio"
-                           onChange={this.handleInputChange} ref={this.moveOptionChangeRef} checked={this.state.moveOption === 'change'} />
-                    <label htmlFor="moveOptionChange">
-                      <span className="strategy-name">Change permissions</span>
-                      <span className="strategy-info">Remove old inherited permissions and apply the new destination folder permissions recursively.</span>
-                    </label>
-                  </div>
-                  <div className="input radio last">
-                    <input name="moveOption" value="keep" id="moveOptionKeep" type="radio"
-                           onChange={this.handleInputChange} ref={this.moveOptionKeepRef}  checked={this.state.moveOption === 'keep'}/>
-                    <label htmlFor="moveOptionKeep">
-                      <span className="strategy-name">Keep existing permissions</span>
-                      <span className="strategy-info">Keep the original permissions, do not apply the destination folder permissions.</span>
-                    </label>
-                  </div>
+              <div className="radiolist-alt">
+                <div className="input radio">
+                  <input name="moveOption" value="change" id="moveOptionChange" type="radio"
+                    onChange={this.handleInputChange} ref={this.moveOptionChangeRef} checked={this.state.moveOption === 'change'} />
+                  <label htmlFor="moveOptionChange">
+                    <span className="strategy-name">Change permissions</span>
+                    <span className="strategy-info">Remove old inherited permissions and apply the new destination folder permissions recursively.</span>
+                  </label>
                 </div>
+                <div className="input radio last">
+                  <input name="moveOption" value="keep" id="moveOptionKeep" type="radio"
+                    onChange={this.handleInputChange} ref={this.moveOptionKeepRef}  checked={this.state.moveOption === 'keep'}/>
+                  <label htmlFor="moveOptionKeep">
+                    <span className="strategy-name">Keep existing permissions</span>
+                    <span className="strategy-info">Keep the original permissions, do not apply the destination folder permissions.</span>
+                  </label>
+                </div>
+              </div>
             </div>
             <div className="submit-wrapper clearfix">
               <FormSubmitButton disabled={this.hasAllInputDisabled()} processing={this.state.processing} value="Move" />
@@ -276,6 +280,7 @@ FolderMoveStrategyDialog.contextType = AppContext;
 FolderMoveStrategyDialog.propTypes = {
   className: PropTypes.string,
   folderId: PropTypes.string,
+  requestId: PropTypes.string,
   foldersIds: PropTypes.array,
   resourcesIds: PropTypes.array,
   onClose: PropTypes.func

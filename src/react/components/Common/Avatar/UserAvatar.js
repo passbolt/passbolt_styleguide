@@ -22,7 +22,17 @@ class UserAvatar extends Component {
    */
   constructor(props) {
     super(props);
-    this.state = {error: false};
+    this.state = this.getDefaultState();
+  }
+
+  /**
+   * Get default state
+   * @returns {*}
+   */
+  getDefaultState() {
+    return {
+      error: false
+    }
   }
 
   /**
@@ -42,17 +52,19 @@ class UserAvatar extends Component {
   }
 
   formatUrl(url) {
-    let baseUrl;
-    if (this.context && this.context.user && this.context.user["user.settings.trustedDomain"]) {
-      baseUrl = this.context.user["user.settings.trustedDomain"];
-    } else {
-      baseUrl = '';
-    }
-    return `${baseUrl}/${url}`;
+    return `${this.props.baseUrl}/${url}`;
   }
 
   getPropsUrl() {
     return this.props.user.profile.avatar.url.small;
+  }
+
+  /**
+   * Get the default avatar url
+   * @returns {string}
+   */
+  getDefaultAvatarUrl() {
+    return `${this.props.baseUrl}/img/avatar/user.png`;
   }
 
   getAvatarSrc() {
@@ -63,7 +75,7 @@ class UserAvatar extends Component {
         return this.formatUrl(this.getPropsUrl());
       }
     }
-    return this.formatUrl('img/avatar/user.png');
+    return this.getDefaultAvatarUrl();
   }
 
   handleError() {
@@ -81,7 +93,12 @@ class UserAvatar extends Component {
   render() {
     return(
       <div className={this.props.className}>
+        {!this.state.error &&
         <img src={this.getAvatarSrc()} onError={this.handleError.bind(this)} alt={this.getAltText()}/>
+        }
+        {this.state.error &&
+        <img src={this.getDefaultAvatarUrl()} alt={this.getAltText()}/>
+        }
       </div>
     )
   }
@@ -94,6 +111,7 @@ UserAvatar.defaultProps = {
 };
 
 UserAvatar.propTypes = {
+  baseUrl: PropTypes.string,
   user: PropTypes.object,
   className: PropTypes.string
 };

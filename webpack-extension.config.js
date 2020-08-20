@@ -2,7 +2,7 @@ const path = require("path");
 const webpack = require("webpack");
 
 module.exports = {
-  entry: "./src/react-extension/index.js",
+  entry: "./demo/react-extension/public/js/index.js",
   mode: "development",
   devtool: "inline-source-map",
   module: {
@@ -27,7 +27,7 @@ module.exports = {
   },
   devServer: {
     contentBase: path.join(__dirname, "demo/react-extension/public/"),
-    port: 3001,
-    publicPath: "http://localhost:3001/dist/",
+    port: 3000,
+    publicPath: "http://localhost:3000/dist/",
   },
 };

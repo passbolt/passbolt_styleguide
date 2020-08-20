@@ -1,12 +1,12 @@
 /**
  * Passbolt ~ Open source password manager for teams
- * Copyright (c) 2019 Passbolt SA (https://www.passbolt.com)
+ * Copyright (c) 2020 Passbolt SA (https://www.passbolt.com)
  *
  * Licensed under GNU Affero General Public License version 3 of the or any later version.
  * For full copyright and license information, please see the LICENSE.txt
  * Redistributions of files must retain the above copyright notice.
  *
- * @copyright     Copyright (c) 2019 Passbolt SA (https://www.passbolt.com)
+ * @copyright     Copyright (c) 2020 Passbolt SA (https://www.passbolt.com)
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         2.14.0
@@ -17,6 +17,8 @@ import PropTypes from "prop-types";
 import AppContext from "../../../contexts/AppContext";
 import Icon from "../../Common/Icons/Icon";
 import Tooltip from "../../Common/Tooltip/Tooltip";
+import Port from "../../../lib/extension/port";
+import SecretComplexity from "../../../lib/secret/secretComplexity";
 
 class PasswordCreateDialog extends Component {
   constructor() {
@@ -88,7 +90,13 @@ class PasswordCreateDialog extends Component {
     try {
       const resource = await this.createResource();
       this.displayNotification("success", "The password has been added successfully");
-      this.selectAndScrollToResource(resource.id);
+      if (resource.folder_parent_id) {
+        // TODO and select resource inside that folder
+        this.selectAndScrollToFolder(resource.folder_parent_id);
+      } else {
+        this.selectAndScrollToResource(resource.id);
+      }
+
       this.props.onClose();
     } catch (error) {
       // It can happen when the user has closed the passphrase entry dialog by instance.
@@ -110,15 +118,15 @@ class PasswordCreateDialog extends Component {
    * @returns {Promise}
    */
   createResource() {
-    const resourceMeta = {
+    const resourceDto = {
       name: this.state.name,
       username: this.state.username,
       uri: this.state.uri,
       description: this.state.description,
-      folderParentId: this.props.folderParentId
+      folder_parent_id: this.props.folderParentId
     };
 
-    return port.request("passbolt.resources.create", resourceMeta, this.state.password);
+    return Port.get().request("passbolt.resources.create", resourceDto, this.state.password);
   }
 
   /**
@@ -138,7 +146,7 @@ class PasswordCreateDialog extends Component {
    * @param {string} message The message to display
    */
   displayNotification(status, message) {
-    port.emit("passbolt.notification.display", {status: status, message: message});
+    Port.get().emit("passbolt.notification.display", {status: status, message: message});
   }
 
   /**
@@ -146,7 +154,16 @@ class PasswordCreateDialog extends Component {
    * @param {string} id The resource id.
    */
   selectAndScrollToResource(id) {
-    port.emit("passbolt.resources.select-and-scroll-to", id);
+    Port.get().emit("passbolt.resources.select-and-scroll-to", id);
+  }
+
+  /**
+   * Select and scroll to a given resource.
+   * @param {string} id The resource id.
+   * @returns {void}
+   */
+  selectAndScrollToFolder(id) {
+    Port.get().emit("passbolt.folders.select-and-scroll-to", id);
   }
 
   /**
@@ -266,7 +283,7 @@ class PasswordCreateDialog extends Component {
     if (this.state.processing) {
       return;
     }
-    const password = secretComplexity.generate();
+    const password = SecretComplexity.generate();
     this.setState({
       password: password,
       passwordError: ""
@@ -332,9 +349,7 @@ class PasswordCreateDialog extends Component {
   render() {
     const passwordInputStyle = this.getPasswordInputStyle();
     const securityTokenStyle = this.getSecurityTokenStyle();
-    const passwordStrength = secretComplexity.strength(this.state.password);
-    const passwordStrengthLabel = secretComplexity.STRENGTH[passwordStrength].label;
-    const passwordStrengthLabelClass = secretComplexity.STRENGTH[passwordStrength].id;
+    const passwordStrength = SecretComplexity.getStrength(this.state.password);
 
     return (
       <div className="dialog-wrapper" onKeyDown={this.handleKeyDown}>
@@ -405,10 +420,10 @@ class PasswordCreateDialog extends Component {
                       </a>
                     </li>
                   </ul>
-                  <div className={`password-complexity ${passwordStrengthLabelClass}`}>
+                  <div className={`password-complexity ${passwordStrength.id}`}>
                     <span className="progress"><span
-                      className={`progress-bar ${passwordStrengthLabelClass}`}></span></span>
-                    <span className="complexity-text">complexity: <strong>{passwordStrengthLabel}</strong></span>
+                      className={`progress-bar ${passwordStrength.id}`}></span></span>
+                    <span className="complexity-text">complexity: <strong>{passwordStrength.label}</strong></span>
                   </div>
                   {this.state.passwordError &&
                   <div className="input text">
@@ -418,7 +433,7 @@ class PasswordCreateDialog extends Component {
                 </div>
                 <div className="input textarea">
                   <label htmlFor="create-password-form-description">Description&nbsp;
-                    <Tooltip message="Do not store sensitive data. Unlike the password, this data is not encrypted." icon="warning" />
+                    <Tooltip message="Do not store sensitive data. Unlike the password, this data is not encrypted." icon="info-circle" />
                   </label>
                   <textarea id="create-password-form-description" name="description" maxLength="10000"
                     className="required" placeholder="add a description" value={this.state.description}
