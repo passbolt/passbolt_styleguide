@@ -47,8 +47,10 @@
     "webextension-polyfill": "^0.6.0"
   },
   "scripts": {
+    "start-react-app-dev-server": "webpack-dev-server --mode development --config webpack-appjs.config.js",
     "start-react-extension-dev-server": "webpack-dev-server --mode development --config webpack-extension.config.js",
     "test": "jest --config .jest.config.json --no-cache ./src --maxWorkers=4",
+    "test-react-app": "jest --config .jest.config.json --no-cache ./src/react-appjs --maxWorkers=4",
     "test-react-extension": "jest --config .jest.config.json --no-cache ./src/react-extension --maxWorkers=4"
   }
 }
