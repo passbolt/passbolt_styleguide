@@ -16,34 +16,31 @@ import React from "react";
 import {render, cleanup} from "@testing-library/react";
 import ProgressDialog from "./ProgressDialog";
 import AppContext from "../../contexts/AppContext";
+import Port from "../../lib/extension/port";
 
 beforeEach(() => {
   jest.resetModules();
-  // mock window.port
   mockPort();
 });
 
 const mockPort = function() {
-  window.port = {
-    _mockedOnCallbacks: {},
+  const mockedOnCallbacks = {};
+  const port = {
+    emit: jest.fn(),
     fireAddonMessage: function(message) {
-      const callback = window.port._mockedOnCallbacks[message];
+      const callback =mockedOnCallbacks[message];
       if (callback) {
         const callbackArgs = Array.prototype.slice.call(arguments, 1);
         callback.apply(null, callbackArgs);
       }
     },
     on: (message, callback) => {
-      window.port._mockedOnCallbacks[message] = callback;
-    }
+      mockedOnCallbacks[message] = callback;
+    },
+    request: jest.fn()
   };
+  Port.set(port);
 };
-
-afterEach(() => {
-  cleanup();
-  // Cleanup the global library port mock.
-  delete window.port;
-});
 
 describe("ProgressDialog", () => {
   it("displays a spinning 100% progress bar by default.", () => {
