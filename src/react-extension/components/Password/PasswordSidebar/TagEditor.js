@@ -15,10 +15,12 @@ import React from "react";
 import PropTypes from "prop-types";
 import Icon from "../../Common/Icons/Icon";
 import AppContext from "../../../contexts/AppContext";
+import Autocomplete from "./Autocomplete/Autocomplete";
 
 const TAG_MAX_LENGTH = 128;
 
 class TagEditor extends React.Component {
+
   /**
    * Constructor
    * @param {Object} props
@@ -36,14 +38,22 @@ class TagEditor extends React.Component {
    */
   getDefaultState() {
     return {
-      tags: this.cloneTagArray(),
-      isSubmitted: false,
+      tags: this.getResourceTags(),
+      inputTagValue: "",
+      processing: false,
+      loading: true,
       tagAlreadyPresent: "",
+      allTags: null,
+      autocompletePosition: {
+        top: 0,
+        left: 0
+      },
+      suggestedTags: null,
       errorMessage: ""
     };
   }
 
-  cloneTagArray() {
+  getResourceTags() {
     if (this.props.tags) {
       return [...this.props.tags];
     }
@@ -63,19 +73,51 @@ class TagEditor extends React.Component {
    */
   bindCallbacks() {
     this.handleEditorClickEvent = this.handleEditorClickEvent.bind(this);
-    this.saveTags = this.saveTags.bind(this);
-    this.addTagOnEnterOrComma = this.addTagOnEnterOrComma.bind(this);
-    this.deleteTagOnBackspace = this.deleteTagOnBackspace.bind(this);
+
+    this.handleOnSubmit = this.handleOnSubmit.bind(this);
+    this.handleOnInput = this.handleOnInput.bind(this);
+    this.handleKeyPressed = this.handleKeyPressed.bind(this);
+    this.handleOnKeyDown = this.handleOnKeyDown.bind(this);
     this.deleteTag = this.deleteTag.bind(this);
+    this.focusOnInputTag = this.focusOnInputTag.bind(this);
+
+    this.handleAutocompleteSelect = this.handleAutocompleteSelect.bind(this);
+    this.handleAutocompleteArrowFocus = this.handleAutocompleteArrowFocus.bind(this);
   }
 
   componentDidMount() {
     document.addEventListener('click', this.handleEditorClickEvent);
-    this.inputTagRef.current.focus();
+    this.fetchAllTags();
+    this.setState({loading: false}, () => {
+      this.focusOnInputTag();
+    });
   }
 
   componentWillUnmount() {
     document.removeEventListener('click', this.handleEditorClickEvent);
+  }
+
+  focusOnInputTag() {
+    this.inputTagRef.current.focus();
+  }
+
+  /**
+   * Find all tags.
+   * @return {Promise<void>}
+   */
+  async fetchAllTags() {
+    const allTags = await this.context.port.request("passbolt.tags.find-all");
+    if (allTags) {
+      this.setState({allTags});
+    }
+  }
+
+  /**
+   * Should input be disabled? True if state is loading or processing
+   * @returns {boolean}
+   */
+  hasAllInputDisabled() {
+    return this.state.processing || this.state.loading;
   }
 
   /**
@@ -86,8 +128,49 @@ class TagEditor extends React.Component {
     // Prevent stop editing when the user click on an element of the editor
     if (this.elementRef.current.contains(event.target)) {
       return;
+    } else if (this.inputTagRef.current.contains(event.target)) {
+      this.focusOnInputTag();
+      return;
     }
     this.props.toggleInputTagEditor();
+  }
+
+  /**
+   * handle onInput event
+   */
+  handleOnInput() {
+    this.setInputTagValue();
+    // get suggested tags for the autocomplete
+    this.getSuggestedTags();
+    this.getPositionOfInputTag();
+  }
+
+  /**
+   * Set state inputTagValue
+   */
+  setInputTagValue() {
+    const inputTagValue = this.inputTagRef.current.textContent;
+    this.setState({inputTagValue});
+  }
+
+  /**
+   * reset the tag input value
+   */
+  resetInputTagValue() {
+    this.inputTagRef.current.textContent = "";
+    this.setInputTagValue();
+  }
+
+  /**
+   * get The position of the input tag to
+   * set the position of the autocomplete
+   */
+  getPositionOfInputTag() {
+    const top = this.inputTagRef.current.offsetTop + 20;
+    const left = this.inputTagRef.current.offsetLeft;
+    const autocompletePosition = {left, top};
+    this.setState({autocompletePosition});
+
   }
 
   /**
@@ -103,7 +186,7 @@ class TagEditor extends React.Component {
     return {
       slug,
       is_shared
-    };
+    }
   }
 
   /**
@@ -112,7 +195,7 @@ class TagEditor extends React.Component {
    * @returns {boolean}
    */
   isTagDeletable(tag) {
-    return this.props.isOwner || !tag.is_shared;
+    return (this.props.isOwner || !tag.is_shared) && !this.hasAllInputDisabled();
   }
 
   /**
@@ -155,7 +238,7 @@ class TagEditor extends React.Component {
    * @returns {boolean}
    */
   isTagExceedMaxLength(slug) {
-    return slug.length > TAG_MAX_LENGTH;
+    return slug.length > TAG_MAX_LENGTH
   }
 
   /**
@@ -178,7 +261,7 @@ class TagEditor extends React.Component {
     if (this.isTagAlreadyPresent(slug.trim())) {
       this.blinkTagAlreadyPresent(slug.trim());
       this.setErrorMessage("This tag is already present");
-      this.inputTagRef.current.textContent = "";
+      this.resetInputTagValue();
       return false;
     }
     return true;
@@ -189,23 +272,34 @@ class TagEditor extends React.Component {
    */
   checkTagToInsert() {
     const inputTag = this.inputTagRef.current.textContent;
-    const tags = this.state.tags;
     if (this.validateTag(inputTag)) {
       const tag = this.createTag(inputTag.trim());
-      tags.push(tag);
-      this.setState({tags});
+      this.insertTag(tag);
       this.setErrorMessage("");
-      this.inputTagRef.current.textContent = "";
+      this.resetInputTagValue();
     }
   }
 
   /**
+   * insert tag in the editor
+   * @param tag
+   */
+  insertTag(tag) {
+    const tags = this.state.tags;
+    tags.push(tag);
+    this.setState({tags});
+  }
+
+  /**
+   * Handle key pressed event
    * Add tag if key enter or comma
    * @param event
    */
-  addTagOnEnterOrComma(event) {
+  handleKeyPressed(event) {
     // Code for enter is 13 and for comma is 44
-    if (event.which === 13 || event.which === 44) {
+    if (event.which === 13 && !this.inputTagRef.current.textContent) {
+      this.handleOnSubmit();
+    } else if (event.which === 13 || event.which === 44) {
       event.preventDefault();
       this.checkTagToInsert();
     }
@@ -231,6 +325,7 @@ class TagEditor extends React.Component {
 
   /**
    * Delete the tag
+   * @param event
    * @param indexTag
    */
   deleteTag(event, indexTag) {
@@ -247,25 +342,53 @@ class TagEditor extends React.Component {
   }
 
   /**
-   * Delete tag if key backspace
+   * must show the autocomplete or not
+   * @returns {boolean}
+   */
+  mustShowAutocomplete() {
+    return this.state.suggestedTags && this.state.suggestedTags.length > 0
+  }
+
+  /**
+   * hide autocomplete
+   */
+  hideAutocomplete() {
+    this.setState({suggestedTags: null});
+  }
+
+  /**
+   * Handle on key down event
+   * Delete tag if key code is 8 (backspace)
+   * Close editor tag if key code is 27 (escape)
    * @param event
    */
-  deleteTagOnBackspace(event) {
+  handleOnKeyDown(event) {
     if (event.which === 8) {
       this.checkTagToDelete();
+    } else if (event.which === 27) {
+      if (this.mustShowAutocomplete()) {
+        this.inputTagRef.current.textContent = this.state.inputTagValue;
+        this.setCaretCursorToEnd();
+        this.hideAutocomplete();
+      } else {
+        this.props.toggleInputTagEditor();
+      }
     }
   }
 
   /**
    * Save all tags
    */
-  async saveTags() {
-    this.setState({isSubmitted: true});
-    this.checkTagToInsert();
-    if (!this.state.errorMessage) {
-      await this.updateTags();
-    } else {
-      this.setState({isSubmitted: false});
+  async handleOnSubmit() {
+    // Do not re-submit an already processing form
+    if (!this.state.processing) {
+      this.setState({processing: true})
+      this.checkTagToInsert();
+      if (!this.state.errorMessage) {
+        await this.updateTags();
+      } else {
+        this.setState({processing: false});
+      }
     }
   }
 
@@ -280,15 +403,15 @@ class TagEditor extends React.Component {
         tags: this.state.tags
       };
       await this.context.port.request("passbolt.resource.update-tags", data);
-      this.displayNotification("success", "Tags has been added successfully");
-      this.setState({isSubmitted: false});
+      this.displayNotification("success", "Tags has been updated successfully");
+      this.setState({processing: false})
       this.props.toggleInputTagEditor();
     } catch (error) {
       // Unexpected error occurred.
       console.error(error);
       this.setState({
         errorMessage: error.message,
-        isSubmitted: false
+        processing: false
       });
     }
   }
@@ -302,33 +425,101 @@ class TagEditor extends React.Component {
     this.context.port.emit("passbolt.notification.display", {status: status, message: message});
   }
 
+  /*
+   * Functions to handle autocomplete
+   */
+
+  /**
+   * Get tags matching the input
+   * @returns {array} array
+   */
+  getSuggestedTags() {
+    const inputTagValue = this.inputTagRef.current.textContent;
+    if (inputTagValue && this.state.allTags) {
+      const suggestedTags = this.state.allTags.filter(tag =>
+        this.state.tags.filter(tagResources => (tagResources.slug === tag.slug)).length === 0
+        && this.isTagDeletable(tag)
+        && tag.slug.toLowerCase().indexOf(inputTagValue.toLowerCase()) != -1
+      );
+      this.setState({suggestedTags});
+    } else {
+      this.setState({suggestedTags: null});
+    }
+  }
+
+  /**
+   * handleAutocompleteSelect
+   * What happens when an item in the autocomplete list is selected
+   * e.g. if it's not already in the list, add it
+   * @param {object} tag
+   */
+  handleAutocompleteSelect(tag) {
+    this.insertTag(tag);
+    this.resetInputTagValue();
+    this.focusOnInputTag();
+    this.hideAutocomplete();
+  }
+
+  /**
+   * Handle the autocomplete slug selected by arrow
+   * @param slug
+   */
+  handleAutocompleteArrowFocus(slug) {
+    this.inputTagRef.current.textContent = slug;
+    this.setCaretCursorToEnd();
+  }
+
+  /**
+   * Set the caret cursor position at the end of the tag editor input
+   */
+  setCaretCursorToEnd() {
+    const range = document.createRange();
+    const selection = window.getSelection();
+    range.setStart(this.inputTagRef.current.childNodes[0], this.inputTagRef.current.textContent.length);
+    range.collapse(true);
+    selection.removeAllRanges();
+    selection.addRange(range);
+  }
 
   /**
    * Render the component
    * @returns {JSX}
    */
   render() {
+
     return (
       <div className="form-content" ref={this.elementRef}>
         <div className="input tag-editor">
-          <div className="tag-editor-input-wrapper">
+          <div className="tag-editor-input-wrapper" onClick={this.focusOnInputTag}>
             {this.state.tags &&
-            <div className="tags">
-              {this.state.tags.map((tag, index) =>
+              this.state.tags.map((tag, index) =>
                 <div key={index} className="tag">
                   <span
                     className={`tag-content ellipsis ${this.state.tagAlreadyPresent === tag.slug ? "blink-fast" : ""}`}>{tag.slug}</span>
                   {this.isTagDeletable(tag) &&
-                  <span className="tag-delete" onClick={ event => this.deleteTag(event, index)}><Icon name="close"></Icon></span>
+                  <span className={`tag-delete`} onClick={(event) => this.deleteTag(event, index)}><Icon
+                    name="close"></Icon></span>
                   }
                 </div>
               )
-              }
-            </div>
+
+
             }
-            <div ref={this.inputTagRef} className="tag-editor-input" contentEditable={!this.state.isSubmitted}
-              suppressContentEditableWarning="true" onKeyPress={this.addTagOnEnterOrComma} onKeyDown={this.deleteTagOnBackspace}>
+            <div ref={this.inputTagRef} className="tag-editor-input" contentEditable={!this.hasAllInputDisabled()}
+                 suppressContentEditableWarning="true" onKeyPress={this.handleKeyPressed}
+                 onKeyDown={this.handleOnKeyDown} onInput={this.handleOnInput}>
             </div>
+            {this.mustShowAutocomplete() &&
+            <Autocomplete
+              id="tag-autocomplete"
+              value={this.state.inputTagValue}
+              autocompleteItems={this.state.suggestedTags}
+              left={this.state.autocompletePosition.left}
+              top={this.state.autocompletePosition.top}
+              onSelect={this.handleAutocompleteSelect}
+              onArrowFocus={this.handleAutocompleteArrowFocus}
+            />
+            }
           </div>
           {!this.state.errorMessage && this.props.isOwner &&
           <div className="message notice">
@@ -342,11 +533,12 @@ class TagEditor extends React.Component {
           }
         </div>
         <div className="actions">
-          <a className={`button tag-editor-submit ${this.state.isSubmitted ? "primary processing" : ""}`}
-            onClick={this.saveTags}>
+          <a className={`button tag-editor-submit ${this.hasAllInputDisabled() ? "primary processing disabled" : ""}`}
+             onClick={this.handleOnSubmit}>
             <span>save</span>
           </a>
-          <a className="button cancel tag-editor-cancel" role="button"><span>cancel</span></a>
+          <a className={`button cancel tag-editor-cancel ${this.hasAllInputDisabled() ? "disabled" : ""}`} role="button"
+             onClick={this.props.toggleInputTagEditor}><span>cancel</span></a>
         </div>
       </div>
     );

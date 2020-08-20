@@ -20,6 +20,7 @@ import PasswordSidebarCommentSection from "./PasswordSidebarCommentSection";
 
 
 class PasswordSidebar extends React.Component {
+
   /**
    * Constructor
    * @param {Object} props

@@ -15,26 +15,48 @@ import React from "react";
 import PropTypes from "prop-types";
 
 class TagItemViewer extends React.Component {
+
+  /**
+   * Constructor
+   * @param {Object} props
+   */
+  constructor(props) {
+    super(props);
+  }
+
+  isLoading() {
+    return !this.props.tags;
+  }
+
+  getTags() {
+    if(!this.isLoading()) {
+      return this.props.tags.sort((tagA, tagB) => tagA.slug.localeCompare(tagB.slug));
+    }
+    return null;
+  }
+
   /**
    * Render the component
    * @returns {JSX}
    */
   render() {
-    const isTagsNull = !this.props.tags
+    const isLoading = this.isLoading();
 
     return (
       <div>
-        {isTagsNull &&
-        <em className="empty-content">loading...</em>
+        {isLoading &&
+        <div className="processing-wrapper">
+          <span className="processing-text">Retrieving tags</span>
+        </div>
         }
-        {!isTagsNull && this.props.tags.length === 0 &&
+        {!isLoading && this.props.tags.length === 0 &&
         <em className="empty-content"
           onClick={this.props.toggleInputTagEditor}>There is no tag, click here to add one</em>
         }
-        {!isTagsNull && this.props.tags.length > 0 &&
+        {!isLoading && this.props.tags.length > 0 &&
         <ul className="tags tags-list">
-          {this.props.tags.map(tag =>
-            <li key={tag.id}>
+          {this.getTags().map(tag =>
+            <li key={tag.id}className="tag-list-item">
               <a className="tag ellipsis">{tag.slug}</a>
             </li>)
           }
