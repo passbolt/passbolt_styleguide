@@ -15,6 +15,7 @@ import React from "react";
 import Icon from "../../../Common/Icons/Icon";
 import PropTypes from "prop-types";
 import TagItemViewer from "./TagItemViewer";
+import TagEditor from "./TagEditor";
 
 class PasswordSidebarTagSection extends React.Component {
 
@@ -87,6 +88,14 @@ class PasswordSidebarTagSection extends React.Component {
           <TagItemViewer
             tags={this.props.resource.tags}
             displayInputTagEditor={this.displayInputTagEditor}/>
+          }
+
+          {this.state.showTagEditor &&
+          <TagEditor
+            tags={this.props.resource.tags}
+            isOwner={this.props.resource.permission.type === 15}
+            displayInputTagEditor={this.displayInputTagEditor}
+            resourceId={this.props.resource.id}/>
           }
 
         </div>
