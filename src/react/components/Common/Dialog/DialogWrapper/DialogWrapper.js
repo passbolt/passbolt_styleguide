@@ -13,7 +13,6 @@
  */
 import React, {Component} from "react";
 import PropTypes from "prop-types";
-
 import DialogCloseButton from "../DialogCloseButton/DialogCloseButton";
 import TooltipHtml from "../../Tooltip/TooltipHtml";
 
@@ -24,10 +23,22 @@ class DialogWrapper extends Component {
    */
   constructor(props) {
     super(props);
+    this.bindCallbacks();
+  }
+
+  /**
+   * Bind callbacks methods
+   * @return {void}
+   */
+  bindCallbacks() {
     this.handleKeyDown = this.handleKeyDown.bind(this);
     this.handleClose = this.handleClose.bind(this);
   }
 
+  /**
+   * Handle key down
+   * @param {ReactEvent} event The triggered event
+   */
   handleKeyDown(event) {
     // Close the dialog when the user presses the "ESC" key.
     if (event.keyCode === 27) {
@@ -35,6 +46,9 @@ class DialogWrapper extends Component {
     }
   }
 
+  /**
+   * Handle close
+   */
   handleClose() {
     if (!this.props.disabled) {
       this.props.onClose();
@@ -50,10 +64,19 @@ class DialogWrapper extends Component {
     document.addEventListener("keydown", this.handleKeyDown);
   }
 
+  /**
+   * componentWillUnmount
+   * Invoked immediately before the component is removed from the tree
+   * @return {void}
+   */
   componentWillUnmount() {
     document.removeEventListener("keydown", this.handleKeyDown);
   }
 
+  /**
+   * Render the component
+   * @return {JSX}
+   */
   render() {
     return (
       <div className={`${this.props.className} dialog-wrapper`}>
@@ -62,9 +85,9 @@ class DialogWrapper extends Component {
             <h2>
               <span>{this.props.title}</span>
               {(this.props.tooltip && this.props.tooltip !== '') &&
-                <TooltipHtml>
-                  <span>{this.props.tooltip}</span>
-                </TooltipHtml>
+              <TooltipHtml>
+                <span>{this.props.tooltip}</span>
+              </TooltipHtml>
               }
             </h2>
             <DialogCloseButton onClose={this.handleClose} disabled={this.props.disabled}/>

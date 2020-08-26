@@ -13,9 +13,9 @@
  */
 import React, {Component} from "react";
 import PropTypes from "prop-types";
-import UserAvatar from "../../../Common/Avatar/UserAvatar"
+import UserAvatar from "../../Avatar/UserAvatar"
 import Icon from "../../Icons/Icon";
-import AppContext from "../../../../../react-appjs/contexts/AppContext";
+import {Link} from "react-router-dom";
 
 class UserBadgeMenu extends Component {
   /**
@@ -25,60 +25,38 @@ class UserBadgeMenu extends Component {
   constructor(props) {
     super(props);
     this.state = this.getDefaultState();
-  }
-
-  componentDidUpdate() {
-    if (this.context.user && this.state.loading === true) {
-      this.setState({loading: false})
-    }
+    this.bindCallbacks();
   }
 
   /**
    * Get default state
-   * @returns {*}
+   * @returns {Object}
    */
   getDefaultState() {
     return {
-      // Whether the menu is opened or not.
-      open : false,
+      open: false,
       loading: true,
-
-      //  profile menu items list
-      menuItems: [
-        {
-          "id": "profile",
-          "name": "Profile",
-          "className": "profile row",
-          "url": "/app/settings/profile",
-        },
-        {
-          "id": "theme",
-          "name": "Theme",
-          "className": "theme row",
-          "url": "/app/settings/theme",
-        },
-        {
-          "id": "logout",
-          "name": "Logout",
-          "className": "logout row",
-          "url": "/logout",
-        },
-      ],
     }
   }
 
-  getCurrentUser() {
-    return this.context.currentUser || {};
+  /**
+   * Bind callbacks methods
+   * @return {void}
+   */
+  bindCallbacks() {
+    this.handleToggleMenuClick = this.handleToggleMenuClick.bind(this);
+    this.handleMenuItemClick = this.handleMenuItemClick.bind(this);
   }
+
   /**
    * Get current user first name and last name
    * @returns {string}
    */
   getCurrentUserName() {
-    if (!this.context.currentUser || !this.context.currentUser.profile) {
+    if (!this.props.user || !this.props.user.profile) {
       return '...';
     }
-    return `${this.context.currentUser.profile.first_name} ${this.context.currentUser.profile.last_name}`;
+    return `${this.props.user.profile.first_name} ${this.props.user.profile.last_name}`;
   }
 
   /**
@@ -86,10 +64,10 @@ class UserBadgeMenu extends Component {
    * @returns {string}
    */
   getCurrentUserUsername() {
-    if (!this.context.currentUser || !this.context.currentUser.username) {
+    if (!this.props.user || !this.props.user.username) {
       return '...';
     }
-    return `${this.context.currentUser.username}`;
+    return `${this.props.user.username}`;
   }
 
   /**
@@ -98,7 +76,8 @@ class UserBadgeMenu extends Component {
    */
   handleToggleMenuClick(e) {
     e.preventDefault();
-    this.setState({ open: !this.state.open });
+    const open = !this.state.open;
+    this.setState({open});
   }
 
   /**
@@ -106,54 +85,67 @@ class UserBadgeMenu extends Component {
    * @param {Element} menuItem
    */
   handleMenuItemClick(menuItem) {
-    this.props.onClick(menuItem);
-    this.setState({ open: false });
+    const open = false;
+    this.setState({open});
   }
 
+  /**
+   * Render the component
+   * @return {JSX}
+   */
   render() {
     return (
       <div className="col3 profile-wrapper">
-        <div className="user profile dropdown" onClick={(e) => this.handleToggleMenuClick(e)}>
-          <div className="center-cell-wrapper">
-            <div className="details center-cell">
-              <span className="name">{this.getCurrentUserName()}</span>
-              <span className="email">{this.getCurrentUserUsername()}</span>
+        <div className="user profile dropdown">
+          <div onClick={this.handleToggleMenuClick}>
+            <div className="center-cell-wrapper">
+              <div className="details center-cell">
+                <span className="name">{this.getCurrentUserName()}</span>
+                <span className="email">{this.getCurrentUserUsername()}</span>
+              </div>
+            </div>
+            <UserAvatar user={this.props.user} className="picture left-cell" baseUrl={this.props.baseUrl}/>
+            <div className="more right-cell">
+              <a>
+                <Icon name="caret-down"/>
+                <span>more</span>
+              </a>
             </div>
           </div>
-          <UserAvatar user={this.getCurrentUser()} className="picture left-cell" baseUrl={this.context.user["user.settings.trustedDomain"]}/>
-          <div className="more right-cell">
-            <a onClick={(e) => this.handleToggleMenuClick(e)}>
-              <Icon name="caret-down" />
-              <span>more</span>
-            </a>
-          </div>
-          <ul className={"dropdown-content right" + ' ' + ( this.state.open ? 'visible' : 'hidden' )}>
-            {(this.state.menuItems && (this.state.menuItems).map((menuItem) => {
-              return this.MenuItem(menuItem);
-            }))}
+          {this.state.open &&
+          <ul className="dropdown-content right visible">
+            <li key="profile">
+              <div className="row">
+                <Link to="/app/settings/profile" role="button" tabIndex="1" onClick={this.handleMenuItemClick}>
+                  <span>Profile</span>
+                </Link>
+              </div>
+            </li>
+            <li key="theme">
+              <div className="row">
+                <Link to="/app/settings/theme" role="button" tabIndex="2" onClick={this.handleMenuItemClick}>
+                  <span>Theme</span>
+                </Link>
+              </div>
+            </li>
+            <li key="logout">
+              <div className="row">
+                <a href={`${this.props.baseUrl}/logout`} role="button" tabIndex="3" onClick={this.handleMenuItemClick}>
+                  <span>Logout</span>
+                </a>
+              </div>
+            </li>
           </ul>
+          }
         </div>
       </div>
     );
   }
-
-  MenuItem(menuItem) {
-    return (
-      <li className={menuItem.className + ' ' + ( this.state.hidden ? 'hidden' : 'visible' )} key={menuItem.id}>
-        <div className={menuItem.selected ? "row selected" : "row"}>
-          <a href={menuItem.url} role="button" tabIndex="2" onClick={this.handleMenuItemClick.bind(this)}>
-            <span>{menuItem.name}</span>
-          </a>
-        </div>
-      </li>
-    );
-  }
 }
 
-UserBadgeMenu.contextType = AppContext;
-
 UserBadgeMenu.propTypes = {
-  onClick: PropTypes.func
+  baseUrl: PropTypes.string,
+  user: PropTypes.object,
 };
 
 export default UserBadgeMenu;

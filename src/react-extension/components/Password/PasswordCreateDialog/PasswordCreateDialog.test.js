@@ -14,65 +14,41 @@
 
 import React from "react";
 import {render, fireEvent, waitFor, cleanup} from "@testing-library/react";
-import "../../../test/lib/polyfill/cryptoGetRandomvalues";
+import "../../../test/lib/crypto/cryptoGetRandomvalues";
 import AppContext from "../../../contexts/AppContext";
 import PasswordCreateDialog from "./PasswordCreateDialog";
-import {PassboltApiFetchError} from "../../../lib/errors/PassboltApiFetchError";
-import Port from "../../../lib/extension/port";
+import {PassboltApiFetchError} from "../../../lib/Common/Error/PassboltApiFetchError";
+import UserSettings from "../../../lib/Settings/UserSettings";
+import userSettingsFixture from "../../../test/fixture/Settings/userSettings";
+import SiteSettings from "../../../lib/Settings/SiteSettings";
+import siteSettingsFixture from "../../../test/fixture/Settings/siteSettings";
+import MockPort from "../../../test/mock/MockPort";
 
 beforeEach(() => {
   jest.resetModules();
-  mockPort();
 });
 
-const mockPort = function() {
-  const mockedOnCallbacks = {};
-  const port = {
-    emit: jest.fn(),
-    fireAddonMessage: function(message) {
-      const callback =mockedOnCallbacks[message];
-      if (callback) {
-        const callbackArgs = Array.prototype.slice.call(arguments, 1);
-        callback.apply(null, callbackArgs);
-      }
-    },
-    on: (message, callback) => {
-      mockedOnCallbacks[message] = callback;
-    },
-    request: jest.fn()
+const getAppContext = function (appContext) {
+  const defaultAppContext = {
+    userSettings: new UserSettings(userSettingsFixture),
+    siteSettings: new SiteSettings(siteSettingsFixture),
+    port: new MockPort()
   };
-  Port.set(port);
+
+  return Object.assign(defaultAppContext, appContext || {});
 };
 
-afterEach(() => {
-  cleanup();
-  // Cleanup the global library port mock.
-  delete Port.get();
-});
+const renderPasswordCreateDialog = function(appContext, props) {
+  appContext = getAppContext(appContext);
+  props = props || {};
+  return render(
+    <AppContext.Provider value={appContext}>
+      <PasswordCreateDialog debug onClose={props.onClose || jest.fn()} />
+    </AppContext.Provider>
+  );
+};
 
 describe("PasswordCreateDialog", () => {
-  const getAppContext = function(appContext) {
-    const defaultAppContext = {
-      user: {
-        "user.settings.securityToken.code": "TST",
-        "user.settings.securityToken.textColor": "#FFFFFF",
-        "user.settings.securityToken.color": "#000000"
-      }
-    };
-
-    return Object.assign(defaultAppContext, appContext || {});
-  };
-
-  const renderPasswordCreateDialog = function(appContext, props) {
-    appContext = getAppContext(appContext);
-    props = props || {};
-    return render(
-      <AppContext.Provider value={appContext}>
-        <PasswordCreateDialog debug onClose={props.onClose || jest.fn()} />
-      </AppContext.Provider>
-    );
-  };
-
   it("matches the styleguide.", () => {
     const {container} = renderPasswordCreateDialog();
 
@@ -259,11 +235,8 @@ describe("PasswordCreateDialog", () => {
   });
 
   it("displays an error when the API call fail.", async() => {
-    // Mock the request function to make it return an error.
-    jest.spyOn(Port.get(), 'request').mockImplementationOnce(() => {
-      throw new PassboltApiFetchError("Jest simulate API error.");
-    });
-    const {container} = renderPasswordCreateDialog();
+    const context = getAppContext();
+    const {container} = renderPasswordCreateDialog(context);
 
     const resourceMeta = {
       name: "Password name",
@@ -281,6 +254,11 @@ describe("PasswordCreateDialog", () => {
     const passwordInputEvent = {target: {value: resourceMeta.password}};
     fireEvent.change(passwordInput, passwordInputEvent);
 
+    // Mock the request function to make it return an error.
+    jest.spyOn(context.port, 'request').mockImplementationOnce(() => {
+      throw new PassboltApiFetchError("Jest simulate API error.");
+    });
+
     // Submit and assert
     const submitButton = container.querySelector("input[type=\"submit\"]");
     fireEvent.click(submitButton, {button: 0});
@@ -294,12 +272,11 @@ describe("PasswordCreateDialog", () => {
 
   it("requests the addon to create a resource when clicking on the submit button.", async() => {
     const createdResourceId = "f2b4047d-ab6d-4430-a1e2-3ab04a2f4fb9";
-    // Mock the request function to make it the expected result
-    jest.spyOn(Port.get(), 'request').mockImplementationOnce(jest.fn((message, data) => Object.assign({id: createdResourceId}, data)));
+    const context = getAppContext();
     const props = {
       onClose: jest.fn()
     };
-    const {container} = renderPasswordCreateDialog(null, props);
+    const {container} = renderPasswordCreateDialog(context, props);
 
     const resourceMeta = {
       name: "Password name",
@@ -330,6 +307,10 @@ describe("PasswordCreateDialog", () => {
     const descriptionTextareaEvent = {target: {value: resourceMeta.description}};
     fireEvent.change(descriptionTextArea, descriptionTextareaEvent);
 
+    // Mock the request function to make it the expected result
+    jest.spyOn(context.port, 'request').mockImplementationOnce(jest.fn((message, data) => Object.assign({id: createdResourceId}, data)));
+    jest.spyOn(context.port, 'emit').mockImplementation(jest.fn());
+
     // Submit and assert
     const submitButton = container.querySelector("input[type=\"submit\"]");
     fireEvent.click(submitButton, {button: 0});
@@ -343,10 +324,10 @@ describe("PasswordCreateDialog", () => {
       username: resourceMeta.username,
       description: resourceMeta.description
     };
-    expect(Port.get().request).toHaveBeenCalledWith("passbolt.resources.create", onApiCreateResourceMeta, resourceMeta.password);
-    expect(Port.get().emit).toHaveBeenCalledTimes(2);
-    expect(Port.get().emit).toHaveBeenNthCalledWith(1, "passbolt.notification.display", {"message": "The password has been added successfully", "status": "success"});
-    expect(Port.get().emit).toHaveBeenNthCalledWith(2, "passbolt.resources.select-and-scroll-to", createdResourceId);
+    expect(context.port.request).toHaveBeenCalledWith("passbolt.resources.create", onApiCreateResourceMeta, resourceMeta.password);
+    expect(context.port.emit).toHaveBeenCalledTimes(2);
+    expect(context.port.emit).toHaveBeenNthCalledWith(1, "passbolt.notification.display", {"message": "The password has been added successfully", "status": "success"});
+    expect(context.port.emit).toHaveBeenNthCalledWith(2, "passbolt.resources.select-and-scroll-to", createdResourceId);
     expect(props.onClose).toBeCalled();
   });
 });

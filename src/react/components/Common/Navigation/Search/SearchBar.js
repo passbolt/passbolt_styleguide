@@ -51,6 +51,10 @@ class SearchBar extends Component {
     this.props.onSearch(value);
   }
 
+  /**
+   * Render the component
+   * @return {JSX}
+   */
   render() {
     return (
       <div className="col2 search-wrapper">

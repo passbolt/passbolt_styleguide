@@ -22,10 +22,23 @@ class TooltipHtml extends Component {
    */
   constructor(props) {
     super(props);
-    this.state = {top:null};
+    this.state = {top: null};
     this.tooltipRef = React.createRef();
+    this.bindCallbacks();
   }
 
+  /**
+   * Bind callbacks methods
+   * @return {void}
+   */
+  bindCallbacks() {
+    this.setTop = this.setTop.bind(this);
+  }
+
+  /**
+   * Change the tooltip inline style
+   * @return {Object}
+   */
   getInlineCss() {
     if (this.state.top) {
       const top = (this.tooltipRef.current.getBoundingClientRect().top) + 'px';
@@ -34,16 +47,24 @@ class TooltipHtml extends Component {
     return {};
   }
 
+  /**
+   * Change the tooltip top style
+   * @return {void}
+   */
   setTop() {
     if (this.props.offset) {
       this.setState({top: this.tooltipRef.current.getBoundingClientRect().top});
     }
   }
 
+  /**
+   * Render the component
+   * @return {JSX}
+   */
   render() {
-    return(
-      <div className="more-details tooltip-alt" ref={this.tooltipRef} onMouseEnter={this.setTop.bind(this)}>
-        <Icon name='info-circle' />
+    return (
+      <div className="more-details tooltip-alt" ref={this.tooltipRef} onMouseEnter={this.setTop}>
+        <Icon name='info-circle'/>
         <div className="tooltip-text right" style={this.getInlineCss()}>
           {this.props.children}
         </div>

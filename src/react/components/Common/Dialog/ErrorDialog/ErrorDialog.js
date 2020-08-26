@@ -22,6 +22,14 @@ class ErrorDialog extends Component {
    */
   constructor(props) {
     super(props);
+    this.bindCallbacks();
+  }
+
+  /**
+   * Bind callbacks methods
+   * @return {void}
+   */
+  bindCallbacks() {
     this.handleKeyDown = this.handleKeyDown.bind(this);
   }
 
@@ -34,6 +42,11 @@ class ErrorDialog extends Component {
     document.addEventListener("keydown", this.handleKeyDown);
   }
 
+  /**
+   * componentWillUnmount
+   * Invoked immediately before the component is removed from the tree
+   * @return {void}
+   */
   componentWillUnmount() {
     document.removeEventListener("keydown", this.handleKeyDown);
   }
@@ -73,6 +86,10 @@ class ErrorDialog extends Component {
     }
   }
 
+  /**
+   * Render the component
+   * @return {JSX}
+   */
   render() {
     return (
       <div className="dialog-wrapper error-dialog">

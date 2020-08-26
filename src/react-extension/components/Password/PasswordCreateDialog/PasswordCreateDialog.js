@@ -17,8 +17,7 @@ import PropTypes from "prop-types";
 import AppContext from "../../../contexts/AppContext";
 import Icon from "../../Common/Icons/Icon";
 import Tooltip from "../../Common/Tooltip/Tooltip";
-import Port from "../../../lib/extension/port";
-import SecretComplexity from "../../../lib/secret/secretComplexity";
+import SecretComplexity from "../../../lib/Secret/secretComplexity";
 
 class PasswordCreateDialog extends Component {
   constructor() {
@@ -126,7 +125,7 @@ class PasswordCreateDialog extends Component {
       folder_parent_id: this.props.folderParentId
     };
 
-    return Port.get().request("passbolt.resources.create", resourceDto, this.state.password);
+    return this.context.port.request("passbolt.resources.create", resourceDto, this.state.password);
   }
 
   /**
@@ -146,7 +145,7 @@ class PasswordCreateDialog extends Component {
    * @param {string} message The message to display
    */
   displayNotification(status, message) {
-    Port.get().emit("passbolt.notification.display", {status: status, message: message});
+    this.context.port.emit("passbolt.notification.display", {status: status, message: message});
   }
 
   /**
@@ -154,7 +153,7 @@ class PasswordCreateDialog extends Component {
    * @param {string} id The resource id.
    */
   selectAndScrollToResource(id) {
-    Port.get().emit("passbolt.resources.select-and-scroll-to", id);
+    this.context.port.emit("passbolt.resources.select-and-scroll-to", id);
   }
 
   /**
@@ -163,7 +162,7 @@ class PasswordCreateDialog extends Component {
    * @returns {void}
    */
   selectAndScrollToFolder(id) {
-    Port.get().emit("passbolt.folders.select-and-scroll-to", id);
+    this.context.port.emit("passbolt.folders.select-and-scroll-to", id);
   }
 
   /**
@@ -316,9 +315,12 @@ class PasswordCreateDialog extends Component {
    */
   getPasswordInputStyle() {
     if (this.state.passwordInputHasFocus) {
+      const backgroundColor = this.context.userSettings.getSecurityTokenBackgroundColor();
+      const textColor = this.context.userSettings.getSecurityTokenTextColor();
+
       return {
-        background: this.context.user["user.settings.securityToken.color"],
-        color: this.context.user["user.settings.securityToken.textColor"]
+        background: backgroundColor,
+        color: textColor
       };
     }
 
@@ -333,22 +335,26 @@ class PasswordCreateDialog extends Component {
    * @return {Object}
    */
   getSecurityTokenStyle() {
+    const backgroundColor = this.context.userSettings.getSecurityTokenBackgroundColor();
+    const textColor = this.context.userSettings.getSecurityTokenTextColor();
+
     if (this.state.passwordInputHasFocus) {
       return {
-        background: this.context.user["user.settings.securityToken.textColor"],
-        color: this.context.user["user.settings.securityToken.color"],
+        background: textColor,
+        color: backgroundColor,
       };
     }
 
     return {
-      background: this.context.user["user.settings.securityToken.color"],
-      color: this.context.user["user.settings.securityToken.textColor"],
+      background: backgroundColor,
+      color: textColor,
     };
   }
 
   render() {
     const passwordInputStyle = this.getPasswordInputStyle();
     const securityTokenStyle = this.getSecurityTokenStyle();
+    const securityTokenCode = this.context.userSettings.getSecurityTokenCode();
     const passwordStrength = SecretComplexity.getStrength(this.state.password);
 
     return (
@@ -402,7 +408,7 @@ class PasswordCreateDialog extends Component {
                       onChange={this.handleInputChange} disabled={this.state.processing}
                       style={passwordInputStyle} ref={this.passwordInputRef}/>
                     <div className="security-token"
-                      style={securityTokenStyle}>{this.context.user["user.settings.securityToken.code"]}</div>
+                      style={securityTokenStyle}>{securityTokenCode}</div>
                   </div>
                   <ul className="actions inline">
                     <li>

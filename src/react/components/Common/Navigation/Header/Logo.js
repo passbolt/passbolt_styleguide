@@ -15,13 +15,9 @@ import React, {Component} from "react";
 
 class Logo extends Component {
   /**
-   * Constructor
-   * @param {Object} props
+   * Render the component
+   * @return {JSX}
    */
-  constructor(props) {
-    super(props);
-  }
-
   render() {
     return (
       <div className="col1">

@@ -25,7 +25,7 @@ import Grid from "./Grid/Grid";
 import FolderSidebar from "./FolderSidebar/FolderSidebar";
 import PasswordSidebar from "./PasswordSidebar/PasswordSidebar";
 import FoldersTreeRootFolderContextualMenu from "./FoldersTree/FoldersTreeRootFolderContextualMenu";
-import AppContext from "../../../../react/contexts/AppContext";
+import AppContext from "../../../contexts/AppContext";
 import UserAvatar from "../../../../react/components/Common/Avatar/UserAvatar";
 
 class Workspace extends Component {

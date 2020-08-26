@@ -13,18 +13,31 @@
  */
 import React, {Component} from "react";
 import PropTypes from "prop-types";
+import UserAvatar from "../Avatar/UserAvatar";
+import GroupAvatar from "../Avatar/GroupAvatar";
 
 class AutocompleteItem extends Component {
-
-  getAvatar() {
-    if (this.props.user) {
-      // return this.props.user.profile.avatar.small;
-      return 'img/avatar/user.png'
-    } else {
-      return 'img/avatar/group_default.png';
-    }
+  /**
+   * Constructor
+   * @param {Object} props
+   */
+  constructor(props) {
+    super(props);
+    this.bindCallbacks();
   }
 
+  /**
+   * Bind callbacks methods
+   * @return {void}
+   */
+  bindCallbacks() {
+    this.handleClick = this.handleClick.bind(this);
+  }
+
+  /**
+   * Get the item title
+   * @returns {string}
+   */
   getTitle() {
     if (this.props.user) {
       return `${this.props.user.profile.first_name} ${this.props.user.profile.last_name} (${this.props.user.username})`;
@@ -33,6 +46,10 @@ class AutocompleteItem extends Component {
     }
   }
 
+  /**
+   * Get the item subtitle
+   * @returns {string}
+   */
   getSubtitle() {
     if (this.props.user) {
       let longId = this.props.user.gpgkey.fingerprint.substr(this.props.user.gpgkey.fingerprint.length - 16);
@@ -46,6 +63,10 @@ class AutocompleteItem extends Component {
     }
   }
 
+  /**
+   * Get the autocomplete item classname
+   * @returns {string}
+   */
   getClassName() {
     if (this.props.selected) {
       return 'row selected';
@@ -53,20 +74,30 @@ class AutocompleteItem extends Component {
     return 'row';
   }
 
-  onClick () {
+  /**
+   * Handle click on an autocomplete item
+   */
+  handleClick () {
     this.props.onClick(this.props.id);
   }
 
+  /**
+   * Render the component
+   * @return {JSX}
+   */
   render() {
     return (
       <li id="autocomplete-item">
         <div className={this.getClassName()}>
           <div className="main-cell-wrapper">
             <div className="main-cell ">
-              <a role="button" onClick={this.onClick.bind(this)}>
-                <div className="avatar">
-                  <img src={this.getAvatar()} alt="Avatar picture"/>
-                </div>
+              <a role="button" onClick={this.handleClick}>
+                {this.props.user &&
+                <UserAvatar user={this.props.user} baseUrl={this.props.baseUrl}/>
+                }
+                {this.props.group &&
+                <GroupAvatar group={this.props.group} baseUrl={this.props.baseUrl}/>
+                }
                 <div className="user">
                   <span className="name">{this.getTitle()}</span>
                   <span className="details">{this.getSubtitle()}</span>
@@ -81,6 +112,7 @@ class AutocompleteItem extends Component {
 }
 
 AutocompleteItem.propTypes = {
+  baseUrl: PropTypes.string,
   id: PropTypes.number,
   user: PropTypes.object,
   group: PropTypes.object,

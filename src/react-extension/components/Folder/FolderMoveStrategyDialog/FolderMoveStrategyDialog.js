@@ -17,8 +17,7 @@ import AppContext from "../../../contexts/AppContext";
 import FormSubmitButton from "../../Common/Inputs/FormSubmitButton/FormSubmitButton";
 import FormCancelButton from "../../Common/Inputs/FormSubmitButton/FormCancelButton";
 import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
-import UserAbortsOperationError from "../../../lib/errors/UserAbortsOperationError";
-import Port from "../../../lib/extension/port";
+import UserAbortsOperationError from "../../../lib/Common/Error/UserAbortsOperationError";
 
 class FolderMoveStrategyDialog extends Component {
   /**
@@ -117,7 +116,7 @@ class FolderMoveStrategyDialog extends Component {
     await this.toggleProcessing();
 
     try {
-      Port.get().emit(this.props.requestId, "SUCCESS", {moveOption: this.state.moveOption});
+      this.context.port.emit(this.props.requestId, "SUCCESS", {moveOption: this.state.moveOption});
       this.props.onClose();
     } catch (error) {
       console.error(error);
@@ -161,7 +160,7 @@ class FolderMoveStrategyDialog extends Component {
       return;
     }
     const error = new UserAbortsOperationError("The dialog has been closed.");
-    Port.get().emit(this.props.requestId, "ERROR", error);
+    this.context.port.emit(this.props.requestId, "ERROR", error);
     this.props.onClose();
   }
 

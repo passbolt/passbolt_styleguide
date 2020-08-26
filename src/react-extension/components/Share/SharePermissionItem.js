@@ -120,10 +120,10 @@ class SharePermissionItem extends Component {
     return (
       <li id={`permission-item-${this.props.id}`} className={this.getClassName()}>
         {this.isUser() &&
-        <UserAvatar user={this.props.aro} baseUrl={this.context.user["user.settings.trustedDomain"]}/>
+        <UserAvatar user={this.props.aro} baseUrl={this.context.userSettings.getTrustedDomain()}/>
         }
         {this.isGroup() &&
-        <GroupAvatar group={this.props.aro} baseUrl={this.context.user["user.settings.trustedDomain"]}/>
+        <GroupAvatar group={this.props.aro} baseUrl={this.context.userSettings.getTrustedDomain()}/>
         }
 
         <div className="aro">

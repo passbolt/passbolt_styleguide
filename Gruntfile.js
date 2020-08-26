@@ -91,10 +91,10 @@ module.exports = function(grunt) {
           'cp ./src/css/themes/default/api_main.css ./demo/react-appjs/public/css/themes/default/.',
           'cp ./src/css/themes/midgar/api_main.css ./demo/react-appjs/public/css/themes/midgar/.',
 
-          'rm ./demo/react-extension/public/css/themes/default/ext_app.css',
-          'rm ./demo/react-extension/public/css/themes/midgar/ext_app.css',
-          'cp ./src/css/themes/default/ext_app.css ./demo/react-extension/public/css/themes/default/.',
-          'cp ./src/css/themes/midgar/ext_app.css ./demo/react-extension/public/css/themes/midgar/.'
+          'rm ./demo/react-extension/public/css/themes/default/api_main.css',
+          'rm ./demo/react-extension/public/css/themes/midgar/api_main.css',
+          'cp ./src/css/themes/default/api_main.css ./demo/react-extension/public/css/themes/default/.',
+          'cp ./src/css/themes/midgar/api_main.css ./demo/react-extension/public/css/themes/midgar/.'
         ].join('&& ')
       }
 		},

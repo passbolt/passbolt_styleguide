@@ -13,13 +13,11 @@
  */
 import React, {Component} from "react";
 import PropTypes from "prop-types";
-
 import AppContext from "../../../contexts/AppContext";
 import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
 import ErrorDialog from "../../Common/Dialog/ErrorDialog/ErrorDialog";
 import FormSubmitButton from "../../Common/Inputs/FormSubmitButton/FormSubmitButton";
 import FormCancelButton from "../../Common/Inputs/FormSubmitButton/FormCancelButton";
-import Port from "../../../lib/extension/port";
 
 class FolderCreateDialog extends Component {
   /**
@@ -193,7 +191,7 @@ class FolderCreateDialog extends Component {
       name: this.state.name,
       folder_parent_id: this.props.folderParentId
     };
-    return await Port.get().request("passbolt.folders.create", folderDto);
+    return await this.context.port.request("passbolt.folders.create", folderDto);
   }
 
   /**
@@ -203,7 +201,7 @@ class FolderCreateDialog extends Component {
    * @returns {void}
    */
   displayNotification(status, message) {
-    Port.get().emit("passbolt.notification.display", {status: status, message: message});
+    this.context.port.emit("passbolt.notification.display", {status: status, message: message});
   }
 
   /**
@@ -212,7 +210,7 @@ class FolderCreateDialog extends Component {
    * @returns {void}
    */
   selectAndScrollToFolder(id) {
-    Port.get().emit("passbolt.folders.select-and-scroll-to", id);
+    this.context.port.emit("passbolt.folders.select-and-scroll-to", id);
   }
 
   /**
@@ -271,7 +269,7 @@ class FolderCreateDialog extends Component {
 
   /**
    * Render
-   * @returns {*}
+   * @returns {JSX}
    */
   render() {
     return (

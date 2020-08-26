@@ -19,26 +19,35 @@ import Gauge from "../../../lib/reports/widgets/gauge";
 
 class Chart extends Component {
 
+  /**
+   * @todo Investigate if there is another way to do this. It looks counter intuitive.
+   */
   componentDidMount() {
     const el = ReactDOM.findDOMNode(this);
-    if(this.props.type === "area") {
+    if (this.props.type === "area") {
       const chart = new Area(this.props.data);
       chart.render(el);
-    } else if(this.props.type === "gauge") {
+    } else if (this.props.type === "gauge") {
       const chart = new Gauge(this.props.data);
       chart.render(el);
     }
   }
 
+  /**
+   * Get the chart classname
+   * @returns {string}
+   */
   getClassName() {
-    let className = `chart chart-${this.props.type}`;
-
-    return className;
+    return `chart chart-${this.props.type}`;
   }
 
+  /**
+   * Render the component
+   * @return {JSX}
+   */
   render() {
-    return(
-      <div className={this.getClassName()} />
+    return (
+      <div className={this.getClassName()}/>
     )
   }
 }

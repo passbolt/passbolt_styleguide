@@ -16,8 +16,7 @@ import PropTypes from "prop-types";
 import AppContext from "../../../contexts/AppContext";
 import Icon from "../../Common/Icons/Icon";
 import Tooltip from "../../Common/Tooltip/Tooltip";
-import Port from "../../../lib/extension/port";
-import SecretComplexity from "../../../lib/secret/secretComplexity";
+import SecretComplexity from "../../../lib/Secret/secretComplexity";
 
 class PasswordEditDialog extends Component {
   constructor(props, context) {
@@ -232,7 +231,7 @@ class PasswordEditDialog extends Component {
       secret = this.state.password;
     }
 
-    return Port.get().request("passbolt.resources.update", resourceMeta, secret);
+    return this.context.port.request("passbolt.resources.update", resourceMeta, secret);
   }
 
   /**
@@ -252,7 +251,7 @@ class PasswordEditDialog extends Component {
    * @param {string} message The message to display
    */
   displayNotification(status, message) {
-    Port.get().emit("passbolt.notification.display", {status: status, message: message});
+    this.context.port.emit("passbolt.notification.display", {status: status, message: message});
   }
 
   /**
@@ -260,7 +259,7 @@ class PasswordEditDialog extends Component {
    * @param {string} id The resource id.
    */
   selectAndScrollToResource(id) {
-    Port.get().emit("passbolt.resources.select-and-scroll-to", id);
+    this.context.port.emit("passbolt.resources.select-and-scroll-to", id);
   }
 
   /**
@@ -297,7 +296,7 @@ class PasswordEditDialog extends Component {
    * @return {Promise<string>}
    */
   async getDecryptedSecret() {
-    return Port.get().request("passbolt.secret-edit.decrypt", this.props.id);
+    return this.context.port.request("passbolt.secret-edit.decrypt", this.props.id);
   }
 
   /**
@@ -366,9 +365,12 @@ class PasswordEditDialog extends Component {
    */
   getPasswordInputStyle() {
     if (this.state.passwordInputHasFocus) {
+      const backgroundColor = this.context.userSettings.getSecurityTokenBackgroundColor();
+      const textColor = this.context.userSettings.getSecurityTokenTextColor();
+
       return {
-        background: this.context.user["user.settings.securityToken.color"],
-        color: this.context.user["user.settings.securityToken.textColor"]
+        background: backgroundColor,
+        color: textColor
       };
     }
 
@@ -383,16 +385,19 @@ class PasswordEditDialog extends Component {
    * @return {Object}
    */
   getSecurityTokenStyle() {
+    const backgroundColor = this.context.userSettings.getSecurityTokenBackgroundColor();
+    const textColor = this.context.userSettings.getSecurityTokenTextColor();
+
     if (this.state.passwordInputHasFocus) {
       return {
-        background: this.context.user["user.settings.securityToken.textColor"],
-        color: this.context.user["user.settings.securityToken.color"],
+        background: textColor,
+        color: backgroundColor,
       };
     }
 
     return {
-      background: this.context.user["user.settings.securityToken.color"],
-      color: this.context.user["user.settings.securityToken.textColor"],
+      background: backgroundColor,
+      color: textColor,
     };
   }
 
@@ -414,6 +419,7 @@ class PasswordEditDialog extends Component {
   render() {
     const passwordInputStyle = this.getPasswordInputStyle();
     const securityTokenStyle = this.getSecurityTokenStyle();
+    const securityTokenCode = this.context.userSettings.getSecurityTokenCode();
     const passwordStrength = SecretComplexity.getStrength(this.state.password);
     const passwordPlaceholder = this.getPasswordInputPlaceholder();
 
@@ -464,14 +470,14 @@ class PasswordEditDialog extends Component {
                 <div className={`input-password-wrapper required ${this.state.passwordError ? "error" : ""}`}>
                   <label htmlFor="edit-password-form-password">Password</label>
                   <div className="input text password">
-                    <input id="edit-password-form-password" name="password" className="required"
+                    <input id="edit-password-form-password" name="password" className={`required ${this.state.isSecretDecrypted ? "decrypted" : ""}`}
                       required="required" type={this.state.viewPassword ? "text" : "password"}
                       onKeyUp={this.handlePasswordInputKeyUp} value={this.state.password}
                       placeholder={passwordPlaceholder} onFocus={this.handlePasswordInputFocus}
                       onBlur={this.handlePasswordInputBlur} onChange={this.handleInputChange}
                       disabled={this.state.processing} style={passwordInputStyle} ref={this.passwordInputRef}/>
                     <div className="security-token"
-                      style={securityTokenStyle}>{this.context.user["user.settings.securityToken.code"]}</div>
+                      style={securityTokenStyle}>{securityTokenCode}</div>
                   </div>
                   <ul className="actions inline">
                     <li>

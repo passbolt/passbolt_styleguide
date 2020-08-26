@@ -14,6 +14,10 @@
 import React, {Component} from "react";
 
 class AutocompleteItemEmpty extends Component {
+  /**
+   * Render
+   * @returns {JSX}
+   */
   render() {
     return(
       <li>

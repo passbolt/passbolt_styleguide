@@ -13,7 +13,6 @@
  */
 import React, {Component} from "react";
 import PropTypes from "prop-types";
-import AppContext from "../../../contexts/AppContext";
 
 class UserAvatar extends Component {
   /**
@@ -23,6 +22,7 @@ class UserAvatar extends Component {
   constructor(props) {
     super(props);
     this.state = this.getDefaultState();
+    this.bindCallbacks();
   }
 
   /**
@@ -36,10 +36,18 @@ class UserAvatar extends Component {
   }
 
   /**
+   * Bind callbacks methods
+   * @return {void}
+   */
+  bindCallbacks() {
+    this.handleError = this.handleError.bind(this);
+  }
+
+  /**
    * Return true if the user from props contains a valid profile with avatar url properties
    * @returns {boolean}
    */
-  propsHasUrl () {
+  propsHasUrl() {
     return this.props.user &&
       this.props.user.profile &&
       this.props.user.profile.avatar &&
@@ -47,16 +55,22 @@ class UserAvatar extends Component {
       this.props.user.profile.avatar.url.small
   }
 
+  /**
+   * Check if the url has a protocol like http or https?
+   * @todo only check https for now
+   * @returns {boolean}
+   */
   propsUrlHasProtocol() {
     return this.props.user.profile.avatar.url.small.startsWith('https://');
   }
 
+  /**
+   * Format the avatar url to point on the site url.
+   * @param {string} url The relative url
+   * @returns {string}
+   */
   formatUrl(url) {
     return `${this.props.baseUrl}/${url}`;
-  }
-
-  getPropsUrl() {
-    return this.props.user.profile.avatar.url.small;
   }
 
   /**
@@ -67,34 +81,51 @@ class UserAvatar extends Component {
     return `${this.props.baseUrl}/img/avatar/user.png`;
   }
 
+  /**
+   * Get the user avatar url. If the user has no avatar defined, return the default one.
+   * @returns {string}
+   */
   getAvatarSrc() {
     if (!this.state.error && this.propsHasUrl()) {
       if (this.propsUrlHasProtocol()) {
-        return this.getPropsUrl();
+        return this.props.user.profile.avatar.url.small;
       } else {
-        return this.formatUrl(this.getPropsUrl());
+        return this.formatUrl(this.props.user.profile.avatar.url.small);
       }
     }
     return this.getDefaultAvatarUrl();
   }
 
+  /**
+   * Handle error while loading the user avatar image.
+   * By instance when the image is not present on the server.
+   * @return {void}
+   */
   handleError() {
     console.error(`Could not load avatar image url: ${this.getAvatarSrc()}`);
     this.setState({error: true});
   }
 
+  /**
+   * Get the user avatar image alternative text.
+   * @returns {string}
+   */
   getAltText() {
-    if (!this.props.user.profile) {
+    if (!this.props.user || !this.props.user.profile) {
       return '...';
     }
     return `Avatar of user ${this.props.user.profile.first_name} ${this.props.user.profile.last_name}.`;
   }
 
+  /**
+   * Render the component
+   * @return {JSX}
+   */
   render() {
-    return(
+    return (
       <div className={this.props.className}>
         {!this.state.error &&
-        <img src={this.getAvatarSrc()} onError={this.handleError.bind(this)} alt={this.getAltText()}/>
+        <img src={this.getAvatarSrc()} onError={this.handleError} alt={this.getAltText()}/>
         }
         {this.state.error &&
         <img src={this.getDefaultAvatarUrl()} alt={this.getAltText()}/>
@@ -103,8 +134,6 @@ class UserAvatar extends Component {
     )
   }
 }
-
-UserAvatar.contextType = AppContext;
 
 UserAvatar.defaultProps = {
   className: "avatar user-avatar"

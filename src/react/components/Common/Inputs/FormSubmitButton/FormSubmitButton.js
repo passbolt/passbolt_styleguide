@@ -11,7 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         2.13.0
  */
-import React, { Component} from "react";
+import React, {Component} from "react";
 import PropTypes from "prop-types";
 
 class FormSubmitButton extends Component {
@@ -21,13 +21,21 @@ class FormSubmitButton extends Component {
    */
   constructor(props) {
     super(props);
-    this.bindEventHandlers();
+    this.bindCallbacks();
   }
 
-  bindEventHandlers() {
+  /**
+   * Bind callbacks methods
+   * @return {void}
+   */
+  bindCallbacks() {
     this.getClassName = this.getClassName.bind(this);
   }
 
+  /**
+   * Get the input button classname
+   * @returns {string}
+   */
   getClassName() {
     let name = 'button primary';
     if (this.props.warning) {
@@ -42,12 +50,16 @@ class FormSubmitButton extends Component {
     return name;
   }
 
+  /**
+   * Render the component
+   * @return {JSX}
+   */
   render() {
     return (
       <input type="submit"
-             className={this.getClassName()}
-             disabled={this.props.disabled}
-             value={this.props.value || 'Save'}
+        className={this.getClassName()}
+        disabled={this.props.disabled}
+        value={this.props.value || 'Save'}
       />
     )
   }

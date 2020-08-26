@@ -14,88 +14,68 @@
 
 import React from "react";
 import {render, fireEvent, waitFor, cleanup} from "@testing-library/react";
-import "../../../test/lib/polyfill/cryptoGetRandomvalues";
+import "../../../test/lib/crypto/cryptoGetRandomvalues";
 import AppContext from "../../../contexts/AppContext";
 import PasswordEditDialog from "./PasswordEditDialog";
-import {PassboltApiFetchError} from "../../../lib/errors/PassboltApiFetchError";
-import Port from "../../../lib/extension/port";
+import {PassboltApiFetchError} from "../../../lib/Common/Error/PassboltApiFetchError";
+import UserSettings from "../../../lib/Settings/UserSettings";
+import userSettingsFixture from "../../../test/fixture/Settings/userSettings";
+import SiteSettings from "../../../lib/Settings/SiteSettings";
+import siteSettingsFixture from "../../../test/fixture/Settings/siteSettings";
+import MockPort from "../../../test/mock/MockPort";
 
 beforeEach(() => {
   jest.resetModules();
-  mockPort();
 });
 
-const mockPort = function() {
-  const mockedOnCallbacks = {};
-  const port = {
-    emit: jest.fn(),
-    fireAddonMessage: function(message) {
-      const callback =mockedOnCallbacks[message];
-      if (callback) {
-        const callbackArgs = Array.prototype.slice.call(arguments, 1);
-        callback.apply(null, callbackArgs);
-      }
-    },
-    on: (message, callback) => {
-      mockedOnCallbacks[message] = callback;
-    },
-    request: jest.fn()
+const getDummyResource = function () {
+  return {
+    "id": "8e3874ae-4b40-590b-968a-418f704b9d9a",
+    "name": "apache",
+    "username": "www-data",
+    "uri": "http://www.apache.org/",
+    "description": "Apache is the world's most used web server software.",
+    "deleted": false,
+    "created": "2019-12-05T13:38:43+00:00",
+    "modified": "2019-12-06T13:38:43+00:00",
+    "created_by": "f848277c-5398-58f8-a82a-72397af2d450",
+    "modified_by": "f848277c-5398-58f8-a82a-72397af2d450"
   };
-  Port.set(port);
+};
+
+const getAppContext = function (appContext) {
+  const port = new MockPort();
+  port.addRequestListener("passbolt.secret-edit.decrypt", () => "secret-decrypted");
+  const userSettings = new UserSettings(userSettingsFixture);
+  const siteSettings = new SiteSettings(siteSettingsFixture);
+  const resources = [getDummyResource()];
+  const defaultAppContext = {userSettings, siteSettings, port, resources};
+
+  return Object.assign(defaultAppContext, appContext || {});
+};
+
+const getComponentProps = function (props) {
+  const defaultAppProps = {
+    id: "8e3874ae-4b40-590b-968a-418f704b9d9a",
+    onClose: jest.fn()
+  };
+
+  return Object.assign(defaultAppProps, props || {});
+};
+
+const renderPasswordEditDialog = function (appContext, props) {
+  appContext = getAppContext(appContext);
+  props = getComponentProps(props);
+
+  return render(
+    <AppContext.Provider value={appContext}>
+      <PasswordEditDialog debug id={props.id} onClose={props.onClose}/>
+    </AppContext.Provider>
+  );
 };
 
 describe("PasswordEditDialog", () => {
-  const getDummyResource = function() {
-    return {
-      "id": "8e3874ae-4b40-590b-968a-418f704b9d9a",
-      "name": "apache",
-      "username": "www-data",
-      "uri": "http://www.apache.org/",
-      "description": "Apache is the world's most used web server software.",
-      "deleted": false,
-      "created": "2019-12-05T13:38:43+00:00",
-      "modified": "2019-12-06T13:38:43+00:00",
-      "created_by": "f848277c-5398-58f8-a82a-72397af2d450",
-      "modified_by": "f848277c-5398-58f8-a82a-72397af2d450"
-    };
-  };
-
-  const getAppContext = function(appContext) {
-    const defaultAppContext = {
-      user: {
-        "user.settings.securityToken.code": "TST",
-        "user.settings.securityToken.textColor": "#FFFFFF",
-        "user.settings.securityToken.color": "#000000"
-      },
-      resources: [
-        getDummyResource()
-      ]
-    };
-
-    return Object.assign(defaultAppContext, appContext || {});
-  };
-
-  const getComponentProps = function(props) {
-    const defaultAppProps = {
-      id: "8e3874ae-4b40-590b-968a-418f704b9d9a",
-      onClose: jest.fn()
-    };
-
-    return Object.assign(defaultAppProps, props || {});
-  };
-
-  const renderPasswordEditDialog = function(appContext, props) {
-    appContext = getAppContext(appContext);
-    props = getComponentProps(props);
-
-    return render(
-      <AppContext.Provider value={appContext}>
-        <PasswordEditDialog debug id={props.id} onClose={props.onClose}/>
-      </AppContext.Provider>
-    );
-  };
-
-  it.only("matches the styleguide.", () => {
+  it("matches the styleguide.", () => {
     const resource = getDummyResource();
     const {container} = renderPasswordEditDialog();
 
@@ -175,7 +155,7 @@ describe("PasswordEditDialog", () => {
     expect(cancelButton).not.toBeNull();
   });
 
-  it.only("calls onClose props when clicking on the close button.", () => {
+  it("calls onClose props when clicking on the close button.", () => {
     const props = {
       onClose: jest.fn()
     };
@@ -187,7 +167,7 @@ describe("PasswordEditDialog", () => {
     expect(props.onClose).toBeCalled();
   });
 
-  it.only("calls onClose props when clicking on the cancel button.", () => {
+  it("calls onClose props when clicking on the cancel button.", () => {
     const props = {
       onClose: jest.fn()
     };
@@ -199,7 +179,7 @@ describe("PasswordEditDialog", () => {
     expect(props.onClose).toBeCalled();
   });
 
-  it("changes the style of its security token when the password input get or lose focus when the password is already decrypted", () => {
+  it("changes the style of its security token when the password input get or lose focus when the password is already decrypted", async () => {
     const {container} = renderPasswordEditDialog();
     const passwordInput = container.querySelector("[name=\"password\"]");
     const securityTokenElement = container.querySelector(".security-token");
@@ -209,6 +189,9 @@ describe("PasswordEditDialog", () => {
      * Assert style change.
      */
     fireEvent.focus(passwordInput);
+    await waitFor(() => {
+      expect(passwordInput.classList).toContain("decrypted");
+    });
     let securityTokenStyle = window.getComputedStyle(securityTokenElement);
     let passwordInputStyle = window.getComputedStyle(passwordInput);
     expect(passwordInputStyle.background).toBe("rgb(0, 0, 0)");
@@ -229,7 +212,7 @@ describe("PasswordEditDialog", () => {
     expect(securityTokenStyle.color).toBe("rgb(255, 255, 255)");
   });
 
-  it("generates password when clicking on the generate button.", () => {
+  it("generates password when clicking on the generate button.", async () => {
     const {container} = renderPasswordEditDialog();
 
     const leftClick = {button: 0};
@@ -238,24 +221,30 @@ describe("PasswordEditDialog", () => {
     const complexityLabel = container.querySelector(".complexity-text");
     const complexityBar = container.querySelector(".progress-bar");
 
-    // Generate a password and asserts.
+    fireEvent.focus(passwordInput);
+    await waitFor(() => {
+      expect(passwordInput.classList).toContain("decrypted");
+    });
+
     fireEvent.click(generateButton, leftClick);
-    expect(passwordInput.value).not.toBe("");
     expect(complexityLabel.textContent).not.toBe("complexity: n/a");
     expect(complexityBar.classList.contains("not_available")).toBe(false);
   });
 
-  it("views password when clicking on the view button.", () => {
+  it("views password when clicking on the view button.", async () => {
     const {container} = renderPasswordEditDialog();
 
     const leftClick = {button: 0};
-    const passwordValue = "Lise Meitner";
+    const passwordValue = "secret-decrypted";
+
     const passwordInput = container.querySelector("[name=\"password\"]");
-    const viewButton = container.querySelector(".password-view");
-    fireEvent.change(passwordInput, {target: {value: passwordValue}});
+    const viewButton = container.querySelector(".password-view.button");
 
     // View password
     fireEvent.click(viewButton, leftClick);
+    await waitFor(() => {
+      expect(passwordInput.classList).toContain("decrypted");
+    });
     expect(passwordInput.value).toBe(passwordValue);
     let passwordInputType = passwordInput.getAttribute("type");
     expect(passwordInputType).toBe("text");
@@ -269,29 +258,51 @@ describe("PasswordEditDialog", () => {
     expect(viewButton.classList.contains("selected")).toBe(false);
   });
 
-  it("validates the form when clicking on the submit button.", async() => {
+  it("validates the form when clicking on the submit button.", async () => {
     const {container} = renderPasswordEditDialog();
+
+    const nameInput = container.querySelector("[name=\"name\"]");
+    const passwordInput = container.querySelector("[name=\"password\"]");
+
+    const nameInputEvent = {target: {value: ""}};
+    fireEvent.change(nameInput, nameInputEvent);
+
+    fireEvent.focus(passwordInput);
+    await waitFor(() => {
+      expect(passwordInput.classList).toContain("decrypted");
+    });
+    const passwordInputEvent = {target: {value: ""}};
+    fireEvent.change(passwordInput, passwordInputEvent);
+
+    await waitFor(() => {
+    });
 
     const leftClick = {button: 0};
     const submitButton = container.querySelector("input[type=\"submit\"]");
     fireEvent.click(submitButton, leftClick);
-    await waitFor(() => {});
 
-    // Throw name error message
-    const nameErrorMessage = container.querySelector(".name.error.message");
-    expect(nameErrorMessage.textContent).toBe("A name is required.");
+    await waitFor(() => {
+      // Throw name error message
+      const nameErrorMessage = container.querySelector(".name.error.message");
+      expect(nameErrorMessage.textContent).toBe("A name is required.");
 
-    // Throw password error message
-    const passwordErrorMessage = container.querySelector(".password.message.error");
-    expect(passwordErrorMessage.textContent).toBe("A password is required.");
+      // Throw password error message
+      const passwordErrorMessage = container.querySelector(".password.message.error");
+      expect(passwordErrorMessage.textContent).toBe("A password is required.");
+    });
   });
 
-  it("displays an error when the API call fail.", async() => {
+  it("displays an error when the API call fail.", async () => {
+    const context = getAppContext();
+    const props = {
+      onClose: jest.fn()
+    };
+    const {container} = renderPasswordEditDialog(context, props);
+
     // Mock the request function to make it return an error.
-    jest.spyOn(Port.get(), 'request').mockImplementationOnce(() => {
+    jest.spyOn(context.port, 'request').mockImplementationOnce(() => {
       throw new PassboltApiFetchError("Jest simulate API error.");
     });
-    const {container} = renderPasswordEditDialog();
 
     const resourceMeta = {
       name: "Password name",
@@ -312,22 +323,22 @@ describe("PasswordEditDialog", () => {
     // Submit and assert
     const submitButton = container.querySelector("input[type=\"submit\"]");
     fireEvent.click(submitButton, {button: 0});
-    // API calls are made on submit, wait they are resolved.
-    await waitFor(() => {});
+
+    // API calls are made on submit, wait on them.
+    await waitFor(() => {
+    });
 
     // Throw general error message
     const generalErrorMessage = container.querySelector(".feedbacks.error.message");
     expect(generalErrorMessage.textContent).toBe("Jest simulate API error.");
   });
 
-  it("requests the addon to edit a resource when clicking on the submit button.", async() => {
-    const createdResourceId = "f2b4047d-ab6d-4430-a1e2-3ab04a2f4fb9";
-    // Mock the request function to make it the expected result
-    jest.spyOn(Port.get(), 'request').mockImplementationOnce(jest.fn((message, data) => Object.assign({id: createdResourceId}, data)));
+  it("requests the addon to edit a resource when clicking on the submit button.", async () => {
+    const context = getAppContext();
     const props = {
       onClose: jest.fn()
     };
-    const {container} = renderPasswordEditDialog(null, props);
+    const {container} = renderPasswordEditDialog(context, props);
 
     const resourceMeta = {
       name: "Password name",
@@ -348,6 +359,10 @@ describe("PasswordEditDialog", () => {
     const usernameInputEvent = {target: {value: resourceMeta.username}};
     fireEvent.change(usernameInput, usernameInputEvent);
     const passwordInput = container.querySelector("[name=\"password\"]");
+    fireEvent.focus(passwordInput);
+    await waitFor(() => {
+      expect(passwordInput.classList).toContain("decrypted");
+    });
     const passwordInputEvent = {target: {value: resourceMeta.password}};
     fireEvent.change(passwordInput, passwordInputEvent);
     const complexityLabel = container.querySelector(".complexity-text");
@@ -358,26 +373,32 @@ describe("PasswordEditDialog", () => {
     const descriptionTextareaEvent = {target: {value: resourceMeta.description}};
     fireEvent.change(descriptionTextArea, descriptionTextareaEvent);
 
+    // Mock the request function to make it the expected result
+    jest.spyOn(context.port, 'request').mockImplementationOnce(jest.fn());
+    jest.spyOn(context.port, 'emit').mockImplementation(jest.fn());
+
     // Submit and assert
     const submitButton = container.querySelector("input[type=\"submit\"]");
     fireEvent.click(submitButton, {button: 0});
 
-    // API calls are made on submit, wait they are resolved.
-    await waitFor(() => {});
-
-    const onApiCreateResourceMeta = {
+    const onApiUpdateResourceMeta = {
+      id: "8e3874ae-4b40-590b-968a-418f704b9d9a",
       name: resourceMeta.name,
       uri: resourceMeta.uri,
       username: resourceMeta.username,
       description: resourceMeta.description
     };
-    expect(Port.get().request).toHaveBeenCalledWith("passbolt.resources.create", onApiCreateResourceMeta, resourceMeta.password);
-    expect(Port.get().emit).toHaveBeenCalledTimes(2);
-    expect(Port.get().emit).toHaveBeenNthCalledWith(1, "passbolt.notification.display", {
-      "message": "The password has been added successfully",
-      "status": "success"
+
+    // API calls are made on submit, wait they are resolved.
+    await waitFor(() => {
+      expect(context.port.request).toHaveBeenCalledWith("passbolt.resources.update", onApiUpdateResourceMeta, resourceMeta.password);
+      expect(context.port.emit).toHaveBeenCalledTimes(2);
+      expect(context.port.emit).toHaveBeenNthCalledWith(1, "passbolt.notification.display", {
+        "message": "The password has been updated successfully",
+        "status": "success"
+      });
+      expect(context.port.emit).toHaveBeenNthCalledWith(2, "passbolt.resources.select-and-scroll-to", "8e3874ae-4b40-590b-968a-418f704b9d9a");
+      expect(props.onClose).toBeCalled();
     });
-    expect(Port.get().emit).toHaveBeenNthCalledWith(2, "passbolt.resources.select-and-scroll-to", createdResourceId);
-    expect(props.onClose).toBeCalled();
   });
 });

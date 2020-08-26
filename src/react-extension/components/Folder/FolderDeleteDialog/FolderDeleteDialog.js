@@ -18,7 +18,6 @@ import ErrorDialog from "../../Common/Dialog/ErrorDialog/ErrorDialog";
 import FormSubmitButton from "../../Common/Inputs/FormSubmitButton/FormSubmitButton";
 import FormCancelButton from "../../Common/Inputs/FormSubmitButton/FormCancelButton";
 import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
-import Port from "../../../lib/extension/port";
 
 class FolderDeleteDialog extends Component {
   /**
@@ -114,7 +113,7 @@ class FolderDeleteDialog extends Component {
     this.toggleProcessing();
 
     try {
-      await Port.get().request("passbolt.folders.delete", this.props.folderId, this.state.cascade);
+      await this.context.port.request("passbolt.folders.delete", this.props.folderId, this.state.cascade);
       this.displayNotification("success", "The folder was deleted.");
       this.props.onClose();
     } catch (error) {
@@ -144,7 +143,7 @@ class FolderDeleteDialog extends Component {
    * @param {string} message The message to display
    */
   displayNotification(status, message) {
-    Port.get().emit("passbolt.notification.display", {status: status, message: message});
+    this.context.port.emit("passbolt.notification.display", {status: status, message: message});
   }
 
   /**

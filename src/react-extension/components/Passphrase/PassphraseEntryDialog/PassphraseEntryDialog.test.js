@@ -16,66 +16,40 @@ import React from "react";
 import {render, fireEvent, waitFor, cleanup} from "@testing-library/react";
 import PassphraseEntryDialog from "./PassphraseEntryDialog";
 import AppContext from "../../../contexts/AppContext";
-import UserAbortsOperationError from "../../../lib/errors/UserAbortsOperationError";
-import {PassboltApiFetchError} from "../../../lib/errors/PassboltApiFetchError";
-import Port from "../../../lib/extension/port";
+import UserAbortsOperationError from "../../../lib/Common/Error/UserAbortsOperationError";
+import MockPort from "../../../test/mock/MockPort";
+import UserSettings from "../../../lib/Settings/UserSettings";
+import userSettingsFixture from "../../../test/fixture/Settings/userSettings";
+import SiteSettings from "../../../lib/Settings/SiteSettings";
+import siteSettingsFixture from "../../../test/fixture/Settings/siteSettings";
 
 beforeEach(() => {
   jest.resetModules();
-  mockPort();
 });
 
-const mockPort = function() {
-  const mockedOnCallbacks = {};
-  const port = {
-    emit: jest.fn(),
-    fireAddonMessage: function(message) {
-      const callback =mockedOnCallbacks[message];
-      if (callback) {
-        const callbackArgs = Array.prototype.slice.call(arguments, 1);
-        callback.apply(null, callbackArgs);
-      }
-    },
-    on: (message, callback) => {
-      mockedOnCallbacks[message] = callback;
-    },
-    request: jest.fn()
+const getAppContext = function (appContext) {
+  const defaultAppContext = {
+    userSettings: new UserSettings(userSettingsFixture),
+    siteSettings: new SiteSettings(siteSettingsFixture),
+    port: new MockPort()
   };
-  Port.set(port);
+
+  return Object.assign(defaultAppContext, appContext || {});
+};
+
+const renderPassphraseEntryDialog = function (appContext, props) {
+  appContext = getAppContext(appContext);
+  props = props || {};
+  return render(
+    <AppContext.Provider value={appContext}>
+      <PassphraseEntryDialog debug onClose={props.onClose || jest.fn()}/>
+    </AppContext.Provider>
+  );
 };
 
 describe("PassphraseEntryDialog", () => {
-  const getAppContext = function(appContext) {
-    const defaultAppContext = {
-      user: {
-        "user.settings.securityToken.code": "TST",
-        "user.settings.securityToken.textColor": "#FFFFFF",
-        "user.settings.securityToken.color": "#000000"
-      },
-      rememberMeOptions: {
-        "300": "5 minutes",
-        "900": "15 minutes",
-        "1800": "30 minutes",
-        "3600": "1 hour",
-        "-1": "until I log out"
-      }
-    };
-
-    return Object.assign(defaultAppContext, appContext || {});
-  };
-
-  const renderPassphraseEntryDialog = function(appContext, props) {
-    appContext = getAppContext(appContext);
-    props = props || {};
-    return render(
-      <AppContext.Provider value={appContext}>
-        <PassphraseEntryDialog debug onClose={props.onClose || jest.fn()}/>
-      </AppContext.Provider>
-    );
-  };
-
   it("matches the styleguide.", () => {
-    const appContext = getAppContext();
+    const context = getAppContext();
     const {container} = renderPassphraseEntryDialog();
 
     // Dialog title exists and correct.
@@ -119,10 +93,11 @@ describe("PassphraseEntryDialog", () => {
     // Remember me duration options exists.
     const rememberMeDurationSelect = container.querySelector("[name=\"rememberMeDuration\"]");
     expect(rememberMeDurationSelect).not.toBeNull();
-    Object.keys(appContext.rememberMeOptions).forEach(optionKey => {
+    const rememberMeOptions = context.siteSettings.getRememberMeOptions();
+    Object.keys(rememberMeOptions).forEach(optionKey => {
       const rememberMeDurationOption = container.querySelector(`option[value="${optionKey}"]`);
       expect(rememberMeDurationOption).not.toBeNull();
-      expect(rememberMeDurationOption.textContent).toBe(appContext.rememberMeOptions[optionKey]);
+      expect(rememberMeDurationOption.textContent).toBe(rememberMeOptions[optionKey]);
     });
 
     // Submit button exists.
@@ -135,9 +110,10 @@ describe("PassphraseEntryDialog", () => {
   });
 
   it("Should not display the remember me section if no remember me options provided", () => {
-    const appContext = {
-      rememberMeOptions: {}
-    };
+    const siteSettingsFixtureWithoutRememberMe = JSON.parse(JSON.stringify(siteSettingsFixture));
+    siteSettingsFixtureWithoutRememberMe.passbolt.plugins.rememberMe.options = {};
+    const siteSettings = new SiteSettings(siteSettingsFixtureWithoutRememberMe);
+    const appContext = getAppContext({siteSettings});
     const {container} = renderPassphraseEntryDialog(appContext);
 
     // Remember me checkbox exists.
@@ -150,41 +126,35 @@ describe("PassphraseEntryDialog", () => {
   });
 
   it("calls onClose props when clicking on the close button.", () => {
-    // Mock the request function to make it return an error.
-    jest.spyOn(Port.get(), 'request').mockImplementation(jest.fn(() => {
-      throw new PassboltApiFetchError("Jest simulate API error.");
-    }));
-
+    const context = getAppContext();
     const props = {
       onClose: jest.fn()
     };
-    const {container} = renderPassphraseEntryDialog({}, props);
+    const {container} = renderPassphraseEntryDialog(context, props);
 
+    jest.spyOn(context.port, 'emit').mockImplementation(jest.fn());
     const leftClick = {button: 0};
     const dialogCloseIcon = container.querySelector(".dialog-close");
     fireEvent.click(dialogCloseIcon, leftClick);
     expect(props.onClose).toBeCalled();
     const error = new UserAbortsOperationError("The dialog has been closed.");
-    expect(Port.get().emit).toBeCalledWith(undefined, "ERROR", error);
+    expect(context.port.emit).toBeCalledWith(undefined, "ERROR", error);
   });
 
   it("calls onClose props when clicking on the cancel button.", () => {
-    // Mock the request function to make it return an error.
-    jest.spyOn(Port.get(), 'request').mockImplementation(jest.fn(() => {
-      throw new PassboltApiFetchError("Jest simulate API error.");
-    }));
-
+    const context = getAppContext();
     const props = {
       onClose: jest.fn()
     };
-    const {container} = renderPassphraseEntryDialog({}, props);
+    const {container} = renderPassphraseEntryDialog(context, props);
 
+    jest.spyOn(context.port, 'emit').mockImplementation(jest.fn());
     const leftClick = {button: 0};
     const cancelButton = container.querySelector(".submit-wrapper .cancel");
     fireEvent.click(cancelButton, leftClick);
     expect(props.onClose).toBeCalled();
     const error = new UserAbortsOperationError("The dialog has been closed.");
-    expect(Port.get().emit).toBeCalledWith(undefined, "ERROR", error);
+    expect(context.port.emit).toBeCalledWith(undefined, "ERROR", error);
   });
 
   it("changes the style of its security token when the passphrase input get or lose focus.", () => {
@@ -218,15 +188,16 @@ describe("PassphraseEntryDialog", () => {
     expect(securityTokenStyle.color).toBe("rgb(255, 255, 255)");
   });
 
-  it("Should validate the passphrase.", async() => {
+  it("Should validate the passphrase.", async () => {
+    const context = getAppContext();
+    const {container} = renderPassphraseEntryDialog(context);
+
     // Mock the request function to make it return an error.
-    jest.spyOn(Port.get(), 'request').mockImplementation(jest.fn(message => {
-      if (message == "passbolt.keyring.private.checkpassphrase") {
+    jest.spyOn(context.port, 'request').mockImplementation(jest.fn(message => {
+      if (message === "passbolt.keyring.private.checkpassphrase") {
         throw new Error();
       }
     }));
-
-    const {container} = renderPassphraseEntryDialog();
 
     // Fill the passphrase input.
     const passphraseInput = container.querySelector("[name=\"passphrase\"]");
@@ -238,7 +209,8 @@ describe("PassphraseEntryDialog", () => {
     const leftClick = {button: 0};
     fireEvent.click(submitButton, leftClick);
 
-    await waitFor(() => {});
+    await waitFor(() => {
+    });
 
     // Label changed
     const dialogLabel = container.querySelector(".dialog-content label");
@@ -249,18 +221,20 @@ describe("PassphraseEntryDialog", () => {
     expect(errorMessage.textContent).toBe("This is not a valid passphrase.");
   });
 
-  it("Should allow only 3 attempts.", async() => {
+  it("Should allow only 3 attempts.", async () => {
+    const context = getAppContext();
+    const props = {
+      onClose: jest.fn()
+    };
+    const {container} = renderPassphraseEntryDialog(context, props);
+
     // Mock the request function to make it return an error.
-    jest.spyOn(Port.get(), 'request').mockImplementation(jest.fn(message => {
+    jest.spyOn(context.port, 'request').mockImplementation(jest.fn(message => {
       if (message === "passbolt.keyring.private.checkpassphrase") {
         throw new Error();
       }
     }));
-
-    const props = {
-      onClose: jest.fn()
-    };
-    const {container} = renderPassphraseEntryDialog({}, props);
+    jest.spyOn(context.port, 'emit').mockImplementation(jest.fn());
 
     // Attempting 3 times with a wrong passphrase.
     const passphraseInput = container.querySelector("[name=\"passphrase\"]");
@@ -270,7 +244,8 @@ describe("PassphraseEntryDialog", () => {
     const leftClick = {button: 0};
     for (let i = 0; i < 3; i++) {
       fireEvent.click(submitButton, leftClick);
-      await waitFor(() => {});
+      await waitFor(() => {
+      });
     }
 
     // Dialog label does not exist.
@@ -291,15 +266,17 @@ describe("PassphraseEntryDialog", () => {
     fireEvent.click(closeButton, leftClick);
     expect(props.onClose).toBeCalled();
     const error = new UserAbortsOperationError("The dialog has been closed.");
-    expect(Port.get().emit).toBeCalledWith(undefined, "ERROR", error);
+    expect(context.port.emit).toBeCalledWith(undefined, "ERROR", error);
   });
 
-  it("Should capture passphrase.", async() => {
+  it("Should capture passphrase.", async () => {
+    const context = getAppContext();
     const props = {
       onClose: jest.fn()
     };
-    const {container} = renderPassphraseEntryDialog({}, props);
+    const {container} = renderPassphraseEntryDialog(context, props);
 
+    jest.spyOn(context.port, 'emit').mockImplementation(jest.fn());
     const leftClick = {button: 0};
 
     // Fill passphrase.
@@ -311,22 +288,24 @@ describe("PassphraseEntryDialog", () => {
     const submitButton = container.querySelector(".submit-wrapper [type=\"submit\"]");
     fireEvent.click(submitButton, leftClick);
 
-    await waitFor(() => {});
-
-    // Assert the dialog well respond to the original request call.
-    expect(props.onClose).toBeCalled();
-    expect(Port.get().emit).toBeCalledWith(undefined, "SUCCESS", {
-      passphrase: "ada@passbolt.com",
-      rememberMe: false
+    await waitFor(() => {
+      // Assert the dialog well respond to the original request call.
+      expect(props.onClose).toBeCalled();
+      expect(context.port.emit).toBeCalledWith(undefined, "SUCCESS", {
+        passphrase: "ada@passbolt.com",
+        rememberMe: false
+      });
     });
   });
 
-  it("Should capture passphrase and the remember me duration.", async() => {
+  it("Should capture passphrase and the remember me duration.", async () => {
+    const context = getAppContext();
     const props = {
       onClose: jest.fn()
     };
-    const {container} = renderPassphraseEntryDialog({}, props);
+    const {container} = renderPassphraseEntryDialog(context, props);
 
+    jest.spyOn(context.port, 'emit').mockImplementation(jest.fn());
     const leftClick = {button: 0};
 
     // Fill passphrase.
@@ -347,22 +326,24 @@ describe("PassphraseEntryDialog", () => {
     const submitButton = container.querySelector(".submit-wrapper [type=\"submit\"]");
     fireEvent.click(submitButton, leftClick);
 
-    await waitFor(() => {});
-
-    // Assert the dialog well respond to the original request call.
-    expect(props.onClose).toBeCalled();
-    expect(Port.get().emit).toBeCalledWith(undefined, "SUCCESS", {
-      passphrase: "ada@passbolt.com",
-      rememberMe: 1800
+    await waitFor(() => {
+      // Assert the dialog well respond to the original request call.
+      expect(props.onClose).toBeCalled();
+      expect(context.port.emit).toBeCalledWith(undefined, "SUCCESS", {
+        passphrase: "ada@passbolt.com",
+        rememberMe: 1800
+      });
     });
   });
 
-  it("Should capture passphrase when no remember me options are provided.", async() => {
+  it("Should capture passphrase when no remember me options are provided.", async () => {
+    const context = getAppContext();
     const props = {
       onClose: jest.fn()
     };
-    const {container} = renderPassphraseEntryDialog({}, props);
+    const {container} = renderPassphraseEntryDialog(context, props);
 
+    jest.spyOn(context.port, 'emit').mockImplementation(jest.fn());
     const leftClick = {button: 0};
 
     // Fill passphrase.
@@ -374,13 +355,13 @@ describe("PassphraseEntryDialog", () => {
     const submitButton = container.querySelector(".submit-wrapper [type=\"submit\"]");
     fireEvent.click(submitButton, leftClick);
 
-    await waitFor(() => {});
-
-    // Assert the dialog well respond to the original request call.
-    expect(props.onClose).toBeCalled();
-    expect(Port.get().emit).toBeCalledWith(undefined, "SUCCESS", {
-      passphrase: "ada@passbolt.com",
-      rememberMe: false
+    await waitFor(() => {
+      // Assert the dialog well respond to the original request call.
+      expect(props.onClose).toBeCalled();
+      expect(context.port.emit).toBeCalledWith(undefined, "SUCCESS", {
+        passphrase: "ada@passbolt.com",
+        rememberMe: false
+      });
     });
   });
 });

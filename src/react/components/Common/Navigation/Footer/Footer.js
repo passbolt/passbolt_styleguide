@@ -12,28 +12,12 @@
  * @since         2.13.0
  */
 import React, {Component} from "react";
-import PropTypes from "prop-types";
 
 class Footer extends Component {
   /**
-   * Constructor
-   * @param {Object} props
+   * Render the component
+   * @return {JSX}
    */
-  constructor(props) {
-    super(props);
-    this.state = this.getDefaultState();
-  }
-
-  /**
-   * Get default state
-   * @returns {*}
-   */
-  getDefaultState() {
-    return {
-
-    }
-  }
-
   render() {
     return (
       <footer>
@@ -52,8 +36,7 @@ class Footer extends Component {
   }
 }
 
-Footer.propTypes = {
-};
+Footer.propTypes = {};
 
 
 export default Footer;

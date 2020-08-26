@@ -55,7 +55,7 @@ class GroupAvatar extends Component {
    * @returns {JSX}
    */
   render() {
-    return(
+    return (
       <div className="avatar user-avatar">
         <img src={this.getAvatarUrl()} alt={this.getAltText()}/>
       </div>

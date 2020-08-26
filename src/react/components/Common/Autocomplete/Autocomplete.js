@@ -26,7 +26,7 @@ class Autocomplete extends Component {
    */
   constructor(props) {
     super(props);
-    this.bindEventHandlers();
+    this.bindCallbacks();
     this.createInputRefs();
     this.state = this.getDefaultState();
     this.getItemsDebounced = debounce(this.getItems, 150, {leading: true});
@@ -76,16 +76,29 @@ class Autocomplete extends Component {
     }
   }
 
+  /**
+   * componentWillUnmount
+   * Invoked immediately before the component is removed from the tree
+   * @return {void}
+   */
   componentWillUnmount() {
     document.removeEventListener("keydown", this.handleKeyDown);
   }
 
+  /**
+   * Create references
+   * @returns {void}
+   */
   createInputRefs() {
     this.listRef = React.createRef();
     this.inputRef = React.createRef();
   }
 
-  bindEventHandlers() {
+  /**
+   * Bind callbacks methods
+   * @return {void}
+   */
+  bindCallbacks() {
     this.handleKeyDown = this.handleKeyDown.bind(this);
     this.selectNext = this.selectNext.bind(this);
     this.selectPrevious = this.selectPrevious.bind(this);
@@ -94,11 +107,22 @@ class Autocomplete extends Component {
     this.handleInputChange = this.handleInputChange.bind(this);
   }
 
+  /**
+   * Retrieve the items to display based on a keyword
+   * @param {string} keyword The keyword to search for
+   * @returns {Promise<void>}
+   */
   async getItems(keyword) {
     this.setState({processing: true});
     return await this.props.searchCallback(keyword);
   }
 
+  /**
+   * Retrieve the items to display based on keywords.
+   * Check in the cache first, or plan a search call.
+   * @param {string} keyword The keyword to search for
+   * @returns {Promise<*>}
+   */
   async autocompleteSearch(keyword) {
     if (!this.cache[keyword] || this.cache[keyword].cacheExpiry < (new Date()).getTime()) {
       this.cache[keyword] = await this.getItemsDebounced(keyword);
@@ -107,13 +131,22 @@ class Autocomplete extends Component {
     return this.cache[keyword];
   }
 
+  /**
+   * Close the autocomplete area
+   * @return {void}
+   */
   closeAutocomplete() {
     this.cache = [];
     this.setState({processing: false, autocompleteItems: null, selected: null});
     this.props.onClose();
   }
 
-  handleKeyDown (event) {
+  /**
+   * Handle the user key down
+   * @param {ReactEvent} event The triggered event
+   * @return {void}
+   */
+  handleKeyDown(event) {
     if (this.state.disabled || this.state.processing || this.state.autocompleteItems === null) {
       return;
     }
@@ -136,6 +169,11 @@ class Autocomplete extends Component {
     }
   }
 
+  /**
+   * Handle a suggested item selection
+   * @param {Object} selected The selected item
+   * @return {void}
+   */
   handleSelect(selected) {
     let obj = this.state.autocompleteItems[selected];
     this.cache = [];
@@ -144,6 +182,11 @@ class Autocomplete extends Component {
     this.closeAutocomplete();
   }
 
+  /**
+   * Handle the search input change
+   * @param {ReactEvent} event The triggered event
+   * @return {void}
+   */
   handleInputChange(event) {
     const target = event.target;
     const value = target.type === "checkbox" ? target.checked : target.value;
@@ -157,6 +200,11 @@ class Autocomplete extends Component {
     });
   }
 
+  /**
+   * Handle after name update
+   * @param {ReactEvent} event The triggered event
+   * @return {void}
+   */
   handleAfterNameUpdate() {
     if (this.state.name) {
       if (!this.state.name.endsWith(' ')) {
@@ -168,7 +216,7 @@ class Autocomplete extends Component {
   }
 
   /**
-   *
+   * Handle autocomplete change
    * @returns {Promise<void>}
    */
   async handleAutocompleteChange() {
@@ -194,24 +242,37 @@ class Autocomplete extends Component {
     }
   }
 
+  /**
+   * Select previous item in the list
+   * @return {void}
+   */
   selectPrevious() {
     if (this.state.selected === 0 || this.state.selected === null) {
-      this.setState({selected: (this.state.autocompleteItems.length -1)});
+      this.setState({selected: (this.state.autocompleteItems.length - 1)});
     } else {
-      this.setState({selected: (this.state.selected -1)});
+      this.setState({selected: (this.state.selected - 1)});
     }
     this.scrollToSelectedItem();
   }
 
+  /**
+   * Select next item in the list
+   * @return {void}
+   */
   selectNext() {
-    if (this.state.selected === null || (this.state.selected === this.state.autocompleteItems.length-1)) {
+    if (this.state.selected === null || (this.state.selected === this.state.autocompleteItems.length - 1)) {
       this.setState({selected: 0});
     } else {
-      this.setState({selected: (this.state.selected +1)});
+      this.setState({selected: (this.state.selected + 1)});
     }
     this.scrollToSelectedItem();
   }
 
+  /**
+   * Check if an item is selected
+   * @param {int} key the item key to look for
+   * @returns {boolean}
+   */
   isItemSelected(key) {
     if (this.state.selected === null) {
       return false;
@@ -220,6 +281,10 @@ class Autocomplete extends Component {
     }
   }
 
+  /**
+   * Get the loading placeholder.
+   * @returns {string}
+   */
   getPlaceholder() {
     if (this.props.disabled) {
       return 'please wait...';
@@ -228,10 +293,18 @@ class Autocomplete extends Component {
     }
   }
 
+  /**
+   * Check if the input search is disabled.
+   * @returns {Boolean}
+   */
   isInputDisabled() {
     return (this.state.loading || this.props.disabled);
   }
 
+  /**
+   * Scroll to the selected item
+   * @return {void}
+   */
   scrollToSelectedItem() {
     if (!this.state.autocompleteItems || this.state.autocompleteItems.length === 0) {
       this.listRef.current.scrollTop = 0;
@@ -254,6 +327,10 @@ class Autocomplete extends Component {
     }
   }
 
+  /**
+   * Render
+   * @returns {JSX}
+   */
   render() {
     return (
       <div>
@@ -261,33 +338,33 @@ class Autocomplete extends Component {
           <div className="input text autocomplete">
             <label htmlFor={this.props.id}>{this.props.label}</label>
             <input id={this.props.id}
-                   name={this.props.name}
-                   ref={this.inputRef} maxLength="64"
-                   type="text"
-                   placeholder={this.getPlaceholder()}
-                   autoComplete="off"
-                   value={this.state.name}
-                   disabled={this.isInputDisabled()}
-                   onChange={this.handleInputChange}
+              name={this.props.name}
+              ref={this.inputRef} maxLength="64"
+              type="text"
+              placeholder={this.getPlaceholder()}
+              autoComplete="off"
+              value={this.state.name}
+              disabled={this.isInputDisabled()}
+              onChange={this.handleInputChange}
             />
           </div>
           {(this.state.processing || this.state.autocompleteItems) &&
           <div className="autocomplete-wrapper">
-            <div className="autocomplete-content scroll"  ref={this.listRef}>
+            <div className="autocomplete-content scroll" ref={this.listRef}>
               <ul>
                 {this.state.processing &&
-                <AutocompleteItemLoading />
+                <AutocompleteItemLoading/>
                 }
                 {!this.state.processing && (!this.state.autocompleteItems || !this.state.autocompleteItems.length) &&
-                <AutocompleteItemEmpty />
+                <AutocompleteItemEmpty/>
                 }
                 {!this.state.processing && this.state.autocompleteItems && (this.state.autocompleteItems).map((item, key) => {
                   if (item.username) {
                     return <AutocompleteItem key={key} id={key} user={item} selected={this.isItemSelected(key)}
-                                             onClick={this.handleSelect}/>
+                      onClick={this.handleSelect} baseUrl={this.props.baseUrl}/>
                   } else {
                     return <AutocompleteItem key={key} id={key} group={item} selected={this.isItemSelected(key)}
-                                             onClick={this.handleSelect}/>
+                      onClick={this.handleSelect} baseUrl={this.props.baseUrl}/>
                   }
                 })}
               </ul>
@@ -301,6 +378,7 @@ class Autocomplete extends Component {
 }
 
 Autocomplete.propTypes = {
+  baseUrl: PropTypes.string,
   id: PropTypes.string,
   searchCallback: PropTypes.func,
   onSelect: PropTypes.func,

@@ -13,139 +13,93 @@
  */
 import React, {Component} from "react";
 import PropTypes from "prop-types";
-import { matchPath } from "react-router"
-
-import {
-  Link,
-  withRouter
-} from "react-router-dom";
+import {Link, withRouter} from "react-router-dom";
 
 class MainMenu extends Component {
   /**
-   * Constructor
-   * @param {Object} props
+   * Check if a menu item is selected
+   * @param {string} name The menu item name
+   * @returns {boolean}
    */
-  constructor(props) {
-    super(props);
-    this.state = this.getDefaultState();
-  }
-
-  /**
-   * Get default state
-   * @returns {*}
-   */
-  getDefaultState() {
-    return {
-      // Used for keyboard navigation.
-      // Each new menu item displayed will increment it by 1.
-      tabIndex: 1,
-      // menu items list
-      menuItems: [
-        {
-          "id": "passwords",
-          "name": "passwords",
-          "className": "passwords",
-          "route": "/passwords",
-        },
-        {
-          "id": "users",
-          "name": "users",
-          "className": "users",
-          "url": "/app/users",
-        },
-        {
-          "id": "reports",
-          "name": "reports",
-          "className": "reports",
-          "route": "/reports",
-        },
-        {
-          "id": "administration",
-          "name": "administration",
-          "className": "administration",
-          "url": "/app/administration",
-        },
-        {
-          "id": "help",
-          "name": "help",
-          "className": "administration",
-          "url": "https://help.passbolt.com",
-        },
-      ],
-
-      // logoutItem
-      logoutItem: {
-        "id": "logout",
-        "name": "logout",
-        "className": "logout",
-        "url": "/logout",
-      },
-    }
-  }
-
-  handleClick (e, menuItem) {
-    e.preventDefault();
-    this.props.onClick(menuItem);
-  }
-
-  ItemLink(menuItem) {
-    if (menuItem.route) {
-      return (
-        <Link to={menuItem.route} role="button" tabIndex={this.state.tabIndex++}><span>{menuItem.name}</span></Link>
-      );
-    }
-    else {
-      return(
-        <a href={menuItem.url} role="button" tabIndex={this.state.tabIndex++} onClick={(e) => this.handleClick(e, menuItem)}>
-          <span>{menuItem.name}</span>
-        </a>
-      );
-    }
-  }
-
-  checkSelected(menuItem) {
+  isSelected(name) {
     let selected = false;
-    if (menuItem.route) {
-      const match = matchPath(this.props.location.pathname, {
-        path: menuItem.route,
-        exact: false,
-        strict: false
-      });
-      if (match) {
-        selected = true;
-      }
+
+    if (name === "passwords") {
+      selected = /^\/app\/(passwords|folders)/.test(this.props.location.pathname);
+    } else if (name === "users") {
+      selected = /^\/app\/(users|groups)/.test(this.props.location.pathname);
+    } else if (name === "administration") {
+      selected = /^\/app\/administration/.test(this.props.location.pathname);
     }
 
     return selected;
   }
 
-  MenuItem(menuItem) {
-    const selected = this.checkSelected(menuItem);
-
-    return (
-      <li className={menuItem.className + ' ' + ( this.state.hidden ? 'hidden' : 'visible' )} key={menuItem.id}>
-        <div className={selected? "row selected" : "row"}>
-          <div className="main-cell-wrapper">
-            <div className="main-cell">
-              {this.ItemLink(menuItem)}
-            </div>
-          </div>
-        </div>
-      </li>
-    );
-  }
-
+  /**
+   * Render the component
+   * @return {JSX}
+   */
   render() {
     return (
       <nav>
         <div className="primary navigation top">
           <ul className="left">
-            {(this.state.menuItems && (this.state.menuItems).map((menuItem) => {
-              return this.MenuItem(menuItem);
-            }))}
+            <li key="password">
+              <div className={`row ${this.isSelected("passwords") ? "selected" : ""}`}>
+                <div className="main-cell-wrapper">
+                  <div className="main-cell">
+                    <Link to="/app/passwords" role="button"><span>passwords</span></Link>
+                  </div>
+                </div>
+              </div>
+            </li>
+            <li key="users">
+              <div className={`row ${this.isSelected("users") ? "selected" : ""}`}>
+                <div className="main-cell-wrapper">
+                  <div className="main-cell">
+                    <Link to="/app/users" role="button"><span>users</span></Link>
+                  </div>
+                </div>
+              </div>
+            </li>
+            <li key="reports">
+              <div className="row">
+                <div className="main-cell-wrapper">
+                  <div className="main-cell">
+                    <a href={`${this.props.baseUrl}/reports`} role="button"><span>reports</span></a>
+                  </div>
+                </div>
+              </div>
+            </li>
+            <li key="administration">
+              <div className={`row ${this.isSelected("administration") ? "selected" : ""}`}>
+                <div className="main-cell-wrapper">
+                  <div className="main-cell">
+                    <Link to="/app/administration" role="button"><span>administration</span></Link>
+                  </div>
+                </div>
+              </div>
+            </li>
+            <li key="help">
+              <div className="row">
+                <div className="main-cell-wrapper">
+                  <div className="main-cell">
+                    <a href="https://help.passbolt.com" role="button"><span>help</span></a>
+                  </div>
+                </div>
+              </div>
+            </li>
           </ul>
           <ul className="right">
-            {this.MenuItem(this.state.logoutItem)}
+            <li key="logout">
+              <div className="row">
+                <div className="main-cell-wrapper">
+                  <div className="main-cell">
+                    <a href={`${this.props.baseUrl}/logout`} role="button"><span>logout</span></a>
+                  </div>
+                </div>
+              </div>
+            </li>
           </ul>
         </div>
       </nav>
@@ -154,7 +108,7 @@ class MainMenu extends Component {
 }
 
 MainMenu.propTypes = {
-  onClick: PropTypes.func
+  baseUrl: PropTypes.string
 };
 
 export default withRouter(MainMenu);

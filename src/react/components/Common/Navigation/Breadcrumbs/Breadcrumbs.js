@@ -17,14 +17,6 @@ import PropTypes from "prop-types";
 
 class Breadcrumbs extends Component {
   /**
-   * Constructor
-   * @param {Object} props
-   */
-  constructor(props) {
-    super(props);
-  }
-
-  /**
    * Render the component
    * @returns {JSX}
    */
@@ -41,10 +33,10 @@ class Breadcrumbs extends Component {
                 <Link to={item.link}>{item.name}</Link>
                 }
                 {item.url && item.name &&
-                  <a href={item.url}>{item.name}</a>
+                <a href={item.url}>{item.name}</a>
                 }
                 {!item.url && !item.link && item.name &&
-                  <a href="#">{item.name}</a>
+                <a href="#">{item.name}</a>
                 }
               </li>
             );

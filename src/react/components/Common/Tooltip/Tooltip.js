@@ -17,17 +17,13 @@ import Icon from "../Icons/Icon";
 
 class Tooltip extends Component {
   /**
-   * Constructor
-   * @param {Object} props
+   * Render the component
+   * @return {JSX}
    */
-  constructor(props) {
-    super(props);
-  }
-
   render() {
-    return(
+    return (
       <span className="tooltip tooltip-right" data-tooltip={this.props.message}>
-        <Icon name={this.props.icon} />
+        <Icon name={this.props.icon}/>
       </span>
     )
   }

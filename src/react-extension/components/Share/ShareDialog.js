@@ -23,7 +23,6 @@ import ShareChanges from "./Utility/ShareChanges";
 import SharePermissionItem from "./SharePermissionItem";
 import SharePermissionItemSkeleton from "./SharePermissionItemSkeleton";
 import AppContext from "../../contexts/AppContext";
-import Port from "../../lib/extension/port";
 
 class ShareDialog extends Component {
   /**
@@ -47,10 +46,10 @@ class ShareDialog extends Component {
    */
   async componentDidMount() {
     if (this.props.resourcesIds) {
-      this.resources = await Port.get().request('passbolt.share.get-resources', this.props.resourcesIds);
+      this.resources = await this.context.port.request('passbolt.share.get-resources', this.props.resourcesIds);
     }
     if (this.props.foldersIds) {
-      this.folders = await Port.get().request('passbolt.share.get-folders', this.props.foldersIds);
+      this.folders = await this.context.port.request('passbolt.share.get-folders', this.props.foldersIds);
     }
 
     this.shareChanges = new ShareChanges(this.resources, this.folders);
@@ -249,11 +248,11 @@ class ShareDialog extends Component {
       throw new Error('Multi resource and folder share is not implemented.');
     }
     if (this.props.resourcesIds) {
-      await Port.get().request("passbolt.share.resources.save", this.resources, this.shareChanges.getResourcesChanges());
+      await this.context.port.request("passbolt.share.resources.save", this.resources, this.shareChanges.getResourcesChanges());
       return;
     }
     if (this.props.foldersIds) {
-      await Port.get().request("passbolt.share.folders.save", this.folders, this.shareChanges.getFoldersChanges());
+      await this.context.port.request("passbolt.share.folders.save", this.folders, this.shareChanges.getFoldersChanges());
     }
   }
 
@@ -263,7 +262,7 @@ class ShareDialog extends Component {
    * @returns {Promise<Object>} aros,
    */
   async fetchAutocompleteItems(keyword) {
-    const items = await Port.get().request('passbolt.share.search-aros', keyword, this.props.resourcesIds);
+    const items = await this.context.port.request('passbolt.share.search-aros', keyword, this.props.resourcesIds);
     return items.filter(item => {
       const found = this.state.permissions.filter(permission => (permission.aro.id === item.id));
       return found.length === 0;
@@ -277,7 +276,7 @@ class ShareDialog extends Component {
    * @returns {void}
    */
   displayNotification(status, message) {
-    Port.get().emit("passbolt.notification.display", {status: status, message: message});
+    this.context.port.emit("passbolt.notification.display", {status: status, message: message});
   }
 
   /**
@@ -464,6 +463,7 @@ class ShareDialog extends Component {
                 onOpen={this.handleAutocompleteOpen}
                 onClose={this.handleAutocompleteClose}
                 disabled={this.hasAllInputDisabled()}
+                baseUrl={this.context.userSettings.getTrustedDomain()}
               />
             </div>
             <div className="submit-wrapper clearfix">
@@ -483,7 +483,7 @@ class ShareDialog extends Component {
   }
 }
 
-ShareDialog.context = AppContext;
+ShareDialog.contextType = AppContext;
 
 ShareDialog.propTypes = {
   resourcesIds: PropTypes.array,

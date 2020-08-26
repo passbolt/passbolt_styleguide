@@ -12,14 +12,11 @@
  * @since         2.12.0
  */
 
-import React, {Component} from "react";
-import ReactDOM from "react-dom";
-import {BrowserRouter as Router, Route} from "react-router-dom";
 /* eslint-disable no-unused-vars */
 import Simplebar from "simplebar/dist/simplebar";
-// import SecretComplexity from "../lib/secretComplexity";
 /* eslint-enable no-unused-vars */
-
+import React, {Component} from "react";
+import {Route, BrowserRouter as Router, Switch} from "react-router-dom";
 import ErrorDialog from "./components/Common/Dialog/ErrorDialog/ErrorDialog";
 import PasswordCreateDialog from "./components/Password/PasswordCreateDialog/PasswordCreateDialog";
 import PasswordEditDialog from "./components/Password/PasswordEditDialog/PasswordEditDialog";
@@ -28,37 +25,46 @@ import FolderRenameDialog from "./components/Folder/FolderRenameDialog/FolderRen
 import FolderDeleteDialog from "./components/Folder/FolderDeleteDialog/FolderDeleteDialog";
 import ProgressDialog from "./components/ProgressDialog/ProgressDialog";
 import PassphraseEntryDialog from "./components/Passphrase/PassphraseEntryDialog/PassphraseEntryDialog";
-
-import Port from "./lib/extension/port";
-import Storage from "./lib/extension/storage";
-import AppContext from './contexts/AppContext';
 import ShareDialog from "./components/Share/ShareDialog";
 import FolderMoveStrategyDialog from "./components/Folder/FolderMoveStrategyDialog/FolderMoveStrategyDialog";
+import AppContext from './contexts/AppContext';
 import PropTypes from "prop-types";
+import MainMenu from "./components/Common/Navigation/MainMenu/MainMenu";
+import PasswordWorkspace from "./components/Password/PasswordWorkspace/PasswordWorkspace";
+import SiteSettings from "./lib/Settings/SiteSettings";
+import UserSettings from "./lib/Settings/UserSettings";
 
 class ReactExtension extends Component {
   constructor(props) {
     super(props);
-    // @todo dependencies injection global style?
-    Port.set(props.port);
-    Storage.set(props.storage);
-    this.state = this.getDefaultState();
+    this.state = this.getDefaultState(props);
     this.bindCallbacks();
     this.initEventHandlers();
   }
 
   async componentDidMount() {
+    this.getSiteSettings();
     this.getUserSettings();
-    this.rememberMeInfo();
+    this.getLoggedInUser();
     this.getResources();
     this.getFolders();
   }
 
-  getDefaultState() {
+  getDefaultState(props) {
     return {
+      port: props.port,
+      storage: props.storage,
+
       user: null,
       resources: null,
-      rememberMeOptions: {},
+      folders: null,
+
+      siteSettings: null,
+      userSettings: null,
+
+      setContext: (context) => {
+        this.setState(context);
+      },
 
       // passphrase dialog
       showPassphraseEntryDialog: false,
@@ -93,7 +99,8 @@ class ReactExtension extends Component {
       // share dialog
       showShareDialog: false,
       shareDialogProps: {
-        resourcesIds: null
+        foldersIds: null,
+        resourcesIds: null,
       },
 
       // progress dialog
@@ -137,39 +144,44 @@ class ReactExtension extends Component {
   }
 
   initEventHandlers() {
-    Storage.get().onChanged.addListener(this.handleStorageChange);
-    Port.get().on('passbolt.react-app.is-ready', this.handleIsReadyEvent);
-    Port.get().on('passbolt.errors.open-error-dialog', this.handleErrorDialogOpenEvent);
-    Port.get().on('passbolt.progress.open-progress-dialog', this.handleProgressDialogOpenEvent);
-    Port.get().on("passbolt.progress.update", this.handleProgressDialogUpdateEvent);
-    Port.get().on("passbolt.progress.update-goals", this.handleProgressDialogUpdateGoalsEvent);
-    Port.get().on('passbolt.progress.close-progress-dialog', this.handleProgressDialogCloseEvent);
-    Port.get().on('passbolt.resources.open-create-dialog', this.handleResourceCreateDialogOpenEvent);
-    Port.get().on('passbolt.resources.open-edit-dialog', this.handleResourceEditDialogOpenEvent);
-    Port.get().on('passbolt.folders.open-create-dialog', this.handleFolderCreateDialogOpenEvent);
-    Port.get().on('passbolt.folders.open-rename-dialog', this.handleFolderRenameDialogOpenEvent);
-    Port.get().on('passbolt.folders.open-delete-dialog', this.handleFolderDeleteDialogOpenEvent);
-    Port.get().on('passbolt.share.open-share-dialog', this.handleShareDialogOpenEvent);
+    this.props.storage.onChanged.addListener(this.handleStorageChange);
+    this.props.port.on('passbolt.react-app.is-ready', this.handleIsReadyEvent);
+    this.props.port.on('passbolt.errors.open-error-dialog', this.handleErrorDialogOpenEvent);
+    this.props.port.on('passbolt.progress.open-progress-dialog', this.handleProgressDialogOpenEvent);
+    this.props.port.on("passbolt.progress.update", this.handleProgressDialogUpdateEvent);
+    this.props.port.on("passbolt.progress.update-goals", this.handleProgressDialogUpdateGoalsEvent);
+    this.props.port.on('passbolt.progress.close-progress-dialog', this.handleProgressDialogCloseEvent);
+    this.props.port.on('passbolt.resources.open-create-dialog', this.handleResourceCreateDialogOpenEvent);
+    this.props.port.on('passbolt.resources.open-edit-dialog', this.handleResourceEditDialogOpenEvent);
+    this.props.port.on('passbolt.folders.open-create-dialog', this.handleFolderCreateDialogOpenEvent);
+    this.props.port.on('passbolt.folders.open-rename-dialog', this.handleFolderRenameDialogOpenEvent);
+    this.props.port.on('passbolt.folders.open-delete-dialog', this.handleFolderDeleteDialogOpenEvent);
+    this.props.port.on('passbolt.share.open-share-dialog', this.handleShareDialogOpenEvent);
 
     // requests: dialogs that return responses to controllers
-    Port.get().on('passbolt.passphrase.request', this.handlePassphraseEntryRequestEvent);
-    Port.get().on('passbolt.folders.move-strategy.request', this.handleFolderMoveStrategyRequestEvent);
+    this.props.port.on('passbolt.passphrase.request', this.handlePassphraseEntryRequestEvent);
+    this.props.port.on('passbolt.folders.move-strategy.request', this.handleFolderMoveStrategyRequestEvent);
   }
 
   handleIsReadyEvent(requestId) {
     if (this.isReady()) {
-      Port.get().emit(requestId, "SUCCESS");
+      this.props.port.emit(requestId, "SUCCESS");
     } else {
-      Port.get().emit(requestId, "ERROR");
+      this.props.port.emit(requestId, "ERROR");
     }
   }
 
   isReady() {
-    return this.state.user !== null;
+    return this.state.userSettings !== null && this.state.siteSettings !== null;
+  }
+
+  async getLoggedInUser() {
+    const currentUser = await this.props.port.request("passbolt.user.get");
+    this.setState({currentUser});
   }
 
   async getResources() {
-    const storageData = await Storage.get().local.get(["resources"]);
+    const storageData = await this.props.storage.local.get(["resources"]);
     if (storageData.resources && storageData.resources.length) {
       const resources = storageData.resources;
       this.setState({resources: resources});
@@ -177,7 +189,7 @@ class ReactExtension extends Component {
   }
 
   async getFolders() {
-    const storageData = await Storage.get().local.get(["folders"]);
+    const storageData = await this.props.storage.local.get(["folders"]);
     if (storageData.folders && storageData.folders.length) {
       const folders = storageData.folders;
       this.setState({folders: folders});
@@ -185,8 +197,15 @@ class ReactExtension extends Component {
   }
 
   async getUserSettings() {
-    const storageData = await Storage.get().local.get(["_passbolt_data"]);
-    this.setState({user: storageData._passbolt_data.config});
+    const storageData = await this.props.storage.local.get(["_passbolt_data"]);
+    const userSettings = new UserSettings(storageData._passbolt_data.config);
+    this.setState({userSettings});
+  }
+
+  async getSiteSettings() {
+    const settings = await this.props.port.request("passbolt.site.settings");
+    const siteSettings = new SiteSettings(settings);
+    this.setState({siteSettings});
   }
 
   handleStorageChange(changes) {
@@ -206,20 +225,16 @@ class ReactExtension extends Component {
    * =============================================================
    */
 
-  async rememberMeInfo() {
-    const rememberMeOptions = await Port.get().request('passbolt.site.settings.plugins.rememberMe');
-    this.setState({rememberMeOptions: rememberMeOptions});
-  }
-
   handleErrorDialogOpenEvent(title, message) {
+    const showErrorDialog = true;
     const errorDialogProps = {title: title, message: message};
-    this.setState({showErrorDialog: true, errorDialogProps: errorDialogProps});
+    this.setState({showErrorDialog, errorDialogProps});
   }
 
   handleErrorDialogCloseEvent() {
-    const defaultState = this.getDefaultState();
-    this.setState({showErrorDialog: false, errorDialogProps: defaultState.errorDialogProps});
-    Port.get().emit('passbolt.app.hide');
+    const showErrorDialog = false;
+    const errorDialogProps = {};
+    this.setState({showErrorDialog, errorDialogProps});
   }
 
   /*
@@ -229,12 +244,15 @@ class ReactExtension extends Component {
    */
 
   handlePassphraseEntryRequestEvent(requestId) {
-    this.setState({showPassphraseEntryDialog: true, passphraseRequestId: requestId});
+    const showPassphraseEntryDialog = true;
+    const passphraseRequestId = requestId;
+    this.setState({showPassphraseEntryDialog, passphraseRequestId});
   }
 
   handlePassphraseDialogClose() {
-    const defaultState = this.getDefaultState();
-    this.setState({showPassphraseEntryDialog: false, passphraseRequestId: defaultState.passphraseRequestId});
+    const showPassphraseEntryDialog = false;
+    const passphraseRequestId = {};
+    this.setState({showPassphraseEntryDialog, passphraseRequestId});
   }
 
   /*
@@ -244,26 +262,28 @@ class ReactExtension extends Component {
    */
 
   handleProgressDialogOpenEvent(title, goals, message) {
+    const showProgressDialog = true;
     const progressDialogProps = {title: title, message: message, goals: goals};
-    this.setState({showProgressDialog: true, progressDialogProps: progressDialogProps});
+    this.setState({showProgressDialog, progressDialogProps});
   }
 
   handleProgressDialogUpdateEvent(message, completed) {
     const progressDialogProps = this.state.progressDialogProps;
     progressDialogProps.message = message || progressDialogProps.message;
     progressDialogProps.completed = completed;
-    this.setState({progressDialogProps: progressDialogProps});
+    this.setState({progressDialogProps});
   }
 
   handleProgressDialogUpdateGoalsEvent(goals) {
     const progressDialogProps = this.state.progressDialogProps;
     progressDialogProps.goals = goals;
-    this.setState({progressDialogProps: progressDialogProps});
+    this.setState({progressDialogProps});
   }
 
   handleProgressDialogCloseEvent() {
-    const defaultState = this.getDefaultState();
-    this.setState({showProgressDialog: false, progressDialogProps: defaultState.progressDialogProps});
+    const showProgressDialog = false;
+    const progressDialogProps = {};
+    this.setState({showProgressDialog, progressDialogProps});
   }
 
   /*
@@ -273,24 +293,27 @@ class ReactExtension extends Component {
    */
 
   handleResourceCreateDialogOpenEvent(folderParentId) {
+    const showResourceCreateDialog = true;
     const resourceCreateDialogProps = {folderParentId: folderParentId};
-    this.setState({showResourceCreateDialog: true, resourceCreateDialogProps: resourceCreateDialogProps});
+    this.setState({showResourceCreateDialog, resourceCreateDialogProps});
   }
 
   handleResourceCreateDialogCloseEvent() {
-    const defaultState = this.getDefaultState();
-    this.setState({showResourceCreateDialog: false, resourceCreateDialogProps: defaultState.resourceCreateDialogProps});
-    Port.get().emit('passbolt.app.hide');
+    const showResourceCreateDialog = false;
+    const resourceCreateDialogProps = {};
+    this.setState({showResourceCreateDialog, resourceCreateDialogProps});
   }
 
   handleResourceEditDialogOpenEvent(id) {
-    this.setState({showPasswordEditDialog: true, passwordEditDialogProps: {id: id}});
+    const showPasswordEditDialog = true;
+    const passwordEditDialogProps = {id};
+    this.setState({showPasswordEditDialog, passwordEditDialogProps});
   }
 
   handleResourceEditDialogCloseEvent() {
-    const defaultState = this.getDefaultState();
-    this.setState({showPasswordEditDialog: false, passwordEditDialogProps: defaultState.passwordEditDialogProps});
-    Port.get().emit('passbolt.app.hide');
+    const showPasswordEditDialog = false;
+    const passwordEditDialogProps = {};
+    this.setState({showPasswordEditDialog, passwordEditDialogProps});
   }
 
   /*
@@ -300,13 +323,15 @@ class ReactExtension extends Component {
    */
 
   handleShareDialogOpenEvent(itemsToShare) {
-    this.setState({showShareDialog: true, shareDialogProps: itemsToShare});
+    const showShareDialog = true;
+    const shareDialogProps = itemsToShare;
+    this.setState({showShareDialog, shareDialogProps});
   }
 
   handleShareDialogCloseEvent() {
-    const defaultState = this.getDefaultState();
-    this.setState({showShareDialog: false, shareDialogProps: defaultState.shareDialogProps});
-    Port.get().emit('passbolt.app.hide');
+    const showShareDialog = false;
+    const shareDialogProps = {};
+    this.setState({showShareDialog, shareDialogProps});
   }
 
   /*
@@ -316,53 +341,53 @@ class ReactExtension extends Component {
    */
 
   handleFolderCreateDialogOpenEvent(folderParentId) {
+    const showFolderCreateDialog = true;
     const folderCreateDialogProps = {folderParentId: folderParentId};
-    this.setState({showFolderCreateDialog: true, folderCreateDialogProps: folderCreateDialogProps});
+    this.setState({showFolderCreateDialog, folderCreateDialogProps});
   }
 
   handleFolderCreateDialogCloseEvent() {
-    const defaultState = this.getDefaultState();
-    this.setState({showFolderCreateDialog: false, folderCreateDialogProps: defaultState.folderCreateDialogProps});
-    Port.get().emit('passbolt.app.hide');
+    const showFolderCreateDialog = false;
+    const folderCreateDialogProps = {};
+    this.setState({showFolderCreateDialog, folderCreateDialogProps});
   }
 
   handleFolderRenameDialogOpenEvent(folderId) {
+    const showFolderRenameDialog = true;
     const folder = {id: folderId};
-    this.setState({showFolderRenameDialog: true, folder: folder});
+    this.setState({showFolderRenameDialog, folder});
   }
 
   handleFolderRenameDialogCloseEvent() {
-    const defaultState = this.getDefaultState();
-    this.setState({showFolderRenameDialog: false, folder: defaultState.folder});
-    Port.get().emit('passbolt.app.hide');
+    const showFolderRenameDialog = false;
+    const folder = null;
+    this.setState({showFolderRenameDialog, folder});
   }
 
   handleFolderDeleteDialogOpenEvent(folderId) {
+    const showFolderDeleteDialog = true;
     const folder = {id: folderId};
-    this.setState({showFolderDeleteDialog: true, folder: folder});
+    this.setState({showFolderDeleteDialog, folder});
   }
 
   handleFolderDeleteDialogCloseEvent() {
-    const defaultState = this.getDefaultState();
-    this.setState({showFolderDeleteDialog: false, folder: defaultState.folder});
-    Port.get().emit('passbolt.app.hide');
+    const showFolderDeleteDialog = false;
+    const folder = null;
+    this.setState({showFolderDeleteDialog, folder});
   }
 
   handleFolderMoveStrategyRequestEvent(requestId, folderId, foldersIds, resourcesIds) {
-    this.setState({
-      showProgressDialog: false,
-      showFolderMoveStrategyDialog: true,
-      folderMoveStrategyProps: {requestId: requestId, folderId: folderId, foldersIds: foldersIds, resourcesIds: resourcesIds}
-    });
+    const showProgressDialog = false;
+    const showFolderMoveStrategyDialog = true;
+    const folderMoveStrategyProps = {requestId, folderId, foldersIds, resourcesIds};
+    this.setState({showProgressDialog, showFolderMoveStrategyDialog, folderMoveStrategyProps});
   }
 
   handleFolderMoveStrategyDialogCloseEvent() {
-    const defaultState = this.getDefaultState();
-    this.setState({
-      showProgressDialog: true,
-      showFolderMoveStrategyDialog: false,
-      folderMoveStrategyProps: defaultState.folderMoveStrategyProps
-    });
+    const showProgressDialog = true;
+    const showFolderMoveStrategyDialog = false;
+    const folderMoveStrategyProps = {};
+    this.setState({showProgressDialog, showFolderMoveStrategyDialog, folderMoveStrategyProps});
   }
 
   /*
@@ -372,73 +397,84 @@ class ReactExtension extends Component {
    */
   render() {
     const isReady = this.isReady();
-    const areResourcesLoaded = this.state.resources && this.state.resources.length;
+    const areResourcesLoaded = this.state.resources !== null && this.state.resources.length > 0;
+    const areFoldersLoaded = this.state.folders !== null && this.state.folders.length > 0;
 
     return (
-      <Router>
-        <Route render={() => (
-          <Route  path="/">
-            <AppContext.Provider value={this.state}>
-              {isReady &&
-              <div id="app" className={`app ${isReady ? "ready" : ""}`} tabIndex="1000">
-                {this.state.showResourceCreateDialog &&
-                <PasswordCreateDialog onClose={this.handleResourceCreateDialogCloseEvent}
-                  folderParentId={this.state.resourceCreateDialogProps.folderParentId}/>
-                }
-                {this.state.showPasswordEditDialog && areResourcesLoaded &&
-                <PasswordEditDialog onClose={this.handleResourceEditDialogCloseEvent}
-                  id={this.state.passwordEditDialogProps.id}/>
-                }
-                {this.state.showFolderCreateDialog &&
-                <FolderCreateDialog onClose={this.handleFolderCreateDialogCloseEvent}
-                  folderParentId={this.state.folderCreateDialogProps.folderParentId}/>
-                }
-                {this.state.showFolderMoveStrategyDialog &&
-                <FolderMoveStrategyDialog onClose={this.handleFolderMoveStrategyDialogCloseEvent}
-                  folderId={this.state.folderMoveStrategyProps.folderId}
-                  foldersIds={this.state.folderMoveStrategyProps.foldersIds}
-                  resourcesIds={this.state.folderMoveStrategyProps.resourcesIds}
-                  requestId={this.state.folderMoveStrategyProps.requestId}
-                />
-                }
-                {this.state.showFolderRenameDialog &&
-                <FolderRenameDialog onClose={this.handleFolderRenameDialogCloseEvent} folderId={this.state.folder.id}/>
-                }
-                {this.state.showFolderDeleteDialog &&
-                <FolderDeleteDialog onClose={this.handleFolderDeleteDialogCloseEvent} folderId={this.state.folder.id}/>
-                }
-                {this.state.showShareDialog &&
-                <ShareDialog resourcesIds={this.state.shareDialogProps.resourcesIds}
-                  foldersIds={this.state.shareDialogProps.foldersIds}
-                  onClose={this.handleShareDialogCloseEvent} />
-                }
-                {
-                  /*
-                   * Hello traveller, leave these dialogs at the end
-                   * so that they are displayed on top of your new dialog
-                   */
-                }
-                {this.state.showProgressDialog &&
-                <ProgressDialog title={this.state.progressDialogProps.title}
-                  goals={this.state.progressDialogProps.goals}
-                  message={this.state.progressDialogProps.message}
-                  completed={this.state.progressDialogProps.completed} />
-                }
-                {this.state.showPassphraseEntryDialog &&
-                <PassphraseEntryDialog requestId={this.state.passphraseRequestId}
-                  onClose={this.handlePassphraseDialogClose}/>
-                }
-                {this.state.showErrorDialog &&
-                <ErrorDialog title={this.state.errorDialogProps.title}
-                  message={this.state.errorDialogProps.message}
-                  onClose={this.handleErrorDialogCloseEvent}/>
-                }
-              </div>
+      <AppContext.Provider value={this.state}>
+        <Router>
+          <div id="container" className="page">
+            {isReady &&
+            <div id="app" className={`app ${isReady ? "ready" : ""}`} tabIndex="1000">
+              {this.state.showResourceCreateDialog &&
+              <PasswordCreateDialog onClose={this.handleResourceCreateDialogCloseEvent}
+                folderParentId={this.state.resourceCreateDialogProps.folderParentId}/>
               }
-            </AppContext.Provider>
-          </Route>
-        )}/>
-      </Router>
+              {this.state.showPasswordEditDialog && areResourcesLoaded &&
+              <PasswordEditDialog onClose={this.handleResourceEditDialogCloseEvent}
+                id={this.state.passwordEditDialogProps.id}/>
+              }
+              {this.state.showFolderCreateDialog &&
+              <FolderCreateDialog onClose={this.handleFolderCreateDialogCloseEvent}
+                folderParentId={this.state.folderCreateDialogProps.folderParentId}/>
+              }
+              {this.state.showFolderMoveStrategyDialog && areFoldersLoaded &&
+              <FolderMoveStrategyDialog onClose={this.handleFolderMoveStrategyDialogCloseEvent}
+                folderId={this.state.folderMoveStrategyProps.folderId}
+                foldersIds={this.state.folderMoveStrategyProps.foldersIds}
+                resourcesIds={this.state.folderMoveStrategyProps.resourcesIds}
+                requestId={this.state.folderMoveStrategyProps.requestId}
+              />
+              }
+              {this.state.showFolderRenameDialog && areFoldersLoaded &&
+              <FolderRenameDialog onClose={this.handleFolderRenameDialogCloseEvent} folderId={this.state.folder.id}/>
+              }
+              {this.state.showFolderDeleteDialog && areFoldersLoaded &&
+              <FolderDeleteDialog onClose={this.handleFolderDeleteDialogCloseEvent} folderId={this.state.folder.id}/>
+              }
+              {this.state.showShareDialog &&
+              <ShareDialog resourcesIds={this.state.shareDialogProps.resourcesIds}
+                foldersIds={this.state.shareDialogProps.foldersIds}
+                onClose={this.handleShareDialogCloseEvent}/>
+              }
+              {
+                /*
+                 * Hello traveller, leave these dialogs at the end
+                 * so that they are displayed on top of your new dialog
+                 */
+              }
+              {this.state.showProgressDialog &&
+              <ProgressDialog title={this.state.progressDialogProps.title}
+                goals={this.state.progressDialogProps.goals}
+                message={this.state.progressDialogProps.message}
+                completed={this.state.progressDialogProps.completed}/>
+              }
+              {this.state.showPassphraseEntryDialog &&
+              <PassphraseEntryDialog requestId={this.state.passphraseRequestId}
+                onClose={this.handlePassphraseDialogClose}/>
+              }
+              {this.state.showErrorDialog &&
+              <ErrorDialog title={this.state.errorDialogProps.title}
+                message={this.state.errorDialogProps.message}
+                onClose={this.handleErrorDialogCloseEvent}/>
+              }
+              <div className="header first">
+                <MainMenu onClick={this.handleWorkspaceSelect} baseUrl={this.state.userSettings.getTrustedDomain()}/>
+              </div>
+              <Switch>
+                <Route path={[
+                  "/app/folders/view/:filterByFolderId",
+                  "/app/passwords/view/:selectedResourceId",
+                  "/app/passwords",
+                ]}>
+                  <PasswordWorkspace onMenuItemClick={this.handleWorkspaceSelect}/>
+                </Route>
+              </Switch>
+            </div>
+            }
+          </div>
+        </Router>
+      </AppContext.Provider>
     );
   }
 }

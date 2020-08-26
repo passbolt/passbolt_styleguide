@@ -19,7 +19,6 @@ import ErrorDialog from "../../Common/Dialog/ErrorDialog/ErrorDialog";
 import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
 import FormSubmitButton from "../../Common/Inputs/FormSubmitButton/FormSubmitButton";
 import FormCancelButton from "../../Common/Inputs/FormSubmitButton/FormCancelButton";
-import Port from "../../../lib/extension/port";
 
 class FolderRenameDialog extends Component {
   /**
@@ -224,7 +223,7 @@ class FolderRenameDialog extends Component {
       id: this.props.folderId,
       name: this.state.name
     };
-    return await Port.get().request("passbolt.folders.update", folderDto);
+    return await this.context.port.request("passbolt.folders.update", folderDto);
   }
 
   /**
@@ -233,7 +232,7 @@ class FolderRenameDialog extends Component {
    * @param {string} message The message to display
    */
   displayNotification(status, message) {
-    Port.get().emit("passbolt.notification.display", {status: status, message: message});
+    this.context.port.emit("passbolt.notification.display", {status: status, message: message});
   }
 
   /**
@@ -242,7 +241,7 @@ class FolderRenameDialog extends Component {
    * @returns {void}
    */
   selectAndScrollToFolder(id) {
-    Port.get().emit("passbolt.folders.select-and-scroll-to", id);
+    this.context.port.emit("passbolt.folders.select-and-scroll-to", id);
   }
 
   /**
