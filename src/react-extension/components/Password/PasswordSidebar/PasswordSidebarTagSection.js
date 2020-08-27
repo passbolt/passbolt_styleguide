@@ -39,7 +39,6 @@ class PasswordSidebarTagSection extends React.Component {
     };
   }
 
-
   /**
    * Bind callbacks methods
    */
@@ -47,7 +46,6 @@ class PasswordSidebarTagSection extends React.Component {
     this.handleTitleClickEvent = this.handleTitleClickEvent.bind(this);
     this.displayInputTagEditor = this.displayInputTagEditor.bind(this);
   }
-
 
   /**
    * Handle when the user selects the folder parent.
@@ -64,7 +62,6 @@ class PasswordSidebarTagSection extends React.Component {
     const showTagEditor = !this.state.showTagEditor;
     this.setState({showTagEditor});
   }
-
 
   /**
    * Render the component

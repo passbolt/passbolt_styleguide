@@ -24,29 +24,29 @@ class TagItemViewer extends React.Component {
     super(props);
   }
 
-
   /**
    * Render the component
    * @returns {JSX}
    */
   render() {
+    const hasTags = this.props.tags && this.props.tags.length > 0;
 
     return (
-        <div>
-          {!this.props.tags &&
-          <em className="empty-content"
-              onClick={this.props.displayInputTagEditor}>There is no tag, click edit to add one</em>
+      <div>
+        {!hasTags &&
+        <em className="empty-content"
+          onClick={this.props.displayInputTagEditor}>There is no tag, click here to add one</em>
+        }
+        {hasTags &&
+        <ul className="tags tags-list">
+          {this.props.tags.map((tag) =>
+            <li key={tag.id}>
+              <a className="tag ellipsis">{tag.slug}</a>
+            </li>)
           }
-          {this.props.tags &&
-          <ul className="tags tags-list">
-            {this.props.tags.map((tag) =>
-              <li key={tag.id}>
-                <a className="tag ellipsis">{tag.slug}</a>
-              </li>)
-            }
-          </ul>
-          }
-        </div>
+        </ul>
+        }
+      </div>
     );
   }
 }
