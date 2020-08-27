@@ -1,14 +1,13 @@
 /* tags */
 .tags {
     .tag {
-        word-break: break-all;
-        white-space: normal;
         padding: .125em .5em;
         float: left;
         position: relative;
         margin: 0 .5em .5em 0;
         text-decoration: none;
         border-radius: 3px;
+        max-width: 95%; // TODO review size
         border: 1px solid @tag-border;
         background: @tag-background;
         color: @tag-color;
@@ -36,6 +35,9 @@
     }
     .tag-content {
         padding-right: .5em;
+        word-wrap: break-word;
+        display: inline-block; // TODO
+        max-width: 90%; // TODO review size
     }
     .tag-delete {
         border-left: 1px dotted @blue;
@@ -45,6 +47,7 @@
         font-size: .75em;
         vertical-align: 10%;
         cursor: pointer;
+        display: inline-block; // TODO
     }
     .tag:hover:after {
         border-color: @border-input-light;
