@@ -6018,14 +6018,13 @@ input[type="search"]::-webkit-search-cancel-button {
 }
 /* tags */
 .tags .tag {
-  word-break: break-all;
-  white-space: normal;
   padding: 0.125em 0.5em;
   float: left;
   position: relative;
   margin: 0 0.5em 0.5em 0;
   text-decoration: none;
   border-radius: 3px;
+  max-width: 95%;
   border: 1px solid #2894DF;
   background: rgba(42, 156, 235, 0.05);
   color: #2894DF;
@@ -6097,6 +6096,8 @@ input[type="search"]::-webkit-search-cancel-button {
 }
 .tag-editor .tag-content {
   padding-right: 0.5em;
+  display: inline-block;
+  max-width: 90%;
 }
 .tag-editor .tag-delete {
   border-left: 1px dotted #2894DF;
@@ -6106,6 +6107,7 @@ input[type="search"]::-webkit-search-cancel-button {
   font-size: 0.75em;
   vertical-align: 10%;
   cursor: pointer;
+  display: inline-block;
 }
 .tag-editor .tag:hover:after {
   border-color: #BBB;

@@ -13,10 +13,14 @@
  */
 
 import React from "react";
-import {fireEvent, render} from "@testing-library/react";
+import {fireEvent, render, waitFor} from "@testing-library/react";
 import PasswordSidebarTagSection from "./PasswordSidebarTagSection";
 import AppContext from "../../../contexts/AppContext";
 import MockPort from "../../../test/mock/MockPort";
+import UserSettings from "../../../lib/Settings/UserSettings";
+import userSettingsFixture from "../../../test/fixture/Settings/userSettings";
+import SiteSettings from "../../../lib/Settings/SiteSettings";
+import siteSettingsFixture from "../../../test/fixture/Settings/siteSettings";
 
 beforeEach(() => {
   jest.resetModules();
@@ -34,38 +38,41 @@ const getDummyResource = function() {
     "modified": "2019-12-06T13:38:43+00:00",
     "created_by": "f848277c-5398-58f8-a82a-72397af2d450",
     "modified_by": "f848277c-5398-58f8-a82a-72397af2d450",
+    "permission": {
+      type: 10
+    },
     "tags": [
-    {
-      "id": "be930cc9-516c-4206-8f0b-00b8b6752029",
-      "slug": "#gg",
-      "is_shared": true
-    },
-    {
-      "id": "d4582ccc-1869-43ce-b47f-1c957764e654",
-      "slug": "#test",
-      "is_shared": true
-    },
-    {
-      "id": "0a710aba-4aa9-439b-a434-5f9f6c9f6442",
-      "slug": "dede",
-      "is_shared": false
-    },
-    {
-      "id": "37d7eeca-71d5-46fb-9f08-831e2bde7781",
-      "slug": "ok",
-      "is_shared": false
-    },
-    {
-      "id": "f3ad54ab-54c1-457c-8f18-7c40dc4a37d9",
-      "slug": "test",
-      "is_shared": false
-    },
-    {
-      "id": "5c6bb083-a499-40ff-a639-6593c87a24bd",
-      "slug": "There’s always something to look at if you open your eyes",
-      "is_shared": false
-    }
-  ]
+      {
+        "id": "be930cc9-516c-4206-8f0b-00b8b6752029",
+        "slug": "#gg",
+        "is_shared": true
+      },
+      {
+        "id": "d4582ccc-1869-43ce-b47f-1c957764e654",
+        "slug": "#test",
+        "is_shared": true
+      },
+      {
+        "id": "0a710aba-4aa9-439b-a434-5f9f6c9f6442",
+        "slug": "dede",
+        "is_shared": false
+      },
+      {
+        "id": "37d7eeca-71d5-46fb-9f08-831e2bde7781",
+        "slug": "ok",
+        "is_shared": false
+      },
+      {
+        "id": "f3ad54ab-54c1-457c-8f18-7c40dc4a37d9",
+        "slug": "test",
+        "is_shared": false
+      },
+      {
+        "id": "5c6bb083-a499-40ff-a639-6593c87a24bd",
+        "slug": "There’s always something to look at if you open your eyes",
+        "is_shared": false
+      }
+    ]
   };
 };
 
@@ -81,11 +88,15 @@ const getDummyResourceEmptyTag = function() {
     "modified": "2019-12-06T13:38:43+00:00",
     "created_by": "f848277c-5398-58f8-a82a-72397af2d450",
     "modified_by": "f848277c-5398-58f8-a82a-72397af2d450",
+    "permission": {
+      type: 15
+    }
   };
 };
 
 const getAppContext = function (appContext) {
   const defaultAppContext = {
+
     port: new MockPort()
   };
 
@@ -153,7 +164,480 @@ describe("PasswordSidebarTag", () => {
     // Tags list exists
     const emptyContent = container.querySelector(".empty-content");
     expect(emptyContent).not.toBeNull();
-    expect(emptyContent.textContent).toBe("There is no tag, click edit to add one");
+    expect(emptyContent.textContent).toBe("There is no tag, click here to add one");
+
+  });
+
+  it("Cut long tags so they fit on one line", () => {
+    // TODO Cut long tags so they fit on one line
+  });
+
+  it("Start editing by clicking on the edit icon", () => {
+    const props = {
+      resource: getDummyResource()
+    };
+    const {container} = renderPasswordSidebarTagSection(null, props);
+
+    // Click to expand tags
+    const leftClick = {button: 0};
+    const sidebar = container.querySelector(".sidebar-section");
+    fireEvent.click(sidebar, leftClick);
+
+    // Edit icon exists
+    const editIcon = container.querySelector(".edit_tags_button");
+    expect(editIcon).not.toBeNull();
+    fireEvent.click(editIcon, leftClick);
+
+    // Editor input tag exists
+    const editorTag = container.querySelector(".tag-editor-input");
+    expect(editorTag).not.toBeNull();
+
+    // notice input tag not exists
+    const noticeInputTag = container.querySelector(".message");
+    expect(noticeInputTag).toBeNull();
+
+    // submit button input tag exists
+    const submitButton = container.querySelector(".tag-editor-submit");
+    expect(submitButton).not.toBeNull();
+    expect(submitButton.textContent).toBe("save");
+
+    // cancel button input tag exists
+    const cancelButton = container.querySelector(".tag-editor-cancel");
+    expect(cancelButton).not.toBeNull();
+    expect(cancelButton.textContent).toBe("cancel");
+
+  });
+
+  it("Start editing by clicking on the empty message", () => {
+    const props = {
+      resource: getDummyResourceEmptyTag()
+    };
+    const {container} = renderPasswordSidebarTagSection(null, props);
+
+    // Click to expand tags
+    const leftClick = {button: 0};
+    const sidebar = container.querySelector(".sidebar-section");
+    fireEvent.click(sidebar, leftClick);
+
+    // Tags list empty content exists
+    const emptyContent = container.querySelector(".empty-content");
+    expect(emptyContent).not.toBeNull();
+    expect(emptyContent.textContent).toBe("There is no tag, click here to add one");
+    fireEvent.click(emptyContent, emptyContent);
+
+    // Editor input tag exists
+    const editorTag = container.querySelector(".tag-editor-input");
+    expect(editorTag).not.toBeNull();
+
+    // notice input tag exists
+    const noticeInputTag = container.querySelector(".message");
+    expect(noticeInputTag).not.toBeNull();
+    expect(noticeInputTag.textContent).toBe("Pro tip: Tags starting with # are shared with all users who have access. Separate tags using commas.");
+
+  });
+
+  it("Stop editing by clicking on the edit icon", () => {
+    const props = {
+      resource: getDummyResource()
+    };
+    const {container} = renderPasswordSidebarTagSection(null, props);
+
+    // Click to expand tags
+    const leftClick = {button: 0};
+    const sidebar = container.querySelector(".sidebar-section");
+    fireEvent.click(sidebar, leftClick);
+
+    // Edit icon exists
+    const editIcon = container.querySelector(".edit_tags_button");
+    expect(editIcon).not.toBeNull();
+    fireEvent.click(editIcon, leftClick);
+
+    // Editor input tag exists
+    const editorTag = container.querySelector(".tag-editor-input");
+    expect(editorTag).not.toBeNull();
+
+    fireEvent.click(editIcon, leftClick);
+
+    // Editor input tag not exists
+    const editorTagClose = container.querySelector(".tag-editor-input");
+    expect(editorTagClose).toBeNull();
+
+  });
+
+  it("Stop editing by clicking out of the edit zone", () => {
+    const props = {
+      resource: getDummyResource()
+    };
+    const {container} = renderPasswordSidebarTagSection(null, props);
+
+    // Click to expand tags
+    const leftClick = {button: 0};
+    const sidebar = container.querySelector(".sidebar-section");
+    fireEvent.click(sidebar, leftClick);
+
+    // Edit icon exists
+    const editIcon = container.querySelector(".edit_tags_button");
+    expect(editIcon).not.toBeNull();
+    fireEvent.click(editIcon, leftClick);
+
+    // Editor input tag exists
+    const editorTag = container.querySelector(".tag-editor-input");
+    expect(editorTag).not.toBeNull();
+
+    const accordionContent = container.querySelector(".accordion-content");
+    fireEvent.click(accordionContent, leftClick);
+
+    // Editor input tag not exists
+    const editorTagClose = container.querySelector(".tag-editor-input");
+    expect(editorTagClose).toBeNull();
+
+  });
+
+  it("Add a new tag to a resource", async() => {
+    const context = getAppContext();
+    const props = {
+      resource: getDummyResourceEmptyTag()
+    };
+    const {container} = renderPasswordSidebarTagSection(context, props);
+
+    // Click to expand tags
+    const leftClick = {button: 0};
+    const sidebar = container.querySelector(".sidebar-section");
+    fireEvent.click(sidebar, leftClick);
+
+    // Edit icon exists
+    const editIcon = container.querySelector(".edit_tags_button");
+    expect(editIcon).not.toBeNull();
+    fireEvent.click(editIcon, leftClick);
+
+    // Editor input tag exists
+    const editorTagInput = container.querySelector(".tag-editor-input");
+    const tagValue = "tardis";
+    expect(editorTagInput).not.toBeNull();
+    fireEvent.change(editorTagInput, {target: {textContent: tagValue}});
+
+    // Mock the request function to make it the expected result
+    jest.spyOn(context.port, 'request').mockImplementationOnce(jest.fn((message, data) => Object.assign({id: props.resource.id}, data)));
+    jest.spyOn(context.port, 'emit').mockImplementation(jest.fn());
+
+    // submit button input tag exists
+    const submitButton = container.querySelector(".tag-editor-submit");
+    expect(submitButton).not.toBeNull();
+    expect(submitButton.textContent).toBe("save");
+    fireEvent.click(submitButton, leftClick);
+
+    // API calls are made on submit, wait they are resolved.
+    await waitFor(() => {});
+
+    // Editor input tag not exists
+    const editorTagInputDisable = container.querySelector(".tag-editor-input");
+    expect(editorTagInputDisable).toBeNull();
+
+    const onApiUpdateResourceTagMeta = {
+      id: props.resource.id,
+      tags: [
+        {
+          slug: tagValue,
+          is_shared: false
+        }
+      ]
+    };
+    expect(context.port.request).toHaveBeenCalledWith("passbolt.resource.update-tags", onApiUpdateResourceTagMeta);
+    expect(context.port.emit).toHaveBeenNthCalledWith(1, "passbolt.notification.display", {"message": "Tags has been added successfully", "status": "success"});
+  });
+
+  it("Add multiple tags to a resource", async() => {
+    const context = getAppContext();
+    const props = {
+      resource: getDummyResourceEmptyTag()
+    };
+    const {container} = renderPasswordSidebarTagSection(context, props);
+
+    // Click to expand tags
+    const leftClick = {button: 0};
+    const sidebar = container.querySelector(".sidebar-section");
+    fireEvent.click(sidebar, leftClick);
+
+    // Edit icon exists
+    const editIcon = container.querySelector(".edit_tags_button");
+    expect(editIcon).not.toBeNull();
+    fireEvent.click(editIcon, leftClick);
+
+    // Editor input tag exists
+    const editorTagInput = container.querySelector(".tag-editor-input");
+    const tagValues = ["tardis", "vortex-manipulator"];
+    const enterKeyPressed = {keyCode: 13};
+    expect(editorTagInput).not.toBeNull();
+    fireEvent.change(editorTagInput, {target: {textContent: tagValues[0]}});
+    fireEvent.keyPress(editorTagInput, enterKeyPressed);
+    expect(editorTagInput.textContent).toBe("");
+
+    const commaKeyPressed = {charCode: 44};
+    fireEvent.change(editorTagInput, {target: {textContent: tagValues[1]}});
+    fireEvent.keyPress(editorTagInput, commaKeyPressed);
+    expect(editorTagInput.textContent).toBe("");
+
+    // number of tags and check all name displayed
+    const tags = container.querySelectorAll(".tag");
+    expect(tags).not.toBeNull();
+    expect(tags.length).toBe(2);
+    tags.forEach(function (value, index) {
+      expect(value.textContent).toBe(tagValues[index]);
+    });
+
+    // Mock the request function to make it the expected result
+    jest.spyOn(context.port, 'request').mockImplementationOnce(jest.fn((message, data) => Object.assign({id: props.resource.id}, data)));
+    jest.spyOn(context.port, 'emit').mockImplementation(jest.fn());
+
+    // submit button input tag exists
+    const submitButton = container.querySelector(".tag-editor-submit");
+    expect(submitButton).not.toBeNull();
+    expect(submitButton.textContent).toBe("save");
+    fireEvent.click(submitButton, leftClick);
+
+    // API calls are made on submit, wait they are resolved.
+    await waitFor(() => {});
+
+    // Editor input tag not exists
+    const editorTagInputDisable = container.querySelector(".tag-editor-input");
+    expect(editorTagInputDisable).toBeNull();
+
+    const onApiUpdateResourceTagMeta = {
+      id: props.resource.id,
+      tags: [
+        {
+          slug: tagValues[0],
+          is_shared: false
+        },
+        {
+          slug: tagValues[1],
+          is_shared: false
+        }
+      ]
+    };
+    expect(context.port.request).toHaveBeenCalledWith("passbolt.resource.update-tags", onApiUpdateResourceTagMeta);
+    expect(context.port.emit).toHaveBeenNthCalledWith(1, "passbolt.notification.display", {"message": "Tags has been added successfully", "status": "success"});
+  });
+
+  it("Cannot edit while submitting changes", () => {
+    const context = getAppContext();
+    const props = {
+      resource: getDummyResourceEmptyTag()
+    };
+    const {container} = renderPasswordSidebarTagSection(context, props);
+
+    // Click to expand tags
+    const leftClick = {button: 0};
+    const sidebar = container.querySelector(".sidebar-section");
+    fireEvent.click(sidebar, leftClick);
+
+    // Edit icon exists
+    const editIcon = container.querySelector(".edit_tags_button");
+    expect(editIcon).not.toBeNull();
+    fireEvent.click(editIcon, leftClick);
+
+    // Editor input tag exists
+    const editorTagInput = container.querySelector(".tag-editor-input");
+    expect(editorTagInput).not.toBeNull();
+    expect(editorTagInput.textContent).toBe("");
+
+    // submit button input tag exists
+    const submitButton = container.querySelector(".tag-editor-submit");
+    expect(submitButton).not.toBeNull();
+    expect(submitButton.textContent).toBe("save");
+    fireEvent.click(submitButton, leftClick);
+
+    const editorTagInputDisable = container.querySelector(".tag-editor-input");
+    expect(editorTagInputDisable).not.toBeNull();
+    expect(editorTagInputDisable.getAttribute("contenteditable")).toBe("false");
+
+  });
+
+  it("Show progress feedback while submitting", () => {
+    const context = getAppContext();
+    const props = {
+      resource: getDummyResourceEmptyTag()
+    };
+    const {container} = renderPasswordSidebarTagSection(context, props);
+
+    // Click to expand tags
+    const leftClick = {button: 0};
+    const sidebar = container.querySelector(".sidebar-section");
+    fireEvent.click(sidebar, leftClick);
+
+    // Edit icon exists
+    const editIcon = container.querySelector(".edit_tags_button");
+    expect(editIcon).not.toBeNull();
+    fireEvent.click(editIcon, leftClick);
+
+    // Editor input tag exists
+    const editorTagInput = container.querySelector(".tag-editor-input");
+    expect(editorTagInput).not.toBeNull();
+    expect(editorTagInput.textContent).toBe("");
+
+    // submit button input tag exists
+    const submitButton = container.querySelector(".tag-editor-submit");
+    expect(submitButton).not.toBeNull();
+    expect(submitButton.textContent).toBe("save");
+    fireEvent.click(submitButton, leftClick);
+
+    // submit button input tag exists and processing
+    const submitButtonProcessing = container.querySelector(".tag-editor-submit");
+    expect(submitButtonProcessing).not.toBeNull();
+    expect(submitButtonProcessing.className).toBe("button tag-editor-submit primary processing");
+  });
+
+  it("Cannot add a shared tag to a resource I don’t own", () => {
+    const props = {
+      resource: getDummyResource()
+    };
+    const {container} = renderPasswordSidebarTagSection(null, props);
+
+    // Click to expand tags
+    const leftClick = {button: 0};
+    const sidebar = container.querySelector(".sidebar-section");
+    fireEvent.click(sidebar, leftClick);
+
+    // Edit icon exists
+    const editIcon = container.querySelector(".edit_tags_button");
+    expect(editIcon).not.toBeNull();
+    fireEvent.click(editIcon, leftClick);
+
+    // Editor input tag exists
+    const editorTagInput = container.querySelector(".tag-editor-input");
+    const tagValue = "#test";
+    const enterKeyPressed = {keyCode: 13};
+    expect(editorTagInput).not.toBeNull();
+    fireEvent.change(editorTagInput, {target: {textContent: tagValue}});
+    fireEvent.keyPress(editorTagInput, enterKeyPressed);
+    expect(editorTagInput.textContent).toBe(tagValue);
+
+
+    // number of tags and check all name displayed
+    const tags = container.querySelectorAll(".tag");
+    expect(tags).not.toBeNull();
+    expect(tags.length).toBe(6);
+
+    // error message exists
+    const errorInputTag = container.querySelector(".error");
+    expect(errorInputTag).not.toBeNull();
+    expect(errorInputTag.textContent).toBe("This shared tag can't be added, you are not the owner");
+
+  });
+
+  it("Cannot add a tag already added to a resource", () => {
+    const props = {
+      resource: getDummyResource()
+    };
+    const {container} = renderPasswordSidebarTagSection(null, props);
+
+    // Click to expand tags
+    const leftClick = {button: 0};
+    const sidebar = container.querySelector(".sidebar-section");
+    fireEvent.click(sidebar, leftClick);
+
+    // Edit icon exists
+    const editIcon = container.querySelector(".edit_tags_button");
+    expect(editIcon).not.toBeNull();
+    fireEvent.click(editIcon, leftClick);
+
+    // Editor input tag exists
+    const editorTagInput = container.querySelector(".tag-editor-input");
+    const tagValue = "test";
+    const enterKeyPressed = {keyCode: 13};
+    expect(editorTagInput).not.toBeNull();
+    fireEvent.change(editorTagInput, {target: {textContent: tagValue}});
+    fireEvent.keyPress(editorTagInput, enterKeyPressed);
+    expect(editorTagInput.textContent).toBe("");
+
+
+    // number of tags and check all name displayed
+    const tags = container.querySelectorAll(".tag");
+    expect(tags).not.toBeNull();
+    expect(tags.length).toBe(6);
+
+    // error message exists
+    const errorInputTag = container.querySelector(".error");
+    expect(errorInputTag).not.toBeNull();
+    expect(errorInputTag.textContent).toBe("This tag is already present");
+
+  });
+
+  it("Cannot add a tag longer than 128 characters", () => {
+    const props = {
+      resource: getDummyResourceEmptyTag()
+    };
+    const {container} = renderPasswordSidebarTagSection(null, props);
+
+    // Click to expand tags
+    const leftClick = {button: 0};
+    const sidebar = container.querySelector(".sidebar-section");
+    fireEvent.click(sidebar, leftClick);
+
+    // Edit icon exists
+    const editIcon = container.querySelector(".edit_tags_button");
+    expect(editIcon).not.toBeNull();
+    fireEvent.click(editIcon, leftClick);
+
+    // Editor input tag exists
+    const editorTagInput = container.querySelector(".tag-editor-input");
+    const tagValue = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
+    const enterKeyPressed = {keyCode: 13};
+    expect(editorTagInput).not.toBeNull();
+    fireEvent.change(editorTagInput, {target: {textContent: tagValue}});
+    fireEvent.keyPress(editorTagInput, enterKeyPressed);
+    expect(editorTagInput.textContent).toBe(tagValue);
+
+
+    // number of tags and check all name displayed
+    const tags = container.querySelectorAll(".tag");
+    expect(tags).not.toBeNull();
+    expect(tags.length).toBe(0);
+
+    // error message exists
+    const errorInputTag = container.querySelector(".error");
+    expect(errorInputTag).not.toBeNull();
+    expect(errorInputTag.textContent).toBe("This tag can't be added, the length cannot exceeds 128");
+
+  });
+
+  it("Cut long tags so they fit on one line", () => {
+    // TODO Cut long tags so they fit on one line
+  });
+
+  it("Trim tag", () => {
+    const props = {
+      resource: getDummyResourceEmptyTag()
+    };
+    const {container} = renderPasswordSidebarTagSection(null, props);
+
+    // Click to expand tags
+    const leftClick = {button: 0};
+    const sidebar = container.querySelector(".sidebar-section");
+    fireEvent.click(sidebar, leftClick);
+
+    // Edit icon exists
+    const editIcon = container.querySelector(".edit_tags_button");
+    expect(editIcon).not.toBeNull();
+    fireEvent.click(editIcon, leftClick);
+
+    // Editor input tag exists
+    const editorTagInput = container.querySelector(".tag-editor-input");
+    const tagValue = "   trim   ";
+    const enterKeyPressed = {keyCode: 13};
+    expect(editorTagInput).not.toBeNull();
+    fireEvent.change(editorTagInput, {target: {textContent: tagValue}});
+    fireEvent.keyPress(editorTagInput, enterKeyPressed);
+    expect(editorTagInput.textContent).toBe("");
+
+
+    // number of tags and check all name displayed
+    const tags = container.querySelectorAll(".tag");
+    expect(tags).not.toBeNull();
+    expect(tags.length).toBe(1);
+    tags.forEach(function (value, index) {
+      expect(value.textContent).toBe("trim");
+    });
 
   });
 

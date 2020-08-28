@@ -39,8 +39,8 @@ class TagItemViewer extends React.Component {
           }
           {this.props.tags &&
           <ul className="tags tags-list">
-            {this.props.tags.map((tag) =>
-              <li key={tag.id}>
+            {this.props.tags.map((tag, index) =>
+              <li key={index}>
                 <a className="tag ellipsis">{tag.slug}</a>
               </li>)
             }
@@ -52,7 +52,7 @@ class TagItemViewer extends React.Component {
 }
 
 TagItemViewer.propTypes = {
-  tags: PropTypes.array,
+  tags: PropTypes.array
 };
 
 export default TagItemViewer;

@@ -27,6 +27,7 @@ import mockRequestShareGetResources from "./request/mockRequestShareGetResources
 import mockRequestShareSearchAros from "./request/mockRequestShareSearchAros";
 import mockRequestSiteSettings from "./request/mockRequestSiteSettings";
 import mockRequestUserGet from "./request/mockRequestUserGet";
+import mockRequestResourceUpdateTags from "./request/mockRequestResourceUpdateTags";
 
 export default (storage) => {
   const mockPort = new MockPort(storage);
@@ -44,6 +45,7 @@ export default (storage) => {
   mockPort.addRequestListener("passbolt.share.get-resources", mockRequestShareGetResources);
   mockPort.addRequestListener("passbolt.share.search-aros", mockRequestShareSearchAros);
   mockPort.addRequestListener("passbolt.secret-edit.decrypt", mockRequestSecretEditDecrypt);
+  mockPort.addRequestListener("passbolt.resource.update-tags", mockRequestResourceUpdateTags);
 
   return mockPort;
 };
