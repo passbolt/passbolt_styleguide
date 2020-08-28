@@ -697,6 +697,203 @@ describe("PasswordSidebarTag", () => {
     expect(closeIcon).not.toBeNull();
     expect(closeIcon.length).toBe(1);
 
+    // TODO test to see the new tag
   });
 
+  it("Add multiple tags to a resource", () => {
+    const {container} = renderPasswordSidebarTagSection(resourceEmptyTag);
+
+    // Click to expand tags
+    const leftClick = {button: 0};
+    const sidebar = container.querySelector(".sidebar-section");
+    fireEvent.click(sidebar, leftClick);
+
+    // Edit icon exists
+    const editIcon = container.querySelector(".edit_tags_button");
+    expect(editIcon).not.toBeNull();
+    fireEvent.click(editIcon, leftClick);
+
+    // Editor input tag exists
+    const editorTagInput = container.querySelector(".tag-editor-input");
+    const tagValues = ["tardis", "vortex-manipulator"];
+    const enterKeyPressed = {keyCode: 13};
+    expect(editorTagInput).not.toBeNull();
+    fireEvent.change(editorTagInput, {target: {textContent: tagValues[0]}});
+    fireEvent.keyPress(editorTagInput, enterKeyPressed);
+    expect(editorTagInput.textContent).toBe("");
+
+    const commaKeyPressed = {charCode: 44};
+    fireEvent.change(editorTagInput, {target: {textContent: tagValues[1]}});
+    fireEvent.keyPress(editorTagInput, commaKeyPressed);
+    expect(editorTagInput.textContent).toBe("");
+
+    // number of tags and check all name displayed
+    const tags = container.querySelectorAll(".tag");
+    expect(tags).not.toBeNull();
+    expect(tags.length).toBe(2);
+    tags.forEach(function (value, index) {
+      expect(value.textContent).toBe(tagValues[index]);
+    });
+
+    // submit button input tag exists
+    const submitButton = container.querySelector(".tag-editor-submit");
+    expect(submitButton).not.toBeNull();
+    expect(submitButton.textContent).toBe("save");
+    // TODO event to emit tag with submit button
+    //fireEvent.click(submitButton, leftClick);
+
+    // TODO test to see the new tag
+  });
+
+  it("Cannot edit while submitting changes", () => {
+    // TODO event to emit tag with submit button
+    // TODO Cannot edit while submitting changes
+  });
+
+  it("Show progress feedback while submitting", () => {
+    // TODO event to emit tag with submit button
+    // TODO Show progress feedback while submitting
+  });
+
+  it("Cannot add a shared tag to a resource I don’t own", () => {
+    const {container} = renderPasswordSidebarTagSection(resource);
+
+    // Click to expand tags
+    const leftClick = {button: 0};
+    const sidebar = container.querySelector(".sidebar-section");
+    fireEvent.click(sidebar, leftClick);
+
+    // Edit icon exists
+    const editIcon = container.querySelector(".edit_tags_button");
+    expect(editIcon).not.toBeNull();
+    fireEvent.click(editIcon, leftClick);
+
+    // Editor input tag exists
+    const editorTagInput = container.querySelector(".tag-editor-input");
+    const tagValue = "#test";
+    const enterKeyPressed = {keyCode: 13};
+    expect(editorTagInput).not.toBeNull();
+    fireEvent.change(editorTagInput, {target: {textContent: tagValue}});
+    fireEvent.keyPress(editorTagInput, enterKeyPressed);
+    expect(editorTagInput.textContent).toBe("");
+
+
+    // number of tags and check all name displayed
+    const tags = container.querySelectorAll(".tag");
+    expect(tags).not.toBeNull();
+    expect(tags.length).toBe(6);
+
+    // error message exists
+    const errorInputTag = container.querySelector(".error");
+    expect(errorInputTag).not.toBeNull();
+    expect(errorInputTag.textContent).toBe("This shared tag can't be added, you are not the owner");
+
+  });
+
+  it("Cannot add a tag already added to a resource", () => {
+    const {container} = renderPasswordSidebarTagSection(resource);
+
+    // Click to expand tags
+    const leftClick = {button: 0};
+    const sidebar = container.querySelector(".sidebar-section");
+    fireEvent.click(sidebar, leftClick);
+
+    // Edit icon exists
+    const editIcon = container.querySelector(".edit_tags_button");
+    expect(editIcon).not.toBeNull();
+    fireEvent.click(editIcon, leftClick);
+
+    // Editor input tag exists
+    const editorTagInput = container.querySelector(".tag-editor-input");
+    const tagValue = "test";
+    const enterKeyPressed = {keyCode: 13};
+    expect(editorTagInput).not.toBeNull();
+    fireEvent.change(editorTagInput, {target: {textContent: tagValue}});
+    fireEvent.keyPress(editorTagInput, enterKeyPressed);
+    expect(editorTagInput.textContent).toBe("");
+
+
+    // number of tags and check all name displayed
+    const tags = container.querySelectorAll(".tag");
+    expect(tags).not.toBeNull();
+    expect(tags.length).toBe(6);
+
+    // error message exists
+    const errorInputTag = container.querySelector(".error");
+    expect(errorInputTag).not.toBeNull();
+    expect(errorInputTag.textContent).toBe("This tag is already present");
+
+  });
+
+  it("Cannot add a tag longer than 128 characters", () => {
+    const {container} = renderPasswordSidebarTagSection(resourceEmptyTag);
+
+    // Click to expand tags
+    const leftClick = {button: 0};
+    const sidebar = container.querySelector(".sidebar-section");
+    fireEvent.click(sidebar, leftClick);
+
+    // Edit icon exists
+    const editIcon = container.querySelector(".edit_tags_button");
+    expect(editIcon).not.toBeNull();
+    fireEvent.click(editIcon, leftClick);
+
+    // Editor input tag exists
+    const editorTagInput = container.querySelector(".tag-editor-input");
+    const tagValue = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
+    const enterKeyPressed = {keyCode: 13};
+    expect(editorTagInput).not.toBeNull();
+    fireEvent.change(editorTagInput, {target: {textContent: tagValue}});
+    fireEvent.keyPress(editorTagInput, enterKeyPressed);
+    expect(editorTagInput.textContent).toBe("");
+
+
+    // number of tags and check all name displayed
+    const tags = container.querySelectorAll(".tag");
+    expect(tags).not.toBeNull();
+    expect(tags.length).toBe(0);
+
+    // error message exists
+    const errorInputTag = container.querySelector(".error");
+    expect(errorInputTag).not.toBeNull();
+    expect(errorInputTag.textContent).toBe("This tag can't be added, the length cannot exceeds 128");
+
+  });
+
+  it("Cut long tags so they fit on one line", () => {
+    // TODO Cut long tags so they fit on one line
+  });
+
+  it("Trim tag", () => {
+    const {container} = renderPasswordSidebarTagSection(resourceEmptyTag);
+
+    // Click to expand tags
+    const leftClick = {button: 0};
+    const sidebar = container.querySelector(".sidebar-section");
+    fireEvent.click(sidebar, leftClick);
+
+    // Edit icon exists
+    const editIcon = container.querySelector(".edit_tags_button");
+    expect(editIcon).not.toBeNull();
+    fireEvent.click(editIcon, leftClick);
+
+    // Editor input tag exists
+    const editorTagInput = container.querySelector(".tag-editor-input");
+    const tagValue = "   trim   ";
+    const enterKeyPressed = {keyCode: 13};
+    expect(editorTagInput).not.toBeNull();
+    fireEvent.change(editorTagInput, {target: {textContent: tagValue}});
+    fireEvent.keyPress(editorTagInput, enterKeyPressed);
+    expect(editorTagInput.textContent).toBe("");
+
+
+    // number of tags and check all name displayed
+    const tags = container.querySelectorAll(".tag");
+    expect(tags).not.toBeNull();
+    expect(tags.length).toBe(1);
+    tags.forEach(function (value, index) {
+      expect(value.textContent).toBe("trim");
+    });
+
+  });
 });
