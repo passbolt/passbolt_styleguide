@@ -16,7 +16,7 @@ import PropTypes from "prop-types";
 import AppContext from "../../../contexts/AppContext";
 import Icon from "../../Common/Icons/Icon";
 import Tooltip from "../../Common/Tooltip/Tooltip";
-import SecretComplexity from "../../../lib/Secret/secretComplexity";
+import SecretComplexity from "../../../lib/Secret/SecretComplexity";
 
 class PasswordEditDialog extends Component {
   constructor(props, context) {
