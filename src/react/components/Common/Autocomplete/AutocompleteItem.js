@@ -52,13 +52,13 @@ class AutocompleteItem extends Component {
    */
   getSubtitle() {
     if (this.props.user) {
-      let longId = this.props.user.gpgkey.fingerprint.substr(this.props.user.gpgkey.fingerprint.length - 16);
-      return longId.replace(/(.{4})/g,"$1 ")
+      const longId = this.props.user.gpgkey.fingerprint.substr(this.props.user.gpgkey.fingerprint.length - 16);
+      return longId.replace(/(.{4})/g, "$1 ");
     } else {
       if (this.props.group.user_count > 1) {
         return `${this.props.group.user_count} group members`;
       } else {
-        return `One group member`
+        return `One group member`;
       }
     }
   }
@@ -77,7 +77,7 @@ class AutocompleteItem extends Component {
   /**
    * Handle click on an autocomplete item
    */
-  handleClick () {
+  handleClick() {
     this.props.onClick(this.props.id);
   }
 
@@ -107,7 +107,7 @@ class AutocompleteItem extends Component {
           </div>
         </div>
       </li>
-    )
+    );
   }
 }
 

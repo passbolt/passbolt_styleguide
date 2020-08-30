@@ -151,11 +151,10 @@ class FoldersTree extends React.Component {
 
   /**
    * Handle when the user is not dragging over the section title anymore.
-   * @param {ReactEvent} event The event
    */
-  handleDragLeaveTitle(event) {
+  handleDragLeaveTitle() {
     const draggingOverTitle = false;
-    this.setState({draggingOverTitle})
+    this.setState({draggingOverTitle});
   }
 
   /**
@@ -163,15 +162,17 @@ class FoldersTree extends React.Component {
    * @param {ReactEvent} event The event
    */
   handleDragOverTitle(event) {
-    // If you want to allow a drop, you must prevent the default handling by cancelling both the dragenter and dragover events.
-    // see: https://developer.mozilla.org/en-US/docs/Web/API/HTML_Drag_and_Drop_API/Drag_operations#droptargets
+    /*
+     * If you want to allow a drop, you must prevent the default handling by cancelling both the dragenter and dragover events.
+     * see: https://developer.mozilla.org/en-US/docs/Web/API/HTML_Drag_and_Drop_API/Drag_operations#droptargets
+     */
     event.preventDefault();
 
     if (this.state.draggingOverTitle) {
       return;
     }
     const draggingOverTitle = true;
-    this.setState({draggingOverTitle})
+    this.setState({draggingOverTitle});
   }
 
   /**
@@ -191,9 +192,8 @@ class FoldersTree extends React.Component {
 
   /**
    * Handle when the user stop dragging a folder.
-   * @param {ReactEvent} event The event
    */
-  handleFolderDragEndEvent(event) {
+  handleFolderDragEndEvent() {
     const draggedItems = {
       folders: [],
       resources: [],
@@ -317,14 +317,10 @@ class FoldersTree extends React.Component {
    */
   canDragItems(draggedItems) {
     const draggedFolders = draggedItems.folders;
-    let canDragItems = draggedFolders.reduce((accumulator, folder) => {
-      return accumulator && this.canDragItem(folder);
-    }, true);
+    let canDragItems = draggedFolders.reduce((accumulator, folder) => accumulator && this.canDragItem(folder), true);
 
     const draggedResources = draggedItems.resources;
-    canDragItems = canDragItems && draggedResources.reduce((accumulator, folder) => {
-      return accumulator && this.canDragItem(folder);
-    }, true);
+    canDragItems = canDragItems && draggedResources.reduce((accumulator, folder) => accumulator && this.canDragItem(folder), true);
 
     return canDragItems;
   }
@@ -346,9 +342,11 @@ class FoldersTree extends React.Component {
       }
     }
 
-    // We display the drag feedback element even if there is no drag event happening.
-    // The start drag event can start using the element before the render is completely rendered, not sure the waiting
-    // the status to be updated will be sufficient.
+    /*
+     * We display the drag feedback element even if there is no drag event happening.
+     * The start drag event can start using the element before the render is completely rendered, not sure the waiting
+     * the status to be updated will be sufficient.
+     */
     return (
       <div ref={this.dragFeedbackElementRef} className="drag-and-drop">
         {error &&
@@ -393,9 +391,7 @@ class FoldersTree extends React.Component {
   getRootFolders() {
     let folders = [];
     if (!this.isLoading()) {
-      folders = this.props.folders.filter(folder => {
-        return folder.folder_parent_id === ROOT;
-      });
+      folders = this.props.folders.filter(folder => folder.folder_parent_id === ROOT);
     }
 
     this.sortFoldersAlphabetically(folders);
@@ -470,23 +466,21 @@ class FoldersTree extends React.Component {
         </div>
         {!isLoading && isOpen &&
         <ul ref={this.listElement} className="folders-tree">
-          {rootFolders.map(folder => {
-            return <FoldersTreeItem
-              key={`folders-list-${folder.id}`}
-              draggedItems={this.state.draggedItems}
-              folder={folder}
-              folders={this.props.folders}
-              isDragging={isDragging}
-              onClose={this.handleFolderCloseEvent}
-              onContextualMenu={this.handleFolderItemContextualMenuEvent}
-              onDragEnd={this.handleFolderDragEndEvent}
-              onDragStart={this.handleFolderDragStartEvent}
-              onDrop={this.handleFolderDropEvent}
-              onOpen={this.handleFolderOpenEvent}
-              openFolders={this.state.openFolders}
-              onSelect={this.handleFolderSelectEvent}
-              selectedFolder={this.props.selectedFolder}/>;
-          })}
+          {rootFolders.map(folder => <FoldersTreeItem
+            key={`folders-list-${folder.id}`}
+            draggedItems={this.state.draggedItems}
+            folder={folder}
+            folders={this.props.folders}
+            isDragging={isDragging}
+            onClose={this.handleFolderCloseEvent}
+            onContextualMenu={this.handleFolderItemContextualMenuEvent}
+            onDragEnd={this.handleFolderDragEndEvent}
+            onDragStart={this.handleFolderDragStartEvent}
+            onDrop={this.handleFolderDropEvent}
+            onOpen={this.handleFolderOpenEvent}
+            openFolders={this.state.openFolders}
+            onSelect={this.handleFolderSelectEvent}
+            selectedFolder={this.props.selectedFolder}/>)}
         </ul>
         }
       </div>

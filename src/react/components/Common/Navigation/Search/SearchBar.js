@@ -38,7 +38,7 @@ class SearchBar extends Component {
    * @returns {*}
    */
   getDefaultState() {
-    return {}
+    return {};
   }
 
   /**

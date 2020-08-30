@@ -32,7 +32,7 @@ class UserAvatar extends Component {
   getDefaultState() {
     return {
       error: false
-    }
+    };
   }
 
   /**
@@ -52,7 +52,7 @@ class UserAvatar extends Component {
       this.props.user.profile &&
       this.props.user.profile.avatar &&
       this.props.user.profile.avatar.url &&
-      this.props.user.profile.avatar.url.small
+      this.props.user.profile.avatar.url.small;
   }
 
   /**
@@ -131,7 +131,7 @@ class UserAvatar extends Component {
         <img src={this.getDefaultAvatarUrl()} alt={this.getAltText()}/>
         }
       </div>
-    )
+    );
   }
 }
 

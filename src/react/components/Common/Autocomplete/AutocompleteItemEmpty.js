@@ -19,7 +19,7 @@ class AutocompleteItemEmpty extends Component {
    * @returns {JSX}
    */
   render() {
-    return(
+    return (
       <li>
         <div className="row">
           <div className="main-cell-wrapper">
@@ -29,7 +29,7 @@ class AutocompleteItemEmpty extends Component {
           </div>
         </div>
       </li>
-    )
+    );
   }
 }
 

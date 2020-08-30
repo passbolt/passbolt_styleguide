@@ -24,7 +24,6 @@ const SELECT_MULITPLE = 'multiple';
 const SELECT_RANGE = 'range';
 
 class Grid extends React.Component {
-
   constructor(props) {
     super(props);
     this.initEventHandlers();
@@ -49,7 +48,7 @@ class Grid extends React.Component {
       selectStrategy: "",
       sortProperty: "modified",
       sortASC: false
-    }
+    };
   }
 
   /**
@@ -96,8 +95,10 @@ class Grid extends React.Component {
   }
 
   handleCheckboxWrapperClick(ev, resource) {
-    // We want the td to extend the clickable area of the checkbox.
-    // If we propagate the event, the tr will listen to the click and select only the clicked row.
+    /*
+     * We want the td to extend the clickable area of the checkbox.
+     * If we propagate the event, the tr will listen to the click and select only the clicked row.
+     */
     ev.stopPropagation();
     this.selectResource(resource, SELECT_MULITPLE);
   }
@@ -169,7 +170,7 @@ class Grid extends React.Component {
   }
 
   isResourceSelected(resource) {
-    return this.props.selectedResources.some(selectedResource => resource.id === selectedResource.id)
+    return this.props.selectedResources.some(selectedResource => resource.id === selectedResource.id);
   }
 
   handleCopyUsernameClick(ev, resource) {
@@ -218,7 +219,6 @@ class Grid extends React.Component {
   }
 
   handleDragEndEvent() {
-    const bus = document.querySelector("#bus");
     const trigerEvent = document.createEvent("CustomEvent");
     trigerEvent.initCustomEvent("passbolt.resources.drag-end", true, true);
     document.dispatchEvent(trigerEvent);
@@ -275,7 +275,7 @@ class Grid extends React.Component {
 
     return resources.filter(resource => {
       let match = true;
-      for (let i in regexes) {
+      for (const i in regexes) {
         // To match a resource would have to match all the words of the search.
         match &= (regexes[i].test(resource.name)
           || regexes[i].test(resource.username)
@@ -332,10 +332,10 @@ class Grid extends React.Component {
     return (
       <table style={tableStyle}>
         <tbody ref={ref}>
-        {items}
+          {items}
         </tbody>
       </table>
-    )
+    );
   }
 
   getColumnSortedClass(column) {
@@ -369,9 +369,9 @@ class Grid extends React.Component {
     }
 
     try {
-      let url = new URL(uri);
-      if (url.protocol == "javascript") {
-        throw Exception("The protocol javascript is forbidden.");
+      const url = new URL(uri);
+      if (url.protocol === "javascript") {
+        throw new Error("The protocol javascript is forbidden.");
       }
       return url.href;
     } catch (error) {
@@ -394,12 +394,12 @@ class Grid extends React.Component {
     return (
       <tr id={`resource_${resource.id}`} key={key} draggable="true" className={isSelected ? "selected" : ""}
         unselectable={this.state.selectStrategy == "range" ? "on" : ""}
-        onClick={(ev) => this.handleResourceClick(ev, resource)}
-        onContextMenu={(ev) => this.handleResourceRightClick(ev, resource)}
+        onClick={ev => this.handleResourceClick(ev, resource)}
+        onContextMenu={ev => this.handleResourceRightClick(ev, resource)}
         onDragStart={event => this.handleDragStartEvent(event, resource)}
         onDragEnd={event => this.handleDragEndEvent(event, resource)}>
         <td className="cell_multipleSelect selections s-cell"
-          onClick={(ev) => this.handleCheckboxWrapperClick(ev, resource)}>
+          onClick={ev => this.handleCheckboxWrapperClick(ev, resource)}>
           <div className="ready">
             <div className="input checkbox">
               <input type="checkbox" id={`checkbox_multiple_select_checkbox_${resource.id}`} checked={isSelected} readOnly={true}/>
@@ -409,7 +409,7 @@ class Grid extends React.Component {
         </td>
         <td className="cell_favorite selections s-cell">
           <div className="ready">
-            <a className="no-text" onClick={(ev) => this.handleFavoriteClick(ev, resource)}>
+            <a className="no-text" onClick={ev => this.handleFavoriteClick(ev, resource)}>
               <i className={`icon ${isFavorite ? "unfav" : "fav"}`}></i>
               <span className="visuallyhidden">fav</span>
             </a>
@@ -422,12 +422,12 @@ class Grid extends React.Component {
         </td>
         <td className="cell_username m-cell username">
           <div title={resource.username}>
-            <a onClick={(ev) => this.handleCopyUsernameClick(ev, resource)}>{resource.username}</a>
+            <a onClick={ev => this.handleCopyUsernameClick(ev, resource)}>{resource.username}</a>
           </div>
         </td>
         <td className="cell_secret m-cell password">
           <div title="secret" className="secret-copy">
-            <a onClick={(ev) => this.handleCopyPasswordClick(ev, resource)}>
+            <a onClick={ev => this.handleCopyPasswordClick(ev, resource)}>
               <span>copy password to clipboard</span>
             </a>
           </div>
@@ -538,36 +538,36 @@ class Grid extends React.Component {
             <div className="tableview-header">
               <table>
                 <thead>
-                <tr>
-                  <th className="cell_multipleSelect selections s-cell">
-                    <div className="input checkbox">
-                      <input type="checkbox" name="select all" id="js-passwords-select-all" checked={selectAll}
-                        onChange={this.handleSelectAllChange}/>
-                      <label htmlFor="js-passwords-select-all">select all</label>
-                    </div>
-                  </th>
-                  <th className="cell_favorite selections s-cell sortable">
-                    <a>
-                      <i className="icon fav"></i>
-                      <span className="visuallyhidden">fav</span>
-                    </a>
-                  </th>
-                  <th className={`cell_name m-cell sortable js_grid_column_name ${this.getColumnSortedClass("name")}`}>
-                    <a onClick={ev => this.handleSortByColumnClick(ev, "name")}>Resource</a>
-                  </th>
-                  <th className={`cell_username m-cell username sortable js_grid_column_username ${this.getColumnSortedClass("username")}`}>
-                    <a onClick={ev => this.handleSortByColumnClick(ev, "username")}>Username</a>
-                  </th>
-                  <th className="cell_secret m-cell password">
+                  <tr>
+                    <th className="cell_multipleSelect selections s-cell">
+                      <div className="input checkbox">
+                        <input type="checkbox" name="select all" id="js-passwords-select-all" checked={selectAll}
+                          onChange={this.handleSelectAllChange}/>
+                        <label htmlFor="js-passwords-select-all">select all</label>
+                      </div>
+                    </th>
+                    <th className="cell_favorite selections s-cell sortable">
+                      <a>
+                        <i className="icon fav"></i>
+                        <span className="visuallyhidden">fav</span>
+                      </a>
+                    </th>
+                    <th className={`cell_name m-cell sortable js_grid_column_name ${this.getColumnSortedClass("name")}`}>
+                      <a onClick={ev => this.handleSortByColumnClick(ev, "name")}>Resource</a>
+                    </th>
+                    <th className={`cell_username m-cell username sortable js_grid_column_username ${this.getColumnSortedClass("username")}`}>
+                      <a onClick={ev => this.handleSortByColumnClick(ev, "username")}>Username</a>
+                    </th>
+                    <th className="cell_secret m-cell password">
                     Password
-                  </th>
-                  <th className={`cell_uri l-cell sortable js_grid_column_uri ${this.getColumnSortedClass("uri")}`}>
-                    <a onClick={ev => this.handleSortByColumnClick(ev, "uri")}>URI</a>
-                  </th>
-                  <th className={`cell_modified m-cell sortable js_grid_column_modified ${this.getColumnSortedClass("modified")}`}>
-                    <a onClick={ev => this.handleSortByColumnClick(ev, "modified")}>Modified</a>
-                  </th>
-                </tr>
+                    </th>
+                    <th className={`cell_uri l-cell sortable js_grid_column_uri ${this.getColumnSortedClass("uri")}`}>
+                      <a onClick={ev => this.handleSortByColumnClick(ev, "uri")}>URI</a>
+                    </th>
+                    <th className={`cell_modified m-cell sortable js_grid_column_modified ${this.getColumnSortedClass("modified")}`}>
+                      <a onClick={ev => this.handleSortByColumnClick(ev, "modified")}>Modified</a>
+                    </th>
+                  </tr>
                 </thead>
               </table>
             </div>

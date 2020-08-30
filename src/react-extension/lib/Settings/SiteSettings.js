@@ -1,7 +1,6 @@
 import getPropValue from "../../../react/lib/Common/Object/getPropValue";
 
 export default class SiteSettings {
-
   constructor(settings) {
     this.settings = settings;
   }

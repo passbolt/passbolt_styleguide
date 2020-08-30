@@ -1,5 +1,4 @@
 export default class UserSettings {
-
   constructor(settings) {
     this.settings = settings;
   }

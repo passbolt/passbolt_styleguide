@@ -18,7 +18,6 @@ import moment from "moment";
 import AppContext from "../../../contexts/AppContext";
 
 class FolderSidebarInformationSection extends React.Component {
-
   /**
    * Constructor
    * @param {Object} props
@@ -156,9 +155,9 @@ class FolderSidebarInformationSection extends React.Component {
           <li className="location">
             <span className="label">Location</span>
             <span className="value">
-                <a onClick={this.handleFolderParentClickEvent} className={`folder-link ${!this.props.folders ? "disabled" : ""}`}>
-                  <Icon name="folder"/> {folderParentName}
-                </a>
+              <a onClick={this.handleFolderParentClickEvent} className={`folder-link ${!this.props.folders ? "disabled" : ""}`}>
+                <Icon name="folder"/> {folderParentName}
+              </a>
             </span>
           </li>
         </ul>

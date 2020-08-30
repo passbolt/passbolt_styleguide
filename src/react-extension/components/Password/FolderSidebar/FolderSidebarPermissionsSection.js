@@ -19,7 +19,6 @@ import Icon from "../../Common/Icons/Icon";
 import AppContext from "../../../contexts/AppContext";
 
 class FolderSidebarPermissionsSection extends React.Component {
-
   /**
    * Constructor
    * @param {Object} props
@@ -53,7 +52,7 @@ class FolderSidebarPermissionsSection extends React.Component {
    * Handle when the user edits the folder permissions.
    */
   handlePermissionsEditClickEvent() {
-    this.props.onEditPermissions(this.props.folder)
+    this.props.onEditPermissions(this.props.folder);
   }
 
   /**
@@ -62,7 +61,7 @@ class FolderSidebarPermissionsSection extends React.Component {
    */
   getPermissionAroName(permission) {
     if (permission.user) {
-      let profile = permission.user.profile;
+      const profile = permission.user.profile;
       return `${profile.first_name} ${profile.last_name}`;
     } else {
       return permission.group.name;
@@ -74,7 +73,7 @@ class FolderSidebarPermissionsSection extends React.Component {
    * @param {object} permission The permission
    */
   getPermissionLabel(permission) {
-    switch(permission.type) {
+    switch (permission.type) {
       case 1:
         return "can read";
       case 7:
@@ -94,8 +93,8 @@ class FolderSidebarPermissionsSection extends React.Component {
       permissions.sort((permission1, permission2) => {
         const permission1Name = permission1.user ? `${permission1.user.profile.first_name} ${permission1.user.profile.last_name}`.toLowerCase() : permission1.group.name.toLowerCase();
         const permission2Name = permission2.user ? `${permission2.user.profile.first_name} ${permission2.user.profile.last_name}`.toLowerCase() : permission2.group.name.toLowerCase();
-        if (permission1Name < permission2Name) return -1;
-        if (permission1Name > permission2Name) return 1;
+        if (permission1Name < permission2Name) { return -1; }
+        if (permission1Name > permission2Name) { return 1; }
         return 0;
       });
     }
@@ -130,24 +129,22 @@ class FolderSidebarPermissionsSection extends React.Component {
                 <span className="processing-text">Retrieving permissions </span>
               </div>
               }
-              {permissions && permissions.map(permission => {
-                return (
-                  <li key={permission.id} className="usercard-col-2">
-                    <div className="content-wrapper">
-                      <div className="content">
-                        <div className="name">{this.getPermissionAroName(permission)}</div>
-                        <div className="subinfo">{this.getPermissionLabel(permission)}</div>
-                      </div>
+              {permissions && permissions.map(permission => (
+                <li key={permission.id} className="usercard-col-2">
+                  <div className="content-wrapper">
+                    <div className="content">
+                      <div className="name">{this.getPermissionAroName(permission)}</div>
+                      <div className="subinfo">{this.getPermissionLabel(permission)}</div>
                     </div>
-                    {permission.user &&
+                  </div>
+                  {permission.user &&
                     <UserAvatar user={permission.user} baseUrl={this.context.userSettings.getTrustedDomain()}/>
-                    }
-                    {permission.group &&
+                  }
+                  {permission.group &&
                     <GroupAvatar group={permission.group} baseUrl={this.context.userSettings.getTrustedDomain()}/>
-                    }
-                  </li>
-                );
-              })}
+                  }
+                </li>
+              ))}
             </ul>
           </div>
         </div>

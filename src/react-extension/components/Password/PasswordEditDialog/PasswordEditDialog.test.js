@@ -13,11 +13,11 @@
  */
 
 import React from "react";
-import {render, fireEvent, waitFor, cleanup} from "@testing-library/react";
+import {render, fireEvent, waitFor} from "@testing-library/react";
 import "../../../test/lib/crypto/cryptoGetRandomvalues";
 import AppContext from "../../../contexts/AppContext";
 import PasswordEditDialog from "./PasswordEditDialog";
-import {PassboltApiFetchError} from "../../../lib/Common/Error/PassboltApiFetchError";
+import PassboltApiFetchError from "../../../lib/Common/Error/PassboltApiFetchError";
 import UserSettings from "../../../lib/Settings/UserSettings";
 import userSettingsFixture from "../../../test/fixture/Settings/userSettings";
 import SiteSettings from "../../../lib/Settings/SiteSettings";
@@ -28,7 +28,7 @@ beforeEach(() => {
   jest.resetModules();
 });
 
-const getDummyResource = function () {
+const getDummyResource = function() {
   return {
     "id": "8e3874ae-4b40-590b-968a-418f704b9d9a",
     "name": "apache",
@@ -43,7 +43,7 @@ const getDummyResource = function () {
   };
 };
 
-const getAppContext = function (appContext) {
+const getAppContext = function(appContext) {
   const port = new MockPort();
   port.addRequestListener("passbolt.secret-edit.decrypt", () => "secret-decrypted");
   const userSettings = new UserSettings(userSettingsFixture);
@@ -54,7 +54,7 @@ const getAppContext = function (appContext) {
   return Object.assign(defaultAppContext, appContext || {});
 };
 
-const getComponentProps = function (props) {
+const getComponentProps = function(props) {
   const defaultAppProps = {
     id: "8e3874ae-4b40-590b-968a-418f704b9d9a",
     onClose: jest.fn()
@@ -63,7 +63,7 @@ const getComponentProps = function (props) {
   return Object.assign(defaultAppProps, props || {});
 };
 
-const renderPasswordEditDialog = function (appContext, props) {
+const renderPasswordEditDialog = function(appContext, props) {
   appContext = getAppContext(appContext);
   props = getComponentProps(props);
 
@@ -179,7 +179,7 @@ describe("PasswordEditDialog", () => {
     expect(props.onClose).toBeCalled();
   });
 
-  it("changes the style of its security token when the password input get or lose focus when the password is already decrypted", async () => {
+  it("changes the style of its security token when the password input get or lose focus when the password is already decrypted", async() => {
     const {container} = renderPasswordEditDialog();
     const passwordInput = container.querySelector("[name=\"password\"]");
     const securityTokenElement = container.querySelector(".security-token");
@@ -212,7 +212,7 @@ describe("PasswordEditDialog", () => {
     expect(securityTokenStyle.color).toBe("rgb(255, 255, 255)");
   });
 
-  it("generates password when clicking on the generate button.", async () => {
+  it("generates password when clicking on the generate button.", async() => {
     const {container} = renderPasswordEditDialog();
 
     const leftClick = {button: 0};
@@ -231,7 +231,7 @@ describe("PasswordEditDialog", () => {
     expect(complexityBar.classList.contains("not_available")).toBe(false);
   });
 
-  it("views password when clicking on the view button.", async () => {
+  it("views password when clicking on the view button.", async() => {
     const {container} = renderPasswordEditDialog();
 
     const leftClick = {button: 0};
@@ -258,7 +258,7 @@ describe("PasswordEditDialog", () => {
     expect(viewButton.classList.contains("selected")).toBe(false);
   });
 
-  it("validates the form when clicking on the submit button.", async () => {
+  it("validates the form when clicking on the submit button.", async() => {
     const {container} = renderPasswordEditDialog();
 
     const nameInput = container.querySelector("[name=\"name\"]");
@@ -292,7 +292,7 @@ describe("PasswordEditDialog", () => {
     });
   });
 
-  it("displays an error when the API call fail.", async () => {
+  it("displays an error when the API call fail.", async() => {
     const context = getAppContext();
     const props = {
       onClose: jest.fn()
@@ -333,7 +333,7 @@ describe("PasswordEditDialog", () => {
     expect(generalErrorMessage.textContent).toBe("Jest simulate API error.");
   });
 
-  it("requests the addon to edit a resource when clicking on the submit button.", async () => {
+  it("requests the addon to edit a resource when clicking on the submit button.", async() => {
     const context = getAppContext();
     const props = {
       onClose: jest.fn()

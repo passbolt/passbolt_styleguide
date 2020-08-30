@@ -15,15 +15,6 @@ import React from "react";
 import PropTypes from "prop-types";
 
 class TagItemViewer extends React.Component {
-
-  /**
-   * Constructor
-   * @param {Object} props
-   */
-  constructor(props) {
-    super(props);
-  }
-
   /**
    * Render the component
    * @returns {JSX}
@@ -39,7 +30,7 @@ class TagItemViewer extends React.Component {
         }
         {hasTags &&
         <ul className="tags tags-list">
-          {this.props.tags.map((tag) =>
+          {this.props.tags.map(tag =>
             <li key={tag.id}>
               <a className="tag ellipsis">{tag.slug}</a>
             </li>)

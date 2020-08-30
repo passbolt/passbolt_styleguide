@@ -18,7 +18,6 @@ import TagEditor from "./TagEditor";
 import Icon from "../../Common/Icons/Icon";
 
 class PasswordSidebarTagSection extends React.Component {
-
   /**
    * Constructor
    * @param {Object} props

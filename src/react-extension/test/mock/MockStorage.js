@@ -31,11 +31,11 @@ class MockStorage {
     this.changeCallbacks = [];
     this.local = new LocalStorage(this.changeCallbacks);
     this.onChanged = {
-      addListener: (listener) => {
+      addListener: listener => {
         console.debug("browser.storage.onChanged.addListener");
         this.changeCallbacks.push(listener);
       }
-    }
+    };
   }
 }
 

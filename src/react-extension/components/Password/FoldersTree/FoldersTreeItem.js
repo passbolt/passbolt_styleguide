@@ -106,9 +106,8 @@ class FoldersTreeItem extends React.Component {
 
   /**
    * Handle when the user is not dragging over this component anymore.
-   * @param {ReactEvent} event The event
    */
-  handleDragLeaveEvent(event) {
+  handleDragLeaveEvent() {
     const draggingOver = false;
     const draggingOverSince = null;
     this.setState({draggingOver, draggingOverSince});
@@ -119,8 +118,10 @@ class FoldersTreeItem extends React.Component {
    * @param {ReactEvent} event The event
    */
   handleDragOverEvent(event) {
-    // If you want to allow a drop, you must prevent the default handling by cancelling both the dragenter and dragover events.
-    // see: https://developer.mozilla.org/en-US/docs/Web/API/HTML_Drag_and_Drop_API/Drag_operations#droptargets
+    /*
+     * If you want to allow a drop, you must prevent the default handling by cancelling both the dragenter and dragover events.
+     * see: https://developer.mozilla.org/en-US/docs/Web/API/HTML_Drag_and_Drop_API/Drag_operations#droptargets
+     */
     event.preventDefault();
 
     if (this.state.draggingOver) {
@@ -139,7 +140,7 @@ class FoldersTreeItem extends React.Component {
    */
   openOnLongDragOver(event) {
     const period = 2000;
-    let open = this.isOpen();
+    const open = this.isOpen();
 
     // If already open, leave.
     if (!open) {
@@ -192,7 +193,7 @@ class FoldersTreeItem extends React.Component {
    * @param {array} folders The folders to check for
    */
   isChildOfAny(folder, folders) {
-    for (let i in folders) {
+    for (const i in folders) {
       if (folder.folder_parent_id === folders[i].id) {
         return true;
       }
@@ -243,14 +244,10 @@ class FoldersTreeItem extends React.Component {
    */
   canDragItems(draggedItems) {
     const draggedFolders = draggedItems.folders;
-    let canDragItems = draggedFolders.reduce((accumulator, folder) => {
-      return accumulator && this.canDragItem(folder);
-    }, true);
+    let canDragItems = draggedFolders.reduce((accumulator, folder) => accumulator && this.canDragItem(folder), true);
 
     const draggedResources = draggedItems.resources;
-    canDragItems &= draggedResources.reduce((accumulator, folder) => {
-      return accumulator && this.canDragItem(folder);
-    }, true);
+    canDragItems &= draggedResources.reduce((accumulator, folder) => accumulator && this.canDragItem(folder), true);
 
     return canDragItems;
   }
@@ -308,7 +305,7 @@ class FoldersTreeItem extends React.Component {
     }
 
     // Cannot move a folder into itself.
-    for (let i in this.props.draggedItems.folders) {
+    for (const i in this.props.draggedItems.folders) {
       if (this.props.folder.id === this.props.draggedItems.folders[i].id) {
         return false;
       }
@@ -322,7 +319,7 @@ class FoldersTreeItem extends React.Component {
    * @returns {boolean}
    */
   isDragged() {
-    for (let i in this.props.draggedItems.folders) {
+    for (const i in this.props.draggedItems.folders) {
       if (this.props.folder.id === this.props.draggedItems.folders[i].id) {
         return true;
       }
@@ -336,9 +333,11 @@ class FoldersTreeItem extends React.Component {
    * @returns {boolean}
    */
   isDisabled() {
-    // If the user is dragging content, disable the component if:
-    // - The user is not allowed to drag any of dragged items;
-    // - The user is not allowed to drop content in the folder associated to this component.
+    /*
+     * If the user is dragging content, disable the component if:
+     * - The user is not allowed to drag any of dragged items;
+     * - The user is not allowed to drop content in the folder associated to this component.
+     */
     if (this.props.isDragging) {
       const canDragItems = this.canDragItems(this.props.draggedItems);
       if (!canDragItems) {
@@ -377,7 +376,7 @@ class FoldersTreeItem extends React.Component {
    * @returns {array}
    */
   getChildrenFolders() {
-    const folders = this.props.folders.filter(folder => folder.folder_parent_id === this.props.folder.id)
+    const folders = this.props.folders.filter(folder => folder.folder_parent_id === this.props.folder.id);
     this.sortFoldersAlphabetically(folders);
 
     return folders;
@@ -439,23 +438,21 @@ class FoldersTreeItem extends React.Component {
         </div>
         {hasChildren && isOpen &&
         <ul className="folders-tree">
-          {folderChildren.map(folder => {
-            return <FoldersTreeItem
-              key={`folders-tree-${folder.id}`}
-              draggedItems={this.props.draggedItems}
-              folder={folder}
-              folders={this.props.folders}
-              isDragging={this.props.isDragging}
-              onClose={this.props.onClose}
-              onContextualMenu={this.props.onContextualMenu}
-              onDragEnd={this.props.onDragEnd}
-              onDragStart={this.props.onDragStart}
-              onDrop={this.props.onDrop}
-              onOpen={this.props.onOpen}
-              onSelect={this.props.onSelect}
-              openFolders={this.props.openFolders}
-              selectedFolder={this.props.selectedFolder}/>;
-          })}
+          {folderChildren.map(folder => <FoldersTreeItem
+            key={`folders-tree-${folder.id}`}
+            draggedItems={this.props.draggedItems}
+            folder={folder}
+            folders={this.props.folders}
+            isDragging={this.props.isDragging}
+            onClose={this.props.onClose}
+            onContextualMenu={this.props.onContextualMenu}
+            onDragEnd={this.props.onDragEnd}
+            onDragStart={this.props.onDragStart}
+            onDrop={this.props.onDrop}
+            onOpen={this.props.onOpen}
+            onSelect={this.props.onSelect}
+            openFolders={this.props.openFolders}
+            selectedFolder={this.props.selectedFolder}/>)}
         </ul>
         }
       </li>

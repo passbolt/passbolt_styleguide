@@ -77,9 +77,9 @@ export default class SecretComplexity {
    * @returns {int}
    */
   static randomRange(min, max) {
-    var arr = new Uint32Array(1);
+    const arr = new Uint32Array(1);
     window.crypto.getRandomValues(arr);
-    var random = arr[0] / (0xffffffff + 1);
+    const random = arr[0] / (0xffffffff + 1);
 
     return Math.floor(random * (max - min + 1)) + min;
   }
@@ -100,9 +100,9 @@ export default class SecretComplexity {
    * @return {int}
    */
   static entropy(pwd) {
-    var maskSize = 0;
+    let maskSize = 0;
 
-    for (var i in MASKS) {
+    for (const i in MASKS) {
       if (pwd.match(MASKS[i].pattern)) {
         maskSize += MASKS[i].size;
       }
@@ -121,8 +121,8 @@ export default class SecretComplexity {
     const entropy = this.entropy(txt);
 
     const strength = STRENGTH.reduce((accumulator, item) => {
-      if (!accumulator) return item;
-      if (item.strength > accumulator.strength && entropy >= item.strength) return item;
+      if (!accumulator) { return item; }
+      if (item.strength > accumulator.strength && entropy >= item.strength) { return item; }
       return accumulator;
     });
 
@@ -140,8 +140,8 @@ export default class SecretComplexity {
    *   }
    */
   static matchMasks(txt) {
-    var matches = {};
-    for (var i in MASKS) {
+    const matches = {};
+    for (const i in MASKS) {
       matches[i] = false;
       if (txt.match(MASKS[i].pattern)) {
         matches[i] = true;
@@ -158,25 +158,26 @@ export default class SecretComplexity {
    * @return {string}
    */
   static generate(length, masks) {
-    var secret = '',
-      mask = [],
-      masks = masks || ["alpha", "uppercase", "digit", "special"],
-      length = length || 18,
-      expectedEntropy = null;
+    let secret = '';
+    let mask = [];
+    length = length || 18;
+    masks = masks || ["alpha", "uppercase", "digit", "special"];
 
     // Build the mask to use to generate a secret.
-    for (var i in masks) {
-      mask = [...mask, ...MASKS[masks[i]].data]
+    for (const i in masks) {
+      mask = [...mask, ...MASKS[masks[i]].data];
     }
 
-    // Generate a password which should fit the expected entropy.
-    // Try maximum 10 times.
-    var j = 0;
-    expectedEntropy = this.calculEntropy(length, mask.length);
+    /*
+     * Generate a password which should fit the expected entropy.
+     * Try maximum 10 times.
+     */
+    let j = 0;
+    const expectedEntropy = this.calculEntropy(length, mask.length);
 
     do {
       secret = '';
-      for (var i = 0; i < length; i++) {
+      for (let i = 0; i < length; i++) {
         secret += mask[this.randomRange(0, mask.length - 1)];
       }
     } while (this.entropy(secret) < expectedEntropy && j++ < 10);
@@ -188,7 +189,7 @@ export default class SecretComplexity {
    * Dictionary check
    */
   static async ispwned(password) {
-    var count = await pwnedpasswords(password);
+    const count = await pwnedpasswords(password);
 
     return (count > 0);
   }

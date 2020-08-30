@@ -108,7 +108,11 @@ class MainMenu extends Component {
 }
 
 MainMenu.propTypes = {
-  baseUrl: PropTypes.string
+  baseUrl: PropTypes.string,
+  // Match, location and history props are injected by the withRouter decoration call.
+  match: PropTypes.object,
+  location: PropTypes.object,
+  history: PropTypes.object
 };
 
 export default withRouter(MainMenu);

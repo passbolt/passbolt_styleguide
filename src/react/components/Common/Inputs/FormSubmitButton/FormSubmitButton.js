@@ -61,7 +61,7 @@ class FormSubmitButton extends Component {
         disabled={this.props.disabled}
         value={this.props.value || 'Save'}
       />
-    )
+    );
   }
 }
 

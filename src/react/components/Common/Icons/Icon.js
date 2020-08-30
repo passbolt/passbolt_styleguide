@@ -26,7 +26,6 @@ import React, {Component} from "react";
 import PropTypes from "prop-types";
 
 class Icon extends Component {
-
   /**
    * Get icon classname
    * @returns {string}
@@ -225,7 +224,7 @@ class Icon extends Component {
         </svg>
         }
       </span>
-    )
+    );
   }
 }
 

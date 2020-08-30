@@ -19,7 +19,6 @@ import GroupAvatar from "../../Common/Avatar/GroupAvatar";
 import AppContext from "../../../contexts/AppContext";
 
 class FolderSidebarActivitySection extends React.Component {
-
   /**
    * Constructor
    * @param {Object} props
@@ -101,7 +100,7 @@ class FolderSidebarActivitySection extends React.Component {
    */
   getPermissionAroName(permission) {
     if (permission.user) {
-      let profile = permission.user.profile;
+      const profile = permission.user.profile;
       return `${profile.first_name} ${profile.last_name}`;
     } else {
       return permission.group.name;
@@ -251,10 +250,9 @@ class FolderSidebarActivitySection extends React.Component {
 
   /**
    * Render an unknown activity.
-   * @param {object} activity The target activity
    * @returns {JSX}
    */
-  renderUnknownActivity(activity) {
+  renderUnknownActivity() {
     return (
       <li className="usercard-detailed-col-2">
         <div className="content-wrapper">

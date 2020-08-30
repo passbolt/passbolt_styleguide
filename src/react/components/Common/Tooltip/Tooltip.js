@@ -25,7 +25,7 @@ class Tooltip extends Component {
       <span className="tooltip tooltip-right" data-tooltip={this.props.message}>
         <Icon name={this.props.icon}/>
       </span>
-    )
+    );
   }
 }
 

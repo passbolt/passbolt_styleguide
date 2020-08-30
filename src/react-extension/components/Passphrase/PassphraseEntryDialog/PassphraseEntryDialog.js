@@ -18,7 +18,6 @@ import UserAbortsOperationError from "../../../lib/Common/Error/UserAbortsOperat
 import Icon from "../../Common/Icons/Icon";
 
 class PassphraseEntryDialog extends Component {
-
   constructor(props) {
     super(props);
     this.state = this.getDefaultState();

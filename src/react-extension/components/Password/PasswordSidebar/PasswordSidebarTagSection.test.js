@@ -17,10 +17,6 @@ import {fireEvent, render, waitFor} from "@testing-library/react";
 import PasswordSidebarTagSection from "./PasswordSidebarTagSection";
 import AppContext from "../../../contexts/AppContext";
 import MockPort from "../../../test/mock/MockPort";
-import UserSettings from "../../../lib/Settings/UserSettings";
-import userSettingsFixture from "../../../test/fixture/Settings/userSettings";
-import SiteSettings from "../../../lib/Settings/SiteSettings";
-import siteSettingsFixture from "../../../test/fixture/Settings/siteSettings";
 
 beforeEach(() => {
   jest.resetModules();
@@ -76,7 +72,7 @@ const getDummyResource = function() {
   };
 };
 
-const getDummyResourceWithLastSharedTagNotOwned = function () {
+const getDummyResourceWithLastSharedTagNotOwned = function() {
   return {
     "id": "8e3874ae-4b40-590b-968a-418f704b9d9a",
     "name": "apache",
@@ -129,7 +125,7 @@ const getDummyResourceEmptyTag = function() {
   };
 };
 
-const getAppContext = function (appContext) {
+const getAppContext = function(appContext) {
   const defaultAppContext = {
 
     port: new MockPort()
@@ -149,7 +145,6 @@ const renderPasswordSidebarTagSection = function(appContext, props) {
 };
 
 describe("PasswordSidebarTag", () => {
-
   it("See the tags of a resource", () => {
     const props = {
       resource: getDummyResource()
@@ -171,13 +166,12 @@ describe("PasswordSidebarTag", () => {
     expect(tagList).not.toBeNull();
 
     // number of tags and check all name displayed
-    const tags= container.querySelectorAll(".tag");
+    const tags = container.querySelectorAll(".tag");
     expect(tags).not.toBeNull();
     expect(tags.length).toBe(6);
-    tags.forEach(function (value, index) {
+    tags.forEach((value, index) => {
       expect(value.textContent).toBe(props.resource.tags[index].slug);
     });
-
   });
 
   it("See an empty message if the resource has no tags", () => {
@@ -200,7 +194,6 @@ describe("PasswordSidebarTag", () => {
     const emptyContent = container.querySelector(".empty-content");
     expect(emptyContent).not.toBeNull();
     expect(emptyContent.textContent).toBe("There is no tag, click here to add one");
-
   });
 
   it("Cut long tags so they fit on one line", () => {
@@ -240,7 +233,6 @@ describe("PasswordSidebarTag", () => {
     const cancelButton = container.querySelector(".tag-editor-cancel");
     expect(cancelButton).not.toBeNull();
     expect(cancelButton.textContent).toBe("cancel");
-
   });
 
   it("Start editing by clicking on the empty message", () => {
@@ -268,7 +260,6 @@ describe("PasswordSidebarTag", () => {
     const noticeInputTag = container.querySelector(".message");
     expect(noticeInputTag).not.toBeNull();
     expect(noticeInputTag.textContent).toBe("Pro tip: Tags starting with # are shared with all users who have access. Separate tags using commas.");
-
   });
 
   it("Stop editing by clicking on the edit icon", () => {
@@ -296,7 +287,6 @@ describe("PasswordSidebarTag", () => {
     // Editor input tag not exists
     const editorTagClose = container.querySelector(".tag-editor-input");
     expect(editorTagClose).toBeNull();
-
   });
 
   it("Stop editing by clicking out of the edit zone", () => {
@@ -325,7 +315,6 @@ describe("PasswordSidebarTag", () => {
     // Editor input tag not exists
     const editorTagClose = container.querySelector(".tag-editor-input");
     expect(editorTagClose).toBeNull();
-
   });
 
   it("Add a new tag to a resource", async() => {
@@ -416,7 +405,7 @@ describe("PasswordSidebarTag", () => {
     const tags = container.querySelectorAll(".tag");
     expect(tags).not.toBeNull();
     expect(tags.length).toBe(2);
-    tags.forEach(function (value, index) {
+    tags.forEach((value, index) => {
       expect(value.textContent).toBe(tagValues[index]);
     });
 
@@ -454,7 +443,7 @@ describe("PasswordSidebarTag", () => {
     expect(context.port.emit).toHaveBeenNthCalledWith(1, "passbolt.notification.display", {"message": "Tags has been added successfully", "status": "success"});
   });
 
-  it("Cannot edit while submitting changes", async () => {
+  it("Cannot edit while submitting changes", async() => {
     const context = getAppContext();
     const props = {
       resource: getDummyResourceEmptyTag()
@@ -479,11 +468,9 @@ describe("PasswordSidebarTag", () => {
     let updateResolve;
 
     // Mock the request function to make it the expected result
-    jest.spyOn(context.port, 'request').mockImplementationOnce(jest.fn((message, data) => {
-      return new Promise(resolve => {
-        updateResolve = resolve;
-      })
-    }));
+    jest.spyOn(context.port, 'request').mockImplementationOnce(jest.fn(() => new Promise(resolve => {
+      updateResolve = resolve;
+    })));
 
     // submit button input tag exists
     const submitButton = container.querySelector(".tag-editor-submit");
@@ -499,10 +486,9 @@ describe("PasswordSidebarTag", () => {
       expect(editorTagInputDisable.getAttribute("contenteditable")).toBe("false");
       updateResolve();
     });
-
   });
 
-  it("Show progress feedback while submitting", async () => {
+  it("Show progress feedback while submitting", async() => {
     const context = getAppContext();
     const props = {
       resource: getDummyResourceEmptyTag()
@@ -527,11 +513,9 @@ describe("PasswordSidebarTag", () => {
     let updateResolve;
 
     // Mock the request function to make it the expected result
-    jest.spyOn(context.port, 'request').mockImplementationOnce(jest.fn((message, data) => {
-      return new Promise(resolve => {
-        updateResolve = resolve;
-      })
-    }));
+    jest.spyOn(context.port, 'request').mockImplementationOnce(jest.fn(() => new Promise(resolve => {
+      updateResolve = resolve;
+    })));
 
     // submit button input tag exists
     const submitButton = container.querySelector(".tag-editor-submit");
@@ -584,7 +568,6 @@ describe("PasswordSidebarTag", () => {
     const errorInputTag = container.querySelector(".error");
     expect(errorInputTag).not.toBeNull();
     expect(errorInputTag.textContent).toBe("This shared tag can't be added, you are not the owner");
-
   });
 
   it("Cannot add a tag already added to a resource", () => {
@@ -622,7 +605,6 @@ describe("PasswordSidebarTag", () => {
     const errorInputTag = container.querySelector(".error");
     expect(errorInputTag).not.toBeNull();
     expect(errorInputTag.textContent).toBe("This tag is already present");
-
   });
 
   it("Cannot add a tag longer than 128 characters", () => {
@@ -660,7 +642,6 @@ describe("PasswordSidebarTag", () => {
     const errorInputTag = container.querySelector(".error");
     expect(errorInputTag).not.toBeNull();
     expect(errorInputTag.textContent).toBe("This tag can't be added, the length cannot exceeds 128");
-
   });
 
   it("Cut long tags so they fit on one line", () => {
@@ -697,10 +678,9 @@ describe("PasswordSidebarTag", () => {
     const tags = container.querySelectorAll(".tag");
     expect(tags).not.toBeNull();
     expect(tags.length).toBe(1);
-    tags.forEach(function (value, index) {
+    tags.forEach(value => {
       expect(value.textContent).toBe("trim");
     });
-
   });
 
   it("Remove a tag using the edit icon", () => {
@@ -728,7 +708,7 @@ describe("PasswordSidebarTag", () => {
     expect(tags).not.toBeNull();
     expect(tags.length).toBe(6);
 
-    tags.forEach(function (value, index) {
+    tags.forEach((value, index) => {
       expect(value.textContent).toBe(props.resource.tags[index].slug);
     });
     // delete a tag
@@ -739,14 +719,13 @@ describe("PasswordSidebarTag", () => {
     const tagsWithOneElementDeleted = container.querySelectorAll(".tag");
     expect(tagsWithOneElementDeleted).not.toBeNull();
     expect(tagsWithOneElementDeleted.length).toBe(5);
-    tagsWithOneElementDeleted.forEach(function (value, index) {
-      if(index > 1) {
-        expect(value.textContent).toBe(props.resource.tags[index+1].slug);
+    tagsWithOneElementDeleted.forEach((value, index) => {
+      if (index > 1) {
+        expect(value.textContent).toBe(props.resource.tags[index + 1].slug);
       } else {
         expect(value.textContent).toBe(props.resource.tags[index].slug);
       }
     });
-
   });
 
   it("Remove a tag using the keyboard", () => {
@@ -774,7 +753,7 @@ describe("PasswordSidebarTag", () => {
     expect(tags).not.toBeNull();
     expect(tags.length).toBe(6);
 
-    tags.forEach(function (value, index) {
+    tags.forEach((value, index) => {
       expect(value.textContent).toBe(props.resource.tags[index].slug);
     });
     // delete a tag
@@ -786,10 +765,9 @@ describe("PasswordSidebarTag", () => {
     const tagsWithOneElementDeleted = container.querySelectorAll(".tag");
     expect(tagsWithOneElementDeleted).not.toBeNull();
     expect(tagsWithOneElementDeleted.length).toBe(5);
-    tagsWithOneElementDeleted.forEach(function (value, index) {
+    tagsWithOneElementDeleted.forEach((value, index) => {
       expect(value.textContent).toBe(props.resource.tags[index].slug);
     });
-
   });
 
   it("Cannot remove shared tags on resources not owned", () => {
@@ -817,7 +795,7 @@ describe("PasswordSidebarTag", () => {
     expect(tags).not.toBeNull();
     expect(tags.length).toBe(3);
 
-    tags.forEach(function (value, index) {
+    tags.forEach((value, index) => {
       expect(value.textContent).toBe(props.resource.tags[index].slug);
     });
     // try to delete a tag
@@ -829,7 +807,7 @@ describe("PasswordSidebarTag", () => {
     const tagsWithOneElementDeleted = container.querySelectorAll(".tag");
     expect(tagsWithOneElementDeleted).not.toBeNull();
     expect(tagsWithOneElementDeleted.length).toBe(3);
-    tagsWithOneElementDeleted.forEach(function (value, index) {
+    tagsWithOneElementDeleted.forEach((value, index) => {
       expect(value.textContent).toBe(props.resource.tags[index].slug);
     });
 
@@ -837,7 +815,6 @@ describe("PasswordSidebarTag", () => {
     const errorInputTag = container.querySelector(".error");
     expect(errorInputTag).not.toBeNull();
     expect(errorInputTag.textContent).toBe("This shared tag can't be deleted, you are not the owner");
-
   });
 
   it("Hide tag delete icon for resources not owned", () => {
@@ -864,7 +841,5 @@ describe("PasswordSidebarTag", () => {
     const closeIcon = container.querySelectorAll(".tag-delete");
     expect(closeIcon).not.toBeNull();
     expect(closeIcon.length).toBe(1);
-
   });
-
 });

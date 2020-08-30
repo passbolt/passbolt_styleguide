@@ -31,7 +31,7 @@ class GroupAvatar extends Component {
   getDefaultState() {
     return {
       error: false
-    }
+    };
   }
 
   /**
@@ -59,13 +59,14 @@ class GroupAvatar extends Component {
       <div className="avatar user-avatar">
         <img src={this.getAvatarUrl()} alt={this.getAltText()}/>
       </div>
-    )
+    );
   }
 }
 
 GroupAvatar.propTypes = {
   baseUrl: PropTypes.string,
   group: PropTypes.object,
+  name: PropTypes.string,
 };
 
 export default GroupAvatar;

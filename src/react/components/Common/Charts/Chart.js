@@ -18,7 +18,6 @@ import Area from "../../../lib/reports/widgets/area";
 import Gauge from "../../../lib/reports/widgets/gauge";
 
 class Chart extends Component {
-
   /**
    * @todo Investigate if there is another way to do this. It looks counter intuitive.
    */
@@ -48,7 +47,7 @@ class Chart extends Component {
   render() {
     return (
       <div className={this.getClassName()}/>
-    )
+    );
   }
 }
 

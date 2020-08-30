@@ -18,7 +18,6 @@ import moment from "moment";
 import AppContext from "../../../contexts/AppContext";
 
 class PasswordSidebarInformationSection extends React.Component {
-
   /**
    * Constructor
    * @param {Object} props
@@ -135,9 +134,9 @@ class PasswordSidebarInformationSection extends React.Component {
     }
 
     try {
-      let url = new URL(uri);
-      if (url.protocol == "javascript") {
-        throw Exception("The protocol javascript is forbidden.");
+      const url = new URL(uri);
+      if (url.protocol === "javascript") {
+        throw new Error("The protocol javascript is forbidden.");
       }
       return url.href;
     } catch (error) {
@@ -198,9 +197,9 @@ class PasswordSidebarInformationSection extends React.Component {
           <li className="location">
             <span className="label">Location</span>
             <span className="value">
-                <a onClick={this.handleFolderParentClickEvent} className={`folder-link ${!this.props.folders ? "disabled" : ""}`}>
-                  <Icon name="folder"/> {folderParentName}
-                </a>
+              <a onClick={this.handleFolderParentClickEvent} className={`folder-link ${!this.props.folders ? "disabled" : ""}`}>
+                <Icon name="folder"/> {folderParentName}
+              </a>
             </span>
           </li>
         </ul>

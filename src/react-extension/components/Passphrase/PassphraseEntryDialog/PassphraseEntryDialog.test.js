@@ -13,7 +13,7 @@
  */
 
 import React from "react";
-import {render, fireEvent, waitFor, cleanup} from "@testing-library/react";
+import {render, fireEvent, waitFor} from "@testing-library/react";
 import PassphraseEntryDialog from "./PassphraseEntryDialog";
 import AppContext from "../../../contexts/AppContext";
 import UserAbortsOperationError from "../../../lib/Common/Error/UserAbortsOperationError";
@@ -27,7 +27,7 @@ beforeEach(() => {
   jest.resetModules();
 });
 
-const getAppContext = function (appContext) {
+const getAppContext = function(appContext) {
   const defaultAppContext = {
     userSettings: new UserSettings(userSettingsFixture),
     siteSettings: new SiteSettings(siteSettingsFixture),
@@ -37,7 +37,7 @@ const getAppContext = function (appContext) {
   return Object.assign(defaultAppContext, appContext || {});
 };
 
-const renderPassphraseEntryDialog = function (appContext, props) {
+const renderPassphraseEntryDialog = function(appContext, props) {
   appContext = getAppContext(appContext);
   props = props || {};
   return render(
@@ -188,7 +188,7 @@ describe("PassphraseEntryDialog", () => {
     expect(securityTokenStyle.color).toBe("rgb(255, 255, 255)");
   });
 
-  it("Should validate the passphrase.", async () => {
+  it("Should validate the passphrase.", async() => {
     const context = getAppContext();
     const {container} = renderPassphraseEntryDialog(context);
 
@@ -221,7 +221,7 @@ describe("PassphraseEntryDialog", () => {
     expect(errorMessage.textContent).toBe("This is not a valid passphrase.");
   });
 
-  it("Should allow only 3 attempts.", async () => {
+  it("Should allow only 3 attempts.", async() => {
     const context = getAppContext();
     const props = {
       onClose: jest.fn()
@@ -269,7 +269,7 @@ describe("PassphraseEntryDialog", () => {
     expect(context.port.emit).toBeCalledWith(undefined, "ERROR", error);
   });
 
-  it("Should capture passphrase.", async () => {
+  it("Should capture passphrase.", async() => {
     const context = getAppContext();
     const props = {
       onClose: jest.fn()
@@ -298,7 +298,7 @@ describe("PassphraseEntryDialog", () => {
     });
   });
 
-  it("Should capture passphrase and the remember me duration.", async () => {
+  it("Should capture passphrase and the remember me duration.", async() => {
     const context = getAppContext();
     const props = {
       onClose: jest.fn()
@@ -336,7 +336,7 @@ describe("PassphraseEntryDialog", () => {
     });
   });
 
-  it("Should capture passphrase when no remember me options are provided.", async () => {
+  it("Should capture passphrase when no remember me options are provided.", async() => {
     const context = getAppContext();
     const props = {
       onClose: jest.fn()

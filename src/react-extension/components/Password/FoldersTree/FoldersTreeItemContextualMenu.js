@@ -15,7 +15,6 @@ import React from "react";
 import PropTypes from "prop-types";
 
 class FoldersTreeItemContextualMenu extends React.Component {
-
   /**
    * Constructor
    * Initialize state and bind methods
@@ -260,8 +259,11 @@ class FoldersTreeItemContextualMenu extends React.Component {
 }
 
 FoldersTreeItemContextualMenu.propTypes = {
-  onDestroy: PropTypes.func,
+  left: PropTypes.number,
+  folder: PropTypes.object,
   foldersTreeListElementRef: PropTypes.object,
+  onDestroy: PropTypes.func,
+  top: PropTypes.number,
 };
 
 export default FoldersTreeItemContextualMenu;

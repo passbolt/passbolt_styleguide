@@ -19,7 +19,7 @@ class AutocompleteItemLoading extends Component {
    * @returns {JSX}
    */
   render() {
-    return(
+    return (
       <li>
         <div className="row loading">
           <div className="main-cell-wrapper">

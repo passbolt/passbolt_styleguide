@@ -41,7 +41,7 @@ class TooltipHtml extends Component {
    */
   getInlineCss() {
     if (this.state.top) {
-      const top = (this.tooltipRef.current.getBoundingClientRect().top) + 'px';
+      const top = `${this.tooltipRef.current.getBoundingClientRect().top}px`;
       return {top};
     }
     return {};
@@ -69,12 +69,13 @@ class TooltipHtml extends Component {
           {this.props.children}
         </div>
       </div>
-    )
+    );
   }
 }
 
 TooltipHtml.propTypes = {
   // force top position (useful if in a scrolling container)
-  offset: PropTypes.bool
+  offset: PropTypes.bool,
+  children: PropTypes.node
 };
 export default TooltipHtml;

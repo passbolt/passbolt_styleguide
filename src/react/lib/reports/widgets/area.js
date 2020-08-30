@@ -15,7 +15,6 @@
 import Widget from "./widget";
 
 class Area extends Widget {
-
   constructor(options) {
     super(options);
 

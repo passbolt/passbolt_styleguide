@@ -15,7 +15,6 @@
 import ApexCharts from 'apexcharts';
 
 class Widget {
-
   constructor(options) {
     this.options = options;
     this.chartOptions = {};
@@ -23,12 +22,11 @@ class Widget {
 
   static getStyleSheetPropertyValue(selectorText, propertyName) {
     // search backwards because the last match is more likely the right one
-    for (let s= document.styleSheets.length - 1; s >= 0; s--) {
+    for (let s = document.styleSheets.length - 1; s >= 0; s--) {
       const cssRules = document.styleSheets[s].cssRules ||
         document.styleSheets[s].rules || []; // IE support
-      for (let c=0; c < cssRules.length; c++) {
-        if (cssRules[c].selectorText === selectorText)
-          return cssRules[c].style[propertyName];
+      for (let c = 0; c < cssRules.length; c++) {
+        if (cssRules[c].selectorText === selectorText) { return cssRules[c].style[propertyName]; }
       }
     }
     return null;

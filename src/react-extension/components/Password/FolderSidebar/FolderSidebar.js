@@ -20,7 +20,6 @@ import FolderSidebarActivitySection from "./FolderSidebarActivitySection";
 import AppContext from "../../../contexts/AppContext";
 
 class FolderSidebar extends React.Component {
-
   /**
    * Constructor
    * @param {Object} props
@@ -154,8 +153,8 @@ class FolderSidebar extends React.Component {
             <h3>
               <span className="name">{this.props.folder.name}
                 <a className="title-link" title="Copy the link to this folder" onClick={this.handlePermalinkClick}>
-                    <i className="fa fa-link"></i>
-                    <span className="visuallyhidden">Copy the link to this folder</span>
+                  <i className="fa fa-link"></i>
+                  <span className="visuallyhidden">Copy the link to this folder</span>
                 </a>
               </span>
               <span className="type">folder</span>

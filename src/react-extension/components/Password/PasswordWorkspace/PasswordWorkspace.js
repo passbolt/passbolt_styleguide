@@ -65,7 +65,7 @@ class Workspace extends Component {
       users: null,
 
       filterByFolder: false,
-    }
+    };
   }
 
   /**
@@ -93,8 +93,10 @@ class Workspace extends Component {
   componentDidMount() {
     this.updateFoldersLocalStorage();
     this.updateResourcesLocalStorage();
-    // this.findGroups();
-    // this.findUsers();
+    /*
+     * this.findGroups();
+     * this.findUsers();
+     */
 
     this.filterByFolderFromRoute();
     this.selectResourceFromRoute();
@@ -253,7 +255,7 @@ class Workspace extends Component {
     const filterByFolder = folder;
     const selectedFolders = [folder];
     this.setState({filterByFolder, selectedFolders, selectedResources}, () => {
-      this.props.history.push(`/app/folders/view/${folder.id}`)
+      this.props.history.push(`/app/folders/view/${folder.id}`);
     });
   }
 
@@ -418,6 +420,10 @@ class Workspace extends Component {
 Workspace.contextType = AppContext;
 
 Workspace.propTypes = {
+  // Match, location and history props are injected by the withRouter decoration call.
+  match: PropTypes.object,
+  location: PropTypes.object,
+  history: PropTypes.object
 };
 
 export default withRouter(Workspace);

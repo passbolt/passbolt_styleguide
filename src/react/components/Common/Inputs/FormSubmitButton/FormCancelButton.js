@@ -61,7 +61,7 @@ class FormCancelButton extends Component {
   render() {
     return (
       <a className={this.getClassName()} role="button" onClick={this.handleClick}>Cancel</a>
-    )
+    );
   }
 }
 

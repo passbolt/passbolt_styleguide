@@ -15,26 +15,26 @@
 import {v4 as uuidv4} from "uuid";
 import moment from 'moment/moment';
 
-export default (eventObject, storage) => {
+export default (resourceDto, password, storage) => {
   return new Promise(async (resolve) => {
     const {resources} = await storage.local.get(["resources"]);
-    eventObject.id = uuidv4();
-    eventObject.created = moment().format("YYYY-MM-DD[T]HH:mm:ss[+]00:00");
-    eventObject.created_by = "f848277c-5398-58f8-a82a-72397af2d450";
-    eventObject.modified = moment().format("YYYY-MM-DD[T]HH:mm:ss[+]00:00");
-    eventObject.modified_by = "f848277c-5398-58f8-a82a-72397af2d450";
-    eventObject.private = true;
-    eventObject.favorite = null;
-    eventObject.permission = {
+    resourceDto.id = uuidv4();
+    resourceDto.created = moment().format("YYYY-MM-DD[T]HH:mm:ss[+]00:00");
+    resourceDto.created_by = "f848277c-5398-58f8-a82a-72397af2d450";
+    resourceDto.modified = moment().format("YYYY-MM-DD[T]HH:mm:ss[+]00:00");
+    resourceDto.modified_by = "f848277c-5398-58f8-a82a-72397af2d450";
+    resourceDto.private = true;
+    resourceDto.favorite = null;
+    resourceDto.permission = {
       id: uuidv4(),
       aco: "Resource",
-      aco_foreign_key: eventObject.id,
+      aco_foreign_key: resourceDto.id,
       aro: "User",
       aro_foreign_key: "f848277c-5398-58f8-a82a-72397af2d450",
       type: 15
     };
-    resources.push(eventObject);
+    resources.push(resourceDto);
     await storage.local.set({resources});
-    resolve(eventObject);
+    resolve(resourceDto);
   });
 };

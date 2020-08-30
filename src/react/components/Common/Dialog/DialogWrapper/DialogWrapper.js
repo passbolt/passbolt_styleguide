@@ -102,6 +102,7 @@ class DialogWrapper extends Component {
 }
 
 DialogWrapper.propTypes = {
+  children: PropTypes.node,
   className: PropTypes.string,
   title: PropTypes.string,
   tooltip: PropTypes.string,

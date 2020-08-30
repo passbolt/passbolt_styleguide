@@ -15,7 +15,6 @@
 import Widget from "./widget";
 
 class Gauge extends Widget {
-
   constructor(options) {
     super(options);
 
@@ -49,7 +48,7 @@ class Gauge extends Widget {
               color: "#000",
               fontSize: "25px",
               show: true,
-              formatter: function (val) {
+              formatter: function(val) {
                 return val + radd;
               }
             }

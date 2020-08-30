@@ -13,7 +13,7 @@
  */
 import React, {Component} from "react";
 import PropTypes from "prop-types";
-import UserAvatar from "../../Avatar/UserAvatar"
+import UserAvatar from "../../Avatar/UserAvatar";
 import Icon from "../../Icons/Icon";
 import {Link} from "react-router-dom";
 
@@ -36,7 +36,7 @@ class UserBadgeMenu extends Component {
     return {
       open: false,
       loading: true,
-    }
+    };
   }
 
   /**
@@ -73,6 +73,7 @@ class UserBadgeMenu extends Component {
   /**
    * Handle click on menu (toggle open state)
    * @param {Event} e
+   * @return {void}
    */
   handleToggleMenuClick(e) {
     e.preventDefault();
@@ -82,9 +83,9 @@ class UserBadgeMenu extends Component {
 
   /**
    * Handle click on menu event
-   * @param {Element} menuItem
+   * @return {void}
    */
-  handleMenuItemClick(menuItem) {
+  handleMenuItemClick() {
     const open = false;
     this.setState({open});
   }

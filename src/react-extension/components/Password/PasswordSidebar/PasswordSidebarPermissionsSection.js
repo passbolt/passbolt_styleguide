@@ -24,7 +24,6 @@ const PERMISSIONS_LABEL = {
 };
 
 class PasswordSidebarPermissionsSection extends React.Component {
-
   /**
    * Constructor
    * @param {Object} props
@@ -58,7 +57,7 @@ class PasswordSidebarPermissionsSection extends React.Component {
    * Handle when the user edits the folder permissions.
    */
   handlePermissionsEditClickEvent() {
-    this.props.onEditPermissions(this.props.folder)
+    this.props.onEditPermissions(this.props.folder);
   }
 
   /**
@@ -67,7 +66,7 @@ class PasswordSidebarPermissionsSection extends React.Component {
    */
   getPermissionAroName(permission) {
     if (permission.user) {
-      let profile = permission.user.profile;
+      const profile = permission.user.profile;
       return `${profile.first_name} ${profile.last_name}`;
     } else {
       return permission.group.name;
@@ -91,24 +90,22 @@ class PasswordSidebarPermissionsSection extends React.Component {
           </a>
           <div>
             <ul className="shared-with ready">
-              {this.props.permissions && this.props.permissions.map(permission => {
-                return (
-                  <li key={permission.id} className="usercard-col-2">
-                    <div className="content-wrapper">
-                      <div className="content">
-                        <div className="name">{this.getPermissionAroName(permission)}</div>
-                        <div className="subinfo">{PERMISSIONS_LABEL[permission.type]}</div>
-                      </div>
+              {this.props.permissions && this.props.permissions.map(permission => (
+                <li key={permission.id} className="usercard-col-2">
+                  <div className="content-wrapper">
+                    <div className="content">
+                      <div className="name">{this.getPermissionAroName(permission)}</div>
+                      <div className="subinfo">{PERMISSIONS_LABEL[permission.type]}</div>
                     </div>
-                    {permission.user &&
+                  </div>
+                  {permission.user &&
                     <UserAvatar user={permission.user} baseUrl={this.context.userSettings.getTrustedDomain()}/>
-                    }
-                    {permission.group &&
+                  }
+                  {permission.group &&
                     <GroupAvatar group={permission.group} baseUrl={this.context.userSettings.getTrustedDomain()}/>
-                    }
-                  </li>
-                );
-              })}
+                  }
+                </li>
+              ))}
             </ul>
           </div>
         </div>

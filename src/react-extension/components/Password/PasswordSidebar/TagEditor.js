@@ -19,7 +19,6 @@ import AppContext from "../../../contexts/AppContext";
 const TAG_MAX_LENGTH = 128;
 
 class TagEditor extends React.Component {
-
   /**
    * Constructor
    * @param {Object} props
@@ -104,7 +103,7 @@ class TagEditor extends React.Component {
     return {
       slug,
       is_shared
-    }
+    };
   }
 
   /**
@@ -113,7 +112,7 @@ class TagEditor extends React.Component {
    * @returns {boolean}
    */
   isTagDeletable(tag) {
-    return this.props.isOwner || !tag.is_shared
+    return this.props.isOwner || !tag.is_shared;
   }
 
   /**
@@ -156,7 +155,7 @@ class TagEditor extends React.Component {
    * @returns {boolean}
    */
   isTagExceedMaxLength(slug) {
-    return slug.length > TAG_MAX_LENGTH
+    return slug.length > TAG_MAX_LENGTH;
   }
 
   /**
@@ -217,7 +216,7 @@ class TagEditor extends React.Component {
    */
   checkTagToDelete() {
     const inputTag = this.inputTagRef.current.textContent;
-    if(!inputTag) {
+    if (!inputTag) {
       const tag = this.state.tags.slice(-1)[0];
       if (this.isTagDeletable(tag)) {
         const tags = this.state.tags;
@@ -235,10 +234,12 @@ class TagEditor extends React.Component {
    * @param indexTag
    */
   deleteTag(event, indexTag) {
-    // When click on the close button with a long tag cut
-    // the click is detected out of the element and the editor close.
-    // To fix that an immediate stop propagation enable to avoid the editor close.
-    // Need absolutely an immediate propagation to stop other listeners.
+    /*
+     * When click on the close button with a long tag cut
+     * the click is detected out of the element and the editor close.
+     * To fix that an immediate stop propagation enable to avoid the editor close.
+     * Need absolutely an immediate propagation to stop other listeners.
+     */
     event.nativeEvent.stopImmediatePropagation();
     const tags = this.state.tags;
     tags.splice(indexTag, 1);
@@ -250,7 +251,7 @@ class TagEditor extends React.Component {
    * @param event
    */
   deleteTagOnBackspace(event) {
-    if(event.which === 8) {
+    if (event.which === 8) {
       this.checkTagToDelete();
     }
   }
@@ -259,7 +260,7 @@ class TagEditor extends React.Component {
    * Save all tags
    */
   async saveTags() {
-    this.setState({isSubmitted: true})
+    this.setState({isSubmitted: true});
     this.checkTagToInsert();
     if (!this.state.errorMessage) {
       await this.updateTags();
@@ -280,7 +281,7 @@ class TagEditor extends React.Component {
       };
       await this.context.port.request("passbolt.resource.update-tags", data);
       this.displayNotification("success", "Tags has been added successfully");
-      this.setState({isSubmitted: false})
+      this.setState({isSubmitted: false});
       this.props.toggleInputTagEditor();
     } catch (error) {
       // Unexpected error occurred.
@@ -307,7 +308,6 @@ class TagEditor extends React.Component {
    * @returns {JSX}
    */
   render() {
-
     return (
       <div className="form-content" ref={this.elementRef}>
         <div className="input tag-editor">
@@ -319,7 +319,7 @@ class TagEditor extends React.Component {
                   <span
                     className={`tag-content ellipsis ${this.state.tagAlreadyPresent === tag.slug ? "blink-fast" : ""}`}>{tag.slug}</span>
                   {this.isTagDeletable(tag) &&
-                  <span className="tag-delete" onClick={ (event) => this.deleteTag(event, index)}><Icon name="close"></Icon></span>
+                  <span className="tag-delete" onClick={ event => this.deleteTag(event, index)}><Icon name="close"></Icon></span>
                   }
                 </div>
               )
@@ -327,7 +327,7 @@ class TagEditor extends React.Component {
             </div>
             }
             <div ref={this.inputTagRef} className="tag-editor-input" contentEditable={!this.state.isSubmitted}
-                 suppressContentEditableWarning="true" onKeyPress={this.addTagOnEnterOrComma} onKeyDown={this.deleteTagOnBackspace}>
+              suppressContentEditableWarning="true" onKeyPress={this.addTagOnEnterOrComma} onKeyDown={this.deleteTagOnBackspace}>
             </div>
           </div>
           {!this.state.errorMessage && this.props.isOwner &&
@@ -343,7 +343,7 @@ class TagEditor extends React.Component {
         </div>
         <div className="actions">
           <a className={`button tag-editor-submit ${this.state.isSubmitted ? "primary processing" : ""}`}
-             onClick={this.saveTags}>
+            onClick={this.saveTags}>
             <span>save</span>
           </a>
           <a className="button cancel tag-editor-cancel" role="button"><span>cancel</span></a>

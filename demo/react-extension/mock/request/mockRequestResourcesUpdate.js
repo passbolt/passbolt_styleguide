@@ -14,17 +14,17 @@
 
 import moment from 'moment/moment';
 
-export default (eventObject, password, storage) => {
+export default (resourceDto, password, storage) => {
   return new Promise(async (resolve) => {
     const {resources} = await storage.local.get(["resources"]);
-    const resourceIndex = resources.findIndex(item => item.id === eventObject.id);
+    const resourceIndex = resources.findIndex(item => item.id === resourceDto.id);
     const resource = resources[resourceIndex];
     resource.modified = moment().format("YYYY-MM-DD[T]HH:mm:ss[+]00:00");
     resource.modified_by = "f848277c-5398-58f8-a82a-72397af2d450";
-    resource.name = eventObject.name;
-    resource.uri = eventObject.uri;
-    resource.username = eventObject.username;
-    resource.description = eventObject.description;
+    resource.name = resourceDto.name;
+    resource.uri = resourceDto.uri;
+    resource.username = resourceDto.username;
+    resource.description = resourceDto.description;
     resources[resourceIndex] = resource;
     await storage.local.set({resources});
     resolve(resource);

@@ -16,7 +16,6 @@ import PropTypes from "prop-types";
 import AppContext from "../../../contexts/AppContext";
 
 class FoldersTreeRootFolderContextualMenu extends React.Component {
-
   /**
    * Constructor
    * Initialize state and bind methods
@@ -179,6 +178,8 @@ FoldersTreeRootFolderContextualMenu.propTypes = {
   onDestroy: PropTypes.func,
   folders: PropTypes.array,
   foldersTreeTitleElementRef: PropTypes.object,
+  left: PropTypes.number,
+  top: PropTypes.number,
 };
 
 export default FoldersTreeRootFolderContextualMenu;

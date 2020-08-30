@@ -63,7 +63,7 @@ class DialogCloseButton extends Component {
         <Icon name='close'/>
         <span className="visually-hidden">Close</span>
       </a>
-    )
+    );
   }
 }
 

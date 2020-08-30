@@ -1,14 +1,12 @@
 function delay(t, v) {
-  return new Promise(function (resolve) {
-    setTimeout(() => resolve(v), t)
+  return new Promise(resolve => {
+    setTimeout(() => resolve(v), t);
   });
 }
 
 class MockPort {
-
   constructor(storage) {
     this.storage = storage;
-    this.emitListeners = {};
     this.onListeners = {};
     this.requestListeners = {};
   }
@@ -22,11 +20,10 @@ class MockPort {
     console.debug(`PORT ON: ${name}`);
   }
 
-  async request(name, eventObject, delayTime) {
+  async request(name) {
     console.debug(`PORT REQUEST: ${name}`);
-    console.debug('parameters:',  Array.prototype.slice.call(arguments));
+    console.debug('PORT REQUEST PARAMETERS:', Array.prototype.slice.call(arguments));
     let result;
-    delayTime = delayTime || 0;
 
     if (this.requestListeners[name]) {
       const listenerArguments = Array.prototype.slice.call(arguments, 1);
@@ -39,13 +36,18 @@ class MockPort {
       console.debug(`The request ${name} has not been mocked`);
     }
 
-    return delay(delayTime, result);
+    return delay(0, result);
   }
 
-  addEmitListener(name, callback) {
+  addEmitListener(name) {
+    console.debug(`PORT EMIT: ${name}`);
+    console.debug('PORT EMIT PARAMETERS:', Array.prototype.slice.call(arguments));
   }
 
   addOnListener(name, callback) {
+    // todo Implement a function to launch this on callbacks.
+    console.debug(`PORT ON: ${name}`);
+    console.debug('PORT ON PARAMETERS:', callback);
   }
 
   addRequestListener(name, callback) {

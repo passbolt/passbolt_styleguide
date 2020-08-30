@@ -13,11 +13,11 @@
  */
 
 import React from "react";
-import {render, fireEvent, waitFor, cleanup} from "@testing-library/react";
+import {render, fireEvent, waitFor} from "@testing-library/react";
 import "../../../test/lib/crypto/cryptoGetRandomvalues";
 import AppContext from "../../../contexts/AppContext";
 import PasswordCreateDialog from "./PasswordCreateDialog";
-import {PassboltApiFetchError} from "../../../lib/Common/Error/PassboltApiFetchError";
+import PassboltApiFetchError from "../../../lib/Common/Error/PassboltApiFetchError";
 import UserSettings from "../../../lib/Settings/UserSettings";
 import userSettingsFixture from "../../../test/fixture/Settings/userSettings";
 import SiteSettings from "../../../lib/Settings/SiteSettings";
@@ -28,7 +28,7 @@ beforeEach(() => {
   jest.resetModules();
 });
 
-const getAppContext = function (appContext) {
+const getAppContext = function(appContext) {
   const defaultAppContext = {
     userSettings: new UserSettings(userSettingsFixture),
     siteSettings: new SiteSettings(siteSettingsFixture),

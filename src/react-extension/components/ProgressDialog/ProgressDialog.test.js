@@ -13,7 +13,7 @@
  */
 
 import React from "react";
-import {render, cleanup} from "@testing-library/react";
+import {render} from "@testing-library/react";
 import ProgressDialog from "./ProgressDialog";
 import AppContext from "../../contexts/AppContext";
 
