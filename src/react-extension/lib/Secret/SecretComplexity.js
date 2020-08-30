@@ -184,13 +184,4 @@ export default class SecretComplexity {
 
     return secret;
   }
-
-  /**
-   * Dictionary check
-   */
-  static async ispwned(password) {
-    const count = await pwnedpasswords(password);
-
-    return (count > 0);
-  }
 }

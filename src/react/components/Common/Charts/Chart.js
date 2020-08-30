@@ -19,9 +19,13 @@ import Gauge from "../../../lib/reports/widgets/gauge";
 
 class Chart extends Component {
   /**
-   * @todo Investigate if there is another way to do this. It looks counter intuitive.
+   * ComponentDidMount
+   * Invoked immediately after component is inserted into the tree
+   * @return {void}
    */
   componentDidMount() {
+    // @todo Do not use findDOMNode. It doesn’t work with function components and is deprecated in StrictMode. See https://reactjs.org/docs/react-dom.html#finddomnode  react/no-find-dom-node
+    // eslint-disable-next-line
     const el = ReactDOM.findDOMNode(this);
     if (this.props.type === "area") {
       const chart = new Area(this.props.data);
