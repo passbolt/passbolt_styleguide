@@ -4687,6 +4687,183 @@ h6 .input.toggle-switch {
     background-position: 1000px 0;
   }
 }
+.accordion .accordion-header {
+  /*
+     * For IE 6/7 only
+     * Include this rule to trigger hasLayout and contain floats.
+     */
+  /*
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
+  /*
+     * For IE 6/7 only
+     * Include this rule to trigger hasLayout and contain floats.
+     */
+  zoom: 1;
+  /*
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
+}
+.accordion .accordion-header:before,
+.accordion .accordion-header:after {
+  content: "";
+  display: table;
+}
+.accordion .accordion-header:after {
+  clear: both;
+}
+.accordion .accordion-header:before,
+.accordion .accordion-header:after {
+  content: "";
+  display: table;
+}
+.accordion .accordion-header:after {
+  clear: both;
+}
+.accordion .accordion-header a {
+  color: #FFFFFC;
+  display: block;
+}
+.accordion .accordion-header a:hover {
+  color: #2894DF;
+}
+.accordion .accordion-content {
+  /*
+     * For IE 6/7 only
+     * Include this rule to trigger hasLayout and contain floats.
+     */
+  /*
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
+  /*
+     * For IE 6/7 only
+     * Include this rule to trigger hasLayout and contain floats.
+     */
+  zoom: 1;
+  /*
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
+}
+.accordion .accordion-content:before,
+.accordion .accordion-content:after {
+  content: "";
+  display: table;
+}
+.accordion .accordion-content:after {
+  clear: both;
+}
+.accordion .accordion-content:before,
+.accordion .accordion-content:after {
+  content: "";
+  display: table;
+}
+.accordion .accordion-content:after {
+  clear: both;
+}
+.accordion.closed .accordion-content {
+  display: none;
+}
+.dialog .accordion .accordion-header {
+  margin-bottom: 0.5em;
+}
+.dialog .accordion .accordion-header a {
+  display: inline;
+  margin-left: 1em;
+}
+.dialog .accordion .accordion-header a:before {
+  margin-left: -1.25em;
+  margin-top: 0.25em;
+  content: "\f0d7";
+  /* caret down */
+  font: normal normal normal 1em FontAwesome;
+  text-rendering: auto;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  width: 1em;
+  height: 1em;
+  position: absolute;
+  text-align: center;
+}
+.dialog .accordion.closed .accordion-header a:before {
+  content: "\f0da";
+  /* caret right */
+}
+.accordion.sidebar-section .accordion-header a {
+  border: 0;
+}
+.accordion.sidebar-section .accordion-header a:after {
+  position: absolute;
+  right: 1.5em;
+  margin-top: 0.25em;
+  content: "\f0d7";
+  /* caret down */
+  font: normal normal normal 1em FontAwesome;
+  text-rendering: auto;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  width: 1em;
+  height: 1em;
+  text-align: center;
+  z-index: 400;
+  color: #8B8B89;
+}
+.accordion.sidebar-section .accordion-header a:hover:after {
+  color: #2894DF;
+}
+.accordion.sidebar-section.closed .accordion-header a:after {
+  content: "\f0da";
+  /* caret right */
+}
+.accordion.navigation .accordion-header .main-cell a:before {
+  margin-left: -1.25em;
+  margin-top: 0.25em;
+  content: "\f0d7";
+  /* caret down */
+  font: normal normal normal 1em FontAwesome;
+  text-rendering: auto;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  width: 1em;
+  height: 1em;
+  position: absolute;
+  text-align: center;
+}
+.accordion.navigation.closed .accordion-header .main-cell a:before {
+  content: "\f0da";
+  /* caret right */
+}
 .avatar img {
   width: 36px;
   height: 36px;
@@ -4729,6 +4906,42 @@ h6 .input.toggle-switch {
   display: inline;
 }
 .panel.middle .breadcrumbs {
+  border-bottom: 1px solid #0C0C0A;
+}
+.contextual-menu {
+  position: absolute;
+  background: #3B3B39;
+  border: 1px solid #0C0C0A;
+  width: 12em;
+  box-shadow: 0px 0px 10px 0px #000;
+  z-index: 993;
+  left: 11.25em;
+  display: none;
+  padding: 0.25em 0;
+}
+.contextual-menu a {
+  font-size: 0.875em;
+  /* 14px */
+  display: block;
+  padding: 0.357em 0.714em;
+  /* 5px 10px */
+  border: 0;
+}
+.contextual-menu a:hover {
+  color: #FFFFFC;
+  background: #444442;
+}
+.contextual-menu li.disabled a {
+  color: #444442;
+}
+.contextual-menu li.disabled a:hover {
+  color: #444442;
+  background: #3B3B39;
+}
+.contextual-menu .separator-before {
+  border-top: 1px solid #0C0C0A;
+}
+.contextual-menu .separator-after {
   border-bottom: 1px solid #0C0C0A;
 }
 /* Dialog */
@@ -4988,714 +5201,264 @@ h6 .input.toggle-switch {
     margin-bottom: 2.5em;
   }
 }
-/* Small Progress bar */
-.progress-bar {
-  background: transparent;
-  width: 100%;
-  height: 2px;
-  display: block;
+.drag-and-drop,
+.drag-and-drop-multiple {
+  position: absolute;
+  top: -1000px;
+  background: #444442;
+  border: 1px solid #3B3B39;
+  z-index: 9999999;
+  padding: 0.65em;
+  line-height: 1em;
+  color: #FFF;
+  border-radius: 5px;
 }
-.progress-bar span {
-  background: #D40101;
-  height: 2px;
-  display: block;
+.drag-and-drop svg,
+.drag-and-drop-multiple svg {
+  position: absolute;
+  margin-top: -0.85em;
+  margin-left: 0.4em;
 }
-/* larger progress bar */
-.progress-bar-wrapper {
-  border: 1px solid #0C0C0A;
-  height: 10px;
-  display: block;
-  margin: 2em 0 1em 0;
-  padding: 2px;
+.drag-and-drop svg path,
+.drag-and-drop-multiple svg path {
+  fill: #FFF;
 }
-.progress-bar-wrapper .progress-bar.big {
-  width: 100%;
-  height: 10px;
-  display: block;
-  clear: both;
-  /* indefinite loading */
-}
-.progress-bar-wrapper .progress-bar.big .progress {
-  background: #D40101;
-  width: 5%;
-  display: block;
-  height: 10px;
-}
-.progress-bar-wrapper .progress-bar.big.infinite {
-  background: #D40101;
-}
-.progress-bar-wrapper .progress-bar.big.infinite .progress {
-  width: 100%;
-  overflow: hidden;
-  background: url('../../../img/controls/infinite-bar.gif') repeat-x;
-  -moz-opacity: 0.5;
-  -khtml-opacity: 0.5;
-  opacity: 0.5;
-  -ms-filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=5);
-  filter: progid:DXImageTransform.Microsoft.Alpha(opacity=5);
-  filter: alpha(opacity=5);
-}
-.progress-details {
-  color: #8B8B89;
-  margin: 0.5em 0 0.5em 0;
-}
-.progress-details .progress-percent {
-  float: right;
-}
-/*
-	Contextual loading bar
-	  it is situated at the bottom of the workspace
-*/
-.update-loading-bar {
-  position: fixed;
-  display: block;
-  width: 100%;
-  bottom: 2.35em;
-  z-index: 991;
-}
-/*
-	do not show javascript needed warning if js is enabled
-	this needs modernizer to work
-*/
-.js .message.no-js {
-  display: none;
-}
-.cookies .message.no-cookies {
-  display: none;
-}
-/* message styling per types */
-.message {
-  padding: 1em;
-}
-.message a {
-  border-bottom: 1px solid #0C0C0A;
-}
-.message a:hover {
-  border-bottom: 1px solid #2894DF;
-}
-.message.error {
-  color: #333;
-  background: #ffe4e4;
-}
-.message.error a:link,
-.message.error a:visited {
-  color: #333;
-  border-bottom: 1px dotted #0C0C0A;
-}
-.message.error a:hover {
-  color: #333;
-  border-bottom: 1px solid #0C0C0A;
-}
-.message.success {
-  color: #333;
-  background: #f4f4d9;
-}
-.message.notice {
-  color: #333;
-  background: #2894DF;
-}
-.message.warning {
-  color: #333;
-  background: #FEF0BF;
-}
-.message p:last-child {
-  margin-bottom: 0;
-}
-/* big side info message blocks on setup or profile pages */
-.message.side-message {
-  margin-left: 1em;
-  font-size: 1em;
-  margin-right: 2em;
-}
-.message.side-message ul,
-.message.side-message p {
-  padding-bottom: 1em;
-}
-/* success animation */
-.message.success.success-large.animated {
-  background: #30302D;
-  color: #FFFFFC;
-  display: flex;
-  border: 1px solid #0C0C0A;
-  border-radius: 3px;
-}
-.message.success.success-large.animated .illustration {
-  flex: 0 0 180px;
-}
-.message.success.success-large.animated .additional-information {
-  flex: 1;
-  line-height: 180px;
-  margin-top: 1.5em;
-  padding-left: 1em;
-}
-@keyframes drawCircle {
-  0% {
-    stroke-dashoffset: 180px;
-  }
-  100% {
-    stroke-dashoffset: 0;
-  }
-}
-@keyframes drawCheck {
-  0% {
-    stroke-dashoffset: 50px;
-  }
-  100% {
-    stroke-dashoffset: 0;
-  }
-}
-.message.success.success-large.animated #successAnimationCircle {
-  stroke-dasharray: 180px 180px;
-  stroke: #009900;
-}
-.message.success.success-large.animated #successAnimationCheck {
-  stroke-dasharray: 50px 50px;
-  stroke: #009900;
-}
-.message.success.success-large.animated #successAnimation.animated {
-  animation: 0.75s ease-out 0s 1 both pop;
-}
-.message.success.success-large.animated #successAnimation.animated #successAnimationCircle {
-  animation: 0.75s cubic-bezier(0.77, 0, 0.175, 1) 0s 1 both drawCircle;
-}
-.message.success.success-large.animated #successAnimation.animated #successAnimationCheck {
-  animation: 0.75s cubic-bezier(0.77, 0, 0.175, 1) 0s 1 both drawCheck;
-}
-@media only screen and (max-width: 767px) {
-  .message.success.success-large.animated {
-    flex-direction: column;
-  }
-}
-/* tabs */
-.tabs {
-  border-bottom: 1px solid #0C0C0A;
-  width: 100%;
-}
-.tabs-nav {
-  border-bottom: 1px solid #0C0C0A;
-}
-.tabs-nav li {
+.drag-and-drop span.message,
+.drag-and-drop-multiple span.message {
   display: inline;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
-.tabs-nav li div {
-  display: inline-block;
+.drag-and-drop span.message.not-allowed,
+.drag-and-drop-multiple span.message.not-allowed {
+  padding-left: 1.85em;
 }
-.tabs-nav li a {
-  display: inline-block;
-  padding: 0.4em 1.75em;
-  margin-left: 1.25em;
-  font-size: 15px;
-  border: 0;
+.drag-and-drop-multiple {
+  box-shadow: 0.25em 0.25em 0 -1px #3B3B39;
 }
-.tabs-nav li a.selected {
-  margin-bottom: -1px;
-  border: 1px solid #0C0C0A;
-  border-bottom: 1px solid #30302D;
-  background: #30302D;
-  -webkit-border-radius: 0.214em;
-  -moz-border-radius: 0.214em;
-  border-radius: 0.214em;
-  border-bottom-left-radius: 0;
-  border-bottom-right-radius: 0;
-}
-/* tab content */
-.tab-content {
-  display: none;
-}
-.tab-content.selected {
-  display: block;
-}
-.dialog .form-content.permission-add {
-  background-color: #30302D;
-  padding: 0 1em 1em 1em;
-  /*
-     * For IE 6/7 only
-     * Include this rule to trigger hasLayout and contain floats.
-     */
-  /*
-     * Clearfix: contain floats
-     *
-     * For modern browsers
-     * 1. The space content is one way to avoid an Opera bug when the
-     *	`contenteditable` attribute is included anywhere else in the document.
-     *	Otherwise it causes space to appear at the top and bottom of elements
-     *	that receive the `clearfix` class.
-     * 2. The use of `table` rather than `block` is only necessary if using
-     *	`:before` to contain the top-margins of child elements.
-     */
-  /*
-     * For IE 6/7 only
-     * Include this rule to trigger hasLayout and contain floats.
-     */
-  zoom: 1;
-  /*
-     * Clearfix: contain floats
-     *
-     * For modern browsers
-     * 1. The space content is one way to avoid an Opera bug when the
-     *	`contenteditable` attribute is included anywhere else in the document.
-     *	Otherwise it causes space to appear at the top and bottom of elements
-     *	that receive the `clearfix` class.
-     * 2. The use of `table` rather than `block` is only necessary if using
-     *	`:before` to contain the top-margins of child elements.
-     */
-}
-.dialog .form-content.permission-add:before,
-.dialog .form-content.permission-add:after {
-  content: "";
-  display: table;
-}
-.dialog .form-content.permission-add:after {
-  clear: both;
-}
-.dialog .form-content.permission-add:before,
-.dialog .form-content.permission-add:after {
-  content: "";
-  display: table;
-}
-.dialog .form-content.permission-add:after {
-  clear: both;
-}
-.dialog .form-content.permission-edit {
-  padding: 0em;
-  border-bottom: 1px solid #0C0C0A;
-}
-.dialog .permissions {
-  /* shimmering skeleton when loading */
-}
-.dialog .permissions.scroll {
-  /* Opera doesn't support this in the shorthand */
-  overflow: auto;
-  background: linear-gradient(#30302D 30%, rgba(255, 255, 255, 0)), linear-gradient(rgba(255, 255, 255, 0), #30302D 70%) 0 100%, /* Shadows */ radial-gradient(farthest-side at 50% 0, rgba(0, 0, 0, 0.08), rgba(0, 0, 0, 0)), radial-gradient(farthest-side at 50% 100%, rgba(0, 0, 0, 0.08), rgba(0, 0, 0, 0)) 0 100%;
-  background-repeat: no-repeat;
-  background-color: #30302D;
-  background-size: 100% 40px, 100% 40px, 100% 14px, 100% 14px;
-  /* Opera doesn't support this in the shorthand */
-  background-attachment: local, local, scroll, scroll;
-  max-height: 19em;
-  margin: 0;
-}
-.dialog .permissions .row {
-  /*
-     * For IE 6/7 only
-     * Include this rule to trigger hasLayout and contain floats.
-     */
-  /*
-     * Clearfix: contain floats
-     *
-     * For modern browsers
-     * 1. The space content is one way to avoid an Opera bug when the
-     *	`contenteditable` attribute is included anywhere else in the document.
-     *	Otherwise it causes space to appear at the top and bottom of elements
-     *	that receive the `clearfix` class.
-     * 2. The use of `table` rather than `block` is only necessary if using
-     *	`:before` to contain the top-margins of child elements.
-     */
-  /*
-     * For IE 6/7 only
-     * Include this rule to trigger hasLayout and contain floats.
-     */
-  zoom: 1;
-  /*
-     * Clearfix: contain floats
-     *
-     * For modern browsers
-     * 1. The space content is one way to avoid an Opera bug when the
-     *	`contenteditable` attribute is included anywhere else in the document.
-     *	Otherwise it causes space to appear at the top and bottom of elements
-     *	that receive the `clearfix` class.
-     * 2. The use of `table` rather than `block` is only necessary if using
-     *	`:before` to contain the top-margins of child elements.
-     */
-  font-size: 0.813em;
-  padding: 0.875em 0.5em 0.5em 0.875em;
-  border-bottom: 1px dotted #0C0C0A;
-  /* aro summary */
-}
-.dialog .permissions .row:before,
-.dialog .permissions .row:after {
-  content: "";
-  display: table;
-}
-.dialog .permissions .row:after {
-  clear: both;
-}
-.dialog .permissions .row:before,
-.dialog .permissions .row:after {
-  content: "";
-  display: table;
-}
-.dialog .permissions .row:after {
-  clear: both;
-}
-.dialog .permissions .row:last-child {
-  border: 0;
-}
-.dialog .permissions .row.permission-updated {
-  background: #5C564C;
-}
-.dialog .permissions .row .avatar img {
-  float: left;
-}
-.dialog .permissions .row .aro {
-  width: 48%;
-  float: left;
-  padding: 0 1em;
-}
-.dialog .permissions .row .aro .aro-details {
-  margin-top: -0.25em;
-  color: #8B8B89;
-}
-.dialog .permissions .row .aro .ellipsis {
-  display: inline-block;
-  max-width: 90%;
-}
-.dialog .permissions .row .aro .svg-icon svg {
-  position: relative;
-  top: -0.125em;
-}
-.dialog .permissions .row .tooltip-alt {
-  margin-left: 0.25em;
-}
-.dialog .permissions .row .rights {
-  float: left;
-  margin-top: 0.5em;
-  width: 27%;
-}
-.dialog .permissions .row .rights select {
-  margin: 0;
-  font-size: 1em;
-}
-.dialog .permissions .row .remove-item {
-  color: #cacac9;
-  float: right;
-  margin-right: 1em;
-  border: 0;
-  padding: 0.625em;
-  width: 1em;
-  height: 1em;
-  margin-top: 0.125em;
-  /* hover */
-  /* focus */
-  /* active */
-}
-.dialog .permissions .row .remove-item:hover {
-  color: #FFFFFC;
-  text-decoration: none;
-}
-.dialog .permissions .row .remove-item:focus {
-  color: #2894DF;
-}
-.dialog .permissions .row .remove-item:active {
-  color: #2894DF;
-  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.2);
-}
-.dialog .permissions .row .remove-item.disabled {
-  cursor: default;
-  color: #8B8B89;
-}
-.dialog .permissions .row.skeleton {
-  height: 42px;
-}
-.dialog .permissions .row.skeleton .avatar {
-  float: left;
-  width: 3em;
-  height: 3em;
-  background: #444442;
-  border-radius: 50%;
-}
-.dialog .permissions .row.skeleton .aro .aro-name {
-  margin-top: 0.25em;
-  width: 10em;
-  height: 1em;
-  background: #444442;
-  -webkit-border-radius: 0.214em;
-  -moz-border-radius: 0.214em;
-  border-radius: 0.214em;
-}
-.dialog .permissions .row.skeleton .aro .aro-details {
-  -webkit-border-radius: 0.214em;
-  -moz-border-radius: 0.214em;
-  border-radius: 0.214em;
-  margin-top: 0.5em;
-  width: 7em;
-  height: 1em;
-  background: #444442;
-}
-.dialog .permissions .row.skeleton .select.rights {
-  -webkit-border-radius: 0.214em;
-  -moz-border-radius: 0.214em;
-  border-radius: 0.214em;
-  float: left;
-  margin-top: 1em;
-  width: 8em;
-  height: 1.2em;
-  background: #444442;
-}
-.dialog .permissions .row.skeleton .actions {
-  border-radius: 50%;
-  float: right;
+.drag-and-drop-multiple .count {
+  position: absolute;
+  top: -9px;
+  right: -3px;
+  font-size: 0.7em;
+  background: #D40101;
+  color: #FFF;
   width: 1.5em;
   height: 1.5em;
-  margin-top: 0.9em;
-  margin-right: 1.5em;
-  background: #444442;
-}
-/* hide icons if there is no space */
-@media all and (max-width: 480px) {
-  .dialog .permissions.scroll {
-    height: auto;
-    margin: 0;
-  }
-  .dialog .permissions .row .user,
-  .dialog .permissions .row .group {
-    width: 45%;
-  }
-}
-/**
- * Tooltips!
- * credits: Chris Bracco http://cbracco.me/a-simple-css-tooltip/
- */
-/* Base styles for the element that has a tooltip */
-[data-tooltip],
-.tooltip {
-  position: relative;
-  cursor: pointer;
-}
-/* Base styles for the entire tooltip */
-[data-tooltip]:before,
-[data-tooltip]:after,
-.tooltip:before,
-.tooltip:after {
-  position: absolute;
-  visibility: hidden;
-  opacity: 0;
-  transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out, transform 0.2s cubic-bezier(0.71, 1.7, 0.77, 1.24);
-  transform: translate3d(0, 0, 0);
-  pointer-events: none;
   text-align: center;
+  line-height: 1.5em;
+  border-radius: 50%;
+  box-shadow: 0 0 1px #333;
 }
-/* Show the entire tooltip on hover and focus */
-[data-tooltip]:hover:before,
-[data-tooltip]:hover:after,
-[data-tooltip]:focus:before,
-[data-tooltip]:focus:after,
-.tooltip:hover:before,
-.tooltip:hover:after,
-.tooltip:focus:before,
-.tooltip:focus:after,
-.always-show:before,
-.always-show:after {
-  visibility: visible;
-  opacity: 1;
+.drop-focus {
+  background-color: #0e3e60;
 }
-/* Base styles for the tooltip's directional arrow */
-.tooltip:before,
-[data-tooltip]:before {
-  z-index: 990;
-  border: 6px solid transparent;
-  background: transparent;
-  content: "";
+/* dropdown */
+.dropdown {
+  float: left;
 }
-/* Base styles for the tooltip's content area */
-.tooltip:after,
-[data-tooltip]:after {
-  z-index: 990;
-  padding: 8px;
-  width: 160px;
-  background-color: #444442;
-  color: #EEEEEC;
-  content: attr(data-tooltip);
-  font-size: 14px;
-  line-height: 1.2em;
-  font-weight: normal;
-  text-shadow: none;
-}
-/* Directions */
-/* Top (default) */
-[data-tooltip]:before,
-[data-tooltip]:after,
-.tooltip:before,
-.tooltip:after,
-.tooltip-top:before,
-.tooltip-top:after {
-  bottom: 100%;
-  left: 50%;
-}
-[data-tooltip]:before,
-.tooltip:before,
-.tooltip-top:before {
-  margin-left: -6px;
-  margin-bottom: -12px;
-  border-top-color: #444442;
-}
-/* Horizontally align top/bottom tooltips */
-[data-tooltip]:after,
-.tooltip:after,
-.tooltip-top:after {
-  margin-left: -80px;
-}
-[data-tooltip]:hover:before,
-[data-tooltip]:hover:after,
-[data-tooltip]:focus:before,
-[data-tooltip]:focus:after,
-.tooltip:hover:before,
-.tooltip:hover:after,
-.tooltip:focus:before,
-.tooltip:focus:after,
-.tooltip.always-show:after,
-.tooltip.always-show:before,
-.tooltip-top.always-show:after,
-.tooltip-top.always-show:before,
-.tooltip-top:hover:before,
-.tooltip-top:hover:after,
-.tooltip-top:focus:before,
-.tooltip-top:focus:after {
-  -webkit-transform: translateY(-12px);
-  -moz-transform: translateY(-12px);
-  transform: translateY(-12px);
-}
-/* Left */
-.tooltip-left:before,
-.tooltip-left:after {
-  right: 100%;
-  bottom: 50%;
-  left: auto;
-}
-.tooltip-left:before {
-  margin-left: 0;
-  margin-right: -12px;
-  margin-bottom: 0;
-  border-top-color: transparent;
-  border-left-color: #222220;
-  border-left-color: hsla(0, 0%, 20%, 0.9);
-}
-.tooltip-left:hover:before,
-.tooltip-left:hover:after,
-.tooltip-left.always-show:after,
-.tooltip-left.always-show:before,
-.tooltip-left:focus:before,
-.tooltip-left:focus:after {
-  -webkit-transform: translateX(-12px);
-  -moz-transform: translateX(-12px);
-  transform: translateX(-12px);
-}
-/* Bottom */
-.tooltip-bottom:before,
-.tooltip-bottom:after {
-  top: 100%;
-  bottom: auto;
-  left: 50%;
-}
-.tooltip-bottom:before {
-  margin-top: -12px;
-  margin-bottom: 0;
-  border-top-color: transparent;
-  border-bottom-color: #222220;
-  border-bottom-color: hsla(0, 0%, 20%, 0.9);
-}
-.tooltip-bottom:hover:before,
-.tooltip-bottom:hover:after,
-.tooltip-bottom.always-show:after,
-.tooltip-bottom.always-show:before,
-.tooltip-bottom:focus:before,
-.tooltip-bottom:focus:after {
-  -webkit-transform: translateY(12px);
-  -moz-transform: translateY(12px);
-  transform: translateY(12px);
-}
-/* Right */
-.tooltip-right:before,
-.tooltip-right:after {
-  bottom: 50%;
-  left: 100%;
-}
-.tooltip-right:before {
-  margin-bottom: 0;
-  margin-left: -12px;
-  border-top-color: transparent;
-  border-right-color: #222220;
-}
-.tooltip-right:hover:before,
-.tooltip-right:hover:after,
-.tooltip-right.always-show:after,
-.tooltip-right.always-show:before,
-.tooltip-right:focus:before,
-.tooltip-right:focus:after {
-  -webkit-transform: translateX(12px);
-  -moz-transform: translateX(12px);
-  transform: translateX(12px);
-}
-/* Move directional arrows down a bit for left/right tooltips */
-.tooltip-left:before,
-.tooltip-right:before {
-  top: 3px;
-}
-/* Vertically center tooltip content for left/right tooltips */
-.tooltip-left:after,
-.tooltip-right:after {
-  margin-left: 0;
-  margin-bottom: -16px;
-}
-/* large width */
-.tooltip.large:after,
-[data-tooltip].large:after {
-  width: 240px;
-}
-.tooltip-right.large:before,
-.tooltip-right.large:after,
-.tooltip-left.large:before,
-.tooltip-left.large:after {
-  margin-top: 6px;
-}
-/*
-	More complex tooltips
-	That allows HTML in them
-*/
-/* Tooltip container */
-.tooltip-alt {
-  cursor: pointer;
-  display: inline-block;
+.dropdown .button:focus,
+.dropdown .button.create:focus {
+  border: 1px solid #0C0C0A;
+  color: #FFFFFC;
+  background: #30302D;
+  z-index: 801;
   border-bottom: 0;
-  /* Tooltip text */
-  /* Ease the tooltip left when you mouse over the tooltip container */
+  -webkit-border-bottom-right-radius: 0;
+  -webkit-border-bottom-left-radius: 0;
+  -moz-border-radius-bottomright: 0;
+  -moz-border-radius-bottomleft: 0;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
 }
-.tooltip-alt .tooltip-text {
+.dropdown .button:focus .svg-icon svg,
+.dropdown .button.create:focus .svg-icon svg {
+  fill: #FFFFFC;
+}
+.dropdown .button.create .svg-icon svg {
+  fill: #FFF;
+}
+.dropdown-content {
+  border: 1px solid #0C0C0A;
+  background: #3B3B39;
+  float: left;
   position: absolute;
-  visibility: hidden;
-  width: 180px;
-  background-color: #222220;
-  color: #EEEEEC;
-  padding: 0.5em 1em;
-  transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out, transform 0.2s cubic-bezier(0.71, 1.7, 0.77, 1.24);
-  transform: translate3d(0, 0, 0);
-  z-index: 99999;
-  /* only right for now */
+  min-width: 13em;
+  z-index: 800;
+  padding: 0.25em 0;
 }
-.tooltip-alt .tooltip-text.right {
-  margin-left: 1em;
-  margin-top: -1.75em;
+.button + .dropdown-content {
+  margin-top: 2em;
+  margin-bottom: 2em;
 }
-.tooltip-alt .tooltip-text.right::after {
-  content: " ";
+.dropdown-content.right {
+  right: 0;
+}
+.dropdown-content li a {
+  display: block;
+  min-width: 9em;
+  font-size: 0.938em;
+  border: 0;
+}
+.dropdown-content li a {
+  padding: 0.313em 0.626em;
+  /* 5px */
+}
+.dropdown-content li a:hover {
+  background: #444442;
+  text-decoration: none;
+  color: #FFFFFC;
+}
+.dropdown-content li .separator-before {
+  border-top: 1px solid #0C0C0A;
+}
+.dropdown-content li .separator-after {
+  border-bottom: 1px solid #0C0C0A;
+}
+.dropdown-content li.disabled a,
+.dropdown-content li.disabled a:hover {
+  color: #8B8B89;
+}
+.dropdown-content {
+  display: none;
+}
+.dropdown-content.visible {
+  display: block;
+}
+/* dropdown menu */
+.dropdownmenu {
+  list-style: none;
   position: absolute;
-  top: 1.125em;
-  right: 100%;
-  margin-top: -5px;
-  border: 5px #333 solid;
-  border-color: transparent #222220 transparent transparent;
+  z-index: 800;
+  background: #30302D;
+  border: 1px solid #0C0C0A;
+  box-shadow: 0px 0px 10px 0px #000;
 }
-.tooltip-alt:hover .tooltip-text {
-  transform: translateX(12px);
-  visibility: visible;
-  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100);
-  opacity: 1;
+.dropdownmenu ul {
+  list-style: none;
+  position: absolute;
+  top: 0;
+  left: 100%;
+  background: #30302D;
+  border: 1px solid #0C0C0A;
+  box-shadow: 0px 0px 10px 0px #000;
 }
-.tooltip svg,
-.tooltip-alt svg {
-  fill: #cacac9;
-  top: 0.125em;
+.dropdownmenu li {
   position: relative;
+  padding: 3px 7em 3px 30px;
+}
+.panel .folders.navigation {
+  border: 0;
+}
+.panel .folders.navigation ul {
+  list-style: none;
+  padding: 0;
+}
+.panel .folders.navigation .folders-label-selected {
+  background: #F3F3F3;
+}
+.panel .folders.navigation .folders-label-height {
+  height: 1.8em;
+}
+.panel .folders.navigation.first {
+  padding-top: 0;
+}
+.panel .folders.navigation .row {
+  /* title row */
+  /* disabled row */
+}
+.panel .folders.navigation .row .main-cell span {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -o-text-overflow: ellipsis;
+  -ms-text-overflow: ellipsis;
+  display: inline-block;
+  margin-top: 0.2em;
+  width: calc(100% - 2.5em);
+}
+.panel .folders.navigation .row .main-cell .svg-icon {
+  display: inline;
+}
+.panel .folders.navigation .row .main-cell .svg-icon.hidden {
+  display: none;
+}
+.panel .folders.navigation .row .main-cell .svg-icon svg {
+  width: 0.83em;
+  height: 0.83em;
+  position: absolute;
+  margin-top: 0.5em;
+  fill: #FFFFFC;
+}
+.panel .folders.navigation .row .main-cell a {
+  padding: 0 0 0 2.5em;
+}
+.panel .folders.navigation .row .main-cell a .svg-icon.caret-right svg,
+.panel .folders.navigation .row .main-cell a .svg-icon.caret-down svg {
+  margin-left: -1.2em;
+  margin-top: 0.4em;
+  width: 1em;
+  height: 1em;
+  position: absolute;
+}
+.panel .folders.navigation .row .main-cell a .folder-name {
+  margin-left: 1.3em;
+}
+.panel .folders.navigation .row .right-cell {
+  margin-top: -1.65em;
+}
+.panel .folders.navigation .row.title .main-cell h3 {
+  padding-top: 0;
+  line-height: 1em;
+  border: 0;
+}
+.panel .folders.navigation .row.title .main-cell h3 a {
+  padding-left: 0;
+}
+.panel .folders.navigation .row.title .main-cell h3 a::before,
+.panel .folders.navigation .row.title .main-cell h3 a::after {
+  display: none;
+}
+.panel .folders.navigation .row.title .main-cell h3 .folders-label {
+  margin-left: 1em;
+  cursor: pointer;
+}
+.panel .folders.navigation .row.title .main-cell h3 .folders-label .svg-icon.caret-right svg,
+.panel .folders.navigation .row.title .main-cell h3 .folders-label .svg-icon.caret-down svg {
+  margin-left: -1.2em;
+  margin-top: 0.25em;
+  width: 1em;
+  height: 1em;
+  position: absolute;
+}
+.panel .folders.navigation .row.title .main-cell h3 .folders-label .svg-icon.spinner svg {
+  margin-left: -1.1em;
+  margin-top: 0.3em;
+  width: 0.83em;
+  height: 0.83em;
+  position: absolute;
+}
+.panel .folders.navigation .row.disabled {
+  cursor: default;
+  pointer-events: none;
+}
+.panel .folders.navigation .row.disabled .main-cell span.folder-name {
+  color: #8B8B89;
+  text-shadow: none;
+  font-weight: normal;
+}
+.panel .folders.navigation .row.disabled .main-cell span.svg-icon svg {
+  fill: #8B8B89;
+}
+.panel .folders.navigation .row.disabled .main-cell a:before {
+  color: #8B8B89;
+}
+.panel .folders.navigation .row.disabled.is-dragged {
+  pointer-events: auto;
+}
+.panel .folders.navigation li li {
+  padding-left: 1.15em;
 }
 .input.location {
   /*
@@ -6110,6 +5873,1899 @@ h6 .input.toggle-switch {
   vertical-align: middle;
   box-sizing: border-box;
 }
+/*
+ * Footer
+ */
+.footer {
+  margin-top: 0em;
+  position: fixed;
+  bottom: 0;
+  padding: 1.167em 1.5% 0 0.5%;
+  text-align: right;
+  font-size: 0.75em;
+  /* 12px */
+  width: 98%;
+  height: 2em;
+  background: #30302D;
+  border-top: 1px solid #0C0C0A;
+  z-index: 890;
+}
+.footer .footer-links {
+  width: 100%;
+  margin-top: -0.25em;
+}
+.footer .footer-links li {
+  display: inline;
+  margin-right: 1.5em;
+}
+.footer .footer-links li .github-star {
+  display: inline;
+  position: absolute;
+  margin-left: -8em;
+  margin-top: -1px;
+}
+.footer .footer-links a:not(.gh-btn):not(.gh-count) {
+  border: 0;
+}
+/* headers */
+.header {
+  overflow: visible !important;
+  /* top navigation */
+  /* logo positioning */
+}
+.header.first {
+  background: #222220;
+}
+.header.second {
+  background: #3B3B39;
+}
+.header .navigation.primary {
+  /*
+     * For IE 6/7 only
+     * Include this rule to trigger hasLayout and contain floats.
+     */
+  /*
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
+  /*
+     * For IE 6/7 only
+     * Include this rule to trigger hasLayout and contain floats.
+     */
+  zoom: 1;
+  /*
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
+}
+.header .navigation.primary:before,
+.header .navigation.primary:after {
+  content: "";
+  display: table;
+}
+.header .navigation.primary:after {
+  clear: both;
+}
+.header .navigation.primary:before,
+.header .navigation.primary:after {
+  content: "";
+  display: table;
+}
+.header .navigation.primary:after {
+  clear: both;
+}
+.header .navigation.primary li {
+  padding: 0.5em;
+  float: left;
+}
+.header .navigation.primary li:first-child {
+  padding-left: 1em;
+}
+.header .navigation.primary li.right {
+  float: right;
+  margin-right: 1em;
+}
+.header .navigation.primary li a {
+  color: #F3F3F3;
+  text-decoration: none;
+  border: 0;
+  display: inline-block;
+}
+.header .navigation.primary li a:hover {
+  color: #EEEEEC;
+}
+.header .navigation.primary li a:active,
+.header .navigation.primary li a:focus {
+  color: #2894DF;
+}
+.header .navigation.primary li a.highlighted {
+  background-color: #2894DF;
+  padding: 0 0.5em 0 0.5em;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+}
+.header .navigation.primary li a.highlighted:active,
+.header .navigation.primary li a.highlighted:focus {
+  color: #F3F3F3;
+}
+.header .navigation.primary li .row.selected a {
+  color: #EEEEEC;
+}
+.header .navigation.primary li .row.selected a:focus {
+  color: #2894DF;
+}
+.header .navigation.primary .github-star {
+  display: none;
+  position: absolute;
+  right: 1em;
+  top: 4px;
+}
+@media all and (min-width: 600px) {
+  .header .navigation.primary .github-star {
+    display: block;
+  }
+}
+.header .logo {
+  margin: 1.25em 0 0 1em;
+  max-width: 80%;
+}
+/* Small Progress bar */
+.progress-bar {
+  background: transparent;
+  width: 100%;
+  height: 2px;
+  display: block;
+}
+.progress-bar span {
+  background: #D40101;
+  height: 2px;
+  display: block;
+}
+/* larger progress bar */
+.progress-bar-wrapper {
+  border: 1px solid #0C0C0A;
+  height: 10px;
+  display: block;
+  margin: 2em 0 1em 0;
+  padding: 2px;
+}
+.progress-bar-wrapper .progress-bar.big {
+  width: 100%;
+  height: 10px;
+  display: block;
+  clear: both;
+  /* indefinite loading */
+}
+.progress-bar-wrapper .progress-bar.big .progress {
+  background: #D40101;
+  width: 5%;
+  display: block;
+  height: 10px;
+}
+.progress-bar-wrapper .progress-bar.big.infinite {
+  background: #D40101;
+}
+.progress-bar-wrapper .progress-bar.big.infinite .progress {
+  width: 100%;
+  overflow: hidden;
+  background: url('../../../img/controls/infinite-bar.gif') repeat-x;
+  -moz-opacity: 0.5;
+  -khtml-opacity: 0.5;
+  opacity: 0.5;
+  -ms-filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=5);
+  filter: progid:DXImageTransform.Microsoft.Alpha(opacity=5);
+  filter: alpha(opacity=5);
+}
+.progress-details {
+  color: #8B8B89;
+  margin: 0.5em 0 0.5em 0;
+}
+.progress-details .progress-percent {
+  float: right;
+}
+/*
+	Contextual loading bar
+	  it is situated at the bottom of the workspace
+*/
+.update-loading-bar {
+  position: fixed;
+  display: block;
+  width: 100%;
+  bottom: 2.35em;
+  z-index: 991;
+}
+.logo.no-img {
+  background: transparent url('../../../img/logo/logo_white.png') 0 0 no-repeat;
+  background-size: 150px auto;
+  width: 150px;
+  height: 30px;
+}
+.logo h1 {
+  display: none;
+}
+.logo.bigger {
+  background: transparent url('../../../img/logo/logo_white.svg') 0 0 no-repeat;
+  background-size: 200px auto;
+  width: 200px;
+  height: 45px;
+}
+.header.second .col1 {
+  min-width: 200px;
+}
+/* CSS for serving the retina image to devices with a high "device-pixel-ratio": */
+@media only screen and (-moz-min-device-pixel-ratio: 1.5), only screen and (-o-min-device-pixel-ratio: 1.5), only screen and (-webkit-min-device-pixel-ratio: 1.5), only screen and (min-devicepixel-ratio: 1.5), only screen and (min-resolution: 1.5dppx) {
+  .logo.no-img {
+    background: transparent url('../../../img/logo/logo_white.svg') 0 0 no-repeat;
+    background-size: 150px auto;
+  }
+  .logo.bigger {
+    background: transparent url('../../../img/logo/logo_white.svg') 0 0 no-repeat;
+    background-size: 200px auto;
+  }
+}
+/*
+	do not show javascript needed warning if js is enabled
+	this needs modernizer to work
+*/
+.js .message.no-js {
+  display: none;
+}
+.cookies .message.no-cookies {
+  display: none;
+}
+/* message styling per types */
+.message {
+  padding: 1em;
+}
+.message a {
+  border-bottom: 1px solid #0C0C0A;
+}
+.message a:hover {
+  border-bottom: 1px solid #2894DF;
+}
+.message.error {
+  color: #333;
+  background: #ffe4e4;
+}
+.message.error a:link,
+.message.error a:visited {
+  color: #333;
+  border-bottom: 1px dotted #0C0C0A;
+}
+.message.error a:hover {
+  color: #333;
+  border-bottom: 1px solid #0C0C0A;
+}
+.message.success {
+  color: #333;
+  background: #f4f4d9;
+}
+.message.notice {
+  color: #333;
+  background: #2894DF;
+}
+.message.warning {
+  color: #333;
+  background: #FEF0BF;
+}
+.message p:last-child {
+  margin-bottom: 0;
+}
+/* big side info message blocks on setup or profile pages */
+.message.side-message {
+  margin-left: 1em;
+  font-size: 1em;
+  margin-right: 2em;
+}
+.message.side-message ul,
+.message.side-message p {
+  padding-bottom: 1em;
+}
+/* success animation */
+.message.success.success-large.animated {
+  background: #30302D;
+  color: #FFFFFC;
+  display: flex;
+  border: 1px solid #0C0C0A;
+  border-radius: 3px;
+}
+.message.success.success-large.animated .illustration {
+  flex: 0 0 180px;
+}
+.message.success.success-large.animated .additional-information {
+  flex: 1;
+  line-height: 180px;
+  margin-top: 1.5em;
+  padding-left: 1em;
+}
+@keyframes drawCircle {
+  0% {
+    stroke-dashoffset: 180px;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes drawCheck {
+  0% {
+    stroke-dashoffset: 50px;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+.message.success.success-large.animated #successAnimationCircle {
+  stroke-dasharray: 180px 180px;
+  stroke: #009900;
+}
+.message.success.success-large.animated #successAnimationCheck {
+  stroke-dasharray: 50px 50px;
+  stroke: #009900;
+}
+.message.success.success-large.animated #successAnimation.animated {
+  animation: 0.75s ease-out 0s 1 both pop;
+}
+.message.success.success-large.animated #successAnimation.animated #successAnimationCircle {
+  animation: 0.75s cubic-bezier(0.77, 0, 0.175, 1) 0s 1 both drawCircle;
+}
+.message.success.success-large.animated #successAnimation.animated #successAnimationCheck {
+  animation: 0.75s cubic-bezier(0.77, 0, 0.175, 1) 0s 1 both drawCheck;
+}
+@media only screen and (max-width: 767px) {
+  .message.success.success-large.animated {
+    flex-direction: column;
+  }
+}
+/* left panel navigation */
+.panel .navigation {
+  font-size: 0.938em;
+  /* first block have a delimiter */
+  /*
+        Navigation row
+    */
+}
+.panel .navigation li {
+  /*
+     * For IE 6/7 only
+     * Include this rule to trigger hasLayout and contain floats.
+     */
+  /*
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
+  /*
+     * For IE 6/7 only
+     * Include this rule to trigger hasLayout and contain floats.
+     */
+  zoom: 1;
+  /*
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
+}
+.panel .navigation li:before,
+.panel .navigation li:after {
+  content: "";
+  display: table;
+}
+.panel .navigation li:after {
+  clear: both;
+}
+.panel .navigation li:before,
+.panel .navigation li:after {
+  content: "";
+  display: table;
+}
+.panel .navigation li:after {
+  clear: both;
+}
+.panel .navigation.first {
+  border-bottom: 1px dotted #0C0C0A;
+  padding: 0.625em 0;
+  margin-bottom: 0.625em;
+}
+.panel .navigation .row {
+  float: left;
+  width: 100%;
+  box-sizing: border-box;
+  /*
+            Row layout
+              fluid main-cell
+              fixed right-cell
+        */
+  /*
+            Right Cell
+        */
+  /* title cell is higher than normal cell
+           this centers the right cell vertically accordingly
+         */
+}
+.panel .navigation .row:hover {
+  background: #444442;
+}
+.panel .navigation .row.no-hover:hover {
+  background: transparent;
+}
+.panel .navigation .row.selected {
+  font-weight: bold;
+}
+.panel .navigation .row .main-cell-wrapper {
+  float: left;
+  width: 100%;
+}
+.panel .navigation .row .main-cell {
+  margin: 0 1.5em 0 0;
+}
+.panel .navigation .row .main-cell h3 {
+  border: 0;
+  font-size: 1em;
+  margin: 0 0.25em 0 1em;
+  padding: 0.25em 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -o-text-overflow: ellipsis;
+  -ms-text-overflow: ellipsis;
+}
+.panel .navigation .row .main-cell h3 a {
+  /* suppress a padding so that it looks the same
+                        for all title if it is a link or not */
+  padding-top: 0;
+  padding-bottom: 0;
+}
+.panel .navigation .row .main-cell span {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -o-text-overflow: ellipsis;
+  -ms-text-overflow: ellipsis;
+  display: block;
+}
+.panel .navigation .row .main-cell a {
+  border: 0;
+  padding: 0.2em 0.313em;
+  /* 2px 5px */
+  padding-left: 1em;
+  color: #FFFFFC;
+  display: block;
+}
+.panel .navigation .row .right-cell {
+  float: right;
+  width: 1em;
+  height: 1em;
+  margin-right: 1em;
+  margin-top: -1.5em;
+}
+.panel .navigation .row .right-cell a {
+  display: none;
+  width: 1em;
+  height: 1em;
+  padding: 0.125em;
+  color: #8B8B89;
+  border: 1px solid transparent;
+}
+.panel .navigation .row .right-cell a:after {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  content: "\f0fe";
+  font: normal normal normal 14px/1 FontAwesome;
+  line-height: 16px;
+  text-align: center;
+  vertical-align: center;
+}
+.panel .navigation .row .right-cell a.filter:after {
+  content: "\f0b0";
+}
+.panel .navigation .row .right-cell a:hover {
+  color: #2894DF;
+  background: #30302D;
+}
+.panel .navigation .row .right-cell span {
+  /*
+     * Extends the .visuallyhidden class to allow the element to be focusable
+     * when navigated to via the keyboard: h5bp.com/p
+     */
+  border: 0;
+  clip: rect(0 0 0 0);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
+  /*
+     * Extends the .visuallyhidden class to allow the element to be focusable
+     * when navigated to via the keyboard: h5bp.com/p
+     */
+}
+.panel .navigation .row .right-cell span .focusable:active,
+.panel .navigation .row .right-cell span .focusable:focus {
+  clip: auto;
+  height: auto;
+  margin: 0;
+  overflow: visible;
+  position: static;
+  width: auto;
+}
+.panel .navigation .row .right-cell span .focusable:active,
+.panel .navigation .row .right-cell span .focusable:focus {
+  clip: auto;
+  height: auto;
+  margin: 0;
+  overflow: visible;
+  position: static;
+  width: auto;
+}
+.panel .navigation .row.title .right-cell {
+  margin-top: -1.625em;
+}
+.panel .navigation .row:hover {
+  background: #444442;
+}
+.panel .navigation .row:hover .right-cell a {
+  display: block;
+}
+.panel .navigation .row:hover .right-cell a.filter {
+  border: 1px solid #0C0C0A;
+}
+.panel .navigation .empty-content {
+  padding-left: 1em;
+}
+.dialog .form-content.permission-add {
+  background-color: #30302D;
+  padding: 0 1em 1em 1em;
+  /*
+     * For IE 6/7 only
+     * Include this rule to trigger hasLayout and contain floats.
+     */
+  /*
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
+  /*
+     * For IE 6/7 only
+     * Include this rule to trigger hasLayout and contain floats.
+     */
+  zoom: 1;
+  /*
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
+}
+.dialog .form-content.permission-add:before,
+.dialog .form-content.permission-add:after {
+  content: "";
+  display: table;
+}
+.dialog .form-content.permission-add:after {
+  clear: both;
+}
+.dialog .form-content.permission-add:before,
+.dialog .form-content.permission-add:after {
+  content: "";
+  display: table;
+}
+.dialog .form-content.permission-add:after {
+  clear: both;
+}
+.dialog .form-content.permission-edit {
+  padding: 0em;
+  border-bottom: 1px solid #0C0C0A;
+}
+.dialog .permissions {
+  /* shimmering skeleton when loading */
+}
+.dialog .permissions.scroll {
+  /* Opera doesn't support this in the shorthand */
+  overflow: auto;
+  background: linear-gradient(#30302D 30%, rgba(255, 255, 255, 0)), linear-gradient(rgba(255, 255, 255, 0), #30302D 70%) 0 100%, /* Shadows */ radial-gradient(farthest-side at 50% 0, rgba(0, 0, 0, 0.08), rgba(0, 0, 0, 0)), radial-gradient(farthest-side at 50% 100%, rgba(0, 0, 0, 0.08), rgba(0, 0, 0, 0)) 0 100%;
+  background-repeat: no-repeat;
+  background-color: #30302D;
+  background-size: 100% 40px, 100% 40px, 100% 14px, 100% 14px;
+  /* Opera doesn't support this in the shorthand */
+  background-attachment: local, local, scroll, scroll;
+  max-height: 19em;
+  margin: 0;
+}
+.dialog .permissions .row {
+  /*
+     * For IE 6/7 only
+     * Include this rule to trigger hasLayout and contain floats.
+     */
+  /*
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
+  /*
+     * For IE 6/7 only
+     * Include this rule to trigger hasLayout and contain floats.
+     */
+  zoom: 1;
+  /*
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
+  font-size: 0.813em;
+  padding: 0.875em 0.5em 0.5em 0.875em;
+  border-bottom: 1px dotted #0C0C0A;
+  /* aro summary */
+}
+.dialog .permissions .row:before,
+.dialog .permissions .row:after {
+  content: "";
+  display: table;
+}
+.dialog .permissions .row:after {
+  clear: both;
+}
+.dialog .permissions .row:before,
+.dialog .permissions .row:after {
+  content: "";
+  display: table;
+}
+.dialog .permissions .row:after {
+  clear: both;
+}
+.dialog .permissions .row:last-child {
+  border: 0;
+}
+.dialog .permissions .row.permission-updated {
+  background: #5C564C;
+}
+.dialog .permissions .row .avatar img {
+  float: left;
+}
+.dialog .permissions .row .aro {
+  width: 48%;
+  float: left;
+  padding: 0 1em;
+}
+.dialog .permissions .row .aro .aro-details {
+  margin-top: -0.25em;
+  color: #8B8B89;
+}
+.dialog .permissions .row .aro .ellipsis {
+  display: inline-block;
+  max-width: 90%;
+}
+.dialog .permissions .row .aro .svg-icon svg {
+  position: relative;
+  top: -0.125em;
+}
+.dialog .permissions .row .tooltip-alt {
+  margin-left: 0.25em;
+}
+.dialog .permissions .row .rights {
+  float: left;
+  margin-top: 0.5em;
+  width: 27%;
+}
+.dialog .permissions .row .rights select {
+  margin: 0;
+  font-size: 1em;
+}
+.dialog .permissions .row .remove-item {
+  color: #cacac9;
+  float: right;
+  margin-right: 1em;
+  border: 0;
+  padding: 0.625em;
+  width: 1em;
+  height: 1em;
+  margin-top: 0.125em;
+  /* hover */
+  /* focus */
+  /* active */
+}
+.dialog .permissions .row .remove-item:hover {
+  color: #FFFFFC;
+  text-decoration: none;
+}
+.dialog .permissions .row .remove-item:focus {
+  color: #2894DF;
+}
+.dialog .permissions .row .remove-item:active {
+  color: #2894DF;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+.dialog .permissions .row .remove-item.disabled {
+  cursor: default;
+  color: #8B8B89;
+}
+.dialog .permissions .row.skeleton {
+  height: 42px;
+}
+.dialog .permissions .row.skeleton .avatar {
+  float: left;
+  width: 3em;
+  height: 3em;
+  background: #444442;
+  border-radius: 50%;
+}
+.dialog .permissions .row.skeleton .aro .aro-name {
+  margin-top: 0.25em;
+  width: 10em;
+  height: 1em;
+  background: #444442;
+  -webkit-border-radius: 0.214em;
+  -moz-border-radius: 0.214em;
+  border-radius: 0.214em;
+}
+.dialog .permissions .row.skeleton .aro .aro-details {
+  -webkit-border-radius: 0.214em;
+  -moz-border-radius: 0.214em;
+  border-radius: 0.214em;
+  margin-top: 0.5em;
+  width: 7em;
+  height: 1em;
+  background: #444442;
+}
+.dialog .permissions .row.skeleton .select.rights {
+  -webkit-border-radius: 0.214em;
+  -moz-border-radius: 0.214em;
+  border-radius: 0.214em;
+  float: left;
+  margin-top: 1em;
+  width: 8em;
+  height: 1.2em;
+  background: #444442;
+}
+.dialog .permissions .row.skeleton .actions {
+  border-radius: 50%;
+  float: right;
+  width: 1.5em;
+  height: 1.5em;
+  margin-top: 0.9em;
+  margin-right: 1.5em;
+  background: #444442;
+}
+/* hide icons if there is no space */
+@media all and (max-width: 480px) {
+  .dialog .permissions.scroll {
+    height: auto;
+    margin: 0;
+  }
+  .dialog .permissions .row .user,
+  .dialog .permissions .row .group {
+    width: 45%;
+  }
+}
+/* search */
+form.search {
+  margin-top: 1em;
+}
+form.search legend,
+form.search label {
+  display: none;
+  width: 10em;
+}
+form.search input[type=search] {
+  float: left;
+  width: 65%;
+  margin-bottom: 0;
+  border-right: 1px solid #30302D;
+  padding: 0.313em 0.625em;
+}
+form.search input[type=search]:focus,
+form.search input[type=search]:active {
+  border-right: 1px solid #2894DF;
+}
+form.search button {
+  height: 2.571em;
+  /* 36px */
+  width: 4.5em;
+  float: left;
+  margin-left: 0;
+  border-radius: 0px 2px 2px 0px;
+}
+form.search button .svg-icon.icon-only svg {
+  top: 0.125em;
+}
+/* remove webkit search input decoration and cancel button */
+input[type="search"]::-webkit-search-decoration,
+input[type="search"]::-webkit-search-cancel-button {
+  display: none;
+}
+/* rescale on small screen */
+@media all and (max-width: 480px) {
+  form.search {
+    display: none;
+  }
+}
+/**
+ * Sidebar
+ */
+.panel.aside {
+  position: absolute;
+  right: 2em;
+  min-width: 25em;
+  width: 30%;
+  bottom: 0;
+  height: 100%;
+  background: #3B3B39;
+  box-shadow: 0px 0px 10px 0px #000;
+  /* Controls */
+  /** SECTIONS **/
+  /** Sidebar forms **/
+}
+.panel.aside .sidebar-header h3 {
+  padding: 1em;
+  margin: 0;
+  border: 0;
+}
+.panel.aside .sidebar-header .title-link {
+  border: 0;
+  color: #cacac9;
+  font-size: 0.875em;
+  margin-left: 0.429em;
+  vertical-align: bottom;
+}
+.panel.aside .sidebar-header .title-link:hover {
+  color: #2894DF;
+}
+.panel.aside .sidebar-header .dialog-close {
+  position: absolute;
+  right: 1em;
+  top: 1em;
+}
+.panel.aside .sidebar-section {
+  margin-top: -1px;
+  border-bottom: 1px solid #0C0C0A;
+  border-top: 1px solid #0C0C0A;
+  font-size: 0.875em;
+  background: #3B3B39;
+}
+.panel.aside .sidebar-section h4 {
+  font-size: 1.125em;
+  padding: 1em 1.125em;
+  margin: 0;
+  display: block;
+}
+.panel.aside .sidebar-section .accordion-content {
+  padding: 1em 1.25em 1.5em 1.25em;
+  background: #30302D;
+}
+.panel.aside .sidebar-section .accordion-content .section-action {
+  font-size: 1.125em;
+  position: absolute;
+  margin-top: -3.1em;
+  right: 3.25em;
+  width: 1.125em;
+  height: 1.125em;
+  z-index: 401;
+  border: 0;
+}
+.panel.aside .sidebar-section .accordion-content span {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -o-text-overflow: ellipsis;
+  -ms-text-overflow: ellipsis;
+}
+.panel.aside .sidebar-section .accordion-content .label {
+  width: 30%;
+  display: inline-block;
+  margin-right: 10%;
+  float: left;
+  height: 1.8em;
+}
+.panel.aside .sidebar-section .accordion-content .value {
+  width: 60%;
+  display: inline-block;
+  float: left;
+  height: 1.8em;
+}
+.panel.aside .sidebar-section .accordion-content .processing-wrapper {
+  background-color: #30302D;
+  text-align: center;
+  padding: 0.5em 0;
+}
+.panel.aside .sidebar-section .accordion-content .processing-wrapper .processing-text {
+  position: relative;
+  padding-left: 1.5em;
+}
+.panel.aside .sidebar-section .accordion-content .processing-wrapper .processing-text:before {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  content: " ";
+  top: 0px;
+  left: 0px;
+  background: transparent url('../../../img/controls/loading_dark.svg') left center no-repeat;
+  background-size: auto 75% ;
+}
+.panel.aside .description .description_content {
+  white-space: pre-line;
+}
+.panel.aside .key-information textarea {
+  min-height: 30em;
+  line-height: normal;
+}
+.panel.aside .form-content {
+  margin: 0 0 0.5em 0;
+  /*
+     * For IE 6/7 only
+     * Include this rule to trigger hasLayout and contain floats.
+     */
+  /*
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
+  /*
+     * For IE 6/7 only
+     * Include this rule to trigger hasLayout and contain floats.
+     */
+  zoom: 1;
+  /*
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
+}
+.panel.aside .form-content:before,
+.panel.aside .form-content:after {
+  content: "";
+  display: table;
+}
+.panel.aside .form-content:after {
+  clear: both;
+}
+.panel.aside .form-content:before,
+.panel.aside .form-content:after {
+  content: "";
+  display: table;
+}
+.panel.aside .form-content:after {
+  clear: both;
+}
+.panel.aside .form-content label {
+  display: none;
+}
+.panel.aside .form-content textarea {
+  font-size: 1em;
+  width: 100%;
+  box-sizing: border-box;
+  height: 5em;
+  margin-top: 0;
+}
+.panel.aside .form-content .cancel,
+.panel.aside .form-content .button {
+  float: right;
+  margin-top: -0.25em;
+  margin-right: 0;
+}
+.panel.aside .form-content .cancel {
+  margin-right: 0.5em;
+}
+.panel.aside .form-content .message.notice {
+  padding: 0.5em;
+  margin: 0;
+  font-size: 0.929em;
+  /* 13px */
+  background: #2894DF;
+}
+.panel.aside .form-content .message.notice span:last-child {
+  display: inline-block;
+}
+/* place sidebar on top of everything when there is no space */
+@media all and (max-width: 1024px) {
+  .panel.aside {
+    position: absolute;
+    right: 0em;
+    width: 100%;
+    bottom: 0;
+    top: 0;
+    height: 100%;
+  }
+}
+/*
+ * Main Workspace - Table View
+ */
+.tableview {
+  background: #222220;
+  position: relative;
+  font-size: 0.9375em;
+  /* 15px */
+  height: 100%;
+}
+/* header */
+.tableview-header {
+  background: #3B3B39;
+  height: 2.125em;
+  overflow-y: scroll;
+  padding-top: 0.125em;
+}
+.tableview-header table {
+  width: 100%;
+}
+.tableview-header table th.sortable.sorted a:after {
+  padding-left: 0.75em;
+  font: normal normal normal 14px/1 FontAwesome;
+  -moz-osx-font-smoothing: grayscale;
+  color: #FFFFFC;
+}
+.tableview-header table th.sortable.sorted a:hover:after {
+  color: #2A9CEB;
+}
+.tableview-header table th.sortable.sorted.sort-desc a:after {
+  content: "\f0d7";
+}
+.tableview-header table th.sortable.sorted.sort-asc a:after {
+  content: "\f0d8";
+}
+/* main content */
+.tableview-content {
+  top: 2.125em;
+  bottom: 2.45em;
+  padding: 0;
+  position: absolute;
+  width: 100%;
+  border-top: 1px solid #0C0C0A;
+  overflow-y: scroll;
+  background: #222220;
+}
+.tableview-content table {
+  width: 100%;
+}
+/* rows */
+.tableview table {
+  /* fav fix */
+}
+.tableview table a {
+  border: 0;
+}
+.tableview table th,
+.tableview table td {
+  text-align: left;
+  padding: 0.25em 0.75em;
+  vertical-align: middle;
+}
+.tableview table th {
+  font-weight: bold;
+}
+.tableview table td div {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -o-text-overflow: ellipsis;
+  -ms-text-overflow: ellipsis;
+}
+.tableview table .s-cell {
+  width: 15px;
+  max-width: 15px;
+}
+.tableview table .s1-cell {
+  width: 25px;
+  max-width: 25px;
+}
+.tableview table .s2-cell {
+  width: 40px;
+  max-width: 40px;
+}
+.tableview table .m-cell {
+  width: 9em;
+  max-width: 9em;
+  vertical-align: middle;
+}
+.tableview table .l-cell {
+  width: 14em;
+  max-width: 14em;
+}
+.tableview table .xl-cell {
+  width: 19em;
+  max-width: 19em;
+}
+.tableview table tbody tr {
+  height: 2em;
+}
+.tableview table tbody tr.selected {
+  background: #0e3e60;
+}
+.tableview table tbody tr:hover {
+  background: #3B3B39;
+}
+.tableview table tbody tr.selected:hover {
+  background: #0e3e60;
+}
+.tableview table tbody tr.inactive {
+  color: #8B8B89;
+}
+.tableview table .input.checkbox {
+  padding-top: 0px;
+  padding-left: 0.25em;
+}
+.tableview table .input.checkbox label {
+  display: none;
+}
+.tableview table .input.checkbox input {
+  margin-top: 0;
+  float: left;
+}
+.tableview table th.cell_favorite,
+.tableview table td.cell_favorite {
+  padding-left: 0;
+  padding-top: 2px;
+  padding-right: 0.25em;
+}
+.tableview table td.cell_icon svg,
+.tableview table td.cell_icon img {
+  width: 1em;
+  height: 1em;
+  position: absolute;
+  margin-top: -0.5em;
+}
+.tableview table td.cell_icon svg {
+  margin-top: -0.55em;
+}
+/* hide secondary actions if there is no space */
+@media all and (max-width: 600px) {
+  .tableview table tbody {
+    background: #0e3e60;
+  }
+  .tableview table tbody td {
+    display: block;
+  }
+  .tableview table tbody td.s-cell,
+  .tableview table tbody td.s2-cell,
+  .tableview table tbody td.m-cell,
+  .tableview table tbody td.l-cell {
+    max-width: 90%;
+    width: 90%;
+    padding: 0.5em;
+  }
+  .tableview table tbody td.s-cell {
+    display: none;
+  }
+  .tableview thead {
+    display: none;
+  }
+  .tableview-content {
+    top: 0;
+    border: 0;
+    bottom: 0px;
+  }
+}
+table.table-info,
+table.table-info.vertical {
+  border-collapse: separate;
+}
+table.table-info td,
+table.table-info.vertical td {
+  padding: 0.625em;
+  padding-right: 1.25em;
+  color: #cacac9;
+}
+table.table-info td.warning,
+table.table-info.vertical td.warning {
+  background: #FEF0BF;
+}
+table.table-info td.error,
+table.table-info.vertical td.error {
+  background: #ffe4e4;
+}
+table.table-info td .alt.side,
+table.table-info.vertical td .alt.side {
+  color: #cacac9;
+  float: right;
+}
+table.table-info td .alt.side:before,
+table.table-info.vertical td .alt.side:before {
+  content: "(";
+}
+table.table-info td .alt.side:after,
+table.table-info.vertical td .alt.side:after {
+  content: ")";
+}
+table.table-info td + td,
+table.table-info.vertical td + td {
+  color: #FFFFFC;
+  padding-right: 0.625em;
+}
+/* horizontal tableview */
+table.table-info.horizontal {
+  width: 100%;
+  border-collapse: collapse;
+  padding: 0;
+  border: 1px solid #0C0C0A;
+  margin-bottom: 1em;
+}
+table.table-info.horizontal.with-borders td,
+table.table-info.horizontal.with-borders th {
+  border-right: 1px solid #0C0C0A;
+}
+table.table-info.horizontal td,
+table.table-info.horizontal th {
+  padding: 0.5em 0.5em 0.5em 0.75em;
+  margin: 0;
+}
+table.table-info.horizontal th {
+  border-bottom: 1px solid #0C0C0A;
+}
+table.table-info.horizontal th a {
+  display: block;
+  border: 0;
+}
+table.table-info.horizontal th a.sortable .svg-icon svg {
+  top: 0.15em;
+  position: relative;
+  margin-left: 0.5em;
+}
+table.table-info.horizontal thead tr {
+  background: #3B3B39;
+}
+table.table-info.horizontal tbody {
+  background: #222220;
+}
+table.table-info.horizontal tbody tr:nth-child(odd) {
+  background: #272725;
+}
+table.table-info.horizontal tbody tr:hover {
+  background: #3B3B39;
+}
+.table-info-pagination .pagination-limit {
+  margin-top: -0.5em;
+  float: left;
+}
+.table-info-pagination .pagination-limit label {
+  float: left;
+  font-weight: normal;
+}
+.table-info-pagination .pagination-limit select {
+  float: left;
+  margin: 0.35em;
+}
+.table-info-pagination .pagination-pages {
+  float: right;
+}
+.table-info-pagination .pagination-pages .page-location {
+  float: left;
+}
+.table-info-pagination .pagination-pages .page-buttons {
+  float: right;
+}
+.table-info-pagination .pagination-pages .button {
+  float: left;
+  margin: -0.5em 0 0 0.75em;
+  padding: 0.35em 0.75em;
+}
+/* tabs */
+.tabs {
+  border-bottom: 1px solid #0C0C0A;
+  width: 100%;
+}
+.tabs-nav {
+  border-bottom: 1px solid #0C0C0A;
+}
+.tabs-nav li {
+  display: inline;
+}
+.tabs-nav li div {
+  display: inline-block;
+}
+.tabs-nav li a {
+  display: inline-block;
+  padding: 0.4em 1.75em;
+  margin-left: 1.25em;
+  font-size: 15px;
+  border: 0;
+}
+.tabs-nav li a.selected {
+  margin-bottom: -1px;
+  border: 1px solid #0C0C0A;
+  border-bottom: 1px solid #30302D;
+  background: #30302D;
+  -webkit-border-radius: 0.214em;
+  -moz-border-radius: 0.214em;
+  border-radius: 0.214em;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+/* tab content */
+.tab-content {
+  display: none;
+}
+.tab-content.selected {
+  display: block;
+}
+/* tags */
+.tags .tag {
+  padding: 0.125em 0.5em;
+  float: left;
+  position: relative;
+  margin: 0 0.5em 0.5em 0;
+  text-decoration: none;
+  border-radius: 3px;
+  max-width: 95%;
+  border: 1px solid #b8d0fd;
+  background: rgba(42, 156, 235, 0.1);
+  color: #d4e4ff;
+}
+.tags .tag:active,
+.tags .tag:hover {
+  border: 1px solid #2A9CEB;
+  background: #30302D;
+  color: #2A9CEB;
+}
+.tags-list {
+  /*
+     * For IE 6/7 only
+     * Include this rule to trigger hasLayout and contain floats.
+     */
+  /*
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
+  /*
+     * For IE 6/7 only
+     * Include this rule to trigger hasLayout and contain floats.
+     */
+  zoom: 1;
+  /*
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
+}
+.tags-list:before,
+.tags-list:after {
+  content: "";
+  display: table;
+}
+.tags-list:after {
+  clear: both;
+}
+.tags-list:before,
+.tags-list:after {
+  content: "";
+  display: table;
+}
+.tags-list:after {
+  clear: both;
+}
+.tag-editor {
+  margin-bottom: 1em;
+}
+.tag-editor .message {
+  font-size: 1em;
+  margin-top: 0.5em;
+}
+.tag-editor .tag {
+  padding-right: 0;
+}
+.tag-editor .tag-content {
+  padding-right: 0.5em;
+  display: inline-block;
+  max-width: 90%;
+}
+.tag-editor .tag-delete {
+  border-left: 1px dotted #2894DF;
+  margin-left: -0.25em;
+  padding-left: 0.5em;
+  padding-right: 0.5em;
+  font-size: 0.75em;
+  vertical-align: 10%;
+  cursor: pointer;
+  display: inline-block;
+}
+.tag-editor .tag:hover:after {
+  border-color: #30302D;
+}
+.tag-editor .tag-editor-input-wrapper {
+  /*
+     * For IE 6/7 only
+     * Include this rule to trigger hasLayout and contain floats.
+     */
+  /*
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
+  /*
+     * For IE 6/7 only
+     * Include this rule to trigger hasLayout and contain floats.
+     */
+  zoom: 1;
+  /*
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
+  min-height: 5em;
+  padding: 0.5em;
+  border: 1px solid #222220;
+  border-top: 1px solid #30302D;
+}
+.tag-editor .tag-editor-input-wrapper:before,
+.tag-editor .tag-editor-input-wrapper:after {
+  content: "";
+  display: table;
+}
+.tag-editor .tag-editor-input-wrapper:after {
+  clear: both;
+}
+.tag-editor .tag-editor-input-wrapper:before,
+.tag-editor .tag-editor-input-wrapper:after {
+  content: "";
+  display: table;
+}
+.tag-editor .tag-editor-input-wrapper:after {
+  clear: both;
+}
+.tag-editor .tag-editor-input-wrapper.input-focus {
+  border-color: #2894DF;
+}
+.tag-editor .tag-editor-input {
+  min-height: 1.5em;
+  padding: 0.25em 0.5em 0.25em 0.5em;
+  box-shadow: none;
+  min-width: 6em;
+  max-width: 24em;
+  float: left;
+  overflow: hidden;
+}
+/**
+ * Tooltips!
+ * credits: Chris Bracco http://cbracco.me/a-simple-css-tooltip/
+ */
+/* Base styles for the element that has a tooltip */
+[data-tooltip],
+.tooltip {
+  position: relative;
+  cursor: pointer;
+}
+/* Base styles for the entire tooltip */
+[data-tooltip]:before,
+[data-tooltip]:after,
+.tooltip:before,
+.tooltip:after {
+  position: absolute;
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out, transform 0.2s cubic-bezier(0.71, 1.7, 0.77, 1.24);
+  transform: translate3d(0, 0, 0);
+  pointer-events: none;
+  text-align: center;
+}
+/* Show the entire tooltip on hover and focus */
+[data-tooltip]:hover:before,
+[data-tooltip]:hover:after,
+[data-tooltip]:focus:before,
+[data-tooltip]:focus:after,
+.tooltip:hover:before,
+.tooltip:hover:after,
+.tooltip:focus:before,
+.tooltip:focus:after,
+.always-show:before,
+.always-show:after {
+  visibility: visible;
+  opacity: 1;
+}
+/* Base styles for the tooltip's directional arrow */
+.tooltip:before,
+[data-tooltip]:before {
+  z-index: 990;
+  border: 6px solid transparent;
+  background: transparent;
+  content: "";
+}
+/* Base styles for the tooltip's content area */
+.tooltip:after,
+[data-tooltip]:after {
+  z-index: 990;
+  padding: 8px;
+  width: 160px;
+  background-color: #444442;
+  color: #EEEEEC;
+  content: attr(data-tooltip);
+  font-size: 14px;
+  line-height: 1.2em;
+  font-weight: normal;
+  text-shadow: none;
+}
+/* Directions */
+/* Top (default) */
+[data-tooltip]:before,
+[data-tooltip]:after,
+.tooltip:before,
+.tooltip:after,
+.tooltip-top:before,
+.tooltip-top:after {
+  bottom: 100%;
+  left: 50%;
+}
+[data-tooltip]:before,
+.tooltip:before,
+.tooltip-top:before {
+  margin-left: -6px;
+  margin-bottom: -12px;
+  border-top-color: #444442;
+}
+/* Horizontally align top/bottom tooltips */
+[data-tooltip]:after,
+.tooltip:after,
+.tooltip-top:after {
+  margin-left: -80px;
+}
+[data-tooltip]:hover:before,
+[data-tooltip]:hover:after,
+[data-tooltip]:focus:before,
+[data-tooltip]:focus:after,
+.tooltip:hover:before,
+.tooltip:hover:after,
+.tooltip:focus:before,
+.tooltip:focus:after,
+.tooltip.always-show:after,
+.tooltip.always-show:before,
+.tooltip-top.always-show:after,
+.tooltip-top.always-show:before,
+.tooltip-top:hover:before,
+.tooltip-top:hover:after,
+.tooltip-top:focus:before,
+.tooltip-top:focus:after {
+  -webkit-transform: translateY(-12px);
+  -moz-transform: translateY(-12px);
+  transform: translateY(-12px);
+}
+/* Left */
+.tooltip-left:before,
+.tooltip-left:after {
+  right: 100%;
+  bottom: 50%;
+  left: auto;
+}
+.tooltip-left:before {
+  margin-left: 0;
+  margin-right: -12px;
+  margin-bottom: 0;
+  border-top-color: transparent;
+  border-left-color: #222220;
+  border-left-color: hsla(0, 0%, 20%, 0.9);
+}
+.tooltip-left:hover:before,
+.tooltip-left:hover:after,
+.tooltip-left.always-show:after,
+.tooltip-left.always-show:before,
+.tooltip-left:focus:before,
+.tooltip-left:focus:after {
+  -webkit-transform: translateX(-12px);
+  -moz-transform: translateX(-12px);
+  transform: translateX(-12px);
+}
+/* Bottom */
+.tooltip-bottom:before,
+.tooltip-bottom:after {
+  top: 100%;
+  bottom: auto;
+  left: 50%;
+}
+.tooltip-bottom:before {
+  margin-top: -12px;
+  margin-bottom: 0;
+  border-top-color: transparent;
+  border-bottom-color: #222220;
+  border-bottom-color: hsla(0, 0%, 20%, 0.9);
+}
+.tooltip-bottom:hover:before,
+.tooltip-bottom:hover:after,
+.tooltip-bottom.always-show:after,
+.tooltip-bottom.always-show:before,
+.tooltip-bottom:focus:before,
+.tooltip-bottom:focus:after {
+  -webkit-transform: translateY(12px);
+  -moz-transform: translateY(12px);
+  transform: translateY(12px);
+}
+/* Right */
+.tooltip-right:before,
+.tooltip-right:after {
+  bottom: 50%;
+  left: 100%;
+}
+.tooltip-right:before {
+  margin-bottom: 0;
+  margin-left: -12px;
+  border-top-color: transparent;
+  border-right-color: #222220;
+}
+.tooltip-right:hover:before,
+.tooltip-right:hover:after,
+.tooltip-right.always-show:after,
+.tooltip-right.always-show:before,
+.tooltip-right:focus:before,
+.tooltip-right:focus:after {
+  -webkit-transform: translateX(12px);
+  -moz-transform: translateX(12px);
+  transform: translateX(12px);
+}
+/* Move directional arrows down a bit for left/right tooltips */
+.tooltip-left:before,
+.tooltip-right:before {
+  top: 3px;
+}
+/* Vertically center tooltip content for left/right tooltips */
+.tooltip-left:after,
+.tooltip-right:after {
+  margin-left: 0;
+  margin-bottom: -16px;
+}
+/* large width */
+.tooltip.large:after,
+[data-tooltip].large:after {
+  width: 240px;
+}
+.tooltip-right.large:before,
+.tooltip-right.large:after,
+.tooltip-left.large:before,
+.tooltip-left.large:after {
+  margin-top: 6px;
+}
+/*
+	More complex tooltips
+	That allows HTML in them
+*/
+/* Tooltip container */
+.tooltip-alt {
+  cursor: pointer;
+  display: inline-block;
+  border-bottom: 0;
+  /* Tooltip text */
+  /* Ease the tooltip left when you mouse over the tooltip container */
+}
+.tooltip-alt .tooltip-text {
+  position: absolute;
+  visibility: hidden;
+  width: 180px;
+  background-color: #222220;
+  color: #EEEEEC;
+  padding: 0.5em 1em;
+  transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out, transform 0.2s cubic-bezier(0.71, 1.7, 0.77, 1.24);
+  transform: translate3d(0, 0, 0);
+  z-index: 99999;
+  /* only right for now */
+}
+.tooltip-alt .tooltip-text.right {
+  margin-left: 1em;
+  margin-top: -1.75em;
+}
+.tooltip-alt .tooltip-text.right::after {
+  content: " ";
+  position: absolute;
+  top: 1.125em;
+  right: 100%;
+  margin-top: -5px;
+  border: 5px #333 solid;
+  border-color: transparent #222220 transparent transparent;
+}
+.tooltip-alt:hover .tooltip-text {
+  transform: translateX(12px);
+  visibility: visible;
+  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100);
+  opacity: 1;
+}
+.tooltip svg,
+.tooltip-alt svg {
+  fill: #cacac9;
+  top: 0.125em;
+  position: relative;
+}
+/*
+ * Profile user card
+ */
+.user.profile {
+  max-width: 16em;
+  float: right;
+  border: 1px solid #0C0C0A;
+  margin-top: 0.5em;
+  background: #3B3B39;
+  overflow: hidden;
+  cursor: pointer;
+  border-radius: 3px;
+  background: #444442;
+  background-image: linear-gradient(top, #444442, #444442);
+  /* fixed fluid fixed layout */
+  /* user card styling */
+}
+.user.profile .more {
+  background: #444442;
+  background-image: linear-gradient(top, #444442, #444442);
+  border-left: 1px dotted #0C0C0A;
+}
+.user.profile .left-cell,
+.user.profile .right-cell,
+.user.profile .center-cell-wrapper {
+  float: left;
+  height: 3.125em;
+  /* 50px */
+}
+.user.profile .center-cell-wrapper {
+  width: 100%;
+}
+.user.profile .center-cell {
+  margin: 0 1.75em 0 3.125em;
+  overflow: hidden;
+}
+.user.profile .left-cell {
+  width: 3.125em;
+  margin-left: -100%;
+}
+.user.profile .right-cell {
+  width: 1.6875em;
+  margin-left: -1.75em;
+}
+.user.profile .picture img {
+  width: 2.6em;
+  padding: 0.28em 0.35em 0.35em 0.35em;
+  border-radius: 50%;
+}
+.user.profile .details {
+  float: left;
+  height: 2.8125em;
+  font-size: 0.9em;
+  padding: 0.3125em 1em;
+  /* 5/10px */
+}
+.user.profile .details .name,
+.user.profile .details .email {
+  width: 11em;
+  float: left;
+  clear: both;
+  text-overflow: clip;
+  word-wrap: break-word;
+  display: inline-block;
+  line-height: normal;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -o-text-overflow: ellipsis;
+  -ms-text-overflow: ellipsis;
+}
+.user.profile .details .name {
+  font-weight: bold;
+  padding-top: 0;
+}
+.user.profile .details .email {
+  padding-bottom: 0;
+}
+.user.profile .more a {
+  position: absolute;
+  display: block;
+  border: 0;
+  color: #cacac9;
+}
+.user.profile .more a .svg-icon {
+  margin: 18px 0 0 7px;
+  display: inline-block;
+}
+.user.profile .more a .svg-icon svg {
+  fill: #FFF;
+}
+.user.profile .more a:hover {
+  color: #000;
+}
+.user.profile .more a:hover svg {
+  fill: #8B8B89;
+}
+.user.profile .more a span:last-child {
+  visibility: hidden;
+}
+.user.profile .dropdown-content {
+  top: 59px;
+  max-width: 18em;
+  width: 80%;
+  background: #3B3B39;
+}
+.user.profile .dropdown-content.visible {
+  display: block;
+}
+/* hide left column when there is no space */
+@media all and (max-width: 1024px) {
+  .user.profile {
+    display: block;
+    width: auto;
+  }
+  .user.profile .center-cell {
+    display: none;
+  }
+  .user.profile .right-cell {
+    display: none;
+  }
+}
 /* password share tab */
 .dialog .share-tab {
   /* message */
@@ -6416,4 +8072,200 @@ h6 .input.toggle-switch {
 }
 .progress-bar-wrapper .progress-bar.big.infinite {
   width: 0;
+}
+/*
+ * Password workspace
+ */
+/* unused columns */
+.js_grid_column_owner,
+.js_grid_column_copyLogin,
+.js_grid_column_copySecret {
+  display: none;
+}
+/* hide left column when there is no space */
+@media all and (max-width: 1024px) {
+  .tableview .js_grid_column_modified {
+    display: none;
+  }
+}
+.panel.aside .resource .detailed-information li.password .value {
+  height: 1.6em;
+  padding-top: 0.2em;
+}
+.panel.aside .resource .sidebar-header {
+  /*
+     * For IE 6/7 only
+     * Include this rule to trigger hasLayout and contain floats.
+     */
+  /*
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
+  /*
+     * For IE 6/7 only
+     * Include this rule to trigger hasLayout and contain floats.
+     */
+  zoom: 1;
+  /*
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
+}
+.panel.aside .resource .sidebar-header:before,
+.panel.aside .resource .sidebar-header:after {
+  content: "";
+  display: table;
+}
+.panel.aside .resource .sidebar-header:after {
+  clear: both;
+}
+.panel.aside .resource .sidebar-header:before,
+.panel.aside .resource .sidebar-header:after {
+  content: "";
+  display: table;
+}
+.panel.aside .resource .sidebar-header:after {
+  clear: both;
+}
+.panel.aside .resource .sidebar-header img {
+  margin: 1em 0 1em 1em;
+  float: left;
+  width: 4em;
+  height: 4em;
+  border: 1px solid #0C0C0A;
+}
+.panel.aside .resource .sidebar-header h3 {
+  float: left;
+  width: 67%;
+  margin-top: 0.88em;
+  padding: 0 0 0 0.6em;
+  display: table-cell;
+  vertical-align: middle;
+  border: 0;
+}
+.panel.aside .resource .sidebar-header h3 .title-wrapper {
+  width: 100%;
+  line-height: 1.2em;
+  font-size: 1.2em;
+}
+.panel.aside .resource .sidebar-header h3 .title-wrapper .name {
+  max-width: 85%;
+  float: left;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -o-text-overflow: ellipsis;
+  -ms-text-overflow: ellipsis;
+}
+.panel.aside .resource .sidebar-header h3 .title-wrapper .title-link .svg-icon {
+  margin-top: 0.25em;
+}
+.panel.aside .resource .sidebar-header h3 .type,
+.panel.aside .resource .sidebar-header h3 .username {
+  font-size: 0.8em;
+  color: #8B8B89;
+  font-weight: normal;
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -o-text-overflow: ellipsis;
+  -ms-text-overflow: ellipsis;
+}
+.panel.aside .resource .sidebar-header .side-bar-text-label {
+  color: #FFF;
+  width: 1.7em;
+  height: 1.7em;
+  line-height: 1.7em;
+  text-align: center;
+  font-size: 0.8em;
+  margin: 1.1em;
+}
+.panel.aside .resource .sidebar-header .side-bar-text-label + h3 {
+  margin-top: 1em;
+  padding: 0 0 0 0.6em;
+}
+.panel.aside .resource .sidebar-header .logo {
+  margin: 1em 0 1em 1em;
+  float: left;
+  width: 3em;
+  height: 3em;
+  border: 1px solid #8B8B89;
+  line-height: 3em;
+  text-align: center;
+  border-radius: 50%;
+}
+.panel.aside .resource .sidebar-header .logo .svg-icon svg {
+  width: 1.5rem;
+  height: 1.5rem;
+  margin-top: 0.75em;
+}
+.panel.aside .resource .sidebar-header .logo img {
+  width: 1.5em;
+  height: 1.5em;
+  display: block;
+  margin: 0.75em auto;
+  float: none;
+  border: 0;
+}
+/* Define state where there are no passwords, and the filter all items */
+.page.password .tableview.empty .tableview-header {
+  /* No tableview-header */
+  display: none;
+}
+.page.password .tableview.empty .tableview-content {
+  /* No tableview-header */
+  border: 0;
+  top: 0;
+}
+.page.password .tableview.empty.all_items .tableview-content {
+  /* Tablet version */
+  /* Normal screen version */
+}
+@media all and (min-width: 780px) {
+  .page.password .tableview.empty.all_items .tableview-content {
+    background-position: center 60%;
+    background-size: 10%;
+  }
+}
+@media all and (min-width: 1024px) {
+  .page.password .tableview.empty.all_items .tableview-content {
+    background-position: center 80%;
+    background-size: 20%;
+  }
+}
+.page.password .tableview.empty .empty-content {
+  text-align: center;
+  margin: 2em 0.5em 0.67em 0.5em;
+  padding-top: 2em;
+}
+.page.password .tableview.empty .empty-content h1 {
+  font-size: 1.5em;
+}
+.page.password .tableview.empty .empty-content p {
+  font-size: 1em;
+  line-height: 1.5em;
+}
+@media all and (min-width: 780px) {
+  .page.password .tableview.empty .empty-content h1 {
+    font-size: 2.2em;
+  }
+  .page.password .tableview.empty .empty-content p {
+    font-size: 1.2em;
+    line-height: 1.8em;
+  }
 }
