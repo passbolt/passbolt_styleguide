@@ -22,7 +22,7 @@ import mockRequestFoldersUpdateLocalStorage from "./request/mockRequestFoldersUp
 import mockRequestResourcesCreate from "./request/mockRequestResourcesCreate";
 import mockRequestResourcesUpdate from "./request/mockRequestResourcesUpdate";
 import mockRequestResourcesUpdateLocalStorage from "./request/mockRequestResourcesUpdateLocalStorage";
-import mockRequestSecretEditDecrypt from "./request/mockRequestSecretEditDecrypt";
+import mockRequestSecretDecrypt from "./request/mockRequestSecretEditDecrypt";
 import mockRequestShareGetResources from "./request/mockRequestShareGetResources";
 import mockRequestShareSearchAros from "./request/mockRequestShareSearchAros";
 import mockRequestSiteSettings from "./request/mockRequestSiteSettings";
@@ -44,7 +44,7 @@ export default (storage) => {
   mockPort.addRequestListener("passbolt.resources.update", mockRequestResourcesUpdate);
   mockPort.addRequestListener("passbolt.share.get-resources", mockRequestShareGetResources);
   mockPort.addRequestListener("passbolt.share.search-aros", mockRequestShareSearchAros);
-  mockPort.addRequestListener("passbolt.secret-edit.decrypt", mockRequestSecretEditDecrypt);
+  mockPort.addRequestListener("passbolt.secret.decrypt", mockRequestSecretDecrypt);
   mockPort.addRequestListener("passbolt.resource.update-tags", mockRequestResourceUpdateTags);
 
   return mockPort;

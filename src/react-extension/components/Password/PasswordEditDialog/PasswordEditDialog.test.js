@@ -45,7 +45,7 @@ const getDummyResource = function() {
 
 const getAppContext = function(appContext) {
   const port = new MockPort();
-  port.addRequestListener("passbolt.secret-edit.decrypt", () => "secret-decrypted");
+  port.addRequestListener("passbolt.secret.decrypt", () => "secret-decrypted");
   const userSettings = new UserSettings(userSettingsFixture);
   const siteSettings = new SiteSettings(siteSettingsFixture);
   const resources = [getDummyResource()];
