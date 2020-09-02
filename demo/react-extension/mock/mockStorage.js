@@ -13,6 +13,7 @@
  */
 
 import MockStorage from "../../../src/react-extension/test/mock/MockStorage";
+import resourceTypes from "../fixture/resourceTypes";
 
 const _passbolt_data = {
   "config": {
@@ -30,6 +31,7 @@ const _passbolt_data = {
 export default () => {
   const storage = new MockStorage();
   storage.local.set({_passbolt_data});
+  storage.local.set({resourceTypes});
 
   return storage;
 };
