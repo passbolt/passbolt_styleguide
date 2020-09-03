@@ -68,7 +68,9 @@ class PasswordSidebarTagSection extends React.Component {
    * @returns {JSX}
    */
   render() {
-    const isOwner = this.props.resource.permission.type === 15;
+    const hasResource = this.props.resource;
+    const isOwner =  hasResource && this.props.resource.permission.type === 15;
+    const tags = hasResource && this.props.resource.tags;
 
     return (
       <div className={`detailed-information accordion sidebar-section ${this.state.open ? "" : "closed"}`}>
@@ -83,13 +85,13 @@ class PasswordSidebarTagSection extends React.Component {
 
           {!this.state.showTagEditor &&
           <TagItemViewer
-            tags={this.props.resource.tags}
+            tags={tags}
             toggleInputTagEditor={this.toggleInputTagEditor}/>
           }
 
           {this.state.showTagEditor &&
           <TagEditor
-            tags={this.props.resource.tags}
+            tags={tags}
             isOwner={isOwner}
             toggleInputTagEditor={this.toggleInputTagEditor}
             resourceId={this.props.resource.id}/>
