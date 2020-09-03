@@ -17,6 +17,7 @@ import PropTypes from "prop-types";
 import AppContext from "../../../contexts/AppContext";
 import UserAvatar from "../../../../react/components/Common/Avatar/UserAvatar";
 import moment from "moment";
+import DeleteComment from "./DeleteComment";
 
 
 class DisplayCommentList extends React.Component {
@@ -43,6 +44,7 @@ class DisplayCommentList extends React.Component {
         }
     }
 
+
     /**
      * Whenever the component has been mounted
      */
@@ -57,7 +59,6 @@ class DisplayCommentList extends React.Component {
     componentDidUpdate(prevProps) {
         this.checkRefresh(prevProps.mustRefresh);
     }
-
 
     /**
      * Fetch the comments of the resource
@@ -78,13 +79,28 @@ class DisplayCommentList extends React.Component {
 
     /**
      * Check if the comment list must be refreshed
-     * @param previousValue The previous value of the mustRefresh flag
+     * @param previousValue The previous props value of the mustRefresh flag
      */
     checkRefresh(previousValue) {
-        const mustRefresh = this.props.mustRefresh && !previousValue;
+        // Either refresh comes from parent or from the application context
+        const mustRefresh = (this.props.mustRefresh && !previousValue) || this.context.mustRefreshComments;
         if (mustRefresh) {
             this.fetch();
         }
+
+        if (this.context.mustRefreshComments) {
+            this.context.setContext({mustRefreshComments: false});
+        }
+    }
+
+    /**
+     * Returns true if the givne comment can be deleted
+     * @param comment A comment
+     */
+    canDeleteComment(comment) {
+        const isAdministrator = this.context.currentUser.role && this.context.currentUser.role.name === 'administrator';
+        const isOwner = this.context.currentUser.id === comment.created_by;
+        return isAdministrator || isOwner;
     }
 
     /**
@@ -115,16 +131,9 @@ class DisplayCommentList extends React.Component {
                                                 <div className="actions">
                                                     <ul>
                                                         <li>
-                                                            <a className="js_delete_comment" href="#">
-                                                      <span className="svg-icon">
-                                                          <svg viewBox="0 0 1792 1792"
-                                                               xmlns="http://www.w3.org/2000/svg">
-                                                              <path
-                                                                  d="M704 1376v-704q0-14-9-23t-23-9h-64q-14 0-23 9t-9 23v704q0 14 9 23t23 9h64q14 0 23-9t9-23zm256 0v-704q0-14-9-23t-23-9h-64q-14 0-23 9t-9 23v704q0 14 9 23t23 9h64q14 0 23-9t9-23zm256 0v-704q0-14-9-23t-23-9h-64q-14 0-23 9t-9 23v704q0 14 9 23t23 9h64q14 0 23-9t9-23zm-544-992h448l-48-117q-7-9-17-11h-317q-10 2-17 11zm928 32v64q0 14-9 23t-23 9h-96v948q0 83-47 143.5t-113 60.5h-832q-66 0-113-58.5t-47-141.5v-952h-96q-14 0-23-9t-9-23v-64q0-14 9-23t23-9h309l70-167q15-37 54-63t79-26h320q40 0 79 26t54 63l70 167h309q14 0 23 9t9 23z"/>
-                                                          </svg>
-                                                      </span>
-                                                                <span className="visuallyhidden">delete</span>
-                                                            </a>
+                                                            {this.canDeleteComment(comment) &&
+                                                                <DeleteComment commentId={comment.id}/>
+                                                            }
                                                         </li>
                                                     </ul>
                                                 </div>

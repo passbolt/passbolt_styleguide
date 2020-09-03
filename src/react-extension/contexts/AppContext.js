@@ -1,5 +1,6 @@
 import React from "react";
 
+
 export default React.createContext({
   user: null,
   users: null,
@@ -12,4 +13,7 @@ export default React.createContext({
   selectedResources: null,
   selectedUser: null,
   folders: null,
+  resourceCommentId: null,
+  showDeleteCommentDialog: false,
+  mustRefreshComments: false
 });
