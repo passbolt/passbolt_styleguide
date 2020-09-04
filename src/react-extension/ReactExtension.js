@@ -34,6 +34,7 @@ import PasswordWorkspace from "./components/Password/PasswordWorkspace/PasswordW
 import SiteSettings from "./lib/Settings/SiteSettings";
 import UserSettings from "./lib/Settings/UserSettings";
 import ActionFeedbackContextProvider from "./contexts/ActionFeedbackContext";
+import TagEditDialog from "./components/Tag/TagEditDialog/TagEditDialog";
 
 class ReactExtension extends Component {
   constructor(props) {
@@ -105,6 +106,13 @@ class ReactExtension extends Component {
         resourcesIds: null,
       },
 
+      // tag dialog
+      showTagEditDialog: false,
+      tagEditDialogProps: {
+        id: null,
+        slug: null,
+      },
+
       // progress dialog
       showProgressDialog: false,
       progressDialogProps: {},
@@ -143,6 +151,9 @@ class ReactExtension extends Component {
     this.handleFolderMoveStrategyDialogCloseEvent = this.handleFolderMoveStrategyDialogCloseEvent.bind(this);
     this.handleShareDialogOpenEvent = this.handleShareDialogOpenEvent.bind(this);
     this.handleShareDialogCloseEvent = this.handleShareDialogCloseEvent.bind(this);
+    this.handleTagEditDialogOpenEvent = this.handleTagEditDialogOpenEvent.bind(this);
+    this.handleTagEditDialogCloseEvent = this.handleTagEditDialogCloseEvent.bind(this);
+
   }
 
   initEventHandlers() {
@@ -159,6 +170,7 @@ class ReactExtension extends Component {
     this.props.port.on('passbolt.folders.open-rename-dialog', this.handleFolderRenameDialogOpenEvent);
     this.props.port.on('passbolt.folders.open-delete-dialog', this.handleFolderDeleteDialogOpenEvent);
     this.props.port.on('passbolt.share.open-share-dialog', this.handleShareDialogOpenEvent);
+    this.props.port.on('passbolt.tags.open-edit-dialog', this.handleTagEditDialogOpenEvent);
 
     // requests: dialogs that return responses to controllers
     this.props.port.on('passbolt.passphrase.request', this.handlePassphraseEntryRequestEvent);
@@ -406,6 +418,24 @@ class ReactExtension extends Component {
 
   /*
    * =============================================================
+   *  Tags Dialogs Events
+   * =============================================================
+   */
+
+  handleTagEditDialogOpenEvent(tag) {
+    const showTagEditDialog = true;
+    const tagEditDialogProps = tag;
+    this.setState({showTagEditDialog, tagEditDialogProps});
+  }
+
+  handleTagEditDialogCloseEvent() {
+    const showTagEditDialog = false;
+    const tagEditDialogProps = {};
+    this.setState({showTagEditDialog, tagEditDialogProps});
+  }
+
+  /*
+   * =============================================================
    *  View
    * =============================================================
    */
@@ -455,6 +485,11 @@ class ReactExtension extends Component {
               <ShareDialog resourcesIds={this.state.shareDialogProps.resourcesIds}
                 foldersIds={this.state.shareDialogProps.foldersIds}
                 onClose={this.handleShareDialogCloseEvent}/>
+              }
+              {this.state.showTagEditDialog && areResourcesLoaded &&
+              <TagEditDialog onClose={this.handleTagEditDialogCloseEvent}
+                             tag={this.state.tagEditDialogProps}
+              />
               }
               {
                 /*

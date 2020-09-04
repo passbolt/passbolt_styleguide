@@ -13,13 +13,14 @@
  */
 import React, {Fragment} from "react";
 import PropTypes from "prop-types";
-import Icon from "../../Common/Icons/Icon";
-import TagFilterContextualMenu from "./TagFilterContextualMenu";
+import Icon from "../../../../react/components/Common/Icons/Icon";
+import SidebarTagFilterSectionContextualMenu from "./SidebarTagFilterSectionContextualMenu";
+import DisplayTagList from "./DisplayTagList";
 
 /**
  * This component display the tag to filter the resources
  */
-class TagFilter extends React.Component {
+class SidebarTagFilterSection extends React.Component {
 
   /**
    * Constructor
@@ -39,12 +40,13 @@ class TagFilter extends React.Component {
     return {
       open: true,
       title: "Filter by tags",
+      // properties to display the contextual menu
       tagFilterContextualMenu: {
-        left: 0,
+        left: 0, // left position in px on the page
         show: false,
-        top: 0,
+        top: 0, // top position in px on the page
       },
-      filterType: null
+      filterType: null // type of the filter selected
     };
   }
 
@@ -57,7 +59,6 @@ class TagFilter extends React.Component {
     this.handleTagFilterContextualMenuHideEvent = this.handleTagFilterContextualMenuHideEvent.bind(this);
     this.handleFilterTagsType = this.handleFilterTagsType.bind(this);
   }
-
 
   /**
    * Handle when the user selects the folder parent.
@@ -137,17 +138,11 @@ class TagFilter extends React.Component {
    * @returns {*[filtered tags]}
    */
   get filteredTags() {
-    const filter = this.filters[this.state.filterType] || this.filters.default;
-    return this.props.tags.filter(filter);
-  }
-
-
-  /**
-   * check if no tag is present
-   * @returns {boolean}
-   */
-  hasNoTag() {
-    return !this.props.tags;
+    if(this.props.tags) {
+      const filter = this.filters[this.state.filterType] || this.filters.default;
+      return this.props.tags.filter(filter);
+    }
+    return null;
   }
 
   /**
@@ -155,10 +150,11 @@ class TagFilter extends React.Component {
    * @returns {JSX}
    */
   render() {
+
     return (
       <div>
         {this.state.tagFilterContextualMenu.show &&
-        <TagFilterContextualMenu
+        <SidebarTagFilterSectionContextualMenu
           left={this.state.tagFilterContextualMenu.left}
           onDestroy={this.handleTagFilterContextualMenuHideEvent}
           top={this.state.tagFilterContextualMenu.top}
@@ -192,30 +188,8 @@ class TagFilter extends React.Component {
             </li>
           </ul>
           {this.state.open &&
-          <div className="accordion-content">
-            {this.hasNoTag() &&
-            <em className="empty-content">loading...</em>
-            }
-            {!this.hasNoTag() && this.props.tags.length === 0 &&
-            <em className="empty-content">empty</em>
-            }
-            {!this.hasNoTag() && this.props.tags.length > 0 &&
-            <ul className="tree ready">
-              {this.filteredTags.map(tag =>
-                <li className="open node root tag-item" key={tag.id}>
-                  <div className="row ">
-                    <div className="main-cell-wrapper">
-                      <div className="main-cell">
-                        <a title={tag.slug}><span className="ellipsis">{tag.slug}</span></a>
-                      </div>
-                    </div>
-                  </div>
-                </li>
-              )
-              }
-            </ul>
-            }
-          </div>
+          <DisplayTagList
+            tags={this.filteredTags}/>
           }
         </div>
       </div>
@@ -223,8 +197,8 @@ class TagFilter extends React.Component {
   }
 }
 
-TagFilter.propTypes = {
+SidebarTagFilterSection.propTypes = {
   tags: PropTypes.array,
 };
 
-export default TagFilter;
+export default SidebarTagFilterSection;
