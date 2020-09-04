@@ -73,6 +73,28 @@ class DisplayTagList extends React.Component {
     this.setState({tagFilterItemContextualMenu});
   }
 
+  // Zero conditional statements
+  /**
+   * get the filter according to the type of the filter
+   * @returns {{shared: (function(*): *), default: (function(*): *), personal: (function(*): *)}}
+   */
+  get filters() {
+    return {
+      personal: tag => !tag.is_shared,
+      shared: tag => tag.is_shared,
+      default: tag => tag
+    }
+  }
+
+  /**
+   * filter tag to display only the type selected
+   * @returns {*[filtered tags]}
+   */
+  get filteredTags() {
+    const filter = this.filters[this.props.filterType] || this.filters.default;
+    return this.props.tags.filter(filter);
+  }
+
   /**
    * check if no tag is present
    * @returns {boolean}
@@ -107,7 +129,7 @@ class DisplayTagList extends React.Component {
           }
           {!this.isLoading() && this.props.tags.length > 0 &&
           <ul className="tree ready">
-            {this.props.tags.map(tag =>
+            {this.filteredTags.map(tag =>
               <li className="open node root tag-item" key={tag.id}>
                 <div className="row">
                   <div className="main-cell-wrapper">
@@ -135,6 +157,7 @@ class DisplayTagList extends React.Component {
 
 DisplayTagList.propTypes = {
   tags: PropTypes.array,
+  filterType: PropTypes.string
 };
 
 export default DisplayTagList;

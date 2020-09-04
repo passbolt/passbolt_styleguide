@@ -39,6 +39,7 @@ class DisplayTagListContextualMenu extends React.Component {
   bindCallbacks() {
     this.handleDocumentClickEvent = this.handleDocumentClickEvent.bind(this);
     this.handleEditClickEvent = this.handleEditClickEvent.bind(this);
+    this.handleDeleteClickEvent = this.handleDeleteClickEvent.bind(this);
   }
 
   componentDidMount() {
@@ -78,6 +79,15 @@ class DisplayTagListContextualMenu extends React.Component {
   }
 
   /**
+   * Handle click on the delete tag menu option.
+   */
+  handleDeleteClickEvent() {
+    const tag = this.props.selectedTag;
+    this.context.port.emit('passbolt.plugin.tags.open-delete-dialog', {tag});
+    this.destroy();
+  }
+
+  /**
    * Get the contextual menu style.
    */
   getStyle() {
@@ -106,6 +116,15 @@ class DisplayTagListContextualMenu extends React.Component {
               </div>
             </div>
           </li>
+          <li key="option-delete-tag" className="ready closed">
+            <div className="row">
+              <div className="main-cell-wrapper">
+                <div className="main-cell">
+                  <a id="delete-tag" onClick={this.handleDeleteClickEvent}><span>Delete Tag</span></a>
+                </div>
+              </div>
+            </div>
+          </li>
         </ul>
       </div>
     );
@@ -115,10 +134,9 @@ class DisplayTagListContextualMenu extends React.Component {
 DisplayTagListContextualMenu.contextType = AppContext;
 
 DisplayTagListContextualMenu.propTypes = {
-  left: PropTypes.number,
-  filterTagsType: PropTypes.func,
+  left: PropTypes.number, // left position in px of the page
   onDestroy: PropTypes.func,
-  top: PropTypes.number,
+  top: PropTypes.number, // top position in px of the page
   selectedTag: PropTypes.object
 };
 
