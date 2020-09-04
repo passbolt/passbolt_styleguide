@@ -5546,8 +5546,11 @@ h6 .input.toggle-switch {
 }
 .panel .folders.navigation .row.title .main-cell h3 {
   padding-top: 0;
-  line-height: 1em;
+  line-height: 1.1em;
   border: 0;
+}
+.panel .folders.navigation .row.title .main-cell h3 span {
+  width: 100%;
 }
 .panel .folders.navigation .row.title .main-cell h3 a {
   padding-left: 0;

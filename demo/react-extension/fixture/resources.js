@@ -95,7 +95,7 @@ export default [
       {
         "id": "094e27f0-637c-5397-b16c-f3eee5f7dd6c",
         "slug": "hotel",
-        "is_shared": true
+        "is_shared": false
       },
       {
         "id": "0507cbbb-eb14-5121-9105-05380dbe64ff",
@@ -451,7 +451,7 @@ export default [
       {
         "id": "094e27f0-637c-5397-b16c-f3eee5f7dd6c",
         "slug": "hotel",
-        "is_shared": true
+        "is_shared": false
       }
     ],
     "folder_parent_id": null,
