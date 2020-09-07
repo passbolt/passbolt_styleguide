@@ -25,6 +25,7 @@ import FolderSidebar from "../FolderSidebar/FolderSidebar";
 import PasswordSidebar from "../PasswordSidebar/PasswordSidebar";
 import FoldersTreeRootFolderContextualMenu from "../FoldersTree/FoldersTreeRootFolderContextualMenu";
 import AppContext from "../../../contexts/AppContext";
+import TagFilter from "../TagFilter/TagFilter";
 
 class Workspace extends Component {
   /**
@@ -326,6 +327,23 @@ class Workspace extends Component {
   }
 
   /**
+   * Get tags from resources
+   * @returns {array} all tags from resources
+   */
+  getTagsFromResources() {
+    if(this.context.resources) {
+      // get all tags, flat in array and reduce to have unique tag
+      const tags =  this.context.resources.map(resource => resource.tags).flat().reduce((tagsA, tagsB) => {
+        !tagsA.find(tag => tag.id === tagsB.id) && tagsA.push(tagsB);
+        return tagsA;
+      }, []);
+      // sort array alphabetically
+      return tags.sort((tagA, tagB) => tagA.slug.localeCompare(tagB.slug));
+    }
+    return null;
+  }
+
+  /**
    * Render the component
    * @return {JSX}
    */
@@ -377,6 +395,7 @@ class Workspace extends Component {
                     onSelect={this.handleFilterByFolder}
                     onSelectRoot={this.handleSelectRootFolder}
                     selectedFolder={this.state.filterByFolder}/>
+                  <TagFilter tags={this.getTagsFromResources()}/>
                 </div>
                 <div className="panel middle">
                   <Breadcrumbs/>
