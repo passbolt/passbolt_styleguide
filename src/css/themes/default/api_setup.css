@@ -3597,14 +3597,15 @@ input[type=number]:focus input[type=email]:focus {
   box-shadow: inset 1px 1px 2px rgba(0, 0, 0, 0.2);
   border: 1px solid #2894DF;
 }
+textarea:disabled,
+input[type=email]:disabled,
 input[type=password]:disabled,
 input[type=search]:disabled,
 input[type=text]:disabled,
-input[type=number]:disabled,
-input[type=email]:disabled {
+input[type=number]:disabled {
   border: 1px solid #DDD;
   box-shadow: 0 0 0 0;
-  cursor: normal;
+  cursor: default;
   background: #F3F3F3;
 }
 /*

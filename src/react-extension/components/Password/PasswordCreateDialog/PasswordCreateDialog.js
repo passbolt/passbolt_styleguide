@@ -40,7 +40,8 @@ class PasswordCreateDialog extends Component {
       description: "",
       descriptionError: "",
       viewPassword: false,
-      passwordInputHasFocus: false
+      passwordInputHasFocus: false,
+      processing: true
     };
   }
 

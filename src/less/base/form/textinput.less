@@ -51,14 +51,15 @@ input[type=email]:focus {
     border: 1px solid @border-focus;
 }
 
+textarea:disabled,
+input[type=email]:disabled,
 input[type=password]:disabled,
 input[type=search]:disabled,
 input[type=text]:disabled,
-input[type=number]:disabled,
-input[type=email]:disabled {
+input[type=number]:disabled {
     border: 1px solid @border-default;
     box-shadow: 0 0 0 0;
-    cursor: normal;
+    cursor: default;
     background: @input-background-disabled;
 }
 
