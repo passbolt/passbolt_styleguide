@@ -121,7 +121,8 @@ const getDummyResourceEmptyTag = function() {
     "modified_by": "f848277c-5398-58f8-a82a-72397af2d450",
     "permission": {
       type: 15
-    }
+    },
+    "tags": []
   };
 };
 
@@ -139,7 +140,7 @@ const renderPasswordSidebarTagSection = function(appContext, props) {
   props = props || {};
   return render(
     <AppContext.Provider value={appContext}>
-      <PasswordSidebarTagSection debug resource={props.resource || jest.fn()} />
+      <PasswordSidebarTagSection debug resource={props.resource} />
     </AppContext.Provider>
   );
 };
@@ -199,6 +200,29 @@ describe("PasswordSidebarTag", () => {
   it("Cut long tags so they fit on one line", () => {
     // TODO Cut long tags so they fit on one line
   });
+
+  it("See loading feedback in tag viewer", () => {
+    const props = {
+      resource: null
+    };
+    const {container} = renderPasswordSidebarTagSection(null, props);
+    // Sidebar Tags title exists and correct
+    const sidebarTitle = container.querySelector("h4 a");
+    expect(sidebarTitle).not.toBeNull();
+    expect(sidebarTitle.textContent).toBe("Tags");
+
+    // Click to expand tags
+    const leftClick = {button: 0};
+    const sidebar = container.querySelector(".sidebar-section");
+    fireEvent.click(sidebar, leftClick);
+
+    // Tags list exists
+    const emptyContent = container.querySelector(".empty-content");
+    expect(emptyContent).not.toBeNull();
+    expect(emptyContent.textContent).toBe("loading...");
+
+  });
+
 
   it("Start editing by clicking on the edit icon", () => {
     const props = {

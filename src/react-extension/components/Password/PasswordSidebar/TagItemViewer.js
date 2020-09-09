@@ -20,15 +20,18 @@ class TagItemViewer extends React.Component {
    * @returns {JSX}
    */
   render() {
-    const hasTags = this.props.tags && this.props.tags.length > 0;
+    const isTagsNull = !this.props.tags
 
     return (
       <div>
-        {!hasTags &&
+        {isTagsNull &&
+        <em className="empty-content">loading...</em>
+        }
+        {!isTagsNull && this.props.tags.length === 0 &&
         <em className="empty-content"
           onClick={this.props.toggleInputTagEditor}>There is no tag, click here to add one</em>
         }
-        {hasTags &&
+        {!isTagsNull && this.props.tags.length > 0 &&
         <ul className="tags tags-list">
           {this.props.tags.map(tag =>
             <li key={tag.id}>
