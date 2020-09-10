@@ -13,6 +13,8 @@
  */
 import React from "react";
 import PropTypes from "prop-types";
+import Icon from "../../../../react/components/Common/Icons/Icon";
+import DescriptionEditor from "./DescriptionEditor";
 
 /**
  * This component display the description section of a resource
@@ -35,6 +37,7 @@ class PasswordSidebarDescriptionSection extends React.Component {
   getDefaultState() {
     return {
       open: false,
+      showDescriptionEditor: false
     };
   }
 
@@ -43,6 +46,7 @@ class PasswordSidebarDescriptionSection extends React.Component {
    */
   bindCallbacks() {
     this.handleTitleClickEvent = this.handleTitleClickEvent.bind(this);
+    this.toggleInputDescriptionEditor = this.toggleInputDescriptionEditor.bind(this);
   }
 
   /**
@@ -54,11 +58,41 @@ class PasswordSidebarDescriptionSection extends React.Component {
   }
 
   /**
+   * Display or not the input tag editor
+   */
+  toggleInputDescriptionEditor() {
+    if(this.canEdit()) {
+      const showDescriptionEditor = !this.state.showDescriptionEditor;
+      this.setState({showDescriptionEditor});
+    }
+  }
+
+  /**
    * check if there is a no description
    * @returns {boolean}
    */
   hasNoDescription() {
     return !this.props.description;
+  }
+
+  /**
+   * check if the user edit the description
+   * @returns {boolean}
+   */
+  canEdit() {
+    return this.props.permission && this.props.permission.type >= 7;
+  }
+
+  mustShowDescriptionEditor() {
+    return this.canEdit() && this.state.showDescriptionEditor;
+  }
+
+  mustShowEmptyDescriptionView() {
+    return this.hasNoDescription() && !this.state.showDescriptionEditor;
+  }
+
+  mustShowDescriptionView() {
+    return !this.hasNoDescription() && !this.state.showDescriptionEditor;
   }
 
   /**
@@ -73,11 +107,28 @@ class PasswordSidebarDescriptionSection extends React.Component {
           <h4><a onClick={this.handleTitleClickEvent} role="button">Description</a></h4>
         </div>
         <div className="accordion-content">
-          {this.hasNoDescription() &&
-          <em className="empty-content">There is no description yet, click here to add one</em>
+          {this.canEdit() &&
+          <a className="section-action" onClick={this.toggleInputDescriptionEditor}>
+            <Icon name="edit"></Icon>
+            <span className="visuallyhidden">edit</span>
+          </a>
           }
-          {!this.hasNoDescription() &&
-          <p className="description_content">{this.props.description}</p>
+
+          {this.mustShowEmptyDescriptionView() && !this.canEdit() &&
+          <em className="empty-content">There is no description</em>
+          }
+          {this.mustShowEmptyDescriptionView() && this.canEdit() &&
+          <em className="empty-content" onClick={this.toggleInputDescriptionEditor}>There is no description yet, click
+            here to add one</em>
+          }
+          {this.mustShowDescriptionView() &&
+          <p className="description_content" onClick={this.toggleInputDescriptionEditor}>{this.props.description}</p>
+          }
+          {this.mustShowDescriptionEditor() &&
+          <DescriptionEditor
+            description={this.props.description}
+            toggleInputDescriptionEditor={this.toggleInputDescriptionEditor}
+            resourceId={this.props.resourceId}/>
           }
         </div>
       </div>
@@ -87,7 +138,8 @@ class PasswordSidebarDescriptionSection extends React.Component {
 
 PasswordSidebarDescriptionSection.propTypes = {
   description: PropTypes.string,
-  id: PropTypes.string
+  resourceId: PropTypes.string,
+  permission: PropTypes.object
 };
 
 export default PasswordSidebarDescriptionSection;
