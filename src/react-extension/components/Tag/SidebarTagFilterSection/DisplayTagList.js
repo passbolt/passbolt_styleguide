@@ -89,6 +89,34 @@ class DisplayTagList extends React.Component {
     this.props.resourceWorkspaceContext.onFilterTagChanged(tag);
   }
 
+  /**
+   * Whenever the component has updated in terms of props
+   * @param prevProps
+   */
+  async componentDidUpdate(prevProps) {
+    this.handleAllFilterRequired(prevProps.tags);
+  }
+
+  /**
+   * If the tag filtered is deleted
+   * Apply an all filter to unfiltered the resources
+   * @param previousTags
+   */
+  handleAllFilterRequired(previousTags) {
+    const hasTagChanged = this.props.tags !== previousTags;
+    const filter = this.props.resourceWorkspaceContext.filter;
+    const isAppFilterByTag = filter && filter.type === ResourceWorkspaceFilterTypes.TAG;
+
+    if (hasTagChanged && isAppFilterByTag) {
+      // check if the tag is present in the list of tags
+      const isTagFilteredPresent = this.props.tags.filter(tag => tag.id === filter.payload.tag.id).length > 0;
+      if(!isTagFilteredPresent) {
+        // apply all filter
+        this.props.resourceWorkspaceContext.onAllFilterRequired();
+      }
+    }
+  }
+
   // Zero conditional statements
   /**
    * get the filter according to the type of the filter

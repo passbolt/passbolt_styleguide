@@ -17,6 +17,7 @@ import Icon from "../../../../react/components/Common/Icons/Icon";
 import SidebarTagFilterSectionContextualMenu from "./SidebarTagFilterSectionContextualMenu";
 import DisplayTagList from "./DisplayTagList";
 import {withContextualMenu} from "../../../contexts/Common/ContextualMenuContext";
+import {ResourceWorkspaceFilterTypes, withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 
 /**
  * This component display the tag to filter the resources
@@ -96,9 +97,24 @@ class SidebarTagFilterSection extends React.Component {
    * @param {string} filterType
    */
   handleFilterTagsType(filterType) {
+    if(this.isAllFilterRequire(filterType)) {
+      // apply all filter
+      this.props.resourceWorkspaceContext.onAllFilterRequired();
+    }
     this.setState({filterType}, () => {
       this.updateTitle();
     });
+  }
+
+  /**
+   * Check if the all filter is required
+   * @param filterType
+   * @returns {boolean}
+   */
+  isAllFilterRequire(filterType) {
+    const filter = this.props.resourceWorkspaceContext.filter;
+    const isSharedTag = filter.type === ResourceWorkspaceFilterTypes.TAG && filter.payload.tag.is_shared;
+    return !isSharedTag && filterType === 'shared' || isSharedTag && filterType === 'personal';
   }
 
   // Zero conditional statements
@@ -169,7 +185,8 @@ class SidebarTagFilterSection extends React.Component {
 
 SidebarTagFilterSection.propTypes = {
   tags: PropTypes.array,
-  contextualMenuContext: PropTypes.any // The contextual menu context
+  contextualMenuContext: PropTypes.any, // The contextual menu context
+  resourceWorkspaceContext: PropTypes.object
 };
 
-export default withContextualMenu(SidebarTagFilterSection);
+export default withResourceWorkspace(withContextualMenu(SidebarTagFilterSection));
