@@ -188,9 +188,11 @@ class ResourceWorkspaceContextProvider extends React.Component {
      * E.g. /password
      */
     async handleAllResourceRouteChange() {
-        await this.search({type: ResourceWorkspaceFilterTypes.ALL});
+        const filter = (this.props.location.state && this.props.location.state.filter) || ResourceWorkspaceFilterTypes.ALL
+        await this.search(filter);
         await this.detailNothing();
     }
+
 
     /**
      * Populate the context with initial data such as resources and folders
@@ -322,7 +324,7 @@ export const ResourceWorkspaceFilterTypes = {
     NONE: 'NONE', // Initial filter at page load
     ALL: 'ALL', // All resources
     FOLDER: 'FILTER-BY-FOLDER', // Resources for a given folder
-    TEXT: 'FILTER-BY-TEXT-SEARCH'// Resources matching some text words
+    TEXT: 'FILTER-BY-TEXT-SEARCH', // Resources matching some text words
 }
 
 

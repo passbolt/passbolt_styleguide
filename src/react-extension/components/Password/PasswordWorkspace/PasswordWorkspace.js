@@ -13,7 +13,6 @@
  */
 import React, {Component} from "react";
 import {withRouter} from "react-router-dom";
-import SearchBar from "../../Common/Navigation/Search/SearchBar";
 import UserBadgeMenu from "../../Common/Navigation/Header/UserBadgeMenu";
 import Breadcrumbs from "../../Common/Navigation/Breadcrumbs/Breadcrumbs";
 import FoldersTree from "../FoldersTree/FoldersTree";
@@ -25,6 +24,7 @@ import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext"
 import SidebarTagFilterSection from "../../Tag/SidebarTagFilterSection/SidebarTagFilterSection";
 import PropTypes from "prop-types";
 import PasswordSearchBar from "../PasswordSearchBar/PasswordSearchBar";
+import FilterResourcesByShortcuts from "../FilterResourcesByShortcuts/FilterResourcesByShortcuts";
 
 class Workspace extends Component {
   /**
@@ -212,6 +212,7 @@ class Workspace extends Component {
               <div className="tab-content selected">
                 <div className="reports-workspace">
                   <div className="panel left">
+                    <FilterResourcesByShortcuts/>
                     <FoldersTree
                       onFolderContextualMenu={this.handleFoldersTreeFolderContextualMenu}
                       onRootFolderContextualMenu={this.handleFoldersTreeRootFolderContextualMenu}/>
