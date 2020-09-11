@@ -34,6 +34,7 @@ import mockRequestResourceUpdateDescription from "./request/mockRequestResourceU
 import mockRequestTagsGet from "./request/mockRequestTagsGet";
 import mockRequestUpdateTags from "./request/mockRequestUpdateTags";
 import mockRequestDeleteTags from "./request/mockRequestDeleteTags";
+import mockRequestResourcesFindPermissions from "./request/mockRequestResourcesFindPermissions";
 
 export default (storage) => {
   const mockPort = new MockPort(storage);
@@ -58,6 +59,7 @@ export default (storage) => {
   mockPort.addRequestListener("passbolt.tags.find-all", mockRequestTagsGet);
   mockPort.addRequestListener("passbolt.tags.update", mockRequestUpdateTags);
   mockPort.addRequestListener("passbolt.tags.delete", mockRequestDeleteTags);
+  mockPort.addRequestListener("passbolt.resources.find-permissions", mockRequestResourcesFindPermissions);
 
   return mockPort;
 };
