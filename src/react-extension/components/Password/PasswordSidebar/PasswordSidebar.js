@@ -18,6 +18,7 @@ import PasswordSidebarInformationSection from "./PasswordSidebarInformationSecti
 import PasswordSidebarTagSection from "./PasswordSidebarTagSection";
 import PasswordSidebarCommentSection from "./PasswordSidebarCommentSection";
 import PasswordSidebarDescriptionSection from "./PasswordSidebarDescriptionSection";
+import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 import PasswordSidebarPermissionsSection from "./PasswordSidebarPermissionsSection";
 import AppContext from "../../../contexts/AppContext";
 
@@ -45,7 +46,7 @@ class PasswordSidebar extends React.Component {
             </div>
             <h3>
               <div className="title-wrapper">
-                <span className="name">{this.props.resource.name}</span>
+                <span className="name">{this.props.resourceWorkspaceContext.details.resource.name}</span>
                 <a className="title-link" title="Copy the link to this password">
                   <Icon name="link"/>
                   <span className="visuallyhidden">Copy the link to this password</span>
@@ -58,13 +59,8 @@ class PasswordSidebar extends React.Component {
               <span className="visuallyhidden">Close</span>
             </a>
           </div>
-          <PasswordSidebarInformationSection
-            resource={this.props.resource}
-            folders={this.props.folders}
-            onSelectFolderParent={this.props.onSelectFolderParent}
-            onSelectRoot={this.props.onSelectRoot}
-            users={this.props.users}/>
-          {/*<PasswordSidebarPermissionsSection*/}
+          <PasswordSidebarInformationSection users={this.props.users}/>
+          <PasswordSidebarPermissionsSection />
           {/*  resource={this.props.resource}*/}
           {/*  onEditPermissions={this.props.onEditPermissions}*/}
           {/*  onClose={this.handlePermissionSectionClose}*/}
@@ -73,16 +69,9 @@ class PasswordSidebar extends React.Component {
           {/*  permissions={this.state.permissions}*/}
           {/*  groups={this.props.groups}*/}
           {/*  users={this.props.users}/>*/}
-          <PasswordSidebarDescriptionSection
-            description={this.props.resource.description}
-            resourceId={this.props.resource.id}
-            permission={this.props.resource.permission}/>
-          <PasswordSidebarTagSection
-            resource={this.props.resource}/>
-          <PasswordSidebarCommentSection
-              resource={this.props.resource}/>
-          <PasswordSidebarPermissionsSection
-            resourceId={this.props.resource.id}/>
+          <PasswordSidebarDescriptionSection/>
+          <PasswordSidebarTagSection/>
+          <PasswordSidebarCommentSection/>
         </div>
       </div>
     );
@@ -92,13 +81,13 @@ class PasswordSidebar extends React.Component {
 PasswordSidebar.contextType = AppContext;
 
 PasswordSidebar.propTypes = {
-  resource: PropTypes.object,
-  folders: PropTypes.array,
   groups: PropTypes.array,
   onSelectFolderParent: PropTypes.func,
   onSelectRoot: PropTypes.func,
   onEditPermissions: PropTypes.func,
   users: PropTypes.array,
+  resourceWorkspaceContext: PropTypes.object
 };
 
-export default PasswordSidebar;
+export default withResourceWorkspace(PasswordSidebar);
+

@@ -206,7 +206,7 @@ FoldersTreeItemContextualMenu.propTypes = {
   hide: PropTypes.func, // Hide the contextual menu
   left: PropTypes.number, // left position in px of the page
   top: PropTypes.number, // top position in px of the page
-  dialogContext: PropTypes.object, // The dialog context
+  dialogContext: PropTypes.any
 };
 
 export default withDialog(FoldersTreeItemContextualMenu);

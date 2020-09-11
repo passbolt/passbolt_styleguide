@@ -16,6 +16,8 @@ import Icon from "../../Common/Icons/Icon";
 import PropTypes from "prop-types";
 import moment from "moment";
 import AppContext from "../../../contexts/AppContext";
+import {withRouter} from "react-router-dom";
+import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 
 class FolderSidebarInformationSection extends React.Component {
   /**
@@ -46,18 +48,16 @@ class FolderSidebarInformationSection extends React.Component {
     this.handleTitleClickEvent = this.handleTitleClickEvent.bind(this);
   }
 
+
   /**
    * Handle when the user selects the folder parent.
    */
   handleFolderParentClickEvent() {
-    if (!this.props.folders) {
-      return;
-    }
-    if (!this.props.folder.folder_parent_id) {
-      this.props.onSelectRoot();
-    } else {
-      const folderParent = this.props.folders.find(item => item.id === this.props.folder.folder_parent_id);
-      this.props.onSelectFolderParent(folderParent);
+    if (this.folder.folder_parent_id) { // Case of specific folder
+      const folderParent = this.context.folders.find(item => item.id === this.folder.folder_parent_id);
+      this.props.history.push(`/app/folders/view/${folderParent.id}`)
+    } else { // Case of root folder
+      this.props.history.push(`/app/passwords`);
     }
   }
 
@@ -67,6 +67,13 @@ class FolderSidebarInformationSection extends React.Component {
   handleTitleClickEvent() {
     const open = !this.state.open;
     this.setState({open});
+  }
+
+  /**
+   * Returns the current detailed folder
+   */
+  get folder() {
+    return this.props.resourceWorkspaceContext.details.folder;
   }
 
   /**
@@ -106,9 +113,8 @@ class FolderSidebarInformationSection extends React.Component {
       return '/';
     }
 
-    if (this.props.folders) {
-      const folder = this.props.folders.find(item => item.id === folderId);
-
+    if (this.context.folders) {
+      const folder = this.context.folders.find(item => item.id === folderId);
       return folder.name;
     }
 
@@ -120,11 +126,11 @@ class FolderSidebarInformationSection extends React.Component {
    * @returns {JSX}
    */
   render() {
-    const creatorUsername = this.getUserUsername(this.props.folder.created_by);
-    const modifierUsername = this.getUserUsername(this.props.folder.modified_by);
-    const createdDateTimeAgo = this.formatDateTimeAgo(this.props.folder.created);
-    const modifiedDateTimeAgo = this.formatDateTimeAgo(this.props.folder.modified);
-    const folderParentName = this.getFolderName(this.props.folder.folder_parent_id);
+    const creatorUsername = this.getUserUsername(this.folder.created_by);
+    const modifierUsername = this.getUserUsername(this.folder.modified_by);
+    const createdDateTimeAgo = this.formatDateTimeAgo(this.folder.created);
+    const modifiedDateTimeAgo = this.formatDateTimeAgo(this.folder.modified);
+    const folderParentName = this.getFolderName(this.folder.folder_parent_id);
 
     return (
       <div className={`detailed-information accordion sidebar-section ${this.state.open ? "" : "closed"}`}>
@@ -134,7 +140,7 @@ class FolderSidebarInformationSection extends React.Component {
         <ul className="accordion-content">
           <li className="username">
             <span className="label">Name</span>
-            <span className="value">{this.props.folder.name}</span>
+            <span className="value">{this.folder.name}</span>
           </li>
           <li className="modified">
             <span className="label">Modified</span>
@@ -155,7 +161,7 @@ class FolderSidebarInformationSection extends React.Component {
           <li className="location">
             <span className="label">Location</span>
             <span className="value">
-              <a onClick={this.handleFolderParentClickEvent} className={`folder-link ${!this.props.folders ? "disabled" : ""}`}>
+              <a onClick={this.handleFolderParentClickEvent} className={`folder-link ${!this.context.folders ? "disabled" : ""}`}>
                 <Icon name="folder"/> {folderParentName}
               </a>
             </span>
@@ -169,11 +175,9 @@ class FolderSidebarInformationSection extends React.Component {
 FolderSidebarInformationSection.contextType = AppContext;
 
 FolderSidebarInformationSection.propTypes = {
-  folder: PropTypes.object,
-  folders: PropTypes.array,
-  onSelectFolderParent: PropTypes.func,
-  onSelectRoot: PropTypes.func,
   users: PropTypes.array,
+  history: PropTypes.object,
+  resourceWorkspaceContext: PropTypes.object
 };
 
-export default FolderSidebarInformationSection;
+export default withRouter(withResourceWorkspace(FolderSidebarInformationSection));

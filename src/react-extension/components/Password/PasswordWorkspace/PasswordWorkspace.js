@@ -13,8 +13,6 @@
  */
 import React, {Component} from "react";
 import {withRouter} from "react-router-dom";
-import PropTypes from "prop-types";
-import Logo from "../../Common/Navigation/Header/Logo";
 import SearchBar from "../../Common/Navigation/Search/SearchBar";
 import UserBadgeMenu from "../../Common/Navigation/Header/UserBadgeMenu";
 import Breadcrumbs from "../../Common/Navigation/Breadcrumbs/Breadcrumbs";
@@ -23,7 +21,9 @@ import Grid from "../Grid/Grid";
 import FolderSidebar from "../FolderSidebar/FolderSidebar";
 import PasswordSidebar from "../PasswordSidebar/PasswordSidebar";
 import AppContext from "../../../contexts/AppContext";
+import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 import SidebarTagFilterSection from "../../Tag/SidebarTagFilterSection/SidebarTagFilterSection";
+import PropTypes from "prop-types";
 
 class Workspace extends Component {
   /**
@@ -42,15 +42,24 @@ class Workspace extends Component {
    */
   getDefaultState() {
     return {
-      filterType: "default",
-      folders: null,
-      resources: null,
+      folderContextualMenu: {
+        folder: null,
+        foldersTreeListElementRef: null,
+        left: 0,
+        show: false,
+        top: 0,
+      },
+      rootFolderContextualMenu: {
+        foldersTreeTitleElementRef: null,
+        left: 0,
+        show: false,
+        top: 0,
+      },
       search: "",
       selectedResources: [],
       selectedFolders: [],
       users: null,
 
-      filterByFolder: false,
     };
   }
 
@@ -67,91 +76,6 @@ class Workspace extends Component {
     this.handleSearch = this.handleSearch.bind(this);
   }
 
-  /**
-   * ComponentDidMount
-   * Invoked immediately after component is inserted into the tree
-   * @return {void}
-   */
-  componentDidMount() {
-    this.updateFoldersLocalStorage();
-    this.updateResourcesLocalStorage();
-    /*
-     * this.findGroups();
-     * this.findUsers();
-     */
-
-    this.filterByFolderFromRoute();
-    this.selectResourceFromRoute();
-  }
-
-  /**
-   * componentWillUnmount
-   * Invoked immediately before the component is removed from the tree
-   * @return {void}
-   */
-  componentWillUnmount() {
-    if (this.filterByFolderFromRouteInterval) {
-      clearInterval(this.filterByFolderFromRouteInterval);
-    }
-    if (this.selectResourceFromRouteInterval) {
-      clearInterval(this.selectResourceFromRouteInterval);
-    }
-  }
-
-  /**
-   * Filter by folder based on the route.
-   * @return {void}
-   */
-  filterByFolderFromRoute() {
-    const routeFilterByFolderId = this.props.match.params.filterByFolderId;
-    if (!routeFilterByFolderId) {
-      return;
-    }
-
-    this.filterByFolderFromRouteInterval = setInterval(() => {
-      if (this.context.folders !== null) {
-        const folder = this.context.folders.find(item => item.id === routeFilterByFolderId);
-        if (folder) {
-          this.handleFilterByFolder(folder);
-        } else {
-          // @todo display an error notification
-        }
-        clearInterval(this.filterByFolderFromRouteInterval);
-      }
-    }, 200);
-  }
-
-  /**
-   * Select a resource based on the route.
-   * @return {void}
-   */
-  selectResourceFromRoute() {
-    const routeSelectedResourceId = this.props.match.params.selectedResourceId;
-    if (!routeSelectedResourceId) {
-      return;
-    }
-
-    this.selectResourceFromRouteInterval = setInterval(() => {
-      if (this.context.resources !== null) {
-        const selectedResource = this.context.resources.find(item => item.id === routeSelectedResourceId);
-        if (selectedResource) {
-          const selectedResources = [selectedResource];
-          this.handleSelectResources(selectedResources);
-        } else {
-          // @todo display an error notification
-        }
-        clearInterval(this.selectResourceFromRouteInterval);
-      }
-    }, 200);
-  }
-
-  /**
-   * Find all folders.
-   * @return {Promise<void>}
-   */
-  async updateFoldersLocalStorage() {
-    this.context.port.request("passbolt.plugin.folders.update-local-storage");
-  }
 
   /**
    * Find all groups.
@@ -244,27 +168,6 @@ class Workspace extends Component {
     this.setState({search});
   }
 
-  /**
-   * Get the highlighted folder
-   * @return {null|Object}
-   */
-  getHighlightedFolder() {
-    if (this.state.selectedFolders.length === 1) {
-      return this.state.selectedFolders[0];
-    }
-    return null;
-  }
-
-  /**
-   * Get the highlighted
-   * @return {null|Object}
-   */
-  getHighlightedResource() {
-    if (this.state.selectedResources.length === 1 && !this.state.selectedFolders.length) {
-      return this.state.selectedResources[0];
-    }
-    return null;
-  }
 
   /**
    * Get tags from resources
@@ -288,83 +191,69 @@ class Workspace extends Component {
    * @return {JSX}
    */
   render() {
-    const highlightedFolder = this.getHighlightedFolder();
-    const highlightedResource = this.getHighlightedResource();
 
     return (
-      <div>
-        <div className="header second">
-          <Logo/>
-          <SearchBar
-            onSearch={this.handleSearch}
-            placeholder="Search passwords"
-            search={this.state.search}/>
-          <UserBadgeMenu baseUrl={this.context.userSettings.getTrustedDomain()} user={this.context.currentUser}/>
-        </div>
-        <div className="header third">
-          <div className="col1 main-action-wrapper">
+        <div>
+          <div className="header second">
+            <SearchBar
+              onSearch={this.handleSearch}
+              placeholder="Search passwords"
+              search={this.state.search}/>
+            <UserBadgeMenu baseUrl={this.context.userSettings.getTrustedDomain()} user={this.context.currentUser}/>
           </div>
-          <div className="col2_3 actions-wrapper">
+          <div className="header third">
+            <div className="col1 main-action-wrapper">
+            </div>
+            <div className="col2_3 actions-wrapper">
+            </div>
           </div>
-        </div>
-        <div className="panel main">
-          <div className="tabs-content">
-            <div className="tab-content selected">
-              <div className="reports-workspace">
-                <div className="panel left">
-                  <FoldersTree
-                    folders={this.context.folders}
-                    onSelect={this.handleFilterByFolder}
-                    onSelectRoot={this.handleSelectRootFolder}
-                    selectedFolder={this.state.filterByFolder}/>
-                  <SidebarTagFilterSection tags={this.getTagsFromResources()}/>
-                </div>
-                <div className="panel middle">
-                  <Breadcrumbs/>
-                  <Grid
-                    resources={this.context.resources}
-                    selectedResources={this.state.selectedResources}
-                    search={this.state.search}
-                    filterType={this.state.filterType}
-                    onRightSelect={this.handleRightSelectResource}
-                    onSelect={this.handleSelectResources}/>
-                  {highlightedFolder &&
-                  <FolderSidebar
-                    folder={highlightedFolder}
-                    folders={this.context.folders}
-                    groups={this.state.groups}
-                    onEditPermissions={this.handleEditFolderPermissions}
-                    onSelectFolderParent={this.handleFilterByFolder}
-                    onSelectRoot={this.handleSelectRootFolder}
-                    users={this.state.users}/>
-                  }
-                  {highlightedResource &&
-                  <PasswordSidebar
-                    resource={highlightedResource}
-                    folders={this.context.folders}
-                    groups={this.state.groups}
-                    onEditPermissions={this.handleEditFolderPermissions}
-                    onSelectFolderParent={this.handleFilterByFolder}
-                    onSelectRoot={this.handleSelectRootFolder}
-                    users={this.state.users}/>
-                  }
+          <div className="panel main">
+            <div className="tabs-content">
+              <div className="tab-content selected">
+                <div className="reports-workspace">
+                  <div className="panel left">
+                    <FoldersTree
+                      onFolderContextualMenu={this.handleFoldersTreeFolderContextualMenu}
+                      onRootFolderContextualMenu={this.handleFoldersTreeRootFolderContextualMenu}/>
+                    <SidebarTagFilterSection ection tags={this.getTagsFromResources()}/>
+                  </div>
+                  <div className="panel middle">
+                    <Breadcrumbs/>
+                    <Grid
+                      selectedResources={this.state.selectedResources}
+                      search={this.state.search}
+                      onRightSelect={this.handleRightSelectResource}
+                      onSelect={this.handleSelectResources}/>
+                    {this.props.resourceWorkspaceContext.details.folder &&
+                    <FolderSidebar
+                      groups={this.state.groups}
+                      onEditPermissions={this.handleEditFolderPermissions}
+                      onSelectFolderParent={this.handleFilterByFolder}
+                      onSelectRoot={this.handleSelectRootFolder}
+                      users={this.state.users}/>
+                    }
+                    {this.props.resourceWorkspaceContext.details.resource &&
+                    <PasswordSidebar
+                      groups={this.state.groups}
+                      onEditPermissions={this.handleEditFolderPermissions}
+                      onSelectFolderParent={this.handleFilterByFolder}
+                      onSelectRoot={this.handleSelectRootFolder}
+                      users={this.state.users}/>
+                    }
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
       </div>
     );
   }
 }
 
 Workspace.contextType = AppContext;
-
 Workspace.propTypes = {
-  // Match, location and history props are injected by the withRouter decoration call.
-  match: PropTypes.object,
-  location: PropTypes.object,
-  history: PropTypes.object
-};
+  history: PropTypes.any,
+  resourceWorkspaceContext: PropTypes.any
+}
 
-export default withRouter(Workspace);
+export default withRouter(withResourceWorkspace(Workspace));

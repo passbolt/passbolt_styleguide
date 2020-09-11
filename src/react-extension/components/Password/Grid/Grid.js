@@ -17,20 +17,47 @@ import ReactList from "react-list";
 import moment from 'moment/moment';
 import 'moment-timezone/builds/moment-timezone-with-data-2012-2022';
 import AppContext from "../../../contexts/AppContext";
+import {ResourceWorkspaceFilterTypes, withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 
 // Select strategies.
 const SELECT_SINGLE = 'single';
 const SELECT_MULITPLE = 'multiple';
 const SELECT_RANGE = 'range';
 
+/**
+ * This component allows to display the filtered resources into a grid
+ */
 class Grid extends React.Component {
+
+
+
+  /**
+   * Default constructor
+   * @param props Component props
+   */
   constructor(props) {
     super(props);
-    this.initEventHandlers();
     this.state = this.getDefaultState();
+    this.initEventHandlers();
     this.createRefs();
   }
 
+  /**
+   * Returns the component default state
+   */
+  getDefaultState() {
+    return {
+      filteredResources: [], // The filtered resources
+      selectStrategy: "",
+      sortProperty: "modified",
+      sortASC: false
+    };
+  }
+
+
+  /**
+   * Initialize the component event handlers
+   */
   initEventHandlers() {
     this.handleSelectAllChange = this.handleSelectAllChange.bind(this);
     this.handleResourceClick = this.handleResourceClick.bind(this);
@@ -43,13 +70,6 @@ class Grid extends React.Component {
     this.handleGoToUrlClick = this.handleGoToUrlClick.bind(this);
   }
 
-  getDefaultState() {
-    return {
-      selectStrategy: "",
-      sortProperty: "modified",
-      sortASC: false
-    };
-  }
 
   /**
    * Create DOM nodes or React elements references in order to be able to access them programmatically.
@@ -102,6 +122,7 @@ class Grid extends React.Component {
     ev.stopPropagation();
     this.selectResource(resource, SELECT_MULITPLE);
   }
+
 
   selectResource(resource, selectStrategy) {
     let selectedResources;
@@ -249,12 +270,6 @@ class Grid extends React.Component {
     bus.dispatchEvent(event);
   }
 
-  getFilteredResources() {
-    let filteredResources = this.props.resources.slice(0);
-    filteredResources = this.filterResourcesBySearch(filteredResources, this.props.search);
-    this.sortResources(filteredResources, false);
-    return filteredResources;
-  }
 
   /**
    * Filter resources by keywords.
@@ -272,7 +287,7 @@ class Grid extends React.Component {
     const needles = needle.split(/\s+/);
     // Prepare the regexes for each word contained in the search.
     const regexes = needles.map(needle => new RegExp(this.escapeRegExp(needle), 'i'));
-
+    
     return resources.filter(resource => {
       let match = true;
       for (const i in regexes) {
@@ -317,10 +332,6 @@ class Grid extends React.Component {
   scrollTo(resourceId) {
     const resourceIndex = this.filteredResources.findIndex(resource => resource.id === resourceId);
     this.listRef.current.scrollTo(resourceIndex);
-  }
-
-  isReady() {
-    return this.props.resources !== null;
   }
 
   renderTable(items, ref) {
@@ -453,7 +464,7 @@ class Grid extends React.Component {
     let dragElementClassname = "";
 
     if (isSelected) {
-      const firstSelectedResource = this.props.resources.find(resource => resource.id === this.props.selectedResources[0].id);
+      const firstSelectedResource = this.props.resourceWorkspaceContext.filteredResources.find(resource => resource.id === this.props.selectedResources[0].id);
       if (firstSelectedResource) {
         dragElementClassname = isMultipleSelected ? "drag-and-drop-multiple" : "drag-and-drop";
         dragFeedbackText = firstSelectedResource.name;
@@ -473,24 +484,17 @@ class Grid extends React.Component {
   }
 
   render() {
-    const isReady = this.isReady();
-    let isEmpty, isSearching;
-    let selectAll = false;
 
-    if (isReady) {
-      this.filteredResources = this.getFilteredResources();
-      isEmpty = this.filteredResources.length === 0;
-      isSearching = this.props.search.length > 0;
-      selectAll = this.filteredResources.length === this.props.selectedResources.length;
-    }
+    this.filteredResources = this.props.resourceWorkspaceContext.filteredResources;
+    const isEmpty = this.filteredResources.length === 0;
+    const isSearching = this.props.search.length > 0;
+    const selectAll = this.filteredResources.length === this.props.selectedResources.length;
+    const filterType = this.props.resourceWorkspaceContext.filter.type;
+
 
     return (
       <div className={`tableview ready ${isEmpty ? "empty" : ""} ${["default", "modified"].includes(this.props.filterType) ? "all_items" : ""}`}>
-        {!isReady &&
-        <div className="empty-content">
-        </div>
-        }
-        {isReady &&
+
         <React.Fragment>
           {isEmpty && isSearching &&
           <div className="empty-content">
@@ -498,31 +502,35 @@ class Grid extends React.Component {
             <p>Try another search or use the left panel to navigate into your passwords.</p>
           </div>
           }
-          {isEmpty && !isSearching && this.props.filterType == "favorite" &&
+          {isEmpty && !isSearching && filterType == "favorite" &&
           <div className="empty-content">
             <h2>None of your passwords are yet marked as favorite.</h2>
             <p>Add stars to passwords your want to easily find later.</p>
           </div>
           }
-          {isEmpty && !isSearching && this.props.filterType == "group" &&
+          {isEmpty && !isSearching && filterType == "group" &&
           <div className="empty-content">
             <h2>No passwords are shared with this group yet.</h2>
             <p>Share a password with this group or wait for a team member to share one with this group.</p>
           </div>
           }
-          {isEmpty && !isSearching && this.props.filterType == "folder" &&
+          {isEmpty && !isSearching &&
+          filterType == ResourceWorkspaceFilterTypes.FOLDER &&
           <div className="empty-content">
             <h2>No passwords in this folder yet.</h2>
             <p>It does feel a bit empty here.</p>
           </div>
           }
-          {isEmpty && !isSearching && this.props.filterType == "shared_with_me" &&
+          {isEmpty && !isSearching && filterType == "shared_with_me" &&
           <div className="empty-content">
             <h2>No passwords are shared with you yet.</h2>
             <p>It does feel a bit empty here. Wait for a team member to share a password with you.</p>
           </div>
           }
-          {isEmpty && !isSearching && ["default", "modified", "owned_by_me"].includes(this.props.filterType) &&
+          {isEmpty &&
+          !isSearching &&
+          filterType !== ResourceWorkspaceFilterTypes.NONE  &&
+          ["default", "modified", "owned_by_me"].includes(filterType) &&
           <React.Fragment>
             <div className="empty-content">
               <h1>Welcome to passbolt!</h1>
@@ -584,7 +592,6 @@ class Grid extends React.Component {
           </React.Fragment>
           }
         </React.Fragment>
-        }
       </div>
     );
   }
@@ -596,9 +603,9 @@ Grid.propTypes = {
   filterType: PropTypes.string,
   onRightSelect: PropTypes.func,
   onSelect: PropTypes.func,
-  resources: PropTypes.array,
   search: PropTypes.string,
   selectedResources: PropTypes.array,
+  resourceWorkspaceContext: PropTypes.any
 };
 
-export default Grid;
+export default withResourceWorkspace(Grid);

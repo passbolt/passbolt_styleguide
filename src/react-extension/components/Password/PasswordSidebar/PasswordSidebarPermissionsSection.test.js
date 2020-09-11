@@ -87,7 +87,7 @@ const renderPasswordSidebarPermissionSection = function (appContext, props) {
   props = props || {};
   return render(
     <AppContext.Provider value={appContext}>
-      <PasswordSidebarPermissionsSection debug resourceId={props.resourceId}/>
+      <PasswordSidebarPermissionsSection debug {...props}/>
     </AppContext.Provider>
   );
 };
@@ -96,7 +96,13 @@ describe("PasswordSidebarPermission", () => {
   it("See the permission of a resource", async () => {
     const context = getAppContext();
     const props = {
-      resourceId: "8e3874ae-4b40-590b-968a-418f704b9d9a"
+      resourceWorkspaceContext: {
+        details: {
+          resource: {
+            id: "8e3874ae-4b40-590b-968a-418f704b9d9a"
+          }
+        }
+      }
     }
 
     // Mock the request function to make it the expected result
@@ -125,13 +131,19 @@ describe("PasswordSidebarPermission", () => {
       expect(value.textContent).toBe("Carol Shaw (carol@passbolt.com)is owner");
     });
 
-    expect(context.port.request).toHaveBeenCalledWith("passbolt.resources.find-permissions", props.resourceId);
+    expect(context.port.request).toHaveBeenCalledWith("passbolt.resources.find-permissions", props.resourceWorkspaceContext.details.resource.id);
   });
 
   it("See the loading feedback permission of a resource", async () => {
     const context = getAppContext();
     const props = {
-      resourceId: "8e3874ae-4b40-590b-968a-418f704b9d9a"
+      resourceWorkspaceContext: {
+        details: {
+          resource: {
+            id: "8e3874ae-4b40-590b-968a-418f704b9d9a"
+          }
+        }
+      }
     }
 
     let updateResolve;

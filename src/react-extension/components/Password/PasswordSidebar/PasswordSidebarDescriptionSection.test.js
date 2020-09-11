@@ -71,16 +71,14 @@ const renderPasswordSidebarDescriptionSection = function(appContext, props) {
   props = props || {};
   return render(
     <AppContext.Provider value={appContext}>
-      <PasswordSidebarDescriptionSection debug description={props.resource.description} resourceId={props.resource.id} permission={props.resource.permission} />
+      <PasswordSidebarDescriptionSection debug {...props}/>
     </AppContext.Provider>
   );
 };
 
 describe("PasswordSidebarDescription", () => {
   it("See the description of a resource", () => {
-    const props = {
-      resource: getDummyDescription()
-    };
+    const props = {resourceWorkspaceContext: {details: {resource: getDummyDescription()}}};
     const {container} = renderPasswordSidebarDescriptionSection(null, props);
 
     // Sidebar Description title exists and correct
@@ -96,13 +94,11 @@ describe("PasswordSidebarDescription", () => {
     // Description exists
     const description = container.querySelector(".description_content");
     expect(description).not.toBeNull();
-    expect(description.textContent).toBe(props.resource.description);
+    expect(description.textContent).toBe(props.resourceWorkspaceContext.details.resource.description);
   });
 
   it("See an empty message if the resource has no description", () => {
-    const props = {
-      resource: getDummyDescriptionEmpty()
-    };
+    const props = {resourceWorkspaceContext: {details: {resource: getDummyDescriptionEmpty()}}};
     const {container} = renderPasswordSidebarDescriptionSection(null, props);
 
     // Sidebar Description title exists and correct
@@ -122,9 +118,7 @@ describe("PasswordSidebarDescription", () => {
   });
 
   it("See an empty message if the resource has no description", () => {
-    const props = {
-      resource: getDummyDescriptionEmptyWithPermissionUpdate()
-    };
+    const props = {resourceWorkspaceContext: {details: {resource: getDummyDescriptionEmptyWithPermissionUpdate()}}};
     const {container} = renderPasswordSidebarDescriptionSection(null, props);
 
     // Sidebar Description title exists and correct
@@ -144,9 +138,7 @@ describe("PasswordSidebarDescription", () => {
   });
 
   it("Start editing by clicking on the edit icon", () => {
-    const props = {
-      resource: getDummyDescription()
-    };
+    const props = {resourceWorkspaceContext: {details: {resource: getDummyDescription()}}};
     const {container} = renderPasswordSidebarDescriptionSection(null, props);
 
     // Click to expand Description
@@ -170,7 +162,7 @@ describe("PasswordSidebarDescription", () => {
     // Textearea exists
     const textearea = container.querySelector(".fluid");
     expect(textearea).not.toBeNull();
-    expect(textearea.value).toBe(props.resource.description);
+    expect(textearea.value).toBe(props.resourceWorkspaceContext.details.resource.description);
 
     // submit button exists
     const submitButton = container.querySelector(".description-editor-submit");
@@ -184,9 +176,7 @@ describe("PasswordSidebarDescription", () => {
   });
 
   it("Start editing by clicking on the empty message", () => {
-    const props = {
-      resource: getDummyDescriptionEmptyWithPermissionUpdate()
-    };
+    const props = {resourceWorkspaceContext: {details: {resource: getDummyDescriptionEmptyWithPermissionUpdate()}}};
     const {container} = renderPasswordSidebarDescriptionSection(null, props);
 
     // Sidebar Description title exists and correct
@@ -215,9 +205,7 @@ describe("PasswordSidebarDescription", () => {
   });
 
   it("Cannot editing by clicking on edit icon or on descriptio", () => {
-    const props = {
-      resource: getDummyDescriptionEmpty()
-    };
+    const props = {resourceWorkspaceContext: {details: {resource: getDummyDescriptionEmpty()}}};
     const {container} = renderPasswordSidebarDescriptionSection(null, props);
 
     // Click to expand Description
@@ -240,9 +228,7 @@ describe("PasswordSidebarDescription", () => {
   });
 
   it("Stop editing by clicking on the edit icon", () => {
-    const props = {
-      resource: getDummyDescriptionEmptyWithPermissionUpdate()
-    };
+    const props = {resourceWorkspaceContext: {details: {resource: getDummyDescriptionEmptyWithPermissionUpdate()}}};
     const {container} = renderPasswordSidebarDescriptionSection(null, props);
 
     // Click to expand Description
@@ -262,7 +248,7 @@ describe("PasswordSidebarDescription", () => {
     // Textearea exists
     const textearea = container.querySelector(".fluid");
     expect(textearea).not.toBeNull();
-    expect(textearea.value).toBe(props.resource.description);
+    expect(textearea.value).toBe(props.resourceWorkspaceContext.details.resource.description);
 
     fireEvent.click(editIcon, leftClick);
     const editorDescriptionClosed = container.querySelector(".form-content");
@@ -270,9 +256,7 @@ describe("PasswordSidebarDescription", () => {
   });
 
   it("Stop editing by clicking out of the edit zone", () => {
-    const props = {
-      resource: getDummyDescription()
-    };
+    const props = {resourceWorkspaceContext: {details: {resource: getDummyDescription()}}};
     const {container} = renderPasswordSidebarDescriptionSection(null, props);
 
     // Click to expand Description
@@ -292,7 +276,7 @@ describe("PasswordSidebarDescription", () => {
     // Textearea exists
     const textearea = container.querySelector(".fluid");
     expect(textearea).not.toBeNull();
-    expect(textearea.value).toBe(props.resource.description);
+    expect(textearea.value).toBe(props.resourceWorkspaceContext.details.resource.description);
 
     const accordionContent = container.querySelector(".accordion-content");
     fireEvent.click(accordionContent, leftClick);
@@ -302,9 +286,7 @@ describe("PasswordSidebarDescription", () => {
   });
 
   it("Stop editing by cancelling the operation", () => {
-    const props = {
-      resource: getDummyDescription()
-    };
+    const props = {resourceWorkspaceContext: {details: {resource: getDummyDescription()}}};
     const {container} = renderPasswordSidebarDescriptionSection(null, props);
 
     // Click to expand Description
@@ -324,7 +306,7 @@ describe("PasswordSidebarDescription", () => {
     // Textearea exists
     const textearea = container.querySelector(".fluid");
     expect(textearea).not.toBeNull();
-    expect(textearea.value).toBe(props.resource.description);
+    expect(textearea.value).toBe(props.resourceWorkspaceContext.details.resource.description);
 
     // cancel button exists
     const cancelButton = container.querySelector(".cancel");
@@ -337,9 +319,7 @@ describe("PasswordSidebarDescription", () => {
   });
 
   it("Stop editing with the keyboard escape", () => {
-    const props = {
-      resource: getDummyDescription()
-    };
+    const props = {resourceWorkspaceContext: {details: {resource: getDummyDescription()}}};
     const {container} = renderPasswordSidebarDescriptionSection(null, props);
 
     // Click to expand Description
@@ -359,7 +339,7 @@ describe("PasswordSidebarDescription", () => {
     // Textearea exists
     const textearea = container.querySelector(".fluid");
     expect(textearea).not.toBeNull();
-    expect(textearea.value).toBe(props.resource.description);
+    expect(textearea.value).toBe(props.resourceWorkspaceContext.details.resource.description);
 
     // Escape keypressed event
     const escapeKeyDown = {keyCode: 27};
@@ -371,9 +351,7 @@ describe("PasswordSidebarDescription", () => {
 
   it("Update the description to a resource", async () => {
     const context = getAppContext();
-    const props = {
-      resource: getDummyDescriptionEmptyWithPermissionUpdate()
-    };
+    const props = {resourceWorkspaceContext: {details: {resource: getDummyDescriptionEmptyWithPermissionUpdate()}}};
     const {container} = renderPasswordSidebarDescriptionSection(context, props);
 
     // Sidebar Description title exists and correct
@@ -399,8 +377,8 @@ describe("PasswordSidebarDescription", () => {
     fireEvent.change(textearea, {target: {value: descriptionValue}});
 
     // Mock the request function to make it the expected result
-    jest.spyOn(context.port, 'request').mockImplementationOnce(jest.fn((message, data) => Object.assign({id: props.resource.id}, data)));
-    jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementation(() => {});
+    jest.spyOn(context.port, 'request').mockImplementationOnce(jest.fn((message, data) => Object.assign({id: props.resourceWorkspaceContext.details.resource.id}, data)));
+    jest.spyOn(context.port, 'emit').mockImplementation(jest.fn());
 
     // submit button exists
     const submitButton = container.querySelector(".description-editor-submit");
@@ -416,7 +394,7 @@ describe("PasswordSidebarDescription", () => {
     expect(editorDescriptionInputDisable).toBeNull();
 
     const onApiUpdateResourceDescriptionMeta = {
-      id: props.resource.id,
+      id: props.resourceWorkspaceContext.details.resource.id,
       description: descriptionValue
     };
     expect(context.port.request).toHaveBeenCalledWith("passbolt.resource.update-description", onApiUpdateResourceDescriptionMeta);
@@ -425,9 +403,7 @@ describe("PasswordSidebarDescription", () => {
 
   it("Cannot edit while submitting changes", async () => {
     const context = getAppContext();
-    const props = {
-      resource: getDummyDescriptionEmptyWithPermissionUpdate()
-    };
+    const props = {resourceWorkspaceContext: {details: {resource: getDummyDescriptionEmptyWithPermissionUpdate()}}};
     const {container} = renderPasswordSidebarDescriptionSection(context, props);
 
     // Sidebar Description title exists and correct
@@ -476,9 +452,7 @@ describe("PasswordSidebarDescription", () => {
 
   it("Show progress feedback while submitting", async () => {
     const context = getAppContext();
-    const props = {
-      resource: getDummyDescriptionEmptyWithPermissionUpdate()
-    };
+    const props = {resourceWorkspaceContext: {details: {resource: getDummyDescriptionEmptyWithPermissionUpdate()}}};
     const {container} = renderPasswordSidebarDescriptionSection(context, props);
 
     // Sidebar Description title exists and correct

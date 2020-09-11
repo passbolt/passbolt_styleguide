@@ -230,11 +230,8 @@ class Workspace extends Component {
               <div className="reports-workspace">
                 <div className="panel left">
                   <FoldersTree
-                    folders={this.state.folders}
                     onFolderContextualMenu={this.handleFoldersTreeFolderContextualMenu}
                     onRootFolderContextualMenu={this.handleFoldersTreeRootFolderContextualMenu}
-                    onSelect={this.handleSelectFolder}
-                    onSelectRoot={this.handleSelectRootFolder}
                     selectedFolder={this.state.selectedFolders[0]}/>
                 </div>
                 <div className="panel middle">

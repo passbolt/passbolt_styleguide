@@ -18,6 +18,7 @@ import AddComment from "./AddComment";
 import PropTypes from "prop-types";
 import AppContext from "../../../contexts/AppContext";
 import DisplayCommentList from "./DisplayCommentList";
+import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 
 
 class PasswordSidebarCommentSection extends React.Component {
@@ -102,6 +103,13 @@ class PasswordSidebarCommentSection extends React.Component {
     }
 
     /**
+     * Get the current detailed resource
+     */
+    get resource() {
+        return this.props.resourceWorkspaceContext.details.resource;
+    }
+
+    /**
      * Render the component
      * @returns {JSX}
      */
@@ -136,13 +144,13 @@ class PasswordSidebarCommentSection extends React.Component {
 
                     { this.state.canAdd &&
                         <AddComment
-                            resource={this.props.resource}
+                            resource={this.resource}
                             onAdd={this.handleAddedEvent}
                             onCancel={this.handleCancelledAddEvent}
                             cancellable={this.state.canAddByIcon}/>
                     }
                     <DisplayCommentList
-                        resource={this.props.resource}
+                        resource={this.resource}
                         onFetch={this.handleFetchedEvent}
                         mustRefresh={this.state.mustRefresh}/>
                 </div>
@@ -157,7 +165,7 @@ class PasswordSidebarCommentSection extends React.Component {
 PasswordSidebarCommentSection.contextType = AppContext;
 
 PasswordSidebarCommentSection.propTypes = {
-    resource: PropTypes.object,
+    resourceWorkspaceContext: PropTypes.any, // The resource context
 };
 
-export default PasswordSidebarCommentSection;
+export default withResourceWorkspace(PasswordSidebarCommentSection);

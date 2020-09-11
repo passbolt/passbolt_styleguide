@@ -16,6 +16,8 @@ import Icon from "../../Common/Icons/Icon";
 import PropTypes from "prop-types";
 import moment from "moment";
 import AppContext from "../../../contexts/AppContext";
+import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
+import {withRouter} from "react-router-dom";
 
 class PasswordSidebarInformationSection extends React.Component {
   /**
@@ -50,14 +52,11 @@ class PasswordSidebarInformationSection extends React.Component {
    * Handle when the user selects the folder parent.
    */
   handleFolderParentClickEvent() {
-    if (!this.props.folders) {
-      return;
-    }
-    if (!this.props.resource.folder_parent_id) {
-      this.props.onSelectRoot();
-    } else {
-      const folderParent = this.props.folders.find(item => item.id === this.props.resource.folder_parent_id);
-      this.props.onSelectFolderParent(folderParent);
+    if (this.resource.folder_parent_id) { // Case of specific folder
+      const folderParent = this.context.folders.find(item => item.id === this.resource.folder_parent_id);
+      this.props.history.push(`/app/folders/view/${folderParent.id}`)
+    } else { // Case of root folder
+      this.props.history.push(`/app/passwords`);
     }
   }
 
@@ -67,6 +66,10 @@ class PasswordSidebarInformationSection extends React.Component {
   handleTitleClickEvent() {
     const open = !this.state.open;
     this.setState({open});
+  }
+
+  get resource() {
+    return this.props.resourceWorkspaceContext.details.resource
   }
 
   /**
@@ -102,8 +105,8 @@ class PasswordSidebarInformationSection extends React.Component {
       return '/';
     }
 
-    if (this.props.folders) {
-      const folder = this.props.folders.find(item => item.id === folderParentId);
+    if (this.context.folders) {
+      const folder = this.context.folders.find(item => item.id === folderParentId);
 
       return folder.name;
     }
@@ -149,12 +152,12 @@ class PasswordSidebarInformationSection extends React.Component {
    * @returns {JSX}
    */
   render() {
-    const creatorUsername = this.getUserUsername(this.props.resource.created_by);
-    const modifierUsername = this.getUserUsername(this.props.resource.modified_by);
-    const createdDateTimeAgo = this.formatDateTimeAgo(this.props.resource.created);
-    const modifiedDateTimeAgo = this.formatDateTimeAgo(this.props.resource.modified);
-    const folderParentName = this.getFolderName(this.props.resource.folder_parent_id);
-    const safeUri = this.sanitizeResourceUri(this.props.resource.uri) || "";
+    const creatorUsername = this.getUserUsername(this.resource.created_by);
+    const modifierUsername = this.getUserUsername(this.resource.modified_by);
+    const createdDateTimeAgo = this.formatDateTimeAgo(this.resource.created);
+    const modifiedDateTimeAgo = this.formatDateTimeAgo(this.resource.modified);
+    const folderParentName = this.getFolderName(this.resource.folder_parent_id);
+    const safeUri = this.sanitizeResourceUri(this.resource.uri) || "";
 
     return (
       <div className={`detailed-information accordion sidebar-section ${this.state.open ? "" : "closed"}`}>
@@ -164,7 +167,7 @@ class PasswordSidebarInformationSection extends React.Component {
         <ul className="accordion-content">
           <li className="username">
             <span className="label">Username</span>
-            <span className="value">{this.props.resource.username}</span>
+            <span className="value">{this.resource.username}</span>
           </li>
           <li className="password">
             <span className="label">Password</span>
@@ -176,7 +179,7 @@ class PasswordSidebarInformationSection extends React.Component {
           </li>
           <li className="uri">
             <span className="label">URL</span>
-            <span className="value"><a href={safeUri} target="_blank" rel="noopener noreferrer">{this.props.resource.uri}</a></span>
+            <span className="value"><a href={safeUri} target="_blank" rel="noopener noreferrer">{this.resource.uri}</a></span>
           </li>
           <li className="modified">
             <span className="label">Modified</span>
@@ -197,7 +200,7 @@ class PasswordSidebarInformationSection extends React.Component {
           <li className="location">
             <span className="label">Location</span>
             <span className="value">
-              <a onClick={this.handleFolderParentClickEvent} className={`folder-link ${!this.props.folders ? "disabled" : ""}`}>
+              <a onClick={this.handleFolderParentClickEvent} className={`folder-link ${!this.context.folders ? "disabled" : ""}`}>
                 <Icon name="folder"/> {folderParentName}
               </a>
             </span>
@@ -211,11 +214,11 @@ class PasswordSidebarInformationSection extends React.Component {
 PasswordSidebarInformationSection.contextType = AppContext;
 
 PasswordSidebarInformationSection.propTypes = {
-  resource: PropTypes.object,
-  folders: PropTypes.array,
   onSelectFolderParent: PropTypes.func,
   onSelectRoot: PropTypes.func,
   users: PropTypes.array,
+  history: PropTypes.object,
+  resourceWorkspaceContext: PropTypes.object
 };
 
-export default PasswordSidebarInformationSection;
+export default withRouter(withResourceWorkspace(PasswordSidebarInformationSection));
