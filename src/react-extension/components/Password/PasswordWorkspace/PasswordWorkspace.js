@@ -24,6 +24,7 @@ import AppContext from "../../../contexts/AppContext";
 import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 import SidebarTagFilterSection from "../../Tag/SidebarTagFilterSection/SidebarTagFilterSection";
 import PropTypes from "prop-types";
+import PasswordSearchBar from "../PasswordSearchBar/PasswordSearchBar";
 
 class Workspace extends Component {
   /**
@@ -195,10 +196,9 @@ class Workspace extends Component {
     return (
         <div>
           <div className="header second">
-            <SearchBar
+            <PasswordSearchBar
               onSearch={this.handleSearch}
-              placeholder="Search passwords"
-              search={this.state.search}/>
+              placeholder="Search passwords"/>
             <UserBadgeMenu baseUrl={this.context.userSettings.getTrustedDomain()} user={this.context.currentUser}/>
           </div>
           <div className="header third">

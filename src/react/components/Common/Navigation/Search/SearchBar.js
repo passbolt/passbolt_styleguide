@@ -46,9 +46,7 @@ class SearchBar extends Component {
    * @params {ReactEvent} The react event.
    */
   handleChangeEvent(event) {
-    const target = event.target;
-    const value = target.value;
-    this.props.onSearch(value);
+    this.props.onSearch(event);
   }
 
   /**

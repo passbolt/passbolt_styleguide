@@ -34,7 +34,9 @@ export const ResourceWorkspaceContext = React.createContext({
         resource: null, // The resource to focus details on
         folder: null,// The folder to focus details on
     },
+    onTextFilterChanged: () => {} // Whenever the search text filter changed
 });
+
 
 /**
  * The related context provider
@@ -51,7 +53,6 @@ class ResourceWorkspaceContextProvider extends React.Component {
         this.initializeProperties();
     }
 
-
     /**
      * Returns the default component state
      */
@@ -63,11 +64,9 @@ class ResourceWorkspaceContextProvider extends React.Component {
                 resource: null, // The resource to focus details on
                 folder: null,// The folder to focus details on
             },
+            onTextFilterChanged: this.handleTextFilterChange.bind(this) // Whenever the search text filter changed
         }
     }
-
-
-
 
     /**
      * Initialize class properties out of the state ( for performance purpose )
@@ -102,6 +101,16 @@ class ResourceWorkspaceContextProvider extends React.Component {
         if (hasFilterChanged) {
             this.populate();
         }
+    }
+
+
+    /**
+     * Handles the resource search text filter change
+     * @param text The filter text
+     */
+    async handleTextFilterChange(text) {
+        await this.search({type: ResourceWorkspaceFilterTypes.TEXT, payload: text});
+        await this.detailNothing();
     }
 
     /**
@@ -150,12 +159,14 @@ class ResourceWorkspaceContextProvider extends React.Component {
     async handleResourceRouteChange() {
         const isResourceLocation = this.props.location.pathname.includes('passwords');
         const resourceId = this.props.match.params.selectedResourceId;
+        const isTextFilter = this.state.filter.type === ResourceWorkspaceFilterTypes.TEXT;
         if (isResourceLocation) {
             if (resourceId) { // Case of password view
                this.handleSingleResourceRouteChange(resourceId);
-            } else { // Case of all
-               this.handleAllResourceRouteChange();
+            } else if (!isTextFilter) { // Case of all
+                this.handleAllResourceRouteChange();
             }
+            // Case of text filter, so filter has already been performed
         }
     }
 
@@ -196,6 +207,7 @@ class ResourceWorkspaceContextProvider extends React.Component {
     async search(filter) {
         const searchOperations = {
             [ResourceWorkspaceFilterTypes.FOLDER]: this.searchByFolder.bind(this),
+            [ResourceWorkspaceFilterTypes.TEXT]: this.searchByText.bind(this),
             [ResourceWorkspaceFilterTypes.ALL]: this.searchAll.bind(this),
             [ResourceWorkspaceFilterTypes.NONE]: () => {/* No search */}
         }
@@ -217,6 +229,22 @@ class ResourceWorkspaceContextProvider extends React.Component {
         const folderId = filter.payload.folder.id;
         const folderResources = this.resources.filter(resource => resource.folder_parent_id === folderId);
         await this.setState({filter, filteredResources: folderResources});
+    }
+
+    /**
+     * Filter the resources which textual properties matched some user text words
+     */
+    async searchByText(filter) {
+        const text = filter.payload;
+        const words =  ( text && text.split(/\s+/) ) || [''];
+
+        // Test match of some escaped test words against the name / usernmae / uri / description resource properties
+        const escapeWord = word =>  word.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+        const wordToRegex = word =>  new RegExp(escapeWord(word), 'i');
+        const matchSomeWords = value => words.some( word => wordToRegex(word).test(value));
+        const matchText = resource => ['name', 'username', 'uri', 'description'].some( key => matchSomeWords(resource[key]));
+        const filteredResources = this.resources.filter(matchText);
+        await this.setState({filter, filteredResources});
     }
 
 
@@ -293,7 +321,8 @@ export function withResourceWorkspace(WrappedComponent) {
 export const ResourceWorkspaceFilterTypes = {
     NONE: 'NONE', // Initial filter at page load
     ALL: 'ALL', // All resources
-    FOLDER: 'FILTER-BY-FOLDER'// Resources for a given folder
+    FOLDER: 'FILTER-BY-FOLDER', // Resources for a given folder
+    TEXT: 'FILTER-BY-TEXT-SEARCH'// Resources matching some text words
 }
 
 
