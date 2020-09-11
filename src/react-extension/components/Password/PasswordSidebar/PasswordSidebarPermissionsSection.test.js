@@ -105,9 +105,6 @@ describe("PasswordSidebarPermission", () => {
       }
     }
 
-    // Mock the request function to make it the expected result
-    jest.spyOn(context.port, 'request').mockImplementationOnce(jest.fn(() => getDummyPermission()));
-
     const {container} = renderPasswordSidebarPermissionSection(context, props);
 
     // Sidebar Tags title exists and correct
@@ -115,10 +112,12 @@ describe("PasswordSidebarPermission", () => {
     expect(sidebarTitle).not.toBeNull();
     expect(sidebarTitle.textContent).toBe("Shared with");
 
-    // Click to expand tags
+    // Mock the request function to make it the expected result
+    jest.spyOn(context.port, 'request').mockImplementationOnce(jest.fn(() => getDummyPermission()));
+
+    // Click to expand
     const leftClick = {button: 0};
-    const sidebar = container.querySelector(".sidebar-section");
-    fireEvent.click(sidebar, leftClick);
+    fireEvent.click(sidebarTitle, leftClick);
 
     // API calls are made on submit, wait they are resolved.
     await waitFor(() => {});
@@ -146,6 +145,14 @@ describe("PasswordSidebarPermission", () => {
       }
     }
 
+    const {container} = renderPasswordSidebarPermissionSection(context, props);
+
+
+    // Sidebar Tags title exists and correct
+    const sidebarTitle = container.querySelector("h4 a");
+    expect(sidebarTitle).not.toBeNull();
+    expect(sidebarTitle.textContent).toBe("Shared with");
+
     let updateResolve;
 
     // Mock the request function to make it the expected result
@@ -153,17 +160,9 @@ describe("PasswordSidebarPermission", () => {
       updateResolve = resolve;
     })));
 
-    const {container} = renderPasswordSidebarPermissionSection(context, props);
-
-    // Sidebar Tags title exists and correct
-    const sidebarTitle = container.querySelector("h4 a");
-    expect(sidebarTitle).not.toBeNull();
-    expect(sidebarTitle.textContent).toBe("Shared with");
-
-    // Click to expand tags
+    // Click to expand
     const leftClick = {button: 0};
-    const sidebar = container.querySelector(".sidebar-section");
-    fireEvent.click(sidebar, leftClick);
+    fireEvent.click(sidebarTitle, leftClick);
 
     // API calls are made on submit, wait they are resolved.
     await waitFor(() => {

@@ -13,13 +13,13 @@
  */
 import React from "react";
 import PropTypes from "prop-types";
-import FolderCreateDialog from "../../Folder/FolderCreateDialog/FolderCreateDialog";
 import {withDialog} from "../../../contexts/DialogContext";
+import ContextualMenuWrapper from "../../Common/ContextualMenu/ContextualMenuWrapper";
+import FolderCreateDialog from "../../Folder/FolderCreateDialog/FolderCreateDialog";
 import AppContext from "../../../contexts/AppContext";
 import FolderRenameDialog from "../../Folder/FolderRenameDialog/FolderRenameDialog";
 import FolderDeleteDialog from "../../Folder/FolderDeleteDialog/FolderDeleteDialog";
 import ShareDialog from "../../Share/ShareDialog";
-import ContextualMenuWrapper from "../../Common/ContextualMenu/ContextualMenuWrapper";
 
 class FoldersTreeItemContextualMenu extends React.Component {
   /**

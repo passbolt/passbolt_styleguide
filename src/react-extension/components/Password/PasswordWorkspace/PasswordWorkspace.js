@@ -13,7 +13,6 @@
  */
 import React, {Component} from "react";
 import {withRouter} from "react-router-dom";
-import SearchBar from "../../Common/Navigation/Search/SearchBar";
 import UserBadgeMenu from "../../Common/Navigation/Header/UserBadgeMenu";
 import Breadcrumbs from "../../Common/Navigation/Breadcrumbs/Breadcrumbs";
 import FoldersTree from "../FoldersTree/FoldersTree";
@@ -69,7 +68,6 @@ class Workspace extends Component {
    * @return {void}
    */
   bindCallbacks() {
-    this.handleEditFolderPermissions = this.handleEditFolderPermissions.bind(this);
     this.handleFilterByFolder = this.handleFilterByFolder.bind(this);
     this.handleSelectRootFolder = this.handleSelectRootFolder.bind(this);
     this.handleSelectResources = this.handleSelectResources.bind(this);
@@ -102,14 +100,6 @@ class Workspace extends Component {
   async findUsers() {
     const users = await port.request("passbolt.users.find-all");
     this.setState({users});
-  }
-
-  /**
-   * Handle when the user edits the folder permissions.
-   * @param {object} folder the folder to edit the permissions
-   */
-  handleEditFolderPermissions(folder) {
-    console.error(`TODO: The user edits the permissions of the folder ${folder.name}`);
   }
 
   /**
@@ -212,10 +202,8 @@ class Workspace extends Component {
               <div className="tab-content selected">
                 <div className="reports-workspace">
                   <div className="panel left">
-                    <FoldersTree
-                      onFolderContextualMenu={this.handleFoldersTreeFolderContextualMenu}
-                      onRootFolderContextualMenu={this.handleFoldersTreeRootFolderContextualMenu}/>
-                    <SidebarTagFilterSection ection tags={this.getTagsFromResources()}/>
+                    <FoldersTree/>
+                    <SidebarTagFilterSection tags={this.getTagsFromResources()}/>
                   </div>
                   <div className="panel middle">
                     <Breadcrumbs/>
