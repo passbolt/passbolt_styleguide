@@ -18,6 +18,7 @@ import PasswordSidebarTagSection from "./PasswordSidebarTagSection";
 import AppContext from "../../../contexts/AppContext";
 import MockPort from "../../../test/mock/MockPort";
 import {ActionFeedbackContext} from "../../../contexts/ActionFeedbackContext";
+import {ResourceWorkspaceContext} from "../../../contexts/ResourceWorkspaceContext";
 
 
 beforeEach(() => {
@@ -1175,6 +1176,36 @@ describe("PasswordSidebarTag", () => {
     expect(context.port.request).toHaveBeenCalledWith("passbolt.resource.update-tags", onApiUpdateResourceTagMeta);
     // notification toaster called
     expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalledWith("The tags have been updated successfully");
+  });
+
+  it("Select a tag in my resources’ tags", () => {
+    const props = {resourceWorkspaceContext: {details: {resource: getDummyResource()}}};
+    const {container} = renderPasswordSidebarTagSection(null, props);
+
+    // Sidebar Tags title exists and correct
+    const sidebarTitle = container.querySelector("h4 a");
+    expect(sidebarTitle).not.toBeNull();
+    expect(sidebarTitle.textContent).toBe("Tags");
+
+    // Click to expand tags
+    const leftClick = {button: 0};
+    const sidebar = container.querySelector(".sidebar-section");
+    fireEvent.click(sidebar, leftClick);
+
+    // Tags list exists
+    const tagList = container.querySelector(".tags-list");
+    expect(tagList).not.toBeNull();
+
+    jest.spyOn(ResourceWorkspaceContext._currentValue, 'onFilterTagChanged').mockImplementation(() => {});
+
+    // number of tags and check all name displayed
+    const tags = container.querySelectorAll(".tag");
+    expect(tags).not.toBeNull();
+    expect(tags.length).toBe(6);
+    fireEvent.click(tags[2], leftClick);
+
+    expect(ResourceWorkspaceContext._currentValue.onFilterTagChanged).toHaveBeenCalled();
+
   });
 
 });
