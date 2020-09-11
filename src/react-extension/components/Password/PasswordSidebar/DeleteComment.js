@@ -16,6 +16,8 @@ import React from "react";
 import AppContext from "../../../contexts/AppContext";
 import Icon from "../../Common/Icons/Icon";
 import PropTypes from "prop-types";
+import {withDialog} from "../../../contexts/DialogContext";
+import ConfirmCommentDeletion from "./ConfirmCommentDeletion";
 
 /**
  * This component allows to delete a resource comment ( at least call-to-action )
@@ -42,7 +44,8 @@ class DeleteComment extends React.Component {
      * Call to delete the comment
      */
     delete() {
-       this.context.setContext({resourceCommentId: this.props.commentId, showDeleteCommentDialog: true});
+       this.context.setContext({resourceCommentId: this.props.commentId});
+       this.props.dialogContext.open(ConfirmCommentDeletion);
     }
 
     render() {
@@ -62,10 +65,11 @@ class DeleteComment extends React.Component {
 
 }
 
-export default DeleteComment;
-
 DeleteComment.contextType = AppContext;
 
 DeleteComment.propTypes = {
     commentId: PropTypes.string, // The resource comment id
+    dialogContext: PropTypes.any // The dialog context
 }
+
+export default withDialog(DeleteComment);

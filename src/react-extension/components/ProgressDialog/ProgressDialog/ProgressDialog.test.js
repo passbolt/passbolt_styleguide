@@ -15,7 +15,7 @@
 import React from "react";
 import {render} from "@testing-library/react";
 import ProgressDialog from "./ProgressDialog";
-import AppContext from "../../contexts/AppContext";
+import AppContext from "../../../contexts/AppContext";
 
 beforeEach(() => {
   jest.resetModules();
@@ -23,11 +23,11 @@ beforeEach(() => {
 
 describe("ProgressDialog", () => {
   it("displays a spinning 100% progress bar by default.", () => {
-    const appContext = {};
+    const appContext = {progressDialogProps: {title: "Progress dialog title"}};
 
     const {container} = render(
       <AppContext.Provider value={appContext}>
-        <ProgressDialog debug title={"Progress dialog title"}/>
+        <ProgressDialog debug/>
       </AppContext.Provider>
     );
 
@@ -55,11 +55,11 @@ describe("ProgressDialog", () => {
   });
 
   it("displays a progressive progress bar.", async() => {
-    const appContext = {};
+    const appContext = {progressDialogProps: {title: "Progress dialog title", goals: 2, message: "Step 0", completed: 0}};
 
     const {container} = render(
       <AppContext.Provider value={appContext}>
-        <ProgressDialog debug title={"Progress dialog title"} goals={2} message={"Step 0"} />
+        <ProgressDialog debug />
       </AppContext.Provider>
     );
 

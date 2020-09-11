@@ -21,8 +21,9 @@ import PasswordSidebarCommentSection from "./PasswordSidebarCommentSection";
 import AddCommentPageObject from "./AddComment.test.page.object";
 import DisplayCommentListPageObject from "./DisplayCommentList.test.page.object";
 import ConfirmCommentDeletionPageObject from "./ConfirmCommentDeletion.test.page.object";
-import ConfirmCommentDeletion from "./ConfirmCommentDeletion";
 import PropTypes from "prop-types";
+import ManageDialogs from "../../Dialog/ManageDialogs";
+import DialogContextProvider from "../../../contexts/DialogContext";
 
 
 
@@ -39,14 +40,10 @@ export default class PasswordSidebarCommentSectionPage {
     constructor(appContext, props) {
         this._page = render(
             <AppContextProvider context={appContext}>
-                {
-                    <AppContext.Consumer>
-                        {
-                            context => context.showDeleteCommentDialog && <ConfirmCommentDeletion />
-                        }
-                    </AppContext.Consumer>
-                }
-                <PasswordSidebarCommentSection {...props}/>
+                <DialogContextProvider>
+                    <ManageDialogs/>
+                    <PasswordSidebarCommentSection {...props}/>
+                </DialogContextProvider>
             </AppContextProvider>
         );
         this.setupPageObjects();

@@ -12,16 +12,15 @@
  * @since         2.12.0
  */
 import React, {Component} from "react";
-import PropTypes from "prop-types";
-import AppContext from "../../contexts/AppContext";
+import AppContext from "../../../contexts/AppContext";
 
 class ProgressDialog extends Component {
   calculateProgress() {
-    if (!this.props.goals) {
+    if (!this.context.progressDialogProps.goals) {
       return 100; // displays a spinning 100% progress bar by default.
     }
 
-    let progress = Math.round((100 * this.props.completed) / this.props.goals);
+    let progress = Math.round((100 * this.context.progressDialogProps.completed) / this.context.progressDialogProps.goals);
     if (progress > 100) {
       progress = 100;
     }
@@ -29,7 +28,7 @@ class ProgressDialog extends Component {
   }
 
   render() {
-    const displayDetailsSection = this.props.goals || false;
+    const displayDetailsSection = this.context.progressDialogProps.goals || false;
     const progress = this.calculateProgress();
     const progressBarStyle = {width: `${progress}%`};
     const progressLabelStyle = {float: "right"};
@@ -38,7 +37,7 @@ class ProgressDialog extends Component {
       <div className="dialog-wrapper progress-dialog">
         <div className="dialog">
           <div className="dialog-header">
-            <h2>{this.props.title}</h2>
+            <h2>{this.context.progressDialogProps.title || 'Please wait...' }</h2>
           </div>
           <div className="dialog-content">
             <div className="form-content">
@@ -50,7 +49,7 @@ class ProgressDialog extends Component {
               </div>
               {displayDetailsSection &&
               <div className="progress-details">
-                <span className="progress-step-label">&nbsp; {this.props.message}</span>
+                <span className="progress-step-label">&nbsp; {this.context.progressDialogProps.message ||  'Please wait...' }</span>
                 <span style={progressLabelStyle} className="progress-percent">{progress}%</span>
               </div>
               }
@@ -66,19 +65,5 @@ class ProgressDialog extends Component {
 }
 
 ProgressDialog.contextType = AppContext;
-
-ProgressDialog.defaultProps = {
-  title: 'Please wait...',
-  message: 'Please wait...',
-  completed: 0,
-  goal: 0
-};
-
-ProgressDialog.propTypes = {
-  title: PropTypes.string,
-  goals: PropTypes.number,
-  completed: PropTypes.number,
-  message: PropTypes.string
-};
 
 export default ProgressDialog;

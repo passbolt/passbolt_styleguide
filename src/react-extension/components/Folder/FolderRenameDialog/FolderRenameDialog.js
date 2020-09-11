@@ -19,6 +19,7 @@ import ErrorDialog from "../../Common/Dialog/ErrorDialog/ErrorDialog";
 import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
 import FormSubmitButton from "../../Common/Inputs/FormSubmitButton/FormSubmitButton";
 import FormCancelButton from "../../Common/Inputs/FormSubmitButton/FormCancelButton";
+import {withDialog} from "../../../contexts/DialogContext";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 
 class FolderRenameDialog extends Component {
@@ -84,9 +85,9 @@ class FolderRenameDialog extends Component {
       defaultState.serviceError = true;
       defaultState.errorMessage = errorMessage;
     }
-    const folder = context.folders.find(item => item.id === props.folderId) || false;
+    const folder = context.folders.find(item => item.id === context.folder.id) || false;
     if (!folder) {
-      console.error(`Folder ${props.folderId} not found in context.`);
+      console.error(`Folder ${context.folder.id} not found in context.`);
       defaultState.serviceError = true;
       defaultState.errorMessage = errorMessage;
     } else {
@@ -221,7 +222,7 @@ class FolderRenameDialog extends Component {
    */
   async updateFolder() {
     const folderDto = {
-      id: this.props.folderId,
+      id: this.context.folder.id,
       name: this.state.name
     };
     return await this.context.port.request("passbolt.folders.update", folderDto);
@@ -333,9 +334,8 @@ class FolderRenameDialog extends Component {
 FolderRenameDialog.contextType = AppContext;
 
 FolderRenameDialog.propTypes = {
-  folderId: PropTypes.string,
   onClose: PropTypes.func,
   actionFeedbackContext: PropTypes.any // The action feedback context
 };
 
-export default withActionFeedback(FolderRenameDialog);
+export default withDialog(withActionFeedback(FolderRenameDialog));

@@ -13,6 +13,12 @@
  */
 import React from "react";
 import PropTypes from "prop-types";
+import FolderCreateDialog from "../../Folder/FolderCreateDialog/FolderCreateDialog";
+import {withDialog} from "../../../contexts/DialogContext";
+import AppContext from "../../../contexts/AppContext";
+import FolderRenameDialog from "../../Folder/FolderRenameDialog/FolderRenameDialog";
+import FolderDeleteDialog from "../../Folder/FolderDeleteDialog/FolderDeleteDialog";
+import ShareDialog from "../../Share/ShareDialog";
 import ContextualMenuWrapper from "../../Common/ContextualMenu/ContextualMenuWrapper";
 
 class FoldersTreeItemContextualMenu extends React.Component {
@@ -49,36 +55,36 @@ class FoldersTreeItemContextualMenu extends React.Component {
    * Handle click on the create a folder menu option.
    */
   handleCreateFolderItemClickEvent() {
-    if (!this.canUpdate()) {
-      return;
+    if (this.canUpdate()) {
+      this.context.setContext({folderCreateDialogProps: {folderParentId: this.props.folder.id}});
+      this.props.dialogContext.open(FolderCreateDialog);
+      this.props.hide();
     }
-    const folderParentId = this.props.folder.id;
-    this.context.port.emit('passbolt.plugin.folders.open-create-dialog', {folderParentId});
-    this.props.hide();
   }
 
   /**
    * Handle click on the rename a folder menu option.
    */
   handleRenameFolderItemClickEvent() {
-    if (!this.canUpdate()) {
-      return;
+    if (this.canUpdate()) {
+      this.context.setContext({folder: this.props.folder});
+      this.props.dialogContext.open(FolderRenameDialog);
+      this.props.hide();
     }
-    const folderId = this.props.folder.id;
-    this.context.port.emit('passbolt.plugin.folders.open-rename-dialog', {folderId});
-    this.props.hide();
   }
 
   /**
    * Handle click on the share a folder menu option.
    */
   handleShareFolderItemClickEvent() {
-    if (!this.canShare()) {
-      return;
+    if (this.canShare()) {
+      this.context.setContext(Object.assign(
+          {},
+          this.context.shareDialogProps,
+          {shareDialogProps: {folderIds: [this.props.folder.id]}}));
+      this.props.dialogContext.open(ShareDialog);
+      this.props.hide();
     }
-    const foldersIds = [this.props.folder.id];
-    this.context.port.emit("passbolt.plugin.folders.open-share-dialog", {foldersIds});
-    this.props.hide();
   }
 
   /**
@@ -94,12 +100,23 @@ class FoldersTreeItemContextualMenu extends React.Component {
    * Handle click on the delete a folder menu option.
    */
   handleDeleteFolderItemClickEvent() {
-    if (!this.canUpdate()) {
-      return;
+    if (this.canUpdate()) {
+      this.context.setContext({folder: this.props.folder});
+      this.props.dialogContext.open(FolderDeleteDialog);
+      this.props.hide();
     }
-    const folderId = this.props.folder.id;
-    this.context.port.emit('passbolt.plugin.folders.open-delete-dialog', {folderId});
-    this.props.hide();
+  }
+
+  /**
+   * Get the contextual menu style.
+   */
+  getStyle() {
+    return {
+      display: "block",
+      position: "fixed",
+      top: this.props.top,
+      left: this.props.left
+    };
   }
 
   /**
@@ -181,12 +198,15 @@ class FoldersTreeItemContextualMenu extends React.Component {
   }
 }
 
+FoldersTreeItemContextualMenu.contextType = AppContext;
+
 FoldersTreeItemContextualMenu.propTypes = {
   folder: PropTypes.object,
   foldersTreeListElementRef: PropTypes.object,
   hide: PropTypes.func, // Hide the contextual menu
   left: PropTypes.number, // left position in px of the page
   top: PropTypes.number, // top position in px of the page
+  dialogContext: PropTypes.object, // The dialog context
 };
 
-export default FoldersTreeItemContextualMenu;
+export default withDialog(FoldersTreeItemContextualMenu);

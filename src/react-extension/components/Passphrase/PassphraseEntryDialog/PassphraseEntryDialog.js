@@ -70,7 +70,8 @@ class PassphraseEntryDialog extends Component {
    */
   close() {
     const error = new UserAbortsOperationError("The dialog has been closed.");
-    this.context.port.emit(this.props.requestId, "ERROR", error);
+    this.context.port.emit(this.context.passphraseRequestId, "ERROR", error);
+    this.context.setContext({passphraseRequestId: null});
     this.props.onClose();
   }
 
@@ -140,10 +141,11 @@ class PassphraseEntryDialog extends Component {
       rememberMe = this.state.rememberMeDuration;
     }
 
-    this.context.port.emit(this.props.requestId, "SUCCESS", {
+    this.context.port.emit(this.context.passphraseRequestId, "SUCCESS", {
       passphrase: this.state.passphrase,
       rememberMe: rememberMe
     });
+    this.context.setContext({passphraseRequestId: null});
     this.props.onClose();
   }
 
@@ -346,7 +348,6 @@ class PassphraseEntryDialog extends Component {
 PassphraseEntryDialog.contextType = AppContext;
 
 PassphraseEntryDialog.propTypes = {
-  requestId: PropTypes.string,
   onClose: PropTypes.func
 };
 

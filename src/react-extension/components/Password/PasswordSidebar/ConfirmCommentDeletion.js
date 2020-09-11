@@ -74,8 +74,11 @@ class ConfirmDeleteDialog extends Component {
             // Stop processing
             await this.setState({actions: {processing: false}});
 
+            // Update the context
+            this.context.setContext({resourceCommentId: null, mustRefreshComments: true});
+
             // Hides the dialog
-            this.context.setContext({resourceCommentId: null, showDeleteCommentDialog: false, mustRefreshComments: true});
+            this.props.onClose();
 
         } catch (error) {
             await this.setState({actions: {processing: false}});
@@ -83,8 +86,11 @@ class ConfirmDeleteDialog extends Component {
             // Show the error
             await this.props.actionFeedbackContext.displayError(error);
 
+            // Update the context
+            this.context.setContext({resourceCommentId: null,mustRefreshComments: false });
+
             // Hides the dialog
-            this.context.setContext({resourceCommentId: null, showDeleteCommentDialog: false});
+            this.props.onClose();
         }
     }
 
@@ -94,6 +100,7 @@ class ConfirmDeleteDialog extends Component {
      */
     handleClose() {
         this.context.setContext({resourceCommentId: null, showDeleteCommentDialog: false});
+        this.props.onClose();
     }
 
     render() {
@@ -135,7 +142,7 @@ ConfirmDeleteDialog.contextType = AppContext;
 
 ConfirmDeleteDialog.propTypes = {
     actionFeedbackContext: PropTypes.object,
-
+    onClose: PropTypes.func
 };
 
 

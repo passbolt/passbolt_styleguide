@@ -18,6 +18,7 @@ import ErrorDialog from "../../Common/Dialog/ErrorDialog/ErrorDialog";
 import FormSubmitButton from "../../Common/Inputs/FormSubmitButton/FormSubmitButton";
 import FormCancelButton from "../../Common/Inputs/FormSubmitButton/FormCancelButton";
 import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
+import {withDialog} from "../../../contexts/DialogContext";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 
 class FolderDeleteDialog extends Component {
@@ -88,9 +89,9 @@ class FolderDeleteDialog extends Component {
       defaultState.serviceError = true;
       defaultState.errorMessage = errorMessage;
     }
-    const folder = context.folders.find(item => item.id === props.folderId) || false;
+    const folder = context.folders.find(item => item.id === context.folder.id) || false;
     if (!folder) {
-      console.error(`Folder ${props.folderId} not found in context.`);
+      console.error(`Folder ${context.folder.id} not found in context.`);
       defaultState.serviceError = true;
       defaultState.errorMessage = errorMessage;
     } else {
@@ -114,7 +115,7 @@ class FolderDeleteDialog extends Component {
     this.toggleProcessing();
 
     try {
-      await this.context.port.request("passbolt.folders.delete", this.props.folderId, this.state.cascade);
+      await this.context.port.request("passbolt.folders.delete", this.context.folder.id, this.state.cascade);
       await this.props.actionFeedbackContext.displaySuccess("The folder was deleted successfully");
       this.props.onClose();
     } catch (error) {
@@ -212,10 +213,8 @@ class FolderDeleteDialog extends Component {
 FolderDeleteDialog.contextType = AppContext;
 
 FolderDeleteDialog.propTypes = {
-  className: PropTypes.string,
-  folderId: PropTypes.string,
   onClose: PropTypes.func,
   actionFeedbackContext: PropTypes.any // The action feedback context
 };
 
-export default withActionFeedback(FolderDeleteDialog);
+export default withDialog(withActionFeedback(FolderDeleteDialog));

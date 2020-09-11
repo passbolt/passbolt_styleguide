@@ -25,17 +25,20 @@ beforeEach(() => {
 
 const getAppContext = function (appContext) {
   const port = new MockPort();
-  const defaultAppContext = {port};
+  const defaultAppContext = {
+    port,
+    setContext: () => {},
+    tagToDelete: {
+      id: "8e3874ae-4b40-590b-968a-418f704b9d9a",
+      slug: "tardis",
+      is_shared: false
+    }
+  };
   return Object.assign(defaultAppContext, appContext || {});
 };
 
 const getDummyTag = () => {
   return {
-    tag: {
-      id: "8e3874ae-4b40-590b-968a-418f704b9d9a",
-      slug: "tardis",
-      is_shared: false
-    },
     onClose: jest.fn()
   };
 }
@@ -52,8 +55,9 @@ const renderTagDeleteDialog = function (appContext, props) {
 
 describe("TagEditDialog", () => {
   it("matches the styleguide.", () => {
+    const context = getAppContext();
     const props = getDummyTag();
-    const {container} = renderTagDeleteDialog(null, props);
+    const {container} = renderTagDeleteDialog(context, props);
 
     // Dialog title exists and correct
     const dialogTitle = container.querySelector(".dialog-header h2 span");
@@ -74,8 +78,9 @@ describe("TagEditDialog", () => {
   });
 
   it("calls onClose props when clicking on the close button.", () => {
+    const context = getAppContext();
     const props = getDummyTag();
-    const {container} = renderTagDeleteDialog(null, props);
+    const {container} = renderTagDeleteDialog(context, props);
 
     const leftClick = {button: 0};
     const dialogCloseIcon = container.querySelector(".dialog-close");
@@ -84,8 +89,9 @@ describe("TagEditDialog", () => {
   });
 
   it("calls onClose props when clicking on the cancel button.", () => {
+    const context = getAppContext();
     const props = getDummyTag();
-    const {container} = renderTagDeleteDialog(null, props);
+    const {container} = renderTagDeleteDialog(context, props);
 
     const leftClick = {button: 0};
     const cancelButton = container.querySelector(".submit-wrapper .cancel");

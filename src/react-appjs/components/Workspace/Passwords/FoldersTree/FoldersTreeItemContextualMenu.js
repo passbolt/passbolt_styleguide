@@ -14,6 +14,8 @@
 import React from "react";
 import PropTypes from "prop-types";
 import Plugin from "../../../../legacy/util/plugin";
+import {withDialog} from "../../../../../react-extension/contexts/DialogContext";
+import FolderCreateDialog from "../../../../../react-extension/components/Folder/FolderCreateDialog/FolderCreateDialog";
 
 class FoldersTreeItemContextualMenu extends React.Component {
 
@@ -117,11 +119,10 @@ class FoldersTreeItemContextualMenu extends React.Component {
    * Handle click on the create a folder menu option.
    */
   handleCreateFolderItemClickEvent() {
+
     if (!this.canUpdate()) {
       return;
     }
-    const folderParentId = this.props.folder.id;
-    Plugin.send('passbolt.plugin.folders.open-create-dialog', {folderParentId});
     this.destroy();
   }
 

@@ -23,6 +23,7 @@ import ShareChanges from "./Utility/ShareChanges";
 import SharePermissionItem from "./SharePermissionItem";
 import SharePermissionItemSkeleton from "./SharePermissionItemSkeleton";
 import AppContext from "../../contexts/AppContext";
+import {withDialog} from "../../contexts/DialogContext";
 import {withActionFeedback} from "../../contexts/ActionFeedbackContext";
 
 class ShareDialog extends Component {
@@ -46,11 +47,11 @@ class ShareDialog extends Component {
    * @return {void}
    */
   async componentDidMount() {
-    if (this.props.resourcesIds) {
-      this.resources = await this.context.port.request('passbolt.share.get-resources', this.props.resourcesIds);
+    if (this.context.shareDialogProps.resourcesIds) {
+      this.resources = await this.context.port.request('passbolt.share.get-resources', this.context.shareDialogProps.resourcesIds);
     }
-    if (this.props.foldersIds) {
-      this.folders = await this.context.port.request('passbolt.share.get-folders', this.props.foldersIds);
+    if (this.context.shareDialogProps.foldersIds) {
+      this.folders = await this.context.port.request('passbolt.share.get-folders', this.context.shareDialogProps.foldersIds);
     }
 
     this.shareChanges = new ShareChanges(this.resources, this.folders);
@@ -245,14 +246,14 @@ class ShareDialog extends Component {
    * @returns {Promise<void>}
    */
   async shareSave() {
-    if (this.props.resourcesIds && this.props.foldersIds) {
+    if (this.context.shareDialogProps.resourcesIds && this.context.shareDialogProps.foldersIds) {
       throw new Error('Multi resource and folder share is not implemented.');
     }
-    if (this.props.resourcesIds) {
+    if (this.context.shareDialogProps.resourcesIds) {
       await this.context.port.request("passbolt.share.resources.save", this.resources, this.shareChanges.getResourcesChanges());
       return;
     }
-    if (this.props.foldersIds) {
+    if (this.context.shareDialogProps.foldersIds) {
       await this.context.port.request("passbolt.share.folders.save", this.folders, this.shareChanges.getFoldersChanges());
     }
   }
@@ -263,7 +264,7 @@ class ShareDialog extends Component {
    * @returns {Promise<Object>} aros,
    */
   async fetchAutocompleteItems(keyword) {
-    const items = await this.context.port.request('passbolt.share.search-aros', keyword, this.props.resourcesIds);
+    const items = await this.context.port.request('passbolt.share.search-aros', keyword, this.context.shareDialogProps.resourcesIds);
     return items.filter(item => {
       const found = this.state.permissions.filter(permission => (permission.aro.id === item.id));
       return found.length === 0;
@@ -283,10 +284,10 @@ class ShareDialog extends Component {
    * @returns {boolean}
    */
   isAboutItems() {
-    return this.props.resourcesIds
-      && this.props.foldersIds
-      && this.props.resourcesIds.length
-      && this.props.foldersIds.length;
+    return this.context.shareDialogProps.resourcesIds
+      && this.context.shareDialogProps.foldersIds
+      && this.context.shareDialogProps.resourcesIds.length
+      && this.context.shareDialogProps.foldersIds.length;
   }
 
   /**
@@ -294,7 +295,7 @@ class ShareDialog extends Component {
    * @returns {boolean}
    */
   isAboutResources() {
-    return this.props.resourcesIds && this.props.resourcesIds.length > 1;
+    return this.context.shareDialogProps.resourcesIds && this.context.shareDialogProps.resourcesIds.length > 1;
   }
 
   /**
@@ -302,7 +303,7 @@ class ShareDialog extends Component {
    * @returns {boolean}
    */
   isAboutFolders() {
-    return this.props.foldersIds && this.props.foldersIds.length > 1;
+    return this.context.shareDialogProps.foldersIds && this.context.shareDialogProps.foldersIds.length > 1;
   }
 
   /**
@@ -310,7 +311,7 @@ class ShareDialog extends Component {
    * @returns {boolean}
    */
   isAboutAFolder() {
-    return this.props.foldersIds && this.props.foldersIds.length === 1;
+    return this.context.shareDialogProps.foldersIds && this.context.shareDialogProps.foldersIds.length === 1;
   }
 
   /**
@@ -318,7 +319,7 @@ class ShareDialog extends Component {
    * @returns {boolean}
    */
   isAboutAResource() {
-    return this.props.resourcesIds && this.props.resourcesIds.length === 1;
+    return this.context.shareDialogProps.resourcesIds && this.context.shareDialogProps.resourcesIds.length === 1;
   }
 
   /**
@@ -330,19 +331,19 @@ class ShareDialog extends Component {
       return `Loading...`;
     }
     if (this.isAboutItems()) {
-      return `Share ${this.props.resourcesIds.length + this.props.foldersIds.length} items`;
+      return `Share ${this.context.shareDialogProps.resourcesIds.length + this.context.shareDialogProps.foldersIds.length} items`;
     }
     if (this.isAboutAResource()) {
       return `Share resource ${this.resources[0].name}`;
     }
     if (this.isAboutResources()) {
-      return `Share ${this.props.resourcesIds.length} resources`;
+      return `Share ${this.context.shareDialogProps.resourcesIds.length} resources`;
     }
     if (this.isAboutAFolder()) {
       return `Share folder ${this.folders[0].name}`;
     }
     if (this.isAboutFolders()) {
-      return `Share ${this.props.foldersIds.length} folders`;
+      return `Share ${this.context.shareDialogProps.foldersIds.length} folders`;
     }
   }
 
@@ -477,10 +478,8 @@ class ShareDialog extends Component {
 ShareDialog.contextType = AppContext;
 
 ShareDialog.propTypes = {
-  resourcesIds: PropTypes.array,
-  foldersIds: PropTypes.array,
   onClose: PropTypes.func,
   actionFeedbackContext: PropTypes.any // The action feedback context
 };
 
-export default withActionFeedback(ShareDialog);
+export default withActionFeedback(withDialog(ShareDialog));

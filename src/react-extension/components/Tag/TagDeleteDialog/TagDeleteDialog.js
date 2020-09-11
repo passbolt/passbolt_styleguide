@@ -56,6 +56,7 @@ class TagDeleteDialog extends Component {
    * Handle close button click.
    */
   handleCloseClick() {
+    this.context.setContext({tagToDelete: null});
     this.props.onClose();
   }
 
@@ -66,9 +67,10 @@ class TagDeleteDialog extends Component {
     this.setState({processing: true});
 
     try {
-      await this.context.port.request("passbolt.tags.delete", this.props.tag.id);
+      await this.context.port.request("passbolt.tags.delete", this.context.tagToDelete.id);
       await this.props.actionFeedbackContext.displaySuccess("The tag has been deleted successfully");
       this.props.onClose();
+      this.context.setContext({tagToDelete: null});
     } catch (error) {
       // It can happen when the user has closed the passphrase entry dialog by instance.
       if (error.name === "UserAbortsOperationError") {
@@ -95,7 +97,7 @@ class TagDeleteDialog extends Component {
         className="delete-tag-dialog">
             <form onSubmit={this.handleFormSubmit} noValidate>
               <div className="form-content">
-                <p>Are you sure you want to delete the tag <strong>{this.props.tag.slug}</strong>?</p>
+                <p>Are you sure you want to delete the tag <strong>{this.context.tagToDelete.slug}</strong>?</p>
                 <p>Warning: Once the tag is deleted, it’ll be removed permanently and will not be recoverable.</p>
                 {this.state.error &&
                 <div className="feedbacks message error">{this.state.error}</div>
@@ -115,7 +117,6 @@ TagDeleteDialog.contextType = AppContext;
 
 TagDeleteDialog.propTypes = {
   onClose: PropTypes.func,
-  tag: PropTypes.object,
   actionFeedbackContext: PropTypes.any // The action feedback context
 };
 
