@@ -13,11 +13,12 @@
  */
 
 import React from "react";
-import {fireEvent, render} from "@testing-library/react";
+import {fireEvent, render, waitFor} from "@testing-library/react";
 import "../../../test/lib/crypto/cryptoGetRandomvalues";
 import AppContext from "../../../contexts/AppContext";
 import MockPort from "../../../test/mock/MockPort";
 import SidebarTagFilterSection from "./SidebarTagFilterSection";
+import {ResourceWorkspaceContext} from "../../../contexts/ResourceWorkspaceContext";
 import ContextualMenuContextProvider from "../../../contexts/Common/ContextualMenuContext";
 import ManageContextualMenu from "../../ManageContextualMenu";
 
@@ -270,6 +271,35 @@ describe("SidebarTagFilterSection", () => {
     const moreTagItemMenu = container.querySelector(".more");
     expect(moreTagItemMenu).toBeNull();
 
+  });
+
+  it("Select a tag in a resource’s tags", async () => {
+    const appContext = getAppContext();
+    const props = {
+      tags: getDummyTags()
+    };
+    const {container} = renderTagFilter(appContext, props);
+
+    // Sidebar Tags title exists and correct
+    const tagFilterTitle = container.querySelector("h3");
+    expect(tagFilterTitle).not.toBeNull();
+    expect(tagFilterTitle.textContent).toBe("Filter by tags");
+
+    jest.spyOn(ResourceWorkspaceContext._currentValue, 'onFilterTagChanged').mockImplementation(() => {});
+
+    // Click to display contextual menu tags
+    const leftClick = {button: 0};
+    // slug list exists
+    const slugList = container.querySelectorAll(".ellipsis");
+    expect(slugList).not.toBeNull();
+    expect(slugList.length).toBe(5);
+    fireEvent.click(slugList[2], leftClick);
+
+    // API calls are made on submit, wait they are resolved.
+    await waitFor(() => {
+    });
+
+    expect(ResourceWorkspaceContext._currentValue.onFilterTagChanged).toHaveBeenCalled();
   });
 
 });
