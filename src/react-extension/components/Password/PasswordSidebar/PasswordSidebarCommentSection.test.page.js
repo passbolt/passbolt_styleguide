@@ -19,6 +19,7 @@ import AppContext from "../../../contexts/AppContext";
 import React from "react";
 import PasswordSidebarCommentSection from "./PasswordSidebarCommentSection";
 import AddCommentPageObject from "./AddComment.test.page.object";
+import DisplayCommentListPageObject from "./DisplayCommentList.test.page.object";
 
 /**
  * The PasswordSidebarCommentSection component represented as a page
@@ -44,6 +45,7 @@ export default class PasswordSidebarCommentSectionPage {
      */
     setupPageObjects() {
         this._addComment = new AddCommentPageObject(this._page.container);
+        this._displayCommentList = new DisplayCommentListPageObject(this._page.container);
         this._titleHeader = new TitleHeaderPageObject(this._page.container);
         this._addIcon = new AddIconPageObject(this._page.container);
     }
@@ -68,6 +70,13 @@ export default class PasswordSidebarCommentSectionPage {
      */
     get addComment() {
         return this._addComment;
+    }
+
+    /**
+     * Returns the page object of display comments
+     */
+    get displayCommentList() {
+        return this._displayCommentList;
     }
 
 }

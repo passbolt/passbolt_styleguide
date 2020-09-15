@@ -17,6 +17,7 @@ import React from "react";
 import AddComment from "./AddComment";
 import PropTypes from "prop-types";
 import AppContext from "../../../contexts/AppContext";
+import DisplayCommentList from "./DisplayCommentList";
 
 
 class PasswordSidebarCommentSection extends React.Component {
@@ -39,9 +40,9 @@ class PasswordSidebarCommentSection extends React.Component {
     getDefaultState() {
         return {
             open: false, // Flag to determine the expand / collapse of the section
-            comments: [], // The resource comments
             canAdd: false,// Flag to determine the display of the "Add Comment" area,
-            canAddByIcon: false // Flag to determine the display of the "Add Icons"
+            canAddByIcon: false, // Flag to determine the display of the "Add Icons"
+            mustRefresh: false, // Flag to determine if the comment list must be refreshed
         };
     }
 
@@ -54,6 +55,7 @@ class PasswordSidebarCommentSection extends React.Component {
         this.handleAddedEvent = this.handleAddedEvent.bind(this);
         this.handleCancelledAddEvent = this.handleCancelledAddEvent.bind(this);
         this.handleRequestedAddEvent = this.handleRequestedAddEvent.bind(this);
+        this.handleFetchedEvent = this.handleFetchedEvent.bind(this);
     }
 
 
@@ -63,50 +65,38 @@ class PasswordSidebarCommentSection extends React.Component {
     async handleTitleClickedEvent() {
         const open = !this.state.open;
         this.setState({open});
-        if (open) {
-            await this.fetch();
-        }
     }
 
 
     /**
      * Whenever the user added a new comment
-     * @param addedComment The added comment
      * @returns {Promise<void>}
      */
-    async handleAddedEvent(addedComment) {
-        // Refresh the comment list
-        const commentsWithAddedCommentAtTop = [ addedComment, ...this.state.comments ];
-        this.setState({comments: commentsWithAddedCommentAtTop, canAdd: false, canAddByIcon: true});
+    async handleAddedEvent() {
+        await this.setState({mustRefresh: true, canAdd: false, canAddByIcon: true});
     }
 
     /**
      * Whenever the user cancelled the adding of new comment
      */
-    handleCancelledAddEvent() {
-        const hasComments = this.state.comments.length > 0;
-        if (hasComments) {
-            this.setState({canAdd: false });
-        }
+    async handleCancelledAddEvent() {
+        await this.setState({canAdd: false });
     }
 
     /**
      * Whenever the user requested to add a new comment ( call-to-action )
      */
-    handleRequestedAddEvent() {
-        this.setState({canAdd: true });
+    async handleRequestedAddEvent() {
+        await this.setState({canAdd: true });
     }
 
-
     /**
-     * Fetch the comments of the resource
+     * Whenever the comments to display has been fetched
+     * @param comments The fetched comments
      */
-    async fetch() {
-        const resourceId = this.props.resource.id;
-        const comments = await this.context.port.request('passbolt.comments.find-all-by-resource', resourceId);
-        const canAdd = comments.length === 0; // If no comments initially, one can display the "Add Comment" component
-        const canAddByIcon = comments.length > 0; // If comments initially, one can do actions i.e. add comment icon
-        await this.setState({comments, canAdd, canAddByIcon});
+    async handleFetchedEvent(comments) {
+        const hasComments = comments && comments.length > 0;
+        await this.setState({mustRefresh: false, canAdd: !hasComments, canAddByIcon: hasComments});
     }
 
     /**
@@ -125,20 +115,21 @@ class PasswordSidebarCommentSection extends React.Component {
                         </a>
                     </h4>
                 </div>
-                <div className="accordion-content">
+                { this.state.open &&
+                    <div className="accordion-content">
                     {this.state.canAddByIcon &&
-                        <a
-                            className="section-action"
-                            href="#"
-                            onClick={this.handleRequestedAddEvent}>
+                    <a
+                        className="section-action"
+                        href="#"
+                        onClick={this.handleRequestedAddEvent}>
                             <span className="svg-icon">
                                 <svg viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg">
                                     <path
                                         d="M1344 960v-128q0-26-19-45t-45-19h-256v-256q0-26-19-45t-45-19h-128q-26 0-45 19t-19 45v256h-256q-26 0-45 19t-19 45v128q0 26 19 45t45 19h256v256q0 26 19 45t45 19h128q26 0 45-19t19-45v-256h256q26 0 45-19t19-45zm320-64q0 209-103 385.5t-279.5 279.5-385.5 103-385.5-103-279.5-279.5-103-385.5 103-385.5 279.5-279.5 385.5-103 385.5 103 279.5 279.5 103 385.5z"/>
                                 </svg>
                             </span>
-                            <span className="visuallyhidden">Create</span>
-                        </a>
+                        <span className="visuallyhidden">Create</span>
+                    </a>
                     }
 
                     { this.state.canAdd &&
@@ -148,7 +139,13 @@ class PasswordSidebarCommentSection extends React.Component {
                             onCancel={this.handleCancelledAddEvent}
                             cancellable={this.state.canAddByIcon}/>
                     }
+                    <DisplayCommentList
+                        resource={this.props.resource}
+                        onFetch={this.handleFetchedEvent}
+                        mustRefresh={this.state.mustRefresh}/>
                 </div>
+                }
+
             </div>
         );
     }
