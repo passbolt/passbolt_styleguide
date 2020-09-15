@@ -20,6 +20,8 @@ import FolderSidebarActivitySection from "./FolderSidebarActivitySection";
 import AppContext from "../../../contexts/AppContext";
 import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 
+const LIMIT_ACTIVITIES_PER_PAGE = 5;
+
 class FolderSidebar extends React.Component {
   /**
    * Constructor
@@ -124,8 +126,8 @@ class FolderSidebar extends React.Component {
    * @returns {Promise<void>}
    */
   async findFolderActivities() {
-    const newActivities = await this.context.port.request('passbolt.folders.find-activities', {page: this.state.activitiesPage});
-    const activities = [...this.state.activities, ...newActivities];
+    const newActivities = await this.context.port.request('passbolt.folders.action-log', this.props.resourceWorkspaceContext.details.folder.id, this.state.activitiesPage, LIMIT_ACTIVITIES_PER_PAGE);
+    const activities = [...(this.state.activities || []), ...newActivities];
     const activitySectionMoreProcessing = false;
     this.setState({activities, activitySectionMoreProcessing});
   }

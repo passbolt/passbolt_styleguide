@@ -12,8 +12,8 @@
  * @since         3.0.0
  */
 
-export default (eventObject) => {
-  if (eventObject.page === 1) {
+export default (folderId, page, limit) => {
+  if (page === 1) {
     return [{
       "action_log_id": "c8f93853-290f-42aa-a290-a555c53bdeeb",
       "type": "Folders.updated",
@@ -208,7 +208,7 @@ export default (eventObject) => {
       "created": "2020-06-13T09:24:13+00:00",
       "id": "a4e5da20-ec7e-5b6e-82ad-627a9c82983a"
     }];
-  } else if (eventObject.page === 2) {
+  } else if (page === 2) {
     return [{
       "action_log_id": "838e3154-f6af-4c71-bf32-48e1f4f35897",
       "type": "Permissions.updated",
