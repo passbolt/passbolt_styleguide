@@ -4907,6 +4907,143 @@ h6 .input.toggle-switch {
 .panel.middle .breadcrumbs {
   border-bottom: 1px solid #DDD;
 }
+/*
+ * Comment thread with add/edit form
+ */
+.panel.aside .comments {
+  width: 100%;
+  /* mini fixed fluid 2 columns layout */
+}
+.panel.aside .comments .wrap-right-column {
+  float: left;
+  width: 100%;
+}
+.panel.aside .comments .right-column {
+  margin-left: 2.5em;
+}
+.panel.aside .comments .left-column {
+  float: left;
+  width: 2em;
+  margin-left: -100%;
+}
+.panel.aside .comments .comment {
+  padding-bottom: 0.5em;
+  /*
+     * For IE 6/7 only
+     * Include this rule to trigger hasLayout and contain floats.
+     */
+  /*
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
+  /*
+     * For IE 6/7 only
+     * Include this rule to trigger hasLayout and contain floats.
+     */
+  zoom: 1;
+  /*
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
+  /* picture */
+  /* username and date */
+  /* actions */
+  /* triangle bubble */
+}
+.panel.aside .comments .comment:before,
+.panel.aside .comments .comment:after {
+  content: "";
+  display: table;
+}
+.panel.aside .comments .comment:after {
+  clear: both;
+}
+.panel.aside .comments .comment:before,
+.panel.aside .comments .comment:after {
+  content: "";
+  display: table;
+}
+.panel.aside .comments .comment:after {
+  clear: both;
+}
+.panel.aside .comments .comment p {
+  background: #EEE;
+  padding: 1em;
+  margin-left: 10px;
+}
+.panel.aside .comments .comment .author.picture {
+  width: 2em;
+  height: 2em;
+  margin-top: 0.25em;
+}
+.panel.aside .comments .comment .author.picture img {
+  width: 2em;
+  height: 2em;
+}
+.panel.aside .comments .comment .author.picture a {
+  border: 0;
+}
+.panel.aside .comments .comment .metadata {
+  font-style: italic;
+  margin: 0.5em 0 1em 1em;
+}
+.panel.aside .comments .comment .metadata .author.username {
+  max-width: 48%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -o-text-overflow: ellipsis;
+  -ms-text-overflow: ellipsis;
+}
+.panel.aside .comments .comment .metadata .author.username:after {
+  content: ', ';
+}
+.panel.aside .comments .comment .metadata .modified {
+  max-width: 48%;
+  padding-right: 2px;
+  color: #969696;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -o-text-overflow: ellipsis;
+  -ms-text-overflow: ellipsis;
+}
+.panel.aside .comments .comment .form-content {
+  margin-left: 0.5em;
+}
+.panel.aside .comments .comment .actions {
+  float: right;
+  margin-top: -2.25em;
+  margin-right: 0;
+}
+.panel.aside .comments .comment p:before {
+  content: ' ';
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  border-top: 10px solid transparent;
+  border-bottom: 10px solid transparent;
+  border-right: 10px solid #EEE;
+  margin-left: -1.8em;
+  margin-top: -0.5em;
+}
+.panel.aside .comments .comment a.js_delete_comment {
+  border: 0;
+}
 .contextual-menu {
   position: absolute;
   background: #FFF;

@@ -104,8 +104,3 @@ class PasswordSidebarTagSection extends React.Component {
   }
 }
 
-PasswordSidebarTagSection.propTypes = {
-  resource: PropTypes.object,
-};
-
-export default PasswordSidebarTagSection;

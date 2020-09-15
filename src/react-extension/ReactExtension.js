@@ -33,6 +33,7 @@ import MainMenu from "./components/Common/Navigation/MainMenu/MainMenu";
 import PasswordWorkspace from "./components/Password/PasswordWorkspace/PasswordWorkspace";
 import SiteSettings from "./lib/Settings/SiteSettings";
 import UserSettings from "./lib/Settings/UserSettings";
+import ActionFeedbackContextProvider from "./contexts/ActionFeedbackContext";
 
 class ReactExtension extends Component {
   constructor(props) {
@@ -415,7 +416,8 @@ class ReactExtension extends Component {
 
     return (
       <AppContext.Provider value={this.state}>
-        <Router>
+        <ActionFeedbackContextProvider>
+          <Router>
           <div id="container" className="page">
             {isReady &&
             <div id="app" className={`app ${isReady ? "ready" : ""}`} tabIndex="1000">
@@ -478,6 +480,8 @@ class ReactExtension extends Component {
               <div className="header first">
                 <MainMenu onClick={this.handleWorkspaceSelect} baseUrl={this.state.userSettings.getTrustedDomain()}/>
               </div>
+
+
               <Switch>
                 <Route path={[
                   "/app/folders/view/:filterByFolderId",
@@ -490,7 +494,8 @@ class ReactExtension extends Component {
             </div>
             }
           </div>
-        </Router>
+          </Router>
+        </ActionFeedbackContextProvider>
       </AppContext.Provider>
     );
   }

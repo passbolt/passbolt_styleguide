@@ -28,6 +28,8 @@ import mockRequestShareSearchAros from "./request/mockRequestShareSearchAros";
 import mockRequestSiteSettings from "./request/mockRequestSiteSettings";
 import mockRequestUserGet from "./request/mockRequestUserGet";
 import mockRequestResourceUpdateTags from "./request/mockRequestResourceUpdateTags";
+import mockRequestCommentsFind from "./request/mockRequestCommentsFind";
+import mockRequestCommentsCreate from "./request/mockRequestCommentsCreate";
 
 export default (storage) => {
   const mockPort = new MockPort(storage);
@@ -46,6 +48,8 @@ export default (storage) => {
   mockPort.addRequestListener("passbolt.share.search-aros", mockRequestShareSearchAros);
   mockPort.addRequestListener("passbolt.secret.decrypt", mockRequestSecretDecrypt);
   mockPort.addRequestListener("passbolt.resource.update-tags", mockRequestResourceUpdateTags);
+  mockPort.addRequestListener("passbolt.comments.create", mockRequestCommentsCreate);
+  mockPort.addRequestListener("passbolt.comments.find-all-by-resource", mockRequestCommentsFind);
 
   return mockPort;
 };
