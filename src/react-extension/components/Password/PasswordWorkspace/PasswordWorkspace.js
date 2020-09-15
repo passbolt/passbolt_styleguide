@@ -19,11 +19,9 @@ import SearchBar from "../../Common/Navigation/Search/SearchBar";
 import UserBadgeMenu from "../../Common/Navigation/Header/UserBadgeMenu";
 import Breadcrumbs from "../../Common/Navigation/Breadcrumbs/Breadcrumbs";
 import FoldersTree from "../FoldersTree/FoldersTree";
-import FoldersTreeItemContextualMenu from "../FoldersTree/FoldersTreeItemContextualMenu";
 import Grid from "../Grid/Grid";
 import FolderSidebar from "../FolderSidebar/FolderSidebar";
 import PasswordSidebar from "../PasswordSidebar/PasswordSidebar";
-import FoldersTreeRootFolderContextualMenu from "../FoldersTree/FoldersTreeRootFolderContextualMenu";
 import AppContext from "../../../contexts/AppContext";
 import TagFilter from "../TagFilter/TagFilter";
 
@@ -44,22 +42,9 @@ class Workspace extends Component {
    */
   getDefaultState() {
     return {
-      folderContextualMenu: {
-        folder: null,
-        foldersTreeListElementRef: null,
-        left: 0,
-        show: false,
-        top: 0,
-      },
       filterType: "default",
       folders: null,
       resources: null,
-      rootFolderContextualMenu: {
-        foldersTreeTitleElementRef: null,
-        left: 0,
-        show: false,
-        top: 0,
-      },
       search: "",
       selectedResources: [],
       selectedFolders: [],
@@ -75,10 +60,6 @@ class Workspace extends Component {
    */
   bindCallbacks() {
     this.handleEditFolderPermissions = this.handleEditFolderPermissions.bind(this);
-    this.handleFoldersTreeContextualMenuOnFolderHideEvent = this.handleFoldersTreeContextualMenuOnFolderHideEvent.bind(this);
-    this.handleFoldersTreeContextualMenuOnRootFolderHideEvent = this.handleFoldersTreeContextualMenuOnRootFolderHideEvent.bind(this);
-    this.handleFoldersTreeFolderContextualMenu = this.handleFoldersTreeFolderContextualMenu.bind(this);
-    this.handleFoldersTreeRootFolderContextualMenu = this.handleFoldersTreeRootFolderContextualMenu.bind(this);
     this.handleFilterByFolder = this.handleFilterByFolder.bind(this);
     this.handleSelectRootFolder = this.handleSelectRootFolder.bind(this);
     this.handleSelectResources = this.handleSelectResources.bind(this);
@@ -207,47 +188,6 @@ class Workspace extends Component {
   }
 
   /**
-   * Handle when the user wants to hide the contextual menu of a folder.
-   */
-  handleFoldersTreeContextualMenuOnFolderHideEvent() {
-    const folderContextualMenu = {show: false};
-    this.setState({folderContextualMenu});
-  }
-
-  /**
-   * Handle when the user wants to hide the contextual menu of the folder.
-   */
-  handleFoldersTreeContextualMenuOnRootFolderHideEvent() {
-    const rootFolderContextualMenu = {show: false};
-    this.setState({rootFolderContextualMenu});
-  }
-
-  /**
-   * Handle when the user wants to display the contextual menu of a folder.
-   * @param {Object} folder The folder
-   * @param {int} top The top position of the contextual menu
-   * @param {int} left The left position of the contextual menu
-   * @param {Element} foldersTreeListElementRef The folders tree list element
-   */
-  handleFoldersTreeFolderContextualMenu(folder, top, left, foldersTreeListElementRef) {
-    const show = true;
-    const folderContextualMenu = {folder, left, show, top, foldersTreeListElementRef};
-    this.setState({folderContextualMenu});
-  }
-
-  /**
-   * Handle when the user wants to display the contextual menu of the root folder.
-   * @param {int} top The top position of the contextual menu
-   * @param {int} left The left position of the contextual menu
-   * @param {Element} foldersTreeTitleElementRef The folders tree title element
-   */
-  handleFoldersTreeRootFolderContextualMenu(top, left, foldersTreeTitleElementRef) {
-    const show = true;
-    const rootFolderContextualMenu = {left, show, top, foldersTreeTitleElementRef};
-    this.setState({rootFolderContextualMenu});
-  }
-
-  /**
    * Handle when the user filters by folder.
    * @param {object} folder The target folder
    */
@@ -353,22 +293,6 @@ class Workspace extends Component {
 
     return (
       <div>
-        {this.state.folderContextualMenu.show &&
-        <FoldersTreeItemContextualMenu
-          folder={this.state.folderContextualMenu.folder}
-          foldersTreeListElementRef={this.state.folderContextualMenu.foldersTreeListElementRef}
-          left={this.state.folderContextualMenu.left}
-          onDestroy={this.handleFoldersTreeContextualMenuOnFolderHideEvent}
-          top={this.state.folderContextualMenu.top}/>
-        }
-        {this.state.rootFolderContextualMenu.show &&
-        <FoldersTreeRootFolderContextualMenu
-          folders={this.context.folders}
-          foldersTreeTitleElementRef={this.state.rootFolderContextualMenu.foldersTreeTitleElementRef}
-          left={this.state.rootFolderContextualMenu.left}
-          onDestroy={this.handleFoldersTreeContextualMenuOnRootFolderHideEvent}
-          top={this.state.rootFolderContextualMenu.top}/>
-        }
         <div className="header second">
           <Logo/>
           <SearchBar
@@ -390,8 +314,6 @@ class Workspace extends Component {
                 <div className="panel left">
                   <FoldersTree
                     folders={this.context.folders}
-                    onFolderContextualMenu={this.handleFoldersTreeFolderContextualMenu}
-                    onRootFolderContextualMenu={this.handleFoldersTreeRootFolderContextualMenu}
                     onSelect={this.handleFilterByFolder}
                     onSelectRoot={this.handleSelectRootFolder}
                     selectedFolder={this.state.filterByFolder}/>

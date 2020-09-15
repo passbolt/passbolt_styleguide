@@ -134,7 +134,7 @@ class FoldersTreeRootFolderContextualMenu extends React.Component {
   getStyle() {
     return {
       display: "block",
-      position: "absolute",
+      position: "fixed",
       top: this.props.top,
       left: this.props.left
     };
