@@ -11,5 +11,5 @@ export default React.createContext({
   shareResources: null,
   selectedResources: null,
   selectedUser: null,
-  folders: null
+  folders: null,
 });

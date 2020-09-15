@@ -16,6 +16,7 @@ import Icon from "../../../Common/Icons/Icon";
 import PropTypes from "prop-types";
 import PasswordSidebarInformationSection from "./PasswordSidebarInformationSection";
 import PasswordSidebarTagSection from "./PasswordSidebarTagSection";
+
 import PasswordSidebarPermissionsSection from "./PasswordSidebarPermissionsSection";
 
 class PasswordSidebar extends React.Component {
@@ -118,6 +119,7 @@ class PasswordSidebar extends React.Component {
           {/*  users={this.props.users}/>*/}
           <PasswordSidebarTagSection
             resource={this.props.resource}/>
+
         </div>
       </div>
     );
