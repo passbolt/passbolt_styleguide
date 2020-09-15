@@ -75,10 +75,6 @@ class Workspace extends Component {
    */
   bindCallbacks() {
     this.handleEditFolderPermissions = this.handleEditFolderPermissions.bind(this);
-    this.handleFoldersTreeContextualMenuOnFolderHideEvent = this.handleFoldersTreeContextualMenuOnFolderHideEvent.bind(this);
-    this.handleFoldersTreeContextualMenuOnRootFolderHideEvent = this.handleFoldersTreeContextualMenuOnRootFolderHideEvent.bind(this);
-    this.handleFoldersTreeFolderContextualMenu = this.handleFoldersTreeFolderContextualMenu.bind(this);
-    this.handleFoldersTreeRootFolderContextualMenu = this.handleFoldersTreeRootFolderContextualMenu.bind(this);
     this.handleSelectFolder = this.handleSelectFolder.bind(this);
     this.handleSelectRootFolder = this.handleSelectRootFolder.bind(this);
     this.handleSelectResourcesEvent = this.handleSelectResourcesEvent.bind(this);
@@ -135,47 +131,6 @@ class Workspace extends Component {
    */
   handleEditFolderPermissions(folder) {
     console.log(`The user edits the permissions of the folder ${folder.name}`);
-  }
-
-  /**
-   * Handle when the user wants to hide the contextual menu of a folder.
-   */
-  handleFoldersTreeContextualMenuOnFolderHideEvent() {
-    const folderContextualMenu = {show: false};
-    this.setState({folderContextualMenu});
-  }
-
-  /**
-   * Handle when the user wants to hide the contextual menu of the folder.
-   */
-  handleFoldersTreeContextualMenuOnRootFolderHideEvent() {
-    const rootFolderContextualMenu = {show: false};
-    this.setState({rootFolderContextualMenu});
-  }
-
-  /**
-   * Handle when the user wants to display the contextual menu of a folder.
-   * @param {Object} folder The folder
-   * @param {int} top The top position of the contextual menu
-   * @param {int} left The left position of the contextual menu
-   * @param {Element} foldersTreeListElementRef The folders tree list element
-   */
-  handleFoldersTreeFolderContextualMenu(folder, top, left, foldersTreeListElementRef) {
-    const show = true;
-    const folderContextualMenu = {folder, left, show, top, foldersTreeListElementRef};
-    this.setState({folderContextualMenu});
-  }
-
-  /**
-   * Handle when the user wants to display the contextual menu of the root folder.
-   * @param {int} top The top position of the contextual menu
-   * @param {int} left The left position of the contextual menu
-   * @param {Element} foldersTreeTitleElementRef The folders tree title element
-   */
-  handleFoldersTreeRootFolderContextualMenu(top, left, foldersTreeTitleElementRef) {
-    const show = true;
-    const rootFolderContextualMenu = {left, show, top, foldersTreeTitleElementRef};
-    this.setState({rootFolderContextualMenu});
   }
 
   /**
@@ -255,22 +210,6 @@ class Workspace extends Component {
 
     return (
       <div>
-        {this.state.folderContextualMenu.show &&
-        <FoldersTreeItemContextualMenu
-          folder={this.state.folderContextualMenu.folder}
-          foldersTreeListElementRef={this.state.folderContextualMenu.foldersTreeListElementRef}
-          left={this.state.folderContextualMenu.left}
-          onDestroy={this.handleFoldersTreeContextualMenuOnFolderHideEvent}
-          top={this.state.folderContextualMenu.top}/>
-        }
-        {this.state.rootFolderContextualMenu.show &&
-        <FoldersTreeRootFolderContextualMenu
-          folders={this.state.folders}
-          foldersTreeTitleElementRef={this.state.rootFolderContextualMenu.foldersTreeTitleElementRef}
-          left={this.state.rootFolderContextualMenu.left}
-          onDestroy={this.handleFoldersTreeContextualMenuOnRootFolderHideEvent}
-          top={this.state.rootFolderContextualMenu.top}/>
-        }
         <div className="header second">
           <Logo/>
           <SearchBar
