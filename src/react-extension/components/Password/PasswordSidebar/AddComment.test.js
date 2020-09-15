@@ -33,7 +33,7 @@ describe("Add comments", () => {
 
 
     // The mocked context port request
-    const mockContextRequest = implementation => jest.spyOn(context.port, 'request').mockImplementationOnce(implementation);
+    const mockContextRequest = implementation => jest.spyOn(context.port, 'request').mockImplementation(implementation);
     const noneCommentFoundRequestMockImpl = jest.fn(() => Promise.resolve([]));
     const commentsFoundRequestMockImpl = jest.fn(() => Promise.resolve(commentsMock));
 
@@ -52,7 +52,6 @@ describe("Add comments", () => {
         })
 
         it("I should be prompted to insert a new comment", async () => {
-
             await page.title.click();
 
             expect(page.addComment.exists()).toBeTruthy();
@@ -135,6 +134,8 @@ describe("Add comments", () => {
 
     describe("Scenario: Add a comment on top of the list", () => {
 
+
+
         /**
          * Given I am adding a comment to a resource
          * And I typed “Good men don’t need rules.”
@@ -142,8 +143,27 @@ describe("Add comments", () => {
          * Then I should see the comment “Good men don’t need rules.” at the top of the comments list
          */
 
-        it('I should see the comment “Good men don’t need rules.” at the top of the comments list', () => {
-            // TODO When the display comments part is done
+        let requestMock;
+
+        beforeEach( () => {
+            page = new PasswordSidebarCommentSectionPage(context, props);
+            requestMock = mockContextRequest(commentsFoundRequestMockImpl).mockClear();
+        })
+
+        it('I should see the comment “Good men don’t need rules.” at the top of the comments list', async () => {
+
+            // Since there's a refresh fetch after adding a comment, just need to check if the refresh fetch call is done
+
+
+            await page.title.click();
+            await page.addIcon.click();
+            await page.addComment.write("I'm writing a valid comment");
+            await page.addComment.save();
+
+            expect(context.port.request).toHaveBeenCalledTimes(3);
+
+            const requestName = requestMock.mock.calls[2][0];
+            expect(requestName).toBe("passbolt.comments.find-all-by-resource");
         })
 
 
@@ -193,13 +213,13 @@ describe("Add comments", () => {
          */
 
         let saveResolve;
-        const saveMockImpl = jest.fn(() => new Promise(resolve => saveResolve = resolve));
-        const requestsMockImpl = (...parameters) => {
+        const saveMockImpl = jest.fn(() => new Promise(resolve => { saveResolve = resolve; }));
+        const requestsMockImpl = async (...parameters) => {
             const requestName = parameters[0];
             switch(requestName) {
-                case 'passbolt.comments.find-all-by-resource': return commentsFoundRequestMockImpl(...parameters);
-                case 'passbolt.comments.create': return saveMockImpl(...parameters);
-                default: return jest.fn(() => Promise.reject());
+                case 'passbolt.comments.find-all-by-resource': return await commentsFoundRequestMockImpl(...parameters);
+                case 'passbolt.comments.create': return await saveMockImpl(...parameters);
+                default: return jest.fn(() => Promise.resolve([]));
             }
         }
 
@@ -359,7 +379,7 @@ describe("Add comments", () => {
             await page.addComment.write(' I am writing a comment ');
             await page.addComment.save();
 
-            expect(context.port.request).toHaveBeenCalledTimes(2);
+            expect(context.port.request).toHaveBeenCalledTimes(3);
 
             const createCallPayload = requestMock.mock.calls[1][1];
             expect(createCallPayload.content).toBe("I am writing a comment");
