@@ -13,7 +13,7 @@
  */
 
 import React from "react";
-import {render} from "@testing-library/react";
+import {fireEvent, render} from "@testing-library/react";
 import "../../../test/lib/crypto/cryptoGetRandomvalues";
 import AppContext from "../../../contexts/AppContext";
 import MockPort from "../../../test/mock/MockPort";
@@ -28,22 +28,27 @@ const getDummyTags = function() {
     {
       id: "1",
       slug: "test",
+      is_shared: false
     },
     {
       id: "2",
       slug: "slug",
+      is_shared: false
     },
     {
       id: "3",
-      slug: "git",
+      slug: "#git",
+      is_shared: true
     },
     {
       id: "4",
       slug: "gpg",
+      is_shared: false
     },
     {
       id: "5",
       slug: "there’s always something to look at if you open your eyes!",
+      is_shared: false
     }
   ]
 }
@@ -127,4 +132,114 @@ describe("TagFilter", () => {
   it("Cut long tags", () => {
     // TODO Cut long tags so they fit on one line
   });
+
+  it("Filter my resources’ tags by personal tags", () => {
+    const props = {
+      tags: getDummyTags()
+    };
+    const {container} = renderTagFilter(null, props);
+
+    // Sidebar Tags title exists and correct
+    const tagFilterTitle = container.querySelector("h3");
+    expect(tagFilterTitle).not.toBeNull();
+    expect(tagFilterTitle.textContent).toBe("Filter by tags");
+
+    // Click to expand tags
+    const leftClick = {button: 0};
+    const filterTagByType = container.querySelector(".filter");
+    expect(filterTagByType).not.toBeNull();
+    fireEvent.click(filterTagByType, leftClick);
+
+    const personalTagMenu = container.querySelector("#personal-tag");
+    expect(personalTagMenu).not.toBeNull();
+    fireEvent.click(personalTagMenu, leftClick);
+
+    const tagFilterTitleUpdated = container.querySelector("h3");
+    expect(tagFilterTitleUpdated).not.toBeNull();
+    expect(tagFilterTitleUpdated.textContent).toBe("My tags");
+
+    const personalTags = props.tags.filter( tag => !tag.is_shared);
+
+    // slug list exists
+    const slugList = container.querySelectorAll(".ellipsis");
+    expect(slugList).not.toBeNull();
+    expect(slugList.length).toBe(4);
+    slugList.forEach(function (value, index) {
+      expect(value.textContent).toBe(personalTags[index].slug);
+    });
+
+  });
+
+  it("Filter my resources’ tags by shared tags", () => {
+    const props = {
+      tags: getDummyTags()
+    };
+    const {container} = renderTagFilter(null, props);
+
+    // Sidebar Tags title exists and correct
+    const tagFilterTitle = container.querySelector("h3");
+    expect(tagFilterTitle).not.toBeNull();
+    expect(tagFilterTitle.textContent).toBe("Filter by tags");
+
+    // Click to expand tags
+    const leftClick = {button: 0};
+    const filterTagByType = container.querySelector(".filter");
+    expect(filterTagByType).not.toBeNull();
+    fireEvent.click(filterTagByType, leftClick);
+
+    const personalTagMenu = container.querySelector("#shared-tag");
+    expect(personalTagMenu).not.toBeNull();
+    fireEvent.click(personalTagMenu, leftClick);
+
+    const tagFilterTitleUpdated = container.querySelector("h3");
+    expect(tagFilterTitleUpdated).not.toBeNull();
+    expect(tagFilterTitleUpdated.textContent).toBe("Shared tags");
+
+    const sharedTags = props.tags.filter( tag => tag.is_shared);
+
+    // slug list exists
+    const slugList = container.querySelectorAll(".ellipsis");
+    expect(slugList).not.toBeNull();
+    expect(slugList.length).toBe(1);
+    slugList.forEach(function (value, index) {
+      expect(value.textContent).toBe(sharedTags[index].slug);
+    });
+
+  });
+
+  it("Filter my resources’ tags by all tags", () => {
+    const props = {
+      tags: getDummyTags()
+    };
+    const {container} = renderTagFilter(null, props);
+
+    // Sidebar Tags title exists and correct
+    const tagFilterTitle = container.querySelector("h3");
+    expect(tagFilterTitle).not.toBeNull();
+    expect(tagFilterTitle.textContent).toBe("Filter by tags");
+
+    // Click to expand tags
+    const leftClick = {button: 0};
+    const filterTagByType = container.querySelector(".filter");
+    expect(filterTagByType).not.toBeNull();
+    fireEvent.click(filterTagByType, leftClick);
+
+    const allTagMenu = container.querySelector("#all-tag");
+    expect(allTagMenu).not.toBeNull();
+    fireEvent.click(allTagMenu, leftClick);
+
+    const tagFilterTitleUpdated = container.querySelector("h3");
+    expect(tagFilterTitleUpdated).not.toBeNull();
+    expect(tagFilterTitleUpdated.textContent).toBe("Filter by tags");
+
+    // slug list exists
+    const slugList = container.querySelectorAll(".ellipsis");
+    expect(slugList).not.toBeNull();
+    expect(slugList.length).toBe(5);
+    slugList.forEach(function (value, index) {
+      expect(value.textContent).toBe(props.tags[index].slug);
+    });
+
+  });
+
 });
