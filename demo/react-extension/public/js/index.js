@@ -120,6 +120,17 @@ const scenarios = {
         message: "Error description ..."
       }
     }
+  }],
+  Tags: [{
+    name: "Edit tag dialog",
+    path: "/app/passwords",
+    state: {
+      showTagEditDialog: true,
+      tagEditDialogProps: {
+        id:"c03f9013-b8bd-59fd-8076-d66292180550",
+        slug:"alphaUpdated",
+        is_shared: false}
+    }
   }]
 };
 

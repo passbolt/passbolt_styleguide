@@ -14,7 +14,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-class TagFilterContextualMenu extends React.Component {
+class SidebarTagFilterSectionContextualMenu extends React.Component {
   /**
    * Constructor
    * Initialize state and bind methods
@@ -130,11 +130,11 @@ class TagFilterContextualMenu extends React.Component {
   }
 }
 
-TagFilterContextualMenu.propTypes = {
+SidebarTagFilterSectionContextualMenu.propTypes = {
   left: PropTypes.number, // left position in px of the menu
   filterTagsType: PropTypes.func,
   onDestroy: PropTypes.func,
   top: PropTypes.number // top position in px of the menu
 };
 
-export default TagFilterContextualMenu;
+export default SidebarTagFilterSectionContextualMenu;

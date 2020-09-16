@@ -17,7 +17,7 @@ import {fireEvent, render} from "@testing-library/react";
 import "../../../test/lib/crypto/cryptoGetRandomvalues";
 import AppContext from "../../../contexts/AppContext";
 import MockPort from "../../../test/mock/MockPort";
-import TagFilter from "./TagFilter";
+import SidebarTagFilterSection from "./SidebarTagFilterSection";
 
 beforeEach(() => {
   jest.resetModules();
@@ -66,12 +66,12 @@ const renderTagFilter = function(appContext, props) {
   props = props || {};
   return render(
     <AppContext.Provider value={appContext}>
-      <TagFilter debug tags={props.tags} />
+      <SidebarTagFilterSection debug tags={props.tags} />
     </AppContext.Provider>
   );
 };
 
-describe("TagFilter", () => {
+describe("SidebarTagFilterSection", () => {
   it("View resources' tags", () => {
     const props = {
       tags: getDummyTags()
@@ -123,9 +123,9 @@ describe("TagFilter", () => {
     expect(tagFilterTitle.textContent).toBe("Filter by tags");
 
     // loading tag exists
-    const emptyTag = container.querySelector(".empty-content");
+    const emptyTag = container.querySelector(".processing-text");
     expect(emptyTag).not.toBeNull();
-    expect(emptyTag.textContent).toBe("loading...");
+    expect(emptyTag.textContent).toBe("Retrieving tags");
 
   });
 
@@ -239,6 +239,32 @@ describe("TagFilter", () => {
     slugList.forEach(function (value, index) {
       expect(value.textContent).toBe(props.tags[index].slug);
     });
+
+  });
+
+  it("As LU I cannot edit a shared tag", () => {
+    const props = {
+      tags: getDummyTags()
+    };
+    const {container} = renderTagFilter(null, props);
+
+    // Sidebar Tags title exists and correct
+    const tagFilterTitle = container.querySelector("h3");
+    expect(tagFilterTitle).not.toBeNull();
+    expect(tagFilterTitle.textContent).toBe("Filter by tags");
+
+    // Click to expand tags
+    const leftClick = {button: 0};
+    const filterTagByType = container.querySelector(".filter");
+    expect(filterTagByType).not.toBeNull();
+    fireEvent.click(filterTagByType, leftClick);
+
+    const personalTagMenu = container.querySelector("#shared-tag");
+    expect(personalTagMenu).not.toBeNull();
+    fireEvent.click(personalTagMenu, leftClick);
+
+    const moreTagItemMenu = container.querySelector(".more");
+    expect(moreTagItemMenu).toBeNull();
 
   });
 

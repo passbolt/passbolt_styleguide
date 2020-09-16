@@ -23,7 +23,7 @@ import Grid from "../Grid/Grid";
 import FolderSidebar from "../FolderSidebar/FolderSidebar";
 import PasswordSidebar from "../PasswordSidebar/PasswordSidebar";
 import AppContext from "../../../contexts/AppContext";
-import TagFilter from "../TagFilter/TagFilter";
+import SidebarTagFilterSection from "../../Tag/SidebarTagFilterSection/SidebarTagFilterSection";
 
 class Workspace extends Component {
   /**
@@ -317,7 +317,7 @@ class Workspace extends Component {
                     onSelect={this.handleFilterByFolder}
                     onSelectRoot={this.handleSelectRootFolder}
                     selectedFolder={this.state.filterByFolder}/>
-                  <TagFilter tags={this.getTagsFromResources()}/>
+                  <SidebarTagFilterSection tags={this.getTagsFromResources()}/>
                 </div>
                 <div className="panel middle">
                   <Breadcrumbs/>
