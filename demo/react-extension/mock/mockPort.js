@@ -30,6 +30,7 @@ import mockRequestUserGet from "./request/mockRequestUserGet";
 import mockRequestResourceUpdateTags from "./request/mockRequestResourceUpdateTags";
 import mockRequestCommentsFind from "./request/mockRequestCommentsFind";
 import mockRequestCommentsCreate from "./request/mockRequestCommentsCreate";
+import mockRequestTagsGet from "./request/mockRequestTagsGet";
 
 export default (storage) => {
   const mockPort = new MockPort(storage);
@@ -50,6 +51,7 @@ export default (storage) => {
   mockPort.addRequestListener("passbolt.resource.update-tags", mockRequestResourceUpdateTags);
   mockPort.addRequestListener("passbolt.comments.create", mockRequestCommentsCreate);
   mockPort.addRequestListener("passbolt.comments.find-all-by-resource", mockRequestCommentsFind);
+  mockPort.addRequestListener("passbolt.tags.find-all", mockRequestTagsGet);
 
   return mockPort;
 };

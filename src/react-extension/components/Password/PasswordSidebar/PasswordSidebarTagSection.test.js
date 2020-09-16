@@ -18,11 +18,12 @@ import PasswordSidebarTagSection from "./PasswordSidebarTagSection";
 import AppContext from "../../../contexts/AppContext";
 import MockPort from "../../../test/mock/MockPort";
 
+
 beforeEach(() => {
   jest.resetModules();
 });
 
-const getDummyResource = function() {
+const getDummyResource = function () {
   return {
     "id": "8e3874ae-4b40-590b-968a-418f704b9d9a",
     "name": "apache",
@@ -72,7 +73,7 @@ const getDummyResource = function() {
   };
 };
 
-const getDummyResourceWithLastSharedTagNotOwned = function() {
+const getDummyResourceWithLastSharedTagNotOwned = function () {
   return {
     "id": "8e3874ae-4b40-590b-968a-418f704b9d9a",
     "name": "apache",
@@ -95,19 +96,19 @@ const getDummyResourceWithLastSharedTagNotOwned = function() {
       },
       {
         "id": "0a710aba-4aa9-439b-a434-5f9f6c9f6442",
-        "slug": "tardis",
+        "slug": "#gallifrey",
         "is_shared": false
       },
       {
         "id": "37d7eeca-71d5-46fb-9f08-831e2bde7781",
-        "slug": "#gallifrey",
+        "slug": "tardis",
         "is_shared": true
       }
     ]
   };
 };
 
-const getDummyResourceEmptyTag = function() {
+const getDummyResourceEmptyTag = function () {
   return {
     "id": "8e3874ae-4b40-590b-968a-418f704b9d9a",
     "name": "apache",
@@ -126,7 +127,32 @@ const getDummyResourceEmptyTag = function() {
   };
 };
 
-const getAppContext = function(appContext) {
+const getDummytags = function () {
+  return [
+    {
+      "id": "be930cc9-516c-4206-8f0b-00b8b6752029",
+      "slug": "#gg",
+      "is_shared": true
+    },
+    {
+      "id": "d4582ccc-1869-43ce-b47f-1c957764e654",
+      "slug": "tardis",
+      "is_shared": false
+    },
+    {
+      "id": "0a710aba-4aa9-439b-a434-5f9f6c9f6442",
+      "slug": "tarantino",
+      "is_shared": false
+    },
+    {
+      "id": "37d7eeca-71d5-46fb-9f08-831e2bde7781",
+      "slug": "ok",
+      "is_shared": false
+    }
+  ];
+};
+
+const getAppContext = function (appContext) {
   const defaultAppContext = {
 
     port: new MockPort()
@@ -135,7 +161,7 @@ const getAppContext = function(appContext) {
   return Object.assign(defaultAppContext, appContext || {});
 };
 
-const renderPasswordSidebarTagSection = function(appContext, props) {
+const renderPasswordSidebarTagSection = function (appContext, props) {
   appContext = getAppContext(appContext);
   props = props || {};
   return render(
@@ -146,6 +172,7 @@ const renderPasswordSidebarTagSection = function(appContext, props) {
 };
 
 describe("PasswordSidebarTag", () => {
+
   it("See the tags of a resource", () => {
     const props = {
       resource: getDummyResource()
@@ -170,9 +197,10 @@ describe("PasswordSidebarTag", () => {
     const tags = container.querySelectorAll(".tag");
     expect(tags).not.toBeNull();
     expect(tags.length).toBe(6);
-    tags.forEach((value, index) => {
+    tags.forEach(function (value, index) {
       expect(value.textContent).toBe(props.resource.tags[index].slug);
     });
+
   });
 
   it("See an empty message if the resource has no tags", () => {
@@ -195,9 +223,10 @@ describe("PasswordSidebarTag", () => {
     const emptyContent = container.querySelector(".empty-content");
     expect(emptyContent).not.toBeNull();
     expect(emptyContent.textContent).toBe("There is no tag, click here to add one");
+
   });
 
-  it("Cut long tags so they fit on one line", () => {
+  it("Cut long tags so they fit on one line in tag viewer", () => {
     // TODO Cut long tags so they fit on one line
   });
 
@@ -217,9 +246,9 @@ describe("PasswordSidebarTag", () => {
     fireEvent.click(sidebar, leftClick);
 
     // Tags list exists
-    const emptyContent = container.querySelector(".empty-content");
+    const emptyContent = container.querySelector(".processing-text");
     expect(emptyContent).not.toBeNull();
-    expect(emptyContent.textContent).toBe("loading...");
+    expect(emptyContent.textContent).toBe("Retrieving tags");
 
   });
 
@@ -257,6 +286,7 @@ describe("PasswordSidebarTag", () => {
     const cancelButton = container.querySelector(".tag-editor-cancel");
     expect(cancelButton).not.toBeNull();
     expect(cancelButton.textContent).toBe("cancel");
+
   });
 
   it("Start editing by clicking on the empty message", () => {
@@ -284,6 +314,7 @@ describe("PasswordSidebarTag", () => {
     const noticeInputTag = container.querySelector(".message");
     expect(noticeInputTag).not.toBeNull();
     expect(noticeInputTag.textContent).toBe("Pro tip: Tags starting with # are shared with all users who have access. Separate tags using commas.");
+
   });
 
   it("Stop editing by clicking on the edit icon", () => {
@@ -311,6 +342,7 @@ describe("PasswordSidebarTag", () => {
     // Editor input tag not exists
     const editorTagClose = container.querySelector(".tag-editor-input");
     expect(editorTagClose).toBeNull();
+
   });
 
   it("Stop editing by clicking out of the edit zone", () => {
@@ -339,9 +371,10 @@ describe("PasswordSidebarTag", () => {
     // Editor input tag not exists
     const editorTagClose = container.querySelector(".tag-editor-input");
     expect(editorTagClose).toBeNull();
+
   });
 
-  it("Add a new tag to a resource", async() => {
+  it("Add a new tag to a resource", async () => {
     const context = getAppContext();
     const props = {
       resource: getDummyResourceEmptyTag()
@@ -375,7 +408,8 @@ describe("PasswordSidebarTag", () => {
     fireEvent.click(submitButton, leftClick);
 
     // API calls are made on submit, wait they are resolved.
-    await waitFor(() => {});
+    await waitFor(() => {
+    });
 
     // Editor input tag not exists
     const editorTagInputDisable = container.querySelector(".tag-editor-input");
@@ -391,10 +425,13 @@ describe("PasswordSidebarTag", () => {
       ]
     };
     expect(context.port.request).toHaveBeenCalledWith("passbolt.resource.update-tags", onApiUpdateResourceTagMeta);
-    expect(context.port.emit).toHaveBeenNthCalledWith(1, "passbolt.notification.display", {"message": "Tags has been added successfully", "status": "success"});
+    expect(context.port.emit).toHaveBeenNthCalledWith(1, "passbolt.notification.display", {
+      "message": "Tags has been updated successfully",
+      "status": "success"
+    });
   });
 
-  it("Add multiple tags to a resource", async() => {
+  it("Add multiple tags to a resource", async () => {
     const context = getAppContext();
     const props = {
       resource: getDummyResourceEmptyTag()
@@ -429,7 +466,7 @@ describe("PasswordSidebarTag", () => {
     const tags = container.querySelectorAll(".tag");
     expect(tags).not.toBeNull();
     expect(tags.length).toBe(2);
-    tags.forEach((value, index) => {
+    tags.forEach(function (value, index) {
       expect(value.textContent).toBe(tagValues[index]);
     });
 
@@ -444,7 +481,8 @@ describe("PasswordSidebarTag", () => {
     fireEvent.click(submitButton, leftClick);
 
     // API calls are made on submit, wait they are resolved.
-    await waitFor(() => {});
+    await waitFor(() => {
+    });
 
     // Editor input tag not exists
     const editorTagInputDisable = container.querySelector(".tag-editor-input");
@@ -464,10 +502,13 @@ describe("PasswordSidebarTag", () => {
       ]
     };
     expect(context.port.request).toHaveBeenCalledWith("passbolt.resource.update-tags", onApiUpdateResourceTagMeta);
-    expect(context.port.emit).toHaveBeenNthCalledWith(1, "passbolt.notification.display", {"message": "Tags has been added successfully", "status": "success"});
+    expect(context.port.emit).toHaveBeenNthCalledWith(1, "passbolt.notification.display", {
+      "message": "Tags has been updated successfully",
+      "status": "success"
+    });
   });
 
-  it("Cannot edit while submitting changes", async() => {
+  it("Cannot edit while submitting changes", async () => {
     const context = getAppContext();
     const props = {
       resource: getDummyResourceEmptyTag()
@@ -492,9 +533,11 @@ describe("PasswordSidebarTag", () => {
     let updateResolve;
 
     // Mock the request function to make it the expected result
-    jest.spyOn(context.port, 'request').mockImplementationOnce(jest.fn(() => new Promise(resolve => {
-      updateResolve = resolve;
-    })));
+    jest.spyOn(context.port, 'request').mockImplementationOnce(jest.fn(() => {
+      return new Promise(resolve => {
+        updateResolve = resolve;
+      })
+    }));
 
     // submit button input tag exists
     const submitButton = container.querySelector(".tag-editor-submit");
@@ -510,9 +553,10 @@ describe("PasswordSidebarTag", () => {
       expect(editorTagInputDisable.getAttribute("contenteditable")).toBe("false");
       updateResolve();
     });
+
   });
 
-  it("Show progress feedback while submitting", async() => {
+  it("Show progress feedback while submitting", async () => {
     const context = getAppContext();
     const props = {
       resource: getDummyResourceEmptyTag()
@@ -537,9 +581,11 @@ describe("PasswordSidebarTag", () => {
     let updateResolve;
 
     // Mock the request function to make it the expected result
-    jest.spyOn(context.port, 'request').mockImplementationOnce(jest.fn(() => new Promise(resolve => {
-      updateResolve = resolve;
-    })));
+    jest.spyOn(context.port, 'request').mockImplementationOnce(jest.fn(() => {
+      return new Promise(resolve => {
+        updateResolve = resolve;
+      })
+    }));
 
     // submit button input tag exists
     const submitButton = container.querySelector(".tag-editor-submit");
@@ -552,7 +598,7 @@ describe("PasswordSidebarTag", () => {
       // submit button input tag exists and processing
       const submitButtonProcessing = container.querySelector(".tag-editor-submit");
       expect(submitButtonProcessing).not.toBeNull();
-      expect(submitButtonProcessing.className).toBe("button tag-editor-submit primary processing");
+      expect(submitButtonProcessing.className).toBe("button tag-editor-submit primary processing disabled");
       updateResolve();
     });
   });
@@ -592,6 +638,7 @@ describe("PasswordSidebarTag", () => {
     const errorInputTag = container.querySelector(".error");
     expect(errorInputTag).not.toBeNull();
     expect(errorInputTag.textContent).toBe("This shared tag can't be added, you are not the owner");
+
   });
 
   it("Cannot add a tag already added to a resource", () => {
@@ -629,6 +676,7 @@ describe("PasswordSidebarTag", () => {
     const errorInputTag = container.querySelector(".error");
     expect(errorInputTag).not.toBeNull();
     expect(errorInputTag.textContent).toBe("This tag is already present");
+
   });
 
   it("Cannot add a tag longer than 128 characters", () => {
@@ -666,9 +714,10 @@ describe("PasswordSidebarTag", () => {
     const errorInputTag = container.querySelector(".error");
     expect(errorInputTag).not.toBeNull();
     expect(errorInputTag.textContent).toBe("This tag can't be added, the length cannot exceeds 128");
+
   });
 
-  it("Cut long tags so they fit on one line", () => {
+  it("Cut long tags so they fit on one line in tag editor", () => {
     // TODO Cut long tags so they fit on one line
   });
 
@@ -702,9 +751,10 @@ describe("PasswordSidebarTag", () => {
     const tags = container.querySelectorAll(".tag");
     expect(tags).not.toBeNull();
     expect(tags.length).toBe(1);
-    tags.forEach(value => {
+    tags.forEach(function (value) {
       expect(value.textContent).toBe("trim");
     });
+
   });
 
   it("Remove a tag using the edit icon", () => {
@@ -732,7 +782,7 @@ describe("PasswordSidebarTag", () => {
     expect(tags).not.toBeNull();
     expect(tags.length).toBe(6);
 
-    tags.forEach((value, index) => {
+    tags.forEach(function (value, index) {
       expect(value.textContent).toBe(props.resource.tags[index].slug);
     });
     // delete a tag
@@ -743,13 +793,14 @@ describe("PasswordSidebarTag", () => {
     const tagsWithOneElementDeleted = container.querySelectorAll(".tag");
     expect(tagsWithOneElementDeleted).not.toBeNull();
     expect(tagsWithOneElementDeleted.length).toBe(5);
-    tagsWithOneElementDeleted.forEach((value, index) => {
+    tagsWithOneElementDeleted.forEach(function (value, index) {
       if (index > 1) {
         expect(value.textContent).toBe(props.resource.tags[index + 1].slug);
       } else {
         expect(value.textContent).toBe(props.resource.tags[index].slug);
       }
     });
+
   });
 
   it("Remove a tag using the keyboard", () => {
@@ -777,7 +828,7 @@ describe("PasswordSidebarTag", () => {
     expect(tags).not.toBeNull();
     expect(tags.length).toBe(6);
 
-    tags.forEach((value, index) => {
+    tags.forEach(function (value, index) {
       expect(value.textContent).toBe(props.resource.tags[index].slug);
     });
     // delete a tag
@@ -789,9 +840,10 @@ describe("PasswordSidebarTag", () => {
     const tagsWithOneElementDeleted = container.querySelectorAll(".tag");
     expect(tagsWithOneElementDeleted).not.toBeNull();
     expect(tagsWithOneElementDeleted.length).toBe(5);
-    tagsWithOneElementDeleted.forEach((value, index) => {
+    tagsWithOneElementDeleted.forEach(function (value, index) {
       expect(value.textContent).toBe(props.resource.tags[index].slug);
     });
+
   });
 
   it("Cannot remove shared tags on resources not owned", () => {
@@ -819,7 +871,7 @@ describe("PasswordSidebarTag", () => {
     expect(tags).not.toBeNull();
     expect(tags.length).toBe(3);
 
-    tags.forEach((value, index) => {
+    tags.forEach(function (value, index) {
       expect(value.textContent).toBe(props.resource.tags[index].slug);
     });
     // try to delete a tag
@@ -831,7 +883,7 @@ describe("PasswordSidebarTag", () => {
     const tagsWithOneElementDeleted = container.querySelectorAll(".tag");
     expect(tagsWithOneElementDeleted).not.toBeNull();
     expect(tagsWithOneElementDeleted.length).toBe(3);
-    tagsWithOneElementDeleted.forEach((value, index) => {
+    tagsWithOneElementDeleted.forEach(function (value, index) {
       expect(value.textContent).toBe(props.resource.tags[index].slug);
     });
 
@@ -839,6 +891,7 @@ describe("PasswordSidebarTag", () => {
     const errorInputTag = container.querySelector(".error");
     expect(errorInputTag).not.toBeNull();
     expect(errorInputTag.textContent).toBe("This shared tag can't be deleted, you are not the owner");
+
   });
 
   it("Hide tag delete icon for resources not owned", () => {
@@ -865,5 +918,317 @@ describe("PasswordSidebarTag", () => {
     const closeIcon = container.querySelectorAll(".tag-delete");
     expect(closeIcon).not.toBeNull();
     expect(closeIcon.length).toBe(1);
+
   });
+
+  it("Add suggested tag to a resource", async () => {
+    const context = getAppContext();
+    const props = {
+      resource: getDummyResourceEmptyTag()
+    };
+    const {container} = renderPasswordSidebarTagSection(context, props);
+
+    // Click to expand tags
+    const leftClick = {button: 0};
+    const sidebar = container.querySelector(".sidebar-section");
+    fireEvent.click(sidebar, leftClick);
+
+    // Mock the request function to make it the expected result
+    jest.spyOn(context.port, 'request').mockImplementationOnce(jest.fn(() => getDummytags()));
+
+    // Edit icon exists
+    const editIcon = container.querySelector(".edit_tags_button");
+    expect(editIcon).not.toBeNull();
+    fireEvent.click(editIcon, leftClick);
+
+    // API calls are made on submit, wait they are resolved.
+    await waitFor(() => {
+    });
+
+    // Editor input tag exists
+    const editorTagInput = container.querySelector(".tag-editor-input");
+    const tagValue = "tard";
+    expect(editorTagInput).not.toBeNull();
+    fireEvent.input(editorTagInput, {target: {textContent: tagValue}});
+
+    // autocompleteItem exists
+    const autocompleteItem = container.querySelector(".autocomplete-item");
+    expect(autocompleteItem).not.toBeNull();
+    const autocompleteItemValue = "tardis"
+    expect(autocompleteItem.textContent).toBe(autocompleteItemValue);
+    // add it to the editor
+    const autocompleteItemName = container.querySelector(".name");
+    expect(autocompleteItemName).not.toBeNull();
+    fireEvent.click(autocompleteItemName, leftClick);
+    // input tag must be empty
+    expect(editorTagInput.textContent).toBe("");
+
+    // number of tags and check the new one is displayed
+    const tags = container.querySelectorAll(".tag");
+    expect(tags).not.toBeNull();
+    expect(tags.length).toBe(1);
+
+    tags.forEach(function (value) {
+      expect(value.textContent).toBe(autocompleteItemValue);
+    });
+
+  });
+
+  it("Navigate with keyboard in the list of suggested tags", async () => {
+    const context = getAppContext();
+    const props = {
+      resource: getDummyResourceEmptyTag()
+    };
+    const {container} = renderPasswordSidebarTagSection(context, props);
+
+    // Click to expand tags
+    const leftClick = {button: 0};
+    const sidebar = container.querySelector(".sidebar-section");
+    fireEvent.click(sidebar, leftClick);
+
+    // Mock the request function to make it the expected result
+    jest.spyOn(context.port, 'request').mockImplementationOnce(jest.fn(() => getDummytags()));
+
+    // Edit icon exists
+    const editIcon = container.querySelector(".edit_tags_button");
+    expect(editIcon).not.toBeNull();
+    fireEvent.click(editIcon, leftClick);
+
+    // API calls are made on submit, wait they are resolved.
+    await waitFor(() => {
+    });
+
+    // Editor input tag exists
+    const editorTagInput = container.querySelector(".tag-editor-input");
+    const tagValue = "tar";
+    expect(editorTagInput).not.toBeNull();
+    fireEvent.input(editorTagInput, {target: {textContent: tagValue}});
+    expect(editorTagInput.textContent).toBe(tagValue);
+
+    // autocomplete exists
+    const autocomplete = container.querySelector(".autocomplete-content");
+    expect(autocomplete).not.toBeNull();
+    const enterUpArrowPressed = {keyCode: 38};
+    const enterDownArrowPressed = {keyCode: 40};
+
+    const autocompleteItems = container.querySelectorAll(".autocomplete-item");
+    expect(autocompleteItems).not.toBeNull();
+    const autocompleteItemsValues = ["tardis", "tarantino"]
+    autocompleteItems.forEach(function (value, index) {
+      expect(value.textContent).toBe(autocompleteItemsValues[index]);
+    });
+
+    fireEvent.keyDown(autocomplete, enterDownArrowPressed);
+    expect(editorTagInput.textContent).toBe(tagValue);
+    fireEvent.keyDown(autocomplete, enterDownArrowPressed);
+    expect(editorTagInput.textContent).toBe(autocompleteItemsValues[0]);
+    fireEvent.keyDown(autocomplete, enterUpArrowPressed);
+    expect(editorTagInput.textContent).toBe(autocompleteItemsValues[1]);
+    fireEvent.keyDown(autocomplete, enterDownArrowPressed);
+    expect(editorTagInput.textContent).toBe(autocompleteItemsValues[0]);
+
+    // select tardis item
+    const enterKeyPressed = {keyCode: 13};
+    fireEvent.keyPress(editorTagInput, enterKeyPressed);
+
+    // number of tags and check the new one is displayed
+    const tags = container.querySelectorAll(".tag");
+    expect(tags).not.toBeNull();
+    expect(tags.length).toBe(1);
+
+    tags.forEach(function (value) {
+      expect(value.textContent).toBe(autocompleteItemsValues[0]);
+    });
+
+    // input tag must be empty
+    expect(editorTagInput.textContent).toBe("");
+  });
+
+  it("Cut long tags autocomplete", async () => {
+    // TODO Cut long tags
+  });
+
+  it("Stop editing by cancelling the operation", () => {
+    const props = {
+      resource: getDummyResource()
+    };
+    const {container} = renderPasswordSidebarTagSection(null, props);
+
+    // Click to expand tags
+    const leftClick = {button: 0};
+    const sidebar = container.querySelector(".sidebar-section");
+    fireEvent.click(sidebar, leftClick);
+
+    // Edit icon exists
+    const editIcon = container.querySelector(".edit_tags_button");
+    expect(editIcon).not.toBeNull();
+    fireEvent.click(editIcon, leftClick);
+
+    // Editor input tag exists
+    const editorTag = container.querySelector(".tag-editor-input");
+    expect(editorTag).not.toBeNull();
+
+    // Cancel button exists
+    const cancelButton = container.querySelector(".cancel");
+    expect(cancelButton).not.toBeNull();
+    fireEvent.click(cancelButton, leftClick);
+
+    // Editor input tag not exists
+    const editorTagClose = container.querySelector(".tag-editor-input");
+    expect(editorTagClose).toBeNull();
+
+  });
+
+  it("Stop editing with keyboard", () => {
+    const props = {
+      resource: getDummyResource()
+    };
+    const {container} = renderPasswordSidebarTagSection(null, props);
+
+    // Click to expand tags
+    const leftClick = {button: 0};
+    const sidebar = container.querySelector(".sidebar-section");
+    fireEvent.click(sidebar, leftClick);
+
+    // Edit icon exists
+    const editIcon = container.querySelector(".edit_tags_button");
+    expect(editIcon).not.toBeNull();
+    fireEvent.click(editIcon, leftClick);
+
+    // Editor input tag exists
+    const editorTag = container.querySelector(".tag-editor-input");
+    expect(editorTag).not.toBeNull();
+
+    // Escape keypressed event
+    const escapeKeyDown = {keyCode: 27};
+    fireEvent.keyDown(editorTag, escapeKeyDown);
+
+    // Editor input tag not exists
+    const editorTagClose = container.querySelector(".tag-editor-input");
+    expect(editorTagClose).toBeNull();
+
+  });
+
+  it("Close autocomplete with keyboard", async () => {
+    const context = getAppContext();
+    const props = {
+      resource: getDummyResourceEmptyTag()
+    };
+    const {container} = renderPasswordSidebarTagSection(context, props);
+
+    // Click to expand tags
+    const leftClick = {button: 0};
+    const sidebar = container.querySelector(".sidebar-section");
+    fireEvent.click(sidebar, leftClick);
+
+    // Mock the request function to make it the expected result
+    jest.spyOn(context.port, 'request').mockImplementationOnce(jest.fn(() => getDummytags()));
+
+    // Edit icon exists
+    const editIcon = container.querySelector(".edit_tags_button");
+    expect(editIcon).not.toBeNull();
+    fireEvent.click(editIcon, leftClick);
+
+    // API calls are made on submit, wait they are resolved.
+    await waitFor(() => {
+    });
+
+    // Editor input tag exists
+    const editorTagInput = container.querySelector(".tag-editor-input");
+    const tagValue = "tar";
+    expect(editorTagInput).not.toBeNull();
+    fireEvent.input(editorTagInput, {target: {textContent: tagValue}});
+    expect(editorTagInput.textContent).toBe(tagValue);
+
+    // autocomplete exists
+    const autocomplete = container.querySelector(".autocomplete-content");
+    expect(autocomplete).not.toBeNull();
+
+    const autocompleteItems = container.querySelectorAll(".autocomplete-item");
+    expect(autocompleteItems).not.toBeNull();
+    const autocompleteItemsValues = ["tardis", "tarantino"]
+    autocompleteItems.forEach(function (value, index) {
+      expect(value.textContent).toBe(autocompleteItemsValues[index]);
+    });
+
+    // Escape keypressed event
+    const escapeKeyDown = {keyCode: 27};
+    fireEvent.keyDown(editorTagInput, escapeKeyDown);
+
+    const autocompleteClose = container.querySelector(".autocomplete-suggestions");
+    expect(autocompleteClose).toBeNull();
+
+
+    fireEvent.keyDown(editorTagInput, escapeKeyDown);
+    // Editor input tag not exists
+    const editorTagClose = container.querySelector(".tag-editor-input");
+    expect(editorTagClose).toBeNull();
+
+  });
+
+  it("Save tags on keyboard enter", async () => {
+    const context = getAppContext();
+    const props = {
+      resource: getDummyResourceEmptyTag()
+    };
+    const {container} = renderPasswordSidebarTagSection(context, props);
+
+    // Click to expand tags
+    const leftClick = {button: 0};
+    const sidebar = container.querySelector(".sidebar-section");
+    fireEvent.click(sidebar, leftClick);
+
+    // Edit icon exists
+    const editIcon = container.querySelector(".edit_tags_button");
+    expect(editIcon).not.toBeNull();
+    fireEvent.click(editIcon, leftClick);
+
+    // Editor input tag exists
+    const editorTagInput = container.querySelector(".tag-editor-input");
+    const tagValue = "tardis";
+    const enterKeyPressed = {keyCode: 13};
+    expect(editorTagInput).not.toBeNull();
+    fireEvent.change(editorTagInput, {target: {textContent: tagValue}});
+    fireEvent.keyPress(editorTagInput, enterKeyPressed);
+    expect(editorTagInput.textContent).toBe("");
+
+    // number of tags and check all name displayed
+    const tags = container.querySelectorAll(".tag");
+    expect(tags).not.toBeNull();
+    expect(tags.length).toBe(1);
+    tags.forEach(function (value) {
+      expect(value.textContent).toBe(tagValue);
+    });
+
+    // Mock the request function to make it the expected result
+    jest.spyOn(context.port, 'request').mockImplementationOnce(jest.fn((message, data) => Object.assign({id: props.resource.id}, data)));
+    jest.spyOn(context.port, 'emit').mockImplementation(jest.fn());
+
+    // submit with key enter
+    fireEvent.keyPress(editorTagInput, enterKeyPressed);
+
+    // API calls are made on submit, wait they are resolved.
+    await waitFor(() => {
+    });
+
+    // Editor input tag not exists
+    const editorTagInputDisable = container.querySelector(".tag-editor-input");
+    expect(editorTagInputDisable).toBeNull();
+
+    const onApiUpdateResourceTagMeta = {
+      id: props.resource.id,
+      tags: [
+        {
+          slug: tagValue,
+          is_shared: false
+        }
+      ]
+    };
+    expect(context.port.request).toHaveBeenCalledWith("passbolt.resource.update-tags", onApiUpdateResourceTagMeta);
+    expect(context.port.emit).toHaveBeenNthCalledWith(1, "passbolt.notification.display", {
+      "message": "Tags has been updated successfully",
+      "status": "success"
+    });
+  });
+
 });
