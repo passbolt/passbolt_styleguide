@@ -14,6 +14,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import AppContext from "../../../contexts/AppContext";
+import ContextualMenuWrapper from "../../Common/ContextualMenu/ContextualMenuWrapper";
 
 class FoldersTreeRootFolderContextualMenu extends React.Component {
   /**
@@ -46,63 +47,8 @@ class FoldersTreeRootFolderContextualMenu extends React.Component {
    * Bind callbacks methods
    */
   bindCallbacks() {
-    this.handleDocumentClickEvent = this.handleDocumentClickEvent.bind(this);
-    this.handleDocumentContextualMenuEvent = this.handleDocumentContextualMenuEvent.bind(this);
-    this.handleDocumentDragStartEvent = this.handleDocumentDragStartEvent.bind(this);
     this.handleCreateFolderItemClickEvent = this.handleCreateFolderItemClickEvent.bind(this);
     this.handleExportFolderItemClickEvent = this.handleExportFolderItemClickEvent.bind(this);
-  }
-
-  componentDidMount() {
-    document.addEventListener('click', this.handleDocumentClickEvent);
-    document.addEventListener('contextmenu', this.handleDocumentContextualMenuEvent);
-    document.addEventListener('dragstart', this.handleDocumentDragStartEvent);
-  }
-
-  componentWillUnmount() {
-    document.removeEventListener('click', this.handleDocumentClickEvent);
-    document.removeEventListener('contextmenu', this.handleDocumentContextualMenuEvent);
-    document.removeEventListener('dragstart', this.handleDocumentDragStartEvent);
-  }
-
-  /**
-   * Destroy the menu
-   */
-  destroy() {
-    this.props.onDestroy();
-  }
-
-  /**
-   * Handle click events on document. Hide the component if the click occurred outside of the component.
-   * @param {ReactEvent} event The event
-   */
-  handleDocumentClickEvent(event) {
-    // Prevent closing when the user click on an element of the contextual menu
-    if (this.elementRef.current.contains(event.target)) {
-      return;
-    }
-    this.destroy();
-  }
-
-  /**
-   * Handle contextual menu events on document. Hide the component if the click occurred outside of the component.
-   * Don't hide it if a contextual menu event occurred on the FoldersList component, this component props will be
-   * updated with new datA.
-   * @param {ReactEvent} event The event
-   */
-  handleDocumentContextualMenuEvent(event) {
-    // Prevent closing when the user right clicks on an element of the FoldersTree component title
-    if (this.props.foldersTreeTitleElementRef.current.contains(event.target)) {
-      return;
-    }
-    this.destroy();
-  }
-
-  /**
-   * Handle drag start event on document. Hide the component if any.
-   */
-  handleDocumentDragStartEvent() {
-    this.destroy();
   }
 
   /**
@@ -115,7 +61,7 @@ class FoldersTreeRootFolderContextualMenu extends React.Component {
         folderParentId: null
       }
     });
-    this.destroy();
+    this.props.hide();
   }
 
   /**
@@ -125,19 +71,7 @@ class FoldersTreeRootFolderContextualMenu extends React.Component {
     const foldersIds = this.props.folders.filter(folder => folder.folder_parent_id === null)
       .reduce((carry, folder) => [...carry, folder.id], []);
     this.context.port.emit("passbolt.plugin.export_resources", {"folders": foldersIds});
-    this.destroy();
-  }
-
-  /**
-   * Get the contextual menu style.
-   */
-  getStyle() {
-    return {
-      display: "block",
-      position: "fixed",
-      top: this.props.top,
-      left: this.props.left
-    };
+    this.props.hide();
   }
 
   /**
@@ -146,28 +80,29 @@ class FoldersTreeRootFolderContextualMenu extends React.Component {
    */
   render() {
     return (
-      <div ref={this.elementRef}>
-        <ul className="contextual-menu" style={this.getStyle()}>
-          <li key="option-create-folder" className="ready closed">
-            <div className="row">
-              <div className="main-cell-wrapper">
-                <div className="main-cell">
-                  <a onClick={this.handleCreateFolderItemClickEvent}><span>Create folder</span></a>
-                </div>
+      <ContextualMenuWrapper
+        hide={this.props.hide}
+        left={this.props.left}
+        top={this.props.top}>
+        <li key="option-create-folder" className="ready closed">
+          <div className="row">
+            <div className="main-cell-wrapper">
+              <div className="main-cell">
+                <a onClick={this.handleCreateFolderItemClickEvent}><span>Create folder</span></a>
               </div>
             </div>
-          </li>
-          <li key="option-export-folder" className="ready closed">
-            <div className="row">
-              <div className="main-cell-wrapper">
-                <div className="main-cell">
-                  <a onClick={this.handleExportFolderItemClickEvent}><span>Export all</span></a>
-                </div>
+          </div>
+        </li>
+        <li key="option-export-folder" className="ready closed">
+          <div className="row">
+            <div className="main-cell-wrapper">
+              <div className="main-cell">
+                <a onClick={this.handleExportFolderItemClickEvent}><span>Export all</span></a>
               </div>
             </div>
-          </li>
-        </ul>
-      </div>
+          </div>
+        </li>
+      </ContextualMenuWrapper>
     );
   }
 }
@@ -175,11 +110,11 @@ class FoldersTreeRootFolderContextualMenu extends React.Component {
 FoldersTreeRootFolderContextualMenu.contextType = AppContext;
 
 FoldersTreeRootFolderContextualMenu.propTypes = {
-  onDestroy: PropTypes.func,
   folders: PropTypes.array,
   foldersTreeTitleElementRef: PropTypes.object,
-  left: PropTypes.number,
-  top: PropTypes.number,
+  hide: PropTypes.func, // Hide the contextual menu
+  left: PropTypes.number, // left position in px of the page
+  top: PropTypes.number, // top position in px of the page
 };
 
 export default FoldersTreeRootFolderContextualMenu;

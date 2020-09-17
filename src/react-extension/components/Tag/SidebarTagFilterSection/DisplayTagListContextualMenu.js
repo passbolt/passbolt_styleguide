@@ -14,6 +14,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import AppContext from "../../../contexts/AppContext";
+import ContextualMenuWrapper from "../../Common/ContextualMenu/ContextualMenuWrapper";
 
 class DisplayTagListContextualMenu extends React.Component {
   /**
@@ -22,51 +23,15 @@ class DisplayTagListContextualMenu extends React.Component {
    */
   constructor(props) {
     super(props);
-    this.createRefs();
     this.bindCallbacks();
-  }
-
-  /**
-   * Create DOM nodes or React elements references in order to be able to access them programmatically.
-   */
-  createRefs() {
-    this.elementRef = React.createRef();
   }
 
   /**
    * Bind callbacks methods
    */
   bindCallbacks() {
-    this.handleDocumentClickEvent = this.handleDocumentClickEvent.bind(this);
     this.handleEditClickEvent = this.handleEditClickEvent.bind(this);
     this.handleDeleteClickEvent = this.handleDeleteClickEvent.bind(this);
-  }
-
-  componentDidMount() {
-    document.addEventListener('click', this.handleDocumentClickEvent);
-  }
-
-  componentWillUnmount() {
-    document.removeEventListener('click', this.handleDocumentClickEvent);
-  }
-
-  /**
-   * Destroy the menu
-   */
-  destroy() {
-    this.props.onDestroy();
-  }
-
-  /**
-   * Handle click events on document. Hide the component if the click occurred outside of the component.
-   * @param {ReactEvent} event The event
-   */
-  handleDocumentClickEvent(event) {
-    // Prevent closing when the user click on an element of the contextual menu
-    if (this.elementRef.current.contains(event.target)) {
-      return;
-    }
-    this.destroy();
   }
 
   /**
@@ -75,7 +40,7 @@ class DisplayTagListContextualMenu extends React.Component {
   handleEditClickEvent() {
     const tag = this.props.selectedTag;
     this.context.port.emit('passbolt.plugin.tags.open-edit-dialog', {tag});
-    this.destroy();
+    this.props.hide();
   }
 
   /**
@@ -84,19 +49,7 @@ class DisplayTagListContextualMenu extends React.Component {
   handleDeleteClickEvent() {
     const tag = this.props.selectedTag;
     this.context.port.emit('passbolt.plugin.tags.open-delete-dialog', {tag});
-    this.destroy();
-  }
-
-  /**
-   * Get the contextual menu style.
-   */
-  getStyle() {
-    return {
-      position: "fixed",
-      display: "block",
-      left: this.props.left,
-      top: this.props.top
-    };
+    this.props.hide();
   }
 
   /**
@@ -105,28 +58,29 @@ class DisplayTagListContextualMenu extends React.Component {
    */
   render() {
     return (
-      <div ref={this.elementRef}>
-        <ul className="contextual-menu" style={this.getStyle()}>
-          <li key="option-edit-tag" className="ready closed">
-            <div className="row">
-              <div className="main-cell-wrapper">
-                <div className="main-cell">
-                  <a id="edit-tag" onClick={this.handleEditClickEvent}><span>Edit Tag</span></a>
-                </div>
+      <ContextualMenuWrapper
+        hide={this.props.hide}
+        left={this.props.left}
+        top={this.props.top}>
+        <li key="option-edit-tag" className="ready closed">
+          <div className="row">
+            <div className="main-cell-wrapper">
+              <div className="main-cell">
+                <a id="edit-tag" onClick={this.handleEditClickEvent}><span>Edit Tag</span></a>
               </div>
             </div>
-          </li>
-          <li key="option-delete-tag" className="ready closed">
-            <div className="row">
-              <div className="main-cell-wrapper">
-                <div className="main-cell">
-                  <a id="delete-tag" onClick={this.handleDeleteClickEvent}><span>Delete Tag</span></a>
-                </div>
+          </div>
+        </li>
+        <li key="option-delete-tag" className="ready closed">
+          <div className="row">
+            <div className="main-cell-wrapper">
+              <div className="main-cell">
+                <a id="delete-tag" onClick={this.handleDeleteClickEvent}><span>Delete Tag</span></a>
               </div>
             </div>
-          </li>
-        </ul>
-      </div>
+          </div>
+        </li>
+      </ContextualMenuWrapper>
     );
   }
 }
@@ -134,8 +88,8 @@ class DisplayTagListContextualMenu extends React.Component {
 DisplayTagListContextualMenu.contextType = AppContext;
 
 DisplayTagListContextualMenu.propTypes = {
+  hide: PropTypes.func, // Hide the contextual menu
   left: PropTypes.number, // left position in px of the page
-  onDestroy: PropTypes.func,
   top: PropTypes.number, // top position in px of the page
   selectedTag: PropTypes.object
 };
