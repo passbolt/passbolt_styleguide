@@ -13,6 +13,7 @@
  */
 import React from "react";
 import PropTypes from "prop-types";
+import ContextualMenuWrapper from "../../Common/ContextualMenu/ContextualMenuWrapper";
 
 class FoldersTreeItemContextualMenu extends React.Component {
   /**
@@ -22,7 +23,6 @@ class FoldersTreeItemContextualMenu extends React.Component {
   constructor(props) {
     super(props);
     this.state = this.getDefaultState();
-    this.createRefs();
     this.bindCallbacks();
   }
 
@@ -35,80 +35,14 @@ class FoldersTreeItemContextualMenu extends React.Component {
   }
 
   /**
-   * Create DOM nodes or React elements references in order to be able to access them programmatically.
-   */
-  createRefs() {
-    this.elementRef = React.createRef();
-  }
-
-  /**
    * Bind callbacks methods
    */
   bindCallbacks() {
-    this.handleDocumentClickEvent = this.handleDocumentClickEvent.bind(this);
-    this.handleDocumentContextualMenuEvent = this.handleDocumentContextualMenuEvent.bind(this);
-    this.handleDocumentDragStartEvent = this.handleDocumentDragStartEvent.bind(this);
     this.handleCreateFolderItemClickEvent = this.handleCreateFolderItemClickEvent.bind(this);
     this.handleRenameFolderItemClickEvent = this.handleRenameFolderItemClickEvent.bind(this);
     this.handleShareFolderItemClickEvent = this.handleShareFolderItemClickEvent.bind(this);
     this.handleExportFolderItemClickEvent = this.handleExportFolderItemClickEvent.bind(this);
     this.handleDeleteFolderItemClickEvent = this.handleDeleteFolderItemClickEvent.bind(this);
-  }
-
-  componentDidMount() {
-    document.addEventListener('click', this.handleDocumentClickEvent);
-    document.addEventListener('contextmenu', this.handleDocumentContextualMenuEvent);
-    document.addEventListener('dragstart', this.handleDocumentDragStartEvent);
-  }
-
-  componentWillUnmount() {
-    document.removeEventListener('click', this.handleDocumentClickEvent);
-    document.removeEventListener('contextmenu', this.handleDocumentContextualMenuEvent);
-    document.removeEventListener('dragstart', this.handleDocumentDragStartEvent);
-  }
-
-  /**
-   * Destroy the menu
-   */
-  destroy() {
-    this.props.onDestroy();
-  }
-
-  /**
-   * Handle click events on document. Hide the component if the click occurred outside of the component.
-   * @param {ReactEvent} event The event
-   */
-  handleDocumentClickEvent(event) {
-    // Prevent closing when the user click on an element of the contextual menu
-    if (this.elementRef.current.contains(event.target)) {
-      return;
-    }
-    this.destroy();
-  }
-
-  /**
-   * Handle contextual menu events on document. Hide the component if the click occurred outside of the component.
-   * Don't hide it if a contextual menu event occurred on the FoldersList component, this component props will be
-   * updated with new datA.
-   * @param {ReactEvent} event The event
-   */
-  handleDocumentContextualMenuEvent(event) {
-    // Prevent closing when the user right click on an element of the contextual menu
-    if (this.elementRef.current.contains(event.target)) {
-      return;
-    }
-    // Prevent closing when the user right clicks on an element of the FoldersTree component list.
-    if (this.props.foldersTreeListElementRef.current.contains(event.target)) {
-      return;
-    }
-    this.destroy();
-  }
-
-  /**
-   * Handle drag start event on document. Hide the component if any.
-   */
-  handleDocumentDragStartEvent() {
-    this.destroy();
   }
 
   /**
@@ -120,7 +54,7 @@ class FoldersTreeItemContextualMenu extends React.Component {
     }
     const folderParentId = this.props.folder.id;
     this.context.port.emit('passbolt.plugin.folders.open-create-dialog', {folderParentId});
-    this.destroy();
+    this.props.hide();
   }
 
   /**
@@ -132,7 +66,7 @@ class FoldersTreeItemContextualMenu extends React.Component {
     }
     const folderId = this.props.folder.id;
     this.context.port.emit('passbolt.plugin.folders.open-rename-dialog', {folderId});
-    this.destroy();
+    this.props.hide();
   }
 
   /**
@@ -144,7 +78,7 @@ class FoldersTreeItemContextualMenu extends React.Component {
     }
     const foldersIds = [this.props.folder.id];
     this.context.port.emit("passbolt.plugin.folders.open-share-dialog", {foldersIds});
-    this.destroy();
+    this.props.hide();
   }
 
   /**
@@ -153,7 +87,7 @@ class FoldersTreeItemContextualMenu extends React.Component {
   handleExportFolderItemClickEvent() {
     const foldersIds = [this.props.folder.id];
     this.context.port.emit("passbolt.plugin.export_resources", {"folders": foldersIds});
-    this.destroy();
+    this.props.hide();
   }
 
   /**
@@ -165,19 +99,7 @@ class FoldersTreeItemContextualMenu extends React.Component {
     }
     const folderId = this.props.folder.id;
     this.context.port.emit('passbolt.plugin.folders.open-delete-dialog', {folderId});
-    this.destroy();
-  }
-
-  /**
-   * Get the contextual menu style.
-   */
-  getStyle() {
-    return {
-      display: "block",
-      position: "fixed",
-      top: this.props.top,
-      left: this.props.left
-    };
+    this.props.hide();
   }
 
   /**
@@ -205,65 +127,66 @@ class FoldersTreeItemContextualMenu extends React.Component {
     const canShare = this.canShare();
 
     return (
-      <div ref={this.elementRef}>
-        <ul className="contextual-menu" style={this.getStyle()}>
-          <li key="option-create-folder" className={`ready closed ${canUpdate ? "" : "disabled"}`}>
-            <div className="row">
-              <div className="main-cell-wrapper">
-                <div className="main-cell">
-                  <a onClick={this.handleCreateFolderItemClickEvent}><span>Create folder</span></a>
-                </div>
+      <ContextualMenuWrapper
+        hide={this.props.hide}
+        left={this.props.left}
+        top={this.props.top}>
+        <li key="option-create-folder" className={`ready closed ${canUpdate ? "" : "disabled"}`}>
+          <div className="row">
+            <div className="main-cell-wrapper">
+              <div className="main-cell">
+                <a onClick={this.handleCreateFolderItemClickEvent}><span>Create folder</span></a>
               </div>
             </div>
-          </li>
-          <li key="option-rename-folder" className={`"separator-after ready closed ${canUpdate ? "" : "disabled"}`}>
-            <div className="row">
-              <div className="main-cell-wrapper">
-                <div className="main-cell">
-                  <a onClick={this.handleRenameFolderItemClickEvent}><span>Rename</span></a>
-                </div>
+          </div>
+        </li>
+        <li key="option-rename-folder" className={`"separator-after ready closed ${canUpdate ? "" : "disabled"}`}>
+          <div className="row">
+            <div className="main-cell-wrapper">
+              <div className="main-cell">
+                <a onClick={this.handleRenameFolderItemClickEvent}><span>Rename</span></a>
               </div>
             </div>
-          </li>
-          <li key="option-share-folder" className={`ready closed ${canShare ? "" : "disabled"}`}>
-            <div className="row">
-              <div className="main-cell-wrapper">
-                <div className="main-cell">
-                  <a onClick={this.handleShareFolderItemClickEvent}><span>Share</span></a>
-                </div>
+          </div>
+        </li>
+        <li key="option-share-folder" className={`ready closed ${canShare ? "" : "disabled"}`}>
+          <div className="row">
+            <div className="main-cell-wrapper">
+              <div className="main-cell">
+                <a onClick={this.handleShareFolderItemClickEvent}><span>Share</span></a>
               </div>
             </div>
-          </li>
-          <li key="option-export-folder" className="ready closed">
-            <div className="row">
-              <div className="main-cell-wrapper">
-                <div className="main-cell">
-                  <a onClick={this.handleExportFolderItemClickEvent}><span>Export</span></a>
-                </div>
+          </div>
+        </li>
+        <li key="option-export-folder" className="ready closed">
+          <div className="row">
+            <div className="main-cell-wrapper">
+              <div className="main-cell">
+                <a onClick={this.handleExportFolderItemClickEvent}><span>Export</span></a>
               </div>
             </div>
-          </li>
-          <li key="option-delete-folder" className={`ready closed ${canUpdate ? "" : "disabled"}`}>
-            <div className="row">
-              <div className="main-cell-wrapper">
-                <div className="main-cell">
-                  <a onClick={this.handleDeleteFolderItemClickEvent}><span>Delete</span></a>
-                </div>
+          </div>
+        </li>
+        <li key="option-delete-folder" className={`ready closed ${canUpdate ? "" : "disabled"}`}>
+          <div className="row">
+            <div className="main-cell-wrapper">
+              <div className="main-cell">
+                <a onClick={this.handleDeleteFolderItemClickEvent}><span>Delete</span></a>
               </div>
             </div>
-          </li>
-        </ul>
-      </div>
+          </div>
+        </li>
+      </ContextualMenuWrapper>
     );
   }
 }
 
 FoldersTreeItemContextualMenu.propTypes = {
-  left: PropTypes.number,
   folder: PropTypes.object,
   foldersTreeListElementRef: PropTypes.object,
-  onDestroy: PropTypes.func,
-  top: PropTypes.number,
+  hide: PropTypes.func, // Hide the contextual menu
+  left: PropTypes.number, // left position in px of the page
+  top: PropTypes.number, // top position in px of the page
 };
 
 export default FoldersTreeItemContextualMenu;

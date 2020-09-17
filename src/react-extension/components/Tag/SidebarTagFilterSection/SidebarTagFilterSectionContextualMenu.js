@@ -13,6 +13,8 @@
  */
 import React from "react";
 import PropTypes from "prop-types";
+import ContextualMenuWrapper from "../../Common/ContextualMenu/ContextualMenuWrapper";
+import {filterByTagsOptions} from "./DisplayTagList";
 
 class SidebarTagFilterSectionContextualMenu extends React.Component {
   /**
@@ -21,50 +23,14 @@ class SidebarTagFilterSectionContextualMenu extends React.Component {
    */
   constructor(props) {
     super(props);
-    this.createRefs();
     this.bindCallbacks();
-  }
-
-  /**
-   * Create DOM nodes or React elements references in order to be able to access them programmatically.
-   */
-  createRefs() {
-    this.elementRef = React.createRef();
   }
 
   /**
    * Bind callbacks methods
    */
   bindCallbacks() {
-    this.handleDocumentClickEvent = this.handleDocumentClickEvent.bind(this);
     this.handleFilterClickEvent = this.handleFilterClickEvent.bind(this);
-  }
-
-  componentDidMount() {
-    document.addEventListener('click', this.handleDocumentClickEvent);
-  }
-
-  componentWillUnmount() {
-    document.removeEventListener('click', this.handleDocumentClickEvent);
-  }
-
-  /**
-   * Destroy the menu
-   */
-  destroy() {
-    this.props.onDestroy();
-  }
-
-  /**
-   * Handle click events on document. Hide the component if the click occurred outside of the component.
-   * @param {ReactEvent} event The event
-   */
-  handleDocumentClickEvent(event) {
-    // Prevent closing when the user click on an element of the contextual menu
-    if (this.elementRef.current.contains(event.target)) {
-      return;
-    }
-    this.destroy();
   }
 
   /**
@@ -72,20 +38,8 @@ class SidebarTagFilterSectionContextualMenu extends React.Component {
    * @param {string} filterType
    */
   handleFilterClickEvent(filterType) {
-    this.props.filterTagsType(filterType);
-    this.destroy();
-  }
-
-  /**
-   * Get the contextual menu style.
-   */
-  getStyle() {
-    return {
-      position: "fixed",
-      display: "block",
-      left: this.props.left,
-      top: this.props.top
-    };
+    this.props.onFilterSelected(filterType);
+    this.props.hide();
   }
 
   /**
@@ -93,47 +47,47 @@ class SidebarTagFilterSectionContextualMenu extends React.Component {
    * @returns {JSX}
    */
   render() {
-
     return (
-      <div ref={this.elementRef}>
-        <ul className="contextual-menu" style={this.getStyle()}>
-          <li key="option-filter-all-tag" className="ready closed">
-            <div className="row">
-              <div className="main-cell-wrapper">
-                <div className="main-cell">
-                  <a id="all-tag" onClick={ () => this.handleFilterClickEvent("all")}><span>All tags</span></a>
-                </div>
+      <ContextualMenuWrapper
+        hide={this.props.hide}
+        left={this.props.left}
+        top={this.props.top}>
+        <li key="option-filter-all-tag" className="ready closed">
+          <div className="row">
+            <div className="main-cell-wrapper">
+              <div className="main-cell">
+                <a id="all-tag" onClick={() => this.handleFilterClickEvent(filterByTagsOptions.all)}><span>All tags</span></a>
               </div>
             </div>
-          </li>
-          <li key="option-filter-personal-tag" className="ready closed">
-            <div className="row">
-              <div className="main-cell-wrapper">
-                <div className="main-cell">
-                  <a id="personal-tag" onClick={ () => this.handleFilterClickEvent("personal")}><span>My tags</span></a>
-                </div>
+          </div>
+        </li>
+        <li key="option-filter-personal-tag" className="ready closed">
+          <div className="row">
+            <div className="main-cell-wrapper">
+              <div className="main-cell">
+                <a id="personal-tag" onClick={() => this.handleFilterClickEvent(filterByTagsOptions.personal)}><span>My tags</span></a>
               </div>
             </div>
-          </li>
-          <li key="option-filter-share-tag" className="ready closed">
-            <div className="row">
-              <div className="main-cell-wrapper">
-                <div className="main-cell">
-                  <a id="shared-tag" onClick={ () => this.handleFilterClickEvent("shared")}><span>Shared tags</span></a>
-                </div>
+          </div>
+        </li>
+        <li key="option-filter-share-tag" className="ready closed">
+          <div className="row">
+            <div className="main-cell-wrapper">
+              <div className="main-cell">
+                <a id="shared-tag" onClick={() => this.handleFilterClickEvent(filterByTagsOptions.shared)}><span>Shared tags</span></a>
               </div>
             </div>
-          </li>
-        </ul>
-      </div>
+          </div>
+        </li>
+      </ContextualMenuWrapper>
     );
   }
 }
 
 SidebarTagFilterSectionContextualMenu.propTypes = {
+  onFilterSelected: PropTypes.func,
   left: PropTypes.number, // left position in px of the menu
-  filterTagsType: PropTypes.func,
-  onDestroy: PropTypes.func,
+  hide: PropTypes.func, // Hide the contextual menu
   top: PropTypes.number // top position in px of the menu
 };
 

@@ -37,7 +37,8 @@ import ActionFeedbackContextProvider from "./contexts/ActionFeedbackContext";
 import ShareActionFeedbacks from "./components/Share/ShareActionFeedbacks";
 import TagEditDialog from "./components/Tag/TagEditDialog/TagEditDialog";
 import TagDeleteDialog from "./components/Tag/TagDeleteDialog/TagDeleteDialog";
-
+import ContextualMenuContextProvider from "./contexts/Common/ContextualMenuContext";
+import ManageContextualMenu from "./components/ManageContextualMenu";
 
 class ReactExtension extends Component {
   constructor(props) {
@@ -468,95 +469,98 @@ class ReactExtension extends Component {
     return (
       <AppContext.Provider value={this.state}>
         <ActionFeedbackContextProvider>
-          <ShareActionFeedbacks  />
-          <Router>
-          <div id="container" className="page">
-            {isReady &&
-            <div id="app" className={`app ${isReady ? "ready" : ""}`} tabIndex="1000">
-              {this.state.showResourceCreateDialog &&
-              <PasswordCreateDialog onClose={this.handleResourceCreateDialogCloseEvent}
-                folderParentId={this.state.resourceCreateDialogProps.folderParentId}
-                resourceTypes={this.state.resourceTypes}
-              />
-              }
-              {this.state.showPasswordEditDialog && areResourcesLoaded &&
-              <PasswordEditDialog onClose={this.handleResourceEditDialogCloseEvent}
-                id={this.state.passwordEditDialogProps.id}
-                resourceTypes={this.state.resourceTypes}
-              />
-              }
-              {this.state.showFolderCreateDialog &&
-              <FolderCreateDialog onClose={this.handleFolderCreateDialogCloseEvent}
-                folderParentId={this.state.folderCreateDialogProps.folderParentId}/>
-              }
-              {this.state.showFolderMoveStrategyDialog && areFoldersLoaded &&
-              <FolderMoveStrategyDialog onClose={this.handleFolderMoveStrategyDialogCloseEvent}
-                folderId={this.state.folderMoveStrategyProps.folderId}
-                foldersIds={this.state.folderMoveStrategyProps.foldersIds}
-                resourcesIds={this.state.folderMoveStrategyProps.resourcesIds}
-                requestId={this.state.folderMoveStrategyProps.requestId}
-              />
-              }
-              {this.state.showFolderRenameDialog && areFoldersLoaded &&
-              <FolderRenameDialog onClose={this.handleFolderRenameDialogCloseEvent} folderId={this.state.folder.id}/>
-              }
-              {this.state.showFolderDeleteDialog && areFoldersLoaded &&
-              <FolderDeleteDialog onClose={this.handleFolderDeleteDialogCloseEvent} folderId={this.state.folder.id}/>
-              }
-              {this.state.showShareDialog &&
-              <ShareDialog resourcesIds={this.state.shareDialogProps.resourcesIds}
-                foldersIds={this.state.shareDialogProps.foldersIds}
-                onClose={this.handleShareDialogCloseEvent}/>
-              }
-              {this.state.showTagEditDialog && areResourcesLoaded &&
-              <TagEditDialog onClose={this.handleTagEditDialogCloseEvent}
-                             tag={this.state.tagEditDialogProps}
-              />
-              }
-              {this.state.showTagDeleteDialog && areResourcesLoaded &&
-              <TagDeleteDialog onClose={this.handleTagDeleteDialogCloseEvent}
-                             tag={this.state.tagDeleteDialogProps}
-              />
-              }
-              {
-                /*
-                 * Hello traveller, leave these dialogs at the end
-                 * so that they are displayed on top of your new dialog
-                 */
-              }
-              {this.state.showProgressDialog &&
-              <ProgressDialog title={this.state.progressDialogProps.title}
-                goals={this.state.progressDialogProps.goals}
-                message={this.state.progressDialogProps.message}
-                completed={this.state.progressDialogProps.completed}/>
-              }
-              {this.state.showPassphraseEntryDialog &&
-              <PassphraseEntryDialog requestId={this.state.passphraseRequestId}
-                onClose={this.handlePassphraseDialogClose}/>
-              }
-              {this.state.showErrorDialog &&
-              <ErrorDialog title={this.state.errorDialogProps.title}
-                message={this.state.errorDialogProps.message}
-                onClose={this.handleErrorDialogCloseEvent}/>
-              }
-              <div className="header first">
-                <MainMenu onClick={this.handleWorkspaceSelect} baseUrl={this.state.userSettings.getTrustedDomain()}/>
+          <ShareActionFeedbacks/>
+          <ContextualMenuContextProvider>
+            <ManageContextualMenu/>
+            <Router>
+            <div id="container" className="page">
+              {isReady &&
+              <div id="app" className={`app ${isReady ? "ready" : ""}`} tabIndex="1000">
+                {this.state.showResourceCreateDialog &&
+                <PasswordCreateDialog onClose={this.handleResourceCreateDialogCloseEvent}
+                  folderParentId={this.state.resourceCreateDialogProps.folderParentId}
+                  resourceTypes={this.state.resourceTypes}
+                />
+                }
+                {this.state.showPasswordEditDialog && areResourcesLoaded &&
+                <PasswordEditDialog onClose={this.handleResourceEditDialogCloseEvent}
+                  id={this.state.passwordEditDialogProps.id}
+                  resourceTypes={this.state.resourceTypes}
+                />
+                }
+                {this.state.showFolderCreateDialog &&
+                <FolderCreateDialog onClose={this.handleFolderCreateDialogCloseEvent}
+                  folderParentId={this.state.folderCreateDialogProps.folderParentId}/>
+                }
+                {this.state.showFolderMoveStrategyDialog && areFoldersLoaded &&
+                <FolderMoveStrategyDialog onClose={this.handleFolderMoveStrategyDialogCloseEvent}
+                  folderId={this.state.folderMoveStrategyProps.folderId}
+                  foldersIds={this.state.folderMoveStrategyProps.foldersIds}
+                  resourcesIds={this.state.folderMoveStrategyProps.resourcesIds}
+                  requestId={this.state.folderMoveStrategyProps.requestId}
+                />
+                }
+                {this.state.showFolderRenameDialog && areFoldersLoaded &&
+                <FolderRenameDialog onClose={this.handleFolderRenameDialogCloseEvent} folderId={this.state.folder.id}/>
+                }
+                {this.state.showFolderDeleteDialog && areFoldersLoaded &&
+                <FolderDeleteDialog onClose={this.handleFolderDeleteDialogCloseEvent} folderId={this.state.folder.id}/>
+                }
+                {this.state.showShareDialog &&
+                <ShareDialog resourcesIds={this.state.shareDialogProps.resourcesIds}
+                  foldersIds={this.state.shareDialogProps.foldersIds}
+                  onClose={this.handleShareDialogCloseEvent}/>
+                }
+                {this.state.showTagEditDialog && areResourcesLoaded &&
+                <TagEditDialog onClose={this.handleTagEditDialogCloseEvent}
+                               tag={this.state.tagEditDialogProps}
+                />
+                }
+                {this.state.showTagDeleteDialog && areResourcesLoaded &&
+                <TagDeleteDialog onClose={this.handleTagDeleteDialogCloseEvent}
+                               tag={this.state.tagDeleteDialogProps}
+                />
+                }
+                {
+                  /*
+                   * Hello traveller, leave these dialogs at the end
+                   * so that they are displayed on top of your new dialog
+                   */
+                }
+                {this.state.showProgressDialog &&
+                <ProgressDialog title={this.state.progressDialogProps.title}
+                  goals={this.state.progressDialogProps.goals}
+                  message={this.state.progressDialogProps.message}
+                  completed={this.state.progressDialogProps.completed}/>
+                }
+                {this.state.showPassphraseEntryDialog &&
+                <PassphraseEntryDialog requestId={this.state.passphraseRequestId}
+                  onClose={this.handlePassphraseDialogClose}/>
+                }
+                {this.state.showErrorDialog &&
+                <ErrorDialog title={this.state.errorDialogProps.title}
+                  message={this.state.errorDialogProps.message}
+                  onClose={this.handleErrorDialogCloseEvent}/>
+                }
+                <div className="header first">
+                  <MainMenu onClick={this.handleWorkspaceSelect} baseUrl={this.state.userSettings.getTrustedDomain()}/>
+                </div>
+
+
+                <Switch>
+                  <Route path={[
+                    "/app/folders/view/:filterByFolderId",
+                    "/app/passwords/view/:selectedResourceId",
+                    "/app/passwords",
+                  ]}>
+                    <PasswordWorkspace onMenuItemClick={this.handleWorkspaceSelect}/>
+                  </Route>
+                </Switch>
               </div>
-
-
-              <Switch>
-                <Route path={[
-                  "/app/folders/view/:filterByFolderId",
-                  "/app/passwords/view/:selectedResourceId",
-                  "/app/passwords",
-                ]}>
-                  <PasswordWorkspace onMenuItemClick={this.handleWorkspaceSelect}/>
-                </Route>
-              </Switch>
+              }
             </div>
-            }
-          </div>
-          </Router>
+            </Router>
+          </ContextualMenuContextProvider>
         </ActionFeedbackContextProvider>
       </AppContext.Provider>
     );

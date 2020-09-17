@@ -16,6 +16,7 @@ import PropTypes from "prop-types";
 import Icon from "../../../../react/components/Common/Icons/Icon";
 import SidebarTagFilterSectionContextualMenu from "./SidebarTagFilterSectionContextualMenu";
 import DisplayTagList from "./DisplayTagList";
+import {withContextualMenu} from "../../../contexts/Common/ContextualMenuContext";
 
 /**
  * This component display the tag to filter the resources
@@ -39,12 +40,6 @@ class SidebarTagFilterSection extends React.Component {
     return {
       open: true,
       title: "Filter by tags",
-      // properties to display the contextual menu
-      tagFilterContextualMenu: {
-        left: 0, // left position in px on the page
-        show: false,
-        top: 0, // top position in px on the page
-      },
       filterType: null // type of the filter selected
     };
   }
@@ -54,8 +49,8 @@ class SidebarTagFilterSection extends React.Component {
    */
   bindCallbacks() {
     this.handleTitleClickEvent = this.handleTitleClickEvent.bind(this);
-    this.handleContextualMenuEvent = this.handleContextualMenuEvent.bind(this);
-    this.handleTagFilterContextualMenuHideEvent = this.handleTagFilterContextualMenuHideEvent.bind(this);
+    this.handleTitleContextualMenuEvent = this.handleTitleContextualMenuEvent.bind(this);
+    this.handleTitleMoreClickEvent = this.handleTitleMoreClickEvent.bind(this);
     this.handleFilterTagsType = this.handleFilterTagsType.bind(this);
   }
 
@@ -68,23 +63,32 @@ class SidebarTagFilterSection extends React.Component {
   }
 
   /**
-   * Handle when the user click right on the component
+   * Handle when the user requests to display the contextual menu on the root folder.
    * @param {ReactEvent} event The event
    */
-  handleContextualMenuEvent(event) {
-    const top = event.pageY;
-    const left = event.pageX;
-    const show = true;
-    const tagFilterContextualMenu = {left, show, top};
-    this.setState({tagFilterContextualMenu});
+  handleTitleContextualMenuEvent(event) {
+    // Prevent the browser contextual menu to pop up.
+    event.preventDefault();
+    this.showContextualMenu(event.pageY, event.pageX);
   }
 
   /**
-   * Handle when the user wants to hide the contextual menu of a folder.
+   * Handle when the user requests to display the contextual menu on the tag title section.
+   * @param {ReactEvent} event The event
    */
-  handleTagFilterContextualMenuHideEvent() {
-    const tagFilterContextualMenu = {show: false};
-    this.setState({tagFilterContextualMenu});
+  handleTitleMoreClickEvent(event) {
+    this.showContextualMenu(event.pageY, event.pageX);
+  }
+
+  /**
+   * Show the contextual menu
+   * @param {int} left The left position to display the menu
+   * @param {int} top The top position to display the menu
+   */
+  showContextualMenu(top, left) {
+    const onFilterSelected = this.handleFilterTagsType;
+    const contextualMenuProps = {left, onFilterSelected, top};
+    this.props.contextualMenuContext.show(SidebarTagFilterSectionContextualMenu, contextualMenuProps);
   }
 
   /**
@@ -110,7 +114,6 @@ class SidebarTagFilterSection extends React.Component {
     }
   }
 
-
   /**
    * update the title of the filter tag
    */
@@ -124,23 +127,14 @@ class SidebarTagFilterSection extends React.Component {
    * @returns {JSX}
    */
   render() {
-
     return (
-      <div>
-        {this.state.tagFilterContextualMenu.show &&
-        <SidebarTagFilterSectionContextualMenu
-          left={this.state.tagFilterContextualMenu.left}
-          onDestroy={this.handleTagFilterContextualMenuHideEvent}
-          top={this.state.tagFilterContextualMenu.top}
-          filterTagsType={this.handleFilterTagsType}/>
-        }
-        <div className="folders navigation first accordion">
-          <ul className="accordion-header">
-            <li className={`node root ${this.state.open ? "open" : "close"}`}>
-              <div className="row title">
-                <div className="main-cell-wrapper">
-                  <div className="main-cell">
-                    <h3>
+      <div className="folders navigation first accordion">
+        <ul className="accordion-header">
+          <li className={`node root ${this.state.open ? "open" : "close"}`}>
+            <div className="row title">
+              <div className="main-cell-wrapper">
+                <div className="main-cell">
+                  <h3>
                     <span className="folders-label" onClick={this.handleTitleClickEvent}>
                       <Fragment>
                         {this.state.open &&
@@ -150,23 +144,24 @@ class SidebarTagFilterSection extends React.Component {
                         <Icon name="caret-right"/>
                         }
                       </Fragment>
-                      <span>{this.state.title}</span>
+                      <span
+                        onContextMenu={this.handleTitleContextualMenuEvent}>{this.state.title}</span>
                     </span>
-                    </h3>
-                  </div>
-                </div>
-                <div className="right-cell more-ctrl">
-                  <a className="filter" onClick={this.handleContextualMenuEvent}><span>more</span></a>
+                  </h3>
                 </div>
               </div>
-            </li>
-          </ul>
-          {this.state.open &&
-          <DisplayTagList
-            tags={this.props.tags}
-            filterType={this.state.filterType}/>
-          }
-        </div>
+              <div className="right-cell more-ctrl">
+                <a className="filter" onClick={this.handleTitleMoreClickEvent}><span>more</span></a>
+              </div>
+            </div>
+          </li>
+        </ul>
+        {this.state.open &&
+        <DisplayTagList
+          tags={this.props.tags}
+          filterType={this.state.filterType}
+        />
+        }
       </div>
     );
   }
@@ -174,6 +169,7 @@ class SidebarTagFilterSection extends React.Component {
 
 SidebarTagFilterSection.propTypes = {
   tags: PropTypes.array,
+  contextualMenuContext: PropTypes.any // The contextual menu context
 };
 
-export default SidebarTagFilterSection;
+export default withContextualMenu(SidebarTagFilterSection);

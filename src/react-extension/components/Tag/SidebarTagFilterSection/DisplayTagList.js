@@ -14,6 +14,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import DisplayTagListContextualMenu from "./DisplayTagListContextualMenu";
+import {withContextualMenu} from "../../../contexts/Common/ContextualMenuContext";
 
 class DisplayTagList extends React.Component {
   /**
@@ -33,44 +34,53 @@ class DisplayTagList extends React.Component {
   getDefaultState() {
     return {
       open: true,
-      // properties to display the contextual menu
-      tagFilterItemContextualMenu: {
-        left: 0, // left position in px on the page
-        show: false,
-        top: 0, // top position in px on the page
-      },
       selectedTag: null, //  tag selected
     };
   }
-
 
   /**
    * Bind callbacks methods
    */
   bindCallbacks() {
     this.handleContextualMenuEvent = this.handleContextualMenuEvent.bind(this);
-    this.handleTagFilterItemContextualMenuHideEvent = this.handleTagFilterItemContextualMenuHideEvent.bind(this);
+    this.handleMoreClickEvent = this.handleMoreClickEvent.bind(this);
   }
 
-
   /**
-   * Handle when the user click right on the component
+   * Handle when the user clicks right on a tag
    * @param {ReactEvent} event The event
+   * @param {Object} selectedTag The target tag
    */
   handleContextualMenuEvent(event, selectedTag) {
-    const top = event.pageY;
-    const left = event.pageX;
-    const show = true;
-    const tagFilterItemContextualMenu = {left, show, top};
-    this.setState({tagFilterItemContextualMenu, selectedTag});
+    // Prevent the browser contextual menu to pop up.
+    event.preventDefault();
+
+    // No operation available on shared tag.
+    if (selectedTag.is_shared) {
+      return;
+    }
+
+    this.showContextualMenu(event.pageY, event.pageX);
   }
 
   /**
-   * Handle when the user wants to hide the contextual menu of a folder.
+   * Handle when the user clicks on the more button
+   * @param {ReactEvent} event The event
+   * @param {Object} selectedTag The target tag
    */
-  handleTagFilterItemContextualMenuHideEvent() {
-    const tagFilterItemContextualMenu = {show: false};
-    this.setState({tagFilterItemContextualMenu});
+  handleMoreClickEvent(event, selectedTag) {
+    this.showContextualMenu(event.pageY, event.pageX, selectedTag);
+  }
+
+  /**
+   * Show the contextual menu
+   * @param {int} left The left position to display the menu
+   * @param {int} top The top position to display the menu
+   * @param {Object} selectedTag The target tag
+   */
+  showContextualMenu(top, left, selectedTag) {
+    const contextualMenuProps = {left, selectedTag, top};
+    this.props.contextualMenuContext.show(DisplayTagListContextualMenu, contextualMenuProps);
   }
 
   // Zero conditional statements
@@ -80,9 +90,9 @@ class DisplayTagList extends React.Component {
    */
   get filters() {
     return {
-      personal: tag => !tag.is_shared,
-      shared: tag => tag.is_shared,
-      default: tag => tag
+      [filterByTagsOptions.personal]: tag => !tag.is_shared,
+      [filterByTagsOptions.shared]: tag => tag.is_shared,
+      [filterByTagsOptions.all]: tag => tag
     }
   }
 
@@ -91,7 +101,8 @@ class DisplayTagList extends React.Component {
    * @returns {*[filtered tags]}
    */
   get filteredTags() {
-    const filter = this.filters[this.props.filterType] || this.filters.default;
+    const filterType = this.props.filterType || filterByTagsOptions.all;
+    const filter = this.filters[filterType];
     return this.props.tags.filter(filter);
   }
 
@@ -109,55 +120,53 @@ class DisplayTagList extends React.Component {
    */
   render() {
     return (
-      <div>
-        {this.state.tagFilterItemContextualMenu.show &&
-        <DisplayTagListContextualMenu
-          left={this.state.tagFilterItemContextualMenu.left}
-          onDestroy={this.handleTagFilterItemContextualMenuHideEvent}
-          top={this.state.tagFilterItemContextualMenu.top}
-          selectedTag={this.state.selectedTag}
-        />
-        }
-        <div className="accordion-content">
-          {this.isLoading() &&
-          <div className="processing-wrapper">
-            <span className="processing-text">Retrieving tags</span>
-          </div>
-          }
-          {!this.isLoading() && this.props.tags.length === 0 &&
-          <em className="empty-content">empty</em>
-          }
-          {!this.isLoading() && this.props.tags.length > 0 &&
-          <ul className="tree ready">
-            {this.filteredTags.map(tag =>
-              <li className="open node root tag-item" key={tag.id}>
-                <div className="row">
-                  <div className="main-cell-wrapper">
-                    <div className="main-cell">
-                      <a title={tag.slug}><span className="ellipsis">{tag.slug}</span></a>
-                    </div>
-                  </div>
-                  {!tag.is_shared &&
-                  <div className="right-cell more-ctrl">
-                    <a className="more"
-                       onClick={(event) => this.handleContextualMenuEvent(event, tag)}><span>more</span></a>
-                  </div>
-                  }
-                </div>
-              </li>
-            )
-            }
-          </ul>
-          }
+      <div className="accordion-content">
+        {this.isLoading() &&
+        <div className="processing-wrapper">
+          <span className="processing-text">Retrieving tags</span>
         </div>
+        }
+        {!this.isLoading() && this.props.tags.length === 0 &&
+        <em className="empty-content">empty</em>
+        }
+        {!this.isLoading() && this.props.tags.length > 0 &&
+        <ul className="tree ready">
+          {this.filteredTags.map(tag =>
+            <li className="open node root tag-item" key={tag.id}>
+              <div className="row">
+                <div className="main-cell-wrapper"
+                  onContextMenu={(event) => this.handleContextualMenuEvent(event, tag)}>
+                  <div className="main-cell">
+                    <a title={tag.slug}><span className="ellipsis">{tag.slug}</span></a>
+                  </div>
+                </div>
+                {!tag.is_shared &&
+                <div className="right-cell more-ctrl">
+                  <a className="more"
+                    onClick={(event) => this.handleMoreClickEvent(event, tag)}><span>more</span></a>
+                </div>
+                }
+              </div>
+            </li>
+          )
+          }
+        </ul>
+        }
       </div>
     );
   }
 }
 
 DisplayTagList.propTypes = {
+  contextualMenuContext: PropTypes.any, // The contextual menu context
   tags: PropTypes.array,
-  filterType: PropTypes.string
+  filterType: PropTypes.string,
 };
 
-export default DisplayTagList;
+export default withContextualMenu(DisplayTagList);
+
+export const filterByTagsOptions = {
+  all: "all",
+  shared: "shared",
+  personal: "personal"
+};

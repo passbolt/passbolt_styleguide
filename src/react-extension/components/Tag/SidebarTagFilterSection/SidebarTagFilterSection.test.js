@@ -18,13 +18,15 @@ import "../../../test/lib/crypto/cryptoGetRandomvalues";
 import AppContext from "../../../contexts/AppContext";
 import MockPort from "../../../test/mock/MockPort";
 import SidebarTagFilterSection from "./SidebarTagFilterSection";
+import ContextualMenuContextProvider from "../../../contexts/Common/ContextualMenuContext";
+import ManageContextualMenu from "../../ManageContextualMenu";
 
 beforeEach(() => {
   jest.resetModules();
 });
 
-const getDummyTags = function() {
-  return [
+const getDummyTags = function (filterBy) {
+  let tags = [
     {
       id: "1",
       slug: "test",
@@ -50,8 +52,18 @@ const getDummyTags = function() {
       slug: "there’s always something to look at if you open your eyes!",
       is_shared: false
     }
-  ]
-}
+  ];
+
+  if (filterBy) {
+    const filter = {
+      personal: tag => !tag.is_shared,
+      shared: tag => tag.is_shared
+    };
+    tags = tags.filter(filter[filterBy]);
+  }
+
+  return tags;
+};
 
 const getAppContext = function (appContext) {
   const defaultAppContext = {
@@ -61,12 +73,15 @@ const getAppContext = function (appContext) {
   return Object.assign(defaultAppContext, appContext || {});
 };
 
-const renderTagFilter = function(appContext, props) {
+const renderTagFilter = function (appContext, props) {
   appContext = getAppContext(appContext);
   props = props || {};
   return render(
     <AppContext.Provider value={appContext}>
-      <SidebarTagFilterSection debug tags={props.tags} />
+      <ContextualMenuContextProvider>
+        <ManageContextualMenu/>
+        <SidebarTagFilterSection debug tags={props.tags}/>
+      </ContextualMenuContextProvider>
     </AppContext.Provider>
   );
 };
@@ -158,7 +173,7 @@ describe("SidebarTagFilterSection", () => {
     expect(tagFilterTitleUpdated).not.toBeNull();
     expect(tagFilterTitleUpdated.textContent).toBe("My tags");
 
-    const personalTags = props.tags.filter( tag => !tag.is_shared);
+    const personalTags = props.tags.filter(tag => !tag.is_shared);
 
     // slug list exists
     const slugList = container.querySelectorAll(".ellipsis");
@@ -195,7 +210,7 @@ describe("SidebarTagFilterSection", () => {
     expect(tagFilterTitleUpdated).not.toBeNull();
     expect(tagFilterTitleUpdated.textContent).toBe("Shared tags");
 
-    const sharedTags = props.tags.filter( tag => tag.is_shared);
+    const sharedTags = props.tags.filter(tag => tag.is_shared);
 
     // slug list exists
     const slugList = container.querySelectorAll(".ellipsis");
@@ -239,12 +254,11 @@ describe("SidebarTagFilterSection", () => {
     slugList.forEach(function (value, index) {
       expect(value.textContent).toBe(props.tags[index].slug);
     });
-
   });
 
   it("As LU I cannot edit a shared tag", () => {
     const props = {
-      tags: getDummyTags()
+      tags: getDummyTags("shared")
     };
     const {container} = renderTagFilter(null, props);
 
@@ -252,16 +266,6 @@ describe("SidebarTagFilterSection", () => {
     const tagFilterTitle = container.querySelector("h3");
     expect(tagFilterTitle).not.toBeNull();
     expect(tagFilterTitle.textContent).toBe("Filter by tags");
-
-    // Click to expand tags
-    const leftClick = {button: 0};
-    const filterTagByType = container.querySelector(".filter");
-    expect(filterTagByType).not.toBeNull();
-    fireEvent.click(filterTagByType, leftClick);
-
-    const personalTagMenu = container.querySelector("#shared-tag");
-    expect(personalTagMenu).not.toBeNull();
-    fireEvent.click(personalTagMenu, leftClick);
 
     const moreTagItemMenu = container.querySelector(".more");
     expect(moreTagItemMenu).toBeNull();
