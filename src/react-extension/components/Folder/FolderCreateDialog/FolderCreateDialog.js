@@ -18,6 +18,7 @@ import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
 import ErrorDialog from "../../Common/Dialog/ErrorDialog/ErrorDialog";
 import FormSubmitButton from "../../Common/Inputs/FormSubmitButton/FormSubmitButton";
 import FormCancelButton from "../../Common/Inputs/FormSubmitButton/FormCancelButton";
+import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 
 class FolderCreateDialog extends Component {
   /**
@@ -154,7 +155,7 @@ class FolderCreateDialog extends Component {
 
     try {
       const folder = await this.createFolder();
-      this.displayNotification("success", "The folder has been added successfully");
+      await this.props.actionFeedbackContext.displaySuccess("The folder has been added successfully");
       this.selectAndScrollToFolder(folder.id);
       this.props.onClose();
     } catch (error) {
@@ -192,16 +193,6 @@ class FolderCreateDialog extends Component {
       folder_parent_id: this.props.folderParentId
     };
     return await this.context.port.request("passbolt.folders.create", folderDto);
-  }
-
-  /**
-   * Notify the user.
-   * @param {string} status Can be success, error or info
-   * @param {string} message The message to display
-   * @returns {void}
-   */
-  displayNotification(status, message) {
-    this.context.port.emit("passbolt.notification.display", {status: status, message: message});
   }
 
   /**
@@ -313,7 +304,8 @@ FolderCreateDialog.contextType = AppContext;
 
 FolderCreateDialog.propTypes = {
   folderParentId: PropTypes.string,
-  onClose: PropTypes.func
+  onClose: PropTypes.func,
+  actionFeedbackContext: PropTypes.any // The action feedback context
 };
 
-export default FolderCreateDialog;
+export default withActionFeedback(FolderCreateDialog);

@@ -19,6 +19,7 @@ import ErrorDialog from "../../Common/Dialog/ErrorDialog/ErrorDialog";
 import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
 import FormSubmitButton from "../../Common/Inputs/FormSubmitButton/FormSubmitButton";
 import FormCancelButton from "../../Common/Inputs/FormSubmitButton/FormCancelButton";
+import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 
 class FolderRenameDialog extends Component {
   /**
@@ -182,7 +183,7 @@ class FolderRenameDialog extends Component {
 
     try {
       const folder = await this.updateFolder();
-      this.displayNotification("success", "The folder was renamed successfully");
+      await this.props.actionFeedbackContext.displaySuccess("The folder was renamed successfully");
       this.selectAndScrollToFolder(folder.id);
       this.props.onClose();
     } catch (error) {
@@ -224,15 +225,6 @@ class FolderRenameDialog extends Component {
       name: this.state.name
     };
     return await this.context.port.request("passbolt.folders.update", folderDto);
-  }
-
-  /**
-   * Notify the user.
-   * @param {string} status Can be success, error or info
-   * @param {string} message The message to display
-   */
-  displayNotification(status, message) {
-    this.context.port.emit("passbolt.notification.display", {status: status, message: message});
   }
 
   /**
@@ -342,7 +334,8 @@ FolderRenameDialog.contextType = AppContext;
 
 FolderRenameDialog.propTypes = {
   folderId: PropTypes.string,
-  onClose: PropTypes.func
+  onClose: PropTypes.func,
+  actionFeedbackContext: PropTypes.any // The action feedback context
 };
 
-export default FolderRenameDialog;
+export default withActionFeedback(FolderRenameDialog);

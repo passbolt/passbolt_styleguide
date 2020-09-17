@@ -23,6 +23,7 @@ import userSettingsFixture from "../../../test/fixture/Settings/userSettings";
 import SiteSettings from "../../../lib/Settings/SiteSettings";
 import siteSettingsFixture from "../../../test/fixture/Settings/siteSettings";
 import MockPort from "../../../test/mock/MockPort";
+import {ActionFeedbackContext} from "../../../contexts/ActionFeedbackContext";
 
 beforeEach(() => {
   jest.resetModules();
@@ -310,6 +311,7 @@ describe("PasswordCreateDialog", () => {
     // Mock the request function to make it the expected result
     jest.spyOn(context.port, 'request').mockImplementationOnce(jest.fn((message, data) => Object.assign({id: createdResourceId}, data)));
     jest.spyOn(context.port, 'emit').mockImplementation(jest.fn());
+    jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementation(() => {});
 
     // Submit and assert
     const submitButton = container.querySelector("input[type=\"submit\"]");
@@ -325,9 +327,9 @@ describe("PasswordCreateDialog", () => {
       description: resourceMeta.description
     };
     expect(context.port.request).toHaveBeenCalledWith("passbolt.resources.create", onApiCreateResourceMeta, resourceMeta.password);
-    expect(context.port.emit).toHaveBeenCalledTimes(2);
-    expect(context.port.emit).toHaveBeenNthCalledWith(1, "passbolt.notification.display", {"message": "The password has been added successfully", "status": "success"});
-    expect(context.port.emit).toHaveBeenNthCalledWith(2, "passbolt.resources.select-and-scroll-to", createdResourceId);
+    expect(context.port.emit).toHaveBeenCalledTimes(1);
+    expect(context.port.emit).toHaveBeenNthCalledWith(1, "passbolt.resources.select-and-scroll-to", createdResourceId);
+    expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalled();
     expect(props.onClose).toBeCalled();
   });
 });

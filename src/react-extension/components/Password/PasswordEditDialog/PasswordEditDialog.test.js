@@ -23,6 +23,7 @@ import userSettingsFixture from "../../../test/fixture/Settings/userSettings";
 import SiteSettings from "../../../lib/Settings/SiteSettings";
 import siteSettingsFixture from "../../../test/fixture/Settings/siteSettings";
 import MockPort from "../../../test/mock/MockPort";
+import {ActionFeedbackContext} from "../../../contexts/ActionFeedbackContext";
 
 beforeEach(() => {
   jest.resetModules();
@@ -376,6 +377,7 @@ describe("PasswordEditDialog", () => {
     // Mock the request function to make it the expected result
     jest.spyOn(context.port, 'request').mockImplementationOnce(jest.fn());
     jest.spyOn(context.port, 'emit').mockImplementation(jest.fn());
+    jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementation(() => {});
 
     // Submit and assert
     const submitButton = container.querySelector("input[type=\"submit\"]");
@@ -392,13 +394,10 @@ describe("PasswordEditDialog", () => {
     // API calls are made on submit, wait they are resolved.
     await waitFor(() => {
       expect(context.port.request).toHaveBeenCalledWith("passbolt.resources.update", onApiUpdateResourceMeta, resourceMeta.password);
-      expect(context.port.emit).toHaveBeenCalledTimes(2);
-      expect(context.port.emit).toHaveBeenNthCalledWith(1, "passbolt.notification.display", {
-        "message": "The password has been updated successfully",
-        "status": "success"
-      });
-      expect(context.port.emit).toHaveBeenNthCalledWith(2, "passbolt.resources.select-and-scroll-to", "8e3874ae-4b40-590b-968a-418f704b9d9a");
+      expect(context.port.emit).toHaveBeenCalledTimes(1);
+      expect(context.port.emit).toHaveBeenNthCalledWith(1, "passbolt.resources.select-and-scroll-to", "8e3874ae-4b40-590b-968a-418f704b9d9a");
       expect(props.onClose).toBeCalled();
+      expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalled();
     });
   });
 });

@@ -17,6 +17,7 @@ import {fireEvent, render, waitFor} from "@testing-library/react";
 import PasswordSidebarTagSection from "./PasswordSidebarTagSection";
 import AppContext from "../../../contexts/AppContext";
 import MockPort from "../../../test/mock/MockPort";
+import {ActionFeedbackContext} from "../../../contexts/ActionFeedbackContext";
 
 
 beforeEach(() => {
@@ -399,7 +400,7 @@ describe("PasswordSidebarTag", () => {
 
     // Mock the request function to make it the expected result
     jest.spyOn(context.port, 'request').mockImplementationOnce(jest.fn((message, data) => Object.assign({id: props.resource.id}, data)));
-    jest.spyOn(context.port, 'emit').mockImplementation(jest.fn());
+    jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementation(() => {});
 
     // submit button input tag exists
     const submitButton = container.querySelector(".tag-editor-submit");
@@ -425,10 +426,8 @@ describe("PasswordSidebarTag", () => {
       ]
     };
     expect(context.port.request).toHaveBeenCalledWith("passbolt.resource.update-tags", onApiUpdateResourceTagMeta);
-    expect(context.port.emit).toHaveBeenNthCalledWith(1, "passbolt.notification.display", {
-      "message": "Tags has been updated successfully",
-      "status": "success"
-    });
+    // notification toaster called
+    expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalledWith("Tags has been updated successfully");
   });
 
   it("Add multiple tags to a resource", async () => {
@@ -472,7 +471,7 @@ describe("PasswordSidebarTag", () => {
 
     // Mock the request function to make it the expected result
     jest.spyOn(context.port, 'request').mockImplementationOnce(jest.fn((message, data) => Object.assign({id: props.resource.id}, data)));
-    jest.spyOn(context.port, 'emit').mockImplementation(jest.fn());
+    jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementation(() => {});
 
     // submit button input tag exists
     const submitButton = container.querySelector(".tag-editor-submit");
@@ -502,10 +501,8 @@ describe("PasswordSidebarTag", () => {
       ]
     };
     expect(context.port.request).toHaveBeenCalledWith("passbolt.resource.update-tags", onApiUpdateResourceTagMeta);
-    expect(context.port.emit).toHaveBeenNthCalledWith(1, "passbolt.notification.display", {
-      "message": "Tags has been updated successfully",
-      "status": "success"
-    });
+    // notification toaster called
+    expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalledWith("Tags has been updated successfully");
   });
 
   it("Cannot edit while submitting changes", async () => {
@@ -1202,7 +1199,7 @@ describe("PasswordSidebarTag", () => {
 
     // Mock the request function to make it the expected result
     jest.spyOn(context.port, 'request').mockImplementationOnce(jest.fn((message, data) => Object.assign({id: props.resource.id}, data)));
-    jest.spyOn(context.port, 'emit').mockImplementation(jest.fn());
+    jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementation(() => {});
 
     // submit with key enter
     fireEvent.keyPress(editorTagInput, enterKeyPressed);
@@ -1225,10 +1222,8 @@ describe("PasswordSidebarTag", () => {
       ]
     };
     expect(context.port.request).toHaveBeenCalledWith("passbolt.resource.update-tags", onApiUpdateResourceTagMeta);
-    expect(context.port.emit).toHaveBeenNthCalledWith(1, "passbolt.notification.display", {
-      "message": "Tags has been updated successfully",
-      "status": "success"
-    });
+    // notification toaster called
+    expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalledWith("Tags has been updated successfully");
   });
 
 });

@@ -21,6 +21,7 @@ import {fireEvent, render, waitFor} from "@testing-library/react";
 import AppContext from "../../../contexts/AppContext";
 import MockPort from "../../../test/mock/MockPort";
 import PasswordSidebarDescriptionSection from "./PasswordSidebarDescriptionSection";
+import {ActionFeedbackContext} from "../../../contexts/ActionFeedbackContext";
 
 beforeEach(() => {
   jest.resetModules();
@@ -399,7 +400,7 @@ describe("PasswordSidebarDescription", () => {
 
     // Mock the request function to make it the expected result
     jest.spyOn(context.port, 'request').mockImplementationOnce(jest.fn((message, data) => Object.assign({id: props.resource.id}, data)));
-    jest.spyOn(context.port, 'emit').mockImplementation(jest.fn());
+    jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementation(() => {});
 
     // submit button exists
     const submitButton = container.querySelector(".description-editor-submit");
@@ -419,7 +420,7 @@ describe("PasswordSidebarDescription", () => {
       description: descriptionValue
     };
     expect(context.port.request).toHaveBeenCalledWith("passbolt.resource.update-description", onApiUpdateResourceDescriptionMeta);
-    expect(context.port.emit).toHaveBeenNthCalledWith(1, "passbolt.notification.display", {"message": "The description has been updated successfully", "status": "success"});
+    expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalled();
   });
 
   it("Cannot edit while submitting changes", async () => {

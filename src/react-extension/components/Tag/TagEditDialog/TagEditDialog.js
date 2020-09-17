@@ -15,6 +15,7 @@ import React, {Component} from "react";
 import PropTypes from "prop-types";
 import AppContext from "../../../contexts/AppContext";
 import DialogWrapper from "../../../../react/components/Common/Dialog/DialogWrapper/DialogWrapper";
+import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 
 /**
  * Component allows the user to edit a tag from a dialog
@@ -110,7 +111,7 @@ class TagEditDialog extends Component {
 
     try {
       await this.context.port.request("passbolt.tags.update", tagDto);
-      this.handleSaveSuccess();
+      await this.handleSaveSuccess();
     } catch (error) {
       this.handleSaveError(error);
       this.setState({processing: false});
@@ -130,8 +131,8 @@ class TagEditDialog extends Component {
   /**
    * Handle save operation success.
    */
-  handleSaveSuccess() {
-    this.displayNotification("success", "The tag has been updated successfully");
+  async handleSaveSuccess() {
+    await this.props.actionFeedbackContext.displaySuccess("The tag has been updated successfully");
     this.props.onClose();
   }
 
@@ -161,15 +162,6 @@ class TagEditDialog extends Component {
     if (this.state.nameError) {
       this.nameInputRef.current.focus();
     }
-  }
-
-  /**
-   * Notify the user.
-   * @param {string} status Can be success, error or info
-   * @param {string} message The message to display
-   */
-  displayNotification(status, message) {
-    this.context.port.emit("passbolt.notification.display", {status: status, message: message});
   }
 
   /**
@@ -246,6 +238,7 @@ TagEditDialog.contextType = AppContext;
 TagEditDialog.propTypes = {
   onClose: PropTypes.func,
   tag: PropTypes.object,
+  actionFeedbackContext: PropTypes.any // The action feedback context
 };
 
-export default TagEditDialog;
+export default withActionFeedback(TagEditDialog);

@@ -23,6 +23,7 @@ import ShareChanges from "./Utility/ShareChanges";
 import SharePermissionItem from "./SharePermissionItem";
 import SharePermissionItemSkeleton from "./SharePermissionItemSkeleton";
 import AppContext from "../../contexts/AppContext";
+import {withActionFeedback} from "../../contexts/ActionFeedbackContext";
 
 class ShareDialog extends Component {
   /**
@@ -167,7 +168,7 @@ class ShareDialog extends Component {
     await this.toggleProcessing();
     try {
       await this.shareSave();
-      this.displayNotification("success", "The permissions have been changed successfully.");
+      await this.props.actionFeedbackContext.displaySuccess("The permissions have been changed successfully.");
       this.props.onClose();
     } catch (error) {
       console.error(error);
@@ -267,16 +268,6 @@ class ShareDialog extends Component {
       const found = this.state.permissions.filter(permission => (permission.aro.id === item.id));
       return found.length === 0;
     });
-  }
-
-  /**
-   * Display a notification on screen
-   * @param {string} status Can be success, error or info
-   * @param {string} message The message to display
-   * @returns {void}
-   */
-  displayNotification(status, message) {
-    this.context.port.emit("passbolt.notification.display", {status: status, message: message});
   }
 
   /**
@@ -488,7 +479,8 @@ ShareDialog.contextType = AppContext;
 ShareDialog.propTypes = {
   resourcesIds: PropTypes.array,
   foldersIds: PropTypes.array,
-  onClose: PropTypes.func
+  onClose: PropTypes.func,
+  actionFeedbackContext: PropTypes.any // The action feedback context
 };
 
-export default ShareDialog;
+export default withActionFeedback(ShareDialog);

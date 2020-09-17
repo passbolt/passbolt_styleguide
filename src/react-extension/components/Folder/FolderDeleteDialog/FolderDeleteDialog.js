@@ -18,6 +18,7 @@ import ErrorDialog from "../../Common/Dialog/ErrorDialog/ErrorDialog";
 import FormSubmitButton from "../../Common/Inputs/FormSubmitButton/FormSubmitButton";
 import FormCancelButton from "../../Common/Inputs/FormSubmitButton/FormCancelButton";
 import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
+import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 
 class FolderDeleteDialog extends Component {
   /**
@@ -114,7 +115,7 @@ class FolderDeleteDialog extends Component {
 
     try {
       await this.context.port.request("passbolt.folders.delete", this.props.folderId, this.state.cascade);
-      this.displayNotification("success", "The folder was deleted.");
+      await this.props.actionFeedbackContext.displaySuccess("The folder was deleted.");
       this.props.onClose();
     } catch (error) {
       console.error(error);
@@ -135,15 +136,6 @@ class FolderDeleteDialog extends Component {
     return new Promise(resolve => {
       this.setState({processing: !prev}, resolve());
     });
-  }
-
-  /**
-   * Notify the user.
-   * @param {string} status Can be success, error or info
-   * @param {string} message The message to display
-   */
-  displayNotification(status, message) {
-    this.context.port.emit("passbolt.notification.display", {status: status, message: message});
   }
 
   /**
@@ -222,7 +214,8 @@ FolderDeleteDialog.contextType = AppContext;
 FolderDeleteDialog.propTypes = {
   className: PropTypes.string,
   folderId: PropTypes.string,
-  onClose: PropTypes.func
+  onClose: PropTypes.func,
+  actionFeedbackContext: PropTypes.any // The action feedback context
 };
 
-export default FolderDeleteDialog;
+export default withActionFeedback(FolderDeleteDialog);
