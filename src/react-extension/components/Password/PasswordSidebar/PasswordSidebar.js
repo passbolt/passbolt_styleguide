@@ -119,10 +119,10 @@ class PasswordSidebar extends React.Component {
           {/*  users={this.props.users}/>*/}
           <PasswordSidebarDescriptionSection
             description={this.props.resource.description}
-            id={this.props.resource.id}/>
+            resourceId={this.props.resource.id}
+            permission={this.props.resource.permission}/>
           <PasswordSidebarTagSection
             resource={this.props.resource}/>
-
           <PasswordSidebarCommentSection
               resource={this.props.resource}/>
         </div>
