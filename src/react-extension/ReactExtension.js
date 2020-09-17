@@ -34,6 +34,7 @@ import PasswordWorkspace from "./components/Password/PasswordWorkspace/PasswordW
 import SiteSettings from "./lib/Settings/SiteSettings";
 import UserSettings from "./lib/Settings/UserSettings";
 import ActionFeedbackContextProvider from "./contexts/ActionFeedbackContext";
+import ShareActionFeedbacks from "./components/Share/ShareActionFeedbacks";
 import TagEditDialog from "./components/Tag/TagEditDialog/TagEditDialog";
 import TagDeleteDialog from "./components/Tag/TagDeleteDialog/TagDeleteDialog";
 
@@ -467,6 +468,7 @@ class ReactExtension extends Component {
     return (
       <AppContext.Provider value={this.state}>
         <ActionFeedbackContextProvider>
+          <ShareActionFeedbacks  />
           <Router>
           <div id="container" className="page">
             {isReady &&

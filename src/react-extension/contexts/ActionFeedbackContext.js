@@ -22,10 +22,9 @@ import PropTypes from "prop-types";
  */
 export const ActionFeedbackContext = React.createContext({
     feedbacks: [], // Current displayed feedbacks
-    displaySuccess: () => {
-    }, // Inform a user about an successful action feedback
-    displayError: () => {
-    } // Inform a user about an  action failure's eedback
+    displaySuccess: () => {}, // Inform a user about an successful action feedback
+    displayError: () => {}, // Inform a user about an  action failure's eedback
+    remove: () => {} // Remove a particular feedback
 });
 
 /**
@@ -51,12 +50,12 @@ export default class ActionFeedbackContextProvider extends React.Component {
             displaySuccess: async feedbackToAdd => {
                 await this.setState({feedbacks: [{type: 'success', message: feedbackToAdd}, ...this.state.feedbacks]})
             },
-            displayError: feedbackToAdd => this.setState({
-                feedbacks: [{
-                    type: 'error',
-                    message: feedbackToAdd
-                }, ...this.state.feedbacks]
-            })
+            displayError: async feedbackToAdd => {
+                await this.setState({feedbacks: [{type: 'error', message: feedbackToAdd}, ...this.state.feedbacks]})
+            },
+            remove: async feedbackToRemove => {
+                await this.setState({feedbacks: this.state.feedbacks.filter(feedback => feedbackToRemove !== feedback)})
+            }
         }
     }
 

@@ -4777,6 +4777,8 @@ input[type=email].fluid {
   position: relative;
   left: 50%;
   float: left;
+  clear: both;
+  margin-bottom: 1em;
 }
 .notification-container .notification .message {
   box-shadow: 0px 0px 10px 0px #333;
@@ -4785,17 +4787,22 @@ input[type=email].fluid {
   position: relative;
   left: -50%;
   float: left;
-  background: #FEF0BF;
-  border: 1px solid #fccd28;
   color: #000;
   font-weight: normal;
   width: auto;
 }
-.notification-container .notification .message strong {
+.notification-container .notification .message .content {
+  margin-right: 1em;
+}
+.notification-container .notification .message .content strong {
   text-transform: capitalize;
 }
-.notification-container .notification .message strong:after {
-  content: ':';
+.notification-container .notification .message .action {
+  border-bottom: none;
+  margin-left: 0.4em;
+}
+.notification-container .notification .message .action:hover .svg-icon svg {
+  fill: #000000;
 }
 /* Dialog */
 .dialog-wrapper {

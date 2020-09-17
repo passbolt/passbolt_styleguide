@@ -40,6 +40,7 @@ class PasswordSidebarCommentSection extends React.Component {
     getDefaultState() {
         return {
             open: false, // Flag to determine the expand / collapse of the section
+            comments: [], // The resource comments
             canAdd: false,// Flag to determine the display of the "Add Comment" area,
             canAddByIcon: false, // Flag to determine the display of the "Add Icons"
             mustRefresh: false, // Flag to determine if the comment list must be refreshed
@@ -94,6 +95,7 @@ class PasswordSidebarCommentSection extends React.Component {
      * Whenever the comments to display has been fetched
      * @param comments The fetched comments
      */
+
     async handleFetchedEvent(comments) {
         const hasComments = comments && comments.length > 0;
         await this.setState({mustRefresh: false, canAdd: !hasComments, canAddByIcon: hasComments});
