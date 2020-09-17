@@ -18,6 +18,8 @@ import PasswordSidebarInformationSection from "./PasswordSidebarInformationSecti
 import PasswordSidebarTagSection from "./PasswordSidebarTagSection";
 import PasswordSidebarCommentSection from "./PasswordSidebarCommentSection";
 import PasswordSidebarDescriptionSection from "./PasswordSidebarDescriptionSection";
+import PasswordSidebarPermissionsSection from "./PasswordSidebarPermissionsSection";
+import AppContext from "../../../contexts/AppContext";
 
 class PasswordSidebar extends React.Component {
 
@@ -27,52 +29,6 @@ class PasswordSidebar extends React.Component {
    */
   constructor(props) {
     super(props);
-    this.state = this.getDefaultState();
-    this.bindCallbacks();
-  }
-
-  /**
-   * Get default state
-   * @returns {*}
-   */
-  getDefaultState() {
-    return {
-      permissions: null,
-      permissionsSectionOpen: false
-    };
-  }
-
-  /**
-   * Bind callbacks methods
-   */
-  bindCallbacks() {
-    this.handlePermissionSectionClose = this.handlePermissionSectionClose.bind(this);
-    this.handlePermissionSectionOpen = this.handlePermissionSectionOpen.bind(this);
-  }
-
-  /**
-   * Handle when the user closes the permissions section.
-   */
-  handlePermissionSectionClose() {
-    const permissionsSectionOpen = false;
-    this.setState({permissionsSectionOpen});
-  }
-
-  /**
-   * Handle when the user opens the permissions section.
-   */
-  handlePermissionSectionOpen() {
-    this.findPermissions();
-    const permissionsSectionOpen = true;
-    this.setState({permissionsSectionOpen});
-  }
-
-  /**
-   * Get the folder permissions.
-   */
-  async findPermissions() {
-    const permissions = await port.request('passbolt.folders.find-permissions');
-    this.setState({permissions});
   }
 
   /**
@@ -125,11 +81,15 @@ class PasswordSidebar extends React.Component {
             resource={this.props.resource}/>
           <PasswordSidebarCommentSection
               resource={this.props.resource}/>
+          <PasswordSidebarPermissionsSection
+            resourceId={this.props.resource.id}/>
         </div>
       </div>
     );
   }
 }
+
+PasswordSidebar.contextType = AppContext;
 
 PasswordSidebar.propTypes = {
   resource: PropTypes.object,

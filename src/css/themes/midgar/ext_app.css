@@ -7987,6 +7987,283 @@ table.table-info.horizontal tbody tr:hover {
     display: none;
   }
 }
+.usercard-col-2 {
+  /*
+     * For IE 6/7 only
+     * Include this rule to trigger hasLayout and contain floats.
+     */
+  /*
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
+  /*
+     * For IE 6/7 only
+     * Include this rule to trigger hasLayout and contain floats.
+     */
+  zoom: 1;
+  /*
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
+  margin: 0 0 1em 0;
+}
+.usercard-col-2:before,
+.usercard-col-2:after {
+  content: "";
+  display: table;
+}
+.usercard-col-2:after {
+  clear: both;
+}
+.usercard-col-2:before,
+.usercard-col-2:after {
+  content: "";
+  display: table;
+}
+.usercard-col-2:after {
+  clear: both;
+}
+.usercard-col-2:last-of-type {
+  margin-bottom: 0;
+}
+.usercard-col-2 .content-wrapper {
+  float: left;
+  width: 100%;
+}
+.usercard-col-2 .content-wrapper .content {
+  margin-left: 36px;
+  padding: 0 1em 0 1em;
+}
+.usercard-col-2 .content-wrapper .content .name {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -o-text-overflow: ellipsis;
+  -ms-text-overflow: ellipsis;
+}
+.usercard-col-2 .content-wrapper .content .subinfo {
+  color: #FFFFFC;
+  font-size: 0.929em;
+  /* 13px */
+}
+.usercard-col-2 .avatar {
+  float: left;
+  width: 36px;
+  margin-left: -100%;
+}
+.usercard-col-2 .avatar img {
+  width: 36px;
+  height: 36px;
+}
+.usercard-col-2 ul.permissions-list {
+  margin-top: 1em;
+  font-size: 0.8em;
+}
+.usercard-col-2 ul.permissions-list li .avatar {
+  margin-left: 0;
+  float: left;
+  width: 18px;
+}
+.usercard-col-2 ul.permissions-list li .avatar img {
+  width: 18px;
+  height: 18px;
+}
+.usercard-col-2 ul.permissions-list li .name {
+  display: inline-block;
+  padding-left: 7%;
+  line-height: 18px;
+}
+.usercard-col-2 ul.permissions-list li .name.crossed {
+  text-decoration: line-through;
+}
+.usercard-col-2 ul.permissions-list li .type {
+  float: right;
+  text-align: right;
+  line-height: 18px;
+  color: #606060;
+}
+.usercard-col-2 ul.permissions-list li .type span {
+  background-color: white;
+  font-size: 0.8em;
+  color: white;
+  padding: 0.1em 0.5em;
+  border-radius: 0.5em;
+}
+.usercard-col-2 ul.permissions-list li .type span.created {
+  background-color: #66CC00;
+}
+.usercard-col-2 ul.permissions-list li .type span.updated {
+  background-color: #2A9CEB;
+}
+.usercard-col-2 ul.permissions-list li .type span.removed {
+  background-color: #DB5454;
+}
+.usercard-detailed-col-2 {
+  /*
+     * For IE 6/7 only
+     * Include this rule to trigger hasLayout and contain floats.
+     */
+  /*
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
+  /*
+     * For IE 6/7 only
+     * Include this rule to trigger hasLayout and contain floats.
+     */
+  zoom: 1;
+  /*
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
+  margin: 0 0 1em 0;
+  padding: 0.5em 0;
+  margin: 0;
+}
+.usercard-detailed-col-2:before,
+.usercard-detailed-col-2:after {
+  content: "";
+  display: table;
+}
+.usercard-detailed-col-2:after {
+  clear: both;
+}
+.usercard-detailed-col-2:before,
+.usercard-detailed-col-2:after {
+  content: "";
+  display: table;
+}
+.usercard-detailed-col-2:after {
+  clear: both;
+}
+.usercard-detailed-col-2:last-of-type {
+  margin-bottom: 0;
+}
+.usercard-detailed-col-2 .content-wrapper {
+  float: left;
+  width: 100%;
+}
+.usercard-detailed-col-2 .content-wrapper .content {
+  margin-left: 36px;
+  padding: 0 1em 0 1em;
+}
+.usercard-detailed-col-2 .content-wrapper .content .name {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -o-text-overflow: ellipsis;
+  -ms-text-overflow: ellipsis;
+}
+.usercard-detailed-col-2 .content-wrapper .content .subinfo {
+  color: #FFFFFC;
+  font-size: 0.929em;
+  /* 13px */
+}
+.usercard-detailed-col-2 .avatar {
+  float: left;
+  width: 36px;
+  margin-left: -100%;
+}
+.usercard-detailed-col-2 .avatar img {
+  width: 36px;
+  height: 36px;
+}
+.usercard-detailed-col-2 ul.permissions-list {
+  margin-top: 1em;
+  font-size: 0.8em;
+}
+.usercard-detailed-col-2 ul.permissions-list li .avatar {
+  margin-left: 0;
+  float: left;
+  width: 18px;
+}
+.usercard-detailed-col-2 ul.permissions-list li .avatar img {
+  width: 18px;
+  height: 18px;
+}
+.usercard-detailed-col-2 ul.permissions-list li .name {
+  display: inline-block;
+  padding-left: 7%;
+  line-height: 18px;
+}
+.usercard-detailed-col-2 ul.permissions-list li .name.crossed {
+  text-decoration: line-through;
+}
+.usercard-detailed-col-2 ul.permissions-list li .type {
+  float: right;
+  text-align: right;
+  line-height: 18px;
+  color: #606060;
+}
+.usercard-detailed-col-2 ul.permissions-list li .type span {
+  background-color: white;
+  font-size: 0.8em;
+  color: white;
+  padding: 0.1em 0.5em;
+  border-radius: 0.5em;
+}
+.usercard-detailed-col-2 ul.permissions-list li .type span.created {
+  background-color: #66CC00;
+}
+.usercard-detailed-col-2 ul.permissions-list li .type span.updated {
+  background-color: #2A9CEB;
+}
+.usercard-detailed-col-2 ul.permissions-list li .type span.removed {
+  background-color: #DB5454;
+}
+@keyframes highlight {
+  from {
+    background-color: #0e3e60;
+  }
+  to {
+    background-color: transparent;
+  }
+}
+.usercard-detailed-col-2.highlight {
+  background-color: #0e3e60;
+  animation-delay: 2s;
+  animation-duration: 5s;
+  animation-name: highlight;
+  animation-fill-mode: forwards;
+}
+.usercard-detailed-col-2 .content-wrapper .content .name,
+.usercard-detailed-col-2 .content-wrapper .content .subinfo {
+  color: #606060;
+}
+.usercard-detailed-col-2 .content-wrapper .content .name {
+  white-space: normal;
+}
+.usercard-detailed-col-2 .content-wrapper .content .name .creator {
+  color: #FFFFFC;
+}
 /* password share tab */
 .dialog .share-tab {
   /* message */
