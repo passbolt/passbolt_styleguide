@@ -21,7 +21,6 @@ import DisplayTagList from "./DisplayTagList";
  * This component display the tag to filter the resources
  */
 class SidebarTagFilterSection extends React.Component {
-
   /**
    * Constructor
    * @param {Object} props
@@ -120,31 +119,6 @@ class SidebarTagFilterSection extends React.Component {
     this.setState({title});
   }
 
-  // Zero conditional statements
-  /**
-   * get the filter according to the type of the filter
-   * @returns {{shared: (function(*): *), default: (function(*): *), personal: (function(*): *)}}
-   */
-  get filters() {
-    return {
-      personal: tag => !tag.is_shared,
-      shared: tag => tag.is_shared,
-      default: tag => tag
-    }
-  }
-
-  /**
-   * filter tag to display only the type selected
-   * @returns {*[filtered tags]}
-   */
-  get filteredTags() {
-    if(this.props.tags) {
-      const filter = this.filters[this.state.filterType] || this.filters.default;
-      return this.props.tags.filter(filter);
-    }
-    return null;
-  }
-
   /**
    * Render the component
    * @returns {JSX}
@@ -189,7 +163,8 @@ class SidebarTagFilterSection extends React.Component {
           </ul>
           {this.state.open &&
           <DisplayTagList
-            tags={this.filteredTags}/>
+            tags={this.props.tags}
+            filterType={this.state.filterType}/>
           }
         </div>
       </div>

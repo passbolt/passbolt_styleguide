@@ -131,6 +131,16 @@ const scenarios = {
         slug:"alphaUpdated",
         is_shared: false}
     }
+  }, {
+    name: "Delete tag dialog",
+    path: "/app/passwords",
+    state: {
+      showTagDeleteDialog: true,
+      tagDeleteDialogProps: {
+        id:"c03f9013-b8bd-59fd-8076-d66292180550",
+        slug:"alpha",
+        is_shared: false}
+    }
   }]
 };
 

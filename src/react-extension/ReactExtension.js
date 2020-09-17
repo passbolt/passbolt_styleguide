@@ -35,6 +35,8 @@ import SiteSettings from "./lib/Settings/SiteSettings";
 import UserSettings from "./lib/Settings/UserSettings";
 import ActionFeedbackContextProvider from "./contexts/ActionFeedbackContext";
 import TagEditDialog from "./components/Tag/TagEditDialog/TagEditDialog";
+import TagDeleteDialog from "./components/Tag/TagDeleteDialog/TagDeleteDialog";
+
 
 class ReactExtension extends Component {
   constructor(props) {
@@ -112,6 +114,10 @@ class ReactExtension extends Component {
         id: null,
         slug: null,
       },
+      showTagDeleteDialog: false,
+      tagDeleteDialogProps: {
+        id: null,
+      },
 
       // progress dialog
       showProgressDialog: false,
@@ -153,7 +159,8 @@ class ReactExtension extends Component {
     this.handleShareDialogCloseEvent = this.handleShareDialogCloseEvent.bind(this);
     this.handleTagEditDialogOpenEvent = this.handleTagEditDialogOpenEvent.bind(this);
     this.handleTagEditDialogCloseEvent = this.handleTagEditDialogCloseEvent.bind(this);
-
+    this.handleTagDeleteDialogOpenEvent = this.handleTagDeleteDialogOpenEvent.bind(this);
+    this.handleTagDeleteDialogCloseEvent = this.handleTagDeleteDialogCloseEvent.bind(this);
   }
 
   initEventHandlers() {
@@ -171,6 +178,7 @@ class ReactExtension extends Component {
     this.props.port.on('passbolt.folders.open-delete-dialog', this.handleFolderDeleteDialogOpenEvent);
     this.props.port.on('passbolt.share.open-share-dialog', this.handleShareDialogOpenEvent);
     this.props.port.on('passbolt.tags.open-edit-dialog', this.handleTagEditDialogOpenEvent);
+    this.props.port.on('passbolt.tags.open-delete-dialog', this.handleTagDeleteDialogOpenEvent);
 
     // requests: dialogs that return responses to controllers
     this.props.port.on('passbolt.passphrase.request', this.handlePassphraseEntryRequestEvent);
@@ -434,6 +442,18 @@ class ReactExtension extends Component {
     this.setState({showTagEditDialog, tagEditDialogProps});
   }
 
+  handleTagDeleteDialogOpenEvent(tag) {
+    const showTagDeleteDialog = true;
+    const tagDeleteDialogProps = tag;
+    this.setState({showTagDeleteDialog, tagDeleteDialogProps});
+  }
+
+  handleTagDeleteDialogCloseEvent() {
+    const showTagDeleteDialog = false;
+    const tagDeleteDialogProps = {};
+    this.setState({showTagDeleteDialog, tagDeleteDialogProps});
+  }
+
   /*
    * =============================================================
    *  View
@@ -489,6 +509,11 @@ class ReactExtension extends Component {
               {this.state.showTagEditDialog && areResourcesLoaded &&
               <TagEditDialog onClose={this.handleTagEditDialogCloseEvent}
                              tag={this.state.tagEditDialogProps}
+              />
+              }
+              {this.state.showTagDeleteDialog && areResourcesLoaded &&
+              <TagDeleteDialog onClose={this.handleTagDeleteDialogCloseEvent}
+                             tag={this.state.tagDeleteDialogProps}
               />
               }
               {

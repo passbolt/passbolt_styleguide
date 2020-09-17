@@ -113,6 +113,9 @@ class TagEditDialog extends Component {
       this.handleSaveSuccess();
     } catch (error) {
       this.handleSaveError(error);
+      this.setState({processing: false});
+      this.focusFieldError();
+      return;
     }
   }
 
@@ -149,6 +152,7 @@ class TagEditDialog extends Component {
       });
     }
   }
+
 
   /**
    * Focus the field of the form which is in error state.
