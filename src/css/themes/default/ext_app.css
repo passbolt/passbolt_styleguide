@@ -6370,6 +6370,50 @@ h6 .input.toggle-switch {
     flex-direction: column;
   }
 }
+/*
+ * Notification
+ */
+.notification-container {
+  font-size: 0.85em;
+  top: 0;
+  position: absolute;
+  z-index: 991;
+  height: 2em;
+  padding-top: 1em;
+  width: 60%;
+  margin-left: 20%;
+}
+.notification-container .notification {
+  position: relative;
+  left: 50%;
+  float: left;
+  clear: both;
+  margin-bottom: 1em;
+}
+.notification-container .notification .message {
+  box-shadow: 0px 0px 10px 0px #333;
+  border-radius: 2px;
+  padding: 0.5em 1em;
+  position: relative;
+  left: -50%;
+  float: left;
+  color: #000;
+  font-weight: normal;
+  width: auto;
+}
+.notification-container .notification .message .content {
+  margin-right: 1em;
+}
+.notification-container .notification .message .content strong {
+  text-transform: capitalize;
+}
+.notification-container .notification .message .action {
+  border-bottom: none;
+  margin-left: 0.4em;
+}
+.notification-container .notification .message .action:hover .svg-icon svg {
+  fill: #000000;
+}
 /* left panel navigation */
 .panel .navigation {
   font-size: 0.938em;

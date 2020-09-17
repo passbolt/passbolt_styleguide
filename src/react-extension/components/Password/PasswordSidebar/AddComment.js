@@ -119,7 +119,7 @@ class AddComment extends React.Component {
         const addedComment = await this.context.port.request('passbolt.comments.create', payload);
 
         // Asks for a success / failure message
-        await this.props.actionFeedbackContext.displaySuccess( "The comment has been added successfully");
+        await this.props.actionFeedbackContext.displaySuccess("The comment has been added successfully");
 
         // Informs the parent component
         this.props.onAdd(addedComment);
