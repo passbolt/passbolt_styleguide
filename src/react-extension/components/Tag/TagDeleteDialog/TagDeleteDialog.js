@@ -15,6 +15,7 @@ import React, {Component} from "react";
 import PropTypes from "prop-types";
 import AppContext from "../../../contexts/AppContext";
 import DialogWrapper from "../../../../react/components/Common/Dialog/DialogWrapper/DialogWrapper";
+import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 
 /**
  * This component allows user to delete a tag of the resources
@@ -66,7 +67,7 @@ class TagDeleteDialog extends Component {
 
     try {
       await this.context.port.request("passbolt.tags.delete", this.props.tag.id);
-      this.displayNotification("success", "The tag has been deleted successfully");
+      await this.props.actionFeedbackContext.displaySuccess("The tag has been deleted successfully");
       this.props.onClose();
     } catch (error) {
       // It can happen when the user has closed the passphrase entry dialog by instance.
@@ -81,15 +82,6 @@ class TagDeleteDialog extends Component {
         });
       }
     }
-  }
-
-  /**
-   * Notify the user.
-   * @param {string} status Can be success, error or info
-   * @param {string} message The message to display
-   */
-  displayNotification(status, message) {
-    this.context.port.emit("passbolt.notification.display", {status: status, message: message});
   }
 
   render() {
@@ -124,6 +116,7 @@ TagDeleteDialog.contextType = AppContext;
 TagDeleteDialog.propTypes = {
   onClose: PropTypes.func,
   tag: PropTypes.object,
+  actionFeedbackContext: PropTypes.any // The action feedback context
 };
 
-export default TagDeleteDialog;
+export default withActionFeedback(TagDeleteDialog);

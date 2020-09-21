@@ -17,6 +17,7 @@ import {render, fireEvent, waitFor} from "@testing-library/react";
 import AppContext from "../../../contexts/AppContext";
 import MockPort from "../../../test/mock/MockPort";
 import TagEditDialog from "./TagEditDialog";
+import {ActionFeedbackContext} from "../../../contexts/ActionFeedbackContext";
 
 beforeEach(() => {
   jest.resetModules();
@@ -137,7 +138,7 @@ describe("TagEditDialog", () => {
 
     // Mock the request function to make it the expected result
     jest.spyOn(context.port, 'request').mockImplementationOnce(jest.fn());
-    jest.spyOn(context.port, 'emit').mockImplementation(jest.fn());
+    jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementation(() => {});
 
     // Submit and assert
     const submitButton = container.querySelector("input[type=\"submit\"]");
@@ -152,12 +153,8 @@ describe("TagEditDialog", () => {
     // API calls are made on submit, wait they are resolved.
     await waitFor(() => {
       expect(context.port.request).toHaveBeenCalledWith("passbolt.tags.update", onApiUpdateTageMeta);
-      expect(context.port.emit).toHaveBeenCalledTimes(1);
-      expect(context.port.emit).toHaveBeenNthCalledWith(1, "passbolt.notification.display", {
-        "message": "The tag has been updated successfully",
-        "status": "success"
-      });
       expect(props.onClose).toBeCalled();
+      expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalled();
     });
   });
 });

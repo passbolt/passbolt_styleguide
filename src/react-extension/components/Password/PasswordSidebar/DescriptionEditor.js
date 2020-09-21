@@ -14,6 +14,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import AppContext from "../../../contexts/AppContext";
+import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 
 /**
  * This component allows the current user to edit the description of a resource
@@ -153,7 +154,7 @@ class DescriptionEditor extends React.Component {
 
     try {
       await this.updateDescription();
-      this.displayNotification("success", "The description has been updated successfully");
+      await this.props.actionFeedbackContext.displaySuccess("The description has been updated successfully");
       this.props.toggleInputDescriptionEditor();
     } catch (error) {
       // It can happen when the user has closed the passphrase entry dialog by instance.
@@ -180,15 +181,6 @@ class DescriptionEditor extends React.Component {
       description: this.state.description,
     };
     return this.context.port.request("passbolt.resource.update-description", descriptionDto);
-  }
-
-  /**
-   * Notify the user.
-   * @param {string} status Can be success, error or info
-   * @param {string} message The message to display
-   */
-  displayNotification(status, message) {
-    this.context.port.emit("passbolt.notification.display", {status: status, message: message});
   }
 
 
@@ -227,10 +219,11 @@ class DescriptionEditor extends React.Component {
 
 DescriptionEditor.contextType = AppContext;
 
-DescriptionEditor.propTypes = {
-  description: PropTypes.string,
-  resourceId: PropTypes.string,
-  toggleInputDescriptionEditor: PropTypes.func
-};
+  DescriptionEditor.propTypes = {
+    description: PropTypes.string, // the description of the resources
+    resourceId: PropTypes.string, // the id of the resource
+    toggleInputDescriptionEditor: PropTypes.func, // toggle to display or not the editor
+    actionFeedbackContext: PropTypes.any // The action feedback context
+  };
 
-export default DescriptionEditor;
+  export default withActionFeedback(DescriptionEditor);

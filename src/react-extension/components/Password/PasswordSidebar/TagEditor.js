@@ -16,6 +16,7 @@ import PropTypes from "prop-types";
 import Icon from "../../Common/Icons/Icon";
 import AppContext from "../../../contexts/AppContext";
 import Autocomplete from "./Autocomplete/Autocomplete";
+import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 
 const TAG_MAX_LENGTH = 128;
 
@@ -403,7 +404,7 @@ class TagEditor extends React.Component {
         tags: this.state.tags
       };
       await this.context.port.request("passbolt.resource.update-tags", data);
-      this.displayNotification("success", "Tags has been updated successfully");
+      await this.props.actionFeedbackContext.displaySuccess("The tags have been updated successfully");
       this.setState({processing: false})
       this.props.toggleInputTagEditor();
     } catch (error) {
@@ -414,15 +415,6 @@ class TagEditor extends React.Component {
         processing: false
       });
     }
-  }
-
-  /**
-   * Notify the user.
-   * @param {string} status Can be success, error or info
-   * @param {string} message The message to display
-   */
-  displayNotification(status, message) {
-    this.context.port.emit("passbolt.notification.display", {status: status, message: message});
   }
 
   /*
@@ -548,10 +540,11 @@ class TagEditor extends React.Component {
 TagEditor.contextType = AppContext;
 
 TagEditor.propTypes = {
-  tags: PropTypes.array,
-  isOwner: PropTypes.bool,
-  toggleInputTagEditor: PropTypes.func,
-  resourceId: PropTypes.string
+  tags: PropTypes.array, // tags of the resource
+  isOwner: PropTypes.bool, // if the user is owner of the resource
+  toggleInputTagEditor: PropTypes.func, // toggle to display or not the editor
+  resourceId: PropTypes.string, // the id of the resource
+  actionFeedbackContext: PropTypes.any // The action feedback context
 };
 
-export default TagEditor;
+export default withActionFeedback(TagEditor);

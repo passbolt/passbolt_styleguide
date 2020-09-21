@@ -33,6 +33,7 @@ export default (resourceDto, password, storage) => {
       aro_foreign_key: "f848277c-5398-58f8-a82a-72397af2d450",
       type: 15
     };
+    resourceDto.tags = [];
     resources.push(resourceDto);
     await storage.local.set({resources});
     resolve(resourceDto);

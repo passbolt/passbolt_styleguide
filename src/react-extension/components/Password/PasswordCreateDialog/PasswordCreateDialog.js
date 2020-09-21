@@ -18,6 +18,7 @@ import AppContext from "../../../contexts/AppContext";
 import Icon from "../../Common/Icons/Icon";
 import Tooltip from "../../Common/Tooltip/Tooltip";
 import SecretComplexity from "../../../lib/Secret/SecretComplexity";
+import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 
 class PasswordCreateDialog extends Component {
   constructor() {
@@ -96,7 +97,7 @@ class PasswordCreateDialog extends Component {
 
     try {
       const resource = await this.createResource();
-      this.displayNotification("success", "The password has been added successfully");
+      await this.props.actionFeedbackContext.displaySuccess("The password has been added successfully");
       if (resource.folder_parent_id) {
         // TODO and select resource inside that folder
         this.selectAndScrollToFolder(resource.folder_parent_id);
@@ -176,15 +177,6 @@ class PasswordCreateDialog extends Component {
     } else if (this.state.passwordError) {
       this.passwordInputRef.current.focus();
     }
-  }
-
-  /**
-   * Notify the user.
-   * @param {string} status Can be success, error or info
-   * @param {string} message The message to display
-   */
-  displayNotification(status, message) {
-    this.context.port.emit("passbolt.notification.display", {status: status, message: message});
   }
 
   /**
@@ -530,7 +522,8 @@ PasswordCreateDialog.propTypes = {
   folderParentId: PropTypes.string,
   resourceTypes: PropTypes.array,
   className: PropTypes.string,
-  onClose: PropTypes.func
+  onClose: PropTypes.func,
+  actionFeedbackContext: PropTypes.any // The action feedback context
 };
 
-export default PasswordCreateDialog;
+export default withActionFeedback(PasswordCreateDialog);

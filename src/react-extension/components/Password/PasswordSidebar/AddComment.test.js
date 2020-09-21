@@ -14,6 +14,7 @@
 
 import {commentsMock, defaultAppContext, defaultProps, tooLongComment} from "./AddComment.test.data";
 import PasswordSidebarCommentSectionPage from "./PasswordSidebarCommentSection.test.page";
+import {ActionFeedbackContext} from "../../../contexts/ActionFeedbackContext";
 
 
 
@@ -276,11 +277,18 @@ describe("Add comments", () => {
          */
 
         beforeEach( () => {
-            // TODO
+            page = new PasswordSidebarCommentSectionPage(context, props);
+            mockContextRequest(commentsFoundRequestMockImpl);
         })
 
-        it('I should be notified about the success of the operation',  () => {
-            // TODO Depend on the notification component
+        it('I should be notified about the success of the operation',  async () => {
+            jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementation(() => {});
+            await page.title.click();
+            await page.addIcon.click();
+            await page.addComment.write("Good men don’t need rules.");
+            await page.addComment.save()
+            expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalled();
+
         })
 
     });
