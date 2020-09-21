@@ -36,10 +36,10 @@ class DescriptionEditor extends React.Component {
    */
   getDefaultState() {
     return {
-      description: this.props.description,
-      loading: true,
-      processing: false,
-      error: ""
+      description: this.props.description, // description of the resource
+      loading: true, // component loading
+      processing: false, // component processing
+      error: "" // error to display
     };
   }
 
@@ -58,12 +58,12 @@ class DescriptionEditor extends React.Component {
    */
   createInputRef() {
     this.elementRef = React.createRef();
-    this.texteareaRef = React.createRef();
+    this.textareaRef = React.createRef();
   }
 
   componentDidMount() {
     this.handleOutsideEditorClickEvent();
-    this.setState({loading: false});
+    this.setState({loading: false}, this.setFocusOnDescriptionEditor.bind(this));
   }
 
   componentWillUnmount() {
@@ -87,6 +87,15 @@ class DescriptionEditor extends React.Component {
       return;
     }
     this.props.toggleInputDescriptionEditor();
+  }
+
+  /**
+   * set the focus at the end of the description editor
+   */
+  setFocusOnDescriptionEditor() {
+    this.textareaRef.current.selectionStart = this.state.description.length;
+    this.textareaRef.current.selectionEnd = this.state.description.length;
+    this.textareaRef.current.focus();
   }
 
   /**
@@ -192,7 +201,7 @@ class DescriptionEditor extends React.Component {
       <form onKeyDown={this.handleKeyDown} noValidate>
         <div className="form-content" ref={this.elementRef}>
           <div className="input text required">
-              <textarea name="description" className="fluid"
+              <textarea name="description" className="fluid" ref={this.textareaRef}
                         maxLength="10000" placeholder="enter a description" value={this.state.description}
                         onChange={this.handleInputChange}
                         disabled={this.hasAllInputDisabled()} autoComplete="off"/>
@@ -207,20 +216,21 @@ class DescriptionEditor extends React.Component {
                onClick={this.handleFormSubmit}>
               <span>save</span>
             </a>
-            <a className={`cancel button ${this.hasAllInputDisabled() ? "disabled" : ""}`} role="button" onClick={this.props.toggleInputDescriptionEditor}>cancel</a>
+            <a className={`cancel button ${this.hasAllInputDisabled() ? "disabled" : ""}`} role="button"
+               onClick={this.props.toggleInputDescriptionEditor}>cancel</a>
           </div>
         </div>
       </form>
-  );
+    );
   }
-  }
+}
 
-  DescriptionEditor.contextType = AppContext;
+DescriptionEditor.contextType = AppContext;
 
-  DescriptionEditor.propTypes = {
-    description: PropTypes.string,
-    resourceId: PropTypes.string,
-    toggleInputDescriptionEditor: PropTypes.func
-  };
+DescriptionEditor.propTypes = {
+  description: PropTypes.string,
+  resourceId: PropTypes.string,
+  toggleInputDescriptionEditor: PropTypes.func
+};
 
-  export default DescriptionEditor;
+export default DescriptionEditor;
