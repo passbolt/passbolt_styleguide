@@ -188,7 +188,7 @@ class ResourceWorkspaceContextProvider extends React.Component {
      * E.g. /password
      */
     async handleAllResourceRouteChange() {
-        const filter = (this.props.location.state && this.props.location.state.filter) || ResourceWorkspaceFilterTypes.ALL
+        const filter = (this.props.location.state && this.props.location.state.filter) || {type: ResourceWorkspaceFilterTypes.ALL}
         await this.search(filter);
         await this.detailNothing();
     }
@@ -210,6 +210,7 @@ class ResourceWorkspaceContextProvider extends React.Component {
         const searchOperations = {
             [ResourceWorkspaceFilterTypes.FOLDER]: this.searchByFolder.bind(this),
             [ResourceWorkspaceFilterTypes.TEXT]: this.searchByText.bind(this),
+            [ResourceWorkspaceFilterTypes.FAVORITE]: this.searchByFavorite.bind(this),
             [ResourceWorkspaceFilterTypes.ALL]: this.searchAll.bind(this),
             [ResourceWorkspaceFilterTypes.NONE]: () => {/* No search */}
         }
@@ -246,6 +247,14 @@ class ResourceWorkspaceContextProvider extends React.Component {
         const matchSomeWords = value => words.some( word => wordToRegex(word).test(value));
         const matchText = resource => ['name', 'username', 'uri', 'description'].some( key => matchSomeWords(resource[key]));
         const filteredResources = this.resources.filter(matchText);
+        await this.setState({filter, filteredResources});
+    }
+
+    /**
+     * Filter the resources which are the current user favorites one
+     */
+    async searchByFavorite(filter) {
+        const filteredResources = this.resources.filter(resource => resource.favorite !== null);
         await this.setState({filter, filteredResources});
     }
 
@@ -325,6 +334,7 @@ export const ResourceWorkspaceFilterTypes = {
     ALL: 'ALL', // All resources
     FOLDER: 'FILTER-BY-FOLDER', // Resources for a given folder
     TEXT: 'FILTER-BY-TEXT-SEARCH', // Resources matching some text words
+    FAVORITE: 'FILTER-BY-FOVRITE', // Favorite resources filter
 }
 
 
