@@ -427,7 +427,7 @@ describe("PasswordSidebarTag", () => {
     };
     expect(context.port.request).toHaveBeenCalledWith("passbolt.resource.update-tags", onApiUpdateResourceTagMeta);
     // notification toaster called
-    expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalledWith("Tags has been updated successfully");
+    expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalledWith("The tags have been updated successfully");
   });
 
   it("Add multiple tags to a resource", async () => {
@@ -502,7 +502,7 @@ describe("PasswordSidebarTag", () => {
     };
     expect(context.port.request).toHaveBeenCalledWith("passbolt.resource.update-tags", onApiUpdateResourceTagMeta);
     // notification toaster called
-    expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalledWith("Tags has been updated successfully");
+    expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalledWith("The tags have been updated successfully");
   });
 
   it("Cannot edit while submitting changes", async () => {
@@ -1223,7 +1223,7 @@ describe("PasswordSidebarTag", () => {
     };
     expect(context.port.request).toHaveBeenCalledWith("passbolt.resource.update-tags", onApiUpdateResourceTagMeta);
     // notification toaster called
-    expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalledWith("Tags has been updated successfully");
+    expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalledWith("The tags have been updated successfully");
   });
 
 });

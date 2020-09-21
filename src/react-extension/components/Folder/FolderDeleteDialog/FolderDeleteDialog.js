@@ -115,7 +115,7 @@ class FolderDeleteDialog extends Component {
 
     try {
       await this.context.port.request("passbolt.folders.delete", this.props.folderId, this.state.cascade);
-      await this.props.actionFeedbackContext.displaySuccess("The folder was deleted.");
+      await this.props.actionFeedbackContext.displaySuccess("The folder was deleted successfully");
       this.props.onClose();
     } catch (error) {
       console.error(error);
