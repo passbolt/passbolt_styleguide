@@ -20,6 +20,11 @@ import React from "react";
 import PasswordSidebarCommentSection from "./PasswordSidebarCommentSection";
 import AddCommentPageObject from "./AddComment.test.page.object";
 import DisplayCommentListPageObject from "./DisplayCommentList.test.page.object";
+import ConfirmCommentDeletionPageObject from "./ConfirmCommentDeletion.test.page.object";
+import ConfirmCommentDeletion from "./ConfirmCommentDeletion";
+import PropTypes from "prop-types";
+
+
 
 /**
  * The PasswordSidebarCommentSection component represented as a page
@@ -33,9 +38,16 @@ export default class PasswordSidebarCommentSectionPage {
      */
     constructor(appContext, props) {
         this._page = render(
-            <AppContext.Provider value={appContext}>
+            <AppContextProvider context={appContext}>
+                {
+                    <AppContext.Consumer>
+                        {
+                            context => context.showDeleteCommentDialog && <ConfirmCommentDeletion />
+                        }
+                    </AppContext.Consumer>
+                }
                 <PasswordSidebarCommentSection {...props}/>
-            </AppContext.Provider>
+            </AppContextProvider>
         );
         this.setupPageObjects();
     }
@@ -48,6 +60,7 @@ export default class PasswordSidebarCommentSectionPage {
         this._displayCommentList = new DisplayCommentListPageObject(this._page.container);
         this._titleHeader = new TitleHeaderPageObject(this._page.container);
         this._addIcon = new AddIconPageObject(this._page.container);
+        this._confirmDeleteComment = new ConfirmCommentDeletionPageObject(this._page.container);
     }
 
     /**
@@ -77,6 +90,13 @@ export default class PasswordSidebarCommentSectionPage {
      */
     get displayCommentList() {
         return this._displayCommentList;
+    }
+
+    /**
+     * Returns the page object of the confirm comment deletion
+     */
+    get confirmDeleteComment() {
+        return this._confirmDeleteComment;
     }
 
 }
@@ -152,6 +172,39 @@ class AddIconPageObject {
 }
 
 
+/**
+ * Custom application provider (used to force the re-rendering when context changes )
+ */
+class AppContextProvider extends React.Component {
+
+    /**
+     * Default constructor
+     * @param props Props component
+     */
+    constructor(props) {
+        super(props);
+        this.state = props.context;
+    }
+
+    componentDidMount() {
+        this.setState({setContext:this.setState.bind(this)});
+    }
+
+    /**
+     * Render the component
+     */
+    render() {
+        return (
+            <AppContext.Provider value={this.state}>
+                {this.props.children}
+            </AppContext.Provider>
+        )
+    }
 
 
+}
 
+AppContextProvider.propTypes = {
+    context: PropTypes.object,
+    children: PropTypes.any
+};

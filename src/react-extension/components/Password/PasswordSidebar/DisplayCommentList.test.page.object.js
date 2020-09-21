@@ -12,7 +12,7 @@
  * @since         2.11.0
  */
 
-import {waitFor} from "@testing-library/react";
+import {fireEvent, waitFor} from "@testing-library/react";
 
 
 /**
@@ -86,6 +86,25 @@ export default class DisplayCommentListPageObject {
      */
     async waitForLoading(inProgressFn) {
         await waitFor(inProgressFn);
+    }
+
+    /**
+     * Call to the delete action on the index-th comment
+     * @param index The rank of the comment
+     */
+    async delete(index) {
+        const deleteButton = this.list.querySelectorAll('.js_delete_comment')[index-1];
+        const leftClick = {button: 0};
+        fireEvent.click(deleteButton, leftClick);
+        await waitFor(() => {});
+    }
+
+    /**
+     * Returns true if the delete action can be applied on the index-th comment
+     * @param index The rank of the comment
+     */
+    canDelete(index) {
+        return typeof this.list.querySelectorAll('.js_delete_comment')[index-1] !== 'undefined';
     }
 
 

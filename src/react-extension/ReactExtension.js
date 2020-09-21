@@ -131,6 +131,11 @@ class ReactExtension extends Component {
         title: null,
         message: null
       },
+
+      // Resource comment dialog
+      resourceCommentId: null, // Selected resource comment id
+      showDeleteCommentDialog: false, // Flag telling whether the delete comment should be displayed
+      mustRefreshComments: false // Flag telling whether the current list of comments should be refreshed
     };
   }
 
