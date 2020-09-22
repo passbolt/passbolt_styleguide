@@ -28,6 +28,7 @@ import PasswordBreadcrumb from "../PasswordBreadcrumb/PasswordBreadcrumb";
 import PasswordWorkspaceMenu from "./PasswordWorkspaceMenu";
 import Logo from "../../../../react/components/Common/Navigation/Header/Logo";
 import PasswordWorkspaceMainMenu from "./PasswordWorkspaceMainMenu";
+import SidebarGroupFilterSection from "../Group/SidebarGroupFilterSection/SidebarGroupFilterSection";
 
 class Workspace extends Component {
   /**
@@ -177,6 +178,7 @@ class Workspace extends Component {
    */
   render() {
     const canUseFolders = this.context.siteSettings.canIUse("folders");
+    const canUseGroups = this.context.siteSettings.canIUse("groups");
     const canUseTags = this.context.siteSettings.canIUse("tags");
 
     return (
@@ -202,6 +204,9 @@ class Workspace extends Component {
                   <FilterResourcesByShortcuts/>
                   {canUseFolders &&
                   <FoldersTree/>
+                  }
+                  {canUseGroups &&
+                  <SidebarGroupFilterSection/>
                   }
                   {canUseTags &&
                   <SidebarTagFilterSection/>
