@@ -82,3 +82,4 @@ describe("ProgressDialog", () => {
     expect(progressDetailsElement).not.toBeNull();
   });
 });
+

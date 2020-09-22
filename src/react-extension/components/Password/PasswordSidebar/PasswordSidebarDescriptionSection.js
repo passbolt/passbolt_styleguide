@@ -15,6 +15,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import Icon from "../../../../react/components/Common/Icons/Icon";
 import DescriptionEditor from "./DescriptionEditor";
+import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 
 /**
  * This component display the description section of a resource
@@ -58,6 +59,13 @@ class PasswordSidebarDescriptionSection extends React.Component {
   }
 
   /**
+   * Returns the current detailed resource
+   */
+  get resource() {
+    return this.props.resourceWorkspaceContext.details.resource;
+  }
+
+  /**
    * Display or not the input tag editor
    */
   toggleInputDescriptionEditor() {
@@ -72,7 +80,7 @@ class PasswordSidebarDescriptionSection extends React.Component {
    * @returns {boolean}
    */
   hasNoDescription() {
-    return !this.props.description;
+    return !this.resource.description;
   }
 
   /**
@@ -80,7 +88,7 @@ class PasswordSidebarDescriptionSection extends React.Component {
    * @returns {boolean}
    */
   canEdit() {
-    return this.props.permission && this.props.permission.type >= 7;
+    return this.resource.permission && this.resource.permission.type >= 7;
   }
 
   mustShowDescriptionEditor() {
@@ -122,13 +130,13 @@ class PasswordSidebarDescriptionSection extends React.Component {
             here to add one</em>
           }
           {this.mustShowDescriptionView() &&
-          <p className="description_content" onClick={this.toggleInputDescriptionEditor}>{this.props.description}</p>
+          <p className="description_content" onClick={this.toggleInputDescriptionEditor}>{this.resource.description}</p>
           }
           {this.mustShowDescriptionEditor() &&
           <DescriptionEditor
-            description={this.props.description}
+            description={this.resource.description}
             toggleInputDescriptionEditor={this.toggleInputDescriptionEditor}
-            resourceId={this.props.resourceId}/>
+            resourceId={this.resource.id}/>
           }
         </div>
       </div>
@@ -137,9 +145,8 @@ class PasswordSidebarDescriptionSection extends React.Component {
 }
 
 PasswordSidebarDescriptionSection.propTypes = {
-  description: PropTypes.string,
-  resourceId: PropTypes.string,
-  permission: PropTypes.object
-};
+  resourceWorkspaceContext: PropTypes.any
+}
 
-export default PasswordSidebarDescriptionSection;
+
+export default withResourceWorkspace(PasswordSidebarDescriptionSection);

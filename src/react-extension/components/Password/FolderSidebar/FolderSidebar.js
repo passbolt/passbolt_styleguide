@@ -18,6 +18,7 @@ import FolderSidebarInformationSection from "./FolderSidebarInformationSection";
 import FolderSidebarPermissionsSection from "./FolderSidebarPermissionsSection";
 import FolderSidebarActivitySection from "./FolderSidebarActivitySection";
 import AppContext from "../../../contexts/AppContext";
+import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 
 class FolderSidebar extends React.Component {
   /**
@@ -98,7 +99,7 @@ class FolderSidebar extends React.Component {
   handlePermalinkClick() {
     const name = "permalink";
     const baseUrl = this.context.userSettings.getTrustedDomain();
-    const data = `${baseUrl}/app/folders/view/${this.props.folder.id}`;
+    const data = `${baseUrl}/app/folders/view/${this.props.resourceWorkspaceContext.details.folder.id}`;
     this.context.port.emit('passbolt.clipboard', {name, data});
   }
 
@@ -151,7 +152,7 @@ class FolderSidebar extends React.Component {
               <Icon name="folder"/>
             </div>
             <h3>
-              <span className="name">{this.props.folder.name}
+              <span className="name">{this.props.resourceWorkspaceContext.details.folder.name}
                 <a className="title-link" title="Copy the link to this folder" onClick={this.handlePermalinkClick}>
                   <i className="fa fa-link"></i>
                   <span className="visuallyhidden">Copy the link to this folder</span>
@@ -164,14 +165,9 @@ class FolderSidebar extends React.Component {
               <span className="visuallyhidden">Close</span>
             </a>
           </div>
-          <FolderSidebarInformationSection
-            folder={this.props.folder}
-            folders={this.props.folders}
-            onSelectFolderParent={this.props.onSelectFolderParent}
-            onSelectRoot={this.props.onSelectRoot}
-            users={this.props.users}/>
+          <FolderSidebarInformationSection users={this.props.users}/>
           <FolderSidebarPermissionsSection
-            folder={this.props.folder}
+            folder={this.props.resourceWorkspaceContext.details.folder}
             onEditPermissions={this.props.onEditPermissions}
             onClose={this.handlePermissionSectionClose}
             onOpen={this.handlePermissionSectionOpen}
@@ -181,7 +177,7 @@ class FolderSidebar extends React.Component {
             users={this.props.users}/>
           <FolderSidebarActivitySection
             activities={this.state.activities}
-            folder={this.props.folder}
+            folder={this.props.resourceWorkspaceContext.details.folder}
             moreProcessing={this.state.activitySectionMoreProcessing}
             onClose={this.handleActivitySectionClose}
             onOpen={this.handleActivitySectionOpen}
@@ -196,14 +192,13 @@ class FolderSidebar extends React.Component {
 FolderSidebar.contextType = AppContext;
 
 FolderSidebar.propTypes = {
-  folder: PropTypes.object,
-  folders: PropTypes.array,
   groups: PropTypes.array,
   onClose: PropTypes.func,
   onSelectFolderParent: PropTypes.func,
   onSelectRoot: PropTypes.func,
   onEditPermissions: PropTypes.func,
-  users: PropTypes.array
+  users: PropTypes.array,
+  resourceWorkspaceContext: PropTypes.object
 };
 
-export default FolderSidebar;
+export default withResourceWorkspace(FolderSidebar);

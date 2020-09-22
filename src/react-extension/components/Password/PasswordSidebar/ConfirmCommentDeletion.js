@@ -53,7 +53,6 @@ class ConfirmDeleteDialog extends Component {
     }
 
 
-
     /**
      * Handle the confirm event
      * @params {ReactEvent} The react event

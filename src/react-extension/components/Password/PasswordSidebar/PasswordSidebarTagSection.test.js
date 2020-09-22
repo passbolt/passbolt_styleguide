@@ -155,7 +155,6 @@ const getDummytags = function () {
 
 const getAppContext = function (appContext) {
   const defaultAppContext = {
-
     port: new MockPort()
   };
 
@@ -164,10 +163,9 @@ const getAppContext = function (appContext) {
 
 const renderPasswordSidebarTagSection = function (appContext, props) {
   appContext = getAppContext(appContext);
-  props = props || {};
   return render(
     <AppContext.Provider value={appContext}>
-      <PasswordSidebarTagSection debug resource={props.resource} />
+        <PasswordSidebarTagSection debug  {...props}/>
     </AppContext.Provider>
   );
 };
@@ -175,9 +173,7 @@ const renderPasswordSidebarTagSection = function (appContext, props) {
 describe("PasswordSidebarTag", () => {
 
   it("See the tags of a resource", () => {
-    const props = {
-      resource: getDummyResource()
-    };
+    const props = {resourceWorkspaceContext: {details: {resource: getDummyResource()}}};
     const {container} = renderPasswordSidebarTagSection(null, props);
 
     // Sidebar Tags title exists and correct
@@ -199,15 +195,13 @@ describe("PasswordSidebarTag", () => {
     expect(tags).not.toBeNull();
     expect(tags.length).toBe(6);
     tags.forEach(function (value, index) {
-      expect(value.textContent).toBe(props.resource.tags[index].slug);
+      expect(value.textContent).toBe(props.resourceWorkspaceContext.details.resource.tags[index].slug);
     });
 
   });
 
   it("See an empty message if the resource has no tags", () => {
-    const props = {
-      resource: getDummyResourceEmptyTag()
-    };
+    const props = {resourceWorkspaceContext: {details: {resource: getDummyResourceEmptyTag()}}};
     const {container} = renderPasswordSidebarTagSection(null, props);
 
     // Sidebar Tags title exists and correct
@@ -232,10 +226,10 @@ describe("PasswordSidebarTag", () => {
   });
 
   it("See loading feedback in tag viewer", () => {
-    const props = {
-      resource: null
-    };
+
+    const props = {resourceWorkspaceContext: {details: {resource: null}}};
     const {container} = renderPasswordSidebarTagSection(null, props);
+
     // Sidebar Tags title exists and correct
     const sidebarTitle = container.querySelector("h4 a");
     expect(sidebarTitle).not.toBeNull();
@@ -255,9 +249,7 @@ describe("PasswordSidebarTag", () => {
 
 
   it("Start editing by clicking on the edit icon", () => {
-    const props = {
-      resource: getDummyResource()
-    };
+    const props = {resourceWorkspaceContext: {details: {resource: getDummyResource()}}};
     const {container} = renderPasswordSidebarTagSection(null, props);
 
     // Click to expand tags
@@ -291,10 +283,9 @@ describe("PasswordSidebarTag", () => {
   });
 
   it("Start editing by clicking on the empty message", () => {
-    const props = {
-      resource: getDummyResourceEmptyTag()
-    };
+    const props = {resourceWorkspaceContext: {details: {resource: getDummyResourceEmptyTag()}}};
     const {container} = renderPasswordSidebarTagSection(null, props);
+
 
     // Click to expand tags
     const leftClick = {button: 0};
@@ -319,9 +310,7 @@ describe("PasswordSidebarTag", () => {
   });
 
   it("Stop editing by clicking on the edit icon", () => {
-    const props = {
-      resource: getDummyResource()
-    };
+    const props = {resourceWorkspaceContext: {details: {resource: getDummyResource()}}};
     const {container} = renderPasswordSidebarTagSection(null, props);
 
     // Click to expand tags
@@ -347,9 +336,7 @@ describe("PasswordSidebarTag", () => {
   });
 
   it("Stop editing by clicking out of the edit zone", () => {
-    const props = {
-      resource: getDummyResource()
-    };
+    const props = {resourceWorkspaceContext: {details: {resource: getDummyResource()}}};
     const {container} = renderPasswordSidebarTagSection(null, props);
 
     // Click to expand tags
@@ -377,9 +364,7 @@ describe("PasswordSidebarTag", () => {
 
   it("Add a new tag to a resource", async () => {
     const context = getAppContext();
-    const props = {
-      resource: getDummyResourceEmptyTag()
-    };
+    const props = {resourceWorkspaceContext: {details: {resource: getDummyResourceEmptyTag()}}};
     const {container} = renderPasswordSidebarTagSection(context, props);
 
     // Click to expand tags
@@ -399,7 +384,8 @@ describe("PasswordSidebarTag", () => {
     fireEvent.change(editorTagInput, {target: {textContent: tagValue}});
 
     // Mock the request function to make it the expected result
-    jest.spyOn(context.port, 'request').mockImplementationOnce(jest.fn((message, data) => Object.assign({id: props.resource.id}, data)));
+    jest.spyOn(context.port, 'request').mockImplementationOnce(jest.fn((message, data) => Object.assign({id: props.resourceWorkspaceContext.details.resource.id}, data)));
+    jest.spyOn(context.port, 'emit').mockImplementation(jest.fn());
     jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementation(() => {});
 
     // submit button input tag exists
@@ -417,7 +403,7 @@ describe("PasswordSidebarTag", () => {
     expect(editorTagInputDisable).toBeNull();
 
     const onApiUpdateResourceTagMeta = {
-      id: props.resource.id,
+      id: props.resourceWorkspaceContext.details.resource.id,
       tags: [
         {
           slug: tagValue,
@@ -432,9 +418,7 @@ describe("PasswordSidebarTag", () => {
 
   it("Add multiple tags to a resource", async () => {
     const context = getAppContext();
-    const props = {
-      resource: getDummyResourceEmptyTag()
-    };
+    const props = {resourceWorkspaceContext: {details: {resource: getDummyResourceEmptyTag()}}};
     const {container} = renderPasswordSidebarTagSection(context, props);
 
     // Click to expand tags
@@ -470,8 +454,8 @@ describe("PasswordSidebarTag", () => {
     });
 
     // Mock the request function to make it the expected result
-    jest.spyOn(context.port, 'request').mockImplementationOnce(jest.fn((message, data) => Object.assign({id: props.resource.id}, data)));
-    jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementation(() => {});
+    jest.spyOn(context.port, 'request').mockImplementationOnce(jest.fn((message, data) => Object.assign({id: props.resourceWorkspaceContext.details.resource.id}, data)));
+    jest.spyOn(context.port, 'emit').mockImplementation(jest.fn());
 
     // submit button input tag exists
     const submitButton = container.querySelector(".tag-editor-submit");
@@ -488,7 +472,7 @@ describe("PasswordSidebarTag", () => {
     expect(editorTagInputDisable).toBeNull();
 
     const onApiUpdateResourceTagMeta = {
-      id: props.resource.id,
+      id: props.resourceWorkspaceContext.details.resource.id,
       tags: [
         {
           slug: tagValues[0],
@@ -507,9 +491,7 @@ describe("PasswordSidebarTag", () => {
 
   it("Cannot edit while submitting changes", async () => {
     const context = getAppContext();
-    const props = {
-      resource: getDummyResourceEmptyTag()
-    };
+    const props = {resourceWorkspaceContext: {details: {resource: getDummyResourceEmptyTag()}}};
     const {container} = renderPasswordSidebarTagSection(context, props);
 
     // Click to expand tags
@@ -555,9 +537,7 @@ describe("PasswordSidebarTag", () => {
 
   it("Show progress feedback while submitting", async () => {
     const context = getAppContext();
-    const props = {
-      resource: getDummyResourceEmptyTag()
-    };
+    const props = {resourceWorkspaceContext: {details: {resource: getDummyResourceEmptyTag()}}};
     const {container} = renderPasswordSidebarTagSection(context, props);
 
     // Click to expand tags
@@ -601,9 +581,7 @@ describe("PasswordSidebarTag", () => {
   });
 
   it("Cannot add a shared tag to a resource I don’t own", () => {
-    const props = {
-      resource: getDummyResource()
-    };
+    const props = {resourceWorkspaceContext: {details: {resource: getDummyResource()}}};
     const {container} = renderPasswordSidebarTagSection(null, props);
 
     // Click to expand tags
@@ -639,9 +617,7 @@ describe("PasswordSidebarTag", () => {
   });
 
   it("Cannot add a tag already added to a resource", () => {
-    const props = {
-      resource: getDummyResource()
-    };
+    const props = {resourceWorkspaceContext: {details: {resource: getDummyResource()}}};
     const {container} = renderPasswordSidebarTagSection(null, props);
 
     // Click to expand tags
@@ -677,9 +653,7 @@ describe("PasswordSidebarTag", () => {
   });
 
   it("Cannot add a tag longer than 128 characters", () => {
-    const props = {
-      resource: getDummyResourceEmptyTag()
-    };
+    const props = {resourceWorkspaceContext: {details: {resource: getDummyResourceEmptyTag()}}};
     const {container} = renderPasswordSidebarTagSection(null, props);
 
     // Click to expand tags
@@ -719,9 +693,7 @@ describe("PasswordSidebarTag", () => {
   });
 
   it("Trim tag", () => {
-    const props = {
-      resource: getDummyResourceEmptyTag()
-    };
+    const props = {resourceWorkspaceContext: {details: {resource: getDummyResourceEmptyTag()}}};
     const {container} = renderPasswordSidebarTagSection(null, props);
 
     // Click to expand tags
@@ -755,9 +727,7 @@ describe("PasswordSidebarTag", () => {
   });
 
   it("Remove a tag using the edit icon", () => {
-    const props = {
-      resource: getDummyResource()
-    };
+    const props = {resourceWorkspaceContext: {details: {resource: getDummyResource()}}};
     const {container} = renderPasswordSidebarTagSection(null, props);
 
     // Click to expand tags
@@ -780,7 +750,7 @@ describe("PasswordSidebarTag", () => {
     expect(tags.length).toBe(6);
 
     tags.forEach(function (value, index) {
-      expect(value.textContent).toBe(props.resource.tags[index].slug);
+      expect(value.textContent).toBe(props.resourceWorkspaceContext.details.resource.tags[index].slug);
     });
     // delete a tag
     const deleteIcon = container.querySelector(".tag-delete");
@@ -792,18 +762,16 @@ describe("PasswordSidebarTag", () => {
     expect(tagsWithOneElementDeleted.length).toBe(5);
     tagsWithOneElementDeleted.forEach(function (value, index) {
       if (index > 1) {
-        expect(value.textContent).toBe(props.resource.tags[index + 1].slug);
+        expect(value.textContent).toBe(props.resourceWorkspaceContext.details.resource.tags[index + 1].slug);
       } else {
-        expect(value.textContent).toBe(props.resource.tags[index].slug);
+        expect(value.textContent).toBe(props.resourceWorkspaceContext.details.resource.tags[index].slug);
       }
     });
 
   });
 
   it("Remove a tag using the keyboard", () => {
-    const props = {
-      resource: getDummyResource()
-    };
+    const props = {resourceWorkspaceContext: {details: {resource: getDummyResource()}}};
     const {container} = renderPasswordSidebarTagSection(null, props);
 
     // Click to expand tags
@@ -826,7 +794,7 @@ describe("PasswordSidebarTag", () => {
     expect(tags.length).toBe(6);
 
     tags.forEach(function (value, index) {
-      expect(value.textContent).toBe(props.resource.tags[index].slug);
+      expect(value.textContent).toBe(props.resourceWorkspaceContext.details.resource.tags[index].slug);
     });
     // delete a tag
     const backspaceKeyDown = {keyCode: 8};
@@ -838,15 +806,13 @@ describe("PasswordSidebarTag", () => {
     expect(tagsWithOneElementDeleted).not.toBeNull();
     expect(tagsWithOneElementDeleted.length).toBe(5);
     tagsWithOneElementDeleted.forEach(function (value, index) {
-      expect(value.textContent).toBe(props.resource.tags[index].slug);
+      expect(value.textContent).toBe(props.resourceWorkspaceContext.details.resource.tags[index].slug);
     });
 
   });
 
   it("Cannot remove shared tags on resources not owned", () => {
-    const props = {
-      resource: getDummyResourceWithLastSharedTagNotOwned()
-    };
+    const props = {resourceWorkspaceContext: {details: {resource: getDummyResourceWithLastSharedTagNotOwned()}}};
     const {container} = renderPasswordSidebarTagSection(null, props);
 
     // Click to expand tags
@@ -869,7 +835,7 @@ describe("PasswordSidebarTag", () => {
     expect(tags.length).toBe(3);
 
     tags.forEach(function (value, index) {
-      expect(value.textContent).toBe(props.resource.tags[index].slug);
+      expect(value.textContent).toBe(props.resourceWorkspaceContext.details.resource.tags[index].slug);
     });
     // try to delete a tag
     const backspaceKeyDown = {keyCode: 8};
@@ -881,7 +847,7 @@ describe("PasswordSidebarTag", () => {
     expect(tagsWithOneElementDeleted).not.toBeNull();
     expect(tagsWithOneElementDeleted.length).toBe(3);
     tagsWithOneElementDeleted.forEach(function (value, index) {
-      expect(value.textContent).toBe(props.resource.tags[index].slug);
+      expect(value.textContent).toBe(props.resourceWorkspaceContext.details.resource.tags[index].slug);
     });
 
     // error message exists
@@ -892,9 +858,7 @@ describe("PasswordSidebarTag", () => {
   });
 
   it("Hide tag delete icon for resources not owned", () => {
-    const props = {
-      resource: getDummyResourceWithLastSharedTagNotOwned()
-    };
+    const props = {resourceWorkspaceContext: {details: {resource: getDummyResourceWithLastSharedTagNotOwned()}}};
     const {container} = renderPasswordSidebarTagSection(null, props);
 
     // Click to expand tags
@@ -920,9 +884,7 @@ describe("PasswordSidebarTag", () => {
 
   it("Add suggested tag to a resource", async () => {
     const context = getAppContext();
-    const props = {
-      resource: getDummyResourceEmptyTag()
-    };
+    const props = {resourceWorkspaceContext: {details: {resource: getDummyResourceEmptyTag()}}};
     const {container} = renderPasswordSidebarTagSection(context, props);
 
     // Click to expand tags
@@ -973,9 +935,7 @@ describe("PasswordSidebarTag", () => {
 
   it("Navigate with keyboard in the list of suggested tags", async () => {
     const context = getAppContext();
-    const props = {
-      resource: getDummyResourceEmptyTag()
-    };
+    const props = {resourceWorkspaceContext: {details: {resource: getDummyResourceEmptyTag()}}};
     const {container} = renderPasswordSidebarTagSection(context, props);
 
     // Click to expand tags
@@ -1046,9 +1006,7 @@ describe("PasswordSidebarTag", () => {
   });
 
   it("Stop editing by cancelling the operation", () => {
-    const props = {
-      resource: getDummyResource()
-    };
+    const props = {resourceWorkspaceContext: {details: {resource: getDummyResource()}}};
     const {container} = renderPasswordSidebarTagSection(null, props);
 
     // Click to expand tags
@@ -1077,9 +1035,7 @@ describe("PasswordSidebarTag", () => {
   });
 
   it("Stop editing with keyboard", () => {
-    const props = {
-      resource: getDummyResource()
-    };
+    const props = {resourceWorkspaceContext: {details: {resource: getDummyResource()}}};
     const {container} = renderPasswordSidebarTagSection(null, props);
 
     // Click to expand tags
@@ -1108,9 +1064,7 @@ describe("PasswordSidebarTag", () => {
 
   it("Close autocomplete with keyboard", async () => {
     const context = getAppContext();
-    const props = {
-      resource: getDummyResourceEmptyTag()
-    };
+    const props = {resourceWorkspaceContext: {details: {resource: getDummyResourceEmptyTag()}}};
     const {container} = renderPasswordSidebarTagSection(context, props);
 
     // Click to expand tags
@@ -1165,9 +1119,7 @@ describe("PasswordSidebarTag", () => {
 
   it("Save tags on keyboard enter", async () => {
     const context = getAppContext();
-    const props = {
-      resource: getDummyResourceEmptyTag()
-    };
+    const props = {resourceWorkspaceContext: {details: {resource: getDummyResourceEmptyTag()}}};
     const {container} = renderPasswordSidebarTagSection(context, props);
 
     // Click to expand tags
@@ -1198,8 +1150,8 @@ describe("PasswordSidebarTag", () => {
     });
 
     // Mock the request function to make it the expected result
-    jest.spyOn(context.port, 'request').mockImplementationOnce(jest.fn((message, data) => Object.assign({id: props.resource.id}, data)));
-    jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementation(() => {});
+    jest.spyOn(context.port, 'request').mockImplementationOnce(jest.fn((message, data) => Object.assign({id: props.resourceWorkspaceContext.details.resource.id}, data)));
+    jest.spyOn(context.port, 'emit').mockImplementation(jest.fn());
 
     // submit with key enter
     fireEvent.keyPress(editorTagInput, enterKeyPressed);
@@ -1213,7 +1165,7 @@ describe("PasswordSidebarTag", () => {
     expect(editorTagInputDisable).toBeNull();
 
     const onApiUpdateResourceTagMeta = {
-      id: props.resource.id,
+      id: props.resourceWorkspaceContext.details.resource.id,
       tags: [
         {
           slug: tagValue,

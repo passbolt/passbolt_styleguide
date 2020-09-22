@@ -16,6 +16,7 @@ import Icon from "../../Common/Icons/Icon";
 import PropTypes from "prop-types";
 import {withContextualMenu} from "../../../contexts/Common/ContextualMenuContext";
 import FoldersTreeItemContextualMenu from "./FoldersTreeItemContextualMenu";
+import AppContext from "../../../contexts/AppContext";
 
 class FoldersTreeItem extends React.Component {
   /**
@@ -219,7 +220,7 @@ class FoldersTreeItem extends React.Component {
     }
 
     if (folder.folder_parent_id !== null) {
-      const folderParent = this.props.folders.find(item => item.id === folder.folder_parent_id);
+      const folderParent = this.context.folders.find(item => item.id === folder.folder_parent_id);
       return this.isChildOfAny(folderParent, folders);
     }
 
@@ -236,7 +237,7 @@ class FoldersTreeItem extends React.Component {
       return true;
     }
 
-    const folderParent = this.props.folders.find(folder => folder.id === item.folder_parent_id);
+    const folderParent = this.context.folders.find(folder => folder.id === item.folder_parent_id);
 
     // The user can always drag content from a personal folder.
     if (folderParent.personal) {
@@ -395,7 +396,7 @@ class FoldersTreeItem extends React.Component {
    * @returns {array}
    */
   getChildrenFolders() {
-    const folders = this.props.folders.filter(folder => folder.folder_parent_id === this.props.folder.id);
+    const folders = this.context.folders.filter(folder => folder.folder_parent_id === this.props.folder.id);
     this.sortFoldersAlphabetically(folders);
 
     return folders;
@@ -477,6 +478,8 @@ class FoldersTreeItem extends React.Component {
     );
   }
 }
+
+FoldersTreeItem.contextType = AppContext;
 
 FoldersTreeItem.propTypes = {
   contextualMenuContext: PropTypes.any, // The contextual menu context

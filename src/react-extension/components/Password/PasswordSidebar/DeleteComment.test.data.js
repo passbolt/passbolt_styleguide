@@ -59,8 +59,12 @@ export function defaultAppContext() {
  */
 export function defaultProps() {
     return {
-        resource: {
-            id: uuidv4()
+        resourceWorkspaceContext: {
+            details: {
+                resource: {
+                    id: uuidv4()
+                }
+            }
         },
         actionFeedbackContext: {
             displaySuccess: () => {}

@@ -17,6 +17,7 @@ import GroupAvatar from "../../Common/Avatar/GroupAvatar";
 import Icon from "../../Common/Icons/Icon";
 import AppContext from "../../../contexts/AppContext";
 import PropTypes from "prop-types";
+import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 
 const PERMISSIONS_LABEL = {
   1: 'can read',
@@ -61,12 +62,18 @@ class PasswordSidebarPermissionsSection extends React.Component {
     this.fetch();
   }
 
+  /**
+   * Returns the current detailed resource
+   */
+  get resource() {
+    return this.props.resourceWorkspaceContext.details.resource;
+  }
 
   /**
    * Get the folder permissions.
    */
   async fetch() {
-    const permissions = await this.context.port.request('passbolt.resources.find-permissions', this.props.resourceId);
+    const permissions = await this.context.port.request('passbolt.resources.find-permissions', this.resource.id);
     if(permissions) {
       permissions.sort((permissionA, permissionB) => this.sortPermissions(permissionA,permissionB) );
     }
@@ -188,7 +195,7 @@ class PasswordSidebarPermissionsSection extends React.Component {
 PasswordSidebarPermissionsSection.contextType = AppContext;
 
 PasswordSidebarPermissionsSection.propTypes = {
-  resourceId: PropTypes.string
+  resourceWorkspaceContext: PropTypes.object
 };
 
-export default PasswordSidebarPermissionsSection;
+export default withResourceWorkspace(PasswordSidebarPermissionsSection);

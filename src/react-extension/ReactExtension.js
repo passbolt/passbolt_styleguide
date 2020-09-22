@@ -29,15 +29,16 @@ import ActionFeedbackContextProvider from "./contexts/ActionFeedbackContext";
 import ShareActionFeedbacks from "./components/Share/ShareActionFeedbacks";
 import DialogContextProvider from "./contexts/DialogContext";
 import ManageDialogs from "./components/Dialog/ManageDialogs";
-import HandleFolderMoveStrategyDialogEvents
-  from "./components/Folder/HandleFolderMoveStrategyDialogEvents/HandleFolderMoveStrategyDialogEvents";
+import HandlePassphraseEntryDialogEvents
+  from "./components/Passphrase/HandlePassphraseEntryDialogEvents/HandlePassphraseEntryDialogEvents";
 import HandleProgressDialogEvents
   from "./components/ProgressDialog/HandleProgressDialogEvents/HandleProgressDialogEvents";
 import HandleErrorDialogEvents from "./components/Error/HandleErrorDialogEvents/HandleErrorDialogEvents";
-import HandlePassphraseEntryDialogEvents
-  from "./components/Passphrase/HandlePassphraseEntryDialogEvents/HandlePassphraseEntryDialogEvents";
+import ResourceWorkspaceContextProvider from "./contexts/ResourceWorkspaceContext";
 import ContextualMenuContextProvider from "./contexts/Common/ContextualMenuContext";
 import ManageContextualMenu from "./components/ManageContextualMenu";
+import HandleFolderMoveStrategyDialogEvents
+  from "./components/Folder/HandleFolderMoveStrategyDialogEvents/HandleFolderMoveStrategyDialogEvents";
 
 
 
@@ -291,19 +292,21 @@ class ReactExtension extends Component {
               </div>
 
 
-              <Switch>
-                <Route path={[
-                  "/app/folders/view/:filterByFolderId",
-                  "/app/passwords/view/:selectedResourceId",
-                  "/app/passwords",
-                ]}>
-                  <PasswordWorkspace onMenuItemClick={this.handleWorkspaceSelect}/>
-                </Route>
-              </Switch>
-            </div>
-            }
-          </div>
-            </Router>
+                      <Switch>
+                        <Route path={[
+                          "/app/folders/view/:filterByFolderId",
+                          "/app/passwords/view/:selectedResourceId",
+                          "/app/passwords",
+                        ]}>
+                        <ResourceWorkspaceContextProvider>
+                          <PasswordWorkspace onMenuItemClick={this.handleWorkspaceSelect}/>
+                        </ResourceWorkspaceContextProvider>
+                        </Route>
+                      </Switch>
+                    </div>
+                  }
+                </div>
+              </Router>
             </ContextualMenuContextProvider>
           </DialogContextProvider>
         </ActionFeedbackContextProvider>

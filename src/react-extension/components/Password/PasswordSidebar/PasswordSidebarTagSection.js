@@ -16,6 +16,7 @@ import PropTypes from "prop-types";
 import TagItemViewer from "./TagItemViewer";
 import TagEditor from "./TagEditor";
 import Icon from "../../Common/Icons/Icon";
+import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 
 class PasswordSidebarTagSection extends React.Component {
 
@@ -57,6 +58,13 @@ class PasswordSidebarTagSection extends React.Component {
   }
 
   /**
+   * Get the current detailed resource
+   */
+  get resource() {
+    return this.props.resourceWorkspaceContext.details.resource;
+  }
+
+  /**
    * Display or not the input tag editor
    */
   toggleInputTagEditor() {
@@ -69,9 +77,9 @@ class PasswordSidebarTagSection extends React.Component {
    * @returns {JSX}
    */
   render() {
-    const hasResource = this.props.resource;
-    const isOwner =  hasResource && this.props.resource.permission.type === 15;
-    const tags = hasResource && this.props.resource.tags;
+    const hasResource = this.resource;
+    const isOwner =  hasResource && this.resource.permission.type === 15;
+    const tags = hasResource && this.resource.tags;
 
     return (
       <div className={`detailed-information accordion sidebar-section ${this.state.open ? "" : "closed"}`}>
@@ -95,7 +103,7 @@ class PasswordSidebarTagSection extends React.Component {
             tags={tags}
             isOwner={isOwner}
             toggleInputTagEditor={this.toggleInputTagEditor}
-            resourceId={this.props.resource.id}/>
+            resourceId={this.resource.id}/>
           }
 
         </div>
@@ -105,7 +113,8 @@ class PasswordSidebarTagSection extends React.Component {
 }
 
 PasswordSidebarTagSection.propTypes = {
-  resource: PropTypes.object,
-};
+  history: PropTypes.any,
+  resourceWorkspaceContext: PropTypes.any
+}
 
-export default PasswordSidebarTagSection;
+export default withResourceWorkspace(PasswordSidebarTagSection);
