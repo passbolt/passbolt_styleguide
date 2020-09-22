@@ -36,6 +36,7 @@ class FilterResourcesByShortcuts extends React.Component {
      */
     bindHandlers() {
         this.handleAllItemsClick = this.handleAllItemsClick.bind(this);
+        this.handleSharedWithMeClick = this.handleSharedWithMeClick.bind(this);
     }
 
     /**
@@ -46,10 +47,26 @@ class FilterResourcesByShortcuts extends React.Component {
     }
 
     /**
+     * Returns true if the Shared With Me shortcut is currently selected
+     */
+    get isSharedWithMeSelected() {
+        return this.props.resourceWorkspaceContext.filter.type === ResourceWorkspaceFilterTypes.SHARED_WITH_ME;
+    }
+
+    /**
      * Whenever the shortcut "All items" has been selected
      */
     handleAllItemsClick() {
         const filter = {type: ResourceWorkspaceFilterTypes.ALL}
+        this.props.history.push({pathname: '/app/passwords', state: {filter}});
+    }
+
+
+    /**
+     * Whenever the shortcut "Shared with me" has been selected
+     */
+    handleSharedWithMeClick() {
+        const filter = {type: ResourceWorkspaceFilterTypes.SHARED_WITH_ME}
         this.props.history.push({pathname: '/app/passwords', state: {filter}});
     }
 
@@ -91,7 +108,9 @@ class FilterResourcesByShortcuts extends React.Component {
                         <div className="row">
                             <div className="main-cell-wrapper">
                                 <div className="main-cell">
-                                    <a href="#"><span>Shared with me</span></a>
+                                    <a onClick={this.handleSharedWithMeClick}>
+                                        <span>Shared with me</span>
+                                    </a>
                                 </div>
                             </div>
                         </div>

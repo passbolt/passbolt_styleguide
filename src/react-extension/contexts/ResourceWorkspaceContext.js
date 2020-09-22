@@ -210,6 +210,7 @@ class ResourceWorkspaceContextProvider extends React.Component {
         const searchOperations = {
             [ResourceWorkspaceFilterTypes.FOLDER]: this.searchByFolder.bind(this),
             [ResourceWorkspaceFilterTypes.TEXT]: this.searchByText.bind(this),
+            [ResourceWorkspaceFilterTypes.SHARED_WITH_ME]: this.seachBySharedWithMe.bind(this),
             [ResourceWorkspaceFilterTypes.ALL]: this.searchAll.bind(this),
             [ResourceWorkspaceFilterTypes.NONE]: () => {/* No search */}
         }
@@ -246,6 +247,14 @@ class ResourceWorkspaceContextProvider extends React.Component {
         const matchSomeWords = value => words.some( word => wordToRegex(word).test(value));
         const matchText = resource => ['name', 'username', 'uri', 'description'].some( key => matchSomeWords(resource[key]));
         const filteredResources = this.resources.filter(matchText);
+        await this.setState({filter, filteredResources});
+    }
+
+    /**
+     * Filter the resources which are shared wit the current user
+     */
+    async seachBySharedWithMe(filter) {
+        const filteredResources = this.resources.filter(resource => !resource.personal);
         await this.setState({filter, filteredResources});
     }
 
@@ -325,6 +334,7 @@ export const ResourceWorkspaceFilterTypes = {
     ALL: 'ALL', // All resources
     FOLDER: 'FILTER-BY-FOLDER', // Resources for a given folder
     TEXT: 'FILTER-BY-TEXT-SEARCH', // Resources matching some text words
+    SHARED_WITH_ME: 'FILTER-BY-SHARED-WITH-ME', // Shared with current user resources
 }
 
 
