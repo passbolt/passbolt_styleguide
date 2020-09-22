@@ -40,8 +40,6 @@ import ManageContextualMenu from "./components/ManageContextualMenu";
 import HandleFolderMoveStrategyDialogEvents
   from "./components/Folder/HandleFolderMoveStrategyDialogEvents/HandleFolderMoveStrategyDialogEvents";
 
-
-
 class ReactExtension extends Component {
   constructor(props) {
     super(props);

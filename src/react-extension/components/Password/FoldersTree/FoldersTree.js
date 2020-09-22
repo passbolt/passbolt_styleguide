@@ -277,7 +277,6 @@ class FoldersTree extends React.Component {
   get selectedFolder() {
     const filter = this.props.resourceWorkspaceContext.filter;
     return filter.type === ResourceWorkspaceFilterTypes.FOLDER && filter.payload.folder;
-
   }
 
   /**
@@ -500,7 +499,7 @@ class FoldersTree extends React.Component {
               onOpen={this.handleFolderOpenEvent}
               openFolders={this.state.openFolders}
               onSelect={this.handleFolderSelectEvent}
-              selectedFolder={this.props.selectedFolder}/>)}
+              selectedFolder={this.selectedFolder}/>)}
           </ul>
           }
         </div>
