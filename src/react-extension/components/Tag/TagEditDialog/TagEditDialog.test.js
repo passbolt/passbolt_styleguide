@@ -25,17 +25,21 @@ beforeEach(() => {
 
 const getAppContext = function (appContext) {
   const port = new MockPort();
-  const defaultAppContext = {port};
+  const defaultAppContext = {
+    port,
+    tagToEdit: {
+      id: "8e3874ae-4b40-590b-968a-418f704b9d9a",
+      slug: "tardis",
+      is_shared: false
+    },
+    setContext: () => {}
+  };
+
   return Object.assign(defaultAppContext, appContext || {});
 };
 
 const getDummyTag = () => {
   return {
-    tag: {
-      id: "8e3874ae-4b40-590b-968a-418f704b9d9a",
-      slug: "tardis",
-      is_shared: false
-    },
     onClose: jest.fn()
   };
 }
@@ -45,15 +49,16 @@ const renderTagEditDialog = function (appContext, props) {
 
   return render(
     <AppContext.Provider value={appContext}>
-      <TagEditDialog debug tag={props.tag} onClose={props.onClose}/>
+      <TagEditDialog debug onClose={props.onClose}/>
     </AppContext.Provider>
   );
 };
 
 describe("TagEditDialog", () => {
   it("matches the styleguide.", () => {
+    const context = getAppContext();
     const props = getDummyTag();
-    const {container} = renderTagEditDialog(null, props);
+    const {container} = renderTagEditDialog(context, props);
 
     // Dialog title exists and correct
     const dialogTitle = container.querySelector(".dialog-header h2 span");
@@ -67,7 +72,7 @@ describe("TagEditDialog", () => {
     // Name input field exists.
     const nameInput = container.querySelector("[name=\"name\"]");
     expect(nameInput).not.toBeNull();
-    expect(nameInput.value.trim()).toBe(props.tag.slug);
+    expect(nameInput.value.trim()).toBe(context.tagToEdit.slug);
 
     // Save button exists
     const saveButton = container.querySelector(".submit-wrapper [type=\"submit\"]");
@@ -79,8 +84,9 @@ describe("TagEditDialog", () => {
   });
 
   it("calls onClose props when clicking on the close button.", () => {
+    const context = getAppContext();
     const props = getDummyTag();
-    const {container} = renderTagEditDialog(null, props);
+    const {container} = renderTagEditDialog(context, props);
 
     const leftClick = {button: 0};
     const dialogCloseIcon = container.querySelector(".dialog-close");
@@ -89,8 +95,9 @@ describe("TagEditDialog", () => {
   });
 
   it("calls onClose props when clicking on the cancel button.", () => {
+    const context = getAppContext();
     const props = getDummyTag();
-    const {container} = renderTagEditDialog(null, props);
+    const {container} = renderTagEditDialog(context, props);
 
     const leftClick = {button: 0};
     const cancelButton = container.querySelector(".submit-wrapper .cancel");
@@ -99,8 +106,9 @@ describe("TagEditDialog", () => {
   });
 
   it("validates the form when clicking on the submit button.", async () => {
+    const context = getAppContext();
     const props = getDummyTag();
-    const {container} = renderTagEditDialog(null, props);
+    const {container} = renderTagEditDialog(context, props);
 
     const nameInput = container.querySelector("[name=\"name\"]");
     expect(nameInput.value).toBe("tardis");

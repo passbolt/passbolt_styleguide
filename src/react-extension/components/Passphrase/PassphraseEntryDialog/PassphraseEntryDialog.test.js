@@ -31,7 +31,8 @@ const getAppContext = function(appContext) {
   const defaultAppContext = {
     userSettings: new UserSettings(userSettingsFixture),
     siteSettings: new SiteSettings(siteSettingsFixture),
-    port: new MockPort()
+    port: new MockPort(),
+    setContext: () => {}
   };
 
   return Object.assign(defaultAppContext, appContext || {});

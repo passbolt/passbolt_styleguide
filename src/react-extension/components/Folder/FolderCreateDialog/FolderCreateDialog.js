@@ -190,7 +190,7 @@ class FolderCreateDialog extends Component {
   async createFolder() {
     const folderDto = {
       name: this.state.name,
-      folder_parent_id: this.props.folderParentId
+      folder_parent_id: this.context.folderCreateDialogProps.folderParentId
     };
     return await this.context.port.request("passbolt.folders.create", folderDto);
   }
@@ -303,9 +303,8 @@ class FolderCreateDialog extends Component {
 FolderCreateDialog.contextType = AppContext;
 
 FolderCreateDialog.propTypes = {
-  folderParentId: PropTypes.string,
-  onClose: PropTypes.func,
-  actionFeedbackContext: PropTypes.any // The action feedback context
+  actionFeedbackContext: PropTypes.any, // The action feedback context
+  onClose: PropTypes.func
 };
 
 export default withActionFeedback(FolderCreateDialog);

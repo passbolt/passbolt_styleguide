@@ -14,6 +14,9 @@
 import React from "react";
 import PropTypes from "prop-types";
 import AppContext from "../../../contexts/AppContext";
+import TagEditDialog from "../TagEditDialog/TagEditDialog";
+import TagDeleteDialog from "../TagDeleteDialog/TagDeleteDialog";
+import {withDialog} from "../../../contexts/DialogContext";
 import ContextualMenuWrapper from "../../Common/ContextualMenu/ContextualMenuWrapper";
 
 class DisplayTagListContextualMenu extends React.Component {
@@ -38,8 +41,8 @@ class DisplayTagListContextualMenu extends React.Component {
    * Handle click on the edit tag menu option.
    */
   handleEditClickEvent() {
-    const tag = this.props.selectedTag;
-    this.context.port.emit('passbolt.plugin.tags.open-edit-dialog', {tag});
+    this.context.setContext({tagToEdit: this.props.selectedTag});
+    this.props.dialogContext.open(TagEditDialog);
     this.props.hide();
   }
 
@@ -47,9 +50,21 @@ class DisplayTagListContextualMenu extends React.Component {
    * Handle click on the delete tag menu option.
    */
   handleDeleteClickEvent() {
-    const tag = this.props.selectedTag;
-    this.context.port.emit('passbolt.plugin.tags.open-delete-dialog', {tag});
+    this.context.setContext({tagToDelete: this.props.selectedTag});
+    this.props.dialogContext.open(TagDeleteDialog);
     this.props.hide();
+  }
+
+  /**
+   * Get the contextual menu style.
+   */
+  getStyle() {
+    return {
+      position: "fixed",
+      display: "block",
+      left: this.props.left,
+      top: this.props.top
+    };
   }
 
   /**
@@ -91,7 +106,8 @@ DisplayTagListContextualMenu.propTypes = {
   hide: PropTypes.func, // Hide the contextual menu
   left: PropTypes.number, // left position in px of the page
   top: PropTypes.number, // top position in px of the page
-  selectedTag: PropTypes.object
+  selectedTag: PropTypes.object,
+  dialogContext: PropTypes.any
 };
 
-export default DisplayTagListContextualMenu;
+export default withDialog(DisplayTagListContextualMenu);

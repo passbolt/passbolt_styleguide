@@ -116,7 +116,8 @@ class FolderMoveStrategyDialog extends Component {
     await this.toggleProcessing();
 
     try {
-      this.context.port.emit(this.props.requestId, "SUCCESS", {moveOption: this.state.moveOption});
+      this.context.port.emit(this.context.folderMoveStrategyProps.requestId, "SUCCESS", {moveOption: this.state.moveOption});
+      this.context.setContext({folderMoveStrategyProps: {}});
       this.props.onClose();
     } catch (error) {
       console.error(error);
@@ -160,7 +161,8 @@ class FolderMoveStrategyDialog extends Component {
       return;
     }
     const error = new UserAbortsOperationError("The dialog has been closed.");
-    this.context.port.emit(this.props.requestId, "ERROR", error);
+    this.context.port.emit(this.context.folderMoveStrategyProps.requestId, "ERROR", error);
+    this.context.setContext({folderMoveStrategyProps: {}});
     this.props.onClose();
   }
 
@@ -198,10 +200,10 @@ class FolderMoveStrategyDialog extends Component {
    * @returns {boolean}
    */
   isAboutItems() {
-    return this.props.resourcesIds
-      && this.props.foldersIds
-      && this.props.resourcesIds.length
-      && this.props.foldersIds.length;
+    return this.context.folderMoveStrategyProps.resourcesIds
+      && this.context.folderMoveStrategyProps.foldersIds
+      && this.context.folderMoveStrategyProps.resourcesIds.length
+      && this.context.folderMoveStrategyProps.foldersIds.length;
   }
 
   /**
@@ -209,7 +211,7 @@ class FolderMoveStrategyDialog extends Component {
    * @returns {boolean}
    */
   isAboutResources() {
-    return this.props.resourcesIds && this.props.resourcesIds.length > 1;
+    return this.context.folderMoveStrategyProps.resourcesIds && this.context.folderMoveStrategyProps.resourcesIds.length > 1;
   }
 
   /**
@@ -217,7 +219,7 @@ class FolderMoveStrategyDialog extends Component {
    * @returns {boolean}
    */
   isAboutFolders() {
-    return this.props.foldersIds && this.props.foldersIds.length > 1;
+    return this.context.folderMoveStrategyProps.foldersIds && this.context.folderMoveStrategyProps.foldersIds.length > 1;
   }
 
   /**
@@ -225,7 +227,7 @@ class FolderMoveStrategyDialog extends Component {
    * @returns {boolean}
    */
   isAboutAFolder() {
-    return this.props.foldersIds && this.props.foldersIds.length === 1;
+    return this.context.folderMoveStrategyProps.foldersIds && this.context.folderMoveStrategyProps.foldersIds.length === 1;
   }
 
   /**
@@ -233,7 +235,7 @@ class FolderMoveStrategyDialog extends Component {
    * @returns {boolean}
    */
   isAboutAResource() {
-    return this.props.resourcesIds && this.props.resourcesIds.length === 1;
+    return this.context.folderMoveStrategyProps.resourcesIds && this.context.folderMoveStrategyProps.resourcesIds.length === 1;
   }
 
   render() {
@@ -277,11 +279,6 @@ class FolderMoveStrategyDialog extends Component {
 FolderMoveStrategyDialog.contextType = AppContext;
 
 FolderMoveStrategyDialog.propTypes = {
-  className: PropTypes.string,
-  folderId: PropTypes.string,
-  requestId: PropTypes.string,
-  foldersIds: PropTypes.array,
-  resourcesIds: PropTypes.array,
   onClose: PropTypes.func
 };
 

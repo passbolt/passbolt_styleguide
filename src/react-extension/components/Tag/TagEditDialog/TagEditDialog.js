@@ -31,7 +31,7 @@ class TagEditDialog extends Component {
   getDefaultState() {
     return {
       error: "",
-      name: this.props.tag.slug,
+      name:'',
       nameError: "",
       processing: false
     };
@@ -49,6 +49,13 @@ class TagEditDialog extends Component {
    */
   createInputRef() {
     this.nameInputRef = React.createRef();
+  }
+
+  /**
+   * Whenever the component is mounted
+   */
+  componentDidMount() {
+    this.setState({name:  this.context.tagToEdit.slug});
   }
 
   /**
@@ -89,6 +96,7 @@ class TagEditDialog extends Component {
    * Handle close button click.
    */
   handleCloseClick() {
+    this.context.setContext({tagToEdit: null});
     this.props.onClose();
   }
 
@@ -104,9 +112,9 @@ class TagEditDialog extends Component {
     }
 
     const tagDto = {
-      id: this.props.tag.id,
+      id: this.context.tagToEdit.id,
       slug: this.state.name,
-      is_shared: this.props.tag.is_shared
+      is_shared: this.context.tagToEdit.is_shared
     };
 
     try {
@@ -134,6 +142,7 @@ class TagEditDialog extends Component {
   async handleSaveSuccess() {
     await this.props.actionFeedbackContext.displaySuccess("The tag has been updated successfully");
     this.props.onClose();
+    this.context.setContext({tagToEdit: null});
   }
 
   /**
@@ -237,7 +246,6 @@ TagEditDialog.contextType = AppContext;
 
 TagEditDialog.propTypes = {
   onClose: PropTypes.func,
-  tag: PropTypes.object,
   actionFeedbackContext: PropTypes.any // The action feedback context
 };
 
