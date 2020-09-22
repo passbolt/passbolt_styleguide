@@ -60,6 +60,7 @@ class AddComment extends React.Component {
         this.handleSubmitEvent = this.handleSubmitEvent.bind(this);
         this.handleCancelEvent = this.handleCancelEvent.bind(this);
         this.handleContentChanged = this.handleContentChanged.bind(this);
+        this.handleEscapeKeyPressed = this.handleEscapeKeyPressed.bind(this);
     }
 
 
@@ -78,13 +79,43 @@ class AddComment extends React.Component {
     async handleSubmitEvent(event) {
         event.preventDefault();
 
-        await this.setState({actions: {processing: true}});
-
-        await this.validate();
-        if (this.isValid) {
-            await this.add();
+        try {
+            await this.setState({actions: {processing: true}});
+            await this.validate();
+            if (this.isValid) {
+                const addedComment = await this.add();
+                await this.handleSubmitSuccess(addedComment);
+            }
+        } catch(error) {
+            await this.handleSubmitFailure(error);
         }
     }
+
+    /**
+     * Whenever the submit action has been successful
+     * @param addedComment The added comment
+     */
+    async handleSubmitSuccess(addedComment) {
+        await this.props.actionFeedbackContext.displaySuccess("The comment has been added successfully");
+        this.props.onAdd(addedComment);
+    }
+
+    /**
+     * Whenever the submit action has not been successful
+     * @param error
+     * @returns {Promise<void>}
+     */
+    async handleSubmitFailure(error) {
+        await this.props.actionFeedbackContext.displayError(error.message);
+
+        // If the component can cancel, let's behave like a cancel
+        if (this.props.cancellable) {
+            this.props.onCancel();
+        } else {
+            await this.setState({actions: {processing: false}});
+        }
+    }
+
 
     /**
      * Handle the cancellation of the add of the comment
@@ -102,11 +133,26 @@ class AddComment extends React.Component {
     }
 
     /**
+     * Whenever the user press the escape key
+     * @param event Keypressed event
+     */
+    handleEscapeKeyPressed(event) {
+        // Close the dialog when the user presses the "ESC" key if the component is cancellable.
+        const hasEscapeKeyPressed = event.keyCode === 27;
+        const mustQuit = hasEscapeKeyPressed && this.props.cancellable;
+        if (mustQuit) {
+            // Stop the event propagation in order to avoid a parent component to react to this ESC event.
+            event.stopPropagation();
+            this.props.onCancel();
+        }
+    }
+
+
+    /**
      * Add a new comment
      * @returns {Promise<void>}
      */
     async add() {
-
         // Persist
         const commentToAdd = this.state.content.trim();
         const payload =  {
@@ -116,13 +162,7 @@ class AddComment extends React.Component {
             user_id: this.context.currentUser.id
         };
 
-        const addedComment = await this.context.port.request('passbolt.comments.create', payload);
-
-        // Asks for a success / failure message
-        await this.props.actionFeedbackContext.displaySuccess("The comment has been added successfully");
-
-        // Informs the parent component
-        this.props.onAdd(addedComment);
+        return await this.context.port.request('passbolt.comments.create', payload);
     }
 
     /**
@@ -157,6 +197,7 @@ class AddComment extends React.Component {
                             <textarea
                                 placeholder="Add a comment"
                                 onChange={this.handleContentChanged}
+                                onKeyDown={this.handleEscapeKeyPressed}
                                 disabled={this.state.actions.processing}>
                             </textarea>
                                 <div className="message error">

@@ -133,4 +133,14 @@ export default class AddCommentPageObject {
         fireEvent.click(this.cancelButton, leftClick);
         await waitFor( () => {});
     }
+
+    /**
+     * Press the escape key
+     */
+    async escape() {
+        const escapeKeyPressed = {keyCode: 27}
+        this.textarea.focus();
+        fireEvent.keyDown(this.textarea, escapeKeyPressed);
+        await waitFor(() => {})
+    }
 }
