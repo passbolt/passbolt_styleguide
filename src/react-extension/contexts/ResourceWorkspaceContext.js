@@ -207,9 +207,11 @@ class ResourceWorkspaceContextProvider extends React.Component {
      * @param filter
      */
     async search(filter) {
+        console.log(filter)
         const searchOperations = {
             [ResourceWorkspaceFilterTypes.FOLDER]: this.searchByFolder.bind(this),
             [ResourceWorkspaceFilterTypes.TEXT]: this.searchByText.bind(this),
+            [ResourceWorkspaceFilterTypes.ITEMS_I_OWN]: this.searchByItemsIOwn.bind(this),
             [ResourceWorkspaceFilterTypes.ALL]: this.searchAll.bind(this),
             [ResourceWorkspaceFilterTypes.NONE]: () => {/* No search */}
         }
@@ -246,6 +248,15 @@ class ResourceWorkspaceContextProvider extends React.Component {
         const matchSomeWords = value => words.some( word => wordToRegex(word).test(value));
         const matchText = resource => ['name', 'username', 'uri', 'description'].some( key => matchSomeWords(resource[key]));
         const filteredResources = this.resources.filter(matchText);
+        await this.setState({filter, filteredResources});
+    }
+
+    /**
+     * Search for current user personal resources
+     * @param filter The filter
+     */
+    async searchByItemsIOwn(filter) {
+        const filteredResources = this.resources.filter(resource => resource.personal);
         await this.setState({filter, filteredResources});
     }
 
@@ -325,6 +336,7 @@ export const ResourceWorkspaceFilterTypes = {
     ALL: 'ALL', // All resources
     FOLDER: 'FILTER-BY-FOLDER', // Resources for a given folder
     TEXT: 'FILTER-BY-TEXT-SEARCH', // Resources matching some text words
+    ITEMS_I_OWN: 'FILTER-BY-ITEMS-I-OWN', // Current user personal resources
 }
 
 

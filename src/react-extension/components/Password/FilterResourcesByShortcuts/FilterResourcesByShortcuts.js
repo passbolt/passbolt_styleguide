@@ -36,6 +36,7 @@ class FilterResourcesByShortcuts extends React.Component {
      */
     bindHandlers() {
         this.handleAllItemsClick = this.handleAllItemsClick.bind(this);
+        this.handleItemsIOwnClick = this.handleItemsIOwnClick.bind(this);
     }
 
     /**
@@ -46,10 +47,26 @@ class FilterResourcesByShortcuts extends React.Component {
     }
 
     /**
+     * Returns true if the All Items shortcut is currently selected
+     */
+    get isItemsIOwnSelected() {
+        return this.props.resourceWorkspaceContext.filter.type === ResourceWorkspaceFilterTypes.ITEMS_I_OWN;
+    }
+
+    /**
      * Whenever the shortcut "All items" has been selected
      */
     handleAllItemsClick() {
         const filter = {type: ResourceWorkspaceFilterTypes.ALL}
+        this.props.history.push({pathname: '/app/passwords', state: {filter}});
+    }
+
+    /**
+     * Whenever the shortcut "Items I own" has been selected
+     */
+    handleItemsIOwnClick() {
+        console.log('click')
+        const filter = {type: ResourceWorkspaceFilterTypes.ITEMS_I_OWN}
         this.props.history.push({pathname: '/app/passwords', state: {filter}});
     }
 
@@ -100,7 +117,9 @@ class FilterResourcesByShortcuts extends React.Component {
                         <div className="row">
                             <div className="main-cell-wrapper">
                                 <div className="main-cell">
-                                    <a href="#"><span>Owned by me</span></a>
+                                    <a onClick={this.handleItemsIOwnClick}>
+                                        <span>Owned by me</span>
+                                    </a>
                                 </div>
                             </div>
                         </div>
