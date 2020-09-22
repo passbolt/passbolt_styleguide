@@ -36,6 +36,7 @@ class FilterResourcesByShortcuts extends React.Component {
      */
     bindHandlers() {
         this.handleAllItemsClick = this.handleAllItemsClick.bind(this);
+        this.handleRecentlyModifiedClick = this.handleRecentlyModifiedClick.bind(this);
     }
 
     /**
@@ -46,10 +47,25 @@ class FilterResourcesByShortcuts extends React.Component {
     }
 
     /**
+     * Returns true if the Recently Modified shortcut is currently selected
+     */
+    get isRecentlyModifiedSelected() {
+        return this.props.resourceWorkspaceContext.filter.type === ResourceWorkspaceFilterTypes.RECENTLY_MODIFIED;
+    }
+
+    /**
      * Whenever the shortcut "All items" has been selected
      */
     handleAllItemsClick() {
         const filter = {type: ResourceWorkspaceFilterTypes.ALL}
+        this.props.history.push({pathname: '/app/passwords', state: {filter}});
+    }
+
+    /**
+     * Whenever the shortcut "Recently modified" has been selected
+     */
+    handleRecentlyModifiedClick() {
+        const filter = {type: ResourceWorkspaceFilterTypes.RECENTLY_MODIFIED}
         this.props.history.push({pathname: '/app/passwords', state: {filter}});
     }
 
@@ -79,10 +95,12 @@ class FilterResourcesByShortcuts extends React.Component {
                         </div>
                     </li>
                     <li>
-                        <div className="row">
+                        <div className={"row " + (this.isRecentlyModifiedSelected ? "selected" : "") }>
                             <div className="main-cell-wrapper">
                                 <div className="main-cell">
-                                    <a href="#"><span>Recents</span></a>
+                                    <a onClick={this.handleRecentlyModifiedClick}>
+                                        <span>Recently Modified</span>
+                                    </a>
                                 </div>
                             </div>
                         </div>

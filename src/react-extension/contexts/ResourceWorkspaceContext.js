@@ -19,6 +19,7 @@ import * as React from "react";
 import PropTypes from "prop-types";
 import AppContext from "./AppContext";
 import {withRouter} from "react-router-dom";
+import moment from "moment";
 
 
 /**
@@ -207,9 +208,11 @@ class ResourceWorkspaceContextProvider extends React.Component {
      * @param filter
      */
     async search(filter) {
+        console.log(filter);
         const searchOperations = {
             [ResourceWorkspaceFilterTypes.FOLDER]: this.searchByFolder.bind(this),
             [ResourceWorkspaceFilterTypes.TEXT]: this.searchByText.bind(this),
+            [ResourceWorkspaceFilterTypes.RECENTLY_MODIFIED]: this.searchByRecentlyModified.bind(this),
             [ResourceWorkspaceFilterTypes.ALL]: this.searchAll.bind(this),
             [ResourceWorkspaceFilterTypes.NONE]: () => {/* No search */}
         }
@@ -235,6 +238,7 @@ class ResourceWorkspaceContextProvider extends React.Component {
 
     /**
      * Filter the resources which textual properties matched some user text words
+     * @param filter A textual filter
      */
     async searchByText(filter) {
         const text = filter.payload;
@@ -246,6 +250,16 @@ class ResourceWorkspaceContextProvider extends React.Component {
         const matchSomeWords = value => words.some( word => wordToRegex(word).test(value));
         const matchText = resource => ['name', 'username', 'uri', 'description'].some( key => matchSomeWords(resource[key]));
         const filteredResources = this.resources.filter(matchText);
+        await this.setState({filter, filteredResources});
+    }
+
+    /**
+     * Keep the most recently modified resources ( current state: just sort everything with the most recent modified resource )
+     * @param filter A recently modified filter
+     */
+    async searchByRecentlyModified(filter) {
+        const recentlyModifiedSorter = (resource1, resource2) => moment(resource2.modified).diff(moment(resource1.modified));
+        const filteredResources = this.resources.sort(recentlyModifiedSorter);
         await this.setState({filter, filteredResources});
     }
 
@@ -325,6 +339,7 @@ export const ResourceWorkspaceFilterTypes = {
     ALL: 'ALL', // All resources
     FOLDER: 'FILTER-BY-FOLDER', // Resources for a given folder
     TEXT: 'FILTER-BY-TEXT-SEARCH', // Resources matching some text words
+    RECENTLY_MODIFIED: 'FILTER-BY-RECENTLY-MODIFIERD', // Keep recently modified resources
 }
 
 
