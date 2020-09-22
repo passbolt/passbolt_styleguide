@@ -4792,6 +4792,25 @@ h6 .input.toggle-switch {
 .accordion .accordion-content:after {
   clear: both;
 }
+.accordion .accordion-content .processing-wrapper {
+  background-color: #30302D;
+  text-align: center;
+  padding: 0.5em 0;
+}
+.accordion .accordion-content .processing-wrapper .processing-text {
+  position: relative;
+  padding-left: 1.5em;
+}
+.accordion .accordion-content .processing-wrapper .processing-text:before {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  content: " ";
+  top: 0px;
+  left: 0px;
+  background: transparent url('../../../img/controls/loading_dark.svg') left center no-repeat;
+  background-size: auto 75% ;
+}
 .accordion.closed .accordion-content {
   display: none;
 }
