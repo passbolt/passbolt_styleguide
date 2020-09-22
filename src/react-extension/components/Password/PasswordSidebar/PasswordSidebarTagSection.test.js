@@ -386,6 +386,7 @@ describe("PasswordSidebarTag", () => {
     // Mock the request function to make it the expected result
     jest.spyOn(context.port, 'request').mockImplementationOnce(jest.fn((message, data) => Object.assign({id: props.resourceWorkspaceContext.details.resource.id}, data)));
     jest.spyOn(context.port, 'emit').mockImplementation(jest.fn());
+    jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementation(() => {});
 
     // submit button input tag exists
     const submitButton = container.querySelector(".tag-editor-submit");

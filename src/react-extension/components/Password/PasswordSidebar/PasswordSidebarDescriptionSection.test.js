@@ -379,6 +379,7 @@ describe("PasswordSidebarDescription", () => {
     // Mock the request function to make it the expected result
     jest.spyOn(context.port, 'request').mockImplementationOnce(jest.fn((message, data) => Object.assign({id: props.resourceWorkspaceContext.details.resource.id}, data)));
     jest.spyOn(context.port, 'emit').mockImplementation(jest.fn());
+    jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementation(() => {});
 
     // submit button exists
     const submitButton = container.querySelector(".description-editor-submit");
