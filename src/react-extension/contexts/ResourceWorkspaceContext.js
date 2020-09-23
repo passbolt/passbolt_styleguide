@@ -302,7 +302,7 @@ class ResourceWorkspaceContextProvider extends React.Component {
      * @param filter The filter
      */
     async searchByItemsIOwn(filter) {
-        const filteredResources = this.resources.filter(resource => resource.personal);
+        const filteredResources = this.resources.filter(resource => resource.permission.type === 15);
         await this.setState({filter, filteredResources});
     }
     /**
@@ -317,7 +317,7 @@ class ResourceWorkspaceContextProvider extends React.Component {
      * Filter the resources which are shared wit the current user
      */
     async seachBySharedWithMe(filter) {
-        const filteredResources = this.resources.filter(resource => !resource.personal);
+        const filteredResources = this.resources.filter(resource => resource.permission.type < 15);
         await this.setState({filter, filteredResources});
     }
     /**
