@@ -246,6 +246,7 @@ class ResourceWorkspaceContextProvider extends React.Component {
             [ResourceWorkspaceFilterTypes.TEXT]: this.searchByText.bind(this),
             [ResourceWorkspaceFilterTypes.ITEMS_I_OWN]: this.searchByItemsIOwn.bind(this),
             [ResourceWorkspaceFilterTypes.FAVORITE]: this.searchByFavorite.bind(this),
+            [ResourceWorkspaceFilterTypes.SHARED_WITH_ME]: this.seachBySharedWithMe.bind(this),
             [ResourceWorkspaceFilterTypes.ALL]: this.searchAll.bind(this),
             [ResourceWorkspaceFilterTypes.NONE]: () => {/* No search */}
         }
@@ -310,6 +311,13 @@ class ResourceWorkspaceContextProvider extends React.Component {
         await this.setState({filter, filteredResources});
     }
 
+    /**
+     * Filter the resources which are shared wit the current user
+     */
+    async seachBySharedWithMe(filter) {
+        const filteredResources = this.resources.filter(resource => !resource.personal);
+        await this.setState({filter, filteredResources});
+    }
 
     /**
      * Set the details focus on the given folder
@@ -389,6 +397,7 @@ export const ResourceWorkspaceFilterTypes = {
     TEXT: 'FILTER-BY-TEXT-SEARCH', // Resources matching some text words
     ITEMS_I_OWN: 'FILTER-BY-ITEMS-I-OWN', // Current user personal resources
     FAVORITE: 'FILTER-BY-FOVRITE', // Favorite resources filter
+    SHARED_WITH_ME: 'FILTER-BY-SHARED-WITH-ME', // Shared with current user resources
 }
 
 

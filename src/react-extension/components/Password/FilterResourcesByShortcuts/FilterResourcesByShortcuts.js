@@ -38,6 +38,7 @@ class FilterResourcesByShortcuts extends React.Component {
         this.handleAllItemsClick = this.handleAllItemsClick.bind(this);
         this.handleItemsIOwnClick = this.handleItemsIOwnClick.bind(this);
         this.handleFavoriteClick = this.handleFavoriteClick.bind(this);
+        this.handleSharedWithMeClick = this.handleSharedWithMeClick.bind(this);
     }
 
     /**
@@ -59,6 +60,13 @@ class FilterResourcesByShortcuts extends React.Component {
      */
     get isFavoriteSelected() {
         return this.props.resourceWorkspaceContext.filter.type === ResourceWorkspaceFilterTypes.FAVORITE;
+    }
+
+    /**
+     * Returns true if the Shared With Me shortcut is currently selected
+     */
+    get isSharedWithMeSelected() {
+        return this.props.resourceWorkspaceContext.filter.type === ResourceWorkspaceFilterTypes.SHARED_WITH_ME;
     }
 
     /**
@@ -88,12 +96,21 @@ class FilterResourcesByShortcuts extends React.Component {
     }
 
 
+    /**
+     * Whenever the shortcut "Shared with me" has been selected
+     */
+    handleSharedWithMeClick() {
+        const filter = {type: ResourceWorkspaceFilterTypes.SHARED_WITH_ME}
+        this.props.history.push({pathname: '/app/passwords', state: {filter}});
+    }
+
+
     render() {
         return (
             <div className="navigation first shortcuts">
                 <ul >
                     <li>
-                        <div className={"row " + (this.isAllItemsSelected ? "selected" : "") }>
+                        <div className={`row ${this.isAllItemsSelected ? "selected" : ""}`}>
                             <div className="main-cell-wrapper">
                                 <div className="main-cell">
                                     <a onClick={this.handleAllItemsClick}>
@@ -124,10 +141,12 @@ class FilterResourcesByShortcuts extends React.Component {
                         </div>
                     </li>
                     <li>
-                        <div className="row">
+                        <div className={`row ${this.isSharedWithMeSelected ? "selected" : ""}`}>
                             <div className="main-cell-wrapper">
                                 <div className="main-cell">
-                                    <a href="#"><span>Shared with me</span></a>
+                                    <a onClick={this.handleSharedWithMeClick}>
+                                        <span>Shared with me</span>
+                                    </a>
                                 </div>
                             </div>
                         </div>
