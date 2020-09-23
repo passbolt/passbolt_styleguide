@@ -94,6 +94,14 @@ export default class AddCommentPageObject {
     }
 
     /**
+     * Returns true if the Technical Error message is displayed
+     * @param message The technical error message
+     */
+    hasTechnicalError(message) {
+        return this.errorMessage.textContent === message;
+    }
+
+    /**
      * Returns true if the the component is in a disable state
      */
     isDisabled() {

@@ -463,7 +463,7 @@ describe("Add comments", () => {
     });
 
 
-    describe("Scenario: As LU I should see an error when the background page call fails on add without comments", () => {
+    describe("Scenario: As LU I should see an error when the background page call fails", () => {
 
 
         /**
@@ -471,58 +471,7 @@ describe("Add comments", () => {
          * And I have typed “Good men don’t need rules.”
          * When I submit the change
          * And the system raise an error
-         * Then I should see an error notification
-         * And the adding operation should be able to be continued
-         */
-
-        let saveReject;
-        const saveError = {message: "The comment has not been added"};
-        const saveErrorMockImpl = jest.fn(() => new Promise((resolve,reject) => saveReject = reject.bind(null,saveError)));
-        const requestsMockImpl = async (...parameters) => {
-            const requestName = parameters[0];
-            switch(requestName) {
-                case 'passbolt.comments.find-all-by-resource': return await noneCommentFoundRequestMockImpl(...parameters);
-                case 'passbolt.comments.create': return await saveErrorMockImpl(...parameters);
-                default: return jest.fn(() => Promise.resolve([]));
-            }
-        }
-
-        beforeEach( () => {
-            page = new PasswordSidebarCommentSectionPage(context, props);
-            mockContextRequest(requestsMockImpl).mockClear();
-        })
-
-
-        it('I should see an error notification and the adding operation should be able to be continued', async () => {
-            jest.spyOn(ActionFeedbackContext._currentValue, 'displayError').mockImplementation(() => {});
-
-            await page.title.click();
-            await page.addComment.write("I'm writing a valid comment");
-
-            const inProgressFn = () => {
-                saveReject();
-            }
-
-            await page.addComment.save(inProgressFn);
-
-            expect(context.port.request).toHaveBeenCalledTimes(2);
-            expect(page.addComment.exists()).toBeTruthy();
-            expect(ActionFeedbackContext._currentValue.displayError).toHaveBeenCalledWith(saveError.message)
-        })
-
-    })
-
-
-    describe("Scenario: As LU I should see an error when the background page call fails on add with several comment", () => {
-
-
-        /**
-         * Given I am adding a comment to a resource in the sidebar
-         * And I have typed “Good men don’t need rules.”
-         * When I submit the change
-         * And the system raise an error
-         * Then I should see an error notification
-         * And the adding operation should be stopped
+         * Then I should see an error message
          */
 
         let saveReject;
@@ -539,12 +488,11 @@ describe("Add comments", () => {
 
         beforeEach( () => {
             jest.resetModules();
-            page = new PasswordSidebarCommentSectionPage(context, Object.assign(props, {cancellable: true}));
+            page = new PasswordSidebarCommentSectionPage(context, Object.assign(props));
             mockContextRequest(requestsMockImpl).mockClear();
         })
 
-        it(' I should see an error notification and the adding operation should be stopped', async () => {
-            jest.spyOn(ActionFeedbackContext._currentValue, 'displayError').mockImplementation(() => {});
+        it(' I should see an error message', async () => {
 
             await page.title.click();
             await page.addIcon.click();
@@ -557,8 +505,7 @@ describe("Add comments", () => {
             await page.addComment.save(inProgressFn);
 
             expect(context.port.request).toHaveBeenCalledTimes(2);
-            expect(page.addComment.exists()).toBeFalsy();
-            expect(ActionFeedbackContext._currentValue.displayError).toHaveBeenCalledWith(saveError.message)
+            expect(page.addComment.hasTechnicalError(saveError.message)).toBeTruthy();
         })
 
 
