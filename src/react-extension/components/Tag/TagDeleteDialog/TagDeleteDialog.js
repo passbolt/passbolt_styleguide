@@ -18,6 +18,8 @@ import DialogWrapper from "../../../../react/components/Common/Dialog/DialogWrap
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import ErrorDialog from "../../Dialog/ErrorDialog/ErrorDialog";
 import {withDialog} from "../../../contexts/Common/DialogContext";
+import FormSubmitButton from "../../../../react/components/Common/Inputs/FormSubmitButton/FormSubmitButton";
+import FormCancelButton from "../../../../react/components/Common/Inputs/FormSubmitButton/FormCancelButton";
 
 /**
  * This component allows user to delete a tag of the resources
@@ -94,28 +96,34 @@ class TagDeleteDialog extends Component {
     this.props.dialogContext.open(ErrorDialog);
   }
 
+  /**
+   * Should input be disabled? True if state is processing
+   * @returns {boolean}
+   */
+  hasAllInputDisabled() {
+    return this.state.processing;
+  }
+
   render() {
 
     return (
-      <div>
-        <DialogWrapper
-          title="Delete tag?"
-          tooltip="Delete tag?"
-          onClose={this.handleCloseClick}
-          disabled={this.state.processing}
-          className="delete-tag-dialog">
-          <form onSubmit={this.handleFormSubmit} noValidate>
-            <div className="form-content">
-              <p>Are you sure you want to delete the tag <strong>{this.context.tagToDelete.slug}</strong>?</p>
-              <p>Warning: Once the tag is deleted, it’ll be removed permanently and will not be recoverable.</p>
-              <div className="submit-wrapper clearfix">
-                <input type="submit" className="button primary warning" role="button" value="Delete tag"/>
-                <a className="cancel" role="button" onClick={this.handleCloseClick}>Cancel</a>
+      <DialogWrapper
+        title="Delete tag?"
+        tooltip="Delete tag?"
+        onClose={this.handleCloseClick}
+        disabled={this.state.processing}
+        className="delete-tag-dialog">
+            <form onSubmit={this.handleFormSubmit} noValidate>
+              <div className="form-content">
+                <p>Are you sure you want to delete the tag <strong>{this.context.tagToDelete.slug}</strong>?</p>
+                <p>Warning: Once the tag is deleted, it’ll be removed permanently and will not be recoverable.</p>
               </div>
-            </div>
-          </form>
-        </DialogWrapper>
-      </div>
+              <div className="submit-wrapper clearfix">
+                <FormSubmitButton disabled={this.hasAllInputDisabled()} processing={this.state.processing} value="Delete"/>
+                <FormCancelButton disabled={this.hasAllInputDisabled()} onClick={this.handleCloseClick} />
+              </div>
+            </form>
+      </DialogWrapper>
     );
   }
 }
