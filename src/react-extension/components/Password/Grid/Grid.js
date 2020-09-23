@@ -69,6 +69,12 @@ class Grid extends React.Component {
     this.handleGoToUrlClick = this.handleGoToUrlClick.bind(this);
   }
 
+  /**
+   * Whenever the component has been updated
+   */
+  componentDidUpdate() {
+    this.handleInitialResourceScroll();
+  }
 
   /**
    * Create DOM nodes or React elements references in order to be able to access them programmatically.
@@ -120,6 +126,20 @@ class Grid extends React.Component {
      */
     ev.stopPropagation();
     this.selectResource(resource, SELECT_MULITPLE);
+  }
+
+  /**
+   * Handles the initial resource scroll ( with a specific manual resource url /password/view/:id )
+   */
+  handleInitialResourceScroll() {
+    const resourceToScroll = this.props.resourceWorkspaceContext.scrollTo.resource
+    if (resourceToScroll) {
+      this.scrollTo(resourceToScroll.id);
+      this.props.resourceWorkspaceContext.onResourceScrolled();
+
+      // Dynamic programming just to save continuous checking and voiding the handler
+      this.handleInitialResourceScroll = () => {}
+    }
   }
 
   /**
@@ -196,8 +216,12 @@ class Grid extends React.Component {
     return selectedResources;
   }
 
+  /**
+   * Returns true if the given resource is selected
+   * @param resource A resource
+   */
   isResourceSelected(resource) {
-    return this.props.selectedResources.some(selectedResource => resource.id === selectedResource.id);
+    return this.props.resourceWorkspaceContext.selectedResources.some(selectedResource => resource.id === selectedResource.id);
   }
 
   handleCopyUsernameClick(ev, resource) {
@@ -280,7 +304,12 @@ class Grid extends React.Component {
 
   scrollTo(resourceId) {
     const resourceIndex = this.resources.findIndex(resource => resource.id === resourceId);
-    this.listRef.current.scrollTo(resourceIndex);
+    const [visibleStartIndex, visibleEndIndex] = this.listRef.current.getVisibleRange();
+    const isInvisible = resourceIndex < visibleStartIndex || resourceIndex > visibleEndIndex;
+
+    if (isInvisible) {
+      this.listRef.current.scrollTo(resourceIndex);
+    }
   }
 
   renderTable(items, ref) {

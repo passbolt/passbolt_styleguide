@@ -484,7 +484,7 @@ export default [
     "personal": false
   },
   {
-    "id": "76d75fef-d7ed-5a0d-8df0-0a0ffb7c44c8",
+    "id": "77d75fef-d7ed-5a0d-8df0-0a0ffb7c44c8",
     "name": "Inside Private Passwor",
     "username": "vector",
     "uri": "https:\/\/private.org\/",

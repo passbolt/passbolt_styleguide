@@ -20,6 +20,7 @@ import PropTypes from "prop-types";
 import AppContext from "./AppContext";
 import {withRouter} from "react-router-dom";
 import moment from "moment";
+import {withActionFeedback} from "./ActionFeedbackContext";
 
 
 /**
@@ -30,6 +31,7 @@ export const ResourceWorkspaceContext = React.createContext({
         type: null, // Filter type
         payload: null // Filter payload
     },
+    selectedResources: [], // The current list of selected resources
     sorter: {
       propertyName: 'modified', // The name of the property to sort on
       asc: false // True if the sort must be descendant
@@ -39,7 +41,11 @@ export const ResourceWorkspaceContext = React.createContext({
         resource: null, // The resource to focus details on
         folder: null,// The folder to focus details on
     },
+    scrollTo: {
+        resource: null // The resource to scroll to
+    },
     onTextFilterChanged: () => {}, // Whenever the search text filter changed
+    onResourceScrolled: () => {}, // Whenever one scrolled to a resource
     onAllFilterRequired: () => {}, // Whenever the filter on all is required
     onFilterTagChanged: () => {}, // Whenever the filter by tag changed
     onSorterChanged: () => {} // Whenever the sorter changed
@@ -67,6 +73,7 @@ class ResourceWorkspaceContextProvider extends React.Component {
     get defaultState() {
         return {
             filter: { type: ResourceWorkspaceFilterTypes.NONE }, // The current resource search filter
+            selectedResources: [], // The current list of selected resources
             sorter: {
               propertyName: 'modified', // The name of the property to sort on
               asc: false // True if the sort must be descendant
@@ -76,7 +83,11 @@ class ResourceWorkspaceContextProvider extends React.Component {
                 resource: null, // The resource to focus details on
                 folder: null,// The folder to focus details on
             },
+            scrollTo: {
+                resource: null // The resource to scroll to
+            },
             onTextFilterChanged: this.handleTextFilterChange.bind(this), // Whenever the search text filter changed
+            onResourceScrolled: this.handleResourceScrolled.bind(this), // Whenever one scrolled to a resource
             onAllFilterRequired: this.handleAllFilterRequired.bind(this), // filter on all required
             onFilterTagChanged: this.handleFilterTagChanged.bind(this), // filter by tag
             onSorterChanged: this.handleSorterChange.bind(this) // Whenever the sorter changed
@@ -197,7 +208,15 @@ class ResourceWorkspaceContextProvider extends React.Component {
         if (hasNoneFilter) { // Case of password view by url bar inputting
             await this.search({type: ResourceWorkspaceFilterTypes.ALL});
         }
-        await this.detailResource(resource);
+
+        // If the resource does not exist, it should display an error
+        if (resource) {
+            await this.select(resource);
+            await this.scrollTo(resource);
+            await this.detailResource(resource);
+        } else {
+            this.handleUnknownResource();
+        }
     }
 
     /**
@@ -238,6 +257,20 @@ class ResourceWorkspaceContextProvider extends React.Component {
     }
 
     /**
+     * Handle an unknown resource ( passe by route parameter resource identifier )
+     */
+    handleUnknownResource() {
+        this.props.actionFeedbackContext.displayError("The resource does not exist");
+    }
+
+    /**
+     * Handle the scrolling of a resource
+     */
+    async handleResourceScrolled() {
+        await this.scrollNothing();
+    }
+
+    /**
      * Handle the change of sorter ( on property or direction )
      * @param propertyName The name of the property to sort on
      */
@@ -254,6 +287,9 @@ class ResourceWorkspaceContextProvider extends React.Component {
         this.context.port.request("passbolt.plugin.folders.update-local-storage");
         this.context.port.request("passbolt.plugin.resources.update-local-storage");
     }
+
+
+    /** RESOURCE SEARCH  **/
 
     /**
      * Search for the resources which matches the given filter and sort them
@@ -322,64 +358,77 @@ class ResourceWorkspaceContextProvider extends React.Component {
         await this.setState({filter, filteredResources});
     }
 
-    /**
-     * Search for current user personal resources
-     * @param filter The filter
-     */
-    async searchByItemsIOwn(filter) {
-        const filteredResources = this.resources.filter(resource => resource.permission.type === 15);
-        await this.setState({filter, filteredResources});
-    }
-    /**
-     * Filter the resources which are the current user favorites one
-     */
-    async searchByFavorite(filter) {
-        const filteredResources = this.resources.filter(resource => resource.favorite !== null);
-        await this.setState({filter, filteredResources});
-    }
+  /**
+   * Search for current user personal resources
+   * @param filter The filter
+   */
+  async searchByItemsIOwn(filter) {
+    const filteredResources = this.resources.filter(resource => resource.permission.type === 15);
+    await this.setState({filter, filteredResources});
+  }
+  /**
+   * Filter the resources which are the current user favorites one
+   */
+  async searchByFavorite(filter) {
+    const filteredResources = this.resources.filter(resource => resource.favorite !== null);
+    await this.setState({filter, filteredResources});
+  }
+
+  /**
+   * Filter the resources which are shared wit the current user
+   */
+  async seachBySharedWithMe(filter) {
+    const filteredResources = this.resources.filter(resource => resource.permission.type < 15);
+    await this.setState({filter, filteredResources});
+  }
+  /**
+   * Keep the most recently modified resources ( current state: just sort everything with the most recent modified resource )
+   * @param filter A recently modified filter
+   */
+  async searchByRecentlyModified(filter) {
+    const recentlyModifiedSorter = (resource1, resource2) => moment(resource2.modified).diff(moment(resource1.modified));
+    const filteredResources = this.resources.sort(recentlyModifiedSorter);
+    await this.setState({filter, filteredResources});
+  }
+
+
+  /** RESOURCE SELECTION */
 
     /**
-     * Filter the resources which are shared wit the current user
+     * Add the given resource as a selected resources
+     * @param resource The resource to select
      */
-    async seachBySharedWithMe(filter) {
-        const filteredResources = this.resources.filter(resource => resource.permission.type < 15);
-        await this.setState({filter, filteredResources});
-    }
-    /**
-     * Keep the most recently modified resources ( current state: just sort everything with the most recent modified resource )
-     * @param filter A recently modified filter
-     */
-    async searchByRecentlyModified(filter) {
-        const recentlyModifiedSorter = (resource1, resource2) => moment(resource2.modified).diff(moment(resource1.modified));
-        const filteredResources = this.resources.sort(recentlyModifiedSorter);
-        await this.setState({filter, filteredResources});
+    async select(resource) {
+        await this.setState({selectedResources: [...this.state.selectedResources, resource]});
     }
 
+  /**
+   * Update the resourcces sorter given a property name
+   * @param propertyName
+   */
+  async updateSorter(propertyName) {
+    const hasSortPropertyChanged = this.state.sorter.propertyName !== propertyName;
+    const asc = hasSortPropertyChanged  || !this.state.sorter.asc;
+    const sorter = {propertyName,asc};
+    await this.setState({sorter});
+  }
 
-    /**
-     *
-     * @param propertyName
-     */
-    async updateSorter(propertyName) {
-      const hasSortPropertyChanged = this.state.sorter.propertyName !== propertyName;
-      const asc = hasSortPropertyChanged  || !this.state.sorter.asc;
-      const sorter = {propertyName,asc};
-      await this.setState({sorter});
-    }
+  /**
+   * Sort the resources given the current sorter
+   */
+  async sort() {
+    const reverseSorter = sorter => (s1,s2) => -sorter(s1,s2);
+    const baseSorter =  sorter => this.state.sorter.asc ? sorter : reverseSorter(sorter);
+    const keySorter = (key, sorter) => baseSorter((s1,s2) => sorter(s1[key],s2[key]));
+    const dateSorter = (d1,d2) => moment(d1).diff(moment(d2));
+    const stringSorter = (s1,s2) => s1.localeCompare(s2);
+    const sorter = this.state.sorter.propertyName === 'modified' ? dateSorter : stringSorter;
+    const propertySorter = keySorter(this.state.sorter.propertyName, sorter);
+    await this.setState({filteredResources: this.state.filteredResources.sort(propertySorter)});
+  }
 
-    /**
-     * Sort the resources given the current sorter
-     */
-    async sort() {
-      const reverseSorter = sorter => (s1,s2) => -sorter(s1,s2);
-      const baseSorter =  sorter => this.state.sorter.asc ? sorter : reverseSorter(sorter);
-      const keySorter = (key, sorter) => baseSorter((s1,s2) => sorter(s1[key],s2[key]));
-      const dateSorter = (d1,d2) => moment(d1).diff(moment(d2));
-      const stringSorter = (s1,s2) => s1.localeCompare(s2);
-      const sorter = this.state.sorter.propertyName === 'modified' ? dateSorter : stringSorter;
-      const propertySorter = keySorter(this.state.sorter.propertyName, sorter);
-      await this.setState({filteredResources: this.state.filteredResources.sort(propertySorter)});
-    }
+    /** RESOURCE DETAILS  **/
+
 
     /**
      * Set the details focus on the given folder
@@ -404,6 +453,23 @@ class ResourceWorkspaceContextProvider extends React.Component {
         await this.setState({details: {folder:null, resource: null}});
     }
 
+    /** Resource scrolling **/
+
+    /**
+     * Set the resource to scroll to
+     * @param resource A resource
+     */
+    async scrollTo(resource) {
+        await this.setState({scrollTo: {resource}});
+    }
+
+    /**
+     * Unset the resource to scroll to
+     */
+    async scrollNothing() {
+        await this.setState({scrollTo: {}});
+    }
+
     /**
      * Render the component
      * @returns {JSX}
@@ -422,10 +488,11 @@ ResourceWorkspaceContextProvider.contextType = AppContext;
 ResourceWorkspaceContextProvider.propTypes = {
     children: PropTypes.any,
     location: PropTypes.object,
-    match: PropTypes.object
+    match: PropTypes.object,
+    actionFeedbackContext: PropTypes.object
 };
 
-export default withRouter(ResourceWorkspaceContextProvider);
+export default withActionFeedback(withRouter(ResourceWorkspaceContextProvider));
 
 
 /**
