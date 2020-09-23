@@ -515,7 +515,7 @@ FoldersTree.propTypes = {
   history: PropTypes.object,
   onFolderContextualMenu: PropTypes.func,
   resourceWorkspaceContext: PropTypes.object,
-  dialogContext: PropTypes.func
+  dialogContext: PropTypes.any
 };
 
 
