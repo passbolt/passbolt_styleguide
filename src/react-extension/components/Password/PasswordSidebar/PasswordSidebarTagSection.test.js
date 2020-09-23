@@ -18,6 +18,7 @@ import PasswordSidebarTagSection from "./PasswordSidebarTagSection";
 import AppContext from "../../../contexts/AppContext";
 import MockPort from "../../../test/mock/MockPort";
 import {ActionFeedbackContext} from "../../../contexts/ActionFeedbackContext";
+import PassboltApiFetchError from "../../../../react/lib/Common/Error/PassboltApiFetchError";
 import {ResourceWorkspaceContext} from "../../../contexts/ResourceWorkspaceContext";
 
 
@@ -1178,7 +1179,48 @@ describe("PasswordSidebarTag", () => {
     expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalledWith("The tags have been updated successfully");
   });
 
-  it("Select a tag in my resources’ tags", () => {
+  it("As LU I should see an error message in the tag section when the API call fails", async() => {
+    const context = getAppContext();
+    const props = {resourceWorkspaceContext: {details: {resource: getDummyResourceEmptyTag()}}};
+    const {container} = renderPasswordSidebarTagSection(context, props);
+
+    // Click to expand tags
+    const leftClick = {button: 0};
+    const sidebar = container.querySelector(".sidebar-section");
+    fireEvent.click(sidebar, leftClick);
+
+    // Edit icon exists
+    const editIcon = container.querySelector(".edit_tags_button");
+    expect(editIcon).not.toBeNull();
+    fireEvent.click(editIcon, leftClick);
+
+    // Editor input tag exists
+    const editorTagInput = container.querySelector(".tag-editor-input");
+    const tagValue = "tardis";
+    expect(editorTagInput).not.toBeNull();
+    fireEvent.change(editorTagInput, {target: {textContent: tagValue}});
+
+    // Mock the request function to make it return an error.
+    jest.spyOn(context.port, 'request').mockImplementationOnce(() => {
+      throw new PassboltApiFetchError("Jest simulate API error.");
+    });
+
+    // submit button input tag exists
+    const submitButton = container.querySelector(".tag-editor-submit");
+    expect(submitButton).not.toBeNull();
+    expect(submitButton.textContent).toBe("save");
+    fireEvent.click(submitButton, leftClick);
+
+    // API calls are made on submit, wait they are resolved.
+    await waitFor(() => {
+    });
+
+    // Throw general error message
+    const generalErrorMessage = container.querySelector(".message.error");
+    expect(generalErrorMessage.textContent).toBe("Jest simulate API error.");
+  });
+
+  it("As Lu I should be able to filter the resource by selecting a tag in the resource tags list of the resource sidebar", () => {
     const props = {resourceWorkspaceContext: {details: {resource: getDummyResource()}}};
     const {container} = renderPasswordSidebarTagSection(null, props);
 
