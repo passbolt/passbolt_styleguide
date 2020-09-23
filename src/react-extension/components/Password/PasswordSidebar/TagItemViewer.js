@@ -13,6 +13,7 @@
  */
 import React from "react";
 import PropTypes from "prop-types";
+import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 
 class TagItemViewer extends React.Component {
 
@@ -22,6 +23,23 @@ class TagItemViewer extends React.Component {
    */
   constructor(props) {
     super(props);
+    this.bindCallbacks();
+  }
+
+  /**
+   * Bind callbacks methods
+   */
+  bindCallbacks() {
+    this.handleOnClickTag = this.handleOnClickTag.bind(this);
+  }
+
+  /**
+   * Handle on click event
+   * @param tag
+   */
+  handleOnClickTag(tag) {
+    // filter by the resources by tag
+    this.props.resourceWorkspaceContext.onFilterTagChanged(tag);
   }
 
   isLoading() {
@@ -56,7 +74,7 @@ class TagItemViewer extends React.Component {
         {!isLoading && this.props.tags.length > 0 &&
         <ul className="tags tags-list">
           {this.getTags().map(tag =>
-            <li key={tag.id}className="tag-list-item">
+            <li key={tag.id} className="tag-list-item" onClick={() => this.handleOnClickTag(tag)}>
               <a className="tag ellipsis">{tag.slug}</a>
             </li>)
           }
@@ -69,7 +87,8 @@ class TagItemViewer extends React.Component {
 
 TagItemViewer.propTypes = {
   tags: PropTypes.array,
-  toggleInputTagEditor: PropTypes.func
+  toggleInputTagEditor: PropTypes.func,
+  resourceWorkspaceContext: PropTypes.any
 };
 
-export default TagItemViewer;
+export default withResourceWorkspace(TagItemViewer);
