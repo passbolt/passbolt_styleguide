@@ -18,6 +18,9 @@ import AppContext from "../../../contexts/AppContext";
 import MockPort from "../../../test/mock/MockPort";
 import TagDeleteDialog from "./TagDeleteDialog";
 import {ActionFeedbackContext} from "../../../contexts/ActionFeedbackContext";
+import PassboltApiFetchError from "../../../../react/lib/Common/Error/PassboltApiFetchError";
+import ManageDialogs from "../../Dialog/ManageDialogs";
+import DialogContextProvider from "../../../contexts/DialogContext";
 
 beforeEach(() => {
   jest.resetModules();
@@ -27,7 +30,8 @@ const getAppContext = function (appContext) {
   const port = new MockPort();
   const defaultAppContext = {
     port,
-    setContext: () => {},
+    setContext: () => {
+    },
     tagToDelete: {
       id: "8e3874ae-4b40-590b-968a-418f704b9d9a",
       slug: "tardis",
@@ -48,7 +52,10 @@ const renderTagDeleteDialog = function (appContext, props) {
 
   return render(
     <AppContext.Provider value={appContext}>
-      <TagDeleteDialog debug tag={props.tag} onClose={props.onClose}/>
+      <DialogContextProvider>
+        <ManageDialogs/>
+        <TagDeleteDialog debug tag={props.tag} onClose={props.onClose}/>
+      </DialogContextProvider>
     </AppContext.Provider>
   );
 };
@@ -67,7 +74,7 @@ describe("TagEditDialog", () => {
     // Close button exists
     const closeButton = container.querySelector(".dialog-close");
     expect(closeButton).not.toBeNull();
-    
+
     // Save button exists
     const saveButton = container.querySelector(".submit-wrapper [type=\"submit\"]");
     expect(saveButton).not.toBeNull();
@@ -99,14 +106,15 @@ describe("TagEditDialog", () => {
     expect(props.onClose).toBeCalled();
   });
 
-  it("requests the addon to delete a tag when clicking on the submit button.", async() => {
+  it("requests the addon to delete a tag when clicking on the submit button.", async () => {
     const context = getAppContext();
     const props = getDummyTag();
     const {container} = renderTagDeleteDialog(context, props);
 
     // Mock the request function to make it the expected result
     jest.spyOn(context.port, 'request').mockImplementationOnce(jest.fn());
-    jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementation(() => {});
+    jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementation(() => {
+    });
 
     // Submit and assert
     const submitButton = container.querySelector("input[type=\"submit\"]");
@@ -119,5 +127,29 @@ describe("TagEditDialog", () => {
       expect(props.onClose).toBeCalled();
       expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalled();
     });
+  });
+
+  it("displays an error when the API call fail.", async () => {
+    const context = getAppContext();
+    const props = getDummyTag();
+    const {container} = renderTagDeleteDialog(context, props);
+
+    // Mock the request function to make it return an error.
+    jest.spyOn(context.port, 'request').mockImplementationOnce(() => {
+      throw new PassboltApiFetchError("Jest simulate API error.");
+    });
+
+    // Submit and assert
+    const submitButton = container.querySelector("input[type=\"submit\"]");
+    fireEvent.click(submitButton, {button: 0});
+
+    await waitFor(() => {
+    });
+
+    // Throw general error message
+    const generalErrorDialog = container.querySelector(".error-dialog");
+    expect(generalErrorDialog).not.toBeNull();
+    const generalErrorMessage = container.querySelector(".error-dialog .dialog .dialog-content .form-content");
+    expect(generalErrorMessage).not.toBeNull();
   });
 });
