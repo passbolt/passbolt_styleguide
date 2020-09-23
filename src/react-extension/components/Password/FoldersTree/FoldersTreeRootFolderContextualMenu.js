@@ -75,18 +75,6 @@ class FoldersTreeRootFolderContextualMenu extends React.Component {
   }
 
   /**
-   * Get the contextual menu style.
-   */
-  getStyle() {
-    return {
-      display: "block",
-      position: "absolute",
-      top: this.props.top,
-      left: this.props.left
-    };
-  }
-
-  /**
    * Render the component.
    * @returns {JSX}
    */
