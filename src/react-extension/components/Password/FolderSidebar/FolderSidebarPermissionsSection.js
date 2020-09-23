@@ -17,6 +17,9 @@ import UserAvatar from "../../Common/Avatar/UserAvatar";
 import GroupAvatar from "../../Common/Avatar/GroupAvatar";
 import Icon from "../../Common/Icons/Icon";
 import AppContext from "../../../contexts/AppContext";
+import {withDialog} from "../../../contexts/DialogContext";
+import ShareDialog from "../../Share/ShareDialog";
+import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 
 class FolderSidebarPermissionsSection extends React.Component {
   /**
@@ -37,6 +40,26 @@ class FolderSidebarPermissionsSection extends React.Component {
   }
 
   /**
+   * Whenever the component has updated in terms of props
+   * @param prevProps
+   */
+  async componentDidUpdate(prevProps) {
+    await this.handleFolderChange(prevProps.resourceWorkspaceContext.details.folder);
+  }
+
+
+  /**
+   * Check if the folder has changed and fetch
+   * @param previousFolder
+   */
+  handleFolderChange(previousFolder) {
+    const hasFolderChanged = this.folder.id !== previousFolder.id;
+    if(hasFolderChanged && this.props.open) {
+      this.props.onOpen();
+    }
+  }
+
+  /**
    * handle when the users click on the section header.
    * Open/Close it.
    */
@@ -52,7 +75,15 @@ class FolderSidebarPermissionsSection extends React.Component {
    * Handle when the user edits the folder permissions.
    */
   handlePermissionsEditClickEvent() {
-    this.props.onEditPermissions(this.props.folder);
+    this.context.setContext({shareDialogProps: {folderIds: [this.folder.id]}});
+    this.props.dialogContext.open(ShareDialog);
+  }
+
+  /**
+   * Returns the current detailed resource
+   */
+  get folder() {
+    return this.props.resourceWorkspaceContext.details.folder;
   }
 
   /**
@@ -93,8 +124,12 @@ class FolderSidebarPermissionsSection extends React.Component {
       permissions.sort((permission1, permission2) => {
         const permission1Name = permission1.user ? `${permission1.user.profile.first_name} ${permission1.user.profile.last_name}`.toLowerCase() : permission1.group.name.toLowerCase();
         const permission2Name = permission2.user ? `${permission2.user.profile.first_name} ${permission2.user.profile.last_name}`.toLowerCase() : permission2.group.name.toLowerCase();
-        if (permission1Name < permission2Name) { return -1; }
-        if (permission1Name > permission2Name) { return 1; }
+        if (permission1Name < permission2Name) {
+          return -1;
+        }
+        if (permission1Name > permission2Name) {
+          return 1;
+        }
         return 0;
       });
     }
@@ -103,11 +138,19 @@ class FolderSidebarPermissionsSection extends React.Component {
   }
 
   /**
+   * Check if the user can share the folder.
+   * @returns {boolean}
+   */
+  canShare() {
+    return this.folder && this.folder.permission.type === 15;
+  }
+
+  /**
    * Render the component
    * @returns {JSX}
    */
   render() {
-    const canShare = this.props.folder.permission.type === 15;
+    const canShare = this.canShare();
     const permissions = this.getPermissions();
 
     return (
@@ -138,10 +181,10 @@ class FolderSidebarPermissionsSection extends React.Component {
                     </div>
                   </div>
                   {permission.user &&
-                    <UserAvatar user={permission.user} baseUrl={this.context.userSettings.getTrustedDomain()}/>
+                  <UserAvatar user={permission.user} baseUrl={this.context.userSettings.getTrustedDomain()}/>
                   }
                   {permission.group &&
-                    <GroupAvatar group={permission.group} baseUrl={this.context.userSettings.getTrustedDomain()}/>
+                  <GroupAvatar group={permission.group} baseUrl={this.context.userSettings.getTrustedDomain()}/>
                   }
                 </li>
               ))}
@@ -156,13 +199,13 @@ class FolderSidebarPermissionsSection extends React.Component {
 FolderSidebarPermissionsSection.contextType = AppContext;
 
 FolderSidebarPermissionsSection.propTypes = {
-  folder: PropTypes.object,
-  onEditPermissions: PropTypes.func,
   onClose: PropTypes.func,
   onOpen: PropTypes.func,
   open: PropTypes.bool,
   permissions: PropTypes.array,
   users: PropTypes.array,
+  resourceWorkspaceContext: PropTypes.object,
+  dialogContext: PropTypes.any
 };
 
-export default FolderSidebarPermissionsSection;
+export default withDialog(withResourceWorkspace(FolderSidebarPermissionsSection));

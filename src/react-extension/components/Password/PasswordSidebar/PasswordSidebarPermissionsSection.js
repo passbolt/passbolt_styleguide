@@ -18,6 +18,8 @@ import Icon from "../../Common/Icons/Icon";
 import AppContext from "../../../contexts/AppContext";
 import PropTypes from "prop-types";
 import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
+import {withDialog} from "../../../contexts/DialogContext";
+import ShareDialog from "../../Share/ShareDialog";
 
 const PERMISSIONS_LABEL = {
   1: 'can read',
@@ -58,8 +60,12 @@ class PasswordSidebarPermissionsSection extends React.Component {
     this.handleTitleClickEvent = this.handleTitleClickEvent.bind(this);
   }
 
-  componentDidMount() {
-    this.fetch();
+  /**
+   * Whenever the component has updated in terms of props
+   * @param prevProps
+   */
+  async componentDidUpdate(prevProps) {
+    await this.handleResourceChange(prevProps.resourceWorkspaceContext.details.resource);
   }
 
   /**
@@ -67,6 +73,17 @@ class PasswordSidebarPermissionsSection extends React.Component {
    */
   get resource() {
     return this.props.resourceWorkspaceContext.details.resource;
+  }
+
+  /**
+   * Check if the resource has changed and fetch
+   * @param previousResource
+   */
+  handleResourceChange(previousResource) {
+    const hasResourceChanged = this.resource.id !== previousResource.id;
+    if(hasResourceChanged && this.state.open) {
+      this.fetch();
+    }
   }
 
   /**
@@ -112,6 +129,9 @@ class PasswordSidebarPermissionsSection extends React.Component {
    */
   handleTitleClickEvent() {
     const open = !this.state.open;
+    if(open) {
+      this.fetch();
+    }
     this.setState({open});
   }
 
@@ -119,7 +139,8 @@ class PasswordSidebarPermissionsSection extends React.Component {
    * Handle when the user edits the permissions.
    */
   handlePermissionsEditClickEvent() {
-    //this.props.onEditPermissions(this.props.folder);
+    this.context.setContext({shareDialogProps: {resourceIds: [this.resource.id]}});
+    this.props.dialogContext.open(ShareDialog);
   }
 
   /**
@@ -144,6 +165,14 @@ class PasswordSidebarPermissionsSection extends React.Component {
   }
 
   /**
+   * Check if the user can share the folder.
+   * @returns {boolean}
+   */
+  canShare() {
+    return this.resource.permission && this.resource.permission.type === 15;
+  }
+
+  /**
    * Render the component
    * @returns {JSX}
    */
@@ -155,10 +184,12 @@ class PasswordSidebarPermissionsSection extends React.Component {
           <h4><a onClick={this.handleTitleClickEvent} role="button">Shared with</a></h4>
         </div>
         <div className="accordion-content">
+          {this.canShare() &&
           <a onClick={this.handlePermissionsEditClickEvent} className="section-action">
             <Icon name="edit"/>
             <span className="visuallyhidden">modify</span>
           </a>
+          }
           {this.isLoading() &&
           <div className="processing-wrapper">
             <span className="processing-text">Retrieving permissions</span>
@@ -195,7 +226,8 @@ class PasswordSidebarPermissionsSection extends React.Component {
 PasswordSidebarPermissionsSection.contextType = AppContext;
 
 PasswordSidebarPermissionsSection.propTypes = {
-  resourceWorkspaceContext: PropTypes.object
+  resourceWorkspaceContext: PropTypes.object,
+  dialogContext: PropTypes.any
 };
 
-export default withResourceWorkspace(PasswordSidebarPermissionsSection);
+export default withDialog(withResourceWorkspace(PasswordSidebarPermissionsSection));
