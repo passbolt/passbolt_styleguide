@@ -17,6 +17,7 @@
 /* tooltip */
 /* loading animation */
 /* svg fill */
+/* favorite icon fill */
 /* ==========================================================================
  * Reset is a mix of :
  *
@@ -3274,6 +3275,12 @@ a.disabled .svg-icon svg {
 }
 a.disabled:hover .svg-icon svg {
   fill: #888;
+}
+a.fav .svg-icon svg {
+  fill: #D40101;
+}
+a.unfav .svg-icon svg {
+  fill: #DDD;
 }
 /*
 	Generic buttons

@@ -17,6 +17,7 @@
 /* tooltip */
 /* loading animation */
 /* svg fill */
+/* favorite icon fill */
 /* ==========================================================================
  * Reset is a mix of :
  *
@@ -3274,6 +3275,12 @@ a.disabled .svg-icon svg {
 }
 a.disabled:hover .svg-icon svg {
   fill: #888;
+}
+a.fav .svg-icon svg {
+  fill: #D40101;
+}
+a.unfav .svg-icon svg {
+  fill: #DDD;
 }
 /*
 	Generic buttons
@@ -6997,8 +7004,7 @@ input[type="search"]::-webkit-search-cancel-button {
 .tableview-header table {
   width: 100%;
 }
-.tableview-header table th.sortable .svg-icon svg {
-  position: absolute;
+.tableview-header table th.m-cell.sortable .svg-icon svg {
   margin-left: 0.55em;
   margin-top: -0.87em;
 }

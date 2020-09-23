@@ -35,6 +35,8 @@ import mockRequestTagsGet from "./request/mockRequestTagsGet";
 import mockRequestUpdateTags from "./request/mockRequestTagsUpdate";
 import mockRequestDeleteTags from "./request/mockRequestDeleteTags";
 import mockRequestResourcesFindPermissions from "./request/mockRequestResourcesFindPermissions";
+import mockRequestResourceAddFavorite from "./request/mockRequestResourceAddFavorite";
+import mockRequestResourceDeleteFavorite from "./request/mockRequestResourceDeleteFavorite";
 
 export default (storage) => {
   const mockPort = new MockPort(storage);
@@ -60,6 +62,8 @@ export default (storage) => {
   mockPort.addRequestListener("passbolt.tags.update", mockRequestUpdateTags);
   mockPort.addRequestListener("passbolt.tags.delete", mockRequestDeleteTags);
   mockPort.addRequestListener("passbolt.resources.find-permissions", mockRequestResourcesFindPermissions);
+  mockPort.addRequestListener("passbolt.favorite.add", mockRequestResourceAddFavorite);
+  mockPort.addRequestListener("passbolt.favorite.delete", mockRequestResourceDeleteFavorite);
 
   return mockPort;
 };
