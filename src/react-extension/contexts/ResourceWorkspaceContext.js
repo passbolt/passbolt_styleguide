@@ -288,11 +288,15 @@ class ResourceWorkspaceContextProvider extends React.Component {
         const text = filter.payload;
         const words =  ( text && text.split(/\s+/) ) || [''];
 
-        // Test match of some escaped test words against the name / usernmae / uri / description resource properties
+        // Test match of some escaped test words against the name / usernmae / uri / description /tags resource properties
         const escapeWord = word =>  word.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
         const wordToRegex = word =>  new RegExp(escapeWord(word), 'i');
         const matchSomeWords = value => words.some( word => wordToRegex(word).test(value));
-        const matchText = resource => ['name', 'username', 'uri', 'description'].some( key => matchSomeWords(resource[key]));
+
+        const matchSomeTagProperty = resource => resource.tags.some( tag => matchSomeWords(tag.slug));
+        const matchSomeTextualProperty = resource => ['name', 'username', 'uri', 'description'].some( key => matchSomeWords(resource[key]))
+        const matchText = resource => matchSomeTextualProperty(resource) || matchSomeTagProperty(resource);
+
         const filteredResources = this.resources.filter(matchText);
         await this.setState({filter, filteredResources});
     }
