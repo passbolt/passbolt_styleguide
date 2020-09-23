@@ -24,6 +24,7 @@ import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext"
 import SidebarTagFilterSection from "../../Tag/SidebarTagFilterSection/SidebarTagFilterSection";
 import PropTypes from "prop-types";
 import PasswordSearchBar from "../PasswordSearchBar/PasswordSearchBar";
+import FilterResourcesByShortcuts from "../FilterResourcesByShortcuts/FilterResourcesByShortcuts";
 
 class Workspace extends Component {
   /**
@@ -203,6 +204,7 @@ class Workspace extends Component {
               <div className="tab-content selected">
                 <div className="reports-workspace">
                   <div className="panel left">
+                    <FilterResourcesByShortcuts/>
                     <FoldersTree/>
                     <SidebarTagFilterSection tags={this.getTagsFromResources()}/>
                   </div>
