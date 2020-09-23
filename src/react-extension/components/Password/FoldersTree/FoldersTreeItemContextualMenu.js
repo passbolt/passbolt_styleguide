@@ -108,18 +108,6 @@ class FoldersTreeItemContextualMenu extends React.Component {
   }
 
   /**
-   * Get the contextual menu style.
-   */
-  getStyle() {
-    return {
-      display: "block",
-      position: "fixed",
-      top: this.props.top,
-      left: this.props.left
-    };
-  }
-
-  /**
    * Check if the user can update the folder.
    * @returns {boolean}
    */

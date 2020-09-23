@@ -446,7 +446,6 @@ class FoldersTree extends React.Component {
     }
 
     return (
-      <div>
         <div className="folders navigation first accordion">
           {this.renderDragFeedback()}
           <div className="accordion-header">
@@ -467,12 +466,12 @@ class FoldersTree extends React.Component {
                       </Fragment>
                       }
                       <span
-                        ref={this.titleElementRef}
-                        onDragOver={this.handleDragOverTitle}
-                        onDragLeave={this.handleDragLeaveTitle}
-                        onDrop={this.handleDropTitle}
-                        onClick={this.handleClickOnTitle}
-                        onContextMenu={this.handleTitleContextualMenuEvent}
+                          ref={this.titleElementRef}
+                          onDragOver={this.handleDragOverTitle}
+                          onDragLeave={this.handleDragLeaveTitle}
+                          onDrop={this.handleDropTitle}
+                          onClick={this.handleClickOnTitle}
+                          onContextMenu={this.handleTitleContextualMenuEvent}
                       >Folders</span>
                     </span>
                     </h3>
@@ -483,27 +482,28 @@ class FoldersTree extends React.Component {
                 </div>
               </div>
             </div>
+            {!isLoading && isOpen &&
+            <ul ref={this.listElement} className="folders-tree">
+              {rootFolders.map(folder => <FoldersTreeItem
+                  key={`folders-list-${folder.id}`}
+                  draggedItems={this.state.draggedItems}
+                  folder={folder}
+                  folders={this.context.folders}
+                  isDragging={isDragging}
+                  onClose={this.handleFolderCloseEvent}
+                  onContextualMenu={this.handleFolderItemContextualMenuEvent}
+                  onDragEnd={this.handleFolderDragEndEvent}
+                  onDragStart={this.handleFolderDragStartEvent}
+                  onDrop={this.handleFolderDropEvent}
+                  onOpen={this.handleFolderOpenEvent}
+                  openFolders={this.state.openFolders}
+                  onSelect={this.handleFolderSelectEvent}
+                  selectedFolder={this.selectedFolder}/>)}
+            </ul>
+            }
           </div>
-          {!isLoading && isOpen &&
-          <ul ref={this.listElement} className="folders-tree">
-            {rootFolders.map(folder => <FoldersTreeItem
-              key={`folders-list-${folder.id}`}
-              draggedItems={this.state.draggedItems}
-              folder={folder}
-              folders={this.context.folders}
-              isDragging={isDragging}
-              onClose={this.handleFolderCloseEvent}
-              onDragEnd={this.handleFolderDragEndEvent}
-              onDragStart={this.handleFolderDragStartEvent}
-              onDrop={this.handleFolderDropEvent}
-              onOpen={this.handleFolderOpenEvent}
-              openFolders={this.state.openFolders}
-              onSelect={this.handleFolderSelectEvent}
-              selectedFolder={this.selectedFolder}/>)}
-          </ul>
-          }
         </div>
-      </div>
+
     );
   }
 }
@@ -512,10 +512,10 @@ FoldersTree.contextType = AppContext;
 
 FoldersTree.propTypes = {
   contextualMenuContext: PropTypes.any, // The contextual menu context
-  resourceWorkspaceContext: PropTypes.object,
   history: PropTypes.object,
-  selectedFolder: PropTypes.object,
-  dialogContext: PropTypes.object
+  onFolderContextualMenu: PropTypes.func,
+  resourceWorkspaceContext: PropTypes.object,
+  dialogContext: PropTypes.any
 };
 
 

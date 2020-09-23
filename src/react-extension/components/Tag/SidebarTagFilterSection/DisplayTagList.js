@@ -14,6 +14,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import DisplayTagListContextualMenu from "./DisplayTagListContextualMenu";
+import {ResourceWorkspaceFilterTypes, withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 import {withContextualMenu} from "../../../contexts/Common/ContextualMenuContext";
 
 class DisplayTagList extends React.Component {
@@ -34,9 +35,10 @@ class DisplayTagList extends React.Component {
   getDefaultState() {
     return {
       open: true,
-      selectedTag: null, //  tag selected
+      selectedTag: null, //  tag selected for the contextual menu
     };
   }
+
 
   /**
    * Bind callbacks methods
@@ -60,7 +62,7 @@ class DisplayTagList extends React.Component {
       return;
     }
 
-    this.showContextualMenu(event.pageY, event.pageX);
+    this.showContextualMenu(event.pageY, event.pageX, selectedTag);
   }
 
   /**
@@ -81,6 +83,10 @@ class DisplayTagList extends React.Component {
   showContextualMenu(top, left, selectedTag) {
     const contextualMenuProps = {left, selectedTag, top};
     this.props.contextualMenuContext.show(DisplayTagListContextualMenu, contextualMenuProps);
+  }
+
+  handleOnClickTag(tag) {
+    this.props.resourceWorkspaceContext.onFilterTagChanged(tag);
   }
 
   // Zero conditional statements
@@ -115,6 +121,17 @@ class DisplayTagList extends React.Component {
   }
 
   /**
+   * Check if the tag associated to this component is selected.
+   * @returns {boolean}
+   * @param tagId
+   * @returns {boolean}
+   */
+  isSelected(tagId) {
+    const filter = this.props.resourceWorkspaceContext.filter;
+    return filter.type === ResourceWorkspaceFilterTypes.TAG && filter.payload.tag.id === tagId;
+  }
+
+  /**
    * Render the component
    * @returns {JSX}
    */
@@ -133,9 +150,9 @@ class DisplayTagList extends React.Component {
         <ul className="tree ready">
           {this.filteredTags.map(tag =>
             <li className="open node root tag-item" key={tag.id}>
-              <div className="row">
-                <div className="main-cell-wrapper"
-                  onContextMenu={(event) => this.handleContextualMenuEvent(event, tag)}>
+              <div className={`row ${this.isSelected(tag.id) ? "selected" : ""}`}>
+                <div className="main-cell-wrapper" onClick={() => this.handleOnClickTag(tag)}
+                     onContextMenu={(event) => this.handleContextualMenuEvent(event, tag)}>
                   <div className="main-cell">
                     <a title={tag.slug}><span className="ellipsis">{tag.slug}</span></a>
                   </div>
@@ -143,7 +160,7 @@ class DisplayTagList extends React.Component {
                 {!tag.is_shared &&
                 <div className="right-cell more-ctrl">
                   <a className="more"
-                    onClick={(event) => this.handleMoreClickEvent(event, tag)}><span>more</span></a>
+                     onClick={(event) => this.handleMoreClickEvent(event, tag)}><span>more</span></a>
                 </div>
                 }
               </div>
@@ -161,9 +178,10 @@ DisplayTagList.propTypes = {
   contextualMenuContext: PropTypes.any, // The contextual menu context
   tags: PropTypes.array,
   filterType: PropTypes.string,
+  resourceWorkspaceContext: PropTypes.object
 };
 
-export default withContextualMenu(DisplayTagList);
+export default withResourceWorkspace(withContextualMenu(DisplayTagList));
 
 export const filterByTagsOptions = {
   all: "all",

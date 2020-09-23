@@ -13,7 +13,6 @@
  */
 import React, {Component} from "react";
 import {withRouter} from "react-router-dom";
-import SearchBar from "../../Common/Navigation/Search/SearchBar";
 import UserBadgeMenu from "../../Common/Navigation/Header/UserBadgeMenu";
 import Breadcrumbs from "../../Common/Navigation/Breadcrumbs/Breadcrumbs";
 import FoldersTree from "../FoldersTree/FoldersTree";
@@ -61,6 +60,7 @@ class Workspace extends Component {
       selectedFolders: [],
       users: null,
 
+      filterByFolder: false,
     };
   }
 
@@ -212,10 +212,8 @@ class Workspace extends Component {
               <div className="tab-content selected">
                 <div className="reports-workspace">
                   <div className="panel left">
-                    <FoldersTree
-                      onFolderContextualMenu={this.handleFoldersTreeFolderContextualMenu}
-                      onRootFolderContextualMenu={this.handleFoldersTreeRootFolderContextualMenu}/>
-                    <SidebarTagFilterSection ection tags={this.getTagsFromResources()}/>
+                    <FoldersTree/>
+                    <SidebarTagFilterSection tags={this.getTagsFromResources()}/>
                   </div>
                   <div className="panel middle">
                     <Breadcrumbs/>
