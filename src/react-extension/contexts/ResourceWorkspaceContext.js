@@ -194,7 +194,7 @@ class ResourceWorkspaceContextProvider extends React.Component {
      * E.g. /password
      */
     async handleAllResourceRouteChange() {
-        const filter = (this.props.location.state && this.props.location.state.filter) || ResourceWorkspaceFilterTypes.ALL
+        const filter = (this.props.location.state && this.props.location.state.filter) || {type: ResourceWorkspaceFilterTypes.ALL}
         await this.search(filter);
         await this.detailNothing();
     }
@@ -245,6 +245,7 @@ class ResourceWorkspaceContextProvider extends React.Component {
             [ResourceWorkspaceFilterTypes.TAG]: this.searchByTag.bind(this),
             [ResourceWorkspaceFilterTypes.TEXT]: this.searchByText.bind(this),
             [ResourceWorkspaceFilterTypes.ITEMS_I_OWN]: this.searchByItemsIOwn.bind(this),
+            [ResourceWorkspaceFilterTypes.FAVORITE]: this.searchByFavorite.bind(this),
             [ResourceWorkspaceFilterTypes.ALL]: this.searchAll.bind(this),
             [ResourceWorkspaceFilterTypes.NONE]: () => {/* No search */}
         }
@@ -301,6 +302,14 @@ class ResourceWorkspaceContextProvider extends React.Component {
         const filteredResources = this.resources.filter(resource => resource.personal);
         await this.setState({filter, filteredResources});
     }
+    /**
+     * Filter the resources which are the current user favorites one
+     */
+    async searchByFavorite(filter) {
+        const filteredResources = this.resources.filter(resource => resource.favorite !== null);
+        await this.setState({filter, filteredResources});
+    }
+
 
     /**
      * Set the details focus on the given folder
@@ -379,6 +388,7 @@ export const ResourceWorkspaceFilterTypes = {
     TAG: 'FILTER-BY-TAG', // Resources for a given tag
     TEXT: 'FILTER-BY-TEXT-SEARCH', // Resources matching some text words
     ITEMS_I_OWN: 'FILTER-BY-ITEMS-I-OWN', // Current user personal resources
+    FAVORITE: 'FILTER-BY-FOVRITE', // Favorite resources filter
 }
 
 

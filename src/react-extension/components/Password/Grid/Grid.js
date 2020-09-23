@@ -502,7 +502,8 @@ class Grid extends React.Component {
             <p>Try another search or use the left panel to navigate into your passwords.</p>
           </div>
           }
-          {isEmpty && !isSearching && filterType == "favorite" &&
+          {isEmpty && !isSearching &&
+          filterType == ResourceWorkspaceFilterTypes.FAVORITE &&
           <div className="empty-content">
             <h2>None of your passwords are yet marked as favorite.</h2>
             <p>Add stars to passwords your want to easily find later.</p>
