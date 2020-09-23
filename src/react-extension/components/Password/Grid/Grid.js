@@ -287,7 +287,7 @@ class Grid extends React.Component {
     const needles = needle.split(/\s+/);
     // Prepare the regexes for each word contained in the search.
     const regexes = needles.map(needle => new RegExp(this.escapeRegExp(needle), 'i'));
-    
+
     return resources.filter(resource => {
       let match = true;
       for (const i in regexes) {
@@ -487,7 +487,6 @@ class Grid extends React.Component {
 
     this.filteredResources = this.props.resourceWorkspaceContext.filteredResources;
     const isEmpty = this.filteredResources.length === 0;
-    const isSearching = this.props.search.length > 0;
     const selectAll = this.filteredResources.length === this.props.selectedResources.length;
     const filterType = this.props.resourceWorkspaceContext.filter.type;
 
@@ -496,40 +495,37 @@ class Grid extends React.Component {
       <div className={`tableview ready ${isEmpty ? "empty" : ""} ${["default", "modified"].includes(this.props.filterType) ? "all_items" : ""}`}>
 
         <React.Fragment>
-          {isEmpty && isSearching &&
+          {isEmpty && filterType === ResourceWorkspaceFilterTypes.TEXT &&
           <div className="empty-content">
             <h2>None of your passwords matched this search.</h2>
             <p>Try another search or use the left panel to navigate into your passwords.</p>
           </div>
           }
-          {isEmpty && !isSearching &&
-          filterType == ResourceWorkspaceFilterTypes.FAVORITE &&
+          {isEmpty && filterType == ResourceWorkspaceFilterTypes.FAVORITE &&
           <div className="empty-content">
             <h2>None of your passwords are yet marked as favorite.</h2>
             <p>Add stars to passwords your want to easily find later.</p>
           </div>
           }
-          {isEmpty && !isSearching && filterType == "group" &&
+          {isEmpty && filterType == "group" &&
           <div className="empty-content">
             <h2>No passwords are shared with this group yet.</h2>
             <p>Share a password with this group or wait for a team member to share one with this group.</p>
           </div>
           }
-          {isEmpty && !isSearching &&
-          filterType == ResourceWorkspaceFilterTypes.FOLDER &&
+          {isEmpty && filterType == ResourceWorkspaceFilterTypes.FOLDER &&
           <div className="empty-content">
             <h2>No passwords in this folder yet.</h2>
             <p>It does feel a bit empty here.</p>
           </div>
           }
-          {isEmpty && !isSearching && filterType == "shared_with_me" &&
+          {isEmpty &&  filterType == ResourceWorkspaceFilterTypes.SHARED_WITH_ME &&
           <div className="empty-content">
             <h2>No passwords are shared with you yet.</h2>
             <p>It does feel a bit empty here. Wait for a team member to share a password with you.</p>
           </div>
           }
           {isEmpty &&
-          !isSearching &&
           filterType !== ResourceWorkspaceFilterTypes.NONE  &&
           ["default", "modified", "owned_by_me"].includes(filterType) &&
           <React.Fragment>
