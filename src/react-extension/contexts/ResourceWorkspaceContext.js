@@ -19,6 +19,7 @@ import * as React from "react";
 import PropTypes from "prop-types";
 import AppContext from "./AppContext";
 import {withRouter} from "react-router-dom";
+import moment from "moment";
 
 
 /**
@@ -239,7 +240,6 @@ class ResourceWorkspaceContextProvider extends React.Component {
      * @param filter
      */
     async search(filter) {
-        console.log(filter)
         const searchOperations = {
             [ResourceWorkspaceFilterTypes.FOLDER]: this.searchByFolder.bind(this),
             [ResourceWorkspaceFilterTypes.TAG]: this.searchByTag.bind(this),
@@ -247,6 +247,7 @@ class ResourceWorkspaceContextProvider extends React.Component {
             [ResourceWorkspaceFilterTypes.ITEMS_I_OWN]: this.searchByItemsIOwn.bind(this),
             [ResourceWorkspaceFilterTypes.FAVORITE]: this.searchByFavorite.bind(this),
             [ResourceWorkspaceFilterTypes.SHARED_WITH_ME]: this.seachBySharedWithMe.bind(this),
+            [ResourceWorkspaceFilterTypes.RECENTLY_MODIFIED]: this.searchByRecentlyModified.bind(this),
             [ResourceWorkspaceFilterTypes.ALL]: this.searchAll.bind(this),
             [ResourceWorkspaceFilterTypes.NONE]: () => {/* No search */}
         }
@@ -281,6 +282,7 @@ class ResourceWorkspaceContextProvider extends React.Component {
 
     /**
      * Filter the resources which textual properties matched some user text words
+     * @param filter A textual filter
      */
     async searchByText(filter) {
         const text = filter.payload;
@@ -316,6 +318,15 @@ class ResourceWorkspaceContextProvider extends React.Component {
      */
     async seachBySharedWithMe(filter) {
         const filteredResources = this.resources.filter(resource => !resource.personal);
+        await this.setState({filter, filteredResources});
+    }
+    /**
+     * Keep the most recently modified resources ( current state: just sort everything with the most recent modified resource )
+     * @param filter A recently modified filter
+     */
+    async searchByRecentlyModified(filter) {
+        const recentlyModifiedSorter = (resource1, resource2) => moment(resource2.modified).diff(moment(resource1.modified));
+        const filteredResources = this.resources.sort(recentlyModifiedSorter);
         await this.setState({filter, filteredResources});
     }
 
@@ -398,6 +409,7 @@ export const ResourceWorkspaceFilterTypes = {
     ITEMS_I_OWN: 'FILTER-BY-ITEMS-I-OWN', // Current user personal resources
     FAVORITE: 'FILTER-BY-FOVRITE', // Favorite resources filter
     SHARED_WITH_ME: 'FILTER-BY-SHARED-WITH-ME', // Shared with current user resources
+    RECENTLY_MODIFIED: 'FILTER-BY-RECENTLY-MODIFIERD', // Keep recently modified resources
 }
 
 
