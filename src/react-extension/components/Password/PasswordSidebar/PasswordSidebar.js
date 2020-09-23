@@ -60,16 +60,8 @@ class PasswordSidebar extends React.Component {
             </a>
           </div>
           <PasswordSidebarInformationSection users={this.props.users}/>
-          <PasswordSidebarPermissionsSection />
-          {/*  resource={this.props.resource}*/}
-          {/*  onEditPermissions={this.props.onEditPermissions}*/}
-          {/*  onClose={this.handlePermissionSectionClose}*/}
-          {/*  onOpen={this.handlePermissionSectionOpen}*/}
-          {/*  open={this.state.permissionsSectionOpen}*/}
-          {/*  permissions={this.state.permissions}*/}
-          {/*  groups={this.props.groups}*/}
-          {/*  users={this.props.users}/>*/}
           <PasswordSidebarDescriptionSection/>
+          <PasswordSidebarPermissionsSection />
           <PasswordSidebarTagSection/>
           <PasswordSidebarCommentSection/>
         </div>
