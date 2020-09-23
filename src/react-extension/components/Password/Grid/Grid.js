@@ -47,10 +47,8 @@ class Grid extends React.Component {
    */
   getDefaultState() {
     return {
-      filteredResources: [], // The filtered resources
+      resources: [], // The current list of resources to display
       selectStrategy: "",
-      sortProperty: "modified",
-      sortASC: false
     };
   }
 
@@ -84,7 +82,7 @@ class Grid extends React.Component {
     let selectedResources = [];
 
     if (checked) {
-      selectedResources = this.filteredResources;
+      selectedResources = this.resources;
     }
 
     const selectStrategy = SELECT_MULITPLE;
@@ -121,6 +119,13 @@ class Grid extends React.Component {
      */
     ev.stopPropagation();
     this.selectResource(resource, SELECT_MULITPLE);
+  }
+
+  /**
+   * Returns the current list of filtered resources to display
+   */
+  get resources() {
+    return this.props.resourceWorkspaceContext.filteredResources;
   }
 
 
@@ -176,12 +181,12 @@ class Grid extends React.Component {
   getSelectedResourcesRangeClickStrategy(resource) {
     let selectedResources = [];
     if (this.state.selectStrategy == "range" || this.props.selectedResources.length === 1) {
-      const indexFirst = this.filteredResources.findIndex(item => item.id === this.props.selectedResources[0].id);
-      const indexLast = this.filteredResources.findIndex(item => item.id === resource.id);
+      const indexFirst = this.resources.findIndex(item => item.id === this.props.selectedResources[0].id);
+      const indexLast = this.resources.findIndex(item => item.id === resource.id);
       if (indexFirst < indexLast) {
-        selectedResources = this.filteredResources.slice(indexFirst, indexLast + 1);
+        selectedResources = this.resources.slice(indexFirst, indexLast + 1);
       } else {
-        selectedResources = this.filteredResources.slice(indexLast, indexFirst + 1).reverse();
+        selectedResources = this.resources.slice(indexLast, indexFirst + 1).reverse();
       }
     } else {
       selectedResources = [resource];
@@ -215,12 +220,13 @@ class Grid extends React.Component {
     }
   }
 
-  async handleSortByColumnClick(ev, sortProperty) {
-    if (this.state.sortProperty === sortProperty) {
-      this.setState({sortProperty: sortProperty, sortASC: !this.state.sortASC});
-    } else {
-      this.setState({sortProperty: sortProperty, sortASC: true});
-    }
+  /**
+   * Handle the resource sorter change
+   * @param event A DOM event
+   * @param sortProperty The resource property to sort on
+   */
+  async handleSortByColumnClick(event, sortProperty) {
+    this.props.resourceWorkspaceContext.onSorterChanged(sortProperty);
   }
 
   handleDragStartEvent(event, resource) {
@@ -271,66 +277,8 @@ class Grid extends React.Component {
   }
 
 
-  /**
-   * Filter resources by keywords.
-   * Search on the name, the username, the uri and the description of the resources.
-   * @param {array} resources The list of resources to filter.
-   * @param {string} needle The needle to search.
-   * @return {array} The filtered resources.
-   */
-  filterResourcesBySearch(resources, needle) {
-    if (needle == '' || !needle) {
-      return resources;
-    }
-
-    // Split the search by words
-    const needles = needle.split(/\s+/);
-    // Prepare the regexes for each word contained in the search.
-    const regexes = needles.map(needle => new RegExp(this.escapeRegExp(needle), 'i'));
-
-    return resources.filter(resource => {
-      let match = true;
-      for (const i in regexes) {
-        // To match a resource would have to match all the words of the search.
-        match &= (regexes[i].test(resource.name)
-          || regexes[i].test(resource.username)
-          || regexes[i].test(resource.uri)
-          || regexes[i].test(resource.description));
-      }
-
-      return match;
-    });
-  }
-
-  /**
-   * Escape a string that is to be treated as a literal string within a regular expression.
-   * Reference: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions#Using_special_characters
-   * @param {string} value The string to escape
-   */
-  escapeRegExp(value) {
-    return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-  }
-
-  sortResources(resources) {
-    const collator = Intl.Collator();
-    resources.sort((itemA, itemB) => {
-      const valueA = (itemA[this.state.sortProperty] || '').toUpperCase();
-      const valueB = (itemB[this.state.sortProperty] || '').toUpperCase();
-      if (valueA == valueB) {
-        return 0;
-      }
-      if (!valueA.length || valueA == null) {
-        return 1;
-      }
-      if (!valueB.length || valueB == null) {
-        return -1;
-      }
-      return this.state.sortASC ? collator.compare(valueA, valueB) : -collator.compare(valueA, valueB);
-    });
-  }
-
   scrollTo(resourceId) {
-    const resourceIndex = this.filteredResources.findIndex(resource => resource.id === resourceId);
+    const resourceIndex = this.resources.findIndex(resource => resource.id === resourceId);
     this.listRef.current.scrollTo(resourceIndex);
   }
 
@@ -349,9 +297,13 @@ class Grid extends React.Component {
     );
   }
 
+  /**
+   * Returns the column sort class
+   * @param column The column name
+   */
   getColumnSortedClass(column) {
-    if (this.state.sortProperty === column) {
-      if (this.state.sortASC) {
+    if (this.props.resourceWorkspaceContext.sorter.propertyName === column) {
+      if (this.props.resourceWorkspaceContext.sorter.asc) {
         return "sorted sort-asc";
       } else {
         return "sorted sort-desc";
@@ -395,7 +347,7 @@ class Grid extends React.Component {
   }
 
   renderItem(index, key) {
-    const resource = this.filteredResources[index];
+    const resource = this.resources[index];
     const isSelected = this.isResourceSelected(resource);
     const isFavorite = resource.favorite !== null && resource.favorite !== undefined;
     const safeUri = this.sanitizeResourceUrl(resource) || "#";
@@ -484,10 +436,8 @@ class Grid extends React.Component {
   }
 
   render() {
-
-    this.filteredResources = this.props.resourceWorkspaceContext.filteredResources;
-    const isEmpty = this.filteredResources.length === 0;
-    const selectAll = this.filteredResources.length === this.props.selectedResources.length;
+    const isEmpty = this.resources.length === 0;
+    const selectAll = this.resources.length === this.props.selectedResources.length;
     const filterType = this.props.resourceWorkspaceContext.filter.type;
 
 
@@ -580,7 +530,7 @@ class Grid extends React.Component {
               <ReactList
                 itemRenderer={(index, key) => this.renderItem(index, key)}
                 itemsRenderer={(items, ref) => this.renderTable(items, ref)}
-                length={this.filteredResources.length}
+                length={this.resources.length}
                 pageSize={20}
                 type="uniform"
                 ref={this.listRef}>

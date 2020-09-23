@@ -30,14 +30,19 @@ export const ResourceWorkspaceContext = React.createContext({
         type: null, // Filter type
         payload: null // Filter payload
     },
+    sorter: {
+      propertyName: 'modified', // The name of the property to sort on
+      asc: true // True if the sort must be ascendant
+    },
     filteredResources: [], // The current list of filtered resources
     details: {
         resource: null, // The resource to focus details on
         folder: null,// The folder to focus details on
     },
     onTextFilterChanged: () => {}, // Whenever the search text filter changed
-    onAllFilterRequired: () => {}, // filter on all required
-    onFilterTagChanged: () => {} // filter by tag
+    onAllFilterRequired: () => {}, // Whenever the filter on all is required
+    onFilterTagChanged: () => {}, // Whenever the filter by tag changed
+    onSorterChanged: () => {} // Whenever the sorter changed
 });
 
 /**
@@ -62,6 +67,10 @@ class ResourceWorkspaceContextProvider extends React.Component {
     get defaultState() {
         return {
             filter: { type: ResourceWorkspaceFilterTypes.NONE }, // The current resource search filter
+            sorter: {
+              propertyName: 'modified', // The name of the property to sort on
+              asc: true // True if the sort must be ascendant
+            },
             filteredResources: [], // The current list of filtered resources
             details: {
                 resource: null, // The resource to focus details on
@@ -70,6 +79,7 @@ class ResourceWorkspaceContextProvider extends React.Component {
             onTextFilterChanged: this.handleTextFilterChange.bind(this), // Whenever the search text filter changed
             onAllFilterRequired: this.handleAllFilterRequired.bind(this), // filter on all required
             onFilterTagChanged: this.handleFilterTagChanged.bind(this), // filter by tag
+            onSorterChanged: this.handleSorterChange.bind(this) // Whenever the sorter changed
         }
     }
 
@@ -228,6 +238,16 @@ class ResourceWorkspaceContextProvider extends React.Component {
     }
 
     /**
+     * Handle the change of sorter ( on property or direction )
+     * @param propertyName The name of the property to sort on
+     */
+    async handleSorterChange(propertyName) {
+
+      await this.updateSorter(propertyName);
+      await this.sort();
+    }
+
+    /**
      * Populate the context with initial data such as resources and folders
      */
     populate() {
@@ -236,7 +256,7 @@ class ResourceWorkspaceContextProvider extends React.Component {
     }
 
     /**
-     * Search for the resources which matches the given filter
+     * Search for the resources which matches the given filter and sort them
      * @param filter
      */
     async search(filter) {
@@ -252,6 +272,7 @@ class ResourceWorkspaceContextProvider extends React.Component {
             [ResourceWorkspaceFilterTypes.NONE]: () => {/* No search */}
         }
         await searchOperations[filter.type](filter);
+        await this.sort();
     }
 
     /**
@@ -332,6 +353,32 @@ class ResourceWorkspaceContextProvider extends React.Component {
         const recentlyModifiedSorter = (resource1, resource2) => moment(resource2.modified).diff(moment(resource1.modified));
         const filteredResources = this.resources.sort(recentlyModifiedSorter);
         await this.setState({filter, filteredResources});
+    }
+
+
+    /**
+     *
+     * @param propertyName
+     */
+    async updateSorter(propertyName) {
+      const hasSortPropertyChanged = this.state.sorter.propertyName !== propertyName;
+      const asc = hasSortPropertyChanged  || !this.state.sorter.asc;
+      const sorter = {propertyName,asc};
+      await this.setState({sorter});
+    }
+
+    /**
+     * Sort the resources given the current sorter
+     */
+    async sort() {
+      const reverseSorter = sorter => (s1,s2) => -sorter(s1,s2);
+      const baseSorter =  sorter => this.state.sorter.asc ? sorter : reverseSorter(sorter);
+      const keySorter = (key, sorter) => baseSorter((s1,s2) => sorter(s1[key],s2[key]));
+      const dateSorter = (d1,d2) => moment(d1).diff(moment(d2));
+      const stringSorter = (s1,s2) => s1.localeCompare(s2);
+      const sorter = this.state.sorter.propertyName === 'modified' ? dateSorter : stringSorter;
+      const propertySorter = keySorter(this.state.sorter.propertyName, sorter);
+      await this.setState({filteredResources: this.state.filteredResources.sort(propertySorter)});
     }
 
     /**
