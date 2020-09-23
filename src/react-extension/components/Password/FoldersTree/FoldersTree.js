@@ -466,12 +466,12 @@ class FoldersTree extends React.Component {
                       </Fragment>
                       }
                       <span
-                          ref={this.titleElementRef}
-                          onDragOver={this.handleDragOverTitle}
-                          onDragLeave={this.handleDragLeaveTitle}
-                          onDrop={this.handleDropTitle}
-                          onClick={this.handleClickOnTitle}
-                          onContextMenu={this.handleTitleContextualMenuEvent}
+                        ref={this.titleElementRef}
+                        onDragOver={this.handleDragOverTitle}
+                        onDragLeave={this.handleDragLeaveTitle}
+                        onDrop={this.handleDropTitle}
+                        onClick={this.handleClickOnTitle}
+                        onContextMenu={this.handleTitleContextualMenuEvent}
                       >Folders</span>
                     </span>
                     </h3>
