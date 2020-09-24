@@ -19,22 +19,12 @@
 .tableview-header table {
     width: 100%;
 
-    th.sortable.sorted {
-        a:after {
-            padding-left: 0.75em;
-            font: normal normal normal 14px/1 FontAwesome;
-            -moz-osx-font-smoothing: grayscale;
-            color: @font-default;
-        }
-        a:hover:after {
-            color: @blue-light;
-        }
-        &.sort-desc a:after {
-            content: "\f0d7";
-        }
-        &.sort-asc a:after {
-            content: "\f0d8";
-        }
+    th.sortable {
+      .svg-icon svg {
+        position: absolute;
+        margin-left: 0.55em;
+        margin-top: -0.87em;
+      }
     }
 }
 

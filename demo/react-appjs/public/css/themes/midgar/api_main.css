@@ -6994,20 +6994,10 @@ input[type="search"]::-webkit-search-cancel-button {
 .tableview-header table {
   width: 100%;
 }
-.tableview-header table th.sortable.sorted a:after {
-  padding-left: 0.75em;
-  font: normal normal normal 14px/1 FontAwesome;
-  -moz-osx-font-smoothing: grayscale;
-  color: #FFFFFC;
-}
-.tableview-header table th.sortable.sorted a:hover:after {
-  color: #2A9CEB;
-}
-.tableview-header table th.sortable.sorted.sort-desc a:after {
-  content: "\f0d7";
-}
-.tableview-header table th.sortable.sorted.sort-asc a:after {
-  content: "\f0d8";
+.tableview-header table th.sortable .svg-icon svg {
+  position: absolute;
+  margin-left: 0.55em;
+  margin-top: -0.87em;
 }
 /* main content */
 .tableview-content {

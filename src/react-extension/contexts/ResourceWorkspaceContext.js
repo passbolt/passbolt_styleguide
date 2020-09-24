@@ -32,7 +32,7 @@ export const ResourceWorkspaceContext = React.createContext({
     },
     sorter: {
       propertyName: 'modified', // The name of the property to sort on
-      asc: true // True if the sort must be ascendant
+      asc: false // True if the sort must be descendant
     },
     filteredResources: [], // The current list of filtered resources
     details: {
@@ -69,7 +69,7 @@ class ResourceWorkspaceContextProvider extends React.Component {
             filter: { type: ResourceWorkspaceFilterTypes.NONE }, // The current resource search filter
             sorter: {
               propertyName: 'modified', // The name of the property to sort on
-              asc: true // True if the sort must be ascendant
+              asc: false // True if the sort must be descendant
             },
             filteredResources: [], // The current list of filtered resources
             details: {

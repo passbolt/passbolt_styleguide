@@ -18,6 +18,7 @@ import moment from 'moment/moment';
 import 'moment-timezone/builds/moment-timezone-with-data-2012-2022';
 import AppContext from "../../../contexts/AppContext";
 import {ResourceWorkspaceFilterTypes, withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
+import Icon from "../../Common/Icons/Icon";
 
 // Select strategies.
 const SELECT_SINGLE = 'single';
@@ -298,19 +299,19 @@ class Grid extends React.Component {
   }
 
   /**
-   * Returns the column sort class
+   * Check if the grid is sorted for a given column
    * @param column The column name
    */
-  getColumnSortedClass(column) {
-    if (this.props.resourceWorkspaceContext.sorter.propertyName === column) {
-      if (this.props.resourceWorkspaceContext.sorter.asc) {
-        return "sorted sort-asc";
-      } else {
-        return "sorted sort-desc";
-      }
-    }
+  isSortedColumn(column) {
+    return this.props.resourceWorkspaceContext.sorter.propertyName === column;
+  }
 
-    return "";
+  /**
+   * Check if the sort is ascendant.
+   * @returns {boolean}
+   */
+  isSortedAsc() {
+    return this.props.resourceWorkspaceContext.sorter.asc;
   }
 
   sanitizeResourceUrl(resource) {
@@ -496,7 +497,7 @@ class Grid extends React.Component {
                   <tr>
                     <th className="cell_multipleSelect selections s-cell">
                       <div className="input checkbox">
-                        <input type="checkbox" name="select all" id="js-passwords-select-all" checked={selectAll}
+                        <input type="checkbox" name="select all" checked={selectAll}
                           onChange={this.handleSelectAllChange}/>
                         <label htmlFor="js-passwords-select-all">select all</label>
                       </div>
@@ -507,20 +508,52 @@ class Grid extends React.Component {
                         <span className="visuallyhidden">fav</span>
                       </a>
                     </th>
-                    <th className={`cell_name m-cell sortable js_grid_column_name ${this.getColumnSortedClass("name")}`}>
-                      <a onClick={ev => this.handleSortByColumnClick(ev, "name")}>Resource</a>
+                    <th className="cell_name m-cell sortable">
+                      <a onClick={ev => this.handleSortByColumnClick(ev, "name")}>
+                        Resource
+                        {this.isSortedColumn("name") && this.isSortedAsc() &&
+                        <Icon name="caret-up"/>
+                        }
+                        {this.isSortedColumn("name") && !this.isSortedAsc() &&
+                        <Icon name="caret-down"/>
+                        }
+                      </a>
                     </th>
-                    <th className={`cell_username m-cell username sortable js_grid_column_username ${this.getColumnSortedClass("username")}`}>
-                      <a onClick={ev => this.handleSortByColumnClick(ev, "username")}>Username</a>
+                    <th className="cell_username m-cell username sortable">
+                      <a onClick={ev => this.handleSortByColumnClick(ev, "username")}>
+                        Username
+                        {this.isSortedColumn("username") && this.isSortedAsc() &&
+                        <Icon name="caret-up"/>
+                        }
+                        {this.isSortedColumn("username") && !this.isSortedAsc() &&
+                        <Icon name="caret-down"/>
+                        }
+                      </a>
                     </th>
                     <th className="cell_secret m-cell password">
                     Password
                     </th>
-                    <th className={`cell_uri l-cell sortable js_grid_column_uri ${this.getColumnSortedClass("uri")}`}>
-                      <a onClick={ev => this.handleSortByColumnClick(ev, "uri")}>URI</a>
+                    <th className="cell_uri l-cell sortable">
+                      <a onClick={ev => this.handleSortByColumnClick(ev, "uri")}>
+                        URI
+                        {this.isSortedColumn("uri") && this.isSortedAsc() &&
+                        <Icon name="caret-up"/>
+                        }
+                        {this.isSortedColumn("uri") && !this.isSortedAsc() &&
+                        <Icon name="caret-down"/>
+                        }
+                      </a>
                     </th>
-                    <th className={`cell_modified m-cell sortable js_grid_column_modified ${this.getColumnSortedClass("modified")}`}>
-                      <a onClick={ev => this.handleSortByColumnClick(ev, "modified")}>Modified</a>
+                    <th className="cell_modified m-cell sortable">
+                      <a onClick={ev => this.handleSortByColumnClick(ev, "modified")}>
+                        Modified
+                        {this.isSortedColumn("modified") && this.isSortedAsc() &&
+                        <Icon name="caret-up"/>
+                        }
+                        {this.isSortedColumn("modified") && !this.isSortedAsc() &&
+                        <Icon name="caret-down"/>
+                        }
+                      </a>
                     </th>
                   </tr>
                 </thead>
