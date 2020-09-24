@@ -32,7 +32,7 @@ import mockRequestCommentsFind from "./request/mockRequestCommentsFind";
 import mockRequestCommentsCreate from "./request/mockRequestCommentsCreate";
 import mockRequestResourceUpdateDescription from "./request/mockRequestResourceUpdateDescription";
 import mockRequestTagsGet from "./request/mockRequestTagsGet";
-import mockRequestUpdateTags from "./request/mockRequestUpdateTags";
+import mockRequestUpdateTags from "./request/mockRequestTagsUpdate";
 import mockRequestDeleteTags from "./request/mockRequestDeleteTags";
 import mockRequestResourcesFindPermissions from "./request/mockRequestResourcesFindPermissions";
 

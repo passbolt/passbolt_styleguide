@@ -16,8 +16,8 @@ import PropTypes from "prop-types";
 import AppContext from "../../../contexts/AppContext";
 import DialogWrapper from "../../../../react/components/Common/Dialog/DialogWrapper/DialogWrapper";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
-import {withDialog} from "../../../contexts/DialogContext";
-import ErrorDialog from "../../Common/Dialog/ErrorDialog/ErrorDialog";
+import {withDialog} from "../../../contexts/Common/DialogContext";
+import ErrorDialog from "../../Dialog/ErrorDialog/ErrorDialog";
 
 /**
  * Component allows the user to edit a tag from a dialog

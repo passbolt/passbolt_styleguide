@@ -19,8 +19,8 @@ import MockPort from "../../../test/mock/MockPort";
 import TagEditDialog from "./TagEditDialog";
 import {ActionFeedbackContext} from "../../../contexts/ActionFeedbackContext";
 import PassboltApiFetchError from "../../../../react/lib/Common/Error/PassboltApiFetchError";
-import DialogContextProvider from "../../../contexts/DialogContext";
-import ManageDialogs from "../../Dialog/ManageDialogs";
+import DialogContextProvider from "../../../contexts/Common/DialogContext";
+import ManageDialogs from "../../Common/Dialog/ManageDialogs/ManageDialogs";
 
 beforeEach(() => {
   jest.resetModules();
@@ -35,8 +35,10 @@ const getAppContext = function (appContext) {
       slug: "tardis",
       is_shared: false
     },
-    setContext: () => {
-    }
+    setContext: function (newContext) {
+      // In this scope this reference the object context.
+      Object.assign(this, newContext);
+    },
   };
 
   return Object.assign(defaultAppContext, appContext || {});
