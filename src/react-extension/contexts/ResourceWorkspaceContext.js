@@ -166,14 +166,12 @@ class ResourceWorkspaceContextProvider extends React.Component {
     async handleResourceRouteChange() {
         const isResourceLocation = this.props.location.pathname.includes('passwords');
         const resourceId = this.props.match.params.selectedResourceId;
-        const isTextFilter = this.state.filter.type === ResourceWorkspaceFilterTypes.TEXT;
         if (isResourceLocation) {
             if (resourceId) { // Case of password view
                this.handleSingleResourceRouteChange(resourceId);
-            } else if (!isTextFilter) { // Case of all
+            } else { // Case of all and applied filters
                 this.handleAllResourceRouteChange();
             }
-            // Case of text filter, so filter has already been performed
         }
     }
 

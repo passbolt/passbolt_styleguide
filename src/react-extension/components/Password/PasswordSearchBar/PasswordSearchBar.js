@@ -56,8 +56,8 @@ class PasswordSearchBar extends Component {
     handleSearchEvent(event) {
         const target = event.target;
         const text = target.value;
-        this.props.history.push('/app/passwords');
-        this.props.resourceWorkspaceContext.onTextFilterChanged(text);
+        const filter = {type: ResourceWorkspaceFilterTypes.TEXT, payload: text};
+        this.props.history.push({pathname: '/app/passwords', state: {filter}});
     }
 
     /**
