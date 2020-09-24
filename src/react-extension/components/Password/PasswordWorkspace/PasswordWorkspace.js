@@ -14,7 +14,6 @@
 import React, {Component} from "react";
 import {withRouter} from "react-router-dom";
 import UserBadgeMenu from "../../Common/Navigation/Header/UserBadgeMenu";
-import Breadcrumbs from "../../Common/Navigation/Breadcrumbs/Breadcrumbs";
 import FoldersTree from "../FoldersTree/FoldersTree";
 import Grid from "../Grid/Grid";
 import FolderSidebar from "../FolderSidebar/FolderSidebar";
@@ -25,6 +24,7 @@ import SidebarTagFilterSection from "../../Tag/SidebarTagFilterSection/SidebarTa
 import PropTypes from "prop-types";
 import PasswordSearchBar from "../PasswordSearchBar/PasswordSearchBar";
 import FilterResourcesByShortcuts from "../FilterResourcesByShortcuts/FilterResourcesByShortcuts";
+import PasswordBreadcrumb from "../PasswordBreadcrumb/PasswordBreadcrumb";
 
 class Workspace extends Component {
   /**
@@ -209,7 +209,7 @@ class Workspace extends Component {
                     <SidebarTagFilterSection tags={this.getTagsFromResources()}/>
                   </div>
                   <div className="panel middle">
-                    <Breadcrumbs/>
+                    <PasswordBreadcrumb/>
                     <Grid
                       selectedResources={this.state.selectedResources}
                       search={this.state.search}
