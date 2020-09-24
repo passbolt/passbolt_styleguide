@@ -47,7 +47,8 @@ class TagEditor extends React.Component {
       allTags: null,
       autocompletePosition: {
         top: 0,
-        left: 0
+        left: 0,
+        width: 0,
       },
       suggestedTags: null,
       errorMessage: ""
@@ -169,7 +170,8 @@ class TagEditor extends React.Component {
   getPositionOfInputTag() {
     const top = this.inputTagRef.current.offsetTop + 20;
     const left = this.inputTagRef.current.offsetLeft;
-    const autocompletePosition = {left, top};
+    const width = this.elementRef.current.getBoundingClientRect().width;
+    const autocompletePosition = {left, top, width};
     this.setState({autocompletePosition});
 
   }
@@ -278,6 +280,7 @@ class TagEditor extends React.Component {
       this.insertTag(tag);
       this.setErrorMessage("");
       this.resetInputTagValue();
+      this.hideAutocomplete();
     }
   }
 
@@ -459,6 +462,7 @@ class TagEditor extends React.Component {
   handleAutocompleteArrowFocus(slug) {
     this.inputTagRef.current.textContent = slug;
     this.setCaretCursorToEnd();
+    this.getPositionOfInputTag();
   }
 
   /**
@@ -508,6 +512,7 @@ class TagEditor extends React.Component {
               autocompleteItems={this.state.suggestedTags}
               left={this.state.autocompletePosition.left}
               top={this.state.autocompletePosition.top}
+              width={this.state.autocompletePosition.width}
               onSelect={this.handleAutocompleteSelect}
               onArrowFocus={this.handleAutocompleteArrowFocus}
             />

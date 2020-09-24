@@ -7556,6 +7556,7 @@ table.table-info.horizontal tbody tr:hover {
   min-width: 6em;
   max-width: 24em;
   display: inline-block;
+  word-break: break-word;
 }
 .tag-editor .autocomplete-suggestions {
   text-align: left;
@@ -7571,8 +7572,12 @@ table.table-info.horizontal tbody tr:hover {
   overflow: hidden;
   overflow-y: auto;
   box-sizing: border-box;
-  min-width: 6em;
-  max-width: 24em;
+}
+.tag-editor .autocomplete-suggestions .autocomplete-content.scroll {
+  overflow-y: auto;
+}
+.tag-editor .autocomplete-suggestions .autocomplete-content.scroll .name.ellipsis {
+  display: block;
 }
 .tag-editor .autocomplete-suggestions .autocomplete-suggestion {
   position: relative;

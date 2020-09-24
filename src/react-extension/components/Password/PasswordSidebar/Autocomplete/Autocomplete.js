@@ -168,9 +168,12 @@ class Autocomplete extends Component {
    * Get the autocomplete style.
    */
   getStyle() {
+    // calculate the max width according to the position of the autocomplete to avoid horizontally scroll
+    const maxWidth = this.props.width - this.props.left;
     return {
       left: this.props.left,
-      top: this.props.top
+      top: this.props.top,
+      maxWidth
     };
   }
 
@@ -214,10 +217,11 @@ class Autocomplete extends Component {
 }
 
 Autocomplete.propTypes = {
-  id: PropTypes.string,
-  autocompleteItems: PropTypes.array,
-  top: PropTypes.number,
-  left: PropTypes.number,
+  id: PropTypes.string, // id of the item
+  autocompleteItems: PropTypes.array, // item of the autocomplete
+  top: PropTypes.number, // top position for autocomplete
+  left: PropTypes.number, // left position for autocomplete
+  width: PropTypes.number, // width in px of the parent element
   onSelect: PropTypes.func,
   onArrowFocus: PropTypes.func,
   value: PropTypes.string
