@@ -185,7 +185,7 @@ class AddComment extends React.Component {
         // Rule: the content could not be longer than 256
         const isTooLong = this.state.content.length > 256;
 
-        const errors = Object.assign({}, this.state.errors, {isEmpty, isTooLong});
+        const errors = {isEmpty, isTooLong};
         await this.setState({errors});
     }
 

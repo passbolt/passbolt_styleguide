@@ -81,7 +81,6 @@ class PasswordSidebarCommentSection extends React.Component {
      * Whenever the user cancelled the adding of new comment
      */
     async handleCancelledAddEvent() {
-        console.log('TEST')
         await this.setState({canAdd: false });
     }
 
