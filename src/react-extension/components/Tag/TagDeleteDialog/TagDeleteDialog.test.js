@@ -81,7 +81,7 @@ describe("TagEditDialog", () => {
     // Save button exists
     const saveButton = container.querySelector(".submit-wrapper [type=\"submit\"]");
     expect(saveButton).not.toBeNull();
-    expect(saveButton.value).toBe("Save");
+    expect(saveButton.value).toBe("Delete");
 
     // Cancel button exists
     const cancelButton = container.querySelector(".submit-wrapper .cancel");
