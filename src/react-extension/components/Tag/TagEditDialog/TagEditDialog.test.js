@@ -18,6 +18,9 @@ import AppContext from "../../../contexts/AppContext";
 import MockPort from "../../../test/mock/MockPort";
 import TagEditDialog from "./TagEditDialog";
 import {ActionFeedbackContext} from "../../../contexts/ActionFeedbackContext";
+import PassboltApiFetchError from "../../../../react/lib/Common/Error/PassboltApiFetchError";
+import DialogContextProvider from "../../../contexts/Common/DialogContext";
+import ManageDialogs from "../../Common/Dialog/ManageDialogs/ManageDialogs";
 
 beforeEach(() => {
   jest.resetModules();
@@ -32,7 +35,10 @@ const getAppContext = function (appContext) {
       slug: "tardis",
       is_shared: false
     },
-    setContext: () => {}
+    setContext: function (newContext) {
+      // In this scope this reference the object context.
+      Object.assign(this, newContext);
+    },
   };
 
   return Object.assign(defaultAppContext, appContext || {});
@@ -49,7 +55,10 @@ const renderTagEditDialog = function (appContext, props) {
 
   return render(
     <AppContext.Provider value={appContext}>
-      <TagEditDialog debug onClose={props.onClose}/>
+      <DialogContextProvider>
+        <ManageDialogs/>
+        <TagEditDialog debug onClose={props.onClose}/>
+      </DialogContextProvider>
     </AppContext.Provider>
   );
 };
@@ -129,7 +138,7 @@ describe("TagEditDialog", () => {
     });
   });
 
-  it("requests the addon to edit a tag when clicking on the submit button.", async() => {
+  it("requests the addon to edit a tag when clicking on the submit button.", async () => {
     const context = getAppContext();
     const props = getDummyTag();
     const {container} = renderTagEditDialog(context, props);
@@ -146,7 +155,8 @@ describe("TagEditDialog", () => {
 
     // Mock the request function to make it the expected result
     jest.spyOn(context.port, 'request').mockImplementationOnce(jest.fn());
-    jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementation(() => {});
+    jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementation(() => {
+    });
 
     // Submit and assert
     const submitButton = container.querySelector("input[type=\"submit\"]");
@@ -164,5 +174,39 @@ describe("TagEditDialog", () => {
       expect(props.onClose).toBeCalled();
       expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalled();
     });
+  });
+
+  it("displays an error when the API call fail.", async () => {
+    const context = getAppContext();
+    const props = getDummyTag();
+    const {container} = renderTagEditDialog(context, props);
+
+    const tagMeta = {
+      slug: "tardis-updated",
+      is_shared: false,
+    };
+
+    // Fill the form
+    const nameInput = container.querySelector("[name=\"name\"]");
+    const nameInputEvent = {target: {value: tagMeta.slug}};
+    fireEvent.change(nameInput, nameInputEvent);
+
+    // Mock the request function to make it return an error.
+    jest.spyOn(context.port, 'request').mockImplementationOnce(() => {
+      throw new PassboltApiFetchError("Jest simulate API error.");
+    });
+
+    // Submit and assert
+    const submitButton = container.querySelector("input[type=\"submit\"]");
+    fireEvent.click(submitButton, {button: 0});
+
+    await waitFor(() => {
+    });
+
+    // Throw general error message
+    const generalErrorDialog = container.querySelector(".error-dialog");
+    expect(generalErrorDialog).not.toBeNull();
+    const generalErrorMessage = container.querySelector(".error-dialog .dialog .dialog-content .form-content");
+    expect(generalErrorMessage).not.toBeNull();
   });
 });

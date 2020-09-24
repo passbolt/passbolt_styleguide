@@ -16,6 +16,8 @@ import PropTypes from "prop-types";
 import AppContext from "../../../contexts/AppContext";
 import DialogWrapper from "../../../../react/components/Common/Dialog/DialogWrapper/DialogWrapper";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
+import {withDialog} from "../../../contexts/Common/DialogContext";
+import ErrorDialog from "../../Dialog/ErrorDialog/ErrorDialog";
 
 /**
  * Component allows the user to edit a tag from a dialog
@@ -30,7 +32,6 @@ class TagEditDialog extends Component {
 
   getDefaultState() {
     return {
-      error: "",
       name:'',
       nameError: "",
       processing: false
@@ -156,10 +157,12 @@ class TagEditDialog extends Component {
     } else {
       // Unexpected error occurred.
       console.error(error);
-      this.setState({
-        error: error.message,
-        processing: false
-      });
+      const errorDialogProps = {
+        title: "There was an unexpected error...",
+        message: error.message
+      }
+      this.context.setContext({errorDialogProps});
+      this.props.dialogContext.open(ErrorDialog);
     }
   }
 
@@ -228,9 +231,6 @@ class TagEditDialog extends Component {
                   <div className="name error message">{this.state.nameError}</div>
                   }
                 </div>
-                {this.state.error &&
-                <div className="feedbacks message error">{this.state.error}</div>
-                }
                 <div className="submit-wrapper clearfix">
                   <input type="submit" className="button primary" role="button" value="Save"/>
                   <a className="cancel" role="button" onClick={this.handleCloseClick}>Cancel</a>
@@ -246,7 +246,8 @@ TagEditDialog.contextType = AppContext;
 
 TagEditDialog.propTypes = {
   onClose: PropTypes.func,
-  actionFeedbackContext: PropTypes.any // The action feedback context
+  actionFeedbackContext: PropTypes.any, // The action feedback context
+  dialogContext: PropTypes.any // The dialog congtext
 };
 
-export default withActionFeedback(TagEditDialog);
+export default withActionFeedback(withDialog(TagEditDialog));
