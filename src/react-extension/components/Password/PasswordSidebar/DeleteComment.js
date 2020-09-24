@@ -16,7 +16,7 @@ import React from "react";
 import AppContext from "../../../contexts/AppContext";
 import Icon from "../../Common/Icons/Icon";
 import PropTypes from "prop-types";
-import {withDialog} from "../../../contexts/DialogContext";
+import {withDialog} from "../../../contexts/Common/DialogContext";
 import ConfirmCommentDeletion from "./ConfirmCommentDeletion";
 
 /**

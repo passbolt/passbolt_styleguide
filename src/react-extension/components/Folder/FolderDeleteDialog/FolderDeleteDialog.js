@@ -14,11 +14,11 @@
 import React, {Component} from "react";
 import PropTypes from "prop-types";
 import AppContext from "../../../contexts/AppContext";
-import ErrorDialog from "../../Common/Dialog/ErrorDialog/ErrorDialog";
+import ErrorDialog from "../../Dialog/ErrorDialog/ErrorDialog";
 import FormSubmitButton from "../../Common/Inputs/FormSubmitButton/FormSubmitButton";
 import FormCancelButton from "../../Common/Inputs/FormSubmitButton/FormCancelButton";
 import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
-import {withDialog} from "../../../contexts/DialogContext";
+import {withDialog} from "../../../contexts/Common/DialogContext";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 
 class FolderDeleteDialog extends Component {

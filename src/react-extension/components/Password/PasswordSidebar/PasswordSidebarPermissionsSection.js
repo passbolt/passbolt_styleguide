@@ -18,7 +18,7 @@ import Icon from "../../Common/Icons/Icon";
 import AppContext from "../../../contexts/AppContext";
 import PropTypes from "prop-types";
 import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
-import {withDialog} from "../../../contexts/DialogContext";
+import {withDialog} from "../../../contexts/Common/DialogContext";
 import ShareDialog from "../../Share/ShareDialog";
 
 const PERMISSIONS_LABEL = {

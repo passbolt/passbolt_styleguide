@@ -13,7 +13,7 @@
  */
 
 import React from "react";
-import {withDialog} from "../../contexts/DialogContext";
+import {withDialog} from "../../../../contexts/Common/DialogContext";
 import PropTypes from "prop-types";
 
 /**

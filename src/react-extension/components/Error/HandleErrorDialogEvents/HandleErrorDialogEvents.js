@@ -14,8 +14,8 @@
 
 import React from 'react';
 import AppContext from "../../../contexts/AppContext";
-import {withDialog} from "../../../contexts/DialogContext";
-import ErrorDialog from "../../Common/Dialog/ErrorDialog/ErrorDialog";
+import {withDialog} from "../../../contexts/Common/DialogContext";
+import ErrorDialog from "../../Dialog/ErrorDialog/ErrorDialog";
 import PropTypes from "prop-types";
 
 /**
@@ -109,13 +109,10 @@ class ContextualizedErrorDialog extends React.Component {
         this.context.setContext({errorDialogProps: {}})
         this.props.onClose();
     }
+
     render() {
         return (
-            <>
-                <ErrorDialog
-                    onClose={this.handleClose}
-                    {...this.context.errorDialogProps} />
-            </>
+          <ErrorDialog onClose={this.handleClose} />
         )
     }
 }

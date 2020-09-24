@@ -15,7 +15,7 @@
 import React from 'react';
 import AppContext from "../../../contexts/AppContext";
 import PassphraseEntryDialog from "../PassphraseEntryDialog/PassphraseEntryDialog";
-import {withDialog} from "../../../contexts/DialogContext";
+import {withDialog} from "../../../contexts/Common/DialogContext";
 
 /**
  * This component listens any event related to passphrase entry dialog actions to perform

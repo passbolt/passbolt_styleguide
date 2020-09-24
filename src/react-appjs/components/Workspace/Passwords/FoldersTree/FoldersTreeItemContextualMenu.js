@@ -14,8 +14,6 @@
 import React from "react";
 import PropTypes from "prop-types";
 import Plugin from "../../../../legacy/util/plugin";
-import {withDialog} from "../../../../../react-extension/contexts/DialogContext";
-import FolderCreateDialog from "../../../../../react-extension/components/Folder/FolderCreateDialog/FolderCreateDialog";
 
 class FoldersTreeItemContextualMenu extends React.Component {
 

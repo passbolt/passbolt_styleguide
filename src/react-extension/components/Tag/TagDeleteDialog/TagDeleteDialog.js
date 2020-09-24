@@ -16,6 +16,8 @@ import PropTypes from "prop-types";
 import AppContext from "../../../contexts/AppContext";
 import DialogWrapper from "../../../../react/components/Common/Dialog/DialogWrapper/DialogWrapper";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
+import ErrorDialog from "../../Dialog/ErrorDialog/ErrorDialog";
+import {withDialog} from "../../../contexts/Common/DialogContext";
 
 /**
  * This component allows user to delete a tag of the resources
@@ -30,7 +32,6 @@ class TagDeleteDialog extends Component {
   getDefaultState() {
     return {
       processing: false,
-      error: "",
     };
   }
 
@@ -78,37 +79,43 @@ class TagDeleteDialog extends Component {
       } else {
         // Unexpected error occurred.
         console.error(error);
-        this.setState({
-          error: error.message,
-          processing: false
-        });
+        this.handleError(error);
+        this.setState({processing: false});
       }
     }
+  }
+
+  handleError(error) {
+    const errorDialogProps = {
+      title: "There was an unexpected error...",
+      message: error.message
+    }
+    this.context.setContext({errorDialogProps});
+    this.props.dialogContext.open(ErrorDialog);
   }
 
   render() {
 
     return (
-      <DialogWrapper
-        title="Delete tag?"
-        tooltip="Delete tag?"
-        onClose={this.handleCloseClick}
-        disabled={this.state.processing}
-        className="delete-tag-dialog">
-            <form onSubmit={this.handleFormSubmit} noValidate>
-              <div className="form-content">
-                <p>Are you sure you want to delete the tag <strong>{this.context.tagToDelete.slug}</strong>?</p>
-                <p>Warning: Once the tag is deleted, it’ll be removed permanently and will not be recoverable.</p>
-                {this.state.error &&
-                <div className="feedbacks message error">{this.state.error}</div>
-                }
-                <div className="submit-wrapper clearfix">
-                  <input type="submit" className="button primary warning" role="button" value="Delete tag"/>
-                  <a className="cancel" role="button" onClick={this.handleCloseClick}>Cancel</a>
-                </div>
+      <div>
+        <DialogWrapper
+          title="Delete tag?"
+          tooltip="Delete tag?"
+          onClose={this.handleCloseClick}
+          disabled={this.state.processing}
+          className="delete-tag-dialog">
+          <form onSubmit={this.handleFormSubmit} noValidate>
+            <div className="form-content">
+              <p>Are you sure you want to delete the tag <strong>{this.context.tagToDelete.slug}</strong>?</p>
+              <p>Warning: Once the tag is deleted, it’ll be removed permanently and will not be recoverable.</p>
+              <div className="submit-wrapper clearfix">
+                <input type="submit" className="button primary warning" role="button" value="Delete tag"/>
+                <a className="cancel" role="button" onClick={this.handleCloseClick}>Cancel</a>
               </div>
-            </form>
-      </DialogWrapper>
+            </div>
+          </form>
+        </DialogWrapper>
+      </div>
     );
   }
 }
@@ -117,7 +124,8 @@ TagDeleteDialog.contextType = AppContext;
 
 TagDeleteDialog.propTypes = {
   onClose: PropTypes.func,
-  actionFeedbackContext: PropTypes.any // The action feedback context
+  actionFeedbackContext: PropTypes.any, // The action feedback context
+  dialogContext: PropTypes.any
 };
 
-export default withActionFeedback(TagDeleteDialog);
+export default withActionFeedback(withDialog(TagDeleteDialog));
