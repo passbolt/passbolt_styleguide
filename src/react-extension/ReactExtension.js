@@ -27,8 +27,8 @@ import SiteSettings from "./lib/Settings/SiteSettings";
 import UserSettings from "./lib/Settings/UserSettings";
 import ActionFeedbackContextProvider from "./contexts/ActionFeedbackContext";
 import ShareActionFeedbacks from "./components/Share/ShareActionFeedbacks";
-import DialogContextProvider from "./contexts/DialogContext";
-import ManageDialogs from "./components/Dialog/ManageDialogs";
+import DialogContextProvider from "./contexts/Common/DialogContext";
+import ManageDialogs from "./components/Common/Dialog/ManageDialogs/ManageDialogs";
 import HandlePassphraseEntryDialogEvents
   from "./components/Passphrase/HandlePassphraseEntryDialogEvents/HandlePassphraseEntryDialogEvents";
 import HandleProgressDialogEvents

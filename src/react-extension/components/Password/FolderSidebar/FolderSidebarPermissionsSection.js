@@ -17,7 +17,7 @@ import UserAvatar from "../../Common/Avatar/UserAvatar";
 import GroupAvatar from "../../Common/Avatar/GroupAvatar";
 import Icon from "../../Common/Icons/Icon";
 import AppContext from "../../../contexts/AppContext";
-import {withDialog} from "../../../contexts/DialogContext";
+import {withDialog} from "../../../contexts/Common/DialogContext";
 import ShareDialog from "../../Share/ShareDialog";
 import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 

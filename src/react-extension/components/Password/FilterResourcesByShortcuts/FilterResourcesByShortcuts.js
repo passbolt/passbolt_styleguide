@@ -106,7 +106,6 @@ class FilterResourcesByShortcuts extends React.Component {
      * Whenever the shortcut "Items I own" has been selected
      */
     handleItemsIOwnClick() {
-        console.log('click')
         const filter = {type: ResourceWorkspaceFilterTypes.ITEMS_I_OWN}
         this.props.history.push({pathname: '/app/passwords', state: {filter}});
     }

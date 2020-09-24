@@ -19,8 +19,8 @@ import MockPort from "../../../test/mock/MockPort";
 import TagDeleteDialog from "./TagDeleteDialog";
 import {ActionFeedbackContext} from "../../../contexts/ActionFeedbackContext";
 import PassboltApiFetchError from "../../../../react/lib/Common/Error/PassboltApiFetchError";
-import ManageDialogs from "../../Dialog/ManageDialogs";
-import DialogContextProvider from "../../../contexts/DialogContext";
+import ManageDialogs from "../../Common/Dialog/ManageDialogs/ManageDialogs";
+import DialogContextProvider from "../../../contexts/Common/DialogContext";
 
 beforeEach(() => {
   jest.resetModules();
@@ -28,9 +28,11 @@ beforeEach(() => {
 
 const getAppContext = function (appContext) {
   const port = new MockPort();
-  const defaultAppContext = {
+  const context = {
     port,
-    setContext: () => {
+    setContext: function (newContext) {
+      // In this scope this reference the object context.
+      Object.assign(this, newContext);
     },
     tagToDelete: {
       id: "8e3874ae-4b40-590b-968a-418f704b9d9a",
@@ -38,7 +40,8 @@ const getAppContext = function (appContext) {
       is_shared: false
     }
   };
-  return Object.assign(defaultAppContext, appContext || {});
+
+  return Object.assign(context, appContext || {});
 };
 
 const getDummyTag = () => {

@@ -22,8 +22,8 @@ import AddCommentPageObject from "./AddComment.test.page.object";
 import DisplayCommentListPageObject from "./DisplayCommentList.test.page.object";
 import ConfirmCommentDeletionPageObject from "./ConfirmCommentDeletion.test.page.object";
 import PropTypes from "prop-types";
-import ManageDialogs from "../../Dialog/ManageDialogs";
-import DialogContextProvider from "../../../contexts/DialogContext";
+import ManageDialogs from "../../Common/Dialog/ManageDialogs/ManageDialogs";
+import DialogContextProvider from "../../../contexts/Common/DialogContext";
 
 
 

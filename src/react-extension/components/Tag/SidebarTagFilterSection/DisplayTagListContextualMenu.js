@@ -16,7 +16,7 @@ import PropTypes from "prop-types";
 import AppContext from "../../../contexts/AppContext";
 import TagEditDialog from "../TagEditDialog/TagEditDialog";
 import TagDeleteDialog from "../TagDeleteDialog/TagDeleteDialog";
-import {withDialog} from "../../../contexts/DialogContext";
+import {withDialog} from "../../../contexts/Common/DialogContext";
 import ContextualMenuWrapper from "../../Common/ContextualMenu/ContextualMenuWrapper";
 
 class DisplayTagListContextualMenu extends React.Component {

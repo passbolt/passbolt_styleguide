@@ -21,7 +21,7 @@ import FoldersTreeRootFolderContextualMenu from "./FoldersTreeRootFolderContextu
 import FolderMoveStrategyDialog from "../../Folder/FolderMoveStrategyDialog/FolderMoveStrategyDialog";
 import {withContextualMenu} from "../../../contexts/Common/ContextualMenuContext";
 import PropTypes from "prop-types";
-import {withDialog} from "../../../contexts/DialogContext";
+import {withDialog} from "../../../contexts/Common/DialogContext";
 
 // Root virtual folder identifier.
 const ROOT = null;

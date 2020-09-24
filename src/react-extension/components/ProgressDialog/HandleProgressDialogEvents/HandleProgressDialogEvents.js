@@ -16,7 +16,7 @@
 import React from 'react';
 import ProgressDialog from "../ProgressDialog/ProgressDialog";
 import AppContext from "../../../contexts/AppContext";
-import {withDialog} from "../../../contexts/DialogContext";
+import {withDialog} from "../../../contexts/Common/DialogContext";
 
 /**
  * This component listens any event related to progress dialog actions to perform

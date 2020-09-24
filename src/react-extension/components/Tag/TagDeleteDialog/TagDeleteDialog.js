@@ -16,8 +16,8 @@ import PropTypes from "prop-types";
 import AppContext from "../../../contexts/AppContext";
 import DialogWrapper from "../../../../react/components/Common/Dialog/DialogWrapper/DialogWrapper";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
-import ErrorDialog from "../../../../react/components/Common/Dialog/ErrorDialog/ErrorDialog";
-import {withDialog} from "../../../contexts/DialogContext";
+import ErrorDialog from "../../Dialog/ErrorDialog/ErrorDialog";
+import {withDialog} from "../../../contexts/Common/DialogContext";
 
 /**
  * This component allows user to delete a tag of the resources

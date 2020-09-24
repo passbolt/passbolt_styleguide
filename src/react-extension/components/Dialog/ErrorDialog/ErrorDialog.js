@@ -13,7 +13,8 @@
  */
 import React, {Component} from "react";
 import PropTypes from "prop-types";
-import DialogCloseButton from "../DialogCloseButton/DialogCloseButton";
+import DialogCloseButton from "../../../../react/components/Common/Dialog/DialogCloseButton/DialogCloseButton";
+import AppContext from "../../../contexts/AppContext";
 
 class ErrorDialog extends Component {
   /**
@@ -56,10 +57,10 @@ class ErrorDialog extends Component {
    * @returns {String|string} return default if string is empty
    */
   getTitle() {
-    if (!this.props.title || this.props.title === '') {
+    if (!this.context.errorDialogProps.title || this.context.errorDialogProps.title === '') {
       return ErrorDialog.defaultProps.title;
     }
-    return this.props.title;
+    return this.context.errorDialogProps.title;
   }
 
   /**
@@ -67,10 +68,10 @@ class ErrorDialog extends Component {
    * @returns {String|string} return default if string is empty
    */
   getMessage() {
-    if (!this.props.message || this.props.message === '') {
+    if (!this.context.errorDialogProps.message || this.context.errorDialogProps.message === '') {
       return ErrorDialog.defaultProps.message;
     }
-    return this.props.message;
+    return this.context.errorDialogProps.message;
   }
 
   /**
@@ -111,6 +112,8 @@ class ErrorDialog extends Component {
     );
   }
 }
+
+ErrorDialog.contextType = AppContext;
 
 ErrorDialog.defaultProps = {
   title: "Oops something went wrong.",

@@ -16,7 +16,9 @@ import moment from 'moment/moment';
 import {v4 as uuidv4} from "uuid";
 
 export default (eventObject, storage) => {
-  return new Promise(async (resolve) => {
+  return new Promise(async (resolve, reject) => {
+    const error = new Error('Something went wrong loulou');
+    reject(error);
     const {resources} = await storage.local.get(["resources"]);
     resources.forEach( (resource, resourceIndex) => {
       if(resource.tags) {
