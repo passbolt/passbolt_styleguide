@@ -94,6 +94,14 @@ export default class AddCommentPageObject {
     }
 
     /**
+     * Returns true if the Technical Error message is displayed
+     * @param message The technical error message
+     */
+    hasTechnicalError(message) {
+        return this.errorMessage.textContent === message;
+    }
+
+    /**
      * Returns true if the the component is in a disable state
      */
     isDisabled() {
@@ -132,5 +140,15 @@ export default class AddCommentPageObject {
         const leftClick = {button: 0};
         fireEvent.click(this.cancelButton, leftClick);
         await waitFor( () => {});
+    }
+
+    /**
+     * Press the escape key
+     */
+    async escape() {
+        const escapeKeyPressed = {keyCode: 27}
+        this.textarea.focus();
+        fireEvent.keyDown(this.textarea, escapeKeyPressed);
+        await waitFor(() => {})
     }
 }

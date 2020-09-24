@@ -26,7 +26,6 @@ import AppContext from "../../../contexts/AppContext";
  */
 class AddComment extends React.Component {
 
-
     /**
      * Constructor
      * @param {Object} props
@@ -35,6 +34,16 @@ class AddComment extends React.Component {
         super(props);
         this.state = this.getDefaultState();
         this.bindCallbacks();
+        this.createRefs();
+    }
+
+    /**
+     * ComponentDidMount
+     * Invoked immediately after component is inserted into the tree
+     * @return {void}
+     */
+    componentDidMount() {
+        this.textareaRef.current.focus();
     }
 
     /**
@@ -51,8 +60,6 @@ class AddComment extends React.Component {
         }
     }
 
-
-
     /**
      * Bind callbacks methods
      */
@@ -60,8 +67,15 @@ class AddComment extends React.Component {
         this.handleSubmitEvent = this.handleSubmitEvent.bind(this);
         this.handleCancelEvent = this.handleCancelEvent.bind(this);
         this.handleContentChanged = this.handleContentChanged.bind(this);
+        this.handleEscapeKeyPressed = this.handleEscapeKeyPressed.bind(this);
     }
 
+    /**
+     * Create DOM nodes or React elements references in order to be able to access them programmatically.
+     */
+    createRefs() {
+        this.textareaRef = React.createRef();
+    }
 
     /**
      * @returns {boolean} Returns true if the form is valid
@@ -70,21 +84,49 @@ class AddComment extends React.Component {
         return Object.values(this.state.errors).every( value => ! value );
     }
 
-
     /**
      * Handle the submitting of the new comment
      * @param event The event object
      */
     async handleSubmitEvent(event) {
+        // Prevent the default browser behavior to post the form.
         event.preventDefault();
 
-        await this.setState({actions: {processing: true}});
+        await this.validate()
 
-        await this.validate();
         if (this.isValid) {
-            await this.add();
+          try {
+            await this.setState({actions: {processing: true}});
+            const addedComment = await this.add();
+            await this.handleSubmitSuccess(addedComment);
+          } catch(error) {
+            await this.handleSubmitFailure(error);
+          }
         }
     }
+
+    /**
+     * Whenever the submit action has been successful
+     * @param addedComment The added comment
+     */
+    async handleSubmitSuccess(addedComment) {
+        await this.props.actionFeedbackContext.displaySuccess("The comment has been added successfully");
+        this.props.onAdd(addedComment);
+    }
+
+    /**
+     * Whenever the submit action has not been successful
+     * @param error
+     * @returns {Promise<void>}
+     */
+    async handleSubmitFailure(error) {
+        await this.props.actionFeedbackContext.displayError(error.message);
+        await this.setState({
+            actions: {processing: false},
+            errors: {technicalError: error.message}
+        });
+    }
+
 
     /**
      * Handle the cancellation of the add of the comment
@@ -102,11 +144,25 @@ class AddComment extends React.Component {
     }
 
     /**
+     * Whenever the user press the escape key
+     * @param event Keypressed event
+     */
+    handleEscapeKeyPressed(event) {
+        // Close the dialog when the user presses the "ESC" key if the component is cancellable.
+        const hasEscapeKeyPressed = event.keyCode === 27;
+        const mustQuit = hasEscapeKeyPressed && this.props.cancellable;
+        if (mustQuit) {
+            // Stop the event propagation in order to avoid a parent component to react to this ESC event.
+            event.stopPropagation();
+            this.props.onCancel();
+        }
+    }
+
+    /**
      * Add a new comment
      * @returns {Promise<void>}
      */
     async add() {
-
         // Persist
         const commentToAdd = this.state.content.trim();
         const payload =  {
@@ -116,13 +172,7 @@ class AddComment extends React.Component {
             user_id: this.context.currentUser.id
         };
 
-        const addedComment = await this.context.port.request('passbolt.comments.create', payload);
-
-        // Asks for a success / failure message
-        await this.props.actionFeedbackContext.displaySuccess("The comment has been added successfully");
-
-        // Informs the parent component
-        this.props.onAdd(addedComment);
+        return await this.context.port.request('passbolt.comments.create', payload);
     }
 
     /**
@@ -135,7 +185,7 @@ class AddComment extends React.Component {
         // Rule: the content could not be longer than 256
         const isTooLong = this.state.content.length > 256;
 
-        const errors = Object.assign({}, this.state.errors, {isEmpty, isTooLong});
+        const errors = {isEmpty, isTooLong};
         await this.setState({errors});
     }
 
@@ -154,14 +204,16 @@ class AddComment extends React.Component {
                         <div className="form-content">
 
                             <div className="input textarea required">
-                            <textarea
+                            <textarea ref={this.textareaRef}
                                 placeholder="Add a comment"
                                 onChange={this.handleContentChanged}
+                                onKeyDown={this.handleEscapeKeyPressed}
                                 disabled={this.state.actions.processing}>
                             </textarea>
                                 <div className="message error">
                                     {this.state.errors.isEmpty && "A comment is required."}
                                     {this.state.errors.isTooLong && "A comment must be less than 256 characters"}
+                                    {this.state.errors.technicalError}
                                 </div>
                             </div>
 
@@ -215,6 +267,3 @@ AddComment.propTypes = {
 };
 
 export default withActionFeedback(AddComment);
-
-
-

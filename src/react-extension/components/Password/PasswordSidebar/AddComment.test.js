@@ -38,7 +38,7 @@ describe("Add comments", () => {
     const noneCommentFoundRequestMockImpl = jest.fn(() => Promise.resolve([]));
     const commentsFoundRequestMockImpl = jest.fn(() => Promise.resolve(commentsMock));
 
-    describe("Scenario: Start editing if there is no comment yet", () => {
+    describe("Scenario: As LU I should start editing if there is no comment yet", () => {
 
         /**
          * Given I have selected a resource with no comments
@@ -69,8 +69,7 @@ describe("Add comments", () => {
 
     });
 
-
-    describe("Scenario: Start adding a comment by clicking on the add icon", () => {
+    describe("Scenario: As LU I should start adding a comment by clicking on the add icon", () => {
 
         /**
          * Given I selected a resource that has comments
@@ -99,7 +98,7 @@ describe("Add comments", () => {
 
     });
 
-    describe("Scenario: Stop adding a comment by clicking on the add icon", () => {
+    describe("Scenario: As LU I should stop adding a comment by clicking on the add icon", () => {
 
         /**
          * Given I am adding a comment to a resource that already has comments
@@ -122,7 +121,7 @@ describe("Add comments", () => {
 
     });
 
-    describe("Scenario: Stop adding a comment by clicking out of the adding zone", () => {
+    describe("Scenario: As LU I should stop adding a comment by clicking out of the adding zone", () => {
 
         /**
          * Given I am adding a comment to a resource
@@ -133,7 +132,38 @@ describe("Add comments", () => {
         // Standard browser behavior (?)
     });
 
-    describe("Scenario: Add a comment on top of the list", () => {
+    describe("Scenario: As LU I should stop adding a comment by pressing escape with several comments", () => {
+
+
+        /**
+         * Given Given a resource with several comments
+         * And I am adding a comment to a resource
+         * And I typed “Good men don’t need rules.”
+         * When I pressed the escape key
+         * Then the adding operation should be stopped
+         */
+
+        beforeEach( () => {
+            page = new PasswordSidebarCommentSectionPage(context, props);
+            mockContextRequest(commentsFoundRequestMockImpl).mockClear();
+        })
+
+
+        it('the adding operation should be stopped', async () => {
+
+            // Since there's a refresh fetch after adding a comment, just need to check if the refresh fetch call is done
+            await page.title.click();
+            await page.addIcon.click();
+            await page.addComment.write("I'm writing a valid comment");
+            await page.addComment.escape();
+
+            expect(page.addComment.exists()).toBeFalsy();
+        })
+
+
+    })
+
+    describe("Scenario: As LU I should see a comment on top of the list after adding one", () => {
 
 
 
@@ -154,8 +184,6 @@ describe("Add comments", () => {
         it('I should see the comment “Good men don’t need rules.” at the top of the comments list', async () => {
 
             // Since there's a refresh fetch after adding a comment, just need to check if the refresh fetch call is done
-
-
             await page.title.click();
             await page.addIcon.click();
             await page.addComment.write("I'm writing a valid comment");
@@ -171,7 +199,7 @@ describe("Add comments", () => {
 
     });
 
-    describe("Scenario: Cancel a comment adding for a resource with several comments", () => {
+    describe("Scenario: As LU I should be able to cancel a comment adding for a resource with several comments", () => {
 
 
         /**
@@ -204,7 +232,7 @@ describe("Add comments", () => {
 
     });
 
-    describe("Scenario: Cannot edit while submitting", () => {
+    describe("Scenario: As LU I shouldn’t be able to edit while submitting changes", () => {
 
         /**
          * Given I am adding a comment to a resource
@@ -247,7 +275,7 @@ describe("Add comments", () => {
 
     });
 
-    describe("Scenario: Show progress feedback while submitting", () => {
+    describe("Scenario: As LU I should see progress feedback while submitting", () => {
 
 
         /**
@@ -267,7 +295,7 @@ describe("Add comments", () => {
 
     });
 
-    describe("Scenario: See notification after adding a comment", () => {
+    describe("Scenario: As LU I should see notification after adding a comment", () => {
 
         /**
          * Given I am adding a comment to a resource
@@ -293,7 +321,7 @@ describe("Add comments", () => {
 
     });
 
-    describe("Scenario: Cannot add a comment longer than 256 characters", () => {
+    describe("Scenario: As LU I should not be able to add a comment longer than 256 characters", () => {
 
         /**
          * Given I am adding a comment to a resource
@@ -329,7 +357,7 @@ describe("Add comments", () => {
     });
 
 
-    describe("Scenario: Cannot add an empty comment", () => {
+    describe("Scenario: As LU I should not be able to add an empty comment ", () => {
 
         /**
          * Given a resource with several comments
@@ -364,7 +392,7 @@ describe("Add comments", () => {
 
     });
 
-    describe("Scenario: Trim a comment", () => {
+    describe("Scenario: As LU I should trim comment", () => {
 
         /**
          * Given I am adding a comment to a resource
@@ -398,7 +426,7 @@ describe("Add comments", () => {
     });
 
 
-    describe("Scenario: Cannot add an empty trimmed comment", () => {
+    describe("Scenario: As LU I should not be able to add an empty trimmed comment ", () => {
 
         /**
          * Given a resource with several comments
@@ -433,6 +461,59 @@ describe("Add comments", () => {
 
 
     });
+
+
+    describe("Scenario: As LU I should see an error when the background page call fails", () => {
+
+
+        /**
+         * Given I am adding a comment to a resource in the sidebar
+         * And I have typed “Good men don’t need rules.”
+         * When I submit the change
+         * And the system raise an error
+         * Then I should see an error message
+         */
+
+        let saveReject;
+        const saveError = {message: "The comment has not been added"};
+        const saveErrorMockImpl = jest.fn(() => new Promise((resolve,reject) => saveReject = reject.bind(null,saveError)));
+        const requestsMockImpl = async (...parameters) => {
+            const requestName = parameters[0];
+            switch(requestName) {
+                case 'passbolt.comments.find-all-by-resource': return await commentsFoundRequestMockImpl(...parameters);
+                case 'passbolt.comments.create': return await saveErrorMockImpl(...parameters);
+                default: return jest.fn(() => Promise.resolve([]));
+            }
+        }
+
+        beforeEach( () => {
+            jest.resetModules();
+            page = new PasswordSidebarCommentSectionPage(context, Object.assign(props));
+            mockContextRequest(requestsMockImpl).mockClear();
+        })
+
+        it(' I should see an error message', async () => {
+
+            await page.title.click();
+            await page.addIcon.click();
+            await page.addComment.write("I'm writing a valid comment");
+
+            const inProgressFn = () => {
+                saveReject();
+            }
+
+            await page.addComment.save(inProgressFn);
+
+            expect(context.port.request).toHaveBeenCalledTimes(2);
+            expect(page.addComment.hasTechnicalError(saveError.message)).toBeTruthy();
+        })
+
+
+
+
+
+
+    })
 
 
 
