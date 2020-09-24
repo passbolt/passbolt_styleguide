@@ -20,7 +20,6 @@ import {withContextualMenu} from "../contexts/Common/ContextualMenuContext";
  * This component acts as an anchor for the different project contextual menus.
  */
 class ManageContextualMenu extends React.Component {
-
   /**
    * Default constructor
    * @param props The component props
@@ -69,7 +68,7 @@ class ManageContextualMenu extends React.Component {
           )
         }
       </div>
-    )
+    );
   }
 }
 

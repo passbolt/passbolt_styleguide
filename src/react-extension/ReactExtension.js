@@ -208,7 +208,6 @@ class ReactExtension extends Component {
     }
   }
 
-
   /*
    * =============================================================
    *  Resource Dialogs Events
@@ -288,7 +287,6 @@ class ReactExtension extends Component {
               <div className="header first">
                 <MainMenu onClick={this.handleWorkspaceSelect} baseUrl={this.state.userSettings.getTrustedDomain()}/>
               </div>
-
 
                       <Switch>
                         <Route path={[

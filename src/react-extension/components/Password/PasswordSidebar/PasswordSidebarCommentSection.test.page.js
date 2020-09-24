@@ -13,7 +13,6 @@
  * @since         2.11.0
  */
 
-
 import {fireEvent, render, waitFor} from "@testing-library/react";
 import AppContext from "../../../contexts/AppContext";
 import React from "react";
@@ -25,183 +24,170 @@ import PropTypes from "prop-types";
 import ManageDialogs from "../../Common/Dialog/ManageDialogs/ManageDialogs";
 import DialogContextProvider from "../../../contexts/Common/DialogContext";
 
-
-
 /**
  * The PasswordSidebarCommentSection component represented as a page
  */
 export default class PasswordSidebarCommentSectionPage {
+  /**
+   * Default constructor
+   * @param appContext An app context
+   * @param props Props to attach
+   */
+  constructor(appContext, props) {
+    this._page = render(
+      <AppContextProvider context={appContext}>
+        <DialogContextProvider>
+          <ManageDialogs/>
+          <PasswordSidebarCommentSection {...props}/>
+        </DialogContextProvider>
+      </AppContextProvider>
+    );
+    this.setupPageObjects();
+  }
 
-    /**
-     * Default constructor
-     * @param appContext An app context
-     * @param props Props to attach
-     */
-    constructor(appContext, props) {
-        this._page = render(
-            <AppContextProvider context={appContext}>
-                <DialogContextProvider>
-                    <ManageDialogs/>
-                    <PasswordSidebarCommentSection {...props}/>
-                </DialogContextProvider>
-            </AppContextProvider>
-        );
-        this.setupPageObjects();
-    }
+  /**
+   * Set up the objects of the page
+   */
+  setupPageObjects() {
+    this._addComment = new AddCommentPageObject(this._page.container);
+    this._displayCommentList = new DisplayCommentListPageObject(this._page.container);
+    this._titleHeader = new TitleHeaderPageObject(this._page.container);
+    this._addIcon = new AddIconPageObject(this._page.container);
+    this._confirmDeleteComment = new ConfirmCommentDeletionPageObject(this._page.container);
+  }
 
-    /**
-     * Set up the objects of the page
-     */
-    setupPageObjects() {
-        this._addComment = new AddCommentPageObject(this._page.container);
-        this._displayCommentList = new DisplayCommentListPageObject(this._page.container);
-        this._titleHeader = new TitleHeaderPageObject(this._page.container);
-        this._addIcon = new AddIconPageObject(this._page.container);
-        this._confirmDeleteComment = new ConfirmCommentDeletionPageObject(this._page.container);
-    }
+  /**
+   * Return the page object of the title header
+   * @returns {{select: select}}
+   */
+  get title() {
+    return this._titleHeader;
+  }
 
-    /**
-     * Return the page object of the title header
-     * @returns {{select: select}}
-     */
-    get title() {
-        return this._titleHeader;
-    }
+  /**
+   * Return the page object of add icon element
+   */
+  get addIcon() {
+    return this._addIcon;
+  }
 
-    /**
-     * Return the page object of add icon element
-     */
-    get addIcon() {
-        return this._addIcon;
-    }
+  /**
+   * Returns the page object of add comment component
+   */
+  get addComment() {
+    return this._addComment;
+  }
 
-    /**
-     * Returns the page object of add comment component
-     */
-    get addComment() {
-        return this._addComment;
-    }
+  /**
+   * Returns the page object of display comments
+   */
+  get displayCommentList() {
+    return this._displayCommentList;
+  }
 
-    /**
-     * Returns the page object of display comments
-     */
-    get displayCommentList() {
-        return this._displayCommentList;
-    }
-
-    /**
-     * Returns the page object of the confirm comment deletion
-     */
-    get confirmDeleteComment() {
-        return this._confirmDeleteComment;
-    }
-
+  /**
+   * Returns the page object of the confirm comment deletion
+   */
+  get confirmDeleteComment() {
+    return this._confirmDeleteComment;
+  }
 }
 
 /**
  * Page object for the TitleHeader element
  */
 class TitleHeaderPageObject {
+  /**
+   * Default constructor
+   * @param container The container which includes the AddComment Component
+   */
+  constructor(container) {
+    this._container = container;
+  }
 
-    /**
-     * Default constructor
-     * @param container The container which includes the AddComment Component
-     */
-    constructor(container) {
-        this._container = container;
-    }
+  /**
+   * Returns the clickable area of the header
+   */
+  get hyperlink() {
+    return this._container.querySelector(".accordion-header h4 a");
+  }
 
-    /**
-     * Returns the clickable area of the header
-     */
-    get hyperlink() {
-        return this._container.querySelector(".accordion-header h4 a");
-    }
-
-    /** Click on the title */
-    async click()  {
-        const leftClick = {button: 0};
-        fireEvent.click(this.hyperlink, leftClick);
-        await waitFor( () => {} );
-    }
-
+  /** Click on the title */
+  async click()  {
+    const leftClick = {button: 0};
+    fireEvent.click(this.hyperlink, leftClick);
+    await waitFor(() => {});
+  }
 }
-
 
 /**
  * Page object for the AddIcon element
  */
 class AddIconPageObject {
+  /**
+   * Default constructor
+   * @param container The container which includes the AddComment Component
+   */
+  constructor(container) {
+    this._container = container;
+  }
 
-    /**
-     * Default constructor
-     * @param container The container which includes the AddComment Component
-     */
-    constructor(container) {
-        this._container = container;
-    }
+  /**
+   * Returns the icon element
+   */
+  get icon() {
+    return  this._container.querySelector('.section-action');
+  }
 
-    /**
-     * Returns the icon element
-     */
-    get icon() {
-        return  this._container.querySelector('.section-action');
-    }
+  /**
+   * Returns true if the page object exists in the DOM
+   * @returns {boolean}
+   */
+  exists() {
+    return this.icon !== null;
+  }
 
-    /**
-     * Returns true if the page object exists in the DOM
-     * @returns {boolean}
-     */
-    exists() {
-      return this.icon !== null;
-    }
-
-    /**
-     * Click on the page object
-     */
-    async click() {
-        this.icon.focus();
-        const leftClick = {button: 0};
-        fireEvent.click(this.icon, leftClick);
-        await waitFor( () => {} );
-    }
-
+  /**
+   * Click on the page object
+   */
+  async click() {
+    this.icon.focus();
+    const leftClick = {button: 0};
+    fireEvent.click(this.icon, leftClick);
+    await waitFor(() => {});
+  }
 }
-
 
 /**
  * Custom application provider (used to force the re-rendering when context changes )
  */
 class AppContextProvider extends React.Component {
+  /**
+   * Default constructor
+   * @param props Props component
+   */
+  constructor(props) {
+    super(props);
+    this.state = props.context;
+  }
 
-    /**
-     * Default constructor
-     * @param props Props component
-     */
-    constructor(props) {
-        super(props);
-        this.state = props.context;
-    }
+  componentDidMount() {
+    this.setState({setContext: this.setState.bind(this)});
+  }
 
-    componentDidMount() {
-        this.setState({setContext:this.setState.bind(this)});
-    }
-
-    /**
-     * Render the component
-     */
-    render() {
-        return (
-            <AppContext.Provider value={this.state}>
-                {this.props.children}
-            </AppContext.Provider>
-        )
-    }
-
-
+  /**
+   * Render the component
+   */
+  render() {
+    return (
+      <AppContext.Provider value={this.state}>
+        {this.props.children}
+      </AppContext.Provider>
+    );
+  }
 }
 
 AppContextProvider.propTypes = {
-    context: PropTypes.object,
-    children: PropTypes.any
+  context: PropTypes.object,
+  children: PropTypes.any
 };

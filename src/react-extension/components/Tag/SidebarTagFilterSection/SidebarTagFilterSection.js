@@ -97,7 +97,7 @@ class SidebarTagFilterSection extends React.Component {
    * @param {string} filterType
    */
   handleFilterTagsType(filterType) {
-    if(this.isAllFilterRequire(filterType)) {
+    if (this.isAllFilterRequire(filterType)) {
       // apply all filter
       this.props.resourceWorkspaceContext.onAllFilterRequired();
     }
@@ -127,7 +127,7 @@ class SidebarTagFilterSection extends React.Component {
       personal: "My tags",
       shared: "Shared tags",
       default: "Filter by tags"
-    }
+    };
   }
 
   /**

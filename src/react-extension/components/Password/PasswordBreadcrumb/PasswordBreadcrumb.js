@@ -17,20 +17,10 @@ import PropTypes from "prop-types";
 import {ResourceWorkspaceFilterTypes, withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 import Breadcrumbs from "../../Common/Navigation/Breadcrumbs/Breadcrumbs";
 
-
 /**
  * The component displays a navigation breadcrumb given the applied resources filter
  */
 class PasswordBreadcrumbs extends Component {
-
-  /**
-   * Default constructor
-   * @param props The component props
-   */
-  constructor(props) {
-    super(props);
-  }
-
   /**
    * Returns the all items breadcrumb items
    */
@@ -47,7 +37,7 @@ class PasswordBreadcrumbs extends Component {
           }
         }
       }
-    ]
+    ];
   }
 
   /**
@@ -60,7 +50,7 @@ class PasswordBreadcrumbs extends Component {
         name: this.getBreadcrumbItemName(),
         link: this.props.location
       }
-    ]
+    ];
   }
 
   /**
@@ -68,7 +58,7 @@ class PasswordBreadcrumbs extends Component {
    * @returns {string}
    */
   getBreadcrumbItemName() {
-    switch(this.props.resourceWorkspaceContext.filter.type) {
+    switch (this.props.resourceWorkspaceContext.filter.type) {
       case ResourceWorkspaceFilterTypes.ALL: return "All items";
       case ResourceWorkspaceFilterTypes.FAVORITE: return "Favorite";
       case ResourceWorkspaceFilterTypes.RECENTLY_MODIFIED: return "Recently modified";
@@ -76,15 +66,15 @@ class PasswordBreadcrumbs extends Component {
       case ResourceWorkspaceFilterTypes.ITEMS_I_OWN: return "Items I own";
       case ResourceWorkspaceFilterTypes.TAG: {
         const currentTagName = this.props.resourceWorkspaceContext.filter.payload.tag.slug;
-        return currentTagName + " (tag)";
+        return `${currentTagName} (tag)`;
       }
       case ResourceWorkspaceFilterTypes.FOLDER: {
         const currentFolderName = this.props.resourceWorkspaceContext.filter.payload.folder.name;
-        return currentFolderName + " (folder)";
+        return `${currentFolderName} (folder)`;
       }
       case ResourceWorkspaceFilterTypes.TEXT: {
         const currentSearchText = this.props.resourceWorkspaceContext.filter.payload;
-        return "Search : " + currentSearchText;
+        return `Search : ${currentSearchText}`;
       }
       default: return "";
     }
@@ -94,7 +84,7 @@ class PasswordBreadcrumbs extends Component {
    * Returns the current list of breadcrumb items
    */
   get items() {
-    switch(this.props.resourceWorkspaceContext.filter.type) {
+    switch (this.props.resourceWorkspaceContext.filter.type) {
       case ResourceWorkspaceFilterTypes.ALL:  return this.allItems;
       case ResourceWorkspaceFilterTypes.NONE: return [];
       case ResourceWorkspaceFilterTypes.TEXT: {
@@ -104,7 +94,6 @@ class PasswordBreadcrumbs extends Component {
       default: return this.getBreadcrumb();
     }
   }
-
 
   /**
    * Render the component
@@ -123,4 +112,3 @@ PasswordBreadcrumbs.propTypes = {
 };
 
 export default withRouter(withResourceWorkspace(PasswordBreadcrumbs));
-

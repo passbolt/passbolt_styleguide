@@ -20,54 +20,52 @@ import PropTypes from "prop-types";
  * This component acts as an anchor for the different project dialogs.
  */
 class ManageDialogs extends React.Component {
+  /**
+   * Default constructor
+   * @param props The component props
+   */
+  constructor(props) {
+    super(props);
+    this.bindCallback();
+  }
 
-    /**
-     * Default constructor
-     * @param props The component props
-     */
-    constructor(props) {
-        super(props);
-        this.bindCallback();
-    }
+  /**
+   * Bind class methods callback
+   */
+  bindCallback() {
+    this.close = this.close.bind(this);
+  }
 
-    /**
-     * Bind class methods callback
-     */
-    bindCallback() {
-        this.close = this.close.bind(this);
-    }
+  /**
+   * Removes the index-th dialog
+   */
+  async close(index) {
+    this.props.dialogContext.close(index);
+  }
 
-    /**
-     * Removes the index-th dialog
-     */
-    async close(index) {
-        this.props.dialogContext.close(index);
-    }
+  /**
+   * Renders the component
+   * @returns {JSX.Element}
+   */
+  render() {
+    return (
+      <>
+        {
+          this.props.dialogContext.dialogs.map((Dialog, index) =>
+            <Dialog
+              key={index}
+              onClose={ () => this.close(index)} />)
+        }
+        {this.props.children}
 
-    /**
-     * Renders the component
-     * @returns {JSX.Element}
-     */
-    render() {
-        return (
-            <>
-                {
-                    this.props.dialogContext.dialogs.map( (Dialog,index) =>
-                        <Dialog
-                            key={index}
-                            onClose={ () => this.close(index)} /> )
-                }
-                {this.props.children}
-
-            </>
-        )
-    }
+      </>
+    );
+  }
 }
 
 ManageDialogs.propTypes = {
-    dialogContext: PropTypes.any,
-    children: PropTypes.any
-}
+  dialogContext: PropTypes.any,
+  children: PropTypes.any
+};
 
 export default withDialog(ManageDialogs);
-

@@ -81,7 +81,7 @@ class PasswordSidebarPermissionsSection extends React.Component {
    */
   handleResourceChange(previousResource) {
     const hasResourceChanged = this.resource.id !== previousResource.id;
-    if(hasResourceChanged && this.state.open) {
+    if (hasResourceChanged && this.state.open) {
       this.fetch();
     }
   }
@@ -91,8 +91,8 @@ class PasswordSidebarPermissionsSection extends React.Component {
    */
   async fetch() {
     const permissions = await this.context.port.request('passbolt.resources.find-permissions', this.resource.id);
-    if(permissions) {
-      permissions.sort((permissionA, permissionB) => this.sortPermissions(permissionA,permissionB) );
+    if (permissions) {
+      permissions.sort((permissionA, permissionB) => this.sortPermissions(permissionA, permissionB));
     }
     this.setState({permissions});
   }
@@ -103,25 +103,20 @@ class PasswordSidebarPermissionsSection extends React.Component {
    * @param permissionB
    * @returns {number}
    */
-  sortPermissions (permissionA, permissionB) {
-      // permission have user sort by firstname and lastname
-      if (permissionA.user && permissionB.user) {
-        if(permissionA.user.profile.first_name === permissionB.user.profile.first_name) {
-          return permissionA.user.profile.last_name < permissionB.user.profile.last_name ? -1 : 1;
-        }
-        return permissionA.user.profile.first_name < permissionB.user.profile.first_name ? -1 : 1;
+  sortPermissions(permissionA, permissionB) {
+    // permission have user sort by firstname and lastname
+    if (permissionA.user && permissionB.user) {
+      if (permissionA.user.profile.first_name === permissionB.user.profile.first_name) {
+        return permissionA.user.profile.last_name < permissionB.user.profile.last_name ? -1 : 1;
       }
-      // sort after group permission user
-      else if (!permissionA.user && permissionB.user) {
-        return 1;
-      }
-      else if (permissionA.user && !permissionB.user) {
-        return -1;
-      }
-      // otherwise, sort by group
-      else {
-        return permissionA.group.name < permissionB.group.name ? -1 : 1;
-      }
+      return permissionA.user.profile.first_name < permissionB.user.profile.first_name ? -1 : 1;
+    } else if (!permissionA.user && permissionB.user) { // sort after group permission user
+      return 1;
+    } else if (permissionA.user && !permissionB.user) {
+      return -1;
+    } else { // otherwise, sort by group
+      return permissionA.group.name < permissionB.group.name ? -1 : 1;
+    }
   }
 
   /**
@@ -129,7 +124,7 @@ class PasswordSidebarPermissionsSection extends React.Component {
    */
   handleTitleClickEvent() {
     const open = !this.state.open;
-    if(open) {
+    if (open) {
       this.fetch();
     }
     this.setState({open});
@@ -161,7 +156,7 @@ class PasswordSidebarPermissionsSection extends React.Component {
    * @returns {boolean}
    */
   isLoading() {
-    return !this.state.permissions
+    return !this.state.permissions;
   }
 
   /**
@@ -177,7 +172,6 @@ class PasswordSidebarPermissionsSection extends React.Component {
    * @returns {JSX}
    */
   render() {
-
     return (
       <div className={`sharedwith accordion sidebar-section ${this.state.open ? "" : "closed"}`}>
         <div className="accordion-header">
@@ -218,9 +212,7 @@ class PasswordSidebarPermissionsSection extends React.Component {
         </div>
       </div>
     );
-
   }
-
 }
 
 PasswordSidebarPermissionsSection.contextType = AppContext;

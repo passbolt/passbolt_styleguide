@@ -77,7 +77,6 @@ class Workspace extends Component {
     this.handleSearch = this.handleSearch.bind(this);
   }
 
-
   /**
    * Find all groups.
    * @return {Promise<void>}
@@ -161,13 +160,12 @@ class Workspace extends Component {
     this.setState({search});
   }
 
-
   /**
    * Get tags from resources
    * @returns {array} all tags from resources
    */
   getTagsFromResources() {
-    if(this.context.resources) {
+    if (this.context.resources) {
       // get all tags, flat in array and reduce to have unique tag
       const tags =  this.context.resources.map(resource => resource.tags).flat().reduce((tagsA, tagsB) => {
         !tagsA.find(tag => tag.id === tagsB.id) && tagsA.push(tagsB);
@@ -184,58 +182,57 @@ class Workspace extends Component {
    * @return {JSX}
    */
   render() {
-
     return (
-        <div>
-          <div className="header second">
-            <PasswordSearchBar
-              onSearch={this.handleSearch}
-              placeholder="Search passwords"/>
-            <UserBadgeMenu baseUrl={this.context.userSettings.getTrustedDomain()} user={this.context.currentUser}/>
+      <div>
+        <div className="header second">
+          <PasswordSearchBar
+            onSearch={this.handleSearch}
+            placeholder="Search passwords"/>
+          <UserBadgeMenu baseUrl={this.context.userSettings.getTrustedDomain()} user={this.context.currentUser}/>
+        </div>
+        <div className="header third">
+          <div className="col1 main-action-wrapper">
           </div>
-          <div className="header third">
-            <div className="col1 main-action-wrapper">
-            </div>
-            <div className="col2_3 actions-wrapper">
-            </div>
+          <div className="col2_3 actions-wrapper">
           </div>
-          <div className="panel main">
-            <div className="tabs-content">
-              <div className="tab-content selected">
-                <div className="reports-workspace">
-                  <div className="panel left">
-                    <FilterResourcesByShortcuts/>
-                    <FoldersTree/>
-                    <SidebarTagFilterSection tags={this.getTagsFromResources()}/>
-                  </div>
-                  <div className="panel middle">
-                    <PasswordBreadcrumb/>
-                    <Grid
-                      selectedResources={this.state.selectedResources}
-                      search={this.state.search}
-                      onRightSelect={this.handleRightSelectResource}
-                      onSelect={this.handleSelectResources}/>
-                    {this.props.resourceWorkspaceContext.details.folder &&
+        </div>
+        <div className="panel main">
+          <div className="tabs-content">
+            <div className="tab-content selected">
+              <div className="reports-workspace">
+                <div className="panel left">
+                  <FilterResourcesByShortcuts/>
+                  <FoldersTree/>
+                  <SidebarTagFilterSection tags={this.getTagsFromResources()}/>
+                </div>
+                <div className="panel middle">
+                  <PasswordBreadcrumb/>
+                  <Grid
+                    selectedResources={this.state.selectedResources}
+                    search={this.state.search}
+                    onRightSelect={this.handleRightSelectResource}
+                    onSelect={this.handleSelectResources}/>
+                  {this.props.resourceWorkspaceContext.details.folder &&
                     <FolderSidebar
                       groups={this.state.groups}
                       onEditPermissions={this.handleEditFolderPermissions}
                       onSelectFolderParent={this.handleFilterByFolder}
                       onSelectRoot={this.handleSelectRootFolder}
                       users={this.state.users}/>
-                    }
-                    {this.props.resourceWorkspaceContext.details.resource &&
+                  }
+                  {this.props.resourceWorkspaceContext.details.resource &&
                     <PasswordSidebar
                       groups={this.state.groups}
                       onEditPermissions={this.handleEditFolderPermissions}
                       onSelectFolderParent={this.handleFilterByFolder}
                       onSelectRoot={this.handleSelectRootFolder}
                       users={this.state.users}/>
-                    }
-                  </div>
+                  }
                 </div>
               </div>
             </div>
           </div>
+        </div>
       </div>
     );
   }
@@ -245,6 +242,6 @@ Workspace.contextType = AppContext;
 Workspace.propTypes = {
   history: PropTypes.any,
   resourceWorkspaceContext: PropTypes.any
-}
+};
 
 export default withRouter(withResourceWorkspace(Workspace));

@@ -25,7 +25,7 @@ class Breadcrumbs extends Component {
     return (
       <div className="breadcrumbs">
         <ul className="menu">
-          {(this.props.items && this.props.items.map((item) => {
+          {(this.props.items && this.props.items.map(item => {
             index++;
             return (
               <li key={index}>
@@ -52,4 +52,3 @@ Breadcrumbs.propTypes = {
 };
 
 export default Breadcrumbs;
-

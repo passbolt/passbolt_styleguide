@@ -21,7 +21,6 @@ import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 const TAG_MAX_LENGTH = 128;
 
 class TagEditor extends React.Component {
-
   /**
    * Constructor
    * @param {Object} props
@@ -173,7 +172,6 @@ class TagEditor extends React.Component {
     const width = this.elementRef.current.getBoundingClientRect().width;
     const autocompletePosition = {left, top, width};
     this.setState({autocompletePosition});
-
   }
 
   /**
@@ -189,7 +187,7 @@ class TagEditor extends React.Component {
     return {
       slug,
       is_shared
-    }
+    };
   }
 
   /**
@@ -241,7 +239,7 @@ class TagEditor extends React.Component {
    * @returns {boolean}
    */
   isTagExceedMaxLength(slug) {
-    return slug.length > TAG_MAX_LENGTH
+    return slug.length > TAG_MAX_LENGTH;
   }
 
   /**
@@ -350,7 +348,7 @@ class TagEditor extends React.Component {
    * @returns {boolean}
    */
   mustShowAutocomplete() {
-    return this.state.suggestedTags && this.state.suggestedTags.length > 0
+    return this.state.suggestedTags && this.state.suggestedTags.length > 0;
   }
 
   /**
@@ -386,7 +384,7 @@ class TagEditor extends React.Component {
   async handleOnSubmit() {
     // Do not re-submit an already processing form
     if (!this.state.processing) {
-      this.setState({processing: true})
+      this.setState({processing: true});
       this.checkTagToInsert();
       if (!this.state.errorMessage) {
         await this.updateTags();
@@ -408,7 +406,7 @@ class TagEditor extends React.Component {
       };
       await this.context.port.request("passbolt.resource.update-tags", data);
       await this.props.actionFeedbackContext.displaySuccess("The tags have been updated successfully");
-      this.setState({processing: false})
+      this.setState({processing: false});
       this.props.toggleInputTagEditor();
     } catch (error) {
       // Unexpected error occurred.
@@ -482,7 +480,6 @@ class TagEditor extends React.Component {
    * @returns {JSX}
    */
   render() {
-
     return (
       <div className="form-content" ref={this.elementRef}>
         <div className="input tag-editor">
@@ -493,17 +490,16 @@ class TagEditor extends React.Component {
                   <span
                     className={`tag-content ellipsis ${this.state.tagAlreadyPresent === tag.slug ? "blink-fast" : ""}`}>{tag.slug}</span>
                   {this.isTagDeletable(tag) &&
-                  <span className={`tag-delete`} onClick={(event) => this.deleteTag(event, index)}><Icon
+                  <span className={`tag-delete`} onClick={event => this.deleteTag(event, index)}><Icon
                     name="close"></Icon></span>
                   }
                 </div>
               )
 
-
             }
             <div ref={this.inputTagRef} className="tag-editor-input" contentEditable={!this.hasAllInputDisabled()}
-                 suppressContentEditableWarning="true" onKeyPress={this.handleKeyPressed}
-                 onKeyDown={this.handleOnKeyDown} onInput={this.handleOnInput}>
+              suppressContentEditableWarning="true" onKeyPress={this.handleKeyPressed}
+              onKeyDown={this.handleOnKeyDown} onInput={this.handleOnInput}>
             </div>
             {this.mustShowAutocomplete() &&
             <Autocomplete
@@ -531,11 +527,11 @@ class TagEditor extends React.Component {
         </div>
         <div className="actions">
           <a className={`button tag-editor-submit ${this.hasAllInputDisabled() ? "primary processing disabled" : ""}`}
-             onClick={this.handleOnSubmit}>
+            onClick={this.handleOnSubmit}>
             <span>save</span>
           </a>
           <a className={`button cancel tag-editor-cancel ${this.hasAllInputDisabled() ? "disabled" : ""}`} role="button"
-             onClick={this.props.toggleInputTagEditor}><span>cancel</span></a>
+            onClick={this.props.toggleInputTagEditor}><span>cancel</span></a>
         </div>
       </div>
     );

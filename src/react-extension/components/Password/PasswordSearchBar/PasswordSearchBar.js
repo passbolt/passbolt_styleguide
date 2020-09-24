@@ -18,75 +18,72 @@ import SearchBar from "../../Common/Navigation/Search/SearchBar";
 import {ResourceWorkspaceFilterTypes, withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 
 class PasswordSearchBar extends Component {
-    /**
-     * Constructor
-     * @param {Object} props
-     */
-    constructor(props) {
-        super(props);
-        this.state = this.defaultState;
-        this.bindCallbacks();
-    }
+  /**
+   * Constructor
+   * @param {Object} props
+   */
+  constructor(props) {
+    super(props);
+    this.state = this.defaultState;
+    this.bindCallbacks();
+  }
 
-    /**
-     * Bind callbacks methods
-     */
-    bindCallbacks() {
-        this.handleSearchEvent = this.handleSearchEvent.bind(this);
-    }
+  /**
+   * Bind callbacks methods
+   */
+  bindCallbacks() {
+    this.handleSearchEvent = this.handleSearchEvent.bind(this);
+  }
 
-    /**
-     * Get default state
-     * @returns {*}
-     */
-    get defaultState() {
-        return {};
-    }
+  /**
+   * Get default state
+   * @returns {*}
+   */
+  get defaultState() {
+    return {};
+  }
 
-    get value() {
-        const hasTextFilter = this.props.resourceWorkspaceContext.filter.type === ResourceWorkspaceFilterTypes.TEXT;
-        return hasTextFilter? this.props.resourceWorkspaceContext.filter.payload : '';
-    }
+  get value() {
+    const hasTextFilter = this.props.resourceWorkspaceContext.filter.type === ResourceWorkspaceFilterTypes.TEXT;
+    return hasTextFilter ? this.props.resourceWorkspaceContext.filter.payload : '';
+  }
 
+  /**
+   * Handle search input change
+   * @params {ReacEvent} The react event.
+   */
+  handleSearchEvent(event) {
+    const target = event.target;
+    const text = target.value;
+    const filter = {type: ResourceWorkspaceFilterTypes.TEXT, payload: text};
+    this.props.history.push({pathname: '/app/passwords', state: {filter}});
+  }
 
-    /**
-     * Handle search input change
-     * @params {ReacEvent} The react event.
-     */
-    handleSearchEvent(event) {
-        const target = event.target;
-        const text = target.value;
-        const filter = {type: ResourceWorkspaceFilterTypes.TEXT, payload: text};
-        this.props.history.push({pathname: '/app/passwords', state: {filter}});
-    }
-
-    /**
-     * Render the component
-     * @return {JSX}
-     */
-    render() {
-        return (
-            <SearchBar
-                disabled={this.props.disabled}
-                onSearch={this.handleSearchEvent}
-                placeholder={this.props.placeholder}
-                value={this.value} />
-        );
-    }
+  /**
+   * Render the component
+   * @return {JSX}
+   */
+  render() {
+    return (
+      <SearchBar
+        disabled={this.props.disabled}
+        onSearch={this.handleSearchEvent}
+        placeholder={this.props.placeholder}
+        value={this.value} />
+    );
+  }
 }
 
 PasswordSearchBar.propTypes = {
-    disabled: PropTypes.bool,
-    placeholder: PropTypes.string,
-    resourceWorkspaceContext: PropTypes.object,
-    history: PropTypes.object
+  disabled: PropTypes.bool,
+  placeholder: PropTypes.string,
+  resourceWorkspaceContext: PropTypes.object,
+  history: PropTypes.object
 };
 
 PasswordSearchBar.defaultProps = {
-    disabled: false,
-    placeholder: 'Search',
+  disabled: false,
+  placeholder: 'Search',
 };
 
 export default withRouter(withResourceWorkspace(PasswordSearchBar));
-
-

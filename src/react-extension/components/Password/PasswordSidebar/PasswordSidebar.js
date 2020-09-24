@@ -23,15 +23,6 @@ import PasswordSidebarPermissionsSection from "./PasswordSidebarPermissionsSecti
 import AppContext from "../../../contexts/AppContext";
 
 class PasswordSidebar extends React.Component {
-
-  /**
-   * Constructor
-   * @param {Object} props
-   */
-  constructor(props) {
-    super(props);
-  }
-
   /**
    * Render the component
    * @returns {JSX}
@@ -82,4 +73,3 @@ PasswordSidebar.propTypes = {
 };
 
 export default withResourceWorkspace(PasswordSidebar);
-

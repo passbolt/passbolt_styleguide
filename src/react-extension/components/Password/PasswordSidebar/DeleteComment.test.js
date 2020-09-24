@@ -12,8 +12,6 @@
  * @since         2.11.0
  */
 
-
-
 /**
  * Unit tests on DeleteComment in regard of specifications
  */
@@ -23,161 +21,133 @@ import PasswordSidebarCommentSectionPage from "./PasswordSidebarCommentSection.t
 import {ActionFeedbackContext} from "../../../contexts/ActionFeedbackContext";
 
 beforeEach(() => {
-    jest.resetModules();
+  jest.resetModules();
 });
 
 describe("Delete comments", () => {
+  let page; // The page to test against
+  const context = defaultAppContext(); // The applicative context
+  const administratorContext = administratorAppContext(); // The applicative context as administrator
+  const props = defaultProps(); // The props to pass
 
-    var page; // The page to test against
-    const context = defaultAppContext(); // The applicative context
-    const administratorContext = administratorAppContext(); // The applicative context as administrator
-    const props = defaultProps(); // The props to pass
+  const mockContextRequest = (context, implementation) => jest.spyOn(context.port, 'request').mockImplementation(implementation);
+  const noneCommentFoundRequestMockImpl = jest.fn(() => Promise.resolve([]));
+  const commentsFoundRequestMockImpl = jest.fn(() => Promise.resolve(commentsMock));
 
-    const mockContextRequest = (context,implementation) => jest.spyOn(context.port, 'request').mockImplementation(implementation);
-    const noneCommentFoundRequestMockImpl = jest.fn(() => Promise.resolve([]));
-    const commentsFoundRequestMockImpl = jest.fn(() => Promise.resolve(commentsMock));
+  describe("As AD I should be able to delete comments I don’t own", () => {
+    describe('As AD I can delete a comment I don’t own', () => {
+      /**
+       * Given I am deleting a comment I don’t own
+       * When I confirm the deletion
+       * Then The comment should be removed from the comments list
+       * And I should be notified that the comment has been deleted
+       */
 
+      beforeEach(() => {
+        page = new PasswordSidebarCommentSectionPage(administratorContext, props);
+        mockContextRequest(administratorContext, commentsFoundRequestMockImpl);
+      });
 
-    describe("As AD I should be able to delete comments I don’t own", () => {
-
-        describe('As AD I can delete a comment I don’t own', () => {
-
-            /**
-             * Given I am deleting a comment I don’t own
-             * When I confirm the deletion
-             * Then The comment should be removed from the comments list
-             * And I should be notified that the comment has been deleted
-             */
-
-            beforeEach( () => {
-                page = new PasswordSidebarCommentSectionPage(administratorContext, props);
-                mockContextRequest(administratorContext,commentsFoundRequestMockImpl);
-            })
-
-            it('I should not be able to delete the comment', async () => {
-                await page.title.click();
-                expect(page.displayCommentList.canDelete(2)).toBeTruthy();
-            });
-
-        })
-
-
+      it('I should not be able to delete the comment', async() => {
+        await page.title.click();
+        expect(page.displayCommentList.canDelete(2)).toBeTruthy();
+      });
     });
-    describe('As LU I should be able to delete my comment', () => {
+  });
+  describe('As LU I should be able to delete my comment', () => {
+    describe('Remove comment from the list', () => {
+      /**
+       * Given I am deleting a comment
+       * When I confirm the deletion
+       * Then the comment should be removed from the comments list
+       */
 
+      let requestMock;
 
-        describe('Remove comment from the list', () => {
+      beforeEach(() => {
+        page = new PasswordSidebarCommentSectionPage(context, props);
+        requestMock = mockContextRequest(context, commentsFoundRequestMockImpl).mockClear();
+      });
 
-            /**
-             * Given I am deleting a comment
-             * When I confirm the deletion
-             * Then the comment should be removed from the comments list
-             */
+      it('the comment should be removed from the comments list', async() => {
+        await page.title.click();
+        await page.displayCommentList.delete(1);
+        expect(page.confirmDeleteComment.exists()).toBeTruthy();
 
-            let requestMock;
+        await page.confirmDeleteComment.confirm();
 
-            beforeEach( () => {
-                page = new PasswordSidebarCommentSectionPage(context, props);
-                requestMock = mockContextRequest(context,commentsFoundRequestMockImpl).mockClear();
-            })
+        const requestName = requestMock.mock.calls[requestMock.mock.calls.length - 2][0];
+        const deletedCommentId = requestMock.mock.calls[requestMock.mock.calls.length - 2][1];
+        expect(requestName).toBe('passbolt.comments.delete');
+        expect(deletedCommentId).toBe(context.resourceCommentId);
+      });
+    });
 
-            it('the comment should be removed from the comments list', async () => {
-                await page.title.click();
-                await page.displayCommentList.delete(1);
-                expect(page.confirmDeleteComment.exists()).toBeTruthy();
+    describe('Remove the only one comment of a resource', () => {
+      /**
+       * Given a resource with only one comment
+       * And I don’t own the comment
+       * When I ask for the deletion of the comment
+       * Then it should ask me for confirmation
+       * When I confirm the deletion
+       * Then the comment should be removed from the comments list
+       * And I should prompt to insert a new comment
+       */
 
-                await page.confirmDeleteComment.confirm();
+      beforeEach(() => {
+        page = new PasswordSidebarCommentSectionPage(context, props);
+        mockContextRequest(context, commentsFoundRequestMockImpl);
+      });
 
-                const requestName = requestMock.mock.calls[requestMock.mock.calls.length-2][0];
-                const deletedCommentId = requestMock.mock.calls[requestMock.mock.calls.length-2][1];
-                expect(requestName).toBe('passbolt.comments.delete');
-                expect(deletedCommentId).toBe(context.resourceCommentId);
-            });
+      it('I should prompt to insert a new comment', async() => {
+        await page.title.click();
+        await page.displayCommentList.delete(1);
 
+        // Simulate an empty list after deletion
+        mockContextRequest(context, noneCommentFoundRequestMockImpl);
 
-        })
+        await page.confirmDeleteComment.confirm();
+        expect(page.addComment.exists()).toBeTruthy();
+      });
+    });
 
-        describe('Remove the only one comment of a resource', () => {
+    describe('See notification after removing a comment', () => {
+      /**
+       * Given I am deleting a comment
+       * When I confirm the deletion
+       * Then I should be notified about the success of the operation
+       */
 
-            /**
-             * Given a resource with only one comment
-             * And I don’t own the comment
-             * When I ask for the deletion of the comment
-             * Then it should ask me for confirmation
-             * When I confirm the deletion
-             * Then the comment should be removed from the comments list
-             * And I should prompt to insert a new comment
-             */
+      beforeEach(() => {
+        page = new PasswordSidebarCommentSectionPage(context, props);
+        mockContextRequest(context, commentsFoundRequestMockImpl);
+      });
 
-            beforeEach( () => {
-                page = new PasswordSidebarCommentSectionPage(context, props);
-                mockContextRequest(context,commentsFoundRequestMockImpl);
-            })
+      it('I should be notified about the success of the operation', async() => {
+        jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementation(() => {});
+        await page.title.click();
+        await page.displayCommentList.delete(1);
+        await page.confirmDeleteComment.confirm();
+        expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalled();
+      });
+    });
 
-            it('I should prompt to insert a new comment', async () => {
-                await page.title.click();
-                await page.displayCommentList.delete(1);
+    describe('Cannot delete a comment I don’t own', () => {
+      /**
+       * Given a selected resource which has comments I don’t own
+       * When I intends to remove a comment I don’t own
+       * Then I should not be able to delete the comment
+       */
 
-                // Simulate an empty list after deletion
-                mockContextRequest(context,noneCommentFoundRequestMockImpl);
+      beforeEach(() => {
+        page = new PasswordSidebarCommentSectionPage(context, props);
+        mockContextRequest(context, commentsFoundRequestMockImpl);
+      });
 
-                await page.confirmDeleteComment.confirm();
-                expect(page.addComment.exists()).toBeTruthy();
-            });
-
-
-        })
-
-        describe('See notification after removing a comment', () => {
-
-            /**
-             * Given I am deleting a comment
-             * When I confirm the deletion
-             * Then I should be notified about the success of the operation
-             */
-
-
-            beforeEach( () => {
-                page = new PasswordSidebarCommentSectionPage(context, props);
-                mockContextRequest(context,commentsFoundRequestMockImpl);
-            })
-
-            it('I should be notified about the success of the operation', async () => {
-                jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementation(() => {});
-                await page.title.click();
-                await page.displayCommentList.delete(1);
-                await page.confirmDeleteComment.confirm();
-                expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalled();
-            });
-
-
-        })
-
-        describe('Cannot delete a comment I don’t own', () => {
-
-            /**
-             * Given a selected resource which has comments I don’t own
-             * When I intends to remove a comment I don’t own
-             * Then I should not be able to delete the comment
-             */
-
-
-            beforeEach( () => {
-                page = new PasswordSidebarCommentSectionPage(context, props);
-                mockContextRequest(context,commentsFoundRequestMockImpl);
-            })
-
-            it('I should not be able to delete the comment', async () => {
-                await page.title.click();
-                expect(page.displayCommentList.canDelete(2)).toBeFalsy();
-            });
-
-        })
-
-    })
-
-
-
-
-
+      it('I should not be able to delete the comment', async() => {
+        await page.title.click();
+        expect(page.displayCommentList.canDelete(2)).toBeFalsy();
+      });
+    });
+  });
 });

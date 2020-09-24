@@ -69,7 +69,7 @@ class PasswordSidebarDescriptionSection extends React.Component {
    * Display or not the input tag editor
    */
   toggleInputDescriptionEditor() {
-    if(this.canEdit()) {
+    if (this.canEdit()) {
       const showDescriptionEditor = !this.state.showDescriptionEditor;
       this.setState({showDescriptionEditor});
     }
@@ -108,7 +108,6 @@ class PasswordSidebarDescriptionSection extends React.Component {
    * @returns {JSX}
    */
   render() {
-
     return (
       <div className={`detailed-information accordion sidebar-section ${this.state.open ? "" : "closed"}`}>
         <div className="accordion-header">
@@ -146,7 +145,6 @@ class PasswordSidebarDescriptionSection extends React.Component {
 
 PasswordSidebarDescriptionSection.propTypes = {
   resourceWorkspaceContext: PropTypes.any
-}
-
+};
 
 export default withResourceWorkspace(PasswordSidebarDescriptionSection);

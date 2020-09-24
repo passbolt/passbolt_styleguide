@@ -183,7 +183,6 @@ class DescriptionEditor extends React.Component {
     return this.context.port.request("passbolt.resource.update-description", descriptionDto);
   }
 
-
   /**
    * Render the component
    * @returns {JSX}
@@ -193,10 +192,10 @@ class DescriptionEditor extends React.Component {
       <form onKeyDown={this.handleKeyDown} noValidate>
         <div className="form-content" ref={this.elementRef}>
           <div className="input text required">
-              <textarea name="description" className="fluid" ref={this.textareaRef}
-                        maxLength="10000" placeholder="enter a description" value={this.state.description}
-                        onChange={this.handleInputChange}
-                        disabled={this.hasAllInputDisabled()} autoComplete="off"/>
+            <textarea name="description" className="fluid" ref={this.textareaRef}
+              maxLength="10000" placeholder="enter a description" value={this.state.description}
+              onChange={this.handleInputChange}
+              disabled={this.hasAllInputDisabled()} autoComplete="off"/>
             <div className=" message ready">
             </div>
           </div>
@@ -205,11 +204,11 @@ class DescriptionEditor extends React.Component {
           }
           <div className="actions">
             <a className={`button description-editor-submit ${this.state.processing ? "primary processing" : ""}`}
-               onClick={this.handleFormSubmit}>
+              onClick={this.handleFormSubmit}>
               <span>save</span>
             </a>
             <a className={`cancel button ${this.hasAllInputDisabled() ? "disabled" : ""}`} role="button"
-               onClick={this.props.toggleInputDescriptionEditor}>cancel</a>
+              onClick={this.props.toggleInputDescriptionEditor}>cancel</a>
           </div>
         </div>
       </form>
@@ -219,11 +218,11 @@ class DescriptionEditor extends React.Component {
 
 DescriptionEditor.contextType = AppContext;
 
-  DescriptionEditor.propTypes = {
-    description: PropTypes.string, // the description of the resources
-    resourceId: PropTypes.string, // the id of the resource
-    toggleInputDescriptionEditor: PropTypes.func, // toggle to display or not the editor
-    actionFeedbackContext: PropTypes.any // The action feedback context
-  };
+DescriptionEditor.propTypes = {
+  description: PropTypes.string, // the description of the resources
+  resourceId: PropTypes.string, // the id of the resource
+  toggleInputDescriptionEditor: PropTypes.func, // toggle to display or not the editor
+  actionFeedbackContext: PropTypes.any // The action feedback context
+};
 
-  export default withActionFeedback(DescriptionEditor);
+export default withActionFeedback(DescriptionEditor);

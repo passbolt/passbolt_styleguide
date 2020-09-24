@@ -26,7 +26,7 @@ beforeEach(() => {
   jest.resetModules();
 });
 
-const getAppContext = function (appContext) {
+const getAppContext = function(appContext) {
   const port = new MockPort();
   const defaultAppContext = {
     port,
@@ -35,7 +35,7 @@ const getAppContext = function (appContext) {
       slug: "tardis",
       is_shared: false
     },
-    setContext: function (newContext) {
+    setContext: function(newContext) {
       // In this scope this reference the object context.
       Object.assign(this, newContext);
     },
@@ -44,13 +44,11 @@ const getAppContext = function (appContext) {
   return Object.assign(defaultAppContext, appContext || {});
 };
 
-const getDummyTag = () => {
-  return {
-    onClose: jest.fn()
-  };
-}
+const getDummyTag = () => ({
+  onClose: jest.fn()
+});
 
-const renderTagEditDialog = function (appContext, props) {
+const renderTagEditDialog = function(appContext, props) {
   appContext = getAppContext(appContext);
 
   return render(
@@ -116,7 +114,7 @@ describe("TagEditDialog", () => {
     expect(props.onClose).toBeCalled();
   });
 
-  it("validates the form when clicking on the submit button.", async () => {
+  it("validates the form when clicking on the submit button.", async() => {
     const context = getAppContext();
     const props = getDummyTag();
     const {container} = renderTagEditDialog(context, props);
@@ -140,7 +138,7 @@ describe("TagEditDialog", () => {
     });
   });
 
-  it("requests the addon to edit a tag when clicking on the submit button.", async () => {
+  it("requests the addon to edit a tag when clicking on the submit button.", async() => {
     const context = getAppContext();
     const props = getDummyTag();
     const {container} = renderTagEditDialog(context, props);
@@ -178,7 +176,7 @@ describe("TagEditDialog", () => {
     });
   });
 
-  it("displays an error when the API call fail.", async () => {
+  it("displays an error when the API call fail.", async() => {
     const context = getAppContext();
     const props = getDummyTag();
     const {container} = renderTagEditDialog(context, props);

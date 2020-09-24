@@ -16,7 +16,6 @@ import PropTypes from "prop-types";
 import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 
 class TagItemViewer extends React.Component {
-
   /**
    * Constructor
    * @param {Object} props
@@ -47,7 +46,7 @@ class TagItemViewer extends React.Component {
   }
 
   getTags() {
-    if(!this.isLoading()) {
+    if (!this.isLoading()) {
       return this.props.tags.sort((tagA, tagB) => tagA.slug.localeCompare(tagB.slug));
     }
     return null;

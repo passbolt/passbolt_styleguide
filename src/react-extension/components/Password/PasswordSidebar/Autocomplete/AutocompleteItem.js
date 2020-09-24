@@ -15,7 +15,6 @@ import React, {Component} from "react";
 import PropTypes from "prop-types";
 
 class AutocompleteItem extends Component {
-
   /**
    * Constructor
    * @param {Object} props
@@ -46,7 +45,7 @@ class AutocompleteItem extends Component {
         <div className={`autocomplete-suggestion ${this.getClassName()} `}>
           <div className="main-cell-wrapper">
             <div className="main-cell ">
-              <a role="button" onClick={(event) => this.onClick(event)}>
+              <a role="button" onClick={event => this.onClick(event)}>
                 <div className="user">
                   <span className="name ellipsis">{this.props.slug}</span>
                 </div>
@@ -55,7 +54,7 @@ class AutocompleteItem extends Component {
           </div>
         </div>
       </li>
-    )
+    );
   }
 }
 

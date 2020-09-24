@@ -13,51 +13,47 @@
  * @since         2.11.0
  */
 
-
 import {fireEvent, waitFor} from "@testing-library/react";
 
 /**
  * Page object for the ConfirmCommentDeletion component
  */
 export default class ConfirmCommentDeletionPageObject {
+  /**
+   * Default constructor
+   * @param container The container which includes the AddComment Component
+   */
+  constructor(container) {
+    this._container = container;
+  }
 
+  /**
+   * Returns the dialog wrapper element
+   */
+  get dialog() {
+    return this._container.querySelector('.comment-delete-dialog');
+  }
 
-    /**
-     * Default constructor
-     * @param container The container which includes the AddComment Component
-     */
-    constructor(container) {
-        this._container = container;
-    }
+  /**
+   * Returns the confirm button
+   */
+  get confirmButton() {
+    return this._container.querySelector('.button.primary');
+  }
 
-    /**
-     * Returns the dialog wrapper element
-     */
-    get dialog() {
-        return this._container.querySelector('.comment-delete-dialog');
-    }
+  /**
+   * Returns true if the page object exists in the container
+   */
+  exists() {
+    return this.dialog !== null;
+  }
 
-    /**
-     * Returns the confirm button
-     */
-    get confirmButton() {
-        return this._container.querySelector('.button.primary');
-    }
-
-    /**
-     * Returns true if the page object exists in the container
-     */
-    exists() {
-        return this.dialog !== null;
-    }
-
-    /**
-     * Confirm the deletion of the comment
-     */
-    async confirm() {
-        const leftClick = {button: 0};
-        fireEvent.click(this.confirmButton, leftClick);
-        await waitFor(() => {})
-    }
-
+  /**
+   * Confirm the deletion of the comment
+   */
+  async confirm() {
+    const leftClick = {button: 0};
+    fireEvent.click(this.confirmButton, leftClick);
+    await waitFor(() => {});
+  }
 }

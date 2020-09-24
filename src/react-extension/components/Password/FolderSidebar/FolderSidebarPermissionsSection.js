@@ -47,14 +47,13 @@ class FolderSidebarPermissionsSection extends React.Component {
     await this.handleFolderChange(prevProps.resourceWorkspaceContext.details.folder);
   }
 
-
   /**
    * Check if the folder has changed and fetch
    * @param previousFolder
    */
   handleFolderChange(previousFolder) {
     const hasFolderChanged = this.folder.id !== previousFolder.id;
-    if(hasFolderChanged && this.props.open) {
+    if (hasFolderChanged && this.props.open) {
       this.props.onOpen();
     }
   }

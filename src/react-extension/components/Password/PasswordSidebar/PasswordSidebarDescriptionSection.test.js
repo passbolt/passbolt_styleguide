@@ -57,7 +57,6 @@ const getDummyDescriptionEmptyWithPermissionUpdate = function() {
   };
 };
 
-
 const getAppContext = function(appContext) {
   const defaultAppContext = {
     port: new MockPort()
@@ -349,7 +348,7 @@ describe("PasswordSidebarDescription", () => {
     expect(editorDescriptionClosed).toBeNull();
   });
 
-  it("Update the description to a resource", async () => {
+  it("Update the description to a resource", async() => {
     const context = getAppContext();
     const props = {resourceWorkspaceContext: {details: {resource: getDummyDescriptionEmptyWithPermissionUpdate()}}};
     const {container} = renderPasswordSidebarDescriptionSection(context, props);
@@ -402,7 +401,7 @@ describe("PasswordSidebarDescription", () => {
     expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalled();
   });
 
-  it("Cannot edit while submitting changes", async () => {
+  it("Cannot edit while submitting changes", async() => {
     const context = getAppContext();
     const props = {resourceWorkspaceContext: {details: {resource: getDummyDescriptionEmptyWithPermissionUpdate()}}};
     const {container} = renderPasswordSidebarDescriptionSection(context, props);
@@ -451,7 +450,7 @@ describe("PasswordSidebarDescription", () => {
     });
   });
 
-  it("Show progress feedback while submitting", async () => {
+  it("Show progress feedback while submitting", async() => {
     const context = getAppContext();
     const props = {resourceWorkspaceContext: {details: {resource: getDummyDescriptionEmptyWithPermissionUpdate()}}};
     const {container} = renderPasswordSidebarDescriptionSection(context, props);

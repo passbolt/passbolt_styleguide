@@ -91,7 +91,7 @@ class TagDeleteDialog extends Component {
     const errorDialogProps = {
       title: "There was an unexpected error...",
       message: error.message
-    }
+    };
     this.context.setContext({errorDialogProps});
     this.props.dialogContext.open(ErrorDialog);
   }
@@ -105,7 +105,6 @@ class TagDeleteDialog extends Component {
   }
 
   render() {
-
     return (
       <DialogWrapper
         title="Delete tag?"
@@ -113,16 +112,16 @@ class TagDeleteDialog extends Component {
         onClose={this.handleCloseClick}
         disabled={this.state.processing}
         className="delete-tag-dialog">
-            <form onSubmit={this.handleFormSubmit} noValidate>
-              <div className="form-content">
-                <p>Are you sure you want to delete the tag <strong>{this.context.tagToDelete.slug}</strong>?</p>
-                <p>Warning: Once the tag is deleted, it’ll be removed permanently and will not be recoverable.</p>
-              </div>
-              <div className="submit-wrapper clearfix">
-                <FormSubmitButton disabled={this.hasAllInputDisabled()} processing={this.state.processing} value="Delete"/>
-                <FormCancelButton disabled={this.hasAllInputDisabled()} onClick={this.handleCloseClick} />
-              </div>
-            </form>
+        <form onSubmit={this.handleFormSubmit} noValidate>
+          <div className="form-content">
+            <p>Are you sure you want to delete the tag <strong>{this.context.tagToDelete.slug}</strong>?</p>
+            <p>Warning: Once the tag is deleted, it’ll be removed permanently and will not be recoverable.</p>
+          </div>
+          <div className="submit-wrapper clearfix">
+            <FormSubmitButton disabled={this.hasAllInputDisabled()} processing={this.state.processing} value="Delete"/>
+            <FormCancelButton disabled={this.hasAllInputDisabled()} onClick={this.handleCloseClick} />
+          </div>
+        </form>
       </DialogWrapper>
     );
   }

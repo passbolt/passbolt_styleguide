@@ -19,7 +19,6 @@ import Icon from "../../Common/Icons/Icon";
 import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 
 class PasswordSidebarTagSection extends React.Component {
-
   /**
    * Constructor
    * @param {Object} props
@@ -115,6 +114,6 @@ class PasswordSidebarTagSection extends React.Component {
 PasswordSidebarTagSection.propTypes = {
   history: PropTypes.any,
   resourceWorkspaceContext: PropTypes.any
-}
+};
 
 export default withResourceWorkspace(PasswordSidebarTagSection);

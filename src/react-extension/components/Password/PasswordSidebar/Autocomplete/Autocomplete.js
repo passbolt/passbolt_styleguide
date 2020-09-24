@@ -36,7 +36,7 @@ class Autocomplete extends Component {
     return {
       // autocomplete
       selected: -1,
-    }
+    };
   }
 
   /**
@@ -117,12 +117,11 @@ class Autocomplete extends Component {
    */
   handleArrowFocus() {
     if (this.state.selected === -1) {
-      this.props.onArrowFocus(this.props.value)
+      this.props.onArrowFocus(this.props.value);
     } else {
       const slug = this.props.autocompleteItems[this.state.selected].slug;
       this.props.onArrowFocus(slug);
     }
-
   }
 
   /**
@@ -177,7 +176,6 @@ class Autocomplete extends Component {
     };
   }
 
-
   scrollToSelectedItem() {
     if (!this.props.autocompleteItems || this.props.autocompleteItems.length === 0 || this.state.selected === -1) {
       this.listRef.current.scrollTop = 0;
@@ -207,12 +205,12 @@ class Autocomplete extends Component {
           <ul>
             {!this.state.processing && this.props.autocompleteItems && (this.props.autocompleteItems).map((tag, key) =>
               <AutocompleteItem key={key} id={key} slug={tag.slug} selected={this.isItemSelected(key)}
-                                onClick={this.handleSelect}/>
+                onClick={this.handleSelect}/>
             )}
           </ul>
         </div>
       </div>
-    )
+    );
   }
 }
 

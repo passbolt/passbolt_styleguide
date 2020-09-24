@@ -28,7 +28,6 @@ export const ContextualMenuContext = React.createContext({
  * The related context provider
  */
 export default class ContextualMenuContextProvider extends React.Component {
-
   /**
    * Default constructor
    * @param props The component props
@@ -45,8 +44,8 @@ export default class ContextualMenuContextProvider extends React.Component {
     return {
       contextualMenus: [],
       show: (ContextualMenuComponent, componentProps) => this.setState({contextualMenus: [...this.state.contextualMenus, {ContextualMenuComponent, componentProps}]}),
-      hide: index => this.setState({contextualMenus: this.state.contextualMenus.filter( (_,contextualMenuIndex) => contextualMenuIndex !== index)})
-    }
+      hide: index => this.setState({contextualMenus: this.state.contextualMenus.filter((_, contextualMenuIndex) => contextualMenuIndex !== index)})
+    };
   }
 
   /**
@@ -58,7 +57,7 @@ export default class ContextualMenuContextProvider extends React.Component {
       <ContextualMenuContext.Provider value={this.state}>
         {this.props.children}
       </ContextualMenuContext.Provider>
-    )
+    );
   }
 }
 ContextualMenuContextProvider.displayName = 'ContextualMenuContextProvider';
@@ -71,7 +70,6 @@ ContextualMenuContextProvider.propTypes = {
  * @param WrappedComponent
  */
 export function withContextualMenu(WrappedComponent) {
-
   return class WithContextualMenu extends React.Component {
     render() {
       return (
@@ -80,7 +78,7 @@ export function withContextualMenu(WrappedComponent) {
             contextualMenuContext => <WrappedComponent contextualMenuContext={contextualMenuContext} {...this.props} />
           }
         </ContextualMenuContext.Consumer>
-      )
+      );
     }
-  }
+  };
 }

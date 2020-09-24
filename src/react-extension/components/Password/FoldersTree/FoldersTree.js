@@ -189,7 +189,7 @@ class FoldersTree extends React.Component {
     const foldersIds = this.state.draggedItems.folders.map(folder => folder.id);
     const resourcesIds = this.state.draggedItems.resources.map(resource => resource.id);
     const folderParentId = null;
-    this.context.setContext({folderMoveStrategyProps: {foldersIds, resourcesIds, folderParentId}})
+    this.context.setContext({folderMoveStrategyProps: {foldersIds, resourcesIds, folderParentId}});
     this.props.dialogContext.open(FolderMoveStrategyDialog);
 
     // The dragLeave event is not fired when a drop is happening. Cancel the state manually.
@@ -233,7 +233,7 @@ class FoldersTree extends React.Component {
     const foldersIds = this.state.draggedItems.folders.map(folder => folder.id);
     const resourcesIds = this.state.draggedItems.resources.map(resource => resource.id);
     const folderParentId = null;
-    this.context.setContext({folderMoveStrategyProps: {foldersIds, resourcesIds, folderParentId}})
+    this.context.setContext({folderMoveStrategyProps: {foldersIds, resourcesIds, folderParentId}});
     this.props.dialogContext.open(FolderMoveStrategyDialog);
   }
 
@@ -446,14 +446,14 @@ class FoldersTree extends React.Component {
     }
 
     return (
-        <div className="folders navigation first accordion">
-          {this.renderDragFeedback()}
-          <div className="accordion-header">
-            <div className={`${isOpen ? "open" : "close"} node root`}>
-              <div className={`row title ${showDropFocus ? "drop-focus" : ""} ${disabled ? "disabled" : ""}`}>
-                <div className="main-cell-wrapper">
-                  <div className="main-cell">
-                    <h3>
+      <div className="folders navigation first accordion">
+        {this.renderDragFeedback()}
+        <div className="accordion-header">
+          <div className={`${isOpen ? "open" : "close"} node root`}>
+            <div className={`row title ${showDropFocus ? "drop-focus" : ""} ${disabled ? "disabled" : ""}`}>
+              <div className="main-cell-wrapper">
+                <div className="main-cell">
+                  <h3>
                     <span className="folders-label">
                       {!isLoading &&
                       <Fragment>
@@ -474,16 +474,16 @@ class FoldersTree extends React.Component {
                         onContextMenu={this.handleTitleContextualMenuEvent}
                       >Folders</span>
                     </span>
-                    </h3>
-                  </div>
-                  <div className="right-cell more-ctrl">
-                    <a onClick={this.handleTitleMoreClickEvent}><span>more</span></a>
-                  </div>
+                  </h3>
+                </div>
+                <div className="right-cell more-ctrl">
+                  <a onClick={this.handleTitleMoreClickEvent}><span>more</span></a>
                 </div>
               </div>
             </div>
           </div>
-          {!isLoading && isOpen &&
+        </div>
+        {!isLoading && isOpen &&
           <div className="accordion-content">
             <ul ref={this.listElement} className="folders-tree">
               {rootFolders.map(folder => <FoldersTreeItem
@@ -503,8 +503,8 @@ class FoldersTree extends React.Component {
                 selectedFolder={this.selectedFolder}/>)}
             </ul>
           </div>
-          }
-        </div>
+        }
+      </div>
     );
   }
 }
@@ -518,6 +518,5 @@ FoldersTree.propTypes = {
   resourceWorkspaceContext: PropTypes.object,
   dialogContext: PropTypes.any
 };
-
 
 export default withDialog(withContextualMenu(withResourceWorkspace(withRouter(FoldersTree))));

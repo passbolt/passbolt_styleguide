@@ -116,4 +116,3 @@ MainMenu.propTypes = {
 };
 
 export default withRouter(MainMenu);
-

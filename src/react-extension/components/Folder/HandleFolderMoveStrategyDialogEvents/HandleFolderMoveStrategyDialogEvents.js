@@ -21,51 +21,39 @@ import FolderMoveStrategyDialog from "../FolderMoveStrategyDialog/FolderMoveStra
  * This component listens any event related to folder move strategy dialog actions to perform
  */
 class HandleFolderMoveStrategyDialogEvents extends React.Component {
+  /**
+   * Whenever the component is mounted
+   */
+  componentDidMount() {
+    this.listen();
+  }
 
-    /**
-     * Default constructor
-     */
-    constructor(props) {
-        super(props);
-    }
+  /**
+   * Listen the progress dialog event from the context and acts accordingly
+   */
+  listen() {
+    this.context.port.on('passbolt.folders.move-strategy.request', this.handleFolderMoveStrategyRequestEvent);
+  }
 
+  /**
+   * Handle the dialog request event
+   * @param requestId
+   */
+  handleFolderMoveStrategyRequestEvent(requestId, folderId, foldersIds, resourcesIds) {
+    const folderMoveStrategyProps = {requestId, folderId, foldersIds, resourcesIds};
+    this.context.setContext({folderMoveStrategyProps});
+    this.dialogContext.open(FolderMoveStrategyDialog);
+  }
 
-    /**
-     * Whenever the component is mounted
-     */
-    componentDidMount() {
-        this.listen();
-    }
-
-    /**
-     * Listen the progress dialog event from the context and acts accordingly
-     */
-    listen() {
-        this.context.port.on('passbolt.folders.move-strategy.request', this.handleFolderMoveStrategyRequestEvent);
-    }
-
-    /**
-     * Handle the dialog request event
-     * @param requestId
-     */
-    handleFolderMoveStrategyRequestEvent(requestId, folderId, foldersIds, resourcesIds) {
-        const folderMoveStrategyProps = {requestId, folderId, foldersIds, resourcesIds};
-        this.context.setContext({folderMoveStrategyProps});
-        this.dialogContext.open(FolderMoveStrategyDialog);
-    }
-
-    /**
-     * Renders the component
-     * @returns {JSX.Element}
-     */
-    render() {
-        return <></>
-    }
-
-
+  /**
+   * Renders the component
+   * @returns {JSX.Element}
+   */
+  render() {
+    return <></>;
+  }
 }
 
 HandleFolderMoveStrategyDialogEvents.contextType = AppContext;
 
 export default withDialog(HandleFolderMoveStrategyDialogEvents);
-

@@ -26,7 +26,7 @@ beforeEach(() => {
   jest.resetModules();
 });
 
-const getDummyTags = function (filterBy) {
+const getDummyTags = function(filterBy) {
   let tags = [
     {
       id: "1",
@@ -66,7 +66,7 @@ const getDummyTags = function (filterBy) {
   return tags;
 };
 
-const getAppContext = function (appContext) {
+const getAppContext = function(appContext) {
   const defaultAppContext = {
     port: new MockPort()
   };
@@ -74,7 +74,7 @@ const getAppContext = function (appContext) {
   return Object.assign(defaultAppContext, appContext || {});
 };
 
-const renderTagFilter = function (appContext, props) {
+const renderTagFilter = function(appContext, props) {
   appContext = getAppContext(appContext);
   props = props || {};
   return render(
@@ -103,10 +103,9 @@ describe("SidebarTagFilterSection", () => {
     const slugList = container.querySelectorAll(".ellipsis");
     expect(slugList).not.toBeNull();
     expect(slugList.length).toBe(5);
-    slugList.forEach(function (value, index) {
+    slugList.forEach((value, index) => {
       expect(value.textContent).toBe(props.tags[index].slug);
     });
-
   });
 
   it("View resources' empty tag", () => {
@@ -124,7 +123,6 @@ describe("SidebarTagFilterSection", () => {
     const emptyTag = container.querySelector(".empty-content");
     expect(emptyTag).not.toBeNull();
     expect(emptyTag.textContent).toBe("empty");
-
   });
 
   it("View resources' loading tag", () => {
@@ -142,7 +140,6 @@ describe("SidebarTagFilterSection", () => {
     const emptyTag = container.querySelector(".processing-text");
     expect(emptyTag).not.toBeNull();
     expect(emptyTag.textContent).toBe("Retrieving tags");
-
   });
 
   it("Cut long tags", () => {
@@ -180,10 +177,9 @@ describe("SidebarTagFilterSection", () => {
     const slugList = container.querySelectorAll(".ellipsis");
     expect(slugList).not.toBeNull();
     expect(slugList.length).toBe(4);
-    slugList.forEach(function (value, index) {
+    slugList.forEach((value, index) => {
       expect(value.textContent).toBe(personalTags[index].slug);
     });
-
   });
 
   it("Filter my resources’ tags by shared tags", () => {
@@ -217,10 +213,9 @@ describe("SidebarTagFilterSection", () => {
     const slugList = container.querySelectorAll(".ellipsis");
     expect(slugList).not.toBeNull();
     expect(slugList.length).toBe(1);
-    slugList.forEach(function (value, index) {
+    slugList.forEach((value, index) => {
       expect(value.textContent).toBe(sharedTags[index].slug);
     });
-
   });
 
   it("Filter my resources’ tags by all tags", () => {
@@ -252,7 +247,7 @@ describe("SidebarTagFilterSection", () => {
     const slugList = container.querySelectorAll(".ellipsis");
     expect(slugList).not.toBeNull();
     expect(slugList.length).toBe(5);
-    slugList.forEach(function (value, index) {
+    slugList.forEach((value, index) => {
       expect(value.textContent).toBe(props.tags[index].slug);
     });
   });
@@ -270,10 +265,9 @@ describe("SidebarTagFilterSection", () => {
 
     const moreTagItemMenu = container.querySelector(".more");
     expect(moreTagItemMenu).toBeNull();
-
   });
 
-  it("Select a tag in a resource’s tags", async () => {
+  it("Select a tag in a resource’s tags", async() => {
     const appContext = getAppContext();
     const props = {
       tags: getDummyTags()
@@ -302,7 +296,7 @@ describe("SidebarTagFilterSection", () => {
     expect(ResourceWorkspaceContext._currentValue.onFilterTagChanged).toHaveBeenCalled();
   });
 
-  it("Filter my resources’ tags by personal tags should filter my resources by All items if it was previously filtered with a shared tag", async () => {
+  it("Filter my resources’ tags by personal tags should filter my resources by All items if it was previously filtered with a shared tag", async() => {
     const props = {
       tags: getDummyTags(),
       resourceWorkspaceContext: {
@@ -344,7 +338,7 @@ describe("SidebarTagFilterSection", () => {
     expect(props.resourceWorkspaceContext.onAllFilterRequired).toHaveBeenCalled();
   });
 
-  it("Filter my resources’ tags by shared tags should filter my resources by All items if it was previously filtered with a personal tag", async () => {
+  it("Filter my resources’ tags by shared tags should filter my resources by All items if it was previously filtered with a personal tag", async() => {
     const props = {
       tags: getDummyTags(),
       resourceWorkspaceContext: {
@@ -385,5 +379,4 @@ describe("SidebarTagFilterSection", () => {
 
     expect(props.resourceWorkspaceContext.onAllFilterRequired).toHaveBeenCalled();
   });
-
 });

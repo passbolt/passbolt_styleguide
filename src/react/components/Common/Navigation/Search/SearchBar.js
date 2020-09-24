@@ -88,4 +88,3 @@ SearchBar.defaultProps = {
 };
 
 export default SearchBar;
-

@@ -29,9 +29,6 @@ const SELECT_RANGE = 'range';
  * This component allows to display the filtered resources into a grid
  */
 class Grid extends React.Component {
-
-
-
   /**
    * Default constructor
    * @param props Component props
@@ -52,7 +49,6 @@ class Grid extends React.Component {
       selectStrategy: "",
     };
   }
-
 
   /**
    * Initialize the component event handlers
@@ -132,13 +128,13 @@ class Grid extends React.Component {
    * Handles the initial resource scroll ( with a specific manual resource url /password/view/:id )
    */
   handleInitialResourceScroll() {
-    const resourceToScroll = this.props.resourceWorkspaceContext.scrollTo.resource
+    const resourceToScroll = this.props.resourceWorkspaceContext.scrollTo.resource;
     if (resourceToScroll) {
       this.scrollTo(resourceToScroll.id);
       this.props.resourceWorkspaceContext.onResourceScrolled();
 
       // Dynamic programming just to save continuous checking and voiding the handler
-      this.handleInitialResourceScroll = () => {}
+      this.handleInitialResourceScroll = () => {};
     }
   }
 
@@ -148,7 +144,6 @@ class Grid extends React.Component {
   get resources() {
     return this.props.resourceWorkspaceContext.filteredResources;
   }
-
 
   selectResource(resource, selectStrategy) {
     let selectedResources;
@@ -300,7 +295,6 @@ class Grid extends React.Component {
     event.initCustomEvent("passbolt_notify", true, true, notification);
     bus.dispatchEvent(event);
   }
-
 
   scrollTo(resourceId) {
     const resourceIndex = this.resources.findIndex(resource => resource.id === resourceId);
@@ -469,7 +463,6 @@ class Grid extends React.Component {
     const isEmpty = this.resources.length === 0;
     const selectAll = this.resources.length === this.props.selectedResources.length;
     const filterType = this.props.resourceWorkspaceContext.filter.type;
-
 
     return (
       <div className={`tableview ready ${isEmpty ? "empty" : ""} ${["default", "modified"].includes(this.props.filterType) ? "all_items" : ""}`}>

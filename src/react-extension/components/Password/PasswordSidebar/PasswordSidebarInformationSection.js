@@ -54,7 +54,7 @@ class PasswordSidebarInformationSection extends React.Component {
   handleFolderParentClickEvent() {
     if (this.resource.folder_parent_id) { // Case of specific folder
       const folderParent = this.context.folders.find(item => item.id === this.resource.folder_parent_id);
-      this.props.history.push(`/app/folders/view/${folderParent.id}`)
+      this.props.history.push(`/app/folders/view/${folderParent.id}`);
     } else { // Case of root folder
       this.props.history.push(`/app/passwords`);
     }
@@ -69,7 +69,7 @@ class PasswordSidebarInformationSection extends React.Component {
   }
 
   get resource() {
-    return this.props.resourceWorkspaceContext.details.resource
+    return this.props.resourceWorkspaceContext.details.resource;
   }
 
   /**

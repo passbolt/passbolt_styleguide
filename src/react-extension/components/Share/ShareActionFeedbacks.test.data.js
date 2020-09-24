@@ -14,44 +14,42 @@
  * @since         2.11.0
  */
 
-
-
 /**
  *  Props with one successful feedback
  */
 export const propsWithOneSuccessMessage = {
-    actionFeedbackContext: {
-        feedbacks: [{type: 'success', message: "The comment has been added successfully"}]
-    }
-}
+  actionFeedbackContext: {
+    feedbacks: [{type: 'success', message: "The comment has been added successfully"}]
+  }
+};
 
 /**
  *  Props with one error feedback
  */
 export const propsWithOneErrorMessage = {
-    actionFeedbackContext: {
-        feedbacks: [{type: 'error', message: "An error occurred during the operation"}]
-    }
-}
+  actionFeedbackContext: {
+    feedbacks: [{type: 'error', message: "An error occurred during the operation"}]
+  }
+};
 
 /**
  * Props for checking the 5 seconds display
  */
 export const propsForDisplayTime = {
-    actionFeedbackContext: {
-        feedbacks: [{type: 'success', message: "The comment has been added successfully"}],
-        remove: () => {}
-    }
-}
+  actionFeedbackContext: {
+    feedbacks: [{type: 'success', message: "The comment has been added successfully"}],
+    remove: () => {}
+  }
+};
 
 /**
  * Props with multiple action feedback
  */
 export const propsWithMultipleFeedbacks = {
-    actionFeedbackContext: {
-        feedbacks: [
-            {type: 'success', message: "The comment has been added successfully"},
-            {type: 'error', message: "An error occurred during the operation"}
-        ]
-    }
-}
+  actionFeedbackContext: {
+    feedbacks: [
+      {type: 'success', message: "The comment has been added successfully"},
+      {type: 'error', message: "An error occurred during the operation"}
+    ]
+  }
+};

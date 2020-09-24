@@ -26,11 +26,11 @@ beforeEach(() => {
   jest.resetModules();
 });
 
-const getAppContext = function (appContext) {
+const getAppContext = function(appContext) {
   const port = new MockPort();
   const context = {
     port,
-    setContext: function (newContext) {
+    setContext: function(newContext) {
       // In this scope this reference the object context.
       Object.assign(this, newContext);
     },
@@ -44,13 +44,11 @@ const getAppContext = function (appContext) {
   return Object.assign(context, appContext || {});
 };
 
-const getDummyTag = () => {
-  return {
-    onClose: jest.fn()
-  };
-}
+const getDummyTag = () => ({
+  onClose: jest.fn()
+});
 
-const renderTagDeleteDialog = function (appContext, props) {
+const renderTagDeleteDialog = function(appContext, props) {
   appContext = getAppContext(appContext);
 
   return render(
@@ -111,7 +109,7 @@ describe("TagEditDialog", () => {
     expect(props.onClose).toBeCalled();
   });
 
-  it("requests the addon to delete a tag when clicking on the submit button.", async () => {
+  it("requests the addon to delete a tag when clicking on the submit button.", async() => {
     const context = getAppContext();
     const props = getDummyTag();
     const {container} = renderTagDeleteDialog(context, props);
@@ -125,7 +123,6 @@ describe("TagEditDialog", () => {
     const submitButton = container.querySelector("input[type=\"submit\"]");
     fireEvent.click(submitButton, {button: 0});
 
-
     // API calls are made on submit, wait they are resolved.
     await waitFor(() => {
       expect(context.port.request).toHaveBeenCalledWith("passbolt.tags.delete", "8e3874ae-4b40-590b-968a-418f704b9d9a");
@@ -134,7 +131,7 @@ describe("TagEditDialog", () => {
     });
   });
 
-  it("displays an error when the API call fail.", async () => {
+  it("displays an error when the API call fail.", async() => {
     const context = getAppContext();
     const props = getDummyTag();
     const {container} = renderTagDeleteDialog(context, props);

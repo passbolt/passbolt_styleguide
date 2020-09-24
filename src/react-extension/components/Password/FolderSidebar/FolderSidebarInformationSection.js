@@ -48,14 +48,13 @@ class FolderSidebarInformationSection extends React.Component {
     this.handleTitleClickEvent = this.handleTitleClickEvent.bind(this);
   }
 
-
   /**
    * Handle when the user selects the folder parent.
    */
   handleFolderParentClickEvent() {
     if (this.folder.folder_parent_id) { // Case of specific folder
       const folderParent = this.context.folders.find(item => item.id === this.folder.folder_parent_id);
-      this.props.history.push(`/app/folders/view/${folderParent.id}`)
+      this.props.history.push(`/app/folders/view/${folderParent.id}`);
     } else { // Case of root folder
       this.props.history.push(`/app/passwords`);
     }

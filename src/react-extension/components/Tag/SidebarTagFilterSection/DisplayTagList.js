@@ -39,7 +39,6 @@ class DisplayTagList extends React.Component {
     };
   }
 
-
   /**
    * Bind callbacks methods
    */
@@ -110,7 +109,7 @@ class DisplayTagList extends React.Component {
     if (hasTagChanged && isAppFilterByTag) {
       // check if the tag is present in the list of tags
       const isTagFilteredPresent = this.props.tags.filter(tag => tag.id === filter.payload.tag.id).length > 0;
-      if(!isTagFilteredPresent) {
+      if (!isTagFilteredPresent) {
         // apply all filter
         this.props.resourceWorkspaceContext.onAllFilterRequired();
       }
@@ -127,7 +126,7 @@ class DisplayTagList extends React.Component {
       [filterByTagsOptions.personal]: tag => !tag.is_shared,
       [filterByTagsOptions.shared]: tag => tag.is_shared,
       [filterByTagsOptions.all]: tag => tag
-    }
+    };
   }
 
   /**
@@ -180,7 +179,7 @@ class DisplayTagList extends React.Component {
             <li className="open node root tag-item" key={tag.id}>
               <div className={`row ${this.isSelected(tag.id) ? "selected" : ""}`}>
                 <div className="main-cell-wrapper" onClick={() => this.handleOnClickTag(tag)}
-                     onContextMenu={(event) => this.handleContextualMenuEvent(event, tag)}>
+                  onContextMenu={event => this.handleContextualMenuEvent(event, tag)}>
                   <div className="main-cell">
                     <a title={tag.slug}><span className="ellipsis">{tag.slug}</span></a>
                   </div>
@@ -188,7 +187,7 @@ class DisplayTagList extends React.Component {
                 {!tag.is_shared &&
                 <div className="right-cell more-ctrl">
                   <a className="more"
-                     onClick={(event) => this.handleMoreClickEvent(event, tag)}><span>more</span></a>
+                    onClick={event => this.handleMoreClickEvent(event, tag)}><span>more</span></a>
                 </div>
                 }
               </div>

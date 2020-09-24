@@ -21,59 +21,55 @@ import {withDialog} from "../../../contexts/Common/DialogContext";
  * This component listens any event related to passphrase entry dialog actions to perform
  */
 class HandlePassphraseEntryDialogEvents extends React.Component {
+  /**
+   * Default constructor
+   */
+  constructor(props) {
+    super(props);
+    this.state = this.defaultState;
+  }
 
-    /**
-     * Default constructor
-     */
-    constructor(props) {
-        super(props);
-        this.state = this.defaultState;
-    }
+  /**
+   * Returns the default component state
+   */
+  get defaultState() {
+    return {
+      dialogIndex: null // The index of the opened dialog
+    };
+  }
 
-    /**
-     * Returns the default component state
-     */
-    get defaultState() {
-        return {
-            dialogIndex: null // The index of the opened dialog
-        }
-    }
+  /**
+   * Whenever the component is mounted
+   */
+  componentDidMount() {
+    this.listen();
+  }
 
-    /**
-     * Whenever the component is mounted
-     */
-    componentDidMount() {
-        this.listen();
-    }
+  /**
+   * Listen the progress dialog event from the context and acts accordingly
+   */
+  listen() {
+    this.context.port.on('passbolt.passphrase.request', this.handlePassphraseEntryRequestEvent);
+  }
 
-    /**
-     * Listen the progress dialog event from the context and acts accordingly
-     */
-    listen() {
-        this.context.port.on('passbolt.passphrase.request', this.handlePassphraseEntryRequestEvent);
-    }
+  /**
+   * Handle the dialog request event
+   * @param requestId
+   */
+  handlePassphraseEntryRequestEvent(requestId) {
+    this.context.setContext({passphraseRequestId: requestId});
+    this.dialogContext.open(PassphraseEntryDialog);
+  }
 
-    /**
-     * Handle the dialog request event
-     * @param requestId
-     */
-    handlePassphraseEntryRequestEvent(requestId) {
-        this.context.setContext({passphraseRequestId: requestId});
-        this.dialogContext.open(PassphraseEntryDialog);
-    }
-
-    /**
-     * Renders the component
-     * @returns {JSX.Element}
-     */
-    render() {
-        return <></>
-    }
-
-
+  /**
+   * Renders the component
+   * @returns {JSX.Element}
+   */
+  render() {
+    return <></>;
+  }
 }
 
 HandlePassphraseEntryDialogEvents.contextType = AppContext;
 
 export default withDialog(HandlePassphraseEntryDialogEvents);
-

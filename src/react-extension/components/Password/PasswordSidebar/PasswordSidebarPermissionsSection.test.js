@@ -24,7 +24,7 @@ beforeEach(() => {
   jest.resetModules();
 });
 
-const getDummyPermission = function () {
+const getDummyPermission = function() {
   return [{
     "id": "8dfd59a7-852d-5c57-bd45-75c28bbb3f6c",
     "aco": "Resource",
@@ -70,10 +70,10 @@ const getDummyPermission = function () {
         }
       },
     },
-  }]
+  }];
 };
 
-const getAppContext = function (appContext) {
+const getAppContext = function(appContext) {
   const defaultAppContext = {
     userSettings: new UserSettings(userSettingsFixture),
     port: new MockPort()
@@ -82,7 +82,7 @@ const getAppContext = function (appContext) {
   return Object.assign(defaultAppContext, appContext || {});
 };
 
-const renderPasswordSidebarPermissionSection = function (appContext, props) {
+const renderPasswordSidebarPermissionSection = function(appContext, props) {
   appContext = getAppContext(appContext);
   props = props || {};
   return render(
@@ -93,7 +93,7 @@ const renderPasswordSidebarPermissionSection = function (appContext, props) {
 };
 
 describe("PasswordSidebarPermission", () => {
-  it("See the permission of a resource", async () => {
+  it("See the permission of a resource", async() => {
     const context = getAppContext();
     const props = {
       resourceWorkspaceContext: {
@@ -103,7 +103,7 @@ describe("PasswordSidebarPermission", () => {
           }
         }
       }
-    }
+    };
 
     const {container} = renderPasswordSidebarPermissionSection(context, props);
 
@@ -126,14 +126,14 @@ describe("PasswordSidebarPermission", () => {
     const permissionList = container.querySelectorAll(".usercard-col-2");
     expect(permissionList).not.toBeNull();
     expect(permissionList.length).toBe(1);
-    permissionList.forEach((value) => {
+    permissionList.forEach(value => {
       expect(value.textContent).toBe("Carol Shaw (carol@passbolt.com)is owner");
     });
 
     expect(context.port.request).toHaveBeenCalledWith("passbolt.resources.find-permissions", props.resourceWorkspaceContext.details.resource.id);
   });
 
-  it("See the loading feedback permission of a resource", async () => {
+  it("See the loading feedback permission of a resource", async() => {
     const context = getAppContext();
     const props = {
       resourceWorkspaceContext: {
@@ -143,10 +143,9 @@ describe("PasswordSidebarPermission", () => {
           }
         }
       }
-    }
+    };
 
     const {container} = renderPasswordSidebarPermissionSection(context, props);
-
 
     // Sidebar Tags title exists and correct
     const sidebarTitle = container.querySelector("h4 a");
@@ -172,5 +171,4 @@ describe("PasswordSidebarPermission", () => {
       updateResolve();
     });
   });
-
 });

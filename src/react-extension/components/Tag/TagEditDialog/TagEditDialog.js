@@ -34,7 +34,7 @@ class TagEditDialog extends Component {
 
   getDefaultState() {
     return {
-      name:'',
+      name: '',
       nameError: "",
       processing: false
     };
@@ -162,12 +162,11 @@ class TagEditDialog extends Component {
       const errorDialogProps = {
         title: "There was an unexpected error...",
         message: error.message
-      }
+      };
       this.context.setContext({errorDialogProps});
       this.props.dialogContext.open(ErrorDialog);
     }
   }
-
 
   /**
    * Focus the field of the form which is in error state.
@@ -220,32 +219,31 @@ class TagEditDialog extends Component {
   }
 
   render() {
-
     return (
       <DialogWrapper
         title="Edit tag"
         onClose={this.handleCloseClick}
         disabled={this.state.processing}
         className="edit-tag-dialog">
-            <form onSubmit={this.handleFormSubmit} noValidate>
-              <div className="form-content">
-                <div className={`input text required ${this.state.nameError ? "error" : ""}`}>
-                  <label htmlFor="edit-tag-form-name">Tag name</label>
-                  <input id="edit-tag-form-name" name="name" type="text" value={this.state.name}
-                         onKeyUp={this.handleNameInputKeyUp} onChange={this.handleInputChange}
-                         disabled={this.state.processing} ref={this.nameInputRef} className="required fluid"
-                         maxLength="128"
-                         required="required" autoComplete="off" autoFocus={true}/>
-                  {this.state.nameError &&
+        <form onSubmit={this.handleFormSubmit} noValidate>
+          <div className="form-content">
+            <div className={`input text required ${this.state.nameError ? "error" : ""}`}>
+              <label htmlFor="edit-tag-form-name">Tag name</label>
+              <input id="edit-tag-form-name" name="name" type="text" value={this.state.name}
+                onKeyUp={this.handleNameInputKeyUp} onChange={this.handleInputChange}
+                disabled={this.state.processing} ref={this.nameInputRef} className="required fluid"
+                maxLength="128"
+                required="required" autoComplete="off" autoFocus={true}/>
+              {this.state.nameError &&
                   <div className="name error message">{this.state.nameError}</div>
-                  }
-                </div>
-              </div>
-              <div className="submit-wrapper clearfix">
-                <FormSubmitButton disabled={this.hasAllInputDisabled()} processing={this.state.processing} value="Save"/>
-                <FormCancelButton disabled={this.hasAllInputDisabled()} onClick={this.handleCloseClick} />
-              </div>
-            </form>
+              }
+            </div>
+          </div>
+          <div className="submit-wrapper clearfix">
+            <FormSubmitButton disabled={this.hasAllInputDisabled()} processing={this.state.processing} value="Save"/>
+            <FormCancelButton disabled={this.hasAllInputDisabled()} onClick={this.handleCloseClick} />
+          </div>
+        </form>
       </DialogWrapper>
     );
   }

@@ -69,7 +69,7 @@ class FoldersTreeRootFolderContextualMenu extends React.Component {
    */
   handleExportFolderItemClickEvent() {
     const foldersIds = this.props.folders.filter(folder => folder.folder_parent_id === null)
-        .reduce((carry, folder) => [...carry, folder.id], []);
+      .reduce((carry, folder) => [...carry, folder.id], []);
     this.context.port.emit("passbolt.plugin.export_resources", {"folders": foldersIds});
     this.props.hide();
   }

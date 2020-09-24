@@ -23,53 +23,51 @@ import ConfirmCommentDeletion from "./ConfirmCommentDeletion";
  * This component allows to delete a resource comment ( at least call-to-action )
  */
 class DeleteComment extends React.Component {
+  /**
+   * Default constructor
+   * @param props
+   */
+  constructor(props) {
+    super(props);
+    this.bindEventHandlers();
+  }
 
-    /**
-     * Default constructor
-     * @param props
-     */
-    constructor(props) {
-        super(props);
-        this.bindEventHandlers();
-    }
+  /**
+   * Binds the component event handlers
+   */
+  bindEventHandlers() {
+    this.delete = this.delete.bind(this);
+  }
 
-    /**
-     * Binds the component event handlers
-     */
-    bindEventHandlers() {
-        this.delete = this.delete.bind(this);
-    }
+  /**
+   * Call to delete the comment
+   */
+  delete() {
+    this.context.setContext({resourceCommentId: this.props.commentId});
+    this.props.dialogContext.open(ConfirmCommentDeletion);
+  }
 
-    /**
-     * Call to delete the comment
-     */
-    delete() {
-       this.context.setContext({resourceCommentId: this.props.commentId});
-       this.props.dialogContext.open(ConfirmCommentDeletion);
-    }
-
-    render() {
-        return (
-            <>
-                <a
-                    className="js_delete_comment"
-                    onClick={this.delete}>
-                    <span className="svg-icon">
-                        <Icon name="trash" />
-                    </span>
-                    <span className="visuallyhidden">delete</span>
-                </a>
-            </>
-        )
-    }
-
+  render() {
+    return (
+      <>
+        <a
+          className="js_delete_comment"
+          onClick={this.delete}>
+          <span className="svg-icon">
+            <Icon name="trash" />
+          </span>
+          <span className="visuallyhidden">delete</span>
+        </a>
+      </>
+    );
+  }
 }
 
 DeleteComment.contextType = AppContext;
 
 DeleteComment.propTypes = {
-    commentId: PropTypes.string, // The resource comment id
-    dialogContext: PropTypes.any // The dialog context
-}
+  commentId: PropTypes.string, // The resource comment id
+  dialogContext: PropTypes.any // The dialog context
+};
 
 export default withDialog(DeleteComment);
