@@ -18,6 +18,8 @@ import DialogWrapper from "../../../../react/components/Common/Dialog/DialogWrap
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import {withDialog} from "../../../contexts/Common/DialogContext";
 import ErrorDialog from "../../Dialog/ErrorDialog/ErrorDialog";
+import FormSubmitButton from "../../../../react/components/Common/Inputs/FormSubmitButton/FormSubmitButton";
+import FormCancelButton from "../../../../react/components/Common/Inputs/FormSubmitButton/FormCancelButton";
 
 /**
  * Component allows the user to edit a tag from a dialog
@@ -209,12 +211,19 @@ class TagEditDialog extends Component {
     return this.state.nameError === "";
   }
 
+  /**
+   * Should input be disabled? True if state is processing
+   * @returns {boolean}
+   */
+  hasAllInputDisabled() {
+    return this.state.processing;
+  }
+
   render() {
 
     return (
       <DialogWrapper
         title="Edit tag"
-        tooltip="Edit tag"
         onClose={this.handleCloseClick}
         disabled={this.state.processing}
         className="edit-tag-dialog">
@@ -231,10 +240,10 @@ class TagEditDialog extends Component {
                   <div className="name error message">{this.state.nameError}</div>
                   }
                 </div>
-                <div className="submit-wrapper clearfix">
-                  <input type="submit" className="button primary" role="button" value="Save"/>
-                  <a className="cancel" role="button" onClick={this.handleCloseClick}>Cancel</a>
-                </div>
+              </div>
+              <div className="submit-wrapper clearfix">
+                <FormSubmitButton disabled={this.hasAllInputDisabled()} processing={this.state.processing} value="Save"/>
+                <FormCancelButton disabled={this.hasAllInputDisabled()} onClick={this.handleCloseClick} />
               </div>
             </form>
       </DialogWrapper>

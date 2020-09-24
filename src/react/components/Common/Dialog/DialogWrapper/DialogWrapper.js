@@ -83,7 +83,7 @@ class DialogWrapper extends Component {
         <div className="dialog">
           <div className="dialog-header">
             <h2>
-              <span>{this.props.title}</span>
+              <span className="dialog-header-title">{this.props.title}</span>
               {(this.props.tooltip && this.props.tooltip !== '') &&
               <TooltipHtml>
                 <span>{this.props.tooltip}</span>

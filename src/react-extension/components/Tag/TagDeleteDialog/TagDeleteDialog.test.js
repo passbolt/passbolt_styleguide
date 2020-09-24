@@ -81,10 +81,12 @@ describe("TagEditDialog", () => {
     // Save button exists
     const saveButton = container.querySelector(".submit-wrapper [type=\"submit\"]");
     expect(saveButton).not.toBeNull();
+    expect(saveButton.value).toBe("Delete");
 
     // Cancel button exists
     const cancelButton = container.querySelector(".submit-wrapper .cancel");
     expect(cancelButton).not.toBeNull();
+    expect(cancelButton.textContent).toBe("Cancel");
   });
 
   it("calls onClose props when clicking on the close button.", () => {
