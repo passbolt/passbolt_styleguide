@@ -120,6 +120,7 @@ class AddComment extends React.Component {
      * @returns {Promise<void>}
      */
     async handleSubmitFailure(error) {
+        await this.props.actionFeedbackContext.displayError(error.message);
         await this.setState({
             actions: {processing: false},
             errors: {technicalError: error.message}
