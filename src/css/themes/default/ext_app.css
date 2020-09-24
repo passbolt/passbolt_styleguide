@@ -7461,7 +7461,7 @@ table.table-info.horizontal tbody tr:hover {
   clear: both;
 }
 .tags-list .tag-list-item {
-  display: inline-block;
+  display: initial;
 }
 .tag-editor {
   margin-bottom: 1em;

@@ -6076,7 +6076,7 @@ input[type="search"]::-webkit-search-cancel-button {
   clear: both;
 }
 .tags-list .tag-list-item {
-  display: inline-block;
+  display: initial;
 }
 .tag-editor {
   margin-bottom: 1em;
