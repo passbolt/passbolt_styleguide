@@ -59,8 +59,8 @@ class TagDeleteDialog extends Component {
    * Handle close button click.
    */
   handleCloseClick() {
-    this.context.setContext({tagToDelete: null});
     this.props.onClose();
+    this.context.setContext({tagToDelete: null});
   }
 
   /**
