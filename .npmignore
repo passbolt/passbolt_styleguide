@@ -2,7 +2,6 @@ node_modules
 demo
 docker
 .idea
-src/js
 src/react-appjs
 src/react-extension
 src/css

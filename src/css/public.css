@@ -5873,45 +5873,6 @@ article figure .legend {
   margin-bottom: 1em;
   font-style: italic;
 }
-/* lightbox */
-#imagelightbox {
-  position: absolute;
-  z-index: 9999;
-  -ms-touch-action: none;
-  touch-action: none;
-  overflow: hidden;
-}
-#imagelightbox-overlay {
-  overflow: hidden;
-  background-color: #FFF;
-  background-color: rgba(255, 255, 255, 0.9);
-  position: fixed;
-  z-index: 9998;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-}
-#imagelightbox-overlay {
-  -webkit-animation: fade-in 0.25s linear;
-  animation: fade-in 0.25s linear;
-}
-@-webkit-keyframes fade-in {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-@keyframes fade-in {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
 .tldr {
   background: #F3F3F3;
   padding: 1.5em 1em;
