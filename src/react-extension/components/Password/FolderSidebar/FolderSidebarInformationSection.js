@@ -17,7 +17,7 @@ import PropTypes from "prop-types";
 import moment from "moment";
 import AppContext from "../../../contexts/AppContext";
 import {withRouter} from "react-router-dom";
-import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
+import {ResourceWorkspaceFilterTypes, withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 
 class FolderSidebarInformationSection extends React.Component {
   /**
@@ -56,7 +56,8 @@ class FolderSidebarInformationSection extends React.Component {
       const folderParent = this.context.folders.find(item => item.id === this.folder.folder_parent_id);
       this.props.history.push(`/app/folders/view/${folderParent.id}`);
     } else { // Case of root folder
-      this.props.history.push(`/app/passwords`);
+      const filter = {type: ResourceWorkspaceFilterTypes.ROOT_FOLDER};
+      this.props.history.push(`/app/passwords`, {filter});
     }
   }
 
