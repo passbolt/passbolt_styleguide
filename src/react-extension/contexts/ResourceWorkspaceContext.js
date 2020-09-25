@@ -222,10 +222,7 @@ class ResourceWorkspaceContextProvider extends React.Component {
    * Handle the filter by all is required
    */
   async handleAllFilterRequired() {
-    const filter = {
-      type: ResourceWorkspaceFilterTypes.ALL,
-      payload: null
-    };
+    const filter = {type: ResourceWorkspaceFilterTypes.ALL, payload: null};
     await this.search(filter);
     await this.detailNothing();
   }
@@ -235,12 +232,7 @@ class ResourceWorkspaceContextProvider extends React.Component {
    * @param tag
    */
   async handleFilterTagChanged(tag) {
-    const filter = {
-      type: ResourceWorkspaceFilterTypes.TAG,
-      payload: {
-        tag: tag
-      }
-    };
+    const filter = {type: ResourceWorkspaceFilterTypes.TAG, payload: {tag: tag}};
     await  this.search(filter);
     await  this.detailNothing();
   }
@@ -284,6 +276,7 @@ class ResourceWorkspaceContextProvider extends React.Component {
    */
   async search(filter) {
     const searchOperations = {
+      [ResourceWorkspaceFilterTypes.ROOT_FOLDER]: this.searchByRootFolder.bind(this),
       [ResourceWorkspaceFilterTypes.FOLDER]: this.searchByFolder.bind(this),
       [ResourceWorkspaceFilterTypes.TAG]: this.searchByTag.bind(this),
       [ResourceWorkspaceFilterTypes.TEXT]: this.searchByText.bind(this),
@@ -305,6 +298,15 @@ class ResourceWorkspaceContextProvider extends React.Component {
   async searchAll(filter) {
     await this.setState({filter, filteredResources: [...this.resources]});
   }
+
+  /**
+   * Filter the resources which belongs to the filter root folder
+   */
+  async searchByRootFolder(filter) {
+    const folderResources = this.resources.filter(resource => ! resource.folder_parent_id);
+    await this.setState({filter, filteredResources: folderResources});
+  }
+
 
   /**
    * Filter the resources which belongs to the filter folder
@@ -503,6 +505,7 @@ export const ResourceWorkspaceFilterTypes = {
   NONE: 'NONE', // Initial filter at page load
   ALL: 'ALL', // All resources
   FOLDER: 'FILTER-BY-FOLDER', // Resources for a given folder
+  ROOT_FOLDER: 'FILTER-BY-ROOT-FOLDER', // Resources of the root folder
   TAG: 'FILTER-BY-TAG', // Resources for a given tag
   TEXT: 'FILTER-BY-TEXT-SEARCH', // Resources matching some text words
   ITEMS_I_OWN: 'FILTER-BY-ITEMS-I-OWN', // Current user personal resources
