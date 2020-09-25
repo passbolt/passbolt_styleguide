@@ -144,21 +144,11 @@
 				            <a href="#">See all features</a>
 			            </div>
 		            </div>
-		            <div class="service-col col4 plan with-tab-options business highlighted">
+		            <div class="service-col col4 plan business highlighted">
 			            <div class="ribbon"><span>POPULAR</span></div>
 			            <div class="plan-description">
 				            <h2>Business</h2>
 			            </div>
-                        <div class="pricing-toggle">
-                            <ul>
-                                <li class="monthly selected">
-                                    <a data-term="yearly">Annual (-10%)</a>
-                                </li>
-                                <li class="yearly">
-                                    <a data-term="monthly">Monthly</a>
-                                </li>
-                            </ul>
-                        </div>
 			            <div class="row plan-pricing">
                             <div class="col12 cost cost-large">
                                 <span class="currency">€</span><span class="price" id="product-price">10</span>
