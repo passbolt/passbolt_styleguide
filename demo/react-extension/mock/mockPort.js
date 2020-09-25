@@ -39,6 +39,7 @@ import mockRequestResourceAddFavorite from "./request/mockRequestResourceAddFavo
 import mockRequestResourceDeleteFavorite from "./request/mockRequestResourceDeleteFavorite";
 import mockRequestResourcesDelete from "./request/mockRequestResourcesDelete";
 import mockRequestResourcesFindActivities from "./request/mockRequestResourcesFindActivities";
+import mockRequestGetVersion from "./request/mockRequestGetVersion";
 
 export default (storage) => {
   const mockPort = new MockPort(storage);
@@ -68,6 +69,7 @@ export default (storage) => {
   mockPort.addRequestListener("passbolt.favorite.delete", mockRequestResourceDeleteFavorite);
   mockPort.addRequestListener("passbolt.resources.delete-all", mockRequestResourcesDelete);
   mockPort.addRequestListener("passbolt.resources.action-log", mockRequestResourcesFindActivities);
+  mockPort.addRequestListener("passbolt.addon.get-version", mockRequestGetVersion);
 
   return mockPort;
 };
