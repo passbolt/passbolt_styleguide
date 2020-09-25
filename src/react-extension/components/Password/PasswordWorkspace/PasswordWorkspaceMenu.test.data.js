@@ -3,26 +3,48 @@ import MockPort from "../../../test/mock/MockPort";
 /**
  * Returns the default app context for the unit test
  * @param appContext An existing app context
- * @returns {any | ({port: MockPort} & {})}
+ * @returns {any | ({userSettings: UserSettings, siteSettings: SiteSettings, port: MockPort} & {})}
  */
 export function defaultAppContext(appContext) {
   const defaultAppContext = {
-    port: new MockPort(),
-    passwordDeleteDialogProps: {
-      resources: [resourcesMock[0]]
-    },
+    port: new MockPort()
   };
   return Object.assign(defaultAppContext, appContext || {});
 }
-
 
 /**
  * Default props one selected resource owned
  * @returns {{resourceWorkspaceContext}}
  */
-export function defaultPropsOneResource() {
+export function defaultPropsOneResourceOwned() {
   return {
-    onClose: jest.fn()
+    resourceWorkspaceContext: {
+      selectedResources: [resourcesMock[0]]
+    }
+  };
+}
+
+/**
+ * Default props one selected resource owned
+ * @returns {{resourceWorkspaceContext}}
+ */
+export function defaultPropsOneResourceNotOwned() {
+  return {
+    resourceWorkspaceContext: {
+      selectedResources: [resourcesMock[1]]
+    }
+  };
+}
+
+/**
+ * Default props one selected resource owned
+ * @returns {{resourceWorkspaceContext}}
+ */
+export function defaultPropsNoResource() {
+  return {
+    resourceWorkspaceContext: {
+      selectedResources: []
+    }
   };
 }
 
