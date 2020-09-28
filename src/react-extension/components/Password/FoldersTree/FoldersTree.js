@@ -120,7 +120,8 @@ class FoldersTree extends React.Component {
    * Handle when the user clicks on the section title.
    */
   handleClickOnTitle() {
-    this.props.history.push(`/app/passwords`);
+    const filter = {type: ResourceWorkspaceFilterTypes.ROOT_FOLDER};
+    this.props.history.push(`/app/passwords`, {filter});
   }
 
   /**
