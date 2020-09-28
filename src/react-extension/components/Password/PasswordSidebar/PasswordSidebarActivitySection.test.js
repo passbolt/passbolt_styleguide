@@ -30,9 +30,7 @@ beforeEach(() => {
 });
 
 describe("See activities", () => {
-
-
-  var page; // The page to test against
+  let page; // The page to test against
   const context = defaultAppContext(); // The applicative context
   const props = defaultProps(); // The props to pass
 
@@ -43,7 +41,6 @@ describe("See activities", () => {
 
 
   describe(' As LU I can see activities of a resource with at least one activity', () => {
-
     /**
      * Given a selected resource having 4 activities
      * When I open the “Activity” section of the secondary sidebar
@@ -58,23 +55,23 @@ describe("See activities", () => {
       mockContextRequest(activitiesFoundRequestMockImpl);
     });
 
-    it('I should see the 4 activities made on the resource', async () => {
+    it('I should see the 4 activities made on the resource', async() => {
       await page.title.click();
 
       expect(page.displayActivityList.exists()).toBeTruthy();
       expect(page.displayActivityList.count()).toBe(4);
-    })
+    });
 
-    it('I should be able to identify each activity creators', async () => {
+    it('I should be able to identify each activity creators', async() => {
       await page.title.click();
 
       expect(page.displayActivityList.creator(1)).toBe('Admin User');
       expect(page.displayActivityList.creator(2)).toBe('Ada User');
       expect(page.displayActivityList.creator(3)).toBe('Admin Ada');
       expect(page.displayActivityList.creator(4)).toBe('Admin User4');
-    })
+    });
 
-    it('I should be able to see each activity timestamps', async () => {
+    it('I should be able to see each activity timestamps', async() => {
       await page.title.click();
 
       expect(page.displayActivityList.creationTime(1)).toBeDefined();
@@ -83,7 +80,7 @@ describe("See activities", () => {
       expect(page.displayActivityList.creationTime(4)).toBeDefined();
     });
 
-    it('I should be able to see each other activities with more button ', async () => {
+    it('I should be able to see each other activities with more button ', async() => {
       await page.title.click();
 
       mockContextRequest(activitiesMoreFoundRequestMockImpl);
@@ -96,7 +93,6 @@ describe("See activities", () => {
   });
 
   describe(' As LU I see a loading state when the activity are not loaded', () => {
-
     /**
      * Given a selected resource having 4 activities
      * When I open the “Activity” section of the secondary sidebar
@@ -114,18 +110,15 @@ describe("See activities", () => {
       page = new PasswordSidebarActivitySectionPage(context, props);
     });
 
-    it('I should see the loading message “Retrieving activities”', async () => {
+    it('I should see the loading message “Retrieving activities”', async() => {
       await page.title.click();
 
       const inProgressFn = () => {
         expect(page.displayActivityList.isLoading()).toBeTruthy();
         findResolve([]);
-      }
+      };
       await page.displayActivityList.waitForLoading(inProgressFn);
       expect(page.displayActivityList.isLoading()).toBeFalsy();
     });
-
-
   });
-
 });

@@ -34,7 +34,7 @@ export function defaultProps() {
         }
       }
     }
-  }
+  };
 }
 
 /**

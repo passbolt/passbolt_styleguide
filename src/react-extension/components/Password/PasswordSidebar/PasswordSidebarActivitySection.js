@@ -70,7 +70,7 @@ class PasswordSidebarActivitySection extends React.Component {
    */
   handleResourceChange(previousResource) {
     const hasResourceChanged = this.resource.id !== previousResource.id;
-    if(hasResourceChanged && this.state.open) {
+    if (hasResourceChanged && this.state.open) {
       this.fetch();
     }
   }
@@ -81,7 +81,7 @@ class PasswordSidebarActivitySection extends React.Component {
    */
   handleTitleClickEvent() {
     const open = !this.state.open;
-    if(open) {
+    if (open) {
       this.fetch();
     }
     this.setState({open});
@@ -94,7 +94,7 @@ class PasswordSidebarActivitySection extends React.Component {
   handleMoreClickEvent() {
     const activitiesPage = this.state.activitiesPage + 1;
     this.setState({activitiesPage, activitySectionMoreProcessing: true}, this.fetch.bind(this));
-    this.setState({activitySectionMoreProcessing : false});
+    this.setState({activitySectionMoreProcessing: false});
   }
 
   /**

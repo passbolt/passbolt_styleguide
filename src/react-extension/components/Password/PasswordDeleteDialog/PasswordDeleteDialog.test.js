@@ -60,7 +60,7 @@ describe("See Password Delete Dialog", () => {
       expect(page.displayPasswordDeleteDialog.resourceName).not.toBeNull();
     });
 
-    it('As LU I should see a toaster message after deleting a resource', async () => {
+    it('As LU I should see a toaster message after deleting a resource', async() => {
       const submitButton = page.displayPasswordDeleteDialog.saveButton;
       // Mock the request function to make it the expected result
       jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementation(() => {
@@ -70,7 +70,7 @@ describe("See Password Delete Dialog", () => {
       expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalled();
     });
 
-    it('As LU I should be able to cancel the operation by clicking on the cancel button', async () => {
+    it('As LU I should be able to cancel the operation by clicking on the cancel button', async() => {
       const cancelButton = page.displayPasswordDeleteDialog.cancelButton;
 
       await page.displayPasswordDeleteDialog.click(cancelButton);
@@ -85,7 +85,7 @@ describe("See Password Delete Dialog", () => {
       expect(propsOneResource.onClose).toBeCalled();
     });
 
-    it('Displays an error when the API call fail', async () => {
+    it('Displays an error when the API call fail', async() => {
       const submitButton = page.displayPasswordDeleteDialog.saveButton;
       // Mock the request function to make it return an error.
       jest.spyOn(context.port, 'request').mockImplementationOnce(() => {

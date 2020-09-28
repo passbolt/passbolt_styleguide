@@ -113,7 +113,7 @@ class PasswordDeleteDialog extends Component {
       await this.context.port.request("passbolt.resources.delete-all", selectedResourcesIds);
       await this.handleSaveSuccess();
     } catch (error) {
-      this.handleSaveError(error)
+      this.handleSaveError(error);
     }
   }
 
