@@ -21,11 +21,8 @@ import {ResourceWorkspaceFilterTypes, withResourceWorkspace} from "../../../cont
 import debounce from "debounce-promise";
 import Icon from "../../Common/Icons/Icon";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
+import {withRouter} from "react-router-dom";
 
-// Select strategies.
-const SELECT_SINGLE = 'single';
-const SELECT_MULITPLE = 'multiple';
-const SELECT_RANGE = 'range';
 
 /**
  * This component allows to display the filtered resources into a grid
@@ -58,7 +55,7 @@ class Grid extends React.Component {
    */
   initEventHandlers() {
     this.handleSelectAllChange = this.handleSelectAllChange.bind(this);
-    this.handleResourceClick = this.handleResourceClick.bind(this);
+    this.handleResourceSelected = this.handleResourceSelected.bind(this);
     this.handleResourceRightClick = this.handleResourceRightClick.bind(this);
     this.handleCheckboxWrapperClick = this.handleCheckboxWrapperClick.bind(this);
     this.handleCopyPasswordClick = this.handleCopyPasswordClick.bind(this);
@@ -83,33 +80,26 @@ class Grid extends React.Component {
     this.dragFeedbackElement = React.createRef();
   }
 
-  handleSelectAllChange(ev) {
-    const checked = ev.target.checked;
-    let selectedResources = [];
-
-    if (checked) {
-      selectedResources = this.resources;
-    }
-
-    const selectStrategy = SELECT_MULITPLE;
-    this.setState({selectStrategy});
-    this.props.onSelect(selectedResources);
+  /**
+   * Handle the All resources selection
+   * @param event The DOM event
+   */
+  handleSelectAllChange(event) {
+    const checked = event.target.checked;
+    const operationName = checked ? "all" : "none";
+    this.props.resourceWorkspaceContext.onResourceSelected[operationName]();
   }
 
-  handleResourceClick(ev, resource) {
-    ev.preventDefault();
-    ev.stopPropagation();
-    let selectStrategy;
+  /**
+   * Handle the resource selection
+   * @param event The DOM event
+   * @param resource The selected resource
+   */
+  async handleResourceSelected(event, resource) {
+    event.preventDefault();
+    event.stopPropagation();
 
-    if (ev.metaKey) {
-      selectStrategy = SELECT_MULITPLE;
-    } else if (ev.shiftKey) {
-      selectStrategy = SELECT_RANGE;
-    } else {
-      selectStrategy = SELECT_SINGLE;
-    }
-
-    this.selectResource(resource, selectStrategy);
+    await this.selectResource(resource, event);
   }
 
   handleResourceRightClick(event, resource) {
@@ -124,7 +114,7 @@ class Grid extends React.Component {
      * If we propagate the event, the tr will listen to the click and select only the clicked row.
      */
     ev.stopPropagation();
-    this.selectResource(resource, SELECT_MULITPLE);
+    this.props.resourceWorkspaceContext.onResourceSelected.multiple(resource);
   }
 
   /**
@@ -148,70 +138,11 @@ class Grid extends React.Component {
     return this.props.resourceWorkspaceContext.filteredResources;
   }
 
-  selectResource(resource, selectStrategy) {
-    let selectedResources;
-    selectStrategy = selectStrategy || SELECT_SINGLE;
-
-    switch (selectStrategy) {
-      case SELECT_MULITPLE:
-        selectedResources = this.getSelectedResourcesMultipleClickStrategy(resource);
-        break;
-      case SELECT_RANGE:
-        selectedResources = this.getSelectedResourcesRangeClickStrategy(resource);
-        break;
-      case SELECT_SINGLE:
-        selectedResources = this.getSelectedResourcesSingleClickStrategy(resource);
-        break;
-    }
-
-    this.setState({selectStrategy});
-    this.props.onSelect(selectedResources);
-
-    return selectedResources;
-  }
-
-  getSelectedResourcesSingleClickStrategy(resource) {
-    const hasOneResourceSelected = this.props.selectedResources.length == 1;
-
-    // If only one resource selected and the given resource is already selected, unselect it.
-    if (hasOneResourceSelected) {
-      if (this.props.selectedResources[0].id === resource.id) {
-        return [];
-      }
-    }
-
-    // Otherwise select it.
-    return [resource];
-  }
-
-  getSelectedResourcesMultipleClickStrategy(resource) {
-    let selectedResources = this.props.selectedResources;
-    const index = selectedResources.findIndex(selectedResource => resource.id === selectedResource.id);
-
-    if (index !== -1) {
-      selectedResources.splice(index, 1);
-    } else {
-      selectedResources = [...selectedResources, resource];
-    }
-
-    return selectedResources;
-  }
-
-  getSelectedResourcesRangeClickStrategy(resource) {
-    let selectedResources = [];
-    if (this.state.selectStrategy == "range" || this.props.selectedResources.length === 1) {
-      const indexFirst = this.resources.findIndex(item => item.id === this.props.selectedResources[0].id);
-      const indexLast = this.resources.findIndex(item => item.id === resource.id);
-      if (indexFirst < indexLast) {
-        selectedResources = this.resources.slice(indexFirst, indexLast + 1);
-      } else {
-        selectedResources = this.resources.slice(indexLast, indexFirst + 1).reverse();
-      }
-    } else {
-      selectedResources = [resource];
-    }
-
-    return selectedResources;
+  /**
+   * Returns the current list of selected resources
+   */
+  get selectedResources() {
+    return this.props.resourceWorkspaceContext.selectedResources;
   }
 
   /**
@@ -260,7 +191,7 @@ class Grid extends React.Component {
     let selectedResources = this.props.selectedResources;
 
     if (!this.isResourceSelected(resource)) {
-      selectedResources = this.selectResource(resource);
+      selectedResources = this.props.resourceWorkspaceContext.onResourceSelected.multiple(resource);
     }
     const draggedItems = {
       resources: selectedResources,
@@ -277,6 +208,27 @@ class Grid extends React.Component {
     trigerEvent.initCustomEvent("passbolt.resources.drag-end", true, true);
     document.dispatchEvent(trigerEvent);
   }
+
+  /**
+   * Select the resource given the selection event.
+   * If no event is provided, the selection is considered as multiple
+   * @param resource
+   */
+  async selectResource(resource, event) {
+    const isMultipleSelection = event && event.metaKey;
+    const isRangeSelection = event && event.shiftKey;
+    const hasNoEvent = !event;
+
+    if (hasNoEvent || isMultipleSelection) {
+      await this.props.resourceWorkspaceContext.onResourceSelected.multiple(resource);
+    } else if (isRangeSelection) {
+      await this.props.resourceWorkspaceContext.onResourceSelected.range(resource);
+    } else {
+      await this.props.resourceWorkspaceContext.onResourceSelected.single(resource);
+    }
+  }
+
+
 
   async favoriteResource(resource) {
     try {
@@ -397,7 +349,7 @@ class Grid extends React.Component {
     return (
       <tr id={`resource_${resource.id}`} key={key} draggable="true" className={isSelected ? "selected" : ""}
         unselectable={this.state.selectStrategy == "range" ? "on" : ""}
-        onClick={ev => this.handleResourceClick(ev, resource)}
+        onClick={ev => this.handleResourceSelected(ev, resource)}
         onContextMenu={ev => this.handleResourceRightClick(ev, resource)}
         onDragStart={event => this.handleDragStartEvent(event, resource)}
         onDragEnd={event => this.handleDragEndEvent(event, resource)}>
@@ -477,7 +429,7 @@ class Grid extends React.Component {
 
   render() {
     const isEmpty = this.resources.length === 0;
-    const selectAll = this.resources.length === this.props.selectedResources.length;
+    const selectAll = this.resources.length === this.selectedResources.length;
     const filterType = this.props.resourceWorkspaceContext.filter.type;
 
     return (
@@ -627,4 +579,4 @@ Grid.propTypes = {
   actionFeedbackContext: PropTypes.any // The action feedback context
 };
 
-export default withActionFeedback(withResourceWorkspace(Grid));
+export default withRouter(withActionFeedback(withResourceWorkspace(Grid)));
