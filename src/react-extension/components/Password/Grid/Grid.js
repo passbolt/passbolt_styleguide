@@ -18,7 +18,9 @@ import moment from 'moment/moment';
 import 'moment-timezone/builds/moment-timezone-with-data-2012-2022';
 import AppContext from "../../../contexts/AppContext";
 import {ResourceWorkspaceFilterTypes, withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
+import debounce from "debounce-promise";
 import Icon from "../../Common/Icons/Icon";
+import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 
 // Select strategies.
 const SELECT_SINGLE = 'single';
@@ -37,6 +39,7 @@ class Grid extends React.Component {
     super(props);
     this.state = this.getDefaultState();
     this.initEventHandlers();
+    this.handleFavoriteClickDebounced = debounce(this.handleFavoriteUpdate, 200);
     this.createRefs();
   }
 
@@ -231,8 +234,12 @@ class Grid extends React.Component {
     this.context.port.emit('passbolt.plugin.decrypt_secret_and_copy_to_clipboard', resource.id);
   }
 
-  async handleFavoriteClick(ev, resource) {
-    ev.stopPropagation();
+  async handleFavoriteClick(event, resource) {
+    event.stopPropagation();
+    await this.handleFavoriteClickDebounced(resource);
+  }
+
+  handleFavoriteUpdate(resource) {
     if (resource.favorite === null) {
       this.favoriteResource(resource);
     } else {
@@ -273,27 +280,36 @@ class Grid extends React.Component {
 
   async favoriteResource(resource) {
     try {
-      await this.context.port.request('passbolt.plugin.favorite.add', [resource.id]);
-      this.triggerNotification({status: "success", title: "app_favorites_add_success"});
+      await this.context.port.request('passbolt.favorite.add', resource.id);
+      this.displaySuccessNotification("The password has been added as a favorite");
     } catch (error) {
-      this.triggerNotification({status: "error", title: "app_favorites_delete_success"});
+      this.displayErrorNotification(error.message);
     }
   }
 
   async unfavoriteResource(resource) {
     try {
-      await this.context.port.request('passbolt.plugin.favorite.delete', [resource.id]);
-      this.triggerNotification({status: "success", title: "app_favorites_delete_success"});
+      await this.context.port.request('passbolt.favorite.delete', resource.id);
+      this.displaySuccessNotification("The password has been removed from favorites");
     } catch (error) {
-      this.triggerNotification({status: "error", message: error.message, force: true});
+      this.displayErrorNotification(error.message);
     }
   }
 
-  triggerNotification(notification) {
-    const bus = document.querySelector("#bus");
-    const event = document.createEvent("CustomEvent");
-    event.initCustomEvent("passbolt_notify", true, true, notification);
-    bus.dispatchEvent(event);
+  /**
+   * Display success notification (toaster)
+   * @param message
+   */
+  displaySuccessNotification(message) {
+    this.props.actionFeedbackContext.displaySuccess(message);
+  }
+
+  /**
+   * Display error notification (toaster)
+   * @param message
+   */
+  displayErrorNotification(message) {
+    this.props.actionFeedbackContext.displayError(message);
   }
 
   scrollTo(resourceId) {
@@ -396,8 +412,8 @@ class Grid extends React.Component {
         </td>
         <td className="cell_favorite selections s-cell">
           <div className="ready">
-            <a className="no-text" onClick={ev => this.handleFavoriteClick(ev, resource)}>
-              <i className={`icon ${isFavorite ? "unfav" : "fav"}`}></i>
+            <a className={`no-text ${isFavorite ? "fav" : "unfav"}`} onClick={ev => this.handleFavoriteClick(ev, resource)}>
+              <Icon baseline={true} name="star"></Icon>
               <span className="visuallyhidden">fav</span>
             </a>
           </div>
@@ -525,8 +541,8 @@ class Grid extends React.Component {
                       </div>
                     </th>
                     <th className="cell_favorite selections s-cell sortable">
-                      <a>
-                        <i className="icon fav"></i>
+                      <a className="unfav">
+                        <Icon baseline={true} name="star"></Icon>
                         <span className="visuallyhidden">fav</span>
                       </a>
                     </th>
@@ -534,10 +550,10 @@ class Grid extends React.Component {
                       <a onClick={ev => this.handleSortByColumnClick(ev, "name")}>
                         Resource
                         {this.isSortedColumn("name") && this.isSortedAsc() &&
-                        <Icon name="caret-up"/>
+                        <Icon baseline={true} name="caret-up"/>
                         }
                         {this.isSortedColumn("name") && !this.isSortedAsc() &&
-                        <Icon name="caret-down"/>
+                        <Icon baseline={true} name="caret-down"/>
                         }
                       </a>
                     </th>
@@ -545,10 +561,10 @@ class Grid extends React.Component {
                       <a onClick={ev => this.handleSortByColumnClick(ev, "username")}>
                         Username
                         {this.isSortedColumn("username") && this.isSortedAsc() &&
-                        <Icon name="caret-up"/>
+                        <Icon baseline={true} name="caret-up"/>
                         }
                         {this.isSortedColumn("username") && !this.isSortedAsc() &&
-                        <Icon name="caret-down"/>
+                        <Icon baseline={true} name="caret-down"/>
                         }
                       </a>
                     </th>
@@ -559,10 +575,10 @@ class Grid extends React.Component {
                       <a onClick={ev => this.handleSortByColumnClick(ev, "uri")}>
                         URI
                         {this.isSortedColumn("uri") && this.isSortedAsc() &&
-                        <Icon name="caret-up"/>
+                        <Icon baseline={true} name="caret-up"/>
                         }
                         {this.isSortedColumn("uri") && !this.isSortedAsc() &&
-                        <Icon name="caret-down"/>
+                        <Icon baseline={true} name="caret-down"/>
                         }
                       </a>
                     </th>
@@ -570,10 +586,10 @@ class Grid extends React.Component {
                       <a onClick={ev => this.handleSortByColumnClick(ev, "modified")}>
                         Modified
                         {this.isSortedColumn("modified") && this.isSortedAsc() &&
-                        <Icon name="caret-up"/>
+                        <Icon baseline={true} name="caret-up"/>
                         }
                         {this.isSortedColumn("modified") && !this.isSortedAsc() &&
-                        <Icon name="caret-down"/>
+                        <Icon baseline={true} name="caret-down"/>
                         }
                       </a>
                     </th>
@@ -607,7 +623,8 @@ Grid.propTypes = {
   onSelect: PropTypes.func,
   search: PropTypes.string,
   selectedResources: PropTypes.array,
-  resourceWorkspaceContext: PropTypes.any
+  resourceWorkspaceContext: PropTypes.any,
+  actionFeedbackContext: PropTypes.any // The action feedback context
 };
 
-export default withResourceWorkspace(Grid);
+export default withActionFeedback(withResourceWorkspace(Grid));

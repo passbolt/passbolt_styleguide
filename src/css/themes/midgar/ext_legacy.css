@@ -18,6 +18,7 @@
 /* loading animation */
 /* scrollbar */
 /* svg fill */
+/* favorite icon fill */
 /* ==========================================================================
  * Reset is a mix of :
  *
@@ -3274,6 +3275,12 @@ a.disabled .svg-icon svg {
   cursor: default;
 }
 a.disabled:hover .svg-icon svg {
+  fill: #8B8B89;
+}
+a.fav .svg-icon svg {
+  fill: #D40101;
+}
+a.unfav .svg-icon svg {
   fill: #8B8B89;
 }
 /*
