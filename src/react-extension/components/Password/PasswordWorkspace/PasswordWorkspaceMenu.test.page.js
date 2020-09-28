@@ -91,6 +91,20 @@ class DisplayMenuPageObject {
   }
 
   /**
+   * Returns the share menu elements of password workspace menu
+   */
+  get shareMenu() {
+    return this._container.querySelector('#share_action .button.ready');
+  }
+
+  /**
+   * Returns the share menu disabled elements of password workspace menu
+   */
+  get shareMenuDisabled() {
+    return this._container.querySelector('#share_action .button.ready.disabled');
+  }
+
+  /**
    * Returns the more menu elements of password workspace menu
    */
   get moreMenu() {

@@ -90,6 +90,12 @@ describe("See Workspace Menu", () => {
       page.displayMenu.clickOnMenu(page.displayMenu.dropdownMenuUsername);
       expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalled();
     });
+
+    it('As LU I can start sharing a resource via the workspace main menu', () => {
+      expect(page.displayMenu.exists()).toBeTruthy();
+      expect(page.displayMenu.shareMenu).not.toBeNull();
+      expect(page.displayMenu.shareMenuDisabled).toBeNull();
+    });
   });
 
   describe('As LU I can see the workspace menu with one resource selected not owned', () => {
@@ -113,9 +119,14 @@ describe("See Workspace Menu", () => {
       expect(page.displayMenu.dropdownMenuDeleteDisabled).not.toBeNull();
     });
 
-    it('As LU I cannot edit a resource I do not have update permission from the workspace main menu\n', () => {
+    it('As LU I cannot edit a resource I do not have update permission from the workspace main menu', () => {
       expect(page.displayMenu.exists()).toBeTruthy();
       expect(page.displayMenu.editMenuDisabled).not.toBeNull();
+    });
+
+    it('As LU I cannot share a resource I do not own from the workspace main menu', () => {
+      expect(page.displayMenu.exists()).toBeTruthy();
+      expect(page.displayMenu.shareMenuDisabled).not.toBeNull();
     });
   });
 
@@ -140,6 +151,11 @@ describe("See Workspace Menu", () => {
     it('As LU I should see the edit button disable if nothing is selected', () => {
       expect(page.displayMenu.exists()).toBeTruthy();
       expect(page.displayMenu.editMenuDisabled).not.toBeNull();
+    });
+
+    it('As LU I should see the share button disable if nothing is selected', () => {
+      expect(page.displayMenu.exists()).toBeTruthy();
+      expect(page.displayMenu.shareMenuDisabled).not.toBeNull();
     });
   });
 

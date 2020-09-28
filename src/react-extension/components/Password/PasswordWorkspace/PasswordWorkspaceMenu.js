@@ -21,6 +21,7 @@ import Icon from "../../Common/Icons/Icon";
 import {withDialog} from "../../../../react/contexts/Common/DialogContext";
 import PasswordDeleteDialog from "../PasswordDeleteDialog/PasswordDeleteDialog";
 import PasswordEditDialog from "../PasswordEditDialog/PasswordEditDialog";
+import ShareDialog from "../../Share/ShareDialog";
 
 /**
  * This component allows the current user to add a new comment on a resource
@@ -66,6 +67,7 @@ class PasswordWorkspaceMenu extends React.Component {
     this.handleEditClickEvent = this.handleEditClickEvent.bind(this);
     this.handleCopyPermalinkClickEvent = this.handleCopyPermalinkClickEvent.bind(this);
     this.handleCopyUsernameClickEvent = this.handleCopyUsernameClickEvent.bind(this);
+    this.handleShareClickEvent = this.handleShareClickEvent.bind(this);
   }
 
   componentDidMount() {
@@ -132,7 +134,7 @@ class PasswordWorkspaceMenu extends React.Component {
   }
 
   /**
-   * handle edit one resources
+   * handle edit one resource
    */
   handleEditClickEvent() {
     const passwordEditDialogProps = {
@@ -143,7 +145,16 @@ class PasswordWorkspaceMenu extends React.Component {
   }
 
   /**
-   * handle copy permalink of one resources
+   * handle share resources
+   */
+  handleShareClickEvent() {
+    const resourceIds = this.selectedResources.map(resource => resource.id);
+    this.context.setContext({shareDialogProps: {resourceIds}});
+    this.props.dialogContext.open(ShareDialog);
+  }
+
+  /**
+   * handle copy permalink of one resource
    */
   handleCopyPermalinkClickEvent() {
     const name = "permalink";
@@ -155,7 +166,7 @@ class PasswordWorkspaceMenu extends React.Component {
   }
 
   /**
-   * handle copy username of one resources
+   * handle copy username of one resource
    */
   handleCopyUsernameClickEvent() {
     const name = "username";
@@ -233,6 +244,13 @@ class PasswordWorkspaceMenu extends React.Component {
               onClick={this.handleEditClickEvent}>
               <Icon name="edit"></Icon>
               <span>edit</span>
+            </a>
+          </li>
+          <li id="share_action">
+            <a className={`button ready ${this.hasResourceSelected() && this.isOwnerOfSelectedResources() ? "" : "disabled"}`}
+              onClick={this.handleShareClickEvent}>
+              <Icon name="share"/>
+              <span>share</span>
             </a>
           </li>
           <li>
