@@ -73,7 +73,21 @@ describe("See Workspace Menu", () => {
       jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementation(() => {
       });
 
-      page.displayMenu.clickOnPermalinkMenu();
+      page.displayMenu.clickOnMenu(page.displayMenu.dropdownMenuPermalink);
+      expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalled();
+    });
+
+    it('As LU I should be able to copy a resource username from the resource sidebar', () => {
+      expect(page.displayMenu.exists()).toBeTruthy();
+      expect(page.displayMenu.moreMenu).not.toBeNull();
+      page.displayMenu.clickOnMoreMenu();
+      expect(page.displayMenu.dropdownMenuUsername).not.toBeNull();
+      expect(page.displayMenu.dropdownMenuUsernameDisabled).toBeNull();
+      // Mock the notification function
+      jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementation(() => {
+      });
+
+      page.displayMenu.clickOnMenu(page.displayMenu.dropdownMenuUsername);
       expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalled();
     });
   });
@@ -150,6 +164,11 @@ describe("See Workspace Menu", () => {
     it('As LU I should see the copy permalink disable if multiple resources is selected', () => {
       expect(page.displayMenu.exists()).toBeTruthy();
       expect(page.displayMenu.dropdownMenuPermalinkDisabled).not.toBeNull();
+    });
+
+    it('As LU I should see the copy username disable if multiple resources is selected', () => {
+      expect(page.displayMenu.exists()).toBeTruthy();
+      expect(page.displayMenu.dropdownMenuUsernameDisabled).not.toBeNull();
     });
   });
 });

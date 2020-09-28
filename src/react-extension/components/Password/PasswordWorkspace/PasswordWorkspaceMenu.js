@@ -65,6 +65,7 @@ class PasswordWorkspaceMenu extends React.Component {
     this.handleDeleteClickEvent = this.handleDeleteClickEvent.bind(this);
     this.handleEditClickEvent = this.handleEditClickEvent.bind(this);
     this.handleCopyPermalinkClickEvent = this.handleCopyPermalinkClickEvent.bind(this);
+    this.handleCopyUsernameClickEvent = this.handleCopyUsernameClickEvent.bind(this);
   }
 
   componentDidMount() {
@@ -142,7 +143,7 @@ class PasswordWorkspaceMenu extends React.Component {
   }
 
   /**
-   * handle copy permalink one resources
+   * handle copy permalink of one resources
    */
   handleCopyPermalinkClickEvent() {
     const name = "permalink";
@@ -151,6 +152,17 @@ class PasswordWorkspaceMenu extends React.Component {
     this.context.port.emit('passbolt.clipboard', {name, data});
     this.handleCloseMoreMenu();
     this.displaySuccessNotification("The permalink has been copied to clipboard");
+  }
+
+  /**
+   * handle copy username of one resources
+   */
+  handleCopyUsernameClickEvent() {
+    const name = "username";
+    const data = this.detailResource.username;
+    this.context.port.emit('passbolt.clipboard', {name, data});
+    this.handleCloseMoreMenu();
+    this.displaySuccessNotification("The username has been copied to clipboard");
   }
 
   /**
@@ -230,6 +242,18 @@ class PasswordWorkspaceMenu extends React.Component {
                 <Icon name="caret-down"/>
               </a>
               <ul className={`dropdown-content menu ready ${this.state.moreMenuOpen ? "visible" : ""}`}>
+                <li id="username_action" className="">
+                  <div className="row">
+                    <div className="main-cell-wrapper">
+                      <div className="main-cell">
+                        <a className={`${this.hasOneResourceSelected() ? "" : "disabled"}`}
+                          onClick={this.handleCopyUsernameClickEvent}>
+                          <span>copy username to clipboard</span>
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </li>
                 <li id="delete_action">
                   <div className="row">
                     <div className="main-cell-wrapper">

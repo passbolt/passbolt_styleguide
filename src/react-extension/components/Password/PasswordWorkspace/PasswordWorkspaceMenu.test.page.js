@@ -119,17 +119,31 @@ class DisplayMenuPageObject {
   }
 
   /**
-   * Returns the delete menu elements of password workspace menu
+   * Returns the permalink menu elements of password workspace menu
    */
   get dropdownMenuPermalink() {
     return this._container.querySelector('#permalink_action .row .main-cell-wrapper .main-cell a');
   }
 
   /**
-   * Returns the delete menu elements of password workspace menu
+   * Returns the permalink menu elements of password workspace menu
    */
   get dropdownMenuPermalinkDisabled() {
     return this._container.querySelector('#permalink_action .row .main-cell-wrapper .main-cell a.disabled');
+  }
+
+  /**
+   * Returns the username menu elements of password workspace menu
+   */
+  get dropdownMenuUsername() {
+    return this._container.querySelector('#username_action .row .main-cell-wrapper .main-cell a');
+  }
+
+  /**
+   * Returns the username menu elements of password workspace menu
+   */
+  get dropdownMenuUsernameDisabled() {
+    return this._container.querySelector('#username_action .row .main-cell-wrapper .main-cell a.disabled');
   }
 
   /**
@@ -145,10 +159,10 @@ class DisplayMenuPageObject {
     fireEvent.click(this.moreMenu, leftClick);
   }
 
-  /** Click on the more menu */
-  async clickOnPermalinkMenu()  {
+  /** Click on the action menu */
+  async clickOnMenu(element)  {
     const leftClick = {button: 0};
-    fireEvent.click(this.dropdownMenuPermalink, leftClick);
+    fireEvent.click(element, leftClick);
     await waitFor(() => {});
   }
 }
