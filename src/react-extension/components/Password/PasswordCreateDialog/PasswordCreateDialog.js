@@ -19,6 +19,8 @@ import Icon from "../../Common/Icons/Icon";
 import Tooltip from "../../Common/Tooltip/Tooltip";
 import SecretComplexity from "../../../lib/Secret/SecretComplexity";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
+import ErrorDialog from "../../Dialog/ErrorDialog/ErrorDialog";
+import {withDialog} from "../../../../react/contexts/Common/DialogContext";
 
 class PasswordCreateDialog extends Component {
   constructor() {
@@ -30,7 +32,6 @@ class PasswordCreateDialog extends Component {
 
   getDefaultState() {
     return {
-      error: "",
       name: "",
       nameError: "",
       username: "",
@@ -97,28 +98,53 @@ class PasswordCreateDialog extends Component {
 
     try {
       const resource = await this.createResource();
-      await this.props.actionFeedbackContext.displaySuccess("The password has been added successfully");
-      if (resource.folder_parent_id) {
-        // TODO and select resource inside that folder
-        this.selectAndScrollToFolder(resource.folder_parent_id);
-      } else {
-        this.selectAndScrollToResource(resource.id);
-      }
-
-      this.props.onClose();
+      await this.handleSaveSuccess(resource);
     } catch (error) {
-      // It can happen when the user has closed the passphrase entry dialog by instance.
-      if (error.name === "UserAbortsOperationError") {
-        this.setState({processing: false});
-      } else {
-        // Unexpected error occurred.
-        console.error(error);
-        this.setState({
-          error: error.message,
-          processing: false
-        });
-      }
+      this.handleSaveError(error);
     }
+  }
+
+  /**
+   * Handle save operation success.
+   */
+  async handleSaveSuccess(resource) {
+    await this.props.actionFeedbackContext.displaySuccess("The password has been added successfully");
+    if (resource.folder_parent_id) {
+      // TODO and select resource inside that folder
+      this.selectAndScrollToFolder(resource.folder_parent_id);
+    } else {
+      this.selectAndScrollToResource(resource.id);
+    }
+    this.props.onClose();
+  }
+
+  /**
+   * Handle save operation error.
+   * @param {object} error The returned error
+   */
+  handleSaveError(error) {
+    // It can happen when the user has closed the passphrase entry dialog by instance.
+    if (error.name === "UserAbortsOperationError") {
+      this.setState({processing: false});
+    } else {
+      // Unexpected error occurred.
+      console.error(error);
+      this.handleError(error);
+      this.setState({processing: false});
+    }
+  }
+
+  /**
+   * handle error to display the error dialog
+   * @param error
+   */
+  handleError(error) {
+    const errorDialogProps = {
+      title: "There was an unexpected error...",
+      message: error.message
+    };
+    this.context.setContext({errorDialogProps});
+    this.props.dialogContext.open(ErrorDialog);
   }
 
   /**
@@ -279,7 +305,6 @@ class PasswordCreateDialog extends Component {
   async validate() {
     // Reset the form errors.
     this.setState({
-      error: "",
       nameError: "",
       uriError: "",
       usernameError: "",
@@ -501,9 +526,6 @@ class PasswordCreateDialog extends Component {
                   }
                 </div>
               </div>
-              {this.state.error &&
-              <div className="feedbacks message error">{this.state.error}</div>
-              }
               <div className="submit-wrapper clearfix">
                 <input type="submit" className="button primary" role="button" value="Create"/>
                 <a className="cancel" role="button" onClick={this.handleCloseClick}>Cancel</a>
@@ -523,7 +545,8 @@ PasswordCreateDialog.propTypes = {
   resourceTypes: PropTypes.array,
   className: PropTypes.string,
   onClose: PropTypes.func,
-  actionFeedbackContext: PropTypes.any // The action feedback context
+  actionFeedbackContext: PropTypes.any, // The action feedback context
+  dialogContext: PropTypes.any // The dialog context
 };
 
-export default withActionFeedback(PasswordCreateDialog);
+export default withActionFeedback(withDialog(PasswordCreateDialog));
