@@ -43,6 +43,7 @@ describe("See Workspace Menu", () => {
      * Then I should see the delete
      * Then I should see the edit menu
      * Then I should see the permalink menu
+     * Then I should see the copy menu
      */
 
     beforeEach(() => {
@@ -77,7 +78,7 @@ describe("See Workspace Menu", () => {
       expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalled();
     });
 
-    it('As LU I should be able to copy a resource username from the resource sidebar', () => {
+    it('As LU I should be able to copy a resource username from the workspace main menu', () => {
       expect(page.displayMenu.exists()).toBeTruthy();
       expect(page.displayMenu.moreMenu).not.toBeNull();
       page.displayMenu.clickOnMoreMenu();
@@ -95,6 +96,30 @@ describe("See Workspace Menu", () => {
       expect(page.displayMenu.exists()).toBeTruthy();
       expect(page.displayMenu.shareMenu).not.toBeNull();
       expect(page.displayMenu.shareMenuDisabled).toBeNull();
+    });
+
+    it('As LU I should be able to copy a resource secret from the workspace main menu', () => {
+      expect(page.displayMenu.copyMenu).not.toBeNull();
+      expect(page.displayMenu.copyMenuDisabled).toBeNull();
+      // Mock the notification function
+      jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementation(() => {
+      });
+      page.displayMenu.clickOnMenu(page.displayMenu.copyMenu);
+      expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalled();
+    });
+
+    it('As LU I should be able to copy a resource secret from the more menu', () => {
+      expect(page.displayMenu.exists()).toBeTruthy();
+      expect(page.displayMenu.moreMenu).not.toBeNull();
+      page.displayMenu.clickOnMoreMenu();
+      expect(page.displayMenu.dropdownMenuSecret).not.toBeNull();
+      expect(page.displayMenu.dropdownMenuSecretDisabled).toBeNull();
+      // Mock the notification function
+      jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementation(() => {
+      });
+
+      page.displayMenu.clickOnMenu(page.displayMenu.dropdownMenuSecret);
+      expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalled();
     });
   });
 
@@ -137,6 +162,7 @@ describe("See Workspace Menu", () => {
      * Given no selected resource
      * Then I should see the more menu disable
      * Then I should see the edit menu disable
+     * Then I should see the copy menu disable
      */
 
     beforeEach(() => {
@@ -157,6 +183,14 @@ describe("See Workspace Menu", () => {
       expect(page.displayMenu.exists()).toBeTruthy();
       expect(page.displayMenu.shareMenuDisabled).not.toBeNull();
     });
+
+    it('As LU I should see the copy button disable if nothing is selected', () => {
+      expect(page.displayMenu.exists()).toBeTruthy();
+      expect(page.displayMenu.copyMenuDisabled).not.toBeNull();
+      expect(page.displayMenu.moreMenu).not.toBeNull();
+      page.displayMenu.clickOnMoreMenu();
+      expect(page.displayMenu.dropdownMenuSecretDisabled).not.toBeNull();
+    });
   });
 
   describe('As LU I can see the workspace menu with multiple resource selected', () => {
@@ -166,6 +200,7 @@ describe("See Workspace Menu", () => {
      * Given multiple selected resource
      * Then I should see the edit menu disable
      * Then I should see the permalink menu disable
+     * Then I should see the copy menu disable
      */
 
     beforeEach(() => {
@@ -185,6 +220,14 @@ describe("See Workspace Menu", () => {
     it('As LU I should see the copy username disable if multiple resources is selected', () => {
       expect(page.displayMenu.exists()).toBeTruthy();
       expect(page.displayMenu.dropdownMenuUsernameDisabled).not.toBeNull();
+    });
+
+    it('As LU I should see the copy button disable if multiple resources is selected', () => {
+      expect(page.displayMenu.exists()).toBeTruthy();
+      expect(page.displayMenu.copyMenuDisabled).not.toBeNull();
+      expect(page.displayMenu.moreMenu).not.toBeNull();
+      page.displayMenu.clickOnMoreMenu();
+      expect(page.displayMenu.dropdownMenuSecretDisabled).not.toBeNull();
     });
   });
 });

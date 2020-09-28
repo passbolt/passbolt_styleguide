@@ -105,6 +105,20 @@ class DisplayMenuPageObject {
   }
 
   /**
+   * Returns the share menu elements of password workspace menu
+   */
+  get copyMenu() {
+    return this._container.querySelector('#password_action .button.ready');
+  }
+
+  /**
+   * Returns the share menu disabled elements of password workspace menu
+   */
+  get copyMenuDisabled() {
+    return this._container.querySelector('#password_action .button.ready.disabled');
+  }
+
+  /**
    * Returns the more menu elements of password workspace menu
    */
   get moreMenu() {
@@ -158,6 +172,20 @@ class DisplayMenuPageObject {
    */
   get dropdownMenuUsernameDisabled() {
     return this._container.querySelector('#username_action .row .main-cell-wrapper .main-cell a.disabled');
+  }
+
+  /**
+   * Returns the username menu elements of password workspace menu
+   */
+  get dropdownMenuSecret() {
+    return this._container.querySelector('#secret_action .row .main-cell-wrapper .main-cell a');
+  }
+
+  /**
+   * Returns the username menu elements of password workspace menu
+   */
+  get dropdownMenuSecretDisabled() {
+    return this._container.querySelector('#secret_action .row .main-cell-wrapper .main-cell a.disabled');
   }
 
   /**
