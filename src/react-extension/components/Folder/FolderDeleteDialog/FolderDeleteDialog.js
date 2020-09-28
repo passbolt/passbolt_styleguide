@@ -20,6 +20,7 @@ import FormCancelButton from "../../Common/Inputs/FormSubmitButton/FormCancelBut
 import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
 import {withDialog} from "../../../contexts/Common/DialogContext";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
+import {withLoading} from "../../../contexts/Common/LoadingContext";
 
 class FolderDeleteDialog extends Component {
   /**
@@ -110,6 +111,7 @@ class FolderDeleteDialog extends Component {
     this.toggleProcessing();
 
     try {
+      this.props.loadingContext.add();
       await this.context.port.request("passbolt.folders.delete", this.context.folder.id, this.state.cascade);
       await this.handleSaveSuccess();
     } catch (error) {
@@ -121,6 +123,7 @@ class FolderDeleteDialog extends Component {
    * Handle save operation success.
    */
   async handleSaveSuccess() {
+    this.props.loadingContext.remove();
     await this.props.actionFeedbackContext.displaySuccess("The folder was deleted successfully");
     this.props.onClose();
   }
@@ -130,6 +133,7 @@ class FolderDeleteDialog extends Component {
    * @param {object} error The returned error
    */
   handleSaveError(error) {
+    this.props.loadingContext.remove();
     // It can happen when the user has closed the passphrase entry dialog by instance.
     if (error.name === "UserAbortsOperationError") {
       this.setState({processing: false});
@@ -227,7 +231,8 @@ FolderDeleteDialog.contextType = AppContext;
 FolderDeleteDialog.propTypes = {
   onClose: PropTypes.func,
   actionFeedbackContext: PropTypes.any, // The action feedback context
-  dialogContext: PropTypes.any
+  dialogContext: PropTypes.any, // The dialog context
+  loadingContext: PropTypes.any // The loading context
 };
 
-export default withDialog(withActionFeedback(FolderDeleteDialog));
+export default withLoading(withDialog(withActionFeedback(FolderDeleteDialog)));

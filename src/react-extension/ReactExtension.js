@@ -39,6 +39,8 @@ import ContextualMenuContextProvider from "./contexts/Common/ContextualMenuConte
 import ManageContextualMenu from "./components/ManageContextualMenu";
 import HandleFolderMoveStrategyDialogEvents
   from "./components/Folder/HandleFolderMoveStrategyDialogEvents/HandleFolderMoveStrategyDialogEvents";
+import ManageLoading from "./components/Common/Loading/ManageLoading/ManageLoading";
+import LoadingContextProvider from "./contexts/Common/LoadingContext";
 import Footer from "./components/Footer/Footer";
 
 class ReactExtension extends Component {
@@ -56,6 +58,8 @@ class ReactExtension extends Component {
     this.getResources();
     this.getResourceTypes();
     this.getFolders();
+
+
   }
 
   getDefaultState(props) {
@@ -243,19 +247,20 @@ class ReactExtension extends Component {
         <ActionFeedbackContextProvider>
           <DialogContextProvider>
             <ContextualMenuContextProvider>
+              <LoadingContextProvider>
 
-              { /* Contextual Menu Management */}
-              <ManageContextualMenu/>
+                { /* Contextual Menu Management */}
+                <ManageContextualMenu/>
 
-            { /* Action Feedback Management */ }
-            <ShareActionFeedbacks/>
+                { /* Action Feedback Management */ }
+                <ShareActionFeedbacks/>
 
-            { /* Dialogs Management */ }
-            <HandlePassphraseEntryDialogEvents/>
-            <HandleFolderMoveStrategyDialogEvents/>
-            <HandleProgressDialogEvents/>
-            <HandleErrorDialogEvents/>
-            <ManageDialogs/>
+                { /* Dialogs Management */ }
+                <HandlePassphraseEntryDialogEvents/>
+                <HandleFolderMoveStrategyDialogEvents/>
+                <HandleProgressDialogEvents/>
+                <HandleErrorDialogEvents/>
+                <ManageDialogs/>
 
             <Router>
               <div id="container" className="page">
@@ -268,9 +273,9 @@ class ReactExtension extends Component {
               />
               }
 
-              <div className="header first">
-                <MainMenu onClick={this.handleWorkspaceSelect} baseUrl={this.state.userSettings.getTrustedDomain()}/>
-              </div>
+                <div className="header first">
+                  <MainMenu onClick={this.handleWorkspaceSelect} baseUrl={this.state.userSettings.getTrustedDomain()}/>
+                </div>
 
                       <Switch>
                         <Route path={[
@@ -290,7 +295,9 @@ class ReactExtension extends Component {
                   }
                 </div>
               </Router>
+              <ManageLoading/>
               <Footer/>
+              </LoadingContextProvider>
             </ContextualMenuContextProvider>
           </DialogContextProvider>
         </ActionFeedbackContextProvider>

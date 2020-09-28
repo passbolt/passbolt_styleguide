@@ -144,7 +144,7 @@ class PasswordSidebarDescriptionSection extends React.Component {
 }
 
 PasswordSidebarDescriptionSection.propTypes = {
-  resourceWorkspaceContext: PropTypes.any
+  resourceWorkspaceContext: PropTypes.any, // The resource context
 };
 
 export default withResourceWorkspace(PasswordSidebarDescriptionSection);

@@ -17,6 +17,7 @@ import Icon from "../../Common/Icons/Icon";
 import AppContext from "../../../contexts/AppContext";
 import Autocomplete from "./Autocomplete/Autocomplete";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
+import {withLoading} from "../../../contexts/Common/LoadingContext";
 
 const TAG_MAX_LENGTH = 128;
 
@@ -400,12 +401,15 @@ class TagEditor extends React.Component {
    */
   async updateTags() {
     try {
+      this.props.loadingContext.add();
       await this.context.port.request("passbolt.tags.update-resource-tags", this.props.resourceId, this.state.tags);
+      this.props.loadingContext.remove();
       await this.props.actionFeedbackContext.displaySuccess("The tags have been updated successfully");
       this.setState({processing: false});
       this.props.toggleInputTagEditor();
     } catch (error) {
       // Unexpected error occurred.
+      this.props.loadingContext.remove();
       console.error(error);
       this.setState({
         errorMessage: error.message,
@@ -541,7 +545,8 @@ TagEditor.propTypes = {
   isOwner: PropTypes.bool, // if the user is owner of the resource
   toggleInputTagEditor: PropTypes.func, // toggle to display or not the editor
   resourceId: PropTypes.string, // the id of the resource
-  actionFeedbackContext: PropTypes.any // The action feedback context
+  actionFeedbackContext: PropTypes.any, // The action feedback context
+  loadingContext: PropTypes.any // The loading context
 };
 
-export default withActionFeedback(TagEditor);
+export default withLoading(withActionFeedback(TagEditor));
