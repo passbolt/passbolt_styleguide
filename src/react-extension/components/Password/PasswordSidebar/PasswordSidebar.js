@@ -21,6 +21,7 @@ import PasswordSidebarDescriptionSection from "./PasswordSidebarDescriptionSecti
 import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 import PasswordSidebarPermissionsSection from "./PasswordSidebarPermissionsSection";
 import AppContext from "../../../contexts/AppContext";
+import PasswordSidebarActivitySection from "./PasswordSidebarActivitySection";
 
 class PasswordSidebar extends React.Component {
   /**
@@ -55,6 +56,7 @@ class PasswordSidebar extends React.Component {
           <PasswordSidebarPermissionsSection />
           <PasswordSidebarTagSection/>
           <PasswordSidebarCommentSection/>
+          <PasswordSidebarActivitySection/>
         </div>
       </div>
     );

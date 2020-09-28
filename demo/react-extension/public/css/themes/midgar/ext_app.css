@@ -4889,6 +4889,10 @@ h6 .input.toggle-switch {
   content: "\f0da";
   /* caret right */
 }
+.panel.aside .activity div.actions {
+  margin-top: 1em;
+  text-align: center;
+}
 .avatar img {
   width: 36px;
   height: 36px;
