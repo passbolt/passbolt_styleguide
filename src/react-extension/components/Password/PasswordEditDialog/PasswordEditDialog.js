@@ -24,13 +24,13 @@ import ErrorDialog from "../../Dialog/ErrorDialog/ErrorDialog";
 class PasswordEditDialog extends Component {
   constructor(props, context) {
     super(props, context);
-    this.state = this.getDefaultState(props, context);
+    this.state = this.getDefaultState(context);
     this.initEventHandlers();
     this.createInputRef();
   }
 
-  getDefaultState(props, context) {
-    const resource = context.resources.find(item => item.id === props.id) || {};
+  getDefaultState(context) {
+    const resource = context.resources.find(item => item.id === this.context.passwordEditDialogProps.id) || {};
 
     return {
       nameOriginal: resource.name || "",
@@ -199,6 +199,7 @@ class PasswordEditDialog extends Component {
    */
   handleCloseClick() {
     this.props.onClose();
+    this.context.setContext({passwordEditDialogProps: null});
   }
 
   /**
@@ -211,6 +212,7 @@ class PasswordEditDialog extends Component {
       // Stop the event propagation in order to avoid a parent component to react to this ESC event.
       event.stopPropagation();
       this.props.onClose();
+      this.context.setContext({passwordEditDialogProps: null});
     }
   }
 
@@ -239,8 +241,9 @@ class PasswordEditDialog extends Component {
    */
   async handleSaveSuccess() {
     await this.props.actionFeedbackContext.displaySuccess("The password has been updated successfully");
-    this.selectAndScrollToResource(this.props.id);
+    this.selectAndScrollToResource(this.context.passwordEditDialogProps.id);
     this.props.onClose();
+    this.context.setContext({passwordEditDialogProps: null});
   }
 
   /**
@@ -278,7 +281,7 @@ class PasswordEditDialog extends Component {
    */
   updateResourceLegacy() {
     const resourceDto = {
-      id: this.props.id,
+      id: this.context.passwordEditDialogProps.id,
       name: this.state.name,
       username: this.state.username,
       uri: this.state.uri,
@@ -301,7 +304,7 @@ class PasswordEditDialog extends Component {
     }
 
     const resourceDto = {
-      id: this.props.id,
+      id: this.context.passwordEditDialogProps.id,
       name: this.state.name,
       username: this.state.username,
       uri: this.state.uri
@@ -338,7 +341,7 @@ class PasswordEditDialog extends Component {
     if (!this.isResourceTypesEnabled()) {
       return undefined;
     }
-    const type = this.props.resourceTypes.find(type => type.slug === slug);
+    const type = this.resourceTypes.find(type => type.slug === slug);
     if (type && type.id) {
       return type.id;
     }
@@ -399,7 +402,7 @@ class PasswordEditDialog extends Component {
    * @return {Promise<Object>}
    */
   async getDecryptedSecret() {
-    const plaintext = await this.context.port.request("passbolt.secret.decrypt", this.props.id);
+    const plaintext = await this.context.port.request("passbolt.secret.decrypt", this.context.passwordEditDialogProps.id);
     if (typeof plaintext === 'string') {
       return {
         password: plaintext,
@@ -531,7 +534,7 @@ class PasswordEditDialog extends Component {
    * @returns {boolean}
    */
   isResourceTypesEnabled() {
-    return !(!this.props.resourceTypes || !this.props.resourceTypes.length);
+    return !(!this.resourceTypes || !this.resourceTypes.length);
   }
 
   /**
@@ -543,7 +546,7 @@ class PasswordEditDialog extends Component {
     if (!this.isResourceTypesEnabled()) {
       return false;
     }
-    const type = this.props.resourceTypes.find(type => type.id === this.state.resourceTypeId);
+    const type = this.resourceTypes.find(type => type.id === this.state.resourceTypeId);
     if (!type || !type.slug) {
       return false;
     }
@@ -578,6 +581,13 @@ class PasswordEditDialog extends Component {
         await this.decryptSecret();
       }
     }
+  }
+
+  /**
+   * get the resource types
+   */
+  get resourceTypes() {
+    return this.context.resourceTypes;
   }
 
   render() {
@@ -711,14 +721,9 @@ class PasswordEditDialog extends Component {
 }
 
 PasswordEditDialog.contextType = AppContext;
-PasswordEditDialog.defaultProps = {
-  resourceTypes: []
-};
+
 PasswordEditDialog.propTypes = {
-  className: PropTypes.string,
   onClose: PropTypes.func,
-  id: PropTypes.string,
-  resourceTypes: PropTypes.array,
   actionFeedbackContext: PropTypes.any, // The action feedback context
   dialogContext: PropTypes.any // The dialog context
 };

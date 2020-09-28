@@ -20,6 +20,7 @@ import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext"
 import Icon from "../../Common/Icons/Icon";
 import {withDialog} from "../../../../react/contexts/Common/DialogContext";
 import PasswordDeleteDialog from "../PasswordDeleteDialog/PasswordDeleteDialog";
+import PasswordEditDialog from "../PasswordEditDialog/PasswordEditDialog";
 
 /**
  * This component allows the current user to add a new comment on a resource
@@ -62,6 +63,34 @@ class PasswordWorkspaceMenu extends React.Component {
     this.handleDocumentDragStartEvent = this.handleDocumentDragStartEvent.bind(this);
     this.handleMoreClickEvent = this.handleMoreClickEvent.bind(this);
     this.handleDeleteClickEvent = this.handleDeleteClickEvent.bind(this);
+    this.handleEditClickEvent = this.handleEditClickEvent.bind(this);
+  }
+
+  /**
+   * Create DOM nodes or React elements references in order to be able to access them programmatically.
+   */
+  createRefs() {
+    this.moreMenuRef = React.createRef();
+  }
+
+  componentDidMount() {
+    document.addEventListener('click', this.handleMenuClickEvent);
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('click', this.handleMenuClickEvent);
+  }
+
+  /**
+   * Handle click events on more menu. Hide the component if the click occurred outside of the component.
+   * @param {ReactEvent} event The event
+   */
+  handleMenuClickEvent(event) {
+    // Prevent hide more menu when the user click on an element out of the more menu
+    if (this.moreMenuRef.current.contains(event.target)) {
+      return;
+    }
+    this.handleCloseMoreMenu();
   }
 
   componentDidMount() {
@@ -128,6 +157,17 @@ class PasswordWorkspaceMenu extends React.Component {
   }
 
   /**
+   * handle edit one resources
+   */
+  handleEditClickEvent() {
+    const passwordEditDialogProps = {
+      id: this.detailResource.id
+    };
+    this.context.setContext({passwordEditDialogProps});
+    this.props.dialogContext.open(PasswordEditDialog);
+  }
+
+  /**
    * Close the more menu
    */
   handleCloseMoreMenu() {
@@ -143,11 +183,27 @@ class PasswordWorkspaceMenu extends React.Component {
   }
 
   /**
+   * the detail resource if only one is selected
+   * @returns {*}
+   */
+  get detailResource() {
+    return this.props.resourceWorkspaceContext.details.resource;
+  }
+
+  /**
    * has at least one resource selected
    * @returns {boolean}
    */
   hasResourceSelected() {
     return this.selectedResources.length > 0;
+  }
+
+  /**
+   * has at least one resource selected
+   * @returns {boolean}
+   */
+  hasOneResourceSelected() {
+    return this.detailResource !== null;
   }
 
   /**
@@ -165,6 +221,14 @@ class PasswordWorkspaceMenu extends React.Component {
     return (
       <div className="actions">
         <ul className="ready">
+          <li id="edit_action">
+            <a
+              className={`button ready ${this.hasOneResourceSelected() && this.isOwnerOfSelectedResources() ? "" : "disabled"}`}
+              onClick={this.handleEditClickEvent}>
+              <Icon name="edit"></Icon>
+              <span>edit</span>
+            </a>
+          </li>
           <li>
             <div className="dropdown" ref={this.moreMenuRef}>
               <a className={`button ready ${this.hasResourceSelected() ? "" : "disabled"}`} onClick={this.handleMoreClickEvent}>
@@ -176,7 +240,8 @@ class PasswordWorkspaceMenu extends React.Component {
                   <div className="row">
                     <div className="main-cell-wrapper">
                       <div className="main-cell">
-                        <a className={`${this.isOwnerOfSelectedResources() ? "" : "disabled"}`} onClick={this.handleDeleteClickEvent}><span>delete</span></a>
+                        <a className={`${this.isOwnerOfSelectedResources() ? "" : "disabled"}`}
+                          onClick={this.handleDeleteClickEvent}><span>delete</span></a>
                       </div>
                     </div>
                   </div>

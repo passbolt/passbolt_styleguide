@@ -20,7 +20,7 @@
 
 import PasswordWorkspaceMenuPage from "./PasswordWorkspaceMenu.test.page";
 import {
-  defaultAppContext,
+  defaultAppContext, defaultPropsMultipleResource,
   defaultPropsNoResource, defaultPropsOneResourceNotOwned,
   defaultPropsOneResourceOwned
 } from "./PasswordWorkspaceMenu.test.data";
@@ -32,15 +32,15 @@ beforeEach(() => {
 describe("See Workspace Menu", () => {
   let page; // The page to test against
   const context = defaultAppContext(); // The applicative context
-  const propsOneResourceOwned = defaultPropsOneResourceOwned(); // The props to pass
-  const propsOneResourceNotOwned = defaultPropsOneResourceNotOwned(); // The props to pass
-  const propsNoResource = defaultPropsNoResource(); // The props to pass
 
   describe('As LU I can see the workspace menu with one resource selected owned', () => {
+    const propsOneResourceOwned = defaultPropsOneResourceOwned(); // The props to pass
+
     /**
      * Given a selected resource
      * When I open the more menu
      * Then I should see the delete
+     * Then I should see the edit menu
      */
 
     beforeEach(() => {
@@ -54,13 +54,22 @@ describe("See Workspace Menu", () => {
       expect(page.displayMenu.dropdownMenuDelete).not.toBeNull();
       expect(page.displayMenu.dropdownMenuDeleteDisabled).toBeNull();
     });
+
+    it('As LU I can start editing a resource via the workspace main menu', () => {
+      expect(page.displayMenu.exists()).toBeTruthy();
+      expect(page.displayMenu.editMenu).not.toBeNull();
+      expect(page.displayMenu.editMenuDisabled).toBeNull();
+    });
   });
 
   describe('As LU I can see the workspace menu with one resource selected not owned', () => {
+    const propsOneResourceNotOwned = defaultPropsOneResourceNotOwned(); // The props to pass
+
     /**
      * Given a selected resource not owned
      * When I open the more menu
      * Then I should see the delete disable
+     * Then I should see the edit menu disable
      */
 
     beforeEach(() => {
@@ -73,12 +82,20 @@ describe("See Workspace Menu", () => {
       page.displayMenu.clickOnMoreMenu();
       expect(page.displayMenu.dropdownMenuDeleteDisabled).not.toBeNull();
     });
+
+    it('As LU I cannot edit a resource I do not have update permission from the workspace main menu\n', () => {
+      expect(page.displayMenu.exists()).toBeTruthy();
+      expect(page.displayMenu.editMenuDisabled).not.toBeNull();
+    });
   });
 
   describe('As LU I can see the workspace menu with no resource selected', () => {
+    const propsNoResource = defaultPropsNoResource(); // The props to pass
+
     /**
      * Given no selected resource
      * Then I should see the more menu disable
+     * Then I should see the edit menu disable
      */
 
     beforeEach(() => {
@@ -88,6 +105,29 @@ describe("See Workspace Menu", () => {
     it('As LU I should see the delete button disable if nothing is selected', () => {
       expect(page.displayMenu.exists()).toBeTruthy();
       expect(page.displayMenu.moreMenuDisabled).not.toBeNull();
+    });
+
+    it('As LU I should see the edit button disable if nothing is selected', () => {
+      expect(page.displayMenu.exists()).toBeTruthy();
+      expect(page.displayMenu.editMenuDisabled).not.toBeNull();
+    });
+  });
+
+  describe('As LU I can see the workspace menu with multiple resource selected', () => {
+    const propsMultipleResource = defaultPropsMultipleResource(); // The props to pass
+
+    /**
+     * Given multiple selected resource
+     * Then I should see the edit menu disable
+     */
+
+    beforeEach(() => {
+      page = new PasswordWorkspaceMenuPage(context, propsMultipleResource);
+    });
+
+    it('As LU I should see the edit button disable if multiple resources is selected', () => {
+      expect(page.displayMenu.exists()).toBeTruthy();
+      expect(page.displayMenu.editMenuDisabled).not.toBeNull();
     });
   });
 });

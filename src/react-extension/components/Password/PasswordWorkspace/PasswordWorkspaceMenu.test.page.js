@@ -77,6 +77,20 @@ class DisplayMenuPageObject {
   }
 
   /**
+   * Returns the edit menu elements of password workspace menu
+   */
+  get editMenu() {
+    return this._container.querySelector('#edit_action .button.ready');
+  }
+
+  /**
+   * Returns the edit menu disabled elements of password workspace menu
+   */
+  get editMenuDisabled() {
+    return this._container.querySelector('#edit_action .button.ready.disabled');
+  }
+
+  /**
    * Returns the more menu elements of password workspace menu
    */
   get moreMenu() {
