@@ -136,13 +136,15 @@ class ResourceWorkspaceContextProvider extends React.Component {
    * Handle the resources changes
    */
   async handleResourcesChange() {
-    // We check the equality of the context resources and its last known value through the resources identifiers
-    const localResourcesIdsAsSet = new Set(this.resources.map(resource => resource.id));
-    const areResourcesChanged = ! this.context.resources.every(resource => localResourcesIdsAsSet.has(resource.id));
+    if (this.context.resources) {
+      // We check the equality of the context resources and its last known value through the resources identifiers
+      const localResourcesIdsAsSet = new Set(this.resources.map(resource => resource.id));
+      const areResourcesChanged = ! this.context.resources.every(resource => localResourcesIdsAsSet.has(resource.id));
 
-    if (areResourcesChanged) {
-      this.resources = this.context.resources;
-      await this.search(this.state.filter);
+      if (areResourcesChanged) {
+        this.resources = this.context.resources;
+        await this.search(this.state.filter);
+      }
     }
   }
 
@@ -272,8 +274,8 @@ class ResourceWorkspaceContextProvider extends React.Component {
    * Populate the context with initial data such as resources and folders
    */
   populate() {
-    this.context.port.request("passbolt.plugin.folders.update-local-storage");
-    this.context.port.request("passbolt.plugin.resources.update-local-storage");
+    this.context.port.request("passbolt.folders.update-local-storage");
+    this.context.port.request("passbolt.resources.update-local-storage");
   }
 
   /** RESOURCE SEARCH  **/
