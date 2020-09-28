@@ -39,6 +39,7 @@ import ContextualMenuContextProvider from "./contexts/Common/ContextualMenuConte
 import ManageContextualMenu from "./components/ManageContextualMenu";
 import HandleFolderMoveStrategyDialogEvents
   from "./components/Folder/HandleFolderMoveStrategyDialogEvents/HandleFolderMoveStrategyDialogEvents";
+import Footer from "./components/Footer/Footer";
 
 class ReactExtension extends Component {
   constructor(props) {
@@ -306,6 +307,7 @@ class ReactExtension extends Component {
                   }
                 </div>
               </Router>
+              <Footer/>
             </ContextualMenuContextProvider>
           </DialogContextProvider>
         </ActionFeedbackContextProvider>

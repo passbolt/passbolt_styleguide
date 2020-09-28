@@ -25,6 +25,10 @@ export default () => {
       "session_timeout": 24,
       "image_storage": {
         "public_path": "img/public/"
+      },
+      "legal": {
+        "terms": "https://www.passbolt.com/licence",
+        "privacy": "https://www.passbolt.com/privacy"
       }
     },
     "passbolt": {
