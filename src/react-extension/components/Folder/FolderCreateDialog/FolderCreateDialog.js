@@ -19,6 +19,7 @@ import ErrorDialog from "../../Dialog/ErrorDialog/ErrorDialog";
 import FormSubmitButton from "../../Common/Inputs/FormSubmitButton/FormSubmitButton";
 import FormCancelButton from "../../Common/Inputs/FormSubmitButton/FormCancelButton";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
+import {withDialog} from "../../../contexts/Common/DialogContext";
 
 class FolderCreateDialog extends Component {
   /**
@@ -54,10 +55,6 @@ class FolderCreateDialog extends Component {
       processing: false,
       inlineValidation: false,
 
-      // Error dialog trigger
-      serviceError: false,
-      serviceErrorMessage: '',
-
       // Fields and errors
       name: 'loading...',
       nameError: false
@@ -78,7 +75,6 @@ class FolderCreateDialog extends Component {
    */
   bindEventHandlers() {
     this.handleClose = this.handleClose.bind(this);
-    this.handleCloseError = this.handleCloseError.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleFormSubmit = this.handleFormSubmit.bind(this);
   }
@@ -88,25 +84,7 @@ class FolderCreateDialog extends Component {
    * @returns {void}
    */
   handleClose() {
-    /*
-     * ignore closing event of main folder create dialog
-     * if service error is displayed on top
-     */
-    if (!this.state.serviceError) {
-      this.props.onClose();
-    }
-  }
-
-  /**
-   * Handle close error dialog
-   * @returns {void}
-   */
-  handleCloseError() {
-    /*
-     * Close dialog
-     * TODO do not allow retry if parent id does not exist
-     */
-    this.setState({serviceError: false, serviceErrorMessage: ''});
+    this.props.onClose();
   }
 
   /**
@@ -155,13 +133,48 @@ class FolderCreateDialog extends Component {
 
     try {
       const folder = await this.createFolder();
-      await this.props.actionFeedbackContext.displaySuccess("The folder has been added successfully");
-      this.selectAndScrollToFolder(folder.id);
-      this.props.onClose();
+      await this.handleSaveSuccess(folder.id);
     } catch (error) {
-      console.error(error);
-      this.setState({serviceError: true, serviceErrorMessage: error.message, processing: false});
+      this.handleSaveError(error);
     }
+  }
+
+  /**
+   * Handle save operation success.
+   */
+  async handleSaveSuccess(folderId) {
+    await this.props.actionFeedbackContext.displaySuccess("The folder has been added successfully");
+    this.selectAndScrollToFolder(folderId);
+    this.props.onClose();
+  }
+
+  /**
+   * Handle save operation error.
+   * @param {object} error The returned error
+   */
+  handleSaveError(error) {
+    // It can happen when the user has closed the passphrase entry dialog by instance.
+    if (error.name === "UserAbortsOperationError") {
+      this.setState({processing: false});
+    } else {
+      // Unexpected error occurred.
+      console.error(error);
+      this.handleError(error);
+      this.setState({processing: false});
+    }
+  }
+
+  /**
+   * handle error to display the error dialog
+   * @param error
+   */
+  handleError(error) {
+    const errorDialogProps = {
+      title: "There was an unexpected error...",
+      message: error.message
+    };
+    this.context.setContext({errorDialogProps});
+    this.props.dialogContext.open(ErrorDialog);
   }
 
   /**
@@ -264,38 +277,31 @@ class FolderCreateDialog extends Component {
    */
   render() {
     return (
-      <div>
-        <DialogWrapper className='folder-create-dialog' title="Create a new folder"
-          onClose={this.handleClose} disabled={this.hasAllInputDisabled()}>
-          <form className="folder-create-form" onSubmit={this.handleFormSubmit} noValidate>
-            <div className="form-content">
-              <div className="input text required">
-                <label htmlFor="folder-name-input">Name</label>
-                <input id="folder-name-input" name="name"
-                  ref={this.nameRef}
-                  type="text" value={this.state.name} placeholder="Untitled folder"
-                  maxLength="64" required="required"
-                  disabled={this.hasAllInputDisabled()}
-                  onChange={this.handleInputChange}
-                  autoComplete='off' autoFocus={true}
-                />
-                {this.state.nameError &&
-                <div className="error message">{this.state.nameError}</div>
-                }
-              </div>
+      <DialogWrapper className='folder-create-dialog' title="Create a new folder"
+        onClose={this.handleClose} disabled={this.hasAllInputDisabled()}>
+        <form className="folder-create-form" onSubmit={this.handleFormSubmit} noValidate>
+          <div className="form-content">
+            <div className="input text required">
+              <label htmlFor="folder-name-input">Name</label>
+              <input id="folder-name-input" name="name"
+                ref={this.nameRef}
+                type="text" value={this.state.name} placeholder="Untitled folder"
+                maxLength="64" required="required"
+                disabled={this.hasAllInputDisabled()}
+                onChange={this.handleInputChange}
+                autoComplete='off' autoFocus={true}
+              />
+              {this.state.nameError &&
+              <div className="error message">{this.state.nameError}</div>
+              }
             </div>
-            <div className="submit-wrapper clearfix">
-              <FormSubmitButton disabled={this.hasAllInputDisabled()} processing={this.state.processing} value="Save"/>
-              <FormCancelButton disabled={this.hasAllInputDisabled()} onClick={this.handleClose} />
-            </div>
-          </form>
-        </DialogWrapper>
-        {this.state.serviceError &&
-        <ErrorDialog message={this.state.serviceErrorMessage}
-          title={`The folder could not be saved.`}
-          onClose={this.handleCloseError}/>
-        }
-      </div>
+          </div>
+          <div className="submit-wrapper clearfix">
+            <FormSubmitButton disabled={this.hasAllInputDisabled()} processing={this.state.processing} value="Save"/>
+            <FormCancelButton disabled={this.hasAllInputDisabled()} onClick={this.handleClose}/>
+          </div>
+        </form>
+      </DialogWrapper>
     );
   }
 }
@@ -304,7 +310,8 @@ FolderCreateDialog.contextType = AppContext;
 
 FolderCreateDialog.propTypes = {
   actionFeedbackContext: PropTypes.any, // The action feedback context
-  onClose: PropTypes.func
+  onClose: PropTypes.func,
+  dialogContext: PropTypes.any // The dialog context
 };
 
-export default withActionFeedback(FolderCreateDialog);
+export default withActionFeedback(withDialog(FolderCreateDialog));

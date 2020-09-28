@@ -77,10 +77,6 @@ class ShareDialog extends Component {
 
       // autocomplete
       autocompleteOpen: false,
-
-      // Error dialog trigger
-      serviceError: false,
-      serviceErrorMessage: '',
     };
   }
 
@@ -90,8 +86,6 @@ class ShareDialog extends Component {
    */
   bindEventHandlers() {
     this.handleClose = this.handleClose.bind(this);
-    this.handleServiceError = this.handleServiceError.bind(this);
-    this.handleCloseError = this.handleCloseError.bind(this);
     this.handleFormSubmit = this.handleFormSubmit.bind(this);
 
     this.handleAutocompleteSelect = this.handleAutocompleteSelect.bind(this);
@@ -108,25 +102,7 @@ class ShareDialog extends Component {
    * @returns {void}
    */
   handleClose() {
-    /*
-     * ignore closing event of main folder create dialog
-     * if service error is displayed on top
-     */
-    if (!this.state.serviceError) {
-      this.props.onClose();
-    }
-  }
-
-  /**
-   * Handle close error dialog
-   * @returns {void}
-   */
-  handleCloseError() {
-    /*
-     * Close dialog
-     * TODO do not allow retry if parent id does not exist
-     */
-    this.setState({serviceError: false, serviceErrorMessage: ''});
+    this.props.onClose();
   }
 
   /**
@@ -169,21 +145,47 @@ class ShareDialog extends Component {
     await this.toggleProcessing();
     try {
       await this.shareSave();
-      await this.props.actionFeedbackContext.displaySuccess("The permissions have been changed successfully.");
-      this.props.onClose();
+      await this.handleSaveSuccess();
     } catch (error) {
-      console.error(error);
-      this.setState({serviceError: true, serviceErrorMessage: error.message, processing: false});
+      this.handleSaveError(error);
     }
   }
 
   /**
-   * handleServiceError
-   * @param {string} message
-   * @return {void}
+   * Handle save operation success.
    */
-  handleServiceError(message) {
-    this.setState({serviceError: true, serviceErrorMessage: message, processing: false});
+  async handleSaveSuccess() {
+    await this.props.actionFeedbackContext.displaySuccess("The permissions have been changed successfully.");
+    this.props.onClose();
+  }
+
+  /**
+   * Handle save operation error.
+   * @param {object} error The returned error
+   */
+  handleSaveError(error) {
+    // It can happen when the user has closed the passphrase entry dialog by instance.
+    if (error.name === "UserAbortsOperationError") {
+      this.setState({processing: false});
+    } else {
+      // Unexpected error occurred.
+      console.error(error);
+      this.handleError(error);
+      this.setState({processing: false});
+    }
+  }
+
+  /**
+   * handle error to display the error dialog
+   * @param error
+   */
+  handleError(error) {
+    const errorDialogProps = {
+      title: "There was an unexpected error...",
+      message: error.message
+    };
+    this.context.setContext({errorDialogProps});
+    this.props.dialogContext.open(ErrorDialog);
   }
 
   /**
@@ -405,19 +407,18 @@ class ShareDialog extends Component {
    */
   render() {
     return (
-      <div>
-        <DialogWrapper className='share-dialog'
-          title={this.getTitle()} tooltip={this.getTooltip()} onClose={this.handleClose} disabled={this.hasAllInputDisabled()}>
-          <form className="share-form" onSubmit={this.handleFormSubmit} noValidate>
-            <div className="form-content permission-edit">
-              {(this.state.loading) &&
+      <DialogWrapper className='share-dialog'
+        title={this.getTitle()} tooltip={this.getTooltip()} onClose={this.handleClose} disabled={this.hasAllInputDisabled()}>
+        <form className="share-form" onSubmit={this.handleFormSubmit} noValidate>
+          <div className="form-content permission-edit">
+            {(this.state.loading) &&
               <ul className="permissions scroll">
                 <SharePermissionItemSkeleton/>
                 <SharePermissionItemSkeleton/>
                 <SharePermissionItemSkeleton/>
               </ul>
-              }
-              {!(this.state.loading) &&
+            }
+            {!(this.state.loading) &&
               <ul className="permissions scroll" ref={this.permissionListRef}>
                 {(this.state.permissions && (this.state.permissions).map((permission, key) => <SharePermissionItem
                   id={permission.aro.id}
@@ -431,46 +432,38 @@ class ShareDialog extends Component {
                   onDelete={this.handlePermissionDelete}
                 />))}
               </ul>
-              }
-            </div>
-            {(this.hasNoOwner()) &&
+            }
+          </div>
+          {(this.hasNoOwner()) &&
             <div className="message error">
               Please make sure there is at least one owner.
             </div>
-            }
-            {(this.hasChanges() && !this.hasNoOwner()) &&
+          }
+          {(this.hasChanges() && !this.hasNoOwner()) &&
             <div className="message warning">
               Click save to apply your pending changes.
             </div>
-            }
-            <div className="form-content permission-add">
-              <Autocomplete
-                id="share-name-input"
-                name="name"
-                label="Share with people or groups"
-                placeholder="Start typing a user or group name"
-                searchCallback={this.fetchAutocompleteItems}
-                onSelect={this.handleAutocompleteSelect}
-                onServiceError={this.handleServiceError}
-                onOpen={this.handleAutocompleteOpen}
-                onClose={this.handleAutocompleteClose}
-                disabled={this.hasAllInputDisabled()}
-                baseUrl={this.context.userSettings.getTrustedDomain()}
-              />
-            </div>
-            <div className="submit-wrapper clearfix">
-              <FormSubmitButton disabled={this.hasSubmitDisabled()} processing={this.state.processing} value="Save"/>
-              <FormCancelButton disabled={this.hasAllInputDisabled()} onClick={this.handleClose} />
-            </div>
-          </form>
-        </DialogWrapper>
-        {this.state.serviceError &&
-        <ErrorDialog
-          message={this.state.serviceErrorMessage}
-          title={`There was an unexpected error...`}
-          onClose={this.handleCloseError}/>
-        }
-      </div>
+          }
+          <div className="form-content permission-add">
+            <Autocomplete
+              id="share-name-input"
+              name="name"
+              label="Share with people or groups"
+              placeholder="Start typing a user or group name"
+              searchCallback={this.fetchAutocompleteItems}
+              onSelect={this.handleAutocompleteSelect}
+              onOpen={this.handleAutocompleteOpen}
+              onClose={this.handleAutocompleteClose}
+              disabled={this.hasAllInputDisabled()}
+              baseUrl={this.context.userSettings.getTrustedDomain()}
+            />
+          </div>
+          <div className="submit-wrapper clearfix">
+            <FormSubmitButton disabled={this.hasSubmitDisabled()} processing={this.state.processing} value="Save"/>
+            <FormCancelButton disabled={this.hasAllInputDisabled()} onClick={this.handleClose} />
+          </div>
+        </form>
+      </DialogWrapper>
     );
   }
 }
@@ -479,7 +472,8 @@ ShareDialog.contextType = AppContext;
 
 ShareDialog.propTypes = {
   onClose: PropTypes.func,
-  actionFeedbackContext: PropTypes.any // The action feedback context
+  actionFeedbackContext: PropTypes.any, // The action feedback context
+  dialogContext: PropTypes.any // The dialog context
 };
 
 export default withActionFeedback(withDialog(ShareDialog));

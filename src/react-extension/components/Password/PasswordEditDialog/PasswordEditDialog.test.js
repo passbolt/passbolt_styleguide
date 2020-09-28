@@ -24,6 +24,8 @@ import SiteSettings from "../../../lib/Settings/SiteSettings";
 import siteSettingsFixture from "../../../test/fixture/Settings/siteSettings";
 import MockPort from "../../../test/mock/MockPort";
 import {ActionFeedbackContext} from "../../../contexts/ActionFeedbackContext";
+import DialogContextProvider from "../../../contexts/Common/DialogContext";
+import ManageDialogs from "../../Common/Dialog/ManageDialogs/ManageDialogs";
 
 beforeEach(() => {
   jest.resetModules();
@@ -50,7 +52,16 @@ const getAppContext = function(appContext) {
   const userSettings = new UserSettings(userSettingsFixture);
   const siteSettings = new SiteSettings(siteSettingsFixture);
   const resources = [getDummyResource()];
-  const defaultAppContext = {userSettings, siteSettings, port, resources};
+  const defaultAppContext = {
+    userSettings,
+    siteSettings,
+    port,
+    resources,
+    setContext: function(newContext) {
+      // In this scope this reference the object context.
+      Object.assign(this, newContext);
+    }
+  };
 
   return Object.assign(defaultAppContext, appContext || {});
 };
@@ -70,7 +81,10 @@ const renderPasswordEditDialog = function(appContext, props) {
 
   return render(
     <AppContext.Provider value={appContext}>
-      <PasswordEditDialog debug id={props.id} onClose={props.onClose}/>
+      <DialogContextProvider>
+        <ManageDialogs/>
+        <PasswordEditDialog debug id={props.id} onClose={props.onClose}/>
+      </DialogContextProvider>
     </AppContext.Provider>
   );
 };
@@ -330,8 +344,10 @@ describe("PasswordEditDialog", () => {
     });
 
     // Throw general error message
-    const generalErrorMessage = container.querySelector(".feedbacks.error.message");
-    expect(generalErrorMessage.textContent).toBe("Jest simulate API error.");
+    const generalErrorDialog = container.querySelector(".error-dialog");
+    expect(generalErrorDialog).not.toBeNull();
+    const generalErrorMessage = container.querySelector(".error-dialog .dialog .dialog-content .form-content");
+    expect(generalErrorMessage).not.toBeNull();
   });
 
   it("requests the addon to edit a resource when clicking on the submit button.", async() => {

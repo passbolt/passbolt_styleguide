@@ -52,10 +52,6 @@ class FolderDeleteDialog extends Component {
       loading: true,
       processing: false,
 
-      // Error dialog trigger
-      serviceError: false,
-      errorMessage: '',
-
       // Cascade checkbox
       cascade: false
     };
@@ -66,7 +62,6 @@ class FolderDeleteDialog extends Component {
    */
   bindEventHandlers() {
     this.handleClose = this.handleClose.bind(this);
-    this.handleCloseError = this.handleCloseError.bind(this);
     this.handleFormSubmit = this.handleFormSubmit.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
   }
@@ -83,17 +78,17 @@ class FolderDeleteDialog extends Component {
    */
   getStateBasedOnContext(context, props, defaultState) {
     const folders = context.folders;
-    const errorMessage = 'The folder could not be found. Maybe it was deleted or you lost access.';
+    const error = {
+      message: 'The folder could not be found. Maybe it was deleted or you lost access.'
+    };
     if (!folders) {
       console.error(`No folders context defined.`);
-      defaultState.serviceError = true;
-      defaultState.errorMessage = errorMessage;
+      this.handleError(error);
     }
     const folder = context.folders.find(item => item.id === context.folder.id) || false;
     if (!folder) {
       console.error(`Folder ${context.folder.id} not found in context.`);
-      defaultState.serviceError = true;
-      defaultState.errorMessage = errorMessage;
+      this.handleError(error);
     } else {
       defaultState.name = folder.name;
     }
@@ -116,16 +111,47 @@ class FolderDeleteDialog extends Component {
 
     try {
       await this.context.port.request("passbolt.folders.delete", this.context.folder.id, this.state.cascade);
-      await this.props.actionFeedbackContext.displaySuccess("The folder was deleted successfully");
-      this.props.onClose();
+      await this.handleSaveSuccess();
     } catch (error) {
-      console.error(error);
-      this.setState({
-        serviceError: true,
-        errorMessage: error.message,
-        processing: false
-      });
+      this.handleSaveError(error);
     }
+  }
+
+  /**
+   * Handle save operation success.
+   */
+  async handleSaveSuccess() {
+    await this.props.actionFeedbackContext.displaySuccess("The folder was deleted successfully");
+    this.props.onClose();
+  }
+
+  /**
+   * Handle save operation error.
+   * @param {object} error The returned error
+   */
+  handleSaveError(error) {
+    // It can happen when the user has closed the passphrase entry dialog by instance.
+    if (error.name === "UserAbortsOperationError") {
+      this.setState({processing: false});
+    } else {
+      // Unexpected error occurred.
+      console.error(error);
+      this.handleError(error);
+      this.setState({processing: false});
+    }
+  }
+
+  /**
+   * handle error to display the error dialog
+   * @param error
+   */
+  handleError(error) {
+    const errorDialogProps = {
+      title: "There was an unexpected error...",
+      message: error.message
+    };
+    this.context.setContext({errorDialogProps});
+    this.props.dialogContext.open(ErrorDialog);
   }
 
   /**
@@ -153,15 +179,6 @@ class FolderDeleteDialog extends Component {
   }
 
   /**
-   * Handle close error dialog
-   * @returns {void}
-   */
-  handleCloseError() {
-    // Close error dialog / we do not close main dialog to allow retry
-    this.setState({serviceError: false, serviceErrorMessage: ''});
-  }
-
-  /**
    * Handle close button click.
    */
   handleClose() {
@@ -181,31 +198,26 @@ class FolderDeleteDialog extends Component {
 
   render() {
     return (
-      <div>
-        <DialogWrapper className='folder-create-dialog' title="Are you sure?"
-          onClose={this.handleClose} disabled={this.hasAllInputDisabled()}>
-          <form className="folder-create-form" onSubmit={this.handleFormSubmit} noValidate>
-            <div className="form-content">
-              <p>
+      <DialogWrapper className='folder-create-dialog' title="Are you sure?"
+        onClose={this.handleClose} disabled={this.hasAllInputDisabled()}>
+        <form className="folder-create-form" onSubmit={this.handleFormSubmit} noValidate>
+          <div className="form-content">
+            <p>
                 You&apos;re about to delete the folder <strong>{this.state.name}</strong>.
                 Other users may loose access. This action cannot be undone.
-              </p>
-              <div className="input checkbox">
-                <input id="delete-cascade" type="checkbox" name="cascade" onChange={this.handleInputChange}
-                  autoFocus={true} disabled={this.hasAllInputDisabled()} />&nbsp;
-                <label htmlFor="delete-cascade">Also delete items inside this folder.</label>
-              </div>
+            </p>
+            <div className="input checkbox">
+              <input id="delete-cascade" type="checkbox" name="cascade" onChange={this.handleInputChange}
+                autoFocus={true} disabled={this.hasAllInputDisabled()} />&nbsp;
+              <label htmlFor="delete-cascade">Also delete items inside this folder.</label>
             </div>
-            <div className="submit-wrapper clearfix">
-              <FormSubmitButton disabled={this.hasAllInputDisabled()} processing={this.state.processing} value="Delete" warning={true}/>
-              <FormCancelButton disabled={this.hasAllInputDisabled()} onClick={this.handleClose} />
-            </div>
-          </form>
-        </DialogWrapper>
-        {this.state.serviceError &&
-        <ErrorDialog message={this.state.errorMessage} onClose={this.handleCloseError}/>
-        }
-      </div>
+          </div>
+          <div className="submit-wrapper clearfix">
+            <FormSubmitButton disabled={this.hasAllInputDisabled()} processing={this.state.processing} value="Delete" warning={true}/>
+            <FormCancelButton disabled={this.hasAllInputDisabled()} onClick={this.handleClose} />
+          </div>
+        </form>
+      </DialogWrapper>
     );
   }
 }
@@ -214,7 +226,8 @@ FolderDeleteDialog.contextType = AppContext;
 
 FolderDeleteDialog.propTypes = {
   onClose: PropTypes.func,
-  actionFeedbackContext: PropTypes.any // The action feedback context
+  actionFeedbackContext: PropTypes.any, // The action feedback context
+  dialogContext: PropTypes.any
 };
 
 export default withDialog(withActionFeedback(FolderDeleteDialog));

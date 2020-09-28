@@ -24,6 +24,8 @@ import SiteSettings from "../../../lib/Settings/SiteSettings";
 import siteSettingsFixture from "../../../test/fixture/Settings/siteSettings";
 import MockPort from "../../../test/mock/MockPort";
 import {ActionFeedbackContext} from "../../../contexts/ActionFeedbackContext";
+import DialogContextProvider from "../../../contexts/Common/DialogContext";
+import ManageDialogs from "../../Common/Dialog/ManageDialogs/ManageDialogs";
 
 beforeEach(() => {
   jest.resetModules();
@@ -33,7 +35,11 @@ const getAppContext = function(appContext) {
   const defaultAppContext = {
     userSettings: new UserSettings(userSettingsFixture),
     siteSettings: new SiteSettings(siteSettingsFixture),
-    port: new MockPort()
+    port: new MockPort(),
+    setContext: function(newContext) {
+      // In this scope this reference the object context.
+      Object.assign(this, newContext);
+    },
   };
 
   return Object.assign(defaultAppContext, appContext || {});
@@ -44,7 +50,10 @@ const renderPasswordCreateDialog = function(appContext, props) {
   props = props || {};
   return render(
     <AppContext.Provider value={appContext}>
-      <PasswordCreateDialog debug onClose={props.onClose || jest.fn()} />
+      <DialogContextProvider>
+        <ManageDialogs/>
+        <PasswordCreateDialog debug onClose={props.onClose || jest.fn()} />
+      </DialogContextProvider>
     </AppContext.Provider>
   );
 };
@@ -267,8 +276,10 @@ describe("PasswordCreateDialog", () => {
     await waitFor(() => {});
 
     // Throw general error message
-    const generalErrorMessage = container.querySelector(".feedbacks.error.message");
-    expect(generalErrorMessage.textContent).toBe("Jest simulate API error.");
+    const generalErrorDialog = container.querySelector(".error-dialog");
+    expect(generalErrorDialog).not.toBeNull();
+    const generalErrorMessage = container.querySelector(".error-dialog .dialog .dialog-content .form-content");
+    expect(generalErrorMessage).not.toBeNull();
   });
 
   it("requests the addon to create a resource when clicking on the submit button.", async() => {

@@ -18,6 +18,8 @@ import FormSubmitButton from "../../Common/Inputs/FormSubmitButton/FormSubmitBut
 import FormCancelButton from "../../Common/Inputs/FormSubmitButton/FormCancelButton";
 import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
 import UserAbortsOperationError from "../../../lib/Common/Error/UserAbortsOperationError";
+import ErrorDialog from "../../Dialog/ErrorDialog/ErrorDialog";
+import {withDialog} from "../../../../react/contexts/Common/DialogContext";
 
 class FolderMoveStrategyDialog extends Component {
   /**
@@ -54,10 +56,6 @@ class FolderMoveStrategyDialog extends Component {
       processing: false,
       moveOption: 'change',
 
-      // Error dialog trigger
-      serviceError: false,
-      errorMessage: '',
-
       // Cascade checkbox
       cascade: false
     };
@@ -84,17 +82,17 @@ class FolderMoveStrategyDialog extends Component {
    */
   getStateBasedOnContext(context, props, defaultState) {
     const folders = context.folders;
-    const errorMessage = 'The folder could not be found. Maybe it was deleted or you lost access.';
+    const error = {
+      message: 'The folder could not be found. Maybe it was deleted or you lost access.'
+    };
     if (!folders) {
       console.error(`No folders context defined.`);
-      defaultState.serviceError = true;
-      defaultState.errorMessage = errorMessage;
+      this.handleError(error);
     }
     const folder = context.folders.find(item => item.id === props.folderId) || false;
     if (!folder) {
       console.error(`Folder ${props.folderId} not found in context.`);
-      defaultState.serviceError = true;
-      defaultState.errorMessage = errorMessage;
+      this.handleError(error);
     } else {
       defaultState.name = folder.name;
     }
@@ -117,16 +115,47 @@ class FolderMoveStrategyDialog extends Component {
 
     try {
       this.context.port.emit(this.context.folderMoveStrategyProps.requestId, "SUCCESS", {moveOption: this.state.moveOption});
-      this.context.setContext({folderMoveStrategyProps: {}});
-      this.props.onClose();
+      this.handleSaveSuccess();
     } catch (error) {
-      console.error(error);
-      this.setState({
-        serviceError: true,
-        errorMessage: error.message,
-        processing: false
-      });
+      this.handleSaveError(error);
     }
+  }
+
+  /**
+   * Handle save operation success.
+   */
+  handleSaveSuccess() {
+    this.context.setContext({folderMoveStrategyProps: {}});
+    this.props.onClose();
+  }
+
+  /**
+   * Handle save operation error.
+   * @param {object} error The returned error
+   */
+  handleSaveError(error) {
+    // It can happen when the user has closed the passphrase entry dialog by instance.
+    if (error.name === "UserAbortsOperationError") {
+      this.setState({processing: false});
+    } else {
+      // Unexpected error occurred.
+      console.error(error);
+      this.handleError(error);
+      this.setState({processing: false});
+    }
+  }
+
+  /**
+   * handle error to display the error
+   * @param error
+   */
+  handleError(error) {
+    const errorDialogProps = {
+      title: "There was an unexpected error...",
+      message: error.message
+    };
+    this.context.setContext({errorDialogProps});
+    this.props.dialogContext.open(ErrorDialog);
   }
 
   /**
@@ -240,38 +269,36 @@ class FolderMoveStrategyDialog extends Component {
 
   render() {
     return (
-      <div>
-        <DialogWrapper className='move-folder-strategy-dialog' title="How do you want to proceed?"
-          onClose={this.handleClose} disabled={this.hasAllInputDisabled()}>
-          <form className="folder-create-form" onSubmit={this.handleFormSubmit} noValidate>
-            <div className="form-content">
-              <p>{this.getIntroMessage()}</p>
-              <div className="radiolist-alt">
-                <div className="input radio">
-                  <input name="moveOption" value="change" id="moveOptionChange" type="radio"
-                    onChange={this.handleInputChange} ref={this.moveOptionChangeRef} checked={this.state.moveOption === 'change'} />
-                  <label htmlFor="moveOptionChange">
-                    <span className="strategy-name">Change permissions</span>
-                    <span className="strategy-info">Remove old inherited permissions and apply the new destination folder permissions recursively.</span>
-                  </label>
-                </div>
-                <div className="input radio last">
-                  <input name="moveOption" value="keep" id="moveOptionKeep" type="radio"
-                    onChange={this.handleInputChange} ref={this.moveOptionKeepRef}  checked={this.state.moveOption === 'keep'}/>
-                  <label htmlFor="moveOptionKeep">
-                    <span className="strategy-name">Keep existing permissions</span>
-                    <span className="strategy-info">Keep the original permissions, do not apply the destination folder permissions.</span>
-                  </label>
-                </div>
+      <DialogWrapper className='move-folder-strategy-dialog' title="How do you want to proceed?"
+        onClose={this.handleClose} disabled={this.hasAllInputDisabled()}>
+        <form className="folder-create-form" onSubmit={this.handleFormSubmit} noValidate>
+          <div className="form-content">
+            <p>{this.getIntroMessage()}</p>
+            <div className="radiolist-alt">
+              <div className="input radio">
+                <input name="moveOption" value="change" id="moveOptionChange" type="radio"
+                  onChange={this.handleInputChange} ref={this.moveOptionChangeRef} checked={this.state.moveOption === 'change'} />
+                <label htmlFor="moveOptionChange">
+                  <span className="strategy-name">Change permissions</span>
+                  <span className="strategy-info">Remove old inherited permissions and apply the new destination folder permissions recursively.</span>
+                </label>
+              </div>
+              <div className="input radio last">
+                <input name="moveOption" value="keep" id="moveOptionKeep" type="radio"
+                  onChange={this.handleInputChange} ref={this.moveOptionKeepRef}  checked={this.state.moveOption === 'keep'}/>
+                <label htmlFor="moveOptionKeep">
+                  <span className="strategy-name">Keep existing permissions</span>
+                  <span className="strategy-info">Keep the original permissions, do not apply the destination folder permissions.</span>
+                </label>
               </div>
             </div>
-            <div className="submit-wrapper clearfix">
-              <FormSubmitButton disabled={this.hasAllInputDisabled()} processing={this.state.processing} value="Move" />
-              <FormCancelButton disabled={this.hasAllInputDisabled()} onClick={this.handleClose} />
-            </div>
-          </form>
-        </DialogWrapper>
-      </div>
+          </div>
+          <div className="submit-wrapper clearfix">
+            <FormSubmitButton disabled={this.hasAllInputDisabled()} processing={this.state.processing} value="Move" />
+            <FormCancelButton disabled={this.hasAllInputDisabled()} onClick={this.handleClose} />
+          </div>
+        </form>
+      </DialogWrapper>
     );
   }
 }
@@ -279,7 +306,8 @@ class FolderMoveStrategyDialog extends Component {
 FolderMoveStrategyDialog.contextType = AppContext;
 
 FolderMoveStrategyDialog.propTypes = {
-  onClose: PropTypes.func
+  onClose: PropTypes.func,
+  dialogContext: PropTypes.any // The dialog context
 };
 
-export default FolderMoveStrategyDialog;
+export default withDialog(FolderMoveStrategyDialog);
