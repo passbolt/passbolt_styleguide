@@ -1,4 +1,6 @@
 import MockPort from "../../../test/mock/MockPort";
+import UserSettings from "../../../lib/Settings/UserSettings";
+import userSettingsFixture from "../../../test/fixture/Settings/userSettings";
 
 /**
  * Returns the default app context for the unit test
@@ -7,7 +9,8 @@ import MockPort from "../../../test/mock/MockPort";
  */
 export function defaultAppContext(appContext) {
   const defaultAppContext = {
-    port: new MockPort()
+    port: new MockPort(),
+    userSettings: new UserSettings(userSettingsFixture),
   };
   return Object.assign(defaultAppContext, appContext || {});
 }

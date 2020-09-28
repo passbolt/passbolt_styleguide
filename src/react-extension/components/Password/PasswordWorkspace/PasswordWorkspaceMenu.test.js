@@ -24,6 +24,7 @@ import {
   defaultPropsNoResource, defaultPropsOneResourceNotOwned,
   defaultPropsOneResourceOwned
 } from "./PasswordWorkspaceMenu.test.data";
+import {ActionFeedbackContext} from "../../../contexts/ActionFeedbackContext";
 
 beforeEach(() => {
   jest.resetModules();
@@ -41,6 +42,7 @@ describe("See Workspace Menu", () => {
      * When I open the more menu
      * Then I should see the delete
      * Then I should see the edit menu
+     * Then I should see the permalink menu
      */
 
     beforeEach(() => {
@@ -59,6 +61,20 @@ describe("See Workspace Menu", () => {
       expect(page.displayMenu.exists()).toBeTruthy();
       expect(page.displayMenu.editMenu).not.toBeNull();
       expect(page.displayMenu.editMenuDisabled).toBeNull();
+    });
+
+    it('As LU I can start copying a resource\'s permalink via the workspace main menu', () => {
+      expect(page.displayMenu.exists()).toBeTruthy();
+      expect(page.displayMenu.moreMenu).not.toBeNull();
+      page.displayMenu.clickOnMoreMenu();
+      expect(page.displayMenu.dropdownMenuPermalink).not.toBeNull();
+      expect(page.displayMenu.dropdownMenuPermalinkDisabled).toBeNull();
+      // Mock the notification function
+      jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementation(() => {
+      });
+
+      page.displayMenu.clickOnPermalinkMenu();
+      expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalled();
     });
   });
 
@@ -119,6 +135,7 @@ describe("See Workspace Menu", () => {
     /**
      * Given multiple selected resource
      * Then I should see the edit menu disable
+     * Then I should see the permalink menu disable
      */
 
     beforeEach(() => {
@@ -128,6 +145,11 @@ describe("See Workspace Menu", () => {
     it('As LU I should see the edit button disable if multiple resources is selected', () => {
       expect(page.displayMenu.exists()).toBeTruthy();
       expect(page.displayMenu.editMenuDisabled).not.toBeNull();
+    });
+
+    it('As LU I should see the copy permalink disable if multiple resources is selected', () => {
+      expect(page.displayMenu.exists()).toBeTruthy();
+      expect(page.displayMenu.dropdownMenuPermalinkDisabled).not.toBeNull();
     });
   });
 });

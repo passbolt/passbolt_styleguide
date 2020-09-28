@@ -64,6 +64,7 @@ class PasswordWorkspaceMenu extends React.Component {
     this.handleMoreClickEvent = this.handleMoreClickEvent.bind(this);
     this.handleDeleteClickEvent = this.handleDeleteClickEvent.bind(this);
     this.handleEditClickEvent = this.handleEditClickEvent.bind(this);
+    this.handleCopyPermalinkClickEvent = this.handleCopyPermalinkClickEvent.bind(this);
   }
 
   componentDidMount() {
@@ -141,6 +142,26 @@ class PasswordWorkspaceMenu extends React.Component {
   }
 
   /**
+   * handle copy permalink one resources
+   */
+  handleCopyPermalinkClickEvent() {
+    const name = "permalink";
+    const baseUrl = this.context.userSettings.getTrustedDomain();
+    const data = `${baseUrl}/app/passwords/view/${this.detailResource.id}`;
+    this.context.port.emit('passbolt.clipboard', {name, data});
+    this.handleCloseMoreMenu();
+    this.displaySuccessNotification("The permalink has been copied to clipboard");
+  }
+
+  /**
+   * display a success notification message
+   * @param message
+   */
+  displaySuccessNotification(message) {
+    this.props.actionFeedbackContext.displaySuccess(message);
+  }
+
+  /**
    * Close the more menu
    */
   handleCloseMoreMenu() {
@@ -214,7 +235,21 @@ class PasswordWorkspaceMenu extends React.Component {
                     <div className="main-cell-wrapper">
                       <div className="main-cell">
                         <a className={`${this.isOwnerOfSelectedResources() ? "" : "disabled"}`}
-                          onClick={this.handleDeleteClickEvent}><span>delete</span></a>
+                          onClick={this.handleDeleteClickEvent}>
+                          <span>delete</span>
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+                <li id="permalink_action">
+                  <div className="row">
+                    <div className="main-cell-wrapper">
+                      <div className="main-cell">
+                        <a className={`${this.hasOneResourceSelected() ? "" : "disabled"}`}
+                          onClick={this.handleCopyPermalinkClickEvent}>
+                          <span>copy permalink to clipboard</span>
+                        </a>
                       </div>
                     </div>
                   </div>

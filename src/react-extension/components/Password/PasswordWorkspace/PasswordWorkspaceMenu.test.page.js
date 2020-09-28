@@ -13,7 +13,7 @@
  * @since         2.11.0
  */
 
-import {fireEvent, render} from "@testing-library/react";
+import {fireEvent, render, waitFor} from "@testing-library/react";
 import AppContext from "../../../contexts/AppContext";
 import React from "react";
 import PropTypes from "prop-types";
@@ -119,6 +119,20 @@ class DisplayMenuPageObject {
   }
 
   /**
+   * Returns the delete menu elements of password workspace menu
+   */
+  get dropdownMenuPermalink() {
+    return this._container.querySelector('#permalink_action .row .main-cell-wrapper .main-cell a');
+  }
+
+  /**
+   * Returns the delete menu elements of password workspace menu
+   */
+  get dropdownMenuPermalinkDisabled() {
+    return this._container.querySelector('#permalink_action .row .main-cell-wrapper .main-cell a.disabled');
+  }
+
+  /**
    * Returns true if the page object exists in the container
    */
   exists() {
@@ -129,6 +143,13 @@ class DisplayMenuPageObject {
   clickOnMoreMenu()  {
     const leftClick = {button: 0};
     fireEvent.click(this.moreMenu, leftClick);
+  }
+
+  /** Click on the more menu */
+  async clickOnPermalinkMenu()  {
+    const leftClick = {button: 0};
+    fireEvent.click(this.dropdownMenuPermalink, leftClick);
+    await waitFor(() => {});
   }
 }
 
