@@ -28,12 +28,12 @@ export const ResourceWorkspaceContext = React.createContext({
     type: null, // Filter type
     payload: null // Filter payload
   },
-  selectedResources: [], // The current list of selected resources
   sorter: {
     propertyName: 'modified', // The name of the property to sort on
     asc: false // True if the sort must be descendant
   },
   filteredResources: [], // The current list of filtered resources
+  selectedResources: [], // The current list of selected resources
   details: {
     resource: null, // The resource to focus details on
     folder: null, // The folder to focus details on
@@ -45,7 +45,14 @@ export const ResourceWorkspaceContext = React.createContext({
   onResourceScrolled: () => {}, // Whenever one scrolled to a resource
   onAllFilterRequired: () => {}, // Whenever the filter on all is required
   onFilterTagChanged: () => {}, // Whenever the filter by tag changed
-  onSorterChanged: () => {} // Whenever the sorter changed
+  onSorterChanged: () => {}, // Whenever the sorter changed
+  onResourceSelected: {
+    all: () => {}, // Whenever all the resources have been selected
+    none: () => {}, // Whenever none resources have been selected
+    multiple: () => {}, // Whenever a resource has been selected in a multiple mode
+    range:  () => {}, // Whenever a resource has been selected in a multiple mode
+    single: () => {}// Whenever a single resource has been selected
+  }
 });
 
 /**
@@ -68,12 +75,12 @@ class ResourceWorkspaceContextProvider extends React.Component {
   get defaultState() {
     return {
       filter: {type: ResourceWorkspaceFilterTypes.NONE}, // The current resource search filter
-      selectedResources: [], // The current list of selected resources
       sorter: {
         propertyName: 'modified', // The name of the property to sort on
         asc: false // True if the sort must be descendant
       },
       filteredResources: [], // The current list of filtered resources
+      selectedResources: [], // The current list of selected resources
       details: {
         resource: null, // The resource to focus details on
         folder: null, // The folder to focus details on
@@ -85,7 +92,14 @@ class ResourceWorkspaceContextProvider extends React.Component {
       onResourceScrolled: this.handleResourceScrolled.bind(this), // Whenever one scrolled to a resource
       onAllFilterRequired: this.handleAllFilterRequired.bind(this), // filter on all required
       onFilterTagChanged: this.handleFilterTagChanged.bind(this), // filter by tag
-      onSorterChanged: this.handleSorterChange.bind(this) // Whenever the sorter changed
+      onSorterChanged: this.handleSorterChange.bind(this), // Whenever the sorter changed
+      onResourceSelected: {
+        all: this.handleAllResourcesSelected.bind(this), // Whenever all the resources have been selected
+        none: this.handleNoneResourcesSelected.bind(this), // Whenever none resources have been selected
+        multiple: this.handleMultipleResourcesSelected.bind(this), // Whenever a resource has been selected in a multiple mode
+        range:  this.handleResourceRangeSelected.bind(this), // Whenever a resource has been selected in a multiple mode
+        single: this.handleResourceSelected.bind(this)// Whenever a single resource has been selected
+      }
     };
   }
 
@@ -116,10 +130,16 @@ class ResourceWorkspaceContextProvider extends React.Component {
   /**
    * Handles the resource search filter change
    */
-  handleFilterChange(previousFilter) {
+  async handleFilterChange(previousFilter) {
     const hasFilterChanged = previousFilter !== this.state.filter;
     if (hasFilterChanged) {
       this.populate();
+
+      // Avoid a side-effect whenever one inputs a specific resource url (it unselect the resource otherwise )
+      const isNotNonePreviousFilter = previousFilter.type !== ResourceWorkspaceFilterTypes.NONE;
+      if (isNotNonePreviousFilter) {
+        await this.unselectAll();
+      }
     }
   }
 
@@ -191,7 +211,7 @@ class ResourceWorkspaceContextProvider extends React.Component {
 
   /**
    * Handle the resource view route change with a resource id
-   * E.g. /password/view/:resourceId
+   * E.g. /passwords/view/:resourceId
    */
   async handleSingleResourceRouteChange(resourceId) {
     const resource = this.resources.find(resource => resource.id === resourceId);
@@ -202,7 +222,7 @@ class ResourceWorkspaceContextProvider extends React.Component {
 
     // If the resource does not exist, it should display an error
     if (resource) {
-      await this.select(resource);
+      await this.selectFromRoute(resource);
       await this.scrollTo(resource);
       await this.detailResource(resource);
     } else {
@@ -260,6 +280,47 @@ class ResourceWorkspaceContextProvider extends React.Component {
   async handleSorterChange(propertyName) {
     await this.updateSorter(propertyName);
     await this.sort();
+  }
+
+  /**
+   * Handle the all resource selection
+   */
+  async handleAllResourcesSelected() {
+    await this.selectAll();
+    await this.detailNothing();
+  }
+
+  /**
+   * Handle the none resource selection
+   */
+  async handleNoneResourcesSelected() {
+    await this.unselectAll();
+    await this.detailNothing();
+  }
+
+  /**
+   * Handle the resource selection in a multiple mode
+   * @param resource The selected resource
+   */
+  async handleMultipleResourcesSelected(resource) {
+    await this.selectMultiple(resource);
+    await this.detailsResourceIfSingleSelection();
+  }
+
+  /**
+   * Handle the resource selection in a range mode
+   * @param resource The selected resource
+   */
+  async handleResourceRangeSelected(resource) {
+    await this.selectRange(resource);
+  }
+
+  /**
+   * Handle the single resource selection
+   * @param resource The selected resource
+   */
+  async handleResourceSelected(resource) {
+    this.select(resource);
   }
 
   /**
@@ -385,12 +446,99 @@ class ResourceWorkspaceContextProvider extends React.Component {
   /** RESOURCE SELECTION */
 
   /**
-   * Add the given resource as a selected resources
+   * Select the given resource as the single selected resources if not already selected as single. Otherwise unselect it
    * @param resource The resource to select
    */
   async select(resource) {
-    await this.setState({selectedResources: [...this.state.selectedResources, resource]});
+    const mustUnselect = this.state.selectedResources.length === 1 && this.state.selectedResources[0].id === resource.id;
+    await this.setState({selectedResources: mustUnselect ? [] : [resource]});
+    this.redirectAfterSelection();
   }
+
+  /**
+   * Selects the given resource when one comes from the navigation route
+   * @param resource
+   * @returns {Promise<void>}
+   */
+  async selectFromRoute(resource) {
+    const selectedResources = [resource];
+    await this.setState({selectedResources});
+  }
+
+  /**
+   * Select the given resource in a multiple selection mode
+   * @param resource
+   * @returns {Promise<void>}
+   */
+  async selectMultiple(resource) {
+    const hasNotSameId = selectedResource => selectedResource.id !== resource.id;
+    const selectionWithoutResource = this.state.selectedResources.filter(hasNotSameId);
+    const mustUnselect = this.state.selectedResources.length !== selectionWithoutResource.length;
+    const selectedResources = mustUnselect ? selectionWithoutResource : [...this.state.selectedResources, resource];
+
+    await this.setState({selectedResources});
+    this.redirectAfterSelection();
+  }
+
+  /**
+   * Select the given resource in a range selection mode
+   * @param resource
+   * @returns {Promise<void>}
+   */
+  async selectRange(resource) {
+    const hasNoSelection = this.state.selectedResources.length === 0;
+
+    if (hasNoSelection) {
+      this.select(resource);
+    } else {
+      const hasSameId = resource => selectedResource => selectedResource.id === resource.id;
+      const findIndex = resource => this.state.filteredResources.findIndex(hasSameId(resource));
+      const startRangeIndex = findIndex(this.state.selectedResources[0]);
+      const endRangeIndex = findIndex(resource);
+
+      let selectedResources;
+      if (startRangeIndex > endRangeIndex) { // Down range selection
+        selectedResources = this.state.filteredResources.slice(endRangeIndex, startRangeIndex + 1).reverse();
+      } else { // Up range selection
+        selectedResources = this.state.filteredResources.slice(startRangeIndex, endRangeIndex + 1);
+      }
+
+      await this.setState({selectedResources});
+      this.redirectAfterSelection();
+    }
+  }
+
+  /**
+   * Select all the resources
+   */
+  async selectAll() {
+    await this.setState({selectedResources: [...this.state.filteredResources]});
+    this.redirectAfterSelection();
+  }
+
+  /**
+   * Unselect all the resources
+   */
+  async unselectAll() {
+    await this.setState({selectedResources: []});
+    this.redirectAfterSelection();
+  }
+
+  /**
+   * Navigate to the appropriate url after some resources selection operation
+   */
+  redirectAfterSelection() {
+    const hasSingleSelectionNow = this.state.selectedResources.length === 1;
+    if (hasSingleSelectionNow) { // Case of single selected resource
+      this.props.history.push(`/app/passwords/view/${this.state.selectedResources[0].id}`);
+    } else { // Case of multiple selected resources
+      const filter = this.state.filter;
+      this.props.history.push({pathname: `/app/passwords`, state: {filter}});
+    }
+  }
+
+
+  /** Resource Sorter **/
 
   /**
    * Update the resourcces sorter given a property name
@@ -442,6 +590,19 @@ class ResourceWorkspaceContextProvider extends React.Component {
     await this.setState({details: {folder: null, resource: null}});
   }
 
+  /**
+   * Set the details focus on the selected resource if it's the only one selected
+   * @returns {Promise<void>}
+   */
+  async detailsResourceIfSingleSelection() {
+    const hasSingleSelection = this.state.selectedResources.length == 1;
+    if (hasSingleSelection) {
+      await this.detailResource(this.state.selectedResources[0]);
+    } else {
+      await this.detailNothing();
+    }
+  }
+
   /** Resource scrolling **/
 
   /**
@@ -477,6 +638,7 @@ ResourceWorkspaceContextProvider.propTypes = {
   children: PropTypes.any,
   location: PropTypes.object,
   match: PropTypes.object,
+  history: PropTypes.object,
   actionFeedbackContext: PropTypes.object
 };
 
@@ -511,7 +673,7 @@ export const ResourceWorkspaceFilterTypes = {
   TAG: 'FILTER-BY-TAG', // Resources for a given tag
   TEXT: 'FILTER-BY-TEXT-SEARCH', // Resources matching some text words
   ITEMS_I_OWN: 'FILTER-BY-ITEMS-I-OWN', // Current user personal resources
-  FAVORITE: 'FILTER-BY-FOVRITE', // Favorite resources filter
+  FAVORITE: 'FILTER-BY-FAVORITE', // Favorite resources filter
   SHARED_WITH_ME: 'FILTER-BY-SHARED-WITH-ME', // Shared with current user resources
   RECENTLY_MODIFIED: 'FILTER-BY-RECENTLY-MODIFIERD', // Keep recently modified resources
 };
