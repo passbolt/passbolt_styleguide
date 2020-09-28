@@ -16,7 +16,7 @@
 import Simplebar from "simplebar/dist/simplebar";
 /* eslint-enable no-unused-vars */
 import React, {Component} from "react";
-import {Route, BrowserRouter as Router, Switch} from "react-router-dom";
+import {Route, BrowserRouter as Router, Switch, Redirect} from "react-router-dom";
 import PasswordCreateDialog from "./components/Password/PasswordCreateDialog/PasswordCreateDialog";
 import PasswordEditDialog from "./components/Password/PasswordEditDialog/PasswordEditDialog";
 import AppContext from './contexts/AppContext';
@@ -298,8 +298,11 @@ class ReactExtension extends Component {
                           <PasswordWorkspace onMenuItemClick={this.handleWorkspaceSelect}/>
                         </ResourceWorkspaceContextProvider>
                         </Route>
+                        <Route path="/">
+                          <Redirect to="/app/passwords"/>
+                        </Route>
                       </Switch>
-                    </div>
+                     </div>
                   }
                 </div>
               </Router>
