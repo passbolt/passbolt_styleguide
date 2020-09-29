@@ -66,33 +66,6 @@ class PasswordWorkspaceMenu extends React.Component {
     this.handleEditClickEvent = this.handleEditClickEvent.bind(this);
   }
 
-  /**
-   * Create DOM nodes or React elements references in order to be able to access them programmatically.
-   */
-  createRefs() {
-    this.moreMenuRef = React.createRef();
-  }
-
-  componentDidMount() {
-    document.addEventListener('click', this.handleMenuClickEvent);
-  }
-
-  componentWillUnmount() {
-    document.removeEventListener('click', this.handleMenuClickEvent);
-  }
-
-  /**
-   * Handle click events on more menu. Hide the component if the click occurred outside of the component.
-   * @param {ReactEvent} event The event
-   */
-  handleMenuClickEvent(event) {
-    // Prevent hide more menu when the user click on an element out of the more menu
-    if (this.moreMenuRef.current.contains(event.target)) {
-      return;
-    }
-    this.handleCloseMoreMenu();
-  }
-
   componentDidMount() {
     document.addEventListener('click', this.handleDocumentClickEvent);
     document.addEventListener('contextmenu', this.handleDocumentContextualMenuEvent);
