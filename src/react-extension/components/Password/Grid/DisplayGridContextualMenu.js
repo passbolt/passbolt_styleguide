@@ -37,6 +37,7 @@ class DisplayGridContextualMenu extends React.Component {
     this.handleEditClickEvent = this.handleEditClickEvent.bind(this);
     this.handleShareClickEvent = this.handleShareClickEvent.bind(this);
     this.handleUsernameClickEvent = this.handleUsernameClickEvent.bind(this);
+    this.handlePermalinkClickEvent = this.handlePermalinkClickEvent.bind(this);
   }
 
   /**
@@ -70,6 +71,18 @@ class DisplayGridContextualMenu extends React.Component {
     this.context.port.emit('passbolt.clipboard', {name, data});
     this.props.hide();
     this.displaySuccessNotification("The username has been copied to clipboard");
+  }
+
+  /**
+   * handle permalink resource
+   */
+  handlePermalinkClickEvent() {
+    const name = "permalink";
+    const baseUrl = this.context.userSettings.getTrustedDomain();
+    const data = `${baseUrl}/app/passwords/view/${this.resource.id}`;
+    this.context.port.emit('passbolt.clipboard', {name, data});
+    this.props.hide();
+    this.displaySuccessNotification("The permalink has been copied to clipboard");
   }
 
   /**
@@ -117,6 +130,15 @@ class DisplayGridContextualMenu extends React.Component {
             <div className="main-cell-wrapper">
               <div className="main-cell">
                 <a id="username" onClick={this.handleUsernameClickEvent}><span>Copy username</span></a>
+              </div>
+            </div>
+          </div>
+        </li>
+        <li key="option-permalink-resource" className="ready">
+          <div className="row">
+            <div className="main-cell-wrapper">
+              <div className="main-cell">
+                <a id="permalink" onClick={this.handlePermalinkClickEvent}><span>Copy permalink</span></a>
               </div>
             </div>
           </div>
