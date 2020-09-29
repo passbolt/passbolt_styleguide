@@ -22,6 +22,8 @@ import debounce from "debounce-promise";
 import Icon from "../../Common/Icons/Icon";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import {withRouter} from "react-router-dom";
+import DisplayGridContextualMenu from "./DisplayGridContextualMenu";
+import {withContextualMenu} from "../../../../react/contexts/Common/ContextualMenuContext";
 
 
 /**
@@ -102,10 +104,19 @@ class Grid extends React.Component {
     await this.selectResource(resource, event);
   }
 
+  /**
+   * Handle the right click on a resource
+   * @param event
+   * @param resource
+   */
   handleResourceRightClick(event, resource) {
     // Prevent the default contextual menu to popup.
     event.preventDefault();
     this.props.onRightSelect(event, resource);
+    const left = event.pageX;
+    const top = event.pageY;
+    const contextualMenuProps = {left, top, resource};
+    this.props.contextualMenuContext.show(DisplayGridContextualMenu, contextualMenuProps);
   }
 
   handleCheckboxWrapperClick(ev, resource) {
@@ -576,7 +587,8 @@ Grid.propTypes = {
   search: PropTypes.string,
   selectedResources: PropTypes.array,
   resourceWorkspaceContext: PropTypes.any,
-  actionFeedbackContext: PropTypes.any // The action feedback context
+  actionFeedbackContext: PropTypes.any, // The action feedback context
+  contextualMenuContext: PropTypes.any, // The contextual menu context
 };
 
-export default withRouter(withActionFeedback(withResourceWorkspace(Grid)));
+export default withRouter(withActionFeedback(withContextualMenu(withResourceWorkspace(Grid))));

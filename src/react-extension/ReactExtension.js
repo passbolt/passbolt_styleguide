@@ -82,7 +82,7 @@ class ReactExtension extends Component {
       resourceCreateDialogProps: {
         folderParentId: null
       },
-      showPasswordEditDialog: false,
+
       passwordEditDialogProps: {
         id: null
       },

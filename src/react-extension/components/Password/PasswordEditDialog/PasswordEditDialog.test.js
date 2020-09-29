@@ -24,8 +24,8 @@ import SiteSettings from "../../../lib/Settings/SiteSettings";
 import siteSettingsFixture from "../../../test/fixture/Settings/siteSettings";
 import MockPort from "../../../test/mock/MockPort";
 import {ActionFeedbackContext} from "../../../contexts/ActionFeedbackContext";
-import DialogContextProvider from "../../../contexts/Common/DialogContext";
-import ManageDialogs from "../../Common/Dialog/ManageDialogs/ManageDialogs";
+import ManageDialogs from "../../../../react/components/Common/Dialog/ManageDialogs/ManageDialogs";
+import DialogContextProvider from "../../../../react/contexts/Common/DialogContext";
 
 beforeEach(() => {
   jest.resetModules();
@@ -52,15 +52,19 @@ const getAppContext = function(appContext) {
   const userSettings = new UserSettings(userSettingsFixture);
   const siteSettings = new SiteSettings(siteSettingsFixture);
   const resources = [getDummyResource()];
+  const passwordEditDialogProps = {
+    id: "8e3874ae-4b40-590b-968a-418f704b9d9a"
+  };
   const defaultAppContext = {
     userSettings,
     siteSettings,
     port,
-    resources,
     setContext: function(newContext) {
       // In this scope this reference the object context.
       Object.assign(this, newContext);
-    }
+    },
+    resources,
+    passwordEditDialogProps
   };
 
   return Object.assign(defaultAppContext, appContext || {});
@@ -68,7 +72,6 @@ const getAppContext = function(appContext) {
 
 const getComponentProps = function(props) {
   const defaultAppProps = {
-    id: "8e3874ae-4b40-590b-968a-418f704b9d9a",
     onClose: jest.fn()
   };
 
@@ -83,7 +86,7 @@ const renderPasswordEditDialog = function(appContext, props) {
     <AppContext.Provider value={appContext}>
       <DialogContextProvider>
         <ManageDialogs/>
-        <PasswordEditDialog debug id={props.id} onClose={props.onClose}/>
+        <PasswordEditDialog debug onClose={props.onClose}/>
       </DialogContextProvider>
     </AppContext.Provider>
   );
