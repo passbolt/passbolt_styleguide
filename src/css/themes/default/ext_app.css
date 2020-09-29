@@ -6332,6 +6332,10 @@ h6 .input.toggle-switch {
   bottom: 2.35em;
   z-index: 991;
 }
+.update-loading-bar .progress-bar span {
+  transition: width 2s;
+  transition-timing-function: cubic-bezier(0.45, 1.27, 0.76, 0.9);
+}
 .logo.no-img {
   background: transparent url('../../../img/logo/logo.png') 0 0 no-repeat;
   background-size: 150px auto;

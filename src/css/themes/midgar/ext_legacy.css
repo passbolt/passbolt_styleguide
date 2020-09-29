@@ -4067,6 +4067,10 @@ input[type=email].fluid {
   bottom: 2.35em;
   z-index: 991;
 }
+.update-loading-bar .progress-bar span {
+  transition: width 2s;
+  transition-timing-function: cubic-bezier(0.45, 1.27, 0.76, 0.9);
+}
 /* Dialog */
 .dialog-wrapper {
   position: absolute;

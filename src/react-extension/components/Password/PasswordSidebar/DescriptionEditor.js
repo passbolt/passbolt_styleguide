@@ -15,6 +15,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import AppContext from "../../../contexts/AppContext";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
+import {withLoading} from "../../../contexts/Common/LoadingContext";
 
 /**
  * This component allows the current user to edit the description of a resource
@@ -142,7 +143,9 @@ class DescriptionEditor extends React.Component {
     event.preventDefault();
 
     if (!this.state.processing) {
+      this.props.loadingContext.add();
       await this.save();
+      this.props.loadingContext.remove();
     }
   }
 
@@ -221,7 +224,8 @@ DescriptionEditor.propTypes = {
   description: PropTypes.string, // the description of the resources
   resourceId: PropTypes.string, // the id of the resource
   toggleInputDescriptionEditor: PropTypes.func, // toggle to display or not the editor
-  actionFeedbackContext: PropTypes.any // The action feedback context
+  actionFeedbackContext: PropTypes.any, // The action feedback context
+  loadingContext: PropTypes.any // The loading context
 };
 
-export default withActionFeedback(DescriptionEditor);
+export default withLoading(withActionFeedback(DescriptionEditor));

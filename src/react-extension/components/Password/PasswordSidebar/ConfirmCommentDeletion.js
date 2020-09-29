@@ -18,6 +18,7 @@ import FormCancelButton from "../../Common/Inputs/FormSubmitButton/FormCancelBut
 import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import PropTypes from "prop-types";
+import {withLoading} from "../../../contexts/Common/LoadingContext";
 
 class ConfirmDeleteDialog extends Component {
   /**
@@ -62,8 +63,14 @@ class ConfirmDeleteDialog extends Component {
     try {
       await this.setState({actions: {processing: true}});
 
+      // Start loading bar
+      this.props.loadingContext.add();
+
       // Persist
       await this.context.port.request("passbolt.comments.delete", this.context.resourceCommentId);
+
+      // Complete loading bar
+      this.props.loadingContext.remove();
 
       // Asks for a success  message
       await this.props.actionFeedbackContext.displaySuccess("The comment has been deleted successfully");
@@ -136,8 +143,9 @@ class ConfirmDeleteDialog extends Component {
 ConfirmDeleteDialog.contextType = AppContext;
 
 ConfirmDeleteDialog.propTypes = {
-  actionFeedbackContext: PropTypes.object,
-  onClose: PropTypes.func
+  actionFeedbackContext: PropTypes.object, // The action feedback context
+  loadingContext: PropTypes.object, // The loading context
+  onClose: PropTypes.func // Whenever the dialog is clsoed
 };
 
-export default withActionFeedback(ConfirmDeleteDialog);
+export default withLoading(withActionFeedback(ConfirmDeleteDialog));

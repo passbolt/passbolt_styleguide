@@ -20,6 +20,7 @@ import {withDialog} from "../../../contexts/Common/DialogContext";
 import ErrorDialog from "../../Dialog/ErrorDialog/ErrorDialog";
 import FormSubmitButton from "../../../../react/components/Common/Inputs/FormSubmitButton/FormSubmitButton";
 import FormCancelButton from "../../../../react/components/Common/Inputs/FormSubmitButton/FormCancelButton";
+import {withLoading} from "../../../contexts/Common/LoadingContext";
 
 /**
  * Component allows the user to edit a tag from a dialog
@@ -121,6 +122,7 @@ class TagEditDialog extends Component {
     };
 
     try {
+      this.props.loadingContext.add();
       await this.context.port.request("passbolt.tags.update", tagDto);
       await this.handleSaveSuccess();
     } catch (error) {
@@ -143,6 +145,7 @@ class TagEditDialog extends Component {
    * Handle save operation success.
    */
   async handleSaveSuccess() {
+    this.props.loadingContext.remove();
     await this.props.actionFeedbackContext.displaySuccess("The tag has been updated successfully");
     this.props.onClose();
     this.context.setContext({tagToEdit: null});
@@ -153,6 +156,7 @@ class TagEditDialog extends Component {
    * @param {object} error The returned error
    */
   handleSaveError(error) {
+    this.props.loadingContext.remove();
     // It can happen when the user has closed the passphrase entry dialog by instance.
     if (error.name === "UserAbortsOperationError") {
       this.setState({processing: false});
@@ -254,7 +258,8 @@ TagEditDialog.contextType = AppContext;
 TagEditDialog.propTypes = {
   onClose: PropTypes.func,
   actionFeedbackContext: PropTypes.any, // The action feedback context
-  dialogContext: PropTypes.any // The dialog congtext
+  dialogContext: PropTypes.any, // The dialog congtext
+  loadingContext: PropTypes.any // The loading context
 };
 
-export default withActionFeedback(withDialog(TagEditDialog));
+export default withLoading(withActionFeedback(withDialog(TagEditDialog)));

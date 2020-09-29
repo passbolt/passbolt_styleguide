@@ -20,6 +20,7 @@ import ErrorDialog from "../../Dialog/ErrorDialog/ErrorDialog";
 import {withDialog} from "../../../contexts/Common/DialogContext";
 import FormSubmitButton from "../../../../react/components/Common/Inputs/FormSubmitButton/FormSubmitButton";
 import FormCancelButton from "../../../../react/components/Common/Inputs/FormSubmitButton/FormCancelButton";
+import {withLoading} from "../../../contexts/Common/LoadingContext";
 
 /**
  * This component allows user to delete a tag of the resources
@@ -70,11 +71,14 @@ class TagDeleteDialog extends Component {
     this.setState({processing: true});
 
     try {
+      this.props.loadingContext.add();
       await this.context.port.request("passbolt.tags.delete", this.context.tagToDelete.id);
+      this.props.loadingContext.remove();
       await this.props.actionFeedbackContext.displaySuccess("The tag has been deleted successfully");
       this.props.onClose();
       this.context.setContext({tagToDelete: null});
     } catch (error) {
+      this.props.loadingContext.remove();
       // It can happen when the user has closed the passphrase entry dialog by instance.
       if (error.name === "UserAbortsOperationError") {
         this.setState({processing: false});
@@ -132,7 +136,8 @@ TagDeleteDialog.contextType = AppContext;
 TagDeleteDialog.propTypes = {
   onClose: PropTypes.func,
   actionFeedbackContext: PropTypes.any, // The action feedback context
-  dialogContext: PropTypes.any
+  dialogContext: PropTypes.any, // The dialog context
+  loadingContext: PropTypes.any // The loading context
 };
 
-export default withActionFeedback(withDialog(TagDeleteDialog));
+export default withLoading(withActionFeedback(withDialog(TagDeleteDialog)));

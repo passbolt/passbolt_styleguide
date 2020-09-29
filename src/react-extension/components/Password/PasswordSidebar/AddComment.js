@@ -17,6 +17,7 @@ import UserAvatar from "../../../../react/components/Common/Avatar/UserAvatar";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import PropTypes from "prop-types";
 import AppContext from "../../../contexts/AppContext";
+import {withLoading} from "../../../contexts/Common/LoadingContext";
 
 /**
  * This component allows the current user to add a new comment on a resource
@@ -93,6 +94,7 @@ class AddComment extends React.Component {
     if (this.isValid) {
       try {
         await this.setState({actions: {processing: true}});
+        this.props.loadingContext.add();
         const addedComment = await this.add();
         await this.handleSubmitSuccess(addedComment);
       } catch (error) {
@@ -106,6 +108,7 @@ class AddComment extends React.Component {
    * @param addedComment The added comment
    */
   async handleSubmitSuccess(addedComment) {
+    this.props.loadingContext.remove();
     await this.props.actionFeedbackContext.displaySuccess("The comment has been added successfully");
     this.props.onAdd(addedComment);
   }
@@ -116,6 +119,7 @@ class AddComment extends React.Component {
    * @returns {Promise<void>}
    */
   async handleSubmitFailure(error) {
+    this.props.loadingContext.remove();
     await this.props.actionFeedbackContext.displayError(error.message);
     await this.setState({
       actions: {processing: false},
@@ -158,7 +162,6 @@ class AddComment extends React.Component {
    * @returns {Promise<void>}
    */
   async add() {
-    // Persist
     const commentToAdd = this.state.content.trim();
     const payload =  {
       foreign_key: this.props.resource.id,
@@ -227,13 +230,13 @@ class AddComment extends React.Component {
                 </button>
                 {
                   this.props.cancellable &&
-                                    <button
-                                      className="button cancel"
-                                      role="button"
-                                      onClick={this.handleCancelEvent}
-                                      disabled={this.state.actions.processing}>
-                                      <span>Cancel</span>
-                                    </button>
+                  <button
+                    className="button cancel"
+                    role="button"
+                    onClick={this.handleCancelEvent}
+                    disabled={this.state.actions.processing}>
+                    <span>Cancel</span>
+                  </button>
                 }
               </div>
             </div>
@@ -257,7 +260,8 @@ AddComment.propTypes = {
   onAdd: PropTypes.func, // Called after the comment has been added
   onCancel: PropTypes.func, // Called after the add operation has been cancelled
   cancellable: PropTypes.bool, // Flag to determine if the user can cancel
-  actionFeedbackContext: PropTypes.any // The action feedback context
+  actionFeedbackContext: PropTypes.any, // The action feedback context
+  loadingContext: PropTypes.any // The loading context
 };
 
-export default withActionFeedback(AddComment);
+export default withLoading(withActionFeedback(AddComment));
