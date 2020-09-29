@@ -17,8 +17,6 @@ import Simplebar from "simplebar/dist/simplebar";
 /* eslint-enable no-unused-vars */
 import React, {Component} from "react";
 import {Route, BrowserRouter as Router, Switch, Redirect} from "react-router-dom";
-import PasswordCreateDialog from "./components/Password/PasswordCreateDialog/PasswordCreateDialog";
-import PasswordEditDialog from "./components/Password/PasswordEditDialog/PasswordEditDialog";
 import AppContext from './contexts/AppContext';
 import PropTypes from "prop-types";
 import MainMenu from "./components/Common/Navigation/MainMenu/MainMenu";
@@ -58,8 +56,6 @@ class ReactExtension extends Component {
     this.getResources();
     this.getResourceTypes();
     this.getFolders();
-
-
   }
 
   getDefaultState(props) {
@@ -74,7 +70,7 @@ class ReactExtension extends Component {
       siteSettings: null,
       userSettings: null,
 
-      setContext: (context) => {
+      setContext: context => {
         this.setState(context);
       },
 
@@ -143,7 +139,6 @@ class ReactExtension extends Component {
     this.props.port.on('passbolt.react-app.is-ready', this.handleIsReadyEvent);
     this.props.port.on('passbolt.resources.open-create-dialog', this.handleResourceCreateDialogOpenEvent);
     this.props.port.on('passbolt.resources.open-edit-dialog', this.handleResourceEditDialogOpenEvent);
-
   }
 
   handleIsReadyEvent(requestId) {
@@ -239,8 +234,6 @@ class ReactExtension extends Component {
    */
   render() {
     const isReady = this.isReady();
-    const areResourcesLoaded = this.state.resources !== null && this.state.resources.length > 0;
-    const areFoldersLoaded = this.state.folders !== null && this.state.folders.length > 0;
 
     return (
       <AppContext.Provider value={this.state}>
@@ -252,30 +245,24 @@ class ReactExtension extends Component {
                 { /* Contextual Menu Management */}
                 <ManageContextualMenu/>
 
-                { /* Action Feedback Management */ }
+                { /* Action Feedback Management */}
                 <ShareActionFeedbacks/>
 
-                { /* Dialogs Management */ }
+                { /* Dialogs Management */}
                 <HandlePassphraseEntryDialogEvents/>
                 <HandleFolderMoveStrategyDialogEvents/>
                 <HandleProgressDialogEvents/>
                 <HandleErrorDialogEvents/>
                 <ManageDialogs/>
 
-            <Router>
-              <div id="container" className="page">
-            {isReady &&
-            <div id="app" className={`app ${isReady ? "ready" : ""}`} tabIndex="1000">
-              {this.state.showResourceCreateDialog &&
-              <PasswordCreateDialog onClose={this.handleResourceCreateDialogCloseEvent}
-                folderParentId={this.state.resourceCreateDialogProps.folderParentId}
-                resourceTypes={this.state.resourceTypes}
-              />
-              }
+                <Router>
+                  <div id="container" className="page">
+                    {isReady &&
+                    <div id="app" className={`app ${isReady ? "ready" : ""}`} tabIndex="1000">
 
-                <div className="header first">
-                  <MainMenu onClick={this.handleWorkspaceSelect} baseUrl={this.state.userSettings.getTrustedDomain()}/>
-                </div>
+                      <div className="header first">
+                        <MainMenu onClick={this.handleWorkspaceSelect} baseUrl={this.state.userSettings.getTrustedDomain()}/>
+                      </div>
 
                       <Switch>
                         <Route path={[
@@ -283,20 +270,20 @@ class ReactExtension extends Component {
                           "/app/passwords/view/:selectedResourceId",
                           "/app/passwords",
                         ]}>
-                        <ResourceWorkspaceContextProvider>
-                          <PasswordWorkspace onMenuItemClick={this.handleWorkspaceSelect}/>
-                        </ResourceWorkspaceContextProvider>
+                          <ResourceWorkspaceContextProvider>
+                            <PasswordWorkspace onMenuItemClick={this.handleWorkspaceSelect}/>
+                          </ResourceWorkspaceContextProvider>
                         </Route>
                         <Route path="/">
                           <Redirect to="/app/passwords"/>
                         </Route>
                       </Switch>
-                     </div>
-                  }
-                </div>
-              </Router>
-              <ManageLoading/>
-              <Footer/>
+                    </div>
+                    }
+                  </div>
+                </Router>
+                <ManageLoading/>
+                <Footer/>
               </LoadingContextProvider>
             </ContextualMenuContextProvider>
           </DialogContextProvider>

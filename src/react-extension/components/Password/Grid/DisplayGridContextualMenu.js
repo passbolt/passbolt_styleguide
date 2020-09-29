@@ -179,7 +179,7 @@ class DisplayGridContextualMenu extends React.Component {
             <div className="main-cell-wrapper">
               <div className="main-cell">
                 <a id="share" className={`${this.canShare() ? "" : "disabled"}`}
-                   onClick={this.handleShareClickEvent}><span>Share</span></a>
+                  onClick={this.handleShareClickEvent}><span>Share</span></a>
               </div>
             </div>
           </div>
