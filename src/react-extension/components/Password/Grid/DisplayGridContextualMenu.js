@@ -67,34 +67,37 @@ class DisplayGridContextualMenu extends React.Component {
    * handle username resource
    */
   handleUsernameClickEvent() {
-    const name = "username";
-    const data = this.resource.username;
-    this.context.port.emit('passbolt.clipboard', {name, data});
+    this.context.port.emit("passbolt.clipboard.write", this.resource.username);
+    this.props.actionFeedbackContext.displaySuccess("The username has been copied to clipboard");
     this.props.hide();
-    this.displaySuccessNotification("The username has been copied to clipboard");
   }
 
   /**
    * handle permalink resource
    */
   handlePermalinkClickEvent() {
-    const name = "permalink";
     const baseUrl = this.context.userSettings.getTrustedDomain();
-    const data = `${baseUrl}/app/passwords/view/${this.resource.id}`;
-    this.context.port.emit('passbolt.clipboard', {name, data});
+    const permalink = `${baseUrl}/app/passwords/view/${this.resource.id}`;
+    this.context.port.emit("passbolt.clipboard.write", permalink);
+    this.props.actionFeedbackContext.displaySuccess("The permalink has been copied to clipboard");
     this.props.hide();
-    this.displaySuccessNotification("The permalink has been copied to clipboard");
   }
 
   /**
    * handle username resource
    */
   async handlePasswordClickEvent() {
-    const name = "secret";
-    const data = await this.context.port.request("passbolt.secret.decrypt", this.resource.id);
-    this.context.port.emit('passbolt.clipboard', {name, data});
     this.props.hide();
-    this.displaySuccessNotification("The secret has been copied to clipboard");
+
+    try {
+      const secret = await this.context.port.request("passbolt.secret.decrypt", this.resource.id);
+      this.context.port.emit("passbolt.clipboard.write", secret);
+      this.props.actionFeedbackContext.displaySuccess("The secret has been copied to clipboard");
+    } catch (error) {
+      if (error.name !== "UserAbortsOperationError") {
+        this.props.actionFeedbackContext.displayError(error.message);
+      }
+    }
   }
 
   /**
@@ -117,14 +120,6 @@ class DisplayGridContextualMenu extends React.Component {
    */
   canShare() {
     return this.resource.permission.type === 15;
-  }
-
-  /**
-   * Display success notification (toaster)
-   * @param message
-   */
-  displaySuccessNotification(message) {
-    this.props.actionFeedbackContext.displaySuccess(message);
   }
 
   /**

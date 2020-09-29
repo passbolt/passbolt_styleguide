@@ -16,6 +16,7 @@ import React from 'react';
 import AppContext from "../../../contexts/AppContext";
 import PassphraseEntryDialog from "../PassphraseEntryDialog/PassphraseEntryDialog";
 import {withDialog} from "../../../contexts/Common/DialogContext";
+import PropTypes from "prop-types";
 
 /**
  * This component listens any event related to passphrase entry dialog actions to perform
@@ -27,6 +28,7 @@ class HandlePassphraseEntryDialogEvents extends React.Component {
   constructor(props) {
     super(props);
     this.state = this.defaultState;
+    this.bindCallbacks();
   }
 
   /**
@@ -36,6 +38,13 @@ class HandlePassphraseEntryDialogEvents extends React.Component {
     return {
       dialogIndex: null // The index of the opened dialog
     };
+  }
+
+  /**
+   * Bind callbacks methods
+   */
+  bindCallbacks() {
+    this.handlePassphraseEntryRequestEvent = this.handlePassphraseEntryRequestEvent.bind(this);
   }
 
   /**
@@ -49,16 +58,16 @@ class HandlePassphraseEntryDialogEvents extends React.Component {
    * Listen the progress dialog event from the context and acts accordingly
    */
   listen() {
-    this.context.port.on('passbolt.passphrase.request', this.handlePassphraseEntryRequestEvent);
+    this.context.port.on("passbolt.passphrase.request", this.handlePassphraseEntryRequestEvent);
   }
 
   /**
    * Handle the dialog request event
    * @param requestId
    */
-  handlePassphraseEntryRequestEvent(requestId) {
-    this.context.setContext({passphraseRequestId: requestId});
-    this.dialogContext.open(PassphraseEntryDialog);
+  async handlePassphraseEntryRequestEvent(requestId) {
+    await this.context.setContext({passphraseRequestId: requestId});
+    this.props.dialogContext.open(PassphraseEntryDialog);
   }
 
   /**
@@ -71,5 +80,9 @@ class HandlePassphraseEntryDialogEvents extends React.Component {
 }
 
 HandlePassphraseEntryDialogEvents.contextType = AppContext;
+
+HandlePassphraseEntryDialogEvents.propTypes = {
+  dialogContext: PropTypes.any, // the dialog context
+};
 
 export default withDialog(HandlePassphraseEntryDialogEvents);

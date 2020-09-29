@@ -130,15 +130,11 @@ class ReactExtension extends Component {
   bindCallbacks() {
     this.handleStorageChange = this.handleStorageChange.bind(this);
     this.handleIsReadyEvent = this.handleIsReadyEvent.bind(this);
-    this.handleResourceCreateDialogOpenEvent = this.handleResourceCreateDialogOpenEvent.bind(this);
-    this.handleResourceCreateDialogCloseEvent = this.handleResourceCreateDialogCloseEvent.bind(this);
   }
 
   initEventHandlers() {
     this.props.storage.onChanged.addListener(this.handleStorageChange);
     this.props.port.on('passbolt.react-app.is-ready', this.handleIsReadyEvent);
-    this.props.port.on('passbolt.resources.open-create-dialog', this.handleResourceCreateDialogOpenEvent);
-    this.props.port.on('passbolt.resources.open-edit-dialog', this.handleResourceEditDialogOpenEvent);
   }
 
   handleIsReadyEvent(requestId) {
@@ -207,24 +203,6 @@ class ReactExtension extends Component {
       const folders = changes.folders.newValue;
       this.setState({folders: folders});
     }
-  }
-
-  /*
-   * =============================================================
-   *  Resource Dialogs Events
-   * =============================================================
-   */
-
-  handleResourceCreateDialogOpenEvent(folderParentId) {
-    const showResourceCreateDialog = true;
-    const resourceCreateDialogProps = {folderParentId: folderParentId};
-    this.setState({showResourceCreateDialog, resourceCreateDialogProps});
-  }
-
-  handleResourceCreateDialogCloseEvent() {
-    const showResourceCreateDialog = false;
-    const resourceCreateDialogProps = {};
-    this.setState({showResourceCreateDialog, resourceCreateDialogProps});
   }
 
   /*

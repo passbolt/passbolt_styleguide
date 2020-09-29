@@ -158,27 +158,4 @@ describe("Share Action Feedbacks", () => {
       });
     });
   });
-  describe('As a LU I should copy the persisted feedback message', () => {
-    describe('As a LU I should copy the persisted feedback message in the browser clipboard', () => {
-      /**
-       * Given a persisted feedback message “The comment has been added successfully”
-       * When I asks for copying the feedback message
-       * Then I should have copied the message in the browser clipboard
-       */
-
-      beforeEach(() => {
-        page = new ShareActionFeedbacksTestPage(propsWithOneSuccessMessage);
-        Object.assign(navigator, {clipboard: {writeText: () => {}}});
-      });
-
-      it('I should have copied the message in the browser clipboard', async() => {
-        jest.spyOn(navigator.clipboard, 'writeText').mockImplementation(() => {}).mockClear();
-        await page.persist(1);
-        await page.copy(1);
-
-        const firstFeedback = propsWithOneSuccessMessage.actionFeedbackContext.feedbacks[0];
-        expect(navigator.clipboard.writeText).toHaveBeenCalledWith(firstFeedback.message);
-      });
-    });
-  });
 });

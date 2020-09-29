@@ -115,15 +115,7 @@ class ShareActionFeedback extends React.Component {
    * Bind the component method callback
    */
   bindCallbacks() {
-    this.copy = this.copy.bind(this);
     this.persist = this.persist.bind(this);
-  }
-
-  /**
-   * Copy to the clipboard
-   */
-  async copy() {
-    await navigator.clipboard.writeText(this.props.feedback.message);
   }
 
   /**
@@ -163,7 +155,6 @@ class ShareActionFeedback extends React.Component {
             {
               this.state.isPersisted &&
                                 <a
-                                  onClick={this.copy}
                                   className="action copy">
                                   <Icon name="copy-to-clipboard"/>
                                   <span className="visually-hidden">Close</span>

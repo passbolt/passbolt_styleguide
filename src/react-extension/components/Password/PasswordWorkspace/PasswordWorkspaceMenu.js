@@ -158,11 +158,10 @@ class PasswordWorkspaceMenu extends React.Component {
    * handle copy permalink of one resource
    */
   handleCopyPermalinkClickEvent() {
-    const name = "permalink";
-    const baseUrl = this.context.userSettings.getTrustedDomain();
-    const data = `${baseUrl}/app/passwords/view/${this.detailResource.id}`;
-    this.context.port.emit('passbolt.clipboard', {name, data});
     this.handleCloseMoreMenu();
+    const baseUrl = this.context.userSettings.getTrustedDomain();
+    const permalink = `${baseUrl}/app/passwords/view/${this.detailResource.id}`;
+    this.context.port.emit("passbolt.clipboard.write", permalink);
     this.displaySuccessNotification("The permalink has been copied to clipboard");
   }
 
@@ -170,22 +169,24 @@ class PasswordWorkspaceMenu extends React.Component {
    * handle copy username of one resource
    */
   handleCopyUsernameClickEvent() {
-    const name = "username";
-    const data = this.detailResource.username;
-    this.context.port.emit('passbolt.clipboard', {name, data});
     this.handleCloseMoreMenu();
+    this.context.port.emit("passbolt.clipboard.write", this.detailResource.username);
     this.displaySuccessNotification("The username has been copied to clipboard");
   }
 
   /**
-   * handle copy secrete of one resource
+   * handle copy to clipboard the secret of the selected resource
    */
   async handleCopySecretClickEvent() {
-    const name = "secret";
-    const data = await this.context.port.request("passbolt.secret.decrypt", this.detailResource.id);
-    this.context.port.emit('passbolt.clipboard', {name, data});
-    this.handleCloseMoreMenu();
-    this.displaySuccessNotification("The secret has been copied to clipboard");
+    try {
+      const secret = await this.context.port.request("passbolt.secret.decrypt", this.detailResource.id);
+      this.context.port.emit("passbolt.clipboard.write", secret);
+      this.props.actionFeedbackContext.displaySuccess("The secret has been copied to clipboard");
+    } catch (error) {
+      if (error.name !== "UserAbortsOperationError") {
+        this.props.actionFeedbackContext.displayError(error.message);
+      }
+    }
   }
 
   /**

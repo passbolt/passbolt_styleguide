@@ -22,8 +22,35 @@ import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext"
 import PasswordSidebarPermissionsSection from "./PasswordSidebarPermissionsSection";
 import AppContext from "../../../contexts/AppContext";
 import PasswordSidebarActivitySection from "./PasswordSidebarActivitySection";
+import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 
 class PasswordSidebar extends React.Component {
+  /**
+   * Constructor
+   * @param {Object} props
+   */
+  constructor(props) {
+    super(props);
+    this.bindCallbacks();
+  }
+
+  /**
+   * Bind callbacks methods
+   */
+  bindCallbacks() {
+    this.handlePermalinkClick = this.handlePermalinkClick.bind(this);
+  }
+
+  /**
+   * Handle when the user copies the permalink.
+   */
+  handlePermalinkClick() {
+    const baseUrl = this.context.userSettings.getTrustedDomain();
+    const permalink = `${baseUrl}/app/folders/view/${this.props.resourceWorkspaceContext.details.resource.id}`;
+    this.context.port.emit('passbolt.clipboard.write', permalink);
+    this.props.actionFeedbackContext.displaySuccess("The permalink has been copied to clipboard");
+  }
+
   /**
    * Render the component
    * @returns {JSX}
@@ -39,7 +66,7 @@ class PasswordSidebar extends React.Component {
             <h3>
               <div className="title-wrapper">
                 <span className="name">{this.props.resourceWorkspaceContext.details.resource.name}</span>
-                <a className="title-link" title="Copy the link to this password">
+                <a className="title-link" title="Copy the link to this password" onClick={this.handlePermalinkClick}>
                   <Icon name="link"/>
                   <span className="visuallyhidden">Copy the link to this password</span>
                 </a>
@@ -71,7 +98,8 @@ PasswordSidebar.propTypes = {
   onSelectRoot: PropTypes.func,
   onEditPermissions: PropTypes.func,
   users: PropTypes.array,
-  resourceWorkspaceContext: PropTypes.object
+  resourceWorkspaceContext: PropTypes.object,
+  actionFeedbackContext: PropTypes.any, // The action feedback context
 };
 
-export default withResourceWorkspace(PasswordSidebar);
+export default withResourceWorkspace(withActionFeedback(PasswordSidebar));

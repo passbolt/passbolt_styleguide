@@ -19,6 +19,7 @@ import FolderSidebarPermissionsSection from "./FolderSidebarPermissionsSection";
 import FolderSidebarActivitySection from "./FolderSidebarActivitySection";
 import AppContext from "../../../contexts/AppContext";
 import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
+import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 
 const LIMIT_ACTIVITIES_PER_PAGE = 5;
 
@@ -99,10 +100,10 @@ class FolderSidebar extends React.Component {
    * Handle when the user copies the permalink.
    */
   handlePermalinkClick() {
-    const name = "permalink";
     const baseUrl = this.context.userSettings.getTrustedDomain();
-    const data = `${baseUrl}/app/folders/view/${this.props.resourceWorkspaceContext.details.folder.id}`;
-    this.context.port.emit('passbolt.clipboard', {name, data});
+    const permalink = `${baseUrl}/app/folders/view/${this.props.resourceWorkspaceContext.details.folder.id}`;
+    this.context.port.emit('passbolt.clipboard.write', permalink);
+    this.props.actionFeedbackContext.displaySuccess("The permalink has been copied to clipboard");
   }
 
   /**
@@ -200,7 +201,8 @@ FolderSidebar.propTypes = {
   onSelectRoot: PropTypes.func,
   onEditPermissions: PropTypes.func,
   users: PropTypes.array,
-  resourceWorkspaceContext: PropTypes.object
+  resourceWorkspaceContext: PropTypes.object,
+  actionFeedbackContext: PropTypes.any, // The action feedback context
 };
 
-export default withResourceWorkspace(FolderSidebar);
+export default withResourceWorkspace(withActionFeedback(FolderSidebar));
