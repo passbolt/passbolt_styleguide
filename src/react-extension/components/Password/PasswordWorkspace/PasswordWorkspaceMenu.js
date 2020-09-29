@@ -47,38 +47,63 @@ class PasswordWorkspaceMenu extends React.Component {
   }
 
   /**
-   * Bind callbacks methods
-   */
-  bindCallbacks() {
-    this.handleMenuClickEvent = this.handleMenuClickEvent.bind(this);
-    this.handleMoreClickEvent = this.handleMoreClickEvent.bind(this);
-    this.handleDeleteClickEvent = this.handleDeleteClickEvent.bind(this);
-  }
-
-  /**
    * Create DOM nodes or React elements references in order to be able to access them programmatically.
    */
   createRefs() {
     this.moreMenuRef = React.createRef();
   }
 
+  /**
+   * Bind callbacks methods
+   */
+  bindCallbacks() {
+    this.handleDocumentClickEvent = this.handleDocumentClickEvent.bind(this);
+    this.handleDocumentContextualMenuEvent = this.handleDocumentContextualMenuEvent.bind(this);
+    this.handleDocumentDragStartEvent = this.handleDocumentDragStartEvent.bind(this);
+    this.handleMoreClickEvent = this.handleMoreClickEvent.bind(this);
+    this.handleDeleteClickEvent = this.handleDeleteClickEvent.bind(this);
+  }
+
   componentDidMount() {
-    document.addEventListener('click', this.handleMenuClickEvent);
+    document.addEventListener('click', this.handleDocumentClickEvent);
+    document.addEventListener('contextmenu', this.handleDocumentContextualMenuEvent);
+    document.addEventListener('dragstart', this.handleDocumentDragStartEvent);
   }
 
   componentWillUnmount() {
-    document.removeEventListener('click', this.handleMenuClickEvent);
+    document.removeEventListener('click', this.handleDocumentClickEvent);
+    document.removeEventListener('contextmenu', this.handleDocumentContextualMenuEvent);
+    document.removeEventListener('dragstart', this.handleDocumentDragStartEvent);
   }
 
   /**
-   * Handle click events on more menu. Hide the component if the click occurred outside of the component.
+   * Handle click events on document. Hide the component if the click occurred outside of the component.
    * @param {ReactEvent} event The event
    */
-  handleMenuClickEvent(event) {
-    // Prevent hide more menu when the user click on an element out of the more menu
+  handleDocumentClickEvent(event) {
+    // Prevent closing when the user click on an element of the menu
     if (this.moreMenuRef.current.contains(event.target)) {
       return;
     }
+    this.handleCloseMoreMenu();
+  }
+
+  /**
+   * Handle contextual menu events on document. Hide the component if the click occurred outside of the component.
+   * @param {ReactEvent} event The event
+   */
+  handleDocumentContextualMenuEvent(event) {
+    // Prevent closing when the user right click on an element of the menu
+    if (this.moreMenuRef.current.contains(event.target)) {
+      return;
+    }
+    this.handleCloseMoreMenu();
+  }
+
+  /**
+   * Handle drag start event on document. Hide the component if any.
+   */
+  handleDocumentDragStartEvent() {
     this.handleCloseMoreMenu();
   }
 
@@ -131,7 +156,6 @@ class PasswordWorkspaceMenu extends React.Component {
   isOwnerOfSelectedResources() {
     return this.hasResourceSelected() && this.selectedResources.every(resource => resource.permission.type >= 7);
   }
-
 
   /**
    * Render the component
