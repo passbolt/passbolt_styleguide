@@ -112,7 +112,6 @@ class TagDeleteDialog extends Component {
     return (
       <DialogWrapper
         title="Delete tag?"
-        tooltip="Delete tag?"
         onClose={this.handleCloseClick}
         disabled={this.state.processing}
         className="delete-tag-dialog">
@@ -122,8 +121,8 @@ class TagDeleteDialog extends Component {
             <p>Warning: Once the tag is deleted, it’ll be removed permanently and will not be recoverable.</p>
           </div>
           <div className="submit-wrapper clearfix">
-            <FormSubmitButton disabled={this.hasAllInputDisabled()} processing={this.state.processing} value="Delete"/>
-            <FormCancelButton disabled={this.hasAllInputDisabled()} onClick={this.handleCloseClick} />
+            <FormSubmitButton disabled={this.hasAllInputDisabled()} processing={this.state.processing} value="Delete" warning={true}/>
+            <FormCancelButton disabled={this.hasAllInputDisabled()} onClick={this.handleCloseClick}/>
           </div>
         </form>
       </DialogWrapper>
