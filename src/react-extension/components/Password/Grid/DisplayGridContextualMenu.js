@@ -16,7 +16,6 @@ import PropTypes from "prop-types";
 import AppContext from "../../../contexts/AppContext";
 import {withDialog} from "../../../contexts/Common/DialogContext";
 import ContextualMenuWrapper from "../../Common/ContextualMenu/ContextualMenuWrapper";
-import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 import PasswordEditDialog from "../PasswordEditDialog/PasswordEditDialog";
 
 class DisplayGridContextualMenu extends React.Component {
@@ -57,22 +56,10 @@ class DisplayGridContextualMenu extends React.Component {
   }
 
   /**
-   * is owner of the resource
+   * Can update the resource
    */
-  isOwnerOfTheResource() {
+  canUpdate() {
     return this.resource.permission.type >= 7;
-  }
-
-  /**
-   * Get the contextual menu style.
-   */
-  getStyle() {
-    return {
-      position: "fixed",
-      display: "block",
-      left: this.props.left,
-      top: this.props.top
-    };
   }
 
   /**
@@ -89,7 +76,7 @@ class DisplayGridContextualMenu extends React.Component {
           <div className="row">
             <div className="main-cell-wrapper">
               <div className="main-cell">
-                <a id="edit" className={`${this.isOwnerOfTheResource() ? "" : "disabled"}`}
+                <a id="edit" className={`${this.canUpdate() ? "" : "disabled"}`}
                   onClick={this.handleEditClickEvent}><span>Edit</span></a>
               </div>
             </div>
@@ -110,4 +97,4 @@ DisplayGridContextualMenu.propTypes = {
   resource: PropTypes.object // resource selected
 };
 
-export default withDialog(withResourceWorkspace(DisplayGridContextualMenu));
+export default withDialog(DisplayGridContextualMenu);
