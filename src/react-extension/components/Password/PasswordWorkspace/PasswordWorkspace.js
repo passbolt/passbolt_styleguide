@@ -25,6 +25,7 @@ import PropTypes from "prop-types";
 import PasswordSearchBar from "../PasswordSearchBar/PasswordSearchBar";
 import FilterResourcesByShortcuts from "../FilterResourcesByShortcuts/FilterResourcesByShortcuts";
 import PasswordBreadcrumb from "../PasswordBreadcrumb/PasswordBreadcrumb";
+import PasswordWorkspaceMenu from "./PasswordWorkspaceMenu";
 
 class Workspace extends Component {
   /**
@@ -194,6 +195,7 @@ class Workspace extends Component {
           <div className="col1 main-action-wrapper">
           </div>
           <div className="col2_3 actions-wrapper">
+            <PasswordWorkspaceMenu/>
           </div>
         </div>
         <div className="panel main">

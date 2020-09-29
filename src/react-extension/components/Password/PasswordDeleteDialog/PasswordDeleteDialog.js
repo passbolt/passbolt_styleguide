@@ -20,7 +20,6 @@ import ErrorDialog from "../../Dialog/ErrorDialog/ErrorDialog";
 import {withDialog} from "../../../contexts/Common/DialogContext";
 import FormSubmitButton from "../../../../react/components/Common/Inputs/FormSubmitButton/FormSubmitButton";
 import FormCancelButton from "../../../../react/components/Common/Inputs/FormSubmitButton/FormCancelButton";
-import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 
 /**
  * This component allows user to delete a tag of the resources
@@ -44,19 +43,11 @@ class PasswordDeleteDialog extends Component {
   }
 
   /**
-   * get the selected resources
+   * get the resources
    * @returns {[]|null}
    */
-  get selectedResources() {
-    return this.props.resourceWorkspaceContext.selectedResources;
-  }
-
-  /**
-   * get the details resources
-   * @returns {*}
-   */
-  get detailsResource() {
-    return this.props.resourceWorkspaceContext.details.resource;
+  get resources() {
+    return this.context.passwordDeleteDialogProps.resources;
   }
 
   /**
@@ -109,8 +100,8 @@ class PasswordDeleteDialog extends Component {
   async delete() {
     this.setState({processing: true});
     try {
-      const selectedResourcesIds = this.selectedResources.map(resource => resource.id);
-      await this.context.port.request("passbolt.resources.delete-all", selectedResourcesIds);
+      const resourcesIds = this.resources.map(resource => resource.id);
+      await this.context.port.request("passbolt.resources.delete-all", resourcesIds);
       await this.handleSaveSuccess();
     } catch (error) {
       this.handleSaveError(error);
@@ -139,11 +130,11 @@ class PasswordDeleteDialog extends Component {
   }
 
   /**
-   * has multiple selected resources
+   * has multiple resources
    * @returns {boolean}
    */
-  hasMultipleSelectedResources() {
-    return this.selectedResources.length > 1;
+  hasMultipleResources() {
+    return this.resources.length > 1;
   }
 
   render() {
@@ -155,13 +146,13 @@ class PasswordDeleteDialog extends Component {
         className="delete-password-dialog">
         <form onSubmit={this.handleFormSubmit} noValidate>
           <div className="form-content">
-            {!this.hasMultipleSelectedResources() &&
+            {!this.hasMultipleResources() &&
             <div>
-              <p>Are you sure you want to delete the password <strong>{this.detailsResource.name}</strong>?</p>
+              <p>Are you sure you want to delete the password <strong>{this.resources[0].name}</strong>?</p>
               <p>Warning: Once the password is deleted, it’ll be removed permanently and will not be recoverable.</p>
             </div>
             }
-            {this.hasMultipleSelectedResources() &&
+            {this.hasMultipleResources() &&
             <p>Please confirm you really want to delete the passwords. After clicking ok, the passwords will be deleted
               permanently.</p>
             }
@@ -182,7 +173,6 @@ PasswordDeleteDialog.propTypes = {
   onClose: PropTypes.func,
   actionFeedbackContext: PropTypes.any, // The action feedback context
   dialogContext: PropTypes.any,
-  resourceWorkspaceContext: PropTypes.any
 };
 
-export default withActionFeedback(withDialog(withResourceWorkspace(PasswordDeleteDialog)));
+export default withActionFeedback(withDialog(PasswordDeleteDialog));
