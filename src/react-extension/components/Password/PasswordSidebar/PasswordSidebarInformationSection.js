@@ -48,6 +48,7 @@ class PasswordSidebarInformationSection extends React.Component {
     this.handleFolderParentClickEvent = this.handleFolderParentClickEvent.bind(this);
     this.handleTitleClickEvent = this.handleTitleClickEvent.bind(this);
     this.handleUsernameClickEvent = this.handleUsernameClickEvent.bind(this);
+    this.handlePasswordClickEvent = this.handlePasswordClickEvent.bind(this);
   }
 
   /**
@@ -160,6 +161,13 @@ class PasswordSidebarInformationSection extends React.Component {
     }
   }
 
+  async handlePasswordClickEvent() {
+    const name = "secret";
+    const data = await this.context.port.request("passbolt.secret.decrypt", this.resource.id);
+    this.context.port.emit('passbolt.clipboard', {name, data});
+    this.displaySuccessNotification("The secret has been copied to clipboard");
+  }
+
   /**
    * display a success notification message
    * @param message
@@ -194,7 +202,7 @@ class PasswordSidebarInformationSection extends React.Component {
             <span className="label">Password</span>
             <div className="value">
               <div className="secret-copy">
-                <a><span>copy password to clipboard</span></a>
+                <a onClick={this.handlePasswordClickEvent}><span>copy password to clipboard</span></a>
               </div>
             </div>
           </li>
