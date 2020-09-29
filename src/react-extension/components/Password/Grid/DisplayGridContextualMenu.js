@@ -38,6 +38,7 @@ class DisplayGridContextualMenu extends React.Component {
     this.handleShareClickEvent = this.handleShareClickEvent.bind(this);
     this.handleUsernameClickEvent = this.handleUsernameClickEvent.bind(this);
     this.handlePermalinkClickEvent = this.handlePermalinkClickEvent.bind(this);
+    this.handlePasswordClickEvent = this.handlePasswordClickEvent.bind(this);
   }
 
   /**
@@ -86,6 +87,17 @@ class DisplayGridContextualMenu extends React.Component {
   }
 
   /**
+   * handle username resource
+   */
+  async handlePasswordClickEvent() {
+    const name = "secret";
+    const data = await this.context.port.request("passbolt.secret.decrypt", this.resource.id);
+    this.context.port.emit('passbolt.clipboard', {name, data});
+    this.props.hide();
+    this.displaySuccessNotification("The secret has been copied to clipboard");
+  }
+
+  /**
    * the resource selected
    * @returns {*}
    */
@@ -130,6 +142,15 @@ class DisplayGridContextualMenu extends React.Component {
             <div className="main-cell-wrapper">
               <div className="main-cell">
                 <a id="username" onClick={this.handleUsernameClickEvent}><span>Copy username</span></a>
+              </div>
+            </div>
+          </div>
+        </li>
+        <li key="option-password-resource" className="ready">
+          <div className="row">
+            <div className="main-cell-wrapper">
+              <div className="main-cell">
+                <a id="password" onClick={this.handlePasswordClickEvent}><span>Copy password</span></a>
               </div>
             </div>
           </div>
