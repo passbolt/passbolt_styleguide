@@ -19,7 +19,10 @@ export function defaultAppContext(appContext) {
 export function defaultPropsOneResourceOwned() {
   return {
     resourceWorkspaceContext: {
-      selectedResources: [resourcesMock[0]]
+      selectedResources: [resourcesMock[0]],
+      details: {
+        resource: resourcesMock[1]
+      }
     }
   };
 }
@@ -31,7 +34,10 @@ export function defaultPropsOneResourceOwned() {
 export function defaultPropsOneResourceNotOwned() {
   return {
     resourceWorkspaceContext: {
-      selectedResources: [resourcesMock[1]]
+      selectedResources: [resourcesMock[1]],
+      details: {
+        resource: resourcesMock[1]
+      }
     }
   };
 }
@@ -43,7 +49,25 @@ export function defaultPropsOneResourceNotOwned() {
 export function defaultPropsNoResource() {
   return {
     resourceWorkspaceContext: {
-      selectedResources: []
+      selectedResources: [],
+      details: {
+        resource: null
+      }
+    }
+  };
+}
+
+/**
+ * Default props one selected resource owned
+ * @returns {{resourceWorkspaceContext}}
+ */
+export function defaultPropsMultipleResource() {
+  return {
+    resourceWorkspaceContext: {
+      selectedResources: resourcesMock,
+      details: {
+        resource: null
+      }
     }
   };
 }

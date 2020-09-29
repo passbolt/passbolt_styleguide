@@ -82,7 +82,7 @@ class ReactExtension extends Component {
       resourceCreateDialogProps: {
         folderParentId: null
       },
-      showPasswordEditDialog: false,
+
       passwordEditDialogProps: {
         id: null
       },
@@ -132,8 +132,6 @@ class ReactExtension extends Component {
     this.handleIsReadyEvent = this.handleIsReadyEvent.bind(this);
     this.handleResourceCreateDialogOpenEvent = this.handleResourceCreateDialogOpenEvent.bind(this);
     this.handleResourceCreateDialogCloseEvent = this.handleResourceCreateDialogCloseEvent.bind(this);
-    this.handleResourceEditDialogOpenEvent = this.handleResourceEditDialogOpenEvent.bind(this);
-    this.handleResourceEditDialogCloseEvent = this.handleResourceEditDialogCloseEvent.bind(this);
   }
 
   initEventHandlers() {
@@ -230,18 +228,6 @@ class ReactExtension extends Component {
     this.setState({showResourceCreateDialog, resourceCreateDialogProps});
   }
 
-  handleResourceEditDialogOpenEvent(id) {
-    const showPasswordEditDialog = true;
-    const passwordEditDialogProps = {id};
-    this.setState({showPasswordEditDialog, passwordEditDialogProps});
-  }
-
-  handleResourceEditDialogCloseEvent() {
-    const showPasswordEditDialog = false;
-    const passwordEditDialogProps = {};
-    this.setState({showPasswordEditDialog, passwordEditDialogProps});
-  }
-
   /*
    * =============================================================
    *  View
@@ -278,12 +264,6 @@ class ReactExtension extends Component {
               {this.state.showResourceCreateDialog &&
               <PasswordCreateDialog onClose={this.handleResourceCreateDialogCloseEvent}
                 folderParentId={this.state.resourceCreateDialogProps.folderParentId}
-                resourceTypes={this.state.resourceTypes}
-              />
-              }
-              {this.state.showPasswordEditDialog && areResourcesLoaded &&
-              <PasswordEditDialog onClose={this.handleResourceEditDialogCloseEvent}
-                id={this.state.passwordEditDialogProps.id}
                 resourceTypes={this.state.resourceTypes}
               />
               }
