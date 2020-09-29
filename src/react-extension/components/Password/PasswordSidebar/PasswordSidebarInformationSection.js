@@ -18,6 +18,7 @@ import moment from "moment";
 import AppContext from "../../../contexts/AppContext";
 import {ResourceWorkspaceFilterTypes, withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 import {withRouter} from "react-router-dom";
+import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 
 class PasswordSidebarInformationSection extends React.Component {
   /**
@@ -46,6 +47,7 @@ class PasswordSidebarInformationSection extends React.Component {
   bindCallbacks() {
     this.handleFolderParentClickEvent = this.handleFolderParentClickEvent.bind(this);
     this.handleTitleClickEvent = this.handleTitleClickEvent.bind(this);
+    this.handleUsernameClickEvent = this.handleUsernameClickEvent.bind(this);
   }
 
   /**
@@ -67,6 +69,16 @@ class PasswordSidebarInformationSection extends React.Component {
   handleTitleClickEvent() {
     const open = !this.state.open;
     this.setState({open});
+  }
+
+  /**
+   * Handle when the user select the username of the resource
+   */
+  handleUsernameClickEvent() {
+    const name = "username";
+    const data = this.resource.username;
+    this.context.port.emit('passbolt.clipboard', {name, data});
+    this.displaySuccessNotification("The username has been copied to clipboard");
   }
 
   get resource() {
@@ -149,6 +161,14 @@ class PasswordSidebarInformationSection extends React.Component {
   }
 
   /**
+   * display a success notification message
+   * @param message
+   */
+  displaySuccessNotification(message) {
+    this.props.actionFeedbackContext.displaySuccess(message);
+  }
+
+  /**
    * Render the component
    * @returns {JSX}
    */
@@ -168,7 +188,7 @@ class PasswordSidebarInformationSection extends React.Component {
         <ul className="accordion-content">
           <li className="username">
             <span className="label">Username</span>
-            <span className="value">{this.resource.username}</span>
+            <span className="value"><a onClick={this.handleUsernameClickEvent}>{this.resource.username}</a></span>
           </li>
           <li className="password">
             <span className="label">Password</span>
@@ -219,7 +239,8 @@ PasswordSidebarInformationSection.propTypes = {
   onSelectRoot: PropTypes.func,
   users: PropTypes.array,
   history: PropTypes.object,
-  resourceWorkspaceContext: PropTypes.object
+  resourceWorkspaceContext: PropTypes.object,
+  actionFeedbackContext: PropTypes.any, // The action feedback context
 };
 
-export default withRouter(withResourceWorkspace(PasswordSidebarInformationSection));
+export default withRouter(withActionFeedback(withResourceWorkspace(PasswordSidebarInformationSection)));
