@@ -18,6 +18,7 @@ import {withDialog} from "../../../contexts/Common/DialogContext";
 import ContextualMenuWrapper from "../../Common/ContextualMenu/ContextualMenuWrapper";
 import PasswordEditDialog from "../PasswordEditDialog/PasswordEditDialog";
 import ShareDialog from "../../Share/ShareDialog";
+import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 
 class DisplayGridContextualMenu extends React.Component {
   /**
@@ -35,6 +36,7 @@ class DisplayGridContextualMenu extends React.Component {
   bindCallbacks() {
     this.handleEditClickEvent = this.handleEditClickEvent.bind(this);
     this.handleShareClickEvent = this.handleShareClickEvent.bind(this);
+    this.handleUsernameClickEvent = this.handleUsernameClickEvent.bind(this);
   }
 
   /**
@@ -50,13 +52,24 @@ class DisplayGridContextualMenu extends React.Component {
   }
 
   /**
-   * handle edit resource
+   * handle share resource
    */
   handleShareClickEvent() {
     const resourceIds = [this.resource.id];
     this.context.setContext({shareDialogProps: {resourceIds}});
     this.props.dialogContext.open(ShareDialog);
     this.props.hide();
+  }
+
+  /**
+   * handle username resource
+   */
+  handleUsernameClickEvent() {
+    const name = "username";
+    const data = this.resource.username;
+    this.context.port.emit('passbolt.clipboard', {name, data});
+    this.props.hide();
+    this.displaySuccessNotification("The username has been copied to clipboard");
   }
 
   /**
@@ -82,6 +95,14 @@ class DisplayGridContextualMenu extends React.Component {
   }
 
   /**
+   * Display success notification (toaster)
+   * @param message
+   */
+  displaySuccessNotification(message) {
+    this.props.actionFeedbackContext.displaySuccess(message);
+  }
+
+  /**
    * Render the component.
    * @returns {JSX}
    */
@@ -91,6 +112,15 @@ class DisplayGridContextualMenu extends React.Component {
         hide={this.props.hide}
         left={this.props.left}
         top={this.props.top}>
+        <li key="option-username-resource" className="ready">
+          <div className="row">
+            <div className="main-cell-wrapper">
+              <div className="main-cell">
+                <a id="username" onClick={this.handleUsernameClickEvent}><span>Copy username</span></a>
+              </div>
+            </div>
+          </div>
+        </li>
         <li key="option-edit-resource" className="ready">
           <div className="row">
             <div className="main-cell-wrapper">
@@ -123,7 +153,8 @@ DisplayGridContextualMenu.propTypes = {
   left: PropTypes.number, // left position in px of the page
   top: PropTypes.number, // top position in px of the page
   dialogContext: PropTypes.any, // the dialog context
-  resource: PropTypes.object // resource selected
+  resource: PropTypes.object, // resource selected
+  actionFeedbackContext: PropTypes.any, // The action feedback context
 };
 
-export default withDialog(DisplayGridContextualMenu);
+export default withDialog(withActionFeedback(DisplayGridContextualMenu));
