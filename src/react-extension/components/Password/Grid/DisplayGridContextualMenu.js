@@ -75,6 +75,13 @@ class DisplayGridContextualMenu extends React.Component {
   }
 
   /**
+   * Can share the resource
+   */
+  canShare() {
+    return this.resource.permission.type === 15;
+  }
+
+  /**
    * Render the component.
    * @returns {JSX}
    */
@@ -98,7 +105,7 @@ class DisplayGridContextualMenu extends React.Component {
           <div className="row">
             <div className="main-cell-wrapper">
               <div className="main-cell">
-                <a id="share" className={`${this.isOwnerOfTheResource() ? "" : "disabled"}`}
+                <a id="share" className={`${this.canShare() ? "" : "disabled"}`}
                    onClick={this.handleShareClickEvent}><span>Share</span></a>
               </div>
             </div>
