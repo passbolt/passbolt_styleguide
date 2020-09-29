@@ -236,10 +236,19 @@ class PasswordWorkspaceMenu extends React.Component {
   }
 
   /**
-   * is owner of all selected resources
+   * Can update the selected resources
+   * @returns {}
    */
-  isOwnerOfSelectedResources() {
+  canUpdate() {
     return this.hasResourceSelected() && this.selectedResources.every(resource => resource.permission.type >= 7);
+  }
+
+  /**
+   * Can share the selected resources
+   * @returns {}
+   */
+  canShare() {
+    return this.hasResourceSelected() && this.selectedResources.every(resource => resource.permission.type === 15);
   }
 
   /**
@@ -259,14 +268,14 @@ class PasswordWorkspaceMenu extends React.Component {
           </li>
           <li id="edit_action">
             <a
-              className={`button ready ${this.hasOneResourceSelected() && this.isOwnerOfSelectedResources() ? "" : "disabled"}`}
+              className={`button ready ${this.hasOneResourceSelected() && this.canUpdate() ? "" : "disabled"}`}
               onClick={this.handleEditClickEvent}>
               <Icon name="edit"></Icon>
               <span>edit</span>
             </a>
           </li>
           <li id="share_action">
-            <a className={`button ready ${this.hasResourceSelected() && this.isOwnerOfSelectedResources() ? "" : "disabled"}`}
+            <a className={`button ready ${this.hasResourceSelected() && this.canShare() ? "" : "disabled"}`}
               onClick={this.handleShareClickEvent}>
               <Icon name="share"/>
               <span>share</span>
@@ -307,7 +316,7 @@ class PasswordWorkspaceMenu extends React.Component {
                   <div className="row">
                     <div className="main-cell-wrapper">
                       <div className="main-cell">
-                        <a className={`${this.isOwnerOfSelectedResources() ? "" : "disabled"}`}
+                        <a className={`${this.canUpdate() ? "" : "disabled"}`}
                           onClick={this.handleDeleteClickEvent}>
                           <span>delete</span>
                         </a>
