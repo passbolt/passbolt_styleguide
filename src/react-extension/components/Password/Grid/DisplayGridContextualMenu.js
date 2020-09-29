@@ -17,6 +17,7 @@ import AppContext from "../../../contexts/AppContext";
 import {withDialog} from "../../../contexts/Common/DialogContext";
 import ContextualMenuWrapper from "../../Common/ContextualMenu/ContextualMenuWrapper";
 import PasswordEditDialog from "../PasswordEditDialog/PasswordEditDialog";
+import ShareDialog from "../../Share/ShareDialog";
 
 class DisplayGridContextualMenu extends React.Component {
   /**
@@ -33,6 +34,7 @@ class DisplayGridContextualMenu extends React.Component {
    */
   bindCallbacks() {
     this.handleEditClickEvent = this.handleEditClickEvent.bind(this);
+    this.handleShareClickEvent = this.handleShareClickEvent.bind(this);
   }
 
   /**
@@ -44,6 +46,16 @@ class DisplayGridContextualMenu extends React.Component {
     };
     this.context.setContext({passwordEditDialogProps});
     this.props.dialogContext.open(PasswordEditDialog);
+    this.props.hide();
+  }
+
+  /**
+   * handle edit resource
+   */
+  handleShareClickEvent() {
+    const resourceIds = [this.resource.id];
+    this.context.setContext({shareDialogProps: {resourceIds}});
+    this.props.dialogContext.open(ShareDialog);
     this.props.hide();
   }
 
@@ -78,6 +90,16 @@ class DisplayGridContextualMenu extends React.Component {
               <div className="main-cell">
                 <a id="edit" className={`${this.canUpdate() ? "" : "disabled"}`}
                   onClick={this.handleEditClickEvent}><span>Edit</span></a>
+              </div>
+            </div>
+          </div>
+        </li>
+        <li key="option-share-resource" className="ready">
+          <div className="row">
+            <div className="main-cell-wrapper">
+              <div className="main-cell">
+                <a id="share" className={`${this.isOwnerOfTheResource() ? "" : "disabled"}`}
+                   onClick={this.handleShareClickEvent}><span>Share</span></a>
               </div>
             </div>
           </div>
