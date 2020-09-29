@@ -400,11 +400,7 @@ class TagEditor extends React.Component {
    */
   async updateTags() {
     try {
-      const data = {
-        id: this.props.resourceId,
-        tags: this.state.tags
-      };
-      await this.context.port.request("passbolt.resource.update-tags", data);
+      await this.context.port.request("passbolt.tags.update-resource-tags", this.props.resourceId, this.state.tags);
       await this.props.actionFeedbackContext.displaySuccess("The tags have been updated successfully");
       this.setState({processing: false});
       this.props.toggleInputTagEditor();

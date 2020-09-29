@@ -176,11 +176,10 @@ class DescriptionEditor extends React.Component {
    * @returns {Promise<Object>} updated tag
    */
   updateDescription() {
-    const descriptionDto = {
-      id: this.props.resourceId,
+    const resourceDto = {
       description: this.state.description,
     };
-    return this.context.port.request("passbolt.resource.update-description", descriptionDto);
+    return this.context.port.request("passbolt.resources.update", this.props.resourceId, resourceDto);
   }
 
   /**

@@ -27,7 +27,7 @@ import mockRequestShareGetResources from "./request/mockRequestShareGetResources
 import mockRequestShareSearchAros from "./request/mockRequestShareSearchAros";
 import mockRequestSiteSettings from "./request/mockRequestSiteSettings";
 import mockRequestUserGet from "./request/mockRequestUserGet";
-import mockRequestResourceUpdateTags from "./request/mockRequestResourceUpdateTags";
+import mockRequestTagsUpdateResourceTags from "./request/mockRequestTagsUpdateResourceTags";
 import mockRequestCommentsFind from "./request/mockRequestCommentsFind";
 import mockRequestCommentsCreate from "./request/mockRequestCommentsCreate";
 import mockRequestResourceUpdateDescription from "./request/mockRequestResourceUpdateDescription";
@@ -57,12 +57,12 @@ export default (storage) => {
   mockPort.addRequestListener("passbolt.share.get-resources", mockRequestShareGetResources);
   mockPort.addRequestListener("passbolt.share.search-aros", mockRequestShareSearchAros);
   mockPort.addRequestListener("passbolt.secret.decrypt", mockRequestSecretDecrypt);
-  mockPort.addRequestListener("passbolt.resource.update-tags", mockRequestResourceUpdateTags);
   mockPort.addRequestListener("passbolt.comments.create", mockRequestCommentsCreate);
   mockPort.addRequestListener("passbolt.comments.find-all-by-resource", mockRequestCommentsFind);
   mockPort.addRequestListener("passbolt.resource.update-description", mockRequestResourceUpdateDescription);
   mockPort.addRequestListener("passbolt.tags.find-all", mockRequestTagsGet);
   mockPort.addRequestListener("passbolt.tags.update", mockRequestUpdateTags);
+  mockPort.addRequestListener("passbolt.tags.update-resource-tags", mockRequestTagsUpdateResourceTags);
   mockPort.addRequestListener("passbolt.tags.delete", mockRequestDeleteTags);
   mockPort.addRequestListener("passbolt.resources.find-permissions", mockRequestResourcesFindPermissions);
   mockPort.addRequestListener("passbolt.favorite.add", mockRequestResourceAddFavorite);

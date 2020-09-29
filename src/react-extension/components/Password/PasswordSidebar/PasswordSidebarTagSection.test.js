@@ -391,16 +391,12 @@ describe("PasswordSidebarTag", () => {
     const editorTagInputDisable = container.querySelector(".tag-editor-input");
     expect(editorTagInputDisable).toBeNull();
 
-    const onApiUpdateResourceTagMeta = {
-      id: props.resourceWorkspaceContext.details.resource.id,
-      tags: [
-        {
-          slug: tagValue,
-          is_shared: false
-        }
-      ]
-    };
-    expect(context.port.request).toHaveBeenCalledWith("passbolt.resource.update-tags", onApiUpdateResourceTagMeta);
+    const onApiUpdateResourceId = props.resourceWorkspaceContext.details.resource.id;
+    const onApiUpdateResourceTagsDto = [{
+      slug: tagValue,
+      is_shared: false
+    }];
+    expect(context.port.request).toHaveBeenCalledWith("passbolt.tags.update-resource-tags", onApiUpdateResourceId, onApiUpdateResourceTagsDto);
     // notification toaster called
     expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalledWith("The tags have been updated successfully");
   });
@@ -460,20 +456,15 @@ describe("PasswordSidebarTag", () => {
     const editorTagInputDisable = container.querySelector(".tag-editor-input");
     expect(editorTagInputDisable).toBeNull();
 
-    const onApiUpdateResourceTagMeta = {
-      id: props.resourceWorkspaceContext.details.resource.id,
-      tags: [
-        {
-          slug: tagValues[0],
-          is_shared: false
-        },
-        {
-          slug: tagValues[1],
-          is_shared: false
-        }
-      ]
-    };
-    expect(context.port.request).toHaveBeenCalledWith("passbolt.resource.update-tags", onApiUpdateResourceTagMeta);
+    const onApiUpdateResourceId = props.resourceWorkspaceContext.details.resource.id;
+    const onApiUpdateResourceTagsDto = [{
+      slug: tagValues[0],
+      is_shared: false
+    }, {
+      slug: tagValues[1],
+      is_shared: false
+    }];
+    expect(context.port.request).toHaveBeenCalledWith("passbolt.tags.update-resource-tags", onApiUpdateResourceId, onApiUpdateResourceTagsDto);
     // notification toaster called
     expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalledWith("The tags have been updated successfully");
   });
@@ -1130,16 +1121,12 @@ describe("PasswordSidebarTag", () => {
     const editorTagInputDisable = container.querySelector(".tag-editor-input");
     expect(editorTagInputDisable).toBeNull();
 
-    const onApiUpdateResourceTagMeta = {
-      id: props.resourceWorkspaceContext.details.resource.id,
-      tags: [
-        {
-          slug: tagValue,
-          is_shared: false
-        }
-      ]
-    };
-    expect(context.port.request).toHaveBeenCalledWith("passbolt.resource.update-tags", onApiUpdateResourceTagMeta);
+    const onApiUpdateResourceId = props.resourceWorkspaceContext.details.resource.id;
+    const onApiUpdateResourceTagsDto = [{
+      slug: tagValue,
+      is_shared: false
+    }];
+    expect(context.port.request).toHaveBeenCalledWith("passbolt.tags.update-resource-tags", onApiUpdateResourceId, onApiUpdateResourceTagsDto);
     // notification toaster called
     expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalledWith("The tags have been updated successfully");
   });

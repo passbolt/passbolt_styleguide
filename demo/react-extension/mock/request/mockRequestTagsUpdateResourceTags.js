@@ -15,19 +15,19 @@
 import moment from 'moment/moment';
 import {v4 as uuidv4} from "uuid";
 
-export default (eventObject, storage) => {
+export default (resourceId, tagsDto, storage) => {
   return new Promise(async (resolve) => {
     const {resources} = await storage.local.get(["resources"]);
-    const resourceIndex = resources.findIndex(item => item.id === eventObject.id);
+    const resourceIndex = resources.findIndex(item => item.id === resourceId);
     const resource = resources[resourceIndex];
-    eventObject.tags.forEach(function (tag) {
+    tagsDto.forEach(function (tag) {
       if(!tag.id) {
         tag.id = uuidv4();
       }
     });
     resource.modified = moment().format("YYYY-MM-DD[T]HH:mm:ss[+]00:00");
     resource.modified_by = "f848277c-5398-58f8-a82a-72397af2d450";
-    resource.tags = eventObject.tags;
+    resource.tags = tagsDto;
     resources[resourceIndex] = resource;
     await storage.local.set({resources});
     resolve(resource);

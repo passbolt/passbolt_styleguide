@@ -393,11 +393,11 @@ describe("PasswordSidebarDescription", () => {
     const editorDescriptionInputDisable = container.querySelector(".form-content");
     expect(editorDescriptionInputDisable).toBeNull();
 
-    const onApiUpdateResourceDescriptionMeta = {
-      id: props.resourceWorkspaceContext.details.resource.id,
+    const onApiUpdateResourceId = props.resourceWorkspaceContext.details.resource.id;
+    const onApiUpdateResourceDto = {
       description: descriptionValue
     };
-    expect(context.port.request).toHaveBeenCalledWith("passbolt.resource.update-description", onApiUpdateResourceDescriptionMeta);
+    expect(context.port.request).toHaveBeenCalledWith("passbolt.resources.update", onApiUpdateResourceId, onApiUpdateResourceDto);
     expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalled();
   });
 
