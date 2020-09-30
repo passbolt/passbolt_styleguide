@@ -283,6 +283,7 @@ class ResourceWorkspaceContextProvider extends React.Component {
   async handleAllResourcesSelected() {
     await this.selectAll();
     await this.detailNothing();
+    this.redirectAfterSelection();
   }
 
   /**
@@ -291,6 +292,7 @@ class ResourceWorkspaceContextProvider extends React.Component {
   async handleNoneResourcesSelected() {
     await this.unselectAll();
     await this.detailNothing();
+    this.redirectAfterSelection();
   }
 
   /**
@@ -300,6 +302,7 @@ class ResourceWorkspaceContextProvider extends React.Component {
   async handleMultipleResourcesSelected(resource) {
     await this.selectMultiple(resource);
     await this.detailsResourceIfSingleSelection();
+    this.redirectAfterSelection();
   }
 
   /**
@@ -308,6 +311,7 @@ class ResourceWorkspaceContextProvider extends React.Component {
    */
   async handleResourceRangeSelected(resource) {
     await this.selectRange(resource);
+    this.redirectAfterSelection();
   }
 
   /**
@@ -315,7 +319,8 @@ class ResourceWorkspaceContextProvider extends React.Component {
    * @param resource The selected resource
    */
   async handleResourceSelected(resource) {
-    this.select(resource);
+    await this.select(resource);
+    this.redirectAfterSelection();
   }
 
   /**
@@ -450,7 +455,6 @@ class ResourceWorkspaceContextProvider extends React.Component {
   async select(resource) {
     const mustUnselect = this.state.selectedResources.length === 1 && this.state.selectedResources[0].id === resource.id;
     await this.setState({selectedResources: mustUnselect ? [] : [resource]});
-    this.redirectAfterSelection();
   }
 
   /**
@@ -475,7 +479,6 @@ class ResourceWorkspaceContextProvider extends React.Component {
     const selectedResources = mustUnselect ? selectionWithoutResource : [...this.state.selectedResources, resource];
 
     await this.setState({selectedResources});
-    this.redirectAfterSelection();
   }
 
   /**
@@ -487,7 +490,7 @@ class ResourceWorkspaceContextProvider extends React.Component {
     const hasNoSelection = this.state.selectedResources.length === 0;
 
     if (hasNoSelection) {
-      this.select(resource);
+      await this.select(resource);
     } else {
       const hasSameId = resource => selectedResource => selectedResource.id === resource.id;
       const findIndex = resource => this.state.filteredResources.findIndex(hasSameId(resource));
@@ -500,9 +503,7 @@ class ResourceWorkspaceContextProvider extends React.Component {
       } else { // Up range selection
         selectedResources = this.state.filteredResources.slice(startRangeIndex, endRangeIndex + 1);
       }
-
       await this.setState({selectedResources});
-      this.redirectAfterSelection();
     }
   }
 
@@ -511,7 +512,6 @@ class ResourceWorkspaceContextProvider extends React.Component {
    */
   async selectAll() {
     await this.setState({selectedResources: [...this.state.filteredResources]});
-    this.redirectAfterSelection();
   }
 
   /**
@@ -519,7 +519,6 @@ class ResourceWorkspaceContextProvider extends React.Component {
    */
   async unselectAll() {
     await this.setState({selectedResources: []});
-    this.redirectAfterSelection();
   }
 
   /**
@@ -530,8 +529,13 @@ class ResourceWorkspaceContextProvider extends React.Component {
     if (hasSingleSelectionNow) { // Case of single selected resource
       this.props.history.push(`/app/passwords/view/${this.state.selectedResources[0].id}`);
     } else { // Case of multiple selected resources
-      const filter = this.state.filter;
-      this.props.history.push({pathname: `/app/passwords`, state: {filter}});
+      const {filter} = this.state;
+      const isFolderFilter = filter.type === ResourceWorkspaceFilterTypes.FOLDER;
+      if (isFolderFilter) {
+        this.props.history.push({pathname: `/app/folders/view/${this.state.filter.payload.folder.id}`});
+      } else {
+        this.props.history.push({pathname: `/app/passwords`, state: {filter}});
+      }
     }
   }
 
