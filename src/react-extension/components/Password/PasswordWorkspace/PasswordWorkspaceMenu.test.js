@@ -20,7 +20,7 @@
 
 import PasswordWorkspaceMenuPage from "./PasswordWorkspaceMenu.test.page";
 import {
-  defaultAppContext, defaultPropsMultipleResource,
+  defaultAppContext, defaultPropsMultipleResource, defaultPropsMultipleResourceUpdateRights,
   defaultPropsNoResource, defaultPropsOneResourceNotOwned,
   defaultPropsOneResourceOwned
 } from "./PasswordWorkspaceMenu.test.data";
@@ -194,13 +194,14 @@ describe("See Workspace Menu", () => {
   });
 
   describe('As LU I can see the workspace menu with multiple resource selected', () => {
-    const propsMultipleResource = defaultPropsMultipleResource(); // The props to pass
+    const propsMultipleResource = defaultPropsMultipleResourceUpdateRights(); // The props to pass
 
     /**
      * Given multiple selected resource
      * Then I should see the edit menu disable
      * Then I should see the permalink menu disable
      * Then I should see the copy menu disable
+     * Then I should see the delete menu
      */
 
     beforeEach(() => {
@@ -228,6 +229,34 @@ describe("See Workspace Menu", () => {
       expect(page.displayMenu.moreMenu).not.toBeNull();
       page.displayMenu.clickOnMoreMenu();
       expect(page.displayMenu.dropdownMenuSecretDisabled).not.toBeNull();
+    });
+
+    it('As LU I can start deleting multiple resources via the workspace main menu', () => {
+      expect(page.displayMenu.exists()).toBeTruthy();
+      expect(page.displayMenu.moreMenu).not.toBeNull();
+      page.displayMenu.clickOnMoreMenu();
+      expect(page.displayMenu.dropdownMenuDelete).not.toBeNull();
+      expect(page.displayMenu.dropdownMenuDeleteDisabled).toBeNull();
+    });
+  });
+
+  describe('As LU I can see the workspace menu with multiple resource selected I don’t have update permissions on all the selected resources', () => {
+    const propsMultipleResource = defaultPropsMultipleResource(); // The props to pass
+
+    /**
+     * Given multiple selected resource
+     * Then I should see the delete menu disable
+     */
+
+    beforeEach(() => {
+      page = new PasswordWorkspaceMenuPage(context, propsMultipleResource);
+    });
+
+    it('As LU I cannot delete multiple resources from the workspace main menu if I don’t have update permissions on all the selected resources', () => {
+      expect(page.displayMenu.exists()).toBeTruthy();
+      expect(page.displayMenu.moreMenu).not.toBeNull();
+      page.displayMenu.clickOnMoreMenu();
+      expect(page.displayMenu.dropdownMenuDeleteDisabled).not.toBeNull();
     });
   });
 });
