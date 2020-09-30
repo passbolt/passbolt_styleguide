@@ -19,6 +19,7 @@ import ContextualMenuWrapper from "../../Common/ContextualMenu/ContextualMenuWra
 import PasswordEditDialog from "../PasswordEditDialog/PasswordEditDialog";
 import ShareDialog from "../../Share/ShareDialog";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
+import PasswordDeleteDialog from "../PasswordDeleteDialog/PasswordDeleteDialog";
 
 class DisplayGridContextualMenu extends React.Component {
   /**
@@ -39,6 +40,7 @@ class DisplayGridContextualMenu extends React.Component {
     this.handleUsernameClickEvent = this.handleUsernameClickEvent.bind(this);
     this.handlePermalinkClickEvent = this.handlePermalinkClickEvent.bind(this);
     this.handlePasswordClickEvent = this.handlePasswordClickEvent.bind(this);
+    this.handleDeleteClickEvent = this.handleDeleteClickEvent.bind(this);
   }
 
   /**
@@ -84,7 +86,7 @@ class DisplayGridContextualMenu extends React.Component {
   }
 
   /**
-   * handle username resource
+   * handle password resource
    */
   async handlePasswordClickEvent() {
     this.props.hide();
@@ -98,6 +100,16 @@ class DisplayGridContextualMenu extends React.Component {
         this.props.actionFeedbackContext.displayError(error.message);
       }
     }
+  }
+
+  /**
+   * handle delete resource
+   */
+  handleDeleteClickEvent() {
+    const resources = [this.resource]
+    this.context.setContext({passwordDeleteDialogProps: {resources}});
+    this.props.dialogContext.open(PasswordDeleteDialog);
+    this.props.hide();
   }
 
   /**
@@ -175,6 +187,16 @@ class DisplayGridContextualMenu extends React.Component {
               <div className="main-cell">
                 <a id="share" className={`${this.canShare() ? "" : "disabled"}`}
                   onClick={this.handleShareClickEvent}><span>Share</span></a>
+              </div>
+            </div>
+          </div>
+        </li>
+        <li key="option-delete-resource" className="ready">
+          <div className="row">
+            <div className="main-cell-wrapper">
+              <div className="main-cell">
+                <a id="delete" className={`${this.canUpdate() ? "" : "disabled"}`}
+                   onClick={this.handleDeleteClickEvent}><span>Delete</span></a>
               </div>
             </div>
           </div>
