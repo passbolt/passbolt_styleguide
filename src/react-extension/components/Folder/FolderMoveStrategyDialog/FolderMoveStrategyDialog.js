@@ -85,13 +85,15 @@ class FolderMoveStrategyDialog extends Component {
     const error = {
       message: 'The folder could not be found. Maybe it was deleted or you lost access.'
     };
+
     if (!folders) {
       console.error(`No folders context defined.`);
       this.handleError(error);
     }
-    const folder = context.folders.find(item => item.id === props.folderId) || false;
+
+    const folder = context.folders.find(item => item.id === this.context.folderMoveStrategyProps.folders[0]) || false;
     if (!folder) {
-      console.error(`Folder ${props.folderId} not found in context.`);
+      console.error(`Folder ${this.context.folderMoveStrategyProps.folders[0]} not found in context.`);
       this.handleError(error);
     } else {
       defaultState.name = folder.name;
@@ -229,10 +231,10 @@ class FolderMoveStrategyDialog extends Component {
    * @returns {boolean}
    */
   isAboutItems() {
-    return this.context.folderMoveStrategyProps.resourcesIds
-      && this.context.folderMoveStrategyProps.foldersIds
-      && this.context.folderMoveStrategyProps.resourcesIds.length
-      && this.context.folderMoveStrategyProps.foldersIds.length;
+    return this.context.folderMoveStrategyProps.resources
+      && this.context.folderMoveStrategyProps.folders
+      && this.context.folderMoveStrategyProps.resources.length
+      && this.context.folderMoveStrategyProps.folders.length;
   }
 
   /**
@@ -240,7 +242,7 @@ class FolderMoveStrategyDialog extends Component {
    * @returns {boolean}
    */
   isAboutResources() {
-    return this.context.folderMoveStrategyProps.resourcesIds && this.context.folderMoveStrategyProps.resourcesIds.length > 1;
+    return this.context.folderMoveStrategyProps.resources && this.context.folderMoveStrategyProps.resources.length > 1;
   }
 
   /**
@@ -248,7 +250,7 @@ class FolderMoveStrategyDialog extends Component {
    * @returns {boolean}
    */
   isAboutFolders() {
-    return this.context.folderMoveStrategyProps.foldersIds && this.context.folderMoveStrategyProps.foldersIds.length > 1;
+    return this.context.folderMoveStrategyProps.folders && this.context.folderMoveStrategyProps.folders.length > 1;
   }
 
   /**
@@ -256,7 +258,7 @@ class FolderMoveStrategyDialog extends Component {
    * @returns {boolean}
    */
   isAboutAFolder() {
-    return this.context.folderMoveStrategyProps.foldersIds && this.context.folderMoveStrategyProps.foldersIds.length === 1;
+    return this.context.folderMoveStrategyProps.folders && this.context.folderMoveStrategyProps.folders.length === 1;
   }
 
   /**
@@ -264,7 +266,7 @@ class FolderMoveStrategyDialog extends Component {
    * @returns {boolean}
    */
   isAboutAResource() {
-    return this.context.folderMoveStrategyProps.resourcesIds && this.context.folderMoveStrategyProps.resourcesIds.length === 1;
+    return this.context.folderMoveStrategyProps.resources && this.context.folderMoveStrategyProps.resources.length === 1;
   }
 
   render() {

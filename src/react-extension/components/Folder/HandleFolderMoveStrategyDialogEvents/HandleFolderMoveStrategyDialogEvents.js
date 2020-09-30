@@ -16,11 +16,27 @@ import React from 'react';
 import AppContext from "../../../contexts/AppContext";
 import {withDialog} from "../../../contexts/Common/DialogContext";
 import FolderMoveStrategyDialog from "../FolderMoveStrategyDialog/FolderMoveStrategyDialog";
+import PropTypes from "prop-types";
 
 /**
  * This component listens any event related to folder move strategy dialog actions to perform
  */
 class HandleFolderMoveStrategyDialogEvents extends React.Component {
+  /**
+   * Default constructor
+   */
+  constructor(props) {
+    super(props);
+    this.bindCallbacks();
+  }
+
+  /**
+   * Bind callbacks methods
+   */
+  bindCallbacks() {
+    this.handleFolderMoveStrategyRequestEvent = this.handleFolderMoveStrategyRequestEvent.bind(this);
+  }
+
   /**
    * Whenever the component is mounted
    */
@@ -39,10 +55,10 @@ class HandleFolderMoveStrategyDialogEvents extends React.Component {
    * Handle the dialog request event
    * @param requestId
    */
-  handleFolderMoveStrategyRequestEvent(requestId, folderId, foldersIds, resourcesIds) {
-    const folderMoveStrategyProps = {requestId, folderId, foldersIds, resourcesIds};
+  handleFolderMoveStrategyRequestEvent(requestId, folderParentId, folders, resources) {
+    const folderMoveStrategyProps = {requestId, folderParentId, folders, resources};
     this.context.setContext({folderMoveStrategyProps});
-    this.dialogContext.open(FolderMoveStrategyDialog);
+    this.props.dialogContext.open(FolderMoveStrategyDialog);
   }
 
   /**
@@ -55,5 +71,9 @@ class HandleFolderMoveStrategyDialogEvents extends React.Component {
 }
 
 HandleFolderMoveStrategyDialogEvents.contextType = AppContext;
+
+HandleFolderMoveStrategyDialogEvents.propTypes = {
+  dialogContext: PropTypes.any, // the dialog context
+};
 
 export default withDialog(HandleFolderMoveStrategyDialogEvents);

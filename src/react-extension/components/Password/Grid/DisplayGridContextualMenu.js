@@ -106,7 +106,7 @@ class DisplayGridContextualMenu extends React.Component {
    * handle delete resource
    */
   handleDeleteClickEvent() {
-    const resources = [this.resource]
+    const resources = [this.resource];
     this.context.setContext({passwordDeleteDialogProps: {resources}});
     this.props.dialogContext.open(PasswordDeleteDialog);
     this.props.hide();
@@ -195,8 +195,9 @@ class DisplayGridContextualMenu extends React.Component {
           <div className="row">
             <div className="main-cell-wrapper">
               <div className="main-cell">
-                <a id="delete" className={`${this.canUpdate() ? "" : "disabled"}`}
-                   onClick={this.handleDeleteClickEvent}><span>Delete</span></a>
+                <a
+                  id="delete" className={`${this.canUpdate() ? "" : "disabled"}`}
+                  onClick={this.handleDeleteClickEvent}><span>Delete</span></a>
               </div>
             </div>
           </div>

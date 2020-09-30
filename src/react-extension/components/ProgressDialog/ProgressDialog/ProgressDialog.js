@@ -20,7 +20,8 @@ class ProgressDialog extends Component {
       return 100; // displays a spinning 100% progress bar by default.
     }
 
-    let progress = Math.round((100 * this.context.progressDialogProps.completed) / this.context.progressDialogProps.goals);
+    const completed = this.context.progressDialogProps.completed || 0;
+    let progress = Math.round((100 * completed) / this.context.progressDialogProps.goals);
     if (progress > 100) {
       progress = 100;
     }

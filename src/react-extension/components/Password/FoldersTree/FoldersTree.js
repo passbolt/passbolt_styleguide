@@ -18,7 +18,6 @@ import {ResourceWorkspaceFilterTypes, withResourceWorkspace} from "../../../cont
 import {withRouter} from "react-router-dom";
 import AppContext from "../../../contexts/AppContext";
 import FoldersTreeRootFolderContextualMenu from "./FoldersTreeRootFolderContextualMenu";
-import FolderMoveStrategyDialog from "../../Folder/FolderMoveStrategyDialog/FolderMoveStrategyDialog";
 import {withContextualMenu} from "../../../contexts/Common/ContextualMenuContext";
 import PropTypes from "prop-types";
 import {withDialog} from "../../../contexts/Common/DialogContext";
@@ -187,11 +186,10 @@ class FoldersTree extends React.Component {
    * Handle when the user is dropping the content on the title.
    */
   handleDropTitle() {
-    const foldersIds = this.state.draggedItems.folders.map(folder => folder.id);
-    const resourcesIds = this.state.draggedItems.resources.map(resource => resource.id);
+    const folders = this.state.draggedItems.folders.map(folder => folder.id);
+    const resources = this.state.draggedItems.resources.map(resource => resource.id);
     const folderParentId = null;
-    this.context.setContext({folderMoveStrategyProps: {foldersIds, resourcesIds, folderParentId}});
-    this.props.dialogContext.open(FolderMoveStrategyDialog);
+    this.context.port.request("passbolt.folders.open-move-confirmation-dialog", {folders, resources, folderParentId});
 
     // The dragLeave event is not fired when a drop is happening. Cancel the state manually.
     const draggingOverTitle = false;
@@ -230,12 +228,11 @@ class FoldersTree extends React.Component {
    * @param {ReactEvent} event The event
    * @param {Object} folder The drop folder
    */
-  handleFolderDropEvent() {
-    const foldersIds = this.state.draggedItems.folders.map(folder => folder.id);
-    const resourcesIds = this.state.draggedItems.resources.map(resource => resource.id);
-    const folderParentId = null;
-    this.context.setContext({folderMoveStrategyProps: {foldersIds, resourcesIds, folderParentId}});
-    this.props.dialogContext.open(FolderMoveStrategyDialog);
+  handleFolderDropEvent(event, dropFolder) {
+    const folders = this.state.draggedItems.folders.map(folder => folder.id);
+    const resources = this.state.draggedItems.resources.map(resource => resource.id);
+    const folderParentId = dropFolder.id;
+    this.context.port.request("passbolt.folders.open-move-confirmation-dialog", {folders, resources, folderParentId});
   }
 
   /**

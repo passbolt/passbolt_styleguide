@@ -27,17 +27,7 @@ class HandlePassphraseEntryDialogEvents extends React.Component {
    */
   constructor(props) {
     super(props);
-    this.state = this.defaultState;
     this.bindCallbacks();
-  }
-
-  /**
-   * Returns the default component state
-   */
-  get defaultState() {
-    return {
-      dialogIndex: null // The index of the opened dialog
-    };
   }
 
   /**
