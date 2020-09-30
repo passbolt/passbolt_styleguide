@@ -1,5 +1,4 @@
 import getPropValue from "../../../react/lib/Common/Object/getPropValue";
-import plugin from "../../../react-appjs/legacy/util/plugin";
 
 export default class SiteSettings {
   constructor(settings) {
