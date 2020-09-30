@@ -20,7 +20,7 @@
 
 import ShareActionFeedbacksTestPage from "./ShareActionFeedbacks.test.page";
 import {
-  propsForDisplayTime, propsWithMultipleFeedbacks,
+  propsForDisplayTime,
   propsWithOneErrorMessage,
   propsWithOneSuccessMessage
 } from "./ShareActionFeedbacks.test.data";
@@ -86,27 +86,6 @@ describe("Share Action Feedbacks", () => {
         jest.runAllTimers();
       });
     });
-
-    describe("As a LU I should see queued feedback messages", () => {
-      /**
-       * Given a feedback message “The comment has been added successfully”
-       * When a following message “An error occurred during the operation” is added
-       * Then I should see the feedback message “The comment has been added successfully”
-       * And I should see the feedback message “An error occurred during the operation”
-       */
-
-      beforeEach(() => {
-        page = new ShareActionFeedbacksTestPage(propsWithMultipleFeedbacks);
-      });
-
-      it('I should see the feedback message “The comment has been added successfully”', () => {
-        expect(page.message(1)).toBe('Success: The comment has been added successfully');
-      });
-
-      it('I should see the feedback message “An error occurred during the operation”', () => {
-        expect(page.message(2)).toBe('Error: An error occurred during the operation');
-      });
-    });
   });
   describe('As a LU I should persist the feedback message display', () => {
     describe(' As a LU I should close the persisted feedback message', () => {
@@ -124,7 +103,7 @@ describe("Share Action Feedbacks", () => {
 
         await page.persist(1);
 
-        const oneSecondAfterExpectedRemoval = 6000;
+        const oneSecondAfterExpectedRemoval = 1000;
         setTimeout(() => {
           expect(propsForDisplayTime.actionFeedbackContext.remove).not.toHaveBeenCalled();
           expect(page.message(1)).toBe('Success: The comment has been added successfully');
@@ -150,10 +129,11 @@ describe("Share Action Feedbacks", () => {
         await page.persist(1);
         await page.close(1);
 
+        const twoSecondsAfterExpectedRemoval = 2000;
         setTimeout(() => {
           const firstFeedback = propsWithOneSuccessMessage.actionFeedbackContext.feedbacks[0];
           expect(propsForDisplayTime.actionFeedbackContext.remove).toHaveBeenCalledWith(firstFeedback);
-        });
+        }, twoSecondsAfterExpectedRemoval);
         jest.runAllTimers();
       });
     });
