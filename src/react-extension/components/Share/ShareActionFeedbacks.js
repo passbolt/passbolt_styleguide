@@ -15,10 +15,10 @@
 import React from "react";
 import {withActionFeedback} from "../../contexts/ActionFeedbackContext";
 import PropTypes from "prop-types";
-import Icon from "../../../react/components/Common/Icons/Icon";
 
 /**
- * This component displays the list of actions feedbacks using the action feedback context
+ * This component displays the list of actions feedbacks using the action feedback context.
+ * It displays one at a time (the oldest one) and displays the next one when the user / system closes the current one
  */
 class ShareActionFeedbacks extends React.Component {
   /**
@@ -38,23 +38,34 @@ class ShareActionFeedbacks extends React.Component {
   }
 
   /**
+   * Returns the feedback to displau
+   */
+  get feedbackToDisplay() {
+    return this.props.actionFeedbackContext.feedbacks[0];
+  }
+
+  /**
+   * Returns true there's at least one feedback to display
+   */
+  get hasFeedbacks() {
+    return this.props.actionFeedbackContext.feedbacks.length > 0;
+  }
+
+  /**
    * Closes a feedback message
    */
-  close(feedback) {
-    this.props.actionFeedbackContext.remove(feedback);
+  async close(feedback) {
+    await this.props.actionFeedbackContext.remove(feedback);
   }
 
   render() {
     return (
       <>
         <div className="notification-container">
-          {
-            this.props.actionFeedbackContext.feedbacks.map(feedback =>
-              <ShareActionFeedback
-                key={feedback.message}
-                feedback={feedback}
-                onClose={ () => this.close(feedback) }/>
-            )
+          {this.hasFeedbacks &&
+            <ShareActionFeedback
+              feedback={this.feedbackToDisplay}
+              onClose={ () => this.close(this.feedbackToDisplay) }/>
           }
         </div>
       </>
@@ -104,29 +115,69 @@ class ShareActionFeedback extends React.Component {
    * Whenever the component has been mounted
    */
   componentDidMount() {
-    const timeoutId = setTimeout(() => {
-      this.setState({shouldRender: false});
-      setTimeout(this.props.onClose);
-    }, ShareActionFeedback.DEFAULT_DISPLAY_TIME_IN_MS);
-    this.setState({timeoutId});
+    this.displayWithTimer();
   }
+
+  /**
+   * Whenever the component has been updated
+   * @param previousProps
+   */
+  componentDidUpdate(previousProps) {
+    const hasFeedbackChanged = previousProps && previousProps.feedback.id !== this.props.feedback.id;
+    if (hasFeedbackChanged) {
+      this.setState({shouldRender: true});
+      this.displayWithTimer();
+    }
+  }
+
+  /**
+   * Whenever the component will unmount
+   */
+  componentWillUnmount() {
+    if (this.state.timeoutId) {
+      clearTimeout(this.state.timeoutId);
+    }
+  }
+
 
   /**
    * Bind the component method callback
    */
   bindCallbacks() {
     this.persist = this.persist.bind(this);
+    this.displayWithTimer = this.displayWithTimer.bind(this);
+    this.close = this.close.bind(this);
+  }
+
+  /**
+   * Display the feedback for a while ( 5 seconds ) and then disappear
+   */
+  displayWithTimer() {
+    if (this.state.timeoutId) {
+      clearTimeout(this.state.timeoutId);
+    }
+    const timeoutId = setTimeout(this.close, ShareActionFeedback.DEFAULT_DISPLAY_TIME_IN_MS);
+    this.setState({timeoutId});
   }
 
   /**
    * Persist the display of the feedback
    */
   persist() {
-    const hasNotPersistedYet = this.state.timeoutId && !this.isPersisted;
+    const hasNotPersistedYet = this.state.timeoutId && !this.state.isPersisted;
     if (hasNotPersistedYet) {
       clearTimeout(this.state.timeoutId);
       this.setState({isPersisted: true});
     }
+  }
+
+  /**
+   * Close the feedback
+   */
+  close() {
+    this.setState({shouldRender: false});
+    // To keep the hide animation
+    setTimeout(this.props.onClose, 1000);
   }
 
   /**
@@ -138,9 +189,11 @@ class ShareActionFeedback extends React.Component {
       <>
         <div
           className="notification"
-          onMouseOver={this.persist}>
-          <div className={ `message animated ${this.state.shouldRender ? 'fadeInUp' : 'fadeOutUp'} ${this.props.feedback.type}`}>
-            <span className="content">
+          onMouseOver={this.persist}
+          onMouseLeave={this.displayWithTimer}
+          onClick={this.close}>
+          <div className={ `message animated ${this.state.shouldRender ? 'fadeInUp' : 'fadeOutUp'} warning`}>
+            <span  className="content">
               <strong>
                 {
                   {
@@ -151,25 +204,6 @@ class ShareActionFeedback extends React.Component {
               </strong>
               {this.props.feedback.message}
             </span>
-
-            {
-              this.state.isPersisted &&
-                                <a
-                                  className="action copy">
-                                  <Icon name="copy-to-clipboard"/>
-                                  <span className="visually-hidden">Close</span>
-                                </a>
-            }
-
-            {
-              this.state.isPersisted &&
-                                    <a
-                                      onClick={this.props.onClose}
-                                      className="action close">
-                                      <Icon name="close"/>
-                                      <span className="visually-hidden">Close</span>
-                                    </a>
-            }
           </div>
 
         </div>

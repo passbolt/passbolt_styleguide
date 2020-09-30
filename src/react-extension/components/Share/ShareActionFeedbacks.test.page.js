@@ -60,7 +60,7 @@ export default class ShareActionFeedbacksTestPage {
    * @param index The rank of the feedback
    */
   async close(index) {
-    const closeAction = this.feedback(index).querySelector('.action.close');
+    const closeAction = this.feedback(index).querySelector('.message');
     const leftClick = {button: 0};
     fireEvent.click(closeAction, leftClick);
     await waitFor(() => {});

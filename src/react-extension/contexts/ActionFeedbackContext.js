@@ -14,6 +14,7 @@
 
 import * as React from "react";
 import PropTypes from "prop-types";
+import {v4 as uuidv4} from "uuid";
 
 /**
  * Context used to provide action feedbacks to display
@@ -44,16 +45,54 @@ export default class ActionFeedbackContextProvider extends React.Component {
   get defaultState() {
     return {
       feedbacks: [],
-      displaySuccess: async feedbackToAdd => {
-        await this.setState({feedbacks: [{type: 'success', message: feedbackToAdd}, ...this.state.feedbacks]});
-      },
-      displayError: async feedbackToAdd => {
-        await this.setState({feedbacks: [{type: 'error', message: feedbackToAdd}, ...this.state.feedbacks]});
-      },
-      remove: async feedbackToRemove => {
-        await this.setState({feedbacks: this.state.feedbacks.filter(feedback => feedbackToRemove !== feedback)});
-      }
+      displaySuccess: this.displaySuccess.bind(this),
+      displayError: this.displayError.bind(this),
+      remove: this.remove.bind(this)
     };
+  }
+
+
+  /**
+   * Display the feedback in a success mode
+   * @param feedbackToAdd A feedback
+   */
+  async displaySuccess(feedbackToAdd) {
+    await this.setState({
+      feedbacks: [
+        ...this.state.feedbacks,
+        {
+          id: uuidv4(),
+          type: 'success',
+          message: feedbackToAdd
+        },
+      ]
+    });
+  }
+
+  /**
+   * Display the feedback in a error mode
+   * @param feedbackToAdd A feedback
+   */
+  async displayError(feedbackToAdd) {
+    await this.setState({
+      feedbacks: [
+        ...this.state.feedbacks,
+        {
+          id: uuidv4(),
+          type: 'error',
+          message: feedbackToAdd
+        },
+      ]
+    });
+  }
+
+  /**
+   * Remove the feedback
+   * @param feedbackToRemove A feedback
+   */
+  async remove(feedbackToRemove) {
+    const hasSameId = feedback => feedbackToRemove.id !== feedback.id;
+    await this.setState({feedbacks: this.state.feedbacks.filter(hasSameId)});
   }
 
   /**
