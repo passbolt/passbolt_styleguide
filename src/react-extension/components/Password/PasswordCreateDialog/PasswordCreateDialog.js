@@ -116,6 +116,7 @@ class PasswordCreateDialog extends Component {
       this.selectAndScrollToResource(resource.id);
     }
     this.props.onClose();
+    this.context.setContext({passwordEditDialogProps: null});
   }
 
   /**
@@ -157,7 +158,7 @@ class PasswordCreateDialog extends Component {
       name: this.state.name,
       username: this.state.username,
       uri: this.state.uri,
-      folder_parent_id: this.props.folderParentId
+      folder_parent_id: this.context.resourceCreateDialogProps.folderParentId
     };
 
     if (!this.isResourceTypesEnabled()) {
@@ -186,12 +187,12 @@ class PasswordCreateDialog extends Component {
     if (!this.isResourceTypesEnabled()) {
       return undefined;
     }
-    const type = this.props.resourceTypes.find(type => type.slug === slug);
+    const type = this.resourceTypes.find(type => type.slug === slug);
     return type.id;
   }
 
   isResourceTypesEnabled() {
-    return !(!this.props.resourceTypes || !this.props.resourceTypes.length);
+    return !(!this.resourceTypes || !this.resourceTypes.length);
   }
 
   /**
@@ -350,6 +351,7 @@ class PasswordCreateDialog extends Component {
    */
   handleCloseClick() {
     this.props.onClose();
+    this.context.setContext({resourceCreateDialogProps: null});
   }
 
   /**
@@ -362,6 +364,7 @@ class PasswordCreateDialog extends Component {
       // Stop the event propagation in order to avoid a parent component to react to this ESC event.
       event.stopPropagation();
       this.props.onClose();
+      this.context.setContext({resourceCreateDialogProps: null});
     }
   }
 
@@ -412,6 +415,13 @@ class PasswordCreateDialog extends Component {
    */
   handleDescriptionToggle() {
     this.setState({encryptDescription: !this.state.encryptDescription});
+  }
+
+  /**
+   * get the resource types
+   */
+  get resourceTypes() {
+    return this.context.resourceTypes;
   }
 
   render() {
@@ -541,9 +551,6 @@ class PasswordCreateDialog extends Component {
 PasswordCreateDialog.contextType = AppContext;
 
 PasswordCreateDialog.propTypes = {
-  folderParentId: PropTypes.string,
-  resourceTypes: PropTypes.array,
-  className: PropTypes.string,
   onClose: PropTypes.func,
   actionFeedbackContext: PropTypes.any, // The action feedback context
   dialogContext: PropTypes.any // The dialog context

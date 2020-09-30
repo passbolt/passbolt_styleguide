@@ -27,6 +27,7 @@ import FilterResourcesByShortcuts from "../FilterResourcesByShortcuts/FilterReso
 import PasswordBreadcrumb from "../PasswordBreadcrumb/PasswordBreadcrumb";
 import PasswordWorkspaceMenu from "./PasswordWorkspaceMenu";
 import Logo from "../../../../react/components/Common/Navigation/Header/Logo";
+import PasswordWorkspaceMainMenu from "./PasswordWorkspaceMainMenu";
 
 class Workspace extends Component {
   /**
@@ -198,6 +199,7 @@ class Workspace extends Component {
         </div>
         <div className="header third">
           <div className="col1 main-action-wrapper">
+            <PasswordWorkspaceMainMenu/>
           </div>
           <div className="col2_3 actions-wrapper">
             <PasswordWorkspaceMenu/>

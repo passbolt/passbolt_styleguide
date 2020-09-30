@@ -78,7 +78,6 @@ class ReactExtension extends Component {
       passphraseRequestId: '',
 
       // Resource create / edit / delete dialogs
-      showResourceCreateDialog: false,
       resourceCreateDialogProps: {
         folderParentId: null
       },
