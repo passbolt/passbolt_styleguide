@@ -61,13 +61,29 @@ export function defaultPropsNoResource() {
 }
 
 /**
- * Default props one selected resource owned
+ * Default props multiple selected resource
  * @returns {{resourceWorkspaceContext}}
  */
 export function defaultPropsMultipleResource() {
   return {
     resourceWorkspaceContext: {
       selectedResources: resourcesMock,
+      details: {
+        resource: null
+      }
+    }
+  };
+}
+
+/**
+ * Default props multiple selected resource can update
+ * @returns {{resourceWorkspaceContext}}
+ */
+export function defaultPropsMultipleResourceUpdateRights() {
+  const selectedResources = [resourcesMock[0], resourcesMock[2]];
+  return {
+    resourceWorkspaceContext: {
+      selectedResources,
       details: {
         resource: null
       }
@@ -139,5 +155,41 @@ export const resourcesMock = [
     "tags": [],
     "folder_parent_id": null,
     "personal": false
-  },
+  },{
+    "id": "daaf057e-7fc3-5537-a8a9-e8c151890878",
+    "name": "cakephp",
+    "username": "cake",
+    "uri": "cakephp.org",
+    "description": "The rapid and tasty php development framework",
+    "deleted": false,
+    "created": "2020-08-27T06:35:19+00:00",
+    "modified": "2020-08-27T07:35:19+00:00",
+    "created_by": "f848277c-5398-58f8-a82a-72397af2d450",
+    "modified_by": "f848277c-5398-58f8-a82a-72397af2d450",
+    "favorite": null,
+    "permission": {
+      "id": "972bf3fc-0d5b-579c-9097-56d86394c255",
+      "aco": "Resource",
+      "aco_foreign_key": "daaf057e-7fc3-5537-a8a9-e8c151890878",
+      "aro": "User",
+      "aro_foreign_key": "f848277c-5398-58f8-a82a-72397af2d450",
+      "type": 7,
+      "created": "2020-08-27T08:35:19+00:00",
+      "modified": "2020-08-27T08:35:19+00:00"
+    },
+    "tags": [
+      {
+        "id": "094e27f0-637c-5397-b16c-f3eee5f7dd6c",
+        "slug": "hotel",
+        "is_shared": false
+      },
+      {
+        "id": "0507cbbb-eb14-5121-9105-05380dbe64ff",
+        "slug": "\u092a\u0930\u0926\u0947\u0936\u0940-\u092a\u0930\u0926\u0947\u0936\u0940",
+        "is_shared": false
+      }
+    ],
+    "folder_parent_id": null,
+    "personal": false
+  }
 ];
