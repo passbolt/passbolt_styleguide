@@ -156,15 +156,10 @@ class ResourceWorkspaceContextProvider extends React.Component {
    * Handle the resources changes
    */
   async handleResourcesChange() {
-    if (this.context.resources) {
-      // We check the equality of the context resources and its last known value through the resources identifiers
-      const localResourcesIdsAsSet = new Set(this.resources.map(resource => resource.id));
-      const areResourcesChanged = ! this.context.resources.every(resource => localResourcesIdsAsSet.has(resource.id));
-
-      if (areResourcesChanged) {
-        this.resources = this.context.resources;
-        await this.search(this.state.filter);
-      }
+    const hasResourcesChanged = this.context.resources !== this.resources;
+    if (hasResourcesChanged) {
+      this.resources = this.context.resources;
+      await this.search(this.state.filter);
     }
   }
 
