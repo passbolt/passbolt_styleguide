@@ -180,12 +180,13 @@ class DescriptionEditor extends React.Component {
    */
   updateDescription() {
     const resourceDto = {
+      id: this.props.resource.id,
       name: this.props.resource.name,
       username: this.props.resource.username,
       uri: this.props.resource.uri,
       description: this.state.description,
     };
-    return this.context.port.request("passbolt.resources.update", this.props.resource.id, resourceDto, null);
+    return this.context.port.request("passbolt.resources.update", resourceDto, null);
   }
 
   /**

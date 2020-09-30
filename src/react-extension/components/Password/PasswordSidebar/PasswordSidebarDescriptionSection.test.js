@@ -404,12 +404,13 @@ describe("PasswordSidebarDescription", () => {
 
     const onApiUpdateResourceId = props.resourceWorkspaceContext.details.resource.id;
     const onApiUpdateResourceDto = {
+      id: onApiUpdateResourceId,
       name: resource.name,
       username: resource.username,
       uri: resource.uri,
       description: descriptionValue,
     };
-    expect(context.port.request).toHaveBeenCalledWith("passbolt.resources.update", onApiUpdateResourceId, onApiUpdateResourceDto, null);
+    expect(context.port.request).toHaveBeenCalledWith("passbolt.resources.update", onApiUpdateResourceDto, null);
     expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalled();
   });
 
