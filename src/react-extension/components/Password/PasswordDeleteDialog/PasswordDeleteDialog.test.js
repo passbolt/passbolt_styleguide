@@ -22,6 +22,7 @@ import {ActionFeedbackContext} from "../../../contexts/ActionFeedbackContext";
 import PasswordDeleteDialogPage from "./PasswordDeleteDialogPage";
 import {fireEvent} from "@testing-library/react";
 import PassboltApiFetchError from "../../../../react/lib/Common/Error/PassboltApiFetchError";
+import {defaultPropsMultipleResource} from "../PasswordWorkspace/PasswordWorkspaceMenu.test.data";
 
 beforeEach(() => {
   jest.resetModules();
@@ -30,13 +31,15 @@ beforeEach(() => {
 describe("See Password Delete Dialog", () => {
   let page; // The page to test against
   const context = defaultAppContext(); // The applicative context
-  const propsOneResource = defaultPropsOneResource(); // The props to pass
 
-  describe('As LU I can see the workspace menu with one resource selected owned', () => {
+  describe('As LU I can delete one resource', () => {
+    const propsOneResource = defaultPropsOneResource(); // The props to pass
+
     /**
      * Given a selected resource
-     * When I open the more menu
-     * Then I should see the delete
+     * Then I should see the name of the resource I can delete
+     * Then I can delete it
+     * Then I should see a toaster message
      */
 
     beforeEach(() => {
@@ -97,6 +100,30 @@ describe("See Password Delete Dialog", () => {
       // Throw general error message
       expect(page.displayPasswordDeleteDialog.errorDialog).not.toBeNull();
       expect(page.displayPasswordDeleteDialog.errorDialogMessage).not.toBeNull();
+    });
+  });
+
+  describe('As LU I can delete multiple resources', () => {
+    const propsMultipleResource = defaultPropsMultipleResource(); // The props to pass
+
+    /**
+     * Given multiple selected resource
+     * Then I can delete it
+     * Then I should see a toaster message
+     */
+
+    beforeEach(() => {
+      page = new PasswordDeleteDialogPage(context, propsMultipleResource);
+    });
+
+    it('As LU I should see a toaster message after deleting multiple resource', async() => {
+      const submitButton = page.displayPasswordDeleteDialog.saveButton;
+      // Mock the request function to make it the expected result
+      jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementation(() => {
+      });
+
+      await page.displayPasswordDeleteDialog.click(submitButton);
+      expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalled();
     });
   });
 });
