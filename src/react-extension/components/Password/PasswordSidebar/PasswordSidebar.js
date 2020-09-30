@@ -56,6 +56,9 @@ class PasswordSidebar extends React.Component {
    * @returns {JSX}
    */
   render() {
+    const canUseTags = this.context.siteSettings.canIUse("tags");
+    const canUseAuditLog = this.context.siteSettings.canIUse("audit_log");
+
     return (
       <div className="panel aside ready">
         <div className="sidebar resource">
@@ -81,9 +84,13 @@ class PasswordSidebar extends React.Component {
           <PasswordSidebarInformationSection users={this.props.users}/>
           <PasswordSidebarDescriptionSection/>
           <PasswordSidebarPermissionsSection />
+          {canUseTags &&
           <PasswordSidebarTagSection/>
+          }
           <PasswordSidebarCommentSection/>
+          {canUseAuditLog &&
           <PasswordSidebarActivitySection/>
+          }
         </div>
       </div>
     );

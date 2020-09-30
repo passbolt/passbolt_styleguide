@@ -184,11 +184,11 @@ class PasswordSidebarInformationSection extends React.Component {
    * @returns {JSX}
    */
   render() {
+    const canUseFolders = this.context.siteSettings.canIUse("folders");
     const creatorUsername = this.getUserUsername(this.resource.created_by);
     const modifierUsername = this.getUserUsername(this.resource.modified_by);
     const createdDateTimeAgo = this.formatDateTimeAgo(this.resource.created);
     const modifiedDateTimeAgo = this.formatDateTimeAgo(this.resource.modified);
-    const folderParentName = this.getFolderName(this.resource.folder_parent_id);
     const safeUri = this.sanitizeResourceUri(this.resource.uri) || "";
 
     return (
@@ -229,14 +229,16 @@ class PasswordSidebarInformationSection extends React.Component {
             <span className="label">Created by</span>
             <span className="value">{creatorUsername}</span>
           </li>
+          {canUseFolders &&
           <li className="location">
             <span className="label">Location</span>
             <span className="value">
               <a onClick={this.handleFolderParentClickEvent} className={`folder-link ${!this.context.folders ? "disabled" : ""}`}>
-                <Icon name="folder"/> {folderParentName}
+                <Icon name="folder"/> {this.getFolderName(this.resource.folder_parent_id)}
               </a>
             </span>
           </li>
+          }
         </ul>
       </div>
     );

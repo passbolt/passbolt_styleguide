@@ -7,12 +7,13 @@ export default React.createContext({
   rememberMeOptions: {},
   resources: null,
   resource: null,
-  settings: {},
   shareResources: null,
   selectedResources: null,
   selectedUser: null,
   folders: null,
   resourceCommentId: null,
   showDeleteCommentDialog: false,
-  mustRefreshComments: false
+  mustRefreshComments: false,
+  siteSettings: null,
+  userSettings: null,
 });

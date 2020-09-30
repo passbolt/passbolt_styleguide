@@ -183,6 +183,9 @@ class Workspace extends Component {
    * @return {JSX}
    */
   render() {
+    const canUseFolders = this.context.siteSettings.canIUse("folders");
+    const canUseTags = this.context.siteSettings.canIUse("tags");
+
     return (
       <div>
         <div className="header second">
@@ -204,8 +207,12 @@ class Workspace extends Component {
               <div className="reports-workspace">
                 <div className="panel left">
                   <FilterResourcesByShortcuts/>
+                  {canUseFolders &&
                   <FoldersTree/>
+                  }
+                  {canUseTags &&
                   <SidebarTagFilterSection tags={this.getTagsFromResources()}/>
+                  }
                 </div>
                 <div className="panel middle">
                   <PasswordBreadcrumb/>

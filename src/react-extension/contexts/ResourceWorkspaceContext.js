@@ -327,7 +327,9 @@ class ResourceWorkspaceContextProvider extends React.Component {
    * Populate the context with initial data such as resources and folders
    */
   populate() {
-    this.context.port.request("passbolt.folders.update-local-storage");
+    if (this.context.siteSettings.canIUse("folders")) {
+      this.context.port.request("passbolt.folders.update-local-storage");
+    }
     this.context.port.request("passbolt.resources.update-local-storage");
   }
 
@@ -396,6 +398,7 @@ class ResourceWorkspaceContextProvider extends React.Component {
   async searchByText(filter) {
     const text = filter.payload;
     const words =  (text && text.split(/\s+/)) || [''];
+    const canUseTags = this.context.siteSettings.canIUse("tags");
 
     // Test match of some escaped test words against the name / usernmae / uri / description /tags resource properties
     const escapeWord = word =>  word.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
@@ -404,7 +407,7 @@ class ResourceWorkspaceContextProvider extends React.Component {
 
     const matchSomeTagProperty = resource => resource.tags.some(tag => matchSomeWords(tag.slug));
     const matchSomeTextualProperty = resource => ['name', 'username', 'uri', 'description'].some(key => matchSomeWords(resource[key]));
-    const matchText = resource => matchSomeTextualProperty(resource) || matchSomeTagProperty(resource);
+    const matchText = resource => matchSomeTextualProperty(resource) || (canUseTags && matchSomeTagProperty(resource));
 
     const filteredResources = this.resources.filter(matchText);
     await this.setState({filter, filteredResources});
