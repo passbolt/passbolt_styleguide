@@ -175,14 +175,17 @@ class DescriptionEditor extends React.Component {
   }
 
   /**
-   * Update the tag
-   * @returns {Promise<Object>} updated tag
+   * Persist the resource description update.
+   * @returns {Promise<Object>}
    */
   updateDescription() {
     const resourceDto = {
+      name: this.props.resource.name,
+      username: this.props.resource.username,
+      uri: this.props.resource.uri,
       description: this.state.description,
     };
-    return this.context.port.request("passbolt.resources.update", this.props.resourceId, resourceDto);
+    return this.context.port.request("passbolt.resources.update", this.props.resource.id, resourceDto, null);
   }
 
   /**
@@ -222,7 +225,7 @@ DescriptionEditor.contextType = AppContext;
 
 DescriptionEditor.propTypes = {
   description: PropTypes.string, // the description of the resources
-  resourceId: PropTypes.string, // the id of the resource
+  resource: PropTypes.any, // the resource to update the description for
   toggleInputDescriptionEditor: PropTypes.func, // toggle to display or not the editor
   actionFeedbackContext: PropTypes.any, // The action feedback context
   loadingContext: PropTypes.any // The loading context

@@ -134,8 +134,8 @@ class PasswordSidebarDescriptionSection extends React.Component {
           {this.mustShowDescriptionEditor() &&
           <DescriptionEditor
             description={this.resource.description}
-            toggleInputDescriptionEditor={this.toggleInputDescriptionEditor}
-            resourceId={this.resource.id}/>
+            resource={this.resource}
+            toggleInputDescriptionEditor={this.toggleInputDescriptionEditor}/>
           }
         </div>
       </div>

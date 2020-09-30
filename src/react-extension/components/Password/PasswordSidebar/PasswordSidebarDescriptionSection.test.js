@@ -50,7 +50,15 @@ const getDummyDescriptionEmpty = function() {
 const getDummyDescriptionEmptyWithPermissionUpdate = function() {
   return {
     "id": "8e3874ae-4b40-590b-968a-418f704b9d9a",
+    "name": "apache",
+    "username": "www-data",
+    "uri": "http://www.apache.org/",
     "description": "",
+    "deleted": false,
+    "created": "2019-12-05T13:38:43+00:00",
+    "modified": "2019-12-06T13:38:43+00:00",
+    "created_by": "f848277c-5398-58f8-a82a-72397af2d450",
+    "modified_by": "f848277c-5398-58f8-a82a-72397af2d450",
     "permission": {
       type: 15
     }
@@ -348,9 +356,10 @@ describe("PasswordSidebarDescription", () => {
     expect(editorDescriptionClosed).toBeNull();
   });
 
-  it("Update the description to a resource", async() => {
+  it("Update the description of a resource", async() => {
     const context = getAppContext();
-    const props = {resourceWorkspaceContext: {details: {resource: getDummyDescriptionEmptyWithPermissionUpdate()}}};
+    const resource = getDummyDescriptionEmptyWithPermissionUpdate();
+    const props = {resourceWorkspaceContext: {details: {resource}}};
     const {container} = renderPasswordSidebarDescriptionSection(context, props);
 
     // Sidebar Description title exists and correct
@@ -376,7 +385,7 @@ describe("PasswordSidebarDescription", () => {
     fireEvent.change(textearea, {target: {value: descriptionValue}});
 
     // Mock the request function to make it the expected result
-    jest.spyOn(context.port, 'request').mockImplementationOnce(jest.fn((message, data) => Object.assign({id: props.resourceWorkspaceContext.details.resource.id}, data)));
+    jest.spyOn(context.port, 'request').mockImplementationOnce(jest.fn((message, data) => data));
     jest.spyOn(context.port, 'emit').mockImplementation(jest.fn());
     jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementation(() => {});
 
@@ -387,17 +396,20 @@ describe("PasswordSidebarDescription", () => {
     fireEvent.click(submitButton, leftClick);
 
     // API calls are made on submit, wait they are resolved.
-    await waitFor(() => {});
-
-    // Editor description not exists
-    const editorDescriptionInputDisable = container.querySelector(".form-content");
-    expect(editorDescriptionInputDisable).toBeNull();
+    await waitFor(() => {
+      // Editor description not exists
+      const editorDescriptionInputDisable = container.querySelector(".form-content");
+      expect(editorDescriptionInputDisable).toBeNull();
+    });
 
     const onApiUpdateResourceId = props.resourceWorkspaceContext.details.resource.id;
     const onApiUpdateResourceDto = {
-      description: descriptionValue
+      name: resource.name,
+      username: resource.username,
+      uri: resource.uri,
+      description: descriptionValue,
     };
-    expect(context.port.request).toHaveBeenCalledWith("passbolt.resources.update", onApiUpdateResourceId, onApiUpdateResourceDto);
+    expect(context.port.request).toHaveBeenCalledWith("passbolt.resources.update", onApiUpdateResourceId, onApiUpdateResourceDto, null);
     expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalled();
   });
 
