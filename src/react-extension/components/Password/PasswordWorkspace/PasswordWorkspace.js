@@ -26,6 +26,7 @@ import PasswordSearchBar from "../PasswordSearchBar/PasswordSearchBar";
 import FilterResourcesByShortcuts from "../FilterResourcesByShortcuts/FilterResourcesByShortcuts";
 import PasswordBreadcrumb from "../PasswordBreadcrumb/PasswordBreadcrumb";
 import PasswordWorkspaceMenu from "./PasswordWorkspaceMenu";
+import Logo from "../../../../react/components/Common/Navigation/Header/Logo";
 
 class Workspace extends Component {
   /**
@@ -189,6 +190,7 @@ class Workspace extends Component {
     return (
       <div>
         <div className="header second">
+          <Logo/>
           <PasswordSearchBar
             onSearch={this.handleSearch}
             placeholder="Search passwords"/>
