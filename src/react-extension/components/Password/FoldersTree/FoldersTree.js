@@ -494,7 +494,6 @@ class FoldersTree extends React.Component {
                 folders={this.context.folders}
                 isDragging={isDragging}
                 onClose={this.handleFolderCloseEvent}
-                onContextualMenu={this.handleFolderItemContextualMenuEvent}
                 onDragEnd={this.handleFolderDragEndEvent}
                 onDragStart={this.handleFolderDragStartEvent}
                 onDrop={this.handleFolderDropEvent}

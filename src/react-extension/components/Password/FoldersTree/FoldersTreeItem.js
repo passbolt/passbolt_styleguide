@@ -458,7 +458,7 @@ class FoldersTreeItem extends React.Component {
         </div>
         {hasChildren && isOpen &&
         <ul className="folders-tree">
-          {folderChildren.map(folder => <FoldersTreeItem
+          {folderChildren.map(folder => <DecoratedFoldersTreeItem
             key={`folders-tree-${folder.id}`}
             draggedItems={this.props.draggedItems}
             folder={folder}
@@ -497,4 +497,6 @@ FoldersTreeItem.propTypes = {
   selectedFolder: PropTypes.any,
 };
 
-export default withContextualMenu(FoldersTreeItem);
+const DecoratedFoldersTreeItem = withContextualMenu(FoldersTreeItem);
+
+export default DecoratedFoldersTreeItem;
