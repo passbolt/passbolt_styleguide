@@ -162,7 +162,7 @@ class DisplayGridContextualMenu extends React.Component {
             </div>
           </div>
         </li>
-        <li key="option-permalink-resource" className="ready">
+        <li key="option-permalink-resource" className="ready separator-after">
           <div className="row">
             <div className="main-cell-wrapper">
               <div className="main-cell">
