@@ -496,7 +496,7 @@ class Grid extends React.Component {
           </div>
           }
           {isEmpty &&
-          ( filterType === ResourceWorkspaceFilterTypes.ITEMS_I_OWN ||
+          (filterType === ResourceWorkspaceFilterTypes.ITEMS_I_OWN ||
             filterType === ResourceWorkspaceFilterTypes.RECENTLY_MODIFIED ||
             filterType === ResourceWorkspaceFilterTypes.ALL
           ) &&

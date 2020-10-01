@@ -164,6 +164,7 @@ class ResourceWorkspaceContextProvider extends React.Component {
     if (hasResourcesChanged) {
       this.resources = this.context.resources;
       await this.search(this.state.filter);
+      await this.updateDetails();
       await this.unselectUnknownResources();
       await this.redirectAfterSelection();
     }
@@ -626,6 +627,20 @@ class ResourceWorkspaceContextProvider extends React.Component {
       await this.detailResource(this.state.selectedResources[0]);
     } else {
       await this.detailNothing();
+    }
+  }
+
+  /**
+   * Update the current details with the current list of resources or folders
+   */
+  async updateDetails() {
+    const hasDetails = this.state.details.resource || this.state.details.folder;
+    if (hasDetails) {
+      const hasResourceDetails = this.state.details.resource;
+      if (hasResourceDetails) { // Case of resource details
+        const updatedResourceDetails = this.resources.find(resource => resource.id === this.state.details.resource.id);
+        await this.setState({details: {resource: updatedResourceDetails}});
+      }
     }
   }
 
