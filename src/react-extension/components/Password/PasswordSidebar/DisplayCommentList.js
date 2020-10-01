@@ -107,51 +107,51 @@ class DisplayCommentList extends React.Component {
   render() {
     return (
       <>
-        { ! this.state.actions.loading &&
-                    <ul>
-                      {
-                        this.state.comments.map((comment, index) => (
-                          <li
-                            key={index}
-                            className="comment">
+        {!this.state.actions.loading &&
+        <ul>
+          {
+            this.state.comments.map((comment, index) => (
+              <li
+                key={index}
+                className="comment">
 
-                            <div className="wrap-right-column">
-                              <div className="right-column">
-                                <p> {comment.content} </p>
-                                <div className="metadata">
-                                  <span className="author username"><a
-                                    href="#">{comment.profile.first_name} {comment.profile.last_name}</a></span>
-                                  <span
-                                    className="modified">{moment(comment.created).fromNow()}</span>
-                                </div>
-                                <div className="actions">
-                                  <ul>
-                                    <li>
-                                      {this.canDeleteComment(comment) &&
-                                                                <DeleteComment commentId={comment.id}/>
-                                      }
-                                    </li>
-                                  </ul>
-                                </div>
-                              </div>
-                            </div>
-
-                            <div className="left-column">
-                              <UserAvatar
-                                user={comment.profile}
-                                baseUrl={this.context.siteSettings.settings.app.url}
-                                className="author profile picture"/>
-                            </div>
-
-                          </li>
-                        ))
-                      }
-                    </ul>
-        }
-        { this.state.actions.loading &&
-                    <div className="processing-wrapper">
-                      <span className="processing-text">Retrieving comments</span>
+                <div className="wrap-right-column">
+                  <div className="right-column">
+                    <p> {comment.content} </p>
+                    <div className="metadata">
+                      <span className="author username"><a
+                        href="#">{comment.creator.profile.first_name} {comment.creator.profile.last_name}</a></span>
+                      <span
+                        className="modified">{moment(comment.created).fromNow()}</span>
                     </div>
+                    <div className="actions">
+                      <ul>
+                        <li>
+                          {this.canDeleteComment(comment) &&
+                          <DeleteComment commentId={comment.id}/>
+                          }
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="left-column">
+                  <UserAvatar
+                    user={comment.creator.profile}
+                    baseUrl={this.context.siteSettings.settings.app.url}
+                    className="author profile picture"/>
+                </div>
+
+              </li>
+            ))
+          }
+        </ul>
+        }
+        {this.state.actions.loading &&
+        <div className="processing-wrapper">
+          <span className="processing-text">Retrieving comments</span>
+        </div>
         }
       </>
     );
