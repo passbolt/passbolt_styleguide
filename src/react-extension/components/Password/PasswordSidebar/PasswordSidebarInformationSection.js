@@ -194,7 +194,17 @@ class PasswordSidebarInformationSection extends React.Component {
     return (
       <div className={`detailed-information accordion sidebar-section ${this.state.open ? "" : "closed"}`}>
         <div className="accordion-header">
-          <h4><a onClick={this.handleTitleClickEvent} role="button">Information</a></h4>
+          <h4>
+            <a onClick={this.handleTitleClickEvent} role="button">
+              Information
+              {this.state.open &&
+              <Icon name="caret-down"/>
+              }
+              {!this.state.open &&
+              <Icon name="caret-right"/>
+              }
+            </a>
+          </h4>
         </div>
         <ul className="accordion-content">
           <li className="username">

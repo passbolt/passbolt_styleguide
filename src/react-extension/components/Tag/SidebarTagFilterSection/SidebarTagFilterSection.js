@@ -167,7 +167,7 @@ class SidebarTagFilterSection extends React.Component {
                 </div>
               </div>
               <div className="right-cell more-ctrl">
-                <a className="filter" onClick={this.handleTitleMoreClickEvent}><span>more</span></a>
+                <a className="filter" onClick={this.handleTitleMoreClickEvent}><Icon name="filter"/></a>
               </div>
             </div>
           </li>

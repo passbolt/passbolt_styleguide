@@ -83,7 +83,17 @@ class PasswordSidebarTagSection extends React.Component {
     return (
       <div className={`detailed-information accordion sidebar-section ${this.state.open ? "" : "closed"}`}>
         <div className="accordion-header">
-          <h4><a onClick={this.handleTitleClickEvent} role="button">Tags</a></h4>
+          <h4>
+            <a onClick={this.handleTitleClickEvent} role="button">
+              Tags
+              {this.state.open &&
+              <Icon name="caret-down"/>
+              }
+              {!this.state.open &&
+              <Icon name="caret-right"/>
+              }
+            </a>
+          </h4>
         </div>
         <div className="accordion-content">
           <a className="edit_tags_button section-action" onClick={this.toggleInputTagEditor}>

@@ -19,6 +19,7 @@ import PropTypes from "prop-types";
 import AppContext from "../../../contexts/AppContext";
 import DisplayCommentList from "./DisplayCommentList";
 import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
+import Icon from "../../../../react/components/Common/Icons/Icon";
 
 class PasswordSidebarCommentSection extends React.Component {
   /**
@@ -112,10 +113,14 @@ class PasswordSidebarCommentSection extends React.Component {
       <div className={`comments accordion sidebar-section ${this.state.open ? "" : "closed"}`}>
         <div className="accordion-header">
           <h4>
-            <a
-              onClick={this.handleTitleClickedEvent}
-              role="button">
-                            Comments
+            <a onClick={this.handleTitleClickedEvent} role="button">
+              Comments
+              {this.state.open &&
+              <Icon name="caret-down"/>
+              }
+              {!this.state.open &&
+              <Icon name="caret-right"/>
+              }
             </a>
           </h4>
         </div>

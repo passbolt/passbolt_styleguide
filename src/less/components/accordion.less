@@ -72,32 +72,14 @@
     .accordion-header {
         a {
             border:0;
-        }
-        a:after{
-            position:absolute;
-            right:1.5em;
-            margin-top: .25em;
-            content: "\f0d7"; /* caret down */
-            font: normal normal normal 1em FontAwesome;
-            text-rendering: auto;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-            width:1em;
-            height:1em;
-            text-align: center;
-            z-index:400;
-            color:@font-light;
-        }
-        a:hover:after {
-            color:@font-focus;
-        }
-    }
-    &.closed .accordion-header {
-        a:after{
-            content: "\f0da"; /* caret right */
-        }
-    }
 
+            .svg-icon {
+              position:absolute;
+              right:1.5em;
+              margin-top: .25em;
+            }
+        }
+    }
 }
 
 .accordion.navigation {

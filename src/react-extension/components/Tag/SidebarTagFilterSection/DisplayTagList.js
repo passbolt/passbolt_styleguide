@@ -16,6 +16,7 @@ import PropTypes from "prop-types";
 import DisplayTagListContextualMenu from "./DisplayTagListContextualMenu";
 import {ResourceWorkspaceFilterTypes, withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 import {withContextualMenu} from "../../../contexts/Common/ContextualMenuContext";
+import Icon from "../../Common/Icons/Icon";
 
 class DisplayTagList extends React.Component {
   /**
@@ -186,8 +187,9 @@ class DisplayTagList extends React.Component {
                 </div>
                 {!tag.is_shared &&
                 <div className="right-cell more-ctrl">
-                  <a className="more"
-                    onClick={event => this.handleMoreClickEvent(event, tag)}><span>more</span></a>
+                  <a className="more" onClick={event => this.handleMoreClickEvent(event, tag)}>
+                    <Icon name="plus-square"/>
+                  </a>
                 </div>
                 }
               </div>
