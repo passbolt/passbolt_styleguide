@@ -457,6 +457,7 @@ class Grid extends React.Component {
   }
 
   render() {
+    const isReady = this.resources !== null;
     const isEmpty = this.resources.length === 0;
     const selectAll = this.resources.length === this.selectedResources.length;
     const filterType = this.props.resourceWorkspaceContext.filter.type;
@@ -464,6 +465,11 @@ class Grid extends React.Component {
     return (
       <div className={`tableview ready ${isEmpty ? "empty" : ""} ${["default", "modified"].includes(this.props.filterType) ? "all_items" : ""}`}>
 
+        {!isReady &&
+        <div className="empty-content">
+        </div>
+        }
+        {isReady &&
         <React.Fragment>
           {isEmpty && filterType === ResourceWorkspaceFilterTypes.TEXT &&
           <div className="empty-content">
@@ -517,7 +523,10 @@ class Grid extends React.Component {
                   <tr>
                     <th className="cell_multipleSelect selections s-cell">
                       <div className="input checkbox">
-                        <input type="checkbox" name="select all" checked={selectAll}
+                        <input
+                          type="checkbox"
+                          name="select all"
+                          checked={selectAll}
                           onChange={this.handleSelectAllChange}/>
                         <label htmlFor="js-passwords-select-all">select all</label>
                       </div>
@@ -551,7 +560,7 @@ class Grid extends React.Component {
                       </a>
                     </th>
                     <th className="cell_secret m-cell password">
-                    Password
+                      Password
                     </th>
                     <th className="cell_uri l-cell sortable">
                       <a onClick={ev => this.handleSortByColumnClick(ev, "uri")}>
@@ -592,6 +601,7 @@ class Grid extends React.Component {
           </React.Fragment>
           }
         </React.Fragment>
+        }
       </div>
     );
   }
