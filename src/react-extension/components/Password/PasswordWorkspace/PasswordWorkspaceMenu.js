@@ -229,8 +229,16 @@ class PasswordWorkspaceMenu extends React.Component {
   }
 
   /**
+   * has multiple resources selected
+   * @returns {boolean}
+   */
+  hasMultipleResourcesSelected() {
+    return this.selectedResources.length > 1;
+  }
+
+  /**
    * Can update the selected resources
-   * @returns {}
+   * @return {boolean}
    */
   canUpdate() {
     return this.hasResourceSelected() && this.selectedResources.every(resource => resource.permission.type >= 7);
@@ -238,10 +246,26 @@ class PasswordWorkspaceMenu extends React.Component {
 
   /**
    * Can share the selected resources
-   * @returns {}
+   * @return {boolean}
    */
   canShare() {
     return this.hasResourceSelected() && this.selectedResources.every(resource => resource.permission.type === 15);
+  }
+
+  /**
+   * Has at least one action of the more menu allowed.
+   * @return {boolean}
+   */
+  hasMoreActionAllowed() {
+    // If only one resource is selected then the all the copy operation are enabled.
+    if (this.hasOneResourceSelected()) {
+      return true;
+    } else if (this.hasMultipleResourcesSelected) {
+      // If multiple resources are selected, the only more action available is the delete operation.
+      return this.canUpdate();
+    }
+
+    return false;
   }
 
   /**
@@ -276,7 +300,7 @@ class PasswordWorkspaceMenu extends React.Component {
           </li>
           <li>
             <div className="dropdown" ref={this.moreMenuRef}>
-              <a className={`button ready ${this.hasResourceSelected() ? "" : "disabled"}`} onClick={this.handleMoreClickEvent}>
+              <a className={`button ready ${this.hasMoreActionAllowed() ? "" : "disabled"}`} onClick={this.handleMoreClickEvent}>
                 <span>more</span>
                 <Icon name="caret-down"/>
               </a>
