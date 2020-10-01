@@ -16,6 +16,7 @@ import {withRouter} from "react-router-dom";
 import PropTypes from "prop-types";
 import {ResourceWorkspaceFilterTypes, withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 import Breadcrumbs from "../../Common/Navigation/Breadcrumbs/Breadcrumbs";
+import AppContext from "../../../contexts/AppContext";
 
 /**
  * The component displays a navigation breadcrumb given the applied resources filter
@@ -105,6 +106,8 @@ class PasswordBreadcrumbs extends Component {
     );
   }
 }
+
+PasswordBreadcrumbs.context = AppContext;
 
 PasswordBreadcrumbs.propTypes = {
   resourceWorkspaceContext: PropTypes.object,
