@@ -23,9 +23,6 @@ export function defaultPropsOneResourceOwned() {
   return {
     resourceWorkspaceContext: {
       selectedResources: [resourcesMock[0]],
-      details: {
-        resource: resourcesMock[1]
-      }
     }
   };
 }
@@ -38,9 +35,6 @@ export function defaultPropsOneResourceNotOwned() {
   return {
     resourceWorkspaceContext: {
       selectedResources: [resourcesMock[1]],
-      details: {
-        resource: resourcesMock[1]
-      }
     }
   };
 }
@@ -53,9 +47,6 @@ export function defaultPropsNoResource() {
   return {
     resourceWorkspaceContext: {
       selectedResources: [],
-      details: {
-        resource: null
-      }
     }
   };
 }
@@ -68,9 +59,6 @@ export function defaultPropsMultipleResource() {
   return {
     resourceWorkspaceContext: {
       selectedResources: resourcesMock,
-      details: {
-        resource: null
-      }
     }
   };
 }
@@ -83,10 +71,7 @@ export function defaultPropsMultipleResourceUpdateRights() {
   const selectedResources = [resourcesMock[0], resourcesMock[2]];
   return {
     resourceWorkspaceContext: {
-      selectedResources,
-      details: {
-        resource: null
-      }
+      selectedResources
     }
   };
 }
