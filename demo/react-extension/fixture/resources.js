@@ -24,7 +24,7 @@ export default [
       "aco_foreign_key": "8e3874ae-4b40-590b-968a-418f704b9d9a",
       "aro": "User",
       "aro_foreign_key": "f848277c-5398-58f8-a82a-72397af2d450",
-      "type": 14,
+      "type": 15,
       "created": "2020-08-27T08:35:19+00:00",
       "modified": "2020-08-27T08:35:19+00:00"
     },

@@ -139,7 +139,7 @@ class PasswordWorkspaceMenu extends React.Component {
    */
   handleEditClickEvent() {
     const passwordEditDialogProps = {
-      id: this.detailResource.id
+      id: this.selectedResources[0].id
     };
     this.context.setContext({passwordEditDialogProps});
     this.props.dialogContext.open(PasswordEditDialog);
@@ -160,7 +160,7 @@ class PasswordWorkspaceMenu extends React.Component {
   handleCopyPermalinkClickEvent() {
     this.handleCloseMoreMenu();
     const baseUrl = this.context.userSettings.getTrustedDomain();
-    const permalink = `${baseUrl}/app/passwords/view/${this.detailResource.id}`;
+    const permalink = `${baseUrl}/app/passwords/view/${this.selectedResources[0].id}`;
     this.context.port.emit("passbolt.clipboard.write", permalink);
     this.displaySuccessNotification("The permalink has been copied to clipboard");
   }
@@ -170,7 +170,7 @@ class PasswordWorkspaceMenu extends React.Component {
    */
   handleCopyUsernameClickEvent() {
     this.handleCloseMoreMenu();
-    this.context.port.emit("passbolt.clipboard.write", this.detailResource.username);
+    this.context.port.emit("passbolt.clipboard.write", this.selectedResources[0].username);
     this.displaySuccessNotification("The username has been copied to clipboard");
   }
 
@@ -179,7 +179,7 @@ class PasswordWorkspaceMenu extends React.Component {
    */
   async handleCopySecretClickEvent() {
     try {
-      const secret = await this.context.port.request("passbolt.secret.decrypt", this.detailResource.id);
+      const secret = await this.context.port.request("passbolt.secret.decrypt", this.selectedResources[0].id);
       this.context.port.emit("passbolt.clipboard.write", secret);
       this.props.actionFeedbackContext.displaySuccess("The secret has been copied to clipboard");
     } catch (error) {
@@ -213,14 +213,6 @@ class PasswordWorkspaceMenu extends React.Component {
   }
 
   /**
-   * the detail resource if only one is selected
-   * @returns {*}
-   */
-  get detailResource() {
-    return this.props.resourceWorkspaceContext.details.resource;
-  }
-
-  /**
    * has at least one resource selected
    * @returns {boolean}
    */
@@ -233,12 +225,20 @@ class PasswordWorkspaceMenu extends React.Component {
    * @returns {boolean}
    */
   hasOneResourceSelected() {
-    return this.detailResource !== null;
+    return this.selectedResources.length === 1;
+  }
+
+  /**
+   * has multiple resources selected
+   * @returns {boolean}
+   */
+  hasMultipleResourcesSelected() {
+    return this.selectedResources.length > 1;
   }
 
   /**
    * Can update the selected resources
-   * @returns {}
+   * @return {boolean}
    */
   canUpdate() {
     return this.hasResourceSelected() && this.selectedResources.every(resource => resource.permission.type >= 7);
@@ -246,10 +246,26 @@ class PasswordWorkspaceMenu extends React.Component {
 
   /**
    * Can share the selected resources
-   * @returns {}
+   * @return {boolean}
    */
   canShare() {
     return this.hasResourceSelected() && this.selectedResources.every(resource => resource.permission.type === 15);
+  }
+
+  /**
+   * Has at least one action of the more menu allowed.
+   * @return {boolean}
+   */
+  hasMoreActionAllowed() {
+    // If only one resource is selected then the all the copy operation are enabled.
+    if (this.hasOneResourceSelected()) {
+      return true;
+    } else if (this.hasMultipleResourcesSelected) {
+      // If multiple resources are selected, the only more action available is the delete operation.
+      return this.canUpdate();
+    }
+
+    return false;
   }
 
   /**
@@ -284,7 +300,7 @@ class PasswordWorkspaceMenu extends React.Component {
           </li>
           <li>
             <div className="dropdown" ref={this.moreMenuRef}>
-              <a className={`button ready ${this.hasResourceSelected() ? "" : "disabled"}`} onClick={this.handleMoreClickEvent}>
+              <a className={`button ready ${this.hasMoreActionAllowed() ? "" : "disabled"}`} onClick={this.handleMoreClickEvent}>
                 <span>more</span>
                 <Icon name="caret-down"/>
               </a>
