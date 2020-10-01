@@ -39,6 +39,7 @@ class PasswordSidebar extends React.Component {
    */
   bindCallbacks() {
     this.handlePermalinkClick = this.handlePermalinkClick.bind(this);
+    this.handleCloseClick = this.handleCloseClick.bind(this);
   }
 
   /**
@@ -49,6 +50,13 @@ class PasswordSidebar extends React.Component {
     const permalink = `${baseUrl}/app/folders/view/${this.props.resourceWorkspaceContext.details.resource.id}`;
     this.context.port.emit('passbolt.clipboard.write', permalink);
     this.props.actionFeedbackContext.displaySuccess("The permalink has been copied to clipboard");
+  }
+
+  /**
+   * Handle close sidebar click
+   */
+  handleCloseClick() {
+    this.props.resourceWorkspaceContext.onToggleSidebar();
   }
 
   /**
@@ -76,7 +84,7 @@ class PasswordSidebar extends React.Component {
               </div>
               <span className="type">resource</span>
             </h3>
-            <a className="dialog-close">
+            <a className="dialog-close" onClick={this.handleCloseClick}>
               <Icon name="close"/>
               <span className="visuallyhidden">Close</span>
             </a>

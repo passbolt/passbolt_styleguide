@@ -179,6 +179,10 @@ class Workspace extends Component {
     return null;
   }
 
+  mustDisplaySidebar() {
+    return this.props.resourceWorkspaceContext.mustDisplaySidebar;
+  }
+
   /**
    * Render the component
    * @return {JSX}
@@ -223,7 +227,7 @@ class Workspace extends Component {
                     search={this.state.search}
                     onRightSelect={this.handleRightSelectResource}
                     onSelect={this.handleSelectResources}/>
-                  {this.props.resourceWorkspaceContext.details.folder &&
+                  {this.props.resourceWorkspaceContext.details.folder && this.mustDisplaySidebar() &&
                     <FolderSidebar
                       groups={this.state.groups}
                       onEditPermissions={this.handleEditFolderPermissions}
@@ -231,7 +235,7 @@ class Workspace extends Component {
                       onSelectRoot={this.handleSelectRootFolder}
                       users={this.state.users}/>
                   }
-                  {this.props.resourceWorkspaceContext.details.resource &&
+                  {this.props.resourceWorkspaceContext.details.resource && this.mustDisplaySidebar() &&
                     <PasswordSidebar
                       groups={this.state.groups}
                       onEditPermissions={this.handleEditFolderPermissions}
