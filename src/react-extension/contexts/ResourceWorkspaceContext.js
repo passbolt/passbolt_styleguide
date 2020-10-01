@@ -112,6 +112,7 @@ class ResourceWorkspaceContextProvider extends React.Component {
    */
   initializeProperties() {
     this.resources = []; // A cache of the last known list of resources from the App context
+    this.folders = []; // A cache of the last known list of folders from the App context
   }
 
   /**
@@ -127,6 +128,7 @@ class ResourceWorkspaceContextProvider extends React.Component {
    */
   async componentDidUpdate(prevProps, prevState) {
     await this.handleFilterChange(prevState.filter);
+    await this.handleFoldersChange();
     await this.handleResourcesChange();
     await this.handleRouteChange(prevProps.location);
   }
@@ -154,6 +156,17 @@ class ResourceWorkspaceContextProvider extends React.Component {
   async handleTextFilterChange(text) {
     await this.search({type: ResourceWorkspaceFilterTypes.TEXT, payload: text});
     await this.detailNothing();
+  }
+
+  /**
+   * Whenever the folders change
+   */
+  async handleFoldersChange() {
+    const hasFoldersChanged = this.context.folders !== this.folders;
+    if (hasFoldersChanged) {
+      this.folders = this.context.folders;
+      await this.refreshSearchFilter();
+    }
   }
 
   /**
@@ -459,6 +472,18 @@ class ResourceWorkspaceContextProvider extends React.Component {
     const recentlyModifiedSorter = (resource1, resource2) => moment(resource2.modified).diff(moment(resource1.modified));
     const filteredResources = this.resources.sort(recentlyModifiedSorter);
     await this.setState({filter, filteredResources});
+  }
+
+  /**
+   * Refresh the filter in case of its payload is outdated due to the updated list of resources
+   */
+  async refreshSearchFilter() {
+    const hasFolderFilter = this.state.filter.type === ResourceWorkspaceFilterTypes.FOLDER;
+    if (hasFolderFilter) {
+      const updatedFolder = this.folders.find(folder => folder.id === this.state.filter.payload.folder.id);
+      const filter = Object.assign({}, this.state.filter, {payload: {folder: updatedFolder}});
+      await this.setState({filter});
+    }
   }
 
   /** RESOURCE SELECTION */
