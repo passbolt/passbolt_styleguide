@@ -25,6 +25,7 @@ import {
   defaultPropsOneResourceOwned
 } from "./PasswordWorkspaceMenu.test.data";
 import {ActionFeedbackContext} from "../../../contexts/ActionFeedbackContext";
+import {waitFor} from "@testing-library/dom";
 
 beforeEach(() => {
   jest.resetModules();
@@ -75,7 +76,9 @@ describe("See Workspace Menu", () => {
       });
 
       page.displayMenu.clickOnMenu(page.displayMenu.dropdownMenuPermalink);
-      expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalled();
+      waitFor(() => {
+        expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalled();
+      });
     });
 
     it('As LU I should be able to copy a resource username from the workspace main menu', () => {
@@ -89,7 +92,9 @@ describe("See Workspace Menu", () => {
       });
 
       page.displayMenu.clickOnMenu(page.displayMenu.dropdownMenuUsername);
-      expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalled();
+      waitFor(() => {
+        expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalled();
+      });
     });
 
     it('As LU I can start sharing a resource via the workspace main menu', () => {
@@ -105,7 +110,9 @@ describe("See Workspace Menu", () => {
       jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementation(() => {
       });
       page.displayMenu.clickOnMenu(page.displayMenu.copyMenu);
-      expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalled();
+      waitFor(() => {
+        expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalled();
+      });
     });
 
     it('As LU I should be able to copy a resource secret from the more menu', () => {
@@ -119,7 +126,9 @@ describe("See Workspace Menu", () => {
       });
 
       page.displayMenu.clickOnMenu(page.displayMenu.dropdownMenuSecret);
-      expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalled();
+      waitFor(() => {
+        expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalled();
+      });
     });
   });
 
