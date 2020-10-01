@@ -189,7 +189,7 @@ class ReactExtension extends Component {
     this.setState({siteSettings});
   }
 
-  handleStorageChange(changes) {
+    handleStorageChange(changes) {
     if (changes.resources) {
       const resources = changes.resources.newValue;
       this.setState({resources: resources});
@@ -230,7 +230,6 @@ class ReactExtension extends Component {
                 <HandleFolderMoveStrategyDialogEvents/>
                 <HandleProgressDialogEvents/>
                 <HandleErrorDialogEvents/>
-                <ManageDialogs/>
 
                 <Router>
                   <div id="container" className="page password">
@@ -248,6 +247,7 @@ class ReactExtension extends Component {
                           "/app/passwords",
                         ]}>
                           <ResourceWorkspaceContextProvider>
+                            <ManageDialogs/>
                             <PasswordWorkspace onMenuItemClick={this.handleWorkspaceSelect}/>
                           </ResourceWorkspaceContextProvider>
                         </Route>
