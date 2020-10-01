@@ -330,17 +330,6 @@ class ResourceWorkspaceContextProvider extends React.Component {
   }
 
   /**
-   * Handle the deletion of a resource
-   * @param resources A delete resources
-   */
-  async handleResourcesDeleted(resources) {
-    await this.delete(resources);
-    await this.search(this.state.filter);
-    await this.unselectAll();
-    await this.detailNothing();
-  }
-
-  /**
    * Handle the toggle sidebar to display it or not
    */
   handleToggleSidebar() {
@@ -469,18 +458,6 @@ class ResourceWorkspaceContextProvider extends React.Component {
     const recentlyModifiedSorter = (resource1, resource2) => moment(resource2.modified).diff(moment(resource1.modified));
     const filteredResources = this.resources.sort(recentlyModifiedSorter);
     await this.setState({filter, filteredResources});
-  }
-
-  /** RESOURCE DELETION */
-
-  /**
-   * Delete the given resources
-   * @param resourcesToDelete The resources to delete
-   */
-  async delete(resourcesToDelete) {
-    const hasSameId = resource => resourceToDelete => resourceToDelete.id === resource.id;
-    const matchSomeDeletedResources = resource => resourcesToDelete.some(hasSameId(resource));
-    this.resources = this.resources.filter(matchSomeDeletedResources);
   }
 
   /** RESOURCE SELECTION */
