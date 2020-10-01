@@ -75,8 +75,8 @@ class PasswordSidebarInformationSection extends React.Component {
   /**
    * Handle when the user select the username of the resource
    */
-  handleUsernameClickEvent() {
-    this.context.port.emit("passbolt.clipboard.write", this.resource.username);
+  async handleUsernameClickEvent() {
+    await this.context.port.request("passbolt.clipboard.copy", this.resource.username);
     this.displaySuccessNotification("The username has been copied to clipboard");
   }
 
@@ -162,7 +162,7 @@ class PasswordSidebarInformationSection extends React.Component {
   async handlePasswordClickEvent() {
     try {
       const secret = await this.context.port.request("passbolt.secret.decrypt", this.resource.id);
-      this.context.port.emit("passbolt.clipboard.write", secret);
+      await this.context.port.request("passbolt.clipboard.copy", secret);
       this.props.actionFeedbackContext.displaySuccess("The secret has been copied to clipboard");
     } catch (error) {
       if (error.name !== "UserAbortsOperationError") {

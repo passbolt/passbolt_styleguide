@@ -99,10 +99,10 @@ class FolderSidebar extends React.Component {
   /**
    * Handle when the user copies the permalink.
    */
-  handlePermalinkClick() {
+  async handlePermalinkClick() {
     const baseUrl = this.context.userSettings.getTrustedDomain();
     const permalink = `${baseUrl}/app/folders/view/${this.props.resourceWorkspaceContext.details.folder.id}`;
-    this.context.port.emit('passbolt.clipboard.write', permalink);
+    await this.context.port.request("passbolt.clipboard.copy", permalink);
     this.props.actionFeedbackContext.displaySuccess("The permalink has been copied to clipboard");
   }
 

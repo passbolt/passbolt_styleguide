@@ -157,20 +157,20 @@ class PasswordWorkspaceMenu extends React.Component {
   /**
    * handle copy permalink of one resource
    */
-  handleCopyPermalinkClickEvent() {
+  async handleCopyPermalinkClickEvent() {
     this.handleCloseMoreMenu();
     const baseUrl = this.context.userSettings.getTrustedDomain();
     const permalink = `${baseUrl}/app/passwords/view/${this.selectedResources[0].id}`;
-    this.context.port.emit("passbolt.clipboard.write", permalink);
+    await this.context.port.request("passbolt.clipboard.copy", permalink);
     this.displaySuccessNotification("The permalink has been copied to clipboard");
   }
 
   /**
    * handle copy username of one resource
    */
-  handleCopyUsernameClickEvent() {
+  async handleCopyUsernameClickEvent() {
     this.handleCloseMoreMenu();
-    this.context.port.emit("passbolt.clipboard.write", this.selectedResources[0].username);
+    await this.context.port.request("passbolt.clipboard.copy", this.selectedResources[0].username);
     this.displaySuccessNotification("The username has been copied to clipboard");
   }
 
@@ -178,9 +178,11 @@ class PasswordWorkspaceMenu extends React.Component {
    * handle copy to clipboard the secret of the selected resource
    */
   async handleCopySecretClickEvent() {
+    this.handleCloseMoreMenu();
+
     try {
       const secret = await this.context.port.request("passbolt.secret.decrypt", this.selectedResources[0].id);
-      this.context.port.emit("passbolt.clipboard.write", secret);
+      await this.context.port.request("passbolt.clipboard.copy", secret);
       this.props.actionFeedbackContext.displaySuccess("The secret has been copied to clipboard");
     } catch (error) {
       if (error.name !== "UserAbortsOperationError") {
@@ -253,6 +255,14 @@ class PasswordWorkspaceMenu extends React.Component {
   }
 
   /**
+   * Can copy username
+   * @returns {boolean}
+   */
+  canCopyUsername() {
+    return this.hasOneResourceSelected() && this.selectedResources[0].username;
+  }
+
+  /**
    * Has at least one action of the more menu allowed.
    * @return {boolean}
    */
@@ -309,7 +319,7 @@ class PasswordWorkspaceMenu extends React.Component {
                   <div className="row">
                     <div className="main-cell-wrapper">
                       <div className="main-cell">
-                        <a className={`${this.hasOneResourceSelected() ? "" : "disabled"}`}
+                        <a className={`${this.canCopyUsername() ? "" : "disabled"}`}
                           onClick={this.handleCopyUsernameClickEvent}>
                           <span>copy username to clipboard</span>
                         </a>

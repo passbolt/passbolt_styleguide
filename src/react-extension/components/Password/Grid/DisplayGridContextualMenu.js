@@ -38,6 +38,7 @@ class DisplayGridContextualMenu extends React.Component {
     this.handleEditClickEvent = this.handleEditClickEvent.bind(this);
     this.handleShareClickEvent = this.handleShareClickEvent.bind(this);
     this.handleUsernameClickEvent = this.handleUsernameClickEvent.bind(this);
+    this.handleUriClickEvent = this.handleUriClickEvent.bind(this);
     this.handlePermalinkClickEvent = this.handlePermalinkClickEvent.bind(this);
     this.handlePasswordClickEvent = this.handlePasswordClickEvent.bind(this);
     this.handleDeleteClickEvent = this.handleDeleteClickEvent.bind(this);
@@ -68,19 +69,28 @@ class DisplayGridContextualMenu extends React.Component {
   /**
    * handle username resource
    */
-  handleUsernameClickEvent() {
-    this.context.port.emit("passbolt.clipboard.write", this.resource.username);
+  async handleUsernameClickEvent() {
+    await this.context.port.request("passbolt.clipboard.copy", this.resource.username);
     this.props.actionFeedbackContext.displaySuccess("The username has been copied to clipboard");
+    this.props.hide();
+  }
+
+  /**
+   * handle uri resource
+   */
+  async handleUriClickEvent() {
+    await this.context.port.request("passbolt.clipboard.copy", this.resource.uri);
+    this.props.actionFeedbackContext.displaySuccess("The uri has been copied to clipboard");
     this.props.hide();
   }
 
   /**
    * handle permalink resource
    */
-  handlePermalinkClickEvent() {
+  async handlePermalinkClickEvent() {
     const baseUrl = this.context.userSettings.getTrustedDomain();
     const permalink = `${baseUrl}/app/passwords/view/${this.resource.id}`;
-    this.context.port.emit("passbolt.clipboard.write", permalink);
+    await this.context.port.request("passbolt.clipboard.copy", permalink);
     this.props.actionFeedbackContext.displaySuccess("The permalink has been copied to clipboard");
     this.props.hide();
   }
@@ -93,7 +103,7 @@ class DisplayGridContextualMenu extends React.Component {
 
     try {
       const secret = await this.context.port.request("passbolt.secret.decrypt", this.resource.id);
-      this.context.port.emit("passbolt.clipboard.write", secret);
+      await this.context.port.request("passbolt.clipboard.copy", secret);
       this.props.actionFeedbackContext.displaySuccess("The secret has been copied to clipboard");
     } catch (error) {
       if (error.name !== "UserAbortsOperationError") {
@@ -135,6 +145,22 @@ class DisplayGridContextualMenu extends React.Component {
   }
 
   /**
+   * Can copy username
+   * @returns {boolean}
+   */
+  canCopyUsername() {
+    return this.resource.username !== "";
+  }
+
+  /**
+   * Can copy uri
+   * @returns {boolean}
+   */
+  canCopyUri() {
+    return this.resource.uri !== "";
+  }
+
+  /**
    * Render the component.
    * @returns {JSX}
    */
@@ -148,7 +174,8 @@ class DisplayGridContextualMenu extends React.Component {
           <div className="row">
             <div className="main-cell-wrapper">
               <div className="main-cell">
-                <a id="username" onClick={this.handleUsernameClickEvent}><span>Copy username</span></a>
+                <a id="username" className={`${this.canCopyUsername() ? "" : "disabled"}`}
+                  onClick={this.handleUsernameClickEvent}><span>Copy username</span></a>
               </div>
             </div>
           </div>
@@ -158,6 +185,16 @@ class DisplayGridContextualMenu extends React.Component {
             <div className="main-cell-wrapper">
               <div className="main-cell">
                 <a id="password" onClick={this.handlePasswordClickEvent}><span>Copy password</span></a>
+              </div>
+            </div>
+          </div>
+        </li>
+        <li key="option-uri-resource" className="ready">
+          <div className="row">
+            <div className="main-cell-wrapper">
+              <div className="main-cell">
+                <a id="username" className={`${this.canCopyUri() ? "" : "disabled"}`}
+                  onClick={this.handleUriClickEvent}><span>Copy URI</span></a>
               </div>
             </div>
           </div>

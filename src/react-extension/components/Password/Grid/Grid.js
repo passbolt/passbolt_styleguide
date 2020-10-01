@@ -164,11 +164,11 @@ class Grid extends React.Component {
     return this.props.resourceWorkspaceContext.selectedResources.some(selectedResource => resource.id === selectedResource.id);
   }
 
-  handleCopyUsernameClick(ev, resource) {
+  async handleCopyUsernameClick(ev, resource) {
     // Avoid the grid to select the resource while copying a resource username.
     ev.stopPropagation();
 
-    this.context.port.emit('passbolt.clipboard.write', resource.username);
+    await this.context.port.request("passbolt.clipboard.copy", resource.username);
     this.props.actionFeedbackContext.displaySuccess("The username has been copied to clipboard");
   }
 
@@ -178,7 +178,7 @@ class Grid extends React.Component {
 
     try {
       const secret = await this.context.port.request("passbolt.secret.decrypt", resource.id);
-      this.context.port.emit("passbolt.clipboard.write", secret);
+      await this.context.port.request("passbolt.clipboard.copy", secret);
       this.props.actionFeedbackContext.displaySuccess("The secret has been copied to clipboard");
     } catch (error) {
       if (error.name !== "UserAbortsOperationError") {
