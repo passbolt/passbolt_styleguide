@@ -48,7 +48,8 @@ class PasswordSidebarPermissionsSection extends React.Component {
   getDefaultState() {
     return {
       permissions: null,
-      open: false
+      open: false,
+      loading: true,
     };
   }
 
@@ -90,11 +91,12 @@ class PasswordSidebarPermissionsSection extends React.Component {
    * Get the folder permissions.
    */
   async fetch() {
+    this.setState({loading: true});
     const permissions = await this.context.port.request('passbolt.resources.find-permissions', this.resource.id);
     if (permissions) {
       permissions.sort((permissionA, permissionB) => this.sortPermissions(permissionA, permissionB));
     }
-    this.setState({permissions});
+    this.setState({permissions, loading: false});
   }
 
   /**
@@ -157,7 +159,7 @@ class PasswordSidebarPermissionsSection extends React.Component {
    * @returns {boolean}
    */
   isLoading() {
-    return !this.state.permissions;
+    return this.state.loading;
   }
 
   /**

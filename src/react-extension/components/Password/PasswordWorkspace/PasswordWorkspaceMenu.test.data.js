@@ -155,7 +155,7 @@ export const resourcesMock = [
     "tags": [],
     "folder_parent_id": null,
     "personal": false
-  },{
+  }, {
     "id": "daaf057e-7fc3-5537-a8a9-e8c151890878",
     "name": "cakephp",
     "username": "cake",
