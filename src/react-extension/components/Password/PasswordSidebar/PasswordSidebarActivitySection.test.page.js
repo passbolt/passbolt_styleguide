@@ -12,12 +12,11 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         2.11.0
  */
-
-
 import {fireEvent, render, waitFor} from "@testing-library/react";
 import AppContext from "../../../contexts/AppContext";
 import React from "react";
 import PasswordSidebarActivitySection from "./PasswordSidebarActivitySection";
+import {BrowserRouter as Router} from 'react-router-dom';
 
 /**
  * The PasswordSidebarActivitySection component represented as a page
@@ -30,9 +29,11 @@ export default class PasswordSidebarActivitySectionPage {
    */
   constructor(appContext, props) {
     this._page = render(
-      <AppContext.Provider value={appContext}>
-        <PasswordSidebarActivitySection {...props}/>
-      </AppContext.Provider>
+      <Router>
+        <AppContext.Provider value={appContext}>
+          <PasswordSidebarActivitySection {...props}/>
+        </AppContext.Provider>
+      </Router>
     );
     this.setupPageObjects();
   }
