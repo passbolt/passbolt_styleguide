@@ -19,6 +19,7 @@ import GroupAvatar from "../../Common/Avatar/GroupAvatar";
 import AppContext from "../../../contexts/AppContext";
 import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 import Icon from "../../../../react/components/Common/Icons/Icon";
+import {Link} from "react-router-dom";
 
 const LIMIT_ACTIVITIES_PER_PAGE = 5;
 
@@ -44,8 +45,9 @@ class PasswordSidebarActivitySection extends React.Component {
     return {
       activities: null, // list of activities
       activitiesPage: 1, // pagination for activity
-      activitySectionMoreProcessing: true, // processing when the user want to see more activities
+      loadingMore: false, // processing when the user want to see more activities
       open: false,
+      loading: true,
     };
   }
 
@@ -69,33 +71,49 @@ class PasswordSidebarActivitySection extends React.Component {
    * Check if the resource has changed and fetch
    * @param previousResource
    */
-  handleResourceChange(previousResource) {
-    const hasResourceChanged = this.resource.id !== previousResource.id;
-    if (hasResourceChanged && this.state.open) {
-      this.fetch();
+  async handleResourceChange(previousResource) {
+    // do nothing if the section is closed.
+    if (!this.state.open) {
+      return;
     }
+    // do nothing if the resource doesn't change.
+    if (this.resource.id === previousResource.id) {
+      return;
+    }
+
+    // Reset the component, and fetch activities for the new resource.
+    const state = Object.assign({}, this.getDefaultState(), {open: true});
+    await this.setState(state);
+    await this.fetch();
+    this.setState({loading: false});
   }
 
   /**
    * handle when the users click on the section header.
    * Open/Close it.
    */
-  handleTitleClickEvent() {
-    const open = !this.state.open;
-    if (open) {
-      this.fetch();
+  async handleTitleClickEvent() {
+    // If the section is open, reset the component and close the section.
+    if (this.state.open) {
+      const defaultState = this.getDefaultState();
+      this.setState(defaultState);
+    } else {
+      await this.setState({loading: true, open: true});
+      await this.fetch();
+      this.setState({loading: false});
     }
-    this.setState({open});
   }
 
   /**
    * handle when the users click on the more button.
    * Open/Close it.
    */
-  handleMoreClickEvent() {
+  async handleMoreClickEvent() {
     const activitiesPage = this.state.activitiesPage + 1;
-    this.setState({activitiesPage, activitySectionMoreProcessing: true}, this.fetch.bind(this));
-    this.setState({activitySectionMoreProcessing: false});
+    const loadingMore = true;
+    await this.setState({activitiesPage, loadingMore});
+    await this.fetch();
+    this.setState({loadingMore: false});
   }
 
   /**
@@ -104,7 +122,13 @@ class PasswordSidebarActivitySection extends React.Component {
    */
   async fetch() {
     const newActivities = await this.context.port.request('passbolt.resources.action-log', this.resource.id, this.state.activitiesPage, LIMIT_ACTIVITIES_PER_PAGE);
-    const activities = [...(this.state.activities || []), ...newActivities];
+    let activities;
+    // For the first page need to reset activities state
+    if (this.state.activitiesPage > 1) {
+      activities = [...(this.state.activities || []), ...newActivities];
+    } else {
+      activities = [...newActivities];
+    }
     this.setState({activities});
   }
 
@@ -125,16 +149,6 @@ class PasswordSidebarActivitySection extends React.Component {
    */
   getActivityCreatorFullName(user) {
     return `${user.profile.first_name} ${user.profile.last_name}`;
-  }
-
-  /**
-   * Get a resource permalink
-   * @param {object} resource The target resource
-   * @returns {string}
-   */
-  getResourcePermalink(resource) {
-    const baseUrl = this.context.userSettings.getTrustedDomain();
-    return `${baseUrl}/app/passwords/view/${resource.id}`;
   }
 
   /**
@@ -187,7 +201,7 @@ class PasswordSidebarActivitySection extends React.Component {
    */
   renderCreatedActivity(activity) {
     const activityCreatorName = this.getActivityCreatorFullName(activity.creator);
-    const resourcePermalink = this.getResourcePermalink(this.resource);
+    const resourceLink = `/app/passwords/view/${this.resource.id}`;
     const resourceName = this.resource.name;
     const activityFormattedDate = this.formatDateTimeAgo(activity.created);
 
@@ -196,7 +210,7 @@ class PasswordSidebarActivitySection extends React.Component {
         <div className="content-wrapper">
           <div className="content">
             <div className="name">
-              <span className="creator">{activityCreatorName}</span> created the item <a href={resourcePermalink}>{resourceName}</a>
+              <span className="creator">{activityCreatorName}</span> created the item <Link to={resourceLink}>{resourceName}</Link>
             </div>
             <div className="subinfo light">{activityFormattedDate}</div>
           </div>
@@ -213,7 +227,7 @@ class PasswordSidebarActivitySection extends React.Component {
    */
   renderUpdatedActivity(activity) {
     const activityCreatorName = this.getActivityCreatorFullName(activity.creator);
-    const resourcePermalink = this.getResourcePermalink(this.resource);
+    const resourceLink = `/app/passwords/view/${this.resource.id}`;
     const resourceName = activity.data.resource.name;
     const activityFormattedDate = this.formatDateTimeAgo(activity.created);
 
@@ -222,7 +236,7 @@ class PasswordSidebarActivitySection extends React.Component {
         <div className="content-wrapper">
           <div className="content">
             <div className="name">
-              <span className="creator">{activityCreatorName}</span> renamed the item into <a href={resourcePermalink}>{resourceName}</a>
+              <span className="creator">{activityCreatorName}</span> renamed the item into <Link to={resourceLink}>{resourceName}</Link>
             </div>
             <div className="subinfo light">{activityFormattedDate}</div>
           </div>
@@ -239,7 +253,7 @@ class PasswordSidebarActivitySection extends React.Component {
    */
   renderReadActivity(activity) {
     const activityCreatorName = this.getActivityCreatorFullName(activity.creator);
-    const resourcePermalink = this.getResourcePermalink(this.resource);
+    const resourceLink = `/app/passwords/view/${this.resource.id}`;
     const resourceName = this.resource.name;
     const activityFormattedDate = this.formatDateTimeAgo(activity.created);
 
@@ -248,7 +262,7 @@ class PasswordSidebarActivitySection extends React.Component {
         <div className="content-wrapper">
           <div className="content">
             <div className="name">
-              <span className="creator">{activityCreatorName}</span> accessed secret of item <a href={resourcePermalink}>{resourceName}</a>
+              <span className="creator">{activityCreatorName}</span> accessed secret of item <Link to={resourceLink}>{resourceName}</Link>
             </div>
             <div className="subinfo light">{activityFormattedDate}</div>
           </div>
@@ -293,7 +307,7 @@ class PasswordSidebarActivitySection extends React.Component {
    */
   renderSharedActivity(activity) {
     const activityCreatorName = this.getActivityCreatorFullName(activity.creator);
-    const resourcePermalink = this.getResourcePermalink(this.resource);
+    const resourceLink = `/app/passwords/view/${this.resource.id}`;
     const resourceName = this.resource.name;
     const activityFormattedDate = this.formatDateTimeAgo(activity.created);
 
@@ -302,7 +316,7 @@ class PasswordSidebarActivitySection extends React.Component {
         <div className="content-wrapper">
           <div className="content">
             <div className="name">
-              <span className="creator">{activityCreatorName}</span> changed permissions of the item <a href={resourcePermalink}>{resourceName}</a> with
+              <span className="creator">{activityCreatorName}</span> changed permissions of the item <Link to={resourceLink}>{resourceName}</Link> with
             </div>
             <div className="subinfo light">{activityFormattedDate}</div>
             <ul className="permissions-list">
@@ -367,14 +381,10 @@ class PasswordSidebarActivitySection extends React.Component {
   }
 
   /**
-   * Is the more button visible
+   * Check if the more button should be displayed.
    * @return {boolean}
    */
-  isMoreButtonVisible() {
-    if (this.state.activities === null) {
-      return false;
-    }
-
+  mustDisplayMoreButton() {
     return !this.state.activities.some(activity => activity.type === "Resources.created");
   }
 
@@ -390,9 +400,6 @@ class PasswordSidebarActivitySection extends React.Component {
    * @returns {JSX}
    */
   render() {
-    const loadingActivities = this.state.activities === null;
-    const isMoreButtonVisible = this.isMoreButtonVisible();
-
     return (
       <div className={`activity accordion sidebar-section ${this.state.open ? "" : "closed"}`}>
         <div className="accordion-header">
@@ -409,19 +416,19 @@ class PasswordSidebarActivitySection extends React.Component {
           </h4>
         </div>
         <div className="accordion-content">
-          {loadingActivities &&
+          {this.state.loading &&
           <div className="processing-wrapper">
             <span className="processing-text">Retrieving activities</span>
           </div>
           }
-          {!loadingActivities &&
+          {!this.state.loading &&
           <React.Fragment>
             <ul className="ready">
               {this.state.activities.map(activity => this.renderActivity(activity))}
             </ul>
-            {isMoreButtonVisible &&
+            {this.mustDisplayMoreButton() &&
             <div className="actions">
-              <a onClick={this.handleMoreClickEvent} className={`button action-logs-load-more ${this.state.moreProcessing ? "processing disabled" : ""}`} role="button">
+              <a onClick={this.handleMoreClickEvent} className={`button action-logs-load-more ${this.state.loadingMore ? "processing disabled" : ""}`} role="button">
                 <span>more</span>
               </a>
             </div>
