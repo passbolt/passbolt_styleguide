@@ -452,7 +452,7 @@ class FoldersTreeItem extends React.Component {
           </div>
           {!isDragged &&
           <div className="right-cell more-ctrl">
-            <a onClick={this.handleMoreClickEvent}><span>more</span></a>
+            <a onClick={this.handleMoreClickEvent}><Icon name="plus-square"/></a>
           </div>
           }
         </div>

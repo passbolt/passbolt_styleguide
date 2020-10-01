@@ -475,7 +475,7 @@ class FoldersTree extends React.Component {
                   </h3>
                 </div>
                 <div className="right-cell more-ctrl">
-                  <a onClick={this.handleTitleMoreClickEvent}><span>more</span></a>
+                  <a onClick={this.handleTitleMoreClickEvent}><Icon name="plus-square"/></a>
                 </div>
               </div>
             </div>

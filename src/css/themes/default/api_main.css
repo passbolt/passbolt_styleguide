@@ -6668,58 +6668,17 @@ input[type="search"]::-webkit-search-cancel-button {
   color: #888;
   border: 1px solid transparent;
 }
-.panel .navigation .row .right-cell a:after {
+.panel .navigation .row .right-cell a .svg-icon {
   position: absolute;
   width: 16px;
   height: 16px;
-  content: "\f0fe";
-  font: normal normal normal 14px/1 FontAwesome;
   line-height: 16px;
   text-align: center;
   vertical-align: center;
 }
-.panel .navigation .row .right-cell a.filter:after {
-  content: "\f0b0";
-}
 .panel .navigation .row .right-cell a:hover {
   color: #2894DF;
   background: #FFF;
-}
-.panel .navigation .row .right-cell span {
-  /*
-     * Extends the .visuallyhidden class to allow the element to be focusable
-     * when navigated to via the keyboard: h5bp.com/p
-     */
-  border: 0;
-  clip: rect(0 0 0 0);
-  height: 1px;
-  margin: -1px;
-  overflow: hidden;
-  padding: 0;
-  position: absolute;
-  width: 1px;
-  /*
-     * Extends the .visuallyhidden class to allow the element to be focusable
-     * when navigated to via the keyboard: h5bp.com/p
-     */
-}
-.panel .navigation .row .right-cell span .focusable:active,
-.panel .navigation .row .right-cell span .focusable:focus {
-  clip: auto;
-  height: auto;
-  margin: 0;
-  overflow: visible;
-  position: static;
-  width: auto;
-}
-.panel .navigation .row .right-cell span .focusable:active,
-.panel .navigation .row .right-cell span .focusable:focus {
-  clip: auto;
-  height: auto;
-  margin: 0;
-  overflow: visible;
-  position: static;
-  width: auto;
 }
 .panel .navigation .row.title .right-cell {
   margin-top: -1.625em;
@@ -8179,28 +8138,18 @@ table.table-info.horizontal tbody tr:hover {
 .accordion.sidebar-section .accordion-header a {
   border: 0;
 }
-.accordion.sidebar-section .accordion-header a:after {
+.accordion.sidebar-section .accordion-header a .svg-icon {
   position: absolute;
   right: 1.5em;
   margin-top: 0.25em;
-  content: "\f0d7";
-  /* caret down */
-  font: normal normal normal 1em FontAwesome;
   text-rendering: auto;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  width: 1em;
-  height: 1em;
   text-align: center;
   z-index: 400;
-  color: #888;
 }
 .accordion.sidebar-section .accordion-header a:hover:after {
   color: #2894DF;
-}
-.accordion.sidebar-section.closed .accordion-header a:after {
-  content: "\f0da";
-  /* caret right */
 }
 .accordion.navigation .accordion-header .main-cell a:before {
   margin-left: -1.25em;
