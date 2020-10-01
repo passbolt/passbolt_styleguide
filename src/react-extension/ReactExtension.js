@@ -234,7 +234,7 @@ class ReactExtension extends Component {
                 <ManageDialogs/>
 
                 <Router>
-                  <div id="container" className="page">
+                  <div id="container" className="page password">
                     {isReady &&
                     <div id="app" className={`app ${isReady ? "ready" : ""}`} tabIndex="1000">
 
