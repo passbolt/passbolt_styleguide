@@ -104,7 +104,7 @@ class ErrorDialog extends Component {
               <p>{this.getMessage()}</p>
             </div>
             <div className="submit-wrapper clearfix">
-              <a className="button primary" onClick={this.props.onClose}>OK</a>
+              <a className="button primary warning" onClick={this.props.onClose}>OK</a>
             </div>
           </div>
         </div>
