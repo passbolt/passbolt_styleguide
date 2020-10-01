@@ -148,9 +148,9 @@ class PasswordWorkspaceMenu extends React.Component {
   /**
    * handle share resources
    */
-  handleShareClickEvent() {
-    const resourceIds = this.selectedResources.map(resource => resource.id);
-    this.context.setContext({shareDialogProps: {resourceIds}});
+  async handleShareClickEvent() {
+    const resourcesIds = this.selectedResources.map(resource => resource.id);
+    await this.context.setContext({shareDialogProps: {resourcesIds}});
     this.props.dialogContext.open(ShareDialog);
   }
 

@@ -407,8 +407,11 @@ class ShareDialog extends Component {
    */
   render() {
     return (
-      <DialogWrapper className='share-dialog'
-        title={this.getTitle()} tooltip={this.getTooltip()} onClose={this.handleClose} disabled={this.hasAllInputDisabled()}>
+      <DialogWrapper
+        title={this.getTitle()}
+        tooltip={this.getTooltip()}
+        onClose={this.handleClose}
+        disabled={this.hasAllInputDisabled()}>
         <form className="share-form" onSubmit={this.handleFormSubmit} noValidate>
           <div className="form-content permission-edit">
             {(this.state.loading) &&

@@ -59,8 +59,8 @@ class DisplayGridContextualMenu extends React.Component {
    * handle share resource
    */
   handleShareClickEvent() {
-    const resourceIds = [this.resource.id];
-    this.context.setContext({shareDialogProps: {resourceIds}});
+    const resourcesIds = [this.resource.id];
+    this.context.setContext({shareDialogProps: {resourcesIds}});
     this.props.dialogContext.open(ShareDialog);
     this.props.hide();
   }

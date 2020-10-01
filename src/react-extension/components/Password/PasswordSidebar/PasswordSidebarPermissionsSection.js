@@ -134,7 +134,8 @@ class PasswordSidebarPermissionsSection extends React.Component {
    * Handle when the user edits the permissions.
    */
   handlePermissionsEditClickEvent() {
-    this.context.setContext({shareDialogProps: {resourceIds: [this.resource.id]}});
+    const resourcesIds = [this.resource.id];
+    this.context.setContext({shareDialogProps: {resourcesIds}});
     this.props.dialogContext.open(ShareDialog);
   }
 

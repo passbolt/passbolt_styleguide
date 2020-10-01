@@ -78,10 +78,8 @@ class FoldersTreeItemContextualMenu extends React.Component {
    */
   handleShareFolderItemClickEvent() {
     if (this.canShare()) {
-      this.context.setContext(Object.assign(
-        {},
-        this.context.shareDialogProps,
-        {shareDialogProps: {folderIds: [this.props.folder.id]}}));
+      const foldersIds = [this.props.folder.id];
+      this.context.setContext({shareDialogProps: {foldersIds}});
       this.props.dialogContext.open(ShareDialog);
       this.props.hide();
     }

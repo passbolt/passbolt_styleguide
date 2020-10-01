@@ -74,7 +74,8 @@ class FolderSidebarPermissionsSection extends React.Component {
    * Handle when the user edits the folder permissions.
    */
   handlePermissionsEditClickEvent() {
-    this.context.setContext({shareDialogProps: {folderIds: [this.folder.id]}});
+    const foldersIds = [this.folder.id];
+    this.context.setContext({shareDialogProps: {foldersIds}});
     this.props.dialogContext.open(ShareDialog);
   }
 
