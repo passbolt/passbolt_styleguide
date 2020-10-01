@@ -16,6 +16,7 @@ import PropTypes from "prop-types";
 import DisplayTagListContextualMenu from "./DisplayTagListContextualMenu";
 import {ResourceWorkspaceFilterTypes, withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 import {withContextualMenu} from "../../../contexts/Common/ContextualMenuContext";
+import {withRouter} from "react-router-dom";
 import Icon from "../../Common/Icons/Icon";
 
 class DisplayTagList extends React.Component {
@@ -86,7 +87,8 @@ class DisplayTagList extends React.Component {
   }
 
   handleOnClickTag(tag) {
-    this.props.resourceWorkspaceContext.onFilterTagChanged(tag);
+    const filter = {type: ResourceWorkspaceFilterTypes.TAG, payload: {tag: tag}};
+    this.props.history.push({pathname: '/app/passwords', state: {filter}});
   }
 
   /**
@@ -103,16 +105,19 @@ class DisplayTagList extends React.Component {
    * @param previousTags
    */
   handleAllFilterRequired(previousTags) {
-    const hasTagChanged = this.props.tags !== previousTags;
-    const filter = this.props.resourceWorkspaceContext.filter;
-    const isAppFilterByTag = filter && filter.type === ResourceWorkspaceFilterTypes.TAG;
+    const hasTagNumberChanged = this.props.tags.length !== previousTags.length;
 
-    if (hasTagChanged && isAppFilterByTag) {
-      // check if the tag is present in the list of tags
-      const isTagFilteredPresent = this.props.tags.filter(tag => tag.id === filter.payload.tag.id).length > 0;
-      if (!isTagFilteredPresent) {
-        // apply all filter
-        this.props.resourceWorkspaceContext.onAllFilterRequired();
+    if (hasTagNumberChanged) {
+      const filter = this.props.resourceWorkspaceContext.filter;
+      const isAppFilterByTag = filter && filter.type === ResourceWorkspaceFilterTypes.TAG;
+      if (isAppFilterByTag) {
+        // check if the tag is present in the list of tags
+        const isTagFilteredPresent = this.props.tags.filter(tag => tag.id === filter.payload.tag.id).length > 0;
+        if (!isTagFilteredPresent) {
+          // If the tag filtered is deleted apply all filter
+          const filter = {type: ResourceWorkspaceFilterTypes.ALL};
+          this.props.history.push({pathname: '/app/passwords', state: {filter}});
+        }
       }
     }
   }
@@ -207,10 +212,11 @@ DisplayTagList.propTypes = {
   contextualMenuContext: PropTypes.any, // The contextual menu context
   tags: PropTypes.array,
   filterType: PropTypes.string,
-  resourceWorkspaceContext: PropTypes.object
+  resourceWorkspaceContext: PropTypes.object,
+  history: PropTypes.any
 };
 
-export default withResourceWorkspace(withContextualMenu(DisplayTagList));
+export default withRouter(withResourceWorkspace(withContextualMenu(DisplayTagList)));
 
 export const filterByTagsOptions = {
   all: "all",

@@ -13,7 +13,8 @@
  */
 import React from "react";
 import PropTypes from "prop-types";
-import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
+import {ResourceWorkspaceFilterTypes, withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
+import {withRouter} from "react-router-dom";
 
 class TagItemViewer extends React.Component {
   /**
@@ -38,7 +39,8 @@ class TagItemViewer extends React.Component {
    */
   handleOnClickTag(tag) {
     // filter by the resources by tag
-    this.props.resourceWorkspaceContext.onFilterTagChanged(tag);
+    const filter = {type: ResourceWorkspaceFilterTypes.TAG, payload: {tag: tag}};
+    this.props.history.push({pathname: '/app/passwords', state: {filter}});
   }
 
   isLoading() {
@@ -87,7 +89,8 @@ class TagItemViewer extends React.Component {
 TagItemViewer.propTypes = {
   tags: PropTypes.array,
   toggleInputTagEditor: PropTypes.func,
-  resourceWorkspaceContext: PropTypes.any
+  resourceWorkspaceContext: PropTypes.any,
+  history: PropTypes.any
 };
 
-export default withResourceWorkspace(TagItemViewer);
+export default withRouter(withResourceWorkspace(TagItemViewer));

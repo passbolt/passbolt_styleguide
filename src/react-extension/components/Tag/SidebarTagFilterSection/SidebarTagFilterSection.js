@@ -18,6 +18,8 @@ import SidebarTagFilterSectionContextualMenu from "./SidebarTagFilterSectionCont
 import DisplayTagList from "./DisplayTagList";
 import {withContextualMenu} from "../../../contexts/Common/ContextualMenuContext";
 import {ResourceWorkspaceFilterTypes, withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
+import AppContext from "../../../contexts/AppContext";
+import {withRouter} from "react-router-dom";
 
 /**
  * This component display the tag to filter the resources
@@ -99,7 +101,8 @@ class SidebarTagFilterSection extends React.Component {
   handleFilterTagsType(filterType) {
     if (this.isAllFilterRequire(filterType)) {
       // apply all filter
-      this.props.resourceWorkspaceContext.onAllFilterRequired();
+      const filter = {type: ResourceWorkspaceFilterTypes.ALL};
+      this.props.history.push({pathname: '/app/passwords', state: {filter}});
     }
     this.setState({filterType}, () => {
       this.updateTitle();
@@ -139,6 +142,23 @@ class SidebarTagFilterSection extends React.Component {
   }
 
   /**
+   * Get tags from resources
+   * @returns {array} all tags from resources
+   */
+  getTagsFromResources() {
+    if (this.context.resources) {
+      // get all tags, flat in array and reduce to have unique tag
+      const tags =  this.context.resources.map(resource => resource.tags).flat().reduce((tagsA, tagsB) => {
+        !tagsA.find(tag => tag.id === tagsB.id) && tagsA.push(tagsB);
+        return tagsA;
+      }, []);
+      // sort array alphabetically
+      return tags.sort((tagA, tagB) => tagA.slug.localeCompare(tagB.slug));
+    }
+    return null;
+  }
+
+  /**
    * Render the component
    * @returns {JSX}
    */
@@ -174,7 +194,7 @@ class SidebarTagFilterSection extends React.Component {
         </ul>
         {this.state.open &&
         <DisplayTagList
-          tags={this.props.tags}
+          tags={this.getTagsFromResources()}
           filterType={this.state.filterType}
         />
         }
@@ -183,10 +203,12 @@ class SidebarTagFilterSection extends React.Component {
   }
 }
 
+SidebarTagFilterSection.contextType = AppContext;
+
 SidebarTagFilterSection.propTypes = {
-  tags: PropTypes.array,
   contextualMenuContext: PropTypes.any, // The contextual menu context
-  resourceWorkspaceContext: PropTypes.object
+  resourceWorkspaceContext: PropTypes.object,
+  history: PropTypes.any
 };
 
-export default withResourceWorkspace(withContextualMenu(SidebarTagFilterSection));
+export default withRouter(withResourceWorkspace(withContextualMenu(SidebarTagFilterSection)));

@@ -163,23 +163,6 @@ class Workspace extends Component {
     this.setState({search});
   }
 
-  /**
-   * Get tags from resources
-   * @returns {array} all tags from resources
-   */
-  getTagsFromResources() {
-    if (this.context.resources) {
-      // get all tags, flat in array and reduce to have unique tag
-      const tags =  this.context.resources.map(resource => resource.tags).flat().reduce((tagsA, tagsB) => {
-        !tagsA.find(tag => tag.id === tagsB.id) && tagsA.push(tagsB);
-        return tagsA;
-      }, []);
-      // sort array alphabetically
-      return tags.sort((tagA, tagB) => tagA.slug.localeCompare(tagB.slug));
-    }
-    return null;
-  }
-
   mustDisplaySidebar() {
     return this.props.resourceWorkspaceContext.mustDisplaySidebar;
   }
@@ -219,7 +202,7 @@ class Workspace extends Component {
                   <FoldersTree/>
                   }
                   {canUseTags &&
-                  <SidebarTagFilterSection tags={this.getTagsFromResources()}/>
+                  <SidebarTagFilterSection/>
                   }
                 </div>
                 <div className="panel middle">
