@@ -496,15 +496,16 @@ class Grid extends React.Component {
           </div>
           }
           {isEmpty &&
-          filterType !== ResourceWorkspaceFilterTypes.NONE  &&
-          ["default", "modified", "owned_by_me"].includes(filterType) &&
+          ( filterType === ResourceWorkspaceFilterTypes.ITEMS_I_OWN ||
+            filterType === ResourceWorkspaceFilterTypes.RECENTLY_MODIFIED ||
+            filterType === ResourceWorkspaceFilterTypes.ALL
+          ) &&
           <React.Fragment>
             <div className="empty-content">
               <h1>Welcome to passbolt!</h1>
               <p>It does feel a bit empty here. Create your first password or<br/>wait for a team member to share one with you.
               </p>
             </div>
-            <div className="tableview-content scroll"></div>
           </React.Fragment>
           }
           {!isEmpty &&
