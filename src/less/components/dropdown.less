@@ -21,8 +21,15 @@
     }
 }
 
-.dropdown .button.create .svg-icon svg {
+.dropdown .button.create {
+  .svg-icon svg {
     fill: @white;
+  }
+  &.disabled {
+    .svg-icon svg {
+      fill: @button-disabled-color;
+    }
+  }
 }
 
 .dropdown-content {

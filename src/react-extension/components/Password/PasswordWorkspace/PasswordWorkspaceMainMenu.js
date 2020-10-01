@@ -61,8 +61,8 @@ class PasswordWorkspaceMainMenu extends React.Component {
     this.handleDocumentContextualMenuEvent = this.handleDocumentContextualMenuEvent.bind(this);
     this.handleDocumentDragStartEvent = this.handleDocumentDragStartEvent.bind(this);
     this.handleCreateClickEvent = this.handleCreateClickEvent.bind(this);
-    this.handlePasswordClickEvent = this.handlePasswordClickEvent.bind(this);
-    this.handleFolderClickEvent = this.handleFolderClickEvent.bind(this);
+    this.handleCreateMenuPasswordClickEvent = this.handleCreateMenuPasswordClickEvent.bind(this);
+    this.handleMenuCreateFolderClickEvent = this.handleMenuCreateFolderClickEvent.bind(this);
   }
 
   componentDidMount() {
@@ -112,18 +112,27 @@ class PasswordWorkspaceMainMenu extends React.Component {
    * Handle create click event
    */
   handleCreateClickEvent() {
-    if (this.context.siteSettings.canIUse('folders')) {
+    const canUseFolders = this.context.siteSettings.canIUse('folders');
+    if (canUseFolders) {
       const createMenuOpen = !this.state.createMenuOpen;
       this.setState({createMenuOpen});
     } else {
-      this.handlePasswordClickEvent();
+      this.openPasswordCreateDialog();
     }
   }
 
   /**
    * Handle password click event
    */
-  handlePasswordClickEvent() {
+  handleCreateMenuPasswordClickEvent() {
+    this.openPasswordCreateDialog();
+    this.handleCloseCreateMenu();
+  }
+
+  /**
+   * Open create password dialog
+   */
+  openPasswordCreateDialog() {
     const resourceCreateDialogProps = {
       folderParentId: this.folderIdSelected
     };
@@ -134,7 +143,15 @@ class PasswordWorkspaceMainMenu extends React.Component {
   /**
    * Handle folder click event
    */
-  handleFolderClickEvent() {
+  handleMenuCreateFolderClickEvent() {
+    this.openFolderCreateDialog();
+    this.handleCloseCreateMenu();
+  }
+
+  /**
+   * Open create password dialog
+   */
+  openFolderCreateDialog() {
     const folderCreateDialogProps = {
       folderParentId: this.folderIdSelected
     };
@@ -149,6 +166,10 @@ class PasswordWorkspaceMainMenu extends React.Component {
     this.setState({createMenuOpen: false});
   }
 
+  /**
+   * Get the currently selected folder. Return null if none selected.
+   * @returns {null|object}
+   */
   get folderSelected() {
     const filter = this.props.resourceWorkspaceContext.filter;
     const isFilterByFolder = filter && filter.type === ResourceWorkspaceFilterTypes.FOLDER;
@@ -190,7 +211,7 @@ class PasswordWorkspaceMainMenu extends React.Component {
             <div className="row">
               <div className="main-cell-wrapper">
                 <div className="main-cell">
-                  <a onClick={this.handlePasswordClickEvent}>
+                  <a onClick={this.handleCreateMenuPasswordClickEvent}>
                     <span>New password</span>
                   </a>
                 </div>
@@ -201,7 +222,7 @@ class PasswordWorkspaceMainMenu extends React.Component {
             <div className="row">
               <div className="main-cell-wrapper">
                 <div className="main-cell">
-                  <a onClick={this.handleFolderClickEvent}>
+                  <a onClick={this.handleMenuCreateFolderClickEvent}>
                     <span>New folder</span>
                   </a>
                 </div>
