@@ -44,8 +44,9 @@ class PasswordSidebarActivitySection extends React.Component {
     return {
       activities: null, // list of activities
       activitiesPage: 1, // pagination for activity
-      activitySectionMoreProcessing: true, // processing when the user want to see more activities
+      activitySectionMoreProcessing: false, // processing when the user want to see more activities
       open: false,
+      loading: true,
     };
   }
 
@@ -72,7 +73,8 @@ class PasswordSidebarActivitySection extends React.Component {
   handleResourceChange(previousResource) {
     const hasResourceChanged = this.resource.id !== previousResource.id;
     if (hasResourceChanged && this.state.open) {
-      this.fetch();
+      // need to reset to the first page
+      this.setState({activitiesPage: 1}, this.fetch.bind(this));
     }
   }
 
@@ -83,7 +85,8 @@ class PasswordSidebarActivitySection extends React.Component {
   handleTitleClickEvent() {
     const open = !this.state.open;
     if (open) {
-      this.fetch();
+      // need to reset to the first page
+      this.setState({activitiesPage: 1}, this.fetch.bind(this));
     }
     this.setState({open});
   }
@@ -94,8 +97,7 @@ class PasswordSidebarActivitySection extends React.Component {
    */
   handleMoreClickEvent() {
     const activitiesPage = this.state.activitiesPage + 1;
-    this.setState({activitiesPage, activitySectionMoreProcessing: true}, this.fetch.bind(this));
-    this.setState({activitySectionMoreProcessing: false});
+    this.setState({activitiesPage}, this.fetch.bind(this));
   }
 
   /**
@@ -103,9 +105,16 @@ class PasswordSidebarActivitySection extends React.Component {
    * @returns {Promise<void>}
    */
   async fetch() {
+    this.setState({loading: true});
     const newActivities = await this.context.port.request('passbolt.resources.action-log', this.resource.id, this.state.activitiesPage, LIMIT_ACTIVITIES_PER_PAGE);
-    const activities = [...(this.state.activities || []), ...newActivities];
-    this.setState({activities});
+    let activities;
+    // For the first page need to reset activities state
+    if (this.state.activitiesPage > 1) {
+      activities = [...(this.state.activities || []), ...newActivities];
+    } else {
+      activities = [...newActivities];
+    }
+    this.setState({activities, loading: false});
   }
 
   /**
@@ -390,7 +399,7 @@ class PasswordSidebarActivitySection extends React.Component {
    * @returns {JSX}
    */
   render() {
-    const loadingActivities = this.state.activities === null;
+    const loadingActivities = this.state.loading && this.state.activities === null;
     const isMoreButtonVisible = this.isMoreButtonVisible();
 
     return (
@@ -421,7 +430,7 @@ class PasswordSidebarActivitySection extends React.Component {
             </ul>
             {isMoreButtonVisible &&
             <div className="actions">
-              <a onClick={this.handleMoreClickEvent} className={`button action-logs-load-more ${this.state.moreProcessing ? "processing disabled" : ""}`} role="button">
+              <a onClick={this.handleMoreClickEvent} className={`button action-logs-load-more ${this.state.loading ? "processing disabled" : ""}`} role="button">
                 <span>more</span>
               </a>
             </div>
