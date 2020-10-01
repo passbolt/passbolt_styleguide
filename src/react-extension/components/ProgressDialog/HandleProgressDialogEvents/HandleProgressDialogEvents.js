@@ -16,6 +16,7 @@ import React from 'react';
 import ProgressDialog from "../ProgressDialog/ProgressDialog";
 import AppContext from "../../../contexts/AppContext";
 import {withDialog} from "../../../contexts/Common/DialogContext";
+import PropTypes from "prop-types";
 
 /**
  * This component listens any event related to progress dialog actions to perform
@@ -27,6 +28,7 @@ class HandleProgressDialogEvents extends React.Component {
   constructor(props) {
     super(props);
     this.state = this.defaultState;
+    this.bindCallbacks();
   }
 
   /**
@@ -36,6 +38,16 @@ class HandleProgressDialogEvents extends React.Component {
     return {
       dialogIndex: null // The index of the opened dialog
     };
+  }
+
+  /**
+   * Bind callbacks methods
+   */
+  bindCallbacks() {
+    this.handleProgressDialogOpenEvent = this.handleProgressDialogOpenEvent.bind(this);
+    this.handleProgressDialogUpdateEvent = this.handleProgressDialogUpdateEvent.bind(this);
+    this.handleProgressDialogUpdateGoalsEvent = this.handleProgressDialogUpdateGoalsEvent.bind(this);
+    this.handleProgressDialogCloseEvent = this.handleProgressDialogCloseEvent.bind(this);
   }
 
   /**
@@ -64,7 +76,7 @@ class HandleProgressDialogEvents extends React.Component {
   handleProgressDialogOpenEvent(title, goals, message) {
     const progressDialogProps = {title, goals, message};
     this.context.setContext({progressDialogProps});
-    const dialogIndex = this.dialogContext.open(ProgressDialog);
+    const dialogIndex = this.props.dialogContext.open(ProgressDialog);
     this.setState({dialogIndex});
   }
 
@@ -100,7 +112,7 @@ class HandleProgressDialogEvents extends React.Component {
    * Handle the dialog close
    */
   handleProgressDialogCloseEvent() {
-    this.dialogContext.close(this.state.dialogIndex);
+    this.props.dialogContext.close(this.state.dialogIndex);
     this.context.setContext({progressDialogProps: {}});
   }
 
@@ -114,5 +126,9 @@ class HandleProgressDialogEvents extends React.Component {
 }
 
 HandleProgressDialogEvents.contextType = AppContext;
+
+HandleProgressDialogEvents.propTypes = {
+  dialogContext: PropTypes.any, // the dialog context
+};
 
 export default withDialog(HandleProgressDialogEvents);

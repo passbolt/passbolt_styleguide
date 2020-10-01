@@ -209,20 +209,22 @@ class Grid extends React.Component {
     this.props.resourceWorkspaceContext.onSorterChanged(sortProperty);
   }
 
-  handleDragStartEvent(event, resource) {
-    let selectedResources = this.props.selectedResources;
-
+  /**
+   * Handle the drag start on the selected resource
+   * @param event The DOM event
+   * @param resource The selected resource
+   * @returns {Promise<void>}
+   */
+  async handleDragStartEvent(event, resource) {
+    event.persist();
     if (!this.isResourceSelected(resource)) {
-      selectedResources = this.props.resourceWorkspaceContext.onResourceSelected.multiple(resource);
+      await this.props.resourceWorkspaceContext.onResourceSelected.single(resource);
     }
-    const draggedItems = {
-      resources: selectedResources,
-      folders: []
-    };
     event.dataTransfer.setDragImage(this.dragFeedbackElement.current, 5, 5);
-    const trigerEvent = document.createEvent("CustomEvent");
-    trigerEvent.initCustomEvent("passbolt.resources.drag-start", true, true, draggedItems);
-    document.dispatchEvent(trigerEvent);
+    const draggedItems = {resources:  this.props.resourceWorkspaceContext.selectedResources, folders: []};
+    const triggerEvent = document.createEvent("CustomEvent");
+    triggerEvent.initCustomEvent("passbolt.resources.drag-start", true, true, draggedItems);
+    document.dispatchEvent(triggerEvent);
   }
 
   handleDragEndEvent() {
@@ -423,14 +425,19 @@ class Grid extends React.Component {
     );
   }
 
+  /**
+   * Render the drag tooltip of the selected resources
+   * @returns {JSX.Element}
+   */
   renderDragFeedback() {
-    const isSelected = this.props.selectedResources.length > 0;
-    const isMultipleSelected = this.props.selectedResources.length > 1;
+    const isSelected = this.props.resourceWorkspaceContext.selectedResources.length > 0;
+    const isMultipleSelected = this.props.resourceWorkspaceContext.selectedResources.length > 1;
     let dragFeedbackText = "";
     let dragElementClassname = "";
 
     if (isSelected) {
-      const firstSelectedResource = this.props.resourceWorkspaceContext.filteredResources.find(resource => resource.id === this.props.selectedResources[0].id);
+      const isSelected = resource => resource.id === this.props.resourceWorkspaceContext.selectedResources[0].id;
+      const firstSelectedResource = this.props.resourceWorkspaceContext.filteredResources.find(isSelected);
       if (firstSelectedResource) {
         dragElementClassname = isMultipleSelected ? "drag-and-drop-multiple" : "drag-and-drop";
         dragFeedbackText = firstSelectedResource.name;
@@ -442,7 +449,7 @@ class Grid extends React.Component {
         {dragFeedbackText}
         {isMultipleSelected &&
         <span className="count">
-          {this.props.selectedResources.length}
+          {this.props.resourceWorkspaceContext.selectedResources.length}
         </span>
         }
       </div>
