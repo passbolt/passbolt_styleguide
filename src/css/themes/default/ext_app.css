@@ -5519,6 +5519,9 @@ h6 .input.toggle-switch {
 .dropdown .button.create .svg-icon svg {
   fill: #FFF;
 }
+.dropdown .button.create.disabled .svg-icon svg {
+  fill: #888;
+}
 .dropdown-content {
   border: 1px solid #DDD;
   background: #FFF;

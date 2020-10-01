@@ -36,6 +36,9 @@ const getAppContext = function(appContext) {
     userSettings: new UserSettings(userSettingsFixture),
     siteSettings: new SiteSettings(siteSettingsFixture),
     port: new MockPort(),
+    resourceCreateDialogProps: {
+      folderParentId: null
+    },
     setContext: function(newContext) {
       // In this scope this reference the object context.
       Object.assign(this, newContext);
@@ -335,7 +338,8 @@ describe("PasswordCreateDialog", () => {
       name: resourceMeta.name,
       uri: resourceMeta.uri,
       username: resourceMeta.username,
-      description: resourceMeta.description
+      description: resourceMeta.description,
+      folder_parent_id: null
     };
     expect(context.port.request).toHaveBeenCalledWith("passbolt.resources.create", onApiCreateResourceMeta, resourceMeta.password);
     expect(context.port.emit).toHaveBeenCalledTimes(1);
