@@ -6676,6 +6676,12 @@ input[type="search"]::-webkit-search-cancel-button {
   text-align: center;
   vertical-align: center;
 }
+.panel .navigation .row .right-cell a .svg-icon svg {
+  fill: #888;
+}
+.panel .navigation .row .right-cell a .svg-icon svg:hover {
+  fill: #2894DF;
+}
 .panel .navigation .row .right-cell a:hover {
   color: #2894DF;
   background: #FFF;
@@ -8142,14 +8148,6 @@ table.table-info.horizontal tbody tr:hover {
   position: absolute;
   right: 1.5em;
   margin-top: 0.25em;
-  text-rendering: auto;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  z-index: 400;
-}
-.accordion.sidebar-section .accordion-header a:hover:after {
-  color: #2894DF;
 }
 .accordion.navigation .accordion-header .main-cell a:before {
   margin-left: -1.25em;
