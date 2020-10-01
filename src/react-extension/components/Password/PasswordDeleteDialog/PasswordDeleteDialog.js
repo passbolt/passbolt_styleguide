@@ -75,7 +75,11 @@ class PasswordDeleteDialog extends Component {
    * Handle save operation success.
    */
   async handleSaveSuccess() {
-    await this.props.actionFeedbackContext.displaySuccess("The password has been deleted successfully");
+    let message = "The password has been deleted successfully";
+    if (this.hasMultipleResources()) {
+      message = "The passwords have been deleted successfully";
+    }
+    await this.props.actionFeedbackContext.displaySuccess(message);
     this.props.onClose();
   }
 
