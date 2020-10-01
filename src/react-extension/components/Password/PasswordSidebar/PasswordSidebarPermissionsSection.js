@@ -159,7 +159,7 @@ class PasswordSidebarPermissionsSection extends React.Component {
    * @returns {boolean}
    */
   isLoading() {
-    return this.state.loading && !this.state.permissions;
+    return this.state.loading;
   }
 
   /**
