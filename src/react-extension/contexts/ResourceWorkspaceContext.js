@@ -41,6 +41,8 @@ export const ResourceWorkspaceContext = React.createContext({
   scrollTo: {
     resource: null // The resource to scroll to
   },
+  mustDisplaySidebar: true, // must display or not the sidebar
+  onToggleSidebar: () => {}, // Toggle the display of the sidebar
   onTextFilterChanged: () => {}, // Whenever the search text filter changed
   onResourceScrolled: () => {}, // Whenever one scrolled to a resource
   onAllFilterRequired: () => {}, // Whenever the filter on all is required
@@ -88,6 +90,8 @@ class ResourceWorkspaceContextProvider extends React.Component {
       scrollTo: {
         resource: null // The resource to scroll to
       },
+      mustDisplaySidebar: true, // must display or not the sidebar
+      onToggleSidebar: this.handleToggleSidebar.bind(this), // Toggle the display of the sidebar
       onTextFilterChanged: this.handleTextFilterChange.bind(this), // Whenever the search text filter changed
       onResourceScrolled: this.handleResourceScrolled.bind(this), // Whenever one scrolled to a resource
       onAllFilterRequired: this.handleAllFilterRequired.bind(this), // filter on all required
@@ -321,6 +325,14 @@ class ResourceWorkspaceContextProvider extends React.Component {
   async handleResourceSelected(resource) {
     await this.select(resource);
     this.redirectAfterSelection();
+  }
+
+  /**
+   * Handle the toggle sidebar to display it or not
+   */
+  handleToggleSidebar() {
+    const mustDisplaySidebar = !this.state.mustDisplaySidebar;
+    this.setState({mustDisplaySidebar});
   }
 
   /**

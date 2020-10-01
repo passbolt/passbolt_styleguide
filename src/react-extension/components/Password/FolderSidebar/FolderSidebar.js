@@ -93,7 +93,7 @@ class FolderSidebar extends React.Component {
    * Handle when the user closes the sidebar.
    */
   handleCloseClick() {
-    this.props.onClose();
+    this.props.resourceWorkspaceContext.onToggleSidebar();
   }
 
   /**
