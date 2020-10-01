@@ -16,7 +16,7 @@ export default (resourceIds, storage) => {
   return new Promise(async (resolve) => {
     const {resources} = await storage.local.get(["resources"]);
     const resourcesUpdated = resources.filter(resource => !resourceIds.includes(resource.id));
-    await storage.local.set({resourcesUpdated});
+    await storage.local.set({resources: resourcesUpdated});
     resolve(true);
   });
 };

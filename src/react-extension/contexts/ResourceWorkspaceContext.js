@@ -54,7 +54,7 @@ export const ResourceWorkspaceContext = React.createContext({
     multiple: () => {}, // Whenever a resource has been selected in a multiple mode
     range:  () => {}, // Whenever a resource has been selected in a multiple mode
     single: () => {}// Whenever a single resource has been selected
-  }
+  },
 });
 
 /**
@@ -103,7 +103,7 @@ class ResourceWorkspaceContextProvider extends React.Component {
         multiple: this.handleMultipleResourcesSelected.bind(this), // Whenever a resource has been selected in a multiple mode
         range:  this.handleResourceRangeSelected.bind(this), // Whenever a resource has been selected in a multiple mode
         single: this.handleResourceSelected.bind(this)// Whenever a single resource has been selected
-      }
+      },
     };
   }
 
@@ -164,6 +164,8 @@ class ResourceWorkspaceContextProvider extends React.Component {
     if (hasResourcesChanged) {
       this.resources = this.context.resources;
       await this.search(this.state.filter);
+      await this.unselectUnknownResources();
+      await this.redirectAfterSelection();
     }
   }
 
@@ -531,6 +533,16 @@ class ResourceWorkspaceContextProvider extends React.Component {
    */
   async unselectAll() {
     await this.setState({selectedResources: []});
+  }
+
+  /**
+   * Remove from the selected resources those which are not known resources in regard of the current resources list
+   */
+  async unselectUnknownResources() {
+    const matchId = selectedResource => resource => resource.id === selectedResource.id;
+    const matchSelectedResource = selectedResource => this.resources.some(matchId(selectedResource));
+    const selectedResources = this.state.selectedResources.filter(matchSelectedResource);
+    await this.setState({selectedResources});
   }
 
   /**

@@ -20,6 +20,7 @@ import ErrorDialog from "../../Dialog/ErrorDialog/ErrorDialog";
 import {withDialog} from "../../../contexts/Common/DialogContext";
 import FormSubmitButton from "../../../../react/components/Common/Inputs/FormSubmitButton/FormSubmitButton";
 import FormCancelButton from "../../../../react/components/Common/Inputs/FormSubmitButton/FormCancelButton";
+import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 
 /**
  * This component allows user to delete a tag of the resources
@@ -170,9 +171,10 @@ class PasswordDeleteDialog extends Component {
 PasswordDeleteDialog.contextType = AppContext;
 
 PasswordDeleteDialog.propTypes = {
-  onClose: PropTypes.func,
+  onClose: PropTypes.func, // Whenever the dialog is closed
   actionFeedbackContext: PropTypes.any, // The action feedback context
-  dialogContext: PropTypes.any,
+  dialogContext: PropTypes.any, // The dialog context
+  resourceWorkspaceContext: PropTypes.any // The resource workspace context
 };
 
-export default withActionFeedback(withDialog(PasswordDeleteDialog));
+export default withResourceWorkspace(withActionFeedback(withDialog(PasswordDeleteDialog)));
