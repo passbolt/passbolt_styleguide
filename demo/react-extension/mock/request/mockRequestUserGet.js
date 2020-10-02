@@ -17,6 +17,8 @@ export default () => {
     "id": "f848277c-5398-58f8-a82a-72397af2d450",
     "role_id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
     "username": "ada@passbolt.com",
+    "first_name": "Ada",
+    "last_name": "Lovelace",
     "active": true,
     "deleted": false,
     "created": "2020-06-19T14:56:53+00:00",
@@ -24,8 +26,6 @@ export default () => {
     "profile": {
       "id": "99522cc9-0acc-5ae2-b996-d03bded3c0a6",
       "user_id": "f848277c-5398-58f8-a82a-72397af2d450",
-      "first_name": "Ada",
-      "last_name": "Lovelace",
       "created": "2020-08-19T14:56:53+00:00",
       "modified": "2020-08-19T14:56:53+00:00",
       "avatar": {

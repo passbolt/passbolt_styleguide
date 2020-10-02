@@ -53,10 +53,10 @@ class UserBadgeMenu extends Component {
    * @returns {string}
    */
   getCurrentUserName() {
-    if (!this.props.user || !this.props.user.profile) {
+    if (!this.props.user || !this.props.user.first_name || !this.props.user.last_name) {
       return '...';
     }
-    return `${this.props.user.profile.first_name} ${this.props.user.profile.last_name}`;
+    return `${this.props.user.first_name} ${this.props.user.last_name}`;
   }
 
   /**
