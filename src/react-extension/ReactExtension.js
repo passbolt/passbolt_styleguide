@@ -189,7 +189,7 @@ class ReactExtension extends Component {
     this.setState({siteSettings});
   }
 
-    handleStorageChange(changes) {
+  handleStorageChange(changes) {
     if (changes.resources) {
       const resources = changes.resources.newValue;
       this.setState({resources: resources});

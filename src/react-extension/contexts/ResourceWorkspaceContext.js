@@ -19,6 +19,7 @@ import AppContext from "./AppContext";
 import {withRouter} from "react-router-dom";
 import moment from "moment";
 import {withActionFeedback} from "./ActionFeedbackContext";
+import {withLoading} from "./Common/LoadingContext";
 
 /**
  * Context related to resources ( filter, current selections, etc.)
@@ -107,7 +108,7 @@ class ResourceWorkspaceContextProvider extends React.Component {
    * Initialize class properties out of the state ( for performance purpose )
    */
   initializeProperties() {
-    this.resources = []; // A cache of the last known list of resources from the App context
+    this.resources = null; // A cache of the last known list of resources from the App context
     this.folders = []; // A cache of the last known list of folders from the App context
   }
 
@@ -116,6 +117,7 @@ class ResourceWorkspaceContextProvider extends React.Component {
    */
   componentDidMount() {
     this.populate();
+    this.handleResourcesWaitedFor();
   }
 
   /**
@@ -124,6 +126,7 @@ class ResourceWorkspaceContextProvider extends React.Component {
    */
   async componentDidUpdate(prevProps, prevState) {
     await this.handleFilterChange(prevState.filter);
+    await this.handleResourcesLoaded();
     await this.handleFoldersChange();
     await this.handleResourcesChange();
     await this.handleRouteChange(prevProps.location);
@@ -329,6 +332,26 @@ class ResourceWorkspaceContextProvider extends React.Component {
   }
 
   /**
+   * Handle the wait for the initial resources to be loaded
+   */
+  handleResourcesWaitedFor() {
+    this.props.loadingContext.add();
+  }
+
+  /**
+   * Handle the intial loading of the resources
+   */
+  handleResourcesLoaded() {
+    const hasResourcesBeenInitialized = this.resources === null && this.context.resources;
+    console.log(this.resources)
+    console.log(this.context.resources)
+    if (hasResourcesBeenInitialized) {
+      this.props.loadingContext.remove();
+      this.handleResourcesLoaded = () => {};
+    }
+  }
+
+  /**
    * Populate the context with initial data such as resources and folders
    */
   populate() {
@@ -337,6 +360,8 @@ class ResourceWorkspaceContextProvider extends React.Component {
     }
     this.context.port.request("passbolt.resources.update-local-storage");
   }
+
+
 
   /** RESOURCE SEARCH  **/
 
@@ -682,10 +707,11 @@ ResourceWorkspaceContextProvider.propTypes = {
   location: PropTypes.object,
   match: PropTypes.object,
   history: PropTypes.object,
-  actionFeedbackContext: PropTypes.object
+  actionFeedbackContext: PropTypes.object,
+  loadingContext: PropTypes.object // The loading context
 };
 
-export default withActionFeedback(withRouter(ResourceWorkspaceContextProvider));
+export default withLoading(withActionFeedback(withRouter(ResourceWorkspaceContextProvider)));
 
 /**
  * Resource Workspace Context Consumer HOC
