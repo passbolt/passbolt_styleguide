@@ -17,6 +17,9 @@ import moment from "moment";
 import UserAvatar from "../../Common/Avatar/UserAvatar";
 import GroupAvatar from "../../Common/Avatar/GroupAvatar";
 import AppContext from "../../../contexts/AppContext";
+import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
+
+const LIMIT_ACTIVITIES_PER_PAGE = 5;
 
 class FolderSidebarActivitySection extends React.Component {
   /**
@@ -25,7 +28,7 @@ class FolderSidebarActivitySection extends React.Component {
    */
   constructor(props) {
     super(props);
-    this.state = this.getDefaultState();
+    this.state = this.defaultState;
     this.bindCallbacks();
   }
 
@@ -33,8 +36,14 @@ class FolderSidebarActivitySection extends React.Component {
    * Get default state
    * @returns {*}
    */
-  getDefaultState() {
-    return {};
+  get defaultState() {
+    return {
+      activities: null, // list of activities
+      activitiesPage: 1, // pagination for activity
+      loadingMore: false, // processing when the user want to see more activities
+      open: false,
+      loading: true,
+    };
   }
 
   /**
@@ -46,23 +55,68 @@ class FolderSidebarActivitySection extends React.Component {
   }
 
   /**
+   * Whenever the component has updated in terms of props
+   * @param prevProps
+   */
+  async componentDidUpdate(prevProps) {
+    await this.handleResourceChange(prevProps.resourceWorkspaceContext.details.folder);
+  }
+
+  /**
+   * Check if the folder has changed and fetch
+   * @param previousFolder
+   */
+  async handleResourceChange(previousFolder) {
+    if (this.state.open && this.folder.id !== previousFolder.id) {
+      // Reset the component, and fetch activities for the new folder.
+      const state = Object.assign({}, this.defaultState, {open: true});
+      await this.setState(state);
+      await this.fetch();
+      this.setState({loading: false});
+    }
+  }
+
+  /**
    * handle when the users click on the section header.
    * Open/Close it.
    */
-  handleTitleClickEvent() {
-    if (this.props.open) {
-      this.props.onClose();
+  async handleTitleClickEvent() {
+    // If the section is open, reset the component and close the section.
+    if (this.state.open) {
+      const defaultState = this.defaultState;
+      this.setState(defaultState);
     } else {
-      this.props.onOpen();
+      await this.setState({loading: true, open: true});
+      await this.fetch();
+      this.setState({loading: false});
     }
   }
 
   /**
    * handle when the users click on the more button.
-   * Open/Close it.
    */
-  handleMoreClickEvent() {
-    this.props.onMore();
+  async handleMoreClickEvent() {
+    const activitiesPage = this.state.activitiesPage + 1;
+    const loadingMore = true;
+    await this.setState({activitiesPage, loadingMore});
+    await this.fetch();
+    this.setState({loadingMore: false});
+  }
+
+  /**
+   * Fetch the folder activities
+   * @returns {Promise<void>}
+   */
+  async fetch() {
+    const newActivities = await this.context.port.request('passbolt.folders.action-log', this.folder.id, this.state.activitiesPage, LIMIT_ACTIVITIES_PER_PAGE);
+    let activities;
+    // For the first page need to reset activities state
+    if (this.state.activitiesPage > 1) {
+      activities = [...(this.state.activities || []), ...newActivities];
+    } else {
+      activities = [...newActivities];
+    }
+    this.setState({activities});
   }
 
   /**
@@ -144,8 +198,8 @@ class FolderSidebarActivitySection extends React.Component {
    */
   renderCreatedActivity(activity) {
     const activityCreatorName = this.getActivityCreatorFullName(activity.creator);
-    const folderPermalink = this.getFolderPermalink(this.props.folder);
-    const folderName = this.props.folder.name;
+    const folderPermalink = this.getFolderPermalink(this.folder);
+    const folderName = this.folder.name;
     const activityFormattedDate = this.formatDateTimeAgo(activity.created);
 
     return (
@@ -170,7 +224,7 @@ class FolderSidebarActivitySection extends React.Component {
    */
   renderUpdatedActivity(activity) {
     const activityCreatorName = this.getActivityCreatorFullName(activity.creator);
-    const folderPermalink = this.getFolderPermalink(this.props.folder);
+    const folderPermalink = this.getFolderPermalink(this.folder);
     const folderName = activity.data.folder.name;
     const activityFormattedDate = this.formatDateTimeAgo(activity.created);
 
@@ -224,8 +278,8 @@ class FolderSidebarActivitySection extends React.Component {
    */
   renderSharedActivity(activity) {
     const activityCreatorName = this.getActivityCreatorFullName(activity.creator);
-    const folderPermalink = this.getFolderPermalink(this.props.folder);
-    const folderName = this.props.folder.name;
+    const folderPermalink = this.getFolderPermalink(this.folder);
+    const folderName = this.folder.name;
     const activityFormattedDate = this.formatDateTimeAgo(activity.created);
 
     return (
@@ -298,11 +352,18 @@ class FolderSidebarActivitySection extends React.Component {
    * @return {boolean}
    */
   isMoreButtonVisible() {
-    if (this.props.activities === null) {
+    if (this.state.activities === null) {
       return false;
     }
 
-    return !this.props.activities.some(activity => activity.type === "Folders.created");
+    return !this.state.activities.some(activity => activity.type === "Folders.created");
+  }
+
+  /**
+   * Returns the current detailed folder
+   */
+  get folder() {
+    return this.props.resourceWorkspaceContext.details.folder;
   }
 
   /**
@@ -310,11 +371,11 @@ class FolderSidebarActivitySection extends React.Component {
    * @returns {JSX}
    */
   render() {
-    const loadingActivities = this.props.activities === null;
+    const loadingActivities = this.state.activities === null;
     const isMoreButtonVisible = this.isMoreButtonVisible();
 
     return (
-      <div className={`activity accordion sidebar-section ${this.props.open ? "" : "closed"}`}>
+      <div className={`activity accordion sidebar-section ${this.state.open ? "" : "closed"}`}>
         <div className="accordion-header">
           <h4><a onClick={this.handleTitleClickEvent} role="button">Activity</a></h4>
         </div>
@@ -327,11 +388,11 @@ class FolderSidebarActivitySection extends React.Component {
           {!loadingActivities &&
           <React.Fragment>
             <ul className="ready">
-              {this.props.activities.map(activity => this.renderActivity(activity))}
+              {this.state.activities.map(activity => this.renderActivity(activity))}
             </ul>
             {isMoreButtonVisible &&
             <div className="actions">
-              <a onClick={this.handleMoreClickEvent} className={`button action-logs-load-more ${this.props.moreProcessing ? "processing disabled" : ""}`} role="button">
+              <a onClick={this.handleMoreClickEvent} className={`button action-logs-load-more ${this.state.loading ? "processing disabled" : ""}`} role="button">
                 <span>more</span>
               </a>
             </div>
@@ -347,13 +408,7 @@ class FolderSidebarActivitySection extends React.Component {
 FolderSidebarActivitySection.contextType = AppContext;
 
 FolderSidebarActivitySection.propTypes = {
-  activities: PropTypes.array,
-  folder: PropTypes.object,
-  moreProcessing: PropTypes.bool,
-  onClose: PropTypes.func,
-  onMore: PropTypes.func,
-  onOpen: PropTypes.func,
-  open: PropTypes.bool,
+  resourceWorkspaceContext: PropTypes.any
 };
 
-export default FolderSidebarActivitySection;
+export default withResourceWorkspace(FolderSidebarActivitySection);

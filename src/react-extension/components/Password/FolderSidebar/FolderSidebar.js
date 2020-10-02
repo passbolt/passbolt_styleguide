@@ -21,8 +21,6 @@ import AppContext from "../../../contexts/AppContext";
 import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 
-const LIMIT_ACTIVITIES_PER_PAGE = 5;
-
 class FolderSidebar extends React.Component {
   /**
    * Constructor
@@ -53,40 +51,10 @@ class FolderSidebar extends React.Component {
    * Bind callbacks methods
    */
   bindCallbacks() {
-    this.handleActivitySectionClose = this.handleActivitySectionClose.bind(this);
-    this.handleActivitySectionMore = this.handleActivitySectionMore.bind(this);
-    this.handleActivitySectionOpen = this.handleActivitySectionOpen.bind(this);
     this.handleCloseClick = this.handleCloseClick.bind(this);
     this.handlePermalinkClick = this.handlePermalinkClick.bind(this);
     this.handlePermissionSectionClose = this.handlePermissionSectionClose.bind(this);
     this.handlePermissionSectionOpen = this.handlePermissionSectionOpen.bind(this);
-  }
-
-  /**
-   * Handle when the user closes the activity section.
-   */
-  handleActivitySectionClose() {
-    const activitySectionOpen = false;
-    this.setState({activitySectionOpen});
-  }
-
-  /**
-   * Handle when the user wants to see more activities in the activity section.
-   */
-  handleActivitySectionMore() {
-    const activitiesPage = this.state.activitiesPage + 1;
-    const activitySectionMoreProcessing = true;
-    this.setState({activitiesPage, activitySectionMoreProcessing}, () => this.findFolderActivities());
-  }
-
-  /**
-   * Handle when the user opens the activity section.
-   */
-  handleActivitySectionOpen() {
-    const activitySectionOpen = true;
-    const activities = [];
-    const activitiesPage = 1;
-    this.setState({activities, activitiesPage, activitySectionOpen}, () => this.findFolderActivities());
   }
 
   /**
@@ -120,17 +88,6 @@ class FolderSidebar extends React.Component {
   handlePermissionSectionOpen() {
     const permissionsSectionOpen = true;
     this.setState({permissionsSectionOpen}, () => this.findFolderPermission());
-  }
-
-  /**
-   * Find the folder activities
-   * @returns {Promise<void>}
-   */
-  async findFolderActivities() {
-    const newActivities = await this.context.port.request('passbolt.folders.action-log', this.props.resourceWorkspaceContext.details.folder.id, this.state.activitiesPage, LIMIT_ACTIVITIES_PER_PAGE);
-    const activities = [...(this.state.activities || []), ...newActivities];
-    const activitySectionMoreProcessing = false;
-    this.setState({activities, activitySectionMoreProcessing});
   }
 
   /**
@@ -179,14 +136,7 @@ class FolderSidebar extends React.Component {
             permissions={this.state.permissions}
             groups={this.props.groups}
             users={this.props.users}/>
-          <FolderSidebarActivitySection
-            activities={this.state.activities}
-            folder={this.props.resourceWorkspaceContext.details.folder}
-            moreProcessing={this.state.activitySectionMoreProcessing}
-            onClose={this.handleActivitySectionClose}
-            onOpen={this.handleActivitySectionOpen}
-            onMore={this.handleActivitySectionMore}
-            open={this.state.activitySectionOpen}/>
+          <FolderSidebarActivitySection/>
         </div>
       </div>
     );
@@ -197,7 +147,6 @@ FolderSidebar.contextType = AppContext;
 
 FolderSidebar.propTypes = {
   groups: PropTypes.array,
-  onClose: PropTypes.func,
   onSelectFolderParent: PropTypes.func,
   onSelectRoot: PropTypes.func,
   onEditPermissions: PropTypes.func,

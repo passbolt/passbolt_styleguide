@@ -105,7 +105,7 @@ class DisplayTagList extends React.Component {
    * @param previousTags
    */
   handleAllFilterRequired(previousTags) {
-    const hasTagNumberChanged = this.props.tags.length !== previousTags.length;
+    const hasTagNumberChanged = previousTags && this.props.tags.length !== previousTags.length;
 
     if (hasTagNumberChanged) {
       const filter = this.props.resourceWorkspaceContext.filter;
