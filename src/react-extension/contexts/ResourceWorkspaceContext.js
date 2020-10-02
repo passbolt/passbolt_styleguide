@@ -45,8 +45,6 @@ export const ResourceWorkspaceContext = React.createContext({
   onToggleSidebar: () => {}, // Toggle the display of the sidebar
   onTextFilterChanged: () => {}, // Whenever the search text filter changed
   onResourceScrolled: () => {}, // Whenever one scrolled to a resource
-  onAllFilterRequired: () => {}, // Whenever the filter on all is required
-  onFilterTagChanged: () => {}, // Whenever the filter by tag changed
   onSorterChanged: () => {}, // Whenever the sorter changed
   onResourceSelected: {
     all: () => {}, // Whenever all the resources have been selected
@@ -94,8 +92,6 @@ class ResourceWorkspaceContextProvider extends React.Component {
       onToggleSidebar: this.handleToggleSidebar.bind(this), // Toggle the display of the sidebar
       onTextFilterChanged: this.handleTextFilterChange.bind(this), // Whenever the search text filter changed
       onResourceScrolled: this.handleResourceScrolled.bind(this), // Whenever one scrolled to a resource
-      onAllFilterRequired: this.handleAllFilterRequired.bind(this), // filter on all required
-      onFilterTagChanged: this.handleFilterTagChanged.bind(this), // filter by tag
       onSorterChanged: this.handleSorterChange.bind(this), // Whenever the sorter changed
       onResourceSelected: {
         all: this.handleAllResourcesSelected.bind(this), // Whenever all the resources have been selected
@@ -253,25 +249,6 @@ class ResourceWorkspaceContextProvider extends React.Component {
     const filter = (this.props.location.state && this.props.location.state.filter) || {type: ResourceWorkspaceFilterTypes.ALL};
     await this.search(filter);
     await this.detailNothing();
-  }
-
-  /**
-   * Handle the filter by all is required
-   */
-  async handleAllFilterRequired() {
-    const filter = {type: ResourceWorkspaceFilterTypes.ALL, payload: null};
-    await this.search(filter);
-    await this.detailNothing();
-  }
-
-  /**
-   * Handle the filter by tag
-   * @param tag
-   */
-  async handleFilterTagChanged(tag) {
-    const filter = {type: ResourceWorkspaceFilterTypes.TAG, payload: {tag: tag}};
-    await  this.search(filter);
-    await  this.detailNothing();
   }
 
   /**
