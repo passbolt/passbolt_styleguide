@@ -392,7 +392,7 @@ class FolderSidebarActivitySection extends React.Component {
             </ul>
             {isMoreButtonVisible &&
             <div className="actions">
-              <a onClick={this.handleMoreClickEvent} className={`button action-logs-load-more ${this.state.loading ? "processing disabled" : ""}`} role="button">
+              <a onClick={this.handleMoreClickEvent} className={`button action-logs-load-more ${this.state.loadingMore ? "processing disabled" : ""}`} role="button">
                 <span>more</span>
               </a>
             </div>
