@@ -42,8 +42,8 @@ export const ResourceWorkspaceContext = React.createContext({
   scrollTo: {
     resource: null // The resource to scroll to
   },
-  mustDisplaySidebar: true, // must display or not the sidebar
-  onToggleSidebar: () => {}, // Toggle the display of the sidebar
+  lockDisplayDetail: true, // lock the detail to display the folder or password sidebar
+  onLockDetail: () => {}, // Lock or unlock detail (hide or display the folder or password sidebar)
   onTextFilterChanged: () => {}, // Whenever the search text filter changed
   onResourceScrolled: () => {}, // Whenever one scrolled to a resource
   onSorterChanged: () => {}, // Whenever the sorter changed
@@ -89,8 +89,8 @@ class ResourceWorkspaceContextProvider extends React.Component {
       scrollTo: {
         resource: null // The resource to scroll to
       },
-      mustDisplaySidebar: true, // must display or not the sidebar
-      onToggleSidebar: this.handleToggleSidebar.bind(this), // Toggle the display of the sidebar
+      lockDisplayDetail: true, // lock the detail to display the folder or password sidebar
+      onLockDetail: this.handleLockDetail.bind(this), // Lock or unlock detail (hide or display the folder or password sidebar)
       onTextFilterChanged: this.handleTextFilterChange.bind(this), // Whenever the search text filter changed
       onResourceScrolled: this.handleResourceScrolled.bind(this), // Whenever one scrolled to a resource
       onSorterChanged: this.handleSorterChange.bind(this), // Whenever the sorter changed
@@ -252,6 +252,15 @@ class ResourceWorkspaceContextProvider extends React.Component {
     const filter = (this.props.location.state && this.props.location.state.filter) || {type: ResourceWorkspaceFilterTypes.ALL};
     await this.search(filter);
     await this.detailNothing();
+  }
+
+  /**
+   * Handle the lock detail to display it or not
+   * @returns {Promise<void>}
+   */
+  async handleLockDetail() {
+    const lockDisplayDetail = !this.state.lockDisplayDetail;
+    this.setState({lockDisplayDetail});
   }
 
   /**

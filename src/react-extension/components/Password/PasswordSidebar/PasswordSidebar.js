@@ -56,7 +56,7 @@ class PasswordSidebar extends React.Component {
    * Handle close sidebar click
    */
   handleCloseClick() {
-    this.props.resourceWorkspaceContext.onToggleSidebar();
+    this.props.resourceWorkspaceContext.onLockDetail();
   }
 
   /**

@@ -163,8 +163,8 @@ class Workspace extends Component {
     this.setState({search});
   }
 
-  mustDisplaySidebar() {
-    return this.props.resourceWorkspaceContext.mustDisplaySidebar;
+  hasLockDetail() {
+    return this.props.resourceWorkspaceContext.lockDisplayDetail;
   }
 
   /**
@@ -212,7 +212,7 @@ class Workspace extends Component {
                     search={this.state.search}
                     onRightSelect={this.handleRightSelectResource}
                     onSelect={this.handleSelectResources}/>
-                  {this.props.resourceWorkspaceContext.details.folder && this.mustDisplaySidebar() &&
+                  {this.props.resourceWorkspaceContext.details.folder && this.hasLockDetail() &&
                     <FolderSidebar
                       groups={this.state.groups}
                       onEditPermissions={this.handleEditFolderPermissions}
@@ -220,7 +220,7 @@ class Workspace extends Component {
                       onSelectRoot={this.handleSelectRootFolder}
                       users={this.state.users}/>
                   }
-                  {this.props.resourceWorkspaceContext.details.resource && this.mustDisplaySidebar() &&
+                  {this.props.resourceWorkspaceContext.details.resource && this.hasLockDetail() &&
                     <PasswordSidebar
                       groups={this.state.groups}
                       onEditPermissions={this.handleEditFolderPermissions}
