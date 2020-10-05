@@ -122,6 +122,10 @@ class ResourceWorkspaceContextProvider extends React.Component {
     this.populate();
   }
 
+  async setState(changes) {
+    await super.setState(changes);
+  }
+
   /**
    * Whenever the component has updated in terms of props or state
    * @param prevProps
@@ -173,7 +177,8 @@ class ResourceWorkspaceContextProvider extends React.Component {
    * Handle the resources changes
    */
   async handleResourcesChange() {
-    const hasResourcesChanged = this.context.resources !== this.resources;
+    const hasResourcesChanged = this.context.resources && this.context.resources !== this.resources;
+
     if (hasResourcesChanged) {
       this.resources = this.context.resources;
       await this.search(this.state.filter);
@@ -202,6 +207,7 @@ class ResourceWorkspaceContextProvider extends React.Component {
    */
   async handleFolderRouteChange() {
     const folderId = this.props.match.params.filterByFolderId;
+
     if (folderId) {
       const folder = this.context.folders.find(folder => folder.id === folderId);
       await this.search({type: ResourceWorkspaceFilterTypes.FOLDER, payload: {folder}});
@@ -389,7 +395,7 @@ class ResourceWorkspaceContextProvider extends React.Component {
    * @param filter The All filter
    */
   async searchAll(filter) {
-    await this.setState({filter, filteredResources: [...this.resources]});
+    await this.setState({filter, filteredResources: this.resources});
   }
 
   /**
@@ -481,7 +487,7 @@ class ResourceWorkspaceContextProvider extends React.Component {
     const hasFolderFilter = this.state.filter.type === ResourceWorkspaceFilterTypes.FOLDER;
     if (hasFolderFilter) {
       const updatedFolder = this.folders.find(folder => folder.id === this.state.filter.payload.folder.id);
-      const filter = Object.assign({}, this.state.filter, {payload: {folder: updatedFolder}});
+      const filter = Object.assign(this.state.filter, {payload: {folder: updatedFolder}});
       await this.setState({filter});
     }
   }
@@ -558,7 +564,10 @@ class ResourceWorkspaceContextProvider extends React.Component {
    * Unselect all the resources
    */
   async unselectAll() {
-    await this.setState({selectedResources: []});
+    const hasSelectedResources = this.state.selectedResources.length !== 0;
+    if (hasSelectedResources) {
+      await this.setState({selectedResources: []});
+    }
   }
 
   /**
@@ -582,9 +591,15 @@ class ResourceWorkspaceContextProvider extends React.Component {
       const {filter} = this.state;
       const isFolderFilter = filter.type === ResourceWorkspaceFilterTypes.FOLDER;
       if (isFolderFilter) {
-        this.props.history.push({pathname: `/app/folders/view/${this.state.filter.payload.folder.id}`});
+        const mustRedirect = this.props.location.pathname !== `/app/folders/view/${this.state.filter.payload.folder.id}`;
+        if (mustRedirect) {
+          this.props.history.push({pathname: `/app/folders/view/${this.state.filter.payload.folder.id}`});
+        }
       } else {
-        this.props.history.push({pathname: `/app/passwords`, state: {filter}});
+        const mustRedirect = this.props.location.pathname !== '/app/passwords';
+        if (mustRedirect) {
+          this.props.history.push({pathname: `/app/passwords`, state: {filter}});
+        }
       }
     }
   }
@@ -639,7 +654,10 @@ class ResourceWorkspaceContextProvider extends React.Component {
    * Remove the details on something
    */
   async detailNothing() {
-    await this.setState({details: {folder: null, resource: null}});
+    const hasDetails = this.state.details.resource || this.state.details.folder;
+    if (hasDetails) {
+      await this.setState({details: {folder: null, resource: null}});
+    }
   }
 
   /**
