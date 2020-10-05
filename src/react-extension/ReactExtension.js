@@ -33,6 +33,7 @@ import HandleProgressDialogEvents
   from "./components/ProgressDialog/HandleProgressDialogEvents/HandleProgressDialogEvents";
 import HandleErrorDialogEvents from "./components/Error/HandleErrorDialogEvents/HandleErrorDialogEvents";
 import ResourceWorkspaceContextProvider from "./contexts/ResourceWorkspaceContext";
+import UserWorkspaceContextProvider from "./contexts/UserWorkspaceContext";
 import ContextualMenuContextProvider from "./contexts/Common/ContextualMenuContext";
 import ManageContextualMenu from "./components/ManageContextualMenu";
 import HandleFolderMoveStrategyDialogEvents
@@ -40,6 +41,7 @@ import HandleFolderMoveStrategyDialogEvents
 import ManageLoading from "./components/Common/Loading/ManageLoading/ManageLoading";
 import LoadingContextProvider from "./contexts/Common/LoadingContext";
 import Footer from "./components/Footer/Footer";
+import DisplayUserWorkspace from "./components/User/DisplayUserWorkspace/DisplayUserWorkspace";
 
 class ReactExtension extends Component {
   constructor(props) {
@@ -66,6 +68,7 @@ class ReactExtension extends Component {
       user: null,
       resources: null,
       folders: null,
+      users: null, // The current list of all users
 
       siteSettings: null,
       userSettings: null,
@@ -177,6 +180,17 @@ class ReactExtension extends Component {
     }
   }
 
+  /**
+   * Returns the list of all users
+   */
+  async getUsers() {
+    const storageData = await this.props.storage.local.get(["users"]);
+    if (storageData.users && storageData.users.length) {
+      const users = storageData.users;
+      this.setState({users: users});
+    }
+  }
+
   async getUserSettings() {
     const storageData = await this.props.storage.local.get(["_passbolt_data"]);
     const userSettings = new UserSettings(storageData._passbolt_data.config);
@@ -189,18 +203,30 @@ class ReactExtension extends Component {
     this.setState({siteSettings});
   }
 
+
+  /**
+   * Handle the change in the storage
+   * @param changes
+   */
   handleStorageChange(changes) {
     if (changes.resources) {
       const resources = changes.resources.newValue;
-      this.setState({resources: resources});
+      this.setState({resources});
     }
     if (changes.resourceTypes) {
       const resourceTypes = changes.resourceTypes.newValue;
-      this.setState({resourceTypes: resourceTypes});
+      this.setState({resourceTypes});
     }
     if (changes.folders) {
       const folders = changes.folders.newValue;
-      this.setState({folders: folders});
+      this.setState({folders});
+    }
+
+    console.log('changes', changes);
+
+    if (changes.users) {
+      const users = changes.users.newValue;
+      this.setState({users});
     }
   }
 
@@ -250,6 +276,14 @@ class ReactExtension extends Component {
                             <ManageDialogs/>
                             <PasswordWorkspace onMenuItemClick={this.handleWorkspaceSelect}/>
                           </ResourceWorkspaceContextProvider>
+                        </Route>
+                        <Route path={[
+                          "/app/users",
+                        ]}>
+                          <UserWorkspaceContextProvider>
+                            <ManageDialogs/>
+                            <DisplayUserWorkspace/>
+                          </UserWorkspaceContextProvider>
                         </Route>
                         <Route path="/">
                           <Redirect to="/app/passwords"/>

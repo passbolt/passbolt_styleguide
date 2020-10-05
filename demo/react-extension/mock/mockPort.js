@@ -40,6 +40,7 @@ import mockRequestResourceDeleteFavorite from "./request/mockRequestResourceDele
 import mockRequestResourcesDelete from "./request/mockRequestResourcesDelete";
 import mockRequestResourcesFindActivities from "./request/mockRequestResourcesFindActivities";
 import mockRequestGetVersion from "./request/mockRequestGetVersion";
+import mockRequestUsersUpdateLocalStorage from "./request/mockRequestUsersUpdateLocalStorage";
 
 export default (storage) => {
   const mockPort = new MockPort(storage);
@@ -52,6 +53,7 @@ export default (storage) => {
   mockPort.addRequestListener("passbolt.site.settings", mockRequestSiteSettings);
   mockPort.addRequestListener("passbolt.folders.update-local-storage", mockRequestFoldersUpdateLocalStorage);
   mockPort.addRequestListener("passbolt.resources.update-local-storage", mockRequestResourcesUpdateLocalStorage);
+  mockPort.addRequestListener("passbolt.users.update-local-storage", mockRequestUsersUpdateLocalStorage);
   mockPort.addRequestListener("passbolt.resources.create", mockRequestResourcesCreate);
   mockPort.addRequestListener("passbolt.resources.update", mockRequestResourcesUpdate);
   mockPort.addRequestListener("passbolt.share.get-resources", mockRequestShareGetResources);
