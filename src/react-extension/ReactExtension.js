@@ -58,6 +58,7 @@ class ReactExtension extends Component {
     this.getResources();
     this.getResourceTypes();
     this.getFolders();
+    this.getGroups();
   }
 
   getDefaultState(props) {
@@ -69,6 +70,7 @@ class ReactExtension extends Component {
       resources: null,
       folders: null,
       users: null, // The current list of all users
+      groups: null,
 
       siteSettings: null,
       userSettings: null,
@@ -181,6 +183,17 @@ class ReactExtension extends Component {
   }
 
   /**
+   * Returns the list of all groups
+   */
+  async getGroups() {
+    const storageData = await this.props.storage.local.get(["groups"]);
+    if (storageData.groups && storageData.groups.length) {
+      const groups = storageData.groups;
+      this.setState({groups: groups});
+    }
+  }
+
+  /**
    * Returns the list of all users
    */
   async getUsers() {
@@ -221,12 +234,13 @@ class ReactExtension extends Component {
       const folders = changes.folders.newValue;
       this.setState({folders});
     }
-
-    console.log('changes', changes);
-
     if (changes.users) {
       const users = changes.users.newValue;
       this.setState({users});
+    }
+    if (changes.groups) {
+      const groups = changes.groups.newValue;
+      this.setState({groups});
     }
   }
 
