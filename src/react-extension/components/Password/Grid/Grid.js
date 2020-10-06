@@ -458,8 +458,8 @@ class Grid extends React.Component {
 
   render() {
     const isReady = this.resources !== null;
-    const isEmpty = this.resources.length === 0;
-    const selectAll = this.resources.length === this.selectedResources.length;
+    const isEmpty = isReady && this.resources.length === 0;
+    const selectAll = isReady && this.resources.length === this.selectedResources.length;
     const filterType = this.props.resourceWorkspaceContext.filter.type;
 
     return (
