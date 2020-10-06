@@ -354,8 +354,6 @@ class ResourceWorkspaceContextProvider extends React.Component {
    */
   handleResourcesLoaded() {
     const hasResourcesBeenInitialized = this.resources === null && this.context.resources;
-    console.log(this.resources)
-    console.log(this.context.resources)
     if (hasResourcesBeenInitialized) {
       this.props.loadingContext.remove();
       this.handleResourcesLoaded = () => {};
