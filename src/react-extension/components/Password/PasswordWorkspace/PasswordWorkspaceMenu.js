@@ -69,6 +69,7 @@ class PasswordWorkspaceMenu extends React.Component {
     this.handleCopyUsernameClickEvent = this.handleCopyUsernameClickEvent.bind(this);
     this.handleShareClickEvent = this.handleShareClickEvent.bind(this);
     this.handleCopySecretClickEvent = this.handleCopySecretClickEvent.bind(this);
+    this.handleViewDetailClickEvent = this.handleViewDetailClickEvent.bind(this);
   }
 
   componentDidMount() {
@@ -279,94 +280,123 @@ class PasswordWorkspaceMenu extends React.Component {
   }
 
   /**
+   * handle view detail click event
+   */
+  handleViewDetailClickEvent() {
+    // lock or unlock the detail resource or folder
+    this.props.resourceWorkspaceContext.onLockDetail();
+  }
+
+  /**
+   * Has lock for the detail display
+   * @returns {boolean}
+   */
+  hasLockDetail() {
+    return this.props.resourceWorkspaceContext.lockDisplayDetail;
+  }
+
+  /**
    * Render the component
    * @returns {JSX}
    */
   render() {
     return (
-      <div className="actions">
-        <ul className="ready">
-          <li id="password_action">
-            <a className={`button ready ${this.hasOneResourceSelected() ? "" : "disabled"}`}
-              onClick={this.handleCopySecretClickEvent}>
-              <Icon name="copy-to-clipboard"/>
-              <span>copy</span>
-            </a>
-          </li>
-          <li id="edit_action">
-            <a
-              className={`button ready ${this.hasOneResourceSelected() && this.canUpdate() ? "" : "disabled"}`}
-              onClick={this.handleEditClickEvent}>
-              <Icon name="edit"></Icon>
-              <span>edit</span>
-            </a>
-          </li>
-          <li id="share_action">
-            <a className={`button ready ${this.hasResourceSelected() && this.canShare() ? "" : "disabled"}`}
-              onClick={this.handleShareClickEvent}>
-              <Icon name="share"/>
-              <span>share</span>
-            </a>
-          </li>
-          <li>
-            <div className="dropdown" ref={this.moreMenuRef}>
-              <a className={`button ready ${this.hasMoreActionAllowed() ? "" : "disabled"}`} onClick={this.handleMoreClickEvent}>
-                <span>more</span>
-                <Icon name="caret-down"/>
+      <div className="col2_3 actions-wrapper">
+        <div className="actions">
+          <ul className="ready">
+            <li id="password_action">
+              <a className={`button ready ${this.hasOneResourceSelected() ? "" : "disabled"}`}
+                onClick={this.handleCopySecretClickEvent}>
+                <Icon name="copy-to-clipboard"/>
+                <span>copy</span>
               </a>
-              <ul className={`dropdown-content menu ready ${this.state.moreMenuOpen ? "visible" : ""}`}>
-                <li id="username_action" className="">
-                  <div className="row">
-                    <div className="main-cell-wrapper">
-                      <div className="main-cell">
-                        <a className={`${this.canCopyUsername() ? "" : "disabled"}`}
-                          onClick={this.handleCopyUsernameClickEvent}>
-                          <span>copy username to clipboard</span>
-                        </a>
+            </li>
+            <li id="edit_action">
+              <a className={`button ready ${this.hasOneResourceSelected() && this.canUpdate() ? "" : "disabled"}`}
+                onClick={this.handleEditClickEvent}>
+                <Icon name="edit"></Icon>
+                <span>edit</span>
+              </a>
+            </li>
+            <li id="share_action">
+              <a className={`button ready ${this.hasResourceSelected() && this.canShare() ? "" : "disabled"}`}
+                onClick={this.handleShareClickEvent}>
+                <Icon name="share"/>
+                <span>share</span>
+              </a>
+            </li>
+            <li>
+              <div className="dropdown" ref={this.moreMenuRef}>
+                <a className={`button ready ${this.hasMoreActionAllowed() ? "" : "disabled"}`}
+                  onClick={this.handleMoreClickEvent}>
+                  <span>more</span>
+                  <Icon name="caret-down"/>
+                </a>
+                <ul className={`dropdown-content menu ready ${this.state.moreMenuOpen ? "visible" : ""}`}>
+                  <li id="username_action" className="">
+                    <div className="row">
+                      <div className="main-cell-wrapper">
+                        <div className="main-cell">
+                          <a className={`${this.canCopyUsername() ? "" : "disabled"}`}
+                            onClick={this.handleCopyUsernameClickEvent}>
+                            <span>copy username to clipboard</span>
+                          </a>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </li>
-                <li id="secret_action">
-                  <div className="row">
-                    <div className="main-cell-wrapper">
-                      <div className="main-cell">
-                        <a className={`${this.hasOneResourceSelected() ? "" : "disabled"}`}
-                          onClick={this.handleCopySecretClickEvent}>
-                          <span>copy password to clipboard</span>
-                        </a>
+                  </li>
+                  <li id="secret_action">
+                    <div className="row">
+                      <div className="main-cell-wrapper">
+                        <div className="main-cell">
+                          <a className={`${this.hasOneResourceSelected() ? "" : "disabled"}`}
+                            onClick={this.handleCopySecretClickEvent}>
+                            <span>copy password to clipboard</span>
+                          </a>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </li>
-                <li id="delete_action">
-                  <div className="row">
-                    <div className="main-cell-wrapper">
-                      <div className="main-cell">
-                        <a className={`${this.canUpdate() ? "" : "disabled"}`}
-                          onClick={this.handleDeleteClickEvent}>
-                          <span>delete</span>
-                        </a>
+                  </li>
+                  <li id="delete_action">
+                    <div className="row">
+                      <div className="main-cell-wrapper">
+                        <div className="main-cell">
+                          <a className={`${this.canUpdate() ? "" : "disabled"}`}
+                            onClick={this.handleDeleteClickEvent}>
+                            <span>delete</span>
+                          </a>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </li>
-                <li id="permalink_action">
-                  <div className="row">
-                    <div className="main-cell-wrapper">
-                      <div className="main-cell">
-                        <a className={`${this.hasOneResourceSelected() ? "" : "disabled"}`}
-                          onClick={this.handleCopyPermalinkClickEvent}>
-                          <span>copy permalink to clipboard</span>
-                        </a>
+                  </li>
+                  <li id="permalink_action">
+                    <div className="row">
+                      <div className="main-cell-wrapper">
+                        <div className="main-cell">
+                          <a className={`${this.hasOneResourceSelected() ? "" : "disabled"}`}
+                            onClick={this.handleCopyPermalinkClickEvent}>
+                            <span>copy permalink to clipboard</span>
+                          </a>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </li>
-              </ul>
-            </div>
-          </li>
-        </ul>
+                  </li>
+                </ul>
+              </div>
+            </li>
+          </ul>
+        </div>
+        <div className="actions secondary">
+          <ul className="ready">
+            <li>
+              <a className={`button toggle ready ${this.hasLockDetail() ? "selected" : ""}`}
+                onClick={this.handleViewDetailClickEvent}>
+                <Icon name="info-circle"/>
+                <span className="visuallyhidden">view detail</span>
+              </a>
+            </li>
+          </ul>
+        </div>
       </div>
     );
   }
