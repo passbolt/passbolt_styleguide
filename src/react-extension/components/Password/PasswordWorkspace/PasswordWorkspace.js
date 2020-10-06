@@ -163,6 +163,10 @@ class Workspace extends Component {
     this.setState({search});
   }
 
+  /**
+   * Has lock for the detail display
+   * @returns {boolean}
+   */
   hasLockDetail() {
     return this.props.resourceWorkspaceContext.lockDisplayDetail;
   }
@@ -188,9 +192,7 @@ class Workspace extends Component {
           <div className="col1 main-action-wrapper">
             <PasswordWorkspaceMainMenu/>
           </div>
-          <div className="col2_3 actions-wrapper">
-            <PasswordWorkspaceMenu/>
-          </div>
+          <PasswordWorkspaceMenu/>
         </div>
         <div className="panel main">
           <div className="tabs-content">

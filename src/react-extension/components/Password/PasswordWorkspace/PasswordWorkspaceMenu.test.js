@@ -130,6 +130,14 @@ describe("See Workspace Menu", () => {
         expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalled();
       });
     });
+
+    it('As LU I can toggle the resource sidebar', () => {
+      expect(page.displayMenu.menuDetailInformationSelected).not.toBeNull();
+      page.displayMenu.clickOnMenu(page.displayMenu.menuDetailInformationSelected);
+      waitFor(() => {
+        expect(propsOneResourceOwned.resourceWorkspaceContext.onLockDetail).toHaveBeenCalled();
+      });
+    });
   });
 
   describe('As LU I can see the workspace menu with one resource selected not owned', () => {
@@ -161,6 +169,11 @@ describe("See Workspace Menu", () => {
     it('As LU I cannot share a resource I do not own from the workspace main menu', () => {
       expect(page.displayMenu.exists()).toBeTruthy();
       expect(page.displayMenu.shareMenuDisabled).not.toBeNull();
+    });
+
+    it('As LU I can see the toggle button for the detail resource sidebar unselected', () => {
+      expect(page.displayMenu.menuDetailInformationSelected).toBeNull();
+      expect(page.displayMenu.menuDetailInformation).not.toBeNull();
     });
   });
 
