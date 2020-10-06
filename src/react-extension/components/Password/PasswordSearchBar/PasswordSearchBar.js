@@ -40,12 +40,36 @@ class PasswordSearchBar extends Component {
    * @returns {*}
    */
   get defaultState() {
-    return {};
+    return {
+      text: '', // Current search text
+      debounceTimeoutIt: null // Set the debounce timeout identifier
+    };
   }
 
-  get value() {
-    const hasTextFilter = this.props.resourceWorkspaceContext.filter.type === ResourceWorkspaceFilterTypes.TEXT;
-    return hasTextFilter ? this.props.resourceWorkspaceContext.filter.payload : '';
+  /**
+   * Whenever the component was updated
+   */
+  componentDidUpdate(previousProps) {
+    this.handleFilterChanged(previousProps.resourceWorkspaceContext.filter);
+  }
+
+  /**
+   * Whenever the component will unmount
+   */
+  componentWillUnmount() {
+    clearTimeout(this.state.debounceTimeoutIt);
+  }
+
+  /**
+   * Whenever the resource filter changed
+   */
+  handleFilterChanged(previousFilter) {
+    const wasTextFilter = previousFilter.type === ResourceWorkspaceFilterTypes.TEXT;
+    const isTextFilter = this.props.resourceWorkspaceContext.filter.type === ResourceWorkspaceFilterTypes.TEXT;
+    const isNotTextFilterAnymore = wasTextFilter && !isTextFilter;
+    if (isNotTextFilterAnymore) {
+      this.setState({text: ''});
+    }
   }
 
   /**
@@ -55,8 +79,20 @@ class PasswordSearchBar extends Component {
   handleSearchEvent(event) {
     const target = event.target;
     const text = target.value;
-    const filter = {type: ResourceWorkspaceFilterTypes.TEXT, payload: text};
-    this.props.history.push({pathname: '/app/passwords', state: {filter}});
+    this.search(text);
+  }
+
+  /**
+   * Search for the text
+   * @param text
+   */
+  search(text) {
+    clearTimeout(this.state.debounceTimeoutId);
+    const debounceTimeoutId = setTimeout(() => {
+      const filter = {type: ResourceWorkspaceFilterTypes.TEXT, payload: text};
+      this.props.history.push({pathname: '/app/passwords', state: {filter}});
+    }, 300);
+    this.setState({debounceTimeoutId, text});
   }
 
   /**
@@ -69,7 +105,7 @@ class PasswordSearchBar extends Component {
         disabled={this.props.disabled}
         onSearch={this.handleSearchEvent}
         placeholder={this.props.placeholder}
-        value={this.value} />
+        value={this.state.text} />
     );
   }
 }
@@ -87,3 +123,4 @@ PasswordSearchBar.defaultProps = {
 };
 
 export default withRouter(withResourceWorkspace(PasswordSearchBar));
+
