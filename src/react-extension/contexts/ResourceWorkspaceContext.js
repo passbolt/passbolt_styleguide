@@ -122,10 +122,6 @@ class ResourceWorkspaceContextProvider extends React.Component {
     this.populate();
   }
 
-  async setState(changes) {
-    await super.setState(changes);
-  }
-
   /**
    * Whenever the component has updated in terms of props or state
    * @param prevProps
