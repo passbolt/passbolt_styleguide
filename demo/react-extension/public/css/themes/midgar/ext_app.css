@@ -6972,6 +6972,79 @@ input[type="search"]::-webkit-search-cancel-button {
     display: none;
   }
 }
+/*
+  	Copy secret component
+  		This is what is used to copy a secret in the clipboard
+*/
+.secret-copy {
+  overflow: visible;
+  display: table-cell;
+  vertical-align: middle;
+  /*
+     * For IE 6/7 only
+     * Include this rule to trigger hasLayout and contain floats.
+     */
+  /*
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
+  /*
+     * For IE 6/7 only
+     * Include this rule to trigger hasLayout and contain floats.
+     */
+  zoom: 1;
+  /*
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
+}
+.secret-copy:before,
+.secret-copy:after {
+  content: "";
+  display: table;
+}
+.secret-copy:after {
+  clear: both;
+}
+.secret-copy:before,
+.secret-copy:after {
+  content: "";
+  display: table;
+}
+.secret-copy:after {
+  clear: both;
+}
+.secret-copy > a {
+  background: transparent url('../../../img/controls/dot_white.svg') repeat-x left 3px;
+  display: inline-block;
+  width: 108px;
+  height: 20px;
+  float: left;
+  border: 0;
+}
+.secret-copy > a:hover {
+  background: transparent url('../../../img/controls/dot_red.svg') repeat-x left 3px;
+}
+.secret-copy > a > span {
+  display: none;
+}
+.secret-copy > pre {
+  display: none;
+}
 /**
  * Sidebar
  */
