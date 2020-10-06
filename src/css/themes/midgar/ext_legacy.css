@@ -3242,11 +3242,6 @@ p {
   margin-left: 2px;
   display: inline-block;
 }
-.button .svg-icon.info-circle {
-  font-size: 1.33333333em;
-  line-height: 0.75em;
-  vertical-align: -15%;
-}
 .button:hover .svg-icon svg,
 .button .svg-icon svg:hover {
   fill: #FFFFFC;

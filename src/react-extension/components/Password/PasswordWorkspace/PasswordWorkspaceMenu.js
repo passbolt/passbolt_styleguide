@@ -389,7 +389,7 @@ class PasswordWorkspaceMenu extends React.Component {
         <div className="actions secondary">
           <ul className="ready">
             <li>
-              <a className={`button toggle ready ${this.hasLockDetail() ? "selected" : ""}`}
+              <a className={`button toggle info ${this.hasLockDetail() ? "selected" : ""}`}
                 onClick={this.handleViewDetailClickEvent}>
                 <Icon name="info-circle"/>
                 <span className="visuallyhidden">view detail</span>

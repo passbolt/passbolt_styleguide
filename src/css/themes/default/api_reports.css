@@ -3241,11 +3241,6 @@ p {
   margin-left: 2px;
   display: inline-block;
 }
-.button .svg-icon.info-circle {
-  font-size: 1.33333333em;
-  line-height: 0.75em;
-  vertical-align: -15%;
-}
 .button:hover .svg-icon svg,
 .button .svg-icon svg:hover {
   fill: #333;
@@ -5318,6 +5313,12 @@ input[type="search"]::-webkit-search-cancel-button {
 .header.third .actions-wrapper .secondary .button {
   font-size: 0.875em;
   min-width: 1em;
+}
+.header.third .actions-wrapper .secondary .button.info {
+  padding: 0.3285714em 1.025em 0.3285714em 1.025em;
+}
+.header.third .actions-wrapper .secondary .button.info .svg-icon {
+  font-size: 1.33333333em;
 }
 /* hide secondary actions if there is no space */
 @media all and (max-width: 1024px) {
