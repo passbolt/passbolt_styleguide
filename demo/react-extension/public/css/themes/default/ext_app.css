@@ -4901,6 +4901,12 @@ h6 .input.toggle-switch {
   font-size: 0.875em;
   min-width: 1em;
 }
+.header.third .actions-wrapper .secondary .button.info {
+  padding: 0.3285714em 1.025em 0.3285714em 1.025em;
+}
+.header.third .actions-wrapper .secondary .button.info .svg-icon {
+  font-size: 1.33333333em;
+}
 /* hide secondary actions if there is no space */
 @media all and (max-width: 1024px) {
   .header.third .actions-wrapper .dropdown,

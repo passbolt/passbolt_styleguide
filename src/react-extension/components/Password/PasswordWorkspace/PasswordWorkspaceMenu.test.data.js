@@ -23,6 +23,8 @@ export function defaultPropsOneResourceOwned() {
   return {
     resourceWorkspaceContext: {
       selectedResources: [resourcesMock[0]],
+      lockDisplayDetail: true,
+      onLockDetail: jest.fn(),
     }
   };
 }
@@ -35,6 +37,8 @@ export function defaultPropsOneResourceNotOwned() {
   return {
     resourceWorkspaceContext: {
       selectedResources: [resourcesMock[1]],
+      lockDisplayDetail: false,
+      onLockDetail: jest.fn(),
     }
   };
 }
@@ -47,6 +51,8 @@ export function defaultPropsNoResource() {
   return {
     resourceWorkspaceContext: {
       selectedResources: [],
+      lockDisplayDetail: true,
+      onLockDetail: jest.fn(),
     }
   };
 }
@@ -59,6 +65,8 @@ export function defaultPropsMultipleResource() {
   return {
     resourceWorkspaceContext: {
       selectedResources: resourcesMock,
+      lockDisplayDetail: true,
+      onLockDetail: jest.fn(),
     }
   };
 }
@@ -71,7 +79,9 @@ export function defaultPropsMultipleResourceUpdateRights() {
   const selectedResources = [resourcesMock[0], resourcesMock[2]];
   return {
     resourceWorkspaceContext: {
-      selectedResources
+      selectedResources,
+      lockDisplayDetail: true,
+      onLockDetail: jest.fn(),
     }
   };
 }

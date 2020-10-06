@@ -189,6 +189,20 @@ class DisplayMenuPageObject {
   }
 
   /**
+   * Returns the detail information button menu elements of password workspace menu
+   */
+  get menuDetailInformation() {
+    return this._container.querySelector('.actions.secondary .ready .button.toggle');
+  }
+
+  /**
+   * Returns the detail information button menu elements of password workspace menu
+   */
+  get menuDetailInformationSelected() {
+    return this._container.querySelector('.actions.secondary .ready .button.toggle.selected');
+  }
+
+  /**
    * Returns true if the page object exists in the container
    */
   exists() {
