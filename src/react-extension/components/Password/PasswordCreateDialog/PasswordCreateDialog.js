@@ -115,6 +115,7 @@ class PasswordCreateDialog extends Component {
     } else {
       this.selectAndScrollToResource(resource.id);
     }
+    this.dispatchOnResourceAddedEvent(resource.id);
     this.props.onClose();
     this.context.setContext({passwordEditDialogProps: null});
   }
@@ -221,6 +222,16 @@ class PasswordCreateDialog extends Component {
    */
   selectAndScrollToFolder(id) {
     this.context.port.emit("passbolt.folders.select-and-scroll-to", id);
+  }
+
+  /**
+   * Dispatch the the resource-added custom event
+   * @param resourceId A resource identifier
+   */
+  dispatchOnResourceAddedEvent(resourceId) {
+    const event = document.createEvent("CustomEvent");
+    event.initCustomEvent("passbolt.resources.added-resource", true, true, resourceId);
+    document.dispatchEvent(event);
   }
 
   /**

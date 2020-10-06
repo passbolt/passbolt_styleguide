@@ -118,6 +118,7 @@ class ResourceWorkspaceContextProvider extends React.Component {
   componentDidMount() {
     this.populate();
     this.handleResourcesWaitedFor();
+    this.handleAddedResource();
   }
 
   /**
@@ -130,6 +131,13 @@ class ResourceWorkspaceContextProvider extends React.Component {
     await this.handleFoldersChange();
     await this.handleResourcesChange();
     await this.handleRouteChange(prevProps.location);
+  }
+
+  /**
+   * Whenever the component will unmount
+   */
+  componentWillUnmount() {
+    this.removeDocumentEventListeners();
   }
 
   /**
@@ -173,7 +181,6 @@ class ResourceWorkspaceContextProvider extends React.Component {
    */
   async handleResourcesChange() {
     const hasResourcesChanged = this.context.resources && this.context.resources !== this.resources;
-
     if (hasResourcesChanged) {
       this.resources = this.context.resources;
       await this.search(this.state.filter);
@@ -251,9 +258,12 @@ class ResourceWorkspaceContextProvider extends React.Component {
    * E.g. /password
    */
   async handleAllResourceRouteChange() {
-    const filter = (this.props.location.state && this.props.location.state.filter) || {type: ResourceWorkspaceFilterTypes.ALL};
-    await this.search(filter);
-    await this.detailNothing();
+    const hasResources = this.resources !== null;
+    if (hasResources) {
+      const filter = (this.props.location.state && this.props.location.state.filter) || {type: ResourceWorkspaceFilterTypes.ALL};
+      await this.search(filter);
+      await this.detailNothing();
+    }
   }
 
   /**
@@ -354,12 +364,27 @@ class ResourceWorkspaceContextProvider extends React.Component {
    */
   handleResourcesLoaded() {
     const hasResourcesBeenInitialized = this.resources === null && this.context.resources;
-    console.log(this.resources)
-    console.log(this.context.resources)
     if (hasResourcesBeenInitialized) {
       this.props.loadingContext.remove();
       this.handleResourcesLoaded = () => {};
     }
+  }
+
+  /**
+   * Handle the added resource event
+   */
+  handleAddedResource() {
+    document.addEventListener("passbolt.resources.added-resource", event => {
+      const {detail: resourceId} = event;
+      this.props.history.push(`/app/passwords/view/${resourceId}`);
+    });
+  }
+
+  /**
+   * Remove document event listeners attached in this component
+   */
+  removeDocumentEventListeners() {
+    document.removeEventListener("passbolt.resources.added-resource");
   }
 
   /**
