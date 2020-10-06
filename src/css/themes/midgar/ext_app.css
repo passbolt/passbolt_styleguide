@@ -4871,6 +4871,9 @@ h6 .input.toggle-switch {
   content: "\f0da";
   /* caret right */
 }
+.accordion.navigation .accordion-content > .empty-content {
+  padding: 0 0 0 2.5em;
+}
 /* actions */
 .header.third .main-action-wrapper {
   margin-top: 0.5em;
@@ -6679,9 +6682,6 @@ h6 .input.toggle-switch {
 }
 .panel .navigation .row:hover .right-cell a.filter {
   border: 1px solid #0C0C0A;
-}
-.panel .navigation .empty-content {
-  padding-left: 1em;
 }
 .dialog .form-content.permission-add {
   background-color: #30302D;

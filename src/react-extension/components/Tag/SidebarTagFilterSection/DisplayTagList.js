@@ -176,10 +176,10 @@ class DisplayTagList extends React.Component {
           <span className="processing-text">Retrieving tags</span>
         </div>
         }
-        {!this.isLoading() && this.props.tags.length === 0 &&
+        {!this.isLoading() && this.filteredTags.length === 0 &&
         <em className="empty-content">empty</em>
         }
-        {!this.isLoading() && this.props.tags.length > 0 &&
+        {!this.isLoading() && this.filteredTags.length > 0 &&
         <ul className="tree ready">
           {this.filteredTags.map(tag =>
             <li className="open node root tag-item" key={tag.id}>

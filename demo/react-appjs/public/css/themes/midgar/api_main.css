@@ -6700,9 +6700,6 @@ input[type="search"]::-webkit-search-cancel-button {
 .panel .navigation .row:hover .right-cell a.filter {
   border: 1px solid #0C0C0A;
 }
-.panel .navigation .empty-content {
-  padding-left: 1em;
-}
 .contextual-menu {
   position: absolute;
   background: #3B3B39;
@@ -8168,6 +8165,9 @@ table.table-info.horizontal tbody tr:hover {
 .accordion.navigation.closed .accordion-header .main-cell a:before {
   content: "\f0da";
   /* caret right */
+}
+.accordion.navigation .accordion-content > .empty-content {
+  padding: 0 0 0 2.5em;
 }
 .autocomplete-suggestions {
   text-align: left;

@@ -481,26 +481,29 @@ class FoldersTree extends React.Component {
             </div>
           </div>
         </div>
-        {!isLoading && isOpen &&
-          <div className="accordion-content">
-            <ul ref={this.listElement} className="folders-tree">
-              {rootFolders.map(folder => <FoldersTreeItem
-                key={`folders-list-${folder.id}`}
-                draggedItems={this.state.draggedItems}
-                folder={folder}
-                folders={this.context.folders}
-                isDragging={isDragging}
-                onClose={this.handleFolderCloseEvent}
-                onDragEnd={this.handleFolderDragEndEvent}
-                onDragStart={this.handleFolderDragStartEvent}
-                onDrop={this.handleFolderDropEvent}
-                onOpen={this.handleFolderOpenEvent}
-                openFolders={this.state.openFolders}
-                onSelect={this.handleFolderSelectEvent}
-                selectedFolder={this.selectedFolder}/>)}
-            </ul>
-          </div>
-        }
+        <div className="accordion-content">
+          {!isLoading && isOpen && rootFolders.length === 0 &&
+          <em className="empty-content">empty</em>
+          }
+          {!isLoading && isOpen && rootFolders.length > 0 &&
+          <ul ref={this.listElement} className="folders-tree">
+            {rootFolders.map(folder => <FoldersTreeItem
+              key={`folders-list-${folder.id}`}
+              draggedItems={this.state.draggedItems}
+              folder={folder}
+              folders={this.context.folders}
+              isDragging={isDragging}
+              onClose={this.handleFolderCloseEvent}
+              onDragEnd={this.handleFolderDragEndEvent}
+              onDragStart={this.handleFolderDragStartEvent}
+              onDrop={this.handleFolderDropEvent}
+              onOpen={this.handleFolderOpenEvent}
+              openFolders={this.state.openFolders}
+              onSelect={this.handleFolderSelectEvent}
+              selectedFolder={this.selectedFolder}/>)}
+          </ul>
+          }
+        </div>
       </div>
     );
   }
