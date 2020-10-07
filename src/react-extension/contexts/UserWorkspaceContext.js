@@ -210,6 +210,7 @@ class UserWorkspaceContextProvider extends React.Component {
    * @param filter
    */
   async search(filter) {
+    const isRecentlyModifiedFilter = filter.type === UserWorkspaceFilterTypes.RECENTLY_MODIFIED;
     const searchOperations = {
       [UserWorkspaceFilterTypes.GROUP]: this.searchByGroup.bind(this),
       [UserWorkspaceFilterTypes.TEXT]: this.searchByText.bind(this),
@@ -218,7 +219,11 @@ class UserWorkspaceContextProvider extends React.Component {
       [UserWorkspaceFilterTypes.NONE]: () => { /* No search */ }
     };
     await searchOperations[filter.type](filter);
-    await this.sort();
+    if (!isRecentlyModifiedFilter) {
+      await this.sort();
+    } else {
+      await this.resetSorter();
+    }
   }
 
   /**
@@ -248,8 +253,10 @@ class UserWorkspaceContextProvider extends React.Component {
    * Keep the most recently modified users ( current state: just sort everything with the most recent modified resource )
    * @param filter A recently modified filter
    */
-  async searchByRecentlyModified() {
-    // TODO
+  async searchByRecentlyModified(filter) {
+    const recentlyModifiedSorter = (user1, user2) => moment(user2.modified).diff(moment(user1.modified));
+    const filteredUsers = this.users.sort(recentlyModifiedSorter);
+    await this.setState({filter, filteredUsers});
   }
 
   /** USER SELECTION */
@@ -330,6 +337,14 @@ class UserWorkspaceContextProvider extends React.Component {
     const asc = hasSortPropertyChanged  || !this.state.sorter.asc;
     const sorter = {propertyName, asc};
     await this.setState({sorter});
+  }
+
+  /**
+   * Reset the user sorter
+   */
+  async resetSorter() {
+    const sorter = {propertyName: 'modified', asc: false};
+    this.setState({sorter});
   }
 
   /**
