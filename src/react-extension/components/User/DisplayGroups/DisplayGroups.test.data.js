@@ -55,7 +55,7 @@ export const groupsMock = [
       "id": "8e42567e-6e6e-54bc-b17b-0f5afde5b01c",
       "group_id": "3feba74f-47da-5146-9d8f-76c7266c60ea",
       "user_id": "d57c10f5-639d-5160-9c81-8a0c6c4ec856",
-      "is_admin": true,
+      "is_admin": false,
       "created": "2020-08-17T16:37:13+00:00"
     }
   },
@@ -83,13 +83,7 @@ export const groupsMock = [
     "modified": "2016-01-29T13:39:25+00:00",
     "created_by": "d57c10f5-639d-5160-9c81-8a0c6c4ec856",
     "modified_by": "d57c10f5-639d-5160-9c81-8a0c6c4ec856",
-    "my_group_user": {
-      "id": "15b5e2c6-164a-50e9-a46f-2b4a9ab9345a",
-      "group_id": "c9c8fd8e-a0fa-53f0-967b-42edca3d91e4",
-      "user_id": "d57c10f5-639d-5160-9c81-8a0c6c4ec856",
-      "is_admin": true,
-      "created": "2020-08-17T16:37:13+00:00"
-    }
+    "my_group_user": null
   },
   {
     "id": "f16c507f-9105-502e-aa8a-ba24c36dbdcf",
@@ -103,7 +97,7 @@ export const groupsMock = [
       "id": "ad80b164-c30f-53e0-aac1-3040fa2f136d",
       "group_id": "f16c507f-9105-502e-aa8a-ba24c36dbdcf",
       "user_id": "d57c10f5-639d-5160-9c81-8a0c6c4ec856",
-      "is_admin": true,
+      "is_admin": false,
       "created": "2020-08-17T16:37:13+00:00"
     }
   },
@@ -183,7 +177,7 @@ export const groupsMock = [
       "id": "c8f4bc84-2ea2-5509-8d6a-6b7378b7fffa",
       "group_id": "5fe7a6af-d97e-54f1-a4fc-b4b8bdb6e2ac",
       "user_id": "d57c10f5-639d-5160-9c81-8a0c6c4ec856",
-      "is_admin": true,
+      "is_admin": false,
       "created": "2020-08-17T16:37:13+00:00"
     }
   }
