@@ -15,6 +15,8 @@ import React from "react";
 import PropTypes from "prop-types";
 import AppContext from "../../../contexts/AppContext";
 import ContextualMenuWrapper from "../../Common/ContextualMenu/ContextualMenuWrapper";
+import FolderCreateDialog from "../../Folder/FolderCreateDialog/FolderCreateDialog";
+import {withDialog} from "../../../../react/contexts/Common/DialogContext";
 
 class FoldersTreeRootFolderContextualMenu extends React.Component {
   /**
@@ -56,11 +58,11 @@ class FoldersTreeRootFolderContextualMenu extends React.Component {
    */
   handleCreateFolderItemClickEvent() {
     this.context.setContext({
-      showFolderCreateDialog: true,
       folderCreateDialogProps: {
         folderParentId: null
       }
     });
+    this.props.dialogContext.open(FolderCreateDialog);
     this.props.hide();
   }
 
@@ -68,7 +70,7 @@ class FoldersTreeRootFolderContextualMenu extends React.Component {
    * Handle click on the export a folder menu option.
    */
   handleExportFolderItemClickEvent() {
-    const foldersIds = this.props.folders.filter(folder => folder.folder_parent_id === null)
+    const foldersIds = this.context.folders.filter(folder => folder.folder_parent_id === null)
       .reduce((carry, folder) => [...carry, folder.id], []);
     this.context.port.emit("passbolt.plugin.export_resources", {"folders": foldersIds});
     this.props.hide();
@@ -110,11 +112,10 @@ class FoldersTreeRootFolderContextualMenu extends React.Component {
 FoldersTreeRootFolderContextualMenu.contextType = AppContext;
 
 FoldersTreeRootFolderContextualMenu.propTypes = {
-  folders: PropTypes.array,
-  foldersTreeTitleElementRef: PropTypes.object,
   hide: PropTypes.func, // Hide the contextual menu
   left: PropTypes.number, // left position in px of the page
   top: PropTypes.number, // top position in px of the page
+  dialogContext: PropTypes.any
 };
 
-export default FoldersTreeRootFolderContextualMenu;
+export default withDialog(FoldersTreeRootFolderContextualMenu);
