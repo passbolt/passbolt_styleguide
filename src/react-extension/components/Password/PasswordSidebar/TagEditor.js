@@ -272,15 +272,20 @@ class TagEditor extends React.Component {
   /**
    * Check if the tag can be insert or not
    */
-  checkTagToInsert() {
+  checkTagToBeSaved() {
     const inputTag = this.inputTagRef.current.textContent;
-    if (this.validateTag(inputTag)) {
+    this.setErrorMessage("");
+    // no tag to be saved
+    if (!inputTag && inputTag.trim().length === 0) {
+      return true;
+    } else if (this.validateTag(inputTag)) {
       const tag = this.createTag(inputTag.trim());
       this.insertTag(tag);
-      this.setErrorMessage("");
       this.resetInputTagValue();
       this.hideAutocomplete();
+      return true;
     }
+    return false;
   }
 
   /**
@@ -304,7 +309,7 @@ class TagEditor extends React.Component {
       this.handleOnSubmit();
     } else if (event.which === 13 || event.which === 44) {
       event.preventDefault();
-      this.checkTagToInsert();
+      this.checkTagToBeSaved();
     }
   }
 
@@ -386,8 +391,7 @@ class TagEditor extends React.Component {
     // Do not re-submit an already processing form
     if (!this.state.processing) {
       this.setState({processing: true});
-      this.checkTagToInsert();
-      if (!this.state.errorMessage) {
+      if (this.checkTagToBeSaved()) {
         await this.updateTags();
       } else {
         this.setState({processing: false});
