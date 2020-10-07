@@ -16,7 +16,7 @@
 import Simplebar from "simplebar/dist/simplebar";
 /* eslint-enable no-unused-vars */
 import React, {Component} from "react";
-import {Route, BrowserRouter as Router, Switch, Redirect} from "react-router-dom";
+import {Route, BrowserRouter as Router, Switch} from "react-router-dom";
 import AppContext from './contexts/AppContext';
 import PropTypes from "prop-types";
 import MainMenu from "./components/Common/Navigation/MainMenu/MainMenu";
@@ -42,6 +42,7 @@ import ManageLoading from "./components/Common/Loading/ManageLoading/ManageLoadi
 import LoadingContextProvider from "./contexts/Common/LoadingContext";
 import Footer from "./components/Footer/Footer";
 import DisplayUserWorkspace from "./components/User/DisplayUserWorkspace/DisplayUserWorkspace";
+import HandleRouteFallback from "./components/Route/HandleRouteFallback";
 
 class ReactExtension extends Component {
   constructor(props) {
@@ -234,9 +235,6 @@ class ReactExtension extends Component {
       const folders = changes.folders.newValue;
       this.setState({folders});
     }
-
-    console.log('changes', changes);
-
     if (changes.users) {
       const users = changes.users.newValue;
       this.setState({users});
@@ -303,7 +301,7 @@ class ReactExtension extends Component {
                           </UserWorkspaceContextProvider>
                         </Route>
                         <Route path="/">
-                          <Redirect to="/app/passwords"/>
+                          <HandleRouteFallback/>
                         </Route>
                       </Switch>
                     </div>
