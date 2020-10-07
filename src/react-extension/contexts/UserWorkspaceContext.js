@@ -341,11 +341,11 @@ class UserWorkspaceContextProvider extends React.Component {
     const keySorter = (key, sorter) => baseSorter((s1, s2) => sorter(s1[key], s2[key]));
     const plainObjectSorter = sorter => baseSorter(sorter);
 
-    const dateSorter = (d1, d2) => moment(d1).diff(moment(d2));
+    const dateSorter = (d1, d2) => !d1 ? -1 : (!d2 ? 1 : moment(d1).diff(moment(d2)));
     const stringSorter = (s1, s2) => s1.localeCompare(s2);
     const nameSorter = (u1, u2) => {
       return `${u1.profile.first_name} ${u1.profile.last_name}`.localeCompare(`${u2.profile.first_name} ${u2.profile.last_name}`);
-    }
+    };
     const dateOrStringsorter = ['modified', 'last_logged_in'].includes(this.state.sorter.propertyName) ? dateSorter : stringSorter;
 
     const isNameProperty = this.state.sorter.propertyName === 'name';

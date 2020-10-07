@@ -179,10 +179,10 @@ export default [{
         "medium": "img\/public\/Avatar\/ef\/71\/ed\/b5e7a332595f4e52959179df27f8a978\/b5e7a332595f4e52959179df27f8a978.a99472d5.png",
         "small": "img\/public\/Avatar\/ef\/71\/ed\/b5e7a332595f4e52959179df27f8a978\/b5e7a332595f4e52959179df27f8a978.65a0ba70.png"
       }
-    }
+    },
   },
-  "__placeholder_last_logged_in__": "",
-  "last_logged_in": ""
+  "__placeholder_last_logged_in__": "2020-05-12T15:56:49+00:00",
+  "last_logged_in": "2020-08-12T15:56:49+00:00"
 }, {
   "id": "887422c0-bef6-59a7-bbda-84c253ee0848",
   "role_id": "a58de6d3-f52c-5080-b79b-a601a647ac85",

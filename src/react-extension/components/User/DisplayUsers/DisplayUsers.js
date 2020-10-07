@@ -177,7 +177,7 @@ class DisplayUsers extends React.Component {
     const isSelected = this.isUserSelected(user);
     const serverTimezone = this.context.siteSettings.getServerTimezone();
     const modifiedFormatted = moment.tz(user.modified, serverTimezone).fromNow();
-    const lastLoggedInFormatted = moment.tz(user.last_logged_in, serverTimezone).fromNow();
+    const lastLoggedInFormatted = user.last_logged_in ? moment.tz(user.last_logged_in, serverTimezone).fromNow() : "";
     const rowClassName = `${isSelected ? "selected" : ""} ${user.active ? "" : "inactive"}`;
 
     return (
