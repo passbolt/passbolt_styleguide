@@ -198,6 +198,7 @@ class UserWorkspaceContextProvider extends React.Component {
    */
   populate() {
     this.context.port.request("passbolt.users.update-local-storage");
+    this.context.port.request("passbolt.groups.update-local-storage");
   }
 
   /** USER SEARCH  **/

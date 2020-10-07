@@ -18,6 +18,10 @@ import DisplayUsers from "../DisplayUsers/DisplayUsers";
 import {withUserWorkspace} from "../../../contexts/UserWorkspaceContext";
 import {withRouter} from "react-router-dom";
 import PropTypes from "prop-types";
+import Logo from "../../../../react/components/Common/Navigation/Header/Logo";
+import UserBadgeMenu from "../../../../react/components/Common/Navigation/Header/UserBadgeMenu";
+import AppContext from "../../../contexts/AppContext";
+import DisplayGroups from "../DisplayGroups/DisplayGroups";
 
 /**
  * This component is a container for all the user workspace features
@@ -31,6 +35,8 @@ class DisplayUserWorkspace extends React.Component {
     return (
       <div>
         <div className="header second">
+          <Logo/>
+          <UserBadgeMenu baseUrl={this.context.userSettings.getTrustedDomain()} user={this.context.currentUser}/>
         </div>
         <div className="header third">
           <div className="col1 main-action-wrapper">
@@ -44,6 +50,7 @@ class DisplayUserWorkspace extends React.Component {
             <div className="tab-content selected">
               <div className="reports-workspace">
                 <div className="panel left">
+                  <DisplayGroups/>
                 </div>
                 <div className="panel middle">
                   <DisplayUsers/>
@@ -57,6 +64,7 @@ class DisplayUserWorkspace extends React.Component {
   }
 }
 
+DisplayUserWorkspace.contextType = AppContext;
 DisplayUserWorkspace.propTypes = {
   history: PropTypes.any,
   UserWorkspaceContext: PropTypes.any
