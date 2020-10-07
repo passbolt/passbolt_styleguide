@@ -41,7 +41,7 @@ class DisplayUserWorkspace extends React.Component {
         <div className="header third">
           <div className="col1 main-action-wrapper">
           </div>
-          <div className="col2_3 actions-wrapper">
+          <div className="col2_3 actions-wrapper" >
 
           </div>
         </div>
