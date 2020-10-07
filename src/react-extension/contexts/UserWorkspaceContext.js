@@ -19,6 +19,7 @@ import AppContext from "./AppContext";
 import {withLoading} from "../../react/contexts/Common/LoadingContext";
 import {withRouter} from "react-router-dom";
 import {ResourceWorkspaceFilterTypes} from "./ResourceWorkspaceContext";
+import moment from "moment";
 
 /**
  * Context related to resources ( filter, current selections, etc.)
@@ -163,8 +164,9 @@ class UserWorkspaceContextProvider extends React.Component {
    * Handle the change of sorter ( on property or direction )
    * @param propertyName The name of the property to sort on
    */
-  async handleSorterChange() {
-    // TODO
+  async handleSorterChange(propertyName) {
+    await this.updateSorter(propertyName);
+    await this.sort();
   }
 
   /**
@@ -334,7 +336,22 @@ class UserWorkspaceContextProvider extends React.Component {
    * Sort the resources given the current sorter
    */
   async sort() {
-    // TODO
+    const reverseSorter = sorter => (s1, s2) => -sorter(s1, s2);
+    const baseSorter =  sorter => this.state.sorter.asc ? sorter : reverseSorter(sorter);
+    const keySorter = (key, sorter) => baseSorter((s1, s2) => sorter(s1[key], s2[key]));
+    const plainObjectSorter = sorter => baseSorter(sorter);
+
+    const dateSorter = (d1, d2) => moment(d1).diff(moment(d2));
+    const stringSorter = (s1, s2) => s1.localeCompare(s2);
+    const nameSorter = (u1, u2) => {
+      return `${u1.profile.first_name} ${u1.profile.last_name}`.localeCompare(`${u2.profile.first_name} ${u2.profile.last_name}`);
+    }
+    const dateOrStringsorter = ['modified', 'last_logged_in'].includes(this.state.sorter.propertyName) ? dateSorter : stringSorter;
+
+    const isNameProperty = this.state.sorter.propertyName === 'name';
+    const propertySorter = isNameProperty ? plainObjectSorter(nameSorter) : keySorter(this.state.sorter.propertyName, dateOrStringsorter);
+
+    await this.setState({filteredUsers: this.state.filteredUsers.sort(propertySorter)});
   }
 
   /** USER DETAILS  **/

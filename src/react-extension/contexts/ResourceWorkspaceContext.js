@@ -133,12 +133,6 @@ class ResourceWorkspaceContextProvider extends React.Component {
     await this.handleRouteChange(prevProps.location);
   }
 
-  /**
-   * Whenever the component will unmount
-   */
-  componentWillUnmount() {
-    this.removeDocumentEventListeners();
-  }
 
   /**
    * Handles the resource search filter change
@@ -404,8 +398,6 @@ class ResourceWorkspaceContextProvider extends React.Component {
     }
     this.context.port.request("passbolt.resources.update-local-storage");
   }
-
-
 
   /** RESOURCE SEARCH  **/
 
