@@ -21,6 +21,7 @@ import SecretComplexity from "../../../lib/Secret/SecretComplexity";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import ErrorDialog from "../../Dialog/ErrorDialog/ErrorDialog";
 import {withDialog} from "../../../../react/contexts/Common/DialogContext";
+import {withRouter} from "react-router-dom";
 
 class PasswordCreateDialog extends Component {
   constructor() {
@@ -115,9 +116,9 @@ class PasswordCreateDialog extends Component {
     } else {
       this.selectAndScrollToResource(resource.id);
     }
-    this.dispatchOnResourceAddedEvent(resource.id);
-    this.props.onClose();
     this.context.setContext({passwordEditDialogProps: null});
+    this.props.history.push(`/app/passwords/view/${resource.id}`);
+    this.props.onClose();
   }
 
   /**
@@ -562,9 +563,10 @@ class PasswordCreateDialog extends Component {
 PasswordCreateDialog.contextType = AppContext;
 
 PasswordCreateDialog.propTypes = {
-  onClose: PropTypes.func,
+  history: PropTypes.object, // Router history
+  onClose: PropTypes.func, // Whenever the component must be closed
   actionFeedbackContext: PropTypes.any, // The action feedback context
   dialogContext: PropTypes.any // The dialog context
 };
 
-export default withActionFeedback(withDialog(PasswordCreateDialog));
+export default withActionFeedback(withRouter(withDialog(PasswordCreateDialog)));

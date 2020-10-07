@@ -71,7 +71,7 @@ class Grid extends React.Component {
    * Whenever the component has been updated
    */
   componentDidUpdate() {
-    this.handleInitialResourceScroll();
+    this.handleResourceScroll();
   }
 
   /**
@@ -131,14 +131,11 @@ class Grid extends React.Component {
   /**
    * Handles the initial resource scroll ( with a specific manual resource url /password/view/:id )
    */
-  handleInitialResourceScroll() {
+  handleResourceScroll() {
     const resourceToScroll = this.props.resourceWorkspaceContext.scrollTo.resource;
     if (resourceToScroll) {
       this.scrollTo(resourceToScroll.id);
       this.props.resourceWorkspaceContext.onResourceScrolled();
-
-      // Dynamic programming just to save continuous checking and voiding the handler
-      this.handleInitialResourceScroll = () => {};
     }
   }
 

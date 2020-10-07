@@ -26,6 +26,7 @@ import MockPort from "../../../test/mock/MockPort";
 import {ActionFeedbackContext} from "../../../contexts/ActionFeedbackContext";
 import DialogContextProvider from "../../../contexts/Common/DialogContext";
 import ManageDialogs from "../../Common/Dialog/ManageDialogs/ManageDialogs";
+import {MemoryRouter} from "react-router-dom";
 
 beforeEach(() => {
   jest.resetModules();
@@ -54,8 +55,14 @@ const renderPasswordCreateDialog = function(appContext, props) {
   return render(
     <AppContext.Provider value={appContext}>
       <DialogContextProvider>
-        <ManageDialogs/>
-        <PasswordCreateDialog debug onClose={props.onClose || jest.fn()} />
+        <MemoryRouter initialEntries={[
+          "/app/folders/view/:filterByFolderId",
+          "/app/passwords/view/:selectedResourceId",
+          "/app/passwords",
+        ]}>
+          <ManageDialogs/>
+          <PasswordCreateDialog debug onClose={props.onClose || jest.fn()} />
+        </MemoryRouter>
       </DialogContextProvider>
     </AppContext.Provider>
   );
