@@ -245,8 +245,22 @@ class UserWorkspaceContextProvider extends React.Component {
    * Filter the users which textual properties matched some user text words
    * @param filter A textual filter
    */
-  async searchByText() {
-    // TODO
+  async searchByText(filter) {
+    const text = filter.payload;
+    const words =  (text && text.split(/\s+/)) || [''];
+
+    // Test match of some escaped test words against the name / usernmae / uri / description /tags resource properties
+    const escapeWord = word =>  word.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    const wordToRegex = word =>  new RegExp(escapeWord(word), 'i');
+    const matchSomeWords = value => words.some(word => wordToRegex(word).test(value));
+
+    const matchUsernameProperty = user => matchSomeWords(user.username);
+    const matchNameProperty = user => matchSomeWords(user.profile.first_name) || matchSomeWords(user.profile.last_name);
+
+    const matchText = user => matchUsernameProperty(user) || matchNameProperty(user);
+
+    const filteredUsers = this.users.filter(matchText);
+    await this.setState({filter, filteredUsers});
   }
 
   /**

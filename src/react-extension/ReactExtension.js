@@ -234,6 +234,9 @@ class ReactExtension extends Component {
       const folders = changes.folders.newValue;
       this.setState({folders});
     }
+
+    console.log('changes', changes);
+
     if (changes.users) {
       const users = changes.users.newValue;
       this.setState({users});
