@@ -56,18 +56,6 @@ class DisplayTagListContextualMenu extends React.Component {
   }
 
   /**
-   * Get the contextual menu style.
-   */
-  getStyle() {
-    return {
-      position: "fixed",
-      display: "block",
-      left: this.props.left,
-      top: this.props.top
-    };
-  }
-
-  /**
    * Render the component.
    * @returns {JSX}
    */

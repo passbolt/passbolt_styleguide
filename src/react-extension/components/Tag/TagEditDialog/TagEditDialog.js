@@ -123,8 +123,8 @@ class TagEditDialog extends Component {
 
     try {
       this.props.loadingContext.add();
-      await this.context.port.request("passbolt.tags.update", tagDto);
-      await this.handleSaveSuccess();
+      const updatedTag = await this.context.port.request("passbolt.tags.update", tagDto);
+      await this.handleSaveSuccess(updatedTag);
     } catch (error) {
       this.handleSaveError(error);
       this.setState({processing: false});
@@ -143,12 +143,26 @@ class TagEditDialog extends Component {
 
   /**
    * Handle save operation success.
+   * @param {object} updatedTag The updated tag
    */
-  async handleSaveSuccess() {
+  async handleSaveSuccess(updatedTag) {
     this.props.loadingContext.remove();
     await this.props.actionFeedbackContext.displaySuccess("The tag has been updated successfully");
     this.props.onClose();
+    const previousTagId = this.context.tagToEdit.id;
     this.context.setContext({tagToEdit: null});
+    this.dispatchOnTagUpdatedEvent(previousTagId, updatedTag);
+  }
+
+  /**
+   * Dispatch the the tag-updated custom event
+   * @param {string} previousTagId The tag id before performing the update
+   * @param {object} updatedTag The updated tag
+   */
+  dispatchOnTagUpdatedEvent(previousTagId, updatedTag) {
+    const event = document.createEvent("CustomEvent");
+    event.initCustomEvent("passbolt.tags.updated-tag", true, true, {tagId: previousTagId, updatedTag: updatedTag});
+    document.dispatchEvent(event);
   }
 
   /**
