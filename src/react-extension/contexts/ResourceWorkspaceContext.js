@@ -133,6 +133,12 @@ class ResourceWorkspaceContextProvider extends React.Component {
     await this.handleRouteChange(prevProps.location);
   }
 
+  /**
+   * Whenever the component will unmount
+   */
+  componentWillUnmount() {
+    this.removeDocumentEventListeners();
+  }
 
   /**
    * Handles the resource search filter change
@@ -406,6 +412,7 @@ class ResourceWorkspaceContextProvider extends React.Component {
    * @param filter
    */
   async search(filter) {
+    const isRecentlyModifiedFilter = filter.type === ResourceWorkspaceFilterTypes.RECENTLY_MODIFIED;
     const searchOperations = {
       [ResourceWorkspaceFilterTypes.ROOT_FOLDER]: this.searchByRootFolder.bind(this),
       [ResourceWorkspaceFilterTypes.FOLDER]: this.searchByFolder.bind(this),
@@ -419,7 +426,11 @@ class ResourceWorkspaceContextProvider extends React.Component {
       [ResourceWorkspaceFilterTypes.NONE]: () => { /* No search */ }
     };
     await searchOperations[filter.type](filter);
-    await this.sort();
+    if (!isRecentlyModifiedFilter) {
+      await this.sort();
+    } else {
+      await this.resetSorter();
+    }
   }
 
   /**
@@ -648,6 +659,14 @@ class ResourceWorkspaceContextProvider extends React.Component {
     const asc = hasSortPropertyChanged  || !this.state.sorter.asc;
     const sorter = {propertyName, asc};
     await this.setState({sorter});
+  }
+
+  /**
+   * Reset the user sorter
+   */
+  async resetSorter() {
+    const sorter = {propertyName: 'modified', asc: false};
+    this.setState({sorter});
   }
 
   /**

@@ -22,6 +22,7 @@ import Logo from "../../../../react/components/Common/Navigation/Header/Logo";
 import UserBadgeMenu from "../../../../react/components/Common/Navigation/Header/UserBadgeMenu";
 import AppContext from "../../../contexts/AppContext";
 import DisplayGroups from "../DisplayGroups/DisplayGroups";
+import FilterUsersByShortcut from "../FilterUsersByShortcut/FilterUserByShortcut";
 
 /**
  * This component is a container for all the user workspace features
@@ -50,6 +51,7 @@ class DisplayUserWorkspace extends React.Component {
             <div className="tab-content selected">
               <div className="reports-workspace">
                 <div className="panel left">
+                  <FilterUsersByShortcut/>
                   <DisplayGroups/>
                 </div>
                 <div className="panel middle">
