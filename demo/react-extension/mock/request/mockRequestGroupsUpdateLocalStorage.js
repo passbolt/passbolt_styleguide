@@ -14,5 +14,6 @@ import groupsFixtures from "../../fixture/groups";
  * @since         3.0.0
  */
 export default (storage) => {
-  storage.local.set({groups: groupsFixtures});
+  const groups = JSON.parse(JSON.stringify(groupsFixtures));
+  storage.local.set({groups});
 };
