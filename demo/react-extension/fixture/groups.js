@@ -27,7 +27,7 @@ export default [
       "id": "8e42567e-6e6e-54bc-b17b-0f5afde5b01c",
       "group_id": "3feba74f-47da-5146-9d8f-76c7266c60ea",
       "user_id": "d57c10f5-639d-5160-9c81-8a0c6c4ec856",
-      "is_admin": true,
+      "is_admin": false,
       "created": "2020-08-17T16:37:13+00:00"
     }
   },
@@ -55,13 +55,7 @@ export default [
     "modified": "2016-01-29T13:39:25+00:00",
     "created_by": "d57c10f5-639d-5160-9c81-8a0c6c4ec856",
     "modified_by": "d57c10f5-639d-5160-9c81-8a0c6c4ec856",
-    "my_group_user": {
-      "id": "15b5e2c6-164a-50e9-a46f-2b4a9ab9345a",
-      "group_id": "c9c8fd8e-a0fa-53f0-967b-42edca3d91e4",
-      "user_id": "d57c10f5-639d-5160-9c81-8a0c6c4ec856",
-      "is_admin": true,
-      "created": "2020-08-17T16:37:13+00:00"
-    }
+    "my_group_user": null
   },
   {
     "id": "f16c507f-9105-502e-aa8a-ba24c36dbdcf",

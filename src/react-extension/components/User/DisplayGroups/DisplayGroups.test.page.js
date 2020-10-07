@@ -17,8 +17,11 @@
 import {fireEvent, render, waitFor} from "@testing-library/react";
 import React from "react";
 import {BrowserRouter as Router} from "react-router-dom";
-import SidebarGroupSection from "./DisplayGroups";
 import AppContext from "../../../contexts/AppContext";
+import DisplayGroups from "./DisplayGroups";
+import DisplayGroupsFilterContextualMenuPageObject from "./DisplayGroupsFilterContextualMenu.test.page";
+import ManageContextualMenu from "../../ManageContextualMenu";
+import ContextualMenuContextProvider from "../../../../react/contexts/Common/ContextualMenuContext";
 
 /**
  * The DisplayGroups component represented as a page
@@ -33,7 +36,10 @@ export default class DisplayGroupsPage {
     this._page = render(
       <AppContext.Provider value={appContext}>
         <Router>
-          <SidebarGroupSection {...props}/>
+          <ContextualMenuContextProvider>
+            <ManageContextualMenu/>
+            <DisplayGroups {...props}/>
+          </ContextualMenuContextProvider>
         </Router>
       </AppContext.Provider>
     );
@@ -46,21 +52,28 @@ export default class DisplayGroupsPage {
   setupPageObjects() {
     this._titleHeader = new TitleHeaderPageObject(this._page.container);
     this._displayGroupList = new DisplayGroupPageObject(this._page.container);
+    this._displayGroupFilterContextualMenu = new DisplayGroupsFilterContextualMenuPageObject(this._page.container);
   }
 
   /**
    * Return the page object of the title header
-   * @returns {{select: select}}
    */
   get title() {
     return this._titleHeader;
   }
 
   /**
-   * Returns the page object of display comments
+   * Returns the page object of display groups
    */
   get displayGroupList() {
     return this._displayGroupList;
+  }
+
+  /**
+   * Returns the page object of display groups filter contextual menu
+   */
+  get displayFilterContextualMenu() {
+    return this._displayGroupFilterContextualMenu;
   }
 }
 
@@ -83,10 +96,24 @@ class TitleHeaderPageObject {
     return this._container.querySelector(".folders-label");
   }
 
-  /** Click on the title */
-  async click()  {
+  /**
+   * Returns the clickable area of the filter
+   */
+  get filterButton() {
+    return this._container.querySelector('.filter');
+  }
+
+  /** Click on the component */
+  async click(component)  {
     const leftClick = {button: 0};
-    fireEvent.click(this.hyperlink, leftClick);
+    fireEvent.click(component, leftClick);
+    await waitFor(() => {});
+  }
+
+  /** Right click on the component */
+  async rightClick(component)  {
+    const rightClick = {button: 2};
+    fireEvent.click(component, rightClick);
     await waitFor(() => {});
   }
 }

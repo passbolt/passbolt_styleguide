@@ -61,9 +61,33 @@ describe("See groups", () => {
       expect(page.displayGroupList.name(9)).toBe('Sales');
       expect(page.displayGroupList.name(10)).toBe('Traffic');
     });
+
+    it('As LU I filter the groups in the users workspace primary sidebar by group I am member of', async() => {
+      await page.title.click(page.title.filterButton);
+      expect(page.displayFilterContextualMenu.groupMemberMenu.textContent).toBe("Groups I am member of");
+      await page.displayFilterContextualMenu.click(page.displayFilterContextualMenu.groupMemberMenu);
+      expect(page.title.hyperlink.textContent).toBe("Groups I am member of");
+      expect(page.displayGroupList.count()).toBe(3);
+    });
+
+    it('As LU I filter the groups in the users workspace primary sidebar by all groups', async() => {
+      await page.title.click(page.title.filterButton);
+      expect(page.displayFilterContextualMenu.allGroupMenu.textContent).toBe("All groups");
+      await page.displayFilterContextualMenu.click(page.displayFilterContextualMenu.allGroupMenu);
+      expect(page.title.hyperlink.textContent).toBe("All groups");
+      expect(page.displayGroupList.count()).toBe(10);
+    });
+
+    it('As LU I filter the groups in the users workspace primary sidebar by group I manage', async() => {
+      await page.title.click(page.title.filterButton);
+      expect(page.displayFilterContextualMenu.groupManageMenu.textContent).toBe("Groups I manage");
+      await page.displayFilterContextualMenu.click(page.displayFilterContextualMenu.groupManageMenu);
+      expect(page.title.hyperlink.textContent).toBe("Groups I manage");
+      expect(page.displayGroupList.count()).toBe(6);
+    });
   });
 
-  describe(' As LU I should see the group section empty', () => {
+  describe('As LU I should see the group section empty', () => {
     const appContext = {
       port: new MockPort(),
       groups: []
@@ -79,6 +103,24 @@ describe("See groups", () => {
     });
 
     it('I should see the groups section empty', () => {
+      expect(page.displayGroupList.isEmpty()).toBeTruthy();
+    });
+
+    it('As LU I see an empty feedback if I’m member of no group after filtering by group I am member of', async() => {
+      context.groups = [groupsMock[0]];
+      await page.title.click(page.title.filterButton);
+      expect(page.displayGroupList.isEmpty()).toBeFalsy();
+      await page.displayFilterContextualMenu.click(page.displayFilterContextualMenu.groupMemberMenu);
+      expect(page.title.hyperlink.textContent).toBe("Groups I am member of");
+      expect(page.displayGroupList.isEmpty()).toBeTruthy();
+    });
+
+    it('As LU I see an empty feedback if I manage no group after filtering by group I manage', async() => {
+      context.groups = [groupsMock[1]];
+      await page.title.click(page.title.filterButton);
+      expect(page.displayGroupList.isEmpty()).toBeFalsy();
+      await page.displayFilterContextualMenu.click(page.displayFilterContextualMenu.groupManageMenu);
+      expect(page.title.hyperlink.textContent).toBe("Groups I manage");
       expect(page.displayGroupList.isEmpty()).toBeTruthy();
     });
   });
