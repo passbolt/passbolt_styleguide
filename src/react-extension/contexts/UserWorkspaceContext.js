@@ -19,6 +19,7 @@ import AppContext from "./AppContext";
 import {withLoading} from "../../react/contexts/Common/LoadingContext";
 import {withRouter} from "react-router-dom";
 import {ResourceWorkspaceFilterTypes} from "./ResourceWorkspaceContext";
+import {withActionFeedback} from "./ActionFeedbackContext";
 import moment from "moment";
 
 /**
@@ -38,7 +39,12 @@ export const UserWorkspaceContext = React.createContext({
   details: {
     user: null, // The user to focus details on
     group: null, // The user group to focus details on
+    locked: true // The details display is locked
   },
+  scrollTo: {
+    user: null // The user to scroll to
+  },
+  onLockDetail: () => {}, // Lock or unlock detail  (hide or display the group or user details)
   onSorterChanged: () => {}, // Whenever the sorter changed
   onUserSelected: {
     single: () => {}// Whenever a single resource has been selected
@@ -74,7 +80,12 @@ class UserWorkspaceContextProvider extends React.Component {
       details: {
         user: null, // The user to focus details on
         group: null, // The group to focus details on
+        locked: true // The details display is locked
       },
+      scrollTo: {
+        user: null // The resource to scroll to
+      },
+      onDetailsLocked: this.handleDetailsLocked.bind(this), // Lock or unlock detail  (hide or display the group or user details)
       onSorterChanged: this.handleSorterChange.bind(this), // Whenever the sorter changed
       onUserSelected: {
         single: this.handleUserSelected.bind(this)// Whenever a single user has been selected
@@ -153,11 +164,69 @@ class UserWorkspaceContextProvider extends React.Component {
    */
   async handleUserRouteChange() {
     const isUserLocation = this.props.location.pathname.includes('users');
+    const userId = this.props.match.params.selectedUserId;
     if (isUserLocation) {
-      const filter = (this.props.location.state && this.props.location.state.filter) || {type: ResourceWorkspaceFilterTypes.ALL};
+      if (userId) { // Case of password view
+        await this.handleSingleUserRouteChange(userId);
+      } else { // Case of all and applied filters
+        await this.handleAllUserRouteChange();
+      }
+    }
+  }
+
+  /**
+   * Handle the user view route change with a user id
+   * E.g. /users/view/:userId
+   */
+  async handleSingleUserRouteChange(userId) {
+    const user = this.users.find(user => user.id === userId);
+    const hasNoneFilter = this.state.filter.type === UserWorkspaceFilterTypes.NONE;
+    if (hasNoneFilter) { // Case of password view by url bar inputting
+      await this.search({type: UserWorkspaceFilterTypes.ALL});
+    }
+    // If the user does not exist, it should display an error
+    if (user) {
+      await this.selectFromRoute(user);
+      await this.scrollTo(user);
+      await this.detailUser(user);
+    } else {
+      this.handleUnknownUser();
+    }
+  }
+
+
+  /**
+   * Handle the resource view route change without a resource id in the path
+   * E.g. /password
+   */
+  async handleAllUserRouteChange() {
+    const hasUsers = this.users !== null;
+    if (hasUsers) {
+      const filter = (this.props.location.state && this.props.location.state.filter) || {type: UserWorkspaceFilterTypes.ALL};
       await this.search(filter);
       await this.detailNothing();
     }
+  }
+
+  /**
+   * Handle the lock detail display
+   */
+  async handleDetailsLocked() {
+    await this.lockDetails();
+  }
+
+  /**
+   * Handle an unknown user ( passe by route parameter resource identifier )
+   */
+  handleUnknownUser() {
+    this.props.actionFeedbackContext.displayError("The user does not exist");
+  }
+
+  /**
+   * Handle the scrolling of a resource
+   */
+  async handleUserScrolled() {
+    await this.scrollNothing();
   }
 
   /**
@@ -175,6 +244,7 @@ class UserWorkspaceContextProvider extends React.Component {
    */
   async handleUserSelected(user) {
     await this.select(user);
+    this.redirectAfterSelection();
   }
 
   /**
@@ -285,62 +355,42 @@ class UserWorkspaceContextProvider extends React.Component {
   }
 
   /**
-   * Select the given user in a multiple selection mode
+   * Selects the given user when one comes from the navigation route
    * @param user An user
-   * @returns {Promise<void>}
    */
-  async selectMultiple(user) {
-    const hasNotSameId = selectedUser => selectedUser.id !== user.id;
-    const selectionWithoutUser = this.state.selectedUsers.filter(hasNotSameId);
-    const mustUnselect = this.state.selectedUsers.length !== selectionWithoutUser.length;
-    const selectedUsers = mustUnselect ? selectionWithoutUser : [...this.state.selectedUsers, user];
+  async selectFromRoute(user) {
+    const selectedUsers = [user];
     await this.setState({selectedUsers});
   }
 
   /**
-   * Select the given user in a range selection mode
-   * @param user An user
-   * @returns {Promise<void>}
-   */
-  async selectRange(user) {
-    const hasNoSelection = this.state.selectedUsers.length === 0;
-
-    if (hasNoSelection) {
-      await this.select(user);
-    } else {
-      const hasSameId = user => selectedUser => selectedUser.id === user.id;
-      const findIndex = user => this.state.filteredUsers.findIndex(hasSameId(user));
-      const startRangeIndex = findIndex(this.state.selectedUsers[0]);
-      const endRangeIndex = findIndex(user);
-
-      let selectedUsers;
-      if (startRangeIndex > endRangeIndex) { // Down range selection
-        selectedUsers = this.state.filteredUsers.slice(endRangeIndex, startRangeIndex + 1).reverse();
-      } else { // Up range selection
-        selectedUsers = this.state.filteredUsers.slice(startRangeIndex, endRangeIndex + 1);
-      }
-      await this.setState({selectedUsers});
-    }
-  }
-
-  /**
-   * Select all the users
-   */
-  async selectAll() {
-    await this.setState({selectedUsers: [...this.state.filteredUsers]});
-  }
-
-  /**
-   * Unselect all the users
+   * Unselect all the resources
    */
   async unselectAll() {
     const hasSelectedUsers = this.state.selectedUsers.length !== 0;
     if (hasSelectedUsers) {
-      await this.setState({selectedUsers: []});
+      await this.setState({selectedResources: []});
     }
   }
 
-  /** User Sorter **/
+  /**
+   * Navigate to the appropriate url after some resources selection operation
+   */
+  redirectAfterSelection() {
+    const hasUserSelected = this.state.selectedUsers.length === 1;
+    if (hasUserSelected) { // Case of selected user
+      this.props.history.push(`/app/users/view/${this.state.selectedUsers[0].id}`);
+    } else {
+      const {filter} = this.state;
+      const mustRedirect = this.props.location.pathname !== '/app/users';
+      if (mustRedirect) {
+        this.props.history.push({pathname: `/app/users`, state: {filter}});
+      }
+    }
+  }
+
+
+  /** USER SORTER **/
 
   /**
    * Update the users sorter given a property name
@@ -390,15 +440,17 @@ class UserWorkspaceContextProvider extends React.Component {
    * @param group The group to focus on
    */
   async detailGroup(group) {
-    await this.setState({details: {group, user: null}});
+    const locked = this.state.details.locked;
+    await this.setState({details: {group, user: null, locked}});
   }
 
   /**
    * Set the details focus on the given user
    * @param user The user to focus on
    */
-  async detailResource(user) {
-    await this.setState({details: {group: null, user}});
+  async detailUser(user) {
+    const locked = this.state.details.locked;
+    await this.setState({details: {group: null, user, locked}});
   }
 
   /**
@@ -407,8 +459,36 @@ class UserWorkspaceContextProvider extends React.Component {
   async detailNothing() {
     const hasDetails = this.state.details.user || this.state.details.group;
     if (hasDetails) {
-      await this.setState({details: {group: null, user: null}});
+      const locked = this.state.details.locked;
+      await this.setState({details: {group: null, user: null, locked}});
     }
+  }
+
+  /**
+   * Lock the group or user details display ( hide or show )
+   * @returns {Promise<void>}
+   */
+  async lockDetails() {
+    const details = this.state.details;
+    const locked = this.state.details.locked;
+    await this.setState({details: Object.assign({}, details, {locked: !locked})});
+  }
+
+  /** USER SCROLLING **/
+
+  /**
+   * Set the user to scroll to
+   * @param resource A resource
+   */
+  async scrollTo(user) {
+    await this.setState({scrollTo: {user}});
+  }
+
+  /**
+   * Unset the resource to scroll to
+   */
+  async scrollNothing() {
+    await this.setState({scrollTo: {}});
   }
 
 
@@ -428,15 +508,15 @@ class UserWorkspaceContextProvider extends React.Component {
 UserWorkspaceContextProvider.displayName = 'UserWorkspaceContextProvider';
 UserWorkspaceContextProvider.contextType = AppContext;
 UserWorkspaceContextProvider.propTypes = {
-  children: PropTypes.any,
-  location: PropTypes.object,
-  match: PropTypes.object,
-  history: PropTypes.object,
-  actionFeedbackContext: PropTypes.object,
+  children: PropTypes.any, // The component children
+  location: PropTypes.object, // The router location
+  match: PropTypes.object, // The router match helper
+  history: PropTypes.object, // The router history
+  actionFeedbackContext: PropTypes.object, // The action feedback context
   loadingContext: PropTypes.object // The loading context
 };
 
-export default withRouter(withLoading(UserWorkspaceContextProvider));
+export default withRouter(withActionFeedback(withLoading(UserWorkspaceContextProvider)));
 
 
 /**

@@ -134,13 +134,6 @@ class ResourceWorkspaceContextProvider extends React.Component {
   }
 
   /**
-   * Whenever the component will unmount
-   */
-  componentWillUnmount() {
-    this.removeDocumentEventListeners();
-  }
-
-  /**
    * Handles the resource search filter change
    */
   async handleFilterChange(previousFilter) {
@@ -386,13 +379,6 @@ class ResourceWorkspaceContextProvider extends React.Component {
         this.props.history.push({pathname: '/app/passwords', state: {filter}});
       }
     });
-  }
-
-  /**
-   * Remove document event listeners attached in this component
-   */
-  removeDocumentEventListeners() {
-    document.removeEventListener("passbolt.tags.updated-tag");
   }
 
   /**

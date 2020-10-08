@@ -293,6 +293,7 @@ class ReactExtension extends Component {
                           </ResourceWorkspaceContextProvider>
                         </Route>
                         <Route path={[
+                          "/app/users/view/:selectedUserId",
                           "/app/users",
                         ]}>
                           <UserWorkspaceContextProvider>
