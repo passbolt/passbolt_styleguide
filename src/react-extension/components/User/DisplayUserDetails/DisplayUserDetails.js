@@ -17,6 +17,7 @@ import PropTypes from "prop-types";
 import AppContext from "../../../contexts/AppContext";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import {withUserWorkspace} from "../../../contexts/UserWorkspaceContext";
+import DisplayUserDetailsInformation from "../DisplayUserDetailsInformation/DisplayUserDetailsInformation";
 
 class DisplayUserDetails extends React.Component {
   /**
@@ -84,6 +85,7 @@ class DisplayUserDetails extends React.Component {
               <span className="visuallyhidden">Close</span>
             </a>
           </div>
+          <DisplayUserDetailsInformation/>
         </div>
       </div>
     );

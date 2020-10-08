@@ -854,6 +854,9 @@ p {
   font-size: 0.688em;
   /* 11px base 16 */
 }
+.capitalize {
+  text-transform: capitalize ;
+}
 /* lists */
 article ul {
   list-style-type: circle;
