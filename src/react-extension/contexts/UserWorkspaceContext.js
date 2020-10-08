@@ -155,6 +155,7 @@ class UserWorkspaceContextProvider extends React.Component {
     const hasGroupsChanged = this.context.groups && this.context.groups !== this.groups;
     if (hasGroupsChanged) {
       this.groups = this.context.groups;
+      this.detailGroup(this.groups[0]);
     }
   }
 
@@ -166,7 +167,20 @@ class UserWorkspaceContextProvider extends React.Component {
     const hasLocationChanged = this.props.location.key !== previousLocation.key;
     const isAppFirstLoad = this.state.filter.type === ResourceWorkspaceFilterTypes.NONE;
     if (hasLocationChanged || isAppFirstLoad) {
+      await this.handleGroupRouteChange();
       await this.handleUserRouteChange();
+    }
+  }
+
+  /**
+   * Handle the group view route change
+   *  E.g. /group/view/:selectedGroupId
+   */
+  async handleGroupRouteChange() {
+    const groupId = this.props.match.params.selectedGroupId;
+    if (groupId) {
+      const group = this.context.groups.find(group => group.id === groupId);
+      await this.detailGroup(group);
     }
   }
 

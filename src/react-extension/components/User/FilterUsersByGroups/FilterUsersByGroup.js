@@ -18,12 +18,12 @@ import PropTypes from "prop-types";
 import {withRouter} from "react-router-dom";
 import {withUserWorkspace} from "../../../contexts/UserWorkspaceContext";
 import {withContextualMenu} from "../../../../react/contexts/Common/ContextualMenuContext";
-import DisplayGroupsFilterContextualMenu from "./DisplayGroupsFilterContextualMenu";
+import FilterUsersByGroupContextualMenu from "./FilterUsersByGroupContextualMenu";
 
 /**
  * This component display groups to filter the users
  */
-class DisplayGroups extends React.Component {
+class FilterUsersByGroup extends React.Component {
   /**
    * Constructor
    * @param {Object} props
@@ -54,6 +54,7 @@ class DisplayGroups extends React.Component {
     this.handleTitleMoreClickEvent = this.handleTitleMoreClickEvent.bind(this);
     this.handleTitleContextualMenuEvent = this.handleTitleContextualMenuEvent.bind(this);
     this.handleFilterGroupType = this.handleFilterGroupType.bind(this);
+    this.handleGroupSelected = this.handleGroupSelected.bind(this);
   }
 
   /**
@@ -83,15 +84,18 @@ class DisplayGroups extends React.Component {
   }
 
   /**
-   * Show the contextual menu
-   * @param {int} left The left position to display the menu
-   * @param {int} top The top position to display the menu
+   *
    */
-  showContextualMenu(top, left) {
-    const onFilterSelected = this.handleFilterGroupType;
-    const contextualMenuProps = {left, onFilterSelected, top};
-    this.props.contextualMenuContext.show(DisplayGroupsFilterContextualMenu, contextualMenuProps);
+  /**
+   * Handle the selection of a group
+   * @param event The Dom event
+   * @param group The selected group
+   */
+  handleGroupSelected(event, group) {
+    const {id} = group;
+    this.props.history.push(`/app/group/view/${id}`);
   }
+
 
   /**
    * Handle when the user wants to filter tags
@@ -114,6 +118,17 @@ class DisplayGroups extends React.Component {
       [filterByGroupsOptions.member]: "Groups I am member of",
       default: "All groups"
     };
+  }
+
+  /**
+   * Show the contextual menu
+   * @param {int} left The left position to display the menu
+   * @param {int} top The top position to display the menu
+   */
+  showContextualMenu(top, left) {
+    const onFilterSelected = this.handleFilterGroupType;
+    const contextualMenuProps = {left, onFilterSelected, top};
+    this.props.contextualMenuContext.show(FilterUsersByGroupContextualMenu, contextualMenuProps);
   }
 
   /**
@@ -229,7 +244,11 @@ class DisplayGroups extends React.Component {
                 <div className="row">
                   <div className="main-cell-wrapper">
                     <div className="main-cell">
-                      <a title={group.name}><span className="ellipsis">{group.name}</span></a>
+                      <a
+                        title={group.name}
+                        onClick={event => this.handleGroupSelected(event, group)}>
+                        <span className="ellipsis">{group.name}</span>
+                      </a>
                     </div>
                   </div>
                 </div>
@@ -245,15 +264,15 @@ class DisplayGroups extends React.Component {
   }
 }
 
-DisplayGroups.contextType = AppContext;
+FilterUsersByGroup.contextType = AppContext;
 
-DisplayGroups.propTypes = {
+FilterUsersByGroup.propTypes = {
   userWorkspaceContext: PropTypes.any, // user workspace context
   history: PropTypes.object,
   contextualMenuContext: PropTypes.any, // The contextual menu context
 };
 
-export default withRouter(withUserWorkspace(withContextualMenu(DisplayGroups)));
+export default withRouter(withUserWorkspace(withContextualMenu(FilterUsersByGroup)));
 
 export const filterByGroupsOptions = {
   all: "all",

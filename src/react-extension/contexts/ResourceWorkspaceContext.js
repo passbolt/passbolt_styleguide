@@ -201,7 +201,6 @@ class ResourceWorkspaceContextProvider extends React.Component {
    */
   async handleFolderRouteChange() {
     const folderId = this.props.match.params.filterByFolderId;
-
     if (folderId) {
       const folder = this.context.folders.find(folder => folder.id === folderId);
       await this.search({type: ResourceWorkspaceFilterTypes.FOLDER, payload: {folder}});

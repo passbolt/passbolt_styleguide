@@ -8882,3 +8882,173 @@ table.table-info.horizontal tbody tr:hover {
     line-height: 1.8em;
   }
 }
+/* sidebar / user details in overview */
+.panel.aside .user .sidebar-header,
+.panel.aside .group .sidebar-header {
+  /*
+     * For IE 6/7 only
+     * Include this rule to trigger hasLayout and contain floats.
+     */
+  /*
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
+  /*
+     * For IE 6/7 only
+     * Include this rule to trigger hasLayout and contain floats.
+     */
+  zoom: 1;
+  /*
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
+}
+.panel.aside .user .sidebar-header:before,
+.panel.aside .group .sidebar-header:before,
+.panel.aside .user .sidebar-header:after,
+.panel.aside .group .sidebar-header:after {
+  content: "";
+  display: table;
+}
+.panel.aside .user .sidebar-header:after,
+.panel.aside .group .sidebar-header:after {
+  clear: both;
+}
+.panel.aside .user .sidebar-header:before,
+.panel.aside .group .sidebar-header:before,
+.panel.aside .user .sidebar-header:after,
+.panel.aside .group .sidebar-header:after {
+  content: "";
+  display: table;
+}
+.panel.aside .user .sidebar-header:after,
+.panel.aside .group .sidebar-header:after {
+  clear: both;
+}
+.panel.aside .user .sidebar-header img,
+.panel.aside .group .sidebar-header img {
+  margin: 1em 0 1em 1em;
+  float: left;
+  width: 55px;
+  height: 55px;
+  border: 1px solid #0C0C0A;
+  border-radius: 50%;
+}
+.panel.aside .user .sidebar-header h3,
+.panel.aside .group .sidebar-header h3 {
+  float: left;
+  width: 67%;
+  margin-top: 1em;
+  padding: 0 0 0 1em;
+  display: table-cell;
+  vertical-align: middle;
+  border: 0;
+}
+.panel.aside .user .sidebar-header h3 .name,
+.panel.aside .group .sidebar-header h3 .name {
+  font-size: 1.2em;
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -o-text-overflow: ellipsis;
+  -ms-text-overflow: ellipsis;
+}
+.panel.aside .user .sidebar-header h3 .type,
+.panel.aside .group .sidebar-header h3 .type,
+.panel.aside .user .sidebar-header h3 .username,
+.panel.aside .group .sidebar-header h3 .username {
+  font-size: 0.8em;
+  color: #8B8B89;
+  font-weight: normal;
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -o-text-overflow: ellipsis;
+  -ms-text-overflow: ellipsis;
+}
+.panel.aside .user li.key,
+.panel.aside .group li.key {
+  margin-bottom: 0.5em;
+}
+.panel.aside .user li.key a.button.copy-public-key,
+.panel.aside .group li.key a.button.copy-public-key {
+  padding-top: 0.2em;
+  padding-bottom: 0.2em;
+  font-size: 0.75em;
+}
+.panel.aside .user li textarea,
+.panel.aside .group li textarea {
+  width: 100%;
+}
+/* edit group dialog */
+.edit-group-dialog .permission-edit {
+  margin-top: -1em;
+  border-top: 1px solid #0C0C0A;
+}
+/* tabel view adjustments for avatar */
+.page.people .tableview-header th.cell_icon,
+.page.people .tableview-header th.cell_avatar {
+  width: 45px;
+}
+.page.people .tableview-content th.cell_icon,
+.page.people .tableview-content td.cell_avatar {
+  margin: 0;
+  text-align: left;
+  width: 45px;
+}
+.page.people .tableview-content th.cell_icon img,
+.page.people .tableview-content td.cell_avatar img {
+  margin-top: 3px;
+  width: 1.7em;
+  height: 1.7em;
+  border-radius: 50%;
+}
+/* login history icon column centerign */
+.login-history td:first-child {
+  text-align: center;
+}
+/* Empty search feedback */
+.page.user .tableview.empty .tableview-header {
+  /* No tableview-header */
+  display: none;
+}
+.page.user .tableview.empty .tableview-content {
+  border: 0;
+  top: 0;
+}
+.page.user .tableview.empty .empty-content {
+  text-align: center;
+  margin: 3em 0.5em 0.67em 0.5em;
+}
+.page.user .tableview.empty .empty-content h1 {
+  font-size: 1.5em;
+}
+.page.user .tableview.empty .empty-content p {
+  font-size: 1em;
+  line-height: 1.5em;
+}
+@media all and (min-width: 780px) {
+  .page.user .tableview.empty .empty-content h1 {
+    font-size: 2.2em;
+  }
+  .page.user .tableview.empty .empty-content p {
+    font-size: 1.2em;
+    line-height: 1.8em;
+  }
+}
