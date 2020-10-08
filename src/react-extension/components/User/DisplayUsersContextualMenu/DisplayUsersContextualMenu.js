@@ -19,6 +19,10 @@ import ContextualMenuWrapper from "../../Common/ContextualMenu/ContextualMenuWra
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import EditUserDialog from "../EditUser/EditUserDialog";
 import ConfirmDisableUserMFA from "../DisableUserMFA/ConfirmDisableUserMFA";
+import DeleteUserWithConflictsDialog from "../DeleteUser/DeleteUserWithConflictsDialog";
+import DeleteUserDialog from "../DeleteUser/DeleteUserDialog";
+import ErrorDialog from "../../Dialog/ErrorDialog/ErrorDialog";
+
 class DisplayUsersContextualMenu extends React.Component {
   /**
    * Constructor
@@ -35,8 +39,8 @@ class DisplayUsersContextualMenu extends React.Component {
   bindCallbacks() {
     this.handlePermalinkCopy = this.handlePermalinkCopy.bind(this);
     this.handleUsernameCopy = this.handleUsernameCopy.bind(this);
-    this.handlePublicKeyCopy = this.handlePublicKeyCopy.bind(this);
     this.handleEditClickEvent = this.handleEditClickEvent.bind(this);
+    this.handleDeleteClickEvent = this.handleDeleteClickEvent.bind(this);
     this.handleDisableMfaEvent = this.handleDisableMfaEvent.bind(this);
   }
 
@@ -110,6 +114,61 @@ class DisplayUsersContextualMenu extends React.Component {
    */
   handleDisableMfaEvent() {
     this.disableMFA();
+  }
+
+  /**
+   * Handle delete click event
+   */
+  async handleDeleteClickEvent() {
+    try {
+      await this.context.port.request("passbolt.users.delete-dry-run", this.user.id);
+      this.displayDeleteUserDialog();
+    } catch (error) {
+      if (error.name === 'DryRunDeleteError') {
+        this.displayDeleteUserWithConflictsDialog(error.errors);
+      } else {
+        this.handleError(error);
+      }
+    }
+    this.props.hide();
+  }
+
+  /**
+   * Display delete user dialog when there is not conflict to solve
+   */
+  displayDeleteUserDialog() {
+    const deleteUserDialogProps = {
+      user: this.user
+    };
+    this.context.setContext({deleteUserDialogProps});
+    this.props.dialogContext.open(DeleteUserDialog);
+  }
+
+  /**
+   * Display delete user dialog when there is conflict to solve.
+   */
+  displayDeleteUserWithConflictsDialog(errors) {
+    const deleteUserWithConflictsDialogProps = {
+      user: this.user,
+      folders: errors.folders && errors.folders.sole_owner,
+      resources: errors.resources && errors.resources.sole_owner,
+      groups: errors.groups && errors.groups.sole_manager,
+    };
+    this.context.setContext({deleteUserWithConflictsDialogProps});
+    this.props.dialogContext.open(DeleteUserWithConflictsDialog);
+  }
+
+  /**
+   * Display error dialog
+   * @param error
+   */
+  handleError(error) {
+    const errorDialogProps = {
+      title: "There was an unexpected error...",
+      message: error.message
+    };
+    this.context.setContext({errorDialogProps});
+    this.props.dialogContext.open(ErrorDialog);
   }
 
   /**
@@ -207,6 +266,17 @@ class DisplayUsersContextualMenu extends React.Component {
             <div className="main-cell-wrapper">
               <div className="main-cell">
                 <a id="edit" onClick={this.handleEditClickEvent}><span>Edit</span></a>
+              </div>
+            </div>
+          </div>
+        </li>
+        }
+        {this.isLoggedInUserAdmin() &&
+        <li key="delete-user" className="ready">
+          <div className="row">
+            <div className="main-cell-wrapper">
+              <div className="main-cell">
+                <a id="delete" onClick={this.handleDeleteClickEvent}><span>Delete</span></a>
               </div>
             </div>
           </div>
