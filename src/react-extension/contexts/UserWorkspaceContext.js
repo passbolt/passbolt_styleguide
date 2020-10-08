@@ -44,6 +44,7 @@ export const UserWorkspaceContext = React.createContext({
   scrollTo: {
     user: null // The user to scroll to
   },
+  onUserScrolled: () => {}, // Whenever one scrolled to a user
   onLockDetail: () => {}, // Lock or unlock detail  (hide or display the group or user details)
   onSorterChanged: () => {}, // Whenever the sorter changed
   onUserSelected: {
@@ -85,6 +86,7 @@ class UserWorkspaceContextProvider extends React.Component {
       scrollTo: {
         user: null // The resource to scroll to
       },
+      onUserScrolled: this.handleUserScrolled.bind(this), // Whenever one scrolled to a user
       onDetailsLocked: this.handleDetailsLocked.bind(this), // Lock or unlock detail  (hide or display the group or user details)
       onSorterChanged: this.handleSorterChange.bind(this), // Whenever the sorter changed
       onUserSelected: {

@@ -65,6 +65,25 @@ class DisplayUsers extends React.Component {
   }
 
   /**
+   * Whenever the component has been updated
+   */
+  componentDidUpdate() {
+    this.handleUserScroll();
+  }
+
+  /**
+   * Handles the user scroll ( with a specific manual user url /users/view/:id )
+   */
+  handleUserScroll() {
+    const userToScroll = this.props.userWorkspaceContext.scrollTo.user;
+    if (userToScroll) {
+      this.scrollTo(userToScroll.id);
+      this.props.userWorkspaceContext.onUserScrolled();
+    }
+  }
+
+
+  /**
    * Handle the user selection
    * @param event The DOM event
    * @param user The selected user
@@ -133,6 +152,21 @@ class DisplayUsers extends React.Component {
    */
   async selectUser(user) {
     await this.props.userWorkspaceContext.onUserSelected.single(user);
+  }
+
+
+  /**
+   * Scroll to the given user
+   * @param userId An user identifier
+   */
+  scrollTo(userId) {
+    const userIndex = this.users.findIndex(user => user.id === userId);
+    const [visibleStartIndex, visibleEndIndex] = this.listRef.current.getVisibleRange();
+    const isInvisible = userIndex < visibleStartIndex || userIndex > visibleEndIndex;
+
+    if (isInvisible) {
+      this.listRef.current.scrollTo(userIndex);
+    }
   }
 
   /**

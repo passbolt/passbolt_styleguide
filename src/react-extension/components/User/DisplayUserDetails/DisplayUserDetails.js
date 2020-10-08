@@ -48,7 +48,10 @@ class DisplayUserDetails extends React.Component {
    * Handle when the user copies the permalink.
    */
   async handlePermalinkClick() {
-    // TODO
+    const baseUrl = this.context.userSettings.getTrustedDomain();
+    const permalink = `${baseUrl}/app/users/view/${this.user.id}`;
+    await this.context.port.request("passbolt.clipboard.copy", permalink);
+    this.props.actionFeedbackContext.displaySuccess("The permalink has been copied to clipboard");
   }
 
   /**
