@@ -18,6 +18,7 @@ import AppContext from "../../../contexts/AppContext";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import {withUserWorkspace} from "../../../contexts/UserWorkspaceContext";
 import DisplayUserDetailsInformation from "../DisplayUserDetailsInformation/DisplayUserDetailsInformation";
+import DisplayUserDetailsGroups from "../DisplayUserDetailsGroups/DisplayUserDetailsGroups";
 
 class DisplayUserDetails extends React.Component {
   /**
@@ -86,6 +87,7 @@ class DisplayUserDetails extends React.Component {
             </a>
           </div>
           <DisplayUserDetailsInformation/>
+          {this.user.active && <DisplayUserDetailsGroups/>}
         </div>
       </div>
     );
