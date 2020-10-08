@@ -19,6 +19,7 @@ import {withUserWorkspace} from "../../../contexts/UserWorkspaceContext";
 import DisplayUserGroupDetailsInformation
   from "../DisplayUserGroupDetailsInformation/DisplayUserGroupDetailsInformation";
 import GroupAvatar from "../../Common/Avatar/GroupAvatar";
+import DisplayUserGroupDetailsMembers from "../DisplayUserGroupDetailsMembers/DisplayUserGroupDetailsMembers";
 
 /**
  * This component displays the details of a users group
@@ -87,6 +88,7 @@ class DisplayUserGroupDetails extends React.Component {
           </div>
         </div>
         <DisplayUserGroupDetailsInformation/>
+        <DisplayUserGroupDetailsMembers/>
       </div>
     );
   }
