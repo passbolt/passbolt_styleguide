@@ -21,6 +21,8 @@ import ErrorDialog from "../../Dialog/ErrorDialog/ErrorDialog";
 import FormSubmitButton from "../../../../react/components/Common/Inputs/FormSubmitButton/FormSubmitButton";
 import FormCancelButton from "../../../../react/components/Common/Inputs/FormSubmitButton/FormCancelButton";
 import {withLoading} from "../../../contexts/Common/LoadingContext";
+import {ResourceWorkspaceFilterTypes, withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
+import {withRouter} from "react-router-dom";
 
 /**
  * Component allows the user to edit a tag from a dialog
@@ -147,22 +149,32 @@ class TagEditDialog extends Component {
    */
   async handleSaveSuccess(updatedTag) {
     this.props.loadingContext.remove();
-    await this.props.actionFeedbackContext.displaySuccess("The tag has been updated successfully");
     this.props.onClose();
+
+    await this.props.actionFeedbackContext.displaySuccess("The tag has been updated successfully");
+
     const previousTagId = this.context.tagToEdit.id;
     this.context.setContext({tagToEdit: null});
-    this.dispatchOnTagUpdatedEvent(previousTagId, updatedTag);
+    this.selectUpdatedTag(previousTagId, updatedTag);
   }
 
   /**
-   * Dispatch the the tag-updated custom event
-   * @param {string} previousTagId The tag id before performing the update
+   * Select the updated tag if required.
+   * While updating a tag, a new tag with a new id is returned, that's why if the tag was selected it needs to
+   * be reselected manually.
+   *
+   * @param {string} previousTagId The updated tag previous id
    * @param {object} updatedTag The updated tag
    */
-  dispatchOnTagUpdatedEvent(previousTagId, updatedTag) {
-    const event = document.createEvent("CustomEvent");
-    event.initCustomEvent("passbolt.tags.updated-tag", true, true, {tagId: previousTagId, updatedTag: updatedTag});
-    document.dispatchEvent(event);
+  selectUpdatedTag(previousTagId, updatedTag) {
+    const isFilterByTag = this.props.resourceWorkspaceContext.filter.type === ResourceWorkspaceFilterTypes.TAG;
+    if (isFilterByTag) {
+      const isTagSelected = this.props.resourceWorkspaceContext.filter.payload.tag.id === previousTagId;
+      if (isTagSelected) {
+        const filter = {type: ResourceWorkspaceFilterTypes.TAG, payload: {tag: updatedTag}};
+        this.props.history.push({pathname: "/app/passwords", state: {filter}});
+      }
+    }
   }
 
   /**
@@ -273,7 +285,11 @@ TagEditDialog.propTypes = {
   onClose: PropTypes.func,
   actionFeedbackContext: PropTypes.any, // The action feedback context
   dialogContext: PropTypes.any, // The dialog congtext
-  loadingContext: PropTypes.any // The loading context
+  loadingContext: PropTypes.any, // The loading context
+  resourceWorkspaceContext: PropTypes.any, // The resources workspace context
+  location: PropTypes.object, // Router location prop
+  match: PropTypes.object, // Router match prop
+  history: PropTypes.object, // Route history prop
 };
 
-export default withLoading(withActionFeedback(withDialog(TagEditDialog)));
+export default withRouter(withResourceWorkspace(withLoading(withActionFeedback(withDialog(TagEditDialog)))));
