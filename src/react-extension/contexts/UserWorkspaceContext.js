@@ -319,15 +319,15 @@ class UserWorkspaceContextProvider extends React.Component {
     const text = filter.payload;
     const words =  (text && text.split(/\s+/)) || [''];
 
-    // Test match of some escaped test words against the name / usernmae / uri / description /tags resource properties
+    // Test match of some escaped test words against the name / username
     const escapeWord = word =>  word.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
     const wordToRegex = word =>  new RegExp(escapeWord(word), 'i');
-    const matchSomeWords = value => words.some(word => wordToRegex(word).test(value));
+    const matchWord = (word, value) => wordToRegex(word).test(value);
 
-    const matchUsernameProperty = user => matchSomeWords(user.username);
-    const matchNameProperty = user => matchSomeWords(user.profile.first_name) || matchSomeWords(user.profile.last_name);
-
-    const matchText = user => matchUsernameProperty(user) || matchNameProperty(user);
+    const matchUsernameProperty = (word, user) => matchWord(word, user.username);
+    const matchNameProperty = (word, user) =>  matchWord(word, user.profile.first_name) || matchWord(word, user.profile.last_name);
+    const matchUser = (word, user) => matchUsernameProperty(word, user) || matchNameProperty(word, user);
+    const matchText = user => words.every(word => matchUser(word, user));
 
     const filteredUsers = this.users.filter(matchText);
     await this.setState({filter, filteredUsers});
