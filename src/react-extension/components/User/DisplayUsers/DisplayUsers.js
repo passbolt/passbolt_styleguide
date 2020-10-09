@@ -239,6 +239,8 @@ class DisplayUsers extends React.Component {
     const serverTimezone = this.context.siteSettings.getServerTimezone();
     const modifiedFormatted = moment.tz(user.modified, serverTimezone).fromNow();
     const lastLoggedInFormatted = user.last_logged_in ? moment.tz(user.last_logged_in, serverTimezone).fromNow() : "";
+    const mfa = user.is_mfa_enabled ? "Enabled" : "Disabled";
+    const isAdmin = this.context.currentUser && this.context.currentUser.role.name === 'admin';
     const rowClassName = `${isSelected ? "selected" : ""} ${user.active ? "" : "inactive"}`;
 
     return (
@@ -277,6 +279,13 @@ class DisplayUsers extends React.Component {
             {lastLoggedInFormatted}
           </div>
         </td>
+        {isAdmin &&
+          <td className="cell_is_mfa_enabled m-cell">
+            <div>
+              {mfa}
+            </div>
+          </td>
+        }
       </tr>
     );
   }
@@ -288,7 +297,7 @@ class DisplayUsers extends React.Component {
     const isReady = this.users !== null;
     const isEmpty = isReady && this.users.length === 0;
     const filterType = this.props.userWorkspaceContext.filter.type;
-
+    const isAdmin = this.context.currentUser && this.context.currentUser.role.name === 'admin';
     return (
       <div className={`tableview ready ${isEmpty ? "empty" : ""}`}>
         {!isReady &&
@@ -367,7 +376,21 @@ class DisplayUsers extends React.Component {
                         <Icon baseline={true} name="caret-down"/>
                         }
                       </a>
+
                     </th>
+                    {isAdmin &&
+                      <th className="cell_is_mfa_enabled m-cell sortable">
+                        <a onClick={ev => this.handleSortByColumnClick(ev, "is_mfa_enabled")}>
+                          MFA
+                          {this.isSortedColumn("is_mfa_enabled") && this.isSortedAsc() &&
+                          <Icon baseline={true} name="caret-up"/>
+                          }
+                          {this.isSortedColumn("is_mfa_enabled") && !this.isSortedAsc() &&
+                          <Icon baseline={true} name="caret-down"/>
+                          }
+                        </a>
+                      </th>
+                    }
                   </tr>
                 </thead>
               </table>
