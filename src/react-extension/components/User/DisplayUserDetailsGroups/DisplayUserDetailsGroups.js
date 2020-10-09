@@ -55,13 +55,17 @@ class DisplayUserDetailsGroups extends React.Component {
   get groups() {
     const {groups} = this.context;
     const selectedUser = this.props.userWorkspaceContext.details.user;
-    const belongsToGroup = group => group.groups_users.some(group_user => group_user.user_id === selectedUser.id);
-    const groupUser = group => group.groups_users.find(group_user => group_user.user_id === selectedUser.id);
-    const userRole = groupUser => groupUser.is_admin ? "Admin" : "Member";
-    const roleMapper = group => Object.assign({}, group, {role: userRole(groupUser(group))});
-    return groups
-      .filter(belongsToGroup)
-      .map(roleMapper);
+    if (selectedUser) {
+      const belongsToGroup = group => group.groups_users.some(group_user => group_user.user_id === selectedUser.id);
+      const groupUser = group => group.groups_users.find(group_user => group_user.user_id === selectedUser.id);
+      const userRole = groupUser => groupUser.is_admin ? "Admin" : "Member";
+      const roleMapper = group => Object.assign({}, group, {role: userRole(groupUser(group))});
+      return groups
+        .filter(belongsToGroup)
+        .map(roleMapper);
+    } else {
+      return [];
+    }
   }
 
   /**
