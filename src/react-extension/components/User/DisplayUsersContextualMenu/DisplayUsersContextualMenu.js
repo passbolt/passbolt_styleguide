@@ -17,7 +17,6 @@ import AppContext from "../../../contexts/AppContext";
 import {withDialog} from "../../../contexts/Common/DialogContext";
 import ContextualMenuWrapper from "../../Common/ContextualMenu/ContextualMenuWrapper";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
-
 class DisplayUsersContextualMenu extends React.Component {
   /**
    * Constructor
