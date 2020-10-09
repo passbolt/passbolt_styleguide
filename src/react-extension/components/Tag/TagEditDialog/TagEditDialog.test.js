@@ -21,6 +21,7 @@ import {ActionFeedbackContext} from "../../../contexts/ActionFeedbackContext";
 import PassboltApiFetchError from "../../../../react/lib/Common/Error/PassboltApiFetchError";
 import DialogContextProvider from "../../../contexts/Common/DialogContext";
 import ManageDialogs from "../../Common/Dialog/ManageDialogs/ManageDialogs";
+import {BrowserRouter} from "react-router-dom";
 
 beforeEach(() => {
   jest.resetModules();
@@ -52,12 +53,14 @@ const renderTagEditDialog = function(appContext, props) {
   appContext = getAppContext(appContext);
 
   return render(
-    <AppContext.Provider value={appContext}>
-      <DialogContextProvider>
-        <ManageDialogs/>
-        <TagEditDialog debug onClose={props.onClose}/>
-      </DialogContextProvider>
-    </AppContext.Provider>
+    <BrowserRouter>
+      <AppContext.Provider value={appContext}>
+        <DialogContextProvider>
+          <ManageDialogs/>
+          <TagEditDialog debug onClose={props.onClose}/>
+        </DialogContextProvider>
+      </AppContext.Provider>
+    </BrowserRouter>
   );
 };
 

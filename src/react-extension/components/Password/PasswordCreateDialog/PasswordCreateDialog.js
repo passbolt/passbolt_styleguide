@@ -226,16 +226,6 @@ class PasswordCreateDialog extends Component {
   }
 
   /**
-   * Dispatch the the resource-added custom event
-   * @param resourceId A resource identifier
-   */
-  dispatchOnResourceAddedEvent(resourceId) {
-    const event = document.createEvent("CustomEvent");
-    event.initCustomEvent("passbolt.resources.added-resource", true, true, resourceId);
-    document.dispatchEvent(event);
-  }
-
-  /**
    * Handle form input change.
    * @params {ReactEvent} The react event.
    */

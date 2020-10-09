@@ -118,7 +118,6 @@ class ResourceWorkspaceContextProvider extends React.Component {
   componentDidMount() {
     this.populate();
     this.handleResourcesWaitedFor();
-    this.handleUpdatedTag();
   }
 
   /**
@@ -131,13 +130,6 @@ class ResourceWorkspaceContextProvider extends React.Component {
     await this.handleFoldersChange();
     await this.handleResourcesChange();
     await this.handleRouteChange(prevProps.location);
-  }
-
-  /**
-   * Whenever the component will unmount
-   */
-  componentWillUnmount() {
-    this.removeDocumentEventListeners();
   }
 
   /**
@@ -368,31 +360,6 @@ class ResourceWorkspaceContextProvider extends React.Component {
       this.props.loadingContext.remove();
       this.handleResourcesLoaded = () => {};
     }
-  }
-
-  /**
-   * Handle the updated tag event
-   */
-  handleUpdatedTag() {
-    document.addEventListener("passbolt.tags.updated-tag", event => {
-      const hasTagFilter = this.state.filter.type === ResourceWorkspaceFilterTypes.TAG;
-      if (!hasTagFilter) {
-        return;
-      }
-      const {detail: {tagId, updatedTag}} = event;
-      const isTagSelected = this.state.filter.payload.tag.id === tagId;
-      if (isTagSelected) {
-        const filter = {type: ResourceWorkspaceFilterTypes.TAG, payload: {tag: updatedTag}};
-        this.props.history.push({pathname: '/app/passwords', state: {filter}});
-      }
-    });
-  }
-
-  /**
-   * Remove document event listeners attached in this component
-   */
-  removeDocumentEventListeners() {
-    document.removeEventListener("passbolt.tags.updated-tag");
   }
 
   /**
