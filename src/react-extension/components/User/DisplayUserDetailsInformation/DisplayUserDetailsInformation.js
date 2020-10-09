@@ -57,6 +57,17 @@ class DisplayUserDetailsInformation extends React.Component {
   }
 
   /**
+   * Get user role name
+   */
+  getRoleName() {
+    if (this.context.roles) {
+      const role = this.context.roles.find(role => role.id === this.user.role_id);
+      return role ? role.name : "";
+    }
+    return "";
+  }
+
+  /**
    * Handle the click on the title
    */
   handleTitleClicked() {
@@ -69,7 +80,6 @@ class DisplayUserDetailsInformation extends React.Component {
    * @return {string} The formatted date
    */
   formatDateTimeAgo(date) {
-    console.log(this.context);
     const serverTimezone = this.context.siteSettings.getServerTimezone();
     return moment.tz(date, serverTimezone).fromNow();
   }
@@ -78,7 +88,7 @@ class DisplayUserDetailsInformation extends React.Component {
    * Render the component
    */
   render() {
-    const role = this.user.role.name;
+    const role = this.getRoleName()
     const modified = this.formatDateTimeAgo(this.user.modified);
     const status = this.user.active ? "Activated" : "Activation pending";
 

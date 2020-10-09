@@ -60,6 +60,8 @@ class ReactExtension extends Component {
     this.getResourceTypes();
     this.getFolders();
     this.getGroups();
+    this.getUsers();
+    this.getRoles();
   }
 
   getDefaultState(props) {
@@ -205,6 +207,18 @@ class ReactExtension extends Component {
     }
   }
 
+  /**
+   * Returns the list of roles
+   * @return {array}
+   */
+  async getRoles() {
+    const storageData = await this.props.storage.local.get(["roles"]);
+    if (storageData.roles && storageData.roles.length) {
+      const roles = storageData.roles;
+      this.setState({roles});
+    }
+  }
+
   async getUserSettings() {
     const storageData = await this.props.storage.local.get(["_passbolt_data"]);
     const userSettings = new UserSettings(storageData._passbolt_data.config);
@@ -242,6 +256,10 @@ class ReactExtension extends Component {
     if (changes.groups) {
       const groups = changes.groups.newValue;
       this.setState({groups});
+    }
+    if (changes.roles) {
+      const roles = changes.roles.newValue;
+      this.setState({roles});
     }
   }
 
