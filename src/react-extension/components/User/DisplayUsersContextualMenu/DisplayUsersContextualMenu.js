@@ -17,6 +17,7 @@ import AppContext from "../../../contexts/AppContext";
 import {withDialog} from "../../../contexts/Common/DialogContext";
 import ContextualMenuWrapper from "../../Common/ContextualMenu/ContextualMenuWrapper";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
+import EditUserDialog from "../EditUser/EditUserDialog";
 class DisplayUsersContextualMenu extends React.Component {
   /**
    * Constructor
@@ -34,6 +35,7 @@ class DisplayUsersContextualMenu extends React.Component {
     this.handlePermalinkCopy = this.handlePermalinkCopy.bind(this);
     this.handleUsernameCopy = this.handleUsernameCopy.bind(this);
     this.handlePublicKeyCopy = this.handlePublicKeyCopy.bind(this);
+    this.handleEditClickEvent = this.handleEditClickEvent.bind(this);
   }
 
   /**
@@ -65,6 +67,42 @@ class DisplayUsersContextualMenu extends React.Component {
     const gpgkeyInfo = await this.context.port.request('passbolt.keyring.get-public-key-info-by-user', this.user.id);
     await this.context.port.request("passbolt.clipboard.copy", gpgkeyInfo.key);
     this.props.actionFeedbackContext.displaySuccess("The public key has been copied to clipboard");
+  }
+
+  /**
+   * handle edit resource
+   */
+  handleEditClickEvent() {
+    const editUserDialogProps = {
+      id: this.user.id
+    };
+    this.context.setContext({editUserDialogProps});
+    this.props.dialogContext.open(EditUserDialog);
+    this.props.hide();
+  }
+
+  /**
+   * Can update the resource
+   * @returns {boolean}
+   */
+  canUpdate() {
+    return this.currentUserRole && this.currentUserRole.name === 'admin';
+  }
+
+  /**
+   * Get the role of the current user
+   * @returns {null|*}
+   */
+  get currentUserRole() {
+    return this.context.roles && this.currentUser && this.context.roles.find(role => role.id === this.currentUser.role_id);
+  }
+
+  /**
+   * Get the current user
+   * @returns {null|*}
+   */
+  get currentUser() {
+    return this.context.currentUser;
   }
 
   /**
@@ -124,6 +162,17 @@ class DisplayUsersContextualMenu extends React.Component {
             </div>
           </div>
         </li>
+        {this.canUpdate() &&
+        <li key="edit-user" className="ready">
+          <div className="row">
+            <div className="main-cell-wrapper">
+              <div className="main-cell">
+                <a id="edit" onClick={this.handleEditClickEvent}><span>Edit</span></a>
+              </div>
+            </div>
+          </div>
+        </li>
+        }
       </ContextualMenuWrapper>
     );
   }
