@@ -17,6 +17,8 @@ import PropTypes from "prop-types";
 import AppContext from "../../../contexts/AppContext";
 import Icon from "../../Common/Icons/Icon";
 import {withUserWorkspace} from "../../../contexts/UserWorkspaceContext";
+import EditUserDialog from "../EditUser/EditUserDialog";
+import {withDialog} from "../../../contexts/Common/DialogContext";
 
 /**
  * This component is a container of multiple actions applicable on user
@@ -37,6 +39,7 @@ class DisplayUserWorkspaceActions extends React.Component {
    */
   bindCallbacks() {
     this.handleDetailsLockedEvent = this.handleDetailsLockedEvent.bind(this);
+    this.handleEditClickEvent = this.handleEditClickEvent.bind(this);
   }
 
 
@@ -57,6 +60,57 @@ class DisplayUserWorkspaceActions extends React.Component {
   }
 
   /**
+   * Handle edit click event
+   */
+  handleEditClickEvent() {
+    const editUserDialogProps = {
+      id: this.selectedUser.id
+    };
+    this.context.setContext({editUserDialogProps});
+    this.props.dialogContext.open(EditUserDialog);
+  }
+
+  /**
+   * Get selected user
+   * @returns {user|null}
+   */
+  get selectedUser() {
+    return this.props.userWorkspaceContext.selectedUsers[0];
+  }
+
+  /**
+   * Has a user selected
+   * @returns {boolean}
+   */
+  hasUserSelected() {
+    return this.selectedUser !== null;
+  }
+
+  /**
+   * Can update the resource
+   * @returns {boolean}
+   */
+  canUpdate() {
+    return this.currentUserRole && this.currentUserRole.name === 'admin';
+  }
+
+  /**
+   * Get the role of the current user
+   * @returns {null|*}
+   */
+  get currentUserRole() {
+    return this.context.roles && this.currentUser && this.context.roles.find(role => role.id === this.currentUser.role_id);
+  }
+
+  /**
+   * Get the current user
+   * @returns {null|*}
+   */
+  get currentUser() {
+    return this.context.currentUser;
+  }
+
+  /**
    * Render the component
    * @returns {JSX}
    */
@@ -64,6 +118,16 @@ class DisplayUserWorkspaceActions extends React.Component {
     return (
       <div className="col2_3 actions-wrapper">
         <div className="actions">
+          {this.canUpdate() &&
+          <ul className="ready">
+            <li>
+              <a className="button ready" onClick={this.handleEditClickEvent}>
+                <Icon name="edit"/>
+                <span>edit</span>
+              </a>
+            </li>
+          </ul>
+          }
         </div>
         <div className="actions secondary">
           <ul className="ready">
@@ -86,6 +150,7 @@ DisplayUserWorkspaceActions.contextType = AppContext;
 
 DisplayUserWorkspaceActions.propTypes = {
   userWorkspaceContext: PropTypes.any, // the user workspace context
+  dialogContext: PropTypes.any, // the dialog context
 };
 
-export default withUserWorkspace(DisplayUserWorkspaceActions);
+export default withDialog(withUserWorkspace(DisplayUserWorkspaceActions));
