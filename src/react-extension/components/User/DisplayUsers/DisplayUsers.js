@@ -22,6 +22,7 @@ import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import {withRouter} from "react-router-dom";
 import {withContextualMenu} from "../../../../react/contexts/Common/ContextualMenuContext";
 import {UserWorkspaceFilterTypes, withUserWorkspace} from "../../../contexts/UserWorkspaceContext";
+import DisplayUsersContextualMenu from "../DisplayUsersContextualMenu/DisplayUsersContextualMenu";
 
 
 /**
@@ -99,8 +100,11 @@ class DisplayUsers extends React.Component {
    * @param event A DOM event
    * @param user A user
    */
-  handleUserRightClick() {
-    //TODO
+  async handleUserRightClick(event, user) {
+    // Prevent the default contextual menu to popup.
+    event.preventDefault();
+    this.displayContextualMenu(event, user);
+    await this.selectUserIfNotAlreadySelected(user);
   }
 
   /**
@@ -111,6 +115,15 @@ class DisplayUsers extends React.Component {
   handleCheckboxWrapperClick(event, user) {
     event.stopPropagation();
     this.props.userWorkspaceContext.onUserSelected.single(user);
+  }
+
+  /**
+   * Handle the user sorter change
+   * @param event A DOM event
+   * @param sortProperty The user property to sort on
+   */
+  async handleSortByColumnClick(event, sortProperty) {
+    this.props.userWorkspaceContext.onSorterChanged(sortProperty);
   }
 
 
@@ -136,14 +149,16 @@ class DisplayUsers extends React.Component {
     return this.props.userWorkspaceContext.selectedUsers.some(selectedUser => user.id === selectedUser.id);
   }
 
-
   /**
-   * Handle the user sorter change
-   * @param event A DOM event
-   * @param sortProperty The user property to sort on
+   * Displays the contextual menu for the given user and following the given event
+   * @param event A dom event
+   * @param user A user
    */
-  async handleSortByColumnClick(event, sortProperty) {
-    this.props.userWorkspaceContext.onSorterChanged(sortProperty);
+  displayContextualMenu(event, user) {
+    const left = event.pageX;
+    const top = event.pageY;
+    const contextualMenuProps = {left, top, user};
+    this.props.contextualMenuContext.show(DisplayUsersContextualMenu, contextualMenuProps);
   }
 
   /**
@@ -168,6 +183,19 @@ class DisplayUsers extends React.Component {
       this.listRef.current.scrollTo(userIndex);
     }
   }
+
+  /**
+   * Select the user if not already selected.
+   * @param user An user
+   */
+  async selectUserIfNotAlreadySelected(user) {
+    const [selectedUser] = this.props.userWorkspaceContext.selectedUsers;
+    const isUserNotAlreadySelected = !selectedUser || selectedUser.id !== user.id;
+    if (isUserNotAlreadySelected) {
+      await this.selectUser(user);
+    }
+  }
+
 
   /**
    * Render the users table
