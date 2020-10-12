@@ -88,7 +88,7 @@ class DisplayUserDetailsInformation extends React.Component {
    * Render the component
    */
   render() {
-    const role = this.getRoleName()
+    const role = this.getRoleName();
     const modified = this.formatDateTimeAgo(this.user.modified);
     const status = this.user.active ? "Activated" : "Activation pending";
 
