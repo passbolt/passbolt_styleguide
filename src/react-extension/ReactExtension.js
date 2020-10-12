@@ -115,6 +115,18 @@ class ReactExtension extends Component {
         resourcesIds: null,
       },
 
+      // user dialog
+      deleteUserDialogProps: {
+        user: null
+      },
+
+      deleteUserWithConflictsDialogProps: {
+        user: null,
+        folders: null,
+        resources: null,
+        groups: null
+      },
+
       // tag dialog
       tagToEdit: null, // The current tag to edit
       tagToDelete: null, // The current tag to delete
