@@ -855,7 +855,7 @@ p {
   /* 11px base 16 */
 }
 .capitalize {
-  text-transform: capitalize ;
+  text-transform: capitalize;
 }
 /* lists */
 article ul {
