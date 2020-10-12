@@ -19,7 +19,7 @@
 import {ActionFeedbackContext} from "../../../contexts/ActionFeedbackContext";
 import {fireEvent, waitFor} from "@testing-library/react";
 import PassboltApiFetchError from "../../../../react/lib/Common/Error/PassboltApiFetchError";
-import DeleteUserDialogPage from "./DeleteUserDialogPage";
+import DeleteUserDialogTestPage from "./DeleteUserDialog.test.page";
 import {defaultAppContext, defaultProps, mockUser} from "./DeleteUserDialog.test.data";
 
 beforeEach(() => {
@@ -46,7 +46,7 @@ describe("See Delete User Dialog", () => {
 
     beforeEach(() => {
       context.setContext({deleteUserDialogProps});
-      page = new DeleteUserDialogPage(context, props);
+      page = new DeleteUserDialogTestPage(context, props);
     });
 
     it('As AD I should know what user I am deleting', () => {

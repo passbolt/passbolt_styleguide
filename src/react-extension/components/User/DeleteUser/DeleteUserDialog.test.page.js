@@ -17,13 +17,13 @@ import {fireEvent, render, waitFor} from "@testing-library/react";
 import React from "react";
 import ManageDialogs from "../../Common/Dialog/ManageDialogs/ManageDialogs";
 import DialogContextProvider from "../../../contexts/Common/DialogContext";
+import DeleteUserDialog from "./DeleteUserDialog";
 import AppContext from "../../../contexts/AppContext";
-import DeleteUserWithConflictsDialog from "./DeleteUserWithConflictsDialog";
 
 /**
  * The PasswordSidebarCommentSection component represented as a page
  */
-export default class DeleteUserWithConflictsDialogPage {
+export default class DeleteUserDialogTestPage {
   /**
    * Default constructor
    * @param appContext An app context
@@ -34,7 +34,7 @@ export default class DeleteUserWithConflictsDialogPage {
       <AppContext.Provider value={appContext}>
         <DialogContextProvider>
           <ManageDialogs/>
-          <DeleteUserWithConflictsDialog {...props}/>
+          <DeleteUserDialog {...props}/>
         </DialogContextProvider>
       </AppContext.Provider>
     );
@@ -45,21 +45,21 @@ export default class DeleteUserWithConflictsDialogPage {
    * Set up the objects of the page
    */
   setupPageObjects() {
-    this._displayDeleteUserWithConflictsDialog = new DeleteUserWithConflictsDialogPageObject(this._page.container);
+    this._displayDeleteUserDialog = new DeleteUserDialogPageObject(this._page.container);
   }
 
   /**
    * Returns the page object of display comments
    */
-  get displayDeleteUserWithConflictsDialog() {
-    return this._displayDeleteUserWithConflictsDialog;
+  get displayDeleteUserDialog() {
+    return this._displayDeleteUserDialog;
   }
 }
 
 /**
  * Page object for the TitleHeader element
  */
-class DeleteUserWithConflictsDialogPageObject {
+class DeleteUserDialogPageObject {
   /**
    * Default constructor
    * @param container The container which includes the delete user dialog Component
@@ -125,10 +125,10 @@ class DeleteUserWithConflictsDialogPageObject {
   }
 
   /**
-   * Returns the user first name, last name
+   * Returns the user first name, last name, (username)
    */
   get userName() {
-    return this._container.querySelector('.form-content.intro p strong');
+    return this._container.querySelector('.form-content p strong');
   }
 
   /**

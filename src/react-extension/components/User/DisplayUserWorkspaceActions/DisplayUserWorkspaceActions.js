@@ -19,6 +19,9 @@ import Icon from "../../Common/Icons/Icon";
 import {withUserWorkspace} from "../../../contexts/UserWorkspaceContext";
 import EditUserDialog from "../EditUser/EditUserDialog";
 import {withDialog} from "../../../contexts/Common/DialogContext";
+import DeleteUserDialog from "../DeleteUser/DeleteUserDialog";
+import DeleteUserWithConflictsDialog from "../DeleteUser/DeleteUserWithConflictsDialog";
+import ErrorDialog from "../../Dialog/ErrorDialog/ErrorDialog";
 
 /**
  * This component is a container of multiple actions applicable on user
@@ -40,6 +43,7 @@ class DisplayUserWorkspaceActions extends React.Component {
   bindCallbacks() {
     this.handleDetailsLockedEvent = this.handleDetailsLockedEvent.bind(this);
     this.handleEditClickEvent = this.handleEditClickEvent.bind(this);
+    this.handleDeleteClickEvent = this.handleDeleteClickEvent.bind(this);
   }
 
 
@@ -71,6 +75,60 @@ class DisplayUserWorkspaceActions extends React.Component {
   }
 
   /**
+   * Handle delete click event
+   */
+  async handleDeleteClickEvent() {
+    try {
+      await this.context.port.request("passbolt.users.delete-dry-run", this.selectedUser.id);
+      this.displayDeleteUserDialog();
+    } catch (error) {
+      if (error.name === 'DryRunDeleteError') {
+        this.displayDeleteUserWithConflictsDialog(error.errors);
+      } else {
+        this.handleError(error);
+      }
+    }
+  }
+
+  /**
+   * Display delete user dialog when there is not conflict to solve
+   */
+  displayDeleteUserDialog() {
+    const deleteUserDialogProps = {
+      user: this.selectedUser
+    };
+    this.context.setContext({deleteUserDialogProps});
+    this.props.dialogContext.open(DeleteUserDialog);
+  }
+
+  /**
+   * Display delete user dialog when there is conflict to solve.
+   */
+  displayDeleteUserWithConflictsDialog(errors) {
+    const deleteUserWithConflictsDialogProps = {
+      user: this.selectedUser,
+      folders: errors.folders && errors.folders.sole_owner,
+      resources: errors.resources && errors.resources.sole_owner,
+      groups: errors.groups && errors.groups.sole_manager,
+    };
+    this.context.setContext({deleteUserWithConflictsDialogProps});
+    this.props.dialogContext.open(DeleteUserWithConflictsDialog);
+  }
+
+  /**
+   * Display error dialog
+   * @param error
+   */
+  handleError(error) {
+    const errorDialogProps = {
+      title: "There was an unexpected error...",
+      message: error.message
+    };
+    this.context.setContext({errorDialogProps});
+    this.props.dialogContext.open(ErrorDialog);
+  }
+
+  /**
    * Get selected user
    * @returns {user|null}
    */
@@ -87,10 +145,10 @@ class DisplayUserWorkspaceActions extends React.Component {
   }
 
   /**
-   * Check if the edit button is disabled.
+   * Check if the button is disabled.
    * @returns {boolean}
    */
-  isEditButtonDisabled() {
+  isButtonDisabled() {
     return !this.hasOneUserSelected();
   }
 
@@ -113,9 +171,15 @@ class DisplayUserWorkspaceActions extends React.Component {
           {this.isLoggedInUserAdmin() &&
           <ul className="ready">
             <li>
-              <a className={`button ready ${this.isEditButtonDisabled() ? "disabled" : ""}`} onClick={this.handleEditClickEvent}>
+              <a className={`button ready ${this.isButtonDisabled() ? "disabled" : ""}`} onClick={this.handleEditClickEvent}>
                 <Icon name="edit"/>
                 <span>edit</span>
+              </a>
+            </li>
+            <li>
+              <a className={`button ready ${this.isButtonDisabled() ? "disabled" : ""}`} onClick={this.handleDeleteClickEvent}>
+                <Icon name="trash"/>
+                <span>delete</span>
               </a>
             </li>
           </ul>

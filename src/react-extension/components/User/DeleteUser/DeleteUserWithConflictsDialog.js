@@ -45,6 +45,7 @@ class DeleteUserWithConflictsDialog extends Component {
     this.handleFormSubmit = this.handleFormSubmit.bind(this);
     this.handleOnChangeOwner = this.handleOnChangeOwner.bind(this);
     this.handleOnChangeManager = this.handleOnChangeManager.bind(this);
+    this.removeUserDeletedFilter = this.removeUserDeletedFilter.bind(this);
   }
 
   /**
@@ -195,10 +196,10 @@ class DeleteUserWithConflictsDialog extends Component {
    * Get user first name, last name and username
    * @param userPermission
    */
-  getUserPermissionName(userPermission) {
-    const first_name = userPermission.first_name;
-    const last_name = userPermission.last_name;
-    const username = userPermission.username;
+  getUserPermission(user) {
+    const first_name = user.profile.first_name;
+    const last_name = user.profile.last_name;
+    const username = user.username;
 
     return `${first_name} ${last_name} (${username})`;
   }
@@ -210,7 +211,7 @@ class DeleteUserWithConflictsDialog extends Component {
   populateDefaultOwners() {
     const owners = {};
     // create an object with key:value => [id of object]: permissionId
-    const permissionTransferReducer = (assignments, permissionTransfer) => (Object.assign(assignments, {[permissionTransfer.id]: this.getDefaultPermissionId(permissionTransfer.allowedUsersPermission, permissionTransfer.allowedGroupsPermission)}));
+    const permissionTransferReducer = (assignments, permissionTransfer) => (Object.assign(assignments, {[permissionTransfer.id]: this.getDefaultPermissionId(permissionTransfer.permissions)}));
     if (this.hasFolderConflict()) {
       const assignmentsDefaultFolder = this.folders.reduce(permissionTransferReducer, {});
       Object.assign(owners, assignmentsDefaultFolder || {});
@@ -228,9 +229,9 @@ class DeleteUserWithConflictsDialog extends Component {
    */
   populateDefaultManagers() {
     const managers = {};
-    // create an object with key:value => [id of object]: permissionId
-    const permissionTransferReducer = (assignments, permissionTransfer) => (Object.assign(assignments, {[permissionTransfer.id]: this.getDefaultPermissionId(permissionTransfer.allowedUsersPermission)}));
     if (this.hasGroupsConflict()) {
+      // create an object with key:value => [id of object]: permissionId
+      const permissionTransferReducer = (assignments, permissionTransfer) => (Object.assign(assignments, {[permissionTransfer.id]: this.getDefaultGroupUsersId(permissionTransfer.groups_users)}));
       const assignmentsDefaultGroup = this.groups.reduce(permissionTransferReducer, {});
       Object.assign(managers, assignmentsDefaultGroup || {});
     }
@@ -241,43 +242,54 @@ class DeleteUserWithConflictsDialog extends Component {
    * Get the default user permission id
    * @param allowedUsersPermission
    */
-  getDefaultUserPermissionId(allowedUsersPermission) {
-    return allowedUsersPermission.sort((userPermissionA, userPermissionB) => this.sortPermissions(userPermissionA, userPermissionB))[0].permissionId;
+  getDefaultUserPermissionId(usersPermission) {
+    return usersPermission.sort((userPermissionA, userPermissionB) => this.sortUsers(userPermissionA.user, userPermissionB.user))[0].id;
   }
 
   /**
    * Get the default group permission id
    * @param allowedGroupsPermission
    */
-  getDefaultGroupPermissionId(allowedGroupsPermission) {
-    return allowedGroupsPermission.sort((groupPermissionA, groupPermissionB) => groupPermissionA.name.localeCompare(groupPermissionB.name))[0].permissionId;
+  getDefaultGroupPermissionId(groupsPermission) {
+    return groupsPermission.sort((groupPermissionA, groupPermissionB) => groupPermissionA.name.localeCompare(groupPermissionB.name))[0].id;
   }
 
   /**
    * Get the default permission id
-   * @param allowedUsersPermission
-   * @param allowedGroupsPermission
+   * @param permissions
    */
-  getDefaultPermissionId(allowedUsersPermission, allowedGroupsPermission) {
-    if (allowedUsersPermission !== null) {
-      return this.getDefaultUserPermissionId(allowedUsersPermission);
+  getDefaultPermissionId(permissions) {
+    const userPermissions = permissions.filter(permission => permission.aro === "User" && permission.user.id !== this.user.id);
+    const groupPermissions = permissions.filter(permission => permission.aro === "Group");
+    if (userPermissions !== null) {
+      return this.getDefaultUserPermissionId(userPermissions);
     } else {
-      return this.getDefaultGroupPermissionId(allowedGroupsPermission);
+      return this.getDefaultGroupPermissionId(groupPermissions);
     }
   }
 
   /**
-   * Sort user permission by user firstname and by lastname
-   * @param userPermissionA
-   * @param userPermissionB
+   * get the default user id
+   * @param groupUsers
+   * @returns {*}
+   */
+  getDefaultGroupUsersId(groupUsers) {
+    const users = groupUsers.filter(groupUser => groupUser.user.id !== this.user.id);
+    return users.sort((groupUserA, groupUserB) => this.sortUsers(groupUserA.user, groupUserB.user))[0].id;
+  }
+
+  /**
+   * Sort user by firstname and by lastname
+   * @param userA
+   * @param userB
    * @returns {number}
    */
-  sortPermissions(userPermissionA, userPermissionB) {
+  sortUsers(userA, userB) {
     // permission have user sort by firstname and lastname
-    if (userPermissionA.first_name === userPermissionB.first_name) {
-      return userPermissionA.last_name < userPermissionB.last_name ? -1 : 1;
+    if (userA.profile.first_name === userB.profile.first_name) {
+      return userA.profile.last_name.localeCompare(userB.profile.last_name);
     }
-    return userPermissionA.first_name < userPermissionB.first_name ? -1 : 1;
+    return userA.profile.first_name.localeCompare(userB.profile.first_name);
   }
 
   /**
@@ -337,26 +349,8 @@ class DeleteUserWithConflictsDialog extends Component {
   }
 
   /**
-   * Has allowed user assignment
-   * @param assignment
-   * @returns {boolean}
-   */
-  hasAllowedUsersPermission(assignment) {
-    return assignment.allowedUsersPermission != null;
-  }
-
-  /**
-   * Has allowed group assignment
-   * @param assignment
-   * @returns {boolean}
-   */
-  hasAllowedGroupsPermission(assignment) {
-    return assignment.allowedGroupsPermission != null;
-  }
-
-  /**
    * Get folders sorted by name
-   * @returns {*}
+   * @returns {{id: string, name: string, allowedUsersPermission: [{permissionId: string, username: string, first_name": string,last_name: string},...], allowedGroupsPermission: [{permissionId: string, name: string},...]}}
    */
   get foldersSorted() {
     return this.folders.sort((folderA, folderB) => folderA.name.localeCompare(folderB.name));
@@ -364,7 +358,7 @@ class DeleteUserWithConflictsDialog extends Component {
 
   /**
    * Get resources sorted by name
-   * @returns {*}
+   * @returns {{id: string, name: string, allowedUsersPermission: [{permissionId: string, username: string, first_name": string,last_name: string},...], allowedGroupsPermission: [{permissionId: string, name: string},...]}}
    */
   get resourcesSorted() {
     return this.resources.sort((resourceA, resourceB) => resourceA.name.localeCompare(resourceB.name));
@@ -372,10 +366,22 @@ class DeleteUserWithConflictsDialog extends Component {
 
   /**
    * Get groups sorted by name
-   * @returns {*}
+   * @returns {{id: string, name: string, allowedUsersPermission": [{permissionId: string, username: string, first_name": string,last_name: string},...]}}
    */
   get groupsSorted() {
     return this.groups.sort((groupA, groupB) => groupA.name.localeCompare(groupB.name));
+  }
+
+  /**
+   * filter to remove the user deleted
+   * @param permission
+   * @returns {boolean}
+   */
+  removeUserDeletedFilter(permission) {
+    if (permission.aro === 'User') {
+      return permission.user.id !== this.user.id;
+    }
+    return true;
   }
 
   render() {
@@ -405,14 +411,11 @@ class DeleteUserWithConflictsDialog extends Component {
                      <div className="input select required">
                        <label htmlFor="transfer_folder_owner">{folder.name} (Folder) new owner:</label>
                        <select className="fluid form-element ready" value={this.state.owners[folder.id]} onChange={event => this.handleOnChangeOwner(event, folder.id)}>
-                         {this.hasAllowedUsersPermission(folder) &&
-                         folder.allowedUsersPermission.map(userPermission =>
-                           <option key={userPermission.permissionId} value={userPermission.permissionId}>{this.getUserPermissionName(userPermission)}</option>
-                         )}
-                         {this.hasAllowedGroupsPermission(folder) &&
-                         folder.allowedGroupsPermission.map(groupPermission =>
-                           <option key={groupPermission.permissionId} value={groupPermission.permissionId}>{groupPermission.name}</option>
-                         )}
+                         {folder.permissions.filter(this.removeUserDeletedFilter).map(permission => (
+                           permission.aro === 'User' && <option key={permission.id} value={permission.id}>{this.getUserPermission(permission.user)}</option>
+                           ||
+                           permission.aro === 'Group' && <option key={permission.id} value={permission.id}>{permission.group.name}</option>
+                         ))}
                        </select>
                      </div>
                    </li>
@@ -429,14 +432,11 @@ class DeleteUserWithConflictsDialog extends Component {
                       <div className="input select required">
                         <label htmlFor="transfer_resource_owner">{resource.name} (Password) new owner:</label>
                         <select className="fluid form-element ready" value={this.state.owners[resource.id]} onChange={event => this.handleOnChangeOwner(event, resource.id)}>
-                          {this.hasAllowedUsersPermission(resource) &&
-                          resource.allowedUsersPermission.map(userPermission =>
-                            <option key={userPermission.permissionId} value={userPermission.permissionId}>{this.getUserPermissionName(userPermission)}</option>
-                          )}
-                          {this.hasAllowedGroupsPermission(resource) &&
-                          resource.allowedGroupsPermission.map(groupPermission =>
-                            <option key={groupPermission.permissionId} value={groupPermission.permissionId}>{groupPermission.name}</option>
-                          )}
+                          {resource.permissions.filter(this.removeUserDeletedFilter).map(permission => (
+                            permission.aro === 'User' && <option key={permission.id} value={permission.id}>{this.getUserPermission(permission.user)}</option>
+                            ||
+                            permission.aro === 'Group' && <option key={permission.id} value={permission.id}>{permission.group.name}</option>
+                          ))}
                         </select>
                       </div>
                     </li>
@@ -453,9 +453,9 @@ class DeleteUserWithConflictsDialog extends Component {
                       <div className="input select required">
                         <label htmlFor="transfer_group_manager">{group.name} (Group) new manager:</label>
                         <select className="fluid form-element ready" value={this.state.managers[group.id]} onChange={event => this.handleOnChangeManager(event, group.id)}>
-                          {group.allowedUsersPermission.map(userPermission =>
-                            <option key={userPermission.permissionId} value={userPermission.permissionId}>{this.getUserPermissionName(userPermission)}</option>
-                          )}
+                          {group.groups_users.filter(this.removeUserDeletedFilter).map(groupUser => (
+                            <option key={groupUser.id} value={groupUser.id}>{this.getUserPermission(groupUser.user)}</option>
+                          ))}
                         </select>
                       </div>
                     </li>

@@ -116,6 +116,10 @@ class ReactExtension extends Component {
       },
 
       // user dialog
+      editUserDialogProps: {
+        id: null // The id of the current user to edit
+      },
+
       deleteUserDialogProps: {
         user: null
       },
@@ -130,11 +134,6 @@ class ReactExtension extends Component {
       // tag dialog
       tagToEdit: null, // The current tag to edit
       tagToDelete: null, // The current tag to delete
-
-      // user dialog
-      editUserDialogProps: {
-        id: null // The id of the current user to edit
-      },
 
       // progress dialog
       progressDialogProps: {},

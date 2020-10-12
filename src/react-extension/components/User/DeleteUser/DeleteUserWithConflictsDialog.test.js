@@ -19,9 +19,15 @@
 import {ActionFeedbackContext} from "../../../contexts/ActionFeedbackContext";
 import {fireEvent, waitFor} from "@testing-library/react";
 import PassboltApiFetchError from "../../../../react/lib/Common/Error/PassboltApiFetchError";
-import DeleteUserWithConflictsDialogPage from "./DeleteUserWithConflictsDialogPage";
-import {defaultAppContext, defaultProps, mockUser} from "./DeleteUserDialog.test.data";
-import {mockFolders, mockGroups, mockResources} from "./DeleteUserWithConflictsDialog.test.data";
+import DeleteUserWithConflictsDialogTestPage from "./DeleteUserWithConflictsDialog.test.page";
+import {
+  defaultAppContext,
+  defaultProps,
+  mockFolders,
+  mockGroups,
+  mockResources,
+  mockUser
+} from "./DeleteUserWithConflictsDialog.test.data";
 
 beforeEach(() => {
   jest.resetModules();
@@ -50,7 +56,7 @@ describe("See Delete User Dialog", () => {
 
     beforeEach(() => {
       context.setContext({deleteUserWithConflictsDialogProps});
-      page = new DeleteUserWithConflictsDialogPage(context, props);
+      page = new DeleteUserWithConflictsDialogTestPage(context, props);
     });
 
     it('As AD I should know what user I am deleting', () => {
@@ -81,14 +87,14 @@ describe("See Delete User Dialog", () => {
       await page.displayDeleteUserWithConflictsDialog.click(submitButton);
       const permissionTransfer = {
         owners: [
-          {aco_foreign_key: "9e03fd73-04c0-5514-95fa-1a6cf2c7c093", id: "6aada140-fe8b-5e69-a90f-ae0cec6d3dcf"},
-          {aco_foreign_key: "6592f71b-8874-5e91-bf6d-829b8ad188f5", id: "c5355878-fb96-5c21-8bb5-e8de4b24db8b"},
+          {aco_foreign_key: "9e03fd73-04c0-5514-95fa-1a6cf2c7c093", id: "17336097-cd30-57ab-bc40-89b31bcc513f"},
+          {aco_foreign_key: "6592f71b-8874-5e91-bf6d-829b8ad188f5", id: "875cb5d4-fa9a-57cb-908d-3721264e98b1"},
           {aco_foreign_key: "7ecd7376-8540-58c1-88d9-678c027d464a", id: "64e2a52c-2a3b-5a0d-88f9-4b6776fae07c"},
           {aco_foreign_key: "8e3874ae-4b40-590b-968a-418f704b9d9a", id: "6f65173d-a5e8-5014-9659-e1bb4f19707d"},
-          {aco_foreign_key: "f9f79749-4bce-4e61-8016-68c942a8f2d9", id: "79dc7e17-0d98-4cab-964e-c47422b709ef"}
+          {aco_foreign_key: "f9f79749-4bce-4e61-8016-68c942a8f2d9", id: "fa5f5d7a-32cc-4c5b-9478-f58584ca4222"}
         ],
         managers: [
-          {group_id: "469edf9d-ca1e-5003-91d6-3a46755d5a50", id: "38804173-18aa-5ec1-99b9-354496374816"}
+          {group_id: "469edf9d-ca1e-5003-91d6-3a46755d5a50", id: "a932a3ce-82bc-59b6-ac4e-bf325435e534"}
         ],
       };
       expect(context.port.request).toHaveBeenCalledWith("passbolt.users.delete", mockUser.id, permissionTransfer);
