@@ -178,7 +178,6 @@ class Workspace extends Component {
    */
   render() {
     const canUseFolders = this.context.siteSettings.canIUse("folders");
-    const canUseGroups = this.context.siteSettings.canIUse("groups");
     const canUseTags = this.context.siteSettings.canIUse("tags");
 
     return (
@@ -205,9 +204,7 @@ class Workspace extends Component {
                   {canUseFolders &&
                   <FoldersTree/>
                   }
-                  {canUseGroups &&
                   <SidebarGroupFilterSection/>
-                  }
                   {canUseTags &&
                   <SidebarTagFilterSection/>
                   }
