@@ -16,7 +16,7 @@ import Icon from "../../../../react/components/Common/Icons/Icon";
 import AppContext from "../../../contexts/AppContext";
 import PropTypes from "prop-types";
 import {withRouter} from "react-router-dom";
-import {withUserWorkspace} from "../../../contexts/UserWorkspaceContext";
+import {UserWorkspaceFilterTypes, withUserWorkspace} from "../../../contexts/UserWorkspaceContext";
 import {withContextualMenu} from "../../../../react/contexts/Common/ContextualMenuContext";
 import FilterUsersByGroupContextualMenu from "./FilterUsersByGroupContextualMenu";
 
@@ -93,7 +93,7 @@ class FilterUsersByGroup extends React.Component {
    */
   handleGroupSelected(event, group) {
     const {id} = group;
-    this.props.history.push(`/app/group/view/${id}`);
+    this.props.history.push(`/app/groups/view/${id}`);
   }
 
 
@@ -121,26 +121,6 @@ class FilterUsersByGroup extends React.Component {
   }
 
   /**
-   * Show the contextual menu
-   * @param {int} left The left position to display the menu
-   * @param {int} top The top position to display the menu
-   */
-  showContextualMenu(top, left) {
-    const onFilterSelected = this.handleFilterGroupType;
-    const contextualMenuProps = {left, onFilterSelected, top};
-    this.props.contextualMenuContext.show(FilterUsersByGroupContextualMenu, contextualMenuProps);
-  }
-
-  /**
-   * update the title of the filter tag
-   */
-  updateTitle() {
-    const title = this.titles[this.state.filterType] || this.titles.default;
-    this.setState({title});
-  }
-
-  // Zero conditional statements
-  /**
    * get the filter according to the type of the filter
    * @returns {{manage: (function(*): *), all: (function(*): *), member: (function(*): *)}}
    */
@@ -160,6 +140,25 @@ class FilterUsersByGroup extends React.Component {
     const filterType = this.state.filterType || filterByGroupsOptions.all;
     const filter = this.filters[filterType];
     return this.groupsSorted.filter(filter);
+  }
+
+  /**
+   * Show the contextual menu
+   * @param {int} left The left position to display the menu
+   * @param {int} top The top position to display the menu
+   */
+  showContextualMenu(top, left) {
+    const onFilterSelected = this.handleFilterGroupType;
+    const contextualMenuProps = {left, onFilterSelected, top};
+    this.props.contextualMenuContext.show(FilterUsersByGroupContextualMenu, contextualMenuProps);
+  }
+
+  /**
+   * update the title of the filter tag
+   */
+  updateTitle() {
+    const title = this.titles[this.state.filterType] || this.titles.default;
+    this.setState({title});
   }
 
   /**
@@ -192,6 +191,18 @@ class FilterUsersByGroup extends React.Component {
    */
   get groupsSorted() {
     return this.groups.sort((groupA, groupB) => groupA.name.localeCompare(groupB.name));
+  }
+
+  /**
+   * Returns true if the given group is selected
+   * @param group A group
+   */
+  isSelected(group) {
+    const isGroupFilter = this.props.userWorkspaceContext.filter.type === UserWorkspaceFilterTypes.GROUP;
+    const filterPayload =  this.props.userWorkspaceContext.filter.payload;
+    const groupPayload = filterPayload && filterPayload.group;
+    const isGroupSelected = () => groupPayload.id === group.id;
+    return isGroupFilter && isGroupSelected();
   }
 
   /**
@@ -241,7 +252,7 @@ class FilterUsersByGroup extends React.Component {
           <ul className="tree ready">
             {this.filteredGroups.map(group =>
               <li className="node root group-item" key={group.id}>
-                <div className="row">
+                <div className={`row  ${this.isSelected(group) ? "selected" : ""}`}>
                   <div className="main-cell-wrapper">
                     <div className="main-cell">
                       <a

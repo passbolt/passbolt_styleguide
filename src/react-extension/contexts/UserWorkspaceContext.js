@@ -132,7 +132,7 @@ class UserWorkspaceContextProvider extends React.Component {
       this.populate();
 
       // Avoid a side-effect whenever one inputs a specific resource url (it unselect the resource otherwise )
-      const isNotNonePreviousFilter = previousFilter.type !== ResourceWorkspaceFilterTypes.NONE;
+      const isNotNonePreviousFilter = previousFilter.type !== UserWorkspaceFilterTypes.NONE;
       if (isNotNonePreviousFilter) {
         await this.unselectAll();
       }
@@ -157,7 +157,6 @@ class UserWorkspaceContextProvider extends React.Component {
     const hasGroupsChanged = this.context.groups && this.context.groups !== this.groups;
     if (hasGroupsChanged) {
       this.groups = this.context.groups;
-      this.detailGroup(this.groups[0]);
     }
   }
 
@@ -176,12 +175,13 @@ class UserWorkspaceContextProvider extends React.Component {
 
   /**
    * Handle the group view route change
-   *  E.g. /group/view/:selectedGroupId
+   *  E.g. /groups/view/:selectedGroupId
    */
   async handleGroupRouteChange() {
     const groupId = this.props.match.params.selectedGroupId;
     if (groupId) {
       const group = this.context.groups.find(group => group.id === groupId);
+      await this.search({type: UserWorkspaceFilterTypes.GROUP, payload: {group}});
       await this.detailGroup(group);
     }
   }
@@ -333,9 +333,13 @@ class UserWorkspaceContextProvider extends React.Component {
 
   /**
    * Filter the users which belongs to the given group
+   * @param filter The group filter
    */
-  async searchByGroup() {
-    // TODO
+  async searchByGroup(filter) {
+    const group = filter.payload.group;
+    const usersGroupIds = group.groups_users.map(groupUser => groupUser.user_id);
+    const filteredUsers = this.users.filter(user => usersGroupIds.some(userId => userId === user.id));
+    await this.setState({filter, filteredUsers});
   }
 
   /**
@@ -396,7 +400,7 @@ class UserWorkspaceContextProvider extends React.Component {
   async unselectAll() {
     const hasSelectedUsers = this.state.selectedUsers.length !== 0;
     if (hasSelectedUsers) {
-      await this.setState({selectedResources: []});
+      await this.setState({selectedUsers: []});
     }
   }
 
@@ -409,9 +413,17 @@ class UserWorkspaceContextProvider extends React.Component {
       this.props.history.push(`/app/users/view/${this.state.selectedUsers[0].id}`);
     } else {
       const {filter} = this.state;
-      const mustRedirect = this.props.location.pathname !== '/app/users';
-      if (mustRedirect) {
-        this.props.history.push({pathname: `/app/users`, state: {filter}});
+      const isGroupFilter = filter.type === UserWorkspaceFilterTypes.GROUP;
+      if (isGroupFilter) {
+        const mustRedirect = this.props.location.pathname !== `/app/groups/view/${this.state.filter.payload.group.id}`;
+        if (mustRedirect) {
+          this.props.history.push({pathname: `/app/groups/view/${this.state.filter.payload.group.id}`});
+        }
+      } else {
+        const mustRedirect = this.props.location.pathname !== '/app/users';
+        if (mustRedirect) {
+          this.props.history.push({pathname: `/app/users`, state: {filter}});
+        }
       }
     }
   }
