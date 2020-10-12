@@ -44,6 +44,7 @@ import mockRequestUsersUpdateLocalStorage from "./request/mockRequestUsersUpdate
 import mockRequestGroupsUpdateLocalStorage from "./request/mockRequestGroupsUpdateLocalStorage";
 import mockRequestResources from "./request/mockRequestResources";
 import mockRequestUsersFindLoggedInUser from "./request/mockRequestUsersFindLoggedInUser";
+import mockRequestGpgKeysFindByUserId from "./request/mockRequestGpgKeysFindByUserId";
 
 export default (storage) => {
   const mockPort = new MockPort(storage);
@@ -78,6 +79,7 @@ export default (storage) => {
   mockPort.addRequestListener("passbolt.addon.get-version", mockRequestGetVersion);
   mockPort.addRequestListener("passbolt.groups.update-local-storage", mockRequestGroupsUpdateLocalStorage);
   mockPort.addRequestListener("passbolt.resources.find-all", mockRequestResources);
+  mockPort.addRequestListener("passbolt.gpgkeys.get-by-user-id", mockRequestGpgKeysFindByUserId);
 
   return mockPort;
 };

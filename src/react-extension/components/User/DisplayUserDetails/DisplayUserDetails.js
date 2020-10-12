@@ -19,6 +19,7 @@ import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import {withUserWorkspace} from "../../../contexts/UserWorkspaceContext";
 import DisplayUserDetailsInformation from "../DisplayUserDetailsInformation/DisplayUserDetailsInformation";
 import DisplayUserDetailsGroups from "../DisplayUserDetailsGroups/DisplayUserDetailsGroups";
+import DisplayUserDetailsPublicKey from "../DisplayUserDetailsPublicKey/DisplayUserDetailsPublicKey";
 
 class DisplayUserDetails extends React.Component {
   /**
@@ -69,7 +70,7 @@ class DisplayUserDetails extends React.Component {
   render() {
     return (
       <div className="panel aside ready">
-        <div className="sidebar resource">
+        <div className="sidebar user">
           <div className="sidebar-header">
             <div className="logo">
               <Icon name="key"/>
@@ -91,6 +92,7 @@ class DisplayUserDetails extends React.Component {
           </div>
           <DisplayUserDetailsInformation/>
           {this.user.active && <DisplayUserDetailsGroups/>}
+          {this.user.active && <DisplayUserDetailsPublicKey/>}
         </div>
       </div>
     );
