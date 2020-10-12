@@ -5530,14 +5530,17 @@ input[type=email].fluid {
   -ms-text-overflow: ellipsis;
   display: block;
 }
-.autocomplete-wrapper .autocomplete-content .loading {
-  background-color: #FFF;
+.autocomplete-wrapper .autocomplete-content .row.loading .info {
+  margin-left: 3.8em;
 }
-.autocomplete-wrapper .autocomplete-content .loading img {
-  border-radius: 0;
-  width: 1.75em;
-  height: 1.75em;
-  padding: 0.5em 1.5em 0 0.25em;
+.autocomplete-wrapper .autocomplete-content .row.loading .info:after {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  content: " ";
+  top: 0px;
+  left: 1.45em;
+  background: transparent url('../../../img/controls/loading_light.svg') left center no-repeat;
 }
 @media all and (max-width: 440px) {
   .autocomplete-wrapper .autocomplete-content {
