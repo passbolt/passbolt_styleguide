@@ -15,8 +15,8 @@
 /**
  * Unit tests on SidebarGroupSection in regard of specifications
  */
-import {defaultAppContext, defaultProps, groupsMock} from "./DisplayGroups.test.data";
-import DisplayGroupsPage from "./DisplayGroups.test.page";
+import {defaultAppContext, defaultProps, groupsMock} from "./FilterUsersByGroup.test.data";
+import FilterUsersByGroupPage from "./FilterUsersByGroup.test.page";
 import MockPort from "../../../test/mock/MockPort";
 
 beforeEach(() => {
@@ -41,7 +41,7 @@ describe("See groups", () => {
      */
 
     beforeEach(() => {
-      page = new DisplayGroupsPage(context, props);
+      page = new FilterUsersByGroupPage(context, props);
     });
 
     it('I should see the 10 groups made on the resource', () => {
@@ -99,7 +99,7 @@ describe("See groups", () => {
      */
 
     beforeEach(() => {
-      page = new DisplayGroupsPage(context, props);
+      page = new FilterUsersByGroupPage(context, props);
     });
 
     it('I should see the groups section empty', () => {
@@ -134,7 +134,7 @@ describe("See groups", () => {
      */
 
     beforeEach(() => {
-      page = new DisplayGroupsPage(context, props);
+      page = new FilterUsersByGroupPage(context, props);
     });
 
     it('I should see the loading message “Retrieving groups”', async() => {

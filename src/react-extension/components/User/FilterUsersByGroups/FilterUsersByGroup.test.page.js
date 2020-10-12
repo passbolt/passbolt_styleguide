@@ -18,15 +18,15 @@ import {fireEvent, render, waitFor} from "@testing-library/react";
 import React from "react";
 import {BrowserRouter as Router} from "react-router-dom";
 import AppContext from "../../../contexts/AppContext";
-import DisplayGroups from "./DisplayGroups";
-import DisplayGroupsFilterContextualMenuPageObject from "./DisplayGroupsFilterContextualMenu.test.page";
+import DisplayGroups from "./FilterUsersByGroup";
+import DisplayGroupsFilterContextualMenuPageObject from "./FilterUsersByGroupContextualMenu.test.page";
 import ManageContextualMenu from "../../ManageContextualMenu";
 import ContextualMenuContextProvider from "../../../../react/contexts/Common/ContextualMenuContext";
 
 /**
- * The DisplayGroups component represented as a page
+ * The FilterUsersByGroups component represented as a page
  */
-export default class DisplayGroupsPage {
+export default class FilterUsersByGroupPage {
   /**
    * Default constructor
    * @param appContext An app context

@@ -14,9 +14,9 @@
 import React from "react";
 import PropTypes from "prop-types";
 import ContextualMenuWrapper from "../../Common/ContextualMenu/ContextualMenuWrapper";
-import {filterByGroupsOptions} from "./DisplayGroups";
+import {filterByGroupsOptions} from "./FilterUsersByGroup";
 
-class DisplayGroupsFilterContextualMenu extends React.Component {
+class FilterUsersByGroupContextualMenu extends React.Component {
   /**
    * Constructor
    * Initialize state and bind methods
@@ -84,11 +84,11 @@ class DisplayGroupsFilterContextualMenu extends React.Component {
   }
 }
 
-DisplayGroupsFilterContextualMenu.propTypes = {
+FilterUsersByGroupContextualMenu.propTypes = {
   onFilterSelected: PropTypes.func,
   left: PropTypes.number, // left position in px of the menu
   hide: PropTypes.func, // Hide the contextual menu
   top: PropTypes.number // top position in px of the menu
 };
 
-export default DisplayGroupsFilterContextualMenu;
+export default FilterUsersByGroupContextualMenu;

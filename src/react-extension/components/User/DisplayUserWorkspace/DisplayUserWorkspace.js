@@ -23,9 +23,10 @@ import DisplayUserWorkspaceActions from "../DisplayUserWorkspaceActions/DisplayU
 import Logo from "../../../../react/components/Common/Navigation/Header/Logo";
 import UserBadgeMenu from "../../../../react/components/Common/Navigation/Header/UserBadgeMenu";
 import AppContext from "../../../contexts/AppContext";
-import DisplayGroups from "../DisplayGroups/DisplayGroups";
+import DisplayGroups from "../FilterUsersByGroups/FilterUsersByGroup";
 import FilterUsersByShortcut from "../FilterUsersByShortcut/FilterUserByShortcut";
 import FilterUsersByText from "../FilterUsersByText/FilterUsersByText";
+import DisplayUserGroupDetails from "../DisplayUserGroupDetails/DisplayUserGroupDetails";
 
 /**
  * This component is a container for all the user workspace features
@@ -37,6 +38,14 @@ class DisplayUserWorkspace extends React.Component {
   get mustDisplayUserDetails() {
     const {details} =  this.props.userWorkspaceContext;
     return details.user && details.locked;
+  }
+
+  /**
+   * Returns true if the group details must be displayed
+   */
+  get mustDisplayGroupDetails() {
+    const {details} =  this.props.userWorkspaceContext;
+    return details.group && details.locked;
   }
 
   /**
@@ -70,6 +79,7 @@ class DisplayUserWorkspace extends React.Component {
                 <div className="panel middle">
                   <DisplayUsers/>
                   {this.mustDisplayUserDetails && <DisplayUserDetails/>}
+                  {this.mustDisplayGroupDetails && <DisplayUserGroupDetails/>}
                 </div>
               </div>
             </div>

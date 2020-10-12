@@ -17,9 +17,9 @@
 import {fireEvent, waitFor} from "@testing-library/react";
 
 /**
- * The DisplayGroupsFilterContextualMenu component represented as a page
+ * The FilterUsersByGroupContextualMenu component represented as a page
  */
-export default class DisplayGroupsFilterContextualMenuPageObject {
+export default class FilterUsersByGroupContextualMenuPageObject {
   /**
    * Default constructor
    * @param container The container which includes the AddComment Component

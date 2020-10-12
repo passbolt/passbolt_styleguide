@@ -311,6 +311,7 @@ class ReactExtension extends Component {
                           </ResourceWorkspaceContextProvider>
                         </Route>
                         <Route path={[
+                          "/app/group/view/:selectedGroupId",
                           "/app/users/view/:selectedUserId",
                           "/app/users",
                         ]}>
