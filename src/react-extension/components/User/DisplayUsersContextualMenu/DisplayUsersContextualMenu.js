@@ -17,6 +17,7 @@ import AppContext from "../../../contexts/AppContext";
 import {withDialog} from "../../../contexts/Common/DialogContext";
 import ContextualMenuWrapper from "../../Common/ContextualMenu/ContextualMenuWrapper";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
+
 class DisplayUsersContextualMenu extends React.Component {
   /**
    * Constructor
@@ -33,7 +34,6 @@ class DisplayUsersContextualMenu extends React.Component {
   bindCallbacks() {
     this.handlePermalinkCopy = this.handlePermalinkCopy.bind(this);
   }
-
 
   /**
    * Handle the copy of user permalink
@@ -52,13 +52,6 @@ class DisplayUsersContextualMenu extends React.Component {
    */
   get user() {
     return this.props.user;
-  }
-
-  /**
-   * Can update the resource
-   */
-  canUpdate() {
-    return this.user.role_id !== null;
   }
 
   /**
