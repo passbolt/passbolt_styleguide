@@ -196,20 +196,6 @@ class DisplayUsers extends React.Component {
     }
   }
 
-
-  /**
-   * Select the user if not already selected.
-   * @param user An user
-   */
-  async selectUserIfNotAlreadySelected(user) {
-    const [selectedUser] = this.props.userWorkspaceContext.selectedUsers;
-    const isUserNotAlreadySelected = !selectedUser || selectedUser.id !== user.id;
-    if (isUserNotAlreadySelected) {
-      await this.selectUser(user);
-    }
-  }
-
-
   /**
    * Render the users table
    * @param items Items to display
