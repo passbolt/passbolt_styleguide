@@ -17,7 +17,6 @@ import AppContext from "../../../contexts/AppContext";
 import {withDialog} from "../../../contexts/Common/DialogContext";
 import ContextualMenuWrapper from "../../Common/ContextualMenu/ContextualMenuWrapper";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
-
 class DisplayUsersContextualMenu extends React.Component {
   /**
    * Constructor
@@ -33,6 +32,7 @@ class DisplayUsersContextualMenu extends React.Component {
    */
   bindCallbacks() {
     this.handlePermalinkCopy = this.handlePermalinkCopy.bind(this);
+    this.handleUsernameCopy = this.handleUsernameCopy.bind(this);
   }
 
   /**
@@ -43,6 +43,16 @@ class DisplayUsersContextualMenu extends React.Component {
     const permalink = `${baseUrl}/app/users/view/${this.user.id}`;
     await this.context.port.request("passbolt.clipboard.copy", permalink);
     this.props.actionFeedbackContext.displaySuccess("The permalink has been copied to clipboard");
+    this.props.hide();
+  }
+
+  /**
+   * Handle the copy of the username
+   */
+  async handleUsernameCopy() {
+    const username = `${this.user.username}`;
+    await this.context.port.request("passbolt.clipboard.copy", username);
+    this.props.actionFeedbackContext.displaySuccess("The email has been copied to clipboard");
     this.props.hide();
   }
 
@@ -66,12 +76,25 @@ class DisplayUsersContextualMenu extends React.Component {
         top={this.props.top}>
         <li
           key="copy-user-permalink"
-          className="separator-after opened">
+          className="opened">
           <div className="row">
             <div className="main-cell-wrapper">
               <div className="main-cell">
                 <a onClick={this.handlePermalinkCopy}>
                   <span>Copy permalink</span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </li>
+        <li
+          key="copy-username"
+          className="separator-after opened">
+          <div className="row">
+            <div className="main-cell-wrapper">
+              <div className="main-cell">
+                <a onClick={this.handleUsernameCopy}>
+                  <span>Copy email address</span>
                 </a>
               </div>
             </div>

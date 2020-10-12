@@ -196,7 +196,6 @@ class DisplayUsers extends React.Component {
     }
   }
 
-
   /**
    * Render the users table
    * @param items Items to display
