@@ -117,6 +117,7 @@ class UserWorkspaceContextProvider extends React.Component {
     await this.handleFilterChange(prevState.filter);
     await this.handleUsersLoaded();
     await this.handleUsersChange();
+    await this.handleGroupsChange();
     await this.handleRouteChange(prevProps.location);
   }
 
@@ -144,6 +145,16 @@ class UserWorkspaceContextProvider extends React.Component {
     if (hasUsersChanged) {
       this.users = this.context.users;
       await this.search(this.state.filter);
+    }
+  }
+
+  /**
+   * Handle the groups change
+   */
+  handleGroupsChange() {
+    const hasGroupsChanged = this.context.groups && this.context.groups !== this.groups;
+    if (hasGroupsChanged) {
+      this.groups = this.context.groups;
     }
   }
 
