@@ -54,7 +54,7 @@ class DisplayUserDetailsGroups extends React.Component {
    */
   get groups() {
     const {groups} = this.context;
-    const [selectedUser] = this.props.userWorkspaceContext.selectedUsers;
+    const selectedUser = this.props.userWorkspaceContext.details.user;
     const belongsToGroup = group => group.groups_users.some(group_user => group_user.user_id === selectedUser.id);
     const groupUser = group => group.groups_users.find(group_user => group_user.user_id === selectedUser.id);
     const userRole = groupUser => groupUser.is_admin ? "Admin" : "Member";
