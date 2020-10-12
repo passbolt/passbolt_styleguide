@@ -252,8 +252,8 @@ class ResourceWorkspaceContextProvider extends React.Component {
     const hasResources = this.resources !== null;
     if (hasResources) {
       const filter = (this.props.location.state && this.props.location.state.filter) || {type: ResourceWorkspaceFilterTypes.ALL};
-      await this.search(filter);
       await this.detailNothing();
+      await this.search(filter);
     }
   }
 
@@ -369,6 +369,7 @@ class ResourceWorkspaceContextProvider extends React.Component {
       this.context.port.request("passbolt.folders.update-local-storage");
     }
     this.context.port.request("passbolt.resources.update-local-storage");
+    this.context.port.request("passbolt.groups.update-local-storage");
   }
 
   /** RESOURCE SEARCH  **/
@@ -383,6 +384,7 @@ class ResourceWorkspaceContextProvider extends React.Component {
       [ResourceWorkspaceFilterTypes.ROOT_FOLDER]: this.searchByRootFolder.bind(this),
       [ResourceWorkspaceFilterTypes.FOLDER]: this.searchByFolder.bind(this),
       [ResourceWorkspaceFilterTypes.TAG]: this.searchByTag.bind(this),
+      [ResourceWorkspaceFilterTypes.GROUP]: this.searchByGroup.bind(this),
       [ResourceWorkspaceFilterTypes.TEXT]: this.searchByText.bind(this),
       [ResourceWorkspaceFilterTypes.ITEMS_I_OWN]: this.searchByItemsIOwn.bind(this),
       [ResourceWorkspaceFilterTypes.FAVORITE]: this.searchByFavorite.bind(this),
@@ -455,6 +457,23 @@ class ResourceWorkspaceContextProvider extends React.Component {
 
     const filteredResources = this.resources.filter(matchText);
     await this.setState({filter, filteredResources});
+  }
+
+  /**
+   * Filter the resources which belongs to the filter group
+   */
+  async searchByGroup(filter) {
+    const groupId = filter.payload.group.id;
+    const filters = {'is-shared-with-group': groupId};
+    await this.setState({filter, filteredResources: null, selectedResources: []});
+    // get the resources with the group
+    const resourcesFilteredByGroup = await this.context.port.request('passbolt.resources.find-all', {filters}) || [];
+    if (filter === this.state.filter) {
+      const resourceIds = resourcesFilteredByGroup.map(resource => resource.id);
+      // keep only the resource with the group
+      const groupResources = this.resources.filter(resource => resourceIds.includes(resource.id));
+      await this.setState({filter, filteredResources: groupResources});
+    }
   }
 
   /**
@@ -647,7 +666,9 @@ class ResourceWorkspaceContextProvider extends React.Component {
     const stringSorter = (s1, s2) => s1.localeCompare(s2);
     const sorter = this.state.sorter.propertyName === "modified" ? dateSorter : stringSorter;
     const propertySorter = keySorter(this.state.sorter.propertyName, sorter);
-    await this.setState({filteredResources: this.state.filteredResources.sort(propertySorter)});
+    if (this.state.filteredResources !== null) {
+      await this.setState({filteredResources: this.state.filteredResources.sort(propertySorter)});
+    }
   }
 
   /** RESOURCE DETAILS  **/
@@ -774,6 +795,7 @@ export const ResourceWorkspaceFilterTypes = {
   FOLDER: 'FILTER-BY-FOLDER', // Resources for a given folder
   ROOT_FOLDER: 'FILTER-BY-ROOT-FOLDER', // Resources of the root folder
   TAG: 'FILTER-BY-TAG', // Resources for a given tag
+  GROUP: 'FILTER-BY-GROUP', // Resources for a given group
   TEXT: 'FILTER-BY-TEXT-SEARCH', // Resources matching some text words
   ITEMS_I_OWN: 'FILTER-BY-ITEMS-I-OWN', // Current user personal resources
   FAVORITE: 'FILTER-BY-FAVORITE', // Favorite resources filter

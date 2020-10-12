@@ -73,6 +73,10 @@ class PasswordBreadcrumbs extends Component {
         const currentFolderName = this.props.resourceWorkspaceContext.filter.payload.folder.name;
         return `${currentFolderName} (folder)`;
       }
+      case ResourceWorkspaceFilterTypes.GROUP: {
+        const currentGroupName = this.props.resourceWorkspaceContext.filter.payload.group.name;
+        return `${currentGroupName} (group)`;
+      }
       case ResourceWorkspaceFilterTypes.TEXT: {
         const currentSearchText = this.props.resourceWorkspaceContext.filter.payload;
         return `Search : ${currentSearchText}`;

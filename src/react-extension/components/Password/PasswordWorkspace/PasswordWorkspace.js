@@ -28,6 +28,7 @@ import PasswordBreadcrumb from "../PasswordBreadcrumb/PasswordBreadcrumb";
 import PasswordWorkspaceMenu from "./PasswordWorkspaceMenu";
 import Logo from "../../../../react/components/Common/Navigation/Header/Logo";
 import PasswordWorkspaceMainMenu from "./PasswordWorkspaceMainMenu";
+import SidebarGroupFilterSection from "../Group/SidebarGroupFilterSection/SidebarGroupFilterSection";
 
 class Workspace extends Component {
   /**
@@ -203,6 +204,7 @@ class Workspace extends Component {
                   {canUseFolders &&
                   <FoldersTree/>
                   }
+                  <SidebarGroupFilterSection/>
                   {canUseTags &&
                   <SidebarTagFilterSection/>
                   }

@@ -434,7 +434,7 @@ class Grid extends React.Component {
 
     if (isSelected) {
       const isSelected = resource => resource.id === this.props.resourceWorkspaceContext.selectedResources[0].id;
-      const firstSelectedResource = this.props.resourceWorkspaceContext.filteredResources.find(isSelected);
+      const firstSelectedResource = this.resources.find(isSelected);
       if (firstSelectedResource) {
         dragElementClassname = isMultipleSelected ? "drag-and-drop-multiple" : "drag-and-drop";
         dragFeedbackText = firstSelectedResource.name;
@@ -461,12 +461,6 @@ class Grid extends React.Component {
 
     return (
       <div className={`tableview ready ${isEmpty ? "empty" : ""} ${["default", "modified"].includes(this.props.filterType) ? "all_items" : ""}`}>
-
-        {!isReady &&
-        <div className="empty-content">
-        </div>
-        }
-        {isReady &&
         <React.Fragment>
           {isEmpty && filterType === ResourceWorkspaceFilterTypes.TEXT &&
           <div className="empty-content">
@@ -480,7 +474,7 @@ class Grid extends React.Component {
             <p>Add stars to passwords your want to easily find later.</p>
           </div>
           }
-          {isEmpty && filterType == "group" &&
+          {isEmpty && filterType == ResourceWorkspaceFilterTypes.GROUP &&
           <div className="empty-content">
             <h2>No passwords are shared with this group yet.</h2>
             <p>Share a password with this group or wait for a team member to share one with this group.</p>
@@ -585,6 +579,7 @@ class Grid extends React.Component {
                 </thead>
               </table>
             </div>
+            {isReady &&
             <div className="tableview-content scroll">
               <ReactList
                 itemRenderer={(index, key) => this.renderItem(index, key)}
@@ -595,10 +590,10 @@ class Grid extends React.Component {
                 ref={this.listRef}>
               </ReactList>
             </div>
+            }
           </React.Fragment>
           }
         </React.Fragment>
-        }
       </div>
     );
   }

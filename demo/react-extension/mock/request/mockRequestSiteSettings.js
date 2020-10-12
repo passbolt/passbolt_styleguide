@@ -100,6 +100,9 @@ export default () => {
         },
         "folders": {
           "version": "2.0.0"
+        },
+        "groups": {
+          "version": "2.0.0"
         }
       }
     }

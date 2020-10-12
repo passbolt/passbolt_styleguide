@@ -42,6 +42,7 @@ import mockRequestResourcesFindActivities from "./request/mockRequestResourcesFi
 import mockRequestGetVersion from "./request/mockRequestGetVersion";
 import mockRequestUsersUpdateLocalStorage from "./request/mockRequestUsersUpdateLocalStorage";
 import mockRequestGroupsUpdateLocalStorage from "./request/mockRequestGroupsUpdateLocalStorage";
+import mockRequestResources from "./request/mockRequestResources";
 
 export default (storage) => {
   const mockPort = new MockPort(storage);
@@ -74,6 +75,7 @@ export default (storage) => {
   mockPort.addRequestListener("passbolt.resources.action-log", mockRequestResourcesFindActivities);
   mockPort.addRequestListener("passbolt.addon.get-version", mockRequestGetVersion);
   mockPort.addRequestListener("passbolt.groups.update-local-storage", mockRequestGroupsUpdateLocalStorage);
+  mockPort.addRequestListener("passbolt.resources.find-all", mockRequestResources);
 
   return mockPort;
 };
