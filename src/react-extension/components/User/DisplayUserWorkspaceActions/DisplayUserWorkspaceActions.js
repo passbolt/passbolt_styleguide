@@ -79,35 +79,27 @@ class DisplayUserWorkspaceActions extends React.Component {
   }
 
   /**
-   * Has a user selected
+   * Check if the users workspace has one user selected.
+   * @return {boolean}
+   */
+  hasOneUserSelected() {
+    return this.props.userWorkspaceContext.selectedUsers.length === 1;
+  }
+
+  /**
+   * Check if the edit button is disabled.
    * @returns {boolean}
    */
-  hasUserSelected() {
-    return this.selectedUser !== null;
+  isEditButtonDisabled() {
+    return !this.hasOneUserSelected();
   }
 
   /**
    * Can update the resource
    * @returns {boolean}
    */
-  canUpdate() {
-    return this.currentUserRole && this.currentUserRole.name === 'admin';
-  }
-
-  /**
-   * Get the role of the current user
-   * @returns {null|*}
-   */
-  get currentUserRole() {
-    return this.context.roles && this.currentUser && this.context.roles.find(role => role.id === this.currentUser.role_id);
-  }
-
-  /**
-   * Get the current user
-   * @returns {null|*}
-   */
-  get currentUser() {
-    return this.context.currentUser;
+  isLoggedInUserAdmin() {
+    return this.context.loggedInUser && this.context.loggedInUser.role.name === 'admin';
   }
 
   /**
@@ -118,10 +110,10 @@ class DisplayUserWorkspaceActions extends React.Component {
     return (
       <div className="col2_3 actions-wrapper">
         <div className="actions">
-          {this.canUpdate() &&
+          {this.isLoggedInUserAdmin() &&
           <ul className="ready">
             <li>
-              <a className="button ready" onClick={this.handleEditClickEvent}>
+              <a className={`button ready ${this.isEditButtonDisabled() ? "disabled" : ""}`} onClick={this.handleEditClickEvent}>
                 <Icon name="edit"/>
                 <span>edit</span>
               </a>
