@@ -13,6 +13,7 @@
  */
 import React, {Component} from "react";
 import PropTypes from "prop-types";
+import XRegExp from "xregexp";
 import AppContext from "../../../contexts/AppContext";
 import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
 import ErrorDialog from "../../Dialog/ErrorDialog/ErrorDialog";
@@ -151,6 +152,7 @@ class CreateUserDialog extends Component {
    * @returns {void}
    */
   async handleFormSubmit(event) {
+    // Avoid the form to be submitted.
     event.preventDefault();
 
     // Do not re-submit an already processing form
@@ -309,10 +311,21 @@ class CreateUserDialog extends Component {
     const username = this.state.username.trim();
     if (!username.length) {
       usernameError = "A username is required.";
-    } else if (!/(.+)@(.+){2,}\.(.+){2,}/.test(username)) {
+    } else if (!this.isEmail(username)) {
       usernameError = "The username should be a valid username address.";
     }
     return this.setState({usernameError});
+  }
+
+  /**
+   * Check that a username is a valid email
+   * @param {string }username the username to test
+   */
+  isEmail(username) {
+    const hostnameRegexp = "(?:[_\\p{L}0-9][-_\\p{L}0-9]*\\.)*(?:[\\p{L}0-9][-\\p{L}0-9]{0,62})\\.(?:(?:[a-z]{2}\\.)?[a-z]{2,})";
+    const emailRegexp = `^[\\p{L}0-9!#$%&'*+\/=?^_\`{|}~-]+(?:\\.[\\p{L}0-9!#$%&'*+\/=?^_\`{|}~-]+)*@${hostnameRegexp}$`;
+    const xregexp = XRegExp(emailRegexp);
+    return xregexp.test(username);
   }
 
   /**
@@ -370,7 +383,7 @@ class CreateUserDialog extends Component {
             <div className={`input text required ${this.state.usernameError ? "error" : ""}`}>
               <label htmlFor="user-username-input">Username / Email</label>
               <input id="user-username-input" name="username"
-                ref={this.usernameRef} type="text" value={this.state.username} placeholder="username"
+                ref={this.usernameRef} type="text" value={this.state.username} placeholder="email"
                 required="required" disabled={this.hasAllInputDisabled()}
                 onBlur={this.handleUsernameInputOnBlur} onChange={this.handleInputChange}
                 autoComplete='off' autoFocus={true}
@@ -383,7 +396,7 @@ class CreateUserDialog extends Component {
               <label htmlFor="is_admin">Role</label>
               <div id="is_admin">
                 <input id="is_admin_checkbox" name="is_admin" onChange={this.handleCheckboxClick} checked={this.state.is_admin} type="checkbox"/>
-                <span>This user is an administrator</span>
+                &nbsp;<span>This user is an administrator</span>
               </div>
               <div className="message helptext">Note: Administrators can add and delete users. They can also create
                 groups and assign group managers. Admin can not see all passwords.

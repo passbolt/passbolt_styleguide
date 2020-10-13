@@ -57,7 +57,6 @@ class ManageDialogs extends React.Component {
               onClose={ () => this.close(index)} />)
         }
         {this.props.children}
-
       </>
     );
   }

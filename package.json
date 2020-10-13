@@ -48,7 +48,8 @@
     "@testing-library/react": "^10.4.9",
     "jest": "^26.4.2",
     "simplebar": "^5.2.1",
-    "webextension-polyfill": "^0.6.0"
+    "webextension-polyfill": "^0.6.0",
+    "xregexp": "^4.3.0"
   },
   "scripts": {
     "start-react-app-dev-server": "webpack-dev-server --mode development --config webpack-appjs.config.js",
