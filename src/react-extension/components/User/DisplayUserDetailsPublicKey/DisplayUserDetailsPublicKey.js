@@ -1,4 +1,3 @@
-
 /**
  * Passbolt ~ Open source password manager for teams
  * Copyright (c) Passbolt SA (https://www.passbolt.com)
@@ -40,10 +39,8 @@ class DisplayUserDetailsPublicKey extends React.Component {
   get defaultState() {
     return {
       open: false, // Flag for the expand / collapse mode
-      gpgKey: {}, // The gpg key to display
-      actions: {
-        loading: false // The is loading flag
-      }
+      gpgkeyInfo: {}, // The gpg key info
+      loading: false // Is the component loading
     };
   }
 
@@ -55,12 +52,89 @@ class DisplayUserDetailsPublicKey extends React.Component {
   }
 
   /**
-   * Whenever the component is mounter
+   * Whenever the component has updated in terms of props
+   * @param prevProps
    */
-  async componentDidMount() {
-    await this.setState({actions: {loading: true}});
-    const gpgKey = await this.context.port.request('passbolt.gpgkeys.get-by-user-id', this.user.id);
-    await this.setState({gpgKey, actions: {loading: false}});
+  async componentDidUpdate(prevProps) {
+    await this.handleUserChange(prevProps.userWorkspaceContext.details.user);
+  }
+
+  /**
+   * Check if the user has changed and fetch
+   * @param previousUser
+   */
+  async handleUserChange(previousUser) {
+    // do nothing if the section is closed.
+    if (!this.state.open) {
+      return;
+    }
+    // do nothing if the user doesn't change.
+    if (this.user.id === previousUser.id) {
+      return;
+    }
+
+    // Reset the component, and fetch activities for the new resource.
+    await this.fetchGpgkeyInfo();
+  }
+
+  /**
+   * Fetch the user gpgkey info.
+   * @returns {Promise<void>}
+   */
+  async fetchGpgkeyInfo() {
+    const gpgkeyInfo = await this.context.port.request('passbolt.keyring.get-public-key-info-by-user', this.user.id);
+
+    // format the gpgkey info.
+    const keyId = gpgkeyInfo.keyId;
+    const type = this.gpgkeyType[gpgkeyInfo.algorithm];
+    const created = this.formatDate(gpgkeyInfo.created);
+    const expires = gpgkeyInfo.expires === "Never" ? "Never" : this.formatDate(gpgkeyInfo.expires);
+    const armoredKey = gpgkeyInfo.key;
+
+    const formatedGpgkeyInfo = {keyId, type, created, expires, armoredKey};
+    this.setState({gpgkeyInfo: formatedGpgkeyInfo});
+  }
+
+  /**
+   * Format a date.
+   * @string {string} date The date to format
+   * @return {string}
+   */
+  formatDate(data) {
+    try {
+      return moment(new Date(data)).format("LLL");
+    } catch (error) {
+      return "";
+    }
+  }
+
+  /**
+   * Get the list of gpgkey types associated to their algorithms.
+   * @return {object}
+   */
+  get gpgkeyType() {
+    return {
+      // RSA (Encrypt or Sign) [HAC]
+      rsa_encrypt_sign: "RSA",
+      // RSA (Encrypt only) [HAC]
+      rsa_encrypt: "RSA",
+      // RSA (Sign only) [HAC]
+      rsa_sign: "RSA",
+      // Elgamal (Encrypt only) [ELGAMAL] [HAC]
+      elgamal: "Elgamal",
+      // DSA (Sign only) [FIPS186] [HAC]
+      dsa: "DSA",
+      // ECDH (Encrypt only) [RFC6637]
+      ecdh: "ECDH",
+      // ECDSA (Sign only) [RFC6637]
+      ecdsa: "ECDSA",
+      // EdDSA (Sign only) [{@link https://tools.ietf.org/html/draft-koch-eddsa-for-openpgp-04|Draft RFC}]
+      eddsa: "EdDSA",
+      // Reserved for AEDH
+      aedh: "AEDH",
+      // Reserved for AEDSA
+      aedsa: "AEDSA"
+    };
   }
 
   /**
@@ -73,35 +147,27 @@ class DisplayUserDetailsPublicKey extends React.Component {
   /**
    * Handle the click on the title
    */
-  handleTitleClicked() {
-    this.setState({open: !this.state.open});
-  }
-
-  /**
-   * Format date in time ago
-   * @param {string} date The date to format
-   * @return {string} The formatted date
-   */
-  formatDateTimeAgo(date) {
-    const serverTimezone = this.context.siteSettings.getServerTimezone();
-    return moment.tz(date, serverTimezone).fromNow();
+  async handleTitleClicked() {
+    if (this.state.open) {
+      await this.setState({gpgkeyInfo: {}, open: false});
+    } else {
+      await this.setState({open: true, loading: true});
+      await this.fetchGpgkeyInfo();
+      await this.setState({loading: false});
+    }
   }
 
   /**
    * Render the component
    */
   render() {
-    const keyId = this.state.gpgKey.key_id;
-    const keyType = this.state.gpgKey.type;
-    const created = this.state.gpgKey.created;
-    const expires = this.state.gpgKey.expires;
-    const gpgKey = this.state.gpgKey.armored_key;
-    const isLoading = this.state.actions.loading;
+    const isLoading = this.state.loading;
+
     return (
       <div className={`key-information accordion sidebar-section ${this.state.open ? "" : "closed"}`}>
         <div className="accordion-header">
           <h4>
-            <a onClick={this.handleTitleClicked}  role="button">
+            <a onClick={this.handleTitleClicked} role="button">
               Public key
               {this.state.open && <Icon name="caret-down"/>}
               {!this.state.open && <Icon name="caret-right"/>}
@@ -119,19 +185,19 @@ class DisplayUserDetailsPublicKey extends React.Component {
         <ul className="accordion-content">
           <li className="keyId">
             <span className="label">Key id</span>
-            <span className="value">{keyId}</span>
+            <span className="value">{this.state.gpgkeyInfo.keyId}</span>
           </li>
           <li className="type">
             <span className="label">Type</span>
-            <span className="value">{keyType}</span>
+            <span className="value">{this.state.gpgkeyInfo.type}</span>
           </li>
           <li className="created">
             <span className="label">Created</span>
-            <span className="value">{created}</span>
+            <span className="value">{this.state.gpgkeyInfo.created}</span>
           </li>
           <li className="expires">
             <span className="label">Expires</span>
-            <span className="value">{expires}</span>
+            <span className="value">{this.state.gpgkeyInfo.expires}</span>
           </li>
           <li className="key">
             <span className="label">Public key</span>
@@ -144,7 +210,7 @@ class DisplayUserDetailsPublicKey extends React.Component {
           <li className="gpgkey">
             <textarea
               className="code"
-              value={gpgKey}
+              value={this.state.gpgkeyInfo.armoredKey}
               disabled>
             </textarea>
           </li>

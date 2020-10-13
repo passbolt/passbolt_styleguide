@@ -79,7 +79,7 @@ export default (storage) => {
   mockPort.addRequestListener("passbolt.addon.get-version", mockRequestGetVersion);
   mockPort.addRequestListener("passbolt.groups.update-local-storage", mockRequestGroupsUpdateLocalStorage);
   mockPort.addRequestListener("passbolt.resources.find-all", mockRequestResources);
-  mockPort.addRequestListener("passbolt.gpgkeys.get-by-user-id", mockRequestGpgKeysFindByUserId);
+  mockPort.addRequestListener("passbolt.keyring.get-public-key-info-by-user", mockRequestGpgKeysFindByUserId);
 
   return mockPort;
 };
