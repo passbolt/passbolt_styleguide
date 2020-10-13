@@ -233,6 +233,14 @@ class DisplayUsers extends React.Component {
     return this.props.userWorkspaceContext.sorter.asc;
   }
 
+  /**
+   * Check if the logged in user is admin
+   * @return {boolean}
+   */
+  isLoggedInUserAdmin() {
+    return this.context.loggedInUser && this.context.loggedInUser.role.name === 'admin';
+  }
+
   renderItem(index, key) {
     const user = this.users[index];
     const isSelected = this.isUserSelected(user);
@@ -240,7 +248,6 @@ class DisplayUsers extends React.Component {
     const modifiedFormatted = moment.tz(user.modified, serverTimezone).fromNow();
     const lastLoggedInFormatted = user.last_logged_in ? moment.tz(user.last_logged_in, serverTimezone).fromNow() : "";
     const mfa = user.is_mfa_enabled ? "Enabled" : "Disabled";
-    const isAdmin = this.context.currentUser && this.context.currentUser.role.name === 'admin';
     const rowClassName = `${isSelected ? "selected" : ""} ${user.active ? "" : "inactive"}`;
 
     return (
@@ -279,7 +286,7 @@ class DisplayUsers extends React.Component {
             {lastLoggedInFormatted}
           </div>
         </td>
-        {isAdmin &&
+        {this.isLoggedInUserAdmin() &&
           <td className="cell_is_mfa_enabled m-cell">
             <div>
               {mfa}
@@ -297,7 +304,7 @@ class DisplayUsers extends React.Component {
     const isReady = this.users !== null;
     const isEmpty = isReady && this.users.length === 0;
     const filterType = this.props.userWorkspaceContext.filter.type;
-    const isAdmin = this.context.currentUser && this.context.currentUser.role.name === 'admin';
+
     return (
       <div className={`tableview ready ${isEmpty ? "empty" : ""}`}>
         {!isReady &&
@@ -378,7 +385,7 @@ class DisplayUsers extends React.Component {
                       </a>
 
                     </th>
-                    {isAdmin &&
+                    {this.isLoggedInUserAdmin() &&
                       <th className="cell_is_mfa_enabled m-cell sortable">
                         <a onClick={ev => this.handleSortByColumnClick(ev, "is_mfa_enabled")}>
                           MFA
