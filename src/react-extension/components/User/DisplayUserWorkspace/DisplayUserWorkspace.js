@@ -27,6 +27,7 @@ import DisplayGroups from "../FilterUsersByGroups/FilterUsersByGroup";
 import FilterUsersByShortcut from "../FilterUsersByShortcut/FilterUserByShortcut";
 import FilterUsersByText from "../FilterUsersByText/FilterUsersByText";
 import DisplayUserGroupDetails from "../DisplayUserGroupDetails/DisplayUserGroupDetails";
+import DisplayUserWorkspaceMainActions from "../DisplayUserWorkspaceMainActions/DisplayUserWorkspaceMainActions";
 
 /**
  * This component is a container for all the user workspace features
@@ -61,8 +62,7 @@ class DisplayUserWorkspace extends React.Component {
           <UserBadgeMenu baseUrl={this.context.userSettings.getTrustedDomain()} user={this.context.loggedInUser}/>
         </div>
         <div className="header third">
-          <div className="col1 main-action-wrapper">
-          </div>
+          <DisplayUserWorkspaceMainActions/>
           <DisplayUserWorkspaceActions/>
         </div>
         <div className="panel main">
