@@ -197,12 +197,20 @@ class PasswordWorkspaceMainMenu extends React.Component {
   }
 
   /**
+   * Returns true if the current user can import a CSV/KDBX file
+   */
+  get canImport() {
+    return this.context.siteSettings.canIUse("import");
+  }
+
+  /**
    * can create a resource
    * @returns {boolean}
    */
   canCreate() {
     return this.folderSelected === null || this.folderSelected.permission.type >= 7;
   }
+
 
   /**
    * Render the component
@@ -241,12 +249,14 @@ class PasswordWorkspaceMainMenu extends React.Component {
             </li>
           </ul>
         </div>
-        <a
-          className="button"
-          onClick={this.handleImportClickEvent}>
-          <Icon name="upload-a" />
-          <span className="visuallyhidden">upload</span>
-        </a>
+        {this.canImport &&
+          <a
+            className="button"
+            onClick={this.handleImportClickEvent}>
+            <Icon name="upload-a" />
+            <span className="visuallyhidden">upload</span>
+          </a>
+        }
       </>
     );
   }
