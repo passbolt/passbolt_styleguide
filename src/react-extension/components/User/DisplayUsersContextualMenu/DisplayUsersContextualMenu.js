@@ -33,6 +33,7 @@ class DisplayUsersContextualMenu extends React.Component {
   bindCallbacks() {
     this.handlePermalinkCopy = this.handlePermalinkCopy.bind(this);
     this.handleUsernameCopy = this.handleUsernameCopy.bind(this);
+    this.handlePublicKeyCopy = this.handlePublicKeyCopy.bind(this);
   }
 
   /**
@@ -54,6 +55,16 @@ class DisplayUsersContextualMenu extends React.Component {
     await this.context.port.request("passbolt.clipboard.copy", username);
     this.props.actionFeedbackContext.displaySuccess("The email has been copied to clipboard");
     this.props.hide();
+  }
+
+  /**
+   * Handle the copy of public key
+   */
+  async handlePublicKeyCopy() {
+    this.props.hide();
+    const gpgkeyInfo = await this.context.port.request('passbolt.keyring.get-public-key-info-by-user', this.user.id);
+    await this.context.port.request("passbolt.clipboard.copy", gpgkeyInfo.key);
+    this.props.actionFeedbackContext.displaySuccess("The public key has been copied to clipboard");
   }
 
   /**
@@ -82,6 +93,19 @@ class DisplayUsersContextualMenu extends React.Component {
               <div className="main-cell">
                 <a onClick={this.handlePermalinkCopy}>
                   <span>Copy permalink</span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </li>
+        <li
+          key="copy-public-key"
+          className="opened">
+          <div className="row">
+            <div className="main-cell-wrapper">
+              <div className="main-cell">
+                <a onClick={this.handlePublicKeyCopy}>
+                  <span>Copy public key</span>
                 </a>
               </div>
             </div>
