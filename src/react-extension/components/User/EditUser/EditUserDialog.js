@@ -143,6 +143,7 @@ class EditUserDialog extends Component {
    * @returns {void}
    */
   async handleFormSubmit(event) {
+    // Avoid the form to be submitted.
     event.preventDefault();
 
     // Do not re-submit an already processing form
@@ -231,6 +232,7 @@ class EditUserDialog extends Component {
     const role = this.context.roles.find(role => this.state.is_admin ? role.name === 'admin' : role.name === 'user');
     const userDto = {
       id: this.context.editUserDialogProps.id,
+      username: this.state.username,
       profile: {
         first_name: this.state.first_name,
         last_name: this.state.last_name
@@ -341,7 +343,7 @@ class EditUserDialog extends Component {
               <label htmlFor="is_admin">Role</label>
               <div id="is_admin">
                 <input id="is_admin_checkbox" name="is_admin" onChange={this.handleCheckboxClick} checked={this.state.is_admin} type="checkbox"/>
-                <span>This user is an administrator</span>
+                <span> This user is an administrator</span>
               </div>
               <div className="message helptext">Note: Administrators can add and delete users. They can also create
                 groups and assign group managers. Admin can not see all passwords.

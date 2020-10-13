@@ -70,6 +70,7 @@ describe("See the Create Dialog User", () => {
 
       const userDto = {
         id: editUserDialogProps.id,
+        username: "firstname@passbolt.com",
         profile: {
           first_name: "user",
           last_name: "admin",
