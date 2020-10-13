@@ -61,10 +61,10 @@ class DisplayUsersContextualMenu extends React.Component {
    * Handle the copy of public key
    */
   async handlePublicKeyCopy() {
-    const gpgKey = await this.context.port.request('passbolt.gpgkeys.get-by-user-id', this.user.id);
-    await this.context.port.request("passbolt.clipboard.copy", gpgKey);
-    this.props.actionFeedbackContext.displaySuccess("The public key has been copied to clipboard");
     this.props.hide();
+    const gpgkeyInfo = await this.context.port.request('passbolt.keyring.get-public-key-info-by-user', this.user.id);
+    await this.context.port.request("passbolt.clipboard.copy", gpgkeyInfo.key);
+    this.props.actionFeedbackContext.displaySuccess("The public key has been copied to clipboard");
   }
 
   /**
