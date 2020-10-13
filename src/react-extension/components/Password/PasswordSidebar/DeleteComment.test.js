@@ -49,9 +49,11 @@ describe("Delete comments", () => {
       });
 
       it('I should not be able to delete the comment', async() => {
-        // @todo the API doesn't yet support this scenario.
-        // await page.title.click();
-        // expect(page.displayCommentList.canDelete(2)).toBeTruthy();
+        /*
+         * @todo the API doesn't yet support this scenario.
+         * await page.title.click();
+         * expect(page.displayCommentList.canDelete(2)).toBeTruthy();
+         */
       });
     });
   });
