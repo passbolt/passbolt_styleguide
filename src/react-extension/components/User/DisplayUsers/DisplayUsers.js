@@ -233,12 +233,21 @@ class DisplayUsers extends React.Component {
     return this.props.userWorkspaceContext.sorter.asc;
   }
 
+  /**
+   * Check if the logged in user is admin
+   * @return {boolean}
+   */
+  isLoggedInUserAdmin() {
+    return this.context.loggedInUser && this.context.loggedInUser.role.name === 'admin';
+  }
+
   renderItem(index, key) {
     const user = this.users[index];
     const isSelected = this.isUserSelected(user);
     const serverTimezone = this.context.siteSettings.getServerTimezone();
     const modifiedFormatted = moment.tz(user.modified, serverTimezone).fromNow();
     const lastLoggedInFormatted = user.last_logged_in ? moment.tz(user.last_logged_in, serverTimezone).fromNow() : "";
+    const mfa = user.is_mfa_enabled ? "Enabled" : "Disabled";
     const rowClassName = `${isSelected ? "selected" : ""} ${user.active ? "" : "inactive"}`;
 
     return (
@@ -277,6 +286,13 @@ class DisplayUsers extends React.Component {
             {lastLoggedInFormatted}
           </div>
         </td>
+        {this.isLoggedInUserAdmin() &&
+          <td className="cell_is_mfa_enabled m-cell">
+            <div>
+              {mfa}
+            </div>
+          </td>
+        }
       </tr>
     );
   }
@@ -367,7 +383,21 @@ class DisplayUsers extends React.Component {
                         <Icon baseline={true} name="caret-down"/>
                         }
                       </a>
+
                     </th>
+                    {this.isLoggedInUserAdmin() &&
+                      <th className="cell_is_mfa_enabled m-cell sortable">
+                        <a onClick={ev => this.handleSortByColumnClick(ev, "is_mfa_enabled")}>
+                          MFA
+                          {this.isSortedColumn("is_mfa_enabled") && this.isSortedAsc() &&
+                          <Icon baseline={true} name="caret-up"/>
+                          }
+                          {this.isSortedColumn("is_mfa_enabled") && !this.isSortedAsc() &&
+                          <Icon baseline={true} name="caret-down"/>
+                          }
+                        </a>
+                      </th>
+                    }
                   </tr>
                 </thead>
               </table>

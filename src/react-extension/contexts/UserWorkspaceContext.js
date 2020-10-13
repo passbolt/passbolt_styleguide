@@ -461,12 +461,22 @@ class UserWorkspaceContextProvider extends React.Component {
 
     const dateSorter = (d1, d2) => !d1 ? -1 : (!d2 ? 1 : moment(d1).diff(moment(d2)));
     const stringSorter = (s1, s2) => s1.localeCompare(s2);
-    const userName = user => `${user.profile.first_name} ${user.profile.last_name}`;
-    const nameSorter = (u1, u2) => userName(u1).localeCompare(userName(u2));
-    const dateOrStringSorter = ['modified', 'last_logged_in'].includes(this.state.sorter.propertyName) ? dateSorter : stringSorter;
+    const mfaSorter = (u1, u2) => (u2.is_mfa_enabled === u1.is_mfa_enabled) ? 0 : u2.is_mfa_enabled ? -1 : 1;
+    const getUserFullName = user => `${user.profile.first_name} ${user.profile.last_name}`;
+    const nameSorter = (u1, u2) => getUserFullName(u1).localeCompare(getUserFullName(u2));
+    const dateOrStringsorter = ['modified', 'last_logged_in'].includes(this.state.sorter.propertyName) ? dateSorter : stringSorter;
 
     const isNameProperty = this.state.sorter.propertyName === 'name';
-    const propertySorter = isNameProperty ? plainObjectSorter(nameSorter) : keySorter(this.state.sorter.propertyName, dateOrStringSorter);
+    const isMfaProperty = this.state.sorter.propertyName === 'is_mfa_enabled';
+
+    let propertySorter;
+    if (isNameProperty) {
+      propertySorter = plainObjectSorter(nameSorter);
+    } else if (isMfaProperty) {
+      propertySorter = plainObjectSorter(mfaSorter);
+    } else {
+      propertySorter = keySorter(this.state.sorter.propertyName, dateOrStringsorter);
+    }
 
     await this.setState({filteredUsers: this.state.filteredUsers.sort(propertySorter)});
   }
