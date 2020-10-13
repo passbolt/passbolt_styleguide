@@ -136,27 +136,19 @@ class DisplayUserWorkspaceMainActions extends React.Component {
   }
 
   /**
-   * can create a user
+   * Check if the user can use the create capability.
    * @returns {boolean}
    */
-  canCreate() {
-    return this.currentUserRole && this.currentUserRole.name === 'admin';
+  canIUseCreate() {
+    return this.isLoggedInUserAdmin();
   }
 
   /**
-   * Get the role of the current user
-   * @returns {null|*}
+   * Can update the resource
+   * @returns {boolean}
    */
-  get currentUserRole() {
-    return this.context.roles && this.currentUser && this.context.roles.find(role => role.id === this.currentUser.role_id);
-  }
-
-  /**
-   * Get the current user
-   * @returns {null|*}
-   */
-  get currentUser() {
-    return this.context.currentUser;
+  isLoggedInUserAdmin() {
+    return this.context.loggedInUser && this.context.loggedInUser.role.name === 'admin';
   }
 
   /**
@@ -166,7 +158,7 @@ class DisplayUserWorkspaceMainActions extends React.Component {
   render() {
     return (
       <div className="col1 main-action-wrapper">
-        {this.canCreate() &&
+        {this.canIUseCreate() &&
         <div className="dropdown" ref={this.createMenuRef}>
           <a className="button create primary ready" onClick={this.handleCreateClickEvent}>
             <Icon name="plus-circle"/>

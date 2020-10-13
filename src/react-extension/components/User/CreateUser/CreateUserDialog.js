@@ -396,7 +396,7 @@ class CreateUserDialog extends Component {
               <label htmlFor="is_admin">Role</label>
               <div id="is_admin">
                 <input id="is_admin_checkbox" name="is_admin" onChange={this.handleCheckboxClick} checked={this.state.is_admin} type="checkbox"/>
-                &nbsp;<span>This user is an administrator</span>
+                <span> This user is an administrator</span>
               </div>
               <div className="message helptext">Note: Administrators can add and delete users. They can also create
                 groups and assign group managers. Admin can not see all passwords.

@@ -28,10 +28,14 @@ describe("See Workspace Main Menu", () => {
   const context = defaultAppContext(); // The applicative context
   const props = defaultProps(); // The props to pass
   const adminUser = {
-    role_id: "8e3874ae-4b40-590b-968a-418f704b9d9a",
+    role: {
+      name: "admin"
+    },
   };
   const user = {
-    role_id: "8e3874ae-4b40-590b-968a-418f704b9d9b",
+    role: {
+      name: "user"
+    },
   };
 
   describe('As AD I can start adding a user via the workspace main menu', () => {
@@ -41,7 +45,7 @@ describe("See Workspace Main Menu", () => {
      */
 
     beforeEach(() => {
-      context.setContext({currentUser: adminUser});
+      context.setContext({loggedInUser: adminUser});
       page = new DisplayUserWorkspaceMainActionsTestPage(context, props);
     });
 
@@ -60,7 +64,7 @@ describe("See Workspace Main Menu", () => {
      */
 
     beforeEach(() => {
-      context.setContext({currentUser: user});
+      context.setContext({loggedInUser: user});
       page = new DisplayUserWorkspaceMainActionsTestPage(context, props);
     });
 
