@@ -25,12 +25,11 @@ import siteSettingsFixture from "../../../test/fixture/Settings/siteSettings";
  */
 export function administratorAppContext() {
   return {
-    currentUser: {id: 'f848277c-5398-58f8-a82a-72397af2d450', role: {name: 'administrator'}},
+    loggedInUser: {id: 'f848277c-5398-58f8-a82a-72397af2d450', role: {name: 'admin'}},
     userSettings: new UserSettings(userSettingsFixture),
     siteSettings: new SiteSettings(siteSettingsFixture),
     port: new MockPort(),
     resourceCommentId: '9e56b21f-36f1-44a7-a363-1c6ccbbf09e2', // Selected resource comment id
-    showDeleteCommentDialog: false, // Flag telling whether the delete comment should be displayed
     mustRefreshComments: false // Flag telling whether the current list of comments should be refreshed
   };
 }
@@ -41,12 +40,11 @@ export function administratorAppContext() {
  */
 export function defaultAppContext() {
   return {
-    currentUser: {id: 'f848277c-5398-58f8-a82a-72397af2d450'},
+    loggedInUser: {id: 'f848277c-5398-58f8-a82a-72397af2d450'},
     userSettings: new UserSettings(userSettingsFixture),
     siteSettings: new SiteSettings(siteSettingsFixture),
     port: new MockPort(),
     resourceCommentId: '9e56b21f-36f1-44a7-a363-1c6ccbbf09e2', // Selected resource comment id
-    showDeleteCommentDialog: false, // Flag telling whether the delete comment should be displayed
     mustRefreshComments: false // Flag telling whether the current list of comments should be refreshed
   };
 }

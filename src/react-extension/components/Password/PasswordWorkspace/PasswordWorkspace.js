@@ -187,7 +187,7 @@ class Workspace extends Component {
           <PasswordSearchBar
             onSearch={this.handleSearch}
             placeholder="Search passwords"/>
-          <UserBadgeMenu baseUrl={this.context.userSettings.getTrustedDomain()} user={this.context.currentUser}/>
+          <UserBadgeMenu baseUrl={this.context.userSettings.getTrustedDomain()} user={this.context.loggedInUser}/>
         </div>
         <div className="header third">
           <div className="col1 main-action-wrapper">

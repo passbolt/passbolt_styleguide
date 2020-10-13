@@ -12,7 +12,7 @@ import {v4 as uuidv4} from "uuid";
  */
 export function defaultAppContext(appContext) {
   const defaultAppContext = {
-    currentUser: {id: 'f848277c-5398-58f8-a82a-72397af2d450'},
+    loggedInUser: {id: 'f848277c-5398-58f8-a82a-72397af2d450'},
     userSettings: new UserSettings(userSettingsFixture),
     siteSettings: new SiteSettings(siteSettingsFixture),
     port: new MockPort()

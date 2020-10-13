@@ -49,21 +49,21 @@ class UserBadgeMenu extends Component {
   }
 
   /**
-   * Get current user first name and last name
+   * Get the user full name
    * @returns {string}
    */
-  getCurrentUserName() {
-    if (!this.props.user || !this.props.user.first_name || !this.props.user.last_name) {
+  getUserFullName() {
+    if (!this.props.user || !this.props.user.profile) {
       return '...';
     }
-    return `${this.props.user.first_name} ${this.props.user.last_name}`;
+    return `${this.props.user.profile.first_name} ${this.props.user.profile.last_name}`;
   }
 
   /**
-   * Get current username
+   * Get the user username
    * @returns {string}
    */
-  getCurrentUserUsername() {
+  getUserUsername() {
     if (!this.props.user || !this.props.user.username) {
       return '...';
     }
@@ -101,8 +101,8 @@ class UserBadgeMenu extends Component {
           <div onClick={this.handleToggleMenuClick}>
             <div className="center-cell-wrapper">
               <div className="details center-cell">
-                <span className="name">{this.getCurrentUserName()}</span>
-                <span className="email">{this.getCurrentUserUsername()}</span>
+                <span className="name">{this.getUserFullName()}</span>
+                <span className="email">{this.getUserUsername()}</span>
               </div>
             </div>
             <UserAvatar user={this.props.user} className="picture left-cell" baseUrl={this.props.baseUrl}/>

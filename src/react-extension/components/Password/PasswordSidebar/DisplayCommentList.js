@@ -95,9 +95,8 @@ class DisplayCommentList extends React.Component {
    * @param comment A comment
    */
   canDeleteComment(comment) {
-    const isAdministrator = this.context.currentUser.role && this.context.currentUser.role.name === 'administrator';
-    const isOwner = this.context.currentUser.id === comment.created_by;
-    return isAdministrator || isOwner;
+    const isOwner = this.context.loggedInUser.id === comment.created_by;
+    return isOwner;
   }
 
   /**

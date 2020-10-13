@@ -12,7 +12,6 @@ export default React.createContext({
   selectedUser: null,
   folders: null,
   resourceCommentId: null,
-  showDeleteCommentDialog: false,
   mustRefreshComments: false,
   siteSettings: null,
   userSettings: null,

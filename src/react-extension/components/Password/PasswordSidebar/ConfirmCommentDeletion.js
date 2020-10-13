@@ -58,6 +58,7 @@ class ConfirmDeleteDialog extends Component {
    * @return {Promise}
    */
   async handleConfirm(event) {
+    // Avoid the form to be submitted.
     event.preventDefault();
 
     try {
@@ -101,7 +102,7 @@ class ConfirmDeleteDialog extends Component {
    * Handle close button click.
    */
   handleClose() {
-    this.context.setContext({resourceCommentId: null, showDeleteCommentDialog: false});
+    this.context.setContext({resourceCommentId: null});
     this.props.onClose();
   }
 
@@ -119,8 +120,8 @@ class ConfirmDeleteDialog extends Component {
             noValidate>
             <div className="form-content">
               <p>
-                                Please confirm you really want to delete the comment. After clicking ok,
-                                the comment will be <strong>deleted permanently</strong>
+                Please confirm you really want to delete the comment. After clicking ok,
+                the comment will be <strong>deleted permanently</strong>
               </p>
             </div>
             <div className="submit-wrapper clearfix">

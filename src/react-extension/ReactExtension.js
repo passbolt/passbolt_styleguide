@@ -157,8 +157,8 @@ class ReactExtension extends Component {
   }
 
   async getLoggedInUser() {
-    const currentUser = await this.props.port.request("passbolt.user.get");
-    this.setState({currentUser});
+    const loggedInUser = await this.props.port.request("passbolt.users.find-logged-in-user");
+    this.setState({loggedInUser});
   }
 
   async getResources() {

@@ -43,6 +43,7 @@ import mockRequestGetVersion from "./request/mockRequestGetVersion";
 import mockRequestUsersUpdateLocalStorage from "./request/mockRequestUsersUpdateLocalStorage";
 import mockRequestGroupsUpdateLocalStorage from "./request/mockRequestGroupsUpdateLocalStorage";
 import mockRequestResources from "./request/mockRequestResources";
+import mockRequestUsersFindLoggedInUser from "./request/mockRequestUsersFindLoggedInUser";
 
 export default (storage) => {
   const mockPort = new MockPort(storage);
@@ -56,6 +57,7 @@ export default (storage) => {
   mockPort.addRequestListener("passbolt.folders.update-local-storage", mockRequestFoldersUpdateLocalStorage);
   mockPort.addRequestListener("passbolt.resources.update-local-storage", mockRequestResourcesUpdateLocalStorage);
   mockPort.addRequestListener("passbolt.users.update-local-storage", mockRequestUsersUpdateLocalStorage);
+  mockPort.addRequestListener("passbolt.users.find-logged-in-user", mockRequestUsersFindLoggedInUser);
   mockPort.addRequestListener("passbolt.resources.create", mockRequestResourcesCreate);
   mockPort.addRequestListener("passbolt.resources.update", mockRequestResourcesUpdate);
   mockPort.addRequestListener("passbolt.share.get-resources", mockRequestShareGetResources);

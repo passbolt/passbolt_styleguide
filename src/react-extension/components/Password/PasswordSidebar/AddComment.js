@@ -167,7 +167,7 @@ class AddComment extends React.Component {
       foreign_key: this.props.resource.id,
       foreign_model: 'Resource',
       content: commentToAdd,
-      user_id: this.context.currentUser.id
+      user_id: this.context.loggedInUser.id
     };
 
     return await this.context.port.request('passbolt.comments.create', payload);
@@ -244,7 +244,7 @@ class AddComment extends React.Component {
         </div>
         <div className="left-column">
           <UserAvatar
-            user={this.context.currentUser}
+            user={this.context.loggedInUser}
             baseUrl={this.context.siteSettings.settings.app.url}
             className="author profile picture"/>
         </div>
