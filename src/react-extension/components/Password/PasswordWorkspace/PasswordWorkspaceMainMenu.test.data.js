@@ -11,6 +11,9 @@ import {ResourceWorkspaceFilterTypes} from "../../../contexts/ResourceWorkspaceC
 export function defaultAppContext(appContext) {
   const defaultAppContext = {
     port: new MockPort(),
+    siteSettings: {
+      canIUse: () => true
+    }
   };
   return Object.assign(defaultAppContext, appContext || {});
 }
