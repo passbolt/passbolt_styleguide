@@ -18,6 +18,7 @@ import Icon from "../../../../react/components/Common/Icons/Icon";
 import {withUserWorkspace} from "../../../contexts/UserWorkspaceContext";
 import moment from "moment";
 import AppContext from "../../../contexts/AppContext";
+import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 
 /**
  * This component displays the user details about public key
@@ -49,6 +50,7 @@ class DisplayUserDetailsPublicKey extends React.Component {
    */
   bindHandlers() {
     this.handleTitleClicked = this.handleTitleClicked.bind(this);
+    this.handlePublicKeyCopy = this.handlePublicKeyCopy.bind(this);
   }
 
   /**
@@ -158,6 +160,15 @@ class DisplayUserDetailsPublicKey extends React.Component {
   }
 
   /**
+   * Handle the copy of the public key
+   */
+  async handlePublicKeyCopy() {
+    const armoredKey = this.state.gpgkeyInfo.armoredKey;
+    await this.context.port.request("passbolt.clipboard.copy", armoredKey);
+    this.props.actionFeedbackContext.displaySuccess("The public key has been copied to clipboard");
+  }
+
+  /**
    * Render the component
    */
   render() {
@@ -202,7 +213,9 @@ class DisplayUserDetailsPublicKey extends React.Component {
           <li className="key">
             <span className="label">Public key</span>
             <span className="value">
-              <a className="button copy-public-key">
+              <a
+                className="button copy-public-key"
+                onClick={this.handlePublicKeyCopy}>
                 <span>copy</span>
               </a>
             </span>
@@ -223,7 +236,8 @@ class DisplayUserDetailsPublicKey extends React.Component {
 
 DisplayUserDetailsPublicKey.contextType = AppContext;
 DisplayUserDetailsPublicKey.propTypes = {
-  userWorkspaceContext: PropTypes.object // The user workspace context
+  userWorkspaceContext: PropTypes.object, // The user workspace context
+  actionFeedbackContext: PropTypes.object // The action feedback context
 };
 
-export default withUserWorkspace(DisplayUserDetailsPublicKey);
+export default withActionFeedback(withUserWorkspace(DisplayUserDetailsPublicKey));
