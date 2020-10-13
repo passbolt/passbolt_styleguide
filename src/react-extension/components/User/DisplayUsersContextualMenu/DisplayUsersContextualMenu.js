@@ -82,27 +82,19 @@ class DisplayUsersContextualMenu extends React.Component {
   }
 
   /**
+   * Check if the user can use the edit capability.
+   * @returns {boolean}
+   */
+  canIUseEdit() {
+    return this.isLoggedInUserAdmin();
+  }
+
+  /**
    * Can update the resource
    * @returns {boolean}
    */
-  canUpdate() {
-    return this.currentUserRole && this.currentUserRole.name === 'admin';
-  }
-
-  /**
-   * Get the role of the current user
-   * @returns {null|*}
-   */
-  get currentUserRole() {
-    return this.context.roles && this.currentUser && this.context.roles.find(role => role.id === this.currentUser.role_id);
-  }
-
-  /**
-   * Get the current user
-   * @returns {null|*}
-   */
-  get currentUser() {
-    return this.context.currentUser;
+  isLoggedInUserAdmin() {
+    return this.context.loggedInUser && this.context.loggedInUser.role.name === 'admin';
   }
 
   /**
@@ -162,7 +154,7 @@ class DisplayUsersContextualMenu extends React.Component {
             </div>
           </div>
         </li>
-        {this.canUpdate() &&
+        {this.canIUseEdit() &&
         <li key="edit-user" className="ready">
           <div className="row">
             <div className="main-cell-wrapper">
