@@ -129,7 +129,7 @@ export const mockGroups = [{
   "my_group_user": {
     "id": "2510a118-c838-5470-a0dd-aff268d4a2b6",
     "group_id": "516c2db6-0aed-52d8-854f-b3f3499995e7",
-    "user_id": "640ebc06-5ec1-5322-a1ae-6120ed2f3a74",
+    "user_id": "d57c10f5-639d-5160-9c81-8a0c6c4ec856",
     "is_admin": true,
     "created": "2020-08-17T16:37:13+00:00"
   },
@@ -137,14 +137,14 @@ export const mockGroups = [{
     {
       "id": "16714bc3-f96d-5a36-a10a-088094b5bcbc",
       "group_id": "00ddc3e6-17d6-5a18-b793-05a4484a71a7",
-      "user_id": "640ebc06-5ec1-5322-a1ae-6120ed2f3a74",
+      "user_id": "1e73e104-d53e-579d-a0c4-e9aeaca76c56",
       "is_admin": true,
       "created": "2020-08-17T16:37:15+00:00"
     },
     {
       "id": "285dc1c5-c358-507e-af2a-9201d9fed9f5",
       "group_id": "00ddc3e6-17d6-5a18-b793-05a4484a71a7",
-      "user_id": "f848277c-5398-58f8-a82a-72397af2d450",
+      "user_id": "86b3eb2f-2dd0-56b3-8978-920615cf7c17",
       "is_admin": true,
       "created": "2020-08-17T16:37:15+00:00"
     },
@@ -152,9 +152,45 @@ export const mockGroups = [{
 }];
 
 /**
+ * Mocked a group
+ */
+export const mockGroup = {
+  "id": "516c2db6-0aed-52d8-854f-b3f3499995e7",
+  "name": "Leadership team",
+  "deleted": false,
+  "created": "2016-01-29T13:39:25+00:00",
+  "modified": "2016-01-29T13:39:25+00:00",
+  "created_by": "d57c10f5-639d-5160-9c81-8a0c6c4ec856",
+  "modified_by": "d57c10f5-639d-5160-9c81-8a0c6c4ec856",
+  "my_group_user": {
+    "id": "2510a118-c838-5470-a0dd-aff268d4a2b6",
+    "group_id": "516c2db6-0aed-52d8-854f-b3f3499995e7",
+    "user_id": "d57c10f5-639d-5160-9c81-8a0c6c4ec856",
+    "is_admin": true,
+    "created": "2020-08-17T16:37:13+00:00"
+  },
+  "groups_users": [
+    {
+      "id": "16714bc3-f96d-5a36-a10a-088094b5bcbc",
+      "group_id": "00ddc3e6-17d6-5a18-b793-05a4484a71a7",
+      "user_id": "1e73e104-d53e-579d-a0c4-e9aeaca76c56",
+      "is_admin": true,
+      "created": "2020-08-17T16:37:15+00:00"
+    },
+    {
+      "id": "285dc1c5-c358-507e-af2a-9201d9fed9f5",
+      "group_id": "00ddc3e6-17d6-5a18-b793-05a4484a71a7",
+      "user_id": "86b3eb2f-2dd0-56b3-8978-920615cf7c17",
+      "is_admin": true,
+      "created": "2020-08-17T16:37:15+00:00"
+    },
+  ],
+};
+
+/**
  * Mocked folders conflict
  */
-export const mockFoldersError = [
+export const mockFolders = [
   {
     "id": "9e03fd73-04c0-5514-95fa-1a6cf2c7c093",
     "name": "Accounting",
@@ -256,7 +292,7 @@ export const mockFoldersError = [
 /**
  * Mocked resources conflict
  */
-export const mockResourcesError = [
+export const mockResources = [
   {
     "id": "8e3874ae-4b40-590b-968a-418f704b9d9a",
     "name": "apache",
@@ -336,36 +372,5 @@ export const mockResourcesError = [
     ],
     "folder_parent_id": "9e03fd73-04c0-5514-95fa-1a6cf2c7c093",
     "personal": false
-  }
-];
-
-/**
- * Mocked groups conflict
- */
-export const mockGroupsError = [
-  {
-    "id": "469edf9d-ca1e-5003-91d6-3a46755d5a50",
-    "name": "Accounting",
-    "deleted": false,
-    "created": "2016-01-29T13:39:25+00:00",
-    "modified": "2016-01-29T13:39:25+00:00",
-    "created_by": "d57c10f5-639d-5160-9c81-8a0c6c4ec856",
-    "modified_by": "d57c10f5-639d-5160-9c81-8a0c6c4ec856",
-    "groups_users": [
-      {
-        "id": "38804173-18aa-5ec1-99b9-354496374816",
-        "group_id": "469edf9d-ca1e-5003-91d6-3a46755d5a50",
-        "user_id": "640ebc06-5ec1-5322-a1ae-6120ed2f3a74",
-        "is_admin": true,
-        "created": "2020-08-17T16:37:13+00:00"
-      },
-      {
-        "id": "a932a3ce-82bc-59b6-ac4e-bf325435e534",
-        "group_id": "469edf9d-ca1e-5003-91d6-3a46755d5a50",
-        "user_id": "f848277c-5398-58f8-a82a-72397af2d450",
-        "is_admin": false,
-        "created": "2020-08-17T16:37:13+00:00"
-      }
-    ]
   }
 ];

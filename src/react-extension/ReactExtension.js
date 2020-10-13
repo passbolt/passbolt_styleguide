@@ -133,6 +133,17 @@ class ReactExtension extends Component {
       tagToEdit: null, // The current tag to edit
       tagToDelete: null, // The current tag to delete
 
+      // group dialog
+      deleteGroupDialogProps: {
+        group: null, // the group to delete
+        numberResourcesOwned: null
+      },
+
+      deleteGroupWithConflictsDialogProps: {
+        group: null, // the group to delete
+        errors: {}, // The dry run errors
+      },
+
       // progress dialog
       progressDialogProps: {},
 
