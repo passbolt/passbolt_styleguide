@@ -21,6 +21,8 @@ import DialogWrapper from "../../../../react/components/Common/Dialog/DialogWrap
 import FormSubmitButton from "../../../../react/components/Common/Inputs/FormSubmitButton/FormSubmitButton";
 import FormCancelButton from "../../../../react/components/Common/Inputs/FormSubmitButton/FormCancelButton";
 import Icon from "../../Common/Icons/Icon";
+import PasswordUnlockKeypassDialog from "./PasswordUnlockKeypassDialog";
+import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 
 class PasswordImportDialog extends Component {
   /**
@@ -68,6 +70,15 @@ class PasswordImportDialog extends Component {
   }
 
   /**
+   * Whenever the component updated
+   * @param previousProps The component previous props
+   */
+  async componentDidUpdate(previousProps) {
+    await this.handleFileToImportChange(previousProps.resourceWorkspaceContext.resourceFileToImport);
+    await this.handleKDBXFileImportError();
+  }
+
+  /**
    * Returns the CSS style of the choose file addon button
    */
   get chooseFileStyle() {
@@ -103,7 +114,6 @@ class PasswordImportDialog extends Component {
     return splitFilename[splitFilename.length - 1];
   }
 
-
   /**
    * Handle the selection of a file by file explorer
    */
@@ -137,6 +147,32 @@ class PasswordImportDialog extends Component {
   }
 
   /**
+   * Whenever the contextual file to import has changed
+   * @param previousFileToImport The previous file to import
+   */
+  async handleFileToImportChange(previousFileToImport) {
+    // This is a way to tell that the KDBX file has been imported and then there's nothing to import anymore
+    const isFileToImportNullNow = previousFileToImport && !this.props.resourceWorkspaceContext.resourceFileToImport;
+    if (isFileToImportNullNow) {
+      this.close();
+    }
+  }
+
+  /**
+   * Whenever a KDBX file import arose
+   */
+  async handleKDBXFileImportError() {
+    const kdbxImportError = this.props.resourceWorkspaceContext.resourceKdbxFileImportError;
+    if (!kdbxImportError) {
+      if (kdbxImportError.code == 'BadSignature') {
+        await this.setState({errors: {invalidKdbxFile: true}});
+      } else {
+        await this.setState({errors: {cannotOpenFile: true}});
+      }
+    }
+  }
+
+  /**
    * Handle the cancellation of the import
    */
   handleCancel() {
@@ -151,7 +187,6 @@ class PasswordImportDialog extends Component {
     event.preventDefault();
     await this.resetValidation()
       .then(this.import.bind(this))
-      .then(this.close.bind(this))
       .catch(this.invalidate.bind(this));
   }
 
@@ -177,11 +212,20 @@ class PasswordImportDialog extends Component {
    * Import the selected file with its given base 64 content
    */
   async import() {
-    await this.context.port.emit("passbolt.import-passwords.import-file", {
+    const isKeypassFile = this.selectedFileExtension === 'kdbx';
+    const resourceFileToImport = {
       b64FileContent: await this.readFile,
       fileType: this.selectedFileExtension,
       options: this.state.options
-    });
+    };
+    await this.props.resourceWorkspaceContext.onResourceFileToImport(resourceFileToImport);
+    if (isKeypassFile) {
+      this.props.dialogContext.open(PasswordUnlockKeypassDialog);
+    } else {
+      await this.context.port.emit("passbolt.import-passwords.import-file", resourceFileToImport);
+      await this.props.resourceWorkspaceContext.onResourceFileToImport(null);
+      this.close();
+    }
   }
 
   /**
@@ -203,6 +247,8 @@ class PasswordImportDialog extends Component {
   render() {
     const errors = this.state.errors;
     const isInvalidFile = errors && errors.invalidFile;
+    const isInvalidKdbxFile = errors && errors.invalidKdbxFile;
+    const cannotOpenFile = errors && errors.cannotOpenFile;
     const invalidFileClassName = isInvalidFile ? 'errors' : '';
     return (
       <DialogWrapper
@@ -243,6 +289,16 @@ class PasswordImportDialog extends Component {
                   This file is invalid and cannot be imported.
                 </div>
               }
+              {isInvalidKdbxFile &&
+                <div className="message ready error">
+                  This is not a valid kdbx file
+                </div>
+              }
+              {cannotOpenFile &&
+                <div className="message ready error">
+                  Could not open the kdbx file
+                </div>
+              }
             </div>
 
             <div className="input text">
@@ -280,7 +336,8 @@ PasswordImportDialog.contextType = AppContext;
 PasswordImportDialog.propTypes = {
   onClose: PropTypes.func,
   actionFeedbackContext: PropTypes.any, // The action feedback context
-  dialogContext: PropTypes.any // The dialog context
+  dialogContext: PropTypes.any, // The dialog context
+  resourceWorkspaceContext: PropTypes.any // The resource context
 };
 
-export default withActionFeedback(withDialog(PasswordImportDialog));
+export default withResourceWorkspace(withActionFeedback(withDialog(PasswordImportDialog)));

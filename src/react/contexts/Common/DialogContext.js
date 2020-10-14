@@ -15,6 +15,7 @@
 
 import React from "react";
 import PropTypes from "prop-types";
+import {v4 as uuidv4} from "uuid";
 
 /**
  * The dialog context
@@ -45,11 +46,12 @@ export default class DialogContextProvider extends React.Component {
     return {
       dialogs: [],
       open: Dialog => {
-        const dialogIndex = this.state.dialogs.length;
-        this.setState({dialogs: [...this.state.dialogs, Dialog]});
-        return dialogIndex;
+        const dialogKey = uuidv4();
+        this.setState({dialogs: [...this.state.dialogs, {key: dialogKey, Dialog}]});
+        console.log(dialogKey);
+        return dialogKey;
       },
-      close: index => this.setState({dialogs: this.state.dialogs.filter((_, dialogIndex) => dialogIndex !== index)})
+      close: async dialogKey => await this.setState({dialogs: this.state.dialogs.filter(dialog => dialogKey !== dialog.key)})
     };
   }
 
