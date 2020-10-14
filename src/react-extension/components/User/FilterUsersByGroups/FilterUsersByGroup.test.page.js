@@ -22,6 +22,7 @@ import DisplayGroups from "./FilterUsersByGroup";
 import DisplayGroupsFilterContextualMenuPageObject from "./FilterUsersByGroupContextualMenu.test.page";
 import ManageContextualMenu from "../../ManageContextualMenu";
 import ContextualMenuContextProvider from "../../../../react/contexts/Common/ContextualMenuContext";
+import DisplayGroupsContextualMenuPageObject from "./DisplayGroupContextualMenu.test.page";
 
 /**
  * The FilterUsersByGroups component represented as a page
@@ -53,6 +54,7 @@ export default class FilterUsersByGroupPage {
     this._titleHeader = new TitleHeaderPageObject(this._page.container);
     this._displayGroupList = new DisplayGroupPageObject(this._page.container);
     this._displayGroupFilterContextualMenu = new DisplayGroupsFilterContextualMenuPageObject(this._page.container);
+    this._displayGroupContextualMenu = new DisplayGroupsContextualMenuPageObject(this._page.container);
   }
 
   /**
@@ -74,6 +76,13 @@ export default class FilterUsersByGroupPage {
    */
   get displayFilterContextualMenu() {
     return this._displayGroupFilterContextualMenu;
+  }
+
+  /**
+   * Returns the page object of display groups contextual menu
+   */
+  get displayGroupContextualMenu() {
+    return this._displayGroupContextualMenu;
   }
 }
 
@@ -109,13 +118,6 @@ class TitleHeaderPageObject {
     fireEvent.click(component, leftClick);
     await waitFor(() => {});
   }
-
-  /** Right click on the component */
-  async rightClick(component)  {
-    const rightClick = {button: 2};
-    fireEvent.click(component, rightClick);
-    await waitFor(() => {});
-  }
 }
 
 class DisplayGroupPageObject {
@@ -149,6 +151,13 @@ class DisplayGroupPageObject {
   }
 
   /**
+   * Returns the clickable area of the more group
+   */
+  get moreButton() {
+    return this._container.querySelector('.more');
+  }
+
+  /**
    * Returns true if the page object exists in the container
    */
   exists() {
@@ -177,6 +186,14 @@ class DisplayGroupPageObject {
   }
 
   /**
+   * return the group for the 'index' one
+   * @param index
+   */
+  group(index) {
+    return this.list.querySelectorAll('.group-item')[index - 1].querySelector('.row .main-cell-wrapper .main-cell a');
+  }
+
+  /**
    * Returns the displayed group name for the 'index' one
    * @param index The display rank of name's group
    */
@@ -191,5 +208,12 @@ class DisplayGroupPageObject {
    */
   async waitForLoading(inProgressFn) {
     await waitFor(inProgressFn);
+  }
+
+  /** Click on the component */
+  async click(component)  {
+    const leftClick = {button: 0};
+    fireEvent.click(component, leftClick);
+    await waitFor(() => {});
   }
 }

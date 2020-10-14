@@ -30,7 +30,12 @@ describe("See groups", () => {
   describe('As LU I see the groups of my organization', () => {
     const appContext = {
       port: new MockPort(),
-      groups: groupsMock
+      groups: groupsMock,
+      loggedInUser: {
+        role: {
+          name: 'admin'
+        }
+      }
     };
     const context = defaultAppContext(appContext); // The applicative context
     /**
@@ -84,6 +89,11 @@ describe("See groups", () => {
       await page.displayFilterContextualMenu.click(page.displayFilterContextualMenu.groupManageMenu);
       expect(page.title.hyperlink.textContent).toBe("Groups I manage");
       expect(page.displayGroupList.count()).toBe(6);
+    });
+
+    it('As AD I should be able to start deleting a group', async() => {
+      await page.displayGroupList.click(page.displayGroupList.moreButton);
+      expect(page.displayGroupContextualMenu.deleteGroupContextualMenu).not.toBeNull();
     });
   });
 
@@ -139,6 +149,32 @@ describe("See groups", () => {
 
     it('I should see the loading message “Retrieving groups”', async() => {
       expect(page.displayGroupList.isLoading()).toBeTruthy();
+    });
+  });
+
+  describe('As ALU I shouldn’t be able to start deleting a group', () => {
+    const appContext = {
+      port: new MockPort(),
+      groups: groupsMock,
+      loggedInUser: {
+        role: {
+          name: 'user'
+        }
+      }
+    };
+    const context = defaultAppContext(appContext); // The applicative context
+    /**
+     * Given the groups section
+     * And the logged uin user is not AD
+     * Then I should’t see the delete group menu
+     */
+
+    beforeEach(() => {
+      page = new FilterUsersByGroupPage(context, props);
+    });
+
+    it('As NOT_AD I shouldn’t be able to start deleting a group', async() => {
+      expect(page.displayGroupList.moreButton).toBeNull();
     });
   });
 });

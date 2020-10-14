@@ -19,6 +19,7 @@ import {withRouter} from "react-router-dom";
 import {UserWorkspaceFilterTypes, withUserWorkspace} from "../../../contexts/UserWorkspaceContext";
 import {withContextualMenu} from "../../../../react/contexts/Common/ContextualMenuContext";
 import FilterUsersByGroupContextualMenu from "./FilterUsersByGroupContextualMenu";
+import DisplayGroupContextualMenu from "./DisplayGroupContextualMenu";
 
 /**
  * This component display groups to filter the users
@@ -55,6 +56,8 @@ class FilterUsersByGroup extends React.Component {
     this.handleTitleContextualMenuEvent = this.handleTitleContextualMenuEvent.bind(this);
     this.handleFilterGroupType = this.handleFilterGroupType.bind(this);
     this.handleGroupSelected = this.handleGroupSelected.bind(this);
+    this.handleMoreClickEvent = this.handleMoreClickEvent.bind(this);
+    this.handleContextualMenuEvent = this.handleContextualMenuEvent.bind(this);
   }
 
   /**
@@ -81,6 +84,29 @@ class FilterUsersByGroup extends React.Component {
    */
   handleTitleMoreClickEvent(event) {
     this.showContextualMenu(event.pageY, event.pageX);
+  }
+
+  /**
+   * Handle when the user clicks right on a group
+   * @param {ReactEvent} event The event
+   * @param {Object} selectedTag The target group
+   */
+  handleContextualMenuEvent(event, group) {
+    // Prevent the browser contextual menu to pop up.
+    event.preventDefault();
+    // No operation available if not admin user
+    if (this.isLoggedInUserAdmin()) {
+      this.showGroupContextualMenu(event.pageY, event.pageX, group);
+    }
+  }
+
+  /**
+   * Handle when the user clicks on the more button
+   * @param {ReactEvent} event The event
+   * @param {Object} group The target group
+   */
+  handleMoreClickEvent(event, group) {
+    this.showGroupContextualMenu(event.pageY, event.pageX, group);
   }
 
   /**
@@ -154,6 +180,16 @@ class FilterUsersByGroup extends React.Component {
   }
 
   /**
+   * Show the contextual menu for a group
+   * @param {int} left The left position to display the menu
+   * @param {int} top The top position to display the menu
+   */
+  showGroupContextualMenu(top, left, group) {
+    const contextualMenuProps = {left, top, group};
+    this.props.contextualMenuContext.show(DisplayGroupContextualMenu, contextualMenuProps);
+  }
+
+  /**
    * update the title of the filter tag
    */
   updateTitle() {
@@ -203,6 +239,14 @@ class FilterUsersByGroup extends React.Component {
     const groupPayload = filterPayload && filterPayload.group;
     const isGroupSelected = () => groupPayload.id === group.id;
     return isGroupFilter && isGroupSelected();
+  }
+
+  /**
+   * Can update or delete the group
+   * @returns {boolean}
+   */
+  isLoggedInUserAdmin() {
+    return this.context.loggedInUser && this.context.loggedInUser.role.name === 'admin';
   }
 
   /**
@@ -257,11 +301,19 @@ class FilterUsersByGroup extends React.Component {
                     <div className="main-cell">
                       <a
                         title={group.name}
-                        onClick={event => this.handleGroupSelected(event, group)}>
+                        onClick={event => this.handleGroupSelected(event, group)}
+                        onContextMenu={event => this.handleContextualMenuEvent(event, group)}>
                         <span className="ellipsis">{group.name}</span>
                       </a>
                     </div>
                   </div>
+                  {this.isLoggedInUserAdmin() &&
+                  <div className="right-cell more-ctrl">
+                    <a className="more" onClick={event => this.handleMoreClickEvent(event, group)}>
+                      <Icon name="plus-square"/>
+                    </a>
+                  </div>
+                  }
                 </div>
               </li>
             )

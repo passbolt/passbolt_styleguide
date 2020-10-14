@@ -27,7 +27,6 @@ import {
   mockGroup,
   mockResources
 } from "./DeleteGroupWithConflictsDialog.test.data";
-import {mockGroups} from "../../User/DeleteUser/DeleteUserWithConflictsDialog.test.data";
 
 beforeEach(() => {
   jest.resetModules();
