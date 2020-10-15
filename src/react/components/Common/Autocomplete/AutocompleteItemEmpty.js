@@ -24,7 +24,7 @@ class AutocompleteItemEmpty extends Component {
         <div className="row">
           <div className="main-cell-wrapper">
             <div className="main-cell">
-              <p>No user or group found</p>
+              <p>No one found</p>
             </div>
           </div>
         </div>
