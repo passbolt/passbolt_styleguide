@@ -46,6 +46,7 @@ import mockRequestResources from "./request/mockRequestResources";
 import mockRequestUsersFindLoggedInUser from "./request/mockRequestUsersFindLoggedInUser";
 import mockRequestGpgKeysFindByUserId from "./request/mockRequestGpgKeysFindByUserId";
 import mockRequestUserDeleteDryRun from "./request/mockRequestUserDeleteDryRun";
+import mockRequestImportFile from "./request/mockRequestImportFile";
 
 export default (storage) => {
   const mockPort = new MockPort(storage);
@@ -83,6 +84,7 @@ export default (storage) => {
   mockPort.addRequestListener("passbolt.resources.find-all", mockRequestResources);
   mockPort.addRequestListener("passbolt.keyring.get-public-key-info-by-user", mockRequestGpgKeysFindByUserId);
   mockPort.addRequestListener("passbolt.users.delete-dry-run", mockRequestUserDeleteDryRun);
+  mockPort.addRequestListener("passbolt.import-passwords.import-file", mockRequestImportFile);
 
   return mockPort;
 };

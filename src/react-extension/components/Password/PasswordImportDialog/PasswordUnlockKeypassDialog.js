@@ -22,6 +22,7 @@ import FormSubmitButton from "../../../../react/components/Common/Inputs/FormSub
 import FormCancelButton from "../../../../react/components/Common/Inputs/FormSubmitButton/FormCancelButton";
 import Icon from "../../../../react/components/Common/Icons/Icon";
 import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
+import PasswordImportResultDialog from "./PasswordImportResultDialog";
 
 
 /**
@@ -149,15 +150,18 @@ class PasswordUnlockKeypassDialog extends Component {
     const password = this.passwordInputRef.current.value;
     const keyFile = this.state.keyFile;
     const fileToImport = Object.assign({}, this.fileToImport, {credentials: {password, keyFile}});
-    await this.context.port.emit("passbolt.import-passwords.import-file", fileToImport);
-    await this.props.resourceWorkspaceContext.onResourceFileToImport(null);
+    return await this.context.port.request("passbolt.import-passwords.import-file", fileToImport);
   }
 
   /**
    * Handle the success of the KDBX import
+   * @parama importResult The import result
    */
-  async onImportSuccess() {
+  async onImportSuccess(importResult) {
     await this.setState({errors: {}});
+    await this.props.resourceWorkspaceContext.onResourceFileImportResult(importResult);
+    await this.props.resourceWorkspaceContext.onResourceFileToImport(null);
+    await this.props.dialogContext.open(PasswordImportResultDialog);
     this.close();
   }
 
@@ -167,9 +171,9 @@ class PasswordUnlockKeypassDialog extends Component {
    */
   async onImportFailed(error) {
     const isInvalidPasswordOrKeyFile = error.code == 'InvalidKey' || error.code == 'InvalidArg';
-    if (isInvalidPasswordOrKeyFile) {
+    if (isInvalidPasswordOrKeyFile) { // Show this error on this dialog
       await this.setState({errors: {invalidPasswordOrKeyfile: true}});
-    } else {
+    } else { // Show the errors in the first dialog
       this.props.resourceWorkspaceContext.onKDBXFileImportError(error);
       this.close();
     }

@@ -13,5 +13,19 @@
  */
 
 export default () => {
-
+  return {
+    resources: {
+      created: Array(5)
+    },
+    folders: {
+      created: Array(5),
+      errors: ["some error", "another one"]
+    },
+    importTag: "Generated-custom-tag-import",
+    options: {
+      hasFoldersPlugin: true,
+      importFolders: true,
+      hasTags: true
+    }
+  }
 }

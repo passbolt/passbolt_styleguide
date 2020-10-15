@@ -43,6 +43,7 @@ export const ResourceWorkspaceContext = React.createContext({
     resource: null // The resource to scroll to
   },
   resourceFileToImport: null, // The resource file to import
+  resourceFileImportResult: null, // The resource file import result
   resourceKdbxFileImportError: {}, // The KDB(X) file import error
   lockDisplayDetail: true, // lock the detail to display the folder or password sidebar
   onLockDetail: () => {}, // Lock or unlock detail (hide or display the folder or password sidebar)
@@ -57,7 +58,8 @@ export const ResourceWorkspaceContext = React.createContext({
     single: () => {}// Whenever a single resource has been selected
   },
   onResourceFileToImport: () => {}, // Whenever a resource file will be imported
-  onKDBXFileImportError: () => {} // Whenever a KDBX file import has an error
+  onKDBXFileImportError: () => {}, // Whenever a KDBX file import has an error
+  onResourceFileImportResult: () => {} // Whenever the import result has been provided
 });
 
 /**
@@ -95,6 +97,7 @@ class ResourceWorkspaceContextProvider extends React.Component {
       },
       resourceFileToImport: null, // The resource file to import
       resourceKdbxFileImportError: {}, // The KDB(X) file import error
+      resourceFileImportResult: null, // The resource file import result
       lockDisplayDetail: true, // lock the detail to display the folder or password sidebar
       onLockDetail: this.handleLockDetail.bind(this), // Lock or unlock detail (hide or display the folder or password sidebar)
       onTextFilterChanged: this.handleTextFilterChange.bind(this), // Whenever the search text filter changed
@@ -108,7 +111,8 @@ class ResourceWorkspaceContextProvider extends React.Component {
         single: this.handleResourceSelected.bind(this)// Whenever a single resource has been selected
       },
       onResourceFileToImport: this.handleResourceFileToImport.bind(this), // Whenever a resource file will be imported
-      onKDBXFileImportError: this.handleKDBXFileImportError.bind(this) // Whenever a KDBX file import has error
+      onKDBXFileImportError: this.handleKDBXFileImportError.bind(this), // Whenever a KDBX file import has error
+      onResourceFileImportResult: this.handleResourceFileImportResult.bind(this)// Whenever the import result has been provided
     };
   }
 
@@ -381,6 +385,14 @@ class ResourceWorkspaceContextProvider extends React.Component {
    */
   async handleKDBXFileImportError(error) {
     await this.updateImportError(error);
+  }
+
+  /**
+   * Handle the resource file import result
+   * @param The import result
+   */
+  async handleResourceFileImportResult(result) {
+    await this.updateImportResult(result);
   }
 
 
@@ -782,6 +794,14 @@ class ResourceWorkspaceContextProvider extends React.Component {
    */
   async updateImportError(error) {
     await this.setState({resourceKdbxFileImportError: error});
+  }
+
+  /**
+   * Update the resource file import result
+   * @param The import result
+   */
+  async updateImportResult(result) {
+    await this.setState({resourceFileImportResult: result});
   }
 
 

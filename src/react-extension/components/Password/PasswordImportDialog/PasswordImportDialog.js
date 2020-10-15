@@ -14,7 +14,6 @@
 
 import React, {Component} from "react";
 import PropTypes from "prop-types";
-import AppContext from "../../../contexts/AppContext";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import {withDialog} from "../../../../react/contexts/Common/DialogContext";
 import DialogWrapper from "../../../../react/components/Common/Dialog/DialogWrapper/DialogWrapper";
@@ -23,6 +22,8 @@ import FormCancelButton from "../../../../react/components/Common/Inputs/FormSub
 import Icon from "../../Common/Icons/Icon";
 import PasswordUnlockKeypassDialog from "./PasswordUnlockKeypassDialog";
 import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
+import PasswordImportResultDialog from "./PasswordImportResultDialog";
+import AppContext from "../../../contexts/AppContext";
 
 class PasswordImportDialog extends Component {
   /**
@@ -185,9 +186,10 @@ class PasswordImportDialog extends Component {
    */
   async handleSubmit(event) {
     event.preventDefault();
-    await this.resetValidation()
-      .then(this.import.bind(this))
-      .catch(this.invalidate.bind(this));
+    event.stopPropagation();
+
+    await this.resetValidation();
+    await this.import().catch(this.invalidate.bind(this));
   }
 
   /**
@@ -219,14 +221,31 @@ class PasswordImportDialog extends Component {
       options: this.state.options
     };
     await this.props.resourceWorkspaceContext.onResourceFileToImport(resourceFileToImport);
-    if (isKeypassFile) {
-      this.props.dialogContext.open(PasswordUnlockKeypassDialog);
-    } else {
-      await this.context.port.emit("passbolt.import-passwords.import-file", resourceFileToImport);
-      await this.props.resourceWorkspaceContext.onResourceFileToImport(null);
-      this.close();
+    if (isKeypassFile) { // Case of KDBX file
+      this.importKDBX();
+    } else { // Case of CSV file
+      await this.importCSV();
     }
   }
+
+  /**
+   *  Import a KDBX file
+   */
+  importKDBX() {
+    this.props.dialogContext.open(PasswordUnlockKeypassDialog);
+  }
+
+  /**
+   * Import a CSV file
+   */
+  async importCSV() {
+    const resourceFileToImport = this.props.resourceWorkspaceContext.resourceFileToImport;
+    const result = await this.context.port.request("passbolt.import-passwords.import-file", resourceFileToImport);
+    await this.props.resourceWorkspaceContext.onResourceFileImportResult(result);
+    this.props.dialogContext.open(PasswordImportResultDialog);
+    this.close();
+  }
+
 
   /**
    * Invalidate the selected file as possible file to import

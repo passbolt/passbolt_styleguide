@@ -3883,10 +3883,6 @@ input[type=email].fluid {
   border: 0;
 }
 .form-content .accordion h3.accordion-header a:before {
-  margin-left: -1.25em;
-  margin-top: 0.25em;
-  content: "\f0d7";
-  /* caret down */
   font: normal normal normal 1em FontAwesome;
   text-rendering: auto;
   -webkit-font-smoothing: antialiased;
@@ -8129,21 +8125,7 @@ table.table-info.horizontal tbody tr:hover {
 }
 .dialog .accordion .accordion-header a {
   display: inline;
-  margin-left: 1em;
-}
-.dialog .accordion .accordion-header a:before {
-  margin-left: -1.25em;
-  margin-top: 0.25em;
-  content: "\f0d7";
-  /* caret down */
-  font: normal normal normal 1em FontAwesome;
-  text-rendering: auto;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  width: 1em;
-  height: 1em;
-  position: absolute;
-  text-align: center;
+  border-bottom: 0;
 }
 .dialog .accordion.closed .accordion-header a:before {
   content: "\f0da";
