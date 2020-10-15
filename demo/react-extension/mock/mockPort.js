@@ -45,6 +45,7 @@ import mockRequestGroupsUpdateLocalStorage from "./request/mockRequestGroupsUpda
 import mockRequestResources from "./request/mockRequestResources";
 import mockRequestUsersFindLoggedInUser from "./request/mockRequestUsersFindLoggedInUser";
 import mockRequestGpgKeysFindByUserId from "./request/mockRequestGpgKeysFindByUserId";
+import mockRequestUserDeleteDryRun from "./request/mockRequestUserDeleteDryRun";
 
 export default (storage) => {
   const mockPort = new MockPort(storage);
@@ -80,6 +81,7 @@ export default (storage) => {
   mockPort.addRequestListener("passbolt.groups.update-local-storage", mockRequestGroupsUpdateLocalStorage);
   mockPort.addRequestListener("passbolt.resources.find-all", mockRequestResources);
   mockPort.addRequestListener("passbolt.keyring.get-public-key-info-by-user", mockRequestGpgKeysFindByUserId);
+  mockPort.addRequestListener("passbolt.users.delete-dry-run", mockRequestUserDeleteDryRun);
 
   return mockPort;
 };
