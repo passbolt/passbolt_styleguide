@@ -18,6 +18,7 @@ import {withDialog} from "../../../contexts/Common/DialogContext";
 import ContextualMenuWrapper from "../../Common/ContextualMenu/ContextualMenuWrapper";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import EditUserDialog from "../EditUser/EditUserDialog";
+import ConfirmDisableUserMFA from "../DisableUserMFA/ConfirmDisableUserMFA";
 class DisplayUsersContextualMenu extends React.Component {
   /**
    * Constructor
@@ -130,24 +131,9 @@ class DisplayUsersContextualMenu extends React.Component {
   /**
    * Disable the selected user's MFA
    */
-  async disableMFA() {
-    await this.context.port.request('passbolt.users.disable-mfa', this.user.id)
-      .then(this.onDisableMFASuccess.bind(this))
-      .catch(this.onDisableMFAFailure.bind(this));
-  }
-
-  /**
-   * Whenever the user MFA has been disabled successfully
-   */
-  onDisableMFASuccess() {
-    this.props.actionFeedbackContext.displaySuccess('The MFA has been disabled successfully');
-  }
-
-  /**
-   * Whenever the user MFA has been disabled with failure
-   */
-  onDisableMFAFailure(error) {
-    this.props.actionFeedbackContext.displayError(error);
+  disableMFA() {
+    this.props.dialogContext.open(ConfirmDisableUserMFA);
+    this.props.hide();
   }
 
   /**

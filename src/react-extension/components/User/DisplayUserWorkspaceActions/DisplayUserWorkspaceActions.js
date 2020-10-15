@@ -23,6 +23,7 @@ import DeleteUserDialog from "../DeleteUser/DeleteUserDialog";
 import DeleteUserWithConflictsDialog from "../DeleteUser/DeleteUserWithConflictsDialog";
 import ErrorDialog from "../../Dialog/ErrorDialog/ErrorDialog";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
+import ConfirmDisableUserMFA from "../DisableUserMFA/ConfirmDisableUserMFA";
 
 /**
  * This component is a container of multiple actions applicable on user
@@ -238,27 +239,11 @@ class DisplayUserWorkspaceActions extends React.Component {
   /**
    * Disable the selected user's MFA
    */
-  async disableMFA() {
-    await this.context.port.request('passbolt.users.disable-mfa', this.selectedUser.id)
-      .then(this.onDisableMFASuccess.bind(this))
-      .catch(this.onDisableMFAFailure.bind(this));
+  disableMFA() {
+    this.closeMoreMenu();
+    this.props.dialogContext.open(ConfirmDisableUserMFA);
   }
 
-  /**
-   * Whenever the user MFA has been disabled successfully
-   */
-  onDisableMFASuccess() {
-    this.props.actionFeedbackContext.displaySuccess('The MFA has been disabled successfully');
-    this.toggleMoreMenu();
-  }
-
-  /**
-   * Whenever the user MFA has been disabled with failure
-   */
-  onDisableMFAFailure(error) {
-    this.props.actionFeedbackContext.displayError(error);
-    this.toggleMoreMenu();
-  }
 
   /**
    * Toggles the more menu
