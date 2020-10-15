@@ -28,6 +28,7 @@ import FilterUsersByShortcut from "../FilterUsersByShortcut/FilterUserByShortcut
 import FilterUsersByText from "../FilterUsersByText/FilterUsersByText";
 import DisplayUserGroupDetails from "../DisplayUserGroupDetails/DisplayUserGroupDetails";
 import DisplayUserWorkspaceMainActions from "../DisplayUserWorkspaceMainActions/DisplayUserWorkspaceMainActions";
+import DisplayUserWorkspaceBreadcrumb from "../DisplayUserWorkspaceBreadcrumb/DisplayUserWorkspaceBreadcrumb";
 
 /**
  * This component is a container for all the user workspace features
@@ -74,6 +75,7 @@ class DisplayUserWorkspace extends React.Component {
                   <DisplayGroups/>
                 </div>
                 <div className="panel middle">
+                  <DisplayUserWorkspaceBreadcrumb/>
                   <DisplayUsers/>
                   {this.mustDisplayUserDetails && <DisplayUserDetails/>}
                   {this.mustDisplayGroupDetails && <DisplayUserGroupDetails/>}
