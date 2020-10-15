@@ -82,7 +82,7 @@ class DisplayUserWorkspaceActions extends React.Component {
       await this.context.port.request("passbolt.users.delete-dry-run", this.selectedUser.id);
       this.displayDeleteUserDialog();
     } catch (error) {
-      if (error.name === 'DryRunDeleteError') {
+      if (error.name === "DeleteDryRunError") {
         this.displayDeleteUserWithConflictsDialog(error.errors);
       } else {
         this.handleError(error);
@@ -107,9 +107,7 @@ class DisplayUserWorkspaceActions extends React.Component {
   displayDeleteUserWithConflictsDialog(errors) {
     const deleteUserWithConflictsDialogProps = {
       user: this.selectedUser,
-      folders: errors.folders && errors.folders.sole_owner,
-      resources: errors.resources && errors.resources.sole_owner,
-      groups: errors.groups && errors.groups.sole_manager,
+      errors: errors,
     };
     this.context.setContext({deleteUserWithConflictsDialogProps});
     this.props.dialogContext.open(DeleteUserWithConflictsDialog);

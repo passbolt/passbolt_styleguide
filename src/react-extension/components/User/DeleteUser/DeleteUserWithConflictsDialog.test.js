@@ -39,9 +39,11 @@ describe("See Delete User Dialog", () => {
   const props = defaultProps(); // The props to pass
   const deleteUserWithConflictsDialogProps = {
     user: mockUser,
-    folders: mockFolders,
-    resources: mockResources,
-    groups: mockGroups,
+    errors: {
+      folders: mockFolders,
+      resources: mockResources,
+      groups: mockGroups
+    }
   };
 
   const mockContextRequest = (context, implementation) => jest.spyOn(context.port, 'request').mockImplementation(implementation);
@@ -97,8 +99,11 @@ describe("See Delete User Dialog", () => {
           {group_id: "469edf9d-ca1e-5003-91d6-3a46755d5a50", id: "a932a3ce-82bc-59b6-ac4e-bf325435e534"}
         ],
       };
-      expect(context.port.request).toHaveBeenCalledWith("passbolt.users.delete", mockUser.id, permissionTransfer);
-      expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalled();
+
+      waitFor(() => {
+        expect(context.port.request).toHaveBeenCalledWith("passbolt.users.delete", mockUser.id, permissionTransfer);
+        expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalled();
+      });
     });
 
     it('As AD I should see a processing feedback while submitting the form', async() => {

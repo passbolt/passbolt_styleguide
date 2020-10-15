@@ -125,10 +125,8 @@ class ReactExtension extends Component {
       },
 
       deleteUserWithConflictsDialogProps: {
-        user: null,
-        folders: null,
-        resources: null,
-        groups: null
+        user: null, // The user to delete
+        errors: {}, // The dry run errors
       },
 
       // tag dialog
