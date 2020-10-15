@@ -16,6 +16,9 @@ export default () => {
   return {
     "id": "f848277c-5398-58f8-a82a-72397af2d450",
     "role_id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
+    "role" : {
+      "name": "admin"
+    },
     "username": "ada@passbolt.com",
     "active": true,
     "deleted": false,
