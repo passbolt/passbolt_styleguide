@@ -337,7 +337,8 @@ class PasswordWorkspaceMenu extends React.Component {
                     <div className="row">
                       <div className="main-cell-wrapper">
                         <div className="main-cell">
-                          <a className={`${this.canCopyUsername() ? "" : "disabled"}`}
+                          <a
+                            className={`${this.canCopyUsername() ? "" : "disabled"}`}
                             onClick={this.handleCopyUsernameClickEvent}>
                             <span>copy username to clipboard</span>
                           </a>

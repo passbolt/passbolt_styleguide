@@ -50,7 +50,7 @@ class DisplayUsersContextualMenu extends React.Component {
    * Returns true if the current user has the plugin capability to disable MFA
    */
   get haveDisableMfaCapability() {
-    return false; //this.context.siteSettings.settings.passbolt.plugins.multiFactorAuthentication;
+    return this.context.siteSettings.settings.passbolt.plugins.multiFactorAuthentication;
   }
 
   /**

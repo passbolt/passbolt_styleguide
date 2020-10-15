@@ -22,6 +22,7 @@ import {withDialog} from "../../../contexts/Common/DialogContext";
 import DeleteUserDialog from "../DeleteUser/DeleteUserDialog";
 import DeleteUserWithConflictsDialog from "../DeleteUser/DeleteUserWithConflictsDialog";
 import ErrorDialog from "../../Dialog/ErrorDialog/ErrorDialog";
+import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 
 /**
  * This component is a container of multiple actions applicable on user
@@ -35,15 +36,49 @@ class DisplayUserWorkspaceActions extends React.Component {
     super(props);
     this.state = this.defaultState;
     this.bindCallbacks();
+    this.createRefs();
+  }
+
+  /**
+   * Returns the component default state
+   */
+  get defaultState() {
+    return {
+      moreMenuOpen: false // Display flag for the more button menu
+    };
   }
 
   /**
    * Bind callbacks methods
    */
   bindCallbacks() {
+    this.handleDocumentClickEvent = this.handleDocumentClickEvent.bind(this);
     this.handleDetailsLockedEvent = this.handleDetailsLockedEvent.bind(this);
     this.handleEditClickEvent = this.handleEditClickEvent.bind(this);
     this.handleDeleteClickEvent = this.handleDeleteClickEvent.bind(this);
+    this.handleMoreClickEvent = this.handleMoreClickEvent.bind(this);
+    this.handleDisableMfaEvent = this.handleDisableMfaEvent.bind(this);
+  }
+
+  /**
+   * Create DOM nodes or React elements references in order to be able to access them programmatically.
+   */
+  createRefs() {
+    this.moreMenuRef = React.createRef();
+  }
+
+  /**
+   * Whenever the component is mounted
+   */
+  componentDidMount() {
+    document.addEventListener('click', this.handleDocumentClickEvent);
+  }
+
+  /**
+   * Whenever the component will unmount
+   */
+  componentWillUnmount() {
+    document.removeEventListener('click', this.handleDocumentClickEvent);
   }
 
 
@@ -127,11 +162,53 @@ class DisplayUserWorkspaceActions extends React.Component {
   }
 
   /**
+   * Handle the open or close the more menu
+   */
+  handleMoreClickEvent() {
+    this.toggleMoreMenu();
+  }
+
+  /**
+   * Handle the will of disable MFA for a user
+   */
+  handleDisableMfaEvent() {
+    this.disableMFA();
+  }
+
+  /**
+   * Handle click events on document. Hide the component if the click occurred outside of the component.
+   * @param {ReactEvent} event The event
+   */
+  handleDocumentClickEvent(event) {
+    // Prevent closing when the user click on an element of the menu
+    if (this.moreMenuRef.current.contains(event.target)) {
+      return;
+    }
+    this.closeMoreMenu();
+  }
+
+  /**
    * Get selected user
    * @returns {user|null}
    */
   get selectedUser() {
     return this.props.userWorkspaceContext.selectedUsers[0];
+  }
+
+  /**
+   * Returns true if the more actions are available
+   */
+  get hasMoreActionAllowed() {
+    return this.hasOneUserSelected();
+  }
+
+  /**
+   * Returns true if the current user has the plugin capability to disable MFA
+   */
+  get haveDisableMfaCapability() {
+    const hasSettingsCapability = this.context.siteSettings.settings.passbolt.plugins.multiFactorAuthentication;
+    const hasContextualCapability = this.selectedUser && this.selectedUser.is_mfa_enabled;
+    return hasContextualCapability && hasSettingsCapability;
   }
 
   /**
@@ -159,6 +236,48 @@ class DisplayUserWorkspaceActions extends React.Component {
   }
 
   /**
+   * Disable the selected user's MFA
+   */
+  async disableMFA() {
+    await this.context.port.request('passbolt.users.disable-mfa', this.selectedUser.id)
+      .then(this.onDisableMFASuccess.bind(this))
+      .catch(this.onDisableMFAFailure.bind(this));
+  }
+
+  /**
+   * Whenever the user MFA has been disabled successfully
+   */
+  onDisableMFASuccess() {
+    this.props.actionFeedbackContext.displaySuccess('The MFA has been disabled successfully');
+    this.toggleMoreMenu();
+  }
+
+  /**
+   * Whenever the user MFA has been disabled with failure
+   */
+  onDisableMFAFailure(error) {
+    this.props.actionFeedbackContext.displayError(error);
+    this.toggleMoreMenu();
+  }
+
+  /**
+   * Toggles the more menu
+   */
+  toggleMoreMenu() {
+    const moreMenuOpen = !this.state.moreMenuOpen;
+    this.setState({moreMenuOpen});
+  }
+
+  /**
+   * Close the more menu
+   */
+  closeMoreMenu() {
+    this.setState({moreMenuOpen: false});
+  }
+
+
+
+  /**
    * Render the component
    * @returns {JSX}
    */
@@ -180,6 +299,30 @@ class DisplayUserWorkspaceActions extends React.Component {
                 <span>delete</span>
               </a>
             </li>
+            <div className="dropdown" ref={this.moreMenuRef}>
+              <a
+                className={`button ready ${this.hasMoreActionAllowed ? "" : "disabled"}`}
+                onClick={this.handleMoreClickEvent}>
+                <span>more</span>
+                <Icon name="caret-down"/>
+              </a>
+              <ul className={`dropdown-content menu ready ${this.state.moreMenuOpen ? "visible" : ""}`}>
+                <li id="disable-mfa-action" className="">
+                  <div className="row">
+                    <div className="main-cell-wrapper">
+                      <div className="main-cell">
+                        <a
+                          id="disable-mfa"
+                          onClick={this.handleDisableMfaEvent}
+                          className={this.haveDisableMfaCapability ? '' : 'disabled'}>
+                          <span>Disable MFA</span>
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+              </ul>
+            </div>
           </ul>
           }
         </div>
@@ -205,6 +348,7 @@ DisplayUserWorkspaceActions.contextType = AppContext;
 DisplayUserWorkspaceActions.propTypes = {
   userWorkspaceContext: PropTypes.any, // the user workspace context
   dialogContext: PropTypes.any, // the dialog context
+  actionFeedbackContext: PropTypes.object // the action feeedback context
 };
 
-export default withDialog(withUserWorkspace(DisplayUserWorkspaceActions));
+export default withActionFeedback(withDialog(withUserWorkspace(DisplayUserWorkspaceActions)));
