@@ -59,6 +59,7 @@ class DisplayUserWorkspaceActions extends React.Component {
     this.handleDeleteClickEvent = this.handleDeleteClickEvent.bind(this);
     this.handleMoreClickEvent = this.handleMoreClickEvent.bind(this);
     this.handleDisableMfaEvent = this.handleDisableMfaEvent.bind(this);
+    this.handleCopyPermalinkEvent = this.handleCopyPermalinkEvent.bind(this);
   }
 
   /**
@@ -89,6 +90,13 @@ class DisplayUserWorkspaceActions extends React.Component {
   handleDetailsLockedEvent() {
     // lock or unlock the detail resource or folder
     this.props.userWorkspaceContext.onDetailsLocked();
+  }
+
+  /**
+   * Handle the will of copying the user permalink
+   */
+  handleCopyPermalinkEvent() {
+    this.copyPermalink();
   }
 
   /**
@@ -260,6 +268,16 @@ class DisplayUserWorkspaceActions extends React.Component {
     this.setState({moreMenuOpen: false});
   }
 
+  /**
+   * Copy the user permalink
+   */
+  async copyPermalink() {
+    this.closeMoreMenu();
+    const baseUrl = this.context.userSettings.getTrustedDomain();
+    const permalink = `${baseUrl}/app/users/view/${this.selectedUser.id}`;
+    await this.context.port.request("passbolt.clipboard.copy", permalink);
+    this.props.actionFeedbackContext.displaySuccess("The permalink has been copied to clipboard");
+  }
 
 
   /**
@@ -292,6 +310,17 @@ class DisplayUserWorkspaceActions extends React.Component {
                 <Icon name="caret-down"/>
               </a>
               <ul className={`dropdown-content menu ready ${this.state.moreMenuOpen ? "visible" : ""}`}>
+                <li id="copy-user-permalink" className="separator-after">
+                  <div className="row">
+                    <div className="main-cell-wrapper">
+                      <div className="main-cell">
+                        <a onClick={this.handleCopyPermalinkEvent}>
+                          <span>Copy permalink to clipboard</span>
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </li>
                 <li id="disable-mfa-action" className="">
                   <div className="row">
                     <div className="main-cell-wrapper">
