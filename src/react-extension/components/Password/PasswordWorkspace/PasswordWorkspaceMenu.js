@@ -22,6 +22,7 @@ import {withDialog} from "../../../../react/contexts/Common/DialogContext";
 import PasswordDeleteDialog from "../PasswordDeleteDialog/PasswordDeleteDialog";
 import PasswordEditDialog from "../PasswordEditDialog/PasswordEditDialog";
 import ShareDialog from "../../Share/ShareDialog";
+import ExportResources from "../ExportResources/ExportResources";
 
 /**
  * This component allows the current user to add a new comment on a resource
@@ -70,6 +71,7 @@ class PasswordWorkspaceMenu extends React.Component {
     this.handleShareClickEvent = this.handleShareClickEvent.bind(this);
     this.handleCopySecretClickEvent = this.handleCopySecretClickEvent.bind(this);
     this.handleViewDetailClickEvent = this.handleViewDetailClickEvent.bind(this);
+    this.handleExportClickEvent = this.handleExportClickEvent.bind(this);
   }
 
   componentDidMount() {
@@ -193,6 +195,13 @@ class PasswordWorkspaceMenu extends React.Component {
   }
 
   /**
+   * Whenever the user intends to export the selected resources
+   */
+  handleExportClickEvent() {
+    this.export();
+  }
+
+  /**
    * display a success notification message
    * @param message
    */
@@ -256,6 +265,13 @@ class PasswordWorkspaceMenu extends React.Component {
   }
 
   /**
+   * Returns true if the user can export
+   */
+  canExport() {
+    return this.hasResourceSelected() && this.context.siteSettings.settings.passbolt.plugins.export;
+  }
+
+  /**
    * Can copy username
    * @returns {boolean}
    */
@@ -296,6 +312,15 @@ class PasswordWorkspaceMenu extends React.Component {
   }
 
   /**
+   * Exports the selected resources
+   */
+  async export() {
+    const resourcesIds = this.selectedResources.map(resource => resource.id);
+    await this.props.resourceWorkspaceContext.onResourcesToExport({resourcesIds});
+    await this.props.dialogContext.open(ExportResources);
+  }
+
+  /**
    * Render the component
    * @returns {JSX}
    */
@@ -323,6 +348,14 @@ class PasswordWorkspaceMenu extends React.Component {
                 onClick={this.handleShareClickEvent}>
                 <Icon name="share"/>
                 <span>share</span>
+              </a>
+            </li>
+            <li id="export_action">
+              <a
+                className={`button ready ${this.hasResourceSelected() && this.canExport() ? "" : "disabled"}`}
+                onClick={this.handleExportClickEvent}>
+                <Icon name="upload"/>
+                <span>export</span>
               </a>
             </li>
             <li>

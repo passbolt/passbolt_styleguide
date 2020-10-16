@@ -97,9 +97,8 @@ class DeleteUserWithConflictsDialog extends Component {
    * @returns {object}
    */
   getGroupsGroupsUsersOptionsMap() {
-    return this.groupsErrors.reduce((groupsGroupsUsersOptions, groupError) => {
-      return Object.assign(groupsGroupsUsersOptions, {[groupError.id]: this.getGroupGroupsUsersOptions(groupError)});
-    }, {});
+    const reducer = (groupsGroupsUsersOptions, groupError) => Object.assign(groupsGroupsUsersOptions, {[groupError.id]: this.getGroupGroupsUsersOptions(groupError)});
+    return this.groupsErrors.reduce(reducer, {});
   }
 
   /**
