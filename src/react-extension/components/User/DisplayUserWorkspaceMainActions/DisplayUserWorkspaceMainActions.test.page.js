@@ -89,6 +89,13 @@ class DisplayUserWorkspaceMainActionsPageObject {
     return this._container.querySelector('#user_action');
   }
 
+  /**
+   * Returns the new group menu elements
+   */
+  get newGroupMenu() {
+    return this._container.querySelector('#group_action');
+  }
+
 
   /**
    * Returns true if the page object exists in the container
