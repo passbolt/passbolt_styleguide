@@ -21,6 +21,7 @@ import DialogWrapper from "../../../../react/components/Common/Dialog/DialogWrap
 import FormSubmitButton from "../../../../react/components/Common/Inputs/FormSubmitButton/FormSubmitButton";
 import FormCancelButton from "../../../../react/components/Common/Inputs/FormSubmitButton/FormCancelButton";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
+import ErrorDialog from "../../Dialog/ErrorDialog/ErrorDialog";
 
 /**
  * This component allows to export resources to a specified format
@@ -157,8 +158,13 @@ class ExportResources extends React.Component {
   /**
    * Whenever the export has been performed with failure
    */
-  onExportFailure() {
-
+  onExportFailure(error) {
+    const errorDialogProps = {
+      title: "There was an unexpected error...",
+      message: error.message
+    };
+    this.context.setContext({errorDialogProps});
+    this.props.dialogContext.open(ErrorDialog);
   }
 
   /**
@@ -233,7 +239,8 @@ ExportResources.contextType = AppContext;
 
 ExportResources.propTypes = {
   onClose: PropTypes.func, // Whenever the dialog is closes
-  resourceWorkspaceContext: PropTypes.object // The resource workspace context
+  resourceWorkspaceContext: PropTypes.object, // The resource workspace context
+  dialogContext: PropTypes.object // The dialog context
 };
 
-export default withActionFeedback(withDialog(withResourceWorkspace(ExportResources)));
+export default withDialog(withResourceWorkspace(ExportResources));
