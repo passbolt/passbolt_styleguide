@@ -62,7 +62,8 @@ class CreateUserDialog extends Component {
       last_nameError: null,
       username: "",
       usernameError: null,
-      is_admin: false
+      is_admin: false,
+      hasAlreadyBeenValidated: false // True if the form has alreadt been submitted once
     };
   }
 
@@ -155,16 +156,18 @@ class CreateUserDialog extends Component {
     // Avoid the form to be submitted.
     event.preventDefault();
 
+    await this.setState({hasAlreadyBeenValidated: true});
+
     // Do not re-submit an already processing form
     if (!this.state.processing) {
       await this.toggleProcessing();
       await this.validate();
+
       if (this.hasValidationError()) {
         await this.toggleProcessing();
         this.focusFirstFieldError();
         return;
       }
-
       try {
         await this.createUser();
         await this.handleSaveSuccess();
@@ -354,7 +357,7 @@ class CreateUserDialog extends Component {
         onClose={this.handleClose} disabled={this.hasAllInputDisabled()}>
         <form className="user-create-form" onSubmit={this.handleFormSubmit} noValidate>
           <div className="form-content">
-            <div className={`input text required ${this.state.first_nameError ? "error" : ""}`}>
+            <div className={`input text required ${this.state.first_nameError && this.state.hasAlreadyBeenValidated ? "error" : ""}`}>
               <label htmlFor="user-first-name-input">First Name</label>
               <input id="user-first-name-input" name="first_name"
                 ref={this.firstNameRef}
@@ -363,11 +366,11 @@ class CreateUserDialog extends Component {
                 onBlur={this.handleFirstNameInputOnBlur} onChange={this.handleInputChange}
                 autoComplete='off' autoFocus={true}
               />
-              {this.state.first_nameError &&
+              {this.state.first_nameError && this.state.hasAlreadyBeenValidated &&
               <div className="first_name error message">{this.state.first_nameError}</div>
               }
             </div>
-            <div className={`input text required ${this.state.last_nameError ? "error" : ""}`}>
+            <div className={`input text required ${this.state.last_nameError && this.state.hasAlreadyBeenValidated ? "error" : ""}`}>
               <label htmlFor="user-last-name-input">Last Name</label>
               <input id="user-last-name-input" name="last_name"
                 ref={this.lastNameRef}
@@ -376,11 +379,11 @@ class CreateUserDialog extends Component {
                 onBlur={this.handleLastNameInputOnBlur} onChange={this.handleInputChange}
                 autoComplete='off' autoFocus={true}
               />
-              {this.state.last_nameError &&
+              {this.state.last_nameError && this.state.hasAlreadyBeenValidated &&
               <div className="last_name error message">{this.state.last_nameError}</div>
               }
             </div>
-            <div className={`input text required ${this.state.usernameError ? "error" : ""}`}>
+            <div className={`input text required ${this.state.usernameError && this.state.hasAlreadyBeenValidated ? "error" : ""}`}>
               <label htmlFor="user-username-input">Username / Email</label>
               <input id="user-username-input" name="username"
                 ref={this.usernameRef} type="text" value={this.state.username} placeholder="email"
@@ -388,7 +391,7 @@ class CreateUserDialog extends Component {
                 onBlur={this.handleUsernameInputOnBlur} onChange={this.handleInputChange}
                 autoComplete='off' autoFocus={true}
               />
-              {this.state.usernameError &&
+              {this.state.usernameError && this.state.hasAlreadyBeenValidated &&
               <div className="username error message">{this.state.usernameError}</div>
               }
             </div>
