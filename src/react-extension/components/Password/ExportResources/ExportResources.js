@@ -20,7 +20,6 @@ import AppContext from "../../../contexts/AppContext";
 import DialogWrapper from "../../../../react/components/Common/Dialog/DialogWrapper/DialogWrapper";
 import FormSubmitButton from "../../../../react/components/Common/Inputs/FormSubmitButton/FormSubmitButton";
 import FormCancelButton from "../../../../react/components/Common/Inputs/FormSubmitButton/FormCancelButton";
-import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import ErrorDialog from "../../Dialog/ErrorDialog/ErrorDialog";
 
 /**
@@ -82,8 +81,17 @@ class ExportResources extends React.Component {
   /**
    * Returns the resources identifiers to export
    */
-  get resourcesToExport() {
-    return this.props.resourceWorkspaceContext.resourcesToExport.resourcesIds;
+  get resourcesIdsToExport() {
+    return this.props.resourceWorkspaceContext.resourcesToExport.resourcesIds || [];
+  }
+
+  /**
+   * Returns the folders identifiers to export
+   */
+  get foldersIdsToExport() {
+    const foldersIds = this.props.resourceWorkspaceContext.resourcesToExport.foldersIds;
+    const startFolderId = foldersIds && foldersIds[0];
+    return [startFolderId, ...this.findSubfoldersIds(startFolderId)];
   }
 
   /**
@@ -175,9 +183,38 @@ class ExportResources extends React.Component {
   }
 
   /**
+   * Returns the subfolder ids of the given folder
+   * @param folderId A folder identifier
+   */
+  findSubfoldersIds(folderId) {
+    const folders = this.context.folders;
+    const childrenFolders = folders
+      .filter(folder => folder.folder_parent_id === folderId)
+      .map(folder => folder.id);
+    const hasChildren = childrenFolders.length !== 0;
+    if (!hasChildren) {
+      return [];
+    } else {
+      const grandChildrenFolders = childrenFolders.map(childFolder => this.findSubfoldersIds(childFolder.id));
+      return [...childrenFolders, ...grandChildrenFolders.flat()];
+    }
+  }
+
+  /**
+   * Returns the resources ids of the folders to export
+   * @param foldersIds The folders to look into
+   */
+  findResourcesIdsOfFoldersToExport(foldersIds) {
+    const belongsToFolder = resource => foldersIds.some(folderId =>  folderId === resource.folder_parent_id);
+    return this.context.resources.filter(belongsToFolder);
+  }
+
+  /**
    * Render the component
    */
   render() {
+    const foldersIdsToExport = this.hasFoldersToExport && this.foldersIdsToExport;
+    const resourcesIdsToExport = this.hasFoldersToExport ? this.findResourcesIdsOfFoldersToExport(foldersIdsToExport) : this.resourcesIdsToExport;
     return (
       <DialogWrapper
         title="Export passwords"
@@ -209,11 +246,11 @@ class ExportResources extends React.Component {
 
             <br/>
             <p>
-              {this.hasFoldersToExport && <em>{this.resourcesToExport.length} passwords and 1 folders are going to be exported.</em>}
+              {this.hasFoldersToExport && <em>{resourcesIdsToExport.length} passwords and {foldersIdsToExport.length} folders are going to be exported.</em>}
               {!this.hasFoldersToExport &&
                 <>
                   {this.resourcesToExport.length === 1 && <em>One password is going to be exported</em>}
-                  {this.resourcesToExport.length > 1 && <em>{this.resourcesToExport.length} passwords are going to be exported.</em>}
+                  {this.resourcesToExport.length > 1 && <em>{resourcesIdsToExport.length} passwords are going to be exported.</em>}
                 </>
               }
             </p>

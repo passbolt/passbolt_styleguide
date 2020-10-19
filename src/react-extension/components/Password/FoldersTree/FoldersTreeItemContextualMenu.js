@@ -20,6 +20,8 @@ import AppContext from "../../../contexts/AppContext";
 import FolderRenameDialog from "../../Folder/FolderRenameDialog/FolderRenameDialog";
 import FolderDeleteDialog from "../../Folder/FolderDeleteDialog/FolderDeleteDialog";
 import ShareDialog from "../../Share/ShareDialog";
+import ExportResources from "../ExportResources/ExportResources";
+import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 
 class FoldersTreeItemContextualMenu extends React.Component {
   /**
@@ -88,10 +90,11 @@ class FoldersTreeItemContextualMenu extends React.Component {
   /**
    * Handle click on the export a folder menu option.
    */
-  handleExportFolderItemClickEvent() {
-    const foldersIds = [this.props.folder.id];
-    this.context.port.emit("passbolt.plugin.export_resources", {"folders": foldersIds});
-    this.props.hide();
+  async handleExportFolderItemClickEvent() {
+    if (this.canExport()) {
+      await this.export();
+      this.props.hide();
+    }
   }
 
   /**
@@ -121,6 +124,24 @@ class FoldersTreeItemContextualMenu extends React.Component {
     return this.props.folder.permission.type === 15;
   }
 
+
+  /**
+   * Returns true if the user can export
+   */
+  canExport() {
+    return this.context.siteSettings.settings.passbolt.plugins.export;
+  }
+
+  /**
+   * Exports the selected resources
+   */
+  async export() {
+    const foldersIds = [this.props.folder.id];
+    await this.props.resourceWorkspaceContext.onResourcesToExport({foldersIds});
+    await this.props.dialogContext.open(ExportResources);
+  }
+
+
   /**
    * Render the component.
    * @returns {JSX}
@@ -128,6 +149,7 @@ class FoldersTreeItemContextualMenu extends React.Component {
   render() {
     const canUpdate = this.canUpdate();
     const canShare = this.canShare();
+    const canExport = this.canExport();
 
     return (
       <ContextualMenuWrapper
@@ -161,11 +183,15 @@ class FoldersTreeItemContextualMenu extends React.Component {
             </div>
           </div>
         </li>
-        <li key="option-export-folder" className="ready closed">
+        <li key="option-export-folder" className={`ready closed ${canExport ? "" : "disabled"}`}>
           <div className="row">
             <div className="main-cell-wrapper">
               <div className="main-cell">
-                <a onClick={this.handleExportFolderItemClickEvent}><span>Export</span></a>
+                <a
+                  className={`${this.canExport() ? "" : "disabled"}`}
+                  onClick={this.handleExportFolderItemClickEvent}>
+                  <span>Export</span>
+                </a>
               </div>
             </div>
           </div>
@@ -192,7 +218,8 @@ FoldersTreeItemContextualMenu.propTypes = {
   hide: PropTypes.func, // Hide the contextual menu
   left: PropTypes.number, // left position in px of the page
   top: PropTypes.number, // top position in px of the page
-  dialogContext: PropTypes.any
+  dialogContext: PropTypes.any,
+  resourceWorkspaceContext: PropTypes.any // Resource workspace contextx
 };
 
-export default withDialog(FoldersTreeItemContextualMenu);
+export default withResourceWorkspace(withDialog(FoldersTreeItemContextualMenu));
