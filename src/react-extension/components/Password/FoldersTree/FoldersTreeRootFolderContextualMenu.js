@@ -17,6 +17,8 @@ import AppContext from "../../../contexts/AppContext";
 import ContextualMenuWrapper from "../../Common/ContextualMenu/ContextualMenuWrapper";
 import FolderCreateDialog from "../../Folder/FolderCreateDialog/FolderCreateDialog";
 import {withDialog} from "../../../../react/contexts/Common/DialogContext";
+import ExportResources from "../ExportResources/ExportResources";
+import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 
 class FoldersTreeRootFolderContextualMenu extends React.Component {
   /**
@@ -69,11 +71,25 @@ class FoldersTreeRootFolderContextualMenu extends React.Component {
   /**
    * Handle click on the export a folder menu option.
    */
-  handleExportFolderItemClickEvent() {
-    const foldersIds = this.context.folders.filter(folder => folder.folder_parent_id === null)
-      .reduce((carry, folder) => [...carry, folder.id], []);
-    this.context.port.emit("passbolt.plugin.export_resources", {"folders": foldersIds});
+  async handleExportFolderItemClickEvent() {
+    await this.export();
     this.props.hide();
+  }
+
+  /**
+   * Returns true if the user can export
+   */
+  canExport() {
+    return this.context.siteSettings.settings.passbolt.plugins.export;
+  }
+
+  /**
+   * Exports the selected resources
+   */
+  async export() {
+    const foldersIds = this.context.folders.filter(folder => folder.folder_parent_id === null).map(folder => folder.id);
+    await this.props.resourceWorkspaceContext.onResourcesToExport({foldersIds});
+    await this.props.dialogContext.open(ExportResources);
   }
 
   /**
@@ -95,7 +111,7 @@ class FoldersTreeRootFolderContextualMenu extends React.Component {
             </div>
           </div>
         </li>
-        <li key="option-export-folder" className="ready closed">
+        <li key="option-export-folder" className={`ready closed ${this.canExport() ? "" : "disabled"}`}>
           <div className="row">
             <div className="main-cell-wrapper">
               <div className="main-cell">
@@ -115,7 +131,8 @@ FoldersTreeRootFolderContextualMenu.propTypes = {
   hide: PropTypes.func, // Hide the contextual menu
   left: PropTypes.number, // left position in px of the page
   top: PropTypes.number, // top position in px of the page
-  dialogContext: PropTypes.any
+  dialogContext: PropTypes.any, // The dialog context
+  resourceWorkspaceContext: PropTypes.any // The resource workspace context
 };
 
-export default withDialog(FoldersTreeRootFolderContextualMenu);
+export default withResourceWorkspace(withDialog(FoldersTreeRootFolderContextualMenu));

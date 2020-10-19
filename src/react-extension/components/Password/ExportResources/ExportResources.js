@@ -90,8 +90,8 @@ class ExportResources extends React.Component {
    */
   get foldersIdsToExport() {
     const foldersIds = this.props.resourceWorkspaceContext.resourcesToExport.foldersIds;
-    const startFolderId = foldersIds && foldersIds[0];
-    return [startFolderId, ...this.findSubfoldersIds(startFolderId)];
+    const childrenFoldersIds = foldersIds.map(folderId => this.findSubfoldersIds(folderId)).flat();
+    return [...foldersIds, ...childrenFoldersIds];
   }
 
   /**
