@@ -21,6 +21,8 @@ import DialogWrapper from "../../../../react/components/Common/Dialog/DialogWrap
 import FormSubmitButton from "../../../../react/components/Common/Inputs/FormSubmitButton/FormSubmitButton";
 import FormCancelButton from "../../../../react/components/Common/Inputs/FormSubmitButton/FormCancelButton";
 import ErrorDialog from "../../Dialog/ErrorDialog/ErrorDialog";
+import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
+import ExportResourcesCredentials from "./ExportResourcesCredentials";
 
 /**
  * This component allows to export resources to a specified format
@@ -41,7 +43,7 @@ class ExportResources extends React.Component {
    */
   get defaultState() {
     return {
-      selectedExportFormat: this.exportFormats[0], // The selected export format
+      selectedExportFormat: this.exportFormats[0].value, // The selected export format
       actions: {
         processing: false // Actions flag about processing
       }
@@ -82,7 +84,7 @@ class ExportResources extends React.Component {
    * Returns the resources identifiers to export
    */
   get resourcesIdsToExport() {
-    return this.props.resourceWorkspaceContext.resourcesToExport.resourcesIds || [];
+    return this.props.resourceWorkspaceContext.resourcesToExport.resourcesIds;
   }
 
   /**
@@ -118,16 +120,17 @@ class ExportResources extends React.Component {
    * Whenever the export is submitted
    * @param event A dom event
    */
-  handleExport(event) {
+  async handleExport(event) {
     event.preventDefault();
-
     const isCsv = this.state.selectedExportFormat.startsWith('csv');
     if (isCsv) { // CSV case
+      await this.setState({actions: {processing: true}});
       this.export()
         .then(this.onExportSuccess.bind(this))
         .catch(this.onExportFailure.bind(this));
     } else { // KDBX case
-      // TODO
+      await this.props.dialogContext.open(ExportResourcesCredentials);
+      this.close();
     }
   }
 
@@ -152,26 +155,32 @@ class ExportResources extends React.Component {
    */
   async export() {
     const options = {format: this.state.selectedExportFormat};
-    const resourcesIds = this.resourcesToExport;
-    await this.context.port.request('passbolt.export-passwords.export-to-file', {resourcesIds, options});
+    const foldersIds = this.props.resourceWorkspaceContext.resourcesToExport.foldersIds;
+    const resourcesIds = this.props.resourceWorkspaceContext.resourcesToExport.resourcesIds;
+    await this.context.port.request('passbolt.export-passwords.export-to-file', {foldersIds, resourcesIds, options});
   }
 
   /**
    * Whenever the export has been performed succesfully
    */
   async onExportSuccess() {
+    await this.setState({actions: {processing: false}});
+    await this.props.actionFeedbackContext.displaySuccess('The passwords have been exported successfully');
+    await this.props.resourceWorkspaceContext.onResourcesToExport({resourcesIds: null, foldersIds: null});
     this.close();
   }
 
   /**
    * Whenever the export has been performed with failure
    */
-  onExportFailure(error) {
+  async onExportFailure(error) {
     const errorDialogProps = {
       title: "There was an unexpected error...",
       message: error.message
     };
-    this.context.setContext({errorDialogProps});
+    await this.setState({actions: {processing: false}});
+    await this.props.resourceWorkspaceContext.onResourcesToExport({resourcesIds: null, foldersIds: null});
+    await this.context.setContext({errorDialogProps});
     this.props.dialogContext.open(ErrorDialog);
   }
 
@@ -217,7 +226,7 @@ class ExportResources extends React.Component {
     const resourcesIdsToExport = this.hasFoldersToExport ? this.findResourcesIdsOfFoldersToExport(foldersIdsToExport) : this.resourcesIdsToExport;
     return (
       <DialogWrapper
-        title="Export passwords"
+        title="Export passwords !"
         onClose={this.handleClose}
         disabled={this.areActionsAllowed}>
         <form
@@ -249,8 +258,8 @@ class ExportResources extends React.Component {
               {this.hasFoldersToExport && <em>{resourcesIdsToExport.length} passwords and {foldersIdsToExport.length} folders are going to be exported.</em>}
               {!this.hasFoldersToExport &&
                 <>
-                  {this.resourcesToExport.length === 1 && <em>One password is going to be exported</em>}
-                  {this.resourcesToExport.length > 1 && <em>{resourcesIdsToExport.length} passwords are going to be exported.</em>}
+                  {resourcesIdsToExport.length === 1 && <em>One password is going to be exported</em>}
+                  {resourcesIdsToExport.length > 1 && <em>{resourcesIdsToExport.length} passwords are going to be exported.</em>}
                 </>
               }
             </p>
@@ -263,6 +272,7 @@ class ExportResources extends React.Component {
               value="Export"/>
             <FormCancelButton
               disabled={!this.areActionsAllowed}
+              processing={this.isProcessing}
               onClick={this.handleCancel}/>
           </div>
 
@@ -277,7 +287,8 @@ ExportResources.contextType = AppContext;
 ExportResources.propTypes = {
   onClose: PropTypes.func, // Whenever the dialog is closes
   resourceWorkspaceContext: PropTypes.object, // The resource workspace context
-  dialogContext: PropTypes.object // The dialog context
+  dialogContext: PropTypes.object, // The dialog context
+  actionFeedbackContext: PropTypes.object // The action feedback context
 };
 
-export default withDialog(withResourceWorkspace(ExportResources));
+export default withActionFeedback(withDialog(withResourceWorkspace(ExportResources)));
