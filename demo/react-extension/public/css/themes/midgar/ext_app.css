@@ -3883,10 +3883,6 @@ input[type=email].fluid {
   border: 0;
 }
 .form-content .accordion h3.accordion-header a:before {
-  margin-left: -1.25em;
-  margin-top: 0.25em;
-  content: "\f0d7";
-  /* caret down */
   font: normal normal normal 1em FontAwesome;
   text-rendering: auto;
   -webkit-font-smoothing: antialiased;
@@ -4828,21 +4824,7 @@ h6 .input.toggle-switch {
 }
 .dialog .accordion .accordion-header a {
   display: inline;
-  margin-left: 1em;
-}
-.dialog .accordion .accordion-header a:before {
-  margin-left: -1.25em;
-  margin-top: 0.25em;
-  content: "\f0d7";
-  /* caret down */
-  font: normal normal normal 1em FontAwesome;
-  text-rendering: auto;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  width: 1em;
-  height: 1em;
-  position: absolute;
-  text-align: center;
+  border-bottom: 0;
 }
 .dialog .accordion.closed .accordion-header a:before {
   content: "\f0da";
@@ -8418,6 +8400,39 @@ table.table-info.horizontal tbody tr:hover {
   width: 100%;
   padding-bottom: 0.5em;
   font-size: 0.813em;
+}
+/* import password dialogs */
+.import-password-dialog .input-password-wrapper .input.password {
+  width: 81%;
+}
+.import-password-dialog .input-password-wrapper .input.password input[type="text"],
+.import-password-dialog .input-password-wrapper .input.password input[type="password"] {
+  width: 100%;
+  text-overflow: ellipsis;
+}
+.import-password-dialog .input-password-wrapper .actions.inline {
+  float: none;
+  width: auto;
+}
+.import-password-dialog .input-password-wrapper .actions.inline .button {
+  padding: 0.6em 0 0.4285714em 0;
+  border-left: 0;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+.import-password-dialog .input-file-chooser-wrapper input[type="file"] {
+  display: none;
+}
+.import-password-dialog .input-file-chooser-wrapper input[type="text"] {
+  width: 60%;
+  text-overflow: ellipsis;
+}
+.import-password-dialog .input-file-chooser-wrapper .button.primary {
+  display: inline-block;
+  top: -3px;
+  padding: 0.6em 1.225em 0.55em 1.225em;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
 }
 .passphrase-entry {
   width: 95%;

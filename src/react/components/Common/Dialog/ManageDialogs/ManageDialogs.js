@@ -16,6 +16,7 @@ import React from "react";
 import {withDialog} from "../../../../contexts/Common/DialogContext";
 import PropTypes from "prop-types";
 
+
 /**
  * This component acts as an anchor for the different project dialogs.
  */
@@ -51,10 +52,10 @@ class ManageDialogs extends React.Component {
     return (
       <>
         {
-          this.props.dialogContext.dialogs.map((Dialog, index) =>
+          this.props.dialogContext.dialogs.map(({key, Dialog}) =>
             <Dialog
-              key={index}
-              onClose={ () => this.close(index)} />)
+              key={key}
+              onClose={ () => this.close(key)} />)
         }
         {this.props.children}
       </>

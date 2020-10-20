@@ -42,6 +42,8 @@ export const ResourceWorkspaceContext = React.createContext({
   scrollTo: {
     resource: null // The resource to scroll to
   },
+  resourceFileToImport: null, // The resource file to import
+  resourceFileImportResult: null, // The resource file import result
   lockDisplayDetail: true, // lock the detail to display the folder or password sidebar
   onLockDetail: () => {}, // Lock or unlock detail (hide or display the folder or password sidebar)
   onTextFilterChanged: () => {}, // Whenever the search text filter changed
@@ -54,6 +56,8 @@ export const ResourceWorkspaceContext = React.createContext({
     range:  () => {}, // Whenever a resource has been selected in a multiple mode
     single: () => {}// Whenever a single resource has been selected
   },
+  onResourceFileToImport: () => {}, // Whenever a resource file will be imported
+  onResourceFileImportResult: () => {} // Whenever the import result has been provided
 });
 
 /**
@@ -89,6 +93,8 @@ class ResourceWorkspaceContextProvider extends React.Component {
       scrollTo: {
         resource: null // The resource to scroll to
       },
+      resourceFileToImport: null, // The resource file to import
+      resourceFileImportResult: null, // The resource file import result
       lockDisplayDetail: true, // lock the detail to display the folder or password sidebar
       onLockDetail: this.handleLockDetail.bind(this), // Lock or unlock detail (hide or display the folder or password sidebar)
       onTextFilterChanged: this.handleTextFilterChange.bind(this), // Whenever the search text filter changed
@@ -101,6 +107,8 @@ class ResourceWorkspaceContextProvider extends React.Component {
         range:  this.handleResourceRangeSelected.bind(this), // Whenever a resource has been selected in a multiple mode
         single: this.handleResourceSelected.bind(this)// Whenever a single resource has been selected
       },
+      onResourceFileToImport: this.handleResourceFileToImport.bind(this), // Whenever a resource file will be imported
+      onResourceFileImportResult: this.handleResourceFileImportResult.bind(this)// Whenever the import result has been provided
     };
   }
 
@@ -360,6 +368,22 @@ class ResourceWorkspaceContextProvider extends React.Component {
       this.handleResourcesLoaded = () => {};
     }
   }
+
+  /**
+   * Handle the will to import a resource file
+   */
+  async handleResourceFileToImport(resourceFile) {
+    await this.import(resourceFile);
+  }
+
+  /**
+   * Handle the resource file import result
+   * @param The import result
+   */
+  async handleResourceFileImportResult(result) {
+    await this.updateImportResult(result);
+  }
+
 
   /**
    * Populate the context with initial data such as resources and folders
@@ -741,6 +765,24 @@ class ResourceWorkspaceContextProvider extends React.Component {
    */
   async scrollNothing() {
     await this.setState({scrollTo: {}});
+  }
+
+  /** RESOURCE IMPORT */
+
+  /**
+   * Import the given resource file
+   * @param resourceFile A resource file to import
+   */
+  async import(resourceFile) {
+    await this.setState({resourceFileToImport: resourceFile});
+  }
+
+  /**
+   * Update the resource file import result
+   * @param The import result
+   */
+  async updateImportResult(result) {
+    await this.setState({resourceFileImportResult: result});
   }
 
   /**

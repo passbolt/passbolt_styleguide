@@ -20,6 +20,7 @@ import {withDialog} from "../../../../react/contexts/Common/DialogContext";
 import {ResourceWorkspaceFilterTypes, withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 import PasswordCreateDialog from "../PasswordCreateDialog/PasswordCreateDialog";
 import FolderCreateDialog from "../../Folder/FolderCreateDialog/FolderCreateDialog";
+import PasswordImportDialog from "../PasswordImportDialog/PasswordImportDialog";
 
 /**
  * This component allows the current user to create a new resource
@@ -63,6 +64,7 @@ class PasswordWorkspaceMainMenu extends React.Component {
     this.handleCreateClickEvent = this.handleCreateClickEvent.bind(this);
     this.handleCreateMenuPasswordClickEvent = this.handleCreateMenuPasswordClickEvent.bind(this);
     this.handleMenuCreateFolderClickEvent = this.handleMenuCreateFolderClickEvent.bind(this);
+    this.handleImportClickEvent = this.handleImportClickEvent.bind(this);
   }
 
   componentDidMount() {
@@ -130,6 +132,13 @@ class PasswordWorkspaceMainMenu extends React.Component {
   }
 
   /**
+   * Handle the import click event
+   */
+  handleImportClickEvent() {
+    this.props.dialogContext.open(PasswordImportDialog);
+  }
+
+  /**
    * Open create password dialog
    */
   openPasswordCreateDialog() {
@@ -188,6 +197,13 @@ class PasswordWorkspaceMainMenu extends React.Component {
   }
 
   /**
+   * Returns true if the current user can import a CSV/KDBX file
+   */
+  get canImport() {
+    return this.context.siteSettings.canIUse("import");
+  }
+
+  /**
    * can create a resource
    * @returns {boolean}
    */
@@ -195,42 +211,53 @@ class PasswordWorkspaceMainMenu extends React.Component {
     return this.folderSelected === null || this.folderSelected.permission.type >= 7;
   }
 
+
   /**
    * Render the component
    * @returns {JSX}
    */
   render() {
     return (
-      <div className="dropdown" ref={this.createMenuRef}>
-        <a className={`button create primary ready ${this.canCreate() ? "" : "disabled"}`} onClick={this.handleCreateClickEvent}>
-          <Icon name="plus-circle"/>
-          <span>create</span>
-        </a>
-        <ul className={`dropdown-content menu ready ${this.state.createMenuOpen ? "visible" : ""}`}>
-          <li id="password_action">
-            <div className="row">
-              <div className="main-cell-wrapper">
-                <div className="main-cell">
-                  <a onClick={this.handleCreateMenuPasswordClickEvent}>
-                    <span>New password</span>
-                  </a>
+      <>
+        <div className="dropdown" ref={this.createMenuRef}>
+          <a className={`button create primary ready ${this.canCreate() ? "" : "disabled"}`} onClick={this.handleCreateClickEvent}>
+            <Icon name="plus-circle"/>
+            <span>create</span>
+          </a>
+          <ul className={`dropdown-content menu ready ${this.state.createMenuOpen ? "visible" : ""}`}>
+            <li id="password_action">
+              <div className="row">
+                <div className="main-cell-wrapper">
+                  <div className="main-cell">
+                    <a onClick={this.handleCreateMenuPasswordClickEvent}>
+                      <span>New password</span>
+                    </a>
+                  </div>
                 </div>
               </div>
-            </div>
-          </li>
-          <li id="folder_action">
-            <div className="row">
-              <div className="main-cell-wrapper">
-                <div className="main-cell">
-                  <a onClick={this.handleMenuCreateFolderClickEvent}>
-                    <span>New folder</span>
-                  </a>
+            </li>
+            <li id="folder_action">
+              <div className="row">
+                <div className="main-cell-wrapper">
+                  <div className="main-cell">
+                    <a onClick={this.handleMenuCreateFolderClickEvent}>
+                      <span>New folder</span>
+                    </a>
+                  </div>
                 </div>
               </div>
-            </div>
-          </li>
-        </ul>
-      </div>
+            </li>
+          </ul>
+        </div>
+        {this.canImport &&
+          <a
+            className="button"
+            onClick={this.handleImportClickEvent}>
+            <Icon name="upload-a" />
+            <span className="visuallyhidden">upload</span>
+          </a>
+        }
+      </>
     );
   }
 }
