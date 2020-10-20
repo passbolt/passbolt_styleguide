@@ -124,7 +124,7 @@ class DisplayUsersContextualMenu extends React.Component {
       await this.context.port.request("passbolt.users.delete-dry-run", this.user.id);
       this.displayDeleteUserDialog();
     } catch (error) {
-      if (error.name === 'DryRunDeleteError') {
+      if (error.name === "DeleteDryRunError") {
         this.displayDeleteUserWithConflictsDialog(error.errors);
       } else {
         this.handleError(error);
@@ -150,9 +150,7 @@ class DisplayUsersContextualMenu extends React.Component {
   displayDeleteUserWithConflictsDialog(errors) {
     const deleteUserWithConflictsDialogProps = {
       user: this.user,
-      folders: errors.folders && errors.folders.sole_owner,
-      resources: errors.resources && errors.resources.sole_owner,
-      groups: errors.groups && errors.groups.sole_manager,
+      errors: errors
     };
     this.context.setContext({deleteUserWithConflictsDialogProps});
     this.props.dialogContext.open(DeleteUserWithConflictsDialog);
@@ -176,6 +174,14 @@ class DisplayUsersContextualMenu extends React.Component {
    * @returns {boolean}
    */
   canIUseEdit() {
+    return this.isLoggedInUserAdmin();
+  }
+
+  /**
+   * Check if the user can use the delete capability.
+   * @returns {boolean}
+   */
+  canIUseDelete() {
     return this.isLoggedInUserAdmin();
   }
 
@@ -271,7 +277,7 @@ class DisplayUsersContextualMenu extends React.Component {
           </div>
         </li>
         }
-        {this.isLoggedInUserAdmin() &&
+        {this.canIUseDelete() &&
         <li key="delete-user" className="ready">
           <div className="row">
             <div className="main-cell-wrapper">
