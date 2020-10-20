@@ -83,7 +83,8 @@ FilterUsersByGroupItemContextualMenu.propTypes = {
   left: PropTypes.number, // left position in px of the menu
   hide: PropTypes.func, // Hide the contextual menu
   top: PropTypes.number, // top position in px of the menu,
-  userWorkspaceContext: PropTypes.object // The user group context
+  userWorkspaceContext: PropTypes.object, // The user group context
+  dialogContext: PropTypes.object // The dialog context
 };
 
 export default withUserWorkspace(withDialog(FilterUsersByGroupItemContextualMenu));

@@ -51,7 +51,7 @@ class EditUserGroup extends Component {
       validation: {
         hasAlreadyBeenValidated: false // True when the form has already been submitted
       }
-    }
+    };
   }
 
   /**
@@ -144,7 +144,7 @@ class EditUserGroup extends Component {
       groupToEdit: {
         groupName: this.groupToEdit.name
       }
-    })
+    });
   }
 
   /**
@@ -164,7 +164,7 @@ class EditUserGroup extends Component {
    */
   async validate() {
     await this.validateGroupName();
-    await this.setState({validation: {...this.state.validation, hasAlreadyBeenValidated: true}});
+    await this.setState({validation: Object.assign({}, this.state.validation, {hasAlreadyBeenValidated: true})});
   }
 
   /**
@@ -173,8 +173,7 @@ class EditUserGroup extends Component {
   async validateGroupName() {
     const groupName = this.state.groupToEdit.groupName;
     if (groupName.trim() === '') {
-      console.log('TOP')
-      await this.setState({errors: {...this.state.errors, emptyGroupName: true}});
+      await this.setState({errors: Object.assign({}, this.state.errors, {emptyGroupName: true})});
     }
   }
 
@@ -258,11 +257,11 @@ class EditUserGroup extends Component {
                 type="text"
                 placeholder="group name"
                 onChange={this.handleGroupNameChange}/>
-                {mustRaiseEmptyGroupNameError &&
-                  <div className="error message">
-                    A name is required
-                  </div>
-                }
+              {mustRaiseEmptyGroupNameError &&
+                <div className="error message">
+                  A name is required
+                </div>
+              }
             </div>
           </div>
 

@@ -19,7 +19,6 @@ import {withRouter} from "react-router-dom";
 import {UserWorkspaceFilterTypes, withUserWorkspace} from "../../../contexts/UserWorkspaceContext";
 import {withContextualMenu} from "../../../../react/contexts/Common/ContextualMenuContext";
 import FilterUsersByGroupContextualMenu from "./FilterUsersByGroupContextualMenu";
-import FoldersTreeItemContextualMenu from "../../Password/FoldersTree/FoldersTreeItemContextualMenu";
 import FilterUsersByGroupItemContextualMenu from "./FilterUsersByGroupItemContextualMenu";
 import DisplayGroupContextualMenu from "./DisplayGroupContextualMenu";
 
@@ -190,6 +189,22 @@ class FilterUsersByGroup extends React.Component {
   }
 
   /**
+   * get groups
+   * @returns {*}
+   */
+  get groups() {
+    return this.context.groups;
+  }
+
+  /**
+   * get groups sorted
+   * @returns {*|boolean}
+   */
+  get groupsSorted() {
+    return this.groups.sort((groupA, groupB) => groupA.name.localeCompare(groupB.name));
+  }
+
+  /**
    * Show the contextual menu
    * @param {int} left The left position to display the menu
    * @param {int} top The top position to display the menu
@@ -234,21 +249,7 @@ class FilterUsersByGroup extends React.Component {
     return this.filteredGroups.length > 0;
   }
 
-  /**
-   * get groups
-   * @returns {*}
-   */
-  get groups() {
-    return this.context.groups;
-  }
 
-  /**
-   * get groups sorted
-   * @returns {*|boolean}
-   */
-  get groupsSorted() {
-    return this.groups.sort((groupA, groupB) => groupA.name.localeCompare(groupB.name));
-  }
 
   /**
    * Returns true if the given group is selected
@@ -263,11 +264,12 @@ class FilterUsersByGroup extends React.Component {
   }
 
   /**
-   * Can update or delete the group
-   * @returns {boolean}
+   * Returns true if the contextual menu More can be shown
+   * @param group The selected group
    */
-  isLoggedInUserAdmin() {
-    return this.context.loggedInUser && this.context.loggedInUser.role.name === 'admin';
+  canShowMore(group) {
+    const isGroupManager = group.my_group_user && group.my_group_user.is_admin;
+    return this.isCurrentUserAdmin && isGroupManager;
   }
 
   /**
@@ -327,10 +329,13 @@ class FilterUsersByGroup extends React.Component {
                         <span className="ellipsis">{group.name}</span>
                       </a>
                     </div>
-                    {this.isCurrentUserAdmin &&
-                      <div className="right-cell more-ctrl">
-                        <a onClick={event => this.handleMoreClickEvent(event,group)}><Icon name="plus-square"/></a>
-                      </div>
+                    {this.canShowMore(group) &&
+                    <div className="right-cell more-ctrl">
+                      <a
+                        onClick={event => this.handleMoreClickEvent(event, group)}>
+                        <Icon name="plus-square"/>
+                      </a>
+                    </div>
                     }
                   </div>
                   {this.isLoggedInUserAdmin() &&
