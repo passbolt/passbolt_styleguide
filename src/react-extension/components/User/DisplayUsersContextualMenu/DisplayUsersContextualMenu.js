@@ -18,6 +18,7 @@ import {withDialog} from "../../../contexts/Common/DialogContext";
 import ContextualMenuWrapper from "../../Common/ContextualMenu/ContextualMenuWrapper";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import EditUserDialog from "../EditUser/EditUserDialog";
+import ConfirmDisableUserMFA from "../DisableUserMFA/ConfirmDisableUserMFA";
 class DisplayUsersContextualMenu extends React.Component {
   /**
    * Constructor
@@ -36,6 +37,29 @@ class DisplayUsersContextualMenu extends React.Component {
     this.handleUsernameCopy = this.handleUsernameCopy.bind(this);
     this.handlePublicKeyCopy = this.handlePublicKeyCopy.bind(this);
     this.handleEditClickEvent = this.handleEditClickEvent.bind(this);
+    this.handleDisableMfaEvent = this.handleDisableMfaEvent.bind(this);
+  }
+
+  /**
+   * Returns true if the currrent user can disable the MFA of a user
+   */
+  get canIDisableMfa() {
+    return this.isLoggedInUserAdmin();
+  }
+
+  /**
+   * Returns true if the current user has the plugin capability to disable MFA
+   */
+  get haveDisableMfaCapability() {
+    return this.context.siteSettings.settings.passbolt.plugins.multiFactorAuthentication;
+  }
+
+  /**
+   * the resource selected
+   * @returns {*}
+   */
+  get user() {
+    return this.props.user;
   }
 
   /**
@@ -70,7 +94,7 @@ class DisplayUsersContextualMenu extends React.Component {
   }
 
   /**
-   * handle edit resource
+   * handle edit user
    */
   handleEditClickEvent() {
     const editUserDialogProps = {
@@ -79,6 +103,13 @@ class DisplayUsersContextualMenu extends React.Component {
     this.context.setContext({editUserDialogProps});
     this.props.dialogContext.open(EditUserDialog);
     this.props.hide();
+  }
+
+  /**
+   * Handle the will of disable MFA for a user
+   */
+  handleDisableMfaEvent() {
+    this.disableMFA();
   }
 
   /**
@@ -98,11 +129,11 @@ class DisplayUsersContextualMenu extends React.Component {
   }
 
   /**
-   * the resource selected
-   * @returns {*}
+   * Disable the selected user's MFA
    */
-  get user() {
-    return this.props.user;
+  disableMFA() {
+    this.props.dialogContext.open(ConfirmDisableUserMFA);
+    this.props.hide();
   }
 
   /**
@@ -154,6 +185,22 @@ class DisplayUsersContextualMenu extends React.Component {
             </div>
           </div>
         </li>
+        {this.canIDisableMfa &&
+        <li key="disable-user-mfa" className="ready">
+          <div className="row">
+            <div className="main-cell-wrapper">
+              <div className="main-cell">
+                <a
+                  id="disable-mfa"
+                  onClick={this.handleDisableMfaEvent}
+                  className={this.haveDisableMfaCapability ? '' : 'disabled'}>
+                  <span>Disable MFA</span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </li>
+        }
         {this.canIUseEdit() &&
         <li key="edit-user" className="ready">
           <div className="row">

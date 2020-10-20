@@ -47,6 +47,7 @@ import mockRequestUsersFindLoggedInUser from "./request/mockRequestUsersFindLogg
 import mockRequestGpgKeysFindByUserId from "./request/mockRequestGpgKeysFindByUserId";
 import mockRequestUserDeleteDryRun from "./request/mockRequestUserDeleteDryRun";
 import mockRequestImportFile from "./request/mockRequestImportFile";
+import mockRequestDisableMFA from "./request/mockRequestDisableMFA";
 
 export default (storage) => {
   const mockPort = new MockPort(storage);
@@ -80,11 +81,11 @@ export default (storage) => {
   mockPort.addRequestListener("passbolt.resources.action-log", mockRequestResourcesFindActivities);
   mockPort.addRequestListener("passbolt.addon.get-version", mockRequestGetVersion);
   mockPort.addRequestListener("passbolt.groups.update-local-storage", mockRequestGroupsUpdateLocalStorage);
-  mockPort.addRequestListener("passbolt.import-passwords.import-file", );
   mockPort.addRequestListener("passbolt.resources.find-all", mockRequestResources);
   mockPort.addRequestListener("passbolt.keyring.get-public-key-info-by-user", mockRequestGpgKeysFindByUserId);
   mockPort.addRequestListener("passbolt.users.delete-dry-run", mockRequestUserDeleteDryRun);
   mockPort.addRequestListener("passbolt.import-passwords.import-file", mockRequestImportFile);
+  mockPort.addRequestListener("passbolt.users.disable-mfa", mockRequestDisableMFA);
 
   return mockPort;
 };
