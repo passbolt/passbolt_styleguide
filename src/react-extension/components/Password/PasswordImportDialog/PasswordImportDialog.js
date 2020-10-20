@@ -24,15 +24,17 @@ import PasswordUnlockKeypassDialog from "./PasswordUnlockKeypassDialog";
 import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 import PasswordImportResultDialog from "./PasswordImportResultDialog";
 import AppContext from "../../../contexts/AppContext";
+import ErrorDialog from "../../Dialog/ErrorDialog/ErrorDialog";
 
 class PasswordImportDialog extends Component {
   /**
    * Default constructor
    * @param props Component props
+   * @param context Component context
    */
-  constructor(props) {
+  constructor(props, context) {
     super(props);
-    this.state = this.defaultState;
+    this.state = this.geDefaultState(context);
     this.bindHandlers();
     this.createReferences();
   }
@@ -40,12 +42,18 @@ class PasswordImportDialog extends Component {
   /**
    * Returns the default state
    */
-  get defaultState() {
+  geDefaultState(context) {
+    const canUseTags = context.siteSettings.canIUse("tags");
+    const canUseFolders = context.siteSettings.canIUse("folders");
+
     return {
+      // Dialog states
+      processing: false,
+
       fileToImport: null, // The file to import
       options: {
-        importFolders: true, // Import all the folders specified in the CSV / KDBX file
-        importTags: true // Use unique tags for this import
+        importFolders: canUseFolders, // Import all the folders specified in the CSV / KDBX file
+        importTags: canUseTags // Use unique tags for this import
       }, // The current import options
       errors: {} // Validation errors
     };
@@ -76,28 +84,21 @@ class PasswordImportDialog extends Component {
    */
   async componentDidUpdate(previousProps) {
     await this.handleFileToImportChange(previousProps.resourceWorkspaceContext.resourceFileToImport);
-    await this.handleKDBXFileImportError();
   }
 
   /**
-   * Returns the CSS style of the choose file addon button
+   * Returns true if the submit button should be disabled
    */
-  get chooseFileStyle() {
-    return {
-      width: "35%",
-      padding: "11px 0px 5px 0px",
-      display: "inline-block",
-      marginLeft: "-2px",
-      borderTopLeftRadius: 0,
-      borderBottomLeftRadius: 0
-    };
+  hasSubmitButtonDisabled() {
+    return !this.state.fileToImport || this.state.processing;
   }
 
   /**
-   * Returns true if the import form data are valid
+   * Should input be disabled? True if state is processing
+   * @returns {boolean}
    */
-  get isValid() {
-    return this.state.fileToImport;
+  hasAllInputDisabled() {
+    return this.state.processing;
   }
 
   /**
@@ -126,8 +127,9 @@ class PasswordImportDialog extends Component {
    * Handle the event that a file has been selected
    * @param event A dom event
    */
-  handleFileSelected(event) {
+  async handleFileSelected(event) {
     const [fileToImport] = event.target.files;
+    await this.resetValidation();
     this.setState({fileToImport});
   }
 
@@ -143,7 +145,7 @@ class PasswordImportDialog extends Component {
    * Handle the change of unique tag options
    */
   async handleImportTagsOptionChanged() {
-    const options = Object.assign({}, this.state.options, {uniqueTag: !this.state.options.uniqueTag});
+    const options = Object.assign({}, this.state.options, {importTags: !this.state.options.importTags});
     await this.setState({options});
   }
 
@@ -160,23 +162,10 @@ class PasswordImportDialog extends Component {
   }
 
   /**
-   * Whenever a KDBX file import arose
-   */
-  async handleKDBXFileImportError() {
-    const kdbxImportError = this.props.resourceWorkspaceContext.resourceKdbxFileImportError;
-    if (!kdbxImportError) {
-      if (kdbxImportError.code == 'BadSignature') {
-        await this.setState({errors: {invalidKdbxFile: true}});
-      } else {
-        await this.setState({errors: {cannotOpenFile: true}});
-      }
-    }
-  }
-
-  /**
    * Handle the cancellation of the import
    */
   handleCancel() {
+    this.props.resourceWorkspaceContext.onResourceFileToImport(null);
     this.close();
   }
 
@@ -184,12 +173,22 @@ class PasswordImportDialog extends Component {
    * Handle the import submit event
    * @param event A dom event
    */
-  async handleSubmit(event) {
+  handleSubmit(event) {
+    // Prevent the form to be submitted.
     event.preventDefault();
-    event.stopPropagation();
 
-    await this.resetValidation();
-    await this.import().catch(this.invalidate.bind(this));
+    if (!this.state.processing) {
+      this.import();
+    }
+  }
+
+  /**
+   * Toggle processing state
+   * @returns {Promise<void>}
+   */
+  async toggleProcessing() {
+    const prev = this.state.processing;
+    return this.setState({processing: !prev});
   }
 
   /**
@@ -204,8 +203,16 @@ class PasswordImportDialog extends Component {
    */
   readFile() {
     const reader = new FileReader();
-    return new Promise(resolve => {
-      reader.onloadend = event => resolve(event.target.result);
+    return new Promise((resolve, reject) => {
+      reader.onloadend = event => {
+        try {
+          const base64Url = event.target.result;
+          const fileBase64 = base64Url.split(",")[1];
+          resolve(fileBase64);
+        } catch (e) {
+          reject(e);
+        }
+      };
       reader.readAsDataURL(this.state.fileToImport);
     });
   }
@@ -214,44 +221,90 @@ class PasswordImportDialog extends Component {
    * Import the selected file with its given base 64 content
    */
   async import() {
-    const isKeypassFile = this.selectedFileExtension === 'kdbx';
-    const resourceFileToImport = {
-      b64FileContent: await this.readFile,
-      fileType: this.selectedFileExtension,
-      options: this.state.options
-    };
-    await this.props.resourceWorkspaceContext.onResourceFileToImport(resourceFileToImport);
-    if (isKeypassFile) { // Case of KDBX file
-      this.importKDBX();
-    } else { // Case of CSV file
-      await this.importCSV();
+    const b64FileContent = await this.readFile();
+    const fileType = this.selectedFileExtension;
+    const credentialsOptions = {credentials: {password: null, keyFile: null}};
+    const options = Object.assign({}, this.state.options, credentialsOptions);
+
+    await this.toggleProcessing();
+    try {
+      const importResult = await this.context.port.request("passbolt.import-passwords.import-file", b64FileContent, fileType, options);
+      this.handleImportSuccess(importResult);
+    } catch (error) {
+      this.handleImportError(error, b64FileContent, fileType);
     }
   }
 
   /**
-   *  Import a KDBX file
+   * Handle import success
+   * @param {Object} importResult The import restult
    */
-  importKDBX() {
+  async handleImportSuccess(importResult) {
+    await this.props.resourceWorkspaceContext.onResourceFileImportResult(importResult);
+    await this.props.resourceWorkspaceContext.onResourceFileToImport(null);
+    await this.props.dialogContext.open(PasswordImportResultDialog);
+    this.toggleProcessing();
+    this.close();
+  }
+
+  /**
+   * Handle import error.
+   * @param {Object} error The error returned by the background page
+   * @param {string} b64FileContent The base 64 file content
+   * @param {string} fileType The file type
+   */
+  handleImportError(error, b64FileContent, fileType) {
+    const isUserAbortsOperation = error.name === "UserAbortsOperationError";
+    const isKdbxBadSignatureError = error.name === "KdbxError" && error.code === "BadSignature";
+    const isKdbxProtectedError = error.name === "KdbxError" && (error.code === "InvalidKey" || error.code === "InvalidArg");
+    const isCsvError = error.name === "ImportCsvError";
+
+    this.toggleProcessing();
+    if (isUserAbortsOperation) {
+      // If the user aborts the operation, then do nothing. It happens when the users close the passphrase dialog
+    } else if (isKdbxProtectedError) {
+      // If the keepass file is protected
+      this.importProtectedKeepassFile(b64FileContent, fileType);
+      this.close();
+    } else if (isKdbxBadSignatureError) {
+      // If the keepass file cannot be read.
+      this.setState({errors: {invalidKdbxFile: "Keepass file format not recognized"}});
+    } else if (isCsvError) {
+      // If the csv file cannot be read.
+      this.setState({errors: {invalidCsvFile: error.message}});
+    } else {
+      // If an unexpected error occurred.
+      const errorDialogProps = {
+        title: "There was an unexpected error...",
+        message: error.message
+      };
+      this.context.setContext({errorDialogProps});
+      this.props.dialogContext.open(ErrorDialog);
+    }
+  }
+
+  /**
+   * Import a KDBX file
+   * @param {string} b64FileContent The base 64 file content
+   * @param {string} fileType The file type
+   * @return {Promise}
+   */
+  async importProtectedKeepassFile(b64FileContent, fileType) {
+    const resourceFileToImport = {
+      b64FileContent: b64FileContent,
+      fileType: fileType,
+      options: this.state.options
+    };
+    await this.props.resourceWorkspaceContext.onResourceFileToImport(resourceFileToImport);
     this.props.dialogContext.open(PasswordUnlockKeypassDialog);
   }
 
   /**
-   * Import a CSV file
-   */
-  async importCSV() {
-    const resourceFileToImport = this.props.resourceWorkspaceContext.resourceFileToImport;
-    const result = await this.context.port.request("passbolt.import-passwords.import-file", resourceFileToImport);
-    await this.props.resourceWorkspaceContext.onResourceFileImportResult(result);
-    this.props.dialogContext.open(PasswordImportResultDialog);
-    this.close();
-  }
-
-
-  /**
    * Invalidate the selected file as possible file to import
+   * @param {Object} error The error returned by the backround page
    */
-  async invalidate() {
-    await this.setState({errors: {invalidFile: true}});
+  async invalidate(error) {
+    await this.setState({errors: {invalidCsvFile: error.message}});
   }
 
   /**
@@ -260,95 +313,102 @@ class PasswordImportDialog extends Component {
   async resetValidation() {
     await this.setState({errors: {}});
   }
+
   /**
    * Render the component
    */
   render() {
     const errors = this.state.errors;
-    const isInvalidFile = errors && errors.invalidFile;
+    const isInvalidCsvFile = errors && errors.invalidCsvFile;
     const isInvalidKdbxFile = errors && errors.invalidKdbxFile;
-    const cannotOpenFile = errors && errors.cannotOpenFile;
-    const invalidFileClassName = isInvalidFile ? 'errors' : '';
+    const invalidFileClassName = isInvalidCsvFile || isInvalidKdbxFile ? 'errors' : '';
+    const canUseTags = this.context.siteSettings.canIUse("tags");
+    const canUseFolders = this.context.siteSettings.canIUse("folders");
+
     return (
       <DialogWrapper
-        title="Import password"
+        title="Import passwords"
+        className="import-password-dialog"
+        disabled={this.hasAllInputDisabled()}
         onClose={this.handleCancel}>
         <form onSubmit={this.handleSubmit}>
           <div className="form-content">
-            <div className={`input text required ${invalidFileClassName}`}>
+            <div className="input-file-chooser-wrapper">
               <input
                 type="file"
                 ref={this.fileUploaderRef}
-                style={{display: "None"}}
                 onChange={this.handleFileSelected}
                 accept=".csv, .kdbx, .kdb"/>
-              <label>
-                Select a file to import
-                (<a role="link" data-tooltip="csv exports from keepassx, lastpass and 1password are supported">csv</a> or <a role="link" data-tooltip="kdbx files are files generated by keepass v2.x">kdbx</a>)
-              </label>
 
-              <input
-                type="text"
-                style={{width: "60%", textOverflow: "ellipsis"}}
-                placeholder="No file selected"
-                disabled
-                value={this.selectedFilename}/>
-              <a
-                style={this.chooseFileStyle}
-                className="button primary"
-                onClick={this.handleSelectFile}>
-                <Icon name="upload-a" />
-                <strong  style={{marginLeft: "7px"}}>
-                  Choose a file
-                </strong>
-              </a>
+              <div className={`input text required ${invalidFileClassName}`}>
+                <label htmlFor="dialog-import-passwords">
+                  Select a file to import
+                  (<a role="link" data-tooltip="csv exports from keepassx, lastpass and 1password are supported">csv</a> or <a role="link" data-tooltip="kdbx files are files generated by keepass v2.x">kdbx</a>)
+                </label>
 
-              {isInvalidFile &&
-                <div className="message ready error">
-                  This file is invalid and cannot be imported.
-                </div>
-              }
-              {isInvalidKdbxFile &&
-                <div className="message ready error">
-                  This is not a valid kdbx file
-                </div>
-              }
-              {cannotOpenFile &&
-                <div className="message ready error">
-                  Could not open the kdbx file
-                </div>
-              }
+                <input
+                  type="text"
+                  disabled={true}
+                  placeholder="No file selected"
+                  defaultValue={this.selectedFilename}/>
+                <a
+                  id="dialog-import-passwords-choose-file"
+                  className={`button primary ${this.hasAllInputDisabled() ? "disabled" : ""}`}
+                  onClick={this.handleSelectFile}>
+                  <Icon name="upload-a"/> Choose a file
+                </a>
+
+                {isInvalidCsvFile &&
+                  <div className="message ready error">
+                    {this.state.errors.invalidCsvFile}
+                  </div>
+                }
+                {isInvalidKdbxFile &&
+                  <div className="message ready error">
+                    {this.state.errors.invalidKdbxFile}
+                  </div>
+                }
+              </div>
             </div>
 
+            {canUseTags &&
             <div className="input text">
               <input
+                id="dialog-import-passwords-import-tags"
                 type="checkbox"
                 checked={this.state.options.importTags}
+                disabled={this.hasAllInputDisabled()}
                 onChange={this.handleImportTagsOptionChanged}/>
-              <label>Add a unique import tag to passwords</label>
+              <label htmlFor="dialog-import-passwords-import-tags"> Add a unique import tag to passwords</label>
             </div>
+            }
 
+            {canUseFolders &&
             <div className="input text">
               <input
+                id="dialog-import-passwords-import-folders"
                 type="checkbox"
                 checked={this.state.options.importFolders}
+                disabled={this.hasAllInputDisabled()}
                 onChange={this.handleImportFoldersOptionChanged}/>
-              <label>Import folders</label>
+              <label htmlFor="dialog-import-passwords-import-folders"> Import folders</label>
             </div>
+            }
           </div>
           <div className="submit-wrapper clearfix">
             <FormSubmitButton
               value="Import"
-              disabled={!this.isValid}/>
-            <FormCancelButton onClick={this.handleCancel}/>
+              disabled={this.hasSubmitButtonDisabled()}
+              processing={this.state.processing}/>
+            <FormCancelButton
+              disabled={this.hasAllInputDisabled()}
+              onClick={this.handleCancel}/>
           </div>
-
         </form>
       </DialogWrapper>
     );
   }
 }
-
 
 PasswordImportDialog.contextType = AppContext;
 

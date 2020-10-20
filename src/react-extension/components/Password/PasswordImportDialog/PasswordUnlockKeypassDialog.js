@@ -23,7 +23,7 @@ import FormCancelButton from "../../../../react/components/Common/Inputs/FormSub
 import Icon from "../../../../react/components/Common/Icons/Icon";
 import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 import PasswordImportResultDialog from "./PasswordImportResultDialog";
-
+import ErrorDialog from "../../Dialog/ErrorDialog/ErrorDialog";
 
 /**
  * This component is the second step of the import dialog when the file to import is KDB(X) file
@@ -45,6 +45,9 @@ class PasswordUnlockKeypassDialog extends Component {
    */
   get defaultState() {
     return {
+      // Dialog states
+      processing: false,
+
       showPassword: false, // True if the password should be textually displayed
       keyFile: null, // The optional key file
       errors: {} // The import errors
@@ -62,7 +65,6 @@ class PasswordUnlockKeypassDialog extends Component {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-
   /**
    * Create elements references
    */
@@ -70,22 +72,6 @@ class PasswordUnlockKeypassDialog extends Component {
     this.fileUploaderRef = React.createRef();
     this.passwordInputRef = React.createRef();
   }
-
-
-  /**
-   * Returns the CSS style of the choose file addon button
-   */
-  get chooseFileStyle() {
-    return {
-      width: "35%",
-      padding: "11px 0px 5px 0px",
-      display: "inline-block",
-      marginLeft: "-2px",
-      borderTopLeftRadius: 0,
-      borderBottomLeftRadius: 0
-    };
-  }
-
 
   /**
    * Returns the selected file's name
@@ -100,7 +86,6 @@ class PasswordUnlockKeypassDialog extends Component {
   get fileToImport() {
     return this.props.resourceWorkspaceContext.resourceFileToImport;
   }
-
 
   /**
    * Handle the password view mode toggle
@@ -129,6 +114,7 @@ class PasswordUnlockKeypassDialog extends Component {
    * Handle the cancellation of the import
    */
   handleCancel() {
+    this.props.resourceWorkspaceContext.onResourceFileToImport(null);
     this.close();
   }
 
@@ -138,27 +124,45 @@ class PasswordUnlockKeypassDialog extends Component {
    */
   async handleSubmit(event) {
     event.preventDefault();
-    await this.import()
-      .then(this.onImportSuccess.bind(this))
-      .catch(this.onImportFailed.bind(this));
+
+    if (!this.state.processing) {
+      this.import();
+    }
   }
 
   /**
    * Import the resource file
    */
   async import() {
+    const resourceFileToImport = this.props.resourceWorkspaceContext.resourceFileToImport;
+    const b64FileContent = resourceFileToImport.b64FileContent;
+    const fileType = resourceFileToImport.fileType;
     const password = this.passwordInputRef.current.value;
     const keyFile = this.state.keyFile;
-    const fileToImport = Object.assign({}, this.fileToImport, {credentials: {password, keyFile}});
-    return await this.context.port.request("passbolt.import-passwords.import-file", fileToImport);
+    const options = Object.assign({}, resourceFileToImport.options, {credentials: {password, keyFile}});
+
+    this.toggleProcessing();
+    await this.resetValidation();
+    try {
+      const result = await this.context.port.request("passbolt.import-passwords.import-file", b64FileContent, fileType, options);
+      this.handleImportSuccess(result);
+    } catch (error) {
+      this.handleImportError(error);
+    }
+  }
+
+  /**
+   * Reset the validation process
+   */
+  async resetValidation() {
+    await this.setState({errors: {}});
   }
 
   /**
    * Handle the success of the KDBX import
    * @parama importResult The import result
    */
-  async onImportSuccess(importResult) {
-    await this.setState({errors: {}});
+  async handleImportSuccess(importResult) {
     await this.props.resourceWorkspaceContext.onResourceFileImportResult(importResult);
     await this.props.resourceWorkspaceContext.onResourceFileToImport(null);
     await this.props.dialogContext.open(PasswordImportResultDialog);
@@ -169,13 +173,25 @@ class PasswordUnlockKeypassDialog extends Component {
    * Handle the failure of the KDBX import
    * @param error The import error
    */
-  async onImportFailed(error) {
-    const isInvalidPasswordOrKeyFile = error.code == 'InvalidKey' || error.code == 'InvalidArg';
-    if (isInvalidPasswordOrKeyFile) { // Show this error on this dialog
+  async handleImportError(error) {
+    const userAbortsOperation = error.name === "UserAbortsOperationError";
+    const isInvalidPasswordOrKeyFile = error.code === "InvalidKey" || error.code === "InvalidArg";
+
+    this.toggleProcessing();
+
+    if (userAbortsOperation) {
+      // If the user aborts the operation, then do nothing. It happens when the users close the passphrase dialog
+    } else if (isInvalidPasswordOrKeyFile) {
+      // If the credentials are invalid.
       await this.setState({errors: {invalidPasswordOrKeyfile: true}});
-    } else { // Show the errors in the first dialog
-      this.props.resourceWorkspaceContext.onKDBXFileImportError(error);
-      this.close();
+    } else {
+      // If an unexpected error occurred.
+      const errorDialogProps = {
+        title: "There was an unexpected error...",
+        message: error.message
+      };
+      this.context.setContext({errorDialogProps});
+      this.props.dialogContext.open(ErrorDialog);
     }
   }
 
@@ -187,6 +203,23 @@ class PasswordUnlockKeypassDialog extends Component {
   }
 
   /**
+   * Toggle processing state
+   * @returns {Promise<void>}
+   */
+  async toggleProcessing() {
+    const prev = this.state.processing;
+    return this.setState({processing: !prev});
+  }
+
+  /**
+   * Should input be disabled? True if state is processing
+   * @returns {boolean}
+   */
+  hasAllInputDisabled() {
+    return this.state.processing;
+  }
+
+  /**
    * Render the component
    */
   render() {
@@ -195,86 +228,76 @@ class PasswordUnlockKeypassDialog extends Component {
     return (
       <DialogWrapper
         title="Enter the password and/or key file"
+        className="import-password-dialog"
+        disabled={this.hasAllInputDisabled()}
         onClose={this.handleCancel}>
         <form onSubmit={this.handleSubmit}>
 
           <div className="form-content">
 
-            <div className="input-password-wrapper required">
-              <label htmlFor="password">
-                Keepass password
-              </label>
-              <div
-                className="input text password"
-                style={{width: "83%"}}>
+            <div className="input-password-wrapper">
+              <label htmlFor="import-password-dialog-password">Keepass password</label>
+              <div className="input password">
                 <input
-                  id="password"
+                  id="import-password-dialog-password"
                   type={this.state.showPassword ? "text" : "password"}
+                  disabled={this.hasAllInputDisabled()}
                   placeholder="Passphrase"
-                  ref={this.passwordInputRef}
-                  style={{width: "100%"}}/>
-                {isInvalidPasswordOrKeyFile &&
-                  <div className="message ready error">
-                    This file is invalid and cannot be imported.
-                  </div>
-                }
+                  ref={this.passwordInputRef}/>
               </div>
-              <ul
-                className="actions inline"
-                style={{width: "17%", lineHeight: "24px"}}>
+              <ul className="actions inline">
                 <li>
                   <a
                     onClick={this.handlePasswordViewToggled}
-                    className={`password-view button button-icon toggle ${this.state.showPassword ? "selected" : ""}`}>
+                    className={`password-view button button-icon toggle ${this.state.showPassword ? "selected" : ""} ${this.hasAllInputDisabled() ? "disabled" : ""}`}>
                     <Icon name='eye-open' big={true}/>
                     <span className="visually-hidden">view</span>
                   </a>
                 </li>
               </ul>
-
             </div>
 
-            <div className="input text">
+            <div className="input-file-chooser-wrapper">
               <input
                 type="file"
                 ref={this.fileUploaderRef}
-                style={{display: "None"}}
                 onChange={this.handleFileSelected}/>
-              <label>
-                Keepass key file (optional)
-              </label>
-
-              <input
-                type="text"
-                style={{width: "60%", textOverflow: "ellipsis"}}
-                placeholder="No key file selected"
-                disabled
-                value={this.selectedFilename}/>
-              <a
-                style={this.chooseFileStyle}
-                className="button primary"
-                onClick={this.handleSelectFile}>
-                <Icon name="upload-a" />
-                <strong  style={{marginLeft: "7px"}}>
-                  Choose a file
-                </strong>
-              </a>
-
+              <div className="input text">
+                <label>Keepass key file (optional)</label>
+                <input
+                  type="text"
+                  placeholder="No key file selected"
+                  disabled
+                  value={this.selectedFilename}/>
+                <a
+                  className={`button primary ${this.hasAllInputDisabled() ? "disabled" : ""}`}
+                  onClick={this.handleSelectFile}>
+                  <Icon name="upload-a"/> Choose a file
+                </a>
+              </div>
             </div>
 
+            {isInvalidPasswordOrKeyFile &&
+            <div className="message ready error">
+              Cannot decrypt the file, invalid credentials.
+            </div>
+            }
           </div>
 
           <div className="submit-wrapper clearfix">
             <FormSubmitButton
-              value="Continue import"/>
-            <FormCancelButton onClick={this.handleCancel}/>
+              value="Continue import"
+              disabled={this.hasAllInputDisabled()}
+              processing={this.state.processing}/>
+            <FormCancelButton
+              disabled={this.hasAllInputDisabled()}
+              onClick={this.handleCancel}/>
           </div>
         </form>
       </DialogWrapper>
     );
   }
 }
-
 
 PasswordUnlockKeypassDialog.contextType = AppContext;
 
