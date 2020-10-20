@@ -19,6 +19,8 @@ import {withRouter} from "react-router-dom";
 import {UserWorkspaceFilterTypes, withUserWorkspace} from "../../../contexts/UserWorkspaceContext";
 import {withContextualMenu} from "../../../../react/contexts/Common/ContextualMenuContext";
 import FilterUsersByGroupContextualMenu from "./FilterUsersByGroupContextualMenu";
+import FoldersTreeItemContextualMenu from "../../Password/FoldersTree/FoldersTreeItemContextualMenu";
+import FilterUsersByGroupItemContextualMenu from "./FilterUsersByGroupItemContextualMenu";
 import DisplayGroupContextualMenu from "./DisplayGroupContextualMenu";
 
 /**
@@ -133,6 +135,18 @@ class FilterUsersByGroup extends React.Component {
     });
   }
 
+  /**
+   * Open the contextual menu for the current group
+   * @param event The DOM event
+   * @param group An user group
+   */
+  handleMoreClickEvent(event, group) {
+    const top = event.pageY;
+    const left = event.pageX;
+    const contextualMenuProps = {group, left, top};
+    this.props.contextualMenuContext.show(FilterUsersByGroupItemContextualMenu, contextualMenuProps);
+  }
+
   // Zero conditional statements
   /**
    * get the title
@@ -166,6 +180,13 @@ class FilterUsersByGroup extends React.Component {
     const filterType = this.state.filterType || filterByGroupsOptions.all;
     const filter = this.filters[filterType];
     return this.groupsSorted.filter(filter);
+  }
+
+  /**
+   * Returns true if the current user is admin
+   */
+  get isCurrentUserAdmin() {
+    return this.context.loggedInUser && this.context.loggedInUser.role.name === 'admin';
   }
 
   /**
@@ -306,6 +327,11 @@ class FilterUsersByGroup extends React.Component {
                         <span className="ellipsis">{group.name}</span>
                       </a>
                     </div>
+                    {this.isCurrentUserAdmin &&
+                      <div className="right-cell more-ctrl">
+                        <a onClick={event => this.handleMoreClickEvent(event,group)}><Icon name="plus-square"/></a>
+                      </div>
+                    }
                   </div>
                   {this.isLoggedInUserAdmin() &&
                   <div className="right-cell more-ctrl">
