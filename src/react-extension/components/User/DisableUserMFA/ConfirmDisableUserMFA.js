@@ -20,6 +20,7 @@ import DialogWrapper from "../../../../react/components/Common/Dialog/DialogWrap
 import FormSubmitButton from "../../../../react/components/Common/Inputs/FormSubmitButton/FormSubmitButton";
 import FormCancelButton from "../../../../react/components/Common/Inputs/FormSubmitButton/FormCancelButton";
 import {withUserWorkspace} from "../../../contexts/UserWorkspaceContext";
+import ErrorDialog from "../../Dialog/ErrorDialog/ErrorDialog";
 
 class ConfirmDisableUserMFA extends Component {
   /**
@@ -112,8 +113,12 @@ class ConfirmDisableUserMFA extends Component {
    */
   async onDisableMFAFailure(error) {
     await this.setState({actions: {processing: false}});
-    this.props.actionFeedbackContext.displayError(error);
-    this.props.onClose();
+    const errorDialogProps = {
+      title: "There was an unexpected error...",
+      message: error.message
+    };
+    this.context.setContext({errorDialogProps});
+    this.props.dialogContext.open(ErrorDialog);
   }
 
   /**
@@ -139,13 +144,13 @@ class ConfirmDisableUserMFA extends Component {
           noValidate>
 
           <div className="form-content">
-            <p style={{textAlign: "justify"}}>You are about to disable the second-factor authentication (MFA) for the user <strong>{name} ({username})</strong>.</p>
-            <p style={{textAlign: "justify"}}>Warning: Existing settings will be losts. This action cannot be undone.</p>
+            <p>You are about to disable second-factor authentication (MFA) for the user <strong>{name} ({username})</strong>.</p>
+            <p>Warning: Existing settings will be lost. This action cannot be undone.</p>
           </div>
 
           <div className="submit-wrapper clearfix">
             <FormSubmitButton
-              value="delete"
+              value="Disable MFA"
               warning={true}
               processing={this.isProcessing}
               disabled={this.areActionsDisabled}/>
@@ -160,7 +165,6 @@ class ConfirmDisableUserMFA extends Component {
     );
   }
 }
-
 
 ConfirmDisableUserMFA.contextType = AppContext;
 
