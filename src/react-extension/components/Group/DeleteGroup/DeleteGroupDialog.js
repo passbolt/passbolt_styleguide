@@ -111,26 +111,17 @@ class DeleteGroupDialog extends Component {
     return this.context.deleteGroupDialogProps.group;
   }
 
-  get numberResourcesOwnedByGroup() {
-    return this.context.deleteGroupDialogProps.numberResourcesOwned;
-  }
-
   render() {
     return (
       <DialogWrapper
-        title="Are you sure ?"
+        title="Delete group?"
         onClose={this.handleCloseClick}
         disabled={this.state.processing}
         className="delete-user-dialog">
         <form onSubmit={this.handleFormSubmit} noValidate>
           <div className="form-content">
-            <p><strong>You are about to delete the group {this.group.name}!</strong></p>
-            {this.numberResourcesOwnedByGroup > 0 &&
-            <p>This group is associated with {this.numberResourcesOwnedByGroup} passwords. All users in this group will lose access to these passwords.</p>
-            }
-            {this.numberResourcesOwnedByGroup === 0 &&
-            <p>This group is not associated with any password. You are good to go!</p>
-            }
+            <p>Are you sure you want to delete the group <strong>{this.group.name}</strong>?</p>
+            <p>Warning: This action can’t be undone. Users in this group may lose access to the content shared with it.</p>
           </div>
           <div className="submit-wrapper clearfix">
             <FormSubmitButton disabled={this.hasAllInputDisabled()} processing={this.state.processing} value="Delete" warning={true}/>

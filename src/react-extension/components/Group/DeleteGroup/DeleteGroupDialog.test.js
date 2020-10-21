@@ -31,8 +31,7 @@ describe("See Delete Group Dialog", () => {
   const context = defaultAppContext(); // The applicative context
   const props = defaultProps(); // The props to pass
   const deleteGroupDialogProps = {
-    group: mockGroup,
-    numberResourcesOwned: 15
+    group: mockGroup
   };
 
   const mockContextRequest = (context, implementation) => jest.spyOn(context.port, 'request').mockImplementation(implementation);
@@ -54,7 +53,7 @@ describe("See Delete Group Dialog", () => {
       expect(page.displayDeleteGroupDialog.exists()).toBeTruthy();
       // title
       expect(page.displayDeleteGroupDialog.dialogTitle).not.toBeNull();
-      expect(page.displayDeleteGroupDialog.dialogTitle.textContent).toBe("Are you sure ?");
+      expect(page.displayDeleteGroupDialog.dialogTitle.textContent).toBe("Delete group?");
       // close button
       expect(page.displayDeleteGroupDialog.closeButton).not.toBeNull();
       // submit button
@@ -64,7 +63,7 @@ describe("See Delete Group Dialog", () => {
       expect(page.displayDeleteGroupDialog.cancelButton).not.toBeNull();
       expect(page.displayDeleteGroupDialog.cancelButton.textContent).toBe('Cancel');
       // user name
-      expect(page.displayDeleteGroupDialog.groupName.textContent).toBe(`You are about to delete the group ${mockGroup.name}!`);
+      expect(page.displayDeleteGroupDialog.groupName.textContent).toBe(`${mockGroup.name}`);
     });
 
     it('As AD I should see a toaster message after deleting a group', async() => {

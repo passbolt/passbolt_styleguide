@@ -77,7 +77,7 @@ describe("See Delete Group Dialog", () => {
       expect(page.displayDeleteGroupWithConflictsDialog.cancelButton).not.toBeNull();
       expect(page.displayDeleteGroupWithConflictsDialog.cancelButton.textContent).toBe('Cancel');
       // group name
-      expect(page.displayDeleteGroupWithConflictsDialog.groupName.textContent).toBe(`You are about to delete ${mockGroup.name}.`);
+      expect(page.displayDeleteGroupWithConflictsDialog.groupName.textContent).toBe(`${mockGroup.name}`);
     });
 
     it('As AD I should see a toaster message after deleting a group', async() => {

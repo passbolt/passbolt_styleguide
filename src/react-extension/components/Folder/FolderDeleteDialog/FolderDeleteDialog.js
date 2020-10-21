@@ -202,14 +202,12 @@ class FolderDeleteDialog extends Component {
 
   render() {
     return (
-      <DialogWrapper className='folder-create-dialog' title="Are you sure?"
+      <DialogWrapper className='folder-create-dialog' title="Delete folder?"
         onClose={this.handleClose} disabled={this.hasAllInputDisabled()}>
         <form className="folder-create-form" onSubmit={this.handleFormSubmit} noValidate>
           <div className="form-content">
-            <p>
-                You&apos;re about to delete the folder <strong>{this.state.name}</strong>.
-                Other users may loose access. This action cannot be undone.
-            </p>
+            <p>Are you sure you want to delete the folder <strong>{this.state.name}</strong>?</p>
+            <p>Warning: This action can’t be undone. Other users may lose access.</p>
             <div className="input checkbox">
               <input id="delete-cascade" type="checkbox" name="cascade" onChange={this.handleInputChange}
                 autoFocus={true} disabled={this.hasAllInputDisabled()} />&nbsp;

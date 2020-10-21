@@ -81,7 +81,7 @@ describe("See Delete User Dialog", () => {
       expect(page.displayDeleteUserWithConflictsDialog.cancelButton).not.toBeNull();
       expect(page.displayDeleteUserWithConflictsDialog.cancelButton.textContent).toBe('Cancel');
       // user name
-      expect(page.displayDeleteUserWithConflictsDialog.userName.textContent).toBe(`You are about to delete ${mockUsers[0].profile.first_name} ${mockUsers[0].profile.last_name}.`);
+      expect(page.displayDeleteUserWithConflictsDialog.userName.textContent).toBe(`${mockUsers[0].profile.first_name} ${mockUsers[0].profile.last_name}`);
     });
 
     it('As AD I should see a toaster message after deleting a user', async() => {

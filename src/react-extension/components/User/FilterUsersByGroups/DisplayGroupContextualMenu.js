@@ -42,10 +42,10 @@ class DisplayGroupContextualMenu extends React.Component {
    */
   async handleDeleteClickEvent() {
     try {
-      const result = await this.context.port.request("passbolt.groups.delete-dry-run", this.group.id);
-      this.displayDeleteGroupDialog(result.body.length);
+      await this.context.port.request("passbolt.groups.delete-dry-run", this.group.id);
+      this.displayDeleteGroupDialog();
     } catch (error) {
-      if (error.name === 'DryRunDeleteError') {
+      if (error.name === "DeleteDryRunError") {
         this.displayDeleteGroupWithConflictsDialog(error.errors);
       } else {
         this.handleError(error);
@@ -57,10 +57,9 @@ class DisplayGroupContextualMenu extends React.Component {
   /**
    * Display delete user dialog when there is not conflict to solve
    */
-  displayDeleteGroupDialog(numberResourcesOwned) {
+  displayDeleteGroupDialog() {
     const deleteGroupDialogProps = {
-      group: this.group,
-      numberResourcesOwned
+      group: this.group
     };
     this.context.setContext({deleteGroupDialogProps});
     this.props.dialogContext.open(DeleteGroupDialog);

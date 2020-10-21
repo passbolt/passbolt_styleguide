@@ -176,7 +176,7 @@ class DeleteUserWithConflictsDialog extends Component {
     let acoPermissionsOptions = acoError.permissions;
     acoPermissionsOptions = this.filterOutUserToDeleteFromPermissions(acoPermissionsOptions);
     acoPermissionsOptions = this.decoratePermissionWithAcoEntity(acoPermissionsOptions);
-    acoPermissionsOptions = this.sortGroupsUsersAlphabeticallyByAcoName(acoPermissionsOptions);
+    acoPermissionsOptions = this.sortPermissionsAlphabeticallyByAcoName(acoPermissionsOptions);
     return acoPermissionsOptions;
   }
 
@@ -211,7 +211,7 @@ class DeleteUserWithConflictsDialog extends Component {
    * @param {array} permissions
    * @returns {array}
    */
-  sortGroupsUsersAlphabeticallyByAcoName(permissions) {
+  sortPermissionsAlphabeticallyByAcoName(permissions) {
     return permissions.sort((permissionA, permissionB) => {
       const permissionAAcoName = permissionA.aro === "Group" ? permissionA.group.name : this.getUserFullName(permissionA.user);
       const permissionBAcoName = permissionB.aro === "Group" ? permissionB.group.name : this.getUserFullName(permissionB.user);
@@ -473,13 +473,8 @@ class DeleteUserWithConflictsDialog extends Component {
         className="delete-user-dialog">
         <form onSubmit={this.handleFormSubmit} noValidate>
           <div className="form-content intro">
-            <p>
-              <strong>You are about to delete {this.getUserFullName(this.userToDelete)}.</strong>
-            </p>
-            <p>
-              This user is the owner of passwords or groups.
-              You need to transfer the ownership to other users to continue.
-            </p>
+            <p>You are about to delete the user <strong>{this.getUserFullName(this.userToDelete)}</strong>.</p>
+            <p>This user is the sole owner of some content. You need to transfer the ownership to others to continue.</p>
           </div>
           <div className="ownership-transfer">
             {this.hasFolderConflict() &&

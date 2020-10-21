@@ -42,7 +42,7 @@ class DeleteGroupWithConflictsDialog extends Component {
     this.acosPermissionsOptions = this.getAcosPermissionsOptionsMap();
   }
 
-  get  defaultState() {
+  get defaultState() {
     return {
       processing: false,
       owners: this.populateDefaultOwners(),
@@ -106,7 +106,7 @@ class DeleteGroupWithConflictsDialog extends Component {
     let acoPermissionsOptions = acoError.permissions;
     acoPermissionsOptions = this.filterOutGroupToDeleteFromPermissions(acoPermissionsOptions);
     acoPermissionsOptions = this.decoratePermissionWithAcoEntity(acoPermissionsOptions);
-    acoPermissionsOptions = this.sortGroupsUsersAlphabeticallyByAcoName(acoPermissionsOptions);
+    acoPermissionsOptions = this.sortPermissionsAlphabeticallyByAcoName(acoPermissionsOptions);
     return acoPermissionsOptions;
   }
 
@@ -141,7 +141,7 @@ class DeleteGroupWithConflictsDialog extends Component {
    * @param {array} permissions
    * @returns {array}
    */
-  sortGroupsUsersAlphabeticallyByAcoName(permissions) {
+  sortPermissionsAlphabeticallyByAcoName(permissions) {
     return permissions.sort((permissionA, permissionB) => {
       const permissionAAcoName = permissionA.aro === "Group" ? permissionA.group.name : this.getUserFullName(permissionA.user);
       const permissionBAcoName = permissionB.aro === "Group" ? permissionB.group.name : this.getUserFullName(permissionB.user);
@@ -349,12 +349,8 @@ class DeleteGroupWithConflictsDialog extends Component {
         className="delete-user-dialog">
         <form onSubmit={this.handleFormSubmit} noValidate>
           <div className="form-content intro">
-            <p>
-              <strong>You are about to delete {this.groupToDelete.name}.</strong>
-            </p>
-            <p>
-              This group is the owner of passwords. You need to transfer the ownership to other users or groups to continue.
-            </p>
+            <p>You are about to delete the group <strong>{this.groupToDelete.name}</strong>.</p>
+            <p>This group is the sole owner of some content. You need to transfer the ownership to others to continue.</p>
           </div>
           <div className="ownership-transfer">
             {this.hasFolderConflict() &&
