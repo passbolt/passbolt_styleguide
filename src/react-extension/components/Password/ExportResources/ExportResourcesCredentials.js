@@ -24,7 +24,6 @@ import Icon from "../../../../react/components/Common/Icons/Icon";
 import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 import ErrorDialog from "../../Dialog/ErrorDialog/ErrorDialog";
 
-
 /**
  * This component is the second step of the export dialog when the file to import is KDB(X) file
  */
@@ -64,7 +63,6 @@ class ExportResourcesCredentials extends Component {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-
   /**
    * Create elements references
    */
@@ -73,27 +71,11 @@ class ExportResourcesCredentials extends Component {
     this.passwordInputRef = React.createRef();
   }
 
-
-  /**
-   * Returns the CSS style of the choose file addon button
-   */
-  get chooseFileStyle() {
-    return {
-      width: "35%",
-      padding: "11px 0px 5px 0px",
-      display: "inline-block",
-      marginLeft: "-2px",
-      borderTopLeftRadius: 0,
-      borderBottomLeftRadius: 0
-    };
-  }
-
-
   /**
    * Returns the selected file's name
    */
   get selectedFilename() {
-    return this.state.keyFile ? this.state.keyFile.name : '';
+    return this.state.keyFile ? this.state.keyFile.name : "";
   }
 
   /**
@@ -116,7 +98,6 @@ class ExportResourcesCredentials extends Component {
   get areActionsAllowed() {
     return !this.isProcessing;
   }
-
 
   /**
    * Handle the password view mode toggle
@@ -154,6 +135,7 @@ class ExportResourcesCredentials extends Component {
    */
   async handleSubmit(event) {
     event.preventDefault();
+    await this.setState({actions: {processing: true}});
     await this.export()
       .then(this.onExportSuccess.bind(this))
       .catch(this.onExportFailure.bind(this));
@@ -164,11 +146,35 @@ class ExportResourcesCredentials extends Component {
    */
   async export() {
     const password = this.passwordInputRef.current.value;
-    const keyFile = this.state.keyFile;
-    const options = {format: this.state.selectedExportFormat, credentials: {password, keyFile}};
+    const keyFile = await this.readFile();
+    const options = {format: "kdbx", credentials: {password, keyFile}};
     const foldersIds = this.props.resourceWorkspaceContext.resourcesToExport.foldersIds;
     const resourcesIds = this.props.resourceWorkspaceContext.resourcesToExport.resourcesIds;
-    await this.context.port.request('passbolt.export-passwords.export-to-file', {foldersIds, resourcesIds, options});
+    await this.context.port.request("passbolt.export-passwords.export-to-file", {foldersIds, resourcesIds}, options);
+  }
+
+  /**
+   * Read the selected file and returns its content in a base 64
+   * @return {Promise<string>}
+   */
+  readFile() {
+    if (!this.state.keyFile) {
+      return;
+    }
+
+    const reader = new FileReader();
+    return new Promise((resolve, reject) => {
+      reader.onloadend = event => {
+        try {
+          const base64Url = event.target.result;
+          const fileBase64 = base64Url.split(",")[1];
+          resolve(fileBase64);
+        } catch (e) {
+          reject(e);
+        }
+      };
+      reader.readAsDataURL(this.state.keyFile);
+    });
   }
 
   /**
@@ -176,7 +182,7 @@ class ExportResourcesCredentials extends Component {
    */
   async onExportSuccess() {
     await this.props.resourceWorkspaceContext.onResourcesToExport({resourcesIds: null, foldersIds: null});
-    await this.props.actionFeedbackContext.displaySuccess('The passwords have been exported successfully');
+    await this.props.actionFeedbackContext.displaySuccess("The passwords have been exported successfully");
     this.close();
   }
 
@@ -188,7 +194,7 @@ class ExportResourcesCredentials extends Component {
       title: "There was an unexpected error...",
       message: error.message
     };
-    await this.props.resourceWorkspaceContext.onResourcesToExport({resourcesIds: null, foldersIds: null});
+    await this.setState({actions: {processing: false}});
     await this.context.setContext({errorDialogProps});
     this.props.dialogContext.open(ErrorDialog);
   }
@@ -207,69 +213,50 @@ class ExportResourcesCredentials extends Component {
     return (
       <DialogWrapper
         title="Enter the password and/or key file"
+        className="export-password-dialog"
         onClose={this.handleCancel}
-        disabled={this.areActionsAllowed}>
+        disabled={!this.areActionsAllowed}>
         <form onSubmit={this.handleSubmit}>
 
           <div className="form-content">
 
             <div className="input-password-wrapper">
-              <label htmlFor="password">
-                Keepass password
-              </label>
-              <div
-                className="input text password"
-                style={{width: "83%"}}>
-                <input
-                  id="password"
+              <label htmlFor="password">Keepass password</label>
+              <div className="input text password">
+                <input id="password"
                   type={this.state.showPassword ? "text" : "password"}
                   placeholder="Passphrase"
                   ref={this.passwordInputRef}
-                  style={{width: "100%"}}/>
+                  disabled={!this.areActionsAllowed}/>
               </div>
-              <ul
-                className="actions inline"
-                style={{width: "17%", lineHeight: "24px"}}>
+              <ul className="actions inline">
                 <li>
                   <a
                     onClick={this.handlePasswordViewToggled}
-                    className={`password-view button button-icon toggle ${this.state.showPassword ? "selected" : ""}`}>
-                    <Icon name='eye-open' big={true}/>
+                    className={`password-view button button-icon toggle ${this.state.showPassword ? "selected" : ""} ${!this.areActionsAllowed ? "disabled" : ""}`}>
+                    <Icon name="eye-open" big={true}/>
                     <span className="visually-hidden">view</span>
                   </a>
                 </li>
               </ul>
-
             </div>
 
-            <div className="input text">
-              <input
-                type="file"
-                ref={this.fileUploaderRef}
-                style={{display: "None"}}
-                onChange={this.handleFileSelected}/>
-              <label>
-                Keepass key file (optional)
-              </label>
-
-              <input
-                type="text"
-                style={{width: "60%", textOverflow: "ellipsis"}}
-                placeholder="No key file selected"
-                disabled
-                value={this.selectedFilename}/>
-              <a
-                style={this.chooseFileStyle}
-                className="button primary"
-                onClick={this.handleSelectFile}>
-                <Icon name="upload-a" />
-                <strong  style={{marginLeft: "7px"}}>
-                  Choose a file
-                </strong>
-              </a>
-
+            <div className="input-file-chooser-wrapper">
+              <div className="input text">
+                <input type="file"
+                  ref={this.fileUploaderRef}
+                  onChange={this.handleFileSelected}/>
+                <label>Keepass key file (optional)</label>
+                <input type="text"
+                  placeholder="No key file selected"
+                  disabled
+                  value={this.selectedFilename}/>
+                <a className={`button primary ${!this.areActionsAllowed ? "disabled" : ""}`}
+                  onClick={this.handleSelectFile}>
+                  <Icon name="upload-a"/> Choose a file
+                </a>
+              </div>
             </div>
-
           </div>
 
           <div className="submit-wrapper clearfix">
@@ -286,7 +273,6 @@ class ExportResourcesCredentials extends Component {
     );
   }
 }
-
 
 ExportResourcesCredentials.contextType = AppContext;
 

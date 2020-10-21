@@ -60,6 +60,24 @@ class ExportResources extends React.Component {
   }
 
   /**
+   * ComponentDidMount
+   * Invoked immediately after component is inserted into the tree
+   * @return {void}
+   */
+  componentDidMount() {
+    this.findContentToExport();
+  }
+
+  /**
+   * Find the content to export and update the context.
+   */
+  findContentToExport() {
+    const foldersIds = this.findFoldersIdsToExport();
+    const resourcesIds = this.findResourcesIdsToExport(foldersIds);
+    this.props.resourceWorkspaceContext.onResourcesToExport({resourcesIds, foldersIds});
+  }
+
+  /**
    * Return trus if the export is processing
    */
   get isProcessing() {
@@ -77,23 +95,66 @@ class ExportResources extends React.Component {
    * Returns true if some folders must be exported
    */
   get hasFoldersToExport() {
-    return this.props.resourceWorkspaceContext.resourcesToExport.foldersIds;
+    const foldersIds = this.props.resourceWorkspaceContext.resourcesToExport.foldersIds;
+    return foldersIds && foldersIds.length > 0;
   }
 
   /**
-   * Returns the resources identifiers to export
+   * Returns true if some resources must be exported
    */
-  get resourcesIdsToExport() {
-    return this.props.resourceWorkspaceContext.resourcesToExport.resourcesIds;
+  get hasResourcesToExport() {
+    const resourcesIds = this.props.resourceWorkspaceContext.resourcesToExport.resourcesIds;
+    return resourcesIds && resourcesIds.length > 0;
   }
 
   /**
    * Returns the folders identifiers to export
    */
-  get foldersIdsToExport() {
+  findFoldersIdsToExport() {
+    if (!this.hasFoldersToExport) {
+      return [];
+    }
     const foldersIds = this.props.resourceWorkspaceContext.resourcesToExport.foldersIds;
-    const childrenFoldersIds = foldersIds.map(folderId => this.findSubfoldersIds(folderId)).flat();
+    const childrenFoldersIds = foldersIds.map(folderId => this.getChildrenFoldersIds(folderId)).flat();
     return [...foldersIds, ...childrenFoldersIds];
+  }
+
+  /**
+   * Returns the children folders ids of the given folder
+   * @param folderId A folder identifier
+   */
+  getChildrenFoldersIds(folderId) {
+    const folders = this.context.folders;
+    const childrenFoldersIds = folders
+      .filter(folder => folder.folder_parent_id === folderId)
+      .map(folder => folder.id);
+
+    const hasChildren = childrenFoldersIds.length !== 0;
+    if (!hasChildren) {
+      return [];
+    } else {
+      const grandChildrenFolders = childrenFoldersIds.map(childFolderId => this.getChildrenFoldersIds(childFolderId));
+      return [...childrenFoldersIds, ...grandChildrenFolders.flat()];
+    }
+  }
+
+  /**
+   * Returns the resources identifiers to export
+   * @param {array} foldersIds The list of folders to crawl for resources
+   */
+  findResourcesIdsToExport(foldersIds) {
+    const resourcesIdsOfFoldersIds = this.getResourcesIdsOfFoldersToExport(foldersIds);
+    const resourcesIdsToExport = this.props.resourceWorkspaceContext.resourcesToExport.resourcesIds || [];
+    return Array.from(new Set([...resourcesIdsToExport, ...resourcesIdsOfFoldersIds]));
+  }
+
+  /**
+   * Returns the resources ids of the folders to export
+   * @param foldersIds The folders to look into
+   */
+  getResourcesIdsOfFoldersToExport(foldersIds) {
+    const belongsToFolder = resource => foldersIds.some(folderId => folderId === resource.folder_parent_id);
+    return this.context.resources.filter(belongsToFolder).map(resource => resource.id);
   }
 
   /**
@@ -101,10 +162,10 @@ class ExportResources extends React.Component {
    */
   get exportFormats() {
     return [
-      {label: 'kdbx (keepass / keepassx)', value: 'kdbx'},
-      {label: 'csv (keepass / keepassx)', value: 'csv-kdbx'},
-      {label: 'csv (lastpass)', value: 'csv-lastpass'},
-      {label: 'csv (1password)', value: 'csv-1pass'},
+      {label: "kdbx (keepass / keepassx)", value: "kdbx"},
+      {label: "csv (keepass / keepassx)", value: "csv-kdbx"},
+      {label: "csv (lastpass)", value: "csv-lastpass"},
+      {label: "csv (1password)", value: "csv-1password"},
     ];
   }
 
@@ -122,7 +183,7 @@ class ExportResources extends React.Component {
    */
   async handleExport(event) {
     event.preventDefault();
-    const isCsv = this.state.selectedExportFormat.startsWith('csv');
+    const isCsv = this.state.selectedExportFormat.startsWith("csv");
     if (isCsv) { // CSV case
       await this.setState({actions: {processing: true}});
       this.export()
@@ -137,7 +198,8 @@ class ExportResources extends React.Component {
   /**
    * Whenever the export is cancelled
    */
-  handleCancel() {
+  async handleCancel() {
+    await this.props.resourceWorkspaceContext.onResourcesToExport({resourcesIds: null, foldersIds: null});
     this.close();
   }
 
@@ -149,23 +211,22 @@ class ExportResources extends React.Component {
     this.setState({selectedExportFormat});
   }
 
-
   /**
    * Export the selected resources or folders
    */
   async export() {
-    const options = {format: this.state.selectedExportFormat};
+    const options = {format: this.state.selectedExportFormat, credentials: {password: null, keyFile: null}};
     const foldersIds = this.props.resourceWorkspaceContext.resourcesToExport.foldersIds;
     const resourcesIds = this.props.resourceWorkspaceContext.resourcesToExport.resourcesIds;
-    await this.context.port.request('passbolt.export-passwords.export-to-file', {foldersIds, resourcesIds, options});
+    await this.context.port.request("passbolt.export-passwords.export-to-file", {foldersIds, resourcesIds}, options);
   }
 
   /**
-   * Whenever the export has been performed succesfully
+   * Whenever the export has been performed successfully
    */
   async onExportSuccess() {
     await this.setState({actions: {processing: false}});
-    await this.props.actionFeedbackContext.displaySuccess('The passwords have been exported successfully');
+    await this.props.actionFeedbackContext.displaySuccess("The passwords have been exported successfully");
     await this.props.resourceWorkspaceContext.onResourcesToExport({resourcesIds: null, foldersIds: null});
     this.close();
   }
@@ -179,7 +240,6 @@ class ExportResources extends React.Component {
       message: error.message
     };
     await this.setState({actions: {processing: false}});
-    await this.props.resourceWorkspaceContext.onResourcesToExport({resourcesIds: null, foldersIds: null});
     await this.context.setContext({errorDialogProps});
     this.props.dialogContext.open(ErrorDialog);
   }
@@ -192,55 +252,30 @@ class ExportResources extends React.Component {
   }
 
   /**
-   * Returns the subfolder ids of the given folder
-   * @param folderId A folder identifier
-   */
-  findSubfoldersIds(folderId) {
-    const folders = this.context.folders;
-    const childrenFolders = folders
-      .filter(folder => folder.folder_parent_id === folderId)
-      .map(folder => folder.id);
-    const hasChildren = childrenFolders.length !== 0;
-    if (!hasChildren) {
-      return [];
-    } else {
-      const grandChildrenFolders = childrenFolders.map(childFolder => this.findSubfoldersIds(childFolder.id));
-      return [...childrenFolders, ...grandChildrenFolders.flat()];
-    }
-  }
-
-  /**
-   * Returns the resources ids of the folders to export
-   * @param foldersIds The folders to look into
-   */
-  findResourcesIdsOfFoldersToExport(foldersIds) {
-    const belongsToFolder = resource => foldersIds.some(folderId =>  folderId === resource.folder_parent_id);
-    return this.context.resources.filter(belongsToFolder);
-  }
-
-  /**
    * Render the component
    */
   render() {
-    const foldersIdsToExport = this.hasFoldersToExport && this.foldersIdsToExport;
-    const resourcesIdsToExport = this.hasFoldersToExport ? this.findResourcesIdsOfFoldersToExport(foldersIdsToExport) : this.resourcesIdsToExport;
+    const foldersIdsToExport = this.hasFoldersToExport && this.props.resourceWorkspaceContext.resourcesToExport.foldersIds;
+    const resourcesIdsToExport = this.hasResourcesToExport && this.props.resourceWorkspaceContext.resourcesToExport.resourcesIds;
+
     return (
       <DialogWrapper
-        title="Export passwords !"
+        title="Export passwords"
         onClose={this.handleClose}
-        disabled={this.areActionsAllowed}>
+        disabled={!this.areActionsAllowed}>
         <form
           onSubmit={this.handleExport}
           noValidate>
 
           <div className="form-content">
 
-            <div className={`input text required`}>
-              <label htmlFor="export-format">Choose the export format ( csv and kdbx are supported)</label>
+            <div className="input text required">
+              <label htmlFor="export-format">Choose the export format (csv and kdbx are supported)</label>
               <select
                 id="export-format"
                 value={this.state.selectedExportFormat}
-                onChange={this.handleExportFormatSelected}>
+                onChange={this.handleExportFormatSelected}
+                disabled={!this.areActionsAllowed}>
                 {
                   this.exportFormats.map(format =>
                     <option
@@ -255,12 +290,14 @@ class ExportResources extends React.Component {
 
             <br/>
             <p>
-              {this.hasFoldersToExport && <em>{resourcesIdsToExport.length} passwords and {foldersIdsToExport.length} folders are going to be exported.</em>}
-              {!this.hasFoldersToExport &&
-                <>
-                  {resourcesIdsToExport.length === 1 && <em>One password is going to be exported</em>}
-                  {resourcesIdsToExport.length > 1 && <em>{resourcesIdsToExport.length} passwords are going to be exported.</em>}
-                </>
+              {this.hasFoldersToExport && this.hasResourcesToExport &&
+              <em>{resourcesIdsToExport.length} passwords and {foldersIdsToExport.length} folders are going to be exported.</em>}
+              {!this.hasFoldersToExport && this.hasResourcesToExport &&
+              <>
+                {resourcesIdsToExport.length === 1 && <em>One password is going to be exported</em>}
+                {resourcesIdsToExport.length > 1 &&
+                <em>{resourcesIdsToExport.length} passwords are going to be exported.</em>}
+              </>
               }
             </p>
           </div>

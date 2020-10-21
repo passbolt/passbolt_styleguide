@@ -132,6 +132,7 @@ class PasswordUnlockKeypassDialog extends Component {
 
   /**
    * Read the selected file and returns its content in a base 64
+   * @return {Promise<string>}
    */
   readFile() {
     if (!this.state.keyFile) {

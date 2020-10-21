@@ -1,0 +1,41 @@
+/* import password dialogs */
+.export-password-dialog {
+  .input-password-wrapper {
+    .input.password {
+      width: 81%;
+
+      input[type="text"],
+      input[type="password"] {
+        width:100%;
+        text-overflow: ellipsis;
+      }
+    }
+    .actions.inline {
+      float: none;
+      width: auto;
+
+      .button {
+        padding: 0.6em 0 0.4285714em 0;
+        border-left: 0;
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
+      }
+    }
+  }
+  .input-file-chooser-wrapper {
+    input[type="file"] {
+      display: none;
+    }
+    input[type="text"] {
+      width: 60%;
+      text-overflow: ellipsis;
+    }
+    .button.primary {
+      display: inline-block;
+      top: -3px;
+      padding: .60em 1.225em .55em 1.225em;
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
+    }
+  }
+}

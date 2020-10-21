@@ -45,7 +45,10 @@ export const ResourceWorkspaceContext = React.createContext({
   resourceFileToImport: null, // The resource file to import
   resourceFileImportResult: null, // The resource file import result
   lockDisplayDetail: true, // lock the detail to display the folder or password sidebar
-  resourcesToExport: null, // The resources / folders to export
+  resourcesToExport: {
+    resourcesIds: null, // The resources ids to export
+    foldersIds: null // The folders ids to export
+  },
   onLockDetail: () => {}, // Lock or unlock detail (hide or display the folder or password sidebar)
   onTextFilterChanged: () => {}, // Whenever the search text filter changed
   onResourceScrolled: () => {}, // Whenever one scrolled to a resource
@@ -58,8 +61,8 @@ export const ResourceWorkspaceContext = React.createContext({
     single: () => {}// Whenever a single resource has been selected
   },
   onResourceFileToImport: () => {}, // Whenever a resource file will be imported
-  onResourceFileImportResult: () => {} // Whenever the import result has been provided
-  onResourcesToExport: () => {} // Whenever resources and/or folder have to be exported
+  onResourceFileImportResult: () => {}, // Whenever the import result has been provided
+  onResourcesToExport: () => {} // Whenever resources and/or folder will be exported
 });
 
 /**
@@ -111,7 +114,7 @@ class ResourceWorkspaceContextProvider extends React.Component {
         single: this.handleResourceSelected.bind(this)// Whenever a single resource has been selected
       },
       onResourceFileToImport: this.handleResourceFileToImport.bind(this), // Whenever a resource file will be imported
-      onResourceFileImportResult: this.handleResourceFileImportResult.bind(this)// Whenever the import result has been provided
+      onResourceFileImportResult: this.handleResourceFileImportResult.bind(this), // Whenever the import result has been provided
       onResourcesToExport: this.handleResourcesToExportChange.bind(this) // Whenever resources and/or folder have to be exported
     };
   }
@@ -387,7 +390,6 @@ class ResourceWorkspaceContextProvider extends React.Component {
   async handleResourceFileImportResult(result) {
     await this.updateImportResult(result);
   }
-
 
   /**
    * Whenever the resources / folders to export change
