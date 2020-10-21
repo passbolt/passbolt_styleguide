@@ -62,7 +62,8 @@ class CreateUserDialog extends Component {
       last_nameError: null,
       username: "",
       usernameError: null,
-      is_admin: false
+      is_admin: false,
+      hasAlreadyBeenValidated: false // True if the form has alreadt been submitted once
     };
   }
 
@@ -84,9 +85,9 @@ class CreateUserDialog extends Component {
     this.handleClose = this.handleClose.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleFormSubmit = this.handleFormSubmit.bind(this);
-    this.handleFirstNameInputOnBlur = this.handleFirstNameInputOnBlur.bind(this);
-    this.handleLastNameInputOnBlur = this.handleLastNameInputOnBlur.bind(this);
-    this.handleUsernameInputOnBlur = this.handleUsernameInputOnBlur.bind(this);
+    this.handleFirstNameInputKeyUp = this.handleFirstNameInputKeyUp.bind(this);
+    this.handleLastNameInputOnKeyUp = this.handleLastNameInputOnKeyUp.bind(this);
+    this.handleUsernameInputOnKeyUp = this.handleUsernameInputOnKeyUp.bind(this);
     this.handleCheckboxClick = this.handleCheckboxClick.bind(this);
   }
 
@@ -125,25 +126,31 @@ class CreateUserDialog extends Component {
   /**
    * Handle first name input keyUp event.
    */
-  handleFirstNameInputOnBlur() {
-    const state = this.validateFirstNameInput();
-    this.setState(state);
+  handleFirstNameInputKeyUp() {
+    if (this.state.hasAlreadyBeenValidated) {
+      const state = this.validateFirstNameInput();
+      this.setState(state);
+    }
   }
 
   /**
    * Handle last name input keyUp event.
    */
-  handleLastNameInputOnBlur() {
-    const state = this.validateLastNameInput();
-    this.setState(state);
+  handleLastNameInputOnKeyUp() {
+    if (this.state.hasAlreadyBeenValidated) {
+      const state = this.validateLastNameInput();
+      this.setState(state);
+    }
   }
 
   /**
    * Handle username/email input keyUp event.
    */
-  handleUsernameInputOnBlur() {
-    const state = this.validateUsernameInput();
-    this.setState(state);
+  handleUsernameInputOnKeyUp() {
+    if (this.state.hasAlreadyBeenValidated) {
+      const state = this.validateUsernameInput();
+      this.setState(state);
+    }
   }
 
   /**
@@ -155,16 +162,18 @@ class CreateUserDialog extends Component {
     // Avoid the form to be submitted.
     event.preventDefault();
 
+    await this.setState({hasAlreadyBeenValidated: true});
+
     // Do not re-submit an already processing form
     if (!this.state.processing) {
       await this.toggleProcessing();
       await this.validate();
+
       if (this.hasValidationError()) {
         await this.toggleProcessing();
         this.focusFirstFieldError();
         return;
       }
-
       try {
         await this.createUser();
         await this.handleSaveSuccess();
@@ -360,7 +369,7 @@ class CreateUserDialog extends Component {
                 ref={this.firstNameRef}
                 type="text" value={this.state.first_name} placeholder="first name"
                 required="required" disabled={this.hasAllInputDisabled()}
-                onBlur={this.handleFirstNameInputOnBlur} onChange={this.handleInputChange}
+                onKeyUp={this.handleFirstNameInputKeyUp} onChange={this.handleInputChange}
                 autoComplete='off' autoFocus={true}
               />
               {this.state.first_nameError &&
@@ -373,7 +382,7 @@ class CreateUserDialog extends Component {
                 ref={this.lastNameRef}
                 type="text" value={this.state.last_name} placeholder="last name"
                 required="required" disabled={this.hasAllInputDisabled()}
-                onBlur={this.handleLastNameInputOnBlur} onChange={this.handleInputChange}
+                onKeyUp={this.handleLastNameInputOnKeyUp} onChange={this.handleInputChange}
                 autoComplete='off' autoFocus={true}
               />
               {this.state.last_nameError &&
@@ -385,7 +394,7 @@ class CreateUserDialog extends Component {
               <input id="user-username-input" name="username"
                 ref={this.usernameRef} type="text" value={this.state.username} placeholder="email"
                 required="required" disabled={this.hasAllInputDisabled()}
-                onBlur={this.handleUsernameInputOnBlur} onChange={this.handleInputChange}
+                onKeyUp={this.handleUsernameInputOnKeyUp} onChange={this.handleInputChange}
                 autoComplete='off' autoFocus={true}
               />
               {this.state.usernameError &&

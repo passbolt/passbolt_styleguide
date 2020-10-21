@@ -51,7 +51,8 @@ class EditUserDialog extends Component {
       last_name: user.profile.last_name,
       last_nameError: null,
       username: user.username,
-      is_admin: role.name === 'admin'
+      is_admin: role.name === 'admin',
+      hasAlreadyBeenValidated: false // True if the form has alreadt been submitted once
     };
   }
 
@@ -83,8 +84,8 @@ class EditUserDialog extends Component {
     this.handleClose = this.handleClose.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleFormSubmit = this.handleFormSubmit.bind(this);
-    this.handleFirstNameInputOnBlur = this.handleFirstNameInputOnBlur.bind(this);
-    this.handleLastNameInputOnBlur = this.handleLastNameInputOnBlur.bind(this);
+    this.handleFirstNameInputOnKeyUp = this.handleFirstNameInputOnKeyUp.bind(this);
+    this.handleLastNameInputOnKeyUp = this.handleLastNameInputOnKeyUp.bind(this);
     this.handleCheckboxClick = this.handleCheckboxClick.bind(this);
   }
 
@@ -124,17 +125,21 @@ class EditUserDialog extends Component {
   /**
    * Handle first name input keyUp event.
    */
-  handleFirstNameInputOnBlur() {
-    const state = this.validateFirstNameInput();
-    this.setState(state);
+  handleFirstNameInputOnKeyUp() {
+    if (this.state.hasAlreadyBeenValidated) {
+      const state = this.validateFirstNameInput();
+      this.setState(state);
+    }
   }
 
   /**
    * Handle last name input keyUp event.
    */
-  handleLastNameInputOnBlur() {
-    const state = this.validateLastNameInput();
-    this.setState(state);
+  handleLastNameInputOnKeyUp() {
+    if (this.state.hasAlreadyBeenValidated) {
+      const state = this.validateLastNameInput();
+      this.setState(state);
+    }
   }
 
   /**
@@ -145,6 +150,8 @@ class EditUserDialog extends Component {
   async handleFormSubmit(event) {
     // Avoid the form to be submitted.
     event.preventDefault();
+
+    await this.setState({hasAlreadyBeenValidated: true});
 
     // Do not re-submit an already processing form
     if (!this.state.processing) {
@@ -312,7 +319,7 @@ class EditUserDialog extends Component {
               <input id="user-first-name-input" name="first_name"
                 ref={this.firstNameRef} type="text" value={this.state.first_name} placeholder="first name"
                 required="required" disabled={this.hasAllInputDisabled()}
-                onBlur={this.handleFirstNameInputOnBlur} onChange={this.handleInputChange}
+                onKeyUp={this.handleFirstNameInputOnKeyUp} onChange={this.handleInputChange}
                 autoComplete='off' autoFocus={true}
               />
               {this.state.first_nameError &&
@@ -324,7 +331,7 @@ class EditUserDialog extends Component {
               <input id="user-last-name-input" name="last_name"
                 ref={this.lastNameRef} type="text" value={this.state.last_name} placeholder="last name"
                 required="required" disabled={this.hasAllInputDisabled()}
-                onBlur={this.handleLastNameInputOnBlur} onChange={this.handleInputChange}
+                onKeyUp={this.handleLastNameInputOnKeyUp} onChange={this.handleInputChange}
                 autoComplete='off' autoFocus={true}
               />
               {this.state.last_nameError &&
