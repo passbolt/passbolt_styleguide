@@ -85,9 +85,9 @@ class CreateUserDialog extends Component {
     this.handleClose = this.handleClose.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleFormSubmit = this.handleFormSubmit.bind(this);
-    this.handleFirstNameInputOnBlur = this.handleFirstNameInputOnBlur.bind(this);
-    this.handleLastNameInputOnBlur = this.handleLastNameInputOnBlur.bind(this);
-    this.handleUsernameInputOnBlur = this.handleUsernameInputOnBlur.bind(this);
+    this.handleFirstNameInputKeyUp = this.handleFirstNameInputKeyUp.bind(this);
+    this.handleLastNameInputOnKeyUp = this.handleLastNameInputOnKeyUp.bind(this);
+    this.handleUsernameInputOnKeyUp = this.handleUsernameInputOnKeyUp.bind(this);
     this.handleCheckboxClick = this.handleCheckboxClick.bind(this);
   }
 
@@ -126,25 +126,31 @@ class CreateUserDialog extends Component {
   /**
    * Handle first name input keyUp event.
    */
-  handleFirstNameInputOnBlur() {
-    const state = this.validateFirstNameInput();
-    this.setState(state);
+  handleFirstNameInputKeyUp() {
+    if (this.state.hasAlreadyBeenValidated) {
+      const state = this.validateFirstNameInput();
+      this.setState(state);
+    }
   }
 
   /**
    * Handle last name input keyUp event.
    */
-  handleLastNameInputOnBlur() {
-    const state = this.validateLastNameInput();
-    this.setState(state);
+  handleLastNameInputOnKeyUp() {
+    if (this.state.hasAlreadyBeenValidated) {
+      const state = this.validateLastNameInput();
+      this.setState(state);
+    }
   }
 
   /**
    * Handle username/email input keyUp event.
    */
-  handleUsernameInputOnBlur() {
-    const state = this.validateUsernameInput();
-    this.setState(state);
+  handleUsernameInputOnKeyUp() {
+    if (this.state.hasAlreadyBeenValidated) {
+      const state = this.validateUsernameInput();
+      this.setState(state);
+    }
   }
 
   /**
@@ -357,41 +363,41 @@ class CreateUserDialog extends Component {
         onClose={this.handleClose} disabled={this.hasAllInputDisabled()}>
         <form className="user-create-form" onSubmit={this.handleFormSubmit} noValidate>
           <div className="form-content">
-            <div className={`input text required ${this.state.first_nameError && this.state.hasAlreadyBeenValidated ? "error" : ""}`}>
+            <div className={`input text required ${this.state.first_nameError ? "error" : ""}`}>
               <label htmlFor="user-first-name-input">First Name</label>
               <input id="user-first-name-input" name="first_name"
                 ref={this.firstNameRef}
                 type="text" value={this.state.first_name} placeholder="first name"
                 required="required" disabled={this.hasAllInputDisabled()}
-                onBlur={this.handleFirstNameInputOnBlur} onChange={this.handleInputChange}
+                onKeyUp={this.handleFirstNameInputKeyUp} onChange={this.handleInputChange}
                 autoComplete='off' autoFocus={true}
               />
-              {this.state.first_nameError && this.state.hasAlreadyBeenValidated &&
+              {this.state.first_nameError &&
               <div className="first_name error message">{this.state.first_nameError}</div>
               }
             </div>
-            <div className={`input text required ${this.state.last_nameError && this.state.hasAlreadyBeenValidated ? "error" : ""}`}>
+            <div className={`input text required ${this.state.last_nameError ? "error" : ""}`}>
               <label htmlFor="user-last-name-input">Last Name</label>
               <input id="user-last-name-input" name="last_name"
                 ref={this.lastNameRef}
                 type="text" value={this.state.last_name} placeholder="last name"
                 required="required" disabled={this.hasAllInputDisabled()}
-                onBlur={this.handleLastNameInputOnBlur} onChange={this.handleInputChange}
+                onKeyUp={this.handleLastNameInputOnKeyUp} onChange={this.handleInputChange}
                 autoComplete='off' autoFocus={true}
               />
-              {this.state.last_nameError && this.state.hasAlreadyBeenValidated &&
+              {this.state.last_nameError &&
               <div className="last_name error message">{this.state.last_nameError}</div>
               }
             </div>
-            <div className={`input text required ${this.state.usernameError && this.state.hasAlreadyBeenValidated ? "error" : ""}`}>
+            <div className={`input text required ${this.state.usernameError ? "error" : ""}`}>
               <label htmlFor="user-username-input">Username / Email</label>
               <input id="user-username-input" name="username"
                 ref={this.usernameRef} type="text" value={this.state.username} placeholder="email"
                 required="required" disabled={this.hasAllInputDisabled()}
-                onBlur={this.handleUsernameInputOnBlur} onChange={this.handleInputChange}
+                onKeyUp={this.handleUsernameInputOnKeyUp} onChange={this.handleInputChange}
                 autoComplete='off' autoFocus={true}
               />
-              {this.state.usernameError && this.state.hasAlreadyBeenValidated &&
+              {this.state.usernameError &&
               <div className="username error message">{this.state.usernameError}</div>
               }
             </div>
