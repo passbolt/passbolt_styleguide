@@ -269,7 +269,7 @@ class FilterUsersByGroup extends React.Component {
    */
   canShowMore(group) {
     const isGroupManager = group.my_group_user && group.my_group_user.is_admin;
-    return this.isCurrentUserAdmin && isGroupManager;
+    return this.isCurrentUserAdmin || isGroupManager;
   }
 
   /**

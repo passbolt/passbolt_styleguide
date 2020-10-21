@@ -21,6 +21,8 @@ import FormSubmitButton from "../../../../react/components/Common/Inputs/FormSub
 import FormCancelButton from "../../../../react/components/Common/Inputs/FormSubmitButton/FormCancelButton";
 import ErrorDialog from "../../Dialog/ErrorDialog/ErrorDialog";
 import {withUserWorkspace} from "../../../contexts/UserWorkspaceContext";
+import UserAvatar from "../../../../react/components/Common/Avatar/UserAvatar";
+import Icon from "../../Common/Icons/Icon";
 
 class EditUserGroup extends Component {
   /**
@@ -40,7 +42,8 @@ class EditUserGroup extends Component {
   get defaultState() {
     return {
       groupToEdit: { // The group to edit
-        groupName: ''
+        groupName: '',
+        members: []
       },
       actions: {
         processing: false // True if one process some operation
@@ -76,7 +79,8 @@ class EditUserGroup extends Component {
   bindHandlers() {
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleClose = this.handleClose.bind(this);
-    this.handleGroupNameChange = this.handleGroupNameChange.bind(this);
+    this.handleGroupNameChanged = this.handleGroupNameChanged.bind(this);
+    this.handlePermissionSelected = this.handlePermissionSelected.bind(this);
   }
 
   /**
@@ -108,10 +112,34 @@ class EditUserGroup extends Component {
   }
 
   /**
+   * Returns true if there is currently only one group manager
+   */
+  get hasSingleGroupManager() {
+    return this.state.groupToEdit.members.filter(member => member.is_admin).length === 1;
+  }
+
+  /**
+   * Returns true if there are some changes on the group members
+   */
+  get hasMembersChange() {
+    return this.state.groupToEdit.members.some(member => this.hasMemberChanged(member));
+  }
+
+  /**
    * Whenever the group name change
    */
-  async handleGroupNameChange(event) {
+  async handleGroupNameChanged(event) {
     await this.updateGroupName(event.target.value);
+  }
+
+  /**
+   * Whenever a member's permission has changed
+   * @param event A select DOM event
+   * @param member A group member
+   */
+  async handlePermissionSelected(event, member) {
+    const isManager = event.target.value === 'true';
+    await this.updateMemberPermission(isManager, member);
   }
 
   /**
@@ -140,16 +168,33 @@ class EditUserGroup extends Component {
    * Populate the component with initial data
    */
   async populate() {
+    const findUser = groupUser => this.context.users.find(user => user.id === groupUser.user_id);
+    const defineIsAdmin = groupUser => ({original_is_admin: groupUser.is_admin, is_admin: groupUser.is_admin});
+    const userMapper = groupUser => Object.assign({}, findUser(groupUser), defineIsAdmin(groupUser));
+    const members = this.groupToEdit.groups_users.map(userMapper);
     await this.setState({
       groupToEdit: {
-        groupName: this.groupToEdit.name
+        groupName: this.groupToEdit.name,
+        members
       }
     });
   }
 
   /**
-   * Populates the component with initial data
+   * Returns true of the permission / membership has changed
+   * @param member
    */
+  hasMemberChanged(member) {
+    return member.original_is_admin !== member.is_admin;
+  }
+
+  /**
+   * Returns true if the member can have a different permission / membership role
+   * @param member
+   */
+  canChangeMember(member) {
+    return this.hasSingleGroupManager && member.is_admin;
+  }
 
   /**
    * Changes the group name
@@ -157,6 +202,18 @@ class EditUserGroup extends Component {
    */
   async updateGroupName(groupName) {
     await this.setState({groupToEdit: Object.assign({}, this.state.groupToEdit, {groupName})});
+  }
+
+  /**
+   * Update a member's permission
+   * @param isManager True if the members will be a group manager
+   * @param member The member whose permission will be updated
+   */
+  async updateMemberPermission(isManager, member) {
+    const memberToUpdate = Object.assign({}, member, {is_admin: isManager});
+    const updateMemberMapper = groupMember => groupMember.id === memberToUpdate.id ? memberToUpdate : groupMember;
+    const members = this.state.groupToEdit.members.map(updateMemberMapper);
+    await this.setState({groupToEdit: Object.assign({}, this.state.groupToEdit, {members})});
   }
 
   /**
@@ -181,7 +238,11 @@ class EditUserGroup extends Component {
    * Edits the current group
    */
   async edit() {
-    const payload = {name:  this.state.groupToEdit.groupName};
+    const groupUserMapper = member => ({user_id: member.id, is_admin: member.is_admin, delete: member.isDeleted});
+    const payload = {
+      name:  this.state.groupToEdit.groupName,
+      group_users: this.state.groupToEdit.members.map(groupUserMapper)
+    };
     await this.context.port.request('passbolt.groups.edit', payload);
   }
 
@@ -236,7 +297,7 @@ class EditUserGroup extends Component {
     const mustRaiseEmptyGroupNameError = this.state.errors.emptyGroupName && this.state.validation.hasAlreadyBeenValidated;
     return (
       <DialogWrapper
-        className='user-create-dialog'
+        className='edit-group-dialog'
         title="Edit group"
         onClose={this.handleClose}
         disabled={this.areActionsAllowed}>
@@ -246,24 +307,94 @@ class EditUserGroup extends Component {
           onSubmit={this.handleSubmit}
           noValidate>
 
-          <div className="form-content">
-            <div className={`input text required ${mustRaiseEmptyGroupNameError ? "error" : ""}`}>
-              <label htmlFor="js_field_name">Group name</label>
-              <input
-                id="js_field_name"
-                ref={this.references.groupName}
-                value={this.state.groupToEdit.groupName}
-                maxLength="50"
-                type="text"
-                placeholder="group name"
-                onChange={this.handleGroupNameChange}/>
-              {mustRaiseEmptyGroupNameError &&
+          <div className="group_members">
+
+            <div className="form-content">
+              <div className={`input text required ${mustRaiseEmptyGroupNameError ? "error" : ""}`}>
+                <label htmlFor="js_field_name">Group name</label>
+                <input
+                  id="js_field_name"
+                  ref={this.references.groupName}
+                  value={this.state.groupToEdit.groupName}
+                  maxLength="50"
+                  type="text"
+                  placeholder="group name"
+                  onChange={this.handleGroupNameChanged}/>
+                {mustRaiseEmptyGroupNameError &&
                 <div className="error message">
                   A name is required
                 </div>
-              }
+                }
+              </div>
+
+              <div className="input required">
+                <label>Group members</label>
+              </div>
+            </div>
+
+            <div className="form-content permission-edit">
+
+              <ul className="permissions scroll group_user ready">
+                {
+                  this.state.groupToEdit.members.map(member => (
+                    <li
+                      key={member.id}
+                      className={`row ${this.hasMemberChanged(member) ? 'permission-updated' : ''}`}>
+
+                      <div className="avatar">
+                        <UserAvatar
+                          baseUrl={this.context.userSettings.getTrustedDomain()}
+                          user={member}/>
+                      </div>
+
+                      <div className="user">
+                        <div className="details">
+                          <span
+                            className="name">{`${member.profile.first_name} ${member.profile.last_name}`}
+                          </span>
+                          <div className="more_details tooltip-alt">
+                            <Icon name="info-circle"/>
+                            <div className="tooltip-text right">
+                              <div className="email">{member.username}</div>
+                              <div className="fingerprint">3657 D402 E639 6396 57E3 14D1 EC7B BEFF 9B09 131B</div>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="permission_changes">
+                          <span>{this.hasMemberChanged(member) ?  "Will be updated" : "Unchanged"}</span>
+                        </div>
+                      </div>
+
+                      <div className="select rights">
+                        <select
+                          className="permission"
+                          value={member.is_admin}
+                          onChange={event => this.handlePermissionSelected(event, member)}
+                          disabled={this.canChangeMember(member)}>
+                          <option value={false}>Member</option>
+                          <option value={true}>Group manager</option>
+                        </select>
+                      </div>
+
+                      <div className="actions">
+                        <a title="remove">
+                          <Icon name="close-circle"/>
+                          <span className="visuallyhidden">remove</span>
+                        </a>
+                      </div>
+                    </li>
+                  ))
+                }
+              </ul>
+              <div className="message warning feedback">
+                <span>Only the group manager can add new people to a group.</span>
+                {this.hasMembersChange &&
+                  <span>You need to click save for the changes to take place.</span>
+                }
+              </div>
             </div>
           </div>
+
 
           <div className="submit-wrapper clearfix">
             <FormSubmitButton
