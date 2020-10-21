@@ -81,6 +81,7 @@ class EditUserGroup extends Component {
     this.handleClose = this.handleClose.bind(this);
     this.handleGroupNameChanged = this.handleGroupNameChanged.bind(this);
     this.handlePermissionSelected = this.handlePermissionSelected.bind(this);
+    this.handleMemberRemoved = this.handleMemberRemoved.bind(this);
   }
 
   /**
@@ -115,7 +116,7 @@ class EditUserGroup extends Component {
    * Returns true if there is currently only one group manager
    */
   get hasSingleGroupManager() {
-    return this.state.groupToEdit.members.filter(member => member.is_admin).length === 1;
+    return this.members.filter(member => member.is_admin).length === 1;
   }
 
   /**
@@ -123,6 +124,13 @@ class EditUserGroup extends Component {
    */
   get hasMembersChange() {
     return this.state.groupToEdit.members.some(member => this.hasMemberChanged(member));
+  }
+
+  /**
+   * Returns the current list of members
+   */
+  get members() {
+    return this.state.groupToEdit.members.filter(member => !member.isDeleted);
   }
 
   /**
@@ -140,6 +148,15 @@ class EditUserGroup extends Component {
   async handlePermissionSelected(event, member) {
     const isManager = event.target.value === 'true';
     await this.updateMemberPermission(isManager, member);
+  }
+
+  /**
+   * Whenever a member's is removed from the group
+   * @param event A click DOM event
+   * @param member A group member
+   */
+  async handleMemberRemoved(event, member) {
+    await this.removeMember(member);
   }
 
   /**
@@ -185,7 +202,7 @@ class EditUserGroup extends Component {
    * @param member
    */
   hasMemberChanged(member) {
-    return member.original_is_admin !== member.is_admin;
+    return member.original_is_admin !== member.is_admin || member.isDeleted;
   }
 
   /**
@@ -211,6 +228,17 @@ class EditUserGroup extends Component {
    */
   async updateMemberPermission(isManager, member) {
     const memberToUpdate = Object.assign({}, member, {is_admin: isManager});
+    const updateMemberMapper = groupMember => groupMember.id === memberToUpdate.id ? memberToUpdate : groupMember;
+    const members = this.state.groupToEdit.members.map(updateMemberMapper);
+    await this.setState({groupToEdit: Object.assign({}, this.state.groupToEdit, {members})});
+  }
+
+  /**
+   * Removes a member from the list
+   * @param member
+   */
+  async removeMember(member) {
+    const memberToUpdate = Object.assign({}, member, {isDeleted: true});
     const updateMemberMapper = groupMember => groupMember.id === memberToUpdate.id ? memberToUpdate : groupMember;
     const members = this.state.groupToEdit.members.map(updateMemberMapper);
     await this.setState({groupToEdit: Object.assign({}, this.state.groupToEdit, {members})});
@@ -336,7 +364,7 @@ class EditUserGroup extends Component {
 
               <ul className="permissions scroll group_user ready">
                 {
-                  this.state.groupToEdit.members.map(member => (
+                  this.members.map(member => (
                     <li
                       key={member.id}
                       className={`row ${this.hasMemberChanged(member) ? 'permission-updated' : ''}`}>
@@ -377,7 +405,9 @@ class EditUserGroup extends Component {
                       </div>
 
                       <div className="actions">
-                        <a title="remove">
+                        <a
+                          title="remove"
+                          onClick={event => this.handleMemberRemoved(event, member)}>
                           <Icon name="close-circle"/>
                           <span className="visuallyhidden">remove</span>
                         </a>
