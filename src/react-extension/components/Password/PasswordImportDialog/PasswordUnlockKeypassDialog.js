@@ -131,6 +131,29 @@ class PasswordUnlockKeypassDialog extends Component {
   }
 
   /**
+   * Read the selected file and returns its content in a base 64
+   */
+  readFile() {
+    if (!this.state.keyFile) {
+      return;
+    }
+
+    const reader = new FileReader();
+    return new Promise((resolve, reject) => {
+      reader.onloadend = event => {
+        try {
+          const base64Url = event.target.result;
+          const fileBase64 = base64Url.split(",")[1];
+          resolve(fileBase64);
+        } catch (e) {
+          reject(e);
+        }
+      };
+      reader.readAsDataURL(this.state.keyFile);
+    });
+  }
+
+  /**
    * Import the resource file
    */
   async import() {
@@ -138,7 +161,7 @@ class PasswordUnlockKeypassDialog extends Component {
     const b64FileContent = resourceFileToImport.b64FileContent;
     const fileType = resourceFileToImport.fileType;
     const password = this.passwordInputRef.current.value;
-    const keyFile = this.state.keyFile;
+    const keyFile = await this.readFile();
     const options = Object.assign({}, resourceFileToImport.options, {credentials: {password, keyFile}});
 
     this.toggleProcessing();
