@@ -303,8 +303,6 @@ class ReactExtension extends Component {
             <ContextualMenuContextProvider>
               <LoadingContextProvider>
 
-                { /* Contextual Menu Management */}
-                <ManageContextualMenu/>
 
                 { /* Action Feedback Management */}
                 <ShareActionFeedbacks/>
@@ -331,6 +329,7 @@ class ReactExtension extends Component {
                           "/app/passwords",
                         ]}>
                           <ResourceWorkspaceContextProvider>
+                            <ManageContextualMenu/>
                             <ManageDialogs/>
                             <PasswordWorkspace onMenuItemClick={this.handleWorkspaceSelect}/>
                           </ResourceWorkspaceContextProvider>
@@ -341,6 +340,7 @@ class ReactExtension extends Component {
                           "/app/users",
                         ]}>
                           <UserWorkspaceContextProvider>
+                            <ManageContextualMenu/>
                             <ManageDialogs/>
                             <DisplayUserWorkspace/>
                           </UserWorkspaceContextProvider>

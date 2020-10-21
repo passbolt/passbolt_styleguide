@@ -22,13 +22,12 @@ import FormSubmitButton from "../../../../react/components/Common/Inputs/FormSub
 import FormCancelButton from "../../../../react/components/Common/Inputs/FormSubmitButton/FormCancelButton";
 import Icon from "../../../../react/components/Common/Icons/Icon";
 import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
-import PasswordImportResultDialog from "./PasswordImportResultDialog";
 import ErrorDialog from "../../Dialog/ErrorDialog/ErrorDialog";
 
 /**
- * This component is the second step of the import dialog when the file to import is KDB(X) file
+ * This component is the second step of the export dialog when the file to import is KDB(X) file
  */
-class PasswordUnlockKeypassDialog extends Component {
+class ExportResourcesCredentials extends Component {
   /**
    * Default constructor
    * @param props Component props
@@ -45,12 +44,11 @@ class PasswordUnlockKeypassDialog extends Component {
    */
   get defaultState() {
     return {
-      // Dialog states
-      processing: false,
-
       showPassword: false, // True if the password should be textually displayed
       keyFile: null, // The optional key file
-      errors: {} // The import errors
+      actions: {
+        processing: false // Actions flag about processing
+      }
     };
   }
 
@@ -77,7 +75,7 @@ class PasswordUnlockKeypassDialog extends Component {
    * Returns the selected file's name
    */
   get selectedFilename() {
-    return this.state.keyFile ? this.state.keyFile.name : '';
+    return this.state.keyFile ? this.state.keyFile.name : "";
   }
 
   /**
@@ -85,6 +83,20 @@ class PasswordUnlockKeypassDialog extends Component {
    */
   get fileToImport() {
     return this.props.resourceWorkspaceContext.resourceFileToImport;
+  }
+
+  /**
+   * Return trus if the export is processing
+   */
+  get isProcessing() {
+    return this.state.actions.processing;
+  }
+
+  /**
+   * Returns true if actions can be performed
+   */
+  get areActionsAllowed() {
+    return !this.isProcessing;
   }
 
   /**
@@ -114,20 +126,31 @@ class PasswordUnlockKeypassDialog extends Component {
    * Handle the cancellation of the import
    */
   handleCancel() {
-    this.props.resourceWorkspaceContext.onResourceFileToImport(null);
     this.close();
   }
 
   /**
-   * Handle the import submit event
+   * Handle the export submit event
    * @param event A dom event
    */
   async handleSubmit(event) {
     event.preventDefault();
+    await this.setState({actions: {processing: true}});
+    await this.export()
+      .then(this.onExportSuccess.bind(this))
+      .catch(this.onExportFailure.bind(this));
+  }
 
-    if (!this.state.processing) {
-      this.import();
-    }
+  /**
+   * Export the resource file
+   */
+  async export() {
+    const password = this.passwordInputRef.current.value;
+    const keyFile = await this.readFile();
+    const options = {format: "kdbx", credentials: {password, keyFile}};
+    const foldersIds = this.props.resourceWorkspaceContext.resourcesToExport.foldersIds;
+    const resourcesIds = this.props.resourceWorkspaceContext.resourcesToExport.resourcesIds;
+    await this.context.port.request("passbolt.export-passwords.export-to-file", {foldersIds, resourcesIds}, options);
   }
 
   /**
@@ -155,68 +178,25 @@ class PasswordUnlockKeypassDialog extends Component {
   }
 
   /**
-   * Import the resource file
+   * Whenever the export has been performed succesfully
    */
-  async import() {
-    const resourceFileToImport = this.props.resourceWorkspaceContext.resourceFileToImport;
-    const b64FileContent = resourceFileToImport.b64FileContent;
-    const fileType = resourceFileToImport.fileType;
-    const password = this.passwordInputRef.current.value;
-    const keyFile = await this.readFile();
-    const options = Object.assign({}, resourceFileToImport.options, {credentials: {password, keyFile}});
-
-    this.toggleProcessing();
-    await this.resetValidation();
-    try {
-      const result = await this.context.port.request("passbolt.import-passwords.import-file", b64FileContent, fileType, options);
-      this.handleImportSuccess(result);
-    } catch (error) {
-      this.handleImportError(error);
-    }
-  }
-
-  /**
-   * Reset the validation process
-   */
-  async resetValidation() {
-    await this.setState({errors: {}});
-  }
-
-  /**
-   * Handle the success of the KDBX import
-   * @parama importResult The import result
-   */
-  async handleImportSuccess(importResult) {
-    await this.props.resourceWorkspaceContext.onResourceFileImportResult(importResult);
-    await this.props.resourceWorkspaceContext.onResourceFileToImport(null);
-    await this.props.dialogContext.open(PasswordImportResultDialog);
+  async onExportSuccess() {
+    await this.props.resourceWorkspaceContext.onResourcesToExport({resourcesIds: null, foldersIds: null});
+    await this.props.actionFeedbackContext.displaySuccess("The passwords have been exported successfully");
     this.close();
   }
 
   /**
-   * Handle the failure of the KDBX import
-   * @param error The import error
+   * Whenever the export has been performed with failure
    */
-  async handleImportError(error) {
-    const userAbortsOperation = error.name === "UserAbortsOperationError";
-    const isInvalidPasswordOrKeyFile = error.code === "InvalidKey" || error.code === "InvalidArg";
-
-    this.toggleProcessing();
-
-    if (userAbortsOperation) {
-      // If the user aborts the operation, then do nothing. It happens when the users close the passphrase dialog
-    } else if (isInvalidPasswordOrKeyFile) {
-      // If the credentials are invalid.
-      await this.setState({errors: {invalidPasswordOrKeyfile: true}});
-    } else {
-      // If an unexpected error occurred.
-      const errorDialogProps = {
-        title: "There was an unexpected error...",
-        message: error.message
-      };
-      this.context.setContext({errorDialogProps});
-      this.props.dialogContext.open(ErrorDialog);
-    }
+  async onExportFailure(error) {
+    const errorDialogProps = {
+      title: "There was an unexpected error...",
+      message: error.message
+    };
+    await this.setState({actions: {processing: false}});
+    await this.context.setContext({errorDialogProps});
+    this.props.dialogContext.open(ErrorDialog);
   }
 
   /**
@@ -227,54 +207,34 @@ class PasswordUnlockKeypassDialog extends Component {
   }
 
   /**
-   * Toggle processing state
-   * @returns {Promise<void>}
-   */
-  async toggleProcessing() {
-    const prev = this.state.processing;
-    return this.setState({processing: !prev});
-  }
-
-  /**
-   * Should input be disabled? True if state is processing
-   * @returns {boolean}
-   */
-  hasAllInputDisabled() {
-    return this.state.processing;
-  }
-
-  /**
    * Render the component
    */
   render() {
-    const errors = this.state.errors;
-    const isInvalidPasswordOrKeyFile = errors && errors.invalidPasswordOrKeyfile;
     return (
       <DialogWrapper
         title="Enter the password and/or key file"
-        className="import-password-dialog"
-        disabled={this.hasAllInputDisabled()}
-        onClose={this.handleCancel}>
+        className="export-password-dialog"
+        onClose={this.handleCancel}
+        disabled={!this.areActionsAllowed}>
         <form onSubmit={this.handleSubmit}>
 
           <div className="form-content">
 
             <div className="input-password-wrapper">
-              <label htmlFor="import-password-dialog-password">Keepass password</label>
-              <div className="input password">
-                <input
-                  id="import-password-dialog-password"
+              <label htmlFor="password">Keepass password</label>
+              <div className="input text password">
+                <input id="password"
                   type={this.state.showPassword ? "text" : "password"}
-                  disabled={this.hasAllInputDisabled()}
                   placeholder="Passphrase"
-                  ref={this.passwordInputRef}/>
+                  ref={this.passwordInputRef}
+                  disabled={!this.areActionsAllowed}/>
               </div>
               <ul className="actions inline">
                 <li>
                   <a
                     onClick={this.handlePasswordViewToggled}
-                    className={`password-view button button-icon toggle ${this.state.showPassword ? "selected" : ""} ${this.hasAllInputDisabled() ? "disabled" : ""}`}>
-                    <Icon name='eye-open' big={true}/>
+                    className={`password-view button button-icon toggle ${this.state.showPassword ? "selected" : ""} ${!this.areActionsAllowed ? "disabled" : ""}`}>
+                    <Icon name="eye-open" big={true}/>
                     <span className="visually-hidden">view</span>
                   </a>
                 </li>
@@ -282,39 +242,30 @@ class PasswordUnlockKeypassDialog extends Component {
             </div>
 
             <div className="input-file-chooser-wrapper">
-              <input
-                type="file"
-                ref={this.fileUploaderRef}
-                onChange={this.handleFileSelected}/>
               <div className="input text">
+                <input type="file"
+                  ref={this.fileUploaderRef}
+                  onChange={this.handleFileSelected}/>
                 <label>Keepass key file (optional)</label>
-                <input
-                  type="text"
+                <input type="text"
                   placeholder="No key file selected"
                   disabled
                   value={this.selectedFilename}/>
-                <a
-                  className={`button primary ${this.hasAllInputDisabled() ? "disabled" : ""}`}
+                <a className={`button primary ${!this.areActionsAllowed ? "disabled" : ""}`}
                   onClick={this.handleSelectFile}>
                   <Icon name="upload-a"/> Choose a file
                 </a>
               </div>
             </div>
-
-            {isInvalidPasswordOrKeyFile &&
-            <div className="message ready error">
-              Cannot decrypt the file, invalid credentials.
-            </div>
-            }
           </div>
 
           <div className="submit-wrapper clearfix">
             <FormSubmitButton
-              value="Continue import"
-              disabled={this.hasAllInputDisabled()}
-              processing={this.state.processing}/>
+              disabled={!this.areActionsAllowed}
+              processing={this.isProcessing}
+              value="Export"/>
             <FormCancelButton
-              disabled={this.hasAllInputDisabled()}
+              disabled={!this.areActionsAllowed}
               onClick={this.handleCancel}/>
           </div>
         </form>
@@ -323,13 +274,14 @@ class PasswordUnlockKeypassDialog extends Component {
   }
 }
 
-PasswordUnlockKeypassDialog.contextType = AppContext;
+ExportResourcesCredentials.contextType = AppContext;
 
-PasswordUnlockKeypassDialog.propTypes = {
+ExportResourcesCredentials.propTypes = {
   onClose: PropTypes.func,
   actionFeedbackContext: PropTypes.any, // The action feedback context
   dialogContext: PropTypes.any, // The dialog context
   resourceWorkspaceContext: PropTypes.any // The resource workspace context
 };
 
-export default withResourceWorkspace(withActionFeedback(withDialog(PasswordUnlockKeypassDialog)));
+export default withResourceWorkspace(withActionFeedback(withDialog(ExportResourcesCredentials)));
+

@@ -8400,6 +8400,39 @@ table.table-info.horizontal tbody tr:hover {
   font-size: 0.813em;
 }
 /* import password dialogs */
+.export-password-dialog .input-password-wrapper .input.password {
+  width: 81%;
+}
+.export-password-dialog .input-password-wrapper .input.password input[type="text"],
+.export-password-dialog .input-password-wrapper .input.password input[type="password"] {
+  width: 100%;
+  text-overflow: ellipsis;
+}
+.export-password-dialog .input-password-wrapper .actions.inline {
+  float: none;
+  width: auto;
+}
+.export-password-dialog .input-password-wrapper .actions.inline .button {
+  padding: 0.6em 0 0.4285714em 0;
+  border-left: 0;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+.export-password-dialog .input-file-chooser-wrapper input[type="file"] {
+  display: none;
+}
+.export-password-dialog .input-file-chooser-wrapper input[type="text"] {
+  width: 60%;
+  text-overflow: ellipsis;
+}
+.export-password-dialog .input-file-chooser-wrapper .button.primary {
+  display: inline-block;
+  top: -3px;
+  padding: 0.6em 1.225em 0.55em 1.225em;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+/* import password dialogs */
 .import-password-dialog .input-password-wrapper .input.password {
   width: 81%;
 }

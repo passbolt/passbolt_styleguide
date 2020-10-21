@@ -11,6 +11,15 @@ export function defaultAppContext(appContext) {
   const defaultAppContext = {
     port: new MockPort(),
     userSettings: new UserSettings(userSettingsFixture),
+    siteSettings: {
+      settings: {
+        passbolt: {
+          plugins: {
+            export: 'something'
+          }
+        }
+      }
+    }
   };
   return Object.assign(defaultAppContext, appContext || {});
 }
