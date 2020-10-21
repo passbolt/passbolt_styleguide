@@ -23,29 +23,29 @@ import FormCancelButton from "../../../../react/components/Common/Inputs/FormSub
 import {withLoading} from "../../../contexts/Common/LoadingContext";
 
 /**
- * This component allows user to delete a user with conflict to reassign ownership of folders, resources and groups
+ * This component allows user to delete a group with conflict to reassign ownership of folders, resources
  */
-class DeleteUserWithConflictsDialog extends Component {
+class DeleteGroupWithConflictsDialog extends Component {
   constructor(props, context) {
     super(props, context);
     this.initializeProperties();
-    this.state = this.getDefaultState();
+    this.state = this.defaultState;
     this.initEventHandlers();
   }
 
+  /**
+   * Initialize properties
+   */
   initializeProperties() {
-    this.groupsErrors = this.getGroupsErrors();
-    this.groupsGroupsUsersOptions = this.getGroupsGroupsUsersOptionsMap();
     this.foldersErrors = this.getFoldersErrors();
     this.resourcesErrors = this.getResourcesErrors();
     this.acosPermissionsOptions = this.getAcosPermissionsOptionsMap();
   }
 
-  getDefaultState() {
+  get defaultState() {
     return {
       processing: false,
       owners: this.populateDefaultOwners(),
-      managers: this.populateDefaultManagers(),
     };
   }
 
@@ -53,19 +53,6 @@ class DeleteUserWithConflictsDialog extends Component {
     this.handleCloseClick = this.handleCloseClick.bind(this);
     this.handleFormSubmit = this.handleFormSubmit.bind(this);
     this.handleOnChangeOwner = this.handleOnChangeOwner.bind(this);
-    this.handleOnChangeManager = this.handleOnChangeManager.bind(this);
-  }
-
-  /**
-   * Get the groups errors if any
-   * @returns {array} The list of groups errors
-   * - The list is sorted alphabetically by group name
-   */
-  getGroupsErrors() {
-    const errors = this.context.deleteUserWithConflictsDialogProps.errors;
-    const groupsErrors = errors.groups && errors.groups.sole_manager || [];
-    const groupsSorterByName = (groupA, groupB) => groupA.name.localeCompare(groupB.name);
-    return groupsErrors.sort(groupsSorterByName);
   }
 
   /**
@@ -74,7 +61,7 @@ class DeleteUserWithConflictsDialog extends Component {
    * - The list is sorted alphabetically by folder name
    */
   getFoldersErrors() {
-    const errors = this.context.deleteUserWithConflictsDialogProps.errors;
+    const errors = this.context.deleteGroupWithConflictsDialogProps.errors;
     const foldersErrors = errors.folders && errors.folders.sole_owner || [];
     const foldersSorterByName = (folderA, folderB) => folderA.name.localeCompare(folderB.name);
     return foldersErrors.sort(foldersSorterByName);
@@ -86,71 +73,14 @@ class DeleteUserWithConflictsDialog extends Component {
    * - The list is sorted alphabetically by resource name
    */
   getResourcesErrors() {
-    const errors = this.context.deleteUserWithConflictsDialogProps.errors;
+    const errors = this.context.deleteGroupWithConflictsDialogProps.errors;
     const resourcesErrors = errors.resources && errors.resources.sole_owner || [];
     const resourcesSorterByName = (resourcesA, resourcesB) => resourcesA.name.localeCompare(resourcesB.name);
     return resourcesErrors.sort(resourcesSorterByName);
   }
 
   /**
-   * Get a map of groups users options that can potentially be elevated as group manager for each group.
-   * @returns {object}
-   */
-  getGroupsGroupsUsersOptionsMap() {
-    return this.groupsErrors.reduce((groupsGroupsUsersOptions, groupError) => {
-      return Object.assign(groupsGroupsUsersOptions, {[groupError.id]: this.getGroupGroupsUsersOptions(groupError)});
-    }, {});
-  }
-
-  /**
-   * Get the groups users options that can potentially be elevated as group manager for the given group error.
-   * @param {object} groupError
-   * @returns {array} An array of groups users
-   * - The groups users options are sorted alphabetically by associated user full name.
-   * - The group user associated to the user we want to delete is removed from this list.
-   * - The associated user is attached to each group user.
-   */
-  getGroupGroupsUsersOptions(groupError) {
-    let groupGroupsUsersOptions = groupError.groups_users;
-    groupGroupsUsersOptions = this.filterOutUserToDeleteFromGroupsUsers(groupGroupsUsersOptions);
-    groupGroupsUsersOptions = this.decorateGroupsUsersWithUserEntity(groupGroupsUsersOptions);
-    groupGroupsUsersOptions = this.sortGroupsUsersAlphabeticallyByUserFullName(groupGroupsUsersOptions);
-    return groupGroupsUsersOptions;
-  }
-
-  /**
-   * Filter out the user to delete from the list of groups users.
-   * @param {array} groupsUsers
-   * @returns {array}
-   */
-  filterOutUserToDeleteFromGroupsUsers(groupsUsers) {
-    const filterOutDeletedUserFromGroupsUsers = groupUser => groupUser.user_id !== this.userToDelete.id;
-    return groupsUsers.filter(filterOutDeletedUserFromGroupsUsers);
-  }
-
-  /**
-   * Decorate a list of groups users with their associated user.
-   * @param {array} groupsUsers
-   * @returns {array}
-   */
-  decorateGroupsUsersWithUserEntity(groupsUsers) {
-    const decorateGroupsUsersWithUserEntity = groupUser => groupUser.user = this.getUser(groupUser.user_id);
-    groupsUsers.forEach(decorateGroupsUsersWithUserEntity);
-    return groupsUsers;
-  }
-
-  /**
-   * Sort a list of groups users by their
-   * @param {array} groupsUsers
-   * @returns {array}
-   */
-  sortGroupsUsersAlphabeticallyByUserFullName(groupsUsers) {
-    const sortGroupsUsersAlphabeticallyByUserFullName = (groupUserA, groupUserB) => this.getUserFullName(groupUserA.user).localeCompare(this.getUserFullName(groupUserB.user));
-    return groupsUsers.sort(sortGroupsUsersAlphabeticallyByUserFullName);
-  }
-
-  /**
-   * Get a map of permissions options that can potentially be elevated as owner for each aco (resources/groups).
+   * Get a map of permissions options that can potentially be elevated as owner for each aco (resources/folders).
    * @returns {object}
    */
   getAcosPermissionsOptionsMap() {
@@ -169,12 +99,12 @@ class DeleteUserWithConflictsDialog extends Component {
    * @param {object} acoError
    * @returns {array} An array of permissions
    * - The permissions options are sorted alphabetically by associated user full name or group.
-   * - The permission associated to the user we want to delete is removed from this list.
+   * - The permission associated to the group we want to delete is removed from this list.
    * - The permission associated user or group is attached to each permission.
    */
   getAcoPermissionsOptions(acoError) {
     let acoPermissionsOptions = acoError.permissions;
-    acoPermissionsOptions = this.filterOutUserToDeleteFromPermissions(acoPermissionsOptions);
+    acoPermissionsOptions = this.filterOutGroupToDeleteFromPermissions(acoPermissionsOptions);
     acoPermissionsOptions = this.decoratePermissionWithAcoEntity(acoPermissionsOptions);
     acoPermissionsOptions = this.sortPermissionsAlphabeticallyByAcoName(acoPermissionsOptions);
     return acoPermissionsOptions;
@@ -185,9 +115,9 @@ class DeleteUserWithConflictsDialog extends Component {
    * @param {array} permissions
    * @returns {array}
    */
-  filterOutUserToDeleteFromPermissions(permissions) {
-    const filterOutUserToDeleteFromPermissions = permission => permission.aro_foreign_key !== this.userToDelete.id;
-    return permissions.filter(filterOutUserToDeleteFromPermissions);
+  filterOutGroupToDeleteFromPermissions(permissions) {
+    const filterOutGroupToDeleteFromPermissions = permission => permission.aro_foreign_key !== this.groupToDelete.id;
+    return permissions.filter(filterOutGroupToDeleteFromPermissions);
   }
 
   /**
@@ -282,20 +212,6 @@ class DeleteUserWithConflictsDialog extends Component {
   }
 
   /**
-   * Handle onChange manager select event
-   * @param event
-   * @param groupId the id of the group
-   */
-  handleOnChangeManager(event, groupId) {
-    const target = event.target;
-    const permissionId = target.value;
-    const managers = this.state.owners;
-    // assign the new folderId or resourceId with the permissionId
-    Object.assign(managers, {[groupId]: permissionId});
-    this.setState({managers});
-  }
-
-  /**
    * create the permission owners for folder and resource transfer to send it as format expected
    * @returns {[{id: id of the permission, aco_foreign_key: id of the folder or resource}]}
    */
@@ -311,33 +227,12 @@ class DeleteUserWithConflictsDialog extends Component {
   }
 
   /**
-   * create the permission managers for groups transfer to send it as format expected
-   * @returns {[{id: id of the permission group user, group_id: id of the group}]}
-   */
-  createPermissionManagersTransfer() {
-    if (this.state.managers !== null) {
-      const managers = [];
-      for (const [key, value] of Object.entries(this.state.managers)) {
-        managers.push({id: value, group_id: key});
-      }
-      return managers;
-    }
-    return null;
-  }
-
-  /**
    * create the user delete transfer permission
-   * @returns {owners, managers}
+   * @returns {{owners: {id: id, of, the, permission, aco_foreign_key: id, folder, or, resource}[]}}
    */
   createUserDeleteTransfer() {
-    const result = {};
-    if (this.hasResourcesConflict() || this.hasFolderConflict()) {
-      result.owners = this.createPermissionOwnersTransfer();
-    }
-    if (this.hasGroupsConflict()) {
-      result.managers = this.createPermissionManagersTransfer();
-    }
-    return result;
+    const owners = this.createPermissionOwnersTransfer();
+    return {owners};
   }
 
   /**
@@ -346,11 +241,11 @@ class DeleteUserWithConflictsDialog extends Component {
   async delete() {
     this.setState({processing: true});
     try {
-      const userDeleteTransfer = this.createUserDeleteTransfer();
+      const groupDeleteTransfer = this.createUserDeleteTransfer();
       this.props.loadingContext.add();
-      await this.context.port.request("passbolt.users.delete", this.userToDelete.id, userDeleteTransfer);
+      await this.context.port.request("passbolt.groups.delete", this.groupToDelete.id, groupDeleteTransfer);
       this.props.loadingContext.remove();
-      await this.props.actionFeedbackContext.displaySuccess("The user has been deleted successfully");
+      await this.props.actionFeedbackContext.displaySuccess("The group has been deleted successfully");
       this.props.onClose();
       this.context.setContext({deleteUserWithConflictsDialogProps: null});
     } catch (error) {
@@ -374,6 +269,14 @@ class DeleteUserWithConflictsDialog extends Component {
     };
     this.context.setContext({errorDialogProps});
     this.props.dialogContext.open(ErrorDialog);
+  }
+
+  /**
+   * Should input be disabled? True if state is processing
+   * @returns {boolean}
+   */
+  hasAllInputDisabled() {
+    return this.state.processing;
   }
 
   /**
@@ -402,22 +305,11 @@ class DeleteUserWithConflictsDialog extends Component {
   }
 
   /**
-   * populate default managers of groups
-   * @returns { groupId: permissionId,... }
+   * Get the group to delete
+   * @returns {null}
    */
-  populateDefaultManagers() {
-    return this.groupsErrors.reduce((groupsDefaultManagers, groupError) => {
-      const groupDefaultManager = this.groupsGroupsUsersOptions[groupError.id][0];
-      return Object.assign(groupsDefaultManagers, {[groupError.id]: groupDefaultManager.id});
-    }, {});
-  }
-
-  /**
-   * Get the user to delete
-   * @returns {object}
-   */
-  get userToDelete() {
-    return this.context.deleteUserWithConflictsDialogProps.user;
+  get groupToDelete() {
+    return this.context.deleteGroupWithConflictsDialogProps.group;
   }
 
   /**
@@ -437,14 +329,6 @@ class DeleteUserWithConflictsDialog extends Component {
   }
 
   /**
-   * has groups conflict
-   * @returns {boolean}
-   */
-  hasGroupsConflict() {
-    return this.groupsErrors && this.groupsErrors.length > 0;
-  }
-
-  /**
    * Get the user label displayed as option
    * @param {object} user
    */
@@ -456,25 +340,17 @@ class DeleteUserWithConflictsDialog extends Component {
     return `${first_name} ${last_name} (${username})`;
   }
 
-  /**
-   * Should input be disabled? True if state is processing
-   * @returns {boolean}
-   */
-  hasAllInputDisabled() {
-    return this.state.processing;
-  }
-
   render() {
     return (
       <DialogWrapper
-        title="You cannot delete this user!"
+        title="You cannot delete this group!"
         onClose={this.handleCloseClick}
         disabled={this.state.processing}
         className="delete-user-dialog">
         <form onSubmit={this.handleFormSubmit} noValidate>
           <div className="form-content intro">
-            <p>You are about to delete the user <strong>{this.getUserFullName(this.userToDelete)}</strong>.</p>
-            <p>This user is the sole owner of some content. You need to transfer the ownership to others to continue.</p>
+            <p>You are about to delete the group <strong>{this.groupToDelete.name}</strong>.</p>
+            <p>This group is the sole owner of some content. You need to transfer the ownership to others to continue.</p>
           </div>
           <div className="ownership-transfer">
             {this.hasFolderConflict() &&
@@ -521,25 +397,6 @@ class DeleteUserWithConflictsDialog extends Component {
               </ul>
             </div>
             }
-            {this.hasGroupsConflict() &&
-            <div>
-              <h3>Groups</h3>
-              <ul className="ownership-transfer-items">
-                {this.groupsErrors.map(groupError =>
-                  <li key={groupError.id}>
-                    <div className="input select required">
-                      <label htmlFor="transfer_group_manager">{groupError.name} (Group) new manager:</label>
-                      <select className="fluid form-element ready" value={this.state.managers[groupError.id]} onChange={event => this.handleOnChangeManager(event, groupError.id)}>
-                        {this.groupsGroupsUsersOptions[groupError.id].map(groupUser => (
-                          <option key={groupUser.id} value={groupUser.id}>{this.getUserOptionLabel(groupUser.user)}</option>
-                        ))}
-                      </select>
-                    </div>
-                  </li>
-                )}
-              </ul>
-            </div>
-            }
           </div>
           <div className="submit-wrapper clearfix">
             <FormSubmitButton disabled={this.hasAllInputDisabled()} processing={this.state.processing} value="Delete" warning={true}/>
@@ -551,13 +408,13 @@ class DeleteUserWithConflictsDialog extends Component {
   }
 }
 
-DeleteUserWithConflictsDialog.contextType = AppContext;
+DeleteGroupWithConflictsDialog.contextType = AppContext;
 
-DeleteUserWithConflictsDialog.propTypes = {
+DeleteGroupWithConflictsDialog.propTypes = {
   onClose: PropTypes.func,
   actionFeedbackContext: PropTypes.any, // The action feedback context
   dialogContext: PropTypes.any, // The dialog context
   loadingContext: PropTypes.any // The loading context
 };
 
-export default withLoading(withActionFeedback(withDialog(DeleteUserWithConflictsDialog)));
+export default withLoading(withActionFeedback(withDialog(DeleteGroupWithConflictsDialog)));

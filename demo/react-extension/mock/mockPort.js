@@ -48,6 +48,7 @@ import mockRequestGpgKeysFindByUserId from "./request/mockRequestGpgKeysFindByUs
 import mockRequestUserDeleteDryRun from "./request/mockRequestUserDeleteDryRun";
 import mockRequestImportFile from "./request/mockRequestImportFile";
 import mockRequestDisableMFA from "./request/mockRequestDisableMFA";
+import mockRequestGroupDeleteDryRun from "./request/mockRequestGroupDeleteDryRun";
 
 export default (storage) => {
   const mockPort = new MockPort(storage);
@@ -86,6 +87,7 @@ export default (storage) => {
   mockPort.addRequestListener("passbolt.users.delete-dry-run", mockRequestUserDeleteDryRun);
   mockPort.addRequestListener("passbolt.import-passwords.import-file", mockRequestImportFile);
   mockPort.addRequestListener("passbolt.users.disable-mfa", mockRequestDisableMFA);
+  mockPort.addRequestListener("passbolt.groups.delete-dry-run", mockRequestGroupDeleteDryRun);
 
   return mockPort;
 };

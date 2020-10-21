@@ -111,7 +111,7 @@ class ConfirmDeleteDialog extends Component {
       <div>
         <DialogWrapper
           className='comment-delete-dialog'
-          title="Do you really want to delete?"
+          title="Delete comment?"
           onClose={this.handleClose}
           disabled={this.state.actions.processing}>
           <form
@@ -119,10 +119,8 @@ class ConfirmDeleteDialog extends Component {
             onSubmit={this.handleConfirm}
             noValidate>
             <div className="form-content">
-              <p>
-                Please confirm you really want to delete the comment. After clicking ok,
-                the comment will be <strong>deleted permanently</strong>
-              </p>
+              <p>Are you sure you want to delete the comment?</p>
+              <p>Warning: Once the comment is deleted, it’ll be removed permanently and will not be recoverable.</p>
             </div>
             <div className="submit-wrapper clearfix">
               <FormSubmitButton
