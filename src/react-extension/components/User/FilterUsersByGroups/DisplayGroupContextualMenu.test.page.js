@@ -31,4 +31,11 @@ export default class DisplayGroupsContextualMenuPageObject {
   get deleteGroupContextualMenu() {
     return this._container.querySelector('#delete-group');
   }
+
+  /**
+   * @returns {any} the edit group menu element
+   */
+  get editGroupContextualMenu() {
+    return this._container.querySelector('#edit-group');
+  }
 }

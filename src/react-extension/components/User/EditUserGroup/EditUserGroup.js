@@ -23,7 +23,12 @@ import ErrorDialog from "../../Dialog/ErrorDialog/ErrorDialog";
 import {withUserWorkspace} from "../../../contexts/UserWorkspaceContext";
 import UserAvatar from "../../../../react/components/Common/Avatar/UserAvatar";
 import Icon from "../../Common/Icons/Icon";
+import TooltipHtml from "../../Common/Tooltip/TooltipHtml";
+import Autocomplete from "../../Common/Autocomplete/Autocomplete";
 
+/**
+ * This component allows to edit an user group
+ */
 class EditUserGroup extends Component {
   /**
    * Constructor
@@ -42,14 +47,15 @@ class EditUserGroup extends Component {
   get defaultState() {
     return {
       groupToEdit: { // The group to edit
-        groupName: '',
+        name: '',
         members: []
       },
       actions: {
-        processing: false // True if one process some operation
+        processing: false, // True if one process some operation
+        loading: true // True if the component is in a loading mode
       },
       errors: {
-        emptyGroupName: false // True if the group's name is empty
+        emptyName: false // True if the group's name is empty
       },
       validation: {
         hasAlreadyBeenValidated: false // True when the form has already been submitted
@@ -69,7 +75,8 @@ class EditUserGroup extends Component {
    */
   createRefs() {
     this.references = {
-      groupName:  React.createRef()
+      name:  React.createRef(),
+      members: React.createRef()
     };
   }
 
@@ -79,9 +86,13 @@ class EditUserGroup extends Component {
   bindHandlers() {
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleClose = this.handleClose.bind(this);
-    this.handleGroupNameChanged = this.handleGroupNameChanged.bind(this);
+    this.handleNameChanged = this.handleNameChanged.bind(this);
     this.handlePermissionSelected = this.handlePermissionSelected.bind(this);
     this.handleMemberRemoved = this.handleMemberRemoved.bind(this);
+    this.handleAutocompleteSelect = this.handleAutocompleteSelect.bind(this);
+    this.handleAutocompleteClose = this.handleAutocompleteClose.bind(this);
+    this.handleAutocompleteOpen = this.handleAutocompleteOpen.bind(this);
+    this.fetchAutocompleteItems = this.fetchAutocompleteItems.bind(this);
   }
 
   /**
@@ -109,7 +120,7 @@ class EditUserGroup extends Component {
    * Return true if there are some errors
    */
   get hasErrors() {
-    return this.state.errors.emptyGroupName;
+    return this.state.errors.emptyName;
   }
 
   /**
@@ -127,6 +138,27 @@ class EditUserGroup extends Component {
   }
 
   /**
+   * Returns true if the group to edit has members
+   */
+  get hasMember() {
+    return this.members.length > 0;
+  }
+
+  /**
+   * Returns true if the group to edit has at least one manager
+   */
+  get hasManager() {
+    return this.members.filter(member => member.is_admin).length > 0;
+  }
+
+  /**
+   * Returns true if the current user is one of the group managers
+   */
+  get isManager() {
+    return this.groupToEdit.groups_users.some(member => member.user_id === this.context.loggedInUser.id && member.is_admin);
+  }
+
+  /**
    * Returns the current list of members
    */
   get members() {
@@ -136,8 +168,8 @@ class EditUserGroup extends Component {
   /**
    * Whenever the group name change
    */
-  async handleGroupNameChanged(event) {
-    await this.updateGroupName(event.target.value);
+  async handleNameChanged(event) {
+    await this.updateName(event.target.value);
   }
 
   /**
@@ -182,27 +214,77 @@ class EditUserGroup extends Component {
   }
 
   /**
+   * handleAutocompleteOpen
+   * @return {void}
+   */
+  handleAutocompleteOpen() {
+    this.setState({autocompleteOpen: true});
+  }
+
+  /**
+   * handleAutocompleteClose
+   * @return {void}
+   */
+  handleAutocompleteClose() {
+    this.setState({autocompleteOpen: false});
+  }
+
+  /**
+   * handleAutocompleteSelect
+   * What happens when an item in the autocomplete list is selected
+   * e.g. if it's not already in the list, add it and scroll
+   * @param {object} aro
+   */
+  async handleAutocompleteSelect(aro) {
+    const alreadyMember = this.state.groupToEdit.members.find(member => member.id === aro.id);
+    if (alreadyMember) { // Case of previously deleted member and re-added
+      await this.restoreMember(alreadyMember);
+    } else { // Case of fresh member
+      await this.addMember(aro);
+    }
+  }
+
+
+  /**
    * Populate the component with initial data
    */
   async populate() {
     const findUser = groupUser => this.context.users.find(user => user.id === groupUser.user_id);
     const defineIsAdmin = groupUser => ({original_is_admin: groupUser.is_admin, is_admin: groupUser.is_admin});
     const userMapper = groupUser => Object.assign({}, findUser(groupUser), defineIsAdmin(groupUser));
-    const members = this.groupToEdit.groups_users.map(userMapper);
+    const members = await this.decorateUsersWithGpgKey(this.groupToEdit.groups_users.map(userMapper));
     await this.setState({
       groupToEdit: {
-        groupName: this.groupToEdit.name,
+        name: this.groupToEdit.name,
         members
       }
     });
   }
 
   /**
-   * Returns true of the permission / membership has changed
+   * Decorates the list of users with thier Gpg key
+   * @param users An user list
+   */
+  decorateUsersWithGpgKey(users) {
+    const requestGpgKey = user => this.context.port.request('passbolt.keyring.get-public-key-info-by-user', user.id);
+    const findFingerprint = user => requestGpgKey(user).then(gpgkey => this.getFingerprint(gpgkey.fingerprint));
+    const decorateGroupsUsersWithGpgKey = async user => Object.assign(user, {gpgkey: {fingerprint: await findFingerprint(user)}});
+    return Promise.all(users.map(decorateGroupsUsersWithGpgKey));
+  }
+
+  /**
+   * Returns true if the permission / membership has changed
    * @param member
    */
   hasMemberChanged(member) {
     return member.original_is_admin !== member.is_admin || member.isDeleted;
+  }
+
+  /**
+   * Returns true of the member has been added
+   */
+  hasMemberAdded(member) {
+    return member.isAdded;
   }
 
   /**
@@ -214,11 +296,20 @@ class EditUserGroup extends Component {
   }
 
   /**
-   * Changes the group name
-   * @param groupName The new name
+   * Get fingerprint
+   * @param fingerprint An user finger print
+   * @returns {string}
    */
-  async updateGroupName(groupName) {
-    await this.setState({groupToEdit: Object.assign({}, this.state.groupToEdit, {groupName})});
+  getFingerprint(fingerprint) {
+    return fingerprint.toUpperCase().replace(/.{4}(?=.)/g, '$& ');
+  }
+
+  /**
+   * Changes the group name
+   * @param name The new name
+   */
+  async updateName(name) {
+    await this.setState({groupToEdit: Object.assign({}, this.state.groupToEdit, {name})});
   }
 
   /**
@@ -231,6 +322,30 @@ class EditUserGroup extends Component {
     const updateMemberMapper = groupMember => groupMember.id === memberToUpdate.id ? memberToUpdate : groupMember;
     const members = this.state.groupToEdit.members.map(updateMemberMapper);
     await this.setState({groupToEdit: Object.assign({}, this.state.groupToEdit, {members})});
+  }
+
+  /**
+   * Add a user to the member list
+   * @param user An user
+   */
+  async addMember(user) {
+    const members = this.state.groupToEdit.members;
+    const mustBeAdmin = this.state.groupToEdit.members.length === 0;
+    members.push(Object.assign(user, {is_admin: mustBeAdmin, isAdded: true}));
+    await this.setState({groupToEdit: Object.assign({}, this.state.groupToEdit, {members})});
+    this.references.members.current.scrollTop = this.references.members.current.scrollHeight;
+  }
+
+  /**
+   * Restore a previously removed member to the list
+   * @param member A member
+   */
+  async restoreMember(member) {
+    const members = this.state.groupToEdit.members;
+    const memberToUpdate = Object.assign({}, member, {isDeleted: false, is_admin: member.original_is_admin});
+    const updateMemberMapper = groupMember => groupMember.id === memberToUpdate.id ? memberToUpdate : groupMember;
+    const updatedMembers = members.map(updateMemberMapper);
+    await this.setState({groupToEdit: Object.assign({}, this.state.groupToEdit, {members: updatedMembers})});
   }
 
   /**
@@ -248,17 +363,17 @@ class EditUserGroup extends Component {
    * Validate the form
    */
   async validate() {
-    await this.validateGroupName();
+    await this.validateName();
     await this.setState({validation: Object.assign({}, this.state.validation, {hasAlreadyBeenValidated: true})});
   }
 
   /**
    * Validates the group name
    */
-  async validateGroupName() {
-    const groupName = this.state.groupToEdit.groupName;
-    if (groupName.trim() === '') {
-      await this.setState({errors: Object.assign({}, this.state.errors, {emptyGroupName: true})});
+  async validateName() {
+    const name = this.state.groupToEdit.name;
+    if (name.trim() === '') {
+      await this.setState({errors: Object.assign({}, this.state.errors, {emptyName: true})});
     }
   }
 
@@ -268,7 +383,7 @@ class EditUserGroup extends Component {
   async edit() {
     const groupUserMapper = member => ({user_id: member.id, is_admin: member.is_admin, delete: member.isDeleted});
     const payload = {
-      name:  this.state.groupToEdit.groupName,
+      name:  this.state.groupToEdit.name,
       group_users: this.state.groupToEdit.members.map(groupUserMapper)
     };
     await this.context.port.request('passbolt.groups.edit', payload);
@@ -319,10 +434,27 @@ class EditUserGroup extends Component {
   }
 
   /**
+   * Get users matching the given keyword
+   * @param {string} keyword
+   * @returns users,
+   */
+  async fetchAutocompleteItems(keyword) {
+    const words = (keyword && keyword.split(/\s+/)) || [''];
+    const userAlreadyAdded = user => this.state.groupToEdit.members.some(member => member.id === user.id && !member.isDeleted);
+    const matchUserProperty = (word, user) => (user.username.toLowerCase().startsWith(word) || user.profile.first_name.toLowerCase().startsWith(word) || user.profile.last_name.toLowerCase().startsWith(word));
+    const matchUser = (word, user) => matchUserProperty(word, user);
+
+    const usersMatched = this.context.users.filter(user => user.active === true && !userAlreadyAdded(user)
+      && words.some(word => matchUser(word, user)));
+
+    return this.decorateUsersWithGpgKey(usersMatched);
+  }
+
+  /**
    * Render the component
    */
   render() {
-    const mustRaiseEmptyGroupNameError = this.state.errors.emptyGroupName && this.state.validation.hasAlreadyBeenValidated;
+    const mustRaiseEmptyNameError = this.state.errors.emptyName && this.state.validation.hasAlreadyBeenValidated;
     return (
       <DialogWrapper
         className='edit-group-dialog'
@@ -331,24 +463,25 @@ class EditUserGroup extends Component {
         disabled={this.areActionsAllowed}>
 
         <form
-          className="edit-user-group"
+          className="group-form"
           onSubmit={this.handleSubmit}
           noValidate>
 
           <div className="group_members">
 
             <div className="form-content">
-              <div className={`input text required ${mustRaiseEmptyGroupNameError ? "error" : ""}`}>
+              <div className={`input text required ${mustRaiseEmptyNameError ? "error" : ""}`}>
                 <label htmlFor="js_field_name">Group name</label>
                 <input
                   id="js_field_name"
-                  ref={this.references.groupName}
-                  value={this.state.groupToEdit.groupName}
+                  ref={this.references.name}
+                  value={this.state.groupToEdit.name}
                   maxLength="50"
                   type="text"
                   placeholder="group name"
-                  onChange={this.handleGroupNameChanged}/>
-                {mustRaiseEmptyGroupNameError &&
+                  onChange={this.handleNameChanged}
+                  disabled={this.areActionsAllowed}/>
+                {mustRaiseEmptyNameError &&
                 <div className="error message">
                   A name is required
                 </div>
@@ -362,34 +495,32 @@ class EditUserGroup extends Component {
 
             <div className="form-content permission-edit">
 
-              <ul className="permissions scroll group_user ready">
+              <ul
+                className="permissions scroll group_user"
+                ref={this.references.members}>
                 {
                   this.members.map(member => (
                     <li
                       key={member.id}
                       className={`row ${this.hasMemberChanged(member) ? 'permission-updated' : ''}`}>
 
-                      <div className="avatar">
-                        <UserAvatar
-                          baseUrl={this.context.userSettings.getTrustedDomain()}
-                          user={member}/>
-                      </div>
+                      <UserAvatar
+                        baseUrl={this.context.userSettings.getTrustedDomain()}
+                        user={member}/>
 
-                      <div className="user">
-                        <div className="details">
-                          <span
-                            className="name">{`${member.profile.first_name} ${member.profile.last_name}`}
-                          </span>
-                          <div className="more_details tooltip-alt">
-                            <Icon name="info-circle"/>
-                            <div className="tooltip-text right">
-                              <div className="email">{member.username}</div>
-                              <div className="fingerprint">3657 D402 E639 6396 57E3 14D1 EC7B BEFF 9B09 131B</div>
-                            </div>
-                          </div>
+                      <div className="aro">
+                        <div className="aro-name">
+                          <span className="ellipsis">{`${member.profile.first_name} ${member.profile.last_name}`}</span>
+                          <TooltipHtml>
+                            <div className="email"><strong>{member.username}</strong></div>
+                            <div className="fingerprint">{this.getFingerprint(member.gpgkey.fingerprint)}</div>
+                          </TooltipHtml>
                         </div>
                         <div className="permission_changes">
-                          <span>{this.hasMemberChanged(member) ?  "Will be updated" : "Unchanged"}</span>
+                          {this.hasMemberAdded(member) && <span>Will be added</span>}
+                          {this.hasMemberChanged(member) &&  !this.hasMemberAdded(member) && <span>Will be updated</span>}
+                          {!this.hasMemberChanged(member) && !this.hasMemberAdded(member) && <span>Unchanged</span>}
+
                         </div>
                       </div>
 
@@ -397,8 +528,7 @@ class EditUserGroup extends Component {
                         <select
                           className="permission"
                           value={member.is_admin}
-                          onChange={event => this.handlePermissionSelected(event, member)}
-                          disabled={this.canChangeMember(member)}>
+                          onChange={event => this.handlePermissionSelected(event, member)}>
                           <option value={false}>Member</option>
                           <option value={true}>Group manager</option>
                         </select>
@@ -416,15 +546,43 @@ class EditUserGroup extends Component {
                   ))
                 }
               </ul>
-              <div className="message warning feedback">
-                <span>Only the group manager can add new people to a group.</span>
-                {this.hasMembersChange &&
-                  <span>You need to click save for the changes to take place.</span>
-                }
+              {!this.hasMember &&
+              <div className="message warning">
+                <span>The group is empty, please add a group manager.</span>
               </div>
+              }
+              {this.hasMember && !this.hasManager &&
+              <div className="message error">
+                <span>Please make sure there is at least one group manager.</span>
+              </div>
+              }
+              {!  this.isManager &&
+                <div className="message warning feedback">
+                  <span>Only the group manager can add new people to a group.</span>
+                </div>
+              }
+              {this.hasMembersChange &&
+                <div className="message warning feedback">
+                  <span>You need to click save for the changes to take place.</span>
+                </div>
+              }
+
             </div>
           </div>
 
+          <div className="form-content permission-add">
+            <Autocomplete
+              id="user-name-input"
+              name="name"
+              label="Add people"
+              placeholder="Start typing a person name"
+              searchCallback={this.fetchAutocompleteItems}
+              onSelect={this.handleAutocompleteSelect}
+              onOpen={this.handleAutocompleteOpen}
+              onClose={this.handleAutocompleteClose}
+              disabled={this.areActionsAllowed}
+              baseUrl={this.context.userSettings.getTrustedDomain()}/>
+          </div>
 
           <div className="submit-wrapper clearfix">
             <FormSubmitButton

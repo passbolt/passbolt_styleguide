@@ -19,7 +19,6 @@ import {withRouter} from "react-router-dom";
 import {UserWorkspaceFilterTypes, withUserWorkspace} from "../../../contexts/UserWorkspaceContext";
 import {withContextualMenu} from "../../../../react/contexts/Common/ContextualMenuContext";
 import FilterUsersByGroupContextualMenu from "./FilterUsersByGroupContextualMenu";
-import FilterUsersByGroupItemContextualMenu from "./FilterUsersByGroupItemContextualMenu";
 import DisplayGroupContextualMenu from "./DisplayGroupContextualMenu";
 
 /**
@@ -102,15 +101,6 @@ class FilterUsersByGroup extends React.Component {
   }
 
   /**
-   * Handle when the user clicks on the more button
-   * @param {ReactEvent} event The event
-   * @param {Object} group The target group
-   */
-  handleMoreClickEvent(event, group) {
-    this.showGroupContextualMenu(event.pageY, event.pageX, group);
-  }
-
-  /**
    *
    */
   /**
@@ -143,7 +133,7 @@ class FilterUsersByGroup extends React.Component {
     const top = event.pageY;
     const left = event.pageX;
     const contextualMenuProps = {group, left, top};
-    this.props.contextualMenuContext.show(FilterUsersByGroupItemContextualMenu, contextualMenuProps);
+    this.props.contextualMenuContext.show(DisplayGroupContextualMenu, contextualMenuProps);
   }
 
   // Zero conditional statements
@@ -216,16 +206,6 @@ class FilterUsersByGroup extends React.Component {
   }
 
   /**
-   * Show the contextual menu for a group
-   * @param {int} left The left position to display the menu
-   * @param {int} top The top position to display the menu
-   */
-  showGroupContextualMenu(top, left, group) {
-    const contextualMenuProps = {left, top, group};
-    this.props.contextualMenuContext.show(DisplayGroupContextualMenu, contextualMenuProps);
-  }
-
-  /**
    * update the title of the filter tag
    */
   updateTitle() {
@@ -269,6 +249,7 @@ class FilterUsersByGroup extends React.Component {
    */
   canShowMore(group) {
     const isGroupManager = group.my_group_user && group.my_group_user.is_admin;
+    console.log(group);
     return this.isCurrentUserAdmin || isGroupManager;
   }
 
@@ -332,19 +313,13 @@ class FilterUsersByGroup extends React.Component {
                     {this.canShowMore(group) &&
                     <div className="right-cell more-ctrl">
                       <a
-                        onClick={event => this.handleMoreClickEvent(event, group)}>
+                        onClick={event => this.handleMoreClickEvent(event, group)}
+                        className="more">
                         <Icon name="plus-square"/>
                       </a>
                     </div>
                     }
                   </div>
-                  {this.isLoggedInUserAdmin() &&
-                  <div className="right-cell more-ctrl">
-                    <a className="more" onClick={event => this.handleMoreClickEvent(event, group)}>
-                      <Icon name="plus-square"/>
-                    </a>
-                  </div>
-                  }
                 </div>
               </li>
             )
