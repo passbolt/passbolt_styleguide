@@ -99,9 +99,11 @@ class PasswordSidebarInformationSection extends React.Component {
    * @param {string} userId The user id
    */
   getUserUsername(userId) {
-    if (this.props.users) {
-      const user = this.props.users.find(item => item.id === userId);
-      return user.username;
+    if (this.context.users) {
+      const user = this.context.users.find(item => item.id === userId);
+      if (user) {
+        return user.username;
+      }
     }
 
     return "";

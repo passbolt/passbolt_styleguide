@@ -91,16 +91,14 @@ class FolderSidebarInformationSection extends React.Component {
    * @param {string} userId The user id
    */
   getUserUsername(userId) {
-    let username = "";
-
-    if (this.props.users) {
-      const user = this.props.users.find(item => item.id === userId);
+    if (this.context.users) {
+      const user = this.context.users.find(item => item.id === userId);
       if (user) {
-        username = user.username;
+        return user.username;
       }
     }
 
-    return username;
+    return "";
   }
 
   /**
