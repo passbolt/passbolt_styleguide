@@ -140,6 +140,8 @@ class ResourceWorkspaceContextProvider extends React.Component {
     await this.handleRouteChange(prevProps.location);
   }
 
+
+
   /**
    * Handles the resource search filter change
    */
@@ -209,10 +211,15 @@ class ResourceWorkspaceContextProvider extends React.Component {
    */
   async handleFolderRouteChange() {
     const folderId = this.props.match.params.filterByFolderId;
+
     if (folderId) {
       const folder = this.context.folders.find(folder => folder.id === folderId);
-      await this.search({type: ResourceWorkspaceFilterTypes.FOLDER, payload: {folder}});
-      await this.detailFolder(folder);
+      if (folder) { // Known folder
+        await this.search({type: ResourceWorkspaceFilterTypes.FOLDER, payload: {folder}});
+        await this.detailFolder(folder);
+      } else { // Unknown folder
+        this.handleUnknownFolder();
+      }
     }
   }
 
@@ -242,11 +249,12 @@ class ResourceWorkspaceContextProvider extends React.Component {
       await this.search({type: ResourceWorkspaceFilterTypes.ALL});
     }
 
-    // If the resource does not exist, it should display an error
+    // If the resource does not exist , it should display an error
     if (resource) {
       await this.selectFromRoute(resource);
       await this.scrollTo(resource);
       await this.detailResource(resource);
+      await this.redirectAfterSelection();
     } else {
       this.handleUnknownResource();
     }
@@ -279,6 +287,15 @@ class ResourceWorkspaceContextProvider extends React.Component {
    */
   handleUnknownResource() {
     this.props.actionFeedbackContext.displayError("The resource does not exist");
+    this.props.history.push({pathname: `/app/passwords`});
+  }
+
+  /**
+   * Handle an unknown folder (passed by route parameter folder identifier)
+   */
+  handleUnknownFolder() {
+    this.props.actionFeedbackContext.displayError("The folder does not exist");
+    this.props.history.push({pathname: `/app/passwords`});
   }
 
   /**
@@ -639,16 +656,19 @@ class ResourceWorkspaceContextProvider extends React.Component {
   redirectAfterSelection() {
     const hasSingleSelectionNow = this.state.selectedResources.length === 1;
     if (hasSingleSelectionNow) { // Case of single selected resource
-      this.props.history.push(`/app/passwords/view/${this.state.selectedResources[0].id}`);
+      const mustRedirect = this.props.location.pathname !== `/app/passwords/view/${this.state.selectedResources[0].id}`;
+      if (mustRedirect) {
+        this.props.history.push(`/app/passwords/view/${this.state.selectedResources[0].id}`);
+      }
     } else { // Case of multiple selected resources
       const {filter} = this.state;
       const isFolderFilter = filter.type === ResourceWorkspaceFilterTypes.FOLDER;
-      if (isFolderFilter) {
+      if (isFolderFilter) { // Case of folder
         const mustRedirect = this.props.location.pathname !== `/app/folders/view/${this.state.filter.payload.folder.id}`;
         if (mustRedirect) {
           this.props.history.push({pathname: `/app/folders/view/${this.state.filter.payload.folder.id}`});
         }
-      } else {
+      } else { // Case of resources
         const mustRedirect = this.props.location.pathname !== '/app/passwords';
         if (mustRedirect) {
           this.props.history.push({pathname: `/app/passwords`, state: {filter}});
