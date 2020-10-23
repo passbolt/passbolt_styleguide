@@ -40,6 +40,7 @@ class DisplayUsersContextualMenu extends React.Component {
     this.handlePermalinkCopy = this.handlePermalinkCopy.bind(this);
     this.handleUsernameCopy = this.handleUsernameCopy.bind(this);
     this.handleEditClickEvent = this.handleEditClickEvent.bind(this);
+    this.handleResendInviteClickEvent = this.handleResendInviteClickEvent.bind(this);
     this.handleDeleteClickEvent = this.handleDeleteClickEvent.bind(this);
     this.handleDisableMfaEvent = this.handleDisableMfaEvent.bind(this);
   }
@@ -66,6 +67,12 @@ class DisplayUsersContextualMenu extends React.Component {
     return this.props.user;
   }
 
+  /**
+   * Returns true if the current user can resend an invite
+   */
+  get canIUseResend() {
+    return this.context.loggedInUser && this.context.loggedInUser.role.name === 'admin';
+  }
   /**
    * Handle the copy of user permalink
    */
@@ -107,6 +114,13 @@ class DisplayUsersContextualMenu extends React.Component {
     this.context.setContext({editUserDialogProps});
     this.props.dialogContext.open(EditUserDialog);
     this.props.hide();
+  }
+
+  /**
+   * Handle the will of resending an invite
+   */
+  handleResendInviteClickEvent(){
+    this.resendInvite();
   }
 
   /**
@@ -210,6 +224,37 @@ class DisplayUsersContextualMenu extends React.Component {
   }
 
   /**
+   * Resend an invite to the given user
+   */
+  resendInvite() {
+    this.context.port.request('passbolt.users.resend-invite', this.user.id)
+      .then(this.onResendInviteSuccess.bind(this))
+      .catch(this.onResendInviteFailure.bind(this));
+  }
+
+  /**
+   * Whenever the resend invite succeeds
+   */
+  onResendInviteSuccess() {
+    this.props.actionFeedbackContext.displaySuccess("The invite has been resent successfully");
+    this.props.hide();
+  }
+
+  /**
+   * Whenever the resend invite fails
+   * @param error An error
+   */
+  onResendInviteFailure(error) {
+    const errorDialogProps = {
+      title: "There was an unexpected error...",
+      message: error.message
+    };
+    this.context.setContext({errorDialogProps});
+    this.props.dialogContext.open(ErrorDialog);
+    this.props.hide();
+  }
+
+  /**
    * Render the component.
    * @returns {JSX}
    */
@@ -280,6 +325,17 @@ class DisplayUsersContextualMenu extends React.Component {
             <div className="main-cell-wrapper">
               <div className="main-cell">
                 <a id="edit" onClick={this.handleEditClickEvent}><span>Edit</span></a>
+              </div>
+            </div>
+          </div>
+        </li>
+        }
+        {this.canIUseResend &&
+        <li key="resend-invite-user" className="ready">
+          <div className="row">
+            <div className="main-cell-wrapper">
+              <div className="main-cell">
+                <a id="resend" onClick={this.handleResendInviteClickEvent}><span>Resend invite</span></a>
               </div>
             </div>
           </div>
