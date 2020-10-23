@@ -249,9 +249,9 @@ class DisplayUsersContextualMenu extends React.Component {
       title: "There was an unexpected error...",
       message: error.message
     };
+    this.props.hide();
     this.context.setContext({errorDialogProps});
     this.props.dialogContext.open(ErrorDialog);
-    this.props.hide();
   }
 
   /**
