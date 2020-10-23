@@ -179,10 +179,11 @@ class DisplayUsersContextualMenu extends React.Component {
 
   /**
    * Check if the user can use the delete capability.
-   * @returns {boolean}
+   * @param user An user
    */
   canIUseDelete() {
-    return this.isLoggedInUserAdmin();
+    const isNotCurrentUser = this.context.loggedInUser.id !== this.user.id;
+    return this.isLoggedInUserAdmin() && isNotCurrentUser;
   }
 
   /**
