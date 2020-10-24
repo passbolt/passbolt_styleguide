@@ -18,6 +18,7 @@ import UserAvatar from "../../Common/Avatar/UserAvatar";
 import GroupAvatar from "../../Common/Avatar/GroupAvatar";
 import AppContext from "../../../contexts/AppContext";
 import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
+import {Link} from "react-router-dom";
 
 const LIMIT_ACTIVITIES_PER_PAGE = 5;
 
@@ -108,7 +109,11 @@ class FolderSidebarActivitySection extends React.Component {
    * @returns {Promise<void>}
    */
   async fetch() {
-    const newActivities = await this.context.port.request('passbolt.folders.action-log', this.folder.id, this.state.activitiesPage, LIMIT_ACTIVITIES_PER_PAGE);
+    const limit = LIMIT_ACTIVITIES_PER_PAGE;
+    const page = this.state.activitiesPage;
+    const options = {limit, page};
+    const newActivities = await this.context.port.request("passbolt.actionlogs.find-all-for", "Folder", this.folder.id, options);
+
     let activities;
     // For the first page need to reset activities state
     if (this.state.activitiesPage > 1) {
@@ -144,8 +149,7 @@ class FolderSidebarActivitySection extends React.Component {
    * @returns {string}
    */
   getFolderPermalink(folder) {
-    const baseUrl = this.context.userSettings.getTrustedDomain();
-    return `${baseUrl}/app/folders/view/${folder.id}`;
+    return `/app/folders/view/${folder.id}`;
   }
 
   /**
@@ -196,7 +200,7 @@ class FolderSidebarActivitySection extends React.Component {
    * @param {object} activity The target activity
    * @returns {JSX}
    */
-  renderCreatedActivity(activity) {
+  renderFolderCreatedActivity(activity) {
     const activityCreatorName = this.getActivityCreatorFullName(activity.creator);
     const folderPermalink = this.getFolderPermalink(this.folder);
     const folderName = this.folder.name;
@@ -207,7 +211,7 @@ class FolderSidebarActivitySection extends React.Component {
         <div className="content-wrapper">
           <div className="content">
             <div className="name">
-              <span className="creator">{activityCreatorName}</span> created the folder <a href={folderPermalink}>{folderName}</a>
+              <span className="creator">{activityCreatorName}</span> created folder <Link to={folderPermalink}>{folderName}</Link>
             </div>
             <div className="subinfo light">{activityFormattedDate}</div>
           </div>
@@ -222,10 +226,10 @@ class FolderSidebarActivitySection extends React.Component {
    * @param {object} activity The target activity
    * @returns {JSX}
    */
-  renderUpdatedActivity(activity) {
+  renderFolderUpdatedActivity(activity) {
     const activityCreatorName = this.getActivityCreatorFullName(activity.creator);
     const folderPermalink = this.getFolderPermalink(this.folder);
-    const folderName = activity.data.folder.name;
+    const folderName = this.folder.name;
     const activityFormattedDate = this.formatDateTimeAgo(activity.created);
 
     return (
@@ -233,7 +237,7 @@ class FolderSidebarActivitySection extends React.Component {
         <div className="content-wrapper">
           <div className="content">
             <div className="name">
-              <span className="creator">{activityCreatorName}</span> renamed the folder into <a href={folderPermalink}>{folderName}</a>
+              <span className="creator">{activityCreatorName}</span> udpated folder <Link to={folderPermalink}>{folderName}</Link>
             </div>
             <div className="subinfo light">{activityFormattedDate}</div>
           </div>
@@ -272,11 +276,11 @@ class FolderSidebarActivitySection extends React.Component {
   }
 
   /**
-   * Render a shared activity.
+   * Render a permissions updated activity.
    * @param {object} activity The target activity
    * @returns {JSX}
    */
-  renderSharedActivity(activity) {
+  renderPermissionsUpdatedActivity(activity) {
     const activityCreatorName = this.getActivityCreatorFullName(activity.creator);
     const folderPermalink = this.getFolderPermalink(this.folder);
     const folderName = this.folder.name;
@@ -287,7 +291,7 @@ class FolderSidebarActivitySection extends React.Component {
         <div className="content-wrapper">
           <div className="content">
             <div className="name">
-              <span className="creator">{activityCreatorName}</span> shared the folder <a href={folderPermalink}>{folderName}</a> with
+              <span className="creator">{activityCreatorName}</span> changed permissions of folder <Link to={folderPermalink}>{folderName}</Link> with
             </div>
             <div className="subinfo light">{activityFormattedDate}</div>
             <ul className="permissions-list">
@@ -327,15 +331,15 @@ class FolderSidebarActivitySection extends React.Component {
 
     switch (activity.type) {
       case "Folders.created": {
-        render = this.renderCreatedActivity(activity);
+        render = this.renderFolderCreatedActivity(activity);
         break;
       }
       case "Folders.updated": {
-        render = this.renderUpdatedActivity(activity);
+        render = this.renderFolderUpdatedActivity(activity);
         break;
       }
       case "Permissions.updated": {
-        render = this.renderSharedActivity(activity);
+        render = this.renderPermissionsUpdatedActivity(activity);
         break;
       }
       default: {

@@ -121,7 +121,11 @@ class PasswordSidebarActivitySection extends React.Component {
    * @returns {Promise<void>}
    */
   async fetch() {
-    const newActivities = await this.context.port.request('passbolt.resources.action-log', this.resource.id, this.state.activitiesPage, LIMIT_ACTIVITIES_PER_PAGE);
+    const limit = LIMIT_ACTIVITIES_PER_PAGE;
+    const page = this.state.activitiesPage;
+    const options = {limit, page};
+    const newActivities = await this.context.port.request("passbolt.actionlogs.find-all-for", "Resource", this.resource.id, options);
+
     let activities;
     // For the first page need to reset activities state
     if (this.state.activitiesPage > 1) {
@@ -195,22 +199,22 @@ class PasswordSidebarActivitySection extends React.Component {
   }
 
   /**
-   * Render a created activity.
+   * Render a resource created activity.
    * @param {object} activity The target activity
    * @returns {JSX}
    */
-  renderCreatedActivity(activity) {
+  renderResouceCreatedActivity(activity) {
     const activityCreatorName = this.getActivityCreatorFullName(activity.creator);
     const resourceLink = `/app/passwords/view/${this.resource.id}`;
     const resourceName = this.resource.name;
     const activityFormattedDate = this.formatDateTimeAgo(activity.created);
 
     return (
-      <li key={activity.action_log_id} className="usercard-detailed-col-2">
+      <li key={activity.id} className="usercard-detailed-col-2">
         <div className="content-wrapper">
           <div className="content">
             <div className="name">
-              <span className="creator">{activityCreatorName}</span> created the item <Link to={resourceLink}>{resourceName}</Link>
+              <span className="creator">{activityCreatorName}</span> created item <Link to={resourceLink}>{resourceName}</Link>
             </div>
             <div className="subinfo light">{activityFormattedDate}</div>
           </div>
@@ -221,22 +225,22 @@ class PasswordSidebarActivitySection extends React.Component {
   }
 
   /**
-   * Render an updated activity.
+   * Render a resource updated activity.
    * @param {object} activity The target activity
    * @returns {JSX}
    */
-  renderUpdatedActivity(activity) {
+  renderResourceUpdatedActivity(activity) {
     const activityCreatorName = this.getActivityCreatorFullName(activity.creator);
     const resourceLink = `/app/passwords/view/${this.resource.id}`;
-    const resourceName = activity.data.resource.name;
+    const resourceName = this.resource.name;
     const activityFormattedDate = this.formatDateTimeAgo(activity.created);
 
     return (
-      <li key={activity.action_log_id} className="usercard-detailed-col-2">
+      <li key={activity.id} className="usercard-detailed-col-2">
         <div className="content-wrapper">
           <div className="content">
             <div className="name">
-              <span className="creator">{activityCreatorName}</span> renamed the item into <Link to={resourceLink}>{resourceName}</Link>
+              <span className="creator">{activityCreatorName}</span> updated item <Link to={resourceLink}>{resourceName}</Link>
             </div>
             <div className="subinfo light">{activityFormattedDate}</div>
           </div>
@@ -247,22 +251,48 @@ class PasswordSidebarActivitySection extends React.Component {
   }
 
   /**
-   * Render a created activity.
+   * Render a secret read activity.
    * @param {object} activity The target activity
    * @returns {JSX}
    */
-  renderReadActivity(activity) {
+  renderSecretReadActivity(activity) {
     const activityCreatorName = this.getActivityCreatorFullName(activity.creator);
     const resourceLink = `/app/passwords/view/${this.resource.id}`;
     const resourceName = this.resource.name;
     const activityFormattedDate = this.formatDateTimeAgo(activity.created);
 
     return (
-      <li key={activity.action_log_id} className="usercard-detailed-col-2">
+      <li key={activity.id} className="usercard-detailed-col-2">
         <div className="content-wrapper">
           <div className="content">
             <div className="name">
               <span className="creator">{activityCreatorName}</span> accessed secret of item <Link to={resourceLink}>{resourceName}</Link>
+            </div>
+            <div className="subinfo light">{activityFormattedDate}</div>
+          </div>
+        </div>
+        <UserAvatar user={activity.creator} baseUrl={this.context.userSettings.getTrustedDomain()}/>
+      </li>
+    );
+  }
+
+  /**
+   * Render a secret updated activity.
+   * @param {object} activity The target activity
+   * @returns {JSX}
+   */
+  renderSecretUpdatedActivity(activity) {
+    const activityCreatorName = this.getActivityCreatorFullName(activity.creator);
+    const resourceLink = `/app/passwords/view/${this.resource.id}`;
+    const resourceName = this.resource.name;
+    const activityFormattedDate = this.formatDateTimeAgo(activity.created);
+
+    return (
+      <li key={activity.id} className="usercard-detailed-col-2">
+        <div className="content-wrapper">
+          <div className="content">
+            <div className="name">
+              <span className="creator">{activityCreatorName}</span> updated secret of item <Link to={resourceLink}>{resourceName}</Link>
             </div>
             <div className="subinfo light">{activityFormattedDate}</div>
           </div>
@@ -301,22 +331,22 @@ class PasswordSidebarActivitySection extends React.Component {
   }
 
   /**
-   * Render a shared activity.
+   * Render a permissions updated activity.
    * @param {object} activity The target activity
    * @returns {JSX}
    */
-  renderSharedActivity(activity) {
+  renderPermissionsUpdatedActivity(activity) {
     const activityCreatorName = this.getActivityCreatorFullName(activity.creator);
     const resourceLink = `/app/passwords/view/${this.resource.id}`;
     const resourceName = this.resource.name;
     const activityFormattedDate = this.formatDateTimeAgo(activity.created);
 
     return (
-      <li key={activity.action_log_id} className="usercard-detailed-col-2">
+      <li key={activity.id} className="usercard-detailed-col-2">
         <div className="content-wrapper">
           <div className="content">
             <div className="name">
-              <span className="creator">{activityCreatorName}</span> changed permissions of the item <Link to={resourceLink}>{resourceName}</Link> with
+              <span className="creator">{activityCreatorName}</span> changed permissions of item <Link to={resourceLink}>{resourceName}</Link> with
             </div>
             <div className="subinfo light">{activityFormattedDate}</div>
             <ul className="permissions-list">
@@ -337,7 +367,7 @@ class PasswordSidebarActivitySection extends React.Component {
    */
   renderUnknownActivity(activity) {
     return (
-      <li key={activity.action_log_id} className="usercard-detailed-col-2">
+      <li key={activity.id} className="usercard-detailed-col-2">
         <div className="content-wrapper">
           <div className="content">
             Unknown activity, please contact your administrator.
@@ -356,19 +386,23 @@ class PasswordSidebarActivitySection extends React.Component {
 
     switch (activity.type) {
       case "Resources.created": {
-        render = this.renderCreatedActivity(activity);
+        render = this.renderResouceCreatedActivity(activity);
         break;
       }
       case "Resources.updated": {
-        render = this.renderUpdatedActivity(activity);
+        render = this.renderResourceUpdatedActivity(activity);
         break;
       }
       case "Permissions.updated": {
-        render = this.renderSharedActivity(activity);
+        render = this.renderPermissionsUpdatedActivity(activity);
         break;
       }
       case "Resource.Secrets.read": {
-        render = this.renderReadActivity(activity);
+        render = this.renderSecretReadActivity(activity);
+        break;
+      }
+      case "Resource.Secrets.updated": {
+        render = this.renderSecretUpdatedActivity(activity);
         break;
       }
       default: {
