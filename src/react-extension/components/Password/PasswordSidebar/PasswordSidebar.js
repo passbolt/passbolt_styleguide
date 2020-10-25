@@ -47,7 +47,7 @@ class PasswordSidebar extends React.Component {
    */
   async handlePermalinkClick() {
     const baseUrl = this.context.userSettings.getTrustedDomain();
-    const permalink = `${baseUrl}/app/folders/view/${this.props.resourceWorkspaceContext.details.resource.id}`;
+    const permalink = `${baseUrl}/app/passwords/view/${this.props.resourceWorkspaceContext.details.resource.id}`;
     await this.context.port.request("passbolt.clipboard.copy", permalink);
     this.props.actionFeedbackContext.displaySuccess("The permalink has been copied to clipboard");
   }
