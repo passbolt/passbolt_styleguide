@@ -91,7 +91,6 @@ class DisplayUserWorkspaceActions extends React.Component {
     return !this.isButtonDisabled() && isNotCurrentUser;
   }
 
-
   /**
    * Handle view detail click event
    */
@@ -220,12 +219,17 @@ class DisplayUserWorkspaceActions extends React.Component {
   }
 
   /**
-   * Returns true if the current user has the plugin capability to disable MFA
+   * Can the logged in user use the mfa capability.
    */
-  get haveDisableMfaCapability() {
-    const hasSettingsCapability = this.context.siteSettings.settings.passbolt.plugins.multiFactorAuthentication;
-    const hasContextualCapability = this.selectedUser && this.selectedUser.is_mfa_enabled;
-    return hasContextualCapability && hasSettingsCapability;
+  get canIUseMfa() {
+    return this.context.siteSettings.canIUse("multiFactorAuthentication");
+  }
+
+  /**
+   * Returns true if the currrent user can disable the MFA of a user
+   */
+  get canDisableMfaForUser() {
+    return this.selectedUser && this.selectedUser.is_mfa_enabled;
   }
 
   /**
@@ -329,6 +333,7 @@ class DisplayUserWorkspaceActions extends React.Component {
                     </div>
                   </div>
                 </li>
+                {this.canIUseMfa &&
                 <li id="disable-mfa-action" className="">
                   <div className="row">
                     <div className="main-cell-wrapper">
@@ -336,13 +341,14 @@ class DisplayUserWorkspaceActions extends React.Component {
                         <a
                           id="disable-mfa"
                           onClick={this.handleDisableMfaEvent}
-                          className={this.haveDisableMfaCapability ? '' : 'disabled'}>
+                          className={this.canDisableMfaForUser ? '' : 'disabled'}>
                           <span>Disable MFA</span>
                         </a>
                       </div>
                     </div>
                   </div>
                 </li>
+                }
               </ul>
             </div>
           </ul>

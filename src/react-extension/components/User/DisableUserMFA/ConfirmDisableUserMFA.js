@@ -94,7 +94,7 @@ class ConfirmDisableUserMFA extends Component {
    */
   async disableMFA() {
     await this.setState({actions: {processing: true}});
-    await this.context.port.request('passbolt.users.disable-mfa', this.user.id)
+    await this.context.port.request("passbolt.mfa.disable-for-user", this.user.id)
       .then(this.onDisableMFASuccess.bind(this))
       .catch(this.onDisableMFAFailure.bind(this));
   }
@@ -104,7 +104,7 @@ class ConfirmDisableUserMFA extends Component {
    */
   async onDisableMFASuccess() {
     await this.setState({actions: {processing: false}});
-    this.props.actionFeedbackContext.displaySuccess('The MFA has been disabled successfully');
+    this.props.actionFeedbackContext.displaySuccess("Multi-factor authentication has been disabled successfully");
     this.props.onClose();
   }
 

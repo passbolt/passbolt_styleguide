@@ -45,17 +45,17 @@ class DisplayUsersContextualMenu extends React.Component {
   }
 
   /**
-   * Returns true if the currrent user can disable the MFA of a user
+   * Can the logged in user use the mfa capability.
    */
-  get canIDisableMfa() {
-    return this.isLoggedInUserAdmin();
+  get canIUseMfa() {
+    return this.context.siteSettings.canIUse("multiFactorAuthentication") && this.isLoggedInUserAdmin();
   }
 
   /**
-   * Returns true if the current user has the plugin capability to disable MFA
+   * Returns true if the currrent user can disable the MFA of a user
    */
-  get haveDisableMfaCapability() {
-    return this.context.siteSettings.settings.passbolt.plugins.multiFactorAuthentication;
+  get canDisableMfaForUser() {
+    return this.props.user.is_mfa_enabled;
   }
 
   /**
@@ -258,7 +258,7 @@ class DisplayUsersContextualMenu extends React.Component {
             </div>
           </div>
         </li>
-        {this.canIDisableMfa &&
+        {this.canIUseMfa &&
         <li key="disable-user-mfa" className="ready">
           <div className="row">
             <div className="main-cell-wrapper">
@@ -266,7 +266,7 @@ class DisplayUsersContextualMenu extends React.Component {
                 <a
                   id="disable-mfa"
                   onClick={this.handleDisableMfaEvent}
-                  className={this.haveDisableMfaCapability ? '' : 'disabled'}>
+                  className={this.canDisableMfaForUser ? '' : 'disabled'}>
                   <span>Disable MFA</span>
                 </a>
               </div>
