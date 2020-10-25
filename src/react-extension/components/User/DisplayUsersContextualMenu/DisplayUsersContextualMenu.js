@@ -311,22 +311,6 @@ class DisplayUsersContextualMenu extends React.Component {
             </div>
           </div>
         </li>
-        {this.canIUseMfa &&
-        <li key="disable-user-mfa" className="ready">
-          <div className="row">
-            <div className="main-cell-wrapper">
-              <div className="main-cell">
-                <a
-                  id="disable-mfa"
-                  onClick={this.handleDisableMfaEvent}
-                  className={this.canDisableMfaForUser ? '' : 'disabled'}>
-                  <span>Disable MFA</span>
-                </a>
-              </div>
-            </div>
-          </div>
-        </li>
-        }
         {this.canIUseEdit() &&
         <li key="edit-user" className="ready">
           <div className="row">
@@ -346,6 +330,22 @@ class DisplayUsersContextualMenu extends React.Component {
                 <a id="resend"
                   onClick={this.handleResendInviteClickEvent}
                   className={`${this.canResendInviteToUser ? "" : "disabled"}`}><span>Resend invite</span></a>
+              </div>
+            </div>
+          </div>
+        </li>
+        }
+        {this.canIUseMfa &&
+        <li key="disable-user-mfa" className="ready">
+          <div className="row">
+            <div className="main-cell-wrapper">
+              <div className="main-cell">
+                <a
+                  id="disable-mfa"
+                  onClick={this.handleDisableMfaEvent}
+                  className={this.canDisableMfaForUser ? '' : 'disabled'}>
+                  <span>Disable MFA</span>
+                </a>
               </div>
             </div>
           </div>
