@@ -314,44 +314,56 @@ class ReactExtension extends Component {
                 <HandleErrorDialogEvents/>
 
                 <Router>
-                  <div id="container" className="page password">
-                    {isReady &&
-                    <div id="app" className={`app ${isReady ? "ready" : ""}`} tabIndex="1000">
-
-                      <div className="header first">
-                        <MainMenu onClick={this.handleWorkspaceSelect} baseUrl={this.state.userSettings.getTrustedDomain()}/>
-                      </div>
-
-                      <Switch>
-                        <Route path={[
-                          "/app/folders/view/:filterByFolderId",
-                          "/app/passwords/view/:selectedResourceId",
-                          "/app/passwords",
-                        ]}>
-                          <ResourceWorkspaceContextProvider>
-                            <ManageContextualMenu/>
-                            <ManageDialogs/>
+                  <Switch>
+                    <Route path={[
+                      "/app/folders/view/:filterByFolderId",
+                      "/app/passwords/view/:selectedResourceId",
+                      "/app/passwords",
+                    ]}>
+                      {isReady &&
+                      <ResourceWorkspaceContextProvider>
+                        <ManageDialogs/>
+                        <ManageContextualMenu/>
+                        <div id="container" className="page password">
+                          <div id="app" className={`app ${isReady ? "ready" : ""}`} tabIndex="1000">
+                            <div className="header first">
+                              <MainMenu
+                                onClick={this.handleWorkspaceSelect}
+                                baseUrl={this.state.userSettings.getTrustedDomain()}/>
+                            </div>
                             <PasswordWorkspace onMenuItemClick={this.handleWorkspaceSelect}/>
-                          </ResourceWorkspaceContextProvider>
-                        </Route>
-                        <Route path={[
-                          "/app/groups/view/:selectedGroupId",
-                          "/app/users/view/:selectedUserId",
-                          "/app/users",
-                        ]}>
-                          <UserWorkspaceContextProvider>
-                            <ManageContextualMenu/>
-                            <ManageDialogs/>
+                          </div>
+                        </div>
+                      </ResourceWorkspaceContextProvider>
+                      }
+
+                    </Route>
+                    <Route path={[
+                      "/app/groups/view/:selectedGroupId",
+                      "/app/users/view/:selectedUserId",
+                      "/app/users",
+                    ]}>
+                      {isReady &&
+                      <UserWorkspaceContextProvider>
+                        <ManageDialogs/>
+                        <ManageContextualMenu/>
+                        <div id="container" className="page password">
+                          <div id="app" className={`app ${isReady ? "ready" : ""}`} tabIndex="1000">
+                            <div className="header first">
+                              <MainMenu
+                                onClick={this.handleWorkspaceSelect}
+                                baseUrl={this.state.userSettings.getTrustedDomain()}/>
+                            </div>
                             <DisplayUserWorkspace/>
-                          </UserWorkspaceContextProvider>
-                        </Route>
-                        <Route path="/">
-                          <HandleRouteFallback/>
-                        </Route>
-                      </Switch>
-                    </div>
-                    }
-                  </div>
+                          </div>
+                        </div>
+                      </UserWorkspaceContextProvider>
+                      }
+                    </Route>
+                    <Route path="/">
+                      <HandleRouteFallback/>
+                    </Route>
+                  </Switch>
                 </Router>
                 <ManageLoading/>
                 <Footer/>
