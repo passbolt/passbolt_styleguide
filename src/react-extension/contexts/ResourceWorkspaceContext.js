@@ -190,12 +190,15 @@ class ResourceWorkspaceContextProvider extends React.Component {
    */
   async handleResourcesChange() {
     const hasResourcesChanged = this.context.resources && this.context.resources !== this.resources;
+    const areResourcesFirstLoad = this.resources === null;
     if (hasResourcesChanged) {
       this.resources = this.context.resources;
       await this.search(this.state.filter);
       await this.updateDetails();
       await this.unselectUnknownResources();
-      await this.redirectAfterSelection();
+      if (!areResourcesFirstLoad) {
+        await this.redirectAfterSelection();
+      }
     }
   }
 
