@@ -5903,7 +5903,7 @@ h6 .input.toggle-switch {
   margin-left: 3.8em;
 }
 .autocomplete-wrapper .autocomplete-content .row.loading .info:after {
-  width: 100%;
+  width: 60%;
   height: 100%;
   position: absolute;
   content: " ";
