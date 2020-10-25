@@ -68,11 +68,19 @@ class DisplayUsersContextualMenu extends React.Component {
   }
 
   /**
-   * Returns true if the current user can resend an invite
+   * Returns true if the logged in user can use the resend capability.
    */
   get canIUseResend() {
-    return this.context.loggedInUser && this.context.loggedInUser.role.name === 'admin';
+    return this.isLoggedInUserAdmin();
   }
+
+  /**
+   * Returns true if the logged in user can resend an invite to the user
+   */
+  get canResendInviteToUser() {
+    return this.user && !this.user.active;
+  }
+
   /**
    * Handle the copy of user permalink
    */
@@ -227,7 +235,7 @@ class DisplayUsersContextualMenu extends React.Component {
    * Resend an invite to the given user
    */
   resendInvite() {
-    this.context.port.request('passbolt.users.resend-invite', this.user.id)
+    this.context.port.request("passbolt.users.resend-invite", this.user.username)
       .then(this.onResendInviteSuccess.bind(this))
       .catch(this.onResendInviteFailure.bind(this));
   }
@@ -335,7 +343,9 @@ class DisplayUsersContextualMenu extends React.Component {
           <div className="row">
             <div className="main-cell-wrapper">
               <div className="main-cell">
-                <a id="resend" onClick={this.handleResendInviteClickEvent}><span>Resend invite</span></a>
+                <a id="resend"
+                  onClick={this.handleResendInviteClickEvent}
+                  className={`${this.canResendInviteToUser ? "" : "disabled"}`}><span>Resend invite</span></a>
               </div>
             </div>
           </div>

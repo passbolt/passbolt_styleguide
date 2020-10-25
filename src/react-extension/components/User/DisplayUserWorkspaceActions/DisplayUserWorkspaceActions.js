@@ -240,12 +240,18 @@ class DisplayUserWorkspaceActions extends React.Component {
     return this.selectedUser && this.selectedUser.is_mfa_enabled;
   }
 
-
   /**
-   * Returns true if the current user can resend an invite
+   * Returns true if the logged in user can use the resend capability.
    */
   get canIUseResend() {
-    return this.context.loggedInUser && this.context.loggedInUser.role.name === 'admin';
+    return this.isLoggedInUserAdmin();
+  }
+
+  /**
+   * Returns true if the logged in user can resend an invite to the user
+   */
+  get canResendInviteToUser() {
+    return this.selectedUser && !this.selectedUser.active;
   }
 
   /**
@@ -269,7 +275,7 @@ class DisplayUserWorkspaceActions extends React.Component {
    * @returns {boolean}
    */
   isLoggedInUserAdmin() {
-    return this.context.loggedInUser && this.context.loggedInUser.role.name === 'admin';
+    return this.context.loggedInUser && this.context.loggedInUser.role.name === "admin";
   }
 
   /**
@@ -311,7 +317,7 @@ class DisplayUserWorkspaceActions extends React.Component {
    * Resend an invite to the given user
    */
   resendInvite() {
-    this.context.port.request('passbolt.users.resend-invite', this.selectedUser.id)
+    this.context.port.request('passbolt.users.resend-invite', this.selectedUser.username)
       .then(this.onResendInviteSuccess.bind(this))
       .catch(this.onResendInviteFailure.bind(this));
   }
@@ -336,9 +342,7 @@ class DisplayUserWorkspaceActions extends React.Component {
     this.toggleMoreMenu();
     this.context.setContext({errorDialogProps});
     this.props.dialogContext.open(ErrorDialog);
-
   }
-
 
   /**
    * Render the component
@@ -382,17 +386,18 @@ class DisplayUserWorkspaceActions extends React.Component {
                   </div>
                 </li>
                 {this.canIUseResend &&
-                  <li id="resend-invite-user" className="separator-after">
-                    <div className="row">
-                      <div className="main-cell-wrapper">
-                        <div className="main-cell">
-                          <a onClick={this.handleResendInviteClickEvent}>
-                            <span>Resend invite</span>
-                          </a>
-                        </div>
+                <li id="resend-invite-user" className="separator-after">
+                  <div className="row">
+                    <div className="main-cell-wrapper">
+                      <div className="main-cell">
+                        <a onClick={this.handleResendInviteClickEvent}
+                          className={`${this.canResendInviteToUser ? "" : "disabled"}`}>
+                          <span>Resend invite</span>
+                        </a>
                       </div>
                     </div>
-                  </li>
+                  </div>
+                </li>
                 }
                 {this.canIUseMfa &&
                 <li id="disable-mfa-action" className="">
