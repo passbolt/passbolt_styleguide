@@ -78,7 +78,7 @@ class FilterUsersByShortcut extends React.Component {
               <div className="main-cell-wrapper">
                 <div className="main-cell">
                   <a onClick={this.handleAllItemsClick}>
-                    <span>All items</span>
+                    <span>All users</span>
                   </a>
                 </div>
               </div>
