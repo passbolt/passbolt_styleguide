@@ -83,6 +83,14 @@ class DisplayUserWorkspaceActions extends React.Component {
     document.removeEventListener('click', this.handleDocumentClickEvent);
   }
 
+  /**
+   * Returns true if the current user can delete the current selected user
+   */
+  get canDelete() {
+    const isNotCurrentUser = this.selectedUser && this.context.loggedInUser.id !== this.selectedUser.id;
+    return !this.isButtonDisabled() && isNotCurrentUser;
+  }
+
 
   /**
    * Handle view detail click event
@@ -297,7 +305,7 @@ class DisplayUserWorkspaceActions extends React.Component {
               </a>
             </li>
             <li>
-              <a className={`button ready ${this.isButtonDisabled() ? "disabled" : ""}`} onClick={this.handleDeleteClickEvent}>
+              <a className={`button ready ${!this.canDelete ? "disabled" : ""}`} onClick={this.handleDeleteClickEvent}>
                 <Icon name="trash"/>
                 <span>delete</span>
               </a>

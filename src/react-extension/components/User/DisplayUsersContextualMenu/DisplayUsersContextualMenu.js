@@ -179,10 +179,18 @@ class DisplayUsersContextualMenu extends React.Component {
 
   /**
    * Check if the user can use the delete capability.
-   * @returns {boolean}
+   * @param user An user
    */
   canIUseDelete() {
     return this.isLoggedInUserAdmin();
+  }
+
+  /**
+   * Can delete the user. A user cannot deleted its own account.
+   * @returns {boolean}
+   */
+  canDeleteUser() {
+    return this.context.loggedInUser.id !== this.user.id;
   }
 
   /**
@@ -282,7 +290,7 @@ class DisplayUsersContextualMenu extends React.Component {
           <div className="row">
             <div className="main-cell-wrapper">
               <div className="main-cell">
-                <a id="delete" onClick={this.handleDeleteClickEvent}><span>Delete</span></a>
+                <a id="delete" onClick={this.handleDeleteClickEvent} className={`${!this.canDeleteUser() ? "disabled" : ""}`}><span>Delete</span></a>
               </div>
             </div>
           </div>
