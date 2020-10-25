@@ -23,14 +23,14 @@ import {UserWorkspaceFilterTypes, withUserWorkspace} from "../../../contexts/Use
  */
 class DisplayUserWorkspaceBreadcrumb extends Component {
   /**
-   * Returns the all items breadcrumb items
+   * Returns the all users breadcrumb items
    */
-  get allItems() {
+  get allUsers() {
     return  [
       {
-        name: 'All Items',
+        name: "All users",
         link: {
-          pathname: '/app/users',
+          pathname: "/app/users",
           state: {
             filter: {
               type: UserWorkspaceFilterTypes.ALL
@@ -46,7 +46,7 @@ class DisplayUserWorkspaceBreadcrumb extends Component {
    */
   getBreadcrumb() {
     return [
-      ...this.allItems,
+      ...this.allUsers,
       {
         name: this.getBreadcrumbItemName(),
         link: this.props.location
@@ -79,11 +79,11 @@ class DisplayUserWorkspaceBreadcrumb extends Component {
    */
   get items() {
     switch (this.props.userWorkspaceContext.filter.type) {
-      case UserWorkspaceFilterTypes.ALL:  return this.allItems;
+      case UserWorkspaceFilterTypes.ALL:  return this.allUsers;
       case UserWorkspaceFilterTypes.NONE: return [];
       case UserWorkspaceFilterTypes.TEXT: {
         const isEmptySearchText = !this.props.userWorkspaceContext.filter.payload;
-        return isEmptySearchText ? this.allItems : this.getBreadcrumb();
+        return isEmptySearchText ? this.allUsers : this.getBreadcrumb();
       }
       default: return this.getBreadcrumb();
     }
