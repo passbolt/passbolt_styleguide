@@ -35,7 +35,7 @@ class DisplayUserGroupDetailsMembersGroupMember extends React.Component {
    * @return {object}
    */
   get roleName() {
-    return this.props.groupUser.is_admin ? "Group Manager" : "Member";
+    return this.props.groupUser.is_admin ? "Group manager" : "Member";
   }
 
   /**
