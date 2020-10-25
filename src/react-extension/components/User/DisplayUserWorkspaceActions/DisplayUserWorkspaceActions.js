@@ -60,6 +60,7 @@ class DisplayUserWorkspaceActions extends React.Component {
     this.handleMoreClickEvent = this.handleMoreClickEvent.bind(this);
     this.handleDisableMfaEvent = this.handleDisableMfaEvent.bind(this);
     this.handleCopyPermalinkEvent = this.handleCopyPermalinkEvent.bind(this);
+    this.handleResendInviteClickEvent = this.handleResendInviteClickEvent.bind(this);
   }
 
   /**
@@ -104,6 +105,13 @@ class DisplayUserWorkspaceActions extends React.Component {
    */
   handleCopyPermalinkEvent() {
     this.copyPermalink();
+  }
+
+  /**
+   * Handle the will of
+   */
+  handleResendInviteClickEvent() {
+    this.resendInvite();
   }
 
   /**
@@ -233,6 +241,20 @@ class DisplayUserWorkspaceActions extends React.Component {
   }
 
   /**
+   * Returns true if the logged in user can use the resend capability.
+   */
+  get canIUseResend() {
+    return this.isLoggedInUserAdmin();
+  }
+
+  /**
+   * Returns true if the logged in user can resend an invite to the user
+   */
+  get canResendInviteToUser() {
+    return this.selectedUser && !this.selectedUser.active;
+  }
+
+  /**
    * Check if the users workspace has one user selected.
    * @return {boolean}
    */
@@ -253,7 +275,7 @@ class DisplayUserWorkspaceActions extends React.Component {
    * @returns {boolean}
    */
   isLoggedInUserAdmin() {
-    return this.context.loggedInUser && this.context.loggedInUser.role.name === 'admin';
+    return this.context.loggedInUser && this.context.loggedInUser.role.name === "admin";
   }
 
   /**
@@ -291,6 +313,36 @@ class DisplayUserWorkspaceActions extends React.Component {
     this.props.actionFeedbackContext.displaySuccess("The permalink has been copied to clipboard");
   }
 
+  /**
+   * Resend an invite to the given user
+   */
+  resendInvite() {
+    this.context.port.request('passbolt.users.resend-invite', this.selectedUser.username)
+      .then(this.onResendInviteSuccess.bind(this))
+      .catch(this.onResendInviteFailure.bind(this));
+  }
+
+  /**
+   * Whenever the resend invite succeeds
+   */
+  onResendInviteSuccess() {
+    this.props.actionFeedbackContext.displaySuccess("The invite has been resent successfully");
+    this.toggleMoreMenu();
+  }
+
+  /**
+   * Whenever the resend invite fails
+   * @param error An error
+   */
+  onResendInviteFailure(error) {
+    const errorDialogProps = {
+      title: "There was an unexpected error...",
+      message: error.message
+    };
+    this.toggleMoreMenu();
+    this.context.setContext({errorDialogProps});
+    this.props.dialogContext.open(ErrorDialog);
+  }
 
   /**
    * Render the component
@@ -333,6 +385,20 @@ class DisplayUserWorkspaceActions extends React.Component {
                     </div>
                   </div>
                 </li>
+                {this.canIUseResend &&
+                <li id="resend-invite-user" className="separator-after">
+                  <div className="row">
+                    <div className="main-cell-wrapper">
+                      <div className="main-cell">
+                        <a onClick={this.handleResendInviteClickEvent}
+                          className={`${this.canResendInviteToUser ? "" : "disabled"}`}>
+                          <span>Resend invite</span>
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+                }
                 {this.canIUseMfa &&
                 <li id="disable-mfa-action" className="">
                   <div className="row">

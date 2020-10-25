@@ -40,6 +40,7 @@ class DisplayUsersContextualMenu extends React.Component {
     this.handlePermalinkCopy = this.handlePermalinkCopy.bind(this);
     this.handleUsernameCopy = this.handleUsernameCopy.bind(this);
     this.handleEditClickEvent = this.handleEditClickEvent.bind(this);
+    this.handleResendInviteClickEvent = this.handleResendInviteClickEvent.bind(this);
     this.handleDeleteClickEvent = this.handleDeleteClickEvent.bind(this);
     this.handleDisableMfaEvent = this.handleDisableMfaEvent.bind(this);
   }
@@ -64,6 +65,20 @@ class DisplayUsersContextualMenu extends React.Component {
    */
   get user() {
     return this.props.user;
+  }
+
+  /**
+   * Returns true if the logged in user can use the resend capability.
+   */
+  get canIUseResend() {
+    return this.isLoggedInUserAdmin();
+  }
+
+  /**
+   * Returns true if the logged in user can resend an invite to the user
+   */
+  get canResendInviteToUser() {
+    return this.user && !this.user.active;
   }
 
   /**
@@ -107,6 +122,13 @@ class DisplayUsersContextualMenu extends React.Component {
     this.context.setContext({editUserDialogProps});
     this.props.dialogContext.open(EditUserDialog);
     this.props.hide();
+  }
+
+  /**
+   * Handle the will of resending an invite
+   */
+  handleResendInviteClickEvent(){
+    this.resendInvite();
   }
 
   /**
@@ -210,6 +232,37 @@ class DisplayUsersContextualMenu extends React.Component {
   }
 
   /**
+   * Resend an invite to the given user
+   */
+  resendInvite() {
+    this.context.port.request("passbolt.users.resend-invite", this.user.username)
+      .then(this.onResendInviteSuccess.bind(this))
+      .catch(this.onResendInviteFailure.bind(this));
+  }
+
+  /**
+   * Whenever the resend invite succeeds
+   */
+  onResendInviteSuccess() {
+    this.props.actionFeedbackContext.displaySuccess("The invite has been resent successfully");
+    this.props.hide();
+  }
+
+  /**
+   * Whenever the resend invite fails
+   * @param error An error
+   */
+  onResendInviteFailure(error) {
+    const errorDialogProps = {
+      title: "There was an unexpected error...",
+      message: error.message
+    };
+    this.props.hide();
+    this.context.setContext({errorDialogProps});
+    this.props.dialogContext.open(ErrorDialog);
+  }
+
+  /**
    * Render the component.
    * @returns {JSX}
    */
@@ -258,6 +311,30 @@ class DisplayUsersContextualMenu extends React.Component {
             </div>
           </div>
         </li>
+        {this.canIUseEdit() &&
+        <li key="edit-user" className="ready">
+          <div className="row">
+            <div className="main-cell-wrapper">
+              <div className="main-cell">
+                <a id="edit" onClick={this.handleEditClickEvent}><span>Edit</span></a>
+              </div>
+            </div>
+          </div>
+        </li>
+        }
+        {this.canIUseResend &&
+        <li key="resend-invite-user" className="ready">
+          <div className="row">
+            <div className="main-cell-wrapper">
+              <div className="main-cell">
+                <a id="resend"
+                  onClick={this.handleResendInviteClickEvent}
+                  className={`${this.canResendInviteToUser ? "" : "disabled"}`}><span>Resend invite</span></a>
+              </div>
+            </div>
+          </div>
+        </li>
+        }
         {this.canIUseMfa &&
         <li key="disable-user-mfa" className="ready">
           <div className="row">
@@ -269,17 +346,6 @@ class DisplayUsersContextualMenu extends React.Component {
                   className={this.canDisableMfaForUser ? '' : 'disabled'}>
                   <span>Disable MFA</span>
                 </a>
-              </div>
-            </div>
-          </div>
-        </li>
-        }
-        {this.canIUseEdit() &&
-        <li key="edit-user" className="ready">
-          <div className="row">
-            <div className="main-cell-wrapper">
-              <div className="main-cell">
-                <a id="edit" onClick={this.handleEditClickEvent}><span>Edit</span></a>
               </div>
             </div>
           </div>
