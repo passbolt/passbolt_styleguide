@@ -394,17 +394,22 @@ class UserWorkspaceContextProvider extends React.Component {
   }
 
   /**
-   * Refresh the filter in case of its payload is outdated due to the updated list of groups
+   * Refresh the filter in case of its payload is outdated due to the updated list of resources
    */
   async refreshSearchFilter() {
-    const hasGroupFilter = this.state.filter.type === ResourceWorkspaceFilterTypes.GROUP;
+    const hasGroupFilter = this.state.filter.type === UserWorkspaceFilterTypes.GROUP;
     if (hasGroupFilter) {
-      const updatedGroup = this.groups.find(group => group.id === this.state.filter.payload.group.id);
-      const filter = Object.assign(this.state.filter, {payload: {group: updatedGroup}});
-      await this.setState({filter});
+      const isGroupStillExist = this.groups.some(group => group.id === this.state.filter.payload.group.id);
+      if (isGroupStillExist) { // Case of group exists but may have somme applied changes on it
+        const updatedGroup = this.groups.find(group => group.id === this.state.filter.payload.group.id);
+        const filter = Object.assign(this.state.filter, {payload: {group: updatedGroup}});
+        await this.setState({filter});
+      } else { // Case of filter group deleted
+        const filter = {type: UserWorkspaceFilterTypes.ALL};
+        this.props.history.push({pathname: '/app/users', state: {filter}});
+      }
     }
   }
-
 
   /** USER SELECTION */
 

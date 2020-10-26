@@ -574,9 +574,15 @@ class ResourceWorkspaceContextProvider extends React.Component {
   async refreshSearchFilter() {
     const hasFolderFilter = this.state.filter.type === ResourceWorkspaceFilterTypes.FOLDER;
     if (hasFolderFilter) {
-      const updatedFolder = this.folders.find(folder => folder.id === this.state.filter.payload.folder.id);
-      const filter = Object.assign(this.state.filter, {payload: {folder: updatedFolder}});
-      await this.setState({filter});
+      const isFolderStillExist = this.folders.some(folder => folder.id === this.state.filter.payload.folder.id);
+      if (isFolderStillExist) { // Case of folder exists but may have somme applied changes on it
+        const updatedFolder = this.folders.find(folder => folder.id === this.state.filter.payload.folder.id);
+        const filter = Object.assign(this.state.filter, {payload: {folder: updatedFolder}});
+        await this.setState({filter});
+      } else { // Case of filter folder deleted
+        const filter = {type: ResourceWorkspaceFilterTypes.ALL};
+        this.props.history.push({pathname: '/app/passwords', state: {filter}});
+      }
     }
   }
 

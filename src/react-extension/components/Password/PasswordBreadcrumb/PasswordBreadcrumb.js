@@ -70,7 +70,8 @@ class PasswordBreadcrumbs extends Component {
         return `${currentTagName} (tag)`;
       }
       case ResourceWorkspaceFilterTypes.FOLDER: {
-        const currentFolderName = this.props.resourceWorkspaceContext.filter.payload.folder.name;
+        const folder =  this.props.resourceWorkspaceContext.filter.payload.folder;
+        const currentFolderName = (folder && folder.name) || "N/A";
         return `${currentFolderName} (folder)`;
       }
       case ResourceWorkspaceFilterTypes.GROUP: {
