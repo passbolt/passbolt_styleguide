@@ -8775,11 +8775,13 @@ table.table-info.horizontal tbody tr:hover {
     display: none;
   }
 }
-.panel.aside .resource .detailed-information li.password .value {
+.panel.aside .resource .detailed-information li.password .value,
+.panel.aside .user .detailed-information li.password .value {
   height: 1.6em;
   padding-top: 0.2em;
 }
-.panel.aside .resource .sidebar-header {
+.panel.aside .resource .sidebar-header,
+.panel.aside .user .sidebar-header {
   /*
      * For IE 6/7 only
      * Include this rule to trigger hasLayout and contain floats.
@@ -8813,29 +8815,37 @@ table.table-info.horizontal tbody tr:hover {
      */
 }
 .panel.aside .resource .sidebar-header:before,
-.panel.aside .resource .sidebar-header:after {
+.panel.aside .user .sidebar-header:before,
+.panel.aside .resource .sidebar-header:after,
+.panel.aside .user .sidebar-header:after {
   content: "";
   display: table;
 }
-.panel.aside .resource .sidebar-header:after {
+.panel.aside .resource .sidebar-header:after,
+.panel.aside .user .sidebar-header:after {
   clear: both;
 }
 .panel.aside .resource .sidebar-header:before,
-.panel.aside .resource .sidebar-header:after {
+.panel.aside .user .sidebar-header:before,
+.panel.aside .resource .sidebar-header:after,
+.panel.aside .user .sidebar-header:after {
   content: "";
   display: table;
 }
-.panel.aside .resource .sidebar-header:after {
+.panel.aside .resource .sidebar-header:after,
+.panel.aside .user .sidebar-header:after {
   clear: both;
 }
-.panel.aside .resource .sidebar-header img {
+.panel.aside .resource .sidebar-header img,
+.panel.aside .user .sidebar-header img {
   margin: 1em 0 1em 1em;
   float: left;
   width: 4em;
   height: 4em;
   border: 1px solid #DDD;
 }
-.panel.aside .resource .sidebar-header h3 {
+.panel.aside .resource .sidebar-header h3,
+.panel.aside .user .sidebar-header h3 {
   float: left;
   width: 67%;
   margin-top: 0.88em;
@@ -8844,12 +8854,14 @@ table.table-info.horizontal tbody tr:hover {
   vertical-align: middle;
   border: 0;
 }
-.panel.aside .resource .sidebar-header h3 .title-wrapper {
+.panel.aside .resource .sidebar-header h3 .title-wrapper,
+.panel.aside .user .sidebar-header h3 .title-wrapper {
   width: 100%;
   line-height: 1.2em;
   font-size: 1.2em;
 }
-.panel.aside .resource .sidebar-header h3 .title-wrapper .name {
+.panel.aside .resource .sidebar-header h3 .title-wrapper .name,
+.panel.aside .user .sidebar-header h3 .title-wrapper .name {
   max-width: 85%;
   float: left;
   white-space: nowrap;
@@ -8858,11 +8870,14 @@ table.table-info.horizontal tbody tr:hover {
   -o-text-overflow: ellipsis;
   -ms-text-overflow: ellipsis;
 }
-.panel.aside .resource .sidebar-header h3 .title-wrapper .title-link .svg-icon {
+.panel.aside .resource .sidebar-header h3 .title-wrapper .title-link .svg-icon,
+.panel.aside .user .sidebar-header h3 .title-wrapper .title-link .svg-icon {
   margin-top: 0.25em;
 }
 .panel.aside .resource .sidebar-header h3 .type,
-.panel.aside .resource .sidebar-header h3 .username {
+.panel.aside .user .sidebar-header h3 .type,
+.panel.aside .resource .sidebar-header h3 .username,
+.panel.aside .user .sidebar-header h3 .username {
   font-size: 0.8em;
   color: #969696;
   font-weight: normal;
@@ -8873,7 +8888,8 @@ table.table-info.horizontal tbody tr:hover {
   -o-text-overflow: ellipsis;
   -ms-text-overflow: ellipsis;
 }
-.panel.aside .resource .sidebar-header .side-bar-text-label {
+.panel.aside .resource .sidebar-header .side-bar-text-label,
+.panel.aside .user .sidebar-header .side-bar-text-label {
   color: #FFF;
   width: 1.7em;
   height: 1.7em;
@@ -8882,11 +8898,13 @@ table.table-info.horizontal tbody tr:hover {
   font-size: 0.8em;
   margin: 1.1em;
 }
-.panel.aside .resource .sidebar-header .side-bar-text-label + h3 {
+.panel.aside .resource .sidebar-header .side-bar-text-label + h3,
+.panel.aside .user .sidebar-header .side-bar-text-label + h3 {
   margin-top: 1em;
   padding: 0 0 0 0.6em;
 }
-.panel.aside .resource .sidebar-header .logo {
+.panel.aside .resource .sidebar-header .logo,
+.panel.aside .user .sidebar-header .logo {
   margin: 1em 0 1em 1em;
   float: left;
   width: 3em;
@@ -8896,12 +8914,14 @@ table.table-info.horizontal tbody tr:hover {
   text-align: center;
   border-radius: 50%;
 }
-.panel.aside .resource .sidebar-header .logo .svg-icon svg {
+.panel.aside .resource .sidebar-header .logo .svg-icon svg,
+.panel.aside .user .sidebar-header .logo .svg-icon svg {
   width: 1.5rem;
   height: 1.5rem;
   margin-top: 0.75em;
 }
-.panel.aside .resource .sidebar-header .logo img {
+.panel.aside .resource .sidebar-header .logo img,
+.panel.aside .user .sidebar-header .logo img {
   width: 1.5em;
   height: 1.5em;
   display: block;

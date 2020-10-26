@@ -20,6 +20,7 @@ import {withUserWorkspace} from "../../../contexts/UserWorkspaceContext";
 import DisplayUserDetailsInformation from "../DisplayUserDetailsInformation/DisplayUserDetailsInformation";
 import DisplayUserDetailsGroups from "../DisplayUserDetailsGroups/DisplayUserDetailsGroups";
 import DisplayUserDetailsPublicKey from "../DisplayUserDetailsPublicKey/DisplayUserDetailsPublicKey";
+import UserAvatar from "../../Common/Avatar/UserAvatar";
 
 class DisplayUserDetails extends React.Component {
   /**
@@ -44,6 +45,13 @@ class DisplayUserDetails extends React.Component {
    */
   get user() {
     return this.props.userWorkspaceContext.details.user;
+  }
+
+  /**
+   * Returns the base url
+   */
+  get baseUrl() {
+    return this.context.userSettings.getTrustedDomain();
   }
 
   /**
@@ -73,7 +81,9 @@ class DisplayUserDetails extends React.Component {
         <div className="sidebar user">
           <div className="sidebar-header">
             <div className="logo">
-              <Icon name="key"/>
+              <UserAvatar
+                group={this.user}
+                baseUrl={this.baseUrl}/>
             </div>
             <h3>
               <div className="title-wrapper">

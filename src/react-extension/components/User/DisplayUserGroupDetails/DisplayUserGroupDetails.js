@@ -20,6 +20,7 @@ import DisplayUserGroupDetailsInformation
   from "../DisplayUserGroupDetailsInformation/DisplayUserGroupDetailsInformation";
 import GroupAvatar from "../../Common/Avatar/GroupAvatar";
 import DisplayUserGroupDetailsMembers from "../DisplayUserGroupDetailsMembers/DisplayUserGroupDetailsMembers";
+import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 
 /**
  * This component displays the details of a users group
@@ -38,6 +39,7 @@ class DisplayUserGroupDetails extends React.Component {
    * Bind callbacks methods
    */
   bindCallbacks() {
+    this.handlePermalinkClick = this.handlePermalinkClick.bind(this);
     this.handleCloseClick = this.handleCloseClick.bind(this);
   }
 
@@ -55,6 +57,16 @@ class DisplayUserGroupDetails extends React.Component {
     return this.context.userSettings.getTrustedDomain();
   }
 
+  /**
+   * Handle when the user copies the permalink.
+   */
+  async handlePermalinkClick() {
+    const baseUrl = this.context.userSettings.getTrustedDomain();
+    const permalink = `${baseUrl}/app/groups/view/${this.group.id}`;
+    await this.context.port.request("passbolt.clipboard.copy", permalink);
+    this.props.actionFeedbackContext.displaySuccess("The permalink has been copied to clipboard");
+  }
+
 
   /**
    * Handle close sidebar click
@@ -70,7 +82,7 @@ class DisplayUserGroupDetails extends React.Component {
   render() {
     return (
       <div className="panel aside ready">
-        <div className="sidebar group">
+        <div className="sidebar user">
           <div className="sidebar-header">
             <div className="logo">
               <GroupAvatar
@@ -78,7 +90,13 @@ class DisplayUserGroupDetails extends React.Component {
                 baseUrl={this.baseUrl}/>
             </div>
             <h3>
-              <span className="name sidebar-header-title">{this.group.name}</span>
+              <div className="title-wrapper">
+                <span className="name sidebar-header-title">{this.group.name}</span>
+                <a className="title-link" title="Copy the link to this group" onClick={this.handlePermalinkClick}>
+                  <Icon name="link"/>
+                  <span className="visuallyhidden">Copy the link to this group</span>
+                </a>
+              </div>
               <span className="type">group</span>
             </h3>
             <a className="dialog-close" onClick={this.handleCloseClick}>
@@ -97,7 +115,8 @@ class DisplayUserGroupDetails extends React.Component {
 DisplayUserGroupDetails.contextType = AppContext;
 
 DisplayUserGroupDetails.propTypes = {
+  actionFeedbackContext: PropTypes.any, // The action feedback context,
   userWorkspaceContext: PropTypes.any, // The user workspace context
 };
 
-export default withUserWorkspace(DisplayUserGroupDetails);
+export default withActionFeedback(withUserWorkspace(DisplayUserGroupDetails));
