@@ -36,17 +36,20 @@ describe("See the Create Dialog Group", () => {
     /**
      * I should see the create group dialog
      */
-    beforeEach(() => {
+    beforeEach(async() => {
+      const requestGpgMockImpl = jest.fn(() => mockGpgKey);
+      mockContextRequest(context, requestGpgMockImpl);
       page = new CreateGroupDialogPage(context, props);
     });
 
     it('As AD I see a success toaster message after adding a group with success', async() => {
       expect(page.createGroup.exists()).toBeTruthy();
+
       // create group
       const groupMeta = {
         name: "test",
       };
-      expect(page.createGroup.warningMessage).toBe('The group is empty, please add a group manager.');
+      expect(page.createGroup.warningMessage).toBe('You need to click save for the changes to take place.');
       // Fill the form
       page.createGroup.fillInput(page.createGroup.name, groupMeta.name);
       // mock gpg key to get it for the user in autocomplete
@@ -57,17 +60,13 @@ describe("See the Create Dialog Group", () => {
       expect(context.port.request).toHaveBeenCalledWith("passbolt.keyring.get-public-key-info-by-user", mockUsers[1].id);
       await page.createGroup.click(page.createGroup.userAutocomplete);
 
-
-      page.createGroup.fillInput(page.createGroup.selectRights(1), "false");
-      expect(page.createGroup.errorMessage).toBe('Please make sure there is at least one group manager.');
-
-      page.createGroup.fillInput(page.createGroup.selectRights(1), "true");
+      page.createGroup.fillInput(page.createGroup.selectRights(2), "true");
       expect(page.createGroup.warningMessage).toBe('You need to click save for the changes to take place.');
 
-      expect(page.createGroup.count()).toBe(1);
-      expect(page.createGroup.userFirstNameLastName(1)).toBe('Ada Lovelace');
-      expect(page.createGroup.userEmail(1)).toBe('ada@passbolt.com');
-      expect(page.createGroup.userFingerprint(1)).toBe('03F6 0E95 8F4C B297 23AC DF76 1353 B5B1 5D9B 054F');
+      expect(page.createGroup.count()).toBe(2);
+      expect(page.createGroup.userFirstNameLastName(2)).toBe('Ada Lovelace');
+      expect(page.createGroup.userEmail(2)).toBe('ada@passbolt.com');
+      expect(page.createGroup.userFingerprint(2)).toBe('03F6 0E95 8F4C B297 23AC DF76 1353 B5B1 5D9B 054F');
 
       const requestMockImpl = jest.fn((message, data) => data);
       mockContextRequest(context, requestMockImpl);
@@ -75,7 +74,7 @@ describe("See the Create Dialog Group", () => {
 
       const groupDto = {
         name: "test",
-        groups_users: [{user_id: mockUsers[1].id, is_admin: true}]
+        groups_users: [{user_id: mockUsers[0].id, is_admin: true}, {user_id: mockUsers[1].id, is_admin: true}]
       };
       await page.createGroup.click(page.createGroup.saveButton);
 

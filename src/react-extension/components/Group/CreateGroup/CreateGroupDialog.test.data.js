@@ -12,6 +12,7 @@ export function defaultAppContext(appContext) {
     port: new MockPort(),
     users: mockUsers,
     userSettings: new UserSettings(userSettingsFixture),
+    loggedInUser: mockUsers[0],
     setContext: function(newContext) {
       // In this scope this reference the object context.
       Object.assign(this, newContext);

@@ -90,7 +90,8 @@ class CreateGroupDialog extends Component {
    * Invoked immediately after component is inserted into the tree
    * @return {void}
    */
-  componentDidMount() {
+  async componentDidMount() {
+    await this.addCurrentUser();
     this.setState({loading: false}, () => {
       this.nameInputRef.current.focus();
     });
@@ -246,6 +247,14 @@ class CreateGroupDialog extends Component {
     };
     this.context.setContext({errorDialogProps});
     this.props.dialogContext.open(ErrorDialog);
+  }
+
+  /**
+   * Adds the current user in the group as group manager
+   */
+  async addCurrentUser() {
+    const [user] = await this.decorateUsersWithGpgKey([this.context.loggedInUser]);
+    this.state.groups_users.push({user, is_admin: true});
   }
 
   /**
