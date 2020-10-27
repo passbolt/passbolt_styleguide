@@ -18,6 +18,7 @@ import AppContext from "../../../contexts/AppContext";
 import Icon from "../../Common/Icons/Icon";
 import CreateUserDialog from "../CreateUser/CreateUserDialog";
 import {withDialog} from "../../../../react/contexts/Common/DialogContext";
+import CreateGroupDialog from "../../Group/CreateGroup/CreateGroupDialog";
 
 /**
  * This component is a container of multiple actions applicable on user
@@ -53,6 +54,7 @@ class DisplayUserWorkspaceMainActions extends React.Component {
     this.handleDocumentDragStartEvent = this.handleDocumentDragStartEvent.bind(this);
     this.handleCreateClickEvent = this.handleCreateClickEvent.bind(this);
     this.handleCreateMenuUserClickEvent = this.handleCreateMenuUserClickEvent.bind(this);
+    this.handleCreateMenuGroupClickEvent = this.handleCreateMenuGroupClickEvent.bind(this);
   }
 
   componentDidMount() {
@@ -114,7 +116,7 @@ class DisplayUserWorkspaceMainActions extends React.Component {
   }
 
   /**
-   * Handle password click event
+   * Handle user click event
    */
   handleCreateMenuUserClickEvent() {
     this.openCreateUserDialog();
@@ -126,6 +128,21 @@ class DisplayUserWorkspaceMainActions extends React.Component {
    */
   openCreateUserDialog() {
     this.props.dialogContext.open(CreateUserDialog);
+  }
+
+  /**
+   * Handle group click event
+   */
+  handleCreateMenuGroupClickEvent() {
+    this.openCreateGroupDialog();
+    this.handleCloseCreateMenu();
+  }
+
+  /**
+   * Open create group dialog
+   */
+  openCreateGroupDialog() {
+    this.props.dialogContext.open(CreateGroupDialog);
   }
 
   /**
@@ -171,6 +188,17 @@ class DisplayUserWorkspaceMainActions extends React.Component {
                   <div className="main-cell">
                     <a onClick={this.handleCreateMenuUserClickEvent}>
                       <span>New user</span>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </li>
+            <li id="group_action">
+              <div className="row">
+                <div className="main-cell-wrapper">
+                  <div className="main-cell">
+                    <a onClick={this.handleCreateMenuGroupClickEvent}>
+                      <span>New group</span>
                     </a>
                   </div>
                 </div>

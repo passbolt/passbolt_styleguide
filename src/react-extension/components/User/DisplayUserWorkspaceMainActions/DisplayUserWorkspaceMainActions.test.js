@@ -38,7 +38,7 @@ describe("See Workspace Main Menu", () => {
     },
   };
 
-  describe('As AD I can start adding a user via the workspace main menu', () => {
+  describe('As AD I can start adding a user or a group via the workspace main menu', () => {
     /**
      * Given a AD user
      * Then I should see the create resource menu
@@ -54,6 +54,13 @@ describe("See Workspace Main Menu", () => {
       expect(page.displayUserWorkspaceMainActions.createMenu).not.toBeNull();
       page.displayUserWorkspaceMainActions.clickOnMenu(page.displayUserWorkspaceMainActions.createMenu);
       expect(page.displayUserWorkspaceMainActions.newUserMenu).not.toBeNull();
+    });
+
+    it('As AD I can adding a group via the create menu', () => {
+      expect(page.displayUserWorkspaceMainActions.exists()).toBeTruthy();
+      expect(page.displayUserWorkspaceMainActions.createMenu).not.toBeNull();
+      page.displayUserWorkspaceMainActions.clickOnMenu(page.displayUserWorkspaceMainActions.createMenu);
+      expect(page.displayUserWorkspaceMainActions.newGroupMenu).not.toBeNull();
     });
   });
 
