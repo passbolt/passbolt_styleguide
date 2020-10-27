@@ -504,7 +504,7 @@ class ResourceWorkspaceContextProvider extends React.Component {
     const words =  (text && text.split(/\s+/)) || [''];
     const canUseTags = this.context.siteSettings.canIUse("tags");
 
-    // Test match of some escaped test words against the name / usernmae / uri / description /tags resource properties
+    // Test match of some escaped test words against the name / username / uri / description /tags resource properties
     const escapeWord = word =>  word.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
     const wordToRegex = word =>  new RegExp(escapeWord(word), 'i');
     const matchWord = (word, value) => wordToRegex(word).test(value);

@@ -343,13 +343,22 @@ class CreateGroupDialog extends Component {
    * @returns users,
    */
   async fetchAutocompleteItems(keyword) {
+    keyword = keyword.toLowerCase();
     const words = (keyword && keyword.split(/\s+/)) || [''];
     const userAlreadyAdded = user => this.state.groups_users.some(groups_user => groups_user.user.id === user.id);
-    const matchUserProperty = (word, user) => (user.username.toLowerCase().startsWith(word) || user.profile.first_name.toLowerCase().startsWith(word) || user.profile.last_name.toLowerCase().startsWith(word));
-    const matchUser = (word, user) => matchUserProperty(word, user);
 
-    const usersMatched = this.context.users.filter(user => user.active === true && !userAlreadyAdded(user)
-      && words.some(word => matchUser(word, user)));
+    // Test match of some escaped test words against the name / username
+    const escapeWord = word =>  word.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    const wordToRegex = word =>  new RegExp(escapeWord(word), 'i');
+    const matchWord = (word, value) => wordToRegex(word).test(value);
+
+    const matchUsernameProperty = (word, user) => matchWord(word, user.username);
+    const matchNameProperty = (word, user) =>  matchWord(word, user.profile.first_name) || matchWord(word, user.profile.last_name);
+    const matchUser = (word, user) => matchUsernameProperty(word, user) || matchNameProperty(word, user);
+    const matchText = user => words.every(word => matchUser(word, user));
+
+    const usersMatched = this.context.users.filter(user => user.active === true && !userAlreadyAdded(user))
+      .filter(matchText);
 
     return this.decorateUsersWithGpgKey(usersMatched);
   }
@@ -365,7 +374,6 @@ class CreateGroupDialog extends Component {
     return usersWithGPGKey;
   }
 
-
   /**
    * Should input be disabled? True if state is loading or processing
    * @returns {boolean}
@@ -379,14 +387,14 @@ class CreateGroupDialog extends Component {
    * @returns {boolean}
    */
   hasManager() {
-    return this.hasMember() && this.state.groups_users.some(groups_user => groups_user.is_admin === true);
+    return this.hasMembers() && this.state.groups_users.some(groups_user => groups_user.is_admin === true);
   }
 
   /**
-   * Has member
+   * Has members
    * @returns {boolean}
    */
-  hasMember() {
+  hasMembers() {
     return this.state.groups_users.length > 0;
   }
 
@@ -400,11 +408,11 @@ class CreateGroupDialog extends Component {
   }
 
   /**
-   * Get user first name and last name
+   * Get user full name
    * @param user
    * @returns {string}
    */
-  getUser(user) {
+  getUserFullname(user) {
     return `${user.profile.first_name} ${user.profile.last_name}`;
   }
 
@@ -447,14 +455,14 @@ class CreateGroupDialog extends Component {
               </div>
             </div>
             <div className="form-content permission-edit">
-              {this.hasMember() &&
+              {this.hasMembers() &&
               <ul className="permissions groups_users" ref={this.groupUsersListRef}>
                 {this.state.groups_users.map(groups_user =>
                   <li key={groups_user.user.id} className="row">
                     <UserAvatar user={groups_user.user} baseUrl={this.context.userSettings.getTrustedDomain()}/>
                     <div className="aro">
                       <div className="aro-name">
-                        <span className="ellipsis">{this.getUser(groups_user.user)}</span>
+                        <span className="ellipsis">{this.getUserFullname(groups_user.user)}</span>
                         <TooltipHtml>
                           <div className="email"><strong>{groups_user.user.username}</strong></div>
                           <div className="fingerprint">{this.getFingerprint(groups_user.user.gpgkey.fingerprint)}</div>
@@ -483,12 +491,12 @@ class CreateGroupDialog extends Component {
                 }
               </ul>
               }
-              {!this.hasMember() &&
+              {!this.hasMembers() &&
               <div className="message warning">
                 <span>The group is empty, please add a group manager.</span>
               </div>
               }
-              {this.hasMember() && !this.hasManager() &&
+              {this.hasMembers() && !this.hasManager() &&
               <div className="message error">
                 <span>Please make sure there is at least one group manager.</span>
               </div>
