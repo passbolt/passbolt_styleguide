@@ -58,7 +58,7 @@ class DisplayUserDetailsGroups extends React.Component {
     if (selectedUser) {
       const belongsToGroup = group => group.groups_users.some(group_user => group_user.user_id === selectedUser.id);
       const groupUser = group => group.groups_users.find(group_user => group_user.user_id === selectedUser.id);
-      const userRole = groupUser => groupUser.is_admin ? "Admin" : "Member";
+      const userRole = groupUser => groupUser.is_admin ? "Group manager" : "Member";
       const roleMapper = group => Object.assign({}, group, {role: userRole(groupUser(group))});
       return groups
         .filter(belongsToGroup)
