@@ -119,7 +119,7 @@ class FolderSidebar extends React.Component {
                   <span className="visuallyhidden">Copy the link to this folder</span>
                 </a>
               </div>
-              <span className="type">folder</span>
+              <span className="subtitle">folder</span>
             </h3>
             <a className="dialog-close" onClick={this.handleCloseClick}>
               <Icon name="close"/>
