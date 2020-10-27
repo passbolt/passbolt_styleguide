@@ -13,19 +13,67 @@
 
     /* Controls */
     .sidebar-header {
+        .clearfix();
         h3 {
-            padding:1em;
-            margin:0;
+            float: left;
+            width: 67%;
+            margin-top: 0.88em;
+            padding: 0 0 0 0.6em;
+            display: table-cell;
+            vertical-align: middle;
             border: 0;
+            .title-wrapper {
+                width: 100%;
+                line-height: 1.2em;
+                font-size: 1.2em;
+                .name {
+                    max-width: 85%;
+                    float: left;
+                    .ellipsis();
+                }
+                .title-link {
+                  border: 0;
+                  color: @font-dim;
+                  font-size: 0.875em;
+                  margin-left: .429em;
+                  vertical-align: bottom;
+                  &:hover {
+                    color: @font-focus;
+                  }
+                    .svg-icon {
+                        margin-top: 0.25em;
+                    }
+                }
+            }
+            .subtitle {
+                font-size: 0.8em;
+                color: @font-lighter;
+                font-weight: normal;
+                display: block;
+                .ellipsis();
+            }
         }
-        .title-link {
-            border: 0;
-            color: @font-dim;
-            font-size: 0.875em;
-            margin-left: .429em;
-            vertical-align: bottom;
-            &:hover {
-                color: @font-focus;
+        .logo {
+            margin: 1em 0 1em 1em;
+            float: left;
+            width: 3em;
+            height: 3em;
+            border: 1px solid @grey;
+            line-height: 3em;
+            text-align: center;
+            border-radius: 50%;
+            .svg-icon svg {
+                width: 1.5rem;
+                height: 1.5rem;
+                margin-top:.75em;
+            }
+            img {
+                width: 1.5em;
+                height: 1.5em;
+                display: block;
+                margin: 0.75em auto;
+                float: none;
+                border: 0;
             }
         }
         .dialog-close {

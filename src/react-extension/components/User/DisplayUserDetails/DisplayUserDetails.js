@@ -93,7 +93,7 @@ class DisplayUserDetails extends React.Component {
                   <span className="visuallyhidden">Copy the link to this user</span>
                 </a>
               </div>
-              <span className="type">{this.user.username}</span>
+              <span className="subtitle">{this.user.username}</span>
             </h3>
             <a className="dialog-close" onClick={this.handleCloseClick}>
               <Icon name="close"/>

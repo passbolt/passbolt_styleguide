@@ -82,7 +82,7 @@ class PasswordSidebar extends React.Component {
                   <span className="visuallyhidden">Copy the link to this password</span>
                 </a>
               </div>
-              <span className="type">resource</span>
+              <span className="subtitle">resource</span>
             </h3>
             <a className="dialog-close" onClick={this.handleCloseClick}>
               <Icon name="close"/>
