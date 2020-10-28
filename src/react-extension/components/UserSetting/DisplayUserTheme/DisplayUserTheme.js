@@ -17,6 +17,9 @@ import React from 'react';
 import PropTypes from "prop-types";
 import AppContext from "../../../contexts/AppContext";
 import {withLoading} from "../../../contexts/Common/LoadingContext";
+import ErrorDialog from "../../Dialog/ErrorDialog/ErrorDialog";
+import {withDialog} from "../../../contexts/Common/DialogContext";
+import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 
 
 /**
@@ -85,6 +88,7 @@ class DisplayUserTheme extends React.Component {
     if (!isAlreadySelected) {
       await this.setState({selectedTheme: theme});
       await this.context.userSettings.setTheme(theme);
+      await this.props.loadingContext.add();
       this.context.port.request("passbolt.themes.change", theme.name)
         .then(this.onSelectSuccess.bind(this))
         .catch(this.onSelectFailure.bind(this));
@@ -94,15 +98,22 @@ class DisplayUserTheme extends React.Component {
   /**
    * Whenever the a new theme has been selected with success
    */
-  onSelectSuccess() {
-
+  async onSelectSuccess() {
+    await this.props.loadingContext.remove();
+    await this.props.actionFeedbackContext.displaySuccess("The theme has been updated successfully");
   }
 
   /**
    * Whenever the a new theme has been selected with failure
    */
-  onSelectFailure() {
-
+  async onSelectFailure(error) {
+    await this.props.loadingContext.remove();
+    const errorDialogProps = {
+      title: "There was an unexpected error...",
+      message: error.message
+    };
+    this.context.setContext({errorDialogProps});
+    this.props.dialogContext.open(ErrorDialog);
   }
 
   /**
@@ -142,11 +153,12 @@ class DisplayUserTheme extends React.Component {
 
 DisplayUserTheme.contextType = AppContext;
 DisplayUserTheme.propTypes = {
+  actionFeedbackContext: PropTypes.object, // The action feedback context
   dialogContext: PropTypes.object, // The dialog context
-  loadingContext: PropTypes.object // The dialog context
+  loadingContext: PropTypes.object // The loading context
 };
 
-export default withLoading(DisplayUserTheme);
+export default withActionFeedback(withDialog(withLoading(DisplayUserTheme)));
 
 
 
