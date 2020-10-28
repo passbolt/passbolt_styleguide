@@ -182,6 +182,7 @@ class ResourceWorkspaceContextProvider extends React.Component {
     if (hasFoldersChanged) {
       this.folders = this.context.folders;
       await this.refreshSearchFilter();
+      await this.updateDetails();
     }
   }
 
@@ -790,6 +791,9 @@ class ResourceWorkspaceContextProvider extends React.Component {
       if (hasResourceDetails) { // Case of resource details
         const updatedResourceDetails = this.resources.find(resource => resource.id === this.state.details.resource.id);
         await this.setState({details: {resource: updatedResourceDetails}});
+      } else { // Case of folder details
+        const updatedFolderDetails = this.folders.find(folder => folder.id === this.state.details.group.id);
+        await this.setState({details: {folder: updatedFolderDetails}});
       }
     }
   }

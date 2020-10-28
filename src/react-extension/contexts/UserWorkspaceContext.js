@@ -148,12 +148,15 @@ class UserWorkspaceContextProvider extends React.Component {
    */
   async handleUsersChange() {
     const hasUsersChanged = this.context.users && this.context.users !== this.users;
+    const areUsersFirstLoad = this.users === null;
     if (hasUsersChanged) {
       this.users = this.context.users;
       await this.search(this.state.filter);
       await this.updateDetails();
       await this.unselectUnknownUsers();
-      await this.redirectAfterSelection();
+      if (!areUsersFirstLoad) {
+        await this.redirectAfterSelection();
+      }
     }
   }
 
