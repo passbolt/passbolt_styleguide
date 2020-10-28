@@ -21,6 +21,7 @@ import UserBadgeMenu from "../../../../react/components/Common/Navigation/Header
 import AppContext from "../../../contexts/AppContext";
 import NavigateIntoUserSettingsWorkspace from "../NavigateIntooUserSettingsWorkspace/NavigateIntoUserSettingsWorkspace";
 import DisplayUserProfile from "../DisplayUserProfile/DisplayUserProfile";
+import DisplayUserTheme from "../DisplayUserTheme/DisplayUserTheme";
 
 /**
  * This component is a container for all the user settings workspace features
@@ -50,6 +51,7 @@ class DisplayUserSettingsWorkspace extends React.Component {
                 </div>
                 <div className="panel middle">
                   <Route path={`${path}/profile`} component={DisplayUserProfile}></Route>
+                  <Route path={`${path}/theme`} component={DisplayUserTheme}></Route>
                 </div>
               </div>
             </div>

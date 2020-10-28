@@ -51,6 +51,7 @@ import mockRequestDisableMFA from "./request/mockRequestDisableMFA";
 import mockRequestGroupDeleteDryRun from "./request/mockRequestGroupDeleteDryRun";
 import mockRequestGroupsCreate from "./request/mockRequestGroupsCreate";
 import mockRequestGroupsUpdate from "./request/mockRequestGroupsUpdate";
+import mockRequestFindAllThemes from "./request/mockRequestFindAllThemes";
 
 export default (storage) => {
   const mockPort = new MockPort(storage);
@@ -92,6 +93,7 @@ export default (storage) => {
   mockPort.addRequestListener("passbolt.groups.delete-dry-run", mockRequestGroupDeleteDryRun);
   mockPort.addRequestListener("passbolt.groups.create", mockRequestGroupsCreate);
   mockPort.addRequestListener("passbolt.groups.update", mockRequestGroupsUpdate);
+  mockPort.addRequestListener("passbolt.themes.find-all", mockRequestFindAllThemes);
 
   return mockPort;
 };
