@@ -127,7 +127,7 @@ class DisplayUsersContextualMenu extends React.Component {
   /**
    * Handle the will of resending an invite
    */
-  handleResendInviteClickEvent(){
+  handleResendInviteClickEvent() {
     this.resendInvite();
   }
 
