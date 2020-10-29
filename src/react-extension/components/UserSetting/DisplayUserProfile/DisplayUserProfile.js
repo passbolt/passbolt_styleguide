@@ -32,14 +32,31 @@ class DisplayUserProfile extends React.Component {
    */
   constructor(props) {
     super(props);
+    this.state = this.defaultState;
     this.bindHandlers();
   }
 
   /**
-   * Binds the component handlers
+   * Whenever the component is mounted
    */
-  bindHandlers() {
-    this.handleUploadPicture = this.handleUploadPicture.bind(this);
+  async componentDidMount() {
+    await this.populate();
+  }
+
+  /**
+   * Whenever the component has been updated
+   */
+  async componentDidUpdate() {
+    await this.populateIfNeeded();
+  }
+
+  /**
+   * Returns the component default state
+   */
+  get defaultState() {
+    return {
+      key_id: "" // The user key id
+    };
   }
 
   /**
@@ -50,10 +67,41 @@ class DisplayUserProfile extends React.Component {
   }
 
   /**
+   * Binds the component handlers
+   */
+  bindHandlers() {
+    this.handleUploadPicture = this.handleUploadPicture.bind(this);
+  }
+
+  /**
    * Whenever the user wants to upload a new profile's picture
    */
   handleUploadPicture() {
     this.props.dialogContext.open(UploadUserProfileAvatar);
+  }
+
+  /**
+   * Populates the component with data
+   */
+  async populate() {
+    if (this.user) {
+      const key_id = await this.fetchKeyId();
+      await this.setState({key_id});
+    }
+  }
+
+  /**
+   * Populates the component with data in case the logged in user has not been populated
+   */
+  async populateIfNeeded() {
+    const mustPopulate = this.user && !this.state.key_id;
+    const canVoid = this.user && this.state.key_id;
+    if (mustPopulate) {
+      const key_id = await this.fetchKeyId();
+      await this.setState({key_id});
+    } else if (canVoid) {
+      this.populateIfNeeded = () => {};
+    }
   }
 
   /**
@@ -64,6 +112,14 @@ class DisplayUserProfile extends React.Component {
   formatDateTimeAgo(date) {
     const serverTimezone = this.context.siteSettings.getServerTimezone();
     return moment.tz(date, serverTimezone).fromNow();
+  }
+
+  /**
+   * Fetch the user key id
+   */
+  async fetchKeyId() {
+    const {key_id} = await this.context.port.request('passbolt.keyring.get-public-key-info-by-user', this.user.id);
+    return key_id;
   }
 
   render() {
@@ -117,8 +173,9 @@ class DisplayUserProfile extends React.Component {
                   <tr className="publickey_keyid">
                     <td className="label">Public key</td>
                     <td className="value">
-                      53A59974 (NOT DONE)
-                      <p><em>Note: Sorry, it is not possible to change your key at the moment.</em></p>
+                      {this.state.key_id}
+                      <p><em>Note: Sorry, it is not possible to change your key at the
+                        moment.</em></p>
                     </td>
                   </tr>
                 </tbody>
