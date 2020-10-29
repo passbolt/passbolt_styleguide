@@ -6783,8 +6783,6 @@ h6 .input.toggle-switch {
   padding: 0.875em 0.5em 0.5em 0.875em;
   border-bottom: 1px dotted #0C0C0A;
   /* aro summary */
-  /* user summary */
-  /* row actions */
 }
 .dialog .permissions .row:before,
 .dialog .permissions .row:after {
@@ -6867,29 +6865,6 @@ h6 .input.toggle-switch {
 .dialog .permissions .row .remove-item.disabled {
   cursor: default;
   color: #8B8B89;
-}
-.dialog .permissions .row .avatar img {
-  float: left;
-}
-.dialog .permissions .row .user,
-.dialog .permissions .row .group {
-  width: 48%;
-  float: left;
-  padding-left: 1em;
-  padding-right: 1em;
-}
-.dialog .permissions .row .actions {
-  float: right;
-  width: 3em;
-  margin-top: 0.55em;
-}
-.dialog .permissions .row .actions a {
-  font-size: 1.125em;
-  padding: 0.25em 0.5em 0.2em 0.5em;
-  border: 1px solid transparent;
-}
-.dialog .permissions .row .actions a:hover {
-  border: 1px solid #0C0C0A;
 }
 .dialog .permissions .row.skeleton {
   height: 42px;
