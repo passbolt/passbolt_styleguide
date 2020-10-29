@@ -24,6 +24,8 @@ import DisplayUserProfile from "../DisplayUserProfile/DisplayUserProfile";
 import DisplayUserTheme from "../DisplayUserTheme/DisplayUserTheme";
 import DisplayUserSettingsWorkspaceBreadcrumb
   from "../DisplayUserSettingsWorkspaceBreadcrumb/DisplayUserSettingsWorkspaceBreadcrumb";
+import DisplayUserSettingsWorkspaceActions
+  from "../DisplayUserSettingWorkspaceActions/DisplayUserSettingWorkspaceActions";
 
 /**
  * This component is a container for all the user settings workspace features
@@ -42,6 +44,7 @@ class DisplayUserSettingsWorkspace extends React.Component {
           <UserBadgeMenu baseUrl={this.context.userSettings.getTrustedDomain()} user={this.context.loggedInUser}/>
         </div>
         <div className="header third">
+          <DisplayUserSettingsWorkspaceActions/>
         </div>
         <div className="panel main">
           <div className="tabs-content">
