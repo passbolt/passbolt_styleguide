@@ -26,6 +26,7 @@ import DisplayUserSettingsWorkspaceBreadcrumb
   from "../DisplayUserSettingsWorkspaceBreadcrumb/DisplayUserSettingsWorkspaceBreadcrumb";
 import DisplayUserSettingsWorkspaceActions
   from "../DisplayUserSettingWorkspaceActions/DisplayUserSettingWorkspaceActions";
+import DisplayUserGpgInformation from "../DisplayUserGpgInformation/DisplayUserGpgInformation";
 
 /**
  * This component is a container for all the user settings workspace features
@@ -58,6 +59,7 @@ class DisplayUserSettingsWorkspace extends React.Component {
                   <DisplayUserSettingsWorkspaceBreadcrumb/>
                   <Route path={`${path}/profile`} component={DisplayUserProfile}></Route>
                   <Route path={`${path}/theme`} component={DisplayUserTheme}></Route>
+                  <Route path={`${path}/keys`} component={DisplayUserGpgInformation}></Route>
                 </div>
               </div>
             </div>
