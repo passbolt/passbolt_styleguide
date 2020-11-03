@@ -22,6 +22,7 @@ import FormSubmitButton from "../../../../react/components/Common/Inputs/FormSub
 import FormCancelButton from "../../../../react/components/Common/Inputs/FormSubmitButton/FormCancelButton";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import ErrorDialog from "../../Dialog/ErrorDialog/ErrorDialog";
+import Icon from "../../../../react/components/Common/Icons/Icon";
 
 /**
  * This component displays the user profile information
@@ -35,6 +36,7 @@ class UploadUserProfileAvatar extends React.Component {
     super(props);
     this.state = this.defaultState;
     this.bindHandlers();
+    this.createReferences();
   }
 
   /**
@@ -46,13 +48,20 @@ class UploadUserProfileAvatar extends React.Component {
       actions: {
         processing: false // Actions flag about processing
       },
-      errors: { // The list of errrors
+      errors: { // The list of errors
         noFile: true // True if no picture file has been selected
       },
       validation: {
         hasAlreadyBeenValidated: false // True if the form has been already validated once
       }
     };
+  }
+
+  /**
+   * Create elements references
+   */
+  createReferences() {
+    this.fileUploaderRef = React.createRef();
   }
 
   /**
@@ -87,10 +96,18 @@ class UploadUserProfileAvatar extends React.Component {
    * Bind the components handlers
    */
   bindHandlers() {
+    this.handleSelectFile = this.handleSelectFile.bind(this);
     this.handleAvatarFileSelected = this.handleAvatarFileSelected.bind(this);
     this.handleUpload = this.handleUpload.bind(this);
     this.handleCancel = this.handleCancel.bind(this);
     this.handleClose = this.handleClose.bind(this);
+  }
+
+  /**
+   * Handle the selection of a file by file explorer
+   */
+  handleSelectFile() {
+    this.fileUploaderRef.current.click();
   }
 
   /**
@@ -134,12 +151,14 @@ class UploadUserProfileAvatar extends React.Component {
   }
 
   /**
-   * Uplaod the new profile avatar
+   * Upload the new profile avatar
    */
   async upload() {
-    const avatarFileInBase64 = await this.readFile();
+    const {fileBase64, mimeType} = await this.readFile();
+    const filename = this.selectedFilename;
+    const avatarDto = {fileBase64, mimeType, filename};
     await this.toggleProcessing();
-    await this.context.port.request("passbolt.users.update-avatar", this.user.id, avatarFileInBase64)
+    await this.context.port.request("passbolt.users.update-avatar", this.user.id, avatarDto)
       .then(this.onUploadSuccess.bind(this))
       .catch(this.onUploadFailure.bind(this));
   }
@@ -150,7 +169,7 @@ class UploadUserProfileAvatar extends React.Component {
   async onUploadSuccess() {
     await this.toggleProcessing();
     await this.refreshUserProfile();
-    await this.props.actionFeedbackContext.displaySuccess("The user has been updates successfully");
+    await this.props.actionFeedbackContext.displaySuccess("The user has been updated successfully");
     this.props.onClose();
   }
 
@@ -158,6 +177,7 @@ class UploadUserProfileAvatar extends React.Component {
    * Whenever the upload failed
    */
   async onUploadFailure(error) {
+    console.error(error);
     await this.toggleProcessing();
     const errorDialogProps = {
       title: "There was an unexpected error...",
@@ -184,7 +204,8 @@ class UploadUserProfileAvatar extends React.Component {
         try {
           const base64Url = event.target.result;
           const fileBase64 = base64Url.split(",")[1];
-          resolve(fileBase64);
+          const mimeType = base64Url.split(',')[0].split(':')[1].split(';')[0];
+          resolve({fileBase64, mimeType});
         } catch (e) {
           reject(e);
         }
@@ -211,11 +232,20 @@ class UploadUserProfileAvatar extends React.Component {
   }
 
   /**
+   * Returns the selected file's name
+   * @return {string}
+   */
+  get selectedFilename() {
+    return this.state.avatarFile ? this.state.avatarFile.name : '';
+  }
+
+  /**
    * Render the component
    */
   render() {
     return (
       <DialogWrapper
+        className="update-avatar-dialog"
         onClose={this.handleClose}
         disabled={!this.areActionsAllowed}
         title="Edit Avatar">
@@ -223,15 +253,31 @@ class UploadUserProfileAvatar extends React.Component {
           onSubmit={this.handleUpload} noValidate>
 
           <div className="form-content">
-            <div className={`input required ${this.hasNoFileError ? "error" : ""}`}>
-              <label htmlFor="upload-input">
-                Avatar
-              </label>
+            <div className="input-file-chooser-wrapper">
               <input
-                id="upload-input"
+                id="dialog-upload-avatar-input"
                 type="file"
-                accept="image/*"
-                onChange={this.handleAvatarFileSelected}/>
+                ref={this.fileUploaderRef}
+                onChange={this.handleAvatarFileSelected}
+                accept="image/*"/>
+
+              <div className={`input text required ${this.hasNoFileError ? "error" : ""}`}>
+                <label htmlFor="dialog-upload-avatar-input">
+                  Avatar
+                </label>
+
+                <input
+                  type="text"
+                  disabled={true}
+                  placeholder="No file selected"
+                  defaultValue={this.selectedFilename}/>
+                <a
+                  id="dialog-upload-avatar-input"
+                  className={`button primary ${this.areActionsAllowed ? "" : "disabled"}`}
+                  onClick={this.handleSelectFile}>
+                  <Icon name="upload-a"/> Choose a file
+                </a>
+              </div>
             </div>
           </div>
 
@@ -251,7 +297,6 @@ class UploadUserProfileAvatar extends React.Component {
     );
   }
 }
-
 
 UploadUserProfileAvatar.contextType = AppContext;
 UploadUserProfileAvatar.propTypes = {

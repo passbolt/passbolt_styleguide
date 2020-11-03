@@ -74,11 +74,12 @@ class DisplayUserProfile extends React.Component {
           <div className="profile col8">
             <h3>Profile</h3>
             <div className="section profile-detailed-information">
-              <div className="avatar col3">
+              <div className="avatar">
                 <div className="value">
                   <UserAvatar
-                    user={this.context.user}
-                    baseUrl={this.context.userSettings.getTrustedDomain()}/>
+                    user={this.context.loggedInUser}
+                    baseUrl={this.context.userSettings.getTrustedDomain()}
+                    className=""/>
                 </div>
                 <div className="edit">
                   <a
@@ -117,8 +118,7 @@ class DisplayUserProfile extends React.Component {
                     <td className="label">Public key</td>
                     <td className="value">
                       53A59974 (NOT DONE)
-                      <p><em>Note: Sorry, it is not possible to change your key at the
-                        moment.</em></p>
+                      <p><em>Note: Sorry, it is not possible to change your key at the moment.</em></p>
                     </td>
                   </tr>
                 </tbody>

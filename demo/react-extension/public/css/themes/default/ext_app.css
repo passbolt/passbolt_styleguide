@@ -6923,29 +6923,6 @@ h6 .input.toggle-switch {
     width: 45%;
   }
 }
-.profile .section.detailed-information h4 {
-  margin-bottom: 0.626em;
-  padding-bottom: 0.313em;
-  border-bottom: 1px dotted #DDD;
-}
-.profile .section.detailed-information li .label {
-  float: left;
-  width: 6em;
-  color: #969696;
-}
-.profile .section.detailed-information li .value {
-  display: inline-block;
-}
-.profile .section.detailed-information .avatar img {
-  width: 2.875em;
-  padding: 0.125em;
-}
-.profile .section .section-action {
-  padding-left: 1em;
-}
-.profile .edit-avatar-action .fa {
-  margin-top: 0.25em;
-}
 /* search */
 form.search {
   margin-top: 1em;
@@ -8887,6 +8864,21 @@ table.table-info.horizontal tbody tr:hover {
 .delete-group-dialog .ownership-transfer li select {
   width: 100%;
 }
+/* update avatar dialogs */
+.update-avatar-dialog .input-file-chooser-wrapper input[type="file"] {
+  display: none;
+}
+.update-avatar-dialog .input-file-chooser-wrapper input[type="text"] {
+  width: 60%;
+  text-overflow: ellipsis;
+}
+.update-avatar-dialog .input-file-chooser-wrapper .button.primary {
+  display: inline-block;
+  top: -3px;
+  padding: 0.6em 1.225em 0.55em 1.225em;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
 /*
  * Password workspace
  */
@@ -9090,9 +9082,6 @@ table.table-info.horizontal tbody tr:hover {
   height: 12.5em;
   margin: 0.5em 1em 0 0;
 }
-.page.settings .profile-detailed-information .avatar .value .avatar {
-  float: none;
-}
 .page.settings .profile-detailed-information .avatar .edit {
   width: 12.5em;
   height: 3.125em;
@@ -9167,9 +9156,6 @@ table.table-info.horizontal tbody tr:hover {
   font-size: 1.5em;
   text-align: center;
   padding: 0.25em 0.5em;
-}
-.page.settings .profile-detailed-information .avatar .edit a .svg-icon {
-  float: left;
 }
 .page.settings .profile-detailed-information .avatar .edit a .svg-icon svg {
   float: left;
