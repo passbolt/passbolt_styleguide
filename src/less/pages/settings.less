@@ -4,10 +4,10 @@
         .main.panel .middle {
             overflow-y: auto;
         }
-    
+
         .profile-detailed-information {
             .clearfix();
-    
+
             .avatar {
                 float: left;
                 img {
@@ -17,21 +17,22 @@
                     height: 12.5em;
                     margin: .5em 1em 0 0;
                 }
+
                 .edit {
                     width: 12.5em;
                     height: 3.125em;
-                    background: transparent url('@{images}/controls/overlay-opacity-50.png') repeat;
+                    background-color: rgba(0,0,0,0.7);
                     border: 1px solid transparent;
                     color: @font-inverse;
                     margin: -3.25em 0 2em 0;
                     position: relative;
-    
+
                     a {
                         color: @font-inverse;
                         display: block;
                         height: 3.125em;
                         .clearfix();
-    
+
                         i.fa {
                             display: block;
                             float: left;
@@ -46,6 +47,7 @@
                                 padding: .25em .5em;
                             }
                         }
+
                         .svg-icon svg {
                             float: left;
                             fill: white;
@@ -75,7 +77,7 @@
             }
         }
     }
-    
+
     /* hide icons if there is no space */
     @media all and (max-width: 950px) {
         .page.settings .profile-detailed-information {
@@ -84,7 +86,7 @@
             }
         }
     }
-    
+
     /* table info is hard to fit because of fingerprint */
     @media (max-width: 1280px) {
         .key-info .table-info {
