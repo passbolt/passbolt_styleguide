@@ -9198,3 +9198,31 @@ table.table-info.horizontal tbody tr:hover {
     font-size: 0.929em;
   }
 }
+.themes .theme {
+  float: left;
+  border-radius: 2px;
+}
+.themes .theme a {
+  max-width: 275px;
+  display: block;
+  margin: 1em;
+  border: 1px solid #0C0C0A;
+  padding: 1em;
+  box-shadow: 0px 0px 10px 0px #000;
+  border-radius: 3px;
+}
+.themes .theme a:hover {
+  border: 1px solid #2A9CEB;
+}
+.themes .theme .theme-desc {
+  padding-top: 1em;
+  text-align: center;
+}
+.themes .theme.selected {
+  font-weight: bold;
+}
+.themes .theme.selected a {
+  background: #222220;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.2);
+  border: 1px solid #0C0C0A;
+}
