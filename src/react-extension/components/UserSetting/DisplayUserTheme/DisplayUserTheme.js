@@ -120,7 +120,7 @@ class DisplayUserTheme extends React.Component {
    * Render the component
    */
   render() {
-    const selectedClass = theme => this.state.selectedTheme.id === theme.id ? 'selected' : '';
+    const selectedClass = theme => this.state.selectedTheme === theme.name ? 'selected' : '';
     return (
       <div className="grid grid-responsive-12">
         <div className="row">
