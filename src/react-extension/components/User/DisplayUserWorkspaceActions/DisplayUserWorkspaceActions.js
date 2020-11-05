@@ -205,7 +205,7 @@ class DisplayUserWorkspaceActions extends React.Component {
    */
   handleDocumentClickEvent(event) {
     // Prevent closing when the user click on an element of the menu
-    if (this.moreMenuRef.current.contains(event.target)) {
+    if (this.moreMenuRef.current && this.moreMenuRef.current.contains(event.target)) {
       return;
     }
     this.closeMoreMenu();
