@@ -9,7 +9,6 @@
  * @copyright     Copyright (c) 2020 Passbolt SA (https://www.passbolt.com)
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
- * @since         2.13.0
  */
 import React, {Component} from "react";
 import {withRouter} from "react-router-dom";
@@ -26,7 +25,7 @@ class DisplayUserSettingsWorkspaceBreadcrumb extends Component {
    * Returns the all users breadcrumb items
    */
   get allUsers() {
-    return  [
+    return [
       {
         name: "All users",
         link: {
@@ -67,7 +66,7 @@ class DisplayUserSettingsWorkspaceBreadcrumb extends Component {
       {
         name: user && `${user.profile.first_name} ${user.profile.last_name}`,
         link: {
-          pathname: '/app/settings/profile'
+          pathname: "/app/settings/profile"
         }
       },
       {
@@ -77,14 +76,13 @@ class DisplayUserSettingsWorkspaceBreadcrumb extends Component {
     ];
   }
 
-
   /**
    * Render the component
    * @returns {JSX}
    */
   render() {
     return (
-      <Breadcrumbs items={this.breadcrumb} />
+      <Breadcrumbs items={this.breadcrumb}/>
     );
   }
 }
@@ -92,7 +90,6 @@ class DisplayUserSettingsWorkspaceBreadcrumb extends Component {
 DisplayUserSettingsWorkspaceBreadcrumb.contextType = AppContext;
 
 DisplayUserSettingsWorkspaceBreadcrumb.propTypes = {
-  userWorkspaceContext: PropTypes.object, // The user workspace context
   location: PropTypes.object
 };
 
