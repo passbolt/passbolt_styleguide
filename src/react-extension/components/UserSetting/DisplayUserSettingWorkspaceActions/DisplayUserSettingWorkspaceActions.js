@@ -14,7 +14,7 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import {Route} from "react-router-dom";
+import {withRouter, Route} from "react-router-dom";
 import AppContext from "../../../contexts/AppContext";
 import Icon from "../../Common/Icons/Icon";
 import {withDialog} from "../../../contexts/Common/DialogContext";
@@ -38,6 +38,8 @@ class DisplayUserSettingsWorkspaceActions extends React.Component {
    */
   bindCallbacks() {
     this.handleEdit = this.handleEdit.bind(this);
+    this.handleDownloadPublicKey = this.handleDownloadPublicKey.bind(this);
+    this.handleDownloadPrivateKey = this.handleDownloadPrivateKey.bind(this);
   }
 
   /**
@@ -48,21 +50,54 @@ class DisplayUserSettingsWorkspaceActions extends React.Component {
   }
 
   /**
+   * Whenever the user wants to download his public key
+   */
+  async handleDownloadPublicKey() {
+    await this.context.port.request("passbolt.keyring.download-my-public-key");
+  }
+
+  /**
+   * Whenever the user wants to download his private key
+   */
+  async handleDownloadPrivateKey() {
+    await this.context.port.request("passbolt.keyring.download-my-private-key");
+  }
+
+  /**
    * Render the component
    * @returns {JSX}
    */
   render() {
+    const {path} = this.props.match;
     return (
       <div className="col2_3 actions-wrapper">
         <div className="actions">
           <ul className="ready">
-            <Route path={`/app/settings/profile`}>
+            <Route path={`${path}/profile`}>
               <li>
                 <a
                   className="button ready"
                   onClick={this.handleEdit}>
                   <Icon name="edit"/>
                   <span>Edit</span>
+                </a>
+              </li>
+            </Route>
+            <Route path={`${path}/keys`}>
+              <li>
+                <a
+                  className="button ready"
+                  onClick={this.handleDownloadPublicKey}>
+                  <Icon name="download"/>
+                  <span>Public</span>
+                </a>
+              </li>
+              <li>
+                <a
+                  className="button ready"
+                  onClick={this.handleDownloadPrivateKey}>
+                  <Icon name="download"/>
+                  <span>Private</span>
                 </a>
               </li>
             </Route>
@@ -76,7 +111,8 @@ class DisplayUserSettingsWorkspaceActions extends React.Component {
 DisplayUserSettingsWorkspaceActions.contextType = AppContext;
 
 DisplayUserSettingsWorkspaceActions.propTypes = {
+  match: PropTypes.object, // The router match
   dialogContext: PropTypes.any, // the dialog context
 };
 
-export default withDialog(DisplayUserSettingsWorkspaceActions);
+export default withRouter(withDialog(DisplayUserSettingsWorkspaceActions));
