@@ -56,6 +56,7 @@ class ExportResources extends React.Component {
   bindHandlers() {
     this.handleExport = this.handleExport.bind(this);
     this.handleCancel = this.handleCancel.bind(this);
+    this.handleClose = this.handleClose.bind(this);
     this.handleExportFormatSelected = this.handleExportFormatSelected.bind(this);
   }
 
@@ -199,6 +200,14 @@ class ExportResources extends React.Component {
    * Whenever the export is cancelled
    */
   async handleCancel() {
+    await this.props.resourceWorkspaceContext.onResourcesToExport({resourcesIds: null, foldersIds: null});
+    this.close();
+  }
+
+  /**
+   * Whenever the dialog is closed
+   */
+  async handleClose() {
     await this.props.resourceWorkspaceContext.onResourcesToExport({resourcesIds: null, foldersIds: null});
     this.close();
   }

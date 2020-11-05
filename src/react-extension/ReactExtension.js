@@ -43,6 +43,8 @@ import LoadingContextProvider from "./contexts/Common/LoadingContext";
 import Footer from "./components/Footer/Footer";
 import DisplayUserWorkspace from "./components/User/DisplayUserWorkspace/DisplayUserWorkspace";
 import HandleRouteFallback from "./components/Route/HandleRouteFallback";
+import DisplayUserSettingsWorkspace
+  from "./components/UserSetting/DisplayUserSettingsWorkspace/DisplayUserSettingsWorkspace";
 
 class ReactExtension extends Component {
   constructor(props) {
@@ -359,6 +361,24 @@ class ReactExtension extends Component {
                         </div>
                       </UserWorkspaceContextProvider>
                       }
+                    </Route>
+                    <Route path={"/app/settings"}>
+                      {isReady &&
+                        <>
+                          <ManageDialogs/>
+                          <div id="container" className="page settings">
+                            <div id="app" className={`app ${isReady ? "ready" : ""}`} tabIndex="1000">
+                              <div className="header first">
+                                <MainMenu
+                                  onClick={this.handleWorkspaceSelect}
+                                  baseUrl={this.state.userSettings.getTrustedDomain()}/>
+                              </div>
+                              <DisplayUserSettingsWorkspace/>
+                            </div>
+                          </div>
+                        </>
+                      }
+
                     </Route>
                     <Route path="/">
                       <HandleRouteFallback/>

@@ -44,12 +44,14 @@ export const UserWorkspaceContext = React.createContext({
   scrollTo: {
     user: null // The user to scroll to
   },
+  groupToEdit: null, // The group to edit
   onUserScrolled: () => {}, // Whenever one scrolled to a user
   onLockDetail: () => {}, // Lock or unlock detail  (hide or display the group or user details)
   onSorterChanged: () => {}, // Whenever the sorter changed
   onUserSelected: {
     single: () => {}// Whenever a single resource has been selected
   },
+  onGroupToEdit: () => {} // Whenever a group will be edited
 });
 
 /**
@@ -86,12 +88,14 @@ class UserWorkspaceContextProvider extends React.Component {
       scrollTo: {
         user: null // The resource to scroll to
       },
+      groupToEdit: null, // The group to edit
       onUserScrolled: this.handleUserScrolled.bind(this), // Whenever one scrolled to a user
       onDetailsLocked: this.handleDetailsLocked.bind(this), // Lock or unlock detail  (hide or display the group or user details)
       onSorterChanged: this.handleSorterChange.bind(this), // Whenever the sorter changed
       onUserSelected: {
         single: this.handleUserSelected.bind(this)// Whenever a single user has been selected
       },
+      onGroupToEdit: this.handleGroupToEdit.bind(this) // Whenever a group will be edited
     };
   }
 
@@ -147,16 +151,21 @@ class UserWorkspaceContextProvider extends React.Component {
     if (hasUsersChanged) {
       this.users = this.context.users;
       await this.search(this.state.filter);
+      await this.updateDetails();
+      await this.unselectUnknownUsers();
+      await this.redirectAfterSelection();
     }
   }
 
   /**
    * Handle the groups change
    */
-  handleGroupsChange() {
+  async handleGroupsChange() {
     const hasGroupsChanged = this.context.groups && this.context.groups !== this.groups;
     if (hasGroupsChanged) {
       this.groups = this.context.groups;
+      await this.refreshSearchFilter();
+      await this.updateDetails();
     }
   }
 
@@ -275,6 +284,14 @@ class UserWorkspaceContextProvider extends React.Component {
   }
 
   /**
+   * Handle the will to edit a group
+   * @param group
+   */
+  async handleGroupToEdit(group) {
+    await this.updateGroupToEdit(group);
+  }
+
+  /**
    * Handle the wait for the initial resources to be loaded
    */
   handleUsersWaitedFor() {
@@ -291,6 +308,8 @@ class UserWorkspaceContextProvider extends React.Component {
       this.handleUsersLoaded = () => {};
     }
   }
+
+
 
   /**
    * Populate the context with initial data such as resources and folders
@@ -374,6 +393,19 @@ class UserWorkspaceContextProvider extends React.Component {
     await this.setState({filter, filteredUsers});
   }
 
+  /**
+   * Refresh the filter in case of its payload is outdated due to the updated list of groups
+   */
+  async refreshSearchFilter() {
+    const hasGroupFilter = this.state.filter.type === ResourceWorkspaceFilterTypes.GROUP;
+    if (hasGroupFilter) {
+      const updatedGroup = this.groups.find(group => group.id === this.state.filter.payload.group.id);
+      const filter = Object.assign(this.state.filter, {payload: {group: updatedGroup}});
+      await this.setState({filter});
+    }
+  }
+
+
   /** USER SELECTION */
 
   /**
@@ -402,6 +434,16 @@ class UserWorkspaceContextProvider extends React.Component {
     if (hasSelectedUsers) {
       await this.setState({selectedUsers: []});
     }
+  }
+
+  /**
+   * Remove from the selected resources those which are not known resources in regard of the current resources list
+   */
+  async unselectUnknownUsers() {
+    const matchId = selectedUser => user => user.id === selectedUser.id;
+    const matchSelectedUser = selectedUser => this.users.some(matchId(selectedUser));
+    const selectedUsers = this.state.selectedUsers.filter(matchSelectedUser);
+    await this.setState({selectedUsers});
   }
 
   /**
@@ -522,6 +564,24 @@ class UserWorkspaceContextProvider extends React.Component {
     await this.setState({details: Object.assign({}, details, {locked: !locked})});
   }
 
+
+  /**
+   * Update the current details with the current list of users or groups
+   */
+  async updateDetails() {
+    const hasDetails = this.state.details.user || this.state.details.group;
+    if (hasDetails) {
+      const hasUserDetails = this.state.details.user;
+      if (hasUserDetails) { // Case of user details
+        const updatedUserDetails = this.users.find(user => user.id === this.state.details.user.id);
+        await this.setState({details: {user: updatedUserDetails}});
+      } else { // Case of group details
+        const updatedGroupDetails = this.groups.find(group => group.id === this.state.details.group.id);
+        await this.setState({details: {group: updatedGroupDetails}});
+      }
+    }
+  }
+
   /** USER SCROLLING **/
 
   /**
@@ -539,6 +599,17 @@ class UserWorkspaceContextProvider extends React.Component {
     await this.setState({scrollTo: {}});
   }
 
+
+
+  /** GROUP EDIT **/
+
+  /**
+   * Updates the group to edit
+   * @param groupToEdit The group to edit
+   */
+  async updateGroupToEdit(groupToEdit) {
+    await this.setState({groupToEdit});
+  }
 
   /**
    * Render the component

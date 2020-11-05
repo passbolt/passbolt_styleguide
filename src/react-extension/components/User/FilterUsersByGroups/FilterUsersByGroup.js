@@ -101,15 +101,6 @@ class FilterUsersByGroup extends React.Component {
   }
 
   /**
-   * Handle when the user clicks on the more button
-   * @param {ReactEvent} event The event
-   * @param {Object} group The target group
-   */
-  handleMoreClickEvent(event, group) {
-    this.showGroupContextualMenu(event.pageY, event.pageX, group);
-  }
-
-  /**
    *
    */
   /**
@@ -131,6 +122,18 @@ class FilterUsersByGroup extends React.Component {
     this.setState({filterType}, () => {
       this.updateTitle();
     });
+  }
+
+  /**
+   * Open the contextual menu for the current group
+   * @param event The DOM event
+   * @param group An user group
+   */
+  handleMoreClickEvent(event, group) {
+    const top = event.pageY;
+    const left = event.pageX;
+    const contextualMenuProps = {group, left, top};
+    this.props.contextualMenuContext.show(DisplayGroupContextualMenu, contextualMenuProps);
   }
 
   // Zero conditional statements
@@ -169,6 +172,29 @@ class FilterUsersByGroup extends React.Component {
   }
 
   /**
+   * Returns true if the current user is admin
+   */
+  get isCurrentUserAdmin() {
+    return this.context.loggedInUser && this.context.loggedInUser.role.name === 'admin';
+  }
+
+  /**
+   * get groups
+   * @returns {*}
+   */
+  get groups() {
+    return this.context.groups;
+  }
+
+  /**
+   * get groups sorted
+   * @returns {*|boolean}
+   */
+  get groupsSorted() {
+    return this.groups.sort((groupA, groupB) => groupA.name.localeCompare(groupB.name));
+  }
+
+  /**
    * Show the contextual menu
    * @param {int} left The left position to display the menu
    * @param {int} top The top position to display the menu
@@ -177,16 +203,6 @@ class FilterUsersByGroup extends React.Component {
     const onFilterSelected = this.handleFilterGroupType;
     const contextualMenuProps = {left, onFilterSelected, top};
     this.props.contextualMenuContext.show(FilterUsersByGroupContextualMenu, contextualMenuProps);
-  }
-
-  /**
-   * Show the contextual menu for a group
-   * @param {int} left The left position to display the menu
-   * @param {int} top The top position to display the menu
-   */
-  showGroupContextualMenu(top, left, group) {
-    const contextualMenuProps = {left, top, group};
-    this.props.contextualMenuContext.show(DisplayGroupContextualMenu, contextualMenuProps);
   }
 
   /**
@@ -213,21 +229,7 @@ class FilterUsersByGroup extends React.Component {
     return this.filteredGroups.length > 0;
   }
 
-  /**
-   * get groups
-   * @returns {*}
-   */
-  get groups() {
-    return this.context.groups;
-  }
 
-  /**
-   * get groups sorted
-   * @returns {*|boolean}
-   */
-  get groupsSorted() {
-    return this.groups.sort((groupA, groupB) => groupA.name.localeCompare(groupB.name));
-  }
 
   /**
    * Returns true if the given group is selected
@@ -242,11 +244,12 @@ class FilterUsersByGroup extends React.Component {
   }
 
   /**
-   * Can update or delete the group
-   * @returns {boolean}
+   * Returns true if the contextual menu More can be shown
+   * @param group The selected group
    */
-  isLoggedInUserAdmin() {
-    return this.context.loggedInUser && this.context.loggedInUser.role.name === 'admin';
+  canShowMore(group) {
+    const isGroupManager = group.my_group_user && group.my_group_user.is_admin;
+    return this.isCurrentUserAdmin || isGroupManager;
   }
 
   /**
@@ -306,14 +309,16 @@ class FilterUsersByGroup extends React.Component {
                         <span className="ellipsis">{group.name}</span>
                       </a>
                     </div>
+                    {this.canShowMore(group) &&
+                    <div className="right-cell more-ctrl">
+                      <a
+                        onClick={event => this.handleMoreClickEvent(event, group)}
+                        className="more">
+                        <Icon name="plus-square"/>
+                      </a>
+                    </div>
+                    }
                   </div>
-                  {this.isLoggedInUserAdmin() &&
-                  <div className="right-cell more-ctrl">
-                    <a className="more" onClick={event => this.handleMoreClickEvent(event, group)}>
-                      <Icon name="plus-square"/>
-                    </a>
-                  </div>
-                  }
                 </div>
               </li>
             )

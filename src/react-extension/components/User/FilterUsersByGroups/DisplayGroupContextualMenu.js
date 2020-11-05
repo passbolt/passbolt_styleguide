@@ -19,6 +19,8 @@ import ContextualMenuWrapper from "../../Common/ContextualMenu/ContextualMenuWra
 import DeleteGroupWithConflictsDialog from "../../Group/DeleteGroup/DeleteGroupWithConflictsDialog";
 import ErrorDialog from "../../Dialog/ErrorDialog/ErrorDialog";
 import DeleteGroupDialog from "../../Group/DeleteGroup/DeleteGroupDialog";
+import EditUserGroup from "../EditUserGroup/EditUserGroup";
+import {withUserWorkspace} from "../../../contexts/UserWorkspaceContext";
 
 class DisplayGroupContextualMenu extends React.Component {
   /**
@@ -35,6 +37,22 @@ class DisplayGroupContextualMenu extends React.Component {
    */
   bindCallbacks() {
     this.handleDeleteClickEvent = this.handleDeleteClickEvent.bind(this);
+    this.handleEditGroup = this.handleEditGroup.bind(this);
+  }
+
+  /**
+   * Get group
+   * @returns {null|{deleted: boolean, created: string, name: string, modified_by: string, modified: string, id: string, created_by: string, groups_users: [{is_admin: boolean, group_id: string, user_id: string, created: string, id: string}, {is_admin: boolean, group_id: string, user_id: string, created: string, id: string}], my_group_user: {is_admin: boolean, group_id: string, user_id: string, created: string, id: string}}}
+   */
+  get group() {
+    return this.props.group;
+  }
+
+  /**
+   * Returns true if the current user is admin
+   */
+  get isCurrentUserAdmin() {
+    return this.context.loggedInUser && this.context.loggedInUser.role.name === 'admin';
   }
 
   /**
@@ -90,12 +108,15 @@ class DisplayGroupContextualMenu extends React.Component {
     this.props.dialogContext.open(ErrorDialog);
   }
 
+
+
   /**
-   * Get group
-   * @returns {null|{deleted: boolean, created: string, name: string, modified_by: string, modified: string, id: string, created_by: string, groups_users: [{is_admin: boolean, group_id: string, user_id: string, created: string, id: string}, {is_admin: boolean, group_id: string, user_id: string, created: string, id: string}], my_group_user: {is_admin: boolean, group_id: string, user_id: string, created: string, id: string}}}
+   * Handle the will of edit a group
    */
-  get group() {
-    return this.props.group;
+  async handleEditGroup() {
+    await this.props.userWorkspaceContext.onGroupToEdit(this.props.group);
+    this.props.dialogContext.open(EditUserGroup);
+    this.props.hide();
   }
 
   /**
@@ -108,15 +129,34 @@ class DisplayGroupContextualMenu extends React.Component {
         hide={this.props.hide}
         left={this.props.left}
         top={this.props.top}>
-        <li key="option-delete-group" className="ready closed">
+        <li key="option-filter-all-groups" className="ready closed">
           <div className="row">
             <div className="main-cell-wrapper">
               <div className="main-cell">
-                <a id="delete-group" onClick={this.handleDeleteClickEvent}><span>Delete Group</span></a>
+                <a
+                  id="edit-group"
+                  onClick={this.handleEditGroup}>
+                  <span>Edit group</span>
+                </a>
               </div>
             </div>
           </div>
         </li>
+        {this.isCurrentUserAdmin &&
+          <li key="option-delete-group" className="ready closed">
+            <div className="row">
+              <div className="main-cell-wrapper">
+                <div className="main-cell">
+                  <a
+                    id="delete-group"
+                    onClick={this.handleDeleteClickEvent}>
+                    <span>Delete Group</span>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </li>
+        }
       </ContextualMenuWrapper>
     );
   }
@@ -129,7 +169,8 @@ DisplayGroupContextualMenu.propTypes = {
   left: PropTypes.number, // left position in px of the page
   top: PropTypes.number, // top position in px of the page
   group: PropTypes.object,
-  dialogContext: PropTypes.any
+  dialogContext: PropTypes.any, // The dialog context
+  userWorkspaceContext: PropTypes.object // The user workspace context
 };
 
-export default withDialog(DisplayGroupContextualMenu);
+export default withUserWorkspace(withDialog(DisplayGroupContextualMenu));
