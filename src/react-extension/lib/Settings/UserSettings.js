@@ -11,14 +11,6 @@ export default class UserSettings {
     return this.settings["user.settings.theme"];
   }
 
-  /**
-   * Sets a new theme
-   * @param theme The new theme
-   */
-  setTheme(theme) {
-    this.settings["user.settings.theme"] = theme;
-  }
-
   getTrustedDomain() {
     return this.settings["user.settings.trustedDomain"];
   }

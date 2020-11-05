@@ -84,11 +84,9 @@ class DisplayUserTheme extends React.Component {
    * Selects a new theme
    */
   async select(theme) {
-    const isAlreadySelected = this.state.selectedTheme.id === theme.id;
+    const isAlreadySelected = this.state.selectedTheme === theme.name;
     if (!isAlreadySelected) {
-      await this.setState({selectedTheme: theme});
-      await this.context.userSettings.setTheme(theme);
-      await this.props.loadingContext.add();
+      await this.setState({selectedTheme: theme.name});
       this.context.port.request("passbolt.themes.change", theme.name)
         .then(this.onSelectSuccess.bind(this))
         .catch(this.onSelectFailure.bind(this));
