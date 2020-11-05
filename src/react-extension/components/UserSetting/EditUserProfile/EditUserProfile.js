@@ -40,16 +40,15 @@ class EditUserProfile extends Component {
     this.populate();
   }
 
-
   /**
    * Returns the component default state
    */
   get defaultState() {
     return {
       profile: { // The editing user profile data
-        first_name: '',
-        last_name: '',
-        username: ''
+        first_name: "",
+        last_name: "",
+        username: ""
       },
       actions: {
         processing: false // True if one is processing the edit
@@ -96,8 +95,8 @@ class EditUserProfile extends Component {
    * Create references
    */
   createReferences() {
-    this.firstnameRef =  React.createRef();
-    this.lastnameRef =  React.createRef();
+    this.firstnameRef = React.createRef();
+    this.lastnameRef = React.createRef();
   }
 
   /**
@@ -160,14 +159,12 @@ class EditUserProfile extends Component {
       .catch(this.onSaveError.bind(this));
   }
 
-
   /**
    * Whenever the save has been successful
    */
   async onSaveSuccess() {
     await this.props.actionFeedbackContext.displaySuccess("The user has been updated successfully");
-    const loggedInUser = Object.assign({}, this.context.loggedInUser);
-    loggedInUser.profile = Object.assign(loggedInUser.profile, this.state.profile);
+    const loggedInUser = await this.context.port.request("passbolt.users.find-logged-in-user");
     this.context.setContext({loggedInUser});
     this.props.onClose();
   }
@@ -251,7 +248,7 @@ class EditUserProfile extends Component {
                 type="text"
                 placeholder="first name"
                 required="required"
-                autoComplete='off'
+                autoComplete="off"
                 autoFocus={true}
                 ref={this.firstnameRef}
                 value={this.state.profile.first_name}
@@ -272,15 +269,15 @@ class EditUserProfile extends Component {
                 type="text"
                 placeholder="last name"
                 required="required"
-                autoComplete='off'
+                autoComplete="off"
                 ref={this.lastnameRef}
                 value={this.state.profile.last_name}
                 onChange={this.handleInputChange}
                 disabled={!this.areActionsAllowed}/>
               {this.state.errors.isLastnameEmpty &&
-                <div className="last_name error message">
-                  A last name is required
-                </div>
+              <div className="last_name error message">
+                A last name is required
+              </div>
               }
             </div>
 
@@ -290,8 +287,6 @@ class EditUserProfile extends Component {
                 id="user-profile-username-input"
                 name="username"
                 type="text"
-                required="required"
-                autoComplete='off'
                 disabled={true}
                 value={this.context.loggedInUser.username}/>
             </div>

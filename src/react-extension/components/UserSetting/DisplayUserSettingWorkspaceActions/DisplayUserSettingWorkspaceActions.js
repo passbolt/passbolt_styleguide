@@ -14,6 +14,7 @@
 
 import React from "react";
 import PropTypes from "prop-types";
+import {Route} from "react-router-dom";
 import AppContext from "../../../contexts/AppContext";
 import Icon from "../../Common/Icons/Icon";
 import {withDialog} from "../../../contexts/Common/DialogContext";
@@ -32,7 +33,6 @@ class DisplayUserSettingsWorkspaceActions extends React.Component {
     this.bindCallbacks();
   }
 
-
   /**
    * Bind callbacks methods
    */
@@ -40,14 +40,12 @@ class DisplayUserSettingsWorkspaceActions extends React.Component {
     this.handleEdit = this.handleEdit.bind(this);
   }
 
-
   /**
    * Whenever the user wants to edit his profile
    */
   handleEdit() {
     this.props.dialogContext.open(EditUserProfile);
   }
-
 
   /**
    * Render the component
@@ -58,14 +56,16 @@ class DisplayUserSettingsWorkspaceActions extends React.Component {
       <div className="col2_3 actions-wrapper">
         <div className="actions">
           <ul className="ready">
-            <li>
-              <a
-                className="button ready"
-                onClick={this.handleEdit}>
-                <Icon name="edit"/>
-                <span>Edit</span>
-              </a>
-            </li>
+            <Route path={`/app/settings/profile`}>
+              <li>
+                <a
+                  className="button ready"
+                  onClick={this.handleEdit}>
+                  <Icon name="edit"/>
+                  <span>Edit</span>
+                </a>
+              </li>
+            </Route>
           </ul>
         </div>
       </div>
