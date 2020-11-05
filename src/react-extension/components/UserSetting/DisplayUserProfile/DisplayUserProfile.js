@@ -55,7 +55,7 @@ class DisplayUserProfile extends React.Component {
    */
   get defaultState() {
     return {
-      key_id: "" // The user key id
+      keyId: "" // The user key id
     };
   }
 
@@ -85,8 +85,8 @@ class DisplayUserProfile extends React.Component {
    */
   async populate() {
     if (this.user) {
-      const key_id = await this.fetchKeyId();
-      await this.setState({key_id});
+      const keyId = await this.fetchKeyId();
+      await this.setState({keyId});
     }
   }
 
@@ -94,11 +94,11 @@ class DisplayUserProfile extends React.Component {
    * Populates the component with data in case the logged in user has not been populated
    */
   async populateIfNeeded() {
-    const mustPopulate = this.user && !this.state.key_id;
-    const canVoid = this.user && this.state.key_id;
+    const mustPopulate = this.user && !this.state.keyId;
+    const canVoid = this.user && this.state.keyId;
     if (mustPopulate) {
-      const key_id = await this.fetchKeyId();
-      await this.setState({key_id});
+      const keyId = await this.fetchKeyId();
+      await this.setState({keyId});
     } else if (canVoid) {
       this.populateIfNeeded = () => {};
     }
@@ -118,8 +118,8 @@ class DisplayUserProfile extends React.Component {
    * Fetch the user key id
    */
   async fetchKeyId() {
-    const {key_id} = await this.context.port.request('passbolt.keyring.get-public-key-info-by-user', this.user.id);
-    return key_id;
+    const {keyId} = await this.context.port.request('passbolt.keyring.get-public-key-info-by-user', this.user.id);
+    return keyId;
   }
 
   render() {
@@ -173,7 +173,7 @@ class DisplayUserProfile extends React.Component {
                   <tr className="publickey_keyid">
                     <td className="label">Public key</td>
                     <td className="value">
-                      {this.state.key_id}
+                      {this.state.keyId}
                       <p><em>Note: Sorry, it is not possible to change your key at the
                         moment.</em></p>
                     </td>
