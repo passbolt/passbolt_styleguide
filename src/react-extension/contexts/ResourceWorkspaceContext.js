@@ -147,8 +147,6 @@ class ResourceWorkspaceContextProvider extends React.Component {
     await this.handleRouteChange(prevProps.location);
   }
 
-
-
   /**
    * Handles the resource search filter change
    */
@@ -792,7 +790,7 @@ class ResourceWorkspaceContextProvider extends React.Component {
         const updatedResourceDetails = this.resources.find(resource => resource.id === this.state.details.resource.id);
         await this.setState({details: {resource: updatedResourceDetails}});
       } else { // Case of folder details
-        const updatedFolderDetails = this.folders.find(folder => folder.id === this.state.details.group.id);
+        const updatedFolderDetails = this.folders.find(folder => folder.id === this.state.details.folder.id);
         await this.setState({details: {folder: updatedFolderDetails}});
       }
     }

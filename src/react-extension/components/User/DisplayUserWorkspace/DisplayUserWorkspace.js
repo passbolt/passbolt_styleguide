@@ -38,7 +38,7 @@ class DisplayUserWorkspace extends React.Component {
    * Returns true if the user details must be displayed
    */
   get mustDisplayUserDetails() {
-    const {details} =  this.props.userWorkspaceContext;
+    const {details} = this.props.userWorkspaceContext;
     return details.user && details.locked;
   }
 
@@ -46,7 +46,7 @@ class DisplayUserWorkspace extends React.Component {
    * Returns true if the group details must be displayed
    */
   get mustDisplayGroupDetails() {
-    const {details} =  this.props.userWorkspaceContext;
+    const {details} = this.props.userWorkspaceContext;
     return details.group && details.locked;
   }
 
