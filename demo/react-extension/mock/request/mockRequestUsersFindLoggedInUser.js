@@ -40,5 +40,5 @@ export default () => {
     },
     "is_mfa_enabled": false,
     "last_logged_in": null
-  }
+  };
 };

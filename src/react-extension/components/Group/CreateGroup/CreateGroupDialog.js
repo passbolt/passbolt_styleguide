@@ -447,16 +447,15 @@ class CreateGroupDialog extends Component {
               <div className="name error message">{this.state.nameError}</div>
               }
             </div>
+
+            <div className="input required">
+              <label htmlFor="group_permission">Group members</label>
+            </div>
           </div>
           <div className="group_members">
-            <div className="form-content">
-              <div className="input required">
-                <label htmlFor="group_permission">Group members</label>
-              </div>
-            </div>
             <div className="form-content permission-edit">
               {this.hasMembers() &&
-              <ul className="permissions groups_users" ref={this.groupUsersListRef}>
+              <ul className="permissions scroll groups_users" ref={this.groupUsersListRef}>
                 {this.state.groups_users.map(groups_user =>
                   <li key={groups_user.user.id} className="row">
                     <UserAvatar user={groups_user.user} baseUrl={this.context.userSettings.getTrustedDomain()}/>

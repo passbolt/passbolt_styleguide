@@ -63,7 +63,7 @@ class CreateUserDialog extends Component {
       username: "",
       usernameError: null,
       is_admin: false,
-      hasAlreadyBeenValidated: false // True if the form has alreadt been submitted once
+      hasAlreadyBeenValidated: false // True if the form has already been submitted once
     };
   }
 
