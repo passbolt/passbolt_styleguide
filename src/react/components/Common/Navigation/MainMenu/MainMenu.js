@@ -66,7 +66,7 @@ class MainMenu extends Component {
               <div className={`row ${this.isSelected("administration") ? "selected" : ""}`}>
                 <div className="main-cell-wrapper">
                   <div className="main-cell">
-                    <Link to="/app/administration" role="button"><span>administration</span></Link>
+                    <Link to="/app/administration/mfa" role="button"><span>administration</span></Link>
                   </div>
                 </div>
               </div>

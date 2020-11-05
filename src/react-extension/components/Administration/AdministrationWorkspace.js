@@ -23,6 +23,8 @@ import UserBadgeMenu from "../../../react/components/Common/Navigation/Header/Us
 import DisplayAdministrationMenu from "./DisplayAdministrationMenu/DisplayAdministrationMenu";
 import DisplayMfaAdministration from "./DisplayMfaAdministration/DisplayMfaAdministration";
 import DisplayAdministrationWorkspaceActions from "./DisplayAdministartionWorkspaceActions/DisplayUserWorkspaceActions";
+import DisplayAdministrationWorkspaceBreadcrumb
+  from "./DisplayAdministrationWorkspaceBreadcrumb/DisplayAdministrationWorkspaceBreadcrumb";
 import DisplayUserDirectoryAdministration
   from "./DisplayUserDirectoryAdministration/DisplayUserDirectoryAdministration";
 import DisplayEmailNotificationsAdministration
@@ -75,6 +77,7 @@ class AdministrationWorkspace extends Component {
                 <DisplayAdministrationMenu/>
               </div>
               <div className="panel middle">
+                <DisplayAdministrationWorkspaceBreadcrumb/>
                 <div className="workspace-main">
                   <div className="grid grid-responsive-12">
                     {this.isMfaSelected() &&
