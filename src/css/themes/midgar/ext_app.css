@@ -9211,3 +9211,10 @@ table.table-info.horizontal tbody tr:hover {
   box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.2);
   border: 1px solid #0C0C0A;
 }
+.page.administration .workspace-main .grid {
+  position: absolute;
+  bottom: 0;
+  top: 2.125em;
+  padding: 0;
+  overflow-y: scroll;
+}

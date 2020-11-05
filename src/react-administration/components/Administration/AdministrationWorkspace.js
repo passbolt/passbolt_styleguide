@@ -48,6 +48,7 @@ class AdministrationWorkspace extends Component {
           <div className="header third">
             <div className="col1 main-action-wrapper">
             </div>
+            <DisplayAdministrationWorkspaceActions/>
           </div>
           <div className="panel main">
             <div>

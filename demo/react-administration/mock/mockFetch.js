@@ -20,6 +20,7 @@ export default () => {
   const mockFetch = new MockFetch();
   mockFetch.addGetFetchRequest("http://localhost:3000/users/me.json?api-version=v2", mockGetRequestLoggedInUser);
   mockFetch.addGetFetchRequest("http://localhost:3000/mfa/settings.json?api-version=v2", mockGetRequestMfaSettings);
+  mockFetch.addPostFetchRequest("http://localhost:3000/mfa.json?api-version=v2", mockGetRequestMfaSettings);
 
   return mockFetch;
 };

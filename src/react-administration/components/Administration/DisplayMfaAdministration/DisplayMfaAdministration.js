@@ -19,6 +19,7 @@ import XRegExp from "xregexp";
 import {ApiClientOptions} from "../../../lib/apiClient/apiClientOptions";
 import {ApiClient} from "../../../lib/apiClient/apiClient";
 import Icon from "../../Common/Icons/Icon";
+import {withAdministrationWorkspace} from "../../../contexts/AdministrationWorkspaceContext";
 
 /**
  * This component allows to display the MFA for the administration
@@ -72,11 +73,31 @@ class DisplayMfaAdministration extends React.Component {
   }
 
   /**
+   * Whenever the component has updated in terms of props or state
+   * @param prevProps
+   */
+  async componentDidUpdate(prevProps) {
+    await this.handleMustSave(prevProps.administrationWorkspaceContext.mustSaveSettings);
+  }
+
+  /**
    * Bind callbacks methods
    */
   bindCallbacks() {
     this.handleCheckboxClick = this.handleCheckboxClick.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
+  }
+
+  /**
+   * Handle the must save change
+   * @param previousMustSaveSettings Previous must save settings
+   */
+  async handleMustSave(previousMustSaveSettings) {
+    const hasMustSaveChanged = this.props.administrationWorkspaceContext.mustSaveSettings !== previousMustSaveSettings;
+    if (hasMustSaveChanged && this.props.administrationWorkspaceContext.mustSaveSettings) {
+      await this.handleFormSubmit();
+      this.props.administrationWorkspaceContext.onResetSaveSettings();
+    }
   }
 
   /**
@@ -134,6 +155,7 @@ class DisplayMfaAdministration extends React.Component {
     const checked = target.checked;
     const name = target.name;
     this.setState({[name]: checked});
+    this.props.administrationWorkspaceContext.onSaveEnable();
   }
 
   /**
@@ -146,6 +168,7 @@ class DisplayMfaAdministration extends React.Component {
     const value = target.value;
     const name = target.name;
     this.setState({[name]: value});
+    this.props.administrationWorkspaceContext.onSaveEnable();
   }
 
   /**
@@ -210,7 +233,7 @@ class DisplayMfaAdministration extends React.Component {
       if (!yubikeySecretKey.length) {
         yubikeySecretKeyError = "A secret key is required.";
       } else if (!XRegExp("^[a-zA-Z0-9\\/=+]{10,128}$").test(yubikeySecretKey)) {
-        yubikeyClientIdentifierError = "This secret key is not valid.";
+        yubikeySecretKeyError = "This secret key is not valid.";
       }
     }
     return this.setState({yubikeyClientIdentifierError, yubikeySecretKeyError});
@@ -226,7 +249,7 @@ class DisplayMfaAdministration extends React.Component {
     let duoSaltError = null;
     let duoSecretKeyError = null;
 
-    if (this.isYubikeyChecked()) {
+    if (this.isDuoChecked()) {
       const duoHostname = this.state.duoHostname.trim();
       if (!duoHostname.length) {
         duoHostnameError = "A hostname is required.";
@@ -241,7 +264,7 @@ class DisplayMfaAdministration extends React.Component {
         duoIntegrationKeyError = "This is not a valid integration key.";
       }
 
-      const duoSalt = this.state.duoSecretKey.trim();
+      const duoSalt = this.state.duoSalt.trim();
       if (!duoSalt.length) {
         duoSaltError = "A salt is required.";
       } else if (!XRegExp("^.{40,128}$").test(duoSalt)) {
@@ -287,15 +310,11 @@ class DisplayMfaAdministration extends React.Component {
    * @params {ReactEvent} The react event
    * @returns {void}
    */
-  async handleFormSubmit(event) {
-    // Avoid the form to be submitted.
-    event.preventDefault();
-
+  async handleFormSubmit() {
     // Do not re-submit an already processing form
     if (!this.state.processing) {
       await this.toggleProcessing();
       await this.validate();
-
       if (this.hasValidationError()) {
         await this.toggleProcessing();
         return;
@@ -347,6 +366,7 @@ class DisplayMfaAdministration extends React.Component {
    */
   async handleSaveSuccess() {
     await this.props.actionFeedbackContext.displaySuccess("The multi factor authentication settings for the organization were updated.");
+    this.setState({processing: false});
   }
 
   /**
@@ -435,7 +455,7 @@ class DisplayMfaAdministration extends React.Component {
                   second factor authentication.
                 </p>
                 <div className="form-content">
-                  <div className="input text">
+                  <div className="input text required">
                     <label>Client identifier</label>
                     <input id="yubikeyClientIdentifier" type="text" name="yubikeyClientIdentifier" required="required" className="required fluid form-element ready" placeholder="123456789"
                       onChange={this.handleInputChange} value={this.state.yubikeyClientIdentifier} disabled={this.hasAllInputDisabled()}/>
@@ -443,7 +463,7 @@ class DisplayMfaAdministration extends React.Component {
                     <div className="yubikey_client_identifier message error">{this.state.yubikeyClientIdentifierError}</div>
                     }
                   </div>
-                  <div className="input text">
+                  <div className="input text required">
                     <label>Secret key</label>
                     <input id="yubikeySecretKey" name="yubikeySecretKey" required="required" className="required fluid form-element" placeholder="**********" type="password"
                       onChange={this.handleInputChange} value={this.state.yubikeySecretKey} disabled={this.hasAllInputDisabled()}/>
@@ -476,7 +496,7 @@ class DisplayMfaAdministration extends React.Component {
                   second factor authentication.
                 </p>
                 <div className="form-content">
-                  <div className="input text">
+                  <div className="input text required">
                     <label>Hostname</label>
                     <input id="duoHostname" type="text" name="duoHostname" required="required" className="required fluid form-element ready"
                       placeholder="api-24zlkn4.duosecurity.com" value={this.state.duoHostname}
@@ -485,7 +505,7 @@ class DisplayMfaAdministration extends React.Component {
                     <div className="duo_hostname message error">{this.state.duoHostnameError}</div>
                     }
                   </div>
-                  <div className="input text">
+                  <div className="input text required">
                     <label>Integration key</label>
                     <input id="duoIntegrationKey" type="text" name="duoIntegrationKey" required="required" className="required fluid form-element ready"
                       placeholder="HASJKDSQJO213123KQSLDF" value={this.state.duoIntegrationKey}
@@ -494,7 +514,7 @@ class DisplayMfaAdministration extends React.Component {
                     <div className="duo_integration_key message error">{this.state.duoIntegrationKeyError}</div>
                     }
                   </div>
-                  <div className="input text">
+                  <div className="input text required">
                     <label>Salt</label>
                     <input id="duoSalt" name="duoSalt" required="required" className="required fluid form-element ready" placeholder="**********" type="password"
                       value={this.state.duoSalt} onChange={this.handleInputChange} disabled={this.hasAllInputDisabled()}/>
@@ -502,7 +522,7 @@ class DisplayMfaAdministration extends React.Component {
                     <div className="duo_salt message error">{this.state.duoSaltError}</div>
                     }
                   </div>
-                  <div className="input text js_form_element_wrapper">
+                  <div className="input text required">
                     <label>Secret key</label>
                     <input id="duoSecretKey" name="duoSecretKey" required="required" className="required fluid form-element ready" placeholder="**********" type="password"
                       value={this.state.duoSecretKey} onChange={this.handleInputChange} disabled={this.hasAllInputDisabled()}/>
@@ -532,7 +552,8 @@ class DisplayMfaAdministration extends React.Component {
 DisplayMfaAdministration.contextType = AppContext;
 
 DisplayMfaAdministration.propTypes = {
+  administrationWorkspaceContext: PropTypes.object, // The administration workspace context
   actionFeedbackContext: PropTypes.any, // The action feedback context
 };
 
-export default withActionFeedback(DisplayMfaAdministration);
+export default withActionFeedback(withAdministrationWorkspace(DisplayMfaAdministration));
