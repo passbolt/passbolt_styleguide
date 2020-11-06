@@ -19,6 +19,14 @@ class MockFetch {
   async addPostFetchRequest(name, callback) {
     await fetchMock.post(name, callback);
   }
+
+  async addPutFetchRequest(name, callback) {
+    await fetchMock.put(name, callback);
+  }
+
+  async addDeleteFetchRequest(name, callback) {
+    await fetchMock.delete(name, callback);
+  }
 }
 
 export default MockFetch;

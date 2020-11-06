@@ -32,7 +32,7 @@ class DisplayMfaAdministration extends React.Component {
   constructor(props, context) {
     super(props);
     this.state = this.defaultState;
-    this.apiClient = new ApiClient(new ApiClientOptions().setBaseUrl(context.trustedDomain).setResourceName("mfa"));
+    this.apiClient = new ApiClient(new ApiClientOptions().setBaseUrl(context.trustedDomain).setResourceName("mfa/settings"));
     this.bindCallbacks();
   }
 
@@ -69,7 +69,7 @@ class DisplayMfaAdministration extends React.Component {
   }
 
   async componentDidMount() {
-    this.getMfaSettings();
+    this.findAllMfaSettings();
   }
 
   /**
@@ -84,7 +84,6 @@ class DisplayMfaAdministration extends React.Component {
    * Bind callbacks methods
    */
   bindCallbacks() {
-    this.handleCheckboxClick = this.handleCheckboxClick.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
   }
 
@@ -103,8 +102,8 @@ class DisplayMfaAdministration extends React.Component {
   /**
    * fetch the mfa settings
    */
-  async getMfaSettings() {
-    const result = await this.apiClient.get("settings");
+  async findAllMfaSettings() {
+    const result = await this.apiClient.findAll();
     const body = result.body;
     const providers = body.providers;
     // OTP
@@ -146,29 +145,25 @@ class DisplayMfaAdministration extends React.Component {
   }
 
   /**
-   * Handle form checkbox input changes.
-   * @params {ReactEvent} The react event
-   * @returns {void}
-   */
-  handleCheckboxClick(event) {
-    const target = event.target;
-    const checked = target.checked;
-    const name = target.name;
-    this.setState({[name]: checked});
-    this.props.administrationWorkspaceContext.onSaveEnable();
-  }
-
-  /**
    * Handle form input changes.
    * @params {ReactEvent} The react event
    * @returns {void}
    */
   handleInputChange(event) {
     const target = event.target;
-    const value = target.value;
+    const value = target.type === "checkbox" ? target.checked : target.value;
     const name = target.name;
     this.setState({[name]: value});
-    this.props.administrationWorkspaceContext.onSaveEnable();
+    this.handleEnabledSaveButton();
+  }
+
+  /**
+   * Handle enabled the save button
+   */
+  handleEnabledSaveButton() {
+    if (!this.props.administrationWorkspaceContext.isSaveEnabled) {
+      this.props.administrationWorkspaceContext.onSaveEnable();
+    }
   }
 
   /**
@@ -334,12 +329,12 @@ class DisplayMfaAdministration extends React.Component {
    */
   async saveMfa() {
     const providers = [];
-    if(this.state.totpProviderToggle) {
+    if (this.state.totpProviderToggle) {
       providers.push("totp");
     }
 
     let yubikey = null;
-    if(this.state.yubikeyToggle) {
+    if (this.state.yubikeyToggle) {
       providers.push("yubikey");
       yubikey = {
         clientId: this.state.yubikeyClientIdentifier,
@@ -349,7 +344,7 @@ class DisplayMfaAdministration extends React.Component {
     }
 
     let duo = null;
-    if(this.state.duoToggle) {
+    if (this.state.duoToggle) {
       providers.push("duo");
       duo = {
         hostName: this.state.duoHostname,
@@ -415,7 +410,7 @@ class DisplayMfaAdministration extends React.Component {
               <h3>
                 <span className="input toggle-switch form-element ready">
                   <input id="totp-provider-toggle-button" type="checkbox" className="toggle-switch-checkbox checkbox" name="totpProviderToggle"
-                    onChange={this.handleCheckboxClick} checked={this.state.totpProviderToggle} disabled={this.hasAllInputDisabled()}/>
+                    onChange={this.handleInputChange} checked={this.state.totpProviderToggle} disabled={this.hasAllInputDisabled()}/>
                   <label className="toggle-switch-button" htmlFor="totp-provider-toggle-button"/>
                 </span>
                 <label>Time-based One Time Password</label>
@@ -437,7 +432,7 @@ class DisplayMfaAdministration extends React.Component {
               <h3>
                 <span className="input toggle-switch form-element">
                   <input id="yubikey-provider-toggle-button" type="checkbox" className="toggle-switch-checkbox checkbox" name="yubikeyToggle"
-                    onChange={this.handleCheckboxClick} checked={this.state.yubikeyToggle} disabled={this.hasAllInputDisabled()}/>
+                    onChange={this.handleInputChange} checked={this.state.yubikeyToggle} disabled={this.hasAllInputDisabled()}/>
                   <label className="toggle-switch-button" htmlFor="yubikey-provider-toggle-button"/>
                 </span>
                 <label>Yubikey</label>
@@ -479,7 +474,7 @@ class DisplayMfaAdministration extends React.Component {
               <h3>
                 <span className="input toggle-switch form-element ready">
                   <input id="duo-provider-toggle-button" type="checkbox" className="toggle-switch-checkbox checkbox" name="duoToggle"
-                    onChange={this.handleCheckboxClick} checked={this.state.duoToggle} disabled={this.hasAllInputDisabled()}/>
+                    onChange={this.handleInputChange} checked={this.state.duoToggle} disabled={this.hasAllInputDisabled()}/>
                   <label className="toggle-switch-button" htmlFor="duo-provider-toggle-button"/>
                 </span>
                 <label>Duo</label>

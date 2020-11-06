@@ -23,6 +23,8 @@ import UserBadgeMenu from "../../../react/components/Common/Navigation/Header/Us
 import DisplayAdministrationMenu from "./DisplayAdministrationMenu/DisplayAdministrationMenu";
 import DisplayMfaAdministration from "./DisplayMfaAdministration/DisplayMfaAdministration";
 import DisplayAdministrationWorkspaceActions from "./DisplayAdministartionWorkspaceActions/DisplayUserWorkspaceActions";
+import DisplayUserDirectoryAdministration
+  from "./DisplayUserDirectoryAdministration/DisplayUserDirectoryAdministration";
 
 class AdministrationWorkspace extends Component {
 
@@ -32,6 +34,14 @@ class AdministrationWorkspace extends Component {
    */
   isMfaSelected() {
     return AdministrationWorkspaceMenuTypes.MFA === this.props.administrationWorkspaceContext.selectedAdministration;
+  }
+
+  /**
+   * If User directory menu is selected
+   * @returns {boolean}
+   */
+  isUserDirectorySelected() {
+    return AdministrationWorkspaceMenuTypes.USER_DIRECTORY === this.props.administrationWorkspaceContext.selectedAdministration;
   }
 
   render() {
@@ -60,6 +70,9 @@ class AdministrationWorkspace extends Component {
                   <div className="grid grid-responsive-12">
                     {this.isMfaSelected() &&
                     <DisplayMfaAdministration/>
+                    }
+                    {this.isUserDirectorySelected() &&
+                    <DisplayUserDirectoryAdministration/>
                     }
                   </div>
                 </div>

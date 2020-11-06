@@ -38,6 +38,7 @@ class DisplayAdministrationMenu extends React.Component {
    */
   bindCallbacks() {
     this.handleMfaClick = this.handleMfaClick.bind(this);
+    this.handleUserDirectoryClick = this.handleUserDirectoryClick.bind(this);
   }
 
   /**
@@ -48,11 +49,26 @@ class DisplayAdministrationMenu extends React.Component {
   }
 
   /**
+   * Handle when the user click on the user directory menu
+   */
+  handleUserDirectoryClick() {
+    this.props.history.push({pathname: '/app/administration/users-directory'});
+  }
+
+  /**
    * If MFA menu is selected
    * @returns {boolean}
    */
   isMfaSelected() {
     return AdministrationWorkspaceMenuTypes.MFA === this.props.administrationWorkspaceContext.selectedAdministration;
+  }
+
+  /**
+   * If User Directory menu is selected
+   * @returns {boolean}
+   */
+  isUserDirectorySelected() {
+    return AdministrationWorkspaceMenuTypes.USER_DIRECTORY === this.props.administrationWorkspaceContext.selectedAdministration;
   }
 
   /**
@@ -68,6 +84,15 @@ class DisplayAdministrationMenu extends React.Component {
               <div className="main-cell-wrapper">
                 <div className="main-cell">
                   <a onClick={this.handleMfaClick}><span>Multi Factor Authentication</span></a>
+                </div>
+              </div>
+            </div>
+          </li>
+          <li id="user_directory_menu">
+            <div className={`row  ${this.isUserDirectorySelected() ? "selected" : ""}`}>
+              <div className="main-cell-wrapper">
+                <div className="main-cell">
+                  <a onClick={this.handleUserDirectoryClick}><span>Users Directory</span></a>
                 </div>
               </div>
             </div>
