@@ -415,7 +415,7 @@ class UserWorkspaceContextProvider extends React.Component {
       if (isGroupStillExist) { // Case of group exists but may have somme applied changes on it
         const updatedGroup = this.groups.find(group => group.id === this.state.filter.payload.group.id);
         const filter = Object.assign(this.state.filter, {payload: {group: updatedGroup}});
-        await this.setState({filter});
+        await this.search(filter);
       } else { // Case of filter group deleted
         const filter = {type: UserWorkspaceFilterTypes.ALL};
         this.props.history.push({pathname: '/app/users', state: {filter}});
