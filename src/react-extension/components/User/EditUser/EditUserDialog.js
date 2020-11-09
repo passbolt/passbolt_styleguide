@@ -68,6 +68,15 @@ class EditUserDialog extends Component {
   }
 
   /**
+   * Returns true if the editing user is actually the logged in user
+   */
+  get isLoggedInUserAsEditing() {
+    return this.context.editUserDialogProps &&
+      this.context.loggedInUser &&
+      this.context.editUserDialogProps.id === this.context.loggedInUser.id;
+  }
+
+  /**
    * Create references
    * @returns {void}
    */
@@ -177,8 +186,8 @@ class EditUserDialog extends Component {
    */
   async handleSaveSuccess() {
     await this.props.actionFeedbackContext.displaySuccess("The user has been updated successfully");
+    await this.updateLoggedInUserIfNeeded();
     this.props.onClose();
-    this.context.setContext({editUserDialogProps: null});
   }
 
   /**
@@ -247,6 +256,20 @@ class EditUserDialog extends Component {
       role_id: role.id
     };
     return await this.context.port.request("passbolt.users.update", userDto);
+  }
+
+  /**
+   * Update the logged in user if he actually edited himself
+   */
+  async updateLoggedInUserIfNeeded() {
+    const newContext = {editUserDialogProps: null};
+    if (this.isLoggedInUserAsEditing) {
+      newContext.loggedInUser = Object.assign({}, this.context.loggedInUser);
+      newContext.loggedInUser.profile.first_name = this.state.first_name;
+      newContext.loggedInUser.profile.last_name = this.state.last_name;
+      newContext.loggedInUser.username = this.state.username;
+    }
+    await this.context.setContext(newContext);
   }
 
   /**
@@ -349,7 +372,13 @@ class EditUserDialog extends Component {
             <div className="input checkbox required">
               <label htmlFor="is_admin">Role</label>
               <div id="is_admin">
-                <input id="is_admin_checkbox" name="is_admin" onChange={this.handleCheckboxClick} checked={this.state.is_admin} type="checkbox"/>
+                <input
+                  id="is_admin_checkbox"
+                  name="is_admin"
+                  disabled={this.isLoggedInUserAsEditing}
+                  onChange={this.handleCheckboxClick}
+                  checked={this.state.is_admin}
+                  type="checkbox"/>
                 <span> This user is an administrator</span>
               </div>
               <div className="message helptext">Note: Administrators can add and delete users. They can also create
