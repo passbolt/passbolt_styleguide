@@ -13,7 +13,7 @@
  */
 
 /**
- * Unit tests on CreateUserDialog in regard of specifications
+ * Unit tests on DisplayMfaAdministration in regard of specifications
  */
 import {defaultAppContext, defaultProps, mockMfaSettings} from "./DisplayMfaAdministration.test.data";
 import fetchMock from "fetch-mock-jest";

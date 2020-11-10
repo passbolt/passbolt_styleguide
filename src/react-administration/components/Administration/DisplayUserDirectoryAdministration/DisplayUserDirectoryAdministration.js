@@ -20,6 +20,9 @@ import {ApiClient} from "../../../lib/apiClient/apiClient";
 import Icon from "../../Common/Icons/Icon";
 import {withAdministrationWorkspace} from "../../../contexts/AdministrationWorkspaceContext";
 import XRegExp from "xregexp";
+import DisplayTestUserDirectoryAdministrationDialog
+  from "../DisplayTestUserDirectoryAdministration/DisplayTestUserDirectoryAdministrationDialog";
+import {withDialog} from "../../../contexts/Common/DialogContext";
 
 /**
  * This component allows to display the MFA for the administration
@@ -103,15 +106,16 @@ class DisplayUserDirectoryAdministration extends React.Component {
   }
 
   componentWillUnmount() {
-    document.removeEventListener('click', this.handleEditorClickEvent);
+    document.removeEventListener('click', this.handleUserDirectoryClickEvent);
   }
 
   /**
    * Whenever the component has updated in terms of props or state
    * @param prevProps
    */
-  async componentDidUpdate(prevProps) {
-    await this.handleMustSave(prevProps.administrationWorkspaceContext.mustSaveSettings);
+  async componentDidUpdate(prevProps, prevState) {
+    await this.handleEnabledTestButton(prevState.userDirectoryToggle);
+    await this.handleMustSubmit(prevProps.administrationWorkspaceContext);
   }
 
   /**
@@ -144,15 +148,26 @@ class DisplayUserDirectoryAdministration extends React.Component {
   }
 
   /**
+   * Handle the userDirectoryToggle change
+   * @param previousUserDirectoryToggle Previous userDirectoryToggle settings
+   */
+  handleEnabledTestButton(previousUserDirectoryToggle) {
+    const hasPreviousUserDirectoryToggleChanged = this.state.userDirectoryToggle !== previousUserDirectoryToggle;
+    if (hasPreviousUserDirectoryToggleChanged) {
+      this.props.administrationWorkspaceContext.onTestEnabled(this.state.userDirectoryToggle);
+    }
+  }
+
+  /**
    * Handle click events on UserDirectory component. Hide the component if the click occurred outside of the component.
    * @param {ReactEvent} event The event
    */
   handleUserDirectoryClickEvent(event) {
     // Prevent stop editing when the user click on an element of the editor
-    if (!this.defaultAdminRef.current.contains(event.target)) {
+    if (this.defaultAdminRef.current!== null && !this.defaultAdminRef.current.contains(event.target)) {
       this.setState({openDefaultAdmin: false});
     }
-    if (!this.defaultGroupAdminRef.current.contains(event.target)) {
+    if (this.defaultGroupAdminRef.current!== null && !this.defaultGroupAdminRef.current.contains(event.target)) {
       this.setState({openDefaultGroupAdmin: false});
     }
   }
@@ -166,14 +181,16 @@ class DisplayUserDirectoryAdministration extends React.Component {
   }
 
   /**
-   * Handle the must save change
-   * @param previousMustSaveSettings Previous must save settings
+   * Handle the must submit
+   * @param previousAdministrationWorkspaceContext Previous administration workspace context settings
    */
-  async handleMustSave(previousMustSaveSettings) {
-    const hasMustSaveChanged = this.props.administrationWorkspaceContext.mustSaveSettings !== previousMustSaveSettings;
-    if (hasMustSaveChanged && this.props.administrationWorkspaceContext.mustSaveSettings) {
+  async handleMustSubmit(previousAdministrationWorkspaceContext) {
+    const hasMustSaveChanged = this.props.administrationWorkspaceContext.mustSaveSettings !== previousAdministrationWorkspaceContext.mustSaveSettings;
+    const hasMustTestChanged = this.props.administrationWorkspaceContext.mustTestSettings !== previousAdministrationWorkspaceContext.mustTestSettings;
+    if ( (hasMustSaveChanged && this.props.administrationWorkspaceContext.mustSaveSettings)
+      || (hasMustTestChanged && this.props.administrationWorkspaceContext.mustTestSettings)) {
       await this.handleFormSubmit();
-      this.props.administrationWorkspaceContext.onResetSaveSettings();
+      this.props.administrationWorkspaceContext.onResetActionsSettings();
     }
   }
 
@@ -248,6 +265,7 @@ class DisplayUserDirectoryAdministration extends React.Component {
         deleteGroups,
         updateGroups
       });
+      this.props.administrationWorkspaceContext.onTestEnabled(userDirectoryToggle);
     } else {
       const userLogged = users.find(user => this.context.loggedInUser.id === user.id)
       defaultAdmin = userLogged.id;
@@ -376,7 +394,7 @@ class DisplayUserDirectoryAdministration extends React.Component {
    */
   handleEnabledSaveButton() {
     if (!this.props.administrationWorkspaceContext.isSaveEnabled) {
-      this.props.administrationWorkspaceContext.onSaveEnable();
+      this.props.administrationWorkspaceContext.onSaveEnabled();
     }
   }
 
@@ -495,8 +513,13 @@ class DisplayUserDirectoryAdministration extends React.Component {
         return;
       }
       try {
-        await this.saveUserDirectory();
-        await this.handleSaveSuccess();
+        if (this.props.administrationWorkspaceContext.mustSaveSettings) {
+          await this.saveUserDirectory();
+          await this.handleSaveSuccess();
+        } else if (this.props.administrationWorkspaceContext.mustTestSettings) {
+          await this.testUserDirectory();
+        }
+        this.setState({processing: false});
       } catch (error) {
         await this.handleSaveError(error);
       }
@@ -563,7 +586,7 @@ class DisplayUserDirectoryAdministration extends React.Component {
   }
 
   /**
-   * save MFA settings
+   * save user directory settings
    * @returns {Promise<*>}
    */
   async saveUserDirectory() {
@@ -579,11 +602,22 @@ class DisplayUserDirectoryAdministration extends React.Component {
   }
 
   /**
+   * test user directory settings
+   */
+  async testUserDirectory() {
+    const result = await this.apiClientDirectory.create(this.createUserDirectoryDTO());
+    const displayTestUserDirectoryDialogProps = {
+      userDirectoryTestResult: result.body
+    };
+    this.context.setContext({displayTestUserDirectoryDialogProps});
+    this.props.dialogContext.open(DisplayTestUserDirectoryAdministrationDialog);
+  }
+
+  /**
    * Handle save operation success.
    */
   async handleSaveSuccess() {
     await this.props.actionFeedbackContext.displaySuccess("The multi factor authentication settings for the organization were updated.");
-    this.setState({processing: false});
   }
 
   /**
@@ -1094,6 +1128,7 @@ DisplayUserDirectoryAdministration.contextType = AppContext;
 DisplayUserDirectoryAdministration.propTypes = {
   administrationWorkspaceContext: PropTypes.object, // The administration workspace context
   actionFeedbackContext: PropTypes.any, // The action feedback context
+  dialogContext: PropTypes.any // The dialog context
 };
 
-export default withActionFeedback(withAdministrationWorkspace(DisplayUserDirectoryAdministration));
+export default withActionFeedback(withDialog(withAdministrationWorkspace(DisplayUserDirectoryAdministration)));

@@ -4826,10 +4826,6 @@ h6 .input.toggle-switch {
   display: inline;
   border-bottom: 0;
 }
-.dialog .accordion.closed .accordion-header a:before {
-  content: "\f0da";
-  /* caret right */
-}
 .accordion.sidebar-section .accordion-header a {
   border: 0;
 }
@@ -4851,10 +4847,6 @@ h6 .input.toggle-switch {
   height: 1em;
   position: absolute;
   text-align: center;
-}
-.accordion.navigation.closed .accordion-header .main-cell a:before {
-  content: "\f0da";
-  /* caret right */
 }
 .accordion.navigation .accordion-content > .empty-content {
   padding: 0 0 0 2.5em;
@@ -9401,6 +9393,32 @@ table.table-info.horizontal tbody tr:hover {
   border-top-left-radius: 0;
   border-bottom-left-radius: 0;
 }
+.ldap-test-settings-report div.directory-structure {
+  border: 1px solid #8B8B89;
+  padding: 0.5em 0 0.5em 0.5em;
+}
+.ldap-test-settings-report div.directory-structure > ul > li {
+  margin-left: 0.5em;
+}
+.ldap-test-settings-report div.directory-structure ul {
+  font-size: 0.8rem;
+  list-style-type: square;
+  list-style-position: inside;
+}
+.ldap-test-settings-report div.directory-structure ul li {
+  margin-left: 1em;
+}
+.ldap-test-settings-report div.directory-structure ul li em {
+  color: #606060;
+  font-size: 0.8em;
+}
+.ldap-test-settings-report div.directory-structure ul li.user {
+  font-weight: normal;
+  list-style-type: circle;
+}
+.ldap-test-settings-report div.directory-structure ul li.group {
+  font-weight: bold;
+}
 /*
  * Password workspace
  */
@@ -9752,4 +9770,23 @@ table.table-info.horizontal tbody tr:hover {
   top: 2.125em;
   padding: 0;
   overflow-y: scroll;
+}
+.page.administration .ldap-settings.enabled .form-content {
+  display: block;
+}
+.dialog .ldap-test-settings-report .directory-list span.error {
+  color: #D40101;
+}
+.dialog .ldap-test-settings-report p.directory-errors.error {
+  padding: 1em 0 0 0;
+  color: #D40101;
+}
+.dialog .ldap-test-settings-report .accordion-directory-structure .error {
+  color: #D40101;
+}
+.dialog .ldap-test-settings-report .accordion-directory-errors textarea {
+  font-family: "Courier New", Courier, monospace;
+  font-size: 11px;
+  overflow: auto;
+  height: 220px;
 }

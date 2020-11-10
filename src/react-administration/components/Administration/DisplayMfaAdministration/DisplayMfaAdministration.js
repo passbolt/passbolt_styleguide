@@ -95,7 +95,7 @@ class DisplayMfaAdministration extends React.Component {
     const hasMustSaveChanged = this.props.administrationWorkspaceContext.mustSaveSettings !== previousMustSaveSettings;
     if (hasMustSaveChanged && this.props.administrationWorkspaceContext.mustSaveSettings) {
       await this.handleFormSubmit();
-      this.props.administrationWorkspaceContext.onResetSaveSettings();
+      this.props.administrationWorkspaceContext.onResetActionsSettings();
     }
   }
 
@@ -162,7 +162,7 @@ class DisplayMfaAdministration extends React.Component {
    */
   handleEnabledSaveButton() {
     if (!this.props.administrationWorkspaceContext.isSaveEnabled) {
-      this.props.administrationWorkspaceContext.onSaveEnable();
+      this.props.administrationWorkspaceContext.onSaveEnabled();
     }
   }
 

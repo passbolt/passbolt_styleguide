@@ -14,12 +14,10 @@
 import {fireEvent, render, waitFor} from "@testing-library/react";
 import AppContext from "../../../contexts/AppContext";
 import React from "react";
-import ManageDialogs from "../../../../react/components/Common/Dialog/ManageDialogs/ManageDialogs";
-import DialogContextProvider from "../../../../react/contexts/Common/DialogContext";
 import DisplayUserDirectoryAdministration from "./DisplayUserDirectoryAdministration";
 
 /**
- * The CreateUserDialog component represented as a page
+ * The DisplayUserDirectoryAdministration component represented as a page
  */
 export default class DisplayUserDirectoryAdministrationPage {
   /**

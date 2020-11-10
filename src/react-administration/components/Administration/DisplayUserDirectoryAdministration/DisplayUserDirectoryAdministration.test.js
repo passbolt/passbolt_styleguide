@@ -13,7 +13,7 @@
  */
 
 /**
- * Unit tests on CreateUserDialog in regard of specifications
+ * Unit tests on DisplayUserDirectoryAdministration in regard of specifications
  */
 import {
   defaultAppContext,

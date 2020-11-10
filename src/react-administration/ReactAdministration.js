@@ -22,6 +22,9 @@ import {ApiClientOptions} from "./lib/apiClient/apiClientOptions";
 import AdministrationWorkspace from "./components/Administration/AdministrationWorkspace";
 import ActionFeedbackContextProvider from "../react-extension/contexts/ActionFeedbackContext";
 import ShareActionFeedbacks from "../react-extension/components/Share/ShareActionFeedbacks";
+import ManageDialogs from "../react/components/Common/Dialog/ManageDialogs/ManageDialogs";
+import ManageContextualMenu from "../react-extension/components/ManageContextualMenu";
+import ResourceWorkspaceContextProvider from "../react-extension/contexts/ResourceWorkspaceContext";
 
 class ReactAdministration extends Component {
   constructor(props) {
@@ -39,6 +42,14 @@ class ReactAdministration extends Component {
     return {
       loggedInUser: null, // The logged in user
       trustedDomain: window.location.origin,
+
+      displayTestUserDirectoryDialogProps: {
+        userDirectoryTestResult: null, // The result of the test user directory
+      },
+
+      setContext: context => {
+        this.setState(context);
+      },
       setLoggedInUser: () => {
       }, // Set the logged in user
     };
@@ -74,6 +85,8 @@ class ReactAdministration extends Component {
                 <Switch>
                   <Route path="/app/administration">
                     <AdministrationWorkspaceContextProvider>
+                      <ManageDialogs/>
+                      <ManageContextualMenu/>
                       <AdministrationWorkspace/>
                     </AdministrationWorkspaceContextProvider>
                   </Route>

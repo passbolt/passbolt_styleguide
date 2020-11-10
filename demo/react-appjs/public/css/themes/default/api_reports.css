@@ -8210,10 +8210,6 @@ table.table-info.horizontal tbody tr:hover {
   display: inline;
   border-bottom: 0;
 }
-.dialog .accordion.closed .accordion-header a:before {
-  content: "\f0da";
-  /* caret right */
-}
 .accordion.sidebar-section .accordion-header a {
   border: 0;
 }
@@ -8235,10 +8231,6 @@ table.table-info.horizontal tbody tr:hover {
   height: 1em;
   position: absolute;
   text-align: center;
-}
-.accordion.navigation.closed .accordion-header .main-cell a:before {
-  content: "\f0da";
-  /* caret right */
 }
 .accordion.navigation .accordion-content > .empty-content {
   padding: 0 0 0 2.5em;
@@ -9739,19 +9731,7 @@ html.launching .launching-screen p {
 .page.administration .mfa-settings .provider-section.enabled .description.enabled {
   display: block;
 }
-.page.administration .ldap-settings .description.enabled {
-  display: none;
-}
-.page.administration .ldap-settings .form-content {
-  display: none;
-}
 .page.administration .ldap-settings.enabled .form-content {
-  display: block;
-}
-.page.administration .ldap-settings.enabled .description.disabled {
-  display: none;
-}
-.page.administration .ldap-settings.enabled .description.enabled {
   display: block;
 }
 .dialog .ldap-test-settings-report .directory-list span.error {
