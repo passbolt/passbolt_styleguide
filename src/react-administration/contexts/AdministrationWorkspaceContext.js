@@ -23,12 +23,16 @@ export const AdministrationWorkspaceContext = React.createContext({
   selectedAdministration: null, // The current menu administration selected
   isSaveEnabled: false, // If the button save settings is enable
   mustSaveSettings: false, // Must save settings
-  isTestEnabled: false, // If the button save settings is enable
-  mustTestSettings: false, // Must save settings
+  isTestEnabled: false, // If the button test settings is enable
+  mustTestSettings: false, // Must test settings
+  isSynchronizeEnabled: false, // If the button synchronize settings is enable
+  mustSynchronizeSettings: false, // Must synchronize settings
+  mustSimulateSynchronizeSettings: false, // Must simulate synchronize settings
   onSaveEnabled: () => {}, // Whenever a user change settings
   onMustSaveSettings: () => {}, // Whenever a user wants save settings
   onTestEnabled: () => {}, // Whenever a user change settings
   onMustTestSettings: () => {}, // Whenever a user wants save settings
+  onSynchronizeEnabled: () => {}, // Whenever a user have settings to be synchronized
   onResetActionsSettings: () => {}, // Reset states after a user do an action for the settings
 });
 
@@ -54,12 +58,16 @@ class AdministrationWorkspaceContextProvider extends React.Component {
       selectedAdministration: AdministrationWorkspaceMenuTypes.NONE, // The current menu administration selected
       isSaveEnabled: false, // If the button save settings is enable
       mustSaveSettings: false, // Must save settings
-      isTestEnabled: false, // If the button save settings is enable
-      mustTestSettings: false, // Must save settings
+      isTestEnabled: false, // If the button test settings is enable
+      mustTestSettings: false, // Must test settings
+      isSynchronizeEnabled: false, // If the button synchronize settings is enable
+      mustSynchronizeSettings: false, // Must synchronize settings
+      mustSimulateSynchronizeSettings: false, // Must simulate synchronize settings
       onSaveEnabled: this.handleSaveEnabled.bind(this), // Whenever a user change settings
       onMustSaveSettings: this.handleMustSaveSettings.bind(this), // Whenever a user wants save settings
-      onTestEnabled: this.handleTestEnabled.bind(this), // Whenever a user have settings saved
+      onTestEnabled: this.handleTestEnabled.bind(this), // Whenever a user have settings to be tested
       onMustTestSettings: this.handleMustTestSettings.bind(this), // Whenever a user wants test settings
+      onSynchronizeEnabled: this.handleSynchronizeEnabled.bind(this), // Whenever a user have settings to be synchronized
       onResetActionsSettings: this.handleResetActionsSettings.bind(this), // Reset states after a user do an action for the settings
     };
   }
@@ -80,7 +88,7 @@ class AdministrationWorkspaceContextProvider extends React.Component {
   }
 
   /**
-   * Handle save enable
+   * Handle save enabled
    */
   async handleSaveEnabled() {
     await this.setState({isSaveEnabled: true});
@@ -94,24 +102,31 @@ class AdministrationWorkspaceContextProvider extends React.Component {
   }
 
   /**
-   * Handle test enable
+   * Handle test enabled
    */
   async handleTestEnabled(boolean) {
     await this.setState({isTestEnabled: boolean});
   }
 
   /**
-   * Handle must save settings
+   * Handle must test settings
    */
   async handleMustTestSettings() {
     await this.setState({mustTestSettings: true});
   }
 
   /**
+   * Handle synchronize enabled
+   */
+  async handleSynchronizeEnabled(boolean) {
+    await this.setState({isSynchronizeEnabled: boolean});
+  }
+
+  /**
    * Handle reset state settings
    */
   async handleResetActionsSettings() {
-    await this.setState({mustSaveSettings: false, mustTestSettings: false});
+    await this.setState({mustSaveSettings: false, mustTestSettings: false, mustSynchronizeSettings: false, mustSimulateSynchronizeSettings: false});
   }
 
   /**
@@ -136,8 +151,9 @@ class AdministrationWorkspaceContextProvider extends React.Component {
     const mustSaveSettings = false;
     const isTestEnabled = false;
     const mustTestSettings = false;
-    let selectedAdministration;
+    const isSynchronizeEnabled = false;
 
+    let selectedAdministration;
     if (isMfaLocation) {
       selectedAdministration = AdministrationWorkspaceMenuTypes.MFA;
     } else if (isUserDirectoryLocation) {
@@ -145,7 +161,7 @@ class AdministrationWorkspaceContextProvider extends React.Component {
     } else if (isEmailNotificationLocation) {
       selectedAdministration =  AdministrationWorkspaceMenuTypes.EMAIL_NOTIFICATION;
     }
-    await this.setState({selectedAdministration, isSaveEnabled, mustSaveSettings, isTestEnabled, mustTestSettings});
+    await this.setState({selectedAdministration, isSaveEnabled, mustSaveSettings, isTestEnabled, mustTestSettings, isSynchronizeEnabled});
   }
 
 

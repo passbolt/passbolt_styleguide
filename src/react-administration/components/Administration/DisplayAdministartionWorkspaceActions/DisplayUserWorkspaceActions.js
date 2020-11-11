@@ -87,6 +87,13 @@ class DisplayAdministrationWorkspaceActions extends React.Component {
   }
 
   /**
+   * Is save button enable
+   */
+  isSynchronizeEnabled() {
+    return this.props.administrationWorkspaceContext.isSynchronizeEnabled;
+  }
+
+  /**
    * Render the component
    * @returns {JSX}
    */

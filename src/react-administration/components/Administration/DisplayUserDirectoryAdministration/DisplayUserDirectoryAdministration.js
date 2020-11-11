@@ -64,7 +64,7 @@ class DisplayUserDirectoryAdministration extends React.Component {
       connectionType: "plain",
       host: "",
       hostError: null,
-      port: 389,
+      port: "389",
       portError: null,
       username: "",
       password: "",
@@ -266,6 +266,7 @@ class DisplayUserDirectoryAdministration extends React.Component {
         updateGroups
       });
       this.props.administrationWorkspaceContext.onTestEnabled(userDirectoryToggle);
+      this.props.administrationWorkspaceContext.onSynchronizeEnabled(userDirectoryToggle);
     } else {
       const userLogged = users.find(user => this.context.loggedInUser.id === user.id)
       defaultAdmin = userLogged.id;
@@ -593,10 +594,12 @@ class DisplayUserDirectoryAdministration extends React.Component {
     if (this.state.userDirectoryToggle) {
       // TODO check how put with id and not a new each time
       await this.apiClientDirectory.update("ad981925-cee5-40aa-8cb9-c3cc9c0886cf",this.createUserDirectoryDTO());
+      this.props.administrationWorkspaceContext.onSynchronizeEnabled(true);
     } else {
       this.setState(this.defaultState);
       // TODO check how delete the correct configuration
       await this.apiClientDirectory.delete("ad981925-cee5-40aa-8cb9-c3cc9c0886cf");
+      this.props.administrationWorkspaceContext.onSynchronizeEnabled(false);
       this.setState({loading: false});
     }
   }
