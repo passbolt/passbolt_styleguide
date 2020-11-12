@@ -18,6 +18,8 @@ import Icon from "../../../../react/components/Common/Icons/Icon";
 import {withUserWorkspace} from "../../../contexts/UserWorkspaceContext";
 import AppContext from "../../../contexts/AppContext";
 import DisplayUserGroupDetailsMembersGroupMember from "./DisplayUserGroupDetailsMembersGroupMember";
+import EditUserGroup from "../EditUserGroup/EditUserGroup";
+import {withDialog} from "../../../contexts/Common/DialogContext";
 
 /**
  * This component displays the group details about members
@@ -47,6 +49,7 @@ class DisplayUserGroupDetailsMembers extends React.Component {
    */
   bindHandlers() {
     this.handleTitleClicked = this.handleTitleClicked.bind(this);
+    this.handleEditGroup = this.handleEditGroup.bind(this);
   }
 
   /**
@@ -68,6 +71,14 @@ class DisplayUserGroupDetailsMembers extends React.Component {
    */
   handleTitleClicked() {
     this.setState({open: !this.state.open});
+  }
+
+  /**
+   * Whenever the user wants to edit the current group
+   */
+  async handleEditGroup() {
+    await this.props.userWorkspaceContext.onGroupToEdit(this.group);
+    this.props.dialogContext.open(EditUserGroup);
   }
 
   /**
@@ -93,7 +104,11 @@ class DisplayUserGroupDetailsMembers extends React.Component {
             </a>
           </h4>
         </div>
-        <ul className="accordion-content">
+        <div className="accordion-content">
+          <a className="section-action" onClick={this.handleEditGroup}>
+            <Icon name="edit"></Icon>
+            <span className="visuallyhidden">edit</span>
+          </a>
           {this.isLoading() &&
           <div className="processing-wrapper">
             <span className="processing-text">Retrieving group members</span>
@@ -104,7 +119,7 @@ class DisplayUserGroupDetailsMembers extends React.Component {
             <DisplayUserGroupDetailsMembersGroupMember key={groupUser.id} groupUser={groupUser}/>
           ))
           }
-        </ul>
+        </div>
       </div>
     );
   }
@@ -112,7 +127,8 @@ class DisplayUserGroupDetailsMembers extends React.Component {
 
 DisplayUserGroupDetailsMembers.contextType = AppContext;
 DisplayUserGroupDetailsMembers.propTypes = {
-  userWorkspaceContext: PropTypes.object // The user workspace context
+  userWorkspaceContext: PropTypes.object, // The user workspace context
+  dialogContext: PropTypes.object // The dialog context
 };
 
-export default withUserWorkspace(DisplayUserGroupDetailsMembers);
+export default withDialog(withUserWorkspace(DisplayUserGroupDetailsMembers));

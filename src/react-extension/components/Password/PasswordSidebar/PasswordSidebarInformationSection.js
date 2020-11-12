@@ -248,7 +248,7 @@ class PasswordSidebarInformationSection extends React.Component {
             </div>
           </li>
           <li className="uri">
-            <span className="label">URL</span>
+            <span className="label">URI</span>
             <span className="value"><a href={safeUri} target="_blank" rel="noopener noreferrer">{this.resource.uri}</a></span>
           </li>
           <li className="modified">

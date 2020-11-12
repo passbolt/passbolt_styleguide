@@ -8865,6 +8865,21 @@ table.table-info.horizontal tbody tr:hover {
 .delete-group-dialog .ownership-transfer li select {
   width: 100%;
 }
+/* update avatar dialogs */
+.update-avatar-dialog .input-file-chooser-wrapper input[type="file"] {
+  display: none;
+}
+.update-avatar-dialog .input-file-chooser-wrapper input[type="text"] {
+  width: 60%;
+  text-overflow: ellipsis;
+}
+.update-avatar-dialog .input-file-chooser-wrapper .button.primary {
+  display: inline-block;
+  top: -3px;
+  padding: 0.6em 1.225em 0.55em 1.225em;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
 /*
  * Password workspace
  */
@@ -9004,4 +9019,209 @@ table.table-info.horizontal tbody tr:hover {
     font-size: 1.2em;
     line-height: 1.8em;
   }
+}
+/* TODO replace by page level selector */
+.page.settings .main.panel .middle {
+  overflow-y: auto;
+}
+.page.settings .profile-detailed-information {
+  /*
+     * For IE 6/7 only
+     * Include this rule to trigger hasLayout and contain floats.
+     */
+  /*
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
+  /*
+     * For IE 6/7 only
+     * Include this rule to trigger hasLayout and contain floats.
+     */
+  zoom: 1;
+  /*
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
+}
+.page.settings .profile-detailed-information:before,
+.page.settings .profile-detailed-information:after {
+  content: "";
+  display: table;
+}
+.page.settings .profile-detailed-information:after {
+  clear: both;
+}
+.page.settings .profile-detailed-information:before,
+.page.settings .profile-detailed-information:after {
+  content: "";
+  display: table;
+}
+.page.settings .profile-detailed-information:after {
+  clear: both;
+}
+.page.settings .profile-detailed-information .avatar {
+  float: left;
+}
+.page.settings .profile-detailed-information .avatar img {
+  border: 1px solid #DDD;
+  padding: 0;
+  width: 12.5em;
+  height: 12.5em;
+  margin: 0.5em 1em 0 0;
+}
+.page.settings .profile-detailed-information .avatar .edit {
+  width: 12.5em;
+  height: 3.125em;
+  background-color: rgba(0, 0, 0, 0.7);
+  border: 1px solid transparent;
+  color: #FFF;
+  margin: -3.25em 0 2em 0;
+  position: relative;
+}
+.page.settings .profile-detailed-information .avatar .edit a {
+  color: #FFF;
+  display: block;
+  height: 3.125em;
+  /*
+     * For IE 6/7 only
+     * Include this rule to trigger hasLayout and contain floats.
+     */
+  /*
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
+  /*
+     * For IE 6/7 only
+     * Include this rule to trigger hasLayout and contain floats.
+     */
+  zoom: 1;
+  /*
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
+}
+.page.settings .profile-detailed-information .avatar .edit a:before,
+.page.settings .profile-detailed-information .avatar .edit a:after {
+  content: "";
+  display: table;
+}
+.page.settings .profile-detailed-information .avatar .edit a:after {
+  clear: both;
+}
+.page.settings .profile-detailed-information .avatar .edit a:before,
+.page.settings .profile-detailed-information .avatar .edit a:after {
+  content: "";
+  display: table;
+}
+.page.settings .profile-detailed-information .avatar .edit a:after {
+  clear: both;
+}
+.page.settings .profile-detailed-information .avatar .edit a i.fa {
+  display: block;
+  float: left;
+}
+.page.settings .profile-detailed-information .avatar .edit a i.fa:before {
+  display: block;
+  float: left;
+  width: 1em;
+  height: 1em;
+  line-height: 1.4em;
+  font-size: 1.5em;
+  text-align: center;
+  padding: 0.25em 0.5em;
+}
+.page.settings .profile-detailed-information .avatar .edit a .svg-icon svg {
+  float: left;
+  fill: white;
+  width: 2rem;
+  height: 2rem;
+  margin-top: 0.5em;
+  margin-left: 0.5em;
+}
+.page.settings .profile-detailed-information .avatar .edit a .help-text {
+  display: block;
+  font-size: 0.813em;
+  /* 13/16px */
+  width: 10em;
+  /* 130/13 */
+  float: left;
+  margin-left: 0;
+  padding: 0.5em 0.5em 0 0.5em;
+}
+.page.settings .key-export .actions {
+  margin: 1em 0;
+}
+.page.settings .key-export .input.textarea.gpgkey textarea.fluid.code {
+  height: 27em;
+}
+/* hide icons if there is no space */
+@media all and (max-width: 950px) {
+  .page.settings .profile-detailed-information .avatar {
+    float: none;
+  }
+}
+/* table info is hard to fit because of fingerprint */
+@media (max-width: 1280px) {
+  .key-info .table-info {
+    font-size: 0.875em;
+  }
+  .key-info .table-info .select select {
+    font-size: 0.929em;
+  }
+}
+.themes .theme {
+  float: left;
+  border-radius: 2px;
+}
+.themes .theme a {
+  max-width: 275px;
+  display: block;
+  margin: 1em;
+  border: 1px solid #DDD;
+  padding: 1em;
+  box-shadow: 0px 0px 10px 0px #DDD;
+  border-radius: 3px;
+}
+.themes .theme a:hover {
+  border: 1px solid #2A9CEB;
+}
+.themes .theme .theme-desc {
+  padding-top: 1em;
+  text-align: center;
+}
+.themes .theme.selected {
+  font-weight: bold;
+}
+.themes .theme.selected a {
+  background: #EEE;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.2);
+  border: 1px solid #BBB;
 }

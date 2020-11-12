@@ -16,6 +16,14 @@ export default class UserSettings {
     this.settings = settings;
   }
 
+  /**
+   * Returns the current user theme
+   * @returns {*}
+   */
+  getTheme() {
+    return this.settings["user.settings.theme"];
+  }
+
   getTrustedDomain() {
     return this.settings["user.settings.trustedDomain"];
   }

@@ -63,7 +63,8 @@ class DisplayUserWorkspaceBreadcrumb extends Component {
       case UserWorkspaceFilterTypes.ALL: return "All items";
       case UserWorkspaceFilterTypes.RECENTLY_MODIFIED: return "Recently modified";
       case UserWorkspaceFilterTypes.GROUP: {
-        const currentGroupName = this.props.userWorkspaceContext.filter.payload.group.name;
+        const group =  this.props.userWorkspaceContext.filter.payload.group;
+        const currentGroupName = (group && group.name) || "N/A";
         return `${currentGroupName} (group)`;
       }
       case UserWorkspaceFilterTypes.TEXT: {

@@ -95,6 +95,11 @@ describe("See groups", () => {
       await page.displayGroupList.click(page.displayGroupList.moreButton);
       expect(page.displayGroupContextualMenu.deleteGroupContextualMenu).not.toBeNull();
     });
+
+    it('As AD I should be able to start editing a group', async() => {
+      await page.displayGroupList.click(page.displayGroupList.moreButton);
+      expect(page.displayGroupContextualMenu.editGroupContextualMenu).not.toBeNull();
+    });
   });
 
   describe('As LU I should see the group section empty', () => {
@@ -174,7 +179,8 @@ describe("See groups", () => {
     });
 
     it('As NOT_AD I shouldn’t be able to start deleting a group', async() => {
-      expect(page.displayGroupList.moreButton).toBeNull();
+      await page.displayGroupList.click(page.displayGroupList.moreButton);
+      expect(page.displayGroupContextualMenu.deleteGroupContextualMenu).toBeNull();
     });
   });
 });

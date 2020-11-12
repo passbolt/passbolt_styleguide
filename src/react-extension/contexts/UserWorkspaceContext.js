@@ -15,15 +15,14 @@
 
 import * as React from "react";
 import PropTypes from "prop-types";
+import {withRouter} from "react-router-dom";
+import moment from "moment";
 import AppContext from "./AppContext";
 import {withLoading} from "../../react/contexts/Common/LoadingContext";
-import {withRouter} from "react-router-dom";
-import {ResourceWorkspaceFilterTypes} from "./ResourceWorkspaceContext";
 import {withActionFeedback} from "./ActionFeedbackContext";
-import moment from "moment";
 
 /**
- * Context related to resources ( filter, current selections, etc.)
+ * Context related to users ( filter, current selections, etc.)
  */
 export const UserWorkspaceContext = React.createContext({
   filter: {
@@ -44,12 +43,14 @@ export const UserWorkspaceContext = React.createContext({
   scrollTo: {
     user: null // The user to scroll to
   },
+  groupToEdit: null, // The group to edit
   onUserScrolled: () => {}, // Whenever one scrolled to a user
   onLockDetail: () => {}, // Lock or unlock detail  (hide or display the group or user details)
   onSorterChanged: () => {}, // Whenever the sorter changed
   onUserSelected: {
-    single: () => {}// Whenever a single resource has been selected
+    single: () => {}// Whenever a single user has been selected
   },
+  onGroupToEdit: () => {} // Whenever a group will be edited
 });
 
 /**
@@ -71,27 +72,29 @@ class UserWorkspaceContextProvider extends React.Component {
    */
   get defaultState() {
     return {
-      filter: {type: UserWorkspaceFilterTypes.NONE}, // The current resource search filter
+      filter: {type: UserWorkspaceFilterTypes.NONE}, // The current user search filter
       sorter: {
         propertyName: 'modified', // The name of the property to sort on
         asc: false // True if the sort must be descendant
       },
       filteredUsers: [], // The current list of filtered users
-      selectedUsers: [], // The current list of selected resources
+      selectedUsers: [], // The current list of selected users
       details: {
         user: null, // The user to focus details on
         group: null, // The group to focus details on
         locked: true // The details display is locked
       },
       scrollTo: {
-        user: null // The resource to scroll to
+        user: null // The user to scroll to
       },
+      groupToEdit: null, // The group to edit
       onUserScrolled: this.handleUserScrolled.bind(this), // Whenever one scrolled to a user
       onDetailsLocked: this.handleDetailsLocked.bind(this), // Lock or unlock detail  (hide or display the group or user details)
       onSorterChanged: this.handleSorterChange.bind(this), // Whenever the sorter changed
       onUserSelected: {
         single: this.handleUserSelected.bind(this)// Whenever a single user has been selected
       },
+      onGroupToEdit: this.handleGroupToEdit.bind(this) // Whenever a group will be edited
     };
   }
 
@@ -131,7 +134,7 @@ class UserWorkspaceContextProvider extends React.Component {
     if (hasFilterChanged) {
       this.populate();
 
-      // Avoid a side-effect whenever one inputs a specific resource url (it unselect the resource otherwise )
+      // Avoid a side-effect whenever one inputs a specific user url (it unselect the user otherwise )
       const isNotNonePreviousFilter = previousFilter.type !== UserWorkspaceFilterTypes.NONE;
       if (isNotNonePreviousFilter) {
         await this.unselectAll();
@@ -144,19 +147,27 @@ class UserWorkspaceContextProvider extends React.Component {
    */
   async handleUsersChange() {
     const hasUsersChanged = this.context.users && this.context.users !== this.users;
+    const areUsersFirstLoad = this.users === null;
     if (hasUsersChanged) {
       this.users = this.context.users;
       await this.search(this.state.filter);
+      await this.updateDetails();
+      await this.unselectUnknownUsers();
+      if (!areUsersFirstLoad) {
+        await this.redirectAfterSelection();
+      }
     }
   }
 
   /**
    * Handle the groups change
    */
-  handleGroupsChange() {
+  async handleGroupsChange() {
     const hasGroupsChanged = this.context.groups && this.context.groups !== this.groups;
     if (hasGroupsChanged) {
       this.groups = this.context.groups;
+      await this.refreshSearchFilter();
+      await this.updateDetails();
     }
   }
 
@@ -166,7 +177,7 @@ class UserWorkspaceContextProvider extends React.Component {
    */
   async handleRouteChange(previousLocation) {
     const hasLocationChanged = this.props.location.key !== previousLocation.key;
-    const isAppFirstLoad = this.state.filter.type === ResourceWorkspaceFilterTypes.NONE;
+    const isAppFirstLoad = this.state.filter.type === UserWorkspaceFilterTypes.NONE;
     if (hasLocationChanged || isAppFirstLoad) {
       await this.handleGroupRouteChange();
       await this.handleUserRouteChange();
@@ -181,8 +192,12 @@ class UserWorkspaceContextProvider extends React.Component {
     const groupId = this.props.match.params.selectedGroupId;
     if (groupId) {
       const group = this.context.groups.find(group => group.id === groupId);
-      await this.search({type: UserWorkspaceFilterTypes.GROUP, payload: {group}});
-      await this.detailGroup(group);
+      if (group) { // Known group
+        await this.search({type: UserWorkspaceFilterTypes.GROUP, payload: {group}});
+        await this.detailGroup(group);
+      } else { // Unknown group
+        this.handleUnknownGroup();
+      }
     }
   }
 
@@ -221,9 +236,8 @@ class UserWorkspaceContextProvider extends React.Component {
     }
   }
 
-
   /**
-   * Handle the resource view route change without a resource id in the path
+   * Handle the user view route change without a user id in the path
    * E.g. /password
    */
   async handleAllUserRouteChange() {
@@ -243,14 +257,23 @@ class UserWorkspaceContextProvider extends React.Component {
   }
 
   /**
-   * Handle an unknown user ( passe by route parameter resource identifier )
+   * Handle an unknown user ( passe by route parameter user identifier )
    */
   handleUnknownUser() {
     this.props.actionFeedbackContext.displayError("The user does not exist");
+    this.props.history.push({pathname: `/app/users`});
   }
 
   /**
-   * Handle the scrolling of a resource
+   * Handle an unknown user ( passe by route parameter user identifier )
+   */
+  handleUnknownGroup() {
+    this.props.actionFeedbackContext.displayError("The group does not exist");
+    this.props.history.push({pathname: `/app/users`});
+  }
+
+  /**
+   * Handle the scrolling of a user
    */
   async handleUserScrolled() {
     await this.scrollNothing();
@@ -275,7 +298,15 @@ class UserWorkspaceContextProvider extends React.Component {
   }
 
   /**
-   * Handle the wait for the initial resources to be loaded
+   * Handle the will to edit a group
+   * @param group
+   */
+  async handleGroupToEdit(group) {
+    await this.updateGroupToEdit(group);
+  }
+
+  /**
+   * Handle the wait for the initial user to be loaded
    */
   handleUsersWaitedFor() {
     this.props.loadingContext.add();
@@ -293,7 +324,7 @@ class UserWorkspaceContextProvider extends React.Component {
   }
 
   /**
-   * Populate the context with initial data such as resources and folders
+   * Populate the context with initial data such as users and groups
    */
   populate() {
     this.context.port.request("passbolt.users.update-local-storage");
@@ -365,7 +396,7 @@ class UserWorkspaceContextProvider extends React.Component {
   }
 
   /**
-   * Keep the most recently modified users ( current state: just sort everything with the most recent modified resource )
+   * Keep the most recently modified users ( current state: just sort everything with the most recent modified users )
    * @param filter A recently modified filter
    */
   async searchByRecentlyModified(filter) {
@@ -374,11 +405,29 @@ class UserWorkspaceContextProvider extends React.Component {
     await this.setState({filter, filteredUsers});
   }
 
+  /**
+   * Refresh the filter in case of its payload is outdated due to the updated list of users
+   */
+  async refreshSearchFilter() {
+    const hasGroupFilter = this.state.filter.type === UserWorkspaceFilterTypes.GROUP;
+    if (hasGroupFilter) {
+      const isGroupStillExist = this.groups.some(group => group.id === this.state.filter.payload.group.id);
+      if (isGroupStillExist) { // Case of group exists but may have somme applied changes on it
+        const updatedGroup = this.groups.find(group => group.id === this.state.filter.payload.group.id);
+        const filter = Object.assign(this.state.filter, {payload: {group: updatedGroup}});
+        await this.setState({filter});
+      } else { // Case of filter group deleted
+        const filter = {type: UserWorkspaceFilterTypes.ALL};
+        this.props.history.push({pathname: '/app/users', state: {filter}});
+      }
+    }
+  }
+
   /** USER SELECTION */
 
   /**
    * Select the given user as the single selected users if not already selected as single. Otherwise unselect it
-   * @param resource The resource to select
+   * @param user The user to select
    */
   async select(user) {
     const mustUnselect = this.state.selectedUsers.length === 1 && this.state.selectedUsers[0].id === user.id;
@@ -395,7 +444,7 @@ class UserWorkspaceContextProvider extends React.Component {
   }
 
   /**
-   * Unselect all the resources
+   * Unselect all the users
    */
   async unselectAll() {
     const hasSelectedUsers = this.state.selectedUsers.length !== 0;
@@ -405,7 +454,17 @@ class UserWorkspaceContextProvider extends React.Component {
   }
 
   /**
-   * Navigate to the appropriate url after some resources selection operation
+   * Remove from the selected users those which are not known users in regard of the current users list
+   */
+  async unselectUnknownUsers() {
+    const matchId = selectedUser => user => user.id === selectedUser.id;
+    const matchSelectedUser = selectedUser => this.users.some(matchId(selectedUser));
+    const selectedUsers = this.state.selectedUsers.filter(matchSelectedUser);
+    await this.setState({selectedUsers});
+  }
+
+  /**
+   * Navigate to the appropriate url after some users selection operation
    */
   redirectAfterSelection() {
     const hasUserSelected = this.state.selectedUsers.length === 1;
@@ -451,7 +510,7 @@ class UserWorkspaceContextProvider extends React.Component {
   }
 
   /**
-   * Sort the resources given the current sorter
+   * Sort the users given the current sorter
    */
   async sort() {
     const reverseSorter = sorter => (s1, s2) => -sorter(s1, s2);
@@ -522,23 +581,50 @@ class UserWorkspaceContextProvider extends React.Component {
     await this.setState({details: Object.assign({}, details, {locked: !locked})});
   }
 
+  /**
+   * Update the current details with the current list of users or groups
+   */
+  async updateDetails() {
+    const hasDetails = this.state.details.user || this.state.details.group;
+    if (hasDetails) {
+      const hasUserDetails = this.state.details.user;
+      const locked = this.state.details.locked;
+      if (hasUserDetails) { // Case of user details
+        const updatedUserDetails = this.users.find(user => user.id === this.state.details.user.id);
+        await this.setState({details: {user: updatedUserDetails, group: null, locked}});
+      } else { // Case of group details
+        const updatedGroupDetails = this.groups.find(group => group.id === this.state.details.group.id);
+        await this.setState({details: {group: updatedGroupDetails, user: null, locked}});
+      }
+    }
+  }
+
   /** USER SCROLLING **/
 
   /**
    * Set the user to scroll to
-   * @param resource A resource
+   * @param user A user
    */
   async scrollTo(user) {
     await this.setState({scrollTo: {user}});
   }
 
   /**
-   * Unset the resource to scroll to
+   * Unset the user to scroll to
    */
   async scrollNothing() {
     await this.setState({scrollTo: {}});
   }
 
+  /** GROUP EDIT **/
+
+  /**
+   * Updates the group to edit
+   * @param groupToEdit The group to edit
+   */
+  async updateGroupToEdit(groupToEdit) {
+    await this.setState({groupToEdit});
+  }
 
   /**
    * Render the component
@@ -566,7 +652,6 @@ UserWorkspaceContextProvider.propTypes = {
 
 export default withRouter(withActionFeedback(withLoading(UserWorkspaceContextProvider)));
 
-
 /**
  * User Workspace Context Consumer HOC
  * @param WrappedComponent
@@ -590,8 +675,8 @@ export function withUserWorkspace(WrappedComponent) {
  */
 export const UserWorkspaceFilterTypes = {
   NONE: 'NONE', // Initial filter at page load
-  ALL: 'ALL', // All resources
-  GROUP: 'FILTER-BY-GROUP', // Resources for a given group
-  TEXT: 'FILTER-BY-TEXT-SEARCH', // Resources matching some text words
-  RECENTLY_MODIFIED: 'FILTER-BY-RECENTLY-MODIFIERD', // Keep recently modified resources
+  ALL: 'ALL', // All users
+  GROUP: 'FILTER-BY-GROUP', // Users for a given group
+  TEXT: 'FILTER-BY-TEXT-SEARCH', // Users matching some text words
+  RECENTLY_MODIFIED: 'FILTER-BY-RECENTLY-MODIFIED', // Keep recently modified users
 };
