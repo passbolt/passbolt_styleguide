@@ -15,15 +15,13 @@ import React, {Component} from "react";
 import PropTypes from "prop-types";
 import AppContext from "../../../contexts/AppContext";
 import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
-import FormCancelButton from "../../../../react/components/Common/Inputs/FormSubmitButton/FormCancelButton";
 import Icon from "../../../../react/components/Common/Icons/Icon";
 import {ApiClient} from "../../../lib/apiClient/apiClient";
 import {ApiClientOptions} from "../../../lib/apiClient/apiClientOptions";
 import DisplayLoadingDialog from "../DisplayLoadingDialog/DisplayLoadingDialog";
 import {withActionFeedback} from "../../../../react-extension/contexts/ActionFeedbackContext";
-import {withAdministrationWorkspace} from "../../../contexts/AdministrationWorkspaceContext";
 
-class DisplaySimulateSynchronizeUserDirectoryAdministrationDialog extends Component {
+class DisplaySynchronizeUserDirectoryAdministrationDialog extends Component {
   /**
    * Constructor
    * @param {Object} props
@@ -45,7 +43,7 @@ class DisplaySimulateSynchronizeUserDirectoryAdministrationDialog extends Compon
       loading: true,
 
       openFullReport: false,
-      userDirectorySimulateSynchronizeResult: null
+      userDirectorySynchronizeResult: null
     };
   }
 
@@ -66,9 +64,9 @@ class DisplaySimulateSynchronizeUserDirectoryAdministrationDialog extends Compon
    */
   async componentDidMount() {
     try {
-      const result = await this.apiClientDirectory.get("synchronize/dry-run");
-      const userDirectorySimulateSynchronizeResult = result.body;
-      this.setState({loading: false, userDirectorySimulateSynchronizeResult});
+      const result = await this.apiClientDirectory.get("synchronize");
+      const userDirectorySynchronizeResult = result.body;
+      this.setState({loading: false, userDirectorySynchronizeResult});
     } catch (error) {
       await this.handleError(error);
     }
@@ -104,7 +102,6 @@ class DisplaySimulateSynchronizeUserDirectoryAdministrationDialog extends Compon
    * Handle synchronize button click.
    */
   handleSynchronize() {
-    this.props.administrationWorkspaceContext.onMustSynchronizeSettings();
     this.handleClose();
   }
 
@@ -121,7 +118,7 @@ class DisplaySimulateSynchronizeUserDirectoryAdministrationDialog extends Compon
    * @returns {*}
    */
   get users() {
-    return this.state.userDirectorySimulateSynchronizeResult.users;
+    return this.state.userDirectorySynchronizeResult.users;
   }
 
   /**
@@ -129,7 +126,7 @@ class DisplaySimulateSynchronizeUserDirectoryAdministrationDialog extends Compon
    * @returns {*}
    */
   get groups() {
-    return this.state.userDirectorySimulateSynchronizeResult.groups;
+    return this.state.userDirectorySynchronizeResult.groups;
   }
 
   /**
@@ -275,11 +272,11 @@ class DisplaySimulateSynchronizeUserDirectoryAdministrationDialog extends Compon
     return (
       <div>
         {this.isLoading() &&
-        <DisplayLoadingDialog onClose={this.handleClose} title="Synchronize simulation"></DisplayLoadingDialog>
+        <DisplayLoadingDialog onClose={this.handleClose} title="Synchronize"></DisplayLoadingDialog>
         }
         {!this.isLoading() &&
-        <DialogWrapper className='ldap-simulate-synchronize-dialog' title="Synchronize simulation report"
-          onClose={this.handleClose} disabled={this.isLoading()}>
+        <DialogWrapper className='ldap-simulate-synchronize-dialog' title="Synchronize report"
+                       onClose={this.handleClose} disabled={this.isLoading()}>
           <div className="form-content" onSubmit={this.handleFormSubmit}>
             <p>
               <strong>The operation was successfull.</strong>
@@ -309,8 +306,7 @@ class DisplaySimulateSynchronizeUserDirectoryAdministrationDialog extends Compon
             <p></p>
           </div>
           <div className="submit-wrapper clearfix">
-            <a className={`button primary ${this.isLoading() ? "disabled" : ""}`} role="button" onClick={this.handleSynchronize}>Synchronize</a>
-            <FormCancelButton disabled={this.isLoading()} onClick={this.handleClose}/>
+            <a className={`button primary ${this.isLoading() ? "disabled" : ""}`} role="button" onClick={this.handleClose}>OK</a>
           </div>
         </DialogWrapper>
         }
@@ -319,12 +315,11 @@ class DisplaySimulateSynchronizeUserDirectoryAdministrationDialog extends Compon
   }
 }
 
-DisplaySimulateSynchronizeUserDirectoryAdministrationDialog.contextType = AppContext;
+DisplaySynchronizeUserDirectoryAdministrationDialog.contextType = AppContext;
 
-DisplaySimulateSynchronizeUserDirectoryAdministrationDialog.propTypes = {
+DisplaySynchronizeUserDirectoryAdministrationDialog.propTypes = {
   onClose: PropTypes.func,
   actionFeedbackContext: PropTypes.any, // The action feedback context
-  administrationWorkspaceContext: PropTypes.object, // The administration workspace context
 };
 
-export default withActionFeedback(withAdministrationWorkspace(DisplaySimulateSynchronizeUserDirectoryAdministrationDialog));
+export default withActionFeedback(DisplaySynchronizeUserDirectoryAdministrationDialog);

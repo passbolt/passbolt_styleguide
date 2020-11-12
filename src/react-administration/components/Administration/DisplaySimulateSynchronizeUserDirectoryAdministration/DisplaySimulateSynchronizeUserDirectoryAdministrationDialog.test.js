@@ -19,16 +19,16 @@ import {
   defaultAppContext,
   defaultProps, mockSimulateSynchronizeBody,
 } from "./DisplaySimulateSynchronizeUserDirectoryAdministrationDialog.test.data";
-import DisplayTestUserDirectoryAdministrationDialogPage from "./DisplaySimulateSynchronizeUserDirectoryAdministrationDialog.test.page";
-import {mockUserDirectorySettings} from "../DisplayUserDirectoryAdministration/DisplayUserDirectoryAdministration.test.data";
 import mockFetch from "../../../../../demo/react-administration/mock/mockFetch";
 import {waitFor} from "@testing-library/react";
+import DisplaySimulateSynchronizeUserDirectoryAdministrationDialogPage
+  from "./DisplaySimulateSynchronizeUserDirectoryAdministrationDialog.test.page";
 
 beforeEach(() => {
   jest.resetModules();
 });
 
-describe("See the test user directory administration Dialog", () => {
+describe("See the simulate synchronize user directory administration dialog", () => {
   let page; // The page to test against
   const context = defaultAppContext(); // The applicative context
   const props = defaultProps(); // The props to pass
@@ -39,7 +39,7 @@ describe("See the test user directory administration Dialog", () => {
      */
     beforeEach(() => {
       mockFetch("http://localhost:3000/directorysync/synchronize/dry-run.json?api-version=v2", mockSimulateSynchronizeBody);
-      page = new DisplayTestUserDirectoryAdministrationDialogPage(context, props);
+      page = new DisplaySimulateSynchronizeUserDirectoryAdministrationDialogPage(context, props);
     });
 
     it('As AD I should see The full report in the dialog for my simulate synchronize report', async() => {
@@ -61,7 +61,7 @@ describe("See the test user directory administration Dialog", () => {
      * I should see the simulate synchronize report loading dialog page
      */
     beforeEach(() => {
-      page = new DisplayTestUserDirectoryAdministrationDialogPage(context, props);
+      page = new DisplaySimulateSynchronizeUserDirectoryAdministrationDialogPage(context, props);
     });
 
     it('As AD I should see the loading dialog', async() => {

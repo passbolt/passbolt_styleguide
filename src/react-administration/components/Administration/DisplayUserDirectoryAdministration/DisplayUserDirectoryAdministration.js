@@ -35,7 +35,8 @@ class DisplayUserDirectoryAdministration extends React.Component {
   constructor(props, context) {
     super(props);
     this.state = this.defaultState;
-    this.apiClientDirectory = new ApiClient(new ApiClientOptions().setBaseUrl(context.trustedDomain).setResourceName("directorysync/settings"));
+    this.apiClientUserDirectory = new ApiClient(new ApiClientOptions().setBaseUrl(context.trustedDomain).setResourceName("directorysync"));
+    this.apiClientTestUserDirectory = new ApiClient(new ApiClientOptions().setBaseUrl(context.trustedDomain).setResourceName("directorysync/settings/test"));
     this.apiClientUsers = new ApiClient(new ApiClientOptions().setBaseUrl(context.trustedDomain).setResourceName("users"));
     this.createRefs();
     this.bindCallbacks();
@@ -199,7 +200,7 @@ class DisplayUserDirectoryAdministration extends React.Component {
    */
   async findAllUserDirectorySettings() {
     // USER DIRECTORY SETTINGS
-    const result = await this.apiClientDirectory.findAll();
+    const result = await this.apiClientUserDirectory.get('settings');
     const userDirectory = result.body;
     // USERS
     const usersResult = await this.apiClientUsers.findAll();
@@ -593,12 +594,12 @@ class DisplayUserDirectoryAdministration extends React.Component {
   async saveUserDirectory() {
     if (this.state.userDirectoryToggle) {
       // TODO check how put with id and not a new each time
-      await this.apiClientDirectory.update("ad981925-cee5-40aa-8cb9-c3cc9c0886cf",this.createUserDirectoryDTO());
+      await this.apiClientUserDirectory.update("settings",this.createUserDirectoryDTO());
       this.props.administrationWorkspaceContext.onSynchronizeEnabled(true);
     } else {
       this.setState(this.defaultState);
       // TODO check how delete the correct configuration
-      await this.apiClientDirectory.delete("ad981925-cee5-40aa-8cb9-c3cc9c0886cf");
+      await this.apiClientUserDirectory.delete("settings");
       this.props.administrationWorkspaceContext.onSynchronizeEnabled(false);
       this.setState({loading: false});
     }
@@ -608,7 +609,7 @@ class DisplayUserDirectoryAdministration extends React.Component {
    * test user directory settings
    */
   async testUserDirectory() {
-    const result = await this.apiClientDirectory.create(this.createUserDirectoryDTO());
+    const result = await this.apiClientTestUserDirectory.create(this.createUserDirectoryDTO());
     const displayTestUserDirectoryDialogProps = {
       userDirectoryTestResult: result.body
     };

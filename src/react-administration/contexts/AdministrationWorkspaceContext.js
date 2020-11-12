@@ -27,12 +27,12 @@ export const AdministrationWorkspaceContext = React.createContext({
   mustTestSettings: false, // Must test settings
   isSynchronizeEnabled: false, // If the button synchronize settings is enable
   mustSynchronizeSettings: false, // Must synchronize settings
-  mustSimulateSynchronizeSettings: false, // Must simulate synchronize settings
   onSaveEnabled: () => {}, // Whenever a user change settings
   onMustSaveSettings: () => {}, // Whenever a user wants save settings
   onTestEnabled: () => {}, // Whenever a user change settings
   onMustTestSettings: () => {}, // Whenever a user wants save settings
   onSynchronizeEnabled: () => {}, // Whenever a user have settings to be synchronized
+  onMustSynchronizeSettings: () => {}, // Whenever a user wants synchronized settings
   onResetActionsSettings: () => {}, // Reset states after a user do an action for the settings
 });
 
@@ -62,12 +62,12 @@ class AdministrationWorkspaceContextProvider extends React.Component {
       mustTestSettings: false, // Must test settings
       isSynchronizeEnabled: false, // If the button synchronize settings is enable
       mustSynchronizeSettings: false, // Must synchronize settings
-      mustSimulateSynchronizeSettings: false, // Must simulate synchronize settings
       onSaveEnabled: this.handleSaveEnabled.bind(this), // Whenever a user change settings
       onMustSaveSettings: this.handleMustSaveSettings.bind(this), // Whenever a user wants save settings
       onTestEnabled: this.handleTestEnabled.bind(this), // Whenever a user have settings to be tested
       onMustTestSettings: this.handleMustTestSettings.bind(this), // Whenever a user wants test settings
       onSynchronizeEnabled: this.handleSynchronizeEnabled.bind(this), // Whenever a user have settings to be synchronized
+      onMustSynchronizeSettings: this.handleMustSynchronizeSettings.bind(this), // Whenever a user wants synchronized settings
       onResetActionsSettings: this.handleResetActionsSettings.bind(this), // Reset states after a user do an action for the settings
     };
   }
@@ -123,10 +123,17 @@ class AdministrationWorkspaceContextProvider extends React.Component {
   }
 
   /**
+   * Handle must synchronize settings
+   */
+  async handleMustSynchronizeSettings() {
+    await this.setState({mustSynchronizeSettings: true});
+  }
+
+  /**
    * Handle reset state settings
    */
   async handleResetActionsSettings() {
-    await this.setState({mustSaveSettings: false, mustTestSettings: false, mustSynchronizeSettings: false, mustSimulateSynchronizeSettings: false});
+    await this.setState({mustSaveSettings: false, mustTestSettings: false, mustSynchronizeSettings: false});
   }
 
   /**

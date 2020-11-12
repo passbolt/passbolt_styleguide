@@ -14,12 +14,12 @@
 import {fireEvent, render, waitFor} from "@testing-library/react";
 import AppContext from "../../../contexts/AppContext";
 import React from "react";
-import DisplaySimulateSynchronizeUserDirectoryAdministrationDialog from "./DisplaySimulateSynchronizeUserDirectoryAdministrationDialog";
+import DisplaySynchronizeUserDirectoryAdministrationDialog from "./DisplaySynchronizeUserDirectoryAdministrationDialog";
 
 /**
- * The DisplaySimulateSynchronizeUserDirectoryAdministrationDialog component represented as a page
+ * The DisplaySynchronizeUserDirectoryAdministrationDialog component represented as a page
  */
-export default class DisplaySimulateSynchronizeUserDirectoryAdministrationDialogPage {
+export default class DisplaySynchronizeUserDirectoryAdministrationDialogPage {
   /**
    * Default constructor
    * @param appContext An app context
@@ -28,7 +28,7 @@ export default class DisplaySimulateSynchronizeUserDirectoryAdministrationDialog
   constructor(appContext, props) {
     this._page = render(
       <AppContext.Provider value={appContext}>
-        <DisplaySimulateSynchronizeUserDirectoryAdministrationDialog {...props}/>
+        <DisplaySynchronizeUserDirectoryAdministrationDialog {...props}/>
       </AppContext.Provider>
     );
     this.setupPageObjects();
@@ -39,7 +39,7 @@ export default class DisplaySimulateSynchronizeUserDirectoryAdministrationDialog
    */
   setupPageObjects() {
     this._titleHeader = new TitleHeaderPageObject(this._page.container);
-    this._displaySimulateSynchronizeUserDirectoryAdministrationDialog = new DisplaySimulateSynchronizeUserDirectoryAdministrationDialogPageObject(this._page.container);
+    this._displaySynchronizeUserDirectoryAdministrationDialog = new DisplaySynchronizeUserDirectoryAdministrationDialogPageObject(this._page.container);
   }
 
   /**
@@ -52,8 +52,8 @@ export default class DisplaySimulateSynchronizeUserDirectoryAdministrationDialog
   /**
    * Returns the page object of create user
    */
-  get displaySimulateSynchronizeUserDirectoryAdministrationDialog() {
-    return this._displaySimulateSynchronizeUserDirectoryAdministrationDialog;
+  get displaySynchronizeUserDirectoryAdministrationDialog() {
+    return this._displaySynchronizeUserDirectoryAdministrationDialog;
   }
 }
 
@@ -77,7 +77,7 @@ class TitleHeaderPageObject {
   }
 }
 
-class DisplaySimulateSynchronizeUserDirectoryAdministrationDialogPageObject {
+class DisplaySynchronizeUserDirectoryAdministrationDialogPageObject {
   /**
    * Default constructor
    * @param container The container which includes the AddComment Component

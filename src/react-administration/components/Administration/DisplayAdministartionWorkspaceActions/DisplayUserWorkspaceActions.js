@@ -20,6 +20,8 @@ import {withAdministrationWorkspace} from "../../../contexts/AdministrationWorks
 import DisplaySimulateSynchronizeUserDirectoryAdministrationDialog
   from "../DisplaySimulateSynchronizeUserDirectoryAdministration/DisplaySimulateSynchronizeUserDirectoryAdministrationDialog";
 import {withDialog} from "../../../../react/contexts/Common/DialogContext";
+import DisplaySynchronizeUserDirectoryAdministrationDialog
+  from "../DisplaySynchronizeUserDirectoryAdministration/DisplaySynchronizeUserDirectoryAdministrationDialog";
 
 /**
  * This component is a container of multiple actions applicable on setting
@@ -41,6 +43,26 @@ class DisplayAdministrationWorkspaceActions extends React.Component {
     this.handleSaveClick = this.handleSaveClick.bind(this);
     this.handleTestClick = this.handleTestClick.bind(this);
     this.handleSimulateSynchronizeClick = this.handleSimulateSynchronizeClick.bind(this);
+    this.handleSynchronizeClick = this.handleSynchronizeClick.bind(this);
+  }
+
+  /**
+   * Whenever the component has updated in terms of props or state
+   * @param prevProps
+   */
+  async componentDidUpdate(prevProps) {
+    await this.handleMustSynchronize(prevProps.administrationWorkspaceContext.mustSynchronizeSettings);
+  }
+
+  /**
+   * Handle must synchronize settings
+   */
+  handleMustSynchronize(previousMustSynchronizeSettings) {
+    const hasMustSynchronizeChanged = this.props.administrationWorkspaceContext.mustSynchronizeSettings !== previousMustSynchronizeSettings;
+    if (hasMustSynchronizeChanged && this.props.administrationWorkspaceContext.mustSynchronizeSettings) {
+      this.handleSynchronizeClick();
+      this.props.administrationWorkspaceContext.onResetActionsSettings();
+    }
   }
 
   /**
@@ -68,6 +90,7 @@ class DisplayAdministrationWorkspaceActions extends React.Component {
    * Handle synchronize settings
    */
   handleSynchronizeClick() {
+    this.props.dialogContext.open(DisplaySynchronizeUserDirectoryAdministrationDialog);
   }
 
   /**

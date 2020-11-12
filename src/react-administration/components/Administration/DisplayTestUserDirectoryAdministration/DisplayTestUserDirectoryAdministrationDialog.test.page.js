@@ -17,7 +17,7 @@ import React from "react";
 import DisplayTestUserDirectoryAdministrationDialog from "./DisplayTestUserDirectoryAdministrationDialog";
 
 /**
- * The DisplaySimulateSynchronizeUserDirectoryAdministrationDialog component represented as a page
+ * The DisplayTestUserDirectoryAdministrationDialog component represented as a page
  */
 export default class DisplayTestUserDirectoryAdministrationDialogPage {
   /**

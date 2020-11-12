@@ -28,8 +28,9 @@ export default () => {
   mockFetch.addGetFetchRequest("http://localhost:3000/directorysync/settings.json?api-version=v2", mockGetRequestUserDirectorySettings);
   mockFetch.addGetFetchRequest("http://localhost:3000/users.json?api-version=v2", mockGetRequestUsers);
   mockFetch.addGetFetchRequest("http://localhost:3000/directorysync/synchronize/dry-run.json?api-version=v2", mockGetRequestSimulateSynchronize);
+  mockFetch.addGetFetchRequest("http://localhost:3000/directorysync/synchronize.json?api-version=v2", mockGetRequestSimulateSynchronize);
   mockFetch.addPostFetchRequest("http://localhost:3000/mfa/settings.json?api-version=v2", mockGetRequestMfaSettings);
-  mockFetch.addPostFetchRequest("http://localhost:3000/directorysync/settings.json?api-version=v2", mockPostRequestUserDirectorySettings);
+  mockFetch.addPostFetchRequest("http://localhost:3000/directorysync/settings/test.json?api-version=v2", mockPostRequestUserDirectorySettings);
   mockFetch.addPutFetchRequest("http://localhost:3000/directorysync/settings.json?api-version=v2", mockPutRequestUserDirectorySettings);
   mockFetch.addDeleteFetchRequest("http://localhost:3000/directorysync/settings.json?api-version=v2", mockPutRequestUserDirectorySettings);
 
