@@ -177,7 +177,7 @@ class DescriptionEditor extends React.Component {
       this.context.resourceTypesSettings.DEFAULT_RESOURCE_TYPES_SLUGS.PASSWORD_AND_DESCRIPTION
     );
 
-    const plaintextDto = {...this.props.secret};
+    const plaintextDto = {...this.props.plaintextDto};
     plaintextDto.description = this.description;
 
     return this.context.port.request("passbolt.resources.update", resourceDto, plaintextDto);
@@ -335,7 +335,7 @@ DescriptionEditor.contextType = AppContext;
 DescriptionEditor.propTypes = {
   description: PropTypes.string, // the description
   resource: PropTypes.any, // the resource to update the description for
-  secret: PropTypes.any, // the secret to update if description is encrypted
+  plaintextDto: PropTypes.any, // the plaintext secret to update if description is encrypted
   onClose: PropTypes.func, // toggle to display or not the editor
   actionFeedbackContext: PropTypes.any, // The action feedback context
   loadingContext: PropTypes.any // The loading context

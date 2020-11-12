@@ -189,7 +189,7 @@ class PasswordSidebarInformationSection extends React.Component {
 
   async handlePasswordClickEvent() {
     try {
-      const plaintextDto = await this.context.port.request("passbolt.secret.decrypt", this.resource.id);
+      const plaintextDto = await this.context.port.request("passbolt.secret.decrypt", this.resource.id, {showProgress: true});
       await this.copyPasswordToClipboard(plaintextDto);
       this.props.actionFeedbackContext.displaySuccess("The secret has been copied to clipboard");
     } catch (error) {

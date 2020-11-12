@@ -43,7 +43,7 @@ class PasswordSidebarDescriptionSection extends React.Component {
       isSecretDecrypting: false,
       showDescriptionEditor: false,
       description: undefined,
-      secret: undefined
+      plaintextDto: undefined,
     };
   }
 
@@ -57,23 +57,26 @@ class PasswordSidebarDescriptionSection extends React.Component {
   }
 
   componentDidMount() {
-    this.setDescription();
-  }
-
-  componentDidUpdate(prevProps) {
-    if (!this.isDescriptionEncrypted() && this.state.description !== this.props.resource.description) {
-      this.setState({description: this.props.resource.description});
-    }
-    if (this.isDescriptionEncrypted() && this.props.resource.id !== prevProps.resource.id) {
+    if (this.state.open) {
       this.setDescription();
     }
   }
 
+  componentDidUpdate(prevProps) {
+    if (this.props.resource.id !== prevProps.resource.id || this.props.resource.modified !== prevProps.resource.modified) {
+      if (this.state.open) {
+        this.setDescription();
+      } else {
+        this.setState({description: undefined});
+      }
+    }
+  }
+
   setDescription() {
-    if (this.isDescriptionEncrypted()) {
+    if (this.isResourceDescriptionEncrypted()) {
       this.decryptSecret();
     } else {
-      this.setState({description: this.props.resource.description});
+      this.setState({description: this.resource.description});
     }
   }
 
@@ -82,7 +85,11 @@ class PasswordSidebarDescriptionSection extends React.Component {
    *  Decryption
    * =============================================================
    */
-  isDescriptionEncrypted() {
+  isDecryptionRequired() {
+    return (this.isResourceDescriptionEncrypted && typeof this.state.description === undefined);
+  }
+
+  isResourceDescriptionEncrypted() {
     if (!this.resource.resource_type_id) {
       return false;
     }
@@ -92,7 +99,7 @@ class PasswordSidebarDescriptionSection extends React.Component {
   }
 
   /**
-   * Return the description from a given secret
+   * Return the description from a given plaintextDto
    * @param {object|string} plaintextDto
    */
   getSecretDescription(plaintextDto) {
@@ -107,21 +114,22 @@ class PasswordSidebarDescriptionSection extends React.Component {
   }
 
   /**
-   * Decrypt the password secret
+   * Decrypt the password plaintextDto
    * @return {Promise<boolean>}
    */
   async decryptSecret() {
     this.setState({isSecretDecrypting: true});
 
     try {
-      const plaintextDto = await this.context.port.request("passbolt.secret.decrypt", this.resource.id);
+      const plaintextDto = await this.context.port.request("passbolt.secret.decrypt", this.resource.id, {showProgress: false});
       const description = this.getSecretDescription(plaintextDto);
       this.setState({
-        secret: plaintextDto,
+        plaintextDto: plaintextDto,
         description: description,
         isSecretDecrypting: false
       });
     } catch (error) {
+      console.error(error);
       this.setState({
         isSecretDecrypting: false,
         error: true,
@@ -148,11 +156,11 @@ class PasswordSidebarDescriptionSection extends React.Component {
   }
 
   /**
-   * Get the current secret
-   * @returns {object|string|undefined} secret dto
+   * Get the current plaintextDto
+   * @returns {object|string|undefined} plaintextDto dto
    */
-  get secret() {
-    return this.state.secret;
+  get plaintextDto() {
+    return this.state.plaintextDto;
   }
 
   /**
@@ -181,6 +189,9 @@ class PasswordSidebarDescriptionSection extends React.Component {
    */
   handleTitleClickEvent() {
     const open = !this.state.open;
+    if (open && this.state.description === undefined) {
+      this.setDescription();
+    }
     this.setState({open});
   }
 
@@ -247,7 +258,7 @@ class PasswordSidebarDescriptionSection extends React.Component {
       <div className={`detailed-information accordion sidebar-section ${this.state.open ? "" : "closed"}`}>
         <div className="accordion-header">
           <h4>
-            <a onClick={this.handleTitleClickEvent} role="button">
+            <a onClick={this.handleTitleClickEvent} role="button" className="section-opener">
               Description
               {this.state.open &&
               <Icon name="caret-down"/>
@@ -273,10 +284,8 @@ class PasswordSidebarDescriptionSection extends React.Component {
           </p>
           }
           {this.state.error &&
-          <p className="description-content">
-            <span className="error-message">
+          <p className="description-content error-message">
               {this.state.errorMsg}
-            </span>
           </p>
           }
           {this.mustShowEmptyDescription() &&
@@ -298,9 +307,9 @@ class PasswordSidebarDescriptionSection extends React.Component {
           }
           {this.mustShowDescriptionEditor() &&
           <DescriptionEditor
-            description={this.state.description}
+            description={this.description}
             resource={this.resource}
-            secret={this.state.secret}
+            plaintextDto={this.state.plaintextDto}
             onClose={this.onCloseDescriptionEditor}/>
           }
         </div>
@@ -313,7 +322,6 @@ PasswordSidebarDescriptionSection.contextType = AppContext;
 
 PasswordSidebarDescriptionSection.propTypes = {
   resource: PropTypes.any, // The resource
-  resourceWorkspaceContext: PropTypes.any, // The resource context
 };
 
 export default withResourceWorkspace(PasswordSidebarDescriptionSection);

@@ -49,7 +49,7 @@ class PasswordEditDialog extends Component {
       descriptionError: "",
       viewPassword: false,
       passwordInputHasFocus: false,
-      isSecretDecrypting: false,
+      isSecretDecrypting: true,
       encryptDescription: null,
       resourceTypeId: resource.resource_type_id || ""
     };
@@ -85,7 +85,6 @@ class PasswordEditDialog extends Component {
 
   async initialize() {
     await this.decryptSecret();
-
     const encrypt = this.mustEncryptDescription();
     this.setState({encryptDescription: encrypt});
   }
@@ -506,7 +505,7 @@ class PasswordEditDialog extends Component {
    * @return {Promise<Object>}
    */
   async getDecryptedSecret() {
-    const plaintext = await this.context.port.request("passbolt.secret.decrypt", this.context.passwordEditDialogProps.id);
+    const plaintext = await this.context.port.request("passbolt.secret.decrypt", this.context.passwordEditDialogProps.id, {showProgress: false});
     if (typeof plaintext === 'string') {
       return {
         password: plaintext,
@@ -565,9 +564,10 @@ class PasswordEditDialog extends Component {
 
   /*
    * =============================================================
-   *  Placeholder texts
+   *  Placeholder texts / status helpers
    * =============================================================
    */
+
   /**
    * Get the password input field placeholder.
    * @returns {string}
@@ -586,10 +586,24 @@ class PasswordEditDialog extends Component {
    * @returns {string}
    */
   getDescriptionPlaceholder() {
-    if (this.state.encryptDescription && this.state.isSecretDecrypting) {
+    if (this.state.isSecretDecrypting && this.mustEncryptDescription()) {
       return "Decrypting";
     }
     return "Description";
+  }
+
+  /**
+   * @returns {boolean}
+   */
+  isPasswordDisabled() {
+    return this.state.processing || this.state.isSecretDecrypting;
+  }
+
+  /**
+   * @returns {boolean}
+   */
+  isDescriptionDisabled() {
+    return this.state.processing || (this.state.isSecretDecrypting && this.mustEncryptDescription());
   }
 
   /*
@@ -645,7 +659,7 @@ class PasswordEditDialog extends Component {
                   onKeyUp={this.handlePasswordInputKeyUp} value={this.state.password}
                   placeholder={passwordPlaceholder} onFocus={this.handlePasswordInputFocus}
                   onBlur={this.handlePasswordInputBlur} onChange={this.handleInputChange}
-                  disabled={this.state.processing} style={passwordInputStyle} ref={this.passwordInputRef}/>
+                  disabled={this.isPasswordDisabled()} style={passwordInputStyle} ref={this.passwordInputRef}/>
                 <div className="security-token"
                   style={securityTokenStyle}>{securityTokenCode}</div>
               </div>
@@ -696,7 +710,7 @@ class PasswordEditDialog extends Component {
               </label>
               <textarea id="edit-password-form-description" name="description" maxLength="10000"
                 className="required" placeholder={this.getDescriptionPlaceholder()} value={this.state.description}
-                disabled={this.state.processing} onChange={this.handleInputChange} ref={this.descriptionInputRef}
+                disabled={this.isDescriptionDisabled()} onChange={this.handleInputChange} ref={this.descriptionInputRef}
                 onFocus={this.handleDescriptionInputFocus} onBlur={this.handleDescriptionInputBlur}>
               </textarea>
               {this.state.descriptionError &&
