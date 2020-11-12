@@ -224,10 +224,14 @@ class ExportResources extends React.Component {
    * Export the selected resources or folders
    */
   async export() {
-    const options = {format: this.state.selectedExportFormat, credentials: {password: null, keyFile: null}};
     const foldersIds = this.props.resourceWorkspaceContext.resourcesToExport.foldersIds;
     const resourcesIds = this.props.resourceWorkspaceContext.resourcesToExport.resourcesIds;
-    await this.context.port.request("passbolt.export-passwords.export-to-file", {foldersIds, resourcesIds}, options);
+    const exportDto = {
+      format: this.state.selectedExportFormat,
+      folders_ids: foldersIds,
+      resources_ids: resourcesIds
+    };
+    await this.context.port.request("passbolt.export-resources.export-to-file", exportDto);
   }
 
   /**

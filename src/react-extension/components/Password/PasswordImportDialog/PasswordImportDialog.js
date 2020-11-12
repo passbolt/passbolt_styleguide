@@ -52,8 +52,8 @@ class PasswordImportDialog extends Component {
 
       fileToImport: null, // The file to import
       options: {
-        importFolders: canUseFolders, // Import all the folders specified in the CSV / KDBX file
-        importTags: canUseTags // Use unique tags for this import
+        folders: canUseFolders, // Import all the folders specified in the CSV / KDBX file
+        tags: canUseTags // Mark all resource with a unique tag
       }, // The current import options
       errors: {} // Validation errors
     };
@@ -65,8 +65,8 @@ class PasswordImportDialog extends Component {
   bindHandlers() {
     this.handleSelectFile = this.handleSelectFile.bind(this);
     this.handleFileSelected = this.handleFileSelected.bind(this);
-    this.handleImportFoldersOptionChanged = this.handleImportFoldersOptionChanged.bind(this);
-    this.handleImportTagsOptionChanged = this.handleImportTagsOptionChanged.bind(this);
+    this.handleImportOptionFoldersChanged = this.handleImportOptionFoldersChanged.bind(this);
+    this.handleImportOptionTagsChanged = this.handleImportOptionTagsChanged.bind(this);
     this.handleCancel = this.handleCancel.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
@@ -136,16 +136,16 @@ class PasswordImportDialog extends Component {
   /**
    * Handle the change of import folders option
    */
-  async handleImportFoldersOptionChanged() {
-    const options = Object.assign({}, this.state.options, {importFolders: !this.state.options.importFolders});
+  async handleImportOptionFoldersChanged() {
+    const options = Object.assign({}, this.state.options, {folders: !this.state.options.folders});
     await this.setState({options});
   }
 
   /**
    * Handle the change of unique tag options
    */
-  async handleImportTagsOptionChanged() {
-    const options = Object.assign({}, this.state.options, {importTags: !this.state.options.importTags});
+  async handleImportOptionTagsChanged() {
+    const options = Object.assign({}, this.state.options, {tags: !this.state.options.tags});
     await this.setState({options});
   }
 
@@ -228,7 +228,7 @@ class PasswordImportDialog extends Component {
 
     await this.toggleProcessing();
     try {
-      const importResult = await this.context.port.request("passbolt.import-passwords.import-file", b64FileContent, fileType, options);
+      const importResult = await this.context.port.request("passbolt.import-resources.import-file", fileType, b64FileContent, options);
       this.handleImportSuccess(importResult);
     } catch (error) {
       this.handleImportError(error, b64FileContent, fileType);
@@ -257,7 +257,7 @@ class PasswordImportDialog extends Component {
     const isUserAbortsOperation = error.name === "UserAbortsOperationError";
     const isKdbxBadSignatureError = error.name === "KdbxError" && error.code === "BadSignature";
     const isKdbxProtectedError = error.name === "KdbxError" && (error.code === "InvalidKey" || error.code === "InvalidArg");
-    const isCsvError = error.name === "ImportCsvError";
+    const isCsvError = error.name === "FileFormatError";
 
     this.toggleProcessing();
     if (isUserAbortsOperation) {
@@ -376,9 +376,9 @@ class PasswordImportDialog extends Component {
               <input
                 id="dialog-import-passwords-import-tags"
                 type="checkbox"
-                checked={this.state.options.importTags}
+                checked={this.state.options.tags}
                 disabled={this.hasAllInputDisabled()}
-                onChange={this.handleImportTagsOptionChanged}/>
+                onChange={this.handleImportOptionTagsChanged}/>
               <label htmlFor="dialog-import-passwords-import-tags"> Add a unique import tag to passwords</label>
             </div>
             }
@@ -388,9 +388,9 @@ class PasswordImportDialog extends Component {
               <input
                 id="dialog-import-passwords-import-folders"
                 type="checkbox"
-                checked={this.state.options.importFolders}
+                checked={this.state.options.folders}
                 disabled={this.hasAllInputDisabled()}
-                onChange={this.handleImportFoldersOptionChanged}/>
+                onChange={this.handleImportOptionFoldersChanged}/>
               <label htmlFor="dialog-import-passwords-import-folders"> Import folders</label>
             </div>
             }

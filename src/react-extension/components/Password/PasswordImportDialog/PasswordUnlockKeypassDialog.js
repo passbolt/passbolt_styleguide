@@ -162,13 +162,13 @@ class PasswordUnlockKeypassDialog extends Component {
     const b64FileContent = resourceFileToImport.b64FileContent;
     const fileType = resourceFileToImport.fileType;
     const password = this.passwordInputRef.current.value;
-    const keyFile = await this.readFile();
-    const options = Object.assign({}, resourceFileToImport.options, {credentials: {password, keyFile}});
+    const keyfile = await this.readFile();
+    const options = Object.assign({}, resourceFileToImport.options, {credentials: {password, keyfile}});
 
     this.toggleProcessing();
     await this.resetValidation();
     try {
-      const result = await this.context.port.request("passbolt.import-passwords.import-file", b64FileContent, fileType, options);
+      const result = await this.context.port.request("passbolt.import-resources.import-file", fileType, b64FileContent, options);
       this.handleImportSuccess(result);
     } catch (error) {
       this.handleImportError(error);
