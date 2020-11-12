@@ -22,6 +22,12 @@ import AppContext from "../../../contexts/AppContext";
 import MockPort from "../../../test/mock/MockPort";
 import PasswordSidebarDescriptionSection from "./PasswordSidebarDescriptionSection";
 import {ActionFeedbackContext} from "../../../contexts/ActionFeedbackContext";
+import UserSettings from "../../../lib/Settings/UserSettings";
+import userSettingsFixture from "../../../test/fixture/Settings/userSettings";
+import SiteSettings from "../../../lib/Settings/SiteSettings";
+import siteSettingsFixture from "../../../test/fixture/Settings/siteSettings";
+import ResourceTypesSettings from "../../../lib/Settings/ResourceTypesSettings";
+import resourceTypesFixture from "../../../test/fixture/ResourceTypes/resourceTypes";
 
 beforeEach(() => {
   jest.resetModules();
@@ -66,7 +72,14 @@ const getDummyDescriptionEmptyWithPermissionUpdate = function() {
 };
 
 const getAppContext = function(appContext) {
+  const userSettings = new UserSettings(userSettingsFixture);
+  const siteSettings = new SiteSettings(siteSettingsFixture);
+  const resourceTypesSettings = new ResourceTypesSettings(siteSettings, resourceTypesFixture);
+
   const defaultAppContext = {
+    userSettings,
+    siteSettings,
+    resourceTypesSettings,
     port: new MockPort()
   };
 
@@ -78,7 +91,7 @@ const renderPasswordSidebarDescriptionSection = function(appContext, props) {
   props = props || {};
   return render(
     <AppContext.Provider value={appContext}>
-      <PasswordSidebarDescriptionSection debug {...props}/>
+      <PasswordSidebarDescriptionSection debug {...props} resource={props.resourceWorkspaceContext.details.resource}/>
     </AppContext.Provider>
   );
 };
@@ -99,7 +112,7 @@ describe("PasswordSidebarDescription", () => {
     fireEvent.click(sidebar, leftClick);
 
     // Description exists
-    const description = container.querySelector(".description_content");
+    const description = container.querySelector(".description-content");
     expect(description).not.toBeNull();
     expect(description.textContent).toBe(props.resourceWorkspaceContext.details.resource.description);
   });
@@ -159,7 +172,7 @@ describe("PasswordSidebarDescription", () => {
     fireEvent.click(editIcon, leftClick);
 
     // description content not exists
-    const descriptionContent = container.querySelector(".description_content");
+    const descriptionContent = container.querySelector(".description-content");
     expect(descriptionContent).toBeNull();
 
     // Editor input description exists
@@ -381,7 +394,7 @@ describe("PasswordSidebarDescription", () => {
     const textearea = container.querySelector(".fluid");
     expect(textearea).not.toBeNull();
     expect(textearea.value).toBe("");
-    const descriptionValue = "Apache is the world's most used web server software.";
+    const descriptionValue = "Updated description";
     fireEvent.change(textearea, {target: {value: descriptionValue}});
 
     // Mock the request function to make it the expected result
@@ -402,14 +415,9 @@ describe("PasswordSidebarDescription", () => {
       expect(editorDescriptionInputDisable).toBeNull();
     });
 
-    const onApiUpdateResourceId = props.resourceWorkspaceContext.details.resource.id;
-    const onApiUpdateResourceDto = {
-      id: onApiUpdateResourceId,
-      name: resource.name,
-      username: resource.username,
-      uri: resource.uri,
-      description: descriptionValue,
-    };
+    const onApiUpdateResourceDto = props.resourceWorkspaceContext.details.resource;
+    onApiUpdateResourceDto.description = descriptionValue;
+
     expect(context.port.request).toHaveBeenCalledWith("passbolt.resources.update", onApiUpdateResourceDto, null);
     expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalled();
   });

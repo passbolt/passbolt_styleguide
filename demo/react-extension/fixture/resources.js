@@ -41,7 +41,8 @@ export default [
       }
     ],
     "folder_parent_id": null,
-    "personal": false
+    "personal": false,
+    "resource_type_id": "669f8c64-242a-59fb-92fc-81f660975fd3"
   },
   {
     "id": "09c790c0-c003-53c8-a640-25d33cfebc22",
@@ -67,7 +68,8 @@ export default [
     },
     "tags": [],
     "folder_parent_id": null,
-    "personal": false
+    "personal": false,
+    "resource_type_id": "669f8c64-242a-59fb-92fc-81f660975fd3"
   },
   {
     "id": "daaf057e-7fc3-5537-a8a9-e8c151890878",
@@ -104,7 +106,8 @@ export default [
       }
     ],
     "folder_parent_id": null,
-    "personal": false
+    "personal": false,
+    "resource_type_id": "669f8c64-242a-59fb-92fc-81f660975fd3"
   },
   {
     "id": "c8b93000-56b3-5a16-8048-c579d1babbd7",
@@ -130,7 +133,8 @@ export default [
     },
     "tags": [],
     "folder_parent_id": null,
-    "personal": false
+    "personal": false,
+    "resource_type_id": "669f8c64-242a-59fb-92fc-81f660975fd3"
   },
   {
     "id": "6e66e10e-36d7-5d4e-8fa2-8474e4510819",
@@ -156,7 +160,8 @@ export default [
     },
     "tags": [],
     "folder_parent_id": null,
-    "personal": false
+    "personal": false,
+    "resource_type_id": "669f8c64-242a-59fb-92fc-81f660975fd3"
   },
   {
     "id": "f7cef480-fcc3-5c20-a043-340c62e89cd8",
@@ -182,7 +187,8 @@ export default [
     },
     "tags": [],
     "folder_parent_id": null,
-    "personal": false
+    "personal": false,
+    "resource_type_id": "669f8c64-242a-59fb-92fc-81f660975fd3"
   },
   {
     "id": "2a08d0ad-cd50-5f06-a1b1-a2fa46e44d3f",
@@ -208,14 +214,15 @@ export default [
     },
     "tags": [],
     "folder_parent_id": null,
-    "personal": false
+    "personal": false,
+    "resource_type_id": "669f8c64-242a-59fb-92fc-81f660975fd3"
   },
   {
     "id": "9e2d7f42-4164-5882-9445-92e42a8cf067",
     "name": "Docker",
     "username": "docker",
     "uri": "https:\/\/www.docker.com\/",
-    "description": "An open platform for distributed applications for developers and sysadmins",
+    "description": "",
     "deleted": false,
     "created": "2020-08-27T08:35:19+00:00",
     "modified": "2020-08-27T08:35:19+00:00",
@@ -234,7 +241,8 @@ export default [
     },
     "tags": [],
     "folder_parent_id": null,
-    "personal": false
+    "personal": false,
+    "resource_type_id": "a28a04cd-6f53-518a-967c-9963bf9cec51"
   },
   {
     "id": "690b6e40-f371-579c-b0c6-86e8ef383adc",
@@ -260,7 +268,8 @@ export default [
     },
     "tags": [],
     "folder_parent_id": null,
-    "personal": false
+    "personal": false,
+    "resource_type_id": "669f8c64-242a-59fb-92fc-81f660975fd3"
   },
   {
     "id": "4d7adb92-0d85-56d7-8b92-e2b919ef8eb8",
@@ -286,7 +295,8 @@ export default [
     },
     "tags": [],
     "folder_parent_id": null,
-    "personal": false
+    "personal": false,
+    "resource_type_id": "669f8c64-242a-59fb-92fc-81f660975fd3"
   },
   {
     "id": "662497d8-7f1d-550a-9133-0fedd7250867",
@@ -312,7 +322,8 @@ export default [
     },
     "tags": [],
     "folder_parent_id": null,
-    "personal": false
+    "personal": false,
+    "resource_type_id": "669f8c64-242a-59fb-92fc-81f660975fd3"
   },
   {
     "id": "90da24d8-9862-59e4-8748-33cd4563bd81",
@@ -344,7 +355,8 @@ export default [
       }
     ],
     "folder_parent_id": null,
-    "personal": false
+    "personal": false,
+    "resource_type_id": "669f8c64-242a-59fb-92fc-81f660975fd3"
   },
   {
     "id": "d2ab45e9-0d70-5ae3-a373-d2f381bccd99",
@@ -376,7 +388,8 @@ export default [
       }
     ],
     "folder_parent_id": null,
-    "personal": false
+    "personal": false,
+    "resource_type_id": "669f8c64-242a-59fb-92fc-81f660975fd3"
   },
   {
     "id": "73e3309f-1121-5eca-8777-37a7451ee386",
@@ -408,7 +421,8 @@ export default [
       }
     ],
     "folder_parent_id": null,
-    "personal": false
+    "personal": false,
+    "resource_type_id": "669f8c64-242a-59fb-92fc-81f660975fd3"
   },
   {
     "id": "ecf0ed85-3bfc-5f45-b11d-74e9a86aa313",
@@ -455,7 +469,8 @@ export default [
       }
     ],
     "folder_parent_id": null,
-    "personal": false
+    "personal": false,
+    "resource_type_id": "669f8c64-242a-59fb-92fc-81f660975fd3"
   },
   {
     "id": "76d75fef-d7ed-5a0d-8df0-0a0ffb7c44c8",
@@ -481,7 +496,8 @@ export default [
     },
     "tags": [],
     "folder_parent_id": null,
-    "personal": false
+    "personal": false,
+    "resource_type_id": "669f8c64-242a-59fb-92fc-81f660975fd3"
   },
   {
     "id": "77d75fef-d7ed-5a0d-8df0-0a0ffb7c44c8",
@@ -507,7 +523,8 @@ export default [
     },
     "tags": [],
     "folder_parent_id": "907c3f61-f416-5834-86d2-e721501ee493",
-    "personal": true
+    "personal": true,
+    "resource_type_id": "669f8c64-242a-59fb-92fc-81f660975fd3"
   }
 ];
 

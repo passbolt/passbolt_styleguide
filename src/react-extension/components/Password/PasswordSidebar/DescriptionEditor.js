@@ -38,7 +38,8 @@ class DescriptionEditor extends React.Component {
    */
   getDefaultState() {
     return {
-      description: this.props.description, // description of the resource
+      encryptDescription: false,
+      description: undefined, // description of the resource
       loading: true, // component loading
       processing: false, // component processing
       error: "" // error to display
@@ -53,6 +54,7 @@ class DescriptionEditor extends React.Component {
     this.handleKeyDown = this.handleKeyDown.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleFormSubmit = this.handleFormSubmit.bind(this);
+    this.handleCancel = this.handleCancel.bind(this);
   }
 
   /**
@@ -65,10 +67,139 @@ class DescriptionEditor extends React.Component {
 
   componentDidMount() {
     this.handleOutsideEditorClickEvent();
-    this.setState({loading: false}, this.setFocusOnDescriptionEditor.bind(this));
+    const state = {
+      loading: false,
+      description: this.props.description,
+      encryptDescription: this.mustEncryptDescription()
+    };
+    this.setState(state, this.setFocusOnDescriptionEditor.bind(this));
   }
 
   componentWillUnmount() {
+    this.removeOutsideEditorClickEvent();
+  }
+
+  /*
+   * =============================================================
+   *  Resource type helpers
+   * =============================================================
+   */
+  /**
+   * Must the description be kept encrypted?
+   * @returns {boolean}
+   */
+  mustEncryptDescription() {
+    return this.context.resourceTypesSettings.mustEncryptDescription(this.props.resource.resource_type_id);
+  }
+
+  /*
+   * =============================================================
+   *  Getter helpers
+   * =============================================================
+   */
+  /**
+   * @returns {ResourceTypesSettings}
+   */
+  get resourceTypesSettings() {
+    return this.context.resourceTypesSettings;
+  }
+
+  /**
+   * @returns {string}
+   */
+  get description() {
+    return this.state.description;
+  }
+
+  /*
+   * =============================================================
+   *  Save the description
+   * =============================================================
+   */
+  /**
+   * Save the changes.
+   */
+  async save() {
+    this.setState({processing: true});
+
+    try {
+      await this.updateResource();
+      await this.props.actionFeedbackContext.displaySuccess("The description has been updated successfully");
+      this.close();
+    } catch (error) {
+      // It can happen when the user has closed the passphrase entry dialog by instance.
+      if (error.name === "UserAbortsOperationError") {
+        this.setState({processing: false});
+      } else {
+        // Unexpected error occurred.
+        console.error(error);
+        this.setState({
+          error: error.message,
+          processing: false
+        });
+      }
+    }
+  }
+
+  /**
+   * Update the resource
+   * @returns {Promise<Object>} updated resource
+   */
+  async updateResource() {
+    // Resource types enabled but legacy type requested
+    if (!this.mustEncryptDescription()) {
+      return this.updateCleartextDescription();
+    }
+
+    return this.updateWithEncryptedDescription();
+  }
+
+  /**
+   * Update the resource (LEGACY)
+   * @returns {Promise<Object>} updated resource
+   * @deprecated will be removed when v2 support is dropped
+   */
+  async updateCleartextDescription() {
+    const resourceDto = {...this.props.resource};
+    resourceDto.description = this.description;
+
+    return this.context.port.request("passbolt.resources.update", resourceDto, null);
+  }
+
+  /**
+   * Update the resource with encrypted description content type
+   * @returns {Promise<Object>} updated resource
+   */
+  async updateWithEncryptedDescription() {
+    const resourceDto = {...this.props.resource};
+    resourceDto.description = '';
+    resourceDto.resource_type_id = this.context.resourceTypesSettings.findResourceTypeIdBySlug(
+      this.context.resourceTypesSettings.DEFAULT_RESOURCE_TYPES_SLUGS.PASSWORD_AND_DESCRIPTION
+    );
+
+    const plaintextDto = {...this.props.secret};
+    plaintextDto.description = this.description;
+
+    return this.context.port.request("passbolt.resources.update", resourceDto, plaintextDto);
+  }
+
+  /*
+   * =============================================================
+   *  Out of widget actions
+   * =============================================================
+   */
+  /**
+   * Toggle the editor back to display mode
+   * @returns {string} send back the updated description to avoid potential unnecessary decrypt round
+   */
+  close() {
+    return this.props.onClose(this.description);
+  }
+
+  /**
+   * Remove listener for outside description editor clicks that aims to closes the editor
+   */
+  removeOutsideEditorClickEvent() {
     document.removeEventListener('click', this.handleEditorClickEvent);
   }
 
@@ -77,6 +208,20 @@ class DescriptionEditor extends React.Component {
    */
   handleOutsideEditorClickEvent() {
     document.addEventListener('click', this.handleEditorClickEvent);
+  }
+
+  /*
+   * =============================================================
+   *  Widget related events
+   * =============================================================
+   */
+  /**
+   * set the focus at the end of the description editor
+   */
+  setFocusOnDescriptionEditor() {
+    this.textareaRef.current.selectionStart = this.state.description.length;
+    this.textareaRef.current.selectionEnd = this.state.description.length;
+    this.textareaRef.current.focus();
   }
 
   /**
@@ -88,16 +233,7 @@ class DescriptionEditor extends React.Component {
     if (this.elementRef.current.contains(event.target)) {
       return;
     }
-    this.props.toggleInputDescriptionEditor();
-  }
-
-  /**
-   * set the focus at the end of the description editor
-   */
-  setFocusOnDescriptionEditor() {
-    this.textareaRef.current.selectionStart = this.state.description.length;
-    this.textareaRef.current.selectionEnd = this.state.description.length;
-    this.textareaRef.current.focus();
+    this.close();
   }
 
   /**
@@ -117,8 +253,15 @@ class DescriptionEditor extends React.Component {
     if (event.keyCode === 27) {
       // Stop the event propagation in order to avoid a parent component to react to this ESC event.
       event.stopPropagation();
-      this.props.toggleInputDescriptionEditor();
+      this.close();
     }
+  }
+
+  /**
+   * On cancel button click
+   */
+  handleCancel() {
+    this.close();
   }
 
   /**
@@ -149,57 +292,22 @@ class DescriptionEditor extends React.Component {
     }
   }
 
-  /**
-   * Save the changes.
+  /*
+   * =============================================================
+   * Render
+   * =============================================================
    */
-  async save() {
-    this.setState({processing: true});
-
-    try {
-      await this.updateDescription();
-      await this.props.actionFeedbackContext.displaySuccess("The description has been updated successfully");
-      this.props.toggleInputDescriptionEditor();
-    } catch (error) {
-      // It can happen when the user has closed the passphrase entry dialog by instance.
-      if (error.name === "UserAbortsOperationError") {
-        this.setState({processing: false});
-      } else {
-        // Unexpected error occurred.
-        console.error(error);
-        this.setState({
-          error: error.message,
-          processing: false
-        });
-      }
-    }
-  }
-
-  /**
-   * Persist the resource description update.
-   * @returns {Promise<Object>}
-   */
-  updateDescription() {
-    const resourceDto = {
-      id: this.props.resource.id,
-      name: this.props.resource.name,
-      username: this.props.resource.username,
-      uri: this.props.resource.uri,
-      description: this.state.description,
-    };
-    return this.context.port.request("passbolt.resources.update", resourceDto, null);
-  }
-
   /**
    * Render the component
    * @returns {JSX}
    */
   render() {
     return (
-      <form onKeyDown={this.handleKeyDown} noValidate>
+      <form onKeyDown={this.handleKeyDown} noValidate className="description-editor">
         <div className="form-content" ref={this.elementRef}>
           <div className="input text required">
             <textarea name="description" className="fluid" ref={this.textareaRef}
-              maxLength="10000" placeholder="enter a description" value={this.state.description}
+              maxLength="10000" placeholder="enter a description" value={this.description}
               onChange={this.handleInputChange}
               disabled={this.hasAllInputDisabled()} autoComplete="off"/>
             <div className=" message ready">
@@ -214,7 +322,7 @@ class DescriptionEditor extends React.Component {
               <span>save</span>
             </a>
             <a className={`cancel button ${this.hasAllInputDisabled() ? "disabled" : ""}`} role="button"
-              onClick={this.props.toggleInputDescriptionEditor}>cancel</a>
+              onClick={this.handleCancel}>cancel</a>
           </div>
         </div>
       </form>
@@ -225,9 +333,10 @@ class DescriptionEditor extends React.Component {
 DescriptionEditor.contextType = AppContext;
 
 DescriptionEditor.propTypes = {
-  description: PropTypes.string, // the description of the resources
+  description: PropTypes.string, // the description
   resource: PropTypes.any, // the resource to update the description for
-  toggleInputDescriptionEditor: PropTypes.func, // toggle to display or not the editor
+  secret: PropTypes.any, // the secret to update if description is encrypted
+  onClose: PropTypes.func, // toggle to display or not the editor
   actionFeedbackContext: PropTypes.any, // The action feedback context
   loadingContext: PropTypes.any // The loading context
 };

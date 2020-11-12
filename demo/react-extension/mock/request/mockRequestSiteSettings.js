@@ -77,10 +77,13 @@ export default () => {
         "emailNotificationSettings": {
           "version": "1.1.0"
         },
-        "EmailDigest": {
+        "emailDigest": {
           "version": "1.0.0"
         },
-        "Reports": {
+        "reports": {
+          "version": "1.0.0"
+        },
+        "resourceTypes": {
           "version": "1.0.0"
         },
         "multiFactorAuthentication": {

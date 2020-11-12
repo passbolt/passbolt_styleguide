@@ -23,6 +23,7 @@ import MainMenu from "./components/Common/Navigation/MainMenu/MainMenu";
 import PasswordWorkspace from "./components/Password/PasswordWorkspace/PasswordWorkspace";
 import SiteSettings from "./lib/Settings/SiteSettings";
 import UserSettings from "./lib/Settings/UserSettings";
+import ResourceTypesSettings from "./lib/Settings/ResourceTypesSettings";
 import ActionFeedbackContextProvider from "./contexts/ActionFeedbackContext";
 import ShareActionFeedbacks from "./components/Share/ShareActionFeedbacks";
 import DialogContextProvider from "./contexts/Common/DialogContext";
@@ -53,7 +54,7 @@ class ReactExtension extends Component {
   }
 
   async componentDidMount() {
-    this.getSiteSettings();
+    await this.getSiteSettings();
     this.getUserSettings();
     this.getLoggedInUser();
     this.getResources();
@@ -181,11 +182,32 @@ class ReactExtension extends Component {
     return this.state.userSettings !== null && this.state.siteSettings !== null;
   }
 
+  /*
+   * =============================================================
+   *  State initialization
+   * =============================================================
+   */
+  /**
+   * Get the current user info from background page and set it in the state
+   */
   async getLoggedInUser() {
     const loggedInUser = await this.props.port.request("passbolt.users.find-logged-in-user");
     this.setState({loggedInUser});
   }
 
+  /**
+   * Get the list of site settings from background page and set it in the state
+   * Using SiteSettings
+   */
+  async getSiteSettings() {
+    const settings = await this.props.port.request("passbolt.site.settings");
+    const siteSettings = new SiteSettings(settings);
+    this.setState({siteSettings});
+  }
+
+  /**
+   * Get the list of resources from local storage and set it in the state
+   */
   async getResources() {
     const storageData = await this.props.storage.local.get(["resources"]);
     if (storageData.resources && storageData.resources.length) {
@@ -194,14 +216,9 @@ class ReactExtension extends Component {
     }
   }
 
-  async getResourceTypes() {
-    const storageData = await this.props.storage.local.get(["resourceTypes"]);
-    if (storageData.resourceTypes && storageData.resourceTypes.length) {
-      const resourceTypes = storageData.resourceTypes;
-      this.setState({resourceTypes: resourceTypes});
-    }
-  }
-
+  /**
+   * Get the list of folders from local storage and set it in the state
+   */
   async getFolders() {
     const storageData = await this.props.storage.local.get(["folders"]);
     if (storageData.folders && storageData.folders.length) {
@@ -222,7 +239,7 @@ class ReactExtension extends Component {
   }
 
   /**
-   * Returns the list of all users
+   * Get the list of users from local storage and set it in the state
    */
   async getUsers() {
     const storageData = await this.props.storage.local.get(["users"]);
@@ -233,8 +250,7 @@ class ReactExtension extends Component {
   }
 
   /**
-   * Returns the list of roles
-   * @return {array}
+   * Get the list of roles from local storage and set it in the state
    */
   async getRoles() {
     const storageData = await this.props.storage.local.get(["roles"]);
@@ -244,19 +260,35 @@ class ReactExtension extends Component {
     }
   }
 
+  /**
+   * Get the list of resource types from local storage and set it in the state
+   * Using ResourceTypesSettings
+   */
+  async getResourceTypes() {
+    const storageData = await this.props.storage.local.get(["resourceTypes"]);
+    let resourceTypes = [];
+    if (storageData.resourceTypes && storageData.resourceTypes.length) {
+      resourceTypes = storageData.resourceTypes;
+    }
+    const resourceTypesSettings = new ResourceTypesSettings(this.state.siteSettings, resourceTypes);
+    this.setState({resourceTypesSettings});
+  }
+
+  /**
+   * Get the list of user settings from local storage and set it in the state
+   * Using UserSettings
+   */
   async getUserSettings() {
     const storageData = await this.props.storage.local.get(["_passbolt_data"]);
     const userSettings = new UserSettings(storageData._passbolt_data.config);
     this.setState({userSettings});
   }
 
-  async getSiteSettings() {
-    const settings = await this.props.port.request("passbolt.site.settings");
-    const siteSettings = new SiteSettings(settings);
-    this.setState({siteSettings});
-  }
-
-
+  /*
+   * =============================================================
+   *  State changes on local storage change
+   * =============================================================
+   */
   /**
    * Handle the change in the storage
    * @param changes
@@ -266,9 +298,15 @@ class ReactExtension extends Component {
       const resources = changes.resources.newValue;
       this.setState({resources});
     }
+    if (changes._passbolt_data) {
+      const userData = changes._passbolt_data.newValue;
+      const userSettings = new UserSettings(userData.config);
+      this.setState({userSettings});
+    }
     if (changes.resourceTypes) {
       const resourceTypes = changes.resourceTypes.newValue;
-      this.setState({resourceTypes});
+      const resourceTypesSettings = new ResourceTypesSettings(this.state.siteSettings, resourceTypes);
+      this.setState({resourceTypesSettings});
     }
     if (changes.folders) {
       const folders = changes.folders.newValue;

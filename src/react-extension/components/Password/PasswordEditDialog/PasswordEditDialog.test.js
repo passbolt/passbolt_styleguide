@@ -18,6 +18,7 @@ import "../../../test/lib/crypto/cryptoGetRandomvalues";
 import AppContext from "../../../contexts/AppContext";
 import PasswordEditDialog from "./PasswordEditDialog";
 import PassboltApiFetchError from "../../../lib/Common/Error/PassboltApiFetchError";
+import resourceTypesFixture from "../../../test/fixture/ResourceTypes/resourceTypes";
 import UserSettings from "../../../lib/Settings/UserSettings";
 import userSettingsFixture from "../../../test/fixture/Settings/userSettings";
 import SiteSettings from "../../../lib/Settings/SiteSettings";
@@ -26,6 +27,7 @@ import MockPort from "../../../test/mock/MockPort";
 import {ActionFeedbackContext} from "../../../contexts/ActionFeedbackContext";
 import ManageDialogs from "../../../../react/components/Common/Dialog/ManageDialogs/ManageDialogs";
 import DialogContextProvider from "../../../../react/contexts/Common/DialogContext";
+import ResourceTypesSettings from "../../../lib/Settings/ResourceTypesSettings";
 
 beforeEach(() => {
   jest.resetModules();
@@ -51,6 +53,7 @@ const getAppContext = function(appContext) {
   port.addRequestListener("passbolt.secret.decrypt", () => "secret-decrypted");
   const userSettings = new UserSettings(userSettingsFixture);
   const siteSettings = new SiteSettings(siteSettingsFixture);
+  const resourceTypesSettings = new ResourceTypesSettings(siteSettings, resourceTypesFixture);
   const resources = [getDummyResource()];
   const passwordEditDialogProps = {
     id: "8e3874ae-4b40-590b-968a-418f704b9d9a"
@@ -58,6 +61,7 @@ const getAppContext = function(appContext) {
   const defaultAppContext = {
     userSettings,
     siteSettings,
+    resourceTypesSettings,
     port,
     setContext: function(newContext) {
       // In this scope this reference the object context.
@@ -157,7 +161,6 @@ describe("PasswordEditDialog", () => {
     // Password generate button exists.
     const passwordGenerateButton = container.querySelector(".password-generate.button");
     expect(passwordGenerateButton).not.toBeNull();
-    expect(passwordGenerateButton.classList.contains("disabled")).toBe(true);
 
     // Description textarea field exists
     const descriptionTextArea = container.querySelector("[name=\"description\"]");
@@ -353,7 +356,7 @@ describe("PasswordEditDialog", () => {
     expect(generalErrorMessage).not.toBeNull();
   });
 
-  it("requests the addon to edit a resource when clicking on the submit button.", async() => {
+  it("requests the addon to edit a resource with encrypted description when clicking on the submit button.", async() => {
     const context = getAppContext();
     const props = {
       onClose: jest.fn()
@@ -407,12 +410,90 @@ describe("PasswordEditDialog", () => {
       name: resourceMeta.name,
       uri: resourceMeta.uri,
       username: resourceMeta.username,
-      description: resourceMeta.description
+      description: resourceMeta.description,
+      resource_type_id: "669f8c64-242a-59fb-92fc-81f660975fd3"
     };
 
     // API calls are made on submit, wait they are resolved.
     await waitFor(() => {
       expect(context.port.request).toHaveBeenCalledWith("passbolt.resources.update", onApiUpdateResourceMeta, resourceMeta.password);
+      expect(context.port.emit).toHaveBeenCalledTimes(1);
+      expect(context.port.emit).toHaveBeenNthCalledWith(1, "passbolt.resources.select-and-scroll-to", "8e3874ae-4b40-590b-968a-418f704b9d9a");
+      expect(props.onClose).toBeCalled();
+      expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalled();
+    });
+  });
+
+
+  it("requests the addon to edit a resource with non encrypted description when clicking on the submit button.", async() => {
+    const context = getAppContext();
+    const props = {
+      onClose: jest.fn()
+    };
+    const {container} = renderPasswordEditDialog(context, props);
+
+    const resourceMeta = {
+      name: "Password name",
+      uri: "https://uri.dev",
+      username: "Password username",
+      password: "password-value",
+      description: "Password description"
+    };
+
+    // Fill the form
+    const nameInput = container.querySelector("[name=\"name\"]");
+    const nameInputEvent = {target: {value: resourceMeta.name}};
+    fireEvent.change(nameInput, nameInputEvent);
+    const uriInput = container.querySelector("[name=\"uri\"]");
+    const uriInputEvent = {target: {value: resourceMeta.uri}};
+    fireEvent.change(uriInput, uriInputEvent);
+    const usernameInput = container.querySelector("[name=\"username\"]");
+    const usernameInputEvent = {target: {value: resourceMeta.username}};
+    fireEvent.change(usernameInput, usernameInputEvent);
+    const passwordInput = container.querySelector("[name=\"password\"]");
+    fireEvent.focus(passwordInput);
+    await waitFor(() => {
+      expect(passwordInput.classList).toContain("decrypted");
+    });
+    const passwordInputEvent = {target: {value: resourceMeta.password}};
+    fireEvent.change(passwordInput, passwordInputEvent);
+    const complexityLabel = container.querySelector(".complexity-text");
+    expect(complexityLabel.textContent).not.toBe("complexity: n/a");
+    const complexityBar = container.querySelector(".progress-bar");
+    expect(complexityBar.classList.contains("not_available")).toBe(false);
+    const descriptionTextArea = container.querySelector("[name=\"description\"]");
+    const descriptionTextareaEvent = {target: {value: resourceMeta.description}};
+    fireEvent.change(descriptionTextArea, descriptionTextareaEvent);
+
+    // Mock the request function to make it the expected result
+    jest.spyOn(context.port, 'request').mockImplementationOnce(jest.fn());
+    jest.spyOn(context.port, 'emit').mockImplementation(jest.fn());
+    jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementation(() => {});
+
+    // Submit and assert
+    const lockButton = container.querySelector(".lock-toggle");
+    fireEvent.click(lockButton, {button: 0});
+
+    // Submit and assert
+    const submitButton = container.querySelector("input[type=\"submit\"]");
+    fireEvent.click(submitButton, {button: 0});
+
+    const onApiUpdateResourceDto = {
+      id: "8e3874ae-4b40-590b-968a-418f704b9d9a",
+      name: resourceMeta.name,
+      uri: resourceMeta.uri,
+      username: resourceMeta.username,
+      description: '',
+      resource_type_id: "a28a04cd-6f53-518a-967c-9963bf9cec51"
+    };
+    const onApiUpdateSecretDto = {
+      description: resourceMeta.description,
+      password: resourceMeta.password
+    };
+
+    // API calls are made on submit, wait they are resolved.
+    await waitFor(() => {
+      expect(context.port.request).toHaveBeenCalledWith("passbolt.resources.update", onApiUpdateResourceDto, onApiUpdateSecretDto);
       expect(context.port.emit).toHaveBeenCalledTimes(1);
       expect(context.port.emit).toHaveBeenNthCalledWith(1, "passbolt.resources.select-and-scroll-to", "8e3874ae-4b40-590b-968a-418f704b9d9a");
       expect(props.onClose).toBeCalled();

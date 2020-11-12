@@ -15,9 +15,9 @@ import React, {Component} from "react";
 import PropTypes from "prop-types";
 import debounce from "debounce-promise";
 
-import AutocompleteItem from "./AutocompleteItem";
-import AutocompleteItemEmpty from "./AutocompleteItemEmpty";
-import AutocompleteItemLoading from "./AutocompleteItemLoading";
+import AutocompleteItem from "../../../../../react/components/Common/Inputs/Autocomplete/AutocompleteItem";
+import AutocompleteItemEmpty from "../../../../../react/components/Common/Inputs/Autocomplete/AutocompleteItemEmpty";
+import AutocompleteItemLoading from "../../../../../react/components/Common/Inputs/Autocomplete/AutocompleteItemLoading";
 
 class Autocomplete extends Component {
   /**

@@ -58,10 +58,13 @@ export default {
       "emailNotificationSettings": {
         "version": "1.1.0"
       },
-      "EmailDigest": {
+      "emailDigest": {
         "version": "1.0.0"
       },
-      "Reports": {
+      "resourceTypes": {
+        "version": "1.0.0"
+      },
+      "reports": {
         "version": "1.0.0"
       },
       "multiFactorAuthentication": {

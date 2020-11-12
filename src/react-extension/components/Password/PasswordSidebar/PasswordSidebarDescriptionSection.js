@@ -9,13 +9,14 @@
  * @copyright     Copyright (c) Passbolt SA (https://www.passbolt.com)
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
- * @since         2.13.0
+ * @since         3.0.0
  */
 import React from "react";
 import PropTypes from "prop-types";
 import Icon from "../../../../react/components/Common/Icons/Icon";
 import DescriptionEditor from "./DescriptionEditor";
 import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
+import AppContext from "../../../contexts/AppContext";
 
 /**
  * This component display the description section of a resource
@@ -38,7 +39,11 @@ class PasswordSidebarDescriptionSection extends React.Component {
   getDefaultState() {
     return {
       open: false,
-      showDescriptionEditor: false
+      error: false,
+      isSecretDecrypting: false,
+      showDescriptionEditor: false,
+      description: undefined,
+      secret: undefined
     };
   }
 
@@ -48,21 +53,135 @@ class PasswordSidebarDescriptionSection extends React.Component {
   bindCallbacks() {
     this.handleTitleClickEvent = this.handleTitleClickEvent.bind(this);
     this.toggleInputDescriptionEditor = this.toggleInputDescriptionEditor.bind(this);
+    this.onCloseDescriptionEditor = this.onCloseDescriptionEditor.bind(this);
   }
 
+  componentDidMount() {
+    this.setDescription();
+  }
+
+  componentDidUpdate(prevProps) {
+    if (!this.isDescriptionEncrypted() && this.state.description !== this.props.resource.description) {
+      this.setState({description: this.props.resource.description});
+    }
+    if (this.isDescriptionEncrypted() && this.props.resource.id !== prevProps.resource.id) {
+      this.setDescription();
+    }
+  }
+
+  setDescription() {
+    if (this.isDescriptionEncrypted()) {
+      this.decryptSecret();
+    } else {
+      this.setState({description: this.props.resource.description});
+    }
+  }
+
+  /*
+   * =============================================================
+   *  Decryption
+   * =============================================================
+   */
+  isDescriptionEncrypted() {
+    if (!this.resource.resource_type_id) {
+      return false;
+    }
+    return this.context.resourceTypesSettings.assertResourceTypeIdHasEncryptedDescription(
+      this.resource.resource_type_id
+    );
+  }
+
+  /**
+   * Return the description from a given secret
+   * @param {object|string} plaintextDto
+   */
+  getSecretDescription(plaintextDto) {
+    let description = undefined;
+    if (typeof plaintextDto === 'string') {
+      description = plaintextDto;
+    } else if (plaintextDto.description) {
+      description = plaintextDto.description;
+    }
+
+    return description;
+  }
+
+  /**
+   * Decrypt the password secret
+   * @return {Promise<boolean>}
+   */
+  async decryptSecret() {
+    this.setState({isSecretDecrypting: true});
+
+    try {
+      const plaintextDto = await this.context.port.request("passbolt.secret.decrypt", this.resource.id);
+      const description = this.getSecretDescription(plaintextDto);
+      this.setState({
+        secret: plaintextDto,
+        description: description,
+        isSecretDecrypting: false
+      });
+    } catch (error) {
+      this.setState({
+        isSecretDecrypting: false,
+        error: true,
+        errorMsg: `Sorry the description could not be decrypted. ${error.message}`
+      });
+
+      return false;
+    }
+
+    return true;
+  }
+
+  /*
+   * =============================================================
+   *  Getter helpers
+   * =============================================================
+   */
+  /**
+   * Get the currently selected resource from workspace context
+   * @returns {object} resource dto
+   */
+  get resource() {
+    return this.props.resource;
+  }
+
+  /**
+   * Get the current secret
+   * @returns {object|string|undefined} secret dto
+   */
+  get secret() {
+    return this.state.secret;
+  }
+
+  /**
+   * Get the currently selected resource from workspace context
+   * @returns {object} resource dto
+   */
+  get resourceTypesSettings() {
+    return this.context.resourceTypesSettings.resourceTypesSettings;
+  }
+
+  /**
+   * Get the description if decrypted undefined otherwise
+   * @returns {string|undefined} description
+   */
+  get description() {
+    return this.state.description;
+  }
+
+  /*
+   * =============================================================
+   *  Getter helpers
+   * =============================================================
+   */
   /**
    * Handle when the user selects the folder parent.
    */
   handleTitleClickEvent() {
     const open = !this.state.open;
     this.setState({open});
-  }
-
-  /**
-   * Returns the current detailed resource
-   */
-  get resource() {
-    return this.props.resourceWorkspaceContext.details.resource;
   }
 
   /**
@@ -75,32 +194,48 @@ class PasswordSidebarDescriptionSection extends React.Component {
     }
   }
 
+  onCloseDescriptionEditor(description) {
+    this.setState({description}, this.toggleInputDescriptionEditor());
+  }
+
+  /*
+   * =============================================================
+   *  Display helpers
+   * =============================================================
+   */
   /**
-   * check if there is a no description
    * @returns {boolean}
    */
   hasNoDescription() {
-    return !this.resource.description;
+    return !this.description;
   }
 
   /**
-   * check if the user edit the description
    * @returns {boolean}
    */
   canEdit() {
-    return this.resource.permission && this.resource.permission.type >= 7;
+    return !this.state.error && this.resource.permission && this.resource.permission.type >= 7;
   }
 
+  /**
+   * @returns {boolean}
+   */
   mustShowDescriptionEditor() {
-    return this.canEdit() && this.state.showDescriptionEditor;
+    return !this.state.error && !this.state.isSecretDecrypting && this.canEdit() && this.state.showDescriptionEditor;
   }
 
-  mustShowEmptyDescriptionView() {
-    return this.hasNoDescription() && !this.state.showDescriptionEditor;
+  /**
+   * @returns {boolean}
+   */
+  mustShowEmptyDescription() {
+    return !this.state.error && !this.state.isSecretDecrypting && this.hasNoDescription() && !this.state.showDescriptionEditor;
   }
 
-  mustShowDescriptionView() {
-    return !this.hasNoDescription() && !this.state.showDescriptionEditor;
+  /**
+   * @returns {boolean}
+   */
+  mustShowDescription() {
+    return !this.state.error && !this.state.isSecretDecrypting && !this.hasNoDescription() && !this.state.showDescriptionEditor;
   }
 
   /**
@@ -126,26 +261,47 @@ class PasswordSidebarDescriptionSection extends React.Component {
         <div className="accordion-content">
           {this.canEdit() &&
           <a className="section-action" onClick={this.toggleInputDescriptionEditor}>
-            <Icon name="edit"></Icon>
+            <Icon name="edit"/>
             <span className="visuallyhidden">edit</span>
           </a>
           }
-
-          {this.mustShowEmptyDescriptionView() && !this.canEdit() &&
-          <em className="empty-content">There is no description</em>
+          {this.state.isSecretDecrypting &&
+          <p className="description-content">
+            <span className="processing-wrapper">
+              <span className="processing-text">Decrypting</span>
+            </span>
+          </p>
           }
-          {this.mustShowEmptyDescriptionView() && this.canEdit() &&
-          <em className="empty-content" onClick={this.toggleInputDescriptionEditor}>There is no description yet, click
-            here to add one</em>
+          {this.state.error &&
+          <p className="description-content">
+            <span className="error-message">
+              {this.state.errorMsg}
+            </span>
+          </p>
           }
-          {this.mustShowDescriptionView() &&
-          <p className="description_content" onClick={this.toggleInputDescriptionEditor}>{this.resource.description}</p>
+          {this.mustShowEmptyDescription() &&
+          <p className="description-content">
+            {!this.canEdit() &&
+              <em className="empty-content">There is no description</em>
+            }
+            {this.canEdit() &&
+            <em className="empty-content" onClick={this.toggleInputDescriptionEditor}>
+              There is no description yet, click here to add one
+            </em>
+            }
+          </p>
+          }
+          {this.mustShowDescription() &&
+          <p className="description-content" onClick={this.toggleInputDescriptionEditor}>
+            {this.description}
+          </p>
           }
           {this.mustShowDescriptionEditor() &&
           <DescriptionEditor
-            description={this.resource.description}
+            description={this.state.description}
             resource={this.resource}
-            toggleInputDescriptionEditor={this.toggleInputDescriptionEditor}/>
+            secret={this.state.secret}
+            onClose={this.onCloseDescriptionEditor}/>
           }
         </div>
       </div>
@@ -153,7 +309,10 @@ class PasswordSidebarDescriptionSection extends React.Component {
   }
 }
 
+PasswordSidebarDescriptionSection.contextType = AppContext;
+
 PasswordSidebarDescriptionSection.propTypes = {
+  resource: PropTypes.any, // The resource
   resourceWorkspaceContext: PropTypes.any, // The resource context
 };
 

@@ -3600,7 +3600,8 @@ textarea:focus,
 input[type=password]:focus,
 input[type=search]:focus,
 input[type=text]:focus,
-input[type=number]:focus input[type=email]:focus {
+input[type=number]:focus,
+input[type=email]:focus {
   box-shadow: inset 1px 1px 2px rgba(0, 0, 0, 0.2);
   border: 1px solid #2894DF;
 }
@@ -3612,10 +3613,11 @@ input[type=password]:disabled,
 input[type=search]:disabled,
 input[type=text]:disabled,
 input[type=number]:disabled,
-input[type=email]:disabled {
+input[type=email]:disabled,
+textarea:disabled {
   border: 1px solid #0C0C0A;
   box-shadow: 0 0 0 0;
-  cursor: normal;
+  cursor: pointer;
   background: #444442;
 }
 /*
@@ -3626,9 +3628,8 @@ input[type=email]:disabled {
 	.lage		 	 - make the box bigger
 */
 textarea {
-  height: 3.6em;
-  /* 4 char (default input length) x 1em (average char length) + .6em (padding) */
-  line-height: 16px;
+  height: 4.8em;
+  line-height: 1.5em;
   resize: none;
 }
 .textarea.large textarea {
@@ -6853,7 +6854,7 @@ input[type="search"]::-webkit-search-cancel-button {
   -o-text-overflow: ellipsis;
   -ms-text-overflow: ellipsis;
 }
-.panel.aside .sidebar-header .logo {
+.panel.aside .sidebar-header .teaser-image {
   margin: 1em 0 1em 1em;
   float: left;
   width: 3em;
@@ -6863,12 +6864,12 @@ input[type="search"]::-webkit-search-cancel-button {
   text-align: center;
   border-radius: 50%;
 }
-.panel.aside .sidebar-header .logo .svg-icon svg {
+.panel.aside .sidebar-header .teaser-image .svg-icon svg {
   width: 1.5rem;
   height: 1.5rem;
   margin-top: 0.75em;
 }
-.panel.aside .sidebar-header .logo img {
+.panel.aside .sidebar-header .teaser-image img {
   width: 1.5em;
   height: 1.5em;
   display: block;
@@ -6928,7 +6929,7 @@ input[type="search"]::-webkit-search-cancel-button {
   float: left;
   height: 1.8em;
 }
-.panel.aside .description .description_content {
+.panel.aside .description .description-content {
   white-space: pre-line;
 }
 .panel.aside .key-information textarea {
@@ -7018,7 +7019,7 @@ input[type="search"]::-webkit-search-cancel-button {
 @media all and (max-width: 1024px) {
   .panel.aside {
     position: absolute;
-    right: 0em;
+    right: 0;
     width: 100%;
     bottom: 0;
     top: 0;

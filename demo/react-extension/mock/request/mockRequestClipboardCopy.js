@@ -11,24 +11,14 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         3.0.0
  */
-export default class UserSettings {
-  constructor(settings) {
-    this.settings = settings;
-  }
-
-  getTrustedDomain() {
-    return this.settings["user.settings.trustedDomain"];
-  }
-
-  getSecurityTokenBackgroundColor() {
-    return this.settings["user.settings.securityToken.color"];
-  }
-
-  getSecurityTokenTextColor() {
-    return this.settings["user.settings.securityToken.textColor"];
-  }
-
-  getSecurityTokenCode() {
-    return this.settings["user.settings.securityToken.code"];
-  }
-}
+export default (plaintext) => {
+  const el = document.createElement('textarea');
+  el.value = plaintext;
+  el.setAttribute('readonly', '');
+  el.style.position = 'absolute';
+  el.style.left = '-9999px';
+  document.body.appendChild(el);
+  el.select();
+  document.execCommand('copy');
+  document.body.removeChild(el);
+};

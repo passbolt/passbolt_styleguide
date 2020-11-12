@@ -80,7 +80,7 @@ class DisplayUserDetails extends React.Component {
       <div className="panel aside ready">
         <div className="sidebar user">
           <div className="sidebar-header">
-            <div className="logo">
+            <div className="teaser-image">
               <UserAvatar
                 group={this.user}
                 baseUrl={this.baseUrl}/>

@@ -18,7 +18,7 @@ import FormSubmitButton from "../../../../react/components/Common/Inputs/FormSub
 import DialogWrapper from "../../../../react/components/Common/Dialog/DialogWrapper/DialogWrapper";
 import FormCancelButton from "../../../../react/components/Common/Inputs/FormSubmitButton/FormCancelButton";
 import ErrorDialog from "../../Dialog/ErrorDialog/ErrorDialog";
-import Autocomplete from "../../../../react/components/Common/Autocomplete/Autocomplete";
+import Autocomplete from "../../../../react/components/Common/Inputs/Autocomplete/Autocomplete";
 import AppContext from "../../../contexts/AppContext";
 import {withDialog} from "../../../../react/contexts/Common/DialogContext";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";

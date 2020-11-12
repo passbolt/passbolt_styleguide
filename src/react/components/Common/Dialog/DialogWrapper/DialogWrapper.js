@@ -84,6 +84,9 @@ class DialogWrapper extends Component {
           <div className="dialog-header">
             <h2>
               <span className="dialog-header-title">{this.props.title}</span>
+              {this.props.subtitle &&
+              <span className="dialog-header-subtitle">{this.props.subtitle}</span>
+              }
               {(this.props.tooltip && this.props.tooltip !== '') &&
               <TooltipHtml>
                 <span>{this.props.tooltip}</span>
@@ -105,6 +108,7 @@ DialogWrapper.propTypes = {
   children: PropTypes.node,
   className: PropTypes.string,
   title: PropTypes.string,
+  subtitle: PropTypes.string,
   tooltip: PropTypes.string,
   loading: PropTypes.bool,
   disabled: PropTypes.bool,

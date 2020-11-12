@@ -11,7 +11,16 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         3.0.0
  */
+import resourcesFixtures from "../../fixture/resources";
 
-export default () => {
-  return "fa2fN\"y!Pk0=f2Vi<n";
+export default (resourceId) => {
+  const resource = resourcesFixtures.find(resource => resource.id === resourceId);
+  if (resource.resource_type_id === 'a28a04cd-6f53-518a-967c-9963bf9cec51') {
+    return {
+      password: "trustno1",
+      description: "this is an encrypted description"
+    }
+  } else {
+    return "fa2fN\"y!Pk0=f2Vi<n";
+  }
 };

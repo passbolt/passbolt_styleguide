@@ -61,13 +61,13 @@ class ShareActionFeedbacks extends React.Component {
   render() {
     return (
       <>
+        {this.hasFeedbacks &&
         <div className="notification-container">
-          {this.hasFeedbacks &&
-            <ShareActionFeedback
-              feedback={this.feedbackToDisplay}
-              onClose={ () => this.close(this.feedbackToDisplay) }/>
-          }
+          <ShareActionFeedback
+            feedback={this.feedbackToDisplay}
+            onClose={() => this.close(this.feedbackToDisplay)}/>
         </div>
+        }
       </>
     );
   }

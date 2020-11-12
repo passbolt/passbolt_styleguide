@@ -52,6 +52,14 @@ class PasswordSidebarInformationSection extends React.Component {
   }
 
   /**
+   * Get the currently selected resource from workspace context
+   * @returns {object} resource dto
+   */
+  get resource() {
+    return this.props.resourceWorkspaceContext.details.resource;
+  }
+
+  /**
    * Handle when the user selects the folder parent.
    */
   handleFolderParentClickEvent() {
@@ -78,10 +86,6 @@ class PasswordSidebarInformationSection extends React.Component {
   async handleUsernameClickEvent() {
     await this.context.port.request("passbolt.clipboard.copy", this.resource.username);
     this.displaySuccessNotification("The username has been copied to clipboard");
-  }
-
-  get resource() {
-    return this.props.resourceWorkspaceContext.details.resource;
   }
 
   /**
@@ -161,10 +165,32 @@ class PasswordSidebarInformationSection extends React.Component {
     }
   }
 
+  /**
+   * Copy password from dto to clipboard
+   * Support original password (a simple string) and composed objects)
+   *
+   * @param {string|object} plaintextDto
+   * @returns {Promise<void>}
+   */
+  async copyPasswordToClipboard(plaintextDto) {
+    if (!plaintextDto) {
+      throw new TypeError(__('The password is empty.'));
+    }
+    if (typeof plaintextDto === 'string') {
+      await this.context.port.request("passbolt.clipboard.copy", plaintextDto);
+    } else {
+      if (Object.prototype.hasOwnProperty.call(plaintextDto, 'password')) {
+        await this.context.port.request("passbolt.clipboard.copy", plaintextDto.password);
+      } else {
+        throw new TypeError(__('The password field is not defined.'));
+      }
+    }
+  }
+
   async handlePasswordClickEvent() {
     try {
-      const secret = await this.context.port.request("passbolt.secret.decrypt", this.resource.id);
-      await this.context.port.request("passbolt.clipboard.copy", secret);
+      const plaintextDto = await this.context.port.request("passbolt.secret.decrypt", this.resource.id);
+      await this.copyPasswordToClipboard(plaintextDto);
       this.props.actionFeedbackContext.displaySuccess("The secret has been copied to clipboard");
     } catch (error) {
       if (error.name !== "UserAbortsOperationError") {

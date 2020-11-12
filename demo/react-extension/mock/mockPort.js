@@ -13,6 +13,7 @@
  */
 
 import MockPort from "../../../src/react-extension/test/mock/MockPort";
+import mockRequestClipboardCopy from "./request/mockRequestClipboardCopy";
 import mockRequestFoldersCreate from "./request/mockRequestFoldersCreate";
 import mockRequestFoldersDelete from "./request/mockRequestFoldersDelete";
 import mockRequestFoldersUpdate from "./request/mockRequestFoldersUpdate";
@@ -52,6 +53,7 @@ import mockRequestGroupDeleteDryRun from "./request/mockRequestGroupDeleteDryRun
 
 export default (storage) => {
   const mockPort = new MockPort(storage);
+  mockPort.addRequestListener("passbolt.clipboard.copy", mockRequestClipboardCopy);
   mockPort.addRequestListener("passbolt.folders.create", mockRequestFoldersCreate);
   mockPort.addRequestListener("passbolt.folders.delete", mockRequestFoldersDelete);
   mockPort.addRequestListener("passbolt.folders.update", mockRequestFoldersUpdate);

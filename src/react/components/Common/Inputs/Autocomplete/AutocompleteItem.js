@@ -13,8 +13,8 @@
  */
 import React, {Component} from "react";
 import PropTypes from "prop-types";
-import UserAvatar from "../Avatar/UserAvatar";
-import GroupAvatar from "../Avatar/GroupAvatar";
+import UserAvatar from "../../../../../react/components/Common/Avatar/UserAvatar";
+import GroupAvatar from "../../../../../react/components/Common/Avatar/GroupAvatar";
 
 class AutocompleteItem extends Component {
   /**

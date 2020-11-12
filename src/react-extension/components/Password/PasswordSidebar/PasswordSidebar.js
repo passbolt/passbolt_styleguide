@@ -71,7 +71,7 @@ class PasswordSidebar extends React.Component {
       <div className="panel aside ready">
         <div className="sidebar resource">
           <div className="sidebar-header">
-            <div className="logo">
+            <div className="teaser-image">
               <Icon name="key"/>
             </div>
             <h3>
@@ -89,8 +89,8 @@ class PasswordSidebar extends React.Component {
               <span className="visuallyhidden">Close</span>
             </a>
           </div>
-          <PasswordSidebarInformationSection users={this.props.users}/>
-          <PasswordSidebarDescriptionSection/>
+          <PasswordSidebarInformationSection users={this.props.users} />
+          <PasswordSidebarDescriptionSection resource={this.props.resourceWorkspaceContext.details.resource}/>
           <PasswordSidebarPermissionsSection />
           {canUseTags &&
           <PasswordSidebarTagSection/>

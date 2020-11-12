@@ -22,8 +22,8 @@
  *
  * Meyer Reset v2.0 | Public Domain
  * http://meyerweb.com/eric/tools/css/reset/
- *  
- * normalize.css v1.1.2 | MIT License 
+ *
+ * normalize.css v1.1.2 | MIT License
  * https://github.com/necolas/normalize.css
  *
  * ========================================================================== */
@@ -6811,7 +6811,7 @@ input[type="search"]::-webkit-search-cancel-button {
   background: transparent url('../../../img/controls/loading_light.svg') left center no-repeat;
   background-size: auto 75% ;
 }
-.panel.aside .description .description_content {
+.panel.aside .description .description-content {
   white-space: pre-line;
 }
 .panel.aside .key-information textarea {

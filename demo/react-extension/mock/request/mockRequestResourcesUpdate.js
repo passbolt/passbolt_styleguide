@@ -25,6 +25,9 @@ export default (resourceDto, password, storage) => {
     resource.uri = resourceDto.uri;
     resource.username = resourceDto.username;
     resource.description = resourceDto.description;
+    if (resourceDto.resource_type_id) {
+      resource.resource_type_id = resourceDto.resource_type_id;
+    }
     resources[resourceIndex] = resource;
     await storage.local.set({resources});
     resolve(resource);

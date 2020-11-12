@@ -84,7 +84,7 @@ class DisplayUserGroupDetails extends React.Component {
       <div className="panel aside ready">
         <div className="sidebar user">
           <div className="sidebar-header">
-            <div className="logo">
+            <div className="teaser-image">
               <GroupAvatar
                 group={this.group}
                 baseUrl={this.baseUrl}/>

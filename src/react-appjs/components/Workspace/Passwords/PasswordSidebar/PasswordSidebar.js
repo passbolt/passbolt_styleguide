@@ -84,7 +84,7 @@ class PasswordSidebar extends React.Component {
       <div className="panel aside ready">
         <div className="sidebar resource">
           <div className="sidebar-header">
-            <div className="logo">
+            <div className="teaser-image">
               <Icon name="folder"/>
             </div>
             <h3>

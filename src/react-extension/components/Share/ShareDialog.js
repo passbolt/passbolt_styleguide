@@ -18,7 +18,7 @@ import FormSubmitButton from "../Common/Inputs/FormSubmitButton/FormSubmitButton
 import DialogWrapper from "../Common/Dialog/DialogWrapper/DialogWrapper";
 import FormCancelButton from "../Common/Inputs/FormSubmitButton/FormCancelButton";
 import ErrorDialog from "../Dialog/ErrorDialog/ErrorDialog";
-import Autocomplete from "../Common/Autocomplete/Autocomplete";
+import Autocomplete from "../Common/Inputs/Autocomplete/Autocomplete";
 import ShareChanges from "./Utility/ShareChanges";
 import SharePermissionItem from "./SharePermissionItem";
 import SharePermissionItemSkeleton from "./SharePermissionItemSkeleton";

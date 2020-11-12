@@ -18,6 +18,7 @@ import "../../../test/lib/crypto/cryptoGetRandomvalues";
 import AppContext from "../../../contexts/AppContext";
 import PasswordCreateDialog from "./PasswordCreateDialog";
 import PassboltApiFetchError from "../../../lib/Common/Error/PassboltApiFetchError";
+import resourceTypesFixture from "../../../test/fixture/ResourceTypes/resourceTypes";
 import UserSettings from "../../../lib/Settings/UserSettings";
 import userSettingsFixture from "../../../test/fixture/Settings/userSettings";
 import SiteSettings from "../../../lib/Settings/SiteSettings";
@@ -27,6 +28,7 @@ import {ActionFeedbackContext} from "../../../contexts/ActionFeedbackContext";
 import DialogContextProvider from "../../../contexts/Common/DialogContext";
 import ManageDialogs from "../../Common/Dialog/ManageDialogs/ManageDialogs";
 import {MemoryRouter} from "react-router-dom";
+import ResourceTypesSettings from "../../../lib/Settings/ResourceTypesSettings";
 
 beforeEach(() => {
   jest.resetModules();
@@ -36,6 +38,7 @@ const getAppContext = function(appContext) {
   const defaultAppContext = {
     userSettings: new UserSettings(userSettingsFixture),
     siteSettings: new SiteSettings(siteSettingsFixture),
+    resourceTypesSettings: new ResourceTypesSettings(new SiteSettings(siteSettingsFixture), resourceTypesFixture),
     port: new MockPort(),
     resourceCreateDialogProps: {
       folderParentId: null
@@ -292,12 +295,10 @@ describe("PasswordCreateDialog", () => {
     expect(generalErrorMessage).not.toBeNull();
   });
 
-  it("requests the addon to create a resource when clicking on the submit button.", async() => {
+  it("requests the addon to create a legacy resource with cleartext description when clicking on the submit button.", async() => {
     const createdResourceId = "f2b4047d-ab6d-4430-a1e2-3ab04a2f4fb9";
     const context = getAppContext();
-    const props = {
-      onClose: jest.fn()
-    };
+    const props = {onClose: jest.fn()};
     const {container} = renderPasswordCreateDialog(context, props);
 
     const resourceMeta = {
@@ -341,14 +342,92 @@ describe("PasswordCreateDialog", () => {
     // API calls are made on submit, wait they are resolved.
     await waitFor(() => {});
 
-    const onApiCreateResourceMeta = {
+    const onApiCreateResourceDto = {
       name: resourceMeta.name,
       uri: resourceMeta.uri,
       username: resourceMeta.username,
-      description: resourceMeta.description,
-      folder_parent_id: null
+      folder_parent_id: null,
+      resource_type_id: 'a28a04cd-6f53-518a-967c-9963bf9cec51'
     };
-    expect(context.port.request).toHaveBeenCalledWith("passbolt.resources.create", onApiCreateResourceMeta, resourceMeta.password);
+    const onApiCreateSecretDto = {
+      password: resourceMeta.password,
+      description: resourceMeta.description
+    };
+    expect(context.port.request).toHaveBeenCalledWith("passbolt.resources.create", onApiCreateResourceDto, onApiCreateSecretDto);
+    expect(context.port.emit).toHaveBeenCalledTimes(1);
+    expect(context.port.emit).toHaveBeenNthCalledWith(1, "passbolt.resources.select-and-scroll-to", createdResourceId);
+    expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalled();
+    expect(props.onClose).toBeCalled();
+  });
+
+
+  it("requests the addon to create a resource with encrypted description when clicking on the submit button.", async() => {
+    const createdResourceId = "f2b4047d-ab6d-4430-a1e2-3ab04a2f4fb9";
+    const context = getAppContext();
+
+    expect(context.resourceTypesSettings.isLegacyResourceTypeEnabled()).toBe(true);
+    expect(context.resourceTypesSettings.isEncryptedDescriptionEnabled()).toBe(true);
+
+    const props = {
+      onClose: jest.fn()
+    };
+    const {container} = renderPasswordCreateDialog(context, props);
+
+    const resourceMeta = {
+      name: "Password name",
+      uri: "https://uri.dev",
+      username: "Password username",
+      password: "password-value",
+      description: "Password description"
+    };
+
+    // Fill the form
+    const nameInput = container.querySelector("[name=\"name\"]");
+    const nameInputEvent = {target: {value: resourceMeta.name}};
+    fireEvent.change(nameInput, nameInputEvent);
+    const uriInput = container.querySelector("[name=\"uri\"]");
+    const uriInputEvent = {target: {value: resourceMeta.uri}};
+    fireEvent.change(uriInput, uriInputEvent);
+    const usernameInput = container.querySelector("[name=\"username\"]");
+    const usernameInputEvent = {target: {value: resourceMeta.username}};
+    fireEvent.change(usernameInput, usernameInputEvent);
+    const passwordInput = container.querySelector("[name=\"password\"]");
+    const passwordInputEvent = {target: {value: resourceMeta.password}};
+    fireEvent.change(passwordInput, passwordInputEvent);
+    const complexityLabel = container.querySelector(".complexity-text");
+    expect(complexityLabel.textContent).not.toBe("complexity: n/a");
+    const complexityBar = container.querySelector(".progress-bar");
+    expect(complexityBar.classList.contains("not_available")).toBe(false);
+    const descriptionTextArea = container.querySelector("[name=\"description\"]");
+    const descriptionTextareaEvent = {target: {value: resourceMeta.description}};
+    fireEvent.change(descriptionTextArea, descriptionTextareaEvent);
+
+    // Mock the request function to make it the expected result
+    jest.spyOn(context.port, 'request').mockImplementationOnce(jest.fn((message, data) => Object.assign({id: createdResourceId}, data)));
+    jest.spyOn(context.port, 'emit').mockImplementation(jest.fn());
+    jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementation(() => {});
+
+    // Submit and assert
+    const lockButton = container.querySelector(".lock-toggle");
+    fireEvent.click(lockButton, {button: 0});
+
+    // Submit and assert
+    const submitButton = container.querySelector("input[type=\"submit\"]");
+    fireEvent.click(submitButton, {button: 0});
+
+    // API calls are made on submit, wait they are resolved.
+    await waitFor(() => {});
+
+    const onApiCreateResourceDto = {
+      name: resourceMeta.name,
+      uri: resourceMeta.uri,
+      username: resourceMeta.username,
+      folder_parent_id: null,
+      resource_type_id: '669f8c64-242a-59fb-92fc-81f660975fd3',
+      description: resourceMeta.description
+    };
+    const onApiCreateSecretDto = resourceMeta.password;
+    expect(context.port.request).toHaveBeenCalledWith("passbolt.resources.create", onApiCreateResourceDto, onApiCreateSecretDto);
     expect(context.port.emit).toHaveBeenCalledTimes(1);
     expect(context.port.emit).toHaveBeenNthCalledWith(1, "passbolt.resources.select-and-scroll-to", createdResourceId);
     expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalled();

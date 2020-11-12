@@ -178,14 +178,36 @@ class PasswordWorkspaceMenu extends React.Component {
   }
 
   /**
+   * Copy password from dto to clipboard
+   * Support original password (a simple string) and composed objects)
+   *
+   * @param {string|object} plaintextDto
+   * @returns {Promise<void>}
+   */
+  async copyPasswordToClipboard(plaintextDto) {
+    if (!plaintextDto) {
+      throw new TypeError(__('The password is empty.'));
+    }
+    if (typeof plaintextDto === 'string') {
+      await this.context.port.request("passbolt.clipboard.copy", plaintextDto);
+    } else {
+      if (Object.prototype.hasOwnProperty.call(plaintextDto, 'password')) {
+        await this.context.port.request("passbolt.clipboard.copy", plaintextDto.password);
+      } else {
+        throw new TypeError(__('The password field is not defined.'));
+      }
+    }
+  }
+
+  /**
    * handle copy to clipboard the secret of the selected resource
    */
   async handleCopySecretClickEvent() {
     this.handleCloseMoreMenu();
 
     try {
-      const secret = await this.context.port.request("passbolt.secret.decrypt", this.selectedResources[0].id);
-      await this.context.port.request("passbolt.clipboard.copy", secret);
+      const plaintextDto = await this.context.port.request("passbolt.secret.decrypt", this.selectedResources[0].id);
+      await this.copyPasswordToClipboard(plaintextDto);
       this.props.actionFeedbackContext.displaySuccess("The secret has been copied to clipboard");
     } catch (error) {
       if (error.name !== "UserAbortsOperationError") {
