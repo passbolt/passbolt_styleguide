@@ -39,6 +39,7 @@ class DisplayAdministrationMenu extends React.Component {
   bindCallbacks() {
     this.handleMfaClick = this.handleMfaClick.bind(this);
     this.handleUserDirectoryClick = this.handleUserDirectoryClick.bind(this);
+    this.handleEmailNotificationsClick = this.handleEmailNotificationsClick.bind(this);
   }
 
   /**
@@ -56,6 +57,13 @@ class DisplayAdministrationMenu extends React.Component {
   }
 
   /**
+   * Handle when the user click on the email notifications menu
+   */
+  handleEmailNotificationsClick() {
+    this.props.history.push({pathname: '/app/administration/email-notification'});
+  }
+
+  /**
    * If MFA menu is selected
    * @returns {boolean}
    */
@@ -69,6 +77,14 @@ class DisplayAdministrationMenu extends React.Component {
    */
   isUserDirectorySelected() {
     return AdministrationWorkspaceMenuTypes.USER_DIRECTORY === this.props.administrationWorkspaceContext.selectedAdministration;
+  }
+
+  /**
+   * If Email Notifications menu is selected
+   * @returns {boolean}
+   */
+  isEmailNotificationsSelected() {
+    return AdministrationWorkspaceMenuTypes.EMAIL_NOTIFICATION === this.props.administrationWorkspaceContext.selectedAdministration;
   }
 
   /**
@@ -93,6 +109,15 @@ class DisplayAdministrationMenu extends React.Component {
               <div className="main-cell-wrapper">
                 <div className="main-cell">
                   <a onClick={this.handleUserDirectoryClick}><span>Users Directory</span></a>
+                </div>
+              </div>
+            </div>
+          </li>
+          <li id="email_notification_menu">
+            <div className={`row  ${this.isEmailNotificationsSelected() ? "selected" : ""}`}>
+              <div className="main-cell-wrapper">
+                <div className="main-cell">
+                  <a onClick={this.handleEmailNotificationsClick}><span>Email Notifications</span></a>
                 </div>
               </div>
             </div>
