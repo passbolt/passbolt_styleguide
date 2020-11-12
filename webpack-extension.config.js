@@ -2,7 +2,10 @@ const path = require("path");
 const webpack = require("webpack");
 
 module.exports = {
-  entry: "./demo/react-extension/public/js/index.js",
+  entry: {
+    setup: "./demo/react-extension/public/js/authentication-setup.js",
+    index: "./demo/react-extension/public/js/index.js"
+  },
   mode: "development",
   devtool: "inline-source-map",
   module: {
@@ -23,7 +26,7 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, "demo/react-extension/dist/"),
     publicPath: "/dist/",
-    filename: "bundle.js"
+    filename: "[name].bundle.js"
   },
   devServer: {
     contentBase: path.join(__dirname, "demo/react-extension/public/"),

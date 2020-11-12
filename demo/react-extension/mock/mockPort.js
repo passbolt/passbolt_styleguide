@@ -52,6 +52,7 @@ import mockRequestGroupsCreate from "./request/mockRequestGroupsCreate";
 import mockRequestGroupsUpdate from "./request/mockRequestGroupsUpdate";
 import mockRequestFindAllThemes from "./request/mockRequestFindAllThemes";
 import mockRequestFindActivities from "./request/mockRequestFindActivities";
+import mockRequestSetupInfo from "./request/mockRequestSetupInfo";
 
 export default (storage) => {
   const mockPort = new MockPort(storage);
@@ -94,6 +95,7 @@ export default (storage) => {
   mockPort.addRequestListener("passbolt.groups.create", mockRequestGroupsCreate);
   mockPort.addRequestListener("passbolt.groups.update", mockRequestGroupsUpdate);
   mockPort.addRequestListener("passbolt.themes.find-all", mockRequestFindAllThemes);
+  mockPort.addRequestListener("passbolt.setup.info", mockRequestSetupInfo);
 
   return mockPort;
 };

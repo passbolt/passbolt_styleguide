@@ -52,10 +52,11 @@ class ManageDialogs extends React.Component {
     return (
       <>
         {
-          this.props.dialogContext.dialogs.map(({key, Dialog}) =>
+          this.props.dialogContext.dialogs.map(({key, Dialog, DialogProps}) =>
             <Dialog
               key={key}
-              onClose={ () => this.close(key)} />)
+              onClose={ () => this.close(key)}
+              {...DialogProps} />)
         }
         {this.props.children}
       </>

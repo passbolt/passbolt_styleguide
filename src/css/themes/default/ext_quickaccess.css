@@ -346,7 +346,7 @@ body {
 }
 h1 {
   font-size: 2.2rem;
-  line-height: 2.4rem;
+  line-height: 3.2rem;
 }
 h2 {
   font-size: 1.6rem;
@@ -750,12 +750,12 @@ textarea {
 }
 .checkbox input[type=checkbox] + label:before {
   content: '';
-  margin-top: 0.3rem;
+  margin-top: 0.39rem;
   margin-right: 1rem;
   display: inline-block;
   vertical-align: text-top;
-  width: 1.6rem;
-  height: 1.6rem;
+  width: 1.4rem;
+  height: 1.4rem;
   background: #FFF;
   border: 1px solid #DDD;
 }
@@ -775,19 +775,19 @@ textarea {
 }
 .checkbox input[type=checkbox]:disabled + label:before {
   box-shadow: none;
-  background: #FFF;
+  background: #F3F3F3;
 }
 .checkbox input[type=checkbox]:checked + label:after {
   content: '';
   position: absolute;
   left: 0.3rem;
-  top: 0.6rem;
-  width: 1.2rem;
-  height: 1.2rem;
-  background-size: 1.2rem 1.2rem;
+  top: 0.79rem;
+  width: 1rem;
+  height: 1rem;
+  background-size: 1rem 1rem;
   background-color: #333;
-  -webkit-mask-image: url('../../../img/fa/fas/check.svg');
-  mask-image: url('../../../img/fa/fas/check.svg');
+  -webkit-mask-image: url('../../../img/controls/check_black.svg');
+  mask-image: url('../../../img/controls/check_black.svg');
 }
 .checkbox.small input[type=checkbox] {
   cursor: pointer;
@@ -841,27 +841,6 @@ textarea {
   background-size: 20rem auto;
   width: 20rem;
   height: 4.5rem;
-}
-.fa.icon svg {
-  width: 1.6rem;
-  height: 1.6rem;
-}
-.fa.icon svg path {
-  fill: #888;
-}
-.app .fa.icon {
-  font-size: 1.33333333em;
-  vertical-align: -15%;
-}
-.app .dialog-close .fa.icon svg {
-  margin-top: -7px;
-}
-.app .fa.icon svg {
-  width: 1rem;
-  height: 1rem;
-}
-.app .fa.icon svg path {
-  fill: #333;
 }
 /* lists */
 ul {
@@ -1061,6 +1040,27 @@ ul li {
   background-size: 100% 40px, 100% 40px, 100% 14px, 100% 14px;
   /* Opera doesn't support this in the shorthand */
   background-attachment: local, local, scroll, scroll;
+}
+.fa.icon svg {
+  width: 1.6rem;
+  height: 1.6rem;
+}
+.fa.icon svg path {
+  fill: #888;
+}
+.app .fa.icon {
+  font-size: 1.33333333em;
+  vertical-align: -15%;
+}
+.app .dialog-close .fa.icon svg {
+  margin-top: -7px;
+}
+.app .fa.icon svg {
+  width: 1rem;
+  height: 1rem;
+}
+.app .fa.icon svg path {
+  fill: #333;
 }
 .security-token {
   font-size: 1.6rem;
@@ -1439,7 +1439,7 @@ ul li {
   -ms-text-overflow: ellipsis;
 }
 .quickaccess .index-list .resource-entry a:after {
-  background: transparent url('../../../img/fa/fas/chevron-right.svg') 23rem center no-repeat;
+  background: transparent url('../../../img/controls/chevron-right_black.svg') 23rem center no-repeat;
   background-size: 1.6rem 1.6rem;
   content: "";
   display: block;
@@ -1481,7 +1481,7 @@ ul li {
   position: relative;
 }
 .quickaccess .index-list .filter-entry a:after {
-  background: transparent url('../../../img/fa/fas/chevron-right.svg') 23rem center no-repeat;
+  background: transparent url('../../../img/controls/chevron-right_black.svg') 23rem center no-repeat;
   background-size: 1.6rem 1.6rem;
   content: "";
   display: block;

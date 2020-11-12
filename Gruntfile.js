@@ -34,14 +34,6 @@ module.exports = function(grunt) {
 				dest: "src/css/",
 				ext: ".css"
 			},
-      theme_anew: {
-        expand: true,
-        flatten: true,
-        cwd: "src/less/themes/anew",
-        src: "*.less",
-        dest: "src/css/themes/anew",
-        ext: ".css"
-      },
       theme_default: {
         expand: true,
         flatten: true,
@@ -91,10 +83,11 @@ module.exports = function(grunt) {
           'cp ./src/css/themes/default/api_main.css ./demo/react-appjs/public/css/themes/default/.',
           'cp ./src/css/themes/midgar/api_main.css ./demo/react-appjs/public/css/themes/midgar/.',
 
-          'rm -f ./demo/react-extension/public/css/themes/default/ext_app.css',
-          'rm -f ./demo/react-extension/public/css/themes/midgar/ext_app.css',
+          'rm -f ./demo/react-extension/public/css/themes/midgar/*.css',
           'cp ./src/css/themes/default/ext_app.css ./demo/react-extension/public/css/themes/default/.',
-          'cp ./src/css/themes/midgar/ext_app.css ./demo/react-extension/public/css/themes/midgar/.'
+          'cp ./src/css/themes/midgar/ext_app.css ./demo/react-extension/public/css/themes/midgar/.',
+          'cp ./src/css/themes/default/ext_authentication.css ./demo/react-extension/public/css/themes/default/.',
+          'cp ./src/css/themes/midgar/ext_authentication.css ./demo/react-extension/public/css/themes/midgar/.'
         ].join('&& ')
       }
 		},
@@ -106,13 +99,6 @@ module.exports = function(grunt) {
 				dest: 'build/css/',
 				ext: '.min.css'
 			},
-      theme_anew: {
-        expand: true,
-        cwd: 'src/css/themes/anew',
-        src: ['*.css', '!*.min.css'],
-        dest: 'build/css/themes/anew',
-        ext: '.min.css'
-      },
       theme_default: {
         expand: true,
         cwd: 'src/css/themes/default',
@@ -129,16 +115,6 @@ module.exports = function(grunt) {
       }
 		},
     header: {
-      anew: {
-        options: {
-          text: banner
-        },
-        expand: true,
-        cwd: 'build/css/themes/anew',
-        src: ['*.css', '*.min.css'],
-        dest: 'build/css/themes/anew',
-        ext: '.min.css'
-      },
       public: {
         options: {
           text: banner
@@ -205,6 +181,6 @@ module.exports = function(grunt) {
 
 	// 'grunt' will check code quality, and if no errors,
 	// compile LESS to CSS, and minify and concatonate all JS and CSS
-	grunt.registerTask('default', [ 'clean:all', 'less', 'cssmin', 'header']);
+	grunt.registerTask('default', [ 'clean:all', 'less', 'cssmin', 'header', 'shell:copy-react-css']);
   grunt.registerTask('css', [ 'clean:css', 'less']);
 };

@@ -45,9 +45,9 @@ export default class DialogContextProvider extends React.Component {
   get defaultState() {
     return {
       dialogs: [],
-      open: Dialog => {
+      open: (Dialog, DialogProps) => {
         const dialogKey = uuidv4();
-        this.setState({dialogs: [...this.state.dialogs, {key: dialogKey, Dialog}]});
+        this.setState({dialogs: [...this.state.dialogs, {key: dialogKey, Dialog, DialogProps}]});
         return dialogKey;
       },
       close: async dialogKey => await this.setState({dialogs: this.state.dialogs.filter(dialog => dialogKey !== dialog.key)})

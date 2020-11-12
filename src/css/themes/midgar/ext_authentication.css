@@ -1,0 +1,1915 @@
+/* palette */
+/* background */
+/* borders */
+/* font */
+/* buttons */
+/* box shadows */
+/* dropdown menus */
+/* inputs */
+/* logo */
+/* grid */
+/* messages */
+/* controls */
+/* sidebar */
+/* tables */
+/* tabs */
+/* tags */
+/* tooltip */
+/* loading animation */
+/* scrollbar */
+/* svg fill */
+/* favorite icon fill */
+/*! normalize.css v8.0.0 | MIT License | github.com/necolas/normalize.css */
+/* Document
+   ========================================================================== */
+/**
+ * 1. Correct the line height in all browsers.
+ * 2. Prevent adjustments of font size after orientation changes in iOS.
+ */
+html {
+  line-height: 1.15;
+  /* 1 */
+  -webkit-text-size-adjust: 100%;
+  /* 2 */
+}
+/* Sections
+   ========================================================================== */
+/**
+ * Remove the margin in all browsers.
+ */
+body {
+  margin: 0;
+}
+/**
+ * Correct the font size and margin on `h1` elements within `section` and
+ * `article` contexts in Chrome, Firefox, and Safari.
+ */
+h1 {
+  font-size: 2em;
+  margin: 0.67em 0;
+}
+/* Grouping content
+   ========================================================================== */
+/**
+ * 1. Add the correct box sizing in Firefox.
+ * 2. Show the overflow in Edge and IE.
+ */
+hr {
+  box-sizing: content-box;
+  /* 1 */
+  height: 0;
+  /* 1 */
+  overflow: visible;
+  /* 2 */
+}
+/**
+ * 1. Correct the inheritance and scaling of font size in all browsers.
+ * 2. Correct the odd `em` font sizing in all browsers.
+ */
+pre {
+  font-family: monospace, monospace;
+  /* 1 */
+  font-size: 1em;
+  /* 2 */
+}
+/* Text-level semantics
+   ========================================================================== */
+/**
+ * Remove the gray background on active links in IE 10.
+ */
+a {
+  background-color: transparent;
+}
+/**
+ * 1. Remove the bottom border in Chrome 57-
+ * 2. Add the correct text decoration in Chrome, Edge, IE, Opera, and Safari.
+ */
+abbr[title] {
+  border-bottom: none;
+  /* 1 */
+  text-decoration: underline;
+  /* 2 */
+  text-decoration: underline dotted;
+  /* 2 */
+}
+/**
+ * Add the correct font weight in Chrome, Edge, and Safari.
+ */
+b,
+strong {
+  font-weight: bolder;
+}
+/**
+ * 1. Correct the inheritance and scaling of font size in all browsers.
+ * 2. Correct the odd `em` font sizing in all browsers.
+ */
+code,
+kbd,
+samp {
+  font-family: monospace, monospace;
+  /* 1 */
+  font-size: 1em;
+  /* 2 */
+}
+/**
+ * Add the correct font size in all browsers.
+ */
+small {
+  font-size: 80%;
+}
+/**
+ * Prevent `sub` and `sup` elements from affecting the line height in
+ * all browsers.
+ */
+sub,
+sup {
+  font-size: 75%;
+  line-height: 0;
+  position: relative;
+  vertical-align: baseline;
+}
+sub {
+  bottom: -0.25em;
+}
+sup {
+  top: -0.5em;
+}
+/* Embedded content
+   ========================================================================== */
+/**
+ * Remove the border on images inside links in IE 10.
+ */
+img {
+  border-style: none;
+}
+/* Forms
+   ========================================================================== */
+/**
+ * 1. Change the font styles in all browsers.
+ * 2. Remove the margin in Firefox and Safari.
+ */
+button,
+input,
+optgroup,
+select,
+textarea {
+  font-family: inherit;
+  /* 1 */
+  font-size: 100%;
+  /* 1 */
+  line-height: 1.15;
+  /* 1 */
+  margin: 0;
+  /* 2 */
+}
+/**
+ * Show the overflow in IE.
+ * 1. Show the overflow in Edge.
+ */
+button,
+input {
+  /* 1 */
+  overflow: visible;
+}
+/**
+ * Remove the inheritance of text transform in Edge, Firefox, and IE.
+ * 1. Remove the inheritance of text transform in Firefox.
+ */
+button,
+select {
+  /* 1 */
+  text-transform: none;
+}
+/**
+ * Correct the inability to style clickable types in iOS and Safari.
+ */
+button,
+[type="button"],
+[type="reset"],
+[type="submit"] {
+  -webkit-appearance: button;
+}
+/**
+ * Remove the inner border and padding in Firefox.
+ */
+button::-moz-focus-inner,
+[type="button"]::-moz-focus-inner,
+[type="reset"]::-moz-focus-inner,
+[type="submit"]::-moz-focus-inner {
+  border-style: none;
+  padding: 0;
+}
+/**
+ * Restore the focus styles unset by the previous rule.
+ */
+button:-moz-focusring,
+[type="button"]:-moz-focusring,
+[type="reset"]:-moz-focusring,
+[type="submit"]:-moz-focusring {
+  outline: 1px dotted ButtonText;
+}
+/**
+ * Correct the padding in Firefox.
+ */
+fieldset {
+  padding: 0.35em 0.75em 0.625em;
+}
+/**
+ * 1. Correct the text wrapping in Edge and IE.
+ * 2. Correct the color inheritance from `fieldset` elements in IE.
+ * 3. Remove the padding so developers are not caught out when they zero out
+ *    `fieldset` elements in all browsers.
+ */
+legend {
+  box-sizing: border-box;
+  /* 1 */
+  color: inherit;
+  /* 2 */
+  display: table;
+  /* 1 */
+  max-width: 100%;
+  /* 1 */
+  padding: 0;
+  /* 3 */
+  white-space: normal;
+  /* 1 */
+}
+/**
+ * Add the correct vertical alignment in Chrome, Firefox, and Opera.
+ */
+progress {
+  vertical-align: baseline;
+}
+/**
+ * Remove the default vertical scrollbar in IE 10+.
+ */
+textarea {
+  overflow: auto;
+}
+/**
+ * 1. Add the correct box sizing in IE 10.
+ * 2. Remove the padding in IE 10.
+ */
+[type="checkbox"],
+[type="radio"] {
+  box-sizing: border-box;
+  /* 1 */
+  padding: 0;
+  /* 2 */
+}
+/**
+ * Correct the cursor style of increment and decrement buttons in Chrome.
+ */
+[type="number"]::-webkit-inner-spin-button,
+[type="number"]::-webkit-outer-spin-button {
+  height: auto;
+}
+/**
+ * 1. Correct the odd appearance in Chrome and Safari.
+ * 2. Correct the outline style in Safari.
+ */
+[type="search"] {
+  -webkit-appearance: textfield;
+  /* 1 */
+  outline-offset: -2px;
+  /* 2 */
+}
+/**
+ * Remove the inner padding in Chrome and Safari on macOS.
+ */
+[type="search"]::-webkit-search-decoration {
+  -webkit-appearance: none;
+}
+/**
+ * 1. Correct the inability to style clickable types in iOS and Safari.
+ * 2. Change font properties to `inherit` in Safari.
+ */
+::-webkit-file-upload-button {
+  -webkit-appearance: button;
+  /* 1 */
+  font: inherit;
+  /* 2 */
+}
+/* Interactive
+   ========================================================================== */
+/*
+ * Add the correct display in Edge, IE 10+, and Firefox.
+ */
+details {
+  display: block;
+}
+/*
+ * Add the correct display in all browsers.
+ */
+summary {
+  display: list-item;
+}
+/* Misc
+   ========================================================================== */
+/**
+ * Add the correct display in IE 10+.
+ */
+template {
+  display: none;
+}
+/**
+ * Add the correct display in IE 10.
+ */
+[hidden] {
+  display: none;
+}
+/* opensans */
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Open Sans'), local('OpenSans'), url('../../../fonts/opensans-regular.woff') format('woff');
+}
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 700;
+  src: local('Open Sans Bold'), local('OpenSans-Bold'), url('../../../fonts/opensans-bold.woff') format('woff');
+}
+body {
+  font-family: 'Open Sans', Verdana, sans-serif;
+}
+.code {
+  font-family: 'Courier New', Courier, monospace;
+}
+html {
+  font-size: 62.5%;
+  /* =10px */
+}
+body {
+  font-size: 1.4rem;
+  /* =14px */
+}
+h1 {
+  font-size: 2.2rem;
+  line-height: 3.2rem;
+}
+h2 {
+  font-size: 1.6rem;
+  line-height: 2.4rem;
+}
+p {
+  font-size: 1.4rem;
+  line-height: 2.4rem;
+}
+code {
+  font-size: 1.1rem;
+}
+/* ==========================================================================
+ *	Helper classes
+ * ========================================================================== */
+/*
+ * Hide from both screenreaders and browsers: h5bp.com/u
+ */
+html body .hidden {
+  display: none;
+}
+/*
+ * Hide only visually, but have it available for screenreaders: h5bp.com/v
+ */
+.visually-hidden,
+.visuallyhidden {
+  border: 0;
+  clip: rect(0 0 0 0);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
+  /*
+     * Extends the .visuallyhidden class to allow the element to be focusable
+     * when navigated to via the keyboard: h5bp.com/p
+     */
+}
+.visually-hidden .focusable:active,
+.visuallyhidden .focusable:active,
+.visually-hidden .focusable:focus,
+.visuallyhidden .focusable:focus {
+  clip: auto;
+  height: auto;
+  margin: 0;
+  overflow: visible;
+  position: static;
+  width: auto;
+}
+.clearfix {
+  /*
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
+}
+.clearfix:before,
+.clearfix:after {
+  content: "";
+  display: table;
+}
+.clearfix:after {
+  clear: both;
+}
+/*
+ * Border radius
+ */
+.rounded {
+  -webkit-border-radius: 0.214em;
+  -moz-border-radius: 0.214em;
+  border-radius: 0.214em;
+}
+/* ellipsis */
+.ellipsis {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -o-text-overflow: ellipsis;
+  -ms-text-overflow: ellipsis;
+}
+/* box shadows */
+/* rotations */
+.rotate-right {
+  transform: rotate(-90deg);
+}
+/* body */
+html {
+  line-height: 1.6rem;
+}
+body {
+  color: #FFFFFC;
+  background: #30302D;
+}
+body.iframe {
+  background: transparent;
+}
+/* links */
+a {
+  line-height: 1.5rem;
+  border-bottom: 1px solid #0C0C0A;
+  text-decoration: none;
+}
+a:link,
+a:visited {
+  color: #FFFFFC;
+}
+a:hover {
+  color: #2894DF;
+  border-bottom: 1px solid #2894DF;
+}
+a:active,
+a:focus {
+  outline: 0;
+  color: #2894DF;
+  border: 0;
+}
+a.no-border,
+a:hover.no-border {
+  border-bottom: 0;
+}
+a.disabled {
+  outline: 0;
+  text-decoration: none;
+  cursor: default;
+  color: #606060;
+  pointer-events: none;
+}
+/*
+	Generic buttons
+*/
+.button {
+  font-size: 1.4rem;
+  padding: 0.4rem 1.6rem;
+  line-height: 1.5rem;
+  position: relative;
+  display: inline-block;
+  vertical-align: baseline;
+  margin-right: 1.6rem;
+  outline: none;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+  border: 1px solid #222220;
+  color: #FFFFFC;
+  font-weight: normal;
+  text-shadow: 0 1px 0 #000000;
+  background: #444442;
+  background-image: linear-gradient(top, #444442, #444442);
+  -webkit-border-radius: 0.214em;
+  -moz-border-radius: 0.214em;
+  border-radius: 0.214em;
+  box-sizing: border-box;
+}
+/* sizes */
+.button.small {
+  font-size: 1.4rem;
+  padding: 0.4rem 1.6rem;
+}
+.button.medium {
+  font-size: 1.6rem;
+  padding: 0.8rem 1.6rem;
+}
+.button.big {
+  font-size: 1.8rem;
+  padding: 1.6rem 3.2rem;
+}
+.button.full-width {
+  width: 100%;
+}
+/* primary */
+.button.primary {
+  background: #2894DF;
+  border: 1px solid #2894DF;
+  color: #FFF;
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.2);
+}
+.button.primary:hover {
+  background: #2A9CEB;
+  border: 1px solid #2A9CEB;
+  color: #FFF;
+}
+.button.primary:active,
+.button.primary:focus {
+  color: #EEEEEC;
+  border: 1px solid #4271b7;
+  background: #2A9CEB;
+}
+/* warning */
+.button.warning,
+.button.warning:hover,
+.button.warning:focus,
+.button.warning:active {
+  color: #EEEEEC;
+  background: #D40101;
+  border: 1px solid #D40101;
+  text-shadow: none;
+}
+.button.warning:focus,
+.button.warning:active {
+  border: 1px solid #92000C;
+}
+/* cancel */
+.button.cancel,
+.button.cancel:focus,
+.button.cancel:hover,
+.button.cancel:active,
+.button.dim,
+.button.dim:focus,
+.button.dim:hover,
+.button.dim:active {
+  background: #30302D;
+  font-weight: normal;
+}
+/* hover */
+.button:hover {
+  color: #FFFFFC;
+  text-decoration: none;
+  background: #444442;
+  background-image: linear-gradient(top, #606060, #606060);
+  border: 1px solid #30302D;
+}
+/* focus */
+.button:focus {
+  color: #2894DF;
+  border: 1px solid #2894DF;
+}
+/* active */
+.button:active {
+  color: #2894DF;
+  border: 1px solid #2894DF;
+  background: #3B3B39;
+  position: relative;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+/* disabled */
+.button.disabled {
+  cursor: default;
+  color: #8B8B89;
+  background: #3B3B39;
+  border: 1px solid #0C0C0A;
+  text-shadow: none;
+  font-weight: normal;
+}
+.button.disabled:hover,
+.button.disabled:active,
+.button.disabled:focus {
+  box-shadow: 0 0 0;
+  top: 0;
+  color: #8B8B89;
+  background: #3B3B39;
+  border: 1px solid #0C0C0A;
+}
+/* processing state */
+.button.processing {
+  background: #30302D;
+  border: 1px solid #30302D;
+}
+.button.processing:after {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  content: " ";
+  top: -1px;
+  left: -1px;
+  background: #30302D url('../../../img/controls/loading_dark.svg') center center no-repeat;
+  background-size: auto 50% ;
+  border: 1px solid #0C0C0A;
+  -webkit-border-radius: 0.214em;
+  -moz-border-radius: 0.214em;
+  border-radius: 0.214em;
+}
+input[type=submit].button.processing {
+  font-size: 0;
+  background: #30302D url('../../../img/controls/loading_dark.svg') center center no-repeat;
+  background-size: auto 50% ;
+  border: 1px solid #0C0C0A;
+  border-radius: 5px;
+}
+/* toggle selected */
+.button-toggle.selected {
+  background: #222220;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.2);
+  border: 1px solid #0C0C0A;
+}
+/*
+	Base form components styling
+	Check components/form for more advanced/fancy input
+*/
+/* input label */
+label {
+  font-weight: bold;
+  font-size: 1.6rem;
+  /* 16px */
+  line-height: 2.4rem;
+  /* 24px */
+  padding: 0.8rem 0;
+  display: block;
+}
+/*
+	Required Label
+
+	Description	: Label and input are wrapped in <div.text.required>. Additional <span> with a star is included. Input also get the required class.
+	.required		- additional red star
+*/
+.required label:after {
+  content: " *";
+  color: #FF6B70;
+  font-weight: bold;
+}
+.input.error label {
+  color: #FF6B70;
+}
+/*
+	Generic Form Item
+
+	Description	: labels and input are wrapped in a <div.text>
+
+	:hover			- subtle hover highlight
+	:active			- inset box shadow
+	.disabled		- grey out to indicate it cannot be used
+*/
+input[type=text],
+input[type=email],
+input[type=password],
+input[type=search],
+textarea {
+  box-sizing: border-box;
+  font-size: 1.6rem;
+  line-height: 2.4rem;
+  color: #FFFFFC;
+  background: #0C0C0A;
+  width: 100%;
+  max-width: 64rem;
+  padding: 0.6rem 1.2rem;
+  display: inline-block;
+  margin-bottom: 0.8rem;
+  border: 1px solid #222220;
+  border-top: 1px solid #30302D;
+  vertical-align: middle;
+}
+textarea:hover,
+input[type=password]:hover,
+input[type=search]:hover,
+input[type=text]:hover,
+input[type=email]:hover {
+  border: 1px solid #30302D;
+}
+textarea:focus,
+input[type=password]:focus,
+input[type=search]:focus,
+input[type=text]:focus,
+input[type=email]:focus {
+  outline: 0;
+  box-shadow: inset 1px 1px 2px rgba(0, 0, 0, 0.2);
+  border: 1px solid #2894DF;
+}
+input[type=password]:disabled,
+input[type=search]:disabled,
+input[type=text]:disabled,
+input[type=email]:disabled {
+  color: #FFFFFC;
+  border: 1px solid #0C0C0A;
+  box-shadow: 0 0 0 0;
+  cursor: default;
+  background: #444442;
+}
+/*
+	Textarea Textfield
+	Description	: textarea.textarea is pretty much the same than div.input.text.
+
+	.required		- additional red star
+	.lage		 	 - make the box bigger
+*/
+textarea {
+  height: 3.6rem;
+  /* 4 char (default input length) x 1em (average char length) + .6em (padding) */
+  line-height: 1.6rem;
+}
+.textarea.large textarea {
+  width: 30rem;
+  height: 7rem;
+}
+.checkbox input[type=checkbox] {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+}
+.checkbox input[type=checkbox] + label {
+  font-weight: normal;
+  position: relative;
+  cursor: pointer;
+  padding: 0;
+  margin-bottom: 0.8rem;
+}
+.checkbox input[type=checkbox] + label:before {
+  content: '';
+  margin-top: 0.39rem;
+  margin-right: 1rem;
+  display: inline-block;
+  vertical-align: text-top;
+  width: 1.4rem;
+  height: 1.4rem;
+  background: #0C0C0A;
+  border: 1px solid #0C0C0A;
+}
+.checkbox input[type=checkbox]:hover + label:before {
+  border: 1px solid #30302D;
+}
+.checkbox input[type=checkbox]:focus + label:before {
+  box-shadow: 0 0 0 0.3rem rgba(0, 0, 0, 0.12);
+}
+.checkbox input[type=checkbox]:checked + label:before {
+  background: #0C0C0A;
+  border: 1px solid #30302D;
+}
+.checkbox input[type=checkbox]:disabled + label {
+  color: #0C0C0A;
+  cursor: auto;
+}
+.checkbox input[type=checkbox]:disabled + label:before {
+  box-shadow: none;
+  background: #444442;
+}
+.checkbox input[type=checkbox]:checked + label:after {
+  content: '';
+  position: absolute;
+  left: 0.3rem;
+  top: 0.79rem;
+  width: 1rem;
+  height: 1rem;
+  background-size: 1rem 1rem;
+  background-color: #FFFFFC;
+  -webkit-mask-image: url('../../../img/controls/check_white.svg');
+  mask-image: url('../../../img/controls/check_white.svg');
+}
+.checkbox.small input[type=checkbox] {
+  cursor: pointer;
+}
+.checkbox.small input[type=checkbox] + label {
+  font-size: 1.4rem;
+}
+.checkbox.small input[type=checkbox] + label:before {
+  margin-top: 0.2rem;
+  margin-right: 1rem;
+  width: 1.4rem;
+  height: 1.4rem;
+}
+.checkbox.small input[type=checkbox]:checked + label:after {
+  left: 0.3rem;
+  top: 0.7rem;
+  width: 1.1rem;
+  height: 1.1rem;
+  background-size: 1.1rem 1.1rem;
+}
+/*
+	Messages for validation error and example
+
+	.error-message - can be used for validation feedback
+	.help-message - can be used for example messages prior validation
+*/
+.input .error-message {
+  padding: 0;
+  font-size: 1.4rem;
+  margin-top: 0.2rem;
+  margin-bottom: 1.6rem;
+  background-color: transparent;
+  border: 0;
+  font-weight: normal;
+  color: #FF6B70;
+  background: #30302D;
+}
+.input .help-message {
+  padding: 0;
+  font-size: 1.4rem;
+  margin-top: 0.2rem;
+  margin-bottom: 1.6rem;
+  background-color: transparent;
+  border: 0;
+  color: #8B8B89;
+  font-weight: normal;
+  background: #30302D;
+}
+.logo {
+  background: transparent url('../../../img/logo/logo_white.svg') 0 0 no-repeat;
+  background-size: 20rem auto;
+  width: 20rem;
+  height: 4.5rem;
+}
+/* lists */
+ul {
+  padding: 0;
+  margin: 0;
+}
+ul li {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+[data-simplebar] {
+  position: relative;
+  flex-direction: column;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-content: flex-start;
+  align-items: flex-start;
+  width: inherit;
+  height: inherit;
+  max-width: inherit;
+  max-height: inherit;
+}
+.simplebar-wrapper {
+  overflow: hidden;
+  width: inherit;
+  height: inherit;
+  max-width: inherit;
+  max-height: inherit;
+}
+.simplebar-mask {
+  direction: inherit;
+  position: absolute;
+  overflow: hidden;
+  padding: 0;
+  margin: 0;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  width: auto !important;
+  height: auto !important;
+  z-index: 0;
+}
+.simplebar-offset {
+  direction: inherit !important;
+  box-sizing: inherit !important;
+  resize: none !important;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  padding: 0;
+  margin: 0;
+  -webkit-overflow-scrolling: touch;
+}
+.simplebar-content {
+  direction: inherit;
+  box-sizing: border-box !important;
+  position: relative;
+  display: block;
+  height: 100%;
+  /* Required for horizontal native scrollbar to not appear if parent is taller than natural height */
+  width: auto;
+  visibility: visible;
+  overflow: scroll;
+  /* Scroll on this element otherwise element can't have a padding applied properly */
+  max-width: 100%;
+  /* Not required for horizontal scroll to trigger */
+  max-height: 100%;
+  /* Needed for vertical scroll to trigger */
+}
+.simplebar-placeholder {
+  max-height: 100%;
+  max-width: 100%;
+  width: 100%;
+  pointer-events: none;
+}
+.simplebar-height-auto-observer-wrapper {
+  box-sizing: inherit !important;
+  height: 100%;
+  width: inherit;
+  max-width: 1px;
+  position: relative;
+  float: left;
+  max-height: 1px;
+  overflow: hidden;
+  z-index: -1;
+  padding: 0;
+  margin: 0;
+  pointer-events: none;
+  flex-grow: inherit;
+  flex-shrink: 0;
+  flex-basis: 0;
+}
+.simplebar-height-auto-observer {
+  box-sizing: inherit;
+  display: block;
+  opacity: 0;
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 1000%;
+  width: 1000%;
+  min-height: 1px;
+  min-width: 1px;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: -1;
+}
+.simplebar-track {
+  z-index: 1;
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+}
+.simplebar-scrollbar {
+  position: absolute;
+  right: 2px;
+  width: 7px;
+  min-height: 10px;
+}
+.simplebar-scrollbar:before {
+  position: absolute;
+  content: "";
+  background: black;
+  border-radius: 7px;
+  left: 0;
+  right: 0;
+  opacity: 0;
+  transition: opacity 0.2s linear;
+}
+.simplebar-track .simplebar-scrollbar.simplebar-visible:before {
+  /* When hovered, remove all transitions from drag handle */
+  opacity: 0.5;
+  transition: opacity 0s linear;
+}
+.simplebar-track.simplebar-vertical {
+  top: 0;
+  width: 11px;
+}
+.simplebar-track.simplebar-vertical .simplebar-scrollbar:before {
+  top: 2px;
+  bottom: 2px;
+}
+.simplebar-track.simplebar-horizontal {
+  left: 0;
+  height: 11px;
+}
+.simplebar-track.simplebar-horizontal .simplebar-scrollbar:before {
+  height: 100%;
+  left: 2px;
+  right: 2px;
+}
+.simplebar-track.simplebar-horizontal .simplebar-scrollbar {
+  right: auto;
+  left: 0;
+  top: 2px;
+  height: 7px;
+  min-height: 0;
+  min-width: 10px;
+  width: auto;
+}
+/* Rtl support */
+[data-simplebar-direction="rtl"] .simplebar-track.simplebar-vertical {
+  right: auto;
+  left: 0;
+}
+.hs-dummy-scrollbar-size {
+  direction: rtl;
+  position: fixed;
+  opacity: 0;
+  visibility: hidden;
+  height: 500px;
+  width: 500px;
+  overflow-y: hidden;
+  overflow-x: scroll;
+}
+/* credit: http://lea.verou.me/2012/04/background-attachment-local/ */
+.scroll-shadow {
+  overflow: auto;
+  background: linear-gradient(#30302D 30%, rgba(255, 255, 255, 0)), linear-gradient(rgba(255, 255, 255, 0), #30302D 70%) 0 100%, /* Shadows */ radial-gradient(farthest-side at 50% 0, rgba(0, 0, 0, 0.08), rgba(0, 0, 0, 0)), radial-gradient(farthest-side at 50% 100%, rgba(0, 0, 0, 0.08), rgba(0, 0, 0, 0)) 0 100%;
+  background-repeat: no-repeat;
+  background-color: #30302D;
+  background-size: 100% 40px, 100% 40px, 100% 14px, 100% 14px;
+  /* Opera doesn't support this in the shorthand */
+  background-attachment: local, local, scroll, scroll;
+}
+.simplebar-content {
+  /* Opera doesn't support this in the shorthand */
+  overflow: auto;
+  background: linear-gradient(#30302D 30%, rgba(255, 255, 255, 0)), linear-gradient(rgba(255, 255, 255, 0), #30302D 70%) 0 100%, /* Shadows */ radial-gradient(farthest-side at 50% 0, rgba(0, 0, 0, 0.08), rgba(0, 0, 0, 0)), radial-gradient(farthest-side at 50% 100%, rgba(0, 0, 0, 0.08), rgba(0, 0, 0, 0)) 0 100%;
+  background-repeat: no-repeat;
+  background-color: #30302D;
+  background-size: 100% 40px, 100% 40px, 100% 14px, 100% 14px;
+  /* Opera doesn't support this in the shorthand */
+  background-attachment: local, local, scroll, scroll;
+}
+.svg-icon {
+  display: inline-flex;
+  align-self: center;
+}
+.svg-icon svg {
+  fill: #FFF;
+  height: 1em;
+  width: 1em;
+}
+.svg-icon.baseline svg {
+  top: 0.125em;
+  position: relative;
+}
+.svg-icon.dim svg,
+.svg-icon.light svg {
+  fill: #EEEEEC;
+}
+.svg-icon.icon-only svg {
+  position: relative;
+  top: 0.25em;
+  width: 1.1rem;
+  height: 1.1rem;
+}
+a:hover .svg-icon svg {
+  fill: #2894DF;
+}
+a.disabled .svg-icon svg {
+  fill: #8B8B89;
+  pointer-events: none;
+  cursor: default;
+}
+a.disabled:hover .svg-icon svg {
+  fill: #8B8B89;
+}
+a.fav .svg-icon svg {
+  fill: #D40101;
+}
+a.unfav .svg-icon svg {
+  fill: #8B8B89;
+}
+.button .svg-icon svg {
+  top: 0.125em;
+  position: relative;
+}
+.button .svg-icon + span:not(.visuallyhidden) {
+  margin-left: 2px;
+  display: inline-block;
+}
+.button:hover .svg-icon svg,
+.button .svg-icon svg:hover {
+  fill: #FFFFFC;
+}
+/* warning */
+.button.primary:active .svg-icon svg,
+.button.primary:focus .svg-icon svg,
+.button.warning .svg-icon svg,
+.button.warning:hover .svg-icon svg,
+.button.warning:focus .svg-icon svg,
+.button.warning:active .svg-icon svg {
+  fill: #EEEEEC;
+}
+/* focus */
+.button:focus .svg-icon svg,
+.button:active .svg-icon svg {
+  fill: #2894DF;
+}
+.button.disabled .svg-icon svg {
+  fill: #8B8B89;
+}
+.button.disabled .svg-icon svg:hover {
+  fill: #8B8B89;
+}
+.password-hints {
+  margin-top: 1em;
+}
+.password-hints li {
+  line-height: 1.5em;
+}
+.password-hints li:before {
+  content: "●";
+  color: #444442;
+  padding-right: 0.5em;
+}
+.password-hints li.success:before {
+  color: #009900;
+}
+.password-hints li.error:before {
+  color: #D40101;
+}
+/**
+ * Tooltips!
+ * credits: Chris Bracco http://cbracco.me/a-simple-css-tooltip/
+ */
+/* Base styles for the element that has a tooltip */
+[data-tooltip],
+.tooltip {
+  position: relative;
+  cursor: pointer;
+}
+/* Base styles for the entire tooltip */
+[data-tooltip]:before,
+[data-tooltip]:after,
+.tooltip:before,
+.tooltip:after {
+  position: absolute;
+  visibility: hidden;
+  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
+  opacity: 0;
+  transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out, transform 0.2s cubic-bezier(0.71, 1.7, 0.77, 1.24);
+  transform: translate3d(0, 0, 0);
+  pointer-events: none;
+  text-align: center;
+}
+/* Show the entire tooltip on hover and focus */
+[data-tooltip]:hover:before,
+[data-tooltip]:hover:after,
+[data-tooltip]:focus:before,
+[data-tooltip]:focus:after,
+.tooltip:hover:before,
+.tooltip:hover:after,
+.tooltip:focus:before,
+.tooltip:focus:after,
+.always-show:before,
+.always-show:after {
+  visibility: visible;
+  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100);
+  opacity: 1;
+}
+/* Base styles for the tooltip's directional arrow */
+.tooltip:before,
+[data-tooltip]:before {
+  z-index: 990;
+  border: 0.6rem solid transparent;
+  background: transparent;
+  content: "";
+}
+/* Base styles for the tooltip's content area */
+.tooltip:after,
+[data-tooltip]:after {
+  z-index: 990;
+  padding: 0.4rem;
+  width: 16rem;
+  background-color: hsla(0, 0%, 20%, 0.9);
+  color: #EEEEEC;
+  content: attr(data-tooltip);
+  font-size: 1.4rem;
+  line-height: 2.4rem;
+  font-weight: normal;
+  text-shadow: none;
+}
+/* Directions */
+/* Top (default) */
+[data-tooltip]:before,
+[data-tooltip]:after,
+.tooltip:before,
+.tooltip:after,
+.tooltip-top:before,
+.tooltip-top:after {
+  bottom: 100%;
+  left: 50%;
+}
+[data-tooltip]:before,
+.tooltip:before,
+.tooltip-top:before {
+  margin-left: -0.6rem;
+  margin-bottom: -1.2rem;
+  border-top-color: hsla(0, 0%, 20%, 0.9);
+}
+/* Horizontally align top/bottom tooltips */
+[data-tooltip]:after,
+.tooltip:after,
+.tooltip-top:after {
+  margin-left: -8rem;
+}
+[data-tooltip]:hover:before,
+[data-tooltip]:hover:after,
+[data-tooltip]:focus:before,
+[data-tooltip]:focus:after,
+.tooltip:hover:before,
+.tooltip:hover:after,
+.tooltip:focus:before,
+.tooltip:focus:after,
+.tooltip.always-show:after,
+.tooltip.always-show:before,
+.tooltip-top.always-show:after,
+.tooltip-top.always-show:before,
+.tooltip-top:hover:before,
+.tooltip-top:hover:after,
+.tooltip-top:focus:before,
+.tooltip-top:focus:after {
+  transform: translateY(-1.2rem);
+}
+/* Left */
+.tooltip-left:before,
+.tooltip-left:after {
+  right: 100%;
+  bottom: 50%;
+  left: auto;
+}
+.tooltip-left:before {
+  margin-left: 0;
+  margin-right: -1.2rem;
+  margin-bottom: 0;
+  border-top-color: transparent;
+  border-left-color: hsla(0, 0%, 20%, 0.9);
+}
+.tooltip-left:hover:before,
+.tooltip-left:hover:after,
+.tooltip-left.always-show:after,
+.tooltip-left.always-show:before,
+.tooltip-left:focus:before,
+.tooltip-left:focus:after {
+  transform: translateX(-1.2rem);
+}
+/* Bottom */
+.tooltip-bottom:before,
+.tooltip-bottom:after {
+  top: 100%;
+  bottom: auto;
+  left: 50%;
+}
+.tooltip-bottom:before {
+  margin-top: -1.2rem;
+  margin-bottom: 0;
+  border-top-color: transparent;
+  border-bottom-color: hsla(0, 0%, 20%, 0.9);
+}
+.tooltip-bottom:hover:before,
+.tooltip-bottom:hover:after,
+.tooltip-bottom.always-show:after,
+.tooltip-bottom.always-show:before,
+.tooltip-bottom:focus:before,
+.tooltip-bottom:focus:after {
+  transform: translateY(1.2rem);
+}
+/* Right */
+.tooltip-right:before,
+.tooltip-right:after {
+  bottom: 50%;
+  left: 100%;
+}
+.tooltip-right:before {
+  margin-bottom: 0;
+  margin-left: -1.2rem;
+  border-top-color: transparent;
+  border-right-color: #222220;
+}
+.tooltip-right:hover:before,
+.tooltip-right:hover:after,
+.tooltip-right.always-show:after,
+.tooltip-right.always-show:before,
+.tooltip-right:focus:before,
+.tooltip-right:focus:after {
+  transform: translateX(1.2rem);
+}
+/* Move directional arrows down a bit for left/right tooltips */
+.tooltip-left:before,
+.tooltip-right:before {
+  top: 0.3rem;
+}
+/* Vertically center tooltip content for left/right tooltips */
+.tooltip-left:after,
+.tooltip-right:after {
+  margin-left: 0;
+  margin-bottom: -1.6rem;
+}
+/* large width */
+.tooltip.large:after,
+[data-tooltip].large:after {
+  width: 240rem;
+}
+.tooltip-right.large:before,
+.tooltip-right.large:after,
+.tooltip-left.large:before,
+.tooltip-left.large:after {
+  margin-top: 0.6rem;
+}
+.infinite.loading-bar {
+  max-width: 45.2rem;
+  margin: auto auto -0.4rem auto;
+}
+@keyframes drawLine1 {
+  0% {
+    stroke-dashoffset: -40rem;
+  }
+  100% {
+    stroke-dashoffset: 45rem;
+  }
+}
+@keyframes drawLine2 {
+  0% {
+    stroke-dashoffset: 15em;
+  }
+  100% {
+    stroke-dashoffset: -45.2rem;
+  }
+}
+.infinite.loading-bar #svg-loading-bar-line1 {
+  stroke-dasharray: 20rem 45.2rem;
+  stroke: #DE8888;
+}
+.infinite.loading-bar #svg-loading-bar-line2 {
+  stroke: #92000C;
+  stroke-dasharray: 15rem 45.2em;
+}
+.infinite.loading-bar.animated #svg-loading-bar-line1 {
+  animation: drawLine1 2s ease-out 0s alternate infinite none running;
+}
+.infinite.loading-bar.animated #svg-loading-bar-line2 {
+  animation: drawLine2 2s linear 0s normal infinite none running;
+}
+.openpgp-key textarea {
+  height: 12rem;
+  resize: none;
+}
+.passphrase input[type=password] {
+  box-sizing: border-box;
+  width: calc(100% - 6.7rem);
+}
+.security-token {
+  font-size: 1.6rem;
+  padding: 0.6rem 1.6rem;
+  text-align: center;
+  display: inline-block;
+  width: 6.4rem;
+  margin-top: -0.8rem;
+  margin-left: -0.4rem;
+  border: 1px solid #30302D;
+  line-height: 2.4rem;
+  vertical-align: middle;
+  box-sizing: border-box;
+}
+/* Dialog */
+.dialog-wrapper {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: 800;
+  background: rgba(0, 0, 0, 0.8);
+  overflow: auto;
+}
+.dialog-wrapper .placeholder {
+  position: relative;
+  width: 1em;
+  margin: auto;
+  height: 100%;
+}
+.dialog-wrapper .placeholder .loading {
+  position: absolute;
+  top: 30%;
+  height: 2em;
+  width: 2em;
+  background: url('../../../img/controls/loading_dark.svg');
+  background-size: 2em 2em;
+}
+.dialog {
+  position: relative;
+  max-width: 30em;
+  border: 1px solid #0C0C0A;
+  background: #444442;
+  margin: auto;
+  margin-top: 1%;
+  /* some space for the footer / notification area in case it is really tall */
+  margin-bottom: 3em;
+  box-shadow: 0px 0px 10px 0px #000;
+  /* header */
+  /* inputs */
+  /* Error display */
+  /* submit / cancel */
+}
+.dialog.medium {
+  max-width: 36em;
+}
+.dialog .dialog-header {
+  padding: 0.5em 1em 0 1em;
+  height: 3em;
+}
+.dialog .dialog-header h2 {
+  margin: 0.25em 2em 0.5em 0.2em;
+  font-size: 1.2em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -o-text-overflow: ellipsis;
+  -ms-text-overflow: ellipsis;
+}
+.dialog .dialog-header h2 svg {
+  position: relative;
+  top: 0.0625em;
+}
+.dialog .dialog-header .tooltip-alt {
+  margin-left: 0.3em;
+  font-size: 0.7em;
+  font-weight: normal;
+  color: #FFFFFC;
+}
+.dialog .dialog-header .tooltip-alt .tooltip-text {
+  white-space: normal;
+}
+.dialog .dialog-header .dialog-header-subtitle {
+  padding-top: 0.3em;
+  padding-left: 1em;
+  font-size: 0.7em;
+  color: #FFFFFC;
+}
+.dialog .dialog-header .dialog-close {
+  margin-top: -2.5em;
+}
+.dialog .form-content {
+  background: #30302D;
+  padding: 0.813em 1.5em 1.5em 1.5em;
+}
+.dialog p {
+  margin-top: 0.5em;
+  font-size: 1em;
+  /* 15px */
+}
+.dialog p + .checkbox {
+  padding-bottom: 0.5em;
+}
+.dialog p + .checkbox label {
+  font-size: 1em;
+}
+.dialog label {
+  clear: both;
+  font-size: 0.938em;
+  /* 15px */
+  line-height: 1.6em;
+  /* 24px */
+}
+.dialog input[type=text],
+.dialog textarea {
+  width: 100%;
+  box-sizing: border-box;
+  /*
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
+  /*
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
+}
+.dialog input[type=text]:before,
+.dialog textarea:before,
+.dialog input[type=text]:after,
+.dialog textarea:after {
+  content: "";
+  display: table;
+}
+.dialog input[type=text]:after,
+.dialog textarea:after {
+  clear: both;
+}
+.dialog input[type=text]:before,
+.dialog textarea:before,
+.dialog input[type=text]:after,
+.dialog textarea:after {
+  content: "";
+  display: table;
+}
+.dialog input[type=text]:after,
+.dialog textarea:after {
+  clear: both;
+}
+.dialog textarea + .message,
+.dialog input + .message {
+  display: none;
+  /* do not show empty placeholders */
+}
+.dialog textarea + .message.error,
+.dialog input + .message.error {
+  display: block;
+  clear: both;
+  width: 100%;
+}
+.dialog .inline-error {
+  color: #FF6B70;
+  font-weight: bold;
+}
+.dialog .accordion-header a {
+  display: inline;
+}
+.dialog .submit-wrapper {
+  margin: 0;
+  clear: both;
+  width: 100%;
+  padding: 0.75em 0;
+}
+.dialog .submit-wrapper .cancel,
+.dialog .submit-wrapper .button {
+  float: right;
+  margin-right: 1.25em;
+  font-size: 1.125em;
+}
+.dialog .submit-wrapper .button {
+  box-sizing: border-box;
+  min-width: 5em;
+}
+.dialog .submit-wrapper .secondary {
+  float: left;
+  margin-left: 1.5em;
+  margin-top: 0.7em;
+  font-size: 1em;
+}
+.dialog .submit-wrapper .cancel {
+  margin-top: 0.7em;
+  font-size: 1em;
+}
+/* can also be used outside a dialog, like the sidebar */
+.dialog-close,
+.dialog-close:hover {
+  display: block;
+  float: right;
+  border: 0;
+}
+.dialog-close:active {
+  -webkit-border-radius: 0.214em;
+  -moz-border-radius: 0.214em;
+  border-radius: 0.214em;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+.dialog-close .fa-close {
+  padding-top: 15px;
+  width: 30px;
+  height: 15px;
+  text-align: center;
+  display: block;
+  vertical-align: baseline;
+  line-height: 0;
+  border: 1px solid #3B3B39;
+  -webkit-border-radius: 0.214em;
+  -moz-border-radius: 0.214em;
+  border-radius: 0.214em;
+}
+.dialog-close .svg-icon {
+  padding: 7px 0 7px 0;
+  width: 30px;
+  height: 15px;
+  text-align: center;
+  display: block;
+  vertical-align: baseline;
+  line-height: 15px;
+  border: 1px solid #3B3B39;
+  -webkit-border-radius: 0.214em;
+  -moz-border-radius: 0.214em;
+  border-radius: 0.214em;
+}
+.dialog-close:hover .fa-close,
+.dialog-close:hover .svg-icon {
+  border: 1px solid #3B3B39;
+  -webkit-border-radius: 0.214em;
+  -moz-border-radius: 0.214em;
+  border-radius: 0.214em;
+}
+/* reduce font-size for small screen */
+@media all and (max-width: 480px) {
+  .dialog {
+    margin: 0;
+    border: 0;
+    box-shadow: none;
+    width: 100%;
+    max-width: 100%;
+    margin-bottom: 2.5em;
+  }
+}
+html,
+body {
+  height: 100%;
+}
+.login.page {
+  padding: 2.4rem;
+}
+.login.page h1 {
+  margin-top: 0;
+  font-size: 2.4rem;
+  color: #cacac9;
+}
+.login.page p {
+  font-size: 1.6rem;
+}
+.login.page .processing-wrapper {
+  display: block;
+  width: 10em;
+  height: 10em;
+  margin: auto;
+}
+.login.page .processing-wrapper .processing-text {
+  display: block;
+  text-align: center;
+}
+.login.page .processing-wrapper .processing-text:before {
+  display: block;
+  width: 10em;
+  height: 10em;
+  content: " ";
+  background: transparent url('../../../img/controls/loading_dark.svg') center center no-repeat;
+  background-size: auto 40%;
+}
+.login.page .login-form {
+  min-height: 16rem;
+}
+.login.page .login-form .form-actions {
+  text-align: center;
+}
+.login.page .login-form .button {
+  width: 100%;
+  margin-top: 1.2em;
+}
+.login.page .login-form .button + a {
+  font-size: 1.6rem;
+  line-height: 2.4rem;
+  text-align: center;
+  display: inline-block;
+  margin-top: 1.6rem;
+}
+.login.page .email-sent-instructions {
+  text-align: center;
+}
+.login.page .email-sent-instructions .email-sent-bg {
+  background: transparent url('../../../img/illustrations/email.png') top center no-repeat;
+  background-size: auto 90%;
+  height: 16rem;
+}
+.login.page .email-sent-instructions h1 {
+  margin-top: 1.5em;
+  font-size: 2.4rem;
+}
+.login.page .email-sent-instructions p {
+  padding: 0.5em 0.5em 0 0.5em;
+  margin-bottom: 0;
+}
+.login.page .choose-security-token .input-security-token {
+  /*
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
+  /*
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
+  margin: 1em 0 1.5em 0;
+}
+.login.page .choose-security-token .input-security-token:before,
+.login.page .choose-security-token .input-security-token:after {
+  content: "";
+  display: table;
+}
+.login.page .choose-security-token .input-security-token:after {
+  clear: both;
+}
+.login.page .choose-security-token .input-security-token:before,
+.login.page .choose-security-token .input-security-token:after {
+  content: "";
+  display: table;
+}
+.login.page .choose-security-token .input-security-token:after {
+  clear: both;
+}
+.login.page .choose-security-token .input-security-token label {
+  margin-bottom: 0.5em;
+}
+.login.page .choose-security-token .input-security-token .input.text {
+  -webkit-border-radius: 0.214em;
+  -moz-border-radius: 0.214em;
+  border-radius: 0.214em;
+  font-size: 3.6rem;
+  max-width: 10rem;
+  float: left;
+  text-align: center;
+  margin-right: 1em;
+}
+.login.page .choose-security-token .input-security-token .circle-picker {
+  float: left;
+}
+.login.page .choose-security-token .input-security-token .randomize-button-wrapper {
+  float: left;
+  width: 10rem;
+  text-align: center;
+  clear: both;
+}
+.login.page .choose-security-token .input-security-token .svg-icon svg {
+  height: 0.85em;
+  width: 0.85em;
+}
+.login.page .install-extension a.browser-webstore {
+  border: 0;
+}
+.login.page .install-extension a.browser-webstore img {
+  max-width: 26rem;
+}
+.login.page .install-extension a.browser-webstore.firefox img {
+  padding: 1em 0;
+}
+.login.page .choose-passphrase .password {
+  /*
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
+  /*
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
+}
+.login.page .choose-passphrase .password:before,
+.login.page .choose-passphrase .password:after {
+  content: "";
+  display: table;
+}
+.login.page .choose-passphrase .password:after {
+  clear: both;
+}
+.login.page .choose-passphrase .password:before,
+.login.page .choose-passphrase .password:after {
+  content: "";
+  display: table;
+}
+.login.page .choose-passphrase .password:after {
+  clear: both;
+}
+.login.page .choose-passphrase .password input {
+  float: left;
+  box-sizing: border-box;
+  width: calc(100% - 4.1rem);
+}
+.login.page .choose-passphrase .password .password-view {
+  width: 3em;
+  float: left;
+  margin-top: 0;
+  margin-right: 0;
+  margin-left: -0.1rem;
+  height: 2.7em;
+  border-radius: 0;
+  padding: 0.6rem 0.8rem 0.6rem 1rem;
+  background: #0C0C0A;
+  border: 1px solid #222220;
+  border-left: 0;
+  border-top: 1px solid #30302D;
+}
+.login.page .choose-passphrase .password .password-view svg {
+  margin-top: 3px;
+}
+.login.page .choose-passphrase .password input:focus + .password-view {
+  box-shadow: inset -1px 1px 1px rgba(0, 0, 0, 0.2);
+  border: 1px solid #2894DF;
+  border-left: 0;
+}
+.login.page .choose-passphrase .password-complexity .complexity-text {
+  float: right;
+  clear: right;
+  width: 30%;
+  font-size: 11px;
+  text-align: left;
+  padding-left: 0;
+}
+.login.page .choose-passphrase .password-complexity.not_available .complexity-text {
+  color: #0C0C0A;
+}
+.login.page .choose-passphrase .password-complexity .progress {
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid #0C0C0A;
+  height: 10px;
+  display: block;
+  clear: both;
+  margin: 0.25em 0 0.5em 0;
+  float: left;
+}
+.login.page .choose-passphrase .password-complexity .progress-bar {
+  background: #000;
+  width: 0;
+  height: 6px;
+  display: block;
+  float: left;
+  margin: 1px;
+}
+.login.page .choose-passphrase .password-complexity .progress-bar.very_weak {
+  background: #000;
+  width: 5%;
+}
+.login.page .choose-passphrase .password-complexity .progress-bar.weak {
+  background: #D40101;
+  width: 10%;
+}
+.login.page .choose-passphrase .password-complexity .progress-bar.fair {
+  background: #FFBD2E;
+  width: 60%;
+}
+.login.page .choose-passphrase .password-complexity .progress-bar.strong {
+  background: #66CC00;
+  width: 80%;
+}
+.login.page .choose-passphrase .password-complexity .progress-bar.very_strong {
+  background: #009900;
+  width: 99.5%;
+}
+@media only screen and (min-width: 42rem) {
+  body {
+    background: #222220;
+  }
+  .login.page {
+    padding: 0;
+    display: grid;
+    height: 100%;
+    grid-template-columns: 1fr 1.5fr 1fr;
+    grid-template-rows: 0.1fr 1fr 0.05fr;
+    grid-gap: 1px;
+    grid-template-areas: ". . ." ". login-form ." "footer footer footer";
+  }
+  .login.page .content {
+    grid-area: login-form;
+  }
+  .login.page .content .loading-bar {
+    display: block;
+  }
+  .login.page .content .logo {
+    margin: 1.6em auto;
+    width: 20rem;
+    background-size: 20rem auto;
+  }
+  .login.page .content .login-form {
+    box-shadow: 0px 0px 10px 0px #000;
+    border-radius: 0.3rem;
+    max-width: 37.2rem;
+    margin: auto;
+    padding: 4.8rem 4rem 5.6rem 4rem;
+    background: #30302D;
+  }
+}

@@ -1,0 +1,31 @@
+.svg-baseline() {
+    top:.125em;
+    position: relative;
+}
+
+.svg-icon {
+    display: inline-flex;
+    align-self: center;
+
+    svg {
+        fill: @fill-color;
+        height:1em;
+        width:1em;
+    }
+    &.baseline svg {
+        .svg-baseline();
+    }
+    &.dim svg,
+    &.light svg {
+        fill: @fill-light-color;
+    }
+    &.icon-only svg {
+        position:relative;
+        top: .25em;
+        width: 1.1rem;
+        height: 1.1rem;
+    }
+}
+
+@import "icons-svg-links.less";
+@import "icons-svg-buttons.less";

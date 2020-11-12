@@ -47,6 +47,7 @@
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^10.4.9",
     "jest": "^26.4.2",
+    "react-color": "^2.19.3",
     "simplebar": "^5.2.1",
     "webextension-polyfill": "^0.6.0",
     "xregexp": "^4.3.0"

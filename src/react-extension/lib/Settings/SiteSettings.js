@@ -12,6 +12,7 @@
  * @since         3.0.0
  */
 import getPropValue from "../../../react/lib/Common/Object/getPropValue";
+import sanitizeUrl from "../Common/Sanitize/sanitizeUrl";
 
 export default class SiteSettings {
   constructor(settings) {
@@ -58,5 +59,27 @@ export default class SiteSettings {
 
   getServerTimezone() {
     return getPropValue(this.settings, "passbolt.app.server_timezone");
+  }
+
+  /**
+   * Get terms and condition links if any
+   * @returns {string|boolean}
+   */
+  get termsLink() {
+    if (this.settings.app.legal && this.settings.app.legal.terms) {
+      return sanitizeUrl(this.settings.app.legal.terms);
+    }
+    return false;
+  }
+
+  /**
+   * Get privacy link if any
+   * @returns {string|boolean}
+   */
+  get privacyLink() {
+    if (this.settings.app.legal && this.settings.app.legal.privacy) {
+      return sanitizeUrl(this.settings.app.legal.privacy);
+    }
+    return false;
   }
 }

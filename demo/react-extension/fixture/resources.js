@@ -254,7 +254,7 @@ export default (() => {
     "id": "2a08d0ad-cd50-5f06-a1b1-a2fa46e44d3f",
     "name": "Debian",
     "username": "jessy",
-    "uri": "passbolt.dev",
+    "uri": "javascript:alert('ok')",
     "description": "The universal operating system",
     "deleted": false,
     "created": "2020-08-27T08:35:19+00:00",
