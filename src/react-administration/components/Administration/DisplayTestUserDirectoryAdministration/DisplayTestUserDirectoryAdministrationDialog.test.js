@@ -13,7 +13,7 @@
  */
 
 /**
- * Unit tests on DisplayTestUserDirectoryAdministrationDialog in regard of specifications
+ * Unit tests on DisplaySimulateSynchronizeUserDirectoryAdministrationDialog in regard of specifications
  */
 import DisplayUserDirectoryAdministrationPage from "./DisplayTestUserDirectoryAdministrationDialog.test.page";
 import {waitFor} from "@testing-library/react";

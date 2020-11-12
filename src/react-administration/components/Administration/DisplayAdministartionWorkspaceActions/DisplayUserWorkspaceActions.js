@@ -17,6 +17,9 @@ import PropTypes from "prop-types";
 import AppContext from "../../../contexts/AppContext";
 import Icon from "../../Common/Icons/Icon";
 import {withAdministrationWorkspace} from "../../../contexts/AdministrationWorkspaceContext";
+import DisplaySimulateSynchronizeUserDirectoryAdministrationDialog
+  from "../DisplaySimulateSynchronizeUserDirectoryAdministration/DisplaySimulateSynchronizeUserDirectoryAdministrationDialog";
+import {withDialog} from "../../../../react/contexts/Common/DialogContext";
 
 /**
  * This component is a container of multiple actions applicable on setting
@@ -37,6 +40,7 @@ class DisplayAdministrationWorkspaceActions extends React.Component {
   bindCallbacks() {
     this.handleSaveClick = this.handleSaveClick.bind(this);
     this.handleTestClick = this.handleTestClick.bind(this);
+    this.handleSimulateSynchronizeClick = this.handleSimulateSynchronizeClick.bind(this);
   }
 
   /**
@@ -57,6 +61,7 @@ class DisplayAdministrationWorkspaceActions extends React.Component {
    * Handle simulate synchronize settings
    */
   handleSimulateSynchronizeClick() {
+    this.props.dialogContext.open(DisplaySimulateSynchronizeUserDirectoryAdministrationDialog);
   }
 
   /**
@@ -137,6 +142,7 @@ DisplayAdministrationWorkspaceActions.contextType = AppContext;
 
 DisplayAdministrationWorkspaceActions.propTypes = {
   administrationWorkspaceContext: PropTypes.object, // The administration workspace context
+  dialogContext: PropTypes.any // The dialog context
 };
 
-export default withAdministrationWorkspace(DisplayAdministrationWorkspaceActions);
+export default withDialog(withAdministrationWorkspace(DisplayAdministrationWorkspaceActions));

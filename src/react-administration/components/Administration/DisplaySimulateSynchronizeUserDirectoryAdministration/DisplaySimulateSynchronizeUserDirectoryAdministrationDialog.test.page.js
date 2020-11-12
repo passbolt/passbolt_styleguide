@@ -14,7 +14,7 @@
 import {fireEvent, render, waitFor} from "@testing-library/react";
 import AppContext from "../../../contexts/AppContext";
 import React from "react";
-import DisplayTestUserDirectoryAdministrationDialog from "./DisplayTestUserDirectoryAdministrationDialog";
+import DisplaySimulateSynchronizeUserDirectoryAdministrationDialog from "./DisplaySimulateSynchronizeUserDirectoryAdministrationDialog";
 
 /**
  * The DisplaySimulateSynchronizeUserDirectoryAdministrationDialog component represented as a page
@@ -28,7 +28,7 @@ export default class DisplayTestUserDirectoryAdministrationDialogPage {
   constructor(appContext, props) {
     this._page = render(
       <AppContext.Provider value={appContext}>
-        <DisplayTestUserDirectoryAdministrationDialog {...props}/>
+        <DisplaySimulateSynchronizeUserDirectoryAdministrationDialog {...props}/>
       </AppContext.Provider>
     );
     this.setupPageObjects();
@@ -39,7 +39,7 @@ export default class DisplayTestUserDirectoryAdministrationDialogPage {
    */
   setupPageObjects() {
     this._titleHeader = new TitleHeaderPageObject(this._page.container);
-    this._displayTestUserDirectoryAdministrationDialog = new DisplayTestUserDirectoryAdministrationDialogPageObject(this._page.container);
+    this._displaySimulateSynchronizeUserDirectoryAdministrationDialog = new DisplaySimulateSynchronizeUserDirectoryAdministrationDialogPageObject(this._page.container);
   }
 
   /**
@@ -52,8 +52,8 @@ export default class DisplayTestUserDirectoryAdministrationDialogPage {
   /**
    * Returns the page object of create user
    */
-  get displayTestUserDirectoryAdministrationDialog() {
-    return this._displayTestUserDirectoryAdministrationDialog;
+  get displaySimulateSynchronizeUserDirectoryAdministrationDialog() {
+    return this._displaySimulateSynchronizeUserDirectoryAdministrationDialog;
   }
 }
 
@@ -77,7 +77,7 @@ class TitleHeaderPageObject {
   }
 }
 
-class DisplayTestUserDirectoryAdministrationDialogPageObject {
+class DisplaySimulateSynchronizeUserDirectoryAdministrationDialogPageObject {
   /**
    * Default constructor
    * @param container The container which includes the AddComment Component
@@ -90,7 +90,7 @@ class DisplayTestUserDirectoryAdministrationDialogPageObject {
    * Returns the dialog element
    */
   get dialog() {
-    return this._container.querySelector('.ldap-test-settings-dialog');
+    return this._container.querySelector('.ldap-simulate-synchronize-dialog');
   }
 
   /**
@@ -101,94 +101,59 @@ class DisplayTestUserDirectoryAdministrationDialogPageObject {
   }
 
   /**
-   * Returns the test settings report element
+   * Returns the respurce synchronize report element
    */
-  get testSettingsReport() {
-    return this._container.querySelector('.ldap-test-settings-report');
+  get resourceSynchronize() {
+    return this._container.querySelector('#resources-synchronize').textContent;
   }
 
   /**
-   * Returns the users and groups found element
+   * Returns the no resource element
    */
-  get usersAndGroupsFound() {
-    return this._container.querySelector('.ldap-test-settings-report p').textContent;
+  get noResource() {
+    return this._container.querySelector('#no-resources');
   }
 
   /**
-   * Returns the list test report element
+   * Returns the error element
    */
-  get list() {
-    return this._container.querySelector('.accordion.directory-list .accordion-header');
+  get error() {
+    return this._container.querySelector('.error.inline-error').textContent;
   }
 
   /**
-   * Returns the structure test report element
+   * Returns the full report element
    */
-  get structure() {
-    return this._container.querySelector('.accordion.accordion-directory-structure .accordion-header');
+  get fullReport() {
+    return this._container.querySelector('.accordion.operation-details .accordion-header');
   }
 
   /**
    * Returns the errors test report element
    */
-  get errorsList() {
-    return this._container.querySelector('.accordion.accordion-directory-errors .accordion-header');
+  get textareaReport() {
+    return this._container.querySelector('.accordion-content .input.text textarea');
   }
 
   /**
-   * Returns the groups list element
+   * Returns the synchronize button element
    */
-  get groupsList() {
-    return this._container.querySelectorAll('.accordion.directory-list .accordion-content table tbody tr')[1].querySelectorAll('td')[0].querySelectorAll('div');
+  get synchronize() {
+    return this._container.querySelector('.submit-wrapper .button.primary');
   }
 
   /**
    * Returns the users list element
    */
-  get usersList() {
-    return this._container.querySelectorAll('.accordion.directory-list .accordion-content table tbody tr')[1].querySelectorAll('td')[1].querySelectorAll('div');
-  }
-
-  /**
-   * Returns the structure groups element
-   */
-  get structureGroups() {
-    return this._container.querySelectorAll('.accordion.accordion-directory-structure .accordion-content .directory-structure ul li.group ul li.group');
-  }
-
-  /**
-   * Returns the structure users element
-   */
-  get structureUsers() {
-    return this._container.querySelectorAll('.accordion.accordion-directory-structure .accordion-content .directory-structure ul li.group ul li.user');
-  }
-
-  /**
-   * Returns the number of errors element
-   */
-  get errors() {
-    return this._container.querySelector('.directory-errors.error').textContent;
-  }
-
-  /**
-   * Returns the error textarea element
-   */
-  get errorsTextarea() {
-    return this._container.querySelector('.accordion.accordion-directory-errors .accordion-content .directory-errors textarea');
-  }
-
-  /**
-   * Returns the error textarea element
-   */
-  get buttonOk() {
-    return this._container.querySelector('.button.primary');
+  get cancel() {
+    return this._container.querySelector('.submit-wrapper .cancel');
   }
 
   /**
    * Returns true if the page object exists in the container
    */
   exists() {
-    return this.testSettingsReport !== null;
+    return this.dialog !== null;
   }
 
   /** Click on the element */
