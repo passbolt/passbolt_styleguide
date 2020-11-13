@@ -16,7 +16,10 @@ import React from "react";
 import PropTypes from "prop-types";
 import AppContext from "../../../contexts/AppContext";
 import Icon from "../../Common/Icons/Icon";
-import {withAdministrationWorkspace} from "../../../contexts/AdministrationWorkspaceContext";
+import {
+  AdministrationWorkspaceMenuTypes,
+  withAdministrationWorkspace
+} from "../../../contexts/AdministrationWorkspaceContext";
 import DisplaySimulateSynchronizeUserDirectoryAdministrationDialog
   from "../DisplaySimulateSynchronizeUserDirectoryAdministration/DisplaySimulateSynchronizeUserDirectoryAdministrationDialog";
 import {withDialog} from "../../../../react/contexts/Common/DialogContext";
@@ -122,6 +125,14 @@ class DisplayAdministrationWorkspaceActions extends React.Component {
   }
 
   /**
+   * If User Directory menu is selected
+   * @returns {boolean}
+   */
+  isUserDirectorySelected() {
+    return AdministrationWorkspaceMenuTypes.USER_DIRECTORY === this.props.administrationWorkspaceContext.selectedAdministration;
+  }
+
+  /**
    * Render the component
    * @returns {JSX}
    */
@@ -136,24 +147,28 @@ class DisplayAdministrationWorkspaceActions extends React.Component {
                 <span>save settings</span>
               </a>
             </li>
-            <li>
-              <a className={`button  ${this.isTestEnabled() ? "" : "disabled"}`} onClick={this.handleTestClick}>
-                <Icon name="plug"/>
-                <span>test settings</span>
-              </a>
-            </li>
-            <li>
-              <a className={`button  ${this.isSynchronizeEnabled() ? "" : "disabled"}`} onClick={this.handleSimulateSynchronizeClick}>
-                <Icon name="magic-wand"/>
-                <span>simulate synchronize</span>
-              </a>
-            </li>
-            <li>
-              <a className={`button  ${this.isSynchronizeEnabled() ? "" : "disabled"}`} onClick={this.handleSynchronizeClick}>
-                <Icon name="refresh"/>
-                <span>synchronize</span>
-              </a>
-            </li>
+            {this.isUserDirectorySelected() &&
+            <div>
+              <li>
+                <a className={`button  ${this.isTestEnabled() ? "" : "disabled"}`} onClick={this.handleTestClick}>
+                  <Icon name="plug"/>
+                  <span>test settings</span>
+                </a>
+              </li>
+              <li>
+                <a className={`button  ${this.isSynchronizeEnabled() ? "" : "disabled"}`} onClick={this.handleSimulateSynchronizeClick}>
+                  <Icon name="magic-wand"/>
+                  <span>simulate synchronize</span>
+                </a>
+              </li>
+              <li>
+                <a className={`button  ${this.isSynchronizeEnabled() ? "" : "disabled"}`} onClick={this.handleSynchronizeClick}>
+                  <Icon name="refresh"/>
+                  <span>synchronize</span>
+                </a>
+              </li>
+            </div>
+            }
           </div>
         </div>
       </div>

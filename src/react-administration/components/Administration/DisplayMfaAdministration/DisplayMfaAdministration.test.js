@@ -24,7 +24,7 @@ beforeEach(() => {
   jest.resetModules();
 });
 
-describe("See the Create Dialog User", () => {
+describe("See the MFA settings", () => {
   let page; // The page to test against
   const context = defaultAppContext(); // The applicative context
   const props = defaultProps(); // The props to pass

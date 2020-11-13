@@ -25,6 +25,8 @@ import DisplayMfaAdministration from "./DisplayMfaAdministration/DisplayMfaAdmin
 import DisplayAdministrationWorkspaceActions from "./DisplayAdministartionWorkspaceActions/DisplayUserWorkspaceActions";
 import DisplayUserDirectoryAdministration
   from "./DisplayUserDirectoryAdministration/DisplayUserDirectoryAdministration";
+import DisplayEmailNotificationsAdministration
+  from "./DisplayEmailNotificationsAdministration/DisplayEmailNotificationsAdministration";
 
 class AdministrationWorkspace extends Component {
 
@@ -42,6 +44,14 @@ class AdministrationWorkspace extends Component {
    */
   isUserDirectorySelected() {
     return AdministrationWorkspaceMenuTypes.USER_DIRECTORY === this.props.administrationWorkspaceContext.selectedAdministration;
+  }
+
+  /**
+   * If Email notifications menu is selected
+   * @returns {boolean}
+   */
+  isEmailNotificationsSelected() {
+    return AdministrationWorkspaceMenuTypes.EMAIL_NOTIFICATION === this.props.administrationWorkspaceContext.selectedAdministration;
   }
 
   render() {
@@ -73,6 +83,9 @@ class AdministrationWorkspace extends Component {
                     }
                     {this.isUserDirectorySelected() &&
                     <DisplayUserDirectoryAdministration/>
+                    }
+                    {this.isEmailNotificationsSelected() &&
+                    <DisplayEmailNotificationsAdministration/>
                     }
                   </div>
                 </div>

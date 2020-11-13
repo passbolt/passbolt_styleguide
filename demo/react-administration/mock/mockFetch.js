@@ -19,6 +19,7 @@ import mockGetRequestUsers from "./request/mockGetRequestUsers";
 import mockPutRequestUserDirectorySettings from "./request/mockPutRequestUserDirectorySettings";
 import mockPostRequestUserDirectorySettings from "./request/mockPostRequestUserDirectorySettings";
 import mockGetRequestSimulateSynchronize from "./request/mockGetRequestSimulateSynchronize";
+import mockGetRequestEmailNotificationsSettings from "./request/mockGetRequestEmailNotificationsSettings";
 
 
 export default () => {
@@ -29,8 +30,10 @@ export default () => {
   mockFetch.addGetFetchRequest("http://localhost:3000/users.json?api-version=v2", mockGetRequestUsers);
   mockFetch.addGetFetchRequest("http://localhost:3000/directorysync/synchronize/dry-run.json?api-version=v2", mockGetRequestSimulateSynchronize);
   mockFetch.addGetFetchRequest("http://localhost:3000/directorysync/synchronize.json?api-version=v2", mockGetRequestSimulateSynchronize);
+  mockFetch.addGetFetchRequest("http://localhost:3000/settings/emails/notifications.json?api-version=v2", mockGetRequestEmailNotificationsSettings);
   mockFetch.addPostFetchRequest("http://localhost:3000/mfa/settings.json?api-version=v2", mockGetRequestMfaSettings);
   mockFetch.addPostFetchRequest("http://localhost:3000/directorysync/settings/test.json?api-version=v2", mockPostRequestUserDirectorySettings);
+  mockFetch.addPostFetchRequest("http://localhost:3000/settings/emails/notifications.json?api-version=v2", mockGetRequestEmailNotificationsSettings);
   mockFetch.addPutFetchRequest("http://localhost:3000/directorysync/settings.json?api-version=v2", mockPutRequestUserDirectorySettings);
   mockFetch.addDeleteFetchRequest("http://localhost:3000/directorysync/settings.json?api-version=v2", mockPutRequestUserDirectorySettings);
 
