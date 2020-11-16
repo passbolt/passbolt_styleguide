@@ -9,207 +9,144 @@
  * @copyright     Copyright (c) 2020 Passbolt SA (https://www.passbolt.com)
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
- * @since         2.14.0
+ * @since         2.11.0
  */
 
-import React from "react";
-import {render, fireEvent, waitFor} from "@testing-library/react";
-import AppContext from "../../../contexts/AppContext";
-import MockPort from "../../../test/mock/MockPort";
-import TagEditDialog from "./TagEditDialog";
+/**
+ * Unit tests on TagEditDialog in regard of specifications
+ */
 import {ActionFeedbackContext} from "../../../contexts/ActionFeedbackContext";
 import PassboltApiFetchError from "../../../../react/lib/Common/Error/PassboltApiFetchError";
-import DialogContextProvider from "../../../contexts/Common/DialogContext";
-import ManageDialogs from "../../Common/Dialog/ManageDialogs/ManageDialogs";
-import {BrowserRouter} from "react-router-dom";
+import {waitFor} from "@testing-library/react";
+import TagEditDialogPage from "./TagEditDialog.test.page";
+import {defaultAppContext, defaultProps} from "./TagEditDialog.test.data";
 
 beforeEach(() => {
   jest.resetModules();
 });
 
-const getAppContext = function(appContext) {
-  const port = new MockPort();
-  const defaultAppContext = {
-    port,
-    tagToEdit: {
-      id: "8e3874ae-4b40-590b-968a-418f704b9d9a",
-      slug: "tardis",
-      is_shared: false
-    },
-    setContext: function(newContext) {
-      // In this scope this reference the object context.
-      Object.assign(this, newContext);
-    },
+describe("See the Edit Tag Dialog", () => {
+  let page; // The page to test against
+  const context = defaultAppContext(); // The applicative context
+  const props = defaultProps(); // The props to pass
+  const tagToEdit = {
+    id: "8e3874ae-4b40-590b-968a-418f704b9d9a",
+    slug: "tardis",
+    is_shared: false
   };
 
-  return Object.assign(defaultAppContext, appContext || {});
-};
+  const mockContextRequest = (context, implementation) => jest.spyOn(context.port, 'request').mockImplementation(implementation);
 
-const getDummyTag = () => ({
-  onClose: jest.fn()
-});
-
-const renderTagEditDialog = function(appContext, props) {
-  appContext = getAppContext(appContext);
-
-  return render(
-    <BrowserRouter>
-      <AppContext.Provider value={appContext}>
-        <DialogContextProvider>
-          <ManageDialogs/>
-          <TagEditDialog debug onClose={props.onClose}/>
-        </DialogContextProvider>
-      </AppContext.Provider>
-    </BrowserRouter>
-  );
-};
-
-describe("TagEditDialog", () => {
-  it("matches the styleguide.", () => {
-    const context = getAppContext();
-    const props = getDummyTag();
-    const {container} = renderTagEditDialog(context, props);
-
-    // Dialog title exists and correct
-    const dialogTitle = container.querySelector(".dialog-header h2 span");
-    expect(dialogTitle).not.toBeNull();
-    expect(dialogTitle.textContent).toBe("Edit tag");
-
-    // Close button exists
-    const closeButton = container.querySelector(".dialog-close");
-    expect(closeButton).not.toBeNull();
-
-    // Name input field exists.
-    const nameInput = container.querySelector("[name=\"name\"]");
-    expect(nameInput).not.toBeNull();
-    expect(nameInput.value.trim()).toBe(context.tagToEdit.slug);
-
-    // Save button exists
-    const saveButton = container.querySelector(".submit-wrapper [type=\"submit\"]");
-    expect(saveButton).not.toBeNull();
-    expect(saveButton.value).toBe("Save");
-
-    // Cancel button exists
-    const cancelButton = container.querySelector(".submit-wrapper .cancel");
-    expect(cancelButton).not.toBeNull();
-    expect(cancelButton.textContent).toBe("Cancel");
-  });
-
-  it("calls onClose props when clicking on the close button.", () => {
-    const context = getAppContext();
-    const props = getDummyTag();
-    const {container} = renderTagEditDialog(context, props);
-
-    const leftClick = {button: 0};
-    const dialogCloseIcon = container.querySelector(".dialog-close");
-    fireEvent.click(dialogCloseIcon, leftClick);
-    expect(props.onClose).toBeCalled();
-  });
-
-  it("calls onClose props when clicking on the cancel button.", () => {
-    const context = getAppContext();
-    const props = getDummyTag();
-    const {container} = renderTagEditDialog(context, props);
-
-    const leftClick = {button: 0};
-    const cancelButton = container.querySelector(".submit-wrapper .cancel");
-    fireEvent.click(cancelButton, leftClick);
-    expect(props.onClose).toBeCalled();
-  });
-
-  it("validates the form when clicking on the submit button.", async() => {
-    const context = getAppContext();
-    const props = getDummyTag();
-    const {container} = renderTagEditDialog(context, props);
-
-    const nameInput = container.querySelector("[name=\"name\"]");
-    expect(nameInput.value).toBe("tardis");
-    const nameInputEvent = {target: {value: ""}};
-    fireEvent.change(nameInput, nameInputEvent);
-    expect(nameInput.value).toBe("");
-    await waitFor(() => {
+  describe('As LU I can start editing a tag', () => {
+    /**
+     * I should see the tag edit dialog
+     */
+    beforeEach(() => {
+      context.setContext({tagToEdit});
+      page = new TagEditDialogPage(context, props);
     });
 
-    const leftClick = {button: 0};
-    const submitButton = container.querySelector("input[type=\"submit\"]");
-    fireEvent.click(submitButton, leftClick);
+    it('matches the styleguide', async() => {
+      // Dialog title exists and correct
+      expect(page.tagEdit.exists()).toBeTruthy();
+      expect(page.title.header.textContent).toBe("Edit tag");
 
-    await waitFor(() => {
-      // Throw name error message
-      const nameErrorMessage = container.querySelector(".name.error.message");
-      expect(nameErrorMessage.textContent).toBe("A tag name is required.");
-    });
-  });
+      // Close button exists
+      expect(page.tagEdit.dialogClose).not.toBeNull();
 
-  it("requests the addon to edit a tag when clicking on the submit button.", async() => {
-    const context = getAppContext();
-    const props = getDummyTag();
-    const {container} = renderTagEditDialog(context, props);
+      // Name input field exists.
+      expect(page.tagEdit.tagName.value).toBe(context.tagToEdit.slug);
 
-    const tagMeta = {
-      slug: "tardis-updated",
-      is_shared: false,
-    };
+      // Save button exists
+      expect(page.tagEdit.saveButton.value).toBe("Save");
 
-    // Fill the form
-    const nameInput = container.querySelector("[name=\"name\"]");
-    const nameInputEvent = {target: {value: tagMeta.slug}};
-    fireEvent.change(nameInput, nameInputEvent);
-
-    // Mock the request function to make it the expected result
-    jest.spyOn(context.port, 'request').mockImplementationOnce(jest.fn());
-    jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementation(() => {
+      // Cancel button exists
+      expect(page.tagEdit.cancelButton.textContent).toBe("Cancel");
     });
 
-    // Submit and assert
-    const submitButton = container.querySelector("input[type=\"submit\"]");
-    fireEvent.click(submitButton, {button: 0});
+    it('As LU I see a success toaster message after editing a tag with success', async() => {
+      const slugUpdated = "tardis-updated";
+      // check fields in the form
+      expect(page.tagEdit.tagName.value).toBe(tagToEdit.slug);
+      // Fill the form
+      page.tagEdit.fillInput(page.tagEdit.tagName, slugUpdated);
 
-    const onApiUpdateTageMeta = {
-      id: "8e3874ae-4b40-590b-968a-418f704b9d9a",
-      slug: tagMeta.slug,
-      is_shared: tagMeta.is_shared
-    };
+      const requestMockImpl = jest.fn((message, data) => data);
+      mockContextRequest(context, requestMockImpl);
+      jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementation(() => {});
 
-    // API calls are made on submit, wait they are resolved.
-    await waitFor(() => {
-      expect(context.port.request).toHaveBeenCalledWith("passbolt.tags.update", onApiUpdateTageMeta);
-      expect(props.onClose).toBeCalled();
+      const tagDto = {
+        id: tagToEdit.id,
+        slug: slugUpdated,
+        is_shared: false,
+      };
+
+      await page.tagEdit.click(page.tagEdit.saveButton);
+
+      expect(context.port.request).toHaveBeenCalledWith("passbolt.tags.update", tagDto);
       expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalled();
-    });
-  });
-
-  it("displays an error when the API call fail.", async() => {
-    const context = getAppContext();
-    const props = getDummyTag();
-    const {container} = renderTagEditDialog(context, props);
-
-    const tagMeta = {
-      slug: "tardis-updated",
-      is_shared: false,
-    };
-
-    // Fill the form
-    const nameInput = container.querySelector("[name=\"name\"]");
-    const nameInputEvent = {target: {value: tagMeta.slug}};
-    fireEvent.change(nameInput, nameInputEvent);
-
-    // Mock the request function to make it return an error.
-    jest.spyOn(context.port, 'request').mockImplementationOnce(() => {
-      throw new PassboltApiFetchError("Jest simulate API error.");
+      expect(props.onClose).toBeCalled();
     });
 
-    // Submit and assert
-    const submitButton = container.querySelector("input[type=\"submit\"]");
-    fireEvent.click(submitButton, {button: 0});
+    it('As LU I cannot update the form fields and I should see a processing feedback while submitting the form', async() => {
+      // Mock the request function to make it the expected result
+      let updateResolve;
+      const requestMockImpl = jest.fn(() => new Promise(resolve => {
+        updateResolve = resolve;
+      }));
 
-    await waitFor(() => {
+      // Mock the request function to make it the expected result
+      mockContextRequest(context, requestMockImpl);
+      page.tagEdit.clickWithoutWaitFor(page.tagEdit.saveButton);
+      // API calls are made on submit, wait they are resolved.
+      await waitFor(() => {
+        expect(page.tagEdit.tagName.getAttribute("disabled")).not.toBeNull();
+        expect(page.tagEdit.saveButton.getAttribute("disabled")).not.toBeNull();
+        expect(page.tagEdit.cancelButtonDisabled).not.toBeNull();
+        expect(page.tagEdit.saveButtonProcessing).not.toBeNull();
+        updateResolve();
+      });
     });
 
-    // Throw general error message
-    const generalErrorDialog = container.querySelector(".error-dialog");
-    expect(generalErrorDialog).not.toBeNull();
-    const generalErrorMessage = container.querySelector(".error-dialog .dialog .dialog-content .form-content");
-    expect(generalErrorMessage).not.toBeNull();
+    it('As LU I shouldn’t be able to submit the form if there is an invalid field', async() => {
+      expect(page.tagEdit.exists()).toBeTruthy();
+      // empty the form
+      page.tagEdit.fillInput(page.tagEdit.tagName, "");
+      await page.tagEdit.click(page.tagEdit.saveButton);
+
+      // Throw error message
+      expect(page.tagEdit.tagNameErrorMessage.textContent).toBe("A tag name is required.");
+    });
+
+    it('As LU I can stop editing a user by clicking on the cancel button', async() => {
+      expect(page.tagEdit.exists()).toBeTruthy();
+      await page.tagEdit.click(page.tagEdit.cancelButton);
+      expect(props.onClose).toBeCalled();
+    });
+
+    it('As LU I can stop editing a user by closing the dialog', async() => {
+      expect(page.tagEdit.exists()).toBeTruthy();
+      await page.tagEdit.click(page.tagEdit.dialogClose);
+      expect(props.onClose).toBeCalled();
+    });
+
+    it('As LU I can stop adding a user with the keyboard (escape)', async() => {
+      expect(page.tagEdit.exists()).toBeTruthy();
+      await page.tagEdit.escapeKey(page.tagEdit.dialogClose);
+      expect(props.onClose).toBeCalled();
+    });
+
+    it('As LU I should see an error dialog if the submit operation fails for an unexpected reason', async() => {
+      // Mock the request function to make it return an error.
+      jest.spyOn(context.port, 'request').mockImplementationOnce(() => {
+        throw new PassboltApiFetchError("Jest simulate API error.");
+      });
+
+      await page.tagEdit.click(page.tagEdit.saveButton);
+
+      // Throw general error message
+      expect(page.tagEdit.errorDialog).not.toBeNull();
+      expect(page.tagEdit.errorDialogMessage).not.toBeNull();
+    });
   });
 });

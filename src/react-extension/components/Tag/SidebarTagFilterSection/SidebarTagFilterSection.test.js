@@ -12,446 +12,173 @@
  * @since         2.11.0
  */
 
-import React from "react";
-import {fireEvent, render, waitFor} from "@testing-library/react";
-import "../../../test/lib/crypto/cryptoGetRandomvalues";
-import AppContext from "../../../contexts/AppContext";
+/**
+ * Unit tests on SidebarTagFilterSection in regard of specifications
+ */
+import {defaultAppContext, defaultProps, tagsMock} from "./SidebarTagFilterSection.test.data";
+import SidebarTagFilterSectionPage from "./SidebarTagFilterSection.test.page";
 import MockPort from "../../../test/mock/MockPort";
-import SidebarTagFilterSection from "./SidebarTagFilterSection";
-import {ResourceWorkspaceFilterTypes} from "../../../contexts/ResourceWorkspaceContext";
-import ContextualMenuContextProvider from "../../../contexts/Common/ContextualMenuContext";
-import ManageContextualMenu from "../../ManageContextualMenu";
-import {BrowserRouter as Router} from "react-router-dom";
 
 beforeEach(() => {
   jest.resetModules();
 });
 
-const getDummyTags = function(filterBy) {
-  let tags = [
-    {
-      id: "1",
-      slug: "test",
-      is_shared: false
-    },
-    {
-      id: "2",
-      slug: "slug",
-      is_shared: false
-    },
-    {
-      id: "3",
-      slug: "#git",
-      is_shared: true
-    },
-    {
-      id: "4",
-      slug: "gpg",
-      is_shared: false
-    },
-    {
-      id: "5",
-      slug: "there’s always something to look at if you open your eyes!",
-      is_shared: false
-    }
-  ];
+describe("See tags", () => {
+  let page; // The page to test against
+  const props = defaultProps(); // The props to pass
 
-  if (filterBy) {
-    const filter = {
-      personal: tag => !tag.is_shared,
-      shared: tag => tag.is_shared
-    };
-    tags = tags.filter(filter[filterBy]);
-  }
-
-  return tags;
-};
-
-const getAppContext = function(appContext) {
-  const defaultAppContext = {
-    port: new MockPort(),
-  };
-
-  return Object.assign(defaultAppContext, appContext || {});
-};
-
-const renderTagFilter = function(appContext, props) {
-  appContext = getAppContext(appContext);
-  props = props || {};
-  return render(
-    <AppContext.Provider value={appContext}>
-      <Router>
-        <ContextualMenuContextProvider>
-          <ManageContextualMenu/>
-          <SidebarTagFilterSection debug {...props}/>
-        </ContextualMenuContextProvider>
-      </Router>
-    </AppContext.Provider>
-  );
-};
-
-describe("SidebarTagFilterSection", () => {
-  it("View resources' tags", () => {
-    const defaultAppContext = {
+  describe('As LU I see the tags of my resources', () => {
+    const appContext = {
       port: new MockPort(),
       resources: [
         {
-          tags: getDummyTags()
+          tags: tagsMock
         },
         {
-          tags: getDummyTags()
+          tags: tagsMock
         }
-      ]
+      ],
     };
-    const {container} = renderTagFilter(defaultAppContext);
+    const context = defaultAppContext(appContext); // The applicative context
+    /**
+     * Given an organization with 5 tags
+     * Then I should see the 5 tags on the left sidebar
+     * And I should see the tags sorted alphabetically
+     * And I should be able to see each tag name
+     */
 
-    // Sidebar Tags title exists and correct
-    const tagFilterTitle = container.querySelector("h3");
-    expect(tagFilterTitle).not.toBeNull();
-    expect(tagFilterTitle.textContent).toBe("Filter by tags");
+    beforeEach(() => {
+      page = new SidebarTagFilterSectionPage(context, props);
+    });
 
-    const tagSorted = getDummyTags().sort((tagA, tagB) => tagA.slug.localeCompare(tagB.slug));
+    it('I should see the 5 tags made on the resource', () => {
+      expect(page.sidebarTagFilterSection.exists()).toBeTruthy();
+      expect(page.sidebarTagFilterSection.count()).toBe(5);
+    });
 
-    // slug list exists
-    const slugList = container.querySelectorAll(".ellipsis");
-    expect(slugList).not.toBeNull();
-    expect(slugList.length).toBe(5);
-    slugList.forEach((value, index) => {
-      expect(value.textContent).toBe(tagSorted[index].slug);
+    it('I should be able to identify each tag name', () => {
+      expect(page.sidebarTagFilterSection.name(1)).toBe('#git');
+      expect(page.sidebarTagFilterSection.name(2)).toBe('gpg');
+      expect(page.sidebarTagFilterSection.name(3)).toBe('slug');
+      expect(page.sidebarTagFilterSection.name(4)).toBe('test');
+      expect(page.sidebarTagFilterSection.name(5)).toBe('there’s always something to look at if you open your eyes!');
+    });
+
+    it('As LU I filter the tags in the resources workspace primary sidebar by personal tag', async() => {
+      await page.title.click(page.title.filterButton);
+      expect(page.sidebarTagFilterSectionsContextualMenu.personalTagMenu.textContent).toBe("My tags");
+      await page.sidebarTagFilterSectionsContextualMenu.click(page.sidebarTagFilterSectionsContextualMenu.personalTagMenu);
+      expect(page.title.hyperlink.textContent).toBe("My tags");
+      expect(page.sidebarTagFilterSection.count()).toBe(4);
+    });
+
+    it('As LU I filter the tags in the resources workspace primary sidebar by all tags', async() => {
+      await page.title.click(page.title.filterButton);
+      expect(page.sidebarTagFilterSectionsContextualMenu.allTagMenu.textContent).toBe("All tags");
+      await page.sidebarTagFilterSectionsContextualMenu.click(page.sidebarTagFilterSectionsContextualMenu.allTagMenu);
+      expect(page.title.hyperlink.textContent).toBe("Filter by tags");
+      expect(page.sidebarTagFilterSection.count()).toBe(5);
+    });
+
+    it('As LU I filter the tags in the resources workspace primary sidebar by shared tag', async() => {
+      await page.title.click(page.title.filterButton);
+      expect(page.sidebarTagFilterSectionsContextualMenu.sharedTagMenu.textContent).toBe("Shared tags");
+      await page.sidebarTagFilterSectionsContextualMenu.click(page.sidebarTagFilterSectionsContextualMenu.sharedTagMenu);
+      expect(page.title.hyperlink.textContent).toBe("Shared tags");
+      expect(page.sidebarTagFilterSection.count()).toBe(1);
+    });
+
+    it('As LU I should be able to start deleting a tag', async() => {
+      await page.sidebarTagFilterSection.click(page.sidebarTagFilterSection.moreButton);
+      expect(page.displayTagListContextualMenu.deleteGroupContextualMenu).not.toBeNull();
+    });
+
+    it('As LU I should be able to start editing a tag', async() => {
+      await page.sidebarTagFilterSection.click(page.sidebarTagFilterSection.moreButton);
+      expect(page.displayTagListContextualMenu.editGroupContextualMenu).not.toBeNull();
     });
   });
 
-  it("View resources' empty tag", () => {
-    const defaultAppContext = {
+  describe('As LU I should see the tag section empty', () => {
+    const appContext = {
       port: new MockPort(),
       resources: [
         {
           tags: []
-        },
-      ]
-    };
-    const {container} = renderTagFilter(defaultAppContext);
-
-    // Sidebar Tags title exists and correct
-    const tagFilterTitle = container.querySelector("h3");
-    expect(tagFilterTitle).not.toBeNull();
-    expect(tagFilterTitle.textContent).toBe("Filter by tags");
-
-    // empty tag exists
-    const emptyTag = container.querySelector(".empty-content");
-    expect(emptyTag).not.toBeNull();
-    expect(emptyTag.textContent).toBe("empty");
-  });
-
-  it("View resources' loading tag", () => {
-    const {container} = renderTagFilter(getAppContext(), null);
-
-    // Sidebar Tags title exists and correct
-    const tagFilterTitle = container.querySelector("h3");
-    expect(tagFilterTitle).not.toBeNull();
-    expect(tagFilterTitle.textContent).toBe("Filter by tags");
-
-    // loading tag exists
-    const emptyTag = container.querySelector(".processing-text");
-    expect(emptyTag).not.toBeNull();
-    expect(emptyTag.textContent).toBe("Retrieving tags");
-  });
-
-  it("Cut long tags", () => {
-    // TODO Cut long tags so they fit on one line
-  });
-
-  it("Filter my resources’ tags by personal tags", () => {
-    const defaultAppContext = {
-      port: new MockPort(),
-      resources: [
-        {
-          tags: getDummyTags()
-        },
-        {
-          tags: getDummyTags()
         }
       ]
     };
-    const {container} = renderTagFilter(defaultAppContext);
+    const context = defaultAppContext(appContext); // The applicative context
+    /**
+     * Given an organization with 0 tags
+     * Then I should see the tag section empty
+     */
 
-    // Sidebar Tags title exists and correct
-    const tagFilterTitle = container.querySelector("h3");
-    expect(tagFilterTitle).not.toBeNull();
-    expect(tagFilterTitle.textContent).toBe("Filter by tags");
+    beforeEach(() => {
+      page = new SidebarTagFilterSectionPage(context, props);
+    });
 
-    // Click to display contextual menu tags
-    const leftClick = {button: 0};
-    const filterTagByType = container.querySelector(".filter");
-    expect(filterTagByType).not.toBeNull();
-    fireEvent.click(filterTagByType, leftClick);
+    it('I should see the tags section empty', () => {
+      expect(page.sidebarTagFilterSection.isEmpty()).toBeTruthy();
+    });
 
-    const personalTagMenu = container.querySelector("#personal-tag");
-    expect(personalTagMenu).not.toBeNull();
-    fireEvent.click(personalTagMenu, leftClick);
+    it('As LU I see an empty feedback if I’m member of no tag after filtering by personal tag', async() => {
+      context.resources[0].tags = [tagsMock[2]];
+      await page.title.click(page.title.filterButton);
+      expect(page.sidebarTagFilterSection.isEmpty()).toBeFalsy();
+      await page.sidebarTagFilterSectionsContextualMenu.click(page.sidebarTagFilterSectionsContextualMenu.personalTagMenu);
+      expect(page.title.hyperlink.textContent).toBe("My tags");
+      expect(page.sidebarTagFilterSection.isEmpty()).toBeTruthy();
+    });
 
-    const tagFilterTitleUpdated = container.querySelector("h3");
-    expect(tagFilterTitleUpdated).not.toBeNull();
-    expect(tagFilterTitleUpdated.textContent).toBe("My tags");
-
-    const personalTags = getDummyTags().filter(tag => !tag.is_shared).sort((tagA, tagB) => tagA.slug.localeCompare(tagB.slug));
-
-    // slug list exists
-    const slugList = container.querySelectorAll(".ellipsis");
-    expect(slugList).not.toBeNull();
-    expect(slugList.length).toBe(4);
-    slugList.forEach((value, index) => {
-      expect(value.textContent).toBe(personalTags[index].slug);
+    it('As LU I see an empty feedback if I manage no tag after filtering by shared tag', async() => {
+      context.resources[0].tags = [tagsMock[1]];
+      await page.title.click(page.title.filterButton);
+      expect(page.sidebarTagFilterSection.isEmpty()).toBeFalsy();
+      await page.sidebarTagFilterSectionsContextualMenu.click(page.sidebarTagFilterSectionsContextualMenu.sharedTagMenu);
+      expect(page.title.hyperlink.textContent).toBe("Shared tags");
+      expect(page.sidebarTagFilterSection.isEmpty()).toBeTruthy();
     });
   });
 
-  it("Filter my resources’ tags by shared tags", () => {
-    const defaultAppContext = {
-      port: new MockPort(),
-      resources: [
-        {
-          tags: getDummyTags()
-        },
-      ]
-    };
-    const {container} = renderTagFilter(defaultAppContext);
+  describe('As LU I see a loading feedback in the section when the tags are not yet fetched', () => {
+    const context = defaultAppContext(); // The applicative context
+    /**
+     * Given the tags section
+     * And the tags are not loaded yet
+     * Then I should see the loading message “Retrieving tags”
+     */
 
-    // Sidebar Tags title exists and correct
-    const tagFilterTitle = container.querySelector("h3");
-    expect(tagFilterTitle).not.toBeNull();
-    expect(tagFilterTitle.textContent).toBe("Filter by tags");
+    beforeEach(() => {
+      page = new SidebarTagFilterSectionPage(context, props);
+    });
 
-    // Click to display contextual menu tags
-    const leftClick = {button: 0};
-    const filterTagByType = container.querySelector(".filter");
-    expect(filterTagByType).not.toBeNull();
-    fireEvent.click(filterTagByType, leftClick);
-
-    const personalTagMenu = container.querySelector("#shared-tag");
-    expect(personalTagMenu).not.toBeNull();
-    fireEvent.click(personalTagMenu, leftClick);
-
-    const tagFilterTitleUpdated = container.querySelector("h3");
-    expect(tagFilterTitleUpdated).not.toBeNull();
-    expect(tagFilterTitleUpdated.textContent).toBe("Shared tags");
-
-    const sharedTags = getDummyTags().filter(tag => tag.is_shared);
-
-    // slug list exists
-    const slugList = container.querySelectorAll(".ellipsis");
-    expect(slugList).not.toBeNull();
-    expect(slugList.length).toBe(1);
-    slugList.forEach((value, index) => {
-      expect(value.textContent).toBe(sharedTags[index].slug);
+    it('I should see the loading message “Retrieving tags”', async() => {
+      expect(page.sidebarTagFilterSection.isLoading()).toBeTruthy();
     });
   });
 
-  it("Filter my resources’ tags by all tags", () => {
-    const defaultAppContext = {
+  describe('As LU I shouldn’t be able to start deleting a shared tag', () => {
+    const appContext = {
       port: new MockPort(),
       resources: [
         {
-          tags: getDummyTags()
+          tags: [tagsMock[2]]
         }
       ]
     };
-    const {container} = renderTagFilter(defaultAppContext);
+    const context = defaultAppContext(appContext); // The applicative context
+    /**
+     * Given the tags section
+     * Then I should’t see the delete tag menu for a shared tag
+     */
 
-    // Sidebar Tags title exists and correct
-    const tagFilterTitle = container.querySelector("h3");
-    expect(tagFilterTitle).not.toBeNull();
-    expect(tagFilterTitle.textContent).toBe("Filter by tags");
-
-    // Click to display contextual menu tags
-    const leftClick = {button: 0};
-    const filterTagByType = container.querySelector(".filter");
-    expect(filterTagByType).not.toBeNull();
-    fireEvent.click(filterTagByType, leftClick);
-
-    const allTagMenu = container.querySelector("#all-tag");
-    expect(allTagMenu).not.toBeNull();
-    fireEvent.click(allTagMenu, leftClick);
-
-    const tagFilterTitleUpdated = container.querySelector("h3");
-    expect(tagFilterTitleUpdated).not.toBeNull();
-    expect(tagFilterTitleUpdated.textContent).toBe("Filter by tags");
-
-    const tagSorted = getDummyTags().sort((tagA, tagB) => tagA.slug.localeCompare(tagB.slug));
-
-    // slug list exists
-    const slugList = container.querySelectorAll(".ellipsis");
-    expect(slugList).not.toBeNull();
-    expect(slugList.length).toBe(5);
-    slugList.forEach((value, index) => {
-      expect(value.textContent).toBe(tagSorted[index].slug);
-    });
-  });
-
-  it("As LU I cannot edit a shared tag", () => {
-    const defaultAppContext = {
-      port: new MockPort(),
-      resources: [
-        {
-          tags: getDummyTags()
-        }
-      ]
-    };
-    const {container} = renderTagFilter(defaultAppContext);
-
-    // Sidebar Tags title exists and correct
-    const tagFilterTitle = container.querySelector("h3");
-    expect(tagFilterTitle).not.toBeNull();
-    expect(tagFilterTitle.textContent).toBe("Filter by tags");
-
-    // Click to display contextual menu tags
-    const leftClick = {button: 0};
-    const filterTagByType = container.querySelector(".filter");
-    expect(filterTagByType).not.toBeNull();
-    fireEvent.click(filterTagByType, leftClick);
-
-    const shareTagMenu = container.querySelector("#shared-tag");
-    expect(shareTagMenu).not.toBeNull();
-    fireEvent.click(shareTagMenu, leftClick);
-
-    const moreTagItemMenu = container.querySelector(".more");
-    expect(moreTagItemMenu).toBeNull();
-  });
-
-  it.skip("Select a tag in a resource’s tags", async() => {
-    const defaultAppContext = {
-      port: new MockPort(),
-      resources: [
-        {
-          tags: getDummyTags()
-        }
-      ]
-    };
-    const props = {
-      history: {
-        push: () => {}
-      }
-    };
-    const {container} = renderTagFilter(defaultAppContext, props);
-
-    // Sidebar Tags title exists and correct
-    const tagFilterTitle = container.querySelector("h3");
-    expect(tagFilterTitle).not.toBeNull();
-    expect(tagFilterTitle.textContent).toBe("Filter by tags");
-
-    jest.spyOn(props.history, 'push').mockImplementation(() => {});
-
-    // Click to display contextual menu tags
-    const leftClick = {button: 0};
-    // slug list exists
-    const slugList = container.querySelectorAll(".ellipsis");
-    expect(slugList).not.toBeNull();
-    expect(slugList.length).toBe(5);
-    fireEvent.click(slugList[2], leftClick);
-
-    // API calls are made on submit, wait they are resolved.
-    await waitFor(() => {
+    beforeEach(() => {
+      page = new SidebarTagFilterSectionPage(context, props);
     });
 
-    expect(props.history.push).toHaveBeenCalled();
-  });
-
-  it.skip("Filter my resources’ tags by personal tags should filter my resources by All items if it was previously filtered with a shared tag", async() => {
-    const defaultAppContext = {
-      port: new MockPort(),
-      resources: [
-        {
-          tags: getDummyTags()
-        }
-      ]
-    };
-    const props = {
-      resourceWorkspaceContext: {
-        filter: {
-          type: ResourceWorkspaceFilterTypes.TAG,
-          payload: {
-            tag: {
-              is_shared: true
-            }
-          }
-        },
-      },
-      history: {
-        push: () => {}
-      }
-    };
-    const {container} = renderTagFilter(defaultAppContext, props);
-
-    // Sidebar Tags title exists and correct
-    const tagFilterTitle = container.querySelector("h3");
-    expect(tagFilterTitle).not.toBeNull();
-    expect(tagFilterTitle.textContent).toBe("Filter by tags");
-
-    jest.spyOn(props.history, 'push').mockImplementation(() => {});
-
-    // Click to display contextual menu tags
-    const leftClick = {button: 0};
-    const filterTagByType = container.querySelector(".filter");
-    expect(filterTagByType).not.toBeNull();
-    fireEvent.click(filterTagByType, leftClick);
-
-    const personalTagMenu = container.querySelector("#personal-tag");
-    expect(personalTagMenu).not.toBeNull();
-    fireEvent.click(personalTagMenu, leftClick);
-
-    // API calls are made on submit, wait they are resolved.
-    await waitFor(() => {
+    it('As LU I shouldn’t be able to start deleting a shared tag', async() => {
+      expect(page.sidebarTagFilterSection.moreButton).toBeNull();
     });
-
-    expect(props.history.push).toHaveBeenCalled();
-  });
-
-  it.skip("Filter my resources’ tags by shared tags should filter my resources by All items if it was previously filtered with a personal tag", async() => {
-    const defaultAppContext = {
-      port: new MockPort(),
-      resources: [
-        {
-          tags: getDummyTags()
-        }
-      ]
-    };
-    const props = {
-      resourceWorkspaceContext: {
-        filter: {
-          type: ResourceWorkspaceFilterTypes.TAG,
-          payload: {
-            tag: {
-              is_shared: false
-            }
-          }
-        },
-      },
-      history: {
-        push: () => {}
-      }
-    };
-    const {container} = renderTagFilter(defaultAppContext, props);
-
-    // Sidebar Tags title exists and correct
-    const tagFilterTitle = container.querySelector("h3");
-    expect(tagFilterTitle).not.toBeNull();
-    expect(tagFilterTitle.textContent).toBe("Filter by tags");
-
-    jest.spyOn(props.history, 'push').mockImplementation(() => {});
-
-    // Click to display contextual menu tags
-    const leftClick = {button: 0};
-    const filterTagByType = container.querySelector(".filter");
-    expect(filterTagByType).not.toBeNull();
-    fireEvent.click(filterTagByType, leftClick);
-
-    const sharedTagMenu = container.querySelector("#shared-tag");
-    expect(sharedTagMenu).not.toBeNull();
-    fireEvent.click(sharedTagMenu, leftClick);
-
-    // API calls are made on submit, wait they are resolved.
-    await waitFor(() => {
-    });
-
-    expect(props.history.push).toHaveBeenCalled();
   });
 });
