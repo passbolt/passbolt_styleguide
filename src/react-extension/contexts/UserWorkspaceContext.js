@@ -45,7 +45,7 @@ export const UserWorkspaceContext = React.createContext({
   },
   groupToEdit: null, // The group to edit
   onUserScrolled: () => {}, // Whenever one scrolled to a user
-  onLockDetail: () => {}, // Lock or unlock detail  (hide or display the group or user details)
+  onDetailsLocked: () => {}, // Lock or unlock detail  (hide or display the group or user details)
   onSorterChanged: () => {}, // Whenever the sorter changed
   onUserSelected: {
     single: () => {}// Whenever a single user has been selected
