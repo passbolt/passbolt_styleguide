@@ -14,6 +14,7 @@
 
 export default (filter, storage) => {
   return new Promise(async (resolve) => {
+    console.log("roudoudou")
     const {resources} = await storage.local.get(["resources"]);
     const resourcesFiltered = [...resources];
     if(filter && filter['is-shared-with-group'] !== null) {
