@@ -289,7 +289,7 @@ class EditUserGroup extends Component {
     const actions = Object.assign(this.state.actions, {processing: true});
     this.setState({actions});
 
-    await this.validate()
+    await this.validate();
     if (this.hasErrors()) {
       return this.handleValidateError();
     }
