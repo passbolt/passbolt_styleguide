@@ -146,11 +146,17 @@ class ExportResourcesCredentials extends Component {
    */
   async export() {
     const password = this.passwordInputRef.current.value;
-    const keyFile = await this.readFile();
-    const options = {format: "kdbx", credentials: {password, keyFile}};
+    const keyfile = await this.readFile();
+    const options = {credentials: {password, keyfile}};
     const foldersIds = this.props.resourceWorkspaceContext.resourcesToExport.foldersIds;
     const resourcesIds = this.props.resourceWorkspaceContext.resourcesToExport.resourcesIds;
-    await this.context.port.request("passbolt.export-passwords.export-to-file", {foldersIds, resourcesIds}, options);
+    const exportDto = {
+      format: "kdbx",
+      folders_ids: foldersIds,
+      resources_ids: resourcesIds,
+      options: options
+    };
+    await this.context.port.request("passbolt.export-resources.export-to-file", exportDto);
   }
 
   /**
