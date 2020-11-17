@@ -88,7 +88,8 @@ class FoldersTreeRootFolderContextualMenu extends React.Component {
    */
   async export() {
     const foldersIds = this.context.folders.filter(folder => folder.folder_parent_id === null).map(folder => folder.id);
-    await this.props.resourceWorkspaceContext.onResourcesToExport({foldersIds});
+    const resourcesIds = this.context.resources.filter(resource => resource.folder_parent_id === null).map(resource => resource.id);
+    await this.props.resourceWorkspaceContext.onResourcesToExport({foldersIds, resourcesIds});
     await this.props.dialogContext.open(ExportResources);
   }
 
