@@ -69,6 +69,9 @@ class PasswordBreadcrumbs extends Component {
         const currentTagName = this.props.resourceWorkspaceContext.filter.payload.tag.slug;
         return `${currentTagName} (tag)`;
       }
+      case ResourceWorkspaceFilterTypes.ROOT_FOLDER: {
+        return `Root (folder)`;
+      }
       case ResourceWorkspaceFilterTypes.FOLDER: {
         const folder =  this.props.resourceWorkspaceContext.filter.payload.folder;
         const currentFolderName = (folder && folder.name) || "N/A";

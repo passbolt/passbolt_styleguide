@@ -50,7 +50,6 @@ export const ResourceWorkspaceContext = React.createContext({
     foldersIds: null // The folders ids to export
   },
   onLockDetail: () => {}, // Lock or unlock detail (hide or display the folder or password sidebar)
-  onTextFilterChanged: () => {}, // Whenever the search text filter changed
   onResourceScrolled: () => {}, // Whenever one scrolled to a resource
   onSorterChanged: () => {}, // Whenever the sorter changed
   onResourceSelected: {
@@ -68,7 +67,7 @@ export const ResourceWorkspaceContext = React.createContext({
 /**
  * The related context provider
  */
-class ResourceWorkspaceContextProvider extends React.Component {
+export class ResourceWorkspaceContextProvider extends React.Component {
   /**
    * Default constructor
    * @param props The component props
@@ -103,7 +102,6 @@ class ResourceWorkspaceContextProvider extends React.Component {
       lockDisplayDetail: true, // lock the detail to display the folder or password sidebar
       resourcesToExport: null, // The resources / folders to export
       onLockDetail: this.handleLockDetail.bind(this), // Lock or unlock detail (hide or display the folder or password sidebar)
-      onTextFilterChanged: this.handleTextFilterChange.bind(this), // Whenever the search text filter changed
       onResourceScrolled: this.handleResourceScrolled.bind(this), // Whenever one scrolled to a resource
       onSorterChanged: this.handleSorterChange.bind(this), // Whenever the sorter changed
       onResourceSelected: {
@@ -220,7 +218,6 @@ class ResourceWorkspaceContextProvider extends React.Component {
    */
   async handleFolderRouteChange() {
     const folderId = this.props.match.params.filterByFolderId;
-
     if (folderId) {
       const folder = this.context.folders.find(folder => folder.id === folderId);
       if (folder) { // Known folder
@@ -616,7 +613,6 @@ class ResourceWorkspaceContextProvider extends React.Component {
     const selectionWithoutResource = this.state.selectedResources.filter(hasNotSameId);
     const mustUnselect = this.state.selectedResources.length !== selectionWithoutResource.length;
     const selectedResources = mustUnselect ? selectionWithoutResource : [...this.state.selectedResources, resource];
-
     await this.setState({selectedResources});
   }
 
