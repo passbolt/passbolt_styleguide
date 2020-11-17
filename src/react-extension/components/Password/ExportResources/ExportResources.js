@@ -248,6 +248,12 @@ class ExportResources extends React.Component {
    * Whenever the export has been performed with failure
    */
   async onExportFailure(error) {
+    const isUserAbortsOperation = error.name === "UserAbortsOperationError";
+    if (isUserAbortsOperation) {
+      await this.setState({actions: {processing: false}});
+      return;
+    }
+
     const errorDialogProps = {
       title: "There was an unexpected error...",
       message: error.message
