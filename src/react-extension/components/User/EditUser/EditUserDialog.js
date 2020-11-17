@@ -264,10 +264,8 @@ class EditUserDialog extends Component {
   async updateLoggedInUserIfNeeded() {
     const newContext = {editUserDialogProps: null};
     if (this.isLoggedInUserAsEditing) {
-      newContext.loggedInUser = Object.assign({}, this.context.loggedInUser);
-      newContext.loggedInUser.profile.first_name = this.state.first_name;
-      newContext.loggedInUser.profile.last_name = this.state.last_name;
-      newContext.loggedInUser.username = this.state.username;
+      const loggedInUser = await this.context.port.request("passbolt.users.find-logged-in-user");
+      this.context.setContext({loggedInUser});
     }
     await this.context.setContext(newContext);
   }
