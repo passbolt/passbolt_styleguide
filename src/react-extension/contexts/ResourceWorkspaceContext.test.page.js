@@ -23,7 +23,7 @@ import {createMemoryHistory} from "history";
 
 
 /**
- * The CreateUserDialog component represented as a page
+ * The ResourceWorkspaceContextPage component represented as a page
  */
 export default class ResourceWorkspaceContextPage {
   /**
@@ -93,7 +93,7 @@ export default class ResourceWorkspaceContextPage {
   }
 
   /**
-   * Go to the All Items search filter route
+   * Go to the Recently Modified search filter route
    */
   async goToRecentlyModified() {
     await this.goToLink('.recently-modified');
