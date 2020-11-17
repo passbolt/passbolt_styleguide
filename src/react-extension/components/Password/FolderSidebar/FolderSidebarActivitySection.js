@@ -13,7 +13,7 @@
  */
 import React from "react";
 import PropTypes from "prop-types";
-import moment from "moment";
+import moment from "moment-timezone";
 import UserAvatar from "../../Common/Avatar/UserAvatar";
 import GroupAvatar from "../../Common/Avatar/GroupAvatar";
 import AppContext from "../../../contexts/AppContext";

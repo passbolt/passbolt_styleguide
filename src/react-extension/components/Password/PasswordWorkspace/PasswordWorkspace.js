@@ -12,7 +12,6 @@
  * @since         2.13.0
  */
 import React, {Component} from "react";
-import {withRouter} from "react-router-dom";
 import UserBadgeMenu from "../../Common/Navigation/Header/UserBadgeMenu";
 import FoldersTree from "../FoldersTree/FoldersTree";
 import Grid from "../Grid/Grid";
@@ -31,139 +30,6 @@ import PasswordWorkspaceMainMenu from "./PasswordWorkspaceMainMenu";
 import SidebarGroupFilterSection from "../Group/SidebarGroupFilterSection/SidebarGroupFilterSection";
 
 class Workspace extends Component {
-  /**
-   * Constructor
-   * @param {Object} props
-   */
-  constructor(props) {
-    super(props);
-    this.state = this.getDefaultState(props);
-    this.bindCallbacks();
-  }
-
-  /**
-   * Get default state
-   * @return {*}
-   */
-  getDefaultState() {
-    return {
-      folderContextualMenu: {
-        folder: null,
-        foldersTreeListElementRef: null,
-        left: 0,
-        show: false,
-        top: 0,
-      },
-      rootFolderContextualMenu: {
-        foldersTreeTitleElementRef: null,
-        left: 0,
-        show: false,
-        top: 0,
-      },
-      search: "",
-      selectedResources: [],
-      selectedFolders: [],
-      users: null,
-
-      filterByFolder: false,
-    };
-  }
-
-  /**
-   * Bind callbacks methods
-   * @return {void}
-   */
-  bindCallbacks() {
-    this.handleFilterByFolder = this.handleFilterByFolder.bind(this);
-    this.handleSelectRootFolder = this.handleSelectRootFolder.bind(this);
-    this.handleSelectResources = this.handleSelectResources.bind(this);
-    this.handleRightSelectResource = this.handleRightSelectResource.bind(this);
-    this.handleSearch = this.handleSearch.bind(this);
-  }
-
-  /**
-   * Find all groups.
-   * @return {Promise<void>}
-   */
-  async findGroups() {
-    const groups = await port.request("passbolt.groups.find-all");
-    this.setState({groups});
-  }
-
-  /**
-   * Find all resources.
-   * @return {Promise<void>}
-   */
-  async updateResourcesLocalStorage() {
-    this.context.port.request("passbolt.plugin.resources.update-local-storage");
-  }
-
-  /**
-   * Find all users.
-   * @return {Promise<void>}
-   */
-  async findUsers() {
-    const users = await port.request("passbolt.users.find-all");
-    this.setState({users});
-  }
-
-  /**
-   * Handle when the user filters by folder.
-   * @param {object} folder The target folder
-   */
-  handleFilterByFolder(folder) {
-    const selectedResources = [];
-    const filterByFolder = folder;
-    const selectedFolders = [folder];
-    this.setState({filterByFolder, selectedFolders, selectedResources}, () => {
-      this.props.history.push(`/app/folders/view/${folder.id}`);
-    });
-  }
-
-  /**
-   * Handle when the user selects the root folder.
-   */
-  handleSelectRootFolder() {
-    const filterByFolder = null;
-    const selectedFolders = [];
-    const selectedResources = [];
-    this.setState({filterByFolder, selectedFolders, selectedResources}, () => {
-      this.props.history.push(`/app/passwords`);
-    });
-  }
-
-  /**
-   * Handle when the user selects an element in the grid.
-   * @param {array} resources The selected resources
-   */
-  handleSelectResources(resources) {
-    const selectedFolders = [];
-    const selectedResources = resources;
-    this.setState({selectedFolders, selectedResources}, () => {
-      if (resources.length === 1) {
-        this.props.history.push(`/app/passwords/view/${resources[0].id}`);
-      }
-    });
-  }
-
-  /**
-   * Handle when the user right selects an element in the grid.
-   * @param {ReactEvent} event The event
-   * @param {object} selectedResource The selected resource
-   */
-  handleRightSelectResource(event, selectedResource) {
-    const selectedResources = [selectedResource];
-    this.handleSelectResources(selectedResources);
-  }
-
-  /**
-   * Handle when the user searches.
-   * @param search
-   */
-  handleSearch(search) {
-    this.setState({search});
-  }
-
   /**
    * Has lock for the detail display
    * @returns {boolean}
@@ -185,7 +51,6 @@ class Workspace extends Component {
         <div className="header second">
           <Logo/>
           <PasswordSearchBar
-            onSearch={this.handleSearch}
             placeholder="Search passwords"/>
           <UserBadgeMenu baseUrl={this.context.userSettings.getTrustedDomain()} user={this.context.loggedInUser}/>
         </div>
@@ -211,26 +76,12 @@ class Workspace extends Component {
                 </div>
                 <div className="panel middle">
                   <PasswordBreadcrumb/>
-                  <Grid
-                    selectedResources={this.state.selectedResources}
-                    search={this.state.search}
-                    onRightSelect={this.handleRightSelectResource}
-                    onSelect={this.handleSelectResources}/>
+                  <Grid/>
                   {this.props.resourceWorkspaceContext.details.folder && this.hasLockDetail() &&
-                    <FolderSidebar
-                      groups={this.state.groups}
-                      onEditPermissions={this.handleEditFolderPermissions}
-                      onSelectFolderParent={this.handleFilterByFolder}
-                      onSelectRoot={this.handleSelectRootFolder}
-                      users={this.state.users}/>
+                    <FolderSidebar/>
                   }
                   {this.props.resourceWorkspaceContext.details.resource && this.hasLockDetail() &&
-                    <PasswordSidebar
-                      groups={this.state.groups}
-                      onEditPermissions={this.handleEditFolderPermissions}
-                      onSelectFolderParent={this.handleFilterByFolder}
-                      onSelectRoot={this.handleSelectRootFolder}
-                      users={this.state.users}/>
+                    <PasswordSidebar/>
                   }
                 </div>
               </div>
@@ -244,8 +95,7 @@ class Workspace extends Component {
 
 Workspace.contextType = AppContext;
 Workspace.propTypes = {
-  history: PropTypes.any,
   resourceWorkspaceContext: PropTypes.any
 };
 
-export default withRouter(withResourceWorkspace(Workspace));
+export default withResourceWorkspace(Workspace);

@@ -60,7 +60,6 @@ class PasswordBreadcrumbs extends Component {
    */
   getBreadcrumbItemName() {
     switch (this.props.resourceWorkspaceContext.filter.type) {
-      case ResourceWorkspaceFilterTypes.ALL: return "All items";
       case ResourceWorkspaceFilterTypes.FAVORITE: return "Favorite";
       case ResourceWorkspaceFilterTypes.RECENTLY_MODIFIED: return "Recently modified";
       case ResourceWorkspaceFilterTypes.SHARED_WITH_ME: return "Shared with me";

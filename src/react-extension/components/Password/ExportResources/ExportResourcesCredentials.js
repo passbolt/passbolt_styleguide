@@ -79,13 +79,6 @@ class ExportResourcesCredentials extends Component {
   }
 
   /**
-   * Returns the current file to import
-   */
-  get fileToImport() {
-    return this.props.resourceWorkspaceContext.resourceFileToImport;
-  }
-
-  /**
    * Return trus if the export is processing
    */
   get isProcessing() {

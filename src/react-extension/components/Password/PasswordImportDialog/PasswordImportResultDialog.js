@@ -156,30 +156,6 @@ class PasswordImportResultDialog extends Component {
   }
 
   /**
-   * Import options
-   * @returns {array}
-   */
-  get resultOptions() {
-    return this.result.options || {};
-  }
-
-  /**
-   * Were the folders imported
-   * @returns {boolean}
-   */
-  get resultMustImportFolders() {
-    return this.resultOptions.folders || false;
-  }
-
-  /**
-   * Were the resources marked with a unique tag
-   * @returns {boolean}
-   */
-  get resultMustTagResources() {
-    return this.resultOptions.tags || false;
-  }
-
-  /**
    * The import references
    * @returns {object}
    */
@@ -364,4 +340,4 @@ PasswordImportResultDialog.propTypes = {
   resourceWorkspaceContext: PropTypes.any // The resource context
 };
 
-export default withResourceWorkspace(withRouter(withActionFeedback(PasswordImportResultDialog)));
+export default withRouter(withResourceWorkspace(withActionFeedback(PasswordImportResultDialog)));

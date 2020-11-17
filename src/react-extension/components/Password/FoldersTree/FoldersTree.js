@@ -514,9 +514,8 @@ FoldersTree.contextType = AppContext;
 FoldersTree.propTypes = {
   contextualMenuContext: PropTypes.any, // The contextual menu context
   history: PropTypes.object,
-  onFolderContextualMenu: PropTypes.func,
   resourceWorkspaceContext: PropTypes.object,
   dialogContext: PropTypes.any
 };
 
-export default withDialog(withContextualMenu(withResourceWorkspace(withRouter(FoldersTree))));
+export default withRouter(withDialog(withContextualMenu(withResourceWorkspace(FoldersTree))));

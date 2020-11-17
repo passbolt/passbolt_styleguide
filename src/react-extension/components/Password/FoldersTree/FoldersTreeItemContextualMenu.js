@@ -165,7 +165,7 @@ class FoldersTreeItemContextualMenu extends React.Component {
             </div>
           </div>
         </li>
-        <li key="option-rename-folder" className={`"separator-after ready closed ${canUpdate ? "" : "disabled"}`}>
+        <li key="option-rename-folder" className={`separator-after ready closed ${canUpdate ? "" : "disabled"}`}>
           <div className="row">
             <div className="main-cell-wrapper">
               <div className="main-cell">
@@ -214,12 +214,11 @@ FoldersTreeItemContextualMenu.contextType = AppContext;
 
 FoldersTreeItemContextualMenu.propTypes = {
   folder: PropTypes.object,
-  foldersTreeListElementRef: PropTypes.object,
   hide: PropTypes.func, // Hide the contextual menu
   left: PropTypes.number, // left position in px of the page
   top: PropTypes.number, // top position in px of the page
   dialogContext: PropTypes.any,
-  resourceWorkspaceContext: PropTypes.any // Resource workspace contextx
+  resourceWorkspaceContext: PropTypes.any // Resource workspace context
 };
 
 export default withResourceWorkspace(withDialog(FoldersTreeItemContextualMenu));

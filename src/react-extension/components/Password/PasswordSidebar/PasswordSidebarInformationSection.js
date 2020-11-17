@@ -14,7 +14,7 @@
 import React from "react";
 import Icon from "../../Common/Icons/Icon";
 import PropTypes from "prop-types";
-import moment from "moment";
+import moment from "moment-timezone";
 import AppContext from "../../../contexts/AppContext";
 import {ResourceWorkspaceFilterTypes, withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 import {withRouter} from "react-router-dom";
@@ -191,7 +191,7 @@ class PasswordSidebarInformationSection extends React.Component {
     try {
       const plaintextDto = await this.context.port.request("passbolt.secret.decrypt", this.resource.id, {showProgress: true});
       await this.copyPasswordToClipboard(plaintextDto);
-      this.props.actionFeedbackContext.displaySuccess("The secret has been copied to clipboard");
+      this.displaySuccessNotification("The secret has been copied to clipboard");
     } catch (error) {
       if (error.name !== "UserAbortsOperationError") {
         this.props.actionFeedbackContext.displayError(error.message);
@@ -288,7 +288,6 @@ PasswordSidebarInformationSection.contextType = AppContext;
 PasswordSidebarInformationSection.propTypes = {
   onSelectFolderParent: PropTypes.func,
   onSelectRoot: PropTypes.func,
-  users: PropTypes.array,
   history: PropTypes.object,
   resourceWorkspaceContext: PropTypes.object,
   actionFeedbackContext: PropTypes.any, // The action feedback context
