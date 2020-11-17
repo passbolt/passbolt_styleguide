@@ -115,9 +115,15 @@ class DisplayUserGroupDetailsMembers extends React.Component {
           </div>
           }
           {!this.isLoading() && this.state.open &&
-          this.group.groups_users.map(groupUser => (
-            <DisplayUserGroupDetailsMembersGroupMember key={groupUser.id} groupUser={groupUser}/>
-          ))
+            <>
+              <ul>
+                {
+                  this.group.groups_users.map(groupUser => (
+                    <DisplayUserGroupDetailsMembersGroupMember key={groupUser.id} groupUser={groupUser}/>
+                  ))
+                }
+              </ul>
+            </>
           }
         </div>
       </div>

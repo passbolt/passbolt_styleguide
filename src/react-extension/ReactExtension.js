@@ -387,7 +387,7 @@ class ReactExtension extends Component {
                       <UserWorkspaceContextProvider>
                         <ManageDialogs/>
                         <ManageContextualMenu/>
-                        <div id="container" className="page password">
+                        <div id="container" className="page user">
                           <div id="app" className={`app ${isReady ? "ready" : ""}`} tabIndex="1000">
                             <div className="header first">
                               <MainMenu

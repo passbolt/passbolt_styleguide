@@ -51,6 +51,7 @@ class DisplayUserGroupDetailsMembersGroupMember extends React.Component {
   render() {
     return (
       <li
+        key={this.user.id}
         className="permission usercard-col-2">
         <div className="content-wrapper">
           <div className="content">
