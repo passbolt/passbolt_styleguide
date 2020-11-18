@@ -62,15 +62,6 @@ class MainMenu extends Component {
                 </div>
               </div>
             </li>
-            <li key="reports">
-              <div className="row">
-                <div className="main-cell-wrapper">
-                  <div className="main-cell">
-                    <a href={`${this.props.baseUrl}/reports`} role="button"><span>reports</span></a>
-                  </div>
-                </div>
-              </div>
-            </li>
             <li key="administration">
               <div className={`row ${this.isSelected("administration") ? "selected" : ""}`}>
                 <div className="main-cell-wrapper">
