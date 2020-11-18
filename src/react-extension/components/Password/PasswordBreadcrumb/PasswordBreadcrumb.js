@@ -70,7 +70,7 @@ class PasswordBreadcrumbs extends Component {
         return `${currentTagName} (tag)`;
       }
       case ResourceWorkspaceFilterTypes.ROOT_FOLDER: {
-        return `Root (folder)`;
+        return `root (folder)`;
       }
       case ResourceWorkspaceFilterTypes.FOLDER: {
         const folder =  this.props.resourceWorkspaceContext.filter.payload.folder;

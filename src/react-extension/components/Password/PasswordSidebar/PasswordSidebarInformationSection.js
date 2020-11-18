@@ -120,7 +120,7 @@ class PasswordSidebarInformationSection extends React.Component {
    */
   getFolderName(folderParentId) {
     if (folderParentId === null) {
-      return '/';
+      return 'root';
     }
 
     if (this.context.folders) {
