@@ -97,7 +97,7 @@ const renderPasswordSidebarDescriptionSection = function(appContext, props) {
 };
 
 describe("PasswordSidebarDescription", () => {
-  it("See the description of a resource", async () => {
+  it("See the description of a resource", async() => {
     const props = {resource: getDummyDescription()};
     const {container} = renderPasswordSidebarDescriptionSection(null, props);
 

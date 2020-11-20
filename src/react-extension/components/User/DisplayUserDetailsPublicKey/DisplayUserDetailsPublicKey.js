@@ -174,6 +174,7 @@ class DisplayUserDetailsPublicKey extends React.Component {
   render() {
     const isLoading = this.state.loading;
 
+
     return (
       <div className={`key-information accordion sidebar-section ${this.state.open ? "" : "closed"}`}>
         <div className="accordion-header">

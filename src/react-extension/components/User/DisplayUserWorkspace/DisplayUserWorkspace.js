@@ -47,6 +47,7 @@ class DisplayUserWorkspace extends React.Component {
    */
   get mustDisplayGroupDetails() {
     const {details} = this.props.userWorkspaceContext;
+    console.log(details);
     return details.group && details.locked;
   }
 

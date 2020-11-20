@@ -1,4 +1,5 @@
-export default [{
+export default [
+  {
   "id": "640ebc06-5ec1-5322-a1ae-6120ed2f3a74",
   "role_id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
   "role": {
@@ -43,7 +44,8 @@ export default [{
   "__placeholder_last_logged_in__": "",
   "last_logged_in": "",
   is_mfa_enabled: false
-}, {
+},
+  {
   "id": "54c6278e-f824-5fda-91ff-3e946b18d994",
   "role_id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
   "role": {

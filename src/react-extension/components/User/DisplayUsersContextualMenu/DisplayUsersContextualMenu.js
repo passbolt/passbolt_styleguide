@@ -38,6 +38,7 @@ class DisplayUsersContextualMenu extends React.Component {
    */
   bindCallbacks() {
     this.handlePermalinkCopy = this.handlePermalinkCopy.bind(this);
+    this.handlePublicKeyCopy = this.handlePublicKeyCopy.bind(this);
     this.handleUsernameCopy = this.handleUsernameCopy.bind(this);
     this.handleEditClickEvent = this.handleEditClickEvent.bind(this);
     this.handleResendInviteClickEvent = this.handleResendInviteClickEvent.bind(this);
@@ -106,10 +107,10 @@ class DisplayUsersContextualMenu extends React.Component {
    * Handle the copy of public key
    */
   async handlePublicKeyCopy() {
-    this.props.hide();
     const gpgkeyInfo = await this.context.port.request('passbolt.keyring.get-public-key-info-by-user', this.user.id);
     await this.context.port.request("passbolt.clipboard.copy", gpgkeyInfo.key);
     this.props.actionFeedbackContext.displaySuccess("The public key has been copied to clipboard");
+    this.props.hide();
   }
 
   /**
