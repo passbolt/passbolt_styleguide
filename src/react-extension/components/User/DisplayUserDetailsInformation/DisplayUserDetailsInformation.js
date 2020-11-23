@@ -17,6 +17,7 @@ import PropTypes from "prop-types";
 import Icon from "../../../../react/components/Common/Icons/Icon";
 import {withUserWorkspace} from "../../../contexts/UserWorkspaceContext";
 import moment from "moment";
+import 'moment-timezone';
 import AppContext from "../../../contexts/AppContext";
 
 /**

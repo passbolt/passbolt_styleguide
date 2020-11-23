@@ -185,7 +185,9 @@
         "MemberExpression": 1,
         "SwitchCase": 1
       }
-    ]
+    ],
     // enforce consistent indentation
+    "react/display-name": [0] // Off
+    // The display-name rule is only used for dev consideration and ease the debugging, no prod quality check
   }
 }

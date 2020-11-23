@@ -89,7 +89,7 @@ class DisplayUserDetailsGroups extends React.Component {
     const groups = this.groups;
     const hasGroups = groups.length > 0;
     return (
-      <div className={`detailed-information accordion sidebar-section ${this.state.open ? "" : "closed"}`}>
+      <div className={`detailed-user-groups accordion sidebar-section ${this.state.open ? "" : "closed"}`}>
         <div className="accordion-header">
           <h4>
             <a onClick={this.handleTitleClicked}  role="button">

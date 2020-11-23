@@ -532,6 +532,15 @@ class EditUserGroup extends Component {
   }
 
   /**
+   * has username already exists
+   * @param errorData the error data received
+   * @returns {*}
+   */
+  hasGroupNameAlreadyExists(errorData) {
+    return errorData && errorData.body && errorData.body.name && errorData.body.name.group_unique;
+  }
+
+  /**
    * Edits the current group
    * @return {Promise<*>}
    */
@@ -566,6 +575,9 @@ class EditUserGroup extends Component {
     // It can happen when the user has closed the passphrase entry dialog by instance.
     if (error.name === "UserAbortsOperationError") {
       this.setState({processing: false});
+    } else if (this.hasGroupNameAlreadyExists(error.data)) {
+      await this.setError("name", "alreadyExists");
+      this.setState({processing: false, nameError: error.data.body.name.group_unique});
     } else {
       // Unexpected error occurred.
       console.error(error);
@@ -634,7 +646,6 @@ class EditUserGroup extends Component {
 
     const usersMatched = this.context.users.filter(user => user.active === true && !this.isMember(user))
       .filter(matchText);
-
     return this.decorateUsersWithGpgkey(usersMatched);
   }
 
@@ -661,7 +672,7 @@ class EditUserGroup extends Component {
               <div className={`input text required ${this.hasErrors("name") ? "error" : ""}`}>
                 <label htmlFor="js_field_name">Group name</label>
                 <input
-                  id="js_field_name"
+                  id="group-name-input"
                   ref={this.references.name}
                   value={this.state.groupToEdit.name}
                   maxLength="50"
@@ -674,6 +685,12 @@ class EditUserGroup extends Component {
                   A name is required
                 </div>
                 }
+                {this.hasErrors("name", "alreadyExists") &&
+                <div className="error message">
+                  The group name test already exists
+                </div>
+                }
+                <div className="name error message">{this.state.nameError}</div>
               </div>
 
               <div className="input required">
@@ -739,12 +756,12 @@ class EditUserGroup extends Component {
               </div>
               }
               {this.hasMembers && !this.hasManager &&
-              <div className="message error">
+              <div className="message error at-least-one-manager">
                 <span>Please make sure there is at least one group manager.</span>
               </div>
               }
               {!this.isManager &&
-              <div className="message warning feedback">
+              <div className="message warning feedback cannot-add-user">
                 <span>Only the group manager can add new people to a group.</span>
               </div>
               }

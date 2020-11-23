@@ -227,6 +227,13 @@ class DisplayUserWorkspaceActions extends React.Component {
   }
 
   /**
+   * Returns true if the current user can copy a user permalink
+   */
+  get canCopyPermalink() {
+    return Boolean(this.selectedUser);
+  }
+
+  /**
    * Can the logged in user use the mfa capability.
    */
   get canIUseMfa() {
@@ -234,7 +241,7 @@ class DisplayUserWorkspaceActions extends React.Component {
   }
 
   /**
-   * Returns true if the currrent user can disable the MFA of a user
+   * Returns true if the current user can disable the MFA of a user
    */
   get canDisableMfaForUser() {
     return this.selectedUser && this.selectedUser.is_mfa_enabled;
@@ -378,7 +385,9 @@ class DisplayUserWorkspaceActions extends React.Component {
                   <div className="row">
                     <div className="main-cell-wrapper">
                       <div className="main-cell">
-                        <a onClick={this.handleCopyPermalinkEvent}>
+                        <a
+                          onClick={this.handleCopyPermalinkEvent}
+                          className={`${this.canCopyPermalink ? "" : "disabled"}`}>
                           <span>Copy permalink to clipboard</span>
                         </a>
                       </div>

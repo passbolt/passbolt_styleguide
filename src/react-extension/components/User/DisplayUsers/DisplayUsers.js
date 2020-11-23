@@ -314,16 +314,10 @@ class DisplayUsers extends React.Component {
         {isReady &&
         <React.Fragment>
           {isEmpty &&
-          (filterType === UserWorkspaceFilterTypes.TEXT || filterType === UserWorkspaceFilterTypes.RECENTLY_MODIFIED) &&
+           filterType === UserWorkspaceFilterTypes.TEXT &&
           <div className="empty-content">
             <h2>None of the users matched this search.</h2>
-            <p>Try another search or use the left panel to navigate into your organization.</p>
-          </div>
-          }
-          {isEmpty &&  filterType === UserWorkspaceFilterTypes.GROUP &&
-          <div className="empty-content">
-            <h2>No passwords are shared with this group yet.</h2>
-            <p>Share a password with this group or wait for a team member to share one with this group.</p>
+            <p className="try-another-search">Try another search or use the left panel to navigate into your organization.</p>
           </div>
           }
           {!isEmpty &&
@@ -408,6 +402,7 @@ class DisplayUsers extends React.Component {
                 itemsRenderer={(items, ref) => this.renderTable(items, ref)}
                 length={this.users.length}
                 pageSize={20}
+                minSize={20}
                 type="uniform"
                 ref={this.listRef}>
               </ReactList>

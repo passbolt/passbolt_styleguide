@@ -57,6 +57,7 @@
     "test": "jest --config .jest.config.json --no-cache ./src --maxWorkers=4",
     "test-react-app": "jest --config .jest.config.json --no-cache ./src/react-appjs --maxWorkers=4",
     "test-react-extension": "jest --config .jest.config.json --no-cache ./src/react-extension --maxWorkers=4",
+    "test-react-extension-coverage": "jest --config .jest.config.json --no-cache ./src/react-extension --maxWorkers=4 --coverage",
     "eslint": "eslint -c .eslintrc.json src/react/* src/react-extension/*",
     "eslint-fix": "eslint -c .eslintrc.json --fix src/react/* src/react-extension/*"
   }

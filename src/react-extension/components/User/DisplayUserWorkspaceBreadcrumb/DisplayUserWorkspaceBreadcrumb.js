@@ -60,7 +60,6 @@ class DisplayUserWorkspaceBreadcrumb extends Component {
    */
   getBreadcrumbItemName() {
     switch (this.props.userWorkspaceContext.filter.type) {
-      case UserWorkspaceFilterTypes.ALL: return "All items";
       case UserWorkspaceFilterTypes.RECENTLY_MODIFIED: return "Recently modified";
       case UserWorkspaceFilterTypes.GROUP: {
         const group =  this.props.userWorkspaceContext.filter.payload.group;
