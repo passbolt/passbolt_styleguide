@@ -285,7 +285,7 @@ class PasswordSidebarDescriptionSection extends React.Component {
           }
           {this.state.error &&
           <p className="description-content error-message">
-              {this.state.errorMsg}
+            {this.state.errorMsg}
           </p>
           }
           {this.mustShowEmptyDescription() &&

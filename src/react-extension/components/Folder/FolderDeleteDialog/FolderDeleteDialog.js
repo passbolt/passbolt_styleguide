@@ -108,7 +108,7 @@ class FolderDeleteDialog extends Component {
       return;
     }
 
-    this.toggleProcessing();
+    await this.toggleProcessing();
 
     try {
       this.props.loadingContext.add();
