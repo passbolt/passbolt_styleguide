@@ -116,7 +116,7 @@ class FolderMoveStrategyDialog extends Component {
     await this.toggleProcessing();
 
     try {
-      this.context.port.emit(this.context.folderMoveStrategyProps.requestId, "SUCCESS", {moveOption: this.state.moveOption});
+      await this.context.port.emit(this.context.folderMoveStrategyProps.requestId, "SUCCESS", {moveOption: this.state.moveOption});
       this.handleSaveSuccess();
     } catch (error) {
       this.handleSaveError(error);
