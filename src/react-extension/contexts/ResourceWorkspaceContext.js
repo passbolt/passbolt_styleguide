@@ -143,6 +143,7 @@ export class ResourceWorkspaceContextProvider extends React.Component {
     await this.handleFoldersChange();
     await this.handleResourcesChange();
     await this.handleRouteChange(prevProps.location);
+    await this.redirectAfterSelection();
   }
 
   /**
@@ -194,7 +195,7 @@ export class ResourceWorkspaceContextProvider extends React.Component {
       await this.updateDetails();
       await this.unselectUnknownResources();
       if (!areResourcesFirstLoad) {
-        await this.redirectAfterSelection();
+        //await this.redirectAfterSelection();
       }
     }
   }
@@ -260,7 +261,6 @@ export class ResourceWorkspaceContextProvider extends React.Component {
       await this.selectFromRoute(resource);
       await this.scrollTo(resource);
       await this.detailResource(resource);
-      await this.redirectAfterSelection();
     } else {
       this.handleUnknownResource();
     }
@@ -274,8 +274,11 @@ export class ResourceWorkspaceContextProvider extends React.Component {
     const hasResources = this.resources !== null;
     if (hasResources) {
       const filter = (this.props.location.state && this.props.location.state.filter) || {type: ResourceWorkspaceFilterTypes.ALL};
+      const isSameFilter = this.state.filter === filter;
       await this.detailNothing();
-      await this.search(filter);
+      if (!isSameFilter) {
+        await this.search(filter);
+      }
     }
   }
 
@@ -326,7 +329,6 @@ export class ResourceWorkspaceContextProvider extends React.Component {
   async handleAllResourcesSelected() {
     await this.selectAll();
     await this.detailNothing();
-    this.redirectAfterSelection();
   }
 
   /**
@@ -335,7 +337,6 @@ export class ResourceWorkspaceContextProvider extends React.Component {
   async handleNoneResourcesSelected() {
     await this.unselectAll();
     await this.detailNothing();
-    this.redirectAfterSelection();
   }
 
   /**
@@ -345,7 +346,6 @@ export class ResourceWorkspaceContextProvider extends React.Component {
   async handleMultipleResourcesSelected(resource) {
     await this.selectMultiple(resource);
     await this.detailsResourceIfSingleSelection();
-    this.redirectAfterSelection();
   }
 
   /**
@@ -354,7 +354,6 @@ export class ResourceWorkspaceContextProvider extends React.Component {
    */
   async handleResourceRangeSelected(resource) {
     await this.selectRange(resource);
-    this.redirectAfterSelection();
   }
 
   /**
@@ -363,7 +362,6 @@ export class ResourceWorkspaceContextProvider extends React.Component {
    */
   async handleResourceSelected(resource) {
     await this.select(resource);
-    this.redirectAfterSelection();
   }
 
   /**
@@ -448,7 +446,9 @@ export class ResourceWorkspaceContextProvider extends React.Component {
       [ResourceWorkspaceFilterTypes.ALL]: this.searchAll.bind(this),
       [ResourceWorkspaceFilterTypes.NONE]: () => { /* No search */ }
     };
+
     await searchOperations[filter.type](filter);
+
     if (!isRecentlyModifiedFilter) {
       await this.sort();
     } else {
@@ -599,8 +599,11 @@ export class ResourceWorkspaceContextProvider extends React.Component {
    * @returns {Promise<void>}
    */
   async selectFromRoute(resource) {
-    const selectedResources = [resource];
-    await this.setState({selectedResources});
+    const isAlreadySelected = this.state.selectedResources.length === 1 && this.state.selectedResources[0].id === resource.id;
+    if (!isAlreadySelected) {
+      const selectedResources = [resource];
+      await this.setState({selectedResources});
+    }
   }
 
   /**
@@ -730,7 +733,7 @@ export class ResourceWorkspaceContextProvider extends React.Component {
     const sorter = this.state.sorter.propertyName === "modified" ? dateSorter : stringSorter;
     const propertySorter = keySorter(this.state.sorter.propertyName, sorter);
     if (this.state.filteredResources !== null) {
-      await this.setState({filteredResources: this.state.filteredResources.sort(propertySorter)});
+      await this.setState({filteredResources: [...this.state.filteredResources.sort(propertySorter)]});
     }
   }
 
@@ -897,3 +900,5 @@ export const ResourceWorkspaceFilterTypes = {
   SHARED_WITH_ME: 'FILTER-BY-SHARED-WITH-ME', // Shared with current user resources
   RECENTLY_MODIFIED: 'FILTER-BY-RECENTLY-MODIFIERD', // Keep recently modified resources
 };
+
+

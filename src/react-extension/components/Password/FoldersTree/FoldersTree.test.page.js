@@ -172,8 +172,8 @@ class FoldersTreePageObject {
   /**
    * Expand or collapse the folders list
    */
-  get toggleExpanded() {
-    return this.click(this.rootFolderCaret);
+  async toggleExpanded() {
+    await this.click(this.rootFolderCaret);
   }
 
   /**

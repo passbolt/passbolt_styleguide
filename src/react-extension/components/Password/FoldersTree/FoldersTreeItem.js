@@ -16,7 +16,8 @@ import Icon from "../../Common/Icons/Icon";
 import PropTypes from "prop-types";
 import {withContextualMenu} from "../../../contexts/Common/ContextualMenuContext";
 import FoldersTreeItemContextualMenu from "./FoldersTreeItemContextualMenu";
-import AppContext from "../../../contexts/AppContext";
+import {withAppContext} from "../../../contexts/AppContext";
+import {ResourceWorkspaceFilterTypes, withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 
 class FoldersTreeItem extends React.Component {
   /**
@@ -40,6 +41,8 @@ class FoldersTreeItem extends React.Component {
       open: false
     };
   }
+
+
 
   bindCallbacks() {
     this.handleClickLeftCaretEvent = this.handleClickLeftCaretEvent.bind(this);
@@ -200,11 +203,13 @@ class FoldersTreeItem extends React.Component {
    * @returns {boolean}
    */
   isSelected() {
-    if (!this.props.selectedFolder) {
+    const filter = this.props.resourceWorkspaceContext.filter;
+    const hasSelectedFolder = filter.type === ResourceWorkspaceFilterTypes.FOLDER && filter.payload.folder;
+    if (!hasSelectedFolder) {
       return false;
     }
 
-    return this.props.selectedFolder.id === this.props.folder.id;
+    return filter.payload.folder.id === this.props.folder.id;
   }
 
   /**
@@ -220,7 +225,7 @@ class FoldersTreeItem extends React.Component {
     }
 
     if (folder.folder_parent_id !== null) {
-      const folderParent = this.context.folders.find(item => item.id === folder.folder_parent_id);
+      const folderParent = this.props.context.folders.find(item => item.id === folder.folder_parent_id);
       return this.isChildOfAny(folderParent, folders);
     }
 
@@ -237,7 +242,7 @@ class FoldersTreeItem extends React.Component {
       return true;
     }
 
-    const folderParent = this.context.folders.find(folder => folder.id === item.folder_parent_id);
+    const folderParent = this.props.context.folders.find(folder => folder.id === item.folder_parent_id);
 
     // The user can always drag content from a personal folder.
     if (folderParent.personal) {
@@ -396,7 +401,7 @@ class FoldersTreeItem extends React.Component {
    * @returns {array}
    */
   getChildrenFolders() {
-    const folders = this.context.folders.filter(folder => folder.folder_parent_id === this.props.folder.id);
+    const folders = this.props.context.folders.filter(folder => folder.folder_parent_id === this.props.folder.id);
     this.sortFoldersAlphabetically(folders);
 
     return folders;
@@ -415,9 +420,9 @@ class FoldersTreeItem extends React.Component {
     const isOpen = this.isOpen();
     const canDropInto = this.canDropInto();
     const showDropFocus = this.state.draggingOver && canDropInto;
-
     return (
-      <li className={`${isOpen ? "opened" : "closed"} folder-item`}>
+      <li
+        className={`${isOpen ? "opened" : "closed"} folder-item`}>
         <div className={`row ${isSelected ? "selected" : ""} ${isDisabled ? "disabled" : ""} ${isDragged ? "is-dragged" : ""} ${showDropFocus ? "drop-focus" : ""}`}
           draggable="true"
           onDrop={this.handleDropEvent}
@@ -462,7 +467,7 @@ class FoldersTreeItem extends React.Component {
             key={`folders-tree-${folder.id}`}
             draggedItems={this.props.draggedItems}
             folder={folder}
-            folders={this.props.folders}
+            folders={this.props.context.folders}
             isDragging={this.props.isDragging}
             onClose={this.props.onClose}
             onDragEnd={this.props.onDragEnd}
@@ -470,8 +475,7 @@ class FoldersTreeItem extends React.Component {
             onDrop={this.props.onDrop}
             onOpen={this.props.onOpen}
             onSelect={this.props.onSelect}
-            openFolders={this.props.openFolders}
-            selectedFolder={this.props.selectedFolder}/>)}
+            openFolders={this.props.openFolders}/>)}
         </ul>
         }
       </li>
@@ -479,12 +483,10 @@ class FoldersTreeItem extends React.Component {
   }
 }
 
-FoldersTreeItem.contextType = AppContext;
-
 FoldersTreeItem.propTypes = {
+  context: PropTypes.any, // The app context
   contextualMenuContext: PropTypes.any, // The contextual menu context
   draggedItems: PropTypes.object,
-  folders: PropTypes.array,
   folder: PropTypes.object,
   isDragging: PropTypes.bool,
   onClose: PropTypes.func,
@@ -494,9 +496,9 @@ FoldersTreeItem.propTypes = {
   onOpen: PropTypes.func,
   onSelect: PropTypes.func,
   openFolders: PropTypes.array,
-  selectedFolder: PropTypes.any,
+  resourceWorkspaceContext: PropTypes.any
 };
 
-const DecoratedFoldersTreeItem = withContextualMenu(FoldersTreeItem);
+const DecoratedFoldersTreeItem = withAppContext(withContextualMenu(withResourceWorkspace(FoldersTreeItem)));
 
-export default withContextualMenu(FoldersTreeItem);
+export default withAppContext(withContextualMenu(withResourceWorkspace(FoldersTreeItem)));

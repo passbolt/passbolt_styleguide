@@ -20,6 +20,10 @@ export function defaultAppContext(appContext) {
  */
 export function defaultProps() {
   return {
+    context: {
+      port: new MockPort(),
+      folders: foldersMock
+    },
     resourceWorkspaceContext: {
       filter: {
         type: ResourceWorkspaceFilterTypes.FOLDER,

@@ -1,6 +1,6 @@
 import React from "react";
 
-export default React.createContext({
+const AppContext =  React.createContext({
   user: null,
   users: null,
   roles: null,
@@ -16,3 +16,24 @@ export default React.createContext({
   siteSettings: null,
   userSettings: null,
 });
+
+
+/**
+ * App Context Consumer HOC
+ * @param WrappedComponent
+ */
+export function withAppContext(WrappedComponent) {
+  return class withAppContext extends React.Component {
+    render() {
+      return (
+        <AppContext.Consumer>
+          {
+            AppContext => <WrappedComponent context={AppContext} {...this.props} />
+          }
+        </AppContext.Consumer>
+      );
+    }
+  };
+}
+
+export default AppContext;

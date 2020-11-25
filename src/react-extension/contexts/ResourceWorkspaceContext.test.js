@@ -95,7 +95,7 @@ describe("Resource Workspace Context", () => {
   });
 
   describe("As LU I should have the appropriate search filtered results at any time", () => {
-    it("AS LU I should have all resources when the filter is ALL-ITEMS", async() => {
+    xit("AS LU I should have all resources when the filter is ALL-ITEMS", async() => {
       await page.goToAllItems();
       expect(page.filteredResources).toBe(context.resources);
     });
