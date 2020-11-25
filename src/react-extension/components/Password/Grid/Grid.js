@@ -105,6 +105,20 @@ class Grid extends React.Component {
   }
 
   /**
+   * Handle when the user selects an element in the grid.
+   * @param {array} resources The selected resources
+   */
+  handleSelectResources(resources) {
+    const selectedFolders = [];
+    const selectedResources = resources;
+    this.setState({selectedFolders, selectedResources}, () => {
+      if (resources.length === 1) {
+        this.props.history.push(`/app/passwords/view/${resources[0].id}`);
+      }
+    });
+  }
+
+  /**
    * Handle the right click on a resource
    * @param event
    * @param resource
@@ -112,7 +126,7 @@ class Grid extends React.Component {
   handleResourceRightClick(event, resource) {
     // Prevent the default contextual menu to popup.
     event.preventDefault();
-    this.props.onRightSelect(event, resource);
+    this.handleSelectResources([resource]);
     const left = event.pageX;
     const top = event.pageY;
     const contextualMenuProps = {left, top, resource};
@@ -482,7 +496,7 @@ class Grid extends React.Component {
     const filterType = this.props.resourceWorkspaceContext.filter.type;
 
     return (
-      <div className={`tableview ready ${isEmpty ? "empty" : ""} ${["default", "modified"].includes(this.props.filterType) ? "all_items" : ""}`}>
+      <div className={`tableview ready ${isEmpty ? "empty" : ""} ${["default", "modified"].includes(filterType) ? "all_items" : ""}`}>
         <React.Fragment>
           {isEmpty && filterType === ResourceWorkspaceFilterTypes.TEXT &&
           <div className="empty-content">
@@ -608,6 +622,7 @@ class Grid extends React.Component {
                 itemsRenderer={(items, ref) => this.renderTable(items, ref)}
                 length={this.resources.length}
                 pageSize={20}
+                minSize={20}
                 type="uniform"
                 ref={this.listRef}>
               </ReactList>
@@ -624,14 +639,10 @@ class Grid extends React.Component {
 Grid.contextType = AppContext;
 
 Grid.propTypes = {
-  filterType: PropTypes.string,
-  onRightSelect: PropTypes.func,
-  onSelect: PropTypes.func,
-  search: PropTypes.string,
-  selectedResources: PropTypes.array,
   resourceWorkspaceContext: PropTypes.any,
   actionFeedbackContext: PropTypes.any, // The action feedback context
   contextualMenuContext: PropTypes.any, // The contextual menu context
+  history: PropTypes.any
 };
 
 export default withRouter(withActionFeedback(withContextualMenu(withResourceWorkspace(Grid))));

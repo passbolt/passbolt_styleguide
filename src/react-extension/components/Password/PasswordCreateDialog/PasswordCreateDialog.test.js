@@ -12,425 +12,293 @@
  * @since         2.11.0
  */
 
-import React from "react";
-import {render, fireEvent, waitFor} from "@testing-library/react";
-import "../../../test/lib/crypto/cryptoGetRandomvalues";
-import AppContext from "../../../contexts/AppContext";
-import PasswordCreateDialog from "./PasswordCreateDialog";
-import PassboltApiFetchError from "../../../lib/Common/Error/PassboltApiFetchError";
-import resourceTypesFixture from "../../../test/fixture/ResourceTypes/resourceTypes";
-import UserSettings from "../../../lib/Settings/UserSettings";
-import userSettingsFixture from "../../../test/fixture/Settings/userSettings";
-import SiteSettings from "../../../lib/Settings/SiteSettings";
-import siteSettingsFixture from "../../../test/fixture/Settings/siteSettings";
-import MockPort from "../../../test/mock/MockPort";
+/**
+ * Unit tests on PasswordCreateDialog in regard of specifications
+ */
 import {ActionFeedbackContext} from "../../../contexts/ActionFeedbackContext";
-import DialogContextProvider from "../../../contexts/Common/DialogContext";
-import ManageDialogs from "../../Common/Dialog/ManageDialogs/ManageDialogs";
-import {MemoryRouter} from "react-router-dom";
-import ResourceTypesSettings from "../../../lib/Settings/ResourceTypesSettings";
+import PassboltApiFetchError from "../../../../react/lib/Common/Error/PassboltApiFetchError";
+import {waitFor} from "@testing-library/react";
+import {defaultAppContext, defaultProps} from "./PasswordCreateDialog.test.data";
+import PasswordCreateDialogPage from "./PasswordCreateDialog.test.page";
+import "../../../test/lib/crypto/cryptoGetRandomvalues";
 
 beforeEach(() => {
   jest.resetModules();
 });
 
-const getAppContext = function(appContext) {
-  const defaultAppContext = {
-    userSettings: new UserSettings(userSettingsFixture),
-    siteSettings: new SiteSettings(siteSettingsFixture),
-    resourceTypesSettings: new ResourceTypesSettings(new SiteSettings(siteSettingsFixture), resourceTypesFixture),
-    port: new MockPort(),
-    resourceCreateDialogProps: {
-      folderParentId: null
-    },
-    setContext: function(newContext) {
-      // In this scope this reference the object context.
-      Object.assign(this, newContext);
-    },
+describe("See the Create Dialog Password", () => {
+  let page; // The page to test against
+  const context = defaultAppContext(); // The applicative context
+  const props = defaultProps(); // The props to pass
+  const resourceCreateDialogProps = {
+    folderParentId: null
   };
 
-  return Object.assign(defaultAppContext, appContext || {});
-};
+  const mockContextRequest = implementation => jest.spyOn(context.port, 'request').mockImplementation(implementation);
 
-const renderPasswordCreateDialog = function(appContext, props) {
-  appContext = getAppContext(appContext);
-  props = props || {};
-  return render(
-    <AppContext.Provider value={appContext}>
-      <DialogContextProvider>
-        <MemoryRouter initialEntries={[
-          "/app/folders/view/:filterByFolderId",
-          "/app/passwords/view/:selectedResourceId",
-          "/app/passwords",
-        ]}>
-          <ManageDialogs/>
-          <PasswordCreateDialog debug onClose={props.onClose || jest.fn()} />
-        </MemoryRouter>
-      </DialogContextProvider>
-    </AppContext.Provider>
-  );
-};
-
-describe("PasswordCreateDialog", () => {
-  it("matches the styleguide.", () => {
-    const {container} = renderPasswordCreateDialog();
-
-    // Dialog title exists and correct
-    const dialogTitle = container.querySelector(".dialog-header h2");
-    expect(dialogTitle).not.toBeNull();
-    expect(dialogTitle.textContent).toBe("Create a password");
-
-    // Close button exists
-    const closeButton = container.querySelector(".dialog-close");
-    expect(closeButton).not.toBeNull();
-
-    // Name input field exists.
-    const nameInput = container.querySelector("[name=\"name\"]");
-    expect(nameInput).not.toBeNull();
-    expect(nameInput.value.trim()).toBe("");
-
-    // Uri input field exists
-    const uriInput = container.querySelector("[name=\"uri\"]");
-    expect(uriInput).not.toBeNull();
-    expect(uriInput.value.trim()).toBe("");
-
-    // Username input field exists
-    const usernameInput = container.querySelector("[name=\"username\"]");
-    expect(usernameInput).not.toBeNull();
-    expect(usernameInput.value.trim()).toBe("");
-
-    // Password input field exists
-    const passwordInput = container.querySelector("[name=\"password\"]");
-    const passwordInputType = passwordInput.getAttribute("type");
-    expect(passwordInput).not.toBeNull();
-    expect(passwordInput.value.trim()).toBe("");
-    expect(passwordInputType).toBe("password");
-    const passwordInputStyle = window.getComputedStyle(passwordInput);
-    expect(passwordInputStyle.background).toBe("white");
-    expect(passwordInputStyle.color).toBe("");
-
-    // Complexity label exists but is not yet defined.
-    const complexityLabel = container.querySelector(".complexity-text");
-    expect(complexityLabel.textContent).toBe("complexity: n/a");
-
-    // Security token element exists.
-    const securityTokenElement = container.querySelector(".security-token");
-    expect(securityTokenElement).not.toBeNull();
-    expect(securityTokenElement.textContent).toBe("TST");
-    // And the default style is applied.
-    const securityTokenStyle = window.getComputedStyle(securityTokenElement);
-    expect(securityTokenStyle.background).toBe("rgb(0, 0, 0)");
-    expect(securityTokenStyle.color).toBe("rgb(255, 255, 255)");
-
-    // Password view button exists.
-    const passwordViewButton = container.querySelector(".password-view.button");
-    expect(passwordViewButton).not.toBeNull();
-    expect(passwordViewButton.classList.contains("selected")).toBe(false);
-
-    // Password generate button exists.
-    const passwordGenerateButton = container.querySelector(".password-generate.button");
-    expect(passwordGenerateButton).not.toBeNull();
-
-    // Description textarea field exists
-    const descriptionTextArea = container.querySelector("[name=\"description\"]");
-    expect(descriptionTextArea).not.toBeNull();
-    expect(descriptionTextArea.value.trim()).toBe("");
-
-    // Create button exists
-    const createButton = container.querySelector(".submit-wrapper [type=\"submit\"]");
-    expect(createButton).not.toBeNull();
-
-    // Cancel button exists
-    const cancelButton = container.querySelector(".submit-wrapper .cancel");
-    expect(cancelButton).not.toBeNull();
-  });
-
-  it("calls onClose props when clicking on the close button.", () => {
-    const props = {
-      onClose: jest.fn()
-    };
-    const {container} = renderPasswordCreateDialog(null, props);
-
-    const leftClick = {button: 0};
-    const dialogCloseIcon = container.querySelector(".dialog-close");
-    fireEvent.click(dialogCloseIcon, leftClick);
-    expect(props.onClose).toBeCalled();
-  });
-
-  it("calls onClose props when clicking on the cancel button.", () => {
-    const props = {
-      onClose: jest.fn()
-    };
-    const {container} = renderPasswordCreateDialog(null, props);
-
-    const leftClick = {button: 0};
-    const cancelButton = container.querySelector(".submit-wrapper .cancel");
-    fireEvent.click(cancelButton, leftClick);
-    expect(props.onClose).toBeCalled();
-  });
-
-  it("changes the style of its security token when the password input get or lose focus.", () => {
-    const {container} = renderPasswordCreateDialog();
-
-    const passwordInput = container.querySelector("[name=\"password\"]");
-    const securityTokenElement = container.querySelector(".security-token");
-
-    /*
-     * Password input got focus.
-     * Assert style change.
+  describe('As LU I can start adding a password', () => {
+    /**
+     * I should see the create password dialog
      */
-    fireEvent.focus(passwordInput);
-    let securityTokenStyle = window.getComputedStyle(securityTokenElement);
-    let passwordInputStyle = window.getComputedStyle(passwordInput);
-    expect(passwordInputStyle.background).toBe("rgb(0, 0, 0)");
-    expect(passwordInputStyle.color).toBe("rgb(255, 255, 255)");
-    expect(securityTokenStyle.background).toBe("rgb(255, 255, 255)");
-    expect(securityTokenStyle.color).toBe("rgb(0, 0, 0)");
-
-    /*
-     * Password input lost focus.
-     * Assert style
-     */
-    fireEvent.blur(passwordInput);
-    securityTokenStyle = window.getComputedStyle(securityTokenElement);
-    passwordInputStyle = window.getComputedStyle(passwordInput);
-    expect(passwordInputStyle.background).toBe("white");
-    expect(passwordInputStyle.color).toBe("");
-    expect(securityTokenStyle.background).toBe("rgb(0, 0, 0)");
-    expect(securityTokenStyle.color).toBe("rgb(255, 255, 255)");
-  });
-
-  it("generates password when clicking on the generate button.", () => {
-    const {container} = renderPasswordCreateDialog();
-
-    const leftClick = {button: 0};
-    const passwordInput = container.querySelector("[name=\"password\"]");
-    const generateButton = container.querySelector(".password-generate");
-    const complexityLabel = container.querySelector(".complexity-text");
-    const complexityBar = container.querySelector(".progress-bar");
-
-    // Generate a password and asserts.
-    fireEvent.click(generateButton, leftClick);
-    expect(passwordInput.value).not.toBe("");
-    expect(complexityLabel.textContent).not.toBe("complexity: n/a");
-    expect(complexityBar.classList.contains("not_available")).toBe(false);
-  });
-
-  it("views password when clicking on the view button.", () => {
-    const {container} = renderPasswordCreateDialog();
-
-    const leftClick = {button: 0};
-    const passwordValue = "Lise Meitner";
-    const passwordInput = container.querySelector("[name=\"password\"]");
-    const viewButton = container.querySelector(".password-view");
-    fireEvent.change(passwordInput, {target: {value: passwordValue}});
-
-    // View password
-    fireEvent.click(viewButton, leftClick);
-    expect(passwordInput.value).toBe(passwordValue);
-    let passwordInputType = passwordInput.getAttribute("type");
-    expect(passwordInputType).toBe("text");
-    expect(viewButton.classList.contains("selected")).toBe(true);
-
-    // Hide password
-    fireEvent.click(viewButton, leftClick);
-    expect(passwordInput.value).toBe(passwordValue);
-    passwordInputType = passwordInput.getAttribute("type");
-    expect(passwordInputType).toBe("password");
-    expect(viewButton.classList.contains("selected")).toBe(false);
-  });
-
-  it("validates the form when clicking on the submit button.", async() => {
-    const {container} = renderPasswordCreateDialog();
-
-    const leftClick = {button: 0};
-    const submitButton = container.querySelector("input[type=\"submit\"]");
-    fireEvent.click(submitButton, leftClick);
-    await waitFor(() => {});
-
-    // Throw name error message
-    const nameErrorMessage = container.querySelector(".name.error.message");
-    expect(nameErrorMessage.textContent).toBe("A name is required.");
-
-    // Throw password error message
-    const passwordErrorMessage = container.querySelector(".password.message.error");
-    expect(passwordErrorMessage.textContent).toBe("A password is required.");
-  });
-
-  it("displays an error when the API call fail.", async() => {
-    const context = getAppContext();
-    const {container} = renderPasswordCreateDialog(context);
-
-    const resourceMeta = {
-      name: "Password name",
-      uri: "https://uri.dev",
-      username: "Password username",
-      password: "password-value",
-      description: "Password description"
-    };
-
-    // Fill the required form fields.
-    const nameInput = container.querySelector("[name=\"name\"]");
-    const nameInputEvent = {target: {value: resourceMeta.name}};
-    fireEvent.change(nameInput, nameInputEvent);
-    const passwordInput = container.querySelector("[name=\"password\"]");
-    const passwordInputEvent = {target: {value: resourceMeta.password}};
-    fireEvent.change(passwordInput, passwordInputEvent);
-
-    // Mock the request function to make it return an error.
-    jest.spyOn(context.port, 'request').mockImplementationOnce(() => {
-      throw new PassboltApiFetchError("Jest simulate API error.");
+    beforeEach(() => {
+      context.setContext({resourceCreateDialogProps});
+      page = new PasswordCreateDialogPage(context, props);
     });
 
-    // Submit and assert
-    const submitButton = container.querySelector("input[type=\"submit\"]");
-    fireEvent.click(submitButton, {button: 0});
-    // API calls are made on submit, wait they are resolved.
-    await waitFor(() => {});
+    it('matches the styleguide', () => {
+      // Dialog title exists and correct
+      expect(page.passwordCreate.exists()).toBeTruthy();
+      expect(page.title.header.textContent).toBe("Create a password");
 
-    // Throw general error message
-    const generalErrorDialog = container.querySelector(".error-dialog");
-    expect(generalErrorDialog).not.toBeNull();
-    const generalErrorMessage = container.querySelector(".error-dialog .dialog .dialog-content .form-content");
-    expect(generalErrorMessage).not.toBeNull();
-  });
+      // Close button exists
+      expect(page.passwordCreate.dialogClose).not.toBeNull();
 
-  it("requests the addon to create a legacy resource with cleartext description when clicking on the submit button.", async() => {
-    const createdResourceId = "f2b4047d-ab6d-4430-a1e2-3ab04a2f4fb9";
-    const context = getAppContext();
-    const props = {onClose: jest.fn()};
-    const {container} = renderPasswordCreateDialog(context, props);
+      // Name input field exists.
+      expect(page.passwordCreate.name.value).toBe("");
+      // Uri input field exists.
+      expect(page.passwordCreate.uri.value).toBe("");
+      // Username input field exists.
+      expect(page.passwordCreate.username.value).toBe("");
+      // Password input field exists
+      expect(page.passwordCreate.password).not.toBeNull();
+      expect(page.passwordCreate.password.value).toBe("");
+      expect(page.passwordCreate.password.getAttribute("type")).toBe("password");
+      const passwordInputStyle = window.getComputedStyle(page.passwordCreate.password);
+      expect(passwordInputStyle.background).toBe("white");
+      expect(passwordInputStyle.color).toBe("");
 
-    const resourceMeta = {
-      name: "Password name",
-      uri: "https://uri.dev",
-      username: "Password username",
-      password: "password-value",
-      description: "Password description"
-    };
+      // Complexity label exists but is not yet defined.
+      expect(page.passwordCreate.complexityText.textContent).toBe("complexity: n/a");
 
-    // Fill the form
-    const nameInput = container.querySelector("[name=\"name\"]");
-    const nameInputEvent = {target: {value: resourceMeta.name}};
-    fireEvent.change(nameInput, nameInputEvent);
-    const uriInput = container.querySelector("[name=\"uri\"]");
-    const uriInputEvent = {target: {value: resourceMeta.uri}};
-    fireEvent.change(uriInput, uriInputEvent);
-    const usernameInput = container.querySelector("[name=\"username\"]");
-    const usernameInputEvent = {target: {value: resourceMeta.username}};
-    fireEvent.change(usernameInput, usernameInputEvent);
-    const passwordInput = container.querySelector("[name=\"password\"]");
-    const passwordInputEvent = {target: {value: resourceMeta.password}};
-    fireEvent.change(passwordInput, passwordInputEvent);
-    const complexityLabel = container.querySelector(".complexity-text");
-    expect(complexityLabel.textContent).not.toBe("complexity: n/a");
-    const complexityBar = container.querySelector(".progress-bar");
-    expect(complexityBar.classList.contains("not_available")).toBe(false);
-    const descriptionTextArea = container.querySelector("[name=\"description\"]");
-    const descriptionTextareaEvent = {target: {value: resourceMeta.description}};
-    fireEvent.change(descriptionTextArea, descriptionTextareaEvent);
+      // Security token element exists.
+      expect(page.passwordCreate.securityToken.textContent).toBe("TST");
+      // And the default style is applied.
+      const securityTokenStyle = window.getComputedStyle(page.passwordCreate.securityToken);
+      expect(securityTokenStyle.background).toBe("rgb(0, 0, 0)");
+      expect(securityTokenStyle.color).toBe("rgb(255, 255, 255)");
 
-    // Mock the request function to make it the expected result
-    jest.spyOn(context.port, 'request').mockImplementationOnce(jest.fn((message, data) => Object.assign({id: createdResourceId}, data)));
-    jest.spyOn(context.port, 'emit').mockImplementation(jest.fn());
-    jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementation(() => {});
+      // Password view button exists.
+      expect(page.passwordCreate.passwordViewButton).not.toBeNull();
+      expect(page.passwordCreate.passwordViewButton.classList.contains("selected")).toBe(false);
 
-    // Submit and assert
-    const submitButton = container.querySelector("input[type=\"submit\"]");
-    fireEvent.click(submitButton, {button: 0});
+      // Password generate button exists.
+      expect(page.passwordCreate.passwordGenerateButton).not.toBeNull();
 
-    // API calls are made on submit, wait they are resolved.
-    await waitFor(() => {});
+      // Description textarea field exists
+      expect(page.passwordCreate.description.value).toBe("");
 
-    const onApiCreateResourceDto = {
-      name: resourceMeta.name,
-      uri: resourceMeta.uri,
-      username: resourceMeta.username,
-      folder_parent_id: null,
-      resource_type_id: 'a28a04cd-6f53-518a-967c-9963bf9cec51'
-    };
-    const onApiCreateSecretDto = {
-      password: resourceMeta.password,
-      description: resourceMeta.description
-    };
-    expect(context.port.request).toHaveBeenCalledWith("passbolt.resources.create", onApiCreateResourceDto, onApiCreateSecretDto);
-    expect(context.port.emit).toHaveBeenCalledTimes(1);
-    expect(context.port.emit).toHaveBeenNthCalledWith(1, "passbolt.resources.select-and-scroll-to", createdResourceId);
-    expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalled();
-    expect(props.onClose).toBeCalled();
-  });
+      // Save button exists
+      expect(page.passwordCreate.saveButton.value).toBe("Create");
 
+      // Cancel button exists
+      expect(page.passwordCreate.cancelButton.textContent).toBe("Cancel");
+    });
 
-  it("requests the addon to create a resource with encrypted description when clicking on the submit button.", async() => {
-    const createdResourceId = "f2b4047d-ab6d-4430-a1e2-3ab04a2f4fb9";
-    const context = getAppContext();
+    it('changes the style of its security token when the password input get or lose focus when the password is already decrypted', async() => {
+      /*
+       * Password input got focus.
+       * Assert style change.
+       */
+      page.passwordCreate.focusInput(page.passwordCreate.password);
+      let securityTokenStyle = window.getComputedStyle(page.passwordCreate.securityToken);
+      let passwordInputStyle = window.getComputedStyle(page.passwordCreate.password);
+      expect(passwordInputStyle.background).toBe("rgb(0, 0, 0)");
+      expect(passwordInputStyle.color).toBe("rgb(255, 255, 255)");
+      expect(securityTokenStyle.background).toBe("rgb(255, 255, 255)");
+      expect(securityTokenStyle.color).toBe("rgb(0, 0, 0)");
 
-    expect(context.resourceTypesSettings.isLegacyResourceTypeEnabled()).toBe(true);
-    expect(context.resourceTypesSettings.isEncryptedDescriptionEnabled()).toBe(true);
+      /*
+       * Password input lost focus.
+       * Assert style
+       */
+      page.passwordCreate.blurInput(page.passwordCreate.password);
+      securityTokenStyle = window.getComputedStyle(page.passwordCreate.securityToken);
+      passwordInputStyle = window.getComputedStyle(page.passwordCreate.password);
+      expect(passwordInputStyle.background).toBe("white");
+      expect(passwordInputStyle.color).toBe("");
+      expect(securityTokenStyle.background).toBe("rgb(0, 0, 0)");
+      expect(securityTokenStyle.color).toBe("rgb(255, 255, 255)");
+    });
 
-    const props = {
-      onClose: jest.fn()
-    };
-    const {container} = renderPasswordCreateDialog(context, props);
+    it('generates password when clicking on the generate button.', async() => {
+      page.passwordCreate.focusInput(page.passwordCreate.password);
+      await page.passwordCreate.click(page.passwordCreate.passwordGenerateButton);
+      expect(page.passwordCreate.complexityText.textContent).not.toBe("complexity: n/a");
+      expect(page.passwordCreate.progressBar.classList.contains("not_available")).toBe(false);
+    });
 
-    const resourceMeta = {
-      name: "Password name",
-      uri: "https://uri.dev",
-      username: "Password username",
-      password: "password-value",
-      description: "Password description"
-    };
+    it('views password when clicking on the view button.', async() => {
+      const passwordValue = "secret-decrypted";
+      page.passwordCreate.fillInput(page.passwordCreate.password, passwordValue);
+      // View password
+      await page.passwordCreate.click(page.passwordCreate.passwordViewButton);
+      expect(page.passwordCreate.password.value).toBe(passwordValue);
+      let passwordInputType = page.passwordCreate.password.getAttribute("type");
+      expect(passwordInputType).toBe("text");
+      expect(page.passwordCreate.passwordViewButton.classList.contains("selected")).toBe(true);
 
-    // Fill the form
-    const nameInput = container.querySelector("[name=\"name\"]");
-    const nameInputEvent = {target: {value: resourceMeta.name}};
-    fireEvent.change(nameInput, nameInputEvent);
-    const uriInput = container.querySelector("[name=\"uri\"]");
-    const uriInputEvent = {target: {value: resourceMeta.uri}};
-    fireEvent.change(uriInput, uriInputEvent);
-    const usernameInput = container.querySelector("[name=\"username\"]");
-    const usernameInputEvent = {target: {value: resourceMeta.username}};
-    fireEvent.change(usernameInput, usernameInputEvent);
-    const passwordInput = container.querySelector("[name=\"password\"]");
-    const passwordInputEvent = {target: {value: resourceMeta.password}};
-    fireEvent.change(passwordInput, passwordInputEvent);
-    const complexityLabel = container.querySelector(".complexity-text");
-    expect(complexityLabel.textContent).not.toBe("complexity: n/a");
-    const complexityBar = container.querySelector(".progress-bar");
-    expect(complexityBar.classList.contains("not_available")).toBe(false);
-    const descriptionTextArea = container.querySelector("[name=\"description\"]");
-    const descriptionTextareaEvent = {target: {value: resourceMeta.description}};
-    fireEvent.change(descriptionTextArea, descriptionTextareaEvent);
+      // Hide password
+      await page.passwordCreate.click(page.passwordCreate.passwordViewButton);
+      expect(page.passwordCreate.password.value).toBe(passwordValue);
+      passwordInputType = page.passwordCreate.password.getAttribute("type");
+      expect(passwordInputType).toBe("password");
+      expect(page.passwordCreate.passwordViewButton.classList.contains("selected")).toBe(false);
+    });
 
-    // Mock the request function to make it the expected result
-    jest.spyOn(context.port, 'request').mockImplementationOnce(jest.fn((message, data) => Object.assign({id: createdResourceId}, data)));
-    jest.spyOn(context.port, 'emit').mockImplementation(jest.fn());
-    jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementation(() => {});
+    it('requests the addon to create a resource with encrypted description when clicking on the submit button.', async() => {
+      expect(page.passwordCreate.exists()).toBeTruthy();
+      const createdResourceId = "f2b4047d-ab6d-4430-a1e2-3ab04a2f4fb9";
+      // create password
+      const resourceMeta = {
+        name: "Password name",
+        uri: "https://uri.dev",
+        username: "Password username",
+        password: "password-value",
+        description: "Password description"
+      };
+      // Fill the form
+      page.passwordCreate.fillInput(page.passwordCreate.name, resourceMeta.name);
+      page.passwordCreate.fillInput(page.passwordCreate.uri, resourceMeta.uri);
+      page.passwordCreate.fillInput(page.passwordCreate.username, resourceMeta.username);
+      page.passwordCreate.fillInput(page.passwordCreate.password, resourceMeta.password);
+      expect(page.passwordCreate.complexityText.textContent).not.toBe("complexity: n/a");
+      expect(page.passwordCreate.progressBar.classList.contains("not_available")).toBe(false);
+      page.passwordCreate.fillInput(page.passwordCreate.description, resourceMeta.description);
+      await page.passwordCreate.click(page.passwordCreate.descriptionEncryptedLock);
 
-    // Submit and assert
-    const lockButton = container.querySelector(".lock-toggle");
-    fireEvent.click(lockButton, {button: 0});
+      const requestMockImpl = jest.fn((message, data) => Object.assign({id: createdResourceId}, data));
+      mockContextRequest(requestMockImpl);
+      jest.spyOn(context.port, 'emit').mockImplementation(jest.fn());
+      jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementation(() => {});
 
-    // Submit and assert
-    const submitButton = container.querySelector("input[type=\"submit\"]");
-    fireEvent.click(submitButton, {button: 0});
+      const onApiUpdateResourceMeta = {
+        folder_parent_id: null,
+        name: resourceMeta.name,
+        uri: resourceMeta.uri,
+        username: resourceMeta.username,
+        description: resourceMeta.description,
+        resource_type_id: "669f8c64-242a-59fb-92fc-81f660975fd3"
+      };
 
-    // API calls are made on submit, wait they are resolved.
-    await waitFor(() => {});
+      await page.passwordCreate.click(page.passwordCreate.saveButton);
+      expect(context.port.request).toHaveBeenCalledWith("passbolt.resources.create", onApiUpdateResourceMeta, resourceMeta.password);
+      expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalled();
+      expect(context.port.emit).toHaveBeenNthCalledWith(1, "passbolt.resources.select-and-scroll-to", createdResourceId);
+      expect(props.onClose).toBeCalled();
+    });
 
-    const onApiCreateResourceDto = {
-      name: resourceMeta.name,
-      uri: resourceMeta.uri,
-      username: resourceMeta.username,
-      folder_parent_id: null,
-      resource_type_id: '669f8c64-242a-59fb-92fc-81f660975fd3',
-      description: resourceMeta.description
-    };
-    const onApiCreateSecretDto = resourceMeta.password;
-    expect(context.port.request).toHaveBeenCalledWith("passbolt.resources.create", onApiCreateResourceDto, onApiCreateSecretDto);
-    expect(context.port.emit).toHaveBeenCalledTimes(1);
-    expect(context.port.emit).toHaveBeenNthCalledWith(1, "passbolt.resources.select-and-scroll-to", createdResourceId);
-    expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalled();
-    expect(props.onClose).toBeCalled();
+    it('requests the addon to create a resource with non encrypted description when clicking on the submit button.', async() => {
+      expect(page.passwordCreate.exists()).toBeTruthy();
+      const createdResourceId = "f2b4047d-ab6d-4430-a1e2-3ab04a2f4fb9";
+      // create password
+      const resourceMeta = {
+        name: "Password name",
+        uri: "https://uri.dev",
+        username: "Password username",
+        password: "password-value",
+        description: "Password description"
+      };
+      // Fill the form
+      page.passwordCreate.fillInput(page.passwordCreate.name, resourceMeta.name);
+      page.passwordCreate.fillInput(page.passwordCreate.uri, resourceMeta.uri);
+      page.passwordCreate.fillInput(page.passwordCreate.username, resourceMeta.username);
+      page.passwordCreate.fillInput(page.passwordCreate.password, resourceMeta.password);
+      expect(page.passwordCreate.complexityText.textContent).not.toBe("complexity: n/a");
+      expect(page.passwordCreate.progressBar.classList.contains("not_available")).toBe(false);
+      page.passwordCreate.fillInput(page.passwordCreate.description, resourceMeta.description);
+
+      const requestMockImpl = jest.fn((message, data) => Object.assign({id: createdResourceId}, data));
+      mockContextRequest(requestMockImpl);
+      jest.spyOn(context.port, 'emit').mockImplementation(jest.fn());
+      jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementation(() => {});
+
+      const onApiUpdateResourceDto = {
+        folder_parent_id: null,
+        name: resourceMeta.name,
+        uri: resourceMeta.uri,
+        username: resourceMeta.username,
+        resource_type_id: "a28a04cd-6f53-518a-967c-9963bf9cec51"
+      };
+      const onApiUpdateSecretDto = {
+        description: resourceMeta.description,
+        password: resourceMeta.password
+      };
+
+      await page.passwordCreate.click(page.passwordCreate.saveButton);
+
+      expect(context.port.request).toHaveBeenCalledWith("passbolt.resources.create", onApiUpdateResourceDto, onApiUpdateSecretDto);
+      expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalled();
+      expect(context.port.emit).toHaveBeenNthCalledWith(1, "passbolt.resources.select-and-scroll-to", createdResourceId);
+      expect(props.onClose).toBeCalled();
+    });
+
+    it('As LU I shouldn’t be able to submit the form if there is an invalid field', async() => {
+      expect(page.passwordCreate.exists()).toBeTruthy();
+      await page.passwordCreate.click(page.passwordCreate.saveButton);
+
+      // Throw error message
+      expect(page.passwordCreate.nameErrorMessage.textContent).toBe("A name is required.");
+      expect(page.passwordCreate.passwordErrorMessage.textContent).toBe("A password is required.");
+    });
+
+    it('As LU I can stop createing a password by clicking on the cancel button', async() => {
+      expect(page.passwordCreate.exists()).toBeTruthy();
+      await page.passwordCreate.click(page.passwordCreate.cancelButton);
+      expect(props.onClose).toBeCalled();
+    });
+
+    it('As LU I cannot update the form fields and I should see a processing feedback while submitting the form', async() => {
+      // Mock the request function to make it the expected result
+      let updateResolve;
+      const requestMockImpl = jest.fn(() => new Promise(resolve => {
+        updateResolve = resolve;
+      }));
+
+      page.passwordCreate.fillInput(page.passwordCreate.name, "name");
+      page.passwordCreate.fillInput(page.passwordCreate.password, "password");
+
+      // Mock the request function to make it the expected result
+      mockContextRequest(requestMockImpl);
+      page.passwordCreate.clickWithoutWaitFor(page.passwordCreate.saveButton);
+      // API calls are made on submit, wait they are resolved.
+      await waitFor(() => {
+        expect(page.passwordCreate.name.getAttribute("disabled")).not.toBeNull();
+        expect(page.passwordCreate.uri.getAttribute("disabled")).not.toBeNull();
+        expect(page.passwordCreate.username.getAttribute("disabled")).not.toBeNull();
+        expect(page.passwordCreate.password.getAttribute("disabled")).not.toBeNull();
+        expect(page.passwordCreate.saveButton.getAttribute("disabled")).not.toBeNull();
+        expect(page.passwordCreate.saveButton.className).toBe("button primary disabled processing");
+        expect(page.passwordCreate.cancelButton.className).toBe("cancel disabled");
+        updateResolve();
+      });
+    });
+
+    it('As LU I can stop createing a password by closing the dialog', async() => {
+      expect(page.passwordCreate.exists()).toBeTruthy();
+      await page.passwordCreate.click(page.passwordCreate.dialogClose);
+      expect(props.onClose).toBeCalled();
+    });
+
+    it('As LU I can stop adding a password with the keyboard (escape)', async() => {
+      expect(page.passwordCreate.exists()).toBeTruthy();
+      await page.passwordCreate.escapeKey(page.passwordCreate.dialogClose);
+      expect(props.onClose).toBeCalled();
+    });
+
+    it('As LU I should see an error dialog if the submit operation fails for an unexpected reason', async() => {
+      // Mock the request function to make it return an error.
+      page.passwordCreate.fillInput(page.passwordCreate.name, "name");
+      page.passwordCreate.fillInput(page.passwordCreate.password, "password");
+
+      jest.spyOn(context.port, 'request').mockImplementationOnce(() => {
+        throw new PassboltApiFetchError("Jest simulate API error.");
+      });
+
+      await page.passwordCreate.click(page.passwordCreate.saveButton);
+
+      // Throw general error message
+      expect(page.passwordCreate.errorDialog).not.toBeNull();
+      expect(page.passwordCreate.errorDialogMessage).not.toBeNull();
+    });
   });
 });

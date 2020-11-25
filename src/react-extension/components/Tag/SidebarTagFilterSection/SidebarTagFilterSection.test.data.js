@@ -1,4 +1,5 @@
 import MockPort from "../../../test/mock/MockPort";
+import {ResourceWorkspaceFilterTypes} from "../../../contexts/ResourceWorkspaceContext";
 
 /**
  * Returns the default app context for the unit test
@@ -8,8 +9,26 @@ import MockPort from "../../../test/mock/MockPort";
 export function defaultAppContext(appContext) {
   const defaultAppContext = {
     port: new MockPort(),
+    setContext: function(newContext) {
+      // In this scope this reference the object context.
+      Object.assign(this, newContext);
+    },
   };
   return Object.assign(defaultAppContext, appContext || {});
+}
+
+export function defaultResourceWorkspaceContext(context) {
+  const defaultResourceWorkspaceContext = {
+    filter: {
+      type: ResourceWorkspaceFilterTypes.TAG,
+      payload: {
+        tag: {
+          id: "1"
+        }
+      }
+    }
+  };
+  return Object.assign(defaultResourceWorkspaceContext, context || {});
 }
 
 
@@ -19,6 +38,9 @@ export function defaultAppContext(appContext) {
  */
 export function defaultProps() {
   return {
+    history: {
+      push: jest.fn()
+    },
   };
 }
 

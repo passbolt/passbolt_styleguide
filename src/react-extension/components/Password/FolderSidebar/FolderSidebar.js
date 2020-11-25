@@ -28,23 +28,7 @@ class FolderSidebar extends React.Component {
    */
   constructor(props) {
     super(props);
-    this.state = this.getDefaultState();
     this.bindCallbacks();
-  }
-
-  /**
-   * Get default state
-   * @returns {*}
-   */
-  getDefaultState() {
-    return {
-      activities: null,
-      activitiesPage: 1,
-      activitySectionMoreProcessing: true,
-      activitySectionOpen: false,
-      permissions: null,
-      permissionsSectionOpen: false
-    };
   }
 
   /**
@@ -53,8 +37,6 @@ class FolderSidebar extends React.Component {
   bindCallbacks() {
     this.handleCloseClick = this.handleCloseClick.bind(this);
     this.handlePermalinkClick = this.handlePermalinkClick.bind(this);
-    this.handlePermissionSectionClose = this.handlePermissionSectionClose.bind(this);
-    this.handlePermissionSectionOpen = this.handlePermissionSectionOpen.bind(this);
   }
 
   /**
@@ -72,31 +54,6 @@ class FolderSidebar extends React.Component {
     const permalink = `${baseUrl}/app/folders/view/${this.props.resourceWorkspaceContext.details.folder.id}`;
     await this.context.port.request("passbolt.clipboard.copy", permalink);
     this.props.actionFeedbackContext.displaySuccess("The permalink has been copied to clipboard");
-  }
-
-  /**
-   * Handle when the user closes the permissions section.
-   */
-  handlePermissionSectionClose() {
-    const permissionsSectionOpen = false;
-    this.setState({permissionsSectionOpen});
-  }
-
-  /**
-   * Handle when the user opens the permissions section.
-   */
-  handlePermissionSectionOpen() {
-    const permissionsSectionOpen = true;
-    this.setState({permissionsSectionOpen}, () => this.findFolderPermission());
-  }
-
-  /**
-   * Find the folder permissions
-   * @returns {Promise<void>}
-   */
-  async findFolderPermission() {
-    const permissions = await this.context.port.request('passbolt.folders.find-permissions');
-    this.setState({permissions});
   }
 
   /**
@@ -126,16 +83,8 @@ class FolderSidebar extends React.Component {
               <span className="visuallyhidden">Close</span>
             </a>
           </div>
-          <FolderSidebarInformationSection users={this.props.users}/>
-          <FolderSidebarPermissionsSection
-            folder={this.props.resourceWorkspaceContext.details.folder}
-            onEditPermissions={this.props.onEditPermissions}
-            onClose={this.handlePermissionSectionClose}
-            onOpen={this.handlePermissionSectionOpen}
-            open={this.state.permissionsSectionOpen}
-            permissions={this.state.permissions}
-            groups={this.props.groups}
-            users={this.props.users}/>
+          <FolderSidebarInformationSection/>
+          <FolderSidebarPermissionsSection/>
           <FolderSidebarActivitySection/>
         </div>
       </div>

@@ -21,6 +21,9 @@ export function defaultAppContext(appContext) {
  */
 export function defaultProps() {
   return {
+    history: {
+      push: jest.fn()
+    },
     resourceWorkspaceContext: {
       filter: {
         type: ResourceWorkspaceFilterTypes.GROUP,

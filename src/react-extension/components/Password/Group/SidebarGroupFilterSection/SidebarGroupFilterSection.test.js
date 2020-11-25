@@ -18,6 +18,7 @@
 import {defaultAppContext, defaultProps, groupsMock} from "./SidebarGroupFilterSection.test.data";
 import SidebarGroupFilterSectionPage from "./SidebarGroupFilterSection.test.page";
 import MockPort from "../../../../test/mock/MockPort";
+import {ResourceWorkspaceFilterTypes} from "../../../../contexts/ResourceWorkspaceContext";
 
 beforeEach(() => {
   jest.resetModules();
@@ -40,7 +41,9 @@ describe("See groups", () => {
       page = new SidebarGroupFilterSectionPage(context, props);
     });
 
-    it('I should see the 10 groups made on the resource', () => {
+    it('I should see the 10 groups made on the resource', async() => {
+      await page.title.click();
+      await page.title.click();
       expect(page.displayGroupList.exists()).toBeTruthy();
       expect(page.displayGroupList.count()).toBe(9);
     });
@@ -58,7 +61,18 @@ describe("See groups", () => {
     });
 
     it('I should be able to see the filtered group name selected', async() => {
-      expect(page.displayGroupList.groupSelected()).not.toBeNull();
+      await page.displayGroupList.click(page.displayGroupList.group(8));
+      expect(page.displayGroupList.groupSelected).not.toBeNull();
+      const state = {
+        filter: {
+          type: ResourceWorkspaceFilterTypes.GROUP,
+          payload: {
+            group: groupsMock[8]
+          }
+        }
+      };
+      const pathname = '/app/passwords';
+      expect(props.history.push).toHaveBeenCalledWith({pathname, state});
     });
   });
 

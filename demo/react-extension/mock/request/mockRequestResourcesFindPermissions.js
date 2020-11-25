@@ -15,7 +15,7 @@
 export default () => {
   return [{
     "id": "17336097-cd30-57ab-bc40-89b31bcc513f",
-    "aco": "Folder",
+    "aco": "Resource",
     "aco_foreign_key": "9e03fd73-04c0-5514-95fa-1a6cf2c7c093",
     "aro": "User",
     "aro_foreign_key": "d57c10f5-639d-5160-9c81-8a0c6c4ec856",
@@ -44,7 +44,7 @@ export default () => {
     }
   }, {
     "id": "b05cdb85-43fc-4255-b933-6d91c8da6d37",
-    "aco": "Folder",
+    "aco": "Resource",
     "aco_foreign_key": "9e03fd73-04c0-5514-95fa-1a6cf2c7c093",
     "aro": "Group",
     "aro_foreign_key": "428ed4cd-81b1-56af-aa7f-a7cbdbe227e4",
@@ -62,34 +62,34 @@ export default () => {
     },
     "user": null
   },
-    {
-      "id": "6aada140-fe8b-5e69-a90f-ae0cec6d3dcf",
-      "aco": "Folder",
-      "aco_foreign_key": "9e03fd73-04c0-5514-95fa-1a6cf2c7c093",
-      "aro": "User",
-      "aro_foreign_key": "f848277c-5398-58f8-a82a-72397af2d450",
-      "type": 1,
-      "created": "2020-05-13T09:33:17+00:00",
-      "modified": "2020-05-13T09:33:17+00:00",
-      "group": null,
-      "user": {
-        "id": "f848277c-5398-58f8-a82a-72397af2d450",
-        "role_id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
-        "username": "ada@passbolt.com",
-        "active": true,
-        "deleted": false,
-        "created": "2020-03-13T09:32:49+00:00",
-        "modified": "2020-04-13T09:32:49+00:00",
-        "profile": {
-          "id": "99522cc9-0acc-5ae2-b996-d03bded3c0a6",
-          "user_id": "f848277c-5398-58f8-a82a-72397af2d450",
-          "first_name": "Ada",
-          "last_name": "Lovelace",
-          "created": "2020-05-13T09:32:49+00:00",
-          "modified": "2020-05-13T09:32:49+00:00",
-          "avatar": {"url": {"medium": "img\/avatar\/user_medium.png", "small": "img\/avatar\/user.png"}}
-        },
-        "last_logged_in": ""
-      }
-    }];
+  {
+    "id": "6aada140-fe8b-5e69-a90f-ae0cec6d3dcf",
+    "aco": "Resource",
+    "aco_foreign_key": "9e03fd73-04c0-5514-95fa-1a6cf2c7c093",
+    "aro": "User",
+    "aro_foreign_key": "f848277c-5398-58f8-a82a-72397af2d450",
+    "type": 1,
+    "created": "2020-05-13T09:33:17+00:00",
+    "modified": "2020-05-13T09:33:17+00:00",
+    "group": null,
+    "user": {
+      "id": "f848277c-5398-58f8-a82a-72397af2d450",
+      "role_id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
+      "username": "ada@passbolt.com",
+      "active": true,
+      "deleted": false,
+      "created": "2020-03-13T09:32:49+00:00",
+      "modified": "2020-04-13T09:32:49+00:00",
+      "profile": {
+        "id": "99522cc9-0acc-5ae2-b996-d03bded3c0a6",
+        "user_id": "f848277c-5398-58f8-a82a-72397af2d450",
+        "first_name": "Ada",
+        "last_name": "Lovelace",
+        "created": "2020-05-13T09:32:49+00:00",
+        "modified": "2020-05-13T09:32:49+00:00",
+        "avatar": {"url": {"medium": "img\/avatar\/user_medium.png", "small": "img\/avatar\/user.png"}}
+      },
+      "last_logged_in": ""
+    }
+  }];
 };

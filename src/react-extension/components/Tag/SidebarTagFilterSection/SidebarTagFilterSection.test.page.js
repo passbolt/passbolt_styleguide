@@ -23,6 +23,7 @@ import ContextualMenuContextProvider from "../../../../react/contexts/Common/Con
 import SidebarTagFilterSection from "./SidebarTagFilterSection";
 import SidebarTagFilterSectionContextualMenuPageObject from "./SidebarTagFilterSectionContextualMenu.test.page";
 import DisplayTagListContextualMenuPageObject from "./DisplayTagListContextualMenu.test.page";
+import {ResourceWorkspaceContext} from "../../../contexts/ResourceWorkspaceContext";
 
 /**
  * The SidebarTagFilterSection component represented as a page
@@ -33,14 +34,16 @@ export default class SidebarTagFilterSectionPage {
    * @param appContext An app context
    * @param props Props to attach
    */
-  constructor(appContext, props) {
+  constructor(appContext, props, resourceWorkspaceContext) {
     this._page = render(
       <AppContext.Provider value={appContext}>
         <Router>
-          <ContextualMenuContextProvider>
-            <ManageContextualMenu/>
-            <SidebarTagFilterSection {...props}/>
-          </ContextualMenuContextProvider>
+          <ResourceWorkspaceContext.Provider value={resourceWorkspaceContext}>
+            <ContextualMenuContextProvider>
+              <ManageContextualMenu/>
+              <SidebarTagFilterSection.WrappedComponent {...props}/>
+            </ContextualMenuContextProvider>
+          </ResourceWorkspaceContext.Provider>
         </Router>
       </AppContext.Provider>
     );
@@ -65,21 +68,21 @@ export default class SidebarTagFilterSectionPage {
   }
 
   /**
-   * Returns the page object of display groups
+   * Returns the page object of display tags
    */
   get sidebarTagFilterSection() {
     return this._sidebarTagFilterSection;
   }
 
   /**
-   * Returns the page object of display groups filter contextual menu
+   * Returns the page object of display tags filter contextual menu
    */
   get sidebarTagFilterSectionsContextualMenu() {
     return this._sidebarTagFilterSectionsContextualMenu;
   }
 
   /**
-   * Returns the page object of display groups contextual menu
+   * Returns the page object of display tags contextual menu
    */
   get displayTagListContextualMenu() {
     return this._displayTagListContextualMenu;
@@ -189,7 +192,15 @@ class SidebarTagFilterSectionPageObject {
    * return the tag for the 'index' one
    * @param index
    */
-  group(index) {
+  get tagSelected() {
+    return this.list.querySelector('.tag-item .row.selected .main-cell-wrapper .main-cell a');
+  }
+
+  /**
+   * return the tag for the 'index' one
+   * @param index
+   */
+  tag(index) {
     return this.list.querySelectorAll('.tag-item')[index - 1].querySelector('.row .main-cell-wrapper .main-cell a');
   }
 
@@ -201,19 +212,16 @@ class SidebarTagFilterSectionPageObject {
     return this.list.querySelectorAll('.tag-item')[index - 1].querySelector('.ellipsis').textContent;
   }
 
-  /**
-   * Wait for the activities to be loaded while an in-progress function should be satisfied
-   * @param inProgressFn An in-progress function
-   * @returns {Promise<void>} The promise that the load operation is completed
-   */
-  async waitForLoading(inProgressFn) {
-    await waitFor(inProgressFn);
-  }
-
   /** Click on the component */
   async click(component)  {
     const leftClick = {button: 0};
     fireEvent.click(component, leftClick);
+    await waitFor(() => {});
+  }
+
+  /** Right click on the component */
+  async rightClick(component)  {
+    fireEvent.contextMenu(component);
     await waitFor(() => {});
   }
 }

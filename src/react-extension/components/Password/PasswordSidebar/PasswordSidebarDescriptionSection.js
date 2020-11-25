@@ -63,7 +63,8 @@ class PasswordSidebarDescriptionSection extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (this.props.resource.id !== prevProps.resource.id || this.props.resource.modified !== prevProps.resource.modified) {
+    if (this.resource.id !== prevProps.resourceWorkspaceContext.details.resource.id
+      || this.resource.modified !== prevProps.resourceWorkspaceContext.details.resource.modified) {
       if (this.state.open) {
         this.setDescription();
       } else {
@@ -152,7 +153,7 @@ class PasswordSidebarDescriptionSection extends React.Component {
    * @returns {object} resource dto
    */
   get resource() {
-    return this.props.resource;
+    return this.props.resourceWorkspaceContext.details.resource;
   }
 
   /**
@@ -321,7 +322,7 @@ class PasswordSidebarDescriptionSection extends React.Component {
 PasswordSidebarDescriptionSection.contextType = AppContext;
 
 PasswordSidebarDescriptionSection.propTypes = {
-  resource: PropTypes.any, // The resource
+  resourceWorkspaceContext: PropTypes.any, // The resource
 };
 
 export default withResourceWorkspace(PasswordSidebarDescriptionSection);

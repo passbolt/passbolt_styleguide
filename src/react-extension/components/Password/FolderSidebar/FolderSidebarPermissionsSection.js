@@ -28,7 +28,20 @@ class FolderSidebarPermissionsSection extends React.Component {
    */
   constructor(props) {
     super(props);
+    this.state = this.getDefaultState();
     this.bindCallbacks();
+  }
+
+  /**
+   * Get default state
+   * @returns {*}
+   */
+  getDefaultState() {
+    return {
+      permissions: null,
+      open: false,
+      loading: true,
+    };
   }
 
   /**
@@ -53,8 +66,42 @@ class FolderSidebarPermissionsSection extends React.Component {
    */
   handleFolderChange(previousFolder) {
     const hasFolderChanged = this.folder.id !== previousFolder.id;
-    if (hasFolderChanged && this.props.open) {
-      this.props.onOpen();
+    if (hasFolderChanged && this.state.open) {
+      this.fetch();
+    }
+  }
+
+  /**
+   * Get the folder permissions.
+   */
+  async fetch() {
+    this.setState({loading: true});
+    const permissions = await this.context.port.request('passbolt.folders.find-permissions', this.folder.id);
+    if (permissions) {
+      permissions.sort((permissionA, permissionB) => this.sortPermissions(permissionA, permissionB));
+    }
+    this.setState({permissions, loading: false});
+  }
+
+  /**
+   * Sort permission by user firstname and by group name
+   * @param permissionA
+   * @param permissionB
+   * @returns {number}
+   */
+  sortPermissions(permissionA, permissionB) {
+    // permission have user sort by firstname and lastname
+    if (permissionA.user && permissionB.user) {
+      if (permissionA.user.profile.first_name === permissionB.user.profile.first_name) {
+        return permissionA.user.profile.last_name < permissionB.user.profile.last_name ? -1 : 1;
+      }
+      return permissionA.user.profile.first_name < permissionB.user.profile.first_name ? -1 : 1;
+    } else if (!permissionA.user && permissionB.user) { // sort after group permission user
+      return 1;
+    } else if (permissionA.user && !permissionB.user) {
+      return -1;
+    } else { // otherwise, sort by group
+      return permissionA.group.name < permissionB.group.name ? -1 : 1;
     }
   }
 
@@ -63,11 +110,11 @@ class FolderSidebarPermissionsSection extends React.Component {
    * Open/Close it.
    */
   handleTitleClickEvent() {
-    if (this.props.open) {
-      this.props.onClose();
-    } else {
-      this.props.onOpen();
+    const open = !this.state.open;
+    if (open) {
+      this.fetch();
     }
+    this.setState({open});
   }
 
   /**
@@ -115,26 +162,11 @@ class FolderSidebarPermissionsSection extends React.Component {
   }
 
   /**
-   * Get the permissions.
-   * @return {array}
+   * check if no permission is present
+   * @returns {boolean}
    */
-  getPermissions() {
-    const permissions = this.props.permissions;
-    if (permissions) {
-      permissions.sort((permission1, permission2) => {
-        const permission1Name = permission1.user ? `${permission1.user.profile.first_name} ${permission1.user.profile.last_name}`.toLowerCase() : permission1.group.name.toLowerCase();
-        const permission2Name = permission2.user ? `${permission2.user.profile.first_name} ${permission2.user.profile.last_name}`.toLowerCase() : permission2.group.name.toLowerCase();
-        if (permission1Name < permission2Name) {
-          return -1;
-        }
-        if (permission1Name > permission2Name) {
-          return 1;
-        }
-        return 0;
-      });
-    }
-
-    return permissions;
+  isLoading() {
+    return this.state.loading;
   }
 
   /**
@@ -142,7 +174,7 @@ class FolderSidebarPermissionsSection extends React.Component {
    * @returns {boolean}
    */
   canShare() {
-    return this.folder && this.folder.permission.type === 15;
+    return this.folder.permission && this.folder.permission.type === 15;
   }
 
   /**
@@ -150,16 +182,13 @@ class FolderSidebarPermissionsSection extends React.Component {
    * @returns {JSX}
    */
   render() {
-    const canShare = this.canShare();
-    const permissions = this.getPermissions();
-
     return (
-      <div className={`sharedwith accordion sidebar-section ${this.props.open ? "" : "closed"}`}>
+      <div className={`sharedwith accordion sidebar-section ${this.state.open ? "" : "closed"}`}>
         <div className="accordion-header">
           <h4><a onClick={this.handleTitleClickEvent} role="button">Shared with</a></h4>
         </div>
         <div className="accordion-content">
-          {canShare &&
+          {this.canShare() &&
           <a onClick={this.handlePermissionsEditClickEvent} className="section-action">
             <Icon name="edit"/>
             <span className="visuallyhidden">modify</span>
@@ -167,12 +196,12 @@ class FolderSidebarPermissionsSection extends React.Component {
           }
           <div>
             <ul className="shared-with ready">
-              {permissions === null &&
+              {this.isLoading() &&
               <div className="processing-wrapper">
-                <span className="processing-text">Retrieving permissions </span>
+                <span className="processing-text">Retrieving permissions</span>
               </div>
               }
-              {permissions && permissions.map(permission => (
+              {this.state.permissions && this.state.permissions.map(permission => (
                 <li key={permission.id} className="usercard-col-2">
                   <div className="content-wrapper">
                     <div className="content">
@@ -199,11 +228,6 @@ class FolderSidebarPermissionsSection extends React.Component {
 FolderSidebarPermissionsSection.contextType = AppContext;
 
 FolderSidebarPermissionsSection.propTypes = {
-  onClose: PropTypes.func,
-  onOpen: PropTypes.func,
-  open: PropTypes.bool,
-  permissions: PropTypes.array,
-  users: PropTypes.array,
   resourceWorkspaceContext: PropTypes.object,
   dialogContext: PropTypes.any
 };

@@ -14,7 +14,7 @@
 import React from "react";
 import Icon from "../../Common/Icons/Icon";
 import PropTypes from "prop-types";
-import moment from "moment";
+import moment from "moment-timezone";
 import AppContext from "../../../contexts/AppContext";
 import {withRouter} from "react-router-dom";
 import {ResourceWorkspaceFilterTypes, withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
@@ -173,7 +173,6 @@ class FolderSidebarInformationSection extends React.Component {
 FolderSidebarInformationSection.contextType = AppContext;
 
 FolderSidebarInformationSection.propTypes = {
-  users: PropTypes.array,
   history: PropTypes.object,
   resourceWorkspaceContext: PropTypes.object
 };

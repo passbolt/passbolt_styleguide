@@ -33,7 +33,7 @@ export default class SidebarGroupFilterSectionPage {
     this._page = render(
       <AppContext.Provider value={appContext}>
         <Router>
-          <SidebarGroupFilterSection {...props}/>
+          <SidebarGroupFilterSection.WrappedComponent {...props}/>
         </Router>
       </AppContext.Provider>
     );
@@ -108,24 +108,10 @@ class DisplayGroupPageObject {
   }
 
   /**
-   * Returns the loading element
-   */
-  get loadingMessage() {
-    return this._container.querySelector('.processing-text');
-  }
-
-  /**
    * Returns true if the page object exists in the container
    */
   exists() {
     return this.list !== null;
-  }
-
-  /**
-   * Returns true
-   */
-  isLoading() {
-    return this.loadingMessage !== null && this.loadingMessage.innerHTML === 'Retrieving groups';
   }
 
   /**
@@ -138,8 +124,15 @@ class DisplayGroupPageObject {
   /**
    * Returns the group selected
    */
-  groupSelected() {
+  get groupSelected() {
     return this.list.querySelector('.group-item .row.selected');
+  }
+
+  /**
+   * Returns the group for the 'index' one
+   */
+  group(index) {
+    return this.list.querySelectorAll('.group-item')[index - 1].querySelector('.main-cell-wrapper');
   }
 
   /**
@@ -148,5 +141,12 @@ class DisplayGroupPageObject {
    */
   name(index) {
     return this.list.querySelectorAll('.group-item')[index - 1].querySelector('.ellipsis').textContent;
+  }
+
+  /** Click on the element */
+  async click(element)  {
+    const leftClick = {button: 0};
+    fireEvent.click(element, leftClick);
+    await waitFor(() => {});
   }
 }

@@ -17,7 +17,6 @@ import mockRequestClipboardCopy from "./request/mockRequestClipboardCopy";
 import mockRequestFoldersCreate from "./request/mockRequestFoldersCreate";
 import mockRequestFoldersDelete from "./request/mockRequestFoldersDelete";
 import mockRequestFoldersUpdate from "./request/mockRequestFoldersUpdate";
-import mockRequestFoldersFindActivities from "./request/mockRequestFoldersFindActivities";
 import mockRequestFoldersFindPermissions from "./request/mockRequestFoldersFindPermissions";
 import mockRequestFoldersUpdateLocalStorage from "./request/mockRequestFoldersUpdateLocalStorage";
 import mockRequestResourcesCreate from "./request/mockRequestResourcesCreate";
@@ -39,7 +38,6 @@ import mockRequestResourcesFindPermissions from "./request/mockRequestResourcesF
 import mockRequestResourceAddFavorite from "./request/mockRequestResourceAddFavorite";
 import mockRequestResourceDeleteFavorite from "./request/mockRequestResourceDeleteFavorite";
 import mockRequestResourcesDelete from "./request/mockRequestResourcesDelete";
-import mockRequestResourcesFindActivities from "./request/mockRequestResourcesFindActivities";
 import mockRequestGetVersion from "./request/mockRequestGetVersion";
 import mockRequestUsersUpdateLocalStorage from "./request/mockRequestUsersUpdateLocalStorage";
 import mockRequestGroupsUpdateLocalStorage from "./request/mockRequestGroupsUpdateLocalStorage";
@@ -53,6 +51,7 @@ import mockRequestGroupDeleteDryRun from "./request/mockRequestGroupDeleteDryRun
 import mockRequestGroupsCreate from "./request/mockRequestGroupsCreate";
 import mockRequestGroupsUpdate from "./request/mockRequestGroupsUpdate";
 import mockRequestFindAllThemes from "./request/mockRequestFindAllThemes";
+import mockRequestFindActivities from "./request/mockRequestFindActivities";
 
 export default (storage) => {
   const mockPort = new MockPort(storage);
@@ -61,7 +60,6 @@ export default (storage) => {
   mockPort.addRequestListener("passbolt.folders.delete", mockRequestFoldersDelete);
   mockPort.addRequestListener("passbolt.folders.update", mockRequestFoldersUpdate);
   mockPort.addRequestListener("passbolt.folders.find-permissions", mockRequestFoldersFindPermissions);
-  mockPort.addRequestListener("passbolt.folders.action-log", mockRequestFoldersFindActivities);
   mockPort.addRequestListener("passbolt.user.get", mockRequestUserGet);
   mockPort.addRequestListener("passbolt.site.settings", mockRequestSiteSettings);
   mockPort.addRequestListener("passbolt.folders.update-local-storage", mockRequestFoldersUpdateLocalStorage);
@@ -84,7 +82,7 @@ export default (storage) => {
   mockPort.addRequestListener("passbolt.favorite.add", mockRequestResourceAddFavorite);
   mockPort.addRequestListener("passbolt.favorite.delete", mockRequestResourceDeleteFavorite);
   mockPort.addRequestListener("passbolt.resources.delete-all", mockRequestResourcesDelete);
-  mockPort.addRequestListener("passbolt.resources.action-log", mockRequestResourcesFindActivities);
+  mockPort.addRequestListener("passbolt.actionlogs.find-all-for", mockRequestFindActivities);
   mockPort.addRequestListener("passbolt.addon.get-version", mockRequestGetVersion);
   mockPort.addRequestListener("passbolt.groups.update-local-storage", mockRequestGroupsUpdateLocalStorage);
   mockPort.addRequestListener("passbolt.resources.find-all", mockRequestResources);

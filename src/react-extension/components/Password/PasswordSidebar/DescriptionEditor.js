@@ -310,14 +310,12 @@ class DescriptionEditor extends React.Component {
               maxLength="10000" placeholder="enter a description" value={this.description}
               onChange={this.handleInputChange}
               disabled={this.hasAllInputDisabled()} autoComplete="off"/>
-            <div className=" message ready">
-            </div>
           </div>
           {this.state.error &&
           <div className="feedbacks message error">{this.state.error}</div>
           }
           <div className="actions">
-            <a className={`button description-editor-submit ${this.state.processing ? "primary processing" : ""}`}
+            <a className={`button description-editor-submit ${this.hasAllInputDisabled() ? "primary processing disabled" : ""}`}
               onClick={this.handleFormSubmit}>
               <span>save</span>
             </a>

@@ -68,7 +68,7 @@ export default class PasswordSidebarActivitySectionPage {
 class TitleHeaderPageObject {
   /**
    * Default constructor
-   * @param container The container which includes the AddActivity Component
+   * @param container The container which includes the Activity Component
    */
   constructor(container) {
     this._container = container;

@@ -15,9 +15,15 @@
 /**
  * Unit tests on SidebarTagFilterSection in regard of specifications
  */
-import {defaultAppContext, defaultProps, tagsMock} from "./SidebarTagFilterSection.test.data";
+import {
+  defaultAppContext,
+  defaultProps,
+  defaultResourceWorkspaceContext,
+  tagsMock
+} from "./SidebarTagFilterSection.test.data";
 import SidebarTagFilterSectionPage from "./SidebarTagFilterSection.test.page";
 import MockPort from "../../../test/mock/MockPort";
+import {ResourceWorkspaceFilterTypes} from "../../../contexts/ResourceWorkspaceContext";
 
 beforeEach(() => {
   jest.resetModules();
@@ -40,6 +46,7 @@ describe("See tags", () => {
       ],
     };
     const context = defaultAppContext(appContext); // The applicative context
+    const resourceWorkspaceContext = defaultResourceWorkspaceContext();
     /**
      * Given an organization with 5 tags
      * Then I should see the 5 tags on the left sidebar
@@ -48,7 +55,7 @@ describe("See tags", () => {
      */
 
     beforeEach(() => {
-      page = new SidebarTagFilterSectionPage(context, props);
+      page = new SidebarTagFilterSectionPage(context, props, resourceWorkspaceContext);
     });
 
     it('I should see the 5 tags made on the resource', () => {
@@ -90,12 +97,79 @@ describe("See tags", () => {
 
     it('As LU I should be able to start deleting a tag', async() => {
       await page.sidebarTagFilterSection.click(page.sidebarTagFilterSection.moreButton);
-      expect(page.displayTagListContextualMenu.deleteGroupContextualMenu).not.toBeNull();
+      expect(page.displayTagListContextualMenu.deleteTagContextualMenu).not.toBeNull();
+      await page.sidebarTagFilterSection.click(page.displayTagListContextualMenu.deleteTagContextualMenu);
     });
 
     it('As LU I should be able to start editing a tag', async() => {
-      await page.sidebarTagFilterSection.click(page.sidebarTagFilterSection.moreButton);
-      expect(page.displayTagListContextualMenu.editGroupContextualMenu).not.toBeNull();
+      await page.sidebarTagFilterSection.rightClick(page.sidebarTagFilterSection.tag(2));
+      expect(page.displayTagListContextualMenu.editTagContextualMenu).not.toBeNull();
+      await page.sidebarTagFilterSection.click(page.displayTagListContextualMenu.editTagContextualMenu);
+    });
+
+    it('As LU I can select a tag in a resource’s tags', async() => {
+      await page.sidebarTagFilterSection.click(page.sidebarTagFilterSection.tag(3));
+      expect(props.history.push).toHaveBeenCalled();
+    });
+
+    it('Filter my resources tags by shared tags should filter my resources by All items if it was previously filtered with a personal tag', async() => {
+      expect(page.sidebarTagFilterSection.tagSelected).not.toBeNull();
+      await page.title.click(page.title.filterButton);
+      await page.sidebarTagFilterSectionsContextualMenu.click(page.sidebarTagFilterSectionsContextualMenu.sharedTagMenu);
+      const pathname = '/app/passwords';
+      const state = {
+        filter: {
+          type: ResourceWorkspaceFilterTypes.ALL,
+        }
+      };
+      expect(props.history.push).toBeCalledWith({pathname, state});
+    });
+  });
+
+  describe('As LU I should filter by personal tag if it was previously filtered with a shared tag', () => {
+    const appContext = {
+      port: new MockPort(),
+      resources: [
+        {
+          tags: tagsMock
+        },
+        {
+          tags: tagsMock
+        }
+      ],
+    };
+    const resourceWorkspaceContext = {
+      filter: {
+        type: ResourceWorkspaceFilterTypes.TAG,
+        payload: {
+          tag: {
+            id: "3"
+          }
+        }
+      }
+    };
+    const context = defaultAppContext(appContext); // The applicative context
+    const contextResource = defaultResourceWorkspaceContext(resourceWorkspaceContext); // The applicative context
+    /**
+     * Given an organization with 0 tags
+     * Then I should see the tag section empty
+     */
+
+    beforeEach(() => {
+      page = new SidebarTagFilterSectionPage(context, props, contextResource);
+    });
+
+    it('Filter my resources tags by personal tags should filter my resources by All items if it was previously filtered with a shared tag', async() => {
+      expect(page.sidebarTagFilterSection.tagSelected).not.toBeNull();
+      await page.sidebarTagFilterSection.click(page.title.filterButton);
+      await page.sidebarTagFilterSectionsContextualMenu.click(page.sidebarTagFilterSectionsContextualMenu.personalTagMenu);
+      const pathname = '/app/passwords';
+      const state = {
+        filter: {
+          type: ResourceWorkspaceFilterTypes.ALL,
+        }
+      };
+      expect(props.history.push).toBeCalledWith({pathname, state});
     });
   });
 
@@ -109,13 +183,14 @@ describe("See tags", () => {
       ]
     };
     const context = defaultAppContext(appContext); // The applicative context
+    const resourceWorkspaceContext = defaultResourceWorkspaceContext();
     /**
      * Given an organization with 0 tags
      * Then I should see the tag section empty
      */
 
     beforeEach(() => {
-      page = new SidebarTagFilterSectionPage(context, props);
+      page = new SidebarTagFilterSectionPage(context, props, resourceWorkspaceContext);
     });
 
     it('I should see the tags section empty', () => {
@@ -168,13 +243,14 @@ describe("See tags", () => {
       ]
     };
     const context = defaultAppContext(appContext); // The applicative context
+    const resourceWorkspaceContext = defaultResourceWorkspaceContext();
     /**
      * Given the tags section
      * Then I should’t see the delete tag menu for a shared tag
      */
 
     beforeEach(() => {
-      page = new SidebarTagFilterSectionPage(context, props);
+      page = new SidebarTagFilterSectionPage(context, props, resourceWorkspaceContext);
     });
 
     it('As LU I shouldn’t be able to start deleting a shared tag', async() => {

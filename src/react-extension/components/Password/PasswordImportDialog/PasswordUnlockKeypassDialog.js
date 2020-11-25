@@ -158,7 +158,7 @@ class PasswordUnlockKeypassDialog extends Component {
    * Import the resource file
    */
   async import() {
-    const resourceFileToImport = this.props.resourceWorkspaceContext.resourceFileToImport;
+    const resourceFileToImport = this.fileToImport;
     const b64FileContent = resourceFileToImport.b64FileContent;
     const fileType = resourceFileToImport.fileType;
     const password = this.passwordInputRef.current.value;
