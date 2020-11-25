@@ -499,4 +499,4 @@ FoldersTreeItem.propTypes = {
 
 const DecoratedFoldersTreeItem = withContextualMenu(FoldersTreeItem);
 
-export default FoldersTreeItem;
+export default withContextualMenu(FoldersTreeItem);
