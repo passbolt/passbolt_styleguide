@@ -63,7 +63,12 @@ describe("As LU I should see each folders", () => {
       expect(props.contextualMenuContext.show).toHaveBeenCalledWith(FoldersTreeItemContextualMenu, {folder: foldersMock[1]});
     });
 
-    it('As LU I should be able to open a contextual menu for a folder with right click', async() => {
+    it('As LU I should be able to open a contextual menu for a folder with right click on parent folder', async() => {
+      await page.foldersTreeItem.openContextualMenuWithRightClick(1);
+      expect(props.contextualMenuContext.show).toHaveBeenCalledWith(FoldersTreeItemContextualMenu, {folder: foldersMock[1]});
+    });
+
+    it('As LU I should be able to open a contextual menu for a folder with right click on a child folder', async() => {
       await page.foldersTreeItem.openContextualMenuWithRightClick(3);
       expect(props.contextualMenuContext.show).toHaveBeenCalledWith(FoldersTreeItemContextualMenu, {folder: foldersMock[1]});
     });
