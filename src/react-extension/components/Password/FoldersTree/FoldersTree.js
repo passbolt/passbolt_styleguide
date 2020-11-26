@@ -16,11 +16,12 @@ import Icon from "../../Common/Icons/Icon";
 import FoldersTreeItem from "./FoldersTreeItem";
 import {ResourceWorkspaceFilterTypes, withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 import {withRouter} from "react-router-dom";
-import AppContext from "../../../contexts/AppContext";
+import {withAppContext} from "../../../contexts/AppContext";
 import FoldersTreeRootFolderContextualMenu from "./FoldersTreeRootFolderContextualMenu";
 import {withContextualMenu} from "../../../contexts/Common/ContextualMenuContext";
 import PropTypes from "prop-types";
 import {withDialog} from "../../../contexts/Common/DialogContext";
+import ReactList from "react-list";
 
 // Root virtual folder identifier.
 const ROOT = null;
@@ -53,6 +54,13 @@ class FoldersTree extends React.Component {
       open: true,
       openFolders: []
     };
+  }
+
+  /**
+   * Returns true if the component should be re-rendered
+   */
+  shouldComponentUpdate(prevProps, prevState) {
+    return prevState !== this.state || prevProps.context.folders !== this.props.context.folders;
   }
 
   /**
@@ -189,7 +197,7 @@ class FoldersTree extends React.Component {
     const folders = this.state.draggedItems.folders.map(folder => folder.id);
     const resources = this.state.draggedItems.resources.map(resource => resource.id);
     const folderParentId = null;
-    this.context.port.request("passbolt.folders.open-move-confirmation-dialog", {folders, resources, folderParentId});
+    this.props.context.port.request("passbolt.folders.open-move-confirmation-dialog", {folders, resources, folderParentId});
 
     // The dragLeave event is not fired when a drop is happening. Cancel the state manually.
     const draggingOverTitle = false;
@@ -232,7 +240,7 @@ class FoldersTree extends React.Component {
     const folders = this.state.draggedItems.folders.map(folder => folder.id);
     const resources = this.state.draggedItems.resources.map(resource => resource.id);
     const folderParentId = dropFolder.id;
-    this.context.port.request("passbolt.folders.open-move-confirmation-dialog", {folders, resources, folderParentId});
+    this.props.context.port.request("passbolt.folders.open-move-confirmation-dialog", {folders, resources, folderParentId});
   }
 
   /**
@@ -270,14 +278,6 @@ class FoldersTree extends React.Component {
   }
 
   /**
-   * Returns the current selected folder used for the resource search
-   */
-  get selectedFolder() {
-    const filter = this.props.resourceWorkspaceContext.filter;
-    return filter.type === ResourceWorkspaceFilterTypes.FOLDER && filter.payload.folder;
-  }
-
-  /**
    * Open the tree until a given folder
    * @param {object} folder The folder to scroll to
    */
@@ -286,7 +286,7 @@ class FoldersTree extends React.Component {
 
     // If the selected folder has a parent. Open it if not yet open.
     if (folder.folder_parent_id) {
-      const folderParent = this.context.folders.folders.find(item => item.id === folder.folder_parent_id);
+      const folderParent = this.props.context.folders.folders.find(item => item.id === folder.folder_parent_id);
       if (folderParent) {
         openFolders = Array.from(new Set([...openFolders, folderParent]));
         this.setState({openFolders}, () => this.openFolderTree(folderParent));
@@ -304,7 +304,7 @@ class FoldersTree extends React.Component {
       return true;
     }
 
-    const folderParent = this.context.folders.find(folder => folder.id === item.folder_parent_id);
+    const folderParent = this.props.context.folders.find(folder => folder.id === item.folder_parent_id);
 
     // The user can always drag content from a personal folder.
     if (folderParent.personal) {
@@ -376,7 +376,7 @@ class FoldersTree extends React.Component {
    * @returns {boolean}
    */
   isLoading() {
-    return this.context.folders === null;
+    return this.props.context.folders === null;
   }
 
   /**
@@ -405,7 +405,7 @@ class FoldersTree extends React.Component {
   getRootFolders() {
     let folders = [];
     if (!this.isLoading()) {
-      folders = this.context.folders.filter(folder => folder.folder_parent_id === ROOT);
+      folders = this.props.context.folders.filter(folder => folder.folder_parent_id === ROOT);
     }
 
     this.sortFoldersAlphabetically(folders);
@@ -486,12 +486,12 @@ class FoldersTree extends React.Component {
           <em className="empty-content">empty</em>
           }
           {!isLoading && isOpen && rootFolders.length > 0 &&
-          <ul ref={this.listElement} className="folders-tree">
-            {rootFolders.map(folder => <FoldersTreeItem
-              key={`folders-list-${folder.id}`}
+          <ReactList
+            itemRenderer={(index, key) => <FoldersTreeItem
+              key={key}
               draggedItems={this.state.draggedItems}
-              folder={folder}
-              folders={this.context.folders}
+              folder={rootFolders[index]}
+              folders={this.props.context.folders}
               isDragging={isDragging}
               onClose={this.handleFolderCloseEvent}
               onDragEnd={this.handleFolderDragEndEvent}
@@ -500,8 +500,16 @@ class FoldersTree extends React.Component {
               onOpen={this.handleFolderOpenEvent}
               openFolders={this.state.openFolders}
               onSelect={this.handleFolderSelectEvent}
-              selectedFolder={this.selectedFolder}/>)}
-          </ul>
+              selectedFolder={this.selectedFolder}/>
+            }
+            itemsRenderer={(items, ref) => <ul ref={ref} className="folders-tree">{items}</ul>}
+            length={rootFolders.length}
+            pageSize={20}
+            minSize={20}
+            type="uniform"
+            useStaticSize={true}
+            ref={this.listElement}>
+          </ReactList>
           }
         </div>
       </div>
@@ -509,13 +517,12 @@ class FoldersTree extends React.Component {
   }
 }
 
-FoldersTree.contextType = AppContext;
-
 FoldersTree.propTypes = {
+  context: PropTypes.any, // The app context
   contextualMenuContext: PropTypes.any, // The contextual menu context
   history: PropTypes.object,
   resourceWorkspaceContext: PropTypes.object,
   dialogContext: PropTypes.any
 };
 
-export default withRouter(withDialog(withContextualMenu(withResourceWorkspace(FoldersTree))));
+export default withRouter(withDialog(withContextualMenu(withResourceWorkspace(withAppContext(FoldersTree)))));

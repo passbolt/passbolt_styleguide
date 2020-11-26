@@ -16,7 +16,7 @@ import React from "react";
 import ReactList from "react-list";
 import moment from 'moment/moment';
 import 'moment-timezone/builds/moment-timezone-with-data-2012-2022';
-import AppContext from "../../../contexts/AppContext";
+import {withAppContext} from "../../../contexts/AppContext";
 import {ResourceWorkspaceFilterTypes, withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 import debounce from "debounce-promise";
 import Icon from "../../Common/Icons/Icon";
@@ -72,6 +72,24 @@ class Grid extends React.Component {
    */
   componentDidUpdate() {
     this.handleResourceScroll();
+  }
+
+  /**
+   * Returns true if the component should be re-rendered
+   */
+  shouldComponentUpdate(prevProps) {
+    const {filteredResources, selectedResources, sorter, scrollTo} = this.props.resourceWorkspaceContext;
+    const hasFilteredResourcesChanged = prevProps.resourceWorkspaceContext.filteredResources !== filteredResources;
+    const hasBothSingleSelection = selectedResources.length === 1 && prevProps.resourceWorkspaceContext.selectedResources.length === 1;
+    const hasSingleSelectedResourceChanged = hasBothSingleSelection && selectedResources[0].id !== prevProps.resourceWorkspaceContext.selectedResources[0].id;
+    const hasSelectedResourcesLengthChanged = prevProps.resourceWorkspaceContext.selectedResources.length !== selectedResources.length;
+    const hasSorterChanged = sorter !== prevProps.resourceWorkspaceContext.sorter;
+    const hasResourceToScrollChange = Boolean(scrollTo.resource && scrollTo.resource.id);
+    return hasFilteredResourcesChanged ||
+      hasSelectedResourcesLengthChanged ||
+      hasSingleSelectedResourceChanged ||
+      hasSorterChanged ||
+      hasResourceToScrollChange;
   }
 
   /**
@@ -179,7 +197,7 @@ class Grid extends React.Component {
     // Avoid the grid to select the resource while copying a resource username.
     ev.stopPropagation();
 
-    await this.context.port.request("passbolt.clipboard.copy", resource.username);
+    await this.props.context.port.request("passbolt.clipboard.copy", resource.username);
     this.props.actionFeedbackContext.displaySuccess("The username has been copied to clipboard");
   }
 
@@ -195,10 +213,10 @@ class Grid extends React.Component {
       throw new TypeError(__('The password is empty.'));
     }
     if (typeof plaintextDto === 'string') {
-      await this.context.port.request("passbolt.clipboard.copy", plaintextDto);
+      await this.props.context.port.request("passbolt.clipboard.copy", plaintextDto);
     } else {
       if (Object.prototype.hasOwnProperty.call(plaintextDto, 'password')) {
-        await this.context.port.request("passbolt.clipboard.copy", plaintextDto.password);
+        await this.props.context.port.request("passbolt.clipboard.copy", plaintextDto.password);
       } else {
         throw new TypeError(__('The password field is not defined.'));
       }
@@ -210,7 +228,7 @@ class Grid extends React.Component {
     ev.stopPropagation();
 
     try {
-      const plaintextDto = await this.context.port.request("passbolt.secret.decrypt", resource.id, {showProgress: true});
+      const plaintextDto = await this.props.context.port.request("passbolt.secret.decrypt", resource.id, {showProgress: true});
       await this.copyPasswordToClipboard(plaintextDto);
       this.props.actionFeedbackContext.displaySuccess("The secret has been copied to clipboard");
     } catch (error) {
@@ -289,7 +307,7 @@ class Grid extends React.Component {
 
   async favoriteResource(resource) {
     try {
-      await this.context.port.request('passbolt.favorite.add', resource.id);
+      await this.props.context.port.request('passbolt.favorite.add', resource.id);
       this.displaySuccessNotification("The password has been added as a favorite");
     } catch (error) {
       this.displayErrorNotification(error.message);
@@ -298,7 +316,7 @@ class Grid extends React.Component {
 
   async unfavoriteResource(resource) {
     try {
-      await this.context.port.request('passbolt.favorite.delete', resource.id);
+      await this.props.context.port.request('passbolt.favorite.delete', resource.id);
       this.displaySuccessNotification("The password has been removed from favorites");
     } catch (error) {
       this.displayErrorNotification(error.message);
@@ -322,12 +340,14 @@ class Grid extends React.Component {
   }
 
   scrollTo(resourceId) {
-    const resourceIndex = this.resources.findIndex(resource => resource.id === resourceId);
-    const [visibleStartIndex, visibleEndIndex] = this.listRef.current.getVisibleRange();
-    const isInvisible = resourceIndex < visibleStartIndex || resourceIndex > visibleEndIndex;
+    if (this.listRef.current !== null) {
+      const resourceIndex = this.resources.findIndex(resource => resource.id === resourceId);
+      const [visibleStartIndex, visibleEndIndex] = this.listRef.current.getVisibleRange();
+      const isInvisible = resourceIndex < visibleStartIndex || resourceIndex > visibleEndIndex;
 
-    if (isInvisible) {
-      this.listRef.current.scrollTo(resourceIndex);
+      if (isInvisible) {
+        this.listRef.current.scrollTo(resourceIndex);
+      }
     }
   }
 
@@ -400,7 +420,7 @@ class Grid extends React.Component {
     const isSelected = this.isResourceSelected(resource);
     const isFavorite = resource.favorite !== null && resource.favorite !== undefined;
     const safeUri = this.sanitizeResourceUrl(resource) || "#";
-    const serverTimezone = this.context.siteSettings.getServerTimezone();
+    const serverTimezone = this.props.context.siteSettings.getServerTimezone();
     const modifiedFormatted = moment.tz(resource.modified, serverTimezone).fromNow();
 
     return (
@@ -636,13 +656,13 @@ class Grid extends React.Component {
   }
 }
 
-Grid.contextType = AppContext;
 
 Grid.propTypes = {
+  context: PropTypes.any, // The app context
   resourceWorkspaceContext: PropTypes.any,
   actionFeedbackContext: PropTypes.any, // The action feedback context
   contextualMenuContext: PropTypes.any, // The contextual menu context
   history: PropTypes.any
 };
 
-export default withRouter(withActionFeedback(withContextualMenu(withResourceWorkspace(Grid))));
+export default withAppContext(withRouter(withActionFeedback(withContextualMenu(withResourceWorkspace(Grid)))));

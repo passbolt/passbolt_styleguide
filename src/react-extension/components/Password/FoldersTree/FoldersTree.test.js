@@ -15,12 +15,8 @@
 /**
  * Unit tests on FoldersTree in regard of specifications
  */
-import {
-  defaultAppContext,
-  defaultProps,
-} from "./FoldersTree.test.data";
+import {defaultAppContext, defaultProps} from "./FoldersTree.test.data";
 import FoldersTreePage from "./FoldersTree.test.page";
-import MockPort from "../../../test/mock/MockPort";
 import {ResourceWorkspaceFilterTypes} from "../../../contexts/ResourceWorkspaceContext";
 import FoldersTreeRootFolderContextualMenu from "./FoldersTreeRootFolderContextualMenu";
 
@@ -33,7 +29,7 @@ describe("See Folders", () => {
   const context = defaultAppContext(); // The applicative context
   const props = defaultProps(); // The props to pass
 
-  const mockContextRequest = implementation => jest.spyOn(context.port, 'request').mockImplementation(implementation);
+  const mockContextRequest = implementation => jest.spyOn(props.context.port, 'request').mockImplementation(implementation);
 
   describe('As LU I see the folders', () => {
     /**
@@ -50,9 +46,9 @@ describe("See Folders", () => {
     it('As LU I should collapse the folder tree area', async() => {
       expect(page.foldersTree.exists()).toBeTruthy();
       expect(page.foldersTree.displayFolderList).toBeTruthy();
-      await page.foldersTree.toggleExpanded;
+      await page.foldersTree.toggleExpanded();
       expect(page.foldersTree.displayFolderList).toBeFalsy();
-      await page.foldersTree.toggleExpanded;
+      await page.foldersTree.toggleExpanded();
       expect(page.foldersTree.displayFolderList).toBeTruthy();
       expect(page.foldersTree.rootFolderName).toBe('Folders');
     });
@@ -82,7 +78,7 @@ describe("See Folders", () => {
       await page.foldersTree.onDragOver;
       await page.foldersTree.onDrop;
       const data = {folders: [], resources: [], folderParentId: null};
-      expect(context.port.request).toHaveBeenCalledWith("passbolt.folders.open-move-confirmation-dialog", data);
+      expect(props.context.port.request).toHaveBeenCalledWith("passbolt.folders.open-move-confirmation-dialog", data);
     });
 
     it('As LU I should be able to drag and drop a folder on another folder', async() => {
@@ -92,8 +88,8 @@ describe("See Folders", () => {
       await page.foldersTreeItem.dragStartOnFolder(3);
       await page.foldersTreeItem.dragEndOnFolder(3);
       await page.foldersTreeItem.onDropFolder(1);
-      const data = {folders: [], resources: [], folderParentId: null};
-      expect(context.port.request).toHaveBeenCalledWith("passbolt.folders.open-move-confirmation-dialog", data);
+      const data = {folders: [], resources: [], folderParentId: '9e03fd73-04c0-5514-95fa-1a6cf2c7c093'};
+      expect(props.context.port.request).toHaveBeenCalledWith("passbolt.folders.open-move-confirmation-dialog", data);
     });
 
     it('As LU I should be able to open and close folder to see or not the child folders', async() => {
@@ -106,11 +102,9 @@ describe("See Folders", () => {
   });
 
   describe('As LU I should see the Folder section empty', () => {
-    const appContext = {
-      port: new MockPort(),
-      folders: []
-    };
-    const context = defaultAppContext(appContext); // The applicative context
+    const context = defaultAppContext(); // The applicative context
+    const props = defaultProps();
+    props.context.folders = [];
     /**
      * Given an organization with 0 Folders
      * Then I should see the Folder section empty

@@ -46,7 +46,6 @@ describe("As LU I should see each folders", () => {
     it('As LU I should see all folders name', () => {
       expect(page.foldersTreeItem.exists()).toBeTruthy();
       expect(page.foldersTreeItem.count).toBe(4);
-      expect(page.foldersTreeItem.isSelected).toBeTruthy();
       expect(page.foldersTreeItem.name(1)).toBe("ParentCertificates");
       expect(page.foldersTreeItem.name(2)).toBe("Certificates");
       expect(page.foldersTreeItem.name(3)).toBe("ChildCertificates1");
