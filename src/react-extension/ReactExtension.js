@@ -19,7 +19,7 @@ import React, {Component} from "react";
 import {Route, BrowserRouter as Router, Switch} from "react-router-dom";
 import AppContext from './contexts/AppContext';
 import PropTypes from "prop-types";
-import MainMenu from "./components/Common/Navigation/MainMenu/MainMenu";
+import DisplayMainMenu from "./components/navigation/DisplayMainMenu";
 import PasswordWorkspace from "./components/Password/PasswordWorkspace/PasswordWorkspace";
 import SiteSettings from "./lib/Settings/SiteSettings";
 import UserSettings from "./lib/Settings/UserSettings";
@@ -46,6 +46,8 @@ import DisplayUserWorkspace from "./components/User/DisplayUserWorkspace/Display
 import HandleRouteFallback from "./components/Route/HandleRouteFallback";
 import DisplayUserSettingsWorkspace
   from "./components/UserSetting/DisplayUserSettingsWorkspace/DisplayUserSettingsWorkspace";
+import HandleSessionExpired
+  from "./components/Auth/HandleSessionExpired/HandleSessionExpired";
 
 class ReactExtension extends Component {
   constructor(props) {
@@ -296,33 +298,33 @@ class ReactExtension extends Component {
    * @param changes
    */
   handleStorageChange(changes) {
-    if (changes.resources) {
+    if (changes.resources && changes.resources.newValue) {
       const resources = changes.resources.newValue;
       this.setState({resources});
     }
-    if (changes._passbolt_data) {
+    if (changes._passbolt_data && changes._passbolt_data.newValue) {
       const userData = changes._passbolt_data.newValue;
       const userSettings = new UserSettings(userData.config);
       this.setState({userSettings});
     }
-    if (changes.resourceTypes) {
+    if (changes.resourceTypes && changes.resourceTypes.newValue) {
       const resourceTypes = changes.resourceTypes.newValue;
       const resourceTypesSettings = new ResourceTypesSettings(this.state.siteSettings, resourceTypes);
       this.setState({resourceTypesSettings});
     }
-    if (changes.folders) {
+    if (changes.folders && changes.folders.newValue) {
       const folders = changes.folders.newValue;
       this.setState({folders});
     }
-    if (changes.users) {
+    if (changes.users && changes.users.newValue) {
       const users = changes.users.newValue;
       this.setState({users});
     }
-    if (changes.groups) {
+    if (changes.groups && changes.groups.newValue) {
       const groups = changes.groups.newValue;
       this.setState({groups});
     }
-    if (changes.roles) {
+    if (changes.roles && changes.roles.newValue) {
       const roles = changes.roles.newValue;
       this.setState({roles});
     }
@@ -343,7 +345,6 @@ class ReactExtension extends Component {
             <ContextualMenuContextProvider>
               <LoadingContextProvider>
 
-
                 { /* Action Feedback Management */}
                 <ShareActionFeedbacks/>
 
@@ -352,6 +353,7 @@ class ReactExtension extends Component {
                 <HandleFolderMoveStrategyDialogEvents/>
                 <HandleProgressDialogEvents/>
                 <HandleErrorDialogEvents/>
+                <HandleSessionExpired/>
 
                 <Router>
                   <Switch>
@@ -367,9 +369,7 @@ class ReactExtension extends Component {
                         <div id="container" className="page password">
                           <div id="app" className={`app ${isReady ? "ready" : ""}`} tabIndex="1000">
                             <div className="header first">
-                              <MainMenu
-                                onClick={this.handleWorkspaceSelect}
-                                baseUrl={this.state.userSettings.getTrustedDomain()}/>
+                              <DisplayMainMenu/>
                             </div>
                             <PasswordWorkspace onMenuItemClick={this.handleWorkspaceSelect}/>
                           </div>
@@ -390,9 +390,7 @@ class ReactExtension extends Component {
                         <div id="container" className="page user">
                           <div id="app" className={`app ${isReady ? "ready" : ""}`} tabIndex="1000">
                             <div className="header first">
-                              <MainMenu
-                                onClick={this.handleWorkspaceSelect}
-                                baseUrl={this.state.userSettings.getTrustedDomain()}/>
+                              <DisplayMainMenu/>
                             </div>
                             <DisplayUserWorkspace/>
                           </div>
@@ -407,9 +405,7 @@ class ReactExtension extends Component {
                           <div id="container" className="page settings">
                             <div id="app" className={`app ${isReady ? "ready" : ""}`} tabIndex="1000">
                               <div className="header first">
-                                <MainMenu
-                                  onClick={this.handleWorkspaceSelect}
-                                  baseUrl={this.state.userSettings.getTrustedDomain()}/>
+                                <DisplayMainMenu/>
                               </div>
                               <DisplayUserSettingsWorkspace/>
                             </div>

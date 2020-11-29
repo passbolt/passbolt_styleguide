@@ -16,9 +16,6 @@ export function defaultAppContext(appContext) {
  */
 export function defaultProps() {
   return {
-    onClose: jest.fn(),
-    history: {
-      push: jest.fn()
-    }
+    onClose: jest.fn()
   };
 }

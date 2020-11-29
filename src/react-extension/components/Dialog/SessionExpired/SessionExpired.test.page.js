@@ -63,7 +63,7 @@ export default class SessionExpiredPage {
    * Returns the save button element
    */
   get loginButton() {
-    return this._page.container.querySelector('.submit-wrapper input[type=\"submit\"]');
+    return this._page.container.querySelector('.submit-wrapper a');
   }
 
 

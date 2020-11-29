@@ -15,6 +15,9 @@ import React, {Component} from "react";
 import Icon from "../Common/Icons/Icon";
 import AppContext from "../../contexts/AppContext";
 
+const CREDITS_URL = "https://www.passbolt.com/credits";
+const UNSAFE_URL = "https://help.passbolt.com/faq/hosting/why-unsafe";
+
 /**
  * The application footer
  */
@@ -56,6 +59,20 @@ class Footer extends Component {
    */
   get privacyUrl() {
     return this.context.siteSettings.settings.app.legal.terms;
+  }
+
+  /**
+   * Returns the credits link url
+   */
+  get creditsUrl() {
+    return CREDITS_URL;
+  }
+
+  /**
+   * Returns the unsafe url.
+   */
+  get unsafeUrl() {
+    return UNSAFE_URL;
   }
 
   /**
@@ -104,31 +121,40 @@ class Footer extends Component {
               <li className="error message">
                 <a
                   title="terms of service"
-                  href="https://help.passbolt.com/faq/hosting/why-unsafe">
+                  href={this.unsafeUrl}
+                  target="_blank" rel="noopener noreferrer">
                   Unsafe mode
                 </a>
               </li>
               }
               <li>
-                <a href={this.termsUrl}>
+                <a href={this.termsUrl}
+                  target="_blank"
+                  rel="noopener noreferrer">
                   Terms
                 </a>
               </li>
               <li>
-                <a href={this.privacyUrl}>
+                <a href={this.privacyUrl}
+                  target="_blank"
+                  rel="noopener noreferrer">
                   Privacy
                 </a>
               </li>
               <li>
-                <a href="https://www.passbolt.com/credits">
+                <a href={this.creditsUrl}
+                  target="_blank"
+                  rel="noopener noreferrer">
                   Credits
                 </a>
               </li>
               <li>
                 <a
-                  href="https://www.passbolt.com/credits"
+                  href={this.creditsUrl}
                   className="tooltip-left"
-                  data-tooltip={this.versions}>
+                  data-tooltip={this.versions}
+                  target="_blank"
+                  rel="noopener noreferrer">
                   <Icon name="heart-o"/>
                 </a>
               </li>

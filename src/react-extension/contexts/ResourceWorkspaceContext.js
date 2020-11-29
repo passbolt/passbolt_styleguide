@@ -206,8 +206,9 @@ export class ResourceWorkspaceContextProvider extends React.Component {
    */
   async handleRouteChange(previousLocation) {
     const hasLocationChanged = this.props.location.key !== previousLocation.key;
+    const isBrowserClosing = !this.props.location.key; // The key property is undefined when the browser history is initialized or destroyed
     const isAppFirstLoad = this.state.filter.type === ResourceWorkspaceFilterTypes.NONE;
-    if (hasLocationChanged || isAppFirstLoad) {
+    if ((hasLocationChanged || isAppFirstLoad) && !isBrowserClosing) {
       await this.handleFolderRouteChange();
       await this.handleResourceRouteChange();
     }
