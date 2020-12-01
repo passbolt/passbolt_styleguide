@@ -1,5 +1,5 @@
 /**
- * Unit tests on CreateGroupDialog in regard of specifications
+ * Unit tests on CreateGpgKey in regard of specifications
  */
 import {defaultAppContext, defaultProps} from "./CreateGpgKey.test.data";
 import CreateGpgKeyPage from "./CreateGpgKey.test.page";
@@ -92,13 +92,13 @@ describe("Create GPG key", () => {
 
     let generateResolve = null;
     const requestMockImpl = jest.fn(() => new Promise(resolve => generateResolve = resolve));
-    jest.spyOn(context, 'generateGpgKey').mockImplementationOnce(requestMockImpl);
+    jest.spyOn(context, 'onGenerateGpgKeyRequested').mockImplementationOnce(requestMockImpl);
     const inProgressFn = () => {
       expect(page.canChange).toBeFalsy();
       generateResolve();
     };
     await page.generateKey(inProgressFn);
-    expect(context.generateGpgKey).toHaveBeenCalled();
+    expect(context.onGenerateGpgKeyRequested).toHaveBeenCalled();
     expect(generateResolve).toBeDefined();
   });
 
@@ -108,7 +108,7 @@ describe("Create GPG key", () => {
 
     let generateResolve;
     const requestMockImpl = jest.fn(() => new Promise(resolve => generateResolve = resolve));
-    jest.spyOn(context, 'generateGpgKey').mockImplementationOnce(requestMockImpl);
+    jest.spyOn(context, 'onGenerateGpgKeyRequested').mockImplementationOnce(requestMockImpl);
     const inProgressFn = () => {
       expect(page.isProcessing).toBeTruthy();
     };

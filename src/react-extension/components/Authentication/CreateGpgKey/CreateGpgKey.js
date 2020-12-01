@@ -151,16 +151,8 @@ class CreateGpgKey extends Component {
    */
   async generateGpgKey() {
     await this.toggleProcessing();
-    this.context.generateGpgKey(this.state.passphrase)
-      .then(this.onGpgKeyGeneratedSuccess.bind(this))
+    this.context.onGenerateGpgKeyRequested(this.state.passphrase)
       .catch(this.onGpgKeyGeneratedFailure.bind(this));
-  }
-
-  /**
-   * Whenever the gpg key generation succceeded
-   */
-  async onGpgKeyGeneratedSuccess() {
-    await this.toggleProcessing();
   }
 
   /**
@@ -176,7 +168,7 @@ class CreateGpgKey extends Component {
    * Request to import the gpg key
    */
   importGpgKey() {
-    this.context.requestGpgKeyImport(this.state.passphrase);
+    this.context.onImportGpgKeyRequested(this.state.passphrase);
   }
 
   async toggleProcessing() {

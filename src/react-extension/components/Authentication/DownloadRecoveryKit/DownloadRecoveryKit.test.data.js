@@ -8,7 +8,8 @@ import MockPort from "../../../test/mock/MockPort";
 export function defaultAppContext(appContext) {
   const defaultAppContext = {
     port: new MockPort(),
-    onGenerateGpgKeyRequested: jest.fn()
+    onDownloadRecoveryKitRequested: jest.fn(),
+    onRecoveryKitDownloaded: jest.fn(),
   };
   return Object.assign(defaultAppContext, appContext || {});
 }

@@ -12,8 +12,11 @@ export const AuthenticationContext = React.createContext({
   token: null, // The current authentication token
   server_public_key: null, // the current server public key
   armored_key: null, // The current armored key
-  initializeSetup: () => {}, // Initialize the setup process
-  generateGpgKey: () => {}, // Generates a gpg key
+  onInitializeSetupRequested: () => {}, // Whenever the initialization of the setup is requested
+  onGenerateGpgKeyRequested: () => {}, // Whenever the generation of gpg key is requested
+  onImportGpgKeyRequested: () => {}, // Whenever the import of gpg key is requested
+  onDownloadRecoveryKitRequested: () => {}, // Whenever the download of the recovery kit is requested
+  onRecoveryKitDownloaded: () => {} // Whenever the recovery kit has been downloaded
 });
 
 /**
@@ -35,8 +38,11 @@ class AuthenticationContextProvider extends React.Component {
   get defaultState() {
     return {
       state: AuthenticationContextState.INITIAL_STATE,
-      initializeSetup: this.initializeSetup.bind(this),
-      generateGpgKey: this.generateGpgKey.bind(this)
+      onInitializeSetupRequested: this.onInitializeSetupRequested.bind(this),
+      onGenerateGpgKeyRequested: this.onGenerateGpgKeyRequested.bind(this),
+      onImportGpgKeyRequested: this.onImportGpgKeyRequested.bind(this),
+      onDownloadRecoveryKitRequested: this.onDownloadRecoveryKitRequested.bind(this),
+      onRecoveryKitDownloaded: this.onRecoveryKitDownloaded.bind(this)
     };
   }
 
@@ -45,7 +51,7 @@ class AuthenticationContextProvider extends React.Component {
    * @param userId The user identifier
    * @param token The provided token
    */
-  async initializeSetup(userId, token) {
+  async onInitializeSetupRequested(userId, token) {
     const setupInformation = await this.state.port.request('passbolt.setup.info', userId, token);
     const {username, first_name, last_name, server_public_key} = setupInformation;
     await this.setState({
@@ -60,10 +66,10 @@ class AuthenticationContextProvider extends React.Component {
   }
 
   /**
-   * Generates a gpgp key given an user passphrase
+   * Whenever the generates of a gpgp key given an user passphrase is requested
    * @param passphrase A passphrase
    */
-  async generateGpgKey(passphrase) {
+  async onGenerateGpgKeyRequested(passphrase) {
     const keyLength = 2048;
     const keyAlgorithm = "RSA-DSA";
     const keyInfo = {
@@ -78,10 +84,25 @@ class AuthenticationContextProvider extends React.Component {
   }
 
   /**
-   * Requests to import the gpg key
+   * Whenever the import of a gpg key is requested
    */
-  requestGpgKeyImport() {
-    this.setState({state: AuthenticationContextState.GPG_KEY_IMPORT_REQUESTED});
+  async onImportGpgKeyRequested() {
+    await this.setState({state: AuthenticationContextState.GPG_KEY_IMPORT_REQUESTED});
+  }
+
+  /**
+   * Whenever the download of the recovery kit is requested
+   */
+  async onDownloadRecoveryKitRequested() {
+    const filename = 'passbolt-recovery-kit.asc';
+    await this.state.port.request('passbolt.keyring.key.backup', this.state.armoredKey, filename);
+  }
+
+  /**
+   * Whenever the recovery kit has been downloaded
+   */
+  async onRecoveryKitDownloaded() {
+    await this.setState({state: AuthenticationContextState.RECOVERY_KIT_DOWNLOADED});
   }
 
   /**
@@ -111,5 +132,6 @@ export const AuthenticationContextState = {
   INITIAL_STATE: 'Initial State',
   SETUP_INITIALIZED: 'Setup Initialized',
   GPG_KEY_GENERATED: 'Gpg Key Initialized',
-  GPG_KEY_IMPORT_REQUESTED: 'Gpg Key Import Requested'
+  GPG_KEY_IMPORT_REQUESTED: 'Gpg Key Import Requested',
+  RECOVERY_KIT_DOWNLOADED: 'Recovery Kit Downloaded'
 };
