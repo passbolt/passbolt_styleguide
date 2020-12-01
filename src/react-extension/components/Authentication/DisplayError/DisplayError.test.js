@@ -16,35 +16,33 @@
  * Unit tests on DisplayError in regard of specifications
  */
 
-import DisplayBrowserNotSupportedPage from "./DisplayBrowserNotSupportedPage";
+import DisplayErrorPage from "./DisplayErrorPage";
 
 beforeEach(() => {
   jest.resetModules();
 });
 
-describe("As AN I should see not supported browser page", () => {
+describe("As AN I should see an error page", () => {
   let page; // The page to test against
 
-  describe('As AN I should be able to be requested to download a compatible browser during the setup of my account', () => {
+  describe('As AN I should see an error if my registration cannot be performed', () => {
     /**
      * Given a AN
-     * Then I should see that my browser is not supported
+     * Then I should see an error
      */
 
     beforeEach(() => {
-      page = new DisplayBrowserNotSupportedPage();
+      page = new DisplayErrorPage();
     });
 
-    it('As AN I should see that my browser is not supported', () => {
+    it('As AN following an invalid registration link I should see a feedback notifying me that the registration link is invalid', () => {
       expect(page.exists()).toBeTruthy();
       // title
-      expect(page.title).toBe("Sorry, your browser is not supported.");
+      expect(page.title).toBe("Access to this service requires an invitation.");
       // message
-      expect(page.message).toBe('Please download chrome or firefox to get started with passbolt.');
+      expect(page.message).toBe('This email is not associated with any approved users on this domain. Please contact your administrator to request an invitation link.');
       // download
-      expect(page.download).toBe('Download firefox');
-      // link
-      expect(page.link).toBe('Why is my browser not supported?');
+      expect(page.linkToRetrySetup).toBe('Try with another email');
     });
   });
 });

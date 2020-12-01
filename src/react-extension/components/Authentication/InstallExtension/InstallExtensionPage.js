@@ -13,7 +13,7 @@
  * @since         2.11.0
  */
 
-import {render} from "@testing-library/react";
+import {fireEvent, render, waitFor} from "@testing-library/react";
 import React from "react";
 import InstallExtension from "./InstallExtension";
 
@@ -61,10 +61,26 @@ export default class InstallExtensionPage {
   }
 
   /**
-   * Returns the link why browser not supported
+   * Returns the link to refresh
    */
   get link() {
+    return this._page.container.querySelectorAll('.install-extension .form-actions a')[1];
+  }
+
+  /**
+   * Returns the link refresh content
+   */
+  get linkContent() {
     return this._page.container.querySelectorAll('.install-extension .form-actions a')[1].textContent;
+  }
+
+  /**
+   * refresh the page
+   */
+  async refresh() {
+    const leftClick = {button: 0};
+    fireEvent.click(this.link, leftClick);
+    await waitFor(() => {});
   }
 
   /**

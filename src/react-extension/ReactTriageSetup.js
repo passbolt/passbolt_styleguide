@@ -18,6 +18,7 @@ import {BrowserRouter as Router, Route} from "react-router-dom";
 import DisplayBrowserNotSupported
   from "./components/Authentication/DisplayBrowserNotSupported/DisplayBrowserNotSupported";
 import InstallExtension from "./components/Authentication/InstallExtension/InstallExtension";
+import DisplayError from "./components/Authentication/DisplayError/DisplayError";
 
 class ReactTriageSetup extends Component {
   render() {
@@ -37,6 +38,9 @@ class ReactTriageSetup extends Component {
               </Route>
               <Route path="/setup/install-extension">
                 <InstallExtension />
+              </Route>
+              <Route path="/setup/error">
+                <DisplayError />
               </Route>
             </div>
           </div>

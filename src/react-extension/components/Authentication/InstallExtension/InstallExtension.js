@@ -17,6 +17,7 @@ class InstallExtension extends Component {
   constructor(props) {
     super(props);
     this.state = this.getDefaultState();
+    this.initEventHandlers();
   }
 
   getDefaultState() {
@@ -24,6 +25,10 @@ class InstallExtension extends Component {
       browser: this.isChrome ? 'chrome' : 'firefox',
       theme: 'default'
     };
+  }
+
+  initEventHandlers() {
+    this.handleRefreshClick = this.handleRefreshClick.bind(this);
   }
 
   /**
@@ -54,6 +59,13 @@ class InstallExtension extends Component {
     return `browser-webstore ${this.state.browser}`;
   }
 
+  /**
+   * Refresh the page
+   */
+  handleRefreshClick() {
+    window.location.reload();
+  }
+
   render() {
     return (
       <div className="install-extension">
@@ -66,7 +78,7 @@ class InstallExtension extends Component {
         }
         <div className="form-actions">
           <a href={this.storeUrl} className="button primary big" role="button" target="_blank" rel="noopener noreferrer">Download extension</a>
-          <a href="#" role="button">Refresh to detect extension</a>
+          <a href="" onClick={this.handleRefreshClick} role="button">Refresh to detect extension</a>
         </div>
       </div>
     );

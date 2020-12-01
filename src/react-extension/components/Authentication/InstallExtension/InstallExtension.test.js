@@ -13,7 +13,7 @@
  */
 
 /**
- * Unit tests on DisplayBrowserNotSupported in regard of specifications
+ * Unit tests on  InstallExtension in regard of specifications
  */
 
 import InstallExtensionPage from "./InstallExtensionPage";
@@ -50,7 +50,16 @@ describe("As AN I should see install extension page", () => {
       // download
       expect(page.download).toBe('Download extension');
       // link
-      expect(page.link).toBe('Refresh to detect extension');
+      expect(page.linkContent).toBe('Refresh to detect extension');
+    });
+
+    it('As AN I should be able to refresh the page', async() => {
+      Object.defineProperty(window, "location", {
+        value: {reload: jest.fn()},
+      });
+      page = new InstallExtensionPage();
+      await page.refresh();
+      expect(window.location.reload).toHaveBeenCalled();
     });
   });
 });
