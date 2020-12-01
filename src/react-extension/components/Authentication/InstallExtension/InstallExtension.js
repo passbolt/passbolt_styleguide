@@ -21,21 +21,29 @@ class InstallExtension extends Component {
 
   getDefaultState() {
     return {
-      browser: 'chrome',
+      browser: this.isChrome ? 'chrome' : 'firefox',
       theme: 'default'
     };
   }
 
+  /**
+   * Check if the browser is chrome
+   * @returns {boolean}
+   */
+  get isChrome() {
+    return Boolean(window.chrome) && (Boolean(window.chrome.webstore) || Boolean(window.chrome.runtime));
+  }
+
   get storeUrlImg() {
     if (this.state.browser === 'chrome') {
-      return 'img/third-party/ChromeWebStore_black.png'; // _white if theme midgar...
+      return '../img/third-party/ChromeWebStore_black.png'; // _white if theme midgar...
     } else {
-      return 'img/third-party/FirefoxAMO_black.svg'; // idem
+      return '../img/third-party/FirefoxAMO_black.svg'; // idem
     }
   }
 
   get storeUrl() {
-    if (this.state.browser === 'chrome') {
+    if (this.isChrome) {
       return 'https://chrome.google.com/webstore/detail/passbolt-extension/didegimhafipceonhjepacocaffmoppf';
     } else {
       return 'https://addons.mozilla.org/fr/firefox/addon/passbolt/';
@@ -57,7 +65,7 @@ class InstallExtension extends Component {
           </a>
         }
         <div className="form-actions">
-          <a href="#" className="button primary big" role="button" target="_blank" rel="noopener noreferrer">Downlad extension</a>
+          <a href={this.storeUrl} className="button primary big" role="button" target="_blank" rel="noopener noreferrer">Download extension</a>
           <a href="#" role="button">Refresh to detect extension</a>
         </div>
       </div>

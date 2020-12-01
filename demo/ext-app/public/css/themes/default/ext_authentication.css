@@ -1760,6 +1760,9 @@ body {
   border: 0;
 }
 .login.page .install-extension a.browser-webstore img {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
   max-width: 26rem;
 }
 .login.page .install-extension a.browser-webstore.firefox img {

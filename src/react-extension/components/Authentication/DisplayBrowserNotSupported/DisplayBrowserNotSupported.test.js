@@ -35,7 +35,7 @@ describe("As AN I should see not supported browser page", () => {
       page = new DisplayBrowserNotSupportedPage();
     });
 
-    it('AN I should see that my browser is not supported', () => {
+    it('As AN I should see that my browser is not supported', () => {
       expect(page.exists()).toBeTruthy();
       // title
       expect(page.title).toBe("Sorry, your browser is not supported.");

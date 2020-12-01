@@ -35,7 +35,7 @@ describe("As AN I should see the check mail box", () => {
       page = new CheckMailBoxPage();
     });
 
-    it('AN I should see that an email has been sent', () => {
+    it('As AN I should see that an email has been sent', () => {
       expect(page.exists()).toBeTruthy();
       // title
       expect(page.title).toBe("Check your mailbox!");

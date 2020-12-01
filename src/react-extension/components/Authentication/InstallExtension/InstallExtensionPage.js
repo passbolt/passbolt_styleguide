@@ -15,12 +15,12 @@
 
 import {render} from "@testing-library/react";
 import React from "react";
-import DisplayBrowserNotSupported from "./DisplayBrowserNotSupported";
+import InstallExtension from "./InstallExtension";
 
 /**
  * The PasswordSidebarCommentSection component represented as a page
  */
-export default class DisplayBrowserNotSupportedPage {
+export default class InstallExtensionPage {
   /**
    * Default constructor
    * @param appContext An app context
@@ -28,7 +28,7 @@ export default class DisplayBrowserNotSupportedPage {
    */
   constructor() {
     this._page = render(
-      <DisplayBrowserNotSupported/>
+      <InstallExtension/>
     );
   }
 
@@ -36,28 +36,35 @@ export default class DisplayBrowserNotSupportedPage {
    * Returns the title
    */
   get title() {
-    return this._page.container.querySelector('.browser-not-supported h1').textContent;
+    return this._page.container.querySelector('.install-extension h1').textContent;
+  }
+
+  /**
+   * Returns the browser image
+   */
+  get browser() {
+    return this._page.container.querySelector('.install-extension a');
   }
 
   /**
    * Returns the message
    */
   get message() {
-    return this._page.container.querySelector('.browser-not-supported p').textContent;
+    return this._page.container.querySelector('.install-extension p').textContent;
   }
 
   /**
    * Returns the download button
    */
   get download() {
-    return this._page.container.querySelector('.browser-not-supported .form-actions .button.primary.big').textContent;
+    return this._page.container.querySelector('.install-extension .form-actions .button.primary.big').textContent;
   }
 
   /**
    * Returns the link why browser not supported
    */
   get link() {
-    return this._page.container.querySelectorAll('.browser-not-supported .form-actions a')[1].textContent;
+    return this._page.container.querySelectorAll('.install-extension .form-actions a')[1].textContent;
   }
 
   /**

@@ -52,5 +52,4 @@ export default class CheckMailBoxPage {
   exists() {
     return this.title !== null;
   }
-
 }
