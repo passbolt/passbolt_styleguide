@@ -15,6 +15,8 @@ import React, {Component} from "react";
 import LoginContext from "./contexts/LoginContext";
 import CheckMailBox from "./components/Authentication/CheckMailBox/CheckMailBox";
 import {BrowserRouter as Router, Route} from "react-router-dom";
+import DisplayBrowserNotSupported
+  from "./components/Authentication/DisplayBrowserNotSupported/DisplayBrowserNotSupported";
 
 class ReactTriageSetup extends Component {
   render() {
@@ -28,6 +30,9 @@ class ReactTriageSetup extends Component {
             <div className="login-form">
               <Route path="/setup/check-mailbox">
                 <CheckMailBox />
+              </Route>
+              <Route path="/setup/not-supported">
+                <DisplayBrowserNotSupported />
               </Route>
             </div>
           </div>

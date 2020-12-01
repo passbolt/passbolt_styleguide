@@ -15,12 +15,12 @@
 
 import {render} from "@testing-library/react";
 import React from "react";
-import CheckMailBox from "./CheckMailBox";
+import DisplayBrowserNotSupported from "./DisplayBrowserNotSupported";
 
 /**
- * The CheckMailBoxPage component represented as a page
+ * The PasswordSidebarCommentSection component represented as a page
  */
-export default class CheckMailBoxPage {
+export default class DisplayBrowserNotSupportedPage {
   /**
    * Default constructor
    * @param appContext An app context
@@ -28,7 +28,7 @@ export default class CheckMailBoxPage {
    */
   constructor() {
     this._page = render(
-      <CheckMailBox/>
+      <DisplayBrowserNotSupported/>
     );
   }
 
@@ -36,14 +36,28 @@ export default class CheckMailBoxPage {
    * Returns the title
    */
   get title() {
-    return this._page.container.querySelector('.email-sent-instructions h1').textContent;
+    return this._page.container.querySelector('.browser-not-supported h1').textContent;
   }
 
   /**
    * Returns the message
    */
   get message() {
-    return this._page.container.querySelector('.email-sent-instructions p').textContent;
+    return this._page.container.querySelector('.browser-not-supported p').textContent;
+  }
+
+  /**
+   * Returns the download button
+   */
+  get download() {
+    return this._page.container.querySelector('.browser-not-supported .form-actions .button.primary.big').textContent;
+  }
+
+  /**
+   * Returns the link why browser not supported
+   */
+  get link() {
+    return this._page.container.querySelectorAll('.browser-not-supported .form-actions a')[1].textContent;
   }
 
   /**

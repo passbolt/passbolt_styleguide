@@ -1765,6 +1765,15 @@ body {
 .login.page .install-extension a.browser-webstore.firefox img {
   padding: 1em 0;
 }
+.login.page .browser-not-supported a.browser {
+  border: 0;
+}
+.login.page .browser-not-supported a.browser img {
+  max-width: 26rem;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
 .login.page .choose-passphrase .password {
   /*
      * Clearfix: contain floats
