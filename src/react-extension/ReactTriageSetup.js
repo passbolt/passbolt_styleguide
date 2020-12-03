@@ -36,7 +36,7 @@ class ReactTriageSetup extends Component {
               <Route path={["/setup/not-supported", "/recover/not-supported"]}>
                 <DisplayBrowserNotSupported />
               </Route>
-              <Route path="/setup/install-extension">
+              <Route path={["/setup/install-plugin", "/recover/install-plugin"]}>
                 <InstallExtension />
               </Route>
               <Route path="/setup/error">
