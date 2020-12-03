@@ -127,6 +127,10 @@ export default class CreateGpgKeyPage {
     await waitFor(() => {});
   }
 
+  /**
+   * Generate the key
+   * @param inProgressFn Function called while the generation
+   */
   async generateKey(inProgressFn = () => {}) {
     const leftClick = {button: 0};
     fireEvent.click(this.nextButton, leftClick);

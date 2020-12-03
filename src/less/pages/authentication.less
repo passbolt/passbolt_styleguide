@@ -49,6 +49,7 @@ html, body {
             text-align:center;
             display: inline-block;
             margin-top:1.6rem;
+            cursor: pointer;
         }
     }
 
@@ -79,7 +80,7 @@ html, body {
             }
             .input.text {
                 .rounded();
-                font-size: 3.6rem;
+                font-size: 3rem;
                 max-width: 10rem;
                 float: left;
                 text-align: center;
@@ -93,11 +94,21 @@ html, body {
                 width: 10rem;
                 text-align: center;
                 clear:both;
+                cursor: pointer;
             }
+
+
             .svg-icon svg{
                 height:.85em;
                 width:.85em;
             }
+        }
+
+        .message.error {
+          display: block;
+          clear: both;
+          width: 100%;
+          color:@font-error;
         }
     }
 

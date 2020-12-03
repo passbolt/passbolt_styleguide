@@ -25,9 +25,8 @@ import PropTypes from "prop-types";
  * import InstallExtension from "./components/Login/InstallExtension";
  * import ApproveServerPublicKey from "./components/Login/ApproveServerPublicKey";
  */
-import {AuthenticationContext} from "./contexts/AuthenticationContext";
+import AuthenticationContextProvider, {AuthenticationContext} from "./contexts/AuthenticationContext";
 import SetupAuthentication from "./components/AuthenticationSetup/SetupAuthentication/SetupAuthentication";
-import AuthenticationContextProvider from "./contexts/AuthenticationContext";
 import ManageDialogs from "./components/Common/Dialog/ManageDialogs/ManageDialogs";
 import DialogContextProvider from "../react/contexts/Common/DialogContext";
 

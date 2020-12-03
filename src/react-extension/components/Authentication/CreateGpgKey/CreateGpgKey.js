@@ -69,7 +69,14 @@ class CreateGpgKey extends Component {
    * Returns true if the passphrase is valid
    */
   get isValid() {
-    return Object.values(this.state.hintClassNames).every(className => className === 'success');
+    const masks = SecurityComplexity.matchMasks(this.state.passphrase);
+    const validation = {
+      enoughLength:  this.state.passphrase.length > 8,
+      uppercase: masks.uppercase,
+      alphanumeric: masks.alpha && masks.digit,
+      specialCharacters: masks.special
+    };
+    return Object.values(validation).every(value => value);
   }
 
   /**
@@ -171,6 +178,9 @@ class CreateGpgKey extends Component {
     this.context.onImportGpgKeyRequested(this.state.passphrase);
   }
 
+  /**
+   * Toggle the processing mode
+   */
   async toggleProcessing() {
     await this.setState({actions: {processing: true}});
   }

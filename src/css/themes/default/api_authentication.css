@@ -1670,6 +1670,7 @@ body {
   text-align: center;
   display: inline-block;
   margin-top: 1.6rem;
+  cursor: pointer;
 }
 .login.page .email-sent-instructions {
   text-align: center;
@@ -1735,7 +1736,7 @@ body {
   -webkit-border-radius: 0.214em;
   -moz-border-radius: 0.214em;
   border-radius: 0.214em;
-  font-size: 3.6rem;
+  font-size: 3rem;
   max-width: 10rem;
   float: left;
   text-align: center;
@@ -1749,10 +1750,17 @@ body {
   width: 10rem;
   text-align: center;
   clear: both;
+  cursor: pointer;
 }
 .login.page .choose-security-token .input-security-token .svg-icon svg {
   height: 0.85em;
   width: 0.85em;
+}
+.login.page .choose-security-token .message.error {
+  display: block;
+  clear: both;
+  width: 100%;
+  color: #D40101;
 }
 .login.page .install-extension a.browser-webstore {
   border: 0;
