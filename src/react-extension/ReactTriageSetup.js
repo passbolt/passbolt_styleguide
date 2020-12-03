@@ -30,10 +30,10 @@ class ReactTriageSetup extends Component {
               <div className="logo"><span className="visually-hidden">Passbolt</span></div>
             </div>
             <div className="login-form">
-              <Route path={["/setup/check-mailbox", "/users/recover/check-mailbox"]}>
+              <Route path={["/setup/check-mailbox", "/recover/check-mailbox"]}>
                 <CheckMailBox />
               </Route>
-              <Route path="/setup/not-supported">
+              <Route path={["/setup/not-supported", "/recover/not-supported"]}>
                 <DisplayBrowserNotSupported />
               </Route>
               <Route path="/setup/install-extension">
