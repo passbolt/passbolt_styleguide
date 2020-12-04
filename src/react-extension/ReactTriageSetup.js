@@ -19,33 +19,44 @@ import DisplayBrowserNotSupported
   from "./components/Authentication/DisplayBrowserNotSupported/DisplayBrowserNotSupported";
 import InstallExtension from "./components/Authentication/InstallExtension/InstallExtension";
 import DisplayError from "./components/Authentication/DisplayError/DisplayError";
+import EnterUsernameForm from "./components/Authentication/EnterUsernameForm/EnterUsernameForm";
+import ActionFeedbackContextProvider from "./contexts/ActionFeedbackContext";
+import EnterNameForm from "./components/Authentication/EnterNameForm/EnterNameForm";
 
 class ReactTriageSetup extends Component {
   render() {
     return (
-      <Router>
-        <div id="container" className="container page login">
-          <div className="content">
-            <div className="header">
-              <div className="logo"><span className="visually-hidden">Passbolt</span></div>
-            </div>
-            <div className="login-form">
-              <Route path={["/setup/check-mailbox", "/recover/check-mailbox"]}>
-                <CheckMailBox />
-              </Route>
-              <Route path={["/setup/not-supported", "/recover/not-supported"]}>
-                <DisplayBrowserNotSupported />
-              </Route>
-              <Route path={["/setup/install-plugin", "/recover/install-plugin"]}>
-                <InstallExtension />
-              </Route>
-              <Route path="/setup/error">
-                <DisplayError />
-              </Route>
+      <ActionFeedbackContextProvider>
+        <Router>
+          <div id="container" className="container page login">
+            <div className="content">
+              <div className="header">
+                <div className="logo"><span className="visually-hidden">Passbolt</span></div>
+              </div>
+              <div className="login-form">
+                <Route exact path="/auth/login">
+                  <EnterUsernameForm />
+                </Route>
+                <Route path="/setup/name">
+                  <EnterNameForm />
+                </Route>
+                <Route path={["/setup/check-mailbox", "/recover/check-mailbox", "/auth/login/check-mailbox"]}>
+                  <CheckMailBox />
+                </Route>
+                <Route path={["/setup/not-supported", "/recover/not-supported"]}>
+                  <DisplayBrowserNotSupported />
+                </Route>
+                <Route path={["/setup/install-plugin", "/recover/install-plugin"]}>
+                  <InstallExtension />
+                </Route>
+                <Route path={["/setup/error", "/auth/login/not-found"]}>
+                  <DisplayError />
+                </Route>
+              </div>
             </div>
           </div>
-        </div>
-      </Router>
+        </Router>
+      </ActionFeedbackContextProvider>
     );
   }
 }
