@@ -69,12 +69,8 @@ class CreateGpgKey extends Component {
    * Returns true if the passphrase is valid
    */
   get isValid() {
-    const masks = SecurityComplexity.matchMasks(this.state.passphrase);
     const validation = {
-      enoughLength:  this.state.passphrase.length > 8,
-      uppercase: masks.uppercase,
-      alphanumeric: masks.alpha && masks.digit,
-      specialCharacters: masks.special
+      enoughLength:  this.state.passphrase.length >= 8
     };
     return Object.values(validation).every(value => value);
   }
@@ -146,7 +142,7 @@ class CreateGpgKey extends Component {
     const masks = SecurityComplexity.matchMasks(passphrase);
     const hintClassName = condition => condition ? 'success' : 'error';
     return {
-      enoughLength:  hintClassName(passphrase.length > 8),
+      enoughLength:  hintClassName(passphrase.length >= 8),
       uppercase: hintClassName(masks.uppercase),
       alphanumeric: hintClassName(masks.alpha && masks.digit),
       specialCharacters: hintClassName(masks.special)
