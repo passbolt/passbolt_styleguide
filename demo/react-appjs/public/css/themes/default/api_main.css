@@ -7665,21 +7665,6 @@ table.table-info.horizontal tbody tr:hover {
 .input-password-wrapper .input.password input[type=password].decrypting {
   background: transparent url('../../../img/controls/loading_light.svg') no-repeat 90% center;
 }
-.input-password-wrapper .input.password.has-encrypted-secret input {
-  /* fallback placeholder */
-  /* webkit placeholder */
-  /* moz placeholder */
-}
-.input-password-wrapper .input.password.has-encrypted-secret input.placeholder {
-  color: #333;
-}
-.input-password-wrapper .input.password.has-encrypted-secret input::-webkit-input-placeholder {
-  color: #333;
-}
-.input-password-wrapper .input.password.has-encrypted-secret input::-moz-placeholder,
-.input-password-wrapper .input.password.has-encrypted-secret input:-moz-placeholder {
-  color: #333;
-}
 .input-password-wrapper .actions.inline {
   float: right;
   width: 30%;

@@ -4,7 +4,7 @@
 <head>
     <title>Login</title>
     <?php include('../includes/meta/AN_meta.php'); ?>
-    <link rel="stylesheet" type="text/css" href="src/css/themes/anew/api_login.css" />
+    <link rel="stylesheet" type="text/css" href="src/css/themes/default/api_login.css" />
     <script>
         document.documentElement.classList.add('js');
         document.documentElement.classList.remove('no-js');

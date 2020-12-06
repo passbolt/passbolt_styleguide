@@ -9,7 +9,7 @@
 /* logo */
 /* grid */
 /* messages */
-/* secret placeholder */
+/* controls */
 /* sidebar */
 /* tables */
 /* tabs */
@@ -5039,21 +5039,6 @@ input[type=email].fluid {
 }
 .input-password-wrapper .input.password input[type=password].decrypting {
   background: transparent url('../../../img/controls/loading_dark.svg') no-repeat 90% center;
-}
-.input-password-wrapper .input.password.has-encrypted-secret input {
-  /* fallback placeholder */
-  /* webkit placeholder */
-  /* moz placeholder */
-}
-.input-password-wrapper .input.password.has-encrypted-secret input.placeholder {
-  color: #FFFFFC;
-}
-.input-password-wrapper .input.password.has-encrypted-secret input::-webkit-input-placeholder {
-  color: #FFFFFC;
-}
-.input-password-wrapper .input.password.has-encrypted-secret input::-moz-placeholder,
-.input-password-wrapper .input.password.has-encrypted-secret input:-moz-placeholder {
-  color: #FFFFFC;
 }
 .input-password-wrapper .actions.inline {
   float: right;

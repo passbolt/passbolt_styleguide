@@ -1,0 +1,254 @@
+html, body {
+    height: 100%;
+}
+.login.page {
+    h1 {
+        margin-top:0;
+        font-size: 2.4rem;
+        color: @font-dim;
+    }
+    p {
+        font-size: 1.6rem;
+    }
+
+    padding:2.4rem;
+
+    .processing-wrapper {
+        display:block;
+        width: 10em;
+        height: 10em;
+        margin:auto;
+
+        .processing-text {
+            display:block;
+            text-align: center;
+        }
+        .processing-text:before {
+            display:block;
+            width: 10em;
+            height: 10em;
+            content: " ";
+            background: transparent @loading center center no-repeat;
+            background-size: auto 40%;
+        }
+    }
+
+    .login-form {
+        min-height: 16rem;
+
+        .form-actions {
+            text-align:center;
+        }
+        .button {
+            width:100%;
+            margin-top:1.2em;
+        }
+        .button + a {
+            font-size:1.6rem;
+            line-height: 2.4rem;
+            text-align:center;
+            display: inline-block;
+            margin-top:1.6rem;
+            cursor: pointer;
+        }
+    }
+
+    .email-sent-instructions {
+        text-align: center;
+
+        .email-sent-bg {
+            background: transparent url('@{images}/illustrations/email.png') top center no-repeat;
+            background-size: auto 90%;
+            height: 16rem;
+        }
+        h1 {
+            margin-top: 1.5em;
+            font-size: 2.4rem;
+        }
+        p {
+            padding: 0.5em 0.5em 0 0.5em;
+            margin-bottom: 0;
+        }
+    }
+
+    .choose-security-token {
+        .input-security-token {
+            .clearfix();
+            margin: 1em 0 1.5em 0;
+            label {
+                margin-bottom:.5em;
+            }
+            .input.text {
+                .rounded();
+                font-size: 3rem;
+                max-width: 10rem;
+                float: left;
+                text-align: center;
+                margin-right: 1em;
+            }
+            .circle-picker {
+                float:left;
+            }
+            .randomize-button-wrapper {
+                float:left;
+                width: 10rem;
+                text-align: center;
+                clear:both;
+                cursor: pointer;
+            }
+
+
+            .svg-icon svg{
+                height:.85em;
+                width:.85em;
+            }
+        }
+
+        .message.error {
+          display: block;
+          clear: both;
+          width: 100%;
+          color:@font-error;
+        }
+    }
+
+    .install-extension {
+      a.browser-webstore {
+        border: 0;
+        img {
+          max-width: 26rem;
+        }
+        &.firefox img{
+          padding: 1em 0;
+        }
+      }
+    }
+
+    .choose-passphrase {
+      .password {
+        .clearfix();
+
+        input {
+          float: left;
+          box-sizing: border-box;
+          width: calc(100% - 4.1rem); // password field - show button
+        }
+
+        .password-view {
+          width:3em;
+          float: left;
+          margin-top: 0;
+          margin-right:0;
+          margin-left: -.1rem;
+          height: 2.7em;
+          border-radius: 0;
+          padding: .6rem .8rem .6rem 1rem;
+          background: @input-background;
+          border: 1px solid @border-input;
+          border-left: 0;
+          border-top: 1px solid @border-input-light;
+
+          svg {
+            margin-top: 3px;
+          }
+        }
+
+        input:focus + .password-view {
+          box-shadow: inset -1px 1px 1px rgba(0, 0, 0, .2);
+          border: 1px solid @border-focus;
+          border-left: 0;
+        }
+      }
+      .password-complexity {
+
+        .complexity-text {
+          float: right;
+          clear: right;
+          width: 30%;
+          font-size: 11px;
+          text-align: left;
+          padding-left: 0;
+        }
+        &.not_available .complexity-text {
+          color: @border-default;
+        }
+
+        .progress {
+          width: 100%;
+          box-sizing: border-box;
+          border: 1px solid @border-default;
+          height: 10px;
+          display: block;
+          clear: both;
+          margin: .25em 0 .5em 0;
+          float: left;
+        }
+        .progress-bar {
+          background: @blacker;
+          width: 0;
+          height: 6px;
+          display: block;
+          float: left;
+          margin: 1px;
+
+          &.very_weak {
+            background: @blacker;
+            width: 5%;
+          }
+          &.weak {
+            background: @red;
+            width: 10%;
+          }
+          &.fair {
+            background: @yellow;
+            width: 60%;
+          }
+          &.strong {
+            background: @green-light;
+            width: 80%;
+          }
+          &.very_strong {
+            background: @green;
+            width: 99.5%;
+          }
+        }
+      }
+    }
+}
+
+@media only screen and (min-width: 42rem) {
+    body {
+        background:@background-splash;
+    }
+    .login.page {
+        padding:0;
+        display: grid;
+        height: 100%;
+        grid-template-columns: 1fr 1.5fr 1fr;
+        grid-template-rows: 0.1fr 1fr 0.05fr;
+        grid-gap: 1px;
+        grid-template-areas: ". . ." ". login-form ." "footer footer footer";
+
+        .content {
+            grid-area: login-form;
+
+            .loading-bar {
+                display:block;
+            }
+            .logo {
+                margin:1.6em auto;
+                width: 20rem;
+                background-size: 20rem auto;
+            }
+
+            .login-form {
+                .box-shadow();
+                border-radius: .3rem;
+                max-width:37.2rem;
+                margin:auto;
+                padding:4.8rem 4rem 5.6rem 4rem;
+                background:@background-default;
+            }
+        }
+    }
+}

@@ -57,10 +57,8 @@ class ErrorDialog extends Component {
    * @returns {String|string} return default if string is empty
    */
   getTitle() {
-    if (!this.context.errorDialogProps.title || this.context.errorDialogProps.title === '') {
-      return ErrorDialog.defaultProps.title;
-    }
-    return this.context.errorDialogProps.title;
+    const contextTitle = this.context.errorDialogProps && this.context.errorDialogProps.title;
+    return contextTitle || this.props.title ||  ErrorDialog.defaultProps.title;
   }
 
   /**
@@ -68,10 +66,8 @@ class ErrorDialog extends Component {
    * @returns {String|string} return default if string is empty
    */
   getMessage() {
-    if (!this.context.errorDialogProps.message || this.context.errorDialogProps.message === '') {
-      return ErrorDialog.defaultProps.message;
-    }
-    return this.context.errorDialogProps.message;
+    const contextMessage = this.context.errorDialogProps && this.context.errorDialogProps.message;
+    return contextMessage || this.props.message ||  ErrorDialog.defaultProps.message;
   }
 
   /**
