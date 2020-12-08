@@ -56,14 +56,12 @@
     "xregexp": "^4.3.0"
   },
   "scripts": {
-    "build-react-administration": "webpack --config webpack-administration.config.js",
-    "start-react-administration-dev-server": "webpack-dev-server --env.debug=true --config webpack-administration.config.js",
-    "start-react-app-dev-server": "webpack-dev-server --mode development --config webpack-appjs.config.js",
-    "start-react-extension-dev-server": "webpack-dev-server --mode development --config webpack-extension.config.js",
+    "build": "npm run build-api-app",
+    "build-api-app": "webpack --config webpack-api.config.js",
+    "start-api-app-dev-server": "webpack-dev-server --env.debug=true --env.demo=true --config webpack-api.config.js",
+    "start-ext-app-dev-server": "webpack-dev-server --env.debug=true --env.demo=true --config webpack-ext.config.js",
     "test": "jest --config .jest.config.json --no-cache ./src --maxWorkers=4",
-    "test-react-app": "jest --config .jest.config.json --no-cache ./src/react-appjs --maxWorkers=4",
-    "test-react-extension": "jest --config .jest.config.json --no-cache ./src/react-extension --maxWorkers=4",
-    "test-react-extension-coverage": "jest --config .jest.config.json --no-cache ./src/react-extension --maxWorkers=4 --coverage",
+    "test-coverage": "jest --config .jest.config.json --no-cache ./src --maxWorkers=4 --coverage",
     "eslint": "eslint -c .eslintrc.json src/react/* src/react-extension/*",
     "eslint-fix": "eslint -c .eslintrc.json --fix src/react/* src/react-extension/*"
   }

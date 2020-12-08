@@ -234,17 +234,17 @@ class PasswordImportResultDialog extends Component {
   get formatErrors() {
     let result = "";
     if (this.hasErrorsResources) {
-      result += "----------------------------\n" +
+      result += `${"----------------------------\n" +
         "Resources errors\n" +
-        "----------------------------\n" +
-        JSON.stringify(this.resultErrorsResources, null, 4) +
-        "\n\n";
+        "----------------------------\n"}${
+        JSON.stringify(this.resultErrorsResources, null, 4)
+      }\n\n`;
     }
     if (this.resultHasErrorsFolders) {
-      result += "----------------------------\n" +
+      result += `${"----------------------------\n" +
         "Folders errors\n" +
-        "----------------------------\n" +
-        JSON.stringify(this.resultErrorsFolders, null, 4);
+        "----------------------------\n"}${
+        JSON.stringify(this.resultErrorsFolders, null, 4)}`;
     }
 
     return result;

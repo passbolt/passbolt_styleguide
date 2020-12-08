@@ -83,11 +83,17 @@ module.exports = function(grunt) {
           'cp ./src/css/themes/default/api_main.css ./demo/react-appjs/public/css/themes/default/.',
           'cp ./src/css/themes/midgar/api_main.css ./demo/react-appjs/public/css/themes/midgar/.',
 
-          'rm -f ./demo/react-extension/public/css/themes/midgar/*.css',
-          'cp ./src/css/themes/default/ext_app.css ./demo/react-extension/public/css/themes/default/.',
-          'cp ./src/css/themes/midgar/ext_app.css ./demo/react-extension/public/css/themes/midgar/.',
-          'cp ./src/css/themes/default/ext_authentication.css ./demo/react-extension/public/css/themes/default/.',
-          'cp ./src/css/themes/midgar/ext_authentication.css ./demo/react-extension/public/css/themes/midgar/.'
+          'rm -f ./demo/api-app/public/css/themes/default/*.css',
+          'rm -f ./demo/api-app/public/css/themes/midgar/*.css',
+          'cp ./src/css/themes/default/api_main.css ./demo/api-app/public/css/themes/default/.',
+          'cp ./src/css/themes/midgar/api_main.css ./demo/api-app/public/css/themes/midgar/.',
+
+          'rm -f ./demo/ext-app/public/css/themes/default/*.css',
+          'rm -f ./demo/ext-app/public/css/themes/midgar/*.css',
+          'cp ./src/css/themes/default/ext_app.css ./demo/ext-app/public/css/themes/default/.',
+          'cp ./src/css/themes/midgar/ext_app.css ./demo/ext-app/public/css/themes/midgar/.',
+          'cp ./src/css/themes/default/ext_authentication.css ./demo/ext-app/public/css/themes/default/.',
+          'cp ./src/css/themes/midgar/ext_authentication.css ./demo/ext-app/public/css/themes/midgar/.'
         ].join('&& ')
       }
 		},

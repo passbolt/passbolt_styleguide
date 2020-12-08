@@ -56,7 +56,7 @@ class HandleSessionExpired extends React.Component {
    * Schedule a session check.
    */
   scheduleCheckIsAuthenticated() {
-    this.scheduledCheckIsAuthenticatedTimeout = setTimeout(async () => {
+    this.scheduledCheckIsAuthenticatedTimeout = setTimeout(async() => {
       const isAuthenticated = await this.checkIsAuthenticated();
       if (!isAuthenticated) {
         this.handleSessionExpiredEvent();

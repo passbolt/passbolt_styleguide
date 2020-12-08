@@ -57,33 +57,15 @@ grunt watch
 Edit one LESS file to see if it works!
 
 
-How to run the react demo?
+How to run the demo?
 ==========================
 
-After running this command, the react demo will be located at 
+After running this commands, the demo will be located at
 [http://localhost:3000](http://localhost:3000)
 
 ```
-webpack-dev-server --mode development --config webpack-appjs.config.js
-```
-
-or
-
-```
-webpack-dev-server --mode development --config webpack-extension.config.js
-```
-
-How to compile the react app?
-==========================
-
-```
-./node_modules/.bin/webpack --mode production --config ./webpack-appjs.config.js
-```
-
-Do not forget to copy / paste it inside the passbolt_api (TODO: has to be automated)
-
-```
-cp -f ./build/js/dist/passbolt.react.js ../passbolt_pro_api/webroot/js/app/bundles/passbolt-react/
+npm run start-api-app-dev-server
+npm run start-ext-app-dev-server
 ```
 
 How to update the styleguide?
