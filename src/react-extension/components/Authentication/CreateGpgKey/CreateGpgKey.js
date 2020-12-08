@@ -171,7 +171,7 @@ class CreateGpgKey extends Component {
    * Request to import the gpg key
    */
   importGpgKey() {
-    this.context.onImportGpgKeyRequested(this.state.passphrase);
+    this.context.onGoToImportGpgKeyRequested();
   }
 
   /**

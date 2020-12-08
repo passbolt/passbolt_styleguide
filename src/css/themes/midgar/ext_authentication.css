@@ -1757,12 +1757,6 @@ body {
   height: 0.85em;
   width: 0.85em;
 }
-.login.page .choose-security-token .message.error {
-  display: block;
-  clear: both;
-  width: 100%;
-  color: #FF6B70;
-}
 .login.page .install-extension a.browser-webstore {
   border: 0;
 }
@@ -1919,5 +1913,11 @@ body {
     margin: auto;
     padding: 4.8rem 4rem 5.6rem 4rem;
     background: #30302D;
+  }
+  .message.error {
+    display: block;
+    clear: both;
+    width: 100%;
+    color: #FF6B70;
   }
 }

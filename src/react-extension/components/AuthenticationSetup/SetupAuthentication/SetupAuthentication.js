@@ -3,6 +3,8 @@ import CreateGpgKey from "../../Authentication/CreateGpgKey/CreateGpgKey";
 import {AuthenticationContext, AuthenticationContextState} from "../../../contexts/AuthenticationContext";
 import DownloadRecoveryKit from "../../Authentication/DownloadRecoveryKit/DownloadRecoveryKit";
 import ChooseSecurityToken from "../../Authentication/ChooseSecurityToken/ChooseSecurityToken";
+import ImportGpgKey from "../../Authentication/ImportGpgKey/ImportGpgKey";
+import CheckPassphrase from "../../Authentication/CheckPassphrase/CheckPassphrase";
 
 /**
  * The component allows the user to create a Gpg key by automatic generation or by manually importing one
@@ -58,7 +60,12 @@ class SetupAuthentication extends Component {
       case AuthenticationContextState.GPG_KEY_GENERATED:
         return <DownloadRecoveryKit/>;
       case AuthenticationContextState.RECOVERY_KIT_DOWNLOADED:
+      case AuthenticationContextState.GPG_KEY_IMPORTED:
         return <ChooseSecurityToken/>;
+      case AuthenticationContextState.GPG_KEY_TO_IMPORT_REQUESTED:
+        return <ImportGpgKey/>;
+      case AuthenticationContextState.GPG_KEY_VALIDATED:
+        return <CheckPassphrase/>;
       default:
         return <></>;
     }

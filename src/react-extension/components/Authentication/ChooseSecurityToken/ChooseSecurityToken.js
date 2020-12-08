@@ -101,7 +101,6 @@ class ChooseSecurityToken extends Component {
     return Object.values(this.state.errors).every(value => !value);
   }
 
-
   /**
    * Handle component event handlers
    */
@@ -170,7 +169,7 @@ class ChooseSecurityToken extends Component {
   async save() {
     const securityTokenDto = {
       color: this.state.background,
-      textcolor: this.textColor,
+      textColor: this.textColor,
       code: this.state.code
     };
     await this.context.onSaveSecurityTokenRequested(securityTokenDto)
@@ -235,6 +234,8 @@ class ChooseSecurityToken extends Component {
       await this.setState({hasBeenValidated: true, errors: {lengthCode}});
       return;
     }
+
+    await this.setState({hasBeenValidated: true, errors: {}});
   }
 
   /**
