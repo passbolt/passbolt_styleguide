@@ -16,7 +16,8 @@ export const AuthenticationContext = React.createContext({
   onDownloadRecoveryKitRequested: () => {}, // Whenever the download of the recovery kit is requested
   onRecoveryKitDownloaded: () => {}, // Whenever the recovery kit has been downloaded
   onSaveSecurityTokenRequested: () => {}, // Whenever the security token save is requested
-  onCompleteSetupRequested: () => {} // Whenever the the setup complete is requested
+  onCompleteSetupRequested: () => {} ,// Whenever the the setup complete is requested
+  onCompleteRecoverRequested: () => {} // Whenever the the recover complete is requested
 });
 
 /**
@@ -48,7 +49,8 @@ class AuthenticationContextProvider extends React.Component {
       onDownloadRecoveryKitRequested: this.onDownloadRecoveryKitRequested.bind(this),
       onRecoveryKitDownloaded: this.onRecoveryKitDownloaded.bind(this),
       onSaveSecurityTokenRequested: this.onSaveSecurityTokenRequested.bind(this),
-      onCompleteSetupRequested: this.onCompleteSetupRequested.bind(this)
+      onCompleteSetupRequested: this.onCompleteSetupRequested.bind(this),
+      onCompleteRecoverRequested: this.onCompleteRecoverRequested.bind(this)
     };
   }
 
@@ -148,16 +150,27 @@ class AuthenticationContextProvider extends React.Component {
    * @param securityToken The security token
    */
   async onSaveSecurityTokenRequested(securityToken) {
-    await this.state.port.request('passbolt.setup.set-security-token', securityToken);
+    await this.state.port.request(`passbolt.${this.state.process}.set-security-token`, securityToken);
     await this.setState({
       state: AuthenticationContextState.SECURITY_TOKEN_SAVED,
       securityToken: securityToken
     });
   }
 
+  /**
+   * Wheneve the authentication setup must be completed
+   */
   async onCompleteSetupRequested() {
     await this.state.port.request('passbolt.setup.complete');
     await this.setState({state: AuthenticationContextState.SETUP_COMPLETED});
+  }
+
+  /**
+   * Wheneve the authentication recover must be completed
+   */
+  async onCompleteRecoverRequested() {
+    await this.state.port.request('passbolt.recover.complete');
+    await this.setState({state: AuthenticationContextState.RECOVER_COMPLETED});
   }
 
   /**
@@ -188,7 +201,7 @@ export const AuthenticationContextState = {
   SETUP_INITIALIZED: 'Setup Initialized',
   RECOVER_INITIALIZED: 'Recover Initialized',
   SETUP_COMPLETED: 'Setup Completed',
-  RECOVER_COMPLETED: 'Recover Initialized',
+  RECOVER_COMPLETED: 'Recover Completed',
   GPG_KEY_GENERATED: 'Gpg Key Initialized',
   GPG_KEY_TO_IMPORT_REQUESTED: 'Gpg Key  To Import Requested',
   GPG_KEY_VALIDATED: "Imported Gpg key validated",
