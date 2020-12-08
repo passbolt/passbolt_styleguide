@@ -102,6 +102,20 @@ class ChooseSecurityToken extends Component {
   }
 
   /**
+   * Returns true if the component must be in a disabled mode
+   */
+  get mustBeDisabled() {
+    return this.state.hasBeenValidated && !this.isValid;
+  }
+
+  /**
+   * Returns true if the component must be in a processing mode
+   */
+  get isProcessing() {
+    return this.state.actions.processing;
+  }
+
+  /**
    * Handle component event handlers
    */
   bindEventHandlers() {
@@ -252,9 +266,8 @@ class ChooseSecurityToken extends Component {
    * Render the component
    */
   render() {
-    const mustBeDisabled = this.state.hasBeenValidated && !this.isValid;
-    const processingClassName = this.state.actions.processing ? 'processing' : '';
-    const disabledClassName = mustBeDisabled ? 'disabled' : '';
+    const processingClassName = this.isProcessing ? 'processing' : '';
+    const disabledClassName = this.mustBeDisabled ? 'disabled' : '';
     return (
       <div className="choose-security-token">
         <h1>Pick a color and enter three characters.</h1>
@@ -313,7 +326,7 @@ class ChooseSecurityToken extends Component {
               type="submit"
               className={`button primary big ${disabledClassName} ${processingClassName}`}
               role="button"
-              disabled={mustBeDisabled}>
+              disabled={this.mustBeDisabled || this.isProcessing}>
               Next
             </button>
           </div>
