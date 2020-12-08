@@ -48,6 +48,8 @@ import DisplayUserSettingsWorkspace
 import HandleSessionExpired
   from "./components/Auth/HandleSessionExpired/HandleSessionExpired";
 import ExtFooter from "./components/Footer/ExtFooter";
+import HandleRouteChanged from "./components/Route/HandleRouteChanged";
+import HandleRouteChangeRequested from "./components/Route/HandleRouteChangeRequested";
 
 /**
  * The passbolt application served by the browser extension.
@@ -373,6 +375,8 @@ class ExtApp extends Component {
                 <HandleSessionExpired/>
 
                 <Router>
+                  <HandleRouteChanged/>
+                  <HandleRouteChangeRequested  port={this.state.port}/>
                   <Switch>
                     <Route path={[
                       "/app/folders/view/:filterByFolderId",
