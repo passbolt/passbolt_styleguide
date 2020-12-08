@@ -1,6 +1,7 @@
 import React, {Component} from "react";
 import {AuthenticationContext, AuthenticationContextState} from "../../../contexts/AuthenticationContext";
 import ImportGpgKey from "../../Authentication/ImportGpgKey/ImportGpgKey";
+import CheckPassphrase from "../../Authentication/CheckPassphrase/CheckPassphrase";
 
 /**
  * The component allows the user to recover his authentication
@@ -43,6 +44,8 @@ class RecoverAuthentication extends Component {
     switch (this.context.state)  {
       case AuthenticationContextState.RECOVER_INITIALIZED:
         return <ImportGpgKey canGenerate={false}></ImportGpgKey>;
+      case AuthenticationContextState.GPG_KEY_VALIDATED:
+        return <CheckPassphrase/>;
       default:
         return <></>;
     }

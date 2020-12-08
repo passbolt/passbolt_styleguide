@@ -5,15 +5,7 @@ export const AuthenticationContext = React.createContext({
   port: null, // The contextual port
   storage: null, // The context storage
   state: null, // The state in the authentication process
-  userId: null, // The current user id
-  username: null, // The current username
-  first_name: null, // the current user first name
-  last_name: null, // the current user last name
-  token: null, // The current authentication token
-  server_public_key: null, // the current server public key
-  armored_key: null, // The current armored key
-  securityTokenColor: null, // The current security token color
-  securityTokenCode: null, // The current security token code
+  process: null, // The authentication sub-process name
   onInitializeSetupRequested: () => {}, // Whenever the initialization of the setup is requested
   onInitializeRecoverRequested: () => {}, // Whenever the initialization of the recover is requested
   onGenerateGpgKeyRequested: () => {}, // Whenever the generation of gpg key is requested
@@ -67,7 +59,8 @@ class AuthenticationContextProvider extends React.Component {
     const setupInfo = await this.state.port.request('passbolt.setup.info');
     await this.setState({
       state: AuthenticationContextState.SETUP_INITIALIZED,
-      setupInfo
+      setupInfo,
+      process: 'setup'
     });
   }
 
@@ -79,7 +72,8 @@ class AuthenticationContextProvider extends React.Component {
     const setupInfo = await this.state.port.request('passbolt.recover.info');
     await this.setState({
       state: AuthenticationContextState.RECOVER_INITIALIZED,
-      setupInfo
+      setupInfo,
+      process: 'recover'
     });
   }
 
@@ -113,9 +107,7 @@ class AuthenticationContextProvider extends React.Component {
    * @param armoredKey The armored key to import
    */
   async onImportGpgKeyRequested(armoredKey) {
-    const isRecoverProcess = this.state.state === AuthenticationContextState.RECOVER_INITIALIZED;
-    const process = isRecoverProcess ? "recover" : "setup";
-    await this.state.port.request(`passbolt.${process}.import-key`, armoredKey);
+    await this.state.port.request(`passbolt.${this.state.process}.import-key`, armoredKey);
     await this.setState({state: AuthenticationContextState.GPG_KEY_VALIDATED});
   }
 
@@ -124,8 +116,8 @@ class AuthenticationContextProvider extends React.Component {
    * @param passphrase A passphrase private key
    * @param rememeberMe Flag if if need to remember the passphrase
    */
-  async onCheckImportedGpgKeyPassphraseRequested(passphrase, rememeberMe) {
-    await this.state.port.request('passbolt.setup.verify-passphrase', passphrase, rememeberMe);
+  async onCheckImportedGpgKeyPassphraseRequested(passphrase, rememberMe) {
+    await this.state.port.request(`passbolt.${this.state.process}.verify-passphrase`, passphrase, rememberMe);
     await this.onGpgKeyImported();
   }
 
@@ -196,6 +188,7 @@ export const AuthenticationContextState = {
   SETUP_INITIALIZED: 'Setup Initialized',
   RECOVER_INITIALIZED: 'Recover Initialized',
   SETUP_COMPLETED: 'Setup Completed',
+  RECOVER_COMPLETED: 'Recover Initialized',
   GPG_KEY_GENERATED: 'Gpg Key Initialized',
   GPG_KEY_TO_IMPORT_REQUESTED: 'Gpg Key  To Import Requested',
   GPG_KEY_VALIDATED: "Imported Gpg key validated",
