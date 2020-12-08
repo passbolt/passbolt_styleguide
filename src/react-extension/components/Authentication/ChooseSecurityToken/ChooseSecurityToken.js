@@ -289,7 +289,7 @@ class ChooseSecurityToken extends Component {
           <p>
             This security token will be displayed when your passphrase is requested,
             so you can quickly verify the form is coming from passbolt.
-            This will help protect you from <a href="https://en.wikipedia.org/wiki/Phishing" target="_parent" rel="noopener noreferrer">
+            This will help protect you from <a href="https://en.wikipedia.org/wiki/Phishing" target="_blank" rel="noopener noreferrer">
               phishing attacks
             </a>.
           </p>
