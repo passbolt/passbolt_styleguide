@@ -41,7 +41,7 @@ class Login extends Component {
   get defaultState() {
     return {
       passphrase: '', // The passphrase
-      rememberMe: false, // The remember passphrase flag
+      rememberMe: false, // The remember me flag
       actions: {
         processing: false // True if one's processing passphrase
       },
@@ -307,18 +307,20 @@ class Login extends Component {
                   </span>
                 </div>
               </div>
-              <div className="input checkbox">
-                <input
-                  id="remember-me"
-                  type="checkbox"
-                  name="remember-me"
-                  value={this.state.rememberMe}
-                  onChange={this.handleToggleRememberMe}
-                  disabled={!this.areActionsAllowed}/>
-                <label htmlFor="remember-me">
-                  Remember until I logout.
-                </label>
-              </div>
+              {this.props.canRememberMe &&
+                <div className="input checkbox">
+                  <input
+                    id="remember-me"
+                    type="checkbox"
+                    name="remember-me"
+                    value={this.state.rememberMe}
+                    onChange={this.handleToggleRememberMe}
+                    disabled={!this.areActionsAllowed}/>
+                  <label htmlFor="remember-me">
+                    Remember until I logout.
+                  </label>
+                </div>
+              }
               {this.state.hasBeenValidated &&
               <>
                 <br/>
@@ -358,6 +360,7 @@ class Login extends Component {
 
 Login.contextType = AuthenticationContext;
 Login.propTypes = {
+  canRememberMe: PropTypes.bool, // True if the remember me flag must be displayed
   dialogContext: PropTypes.any // The dialog context
 };
 export default withDialog(Login);

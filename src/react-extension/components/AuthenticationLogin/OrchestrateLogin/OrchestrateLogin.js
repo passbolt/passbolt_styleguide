@@ -7,11 +7,18 @@ import AcceptLoginServerKeyChange from "../AcceptLoginServerKeyChange/AcceptLogi
 import ErrorDialog from "../../Dialog/ErrorDialog/ErrorDialog";
 import {withDialog} from "../../../contexts/Common/DialogContext";
 import PropTypes from "prop-types";
+import LoadingSpinner from "../../../../react/components/Common/Loading/LoadingSpinner/LoadingSpinner";
 
 /**
  * The component orchestrates the login authentication process
  */
 class OrchestrateLogin extends Component {
+  /**
+   * Returns the site settings remember me falg
+   */
+  get canRememberMe() {
+    return Boolean(this.props.siteSettings.settings.passbolt.plugins.rememberMe.options['-1']);
+  }
   /**
    * Whenever the component is initialized
    */
@@ -60,7 +67,11 @@ class OrchestrateLogin extends Component {
   render() {
     switch (this.context.state)  {
       case AuthenticationContextState.LOGIN_INITIALIZED:
-        return <Login/>;
+        if (this.props.siteSettings) {
+          return <Login canRememberMe={this.canRememberMe}/>;
+        } else {
+          return  <LoadingSpinner/>;
+        }
       case AuthenticationContextState.LOGIN_IN_PROGRESS:
         return <DisplayLoginInProgress/>;
       case AuthenticationContextState.LOGIN_FAILED:
@@ -68,13 +79,14 @@ class OrchestrateLogin extends Component {
       case AuthenticationContextState.LOGIN_SERVER_KEY_CHANGED:
         return <AcceptLoginServerKeyChange/>;
       default:
-        return <></>;
+        return <LoadingSpinner/>;
     }
   }
 }
 
 OrchestrateLogin.contextType = AuthenticationContext;
 OrchestrateLogin.propTypes = {
+  siteSettings: PropTypes.object, // The site settings
   dialogContext: PropTypes.any // The dialog context
 };
 export default withDialog(OrchestrateLogin);

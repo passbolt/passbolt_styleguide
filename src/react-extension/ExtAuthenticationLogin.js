@@ -96,7 +96,8 @@ class ExtAuthenticationLogin extends Component {
                   <div className="logo"><span className="visually-hidden">Passbolt</span></div>
                 </div>
                 <div className="login-form">
-                  <OrchestrateLogin/>
+                  <OrchestrateLogin
+                    siteSettings={this.state.siteSettings}/>
                 </div>
               </div>
             </div>
