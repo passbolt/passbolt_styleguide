@@ -23,6 +23,8 @@ import ManageContextualMenu from "./components/ManageContextualMenu";
 import AdministrationWorkspace from "./components/Administration/AdministrationWorkspace";
 import {ApiClientOptions} from "./lib/apiClient/apiClientOptions";
 import {ApiClient} from "./lib/apiClient/apiClient";
+import SiteSettings from "./lib/Settings/SiteSettings";
+import ApiFooter from "./components/Footer/ApiFooter";
 
 /**
  * The passbolt application served by the API.
@@ -43,7 +45,8 @@ class ApiApp extends Component {
    */
   async componentDidMount() {
     await this.getLoggedInUser();
-    await this.removeSplashScreen();
+    await this.getSiteSettings();
+    this.removeSplashScreen();
   }
 
   /**
@@ -53,6 +56,7 @@ class ApiApp extends Component {
   getDefaultState() {
     return {
       loggedInUser: null, // The logged in user
+      siteSettings: null, // The site settings
       trustedDomain: window.location.origin,
 
       displayTestUserDirectoryDialogProps: {
@@ -76,6 +80,18 @@ class ApiApp extends Component {
     const apiClient = new ApiClient(apiClientOptions);
     const result = await apiClient.get("me");
     this.setLoggedInUser(result.body);
+  }
+
+  /**
+   * Fetch the site settings
+   */
+  async getSiteSettings() {
+    const apiClientOptions = new ApiClientOptions()
+      .setBaseUrl(this.state.trustedDomain)
+      .setResourceName("settings");
+    const apiClient = new ApiClient(apiClientOptions);
+    const siteSettings = await apiClient.findAll();
+    await this.setState({siteSettings: new SiteSettings(siteSettings)});
   }
 
   /**
@@ -111,6 +127,7 @@ class ApiApp extends Component {
                   </Route>
                 </Switch>
               </Router>
+              <ApiFooter siteSettings={this.state.siteSettings}/>
             </ContextualMenuContextProvider>
           </DialogContextProvider>
         </ActionFeedbackContextProvider>

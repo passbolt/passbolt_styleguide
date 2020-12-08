@@ -419,7 +419,6 @@ class ExtApp extends Component {
                           </div>
                         </>
                       }
-
                     </Route>
                     <Route path="/">
                       <HandleRouteFallback/>
