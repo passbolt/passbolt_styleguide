@@ -208,14 +208,17 @@ class ChooseSecurityToken extends Component {
   /**
    * Randomize a token code
    */
-  randomizeCode() {
+  async randomizeCode() {
     let code = '';
     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
     const charactersLength = characters.length;
     for (let i = 0; i < 3; i++) {
       code += characters.charAt(Math.floor(Math.random() * charactersLength));
     }
-    this.setState({code});
+    await this.selectCode(code);
+    if (this.state.hasBeenValidated) {
+      await this.validate();
+    }
   }
 
   /**
@@ -248,8 +251,9 @@ class ChooseSecurityToken extends Component {
    * Render the component
    */
   render() {
+    const mustBeDisabled = this.state.hasBeenValidated && !this.isValid;
     const processingClassName = this.state.actions.processing ? 'processing' : '';
-    const disabledClassName = this.state.hasBeenValidated && !this.isValid ? 'disabled' : '';
+    const disabledClassName = mustBeDisabled ? 'disabled' : '';
     return (
       <div className="choose-security-token">
         <h1>Pick a color and enter three characters.</h1>
@@ -307,7 +311,8 @@ class ChooseSecurityToken extends Component {
             <button
               type="submit"
               className={`button primary big ${disabledClassName} ${processingClassName}`}
-              role="button">
+              role="button"
+              disabled={mustBeDisabled}>
               Next
             </button>
           </div>
