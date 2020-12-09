@@ -12,25 +12,24 @@
  */
 import React, {Component} from "react";
 import PropTypes from "prop-types";
-import InsertSetupAuthenticationIframe from "./components/AuthenticationSetup/SetupAuthentication/InsertSetupAuthenticationIframe";
-import InsertFileIframe from "./components/InsertFileIframe";
+import InsertRecoverAuthenticationIframe
+  from "./components/AuthenticationRecover/RecoverAuthentication/InsertRecoverAuthenticationIframe";
 
 /**
- * The bootstrap of the setup application served by the browser extension.
- * This application is inserted in the page served by the API and inject the iframe that will contain the setup application.
+ * The bootstrap of the recover application served by the browser extension.
+ * This application is inserted in the page served by the API and inject the iframe that will contain the recover application.
  */
-class ExtBootstrapSetup extends Component {
+class ExtBootstrapRecover extends Component {
   render() {
     return (
       <>
-        <InsertSetupAuthenticationIframe browserExtensionUrl={this.props.browserExtensionUrl}/>
-        <InsertFileIframe browserExtensionUrl={this.props.browserExtensionUrl}/>
+        <InsertRecoverAuthenticationIframe browserExtensionUrl={this.props.browserExtensionUrl}/>
       </>
     );
   }
 }
-ExtBootstrapSetup.propTypes = {
+ExtBootstrapRecover.propTypes = {
   browserExtensionUrl: PropTypes.string, // The browser extension url
 };
 
-export default ExtBootstrapSetup;
+export default ExtBootstrapRecover;

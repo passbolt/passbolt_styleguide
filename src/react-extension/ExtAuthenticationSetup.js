@@ -18,6 +18,9 @@ import SetupAuthentication from "./components/AuthenticationSetup/SetupAuthentic
 import ManageDialogs from "./components/Common/Dialog/ManageDialogs/ManageDialogs";
 import DialogContextProvider from "../react/contexts/Common/DialogContext";
 
+/**
+ * The setup application served by the browser extension.
+ */
 class ExtAuthenticationSetup extends Component {
   /**
    * Returns the component default state

@@ -223,7 +223,7 @@ class CheckPassphrase extends Component {
               onChange={this.handleToggleRememberMe}
               disabled={!this.areActionsAllowed}/>
             <label htmlFor="remember-me">
-              Remember until I logout, or session timeout.
+              Remember until I logout.
             </label>
           </div>
           {this.state.hasBeenValidated &&
@@ -257,4 +257,3 @@ CheckPassphrase.propTypes = {
   dialogContext: PropTypes.any // The dialog context
 };
 export default withDialog(CheckPassphrase);
-

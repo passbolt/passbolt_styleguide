@@ -169,7 +169,7 @@ class ChooseSecurityToken extends Component {
   async save() {
     const securityTokenDto = {
       color: this.state.background,
-      textColor: this.textColor,
+      textcolor: this.textColor,
       code: this.state.code
     };
     await this.context.onSaveSecurityTokenRequested(securityTokenDto)

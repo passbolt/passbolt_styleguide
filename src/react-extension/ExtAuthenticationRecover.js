@@ -18,7 +18,10 @@ import ManageDialogs from "./components/Common/Dialog/ManageDialogs/ManageDialog
 import DialogContextProvider from "../react/contexts/Common/DialogContext";
 import RecoverAuthentication from "./components/AuthenticationRecover/RecoverAuthentication/RecoverAuthentication";
 
-class ReactAuthenticationSetup extends Component {
+/**
+ * The recover application served by the browser extension.
+ */
+class ExtAuthenticationRecover extends Component {
   /**
    * Returns the component default state
    */
@@ -53,10 +56,9 @@ class ReactAuthenticationSetup extends Component {
   }
 }
 
-ReactAuthenticationSetup.contextType = AuthenticationContext;
-ReactAuthenticationSetup.propTypes = {
+ExtAuthenticationRecover.contextType = AuthenticationContext;
+ExtAuthenticationRecover.propTypes = {
   port: PropTypes.object,
   storage: PropTypes.object,
 };
-export default ReactAuthenticationSetup;
-
+export default ExtAuthenticationRecover;

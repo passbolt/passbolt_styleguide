@@ -86,7 +86,8 @@ class AuthenticationContextProvider extends React.Component {
    * @param passphrase A passphrase
    */
   async onGenerateGpgKeyRequested(passphrase) {
-    const armored_key = await this.state.port.request('passbolt.setup.generate-key', passphrase);
+    const generateKeyDto = {passphrase};
+    const armored_key = await this.state.port.request('passbolt.setup.generate-key', generateKeyDto);
     await this.setState({state: AuthenticationContextState.GPG_KEY_GENERATED, armored_key});
   }
 

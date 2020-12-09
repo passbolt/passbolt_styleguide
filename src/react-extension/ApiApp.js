@@ -25,7 +25,11 @@ import {ApiClientOptions} from "./lib/apiClient/apiClientOptions";
 import {ApiClient} from "./lib/apiClient/apiClient";
 
 /**
- * The passbolt application
+ * The passbolt application served by the API.
+ * Briefly it takes care of:
+ * - The passwords workspace
+ * - The user workspace
+ * - Most of the user settings workspace. The MFA screen is handled by the ApiApp because of duo constraints.
  */
 class ApiApp extends Component {
   constructor(props) {

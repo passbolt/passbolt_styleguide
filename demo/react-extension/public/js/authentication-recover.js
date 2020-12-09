@@ -16,7 +16,7 @@ import React, {Component} from "react";
 import ReactDOM from "react-dom";
 import mockPort from "../../mock/mockPort";
 import mockStorage from "../../mock/mockStorage";
-import ReactAuthenticationRecover from "../../../../src/react-extension/ReactAuthenticationRecover";
+import ReactAuthenticationRecover from "../../../../src/react-extension/ExtAuthenticationRecover";
 
 const mockedStorage = mockStorage();
 const mockedPort = mockPort(mockedStorage);

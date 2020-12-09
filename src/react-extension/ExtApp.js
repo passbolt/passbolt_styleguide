@@ -49,6 +49,13 @@ import DisplayUserSettingsWorkspace
 import HandleSessionExpired
   from "./components/Auth/HandleSessionExpired/HandleSessionExpired";
 
+/**
+ * The passbolt application served by the browser extension.
+ * Briefly it takes care of:
+ * - The administration workspace
+ * - The user workspace
+ * - Most of the user settings MFA screen. Because of duo constraints.
+ */
 class ExtApp extends Component {
   constructor(props) {
     super(props);
