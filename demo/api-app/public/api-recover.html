@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="/css/themes/default/api_main.css">
+</head>
+<body>
+
+<!--
+  Mock browser extension pagemod, these dependencies are injected by the browser extension.
+  In demo this script are virtually served by the webpack-dev-server in the public folder
+  defined by the webpack-api.config.js devServer.publicPath setting.
+-->
+<script src="http://localhost:3001/dist/ext-vendors.js"></script>
+<script src="http://localhost:3001/dist/ext-bootstrap-recover.js"></script>
+
+<!--
+  These dependencies are served by the API. Ensure the API view is well including these dependencies.
+  In demo this scripts are virtually served by the webpack-dev-server in the public folder
+  defined by the webpack-api.config.js devServer.publicPath setting.
+-->
+<script src="/../dist/api-vendors.js"></script>
+<script src="/../dist/api-recover.js"></script>
+</body>
+</html>

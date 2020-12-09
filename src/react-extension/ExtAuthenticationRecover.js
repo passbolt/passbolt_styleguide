@@ -14,14 +14,14 @@
 import React, {Component} from "react";
 import PropTypes from "prop-types";
 import AuthenticationContextProvider, {AuthenticationContext} from "./contexts/AuthenticationContext";
-import SetupAuthentication from "./components/AuthenticationSetup/SetupAuthentication/SetupAuthentication";
 import ManageDialogs from "./components/Common/Dialog/ManageDialogs/ManageDialogs";
 import DialogContextProvider from "../react/contexts/Common/DialogContext";
+import RecoverAuthentication from "./components/AuthenticationRecover/RecoverAuthentication/RecoverAuthentication";
 
 /**
- * The setup application served by the browser extension.
+ * The recover application served by the browser extension.
  */
-class ExtAuthenticationSetup extends Component {
+class ExtAuthenticationRecover extends Component {
   /**
    * Returns the component default state
    */
@@ -46,7 +46,7 @@ class ExtAuthenticationSetup extends Component {
                 <div className="logo"><span className="visually-hidden">Passbolt</span></div>
               </div>
               <div className="login-form">
-                <SetupAuthentication/>
+                <RecoverAuthentication/>
               </div>
             </div>
           </div>
@@ -56,11 +56,9 @@ class ExtAuthenticationSetup extends Component {
   }
 }
 
-ExtAuthenticationSetup.contextType = AuthenticationContext;
-ExtAuthenticationSetup.propTypes = {
+ExtAuthenticationRecover.contextType = AuthenticationContext;
+ExtAuthenticationRecover.propTypes = {
   port: PropTypes.object,
   storage: PropTypes.object,
 };
-
-export default ExtAuthenticationSetup;
-
+export default ExtAuthenticationRecover;

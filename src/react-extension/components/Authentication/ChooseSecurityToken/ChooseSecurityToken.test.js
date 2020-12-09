@@ -10,7 +10,7 @@ beforeEach(() => {
   jest.resetModules();
 });
 
-describe("Create GPG key", () => {
+describe("Choose security token", () => {
   let page, // The page to test against
     context; // The context
   const props = defaultProps(); // The props to pass

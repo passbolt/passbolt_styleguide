@@ -13,6 +13,8 @@ const demoEntry = {
   "ext-app": path.resolve(__dirname, "./demo/ext-app/entry/ExtApp.entry.js"), // The passbolt application served by the browser extension.
   "ext-bootstrap-setup": path.resolve(__dirname, "./demo/ext-app/entry/ExtBootstrapSetup.entry.js"), // The setup bootstrap application served by the browser extension.
   "ext-setup": path.resolve(__dirname, "./demo/ext-app/entry/ExtSetup.entry.js"), // The setup application served by the browser extension.
+  "ext-bootstrap-recover": path.resolve(__dirname, "./demo/ext-app/entry/ExtBootstrapRecover.entry.js"), // The recover bootstrap application served by the browser extension.
+  "ext-recover": path.resolve(__dirname, "./demo/ext-app/entry/ExtRecover.entry.js"), // The recover application served by the browser extension.
 };
 
 const config = {

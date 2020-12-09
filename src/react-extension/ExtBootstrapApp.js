@@ -19,7 +19,8 @@ import InsertFileIframe from "./components/InsertFileIframe";
 import InsertClipboardIframe from "./components/InsertClipboardIframe";
 
 /**
- * The passbolt application
+ * The bootstrap of the passbolt application served by the browser extension.
+ * This application is inserted in the page served by the API and inject the iframe that will contain the passbolt application.
  */
 class ExtBootstrapApp extends Component {
   render() {

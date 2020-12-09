@@ -50,6 +50,7 @@ const config = {
       rewrites: [
         {from: /^\/$|^\/app/, to: "/api-app.html"},
         {from: /^\/setup\/install/, to: "/api-setup.html"},
+        {from: /^\/setup\/recover/, to: "/api-recover.html"},
       ]
     }
   },
