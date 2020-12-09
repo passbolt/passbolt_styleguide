@@ -19,7 +19,7 @@ import {
   defaultAppContext,
   defaultProps, mockSynchronizeBody,
 } from "./DisplaySynchronizeUserDirectoryAdministrationDialog.test.data";
-import MockFetch from "../../../test/mock/mockFetch";
+import MockFetch from "../../../test/mock/MockFetch";
 import {waitFor} from "@testing-library/react";
 import DisplaySynchronizeUserDirectoryAdministrationDialogPage
   from "./DisplaySynchronizeUserDirectoryAdministrationDialog.test.page";
