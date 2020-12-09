@@ -58,6 +58,7 @@
   "scripts": {
     "build": "npm run build-api-app",
     "build-api-app": "webpack --config webpack-api.config.js",
+    "start-app-dev-server": "npm run start-api-app-dev-server & npm run start-ext-app-dev-server",
     "start-api-app-dev-server": "webpack-dev-server --env.debug=true --env.demo=true --config webpack-api.config.js",
     "start-ext-app-dev-server": "webpack-dev-server --env.debug=true --env.demo=true --config webpack-ext.config.js",
     "test": "jest --config .jest.config.json --no-cache ./src --maxWorkers=4",
