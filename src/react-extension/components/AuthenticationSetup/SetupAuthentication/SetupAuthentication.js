@@ -5,6 +5,7 @@ import DownloadRecoveryKit from "../../Authentication/DownloadRecoveryKit/Downlo
 import ChooseSecurityToken from "../../Authentication/ChooseSecurityToken/ChooseSecurityToken";
 import ImportGpgKey from "../../Authentication/ImportGpgKey/ImportGpgKey";
 import CheckPassphrase from "../../Authentication/CheckPassphrase/CheckPassphrase";
+import AskForAuthenticationHelp from "../../Authentication/AskForAuthenticationHelp/AskForAuthenticationHelp";
 
 /**
  * The component allows the user to create a Gpg key by automatic generation or by manually importing one
@@ -66,6 +67,8 @@ class SetupAuthentication extends Component {
         return <ImportGpgKey/>;
       case AuthenticationContextState.GPG_KEY_VALIDATED:
         return <CheckPassphrase/>;
+      case AuthenticationContextState.PASSPHRASE_LOST:
+        return <AskForAuthenticationHelp/>;
       default:
         return <></>;
     }

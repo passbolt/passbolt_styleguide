@@ -87,6 +87,7 @@ class CheckPassphrase extends Component {
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleChangePassphrase = this.handleChangePassphrase.bind(this);
     this.handleToggleRememberMe = this.handleToggleRememberMe.bind(this);
+    this.onPassphraseLost = this.onPassphraseLost.bind(this);
   }
 
   /**
@@ -129,6 +130,13 @@ class CheckPassphrase extends Component {
    */
   async handleToggleRememberMe() {
     await this.toggleRemmemberMe();
+  }
+
+  /**
+   * Whenever the user needs help because he lost his passphrase
+   */
+  async onPassphraseLost() {
+    await this.context.onPassphraseLost();
   }
 
   /**
@@ -234,7 +242,9 @@ class CheckPassphrase extends Component {
               disabled={this.mustBeDisabled || this.isProcessing}>
               Verify
             </button>
-            <a href="#">Help, I don&apos;t remember my passphrase.</a>
+            <a onClick={this.onPassphraseLost}>
+              Help, I don&apos;t remember my passphrase.
+            </a>
           </div>
         </form>
       </div>

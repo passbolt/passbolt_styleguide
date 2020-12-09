@@ -3,6 +3,7 @@ import {AuthenticationContext, AuthenticationContextState} from "../../../contex
 import ImportGpgKey from "../../Authentication/ImportGpgKey/ImportGpgKey";
 import CheckPassphrase from "../../Authentication/CheckPassphrase/CheckPassphrase";
 import ChooseSecurityToken from "../../Authentication/ChooseSecurityToken/ChooseSecurityToken";
+import AskForAuthenticationHelp from "../../Authentication/AskForAuthenticationHelp/AskForAuthenticationHelp";
 
 /**
  * The component allows the user to recover his authentication
@@ -60,6 +61,8 @@ class RecoverAuthentication extends Component {
         return <CheckPassphrase/>;
       case AuthenticationContextState.GPG_KEY_IMPORTED:
         return <ChooseSecurityToken/>;
+      case AuthenticationContextState.PASSPHRASE_LOST:
+        return <AskForAuthenticationHelp/>;
       default:
         return <></>;
     }

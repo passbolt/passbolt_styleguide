@@ -16,8 +16,9 @@ export const AuthenticationContext = React.createContext({
   onDownloadRecoveryKitRequested: () => {}, // Whenever the download of the recovery kit is requested
   onRecoveryKitDownloaded: () => {}, // Whenever the recovery kit has been downloaded
   onSaveSecurityTokenRequested: () => {}, // Whenever the security token save is requested
-  onCompleteSetupRequested: () => {} ,// Whenever the the setup complete is requested
-  onCompleteRecoverRequested: () => {} // Whenever the the recover complete is requested
+  onCompleteSetupRequested: () => {}, // Whenever the the setup complete is requested
+  onCompleteRecoverRequested: () => {},// Whenever the the recover complete is requested
+  onPassphraseLost: () => {} // Whenever the user lost his passphrase
 });
 
 /**
@@ -50,7 +51,8 @@ class AuthenticationContextProvider extends React.Component {
       onRecoveryKitDownloaded: this.onRecoveryKitDownloaded.bind(this),
       onSaveSecurityTokenRequested: this.onSaveSecurityTokenRequested.bind(this),
       onCompleteSetupRequested: this.onCompleteSetupRequested.bind(this),
-      onCompleteRecoverRequested: this.onCompleteRecoverRequested.bind(this)
+      onCompleteRecoverRequested: this.onCompleteRecoverRequested.bind(this),
+      onPassphraseLost: this.onPassphraseLost.bind(this) // Whenever the user lost his passphrase: this.onCompleteRecoverRequested.bind(this)
     };
   }
 
@@ -166,11 +168,18 @@ class AuthenticationContextProvider extends React.Component {
   }
 
   /**
-   * Wheneve the authentication recover must be completed
+   * Whenever the authentication recover must be completed
    */
   async onCompleteRecoverRequested() {
     await this.state.port.request('passbolt.recover.complete');
     await this.setState({state: AuthenticationContextState.RECOVER_COMPLETED});
+  }
+
+  /**
+   * Whenever the user lost his passphrase
+   */
+  async onPassphraseLost() {
+    await this.setState({state: AuthenticationContextState.PASSPHRASE_LOST});
   }
 
   /**
@@ -209,4 +218,5 @@ export const AuthenticationContextState = {
   RECOVERY_KIT_DOWNLOADED: 'Recovery Kit Downloaded',
   SECURITY_TOKEN_SAVED: 'Security Token Saved',
   SETUP_COMPLETE_REQUESTED: 'Setup Complete Requested',
+  PASSPHRASE_LOST: 'Passphrase lost',
 };
