@@ -46,40 +46,40 @@ describe("Integration test with real fetch", () => {
     expect(response.body).toBe('OK');
   });
 
-  it("should respond PassboltServiceUnavailableError to not reachable url", async () => {
+  it("should respond PassboltServiceUnavailableError to not reachable url", async() => {
     const options = (new ApiClientOptions())
       .setBaseUrl('https://notavaliddomain.passbolt.com')
       .setResourceName('nope');
     const testClient = new ApiClient(options);
     try {
       await testClient.findAll();
-      done.fail();
+      expect(true).toBeFalsy();
     } catch (error) {
       expect(error).toBeInstanceOf(PassboltServiceUnavailableError);
     }
   });
 
-  it("should respond 404 to wrong url", async () => {
+  it("should respond 404 to wrong url", async() => {
     const options = (new ApiClientOptions())
       .setBaseUrl('https://cloud.passbolt.com/passbolt-monitor/')
       .setResourceName('healthcheck/notfound');
     const testClient = new ApiClient(options);
     try {
       await testClient.findAll();
-      done.fail();
+      expect(true).toBeFalsy();
     } catch (error) {
       expect(error.data.code).toBe(404);
     }
   });
 
-  it("should respond 403 to unauthorized url", async () => {
+  it("should respond 403 to unauthorized url", async() => {
     const options = (new ApiClientOptions())
       .setBaseUrl('https://cloud.passbolt.com/passbolt-monitor/')
       .setResourceName('users');
     const testClient = new ApiClient(options);
     try {
       await testClient.findAll();
-      done.fail();
+      expect(true).toBeFalsy();
     } catch (error) {
       expect(error.data.code).toBe(403);
       /*

@@ -19,12 +19,14 @@ import {
   defaultAppContext,
   defaultProps, mockSynchronizeBody,
 } from "./DisplaySynchronizeUserDirectoryAdministrationDialog.test.data";
-import mockFetch from "../../../test/mock/mockFetch";
+import MockFetch from "../../../test/mock/mockFetch";
 import {waitFor} from "@testing-library/react";
 import DisplaySynchronizeUserDirectoryAdministrationDialogPage
   from "./DisplaySynchronizeUserDirectoryAdministrationDialog.test.page";
 
+let mockFetch = null;
 beforeEach(() => {
+  mockFetch = new MockFetch();
   jest.resetModules();
 });
 
@@ -38,7 +40,7 @@ describe("See the synchronize user directory administration dialog", () => {
      * I should see the simulate synchronize report dialog page
      */
     beforeEach(() => {
-      mockFetch("http://localhost:3000/directorysync/synchronize.json?api-version=v2", mockSynchronizeBody);
+      mockFetch.addGetFetchRequest("http://localhost:3000/directorysync/synchronize.json?api-version=v2", mockSynchronizeBody);
       page = new DisplaySynchronizeUserDirectoryAdministrationDialogPage(context, props);
     });
 
@@ -47,7 +49,7 @@ describe("See the synchronize user directory administration dialog", () => {
       expect(page.title.hyperlink.textContent).toBe("Synchronize report");
       expect(page.displaySynchronizeUserDirectoryAdministrationDialog.exists()).toBeTruthy();
       expect(page.displaySynchronizeUserDirectoryAdministrationDialog.resourceSynchronize).toBe(' 2 user(s) and 60 group(s)  will be synchronized ');
-      expect(page.displaySynchronizeUserDirectoryAdministrationDialog.error).toBe('Some resources won\'t be synchronized and will require your attention, see the full report.');
+      expect(page.displaySynchronizeUserDirectoryAdministrationDialog.error).toBe('Some resources will not be synchronized and will require your attention, see the full report.');
       expect(page.displaySynchronizeUserDirectoryAdministrationDialog.noResource).toBeNull();
       await page.displaySynchronizeUserDirectoryAdministrationDialog.click(page.displaySynchronizeUserDirectoryAdministrationDialog.fullReport);
       expect(page.displaySynchronizeUserDirectoryAdministrationDialog.textareaReport).not.toBeNull();
