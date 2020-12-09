@@ -31,143 +31,126 @@ export default class DisplayMfaAdministrationPage {
         <DisplayMfaAdministration {...props}/>
       </ApiAppContext.Provider>
     );
-    this.setupPageObjects();
   }
 
-  /**
-   * Set up the objects of the page
-   */
-  setupPageObjects() {
-    this._displayMfaAdministration = new DisplayMfaAdministrationPageObject(this._page.container);
-  }
-
-  /**
-   * Returns the page object of create user
-   */
-  get displayMfaAdministration() {
-    return this._displayMfaAdministration;
-  }
-}
-
-class DisplayMfaAdministrationPageObject {
-  /**
-   * Default constructor
-   * @param container The container which includes the AddComment Component
-   */
-  constructor(container) {
-    this._container = container;
+  rerender(appContext, props) {
+    this._page.rerender(
+      <ApiAppContext.Provider value={appContext}>
+        <DisplayMfaAdministration {...props}/>
+      </ApiAppContext.Provider>
+    );
   }
 
   /**
    * Returns the totp input element
    */
   get mfaSettings() {
-    return this._container.querySelector('.mfa-settings');
+    return this._page.container.querySelector('.mfa-settings');
   }
 
   /**
    * Returns the totp input element
    */
   get totp() {
-    return this._container.querySelector('#totp-provider-toggle-button');
+    return this._page.container.querySelector('#totp-provider-toggle-button');
   }
 
   /**
    * Returns the yubikey input element
    */
   get yubikey() {
-    return this._container.querySelector('#yubikey-provider-toggle-button');
+    return this._page.container.querySelector('#yubikey-provider-toggle-button');
   }
 
   /**
    * Returns the yubikey client identifier input element
    */
   get yubikeyClientIdentifier() {
-    return this._container.querySelector('#yubikeyClientIdentifier');
+    return this._page.container.querySelector('#yubikeyClientIdentifier');
   }
 
   /**
    * Returns the yubikey client identifier input element
    */
   get yubikeySecretKey() {
-    return this._container.querySelector('#yubikeySecretKey');
+    return this._page.container.querySelector('#yubikeySecretKey');
   }
 
   /**
    * Returns the duo input element
    */
   get duo() {
-    return this._container.querySelector('#duo-provider-toggle-button');
+    return this._page.container.querySelector('#duo-provider-toggle-button');
   }
 
   /**
    * Returns the duo hostname input element
    */
   get duoHostname() {
-    return this._container.querySelector('#duoHostname');
+    return this._page.container.querySelector('#duoHostname');
   }
 
   /**
    * Returns the duo integration key input element
    */
   get duoIntegrationKey() {
-    return this._container.querySelector('#duoIntegrationKey');
+    return this._page.container.querySelector('#duoIntegrationKey');
   }
 
   /**
    * Returns the duo salt input element
    */
   get duoSalt() {
-    return this._container.querySelector('#duoSalt');
+    return this._page.container.querySelector('#duoSalt');
   }
 
   /**
    * Returns the duo secret key input element
    */
   get duoSecretKey() {
-    return this._container.querySelector('#duoSecretKey');
+    return this._page.container.querySelector('#duoSecretKey');
   }
 
   /**
    * Returns the yubikey client identifier error mesage input element
    */
   get yubikeyClientIdentifierErrorMessage() {
-    return this._container.querySelector('.yubikey_client_identifier.error.message');
+    return this._page.container.querySelector('.yubikey_client_identifier.error.message').textContent;
   }
 
   /**
    * Returns the yubikey client identifier error mesage input element
    */
   get yubikeySecretKeyErrorMessage() {
-    return this._container.querySelector('.yubikey_secret_key.error.message');
+    return this._page.container.querySelector('.yubikey_secret_key.error.message').textContent;
   }
 
   /**
    * Returns the duo hostname error mesage input element
    */
   get duoHostnameErrorMessage() {
-    return this._container.querySelector('.duo_hostname.error.message');
+    return this._page.container.querySelector('.duo_hostname.error.message').textContent;
   }
 
   /**
    * Returns the duo integration key error mesage input element
    */
   get duoIntegrationKeyErrorMessage() {
-    return this._container.querySelector('.duo_integration_key.error.message');
+    return this._page.container.querySelector('.duo_integration_key.error.message').textContent;
   }
 
   /**
    * Returns the duo salt error mesage input element
    */
   get duoSaltErrorMessage() {
-    return this._container.querySelector('.duo_salt.error.message');
+    return this._page.container.querySelector('.duo_salt.error.message').textContent;
   }
 
   /**
    * Returns the duo secret key error mesage input element
    */
   get duoSecretKeyErrorMessage() {
-    return this._container.querySelector('.duo_secret_key.error.message');
+    return this._page.container.querySelector('.duo_secret_key.error.message').textContent;
   }
 
   /**
@@ -185,15 +168,29 @@ class DisplayMfaAdministrationPageObject {
     });
   }
 
-  /** Click without wait for on the element */
-  clickWithoutWaitFor(element) {
-    const leftClick = {button: 0};
-    fireEvent.click(element, leftClick);
-  }
-
   /** fill the input element with data */
   fillInput(element, data) {
     const dataInputEvent = {target: {value: data}};
     fireEvent.change(element, dataInputEvent);
+  }
+
+  /** fill the yubikey client identifier element with data */
+  fillYubikeyClientIdentifier(data) {
+    this.fillInput(this.yubikeyClientIdentifier, data);
+  }
+
+  /** fill the yubikey secret element with data */
+  fillYubikeySecret(data) {
+    this.fillInput(this.yubikeySecretKey, data);
+  }
+
+  /** Click on the duo element */
+  async checkDuo() {
+    await this.click(this.duo);
+  }
+
+  /** Click on the yubikey element */
+  async checkYubikey() {
+    await this.click(this.yubikey);
   }
 }

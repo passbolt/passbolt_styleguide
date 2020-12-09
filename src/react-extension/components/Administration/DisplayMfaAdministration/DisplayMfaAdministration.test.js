@@ -19,6 +19,7 @@ import {defaultAppContext, defaultProps, mockMfaSettings} from "./DisplayMfaAdmi
 import fetchMock from "fetch-mock-jest";
 import DisplayMfaAdministrationPage from "./DisplayMfaAdministration.test.page";
 import {waitFor} from "@testing-library/react";
+import {ActionFeedbackContext} from "../../../contexts/ActionFeedbackContext";
 
 beforeEach(() => {
   jest.resetModules();
@@ -29,33 +30,137 @@ describe("See the MFA settings", () => {
   const context = defaultAppContext(); // The applicative context
   const props = defaultProps(); // The props to pass
 
-  const mockFetch = (url, data) => fetchMock.get(url, data);
+  const mockFetchGet = (url, data) => fetchMock.get(url, data);
+  const mockFetchPost = (url, data) => fetchMock.post(url, data);
 
   describe('As AD I should see the MFA provider activation state on the administration settings page', () => {
     /**
      * I should see the MFA provider activation state on the administration settings page
      */
     beforeEach(() => {
-      mockFetch("http://localhost:3000/mfa/settings.json?api-version=v2", mockMfaSettings);
+      mockFetchGet("http://localhost:3000/mfa/settings.json?api-version=v2", mockMfaSettings);
       page = new DisplayMfaAdministrationPage(context, props);
+      fetchMock.reset();
     });
 
     it('As AD I should see if all fields is available for my Passbolt instance on the administration settings page', async() => {
       await waitFor(() => {
       });
-      expect(page.displayMfaAdministration.exists()).toBeTruthy();
+      expect(page.exists()).toBeTruthy();
       // check fields in the form
-      expect(page.displayMfaAdministration.totp.checked).toBe(true);
-      expect(page.displayMfaAdministration.yubikey.checked).toBe(true);
-      expect(page.displayMfaAdministration.duo.checked).toBe(false);
-      await page.displayMfaAdministration.click(page.displayMfaAdministration.duo);
+      expect(page.totp.checked).toBeTruthy();
+      expect(page.yubikey.checked).toBeTruthy();
+      expect(page.duo.checked).toBe(false);
+      await page.checkDuo();
 
-      expect(page.displayMfaAdministration.yubikeyClientIdentifier.value).toBe(mockMfaSettings.body.yubikey.clientId);
-      expect(page.displayMfaAdministration.yubikeySecretKey.value).toBe(mockMfaSettings.body.yubikey.secretKey);
-      expect(page.displayMfaAdministration.duoHostname.value).toBe("");
-      expect(page.displayMfaAdministration.duoIntegrationKey.value).toBe("");
-      expect(page.displayMfaAdministration.duoSalt.value).toBe("");
-      expect(page.displayMfaAdministration.duoSecretKey.value).toBe("");
+      expect(page.yubikeyClientIdentifier.value).toBe(mockMfaSettings.body.yubikey.clientId);
+      expect(page.yubikeySecretKey.value).toBe(mockMfaSettings.body.yubikey.secretKey);
+      expect(page.duoHostname.value).toBe("");
+      expect(page.duoIntegrationKey.value).toBe("");
+      expect(page.duoSalt.value).toBe("");
+      expect(page.duoSecretKey.value).toBe("");
+    });
+
+    it('As AD I should save mfa on the administration settings page', async() => {
+      await waitFor(() => {});
+      await page.checkYubikey();
+      expect(props.administrationWorkspaceContext.onSaveEnabled).toHaveBeenCalled();
+      const propsUpdated = {
+        administrationWorkspaceContext: {
+          mustSaveSettings: true,
+          onResetActionsSettings: jest.fn(),
+          isSaveEnabled: true,
+          onSaveEnabled: jest.fn()
+        }
+      };
+      mockFetchPost("http://localhost:3000/mfa/settings.json?api-version=v2", {});
+      jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementation(() => {});
+
+      page.rerender(context, propsUpdated);
+      await waitFor(() => {});
+      expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalledWith("The multi factor authentication settings for the organization were updated.");
+      expect(propsUpdated.administrationWorkspaceContext.onResetActionsSettings).toHaveBeenCalled();
+    });
+
+    it('As AD I should see a processing feedback while submitting the form', async() => {
+      await waitFor(() => {});
+      await page.checkYubikey();
+
+      const propsUpdated = {
+        administrationWorkspaceContext: {
+          mustSaveSettings: true,
+          onResetActionsSettings: jest.fn(),
+          isSaveEnabled: true,
+          onSaveEnabled: jest.fn()
+        }
+      };
+      // Mock the request function to make it the expected result
+      let updateResolve;
+      const requestMockImpl = jest.fn(() => new Promise(resolve => {
+        updateResolve = resolve;
+      }));
+      mockFetchPost("http://localhost:3000/mfa/settings.json?api-version=v2", requestMockImpl);
+
+      page.rerender(context, propsUpdated);
+      // API calls are made on submit, wait they are resolved.
+      await waitFor(() => {
+        expect(page.totp.getAttribute("disabled")).not.toBeNull();
+        expect(page.yubikey.getAttribute("disabled")).not.toBeNull();
+        expect(page.duo.getAttribute("disabled")).not.toBeNull();
+        updateResolve();
+      });
+    });
+
+    it('As AD I shouldn’t be able to submit the form if there is an invalid field', async() => {
+      await waitFor(() => {});
+      await page.checkDuo();
+      page.fillYubikeyClientIdentifier("");
+      page.fillYubikeySecret("");
+
+      const propsUpdated = {
+        administrationWorkspaceContext: {
+          mustSaveSettings: true,
+          onResetActionsSettings: jest.fn(),
+          isSaveEnabled: true,
+          onSaveEnabled: jest.fn()
+        }
+      };
+
+      page.rerender(context, propsUpdated);
+      await waitFor(() => {});
+      // Throw error message
+      expect(page.yubikeyClientIdentifierErrorMessage).toBe("A client identifier is required.");
+      expect(page.yubikeySecretKeyErrorMessage).toBe("A secret key is required.");
+      expect(page.duoHostnameErrorMessage).toBe("A hostname is required.");
+      expect(page.duoIntegrationKeyErrorMessage).toBe("An integration key is required.");
+      expect(page.duoSaltErrorMessage).toBe("A salt is required.");
+      expect(page.duoSecretKeyErrorMessage).toBe("A secret key is required.");
+    });
+
+    it('As AD I should see an error toaster if the submit operation fails for an unexpected reason', async() => {
+      await waitFor(() => {});
+      await page.checkYubikey();
+
+      const propsUpdated = {
+        administrationWorkspaceContext: {
+          mustSaveSettings: true,
+          onResetActionsSettings: jest.fn(),
+          isSaveEnabled: true,
+          onSaveEnabled: jest.fn()
+        }
+      };
+
+      // Mock the request function to make it return an error.
+      const error = {
+        status: 500
+      };
+      mockFetchPost("http://localhost:3000/mfa/settings.json?api-version=v2", Promise.reject(error));
+      jest.spyOn(ActionFeedbackContext._currentValue, 'displayError').mockImplementation(() => {});
+
+      page.rerender(context, propsUpdated);
+      await waitFor(() => {});
+      // Throw general error message
+      expect(ActionFeedbackContext._currentValue.displayError).toHaveBeenCalledWith("The service is unavailable");
     });
   });
 
@@ -68,13 +173,14 @@ describe("See the MFA settings", () => {
      */
 
     beforeEach(() => {
+      mockFetchGet("http://localhost:3000/mfa/settings.json?api-version=v2", mockMfaSettings);
       page = new DisplayMfaAdministrationPage(context, props);
     });
 
     it('I should see all fields disabled”', () => {
-      expect(page.displayMfaAdministration.totp.getAttribute("disabled")).not.toBeNull();
-      expect(page.displayMfaAdministration.yubikey.getAttribute("disabled")).not.toBeNull();
-      expect(page.displayMfaAdministration.duo.getAttribute("disabled")).not.toBeNull();
+      expect(page.totp.getAttribute("disabled")).not.toBeNull();
+      expect(page.yubikey.getAttribute("disabled")).not.toBeNull();
+      expect(page.duo.getAttribute("disabled")).not.toBeNull();
     });
   });
 });

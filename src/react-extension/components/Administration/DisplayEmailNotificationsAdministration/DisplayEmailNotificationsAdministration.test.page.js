@@ -31,185 +31,168 @@ export default class DisplayEmailNotificationsAdministrationPage {
         <DisplayEmailNotificationsAdministration {...props}/>
       </ApiAppContext.Provider>
     );
-    this.setupPageObjects();
   }
 
-  /**
-   * Set up the objects of the page
-   */
-  setupPageObjects() {
-    this._displayEmailNotificationsAdministration = new DisplayEmailNotificationsAdministrationPageObject(this._page.container);
-  }
-
-  /**
-   * Returns the page object of create user
-   */
-  get displayEmailNotificationsAdministration() {
-    return this._displayEmailNotificationsAdministration;
-  }
-}
-
-class DisplayEmailNotificationsAdministrationPageObject {
-  /**
-   * Default constructor
-   * @param container The container which includes the AddComment Component
-   */
-  constructor(container) {
-    this._container = container;
+  rerender(appContext, props) {
+    this._page.rerender(
+      <ApiAppContext.Provider value={appContext}>
+        <DisplayEmailNotificationsAdministration {...props}/>
+      </ApiAppContext.Provider>
+    );
   }
 
   /**
    * Returns the totp input element
    */
   get emailNotificationsSettings() {
-    return this._container.querySelector('.email-notification-settings');
+    return this._page.container.querySelector('.email-notification-settings');
   }
 
   /**
    * Returns the password create input element
    */
   get passwordCreate() {
-    return this._container.querySelector('#send-password-create-toggle-button');
+    return this._page.container.querySelector('#send-password-create-toggle-button');
   }
 
   /**
    * Returns the password update input element
    */
   get passwordUpdate() {
-    return this._container.querySelector('#send-password-update-toggle-button');
+    return this._page.container.querySelector('#send-password-update-toggle-button');
   }
 
   /**
    * Returns the password delete input element
    */
   get passwordDelete() {
-    return this._container.querySelector('#send-password-delete-toggle-button');
+    return this._page.container.querySelector('#send-password-delete-toggle-button');
   }
 
   /**
    * Returns the password share input element
    */
   get passwordShare() {
-    return this._container.querySelector('#send-password-share-toggle-button');
+    return this._page.container.querySelector('#send-password-share-toggle-button');
   }
 
   /**
    * Returns the folder create input element
    */
   get folderCreate() {
-    return this._container.querySelector('#send-folder-create-toggle-button');
+    return this._page.container.querySelector('#send-folder-create-toggle-button');
   }
 
   /**
    * Returns the folder create input element
    */
   get folderUpdate() {
-    return this._container.querySelector('#send-folder-update-toggle-button');
+    return this._page.container.querySelector('#send-folder-update-toggle-button');
   }
 
   /**
    * Returns the folder delete input element
    */
   get folderDelete() {
-    return this._container.querySelector('#send-folder-delete-toggle-button');
+    return this._page.container.querySelector('#send-folder-delete-toggle-button');
   }
 
   /**
    * Returns the folder share input element
    */
   get folderShare() {
-    return this._container.querySelector('#send-folder-share-toggle-button');
+    return this._page.container.querySelector('#send-folder-share-toggle-button');
   }
 
   /**
    * Returns the comment add input element
    */
   get commentAdd() {
-    return this._container.querySelector('#send-comment-add-toggle-button');
+    return this._page.container.querySelector('#send-comment-add-toggle-button');
   }
 
   /**
    * Returns the group delete input element
    */
   get groupDelete() {
-    return this._container.querySelector('#send-group-delete-toggle-button');
+    return this._page.container.querySelector('#send-group-delete-toggle-button');
   }
 
   /**
    * Returns the group user add input element
    */
   get groupUserAdd() {
-    return this._container.querySelector('#send-group-user-add-toggle-button');
+    return this._page.container.querySelector('#send-group-user-add-toggle-button');
   }
 
   /**
    * Returns the group user delete input element
    */
   get groupUserDelete() {
-    return this._container.querySelector('#send-group-user-delete-toggle-button');
+    return this._page.container.querySelector('#send-group-user-delete-toggle-button');
   }
 
   /**
    * Returns the group user update input element
    */
   get groupUserUpdate() {
-    return this._container.querySelector('#send-group-user-update-toggle-button');
+    return this._page.container.querySelector('#send-group-user-update-toggle-button');
   }
 
   /**
    * Returns the group manager update input element
    */
   get groupManagerUpdate() {
-    return this._container.querySelector('#send-group-manager-update-toggle-button');
+    return this._page.container.querySelector('#send-group-manager-update-toggle-button');
   }
 
   /**
    * Returns the userCreate input element
    */
   get userCreate() {
-    return this._container.querySelector('#send-user-create-toggle-button');
+    return this._page.container.querySelector('#send-user-create-toggle-button');
   }
 
   /**
    * Returns the userCreate input element
    */
   get userRecover() {
-    return this._container.querySelector('#send-user-recover-toggle-button');
+    return this._page.container.querySelector('#send-user-recover-toggle-button');
   }
 
   /**
    * Returns the show username input element
    */
   get showUsername() {
-    return this._container.querySelector('#show-username-toggle-button');
+    return this._page.container.querySelector('#show-username-toggle-button');
   }
 
   /**
    * Returns the show uri input element
    */
   get showUri() {
-    return this._container.querySelector('#show-uri-toggle-button');
+    return this._page.container.querySelector('#show-uri-toggle-button');
   }
 
   /**
    * Returns the show secret input element
    */
   get showSecret() {
-    return this._container.querySelector('#show-secret-toggle-button');
+    return this._page.container.querySelector('#show-secret-toggle-button');
   }
 
   /**
    * Returns the show description input element
    */
   get showDescription() {
-    return this._container.querySelector('#show-description-toggle-button');
+    return this._page.container.querySelector('#show-description-toggle-button');
   }
 
   /**
    * Returns the show description input element
    */
   get showComment() {
-    return this._container.querySelector('#show-comment-toggle-button');
+    return this._page.container.querySelector('#show-comment-toggle-button');
   }
 
   /**
@@ -227,15 +210,8 @@ class DisplayEmailNotificationsAdministrationPageObject {
     });
   }
 
-  /** Click without wait for on the element */
-  clickWithoutWaitFor(element) {
-    const leftClick = {button: 0};
-    fireEvent.click(element, leftClick);
-  }
-
-  /** fill the input element with data */
-  fillInput(element, data) {
-    const dataInputEvent = {target: {value: data}};
-    fireEvent.change(element, dataInputEvent);
+  /** Click on the comment add element */
+  async checkCommentAdd() {
+    await this.click(this.commentAdd);
   }
 }

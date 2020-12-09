@@ -22,7 +22,7 @@ import Logo from "../../../react/components/Common/Navigation/Header/Logo";
 import UserBadgeMenu from "../../../react/components/Common/Navigation/Header/UserBadgeMenu";
 import DisplayAdministrationMenu from "./DisplayAdministrationMenu/DisplayAdministrationMenu";
 import DisplayMfaAdministration from "./DisplayMfaAdministration/DisplayMfaAdministration";
-import DisplayAdministrationWorkspaceActions from "./DisplayAdministartionWorkspaceActions/DisplayUserWorkspaceActions";
+import DisplayAdministrationWorkspaceActions from "./DisplayAdministrationWorkspaceActions/DisplayAdministrationWorkspaceActions";
 import DisplayAdministrationWorkspaceBreadcrumb
   from "./DisplayAdministrationWorkspaceBreadcrumb/DisplayAdministrationWorkspaceBreadcrumb";
 import DisplayUserDirectoryAdministration
