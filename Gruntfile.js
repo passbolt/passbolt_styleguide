@@ -87,6 +87,7 @@ module.exports = function(grunt) {
           'rm -f ./demo/api-app/public/css/themes/midgar/*.css',
           'cp ./src/css/themes/default/api_main.css ./demo/api-app/public/css/themes/default/.',
           'cp ./src/css/themes/midgar/api_main.css ./demo/api-app/public/css/themes/midgar/.',
+          'cp ./src/css/themes/default/api_authentication.css ./demo/api-app/public/css/themes/default/.',
 
           'rm -f ./demo/ext-app/public/css/themes/default/*.css',
           'rm -f ./demo/ext-app/public/css/themes/midgar/*.css',

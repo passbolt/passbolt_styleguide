@@ -1,16 +1,19 @@
 const path = require("path");
+const uuidRegex = "[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[0-5][a-fA-F0-9]{3}-[089aAbB][a-fA-F0-9]{3}-[a-fA-F0-9]{12}";
 
 /**
  * Demo entries used while testing with webpack-dev-server (add the argument --env.demo=true to the command)
  * @type {object}
  */
 const demoEntry = {
-  "api-app": path.resolve(__dirname, "./demo/api-app/entry/ApiApp.entry.js"), // The passbolt application served by the API
+  "api-app": path.resolve(__dirname, "./demo/api-app/entry/ApiApp.entry.js"), // The passbolt application served by the API,
+  "api-triage": path.resolve(__dirname, "./demo/api-app/entry/ApiTriage.entry.js"), // The triage application served by the API
 };
 
 const config = {
   entry: {
     "api-app": path.resolve(__dirname, "./src/react-extension/ApiApp.entry.js"), // The passbolt application served by the API
+    "api-triage": path.resolve(__dirname, "./src/react-extension/ApiTriage.entry.js"), // The triage application served by the API
   },
   mode: "production",
   module: {
@@ -48,9 +51,11 @@ const config = {
     publicPath: "http://localhost:3000/dist/",
     historyApiFallback: {
       rewrites: [
-        {from: /^\/$|^\/app/, to: "/api-app.html"},
-        {from: /^\/setup\/install/, to: "/api-setup.html"},
-        {from: /^\/setup\/recover/, to: "/api-recover.html"},
+        {from: /^\/app/, to: "/api-app.html"},
+        {from: new RegExp(`^\/setup\/install\/${uuidRegex}\/${uuidRegex}`), to: "/api-setup.html"},
+        {from: new RegExp(`^\/setup\/recover\/${uuidRegex}\/${uuidRegex}`), to: "/api-recover.html"},
+        {from: /^\/setup|^\/recover|^\/auth/, to: "/api-triage.html"},
+        {from: /^\/$/, to: "/default.html"},
       ]
     }
   },

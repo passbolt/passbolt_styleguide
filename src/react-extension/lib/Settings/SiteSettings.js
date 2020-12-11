@@ -46,17 +46,29 @@ export default class SiteSettings {
     return result;
   }
 
+  /**
+   * Retrieve the settings of a plugin.
+   * @param {string} name The plugin name
+   * @returns {object|null}
+   */
   getPluginSettings(name) {
     const configPath = `passbolt.plugins.${name}`;
     return getPropValue(this.settings, configPath);
   }
 
+  /**
+   * Retrieve the remember me options
+   * @returns {object}
+   */
   getRememberMeOptions() {
     const pluginSettings = this.getPluginSettings('rememberMe');
-
     return pluginSettings.options;
   }
 
+  /**
+   * Get the server timezone
+   * @returns {string|null}
+   */
   getServerTimezone() {
     return getPropValue(this.settings, "passbolt.app.server_timezone");
   }
@@ -66,8 +78,9 @@ export default class SiteSettings {
    * @returns {string|boolean}
    */
   get termsLink() {
-    if (this.settings.app.legal && this.settings.app.legal.terms) {
-      return sanitizeUrl(this.settings.app.legal.terms);
+    const termsLink = getPropValue(this.settings, "passbolt.legal.terms.url");
+    if (termsLink) {
+      return sanitizeUrl(termsLink);
     }
     return false;
   }
@@ -77,9 +90,19 @@ export default class SiteSettings {
    * @returns {string|boolean}
    */
   get privacyLink() {
-    if (this.settings.app.legal && this.settings.app.legal.privacy) {
-      return sanitizeUrl(this.settings.app.legal.privacy);
+    const privacyLink = getPropValue(this.settings, "passbolt.legal.privacy_policy.url");
+    if (privacyLink) {
+      return sanitizeUrl(privacyLink);
     }
     return false;
+  }
+
+  /**
+   * Get registration public
+   * @returns {boolean}
+   */
+  get registrationPublic() {
+    const registrationPublic = getPropValue(this.settings, "passbolt.registration.public");
+    return registrationPublic === true;
   }
 }

@@ -47,6 +47,9 @@ class FormSubmitButton extends Component {
     if (this.props.processing) {
       name += ' processing';
     }
+    if (this.props.big) {
+      name += ' big';
+    }
     return name;
   }
 
@@ -73,7 +76,8 @@ FormSubmitButton.propTypes = {
   processing: PropTypes.bool,
   disabled: PropTypes.bool,
   value: PropTypes.string,
-  warning: PropTypes.bool
+  warning: PropTypes.bool,
+  big: PropTypes.bool
 };
 
 export default FormSubmitButton;

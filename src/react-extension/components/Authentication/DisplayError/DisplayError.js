@@ -13,23 +13,18 @@
  */
 import React, {Component} from "react";
 
-class DisplayInvitationRequiredFeedback extends Component {
+class DisplayError extends Component {
   render() {
     return (
-      <div className="invitation-required-feedback">
+      <div className="setup-error">
         <h1>Access to this service requires an invitation.</h1>
-        <p>
-          This email is not associated with any approved users on this domain.
-          Please contact your administrator to request an invitation link.
-        </p>
+        <p>This email is not associated with any approved users on this domain. Please contact your administrator to request an invitation link.</p>
         <div className="form-actions">
-          <a href="#" className="button primary big" role="button">
-            Try with another email
-          </a>
+          <a href="#" className="button primary big" role="button">Try with another email</a>
         </div>
       </div>
     );
   }
 }
 
-export default DisplayInvitationRequiredFeedback;
+export default DisplayError;

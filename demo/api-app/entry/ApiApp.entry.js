@@ -12,12 +12,10 @@
  */
 
 /**
- * This is a demo entry point that has for aim to instantiate the application served by the
+ * This is a demo entry point that has for aim to instantiate the passbolt application served by the
  * api. The demo is useful to mock the API calls.
  *
- * The api should instantiate the application in its code in order to:
- * 1. Not use the application as a dependencies but build it as part of its build workflow
- * 2. Inject its own port and local storage dependencies
+ * The production build will be based on the default entry defined in the webpack-api.config.js.
  */
 import React from "react";
 import ReactDOM from "react-dom";

@@ -13,21 +13,18 @@
  */
 import React, {Component} from "react";
 
-class DisplayCheckMailboxFeedback extends Component {
+class CheckMailBox extends Component {
   render() {
     return (
-      <div className="check-mailbox-feedback">
-        <div className="email-sent-instructions">
-          <div className="email-sent-bg"/>
-          <h1>Check your mailbox!</h1>
-          <p>
-            We sent you a link to verify your email.
-            Check your spam folder if you do not see hear from us after a while.
-          </p>
+      <div className="email-sent-instructions">
+        <div className="email-sent-bg">
         </div>
+        <h1>Check your mailbox!</h1>
+        <p>We send you a link to verify your email.<br/>
+          Check your spam folder if you do not see hear from us after a while.</p>
       </div>
     );
   }
 }
 
-export default DisplayCheckMailboxFeedback;
+export default CheckMailBox;
