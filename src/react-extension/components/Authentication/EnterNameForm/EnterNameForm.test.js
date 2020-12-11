@@ -84,11 +84,11 @@ describe("As AN I should see the Enter Name Form Page", () => {
       expect(page.lastnameErrorMessage).toBe("A last name is required.");
 
 
-      page.insertFirstname("admin123");
-      page.insertLastname("admin123");
+      page.insertFirstname("");
+      page.insertLastname("");
       await page.register();
-      expect(page.firstnameErrorMessage).toBe("The first name should contain only letters.");
-      expect(page.lastnameErrorMessage).toBe("The last name should contain only letters.");
+      expect(page.firstnameErrorMessage).toBe("A first name is required.");
+      expect(page.lastnameErrorMessage).toBe("A last name is required.");
     });
 
     it('As AN I should see an error toaster if the submit operation fails for an unexpected reason', async() => {

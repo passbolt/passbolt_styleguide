@@ -12,14 +12,12 @@
  * @since         3.0.0
  */
 import React, {Component} from "react";
-import LoginContext from "../../../contexts/LoginContext";
-import FormSubmitButton from "../../../../react/components/Common/Inputs/FormSubmitButton/FormSubmitButton";
-import {ApiClient} from "../../../../react-administration/lib/apiClient/apiClient";
-import {ApiClientOptions} from "../../../../react-administration/lib/apiClient/apiClientOptions";
-import XRegExp from "xregexp";
-import {withRouter} from "react-router-dom";
-import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
+import {Link, withRouter} from "react-router-dom";
 import PropTypes from "prop-types";
+import FormSubmitButton from "../../../../react/components/Common/Inputs/FormSubmitButton/FormSubmitButton";
+import {ApiClient} from "../../../lib/apiClient/apiClient";
+import {ApiClientOptions} from "../../../lib/apiClient/apiClientOptions";
+import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 
 class EnterNameForm extends Component {
   /**
@@ -151,11 +149,14 @@ class EnterNameForm extends Component {
    * @returns {Promise<Object>}
    */
   async sendName() {
-    const name = {
-      first_name: this.state.firstname,
-      last_name: this.state.lastname
+    const userDto = {
+      username: this.state.username,
+      profile: {
+        first_name: this.state.firstname,
+        last_name: this.state.lastname
+      }
     };
-    await this.apiClient.create(name);
+    await this.apiClient.create(userDto);
   }
 
   /**
@@ -188,7 +189,6 @@ class EnterNameForm extends Component {
    * @returns {Promise<boolean>}
    */
   async validate() {
-    // Validate the form inputs.
     await Promise.all([
       this.validateFirstnameInput(),
       this.validateLastnameInput(),
@@ -205,8 +205,6 @@ class EnterNameForm extends Component {
     const firstname = this.state.firstname.trim();
     if (!firstname.length) {
       firstnameError = "A first name is required.";
-    } else if (!this.isOnlyLetter(firstname)) {
-      firstnameError = "The first name should contain only letters.";
     }
     return this.setState({firstnameError});
   }
@@ -220,20 +218,8 @@ class EnterNameForm extends Component {
     const lastname = this.state.lastname.trim();
     if (!lastname.length) {
       lastnameError = "A last name is required.";
-    } else if (!this.isOnlyLetter(lastname)) {
-      lastnameError = "The last name should contain only letters.";
     }
     return this.setState({lastnameError});
-  }
-
-  /**
-   * Check that a name contain only letters
-   * @param {string }name the name to test
-   */
-  isOnlyLetter(name) {
-    const lettersRegexp = `^[a-zA-Z]+$`;
-    const xregexp = XRegExp(lettersRegexp);
-    return xregexp.test(name);
   }
 
   /**
@@ -289,15 +275,13 @@ class EnterNameForm extends Component {
           </div>
           <div className="form-actions">
             <FormSubmitButton disabled={this.hasAllInputDisabled()} big={true} processing={this.state.processing} value="Register"/>
-            <a href="/auth/login">I already have an account</a>
+            <Link to="/auth/login">I already have an account</Link>
           </div>
         </form>
       </div>
     );
   }
 }
-
-EnterNameForm.contextType = LoginContext;
 
 EnterNameForm.propTypes = {
   history: PropTypes.object,

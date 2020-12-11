@@ -12,7 +12,6 @@
  * @since         2.12.0
  */
 import React, {Component} from "react";
-import LoginContext from "./contexts/LoginContext";
 import CheckMailBox from "./components/Authentication/CheckMailBox/CheckMailBox";
 import {BrowserRouter as Router, Route} from "react-router-dom";
 import DisplayBrowserNotSupported
@@ -23,7 +22,7 @@ import EnterUsernameForm from "./components/Authentication/EnterUsernameForm/Ent
 import ActionFeedbackContextProvider from "./contexts/ActionFeedbackContext";
 import EnterNameForm from "./components/Authentication/EnterNameForm/EnterNameForm";
 
-class ReactTriageSetup extends Component {
+class ApiTriage extends Component {
   render() {
     return (
       <ActionFeedbackContextProvider>
@@ -35,22 +34,22 @@ class ReactTriageSetup extends Component {
               </div>
               <div className="login-form">
                 <Route exact path="/auth/login">
-                  <EnterUsernameForm />
+                  <EnterUsernameForm/>
                 </Route>
                 <Route path="/setup/name">
-                  <EnterNameForm />
+                  <EnterNameForm/>
                 </Route>
-                <Route path={["/setup/check-mailbox", "/recover/check-mailbox", "/auth/login/check-mailbox"]}>
-                  <CheckMailBox />
+                <Route path={["/setup/check-mailbox", "/setup/recover/check-mailbox", "/auth/login/check-mailbox"]}>
+                  <CheckMailBox/>
                 </Route>
-                <Route path={["/setup/not-supported", "/recover/not-supported"]}>
-                  <DisplayBrowserNotSupported />
+                <Route path={["/setup/not-supported", "/setup/recover/not-supported"]}>
+                  <DisplayBrowserNotSupported/>
                 </Route>
-                <Route path={["/setup/install-plugin", "/recover/install-plugin"]}>
-                  <InstallExtension />
+                <Route path={["/setup/install/:userId/:token", "/setup/recover/:userId/:token"]}>
+                  <InstallExtension/>
                 </Route>
-                <Route path={["/setup/error", "/auth/login/not-found"]}>
-                  <DisplayError />
+                <Route path={["/setup/error", "/setup/recover/error", "/auth/login/error"]}>
+                  <DisplayError/>
                 </Route>
               </div>
             </div>
@@ -61,6 +60,4 @@ class ReactTriageSetup extends Component {
   }
 }
 
-ReactTriageSetup.contextType = LoginContext;
-
-export default ReactTriageSetup;
+export default ApiTriage;

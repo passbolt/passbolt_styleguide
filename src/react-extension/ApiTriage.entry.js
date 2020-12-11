@@ -10,20 +10,14 @@
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  */
-
-/**
- * This is a demo entry point that has for aim to instantiate the passbolt application served by the
- * api. The demo is useful to mock the API calls.
- *
- * The production build will be based on the default entry defined in the webpack-api.config.js.
- */
 import React from "react";
 import ReactDOM from "react-dom";
-import ApiApp from "../../../src/react-extension/ApiApp.js";
-import mockFetch from "../mock/mockFetch";
+import ApiTriage from "./ApiTriage";
 
-mockFetch();
-
-const domContainer = document.createElement("div");
-document.body.appendChild(domContainer);
-ReactDOM.render(<ApiApp/>, domContainer);
+/**
+ * Entry point - Triage application served by the API.
+ * This entry point will be used to compile the production code see webpack-api.config.js
+ */
+const appDomElement = document.createElement("div");
+document.body.appendChild(appDomElement);
+ReactDOM.render(<ApiTriage/>, appDomElement);

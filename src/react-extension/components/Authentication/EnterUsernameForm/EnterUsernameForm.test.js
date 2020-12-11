@@ -31,8 +31,8 @@ describe("As AN I should see the Enter Username Form Page", () => {
   const context = defaultAppContext(); // The applicative context
   const props = defaultProps(); // The applicative context
 
-  const mockFetchPost = (url, response) => fetchMock.post(url, response);
-  const mockFetchGet = (url, response) => fetchMock.get(url, response);
+  const mockFetchPost = (url, response, options) => fetchMock.post(url, response, options);
+  const mockFetchGet = (url, response, options) => fetchMock.get(url, response, options);
 
   describe('As AN I can start adding a username', () => {
     /**
@@ -40,6 +40,8 @@ describe("As AN I should see the Enter Username Form Page", () => {
      */
     beforeEach(() => {
       fetchMock.reset();
+      const siteSettingsResult = '{"body":{"passbolt":{"legal":{"privacy_policy":{"url":"https://www.passbolt.com/privacy"},"terms":{"url":"https://www.passbolt.com/terms"}}}}}';
+      mockFetchGet("http://localhost/settings.json?api-version=v2", new Response(siteSettingsResult, {url: 'http://localhost/settings.json?api-version=v2', status: 200}), {overwriteRoutes: true});
       page = new EnterUsernameFormPage(context, props);
     });
 
@@ -49,6 +51,22 @@ describe("As AN I should see the Enter Username Form Page", () => {
       // Fill the form
       page.insertUsername("admin@passbolt.com");
       await page.checkAgreedTerms();
+      mockFetchPost("http://localhost/users/recover.json?api-version=v2", {});
+      await page.next();
+      expect(props.history.push).toHaveBeenCalledWith("/auth/login/check-mailbox");
+    });
+
+    it('As AN I should be redirected after enter a username with success with no terms or privacy policy required by the API', async() => {
+      const siteSettingsResult = '{"body":{}}';
+      mockFetchGet("http://localhost/settings.json?api-version=v2", new Response(siteSettingsResult, {url: 'http://localhost/settings.json?api-version=v2', status: 200}), {overwriteRoutes: true});
+      page = new EnterUsernameFormPage(context, props);
+
+      expect(page.exists()).toBeTruthy();
+      expect(page.title).toBe('Please enter your email to continue.');
+      await page.isReady();
+
+      // Fill the form
+      page.insertUsername("admin@passbolt.com");
       mockFetchPost("http://localhost/users/recover.json?api-version=v2", {});
       await page.next();
       expect(props.history.push).toHaveBeenCalledWith("/auth/login/check-mailbox");
@@ -78,6 +96,7 @@ describe("As AN I should see the Enter Username Form Page", () => {
 
     it('As AN I shouldn’t be able to submit the form if there is an invalid field', async() => {
       expect(page.exists()).toBeTruthy();
+      await page.isReady();
       await page.next();
 
       // Throw error message
@@ -108,7 +127,11 @@ describe("As AN I should see the Enter Username Form Page", () => {
       expect(ActionFeedbackContext._currentValue.displayError).toHaveBeenCalledWith("There was an unexpected error, please retry later...");
     });
 
-    it('As AN I should be redirected to register', async() => {
+    it('As AN I should be redirected to register if no account match and the registration is public', async() => {
+      const siteSettingsResult = '{"body":{"passbolt":{"registration":{"public":true},"legal":{"privacy_policy":{"url":"https://www.passbolt.com/privacy"},"terms":{"url":"https://www.passbolt.com/terms"}}}}}';
+      mockFetchGet("http://localhost/settings.json?api-version=v2", new Response(siteSettingsResult, {url: 'http://localhost/settings.json?api-version=v2', status: 200}), {overwriteRoutes: true});
+      page = new EnterUsernameFormPage(context, props);
+
       // Fill the form
       page.insertUsername("admin@passbolt.com");
       await page.checkAgreedTerms();
@@ -121,7 +144,7 @@ describe("As AN I should see the Enter Username Form Page", () => {
       expect(props.history.push).toHaveBeenCalledWith("/setup/name");
     });
 
-    it('As AN I should be redirected to not found', async() => {
+    it('As AN I should be redirected to error if no account match and the registration is not public', async() => {
       // Fill the form
       page.insertUsername("admin@passbolt.com");
       await page.checkAgreedTerms();
@@ -130,7 +153,7 @@ describe("As AN I should see the Enter Username Form Page", () => {
       mockFetchPost("http://localhost/users/recover.json?api-version=v2", new Response('{"header":{"message":"not found"}}', {url: 'http://localhost/users/recover.json?api-version=v2', status: 404}));
       mockFetchGet("http://localhost/setup/name.json?api-version=v2", new Response('{"header":{"message":"not found"}}', {url: 'http://localhost/users/recover.json?api-version=v2', status: 404}));
       await page.next();
-      expect(props.history.push).toHaveBeenCalledWith("/auth/login/not-found");
+      expect(props.history.push).toHaveBeenCalledWith("/auth/login/error");
     });
   });
 });

@@ -47,6 +47,9 @@ class InsertRecoverAuthenticationIframe extends Component {
       width: "100%",
       height: "100%",
       zIndex: 999,
+      border: 0,
+      top: 0,
+      left: 0,
     };
 
     return (

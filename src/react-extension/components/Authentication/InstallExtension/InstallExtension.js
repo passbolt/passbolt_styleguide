@@ -13,6 +13,11 @@
  */
 import React, {Component} from "react";
 
+const CHROME_STORE_BROWSER_EXTENSION_URL = "https://chrome.google.com/webstore/detail/passbolt-extension/didegimhafipceonhjepacocaffmoppf";
+const FIREFOX_STORE_BROWSER_EXTENSION_URL = "https://addons.mozilla.org/fr/firefox/addon/passbolt";
+const CHROME_BROWSER_NAME = "chrome";
+const FIREFOX_BROWSER_NAME = "firefox";
+
 class InstallExtension extends Component {
   constructor(props) {
     super(props);
@@ -22,7 +27,7 @@ class InstallExtension extends Component {
 
   getDefaultState() {
     return {
-      browser: this.isChrome ? 'chrome' : 'firefox',
+      browser: this.isChrome ? CHROME_BROWSER_NAME : FIREFOX_BROWSER_NAME,
       theme: 'default'
     };
   }
@@ -39,22 +44,34 @@ class InstallExtension extends Component {
     return Boolean(window.chrome) && (Boolean(window.chrome.webstore) || Boolean(window.chrome.runtime));
   }
 
-  get storeUrlImg() {
+  /**
+   * Get the browser store thumbnail url
+   * @returns {string}
+   */
+  get storeThumbnailUrl() {
     if (this.state.browser === 'chrome') {
-      return '../img/third-party/ChromeWebStore_black.png'; // _white if theme midgar...
+      return `${window.location.origin}/img/third_party/ChromeWebStore_black.png`; // @todo _white if theme midgar
     } else {
-      return '../img/third-party/FirefoxAMO_black.svg'; // idem
+      return `${window.location.origin}/img/third_party/FirefoxAMO_black.svg`; // @todo _white if theme midgar
     }
   }
 
+  /**
+   * Get the browser store url
+   * @returns {string}
+   */
   get storeUrl() {
     if (this.isChrome) {
-      return 'https://chrome.google.com/webstore/detail/passbolt-extension/didegimhafipceonhjepacocaffmoppf';
+      return CHROME_STORE_BROWSER_EXTENSION_URL;
     } else {
-      return 'https://addons.mozilla.org/fr/firefox/addon/passbolt/';
+      return FIREFOX_STORE_BROWSER_EXTENSION_URL;
     }
   }
 
+  /**
+   * Get the store classname
+   * @returns {string}
+   */
   get storeClassName() {
     return `browser-webstore ${this.state.browser}`;
   }
@@ -72,13 +89,13 @@ class InstallExtension extends Component {
         <h1>Please install the browser extension.</h1>
         <p>Please download the browser extension and refresh this page to continue.</p>
         {this.state.browser &&
-          <a href={this.storeUrl} className={this.storeClassName}target="_blank" rel="noopener noreferrer">
-            <img src={this.storeUrlImg} />
-          </a>
+        <a href={this.storeUrl} className={this.storeClassName} target="_blank" rel="noopener noreferrer">
+          <img src={this.storeThumbnailUrl}/>
+        </a>
         }
         <div className="form-actions">
           <a href={this.storeUrl} className="button primary big" role="button" target="_blank" rel="noopener noreferrer">Download extension</a>
-          <a href="" onClick={this.handleRefreshClick} role="button">Refresh to detect extension</a>
+          <a onClick={this.handleRefreshClick} role="button">Refresh to detect extension</a>
         </div>
       </div>
     );

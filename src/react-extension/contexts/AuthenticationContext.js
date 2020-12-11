@@ -17,7 +17,7 @@ export const AuthenticationContext = React.createContext({
   onRecoveryKitDownloaded: () => {}, // Whenever the recovery kit has been downloaded
   onSaveSecurityTokenRequested: () => {}, // Whenever the security token save is requested
   onCompleteSetupRequested: () => {}, // Whenever the the setup complete is requested
-  onCompleteRecoverRequested: () => {},// Whenever the the recover complete is requested
+  onCompleteRecoverRequested: () => {}, // Whenever the the recover complete is requested
   onPassphraseLost: () => {} // Whenever the user lost his passphrase
 });
 

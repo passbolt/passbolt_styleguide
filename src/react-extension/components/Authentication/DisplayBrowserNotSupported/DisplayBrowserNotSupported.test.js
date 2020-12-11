@@ -43,8 +43,10 @@ describe("As AN I should see not supported browser page", () => {
       expect(page.message).toBe('Please download chrome or firefox to get started with passbolt.');
       // download
       expect(page.download).toBe('Download firefox');
-      // link
-      expect(page.link).toBe('Why is my browser not supported?');
+      /*
+       * link
+       * expect(page.link).toBe('Why is my browser not supported?');
+       */
     });
   });
 });

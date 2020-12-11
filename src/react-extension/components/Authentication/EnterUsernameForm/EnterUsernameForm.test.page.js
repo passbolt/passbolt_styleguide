@@ -116,6 +116,7 @@ export default class EnterUsernameFormPage {
 
   /** check the agreed terms */
   async checkAgreedTerms() {
+    await this.isReady();
     await this.click(this.isAgreedTerms);
   }
 
@@ -127,6 +128,13 @@ export default class EnterUsernameFormPage {
   /** click next without wait for */
   nextWithoutWaitFor() {
     this.clickWithoutWaitFor(this.nextButton);
+  }
+
+  /** wait for the agreed terms to be visible **/
+  async isReady() {
+    await waitFor(() => {
+      expect(this.nextButton.getAttribute("disabled")).toBeNull();
+    });
   }
 }
 

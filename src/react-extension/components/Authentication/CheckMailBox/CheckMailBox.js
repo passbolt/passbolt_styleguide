@@ -21,7 +21,7 @@ class CheckMailBox extends Component {
         </div>
         <h1>Check your mailbox!</h1>
         <p>We send you a link to verify your email.<br/>
-        Check your spam folder if you do not see hear from us after a while.</p>
+          Check your spam folder if you do not see hear from us after a while.</p>
       </div>
     );
   }

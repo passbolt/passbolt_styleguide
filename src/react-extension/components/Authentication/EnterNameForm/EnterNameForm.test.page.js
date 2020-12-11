@@ -13,6 +13,7 @@
  * @since         2.11.0
  */
 import {fireEvent, render, waitFor} from "@testing-library/react";
+import {BrowserRouter} from "react-router-dom";
 import AppContext from "../../../contexts/AppContext";
 import React from "react";
 import EnterNameForm from "./EnterNameForm";
@@ -28,9 +29,11 @@ export default class EnterNameFormPage {
    */
   constructor(appContext, props) {
     this._page = render(
-      <AppContext.Provider value={appContext}>
-        <EnterNameForm.WrappedComponent {...props}/>
-      </AppContext.Provider>
+      <BrowserRouter>
+        <AppContext.Provider value={appContext}>
+          <EnterNameForm.WrappedComponent {...props}/>
+        </AppContext.Provider>
+      </BrowserRouter>
     );
   }
 

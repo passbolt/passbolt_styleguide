@@ -13,18 +13,20 @@
  */
 import React, {Component} from "react";
 
+const DOWNLOAD_FIREFOX_URL = "https://www.mozilla.org/firefox/download/thanks/";
+
 class DisplayBrowserNotSupported extends Component {
   render() {
     return (
       <div className="browser-not-supported">
         <h1>Sorry, your browser is not supported.</h1>
         <p>Please download chrome or firefox to get started with passbolt.</p>
-        <a href="https://www.mozilla.org/firefox/download/thanks/" className="browser" target="_blank" rel="noopener noreferrer">
-          <img src='../img/third-party/firefox_logo.png' />
+        <a href={`${DOWNLOAD_FIREFOX_URL}`} className="browser" target="_blank" rel="noopener noreferrer">
+          <img src={`${window.location.origin}/img/third_party/firefox_logo.png`} />
         </a>
         <div className="form-actions">
-          <a href="https://www.mozilla.org/firefox/download/thanks/" className="button primary big" role="button" target="_blank" rel="noopener noreferrer">Download firefox</a>
-          <a href="#" role="button">Why is my browser not supported?</a>
+          <a href={`${DOWNLOAD_FIREFOX_URL}`} className="button primary big" role="button" target="_blank" rel="noopener noreferrer">Download firefox</a>
+          {/*<a role="button">Why is my browser not supported?</a>*/}
         </div>
       </div>
     );

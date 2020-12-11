@@ -9,17 +9,20 @@
  * @copyright     Copyright (c) 2020 Passbolt SA (https://www.passbolt.com)
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
- * @since         2.12.0
  */
 import React, {Component} from "react";
-import LoginContext from "../../../contexts/LoginContext";
 import XRegExp from "xregexp";
 import {withRouter} from "react-router-dom";
 import PropTypes from "prop-types";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import FormSubmitButton from "../../../../react/components/Common/Inputs/FormSubmitButton/FormSubmitButton";
-import {ApiClient} from "../../../../react-administration/lib/apiClient/apiClient";
-import {ApiClientOptions} from "../../../../react-administration/lib/apiClient/apiClientOptions";
+import {ApiClient} from "../../../lib/apiClient/apiClient";
+import {ApiClientOptions} from "../../../lib/apiClient/apiClientOptions";
+import SiteSettings from "../../../lib/Settings/SiteSettings";
+
+const REDIRECT_CHECK_MAILBOX_URL = "/auth/login/check-mailbox";
+const REDIRECT_REGISTRATION = "/setup/name";
+const REDIRECT_ERROR = "/auth/login/error";
 
 class EnterUsernameForm extends Component {
   /**
@@ -29,20 +32,8 @@ class EnterUsernameForm extends Component {
   constructor(props) {
     super(props);
     this.state = this.defaultState;
-    this.apiClient = new ApiClient(new ApiClientOptions().setBaseUrl(window.location.origin).setResourceName("users/recover"));
     this.createInputRefs();
     this.bindEventHandlers();
-  }
-
-  /**
-   * ComponentDidMount
-   * Invoked immediately after component is inserted into the tree
-   * @return {void}
-   */
-  componentDidMount() {
-    this.setState({loading: false}, () => {
-      this.usernameRef.current.focus();
-    });
   }
 
   /**
@@ -51,16 +42,28 @@ class EnterUsernameForm extends Component {
    */
   get defaultState() {
     return {
-      // Dialog states
       loading: true,
       processing: false,
 
+      siteSettings: false,
       username: "",
       usernameError: null,
       agreedTerms: false,
       agreedTermsError: null,
       hasAlreadyBeenValidated: false // True if the form has already been submitted once
     };
+  }
+
+  /**
+   * ComponentDidMount
+   * Invoked immediately after component is inserted into the tree
+   * @return {void}
+   */
+  async componentDidMount() {
+    const siteSettings = await this.getSiteSettings();
+    this.setState({loading: false, siteSettings}, () => {
+      this.usernameRef.current.focus();
+    });
   }
 
   /**
@@ -79,6 +82,19 @@ class EnterUsernameForm extends Component {
    */
   createInputRefs() {
     this.usernameRef = React.createRef();
+  }
+
+  /**
+   * Retrieve the site settings
+   * @returns {Promise<SiteSettings>}
+   */
+  async getSiteSettings() {
+    const apiClientOptions = new ApiClientOptions()
+      .setBaseUrl(window.location.origin)
+      .setResourceName("settings");
+    const apiClient = new ApiClient(apiClientOptions);
+    const {body} = await apiClient.findAll();
+    return new SiteSettings(body);
   }
 
   /**
@@ -137,33 +153,48 @@ class EnterUsernameForm extends Component {
    * @returns {Promise<Object>}
    */
   async sendUsername() {
-    await this.apiClient.create(this.state.username);
+    const recoverDto = {
+      username: this.state.username
+    };
+    const apiOptions = new ApiClientOptions()
+      .setBaseUrl(window.location.origin)
+      .setResourceName("users/recover");
+    const apiClient = new ApiClient(apiOptions);
+    await apiClient.create(recoverDto);
   }
 
   /**
    * Handle operation success.
    */
   async handleSuccess() {
-    this.props.history.push('/auth/login/check-mailbox');
+    this.props.history.push(REDIRECT_CHECK_MAILBOX_URL);
   }
 
   /**
    * Handle save operation success.
    */
   async handleError(error) {
-    if (error.data && error.data.code === 404) {
-      const apiClient = new ApiClient(new ApiClientOptions().setBaseUrl(window.location.origin).setResourceName("setup"));
-      try {
-        await apiClient.get('name');
-        this.props.history.push('/setup/name');
-      } catch (error) {
-        this.props.history.push('/auth/login/not-found');
+    const userNotFound = error.data && error.data.code === 404;
+    if (userNotFound) {
+      const isRegistrationPublic = await this.isRegistrationPublic();
+      if (isRegistrationPublic) {
+        this.props.history.push(REDIRECT_REGISTRATION);
+      } else {
+        this.props.history.push(REDIRECT_ERROR);
       }
     } else {
       console.log(error);
       await this.props.actionFeedbackContext.displayError("There was an unexpected error, please retry later...");
       await this.toggleProcessing();
     }
+  }
+
+  /**
+   * Check if the registration is public.
+   * @returns {Promise<boolean>}
+   */
+  async isRegistrationPublic() {
+    return this.state.siteSettings.registrationPublic;
   }
 
   /**
@@ -180,7 +211,6 @@ class EnterUsernameForm extends Component {
    * @returns {Promise<boolean>}
    */
   async validate() {
-    // Validate the form inputs.
     await Promise.all([
       this.validateUsernameInput(),
       this.validateAgreedTerms()
@@ -220,7 +250,9 @@ class EnterUsernameForm extends Component {
    */
   async validateAgreedTerms() {
     let agreedTermsError = null;
-    if (!this.state.agreedTerms) {
+    const mustValidateTerms = this.privacyLink || this.termsLink;
+    const agreedTerms = this.state.agreedTerms;
+    if (mustValidateTerms && !agreedTerms) {
       agreedTermsError = "You have to accept it.";
     }
     return this.setState({agreedTermsError});
@@ -242,14 +274,32 @@ class EnterUsernameForm extends Component {
     return this.state.processing || this.state.loading;
   }
 
+  /**
+   * Get the privacy link.
+   * @returns {string|boolean} false if no privacy link
+   */
   get privacyLink() {
-    return 'https://www.passbolt.com/privacy';
+    if (this.state.siteSettings) {
+      return this.state.siteSettings.privacyLink;
+    }
+    return false;
   }
 
+  /**
+   * Get the terms link
+   * @returns {string|boolean} false if no terms
+   */
   get termsLink() {
-    return 'https://www.passbolt.com/terms';
+    if (this.state.siteSettings) {
+      return this.state.siteSettings.termsLink;
+    }
+    return false;
   }
 
+  /**
+   * Render
+   * @returns {JSX.Element}
+   */
   render() {
     return (
       <div className="enter-username">
@@ -266,25 +316,16 @@ class EnterUsernameForm extends Component {
           </div>
           {(this.privacyLink || this.termsLink) &&
           <div className="input checkbox">
-            <input type="checkbox" name="agreedTerms" value={this.state.agreedTerms}  onChange={this.handleInputChange}
+            <input type="checkbox" name="agreedTerms" value={this.state.agreedTerms} onChange={this.handleInputChange}
               id="checkbox-terms" disabled={this.hasAllInputDisabled()}/>
             <label htmlFor="checkbox-terms">
-              {(this.privacyLink && this.termsLink) &&
+              {(this.privacyLink || this.termsLink) &&
               <span>
-                  I accept the&nbsp;
-                <a href={this.termsLink} target="_blank" rel="noopener noreferrer">terms</a>
-                &nbsp;and&nbsp;
-                <a href={this.privacyLink} target="_blank" rel="noopener noreferrer">privacy policy</a>.
-              </span>
-              }
-              {(this.privacyLink && !this.termsLink) &&
-              <span>
-                  I accept the <a href={this.privacyLink} target="_blank" rel="noopener noreferrer">privacy policy</a>.
-              </span>
-              }
-              {(!this.privacyLink && this.termsLink) &&
-              <span>
-                I accept the <a href={this.termsLink} target="_blank" rel="noopener noreferrer">terms</a>.
+                I accept the&nbsp;
+                {this.termsLink && <a href={this.termsLink} target="_blank" rel="noopener noreferrer">terms</a>}
+                {(this.termsLink && this.privacyLink) && <span> and </span>}
+                {this.privacyLink &&
+                <a href={this.privacyLink} target="_blank" rel="noopener noreferrer">privacy policy</a>}.
               </span>
               }
             </label>
@@ -301,8 +342,6 @@ class EnterUsernameForm extends Component {
     );
   }
 }
-
-EnterUsernameForm.contextType = LoginContext;
 
 EnterUsernameForm.propTypes = {
   history: PropTypes.object,

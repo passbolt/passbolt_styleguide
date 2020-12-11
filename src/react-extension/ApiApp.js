@@ -28,15 +28,13 @@ import {ApiClient} from "./lib/apiClient/apiClient";
  * The passbolt application served by the API.
  * Briefly it takes care of:
  * - The passwords workspace
- * - The user workspace
+ * - The users workspace
  * - Most of the user settings workspace. The MFA screen is handled by the ApiApp because of duo constraints.
  */
 class ApiApp extends Component {
   constructor(props) {
     super(props);
     this.state = this.getDefaultState(props);
-    this.bindCallbacks();
-    this.initEventHandlers();
   }
 
   async componentDidMount() {
@@ -58,12 +56,6 @@ class ApiApp extends Component {
       setLoggedInUser: () => {
       }, // Set the logged in user
     };
-  }
-
-  bindCallbacks() {
-  }
-
-  initEventHandlers() {
   }
 
   async getLoggedInUser() {
