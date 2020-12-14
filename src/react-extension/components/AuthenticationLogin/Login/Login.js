@@ -340,7 +340,9 @@ class Login extends Component {
                   disabled={this.mustBeDisabled || this.isProcessing}>
                   Login
                 </button>
-                <Link to={{pathname: `${this.trustedDomain}/users/recover}`}}>
+                <Link 
+                  to={{pathname: `${this.trustedDomain}/users/recover}`}}
+                  target="_parent">
                   Or recover another account.
                 </Link>
               </div>
