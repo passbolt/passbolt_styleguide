@@ -17,6 +17,9 @@ import {withDialog} from "../../../contexts/Common/DialogContext";
 import {AuthenticationContext} from "../../../contexts/AuthenticationContext";
 import PropTypes from "prop-types";
 
+/**
+ * This component allows the user to import his Gpg key
+ */
 class ImportGpgKey extends Component {
   /**
    * Default constructor

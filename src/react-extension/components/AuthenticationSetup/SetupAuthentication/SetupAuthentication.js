@@ -8,7 +8,7 @@ import CheckPassphrase from "../../Authentication/CheckPassphrase/CheckPassphras
 import AskForAuthenticationHelp from "../../Authentication/AskForAuthenticationHelp/AskForAuthenticationHelp";
 
 /**
- * The component allows the user to create a Gpg key by automatic generation or by manually importing one
+ * The component orchestrates the setup authentication process
  */
 class SetupAuthentication extends Component {
   /**
