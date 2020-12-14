@@ -111,6 +111,16 @@ export default class GridPage {
   }
 
   /**
+   * Sort the resources by favorite
+   */
+  async sortByResourceFavorite() {
+    const element = this._page.container.querySelectorAll('thead th a')[0];
+    const leftClick = {button: 0};
+    fireEvent.click(element, leftClick);
+    await waitFor(() => {});
+  }
+
+  /**
    * Sort the resources by their name
    */
   async sortByResourceName() {

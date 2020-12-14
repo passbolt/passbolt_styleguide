@@ -731,7 +731,8 @@ export class ResourceWorkspaceContextProvider extends React.Component {
     const keySorter = (key, sorter) => baseSorter((s1, s2) => sorter(s1[key], s2[key]));
     const dateSorter = (d1, d2) => moment(d1).diff(moment(d2));
     const stringSorter = (s1, s2) => s1.localeCompare(s2);
-    const sorter = this.state.sorter.propertyName === "modified" ? dateSorter : stringSorter;
+    const booleanSorter = (s1, s2) => s1 === s2 ? 0 : s1 ? -1 : 1;
+    const sorter = this.state.sorter.propertyName === "modified" ? dateSorter : this.state.sorter.propertyName === "favorite" ? booleanSorter : stringSorter;
     const propertySorter = keySorter(this.state.sorter.propertyName, sorter);
     if (this.state.filteredResources !== null) {
       await this.setState({filteredResources: [...this.state.filteredResources.sort(propertySorter)]});

@@ -6,7 +6,7 @@
  * For full copyright and license information, please see the LICENSE.txt
  * Redistributions of files must retain the above copyright notice.
  *
- * @copyright     Copyright (c) Passbolt SARL (https://www.passbolt.com)
+ * @copyright s    Copyright (c) Passbolt SARL (https://www.passbolt.com)
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         2.11.0
@@ -579,9 +579,15 @@ class Grid extends React.Component {
                       </div>
                     </th>
                     <th className="cell_favorite selections s-cell sortable">
-                      <a className="unfav">
+                      <a onClick={ev => this.handleSortByColumnClick(ev, "favorite")} className="unfav">
                         <Icon baseline={true} name="star"></Icon>
                         <span className="visuallyhidden">fav</span>
+                        {this.isSortedColumn("favorite") && this.isSortedAsc() &&
+                        <Icon baseline={true} name="caret-up"/>
+                        }
+                        {this.isSortedColumn("favorite") && !this.isSortedAsc() &&
+                        <Icon baseline={true} name="caret-down"/>
+                        }
                       </a>
                     </th>
                     <th className="cell_name m-cell sortable">

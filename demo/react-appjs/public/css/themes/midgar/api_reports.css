@@ -3283,7 +3283,10 @@ a.disabled:hover .svg-icon svg {
 a.fav .svg-icon svg {
   fill: #D40101;
 }
-a.unfav .svg-icon svg {
+a.unfav {
+  display: inline-flex;
+}
+a.unfav .svg-icon.star svg {
   fill: #8B8B89;
 }
 /*
