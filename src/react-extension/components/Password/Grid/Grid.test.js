@@ -77,9 +77,10 @@ describe("Display Resources", () => {
     it('AS LU, I should see the appropriate filtered list of resources', async() => {
       page = new GridPage(context, props);
       await waitFor(() => {});
-      expect(page.resourcesCount).toBe(2);
+      expect(page.resourcesCount).toBe(3);
       expect(page.resource(1).name).toBe('apache');
       expect(page.resource(2).name).toBe('bower');
+      expect(page.resource(3).name).toBe('test');
     });
 
     it('As LU, I should be able to open a contextual menu for a resource', async() => {
@@ -107,7 +108,7 @@ describe("Display Resources", () => {
       expect(props.resourceWorkspaceContext.onResourceSelected.single).toHaveBeenCalledWith(props.resourceWorkspaceContext.filteredResources[0]);
     });
 
-    it('As LU, I should select multiple resource', async() => {
+    it('As LU, I should select multiple resources', async() => {
       page = new GridPage(context, props);
       await waitFor(() => {});
       await page.resource(1).selectWithCheckbox();
@@ -116,14 +117,23 @@ describe("Display Resources", () => {
       expect(props.resourceWorkspaceContext.onResourceSelected.multiple).toHaveBeenCalledWith(props.resourceWorkspaceContext.filteredResources[1]);
     });
 
-    it('As LU, I should select all resource', async() => {
+    it('As LU, I should select a range of resources', async() => {
+      page = new GridPage(context, props);
+      await waitFor(() => {});
+      await page.resource(1).selectWithCheckbox();
+      await page.resource(3).selectRangeCheckbox();
+      expect(props.resourceWorkspaceContext.onResourceSelected.multiple).toHaveBeenCalledWith(props.resourceWorkspaceContext.filteredResources[0]);
+      expect(props.resourceWorkspaceContext.onResourceSelected.range).toHaveBeenCalledWith(props.resourceWorkspaceContext.filteredResources[2]);
+    });
+
+    it('As LU, I should select all resources', async() => {
       page = new GridPage(context, props);
       await waitFor(() => {});
       await page.selectAll();
       expect(props.resourceWorkspaceContext.onResourceSelected.all).toHaveBeenCalled();
     });
 
-    it('As LU, I should unselect all resource', async() => {
+    it('As LU, I should unselect all resources', async() => {
       const props = propsWithAllResourcesSelected();
       page = new GridPage(context, props);
       await waitFor(() => {});

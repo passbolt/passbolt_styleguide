@@ -151,13 +151,19 @@ class Grid extends React.Component {
     this.props.contextualMenuContext.show(DisplayGridContextualMenu, contextualMenuProps);
   }
 
-  handleCheckboxWrapperClick(ev, resource) {
+  async handleCheckboxWrapperClick(event, resource) {
     /*
      * We want the td to extend the clickable area of the checkbox.
      * If we propagate the event, the tr will listen to the click and select only the clicked row.
      */
-    ev.stopPropagation();
-    this.props.resourceWorkspaceContext.onResourceSelected.multiple(resource);
+    event.stopPropagation();
+    const isRangeSelection = event && event.shiftKey;
+
+    if (isRangeSelection) {
+      await this.props.resourceWorkspaceContext.onResourceSelected.range(resource);
+    } else {
+      await this.props.resourceWorkspaceContext.onResourceSelected.multiple(resource);
+    }
   }
 
   /**
