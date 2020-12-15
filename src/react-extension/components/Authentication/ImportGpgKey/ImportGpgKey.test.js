@@ -55,13 +55,20 @@ describe("Create GPG key", () => {
   });
 
 
-  it('As AN I should see an error if the private keu is empty after submitting the form (first validation)', async() => {
+  it('As AN I should see an error if the private key is empty after submitting the form (first validation)', async() => {
     const emptyPrivateKey = ' ';
     await page.fill(emptyPrivateKey);
     await page.verifyKey();
     expect(page.hasEmptyPrivateKeyError).toBeTruthy();
   });
 
+  it('As AN I should see an error if the private key is invalid', async() => {
+    const expectedError = {name: 'GpgKeyError'};
+    jest.spyOn(context, 'onImportGpgKeyRequested').mockImplementationOnce(() => Promise.reject(expectedError));
+    await page.fill('Some private key');
+    await page.verifyKey();
+    expect(page.hasInvalidPrivateKeyError).toBeTruthy();
+  });
 
   it('As AN I should see an error if the submission failed for an unexpected reason', async() => {
     const expectedError = {message: 'Some error'};

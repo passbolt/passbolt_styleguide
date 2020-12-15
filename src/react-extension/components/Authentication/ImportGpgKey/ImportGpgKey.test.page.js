@@ -41,6 +41,15 @@ export default class ImportGpgKeyPage {
     return Boolean(this._page.container.querySelector('.empty-private-key'));
   }
 
+
+  /**
+   * Returns true if an invalid private key error appears
+   */
+  get hasInvalidPrivateKeyError() {
+    return Boolean(this._page.container.querySelector('.invalid-private-key'));
+  }
+
+
   /**
    * Returns the verify button element
    */

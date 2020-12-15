@@ -41,7 +41,9 @@ class ImportGpgKey extends Component {
       hasBeenValidated: false, // true if the form has already validated once
       errors: {
         emptyPrivateKey: false, // True if the private key is empty
-      }
+        invalidPrivateKey: false, // True if the private key is invalid
+      },
+      errorMessage: '' // The error messag if required
     };
   }
 
@@ -154,8 +156,14 @@ class ImportGpgKey extends Component {
    * @param error The error
    */
   onSaveFailure(error) {
-    const ErrorDialogProps = {message: error.message};
-    this.props.dialogContext.open(ErrorDialog, ErrorDialogProps);
+    // It can happen when some key validation went wrong.
+    if (error.name === "GpgKeyError") {
+      this.toggleProcessing();
+      this.setState({errors: {invalidPrivateKey: true}, errorMessage: error.message});
+    } else {
+      const ErrorDialogProps = {message: error.message};
+      this.props.dialogContext.open(ErrorDialog, ErrorDialogProps);
+    }
   }
 
   /**
@@ -203,7 +211,7 @@ class ImportGpgKey extends Component {
    * Toggle the processing mode
    */
   async toggleProcessing() {
-    await this.setState({actions: {processing: true}});
+    await this.setState({actions: {processing: !this.state.actions.processing}});
   }
 
 
@@ -242,6 +250,9 @@ class ImportGpgKey extends Component {
               <br/>
               {this.state.errors.emptyPrivateKey &&
               <div className="empty-private-key error message">The private key should not be empty</div>
+              }
+              {this.state.errors.invalidPrivateKey &&
+              <div className="invalid-private-key error message">{this.state.errorMessage}</div>
               }
             </>
           }
