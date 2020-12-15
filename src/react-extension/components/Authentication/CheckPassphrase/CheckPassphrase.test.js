@@ -69,7 +69,12 @@ describe("Check passphras", () => {
     expect(page.hasEmptyPassphraseError).toBeTruthy();
   });
 
-  xit('As AN I should see an error if f the passphrase cannot decrypt the secret key', async() => {
+  it('As AN I should see an error if f the passphrase cannot decrypt the secret key', async() => {
+    const expectedError = {name: 'InvalidMasterPasswordError'};
+    jest.spyOn(context, 'onCheckImportedGpgKeyPassphraseRequested').mockImplementationOnce(() => Promise.reject(expectedError));
+    await page.fillPassphrase('some passphrase');
+    await page.verify();
+    expect(page.hasInvalidPassphraseError);
   });
 
   it('As AN I should see an error if the submission failed for an unexpected reason', async() => {

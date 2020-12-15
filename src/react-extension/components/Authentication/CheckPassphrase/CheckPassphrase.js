@@ -46,6 +46,7 @@ class CheckPassphrase extends Component {
       hasBeenValidated: false, // true if the form has already validated once
       errors: {
         emptyPassphrase: false, // True if the passphrase is empty
+        invalidPassphrase: false, // True if the passphrase is invalid
       }
     };
   }
@@ -152,8 +153,14 @@ class CheckPassphrase extends Component {
    * @param error The error
    */
   onCheckFailure(error) {
-    const ErrorDialogProps = {message: error.message};
-    this.props.dialogContext.open(ErrorDialog, ErrorDialogProps);
+    // Whenever the passphrase is invalid.
+    if (error.name === "InvalidMasterPasswordError") {
+      this.toggleProcessing();
+      this.setState({errors: {invalidPassphrase: true}});
+    } else {
+      const ErrorDialogProps = {message: error.message};
+      this.props.dialogContext.open(ErrorDialog, ErrorDialogProps);
+    }
   }
 
   /**
@@ -176,7 +183,7 @@ class CheckPassphrase extends Component {
    */
   async validate() {
     const {passphrase} = this.state;
-    const emptyPassphrase =  passphrase.trim() === '';
+    const emptyPassphrase = passphrase.trim() === '';
     if (emptyPassphrase) {
       await this.setState({hasBeenValidated: true, errors: {emptyPassphrase}});
       return;
@@ -188,7 +195,7 @@ class CheckPassphrase extends Component {
    * Toggle the processing mode
    */
   async toggleProcessing() {
-    await this.setState({actions: {processing: true}});
+    await this.setState({actions: {processing: !this.state.actions.processing}});
   }
 
   /**
@@ -231,6 +238,9 @@ class CheckPassphrase extends Component {
             <br/>
             {this.state.errors.emptyPassphrase &&
             <div className="empty-passphrase error message">The passphrase should not be empty</div>
+            }
+            {this.state.errors.invalidPassphrase &&
+            <div className="invalid-passphrase error message">The passphrase is invalid</div>
             }
           </>
           }

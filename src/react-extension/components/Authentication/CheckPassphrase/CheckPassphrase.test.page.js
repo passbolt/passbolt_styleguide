@@ -80,6 +80,13 @@ export default class CheckPassphrasePage {
   }
 
   /**
+   * Returns true if the invalid passphrase error is displayed
+   */
+  hasInvalidPassphraseError() {
+    return Boolean(this._page.container.querySelector('.invalid-passphrase'));
+  }
+
+  /**
    * Toggle the remember me value
    * @param color A token color
    */
