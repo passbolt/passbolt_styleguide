@@ -516,13 +516,11 @@ class DisplayEmailNotificationsAdministration extends React.Component {
         </div>
         <div className="col4 last">
           <h3>Need some help?</h3>
-          <div className="notice message">
-            <p>For more information about email notification, checkout the dedicated page on the help website.</p>
-            <a className="button" href="https://help.passbolt.com/configure/notification/email">
-              <Icon name="life-ring"/>
-              <span>Read documentation</span>
-            </a>
-          </div>
+          <p>For more information about email notification, checkout the dedicated page on the help website.</p>
+          <a className="button" href="https://help.passbolt.com/configure/notification/email" target="_blank" rel="noopener noreferrer">
+            <Icon name="life-ring"/>
+            <span>Read documentation</span>
+          </a>
         </div>
       </div>
     );

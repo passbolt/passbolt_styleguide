@@ -3603,6 +3603,11 @@ textarea {
 textarea.message_notice {
   margin-bottom: 0;
 }
+textarea.full_report {
+  height: 12em;
+  line-height: 1.5em;
+  resize: none;
+}
 /* text and textarea */
 .text.input .input-addon,
 .date.input .input-addon {

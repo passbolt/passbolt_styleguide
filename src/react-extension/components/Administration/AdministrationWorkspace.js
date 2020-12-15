@@ -60,11 +60,11 @@ class AdministrationWorkspace extends Component {
       <div id="container" className="page administration">
         <div id="app" tabIndex="1000">
           <div className="header first">
-            <MainMenu baseUrl={"http://passbolt.local"}/>
+            <MainMenu baseUrl={this.props.appContext.trustedDomain}/>
           </div>
           <div className="header second">
             <Logo/>
-            <UserBadgeMenu baseUrl={"http://passbolt.local"} user={this.props.appContext.loggedInUser}/>
+            <UserBadgeMenu baseUrl={this.props.appContext.trustedDomain} user={this.props.appContext.loggedInUser}/>
           </div>
           <div className="header third">
             <div className="col1 main-action-wrapper">

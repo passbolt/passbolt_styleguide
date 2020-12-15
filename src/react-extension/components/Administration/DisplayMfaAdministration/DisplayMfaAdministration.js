@@ -533,7 +533,7 @@ class DisplayMfaAdministration extends React.Component {
         <div className="col4 last">
           <h2>Need help?</h2>
           <p>Check out our Multi Factor Authentication configuration guide</p>
-          <a className="button" href="https://help.passbolt.com/configure">
+          <a className="button" href="https://help.passbolt.com/configure" target="_blank" rel="noopener noreferrer">
             <Icon name="life-ring"/>
             <span>Read documentation</span>
           </a>

@@ -299,7 +299,7 @@ class DisplaySynchronizeUserDirectoryAdministrationDialog extends Component {
               </div>
               <div className="accordion-content">
                 <div className="input text">
-                  <textarea readOnly={true} value={this.getFullReport()}/>
+                  <textarea className="full_report" readOnly={true} value={this.getFullReport()}/>
                 </div>
               </div>
             </div>
