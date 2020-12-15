@@ -76,6 +76,20 @@ class CreateGpgKey extends Component {
   }
 
   /**
+   * Returns true if the component must be in a disabled mode
+   */
+  get mustBeDisabled() {
+    return !this.isValid;
+  }
+
+  /**
+   * Returns true if the component must be in a processing mode
+   */
+  get isProcessing() {
+    return this.state.actions.processing;
+  }
+
+  /**
    * Bind the event handlers
    */
   bindEventHandlers() {
@@ -192,8 +206,8 @@ class CreateGpgKey extends Component {
    * Render the component
    */
   render() {
-    const processingClassName = this.state.actions.processing ? 'processing' : '';
-    const disabledClassName = this.isValid ? '' : 'disabled';
+    const processingClassName = this.isProcessing ? 'processing' : '';
+    const disabledClassName = this.mustBeDisabled ? 'disabled' : '';
     return (
       <div className="choose-passphrase">
         <h1>Please choose a password</h1>
@@ -257,7 +271,8 @@ class CreateGpgKey extends Component {
             <button
               type="submit"
               className={`button primary big ${disabledClassName} ${processingClassName}`}
-              role="button">
+              role="button"
+              disabled={this.mustBeDisabled || this.isProcessing}>
               Next
             </button>
             <a
