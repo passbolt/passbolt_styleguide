@@ -196,7 +196,7 @@ class DisplayUserDirectoryAdministration extends React.Component {
   }
 
   /**
-   * fetch the mfa settings
+   * fetch the user directory settings
    */
   async findAllUserDirectorySettings() {
     // USER DIRECTORY SETTINGS
@@ -593,12 +593,10 @@ class DisplayUserDirectoryAdministration extends React.Component {
    */
   async saveUserDirectory() {
     if (this.state.userDirectoryToggle) {
-      // TODO check how put with id and not a new each time
       await this.apiClientUserDirectory.update("settings", this.createUserDirectoryDTO());
       this.props.administrationWorkspaceContext.onSynchronizeEnabled(true);
     } else {
       this.setState(this.defaultState);
-      // TODO check how delete the correct configuration
       await this.apiClientUserDirectory.delete("settings");
       this.props.administrationWorkspaceContext.onSynchronizeEnabled(false);
       this.setState({loading: false});
@@ -621,7 +619,7 @@ class DisplayUserDirectoryAdministration extends React.Component {
    * Handle save operation success.
    */
   async handleSaveSuccess() {
-    await this.props.actionFeedbackContext.displaySuccess("The multi factor authentication settings for the organization were updated.");
+    await this.props.actionFeedbackContext.displaySuccess("The user directory settings for the organization were updated.");
   }
 
   /**
@@ -801,7 +799,7 @@ class DisplayUserDirectoryAdministration extends React.Component {
                         <div className="input text protocol ad openldap chosen-container chosen-container-single">
                           <select id="connection-type-input" name="connectionType"
                             className="chosen-single required form-element" required="required"
-                            value={this.state.connectionType} onChange={this.handleInputChange}>
+                            value={this.state.connectionType} onChange={this.handleInputChange} disabled={this.hasAllInputDisabled()}>
                             <option value="plain">ldap://</option>
                             <option value="ssl">ldaps:// (ssl)</option>
                             <option value="tls">ldaps:// (tls)</option>

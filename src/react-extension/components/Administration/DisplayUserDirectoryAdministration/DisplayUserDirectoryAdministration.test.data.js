@@ -10,7 +10,7 @@ export function defaultAppContext(appContext) {
     setContext: function(newContext) {
       // In this scope this reference the object context.
       Object.assign(this, newContext);
-    },
+    }
   };
   return Object.assign(defaultAppContext, appContext || {});
 }
@@ -21,6 +21,18 @@ export function defaultAppContext(appContext) {
  */
 export function defaultProps() {
   return {
+    administrationWorkspaceContext: {
+      mustSaveSettings: false,
+      mustTestSettings: false,
+      onResetActionsSettings: jest.fn(),
+      isSaveEnabled: false,
+      onSaveEnabled: jest.fn(),
+      onTestEnabled: jest.fn(),
+      onSynchronizeEnabled: jest.fn()
+    },
+    dialogContext: {
+      open: jest.fn()
+    }
   };
 }
 

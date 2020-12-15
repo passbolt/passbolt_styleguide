@@ -19,6 +19,7 @@ import {defaultAppContext, defaultProps, mockEmailNotificationsSettings} from ".
 import fetchMock from "fetch-mock-jest";
 import DisplayEmailNotificationsAdministrationPage from "./DisplayEmailNotificationsAdministration.test.page";
 import {waitFor} from "@testing-library/react";
+import {ActionFeedbackContext} from "../../../contexts/ActionFeedbackContext";
 
 beforeEach(() => {
   jest.resetModules();
@@ -29,43 +30,138 @@ describe("See the Email Notifications Settings", () => {
   const context = defaultAppContext(); // The applicative context
   const props = defaultProps(); // The props to pass
 
-  const mockFetch = (url, data) => fetchMock.get(url, data);
+  const mockFetchGet = (url, data) => fetchMock.get(url, data);
+  const mockFetchPost = (url, data) => fetchMock.post(url, data);
 
   describe('As AD I should see the Email Notifications on the administration settings page', () => {
     /**
      * I should see the Email Notifications provider activation state on the administration settings page
      */
     beforeEach(() => {
-      mockFetch("http://localhost:3000/settings/emails/notifications.json?api-version=v2", mockEmailNotificationsSettings);
+      mockFetchGet("http://localhost:3000/settings/emails/notifications.json?api-version=v2", mockEmailNotificationsSettings);
       page = new DisplayEmailNotificationsAdministrationPage(context, props);
+      fetchMock.reset();
     });
 
     it('As AD I should see if all fields is available for my Passbolt instance on the administration settings page', async() => {
-      await waitFor(() => {
-      });
-      expect(page.displayEmailNotificationsAdministration.exists()).toBeTruthy();
+      await waitFor(() => {});
+      expect(page.exists()).toBeTruthy();
       // check fields in the form
-      expect(page.displayEmailNotificationsAdministration.passwordCreate.checked).toBe(true);
-      expect(page.displayEmailNotificationsAdministration.passwordUpdate.checked).toBe(true);
-      expect(page.displayEmailNotificationsAdministration.passwordDelete.checked).toBe(true);
-      expect(page.displayEmailNotificationsAdministration.passwordShare.checked).toBe(true);
-      expect(page.displayEmailNotificationsAdministration.folderCreate.checked).toBe(true);
-      expect(page.displayEmailNotificationsAdministration.folderUpdate.checked).toBe(true);
-      expect(page.displayEmailNotificationsAdministration.folderDelete.checked).toBe(true);
-      expect(page.displayEmailNotificationsAdministration.folderShare.checked).toBe(true);
-      expect(page.displayEmailNotificationsAdministration.commentAdd.checked).toBe(true);
-      expect(page.displayEmailNotificationsAdministration.groupDelete.checked).toBe(true);
-      expect(page.displayEmailNotificationsAdministration.groupUserAdd.checked).toBe(true);
-      expect(page.displayEmailNotificationsAdministration.groupUserDelete.checked).toBe(true);
-      expect(page.displayEmailNotificationsAdministration.groupUserUpdate.checked).toBe(true);
-      expect(page.displayEmailNotificationsAdministration.groupManagerUpdate.checked).toBe(true);
-      expect(page.displayEmailNotificationsAdministration.userCreate.checked).toBe(true);
-      expect(page.displayEmailNotificationsAdministration.userRecover.checked).toBe(true);
-      expect(page.displayEmailNotificationsAdministration.showUsername.checked).toBe(true);
-      expect(page.displayEmailNotificationsAdministration.showUri.checked).toBe(true);
-      expect(page.displayEmailNotificationsAdministration.showSecret.checked).toBe(true);
-      expect(page.displayEmailNotificationsAdministration.showDescription.checked).toBe(true);
-      expect(page.displayEmailNotificationsAdministration.showComment.checked).toBe(true);
+      expect(page.passwordCreate.checked).toBeTruthy();
+      expect(page.passwordUpdate.checked).toBeTruthy();
+      expect(page.passwordDelete.checked).toBeTruthy();
+      expect(page.passwordShare.checked).toBeTruthy();
+      expect(page.folderCreate.checked).toBeTruthy();
+      expect(page.folderUpdate.checked).toBeTruthy();
+      expect(page.folderDelete.checked).toBeTruthy();
+      expect(page.folderShare.checked).toBeTruthy();
+      expect(page.commentAdd.checked).toBeTruthy();
+      expect(page.groupDelete.checked).toBeTruthy();
+      expect(page.groupUserAdd.checked).toBeTruthy();
+      expect(page.groupUserDelete.checked).toBeTruthy();
+      expect(page.groupUserUpdate.checked).toBeTruthy();
+      expect(page.groupManagerUpdate.checked).toBeTruthy();
+      expect(page.userCreate.checked).toBeTruthy();
+      expect(page.userRecover.checked).toBeTruthy();
+      expect(page.showUsername.checked).toBeTruthy();
+      expect(page.showUri.checked).toBeTruthy();
+      expect(page.showSecret.checked).toBeTruthy();
+      expect(page.showDescription.checked).toBeTruthy();
+      expect(page.showComment.checked).toBeTruthy();
+    });
+
+    it('As AD I should save email notifications on the administration settings page', async() => {
+      await waitFor(() => {});
+      await page.checkCommentAdd();
+      expect(props.administrationWorkspaceContext.onSaveEnabled).toHaveBeenCalled();
+      const propsUpdated = {
+        administrationWorkspaceContext: {
+          mustSaveSettings: true,
+          onResetActionsSettings: jest.fn(),
+          isSaveEnabled: true,
+          onSaveEnabled: jest.fn()
+        }
+      };
+      mockFetchPost("http://localhost:3000/settings/emails/notifications.json?api-version=v2", {});
+      jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementation(() => {});
+
+      page.rerender(context, propsUpdated);
+      await waitFor(() => {});
+      expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalledWith("The email notification settings were updated.");
+      expect(propsUpdated.administrationWorkspaceContext.onResetActionsSettings).toHaveBeenCalled();
+    });
+
+    it('As AD I should see a processing feedback while submitting the form', async() => {
+      await waitFor(() => {});
+      await page.checkCommentAdd();
+
+      const propsUpdated = {
+        administrationWorkspaceContext: {
+          mustSaveSettings: true,
+          onResetActionsSettings: jest.fn(),
+          isSaveEnabled: true,
+          onSaveEnabled: jest.fn()
+        }
+      };
+      // Mock the request function to make it the expected result
+      let updateResolve;
+      const requestMockImpl = jest.fn(() => new Promise(resolve => {
+        updateResolve = resolve;
+      }));
+      mockFetchPost("http://localhost:3000/settings/emails/notifications.json?api-version=v2", requestMockImpl);
+
+      page.rerender(context, propsUpdated);
+      // API calls are made on submit, wait they are resolved.
+      await waitFor(() => {
+        expect(page.passwordCreate.getAttribute("disabled")).not.toBeNull();
+        expect(page.passwordUpdate.getAttribute("disabled")).not.toBeNull();
+        expect(page.passwordDelete.getAttribute("disabled")).not.toBeNull();
+        expect(page.passwordShare.getAttribute("disabled")).not.toBeNull();
+        expect(page.folderCreate.getAttribute("disabled")).not.toBeNull();
+        expect(page.folderUpdate.getAttribute("disabled")).not.toBeNull();
+        expect(page.folderDelete.getAttribute("disabled")).not.toBeNull();
+        expect(page.folderShare.getAttribute("disabled")).not.toBeNull();
+        expect(page.commentAdd.getAttribute("disabled")).not.toBeNull();
+        expect(page.groupDelete.getAttribute("disabled")).not.toBeNull();
+        expect(page.groupUserAdd.getAttribute("disabled")).not.toBeNull();
+        expect(page.groupUserDelete.getAttribute("disabled")).not.toBeNull();
+        expect(page.groupUserUpdate.getAttribute("disabled")).not.toBeNull();
+        expect(page.groupManagerUpdate.getAttribute("disabled")).not.toBeNull();
+        expect(page.userCreate.getAttribute("disabled")).not.toBeNull();
+        expect(page.userRecover.getAttribute("disabled")).not.toBeNull();
+        expect(page.showUsername.getAttribute("disabled")).not.toBeNull();
+        expect(page.showUri.getAttribute("disabled")).not.toBeNull();
+        expect(page.showSecret.getAttribute("disabled")).not.toBeNull();
+        expect(page.showDescription.getAttribute("disabled")).not.toBeNull();
+        expect(page.showComment.getAttribute("disabled")).not.toBeNull();
+        updateResolve();
+      });
+    });
+
+    it('As AD I should see an error toaster if the submit operation fails for an unexpected reason', async() => {
+      await waitFor(() => {});
+      await page.checkCommentAdd();
+
+      const propsUpdated = {
+        administrationWorkspaceContext: {
+          mustSaveSettings: true,
+          onResetActionsSettings: jest.fn(),
+          isSaveEnabled: true,
+          onSaveEnabled: jest.fn()
+        }
+      };
+
+      // Mock the request function to make it return an error.
+      const error = {
+        status: 500
+      };
+      mockFetchPost("http://localhost:3000/settings/emails/notifications.json?api-version=v2", Promise.reject(error));
+      jest.spyOn(ActionFeedbackContext._currentValue, 'displayError').mockImplementation(() => {});
+
+      page.rerender(context, propsUpdated);
+      await waitFor(() => {});
+      // Throw general error message
+      expect(ActionFeedbackContext._currentValue.displayError).toHaveBeenCalledWith("The service is unavailable");
     });
   });
 
@@ -78,31 +174,32 @@ describe("See the Email Notifications Settings", () => {
      */
 
     beforeEach(() => {
+      mockFetchGet("http://localhost:3000/settings/emails/notifications.json?api-version=v2", mockEmailNotificationsSettings);
       page = new DisplayEmailNotificationsAdministrationPage(context, props);
     });
 
     it('I should see all fields disabled”', () => {
-      expect(page.displayEmailNotificationsAdministration.passwordCreate.getAttribute("disabled")).not.toBeNull();
-      expect(page.displayEmailNotificationsAdministration.passwordUpdate.getAttribute("disabled")).not.toBeNull();
-      expect(page.displayEmailNotificationsAdministration.passwordDelete.getAttribute("disabled")).not.toBeNull();
-      expect(page.displayEmailNotificationsAdministration.passwordShare.getAttribute("disabled")).not.toBeNull();
-      expect(page.displayEmailNotificationsAdministration.folderCreate.getAttribute("disabled")).not.toBeNull();
-      expect(page.displayEmailNotificationsAdministration.folderUpdate.getAttribute("disabled")).not.toBeNull();
-      expect(page.displayEmailNotificationsAdministration.folderDelete.getAttribute("disabled")).not.toBeNull();
-      expect(page.displayEmailNotificationsAdministration.folderShare.getAttribute("disabled")).not.toBeNull();
-      expect(page.displayEmailNotificationsAdministration.commentAdd.getAttribute("disabled")).not.toBeNull();
-      expect(page.displayEmailNotificationsAdministration.groupDelete.getAttribute("disabled")).not.toBeNull();
-      expect(page.displayEmailNotificationsAdministration.groupUserAdd.getAttribute("disabled")).not.toBeNull();
-      expect(page.displayEmailNotificationsAdministration.groupUserDelete.getAttribute("disabled")).not.toBeNull();
-      expect(page.displayEmailNotificationsAdministration.groupUserUpdate.getAttribute("disabled")).not.toBeNull();
-      expect(page.displayEmailNotificationsAdministration.groupManagerUpdate.getAttribute("disabled")).not.toBeNull();
-      expect(page.displayEmailNotificationsAdministration.userCreate.getAttribute("disabled")).not.toBeNull();
-      expect(page.displayEmailNotificationsAdministration.userRecover.getAttribute("disabled")).not.toBeNull();
-      expect(page.displayEmailNotificationsAdministration.showUsername.getAttribute("disabled")).not.toBeNull();
-      expect(page.displayEmailNotificationsAdministration.showUri.getAttribute("disabled")).not.toBeNull();
-      expect(page.displayEmailNotificationsAdministration.showSecret.getAttribute("disabled")).not.toBeNull();
-      expect(page.displayEmailNotificationsAdministration.showDescription.getAttribute("disabled")).not.toBeNull();
-      expect(page.displayEmailNotificationsAdministration.showComment.getAttribute("disabled")).not.toBeNull();
+      expect(page.passwordCreate.getAttribute("disabled")).not.toBeNull();
+      expect(page.passwordUpdate.getAttribute("disabled")).not.toBeNull();
+      expect(page.passwordDelete.getAttribute("disabled")).not.toBeNull();
+      expect(page.passwordShare.getAttribute("disabled")).not.toBeNull();
+      expect(page.folderCreate.getAttribute("disabled")).not.toBeNull();
+      expect(page.folderUpdate.getAttribute("disabled")).not.toBeNull();
+      expect(page.folderDelete.getAttribute("disabled")).not.toBeNull();
+      expect(page.folderShare.getAttribute("disabled")).not.toBeNull();
+      expect(page.commentAdd.getAttribute("disabled")).not.toBeNull();
+      expect(page.groupDelete.getAttribute("disabled")).not.toBeNull();
+      expect(page.groupUserAdd.getAttribute("disabled")).not.toBeNull();
+      expect(page.groupUserDelete.getAttribute("disabled")).not.toBeNull();
+      expect(page.groupUserUpdate.getAttribute("disabled")).not.toBeNull();
+      expect(page.groupManagerUpdate.getAttribute("disabled")).not.toBeNull();
+      expect(page.userCreate.getAttribute("disabled")).not.toBeNull();
+      expect(page.userRecover.getAttribute("disabled")).not.toBeNull();
+      expect(page.showUsername.getAttribute("disabled")).not.toBeNull();
+      expect(page.showUri.getAttribute("disabled")).not.toBeNull();
+      expect(page.showSecret.getAttribute("disabled")).not.toBeNull();
+      expect(page.showDescription.getAttribute("disabled")).not.toBeNull();
+      expect(page.showComment.getAttribute("disabled")).not.toBeNull();
     });
   });
 });

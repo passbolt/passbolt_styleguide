@@ -7,10 +7,6 @@
 export function defaultAppContext(appContext) {
   const defaultAppContext = {
     trustedDomain: "http://localhost:3000",
-    setContext: function(newContext) {
-      // In this scope this reference the object context.
-      Object.assign(this, newContext);
-    },
   };
   return Object.assign(defaultAppContext, appContext || {});
 }
@@ -21,6 +17,12 @@ export function defaultAppContext(appContext) {
  */
 export function defaultProps() {
   return {
+    administrationWorkspaceContext: {
+      mustSaveSettings: false,
+      onResetActionsSettings: jest.fn(),
+      isSaveEnabled: false,
+      onSaveEnabled: jest.fn()
+    }
   };
 }
 
