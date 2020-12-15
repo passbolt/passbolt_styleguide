@@ -8,6 +8,7 @@ export const AuthenticationContext = React.createContext({
   state: null, // The state in the authentication process
   process: null, // The authentication sub-process name
   error: null, // An authentication error object
+  serverKey: null, // The current server key
   onInitializeSetupRequested: () => {}, // Whenever the initialization of the setup is requested
   onInitializeRecoverRequested: () => {}, // Whenever the initialization of the recover is requested
   onInitializeLoginRequested: () => {}, // Whenever the initialization of the login is requested
@@ -23,7 +24,9 @@ export const AuthenticationContext = React.createContext({
   onCompleteRecoverRequested: () => {}, // Whenever the the recover complete is requested
   onPassphraseLost: () => {}, // Whenever the user lost his passphrase
   onCheckLoginPassphraseRequested: () => {}, // Whenever the user enters his passphrase in order to login
-  onTryLoginAgainRequested: () => {} // Whenever the user wants to log in again
+  onTryLoginAgainRequested: () => {}, // Whenever the user wants to log in again
+  onAcceptLoginNewServerKeyRequested: () => {}, // Whenever the user accepted the server Key
+  onVerifyServerKeyRequested: () => {} // Whenever the check of server key is requested
 });
 
 /**
@@ -60,7 +63,9 @@ class AuthenticationContextProvider extends React.Component {
       onCompleteRecoverRequested: this.onCompleteRecoverRequested.bind(this),
       onPassphraseLost: this.onPassphraseLost.bind(this),
       onCheckLoginPassphraseRequested: this.onCheckLoginPassphraseRequested.bind(this),
-      onLoginRequested: this.onLoginRequested.bind(this)
+      onLoginRequested: this.onLoginRequested.bind(this),
+      onAcceptLoginNewServerKeyRequested: this.onAcceptLoginNewServerKeyRequested.bind(this),
+      onVerifyServerKeyRequested: this.onVerifyServerKeyRequested.bind(this)
     };
   }
 
@@ -103,6 +108,33 @@ class AuthenticationContextProvider extends React.Component {
     });
   }
 
+  /**
+   * Whenever one wants to verify the server key
+   */
+  async onVerifyServerKeyRequested() {
+    await this.state.port.request('passbolt.auth.verify-server-key')
+      .then(this.onVerifyServerKeySuccess.bind(this))
+      .catch(this.onVerifyServerKeyFailure.bind(this));
+  }
+
+  /**
+   * Whenver the verify server key has been done with success
+   */
+  async onVerifyServerKeySuccess() {
+    await this.setState({state: AuthenticationContextState.LOGIN_SERVER_KEY_CHECKED});
+  }
+
+  /**
+   * Whenver the verify server key has been done with failure
+   * @param error An error occured while the server key verificcation
+   */
+  async onVerifyServerKeyFailure(error) {
+    if (error.name === "ServerKeyChangedError") {
+      await this.setState({state: AuthenticationContextState.LOGIN_SERVER_KEY_CHANGED});
+    } else {
+      return Promise.reject(error);
+    }
+  }
   /**
    * Whenever the generates of a gpgp key given an user passphrase is requested
    * @param passphrase A passphrase
@@ -252,6 +284,14 @@ class AuthenticationContextProvider extends React.Component {
   }
 
   /**
+   * Whenever the user accepts the new server key
+   */
+  async onAcceptLoginNewServerKeyRequested() {
+    await this.state.port.request('passbolt.auth.replace-server-key');
+    await this.setState({state: AuthenticationContextState.LOGIN_NEW_SERVER_KEY_ACCEPTED});
+  }
+
+  /**
    * Render the component
    * @returns {JSX}
    */
@@ -289,6 +329,9 @@ export const AuthenticationContextState = {
   SETUP_COMPLETE_REQUESTED: 'Setup Complete Requested',
   PASSPHRASE_LOST: 'Passphrase lost',
   LOGIN_INITIALIZED: 'Login Initialized',
+  LOGIN_SERVER_KEY_CHANGED: 'Login Server Key Changed',
+  LOGIN_SERVER_KEY_CHECKED: 'Login Server Key Checked',
+  LOGIN_NEW_SERVER_KEY_ACCEPTED: 'Login New Server Key Accepted',
   LOGIN_PASSPHRASE_CHECKED: 'Login Passphrase Checked',
   LOGIN_IN_PROGRESS: 'Login In Progress',
   LOGIN_FAILED: 'Login Failed',
