@@ -1647,7 +1647,7 @@ body {
   display: block;
   text-align: center;
 }
-.login.page .processing-wrapper .processing-text:before {
+.login.page .processing-wrapper .processing-text:after {
   display: block;
   width: 10em;
   height: 10em;
