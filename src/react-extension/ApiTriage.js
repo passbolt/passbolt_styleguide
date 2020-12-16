@@ -33,7 +33,7 @@ class ApiTriage extends Component {
                 <div className="logo"><span className="visually-hidden">Passbolt</span></div>
               </div>
               <div className="login-form">
-                <Route exact path="/auth/login">
+                <Route exact path={['/auth/login', '/users/recover']}>
                   <EnterUsernameForm/>
                 </Route>
                 <Route path="/setup/name">

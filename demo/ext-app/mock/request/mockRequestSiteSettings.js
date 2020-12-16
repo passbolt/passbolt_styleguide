@@ -19,7 +19,7 @@ export default () => {
         "number": "2.13.5",
         "name": "Stomp"
       },
-      "url": "http://127.0.0.1:3001",
+      "url": "http://127.0.0.1:3000",
       "debug": 1,
       "server_timezone": "UTC",
       "session_timeout": 24,
