@@ -32,14 +32,6 @@ class OrchestrateLogin extends Component {
   }
 
   /**
-   * Returns the server key fingerprint
-   */
-  get serverKeyFingerprint() {
-    const {serverKey} = this.context;
-    return (serverKey && serverKey.fingerprint) || '';
-  }
-
-  /**
    * Verify the potential change ofserver key
    */
   verifyServerKey() {
@@ -74,7 +66,7 @@ class OrchestrateLogin extends Component {
       case AuthenticationContextState.LOGIN_FAILED:
         return <DisplayLoginError error={this.context.error.login}/>;
       case AuthenticationContextState.LOGIN_SERVER_KEY_CHANGED:
-        return <AcceptLoginServerKeyChange fingerprint={this.serverKeyFingerprint}/>;
+        return <AcceptLoginServerKeyChange/>;
       default:
         return <></>;
     }

@@ -12,7 +12,6 @@
  * @since         3.0.0
  */
 import React, {Component} from "react";
-import PropTypes from "prop-types";
 import {AuthenticationContext} from "../../../contexts/AuthenticationContext";
 
 /**
@@ -29,20 +28,39 @@ class AcceptLoginServerKeyChange extends Component {
     this.bindEventHandlers();
   }
 
-
   /**
    * Returns the default state
    */
   get defaultState() {
     return {
-      hasAccepted: false, //  True if the user did explicitely acepte the new ggg key
+      fingerprint: null, // The server key fingerprint
+      hasAccepted: false, //  True if the user did explicitly accept the new ggg key
       hasBeenValidated: false, // true if the form has already validated once
       errors: {
-        hasNotAccepted: false // True if the user did not explicitely accepted the new gpg key
+        hasNotAccepted: false // True if the user did not explicitly accepted the new gpg key
       }
     };
   }
 
+  /**
+   * ComponentDidMount
+   * Invoked immediately after component is inserted into the tree
+   * @return {void}
+   */
+  componentDidMount() {
+    this.fetchServerKey();
+  }
+
+  /**
+   * Fetch the server key
+   * @returns {Promise<void>}
+   */
+  async fetchServerKey() {
+    let {fingerprint} = await this.context.onGetServerKeyRequested();
+    fingerprint = fingerprint.replace(/.{4}/g, '$& ');
+    fingerprint = <>{fingerprint.substr(0, 24)}<br/>{fingerprint.substr(25)}</>;
+    this.setState({fingerprint});
+  }
 
   /**
    * Returns true if the passphrase is valid
@@ -66,7 +84,6 @@ class AcceptLoginServerKeyChange extends Component {
     this.handleAcceptChange = this.handleAcceptChange.bind(this);
   }
 
-
   /**
    * Whenever the users
    * @param event Dom event
@@ -79,7 +96,6 @@ class AcceptLoginServerKeyChange extends Component {
       await this.accept();
     }
   }
-
 
   /**
    * Whenever the user changes the accept new key checkbox
@@ -117,7 +133,6 @@ class AcceptLoginServerKeyChange extends Component {
     await this.setState({hasBeenValidated: true, errors: {}});
   }
 
-
   /**
    * Render the component
    */
@@ -125,9 +140,9 @@ class AcceptLoginServerKeyChange extends Component {
     const disabledClassName = this.mustBeDisabled ? 'disabled' : '';
     return (
       <div>
-        <h2>Sorry, the server key has changed </h2>
+        <h2>Sorry, the server key has changed</h2>
         <p>For security reasons please check with your administrator that this is a change that they initiated. The new fingerprint: </p>
-        <p>{this.props.fingerprint}</p>
+        <pre>{this.state.fingerprint}</pre>
         <form
           acceptCharset="utf-8"
           onSubmit={this.handleSubmit}>
@@ -166,7 +181,5 @@ class AcceptLoginServerKeyChange extends Component {
 }
 
 AcceptLoginServerKeyChange.contextType = AuthenticationContext;
-AcceptLoginServerKeyChange.propTypes = {
-  fingerprint: PropTypes.any // The server key fingerprint
-};
+
 export default AcceptLoginServerKeyChange;
