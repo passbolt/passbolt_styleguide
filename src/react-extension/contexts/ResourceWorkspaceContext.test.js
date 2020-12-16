@@ -16,7 +16,6 @@
  * Unit tests on ResourceWorkspaceContext in regard of specifications
  */
 
-
 import {defaultAppContext, defaultProps} from "./ResourceWorkspaceContext.test.data";
 import ResourceWorkspaceContextPage from "./ResourceWorkspaceContext.test.page";
 import {ResourceWorkspaceFilterTypes} from "./ResourceWorkspaceContext";
