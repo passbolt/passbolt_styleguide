@@ -221,7 +221,7 @@ class AuthenticationContextProvider extends React.Component {
    */
   async onLoginRequested(passphrase, rememberMe) {
     await this.setState({state: AuthenticationContextState.LOGIN_IN_PROGRESS});
-    await this.state.port.request('passbolt.auth.login', {passphrase, rememberMe})
+    await this.state.port.request('passbolt.auth.login', passphrase, rememberMe)
       .then(this.onLoginSuccess.bind(this))
       .catch(this.onLoginFailure.bind(this));
   }
@@ -230,6 +230,7 @@ class AuthenticationContextProvider extends React.Component {
    * Whenever the log in operation succeeded
    */
   async onLoginSuccess() {
+    await this.state.port.request('passbolt.auth.post-login-redirect');
     await this.setState({state: AuthenticationContextState.LOGIN_COMPLETED});
   }
 

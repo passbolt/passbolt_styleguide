@@ -54,6 +54,7 @@ const config = {
         {from: /^\/app/, to: "/api-app.html"},
         {from: new RegExp(`^\/setup\/install\/${uuidRegex}\/${uuidRegex}`), to: "/api-setup.html"},
         {from: new RegExp(`^\/setup\/recover\/${uuidRegex}\/${uuidRegex}`), to: "/api-recover.html"},
+        {from: /^\/auth\/login/, to: "/api-login.html"},
         {from: /^\/setup|^\/recover|^\/auth/, to: "/api-triage.html"},
         {from: /^\/$/, to: "/default.html"},
       ]
