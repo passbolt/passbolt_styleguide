@@ -22,7 +22,6 @@ class RecoverAuthentication extends Component {
    */
   componentDidUpdate() {
     this.handleSecurityTokenSaved();
-    this.handleCompleteRecover();
   }
 
 
@@ -32,15 +31,6 @@ class RecoverAuthentication extends Component {
   handleSecurityTokenSaved() {
     if (this.context.state === AuthenticationContextState.SECURITY_TOKEN_SAVED) {
       this.context.onCompleteRecoverRequested();
-    }
-  }
-
-  /**
-   * Whenever one has to complete the setup
-   */
-  handleCompleteRecover() {
-    if (this.context.state === AuthenticationContextState.RECOVER_COMPLETED) {
-      // TODO
     }
   }
 
@@ -64,6 +54,8 @@ class RecoverAuthentication extends Component {
         return <ChooseSecurityToken/>;
       case AuthenticationContextState.PASSPHRASE_LOST:
         return <AskForAuthenticationHelp/>;
+      case  AuthenticationContextState.RECOVER_COMPLETED:
+        return <LoadingSpinner title="Logging in!" />;
       default:
         return <LoadingSpinner/>;
     }

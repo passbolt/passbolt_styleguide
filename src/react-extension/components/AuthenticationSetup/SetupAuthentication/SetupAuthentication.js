@@ -24,7 +24,6 @@ class SetupAuthentication extends Component {
    */
   componentDidUpdate() {
     this.handleSecurityTokenSaved();
-    this.handleCompleteSetup();
   }
 
   /**
@@ -33,15 +32,6 @@ class SetupAuthentication extends Component {
   handleSecurityTokenSaved() {
     if (this.context.state === AuthenticationContextState.SECURITY_TOKEN_SAVED) {
       this.context.onCompleteSetupRequested();
-    }
-  }
-
-  /**
-   * Whenever one has to complete the setup
-   */
-  handleCompleteSetup() {
-    if (this.context.state === AuthenticationContextState.SETUP_COMPLETED) {
-      // TODO
     }
   }
 

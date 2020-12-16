@@ -25,9 +25,16 @@ class LoadingSpinner extends React.Component {
     return (
       <>
         <div className="processing-wrapper">
-          <h2 className="processing-text" >
-            Please wait...
-          </h2>
+          <div  className="processing-text">
+            {this.props.title &&
+              <h2>
+                {this.props.title}
+              </h2>
+            }
+            <h2>
+              Please wait...
+            </h2>
+          </div>
         </div>
       </>
     );
@@ -35,8 +42,7 @@ class LoadingSpinner extends React.Component {
 }
 
 LoadingSpinner.propTypes = {
-  progress: PropTypes.number, // The progress rate to reach
-  onProgressCompleted: PropTypes.func // Whenever the progress rate has been reached
+  title: PropTypes.string, // A custom string
 };
 
 export default LoadingSpinner;
