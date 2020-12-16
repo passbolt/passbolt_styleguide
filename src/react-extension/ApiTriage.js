@@ -21,6 +21,8 @@ import DisplayError from "./components/Authentication/DisplayError/DisplayError"
 import EnterUsernameForm from "./components/Authentication/EnterUsernameForm/EnterUsernameForm";
 import ActionFeedbackContextProvider from "./contexts/ActionFeedbackContext";
 import EnterNameForm from "./components/Authentication/EnterNameForm/EnterNameForm";
+import Delay from "./components/Common/Delay/Delay";
+import LoadingSpinner from "./components/Common/Loading/LoadingSpinner/LoadingSpinner";
 
 class ApiTriage extends Component {
   render() {
@@ -34,7 +36,11 @@ class ApiTriage extends Component {
               </div>
               <div className="login-form">
                 <Route exact path={['/auth/login', '/users/recover']}>
-                  <EnterUsernameForm/>
+                  <Delay
+                    duration={500}
+                    fallback={<LoadingSpinner/>}>
+                    <EnterUsernameForm/>
+                  </Delay>
                 </Route>
                 <Route path="/setup/name">
                   <EnterNameForm/>
@@ -46,7 +52,12 @@ class ApiTriage extends Component {
                   <DisplayBrowserNotSupported/>
                 </Route>
                 <Route path={["/setup/install/:userId/:token", "/setup/recover/:userId/:token"]}>
-                  <InstallExtension/>
+                  <Delay
+                    duration={500}
+                    fallback={<LoadingSpinner/>}>
+                    <InstallExtension/>
+                  </Delay>
+
                 </Route>
                 <Route path={["/setup/error", "/setup/recover/error", "/auth/login/error"]}>
                   <DisplayError/>
