@@ -36,7 +36,7 @@ class DisplayLoginError extends Component {
 
 
   /**
-   * Whenever the users submits his passphrase
+   * Whenever the users wants to try to log in again
    * @param event Dom event
    */
   async handleSubmit(event) {

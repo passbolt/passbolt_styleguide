@@ -8,22 +8,42 @@ export const AuthenticationContext = React.createContext({
   state: null, // The state in the authentication process
   process: null, // The authentication sub-process name
   error: null, // An authentication error object
-  onInitializeSetupRequested: () => {}, // Whenever the initialization of the setup is requested
-  onInitializeRecoverRequested: () => {}, // Whenever the initialization of the recover is requested
-  onInitializeLoginRequested: () => {}, // Whenever the initialization of the login is requested
-  onGenerateGpgKeyRequested: () => {}, // Whenever the generation of gpg key is requested
-  onGoToGenerateGpgKeyRequested: () => {}, // Whenever the user wants to go back to the key generation
-  onGoToImportGpgKeyRequested: () => {}, // Whenever one wants to go to the import gpg key area
-  onCheckImportedGpgKeyPassphraseRequested: () => {}, // Whenever one wants to check the passphrae of an imported gpg key
-  onImportGpgKeyRequested: () => {}, // Whenever the import of gpg key is requested
-  onDownloadRecoveryKitRequested: () => {}, // Whenever the download of the recovery kit is requested
-  onRecoveryKitDownloaded: () => {}, // Whenever the recovery kit has been downloaded
-  onSaveSecurityTokenRequested: () => {}, // Whenever the security token save is requested
-  onCompleteSetupRequested: () => {}, // Whenever the the setup complete is requested
-  onCompleteRecoverRequested: () => {}, // Whenever the the recover complete is requested
-  onPassphraseLost: () => {}, // Whenever the user lost his passphrase
-  onCheckLoginPassphraseRequested: () => {}, // Whenever the user enters his passphrase in order to login
-  onTryLoginAgainRequested: () => {} // Whenever the user wants to log in again
+  onInitializeSetupRequested: () => {
+  }, // Whenever the initialization of the setup is requested
+  onInitializeRecoverRequested: () => {
+  }, // Whenever the initialization of the recover is requested
+  onInitializeLoginRequested: () => {
+  }, // Whenever the initialization of the login is requested
+  onGenerateGpgKeyRequested: () => {
+  }, // Whenever the generation of gpg key is requested
+  onGoToGenerateGpgKeyRequested: () => {
+  }, // Whenever the user wants to go back to the key generation
+  onGoToImportGpgKeyRequested: () => {
+  }, // Whenever one wants to go to the import gpg key area
+  onCheckImportedGpgKeyPassphraseRequested: () => {
+  }, // Whenever one wants to check the passphrae of an imported gpg key
+  onImportGpgKeyRequested: () => {
+  }, // Whenever the import of gpg key is requested
+  onDownloadRecoveryKitRequested: () => {
+  }, // Whenever the download of the recovery kit is requested
+  onRecoveryKitDownloaded: () => {
+  }, // Whenever the recovery kit has been downloaded
+  onSaveSecurityTokenRequested: () => {
+  }, // Whenever the security token save is requested
+  onCompleteSetupRequested: () => {
+  }, // Whenever the the setup complete is requested
+  onCompleteRecoverRequested: () => {
+  }, // Whenever the the recover complete is requested
+  onPassphraseLost: () => {
+  }, // Whenever the user lost his passphrase
+  onCheckLoginPassphraseRequested: () => {
+  }, // Whenever the user enters his passphrase in order to login
+  onTryLoginAgainRequested: () => {
+  }, // Whenever the user wants to log in again
+  onAcceptLoginNewServerKeyRequested: () => {
+  }, // Whenever the user accepted the server Key
+  onVerifyServerKeyRequested: () => {
+  } // Whenever the check of server key is requested
 });
 
 /**
@@ -60,7 +80,10 @@ class AuthenticationContextProvider extends React.Component {
       onCompleteRecoverRequested: this.onCompleteRecoverRequested.bind(this),
       onPassphraseLost: this.onPassphraseLost.bind(this),
       onCheckLoginPassphraseRequested: this.onCheckLoginPassphraseRequested.bind(this),
-      onLoginRequested: this.onLoginRequested.bind(this)
+      onLoginRequested: this.onLoginRequested.bind(this),
+      onAcceptLoginNewServerKeyRequested: this.onAcceptLoginNewServerKeyRequested.bind(this),
+      onVerifyServerKeyRequested: this.onVerifyServerKeyRequested.bind(this),
+      onGetServerKeyRequested: this.onGetServerKeyRequested.bind(this)
     };
   }
 
@@ -101,6 +124,39 @@ class AuthenticationContextProvider extends React.Component {
       loginInfo,
       process: 'login',
     });
+  }
+
+  /**
+   * Whenever one wants to verify the server key
+   */
+  async onVerifyServerKeyRequested() {
+    await this.state.port.request('passbolt.auth.verify-server-key')
+      .then(this.onVerifyServerKeySuccess.bind(this))
+      .catch(this.onVerifyServerKeyFailure.bind(this));
+  }
+
+  /**
+   * Whenver the verify server key has been done with success
+   */
+  async onVerifyServerKeySuccess() {
+    await this.setState({state: AuthenticationContextState.LOGIN_SERVER_KEY_CHECKED});
+  }
+
+  /**
+   * Whenver the verify server key has been done with failure
+   * @param error An error occured while the server key verificcation
+   */
+  async onVerifyServerKeyFailure(error) {
+    if (error.name === "KeyIsExpiredError") {
+      // Nothing to do.
+    } else if (error.name === "ServerKeyChangedError") {
+      await this.setState({state: AuthenticationContextState.LOGIN_SERVER_KEY_CHANGED});
+    } else if (error.name === "UserNotFoundError") {
+      // @todo treat this case
+      console.log('todo no user associated with this key');
+    } else {
+      return Promise.reject(error);
+    }
   }
 
   /**
@@ -252,6 +308,22 @@ class AuthenticationContextProvider extends React.Component {
   }
 
   /**
+   * Whenever the server key is requested.
+   * @return {Promise<object>}
+   */
+  async onGetServerKeyRequested() {
+    return this.state.port.request('passbolt.auth.get-server-key');
+  }
+
+  /**
+   * Whenever the user accepts the new server key
+   */
+  async onAcceptLoginNewServerKeyRequested() {
+    await this.state.port.request('passbolt.auth.replace-server-key');
+    await this.setState({state: AuthenticationContextState.LOGIN_NEW_SERVER_KEY_ACCEPTED});
+  }
+
+  /**
    * Render the component
    * @returns {JSX}
    */
@@ -265,7 +337,7 @@ class AuthenticationContextProvider extends React.Component {
 }
 
 AuthenticationContextProvider.propTypes = {
-  value:  PropTypes.any, // The initial value of the context
+  value: PropTypes.any, // The initial value of the context
   children: PropTypes.any // The children components
 };
 export default AuthenticationContextProvider;
@@ -289,6 +361,9 @@ export const AuthenticationContextState = {
   SETUP_COMPLETE_REQUESTED: 'Setup Complete Requested',
   PASSPHRASE_LOST: 'Passphrase lost',
   LOGIN_INITIALIZED: 'Login Initialized',
+  LOGIN_SERVER_KEY_CHANGED: 'Login Server Key Changed',
+  LOGIN_SERVER_KEY_CHECKED: 'Login Server Key Checked',
+  LOGIN_NEW_SERVER_KEY_ACCEPTED: 'Login New Server Key Accepted',
   LOGIN_PASSPHRASE_CHECKED: 'Login Passphrase Checked',
   LOGIN_IN_PROGRESS: 'Login In Progress',
   LOGIN_FAILED: 'Login Failed',
