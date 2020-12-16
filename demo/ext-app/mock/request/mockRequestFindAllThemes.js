@@ -18,12 +18,12 @@ export default () => {
     {
       "id": "9a5ecc88-f4df-5cc2-b152-6ca310127a67",
       "name": "default",
-      "preview": "http:\/\/localhost:3001\/img\/themes\/default.png"
+      "preview": "http:\/\/localhost:3000\/img\/themes\/default.png"
     },
     {
       "id": "2e6d06eb-e417-5573-80ed-27b2182dc55b",
       "name": "midgar",
-      "preview": "http:\/\/localhost:3001\/img\/themes\/midgar.png"
+      "preview": "http:\/\/localhost:3000\/img\/themes\/midgar.png"
     }
   ]
 }
