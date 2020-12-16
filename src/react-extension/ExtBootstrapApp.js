@@ -23,9 +23,17 @@ import InsertClipboardIframe from "./components/InsertClipboardIframe";
  * This application is inserted in the page served by the API and inject the iframe that will contain the passbolt application.
  */
 class ExtBootstrapApp extends Component {
+  /**
+   * Get the application pathname.
+   * @returns {string}
+   */
+  get basename() {
+    return window.location.pathname;
+  }
+
   render() {
     return (
-      <Router>
+      <Router basename={this.basename}>
         <Switch>
           <Route exact path={[
             "/app/folders/view/:filterByFolderId",

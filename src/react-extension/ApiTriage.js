@@ -37,7 +37,7 @@ class ApiTriage extends Component {
               <div className="login-form">
                 <Route exact path={['/auth/login', '/users/recover']}>
                   <Delay
-                    duration={500}
+                    duration={1000}
                     fallback={<LoadingSpinner/>}>
                     <EnterUsernameForm/>
                   </Delay>
@@ -53,7 +53,7 @@ class ApiTriage extends Component {
                 </Route>
                 <Route path={["/setup/install/:userId/:token", "/setup/recover/:userId/:token"]}>
                   <Delay
-                    duration={500}
+                    duration={1000}
                     fallback={<LoadingSpinner/>}>
                     <InstallExtension/>
                   </Delay>

@@ -43,7 +43,9 @@ export const AuthenticationContext = React.createContext({
   onAcceptLoginNewServerKeyRequested: () => {
   }, // Whenever the user accepted the server Key
   onVerifyServerKeyRequested: () => {
-  } // Whenever the check of server key is requested
+  }, // Whenever the check of server key is requested
+  onGetServerKeyRequested: () => {
+  } // Whenever the server key is requested.
 });
 
 /**

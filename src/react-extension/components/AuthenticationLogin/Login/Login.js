@@ -343,7 +343,8 @@ class Login extends Component {
                 </button>
                 <Link
                   to={{pathname: `${this.trustedDomain}/users/recover`}}
-                  target="_parent">
+                  target="_parent"
+                  rel="noopener noreferrer">
                   Or recover another account.
                 </Link>
               </div>
