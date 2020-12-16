@@ -6,7 +6,7 @@ import ChooseSecurityToken from "../../Authentication/ChooseSecurityToken/Choose
 import AskForAuthenticationHelp from "../../Authentication/AskForAuthenticationHelp/AskForAuthenticationHelp";
 
 /**
- * The component allows the user to recover his authentication
+ * The component orchestrates the recover authentication process
  */
 class RecoverAuthentication extends Component {
   /**

@@ -17,12 +17,12 @@ import AuthenticationContextProvider, {AuthenticationContext} from "./contexts/A
 import ManageDialogs from "./components/Common/Dialog/ManageDialogs/ManageDialogs";
 import DialogContextProvider from "../react/contexts/Common/DialogContext";
 import {BrowserRouter as Router} from "react-router-dom";
-import SetupAuthentication from "./components/AuthenticationSetup/SetupAuthentication/SetupAuthentication";
+import OrchestrateLogin from "./components/AuthenticationLogin/OrchestrateLogin/OrchestrateLogin";
 
 /**
- * The setup application served by the browser extension.
+ * The login application served by the browser extension.
  */
-class ExtAuthenticationSetup extends Component {
+class ExtAuthenticationLogin extends Component {
   /**
    * Returns the component default state
    */
@@ -48,7 +48,7 @@ class ExtAuthenticationSetup extends Component {
                   <div className="logo"><span className="visually-hidden">Passbolt</span></div>
                 </div>
                 <div className="login-form">
-                  <SetupAuthentication/>
+                  <OrchestrateLogin/>
                 </div>
               </div>
             </div>
@@ -59,11 +59,11 @@ class ExtAuthenticationSetup extends Component {
   }
 }
 
-ExtAuthenticationSetup.contextType = AuthenticationContext;
-ExtAuthenticationSetup.propTypes = {
+ExtAuthenticationLogin.contextType = AuthenticationContext;
+ExtAuthenticationLogin.propTypes = {
   port: PropTypes.object,
   storage: PropTypes.object,
 };
 
-export default ExtAuthenticationSetup;
+export default ExtAuthenticationLogin;
 

@@ -1893,6 +1893,45 @@ body {
   background: #009900;
   width: 99.5%;
 }
+.login.page .login-user {
+  width: 100%;
+  margin: auto;
+}
+.login.page .login-user > * {
+  text-align: center;
+}
+.login.page .login-user-name {
+  font-weight: bold;
+  font-size: 1.6rem;
+  line-height: 1rem;
+}
+.login.page .login-user-email {
+  font-size: 1.6rem;
+  line-height: 1rem;
+}
+.login.page .login-passphrase {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: stretch;
+}
+.login.page .login-passphrase-input {
+  flex: 1 1 auto;
+  border-right: none;
+}
+.login.page .login-passphrase-security-token {
+  display: flex;
+  align-items: center;
+  border: 1px solid #CCC;
+  border-top: 1px solid #BBB;
+  padding: 0.6rem 1.2rem;
+  height: 24px;
+}
+.login.page .login-processing {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center ;
+}
 @media only screen and (min-width: 42rem) {
   body {
     background: #F3F3F3;

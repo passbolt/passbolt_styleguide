@@ -13,19 +13,24 @@
  */
 import React, {Component} from "react";
 
-class CheckExtensionPresence extends Component {
+/**
+ * This component displays an in progress feedback to the user when he's log in
+ */
+class DisplayLoginInProgress extends Component {
   /**
-   * Renders the component
+   * Render the component
    */
   render() {
     return (
-      <div className="check-extension-presence">
+      <div className="login-processing">
+        <h2>Logging in!</h2>
+        <h2>Please wait...</h2>
         <div className="processing-wrapper">
-          <span className="processing-text">Please wait...</span>
+          <span className="processing-text"></span>
         </div>
       </div>
     );
   }
 }
 
-export default CheckExtensionPresence;
+export default DisplayLoginInProgress;

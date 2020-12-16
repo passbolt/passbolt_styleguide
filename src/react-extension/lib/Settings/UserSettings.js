@@ -17,6 +17,20 @@ export default class UserSettings {
   }
 
   /**
+   * Returns the user full name
+   */
+  get fullName() {
+    return `${this.settings["user.firstname"]} ${this.settings["user.lastname"]}`;
+  }
+
+  /**
+   * Returns the username
+   */
+  get username() {
+    return this.settings["user.username"];
+  }
+
+  /**
    * Returns the current user theme
    * @returns {*}
    */

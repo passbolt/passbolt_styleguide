@@ -15,6 +15,8 @@ const demoEntry = {
   "ext-setup": path.resolve(__dirname, "./demo/ext-app/entry/ExtSetup.entry.js"), // The setup application served by the browser extension.
   "ext-bootstrap-recover": path.resolve(__dirname, "./demo/ext-app/entry/ExtBootstrapRecover.entry.js"), // The recover bootstrap application served by the browser extension.
   "ext-recover": path.resolve(__dirname, "./demo/ext-app/entry/ExtRecover.entry.js"), // The recover application served by the browser extension.
+  "ext-bootstrap-login": path.resolve(__dirname, "./demo/ext-app/entry/ExtBootstrapLogin.entry.js"), // The login bootstrap application served by the browser extension.
+  "ext-login": path.resolve(__dirname, "./demo/ext-app/entry/ExtLogin.entry.js"), // The login application served by the browser extension.
 };
 
 const config = {
