@@ -4,6 +4,7 @@ import ImportGpgKey from "../../Authentication/ImportGpgKey/ImportGpgKey";
 import CheckPassphrase from "../../Authentication/CheckPassphrase/CheckPassphrase";
 import ChooseSecurityToken from "../../Authentication/ChooseSecurityToken/ChooseSecurityToken";
 import AskForAuthenticationHelp from "../../Authentication/AskForAuthenticationHelp/AskForAuthenticationHelp";
+import LoadingSpinner from "../../../../react/components/Common/Loading/LoadingSpinner/LoadingSpinner";
 
 /**
  * The component orchestrates the recover authentication process
@@ -64,7 +65,7 @@ class RecoverAuthentication extends Component {
       case AuthenticationContextState.PASSPHRASE_LOST:
         return <AskForAuthenticationHelp/>;
       default:
-        return <></>;
+        return <LoadingSpinner/>;
     }
   }
 }
