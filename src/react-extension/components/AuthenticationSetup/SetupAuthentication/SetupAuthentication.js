@@ -60,6 +60,8 @@ class SetupAuthentication extends Component {
         return <CheckPassphrase/>;
       case AuthenticationContextState.PASSPHRASE_LOST:
         return <AskForAuthenticationHelp/>;
+      case  AuthenticationContextState.SETUP_COMPLETED:
+        return <LoadingSpinner title="Logging in!" />;
       default:
         return <LoadingSpinner/>;
     }
