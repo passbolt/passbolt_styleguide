@@ -6,6 +6,7 @@ import ChooseSecurityToken from "../../Authentication/ChooseSecurityToken/Choose
 import ImportGpgKey from "../../Authentication/ImportGpgKey/ImportGpgKey";
 import CheckPassphrase from "../../Authentication/CheckPassphrase/CheckPassphrase";
 import AskForAuthenticationHelp from "../../Authentication/AskForAuthenticationHelp/AskForAuthenticationHelp";
+import LoadingSpinner from "../../../../react/components/Common/Loading/LoadingSpinner/LoadingSpinner";
 
 /**
  * The component orchestrates the setup authentication process
@@ -70,7 +71,7 @@ class SetupAuthentication extends Component {
       case AuthenticationContextState.PASSPHRASE_LOST:
         return <AskForAuthenticationHelp/>;
       default:
-        return <></>;
+        return <LoadingSpinner/>;
     }
   }
 }
