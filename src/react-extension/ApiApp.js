@@ -16,7 +16,7 @@ import ActionFeedbackContextProvider from "./contexts/ActionFeedbackContext";
 import DialogContextProvider from "../react/contexts/Common/DialogContext";
 import ContextualMenuContextProvider from "../react/contexts/Common/ContextualMenuContext";
 import ShareActionFeedbacks from "./components/Share/ShareActionFeedbacks";
-import {BrowserRouter as Router, Redirect, Route, Switch} from "react-router-dom";
+import {BrowserRouter as Router, Route, Switch} from "react-router-dom";
 import AdministrationWorkspaceContextProvider from "./contexts/AdministrationWorkspaceContext";
 import ManageDialogs from "../react/components/Common/Dialog/ManageDialogs/ManageDialogs";
 import ManageContextualMenu from "./components/ManageContextualMenu";
@@ -85,9 +85,6 @@ class ApiApp extends Component {
                       <ManageContextualMenu/>
                       <AdministrationWorkspace/>
                     </AdministrationWorkspaceContextProvider>
-                  </Route>
-                  <Route path="/">
-                    <Redirect to="/app/administration/mfa"/>
                   </Route>
                 </Switch>
               </Router>

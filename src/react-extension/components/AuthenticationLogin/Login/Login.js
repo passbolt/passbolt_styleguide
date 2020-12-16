@@ -202,10 +202,11 @@ class Login extends Component {
   onCheckFailure(error) {
     // It can happen when the user has entered the wrong passphrase.
     if (error.name === "InvalidMasterPasswordError") {
-      this.setState({processing: false, errors: {invalidPassphrase: true}});
+      this.setState({actions: {processing: false}, errors: {invalidPassphrase: true}});
     } else if (error.name === 'GpgKeyError') {
-      this.setState({processing: false, errors: {invalidGpgKey: true}});
+      this.setState({actions: {processing: false}, errors: {invalidGpgKey: true}});
     } else {
+      this.setState({actions: {processing: false}});
       const ErrorDialogProps = {message: error.message};
       this.props.dialogContext.open(ErrorDialog, ErrorDialogProps);
     }

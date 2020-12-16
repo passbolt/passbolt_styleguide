@@ -3324,6 +3324,9 @@ a.disabled:hover .svg-icon svg {
 a.fav .svg-icon svg {
   fill: #D40101;
 }
+a.unfav {
+  display: inline-flex;
+}
 a.unfav .svg-icon.star svg {
   fill: #DDD;
 }
