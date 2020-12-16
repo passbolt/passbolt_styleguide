@@ -20,6 +20,7 @@ import mockPutRequestUserDirectorySettings from "./request/mockPutRequestUserDir
 import mockPostRequestUserDirectorySettings from "./request/mockPostRequestUserDirectorySettings";
 import mockGetRequestSimulateSynchronize from "./request/mockGetRequestSimulateSynchronize";
 import mockGetRequestEmailNotificationsSettings from "./request/mockGetRequestEmailNotificationsSettings";
+import mockGetSiteSettings from "./request/mockGetSiteSettings";
 
 export default () => {
   const mockFetch = new MockFetch();
@@ -35,6 +36,7 @@ export default () => {
   mockFetch.addPostFetchRequest("http://localhost:3000/settings/emails/notifications.json?api-version=v2", mockGetRequestEmailNotificationsSettings);
   mockFetch.addPutFetchRequest("http://localhost:3000/directorysync/settings.json?api-version=v2", mockPutRequestUserDirectorySettings);
   mockFetch.addDeleteFetchRequest("http://localhost:3000/directorysync/settings.json?api-version=v2", mockPutRequestUserDirectorySettings);
+  mockFetch.addGetFetchRequest("http://localhost:3000/settings.json?api-version=v2", mockGetSiteSettings);
 
   return mockFetch;
 };
