@@ -93,6 +93,11 @@ export default class GridPage {
         fireEvent.click(checkbox, leftClick);
         await waitFor(() => {});
       },
+      async selectRangeCheckbox() {
+        const checkbox = element.querySelector('td.cell_multipleSelect.selections.s-cell');
+        fireEvent.click(checkbox, {button: 0, shiftKey: true});
+        await waitFor(() => {});
+      },
       async openContextualMenu() {
         fireEvent.contextMenu(element, leftClick);
         await waitFor(() => {});

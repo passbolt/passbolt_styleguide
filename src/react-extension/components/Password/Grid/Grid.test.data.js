@@ -195,4 +195,30 @@ export const resources = [{
   "folder_parent_id": null,
   "personal": false,
   "resource_type_id": "669f8c64-242a-59fb-92fc-81f660975fd3"
+}, {
+  "id": "09c790c0-c003-53c8-a640-25d33cfebc25",
+  "name": "test",
+  "username": "test",
+  "uri": "test.io",
+  "description": "A package manager for the test!",
+  "deleted": false,
+  "created": "2018-08-27T08:35:19+00:00",
+  "modified": "2019-08-27T08:35:19+00:00",
+  "created_by": "640ebc06-5ec1-5322-a1ae-6120ed2f3a74",
+  "modified_by": "640ebc06-5ec1-5322-a1ae-6120ed2f3a74",
+  "favorite": null,
+  "permission": {
+    "id": "672728ac-c3f2-52a5-a21c-07dfe84b7ad9",
+    "aco": "Resource",
+    "aco_foreign_key": "09c790c0-c003-53c8-a640-25d33cfebc22",
+    "aro": "User",
+    "aro_foreign_key": "f848277c-5398-58f8-a82a-72397af2d450",
+    "type": 1,
+    "created": "2020-08-27T08:35:19+00:00",
+    "modified": "2020-08-27T08:35:19+00:00"
+  },
+  "tags": [],
+  "folder_parent_id": null,
+  "personal": false,
+  "resource_type_id": "669f8c64-242a-59fb-92fc-81f660975fd3"
 }];
