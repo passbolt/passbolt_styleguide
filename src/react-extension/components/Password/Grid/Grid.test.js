@@ -137,6 +137,11 @@ describe("Display Resources", () => {
       page = new GridPage(context, props);
     });
 
+    it('As LU, I should sort the resources by favorite', async() => {
+      await page.sortByResourceFavorite();
+      expect(props.resourceWorkspaceContext.onSorterChanged).toHaveBeenCalledWith('favorite');
+    });
+
     it('As LU, I should sort the resources by name', async() => {
       await page.sortByResourceName();
       expect(props.resourceWorkspaceContext.onSorterChanged).toHaveBeenCalledWith('name');
