@@ -108,7 +108,6 @@ class ManageLoading extends React.Component {
   render() {
     return (
       <div>
-        <span> {this.state.progressRate}</span>
         {this.state.mustShow &&
           <LoadingBar
             progress={this.state.progressRate}
