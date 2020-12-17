@@ -13,7 +13,6 @@
  * @since         2.11.0
  */
 import {fireEvent, render, waitFor} from "@testing-library/react";
-import AppContext from "../../../contexts/AppContext";
 import React from "react";
 import EnterUsernameForm from "./EnterUsernameForm";
 
@@ -26,11 +25,9 @@ export default class EnterUsernameFormPage {
    * @param appContext An app context
    * @param props Props to attach
    */
-  constructor(appContext, props) {
+  constructor(props) {
     this._page = render(
-      <AppContext.Provider value={appContext}>
-        <EnterUsernameForm.WrappedComponent {...props}/>
-      </AppContext.Provider>
+      <EnterUsernameForm.WrappedComponent {...props}/>
     );
   }
 

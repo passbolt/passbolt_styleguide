@@ -23,49 +23,67 @@ import ActionFeedbackContextProvider from "./contexts/ActionFeedbackContext";
 import EnterNameForm from "./components/Authentication/EnterNameForm/EnterNameForm";
 import Delay from "./components/Common/Delay/Delay";
 import LoadingSpinner from "./components/Common/Loading/LoadingSpinner/LoadingSpinner";
+import ApiAppContext from "./contexts/ApiAppContext";
 
 class ApiTriage extends Component {
+  constructor(props) {
+    super(props);
+    this.state = this.defaultState;
+  }
+
+  get defaultState() {
+    return {
+      username: null, // The username to setup or recover or login
+
+      setContext: context => {
+        this.setState(context);
+      },
+    };
+  }
+
   render() {
     return (
-      <ActionFeedbackContextProvider>
-        <Router>
-          <div id="container" className="container page login">
-            <div className="content">
-              <div className="header">
-                <div className="logo"><span className="visually-hidden">Passbolt</span></div>
-              </div>
-              <div className="login-form">
-                <Route exact path={['/auth/login', '/users/recover']}>
-                  <Delay
-                    duration={1000}
-                    fallback={<LoadingSpinner/>}>
-                    <EnterUsernameForm/>
-                  </Delay>
-                </Route>
-                <Route path="/setup/name">
-                  <EnterNameForm/>
-                </Route>
-                <Route path={["/setup/check-mailbox", "/setup/recover/check-mailbox", "/auth/login/check-mailbox"]}>
-                  <CheckMailBox/>
-                </Route>
-                <Route path={["/setup/not-supported", "/setup/recover/not-supported"]}>
-                  <DisplayBrowserNotSupported/>
-                </Route>
-                <Route path={["/setup/install/:userId/:token", "/setup/recover/:userId/:token"]}>
-                  <Delay
-                    duration={1000}
-                    fallback={<LoadingSpinner/>}>
-                    <InstallExtension/>
-                  </Delay>
-                </Route>
-                <Route path={["/setup/error", "/setup/recover/error", "/auth/login/error"]}>
-                  <DisplayError/>
-                </Route>
+      <ApiAppContext.Provider value={this.state}>
+        <ActionFeedbackContextProvider>
+          <Router>
+            <div id="container" className="container page login">
+              <div className="content">
+                <div className="header">
+                  <div className="logo"><span className="visually-hidden">Passbolt</span></div>
+                </div>
+                <div className="login-form">
+                  <Route exact path={['/auth/login', '/users/recover']}>
+                    <Delay
+                      duration={1000}
+                      fallback={<LoadingSpinner/>}>
+                      <EnterUsernameForm/>
+                    </Delay>
+                  </Route>
+                  <Route path="/setup/name">
+                    <EnterNameForm/>
+                  </Route>
+                  <Route path={["/setup/check-mailbox", "/setup/recover/check-mailbox", "/auth/login/check-mailbox"]}>
+                    <CheckMailBox/>
+                  </Route>
+                  <Route path={["/setup/not-supported", "/setup/recover/not-supported"]}>
+                    <DisplayBrowserNotSupported/>
+                  </Route>
+                  <Route path={["/setup/install/:userId/:token", "/setup/recover/:userId/:token"]}>
+                    <Delay
+                      duration={1000}
+                      fallback={<LoadingSpinner/>}>
+                      <InstallExtension/>
+                    </Delay>
+                  </Route>
+                  <Route path={["/setup/error", "/setup/recover/error", "/auth/login/error"]}>
+                    <DisplayError/>
+                  </Route>
+                </div>
               </div>
             </div>
-          </div>
-        </Router>
-      </ActionFeedbackContextProvider>
+          </Router>
+        </ActionFeedbackContextProvider>
+      </ApiAppContext.Provider>
     );
   }
 }

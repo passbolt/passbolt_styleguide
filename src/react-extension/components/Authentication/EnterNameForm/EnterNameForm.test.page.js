@@ -13,10 +13,9 @@
  * @since         2.11.0
  */
 import {fireEvent, render, waitFor} from "@testing-library/react";
-import {BrowserRouter} from "react-router-dom";
-import AppContext from "../../../contexts/AppContext";
 import React from "react";
 import EnterNameForm from "./EnterNameForm";
+import {BrowserRouter as Router} from "react-router-dom";
 
 /**
  * The EnterNameForm component represented as a page
@@ -24,16 +23,13 @@ import EnterNameForm from "./EnterNameForm";
 export default class EnterNameFormPage {
   /**
    * Default constructor
-   * @param appContext An app context
    * @param props Props to attach
    */
-  constructor(appContext, props) {
+  constructor(props) {
     this._page = render(
-      <BrowserRouter>
-        <AppContext.Provider value={appContext}>
-          <EnterNameForm.WrappedComponent {...props}/>
-        </AppContext.Provider>
-      </BrowserRouter>
+      <Router>
+        <EnterNameForm.WrappedComponent {...props}/>
+      </Router>
     );
   }
 

@@ -16,7 +16,7 @@
  * Unit tests on EnterNameForm in regard of specifications
  */
 import EnterNameFormPage from "./EnterNameForm.test.page";
-import {defaultAppContext, defaultProps} from "./EnterNameForm.test.data";
+import {defaultProps} from "./EnterNameForm.test.data";
 import {ActionFeedbackContext} from "../../../contexts/ActionFeedbackContext";
 import {waitFor} from "@testing-library/react";
 import fetchMock from "fetch-mock-jest";
@@ -28,7 +28,6 @@ beforeEach(() => {
 
 describe("As AN I should see the Enter Name Form Page", () => {
   let page; // The page to test against
-  const context = defaultAppContext(); // The applicative context
   const props = defaultProps(); // The applicative context
 
   const mockFetchPost = (url, response) => fetchMock.post(url, response);
@@ -39,7 +38,7 @@ describe("As AN I should see the Enter Name Form Page", () => {
      */
     beforeEach(() => {
       fetchMock.reset();
-      page = new EnterNameFormPage(context, props);
+      page = new EnterNameFormPage(props);
     });
 
     it('As AN I should be redirected after enter a name with success', async() => {
