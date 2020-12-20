@@ -22,6 +22,7 @@ import {waitFor} from "@testing-library/react";
 import fetchMock from "fetch-mock-jest";
 
 beforeEach(() => {
+  document.cookie = "csrfToken=TEST_CSRF_TOKEN;";
   jest.resetModules();
 });
 

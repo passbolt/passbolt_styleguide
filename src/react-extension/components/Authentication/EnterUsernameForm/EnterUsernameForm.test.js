@@ -23,6 +23,7 @@ import fetchMock from "fetch-mock-jest";
 import {Response} from "node-fetch";
 
 beforeEach(() => {
+  document.cookie = "csrfToken=TEST_CSRF_TOKEN;";
   jest.resetModules();
 });
 

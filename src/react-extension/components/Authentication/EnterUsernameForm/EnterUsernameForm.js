@@ -89,8 +89,7 @@ class EnterUsernameForm extends Component {
    * @returns {Promise<SiteSettings>}
    */
   async getSiteSettings() {
-    const apiClientOptions = new ApiClientOptions()
-      .setBaseUrl(window.location.origin)
+    const apiClientOptions = this.getApiClientOptions()
       .setResourceName("settings");
     const apiClient = new ApiClient(apiClientOptions);
     const {body} = await apiClient.findAll();
@@ -156,11 +155,32 @@ class EnterUsernameForm extends Component {
     const recoverDto = {
       username: this.state.username
     };
-    const apiOptions = new ApiClientOptions()
-      .setBaseUrl(window.location.origin)
+    const apiOptions = this.getApiClientOptions()
       .setResourceName("users/recover");
     const apiClient = new ApiClient(apiOptions);
     await apiClient.create(recoverDto);
+  }
+
+  /**
+   * Get the api client options.
+   * @returns {ApiClientOptions}
+   */
+  getApiClientOptions() {
+    const csrfToken = this.getCsrfToken();
+    return new ApiClientOptions()
+      .setBaseUrl(window.location.origin)
+      .setCsrfToken(csrfToken);
+  }
+
+  /**
+   * Get csrf token
+   * @returns {string}
+   */
+  getCsrfToken() {
+    return document.cookie
+      .split('; ')
+      .find(row => row.startsWith('csrfToken'))
+      .split('=')[1];
   }
 
   /**

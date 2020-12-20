@@ -27,7 +27,6 @@ class EnterNameForm extends Component {
   constructor(props) {
     super(props);
     this.state = this.defaultState;
-    this.apiClient = new ApiClient(new ApiClientOptions().setBaseUrl(window.location.origin).setResourceName("users/register"));
     this.createInputRefs();
     this.bindEventHandlers();
   }
@@ -80,6 +79,28 @@ class EnterNameForm extends Component {
   createInputRefs() {
     this.firstnameRef = React.createRef();
     this.lastnameRef = React.createRef();
+  }
+
+  /**
+   * Get the api client options.
+   * @returns {ApiClientOptions}
+   */
+  getApiClientOptions() {
+    const csrfToken = this.getCsrfToken();
+    return new ApiClientOptions()
+      .setBaseUrl(window.location.origin)
+      .setCsrfToken(csrfToken);
+  }
+
+  /**
+   * Get csrf token
+   * @returns {string}
+   */
+  getCsrfToken() {
+    return document.cookie
+      .split('; ')
+      .find(row => row.startsWith('csrfToken'))
+      .split('=')[1];
   }
 
   /**
@@ -156,7 +177,10 @@ class EnterNameForm extends Component {
         last_name: this.state.lastname
       }
     };
-    await this.apiClient.create(userDto);
+    const apiClientOptions = this.getApiClientOptions()
+      .setResourceName("users/register");
+    const apiClient = new ApiClient(apiClientOptions);
+    await apiClient.create(userDto);
   }
 
   /**

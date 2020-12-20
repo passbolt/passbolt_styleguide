@@ -10,6 +10,8 @@
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  */
+import {CsrfToken} from "./csrfToken";
+
 export class ApiClientOptions {
   /**
    * Set base url
@@ -34,6 +36,29 @@ export class ApiClientOptions {
         this.baseUrl = baseUrl;
       } else {
         throw new TypeError('ApiClientOptions baseurl should be a string or URL');
+      }
+    }
+    return this;
+  }
+
+  /**
+   * Set CSRF Token
+   *
+   * @throws {TypeError} if csrfToken is empty or not a string or CsrfToken object
+   * @param {string|CsrfToken} csrfToken
+   * @public
+   */
+  setCsrfToken(csrfToken) {
+    if (!csrfToken) {
+      throw new TypeError('ApiClientOption csrfToken is required.');
+    }
+    if (typeof csrfToken === 'string') {
+      this.csrfToken = new CsrfToken(csrfToken);
+    } else {
+      if (csrfToken instanceof CsrfToken) {
+        this.csrfToken = csrfToken;
+      } else {
+        throw new TypeError('ApiClientOption csrfToken should be a string or a valid CsrfToken.');
       }
     }
     return this;
