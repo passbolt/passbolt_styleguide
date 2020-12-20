@@ -21,6 +21,10 @@ import DisplayError from "./components/Authentication/DisplayError/DisplayError"
 import EnterUsernameForm from "./components/Authentication/EnterUsernameForm/EnterUsernameForm";
 import ActionFeedbackContextProvider from "./contexts/ActionFeedbackContext";
 import EnterNameForm from "./components/Authentication/EnterNameForm/EnterNameForm";
+import {ApiClientOptions} from "./lib/apiClient/apiClientOptions";
+import {ApiClient} from "./lib/apiClient/apiClient";
+import SiteSettings from "./lib/Settings/SiteSettings";
+import ApiFooter from "./components/Footer/ApiFooter";
 import Delay from "./components/Common/Delay/Delay";
 import LoadingSpinner from "./components/Common/Loading/LoadingSpinner/LoadingSpinner";
 import ApiAppContext from "./contexts/ApiAppContext";
@@ -31,14 +35,35 @@ class ApiTriage extends Component {
     this.state = this.defaultState;
   }
 
+  /**
+   * Returns the component default state
+   */
   get defaultState() {
     return {
       username: null, // The username to setup or recover or login
+      siteSettings: null, // The site settings
+      trustedDomain: window.location.origin, // The current url origin
 
       setContext: context => {
         this.setState(context);
       },
     };
+  }
+
+  async componentDidMount() {
+    await this.getSiteSettings();
+  }
+
+  /**
+   * Fetch the site settings
+   */
+  async getSiteSettings() {
+    const apiClientOptions = new ApiClientOptions()
+      .setBaseUrl(this.state.trustedDomain)
+      .setResourceName("settings");
+    const apiClient = new ApiClient(apiClientOptions);
+    const {body} = await apiClient.findAll();
+    await this.setState({siteSettings: new SiteSettings(body)});
   }
 
   render() {
@@ -82,6 +107,7 @@ class ApiTriage extends Component {
               </div>
             </div>
           </Router>
+          <ApiFooter siteSettings={this.state.siteSettings}/>
         </ActionFeedbackContextProvider>
       </ApiAppContext.Provider>
     );

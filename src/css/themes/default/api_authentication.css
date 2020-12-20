@@ -1621,6 +1621,153 @@ a.unfav .svg-icon svg {
     margin-bottom: 2.5em;
   }
 }
+/*
+ * Footer
+ */
+.footer {
+  margin-top: 0em;
+  position: fixed;
+  bottom: 0;
+  padding: 1.167em 1.5% 0 0.5%;
+  text-align: right;
+  font-size: 0.75em;
+  /* 12px */
+  width: 98%;
+  height: 2em;
+  background: #FFF;
+  border-top: 1px solid #DDD;
+  z-index: 890;
+}
+.footer .footer-links {
+  width: 100%;
+  margin-top: -0.25em;
+}
+.footer .footer-links li {
+  display: inline;
+  margin-right: 1.5em;
+}
+.footer .footer-links li .github-star {
+  display: inline;
+  position: absolute;
+  margin-left: -8em;
+  margin-top: -1px;
+}
+.footer .footer-links a:not(.gh-btn):not(.gh-count) {
+  border: 0;
+}
+/*
+	do not show javascript needed warning if js is enabled
+	this needs modernizer to work
+*/
+.js .message.no-js {
+  display: none;
+}
+.cookies .message.no-cookies {
+  display: none;
+}
+/* message styling per types */
+.message {
+  padding: 1em;
+}
+.message a {
+  border-bottom: 1px solid #888;
+}
+.message a:hover {
+  border-bottom: 1px solid #2894DF;
+}
+.message.error {
+  color: #333;
+  background: #ffe4e4;
+}
+.message.error a:link,
+.message.error a:visited {
+  color: #333;
+  border-bottom: 1px dotted #888;
+}
+.message.error a:hover {
+  color: #333;
+  border-bottom: 1px solid #888;
+}
+.message.success {
+  color: #333;
+  background: #EDF7EB;
+}
+.message.notice {
+  color: #333;
+  background: #daecf9;
+}
+.message.warning {
+  color: #333;
+  background: #FEF0BF;
+}
+.message p:last-child {
+  margin-bottom: 0;
+}
+/* big side info message blocks on setup or profile pages */
+.message.side-message {
+  margin-left: 1em;
+  font-size: 1em;
+  margin-right: 2em;
+}
+.message.side-message ul,
+.message.side-message p {
+  padding-bottom: 1em;
+}
+/* success animation */
+.message.success.success-large.animated {
+  background: #FFF;
+  color: #333;
+  display: flex;
+  border: 1px solid #DDD;
+  border-radius: 3px;
+}
+.message.success.success-large.animated .illustration {
+  flex: 0 0 180px;
+}
+.message.success.success-large.animated .additional-information {
+  flex: 1;
+  line-height: 180px;
+  margin-top: 1.5em;
+  padding-left: 1em;
+}
+@keyframes drawCircle {
+  0% {
+    stroke-dashoffset: 180px;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes drawCheck {
+  0% {
+    stroke-dashoffset: 50px;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+.message.success.success-large.animated #successAnimationCircle {
+  stroke-dasharray: 180px 180px;
+  stroke: #009900;
+}
+.message.success.success-large.animated #successAnimationCheck {
+  stroke-dasharray: 50px 50px;
+  stroke: #009900;
+}
+.message.success.success-large.animated #successAnimation.animated {
+  animation: 0.75s ease-out 0s 1 both pop;
+}
+.message.success.success-large.animated #successAnimation.animated #successAnimationCircle {
+  animation: 0.75s cubic-bezier(0.77, 0, 0.175, 1) 0s 1 both drawCircle;
+}
+.message.success.success-large.animated #successAnimation.animated #successAnimationCheck {
+  animation: 0.75s cubic-bezier(0.77, 0, 0.175, 1) 0s 1 both drawCheck;
+}
+@media only screen and (max-width: 767px) {
+  .message.success.success-large.animated {
+    flex-direction: column;
+  }
+}
 html,
 body {
   height: 100%;
@@ -1931,6 +2078,12 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center ;
+}
+.login.page .message.error {
+  display: block;
+  clear: both;
+  width: 100%;
+  color: #D40101;
 }
 @media only screen and (min-width: 42rem) {
   body {

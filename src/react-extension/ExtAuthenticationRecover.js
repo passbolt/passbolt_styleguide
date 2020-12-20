@@ -17,11 +17,32 @@ import AuthenticationContextProvider, {AuthenticationContext} from "./contexts/A
 import ManageDialogs from "./components/Common/Dialog/ManageDialogs/ManageDialogs";
 import DialogContextProvider from "../react/contexts/Common/DialogContext";
 import RecoverAuthentication from "./components/AuthenticationRecover/RecoverAuthentication/RecoverAuthentication";
+import SiteSettings from "./lib/Settings/SiteSettings";
+import ExtFooter from "./components/Footer/ExtFooter";
 
 /**
  * The recover application served by the browser extension.
  */
 class ExtAuthenticationRecover extends Component {
+  /**
+   * Default constructor
+   * @param props Component props
+   */
+  constructor(props) {
+    super(props);
+    this.state = this.defaultState;
+  }
+
+  /**
+   * Returns the component default state
+   */
+  get defaultState() {
+    return {
+      siteSettings: null, // The site settings
+      extensionVersion: null // The extension version
+    };
+  }
+
   /**
    * Returns the component default state
    */
@@ -30,6 +51,32 @@ class ExtAuthenticationRecover extends Component {
       port: this.props.port,
       storage: this.props.storage,
     };
+  }
+
+  /**
+   * Whenever the component is mounted
+   */
+  async componentDidMount() {
+    await this.getSiteSettings();
+    await this.getExtensionVersion();
+  }
+
+  /**
+   * Get the list of site settings from background page and set it in the state
+   * Using SiteSettings
+   */
+  async getSiteSettings() {
+    const settings = await this.props.port.request("passbolt.site.settings");
+    const siteSettings = new SiteSettings(settings);
+    this.setState({siteSettings});
+  }
+
+  /**
+   * Get extension version
+   */
+  async getExtensionVersion() {
+    const extensionVersion = await this.props.port.request('passbolt.addon.get-version');
+    this.setState({extensionVersion});
   }
 
   /**
@@ -50,6 +97,9 @@ class ExtAuthenticationRecover extends Component {
               </div>
             </div>
           </div>
+          <ExtFooter
+            siteSettings={this.state.siteSettings}
+            extensionVersion={this.state.extensionVersion}/>
         </DialogContextProvider>
       </AuthenticationContextProvider>
     );
