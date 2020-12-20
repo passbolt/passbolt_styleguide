@@ -16,7 +16,7 @@ import ActionFeedbackContextProvider from "./contexts/ActionFeedbackContext";
 import DialogContextProvider from "../react/contexts/Common/DialogContext";
 import ContextualMenuContextProvider from "../react/contexts/Common/ContextualMenuContext";
 import ShareActionFeedbacks from "./components/Share/ShareActionFeedbacks";
-import {BrowserRouter as Router, Route, Switch} from "react-router-dom";
+import {Redirect, BrowserRouter as Router, Route, Switch} from "react-router-dom";
 import AdministrationWorkspaceContextProvider from "./contexts/AdministrationWorkspaceContext";
 import ManageDialogs from "../react/components/Common/Dialog/ManageDialogs/ManageDialogs";
 import ManageContextualMenu from "./components/ManageContextualMenu";
@@ -36,11 +36,20 @@ class ApiApp extends Component {
     super(props);
     this.state = this.getDefaultState(props);
   }
-
+  /**
+   * ComponentDidMount
+   * Invoked immediately after component is inserted into the tree
+   * @return {void}
+   */
   async componentDidMount() {
     await this.getLoggedInUser();
+    await this.removeSplashScreen();
   }
 
+  /**
+   * Default state
+   * @returns {object}
+   */
   getDefaultState() {
     return {
       loggedInUser: null, // The logged in user
@@ -58,11 +67,22 @@ class ApiApp extends Component {
     };
   }
 
+  /**
+   * Retrieve the logged in user.
+   * @returns {Promise<object>}
+   */
   async getLoggedInUser() {
     const apiClientOptions = new ApiClientOptions().setBaseUrl(this.state.trustedDomain).setResourceName("users");
     const apiClient = new ApiClient(apiClientOptions);
     const result = await apiClient.get("me");
     this.setLoggedInUser(result.body);
+  }
+
+  /**
+   * Remove the splashscreen.
+   */
+  removeSplashScreen() {
+    document.getElementsByTagName("html")[0].classList.remove("launching");
   }
 
   setLoggedInUser(loggedInUser) {
@@ -79,7 +99,10 @@ class ApiApp extends Component {
               <ShareActionFeedbacks/>
               <Router>
                 <Switch>
-                  <Route path="/app/administration/*">
+                  <Route exact path="/app/administration">
+                    <Redirect to="/app/administration/mfa"/>
+                  </Route>
+                  <Route path="/app/administration">
                     <AdministrationWorkspaceContextProvider>
                       <ManageDialogs/>
                       <ManageContextualMenu/>

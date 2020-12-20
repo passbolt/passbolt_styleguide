@@ -57,7 +57,6 @@ class ApiTriage extends Component {
                     fallback={<LoadingSpinner/>}>
                     <InstallExtension/>
                   </Delay>
-
                 </Route>
                 <Route path={["/setup/error", "/setup/recover/error", "/auth/login/error"]}>
                   <DisplayError/>
