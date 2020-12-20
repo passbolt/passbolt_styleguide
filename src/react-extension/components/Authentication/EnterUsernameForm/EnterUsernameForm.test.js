@@ -16,7 +16,7 @@
  * Unit tests on EnterUsernameForm in regard of specifications
  */
 import EnterUsernameFormPage from "./EnterUsernameForm.test.page";
-import {defaultAppContext, defaultProps} from "./EnterUsernameForm.test.data";
+import {defaultProps} from "./EnterUsernameForm.test.data";
 import {ActionFeedbackContext} from "../../../contexts/ActionFeedbackContext";
 import {waitFor} from "@testing-library/react";
 import fetchMock from "fetch-mock-jest";
@@ -29,7 +29,6 @@ beforeEach(() => {
 
 describe("As AN I should see the Enter Username Form Page", () => {
   let page; // The page to test against
-  const context = defaultAppContext(); // The applicative context
   const props = defaultProps(); // The applicative context
 
   const mockFetchPost = (url, response, options) => fetchMock.post(url, response, options);
@@ -43,7 +42,7 @@ describe("As AN I should see the Enter Username Form Page", () => {
       fetchMock.reset();
       const siteSettingsResult = '{"body":{"passbolt":{"legal":{"privacy_policy":{"url":"https://www.passbolt.com/privacy"},"terms":{"url":"https://www.passbolt.com/terms"}}}}}';
       mockFetchGet("http://localhost/settings.json?api-version=v2", new Response(siteSettingsResult, {url: 'http://localhost/settings.json?api-version=v2', status: 200}), {overwriteRoutes: true});
-      page = new EnterUsernameFormPage(context, props);
+      page = new EnterUsernameFormPage(props);
     });
 
     it('As AN I should be redirected after enter a username with success', async() => {
@@ -60,7 +59,7 @@ describe("As AN I should see the Enter Username Form Page", () => {
     it('As AN I should be redirected after enter a username with success with no terms or privacy policy required by the API', async() => {
       const siteSettingsResult = '{"body":{}}';
       mockFetchGet("http://localhost/settings.json?api-version=v2", new Response(siteSettingsResult, {url: 'http://localhost/settings.json?api-version=v2', status: 200}), {overwriteRoutes: true});
-      page = new EnterUsernameFormPage(context, props);
+      page = new EnterUsernameFormPage(props);
 
       expect(page.exists()).toBeTruthy();
       expect(page.title).toBe('Please enter your email to continue.');
@@ -131,7 +130,7 @@ describe("As AN I should see the Enter Username Form Page", () => {
     it('As AN I should be redirected to register if no account match and the registration is public', async() => {
       const siteSettingsResult = '{"body":{"passbolt":{"registration":{"public":true},"legal":{"privacy_policy":{"url":"https://www.passbolt.com/privacy"},"terms":{"url":"https://www.passbolt.com/terms"}}}}}';
       mockFetchGet("http://localhost/settings.json?api-version=v2", new Response(siteSettingsResult, {url: 'http://localhost/settings.json?api-version=v2', status: 200}), {overwriteRoutes: true});
-      page = new EnterUsernameFormPage(context, props);
+      page = new EnterUsernameFormPage(props);
 
       // Fill the form
       page.insertUsername("admin@passbolt.com");
@@ -142,6 +141,7 @@ describe("As AN I should see the Enter Username Form Page", () => {
       mockFetchGet("http://localhost/setup/name.json?api-version=v2", {});
 
       await page.next();
+      expect(props.appContext.setContext).toHaveBeenCalledWith({"username": "admin@passbolt.com"});
       expect(props.history.push).toHaveBeenCalledWith("/setup/name");
     });
 
