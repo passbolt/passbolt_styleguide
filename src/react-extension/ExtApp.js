@@ -41,13 +41,13 @@ import HandleFolderMoveStrategyDialogEvents
   from "./components/Folder/HandleFolderMoveStrategyDialogEvents/HandleFolderMoveStrategyDialogEvents";
 import ManageLoading from "./components/Common/Loading/ManageLoading/ManageLoading";
 import LoadingContextProvider from "./contexts/Common/LoadingContext";
-import Footer from "./components/Footer/Footer";
 import DisplayUserWorkspace from "./components/User/DisplayUserWorkspace/DisplayUserWorkspace";
 import HandleRouteFallback from "./components/Route/HandleRouteFallback";
 import DisplayUserSettingsWorkspace
   from "./components/UserSetting/DisplayUserSettingsWorkspace/DisplayUserSettingsWorkspace";
 import HandleSessionExpired
   from "./components/Auth/HandleSessionExpired/HandleSessionExpired";
+import ExtFooter from "./components/Footer/ExtFooter";
 
 /**
  * The passbolt application served by the browser extension.
@@ -66,6 +66,7 @@ class ExtApp extends Component {
 
   async componentDidMount() {
     await this.getSiteSettings();
+    await this.getExtensionVersion();
     this.getUserSettings();
     this.getLoggedInUser();
     this.getResources();
@@ -89,6 +90,7 @@ class ExtApp extends Component {
 
       siteSettings: null,
       userSettings: null,
+      extensionVersion: null, // The extension version
 
       setContext: context => {
         this.setState(context);
@@ -214,6 +216,14 @@ class ExtApp extends Component {
     const settings = await this.props.port.request("passbolt.site.settings");
     const siteSettings = new SiteSettings(settings);
     this.setState({siteSettings});
+  }
+
+  /**
+   * Get extension version
+   */
+  async getExtensionVersion() {
+    const extensionVersion = await this.props.port.request("passbolt.addon.get-version");
+    this.setState({extensionVersion});
   }
 
   /**
@@ -426,7 +436,9 @@ class ExtApp extends Component {
                   </Switch>
                 </Router>
                 <ManageLoading/>
-                <Footer/>
+                <ExtFooter
+                  siteSettings={this.state.siteSettings}
+                  extensionVersion={this.state.extensionVersion}/>
               </LoadingContextProvider>
             </ContextualMenuContextProvider>
           </DialogContextProvider>

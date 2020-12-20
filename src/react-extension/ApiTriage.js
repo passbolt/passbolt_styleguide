@@ -62,8 +62,8 @@ class ApiTriage extends Component {
       .setBaseUrl(this.state.trustedDomain)
       .setResourceName("settings");
     const apiClient = new ApiClient(apiClientOptions);
-    const siteSettings = await apiClient.findAll();
-    await this.setState({siteSettings: new SiteSettings(siteSettings)});
+    const {body} = await apiClient.findAll();
+    await this.setState({siteSettings: new SiteSettings(body)});
   }
 
   render() {

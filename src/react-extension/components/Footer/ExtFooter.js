@@ -33,7 +33,7 @@ class ExtFooter extends Component {
    * Returns the terms link url
    */
   get privacyUrl() {
-    return this.props.siteSettings.settings.app.legal.terms;
+    return this.props.siteSettings.privacyLink;
   }
 
   /**
@@ -54,24 +54,28 @@ class ExtFooter extends Component {
    * Returns the privacy link url
    */
   get termsUrl() {
-    return this.props.siteSettings.settings.app.legal.privacy;
+    return this.props.siteSettings.termsLink;
   }
 
   /**
-   * Returns the server and extension versions label to display
+   * Return the server (if available) and browser extension version.
+   * i.e. SERVER_VERSION / BROWSER_EXTENSION_VERSION
    */
   get versions() {
-    const serverVersion = this.props.siteSettings.settings.app.version.number;
-    return `${serverVersion} / ${this.props.extensionVersion}`;
+    const serverVersion = this.props.siteSettings.version;
+    if (serverVersion) {
+      return `${serverVersion} / ${this.props.extensionVersion}`;
+    }
+    return this.props.extensionVersion;
   }
 
   /**
    * Returns true if the application is in an unsafe mode
    */
   get isUnsafeMode() {
-    const isDebugMode = this.props.siteSettings.settings.app.debug;
-    const isHttpMode = this.props.siteSettings.settings.app.url.trim().startsWith('http://');
-    return isDebugMode || isHttpMode;
+    const debug = this.props.siteSettings.debug;
+    const isHttpMode = this.props.siteSettings.url.startsWith('http://');
+    return debug || isHttpMode;
   }
 
   /**
@@ -82,50 +86,54 @@ class ExtFooter extends Component {
     return (
       <footer>
         <div className="footer">
-          { this.isReady &&
-            <ul className="footer-links">
-              {this.isUnsafeMode &&
-              <li className="error message">
-                <a
-                  title="terms of service"
-                  href={this.unsafeUrl}
-                  target="_blank" rel="noopener noreferrer">
-                  Unsafe mode
-                </a>
-              </li>
-              }
-              <li>
-                <a href={this.termsUrl}
-                  target="_blank"
-                  rel="noopener noreferrer">
-                  Terms
-                </a>
-              </li>
-              <li>
-                <a href={this.privacyUrl}
-                  target="_blank"
-                  rel="noopener noreferrer">
-                  Privacy
-                </a>
-              </li>
-              <li>
-                <a href={this.creditsUrl}
-                  target="_blank"
-                  rel="noopener noreferrer">
-                  Credits
-                </a>
-              </li>
-              <li>
-                <a
-                  href={this.creditsUrl}
-                  className="tooltip-left"
-                  data-tooltip={this.versions}
-                  target="_blank"
-                  rel="noopener noreferrer">
-                  <Icon name="heart-o"/>
-                </a>
-              </li>
-            </ul>
+          {this.isReady &&
+          <ul className="footer-links">
+            {this.isUnsafeMode &&
+            <li className="error message">
+              <a
+                title="terms of service"
+                href={this.unsafeUrl}
+                target="_blank" rel="noopener noreferrer">
+                Unsafe mode
+              </a>
+            </li>
+            }
+            {this.termsUrl &&
+            <li>
+              <a href={this.termsUrl}
+                target="_blank"
+                rel="noopener noreferrer">
+                Terms
+              </a>
+            </li>
+            }
+            {this.privacyUrl &&
+            <li>
+              <a href={this.privacyUrl}
+                target="_blank"
+                rel="noopener noreferrer">
+                Privacy
+              </a>
+            </li>
+            }
+            <li>
+              <a href={this.creditsUrl}
+                target="_blank"
+                rel="noopener noreferrer">
+                Credits
+              </a>
+            </li>
+            <li>
+              <a
+                href={this.creditsUrl}
+                className="tooltip-left"
+                data-tooltip={this.versions}
+                target="_blank"
+                rel="noopener noreferrer">
+                <Icon name="heart-o"/>
+              </a>
+            </li>
+          </ul>
           }
         </div>
       </footer>

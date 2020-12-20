@@ -105,4 +105,29 @@ export default class SiteSettings {
     const registrationPublic = getPropValue(this.settings, "passbolt.registration.public");
     return registrationPublic === true;
   }
+
+  /**
+   * Get debug mode
+   * @returns {boolean}
+   */
+  get debug() {
+    const debug = getPropValue(this.settings, "app.debug");
+    return debug === true;
+  }
+
+  /**
+   * Get app url
+   * @returns {boolean}
+   */
+  get url() {
+    return getPropValue(this.settings, "app.url") || "";
+  }
+
+  /**
+   * Get app version
+   * @returns {string}
+   */
+  get version() {
+    return getPropValue(this.settings, "app.version.number");
+  }
 }
