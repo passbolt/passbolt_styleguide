@@ -18,7 +18,7 @@ import {withRouter} from "react-router-dom";
 /**
  * This component tracks any navigation changes and handle it
  */
-class HandleRouteChangeRequested extends Component {
+class HandleExtAppBootstrapRouteChangeRequested extends Component {
   /**
    * Whenever the component is mounted
    */
@@ -30,8 +30,10 @@ class HandleRouteChangeRequested extends Component {
    * Whenever the route change is requested
    */
   handleRouteChangeRequested() {
-    this.props.port.on('passbolt.navigation.routeChangeRequested', pathname => {
-      this.props.history.replace(pathname);
+    this.props.port.on('passbolt.app-bootstrap.change-route', pathname => {
+      if (/^\/[A-Za-z0-9\-\/]*$/.test(pathname)) {
+        this.props.history.replace(pathname);
+      }
     });
   }
 
@@ -46,10 +48,9 @@ class HandleRouteChangeRequested extends Component {
   }
 }
 
-
-HandleRouteChangeRequested.propTypes = {
+HandleExtAppBootstrapRouteChangeRequested.propTypes = {
   history: PropTypes.object,
   port: PropTypes.any
 };
-export default withRouter(HandleRouteChangeRequested);
+export default withRouter(HandleExtAppBootstrapRouteChangeRequested);
 

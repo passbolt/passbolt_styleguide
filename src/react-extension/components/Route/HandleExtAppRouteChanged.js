@@ -19,7 +19,7 @@ import AppContext from "../../contexts/AppContext";
 /**
  * This component tracks any navigation changes and handle it
  */
-class HandleRouteChanged extends Component {
+class HandleExtAppRouteChanged extends Component {
   /**
    * Whenever the component is mounted
    */
@@ -32,7 +32,7 @@ class HandleRouteChanged extends Component {
    */
   handleRouteChanged() {
     this.props.history.listen(location => {
-      this.context.port.emit('passbolt.navigation.routeChanged', location.pathname);
+      this.context.port.emit('passbolt.app.route-changed', location.pathname);
     });
   }
 
@@ -47,9 +47,9 @@ class HandleRouteChanged extends Component {
   }
 }
 
-HandleRouteChanged.contextType = AppContext;
-HandleRouteChanged.propTypes = {
+HandleExtAppRouteChanged.contextType = AppContext;
+HandleExtAppRouteChanged.propTypes = {
   history: PropTypes.object
 };
-export default withRouter(HandleRouteChanged);
+export default withRouter(HandleExtAppRouteChanged);
 
