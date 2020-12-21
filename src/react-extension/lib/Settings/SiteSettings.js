@@ -66,6 +66,15 @@ export default class SiteSettings {
   }
 
   /**
+   * Check if the remember options include the "until I logout" options
+   * @return {boolean}
+   */
+  get hasRememberMeUntilILogoutOption() {
+    const options = this.getRememberMeOptions() || {};
+    return typeof options[-1] !== "undefined";
+  }
+
+  /**
    * Get the server timezone
    * @returns {string|null}
    */
