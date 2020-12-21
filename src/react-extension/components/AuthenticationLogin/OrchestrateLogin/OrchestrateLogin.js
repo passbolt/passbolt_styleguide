@@ -14,12 +14,6 @@ import LoadingSpinner from "../../../../react/components/Common/Loading/LoadingS
  */
 class OrchestrateLogin extends Component {
   /**
-   * Returns the site settings remember me falg
-   */
-  get canRememberMe() {
-    return Boolean(this.props.siteSettings.settings.passbolt.plugins.rememberMe.options['-1']);
-  }
-  /**
    * Whenever the component is initialized
    */
   componentDidMount() {
@@ -59,6 +53,14 @@ class OrchestrateLogin extends Component {
    */
   initializeLogin() {
     this.context.onInitializeLoginRequested();
+  }
+
+  /**
+   * Can the user use the remember until I logout option
+   * @return {boolean}
+   */
+  get canRememberMe() {
+    return this.props.siteSettings.hasRememberMeUntilILogoutOption;
   }
 
   /**
