@@ -19,7 +19,7 @@ import FormSubmitButton from "../../../../react/components/Common/Inputs/FormSub
 import {ApiClient} from "../../../lib/apiClient/apiClient";
 import {ApiClientOptions} from "../../../lib/apiClient/apiClientOptions";
 import SiteSettings from "../../../lib/Settings/SiteSettings";
-import {withApp} from "../../../contexts/ApiAppContext";
+import {withAppContext} from "../../../contexts/AppContext";
 
 const REDIRECT_CHECK_MAILBOX_URL = "/auth/login/check-mailbox";
 const REDIRECT_REGISTRATION = "/setup/name";
@@ -199,7 +199,7 @@ class EnterUsernameForm extends Component {
     if (userNotFound) {
       const isRegistrationPublic = await this.isRegistrationPublic();
       if (isRegistrationPublic) {
-        this.props.appContext.setContext({username: this.state.username});
+        this.props.context.setContext({username: this.state.username});
         this.props.history.push(REDIRECT_REGISTRATION);
       } else {
         this.props.history.push(REDIRECT_ERROR);
@@ -366,9 +366,9 @@ class EnterUsernameForm extends Component {
 }
 
 EnterUsernameForm.propTypes = {
-  appContext: PropTypes.any, // The application context provider
+  context: PropTypes.any, // The application context provider
   history: PropTypes.object,
   actionFeedbackContext: PropTypes.object,
 };
 
-export default withRouter(withApp(withActionFeedback(EnterUsernameForm)));
+export default withRouter(withAppContext(withActionFeedback(EnterUsernameForm)));

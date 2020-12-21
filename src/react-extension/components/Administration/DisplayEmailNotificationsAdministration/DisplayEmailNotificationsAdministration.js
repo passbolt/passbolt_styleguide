@@ -13,7 +13,7 @@
  */
 import React from "react";
 import PropTypes from "prop-types";
-import ApiAppContext from "../../../contexts/ApiAppContext";
+import AppContext from "../../../contexts/AppContext";
 import {withActionFeedback} from "../../../../react-extension/contexts/ActionFeedbackContext";
 import {ApiClientOptions} from "../../../lib/apiClient/apiClientOptions";
 import {ApiClient} from "../../../lib/apiClient/apiClient";
@@ -527,7 +527,7 @@ class DisplayEmailNotificationsAdministration extends React.Component {
   }
 }
 
-DisplayEmailNotificationsAdministration.contextType = ApiAppContext;
+DisplayEmailNotificationsAdministration.contextType = AppContext;
 
 DisplayEmailNotificationsAdministration.propTypes = {
   administrationWorkspaceContext: PropTypes.object, // The administration workspace context

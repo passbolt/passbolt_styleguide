@@ -11,7 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  */
 import React, {Component} from "react";
-import ApiAppContext from "./contexts/ApiAppContext";
+import AppContext from "./contexts/AppContext";
 import ActionFeedbackContextProvider from "./contexts/ActionFeedbackContext";
 import DialogContextProvider from "../react/contexts/Common/DialogContext";
 import ContextualMenuContextProvider from "../react/contexts/Common/ContextualMenuContext";
@@ -107,7 +107,7 @@ class ApiApp extends Component {
 
   render() {
     return (
-      <ApiAppContext.Provider value={this.state}>
+      <AppContext.Provider value={this.state}>
         <ActionFeedbackContextProvider>
           <DialogContextProvider>
             <ContextualMenuContextProvider>
@@ -125,13 +125,18 @@ class ApiApp extends Component {
                       <AdministrationWorkspace/>
                     </AdministrationWorkspaceContextProvider>
                   </Route>
+                  { /* If the ApiApp doesn't match any route, it's then an ExtApp route. Reload the page and let the browser extension app handle this route */}
+                  <Route path="/" render={() => {
+                    window.location.reload();
+                  }}>
+                  </Route>
                 </Switch>
               </Router>
               <ApiFooter siteSettings={this.state.siteSettings}/>
             </ContextualMenuContextProvider>
           </DialogContextProvider>
         </ActionFeedbackContextProvider>
-      </ApiAppContext.Provider>
+      </AppContext.Provider>
     );
   }
 }

@@ -4,7 +4,7 @@
  */
 export function defaultProps() {
   return {
-    appContext: {
+    context: {
       username: "user@passbolt.com"
     },
     history: {

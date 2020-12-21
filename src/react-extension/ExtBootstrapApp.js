@@ -20,7 +20,6 @@ import InsertClipboardIframe from "./components/InsertClipboardIframe";
 import UserSettings from "./lib/Settings/UserSettings";
 import HandleLegacyAdministrationAppjs from "./components/Legacy/HandleLegacyAdministrationAppjs";
 import HandleExtAppBootstrapRouteChangeRequested from "./components/Route/HandleExtAppBootstrapRouteChangeRequested";
-import HandleExtBoostrapAppHistoryRouteChanged from "./components/Route/HandleExtBoostrapAppHistoryRouteChanged";
 
 /**
  * The bootstrap of the passbolt application served by the browser extension.
@@ -87,7 +86,6 @@ class ExtBootstrapApp extends Component {
       <>
         {this.isReady &&
         <Router basename={this.basename}>
-          <HandleExtBoostrapAppHistoryRouteChanged port={this.props.port}/>
           <HandleExtAppBootstrapRouteChangeRequested port={this.props.port}/>
           <Switch>
             <Route exact path={[

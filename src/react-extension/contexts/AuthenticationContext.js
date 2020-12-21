@@ -154,8 +154,7 @@ class AuthenticationContextProvider extends React.Component {
     } else if (error.name === "ServerKeyChangedError") {
       await this.setState({state: AuthenticationContextState.LOGIN_SERVER_KEY_CHANGED});
     } else if (error.name === "UserNotFoundError") {
-      // @todo treat this case
-      console.log('todo no user associated with this key');
+      // This case should be treated by the background page itself, and the login form should not be displayed.
     } else {
       return Promise.reject(error);
     }

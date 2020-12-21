@@ -4,7 +4,7 @@
  */
 export function defaultProps() {
   return {
-    appContext: {
+    context: {
       setContext: jest.fn()
     },
     history: {

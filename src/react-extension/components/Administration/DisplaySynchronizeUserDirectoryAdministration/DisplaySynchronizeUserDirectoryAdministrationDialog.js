@@ -13,7 +13,7 @@
  */
 import React, {Component} from "react";
 import PropTypes from "prop-types";
-import ApiAppContext from "../../../contexts/ApiAppContext";
+import AppContext from "../../../contexts/AppContext";
 import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
 import Icon from "../../../../react/components/Common/Icons/Icon";
 import {ApiClient} from "../../../lib/apiClient/apiClient";
@@ -315,7 +315,7 @@ class DisplaySynchronizeUserDirectoryAdministrationDialog extends Component {
   }
 }
 
-DisplaySynchronizeUserDirectoryAdministrationDialog.contextType = ApiAppContext;
+DisplaySynchronizeUserDirectoryAdministrationDialog.contextType = AppContext;
 
 DisplaySynchronizeUserDirectoryAdministrationDialog.propTypes = {
   onClose: PropTypes.func,

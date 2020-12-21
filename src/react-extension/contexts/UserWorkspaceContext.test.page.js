@@ -30,7 +30,7 @@ export default class UserWorkspaceContextPage {
    * @param props Props to attach
    */
   constructor(appContext) {
-    this.appContext = appContext;
+    this.context = appContext;
     this.setup(appContext);
   }
 
@@ -86,7 +86,7 @@ export default class UserWorkspaceContextPage {
    * Go to the All Users search filter route
    */
   async goToAllUsers() {
-    this.setup(this.appContext);
+    this.setup(this.context);
     await this.goToLink('.all');
   }
 
@@ -103,7 +103,7 @@ export default class UserWorkspaceContextPage {
    * @param text A specific text search filter
    */
   async goToText(text) {
-    this.setup(this.appContext, {text});
+    this.setup(this.context, {text});
     await this.goToLink('.text');
   }
 
@@ -112,7 +112,7 @@ export default class UserWorkspaceContextPage {
    * @param group A specific group search filter
    */
   async goToGroup(group) {
-    this.setup(this.appContext, {group});
+    this.setup(this.context, {group});
     await this.goToLink('.group');
   }
 

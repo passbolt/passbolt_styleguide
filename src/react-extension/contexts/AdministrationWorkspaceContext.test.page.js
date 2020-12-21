@@ -31,7 +31,7 @@ export default class AdministrationWorkspaceContextPage {
    * @param props Props to attach
    */
   constructor(appContext) {
-    this.appContext = appContext;
+    this.context = appContext;
     this.setup(appContext);
   }
 
@@ -101,7 +101,7 @@ export default class AdministrationWorkspaceContextPage {
    * Go to the mfa route
    */
   async goToMfa() {
-    this.setup(this.appContext);
+    this.setup(this.context);
     await this.goToLink('.mfa');
   }
 

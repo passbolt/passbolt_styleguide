@@ -18,7 +18,7 @@ import FormSubmitButton from "../../../../react/components/Common/Inputs/FormSub
 import {ApiClient} from "../../../lib/apiClient/apiClient";
 import {ApiClientOptions} from "../../../lib/apiClient/apiClientOptions";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
-import {withApp} from "../../../contexts/ApiAppContext";
+import {withAppContext} from "../../../contexts/AppContext";
 
 class EnterNameForm extends Component {
   /**
@@ -172,7 +172,7 @@ class EnterNameForm extends Component {
    */
   async sendName() {
     const userDto = {
-      username: this.props.appContext.username,
+      username: this.props.context.username,
       profile: {
         first_name: this.state.firstname,
         last_name: this.state.lastname
@@ -309,9 +309,9 @@ class EnterNameForm extends Component {
 }
 
 EnterNameForm.propTypes = {
-  appContext: PropTypes.any, // The application context provider
+  context: PropTypes.any, // The application context provider
   history: PropTypes.object,
   actionFeedbackContext: PropTypes.object,
 };
 
-export default withRouter(withApp(withActionFeedback(EnterNameForm)));
+export default withRouter(withAppContext(withActionFeedback(EnterNameForm)));

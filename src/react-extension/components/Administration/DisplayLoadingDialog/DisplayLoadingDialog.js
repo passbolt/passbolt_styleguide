@@ -13,7 +13,7 @@
  */
 import React, {Component} from "react";
 import PropTypes from "prop-types";
-import ApiAppContext from "../../../contexts/ApiAppContext";
+import AppContext from "../../../contexts/AppContext";
 import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
 
 class DisplayLoadingDialog extends Component {
@@ -63,7 +63,7 @@ class DisplayLoadingDialog extends Component {
   }
 }
 
-DisplayLoadingDialog.contextType = ApiAppContext;
+DisplayLoadingDialog.contextType = AppContext;
 
 DisplayLoadingDialog.propTypes = {
   onClose: PropTypes.func,

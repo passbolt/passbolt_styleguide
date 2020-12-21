@@ -13,7 +13,7 @@
  */
 import React, {Component} from "react";
 import PropTypes from "prop-types";
-import ApiAppContext from "../../../contexts/ApiAppContext";
+import AppContext from "../../../contexts/AppContext";
 import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
 import Icon from "../../../../react/components/Common/Icons/Icon";
 import DisplayStructureGroupsUsersTreeItem from "./DisplayStructureGroupsUsersTreeItem";
@@ -242,7 +242,7 @@ class DisplayTestUserDirectoryAdministrationDialog extends Component {
   }
 }
 
-DisplayTestUserDirectoryAdministrationDialog.contextType = ApiAppContext;
+DisplayTestUserDirectoryAdministrationDialog.contextType = AppContext;
 
 DisplayTestUserDirectoryAdministrationDialog.propTypes = {
   onClose: PropTypes.func,

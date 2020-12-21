@@ -12,7 +12,7 @@
  * @since         2.11.0
  */
 import {fireEvent, render, waitFor} from "@testing-library/react";
-import ApiAppContext from "../../../contexts/ApiAppContext";
+import AppContext from "../../../contexts/AppContext";
 import React from "react";
 import DisplaySynchronizeUserDirectoryAdministrationDialog from "./DisplaySynchronizeUserDirectoryAdministrationDialog";
 
@@ -27,9 +27,9 @@ export default class DisplaySynchronizeUserDirectoryAdministrationDialogPage {
    */
   constructor(appContext, props) {
     this._page = render(
-      <ApiAppContext.Provider value={appContext}>
+      <AppContext.Provider value={appContext}>
         <DisplaySynchronizeUserDirectoryAdministrationDialog {...props}/>
-      </ApiAppContext.Provider>
+      </AppContext.Provider>
     );
     this.setupPageObjects();
   }

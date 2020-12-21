@@ -12,12 +12,12 @@
  */
 import React, {Component} from "react";
 import PropTypes from "prop-types";
-import {withApp} from "../../contexts/ApiAppContext";
+import {withAppContext} from "../../contexts/AppContext";
 import {
   AdministrationWorkspaceMenuTypes,
   withAdministrationWorkspace
 } from "../../contexts/AdministrationWorkspaceContext";
-import MainMenu from "../../../react/components/Common/Navigation/MainMenu/MainMenu";
+import DisplayMainMenu from "../navigation/DisplayMainMenu";
 import Logo from "../../../react/components/Common/Navigation/Header/Logo";
 import UserBadgeMenu from "../../../react/components/Common/Navigation/Header/UserBadgeMenu";
 import DisplayAdministrationMenu from "./DisplayAdministrationMenu/DisplayAdministrationMenu";
@@ -60,11 +60,11 @@ class AdministrationWorkspace extends Component {
       <div id="container" className="page administration">
         <div id="app" tabIndex="1000">
           <div className="header first">
-            <MainMenu baseUrl={this.props.appContext.trustedDomain}/>
+            <DisplayMainMenu/>
           </div>
           <div className="header second">
             <Logo/>
-            <UserBadgeMenu baseUrl={this.props.appContext.trustedDomain} user={this.props.appContext.loggedInUser}/>
+            <UserBadgeMenu baseUrl={this.props.context.trustedDomain} user={this.props.context.loggedInUser}/>
           </div>
           <div className="header third">
             <div className="col1 main-action-wrapper">
@@ -101,8 +101,8 @@ class AdministrationWorkspace extends Component {
 }
 
 AdministrationWorkspace.propTypes = {
-  appContext: PropTypes.any, // The application context provider
+  context: PropTypes.any, // The application context provider
   administrationWorkspaceContext: PropTypes.object, // The administration workspace context
 };
 
-export default withApp(withAdministrationWorkspace(AdministrationWorkspace));
+export default withAppContext(withAdministrationWorkspace(AdministrationWorkspace));

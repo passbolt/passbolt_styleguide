@@ -141,7 +141,7 @@ describe("As AN I should see the Enter Username Form Page", () => {
       mockFetchGet("http://localhost/setup/name.json?api-version=v2", {});
 
       await page.next();
-      expect(props.appContext.setContext).toHaveBeenCalledWith({"username": "admin@passbolt.com"});
+      expect(props.context.setContext).toHaveBeenCalledWith({"username": "admin@passbolt.com"});
       expect(props.history.push).toHaveBeenCalledWith("/setup/name");
     });
 

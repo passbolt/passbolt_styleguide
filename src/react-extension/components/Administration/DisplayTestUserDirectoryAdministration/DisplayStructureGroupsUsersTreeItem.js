@@ -13,7 +13,7 @@
  */
 import React from "react";
 import PropTypes from "prop-types";
-import ApiAppContext from "../../../contexts/ApiAppContext";
+import AppContext from "../../../contexts/AppContext";
 
 class DisplayStructureGroupsUsersTreeItem extends React.Component {
   /**
@@ -21,7 +21,6 @@ class DisplayStructureGroupsUsersTreeItem extends React.Component {
    * @returns {boolean}
    */
   hasChildren() {
-    console.log(this.props.node.group.groups.length > 0);
     return this.props.node.group.groups.length > 0;
   }
 
@@ -81,7 +80,7 @@ class DisplayStructureGroupsUsersTreeItem extends React.Component {
   }
 }
 
-DisplayStructureGroupsUsersTreeItem.contextType = ApiAppContext;
+DisplayStructureGroupsUsersTreeItem.contextType = AppContext;
 
 DisplayStructureGroupsUsersTreeItem.propTypes = {
   node: PropTypes.object,

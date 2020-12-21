@@ -17,7 +17,7 @@ import {
   AdministrationWorkspaceMenuTypes,
   withAdministrationWorkspace
 } from "../../../contexts/AdministrationWorkspaceContext";
-import ApiAppContext from "../../../contexts/ApiAppContext";
+import AppContext from "../../../contexts/AppContext";
 import {withRouter} from "react-router-dom";
 
 /**
@@ -128,7 +128,7 @@ class DisplayAdministrationMenu extends React.Component {
   }
 }
 
-DisplayAdministrationMenu.contextType = ApiAppContext;
+DisplayAdministrationMenu.contextType = AppContext;
 
 DisplayAdministrationMenu.propTypes = {
   administrationWorkspaceContext: PropTypes.object, // The administration workspace context

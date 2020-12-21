@@ -27,7 +27,7 @@ import SiteSettings from "./lib/Settings/SiteSettings";
 import ApiFooter from "./components/Footer/ApiFooter";
 import Delay from "./components/Common/Delay/Delay";
 import LoadingSpinner from "./components/Common/Loading/LoadingSpinner/LoadingSpinner";
-import ApiAppContext from "./contexts/ApiAppContext";
+import AppContext from "./contexts/AppContext";
 
 class ApiTriage extends Component {
   constructor(props) {
@@ -68,7 +68,7 @@ class ApiTriage extends Component {
 
   render() {
     return (
-      <ApiAppContext.Provider value={this.state}>
+      <AppContext.Provider value={this.state}>
         <ActionFeedbackContextProvider>
           <Router>
             <div id="container" className="container page login">
@@ -109,7 +109,7 @@ class ApiTriage extends Component {
           </Router>
           <ApiFooter siteSettings={this.state.siteSettings}/>
         </ActionFeedbackContextProvider>
-      </ApiAppContext.Provider>
+      </AppContext.Provider>
     );
   }
 }

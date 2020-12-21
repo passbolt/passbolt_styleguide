@@ -432,6 +432,14 @@ class ExtApp extends Component {
                         </>
                       }
                     </Route>
+                    { /* The routes are handled by the ApiApp. Reload the page and let the API route to this app. */}
+                    <Route exact path={[
+                      "/app/administration",
+                      "/app/settings/mfa",
+                    ]} render={() => {
+                      this.props.port.emit('passbolt.app.reload');
+                    }}>
+                    </Route>
                     <Route path="/">
                       <HandleRouteFallback/>
                     </Route>

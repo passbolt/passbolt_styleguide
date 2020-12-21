@@ -73,12 +73,7 @@ class DisplayMainMenu extends Component {
               <div className={`row ${this.isSelected("administration") ? "selected" : ""}`}>
                 <div className="main-cell-wrapper">
                   <div className="main-cell">
-                    <a href={`${this.context.userSettings.getTrustedDomain()}/app/administration`}
-                      target="_parent"
-                      role="button"
-                      rel="noopener noreferrer">
-                      <span>administration</span>
-                    </a>
+                    <Link to="/app/administration" role="button"><span>administration</span></Link>
                   </div>
                 </div>
               </div>

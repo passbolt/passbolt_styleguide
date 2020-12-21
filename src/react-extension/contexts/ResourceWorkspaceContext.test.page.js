@@ -32,7 +32,7 @@ export default class ResourceWorkspaceContextPage {
    * @param props Props to attach
    */
   constructor(appContext) {
-    this.appContext = appContext;
+    this.context = appContext;
     this.setup(appContext);
   }
 
@@ -88,7 +88,7 @@ export default class ResourceWorkspaceContextPage {
    * Go to the All Items search filter route
    */
   async goToAllItems() {
-    this.setup(this.appContext);
+    this.setup(this.context);
     await this.goToLink('.all');
   }
 
@@ -125,7 +125,7 @@ export default class ResourceWorkspaceContextPage {
    * @param text A specific text search filter
    */
   async goToText(text) {
-    this.setup(this.appContext, {text});
+    this.setup(this.context, {text});
     await this.goToLink('.text');
   }
 
@@ -134,7 +134,7 @@ export default class ResourceWorkspaceContextPage {
    * @param group A specific group search filter
    */
   async goToGroup(group) {
-    this.setup(this.appContext, {group});
+    this.setup(this.context, {group});
     await this.goToLink('.group');
   }
 
@@ -143,7 +143,7 @@ export default class ResourceWorkspaceContextPage {
    * @param tag A specific tag search filter
    */
   async goToTag(tag) {
-    this.setup(this.appContext, {tag});
+    this.setup(this.context, {tag});
     await this.goToLink('.tag');
   }
 
@@ -152,7 +152,7 @@ export default class ResourceWorkspaceContextPage {
    * @param tag A specific folder search filter
    */
   async goToFolder(folder) {
-    this.setup(this.appContext, {folder});
+    this.setup(this.context, {folder});
     await this.goToLink('.folder');
   }
 
@@ -160,7 +160,7 @@ export default class ResourceWorkspaceContextPage {
    * Go to the Root Folder search filter route
    */
   async goToRootFolder() {
-    this.setup(this.appContext);
+    this.setup(this.context);
     await this.goToLink('.root-folder');
   }
 

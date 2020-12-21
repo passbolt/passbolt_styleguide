@@ -12,7 +12,7 @@
  * @since         2.11.0
  */
 import {fireEvent, render, waitFor} from "@testing-library/react";
-import ApiAppContext from "../../../contexts/ApiAppContext";
+import AppContext from "../../../contexts/AppContext";
 import React from "react";
 import DisplayUserDirectoryAdministration from "./DisplayUserDirectoryAdministration";
 
@@ -27,17 +27,17 @@ export default class DisplayUserDirectoryAdministrationPage {
    */
   constructor(appContext, props) {
     this._page = render(
-      <ApiAppContext.Provider value={appContext}>
+      <AppContext.Provider value={appContext}>
         <DisplayUserDirectoryAdministration {...props}/>
-      </ApiAppContext.Provider>
+      </AppContext.Provider>
     );
   }
 
   rerender(appContext, props) {
     this._page.rerender(
-      <ApiAppContext.Provider value={appContext}>
+      <AppContext.Provider value={appContext}>
         <DisplayUserDirectoryAdministration {...props}/>
-      </ApiAppContext.Provider>
+      </AppContext.Provider>
     );
   }
 

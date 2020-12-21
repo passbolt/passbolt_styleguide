@@ -13,7 +13,7 @@
  */
 import React from "react";
 import PropTypes from "prop-types";
-import ApiAppContext from "../../../contexts/ApiAppContext";
+import AppContext from "../../../contexts/AppContext";
 import {withActionFeedback} from "../../../../react-extension/contexts/ActionFeedbackContext";
 import XRegExp from "xregexp";
 import {ApiClientOptions} from "../../../lib/apiClient/apiClientOptions";
@@ -543,7 +543,7 @@ class DisplayMfaAdministration extends React.Component {
   }
 }
 
-DisplayMfaAdministration.contextType = ApiAppContext;
+DisplayMfaAdministration.contextType = AppContext;
 
 DisplayMfaAdministration.propTypes = {
   administrationWorkspaceContext: PropTypes.object, // The administration workspace context
