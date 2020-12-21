@@ -90,7 +90,7 @@ class ExtBootstrapApp extends Component {
               "/app/administration",
               "/app/settings/mfa"
             ]}>
-              <HandleLegacyAdministrationAppjs port={port}/>
+              <HandleLegacyAdministrationAppjs port={this.props.port}/>
             </Route>
             <Route exact path={[
               "/app/folders/view/:filterByFolderId",

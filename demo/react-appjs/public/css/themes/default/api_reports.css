@@ -6700,7 +6700,7 @@ input[type="search"]::-webkit-search-cancel-button {
   background: #FFF;
 }
 .panel .navigation .row.title .right-cell {
-  margin-top: -1.625em;
+  margin-top: -1.825em;
 }
 .panel .navigation .row:hover {
   background: #F3F3F3;
@@ -7086,7 +7086,8 @@ input[type="search"]::-webkit-search-cancel-button {
 .tableview-header table {
   width: 100%;
 }
-.tableview-header table th.m-cell.sortable .svg-icon svg {
+.tableview-header table th.m-cell.sortable .svg-icon svg,
+.tableview-header table th.l-cell.sortable .svg-icon svg {
   margin-left: 0.55em;
   margin-top: -0.87em;
 }
