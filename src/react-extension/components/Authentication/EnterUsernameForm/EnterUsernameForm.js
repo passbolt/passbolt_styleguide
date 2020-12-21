@@ -252,7 +252,7 @@ class EnterUsernameForm extends Component {
     } else if (!this.isEmail(username)) {
       usernameError = "The username should be a valid username address.";
     }
-    return this.setState({usernameError});
+    return this.setState({username, usernameError});
   }
 
   /**
