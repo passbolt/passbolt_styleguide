@@ -20,6 +20,7 @@ import AppContext from "../../../contexts/AppContext";
 import {BrowserRouter as Router} from "react-router-dom";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import DisplayResourcesList from "./DisplayResourcesList";
+import {DragContext} from "../../../contexts/DragContext";
 
 /**
  * The DisplayResourcesListPage component represented as a page
@@ -35,7 +36,9 @@ export default class DisplayResourcesListPage {
       <MockTranslationProvider>
         <AppContext.Provider value={appContext}>
           <Router>
-            <DisplayResourcesList {...props}/>
+            <DragContext.Provider value={props.dragContext}>
+              <DisplayResourcesList {...props}/>
+            </DragContext.Provider>
           </Router>
         </AppContext.Provider>
       </MockTranslationProvider>

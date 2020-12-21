@@ -15,9 +15,11 @@
 
 
 import {fireEvent, render, waitFor} from "@testing-library/react";
-import AppContext from "../../../contexts/AppContext";
 import React from "react";
 import FilterResourcesByFoldersItem from "./FilterResourcesByFoldersItem";
+import {BrowserRouter as Router} from "react-router-dom";
+import AppContext from "../../../contexts/AppContext";
+import {DragContext} from "../../../contexts/DragContext";
 
 /**
  * The FilterResourcesByFolders component represented as a page
@@ -31,7 +33,11 @@ export default class FilterResourcesByFoldersItemPage {
   constructor(appContext, props) {
     this._page = render(
       <AppContext.Provider value={appContext}>
-        <FilterResourcesByFoldersItem {...props}/>
+        <Router>
+          <DragContext.Provider value={props.dragContext}>
+            <FilterResourcesByFoldersItem.WrappedComponent {...props}/>
+          </DragContext.Provider>
+        </Router>
       </AppContext.Provider>
     );
     this.setupPageObjects();
@@ -83,10 +89,10 @@ export class FilterResourcesByFoldersItemPageObject {
   }
 
   /**
-   * Returns the folder selected
+   * Returns the name of the folder selected
    */
-  get isSelected() {
-    return this._container.querySelector('li.folder-item .row.selected') !== null;
+  get selectedFolderName() {
+    return this._container.querySelector('li.folder-item .row.selected').textContent;
   }
 
   /**

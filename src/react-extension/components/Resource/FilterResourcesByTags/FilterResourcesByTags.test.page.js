@@ -25,6 +25,9 @@ import FilterResourcesByTagsListContextualMenuPageObject from "./FilterResources
 import {ResourceWorkspaceContext} from "../../../contexts/ResourceWorkspaceContext";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import FilterResourcesByTags from "./FilterResourcesByTags";
+import {DragContext} from "../../../contexts/DragContext";
+import DialogContextProvider from "../../../contexts/DialogContext";
+import ManageDialogs from "../../../components/Common/Dialog/ManageDialogs/ManageDialogs";
 
 /**
  * The FilterResourcesByTags component represented as a page
@@ -39,14 +42,19 @@ export default class FilterResourcesByTagsPage {
     this._page = render(
       <MockTranslationProvider>
         <AppContext.Provider value={appContext}>
-          <Router>
-            <ResourceWorkspaceContext.Provider value={resourceWorkspaceContext}>
-              <ContextualMenuContextProvider>
-                <ManageContextualMenu/>
-                <FilterResourcesByTags.WrappedComponent {...props}/>
-              </ContextualMenuContextProvider>
-            </ResourceWorkspaceContext.Provider>
-          </Router>
+          <DialogContextProvider>
+            <Router>
+              <ManageDialogs/>
+              <ResourceWorkspaceContext.Provider value={resourceWorkspaceContext}>
+                <ContextualMenuContextProvider>
+                  <ManageContextualMenu/>
+                  <DragContext.Provider value={props.dragContext}>
+                    <FilterResourcesByTags.WrappedComponent {...props}/>
+                  </DragContext.Provider>
+                </ContextualMenuContextProvider>
+              </ResourceWorkspaceContext.Provider>
+            </Router>
+          </DialogContextProvider>
         </AppContext.Provider>
       </MockTranslationProvider>
     );
@@ -208,11 +216,34 @@ class SidebarTagFilterSectionPageObject {
   }
 
   /**
+   * return the tag classname for the 'index' one
+   * @param index
+   */
+  tagClassname(index) {
+    return this.list.querySelectorAll('.tag-item')[index - 1].querySelector('.row').className.trim();
+  }
+
+  /**
    * Returns the displayed tag name for the 'index' one
    * @param index The display rank of name's tag
    */
   name(index) {
-    return this.list.querySelectorAll('.tag-item')[index - 1].querySelector('.ellipsis').textContent;
+    return this.list.querySelectorAll('.tag-item')[index - 1].querySelector('.tag-name').textContent;
+  }
+
+  get errorDialogExist() {
+    return this._container.querySelector('.error-dialog') !== null;
+  }
+
+  get errorDialogMessageExist() {
+    return this._container.querySelector('.error-dialog .dialog .dialog-content .form-content') !== null;
+  }
+
+  /**
+   * Drop on the tag
+   */
+  onDropTag(index) {
+    return this.drop(this.tag(index));
   }
 
   /** Click on the component */
@@ -225,6 +256,12 @@ class SidebarTagFilterSectionPageObject {
   /** Right click on the component */
   async rightClick(component)  {
     fireEvent.contextMenu(component);
+    await waitFor(() => {});
+  }
+
+  /** Drop on the component */
+  async drop(component)  {
+    fireEvent.drop(component);
     await waitFor(() => {});
   }
 }

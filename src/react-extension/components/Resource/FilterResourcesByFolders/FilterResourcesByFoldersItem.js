@@ -18,6 +18,9 @@ import {withContextualMenu} from "../../../contexts/ContextualMenuContext";
 import FilterResourcesByFoldersItemContextualMenu from "./FilterResourcesByFoldersItemContextualMenu";
 import {withAppContext} from "../../../contexts/AppContext";
 import {ResourceWorkspaceFilterTypes, withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
+import {withDrag} from "../../../contexts/DragContext";
+import DisplayDragFolderItem from "./DisplayDragFolderItem";
+import {withRouter} from "react-router-dom";
 
 class FilterResourcesByFoldersItem extends React.Component {
   /**
@@ -45,7 +48,7 @@ class FilterResourcesByFoldersItem extends React.Component {
 
 
   bindCallbacks() {
-    this.handleClickLeftCaretEvent = this.handleClickLeftCaretEvent.bind(this);
+    this.handleToggleOpenFolder = this.handleToggleOpenFolder.bind(this);
     this.handleContextualMenuEvent = this.handleContextualMenuEvent.bind(this);
     this.handleDragEndEvent = this.handleDragEndEvent.bind(this);
     this.handleDragLeaveEvent = this.handleDragLeaveEvent.bind(this);
@@ -56,14 +59,24 @@ class FilterResourcesByFoldersItem extends React.Component {
     this.handleSelectEvent = this.handleSelectEvent.bind(this);
   }
 
+  componentDidMount() {
+    if (this.props.match.params.filterByFolderId) {
+      // Expand folder tree until the selected folder
+      this.openFolderParentTree(this.props.match.params.filterByFolderId);
+    }
+  }
+
   /**
    * Handle when the user start dragging the folder.
    * @param {ReactEvent} event The event
    */
   handleDragStartEvent(event) {
-    const dragging = true;
-    this.setState({dragging});
-    this.props.onDragStart(event, this.props.folder);
+    event.persist();
+    const draggedItems = {
+      folders: [this.props.folder],
+      resources: []
+    };
+    this.props.dragContext.onDragStart(event, DisplayDragFolderItem, draggedItems);
   }
 
   /**
@@ -71,16 +84,29 @@ class FilterResourcesByFoldersItem extends React.Component {
    * Fold/Unfold the folder.
    * @param {ReactEvent} event The event
    */
-  handleClickLeftCaretEvent(event) {
+  handleToggleOpenFolder(event) {
     /*
      * Prevent the component to select the folder.
      * @todo This default behavior should not be allowed as it will break other behavior, such as closing a contextual menu closing.
      */
     event.stopPropagation();
-    if (this.isOpen()) {
-      this.props.onClose(event, this.props.folder);
-    } else {
-      this.props.onOpen(event, this.props.folder);
+    const open = !this.state.open;
+    this.setState({open});
+  }
+
+  /**
+   * Open the tree until a given folder
+   * @param {object} selectedFolderId The folder id to scroll to
+   */
+  openFolderParentTree(selectedFolderId) {
+    const selectedFolder = this.props.context.folders.find(folder => folder.id === selectedFolderId);
+    // If the selected folder has a parent. Open it if not yet open.
+    if (selectedFolder.folder_parent_id) {
+      if (selectedFolder.folder_parent_id === this.props.folder.id) {
+        this.setState({open: true});
+      } else {
+        this.openFolderParentTree(selectedFolder.folder_parent_id);
+      }
     }
   }
 
@@ -89,7 +115,7 @@ class FilterResourcesByFoldersItem extends React.Component {
    * @return {boolean}
    */
   isOpen() {
-    return this.props.openFolders.some(folder => folder.id === this.props.folder.id);
+    return this.state.open;
   }
 
   /**
@@ -123,8 +149,8 @@ class FilterResourcesByFoldersItem extends React.Component {
    * Handle when the user stop dragging content.
    * @param {ReactEvent} event The event
    */
-  handleDragEndEvent(event) {
-    this.props.onDragEnd(event);
+  handleDragEndEvent() {
+    this.props.dragContext.onDragEnd();
   }
 
   /**
@@ -169,7 +195,7 @@ class FilterResourcesByFoldersItem extends React.Component {
     if (!open) {
       const now = Date.now();
       if (now - this.state.draggingOverSince > period) {
-        this.props.onOpen(event, this.props.folder);
+        this.handleToggleOpenFolder(event);
       }
     }
   }
@@ -178,11 +204,14 @@ class FilterResourcesByFoldersItem extends React.Component {
    * Handle when the user drop content on this component.
    * @param {ReactEvent} event The event
    */
-  handleDropEvent(event) {
+  handleDropEvent() {
     // The user cannot drop the dragged content on a dragged item.
-    const isDroppingOnDraggedItem = this.props.draggedItems.folders.some(item => item.id === this.props.folder.id);
+    const folders = this.props.dragContext.draggedItems.folders.map(folder => folder.id);
+    const resources = this.props.dragContext.draggedItems.resources.map(resource => resource.id);
+    const folderParentId = this.props.folder.id;
+    const isDroppingOnDraggedItem = this.draggedItems.folders.some(item => item.id === folderParentId);
     if (!isDroppingOnDraggedItem) {
-      this.props.onDrop(event, this.props.folder);
+      this.props.context.port.request("passbolt.folders.open-move-confirmation-dialog", {folders, resources, folderParentId});
     }
 
     // The dragLeave event is not fired when a drop is happening. Cancel the state manually.
@@ -191,11 +220,10 @@ class FilterResourcesByFoldersItem extends React.Component {
   }
 
   /**
-   * Handle when this component is selected.
-   * @param {ReactEvent} event The event
+   * Handle the user selects a folder from the list.
    */
-  handleSelectEvent(event) {
-    this.props.onSelect(event, this.props.folder);
+  handleSelectEvent() {
+    this.props.history.push(`/app/folders/view/${this.props.folder.id}`);
   }
 
   /**
@@ -296,8 +324,8 @@ class FilterResourcesByFoldersItem extends React.Component {
    * @returns {int}
    */
   getDraggedItemsLowestPermission() {
-    const draggedFoldersLowestPermission = this.getItemsListLowestPermission(this.props.draggedItems.folders);
-    const draggedResourcesLowestPermission = this.getItemsListLowestPermission(this.props.draggedItems.resources);
+    const draggedFoldersLowestPermission = this.getItemsListLowestPermission(this.draggedItems.folders);
+    const draggedResourcesLowestPermission = this.getItemsListLowestPermission(this.draggedItems.resources);
 
     return draggedFoldersLowestPermission < draggedResourcesLowestPermission ? draggedFoldersLowestPermission : draggedResourcesLowestPermission;
   }
@@ -307,7 +335,7 @@ class FilterResourcesByFoldersItem extends React.Component {
    * @returns {boolean}
    */
   canDropInto() {
-    if (!this.props.isDragging) {
+    if (!this.isDragging()) {
       return false;
     }
 
@@ -325,13 +353,13 @@ class FilterResourcesByFoldersItem extends React.Component {
     }
 
     // Cannot move a folder into one of its own children.
-    if (this.isChildOfAny(this.props.folder, this.props.draggedItems.folders)) {
+    if (this.isChildOfAny(this.props.folder, this.draggedItems.folders)) {
       return false;
     }
 
     // Cannot move a folder into itself.
-    for (const i in this.props.draggedItems.folders) {
-      if (this.props.folder.id === this.props.draggedItems.folders[i].id) {
+    for (const i in this.draggedItems.folders) {
+      if (this.props.folder.id === this.draggedItems.folders[i].id) {
         return false;
       }
     }
@@ -344,12 +372,9 @@ class FilterResourcesByFoldersItem extends React.Component {
    * @returns {boolean}
    */
   isDragged() {
-    for (const i in this.props.draggedItems.folders) {
-      if (this.props.folder.id === this.props.draggedItems.folders[i].id) {
-        return true;
-      }
+    if (this.isDragging()) {
+      return this.draggedItems.folders.some(folder => folder.id === this.props.folder.id);
     }
-
     return false;
   }
 
@@ -363,8 +388,8 @@ class FilterResourcesByFoldersItem extends React.Component {
      * - The user is not allowed to drag any of dragged items;
      * - The user is not allowed to drop content in the folder associated to this component.
      */
-    if (this.props.isDragging) {
-      const canDragItems = this.canDragItems(this.props.draggedItems);
+    if (this.isDragging()) {
+      const canDragItems = this.canDragItems(this.draggedItems);
       if (!canDragItems) {
         return true;
       }
@@ -408,6 +433,22 @@ class FilterResourcesByFoldersItem extends React.Component {
   }
 
   /**
+   * return dragged items
+   * @returns {*}
+   */
+  get draggedItems() {
+    return this.props.dragContext.draggedItems;
+  }
+
+  /**
+   * Check if the user is currently dragging content.
+   * @returns {boolean}
+   */
+  isDragging() {
+    return this.props.dragContext.dragging;
+  }
+
+  /**
    * Render the component
    * @returns {JSX}
    */
@@ -438,10 +479,10 @@ class FilterResourcesByFoldersItem extends React.Component {
                 {hasChildren &&
                 <Fragment>
                   {isOpen &&
-                  <Icon name="caret-down" onClick={this.handleClickLeftCaretEvent}/>
+                  <Icon name="caret-down" onClick={this.handleToggleOpenFolder}/>
                   }
                   {!isOpen &&
-                  <Icon name="caret-right" onClick={this.handleClickLeftCaretEvent}/>
+                  <Icon name="caret-right" onClick={this.handleToggleOpenFolder}/>
                   }
                 </Fragment>
                 }
@@ -465,17 +506,7 @@ class FilterResourcesByFoldersItem extends React.Component {
         <ul className="folders-tree">
           {folderChildren.map(folder => <DecoratedFoldersTreeItem
             key={`folders-tree-${folder.id}`}
-            draggedItems={this.props.draggedItems}
-            folder={folder}
-            folders={this.props.context.folders}
-            isDragging={this.props.isDragging}
-            onClose={this.props.onClose}
-            onDragEnd={this.props.onDragEnd}
-            onDragStart={this.props.onDragStart}
-            onDrop={this.props.onDrop}
-            onOpen={this.props.onOpen}
-            onSelect={this.props.onSelect}
-            openFolders={this.props.openFolders}/>)}
+            folder={folder}/>)}
         </ul>
         }
       </li>
@@ -486,19 +517,13 @@ class FilterResourcesByFoldersItem extends React.Component {
 FilterResourcesByFoldersItem.propTypes = {
   context: PropTypes.any, // The app context
   contextualMenuContext: PropTypes.any, // The contextual menu context
-  draggedItems: PropTypes.object,
+  history: PropTypes.object,
+  match: PropTypes.object,
   folder: PropTypes.object,
-  isDragging: PropTypes.bool,
-  onClose: PropTypes.func,
-  onDragEnd: PropTypes.func,
-  onDragStart: PropTypes.func,
-  onDrop: PropTypes.func,
-  onOpen: PropTypes.func,
-  onSelect: PropTypes.func,
-  openFolders: PropTypes.array,
-  resourceWorkspaceContext: PropTypes.any
+  resourceWorkspaceContext: PropTypes.any,
+  dragContext: PropTypes.any,
 };
 
-const DecoratedFoldersTreeItem = withAppContext(withContextualMenu(withResourceWorkspace(FilterResourcesByFoldersItem)));
+const DecoratedFoldersTreeItem = withRouter(withAppContext(withContextualMenu(withResourceWorkspace(withDrag(FilterResourcesByFoldersItem)))));
 
-export default withAppContext(withContextualMenu(withResourceWorkspace(FilterResourcesByFoldersItem)));
+export default withRouter(withAppContext(withContextualMenu(withResourceWorkspace(withDrag(FilterResourcesByFoldersItem)))));
