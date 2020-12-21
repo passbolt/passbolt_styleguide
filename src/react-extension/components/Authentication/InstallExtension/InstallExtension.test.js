@@ -30,14 +30,27 @@ describe("As AN I should see install extension page", () => {
      * Given a AN
      * Then I should see an install extension page
      */
+    it('As AN I should see the install extension for an unsupported browser', () => {
+      page = new InstallExtensionPage();
+      // browser image
+      expect(page.browser.className).toBe("browser-webstore unknown");
+    });
 
     it('As AN I should see the install extension for firefox', () => {
+      Object.defineProperty(window, "navigator", {
+        value: {userAgent: "Firefox"},
+        writable: true
+      });
       page = new InstallExtensionPage();
       // browser image
       expect(page.browser.className).toBe("browser-webstore firefox");
     });
 
     it('As AN I should see the install extension for chrome', () => {
+      Object.defineProperty(window, "navigator", {
+        value: {userAgent: "Chrome"},
+        writable: true
+      });
       window.chrome = {runtime: "true"};
       page = new InstallExtensionPage();
       expect(page.exists()).toBeTruthy();
