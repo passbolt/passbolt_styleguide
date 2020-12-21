@@ -38,6 +38,9 @@ describe("As AN I should see install extension page", () => {
     });
 
     it('As AN I should see the install extension for chrome', () => {
+      Object.defineProperty(window, "navigator", {
+        value: {userAgent: "Chrome"},
+      });
       window.chrome = {runtime: "true"};
       page = new InstallExtensionPage();
       expect(page.exists()).toBeTruthy();

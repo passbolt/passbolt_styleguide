@@ -12,6 +12,7 @@
  * @since         3.0.0
  */
 import React, {Component} from "react";
+import XRegExp from "xregexp";
 
 const CHROME_STORE_BROWSER_EXTENSION_URL = "https://chrome.google.com/webstore/detail/passbolt-extension/didegimhafipceonhjepacocaffmoppf";
 const FIREFOX_STORE_BROWSER_EXTENSION_URL = "https://addons.mozilla.org/fr/firefox/addon/passbolt";
@@ -41,7 +42,8 @@ class InstallExtension extends Component {
    * @returns {boolean}
    */
   get isChrome() {
-    return Boolean(window.chrome) && (Boolean(window.chrome.webstore) || Boolean(window.chrome.runtime));
+    const browser = XRegExp('chrome|chromium|crios', 'i');
+    return browser.test(window.navigator.userAgent);
   }
 
   /**
