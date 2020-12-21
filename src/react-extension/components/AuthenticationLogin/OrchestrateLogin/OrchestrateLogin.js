@@ -33,11 +33,11 @@ class OrchestrateLogin extends Component {
   }
 
   /**
-   * Verify the potential change ofserver key
+   * Verify the potential change of server key
    */
   verifyServerKey() {
     this.context.onVerifyServerKeyRequested()
-      .catch(this.onVerifyServerKeyFailure);
+      .catch(this.onVerifyServerKeyFailure.bind(this));
   }
 
   /**
@@ -67,12 +67,12 @@ class OrchestrateLogin extends Component {
    * Render the component
    */
   render() {
-    switch (this.context.state)  {
+    switch (this.context.state) {
       case AuthenticationContextState.LOGIN_INITIALIZED:
         if (this.props.siteSettings) {
           return <Login canRememberMe={this.canRememberMe}/>;
         } else {
-          return  <LoadingSpinner/>;
+          return <LoadingSpinner/>;
         }
       case AuthenticationContextState.LOGIN_IN_PROGRESS:
         return <DisplayLoginInProgress/>;
