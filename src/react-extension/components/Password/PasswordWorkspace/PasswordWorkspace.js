@@ -12,7 +12,7 @@
  * @since         2.13.0
  */
 import React, {Component} from "react";
-import UserBadgeMenu from "../../Common/Navigation/Header/UserBadgeMenu";
+import UserBadgeMenu from "../../Header/UserBadgeMenu";
 import FoldersTree from "../FoldersTree/FoldersTree";
 import Grid from "../Grid/Grid";
 import FolderSidebar from "../FolderSidebar/FolderSidebar";

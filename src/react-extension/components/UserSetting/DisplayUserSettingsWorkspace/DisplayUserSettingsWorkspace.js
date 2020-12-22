@@ -17,7 +17,7 @@ import React from 'react';
 import {Route, withRouter} from "react-router-dom";
 import PropTypes from "prop-types";
 import Logo from "../../../../react/components/Common/Navigation/Header/Logo";
-import UserBadgeMenu from "../../../../react/components/Common/Navigation/Header/UserBadgeMenu";
+import UserBadgeMenu from "../../Header/UserBadgeMenu";
 import AppContext from "../../../contexts/AppContext";
 import NavigateIntoUserSettingsWorkspace from "../NavigateIntooUserSettingsWorkspace/NavigateIntoUserSettingsWorkspace";
 import DisplayUserProfile from "../DisplayUserProfile/DisplayUserProfile";

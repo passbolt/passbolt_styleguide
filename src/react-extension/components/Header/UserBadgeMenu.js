@@ -13,9 +13,10 @@
  */
 import React, {Component} from "react";
 import PropTypes from "prop-types";
-import UserAvatar from "../../Avatar/UserAvatar";
-import Icon from "../../Icons/Icon";
+import UserAvatar from "../Common/Avatar/UserAvatar";
+import Icon from "../Common/Icons/Icon";
 import {Link} from "react-router-dom";
+import {withAppContext} from "../../contexts/AppContext";
 
 class UserBadgeMenu extends Component {
   /**
@@ -46,6 +47,7 @@ class UserBadgeMenu extends Component {
   bindCallbacks() {
     this.handleToggleMenuClick = this.handleToggleMenuClick.bind(this);
     this.handleMenuItemClick = this.handleMenuItemClick.bind(this);
+    this.handleLogoutClick = this.handleLogoutClick.bind(this);
   }
 
   /**
@@ -91,6 +93,14 @@ class UserBadgeMenu extends Component {
   }
 
   /**
+   * Handle logout click
+   * @return {void}
+   */
+  handleLogoutClick() {
+    this.props.context.onLogoutRequested();
+  }
+
+  /**
    * Render the component
    * @return {JSX}
    */
@@ -131,7 +141,7 @@ class UserBadgeMenu extends Component {
             </li>
             <li key="logout">
               <div className="row">
-                <a href={`${this.props.baseUrl}/logout`} role="button" tabIndex="3" onClick={this.handleMenuItemClick}>
+                <a role="button" tabIndex="3" onClick={this.handleLogoutClick}>
                   <span>Logout</span>
                 </a>
               </div>
@@ -145,8 +155,9 @@ class UserBadgeMenu extends Component {
 }
 
 UserBadgeMenu.propTypes = {
+  context: PropTypes.object, // The application context
   baseUrl: PropTypes.string,
   user: PropTypes.object,
 };
 
-export default UserBadgeMenu;
+export default withAppContext(UserBadgeMenu);

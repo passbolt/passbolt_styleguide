@@ -68,6 +68,9 @@ class ApiApp extends Component {
       },
       setLoggedInUser: () => {
       }, // Set the logged in user
+
+      // Navigation
+      onLogoutRequested: () => this.onLogoutRequested()
     };
   }
 
@@ -103,6 +106,13 @@ class ApiApp extends Component {
 
   setLoggedInUser(loggedInUser) {
     this.setState({loggedInUser});
+  }
+
+  /**
+   * Listen when the user wants to logout.
+   */
+  onLogoutRequested() {
+    document.location.href = `${this.state.trustedDomain}/auth/logout`;
   }
 
   render() {

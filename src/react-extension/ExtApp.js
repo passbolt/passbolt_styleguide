@@ -170,13 +170,17 @@ class ExtApp extends Component {
 
       // Resource comment dialog
       resourceCommentId: null, // Selected resource comment id
-      mustRefreshComments: false // Flag telling whether the current list of comments should be refreshed
+      mustRefreshComments: false, // Flag telling whether the current list of comments should be refreshed
+
+      // Navigation
+      onLogoutRequested: () => this.onLogoutRequested()
     };
   }
 
   bindCallbacks() {
     this.handleStorageChange = this.handleStorageChange.bind(this);
     this.handleIsReadyEvent = this.handleIsReadyEvent.bind(this);
+    this.onLogoutRequested = this.onLogoutRequested.bind(this);
   }
 
   initEventHandlers() {
@@ -346,6 +350,13 @@ class ExtApp extends Component {
       const roles = changes.roles.newValue;
       this.setState({roles});
     }
+  }
+
+  /**
+   * Listen when the user wants to logout.
+   */
+  onLogoutRequested() {
+    this.props.port.request('passbolt.auth.navigate-to-logout');
   }
 
   /*

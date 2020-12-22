@@ -39,7 +39,7 @@ class DisplayMainMenu extends Component {
    * Handle logout click
    */
   handleLogoutClick() {
-    this.context.port.request("passbolt.auth.navigate-to-logout");
+    this.context.onLogoutRequested();
   }
 
   /**

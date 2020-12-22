@@ -19,7 +19,7 @@ import {
 } from "../../contexts/AdministrationWorkspaceContext";
 import DisplayMainMenu from "../navigation/DisplayMainMenu";
 import Logo from "../../../react/components/Common/Navigation/Header/Logo";
-import UserBadgeMenu from "../../../react/components/Common/Navigation/Header/UserBadgeMenu";
+import UserBadgeMenu from "../Header/UserBadgeMenu";
 import DisplayAdministrationMenu from "./DisplayAdministrationMenu/DisplayAdministrationMenu";
 import DisplayMfaAdministration from "./DisplayMfaAdministration/DisplayMfaAdministration";
 import DisplayAdministrationWorkspaceActions from "./DisplayAdministrationWorkspaceActions/DisplayAdministrationWorkspaceActions";

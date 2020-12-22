@@ -34,7 +34,7 @@ jest.mock("../DisplayUserWorkspaceBreadcrumb/DisplayUserWorkspaceBreadcrumb", ()
 jest.mock("../DisplayUserDetails/DisplayUserDetails", () => () => <span className="user-details"></span>);
 jest.mock("../DisplayUserWorkspaceActions/DisplayUserWorkspaceActions", () => () => <></>);
 jest.mock("../../../../react/components/Common/Navigation/Header/Logo");
-jest.mock("../../../../react/components/Common/Navigation/Header/UserBadgeMenu", () => () => <></>);
+jest.mock("../../Header/UserBadgeMenu", () => () => <></>);
 
 beforeEach(() => {
   jest.resetModules();

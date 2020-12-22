@@ -37,7 +37,7 @@ jest.mock("../FilterResourcesByShortcuts/FilterResourcesByShortcuts", () => () =
 jest.mock("./PasswordWorkspaceMenu", () => () => <></>);
 jest.mock("./PasswordWorkspaceMainMenu", () => () => <></>);
 jest.mock("../../../../react/components/Common/Navigation/Header/Logo");
-jest.mock("../../../../react/components/Common/Navigation/Header/UserBadgeMenu", () => () => <></>);
+jest.mock("../../Header/UserBadgeMenu", () => () => <></>);
 
 beforeEach(() => {
   jest.resetModules();

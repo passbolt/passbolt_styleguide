@@ -21,7 +21,7 @@ import PropTypes from "prop-types";
 import DisplayUserDetails from "../DisplayUserDetails/DisplayUserDetails";
 import DisplayUserWorkspaceActions from "../DisplayUserWorkspaceActions/DisplayUserWorkspaceActions";
 import Logo from "../../../../react/components/Common/Navigation/Header/Logo";
-import UserBadgeMenu from "../../../../react/components/Common/Navigation/Header/UserBadgeMenu";
+import UserBadgeMenu from "../../Header/UserBadgeMenu";
 import AppContext from "../../../contexts/AppContext";
 import DisplayGroups from "../FilterUsersByGroups/FilterUsersByGroup";
 import FilterUsersByShortcut from "../FilterUsersByShortcut/FilterUserByShortcut";
