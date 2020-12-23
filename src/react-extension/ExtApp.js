@@ -236,7 +236,7 @@ class ExtApp extends Component {
    */
   async getResources() {
     const storageData = await this.props.storage.local.get(["resources"]);
-    if (storageData.resources && storageData.resources.length) {
+    if (storageData.resources) {
       const resources = storageData.resources;
       this.setState({resources: resources});
     }
