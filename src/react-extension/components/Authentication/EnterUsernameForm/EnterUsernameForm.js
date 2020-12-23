@@ -9,21 +9,14 @@
  * @copyright     Copyright (c) 2020 Passbolt SA (https://www.passbolt.com)
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
+ * @since         3.0.0
  */
 import React, {Component} from "react";
 import XRegExp from "xregexp";
-import {withRouter} from "react-router-dom";
 import PropTypes from "prop-types";
-import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
-import FormSubmitButton from "../../../../react/components/Common/Inputs/FormSubmitButton/FormSubmitButton";
-import {ApiClient} from "../../../lib/apiClient/apiClient";
-import {ApiClientOptions} from "../../../lib/apiClient/apiClientOptions";
-import SiteSettings from "../../../lib/Settings/SiteSettings";
 import {withAppContext} from "../../../contexts/AppContext";
-
-const REDIRECT_CHECK_MAILBOX_URL = "/auth/login/check-mailbox";
-const REDIRECT_REGISTRATION = "/setup/name";
-const REDIRECT_ERROR = "/auth/login/error";
+import {withApiTriageContext} from "../../../contexts/ApiTriageContext";
+import FormSubmitButton from "../../../../react/components/Common/Inputs/FormSubmitButton/FormSubmitButton";
 
 class EnterUsernameForm extends Component {
   /**
@@ -45,8 +38,6 @@ class EnterUsernameForm extends Component {
     return {
       loading: true,
       processing: false,
-
-      siteSettings: false,
       username: "",
       usernameError: null,
       agreedTerms: false,
@@ -60,11 +51,27 @@ class EnterUsernameForm extends Component {
    * Invoked immediately after component is inserted into the tree
    * @return {void}
    */
-  async componentDidMount() {
-    const siteSettings = await this.getSiteSettings();
-    this.setState({loading: false, siteSettings}, () => {
-      this.usernameRef.current.focus();
-    });
+  componentDidMount() {
+    if (this.props.context.siteSettings !== null) {
+      this.setState({loading: false}, () => {
+        this.usernameRef.current.focus();
+      });
+    }
+  }
+
+  /**
+   * componentDidUpdate
+   * Invoked immediately after component is updated
+   * @param {object} previousProps The previous props
+   * @return {void}
+   */
+  async componentDidUpdate() {
+    // If the component is still marked as loading when the site settings are retrieved, mark it as loaded and put the focus on the username field
+    if (this.state.loading && this.props.context.siteSettings !== null) {
+      this.setState({loading: false}, () => {
+        this.usernameRef.current.focus();
+      });
+    }
   }
 
   /**
@@ -83,18 +90,6 @@ class EnterUsernameForm extends Component {
    */
   createInputRefs() {
     this.usernameRef = React.createRef();
-  }
-
-  /**
-   * Retrieve the site settings
-   * @returns {Promise<SiteSettings>}
-   */
-  async getSiteSettings() {
-    const apiClientOptions = this.getApiClientOptions()
-      .setResourceName("settings");
-    const apiClient = new ApiClient(apiClientOptions);
-    const {body} = await apiClient.findAll();
-    return new SiteSettings(body);
   }
 
   /**
@@ -139,84 +134,8 @@ class EnterUsernameForm extends Component {
         await this.toggleProcessing();
         return;
       }
-      try {
-        await this.sendUsername();
-        await this.handleSuccess();
-      } catch (error) {
-        this.handleError(error);
-      }
+      this.props.apiTriageContext.onTriageRequested(this.state.username);
     }
-  }
-
-  /**
-   * Send the username
-   * @returns {Promise<Object>}
-   */
-  async sendUsername() {
-    const recoverDto = {
-      username: this.state.username
-    };
-    const apiOptions = this.getApiClientOptions()
-      .setResourceName("users/recover");
-    const apiClient = new ApiClient(apiOptions);
-    await apiClient.create(recoverDto);
-  }
-
-  /**
-   * Get the api client options.
-   * @returns {ApiClientOptions}
-   */
-  getApiClientOptions() {
-    const csrfToken = this.getCsrfToken();
-    return new ApiClientOptions()
-      .setBaseUrl(window.location.origin)
-      .setCsrfToken(csrfToken);
-  }
-
-  /**
-   * Get csrf token
-   * @returns {string}
-   */
-  getCsrfToken() {
-    return document.cookie
-      .split('; ')
-      .find(row => row.startsWith('csrfToken'))
-      .split('=')[1];
-  }
-
-  /**
-   * Handle operation success.
-   */
-  async handleSuccess() {
-    this.props.history.push(REDIRECT_CHECK_MAILBOX_URL);
-  }
-
-  /**
-   * Handle save operation success.
-   */
-  async handleError(error) {
-    const userNotFound = error.data && error.data.code === 404;
-    if (userNotFound) {
-      const isRegistrationPublic = await this.isRegistrationPublic();
-      if (isRegistrationPublic) {
-        this.props.context.setContext({username: this.state.username});
-        this.props.history.push(REDIRECT_REGISTRATION);
-      } else {
-        this.props.history.push(REDIRECT_ERROR);
-      }
-    } else {
-      console.log(error);
-      await this.props.actionFeedbackContext.displayError("There was an unexpected error, please retry later...");
-      await this.toggleProcessing();
-    }
-  }
-
-  /**
-   * Check if the registration is public.
-   * @returns {Promise<boolean>}
-   */
-  async isRegistrationPublic() {
-    return this.state.siteSettings.registrationPublic;
   }
 
   /**
@@ -301,8 +220,8 @@ class EnterUsernameForm extends Component {
    * @returns {string|boolean} false if no privacy link
    */
   get privacyLink() {
-    if (this.state.siteSettings) {
-      return this.state.siteSettings.privacyLink;
+    if (this.props.context.siteSettings) {
+      return this.props.context.siteSettings.privacyLink;
     }
     return false;
   }
@@ -312,8 +231,8 @@ class EnterUsernameForm extends Component {
    * @returns {string|boolean} false if no terms
    */
   get termsLink() {
-    if (this.state.siteSettings) {
-      return this.state.siteSettings.termsLink;
+    if (this.props.context.siteSettings) {
+      return this.props.context.siteSettings.termsLink;
     }
     return false;
   }
@@ -366,9 +285,8 @@ class EnterUsernameForm extends Component {
 }
 
 EnterUsernameForm.propTypes = {
+  apiTriageContext: PropTypes.object, // The api triage context
   context: PropTypes.any, // The application context provider
-  history: PropTypes.object,
-  actionFeedbackContext: PropTypes.object,
 };
 
-export default withRouter(withAppContext(withActionFeedback(EnterUsernameForm)));
+export default withAppContext(withApiTriageContext(EnterUsernameForm));

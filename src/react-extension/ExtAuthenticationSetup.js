@@ -19,7 +19,7 @@ import DialogContextProvider from "../react/contexts/Common/DialogContext";
 import {BrowserRouter as Router} from "react-router-dom";
 import SetupAuthentication from "./components/AuthenticationSetup/SetupAuthentication/SetupAuthentication";
 import SiteSettings from "./lib/Settings/SiteSettings";
-import ExtFooter from "./components/Footer/ExtFooter";
+import Footer from "./components/Footer/Footer";
 
 /**
  * The setup application served by the browser extension.
@@ -99,7 +99,7 @@ class ExtAuthenticationSetup extends Component {
                 </div>
               </div>
             </div>
-            <ExtFooter
+            <Footer
               siteSettings={this.state.siteSettings}
               extensionVersion={this.state.extensionVersion}/>
           </DialogContextProvider>

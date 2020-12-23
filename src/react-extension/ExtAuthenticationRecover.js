@@ -18,7 +18,7 @@ import ManageDialogs from "./components/Common/Dialog/ManageDialogs/ManageDialog
 import DialogContextProvider from "../react/contexts/Common/DialogContext";
 import RecoverAuthentication from "./components/AuthenticationRecover/RecoverAuthentication/RecoverAuthentication";
 import SiteSettings from "./lib/Settings/SiteSettings";
-import ExtFooter from "./components/Footer/ExtFooter";
+import Footer from "./components/Footer/Footer";
 
 /**
  * The recover application served by the browser extension.
@@ -97,7 +97,7 @@ class ExtAuthenticationRecover extends Component {
               </div>
             </div>
           </div>
-          <ExtFooter
+          <Footer
             siteSettings={this.state.siteSettings}
             extensionVersion={this.state.extensionVersion}/>
         </DialogContextProvider>

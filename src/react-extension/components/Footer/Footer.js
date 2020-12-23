@@ -13,7 +13,7 @@
  */
 import React, {Component} from "react";
 import Icon from "../Common/Icons/Icon";
-import AppContext from "../../contexts/AppContext";
+import PropTypes from "prop-types";
 
 const CREDITS_URL = "https://www.passbolt.com/credits";
 const UNSAFE_URL = "https://help.passbolt.com/faq/hosting/why-unsafe";
@@ -23,42 +23,17 @@ const UNSAFE_URL = "https://help.passbolt.com/faq/hosting/why-unsafe";
  */
 class Footer extends Component {
   /**
-   * Default constructor
-   * @param props The component props
-   */
-  constructor(props) {
-    super(props);
-    this.state = this.defaultState;
-  }
-
-  /**
-   * Whenever the componen is mounted
-   */
-  componentDidMount() {
-    this.populate();
-  }
-
-  /**
-   * Returns the component default state
-   */
-  get defaultState() {
-    return {
-      extensionVersion: '' // The Passbolt extension version
-    };
-  }
-
-  /**
    * Returns true if the component is ready to be displayed
    */
   get isReady() {
-    return this.context.siteSettings && this.state.extensionVersion;
+    return this.props.siteSettings;
   }
 
   /**
    * Returns the terms link url
    */
   get privacyUrl() {
-    return this.context.siteSettings.settings.app.legal.terms;
+    return this.props.siteSettings.privacyLink;
   }
 
   /**
@@ -79,32 +54,33 @@ class Footer extends Component {
    * Returns the privacy link url
    */
   get termsUrl() {
-    return this.context.siteSettings.settings.app.legal.privacy;
+    return this.props.siteSettings.termsLink;
   }
 
   /**
-   * Returns the server and extension versions label to display
+   * Return the server (if available) and browser extension version.
+   * i.e. SERVER_VERSION / BROWSER_EXTENSION_VERSION
    */
   get versions() {
-    const serverVersion = this.context.siteSettings.settings.app.version.number;
-    return `${serverVersion} / ${this.state.extensionVersion}`;
+    const versions = [];
+    const serverVersion = this.props.siteSettings.version;
+    if (serverVersion) {
+      versions.push(serverVersion);
+    }
+    if (this.props.extensionVersion) {
+      versions.push(this.props.extensionVersion);
+    }
+
+    return versions.join(' / ');
   }
 
   /**
    * Returns true if the application is in an unsafe mode
    */
   get isUnsafeMode() {
-    const isDebugMode = this.context.siteSettings.settings.app.debug;
-    const isHttpMode = this.context.siteSettings.settings.app.url.trim().startsWith('http://');
-    return isDebugMode || isHttpMode; // TODO
-  }
-
-  /**
-   * Populates the component with initial date
-   */
-  async populate() {
-    const extensionVersion = await this.context.port.request('passbolt.addon.get-version');
-    this.setState({extensionVersion});
+    const debug = this.props.siteSettings.debug;
+    const isHttpMode = this.props.siteSettings.url.startsWith('http://');
+    return debug || isHttpMode;
   }
 
   /**
@@ -115,50 +91,54 @@ class Footer extends Component {
     return (
       <footer>
         <div className="footer">
-          { this.isReady &&
-            <ul className="footer-links">
-              {this.isUnsafeMode &&
-              <li className="error message">
-                <a
-                  title="terms of service"
-                  href={this.unsafeUrl}
-                  target="_blank" rel="noopener noreferrer">
-                  Unsafe mode
-                </a>
-              </li>
-              }
-              <li>
-                <a href={this.termsUrl}
-                  target="_blank"
-                  rel="noopener noreferrer">
-                  Terms
-                </a>
-              </li>
-              <li>
-                <a href={this.privacyUrl}
-                  target="_blank"
-                  rel="noopener noreferrer">
-                  Privacy
-                </a>
-              </li>
-              <li>
-                <a href={this.creditsUrl}
-                  target="_blank"
-                  rel="noopener noreferrer">
-                  Credits
-                </a>
-              </li>
-              <li>
-                <a
-                  href={this.creditsUrl}
-                  className="tooltip-left"
-                  data-tooltip={this.versions}
-                  target="_blank"
-                  rel="noopener noreferrer">
-                  <Icon name="heart-o"/>
-                </a>
-              </li>
-            </ul>
+          {this.isReady &&
+          <ul className="footer-links">
+            {this.isUnsafeMode &&
+            <li className="error message">
+              <a
+                title="terms of service"
+                href={this.unsafeUrl}
+                target="_blank" rel="noopener noreferrer">
+                Unsafe mode
+              </a>
+            </li>
+            }
+            {this.termsUrl &&
+            <li>
+              <a href={this.termsUrl}
+                target="_blank"
+                rel="noopener noreferrer">
+                Terms
+              </a>
+            </li>
+            }
+            {this.privacyUrl &&
+            <li>
+              <a href={this.privacyUrl}
+                target="_blank"
+                rel="noopener noreferrer">
+                Privacy
+              </a>
+            </li>
+            }
+            <li>
+              <a href={this.creditsUrl}
+                target="_blank"
+                rel="noopener noreferrer">
+                Credits
+              </a>
+            </li>
+            <li>
+              <a
+                href={this.creditsUrl}
+                className="tooltip-left"
+                {...(this.versions && {"data-tooltip": this.versions})}
+                target="_blank"
+                rel="noopener noreferrer">
+                <Icon name="heart-o"/>
+              </a>
+            </li>
+          </ul>
           }
         </div>
       </footer>
@@ -166,8 +146,9 @@ class Footer extends Component {
   }
 }
 
-Footer.contextType = AppContext;
-
-Footer.propTypes = {};
+Footer.propTypes = {
+  siteSettings: PropTypes.object, // The site settings
+  extensionVersion: PropTypes.string // The extension version
+};
 
 export default Footer;

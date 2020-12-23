@@ -47,7 +47,7 @@ import DisplayUserSettingsWorkspace
   from "./components/UserSetting/DisplayUserSettingsWorkspace/DisplayUserSettingsWorkspace";
 import HandleSessionExpired
   from "./components/Auth/HandleSessionExpired/HandleSessionExpired";
-import ExtFooter from "./components/Footer/ExtFooter";
+import Footer from "./components/Footer/Footer";
 import HandleExtAppRouteChanged from "./components/Route/HandleExtAppRouteChanged";
 
 /**
@@ -457,7 +457,7 @@ class ExtApp extends Component {
                   </Switch>
                 </Router>
                 <ManageLoading/>
-                <ExtFooter
+                <Footer
                   siteSettings={this.state.siteSettings}
                   extensionVersion={this.state.extensionVersion}/>
               </LoadingContextProvider>

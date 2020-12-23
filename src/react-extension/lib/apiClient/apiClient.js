@@ -11,7 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         2.13.0
  */
-import PassboltApiFetchError from "../../../react-extension/lib/Common/Error/PassboltApiFetchError";
+import PassboltApiFetchError from "../Error/passboltApiFetchError";
 import PassboltBadResponseError from "../Error/passboltBadResponseError";
 import PassboltServiceUnavailableError from "../Error/passboltServiceUnavailableError";
 

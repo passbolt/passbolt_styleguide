@@ -12,13 +12,10 @@
  * @since         3.0.0
  */
 import React, {Component} from "react";
-import {Link, withRouter} from "react-router-dom";
 import PropTypes from "prop-types";
-import FormSubmitButton from "../../../../react/components/Common/Inputs/FormSubmitButton/FormSubmitButton";
-import {ApiClient} from "../../../lib/apiClient/apiClient";
-import {ApiClientOptions} from "../../../lib/apiClient/apiClientOptions";
-import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import {withAppContext} from "../../../contexts/AppContext";
+import {withApiTriageContext} from "../../../contexts/ApiTriageContext";
+import FormSubmitButton from "../../../../react/components/Common/Inputs/FormSubmitButton/FormSubmitButton";
 
 class EnterNameForm extends Component {
   /**
@@ -49,7 +46,6 @@ class EnterNameForm extends Component {
    */
   get defaultState() {
     return {
-      // Dialog states
       loading: true,
       processing: false,
 
@@ -80,28 +76,6 @@ class EnterNameForm extends Component {
   createInputRefs() {
     this.firstnameRef = React.createRef();
     this.lastnameRef = React.createRef();
-  }
-
-  /**
-   * Get the api client options.
-   * @returns {ApiClientOptions}
-   */
-  getApiClientOptions() {
-    const csrfToken = this.getCsrfToken();
-    return new ApiClientOptions()
-      .setBaseUrl(window.location.origin)
-      .setCsrfToken(csrfToken);
-  }
-
-  /**
-   * Get csrf token
-   * @returns {string}
-   */
-  getCsrfToken() {
-    return document.cookie
-      .split('; ')
-      .find(row => row.startsWith('csrfToken'))
-      .split('=')[1];
   }
 
   /**
@@ -157,47 +131,9 @@ class EnterNameForm extends Component {
         this.focusFirstFieldError();
         return;
       }
-      try {
-        await this.sendName();
-        await this.handleSuccess();
-      } catch (error) {
-        this.handleError(error);
-      }
+
+      await this.props.apiTriageContext.onRegistrationRequested(this.state.firstname, this.state.lastname);
     }
-  }
-
-  /**
-   * Send the name
-   * @returns {Promise<Object>}
-   */
-  async sendName() {
-    const userDto = {
-      username: this.props.context.username,
-      profile: {
-        first_name: this.state.firstname,
-        last_name: this.state.lastname
-      }
-    };
-    const apiClientOptions = this.getApiClientOptions()
-      .setResourceName("users/register");
-    const apiClient = new ApiClient(apiClientOptions);
-    await apiClient.create(userDto);
-  }
-
-  /**
-   * Handle operation success.
-   */
-  async handleSuccess() {
-    this.props.history.push('/setup/check-mailbox');
-  }
-
-  /**
-   * Handle save operation success.
-   */
-  async handleError(error) {
-    console.log(error);
-    await this.props.actionFeedbackContext.displayError("There was an unexpected error, please retry later...");
-    await this.toggleProcessing();
   }
 
   /**
@@ -300,7 +236,7 @@ class EnterNameForm extends Component {
           </div>
           <div className="form-actions">
             <FormSubmitButton disabled={this.hasAllInputDisabled()} big={true} processing={this.state.processing} value="Register"/>
-            <Link to="/auth/login">I already have an account</Link>
+            <a href={`${this.props.context.trustedDomain}/auth/login`}>I already have an account</a>
           </div>
         </form>
       </div>
@@ -309,9 +245,8 @@ class EnterNameForm extends Component {
 }
 
 EnterNameForm.propTypes = {
+  apiTriageContext: PropTypes.object, // The api triage context
   context: PropTypes.any, // The application context provider
-  history: PropTypes.object,
-  actionFeedbackContext: PropTypes.object,
 };
 
-export default withRouter(withAppContext(withActionFeedback(EnterNameForm)));
+export default withAppContext(withApiTriageContext(EnterNameForm));

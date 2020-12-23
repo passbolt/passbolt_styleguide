@@ -17,12 +17,10 @@
  */
 import EnterNameFormPage from "./EnterNameForm.test.page";
 import {defaultProps} from "./EnterNameForm.test.data";
-import {ActionFeedbackContext} from "../../../contexts/ActionFeedbackContext";
 import {waitFor} from "@testing-library/react";
 import fetchMock from "fetch-mock-jest";
 
 beforeEach(() => {
-  document.cookie = "csrfToken=TEST_CSRF_TOKEN;";
   jest.resetModules();
 });
 
@@ -30,7 +28,6 @@ describe("As AN I should see the Enter Name Form Page", () => {
   let page; // The page to test against
   const props = defaultProps(); // The applicative context
 
-  const mockFetchPost = (url, response) => fetchMock.post(url, response);
 
   describe('As AN I can start adding a name', () => {
     /**
@@ -48,22 +45,15 @@ describe("As AN I should see the Enter Name Form Page", () => {
       // Fill the form
       page.insertFirstname("firstname");
       page.insertLastname("lastname");
-      mockFetchPost("http://localhost/users/register.json?api-version=v2", {});
+      jest.spyOn(props.apiTriageContext, 'onRegistrationRequested').mockImplementation(() => {});
       await page.register();
-      expect(props.history.push).toHaveBeenCalledWith("/setup/check-mailbox");
+      expect(props.apiTriageContext.onRegistrationRequested).toHaveBeenCalledWith("firstname", "lastname");
     });
 
     it('As AN I should see a processing feedback while submitting the form', async() => {
       // Fill the form
       page.insertFirstname("firstname");
       page.insertLastname("lastname");
-
-      // Mock the request function to make it the expected result
-      let updateResolve;
-      const requestMockImpl = jest.fn(() => new Promise(resolve => {
-        updateResolve = resolve;
-      }));
-      mockFetchPost("http://localhost/users/register.json?api-version=v2", requestMockImpl);
 
       page.registerWithoutWaitFor();
       // API calls are made on submit, wait they are resolved.
@@ -72,7 +62,6 @@ describe("As AN I should see the Enter Name Form Page", () => {
         expect(page.lastname.getAttribute("disabled")).not.toBeNull();
         expect(page.registerButton.getAttribute("disabled")).not.toBeNull();
         expect(page.registerButton.className).toBe('button primary disabled processing big');
-        updateResolve();
       });
     });
 
@@ -91,23 +80,25 @@ describe("As AN I should see the Enter Name Form Page", () => {
       expect(page.lastnameErrorMessage).toBe("A last name is required.");
     });
 
-    it('As AN I should see an error toaster if the submit operation fails for an unexpected reason', async() => {
-      // Fill the form
-      page.insertFirstname("firstname");
-      page.insertLastname("lastname");
-
-      // Mock the request function to make it return an error.
-      const error = {
-        status: 500
-      };
-      mockFetchPost("http://localhost/users/register.json?api-version=v2", Promise.reject(error));
-
-      jest.spyOn(ActionFeedbackContext._currentValue, 'displayError').mockImplementation(() => {});
-
-      await page.register();
-
-      // Throw general error message
-      expect(ActionFeedbackContext._currentValue.displayError).toHaveBeenCalledWith("There was an unexpected error, please retry later...");
-    });
+    /*
+     * it('As AN I should see an error toaster if the submit operation fails for an unexpected reason', async() => {
+     *   // Fill the form
+     *   page.insertFirstname("firstname");
+     *   page.insertLastname("lastname");
+     *
+     *   // Mock the request function to make it return an error.
+     *   const error = {
+     *     status: 500
+     *   };
+     *   mockFetchPost("http://localhost/users/register.json?api-version=v2", Promise.reject(error));
+     *
+     *   jest.spyOn(ActionFeedbackContext._currentValue, 'displayError').mockImplementation(() => {});
+     *
+     *   await page.register();
+     *
+     *   // Throw general error message
+     *   expect(ActionFeedbackContext._currentValue.displayError).toHaveBeenCalledWith("There was an unexpected error, please retry later...");
+     * });
+     */
   });
 });

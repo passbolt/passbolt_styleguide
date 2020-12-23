@@ -11,24 +11,19 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         3.0.0
  */
-import React, {Component} from "react";
 
-class CheckMailBox extends Component {
-  /**
-   * Render the component
-   * @returns {JSX}
-   */
-  render() {
-    return (
-      <div className="email-sent-instructions">
-        <div className="email-sent-bg">
-        </div>
-        <h1>Check your mailbox!</h1>
-        <p>We send you a link to verify your email.<br/>
-          Check your spam folder if you do not see hear from us after a while.</p>
-      </div>
-    );
-  }
-}
+/**
+ * This is a demo entry point that has for aim to instantiate the setup application served by the
+ * api. The demo is useful to mock the API calls.
+ *
+ * The production build will be based on the default entry defined in the webpack-api.config.js.
+ */
+import React from "react";
+import ReactDOM from "react-dom";
+import mockFetch from "../mock/mockFetch";
+import ApiSetup from "../../../src/react-extension/ApiSetup";
 
-export default CheckMailBox;
+mockFetch();
+const appDomElement = document.createElement("div");
+document.body.appendChild(appDomElement);
+ReactDOM.render(<ApiSetup/>, appDomElement);

@@ -1,14 +1,20 @@
+import SiteSettings from "../../../lib/Settings/SiteSettings";
+import siteSettingsFixture from "../../../test/fixture/Settings/siteSettings";
+
 /**
  * Default props
- * @returns {}
+ * @returns {object}
  */
 export function defaultProps() {
   return {
     context: {
-      username: "user@passbolt.com"
+      setContext: jest.fn(),
+      siteSettings: new SiteSettings(siteSettingsFixture),
+      trustedDomain: "http://127.0.0.1:3001"
     },
-    history: {
-      push: jest.fn()
+    apiTriageContext: {
+      username: "user@passbolt.com",
+      onRegistrationRequested: () => {},
     }
   };
 }

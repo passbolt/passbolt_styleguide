@@ -19,7 +19,7 @@ import DialogContextProvider from "../react/contexts/Common/DialogContext";
 import {BrowserRouter as Router} from "react-router-dom";
 import OrchestrateLogin from "./components/AuthenticationLogin/OrchestrateLogin/OrchestrateLogin";
 import SiteSettings from "./lib/Settings/SiteSettings";
-import ExtFooter from "./components/Footer/ExtFooter";
+import Footer from "./components/Footer/Footer";
 
 
 /**
@@ -101,7 +101,7 @@ class ExtAuthenticationLogin extends Component {
                 </div>
               </div>
             </div>
-            <ExtFooter
+            <Footer
               siteSettings={this.state.siteSettings}
               extensionVersion={this.state.extensionVersion}/>
           </DialogContextProvider>

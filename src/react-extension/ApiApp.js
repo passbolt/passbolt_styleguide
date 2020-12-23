@@ -24,7 +24,7 @@ import AdministrationWorkspace from "./components/Administration/AdministrationW
 import {ApiClientOptions} from "./lib/apiClient/apiClientOptions";
 import {ApiClient} from "./lib/apiClient/apiClient";
 import SiteSettings from "./lib/Settings/SiteSettings";
-import ApiFooter from "./components/Footer/ApiFooter";
+import Footer from "./components/Footer/Footer";
 
 /**
  * The passbolt application served by the API.
@@ -142,7 +142,7 @@ class ApiApp extends Component {
                   </Route>
                 </Switch>
               </Router>
-              <ApiFooter siteSettings={this.state.siteSettings}/>
+              <Footer siteSettings={this.state.siteSettings}/>
             </ContextualMenuContextProvider>
           </DialogContextProvider>
         </ActionFeedbackContextProvider>

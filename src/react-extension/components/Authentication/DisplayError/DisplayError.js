@@ -12,19 +12,28 @@
  * @since         3.0.0
  */
 import React, {Component} from "react";
+import {withAppContext} from "../../../contexts/AppContext";
+import PropTypes from "prop-types";
 
 class DisplayError extends Component {
+  /**
+   * Render the component
+   * @returns {JSX}
+   */
   render() {
     return (
       <div className="setup-error">
         <h1>Access to this service requires an invitation.</h1>
         <p>This email is not associated with any approved users on this domain. Please contact your administrator to request an invitation link.</p>
         <div className="form-actions">
-          <a href="#" className="button primary big" role="button">Try with another email</a>
+          <a href={`${this.props.context.trustedDomain}/users/recover`} className="button primary big" role="button">Try with another email</a>
         </div>
       </div>
     );
   }
 }
 
-export default DisplayError;
+DisplayError.propTypes = {
+  context: PropTypes.any, // The application context
+};
+export default withAppContext(DisplayError);

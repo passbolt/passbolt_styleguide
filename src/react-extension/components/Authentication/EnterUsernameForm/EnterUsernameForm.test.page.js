@@ -27,7 +27,7 @@ export default class EnterUsernameFormPage {
    */
   constructor(props) {
     this._page = render(
-      <EnterUsernameForm.WrappedComponent {...props}/>
+      <EnterUsernameForm {...props}/>
     );
   }
 

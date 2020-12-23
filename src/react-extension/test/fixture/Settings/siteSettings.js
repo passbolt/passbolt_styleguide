@@ -13,6 +13,14 @@ export default {
     }
   },
   "passbolt": {
+    "legal": {
+      "privacy_policy": {
+        "url": "https://passbolt.com/privacy"
+      },
+      "terms": {
+        "url": "https://passbolt.com/terms"
+      }
+    },
     "edition": "pro",
     "plugins": {
       "import": {

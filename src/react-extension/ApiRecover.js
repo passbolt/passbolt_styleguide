@@ -13,17 +13,14 @@
  */
 import React, {Component} from "react";
 import AppContext from "./contexts/AppContext";
+import ApiRecoverContextProvider from "./contexts/ApiRecoverContext";
+import OrchestrateApiRecover from "./components/AuthenticationRecover/OrchestrateApiRecover/OrchestrateApiRecover";
 import {ApiClientOptions} from "./lib/apiClient/apiClientOptions";
-import ApiTriageContextProvider from "./contexts/ApiTriageContext";
-import OrchestrateApiTriage from "./components/AuthenticationLogin/OrchestrateApiTriage/OrchestrateApiTriage";
-import {ApiClient} from "./lib/apiClient/apiClient";
-import SiteSettings from "./lib/Settings/SiteSettings";
-import Footer from "./components/Footer/Footer";
 
 /**
- * The triage application served by the API.
+ * The recover application served by the API.
  */
-class ApiTriage extends Component {
+class ApiRecover extends Component {
   /**
    * Default constructor
    * @param props The component props
@@ -31,6 +28,9 @@ class ApiTriage extends Component {
   constructor(props) {
     super(props);
     this.state = this.defaultState;
+    this.userId = null; // The recover user id
+    this.token = null; // The recover token
+    this.initializeProperties();
   }
 
   /**
@@ -39,19 +39,25 @@ class ApiTriage extends Component {
    */
   get defaultState() {
     return {
-      siteSettings: null, // The site settings
       trustedDomain: this.baseUrl, // The site domain (use trusted domain for compatibility with browser extension applications)
       getApiClientOptions: this.getApiClientOptions.bind(this), // Get the api client options
     };
   }
 
   /**
-   * ComponentDidMount
-   * Invoked immediately after component is inserted into the tree
-   * @return {void}
+   * Initialize properties
    */
-  componentDidMount() {
-    this.getSiteSettings();
+  initializeProperties() {
+    const uuidRegex = "[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[0-5][a-fA-F0-9]{3}-[089aAbB][a-fA-F0-9]{3}-[a-fA-F0-9]{12}";
+    const recoverBootstrapRegex = `setup\/recover\/(${uuidRegex})\/(${uuidRegex})$`;
+    const regex = new RegExp(recoverBootstrapRegex);
+    const match = window.location.pathname.match(regex);
+    if (!match) {
+      console.error("Unable to retrieve the user id and token from the url");
+      return;
+    }
+    this.userId = match[1];
+    this.token = match[2];
   }
 
   /**
@@ -73,32 +79,7 @@ class ApiTriage extends Component {
    */
   getApiClientOptions() {
     return new ApiClientOptions()
-      .setBaseUrl(this.state.trustedDomain)
-      .setCsrfToken(this.getCsrfToken());
-  }
-
-  /**
-   * Get csrf token
-   * @returns {string}
-   */
-  getCsrfToken() {
-    return document.cookie
-      .split('; ')
-      .find(row => row.startsWith('csrfToken'))
-      .split('=')[1];
-  }
-
-  /**
-   * Retrieve the site settings
-   * @returns {Promise<SiteSettings>}
-   */
-  async getSiteSettings() {
-    const apiClientOptions = this.getApiClientOptions()
-      .setResourceName("settings");
-    const apiClient = new ApiClient(apiClientOptions);
-    const {body} = await apiClient.findAll();
-    const siteSettings = new SiteSettings(body);
-    await this.setState({siteSettings});
+      .setBaseUrl(this.state.trustedDomain);
   }
 
   /**
@@ -114,16 +95,15 @@ class ApiTriage extends Component {
               <div className="logo"><span className="visually-hidden">Passbolt</span></div>
             </div>
             <div className="login-form">
-              <ApiTriageContextProvider>
-                <OrchestrateApiTriage/>
-              </ApiTriageContextProvider>
+              <ApiRecoverContextProvider value={{userId: this.userId, token: this.token}}>
+                <OrchestrateApiRecover/>
+              </ApiRecoverContextProvider>
             </div>
           </div>
         </div>
-        <Footer siteSettings={this.state.siteSettings}/>
       </AppContext.Provider>
     );
   }
 }
 
-export default ApiTriage;
+export default ApiRecover;

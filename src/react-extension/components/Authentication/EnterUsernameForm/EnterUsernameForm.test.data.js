@@ -1,14 +1,22 @@
+import SiteSettings from "../../../lib/Settings/SiteSettings";
+import siteSettingsFixture from "../../../test/fixture/Settings/siteSettings";
+
 /**
  * Default props
- * @returns {}
+ * @returns {object}
  */
-export function defaultProps() {
-  return {
+export function defaultProps(data) {
+  data = data || {};
+  const props = {
     context: {
-      setContext: jest.fn()
+      setContext: jest.fn(),
+      siteSettings: new SiteSettings(siteSettingsFixture),
+      trustedDomain: "http://127.0.0.1:3001"
     },
-    history: {
-      push: jest.fn()
+    apiTriageContext: {
+      onTriageRequested: () => {},
     }
   };
+
+  return Object.assign(props, data);
 }

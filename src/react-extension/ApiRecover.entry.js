@@ -9,26 +9,15 @@
  * @copyright     Copyright (c) 2020 Passbolt SA (https://www.passbolt.com)
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
- * @since         3.0.0
  */
-import React, {Component} from "react";
+import React from "react";
+import ReactDOM from "react-dom";
+import ApiRecover from "./ApiRecover";
 
-class CheckMailBox extends Component {
-  /**
-   * Render the component
-   * @returns {JSX}
-   */
-  render() {
-    return (
-      <div className="email-sent-instructions">
-        <div className="email-sent-bg">
-        </div>
-        <h1>Check your mailbox!</h1>
-        <p>We send you a link to verify your email.<br/>
-          Check your spam folder if you do not see hear from us after a while.</p>
-      </div>
-    );
-  }
-}
-
-export default CheckMailBox;
+/**
+ * Entry point - Recover application served by the API.
+ * This entry point will be used to compile the production code see webpack-api.config.js
+ */
+const appDomElement = document.createElement("div");
+document.body.appendChild(appDomElement);
+ReactDOM.render(<ApiRecover/>, appDomElement);

@@ -7,12 +7,16 @@ const uuidRegex = "[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[0-5][a-fA-F0-9]{3}-[089aAbB][a
  */
 const demoEntry = {
   "api-app": path.resolve(__dirname, "./demo/api-app/entry/ApiApp.entry.js"), // The passbolt application served by the API,
+  "api-recover": path.resolve(__dirname, "./demo/api-app/entry/ApiRecover.entry.js"), // The recover application served by the API
+  "api-setup": path.resolve(__dirname, "./demo/api-app/entry/ApiSetup.entry.js"), // The setup application served by the API
   "api-triage": path.resolve(__dirname, "./demo/api-app/entry/ApiTriage.entry.js"), // The triage application served by the API
 };
 
 const config = {
   entry: {
     "api-app": path.resolve(__dirname, "./src/react-extension/ApiApp.entry.js"), // The passbolt application served by the API
+    "api-recover": path.resolve(__dirname, "./src/react-extension/ApiRecover.entry.js"), // The recover application served by the API
+    "api-setup": path.resolve(__dirname, "./src/react-extension/ApiSetup.entry.js"), // The setup application served by the API
     "api-triage": path.resolve(__dirname, "./src/react-extension/ApiTriage.entry.js"), // The triage application served by the API
   },
   mode: "production",

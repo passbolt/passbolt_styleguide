@@ -28,7 +28,7 @@ export default class EnterNameFormPage {
   constructor(props) {
     this._page = render(
       <Router>
-        <EnterNameForm.WrappedComponent {...props}/>
+        <EnterNameForm {...props}/>
       </Router>
     );
   }
