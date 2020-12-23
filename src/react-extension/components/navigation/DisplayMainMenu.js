@@ -43,6 +43,14 @@ class DisplayMainMenu extends Component {
   }
 
   /**
+   * Is the logged in user admin
+   * @returns {boolean}
+   */
+  isLoggedInUserAdmin() {
+    return this.context.loggedInUser && this.context.loggedInUser.role.name === 'admin';
+  }
+
+  /**
    * Render the component
    * @return {JSX}
    */
@@ -69,6 +77,7 @@ class DisplayMainMenu extends Component {
                 </div>
               </div>
             </li>
+            {this.isLoggedInUserAdmin() &&
             <li key="administration">
               <div className={`row ${this.isSelected("administration") ? "selected" : ""}`}>
                 <div className="main-cell-wrapper">
@@ -78,6 +87,7 @@ class DisplayMainMenu extends Component {
                 </div>
               </div>
             </li>
+            }
             <li key="help">
               <div className="row">
                 <div className="main-cell-wrapper">
