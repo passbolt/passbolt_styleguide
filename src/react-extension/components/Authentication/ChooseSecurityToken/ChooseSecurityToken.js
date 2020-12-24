@@ -32,11 +32,19 @@ class ChooseSecurityToken extends Component {
   }
 
   /**
+   * Whenever the component is mounted
+   */
+  componentDidMount() {
+    // randomize token and color
+    this.handleRandomize();
+  }
+
+  /**
    * Returns the default state
    */
   get defaultState() {
     return {
-      background: '#3f51b5', // The token color
+      background: '', // The token color
       code: '', // The token code
       actions: {
         processing: false // True if one's processing passphrase
@@ -121,7 +129,7 @@ class ChooseSecurityToken extends Component {
   bindEventHandlers() {
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleSelectColor = this.handleSelectColor.bind(this);
-    this.handleRandomizeCode = this.handleRandomizeCode.bind(this);
+    this.handleRandomize = this.handleRandomize.bind(this);
     this.handleChangeCode = this.handleChangeCode.bind(this);
   }
 
@@ -159,10 +167,11 @@ class ChooseSecurityToken extends Component {
   }
 
   /**
-   * Whenever the user wants to randomize the token code
+   * Whenever the user wants to randomize the token code and color
    */
-  handleRandomizeCode() {
+  handleRandomize() {
     this.randomizeCode();
+    this.randomizeColor();
   }
 
   /**
@@ -235,6 +244,19 @@ class ChooseSecurityToken extends Component {
   }
 
   /**
+   * Randomize a color
+   */
+  async randomizeColor() {
+    let color;
+    do {
+      color = {
+        hex: this.defaultColors[Math.floor(Math.random() * this.defaultColors.length)]
+      };
+      await this.selectColor(color);
+    } while (color.hex !== this.state.background);
+  }
+
+  /**
    * Validate the security token data
    */
   async validate() {
@@ -289,7 +311,7 @@ class ChooseSecurityToken extends Component {
             <input type="hidden" id="security-token-text-color" name="security-token-text-color"/>
             <CirclePicker
               color={ this.state.background }
-              onChangeComplete={ this.handleSelectColor }
+              onChange={ this.handleSelectColor }
               width={240}
               circleSize={24}
               circleSpacing={16}
@@ -299,7 +321,7 @@ class ChooseSecurityToken extends Component {
               <a
                 className="randomize-button"
                 role="button"
-                onClick={this.handleRandomizeCode}>
+                onClick={this.handleRandomize}>
                 <Icon name="magic-wand"/> Randomize
               </a>
             </div>
