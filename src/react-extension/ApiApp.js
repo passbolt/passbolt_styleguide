@@ -25,6 +25,9 @@ import {ApiClientOptions} from "./lib/apiClient/apiClientOptions";
 import {ApiClient} from "./lib/apiClient/apiClient";
 import SiteSettings from "./lib/Settings/SiteSettings";
 import Footer from "./components/Footer/Footer";
+import DisplayApiUserSettingsWorkspace
+  from "./components/UserSetting/DisplayUserSettingsWorkspace/DisplayApiUserSettingsWorkspace";
+import DisplayMainMenu from "./components/navigation/DisplayMainMenu";
 
 /**
  * The passbolt application served by the API.
@@ -38,6 +41,7 @@ class ApiApp extends Component {
     super(props);
     this.state = this.getDefaultState(props);
   }
+
   /**
    * ComponentDidMount
    * Invoked immediately after component is inserted into the tree
@@ -57,7 +61,8 @@ class ApiApp extends Component {
     return {
       loggedInUser: null, // The logged in user
       siteSettings: null, // The site settings
-      trustedDomain: window.location.origin,
+      trustedDomain: this.baseUrl, // The site domain (use trusted domain for compatibility with browser extension applications)
+      getApiClientOptions: this.getApiClientOptions.bind(this), // Get the api client options
 
       displayTestUserDirectoryDialogProps: {
         userDirectoryTestResult: null, // The result of the test user directory
@@ -66,8 +71,6 @@ class ApiApp extends Component {
       setContext: context => {
         this.setState(context);
       },
-      setLoggedInUser: () => {
-      }, // Set the logged in user
 
       // Navigation
       onLogoutRequested: () => this.onLogoutRequested()
@@ -75,23 +78,56 @@ class ApiApp extends Component {
   }
 
   /**
+   * Get the application base url
+   * @return {string}
+   */
+  get baseUrl() {
+    const baseElement = document.getElementsByTagName('base') && document.getElementsByTagName('base')[0];
+    if (baseElement) {
+      return baseElement.attributes.href.value.replace(/\/*$/g, '');
+    }
+    console.error("Unable to retrieve the page base tag");
+    return "";
+  }
+
+  /**
+   * Get the API client options
+   * @returns {ApiClientOptions}
+   */
+  getApiClientOptions() {
+    return new ApiClientOptions()
+      .setBaseUrl(this.state.trustedDomain)
+      .setCsrfToken(this.getCsrfToken());
+  }
+
+  /**
+   * Get csrf token
+   * @returns {string}
+   */
+  getCsrfToken() {
+    return document.cookie
+      .split('; ')
+      .find(row => row.startsWith('csrfToken'))
+      .split('=')[1];
+  }
+
+  /**
    * Retrieve the logged in user.
    * @returns {Promise<object>}
    */
   async getLoggedInUser() {
-    const apiClientOptions = new ApiClientOptions().setBaseUrl(this.state.trustedDomain).setResourceName("users");
+    const apiClientOptions = this.getApiClientOptions().setResourceName("users");
     const apiClient = new ApiClient(apiClientOptions);
     const result = await apiClient.get("me");
-    this.setLoggedInUser(result.body);
+    const loggedInUser = result.body;
+    this.setState({loggedInUser});
   }
 
   /**
    * Fetch the site settings
    */
   async getSiteSettings() {
-    const apiClientOptions = new ApiClientOptions()
-      .setBaseUrl(this.state.trustedDomain)
-      .setResourceName("settings");
+    const apiClientOptions = this.getApiClientOptions().setResourceName("settings");
     const apiClient = new ApiClient(apiClientOptions);
     const siteSettings = await apiClient.findAll();
     await this.setState({siteSettings: new SiteSettings(siteSettings)});
@@ -102,10 +138,6 @@ class ApiApp extends Component {
    */
   removeSplashScreen() {
     document.getElementsByTagName("html")[0].classList.remove("launching");
-  }
-
-  setLoggedInUser(loggedInUser) {
-    this.setState({loggedInUser});
   }
 
   /**
@@ -135,8 +167,20 @@ class ApiApp extends Component {
                       <AdministrationWorkspace/>
                     </AdministrationWorkspaceContextProvider>
                   </Route>
-                  { /* If the ApiApp doesn't match any route, it's then an ExtApp route. Reload the page and let the browser extension app handle this route */}
-                  <Route path="/" render={() => {
+                  <Route path="/app/settings/mfa">
+                    <ManageDialogs/>
+                    <ManageContextualMenu/>
+                    <div id="container" className="page settings">
+                      <div id="app" className="app" tabIndex="1000">
+                        <div className="header first">
+                          <DisplayMainMenu/>
+                        </div>
+                        <DisplayApiUserSettingsWorkspace/>
+                      </div>
+                    </div>
+                  </Route>
+                  { /* All others /app routes are handled by the browser extension */}
+                  <Route path="/app" render={() => {
                     window.location.reload();
                   }}>
                   </Route>

@@ -387,6 +387,15 @@ class ExtApp extends Component {
                 <Router>
                   <HandleExtAppRouteChanged/>
                   <Switch>
+                    { /* The following routes are not handled by the browser extension application. */}
+                    <Route exact path={[
+                      "/app/administration",
+                      "/app/settings/mfa",
+                    ]} render={() => {
+                      this.props.port.emit('passbolt.app.reload');
+                    }}>
+                    </Route>
+                    {/* Passwords workspace */}
                     <Route path={[
                       "/app/folders/view/:filterByFolderId",
                       "/app/passwords/view/:selectedResourceId",
@@ -406,8 +415,8 @@ class ExtApp extends Component {
                         </div>
                       </ResourceWorkspaceContextProvider>
                       }
-
                     </Route>
+                    {/* Users workspace */}
                     <Route path={[
                       "/app/groups/view/:selectedGroupId",
                       "/app/users/view/:selectedUserId",
@@ -428,6 +437,7 @@ class ExtApp extends Component {
                       </UserWorkspaceContextProvider>
                       }
                     </Route>
+                    {/* User settings workspace */}
                     <Route path={"/app/settings"}>
                       {isReady &&
                         <>
@@ -443,14 +453,7 @@ class ExtApp extends Component {
                         </>
                       }
                     </Route>
-                    { /* The routes are handled by the ApiApp. Reload the page and let the API route to this app. */}
-                    <Route exact path={[
-                      "/app/administration",
-                      "/app/settings/mfa",
-                    ]} render={() => {
-                      this.props.port.emit('passbolt.app.reload');
-                    }}>
-                    </Route>
+                    {/* Fallback */}
                     <Route path="/">
                       <HandleRouteFallback/>
                     </Route>
@@ -468,8 +471,6 @@ class ExtApp extends Component {
     );
   }
 }
-
-ExtApp.contextType = AppContext;
 
 ExtApp.propTypes = {
   onClose: PropTypes.func,
