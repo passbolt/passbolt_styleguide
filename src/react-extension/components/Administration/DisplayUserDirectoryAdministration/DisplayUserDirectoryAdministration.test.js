@@ -17,10 +17,9 @@
  */
 import {
   defaultAppContext,
-  defaultProps,
+  defaultProps, mockResult,
   mockUserDirectorySettings, mockUsers
 } from "./DisplayUserDirectoryAdministration.test.data";
-import fetchMock from "fetch-mock-jest";
 import DisplayUserDirectoryAdministrationPage from "./DisplayUserDirectoryAdministration.test.page";
 import {waitFor} from "@testing-library/react";
 import {ActionFeedbackContext} from "../../../contexts/ActionFeedbackContext";
@@ -36,22 +35,15 @@ describe("As AD I should see the user directory settings", () => {
   const context = defaultAppContext(); // The applicative context
   const props = defaultProps(); // The props to pass
 
-  const mockFetch = (url, data) => fetchMock.mock(url, data);
-
   describe('As AD I should see the user directory activation state on the administration settings page', () => {
     /**
      * I should see the User Directory activation state on the administration settings page
      */
     beforeEach(() => {
-      fetchMock.reset();
-      mockFetch("http://localhost:3000/directorysync/settings.json?api-version=v2", mockUserDirectorySettings);
-      mockFetch("http://localhost:3000/users.json?api-version=v2", mockUsers);
       page = new DisplayUserDirectoryAdministrationPage(context, props);
     });
 
     it('As AD I should see if the User Directory is enabled on my Passbolt instance', async() => {
-      await waitFor(() => {
-      });
       expect(page.exists()).toBeTruthy();
       // check fields in the form
       expect(page.userDirectory.checked).toBeTruthy();
@@ -96,7 +88,6 @@ describe("As AD I should see the user directory settings", () => {
     });
 
     it('As AD I should test the user directory on the administration settings page', async() => {
-      await waitFor(() => {});
       await page.click(page.directoryConfigurationTitle);
       expect(props.administrationWorkspaceContext.onTestEnabled).toHaveBeenCalled();
       const propsUpdated = {
@@ -108,15 +99,20 @@ describe("As AD I should see the user directory settings", () => {
           onSaveEnabled: jest.fn(),
           onTestEnabled: jest.fn(),
           onSynchronizeEnabled: jest.fn(),
+          onGetUsersDirectoryRequested: () => mockUserDirectorySettings,
+          onGetUsersRequested: () => mockUsers,
+          onTestUsersDirectoryRequested: jest.fn(),
         },
         dialogContext: {
           open: jest.fn()
         }
       };
-      mockFetch("http://localhost:3000/directorysync/settings/test.json?api-version=v2", {});
+
+      jest.spyOn(propsUpdated.administrationWorkspaceContext, 'onTestUsersDirectoryRequested').mockImplementation(() => mockUserDirectorySettings);
 
       page.rerender(context, propsUpdated);
       await waitFor(() => {});
+      expect(propsUpdated.administrationWorkspaceContext.onTestUsersDirectoryRequested).toHaveBeenCalledWith(mockResult);
       expect(propsUpdated.dialogContext.open).toHaveBeenCalledWith(DisplayTestUserDirectoryAdministrationDialog);
     });
 
@@ -133,12 +129,15 @@ describe("As AD I should see the user directory settings", () => {
           onSaveEnabled: jest.fn(),
           onTestEnabled: jest.fn(),
           onSynchronizeEnabled: jest.fn(),
-        },
+          onUpdateUsersDirectoryRequested: jest.fn(),
+        }
       };
+      jest.spyOn(propsUpdated.administrationWorkspaceContext, 'onUpdateUsersDirectoryRequested').mockImplementation(() => mockUserDirectorySettings);
       jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementation(() => {});
 
       page.rerender(context, propsUpdated);
       await waitFor(() => {});
+      expect(propsUpdated.administrationWorkspaceContext.onUpdateUsersDirectoryRequested).toHaveBeenCalledWith(mockResult);
       expect(propsUpdated.administrationWorkspaceContext.onSynchronizeEnabled).toHaveBeenCalledWith(true);
       expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalledWith("The user directory settings for the organization were updated.");
     });
@@ -156,12 +155,15 @@ describe("As AD I should see the user directory settings", () => {
           onSaveEnabled: jest.fn(),
           onTestEnabled: jest.fn(),
           onSynchronizeEnabled: jest.fn(),
+          onDeleteUsersDirectoryRequested: jest.fn(),
         },
       };
+      jest.spyOn(propsUpdated.administrationWorkspaceContext, 'onDeleteUsersDirectoryRequested').mockImplementation(() => mockUserDirectorySettings);
       jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementation(() => {});
 
       page.rerender(context, propsUpdated);
       await waitFor(() => {});
+      expect(propsUpdated.administrationWorkspaceContext.onDeleteUsersDirectoryRequested).toHaveBeenCalled();
       expect(propsUpdated.administrationWorkspaceContext.onSynchronizeEnabled).toHaveBeenCalledWith(false);
       expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalledWith("The user directory settings for the organization were updated.");
     });
@@ -205,6 +207,7 @@ describe("As AD I should see the user directory settings", () => {
           onSaveEnabled: jest.fn(),
           onTestEnabled: jest.fn(),
           onSynchronizeEnabled: jest.fn(),
+          onUpdateUsersDirectoryRequested: jest.fn(),
         },
       };
       // Mock the request function to make it the expected result
@@ -212,8 +215,8 @@ describe("As AD I should see the user directory settings", () => {
       const requestMockImpl = jest.fn(() => new Promise(resolve => {
         updateResolve = resolve;
       }));
-      fetchMock.reset();
-      mockFetch("http://localhost:3000/directorysync/settings.json?api-version=v2", requestMockImpl);
+
+      jest.spyOn(propsUpdated.administrationWorkspaceContext, 'onUpdateUsersDirectoryRequested').mockImplementation(requestMockImpl);
 
       page.rerender(context, propsUpdated);
       // API calls are made on submit, wait they are resolved.
@@ -239,16 +242,14 @@ describe("As AD I should see the user directory settings", () => {
           mustSaveSettings: true,
           onResetActionsSettings: jest.fn(),
           isSaveEnabled: true,
-          onSaveEnabled: jest.fn()
+          onSaveEnabled: jest.fn(),
+          onUpdateUsersDirectoryRequested: jest.fn()
         }
       };
 
       // Mock the request function to make it return an error.
-      const error = {
-        status: 500
-      };
-      fetchMock.reset();
-      mockFetch("http://localhost:3000/directorysync/settings.json?api-version=v2", Promise.reject(error));
+      const error = {message: "The service is unavailable"};
+      jest.spyOn(propsUpdated.administrationWorkspaceContext, 'onUpdateUsersDirectoryRequested').mockImplementation(() => Promise.reject(error));
       jest.spyOn(ActionFeedbackContext._currentValue, 'displayError').mockImplementation(() => {});
 
       page.rerender(context, propsUpdated);
@@ -261,19 +262,12 @@ describe("As AD I should see the user directory settings", () => {
   describe('As AD I see all fields disabled if mfa setting are not yet fetched', () => {
     const context = defaultAppContext(); // The applicative context
     /**
-     * Given the groups section
-     * And the groups are not loaded yet
-     * Then I should see the loading message “Retrieving groups”
+     * Given the users directory setting
+     * And the users directory are not loaded yet
      */
 
-    beforeEach(() => {
-      fetchMock.reset();
-      mockFetch("http://localhost:3000/directorysync/settings.json?api-version=v2", mockUserDirectorySettings);
-      mockFetch("http://localhost:3000/users.json?api-version=v2", mockUsers);
-      page = new DisplayUserDirectoryAdministrationPage(context, props);
-    });
-
     it('As AD I should see all fields disabled”', () => {
+      page = new DisplayUserDirectoryAdministrationPage(context, props);
       expect(page.userDirectory.getAttribute("disabled")).not.toBeNull();
     });
   });

@@ -6,7 +6,6 @@
  */
 export function defaultAppContext(appContext) {
   const defaultAppContext = {
-    trustedDomain: "http://localhost:3000",
     setContext: function(newContext) {
       // In this scope this reference the object context.
       Object.assign(this, newContext);
@@ -28,13 +27,43 @@ export function defaultProps() {
       isSaveEnabled: false,
       onSaveEnabled: jest.fn(),
       onTestEnabled: jest.fn(),
-      onSynchronizeEnabled: jest.fn()
+      onSynchronizeEnabled: jest.fn(),
+      onGetUsersDirectoryRequested: () => mockUserDirectorySettings,
+      onGetUsersRequested: () => mockUsers,
+      onTestUsersDirectoryRequested: () => mockUserDirectorySettings,
     },
     dialogContext: {
       open: jest.fn()
     }
   };
 }
+
+export const mockResult = {
+  "base_dn": "DC=passbolt,DC=local",
+  "connection_type": "plain",
+  "default_group_admin_user": "d57c10f5-639d-5160-9c81-8a0c6c4ec856",
+  "default_user": "d57c10f5-639d-5160-9c81-8a0c6c4ec856",
+  "directory_type": "ad",
+  "domain_name": "passbolt.local",
+  "email_prefix": null,
+  "email_suffix": null,
+  "enabled": true,
+  "enabled_users_only": false,
+  "group_path": undefined,
+  "groups_parent_group": undefined,
+  "password": "password",
+  "port": 389,
+  "server": "127.0.0.1",
+  "sync_groups_create": true,
+  "sync_groups_delete": true,
+  "sync_groups_update": true,
+  "sync_users_create": true,
+  "sync_users_delete": true,
+  "use_email_prefix_suffix": undefined,
+  "user_path": undefined,
+  "username": "username",
+  "users_parent_group": undefined,
+};
 
 export const mockUserDirectorySettings = {
   "header": {

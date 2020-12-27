@@ -6,7 +6,6 @@
  */
 export function defaultAppContext(appContext) {
   const defaultAppContext = {
-    trustedDomain: "http://localhost:3000",
   };
   return Object.assign(defaultAppContext, appContext || {});
 }
@@ -21,7 +20,9 @@ export function defaultProps() {
       mustSaveSettings: false,
       onResetActionsSettings: jest.fn(),
       isSaveEnabled: false,
-      onSaveEnabled: jest.fn()
+      onSaveEnabled: jest.fn(),
+      onGetMfaRequested: () => mockMfaSettings,
+      onSaveMfaRequested: jest.fn()
     }
   };
 }

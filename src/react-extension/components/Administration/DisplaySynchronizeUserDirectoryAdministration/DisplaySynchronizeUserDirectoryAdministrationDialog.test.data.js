@@ -6,7 +6,6 @@
  */
 export function defaultAppContext(appContext) {
   const defaultAppContext = {
-    trustedDomain: "http://localhost:3000",
   };
   return Object.assign(defaultAppContext, appContext || {});
 }
@@ -17,11 +16,14 @@ export function defaultAppContext(appContext) {
  */
 export function defaultProps() {
   return {
+    administrationWorkspaceContext: {
+      onGetSynchronizeUsersDirectoryRequested: () => mockSynchronizeBody
+    },
     onClose: jest.fn()
   };
 }
 
-export const mockSynchronizeBody = {
+const mockSynchronizeBody = {
   "header": {
     "id": "3130fc97-c763-4afc-965d-379d6e288646",
     "status": "success",

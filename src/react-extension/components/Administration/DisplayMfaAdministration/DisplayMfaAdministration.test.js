@@ -16,7 +16,6 @@
  * Unit tests on DisplayMfaAdministration in regard of specifications
  */
 import {defaultAppContext, defaultProps, mockMfaSettings} from "./DisplayMfaAdministration.test.data";
-import fetchMock from "fetch-mock-jest";
 import DisplayMfaAdministrationPage from "./DisplayMfaAdministration.test.page";
 import {waitFor} from "@testing-library/react";
 import {ActionFeedbackContext} from "../../../contexts/ActionFeedbackContext";
@@ -30,17 +29,12 @@ describe("See the MFA settings", () => {
   const context = defaultAppContext(); // The applicative context
   const props = defaultProps(); // The props to pass
 
-  const mockFetchGet = (url, data) => fetchMock.get(url, data);
-  const mockFetchPost = (url, data) => fetchMock.post(url, data);
-
   describe('As AD I should see the MFA provider activation state on the administration settings page', () => {
     /**
      * I should see the MFA provider activation state on the administration settings page
      */
     beforeEach(() => {
-      mockFetchGet("http://localhost:3000/mfa/settings.json?api-version=v2", mockMfaSettings);
       page = new DisplayMfaAdministrationPage(context, props);
-      fetchMock.reset();
     });
 
     it('As AD I should see if all fields is available for my Passbolt instance on the administration settings page', async() => {
@@ -70,14 +64,21 @@ describe("See the MFA settings", () => {
           mustSaveSettings: true,
           onResetActionsSettings: jest.fn(),
           isSaveEnabled: true,
-          onSaveEnabled: jest.fn()
+          onSaveEnabled: jest.fn(),
+          onGetMfaRequested: () => mockMfaSettings,
+          onSaveMfaRequested: jest.fn()
         }
       };
-      mockFetchPost("http://localhost:3000/mfa/settings.json?api-version=v2", {});
       jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementation(() => {});
 
+      const result = {
+        "duo": null,
+        "providers": ["totp"],
+        "yubikey": null,
+      };
       page.rerender(context, propsUpdated);
       await waitFor(() => {});
+      expect(propsUpdated.administrationWorkspaceContext.onSaveMfaRequested).toHaveBeenCalledWith(result);
       expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalledWith("The multi factor authentication settings for the organization were updated.");
       expect(propsUpdated.administrationWorkspaceContext.onResetActionsSettings).toHaveBeenCalled();
     });
@@ -91,7 +92,9 @@ describe("See the MFA settings", () => {
           mustSaveSettings: true,
           onResetActionsSettings: jest.fn(),
           isSaveEnabled: true,
-          onSaveEnabled: jest.fn()
+          onSaveEnabled: jest.fn(),
+          onGetMfaRequested: () => mockMfaSettings,
+          onSaveMfaRequested: jest.fn()
         }
       };
       // Mock the request function to make it the expected result
@@ -99,7 +102,7 @@ describe("See the MFA settings", () => {
       const requestMockImpl = jest.fn(() => new Promise(resolve => {
         updateResolve = resolve;
       }));
-      mockFetchPost("http://localhost:3000/mfa/settings.json?api-version=v2", requestMockImpl);
+      jest.spyOn(propsUpdated.administrationWorkspaceContext, 'onSaveMfaRequested').mockImplementation(requestMockImpl);
 
       page.rerender(context, propsUpdated);
       // API calls are made on submit, wait they are resolved.
@@ -146,15 +149,15 @@ describe("See the MFA settings", () => {
           mustSaveSettings: true,
           onResetActionsSettings: jest.fn(),
           isSaveEnabled: true,
-          onSaveEnabled: jest.fn()
+          onSaveEnabled: jest.fn(),
+          onGetMfaRequested: () => mockMfaSettings,
+          onSaveMfaRequested: jest.fn()
         }
       };
 
       // Mock the request function to make it return an error.
-      const error = {
-        status: 500
-      };
-      mockFetchPost("http://localhost:3000/mfa/settings.json?api-version=v2", Promise.reject(error));
+      const error = {message: "The service is unavailable"};
+      jest.spyOn(propsUpdated.administrationWorkspaceContext, 'onSaveMfaRequested').mockImplementation(() => Promise.reject(error));
       jest.spyOn(ActionFeedbackContext._currentValue, 'displayError').mockImplementation(() => {});
 
       page.rerender(context, propsUpdated);
@@ -165,19 +168,13 @@ describe("See the MFA settings", () => {
   });
 
   describe('As AD I see all fields disabled if mfa setting are not yet fetched', () => {
-    const context = defaultAppContext(); // The applicative context
     /**
-     * Given the groups section
-     * And the groups are not loaded yet
-     * Then I should see the loading message “Retrieving groups”
+     * Given the mfa settings
+     * And the mfa settings are not loaded yet
      */
 
-    beforeEach(() => {
-      mockFetchGet("http://localhost:3000/mfa/settings.json?api-version=v2", mockMfaSettings);
-      page = new DisplayMfaAdministrationPage(context, props);
-    });
-
     it('I should see all fields disabled”', () => {
+      page = new DisplayMfaAdministrationPage(context, props);
       expect(page.totp.getAttribute("disabled")).not.toBeNull();
       expect(page.yubikey.getAttribute("disabled")).not.toBeNull();
       expect(page.duo.getAttribute("disabled")).not.toBeNull();

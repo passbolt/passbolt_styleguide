@@ -12,9 +12,10 @@
  */
 import * as React from "react";
 import PropTypes from "prop-types";
-import AppContext from "./AppContext";
+import AppContext, {withAppContext} from "./AppContext";
 import {withRouter} from "react-router-dom";
 import {withLoading} from "../../react/contexts/Common/LoadingContext";
+import {ApiClient} from "../lib/apiClient/apiClient";
 
 /**
  * Context related to resources ( filter, current selections, etc.)
@@ -27,6 +28,17 @@ export const AdministrationWorkspaceContext = React.createContext({
   mustTestSettings: false, // Must test settings
   isSynchronizeEnabled: false, // If the button synchronize settings is enable
   mustSynchronizeSettings: false, // Must synchronize settings
+  onGetMfaRequested: () => {}, // Whenever the user access to the Mfa page
+  onSaveMfaRequested: () => {}, // Whenever the user wants save Mfa settings
+  onGetUsersDirectoryRequested: () => {}, // Whenever the user access to the users directory page
+  onUpdateUsersDirectoryRequested: () => {}, // Whenever the user update the users directory settings
+  onDeleteUsersDirectoryRequested: () => {}, // Whenever the user delete the users directory settings
+  onTestUsersDirectoryRequested: () => {}, // Whenever the user test the users directory settings
+  onGetSimulateSynchronizeUsersDirectoryRequested: () => {}, // Whenever the user simulate synchronize the users directory settings
+  onGetSynchronizeUsersDirectoryRequested: () => {}, // Whenever the user synchronize the users directory settings
+  onGetUsersRequested: () => {}, // Whenever we need get the users
+  onGetEmailNotificationsRequested: () => {}, // Whenever the user access to the email notifications page
+  onSaveEmailNotificationsRequested: () => {}, // Whenever the user save the email notifications settings
   onSaveEnabled: () => {}, // Whenever a user change settings
   onMustSaveSettings: () => {}, // Whenever a user wants save settings
   onTestEnabled: () => {}, // Whenever a user change settings
@@ -61,6 +73,17 @@ class AdministrationWorkspaceContextProvider extends React.Component {
       mustTestSettings: false, // Must test settings
       isSynchronizeEnabled: false, // If the button synchronize settings is enable
       mustSynchronizeSettings: false, // Must synchronize settings
+      onGetMfaRequested: this.onGetMfaRequested.bind(this), // Whenever the user access to the Mfa page
+      onSaveMfaRequested: this.onSaveMfaRequested.bind(this), // Whenever the user wants save the Mfa page
+      onGetUsersDirectoryRequested: this.onGetUsersDirectoryRequested.bind(this), // Whenever the user access to the users directory page
+      onUpdateUsersDirectoryRequested: this.onUpdateUsersDirectoryRequested.bind(this), // Whenever the user update the users directory settings
+      onDeleteUsersDirectoryRequested: this.onDeleteUsersDirectoryRequested.bind(this), // Whenever the user delete the users directory settings
+      onTestUsersDirectoryRequested: this.onTestUsersDirectoryRequested.bind(this), // Whenever the user test the users directory settings
+      onGetSimulateSynchronizeUsersDirectoryRequested: this.onGetSimulateSynchronizeUsersDirectoryRequested.bind(this), // Whenever the user simulate synchronize the users directory settings
+      onGetSynchronizeUsersDirectoryRequested: this.onGetSynchronizeUsersDirectoryRequested.bind(this), // Whenever the user synchronize the users directory settings
+      onGetUsersRequested: this.onGetUsersRequested.bind(this), // Whenever we need get the users
+      onGetEmailNotificationsRequested: this.onGetEmailNotificationsRequested.bind(this), // Whenever the user access to the email notifications page
+      onSaveEmailNotificationsRequested: this.onSaveEmailNotificationsRequested.bind(this), // Whenever the user save the email notifications settings
       onSaveEnabled: this.handleSaveEnabled.bind(this), // Whenever a user change settings
       onMustSaveSettings: this.handleMustSaveSettings.bind(this), // Whenever a user wants save settings
       onTestEnabled: this.handleTestEnabled.bind(this), // Whenever a user have settings to be tested
@@ -170,6 +193,115 @@ class AdministrationWorkspaceContextProvider extends React.Component {
     await this.setState({selectedAdministration, isSaveEnabled, mustSaveSettings, isTestEnabled, mustTestSettings, isSynchronizeEnabled});
   }
 
+  /**
+   * Whenever the mfa is requested.
+   * @return {Promise<object>}
+   */
+  async onGetMfaRequested() {
+    const apiClientOptions = this.props.context.getApiClientOptions().setResourceName("mfa/settings");
+    const apiClient = new ApiClient(apiClientOptions);
+    return apiClient.findAll();
+  }
+
+  /**
+   * Whenever the save mfa is requested.
+   * @return {Promise<object>}
+   */
+  async onSaveMfaRequested(mfa) {
+    const apiClientOptions = this.props.context.getApiClientOptions().setResourceName("mfa/settings");
+    const apiClient = new ApiClient(apiClientOptions);
+    await apiClient.create(mfa);
+  }
+
+  /**
+   * Whenever the users directory is requested.
+   * @return {Promise<object>}
+   */
+  async onGetUsersDirectoryRequested() {
+    const apiClientOptions = this.props.context.getApiClientOptions().setResourceName("directorysync/settings");
+    const apiClient = new ApiClient(apiClientOptions);
+    return apiClient.findAll();
+  }
+
+  /**
+   * Whenever the update users directory is requested.
+   * @return {Promise<object>}
+   */
+  async onUpdateUsersDirectoryRequested(usersDirectory) {
+    const apiClientOptions = this.props.context.getApiClientOptions().setResourceName("directorysync");
+    const apiClient = new ApiClient(apiClientOptions);
+    return apiClient.update('settings', usersDirectory);
+  }
+
+  /**
+   * Whenever the delete users directory is requested.
+   * @return {Promise<object>}
+   */
+  async onDeleteUsersDirectoryRequested() {
+    const apiClientOptions = this.props.context.getApiClientOptions().setResourceName("directorysync");
+    const apiClient = new ApiClient(apiClientOptions);
+    return apiClient.delete('settings');
+  }
+
+  /**
+   * Whenever the test users directory is requested.
+   * @return {Promise<object>}
+   */
+  async onTestUsersDirectoryRequested(usersDirectory) {
+    const apiClientOptions = this.props.context.getApiClientOptions().setResourceName("directorysync/settings/test");
+    const apiClient = new ApiClient(apiClientOptions);
+    return apiClient.create(usersDirectory);
+  }
+
+  /**
+   * Whenever the simulate synchronize users directory is requested.
+   * @return {Promise<object>}
+   */
+  async onGetSimulateSynchronizeUsersDirectoryRequested() {
+    const apiClientOptions = this.props.context.getApiClientOptions().setResourceName("directorysync");
+    const apiClient = new ApiClient(apiClientOptions);
+    return apiClient.get("synchronize/dry-run");
+  }
+
+  /**
+   * Whenever the simulate synchronize users directory is requested.
+   * @return {Promise<object>}
+   */
+  async onGetSynchronizeUsersDirectoryRequested() {
+    const apiClientOptions = this.props.context.getApiClientOptions().setResourceName("directorysync");
+    const apiClient = new ApiClient(apiClientOptions);
+    return apiClient.get("synchronize");
+  }
+
+  /**
+   * Whenever the users is requested.
+   * @return {Promise<object>}
+   */
+  async onGetUsersRequested() {
+    const apiClientOptions = this.props.context.getApiClientOptions().setResourceName("users");
+    const apiClient = new ApiClient(apiClientOptions);
+    return apiClient.findAll();
+  }
+
+  /**
+   * Whenever the email notifications is requested.
+   * @return {Promise<object>}
+   */
+  async onGetEmailNotificationsRequested() {
+    const apiClientOptions = this.props.context.getApiClientOptions().setResourceName("settings/emails/notifications");
+    const apiClient = new ApiClient(apiClientOptions);
+    return apiClient.findAll();
+  }
+
+  /**
+   * Whenever the save email notifications is requested.
+   * @return {Promise<object>}
+   */
+  async onSaveEmailNotificationsRequested(mfa) {
+    const apiClientOptions = this.props.context.getApiClientOptions().setResourceName("settings/emails/notifications");
+    const apiClient = new ApiClient(apiClientOptions);
+    await apiClient.create(mfa);
+  }
 
   /**
    * Render the component
@@ -187,6 +319,7 @@ class AdministrationWorkspaceContextProvider extends React.Component {
 AdministrationWorkspaceContextProvider.displayName = 'AdministrationWorkspaceContextProvider';
 AdministrationWorkspaceContextProvider.contextType = AppContext;
 AdministrationWorkspaceContextProvider.propTypes = {
+  context: PropTypes.object, // The application context
   children: PropTypes.any, // The component children
   location: PropTypes.object, // The router location
   match: PropTypes.object, // The router match helper
@@ -194,7 +327,7 @@ AdministrationWorkspaceContextProvider.propTypes = {
   loadingContext: PropTypes.object // The loading context
 };
 
-export default withRouter(withLoading(AdministrationWorkspaceContextProvider));
+export default withRouter(withAppContext(withLoading(AdministrationWorkspaceContextProvider)));
 
 /**
  * Administration Workspace Context Consumer HOC

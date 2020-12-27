@@ -68,6 +68,7 @@ class ApiApp extends Component {
         userDirectoryTestResult: null, // The result of the test user directory
       },
 
+      // @todo check if still necessary
       setContext: context => {
         this.setState(context);
       },

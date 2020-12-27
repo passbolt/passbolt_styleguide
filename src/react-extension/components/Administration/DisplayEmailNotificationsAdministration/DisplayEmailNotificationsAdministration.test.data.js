@@ -6,7 +6,6 @@
  */
 export function defaultAppContext(appContext) {
   const defaultAppContext = {
-    trustedDomain: "http://localhost:3000",
   };
   return Object.assign(defaultAppContext, appContext || {});
 }
@@ -21,10 +20,37 @@ export function defaultProps() {
       mustSaveSettings: false,
       onResetActionsSettings: jest.fn(),
       isSaveEnabled: false,
-      onSaveEnabled: jest.fn()
+      onSaveEnabled: jest.fn(),
+      onGetEmailNotificationsRequested: () => mockEmailNotificationsSettings
     }
   };
 }
+
+export const mockResult = {
+  "send_comment_add": false,
+  "send_folder_create": true,
+  "send_folder_delete": true,
+  "send_folder_share": true,
+  "send_folder_update": true,
+  "send_group_delete": true,
+  "send_group_manager_update": true,
+  "send_group_user_add": true,
+  "send_group_user_delete": true,
+  "send_group_user_update": true,
+  "send_password_create": true,
+  "send_password_delete": true,
+  "send_password_share": true,
+  "send_password_update": true,
+  "send_user_create": true,
+  "send_user_recover": true,
+  "show_comment": true,
+  "show_description": true,
+  "show_secret": true,
+  "show_uri": true,
+  "show_username": true,
+  "sources_database": true,
+  "sources_file": false,
+};
 
 export const mockEmailNotificationsSettings = {
   "header": {

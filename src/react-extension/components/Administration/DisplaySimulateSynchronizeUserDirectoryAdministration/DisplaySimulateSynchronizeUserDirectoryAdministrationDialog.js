@@ -13,12 +13,9 @@
  */
 import React, {Component} from "react";
 import PropTypes from "prop-types";
-import AppContext from "../../../contexts/AppContext";
 import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
 import FormCancelButton from "../../../../react/components/Common/Inputs/FormSubmitButton/FormCancelButton";
 import Icon from "../../../../react/components/Common/Icons/Icon";
-import {ApiClient} from "../../../lib/apiClient/apiClient";
-import {ApiClientOptions} from "../../../lib/apiClient/apiClientOptions";
 import DisplayLoadingDialog from "../DisplayLoadingDialog/DisplayLoadingDialog";
 import {withActionFeedback} from "../../../../react-extension/contexts/ActionFeedbackContext";
 import {withAdministrationWorkspace} from "../../../contexts/AdministrationWorkspaceContext";
@@ -28,10 +25,9 @@ class DisplaySimulateSynchronizeUserDirectoryAdministrationDialog extends Compon
    * Constructor
    * @param {Object} props
    */
-  constructor(props, context) {
+  constructor(props) {
     super(props);
     this.state = this.defaultState;
-    this.apiClientDirectory = new ApiClient(new ApiClientOptions().setBaseUrl(context.trustedDomain).setResourceName("directorysync"));
     this.bindEventHandlers();
   }
 
@@ -66,7 +62,7 @@ class DisplaySimulateSynchronizeUserDirectoryAdministrationDialog extends Compon
    */
   async componentDidMount() {
     try {
-      const result = await this.apiClientDirectory.get("synchronize/dry-run");
+      const result = await this.props.administrationWorkspaceContext.onGetSimulateSynchronizeUsersDirectoryRequested();
       const userDirectorySimulateSynchronizeResult = result.body;
       this.setState({loading: false, userDirectorySimulateSynchronizeResult});
     } catch (error) {
@@ -318,8 +314,6 @@ class DisplaySimulateSynchronizeUserDirectoryAdministrationDialog extends Compon
     );
   }
 }
-
-DisplaySimulateSynchronizeUserDirectoryAdministrationDialog.contextType = AppContext;
 
 DisplaySimulateSynchronizeUserDirectoryAdministrationDialog.propTypes = {
   onClose: PropTypes.func,
