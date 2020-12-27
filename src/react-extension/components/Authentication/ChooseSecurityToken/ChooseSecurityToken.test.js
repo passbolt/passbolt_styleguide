@@ -22,10 +22,11 @@ describe("Choose security token", () => {
 
   it('As AN I should be able to choose the color of my security token', async() => {
     const colorToPick = '#009688';
-    const expectedSelectedColor = 'rgb(63, 81, 181)';
+    const expectedSelectedColor = 'rgb(0, 150, 136)';
     await page.selectColor(colorToPick);
     expect(page.color).toBe(expectedSelectedColor);
   });
+
   it('As AN I should be able to choose the code of my security token', async() => {
     const expectedSelectedCode = '';
     await page.fillCode(expectedSelectedCode);
