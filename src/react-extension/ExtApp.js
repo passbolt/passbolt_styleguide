@@ -247,7 +247,7 @@ class ExtApp extends Component {
    */
   async getFolders() {
     const storageData = await this.props.storage.local.get(["folders"]);
-    if (storageData.folders && storageData.folders.length) {
+    if (storageData.folders) {
       const folders = storageData.folders;
       this.setState({folders: folders});
     }
