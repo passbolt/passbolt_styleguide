@@ -1,3 +1,5 @@
+// @deprecated Kept as reference until admin reports is tackled.
+
 const path = require("path");
 const webpack = require("webpack");
 

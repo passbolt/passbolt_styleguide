@@ -57,16 +57,21 @@ grunt watch
 Edit one LESS file to see if it works!
 
 
-How to run the demo?
+Quick how-to for developers
 ==========================
 
-After running this commands, the demo will be located at
+## Starting the demo
+After running this commands, the demo will be accessible from
 [http://localhost:3000](http://localhost:3000)
 
 ```
-npm run start-api-app-dev-server
-npm run start-ext-app-dev-server
+npm run start-app-dev-server
 ```
+
+Each change made on the js applications source code will trigger a build and refresh the browser tab where the demo has
+been started.
+
+
 
 How to update the styleguide?
 =============================

@@ -52,11 +52,11 @@ module.exports = function(grunt) {
       },
 		},
 		shell: {
-		  'bundle-reports': {
-		    command: [
-		      'webpack --entry ./src/js/reports/index.js --output-path ./src/react-appjs/lib/ --output-filename reports.js'
-          ].join('&& ')
-      },
+		  // 'bundle-reports': {
+		  //   command: [
+		  //     'webpack --entry ./src/js/reports/index.js --output-path ./src/react-appjs/lib/ --output-filename reports.js'
+      //     ].join('&& ')
+      // },
 			'publish': {
 				options: {
 					stdout: true
@@ -69,19 +69,19 @@ module.exports = function(grunt) {
 					'npm publish'
 				].join('&& ')
 			},
-      'copy-react-css': {
+      'copy-demo-css': {
         options: {
           stdout: true
         },
         command: [
-          'rm -f ./demo/react-appjs/public/css/themes/default/api_reports.css',
-          'rm -f ./demo/react-appjs/public/css/themes/midgar/api_reports.css',
-          'rm -f ./demo/react-appjs/public/css/themes/default/api_main.css',
-          'rm -f ./demo/react-appjs/public/css/themes/midgar/api_main.css',
-          'cp ./src/css/themes/default/api_reports.css ./demo/react-appjs/public/css/themes/default/.',
-          'cp ./src/css/themes/midgar/api_reports.css ./demo/react-appjs/public/css/themes/midgar/.',
-          'cp ./src/css/themes/default/api_main.css ./demo/react-appjs/public/css/themes/default/.',
-          'cp ./src/css/themes/midgar/api_main.css ./demo/react-appjs/public/css/themes/midgar/.',
+          // 'rm -f ./demo/react-appjs/public/css/themes/default/api_reports.css',
+          // 'rm -f ./demo/react-appjs/public/css/themes/midgar/api_reports.css',
+          // 'rm -f ./demo/react-appjs/public/css/themes/default/api_main.css',
+          // 'rm -f ./demo/react-appjs/public/css/themes/midgar/api_main.css',
+          // 'cp ./src/css/themes/default/api_reports.css ./demo/react-appjs/public/css/themes/default/.',
+          // 'cp ./src/css/themes/midgar/api_reports.css ./demo/react-appjs/public/css/themes/midgar/.',
+          // 'cp ./src/css/themes/default/api_main.css ./demo/react-appjs/public/css/themes/default/.',
+          // 'cp ./src/css/themes/midgar/api_main.css ./demo/react-appjs/public/css/themes/midgar/.',
 
           'rm -f ./demo/api-app/public/css/themes/default/*.css',
           'rm -f ./demo/api-app/public/css/themes/midgar/*.css',
@@ -95,6 +95,11 @@ module.exports = function(grunt) {
           'cp ./src/css/themes/midgar/ext_app.css ./demo/ext-app/public/css/themes/midgar/.',
           'cp ./src/css/themes/default/ext_authentication.css ./demo/ext-app/public/css/themes/default/.',
           'cp ./src/css/themes/midgar/ext_authentication.css ./demo/ext-app/public/css/themes/midgar/.'
+        ].join('&& ')
+      },
+      'build-apps': {
+        command: [
+          'npm run build'
         ].join('&& ')
       }
 		},
@@ -161,7 +166,7 @@ module.exports = function(grunt) {
 					'src/less/*.less',
 					'src/less/**/*.less'
         ],
-				tasks: ['css', 'shell:copy-react-css']
+				tasks: ['css', 'shell:copy-demo-css']
 			}
 		}
 	});
@@ -184,10 +189,10 @@ module.exports = function(grunt) {
 	grunt.registerTask('styleguide-publish', [ 'shell:publish']);
 	grunt.registerTask('publish', [ 'shell:publish']);
 
-  grunt.registerTask('bundle-reports', [ 'shell:bundle-reports']);
+  // grunt.registerTask('bundle-reports', [ 'shell:bundle-reports']);
 
 	// 'grunt' will check code quality, and if no errors,
 	// compile LESS to CSS, and minify and concatonate all JS and CSS
-	grunt.registerTask('default', [ 'clean:all', 'less', 'cssmin', 'header', 'shell:copy-react-css']);
+	grunt.registerTask('default', [ 'clean:all', 'less', 'cssmin', 'header', 'shell:copy-demo-css', 'shell:build-apps']);
   grunt.registerTask('css', [ 'clean:css', 'less']);
 };

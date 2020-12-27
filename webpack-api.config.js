@@ -55,7 +55,8 @@ const config = {
     publicPath: "http://localhost:3000/dist/",
     historyApiFallback: {
       rewrites: [
-        {from: /^\/app/, to: "/api-app.html"},
+        {from: /^\/app\/administration|^\/app\/settings\/mfa/, to: "/api-app.html"},
+        {from: /^\/app/, to: "/ext-app.html"},
         {from: new RegExp(`^\/setup\/install\/${uuidRegex}\/${uuidRegex}`), to: "/api-setup.html"},
         {from: new RegExp(`^\/setup\/recover\/${uuidRegex}\/${uuidRegex}`), to: "/api-recover.html"},
         {from: /^\/auth\/login/, to: "/api-login.html"},
