@@ -13,23 +13,20 @@
  */
 import React, {Component} from "react";
 import PropTypes from "prop-types";
-import AppContext from "../../../contexts/AppContext";
 import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
 import Icon from "../../../../react/components/Common/Icons/Icon";
-import {ApiClient} from "../../../lib/apiClient/apiClient";
-import {ApiClientOptions} from "../../../lib/apiClient/apiClientOptions";
 import DisplayLoadingDialog from "../DisplayLoadingDialog/DisplayLoadingDialog";
 import {withActionFeedback} from "../../../../react-extension/contexts/ActionFeedbackContext";
+import {withAdministrationWorkspace} from "../../../contexts/AdministrationWorkspaceContext";
 
 class DisplaySynchronizeUserDirectoryAdministrationDialog extends Component {
   /**
    * Constructor
    * @param {Object} props
    */
-  constructor(props, context) {
+  constructor(props) {
     super(props);
     this.state = this.defaultState;
-    this.apiClientDirectory = new ApiClient(new ApiClientOptions().setBaseUrl(context.trustedDomain).setResourceName("directorysync"));
     this.bindEventHandlers();
   }
 
@@ -64,7 +61,7 @@ class DisplaySynchronizeUserDirectoryAdministrationDialog extends Component {
    */
   async componentDidMount() {
     try {
-      const result = await this.apiClientDirectory.get("synchronize");
+      const result = await this.props.administrationWorkspaceContext.onGetSynchronizeUsersDirectoryRequested();
       const userDirectorySynchronizeResult = result.body;
       this.setState({loading: false, userDirectorySynchronizeResult});
     } catch (error) {
@@ -315,11 +312,10 @@ class DisplaySynchronizeUserDirectoryAdministrationDialog extends Component {
   }
 }
 
-DisplaySynchronizeUserDirectoryAdministrationDialog.contextType = AppContext;
-
 DisplaySynchronizeUserDirectoryAdministrationDialog.propTypes = {
   onClose: PropTypes.func,
   actionFeedbackContext: PropTypes.any, // The action feedback context
+  administrationWorkspaceContext: PropTypes.object, // The administration workspace context
 };
 
-export default withActionFeedback(DisplaySynchronizeUserDirectoryAdministrationDialog);
+export default withActionFeedback(withAdministrationWorkspace(DisplaySynchronizeUserDirectoryAdministrationDialog));

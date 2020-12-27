@@ -13,10 +13,8 @@
  */
 import React from "react";
 import PropTypes from "prop-types";
-import AppContext from "../../../contexts/AppContext";
+import {withAppContext} from "../../../contexts/AppContext";
 import {withActionFeedback} from "../../../../react-extension/contexts/ActionFeedbackContext";
-import {ApiClientOptions} from "../../../lib/apiClient/apiClientOptions";
-import {ApiClient} from "../../../lib/apiClient/apiClient";
 import Icon from "../../Common/Icons/Icon";
 import {withAdministrationWorkspace} from "../../../contexts/AdministrationWorkspaceContext";
 import XRegExp from "xregexp";
@@ -32,12 +30,9 @@ class DisplayUserDirectoryAdministration extends React.Component {
    * Constructor
    * @param {Object} props
    */
-  constructor(props, context) {
+  constructor(props) {
     super(props);
     this.state = this.defaultState;
-    this.apiClientUserDirectory = new ApiClient(new ApiClientOptions().setBaseUrl(context.trustedDomain).setResourceName("directorysync"));
-    this.apiClientTestUserDirectory = new ApiClient(new ApiClientOptions().setBaseUrl(context.trustedDomain).setResourceName("directorysync/settings/test"));
-    this.apiClientUsers = new ApiClient(new ApiClientOptions().setBaseUrl(context.trustedDomain).setResourceName("users"));
     this.createRefs();
     this.bindCallbacks();
   }
@@ -200,10 +195,10 @@ class DisplayUserDirectoryAdministration extends React.Component {
    */
   async findAllUserDirectorySettings() {
     // USER DIRECTORY SETTINGS
-    const result = await this.apiClientUserDirectory.get('settings');
+    const result = await this.props.administrationWorkspaceContext.onGetUsersDirectoryRequested();
     const userDirectory = result.body;
     // USERS
-    const usersResult = await this.apiClientUsers.findAll();
+    const usersResult = await this.props.administrationWorkspaceContext.onGetUsersRequested();
     const users = this.sortUsers(usersResult.body);
     let defaultAdmin = "";
     let defaultGroupAdmin = "";
@@ -269,7 +264,7 @@ class DisplayUserDirectoryAdministration extends React.Component {
       this.props.administrationWorkspaceContext.onTestEnabled(userDirectoryToggle);
       this.props.administrationWorkspaceContext.onSynchronizeEnabled(userDirectoryToggle);
     } else {
-      const userLogged = users.find(user => this.context.loggedInUser.id === user.id);
+      const userLogged = users.find(user => this.props.context.loggedInUser.id === user.id);
       defaultAdmin = userLogged.id;
       defaultGroupAdmin = userLogged.id;
       this.setState({
@@ -593,11 +588,11 @@ class DisplayUserDirectoryAdministration extends React.Component {
    */
   async saveUserDirectory() {
     if (this.state.userDirectoryToggle) {
-      await this.apiClientUserDirectory.update("settings", this.createUserDirectoryDTO());
+      await this.props.administrationWorkspaceContext.onUpdateUsersDirectoryRequested(this.createUserDirectoryDTO());
       this.props.administrationWorkspaceContext.onSynchronizeEnabled(true);
     } else {
       this.setState(this.defaultState);
-      await this.apiClientUserDirectory.delete("settings");
+      await this.props.administrationWorkspaceContext.onDeleteUsersDirectoryRequested();
       this.props.administrationWorkspaceContext.onSynchronizeEnabled(false);
       this.setState({loading: false});
     }
@@ -607,11 +602,11 @@ class DisplayUserDirectoryAdministration extends React.Component {
    * test user directory settings
    */
   async testUserDirectory() {
-    const result = await this.apiClientTestUserDirectory.create(this.createUserDirectoryDTO());
+    const result = await this.props.administrationWorkspaceContext.onTestUsersDirectoryRequested(this.createUserDirectoryDTO());
     const displayTestUserDirectoryDialogProps = {
       userDirectoryTestResult: result.body
     };
-    this.context.setContext({displayTestUserDirectoryDialogProps});
+    this.props.context.setContext({displayTestUserDirectoryDialogProps});
     this.props.dialogContext.open(DisplayTestUserDirectoryAdministrationDialog);
   }
 
@@ -1125,12 +1120,11 @@ class DisplayUserDirectoryAdministration extends React.Component {
   }
 }
 
-DisplayUserDirectoryAdministration.contextType = AppContext;
-
 DisplayUserDirectoryAdministration.propTypes = {
+  context: PropTypes.object, // Application context
   administrationWorkspaceContext: PropTypes.object, // The administration workspace context
   actionFeedbackContext: PropTypes.any, // The action feedback context
   dialogContext: PropTypes.any // The dialog context
 };
 
-export default withActionFeedback(withDialog(withAdministrationWorkspace(DisplayUserDirectoryAdministration)));
+export default withAppContext(withActionFeedback(withDialog(withAdministrationWorkspace(DisplayUserDirectoryAdministration))));

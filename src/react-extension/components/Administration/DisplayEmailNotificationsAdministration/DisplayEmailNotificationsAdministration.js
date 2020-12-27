@@ -13,10 +13,7 @@
  */
 import React from "react";
 import PropTypes from "prop-types";
-import AppContext from "../../../contexts/AppContext";
 import {withActionFeedback} from "../../../../react-extension/contexts/ActionFeedbackContext";
-import {ApiClientOptions} from "../../../lib/apiClient/apiClientOptions";
-import {ApiClient} from "../../../lib/apiClient/apiClient";
 import Icon from "../../Common/Icons/Icon";
 import {withAdministrationWorkspace} from "../../../contexts/AdministrationWorkspaceContext";
 
@@ -28,10 +25,9 @@ class DisplayEmailNotificationsAdministration extends React.Component {
    * Constructor
    * @param {Object} props
    */
-  constructor(props, context) {
+  constructor(props) {
     super(props);
     this.state = this.defaultState;
-    this.apiClient = new ApiClient(new ApiClientOptions().setBaseUrl(context.trustedDomain).setResourceName("settings/emails/notifications"));
     this.bindCallbacks();
   }
 
@@ -118,7 +114,7 @@ class DisplayEmailNotificationsAdministration extends React.Component {
    * fetch the email notifications settings
    */
   async findAllEmailNotificationsSettings() {
-    const result = await this.apiClient.findAll();
+    const result = await this.props.administrationWorkspaceContext.onGetEmailNotificationsRequested();
     const body = result.body;
 
     const hasDatabaseSetting =  body.sources_database;
@@ -263,7 +259,8 @@ class DisplayEmailNotificationsAdministration extends React.Component {
       show_username: this.state.showUsername,
       show_comment: this.state.showComment,
     };
-    await this.apiClient.create(emailNotifications);
+
+    await this.props.administrationWorkspaceContext.onSaveEmailNotificationsRequested(emailNotifications);
   }
 
   /**
@@ -526,8 +523,6 @@ class DisplayEmailNotificationsAdministration extends React.Component {
     );
   }
 }
-
-DisplayEmailNotificationsAdministration.contextType = AppContext;
 
 DisplayEmailNotificationsAdministration.propTypes = {
   administrationWorkspaceContext: PropTypes.object, // The administration workspace context

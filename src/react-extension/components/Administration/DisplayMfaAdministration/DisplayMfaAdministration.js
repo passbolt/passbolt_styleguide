@@ -13,11 +13,8 @@
  */
 import React from "react";
 import PropTypes from "prop-types";
-import AppContext from "../../../contexts/AppContext";
 import {withActionFeedback} from "../../../../react-extension/contexts/ActionFeedbackContext";
 import XRegExp from "xregexp";
-import {ApiClientOptions} from "../../../lib/apiClient/apiClientOptions";
-import {ApiClient} from "../../../lib/apiClient/apiClient";
 import Icon from "../../Common/Icons/Icon";
 import {withAdministrationWorkspace} from "../../../contexts/AdministrationWorkspaceContext";
 
@@ -29,10 +26,9 @@ class DisplayMfaAdministration extends React.Component {
    * Constructor
    * @param {Object} props
    */
-  constructor(props, context) {
+  constructor(props) {
     super(props);
     this.state = this.defaultState;
-    this.apiClient = new ApiClient(new ApiClientOptions().setBaseUrl(context.trustedDomain).setResourceName("mfa/settings"));
     this.bindCallbacks();
   }
 
@@ -103,7 +99,7 @@ class DisplayMfaAdministration extends React.Component {
    * fetch the mfa settings
    */
   async findAllMfaSettings() {
-    const result = await this.apiClient.findAll();
+    const result = await this.props.administrationWorkspaceContext.onGetMfaRequested();
     const body = result.body;
     const providers = body.providers;
     // OTP
@@ -352,7 +348,8 @@ class DisplayMfaAdministration extends React.Component {
         secretKey: this.state.duoSecretKey
       };
     }
-    await this.apiClient.create({providers, yubikey, duo});
+
+    await this.props.administrationWorkspaceContext.onSaveMfaRequested({providers, yubikey, duo});
   }
 
   /**
@@ -542,8 +539,6 @@ class DisplayMfaAdministration extends React.Component {
     );
   }
 }
-
-DisplayMfaAdministration.contextType = AppContext;
 
 DisplayMfaAdministration.propTypes = {
   administrationWorkspaceContext: PropTypes.object, // The administration workspace context

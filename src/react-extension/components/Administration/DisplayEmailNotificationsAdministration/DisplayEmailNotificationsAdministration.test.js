@@ -15,8 +15,11 @@
 /**
  * Unit tests on DisplayEmailNotificationsAdministration in regard of specifications
  */
-import {defaultAppContext, defaultProps, mockEmailNotificationsSettings} from "./DisplayEmailNotificationsAdministration.test.data";
-import fetchMock from "fetch-mock-jest";
+import {
+  defaultAppContext,
+  defaultProps,
+  mockResult
+} from "./DisplayEmailNotificationsAdministration.test.data";
 import DisplayEmailNotificationsAdministrationPage from "./DisplayEmailNotificationsAdministration.test.page";
 import {waitFor} from "@testing-library/react";
 import {ActionFeedbackContext} from "../../../contexts/ActionFeedbackContext";
@@ -30,17 +33,12 @@ describe("See the Email Notifications Settings", () => {
   const context = defaultAppContext(); // The applicative context
   const props = defaultProps(); // The props to pass
 
-  const mockFetchGet = (url, data) => fetchMock.get(url, data);
-  const mockFetchPost = (url, data) => fetchMock.post(url, data);
-
   describe('As AD I should see the Email Notifications on the administration settings page', () => {
     /**
      * I should see the Email Notifications provider activation state on the administration settings page
      */
     beforeEach(() => {
-      mockFetchGet("http://localhost:3000/settings/emails/notifications.json?api-version=v2", mockEmailNotificationsSettings);
       page = new DisplayEmailNotificationsAdministrationPage(context, props);
-      fetchMock.reset();
     });
 
     it('As AD I should see if all fields is available for my Passbolt instance on the administration settings page', async() => {
@@ -79,14 +77,15 @@ describe("See the Email Notifications Settings", () => {
           mustSaveSettings: true,
           onResetActionsSettings: jest.fn(),
           isSaveEnabled: true,
-          onSaveEnabled: jest.fn()
+          onSaveEnabled: jest.fn(),
+          onSaveEmailNotificationsRequested: jest.fn()
         }
       };
-      mockFetchPost("http://localhost:3000/settings/emails/notifications.json?api-version=v2", {});
       jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementation(() => {});
 
       page.rerender(context, propsUpdated);
       await waitFor(() => {});
+      expect(propsUpdated.administrationWorkspaceContext.onSaveEmailNotificationsRequested).toHaveBeenCalledWith(mockResult);
       expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalledWith("The email notification settings were updated.");
       expect(propsUpdated.administrationWorkspaceContext.onResetActionsSettings).toHaveBeenCalled();
     });
@@ -100,7 +99,8 @@ describe("See the Email Notifications Settings", () => {
           mustSaveSettings: true,
           onResetActionsSettings: jest.fn(),
           isSaveEnabled: true,
-          onSaveEnabled: jest.fn()
+          onSaveEnabled: jest.fn(),
+          onSaveEmailNotificationsRequested: jest.fn()
         }
       };
       // Mock the request function to make it the expected result
@@ -108,7 +108,7 @@ describe("See the Email Notifications Settings", () => {
       const requestMockImpl = jest.fn(() => new Promise(resolve => {
         updateResolve = resolve;
       }));
-      mockFetchPost("http://localhost:3000/settings/emails/notifications.json?api-version=v2", requestMockImpl);
+      jest.spyOn(propsUpdated.administrationWorkspaceContext, 'onSaveEmailNotificationsRequested').mockImplementation(requestMockImpl);
 
       page.rerender(context, propsUpdated);
       // API calls are made on submit, wait they are resolved.
@@ -147,15 +147,14 @@ describe("See the Email Notifications Settings", () => {
           mustSaveSettings: true,
           onResetActionsSettings: jest.fn(),
           isSaveEnabled: true,
-          onSaveEnabled: jest.fn()
+          onSaveEnabled: jest.fn(),
+          onSaveEmailNotificationsRequested: jest.fn()
         }
       };
 
       // Mock the request function to make it return an error.
-      const error = {
-        status: 500
-      };
-      mockFetchPost("http://localhost:3000/settings/emails/notifications.json?api-version=v2", Promise.reject(error));
+      const error = {message: "The service is unavailable"};
+      jest.spyOn(propsUpdated.administrationWorkspaceContext, 'onSaveEmailNotificationsRequested').mockImplementation(() => Promise.reject(error));
       jest.spyOn(ActionFeedbackContext._currentValue, 'displayError').mockImplementation(() => {});
 
       page.rerender(context, propsUpdated);
@@ -168,17 +167,11 @@ describe("See the Email Notifications Settings", () => {
   describe('As AD I see all fields disabled if mfa setting are not yet fetched', () => {
     const context = defaultAppContext(); // The applicative context
     /**
-     * Given the groups section
-     * And the groups are not loaded yet
-     * Then I should see the loading message “Retrieving groups”
+     * Given the email notifications setting
+     * And the email notifications setting are not loaded yet
      */
-
-    beforeEach(() => {
-      mockFetchGet("http://localhost:3000/settings/emails/notifications.json?api-version=v2", mockEmailNotificationsSettings);
-      page = new DisplayEmailNotificationsAdministrationPage(context, props);
-    });
-
     it('I should see all fields disabled”', () => {
+      page = new DisplayEmailNotificationsAdministrationPage(context, props);
       expect(page.passwordCreate.getAttribute("disabled")).not.toBeNull();
       expect(page.passwordUpdate.getAttribute("disabled")).not.toBeNull();
       expect(page.passwordDelete.getAttribute("disabled")).not.toBeNull();

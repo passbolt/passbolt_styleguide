@@ -17,16 +17,12 @@
  */
 import {
   defaultAppContext,
-  defaultProps, mockSynchronizeBody,
+  defaultProps,
 } from "./DisplaySynchronizeUserDirectoryAdministrationDialog.test.data";
-import MockFetch from "../../../test/mock/MockFetch";
-import {waitFor} from "@testing-library/react";
 import DisplaySynchronizeUserDirectoryAdministrationDialogPage
   from "./DisplaySynchronizeUserDirectoryAdministrationDialog.test.page";
 
-let mockFetch = null;
 beforeEach(() => {
-  mockFetch = new MockFetch();
   jest.resetModules();
 });
 
@@ -40,12 +36,10 @@ describe("See the synchronize user directory administration dialog", () => {
      * I should see the simulate synchronize report dialog page
      */
     beforeEach(() => {
-      mockFetch.addGetFetchRequest("http://localhost:3000/directorysync/synchronize.json?api-version=v2", mockSynchronizeBody);
       page = new DisplaySynchronizeUserDirectoryAdministrationDialogPage(context, props);
     });
 
     it('As AD I should see The full report in the dialog for my synchronize report', async() => {
-      await waitFor(() => {});
       expect(page.title.hyperlink.textContent).toBe("Synchronize report");
       expect(page.displaySynchronizeUserDirectoryAdministrationDialog.exists()).toBeTruthy();
       expect(page.displaySynchronizeUserDirectoryAdministrationDialog.resourceSynchronize).toBe(' 2 user(s) and 60 group(s)  will be synchronized ');
@@ -62,11 +56,8 @@ describe("See the synchronize user directory administration dialog", () => {
     /**
      * I should see the simulate synchronize report loading dialog page
      */
-    beforeEach(() => {
-      page = new DisplaySynchronizeUserDirectoryAdministrationDialogPage(context, props);
-    });
-
     it('As AD I should see the loading dialog', async() => {
+      page = new DisplaySynchronizeUserDirectoryAdministrationDialogPage(context, props);
       expect(page.title.hyperlink.textContent).toBe("Synchronize");
       await page.displaySynchronizeUserDirectoryAdministrationDialog.click(page.displaySynchronizeUserDirectoryAdministrationDialog.dialogClose);
       expect(props.onClose).toBeCalled();

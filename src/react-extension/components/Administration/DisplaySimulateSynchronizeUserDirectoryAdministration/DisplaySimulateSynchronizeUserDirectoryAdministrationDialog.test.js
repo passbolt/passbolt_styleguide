@@ -17,16 +17,12 @@
  */
 import {
   defaultAppContext,
-  defaultProps, mockSimulateSynchronizeBody,
+  defaultProps,
 } from "./DisplaySimulateSynchronizeUserDirectoryAdministrationDialog.test.data";
-import MockFetch from "../../../test/mock/MockFetch";
-import {waitFor} from "@testing-library/react";
 import DisplaySimulateSynchronizeUserDirectoryAdministrationDialogPage
   from "./DisplaySimulateSynchronizeUserDirectoryAdministrationDialog.test.page";
 
-let mockFetch = null;
 beforeEach(() => {
-  mockFetch = new MockFetch();
   jest.resetModules();
 });
 
@@ -40,12 +36,10 @@ describe("See the simulate synchronize user directory administration dialog", ()
      * I should see the simulate synchronize report dialog page
      */
     beforeEach(() => {
-      mockFetch.addGetFetchRequest("http://localhost:3000/directorysync/synchronize/dry-run.json?api-version=v2", mockSimulateSynchronizeBody);
       page = new DisplaySimulateSynchronizeUserDirectoryAdministrationDialogPage(context, props);
     });
 
     it('As AD I should see The full report in the dialog for my simulate synchronize report', async() => {
-      await waitFor(() => {});
       expect(page.title.hyperlink.textContent).toBe("Synchronize simulation report");
       expect(page.displaySimulateSynchronizeUserDirectoryAdministrationDialog.exists()).toBeTruthy();
       expect(page.displaySimulateSynchronizeUserDirectoryAdministrationDialog.resourceSynchronize).toBe(' 2 user(s) and 60 group(s)  will be synchronized ');
@@ -54,6 +48,7 @@ describe("See the simulate synchronize user directory administration dialog", ()
       await page.displaySimulateSynchronizeUserDirectoryAdministrationDialog.click(page.displaySimulateSynchronizeUserDirectoryAdministrationDialog.fullReport);
       expect(page.displaySimulateSynchronizeUserDirectoryAdministrationDialog.textareaReport).not.toBeNull();
       await page.displaySimulateSynchronizeUserDirectoryAdministrationDialog.click(page.displaySimulateSynchronizeUserDirectoryAdministrationDialog.synchronize);
+      expect(props.administrationWorkspaceContext.onMustSynchronizeSettings).toBeCalled();
       expect(props.onClose).toBeCalled();
     });
   });
@@ -62,11 +57,8 @@ describe("See the simulate synchronize user directory administration dialog", ()
     /**
      * I should see the simulate synchronize report loading dialog page
      */
-    beforeEach(() => {
-      page = new DisplaySimulateSynchronizeUserDirectoryAdministrationDialogPage(context, props);
-    });
-
     it('As AD I should see the loading dialog', async() => {
+      page = new DisplaySimulateSynchronizeUserDirectoryAdministrationDialogPage(context, props);
       expect(page.title.hyperlink.textContent).toBe("Synchronize simulation");
       await page.displaySimulateSynchronizeUserDirectoryAdministrationDialog.click(page.displaySimulateSynchronizeUserDirectoryAdministrationDialog.dialogClose);
       expect(props.onClose).toBeCalled();
