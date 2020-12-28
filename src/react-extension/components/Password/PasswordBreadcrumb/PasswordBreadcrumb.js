@@ -15,7 +15,7 @@ import React, {Component} from "react";
 import {withRouter} from "react-router-dom";
 import PropTypes from "prop-types";
 import {ResourceWorkspaceFilterTypes, withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
-import Breadcrumbs from "../../Common/Navigation/Breadcrumbs/Breadcrumbs";
+import Breadcrumbs from "../../../../react/components/Common/Navigation/Breadcrumbs/Breadcrumbs";
 import AppContext from "../../../contexts/AppContext";
 
 /**

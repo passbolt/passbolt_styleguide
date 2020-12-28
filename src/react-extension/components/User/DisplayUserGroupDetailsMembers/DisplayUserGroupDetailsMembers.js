@@ -19,7 +19,7 @@ import {withUserWorkspace} from "../../../contexts/UserWorkspaceContext";
 import AppContext from "../../../contexts/AppContext";
 import DisplayUserGroupDetailsMembersGroupMember from "./DisplayUserGroupDetailsMembersGroupMember";
 import EditUserGroup from "../EditUserGroup/EditUserGroup";
-import {withDialog} from "../../../contexts/Common/DialogContext";
+import {withDialog} from "../../../../react/contexts/Common/DialogContext";
 
 /**
  * This component displays the group details about members

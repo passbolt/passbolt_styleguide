@@ -14,16 +14,16 @@
 import React, {Component} from "react";
 import PropTypes from "prop-types";
 
-import FormSubmitButton from "../Common/Inputs/FormSubmitButton/FormSubmitButton";
-import DialogWrapper from "../Common/Dialog/DialogWrapper/DialogWrapper";
-import FormCancelButton from "../Common/Inputs/FormSubmitButton/FormCancelButton";
+import FormSubmitButton from "../../../react/components/Common/Inputs/FormSubmitButton/FormSubmitButton";
+import DialogWrapper from "../../../react/components/Common/Dialog/DialogWrapper/DialogWrapper";
+import FormCancelButton from "../../../react/components/Common/Inputs/FormSubmitButton/FormCancelButton";
 import ErrorDialog from "../Dialog/ErrorDialog/ErrorDialog";
-import Autocomplete from "../Common/Inputs/Autocomplete/Autocomplete";
+import Autocomplete from "../../../react/components/Common/Inputs/Autocomplete/Autocomplete";
 import ShareChanges from "./Utility/ShareChanges";
 import SharePermissionItem from "./SharePermissionItem";
 import SharePermissionItemSkeleton from "./SharePermissionItemSkeleton";
 import AppContext from "../../contexts/AppContext";
-import {withDialog} from "../../contexts/Common/DialogContext";
+import {withDialog} from "../../../react/contexts/Common/DialogContext";
 import {withActionFeedback} from "../../contexts/ActionFeedbackContext";
 
 class ShareDialog extends Component {

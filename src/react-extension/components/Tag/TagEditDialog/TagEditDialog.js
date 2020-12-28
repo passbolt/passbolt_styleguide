@@ -16,11 +16,11 @@ import PropTypes from "prop-types";
 import AppContext from "../../../contexts/AppContext";
 import DialogWrapper from "../../../../react/components/Common/Dialog/DialogWrapper/DialogWrapper";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
-import {withDialog} from "../../../contexts/Common/DialogContext";
+import {withDialog} from "../../../../react/contexts/Common/DialogContext";
 import ErrorDialog from "../../Dialog/ErrorDialog/ErrorDialog";
 import FormSubmitButton from "../../../../react/components/Common/Inputs/FormSubmitButton/FormSubmitButton";
 import FormCancelButton from "../../../../react/components/Common/Inputs/FormSubmitButton/FormCancelButton";
-import {withLoading} from "../../../contexts/Common/LoadingContext";
+import {withLoading} from "../../../../react/contexts/Common/LoadingContext";
 import {ResourceWorkspaceFilterTypes, withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 import {withRouter} from "react-router-dom";
 

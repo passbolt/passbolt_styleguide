@@ -17,10 +17,10 @@ import AppContext from "../../../contexts/AppContext";
 import DialogWrapper from "../../../../react/components/Common/Dialog/DialogWrapper/DialogWrapper";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import ErrorDialog from "../../Dialog/ErrorDialog/ErrorDialog";
-import {withDialog} from "../../../contexts/Common/DialogContext";
+import {withDialog} from "../../../../react/contexts/Common/DialogContext";
 import FormSubmitButton from "../../../../react/components/Common/Inputs/FormSubmitButton/FormSubmitButton";
 import FormCancelButton from "../../../../react/components/Common/Inputs/FormSubmitButton/FormCancelButton";
-import {withLoading} from "../../../contexts/Common/LoadingContext";
+import {withLoading} from "../../../../react/contexts/Common/LoadingContext";
 
 /**
  * This component allows user to delete a group with conflict to reassign ownership of folders, resources

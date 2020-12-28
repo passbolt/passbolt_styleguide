@@ -14,7 +14,7 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import {withContextualMenu} from "../contexts/Common/ContextualMenuContext";
+import {withContextualMenu} from "../../react/contexts/Common/ContextualMenuContext";
 
 /**
  * This component acts as an anchor for the different project contextual menus.

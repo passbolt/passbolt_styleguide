@@ -13,8 +13,8 @@
  */
 import React, {Component} from "react";
 import PropTypes from "prop-types";
-import UserAvatar from "../Common/Avatar/UserAvatar";
-import Icon from "../Common/Icons/Icon";
+import UserAvatar from "../../../react/components/Common/Avatar/UserAvatar";
+import Icon from "../../../react/components/Common/Icons/Icon";
 import {Link} from "react-router-dom";
 import {withAppContext} from "../../contexts/AppContext";
 

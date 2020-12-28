@@ -16,7 +16,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import {withUserWorkspace} from "../../../contexts/UserWorkspaceContext";
 import AppContext from "../../../contexts/AppContext";
-import UserAvatar from "../../Common/Avatar/UserAvatar";
+import UserAvatar from "../../../../react/components/Common/Avatar/UserAvatar";
 
 /**
  * This component displays a group member for the group details members

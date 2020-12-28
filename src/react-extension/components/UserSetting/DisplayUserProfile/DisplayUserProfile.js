@@ -15,11 +15,11 @@
 
 import React from 'react';
 import PropTypes from "prop-types";
-import UserAvatar from "../../Common/Avatar/UserAvatar";
+import UserAvatar from "../../../../react/components/Common/Avatar/UserAvatar";
 import AppContext from "../../../contexts/AppContext";
 import moment from "moment-timezone";
-import Icon from "../../Common/Icons/Icon";
-import {withDialog} from "../../../contexts/Common/DialogContext";
+import Icon from "../../../../react/components/Common/Icons/Icon";
+import {withDialog} from "../../../../react/contexts/Common/DialogContext";
 import UploadUserProfileAvatar from "../UploadUserProfileAvatar/UploadUserProfileAvatar";
 
 /**

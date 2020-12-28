@@ -15,7 +15,7 @@ import React, {Component} from "react";
 import ErrorDialog from "../../Dialog/ErrorDialog/ErrorDialog";
 import {AuthenticationContext} from "../../../contexts/AuthenticationContext";
 import PropTypes from "prop-types";
-import {withDialog} from "../../../contexts/Common/DialogContext";
+import {withDialog} from "../../../../react/contexts/Common/DialogContext";
 
 /**
  * This component checks the passphrase of an user gpg key

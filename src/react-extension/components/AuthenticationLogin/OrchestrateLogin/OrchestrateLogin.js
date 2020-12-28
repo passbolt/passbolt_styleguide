@@ -5,7 +5,7 @@ import DisplayLoginInProgress from "../DisplayLoginInProgress/DisplayLoginInProg
 import DisplayLoginError from "../DisplayLoginError/DisplayLoginError";
 import AcceptLoginServerKeyChange from "../AcceptLoginServerKeyChange/AcceptLoginServerKeyChange";
 import ErrorDialog from "../../Dialog/ErrorDialog/ErrorDialog";
-import {withDialog} from "../../../contexts/Common/DialogContext";
+import {withDialog} from "../../../../react/contexts/Common/DialogContext";
 import PropTypes from "prop-types";
 import LoadingSpinner from "../../../../react/components/Common/Loading/LoadingSpinner/LoadingSpinner";
 

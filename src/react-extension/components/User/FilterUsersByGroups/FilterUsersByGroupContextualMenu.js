@@ -13,7 +13,7 @@
  */
 import React from "react";
 import PropTypes from "prop-types";
-import ContextualMenuWrapper from "../../Common/ContextualMenu/ContextualMenuWrapper";
+import ContextualMenuWrapper from "../../../../react/components/Common/ContextualMenu/ContextualMenuWrapper";
 import {filterByGroupsOptions} from "./FilterUsersByGroup";
 
 class FilterUsersByGroupContextualMenu extends React.Component {

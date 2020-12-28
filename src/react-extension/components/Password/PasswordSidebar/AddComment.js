@@ -17,7 +17,7 @@ import UserAvatar from "../../../../react/components/Common/Avatar/UserAvatar";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import PropTypes from "prop-types";
 import AppContext from "../../../contexts/AppContext";
-import {withLoading} from "../../../contexts/Common/LoadingContext";
+import {withLoading} from "../../../../react/contexts/Common/LoadingContext";
 
 /**
  * This component allows the current user to add a new comment on a resource

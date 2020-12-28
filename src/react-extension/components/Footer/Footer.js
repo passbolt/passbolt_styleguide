@@ -12,7 +12,7 @@
  * @since         2.13.0
  */
 import React, {Component} from "react";
-import Icon from "../Common/Icons/Icon";
+import Icon from "../../../react/components/Common/Icons/Icon";
 import PropTypes from "prop-types";
 
 const CREDITS_URL = "https://www.passbolt.com/credits";

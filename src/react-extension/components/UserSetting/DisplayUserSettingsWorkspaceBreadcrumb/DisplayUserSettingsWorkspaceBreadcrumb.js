@@ -13,7 +13,7 @@
 import React, {Component} from "react";
 import {withRouter} from "react-router-dom";
 import PropTypes from "prop-types";
-import Breadcrumbs from "../../Common/Navigation/Breadcrumbs/Breadcrumbs";
+import Breadcrumbs from "../../../../react/components/Common/Navigation/Breadcrumbs/Breadcrumbs";
 import {UserWorkspaceFilterTypes} from "../../../contexts/UserWorkspaceContext";
 import AppContext from "../../../contexts/AppContext";
 

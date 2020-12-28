@@ -12,7 +12,7 @@
  * @since         3.0.0
  */
 import getPropValue from "../../../react/lib/Common/Object/getPropValue";
-import sanitizeUrl from "../Common/Sanitize/sanitizeUrl";
+import sanitizeUrl from "../../../react/lib/Common/Sanitize/sanitizeUrl";
 
 export default class SiteSettings {
   constructor(settings) {

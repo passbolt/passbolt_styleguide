@@ -13,7 +13,7 @@
 import React from 'react';
 import PropTypes from "prop-types";
 import AppContext from "../../../contexts/AppContext";
-import {withDialog} from "../../../contexts/Common/DialogContext";
+import {withDialog} from "../../../../react/contexts/Common/DialogContext";
 import SessionExpired from "../../Dialog/SessionExpired/SessionExpired";
 
 const IS_AUTHENTICATED_CHECK_PERIOD = 2000;

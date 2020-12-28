@@ -14,7 +14,7 @@
 import React, {Component} from "react";
 import PropTypes from "prop-types";
 import AuthenticationContextProvider, {AuthenticationContext} from "./contexts/AuthenticationContext";
-import ManageDialogs from "./components/Common/Dialog/ManageDialogs/ManageDialogs";
+import ManageDialogs from "../react/components/Common/Dialog/ManageDialogs/ManageDialogs";
 import DialogContextProvider from "../react/contexts/Common/DialogContext";
 import {BrowserRouter as Router} from "react-router-dom";
 import SetupAuthentication from "./components/AuthenticationSetup/SetupAuthentication/SetupAuthentication";

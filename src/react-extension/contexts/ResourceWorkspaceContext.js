@@ -19,7 +19,7 @@ import AppContext from "./AppContext";
 import {withRouter} from "react-router-dom";
 import moment from "moment";
 import {withActionFeedback} from "./ActionFeedbackContext";
-import {withLoading} from "./Common/LoadingContext";
+import {withLoading} from "../../react/contexts/Common/LoadingContext";
 
 /**
  * Context related to resources ( filter, current selections, etc.)

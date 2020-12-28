@@ -19,7 +19,7 @@ import 'moment-timezone/builds/moment-timezone-with-data-2012-2022';
 import {withAppContext} from "../../../contexts/AppContext";
 import {ResourceWorkspaceFilterTypes, withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 import debounce from "debounce-promise";
-import Icon from "../../Common/Icons/Icon";
+import Icon from "../../../../react/components/Common/Icons/Icon";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import {withRouter} from "react-router-dom";
 import DisplayGridContextualMenu from "./DisplayGridContextualMenu";

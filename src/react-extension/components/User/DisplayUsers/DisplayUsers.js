@@ -17,7 +17,7 @@ import ReactList from "react-list";
 import moment from 'moment/moment';
 import 'moment-timezone/builds/moment-timezone-with-data-2012-2022';
 import AppContext from "../../../contexts/AppContext";
-import Icon from "../../Common/Icons/Icon";
+import Icon from "../../../../react/components/Common/Icons/Icon";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import {withRouter} from "react-router-dom";
 import {withContextualMenu} from "../../../../react/contexts/Common/ContextualMenuContext";

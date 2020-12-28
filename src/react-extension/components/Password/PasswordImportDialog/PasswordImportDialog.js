@@ -19,7 +19,7 @@ import {withDialog} from "../../../../react/contexts/Common/DialogContext";
 import DialogWrapper from "../../../../react/components/Common/Dialog/DialogWrapper/DialogWrapper";
 import FormSubmitButton from "../../../../react/components/Common/Inputs/FormSubmitButton/FormSubmitButton";
 import FormCancelButton from "../../../../react/components/Common/Inputs/FormSubmitButton/FormCancelButton";
-import Icon from "../../Common/Icons/Icon";
+import Icon from "../../../../react/components/Common/Icons/Icon";
 import PasswordUnlockKeypassDialog from "./PasswordUnlockKeypassDialog";
 import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 import PasswordImportResultDialog from "./PasswordImportResultDialog";

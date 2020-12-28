@@ -16,7 +16,7 @@ import {CirclePicker} from "react-color";
 import Icon from "../../../../react/components/Common/Icons/Icon";
 import {AuthenticationContext} from "../../../contexts/AuthenticationContext";
 import ErrorDialog from "../../Dialog/ErrorDialog/ErrorDialog";
-import {withDialog} from "../../../contexts/Common/DialogContext";
+import {withDialog} from "../../../../react/contexts/Common/DialogContext";
 import PropTypes from "prop-types";
 
 class ChooseSecurityToken extends Component {

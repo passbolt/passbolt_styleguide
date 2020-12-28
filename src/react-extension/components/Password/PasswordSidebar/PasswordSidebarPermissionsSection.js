@@ -12,13 +12,13 @@
  * @since         2.13.0
  */
 import React from "react";
-import UserAvatar from "../../Common/Avatar/UserAvatar";
-import GroupAvatar from "../../Common/Avatar/GroupAvatar";
-import Icon from "../../Common/Icons/Icon";
+import UserAvatar from "../../../../react/components/Common/Avatar/UserAvatar";
+import GroupAvatar from "../../../../react/components/Common/Avatar/GroupAvatar";
+import Icon from "../../../../react/components/Common/Icons/Icon";
 import AppContext from "../../../contexts/AppContext";
 import PropTypes from "prop-types";
 import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
-import {withDialog} from "../../../contexts/Common/DialogContext";
+import {withDialog} from "../../../../react/contexts/Common/DialogContext";
 import ShareDialog from "../../Share/ShareDialog";
 
 const PERMISSIONS_LABEL = {

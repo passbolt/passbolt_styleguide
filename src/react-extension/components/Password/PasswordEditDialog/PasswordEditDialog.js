@@ -14,8 +14,8 @@
 import React, {Component} from "react";
 import PropTypes from "prop-types";
 import AppContext from "../../../contexts/AppContext";
-import Icon from "../../Common/Icons/Icon";
-import Tooltip from "../../Common/Tooltip/Tooltip";
+import Icon from "../../../../react/components/Common/Icons/Icon";
+import Tooltip from "../../../../react/components/Common/Tooltip/Tooltip";
 import SecretComplexity from "../../../lib/Secret/SecretComplexity";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import {withDialog} from "../../../../react/contexts/Common/DialogContext";

@@ -14,10 +14,10 @@
 import React, {Component} from "react";
 import PropTypes from "prop-types";
 import AppContext from "../../../contexts/AppContext";
-import FormSubmitButton from "../../Common/Inputs/FormSubmitButton/FormSubmitButton";
-import FormCancelButton from "../../Common/Inputs/FormSubmitButton/FormCancelButton";
-import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
-import UserAbortsOperationError from "../../../lib/Common/Error/UserAbortsOperationError";
+import FormSubmitButton from "../../../../react/components/Common/Inputs/FormSubmitButton/FormSubmitButton";
+import FormCancelButton from "../../../../react/components/Common/Inputs/FormSubmitButton/FormCancelButton";
+import DialogWrapper from "../../../../react/components/Common/Dialog/DialogWrapper/DialogWrapper";
+import UserAbortsOperationError from "../../../../react/lib/Common/Error/UserAbortsOperationError";
 import ErrorDialog from "../../Dialog/ErrorDialog/ErrorDialog";
 import {withDialog} from "../../../../react/contexts/Common/DialogContext";
 

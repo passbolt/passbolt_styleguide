@@ -26,8 +26,8 @@ import UserSettings from "./lib/Settings/UserSettings";
 import ResourceTypesSettings from "./lib/Settings/ResourceTypesSettings";
 import ActionFeedbackContextProvider from "./contexts/ActionFeedbackContext";
 import ShareActionFeedbacks from "./components/Share/ShareActionFeedbacks";
-import DialogContextProvider from "./contexts/Common/DialogContext";
-import ManageDialogs from "./components/Common/Dialog/ManageDialogs/ManageDialogs";
+import DialogContextProvider from "../react/contexts/Common/DialogContext";
+import ManageDialogs from "../react/components/Common/Dialog/ManageDialogs/ManageDialogs";
 import HandlePassphraseEntryDialogEvents
   from "./components/Passphrase/HandlePassphraseEntryDialogEvents/HandlePassphraseEntryDialogEvents";
 import HandleProgressDialogEvents
@@ -35,12 +35,12 @@ import HandleProgressDialogEvents
 import HandleErrorDialogEvents from "./components/Error/HandleErrorDialogEvents/HandleErrorDialogEvents";
 import ResourceWorkspaceContextProvider from "./contexts/ResourceWorkspaceContext";
 import UserWorkspaceContextProvider from "./contexts/UserWorkspaceContext";
-import ContextualMenuContextProvider from "./contexts/Common/ContextualMenuContext";
+import ContextualMenuContextProvider from "../react/contexts/Common/ContextualMenuContext";
 import ManageContextualMenu from "./components/ManageContextualMenu";
 import HandleFolderMoveStrategyDialogEvents
   from "./components/Folder/HandleFolderMoveStrategyDialogEvents/HandleFolderMoveStrategyDialogEvents";
-import ManageLoading from "./components/Common/Loading/ManageLoading/ManageLoading";
-import LoadingContextProvider from "./contexts/Common/LoadingContext";
+import ManageLoading from "../react/components/Common/Loading/ManageLoading/ManageLoading";
+import LoadingContextProvider from "../react/contexts/Common/LoadingContext";
 import DisplayUserWorkspace from "./components/User/DisplayUserWorkspace/DisplayUserWorkspace";
 import HandleRouteFallback from "./components/Route/HandleRouteFallback";
 import DisplayUserSettingsWorkspace

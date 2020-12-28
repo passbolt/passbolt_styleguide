@@ -15,9 +15,9 @@ import React from "react";
 import PropTypes from "prop-types";
 import DisplayTagListContextualMenu from "./DisplayTagListContextualMenu";
 import {ResourceWorkspaceFilterTypes, withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
-import {withContextualMenu} from "../../../contexts/Common/ContextualMenuContext";
+import {withContextualMenu} from "../../../../react/contexts/Common/ContextualMenuContext";
 import {withRouter} from "react-router-dom";
-import Icon from "../../Common/Icons/Icon";
+import Icon from "../../../../react/components/Common/Icons/Icon";
 
 class DisplayTagList extends React.Component {
   /**

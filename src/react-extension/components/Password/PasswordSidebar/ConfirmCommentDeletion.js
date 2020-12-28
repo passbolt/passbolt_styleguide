@@ -13,12 +13,12 @@
  */
 import React, {Component} from "react";
 import AppContext from "../../../contexts/AppContext";
-import FormSubmitButton from "../../Common/Inputs/FormSubmitButton/FormSubmitButton";
-import FormCancelButton from "../../Common/Inputs/FormSubmitButton/FormCancelButton";
-import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
-import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import PropTypes from "prop-types";
-import {withLoading} from "../../../contexts/Common/LoadingContext";
+import FormSubmitButton from "../../../../react/components/Common/Inputs/FormSubmitButton/FormSubmitButton";
+import FormCancelButton from "../../../../react/components/Common/Inputs/FormSubmitButton/FormCancelButton";
+import DialogWrapper from "../../../../react/components/Common/Dialog/DialogWrapper/DialogWrapper";
+import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
+import {withLoading} from "../../../../react/contexts/Common/LoadingContext";
 
 class ConfirmDeleteDialog extends Component {
   /**

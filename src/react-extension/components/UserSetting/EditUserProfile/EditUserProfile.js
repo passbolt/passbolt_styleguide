@@ -18,7 +18,7 @@ import DialogWrapper from "../../../../react/components/Common/Dialog/DialogWrap
 import FormSubmitButton from "../../../../react/components/Common/Inputs/FormSubmitButton/FormSubmitButton";
 import FormCancelButton from "../../../../react/components/Common/Inputs/FormSubmitButton/FormCancelButton";
 import ErrorDialog from "../../Dialog/ErrorDialog/ErrorDialog";
-import {withDialog} from "../../../contexts/Common/DialogContext";
+import {withDialog} from "../../../../react/contexts/Common/DialogContext";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 
 class EditUserProfile extends Component {

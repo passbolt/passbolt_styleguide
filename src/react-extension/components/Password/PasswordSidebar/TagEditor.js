@@ -13,11 +13,11 @@
  */
 import React from "react";
 import PropTypes from "prop-types";
-import Icon from "../../Common/Icons/Icon";
+import Icon from "../../../../react/components/Common/Icons/Icon";
 import AppContext from "../../../contexts/AppContext";
 import Autocomplete from "./Autocomplete/Autocomplete";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
-import {withLoading} from "../../../contexts/Common/LoadingContext";
+import {withLoading} from "../../../../react/contexts/Common/LoadingContext";
 
 const TAG_MAX_LENGTH = 128;
 

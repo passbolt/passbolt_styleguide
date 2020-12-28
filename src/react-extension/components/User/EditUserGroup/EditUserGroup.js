@@ -22,9 +22,9 @@ import FormCancelButton from "../../../../react/components/Common/Inputs/FormSub
 import ErrorDialog from "../../Dialog/ErrorDialog/ErrorDialog";
 import {withUserWorkspace} from "../../../contexts/UserWorkspaceContext";
 import UserAvatar from "../../../../react/components/Common/Avatar/UserAvatar";
-import Icon from "../../Common/Icons/Icon";
-import TooltipHtml from "../../Common/Tooltip/TooltipHtml";
-import Autocomplete from "../../Common/Inputs/Autocomplete/Autocomplete";
+import Icon from "../../../../react/components/Common/Icons/Icon";
+import TooltipHtml from "../../../../react/components/Common/Tooltip/TooltipHtml";
+import Autocomplete from "../../../../react/components/Common/Inputs/Autocomplete/Autocomplete";
 
 /**
  * This component allows to edit an user group

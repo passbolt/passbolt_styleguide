@@ -17,7 +17,7 @@ import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import PropTypes from "prop-types";
 import AppContext from "../../../contexts/AppContext";
 import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
-import Icon from "../../Common/Icons/Icon";
+import Icon from "../../../../react/components/Common/Icons/Icon";
 import {withDialog} from "../../../../react/contexts/Common/DialogContext";
 import PasswordDeleteDialog from "../PasswordDeleteDialog/PasswordDeleteDialog";
 import PasswordEditDialog from "../PasswordEditDialog/PasswordEditDialog";

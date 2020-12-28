@@ -12,13 +12,13 @@
  * @since         2.13.0
  */
 import React from "react";
-import Icon from "../../Common/Icons/Icon";
+import Icon from "../../../../react/components/Common/Icons/Icon";
 import PropTypes from "prop-types";
 import AppContext from "../../../contexts/AppContext";
 import {withUserWorkspace} from "../../../contexts/UserWorkspaceContext";
 import DisplayUserGroupDetailsInformation
   from "../DisplayUserGroupDetailsInformation/DisplayUserGroupDetailsInformation";
-import GroupAvatar from "../../Common/Avatar/GroupAvatar";
+import GroupAvatar from "../../../../react/components/Common/Avatar/GroupAvatar";
 import DisplayUserGroupDetailsMembers from "../DisplayUserGroupDetailsMembers/DisplayUserGroupDetailsMembers";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 

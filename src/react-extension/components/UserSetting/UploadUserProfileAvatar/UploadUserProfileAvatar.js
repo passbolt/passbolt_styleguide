@@ -15,9 +15,9 @@
 
 import React from 'react';
 import PropTypes from "prop-types";
-import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
+import DialogWrapper from "../../../../react/components/Common/Dialog/DialogWrapper/DialogWrapper";
 import AppContext from "../../../contexts/AppContext";
-import {withDialog} from "../../../contexts/Common/DialogContext";
+import {withDialog} from "../../../../react/contexts/Common/DialogContext";
 import FormSubmitButton from "../../../../react/components/Common/Inputs/FormSubmitButton/FormSubmitButton";
 import FormCancelButton from "../../../../react/components/Common/Inputs/FormSubmitButton/FormCancelButton";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";

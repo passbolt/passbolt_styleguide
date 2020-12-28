@@ -13,9 +13,9 @@
  */
 import React from "react";
 import PropTypes from "prop-types";
-import {withActionFeedback} from "../../../../react-extension/contexts/ActionFeedbackContext";
+import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import XRegExp from "xregexp";
-import Icon from "../../Common/Icons/Icon";
+import Icon from "../../../../react/components/Common/Icons/Icon";
 import {withAdministrationWorkspace} from "../../../contexts/AdministrationWorkspaceContext";
 
 /**

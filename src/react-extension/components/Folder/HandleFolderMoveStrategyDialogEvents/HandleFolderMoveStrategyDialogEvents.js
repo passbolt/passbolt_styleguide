@@ -14,7 +14,7 @@
 
 import React from 'react';
 import AppContext from "../../../contexts/AppContext";
-import {withDialog} from "../../../contexts/Common/DialogContext";
+import {withDialog} from "../../../../react/contexts/Common/DialogContext";
 import FolderMoveStrategyDialog from "../FolderMoveStrategyDialog/FolderMoveStrategyDialog";
 import PropTypes from "prop-types";
 
