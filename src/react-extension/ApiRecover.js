@@ -16,6 +16,9 @@ import AppContext from "./contexts/AppContext";
 import ApiRecoverContextProvider from "./contexts/ApiRecoverContext";
 import OrchestrateApiRecover from "./components/AuthenticationRecover/OrchestrateApiRecover/OrchestrateApiRecover";
 import {ApiClientOptions} from "./lib/apiClient/apiClientOptions";
+import Footer from "./components/Footer/Footer";
+import {ApiClient} from "./lib/apiClient/apiClient";
+import SiteSettings from "./lib/Settings/SiteSettings";
 
 /**
  * The recover application served by the API.
@@ -39,9 +42,19 @@ class ApiRecover extends Component {
    */
   get defaultState() {
     return {
+      siteSettings: null, // The site settings
       trustedDomain: this.baseUrl, // The site domain (use trusted domain for compatibility with browser extension applications)
       getApiClientOptions: this.getApiClientOptions.bind(this), // Get the api client options
     };
+  }
+
+  /**
+   * ComponentDidMount
+   * Invoked immediately after component is inserted into the tree
+   * @return {void}
+   */
+  componentDidMount() {
+    this.getSiteSettings();
   }
 
   /**
@@ -83,6 +96,19 @@ class ApiRecover extends Component {
   }
 
   /**
+   * Retrieve the site settings
+   * @returns {Promise<SiteSettings>}
+   */
+  async getSiteSettings() {
+    const apiClientOptions = this.getApiClientOptions()
+      .setResourceName("settings");
+    const apiClient = new ApiClient(apiClientOptions);
+    const {body} = await apiClient.findAll();
+    const siteSettings = new SiteSettings(body);
+    await this.setState({siteSettings});
+  }
+
+  /**
    * Render the component
    * @returns {JSX}
    */
@@ -101,6 +127,7 @@ class ApiRecover extends Component {
             </div>
           </div>
         </div>
+        <Footer siteSettings={this.state.siteSettings}/>
       </AppContext.Provider>
     );
   }
