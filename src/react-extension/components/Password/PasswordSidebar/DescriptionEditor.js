@@ -219,8 +219,9 @@ class DescriptionEditor extends React.Component {
    * set the focus at the end of the description editor
    */
   setFocusOnDescriptionEditor() {
-    this.textareaRef.current.selectionStart = this.state.description.length;
-    this.textareaRef.current.selectionEnd = this.state.description.length;
+    const descriptionLength = this.description ? this.description.length : 0;
+    this.textareaRef.current.selectionStart = descriptionLength;
+    this.textareaRef.current.selectionEnd = descriptionLength;
     this.textareaRef.current.focus();
   }
 
