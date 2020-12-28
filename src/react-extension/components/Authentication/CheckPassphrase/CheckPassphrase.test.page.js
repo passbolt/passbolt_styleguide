@@ -48,6 +48,10 @@ export default class CheckPassphrasePage {
     return  this._page.container.querySelector('#remember-me');
   }
 
+  get canRememberMe() {
+    return Boolean(this.rememberMeInput);
+  }
+
   /**
    * Returns the verify button element
    */

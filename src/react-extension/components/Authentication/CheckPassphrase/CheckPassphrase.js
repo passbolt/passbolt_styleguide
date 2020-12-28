@@ -221,28 +221,30 @@ class CheckPassphrase extends Component {
               onChange={this.handleChangePassphrase}
               disabled={!this.areActionsAllowed}/>
           </div>
-          <div className="input checkbox">
-            <input
-              id="remember-me"
-              type="checkbox"
-              name="remember-me"
-              value={this.state.rememberMe}
-              onChange={this.handleToggleRememberMe}
-              disabled={!this.areActionsAllowed}/>
-            <label htmlFor="remember-me">
-              Remember until I logout.
-            </label>
-          </div>
+          {this.props.canRememberMe &&
+            <div className="input checkbox">
+              <input
+                id="remember-me"
+                type="checkbox"
+                name="remember-me"
+                value={this.state.rememberMe}
+                onChange={this.handleToggleRememberMe}
+                disabled={!this.areActionsAllowed}/>
+              <label htmlFor="remember-me">
+                Remember until I logout.
+              </label>
+            </div>
+          }
           {this.state.hasBeenValidated &&
-          <>
-            <br/>
-            {this.state.errors.emptyPassphrase &&
-            <div className="empty-passphrase error message">The passphrase should not be empty</div>
-            }
-            {this.state.errors.invalidPassphrase &&
-            <div className="invalid-passphrase error message">The passphrase is invalid</div>
-            }
-          </>
+            <>
+              <br/>
+              {this.state.errors.emptyPassphrase &&
+              <div className="empty-passphrase error message">The passphrase should not be empty</div>
+              }
+              {this.state.errors.invalidPassphrase &&
+              <div className="invalid-passphrase error message">The passphrase is invalid</div>
+              }
+            </>
           }
           <div className="form-actions">
             <button
@@ -264,6 +266,7 @@ class CheckPassphrase extends Component {
 
 CheckPassphrase.contextType = AuthenticationContext;
 CheckPassphrase.propTypes = {
+  canRememberMe: PropTypes.bool, // True if the remember me flag must be displayed
   dialogContext: PropTypes.any // The dialog context
 };
 export default withDialog(CheckPassphrase);

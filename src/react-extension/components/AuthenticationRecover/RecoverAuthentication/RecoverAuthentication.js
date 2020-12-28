@@ -5,6 +5,7 @@ import CheckPassphrase from "../../Authentication/CheckPassphrase/CheckPassphras
 import ChooseSecurityToken from "../../Authentication/ChooseSecurityToken/ChooseSecurityToken";
 import AskForAuthenticationHelp from "../../Authentication/AskForAuthenticationHelp/AskForAuthenticationHelp";
 import LoadingSpinner from "../../../../react/components/Common/Loading/LoadingSpinner/LoadingSpinner";
+import PropTypes from "prop-types";
 
 /**
  * The component orchestrates the recover authentication process
@@ -22,6 +23,14 @@ class RecoverAuthentication extends Component {
    */
   componentDidUpdate() {
     this.handleSecurityTokenSaved();
+  }
+
+  /**
+   * Can the user use the remember until I logout option
+   * @return {boolean}
+   */
+  get canRememberMe() {
+    return this.props.siteSettings.hasRememberMeUntilILogoutOption;
   }
 
 
@@ -49,7 +58,7 @@ class RecoverAuthentication extends Component {
       case AuthenticationContextState.RECOVER_INITIALIZED:
         return <ImportGpgKey canGenerate={false}></ImportGpgKey>;
       case AuthenticationContextState.GPG_KEY_VALIDATED:
-        return <CheckPassphrase/>;
+        return <CheckPassphrase canRememberMe={this.canRememberMe}/>;
       case AuthenticationContextState.GPG_KEY_IMPORTED:
         return <ChooseSecurityToken/>;
       case AuthenticationContextState.PASSPHRASE_LOST:
@@ -63,5 +72,8 @@ class RecoverAuthentication extends Component {
 }
 
 RecoverAuthentication.contextType = AuthenticationContext;
+RecoverAuthentication.propTypes = {
+  siteSettings: PropTypes.object, // The site settings
+};
 
 export default RecoverAuthentication;
