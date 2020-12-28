@@ -45,6 +45,7 @@ class Login extends Component {
       actions: {
         processing: false // True if one's processing passphrase
       },
+      hasPassphraseFocus: false, // The password input has focues
       hasBeenValidated: false, // true if the form has already validated once
       errors: {
         emptyPassphrase: false, // True if the passphrase is empty
@@ -115,10 +116,21 @@ class Login extends Component {
    * Returns the style of the security token (color and text color)
    */
   get securityTokenStyle() {
-    return {
-      backgroundColor: this.context.loginInfo.userSettings.getSecurityTokenBackgroundColor(),
-      color: this.context.loginInfo.userSettings.getSecurityTokenTextColor()
-    };
+    const {userSettings} = this.context.loginInfo;
+    const inverseStyle =  {background: userSettings.getSecurityTokenTextColor(), color: userSettings.getSecurityTokenBackgroundColor()};
+    const fullStyle =  {background: userSettings.getSecurityTokenBackgroundColor(), color: userSettings.getSecurityTokenTextColor()};
+    return this.state.hasPassphraseFocus ? inverseStyle : fullStyle;
+  }
+
+  /**
+   * Get the passphrase input style.
+   * @return {Object}
+   */
+  get passphraseInputStyle() {
+    const {userSettings} = this.context.loginInfo;
+    const emptyStyle =  {background: "", color: ""};
+    const fullStyle =  {background: userSettings.getSecurityTokenBackgroundColor(), color: userSettings.getSecurityTokenTextColor()};
+    return this.state.hasPassphraseFocus ? fullStyle : emptyStyle;
   }
 
   /**
@@ -135,6 +147,8 @@ class Login extends Component {
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleChangePassphrase = this.handleChangePassphrase.bind(this);
     this.handleToggleRememberMe = this.handleToggleRememberMe.bind(this);
+    this.handleFocusPassphrase = this.handleFocusPassphrase.bind(this);
+    this.handleBlurPassphrase = this.handleBlurPassphrase.bind(this);
   }
 
   /**
@@ -171,6 +185,20 @@ class Login extends Component {
     if (this.state.hasBeenValidated) {
       await this.validate();
     }
+  }
+
+  /**
+   * Whenever the user focus on the passphrase input
+   */
+  handleFocusPassphrase() {
+    this.setState({hasPassphraseFocus: true});
+  }
+
+  /**
+   * Whenever the user blurs on the passphrase input
+   */
+  handleBlurPassphrase() {
+    this.setState({hasPassphraseFocus: false});
   }
 
   /**
@@ -297,8 +325,11 @@ class Login extends Component {
                     type="password"
                     name="passphrase"
                     className="login-passphrase-input"
+                    style={this.passphraseInputStyle}
                     value={this.state.passphrase}
                     onChange={this.handleChangePassphrase}
+                    onFocus={this.handleFocusPassphrase}
+                    onBlur={this.handleBlurPassphrase}
                     disabled={!this.areActionsAllowed}/>
                   <span
                     className="login-passphrase-security-token"
