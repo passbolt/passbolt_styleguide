@@ -7,6 +7,7 @@ import ImportGpgKey from "../../Authentication/ImportGpgKey/ImportGpgKey";
 import CheckPassphrase from "../../Authentication/CheckPassphrase/CheckPassphrase";
 import AskForAuthenticationHelp from "../../Authentication/AskForAuthenticationHelp/AskForAuthenticationHelp";
 import LoadingSpinner from "../../../../react/components/Common/Loading/LoadingSpinner/LoadingSpinner";
+import PropTypes from "prop-types";
 
 /**
  * The component orchestrates the setup authentication process
@@ -24,6 +25,14 @@ class SetupAuthentication extends Component {
    */
   componentDidUpdate() {
     this.handleSecurityTokenSaved();
+  }
+
+  /**
+   * Can the user use the remember until I logout option
+   * @return {boolean}
+   */
+  get canRememberMe() {
+    return this.props.siteSettings.hasRememberMeUntilILogoutOption;
   }
 
   /**
@@ -69,5 +78,7 @@ class SetupAuthentication extends Component {
 }
 
 SetupAuthentication.contextType = AuthenticationContext;
-
+SetupAuthentication.propTypes = {
+  siteSettings: PropTypes.object, // The site settings
+};
 export default SetupAuthentication;

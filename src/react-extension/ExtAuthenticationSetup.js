@@ -95,7 +95,7 @@ class ExtAuthenticationSetup extends Component {
                   <div className="logo"><span className="visually-hidden">Passbolt</span></div>
                 </div>
                 <div className="login-form">
-                  <SetupAuthentication/>
+                  <SetupAuthentication siteSettings={this.state.siteSettings}/>
                 </div>
               </div>
             </div>
@@ -114,6 +114,5 @@ ExtAuthenticationSetup.propTypes = {
   port: PropTypes.object,
   storage: PropTypes.object,
 };
-
 export default ExtAuthenticationSetup;
 

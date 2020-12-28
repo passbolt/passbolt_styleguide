@@ -19,6 +19,21 @@ export function defaultAppContext(appContext) {
  */
 export function defaultProps() {
   return {
+    canRememberMe: true,
+    dialogContext: {
+      open: jest.fn()
+    }
+  };
+}
+
+
+/**
+ * Default props
+ * @returns {{}}
+ */
+export function propsWithCannotRememberMe() {
+  return {
+    canRememberMe: false,
     dialogContext: {
       open: jest.fn()
     }
