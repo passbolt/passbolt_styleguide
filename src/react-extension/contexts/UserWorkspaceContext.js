@@ -189,14 +189,17 @@ class UserWorkspaceContextProvider extends React.Component {
    *  E.g. /groups/view/:selectedGroupId
    */
   async handleGroupRouteChange() {
-    const groupId = this.props.match.params.selectedGroupId;
-    if (groupId) {
-      const group = this.context.groups.find(group => group.id === groupId);
-      if (group) { // Known group
-        await this.search({type: UserWorkspaceFilterTypes.GROUP, payload: {group}});
-        await this.detailGroup(group);
-      } else { // Unknown group
-        this.handleUnknownGroup();
+    const hasUsersAndGroups = this.users !== null && this.groups !== null;
+    if (hasUsersAndGroups) {
+      const groupId = this.props.match.params.selectedGroupId;
+      if (groupId) {
+        const group = this.context.groups.find(group => group.id === groupId);
+        if (group) { // Known group
+          await this.search({type: UserWorkspaceFilterTypes.GROUP, payload: {group}});
+          await this.detailGroup(group);
+        } else { // Unknown group
+          this.handleUnknownGroup();
+        }
       }
     }
   }
@@ -221,18 +224,21 @@ class UserWorkspaceContextProvider extends React.Component {
    * E.g. /users/view/:userId
    */
   async handleSingleUserRouteChange(userId) {
-    const user = this.users.find(user => user.id === userId);
-    const hasNoneFilter = this.state.filter.type === UserWorkspaceFilterTypes.NONE;
-    if (hasNoneFilter) { // Case of password view by url bar inputting
-      await this.search({type: UserWorkspaceFilterTypes.ALL});
-    }
-    // If the user does not exist, it should display an error
-    if (user) {
-      await this.selectFromRoute(user);
-      await this.scrollTo(user);
-      await this.detailUser(user);
-    } else {
-      this.handleUnknownUser();
+    const hasUsers = this.users !== null;
+    if (hasUsers) {
+      const user = this.users.find(user => user.id === userId);
+      const hasNoneFilter = this.state.filter.type === UserWorkspaceFilterTypes.NONE;
+      if (hasNoneFilter) { // Case of password view by url bar inputting
+        await this.search({type: UserWorkspaceFilterTypes.ALL});
+      }
+      // If the user does not exist, it should display an error
+      if (user) {
+        await this.selectFromRoute(user);
+        await this.scrollTo(user);
+        await this.detailUser(user);
+      } else {
+        this.handleUnknownUser();
+      }
     }
   }
 
@@ -467,21 +473,24 @@ class UserWorkspaceContextProvider extends React.Component {
    * Navigate to the appropriate url after some users selection operation
    */
   redirectAfterSelection() {
-    const hasUserSelected = this.state.selectedUsers.length === 1;
-    if (hasUserSelected) { // Case of selected user
-      this.props.history.push(`/app/users/view/${this.state.selectedUsers[0].id}`);
-    } else {
-      const {filter} = this.state;
-      const isGroupFilter = filter.type === UserWorkspaceFilterTypes.GROUP;
-      if (isGroupFilter) {
-        const mustRedirect = this.props.location.pathname !== `/app/groups/view/${this.state.filter.payload.group.id}`;
-        if (mustRedirect) {
-          this.props.history.push({pathname: `/app/groups/view/${this.state.filter.payload.group.id}`});
-        }
+    const hasUsersAndGroups = this.users !== null && this.groups !== null;
+    if (hasUsersAndGroups) {
+      const hasUserSelected = this.state.selectedUsers.length === 1;
+      if (hasUserSelected) { // Case of selected user
+        this.props.history.push(`/app/users/view/${this.state.selectedUsers[0].id}`);
       } else {
-        const mustRedirect = this.props.location.pathname !== '/app/users';
-        if (mustRedirect) {
-          this.props.history.push({pathname: `/app/users`, state: {filter}});
+        const {filter} = this.state;
+        const isGroupFilter = filter.type === UserWorkspaceFilterTypes.GROUP;
+        if (isGroupFilter) {
+          const mustRedirect = this.props.location.pathname !== `/app/groups/view/${this.state.filter.payload.group.id}`;
+          if (mustRedirect) {
+            this.props.history.push({pathname: `/app/groups/view/${this.state.filter.payload.group.id}`});
+          }
+        } else {
+          const mustRedirect = this.props.location.pathname !== '/app/users';
+          if (mustRedirect) {
+            this.props.history.push({pathname: `/app/users`, state: {filter}});
+          }
         }
       }
     }
