@@ -134,7 +134,7 @@ class PasswordSidebarDescriptionSection extends React.Component {
       this.setState({
         isSecretDecrypting: false,
         error: true,
-        errorMsg: `Sorry the description could not be decrypted. ${error.message}`
+        errorMsg: `Sorry the description could not be decrypted. ${error.message || ''}`
       });
 
       return false;
