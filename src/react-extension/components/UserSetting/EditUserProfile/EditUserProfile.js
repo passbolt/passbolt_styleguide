@@ -151,9 +151,9 @@ class EditUserProfile extends Component {
       this.focusFirstFieldError();
       return;
     }
-    const {id, role_id, username} = this.context.loggedInUser;
+    const {id, username} = this.context.loggedInUser;
     const {profile} = this.state;
-    const userToUpdate = {id, role_id, username, profile};
+    const userToUpdate = {id, username, profile};
     await this.context.port.request("passbolt.users.update", userToUpdate)
       .then(this.onSaveSuccess.bind(this))
       .catch(this.onSaveError.bind(this));
