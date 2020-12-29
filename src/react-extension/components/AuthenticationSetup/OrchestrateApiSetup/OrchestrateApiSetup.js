@@ -17,8 +17,8 @@ import LoadingSpinner from "../../../../react/components/Common/Loading/LoadingS
 import {ApiSetupContextState, withApiSetupContext} from "../../../contexts/ApiSetupContext";
 import InstallExtension from "../../Authentication/InstallExtension/InstallExtension";
 import DisplayBrowserNotSupported from "../../Authentication/DisplayBrowserNotSupported/DisplayBrowserNotSupported";
-import CheckMailBox from "../../Authentication/CheckMailBox/CheckMailBox";
 import DisplayError from "../../Authentication/DisplayError/DisplayError";
+import DisplayExpiredTokenError from "../../Authentication/DisplayError/DisplayExpiredTokenError";
 
 /**
  * The component orchestrates the api setup authentication workflow.
@@ -48,8 +48,8 @@ class OrchestrateApiSetup extends Component {
         return <InstallExtension/>;
       case ApiSetupContextState.DOWNLOAD_SUPPORTED_BROWSER_STATE:
         return <DisplayBrowserNotSupported/>;
-      case ApiSetupContextState.CHECK_MAILBOX_STATE:
-        return <CheckMailBox/>;
+      case ApiSetupContextState.TOKEN_EXPIRED_STATE:
+        return <DisplayExpiredTokenError/>;
       case ApiSetupContextState.ERROR_STATE:
         return <DisplayError/>;
       default:

@@ -90,7 +90,7 @@ class ApiSetupContextProvider extends React.Component {
     if (error instanceof PassboltApiFetchError) {
       const isTokenExpired = getPropValue(error, "data.body.token.expired");
       if (isTokenExpired) {
-        return this.setState({state: ApiSetupContextState.CHECK_MAILBOX_STATE});
+        return this.setState({state: ApiSetupContextState.TOKEN_EXPIRED_STATE});
       }
     }
     return this.setState({state: ApiSetupContextState.ERROR_STATE});
@@ -160,9 +160,9 @@ export function withApiSetupContext(WrappedComponent) {
  * The setup types of state
  */
 export const ApiSetupContextState = {
-  INITIAL_STATE: 'Initial State',
-  INSTALL_EXTENSION_STATE: 'Install extension',
-  DOWNLOAD_SUPPORTED_BROWSER_STATE: 'Download supported browser',
-  CHECK_MAILBOX_STATE: 'Check mailbox',
-  ERROR_STATE: 'Error',
+  INITIAL_STATE: 'Initial state',
+  DOWNLOAD_SUPPORTED_BROWSER_STATE: 'Download supported browser state',
+  INSTALL_EXTENSION_STATE: 'Install extension state',
+  TOKEN_EXPIRED_STATE: 'Token expired state',
+  ERROR_STATE: 'Error state',
 };

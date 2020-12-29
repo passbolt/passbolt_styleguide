@@ -20,6 +20,30 @@ import InsertFileIframe from "./components/InsertFileIframe";
  * This application is inserted in the page served by the API and inject the iframe that will contain the setup application.
  */
 class ExtBootstrapSetup extends Component {
+  /**
+   * Whenever the component is mounted
+   */
+  componentDidMount() {
+    this.handleRemoveIframeRequested();
+  }
+
+  /**
+   * Whenever the background page request the setup iframe to be removed.
+   */
+  handleRemoveIframeRequested() {
+    this.props.port.on("passbolt.setup-bootstrap.remove-iframe", this.removeSetupIframe.bind(this));
+  }
+
+  /**
+   * Remove the iframe
+   */
+  removeSetupIframe() {
+    const iframe = document.getElementById("passbolt-iframe-setup");
+    if (iframe) {
+      iframe.remove();
+    }
+  }
+
   render() {
     return (
       <>
@@ -31,6 +55,7 @@ class ExtBootstrapSetup extends Component {
 }
 ExtBootstrapSetup.propTypes = {
   browserExtensionUrl: PropTypes.string, // The browser extension url
+  port: PropTypes.object, // The communication port
 };
 
 export default ExtBootstrapSetup;

@@ -17,8 +17,8 @@ import LoadingSpinner from "../../../../react/components/Common/Loading/LoadingS
 import {ApiRecoverContextState, withApiRecoverContext} from "../../../contexts/ApiRecoverContext";
 import InstallExtension from "../../Authentication/InstallExtension/InstallExtension";
 import DisplayBrowserNotSupported from "../../Authentication/DisplayBrowserNotSupported/DisplayBrowserNotSupported";
-import CheckMailBox from "../../Authentication/CheckMailBox/CheckMailBox";
 import DisplayError from "../../Authentication/DisplayError/DisplayError";
+import DisplayExpiredTokenError from "../../Authentication/DisplayError/DisplayExpiredTokenError";
 
 /**
  * The component orchestrates the api recover authentication workflow.
@@ -48,8 +48,8 @@ class OrchestrateApiRecover extends Component {
         return <InstallExtension/>;
       case ApiRecoverContextState.DOWNLOAD_SUPPORTED_BROWSER_STATE:
         return <DisplayBrowserNotSupported/>;
-      case ApiRecoverContextState.CHECK_MAILBOX_STATE:
-        return <CheckMailBox/>;
+      case ApiRecoverContextState.TOKEN_EXPIRED_STATE:
+        return <DisplayExpiredTokenError/>;
       case ApiRecoverContextState.ERROR_STATE:
         return <DisplayError/>;
       default:
