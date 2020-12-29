@@ -90,7 +90,7 @@ class ApiRecoverContextProvider extends React.Component {
     if (error instanceof PassboltApiFetchError) {
       const isTokenExpired = getPropValue(error, "data.body.token.expired");
       if (isTokenExpired) {
-        return this.setState({state: ApiRecoverContextState.CHECK_MAILBOX_STATE});
+        return this.setState({state: ApiRecoverContextState.TOKEN_EXPIRED_STATE});
       }
     }
     return this.setState({state: ApiRecoverContextState.ERROR_STATE});
@@ -160,9 +160,9 @@ export function withApiRecoverContext(WrappedComponent) {
  * The recover types of state
  */
 export const ApiRecoverContextState = {
-  INITIAL_STATE: 'Initial State',
-  INSTALL_EXTENSION_STATE: 'Install extension',
-  DOWNLOAD_SUPPORTED_BROWSER_STATE: 'Download supported browser',
-  CHECK_MAILBOX_STATE: 'Check mailbox',
-  ERROR_STATE: 'Error',
+  INITIAL_STATE: 'Initial state',
+  DOWNLOAD_SUPPORTED_BROWSER_STATE: 'Download supported browser state',
+  INSTALL_EXTENSION_STATE: 'Install extension state',
+  TOKEN_EXPIRED_STATE: 'Token expired state',
+  ERROR_STATE: 'Error state',
 };

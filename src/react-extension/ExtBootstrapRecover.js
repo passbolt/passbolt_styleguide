@@ -20,6 +20,30 @@ import InsertRecoverAuthenticationIframe
  * This application is inserted in the page served by the API and inject the iframe that will contain the recover application.
  */
 class ExtBootstrapRecover extends Component {
+  /**
+   * Whenever the component is mounted
+   */
+  componentDidMount() {
+    this.handleRemoveIframeRequested();
+  }
+
+  /**
+   * Whenever the background page request the recover iframe to be removed.
+   */
+  handleRemoveIframeRequested() {
+    this.props.port.on("passbolt.recover-bootstrap.remove-iframe", this.removeRecoverIframe.bind(this));
+  }
+
+  /**
+   * Remove the iframe
+   */
+  removeRecoverIframe() {
+    const iframe = document.getElementById("passbolt-iframe-recover");
+    if (iframe) {
+      iframe.remove();
+    }
+  }
+
   render() {
     return (
       <>
@@ -30,6 +54,7 @@ class ExtBootstrapRecover extends Component {
 }
 ExtBootstrapRecover.propTypes = {
   browserExtensionUrl: PropTypes.string, // The browser extension url
+  port: PropTypes.object, // The communication port
 };
 
 export default ExtBootstrapRecover;
