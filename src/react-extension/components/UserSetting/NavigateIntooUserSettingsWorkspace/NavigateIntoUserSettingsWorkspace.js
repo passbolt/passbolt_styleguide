@@ -15,11 +15,19 @@
 import React from "react";
 import PropTypes from "prop-types";
 import {NavLink, withRouter} from "react-router-dom";
+import AppContext from "../../../contexts/AppContext";
 
 /**
  * This component allows to navigate throught the differents sections of the user settings workspace
  */
 class NavigateIntoUserSettingsWorkspace extends React.Component {
+  /**
+   * Returns true if the use has the MFA capability
+   */
+  get isMfaEnabled() {
+    return this.context.siteSettings.canIUse("multiFactorAuthentication");
+  }
+
   /**
    * Render the component
    */
@@ -54,19 +62,21 @@ class NavigateIntoUserSettingsWorkspace extends React.Component {
               </div>
             </div>
           </li>
-          <li>
-            <div
-              className={`row ${isSelected('mfa') ? 'selected' : ''}`}>
-              <div className="main-cell-wrapper">
-                <div className="main-cell">
-                  <NavLink
-                    to={"/app/settings/mfa"}>
-                    <span>Multi Factor Authentication</span>
-                  </NavLink>
+          {this.isMfaEnabled &&
+            <li>
+              <div
+                className={`row ${isSelected('mfa') ? 'selected' : ''}`}>
+                <div className="main-cell-wrapper">
+                  <div className="main-cell">
+                    <NavLink
+                      to={"/app/settings/mfa"}>
+                      <span>Multi Factor Authentication</span>
+                    </NavLink>
+                  </div>
                 </div>
               </div>
-            </div>
-          </li>
+            </li>
+          }
           <li>
             <div
               className={`row ${isSelected('keys') ? 'selected' : ''}`}>
@@ -86,6 +96,7 @@ class NavigateIntoUserSettingsWorkspace extends React.Component {
   }
 }
 
+NavigateIntoUserSettingsWorkspace.contextType = AppContext;
 NavigateIntoUserSettingsWorkspace.propTypes = {
   history: PropTypes.object,
   location: PropTypes.object
