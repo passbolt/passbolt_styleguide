@@ -92,6 +92,34 @@ class ApiApp extends Component {
   }
 
   /**
+   * Returns true if the user has the MFA capability
+   * @returns {boolean}
+   */
+  get isMfaEnabled() {
+    const siteSettings = this.state.siteSettings;
+
+    return siteSettings && siteSettings.canIUse('multiFactorAuthentication');
+  }
+
+  /**
+   * Returns true if the user has the user directory capability
+   * @returns {boolean}
+   */
+  get isUserDirectoryEnabled() {
+    const siteSettings = this.state.siteSettings;
+    console.log(this.state.siteSettings);
+    return siteSettings && siteSettings.canIUse('directorySync');
+  }
+
+  /**
+   * Returns true when the component can be rendered
+   */
+  get isReady() {
+    // Waiting for the site settings to have the appropriate redirection
+    return this.state.siteSettings;
+  }
+
+  /**
    * Get the API client options
    * @returns {ApiClientOptions}
    */
@@ -131,7 +159,7 @@ class ApiApp extends Component {
     const apiClientOptions = this.getApiClientOptions().setResourceName("settings");
     const apiClient = new ApiClient(apiClientOptions);
     const siteSettings = await apiClient.findAll();
-    await this.setState({siteSettings: new SiteSettings(siteSettings)});
+    await this.setState({siteSettings: new SiteSettings(siteSettings.body)});
   }
 
   /**
@@ -150,48 +178,54 @@ class ApiApp extends Component {
 
   render() {
     return (
-      <AppContext.Provider value={this.state}>
-        <ActionFeedbackContextProvider>
-          <DialogContextProvider>
-            <ContextualMenuContextProvider>
-              { /* Action Feedback Management */}
-              <ShareActionFeedbacks/>
-              <Router>
-                <Switch>
-                  <Route exact path="/app/administration">
-                    <Redirect to="/app/administration/mfa"/>
-                  </Route>
-                  <Route path="/app/administration">
-                    <AdministrationWorkspaceContextProvider>
-                      <ManageDialogs/>
-                      <ManageContextualMenu/>
-                      <AdministrationWorkspace/>
-                    </AdministrationWorkspaceContextProvider>
-                  </Route>
-                  <Route path="/app/settings/mfa">
-                    <ManageDialogs/>
-                    <ManageContextualMenu/>
-                    <div id="container" className="page settings">
-                      <div id="app" className="app" tabIndex="1000">
-                        <div className="header first">
-                          <DisplayMainMenu/>
+      <>
+        {this.isReady &&
+          <AppContext.Provider value={this.state}>
+            <ActionFeedbackContextProvider>
+              <DialogContextProvider>
+                <ContextualMenuContextProvider>
+                  { /* Action Feedback Management */}
+                  <ShareActionFeedbacks/>
+                  <Router>
+                    <Switch>
+                      <Route exact path="/app/administration">
+                        {this.isMfaEnabled && <Redirect to="/app/administration/mfa"/>}
+                        {!this.isMfaEnabled && this.isUserDirectoryEnabled && <Redirect to="/app/administration/users-directory"/>}
+                        {!this.isMfaEnabled && !this.isUserDirectoryEnabled && <Redirect to="/app/administration/email-notification"/>}
+                      </Route>
+                      <Route path="/app/administration">
+                        <AdministrationWorkspaceContextProvider>
+                          <ManageDialogs/>
+                          <ManageContextualMenu/>
+                          <AdministrationWorkspace/>
+                        </AdministrationWorkspaceContextProvider>
+                      </Route>
+                      <Route path="/app/settings/mfa">
+                        <ManageDialogs/>
+                        <ManageContextualMenu/>
+                        <div id="container" className="page settings">
+                          <div id="app" className="app" tabIndex="1000">
+                            <div className="header first">
+                              <DisplayMainMenu/>
+                            </div>
+                            <DisplayApiUserSettingsWorkspace/>
+                          </div>
                         </div>
-                        <DisplayApiUserSettingsWorkspace/>
-                      </div>
-                    </div>
-                  </Route>
-                  { /* All others /app routes are handled by the browser extension */}
-                  <Route path="/app" render={() => {
-                    window.location.reload();
-                  }}>
-                  </Route>
-                </Switch>
-              </Router>
-              <Footer siteSettings={this.state.siteSettings}/>
-            </ContextualMenuContextProvider>
-          </DialogContextProvider>
-        </ActionFeedbackContextProvider>
-      </AppContext.Provider>
+                      </Route>
+                      { /* All others /app routes are handled by the browser extension */}
+                      <Route path="/app" render={() => {
+                        window.location.reload();
+                      }}>
+                      </Route>
+                    </Switch>
+                  </Router>
+                  <Footer siteSettings={this.state.siteSettings}/>
+                </ContextualMenuContextProvider>
+              </DialogContextProvider>
+            </ActionFeedbackContextProvider>
+          </AppContext.Provider>
+        }
+      </>
     );
   }
 }

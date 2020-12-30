@@ -16,6 +16,11 @@ export function defaultAppContext(appContext) {
  */
 export function defaultProps(selectedAdministration) {
   return {
+    context: {
+      siteSettings: {
+        canIUse: () => true
+      }
+    },
     administrationWorkspaceContext: {
       selectedAdministration,
     },
