@@ -254,9 +254,7 @@ class CheckPassphrase extends Component {
               disabled={this.mustBeDisabled || this.isProcessing}>
               Verify
             </button>
-            <a onClick={this.onPassphraseLost}>
-              Help, I don&apos;t remember my passphrase.
-            </a>
+            {this.props.secondaryAction}
           </div>
         </form>
       </div>
@@ -267,6 +265,7 @@ class CheckPassphrase extends Component {
 CheckPassphrase.contextType = AuthenticationContext;
 CheckPassphrase.propTypes = {
   canRememberMe: PropTypes.bool, // True if the remember me flag must be displayed
-  dialogContext: PropTypes.any // The dialog context
+  dialogContext: PropTypes.any, // The dialog context
+  secondaryAction: PropTypes.any // Secondary action to display
 };
 export default withDialog(CheckPassphrase);

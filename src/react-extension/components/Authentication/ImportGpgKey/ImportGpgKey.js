@@ -87,7 +87,6 @@ class ImportGpgKey extends Component {
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleChangePrivateKey = this.handleChangePrivateKey.bind(this);
     this.handleSelectPrivateKeyFile = this.handleSelectPrivateKeyFile.bind(this);
-    this.handleGenerateKeyInstead = this.handleGenerateKeyInstead.bind(this);
   }
 
   /**
@@ -137,13 +136,6 @@ class ImportGpgKey extends Component {
     if (this.state.hasBeenValidated) {
       await this.validate();
     }
-  }
-
-  /**
-   * Whenever the user wants to generate his gpg key instead of importing it
-   */
-  handleGenerateKeyInstead() {
-    this.context.onGoToGenerateGpgKeyRequested();
   }
 
   /**
@@ -209,14 +201,12 @@ class ImportGpgKey extends Component {
     await this.setState({hasBeenValidated: true, errors: {}});
   }
 
-
   /**
    * Toggle the processing mode
    */
   async toggleProcessing() {
     await this.setState({actions: {processing: !this.state.actions.processing}});
   }
-
 
   /**
    * Render the component
@@ -267,13 +257,7 @@ class ImportGpgKey extends Component {
               disabled={this.mustBeDisabled || this.isProcessing}>
               Verify
             </button>
-            {this.props.canGenerate &&
-              <>
-                <a onClick={this.handleGenerateKeyInstead}>
-                  Generate new key instead
-                </a>
-              </>
-            }
+            {this.props.secondaryAction}
           </div>
         </form>
       </div>
@@ -283,10 +267,7 @@ class ImportGpgKey extends Component {
 
 ImportGpgKey.contextType = AuthenticationContext;
 ImportGpgKey.propTypes = {
-  canGenerate: PropTypes.bool, // True if we propose to generate a new key instead
-  dialogContext: PropTypes.any // The dialog context
-};
-ImportGpgKey.defaultProps = {
-  canGenerate: true
+  dialogContext: PropTypes.any, // The dialog context
+  secondaryAction: PropTypes.any // Secondary action to display
 };
 export default withDialog(ImportGpgKey);

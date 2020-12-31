@@ -13,6 +13,7 @@
  */
 import React, {Component} from "react";
 import PropTypes from "prop-types";
+import AppContext from "./contexts/AppContext";
 import AuthenticationContextProvider, {AuthenticationContext} from "./contexts/AuthenticationContext";
 import ManageDialogs from "../react/components/Common/Dialog/ManageDialogs/ManageDialogs";
 import DialogContextProvider from "../react/contexts/Common/DialogContext";
@@ -50,6 +51,7 @@ class ExtAuthenticationRecover extends Component {
     return {
       port: this.props.port,
       storage: this.props.storage,
+      trustedDomain: null, // The site domain (use trusted domain for compatibility with browser extension applications)
     };
   }
 
@@ -68,7 +70,8 @@ class ExtAuthenticationRecover extends Component {
   async getSiteSettings() {
     const settings = await this.props.port.request("passbolt.recover.site-settings");
     const siteSettings = new SiteSettings(settings);
-    this.setState({siteSettings});
+    const trustedDomain = siteSettings.url;
+    this.setState({siteSettings, trustedDomain});
   }
 
   /**
@@ -84,24 +87,26 @@ class ExtAuthenticationRecover extends Component {
    */
   render() {
     return (
-      <AuthenticationContextProvider value={this.defaultContextValue}>
-        <DialogContextProvider>
-          <div id="container" className="container page login">
-            <ManageDialogs/>
-            <div className="content">
-              <div className="header">
-                <div className="logo"><span className="visually-hidden">Passbolt</span></div>
-              </div>
-              <div className="login-form">
-                <RecoverAuthentication siteSettings={this.state.siteSettings}/>
+      <AppContext.Provider value={this.state}>
+        <AuthenticationContextProvider value={this.defaultContextValue}>
+          <DialogContextProvider>
+            <div id="container" className="container page login">
+              <ManageDialogs/>
+              <div className="content">
+                <div className="header">
+                  <div className="logo"><span className="visually-hidden">Passbolt</span></div>
+                </div>
+                <div className="login-form">
+                  <RecoverAuthentication siteSettings={this.state.siteSettings}/>
+                </div>
               </div>
             </div>
-          </div>
-          <Footer
-            siteSettings={this.state.siteSettings}
-            extensionVersion={this.state.extensionVersion}/>
-        </DialogContextProvider>
-      </AuthenticationContextProvider>
+            <Footer
+              siteSettings={this.state.siteSettings}
+              extensionVersion={this.state.extensionVersion}/>
+          </DialogContextProvider>
+        </AuthenticationContextProvider>
+      </AppContext.Provider>
     );
   }
 }

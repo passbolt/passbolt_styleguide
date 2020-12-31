@@ -64,6 +64,8 @@ export default (storage) => {
   mockPort.addRequestListener("passbolt.folders.find-permissions", mockRequestFoldersFindPermissions);
   mockPort.addRequestListener("passbolt.user.get", mockRequestUserGet);
   mockPort.addRequestListener("passbolt.site.settings", mockRequestSiteSettings);
+  mockPort.addRequestListener("passbolt.recover.site-settings", mockRequestSiteSettings);
+  mockPort.addRequestListener("passbolt.setup.site-settings", mockRequestSiteSettings);
   mockPort.addRequestListener("passbolt.folders.update-local-storage", mockRequestFoldersUpdateLocalStorage);
   mockPort.addRequestListener("passbolt.resources.update-local-storage", mockRequestResourcesUpdateLocalStorage);
   mockPort.addRequestListener("passbolt.users.update-local-storage", mockRequestUsersUpdateLocalStorage);

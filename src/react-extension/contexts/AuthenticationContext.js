@@ -21,7 +21,7 @@ export const AuthenticationContext = React.createContext({
   onGoToImportGpgKeyRequested: () => {
   }, // Whenever one wants to go to the import gpg key area
   onCheckImportedGpgKeyPassphraseRequested: () => {
-  }, // Whenever one wants to check the passphrae of an imported gpg key
+  }, // Whenever one wants to check the passphrase of an imported gpg key
   onImportGpgKeyRequested: () => {
   }, // Whenever the import of gpg key is requested
   onDownloadRecoveryKitRequested: () => {
@@ -45,7 +45,7 @@ export const AuthenticationContext = React.createContext({
   onVerifyServerKeyRequested: () => {
   }, // Whenever the check of server key is requested
   onGetServerKeyRequested: () => {
-  } // Whenever the server key is requested.
+  }, // Whenever the server key is requested.
 });
 
 /**
@@ -85,7 +85,7 @@ class AuthenticationContextProvider extends React.Component {
       onLoginRequested: this.onLoginRequested.bind(this),
       onAcceptLoginNewServerKeyRequested: this.onAcceptLoginNewServerKeyRequested.bind(this),
       onVerifyServerKeyRequested: this.onVerifyServerKeyRequested.bind(this),
-      onGetServerKeyRequested: this.onGetServerKeyRequested.bind(this)
+      onGetServerKeyRequested: this.onGetServerKeyRequested.bind(this),
     };
   }
 
@@ -97,7 +97,7 @@ class AuthenticationContextProvider extends React.Component {
     await this.setState({
       state: AuthenticationContextState.SETUP_INITIALIZED,
       setupInfo,
-      process: 'setup'
+      process: AuthenticationContextProcess.SETUP
     });
   }
 
@@ -110,7 +110,7 @@ class AuthenticationContextProvider extends React.Component {
     await this.setState({
       state: AuthenticationContextState.RECOVER_INITIALIZED,
       recoverInfo,
-      process: 'recover'
+      process: AuthenticationContextProcess.RECOVER
     });
   }
 
@@ -124,7 +124,7 @@ class AuthenticationContextProvider extends React.Component {
     await this.setState({
       state: AuthenticationContextState.LOGIN_INITIALIZED,
       loginInfo,
-      process: 'login',
+      process: AuthenticationContextProcess.LOGIN,
     });
   }
 
@@ -343,6 +343,14 @@ AuthenticationContextProvider.propTypes = {
 };
 export default AuthenticationContextProvider;
 
+/**
+ * The authentication types of process
+ */
+export const AuthenticationContextProcess = {
+  SETUP: 'setup',
+  RECOVER: 'recover',
+  LOGIN: 'login'
+};
 
 /**
  * The authentication types of state
