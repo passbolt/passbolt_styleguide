@@ -65,14 +65,6 @@ class CheckPassphrase extends Component {
     return Object.values(this.state.errors).every(value => !value);
   }
 
-
-  /**
-   * Returns true if the component must be in a disabled mode
-   */
-  get mustBeDisabled() {
-    return this.state.hasBeenValidated && !this.isValid;
-  }
-
   /**
    * Returns true if the component must be in a processing mode
    */
@@ -154,8 +146,8 @@ class CheckPassphrase extends Component {
    */
   onCheckFailure(error) {
     // Whenever the passphrase is invalid.
+    this.toggleProcessing();
     if (error.name === "InvalidMasterPasswordError") {
-      this.toggleProcessing();
       this.setState({errors: {invalidPassphrase: true}});
     } else {
       const ErrorDialogProps = {message: error.message};
@@ -203,7 +195,6 @@ class CheckPassphrase extends Component {
    */
   render() {
     const processingClassName = this.isProcessing ? 'processing' : '';
-    const disabledClassName = this.mustBeDisabled ? 'disabled' : '';
     return (
       <div className="enter-passphrase">
         <h1>Please enter your passphrase to continue.</h1>
@@ -249,9 +240,9 @@ class CheckPassphrase extends Component {
           <div className="form-actions">
             <button
               type="submit"
-              className={`button primary big ${disabledClassName} ${processingClassName}`}
+              className={`button primary big ${processingClassName}`}
               role="button"
-              disabled={this.mustBeDisabled || this.isProcessing}>
+              disabled={this.isProcessing}>
               Verify
             </button>
             {this.props.secondaryAction}
