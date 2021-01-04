@@ -117,7 +117,7 @@ class FolderSidebarPermissionsSection extends React.Component {
         </div>
         <div className="accordion-content">
           {canShare &&
-          <a onClick={this.handlePermissionsEditClickEvent} className="section-action">
+          <a onClick={this.handlePermissionsEditClickEvent} className="section-action" role="button">
             <Icon name="edit"/>
             <span className="visuallyhidden">modify</span>
           </a>

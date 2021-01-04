@@ -409,7 +409,7 @@ class Grid extends React.Component {
         </td>
         <td className="cell_favorite selections s-cell">
           <div className="ready">
-            <a className="no-text" onClick={(ev) => this.handleFavoriteClick(ev, resource)}>
+            <a className="no-text" onClick={(ev) => this.handleFavoriteClick(ev, resource)} role="button">
               <i className={`icon ${isFavorite ? "unfav" : "fav"}`}></i>
               <span className="visuallyhidden">fav</span>
             </a>
@@ -422,12 +422,14 @@ class Grid extends React.Component {
         </td>
         <td className="cell_username m-cell username">
           <div title={resource.username}>
-            <a onClick={(ev) => this.handleCopyUsernameClick(ev, resource)}>{resource.username}</a>
+            <a onClick={(ev) => this.handleCopyUsernameClick(ev, resource)} role="button">
+              {resource.username}
+            </a>
           </div>
         </td>
         <td className="cell_secret m-cell password">
           <div title="secret" className="secret-copy">
-            <a onClick={(ev) => this.handleCopyPasswordClick(ev, resource)}>
+            <a onClick={(ev) => this.handleCopyPasswordClick(ev, resource)} role="button">
               <span>copy password to clipboard</span>
             </a>
           </div>
@@ -547,25 +549,25 @@ class Grid extends React.Component {
                     </div>
                   </th>
                   <th className="cell_favorite selections s-cell sortable">
-                    <a>
+                    <a role="button">
                       <i className="icon fav"></i>
                       <span className="visuallyhidden">fav</span>
                     </a>
                   </th>
                   <th className={`cell_name m-cell sortable js_grid_column_name ${this.getColumnSortedClass("name")}`}>
-                    <a onClick={ev => this.handleSortByColumnClick(ev, "name")}>Resource</a>
+                    <a onClick={ev => this.handleSortByColumnClick(ev, "name")} role="button">Resource</a>
                   </th>
                   <th className={`cell_username m-cell username sortable js_grid_column_username ${this.getColumnSortedClass("username")}`}>
-                    <a onClick={ev => this.handleSortByColumnClick(ev, "username")}>Username</a>
+                    <a onClick={ev => this.handleSortByColumnClick(ev, "username")} role="button">Username</a>
                   </th>
                   <th className="cell_secret m-cell password">
                     Password
                   </th>
                   <th className={`cell_uri l-cell sortable js_grid_column_uri ${this.getColumnSortedClass("uri")}`}>
-                    <a onClick={ev => this.handleSortByColumnClick(ev, "uri")}>URI</a>
+                    <a onClick={ev => this.handleSortByColumnClick(ev, "uri")} role="button">URI</a>
                   </th>
                   <th className={`cell_modified m-cell sortable js_grid_column_modified ${this.getColumnSortedClass("modified")}`}>
-                    <a onClick={ev => this.handleSortByColumnClick(ev, "modified")}>Modified</a>
+                    <a onClick={ev => this.handleSortByColumnClick(ev, "modified")} role="button">Modified</a>
                   </th>
                 </tr>
                 </thead>

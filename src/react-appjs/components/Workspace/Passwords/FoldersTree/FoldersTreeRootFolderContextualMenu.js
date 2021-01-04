@@ -148,7 +148,7 @@ class FoldersTreeRootFolderContextualMenu extends React.Component {
             <div className="row">
               <div className="main-cell-wrapper">
                 <div className="main-cell">
-                  <a onClick={this.handleCreateFolderItemClickEvent}><span>Create folder</span></a>
+                  <a onClick={this.handleCreateFolderItemClickEvent} role="button"><span>Create folder</span></a>
                 </div>
               </div>
             </div>
@@ -157,7 +157,7 @@ class FoldersTreeRootFolderContextualMenu extends React.Component {
             <div className="row">
               <div className="main-cell-wrapper">
                 <div className="main-cell">
-                  <a onClick={this.handleExportFolderItemClickEvent}><span>Export all</span></a>
+                  <a onClick={this.handleExportFolderItemClickEvent} role="button"><span>Export all</span></a>
                 </div>
               </div>
             </div>

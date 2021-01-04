@@ -434,7 +434,7 @@ class FoldersTreeItem extends React.Component {
             onClick={this.handleSelectEvent}
             onContextMenu={this.handleContextualMenuEvent}>
             <div className="main-cell">
-              <a>
+              <a role="button">
                 {hasChildren &&
                 <Fragment>
                   {isOpen &&

@@ -59,7 +59,7 @@ class DialogCloseButton extends Component {
    */
   render() {
     return (
-      <a className={this.getClassName()} onClick={this.handleCloseClick}>
+      <a className={this.getClassName()} onClick={this.handleCloseClick} role="button">
         <Icon name='close'/>
         <span className="visually-hidden">Close</span>
       </a>

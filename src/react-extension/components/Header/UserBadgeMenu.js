@@ -117,7 +117,7 @@ class UserBadgeMenu extends Component {
             </div>
             <UserAvatar user={this.props.user} className="picture left-cell" baseUrl={this.props.baseUrl}/>
             <div className="more right-cell">
-              <a>
+              <a role="button">
                 <Icon name="caret-down"/>
                 <span>more</span>
               </a>

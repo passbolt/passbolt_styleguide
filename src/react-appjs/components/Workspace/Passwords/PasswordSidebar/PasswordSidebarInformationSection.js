@@ -170,7 +170,7 @@ class PasswordSidebarInformationSection extends React.Component {
             <span className="label">Password</span>
             <div className="value">
               <div className="secret-copy">
-                <a><span>copy password to clipboard</span></a>
+                <a role="button"><span>copy password to clipboard</span></a>
               </div>
             </div>
           </li>

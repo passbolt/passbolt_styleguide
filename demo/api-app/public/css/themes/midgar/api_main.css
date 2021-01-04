@@ -5931,9 +5931,10 @@ input[type="search"]::-webkit-search-cancel-button {
     margin-bottom: 2.5em;
   }
 }
-/* dropdown */
+/* dropdown button */
 .dropdown {
   float: left;
+  /* dropdown content */
 }
 .dropdown .button:focus,
 .dropdown .button.create:focus {
@@ -5959,7 +5960,8 @@ input[type="search"]::-webkit-search-cancel-button {
 .dropdown .button.create.disabled .svg-icon svg {
   fill: #8B8B89;
 }
-.dropdown-content {
+.dropdown .dropdown-content {
+  display: none;
   border: 1px solid #0C0C0A;
   background: #3B3B39;
   float: left;
@@ -5968,65 +5970,38 @@ input[type="search"]::-webkit-search-cancel-button {
   z-index: 800;
   padding: 0.25em 0;
 }
-.button + .dropdown-content {
-  margin-top: 2em;
-  margin-bottom: 2em;
+.dropdown .dropdown-content.visible {
+  display: block;
 }
-.dropdown-content.right {
+.dropdown .dropdown-content.right {
   right: 0;
 }
-.dropdown-content li a {
+.dropdown .dropdown-content li a {
   display: block;
   min-width: 9em;
   font-size: 0.938em;
   border: 0;
-}
-.dropdown-content li a {
   padding: 0.313em 0.626em;
   /* 5px */
 }
-.dropdown-content li a:hover {
+.dropdown .dropdown-content li a:hover {
   background: #444442;
   text-decoration: none;
   color: #FFFFFC;
 }
-.dropdown-content li .separator-before {
-  border-top: 1px solid #0C0C0A;
-}
-.dropdown-content li .separator-after {
-  border-bottom: 1px solid #0C0C0A;
-}
-.dropdown-content li.disabled a,
-.dropdown-content li.disabled a:hover {
+.dropdown .dropdown-content li.disabled a,
+.dropdown .dropdown-content li.disabled a:hover {
   color: #8B8B89;
 }
-.dropdown-content {
-  display: none;
+.dropdown .dropdown-content li .separator-before {
+  border-top: 1px solid #0C0C0A;
 }
-.dropdown-content.visible {
-  display: block;
+.dropdown .dropdown-content li .separator-after {
+  border-bottom: 1px solid #0C0C0A;
 }
-/* dropdown menu */
-.dropdownmenu {
-  list-style: none;
-  position: absolute;
-  z-index: 800;
-  background: #30302D;
-  border: 1px solid #0C0C0A;
-  box-shadow: 0px 0px 10px 0px #000;
-}
-.dropdownmenu ul {
-  list-style: none;
-  position: absolute;
-  top: 0;
-  left: 100%;
-  background: #30302D;
-  border: 1px solid #0C0C0A;
-  box-shadow: 0px 0px 10px 0px #000;
-}
-.dropdownmenu li {
-  position: relative;
-  padding: 3px 7em 3px 30px;
+.dropdown .button + .dropdown-content {
+  margin-top: 2em;
+  margin-bottom: 2em;
 }
 .profile .section.detailed-information h4 {
   margin-bottom: 0.626em;

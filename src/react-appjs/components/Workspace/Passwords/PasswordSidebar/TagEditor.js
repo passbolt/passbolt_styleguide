@@ -393,7 +393,7 @@ class TagEditor extends React.Component {
         </div>
         <div className="actions">
           <a className={`button tag-editor-submit ${this.state.isSubmitted ? "primary processing" : ""}`}
-             onClick={this.saveTags}>
+             onClick={this.saveTags} role="button">
             <span>save</span>
           </a>
           <a className="button cancel tag-editor-cancel" role="button" onClick={this.props.displayInputTagEditor}><span>cancel</span></a>

@@ -317,7 +317,7 @@ class DescriptionEditor extends React.Component {
           }
           <div className="actions">
             <a className={`button description-editor-submit ${this.hasAllInputDisabled() ? "primary processing disabled" : ""}`}
-              onClick={this.handleFormSubmit}>
+              onClick={this.handleFormSubmit} role="button">
               <span>save</span>
             </a>
             <a className={`cancel button ${this.hasAllInputDisabled() ? "disabled" : ""}`} role="button"

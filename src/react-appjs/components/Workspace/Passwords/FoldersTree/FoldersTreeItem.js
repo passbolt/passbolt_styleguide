@@ -410,7 +410,7 @@ class FoldersTreeItem extends React.Component {
           onDragStart={this.handleDragStartEvent}>
           <div className="main-cell-wrapper">
             <div className="main-cell">
-              <a>
+              <a role="button">
                 {hasChildren &&
                 <Fragment>
                   {isOpen &&
@@ -433,7 +433,7 @@ class FoldersTreeItem extends React.Component {
           </div>
           {!isDragged &&
           <div className="right-cell more-ctrl">
-            <a onClick={this.handleContextualMenuEvent}><span>more</span></a>
+            <a onClick={this.handleContextualMenuEvent} role="button"><span>more</span></a>
           </div>
           }
         </div>
