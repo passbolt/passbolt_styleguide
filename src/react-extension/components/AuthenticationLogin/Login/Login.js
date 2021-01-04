@@ -57,6 +57,7 @@ class Login extends Component {
 
   /**
    * Returns true if there is data enough to be rendered
+   * @returns {boolean}
    */
   get isReady() {
     return Boolean(this.context.loginInfo);
@@ -64,6 +65,7 @@ class Login extends Component {
 
   /**
    * Returns true if the user can perform actions on the component
+   * @returns {boolean}
    */
   get areActionsAllowed() {
     return !this.state.actions.processing;
@@ -71,24 +73,26 @@ class Login extends Component {
 
   /**
    * Returns true if the passphrase is valid
+   * @returns {boolean}
    */
   get isValid() {
     return Object.values(this.state.errors).every(value => !value);
   }
 
-
-  /**
-   * Returns true if the component must be in a disabled mode
-   */
-  get mustBeDisabled() {
-    return this.state.hasBeenValidated && !this.isValid;
-  }
-
   /**
    * Returns true if the component must be in a processing mode
+   * @returns {boolean}
    */
   get isProcessing() {
     return this.state.actions.processing;
+  }
+
+  /**
+   * Return true if there is a validation error
+   * @returns {boolean}
+   */
+  get hasErrors() {
+    return this.state.errors.emptyPassphrase || this.state.errors.invalidPassphrase || this.state.errors.invalidGpgKey;
   }
 
   /**
@@ -158,7 +162,6 @@ class Login extends Component {
     this.passphraseInputRef = React.createRef();
   }
 
-
   /**
    * Whenever the users submits his passphrase
    * @param event Dom event
@@ -173,7 +176,6 @@ class Login extends Component {
         .then(this.login.bind(this));
     }
   }
-
 
   /**
    * Whenever the user changes the private key
@@ -299,7 +301,6 @@ class Login extends Component {
    */
   render() {
     const processingClassName = this.isProcessing ? 'processing' : '';
-    const disabledClassName = this.mustBeDisabled ? 'disabled' : '';
     return (
       <>
         {this.isReady &&
@@ -314,7 +315,7 @@ class Login extends Component {
             <form
               acceptCharset="utf-8"
               onSubmit={this.handleSubmit}>
-              <div className="input text required">
+              <div className={`input text required ${this.hasErrors ? "error" : ""}`}>
                 <label htmlFor="passphrase">
                   Passphrase
                 </label>
@@ -337,6 +338,19 @@ class Login extends Component {
                     {this.securityTokenCode}
                   </span>
                 </div>
+                {this.state.hasBeenValidated &&
+                <>
+                  {this.state.errors.emptyPassphrase &&
+                  <div className="empty-passphrase error-message">The passphrase should not be empty.</div>
+                  }
+                  {this.state.errors.invalidPassphrase &&
+                  <div className="invalid-passphrase error-message">The passphrase is invalid.</div>
+                  }
+                  {this.state.errors.invalidGpgKey &&
+                  <div className="invalid-gpg-key error-message">The private key is invalid.</div>
+                  }
+                </>
+                }
               </div>
               {this.props.canRememberMe &&
                 <div className="input checkbox">
@@ -352,26 +366,13 @@ class Login extends Component {
                   </label>
                 </div>
               }
-              {this.state.hasBeenValidated &&
-              <>
-                <br/>
-                {this.state.errors.emptyPassphrase &&
-                <div className="empty-passphrase error message">The passphrase should not be empty</div>
-                }
-                {this.state.errors.invalidPassphrase &&
-                <div className="invalid-passphrase error message">The passphrase is invalid </div>
-                }
-                {this.state.errors.invalidGpgKey &&
-                <div className="invalid-gpg-key error message">The private key is invalid </div>
-                }
-              </>
-              }
+
               <div className="form-actions">
                 <button
                   type="submit"
-                  className={`button primary big ${disabledClassName} ${processingClassName}`}
+                  className={`button primary big ${processingClassName}`}
                   role="button"
-                  disabled={this.mustBeDisabled || this.isProcessing}>
+                  disabled={this.isProcessing}>
                   Login
                 </button>
                 <Link

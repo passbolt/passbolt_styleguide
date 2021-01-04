@@ -8622,7 +8622,7 @@ table.table-info.horizontal tbody tr:hover {
   width: 100%;
 }
 .user.profile .center-cell {
-  margin: 0 1.75em 0 3.125em;
+  margin: 0 0 0 3.125em;
   overflow: hidden;
 }
 .user.profile .left-cell {
@@ -8640,10 +8640,9 @@ table.table-info.horizontal tbody tr:hover {
 }
 .user.profile .details {
   float: left;
-  height: 2.8125em;
-  font-size: 0.9em;
-  padding: 0.3125em 1em;
-  /* 5/10px */
+  font-size: 0.875em;
+  padding: 0.5em 1em;
+  /* 7/14px */
 }
 .user.profile .details .name,
 .user.profile .details .email {
@@ -8691,8 +8690,8 @@ table.table-info.horizontal tbody tr:hover {
 }
 .user.profile .dropdown-content {
   top: 59px;
-  max-width: 18em;
-  width: 80%;
+  max-width: 16em;
+  width: 100%;
   background: #FFF;
 }
 .user.profile .dropdown-content.visible {

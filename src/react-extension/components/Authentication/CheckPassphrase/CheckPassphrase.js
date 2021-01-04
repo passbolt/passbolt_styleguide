@@ -239,10 +239,10 @@ class CheckPassphrase extends Component {
             <>
               <br/>
               {this.state.errors.emptyPassphrase &&
-              <div className="empty-passphrase error message">The passphrase should not be empty</div>
+              <div className="empty-passphrase error message">The passphrase should not be empty.</div>
               }
               {this.state.errors.invalidPassphrase &&
-              <div className="invalid-passphrase error message">The passphrase is invalid</div>
+              <div className="invalid-passphrase error message">The passphrase is invalid.</div>
               }
             </>
           }

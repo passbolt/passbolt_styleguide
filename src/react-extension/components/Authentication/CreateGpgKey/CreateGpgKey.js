@@ -159,7 +159,8 @@ class CreateGpgKey extends Component {
       enoughLength:  hintClassName(passphrase.length >= 8),
       uppercase: hintClassName(masks.uppercase),
       alphanumeric: hintClassName(masks.alpha && masks.digit),
-      specialCharacters: hintClassName(masks.special)
+      specialCharacters: hintClassName(masks.special),
+      notInDictionary: false // TODO PB-3579
     };
   }
 
@@ -214,7 +215,7 @@ class CreateGpgKey extends Component {
         <form
           acceptCharset="utf-8"
           onSubmit={this.handleSubmit}>
-          <p className="message">
+          <p>
             This password is the only password you will need to remember from now on, choose wisely!
           </p>
           <div className="input text password required">
@@ -237,7 +238,7 @@ class CreateGpgKey extends Component {
                 disabled={!this.areActionsAllowed}/>
             }
             <a
-              className="password-view button-icon button button-toggle"
+              className={`password-view button-icon button button-toggle ${this.state.isObfuscated ? "" : "selected"}`}
               role="button"
               onClick={this.handleToggleObfuscate}>
               <Icon name="eye-open"/>
@@ -263,6 +264,9 @@ class CreateGpgKey extends Component {
               </li>
               <li className={this.state.hintClassNames.specialCharacters}>
                 It contains special characters (like / or * or %)
+              </li>
+              <li className={this.state.hintClassNames.specialCharacters}>
+                It is not part of a dictionary
               </li>
             </ul>
           </div>

@@ -252,7 +252,7 @@ class ImportGpgKey extends Component {
             <>
               <br/>
               {this.state.errors.emptyPrivateKey &&
-              <div className="empty-private-key error message">The private key should not be empty</div>
+              <div className="empty-private-key error message">The private key should not be empty.</div>
               }
               {this.state.errors.invalidPrivateKey &&
               <div className="invalid-private-key error message">{this.state.errorMessage}</div>
