@@ -307,7 +307,8 @@ class Login extends Component {
           <div className="login">
             <div className="login-user">
               <UserAvatar
-                baseUrl={this.trustedDomain}/>
+                baseUrl={this.trustedDomain}
+                className="big avatar user-avatar"/>
               <p className="login-user-name">{this.fullname}</p>
               <p className="login-user-email">{this.username}</p>
             </div>
