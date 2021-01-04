@@ -56,7 +56,7 @@ const config = {
     historyApiFallback: {
       rewrites: [
         {from: /^\/app\/administration|^\/app\/settings\/mfa/, to: "/api-app.html"},
-        {from: /^\/app/, to: "/ext-app.html"},
+        {from: /^\/app/, to: "/api-ext-app.html"},
         {from: new RegExp(`^\/setup\/install\/${uuidRegex}\/${uuidRegex}`), to: "/api-setup.html"},
         {from: new RegExp(`^\/setup\/recover\/${uuidRegex}\/${uuidRegex}`), to: "/api-recover.html"},
         {from: /^\/auth\/login/, to: "/api-login.html"},

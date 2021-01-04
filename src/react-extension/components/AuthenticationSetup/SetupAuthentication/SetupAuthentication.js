@@ -5,9 +5,12 @@ import DownloadRecoveryKit from "../../Authentication/DownloadRecoveryKit/Downlo
 import ChooseSecurityToken from "../../Authentication/ChooseSecurityToken/ChooseSecurityToken";
 import ImportGpgKey from "../../Authentication/ImportGpgKey/ImportGpgKey";
 import CheckPassphrase from "../../Authentication/CheckPassphrase/CheckPassphrase";
-import AskForAuthenticationHelp from "../../Authentication/AskForAuthenticationHelp/AskForAuthenticationHelp";
 import LoadingSpinner from "../../../../react/components/Common/Loading/LoadingSpinner/LoadingSpinner";
 import PropTypes from "prop-types";
+import GenerateKeyOnPassphraseLostSecondaryAction
+  from "../../Authentication/CheckPassphrase/GenerateKeyOnPassphraseLostSecondaryAction";
+import GenerateKeySecondaryAction
+  from "../../Authentication/ImportGpgKey/GenerateKeySecondaryAction";
 
 /**
  * The component orchestrates the setup authentication process
@@ -64,11 +67,9 @@ class SetupAuthentication extends Component {
       case AuthenticationContextState.GPG_KEY_IMPORTED:
         return <ChooseSecurityToken/>;
       case AuthenticationContextState.GPG_KEY_TO_IMPORT_REQUESTED:
-        return <ImportGpgKey/>;
+        return <ImportGpgKey secondaryAction={<GenerateKeySecondaryAction/>}/>;
       case AuthenticationContextState.GPG_KEY_VALIDATED:
-        return <CheckPassphrase/>;
-      case AuthenticationContextState.PASSPHRASE_LOST:
-        return <AskForAuthenticationHelp/>;
+        return <CheckPassphrase canRememberMe={this.canRememberMe} secondaryAction={<GenerateKeyOnPassphraseLostSecondaryAction/>}/>;
       case  AuthenticationContextState.SETUP_COMPLETED:
         return <LoadingSpinner title="Logging in!" />;
       default:

@@ -61,8 +61,8 @@ export default class SiteSettings {
    * @returns {object}
    */
   getRememberMeOptions() {
-    const pluginSettings = this.getPluginSettings('rememberMe');
-    return pluginSettings.options;
+    const pluginSettings = this.getPluginSettings('rememberMe') || {};
+    return pluginSettings.options || {};
   }
 
   /**
