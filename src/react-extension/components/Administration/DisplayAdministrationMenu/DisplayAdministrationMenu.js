@@ -17,7 +17,7 @@ import {
   AdministrationWorkspaceMenuTypes,
   withAdministrationWorkspace
 } from "../../../contexts/AdministrationWorkspaceContext";
-import AppContext from "../../../contexts/AppContext";
+import AppContext, {withAppContext} from "../../../contexts/AppContext";
 import {withRouter} from "react-router-dom";
 
 /**
@@ -31,6 +31,24 @@ class DisplayAdministrationMenu extends React.Component {
   constructor(props) {
     super(props);
     this.bindCallbacks();
+  }
+
+  /**
+   * Returns true if the user has the MFA capability
+   * @returns {boolean}
+   */
+  get isMfaEnabled() {
+    const siteSettings = this.props.context.siteSettings;
+    return siteSettings && siteSettings.canIUse('multiFactorAuthentication');
+  }
+
+  /**
+   * Returns true if the user has the user directory capability
+   * @returns {boolean}
+   */
+  get isUserDirectoryEnabled() {
+    const siteSettings = this.props.context.siteSettings;
+    return siteSettings && siteSettings.canIUse('directorySync');
   }
 
   /**
@@ -95,24 +113,28 @@ class DisplayAdministrationMenu extends React.Component {
     return (
       <div className="navigation first">
         <ul id="administration_menu" className="clearfix menu ready">
-          <li id="mfa_menu">
-            <div className={`row  ${this.isMfaSelected() ? "selected" : ""}`}>
-              <div className="main-cell-wrapper">
-                <div className="main-cell">
-                  <a onClick={this.handleMfaClick}><span>Multi Factor Authentication</span></a>
+          {this.isMfaEnabled &&
+            <li id="mfa_menu">
+              <div className={`row  ${this.isMfaSelected() ? "selected" : ""}`}>
+                <div className="main-cell-wrapper">
+                  <div className="main-cell">
+                    <a onClick={this.handleMfaClick}><span>Multi Factor Authentication</span></a>
+                  </div>
                 </div>
               </div>
-            </div>
-          </li>
-          <li id="user_directory_menu">
-            <div className={`row  ${this.isUserDirectorySelected() ? "selected" : ""}`}>
-              <div className="main-cell-wrapper">
-                <div className="main-cell">
-                  <a onClick={this.handleUserDirectoryClick}><span>Users Directory</span></a>
+            </li>
+          }
+          {this.isUserDirectoryEnabled &&
+            <li id="user_directory_menu">
+              <div className={`row  ${this.isUserDirectorySelected() ? "selected" : ""}`}>
+                <div className="main-cell-wrapper">
+                  <div className="main-cell">
+                    <a onClick={this.handleUserDirectoryClick}><span>Users Directory</span></a>
+                  </div>
                 </div>
               </div>
-            </div>
-          </li>
+            </li>
+          }
           <li id="email_notification_menu">
             <div className={`row  ${this.isEmailNotificationsSelected() ? "selected" : ""}`}>
               <div className="main-cell-wrapper">
@@ -131,8 +153,9 @@ class DisplayAdministrationMenu extends React.Component {
 DisplayAdministrationMenu.contextType = AppContext;
 
 DisplayAdministrationMenu.propTypes = {
+  context: PropTypes.object, // The app context
   administrationWorkspaceContext: PropTypes.object, // The administration workspace context
   history: PropTypes.object, // The router history
 };
 
-export default withRouter(withAdministrationWorkspace(DisplayAdministrationMenu));
+export default withRouter(withAppContext(withAdministrationWorkspace(DisplayAdministrationMenu)));
