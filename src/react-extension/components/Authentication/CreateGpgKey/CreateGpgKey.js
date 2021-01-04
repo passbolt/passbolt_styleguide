@@ -177,7 +177,8 @@ class CreateGpgKey extends Component {
    * Whenever the gpg key generation failed
    * @param error The error
    */
-  onGpgKeyGeneratedFailure(error) {
+  async onGpgKeyGeneratedFailure(error) {
+    await this.toggleProcessing();
     const ErrorDialogProps = {message: error.message};
     this.props.dialogContext.open(ErrorDialog, ErrorDialogProps);
   }

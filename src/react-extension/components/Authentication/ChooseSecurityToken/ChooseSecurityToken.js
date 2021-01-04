@@ -110,13 +110,6 @@ class ChooseSecurityToken extends Component {
   }
 
   /**
-   * Returns true if the component must be in a disabled mode
-   */
-  get mustBeDisabled() {
-    return this.state.hasBeenValidated && !this.isValid;
-  }
-
-  /**
    * Returns true if the component must be in a processing mode
    */
   get isProcessing() {
@@ -203,7 +196,8 @@ class ChooseSecurityToken extends Component {
    * Whenever the gpg key generation failed
    * @param error The error
    */
-  onSaveFailure(error) {
+  async onSaveFailure(error) {
+    await this.toggleProcessing();
     const ErrorDialogProps = {message: error.message};
     this.props.dialogContext.open(ErrorDialog, ErrorDialogProps);
   }
@@ -289,7 +283,6 @@ class ChooseSecurityToken extends Component {
    */
   render() {
     const processingClassName = this.isProcessing ? 'processing' : '';
-    const disabledClassName = this.mustBeDisabled ? 'disabled' : '';
     return (
       <div className="choose-security-token">
         <h1>Pick a color and enter three characters.</h1>
@@ -346,9 +339,9 @@ class ChooseSecurityToken extends Component {
           <div className="form-actions">
             <button
               type="submit"
-              className={`button primary big ${disabledClassName} ${processingClassName}`}
+              className={`button primary big ${processingClassName}`}
               role="button"
-              disabled={this.mustBeDisabled || this.isProcessing}>
+              disabled={this.isProcessing}>
               Next
             </button>
           </div>
