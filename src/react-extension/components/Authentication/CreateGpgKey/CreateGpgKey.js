@@ -212,12 +212,12 @@ class CreateGpgKey extends Component {
     const disabledClassName = this.mustBeDisabled ? 'disabled' : '';
     return (
       <div className="choose-passphrase">
-        <h1>Please choose a password</h1>
+        <h1>Welcome to Passbolt, please select a passphrase to continue</h1>
         <form
           acceptCharset="utf-8"
           onSubmit={this.handleSubmit}>
           <p>
-            This password is the only password you will need to remember from now on, choose wisely!
+            This passphrase is the only passphrase you will need to remember from now on, choose wisely!
           </p>
           <div className="input text password required">
             {this.state.isObfuscated &&
