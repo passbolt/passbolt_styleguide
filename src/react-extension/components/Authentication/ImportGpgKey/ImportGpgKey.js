@@ -207,7 +207,7 @@ class ImportGpgKey extends Component {
     const processingClassName = this.isProcessing ? 'processing' : '';
     return (
       <div className="import-private-key">
-        <h1>Please enter your private key to continue.</h1>
+        <h1>Welcome back, please enter your private key to begin with the recovery process.</h1>
         <form
           acceptCharset="utf-8"
           onSubmit={this.handleSubmit}>
