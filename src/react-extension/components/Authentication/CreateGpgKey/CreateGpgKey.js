@@ -284,7 +284,7 @@ class CreateGpgKey extends Component {
               id="import-key-link"
               onClick={this.handleImportGpgKey}
               disabled={!this.areActionsAllowed}>
-              I want to import an OpenPGP Key
+              Or use an existing private key.
             </a>
           </div>
         </form>
