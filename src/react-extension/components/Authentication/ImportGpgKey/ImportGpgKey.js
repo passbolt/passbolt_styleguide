@@ -246,7 +246,7 @@ class ImportGpgKey extends Component {
               className={`button primary big ${processingClassName}`}
               role="button"
               disabled={this.isProcessing}>
-              Verify
+              Next
             </button>
             {this.props.secondaryAction}
           </div>
