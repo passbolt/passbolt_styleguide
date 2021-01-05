@@ -65,14 +65,6 @@ class ImportGpgKey extends Component {
     return Object.values(this.state.errors).every(value => !value);
   }
 
-
-  /**
-   * Returns true if the component must be in a disabled mode
-   */
-  get mustBeDisabled() {
-    return this.state.hasBeenValidated && !this.isValid;
-  }
-
   /**
    * Returns true if the component must be in a processing mode
    */
@@ -87,7 +79,6 @@ class ImportGpgKey extends Component {
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleChangePrivateKey = this.handleChangePrivateKey.bind(this);
     this.handleSelectPrivateKeyFile = this.handleSelectPrivateKeyFile.bind(this);
-    this.handleGenerateKeyInstead = this.handleGenerateKeyInstead.bind(this);
   }
 
   /**
@@ -140,13 +131,6 @@ class ImportGpgKey extends Component {
   }
 
   /**
-   * Whenever the user wants to generate his gpg key instead of importing it
-   */
-  handleGenerateKeyInstead() {
-    this.context.onGoToGenerateGpgKeyRequested();
-  }
-
-  /**
    * Verify and save the private gpg key
    */
   async save() {
@@ -158,10 +142,10 @@ class ImportGpgKey extends Component {
    * Whenever the gpg key import failed
    * @param error The error
    */
-  onSaveFailure(error) {
+  async onSaveFailure(error) {
     // It can happen when some key validation went wrong.
+    await this.toggleProcessing();
     if (error.name === "GpgKeyError") {
-      this.toggleProcessing();
       this.setState({errors: {invalidPrivateKey: true}, errorMessage: error.message});
     } else {
       const ErrorDialogProps = {message: error.message};
@@ -209,7 +193,6 @@ class ImportGpgKey extends Component {
     await this.setState({hasBeenValidated: true, errors: {}});
   }
 
-
   /**
    * Toggle the processing mode
    */
@@ -217,13 +200,11 @@ class ImportGpgKey extends Component {
     await this.setState({actions: {processing: !this.state.actions.processing}});
   }
 
-
   /**
    * Render the component
    */
   render() {
     const processingClassName = this.isProcessing ? 'processing' : '';
-    const disabledClassName = this.mustBeDisabled ? 'disabled' : '';
     return (
       <div className="import-private-key">
         <h1>Please enter your private key to continue.</h1>
@@ -262,18 +243,12 @@ class ImportGpgKey extends Component {
           <div className="form-actions">
             <button
               type="submit"
-              className={`button primary big ${disabledClassName} ${processingClassName}`}
+              className={`button primary big ${processingClassName}`}
               role="button"
-              disabled={this.mustBeDisabled || this.isProcessing}>
+              disabled={this.isProcessing}>
               Verify
             </button>
-            {this.props.canGenerate &&
-              <>
-                <a onClick={this.handleGenerateKeyInstead}>
-                  Generate new key instead
-                </a>
-              </>
-            }
+            {this.props.secondaryAction}
           </div>
         </form>
       </div>
@@ -283,10 +258,7 @@ class ImportGpgKey extends Component {
 
 ImportGpgKey.contextType = AuthenticationContext;
 ImportGpgKey.propTypes = {
-  canGenerate: PropTypes.bool, // True if we propose to generate a new key instead
-  dialogContext: PropTypes.any // The dialog context
-};
-ImportGpgKey.defaultProps = {
-  canGenerate: true
+  dialogContext: PropTypes.any, // The dialog context
+  secondaryAction: PropTypes.any // Secondary action to display
 };
 export default withDialog(ImportGpgKey);

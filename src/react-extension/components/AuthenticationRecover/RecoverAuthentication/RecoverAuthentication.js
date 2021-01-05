@@ -6,6 +6,7 @@ import ChooseSecurityToken from "../../Authentication/ChooseSecurityToken/Choose
 import AskForAuthenticationHelp from "../../Authentication/AskForAuthenticationHelp/AskForAuthenticationHelp";
 import LoadingSpinner from "../../../../react/components/Common/Loading/LoadingSpinner/LoadingSpinner";
 import PropTypes from "prop-types";
+import HelpOnCredentialsLostSecondaryAction from "../../Authentication/CheckPassphrase/HelpOnCredentialsLostSecondaryAction";
 
 /**
  * The component orchestrates the recover authentication process
@@ -56,9 +57,9 @@ class RecoverAuthentication extends Component {
   render() {
     switch (this.context.state)  {
       case AuthenticationContextState.RECOVER_INITIALIZED:
-        return <ImportGpgKey canGenerate={false}></ImportGpgKey>;
+        return <ImportGpgKey secondaryAction={<HelpOnCredentialsLostSecondaryAction/>}/>;
       case AuthenticationContextState.GPG_KEY_VALIDATED:
-        return <CheckPassphrase canRememberMe={this.canRememberMe}/>;
+        return <CheckPassphrase canRememberMe={this.canRememberMe} secondaryAction={<HelpOnCredentialsLostSecondaryAction/>}/>;
       case AuthenticationContextState.GPG_KEY_IMPORTED:
         return <ChooseSecurityToken/>;
       case AuthenticationContextState.PASSPHRASE_LOST:

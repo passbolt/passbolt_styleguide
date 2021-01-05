@@ -26,13 +26,17 @@ export default () => {
       "image_storage": {
         "public_path": "img/public/"
       },
-      "legal": {
-        "terms": "https://www.passbolt.com/licence",
-        "privacy": "https://www.passbolt.com/privacy"
-      }
     },
     "passbolt": {
       "edition": "pro",
+      "legal": {
+        "privacy_policy": {
+          "url": ""
+        },
+        "terms": {
+          "url": "https:\/\/www.passbolt.com\/terms"
+        }
+      },
       "plugins": {
         "import": {
           "version": "2.0.1",

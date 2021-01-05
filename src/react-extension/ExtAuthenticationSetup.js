@@ -13,13 +13,13 @@
  */
 import React, {Component} from "react";
 import PropTypes from "prop-types";
-import AuthenticationContextProvider, {AuthenticationContext} from "./contexts/AuthenticationContext";
+import AuthenticationContextProvider from "./contexts/AuthenticationContext";
 import ManageDialogs from "../react/components/Common/Dialog/ManageDialogs/ManageDialogs";
 import DialogContextProvider from "../react/contexts/Common/DialogContext";
-import {BrowserRouter as Router} from "react-router-dom";
 import SetupAuthentication from "./components/AuthenticationSetup/SetupAuthentication/SetupAuthentication";
 import SiteSettings from "./lib/Settings/SiteSettings";
 import Footer from "./components/Footer/Footer";
+import AppContext from "./contexts/AppContext";
 
 /**
  * The setup application served by the browser extension.
@@ -51,6 +51,7 @@ class ExtAuthenticationSetup extends Component {
     return {
       port: this.props.port,
       storage: this.props.storage,
+      trustedDomain: null, // The site domain (use trusted domain for compatibility with browser extension applications)
     };
   }
 
@@ -85,7 +86,7 @@ class ExtAuthenticationSetup extends Component {
    */
   render() {
     return (
-      <Router>
+      <AppContext.Provider value={this.state}>
         <AuthenticationContextProvider value={this.defaultContextValue}>
           <DialogContextProvider>
             <div id="container" className="container page login">
@@ -104,15 +105,13 @@ class ExtAuthenticationSetup extends Component {
               extensionVersion={this.state.extensionVersion}/>
           </DialogContextProvider>
         </AuthenticationContextProvider>
-      </Router>
+      </AppContext.Provider>
     );
   }
 }
 
-ExtAuthenticationSetup.contextType = AuthenticationContext;
 ExtAuthenticationSetup.propTypes = {
   port: PropTypes.object,
   storage: PropTypes.object,
 };
 export default ExtAuthenticationSetup;
-

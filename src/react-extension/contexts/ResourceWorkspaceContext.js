@@ -122,7 +122,7 @@ export class ResourceWorkspaceContextProvider extends React.Component {
    */
   initializeProperties() {
     this.resources = null; // A cache of the last known list of resources from the App context
-    this.folders = []; // A cache of the last known list of folders from the App context
+    this.folders = null; // A cache of the last known list of folders from the App context
   }
 
   /**
@@ -219,14 +219,16 @@ export class ResourceWorkspaceContextProvider extends React.Component {
    * E.g. /folder/view.:filterByFolderId
    */
   async handleFolderRouteChange() {
-    const folderId = this.props.match.params.filterByFolderId;
-    if (folderId) {
-      const folder = this.context.folders.find(folder => folder.id === folderId);
-      if (folder) { // Known folder
-        await this.search({type: ResourceWorkspaceFilterTypes.FOLDER, payload: {folder}});
-        await this.detailFolder(folder);
-      } else { // Unknown folder
-        this.handleUnknownFolder();
+    if (this.context.folders !== null) {
+      const folderId = this.props.match.params.filterByFolderId;
+      if (folderId) {
+        const folder = this.context.folders.find(folder => folder.id === folderId);
+        if (folder) { // Known folder
+          await this.search({type: ResourceWorkspaceFilterTypes.FOLDER, payload: {folder}});
+          await this.detailFolder(folder);
+        } else { // Unknown folder
+          this.handleUnknownFolder();
+        }
       }
     }
   }
@@ -251,19 +253,22 @@ export class ResourceWorkspaceContextProvider extends React.Component {
    * E.g. /passwords/view/:resourceId
    */
   async handleSingleResourceRouteChange(resourceId) {
-    const resource = this.resources.find(resource => resource.id === resourceId);
-    const hasNoneFilter = this.state.filter.type === ResourceWorkspaceFilterTypes.NONE;
-    if (hasNoneFilter) { // Case of password view by url bar inputting
-      await this.search({type: ResourceWorkspaceFilterTypes.ALL});
-    }
+    const hasResources = this.resources !== null;
+    if (hasResources) {
+      const resource = this.resources.find(resource => resource.id === resourceId);
+      const hasNoneFilter = this.state.filter.type === ResourceWorkspaceFilterTypes.NONE;
+      if (hasNoneFilter) { // Case of password view by url bar inputting
+        await this.search({type: ResourceWorkspaceFilterTypes.ALL});
+      }
 
-    // If the resource does not exist , it should display an error
-    if (resource) {
-      await this.selectFromRoute(resource);
-      await this.scrollTo(resource);
-      await this.detailResource(resource);
-    } else {
-      this.handleUnknownResource();
+      // If the resource does not exist , it should display an error
+      if (resource) {
+        await this.selectFromRoute(resource);
+        await this.scrollTo(resource);
+        await this.detailResource(resource);
+      } else {
+        this.handleUnknownResource();
+      }
     }
   }
 
@@ -677,24 +682,27 @@ export class ResourceWorkspaceContextProvider extends React.Component {
    * Navigate to the appropriate url after some resources selection operation
    */
   redirectAfterSelection() {
-    const hasSingleSelectionNow = this.state.selectedResources.length === 1;
-    if (hasSingleSelectionNow) { // Case of single selected resource
-      const mustRedirect = this.props.location.pathname !== `/app/passwords/view/${this.state.selectedResources[0].id}`;
-      if (mustRedirect) {
-        this.props.history.push(`/app/passwords/view/${this.state.selectedResources[0].id}`);
-      }
-    } else { // Case of multiple selected resources
-      const {filter} = this.state;
-      const isFolderFilter = filter.type === ResourceWorkspaceFilterTypes.FOLDER;
-      if (isFolderFilter) { // Case of folder
-        const mustRedirect = this.props.location.pathname !== `/app/folders/view/${this.state.filter.payload.folder.id}`;
+    const hasResourcesAndFolders = this.resources !== null && this.folders !== null;
+    if (hasResourcesAndFolders) {
+      const hasSingleSelectionNow = this.state.selectedResources.length === 1;
+      if (hasSingleSelectionNow) { // Case of single selected resource
+        const mustRedirect = this.props.location.pathname !== `/app/passwords/view/${this.state.selectedResources[0].id}`;
         if (mustRedirect) {
-          this.props.history.push({pathname: `/app/folders/view/${this.state.filter.payload.folder.id}`});
+          this.props.history.push(`/app/passwords/view/${this.state.selectedResources[0].id}`);
         }
-      } else { // Case of resources
-        const mustRedirect = this.props.location.pathname !== '/app/passwords';
-        if (mustRedirect) {
-          this.props.history.push({pathname: `/app/passwords`, state: {filter}});
+      } else { // Case of multiple selected resources
+        const {filter} = this.state;
+        const isFolderFilter = filter.type === ResourceWorkspaceFilterTypes.FOLDER;
+        if (isFolderFilter) { // Case of folder
+          const mustRedirect = this.props.location.pathname !== `/app/folders/view/${this.state.filter.payload.folder.id}`;
+          if (mustRedirect) {
+            this.props.history.push({pathname: `/app/folders/view/${this.state.filter.payload.folder.id}`});
+          }
+        } else { // Case of resources
+          const mustRedirect = this.props.location.pathname !== '/app/passwords';
+          if (mustRedirect) {
+            this.props.history.push({pathname: `/app/passwords`, state: {filter}});
+          }
         }
       }
     }
@@ -729,10 +737,9 @@ export class ResourceWorkspaceContextProvider extends React.Component {
     const reverseSorter = sorter => (s1, s2) => -sorter(s1, s2);
     const baseSorter =  sorter => this.state.sorter.asc ? sorter : reverseSorter(sorter);
     const keySorter = (key, sorter) => baseSorter((s1, s2) => sorter(s1[key], s2[key]));
-    const dateSorter = (d1, d2) => moment(d1).diff(moment(d2));
     const stringSorter = (s1, s2) => s1.localeCompare(s2);
     const booleanSorter = (s1, s2) => s1 === s2 ? 0 : s1 ? -1 : 1;
-    const sorter = this.state.sorter.propertyName === "modified" ? dateSorter : this.state.sorter.propertyName === "favorite" ? booleanSorter : stringSorter;
+    const sorter = this.state.sorter.propertyName === "favorite" ? booleanSorter : stringSorter;
     const propertySorter = keySorter(this.state.sorter.propertyName, sorter);
     if (this.state.filteredResources !== null) {
       await this.setState({filteredResources: [...this.state.filteredResources.sort(propertySorter)]});
