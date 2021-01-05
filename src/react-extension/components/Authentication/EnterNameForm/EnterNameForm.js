@@ -235,7 +235,7 @@ class EnterNameForm extends Component {
             }
           </div>
           <div className="form-actions">
-            <FormSubmitButton disabled={this.hasAllInputDisabled()} big={true} processing={this.state.processing} value="Register"/>
+            <FormSubmitButton disabled={this.hasAllInputDisabled()} big={true} processing={this.state.processing} value="Sign up"/>
             <a href={`${this.props.context.trustedDomain}/auth/login`}>I already have an account</a>
           </div>
         </form>

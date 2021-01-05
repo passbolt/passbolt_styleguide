@@ -42,6 +42,7 @@ describe("As AN I should see the Enter Name Form Page", () => {
       expect(page.exists()).toBeTruthy();
       expect(page.title).toBe('New here? Enter your email to get started.');
       expect(page.haveAccount.textContent).toBe('I already have an account');
+      expect(page.registerButton.value).toBe('Sign up');
       // Fill the form
       page.insertFirstname("firstname");
       page.insertLastname("lastname");
