@@ -14,15 +14,15 @@
 import React, {Component} from "react";
 import {AuthenticationContext} from "../../../contexts/AuthenticationContext";
 
-class HelpOnCredentialsLostSecondaryAction extends Component {
+class HelpOnPrivateKeyLostSecondaryAction extends Component {
   render() {
     return (
       <a onClick={this.context.onPassphraseLost}>
-        Help, I don&apos;t remember.
+        Help, I lost my private key.
       </a>
     );
   }
 }
 
-HelpOnCredentialsLostSecondaryAction.contextType = AuthenticationContext;
-export default HelpOnCredentialsLostSecondaryAction;
+HelpOnPrivateKeyLostSecondaryAction.contextType = AuthenticationContext;
+export default HelpOnPrivateKeyLostSecondaryAction;
