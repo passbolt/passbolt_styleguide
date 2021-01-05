@@ -214,7 +214,7 @@ class EnterNameForm extends Component {
   render() {
     return (
       <div className="enter-name">
-        <h1>New here? Enter your email to get started.</h1>
+        <h1>New here? Enter your name to get started.</h1>
         <form acceptCharset="utf-8" onSubmit={this.handleFormSubmit} noValidate>
           <div className={`input text required ${this.state.firstnameError ? "error" : ""}`}>
             <label htmlFor="firstname">First Name</label>
