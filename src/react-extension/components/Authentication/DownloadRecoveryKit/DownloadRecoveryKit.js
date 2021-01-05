@@ -77,7 +77,7 @@ class DownloadRecoveryKit extends Component {
     return (
       <div className="generate-key-feedback">
         <h1>Keep your recovery kit in a safe place</h1>
-        <p className="message">
+        <p>
           A download of your recovery kit, containing your secret key, has automatically started.
           Make sure you store it in a safe place. You may need it later.
         </p>
