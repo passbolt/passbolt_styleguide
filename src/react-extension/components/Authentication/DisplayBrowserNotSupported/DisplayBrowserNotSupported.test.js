@@ -42,7 +42,8 @@ describe("As AN I should see not supported browser page", () => {
       // message
       expect(page.message).toBe('Please download chrome or firefox to get started with passbolt.');
       // download
-      expect(page.download).toBe('Download firefox');
+      expect(page.downloadFirefox).toBe('Download firefox');
+      expect(page.downloadChrome).toBe('Download chrome');
       /*
        * link
        * expect(page.link).toBe('Why is my browser not supported?');

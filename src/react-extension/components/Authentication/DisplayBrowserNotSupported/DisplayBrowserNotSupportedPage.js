@@ -47,17 +47,24 @@ export default class DisplayBrowserNotSupportedPage {
   }
 
   /**
-   * Returns the download button
+   * Returns the download firefox button
    */
-  get download() {
-    return this._page.container.querySelector('.browser-not-supported .form-actions .button.primary.big').textContent;
+  get downloadFirefox() {
+    return this._page.container.querySelectorAll('.browser-not-supported .form-actions .button.primary.big')[0].textContent;
+  }
+
+  /**
+   * Returns the download firefox button
+   */
+  get downloadChrome() {
+    return this._page.container.querySelectorAll('.browser-not-supported .form-actions a')[1].textContent;
   }
 
   /**
    * Returns the link why browser not supported
    */
   get link() {
-    return this._page.container.querySelectorAll('.browser-not-supported .form-actions a')[1].textContent;
+    return this._page.container.querySelectorAll('.browser-not-supported .form-actions a')[2].textContent;
   }
 
   /**
