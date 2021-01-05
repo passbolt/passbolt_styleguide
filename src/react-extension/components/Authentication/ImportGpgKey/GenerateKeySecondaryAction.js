@@ -18,7 +18,7 @@ export class GenerateKeySecondaryAction extends Component {
   render() {
     return (
       <a onClick={this.context.onGoToGenerateGpgKeyRequested}>
-        Generate new key instead.
+        Or generate a new private key.
       </a>
     );
   }
