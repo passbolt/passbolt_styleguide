@@ -40,7 +40,7 @@ describe("As AN I should see the Enter Name Form Page", () => {
 
     it('As AN I should be redirected after enter a name with success', async() => {
       expect(page.exists()).toBeTruthy();
-      expect(page.title).toBe('New here? Enter your email to get started.');
+      expect(page.title).toBe('New here? Enter your name to get started.');
       expect(page.haveAccount.textContent).toBe('I already have an account');
       // Fill the form
       page.insertFirstname("firstname");
