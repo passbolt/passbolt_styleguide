@@ -380,7 +380,7 @@ class Login extends Component {
                   to={{pathname: `${this.trustedDomain}/users/recover`}}
                   target="_parent"
                   rel="noopener noreferrer">
-                  Or recover another account.
+                  Or switch to another account.
                 </Link>
               </div>
             </form>
