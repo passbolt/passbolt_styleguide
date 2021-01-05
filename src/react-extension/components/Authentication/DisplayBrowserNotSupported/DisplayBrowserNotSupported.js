@@ -16,6 +16,7 @@ import PropTypes from "prop-types";
 import {withAppContext} from "../../../contexts/AppContext";
 
 const DOWNLOAD_FIREFOX_URL = "https://www.mozilla.org/firefox/download/thanks/";
+const DOWNLOAD_CHROME_URL = "https://www.google.com/chrome/";
 
 class DisplayBrowserNotSupported extends Component {
   /**
@@ -32,6 +33,7 @@ class DisplayBrowserNotSupported extends Component {
         </a>
         <div className="form-actions">
           <a href={DOWNLOAD_FIREFOX_URL} className="button primary big" role="button" target="_blank" rel="noopener noreferrer">Download firefox</a>
+          <a href={DOWNLOAD_CHROME_URL} role="button" target="_blank" rel="noopener noreferrer">Download chrome</a>
           {/*<a role="button">Why is my browser not supported?</a>*/}
         </div>
       </div>
