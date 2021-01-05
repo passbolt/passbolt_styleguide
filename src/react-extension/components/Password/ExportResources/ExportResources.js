@@ -306,8 +306,6 @@ class ExportResources extends React.Component {
                 }
               </select>
             </div>
-
-            <br/>
             <p>
               {this.hasFoldersToExport && this.hasResourcesToExport &&
               <em>{resourcesIdsToExport.length} passwords and {foldersIdsToExport.length} folders are going to be exported.</em>}
