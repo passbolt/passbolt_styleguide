@@ -374,7 +374,7 @@ class Login extends Component {
                   className={`button primary big ${processingClassName}`}
                   role="button"
                   disabled={this.isProcessing}>
-                  Login
+                  Sign in
                 </button>
                 <Link
                   to={{pathname: `${this.trustedDomain}/users/recover`}}
