@@ -142,7 +142,7 @@ class UserBadgeMenu extends Component {
             <li key="logout">
               <div className="row">
                 <a role="button" tabIndex="3" onClick={this.handleLogoutClick}>
-                  <span>Logout</span>
+                  <span>Sign out</span>
                 </a>
               </div>
             </li>
