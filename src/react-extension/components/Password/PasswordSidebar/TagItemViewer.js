@@ -35,9 +35,11 @@ class TagItemViewer extends React.Component {
 
   /**
    * Handle on click event
+   * @param event
    * @param tag
    */
-  handleOnClickTag(tag) {
+  handleOnClickTag(event, tag) {
+    event.stopPropagation();
     // filter by the resources by tag
     const filter = {type: ResourceWorkspaceFilterTypes.TAG, payload: {tag: tag}};
     this.props.history.push({pathname: '/app/passwords', state: {filter}});
@@ -73,10 +75,10 @@ class TagItemViewer extends React.Component {
           onClick={this.props.toggleInputTagEditor}>There is no tag, click here to add one</em>
         }
         {!isLoading && this.props.tags.length > 0 &&
-        <ul className="tags tags-list">
+        <ul className="tags tags-list" onClick={this.props.toggleInputTagEditor}>
           {this.getTags().map(tag =>
-            <li key={tag.id} className="tag-list-item" onClick={() => this.handleOnClickTag(tag)}>
-              <a className="tag ellipsis">{tag.slug}</a>
+            <li key={tag.id} className="tag-list-item">
+              <a onClick={(event) => this.handleOnClickTag(event, tag)} className="tag ellipsis">{tag.slug}</a>
             </li>)
           }
         </ul>

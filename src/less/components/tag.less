@@ -12,6 +12,12 @@
     .message {
         font-size:1em;
         margin-top:.5em;
+
+        span.svg-icon {
+          display: initial;
+          margin-left: -0.15em;
+          padding-right: 0.15em;
+        }
     }
     .tag {
         padding-right: 0;
@@ -49,12 +55,13 @@
 
     .tag-editor-input {
         min-height:1.5em;
-        padding: 0 .5em 0 .5em;
+        padding: .3em .4em 0 .4em;
         box-shadow: none;
         min-width: 6em;
         max-width: 24em;
         display: inline-block;
         word-break: break-word;
+        position: absolute;
     }
 
     .autocomplete-suggestions {
@@ -87,7 +94,7 @@
             text-overflow: ellipsis;
             color: @font-default;
             display: block;
-            padding: .357em .714em; /* 5px 10px */
+            padding: .35em .43em; /* align autocomplete suggestion with tag input */
             border: 0;
 
             &.selected {

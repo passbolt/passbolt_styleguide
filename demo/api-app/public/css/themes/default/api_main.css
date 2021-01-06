@@ -6089,6 +6089,11 @@ input[type="search"]::-webkit-search-cancel-button {
   font-size: 1em;
   margin-top: 0.5em;
 }
+.tag-editor .message span.svg-icon {
+  display: initial;
+  margin-left: -0.15em;
+  padding-right: 0.15em;
+}
 .tag-editor .tag {
   padding-right: 0;
 }
@@ -6169,12 +6174,13 @@ input[type="search"]::-webkit-search-cancel-button {
 }
 .tag-editor .tag-editor-input {
   min-height: 1.5em;
-  padding: 0 0.5em 0 0.5em;
+  padding: 0.3em 0.4em 0 0.4em;
   box-shadow: none;
   min-width: 6em;
   max-width: 24em;
   display: inline-block;
   word-break: break-word;
+  position: absolute;
 }
 .tag-editor .autocomplete-suggestions {
   text-align: left;
@@ -6204,8 +6210,8 @@ input[type="search"]::-webkit-search-cancel-button {
   text-overflow: ellipsis;
   color: #333;
   display: block;
-  padding: 0.357em 0.714em;
-  /* 5px 10px */
+  padding: 0.35em 0.43em;
+  /* align autocomplete suggestion with tag input */
   border: 0;
 }
 .tag-editor .autocomplete-suggestions .autocomplete-suggestion.selected {
