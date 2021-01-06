@@ -185,7 +185,17 @@ class FolderSidebarPermissionsSection extends React.Component {
     return (
       <div className={`sharedwith accordion sidebar-section ${this.state.open ? "" : "closed"}`}>
         <div className="accordion-header">
-          <h4><a onClick={this.handleTitleClickEvent} role="button">Shared with</a></h4>
+          <h4>
+            <a onClick={this.handleTitleClickEvent} role="button">
+              Shared with
+              {this.state.open &&
+              <Icon name="caret-down"/>
+              }
+              {!this.state.open &&
+              <Icon name="caret-right"/>
+              }
+            </a>
+          </h4>
         </div>
         <div className="accordion-content">
           {this.canShare() &&

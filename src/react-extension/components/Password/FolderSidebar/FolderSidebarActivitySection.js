@@ -19,6 +19,7 @@ import GroupAvatar from "../../../../react/components/Common/Avatar/GroupAvatar"
 import AppContext from "../../../contexts/AppContext";
 import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 import {Link} from "react-router-dom";
+import Icon from "../../../../react/components/Common/Icons/Icon";
 
 const LIMIT_ACTIVITIES_PER_PAGE = 5;
 
@@ -381,7 +382,17 @@ class FolderSidebarActivitySection extends React.Component {
     return (
       <div className={`activity accordion sidebar-section ${this.state.open ? "" : "closed"}`}>
         <div className="accordion-header">
-          <h4><a onClick={this.handleTitleClickEvent} role="button">Activity</a></h4>
+          <h4>
+            <a onClick={this.handleTitleClickEvent} role="button">
+              Activity
+              {this.state.open &&
+              <Icon name="caret-down"/>
+              }
+              {!this.state.open &&
+              <Icon name="caret-right"/>
+              }
+            </a>
+          </h4>
         </div>
         <div className="accordion-content">
           {loadingActivities &&
