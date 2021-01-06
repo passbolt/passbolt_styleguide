@@ -27,6 +27,7 @@ class UserBadgeMenu extends Component {
     super(props);
     this.state = this.getDefaultState();
     this.bindCallbacks();
+    this.createRefs();
   }
 
   /**
@@ -45,9 +46,69 @@ class UserBadgeMenu extends Component {
    * @return {void}
    */
   bindCallbacks() {
+    this.handleDocumentClickEvent = this.handleDocumentClickEvent.bind(this);
+    this.handleDocumentContextualMenuEvent = this.handleDocumentContextualMenuEvent.bind(this);
+    this.handleDocumentDragStartEvent = this.handleDocumentDragStartEvent.bind(this);
     this.handleToggleMenuClick = this.handleToggleMenuClick.bind(this);
     this.handleMenuItemClick = this.handleMenuItemClick.bind(this);
     this.handleLogoutClick = this.handleLogoutClick.bind(this);
+  }
+
+  componentDidMount() {
+    document.addEventListener('click', this.handleDocumentClickEvent);
+    document.addEventListener('contextmenu', this.handleDocumentContextualMenuEvent);
+    document.addEventListener('dragstart', this.handleDocumentDragStartEvent);
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('click', this.handleDocumentClickEvent);
+    document.removeEventListener('contextmenu', this.handleDocumentContextualMenuEvent);
+    document.removeEventListener('dragstart', this.handleDocumentDragStartEvent);
+  }
+
+  /**
+   * Create DOM nodes or React elements references in order to be able to access them programmatically.
+   */
+  createRefs() {
+    this.userBadgeMenuRef = React.createRef();
+  }
+
+  /**
+   * Handle click events on document. Hide the component if the click occurred outside of the component.
+   * @param {ReactEvent} event The event
+   */
+  handleDocumentClickEvent(event) {
+    // Prevent closing when the user click on an element of the menu
+    if (this.userBadgeMenuRef.current.contains(event.target)) {
+      return;
+    }
+    this.handleCloseUserBadgeMenu();
+  }
+
+  /**
+   * Handle contextual menu events on document. Hide the component if the click occurred outside of the component.
+   * @param {ReactEvent} event The event
+   */
+  handleDocumentContextualMenuEvent(event) {
+    // Prevent closing when the user right click on an element of the menu
+    if (this.userBadgeMenuRef.current.contains(event.target)) {
+      return;
+    }
+    this.handleCloseUserBadgeMenu();
+  }
+
+  /**
+   * Handle drag start event on document. Hide the component if any.
+   */
+  handleDocumentDragStartEvent() {
+    this.handleCloseUserBadgeMenu();
+  }
+
+  /**
+   * Close the user badge menu
+   */
+  handleCloseUserBadgeMenu() {
+    this.setState({open: false});
   }
 
   /**
@@ -107,7 +168,7 @@ class UserBadgeMenu extends Component {
   render() {
     return (
       <div className="col3 profile-wrapper">
-        <div className="user profile dropdown">
+        <div className="user profile dropdown" ref={this.userBadgeMenuRef}>
           <div onClick={this.handleToggleMenuClick}>
             <div className="center-cell-wrapper">
               <div className="details center-cell">
@@ -142,7 +203,7 @@ class UserBadgeMenu extends Component {
             <li key="logout">
               <div className="row">
                 <a role="button" tabIndex="3" onClick={this.handleLogoutClick}>
-                  <span>Logout</span>
+                  <span>Sign out</span>
                 </a>
               </div>
             </li>
