@@ -168,7 +168,7 @@ class TagEditor extends React.Component {
    * set the position of the autocomplete
    */
   getPositionOfInputTag() {
-    const top = this.inputTagRef.current.offsetTop + 20;
+    const top = this.inputTagRef.current.offsetTop + 30;
     const left = this.inputTagRef.current.offsetLeft;
     const width = this.elementRef.current.getBoundingClientRect().width;
     const autocompletePosition = {left, top, width};
@@ -520,7 +520,7 @@ class TagEditor extends React.Component {
           </div>
           {!this.state.errorMessage && this.props.isOwner &&
           <div className="message notice">
-            <Icon name="info-circle"/>
+            <Icon baseline={true} name="info-circle"/>
             <strong>Pro tip:</strong> Tags starting with # are shared with all users who have access. Separate tags
             using commas.
           </div>

@@ -754,6 +754,9 @@ textarea {
   opacity: 0;
   cursor: pointer;
 }
+.checkbox input[type=checkbox].error {
+  color: #D40101;
+}
 .checkbox input[type=checkbox] + label {
   font-weight: normal;
   position: relative;
