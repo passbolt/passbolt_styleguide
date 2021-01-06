@@ -29,6 +29,7 @@ import DisplayUserDirectoryAdministration
   from "./DisplayUserDirectoryAdministration/DisplayUserDirectoryAdministration";
 import DisplayEmailNotificationsAdministration
   from "./DisplayEmailNotificationsAdministration/DisplayEmailNotificationsAdministration";
+import SearchBar from "../../../react/components/Common/Navigation/Search/SearchBar";
 
 class AdministrationWorkspace extends Component {
   /**
@@ -64,6 +65,7 @@ class AdministrationWorkspace extends Component {
           </div>
           <div className="header second">
             <Logo/>
+            <SearchBar disabled={true}/>
             <UserBadgeMenu baseUrl={this.props.context.trustedDomain} user={this.props.context.loggedInUser}/>
           </div>
           <div className="header third">
