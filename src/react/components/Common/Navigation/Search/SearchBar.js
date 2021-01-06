@@ -59,7 +59,7 @@ class SearchBar extends Component {
         <form className="search">
           <div className="input search required">
             <label htmlFor="js_app_filter_keywords">Search</label>
-            <input className="required" maxLength="50" type="search"
+            <input className="required" type="search"
               disabled={this.props.disabled ? 'disabled' : ''}
               onChange={this.handleChangeEvent}
               placeholder={this.props.placeholder}

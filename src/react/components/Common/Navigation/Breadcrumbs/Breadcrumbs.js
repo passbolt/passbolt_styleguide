@@ -28,7 +28,7 @@ class Breadcrumbs extends Component {
           {(this.props.items && this.props.items.map(item => {
             index++;
             return (
-              <li key={index}>
+              <li className="ellipsis" key={index}>
                 {item.link && item.name &&
                 <Link to={item.link}>{item.name}</Link>
                 }
