@@ -49,7 +49,7 @@ describe("As LU I should see the session expired dialog", () => {
       expect(Boolean(page.dialogClose)).toBeTruthy();
 
       // Save button exists
-      expect(page.loginButton.textContent).toBe("Login");
+      expect(page.loginButton.textContent).toBe("Sign in");
     });
 
     it.skip('As LU I should go to login page by clicking on the login button', async() => {
