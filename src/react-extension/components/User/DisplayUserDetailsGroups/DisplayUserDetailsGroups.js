@@ -38,7 +38,7 @@ class DisplayUserDetailsGroups extends React.Component {
    */
   get defaultState() {
     return {
-      open: true // Flag for the expand / collapse mode
+      open: false // Flag for the expand / collapse mode
     };
   }
 
