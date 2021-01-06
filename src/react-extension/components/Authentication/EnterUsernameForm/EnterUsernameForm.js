@@ -97,11 +97,15 @@ class EnterUsernameForm extends Component {
    * @params {ReactEvent} The react event
    * @returns {void}
    */
-  handleInputChange(event) {
+  async handleInputChange(event) {
     const target = event.target;
     const value = target.type === "checkbox" ? target.checked : target.value;
     const name = target.name;
-    this.setState({[name]: value});
+    await this.setState({[name]: value});
+
+    if (this.state.hasAlreadyBeenValidated) {
+      await this.validate();
+    }
   }
 
   /**
@@ -169,7 +173,7 @@ class EnterUsernameForm extends Component {
     if (!username.length) {
       usernameError = "A username is required.";
     } else if (!this.isEmail(username)) {
-      usernameError = "The username should be a valid username address.";
+      usernameError = "Please enter a valid email address.";
     }
     return this.setState({username, usernameError});
   }
@@ -190,11 +194,11 @@ class EnterUsernameForm extends Component {
    * @returns {Promise<void>}
    */
   async validateAgreedTerms() {
-    let agreedTermsError = null;
+    let agreedTermsError = false;
     const mustValidateTerms = this.privacyLink || this.termsLink;
     const agreedTerms = this.state.agreedTerms;
     if (mustValidateTerms && !agreedTerms) {
-      agreedTermsError = "You have to accept it.";
+      agreedTermsError = true;
     }
     return this.setState({agreedTermsError});
   }
@@ -204,7 +208,7 @@ class EnterUsernameForm extends Component {
    * @returns {boolean}
    */
   hasValidationError() {
-    return this.state.usernameError !== null || this.state.agreedTermsError !== null;
+    return this.state.usernameError !== null || this.state.agreedTermsError;
   }
 
   /**
@@ -247,7 +251,7 @@ class EnterUsernameForm extends Component {
         <h1>Please enter your email to continue.</h1>
         <form acceptCharset="utf-8" onSubmit={this.handleFormSubmit} noValidate>
           <div className={`input text required ${this.state.usernameError ? "error" : ""}`}>
-            <label htmlFor="username">Email (username)</label>
+            <label htmlFor="username">Email</label>
             <input id="username-input" type="text" ref={this.usernameRef} name="username" value={this.state.username}
               onKeyUp={this.handleUsernameInputOnKeyUp} onChange={this.handleInputChange} placeholder="you@organization.com"
               required="required" disabled={this.hasAllInputDisabled()}/>
@@ -256,7 +260,7 @@ class EnterUsernameForm extends Component {
             }
           </div>
           {(this.privacyLink || this.termsLink) &&
-          <div className="input checkbox">
+          <div className={`input checkbox ${this.state.agreedTermsError ? 'error' : ''}`}>
             <input type="checkbox" name="agreedTerms" value={this.state.agreedTerms} onChange={this.handleInputChange}
               id="checkbox-terms" disabled={this.hasAllInputDisabled()}/>
             <label htmlFor="checkbox-terms">
@@ -270,9 +274,6 @@ class EnterUsernameForm extends Component {
               </span>
               }
             </label>
-            {this.state.agreedTermsError && !this.state.agreedTerms &&
-            <div className="error-message">{this.state.agreedTermsError}</div>
-            }
           </div>
           }
           <div className="form-actions">
