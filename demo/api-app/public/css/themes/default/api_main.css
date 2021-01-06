@@ -5268,14 +5268,16 @@ input[type="search"]::-webkit-search-cancel-button {
   background: #FFF;
 }
 .breadcrumbs ul {
-  padding-top: 0.2em;
+  padding-top: 0.45em;
   margin-left: 0.1875em;
 }
 .breadcrumbs ul li {
-  display: inline;
+  display: inline-block;
   font-size: 0.8em;
   /* 12px/base16>15 */
   margin-left: 0.25em;
+  max-width: 25%;
+  float: left;
 }
 .breadcrumbs ul li:before {
   content: "›";
