@@ -87,13 +87,13 @@ class DisplayUserDetailsPublicKey extends React.Component {
     const gpgkeyInfo = await this.context.port.request('passbolt.keyring.get-public-key-info-by-user', this.user.id);
 
     // format the gpgkey info.
-    const keyId = gpgkeyInfo.keyId;
+    const fingerprint = gpgkeyInfo.fingerprint;
     const type = this.gpgkeyType[gpgkeyInfo.algorithm];
     const created = this.formatDate(gpgkeyInfo.created);
     const expires = gpgkeyInfo.expires === "Never" ? "Never" : this.formatDate(gpgkeyInfo.expires);
     const armoredKey = gpgkeyInfo.key;
 
-    const formatedGpgkeyInfo = {keyId, type, created, expires, armoredKey};
+    const formatedGpgkeyInfo = {fingerprint, type, created, expires, armoredKey};
     this.setState({gpgkeyInfo: formatedGpgkeyInfo});
   }
 
@@ -147,6 +147,15 @@ class DisplayUserDetailsPublicKey extends React.Component {
   }
 
   /**
+   * get fingerprint
+   * @param fingerprint
+   * @returns {string}
+   */
+  formatFingerprint(fingerprint) {
+    return fingerprint && fingerprint.toUpperCase().replace(/.{4}(?=.)/g, '$& ');
+  }
+
+  /**
    * Handle the click on the title
    */
   async handleTitleClicked() {
@@ -195,9 +204,9 @@ class DisplayUserDetailsPublicKey extends React.Component {
         }
         {!isLoading &&
         <ul className="accordion-content">
-          <li className="keyId">
-            <span className="label">Key id</span>
-            <span className="value">{this.state.gpgkeyInfo.keyId}</span>
+          <li className="fingerprint">
+            <span className="label">Fingerprint</span>
+            <span className="value">{this.formatFingerprint(this.state.gpgkeyInfo.fingerprint)}</span>
           </li>
           <li className="type">
             <span className="label">Type</span>
