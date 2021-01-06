@@ -16,6 +16,7 @@ import ErrorDialog from "../../Dialog/ErrorDialog/ErrorDialog";
 import {AuthenticationContext} from "../../../contexts/AuthenticationContext";
 import PropTypes from "prop-types";
 import {withDialog} from "../../../../react/contexts/Common/DialogContext";
+import Icon from "../../../../react/components/Common/Icons/Icon";
 
 /**
  * This component checks the passphrase of an user gpg key
@@ -40,6 +41,7 @@ class CheckPassphrase extends Component {
     return {
       passphrase: '', // The passphrase
       rememberMe: false, // The remember passphrase flag
+      isObfuscated: true, // True if the paasphrase should not be visible
       actions: {
         processing: false // True if one's processing passphrase
       },
@@ -88,6 +90,7 @@ class CheckPassphrase extends Component {
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleChangePassphrase = this.handleChangePassphrase.bind(this);
     this.handleToggleRememberMe = this.handleToggleRememberMe.bind(this);
+    this.handleToggleObfuscate = this.handleToggleObfuscate.bind(this);
     this.onPassphraseLost = this.onPassphraseLost.bind(this);
   }
 
@@ -132,6 +135,14 @@ class CheckPassphrase extends Component {
   async handleToggleRememberMe() {
     await this.toggleRemmemberMe();
   }
+
+  /**
+   * Whenever one wants to toggle the obfusctated mode
+   */
+  handleToggleObfuscate() {
+    this.toggleObfuscate();
+  }
+
 
   /**
    * Whenever the user needs help because he lost his passphrase
@@ -198,6 +209,14 @@ class CheckPassphrase extends Component {
     await this.setState({actions: {processing: !this.state.actions.processing}});
   }
 
+
+  /**
+   * Toggle the obfuscate mode of the passphrase view
+   */
+  toggleObfuscate() {
+    this.setState({isObfuscated: !this.state.isObfuscated});
+  }
+
   /**
    * Put the focus on the passphrase input
    */
@@ -216,16 +235,23 @@ class CheckPassphrase extends Component {
         <form
           acceptCharset="utf-8"
           onSubmit={this.handleSubmit}>
-          <div className="input text required">
+          <div className="input text password required">
             <label htmlFor="passphrase">Passphrase</label>
             <input
               id="passphrase"
               ref={this.passphraseInputRef}
-              type="password"
+              type={this.state.isObfuscated ? "password" : "text" }
               name="passphrase"
               value={this.state.passphrase}
               onChange={this.handleChangePassphrase}
               disabled={!this.areActionsAllowed}/>
+            <a
+              className={`password-view button-icon button button-toggle ${this.state.isObfuscated ? "" : "selected"}`}
+              role="button"
+              onClick={this.handleToggleObfuscate}>
+              <Icon name="eye-open"/>
+              <span className="visually-hidden">view</span>
+            </a>
           </div>
           {this.props.canRememberMe &&
             <div className="input checkbox">
