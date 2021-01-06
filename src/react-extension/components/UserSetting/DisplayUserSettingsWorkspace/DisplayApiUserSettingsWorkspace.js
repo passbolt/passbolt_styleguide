@@ -22,6 +22,7 @@ import DisplayUserSettingsWorkspaceBreadcrumb
   from "../DisplayUserSettingsWorkspaceBreadcrumb/DisplayUserSettingsWorkspaceBreadcrumb";
 import DisplayUserMfa from "../DisplayUserMfa/DisplayUserMfa";
 import PropTypes from "prop-types";
+import SearchBar from "../../../../react/components/Common/Navigation/Search/SearchBar";
 
 /**
  * This component is a container for all the user settings workspace features
@@ -36,6 +37,7 @@ class DisplayApiUserSettingsWorkspace extends React.Component {
       <div>
         <div className="header second">
           <Logo/>
+          <SearchBar disabled={true}/>
           <UserBadgeMenu baseUrl={this.props.context.trustedDomain} user={this.props.context.loggedInUser}/>
         </div>
         <div className="header third">

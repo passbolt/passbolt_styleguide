@@ -27,6 +27,7 @@ import DisplayUserSettingsWorkspaceBreadcrumb
 import DisplayUserSettingsWorkspaceActions
   from "../DisplayUserSettingWorkspaceActions/DisplayUserSettingWorkspaceActions";
 import DisplayUserGpgInformation from "../DisplayUserGpgInformation/DisplayUserGpgInformation";
+import SearchBar from "../../../../react/components/Common/Navigation/Search/SearchBar";
 
 /**
  * This component is a container for all the user settings workspace features
@@ -42,6 +43,7 @@ class DisplayUserSettingsWorkspace extends React.Component {
       <div>
         <div className="header second">
           <Logo/>
+          <SearchBar disabled={true}/>
           <UserBadgeMenu baseUrl={this.context.userSettings.getTrustedDomain()} user={this.context.loggedInUser}/>
         </div>
         <div className="header third">
