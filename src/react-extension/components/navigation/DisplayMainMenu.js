@@ -110,7 +110,7 @@ class DisplayMainMenu extends Component {
                   <div className="main-cell">
                     <a role="button"
                       onClick={this.handleLogoutClick.bind(this)}>
-                      <span>logout</span>
+                      <span>sign out</span>
                     </a>
                   </div>
                 </div>
