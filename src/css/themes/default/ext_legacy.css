@@ -3979,6 +3979,11 @@ input[type=email].fluid {
   height: 36px;
   border-radius: 50%;
 }
+.big.avatar img {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+}
 .logo.no-img {
   background: transparent url('../../../img/logo/logo.png') 0 0 no-repeat;
   background-size: 150px auto;

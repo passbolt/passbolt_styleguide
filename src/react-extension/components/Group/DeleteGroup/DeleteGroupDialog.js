@@ -117,7 +117,7 @@ class DeleteGroupDialog extends Component {
         title="Delete group?"
         onClose={this.handleCloseClick}
         disabled={this.state.processing}
-        className="delete-user-dialog">
+        className="delete-group-dialog">
         <form onSubmit={this.handleFormSubmit} noValidate>
           <div className="form-content">
             <p>Are you sure you want to delete the group <strong>{this.group.name}</strong>?</p>

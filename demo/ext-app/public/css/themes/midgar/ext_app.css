@@ -4949,6 +4949,11 @@ h6 .input.toggle-switch {
   height: 36px;
   border-radius: 50%;
 }
+.big.avatar img {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+}
 /*
  * Breadcrumbs
  */
@@ -9345,6 +9350,7 @@ table.table-info.horizontal tbody tr:hover {
 .delete-group-dialog .ownership-transfer {
   max-height: 20em;
   overflow: auto;
+  background: #30302D;
 }
 .delete-user-dialog .ownership-transfer h3,
 .delete-group-dialog .ownership-transfer h3 {
