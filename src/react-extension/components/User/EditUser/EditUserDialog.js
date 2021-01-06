@@ -367,7 +367,7 @@ class EditUserDialog extends Component {
                 autoComplete='off' autoFocus={true}
               />
             </div>
-            <div className="input checkbox required">
+            <div className="input checkbox">
               <label htmlFor="is_admin">Role</label>
               <div id="is_admin">
                 <input
