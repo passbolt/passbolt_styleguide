@@ -235,24 +235,36 @@ class CheckPassphrase extends Component {
         <form
           acceptCharset="utf-8"
           onSubmit={this.handleSubmit}>
-          <div className="input text password required">
-            <label htmlFor="passphrase">Passphrase</label>
-            <input
-              id="passphrase"
-              ref={this.passphraseInputRef}
-              type={this.state.isObfuscated ? "password" : "text" }
-              name="passphrase"
-              value={this.state.passphrase}
-              onChange={this.handleChangePassphrase}
-              disabled={!this.areActionsAllowed}/>
-            <a
-              className={`password-view button-icon button button-toggle ${this.state.isObfuscated ? "" : "selected"}`}
-              role="button"
-              onClick={this.handleToggleObfuscate}>
-              <Icon name="eye-open"/>
-              <span className="visually-hidden">view</span>
-            </a>
-          </div>
+          <div className="form-content">
+            <div className="input text password required">
+              <label htmlFor="passphrase">Passphrase</label>
+              <input
+                id="passphrase"
+                ref={this.passphraseInputRef}
+                type={this.state.isObfuscated ? "password" : "text" }
+                name="passphrase"
+                value={this.state.passphrase}
+                onChange={this.handleChangePassphrase}
+                disabled={!this.areActionsAllowed}/>
+              <a
+                className={`password-view button-icon button button-toggle ${this.state.isObfuscated ? "" : "selected"}`}
+                role="button"
+                onClick={this.handleToggleObfuscate}>
+                <Icon name="eye-open"/>
+                <span className="visually-hidden">view</span>
+              </a>
+              {this.state.hasBeenValidated &&
+              <>
+                {
+                  this.state.errors.emptyPassphrase &&
+                  <div className="empty-passphrase error-message">The passphrase should not be empty.</div>
+                }
+                {this.state.errors.invalidPassphrase &&
+                <div className="invalid-passphrase error-message">The passphrase is invalid.</div>
+                }
+              </>
+              }
+            </div>
           {this.props.canRememberMe &&
             <div className="input checkbox">
               <input
@@ -266,18 +278,8 @@ class CheckPassphrase extends Component {
                 Remember until I logout.
               </label>
             </div>
-          }
-          {this.state.hasBeenValidated &&
-            <>
-              <br/>
-              {this.state.errors.emptyPassphrase &&
-              <div className="empty-passphrase error message">The passphrase should not be empty.</div>
-              }
-              {this.state.errors.invalidPassphrase &&
-              <div className="invalid-passphrase error message">The passphrase is invalid.</div>
-              }
-            </>
-          }
+            }
+          </div>
           <div className="form-actions">
             <button
               type="submit"
