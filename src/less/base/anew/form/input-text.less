@@ -28,6 +28,20 @@ textarea {
     vertical-align: middle;
 }
 
+input[type=file] {
+  box-sizing: border-box;
+  font-size: 1.6rem;
+  line-height: 2.4rem;
+  color: @font-default;
+  background: @input-background;
+  //width: 14em; /* 20 char (default input length) x .7em (average char length) */
+  width: 100%;
+  max-width: 64rem;
+  display: inline-block;
+  margin-bottom: .8rem;
+  vertical-align: middle;
+}
+
 textarea:hover,
 input[type=password]:hover,
 input[type=search]:hover,
