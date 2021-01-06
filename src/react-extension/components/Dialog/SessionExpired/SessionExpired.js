@@ -75,7 +75,7 @@ class SessionExpired extends Component {
             className="primary button"
             target="_parent"
             role="button"
-            rel="noopener noreferrer">Login</a>
+            rel="noopener noreferrer">Sign in</a>
         </div>
       </DialogWrapper>
     );
