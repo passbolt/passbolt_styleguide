@@ -1769,6 +1769,16 @@ a.unfav .svg-icon svg {
     flex-direction: column;
   }
 }
+.avatar img {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+}
+.big.avatar img {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+}
 html,
 body {
   height: 100%;
