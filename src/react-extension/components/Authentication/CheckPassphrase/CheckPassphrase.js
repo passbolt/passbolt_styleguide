@@ -74,6 +74,14 @@ class CheckPassphrase extends Component {
 
 
   /**
+   * Whenever the component is mounted
+   */
+  componentDidMount() {
+    this.focusOnPassphrase();
+  }
+
+
+  /**
    * Handle component event handlers
    */
   bindEventHandlers() {
@@ -188,6 +196,13 @@ class CheckPassphrase extends Component {
    */
   async toggleProcessing() {
     await this.setState({actions: {processing: !this.state.actions.processing}});
+  }
+
+  /**
+   * Put the focus on the passphrase input
+   */
+  focusOnPassphrase() {
+    this.passphraseInputRef.current.focus();
   }
 
   /**
