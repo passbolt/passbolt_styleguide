@@ -227,19 +227,18 @@ class ImportGpgKey extends Component {
                 type="file"
                 ref={this.fileUploaderRef}
                 onChange={this.handleSelectPrivateKeyFile}/>
+              {this.state.hasBeenValidated &&
+              <>
+                {this.state.errors.emptyPrivateKey &&
+                  <div className="empty-private-key error-message">The private key should not be empty.</div>
+                }
+                {this.state.errors.invalidPrivateKey &&
+                  <div className="invalid-private-key error-message">{this.state.errorMessage}</div>
+                }
+              </>
+              }
             </div>
           </div>
-          {this.state.hasBeenValidated &&
-            <>
-              <br/>
-              {this.state.errors.emptyPrivateKey &&
-              <div className="empty-private-key error message">The private key should not be empty.</div>
-              }
-              {this.state.errors.invalidPrivateKey &&
-              <div className="invalid-private-key error message">{this.state.errorMessage}</div>
-              }
-            </>
-          }
           <div className="form-actions">
             <button
               type="submit"
