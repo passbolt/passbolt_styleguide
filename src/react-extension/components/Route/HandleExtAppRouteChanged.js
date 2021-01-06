@@ -14,7 +14,7 @@
 import React, {Component} from "react";
 import PropTypes from "prop-types";
 import {withRouter} from "react-router-dom";
-import AppContext from "../../contexts/AppContext";
+import AppContext, {withAppContext} from "../../contexts/AppContext";
 
 /**
  * This component tracks any navigation changes and handle it
@@ -28,12 +28,31 @@ class HandleExtAppRouteChanged extends Component {
   }
 
   /**
-   * Whenever the route changed
+   * Whenever the route changed.
+   * - If the route is handled by the ExtApp, notify the background page to update the browser url.
+   * - If the route is handled by the ApiApp, go to the url.
    */
   handleRouteChanged() {
     this.props.history.listen(location => {
-      this.context.port.emit('passbolt.app.route-changed', location.pathname);
+      if (this.apiAppRoutes.includes(location.pathname)) {
+        const trustedDomain = this.context.userSettings.getTrustedDomain();
+        const url = new URL(`${trustedDomain}${location.pathname}`);
+        window.open(url, '_parent', 'noopener,noreferrer');
+      } else {
+        this.context.port.emit('passbolt.app.route-changed', location.pathname);
+      }
     });
+  }
+
+  /**
+   * Get the API app routes.
+   * @return {array<string>}
+   */
+  get apiAppRoutes() {
+    return [
+      "/app/administration",
+      "/app/settings/mfa",
+    ];
   }
 
   /**
@@ -51,5 +70,5 @@ HandleExtAppRouteChanged.contextType = AppContext;
 HandleExtAppRouteChanged.propTypes = {
   history: PropTypes.object
 };
-export default withRouter(HandleExtAppRouteChanged);
+export default withAppContext(withRouter(HandleExtAppRouteChanged));
 

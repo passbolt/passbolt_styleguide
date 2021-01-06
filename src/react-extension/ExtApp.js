@@ -391,10 +391,7 @@ class ExtApp extends Component {
                     <Route exact path={[
                       "/app/administration",
                       "/app/settings/mfa",
-                    ]} render={() => {
-                      this.props.port.emit('passbolt.app.reload');
-                    }}>
-                    </Route>
+                    ]}/>
                     {/* Passwords workspace */}
                     <Route path={[
                       "/app/folders/view/:filterByFolderId",
