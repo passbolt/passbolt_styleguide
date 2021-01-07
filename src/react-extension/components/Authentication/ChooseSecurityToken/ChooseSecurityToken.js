@@ -279,6 +279,16 @@ class ChooseSecurityToken extends Component {
   }
 
   /**
+   * Check if there are errors
+   * @return {bool}
+   */
+  get hasErrors() {
+    return this.state.errors
+      && (this.state.errors.emptyCode
+      || this.state.errors.lengthCode);
+  }
+
+  /**
    * Render the component
    */
   render() {
@@ -287,7 +297,7 @@ class ChooseSecurityToken extends Component {
       <div className="choose-security-token">
         <h1>Pick a color and enter three characters.</h1>
         <form onSubmit={this.handleSubmit}>
-          <div className="input-security-token required">
+          <div className={`input-security-token input required ${this.hasErrors ? "error" : ""}`}>
             <label htmlFor="security-token-text">Security token</label>
             <input
               id="security-token-text"
@@ -319,6 +329,16 @@ class ChooseSecurityToken extends Component {
               </a>
             </div>
           </div>
+          {this.state.hasBeenValidated &&
+          <div className="input text">
+            {this.state.errors.emptyCode &&
+            <div className="empty-code error-message">The security token code should not be empty.</div>
+            }
+            {this.state.errors.lengthCode &&
+            <div className="not-good-length-code error-message">The security token code should be 3 characters long.</div>
+            }
+          </div>
+          }
           <p>
             This security token will be displayed when your passphrase is requested,
             so you can quickly verify the form is coming from passbolt.
@@ -326,16 +346,6 @@ class ChooseSecurityToken extends Component {
               phishing attacks
             </a>.
           </p>
-          {this.state.hasBeenValidated &&
-            <div className="input text">
-              {this.state.errors.emptyCode &&
-              <div className="empty-code error-message">The security token code should not be empty.</div>
-              }
-              {this.state.errors.lengthCode &&
-              <div className="not-good-length-code error-message">The security token code should be 3 characters long.</div>
-              }
-            </div>
-          }
           <div className="form-actions">
             <button
               type="submit"
