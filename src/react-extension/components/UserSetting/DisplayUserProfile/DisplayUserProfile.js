@@ -170,14 +170,6 @@ class DisplayUserProfile extends React.Component {
                     <td className="label">Created</td>
                     <td className="value">{this.formatDateTimeAgo(this.user.created)}</td>
                   </tr>
-                  <tr className="publickey_keyid">
-                    <td className="label">Public key</td>
-                    <td className="value">
-                      {this.state.keyId}
-                      <p><em>Note: Sorry, it is not possible to change your key at the
-                        moment.</em></p>
-                    </td>
-                  </tr>
                 </tbody>
               </table>
             </div>
