@@ -43,6 +43,29 @@ class PasswordSidebar extends React.Component {
   }
 
   /**
+   * Get the sidebar subtitle
+   */
+  get subtitle() {
+    const defaultSubtitle = "Resource";
+    const resource = this.props.resourceWorkspaceContext.details.resource;
+
+    // Resources types might not be yet initialized at the moment this component is rendered.
+    if (!this.context.resourceTypesSettings) {
+      return "";
+    }
+
+    if (resource.resource_type_id) {
+      const resourceType = this.context.resourceTypesSettings.findResourceTypeSlugById(resource.resource_type_id);
+      switch (resourceType) {
+        case this.context.resourceTypesSettings.DEFAULT_RESOURCE_TYPES_SLUGS.PASSWORD_AND_DESCRIPTION:
+          return "Resource with encrypted description";
+      }
+    }
+
+    return defaultSubtitle;
+  }
+
+  /**
    * Handle when the user copies the permalink.
    */
   async handlePermalinkClick() {
@@ -82,7 +105,7 @@ class PasswordSidebar extends React.Component {
                   <span className="visuallyhidden">Copy the link to this password</span>
                 </a>
               </div>
-              <span className="subtitle">resource</span>
+              <span className="subtitle">{this.subtitle}</span>
             </h3>
             <a className="dialog-close" onClick={this.handleCloseClick}>
               <Icon name="close"/>

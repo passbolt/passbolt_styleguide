@@ -2,6 +2,8 @@ import UserSettings from "../../../lib/Settings/UserSettings";
 import userSettingsFixture from "../../../test/fixture/Settings/userSettings";
 import SiteSettings from "../../../lib/Settings/SiteSettings";
 import siteSettingsFixture from "../../../test/fixture/Settings/siteSettings";
+import ResourceTypesSettings from "../../../lib/Settings/ResourceTypesSettings";
+import resourceTypesFixture from "../../../test/fixture/ResourceTypes/resourceTypes";
 import MockPort from "../../../test/mock/MockPort";
 
 /**
@@ -10,9 +12,11 @@ import MockPort from "../../../test/mock/MockPort";
  * @returns {any | ({userSettings: UserSettings, siteSettings: SiteSettings, port: MockPort} & {})}
  */
 export function defaultAppContext(appContext) {
+  const siteSettings = new SiteSettings(siteSettingsFixture);
   const defaultAppContext = {
     userSettings: new UserSettings(userSettingsFixture),
-    siteSettings: new SiteSettings(siteSettingsFixture),
+    siteSettings: siteSettings,
+    resourceTypesSettings: new ResourceTypesSettings(siteSettings, resourceTypesFixture),
     port: new MockPort()
   };
   return Object.assign(defaultAppContext, appContext || {});
