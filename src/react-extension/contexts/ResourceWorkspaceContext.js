@@ -429,6 +429,7 @@ export class ResourceWorkspaceContextProvider extends React.Component {
     }
     this.context.port.request("passbolt.resources.update-local-storage");
     this.context.port.request("passbolt.groups.update-local-storage");
+    this.context.port.request("passbolt.users.update-local-storage");
   }
 
   /** RESOURCE SEARCH  **/
