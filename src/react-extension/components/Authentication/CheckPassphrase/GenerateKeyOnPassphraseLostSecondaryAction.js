@@ -18,7 +18,7 @@ class GenerateKeyOnPassphraseLostSecondaryAction extends Component {
   render() {
     return (
       <a onClick={this.context.onGoToGenerateGpgKeyRequested}>
-        I don&apos;t remember, generate new key instead.
+        I lost my passphrase, generate a new private key.
       </a>
     );
   }
