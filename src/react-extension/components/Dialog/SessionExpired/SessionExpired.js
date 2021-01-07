@@ -67,7 +67,7 @@ class SessionExpired extends Component {
         onClose={this.handleCloseClick}
         className="session-expired-dialog">
         <div className="form-content">
-          <p>Your session has expired, you need to login</p>
+          <p>Your session has expired, you need to sign in.</p>
         </div>
         <div className="submit-wrapper clearfix">
           <a ref={this.loginLinkRef}
