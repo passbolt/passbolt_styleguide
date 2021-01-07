@@ -13,6 +13,7 @@
  */
 import React, {Component} from "react";
 import PropTypes from "prop-types";
+import {AuthenticationContext} from "../../../contexts/AuthenticationContext";
 
 /**
  * This component displays an error when the user cannot log in
@@ -34,7 +35,6 @@ class DisplayLoginError extends Component {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-
   /**
    * Whenever the users wants to try to log in again
    * @param event Dom event
@@ -44,16 +44,15 @@ class DisplayLoginError extends Component {
     await this.context.onTryLoginAgainRequested();
   }
 
-
   /**
    * Render the component
    */
   render() {
     return (
       <div>
-        <h2>Sorry, you have not been logged in  </h2>
-        <p>Something went wrong, the login failed with the following error: </p>
-        <p>{this.props.error}</p>
+        <h1>Sorry, you have not been signed in.</h1>
+        <p>Something went wrong, the sign in failed with the following error: </p>
+        <p>{this.props.error && this.props.error.message}</p>
         <form
           acceptCharset="utf-8"
           onSubmit={this.handleSubmit}>
@@ -62,7 +61,7 @@ class DisplayLoginError extends Component {
               type="submit"
               className={`button primary big`}
               role="button">
-              Login
+              Try again
             </button>
           </div>
         </form>
@@ -71,6 +70,7 @@ class DisplayLoginError extends Component {
   }
 }
 
+DisplayLoginError.contextType = AuthenticationContext;
 DisplayLoginError.propTypes = {
   error: PropTypes.any // The error to display
 };
