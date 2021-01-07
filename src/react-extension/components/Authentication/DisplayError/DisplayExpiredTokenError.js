@@ -24,7 +24,7 @@ class DisplayExpiredTokenError extends Component {
     return (
       <div className="setup-error">
         <h1>The invitation is expired.</h1>
-        <p>You can request another invitation email by clicking on the button bellow.</p>
+        <p>You can request another invitation email by clicking on the button below.</p>
         <div className="form-actions">
           <a href={`${this.props.context.trustedDomain}/users/recover`} className="button primary big" role="button">Request invitation</a>
         </div>
