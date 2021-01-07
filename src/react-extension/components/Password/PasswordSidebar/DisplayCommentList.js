@@ -95,6 +95,14 @@ class DisplayCommentList extends React.Component {
    * @param comment A comment
    */
   canDeleteComment(comment) {
+    return this.isOwner(comment);
+  }
+
+  /**
+   * Returns true if the the comment owner is the current logged in user
+   * @param comment A comment
+   */
+  isOwner(comment) {
     const isOwner = this.context.loggedInUser.id === comment.created_by;
     return isOwner;
   }
@@ -118,10 +126,12 @@ class DisplayCommentList extends React.Component {
                   <div className="right-column">
                     <p> {comment.content} </p>
                     <div className="metadata">
-                      <span className="author username"><a
-                        href="#">{comment.creator.profile.first_name} {comment.creator.profile.last_name}</a></span>
+                      <span className="author username">
+                        {comment.creator.profile.first_name} {comment.creator.profile.last_name}
+                      </span>
                       <span
-                        className="modified">{moment(comment.created).fromNow()}</span>
+                        className="modified">{moment(comment.created).fromNow()}
+                      </span>
                     </div>
                     <div className="actions">
                       <ul>

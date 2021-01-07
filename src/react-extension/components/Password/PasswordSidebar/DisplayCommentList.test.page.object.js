@@ -66,7 +66,7 @@ export default class DisplayCommentListPageObject {
    * @param index The display rank of author's comment
    */
   author(index) {
-    return this.list.querySelectorAll('.comment')[index - 1].querySelector('.author.username a').textContent;
+    return this.list.querySelectorAll('.comment')[index - 1].querySelector('.author.username').textContent;
   }
 
   /**
