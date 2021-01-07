@@ -62,7 +62,7 @@ describe("See Resource Sidebar", () => {
       jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementation(() => {});
 
       expect(page.name).toBe(props.resourceWorkspaceContext.details.resource.name);
-      expect(page.subtitle).toBe('resource');
+      expect(page.subtitle).toBe('Resource');
       await page.selectPermalink();
       expect(context.port.request).toHaveBeenCalledWith("passbolt.clipboard.copy", `${context.userSettings.getTrustedDomain()}/app/passwords/view/${props.resourceWorkspaceContext.details.resource.id}`);
       expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalledWith("The permalink has been copied to clipboard");
