@@ -65,7 +65,7 @@ class SearchBar extends Component {
               placeholder={this.props.placeholder}
               value={this.props.value}/>
           </div>
-          <button value="search" disabled={this.props.disabled ? 'disabled' : ''}>
+          <button value="search" type="button" disabled={this.props.disabled ? 'disabled' : ''}>
             <Icon name="search"/>
             <span className="visuallyhidden">Search</span>
           </button>
