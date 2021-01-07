@@ -262,27 +262,27 @@ class PasswordImportResultDialog extends Component {
           <div className="form-content">
             {!this.hasErrorsResources &&
             <p>
-              <strong>{this.resultCreatedResourcesCount ? this.resultCreatedResourcesCount : 'No'} passwords have been imported successfully.</strong>
+              <strong>{this.resultCreatedResourcesCount ? this.resultCreatedResourcesCount : 'No'} password{this.resultCreatedResourcesCount === 1 ? ' has' : 's have'} been imported successfully.</strong>
             </p>
             }
             {this.hasErrorsResources &&
             <>
               <p className="error inline-error">There was an issue while importing passwords:</p>
               <p>
-                <strong>{this.resultCreatedResourcesCount} out of {this.resultCreatedResourcesCount + this.resultErrorsResources.length}</strong> passwords have been imported.
+                <strong>{this.resultCreatedResourcesCount} out of {this.resultCreatedResourcesCount + this.resultErrorsResources.length}</strong> password{(this.resultCreatedResourcesCount + this.resultErrorsResources.length) === 1 ? ' has' : 's have'} been imported.
               </p>
             </>
             }
             {this.canIUseFolders && !this.resultHasErrorsFolders &&
             <p>
-              <strong>{this.resultCreatedFoldersCount ? this.resultCreatedFoldersCount : ' No'} folders have been imported successfully.</strong>
+              <strong>{this.resultCreatedFoldersCount ? this.resultCreatedFoldersCount : ' No'} folder{this.resultCreatedFoldersCount === 1 ? ' has' : 's have'} been imported successfully.</strong>
             </p>
             }
             {this.canIUseFolders && this.resultHasErrorsFolders &&
             <>
               <p className="error inline-error">There was an issue while importing folders:</p>
               <p>
-                <strong>{this.resultCreatedFoldersCount} out of {this.resultCreatedFoldersCount + this.resultErrorsFolders.length}</strong> folders have been imported.
+                <strong>{this.resultCreatedFoldersCount} out of {this.resultCreatedFoldersCount + this.resultErrorsFolders.length}</strong> folder{(this.resultCreatedFoldersCount + this.resultErrorsFolders.length) === 1 ? ' has' : 's have'} been imported.
               </p>
             </>
             }
