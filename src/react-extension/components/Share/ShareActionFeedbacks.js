@@ -9,7 +9,7 @@
  * @copyright     Copyright (c) 2020 Passbolt SA (https://www.passbolt.com)
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
- * @since         2.13.0
+ * @since         3.0
  */
 
 import React from "react";
@@ -31,6 +31,20 @@ class ShareActionFeedbacks extends React.Component {
   }
 
   /**
+   * Default display time in ms
+   */
+  static get DEFAULT_DISPLAY_TIME_IN_MS() {
+    return 5000;
+  }
+
+  /**
+   * Default time to wait before closing a feedback in ms
+   */
+  static get DEFAULT_WAIT_TO_CLOSE_TIME_IN_MS() {
+    return 500;
+  }
+
+  /**
    * Bind component method callbacks
    */
   bindCallbacks() {
@@ -45,10 +59,18 @@ class ShareActionFeedbacks extends React.Component {
   }
 
   /**
+   * Returns the length of the feedbacks list.
+   * @returns {number}
+   */
+  get length() {
+    return this.props.actionFeedbackContext.feedbacks.length;
+  }
+
+  /**
    * Returns true there's at least one feedback to display
    */
   get hasFeedbacks() {
-    return this.props.actionFeedbackContext.feedbacks.length > 0;
+    return this.length > 0;
   }
 
   /**
@@ -59,13 +81,16 @@ class ShareActionFeedbacks extends React.Component {
   }
 
   render() {
+    const displayTimeInMs = this.hasFeedbacks ? ShareActionFeedbacks.DEFAULT_DISPLAY_TIME_IN_MS / this.length : 0;
+
     return (
       <>
         {this.hasFeedbacks &&
         <div className="notification-container">
           <ShareActionFeedback
             feedback={this.feedbackToDisplay}
-            onClose={() => this.close(this.feedbackToDisplay)}/>
+            onClose={() => this.close(this.feedbackToDisplay)}
+            displayTimeInMs={displayTimeInMs}/>
         </div>
         }
       </>
@@ -83,13 +108,6 @@ export default withActionFeedback(ShareActionFeedbacks);
  * Child component that displays a single action feedback
  */
 class ShareActionFeedback extends React.Component {
-  /**
-   * Default dispay time in ms
-   */
-  static get DEFAULT_DISPLAY_TIME_IN_MS() {
-    return 5000;
-  }
-
   /**
    * Default constructor
    * @param props Component props
@@ -115,7 +133,7 @@ class ShareActionFeedback extends React.Component {
    * Whenever the component has been mounted
    */
   componentDidMount() {
-    this.displayWithTimer();
+    this.displayWithTimer(this.props.displayTimeInMs);
   }
 
   /**
@@ -124,9 +142,12 @@ class ShareActionFeedback extends React.Component {
    */
   componentDidUpdate(previousProps) {
     const hasFeedbackChanged = previousProps && previousProps.feedback.id !== this.props.feedback.id;
+    const hasDisplayTimeChanged = previousProps && this.props.displayTimeInMs && previousProps.displayTimeInMs !== this.props.displayTimeInMs;
     if (hasFeedbackChanged) {
       this.setState({shouldRender: true});
-      this.displayWithTimer();
+      this.displayWithTimer(this.props.displayTimeInMs);
+    } else if (hasDisplayTimeChanged) {
+      this.updateTimer(this.props.displayTimeInMs);
     }
   }
 
@@ -139,7 +160,6 @@ class ShareActionFeedback extends React.Component {
     }
   }
 
-
   /**
    * Bind the component method callback
    */
@@ -150,14 +170,30 @@ class ShareActionFeedback extends React.Component {
   }
 
   /**
-   * Display the feedback for a while ( 5 seconds ) and then disappear
+   * Display the feedback for a while and then disappear
+   * @param {number} displayTimeInMs The time to display the feedback
    */
-  displayWithTimer() {
+  displayWithTimer(displayTimeInMs) {
     if (this.state.timeoutId) {
       clearTimeout(this.state.timeoutId);
     }
-    const timeoutId = setTimeout(this.close, ShareActionFeedback.DEFAULT_DISPLAY_TIME_IN_MS);
-    this.setState({timeoutId});
+    const timeoutId = setTimeout(this.close, displayTimeInMs);
+    const time = Date.now();
+    this.setState({timeoutId, time});
+  }
+
+  /**
+   * Update the timer of the currently displayed feedback.
+   * @param {number} displayTimeInMs The new time
+   */
+  updateTimer(displayTimeInMs) {
+    const newTime = displayTimeInMs - (Date.now() - this.state.time);
+    if (newTime > 0) {
+      this.displayWithTimer(newTime);
+    } else {
+      clearTimeout(this.state.timeoutId);
+      this.close();
+    }
   }
 
   /**
@@ -177,7 +213,7 @@ class ShareActionFeedback extends React.Component {
   close() {
     this.setState({shouldRender: false});
     // To keep the hide animation
-    setTimeout(this.props.onClose, 1000);
+    setTimeout(this.props.onClose, ShareActionFeedbacks.DEFAULT_WAIT_TO_CLOSE_TIME_IN_MS);
   }
 
   /**
@@ -192,8 +228,8 @@ class ShareActionFeedback extends React.Component {
           onMouseOver={this.persist}
           onMouseLeave={this.displayWithTimer}
           onClick={this.close}>
-          <div className={ `message animated ${this.state.shouldRender ? 'fadeInUp' : 'fadeOutUp'} warning`}>
-            <span  className="content">
+          <div className={`message animated ${this.state.shouldRender ? 'fadeInUp' : 'fadeOutUp'} warning`}>
+            <span className="content">
               <strong>
                 {
                   {
@@ -215,4 +251,5 @@ class ShareActionFeedback extends React.Component {
 ShareActionFeedback.propTypes = {
   feedback: PropTypes.object, // The feedback to display
   onClose: PropTypes.func, // Callback when the feedback must be closed
+  displayTimeInMs: PropTypes.number, // The time the feedback should be displayed
 };
