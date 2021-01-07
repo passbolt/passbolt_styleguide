@@ -327,14 +327,14 @@ class ChooseSecurityToken extends Component {
             </a>.
           </p>
           {this.state.hasBeenValidated &&
-            <>
+            <div className="input text">
               {this.state.errors.emptyCode &&
-              <div className="empty-code error message">The security token code should not be empty.</div>
+              <div className="empty-code error-message">The security token code should not be empty.</div>
               }
               {this.state.errors.lengthCode &&
-              <div className="not-good-length-code error message">The security token code should be 3 characters long.</div>
+              <div className="not-good-length-code error-message">The security token code should be 3 characters long.</div>
               }
-            </>
+            </div>
           }
           <div className="form-actions">
             <button
