@@ -216,7 +216,7 @@ class AddComment extends React.Component {
 
               <div className="metadata">
                 <span className="author username">
-                  <a href="#">You</a>
+                  You
                 </span>
                 <span className="modified">right now</span>
               </div>
@@ -226,7 +226,7 @@ class AddComment extends React.Component {
                   type="submit"
                   onClick={this.handleSubmitEvent}
                   disabled={this.state.actions.processing}>
-                                    Send
+                  Save
                 </button>
                 {
                   this.props.cancellable &&
