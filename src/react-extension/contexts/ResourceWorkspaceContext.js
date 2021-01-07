@@ -526,15 +526,15 @@ export class ResourceWorkspaceContextProvider extends React.Component {
   async searchByGroup(filter) {
     const groupId = filter.payload.group.id;
     const filters = {'is-shared-with-group': groupId};
-    await this.setState({filter, filteredResources: null, selectedResources: []});
     // get the resources with the group
+    this.props.loadingContext.add();
     const resourcesFilteredByGroup = await this.context.port.request('passbolt.resources.find-all', {filters}) || [];
-    if (filter === this.state.filter) {
-      const resourceIds = resourcesFilteredByGroup.map(resource => resource.id);
-      // keep only the resource with the group
-      const groupResources = this.resources.filter(resource => resourceIds.includes(resource.id));
-      await this.setState({filter, filteredResources: groupResources});
-    }
+    const resourceIds = resourcesFilteredByGroup.map(resource => resource.id);
+    // keep only the resource with the group
+    const groupResources = this.resources.filter(resource => resourceIds.includes(resource.id));
+    await this.setState({filter, filteredResources: groupResources, selectedResources: []});
+    this.props.loadingContext.remove();
+
   }
 
   /**
