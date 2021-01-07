@@ -1670,119 +1670,6 @@ a.unfav .svg-icon svg {
 .footer .footer-links a:not(.gh-btn):not(.gh-count) {
   border: 0;
 }
-/*
-	do not show javascript needed warning if js is enabled
-	this needs modernizer to work
-*/
-.js .message.no-js {
-  display: none;
-}
-.cookies .message.no-cookies {
-  display: none;
-}
-/* message styling per types */
-.message {
-  padding: 1em;
-}
-.message a {
-  border-bottom: 1px solid #888;
-}
-.message a:hover {
-  border-bottom: 1px solid #2894DF;
-}
-.message.error {
-  color: #333;
-  background: #ffe4e4;
-}
-.message.error a:link,
-.message.error a:visited {
-  color: #333;
-  border-bottom: 1px dotted #888;
-}
-.message.error a:hover {
-  color: #333;
-  border-bottom: 1px solid #888;
-}
-.message.success {
-  color: #333;
-  background: #EDF7EB;
-}
-.message.notice {
-  color: #333;
-  background: #daecf9;
-}
-.message.warning {
-  color: #333;
-  background: #FEF0BF;
-}
-.message p:last-child {
-  margin-bottom: 0;
-}
-/* big side info message blocks on setup or profile pages */
-.message.side-message {
-  margin-left: 1em;
-  font-size: 1em;
-  margin-right: 2em;
-}
-.message.side-message ul,
-.message.side-message p {
-  padding-bottom: 1em;
-}
-/* success animation */
-.message.success.success-large.animated {
-  background: #FFF;
-  color: #333;
-  display: flex;
-  border: 1px solid #DDD;
-  border-radius: 3px;
-}
-.message.success.success-large.animated .illustration {
-  flex: 0 0 180px;
-}
-.message.success.success-large.animated .additional-information {
-  flex: 1;
-  line-height: 180px;
-  margin-top: 1.5em;
-  padding-left: 1em;
-}
-@keyframes drawCircle {
-  0% {
-    stroke-dashoffset: 180px;
-  }
-  100% {
-    stroke-dashoffset: 0;
-  }
-}
-@keyframes drawCheck {
-  0% {
-    stroke-dashoffset: 50px;
-  }
-  100% {
-    stroke-dashoffset: 0;
-  }
-}
-.message.success.success-large.animated #successAnimationCircle {
-  stroke-dasharray: 180px 180px;
-  stroke: #009900;
-}
-.message.success.success-large.animated #successAnimationCheck {
-  stroke-dasharray: 50px 50px;
-  stroke: #009900;
-}
-.message.success.success-large.animated #successAnimation.animated {
-  animation: 0.75s ease-out 0s 1 both pop;
-}
-.message.success.success-large.animated #successAnimation.animated #successAnimationCircle {
-  animation: 0.75s cubic-bezier(0.77, 0, 0.175, 1) 0s 1 both drawCircle;
-}
-.message.success.success-large.animated #successAnimation.animated #successAnimationCheck {
-  animation: 0.75s cubic-bezier(0.77, 0, 0.175, 1) 0s 1 both drawCheck;
-}
-@media only screen and (max-width: 767px) {
-  .message.success.success-large.animated {
-    flex-direction: column;
-  }
-}
 .avatar img {
   width: 36px;
   height: 36px;
@@ -1949,6 +1836,7 @@ body {
   margin-left: auto;
   margin-right: auto;
 }
+.login.page .enter-passphrase .password,
 .login.page .choose-passphrase .password {
   /*
      * Clearfix: contain floats
@@ -1973,27 +1861,35 @@ body {
      *	`:before` to contain the top-margins of child elements.
      */
 }
+.login.page .enter-passphrase .password:before,
 .login.page .choose-passphrase .password:before,
+.login.page .enter-passphrase .password:after,
 .login.page .choose-passphrase .password:after {
   content: "";
   display: table;
 }
+.login.page .enter-passphrase .password:after,
 .login.page .choose-passphrase .password:after {
   clear: both;
 }
+.login.page .enter-passphrase .password:before,
 .login.page .choose-passphrase .password:before,
+.login.page .enter-passphrase .password:after,
 .login.page .choose-passphrase .password:after {
   content: "";
   display: table;
 }
+.login.page .enter-passphrase .password:after,
 .login.page .choose-passphrase .password:after {
   clear: both;
 }
+.login.page .enter-passphrase .password input,
 .login.page .choose-passphrase .password input {
   float: left;
   box-sizing: border-box;
   width: calc(100% - 4.1rem);
 }
+.login.page .enter-passphrase .password .password-view,
 .login.page .choose-passphrase .password .password-view {
   width: 3em;
   float: left;
@@ -2008,18 +1904,22 @@ body {
   border-left: 0;
   border-top: 1px solid #BBB;
 }
+.login.page .enter-passphrase .password .password-view.selected,
 .login.page .choose-passphrase .password .password-view.selected {
   background: #EEE;
   box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.2);
 }
+.login.page .enter-passphrase .password .password-view svg,
 .login.page .choose-passphrase .password .password-view svg {
   margin-top: 3px;
 }
+.login.page .enter-passphrase .password input:focus + .password-view,
 .login.page .choose-passphrase .password input:focus + .password-view {
   box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.2);
   border: 1px solid #2894DF;
   border-left: 0;
 }
+.login.page .enter-passphrase .password-complexity .complexity-text,
 .login.page .choose-passphrase .password-complexity .complexity-text {
   float: right;
   clear: right;
@@ -2028,9 +1928,11 @@ body {
   text-align: left;
   padding-left: 0;
 }
+.login.page .enter-passphrase .password-complexity.not_available .complexity-text,
 .login.page .choose-passphrase .password-complexity.not_available .complexity-text {
   color: #DDD;
 }
+.login.page .enter-passphrase .password-complexity .progress,
 .login.page .choose-passphrase .password-complexity .progress {
   width: 100%;
   box-sizing: border-box;
@@ -2041,6 +1943,7 @@ body {
   margin: 0.25em 0 0.5em 0;
   float: left;
 }
+.login.page .enter-passphrase .password-complexity .progress-bar,
 .login.page .choose-passphrase .password-complexity .progress-bar {
   background: #000;
   width: 0;
@@ -2049,22 +1952,27 @@ body {
   float: left;
   margin: 1px;
 }
+.login.page .enter-passphrase .password-complexity .progress-bar.very_weak,
 .login.page .choose-passphrase .password-complexity .progress-bar.very_weak {
   background: #000;
   width: 5%;
 }
+.login.page .enter-passphrase .password-complexity .progress-bar.weak,
 .login.page .choose-passphrase .password-complexity .progress-bar.weak {
   background: #D40101;
   width: 10%;
 }
+.login.page .enter-passphrase .password-complexity .progress-bar.fair,
 .login.page .choose-passphrase .password-complexity .progress-bar.fair {
   background: #FFBD2E;
   width: 60%;
 }
+.login.page .enter-passphrase .password-complexity .progress-bar.strong,
 .login.page .choose-passphrase .password-complexity .progress-bar.strong {
   background: #66CC00;
   width: 80%;
 }
+.login.page .enter-passphrase .password-complexity .progress-bar.very_strong,
 .login.page .choose-passphrase .password-complexity .progress-bar.very_strong {
   background: #009900;
   width: 99.5%;
@@ -2108,12 +2016,6 @@ body {
   align-items: center;
   justify-content: center ;
 }
-.login.page .message.error {
-  display: block;
-  clear: both;
-  width: 100%;
-  color: #D40101;
-}
 @media only screen and (min-width: 42rem) {
   body {
     background: #F3F3F3;
@@ -2145,11 +2047,5 @@ body {
     margin: auto;
     padding: 4.8rem 4rem 5.6rem 4rem;
     background: #FFF;
-  }
-  .message.error {
-    display: block;
-    clear: both;
-    width: 100%;
-    color: #D40101;
   }
 }

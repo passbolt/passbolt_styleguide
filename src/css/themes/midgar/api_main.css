@@ -6922,9 +6922,13 @@ input[type="search"]::-webkit-search-cancel-button {
 .panel.aside .description .description-content {
   white-space: pre-line;
 }
+.panel.aside .key-information .fingerprint .value {
+  height: 3.2em;
+}
 .panel.aside .key-information textarea {
   min-height: 30em;
   line-height: normal;
+  margin-top: 0.8em;
 }
 .panel.aside .form-content {
   margin: 0 0 0.5em 0;
