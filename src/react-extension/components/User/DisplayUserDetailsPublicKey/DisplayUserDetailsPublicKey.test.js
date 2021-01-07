@@ -56,9 +56,9 @@ describe("Display User Details Information", () => {
     expect(props.actionFeedbackContext.displaySuccess).toHaveBeenCalled();
   });
 
-  it('As LU I should see the appropriate detailed user key information', async() => {
+  it('As LU I should see the appropriate detailed user fingerprint', async() => {
     await page.toggleCollapse();
-    expect(page.keyId).toBe('5D9B054F');
+    expect(page.fingerprint).toContain('03F6 0E95 8F4C B297 23AC<br>DF76 1353 B5B1 5D9B 054F');
     expect(page.type).toBe('RSA');
   });
 });

@@ -43,10 +43,10 @@ export default class DisplayUserDetailsPublicKeyPage {
   }
 
   /**
-   * Returns the detailed user key id
+   * Returns the detailed user fingerprint
    */
-  get keyId() {
-    return this._page.container.querySelector('.keyId .value').innerHTML;
+  get fingerprint() {
+    return this._page.container.querySelector('.fingerprint .value').innerHTML;
   }
 
   /**
