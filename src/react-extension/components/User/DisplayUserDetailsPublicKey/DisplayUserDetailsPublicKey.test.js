@@ -58,7 +58,7 @@ describe("Display User Details Information", () => {
 
   it('As LU I should see the appropriate detailed user fingerprint', async() => {
     await page.toggleCollapse();
-    expect(page.fingerprint).toBe('03F6 0E95 8F4C B297 23AC DF76 1353 B5B1 5D9B 054F');
+    expect(page.fingerprint).toContain('03F6 0E95 8F4C B297 23AC<br>DF76 1353 B5B1 5D9B 054F');
     expect(page.type).toBe('RSA');
   });
 });

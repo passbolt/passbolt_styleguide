@@ -149,10 +149,12 @@ class DisplayUserDetailsPublicKey extends React.Component {
   /**
    * get fingerprint
    * @param fingerprint
-   * @returns {string}
+   * @returns {JSX.Element}
    */
   formatFingerprint(fingerprint) {
-    return fingerprint && fingerprint.toUpperCase().replace(/.{4}(?=.)/g, '$& ');
+    fingerprint = fingerprint || "";
+    const result = fingerprint.toUpperCase().replace(/.{4}/g, '$& ');
+    return <>{result.substr(0, 24)}<br/>{result.substr(25)}</>;
   }
 
   /**
