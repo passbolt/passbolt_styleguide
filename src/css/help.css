@@ -895,7 +895,8 @@ article ol.lower-alpha {
   list-style-type: lower-alpha;
 }
 ul.checklist li:before {
-  content: '✔';
+  content: '\2714';
+  /* unicode character  ✔ */
   width: 1em;
   margin-right: 1em;
 }
@@ -3585,7 +3586,8 @@ label {
 	.required		- additional red star
 */
 .required label:after {
-  content: " *";
+  content: " \002A";
+  /* unicode character * */
   color: #D40101;
   font-weight: bold;
 }
@@ -5001,7 +5003,8 @@ article table.table-parameters tbody tr td em {
   float: left;
 }
 .breadcrumbs ul li:before {
-  content: "›";
+  content: "\203A";
+  /* unicode character › */
   margin-right: 0.5em;
 }
 .breadcrumbs ul li:first-child {
@@ -5554,11 +5557,13 @@ table.table-info.vertical td .alt.side {
 }
 table.table-info td .alt.side:before,
 table.table-info.vertical td .alt.side:before {
-  content: "(";
+  content: "\0028";
+  /* unicode character ( */
 }
 table.table-info td .alt.side:after,
 table.table-info.vertical td .alt.side:after {
-  content: ")";
+  content: "\0029";
+  /* unicode character ) */
 }
 table.table-info td + td,
 table.table-info.vertical td + td {

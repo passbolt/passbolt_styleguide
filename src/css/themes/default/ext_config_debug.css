@@ -3508,7 +3508,8 @@ label {
 	.required		- additional red star
 */
 .required label:after {
-  content: " *";
+  content: " \002A";
+  /* unicode character * */
   color: #D40101;
   font-weight: bold;
 }
@@ -4860,11 +4861,13 @@ table.table-info.vertical td .alt.side {
 }
 table.table-info td .alt.side:before,
 table.table-info.vertical td .alt.side:before {
-  content: "(";
+  content: "\0028";
+  /* unicode character ( */
 }
 table.table-info td .alt.side:after,
 table.table-info.vertical td .alt.side:after {
-  content: ")";
+  content: "\0029";
+  /* unicode character ) */
 }
 table.table-info td + td,
 table.table-info.vertical td + td {

@@ -3544,7 +3544,8 @@ label {
 	.required		- additional red star
 */
 .required label:after {
-  content: " *";
+  content: " \002A";
+  /* unicode character * */
   color: #FF6B70;
   font-weight: bold;
 }
