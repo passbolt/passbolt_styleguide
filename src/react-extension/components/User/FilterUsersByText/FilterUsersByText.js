@@ -77,11 +77,9 @@ class FilterUsersByText extends Component {
 
   /**
    * Handle search input change
-   * @params {ReacEvent} The react event.
+   * @params {string} text The entered text
    */
-  handleSearchEvent(event) {
-    const target = event.target;
-    const text = target.value;
+  handleSearchEvent(text) {
     this.search(text);
   }
 

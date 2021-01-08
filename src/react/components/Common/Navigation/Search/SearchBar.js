@@ -24,6 +24,7 @@ class SearchBar extends Component {
     super(props);
     this.state = this.getDefaultState();
     this.bindCallbacks();
+    this.createReferences();
   }
 
   /**
@@ -31,6 +32,7 @@ class SearchBar extends Component {
    */
   bindCallbacks() {
     this.handleChangeEvent = this.handleChangeEvent.bind(this);
+    this.handleOnSubmitEvent = this.handleOnSubmitEvent.bind(this);
   }
 
   /**
@@ -42,11 +44,34 @@ class SearchBar extends Component {
   }
 
   /**
+   * Create elements references
+   */
+  createReferences() {
+    this.searchInputRef = React.createRef();
+  }
+
+  /**
    * Handle search input change
    * @params {ReactEvent} The react event.
    */
   handleChangeEvent(event) {
-    this.props.onSearch(event);
+    const target = event.target;
+    const text = target.value;
+    if (this.props.onSearch) {
+      this.props.onSearch(text);
+    }
+  }
+
+  /**
+   * Handle on submit
+   * @params {ReactEvent} The react event.
+   */
+  handleOnSubmitEvent(event) {
+    event.preventDefault();
+    if (this.props.onSearch) {
+      const text = this.searchInputRef.current.value;
+      this.props.onSearch(text);
+    }
   }
 
   /**
@@ -56,16 +81,16 @@ class SearchBar extends Component {
   render() {
     return (
       <div className="col2 search-wrapper">
-        <form className="search">
+        <form className="search" onSubmit={this.handleOnSubmitEvent}>
           <div className="input search required">
             <label htmlFor="js_app_filter_keywords">Search</label>
-            <input className="required" type="search"
+            <input ref={this.searchInputRef} className="required" type="search"
               disabled={this.props.disabled ? 'disabled' : ''}
               onChange={this.handleChangeEvent}
               placeholder={this.props.placeholder}
               value={this.props.value}/>
           </div>
-          <button value="search" type="button" disabled={this.props.disabled ? 'disabled' : ''}>
+          <button value="search" type="submit" disabled={this.props.disabled ? 'disabled' : ''}>
             <Icon name="search"/>
             <span className="visuallyhidden">Search</span>
           </button>
