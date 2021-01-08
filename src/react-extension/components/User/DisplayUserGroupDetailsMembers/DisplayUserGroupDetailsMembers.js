@@ -107,7 +107,7 @@ class DisplayUserGroupDetailsMembers extends React.Component {
         <div className="accordion-content">
           <a className="section-action" onClick={this.handleEditGroup}>
             <Icon name="edit"></Icon>
-            <span className="visuallyhidden">edit</span>
+            <span className="visuallyhidden">Edit</span>
           </a>
           {this.isLoading() &&
           <div className="processing-wrapper">

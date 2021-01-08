@@ -228,7 +228,7 @@ class DisplayUserDetailsPublicKey extends React.Component {
               <a
                 className="button copy-public-key"
                 onClick={this.handlePublicKeyCopy}>
-                <span>copy</span>
+                <span>Copy</span>
               </a>
             </span>
           </li>

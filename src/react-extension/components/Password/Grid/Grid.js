@@ -466,7 +466,7 @@ class Grid extends React.Component {
         <td className="cell_secret m-cell password">
           <div title="secret" className="secret-copy">
             <a onClick={ev => this.handleCopyPasswordClick(ev, resource)}>
-              <span>copy password to clipboard</span>
+              <span>Copy password to clipboard</span>
             </a>
           </div>
         </td>

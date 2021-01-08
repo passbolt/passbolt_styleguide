@@ -222,7 +222,7 @@ class PasswordWorkspaceMainMenu extends React.Component {
         <div className="dropdown" ref={this.createMenuRef}>
           <a className={`button create primary ready ${this.canCreate() ? "" : "disabled"}`} onClick={this.handleCreateClickEvent}>
             <Icon name="plus-circle"/>
-            <span>create</span>
+            <span>Create</span>
           </a>
           <ul className={`dropdown-content menu ready ${this.state.createMenuOpen ? "visible" : ""}`}>
             <li id="password_action">

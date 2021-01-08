@@ -61,8 +61,8 @@ describe("See description", () => {
 
       expect(page.descriptionEditor.component).not.toBeNull();
       expect(page.descriptionEditor.descriptionInput.value).toBe(resourceWithDescriptionMock.description);
-      expect(page.descriptionEditor.saveButton.textContent).toBe("save");
-      expect(page.descriptionEditor.cancelButton.textContent).toBe("cancel");
+      expect(page.descriptionEditor.saveButton.textContent).toBe("Save");
+      expect(page.descriptionEditor.cancelButton.textContent).toBe("Cancel");
     });
 
     it('Stop editing by clicking on the edit icon', async() => {
