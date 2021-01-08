@@ -307,14 +307,18 @@ class ExportResources extends React.Component {
               </select>
             </div>
             <p>
+              {this.hasFoldersToExport && !this.hasResourcesToExport &&
+                <em>{foldersIdsToExport.length} folder{foldersIdsToExport.length > 1 ? 's are' : ' is'} going to be exported.</em>
+              }
               {this.hasFoldersToExport && this.hasResourcesToExport &&
-              <em>{resourcesIdsToExport.length} passwords and {foldersIdsToExport.length} folders are going to be exported.</em>}
+                <em>{resourcesIdsToExport.length} password{resourcesIdsToExport.length > 1 ? 's' : ''} and {foldersIdsToExport.length} folder{foldersIdsToExport.length > 1 ? 's' : ''} are going to be exported.</em>
+              }
               {!this.hasFoldersToExport && this.hasResourcesToExport &&
-              <>
-                {resourcesIdsToExport.length === 1 && <em>One password is going to be exported</em>}
-                {resourcesIdsToExport.length > 1 &&
-                <em>{resourcesIdsToExport.length} passwords are going to be exported.</em>}
-              </>
+                <>
+                  {resourcesIdsToExport.length === 1 && <em>One password is going to be exported</em>}
+                  {resourcesIdsToExport.length > 1 &&
+                  <em>{resourcesIdsToExport.length} passwords are going to be exported.</em>}
+                </>
               }
             </p>
           </div>
