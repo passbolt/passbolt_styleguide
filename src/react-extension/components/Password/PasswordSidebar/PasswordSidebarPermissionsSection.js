@@ -67,6 +67,7 @@ class PasswordSidebarPermissionsSection extends React.Component {
    */
   async componentDidUpdate(prevProps) {
     await this.handleResourceChange(prevProps.resourceWorkspaceContext.details.resource);
+    await this.handleResourcePermissionsRefresh(prevProps.resourceWorkspaceContext.refresh.permissions);
   }
 
   /**
@@ -84,6 +85,18 @@ class PasswordSidebarPermissionsSection extends React.Component {
     const hasResourceChanged = this.resource.id !== previousResource.id;
     if (hasResourceChanged && this.state.open) {
       this.fetch();
+    }
+  }
+
+  /**
+   * Handle the refresh of resource permissions
+   * @param hasPreviouslyRefreshed True if one previously refreshed the permissions
+   */
+  async handleResourcePermissionsRefresh(hasPreviouslyRefreshed) {
+    const mustRefresh = !hasPreviouslyRefreshed && this.props.resourceWorkspaceContext.refresh.permissions;
+    if (mustRefresh) {
+      await this.fetch();
+      await this.props.resourceWorkspaceContext.onResourcePermissionsRefreshed();
     }
   }
 
