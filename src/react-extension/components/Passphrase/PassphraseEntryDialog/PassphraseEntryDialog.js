@@ -280,7 +280,7 @@ class PassphraseEntryDialog extends Component {
       <div className="dialog-wrapper" onKeyDown={this.handleKeyDown}>
         <div className="dialog passphrase-entry">
           <div className="dialog-header">
-            <h2>Please enter your passphrase</h2>
+            <h2>Please enter your passphrase.</h2>
             <a className="dialog-close" onClick={this.handleCloseClick}>
               <Icon name="close"/>
               <span className="visually-hidden">cancel</span>

@@ -282,10 +282,10 @@ class DisplaySimulateSynchronizeUserDirectoryAdministrationDialog extends Compon
             </p>
             <p></p>
             {this.hasSuccessResource() &&
-            <p id="resources-synchronize"> {this.usersSuccess.length} user(s) and {this.groupsSuccess.length} group(s)  will be synchronized </p>
+            <p id="resources-synchronize"> {this.usersSuccess.length} user(s) and {this.groupsSuccess.length} group(s)  will be synchronized. </p>
             }
             {!this.hasSuccessResource() &&
-            <p id="no-resources"> No resources will be synchronized </p>
+            <p id="no-resources"> No resources will be synchronized. </p>
             }
             {this.hasErrorOrIgnoreResource() &&
             <p className="error inline-error">Some resources will not be synchronized and will require your attention, see the full report.</p>
