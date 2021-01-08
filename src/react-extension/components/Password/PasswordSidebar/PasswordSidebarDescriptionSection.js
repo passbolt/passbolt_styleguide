@@ -292,11 +292,11 @@ class PasswordSidebarDescriptionSection extends React.Component {
           {this.mustShowEmptyDescription() &&
           <p className="description-content">
             {!this.canEdit() &&
-              <em className="empty-content">There is no description</em>
+              <em className="empty-content">There is no description.</em>
             }
             {this.canEdit() &&
             <em className="empty-content" onClick={this.toggleInputDescriptionEditor}>
-              There is no description yet, click here to add one
+              There is no description yet, click here to add one.
             </em>
             }
           </p>

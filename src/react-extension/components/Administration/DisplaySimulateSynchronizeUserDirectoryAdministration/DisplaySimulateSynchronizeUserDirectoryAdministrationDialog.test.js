@@ -42,7 +42,7 @@ describe("See the simulate synchronize user directory administration dialog", ()
     it('As AD I should see The full report in the dialog for my simulate synchronize report', async() => {
       expect(page.title.hyperlink.textContent).toBe("Synchronize simulation report");
       expect(page.displaySimulateSynchronizeUserDirectoryAdministrationDialog.exists()).toBeTruthy();
-      expect(page.displaySimulateSynchronizeUserDirectoryAdministrationDialog.resourceSynchronize).toBe(' 2 user(s) and 60 group(s)  will be synchronized ');
+      expect(page.displaySimulateSynchronizeUserDirectoryAdministrationDialog.resourceSynchronize).toBe(' 2 user(s) and 60 group(s)  will be synchronized. ');
       expect(page.displaySimulateSynchronizeUserDirectoryAdministrationDialog.error).toBe('Some resources will not be synchronized and will require your attention, see the full report.');
       expect(page.displaySimulateSynchronizeUserDirectoryAdministrationDialog.noResource).toBeNull();
       await page.displaySimulateSynchronizeUserDirectoryAdministrationDialog.click(page.displaySimulateSynchronizeUserDirectoryAdministrationDialog.fullReport);

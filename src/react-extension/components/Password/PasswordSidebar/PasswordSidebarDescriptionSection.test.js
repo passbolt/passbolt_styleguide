@@ -120,7 +120,7 @@ describe("See description", () => {
 
     it('See an empty message if the resource has no description', async() => {
       await page.title.click();
-      expect(page.passwordSidebarDescriptionSection.emptyMessage.textContent).toBe("There is no description yet, click here to add one");
+      expect(page.passwordSidebarDescriptionSection.emptyMessage.textContent).toBe("There is no description yet, click here to add one.");
     });
 
     it('Start editing by clicking on the empty message', async() => {
@@ -202,7 +202,7 @@ describe("See description", () => {
 
     it('See an empty message if the resource has no description', async() => {
       await page.title.click();
-      expect(page.passwordSidebarDescriptionSection.emptyMessage.textContent).toBe("There is no description");
+      expect(page.passwordSidebarDescriptionSection.emptyMessage.textContent).toBe("There is no description.");
     });
 
     it('Cannot editing by clicking on edit icon or on description', async() => {

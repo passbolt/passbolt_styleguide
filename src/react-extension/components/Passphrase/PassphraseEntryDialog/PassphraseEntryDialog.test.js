@@ -56,7 +56,7 @@ describe("PassphraseEntryDialog", () => {
     // Dialog title exists and correct.
     const dialogTitle = container.querySelector(".dialog-header h2");
     expect(dialogTitle).not.toBeNull();
-    expect(dialogTitle.textContent).toBe("Please enter your passphrase");
+    expect(dialogTitle.textContent).toBe("Please enter your passphrase.");
 
     // Close button exists.
     const closeButton = container.querySelector(".dialog-close");
