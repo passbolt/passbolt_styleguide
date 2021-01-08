@@ -265,19 +265,19 @@ class CheckPassphrase extends Component {
               </>
               }
             </div>
-          {this.props.canRememberMe &&
-            <div className="input checkbox">
-              <input
-                id="remember-me"
-                type="checkbox"
-                name="remember-me"
-                value={this.state.rememberMe}
-                onChange={this.handleToggleRememberMe}
-                disabled={!this.areActionsAllowed}/>
-              <label htmlFor="remember-me">
-                Remember until I logout.
-              </label>
-            </div>
+            {this.props.canRememberMe &&
+              <div className="input checkbox">
+                <input
+                  id="remember-me"
+                  type="checkbox"
+                  name="remember-me"
+                  value={this.state.rememberMe}
+                  onChange={this.handleToggleRememberMe}
+                  disabled={!this.areActionsAllowed}/>
+                <label htmlFor="remember-me">
+                  Remember until I logout.
+                </label>
+              </div>
             }
           </div>
           <div className="form-actions">

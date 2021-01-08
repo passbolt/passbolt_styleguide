@@ -78,7 +78,7 @@ class TagItemViewer extends React.Component {
         <ul className="tags tags-list" onClick={this.props.toggleInputTagEditor}>
           {this.getTags().map(tag =>
             <li key={tag.id} className="tag-list-item">
-              <a onClick={(event) => this.handleOnClickTag(event, tag)} className="tag ellipsis">{tag.slug}</a>
+              <a onClick={event => this.handleOnClickTag(event, tag)} className="tag ellipsis">{tag.slug}</a>
             </li>)
           }
         </ul>
