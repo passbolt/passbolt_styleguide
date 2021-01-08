@@ -137,7 +137,7 @@ class DisplayAdministrationWorkspaceActions extends React.Component {
             <li>
               <a className={`button ${this.isSaveEnabled() ? "" : "disabled"}`} onClick={this.handleSaveClick}>
                 <Icon name="save"/>
-                <span>save settings</span>
+                <span>Save settings</span>
               </a>
             </li>
             {this.isUserDirectorySelected() &&
@@ -145,19 +145,19 @@ class DisplayAdministrationWorkspaceActions extends React.Component {
               <li>
                 <a className={`button ${this.isTestEnabled() ? "" : "disabled"}`} onClick={this.handleTestClick}>
                   <Icon name="plug"/>
-                  <span>test settings</span>
+                  <span>Test settings</span>
                 </a>
               </li>
               <li>
                 <a className={`button ${this.isSynchronizeEnabled() ? "" : "disabled"}`} onClick={this.handleSimulateSynchronizeClick}>
                   <Icon name="magic-wand"/>
-                  <span>simulate synchronize</span>
+                  <span>Simulate synchronize</span>
                 </a>
               </li>
               <li>
                 <a className={`button ${this.isSynchronizeEnabled() ? "" : "disabled"}`} onClick={this.handleSynchronizeClick}>
                   <Icon name="refresh"/>
-                  <span>synchronize</span>
+                  <span>Synchronize</span>
                 </a>
               </li>
             </div>

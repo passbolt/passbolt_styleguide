@@ -463,7 +463,7 @@ class PasswordSidebarActivitySection extends React.Component {
             {this.mustDisplayMoreButton() &&
             <div className="actions">
               <a onClick={this.handleMoreClickEvent} className={`button action-logs-load-more ${this.state.loadingMore ? "processing disabled" : ""}`} role="button">
-                <span>more</span>
+                <span>More</span>
               </a>
             </div>
             }

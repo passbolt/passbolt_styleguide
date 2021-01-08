@@ -77,8 +77,8 @@ describe("See tags", () => {
 
       expect(page.tagEditor.component).not.toBeNull();
       expect(page.tagEditor.noticeMessage).toBeNull();
-      expect(page.tagEditor.saveButton.textContent).toBe("save");
-      expect(page.tagEditor.cancelButton.textContent).toBe("cancel");
+      expect(page.tagEditor.saveButton.textContent).toBe("Save");
+      expect(page.tagEditor.cancelButton.textContent).toBe("Cancel");
     });
 
     it('Stop editing by clicking on the edit icon', async() => {

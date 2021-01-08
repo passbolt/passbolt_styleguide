@@ -303,7 +303,7 @@ class DisplaySynchronizeUserDirectoryAdministrationDialog extends Component {
             <p></p>
           </div>
           <div className="submit-wrapper clearfix">
-            <a className={`button primary ${this.isLoading() ? "disabled" : ""}`} role="button" onClick={this.handleClose}>OK</a>
+            <a className={`button primary ${this.isLoading() ? "disabled" : ""}`} role="button" onClick={this.handleClose}>Ok</a>
           </div>
         </DialogWrapper>
         }

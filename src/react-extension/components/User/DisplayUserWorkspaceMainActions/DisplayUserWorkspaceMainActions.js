@@ -179,7 +179,7 @@ class DisplayUserWorkspaceMainActions extends React.Component {
         <div className="dropdown" ref={this.createMenuRef}>
           <a className="button create primary ready" onClick={this.handleCreateClickEvent}>
             <Icon name="plus-circle"/>
-            <span>create</span>
+            <span>Create</span>
           </a>
           <ul className={`dropdown-content menu ready ${this.state.createMenuOpen ? "visible" : ""}`}>
             <li id="user_action">

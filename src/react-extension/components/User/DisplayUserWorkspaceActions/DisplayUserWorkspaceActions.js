@@ -364,20 +364,20 @@ class DisplayUserWorkspaceActions extends React.Component {
             <li>
               <a className={`button ready ${this.isButtonDisabled() ? "disabled" : ""}`} onClick={this.handleEditClickEvent}>
                 <Icon name="edit"/>
-                <span>edit</span>
+                <span>Edit</span>
               </a>
             </li>
             <li>
               <a className={`button ready ${!this.canDelete ? "disabled" : ""}`} onClick={this.handleDeleteClickEvent}>
                 <Icon name="trash"/>
-                <span>delete</span>
+                <span>Delete</span>
               </a>
             </li>
             <div className="dropdown" ref={this.moreMenuRef}>
               <a
                 className={`button ready ${this.hasMoreActionAllowed ? "" : "disabled"}`}
                 onClick={this.handleMoreClickEvent}>
-                <span>more</span>
+                <span>More</span>
                 <Icon name="caret-down"/>
               </a>
               <ul className={`dropdown-content menu ready ${this.state.moreMenuOpen ? "visible" : ""}`}>
@@ -436,7 +436,7 @@ class DisplayUserWorkspaceActions extends React.Component {
                 className={`button toggle info ${this.hasDetailsLocked() ? "selected" : ""}`}
                 onClick={this.handleDetailsLockedEvent}>
                 <Icon name="info-circle"/>
-                <span className="visuallyhidden">view detail</span>
+                <span className="visuallyhidden">View detail</span>
               </a>
             </li>
           </ul>

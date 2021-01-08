@@ -532,10 +532,10 @@ class TagEditor extends React.Component {
         <div className="actions">
           <a className={`button tag-editor-submit ${this.hasAllInputDisabled() ? "primary processing disabled" : ""}`}
             onClick={this.handleOnSubmit}>
-            <span>save</span>
+            <span>Save</span>
           </a>
           <a className={`button cancel tag-editor-cancel ${this.hasAllInputDisabled() ? "disabled" : ""}`} role="button"
-            onClick={this.props.toggleInputTagEditor}><span>cancel</span></a>
+            onClick={this.props.toggleInputTagEditor}><span>Cancel</span></a>
         </div>
       </div>
     );

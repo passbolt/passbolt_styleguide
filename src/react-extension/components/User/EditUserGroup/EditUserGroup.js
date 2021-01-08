@@ -791,7 +791,7 @@ class EditUserGroup extends Component {
 
           <div className="submit-wrapper clearfix">
             <FormSubmitButton
-              value="save"
+              value="Save"
               disabled={this.hasSubmitDisabled}
               processing={this.isProcessing}/>
             <FormCancelButton
