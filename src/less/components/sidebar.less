@@ -128,12 +128,24 @@
     }
 
     /** SECTIONS **/
-    .description {
-        .description-content {
-            white-space: pre-line;
-        }
-        .description-editor {
+    .description-content {
+      white-space: pre-line;
+    }
 
+    .description-editor {
+        .actions {
+            margin: .5em 0 1em 0;
+
+            .description-lock {
+                float: left;
+
+                span.tooltip.tooltip-right {
+                  white-space: normal;
+                  .svg-icon {
+                    overflow: initial;
+                  }
+                }
+            }
         }
     }
     .key-information {

@@ -54,6 +54,8 @@ class PasswordSidebarDescriptionSection extends React.Component {
     this.handleTitleClickEvent = this.handleTitleClickEvent.bind(this);
     this.toggleInputDescriptionEditor = this.toggleInputDescriptionEditor.bind(this);
     this.onCloseDescriptionEditor = this.onCloseDescriptionEditor.bind(this);
+    this.handleEditClickEvent = this.handleEditClickEvent.bind(this);
+    this.handleRetryDecryptClickEvent = this.handleRetryDecryptClickEvent.bind(this);
   }
 
   componentDidMount() {
@@ -64,7 +66,9 @@ class PasswordSidebarDescriptionSection extends React.Component {
 
   componentDidUpdate(prevProps) {
     if (this.resource.id !== prevProps.resourceWorkspaceContext.details.resource.id
-      || this.resource.modified !== prevProps.resourceWorkspaceContext.details.resource.modified) {
+      || this.resource.modified !== prevProps.resourceWorkspaceContext.details.resource.modified
+      && !this.state.showDescriptionEditor) {
+      // Avoid an update when the user do it with the description editor to not asking his passphrase again
       if (this.state.open) {
         this.setDescription();
       } else {
@@ -86,10 +90,6 @@ class PasswordSidebarDescriptionSection extends React.Component {
    *  Decryption
    * =============================================================
    */
-  isDecryptionRequired() {
-    return (this.isResourceDescriptionEncrypted && typeof this.state.description === undefined);
-  }
-
   isResourceDescriptionEncrypted() {
     if (!this.resource.resource_type_id) {
       return false;
@@ -127,14 +127,16 @@ class PasswordSidebarDescriptionSection extends React.Component {
       this.setState({
         plaintextDto: plaintextDto,
         description: description,
-        isSecretDecrypting: false
+        isSecretDecrypting: false,
+        error: false
       });
     } catch (error) {
       console.error(error);
       this.setState({
+        description: undefined,
         isSecretDecrypting: false,
         error: true,
-        errorMsg: `Sorry the description could not be decrypted. ${error.message || ''}`
+        errorMsg: `Decryption failed, click here to retry ${error.message || ''}`
       });
 
       return false;
@@ -206,8 +208,25 @@ class PasswordSidebarDescriptionSection extends React.Component {
     }
   }
 
-  onCloseDescriptionEditor(description) {
-    this.setState({description}, this.toggleInputDescriptionEditor());
+  /**
+   * Check if description must be decrypted before editing
+   */
+  handleEditClickEvent() {
+    if (this.state.description === undefined) {
+      this.handleRetryDecryptClickEvent();
+    }
+    this.toggleInputDescriptionEditor();
+  }
+
+  /**
+   * Retry to decrypted description
+   */
+  handleRetryDecryptClickEvent() {
+    this.setDescription();
+  }
+
+  onCloseDescriptionEditor(description, plaintextDto) {
+    this.setState({description, plaintextDto, showDescriptionEditor: false});
   }
 
   /*
@@ -226,7 +245,7 @@ class PasswordSidebarDescriptionSection extends React.Component {
    * @returns {boolean}
    */
   canEdit() {
-    return !this.state.error && this.resource.permission && this.resource.permission.type >= 7;
+    return this.resource.permission && this.resource.permission.type >= 7;
   }
 
   /**
@@ -272,7 +291,7 @@ class PasswordSidebarDescriptionSection extends React.Component {
         </div>
         <div className="accordion-content">
           {this.canEdit() &&
-          <a className="section-action" onClick={this.toggleInputDescriptionEditor}>
+          <a className="section-action" onClick={this.handleEditClickEvent}>
             <Icon name="edit"/>
             <span className="visuallyhidden">edit</span>
           </a>
@@ -285,7 +304,7 @@ class PasswordSidebarDescriptionSection extends React.Component {
           </p>
           }
           {this.state.error &&
-          <p className="description-content error-message">
+          <p className="description-content error-message" onClick={this.handleRetryDecryptClickEvent}>
             {this.state.errorMsg}
           </p>
           }

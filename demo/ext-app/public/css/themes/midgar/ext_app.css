@@ -7729,8 +7729,20 @@ input[type="search"]::-webkit-search-cancel-button {
   float: left;
   height: 1.8em;
 }
-.panel.aside .description .description-content {
+.panel.aside .description-content {
   white-space: pre-line;
+}
+.panel.aside .description-editor .actions {
+  margin: 0.5em 0 1em 0;
+}
+.panel.aside .description-editor .actions .description-lock {
+  float: left;
+}
+.panel.aside .description-editor .actions .description-lock span.tooltip.tooltip-right {
+  white-space: normal;
+}
+.panel.aside .description-editor .actions .description-lock span.tooltip.tooltip-right .svg-icon {
+  overflow: initial;
 }
 .panel.aside .key-information .fingerprint .value {
   height: 3.2em;

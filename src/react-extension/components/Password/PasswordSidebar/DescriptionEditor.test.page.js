@@ -36,7 +36,7 @@ export default class DescriptionEditorPageObject {
    * Returns the textarea input element
    */
   get descriptionInput() {
-    return this._container.querySelector('.input.text.required textarea');
+    return this._container.querySelector('.input.textarea.required textarea');
   }
 
   /**

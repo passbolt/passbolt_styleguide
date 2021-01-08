@@ -16,6 +16,7 @@ import PropTypes from "prop-types";
 import AppContext from "../../../contexts/AppContext";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import {withLoading} from "../../../../react/contexts/Common/LoadingContext";
+import Tooltip from "../../../../react/components/Common/Tooltip/Tooltip";
 
 /**
  * This component allows the current user to edit the description of a resource
@@ -40,6 +41,7 @@ class DescriptionEditor extends React.Component {
     return {
       encryptDescription: false,
       description: undefined, // description of the resource
+      plaintextDto: undefined, // description of the resource
       loading: true, // component loading
       processing: false, // component processing
       error: "" // error to display
@@ -55,6 +57,7 @@ class DescriptionEditor extends React.Component {
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleFormSubmit = this.handleFormSubmit.bind(this);
     this.handleCancel = this.handleCancel.bind(this);
+    this.handleDescriptionToggle = this.handleDescriptionToggle.bind(this);
   }
 
   /**
@@ -69,6 +72,7 @@ class DescriptionEditor extends React.Component {
     this.handleOutsideEditorClickEvent();
     const state = {
       loading: false,
+      plaintextDto: this.props.plaintextDto,
       description: this.props.description,
       encryptDescription: this.mustEncryptDescription()
     };
@@ -104,11 +108,31 @@ class DescriptionEditor extends React.Component {
     return this.context.resourceTypesSettings;
   }
 
+  /*
+   * =============================================================
+   *  Resource type helpers
+   * =============================================================
+   */
+  isEncryptedDescriptionEnabled() {
+    return this.resourceTypesSettings.isEncryptedDescriptionEnabled();
+  }
+
+  areResourceTypesEnabled() {
+    return this.resourceTypesSettings.areResourceTypesEnabled();
+  }
+
   /**
    * @returns {string}
    */
   get description() {
     return this.state.description;
+  }
+
+  /**
+   * @returns {}
+   */
+  get plaintextDto() {
+    return this.state.plaintextDto;
   }
 
   /*
@@ -147,7 +171,7 @@ class DescriptionEditor extends React.Component {
    */
   async updateResource() {
     // Resource types enabled but legacy type requested
-    if (!this.mustEncryptDescription()) {
+    if (!this.state.encryptDescription) {
       return this.updateCleartextDescription();
     }
 
@@ -177,8 +201,16 @@ class DescriptionEditor extends React.Component {
       this.context.resourceTypesSettings.DEFAULT_RESOURCE_TYPES_SLUGS.PASSWORD_AND_DESCRIPTION
     );
 
-    const plaintextDto = {...this.props.plaintextDto};
+    let plaintextDto = {};
+    if (this.plaintextDto === undefined) {
+      const password = await this.context.port.request("passbolt.secret.decrypt", resourceDto.id, {showProgress: false});
+      plaintextDto.password = password;
+    } else {
+      plaintextDto = {...this.plaintextDto};
+    }
+
     plaintextDto.description = this.description;
+    await this.setState({plaintextDto});
 
     return this.context.port.request("passbolt.resources.update", resourceDto, plaintextDto);
   }
@@ -190,10 +222,10 @@ class DescriptionEditor extends React.Component {
    */
   /**
    * Toggle the editor back to display mode
-   * @returns {string} send back the updated description to avoid potential unnecessary decrypt round
+   * @returns {string} send back the updated description and plaintextDto to avoid potential unnecessary decrypt round
    */
   close() {
-    return this.props.onClose(this.description);
+    return this.props.onClose(this.description, this.plaintextDto);
   }
 
   /**
@@ -230,8 +262,8 @@ class DescriptionEditor extends React.Component {
    * @param {ReactEvent} event The event
    */
   handleEditorClickEvent(event) {
-    // Prevent stop editing when the user click on an element of the editor
-    if (this.elementRef.current.contains(event.target)) {
+    // Prevent stop editing when the user click on an element of the editor or is in processing state and click to enter his passphrase
+    if (this.elementRef.current.contains(event.target) || this.state.processing) {
       return;
     }
     this.close();
@@ -293,6 +325,29 @@ class DescriptionEditor extends React.Component {
     }
   }
 
+  /**
+   * Switch to toggle description field encryption
+   */
+  async handleDescriptionToggle(event) {
+    /*
+     * When click on the lock button
+     * the click is detected out of the element and the editor close.
+     * To fix that an immediate stop propagation enable to avoid the editor close.
+     * Need absolutely an immediate propagation to stop other listeners.
+     */
+    event.nativeEvent.stopImmediatePropagation();
+    // Description is not encrypted and encrypted description type is not supported => leave it alone
+    if (!this.isEncryptedDescriptionEnabled() && !this.state.encryptDescription) {
+      return;
+    }
+
+    // No obligation to keep description encrypted, allow toggle
+    if (!this.mustEncryptDescription()) {
+      const encrypt = !this.state.encryptDescription;
+      this.setState({encryptDescription: encrypt});
+    }
+  }
+
   /*
    * =============================================================
    * Render
@@ -306,7 +361,7 @@ class DescriptionEditor extends React.Component {
     return (
       <form onKeyDown={this.handleKeyDown} noValidate className="description-editor">
         <div className="form-content" ref={this.elementRef}>
-          <div className="input text required">
+          <div className="input textarea required">
             <textarea name="description" className="fluid" ref={this.textareaRef}
               maxLength="10000" placeholder="enter a description" value={this.description}
               onChange={this.handleInputChange}
@@ -322,6 +377,22 @@ class DescriptionEditor extends React.Component {
             </a>
             <a className={`cancel button ${this.hasAllInputDisabled() ? "disabled" : ""}`} role="button"
               onClick={this.handleCancel}>Cancel</a>
+            <div className="description-lock">
+              {!this.areResourceTypesEnabled() &&
+              <Tooltip message="Do not store sensitive data. Unlike the password, this data is not encrypted. Upgrade to version 3 to encrypt this information."
+                icon="info-circle"/>
+              }
+              {this.areResourceTypesEnabled() && !this.state.encryptDescription &&
+              <a role="button" onClick={event => this.handleDescriptionToggle(event)} className="lock-toggle">
+                <Tooltip message="Do not store sensitive data or click here to enable encryption for the description field." icon="lock-open" />
+              </a>
+              }
+              {this.areResourceTypesEnabled() && this.state.encryptDescription &&
+              <a role="button" onClick={event => this.handleDescriptionToggle(event)} className="lock-toggle">
+                <Tooltip message="The description content will be encrypted." icon="lock" />
+              </a>
+              }
+            </div>
           </div>
         </div>
       </form>
