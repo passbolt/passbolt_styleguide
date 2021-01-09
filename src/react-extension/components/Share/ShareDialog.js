@@ -25,6 +25,7 @@ import SharePermissionItemSkeleton from "./SharePermissionItemSkeleton";
 import AppContext from "../../contexts/AppContext";
 import {withDialog} from "../../../react/contexts/Common/DialogContext";
 import {withActionFeedback} from "../../contexts/ActionFeedbackContext";
+import {withResourceWorkspace} from "../../contexts/ResourceWorkspaceContext";
 
 class ShareDialog extends Component {
   /**
@@ -156,6 +157,7 @@ class ShareDialog extends Component {
    */
   async handleSaveSuccess() {
     await this.props.actionFeedbackContext.displaySuccess("The permissions have been changed successfully.");
+    await this.props.resourceWorkspaceContext.onResourceShared();
     this.props.onClose();
   }
 
@@ -476,8 +478,9 @@ ShareDialog.contextType = AppContext;
 
 ShareDialog.propTypes = {
   onClose: PropTypes.func,
+  resourceWorkspaceContext: PropTypes.any, // The resource workspace context
   actionFeedbackContext: PropTypes.any, // The action feedback context
   dialogContext: PropTypes.any // The dialog context
 };
 
-export default withActionFeedback(withDialog(ShareDialog));
+export default withResourceWorkspace(withActionFeedback(withDialog(ShareDialog)));

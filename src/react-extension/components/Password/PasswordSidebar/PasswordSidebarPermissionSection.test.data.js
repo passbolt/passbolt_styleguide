@@ -34,6 +34,9 @@ export function defaultProps() {
             type: 15
           }
         }
+      },
+      refresh: {
+        permissions: false
       }
     }
   };
