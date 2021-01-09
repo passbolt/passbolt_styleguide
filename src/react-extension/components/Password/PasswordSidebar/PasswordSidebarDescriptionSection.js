@@ -305,7 +305,7 @@ class PasswordSidebarDescriptionSection extends React.Component {
           }
           {this.state.error &&
           <p className="description-content error-message" onClick={this.handleRetryDecryptClickEvent}>
-            {this.state.errorMsg}
+            <em className="empty-content">{this.state.errorMsg}</em>
           </p>
           }
           {this.mustShowEmptyDescription() &&

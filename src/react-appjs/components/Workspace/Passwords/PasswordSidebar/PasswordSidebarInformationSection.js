@@ -161,48 +161,50 @@ class PasswordSidebarInformationSection extends React.Component {
         <div className="accordion-header">
           <h4><a onClick={this.handleTitleClickEvent} role="button">Information</a></h4>
         </div>
-        <ul className="accordion-content">
-          <li className="username">
-            <span className="label">Name</span>
-            <span className="value">{this.props.resource.name}</span>
-          </li>
-          <li className="password">
-            <span className="label">Password</span>
-            <div className="value">
-              <div className="secret-copy">
-                <a role="button"><span>copy password to clipboard</span></a>
+        <div className="accordion-content">
+          <ul>
+            <li className="username">
+              <span className="label">Name</span>
+              <span className="value">{this.props.resource.name}</span>
+            </li>
+            <li className="password">
+              <span className="label">Password</span>
+              <div className="value">
+                <div className="secret-copy">
+                  <a role="button"><span>copy password to clipboard</span></a>
+                </div>
               </div>
-            </div>
-          </li>
-          <li className="uri">
-            <span className="label">Uri</span>
-            <span className="value"><a href={safeUri} target="_blank" rel="noopener noreferrer">{this.props.resource.uri}</a></span>
-          </li>
-          <li className="modified">
-            <span className="label">Modified</span>
-            <span className="value">{modifiedDateTimeAgo}</span>
-          </li>
-          <li className="modified-by">
-            <span className="label">Modified by</span>
-            <span className="value">{modifierUsername}</span>
-          </li>
-          <li className="modified">
-            <span className="label">Created</span>
-            <span className="value">{createdDateTimeAgo}</span>
-          </li>
-          <li className="modified-by">
-            <span className="label">Created by</span>
-            <span className="value">{creatorUsername}</span>
-          </li>
-          <li className="location">
-            <span className="label">Location</span>
-            <span className="value">
-                <a onClick={this.handleFolderParentClickEvent} className={`folder-link ${!this.props.folders ? "disabled" : ""}`}>
-                  <Icon name="folder"/> {folderParentName}
-                </a>
-            </span>
-          </li>
-        </ul>
+            </li>
+            <li className="uri">
+              <span className="label">Uri</span>
+              <span className="value"><a href={safeUri} target="_blank" rel="noopener noreferrer">{this.props.resource.uri}</a></span>
+            </li>
+            <li className="modified">
+              <span className="label">Modified</span>
+              <span className="value">{modifiedDateTimeAgo}</span>
+            </li>
+            <li className="modified-by">
+              <span className="label">Modified by</span>
+              <span className="value">{modifierUsername}</span>
+            </li>
+            <li className="modified">
+              <span className="label">Created</span>
+              <span className="value">{createdDateTimeAgo}</span>
+            </li>
+            <li className="modified-by">
+              <span className="label">Created by</span>
+              <span className="value">{creatorUsername}</span>
+            </li>
+            <li className="location">
+              <span className="label">Location</span>
+              <span className="value">
+                  <a onClick={this.handleFolderParentClickEvent} className={`folder-link ${!this.props.folders ? "disabled" : ""}`}>
+                    <Icon name="folder"/> {folderParentName}
+                  </a>
+              </span>
+            </li>
+          </ul>
+        </div>
       </div>
     );
   }

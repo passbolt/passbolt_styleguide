@@ -99,29 +99,30 @@ class DisplayUserDetailsGroups extends React.Component {
             </a>
           </h4>
         </div>
-        <ul className="accordion-content">
-          {this.state.open && hasGroups &&
-            groups.map(group => (
-              <li
-                key={group.id}
-                className="permission usercard-col-2">
-                <div className="content-wrapper">
-                  <div className="content">
-                    <div className="name">{group.name}</div>
-                    <div className="subinfo">{group.role}</div>
+        <div className="accordion-content">
+          <ul>
+            {this.state.open && hasGroups &&
+              groups.map(group => (
+                <li
+                  key={group.id}
+                  className="permission usercard-col-2">
+                  <div className="content-wrapper">
+                    <div className="content">
+                      <div className="name">{group.name}</div>
+                      <div className="subinfo">{group.role}</div>
+                    </div>
                   </div>
-                </div>
-                <GroupAvatar
-                  group={group}
-                  baseUrl={this.baseUrl}/>
-              </li>
-            ))
-          }
-          {!hasGroups &&
-            <em className="empty-feedback empty-group-feedback">The user is not a member of any group yet</em>
-          }
-
-        </ul>
+                  <GroupAvatar
+                    group={group}
+                    baseUrl={this.baseUrl}/>
+                </li>
+              ))
+            }
+            {!hasGroups &&
+              <em className="empty-feedback empty-group-feedback">The user is not a member of any group yet</em>
+            }
+          </ul>
+        </div>
       </div>
     );
   }
