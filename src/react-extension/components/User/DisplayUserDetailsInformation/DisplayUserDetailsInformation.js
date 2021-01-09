@@ -104,20 +104,22 @@ class DisplayUserDetailsInformation extends React.Component {
             </a>
           </h4>
         </div>
-        <ul className="accordion-content">
-          <li className="role">
-            <span className="label">Role</span>
-            <span className="value capitalize">{role}</span>
-          </li>
-          <li className="modified">
-            <span className="label">Modified</span>
-            <span className="value">{modified}</span>
-          </li>
-          <li className="status">
-            <span className="label">Status</span>
-            <span className="value">{status}</span>
-          </li>
-        </ul>
+        <div className="accordion-content">
+          <ul>
+            <li className="role">
+              <span className="label">Role</span>
+              <span className="value capitalize">{role}</span>
+            </li>
+            <li className="modified">
+              <span className="label">Modified</span>
+              <span className="value">{modified}</span>
+            </li>
+            <li className="status">
+              <span className="label">Status</span>
+              <span className="value">{status}</span>
+            </li>
+          </ul>
+        </div>
       </div>
     );
   }

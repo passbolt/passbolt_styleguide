@@ -97,6 +97,7 @@
             padding:1em 1.25em 1.5em 1.25em;
             background: @sidebar-section-header-background;
 
+            // button displayed next to caret that open/close
             .section-action {
                 font-size: 1.125em;
                 position:absolute;
@@ -108,26 +109,34 @@
                 border:0;
             }
 
-            span {
-                .ellipsis();
-            }
-            .label {
-                width: 30%;
-                display: inline-block;
-                margin-right: 10%;
-                float: left;
-                height: 1.8em;
-            }
-            .value {
-                width: 60%;
-                display: inline-block;
-                float: left;
-                height: 1.8em;
-            }
         }
     }
 
     /** SECTIONS **/
+    .detailed-information {
+      li {
+        .clearfix();
+        padding-bottom:.25em;
+
+        span {
+          .ellipsis();
+        }
+        .label {
+          width: 30%;
+          display: inline-block;
+          margin-right: 10%;
+          float: left;
+          height: 1.8em;
+        }
+        .value {
+          width: 60%;
+          display: inline-block;
+          float: left;
+          height: 1.8em;
+        }
+      }
+    }
+
     .description-content {
       white-space: pre-line;
     }
@@ -148,6 +157,7 @@
             }
         }
     }
+
     .key-information {
       .fingerprint .value {
         height: 3.2em;
@@ -156,6 +166,29 @@
         min-height: 30em;
         line-height: normal;
         margin-top: 0.8em;
+        width: 100%;
+        box-sizing: border-box;
+      }
+      li {
+        .clearfix();
+        padding-bottom:.25em;
+
+        span {
+          .ellipsis();
+        }
+        .label {
+          width: 30%;
+          display: inline-block;
+          margin-right: 10%;
+          float: left;
+          height: 1.8em;
+        }
+        .value {
+          width: 60%;
+          display: inline-block;
+          float: left;
+          height: 1.8em;
+        }
       }
     }
 

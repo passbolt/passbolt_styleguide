@@ -197,50 +197,52 @@ class DisplayUserDetailsPublicKey extends React.Component {
             </a>
           </h4>
         </div>
-        {isLoading &&
-        <ul className="accordion-content">
-          <li className="processing-wrapper">
-            <span className="processing-text">Retrieving public key</span>
-          </li>
-        </ul>
-        }
-        {!isLoading &&
-        <ul className="accordion-content">
-          <li className="fingerprint">
-            <span className="label">Fingerprint</span>
-            <span className="value">{this.formatFingerprint(this.state.gpgkeyInfo.fingerprint)}</span>
-          </li>
-          <li className="type">
-            <span className="label">Type</span>
-            <span className="value">{this.state.gpgkeyInfo.type}</span>
-          </li>
-          <li className="created">
-            <span className="label">Created</span>
-            <span className="value">{this.state.gpgkeyInfo.created}</span>
-          </li>
-          <li className="expires">
-            <span className="label">Expires</span>
-            <span className="value">{this.state.gpgkeyInfo.expires}</span>
-          </li>
-          <li className="key">
-            <span className="label">Public key</span>
-            <span className="value">
-              <a
-                className="button copy-public-key"
-                onClick={this.handlePublicKeyCopy}>
-                <span>Copy</span>
-              </a>
-            </span>
-          </li>
-          <li className="gpgkey">
-            <textarea
-              className="code"
-              value={this.state.gpgkeyInfo.armoredKey}
-              disabled>
-            </textarea>
-          </li>
-        </ul>
-        }
+        <div className="accordion-content">
+          {isLoading &&
+          <ul>
+            <li className="processing-wrapper">
+              <span className="processing-text">Retrieving public key</span>
+            </li>
+          </ul>
+          }
+          {!isLoading &&
+          <ul>
+            <li className="fingerprint">
+              <span className="label">Fingerprint</span>
+              <span className="value">{this.formatFingerprint(this.state.gpgkeyInfo.fingerprint)}</span>
+            </li>
+            <li className="type">
+              <span className="label">Type</span>
+              <span className="value">{this.state.gpgkeyInfo.type}</span>
+            </li>
+            <li className="created">
+              <span className="label">Created</span>
+              <span className="value">{this.state.gpgkeyInfo.created}</span>
+            </li>
+            <li className="expires">
+              <span className="label">Expires</span>
+              <span className="value">{this.state.gpgkeyInfo.expires}</span>
+            </li>
+            <li className="key">
+              <span className="label">Public key</span>
+              <span className="value">
+                <a
+                  className="button copy-public-key"
+                  onClick={this.handlePublicKeyCopy}>
+                  <span>Copy</span>
+                </a>
+              </span>
+            </li>
+            <li className="gpgkey">
+              <textarea
+                className="code"
+                value={this.state.gpgkeyInfo.armoredKey}
+                disabled>
+              </textarea>
+            </li>
+          </ul>
+          }
+        </div>
       </div>
     );
   }

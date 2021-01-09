@@ -50,7 +50,7 @@ const createResource = index => {
 
 export default (() => {
   let resources = [];
-  for(let i = 0; i < 1000; i++) {
+  for(let i = 0; i < 100; i++) {
     resources.push(createResource("" + i));
   }
   return resources;

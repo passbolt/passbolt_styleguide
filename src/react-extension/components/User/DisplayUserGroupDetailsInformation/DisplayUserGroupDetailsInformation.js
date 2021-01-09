@@ -94,24 +94,26 @@ class DisplayUserGroupDetailsInformation extends React.Component {
             </a>
           </h4>
         </div>
-        <ul className="accordion-content">
-          <li className="created">
-            <span className="label">Created</span>
-            <span className="value">{created}</span>
-          </li>
-          <li className="modified">
-            <span className="label">Modified</span>
-            <span className="value">{modified}</span>
-          </li>
-          <li className="modified-by">
-            <span className="label">Modified by</span>
-            <span className="value">{modifiedByUserName}</span>
-          </li>
-          <li className="members">
-            <span className="label">Members</span>
-            <span className="value">{membersCount}</span>
-          </li>
-        </ul>
+        <div className="accordion-content">
+          <ul>
+            <li className="created">
+              <span className="label">Created</span>
+              <span className="value">{created}</span>
+            </li>
+            <li className="modified">
+              <span className="label">Modified</span>
+              <span className="value">{modified}</span>
+            </li>
+            <li className="modified-by">
+              <span className="label">Modified by</span>
+              <span className="value">{modifiedByUserName}</span>
+            </li>
+            <li className="members">
+              <span className="label">Members</span>
+              <span className="value">{membersCount}</span>
+            </li>
+          </ul>
+        </div>
       </div>
     );
   }
