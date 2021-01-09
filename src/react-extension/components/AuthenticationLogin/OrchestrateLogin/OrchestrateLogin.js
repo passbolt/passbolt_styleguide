@@ -8,6 +8,7 @@ import ErrorDialog from "../../Dialog/ErrorDialog/ErrorDialog";
 import {withDialog} from "../../../../react/contexts/Common/DialogContext";
 import PropTypes from "prop-types";
 import LoadingSpinner from "../../../../react/components/Common/Loading/LoadingSpinner/LoadingSpinner";
+import DisplayUnexpectedError from "../../Authentication/DisplayError/DisplayUnexpectedError";
 
 /**
  * The component orchestrates the login authentication process
@@ -77,9 +78,11 @@ class OrchestrateLogin extends Component {
       case AuthenticationContextState.LOGIN_IN_PROGRESS:
         return <DisplayLoginInProgress/>;
       case AuthenticationContextState.LOGIN_FAILED:
-        return <DisplayLoginError error={this.context.error.login}/>;
+        return <DisplayLoginError error={this.context.error}/>;
       case AuthenticationContextState.LOGIN_SERVER_KEY_CHANGED:
         return <AcceptLoginServerKeyChange/>;
+      case AuthenticationContextState.UNEXPECTED_ERROR:
+        return <DisplayUnexpectedError error={this.context.error}/>;
       default:
         return <LoadingSpinner/>;
     }

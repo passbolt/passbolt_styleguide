@@ -17,7 +17,7 @@ import LoadingSpinner from "../../../../react/components/Common/Loading/LoadingS
 import {ApiSetupContextState, withApiSetupContext} from "../../../contexts/ApiSetupContext";
 import InstallExtension from "../../Authentication/InstallExtension/InstallExtension";
 import DisplayBrowserNotSupported from "../../Authentication/DisplayBrowserNotSupported/DisplayBrowserNotSupported";
-import DisplayError from "../../Authentication/DisplayError/DisplayError";
+import DisplayRequireInvitationError from "../../Authentication/DisplayError/DisplayRequireInvitationError";
 import DisplayExpiredTokenError from "../../Authentication/DisplayError/DisplayExpiredTokenError";
 
 /**
@@ -51,7 +51,7 @@ class OrchestrateApiSetup extends Component {
       case ApiSetupContextState.TOKEN_EXPIRED_STATE:
         return <DisplayExpiredTokenError/>;
       case ApiSetupContextState.ERROR_STATE:
-        return <DisplayError/>;
+        return <DisplayRequireInvitationError/>;
       default:
         return <LoadingSpinner/>;
     }

@@ -50,7 +50,6 @@ class ImportGpgKey extends Component {
     };
   }
 
-
   /**
    * Returns true if the user can perform actions on the component
    */
@@ -70,6 +69,13 @@ class ImportGpgKey extends Component {
    */
   get isProcessing() {
     return this.state.actions.processing;
+  }
+
+  /**
+   * Return true if there are errors
+   */
+  get hasErrors() {
+    return this.state.errors.emptyPrivateKey || this.state.errors.invalidPrivateKey;
   }
 
   /**
@@ -211,7 +217,7 @@ class ImportGpgKey extends Component {
         <form
           acceptCharset="utf-8"
           onSubmit={this.handleSubmit}>
-          <div className="input textarea required openpgp-key">
+          <div className={`input textarea required openpgp-key ${this.hasErrors ? "error" : ""}`}>
             <label htmlFor="private-key">Private key</label>
             <textarea
               name="private-key"

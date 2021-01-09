@@ -74,6 +74,12 @@ class CheckPassphrase extends Component {
     return this.state.actions.processing;
   }
 
+  /**
+   * Return true if there are errors
+   */
+  get hasErrors() {
+    return this.state.errors.emptyPassphrase || this.state.errors.invalidPassphrase;
+  }
 
   /**
    * Whenever the component is mounted
@@ -81,7 +87,6 @@ class CheckPassphrase extends Component {
   componentDidMount() {
     this.focusOnPassphrase();
   }
-
 
   /**
    * Handle component event handlers
@@ -101,7 +106,6 @@ class CheckPassphrase extends Component {
     this.passphraseInputRef = React.createRef();
   }
 
-
   /**
    * Whenever the users submits his passphrase
    * @param event Dom event
@@ -115,7 +119,6 @@ class CheckPassphrase extends Component {
       await this.check();
     }
   }
-
 
   /**
    * Whenever the user changes the private key
@@ -142,7 +145,6 @@ class CheckPassphrase extends Component {
   handleToggleObfuscate() {
     this.toggleObfuscate();
   }
-
 
   /**
    * Whenever the user needs help because he lost his passphrase
@@ -236,7 +238,7 @@ class CheckPassphrase extends Component {
           acceptCharset="utf-8"
           onSubmit={this.handleSubmit}>
           <div className="form-content">
-            <div className="input text password required">
+            <div className={`input text password required ${this.hasErrors ? "error" : ""}`}>
               <label htmlFor="passphrase">Passphrase</label>
               <input
                 id="passphrase"
@@ -255,8 +257,7 @@ class CheckPassphrase extends Component {
               </a>
               {this.state.hasBeenValidated &&
               <>
-                {
-                  this.state.errors.emptyPassphrase &&
+                {this.state.errors.emptyPassphrase &&
                   <div className="empty-passphrase error-message">The passphrase should not be empty.</div>
                 }
                 {this.state.errors.invalidPassphrase &&

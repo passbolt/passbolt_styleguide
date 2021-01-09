@@ -15,7 +15,7 @@ import React, {Component} from "react";
 import {withAppContext} from "../../../contexts/AppContext";
 import PropTypes from "prop-types";
 
-class DisplayError extends Component {
+class DisplayRequireInvitationError extends Component {
   /**
    * Render the component
    * @returns {JSX}
@@ -33,7 +33,7 @@ class DisplayError extends Component {
   }
 }
 
-DisplayError.propTypes = {
+DisplayRequireInvitationError.propTypes = {
   context: PropTypes.any, // The application context
 };
-export default withAppContext(DisplayError);
+export default withAppContext(DisplayRequireInvitationError);

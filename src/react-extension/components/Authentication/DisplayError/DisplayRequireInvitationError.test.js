@@ -16,7 +16,7 @@
  * Unit tests on DisplayError in regard of specifications
  */
 
-import DisplayErrorPage from "./DisplayErrorPage";
+import DisplayRequireInvitationErrorPage from "./DisplayRequireInvitationErrorPage";
 
 beforeEach(() => {
   jest.resetModules();
@@ -32,7 +32,7 @@ describe("As AN I should see an error page", () => {
      */
 
     beforeEach(() => {
-      page = new DisplayErrorPage();
+      page = new DisplayRequireInvitationErrorPage();
     });
 
     it('As AN following an invalid registration link I should see a feedback notifying me that the registration link is invalid', () => {
