@@ -236,6 +236,7 @@ class Grid extends React.Component {
     try {
       const plaintextDto = await this.props.context.port.request("passbolt.secret.decrypt", resource.id, {showProgress: true});
       await this.copyPasswordToClipboard(plaintextDto);
+      this.props.resourceWorkspaceContext.onResourceCopied();
       this.props.actionFeedbackContext.displaySuccess("The secret has been copied to clipboard");
     } catch (error) {
       if (error.name !== "UserAbortsOperationError") {

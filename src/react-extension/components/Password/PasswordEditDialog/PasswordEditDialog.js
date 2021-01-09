@@ -23,6 +23,7 @@ import ErrorDialog from "../../Dialog/ErrorDialog/ErrorDialog";
 import DialogWrapper from "../../../../react/components/Common/Dialog/DialogWrapper/DialogWrapper";
 import FormSubmitButton from "../../../../react/components/Common/Inputs/FormSubmitButton/FormSubmitButton";
 import FormCancelButton from "../../../../react/components/Common/Inputs/FormSubmitButton/FormCancelButton";
+import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 
 class PasswordEditDialog extends Component {
   constructor(props, context) {
@@ -295,6 +296,7 @@ class PasswordEditDialog extends Component {
   async handleSaveSuccess() {
     await this.props.actionFeedbackContext.displaySuccess("The password has been updated successfully");
     this.selectAndScrollToResource(this.context.passwordEditDialogProps.id);
+    this.props.resourceWorkspaceContext.onResourceEdited();
     this.props.onClose();
     this.context.setContext({passwordEditDialogProps: null});
   }
@@ -732,8 +734,9 @@ PasswordEditDialog.contextType = AppContext;
 
 PasswordEditDialog.propTypes = {
   onClose: PropTypes.func,
+  resourceWorkspaceContext: PropTypes.any, // The resource workspace context
   actionFeedbackContext: PropTypes.any, // The action feedback context
   dialogContext: PropTypes.any // The dialog context
 };
 
-export default withActionFeedback(withDialog(PasswordEditDialog));
+export default withResourceWorkspace(withActionFeedback(withDialog(PasswordEditDialog)));

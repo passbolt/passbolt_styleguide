@@ -130,6 +130,7 @@ class PasswordSidebarDescriptionSection extends React.Component {
         isSecretDecrypting: false,
         error: false
       });
+      this.props.resourceWorkspaceContext.onResourceDescriptionDecrypted();
     } catch (error) {
       console.error(error);
       this.setState({
@@ -304,8 +305,10 @@ class PasswordSidebarDescriptionSection extends React.Component {
           </p>
           }
           {this.state.error &&
-          <p className="description-content error-message" onClick={this.handleRetryDecryptClickEvent}>
-            <em className="empty-content">{this.state.errorMsg}</em>
+          <p className="description-content error-message">
+            <a onClick={this.handleRetryDecryptClickEvent}>
+              <em className="empty-content">{this.state.errorMsg}</em>
+            </a>
           </p>
           }
           {this.mustShowEmptyDescription() &&
