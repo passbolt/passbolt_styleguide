@@ -9,6 +9,7 @@ import PropTypes from "prop-types";
 import HelpOnPrivateKeyLostSecondaryAction from "../../Authentication/CheckPassphrase/HelpOnPrivateKeyLostSecondaryAction";
 import HelpOnPassphraseLostSecondaryAction
   from "../../Authentication/CheckPassphrase/HelpOnPassphraseLostSecondaryAction";
+import DisplayUnexpectedError from "../../Authentication/DisplayError/DisplayUnexpectedError";
 
 /**
  * The component orchestrates the recover authentication process
@@ -68,6 +69,8 @@ class RecoverAuthentication extends Component {
         return <AskForAuthenticationHelp/>;
       case  AuthenticationContextState.RECOVER_COMPLETED:
         return <LoadingSpinner title="Logging in!" />;
+      case AuthenticationContextState.UNEXPECTED_ERROR:
+        return <DisplayUnexpectedError error={this.context.error}/>;
       default:
         return <LoadingSpinner/>;
     }

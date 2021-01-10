@@ -18,7 +18,7 @@ import {ApiTriageContextState, withApiTriageContext} from "../../../contexts/Api
 import EnterUsernameForm from "../../Authentication/EnterUsernameForm/EnterUsernameForm";
 import EnterNameForm from "../../Authentication/EnterNameForm/EnterNameForm";
 import CheckMailBox from "../../Authentication/CheckMailBox/CheckMailBox";
-import DisplayError from "../../Authentication/DisplayError/DisplayError";
+import DisplayRequireInvitationError from "../../Authentication/DisplayError/DisplayRequireInvitationError";
 
 /**
  * The component orchestrates the api triage workflow.
@@ -51,7 +51,7 @@ class OrchestrateApiTriage extends Component {
       case ApiTriageContextState.NAME_STATE:
         return <EnterNameForm/>;
       case ApiTriageContextState.ERROR_STATE:
-        return <DisplayError/>;
+        return <DisplayRequireInvitationError/>;
       default:
         return <LoadingSpinner/>;
     }

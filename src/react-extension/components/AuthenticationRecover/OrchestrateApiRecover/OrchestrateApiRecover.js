@@ -17,7 +17,7 @@ import LoadingSpinner from "../../../../react/components/Common/Loading/LoadingS
 import {ApiRecoverContextState, withApiRecoverContext} from "../../../contexts/ApiRecoverContext";
 import InstallExtension from "../../Authentication/InstallExtension/InstallExtension";
 import DisplayBrowserNotSupported from "../../Authentication/DisplayBrowserNotSupported/DisplayBrowserNotSupported";
-import DisplayError from "../../Authentication/DisplayError/DisplayError";
+import DisplayRequireInvitationError from "../../Authentication/DisplayError/DisplayRequireInvitationError";
 import DisplayExpiredTokenError from "../../Authentication/DisplayError/DisplayExpiredTokenError";
 
 /**
@@ -51,7 +51,7 @@ class OrchestrateApiRecover extends Component {
       case ApiRecoverContextState.TOKEN_EXPIRED_STATE:
         return <DisplayExpiredTokenError/>;
       case ApiRecoverContextState.ERROR_STATE:
-        return <DisplayError/>;
+        return <DisplayRequireInvitationError/>;
       default:
         return <LoadingSpinner/>;
     }

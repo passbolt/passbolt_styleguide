@@ -59,6 +59,8 @@ export const AuthenticationContext = React.createContext({
   }, // Whenever the check of server key is requested
   onGetServerKeyRequested: () => {
   }, // Whenever the server key is requested.
+  onUnexpectedError: () => {
+  }, // Whenever an unexpected error occurred.
 });
 
 /**
@@ -100,6 +102,7 @@ class AuthenticationContextProvider extends React.Component {
       onVerifyServerKeyRequested: this.onVerifyServerKeyRequested.bind(this),
       onGetServerKeyRequested: this.onGetServerKeyRequested.bind(this),
       onTryLoginAgainRequested: this.onTryLoginAgainRequested.bind(this),
+      onUnexpectedError: this.onUnexpectedError.bind(this),
     };
   }
 
@@ -108,6 +111,7 @@ class AuthenticationContextProvider extends React.Component {
    */
   async onInitializeSetupRequested() {
     const setupInfo = await this.state.port.request('passbolt.setup.info');
+    // In case of error the background page should just disconnect the extension setup application.
     await this.setState({
       state: AuthenticationContextState.SETUP_INITIALIZED,
       setupInfo,
@@ -121,6 +125,7 @@ class AuthenticationContextProvider extends React.Component {
    */
   async onInitializeRecoverRequested() {
     const recoverInfo = await this.state.port.request('passbolt.recover.info');
+    // In case of error the background page should just disconnect the extension setup application.
     await this.setState({
       state: AuthenticationContextState.RECOVER_INITIALIZED,
       recoverInfo,
@@ -159,8 +164,8 @@ class AuthenticationContextProvider extends React.Component {
   }
 
   /**
-   * Whenver the verify server key has been done with failure
-   * @param error An error occured while the server key verificcation
+   * Whenever the verify server key has been done with failure
+   * @param error An error occurred while the server key verification
    */
   async onVerifyServerKeyFailure(error) {
     if (error.name === "KeyIsExpiredError") {
@@ -170,8 +175,18 @@ class AuthenticationContextProvider extends React.Component {
     } else if (error.name === "UserNotFoundError") {
       // This case should be treated by the background page itself, and the login form should not be displayed.
     } else {
-      return Promise.reject(error);
+      await this.onUnexpectedError(error);
     }
+  }
+
+  /**
+   * Whenever an unexpected error occured
+   * @param {object} error The error
+   * @returns {Promise<void>}
+   */
+  async onUnexpectedError(error) {
+    const state = AuthenticationContextState.UNEXPECTED_ERROR;
+    await this.setState({state, error});
   }
 
   /**
@@ -191,14 +206,12 @@ class AuthenticationContextProvider extends React.Component {
     await this.setState({state: AuthenticationContextState.SETUP_INITIALIZED});
   }
 
-
   /**
    * Whenever the access to the import of a gpg key is requested
    */
   async onGoToImportGpgKeyRequested() {
     await this.setState({state: AuthenticationContextState.GPG_KEY_TO_IMPORT_REQUESTED});
   }
-
 
   /**
    * Whenever the import of a gpg key is requested
@@ -257,7 +270,15 @@ class AuthenticationContextProvider extends React.Component {
    * Wheneve the authentication setup must be completed
    */
   async onCompleteSetupRequested() {
-    await this.state.port.request('passbolt.setup.complete');
+    await this.state.port.request('passbolt.setup.complete')
+      .then(this.onSetupSuccess.bind(this))
+      .catch(this.onUnexpectedError.bind(this));
+  }
+
+  /**
+   * Whenever the setup operation succeed
+   */
+  async onSetupSuccess() {
     await this.setState({state: AuthenticationContextState.SETUP_COMPLETED});
   }
 
@@ -265,7 +286,15 @@ class AuthenticationContextProvider extends React.Component {
    * Whenever the authentication recover must be completed
    */
   async onCompleteRecoverRequested() {
-    await this.state.port.request('passbolt.recover.complete');
+    await this.state.port.request('passbolt.recover.complete')
+      .then(this.onRecoverSuccess.bind(this))
+      .catch(this.onUnexpectedError.bind(this));
+  }
+
+  /**
+   * Whenever the recover operation succeed
+   */
+  async onRecoverSuccess() {
     await this.setState({state: AuthenticationContextState.RECOVER_COMPLETED});
   }
 
@@ -311,7 +340,7 @@ class AuthenticationContextProvider extends React.Component {
   async onLoginFailure(error) {
     await this.setState({
       state: AuthenticationContextState.LOGIN_FAILED,
-      error: {login: error}
+      error
     });
   }
 
@@ -390,5 +419,6 @@ export const AuthenticationContextState = {
   LOGIN_PASSPHRASE_CHECKED: 'Login Passphrase Checked',
   LOGIN_IN_PROGRESS: 'Login In Progress',
   LOGIN_FAILED: 'Login Failed',
-  LOGIN_COMPLETED: 'Login Completed'
+  LOGIN_COMPLETED: 'Login Completed',
+  UNEXPECTED_ERROR: 'Unexpected Error',
 };

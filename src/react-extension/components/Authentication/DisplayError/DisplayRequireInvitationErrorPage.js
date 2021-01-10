@@ -15,12 +15,12 @@
 
 import {render} from "@testing-library/react";
 import React from "react";
-import DisplayError from "./DisplayError";
+import DisplayError from "./DisplayRequireInvitationError";
 
 /**
  * The DisplayError component represented as a page
  */
-export default class DisplayErrorPage {
+export default class DisplayRequireInvitationErrorPage {
   /**
    * Default constructor
    * @param appContext An app context

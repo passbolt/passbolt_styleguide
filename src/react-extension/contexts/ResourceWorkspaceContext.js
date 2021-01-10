@@ -1,4 +1,3 @@
-
 /**
  * Passbolt ~ Open source password manager for teams
  * Copyright (c) 2020 Passbolt SA (https://www.passbolt.com)
@@ -42,6 +41,9 @@ export const ResourceWorkspaceContext = React.createContext({
   scrollTo: {
     resource: null // The resource to scroll to
   },
+  refresh: {
+    permissions: false // Flag to force the refresh of the permissions
+  },
   resourceFileToImport: null, // The resource file to import
   resourceFileImportResult: null, // The resource file import result
   lockDisplayDetail: true, // lock the detail to display the folder or password sidebar
@@ -51,6 +53,8 @@ export const ResourceWorkspaceContext = React.createContext({
   },
   onLockDetail: () => {}, // Lock or unlock detail (hide or display the folder or password sidebar)
   onResourceScrolled: () => {}, // Whenever one scrolled to a resource
+  onResourceShared: () => {}, // Whenever a resource is shared
+  onResourcePermissionsRefreshed: () => {}, // Whenever the resource permissions have been refreshed
   onSorterChanged: () => {}, // Whenever the sorter changed
   onResourceSelected: {
     all: () => {}, // Whenever all the resources have been selected
@@ -97,12 +101,17 @@ export class ResourceWorkspaceContextProvider extends React.Component {
       scrollTo: {
         resource: null // The resource to scroll to
       },
+      refresh: {
+        permissions: false // Flag to force the refresh of the permissions
+      },
       resourceFileToImport: null, // The resource file to import
       resourceFileImportResult: null, // The resource file import result
       lockDisplayDetail: true, // lock the detail to display the folder or password sidebar
       resourcesToExport: null, // The resources / folders to export
       onLockDetail: this.handleLockDetail.bind(this), // Lock or unlock detail (hide or display the folder or password sidebar)
       onResourceScrolled: this.handleResourceScrolled.bind(this), // Whenever one scrolled to a resource
+      onResourceShared: this.handleResourceShared.bind(this), // Whenever one shared to a resource
+      onResourcePermissionsRefreshed:  this.handleResourcePermissionsRefreshed.bind(this), // Whenever the resource permissions have been refreshed
       onSorterChanged: this.handleSorterChange.bind(this), // Whenever the sorter changed
       onResourceSelected: {
         all: this.handleAllResourcesSelected.bind(this), // Whenever all the resources have been selected
@@ -321,6 +330,20 @@ export class ResourceWorkspaceContextProvider extends React.Component {
    */
   async handleResourceScrolled() {
     await this.scrollNothing();
+  }
+
+  /**
+   * Handle the share of a resource
+   */
+  async handleResourceShared() {
+    await this.refreshSelectedResourcePermissions();
+  }
+
+  /**
+   * Handle the refresh of the resource permission
+   */
+  async handleResourcePermissionsRefreshed() {
+    await this.setResourcesPermissionsAsRefreshed();
   }
 
   /**
@@ -685,8 +708,9 @@ export class ResourceWorkspaceContextProvider extends React.Component {
    * Navigate to the appropriate url after some resources selection operation
    */
   redirectAfterSelection() {
-    const hasResourcesAndFolders = this.resources !== null && this.folders !== null;
-    if (hasResourcesAndFolders) {
+    const canUseFolders = this.context.siteSettings.canIUse('folders');
+    const contentLoaded = this.resources !== null && (!canUseFolders || this.folders !== null);
+    if (contentLoaded) {
       const hasSingleSelectionNow = this.state.selectedResources.length === 1;
       if (hasSingleSelectionNow) { // Case of single selected resource
         const mustRedirect = this.props.location.pathname !== `/app/passwords/view/${this.state.selectedResources[0].id}`;
@@ -710,7 +734,6 @@ export class ResourceWorkspaceContextProvider extends React.Component {
       }
     }
   }
-
 
   /** Resource Sorter **/
 
@@ -822,6 +845,22 @@ export class ResourceWorkspaceContextProvider extends React.Component {
    */
   async scrollNothing() {
     await this.setState({scrollTo: {}});
+  }
+
+  /** RESOURCE PERMISSION */
+
+  /**
+   * Refresh the permissions of the current selected  resources
+   */
+  async refreshSelectedResourcePermissions() {
+    await this.setState({refresh: {permissions: true}});
+  }
+
+  /**
+   * Set the resources permissions as refreshed
+   */
+  async setResourcesPermissionsAsRefreshed() {
+    await this.setState({refresh: {permissions: false}});
   }
 
   /** RESOURCE IMPORT */

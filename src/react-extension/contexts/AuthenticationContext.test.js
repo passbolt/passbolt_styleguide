@@ -12,7 +12,6 @@
  * @since         2.11.0
  */
 
-
 import {defaultProps} from "./AuthenticationContext.test.data";
 import AuthenticationContextProvider, {AuthenticationContextState} from "./AuthenticationContext";
 
@@ -30,14 +29,15 @@ describe("Authentication Context", () => {
       context = new AuthenticationContextProvider(props);
       const setStateMock = state => context.state = Object.assign(context.state, state);
       jest.spyOn(context, 'setState').mockImplementation(setStateMock);
-      jest.spyOn(context.state.port, 'request').mockImplementation(jest.fn());
+      const requestMock = jest.fn(() => new Promise(resolve => resolve()));
+      jest.spyOn(context.state.port, 'request').mockImplementation(requestMock);
     });
 
     it('As AN I should start with the state INITIAL_STATE', () => {
       expect(context.state.state).toBe(AuthenticationContextState.INITIAL_STATE);
     });
 
-    it('As AN I should start initially with the SETUP_INITIALIAZED state', async() => {
+    it('As AN I should start initially with the SETUP_INITIALIZED state', async() => {
       await context.onInitializeSetupRequested();
       expect(context.state.port.request).toHaveBeenCalledWith("passbolt.setup.info");
       expect(context.state.state).toBe(AuthenticationContextState.SETUP_INITIALIZED);
@@ -98,6 +98,13 @@ describe("Authentication Context", () => {
       await context.onCompleteSetupRequested();
       expect(context.state.state).toBe(AuthenticationContextState.SETUP_COMPLETED);
     });
+
+    it('As AN I should see an error if an unexpected error occurred while completing the setup process', async() => {
+      const requestMock = jest.fn(() => new Promise((resolve, reject) => reject(new Error('An unexpected error occurred'))));
+      jest.spyOn(context.state.port, 'request').mockImplementation(requestMock);
+      await context.onCompleteSetupRequested();
+      expect(context.state.state).toBe(AuthenticationContextState.UNEXPECTED_ERROR);
+    });
   });
 
   describe('AS AN I should complete an authentication recover', () => {
@@ -105,14 +112,15 @@ describe("Authentication Context", () => {
       context = new AuthenticationContextProvider(props);
       const setStateMock = state => context.state = Object.assign(context.state, state);
       jest.spyOn(context, 'setState').mockImplementation(setStateMock);
-      jest.spyOn(context.state.port, 'request').mockImplementation(jest.fn());
+      const requestMock = jest.fn(() => new Promise(resolve => resolve()));
+      jest.spyOn(context.state.port, 'request').mockImplementation(requestMock);
     });
 
     it('As AN I should start with the state INITIAL_STATE', () => {
       expect(context.state.state).toBe(AuthenticationContextState.INITIAL_STATE);
     });
 
-    it('As AN I should start initially with the RECOVER_INITIALIAZED state', async() => {
+    it('As AN I should start initially with the RECOVER_INITIALIZED state', async() => {
       await context.onInitializeRecoverRequested();
       expect(context.state.port.request).toHaveBeenCalledWith("passbolt.recover.info");
       expect(context.state.state).toBe(AuthenticationContextState.RECOVER_INITIALIZED);
@@ -158,6 +166,13 @@ describe("Authentication Context", () => {
     it('As AN I should complete the recover process', async() => {
       await context.onCompleteRecoverRequested();
       expect(context.state.state).toBe(AuthenticationContextState.RECOVER_COMPLETED);
+    });
+
+    it('As AN I should see an error if an unexpected error occurred while completing the recovery process', async() => {
+      const requestMock = jest.fn(() => new Promise((resolve, reject) => reject(new Error('An unexpected error occurred'))));
+      jest.spyOn(context.state.port, 'request').mockImplementation(requestMock);
+      await context.onCompleteRecoverRequested();
+      expect(context.state.state).toBe(AuthenticationContextState.UNEXPECTED_ERROR);
     });
   });
 });
