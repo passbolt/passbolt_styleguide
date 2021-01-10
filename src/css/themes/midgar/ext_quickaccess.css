@@ -840,6 +840,7 @@ textarea {
   font-weight: normal;
   color: #FF6B70;
   background: #30302D;
+  clear: both;
 }
 .input .help-message {
   padding: 0;

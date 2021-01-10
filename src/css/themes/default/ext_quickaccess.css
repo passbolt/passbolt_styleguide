@@ -839,6 +839,7 @@ textarea {
   font-weight: normal;
   color: #D40101;
   background: #FFF;
+  clear: both;
 }
 .input .help-message {
   padding: 0;
