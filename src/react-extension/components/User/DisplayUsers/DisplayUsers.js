@@ -257,7 +257,7 @@ class DisplayUsers extends React.Component {
         onClick={event => this.handleUserSelected(event, user)}
         onContextMenu={event => this.handleUserRightClick(event, user)}>
         <td
-          className="cell_multipleSelect selections s-cell"
+          className="cell-multiple-select selections s-cell"
           onClick={ev => this.handleCheckboxWrapperClick(ev, user)}>
           <div className="ready">
             <div className="input checkbox">
@@ -266,28 +266,28 @@ class DisplayUsers extends React.Component {
             </div>
           </div>
         </td>
-        <td className="cell_name m-cell uri">
-          <div title={user.name}>
+        <td className="cell-name l-cell">
+          <div title={`${user.profile.first_name} ${user.profile.last_name}`}>
             {`${user.profile.first_name} ${user.profile.last_name}`}
           </div>
         </td>
-        <td className="cell_username m-cell username">
+        <td className="cell-username m-cell username">
           <div title={user.username}>
             {user.username}
           </div>
         </td>
-        <td className="cell_modified m-cell">
+        <td className="cell-modified m-cell">
           <div title={user.modified}>
             {modifiedFormatted}
           </div>
         </td>
-        <td className="cell_last_logged_in m-cell">
+        <td className="cell-last_logged_in m-cell">
           <div title={user.last_logged_in}>
             {lastLoggedInFormatted}
           </div>
         </td>
         {this.isLoggedInUserAdmin() &&
-          <td className="cell_is_mfa_enabled m-cell">
+          <td className="cell-is_mfa_enabled m-cell">
             <div>
               {mfa}
             </div>
@@ -326,7 +326,7 @@ class DisplayUsers extends React.Component {
               <table>
                 <thead>
                   <tr>
-                    <th className="cell_multipleSelect selections s-cell">
+                    <th className="cell-multiple-select selections s-cell">
                       <div className="input checkbox">
                         <input
                           type="checkbox"
@@ -334,7 +334,7 @@ class DisplayUsers extends React.Component {
                         <label htmlFor="js-passwords-select-all">select all</label>
                       </div>
                     </th>
-                    <th className="cell_name m-cell sortable">
+                    <th className="cell-name l-cell sortable">
                       <a onClick={ev => this.handleSortByColumnClick(ev, "name")}>
                         Name
                         {this.isSortedColumn("name") && this.isSortedAsc() &&
@@ -345,7 +345,7 @@ class DisplayUsers extends React.Component {
                         }
                       </a>
                     </th>
-                    <th className="cell_username m-cell username sortable">
+                    <th className="cell-username m-cell username sortable">
                       <a onClick={ev => this.handleSortByColumnClick(ev, "username")}>
                         Username
                         {this.isSortedColumn("username") && this.isSortedAsc() &&
@@ -356,7 +356,7 @@ class DisplayUsers extends React.Component {
                         }
                       </a>
                     </th>
-                    <th className="cell_modified m-cell sortable">
+                    <th className="cell-modified m-cell sortable">
                       <a onClick={ev => this.handleSortByColumnClick(ev, "modified")}>
                         Modified
                         {this.isSortedColumn("modified") && this.isSortedAsc() &&
@@ -367,7 +367,7 @@ class DisplayUsers extends React.Component {
                         }
                       </a>
                     </th>
-                    <th className="cell_last_logged_in m-cell sortable">
+                    <th className="cell-last_logged_in m-cell sortable">
                       <a onClick={ev => this.handleSortByColumnClick(ev, "last_logged_in")}>
                         Last logged in
                         {this.isSortedColumn("last_logged_in") && this.isSortedAsc() &&
@@ -380,7 +380,7 @@ class DisplayUsers extends React.Component {
 
                     </th>
                     {this.isLoggedInUserAdmin() &&
-                      <th className="cell_is_mfa_enabled m-cell sortable">
+                      <th className="cell-is_mfa_enabled m-cell sortable">
                         <a onClick={ev => this.handleSortByColumnClick(ev, "is_mfa_enabled")}>
                           MFA
                           {this.isSortedColumn("is_mfa_enabled") && this.isSortedAsc() &&

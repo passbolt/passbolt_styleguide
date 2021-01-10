@@ -1953,8 +1953,8 @@ body {
   float: left;
   margin: 1px;
 }
-.login.page .enter-passphrase .password-complexity .progress-bar.very_weak,
-.login.page .choose-passphrase .password-complexity .progress-bar.very_weak {
+.login.page .enter-passphrase .password-complexity .progress-bar.very-weak,
+.login.page .choose-passphrase .password-complexity .progress-bar.very-weak {
   background: #000;
   width: 5%;
 }
@@ -1973,8 +1973,8 @@ body {
   background: #66CC00;
   width: 80%;
 }
-.login.page .enter-passphrase .password-complexity .progress-bar.very_strong,
-.login.page .choose-passphrase .password-complexity .progress-bar.very_strong {
+.login.page .enter-passphrase .password-complexity .progress-bar.very-strong,
+.login.page .choose-passphrase .password-complexity .progress-bar.very-strong {
   background: #009900;
   width: 99.5%;
 }

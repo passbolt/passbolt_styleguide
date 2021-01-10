@@ -91,7 +91,7 @@ export default class DisplayCommentListPageObject {
    * @param index The rank of the comment
    */
   async delete(index) {
-    const deleteButton = this.list.querySelectorAll('.js_delete_comment')[index - 1];
+    const deleteButton = this.list.querySelectorAll('.delete-comment')[index - 1];
     const leftClick = {button: 0};
     fireEvent.click(deleteButton, leftClick);
     await waitFor(() => {});
@@ -102,6 +102,6 @@ export default class DisplayCommentListPageObject {
    * @param index The rank of the comment
    */
   canDelete(index) {
-    return typeof this.list.querySelectorAll('.js_delete_comment')[index - 1] !== 'undefined';
+    return typeof this.list.querySelectorAll('.delete-comment')[index - 1] !== 'undefined';
   }
 }

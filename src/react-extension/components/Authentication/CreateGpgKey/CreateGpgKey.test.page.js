@@ -59,7 +59,7 @@ export default class CreateGpgKeyPage {
    * Returns true if the current passphrase is very weak
    */
   get isVeryWeakPassphrase() {
-    return Boolean(this._page.container.querySelector('.very_weak'));
+    return Boolean(this._page.container.querySelector('.very-weak'));
   }
 
   /**
@@ -87,7 +87,7 @@ export default class CreateGpgKeyPage {
    * Returns true if the current passphrase is very strong
    */
   get isVeryStrongPassphrase() {
-    return Boolean(this._page.container.querySelector('.very_strong'));
+    return Boolean(this._page.container.querySelector('.very-strong'));
   }
 
   /**

@@ -65,7 +65,7 @@ export default class GridPage {
         return element.querySelector('.uri div').textContent;
       },
       async selectFavorite() {
-        const favorite = element.querySelector('.cell_favorite div a');
+        const favorite = element.querySelector('.cell-favorite div a');
         fireEvent.click(favorite, leftClick);
         await waitFor(() => {});
       },
@@ -80,7 +80,7 @@ export default class GridPage {
         await waitFor(() => {});
       },
       async selectUri() {
-        const uri = element.querySelector('.cell_uri div a');
+        const uri = element.querySelector('.cell-uri div a');
         fireEvent.click(uri, leftClick);
         await waitFor(() => {});
       },
@@ -89,12 +89,12 @@ export default class GridPage {
         await waitFor(() => {});
       },
       async selectWithCheckbox() {
-        const checkbox = element.querySelector('td.cell_multipleSelect.selections.s-cell');
+        const checkbox = element.querySelector('td.cell-multiple-select.selections.s-cell');
         fireEvent.click(checkbox, leftClick);
         await waitFor(() => {});
       },
       async selectRangeCheckbox() {
-        const checkbox = element.querySelector('td.cell_multipleSelect.selections.s-cell');
+        const checkbox = element.querySelector('td.cell-multiple-select.selections.s-cell');
         fireEvent.click(checkbox, {button: 0, shiftKey: true});
         await waitFor(() => {});
       },
@@ -109,7 +109,7 @@ export default class GridPage {
    * select the all resources
    */
   async selectAll() {
-    const element = this._page.container.querySelector('thead tr th.cell_multipleSelect.selections.s-cell div input');
+    const element = this._page.container.querySelector('thead tr th.cell-multiple-select.selections.s-cell div input');
     const leftClick = {button: 0};
     fireEvent.click(element, leftClick);
     await waitFor(() => {});

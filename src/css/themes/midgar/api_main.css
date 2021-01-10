@@ -5345,10 +5345,6 @@ input[type="search"]::-webkit-search-cancel-button {
   .header.third .actions-wrapper i + span {
     margin-left: 0;
   }
-  .header.third .main-action-wrapper #js_wsp_pwd_import_button,
-  .header.third .actions-wrapper #js_wsp_pwd_import_button {
-    display: none;
-  }
   .header.third .main-action-wrapper .disabled,
   .header.third .actions-wrapper .disabled {
     display: none;
@@ -6514,7 +6510,7 @@ input[type="search"]::-webkit-search-cancel-button {
   margin-left: -1.8em;
   margin-top: -0.5em;
 }
-.panel.aside .comments .comment a.js_delete_comment {
+.panel.aside .comments .comment a.delete-comment {
   border: 0;
 }
 .panel.aside .activity div.actions {
@@ -6879,7 +6875,7 @@ input[type="search"]::-webkit-search-cancel-button {
   display: block;
 }
 .panel.aside .sidebar-section .accordion-content {
-  padding: 1em 1.25em 1.5em 1.25em;
+  padding: 1.25em 1.25em 1.5em 1.25em;
   background: #30302D;
 }
 .panel.aside .sidebar-section .accordion-content .section-action {
@@ -7195,24 +7191,25 @@ input[type="search"]::-webkit-search-cancel-button {
   font-size: 0.9375em;
   /* 15px */
   height: 100%;
+  /* header */
+  /* main content */
+  /* rows */
 }
-/* header */
-.tableview-header {
+.tableview .tableview-header {
   background: #3B3B39;
   height: 2.125em;
   overflow-y: scroll;
   padding-top: 0.125em;
 }
-.tableview-header table {
+.tableview .tableview-header table {
   width: 100%;
 }
-.tableview-header table th.m-cell.sortable .svg-icon svg,
-.tableview-header table th.l-cell.sortable .svg-icon svg {
+.tableview .tableview-header table th.m-cell.sortable .svg-icon svg,
+.tableview .tableview-header table th.l-cell.sortable .svg-icon svg {
   margin-left: 0.55em;
-  margin-top: -0.87em;
+  margin-top: -0.8em;
 }
-/* main content */
-.tableview-content {
+.tableview .tableview-content {
   top: 2.125em;
   bottom: 2.45em;
   padding: 0;
@@ -7222,12 +7219,11 @@ input[type="search"]::-webkit-search-cancel-button {
   overflow-y: scroll;
   background: #222220;
 }
-.tableview-content table {
+.tableview .tableview-content table {
   width: 100%;
 }
-/* rows */
 .tableview table {
-  /* fav fix */
+  /* multi select and fav fix */
 }
 .tableview table a {
   border: 0;
@@ -7235,7 +7231,8 @@ input[type="search"]::-webkit-search-cancel-button {
 .tableview table th,
 .tableview table td {
   text-align: left;
-  padding: 0.25em 0.75em;
+  padding: 0.2em 0.4em;
+  /* 3px 6px */
   vertical-align: middle;
 }
 .tableview table th {
@@ -7249,16 +7246,18 @@ input[type="search"]::-webkit-search-cancel-button {
   -ms-text-overflow: ellipsis;
 }
 .tableview table .s-cell {
-  width: 15px;
-  max-width: 15px;
+  width: 1em;
+  max-width: 1em;
 }
 .tableview table .s1-cell {
-  width: 25px;
-  max-width: 25px;
+  width: 1.66666667em;
+  /* 15px */
+  max-width: 1.66666667em;
 }
 .tableview table .s2-cell {
-  width: 40px;
-  max-width: 40px;
+  width: 2.66666667em;
+  /* 40px */
+  max-width: 2.66666667em;
 }
 .tableview table .m-cell {
   width: 9em;
@@ -7288,31 +7287,37 @@ input[type="search"]::-webkit-search-cancel-button {
 .tableview table tbody tr.inactive {
   color: #8B8B89;
 }
-.tableview table .input.checkbox {
-  padding-top: 0px;
-  padding-left: 0.25em;
+.tableview table th.cell-multiple-select,
+.tableview table td.cell-multiple-select {
+  padding-right: 0;
 }
-.tableview table .input.checkbox label {
+.tableview table th.cell-multiple-select .input.checkbox,
+.tableview table td.cell-multiple-select .input.checkbox {
+  padding: 0 0.2em;
+}
+.tableview table th.cell-multiple-select .input.checkbox label,
+.tableview table td.cell-multiple-select .input.checkbox label {
   display: none;
 }
-.tableview table .input.checkbox input {
+.tableview table th.cell-multiple-select .input.checkbox input,
+.tableview table td.cell-multiple-select .input.checkbox input {
   margin-top: 0;
   float: left;
 }
-.tableview table th.cell_favorite,
-.tableview table td.cell_favorite {
+.tableview table th.cell-favorite,
+.tableview table td.cell-favorite {
   padding-left: 0;
-  padding-top: 2px;
-  padding-right: 0.25em;
+  padding-right: 0.4em;
+  /* 6px */
 }
-.tableview table td.cell_icon svg,
-.tableview table td.cell_icon img {
+.tableview table td.cell-icon svg,
+.tableview table td.cell-icon img {
   width: 1em;
   height: 1em;
   position: absolute;
   margin-top: -0.5em;
 }
-.tableview table td.cell_icon svg {
+.tableview table td.cell-icon svg {
   margin-top: -0.55em;
 }
 /* hide secondary actions if there is no space */
@@ -7337,10 +7342,10 @@ input[type="search"]::-webkit-search-cancel-button {
   .tableview thead {
     display: none;
   }
-  .tableview-content {
+  .tableview .tableview-content {
     top: 0;
     border: 0;
-    bottom: 0px;
+    bottom: 0;
   }
 }
 table.table-info,
@@ -7835,7 +7840,7 @@ table.table-info.horizontal tbody tr:hover {
   float: left;
   margin: 1px;
 }
-.input-password-wrapper .password-complexity .progress-bar.very_weak {
+.input-password-wrapper .password-complexity .progress-bar.very-weak {
   background: #000;
   width: 5%;
 }
@@ -7851,7 +7856,7 @@ table.table-info.horizontal tbody tr:hover {
   background: #66CC00;
   width: 80%;
 }
-.input-password-wrapper .password-complexity .progress-bar.very_strong {
+.input-password-wrapper .password-complexity .progress-bar.very-strong {
   background: #009900;
   width: 99.5%;
 }
@@ -9273,18 +9278,18 @@ This file is generated by `grunt build`, do not edit it by hand.
   border-top: 1px solid #0C0C0A;
 }
 /* tabel view adjustments for avatar */
-.page.people .tableview-header th.cell_icon,
-.page.people .tableview-header th.cell_avatar {
+.page.people .tableview-header th.cell-icon,
+.page.people .tableview-header th.cell-avatar {
   width: 45px;
 }
-.page.people .tableview-content th.cell_icon,
-.page.people .tableview-content td.cell_avatar {
+.page.people .tableview-content th.cell-icon,
+.page.people .tableview-content td.cell-avatar {
   margin: 0;
   text-align: left;
   width: 45px;
 }
-.page.people .tableview-content th.cell_icon img,
-.page.people .tableview-content td.cell_avatar img {
+.page.people .tableview-content th.cell-icon img,
+.page.people .tableview-content td.cell-avatar img {
   margin-top: 3px;
   width: 1.7em;
   height: 1.7em;
@@ -9326,18 +9331,6 @@ This file is generated by `grunt build`, do not edit it by hand.
 /*
  * Password workspace
  */
-/* unused columns */
-.js_grid_column_owner,
-.js_grid_column_copyLogin,
-.js_grid_column_copySecret {
-  display: none;
-}
-/* hide left column when there is no space */
-@media all and (max-width: 1024px) {
-  .tableview .js_grid_column_modified {
-    display: none;
-  }
-}
 .panel.aside .resource .detailed-information li.password .value {
   height: 1.6em;
   padding-top: 0.2em;

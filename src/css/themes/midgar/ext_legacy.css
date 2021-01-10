@@ -5094,7 +5094,7 @@ input[type=email].fluid {
   float: left;
   margin: 1px;
 }
-.input-password-wrapper .password-complexity .progress-bar.very_weak {
+.input-password-wrapper .password-complexity .progress-bar.very-weak {
   background: #000;
   width: 5%;
 }
@@ -5110,7 +5110,7 @@ input[type=email].fluid {
   background: #66CC00;
   width: 80%;
 }
-.input-password-wrapper .password-complexity .progress-bar.very_strong {
+.input-password-wrapper .password-complexity .progress-bar.very-strong {
   background: #009900;
   width: 99.5%;
 }

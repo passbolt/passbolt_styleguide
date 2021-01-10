@@ -436,7 +436,7 @@ class Grid extends React.Component {
         onContextMenu={ev => this.handleResourceRightClick(ev, resource)}
         onDragStart={event => this.handleDragStartEvent(event, resource)}
         onDragEnd={event => this.handleDragEndEvent(event, resource)}>
-        <td className="cell_multipleSelect selections s-cell"
+        <td className="cell-multiple-select selections s-cell"
           onClick={ev => this.handleCheckboxWrapperClick(ev, resource)}>
           <div className="ready">
             <div className="input checkbox">
@@ -445,7 +445,7 @@ class Grid extends React.Component {
             </div>
           </div>
         </td>
-        <td className="cell_favorite selections s-cell">
+        <td className="cell-favorite selections s-cell">
           <div className="ready">
             <a className={`no-text ${isFavorite ? "fav" : "unfav"}`} onClick={ev => this.handleFavoriteClick(ev, resource)}>
               <Icon baseline={true} name="star"></Icon>
@@ -453,29 +453,29 @@ class Grid extends React.Component {
             </a>
           </div>
         </td>
-        <td className="cell_name m-cell uri">
+        <td className="cell-name m-cell uri">
           <div title={resource.name}>
             {resource.name}
           </div>
         </td>
-        <td className="cell_username m-cell username">
+        <td className="cell-username m-cell username">
           <div title={resource.username}>
             <a onClick={ev => this.handleCopyUsernameClick(ev, resource)}>{resource.username}</a>
           </div>
         </td>
-        <td className="cell_secret m-cell password">
+        <td className="cell-secret m-cell password">
           <div title="secret" className="secret-copy">
             <a onClick={ev => this.handleCopyPasswordClick(ev, resource)}>
               <span>Copy password to clipboard</span>
             </a>
           </div>
         </td>
-        <td className="cell_uri l-cell">
+        <td className="cell-uri l-cell">
           <div title={resource.uri}>
             <a href={safeUri} onClick={this.handleGoToUrlClick} target="_blank" rel="noopener noreferrer">{resource.uri}</a>
           </div>
         </td>
-        <td className="cell_modified m-cell">
+        <td className="cell-modified m-cell">
           <div title={resource.modified}>
             {modifiedFormatted}
           </div>
@@ -574,7 +574,7 @@ class Grid extends React.Component {
               <table>
                 <thead>
                   <tr>
-                    <th className="cell_multipleSelect selections s-cell">
+                    <th className="cell-multiple-select selections s-cell">
                       <div className="input checkbox">
                         <input
                           type="checkbox"
@@ -584,7 +584,7 @@ class Grid extends React.Component {
                         <label htmlFor="js-passwords-select-all">select all</label>
                       </div>
                     </th>
-                    <th className="cell_favorite selections s-cell sortable">
+                    <th className="cell-favorite selections s-cell sortable">
                       <a onClick={ev => this.handleSortByColumnClick(ev, "favorite")} className="unfav">
                         <Icon baseline={true} name="star"></Icon>
                         <span className="visuallyhidden">fav</span>
@@ -596,7 +596,7 @@ class Grid extends React.Component {
                         }
                       </a>
                     </th>
-                    <th className="cell_name m-cell sortable">
+                    <th className="cell-name m-cell sortable">
                       <a onClick={ev => this.handleSortByColumnClick(ev, "name")}>
                         Resource
                         {this.isSortedColumn("name") && this.isSortedAsc() &&
@@ -607,7 +607,7 @@ class Grid extends React.Component {
                         }
                       </a>
                     </th>
-                    <th className="cell_username m-cell username sortable">
+                    <th className="cell-username m-cell username sortable">
                       <a onClick={ev => this.handleSortByColumnClick(ev, "username")}>
                         Username
                         {this.isSortedColumn("username") && this.isSortedAsc() &&
@@ -618,10 +618,10 @@ class Grid extends React.Component {
                         }
                       </a>
                     </th>
-                    <th className="cell_secret m-cell password">
+                    <th className="cell-secret m-cell password">
                       Password
                     </th>
-                    <th className="cell_uri l-cell sortable">
+                    <th className="cell-uri l-cell sortable">
                       <a onClick={ev => this.handleSortByColumnClick(ev, "uri")}>
                         URI
                         {this.isSortedColumn("uri") && this.isSortedAsc() &&
@@ -632,7 +632,7 @@ class Grid extends React.Component {
                         }
                       </a>
                     </th>
-                    <th className="cell_modified m-cell sortable">
+                    <th className="cell-modified m-cell sortable">
                       <a onClick={ev => this.handleSortByColumnClick(ev, "modified")}>
                         Modified
                         {this.isSortedColumn("modified") && this.isSortedAsc() &&
