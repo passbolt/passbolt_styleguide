@@ -208,6 +208,7 @@ class PasswordWorkspaceMenu extends React.Component {
     try {
       const plaintextDto = await this.context.port.request("passbolt.secret.decrypt", this.selectedResources[0].id, {showProgress: true});
       await this.copyPasswordToClipboard(plaintextDto);
+      this.props.resourceWorkspaceContext.onResourceCopied();
       this.props.actionFeedbackContext.displaySuccess("The secret has been copied to clipboard");
     } catch (error) {
       if (error.name !== "UserAbortsOperationError") {

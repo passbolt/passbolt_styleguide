@@ -20,6 +20,7 @@ import PasswordEditDialog from "../PasswordEditDialog/PasswordEditDialog";
 import ShareDialog from "../../Share/ShareDialog";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import PasswordDeleteDialog from "../PasswordDeleteDialog/PasswordDeleteDialog";
+import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 
 class DisplayGridContextualMenu extends React.Component {
   /**
@@ -108,9 +109,11 @@ class DisplayGridContextualMenu extends React.Component {
     }
     if (typeof plaintextDto === 'string') {
       await this.context.port.request("passbolt.clipboard.copy", plaintextDto);
+      this.props.resourceWorkspaceContext.onResourceCopied();
     } else {
       if (Object.prototype.hasOwnProperty.call(plaintextDto, 'password')) {
         await this.context.port.request("passbolt.clipboard.copy", plaintextDto.password);
+        this.props.resourceWorkspaceContext.onResourceCopied();
       } else {
         throw new TypeError(__('The password field is not defined.'));
       }
@@ -273,9 +276,10 @@ DisplayGridContextualMenu.propTypes = {
   hide: PropTypes.func, // Hide the contextual menu
   left: PropTypes.number, // left position in px of the page
   top: PropTypes.number, // top position in px of the page
+  resourceWorkspaceContext: PropTypes.any, // Resource workspace context
   dialogContext: PropTypes.any, // the dialog context
   resource: PropTypes.object, // resource selected
   actionFeedbackContext: PropTypes.any, // The action feedback context
 };
 
-export default withDialog(withActionFeedback(DisplayGridContextualMenu));
+export default withResourceWorkspace(withDialog(withActionFeedback(DisplayGridContextualMenu)));

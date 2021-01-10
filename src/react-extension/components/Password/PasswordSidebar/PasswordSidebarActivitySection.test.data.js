@@ -32,7 +32,11 @@ export function defaultProps() {
           id: uuidv4(),
           name: "resource_name"
         }
+      },
+      refresh: {
+        activities: false
       }
+
     }
   };
 }

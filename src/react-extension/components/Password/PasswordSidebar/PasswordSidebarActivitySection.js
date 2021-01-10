@@ -57,6 +57,7 @@ class PasswordSidebarActivitySection extends React.Component {
    */
   async componentDidUpdate(prevProps) {
     await this.handleResourceChange(prevProps.resourceWorkspaceContext.details.resource);
+    await this.handleResourceActivitiesRefresh(prevProps.resourceWorkspaceContext.refresh.activities);
   }
 
   /**
@@ -86,6 +87,18 @@ class PasswordSidebarActivitySection extends React.Component {
     await this.setState(state);
     await this.fetch();
     this.setState({loading: false});
+  }
+
+  /**
+   * Handle the refresh of the activities
+   * @param hasPreviouslyRefreshed True if one previously refreshed the activities
+   */
+  async handleResourceActivitiesRefresh(hasPreviouslyRefreshed) {
+    const mustRefresh = !hasPreviouslyRefreshed && this.props.resourceWorkspaceContext.refresh.activities;
+    if (mustRefresh) {
+      await this.fetch();
+      await this.props.resourceWorkspaceContext.onResourceActivitiesRefreshed();
+    }
   }
 
   /**

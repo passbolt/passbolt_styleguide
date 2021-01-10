@@ -17,6 +17,7 @@ import AppContext from "../../../contexts/AppContext";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import {withLoading} from "../../../../react/contexts/Common/LoadingContext";
 import Tooltip from "../../../../react/components/Common/Tooltip/Tooltip";
+import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 
 /**
  * This component allows the current user to edit the description of a resource
@@ -149,6 +150,7 @@ class DescriptionEditor extends React.Component {
     try {
       await this.updateResource();
       await this.props.actionFeedbackContext.displaySuccess("The description has been updated successfully");
+      await this.props.resourceWorkspaceContext.onResourceDescriptionEdited();
       this.close();
     } catch (error) {
       // It can happen when the user has closed the passphrase entry dialog by instance.
@@ -407,8 +409,9 @@ DescriptionEditor.propTypes = {
   resource: PropTypes.any, // the resource to update the description for
   plaintextDto: PropTypes.any, // the plaintext secret to update if description is encrypted
   onClose: PropTypes.func, // toggle to display or not the editor
+  resourceWorkspaceContext: PropTypes.any, // The resource workspace context
   actionFeedbackContext: PropTypes.any, // The action feedback context
   loadingContext: PropTypes.any // The loading context
 };
 
-export default withLoading(withActionFeedback(DescriptionEditor));
+export default withResourceWorkspace(withLoading(withActionFeedback(DescriptionEditor)));

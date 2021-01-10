@@ -53,8 +53,13 @@ export const ResourceWorkspaceContext = React.createContext({
   },
   onLockDetail: () => {}, // Lock or unlock detail (hide or display the folder or password sidebar)
   onResourceScrolled: () => {}, // Whenever one scrolled to a resource
+  onResourceEdited: () => {}, // Whenever a resource descript has been edited
+  onResourceDescriptionEdited: () => {}, // Whenever a resource description has been edited
+  onResourceDescriptionDecrypted: () => {}, // Whenever a resource description area has been descripted
   onResourceShared: () => {}, // Whenever a resource is shared
   onResourcePermissionsRefreshed: () => {}, // Whenever the resource permissions have been refreshed
+  onResourceCopied: () => {}, // Whenever a resource (password)  has been copied
+  onResourceActivitiesRefreshed: () => {}, // Whenever the resource activities have been refreshed
   onSorterChanged: () => {}, // Whenever the sorter changed
   onResourceSelected: {
     all: () => {}, // Whenever all the resources have been selected
@@ -102,6 +107,7 @@ export class ResourceWorkspaceContextProvider extends React.Component {
         resource: null // The resource to scroll to
       },
       refresh: {
+        activities: false, // Flag to force the refresh of the activities
         permissions: false // Flag to force the refresh of the permissions
       },
       resourceFileToImport: null, // The resource file to import
@@ -110,8 +116,13 @@ export class ResourceWorkspaceContextProvider extends React.Component {
       resourcesToExport: null, // The resources / folders to export
       onLockDetail: this.handleLockDetail.bind(this), // Lock or unlock detail (hide or display the folder or password sidebar)
       onResourceScrolled: this.handleResourceScrolled.bind(this), // Whenever one scrolled to a resource
-      onResourceShared: this.handleResourceShared.bind(this), // Whenever one shared to a resource
+      onResourceEdited: this.handleResourceEdited.bind(this), // Whenever a resource descript has been edited
+      onResourceDescriptionEdited: this.handleResourceDescriptionEdited.bind(this), // Whenever a resource description has been edited
+      onResourceDescriptionDecrypted: this.handleResourceDescriptionDecryted.bind(this), // Whenever a resource description has been decrypted
+      onResourceShared: this.handleResourceShared.bind(this), // Whenever a resource is shared
       onResourcePermissionsRefreshed:  this.handleResourcePermissionsRefreshed.bind(this), // Whenever the resource permissions have been refreshed
+      onResourceCopied: this.handleResourceCopied.bind(this), // Whenever a resource (password) has been copied
+      onResourceActivitiesRefreshed: this.handleResourceActivitiesRefreshed.bind(this), // Whenever the resource activities have been refreshed
       onSorterChanged: this.handleSorterChange.bind(this), // Whenever the sorter changed
       onResourceSelected: {
         all: this.handleAllResourcesSelected.bind(this), // Whenever all the resources have been selected
@@ -333,10 +344,32 @@ export class ResourceWorkspaceContextProvider extends React.Component {
   }
 
   /**
-   * Handle the share of a resource
+   * Handle the edited resource
+   */
+  async handleResourceEdited() {
+    console.log('handle resource edited');
+    await this.refreshSelectedResourceActivities();
+  }
+
+  /**
+   * Handle the edited resource description
+   */
+  async handleResourceDescriptionEdited() {
+    await this.refreshSelectedResourceActivities();
+  }
+
+  /**
+   * Handle the decrypted resource description
+   */
+  async handleResourceDescriptionDecryted() {
+    await this.refreshSelectedResourceActivities();
+  }
+
+  /**
+   * Handle the shared resource
    */
   async handleResourceShared() {
-    await this.refreshSelectedResourcePermissions();
+    await this.refreshSelectedResourceActivities();
   }
 
   /**
@@ -344,6 +377,21 @@ export class ResourceWorkspaceContextProvider extends React.Component {
    */
   async handleResourcePermissionsRefreshed() {
     await this.setResourcesPermissionsAsRefreshed();
+  }
+
+  /**
+   * Handle the copied resource
+   */
+  async handleResourceCopied() {
+    await this.refreshSelectedResourceActivities();
+  }
+
+  /**
+   * Handle the refresh of the resource activitie
+   * @returns {Promise<void>}
+   */
+  async handleResourceActivitiesRefreshed() {
+    await this.setResourceActivitiesAsRefreshed();
   }
 
   /**
@@ -845,6 +893,22 @@ export class ResourceWorkspaceContextProvider extends React.Component {
    */
   async scrollNothing() {
     await this.setState({scrollTo: {}});
+  }
+
+  /** RESOURCE ACTIVITIES */
+
+  /**
+   * Refresh the activities of the current selected resource
+   */
+  async refreshSelectedResourceActivities() {
+    await this.setState({refresh: {activities: true}});
+  }
+
+  /**
+   * Set the resources activitie as refreshed
+   */
+  async setResourceActivitiesAsRefreshed() {
+    await this.setState({refresh: {activities: false}});
   }
 
   /** RESOURCE PERMISSION */
