@@ -839,6 +839,7 @@ textarea {
   font-weight: normal;
   color: #D40101;
   background: #FFF;
+  clear: both;
 }
 .input .help-message {
   padding: 0;
@@ -1129,7 +1130,7 @@ a.unfav .svg-icon svg {
   fill: #888;
 }
 .password-hints {
-  margin-top: 1em;
+  margin: 1em 0;
 }
 .password-hints li {
   line-height: 1.5em;
@@ -1718,10 +1719,10 @@ body {
 }
 .login.page .login-form .form-actions {
   text-align: center;
+  padding-top: 1.2em;
 }
 .login.page .login-form .button {
   width: 100%;
-  margin-top: 1.2em;
 }
 .login.page .login-form .button + a {
   font-size: 1.6rem;
@@ -1896,7 +1897,7 @@ body {
   margin-top: 0;
   margin-right: 0;
   margin-left: -0.1rem;
-  height: 2.7em;
+  height: 2.714em;
   border-radius: 0;
   padding: 0.6rem 0.8rem 0.6rem 1rem;
   background: #FFF;
@@ -1952,8 +1953,8 @@ body {
   float: left;
   margin: 1px;
 }
-.login.page .enter-passphrase .password-complexity .progress-bar.very_weak,
-.login.page .choose-passphrase .password-complexity .progress-bar.very_weak {
+.login.page .enter-passphrase .password-complexity .progress-bar.very-weak,
+.login.page .choose-passphrase .password-complexity .progress-bar.very-weak {
   background: #000;
   width: 5%;
 }
@@ -1972,43 +1973,44 @@ body {
   background: #66CC00;
   width: 80%;
 }
-.login.page .enter-passphrase .password-complexity .progress-bar.very_strong,
-.login.page .choose-passphrase .password-complexity .progress-bar.very_strong {
+.login.page .enter-passphrase .password-complexity .progress-bar.very-strong,
+.login.page .choose-passphrase .password-complexity .progress-bar.very-strong {
   background: #009900;
   width: 99.5%;
 }
-.login.page .login-user {
+.login.page .login .login-user {
   width: 100%;
   margin: auto;
 }
-.login.page .login-user > * {
+.login.page .login .login-user > * {
   text-align: center;
 }
-.login.page .login-user-name {
+.login.page .login .login-user .login-user-name {
   font-weight: bold;
   font-size: 1.6rem;
   line-height: 1rem;
 }
-.login.page .login-user-email {
+.login.page .login .login-user .login-user-email {
   font-size: 1.6rem;
   line-height: 1rem;
 }
-.login.page .login-passphrase {
+.login.page .login .login-passphrase {
   display: flex;
   flex-wrap: nowrap;
   align-items: stretch;
 }
-.login.page .login-passphrase-input {
+.login.page .login .login-passphrase .login-input {
   flex: 1 1 auto;
   border-right: none;
 }
-.login.page .login-passphrase-security-token {
+.login.page .login .login-passphrase .login-passphrase-security-token {
   display: flex;
   align-items: center;
-  border: 1px solid #CCC;
+  border: 1px solid #DDD;
+  border-left: 0;
   border-top: 1px solid #BBB;
   padding: 0.6rem 1.2rem;
-  height: 24px;
+  height: 1.75em;
 }
 .login.page .login-processing {
   display: flex;

@@ -38,10 +38,10 @@ html, body {
 
         .form-actions {
             text-align:center;
+            padding-top:1.2em;
         }
         .button {
             width:100%;
-            margin-top:1.2em;
         }
         .button + a {
             font-size:1.6rem;
@@ -149,7 +149,7 @@ html, body {
           margin-top: 0;
           margin-right:0;
           margin-left: -.1rem;
-          height: 2.7em;
+          height: 2.714em;
           border-radius: 0;
           padding: .6rem .8rem .6rem 1rem;
           background: @input-background;
@@ -205,7 +205,7 @@ html, body {
           float: left;
           margin: 1px;
 
-          &.very_weak {
+          &.very-weak {
             background: @blacker;
             width: 5%;
           }
@@ -221,7 +221,7 @@ html, body {
             background: @green-light;
             width: 80%;
           }
-          &.very_strong {
+          &.very-strong {
             background: @green;
             width: 99.5%;
           }
@@ -231,7 +231,7 @@ html, body {
 
     .login {
 
-      &-user {
+      .login-user {
         width: 100%;
         margin: auto;
 
@@ -239,36 +239,36 @@ html, body {
           text-align: center;
         }
 
-        &-name {
+        .login-user-name {
           font-weight: bold;
           font-size: 1.6rem;
           line-height: 1rem;
         }
 
-        &-email {
+        .login-user-email {
           font-size: 1.6rem;
           line-height: 1rem;
         }
       }
 
-      &-passphrase {
-
+      .login-passphrase {
         display: flex;
         flex-wrap: nowrap;
         align-items: stretch;
 
-        &-input {
+        .login-input {
           flex: 1 1 auto;
           border-right: none;
         }
 
-        &-security-token {
+        .login-passphrase-security-token {
           display: flex;
           align-items: center;
-          border: 1px solid #CCC;
-          border-top: 1px solid #BBB;
+          border: 1px solid @border-default;
+          border-left:0;
+          border-top: 1px solid @border-input-light;
           padding: 0.6rem 1.2rem;
-          height: 24px;
+          height: 1.75em;
         }
       }
     }
@@ -316,5 +316,4 @@ html, body {
             }
         }
     }
-
 }

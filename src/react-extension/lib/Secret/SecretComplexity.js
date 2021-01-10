@@ -19,7 +19,7 @@ const STRENGTH = [
     strength: 0
   },
   {
-    id: 'very_weak',
+    id: 'very-weak',
     label: 'very weak',
     strength: 1
   },
@@ -39,7 +39,7 @@ const STRENGTH = [
     strength: 112
   },
   {
-    id: 'very_strong',
+    id: 'very-strong',
     label: 'very strong',
     strength: 128
   }

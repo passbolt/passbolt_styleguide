@@ -840,6 +840,7 @@ textarea {
   font-weight: normal;
   color: #FF6B70;
   background: #30302D;
+  clear: both;
 }
 .input .help-message {
   padding: 0;
@@ -1748,7 +1749,7 @@ ul li {
   display: block;
   margin: 0.1rem;
 }
-.quickaccess .resource-create .password .password-strength .password-strength-bar-value.very_weak {
+.quickaccess .resource-create .password .password-strength .password-strength-bar-value.very-weak {
   background: #000;
   width: 5%;
 }
@@ -1764,7 +1765,7 @@ ul li {
   background: #66CC00;
   width: 80%;
 }
-.quickaccess .resource-create .password .password-strength .password-strength-bar-value.very_strong {
+.quickaccess .resource-create .password .password-strength .password-strength-bar-value.very-strong {
   background: #009900;
   width: 99.5%;
 }

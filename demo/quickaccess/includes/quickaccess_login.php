@@ -13,7 +13,7 @@
         </div>
         <div class="input checkbox small">
             <input type="checkbox" name="remember-me" id="remember-me">
-            <label for="remember-me">Remember until I log out.</label>
+            <label for="remember-me">Remember until signed out.</label>
         </div>
         <div class="submit-wrapper">
             <a id="login-submit" href="#" class="button primary big full-width" role="button">Login</a>

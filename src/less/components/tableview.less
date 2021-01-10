@@ -2,33 +2,32 @@
  * Main Workspace - Table View
  */
 .tableview {
-    background: @tableview-background;
-    position: relative;
-    font-size: .9375em; /* 15px */
-    height: 100%;
-}
+  background: @tableview-background;
+  position: relative;
+  font-size: .9375em; /* 15px */
+  height: 100%;
 
-/* header */
-.tableview-header {
+  /* header */
+  .tableview-header {
     background: @tableview-header-background;
     height: 2.125em;
     overflow-y: scroll;
     padding-top: .125em;
-}
 
-.tableview-header table {
-    width: 100%;
+    table {
+      width: 100%;
 
-    th.m-cell.sortable, th.l-cell.sortable {
-      .svg-icon svg {
-        margin-left: 0.55em;
-        margin-top: -0.87em;
+      th.m-cell.sortable, th.l-cell.sortable {
+        .svg-icon svg {
+          margin-left: 0.55em;
+          margin-top: -0.8em;
+        }
       }
     }
-}
+  }
 
-/* main content */
-.tableview-content {
+  /* main content */
+  .tableview-content {
     top: 2.125em;
     bottom: 2.45em;
     padding: 0;
@@ -39,125 +38,151 @@
     background: @tableview-background;
 
     table {
-        width: 100%;
+      width: 100%;
     }
-}
+  }
 
-/* rows */
-.tableview table {
+  /* rows */
+  table {
     a {
-        border: 0;
+      border: 0;
     }
+
     th, td {
-        text-align: left;
-        padding: .25em .75em;
-        vertical-align: middle;
+      text-align: left;
+      padding: .2em .4em; /* 3px 6px */
+      vertical-align: middle;
     }
+
     th {
-        font-weight: bold;
+      font-weight: bold;
     }
+
     td div {
-        .ellipsis();
+      .ellipsis();
     }
+
     .s-cell {
-        width: 15px;
-        max-width: 15px;
+      width: 1em;
+      max-width: 1em;
     }
+
     .s1-cell {
-        width: 25px;
-        max-width: 25px;
+      width: 1.66666667em; /* 15px */
+      max-width: 1.66666667em;
     }
+
     .s2-cell {
-        width: 40px;
-        max-width: 40px;
+      width: 2.66666667em;  /* 40px */
+      max-width: 2.66666667em;
     }
+
     .m-cell {
-        width: 9em;
-        max-width: 9em;
-        vertical-align: middle;
+      width: 9em;
+      max-width: 9em;
+      vertical-align: middle;
     }
+
     .l-cell {
-        width: 14em;
-        max-width: 14em;
+      width: 14em;
+      max-width: 14em;
     }
+
     .xl-cell {
-        width: 19em;
-        max-width: 19em;
+      width: 19em;
+      max-width: 19em;
     }
+
     tbody tr {
-        height: 2em;
-        &.selected {
-            background: @tableview-background-selected;
-        }
-        &:hover {
-            background: @tableview-background-hover;
-        }
-        &.selected:hover {
-            background: @tableview-background-selected;
-        }
+      height: 2em;
+
+      &.selected {
+        background: @tableview-background-selected;
+      }
+
+      &:hover {
+        background: @tableview-background-hover;
+      }
+
+      &.selected:hover {
+        background: @tableview-background-selected;
+      }
     }
 
     tbody tr.inactive {
-        color: @font-lighter;
+      color: @font-lighter;
     }
-    .input.checkbox {
-        padding-top: 0px;
-        padding-left:.25em;
+
+
+    /* multi select and fav fix */
+    th.cell-multiple-select,
+    td.cell-multiple-select {
+      padding-right:0;
+
+      .input.checkbox {
+        padding: 0 .2em;
 
         label {
-            display: none;
+          display: none;
         }
+
         input {
-            margin-top: 0;
-            float: left;
+          margin-top: 0;
+          float: left;
         }
+      }
     }
 
-    /* fav fix */
-    th.cell_favorite,
-    td.cell_favorite {
-        padding-left:0;
-        padding-top: 2px;
-        padding-right:.25em;
+    th.cell-favorite,
+    td.cell-favorite {
+      padding-left: 0;
+      padding-right: .4em; /* 6px */
     }
 
-    td.cell_icon {
-        svg, img {
-            width: 1em;
-            height: 1em;
-            position: absolute;
-            margin-top:-.5em;
-        }
-        svg {
-            margin-top:-.55em;
-        }
+    td.cell-icon {
+      svg, img {
+        width: 1em;
+        height: 1em;
+        position: absolute;
+        margin-top: -.5em;
+      }
+
+      svg {
+        margin-top: -.55em;
+      }
     }
+  }
 }
 
 /* hide secondary actions if there is no space */
 @media all and (max-width: 600px) {
-    .tableview table tbody {
-        background: @tableview-background-selected;
-        td {
-            display: block;
-            &.s-cell, &.s2-cell, &.m-cell, &.l-cell {
-                max-width: 90%;
-                width: 90%;
-                padding: .5em;
-            }
-            &.s-cell {
-                display: none;
-            }
+  .tableview {
+    table tbody {
+      background: @tableview-background-selected;
+
+      td {
+        display: block;
+
+        &.s-cell, &.s2-cell, &.m-cell, &.l-cell {
+          max-width: 90%;
+          width: 90%;
+          padding: .5em;
         }
+
+        &.s-cell {
+          display: none;
+        }
+      }
     }
 
-    .tableview thead {
-        display: none;
+    thead {
+      display: none;
     }
 
     .tableview-content {
-        top: 0;
-        border: 0;
-        bottom: 0px;
+      top: 0;
+      border: 0;
+      bottom: 0;
     }
+  }
 }

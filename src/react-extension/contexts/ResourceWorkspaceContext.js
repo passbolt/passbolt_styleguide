@@ -1,4 +1,3 @@
-
 /**
  * Passbolt ~ Open source password manager for teams
  * Copyright (c) 2020 Passbolt SA (https://www.passbolt.com)
@@ -162,7 +161,6 @@ export class ResourceWorkspaceContextProvider extends React.Component {
   async handleFilterChange(previousFilter) {
     const hasFilterChanged = previousFilter !== this.state.filter;
     if (hasFilterChanged) {
-
       const wasNotPreviouslyNone = previousFilter.type !== ResourceWorkspaceFilterTypes.NONE;
       if (wasNotPreviouslyNone) {
         this.populate();
@@ -563,7 +561,6 @@ export class ResourceWorkspaceContextProvider extends React.Component {
     const groupResources = this.resources.filter(resource => resourceIds.includes(resource.id));
     await this.setState({filter, filteredResources: groupResources, selectedResources: []});
     this.props.loadingContext.remove();
-
   }
 
   /**
@@ -711,8 +708,9 @@ export class ResourceWorkspaceContextProvider extends React.Component {
    * Navigate to the appropriate url after some resources selection operation
    */
   redirectAfterSelection() {
-    const hasResourcesAndFolders = this.resources !== null && this.folders !== null;
-    if (hasResourcesAndFolders) {
+    const canUseFolders = this.context.siteSettings.canIUse('folders');
+    const contentLoaded = this.resources !== null && (!canUseFolders || this.folders !== null);
+    if (contentLoaded) {
       const hasSingleSelectionNow = this.state.selectedResources.length === 1;
       if (hasSingleSelectionNow) { // Case of single selected resource
         const mustRedirect = this.props.location.pathname !== `/app/passwords/view/${this.state.selectedResources[0].id}`;
@@ -736,7 +734,6 @@ export class ResourceWorkspaceContextProvider extends React.Component {
       }
     }
   }
-
 
   /** Resource Sorter **/
 

@@ -58,23 +58,16 @@ class DisplayUserSettingsWorkspace extends React.Component {
           <DisplayUserSettingsWorkspaceActions/>
         </div>
         <div className="panel main">
-          <div className="tabs-content">
-            <div className="tab-content selected">
-              <div className="reports-workspace">
-                <div className="panel left">
-                  <NavigateIntoUserSettingsWorkspace/>
-
-                </div>
-                <div className="panel middle">
-                  <DisplayUserSettingsWorkspaceBreadcrumb/>
-                  <Route path={`${path}/profile`} component={DisplayUserProfile}></Route>
-                  {this.canIUseThemeCapability &&
-                  <Route path={`${path}/theme`} component={DisplayUserTheme}></Route>
-                  }
-                  <Route path={`${path}/keys`} component={DisplayUserGpgInformation}></Route>
-                </div>
-              </div>
-            </div>
+          <div className="panel left">
+            <NavigateIntoUserSettingsWorkspace/>
+          </div>
+          <div className="panel middle">
+            <DisplayUserSettingsWorkspaceBreadcrumb/>
+            <Route path={`${path}/profile`} component={DisplayUserProfile}></Route>
+            {this.canIUseThemeCapability &&
+            <Route path={`${path}/theme`} component={DisplayUserTheme}></Route>
+            }
+            <Route path={`${path}/keys`} component={DisplayUserGpgInformation}></Route>
           </div>
         </div>
       </div>

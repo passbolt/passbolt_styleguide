@@ -49,7 +49,7 @@ class DeleteComment extends React.Component {
 
   render() {
     return (
-      <a className="js_delete_comment" onClick={this.delete}>
+      <a className="delete-comment" onClick={this.delete}>
         <span className="svg-icon">
           <Icon name="trash"/>
         </span>

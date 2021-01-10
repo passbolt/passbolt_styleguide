@@ -225,47 +225,41 @@ class Workspace extends Component {
           </div>
         </div>
         <div className="panel main">
-          <div className="tabs-content">
-            <div className="tab-content selected">
-              <div className="reports-workspace">
-                <div className="panel left">
-                  <FoldersTree
-                    onFolderContextualMenu={this.handleFoldersTreeFolderContextualMenu}
-                    onRootFolderContextualMenu={this.handleFoldersTreeRootFolderContextualMenu}
-                    selectedFolder={this.state.selectedFolders[0]}/>
-                </div>
-                <div className="panel middle">
-                  <Breadcrumbs/>
-                  <Grid
-                    resources={this.state.resources}
-                    selectedResources={this.state.selectedResources}
-                    search={this.state.search}
-                    filterType={this.state.filterType}
-                    onRightSelect={this.handleRightSelectResourceEvent}
-                    onSelect={this.handleSelectResourcesEvent}/>
-                  {highlightedFolder &&
-                  <FolderSidebar
-                    folder={highlightedFolder}
-                    folders={this.state.folders}
-                    groups={this.state.groups}
-                    onEditPermissions={this.handleEditFolderPermissions}
-                    onSelectFolderParent={this.handleSelectFolder}
-                    onSelectRoot={this.handleSelectRootFolder}
-                    users={this.state.users}/>
-                  }
-                  {highlightedResource &&
-                  <PasswordSidebar
-                    resource={highlightedResource}
-                    folders={this.state.folders}
-                    groups={this.state.groups}
-                    onEditPermissions={this.handleEditFolderPermissions}
-                    onSelectFolderParent={this.handleSelectFolder}
-                    onSelectRoot={this.handleSelectRootFolder}
-                    users={this.state.users}/>
-                  }
-                </div>
-              </div>
-            </div>
+          <div className="panel left">
+            <FoldersTree
+              onFolderContextualMenu={this.handleFoldersTreeFolderContextualMenu}
+              onRootFolderContextualMenu={this.handleFoldersTreeRootFolderContextualMenu}
+              selectedFolder={this.state.selectedFolders[0]}/>
+          </div>
+          <div className="panel middle">
+            <Breadcrumbs/>
+            <Grid
+              resources={this.state.resources}
+              selectedResources={this.state.selectedResources}
+              search={this.state.search}
+              filterType={this.state.filterType}
+              onRightSelect={this.handleRightSelectResourceEvent}
+              onSelect={this.handleSelectResourcesEvent}/>
+            {highlightedFolder &&
+            <FolderSidebar
+              folder={highlightedFolder}
+              folders={this.state.folders}
+              groups={this.state.groups}
+              onEditPermissions={this.handleEditFolderPermissions}
+              onSelectFolderParent={this.handleSelectFolder}
+              onSelectRoot={this.handleSelectRootFolder}
+              users={this.state.users}/>
+            }
+            {highlightedResource &&
+            <PasswordSidebar
+              resource={highlightedResource}
+              folders={this.state.folders}
+              groups={this.state.groups}
+              onEditPermissions={this.handleEditFolderPermissions}
+              onSelectFolderParent={this.handleSelectFolder}
+              onSelectRoot={this.handleSelectRootFolder}
+              users={this.state.users}/>
+            }
           </div>
         </div>
       </div>

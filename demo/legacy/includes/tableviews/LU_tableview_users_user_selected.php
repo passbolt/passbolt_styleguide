@@ -12,7 +12,7 @@
 					<div class="input checkbox"><label for="checkbox-select-all-people">select all</label></div>
 				</th>
 
-				<th class="js_grid_column js_grid_column_avatar grid_column_avatar s1-cell cell_avatar">
+				<th class="js_grid_column js_grid_column_avatar grid_column_avatar s1-cell cell-avatar">
 
 				</th>
 
@@ -41,7 +41,7 @@
 			<tbody>
 <?php foreach($users as $user) : ?>
 			<tr id="dada6042-c5cd-11e1-a0c5-080027796c51"<?=  $user['User']['username'] =='ada@passbolt.com' ? ' class="selected"' : '' ?> <?=  $user['User']['username'] =='jean@passbolt.com' ? ' class="inactive"' : '' ?>>
-				<td class="js_grid_column_multipleSelect selections cell_multipleSelect s-cell">
+				<td class="js_grid_column_multipleSelect selections cell-multiple-select s-cell">
 					<div title="">
 						<div id="multiple_select_checkbox_dada6042-c5cd-11e1-a0c5-080027796c51"
 								 class="mad_form_element_checkbox_controller mad_view_form_element_checkbox_view js_checkbox_multiple_select ready">
@@ -53,7 +53,7 @@
 					</div>
 				</td>
 
-				<td class="js_grid_column_avatar grid_column_avatar s1-cell cell_avatar">
+				<td class="js_grid_column_avatar grid_column_avatar s1-cell cell-avatar">
 					<div title="">
 						<img src="src/img/avatar/user.png" width="25" height="25" alt="avatar picture">
 					</div>

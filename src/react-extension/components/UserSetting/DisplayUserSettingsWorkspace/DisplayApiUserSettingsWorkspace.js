@@ -43,18 +43,12 @@ class DisplayApiUserSettingsWorkspace extends React.Component {
         <div className="header third">
         </div>
         <div className="panel main">
-          <div className="tabs-content">
-            <div className="tab-content selected">
-              <div className="reports-workspace">
-                <div className="panel left">
-                  <NavigateIntoUserSettingsWorkspace/>
-                </div>
-                <div className="panel middle">
-                  <DisplayUserSettingsWorkspaceBreadcrumb/>
-                  <Route path="/app/settings/mfa" component={DisplayUserMfa}></Route>
-                </div>
-              </div>
-            </div>
+          <div className="panel left">
+            <NavigateIntoUserSettingsWorkspace/>
+          </div>
+          <div className="panel middle">
+            <DisplayUserSettingsWorkspaceBreadcrumb/>
+            <Route path="/app/settings/mfa" component={DisplayUserMfa}></Route>
           </div>
         </div>
       </div>

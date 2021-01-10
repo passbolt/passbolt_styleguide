@@ -2,171 +2,170 @@
  * Page layout
  */
 .page {
-    min-width: 320px;
-}
+  width: 100%;
+  min-width: 320px;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  position: absolute;
+  overflow: auto;
 
-.page,
-.panel,
-.header {
+  .panel {
+    height: 100%;
     width: 100%;
-}
-
-.page,
-.panel {
     position: absolute;
     overflow: auto;
-}
 
-.header {
-    overflow: hidden;
-}
+    &.main {
+      top: 10em;
+      bottom: 2.45em;
+      height: auto;
+      padding: 0;
 
-.page {
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-}
+      .row {
+        padding-left: 0;
+      }
 
-/* headers */
-.header.first {
-    // let the height be automatically set
-    // it breaks the greedy nav on firefox otherwise
-    min-height:2.4em;
-}
-
-.header.second {
-    top: 2.375em;
-    height: 4.5em;
-}
-
-.header.third {
-    top: 6.875em;
-    height: 3em;
-}
-
-/* main workspace panel */
-.panel {
-    height: 100%;
-}
-
-.panel.main {
-    top: 10em;
-    bottom: 2.45em;
-    height: auto;
-    padding: 0;
-
-    .row {
-        padding-left:0;
-    }
-
-    .panel.left {
+      .panel.left {
         background: @panel-background;
+      }
     }
-}
+  }
 
-/* its position depends on how many headers are there */
-.header.second + .panel.main {
+  /* main workspace panels  position depend on how many headers are there */
+  .header.second + .panel.main {
+    // with search only
     top: 6.875em;
-}
+  }
 
-.header.third + .panel.main {
+  .header.third + .panel.main {
+    // with search and action bar
     top: 10em;
     border-top: 1px solid @border-default;
-}
+  }
 
-/* columns */
-.panel,
-.col1, .col2, .col3, .col2_3 {
+  .header {
+    width: 100%;
+    overflow: hidden;
+
+    /* headers */
+    &.first {
+      // let the height be automatically set
+      // it breaks the greedy nav on firefox otherwise
+      min-height: 2.4em;
+    }
+
+    &.second {
+      top: 2.375em;
+      height: 4.5em;
+    }
+
+    &.third {
+      top: 6.875em;
+      height: 3em;
+    }
+  }
+
+  /* Grid */
+  .col1, .col2, .col3, .col2_3 {
     position: absolute;
-}
+  }
 
-.col1,
-.panel.left {
+  .col1,
+  .panel.left {
     width: 17.25%;
     box-sizing: border-box;
-}
-.panel.middle {
+  }
+
+  .panel.middle {
     width: 82%;
     left: 18%;
     overflow: hidden;
-}
+  }
 
-.panel.middle.scroll {
+  .panel.middle.scroll {
     overflow-y: scroll;
-}
+  }
 
-.col2 {
+  .col2 {
     width: 70%;
     left: 18%;
-}
+  }
 
-.col3,
-.panel.right {
+  .col3,
+  .panel.right {
     width: 24%;
     left: 75%;
-}
+  }
 
-.col2_3 {
+  .col2_3 {
     width: 81.5%;
     left: 18%;
-}
+  }
 
-/* if the other grid is used
+  /* if the other grid is used
    don't center the grid inside main panel */
-.panel.main .grid-responsive-12 {
+  .panel.main .grid-responsive-12 {
     float: left;
     width: 100%;
     max-width: none;
-    padding-left:.25em;
+    padding-left: .25em;
     box-sizing: border-box;
+  }
 }
 
 /* hide left column when there is no space */
 @media all and (max-width: 1024px) {
-
+  .page {
     .panel.left {
-        display: none;
+      display: none;
     }
 
     .header.second {
-        .col2 {
-            display:none;
-        }
-        .col2_3 {
-            display:none;
-        }
+      .col2 {
+        display: none;
+      }
+
+      .col2_3 {
+        display: none;
+      }
     }
 
     .header.third {
-        height: 4.5em;
-        .col1,
-        .col2,
-        .col2_3{
-            position:relative;
-            float:left;
-            left:auto;
-            width:auto;
-        }
-        .col3 {
-            display:none;
-        }
+      height: 4.5em;
+
+      .col1,
+      .col2,
+      .col2_3 {
+        position: relative;
+        float: left;
+        left: auto;
+        width: auto;
+      }
+
+      .col3 {
+        display: none;
+      }
     }
 
     .panel.main {
-        .panel.left {
-            display:none;
-        }
-        .panel.middle {
-            width:100%;
-            left:0;
-        }
-        .row {
-            padding-left:.5em;
-        }
+      .panel.left {
+        display: none;
+      }
 
-        .panel.aside {
-            min-width:auto;
-        }
+      .panel.middle {
+        width: 100%;
+        left: 0;
+      }
+
+      .row {
+        padding-left: .5em;
+      }
+
+      .panel.aside {
+        min-width: auto;
+      }
     }
+  }
 }

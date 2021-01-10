@@ -61,31 +61,25 @@ class Workspace extends Component {
           <PasswordWorkspaceMenu/>
         </div>
         <div className="panel main">
-          <div className="tabs-content">
-            <div className="tab-content selected">
-              <div className="reports-workspace">
-                <div className="panel left">
-                  <FilterResourcesByShortcuts/>
-                  {canUseFolders &&
-                  <FoldersTree/>
-                  }
-                  <SidebarGroupFilterSection/>
-                  {canUseTags &&
-                  <SidebarTagFilterSection/>
-                  }
-                </div>
-                <div className="panel middle">
-                  <PasswordBreadcrumb/>
-                  <Grid/>
-                  {this.props.resourceWorkspaceContext.details.folder && this.hasLockDetail() &&
-                    <FolderSidebar/>
-                  }
-                  {this.props.resourceWorkspaceContext.details.resource && this.hasLockDetail() &&
-                    <PasswordSidebar/>
-                  }
-                </div>
-              </div>
-            </div>
+          <div className="panel left">
+            <FilterResourcesByShortcuts/>
+            {canUseFolders &&
+            <FoldersTree/>
+            }
+            <SidebarGroupFilterSection/>
+            {canUseTags &&
+            <SidebarTagFilterSection/>
+            }
+          </div>
+          <div className="panel middle">
+            <PasswordBreadcrumb/>
+            <Grid/>
+            {this.props.resourceWorkspaceContext.details.folder && this.hasLockDetail() &&
+              <FolderSidebar/>
+            }
+            {this.props.resourceWorkspaceContext.details.resource && this.hasLockDetail() &&
+              <PasswordSidebar/>
+            }
           </div>
         </div>
       </div>
