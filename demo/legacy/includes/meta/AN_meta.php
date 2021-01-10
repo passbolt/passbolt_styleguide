@@ -21,5 +21,4 @@
     <link rel="icon" href="src/img/webroot/favicon_128.png" sizes="128x128" />
     <link rel="icon" href="src/img/webroot/favicon_192.png" sizes="192x192" />
     <link rel="icon" href="src/img/webroot/favicon_228.png" sizes="228x228" />
-	<script type="text/javascript" src="src/js/modernizr.js"></script>
 	<link rel="stylesheet" type="text/css" href="src/css/themes/default/ext_external.css" />

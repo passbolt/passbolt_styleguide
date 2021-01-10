@@ -67,21 +67,15 @@ class DisplayUserWorkspace extends React.Component {
           <DisplayUserWorkspaceActions/>
         </div>
         <div className="panel main">
-          <div className="tabs-content">
-            <div className="tab-content selected">
-              <div className="reports-workspace">
-                <div className="panel left">
-                  <FilterUsersByShortcut/>
-                  <DisplayGroups/>
-                </div>
-                <div className="panel middle">
-                  <DisplayUserWorkspaceBreadcrumb/>
-                  <DisplayUsers/>
-                  {this.mustDisplayUserDetails && <DisplayUserDetails/>}
-                  {this.mustDisplayGroupDetails && <DisplayUserGroupDetails/>}
-                </div>
-              </div>
-            </div>
+          <div className="panel left">
+            <FilterUsersByShortcut/>
+            <DisplayGroups/>
+          </div>
+          <div className="panel middle">
+            <DisplayUserWorkspaceBreadcrumb/>
+            <DisplayUsers/>
+            {this.mustDisplayUserDetails && <DisplayUserDetails/>}
+            {this.mustDisplayGroupDetails && <DisplayUserGroupDetails/>}
           </div>
         </div>
       </div>

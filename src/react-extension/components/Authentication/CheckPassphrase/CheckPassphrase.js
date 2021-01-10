@@ -275,7 +275,7 @@ class CheckPassphrase extends Component {
                   onChange={this.handleToggleRememberMe}
                   disabled={!this.areActionsAllowed}/>
                 <label htmlFor="remember-me">
-                  Remember until I logout.
+                  Remember until signed out.
                 </label>
               </div>
             }

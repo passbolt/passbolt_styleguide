@@ -4032,100 +4032,93 @@ form.public .input select {
  * Page layout
  */
 .page {
-  min-width: 320px;
-}
-.page,
-.panel,
-.header {
   width: 100%;
-}
-.page,
-.panel {
-  position: absolute;
-  overflow: auto;
-}
-.header {
-  overflow: hidden;
-}
-.page {
+  min-width: 320px;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
+  position: absolute;
+  overflow: auto;
+  /* main workspace panels  position depend on how many headers are there */
+  /* Grid */
+  /* if the other grid is used
+   don't center the grid inside main panel */
 }
-/* headers */
-.header.first {
-  min-height: 2.4em;
-}
-.header.second {
-  top: 2.375em;
-  height: 4.5em;
-}
-.header.third {
-  top: 6.875em;
-  height: 3em;
-}
-/* main workspace panel */
-.panel {
+.page .panel {
   height: 100%;
+  width: 100%;
+  position: absolute;
+  overflow: auto;
 }
-.panel.main {
+.page .panel.main {
   top: 10em;
   bottom: 2.45em;
   height: auto;
   padding: 0;
 }
-.panel.main .row {
+.page .panel.main .row {
   padding-left: 0;
 }
-.panel.main .panel.left {
+.page .panel.main .panel.left {
   background: #ffffff;
 }
-/* its position depends on how many headers are there */
-.header.second + .panel.main {
+.page .header.second + .panel.main {
   top: 6.875em;
 }
-.header.third + .panel.main {
+.page .header.third + .panel.main {
   top: 10em;
   border-top: 1px solid #DDD;
 }
-/* columns */
-.panel,
-.col1,
-.col2,
-.col3,
-.col2_3 {
+.page .header {
+  width: 100%;
+  overflow: hidden;
+  /* headers */
+}
+.page .header.first {
+  min-height: 2.4em;
+}
+.page .header.second {
+  top: 2.375em;
+  height: 4.5em;
+}
+.page .header.third {
+  top: 6.875em;
+  height: 3em;
+}
+.page .col1,
+.page .col2,
+.page .col3,
+.page .col2_3 {
   position: absolute;
 }
-.col1,
-.panel.left {
+.page .col1,
+.page .panel.left {
   width: 17.25%;
   box-sizing: border-box;
 }
-.panel.middle {
+.page .panel.middle {
   width: 82%;
   left: 18%;
   overflow: hidden;
 }
-.panel.middle.scroll {
+.page .panel.middle.scroll {
   overflow-y: scroll;
 }
-.col2 {
+.page .col2 {
   width: 70%;
   left: 18%;
 }
-.col3,
-.panel.right {
+.page .col3,
+.page .panel.right {
   width: 24%;
   left: 75%;
 }
-.col2_3 {
+.page .col2_3 {
   width: 81.5%;
   left: 18%;
 }
-/* if the other grid is used
-   don't center the grid inside main panel */
-.panel.main .grid-responsive-12 {
+.page .panel.main .grid-responsive-12 {
   float: left;
   width: 100%;
   max-width: none;
@@ -4134,40 +4127,40 @@ form.public .input select {
 }
 /* hide left column when there is no space */
 @media all and (max-width: 1024px) {
-  .panel.left {
+  .page .panel.left {
     display: none;
   }
-  .header.second .col2 {
+  .page .header.second .col2 {
     display: none;
   }
-  .header.second .col2_3 {
+  .page .header.second .col2_3 {
     display: none;
   }
-  .header.third {
+  .page .header.third {
     height: 4.5em;
   }
-  .header.third .col1,
-  .header.third .col2,
-  .header.third .col2_3 {
+  .page .header.third .col1,
+  .page .header.third .col2,
+  .page .header.third .col2_3 {
     position: relative;
     float: left;
     left: auto;
     width: auto;
   }
-  .header.third .col3 {
+  .page .header.third .col3 {
     display: none;
   }
-  .panel.main .panel.left {
+  .page .panel.main .panel.left {
     display: none;
   }
-  .panel.main .panel.middle {
+  .page .panel.main .panel.middle {
     width: 100%;
     left: 0;
   }
-  .panel.main .row {
+  .page .panel.main .row {
     padding-left: 0.5em;
   }
-  .panel.main .panel.aside {
+  .page .panel.main .panel.aside {
     min-width: auto;
   }
 }
@@ -4880,7 +4873,7 @@ article table.table-parameters tbody tr td em {
   color: #333;
 }
 .logo.no-img {
-  background: transparent url('../img/logo/logo.png') 0 0 no-repeat;
+  background: transparent url('../img/logo/logo.svg') 0 0 no-repeat;
   background-size: 150px auto;
   width: 150px;
   height: 30px;

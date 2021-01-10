@@ -3985,7 +3985,7 @@ input[type=email].fluid {
   border-radius: 50%;
 }
 .logo.no-img {
-  background: transparent url('../../../img/logo/logo.png') 0 0 no-repeat;
+  background: transparent url('../../../img/logo/logo.svg') 0 0 no-repeat;
   background-size: 150px auto;
   width: 150px;
   height: 30px;

@@ -83,7 +83,7 @@ class SearchBar extends Component {
       <div className="col2 search-wrapper">
         <form className="search" onSubmit={this.handleOnSubmitEvent}>
           <div className="input search required">
-            <label htmlFor="js_app_filter_keywords">Search</label>
+            <label>Search</label>
             <input ref={this.searchInputRef} className="required" type="search"
               disabled={this.props.disabled ? 'disabled' : ''}
               onChange={this.handleChangeEvent}
