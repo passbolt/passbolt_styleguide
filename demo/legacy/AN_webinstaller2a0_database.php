@@ -2,7 +2,15 @@
 <html lang="en" class="version alpha no-passboltplugin no-firefox chrome">
 <head>
 	<?php include('includes/meta/AN_meta_setup.php'); ?>
+    <script src="src/js/jquery-3.5.0.min.js"></script>
+    <script src="src/js/jquery-ui.min.js"></script>
+    <script src="src/js/chosen.jquery.js"></script>
+    <script type="text/javascript">
 
+        $(function() {
+            $("#ConnectionProtocol").chosen({width: '100%', disable_search: true});
+        });
+    </script>
 </head>
 <body>
 <div id="container" class="page setup">
@@ -33,36 +41,45 @@
 				<div class="row">
 					<div class="col7">
 						<h3>Database configuration</h3>
-						<div class="message error">
-							A connection could not be established to the database. Please verify the settings.
-						</div>
-						<div class="input text required">
-							<label for="DbType">Type</label>
-							<select name="data[Db][type]" class="required fluid" id="DbType" required="required" type="text" disabled="disabled">
-								<option value="mysql">MySQL / Maria DB</option>
-							</select>
-						</div>
-						<div class="input text required">
-							<label for="DbHost">Host</label>
-							<input name="data[Db][host]" class="required fluid" id="DbHost" required="required" type="text" placeholder="host name or ip address">
-						</div>
-						<div class="input text required">
-							<label for="DbPort">Port</label>
-							<input name="data[Db][port]" class="required fluid" id="DbPort" required="required" type="text" placeholder="port" value="5432">
-						</div>
-						<div class="input text required">
-							<label for="DbUsername">Username</label>
-							<input name="data[Db][username]" class="required fluid" id="DbPort" required="required" type="text" placeholder="username">
-						</div>
-						<div class="input text required">
-							<label for="DbPassword">Password</label>
-							<input name="data[Db][password]" class="required fluid" id="DbPassword" required="required" type="password" placeholder="password">
-						</div>
+<!--						<div class="message error">-->
+<!--							A connection could not be established to the database. Please verify the settings.-->
+<!--						</div>-->
+                        <div class="message notice">
+                            <p>An existing database has been detected on your server. The connection details are pre-filled below.<br/>
+                                You can keep it as it is (default), or configure another database.
+                            </p>
+                        </div>
+                        <div class="singleline connection_info protocol_host_port clearfix required">
+                            <label>Database connection url</label>
+                            <div class="input text field_protocol_host">
+                                <div class="input text protocol">
+                                    <select name="data[Db][type]" class="required fluid" id="ConnectionProtocol" required="required">
+                                        <option value="1">mysql://</option>
+                                    </select>
+                                </div>
+                                <div class="input text host">
+                                    <input name="data[Db][host]" type="text" class="required fluid" placeholder="host or ip" value="localhost">
+                                </div>
+                            </div>
+                            <div class="input text port">
+                                <input name="data[Db][port]" type="number" class="required fluid" placeholder="port" value="389" value="3306">
+                            </div>
+                        </div>
+                        <div class="singleline clearfix">
+                            <div class="input text first-field required">
+                                <label for="DbUsername">Username</label>
+                                <input name="data[Db][username]" type="text" class="required fluid" placeholder="username" value="passbolt">
+                            </div>
+                            <div class="input text last-field required">
+                                <label for="DbPassword">Password</label>
+                                <input name="data[Db][password]" type="password" class="required fluid" placeholder="password" value="******">
+                            </div>
+                        </div>
 						<div class="input text required">
 							<label for="DbName">Database name</label>
-							<input name="data[Db][name]" class="required fluid" id="DbName" required="required" type="text" placeholder="database name">
+							<input name="data[Db][name]" class="required fluid" id="DbName" required="required" type="text" placeholder="database name" value="passbolt_db">
 						</div>
-
+                        <br>
 						<div class="submit-wrapper">
 							<a href="demo/legacy/AN_webinstaller3a0_server_keys.php" class="button primary big">Save and continue</a>
 						</div>
