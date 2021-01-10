@@ -152,7 +152,6 @@ export class ResourceWorkspaceContextProvider extends React.Component {
   async handleFilterChange(previousFilter) {
     const hasFilterChanged = previousFilter !== this.state.filter;
     if (hasFilterChanged) {
-
       const wasNotPreviouslyNone = previousFilter.type !== ResourceWorkspaceFilterTypes.NONE;
       if (wasNotPreviouslyNone) {
         this.populate();
@@ -539,7 +538,6 @@ export class ResourceWorkspaceContextProvider extends React.Component {
     const groupResources = this.resources.filter(resource => resourceIds.includes(resource.id));
     await this.setState({filter, filteredResources: groupResources, selectedResources: []});
     this.props.loadingContext.remove();
-
   }
 
   /**
