@@ -34,6 +34,14 @@ import SearchBar from "../../../../react/components/Common/Navigation/Search/Sea
  */
 class DisplayUserSettingsWorkspace extends React.Component {
   /**
+   * Can the user access the theme capability.
+   * @returns {bool}
+   */
+  get canIUseThemeCapability() {
+    return this.context.siteSettings && this.context.siteSettings.canIUse('accountSettings');
+  }
+
+  /**
    * Render the component
    * @return {JSX}
    */
@@ -60,7 +68,9 @@ class DisplayUserSettingsWorkspace extends React.Component {
                 <div className="panel middle">
                   <DisplayUserSettingsWorkspaceBreadcrumb/>
                   <Route path={`${path}/profile`} component={DisplayUserProfile}></Route>
+                  {this.canIUseThemeCapability &&
                   <Route path={`${path}/theme`} component={DisplayUserTheme}></Route>
+                  }
                   <Route path={`${path}/keys`} component={DisplayUserGpgInformation}></Route>
                 </div>
               </div>
