@@ -12,8 +12,9 @@
  */
 import React, {Component} from "react";
 import PropTypes from "prop-types";
-import {Link, withRouter} from "react-router-dom";
+import {withRouter} from "react-router-dom";
 import AppContext from "../../contexts/AppContext";
+import {withNavigationContext} from "../../contexts/NavigationContext";
 
 class DisplayMainMenu extends Component {
   /**
@@ -33,13 +34,6 @@ class DisplayMainMenu extends Component {
     }
 
     return selected;
-  }
-
-  /**
-   * Handle logout click
-   */
-  handleLogoutClick() {
-    this.context.onLogoutRequested();
   }
 
   /**
@@ -63,7 +57,7 @@ class DisplayMainMenu extends Component {
               <div className={`row ${this.isSelected("passwords") ? "selected" : ""}`}>
                 <div className="main-cell-wrapper">
                   <div className="main-cell">
-                    <Link to="/app/passwords" role="button"><span>passwords</span></Link>
+                    <a onClick={this.props.navigationContext.onGoToPasswordsRequested} role="button"><span>passwords</span></a>
                   </div>
                 </div>
               </div>
@@ -72,7 +66,7 @@ class DisplayMainMenu extends Component {
               <div className={`row ${this.isSelected("users") ? "selected" : ""}`}>
                 <div className="main-cell-wrapper">
                   <div className="main-cell">
-                    <Link to="/app/users" role="button"><span>users</span></Link>
+                    <a onClick={this.props.navigationContext.onGoToUsersRequested} role="button"><span>users</span></a>
                   </div>
                 </div>
               </div>
@@ -82,7 +76,7 @@ class DisplayMainMenu extends Component {
               <div className={`row ${this.isSelected("administration") ? "selected" : ""}`}>
                 <div className="main-cell-wrapper">
                   <div className="main-cell">
-                    <Link to="/app/administration" role="button"><span>administration</span></Link>
+                    <a onClick={this.props.navigationContext.onGoToAdministrationRequested} role="button"><span>administration</span></a>
                   </div>
                 </div>
               </div>
@@ -109,7 +103,7 @@ class DisplayMainMenu extends Component {
                 <div className="main-cell-wrapper">
                   <div className="main-cell">
                     <a role="button"
-                      onClick={this.handleLogoutClick.bind(this)}>
+                      onClick={this.context.onLogoutRequested}>
                       <span>sign out</span>
                     </a>
                   </div>
@@ -126,7 +120,9 @@ class DisplayMainMenu extends Component {
 DisplayMainMenu.contextType = AppContext;
 
 DisplayMainMenu.propTypes = {
+  navigationContext: PropTypes.any, // The navigation context
+  history: PropTypes.object, // The router history
   location: PropTypes.object, // Router location prop
 };
 
-export default withRouter(DisplayMainMenu);
+export default withRouter(withNavigationContext(DisplayMainMenu));

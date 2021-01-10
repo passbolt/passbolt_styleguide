@@ -49,6 +49,7 @@ import HandleSessionExpired
   from "./components/Auth/HandleSessionExpired/HandleSessionExpired";
 import Footer from "./components/Footer/Footer";
 import HandleExtAppRouteChanged from "./components/Route/HandleExtAppRouteChanged";
+import NavigationContextProvider from "./contexts/NavigationContext";
 
 /**
  * The passbolt application served by the browser extension.
@@ -80,6 +81,7 @@ class ExtApp extends Component {
 
   getDefaultState(props) {
     return {
+      name: "browser-extension", // The application name
       port: props.port,
       storage: props.storage,
 
@@ -385,58 +387,59 @@ class ExtApp extends Component {
                 <HandleSessionExpired/>
 
                 <Router>
-                  <HandleExtAppRouteChanged/>
-                  <Switch>
-                    { /* The following routes are not handled by the browser extension application. */}
-                    <Route exact path={[
-                      "/app/administration",
-                      "/app/settings/mfa",
-                    ]}/>
-                    {/* Passwords workspace */}
-                    <Route path={[
-                      "/app/folders/view/:filterByFolderId",
-                      "/app/passwords/view/:selectedResourceId",
-                      "/app/passwords",
-                    ]}>
-                      {isReady &&
-                      <ResourceWorkspaceContextProvider>
-                        <ManageDialogs/>
-                        <ManageContextualMenu/>
-                        <div id="container" className="page password">
-                          <div id="app" className={`app ${isReady ? "ready" : ""}`} tabIndex="1000">
-                            <div className="header first">
-                              <DisplayMainMenu/>
+                  <NavigationContextProvider>
+                    <HandleExtAppRouteChanged/>
+                    <Switch>
+                      { /* The following routes are not handled by the browser extension application. */}
+                      <Route path={[
+                        "/app/administration",
+                        "/app/settings/mfa",
+                      ]}/>
+                      {/* Passwords workspace */}
+                      <Route path={[
+                        "/app/folders/view/:filterByFolderId",
+                        "/app/passwords/view/:selectedResourceId",
+                        "/app/passwords",
+                      ]}>
+                        {isReady &&
+                        <ResourceWorkspaceContextProvider>
+                          <ManageDialogs/>
+                          <ManageContextualMenu/>
+                          <div id="container" className="page password">
+                            <div id="app" className={`app ${isReady ? "ready" : ""}`} tabIndex="1000">
+                              <div className="header first">
+                                <DisplayMainMenu/>
+                              </div>
+                              <PasswordWorkspace onMenuItemClick={this.handleWorkspaceSelect}/>
                             </div>
-                            <PasswordWorkspace onMenuItemClick={this.handleWorkspaceSelect}/>
                           </div>
-                        </div>
-                      </ResourceWorkspaceContextProvider>
-                      }
-                    </Route>
-                    {/* Users workspace */}
-                    <Route path={[
-                      "/app/groups/view/:selectedGroupId",
-                      "/app/users/view/:selectedUserId",
-                      "/app/users",
-                    ]}>
-                      {isReady &&
-                      <UserWorkspaceContextProvider>
-                        <ManageDialogs/>
-                        <ManageContextualMenu/>
-                        <div id="container" className="page user">
-                          <div id="app" className={`app ${isReady ? "ready" : ""}`} tabIndex="1000">
-                            <div className="header first">
-                              <DisplayMainMenu/>
+                        </ResourceWorkspaceContextProvider>
+                        }
+                      </Route>
+                      {/* Users workspace */}
+                      <Route path={[
+                        "/app/groups/view/:selectedGroupId",
+                        "/app/users/view/:selectedUserId",
+                        "/app/users",
+                      ]}>
+                        {isReady &&
+                        <UserWorkspaceContextProvider>
+                          <ManageDialogs/>
+                          <ManageContextualMenu/>
+                          <div id="container" className="page user">
+                            <div id="app" className={`app ${isReady ? "ready" : ""}`} tabIndex="1000">
+                              <div className="header first">
+                                <DisplayMainMenu/>
+                              </div>
+                              <DisplayUserWorkspace/>
                             </div>
-                            <DisplayUserWorkspace/>
                           </div>
-                        </div>
-                      </UserWorkspaceContextProvider>
-                      }
-                    </Route>
-                    {/* User settings workspace */}
-                    <Route path={"/app/settings"}>
-                      {isReady &&
+                        </UserWorkspaceContextProvider>
+                        }
+                      </Route>
+                      {/* User settings workspace */}
+                      <Route path={"/app/settings"}>
+                        {isReady &&
                         <>
                           <ManageDialogs/>
                           <div id="container" className="page settings">
@@ -448,13 +451,14 @@ class ExtApp extends Component {
                             </div>
                           </div>
                         </>
-                      }
-                    </Route>
-                    {/* Fallback */}
-                    <Route path="/">
-                      <HandleRouteFallback/>
-                    </Route>
-                  </Switch>
+                        }
+                      </Route>
+                      {/* Fallback */}
+                      <Route path="/">
+                        <HandleRouteFallback/>
+                      </Route>
+                    </Switch>
+                  </NavigationContextProvider>
                 </Router>
                 <ManageLoading/>
                 <Footer

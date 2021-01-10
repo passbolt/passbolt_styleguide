@@ -14,28 +14,21 @@
 import React, {Component} from "react";
 import PropTypes from "prop-types";
 
-class Breadcrumbs extends Component {
+class Breadcrumb extends Component {
   /**
    * Render the component
    * @returns {JSX}
    */
   render() {
-    let index = 0;
     return (
-      <div className="breadcrumbs">
-        <ul className="menu">
-          {(this.props.items && this.props.items.map(breadcrumb => {
-            index++;
-            return <li className="ellipsis" key={index}>{breadcrumb}</li>;
-          }))}
-        </ul>
-      </div>
+      <a onClick={this.props.onClick}>{this.props.name}</a>
     );
   }
 }
 
-Breadcrumbs.propTypes = {
-  items: PropTypes.array, // Array of breadcrumb [{name, onClick}, ..]
+Breadcrumb.propTypes = {
+  name: PropTypes.string, // The breadcrumb name
+  onClick: PropTypes.func, // The breadcrumb onClick callback
 };
 
-export default Breadcrumbs;
+export default Breadcrumb;

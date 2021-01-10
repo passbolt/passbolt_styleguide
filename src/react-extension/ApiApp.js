@@ -28,6 +28,7 @@ import Footer from "./components/Footer/Footer";
 import DisplayApiUserSettingsWorkspace
   from "./components/UserSetting/DisplayUserSettingsWorkspace/DisplayApiUserSettingsWorkspace";
 import DisplayMainMenu from "./components/navigation/DisplayMainMenu";
+import NavigationContextProvider from "./contexts/NavigationContext";
 
 /**
  * The passbolt application served by the API.
@@ -59,6 +60,7 @@ class ApiApp extends Component {
    */
   getDefaultState() {
     return {
+      name: "api", // The application name
       loggedInUser: null, // The logged in user
       siteSettings: null, // The site settings
       trustedDomain: this.baseUrl, // The site domain (use trusted domain for compatibility with browser extension applications)
@@ -97,7 +99,6 @@ class ApiApp extends Component {
    */
   get isMfaEnabled() {
     const siteSettings = this.state.siteSettings;
-
     return siteSettings && siteSettings.canIUse('multiFactorAuthentication');
   }
 
@@ -107,7 +108,6 @@ class ApiApp extends Component {
    */
   get isUserDirectoryEnabled() {
     const siteSettings = this.state.siteSettings;
-    console.log(this.state.siteSettings);
     return siteSettings && siteSettings.canIUse('directorySync');
   }
 
@@ -180,18 +180,22 @@ class ApiApp extends Component {
     return (
       <>
         {this.isReady &&
-          <AppContext.Provider value={this.state}>
-            <ActionFeedbackContextProvider>
-              <DialogContextProvider>
-                <ContextualMenuContextProvider>
-                  { /* Action Feedback Management */}
-                  <ShareActionFeedbacks/>
-                  <Router>
+        <AppContext.Provider value={this.state}>
+          <ActionFeedbackContextProvider>
+            <DialogContextProvider>
+              <ContextualMenuContextProvider>
+                { /* Action Feedback Management */}
+                <ShareActionFeedbacks/>
+                <Router>
+                  <NavigationContextProvider>
                     <Switch>
                       <Route exact path="/app/administration">
-                        {this.isMfaEnabled && <Redirect to="/app/administration/mfa"/>}
-                        {!this.isMfaEnabled && this.isUserDirectoryEnabled && <Redirect to="/app/administration/users-directory"/>}
-                        {!this.isMfaEnabled && !this.isUserDirectoryEnabled && <Redirect to="/app/administration/email-notification"/>}
+                        {this.isMfaEnabled &&
+                        <Redirect to="/app/administration/mfa"/>}
+                        {!this.isMfaEnabled && this.isUserDirectoryEnabled &&
+                        <Redirect to="/app/administration/users-directory"/>}
+                        {!this.isMfaEnabled && !this.isUserDirectoryEnabled &&
+                        <Redirect to="/app/administration/email-notification"/>}
                       </Route>
                       <Route path="/app/administration">
                         <AdministrationWorkspaceContextProvider>
@@ -212,18 +216,14 @@ class ApiApp extends Component {
                           </div>
                         </div>
                       </Route>
-                      { /* All others /app routes are handled by the browser extension */}
-                      <Route path="/app" render={() => {
-                        window.location.reload();
-                      }}>
-                      </Route>
                     </Switch>
-                  </Router>
-                  <Footer siteSettings={this.state.siteSettings}/>
-                </ContextualMenuContextProvider>
-              </DialogContextProvider>
-            </ActionFeedbackContextProvider>
-          </AppContext.Provider>
+                  </NavigationContextProvider>
+                </Router>
+                <Footer siteSettings={this.state.siteSettings}/>
+              </ContextualMenuContextProvider>
+            </DialogContextProvider>
+          </ActionFeedbackContextProvider>
+        </AppContext.Provider>
         }
       </>
     );

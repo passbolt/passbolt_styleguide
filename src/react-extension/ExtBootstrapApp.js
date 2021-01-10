@@ -12,14 +12,15 @@
  * @since        3.0.0
  */
 import React, {Component} from "react";
-import {Route, BrowserRouter as Router, Switch} from "react-router-dom";
+import {BrowserRouter as Router, Route, Switch} from "react-router-dom";
 import PropTypes from "prop-types";
 import InsertAppIframe from "./components/InsertAppIframe";
 import InsertFileIframe from "./components/InsertFileIframe";
 import InsertClipboardIframe from "./components/InsertClipboardIframe";
 import UserSettings from "./lib/Settings/UserSettings";
-import HandleLegacyAdministrationAppjs from "./components/Legacy/HandleLegacyAdministrationAppjs";
+import HandleLegacyAppjs from "./components/Legacy/HandleLegacyAppjs";
 import HandleExtAppBootstrapRouteChangeRequested from "./components/Route/HandleExtAppBootstrapRouteChangeRequested";
+import CleanupLegacyAppjs from "./components/Legacy/CleanupLegacyAppjs";
 
 /**
  * The bootstrap of the passbolt application served by the browser extension.
@@ -81,6 +82,23 @@ class ExtBootstrapApp extends Component {
     return urlTrustedDomain.pathname;
   }
 
+  /**
+   * Return true if the legacy appjs is detected on the page.
+   */
+  get isLegacyAppjs() {
+    // The application is legacy if the page contains the script steal.production.js
+    const legacyScripts = document.getElementsByTagName('script');
+    if (legacyScripts) {
+      for (let i = 0; i < legacyScripts.length; i++) {
+        const src = legacyScripts[i].src || "";
+        if (src.indexOf("steal.production.js") !== -1) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
   render() {
     return (
       <>
@@ -88,11 +106,15 @@ class ExtBootstrapApp extends Component {
         <Router basename={this.basename}>
           <HandleExtAppBootstrapRouteChangeRequested port={this.props.port}/>
           <Switch>
-            <Route exact path={[
+            <Route path={[
               "/app/administration",
               "/app/settings/mfa"
             ]}>
-              <HandleLegacyAdministrationAppjs port={this.props.port}/>
+              <>
+                {this.isLegacyAppjs &&
+                <HandleLegacyAppjs port={this.props.port}/>
+                }
+              </>
             </Route>
             <Route exact path={[
               "/app/folders/view/:filterByFolderId",
@@ -108,6 +130,9 @@ class ExtBootstrapApp extends Component {
               "/app",
               "/",
             ]}>
+              {this.isLegacyAppjs &&
+              <CleanupLegacyAppjs/>
+              }
               <InsertAppIframe browserExtensionUrl={this.props.browserExtensionUrl}/>
               <InsertClipboardIframe browserExtensionUrl={this.props.browserExtensionUrl}/>
               <InsertFileIframe browserExtensionUrl={this.props.browserExtensionUrl}/>

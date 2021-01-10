@@ -40,7 +40,7 @@ describe("As LU I can see a Breadcrumb", () => {
     page = new PasswordBreadcrumbPage(context, props);
     expect(page.displayBreadcrumb.exists()).toBeTruthy();
     expect(page.displayBreadcrumb.count).toBe(1);
-    expect(page.displayBreadcrumb.item(1)).toBe("All Items");
+    expect(page.displayBreadcrumb.item(1)).toBe("All items");
   });
 
   it('As LU I should see a breadcrumb for a tag', () => {
@@ -48,7 +48,7 @@ describe("As LU I can see a Breadcrumb", () => {
     page = new PasswordBreadcrumbPage(context, props);
     expect(page.displayBreadcrumb.exists()).toBeTruthy();
     expect(page.displayBreadcrumb.count).toBe(2);
-    expect(page.displayBreadcrumb.item(1)).toBe("All Items");
+    expect(page.displayBreadcrumb.item(1)).toBe("All items");
     expect(page.displayBreadcrumb.item(2)).toBe("tag (tag)");
   });
 
@@ -57,7 +57,7 @@ describe("As LU I can see a Breadcrumb", () => {
     page = new PasswordBreadcrumbPage(context, props);
     expect(page.displayBreadcrumb.exists()).toBeTruthy();
     expect(page.displayBreadcrumb.count).toBe(2);
-    expect(page.displayBreadcrumb.item(1)).toBe("All Items");
+    expect(page.displayBreadcrumb.item(1)).toBe("All items");
     expect(page.displayBreadcrumb.item(2)).toBe("Shared with me");
   });
 
@@ -66,7 +66,7 @@ describe("As LU I can see a Breadcrumb", () => {
     page = new PasswordBreadcrumbPage(context, props);
     expect(page.displayBreadcrumb.exists()).toBeTruthy();
     expect(page.displayBreadcrumb.count).toBe(2);
-    expect(page.displayBreadcrumb.item(1)).toBe("All Items");
+    expect(page.displayBreadcrumb.item(1)).toBe("All items");
     expect(page.displayBreadcrumb.item(2)).toBe("Recently modified");
   });
 
@@ -75,7 +75,7 @@ describe("As LU I can see a Breadcrumb", () => {
     page = new PasswordBreadcrumbPage(context, props);
     expect(page.displayBreadcrumb.exists()).toBeTruthy();
     expect(page.displayBreadcrumb.count).toBe(2);
-    expect(page.displayBreadcrumb.item(1)).toBe("All Items");
+    expect(page.displayBreadcrumb.item(1)).toBe("All items");
     expect(page.displayBreadcrumb.item(2)).toBe("Favorite");
   });
 
@@ -84,7 +84,7 @@ describe("As LU I can see a Breadcrumb", () => {
     page = new PasswordBreadcrumbPage(context, props);
     expect(page.displayBreadcrumb.exists()).toBeTruthy();
     expect(page.displayBreadcrumb.count).toBe(2);
-    expect(page.displayBreadcrumb.item(1)).toBe("All Items");
+    expect(page.displayBreadcrumb.item(1)).toBe("All items");
     expect(page.displayBreadcrumb.item(2)).toBe("Items I own");
   });
 
@@ -93,7 +93,7 @@ describe("As LU I can see a Breadcrumb", () => {
     page = new PasswordBreadcrumbPage(context, props);
     expect(page.displayBreadcrumb.exists()).toBeTruthy();
     expect(page.displayBreadcrumb.count).toBe(2);
-    expect(page.displayBreadcrumb.item(1)).toBe("All Items");
+    expect(page.displayBreadcrumb.item(1)).toBe("All items");
     expect(page.displayBreadcrumb.item(2)).toBe("folder (folder)");
   });
 
@@ -102,7 +102,7 @@ describe("As LU I can see a Breadcrumb", () => {
     page = new PasswordBreadcrumbPage(context, props);
     expect(page.displayBreadcrumb.exists()).toBeTruthy();
     expect(page.displayBreadcrumb.count).toBe(2);
-    expect(page.displayBreadcrumb.item(1)).toBe("All Items");
+    expect(page.displayBreadcrumb.item(1)).toBe("All items");
     expect(page.displayBreadcrumb.item(2)).toBe("group (group)");
   });
 
@@ -118,7 +118,7 @@ describe("As LU I can see a Breadcrumb", () => {
     page = new PasswordBreadcrumbPage(context, props);
     expect(page.displayBreadcrumb.exists()).toBeTruthy();
     expect(page.displayBreadcrumb.count).toBe(2);
-    expect(page.displayBreadcrumb.item(1)).toBe("All Items");
+    expect(page.displayBreadcrumb.item(1)).toBe("All items");
     expect(page.displayBreadcrumb.item(2)).toBe("root (folder)");
   });
 
@@ -127,7 +127,7 @@ describe("As LU I can see a Breadcrumb", () => {
     page = new PasswordBreadcrumbPage(context, props);
     expect(page.displayBreadcrumb.exists()).toBeTruthy();
     expect(page.displayBreadcrumb.count).toBe(2);
-    expect(page.displayBreadcrumb.item(1)).toBe("All Items");
+    expect(page.displayBreadcrumb.item(1)).toBe("All items");
     expect(page.displayBreadcrumb.item(2)).toBe("Search : text");
   });
 });

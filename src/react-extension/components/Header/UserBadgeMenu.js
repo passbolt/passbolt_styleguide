@@ -13,10 +13,10 @@
  */
 import React, {Component} from "react";
 import PropTypes from "prop-types";
+import {withAppContext} from "../../contexts/AppContext";
+import {withNavigationContext} from "../../contexts/NavigationContext";
 import UserAvatar from "../../../react/components/Common/Avatar/UserAvatar";
 import Icon from "../../../react/components/Common/Icons/Icon";
-import {Link} from "react-router-dom";
-import {withAppContext} from "../../contexts/AppContext";
 
 class UserBadgeMenu extends Component {
   /**
@@ -50,7 +50,8 @@ class UserBadgeMenu extends Component {
     this.handleDocumentContextualMenuEvent = this.handleDocumentContextualMenuEvent.bind(this);
     this.handleDocumentDragStartEvent = this.handleDocumentDragStartEvent.bind(this);
     this.handleToggleMenuClick = this.handleToggleMenuClick.bind(this);
-    this.handleMenuItemClick = this.handleMenuItemClick.bind(this);
+    this.handleProfileClick = this.handleProfileClick.bind(this);
+    this.handleThemeClick = this.handleThemeClick.bind(this);
     this.handleLogoutClick = this.handleLogoutClick.bind(this);
   }
 
@@ -74,6 +75,14 @@ class UserBadgeMenu extends Component {
   }
 
   /**
+   * Can the user access the theme capability.
+   * @returns {bool}
+   */
+  get canIUseThemeCapability() {
+    return this.props.context.siteSettings && this.props.context.siteSettings.canIUse('accountSettings');
+  }
+
+  /**
    * Handle click events on document. Hide the component if the click occurred outside of the component.
    * @param {ReactEvent} event The event
    */
@@ -82,7 +91,7 @@ class UserBadgeMenu extends Component {
     if (this.userBadgeMenuRef.current.contains(event.target)) {
       return;
     }
-    this.handleCloseUserBadgeMenu();
+    this.closeUserBadgeMenu();
   }
 
   /**
@@ -94,20 +103,20 @@ class UserBadgeMenu extends Component {
     if (this.userBadgeMenuRef.current.contains(event.target)) {
       return;
     }
-    this.handleCloseUserBadgeMenu();
+    this.closeUserBadgeMenu();
   }
 
   /**
    * Handle drag start event on document. Hide the component if any.
    */
   handleDocumentDragStartEvent() {
-    this.handleCloseUserBadgeMenu();
+    this.closeUserBadgeMenu();
   }
 
   /**
    * Close the user badge menu
    */
-  handleCloseUserBadgeMenu() {
+  closeUserBadgeMenu() {
     this.setState({open: false});
   }
 
@@ -145,12 +154,19 @@ class UserBadgeMenu extends Component {
   }
 
   /**
-   * Handle click on menu event
-   * @return {void}
+   * Whenever the user wants to navigate to the users settings workspace profile section.
    */
-  handleMenuItemClick() {
-    const open = false;
-    this.setState({open});
+  handleProfileClick() {
+    this.props.navigationContext.onGoToUserSettingsProfileRequested();
+    this.closeUserBadgeMenu();
+  }
+
+  /**
+   * Whenever the user wants to navigate to the users settings workspace theme section.
+   */
+  handleThemeClick() {
+    this.props.navigationContext.onGoToUserSettingsThemeRequested();
+    this.closeUserBadgeMenu();
   }
 
   /**
@@ -159,14 +175,7 @@ class UserBadgeMenu extends Component {
    */
   handleLogoutClick() {
     this.props.context.onLogoutRequested();
-  }
-
-  /**
-   * Can the user access the theme capability.
-   * @returns {bool}
-   */
-  get canIUseThemeCapability() {
-    return this.props.context.siteSettings && this.props.context.siteSettings.canIUse('accountSettings');
+    this.closeUserBadgeMenu();
   }
 
   /**
@@ -196,17 +205,17 @@ class UserBadgeMenu extends Component {
           <ul className="dropdown-content right visible">
             <li key="profile">
               <div className="row">
-                <Link to="/app/settings/profile" role="button" tabIndex="1" onClick={this.handleMenuItemClick}>
+                <a role="button" tabIndex="1" onClick={this.handleProfileClick}>
                   <span>Profile</span>
-                </Link>
+                </a>
               </div>
             </li>
             {this.canIUseThemeCapability &&
             <li key="theme">
               <div className="row">
-                <Link to="/app/settings/theme" role="button" tabIndex="2" onClick={this.handleMenuItemClick}>
+                <a role="button" tabIndex="2" onClick={this.handleThemeClick}>
                   <span>Theme</span>
-                </Link>
+                </a>
               </div>
             </li>
             }
@@ -227,8 +236,9 @@ class UserBadgeMenu extends Component {
 
 UserBadgeMenu.propTypes = {
   context: PropTypes.object, // The application context
+  navigationContext: PropTypes.any, // The application navigation context
   baseUrl: PropTypes.string,
   user: PropTypes.object,
 };
 
-export default withAppContext(UserBadgeMenu);
+export default withAppContext(withNavigationContext(UserBadgeMenu));

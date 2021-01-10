@@ -20,60 +20,53 @@ import {
   AdministrationWorkspaceMenuTypes,
   withAdministrationWorkspace
 } from "../../../contexts/AdministrationWorkspaceContext";
+import {withNavigationContext} from "../../../contexts/NavigationContext";
+import Breadcrumb from "../../../../react/components/Common/Navigation/Breadcrumbs/Breadcrumb";
 
 /**
  * The component displays a navigation breadcrumb given the administration setting selected
  */
 class DisplayAdministrationWorkspaceBreadcrumb extends Component {
   /**
-   * Returns the all settings breadcrumb items
+   * Returns the current list of breadcrumb items
    */
-  get allSettings() {
-    return  [
-      {
-        name: "Administration",
-        link: this.props.location
-      }
-    ];
-  }
-
-  /**
-   * Returns the breadcrumb items for the given administration setting selected
-   */
-  getBreadcrumb() {
-    return [
-      ...this.allSettings,
-      {
-        name: this.getBreadcrumbItemName(),
-        link: this.props.location
-      },
-      {
-        name: "Settings"
-      }
-    ];
+  get items() {
+    switch (this.props.administrationWorkspaceContext.selectedAdministration) {
+      case AdministrationWorkspaceMenuTypes.NONE:
+        return [];
+      default:
+        return [
+          <Breadcrumb key="bread-1" name="Administration" onClick={this.props.navigationContext.onGoToAdministrationRequested}/>,
+          <Breadcrumb key="bread-2" name={this.getLastBreadcrumbItemName()} onClick={this.onLastBreadcrumbClick.bind(this)}/>,
+          <Breadcrumb key="bread-3" name="Settings" onClick={this.onLastBreadcrumbClick.bind(this)}/>
+        ];
+    }
   }
 
   /**
    * Returns the main breadcrumb item name given the current administration setting selected
    * @returns {string}
    */
-  getBreadcrumbItemName() {
+  getLastBreadcrumbItemName() {
     switch (this.props.administrationWorkspaceContext.selectedAdministration) {
-      case AdministrationWorkspaceMenuTypes.MFA: return "Multi factor authentication";
-      case AdministrationWorkspaceMenuTypes.USER_DIRECTORY: return "Users Directory";
-      case AdministrationWorkspaceMenuTypes.EMAIL_NOTIFICATION: return "Email Notification";
-      default: return "";
+      case AdministrationWorkspaceMenuTypes.MFA:
+        return "Multi factor authentication";
+      case AdministrationWorkspaceMenuTypes.USER_DIRECTORY:
+        return "Users Directory";
+      case AdministrationWorkspaceMenuTypes.EMAIL_NOTIFICATION:
+        return "Email Notification";
+      default:
+        return "";
     }
   }
 
   /**
-   * Returns the current list of breadcrumb items
+   * Whenever the user click on the last breadcrumb
+   * @returns {Promise<void>}
    */
-  get items() {
-    switch (this.props.administrationWorkspaceContext.selectedAdministration) {
-      case AdministrationWorkspaceMenuTypes.NONE:  return [];
-      default: return this.getBreadcrumb();
-    }
+  async onLastBreadcrumbClick() {
+    const pathname = this.props.location.pathname;
+    this.props.history.push({pathname});
   }
 
   /**
@@ -82,7 +75,7 @@ class DisplayAdministrationWorkspaceBreadcrumb extends Component {
    */
   render() {
     return (
-      <Breadcrumbs items={this.items} />
+      <Breadcrumbs items={this.items}/>
     );
   }
 }
@@ -91,7 +84,9 @@ DisplayAdministrationWorkspaceBreadcrumb.context = AppContext;
 
 DisplayAdministrationWorkspaceBreadcrumb.propTypes = {
   administrationWorkspaceContext: PropTypes.object, // The user workspace context
-  location: PropTypes.object
+  location: PropTypes.object, // The router location
+  history: PropTypes.object, // The router history
+  navigationContext: PropTypes.any, // The application navigation context
 };
 
-export default withRouter(withAdministrationWorkspace(DisplayAdministrationWorkspaceBreadcrumb));
+export default withRouter(withNavigationContext(withAdministrationWorkspace(DisplayAdministrationWorkspaceBreadcrumb)));
