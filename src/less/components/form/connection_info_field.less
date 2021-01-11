@@ -1,4 +1,9 @@
-/** Specific layout for ldap connection information */
+/** Specific layout for connection info field
+ This layout contains 3 fields on a single line:
+ - a chosen select field to select the protocol
+ - a host name text field
+ - a port text field
+ */
 .singleline.connection_info {
     &.protocol_host_port {
         .input.text.field_protocol_host {
@@ -21,16 +26,24 @@
                     }
                 }
 
-                &.protocol.chosen-container {
+                &.protocol {
                     width: 25%;
                     position: relative;
-                    display: block;
-                    .chosen-single {
-                      color: @font-default;
-                      height: 38px;
-                      width: 100%;
+                    .chosen-container {
+                        display: block;
+                        a.chosen-single {
+                            height: 38px;
+                            div {
+                                b {
+                                    background-position: 0px 10px;
+                                }
+                            }
+                            span {
+                                font-size: 16px;
+                                padding: 6px 0 0 0;
+                            }
+                        }
                     }
-
                     .chosen-container-active.chosen-with-drop {
                         a.chosen-single  {
                             div b {

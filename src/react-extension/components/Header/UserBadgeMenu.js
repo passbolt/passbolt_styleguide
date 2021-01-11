@@ -162,6 +162,14 @@ class UserBadgeMenu extends Component {
   }
 
   /**
+   * Can the user access the theme capability.
+   * @returns {bool}
+   */
+  get canIUseThemeCapability() {
+    return this.props.context.siteSettings && this.props.context.siteSettings.canIUse('accountSettings');
+  }
+
+  /**
    * Render the component
    * @return {JSX}
    */
@@ -193,6 +201,7 @@ class UserBadgeMenu extends Component {
                 </Link>
               </div>
             </li>
+            {this.canIUseThemeCapability &&
             <li key="theme">
               <div className="row">
                 <Link to="/app/settings/theme" role="button" tabIndex="2" onClick={this.handleMenuItemClick}>
@@ -200,6 +209,7 @@ class UserBadgeMenu extends Component {
                 </Link>
               </div>
             </li>
+            }
             <li key="logout">
               <div className="row">
                 <a role="button" tabIndex="3" onClick={this.handleLogoutClick}>

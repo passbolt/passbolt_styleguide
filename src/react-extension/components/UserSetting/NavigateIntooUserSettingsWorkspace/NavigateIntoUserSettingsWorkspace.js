@@ -29,6 +29,14 @@ class NavigateIntoUserSettingsWorkspace extends React.Component {
   }
 
   /**
+   * Can the user access the theme capability.
+   * @returns {bool}
+   */
+  get canIUseThemeCapability() {
+    return this.context.siteSettings && this.context.siteSettings.canIUse('accountSettings');
+  }
+
+  /**
    * Render the component
    */
   render() {
@@ -49,6 +57,7 @@ class NavigateIntoUserSettingsWorkspace extends React.Component {
               </div>
             </div>
           </li>
+          {this.canIUseThemeCapability &&
           <li>
             <div
               className={`row ${isSelected('theme') ? 'selected' : ''}`}>
@@ -62,6 +71,7 @@ class NavigateIntoUserSettingsWorkspace extends React.Component {
               </div>
             </div>
           </li>
+          }
           {this.isMfaEnabled &&
             <li>
               <div

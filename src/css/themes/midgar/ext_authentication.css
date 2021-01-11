@@ -660,7 +660,8 @@ label {
 	.required		- additional red star
 */
 .required label:after {
-  content: " *";
+  content: " \002A";
+  /* unicode character * */
   color: #FF6B70;
   font-weight: bold;
 }
@@ -1346,7 +1347,8 @@ a.unfav .svg-icon svg {
   line-height: 1.5em;
 }
 .password-hints li:before {
-  content: "●";
+  content: "\25CF";
+  /* unicode character ● */
   color: #444442;
   padding-right: 0.5em;
 }
