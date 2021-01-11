@@ -9,8 +9,7 @@ const PREFIX_LENGTH = 5;
 const API_URL = 'https://api.pwnedpasswords.com/range/';
 
 export default class PwnedPasswords {
-  static async pwnedPasswords (password) {
-
+  static async pwnedPasswords(password) {
     if (typeof password !== 'string') {
       const err = new Error('Input password must be a string.');
       return Promise.reject(err);

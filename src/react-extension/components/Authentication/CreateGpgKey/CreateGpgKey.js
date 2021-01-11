@@ -32,7 +32,7 @@ class CreateGpgKey extends Component {
   constructor(props) {
     super(props);
     this.state = this.defaultState;
-    this.evaluatePassphraseDebounce = debounce(this.evaluatePassphrase, 150);
+    this.evaluatePassphraseDebounce = debounce(this.evaluatePassphrase, 300);
     this.bindEventHandlers();
     this.createReferences();
   }
@@ -167,22 +167,23 @@ class CreateGpgKey extends Component {
    */
   async evaluatePassphraseHintClassNames(passphrase) {
     const masks = SecurityComplexity.matchMasks(passphrase);
-    const isPwned = await this.evaluatePassphraseIsInDictionary(passphrase);
+    const isPwned = await this.evaluatePassphraseIsInDictionary(passphrase).catch(() => null);
     const hintClassName = condition => condition ? 'success' : 'error';
     return {
       enoughLength:  hintClassName(passphrase.length >= 8),
       uppercase: hintClassName(masks.uppercase),
       alphanumeric: hintClassName(masks.alpha && masks.digit),
       specialCharacters: hintClassName(masks.special),
-      notInDictionary:  hintClassName(!isPwned)
+      notInDictionary:  isPwned !== null ? hintClassName(!isPwned) : null
     };
   }
 
   /**
    * Evaluate if the passphrase is in dictionary
    * @param passphrase The passphrase to evaluate
+   * @return {Promise<boolean>} Return true if the password is part of a dictionary, false otherwise
    */
-  evaluatePassphraseIsInDictionary(passphrase) {
+  async evaluatePassphraseIsInDictionary(passphrase) {
     if (passphrase.length >= 8) {
       return SecretComplexity.ispwned(passphrase);
     }

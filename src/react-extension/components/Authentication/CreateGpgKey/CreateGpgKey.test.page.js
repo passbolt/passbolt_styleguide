@@ -124,7 +124,7 @@ export default class CreateGpgKeyPage {
    */
   async fill(passphrase) {
     fireEvent.change(this.passphraseInput, {target: {value: passphrase}});
-    await waitFor(async() => {await new Promise(resolve => setTimeout(resolve, 150));});
+    await waitFor(async() => { await new Promise(resolve => setTimeout(resolve, 150)); });
   }
 
   /**
