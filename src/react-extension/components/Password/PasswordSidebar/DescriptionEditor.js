@@ -365,7 +365,7 @@ class DescriptionEditor extends React.Component {
         <div className="form-content" ref={this.elementRef}>
           <div className="input textarea required">
             <textarea name="description" className="fluid" ref={this.textareaRef}
-              maxLength="10000" placeholder="enter a description" value={this.description}
+              maxLength="10000" placeholder="Enter a description" value={this.description}
               onChange={this.handleInputChange}
               disabled={this.hasAllInputDisabled()} autoComplete="off"/>
           </div>
