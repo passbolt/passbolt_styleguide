@@ -11,6 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         2.14.0
  */
+import PwnedPasswords from "./PwnedPasswords";
 
 const STRENGTH = [
   {
@@ -183,5 +184,13 @@ export default class SecretComplexity {
     } while (this.entropy(secret) < expectedEntropy && j++ < 10);
 
     return secret;
+  }
+
+  /**
+   * Dictionary check
+   */
+  static async ispwned(password) {
+    const count = await PwnedPasswords.pwnedPasswords(password);
+    return (count > 0);
   }
 }
