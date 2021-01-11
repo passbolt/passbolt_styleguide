@@ -5600,9 +5600,6 @@ h6 .input.toggle-switch {
 .panel .folders.navigation .row .right-cell {
   margin-top: -1.65em;
 }
-.panel .folders.navigation .row .right-cell a.filter {
-  display: block;
-}
 .panel .folders.navigation .row.title .main-cell h3 {
   padding-top: 0;
   line-height: 1.2em;
