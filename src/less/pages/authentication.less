@@ -19,11 +19,11 @@ html, body {
     height: 10em;
     margin:auto;
 
-    .processing-text {
+    .processing {
       display:block;
       text-align: center;
     }
-    .processing-text:after {
+    .processing:after {
       display:block;
       width: 10em;
       height: 10em;
@@ -286,11 +286,10 @@ html, body {
     background:@background-splash;
   }
   .login.page {
-    padding:0;
     display: grid;
     height: 100%;
     grid-template-columns: 1fr 1.5fr 1fr;
-    grid-template-rows: 0.1fr 1fr 0.05fr;
+    grid-template-rows: 0 1fr 0.05fr;
     grid-gap: 1px;
     grid-template-areas: ". . ." ". login-form ." "footer footer footer";
 

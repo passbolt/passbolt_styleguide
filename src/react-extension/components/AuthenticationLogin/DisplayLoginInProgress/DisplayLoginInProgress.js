@@ -23,11 +23,10 @@ class DisplayLoginInProgress extends Component {
   render() {
     return (
       <div className="login-processing">
-        <h2>Logging in!</h2>
-        <h2>Please wait...</h2>
         <div className="processing-wrapper">
-          <span className="processing-text"></span>
+          <span className="processing"></span>
         </div>
+        <h1>Logging in, please wait...</h1>
       </div>
     );
   }

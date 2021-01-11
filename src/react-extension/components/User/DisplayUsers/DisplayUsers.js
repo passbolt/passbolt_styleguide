@@ -271,7 +271,7 @@ class DisplayUsers extends React.Component {
             {`${user.profile.first_name} ${user.profile.last_name}`}
           </div>
         </td>
-        <td className="cell-username m-cell username">
+        <td className="cell-username l-cell username">
           <div title={user.username}>
             {user.username}
           </div>
@@ -345,7 +345,7 @@ class DisplayUsers extends React.Component {
                         }
                       </a>
                     </th>
-                    <th className="cell-username m-cell username sortable">
+                    <th className="cell-username l-cell username sortable">
                       <a onClick={ev => this.handleSortByColumnClick(ev, "username")}>
                         Username
                         {this.isSortedColumn("username") && this.isSortedAsc() &&

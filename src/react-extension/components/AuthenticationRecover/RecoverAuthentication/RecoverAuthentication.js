@@ -10,6 +10,7 @@ import HelpOnPrivateKeyLostSecondaryAction from "../../Authentication/CheckPassp
 import HelpOnPassphraseLostSecondaryAction
   from "../../Authentication/CheckPassphrase/HelpOnPassphraseLostSecondaryAction";
 import DisplayUnexpectedError from "../../Authentication/DisplayError/DisplayUnexpectedError";
+import DisplayLoginInProgress from "../../AuthenticationLogin/DisplayLoginInProgress/DisplayLoginInProgress";
 
 /**
  * The component orchestrates the recover authentication process
@@ -68,7 +69,7 @@ class RecoverAuthentication extends Component {
       case AuthenticationContextState.PASSPHRASE_LOST:
         return <AskForAuthenticationHelp/>;
       case  AuthenticationContextState.RECOVER_COMPLETED:
-        return <LoadingSpinner title="Logging in!" />;
+        return <DisplayLoginInProgress/>;
       case AuthenticationContextState.UNEXPECTED_ERROR:
         return <DisplayUnexpectedError error={this.context.error}/>;
       default:

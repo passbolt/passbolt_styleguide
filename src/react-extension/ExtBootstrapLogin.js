@@ -23,6 +23,10 @@ class ExtBootstrapLogin extends Component {
    * Whenever the component is mounted
    */
   componentDidMount() {
+    const skeleton = document.getElementById("temporary-skeleton");
+    if (skeleton) {
+      skeleton.remove();
+    }
     this.handleRemoveIframeRequested();
   }
 

@@ -59,6 +59,10 @@ class ExtAuthenticationLogin extends Component {
    * Whenever the component is mounted
    */
   async componentDidMount() {
+    const skeleton = document.getElementById("temporary-skeleton");
+    if (skeleton) {
+      skeleton.remove();
+    }
     await this.getSiteSettings();
     await this.getExtensionVersion();
   }

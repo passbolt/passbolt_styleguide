@@ -743,7 +743,6 @@ input[type=email]:disabled {
 textarea {
   height: 3.6rem;
   /* 4 char (default input length) x 1em (average char length) + .6em (padding) */
-  line-height: 1.6rem;
 }
 .textarea.large textarea {
   width: 30rem;
@@ -1692,11 +1691,11 @@ body {
   height: 10em;
   margin: auto;
 }
-.login.page .processing-wrapper .processing-text {
+.login.page .processing-wrapper .processing {
   display: block;
   text-align: center;
 }
-.login.page .processing-wrapper .processing-text:after {
+.login.page .processing-wrapper .processing:after {
   display: block;
   width: 10em;
   height: 10em;
@@ -2013,11 +2012,10 @@ body {
     background: #F3F3F3;
   }
   .login.page {
-    padding: 0;
     display: grid;
     height: 100%;
     grid-template-columns: 1fr 1.5fr 1fr;
-    grid-template-rows: 0.1fr 1fr 0.05fr;
+    grid-template-rows: 0 1fr 0.05fr;
     grid-gap: 1px;
     grid-template-areas: ". . ." ". login-form ." "footer footer footer";
   }

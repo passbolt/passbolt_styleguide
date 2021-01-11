@@ -19,10 +19,11 @@ class CheckExtensionPresence extends Component {
    */
   render() {
     return (
-      <div className="check-extension-presence">
+      <div className="login-processing check-extension-presence">
         <div className="processing-wrapper">
-          <span className="processing-text">Please wait...</span>
+          <span className="processing"></span>
         </div>
+        <h1>Please wait...</h1>
       </div>
     );
   }

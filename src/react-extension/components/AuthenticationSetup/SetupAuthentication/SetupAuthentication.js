@@ -12,6 +12,7 @@ import GenerateKeyOnPassphraseLostSecondaryAction
 import GenerateKeySecondaryAction
   from "../../Authentication/ImportGpgKey/GenerateKeySecondaryAction";
 import DisplayUnexpectedError from "../../Authentication/DisplayError/DisplayUnexpectedError";
+import DisplayLoginInProgress from "../../AuthenticationLogin/DisplayLoginInProgress/DisplayLoginInProgress";
 
 /**
  * The component orchestrates the setup authentication process
@@ -72,7 +73,7 @@ class SetupAuthentication extends Component {
       case AuthenticationContextState.GPG_KEY_VALIDATED:
         return <CheckPassphrase canRememberMe={this.canRememberMe} secondaryAction={<GenerateKeyOnPassphraseLostSecondaryAction/>}/>;
       case  AuthenticationContextState.SETUP_COMPLETED:
-        return <LoadingSpinner title="Logging in!" />;
+        return <DisplayLoginInProgress/>;
       case AuthenticationContextState.UNEXPECTED_ERROR:
         return <DisplayUnexpectedError error={this.context.error}/>;
       default:

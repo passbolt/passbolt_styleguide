@@ -23,27 +23,16 @@ class LoadingSpinner extends React.Component {
    */
   render() {
     return (
-      <>
+      <div className="login-processing">
         <div className="processing-wrapper">
-          <div  className="processing-text">
-            {this.props.title &&
-              <h2>
-                {this.props.title}
-              </h2>
-            }
-            <h2>
-              Please wait...
-            </h2>
+          <div  className="processing">
           </div>
         </div>
-      </>
+        <h1>Please wait...</h1>
+      </div>
     );
   }
 }
-
-LoadingSpinner.propTypes = {
-  title: PropTypes.string, // A custom string
-};
 
 export default LoadingSpinner;
 

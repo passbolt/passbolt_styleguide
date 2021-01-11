@@ -76,6 +76,10 @@ class ExtApp extends Component {
     this.getGroups();
     this.getUsers();
     this.getRoles();
+    const skeleton = document.getElementById("temporary-skeleton");
+    if (skeleton) {
+      skeleton.remove();
+    }
   }
 
   getDefaultState(props) {
