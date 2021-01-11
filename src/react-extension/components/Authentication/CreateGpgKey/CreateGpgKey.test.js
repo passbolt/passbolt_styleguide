@@ -3,7 +3,8 @@
  */
 import {defaultAppContext, defaultProps} from "./CreateGpgKey.test.data";
 import CreateGpgKeyPage from "./CreateGpgKey.test.page";
-
+import fetchMock from "fetch-mock-jest";
+import {waitFor} from "@testing-library/react";
 
 beforeEach(() => {
   jest.resetModules();
@@ -13,6 +14,8 @@ describe("Create GPG key", () => {
   let page; // The page to test against
   const context = defaultAppContext(); // The context
   const props = defaultProps(); // The props to pass
+
+  fetchMock.mock('*', {});
 
   beforeEach(() => {
     page = new CreateGpgKeyPage(context, props);
@@ -40,31 +43,31 @@ describe("Create GPG key", () => {
   it('As AN I should see the passphrase very weak strength updated on change', async() => {
     const veryWeakPassphrase = 'blabla';
     await page.fill(veryWeakPassphrase);
-    expect(page.isVeryWeakPassphrase).toBeTruthy();
+    await waitFor(() => expect(page.isVeryWeakPassphrase).toBeTruthy());
   });
 
   it('As AN I should see the passphrase weak strength updated on change', async() => {
     const weakPassphrase = 'blablablablab';
     await page.fill(weakPassphrase);
-    expect(page.isWeakPassphrase).toBeTruthy();
+    await waitFor(() => expect(page.isWeakPassphrase).toBeTruthy());
   });
 
   it('As AN I should see the passphrase fair strength updated on change', async() => {
     const fairPassphrase = 'abcdefgh1234=5';
     await page.fill(fairPassphrase);
-    expect(page.isFairPassphrase).toBeTruthy();
+    await waitFor(() => expect(page.isFairPassphrase).toBeTruthy());
   });
 
   it('As AN I should see the passphrase strong strength updated on change', async() => {
     const strongPassphrase = 'abcdefgh1234=5ABCD';
     await page.fill(strongPassphrase);
-    expect(page.isStrongPassphrase).toBeTruthy();
+    await waitFor(() => expect(page.isStrongPassphrase).toBeTruthy());
   });
 
   it('As AN I should see the passphrase very strong strength updated on change', async() => {
     const veryStrongPassphrase = 'abcdefgh1234=5ABCD===';
     await page.fill(veryStrongPassphrase);
-    expect(page.isVeryStrongPassphrase).toBeTruthy();
+    await waitFor(() => expect(page.isVeryStrongPassphrase).toBeTruthy());
   });
 
   it('As AN I should not go to the next step if the passphrase is not strong enough', async() => {
