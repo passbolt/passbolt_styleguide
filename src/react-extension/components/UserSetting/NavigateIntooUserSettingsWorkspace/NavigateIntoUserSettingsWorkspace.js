@@ -14,8 +14,9 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import {NavLink, withRouter} from "react-router-dom";
+import {withRouter} from "react-router-dom";
 import AppContext from "../../../contexts/AppContext";
+import {withNavigationContext} from "../../../contexts/NavigationContext";
 
 /**
  * This component allows to navigate throught the differents sections of the user settings workspace
@@ -49,10 +50,9 @@ class NavigateIntoUserSettingsWorkspace extends React.Component {
               className={`row ${isSelected('profile') ? 'selected' : ''}`}>
               <div className="main-cell-wrapper">
                 <div className="main-cell">
-                  <NavLink
-                    to={"/app/settings/profile"}>
+                  <a onClick={this.props.navigationContext.onGoToUserSettingsProfileRequested}>
                     <span>Profile</span>
-                  </NavLink>
+                  </a>
                 </div>
               </div>
             </div>
@@ -63,10 +63,9 @@ class NavigateIntoUserSettingsWorkspace extends React.Component {
               className={`row ${isSelected('theme') ? 'selected' : ''}`}>
               <div className="main-cell-wrapper">
                 <div className="main-cell">
-                  <NavLink
-                    to={"/app/settings/theme"}>
+                  <a onClick={this.props.navigationContext.onGoToUserSettingsThemeRequested}>
                     <span>Theme</span>
-                  </NavLink>
+                  </a>
                 </div>
               </div>
             </div>
@@ -78,10 +77,9 @@ class NavigateIntoUserSettingsWorkspace extends React.Component {
                 className={`row ${isSelected('mfa') ? 'selected' : ''}`}>
                 <div className="main-cell-wrapper">
                   <div className="main-cell">
-                    <NavLink
-                      to={"/app/settings/mfa"}>
+                    <a onClick={this.props.navigationContext.onGoToUserSettingsMfaRequested}>
                       <span>Multi Factor Authentication</span>
-                    </NavLink>
+                    </a>
                   </div>
                 </div>
               </div>
@@ -92,10 +90,9 @@ class NavigateIntoUserSettingsWorkspace extends React.Component {
               className={`row ${isSelected('keys') ? 'selected' : ''}`}>
               <div className="main-cell-wrapper">
                 <div className="main-cell">
-                  <NavLink
-                    to={"/app/settings/keys"}>
+                  <a onClick={this.props.navigationContext.onGoToUserSettingsKeysRequested}>
                     <span>Keys inspector</span>
-                  </NavLink>
+                  </a>
                 </div>
               </div>
             </div>
@@ -108,8 +105,9 @@ class NavigateIntoUserSettingsWorkspace extends React.Component {
 
 NavigateIntoUserSettingsWorkspace.contextType = AppContext;
 NavigateIntoUserSettingsWorkspace.propTypes = {
+  navigationContext: PropTypes.any, // The application navigation context
   history: PropTypes.object,
   location: PropTypes.object
 };
 
-export default withRouter(NavigateIntoUserSettingsWorkspace);
+export default withRouter(withNavigationContext(NavigateIntoUserSettingsWorkspace));

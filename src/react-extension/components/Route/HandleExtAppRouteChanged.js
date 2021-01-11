@@ -29,30 +29,12 @@ class HandleExtAppRouteChanged extends Component {
 
   /**
    * Whenever the route changed.
-   * - If the route is handled by the ExtApp, notify the background page to update the browser url.
-   * - If the route is handled by the ApiApp, go to the url.
+   * Notify the background page to update the browser url.
    */
   handleRouteChanged() {
     this.props.history.listen(location => {
-      if (this.apiAppRoutes.includes(location.pathname)) {
-        const trustedDomain = this.context.userSettings.getTrustedDomain();
-        const url = new URL(`${trustedDomain}${location.pathname}`);
-        window.open(url, '_parent', 'noopener,noreferrer');
-      } else {
-        this.context.port.emit('passbolt.app.route-changed', location.pathname);
-      }
+      this.context.port.emit('passbolt.app.route-changed', location.pathname);
     });
-  }
-
-  /**
-   * Get the API app routes.
-   * @return {array<string>}
-   */
-  get apiAppRoutes() {
-    return [
-      "/app/administration",
-      "/app/settings/mfa",
-    ];
   }
 
   /**

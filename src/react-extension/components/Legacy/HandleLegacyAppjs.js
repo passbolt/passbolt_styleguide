@@ -13,8 +13,9 @@
  */
 import React, {Component} from "react";
 import PropTypes from "prop-types";
+import {withRouter} from "react-router-dom";
 
-class HandleLegacyAdministrationAppjs extends Component {
+class HandleLegacyAppjs extends Component {
   /**
    * ComponentDidMount
    * Invoked immediately after component is inserted into the tree
@@ -24,6 +25,7 @@ class HandleLegacyAdministrationAppjs extends Component {
     window.addEventListener('passbolt.auth.is-authenticated', this.onIsAuthenticatedRequested.bind(this));
     window.addEventListener('passbolt.plugin.auth.logout', this.onLogoutRequested.bind(this));
     this.markPluginAsReady();
+    this.handleRouteChanges();
   }
 
   /**
@@ -34,6 +36,7 @@ class HandleLegacyAdministrationAppjs extends Component {
   componentWillUnmount() {
     window.removeEventListener('passbolt.auth.is-authenticated', this.onIsAuthenticatedRequested.bind(this));
     window.removeEventListener('passbolt.plugin.auth.logout', this.onLogoutRequested.bind(this));
+    clearInterval(this.handleRouteChangesInterval);
   }
 
   /**
@@ -42,6 +45,52 @@ class HandleLegacyAdministrationAppjs extends Component {
    */
   markPluginAsReady() {
     document.getElementsByTagName("html")[0].classList.add("passboltplugin-ready");
+  }
+
+  /**
+   * Listen to legacy route changes.
+   * Redirect the user to the browser extensions when the user is leaving the pages served by the API:
+   * - Administration
+   * - User mfa settings
+   */
+  handleRouteChanges() {
+    const _this = this;
+
+    this.handleRouteChangesInterval = setInterval(function() { // eslint-disable-line prefer-arrow-callback
+      const path = window.location.pathname;
+      if (!_this.isApiPath(path)) {
+        clearInterval(_this.handleRouteChangesInterval);
+        // Push the route in the router in order to let the ExtBootstrap detect the route change and treat it if required.
+        _this.props.history.push(path);
+        // Remove the legacy dom container to avoid the legacy application to treat the url change.
+        _this.removeLegacyAppContainer();
+      }
+    }, 50);
+  }
+
+  /**
+   * Check if a give path is a path handled by the api application
+   * @param {string} path The path to check
+   * @returns {boolean}
+   */
+  isApiPath(path) {
+    const apiPaths = [
+      "/app/administration/mfa",
+      "/app/administration/users-directory",
+      "/app/administration/email-notification",
+      "/app/settings/mfa"
+    ];
+    return apiPaths.some(apiPath => path.endsWith(apiPath));
+  }
+
+  /**
+   * Remove the legacy application container.
+   */
+  removeLegacyAppContainer() {
+    const legacyAppContainer = document.getElementById('container');
+    if (legacyAppContainer) {
+      legacyAppContainer.remove();
+    }
   }
 
   /**
@@ -97,8 +146,8 @@ class HandleLegacyAdministrationAppjs extends Component {
   }
 }
 
-HandleLegacyAdministrationAppjs.propTypes = {
+HandleLegacyAppjs.propTypes = {
   port: PropTypes.object, // The browser extension communication port
 };
 
-export default HandleLegacyAdministrationAppjs;
+export default withRouter(HandleLegacyAppjs);

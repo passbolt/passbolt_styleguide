@@ -14,36 +14,40 @@ import React, {Component} from "react";
 import {withRouter} from "react-router-dom";
 import PropTypes from "prop-types";
 import Breadcrumbs from "../../../../react/components/Common/Navigation/Breadcrumbs/Breadcrumbs";
-import {UserWorkspaceFilterTypes} from "../../../contexts/UserWorkspaceContext";
 import AppContext from "../../../contexts/AppContext";
+import Breadcrumb from "../../../../react/components/Common/Navigation/Breadcrumbs/Breadcrumb";
+import {withNavigationContext} from "../../../contexts/NavigationContext";
 
 /**
  * The component displays a navigation breadcrumb given the applied users filter
  */
 class DisplayUserSettingsWorkspaceBreadcrumb extends Component {
   /**
-   * Returns the all users breadcrumb items
+   * Returns the breadcrumb items for the given filter
+   * @return {array<JSX.Element>}
    */
-  get allUsers() {
+  get items() {
     return [
-      {
-        name: "All users",
-        link: {
-          pathname: "/app/users",
-          state: {
-            filter: {
-              type: UserWorkspaceFilterTypes.ALL
-            }
-          }
-        }
-      }
+      <Breadcrumb key="bread-1" name="All users" onClick={this.props.navigationContext.onGoToUsersRequested}/>,
+      <Breadcrumb key="bread-2" name={this.loggedInUserName} onClick={this.props.navigationContext.onGoToUserSettingsProfileRequested}/>,
+      <Breadcrumb key="bread-3" name={this.getLastBreadcrumbItemName} onClick={this.onLastBreadcrumbClick.bind(this)}/>
     ];
   }
 
   /**
+   * Get the logged in user full name.
+   * @returns {string}
+   */
+  get loggedInUserName() {
+    const user = this.context.loggedInUser;
+    return user ? `${user.profile.first_name} ${user.profile.last_name}` : "";
+  }
+
+
+  /**
    * Returns the current item name given the current location
    */
-  get itemName() {
+  get getLastBreadcrumbItemName() {
     const matchPathSuffix = pathSuffix => this.props.location.pathname.endsWith(pathSuffix);
     const names = {
       profile: "Profile",
@@ -55,25 +59,13 @@ class DisplayUserSettingsWorkspaceBreadcrumb extends Component {
     return names[matchedKey];
   }
 
-
   /**
-   * Returns the breadcrumb items for the given filter
+   * Whenever the user click on the last breadcrumb
+   * @returns {Promise<void>}
    */
-  get breadcrumb() {
-    const user = this.context.loggedInUser;
-    return [
-      ...this.allUsers,
-      {
-        name: user && `${user.profile.first_name} ${user.profile.last_name}`,
-        link: {
-          pathname: "/app/settings/profile"
-        }
-      },
-      {
-        name: this.itemName,
-        link: this.props.location
-      }
-    ];
+  async onLastBreadcrumbClick() {
+    const pathname = this.props.location.pathname;
+    this.props.history.push({pathname});
   }
 
   /**
@@ -82,7 +74,7 @@ class DisplayUserSettingsWorkspaceBreadcrumb extends Component {
    */
   render() {
     return (
-      <Breadcrumbs items={this.breadcrumb}/>
+      <Breadcrumbs items={this.items}/>
     );
   }
 }
@@ -90,7 +82,9 @@ class DisplayUserSettingsWorkspaceBreadcrumb extends Component {
 DisplayUserSettingsWorkspaceBreadcrumb.contextType = AppContext;
 
 DisplayUserSettingsWorkspaceBreadcrumb.propTypes = {
-  location: PropTypes.object
+  location: PropTypes.object, // The router location
+  history: PropTypes.object, // The router history
+  navigationContext: PropTypes.any, // The application navigation context
 };
 
-export default withRouter(DisplayUserSettingsWorkspaceBreadcrumb);
+export default withRouter(withNavigationContext(DisplayUserSettingsWorkspaceBreadcrumb));

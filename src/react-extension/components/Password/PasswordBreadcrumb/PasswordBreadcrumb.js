@@ -17,90 +17,83 @@ import PropTypes from "prop-types";
 import {ResourceWorkspaceFilterTypes, withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 import Breadcrumbs from "../../../../react/components/Common/Navigation/Breadcrumbs/Breadcrumbs";
 import AppContext from "../../../contexts/AppContext";
+import Breadcrumb from "../../../../react/components/Common/Navigation/Breadcrumbs/Breadcrumb";
+import {withNavigationContext} from "../../../contexts/NavigationContext";
 
 /**
  * The component displays a navigation breadcrumb given the applied resources filter
  */
 class PasswordBreadcrumbs extends Component {
   /**
-   * Returns the all items breadcrumb items
-   */
-  get allItems() {
-    return  [
-      {
-        name: 'All Items',
-        link: {
-          pathname: '/app/passwords',
-          state: {
-            filter: {
-              type: ResourceWorkspaceFilterTypes.ALL
-            }
-          }
-        }
-      }
-    ];
-  }
-
-  /**
-   * Returns the breadcrumb items for the given filter
-   */
-  getBreadcrumb() {
-    return [
-      ...this.allItems,
-      {
-        name: this.getBreadcrumbItemName(),
-        link: this.props.location
-      }
-    ];
-  }
-
-  /**
-   * Returns the main breadcrumb item name given the current filter
-   * @returns {string}
-   */
-  getBreadcrumbItemName() {
-    switch (this.props.resourceWorkspaceContext.filter.type) {
-      case ResourceWorkspaceFilterTypes.FAVORITE: return "Favorite";
-      case ResourceWorkspaceFilterTypes.RECENTLY_MODIFIED: return "Recently modified";
-      case ResourceWorkspaceFilterTypes.SHARED_WITH_ME: return "Shared with me";
-      case ResourceWorkspaceFilterTypes.ITEMS_I_OWN: return "Items I own";
-      case ResourceWorkspaceFilterTypes.TAG: {
-        const currentTagName = this.props.resourceWorkspaceContext.filter.payload.tag.slug;
-        return `${currentTagName} (tag)`;
-      }
-      case ResourceWorkspaceFilterTypes.ROOT_FOLDER: {
-        return `root (folder)`;
-      }
-      case ResourceWorkspaceFilterTypes.FOLDER: {
-        const folder =  this.props.resourceWorkspaceContext.filter.payload.folder;
-        const currentFolderName = (folder && folder.name) || "N/A";
-        return `${currentFolderName} (folder)`;
-      }
-      case ResourceWorkspaceFilterTypes.GROUP: {
-        const currentGroupName = this.props.resourceWorkspaceContext.filter.payload.group.name;
-        return `${currentGroupName} (group)`;
-      }
-      case ResourceWorkspaceFilterTypes.TEXT: {
-        const currentSearchText = this.props.resourceWorkspaceContext.filter.payload;
-        return `Search : ${currentSearchText}`;
-      }
-      default: return "";
-    }
-  }
-
-  /**
    * Returns the current list of breadcrumb items
    */
   get items() {
+    const items = [this.allItemsBreadcrumb];
+
     switch (this.props.resourceWorkspaceContext.filter.type) {
-      case ResourceWorkspaceFilterTypes.ALL:  return this.allItems;
-      case ResourceWorkspaceFilterTypes.NONE: return [];
+      case ResourceWorkspaceFilterTypes.NONE:
+        return [];
+      case ResourceWorkspaceFilterTypes.ALL:
+        return items;
       case ResourceWorkspaceFilterTypes.TEXT: {
         const isEmptySearchText = !this.props.resourceWorkspaceContext.filter.payload;
-        return isEmptySearchText ? this.allItems : this.getBreadcrumb();
+        const filterText = this.props.resourceWorkspaceContext.filter.payload;
+        return isEmptySearchText ? items : [...items, this.getLastBreadcrumb(`Search : ${filterText}`)];
       }
-      default: return this.getBreadcrumb();
+      case ResourceWorkspaceFilterTypes.FAVORITE:
+        return [...items, this.getLastBreadcrumb("Favorite")];
+      case ResourceWorkspaceFilterTypes.RECENTLY_MODIFIED:
+        return [...items, this.getLastBreadcrumb("Recently modified")];
+      case ResourceWorkspaceFilterTypes.SHARED_WITH_ME:
+        return [...items, this.getLastBreadcrumb("Shared with me")];
+      case ResourceWorkspaceFilterTypes.ITEMS_I_OWN:
+        return [...items, this.getLastBreadcrumb("Items I own")];
+      case ResourceWorkspaceFilterTypes.TAG: {
+        const filteredTagName = this.props.resourceWorkspaceContext.filter.payload.tag.slug;
+        return [...items, this.getLastBreadcrumb(`${filteredTagName} (tag)`)];
+      }
+      case ResourceWorkspaceFilterTypes.ROOT_FOLDER: {
+        return [...items, this.getLastBreadcrumb(`root (folder)`)];
+      }
+      case ResourceWorkspaceFilterTypes.FOLDER: {
+        const folder = this.props.resourceWorkspaceContext.filter.payload.folder;
+        const currentFolderName = (folder && folder.name) || "N/A";
+        return [...items, this.getLastBreadcrumb(`${currentFolderName} (folder)`)];
+      }
+      case ResourceWorkspaceFilterTypes.GROUP: {
+        const group = this.props.resourceWorkspaceContext.filter.payload.group;
+        const currentGroupName = (group && group.name) || "N/A";
+        return [...items, this.getLastBreadcrumb(`${currentGroupName} (group)`)];
+      }
     }
+
+    return items;
+  }
+
+  /**
+   * Returns the all items breadcrumb items
+   * @return {JSX.Element}
+   */
+  get allItemsBreadcrumb() {
+    return <Breadcrumb name="All items" onClick={this.props.navigationContext.onGoToPasswordsRequested}/>;
+  }
+
+  /**
+   * Return the last breadcrumb
+   * @param {string} name the breadcrumb name
+   * @return {JSX.Element}
+   */
+  getLastBreadcrumb(name) {
+    return <Breadcrumb name={name} onClick={this.onLastBreadcrumbClick.bind(this)}/>;
+  }
+
+  /**
+   * Whenever the user click on the last breadcrumb
+   * @returns {Promise<void>}
+   */
+  async onLastBreadcrumbClick() {
+    const pathname = this.props.location.pathname;
+    this.props.history.push({pathname});
   }
 
   /**
@@ -109,7 +102,7 @@ class PasswordBreadcrumbs extends Component {
    */
   render() {
     return (
-      <Breadcrumbs items={this.items} />
+      <Breadcrumbs items={this.items}/>
     );
   }
 }
@@ -118,7 +111,9 @@ PasswordBreadcrumbs.context = AppContext;
 
 PasswordBreadcrumbs.propTypes = {
   resourceWorkspaceContext: PropTypes.object,
-  location: PropTypes.object
+  location: PropTypes.object, // The router location
+  history: PropTypes.object, // The router history
+  navigationContext: PropTypes.any, // The application navigation context
 };
 
-export default withRouter(withResourceWorkspace(PasswordBreadcrumbs));
+export default withRouter(withNavigationContext(withResourceWorkspace(PasswordBreadcrumbs)));

@@ -17,76 +17,65 @@ import PropTypes from "prop-types";
 import Breadcrumbs from "../../../../react/components/Common/Navigation/Breadcrumbs/Breadcrumbs";
 import AppContext from "../../../contexts/AppContext";
 import {UserWorkspaceFilterTypes, withUserWorkspace} from "../../../contexts/UserWorkspaceContext";
+import Breadcrumb from "../../../../react/components/Common/Navigation/Breadcrumbs/Breadcrumb";
+import {withNavigationContext} from "../../../contexts/NavigationContext";
 
 /**
  * The component displays a navigation breadcrumb given the applied users filter
  */
 class DisplayUserWorkspaceBreadcrumb extends Component {
   /**
-   * Returns the all users breadcrumb items
-   */
-  get allUsers() {
-    return  [
-      {
-        name: "All users",
-        link: {
-          pathname: "/app/users",
-          state: {
-            filter: {
-              type: UserWorkspaceFilterTypes.ALL
-            }
-          }
-        }
-      }
-    ];
-  }
-
-  /**
-   * Returns the breadcrumb items for the given filter
-   */
-  getBreadcrumb() {
-    return [
-      ...this.allUsers,
-      {
-        name: this.getBreadcrumbItemName(),
-        link: this.props.location
-      }
-    ];
-  }
-
-  /**
-   * Returns the main breadcrumb item name given the current filter
-   * @returns {string}
-   */
-  getBreadcrumbItemName() {
-    switch (this.props.userWorkspaceContext.filter.type) {
-      case UserWorkspaceFilterTypes.RECENTLY_MODIFIED: return "Recently modified";
-      case UserWorkspaceFilterTypes.GROUP: {
-        const group =  this.props.userWorkspaceContext.filter.payload.group;
-        const currentGroupName = (group && group.name) || "N/A";
-        return `${currentGroupName} (group)`;
-      }
-      case UserWorkspaceFilterTypes.TEXT: {
-        const currentSearchText = this.props.userWorkspaceContext.filter.payload;
-        return `Search : ${currentSearchText}`;
-      }
-      default: return "";
-    }
-  }
-
-  /**
    * Returns the current list of breadcrumb items
    */
   get items() {
+    const items = [this.allUsersBreadcrumb];
+
     switch (this.props.userWorkspaceContext.filter.type) {
-      case UserWorkspaceFilterTypes.ALL:  return this.allUsers;
-      case UserWorkspaceFilterTypes.NONE: return [];
+      case UserWorkspaceFilterTypes.NONE:
+        return [];
+      case UserWorkspaceFilterTypes.ALL:
+        return items;
       case UserWorkspaceFilterTypes.TEXT: {
         const isEmptySearchText = !this.props.userWorkspaceContext.filter.payload;
-        return isEmptySearchText ? this.allUsers : this.getBreadcrumb();
+        const currentSearchText = this.props.userWorkspaceContext.filter.payload;
+        return isEmptySearchText ? items : [...items, this.getLastBreadcrumb(`Search : ${currentSearchText}`)];
       }
-      default: return this.getBreadcrumb();
+      case UserWorkspaceFilterTypes.RECENTLY_MODIFIED:
+        return [...items, this.getLastBreadcrumb("Recently modified")];
+      case UserWorkspaceFilterTypes.GROUP: {
+        const group = this.props.userWorkspaceContext.filter.payload.group;
+        const currentGroupName = (group && group.name) || "N/A";
+        return [...items, this.getLastBreadcrumb(`${currentGroupName} (group)`)];
+      }
     }
+
+    return [];
+  }
+
+  /**
+   * Returns the all users breadcrumb items
+   * @return {JSX.Element}
+   */
+  get allUsersBreadcrumb() {
+    return <Breadcrumb name="All users" onClick={this.props.navigationContext.onGoToUsersRequested}/>;
+  }
+
+  /**
+   * Return the last breadcrumb
+   * @param {string} name the breadcrumb name
+   * @return {JSX.Element}
+   */
+  getLastBreadcrumb(name) {
+    return <Breadcrumb name={name} onClick={this.onLastBreadcrumbClick.bind(this)}/>;
+  }
+
+  /**
+   * Whenever the user click on the last breadcrumb
+   * @returns {Promise<void>}
+   */
+  async onLastBreadcrumbClick() {
+    const pathname = this.props.location.pathname;
+    this.props.history.push({pathname});
   }
 
   /**
@@ -95,7 +84,7 @@ class DisplayUserWorkspaceBreadcrumb extends Component {
    */
   render() {
     return (
-      <Breadcrumbs items={this.items} />
+      <Breadcrumbs items={this.items}/>
     );
   }
 }
@@ -104,7 +93,9 @@ DisplayUserWorkspaceBreadcrumb.context = AppContext;
 
 DisplayUserWorkspaceBreadcrumb.propTypes = {
   userWorkspaceContext: PropTypes.object, // The user workspace context
-  location: PropTypes.object
+  location: PropTypes.object, // The router location
+  history: PropTypes.object, // The router history
+  navigationContext: PropTypes.any, // The application navigation context
 };
 
-export default withRouter(withUserWorkspace(DisplayUserWorkspaceBreadcrumb));
+export default withRouter(withNavigationContext(withUserWorkspace(DisplayUserWorkspaceBreadcrumb)));
