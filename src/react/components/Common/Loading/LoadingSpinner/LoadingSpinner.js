@@ -12,7 +12,6 @@
  * @since         2.13.0
  */
 import React from "react";
-import PropTypes from "prop-types";
 
 /**
  * This component displays a waiting loading spinner
