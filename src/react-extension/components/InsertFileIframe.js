@@ -42,16 +42,8 @@ class InsertFileIframe extends Component {
    * @return {JSX}
    */
   render() {
-    const style = {
-      position: "absolute",
-      bottom: 0,
-      right: 0,
-      width: "1px",
-      height: "1px"
-    };
-
     return (
-      <iframe id="passbolt-iframe-file" ref={this.iframeRef} style={style}/>
+      <iframe id="passbolt-iframe-file" ref={this.iframeRef} className="cachette"/>
     );
   }
 }

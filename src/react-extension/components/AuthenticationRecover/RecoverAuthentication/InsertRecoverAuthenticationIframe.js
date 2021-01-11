@@ -42,18 +42,8 @@ class InsertRecoverAuthenticationIframe extends Component {
    * @return {JSX}
    */
   render() {
-    const style = {
-      position: "absolute",
-      width: "100%",
-      height: "100%",
-      zIndex: 999,
-      border: 0,
-      top: 0,
-      left: 0,
-    };
-
     return (
-      <iframe id="passbolt-iframe-recover" ref={this.iframeRef} style={style}/>
+      <iframe id="passbolt-iframe-recover" ref={this.iframeRef} className="full-screen"/>
     );
   }
 }

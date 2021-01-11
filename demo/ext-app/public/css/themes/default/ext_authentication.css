@@ -1129,23 +1129,6 @@ a.unfav .svg-icon svg {
 .button.disabled .svg-icon svg:hover {
   fill: #888;
 }
-.password-hints {
-  margin: 1em 0;
-}
-.password-hints li {
-  line-height: 1.5em;
-}
-.password-hints li:before {
-  content: "●";
-  color: #DDD;
-  padding-right: 0.5em;
-}
-.password-hints li.success:before {
-  color: #009900;
-}
-.password-hints li.error:before {
-  color: #D40101;
-}
 /**
  * Tooltips!
  * credits: Chris Bracco http://cbracco.me/a-simple-css-tooltip/
@@ -1334,40 +1317,6 @@ a.unfav .svg-icon svg {
 .tooltip-left.large:after {
   margin-top: 0.6rem;
 }
-.infinite.loading-bar {
-  max-width: 45.2rem;
-  margin: auto auto -0.4rem auto;
-}
-@keyframes drawLine1 {
-  0% {
-    stroke-dashoffset: -40rem;
-  }
-  100% {
-    stroke-dashoffset: 45rem;
-  }
-}
-@keyframes drawLine2 {
-  0% {
-    stroke-dashoffset: 15em;
-  }
-  100% {
-    stroke-dashoffset: -45.2rem;
-  }
-}
-.infinite.loading-bar #svg-loading-bar-line1 {
-  stroke-dasharray: 20rem 45.2rem;
-  stroke: #DE8888;
-}
-.infinite.loading-bar #svg-loading-bar-line2 {
-  stroke: #92000C;
-  stroke-dasharray: 15rem 45.2em;
-}
-.infinite.loading-bar.animated #svg-loading-bar-line1 {
-  animation: drawLine1 2s ease-out 0s alternate infinite none running;
-}
-.infinite.loading-bar.animated #svg-loading-bar-line2 {
-  animation: drawLine2 2s linear 0s normal infinite none running;
-}
 .openpgp-key textarea {
   height: 12rem;
   resize: none;
@@ -1388,6 +1337,23 @@ a.unfav .svg-icon svg {
   line-height: 2.4rem;
   vertical-align: middle;
   box-sizing: border-box;
+}
+.password-hints {
+  margin: 1em 0;
+}
+.password-hints li {
+  line-height: 1.5em;
+}
+.password-hints li:before {
+  content: "●";
+  color: #DDD;
+  padding-right: 0.5em;
+}
+.password-hints li.success:before {
+  color: #009900;
+}
+.password-hints li.error:before {
+  color: #D40101;
 }
 /* Dialog */
 .dialog-wrapper {
@@ -1641,12 +1607,12 @@ a.unfav .svg-icon svg {
  * Footer
  */
 .footer {
-  margin-top: 0em;
+  margin-top: 0;
   position: fixed;
   bottom: 0;
   padding: 1.167em 1.5% 0 0.5%;
   text-align: right;
-  font-size: 0.75em;
+  font-size: 0.857em;
   /* 12px */
   width: 98%;
   height: 2em;
@@ -1661,6 +1627,10 @@ a.unfav .svg-icon svg {
 .footer .footer-links li {
   display: inline;
   margin-right: 1.5em;
+}
+.footer .footer-links li.error-message a {
+  background-color: #FFF;
+  color: #D40101;
 }
 .footer .footer-links li .github-star {
   display: inline;
@@ -1680,6 +1650,24 @@ a.unfav .svg-icon svg {
   width: 72px;
   height: 72px;
   border-radius: 50%;
+}
+iframe.full-screen {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: 999;
+  border: 0;
+  top: 0;
+  left: 0;
+}
+iframe.cachette {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  z-index: 999;
+  border: 0;
+  bottom: 0;
+  right: 0;
 }
 html,
 body {

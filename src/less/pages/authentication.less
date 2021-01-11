@@ -1,319 +1,319 @@
 html, body {
-    height: 100%;
+  height: 100%;
 }
 .login.page {
+  padding:2.4rem;
+
+  h1 {
+    margin-top:0;
+    font-size: 2.4rem;
+    color: @font-dim;
+  }
+  p {
+    font-size: 1.6rem;
+  }
+
+  .processing-wrapper {
+    display:block;
+    width: 10em;
+    height: 10em;
+    margin:auto;
+
+    .processing-text {
+      display:block;
+      text-align: center;
+    }
+    .processing-text:after {
+      display:block;
+      width: 10em;
+      height: 10em;
+      content: " ";
+      background: transparent @loading center center no-repeat;
+      background-size: auto 40%;
+    }
+  }
+
+  .login-form {
+    min-height: 16rem;
+
+    .form-actions {
+      text-align:center;
+      padding-top:1.2em;
+    }
+    .button {
+      width:100%;
+    }
+    .button + a {
+      font-size:1.6rem;
+      line-height: 2.4rem;
+      text-align:center;
+      display: inline-block;
+      margin-top:1.6rem;
+      cursor: pointer;
+    }
+  }
+
+  .email-sent-instructions {
+    text-align: center;
+
+    .email-sent-bg {
+      background: transparent url('@{images}/illustrations/email.png') top center no-repeat;
+      background-size: auto 90%;
+      height: 16rem;
+    }
     h1 {
-        margin-top:0;
-        font-size: 2.4rem;
-        color: @font-dim;
+      margin-top: 1.5em;
+      font-size: 2.4rem;
     }
     p {
-        font-size: 1.6rem;
+      padding: 0.5em 0.5em 0 0.5em;
+      margin-bottom: 0;
     }
+  }
 
-    padding:2.4rem;
-
-    .processing-wrapper {
-        display:block;
-        width: 10em;
-        height: 10em;
-        margin:auto;
-
-        .processing-text {
-            display:block;
-            text-align: center;
-        }
-        .processing-text:after {
-            display:block;
-            width: 10em;
-            height: 10em;
-            content: " ";
-            background: transparent @loading center center no-repeat;
-            background-size: auto 40%;
-        }
-    }
-
-    .login-form {
-        min-height: 16rem;
-
-        .form-actions {
-            text-align:center;
-            padding-top:1.2em;
-        }
-        .button {
-            width:100%;
-        }
-        .button + a {
-            font-size:1.6rem;
-            line-height: 2.4rem;
-            text-align:center;
-            display: inline-block;
-            margin-top:1.6rem;
-            cursor: pointer;
-        }
-    }
-
-    .email-sent-instructions {
+  .choose-security-token {
+    .input-security-token {
+      .clearfix();
+      margin: 1em 0 1.5em 0;
+      label {
+        margin-bottom:.5em;
+      }
+      .input.text {
+        .rounded();
+        font-size: 3rem;
+        max-width: 10rem;
+        float: left;
         text-align: center;
-
-        .email-sent-bg {
-            background: transparent url('@{images}/illustrations/email.png') top center no-repeat;
-            background-size: auto 90%;
-            height: 16rem;
-        }
-        h1 {
-            margin-top: 1.5em;
-            font-size: 2.4rem;
-        }
-        p {
-            padding: 0.5em 0.5em 0 0.5em;
-            margin-bottom: 0;
-        }
-    }
-
-    .choose-security-token {
-        .input-security-token {
-            .clearfix();
-            margin: 1em 0 1.5em 0;
-            label {
-                margin-bottom:.5em;
-            }
-            .input.text {
-                .rounded();
-                font-size: 3rem;
-                max-width: 10rem;
-                float: left;
-                text-align: center;
-                margin-right: 1em;
-            }
-            .circle-picker {
-                float:left;
-            }
-            .randomize-button-wrapper {
-                float:left;
-                width: 10rem;
-                text-align: center;
-                clear:both;
-                cursor: pointer;
-            }
+        margin-right: 1em;
+      }
+      .circle-picker {
+        float:left;
+      }
+      .randomize-button-wrapper {
+        float:left;
+        width: 10rem;
+        text-align: center;
+        clear:both;
+        cursor: pointer;
+      }
 
 
-            .svg-icon svg{
-                height:.85em;
-                width:.85em;
-            }
-        }
-    }
-
-    .install-extension {
-      a.browser-webstore {
-        border: 0;
-        img {
-          display: block;
-          margin-left: auto;
-          margin-right: auto;
-          max-width: 26rem;
-        }
-        &.firefox img{
-          padding: 1em 0;
-        }
+      .svg-icon svg{
+        height:.85em;
+        width:.85em;
       }
     }
+  }
 
-    .browser-not-supported {
-      a.browser {
-        border: 0;
-        img {
-          max-width: 26rem;
-          display: block;
-          margin-left: auto;
-          margin-right: auto;
-        }
+  .install-extension {
+    a.browser-webstore {
+      border: 0;
+      img {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        max-width: 26rem;
+      }
+      &.firefox img{
+        padding: 1em 0;
       }
     }
+  }
 
-    .enter-passphrase,
-    .choose-passphrase {
-      .password {
-        .clearfix();
+  .browser-not-supported {
+    a.browser {
+      border: 0;
+      img {
+        max-width: 26rem;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+      }
+    }
+  }
 
-        input {
-          float: left;
-          box-sizing: border-box;
-          width: calc(100% - 4.1rem); // password field - show button
-        }
+  .enter-passphrase,
+  .choose-passphrase {
+    .password {
+      .clearfix();
 
-        .password-view {
-          width:3em;
-          float: left;
-          margin-top: 0;
-          margin-right:0;
-          margin-left: -.1rem;
-          height: 2.714em;
-          border-radius: 0;
-          padding: .6rem .8rem .6rem 1rem;
-          background: @input-background;
-          border: 1px solid @border-input;
-          border-left: 0;
-          border-top: 1px solid @border-input-light;
+      input {
+        float: left;
+        box-sizing: border-box;
+        width: calc(100% - 4.1rem); // password field - show button
+      }
 
-          &.selected {
-            background: @button-selected-background;
-            box-shadow: inset 0 1px 2px rgba(0, 0, 0, .2);;
-          }
-          svg {
-            margin-top: 3px;
-          }
-        }
+      .password-view {
+        width:3em;
+        float: left;
+        margin-top: 0;
+        margin-right:0;
+        margin-left: -.1rem;
+        height: 2.714em;
+        border-radius: 0;
+        padding: .6rem .8rem .6rem 1rem;
+        background: @input-background;
+        border: 1px solid @border-input;
+        border-left: 0;
+        border-top: 1px solid @border-input-light;
 
-        input:focus + .password-view {
+        &.selected {
+          background: @button-selected-background;
           box-shadow: inset 0 1px 2px rgba(0, 0, 0, .2);;
-          border: 1px solid @border-focus;
-          border-left: 0;
+        }
+        svg {
+          margin-top: 3px;
         }
       }
 
-      .password-complexity {
-
-        .complexity-text {
-          float: right;
-          clear: right;
-          width: 30%;
-          font-size: 11px;
-          text-align: left;
-          padding-left: 0;
-        }
-        &.not_available .complexity-text {
-          color: @border-default;
-        }
-
-        .progress {
-          width: 100%;
-          box-sizing: border-box;
-          border: 1px solid @border-default;
-          height: 10px;
-          display: block;
-          clear: both;
-          margin: .25em 0 .5em 0;
-          float: left;
-        }
-        .progress-bar {
-          background: @blacker;
-          width: 0;
-          height: 6px;
-          display: block;
-          float: left;
-          margin: 1px;
-
-          &.very-weak {
-            background: @blacker;
-            width: 5%;
-          }
-          &.weak {
-            background: @red;
-            width: 10%;
-          }
-          &.fair {
-            background: @yellow;
-            width: 60%;
-          }
-          &.strong {
-            background: @green-light;
-            width: 80%;
-          }
-          &.very-strong {
-            background: @green;
-            width: 99.5%;
-          }
-        }
+      input:focus + .password-view {
+        box-shadow: inset 0 1px 2px rgba(0, 0, 0, .2);;
+        border: 1px solid @border-focus;
+        border-left: 0;
       }
     }
 
-    .login {
+    .password-complexity {
 
-      .login-user {
+      .complexity-text {
+        float: right;
+        clear: right;
+        width: 30%;
+        font-size: 11px;
+        text-align: left;
+        padding-left: 0;
+      }
+      &.not_available .complexity-text {
+        color: @border-default;
+      }
+
+      .progress {
         width: 100%;
-        margin: auto;
-
-        & > * {
-          text-align: center;
-        }
-
-        .login-user-name {
-          font-weight: bold;
-          font-size: 1.6rem;
-          line-height: 1rem;
-        }
-
-        .login-user-email {
-          font-size: 1.6rem;
-          line-height: 1rem;
-        }
+        box-sizing: border-box;
+        border: 1px solid @border-default;
+        height: 10px;
+        display: block;
+        clear: both;
+        margin: .25em 0 .5em 0;
+        float: left;
       }
+      .progress-bar {
+        background: @blacker;
+        width: 0;
+        height: 6px;
+        display: block;
+        float: left;
+        margin: 1px;
 
-      .login-passphrase {
-        display: flex;
-        flex-wrap: nowrap;
-        align-items: stretch;
-
-        .login-input {
-          flex: 1 1 auto;
-          border-right: none;
+        &.very-weak {
+          background: @blacker;
+          width: 5%;
         }
-
-        .login-passphrase-security-token {
-          display: flex;
-          align-items: center;
-          border: 1px solid @border-default;
-          border-left:0;
-          border-top: 1px solid @border-input-light;
-          padding: 0.6rem 1.2rem;
-          height: 1.75em;
+        &.weak {
+          background: @red;
+          width: 10%;
+        }
+        &.fair {
+          background: @yellow;
+          width: 60%;
+        }
+        &.strong {
+          background: @green-light;
+          width: 80%;
+        }
+        &.very-strong {
+          background: @green;
+          width: 99.5%;
         }
       }
     }
+  }
 
-    .login-processing {
+  .login {
+
+    .login-user {
+      width: 100%;
+      margin: auto;
+
+      & > * {
+        text-align: center;
+      }
+
+      .login-user-name {
+        font-weight: bold;
+        font-size: 1.6rem;
+        line-height: 1rem;
+      }
+
+      .login-user-email {
+        font-size: 1.6rem;
+        line-height: 1rem;
+      }
+    }
+
+    .login-passphrase {
       display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center ;
+      flex-wrap: nowrap;
+      align-items: stretch;
+
+      .login-input {
+        flex: 1 1 auto;
+        border-right: none;
+      }
+
+      .login-passphrase-security-token {
+        display: flex;
+        align-items: center;
+        border: 1px solid @border-default;
+        border-left:0;
+        border-top: 1px solid @border-input-light;
+        padding: 0.6rem 1.2rem;
+        height: 1.75em;
+      }
     }
+  }
+
+  .login-processing {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center ;
+  }
 }
 
 @media only screen and (min-width: 42rem) {
-    body {
-        background:@background-splash;
+  body {
+    background:@background-splash;
+  }
+  .login.page {
+    padding:0;
+    display: grid;
+    height: 100%;
+    grid-template-columns: 1fr 1.5fr 1fr;
+    grid-template-rows: 0.1fr 1fr 0.05fr;
+    grid-gap: 1px;
+    grid-template-areas: ". . ." ". login-form ." "footer footer footer";
+
+    .content {
+      grid-area: login-form;
+
+      .loading-bar {
+        display:block;
+      }
+      .logo {
+        margin:1.6em auto;
+        width: 20rem;
+        background-size: 20rem auto;
+      }
+
+      .login-form {
+        .box-shadow();
+        border-radius: .3rem;
+        max-width:37.2rem;
+        margin:auto;
+        padding:4.8rem 4rem 5.6rem 4rem;
+        background:@background-default;
+      }
     }
-    .login.page {
-        padding:0;
-        display: grid;
-        height: 100%;
-        grid-template-columns: 1fr 1.5fr 1fr;
-        grid-template-rows: 0.1fr 1fr 0.05fr;
-        grid-gap: 1px;
-        grid-template-areas: ". . ." ". login-form ." "footer footer footer";
-
-        .content {
-            grid-area: login-form;
-
-            .loading-bar {
-                display:block;
-            }
-            .logo {
-                margin:1.6em auto;
-                width: 20rem;
-                background-size: 20rem auto;
-            }
-
-            .login-form {
-                .box-shadow();
-                border-radius: .3rem;
-                max-width:37.2rem;
-                margin:auto;
-                padding:4.8rem 4rem 5.6rem 4rem;
-                background:@background-default;
-            }
-        }
-    }
+  }
 }

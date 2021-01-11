@@ -5281,7 +5281,7 @@ article table.table-parameters tbody tr td em {
  * Footer
  */
 .footer {
-  margin-top: 0em;
+  margin-top: 0;
   position: fixed;
   bottom: 0;
   padding: 1.167em 1.5% 0 0.5%;
@@ -5301,6 +5301,10 @@ article table.table-parameters tbody tr td em {
 .footer .footer-links li {
   display: inline;
   margin-right: 1.5em;
+}
+.footer .footer-links li.error-message a {
+  background-color: #FFF;
+  color: #D40101;
 }
 .footer .footer-links li .github-star {
   display: inline;

@@ -107,7 +107,7 @@ class ManageLoading extends React.Component {
    */
   render() {
     return (
-      <div>
+      <div className="loading-bar-wrapper">
         {this.state.mustShow &&
           <LoadingBar
             progress={this.state.progressRate}

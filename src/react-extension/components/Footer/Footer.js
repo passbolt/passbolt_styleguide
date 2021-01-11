@@ -94,7 +94,7 @@ class Footer extends Component {
           {this.isReady &&
           <ul className="footer-links">
             {this.isUnsafeMode &&
-            <li className="error message">
+            <li className="error-message">
               <a
                 title="terms of service"
                 href={this.unsafeUrl}
