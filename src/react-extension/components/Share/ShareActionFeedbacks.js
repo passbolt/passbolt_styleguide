@@ -38,6 +38,13 @@ class ShareActionFeedbacks extends React.Component {
   }
 
   /**
+   * Default minimum display time in ms
+   */
+  static get DEFAULT_DISPLAY_MIN_TIME_IN_MS() {
+    return 1200;
+  }
+
+  /**
    * Default time to wait before closing a feedback in ms
    */
   static get DEFAULT_WAIT_TO_CLOSE_TIME_IN_MS() {
@@ -81,7 +88,7 @@ class ShareActionFeedbacks extends React.Component {
   }
 
   render() {
-    const displayTimeInMs = this.hasFeedbacks ? ShareActionFeedbacks.DEFAULT_DISPLAY_TIME_IN_MS / this.length : 0;
+    const displayTimeInMs = this.length > 1 ? ShareActionFeedbacks.DEFAULT_DISPLAY_MIN_TIME_IN_MS : ShareActionFeedbacks.DEFAULT_DISPLAY_TIME_IN_MS;
 
     return (
       <>
