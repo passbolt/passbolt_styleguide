@@ -246,7 +246,7 @@ class AddComment extends React.Component {
           <UserAvatar
             user={this.context.loggedInUser}
             baseUrl={this.context.siteSettings.settings.app.url}
-            className="author profile picture"/>
+            className="author profile picture avatar"/>
         </div>
       </form>
     );

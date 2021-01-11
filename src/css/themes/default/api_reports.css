@@ -6078,6 +6078,7 @@ input[type="search"]::-webkit-search-cancel-button {
 }
 .tags-list .tag-list-item {
   display: initial;
+  float: left;
 }
 .tag-editor {
   margin-bottom: 1em;

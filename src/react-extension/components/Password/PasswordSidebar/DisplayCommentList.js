@@ -149,7 +149,7 @@ class DisplayCommentList extends React.Component {
                   <UserAvatar
                     user={comment.creator.profile}
                     baseUrl={this.context.siteSettings.settings.app.url}
-                    className="author profile picture"/>
+                    className="author profile picture avatar"/>
                 </div>
 
               </li>

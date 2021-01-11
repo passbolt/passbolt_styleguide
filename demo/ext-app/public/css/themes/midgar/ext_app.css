@@ -8340,6 +8340,7 @@ table.table-info.horizontal tbody tr:hover {
 }
 .tags-list .tag-list-item {
   display: initial;
+  float: left;
 }
 .tag-editor {
   margin-bottom: 1em;
