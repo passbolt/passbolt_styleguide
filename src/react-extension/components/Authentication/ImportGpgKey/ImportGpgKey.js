@@ -95,7 +95,6 @@ class ImportGpgKey extends Component {
     this.fileUploaderRef = React.createRef();
   }
 
-
   /**
    * Whenever the users submits his gpg key
    * @param event Dom event
@@ -109,7 +108,6 @@ class ImportGpgKey extends Component {
       await this.save();
     }
   }
-
 
   /**
    * Whenever the user changes the private key
@@ -213,7 +211,7 @@ class ImportGpgKey extends Component {
     const processingClassName = this.isProcessing ? 'processing' : '';
     return (
       <div className="import-private-key">
-        <h1>Welcome back, please enter your private key to begin with the recovery process.</h1>
+        <h1>{this.props.title}</h1>
         <form
           acceptCharset="utf-8"
           onSubmit={this.handleSubmit}>
@@ -263,6 +261,7 @@ class ImportGpgKey extends Component {
 
 ImportGpgKey.contextType = AuthenticationContext;
 ImportGpgKey.propTypes = {
+  title: PropTypes.string, // title
   dialogContext: PropTypes.any, // The dialog context
   secondaryAction: PropTypes.any // Secondary action to display
 };

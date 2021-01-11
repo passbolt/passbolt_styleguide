@@ -59,12 +59,19 @@ class ExtAuthenticationRecover extends Component {
    * Whenever the component is mounted
    */
   async componentDidMount() {
+    this.removeSkeleton();
+    await this.getSiteSettings();
+    await this.getExtensionVersion();
+  }
+
+  /**
+   * Remove skeleton preloaded in html if any
+   */
+  removeSkeleton() {
     const skeleton = document.getElementById("temporary-skeleton");
     if (skeleton) {
       skeleton.remove();
     }
-    await this.getSiteSettings();
-    await this.getExtensionVersion();
   }
 
   /**

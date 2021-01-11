@@ -1340,10 +1340,11 @@ a.unfav .svg-icon svg {
   box-sizing: border-box;
 }
 .password-hints {
-  margin: 1em 0;
+  margin: 0.5em 0 1em 0;
 }
 .password-hints li {
-  line-height: 1.5em;
+  font-size: 1.5rem;
+  line-height: 2.4rem;
 }
 .password-hints li:before {
   content: "\25CF";

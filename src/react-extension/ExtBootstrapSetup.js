@@ -24,11 +24,18 @@ class ExtBootstrapSetup extends Component {
    * Whenever the component is mounted
    */
   componentDidMount() {
+    this.removeSkeleton();
+    this.handleRemoveIframeRequested();
+  }
+
+  /**
+   * Remove skeleton preloaded in html if any
+   */
+  removeSkeleton() {
     const skeleton = document.getElementById("temporary-skeleton");
     if (skeleton) {
       skeleton.remove();
     }
-    this.handleRemoveIframeRequested();
   }
 
   /**

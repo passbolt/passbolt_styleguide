@@ -4906,8 +4906,8 @@ input[type="search"]::-webkit-search-cancel-button {
 .user.profile .details {
   float: left;
   font-size: 0.875em;
-  padding: 0.5em 1em;
-  /* 7/14px */
+  padding: 0.357em 1em 0.5em 1em;
+  /* 5/14/7/14px */
 }
 .user.profile .details .name,
 .user.profile .details .email {
@@ -4938,7 +4938,7 @@ input[type="search"]::-webkit-search-cancel-button {
   color: #666;
 }
 .user.profile .more a .svg-icon {
-  margin: 18px 0 0 7px;
+  margin: 16px 0 0 7px;
   display: inline-block;
 }
 .user.profile .more a .svg-icon svg {
