@@ -69,8 +69,9 @@ class SetupAuthentication extends Component {
       case AuthenticationContextState.GPG_KEY_IMPORTED:
         return <ChooseSecurityToken/>;
       case AuthenticationContextState.GPG_KEY_TO_IMPORT_REQUESTED:
-        return <ImportGpgKey title="Welcome, please enter your private key to continue."
-                             secondaryAction={<GenerateKeySecondaryAction/>}/>;
+        return <ImportGpgKey
+          title="Welcome, please enter your private key to continue."
+          secondaryAction={<GenerateKeySecondaryAction/>}/>;
       case AuthenticationContextState.GPG_KEY_VALIDATED:
         return <CheckPassphrase canRememberMe={this.canRememberMe} secondaryAction={<GenerateKeyOnPassphraseLostSecondaryAction/>}/>;
       case  AuthenticationContextState.SETUP_COMPLETED:
