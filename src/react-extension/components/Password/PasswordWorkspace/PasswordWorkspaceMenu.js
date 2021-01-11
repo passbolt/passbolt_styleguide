@@ -383,7 +383,7 @@ class PasswordWorkspaceMenu extends React.Component {
             </li>
             <li>
               <div className="dropdown" ref={this.moreMenuRef}>
-                <a className={`button ready ${this.hasMoreActionAllowed() ? "" : "disabled"}`}
+                <a className={`button more ready ${this.hasMoreActionAllowed() ? "" : "disabled"}`}
                   onClick={this.handleMoreClickEvent}>
                   <span>More</span>
                   <Icon name="caret-down"/>

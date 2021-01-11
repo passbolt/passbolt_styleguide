@@ -3242,7 +3242,7 @@ p {
   position: relative;
 }
 .button .svg-icon + span:not(.visuallyhidden) {
-  margin-left: 2px;
+  margin-left: 0.5em;
   display: inline-block;
 }
 .button:hover .svg-icon svg,
@@ -5951,6 +5951,10 @@ input[type="search"]::-webkit-search-cancel-button {
 .dropdown .button:focus .svg-icon svg,
 .dropdown .button.create:focus .svg-icon svg {
   fill: #FFFFFC;
+}
+.dropdown .button.more .svg-icon svg {
+  top: 0.15em;
+  margin-left: 0.5em;
 }
 .dropdown .button.create .svg-icon svg {
   fill: #FFF;

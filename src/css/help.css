@@ -3284,7 +3284,7 @@ ul.checklist li:before {
   position: relative;
 }
 .button .svg-icon + span:not(.visuallyhidden) {
-  margin-left: 2px;
+  margin-left: 0.5em;
   display: inline-block;
 }
 .button:hover .svg-icon svg,

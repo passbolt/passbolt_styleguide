@@ -3241,7 +3241,7 @@ p {
   position: relative;
 }
 .button .svg-icon + span:not(.visuallyhidden) {
-  margin-left: 2px;
+  margin-left: 0.5em;
   display: inline-block;
 }
 .button:hover .svg-icon svg,
@@ -5490,6 +5490,10 @@ h6 .input.toggle-switch {
 .dropdown .button:focus .svg-icon svg,
 .dropdown .button.create:focus .svg-icon svg {
   fill: #333;
+}
+.dropdown .button.more .svg-icon svg {
+  top: 0.15em;
+  margin-left: 0.5em;
 }
 .dropdown .button.create .svg-icon svg {
   fill: #FFF;
