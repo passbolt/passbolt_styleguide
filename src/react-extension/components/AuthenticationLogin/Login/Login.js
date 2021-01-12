@@ -332,7 +332,8 @@ class Login extends Component {
                     onChange={this.handleChangePassphrase}
                     onFocus={this.handleFocusPassphrase}
                     onBlur={this.handleBlurPassphrase}
-                    disabled={!this.areActionsAllowed}/>
+                    disabled={!this.areActionsAllowed}
+                    autoFocus={true}/>
                   <span
                     className="login-passphrase-security-token"
                     style={this.securityTokenStyle}>

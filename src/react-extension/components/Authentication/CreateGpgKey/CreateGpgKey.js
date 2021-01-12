@@ -258,7 +258,8 @@ class CreateGpgKey extends Component {
                 ref={this.passphraseInput}
                 value={this.state.passphrase}
                 onChange={this.handlePassphraseChange}
-                disabled={!this.areActionsAllowed}/>
+                disabled={!this.areActionsAllowed}
+                autoFocus={true}/>
             }
             {!this.state.isObfuscated &&
               <input

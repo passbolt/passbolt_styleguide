@@ -54,7 +54,7 @@ class EnterUsernameForm extends Component {
   componentDidMount() {
     if (this.props.context.siteSettings !== null) {
       this.setState({loading: false}, () => {
-        this.usernameRef.current.focus();
+        this.focusUsernameElement();
       });
     }
   }
@@ -69,9 +69,30 @@ class EnterUsernameForm extends Component {
     // If the component is still marked as loading when the site settings are retrieved, mark it as loaded and put the focus on the username field
     if (this.state.loading && this.props.context.siteSettings !== null) {
       this.setState({loading: false}, () => {
-        this.usernameRef.current.focus();
+        this.focusUsernameElement();
       });
     }
+  }
+
+  /**
+   * Focus the username element.
+   */
+  focusUsernameElement() {
+    if (!this.isFocusOnBrowserExtension()) {
+      this.usernameRef.current.focus();
+    }
+  }
+
+  /**
+   * Check if the focus is on the browser extension
+   * @returns {boolean}
+   */
+  isFocusOnBrowserExtension() {
+    const activeElement = document.activeElement;
+    if (activeElement) {
+      return activeElement.tagName.toLowerCase() === "iframe";
+    }
+    return false;
   }
 
   /**
