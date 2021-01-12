@@ -16,7 +16,7 @@ import AppContext from "../../../contexts/AppContext";
 import {withDialog} from "../../../../react/contexts/Common/DialogContext";
 import SessionExpired from "../../Dialog/SessionExpired/SessionExpired";
 
-const IS_AUTHENTICATED_CHECK_PERIOD = 2000;
+const IS_AUTHENTICATED_CHECK_PERIOD = 60000;
 
 /**
  * This component takes care of checking when the user session is expired.
@@ -71,7 +71,7 @@ class HandleSessionExpired extends React.Component {
    * @returns {Promise<boolean>}
    */
   async checkIsAuthenticated() {
-    return this.context.port.request("passbolt.auth.is-authenticated", {requestApi: false});
+    return await this.context.onCheckIsAuthenticatedRequested();
   }
 
   /**

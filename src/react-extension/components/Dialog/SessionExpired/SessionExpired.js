@@ -56,7 +56,8 @@ class SessionExpired extends Component {
    * @returns {string}
    */
   get loginUrl() {
-    const baseUrl = this.context.userSettings.getTrustedDomain();
+    let baseUrl = this.context.userSettings && this.context.userSettings.getTrustedDomain();
+    baseUrl = baseUrl || this.context.trustedDomain;
     return `${baseUrl}/auth/login`;
   }
 

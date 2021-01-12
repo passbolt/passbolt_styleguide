@@ -179,7 +179,9 @@ class ExtApp extends Component {
       mustRefreshComments: false, // Flag telling whether the current list of comments should be refreshed
 
       // Navigation
-      onLogoutRequested: () => this.onLogoutRequested()
+      onLogoutRequested: () => this.onLogoutRequested(),
+      onCheckIsAuthenticatedRequested: () => this.onCheckIsAuthenticatedRequested(),
+
     };
   }
 
@@ -187,6 +189,7 @@ class ExtApp extends Component {
     this.handleStorageChange = this.handleStorageChange.bind(this);
     this.handleIsReadyEvent = this.handleIsReadyEvent.bind(this);
     this.onLogoutRequested = this.onLogoutRequested.bind(this);
+    this.onCheckIsAuthenticatedRequested = this.onCheckIsAuthenticatedRequested.bind(this);
   }
 
   initEventHandlers() {
@@ -363,6 +366,13 @@ class ExtApp extends Component {
    */
   onLogoutRequested() {
     this.props.port.request('passbolt.auth.navigate-to-logout');
+  }
+
+  /**
+   * Whenever the user authentication status must be checked
+   */
+  async onCheckIsAuthenticatedRequested() {
+    return await this.props.port.request("passbolt.auth.is-authenticated", {requestApi: false});
   }
 
   /*

@@ -15,6 +15,7 @@ const AppContext = React.createContext({
   mustRefreshComments: false,
   siteSettings: null,
   userSettings: null,
+  onCheckIsAuthenticatedRequested: null
 });
 
 

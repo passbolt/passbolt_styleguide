@@ -29,6 +29,8 @@ import DisplayApiUserSettingsWorkspace
   from "./components/UserSetting/DisplayUserSettingsWorkspace/DisplayApiUserSettingsWorkspace";
 import DisplayMainMenu from "./components/navigation/DisplayMainMenu";
 import NavigationContextProvider from "./contexts/NavigationContext";
+import HandleSessionExpired from "./components/Auth/HandleSessionExpired/HandleSessionExpired";
+import PassboltApiFetchError from "./lib/Error/passboltApiFetchError";
 
 /**
  * The passbolt application served by the API.
@@ -76,7 +78,8 @@ class ApiApp extends Component {
       },
 
       // Navigation
-      onLogoutRequested: () => this.onLogoutRequested()
+      onLogoutRequested: () => this.onLogoutRequested(),
+      onCheckIsAuthenticatedRequested: () => this.onCheckIsAuthenticatedRequested(),
     };
   }
 
@@ -176,6 +179,27 @@ class ApiApp extends Component {
     document.location.href = `${this.state.trustedDomain}/auth/logout`;
   }
 
+  /**
+   * Whenever the user authentication status must be checked
+   * @return {Promise<boolean>}
+   * @throw Error if an unexpected error occurred while checking the session
+   */
+  async onCheckIsAuthenticatedRequested() {
+    try {
+      const apiClientOptions = this.getApiClientOptions().setResourceName("auth");
+      const apiClient = new ApiClient(apiClientOptions);
+      await apiClient.get('is-authenticated');
+      return true;
+    } catch (error) {
+      if (error instanceof PassboltApiFetchError) {
+        if (error.data.code === 403) {
+          return false;
+        }
+      }
+      throw error;
+    }
+  }
+
   render() {
     return (
       <>
@@ -186,6 +210,8 @@ class ApiApp extends Component {
               <ContextualMenuContextProvider>
                 { /* Action Feedback Management */}
                 <ShareActionFeedbacks/>
+                { /* Session expired handler */}
+                <HandleSessionExpired/>
                 <Router>
                   <NavigationContextProvider>
                     <Switch>
