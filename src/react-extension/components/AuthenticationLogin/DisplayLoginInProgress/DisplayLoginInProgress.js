@@ -26,7 +26,7 @@ class DisplayLoginInProgress extends Component {
         <div className="processing-wrapper">
           <span className="processing"></span>
         </div>
-        <h1>Logging in, please wait...</h1>
+        <h1>Signing in, please wait...</h1>
       </div>
     );
   }
