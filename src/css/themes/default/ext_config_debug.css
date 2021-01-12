@@ -3865,10 +3865,6 @@ input[type=email].fluid {
   position: absolute;
   text-align: center;
 }
-.form-content .accordion.closed h3.accordion-header a:before {
-  content: "\f0da";
-  /* caret right */
-}
 .form-content table {
   width: 100%;
   margin-bottom: 1em;
