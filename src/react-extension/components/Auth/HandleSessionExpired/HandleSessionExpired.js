@@ -16,7 +16,7 @@ import AppContext from "../../../contexts/AppContext";
 import {withDialog} from "../../../../react/contexts/Common/DialogContext";
 import SessionExpired from "../../Dialog/SessionExpired/SessionExpired";
 
-const IS_AUTHENTICATED_CHECK_PERIOD = 2000;
+const IS_AUTHENTICATED_CHECK_PERIOD = 60000;
 
 /**
  * This component takes care of checking when the user session is expired.

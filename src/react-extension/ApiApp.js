@@ -30,6 +30,7 @@ import DisplayApiUserSettingsWorkspace
 import DisplayMainMenu from "./components/navigation/DisplayMainMenu";
 import NavigationContextProvider from "./contexts/NavigationContext";
 import HandleSessionExpired from "./components/Auth/HandleSessionExpired/HandleSessionExpired";
+import PassboltApiFetchError from "./lib/Error/passboltApiFetchError";
 
 /**
  * The passbolt application served by the API.
@@ -180,6 +181,8 @@ class ApiApp extends Component {
 
   /**
    * Whenever the user authentication status must be checked
+   * @return {Promise<boolean>}
+   * @throw Error if an unexpected error occurred while checking the session
    */
   async onCheckIsAuthenticatedRequested() {
     try {
@@ -187,9 +190,13 @@ class ApiApp extends Component {
       const apiClient = new ApiClient(apiClientOptions);
       await apiClient.get('is-authenticated');
       return true;
-    } catch (exception) {
-      console.error('Session expired');
-      return false;
+    } catch (error) {
+      if (error instanceof PassboltApiFetchError) {
+        if (error.data.code === 403) {
+          return false;
+        }
+      }
+      throw error;
     }
   }
 
