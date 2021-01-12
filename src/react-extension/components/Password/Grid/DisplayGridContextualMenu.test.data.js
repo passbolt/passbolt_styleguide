@@ -32,6 +32,9 @@ export function defaultProps() {
     dialogContext: {
       open: jest.fn()
     },
+    resourceWorkspaceContext: {
+      onGoToResourceUriRequested: jest.fn()
+    }
   };
 }
 

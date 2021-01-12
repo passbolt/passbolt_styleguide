@@ -216,9 +216,10 @@ describe("Display Resources", () => {
       expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalled();
     });
 
-    it('As LU, I should be able to copy the uri of a resource', async() => {
-      jest.spyOn(context.port, 'request').mockImplementationOnce(() => {});
+    it('As LU, I should be able to follow the uri of a resource', async() => {
+      jest.spyOn(props.resourceWorkspaceContext, 'onGoToResourceUriRequested').mockImplementationOnce(() => {});
       await page.resource(1).selectUri();
+      expect(props.resourceWorkspaceContext.onGoToResourceUriRequested).toHaveBeenCalled();
     });
   });
 });

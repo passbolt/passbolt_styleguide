@@ -242,4 +242,21 @@ describe("Resource Workspace Context", () => {
       expect(page.details.resource).toBeNull();
     });
   });
+
+  describe("As LU I be able to follow a resource uri", () => {
+    it("As LU I be able to follow a safe resource uri", () => {
+      const resource = context.resources[0];
+      jest.spyOn(window, 'open').mockImplementationOnce(() => {});
+      page.goToResourceUri(resource);
+      expect(window.open).toHaveBeenCalledWith("https://passbolt.dev/", "_blank", "noopener,noreferrer");
+    });
+
+    it("As LU I not be able to follow an unsafe resource uri", () => {
+      const resource = context.resources[0];
+      resource.uri = "javascript://mars-attack";
+      jest.spyOn(window, 'open').mockImplementationOnce(() => {});
+      page.goToResourceUri(resource);
+      expect(window.open).toHaveBeenCalledTimes(0);
+    });
+  });
 });

@@ -220,6 +220,14 @@ export default class ResourceWorkspaceContextPage {
   }
 
   /**
+   * Go to a resource uri
+   * @param resource A specific resource
+   */
+  async goToResourceUri(resource) {
+    await this.resourceWorkspaceContext.onGoToResourceUriRequested(resource);
+  }
+
+  /**
    * Returns the rendering of  the page
    * @param appContext a app context
    * @param text a specific text search filter
