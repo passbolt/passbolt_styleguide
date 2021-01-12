@@ -29,6 +29,7 @@ import DisplayApiUserSettingsWorkspace
   from "./components/UserSetting/DisplayUserSettingsWorkspace/DisplayApiUserSettingsWorkspace";
 import DisplayMainMenu from "./components/navigation/DisplayMainMenu";
 import NavigationContextProvider from "./contexts/NavigationContext";
+import HandleSessionExpired from "./components/Auth/HandleSessionExpired/HandleSessionExpired";
 
 /**
  * The passbolt application served by the API.
@@ -76,7 +77,8 @@ class ApiApp extends Component {
       },
 
       // Navigation
-      onLogoutRequested: () => this.onLogoutRequested()
+      onLogoutRequested: () => this.onLogoutRequested(),
+      onCheckIsAuthenticatedRequested: () => this.onCheckIsAuthenticatedRequested(),
     };
   }
 
@@ -176,6 +178,21 @@ class ApiApp extends Component {
     document.location.href = `${this.state.trustedDomain}/auth/logout`;
   }
 
+  /**
+   * Whenever the user authentication status must be checked
+   */
+  async onCheckIsAuthenticatedRequested() {
+    try {
+      const apiClientOptions = this.getApiClientOptions().setResourceName("auth");
+      const apiClient = new ApiClient(apiClientOptions);
+      await apiClient.get('is-authenticated');
+      return true;
+    } catch (exception) {
+      console.error('Session expired');
+      return false;
+    }
+  }
+
   render() {
     return (
       <>
@@ -186,6 +203,8 @@ class ApiApp extends Component {
               <ContextualMenuContextProvider>
                 { /* Action Feedback Management */}
                 <ShareActionFeedbacks/>
+                { /* Session expired handler */}
+                <HandleSessionExpired/>
                 <Router>
                   <NavigationContextProvider>
                     <Switch>

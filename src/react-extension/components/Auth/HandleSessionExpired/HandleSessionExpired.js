@@ -71,7 +71,7 @@ class HandleSessionExpired extends React.Component {
    * @returns {Promise<boolean>}
    */
   async checkIsAuthenticated() {
-    return this.context.port.request("passbolt.auth.is-authenticated", {requestApi: false});
+    return await this.context.onCheckIsAuthenticatedRequested();
   }
 
   /**
