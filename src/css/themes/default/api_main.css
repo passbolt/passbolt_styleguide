@@ -7236,8 +7236,8 @@ input[type="search"]::-webkit-search-cancel-button {
 .tableview table th,
 .tableview table td {
   text-align: left;
-  padding: 0.2em 0.4em;
-  /* 3px 6px */
+  padding: 0.2em 0.6em;
+  /* 3px 9px */
   vertical-align: middle;
 }
 .tableview table th {
@@ -7253,16 +7253,7 @@ input[type="search"]::-webkit-search-cancel-button {
 .tableview table .s-cell {
   width: 1em;
   max-width: 1em;
-}
-.tableview table .s1-cell {
-  width: 1.66666667em;
-  /* 15px */
-  max-width: 1.66666667em;
-}
-.tableview table .s2-cell {
-  width: 2.66666667em;
-  /* 40px */
-  max-width: 2.66666667em;
+  min-width: 1em;
 }
 .tableview table .m-cell {
   width: 9em;
@@ -7294,36 +7285,18 @@ input[type="search"]::-webkit-search-cancel-button {
 }
 .tableview table th.cell-multiple-select,
 .tableview table td.cell-multiple-select {
-  padding-right: 0;
-}
-.tableview table th.cell-multiple-select .input.checkbox,
-.tableview table td.cell-multiple-select .input.checkbox {
-  padding: 0 0.2em;
+  text-align: center;
 }
 .tableview table th.cell-multiple-select .input.checkbox label,
 .tableview table td.cell-multiple-select .input.checkbox label {
   display: none;
 }
-.tableview table th.cell-multiple-select .input.checkbox input,
-.tableview table td.cell-multiple-select .input.checkbox input {
-  margin-top: 0;
-  float: left;
-}
-.tableview table th.cell-favorite,
-.tableview table td.cell-favorite {
-  padding-left: 0;
-  padding-right: 0.4em;
-  /* 6px */
-}
-.tableview table td.cell-icon svg,
-.tableview table td.cell-icon img {
-  width: 1em;
-  height: 1em;
-  position: absolute;
-  margin-top: -0.5em;
-}
-.tableview table td.cell-icon svg {
-  margin-top: -0.55em;
+@supports (-webkit-appearance:none) and (not (overflow:-webkit-marquee))
+and (not (-ms-ime-align:auto)) and (not (-moz-appearance:none)) {
+  .tableview table th.cell-multiple-select .input.checkbox,
+  .tableview table td.cell-multiple-select .input.checkbox {
+    margin-top: 1px;
+  }
 }
 /* hide secondary actions if there is no space */
 @media all and (max-width: 600px) {
@@ -9563,7 +9536,6 @@ iframe.cachette {
   float: left;
   display: block;
   font-size: 0.813em;
-  /* 13/16px */
   margin-left: 0;
   padding: 0.5em;
   width: 9em;
