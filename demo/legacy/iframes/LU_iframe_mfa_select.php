@@ -22,21 +22,17 @@
                             <img src="src/img/third_party/google-authenticator.svg" />
                             <span>Google Authenticator</span>
                         </a>
-                        <div class="input toggle-switch">
-                            <label for="create_users">Enabled</label>
-                            <input class="toggle-switch-checkbox checkbox" id="create_users" type="checkbox" checked="checked" disabled="disabled">
-                            <label class="toggle-switch-button" for="create_users"></label>
+                        <div class="mfa-provider-status enabled">
+                            Enabled
                         </div>
                     </li>
                     <li>
-                        <a role="button" class="duo ">
+                        <a role="button" class="duo">
                             <img src="src/img/third_party/duo.svg" />
                             <span>Duo MFA</span>
                         </a>
-                        <div class="input toggle-switch">
-                            <label for="create_users">Disabled</label>
-                            <input class="toggle-switch-checkbox checkbox" id="create_users" type="checkbox" disabled="disabled">
-                            <label class="toggle-switch-button" for="create_users"></label>
+                        <div class="mfa-provider-status disabled">
+                            Disabled
                         </div>
                     </li>
                     <li class="coming-soon">
@@ -44,10 +40,8 @@
                             <img src="src/img/third_party/yubikey.svg" />
                             <span>Yubikey</span>
                         </a>
-                        <div class="input toggle-switch">
-                            <label for="create_users">Coming soon</label>
-                            <input class="toggle-switch-checkbox checkbox" id="create_users" type="checkbox" disabled="disabled">
-                            <label class="toggle-switch-button" for="create_users"></label>
+                        <div class="mfa-provider-status disabled">
+                            Disabled
                         </div>
                     </li>
                 </ul>

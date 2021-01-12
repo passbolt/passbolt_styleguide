@@ -9830,20 +9830,13 @@ html.launching .launching-screen p {
   padding: 2em 0 0.5em 0;
   height: 5em;
 }
-.mfa.iframe .mfa-providers .coming-soon {
-  color: #cacac9;
-}
-.mfa.iframe .mfa-providers .coming-soon a {
-  cursor: not-allowed;
-}
-.mfa.iframe .mfa-providers .coming-soon img {
-  filter: url('../../../img/controls/filter.svg#grayscale');
-  -webkit-filter: grayscale(1);
-  -webkit-transition: all 2s;
-}
-.mfa.iframe .mfa-providers .toggle-switch {
-  padding-left: 0.5em;
+.mfa.iframe .mfa-providers .mfa-provider-status {
+  padding: 1em;
   background: #444442;
+  text-align: center;
+}
+.mfa.iframe .mfa-providers .mfa-provider-status.disabled {
+  color: #8B8B89;
 }
 .mfa.iframe .mfa-trusted-device {
   padding: 1em;

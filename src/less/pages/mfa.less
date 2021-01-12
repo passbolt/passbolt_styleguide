@@ -86,20 +86,14 @@
             }
 
         }
-        .coming-soon {
-            color: @font-dim;
-            a {
-                cursor:not-allowed;
-            }
-            img {
-                filter: url('@{images}/controls/filter.svg#grayscale');
-                -webkit-filter: grayscale(1);
-                -webkit-transition: all 2s;
-            }
-        }
-        .toggle-switch {
-            padding-left:.5em;
+        .mfa-provider-status {
+            padding:1em;
             background:@background-lightest;
+            text-align: center;
+
+            &.disabled {
+              color: @button-disabled-color;
+            }
         }
     }
 
