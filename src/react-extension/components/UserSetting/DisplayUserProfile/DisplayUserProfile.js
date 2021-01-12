@@ -124,54 +124,54 @@ class DisplayUserProfile extends React.Component {
 
   render() {
     return (
-      <div className="grid grid-responsive-12">
+      <div className="grid grid-responsive-12 profile-detailed-information">
         {this.user &&
         <div className="row">
-          <div className="profile col8">
+          <div className="profile col6">
             <h3>Profile</h3>
-            <div className="section profile-detailed-information">
-              <div className="avatar">
-                <div className="value">
-                  <UserAvatar
-                    user={this.context.loggedInUser}
-                    baseUrl={this.context.userSettings.getTrustedDomain()}
-                    className=""/>
-                </div>
-                <div className="edit">
-                  <a
-                    className="edit-avatar-action"
-                    title="Change Avatar"
-                    onClick={this.handleUploadPicture}>
-                    <Icon name="camera"/>
-                    <span className="help-text">Upload a new picture</span>
-
-                  </a>
-                </div>
+            <table className="table-info profile">
+              <tbody>
+                <tr className="name">
+                  <td className="label">Name</td>
+                  <td className="value">{`${this.user.profile.first_name} ${this.user.profile.last_name}`}</td>
+                </tr>
+                <tr className="email">
+                  <td className="label">Email</td>
+                  <td className="value">{this.user.username}</td>
+                </tr>
+                <tr className="role">
+                  <td className="label">Role</td>
+                  <td className="value">{this.user.role.name}</td>
+                </tr>
+                <tr className="modified">
+                  <td className="label">Modified</td>
+                  <td className="value">{this.formatDateTimeAgo(this.user.modified)}</td>
+                </tr>
+                <tr className="created">
+                  <td className="label">Created</td>
+                  <td className="value">{this.formatDateTimeAgo(this.user.created)}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div className="avatar col6 last">
+            <h3>Avatar</h3>
+            <div className="avatar">
+              <div className="value">
+                <UserAvatar
+                  user={this.context.loggedInUser}
+                  baseUrl={this.context.userSettings.getTrustedDomain()}
+                  className=""/>
               </div>
-              <table className="table-info profile">
-                <tbody>
-                  <tr className="name">
-                    <td className="label">Name</td>
-                    <td className="value">{`${this.user.profile.first_name} ${this.user.profile.last_name}`}</td>
-                  </tr>
-                  <tr className="email">
-                    <td className="label">Email</td>
-                    <td className="value">{this.user.username}</td>
-                  </tr>
-                  <tr className="role">
-                    <td className="label">Role</td>
-                    <td className="value">{this.user.role.name}</td>
-                  </tr>
-                  <tr className="modified">
-                    <td className="label">Modified</td>
-                    <td className="value">{this.formatDateTimeAgo(this.user.modified)}</td>
-                  </tr>
-                  <tr className="created">
-                    <td className="label">Created</td>
-                    <td className="value">{this.formatDateTimeAgo(this.user.created)}</td>
-                  </tr>
-                </tbody>
-              </table>
+              <div className="edit">
+                <a
+                  className="edit-avatar-action"
+                  title="Change Avatar"
+                  onClick={this.handleUploadPicture}>
+                  <Icon name="camera"/>
+                  <span className="help-text">Upload a new avatar picture</span>
+                </a>
+              </div>
             </div>
           </div>
         </div>

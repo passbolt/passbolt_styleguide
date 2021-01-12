@@ -9709,7 +9709,6 @@ table.table-info.horizontal tbody tr:hover {
     line-height: 1.8em;
   }
 }
-/* TODO replace by page level selector */
 .page.settings .main.panel .middle {
   overflow-y: auto;
 }
@@ -9833,37 +9832,23 @@ table.table-info.horizontal tbody tr:hover {
 .page.settings .profile-detailed-information .avatar .edit a:after {
   clear: both;
 }
-.page.settings .profile-detailed-information .avatar .edit a i.fa {
-  display: block;
+.page.settings .profile-detailed-information .avatar .edit a .svg-icon {
   float: left;
-}
-.page.settings .profile-detailed-information .avatar .edit a i.fa:before {
-  display: block;
-  float: left;
-  width: 1em;
-  height: 1em;
-  line-height: 1.4em;
-  font-size: 1.5em;
-  text-align: center;
-  padding: 0.25em 0.5em;
 }
 .page.settings .profile-detailed-information .avatar .edit a .svg-icon svg {
   float: left;
   fill: white;
-  width: 2rem;
-  height: 2rem;
-  margin-top: 0.5em;
-  margin-left: 0.5em;
+  width: 1.6rem;
+  height: 1.6rem;
+  margin: 0.8em;
 }
 .page.settings .profile-detailed-information .avatar .edit a .help-text {
+  float: left;
   display: block;
   font-size: 0.813em;
-  /* 13/16px */
-  width: 10em;
-  /* 130/13 */
-  float: left;
   margin-left: 0;
-  padding: 0.5em 0.5em 0 0.5em;
+  padding: 0.5em;
+  width: 9em;
 }
 .page.settings .key-export .actions {
   margin: 1em 0;

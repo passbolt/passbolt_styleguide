@@ -6433,16 +6433,22 @@ input[type="search"]::-webkit-search-cancel-button {
   .page.error.error-400 .row {
     max-width: 400px;
     margin: auto;
-    padding-top: 440px;
   }
-  .page.error.error-404 .grid {
-    background: transparent url('../img/illustrations/birds6_850.png') center 1.5em no-repeat;
-    background-size: 500px auto;
+  .page.error.error-500 .grid:before,
+  .page.error.error-404 .grid:before,
+  .page.error.error-400 .grid:before {
+    font-size: 15em;
+    font-weight: bold;
+    color: #333;
   }
-  .page.error.error-400 .grid,
-  .page.error.error-500 .grid {
-    background: transparent url('../img/illustrations/birds3_850.png') center 3em no-repeat;
-    background-size: 640px auto;
+  .page.error.error-404 .grid:before {
+    content: "404";
+  }
+  .page.error.error-400 .grid:before {
+    content: "400";
+  }
+  .page.error.error-500 .grid:before {
+    content: "500";
   }
 }
 .page.search .search-results h2 {
