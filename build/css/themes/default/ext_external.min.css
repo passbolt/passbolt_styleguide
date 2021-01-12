@@ -1,0 +1,9 @@
+/**!
+ * @name		passbolt-styleguide
+ * @version		v3.0.0-alpha.6
+ * @date		2021-01-12
+ * @copyright	Copyright 2021 Passbolt SA
+ * @source		https://github.com/passbolt/passbolt_styleguide
+ * @license		AGPL-3.0
+ */
+iframe.full-screen{position:absolute;width:100%;height:100%;z-index:999;border:0;top:0;left:0}iframe.cachette{position:absolute;width:1px;height:1px;z-index:999;border:0;bottom:0;right:0}
