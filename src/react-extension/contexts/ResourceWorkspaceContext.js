@@ -19,6 +19,7 @@ import {withRouter} from "react-router-dom";
 import moment from "moment";
 import {withActionFeedback} from "./ActionFeedbackContext";
 import {withLoading} from "../../react/contexts/Common/LoadingContext";
+import sanitizeUrl, {urlProtocols} from "../../react/lib/Common/Sanitize/sanitizeUrl";
 
 /**
  * Context related to resources ( filter, current selections, etc.)
@@ -70,7 +71,8 @@ export const ResourceWorkspaceContext = React.createContext({
   },
   onResourceFileToImport: () => {}, // Whenever a resource file will be imported
   onResourceFileImportResult: () => {}, // Whenever the import result has been provided
-  onResourcesToExport: () => {} // Whenever resources and/or folder will be exported
+  onResourcesToExport: () => {}, // Whenever resources and/or folder will be exported
+  onGoToResourceUriRequested: () => {} // Whenever the users wants to follow a resource uri
 });
 
 /**
@@ -133,7 +135,8 @@ export class ResourceWorkspaceContextProvider extends React.Component {
       },
       onResourceFileToImport: this.handleResourceFileToImport.bind(this), // Whenever a resource file will be imported
       onResourceFileImportResult: this.handleResourceFileImportResult.bind(this), // Whenever the import result has been provided
-      onResourcesToExport: this.handleResourcesToExportChange.bind(this) // Whenever resources and/or folder have to be exported
+      onResourcesToExport: this.handleResourcesToExportChange.bind(this), // Whenever resources and/or folder have to be exported
+      onGoToResourceUriRequested: this.onGoToResourceUriRequested.bind(this) // Whenever the users wants to follow a resource uri
     };
   }
 
@@ -347,7 +350,6 @@ export class ResourceWorkspaceContextProvider extends React.Component {
    * Handle the edited resource
    */
   async handleResourceEdited() {
-    console.log('handle resource edited');
     await this.refreshSelectedResourceActivities();
   }
 
@@ -492,6 +494,21 @@ export class ResourceWorkspaceContextProvider extends React.Component {
    */
   async handleResourcesToExportChange({resourcesIds, foldersIds}) {
     await this.updateResourcesToExport({resourcesIds, foldersIds});
+  }
+
+  /**
+   * Whenever the users wants to follow a resource uri
+   * @param {object} resource The resource to follow the uri
+   */
+  onGoToResourceUriRequested(resource) {
+    const safeUri = sanitizeUrl(resource.uri, {
+      whiteListedProtocols: resourceLinkAuthorizedProtocols,
+      defaultProtocol: urlProtocols.HTTPS
+    });
+
+    if (safeUri) {
+      window.open(safeUri, '_blank', 'noopener,noreferrer');
+    }
   }
 
   /**
@@ -1016,4 +1033,13 @@ export const ResourceWorkspaceFilterTypes = {
   RECENTLY_MODIFIED: 'FILTER-BY-RECENTLY-MODIFIERD', // Keep recently modified resources
 };
 
-
+/**
+ * The list of resource link authorized protocols
+ */
+export const resourceLinkAuthorizedProtocols = [
+  urlProtocols.FTP,
+  urlProtocols.FTPS,
+  urlProtocols.HTTPS,
+  urlProtocols.HTTP,
+  urlProtocols.SSH
+];

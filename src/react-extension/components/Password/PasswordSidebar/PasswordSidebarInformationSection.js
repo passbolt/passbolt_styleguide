@@ -16,9 +16,14 @@ import Icon from "../../../../react/components/Common/Icons/Icon";
 import PropTypes from "prop-types";
 import moment from "moment-timezone";
 import AppContext from "../../../contexts/AppContext";
-import {ResourceWorkspaceFilterTypes, withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
+import {
+  resourceLinkAuthorizedProtocols,
+  ResourceWorkspaceFilterTypes,
+  withResourceWorkspace
+} from "../../../contexts/ResourceWorkspaceContext";
 import {withRouter} from "react-router-dom";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
+import sanitizeUrl, {urlProtocols} from "../../../../react/lib/Common/Sanitize/sanitizeUrl";
 
 class PasswordSidebarInformationSection extends React.Component {
   /**
@@ -49,6 +54,7 @@ class PasswordSidebarInformationSection extends React.Component {
     this.handleTitleClickEvent = this.handleTitleClickEvent.bind(this);
     this.handleUsernameClickEvent = this.handleUsernameClickEvent.bind(this);
     this.handlePasswordClickEvent = this.handlePasswordClickEvent.bind(this);
+    this.handleGoToResourceUriClick = this.handleGoToResourceUriClick.bind(this);
   }
 
   /**
@@ -57,6 +63,18 @@ class PasswordSidebarInformationSection extends React.Component {
    */
   get resource() {
     return this.props.resourceWorkspaceContext.details.resource;
+  }
+
+  /**
+   * the resource safe uri
+   * @return {string}
+   */
+  get safeUri() {
+    return sanitizeUrl(
+      this.resource.uri, {
+        whiteListedProtocols: resourceLinkAuthorizedProtocols,
+        defaultProtocol: urlProtocols.HTTPS
+      });
   }
 
   /**
@@ -133,39 +151,6 @@ class PasswordSidebarInformationSection extends React.Component {
   }
 
   /**
-   * Sanitize uri.
-   *
-   * @param {string} uri The uri to sanitize.
-   * @returns {string|boolean}
-   */
-  sanitizeResourceUri(uri) {
-    // Wrong format.
-    if (uri == undefined || typeof uri != "string" || !uri.length) {
-      return false;
-    }
-
-    // Absolute url are not valid url.
-    if (uri[0] == "/") {
-      return false;
-    }
-
-    // If no protocol defined, use http.
-    if (!/^((?!:\/\/).)*:\/\//.test(uri)) {
-      uri = `http://${uri}`;
-    }
-
-    try {
-      const url = new URL(uri);
-      if (url.protocol === "javascript") {
-        throw new Error("The protocol javascript is forbidden.");
-      }
-      return url.href;
-    } catch (error) {
-      return false;
-    }
-  }
-
-  /**
    * Copy password from dto to clipboard
    * Support original password (a simple string) and composed objects)
    *
@@ -200,6 +185,13 @@ class PasswordSidebarInformationSection extends React.Component {
   }
 
   /**
+   * Whenever the user wants to follow a resource uri.
+   */
+  handleGoToResourceUriClick() {
+    this.props.resourceWorkspaceContext.onGoToResourceUriRequested(this.resource);
+  }
+
+  /**
    * display a success notification message
    * @param message
    */
@@ -217,7 +209,6 @@ class PasswordSidebarInformationSection extends React.Component {
     const modifierUsername = this.getUserUsername(this.resource.modified_by);
     const createdDateTimeAgo = this.formatDateTimeAgo(this.resource.created);
     const modifiedDateTimeAgo = this.formatDateTimeAgo(this.resource.modified);
-    const safeUri = this.sanitizeResourceUri(this.resource.uri) || "";
 
     return (
       <div className={`detailed-information accordion sidebar-section ${this.state.open ? "" : "closed"}`}>
@@ -250,7 +241,10 @@ class PasswordSidebarInformationSection extends React.Component {
             </li>
             <li className="uri">
               <span className="label">URI</span>
-              <span className="value"><a href={safeUri} target="_blank" rel="noopener noreferrer">{this.resource.uri}</a></span>
+              <span className="value">
+                {this.safeUri && <a onClick={this.handleGoToResourceUriClick}>{this.resource.uri}</a>}
+                {!this.safeUri && <span>{this.resource.uri}</span>}
+              </span>
             </li>
             <li className="modified">
               <span className="label">Modified</span>

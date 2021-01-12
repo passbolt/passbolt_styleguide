@@ -50,7 +50,7 @@
 
     th, td {
       text-align: left;
-      padding: .2em .4em; /* 3px 6px */
+      padding: .2em .6em; /* 3px 9px */
       vertical-align: middle;
     }
 
@@ -63,18 +63,9 @@
     }
 
     .s-cell {
-      width: 1em;
+      width:1em;
       max-width: 1em;
-    }
-
-    .s1-cell {
-      width: 1.66666667em; /* 15px */
-      max-width: 1.66666667em;
-    }
-
-    .s2-cell {
-      width: 2.66666667em;  /* 40px */
-      max-width: 2.66666667em;
+      min-width: 1em;
     }
 
     .m-cell {
@@ -113,42 +104,28 @@
       color: @font-lighter;
     }
 
-
     /* multi select and fav fix */
     th.cell-multiple-select,
     td.cell-multiple-select {
-      padding-right:0;
-
+      text-align: center;
       .input.checkbox {
-        padding: 0 .2em;
-
         label {
           display: none;
         }
-
-        input {
-          margin-top: 0;
-          float: left;
-        }
       }
     }
+  }
+}
 
-    th.cell-favorite,
-    td.cell-favorite {
-      padding-left: 0;
-      padding-right: .4em; /* 6px */
-    }
-
-    td.cell-icon {
-      svg, img {
-        width: 1em;
-        height: 1em;
-        position: absolute;
-        margin-top: -.5em;
-      }
-
-      svg {
-        margin-top: -.55em;
+// CHROME exclusive crassette
+@supports (-webkit-appearance:none) and (not (overflow:-webkit-marquee))
+and (not (-ms-ime-align:auto)) and (not (-moz-appearance:none))
+{
+  .tableview table {
+    th.cell-multiple-select,
+    td.cell-multiple-select {
+      .input.checkbox {
+        margin-top: 1px; //damn you chrome
       }
     }
   }

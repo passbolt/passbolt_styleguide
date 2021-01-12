@@ -20,7 +20,11 @@ import PasswordEditDialog from "../PasswordEditDialog/PasswordEditDialog";
 import ShareDialog from "../../Share/ShareDialog";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import PasswordDeleteDialog from "../PasswordDeleteDialog/PasswordDeleteDialog";
-import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
+import {
+  resourceLinkAuthorizedProtocols,
+  withResourceWorkspace
+} from "../../../contexts/ResourceWorkspaceContext";
+import sanitizeUrl, {urlProtocols} from "../../../../react/lib/Common/Sanitize/sanitizeUrl";
 
 class DisplayGridContextualMenu extends React.Component {
   /**
@@ -43,6 +47,7 @@ class DisplayGridContextualMenu extends React.Component {
     this.handlePermalinkClickEvent = this.handlePermalinkClickEvent.bind(this);
     this.handlePasswordClickEvent = this.handlePasswordClickEvent.bind(this);
     this.handleDeleteClickEvent = this.handleDeleteClickEvent.bind(this);
+    this.handleGoToResourceUriClick = this.handleGoToResourceUriClick.bind(this);
   }
 
   /**
@@ -148,11 +153,30 @@ class DisplayGridContextualMenu extends React.Component {
   }
 
   /**
+   * handle open the uri in a new tab
+   */
+  handleGoToResourceUriClick() {
+    this.props.resourceWorkspaceContext.onGoToResourceUriRequested(this.resource);
+  }
+
+  /**
    * the resource selected
    * @returns {*}
    */
   get resource() {
     return this.props.resource;
+  }
+
+  /**
+   * the resource safe uri
+   * @return {string|bool} Return safe uri or false if not safe
+   */
+  get safeUri() {
+    return sanitizeUrl(
+      this.resource.uri, {
+        whiteListedProtocols: resourceLinkAuthorizedProtocols,
+        defaultProtocol: urlProtocols.HTTPS
+      });
   }
 
   /**
@@ -205,7 +229,7 @@ class DisplayGridContextualMenu extends React.Component {
             </div>
           </div>
         </li>
-        <li key="option-password-resource" className="ready">
+        <li key="option-copy-password-resource" className="ready">
           <div className="row">
             <div className="main-cell-wrapper">
               <div className="main-cell">
@@ -214,7 +238,7 @@ class DisplayGridContextualMenu extends React.Component {
             </div>
           </div>
         </li>
-        <li key="option-uri-resource" className="ready">
+        <li key="option-copy-uri-resource" className="ready">
           <div className="row">
             <div className="main-cell-wrapper">
               <div className="main-cell">
@@ -224,11 +248,22 @@ class DisplayGridContextualMenu extends React.Component {
             </div>
           </div>
         </li>
-        <li key="option-permalink-resource" className="ready separator-after">
+        <li key="option-permalink-resource" className="ready">
           <div className="row">
             <div className="main-cell-wrapper">
               <div className="main-cell">
                 <a id="permalink" onClick={this.handlePermalinkClickEvent}><span>Copy permalink</span></a>
+              </div>
+            </div>
+          </div>
+        </li>
+        <li key="option-open-uri-resource" className="ready separator-after">
+          <div className="row">
+            <div className="main-cell-wrapper">
+              <div className="main-cell">
+                <a id="permalink"
+                  className={`${this.safeUri ? "" : "disabled"}`}
+                  onClick={this.handleGoToResourceUriClick}><span>Open URI in a new Tab</span></a>
               </div>
             </div>
           </div>

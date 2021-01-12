@@ -84,23 +84,30 @@ export default class DisplayGridContextualMenuPage {
   }
 
   /**
-   * Click on the menu edir folder
+   * Click on the menu open uri in a new tab
    */
-  async edit() {
+  async openUri() {
     await this.click(this.menuItem(5));
   }
 
   /**
    * Click on the menu edir folder
    */
-  async share() {
+  async edit() {
     await this.click(this.menuItem(6));
   }
 
   /**
    * Click on the menu edir folder
    */
-  async delete() {
+  async share() {
     await this.click(this.menuItem(7));
+  }
+
+  /**
+   * Click on the menu edir folder
+   */
+  async delete() {
+    await this.click(this.menuItem(8));
   }
 }
