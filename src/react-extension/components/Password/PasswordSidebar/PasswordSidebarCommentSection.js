@@ -47,6 +47,14 @@ class PasswordSidebarCommentSection extends React.Component {
   }
 
   /**
+   * Whenever the component props or state change
+   * @param prevProps Previous props value
+   */
+  componentDidUpdate(prevProps) {
+    this.handleResourceChange(prevProps.resourceWorkspaceContext.details.resource);
+  }
+
+  /**
    * Bind callbacks methods
    */
   bindCallbacks() {
@@ -55,6 +63,23 @@ class PasswordSidebarCommentSection extends React.Component {
     this.handleCancelledAddEvent = this.handleCancelledAddEvent.bind(this);
     this.handleRequestedAddEvent = this.handleRequestedAddEvent.bind(this);
     this.handleFetchedEvent = this.handleFetchedEvent.bind(this);
+  }
+
+  /**
+   * Check if the resource has changed and fetch
+   * @param previousResource
+   */
+  async handleResourceChange(previousResource) {
+    // do nothing if the section is closed.
+    if (!this.state.open) {
+      return;
+    }
+    // do nothing if the resource doesn't change.
+    if (this.resource.id === previousResource.id) {
+      return;
+    }
+
+    await this.setState({mustRefresh: true});
   }
 
   /**
