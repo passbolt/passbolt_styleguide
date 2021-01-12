@@ -19,7 +19,7 @@
 		<div class="row">
 			<div class="col6 push1 information">
 				<div class="plugin-check-wrapper">
-					<h2>Download firefox!</h2>
+					<h2>Download Firefox!</h2>
 					<div class="plugin-check firefox error">
 						<p class="message">
 							Passbolt is not available for your browser. Try with <a href="https://www.mozilla.org/firefox">Mozilla Firefox</a>.
@@ -39,7 +39,7 @@
 						<i class="fa huge fa-download" ></i>
 					</div>
 					<div class="actions-wrapper center">
-						<a class="button primary" href="https://www.mozilla.org/firefox">Download firefox</a>
+						<a class="button primary" href="https://www.mozilla.org/firefox">Download Firefox</a>
 					</div>
 				</div>
 			</div>
