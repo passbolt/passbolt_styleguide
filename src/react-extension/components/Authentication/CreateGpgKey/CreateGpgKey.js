@@ -32,7 +32,7 @@ class CreateGpgKey extends Component {
   constructor(props) {
     super(props);
     this.state = this.defaultState;
-    this.evaluatePassphraseDebounce = debounce(this.evaluatePassphrase, 300);
+    this.evaluatePassphraseIsInDictionaryDebounce = debounce(this.evaluatePassphraseIsInDictionary, 300);
     this.bindEventHandlers();
     this.createReferences();
   }
@@ -116,8 +116,24 @@ class CreateGpgKey extends Component {
   async handlePassphraseChange(event) {
     const passphrase = event.target.value;
     this.setState({passphrase});
-    // debounce to evaluate the passphrase
-    await this.evaluatePassphraseDebounce(passphrase);
+    const passphraseStrength = this.evaluatePassphraseStrength(passphrase);
+    const hintClassNames = await this.evaluatePassphraseHintClassNames(passphrase);
+    this.setState({passphraseStrength, hintClassNames});
+    await this.checkPassphraseIsInDictionary(passphrase, hintClassNames);
+  }
+
+  /**
+   * check if the passphrase is in dictionary
+   * @param passphrase
+   * @param hintClassNames
+   * @returns {Promise<void>}
+   */
+  async checkPassphraseIsInDictionary(passphrase, hintClassNames) {
+    const hintClassName = condition => condition ? 'success' : 'error';
+    // debounce only to check the passphrase is in dictionary
+    const isPwned = await this.evaluatePassphraseIsInDictionaryDebounce(passphrase).catch(() => null);
+    hintClassNames.notInDictionary = isPwned !== null ? hintClassName(!isPwned) : null;
+    this.setState({hintClassNames});
   }
 
   /**
@@ -144,16 +160,6 @@ class CreateGpgKey extends Component {
   }
 
   /**
-   * Evaluation of the passphrase
-   * @param passphrase The passphrase to evaluate
-   */
-  async evaluatePassphrase(passphrase) {
-    const passphraseStrength = this.evaluatePassphraseStrength(passphrase);
-    const hintClassNames = await this.evaluatePassphraseHintClassNames(passphrase);
-    this.setState({passphraseStrength, hintClassNames});
-  }
-
-  /**
    * Returns the strength evaluation of the passphrase
    * @param passphrase The passphrase to evaluate
    */
@@ -165,16 +171,15 @@ class CreateGpgKey extends Component {
    * Evaluate the passphrase hints classnames
    * @param passphrase The passphrase to evaluate
    */
-  async evaluatePassphraseHintClassNames(passphrase) {
+  evaluatePassphraseHintClassNames(passphrase) {
     const masks = SecurityComplexity.matchMasks(passphrase);
-    const isPwned = await this.evaluatePassphraseIsInDictionary(passphrase).catch(() => null);
     const hintClassName = condition => condition ? 'success' : 'error';
     return {
       enoughLength:  hintClassName(passphrase.length >= 8),
       uppercase: hintClassName(masks.uppercase),
       alphanumeric: hintClassName(masks.alpha && masks.digit),
       specialCharacters: hintClassName(masks.special),
-      notInDictionary:  isPwned !== null ? hintClassName(!isPwned) : null
+      notInDictionary:  'error'
     };
   }
 
