@@ -48,7 +48,8 @@ export function defaultProps() {
       filteredResources: resources,
       filter: {
         type: ResourceWorkspaceFilterTypes.ALL
-      }
+      },
+      onGoToResourceUriRequested: jest.fn(),
     },
     contextualMenuContext: {
       show: jest.fn()
