@@ -17,13 +17,18 @@ import ReactList from "react-list";
 import moment from 'moment/moment';
 import 'moment-timezone/builds/moment-timezone-with-data-2012-2022';
 import {withAppContext} from "../../../contexts/AppContext";
-import {ResourceWorkspaceFilterTypes, withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
+import {
+  resourceLinkAuthorizedProtocols,
+  ResourceWorkspaceFilterTypes,
+  withResourceWorkspace
+} from "../../../contexts/ResourceWorkspaceContext";
 import debounce from "debounce-promise";
 import Icon from "../../../../react/components/Common/Icons/Icon";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import {withRouter} from "react-router-dom";
 import DisplayGridContextualMenu from "./DisplayGridContextualMenu";
 import {withContextualMenu} from "../../../../react/contexts/Common/ContextualMenuContext";
+import sanitizeUrl, {urlProtocols} from "../../../../react/lib/Common/Sanitize/sanitizeUrl";
 
 
 /**
@@ -64,7 +69,7 @@ class Grid extends React.Component {
     this.handleCopyUsernameClick = this.handleCopyUsernameClick.bind(this);
     this.handleFavoriteClick = this.handleFavoriteClick.bind(this);
     this.handleSortByColumnClick = this.handleSortByColumnClick.bind(this);
-    this.handleGoToUrlClick = this.handleGoToUrlClick.bind(this);
+    this.handleGoToResourceUriClick = this.handleGoToResourceUriClick.bind(this);
   }
 
   /**
@@ -389,44 +394,32 @@ class Grid extends React.Component {
     return this.props.resourceWorkspaceContext.sorter.asc;
   }
 
-  sanitizeResourceUrl(resource) {
-    let uri = resource.uri;
-
-    // Wrong format.
-    if (uri == undefined || typeof uri != "string" || !uri.length) {
-      return false;
-    }
-
-    // Absolute url are not valid url.
-    if (uri[0] == "/") {
-      return false;
-    }
-
-    // If no protocol defined, use http.
-    if (!/^((?!:\/\/).)*:\/\//.test(uri)) {
-      uri = `http://${uri}`;
-    }
-
-    try {
-      const url = new URL(uri);
-      if (url.protocol === "javascript") {
-        throw new Error("The protocol javascript is forbidden.");
-      }
-      return url.href;
-    } catch (error) {
-      return false;
-    }
+  /**
+   * Whenever the user wants to follow a resource uri.
+   * @param {object} resource The resource
+   */
+  handleGoToResourceUriClick(resource) {
+    this.props.resourceWorkspaceContext.onGoToResourceUriRequested(resource);
   }
 
-  handleGoToUrlClick(event) {
-    event.stopPropagation();
+  /**
+   * Get safe uri of a resource
+   * @param {object} resource The resource to get the safe uri for
+   * @return {string}
+   */
+  safeUri(resource) {
+    return sanitizeUrl(
+      resource.uri, {
+        whiteListedProtocols: resourceLinkAuthorizedProtocols,
+        defaultProtocol: urlProtocols.HTTPS
+      }) || "";
   }
 
   renderItem(index, key) {
     const resource = this.resources[index];
     const isSelected = this.isResourceSelected(resource);
     const isFavorite = resource.favorite !== null && resource.favorite !== undefined;
-    const safeUri = this.sanitizeResourceUrl(resource) || "#";
+    const safeUri = this.safeUri(resource);
     const serverTimezone = this.props.context.siteSettings.getServerTimezone();
     const modifiedFormatted = moment.tz(resource.modified, serverTimezone).fromNow();
 
@@ -473,7 +466,12 @@ class Grid extends React.Component {
         </td>
         <td className="cell-uri l-cell">
           <div title={resource.uri}>
-            <a href={safeUri} onClick={this.handleGoToUrlClick} target="_blank" rel="noopener noreferrer">{resource.uri}</a>
+            {safeUri &&
+            <a onClick={() => this.handleGoToResourceUriClick(resource)}>{resource.uri}</a>
+            }
+            {!safeUri &&
+            <span>{resource.uri}</span>
+            }
           </div>
         </td>
         <td className="cell-modified m-cell">

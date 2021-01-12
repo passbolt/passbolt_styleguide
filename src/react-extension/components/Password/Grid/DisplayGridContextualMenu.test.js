@@ -50,9 +50,10 @@ describe("As LU I should see each menu", () => {
       expect(page.menuName(2)).toBe("Copy password");
       expect(page.menuName(3)).toBe("Copy URI");
       expect(page.menuName(4)).toBe("Copy permalink");
-      expect(page.menuName(5)).toBe("Edit");
-      expect(page.menuName(6)).toBe("Share");
-      expect(page.menuName(7)).toBe("Delete");
+      expect(page.menuName(5)).toBe("Open URI in a new Tab");
+      expect(page.menuName(6)).toBe("Edit");
+      expect(page.menuName(7)).toBe("Share");
+      expect(page.menuName(8)).toBe("Delete");
     });
 
     it('As LU I can start to copy the username of a resource', async() => {
@@ -86,6 +87,12 @@ describe("As LU I should see each menu", () => {
       expect(context.port.request).toHaveBeenCalledWith('passbolt.clipboard.copy',  `${context.userSettings.getTrustedDomain()}/app/passwords/view/${props.resource.id}`);
       expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalled();
       expect(props.hide).toHaveBeenCalled();
+    });
+
+    it('As LU I can open a resource uri in new tab', async() => {
+      jest.spyOn(props.resourceWorkspaceContext, 'onGoToResourceUriRequested').mockImplementationOnce(() => {});
+      await page.openUri();
+      expect(props.resourceWorkspaceContext.onGoToResourceUriRequested).toHaveBeenCalled();
     });
 
     it('As LU I can start to edit a resource', async() => {
@@ -123,9 +130,10 @@ describe("As LU I should see each menu", () => {
       expect(page.menuItem(2).className).toBe("");
       expect(page.menuItem(3).className).toBe("");
       expect(page.menuItem(4).className).toBe("");
-      expect(page.menuItem(5).className).toBe("disabled");
+      expect(page.menuItem(5).className).toBe("");
       expect(page.menuItem(6).className).toBe("disabled");
       expect(page.menuItem(7).className).toBe("disabled");
+      expect(page.menuItem(8).className).toBe("disabled");
     });
   });
 });

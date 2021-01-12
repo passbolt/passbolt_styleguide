@@ -17,19 +17,36 @@
  * Note that javascript: URI are never allowed
  *
  * @param {string} uri
- * @param {array<string>} [whitelistedProtocols] optional default ['https:','http:']
+ * @param {object} options
+ * - {array<string>} whitelistedProtocols The protocols to white list. Default ['https:','http:']
+ * - {string} defaultProtocol Default protocol if the uri has none.
  * @returns {string|boolean}
  */
-export default (uri, whitelistedProtocols) => {
+export default (uri, options) => {
   // Wrong format.
   if (typeof uri === 'undefined' || typeof uri !== "string" || !uri.length) {
     return false;
   }
-
-  if (!whitelistedProtocols || !Array.isArray(whitelistedProtocols)) {
-    whitelistedProtocols = ['http:', 'https:'];
+  options = options || {};
+  if (options.whitelistedProtocols) {
+    if (!Array.isArray(options.whitelistedProtocols)) {
+      throw new TypeError("The whitelistedProtocols should be an array of string.");
+    }
   }
-  const blacklistedProtocols = ['javascript:'];
+  if (options.defaultProtocol) {
+    if (typeof options.defaultProtocol !== "string") {
+      throw new TypeError("The defaultProtocol should be a string.");
+    }
+  }
+
+  const whitelistedProtocols = options.whitelistedProtocols || [urlProtocols.HTTP, urlProtocols.HTTPS];
+  const blacklistedProtocols = [urlProtocols.JAVASCRIPT];
+  const defaultProtocol = options.defaultProtocol || "";
+
+  // If the uri doesn't have a protocol and a default one is provided, then prepend it to the uri.
+  if (!/^((?!:\/\/).)*:\/\//.test(uri) && defaultProtocol) {
+    uri = `${defaultProtocol}//${uri}`;
+  }
 
   try {
     const url = new URL(uri);
@@ -43,4 +60,17 @@ export default (uri, whitelistedProtocols) => {
   } catch (error) {
     return false;
   }
+};
+
+/**
+ * List of protocols
+ * @type {object}
+ */
+export const urlProtocols = {
+  FTP: "http:",
+  FTPS: "https:",
+  HTTP: "http:",
+  HTTPS: "https:",
+  JAVASCRIPT: "javascript:",
+  SSH: "ssh:",
 };

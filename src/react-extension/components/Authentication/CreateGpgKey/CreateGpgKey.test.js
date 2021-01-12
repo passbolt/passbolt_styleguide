@@ -3,7 +3,6 @@
  */
 import {defaultAppContext, defaultProps} from "./CreateGpgKey.test.data";
 import CreateGpgKeyPage from "./CreateGpgKey.test.page";
-import fetchMock from "fetch-mock-jest";
 import {waitFor} from "@testing-library/react";
 
 beforeEach(() => {
@@ -14,8 +13,6 @@ describe("Create GPG key", () => {
   let page; // The page to test against
   const context = defaultAppContext(); // The context
   const props = defaultProps(); // The props to pass
-
-  fetchMock.mock('*', {});
 
   beforeEach(() => {
     page = new CreateGpgKeyPage(context, props);

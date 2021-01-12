@@ -6077,8 +6077,8 @@ input[type="search"]::-webkit-search-cancel-button {
   clear: both;
 }
 .tags-list .tag-list-item {
-  display: initial;
   float: left;
+  max-width: 95%;
 }
 .tag-editor {
   margin-bottom: 1em;
@@ -6106,9 +6106,8 @@ input[type="search"]::-webkit-search-cancel-button {
   margin-left: -0.25em;
   padding-left: 0.5em;
   font-size: 0.75em;
-  vertical-align: 10%;
+  vertical-align: 30%;
   cursor: pointer;
-  display: inline-block;
 }
 .tag-editor .tag:hover:after {
   border-color: #BBB;
@@ -6172,13 +6171,12 @@ input[type="search"]::-webkit-search-cancel-button {
 }
 .tag-editor .tag-editor-input {
   min-height: 1.5em;
-  padding: 0.3em 0.4em 0 0.4em;
+  padding: 0.2em 0.4em 0 0.4em;
   box-shadow: none;
   min-width: 6em;
   max-width: 24em;
-  display: inline-block;
+  float: left;
   word-break: break-word;
-  position: absolute;
 }
 .tag-editor .autocomplete-suggestions {
   text-align: left;
@@ -6190,7 +6188,7 @@ input[type="search"]::-webkit-search-cancel-button {
   position: absolute;
   display: inline-flex;
   z-index: 9999;
-  max-height: 115px;
+  max-height: 120px;
   overflow: hidden;
   overflow-y: auto;
   box-sizing: border-box;
@@ -6201,7 +6199,7 @@ input[type="search"]::-webkit-search-cancel-button {
 .tag-editor .autocomplete-suggestions .autocomplete-content.scroll .name.ellipsis {
   display: block;
 }
-.tag-editor .autocomplete-suggestions .autocomplete-suggestion {
+.tag-editor .autocomplete-suggestions .autocomplete-suggestion.row {
   position: relative;
   white-space: nowrap;
   overflow: hidden;
@@ -6212,13 +6210,13 @@ input[type="search"]::-webkit-search-cancel-button {
   /* align autocomplete suggestion with tag input */
   border: 0;
 }
-.tag-editor .autocomplete-suggestions .autocomplete-suggestion.selected {
+.tag-editor .autocomplete-suggestions .autocomplete-suggestion.row.selected {
   background: #EEE;
 }
 .tags-list .tag,
 .tag-editor .tag {
   padding: 0 0.25em;
-  display: inline-block;
+  float: left;
   position: relative;
   margin: 0 0.5em 0.5em 0;
   text-decoration: none;
