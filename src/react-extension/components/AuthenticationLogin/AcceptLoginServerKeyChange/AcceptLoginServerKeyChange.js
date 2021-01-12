@@ -140,7 +140,7 @@ class AcceptLoginServerKeyChange extends Component {
     const disabledClassName = this.mustBeDisabled ? 'disabled' : '';
     return (
       <div>
-        <h2>Sorry, the server key has changed.</h2>
+        <h1>Sorry, the server key has changed.</h1>
         <p>For security reasons please check with your administrator that this is a change that they initiated. The new fingerprint: </p>
         <pre>{this.state.fingerprint}</pre>
         <form
