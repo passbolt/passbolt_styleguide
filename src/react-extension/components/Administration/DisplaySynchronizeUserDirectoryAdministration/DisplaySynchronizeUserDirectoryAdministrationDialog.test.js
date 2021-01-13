@@ -42,7 +42,7 @@ describe("See the synchronize user directory administration dialog", () => {
     it('As AD I should see The full report in the dialog for my synchronize report', async() => {
       expect(page.title.hyperlink.textContent).toBe("Synchronize report");
       expect(page.displaySynchronizeUserDirectoryAdministrationDialog.exists()).toBeTruthy();
-      expect(page.displaySynchronizeUserDirectoryAdministrationDialog.resourceSynchronize).toBe(' 2 user(s) and 60 group(s)  will be synchronized. ');
+      expect(page.displaySynchronizeUserDirectoryAdministrationDialog.resourceSynchronize).toBe(' 2 user(s) and 60 group(s) have been synchronized. ');
       expect(page.displaySynchronizeUserDirectoryAdministrationDialog.error).toBe('Some resources will not be synchronized and will require your attention, see the full report.');
       expect(page.displaySynchronizeUserDirectoryAdministrationDialog.noResource).toBeNull();
       await page.displaySynchronizeUserDirectoryAdministrationDialog.click(page.displaySynchronizeUserDirectoryAdministrationDialog.fullReport);
