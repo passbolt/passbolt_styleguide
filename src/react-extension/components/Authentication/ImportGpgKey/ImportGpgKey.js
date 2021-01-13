@@ -230,6 +230,7 @@ class ImportGpgKey extends Component {
               <input
                 type="file"
                 ref={this.fileUploaderRef}
+                disabled={!this.areActionsAllowed}
                 onChange={this.handleSelectPrivateKeyFile}/>
               {this.state.hasBeenValidated &&
               <>
