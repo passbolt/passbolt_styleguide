@@ -528,7 +528,7 @@ class EditUserGroup extends Component {
     if (!type) {
       return typeof errors[domain] === "object";
     }
-    return errors[domain] && errors[domain][type] !== false;
+    return errors[domain] && typeof errors[domain][type] !== "undefined";
   }
 
   /**
@@ -577,7 +577,7 @@ class EditUserGroup extends Component {
       this.setState({processing: false});
     } else if (this.hasGroupNameAlreadyExists(error.data)) {
       await this.setError("name", "alreadyExists");
-      this.setState({processing: false, nameError: error.data.body.name.group_unique});
+      this.setState({processing: false});
     } else {
       // Unexpected error occurred.
       console.error(error);
@@ -681,16 +681,15 @@ class EditUserGroup extends Component {
                   onChange={this.handleNameChange}
                   disabled={!this.areActionsAllowed}/>
                 {this.hasErrors("name", "empty") &&
-                <div className="error message">
+                <div className="name error message">
                   A name is required
                 </div>
                 }
                 {this.hasErrors("name", "alreadyExists") &&
-                <div className="error message">
-                  The group name test already exists
+                <div className="name error message">
+                  The group name test already exists.
                 </div>
                 }
-                <div className="name error message">{this.state.nameError}</div>
               </div>
 
               <div className="input required">
