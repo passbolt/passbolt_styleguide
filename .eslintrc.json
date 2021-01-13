@@ -11,7 +11,8 @@
     "plugin:react/recommended"
   ],
   "plugins": [
-    "jest"
+    "jest",
+    "no-unsanitized"
   ],
   "env": {
     "browser": true,
@@ -187,7 +188,10 @@
       }
     ],
     // enforce consistent indentation
-    "react/display-name": [0] // Off
+    "react/display-name": [0], // Off
     // The display-name rule is only used for dev consideration and ease the debugging, no prod quality check
+    // Mozilla unsanitized rules
+    "no-unsanitized/method": "error",
+    "no-unsanitized/property": "error"
   }
 }
