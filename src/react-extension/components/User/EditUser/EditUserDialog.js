@@ -373,7 +373,7 @@ class EditUserDialog extends Component {
                 <input
                   id="is_admin_checkbox"
                   name="is_admin"
-                  disabled={this.isLoggedInUserAsEditing}
+                  disabled={this.isLoggedInUserAsEditing || this.hasAllInputDisabled()}
                   onChange={this.handleCheckboxClick}
                   checked={this.state.is_admin}
                   type="checkbox"/>

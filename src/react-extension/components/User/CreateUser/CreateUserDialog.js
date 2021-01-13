@@ -404,7 +404,8 @@ class CreateUserDialog extends Component {
             <div className="input checkbox required">
               <label htmlFor="is_admin">Role</label>
               <div id="is_admin">
-                <input id="is_admin_checkbox" name="is_admin" onChange={this.handleCheckboxClick} checked={this.state.is_admin} type="checkbox"/>
+                <input id="is_admin_checkbox" name="is_admin" onChange={this.handleCheckboxClick}
+                  checked={this.state.is_admin} disabled={this.hasAllInputDisabled()} type="checkbox"/>
                 <span> This user is an administrator</span>
               </div>
               <div className="message helptext">Note: Administrators can add and delete users. They can also create
