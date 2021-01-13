@@ -143,8 +143,9 @@ class PasswordSidebarInformationSection extends React.Component {
 
     if (this.context.folders) {
       const folder = this.context.folders.find(item => item.id === folderParentId);
-
-      return folder.name;
+      if (folder) {
+        return folder.name;
+      }
     }
 
     return "";
