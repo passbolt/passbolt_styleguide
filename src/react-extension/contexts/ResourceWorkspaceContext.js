@@ -764,8 +764,8 @@ export class ResourceWorkspaceContextProvider extends React.Component {
    */
   async unselectUnknownResources() {
     const matchId = selectedResource => resource => resource.id === selectedResource.id;
-    const matchSelectedResource = selectedResource => this.resources.some(matchId(selectedResource));
-    const selectedResources = this.state.selectedResources.filter(matchSelectedResource);
+    const matchSelectedResource = selectedResource => this.state.selectedResources.some(matchId(selectedResource));
+    const selectedResources = this.resources.filter(matchSelectedResource);
     await this.setState({selectedResources});
   }
 
