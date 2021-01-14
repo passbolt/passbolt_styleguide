@@ -60,10 +60,14 @@ class HandleLegacyAppjs extends Component {
       const path = window.location.pathname;
       if (!_this.isApiPath(path)) {
         clearInterval(_this.handleRouteChangesInterval);
-        // Push the route in the router in order to let the ExtBootstrap detect the route change and treat it if required.
-        _this.props.history.push(path);
         // Remove the legacy dom container to avoid the legacy application to treat the url change.
         _this.removeLegacyAppContainer();
+        /*
+         * Reload the page to switch to let the browser extension detect the url and display the browser extension app.
+         * Changing the history is not enough as the pathname of the window location can also contain a subdirectory.
+         * It happens for the cloud as well as passbolt instance installed in a subdirectories.
+         */
+        window.location.reload();
       }
     }, 50);
   }
