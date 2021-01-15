@@ -290,7 +290,7 @@ class PassphraseEntryDialog extends Component {
           <div className="dialog-content">
             <form onSubmit={this.handleFormSubmit}>
               <div className="form-content">
-                <div className="input text required">
+                <div className={`input text password required ${this.state.passphraseError ? "error" : ""}`}>
                   <label htmlFor="passphrase-entry-form-passphrase">{passphraseInputLabel}</label>
                   <input id="passphrase-entry-form-passphrase" type="password" name="passphrase"
                     placeholder="Passphrase" required="required" ref={this.passphraseInputRef}
