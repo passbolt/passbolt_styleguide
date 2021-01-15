@@ -165,7 +165,7 @@ class DisplayUserGpgInformation extends React.Component {
    */
   render() {
     return (
-      <div className="grid grid-responsive-12">
+      <div className="grid grid-responsive-12 profile-key-inspector-information">
         <div className="row">
           <div className="col6 key-info">
             <h3>Information for public and secret key</h3>
