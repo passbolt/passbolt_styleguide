@@ -6471,6 +6471,7 @@ input[type="search"]::-webkit-search-cancel-button {
 }
 .panel.aside .comments .comment .metadata .author.username {
   max-width: 48%;
+  float: left;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -6483,6 +6484,7 @@ input[type="search"]::-webkit-search-cancel-button {
 .panel.aside .comments .comment .metadata .modified {
   max-width: 48%;
   padding-right: 2px;
+  padding-left: 4px;
   color: #969696;
   white-space: nowrap;
   overflow: hidden;
