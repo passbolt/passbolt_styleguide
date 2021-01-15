@@ -372,6 +372,7 @@ export class ResourceWorkspaceContextProvider extends React.Component {
    */
   async handleResourceShared() {
     await this.refreshSelectedResourceActivities();
+    await this.refreshSelectedResourcePermissions();
   }
 
   /**
@@ -918,14 +919,16 @@ export class ResourceWorkspaceContextProvider extends React.Component {
    * Refresh the activities of the current selected resource
    */
   async refreshSelectedResourceActivities() {
-    await this.setState({refresh: {activities: true}});
+    const refresh = Object.assign({}, this.state.refresh, {activities: true});
+    await this.setState({refresh});
   }
 
   /**
    * Set the resources activitie as refreshed
    */
   async setResourceActivitiesAsRefreshed() {
-    await this.setState({refresh: {activities: false}});
+    const refresh = Object.assign({}, this.state.refresh, {activities: false});
+    await this.setState({refresh});
   }
 
   /** RESOURCE PERMISSION */
@@ -934,14 +937,16 @@ export class ResourceWorkspaceContextProvider extends React.Component {
    * Refresh the permissions of the current selected  resources
    */
   async refreshSelectedResourcePermissions() {
-    await this.setState({refresh: {permissions: true}});
+    const refresh = Object.assign({}, this.state.refresh, {permissions: true});
+    await this.setState({refresh});
   }
 
   /**
    * Set the resources permissions as refreshed
    */
   async setResourcesPermissionsAsRefreshed() {
-    await this.setState({refresh: {permissions: false}});
+    const refresh = Object.assign({}, this.state.refresh, {permissions: false});
+    await this.setState({refresh});
   }
 
   /** RESOURCE IMPORT */
