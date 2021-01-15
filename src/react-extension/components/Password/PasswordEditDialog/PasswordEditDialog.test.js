@@ -273,6 +273,38 @@ describe("See the Edit Dialog Password", () => {
       expect(props.onClose).toBeCalled();
     });
 
+    it('As LU I can stop editing a password by closing the dialog', async() => {
+      expect(page.passwordEdit.exists()).toBeTruthy();
+      await page.passwordEdit.click(page.passwordEdit.dialogClose);
+      expect(props.onClose).toBeCalled();
+    });
+
+    it('As LU I can stop adding a password with the keyboard (escape)', async() => {
+      expect(page.passwordEdit.exists()).toBeTruthy();
+      await page.passwordEdit.escapeKey(page.passwordEdit.dialogClose);
+      expect(props.onClose).toBeCalled();
+    });
+
+    it('As LU I should see an error dialog if the submit operation fails for an unexpected reason', async() => {
+      // Mock the request function to make it return an error.
+      page.passwordEdit.focusInput(page.passwordEdit.password);
+      await waitFor(() => {
+        expect(page.passwordEdit.password.classList).toContain("decrypted");
+      });
+      page.passwordEdit.fillInput(page.passwordEdit.password, "password");
+      page.passwordEdit.blurInput(page.passwordEdit.password);
+
+      jest.spyOn(context.port, 'request').mockImplementationOnce(() => {
+        throw new PassboltApiFetchError("Jest simulate API error.");
+      });
+
+      await page.passwordEdit.click(page.passwordEdit.saveButton);
+
+      // Throw general error message
+      expect(page.passwordEdit.errorDialog).not.toBeNull();
+      expect(page.passwordEdit.errorDialogMessage).not.toBeNull();
+    });
+
     it('As LU I cannot update the form fields and I should see a processing feedback while submitting the form', async() => {
       // Mock the request function to make it the expected result
       let updateResolve;
@@ -301,33 +333,6 @@ describe("See the Edit Dialog Password", () => {
         expect(page.passwordEdit.cancelButton.className).toBe("cancel disabled");
         updateResolve();
       });
-    });
-
-    it('As LU I can stop editing a password by closing the dialog', async() => {
-      expect(page.passwordEdit.exists()).toBeTruthy();
-      await page.passwordEdit.click(page.passwordEdit.dialogClose);
-      expect(props.onClose).toBeCalled();
-    });
-
-    it('As LU I can stop adding a password with the keyboard (escape)', async() => {
-      expect(page.passwordEdit.exists()).toBeTruthy();
-      await page.passwordEdit.escapeKey(page.passwordEdit.dialogClose);
-      expect(props.onClose).toBeCalled();
-    });
-
-    it('As LU I should see an error dialog if the submit operation fails for an unexpected reason', async() => {
-      // Mock the request function to make it return an error.
-      page.passwordEdit.fillInput(page.passwordEdit.password, "password");
-
-      jest.spyOn(context.port, 'request').mockImplementationOnce(() => {
-        throw new PassboltApiFetchError("Jest simulate API error.");
-      });
-
-      await page.passwordEdit.click(page.passwordEdit.saveButton);
-
-      // Throw general error message
-      expect(page.passwordEdit.errorDialog).not.toBeNull();
-      expect(page.passwordEdit.errorDialogMessage).not.toBeNull();
     });
   });
 });

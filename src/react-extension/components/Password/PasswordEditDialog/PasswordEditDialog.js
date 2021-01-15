@@ -428,7 +428,7 @@ class PasswordEditDialog extends Component {
    * Handle view password button click.
    */
   async handleViewPasswordButtonClick() {
-    if (this.state.processing) {
+    if (this.hasAllInputDisabled()) {
       return;
     }
     this.setState({viewPassword: !this.state.viewPassword});
@@ -438,7 +438,7 @@ class PasswordEditDialog extends Component {
    * Handle generate password button click.
    */
   handleGeneratePasswordButtonClick() {
-    if (this.state.processing) {
+    if (this.hasAllInputDisabled()) {
       return;
     }
     const password = SecretComplexity.generate();
@@ -595,17 +595,25 @@ class PasswordEditDialog extends Component {
   }
 
   /**
+   * Should input be disabled? True if state is processing
+   * @returns {boolean}
+   */
+  hasAllInputDisabled() {
+    return this.state.processing;
+  }
+
+  /**
    * @returns {boolean}
    */
   isPasswordDisabled() {
-    return this.state.processing || this.state.isSecretDecrypting;
+    return this.state.isSecretDecrypting;
   }
 
   /**
    * @returns {boolean}
    */
   isDescriptionDisabled() {
-    return this.state.processing || (this.state.isSecretDecrypting && this.mustEncryptDescription());
+    return (this.state.isSecretDecrypting && this.mustEncryptDescription());
   }
 
   /*
@@ -622,14 +630,14 @@ class PasswordEditDialog extends Component {
 
     return (
       <DialogWrapper title={`Edit`} subtitle={this.state.nameOriginal} className="edit-password-dialog"
-        disabled={this.state.processing} onClose={this.handleClose}>
+        disabled={this.hasAllInputDisabled()} onClose={this.handleClose}>
         <form onSubmit={this.handleFormSubmit} noValidate>
           <div className="form-content">
             <div className={`input text required ${this.state.nameError ? "error" : ""}`}>
               <label htmlFor="edit-password-form-name">Name</label>
               <input id="edit-password-form-name" name="name" type="text" value={this.state.name}
                 onKeyUp={this.handleNameInputKeyUp} onChange={this.handleInputChange}
-                disabled={this.state.processing} ref={this.nameInputRef} className="required fluid" maxLength="64"
+                disabled={this.hasAllInputDisabled()} ref={this.nameInputRef} className="required fluid" maxLength="64"
                 required="required" autoComplete="off" autoFocus={true}/>
               {this.state.nameError &&
               <div className="name error message">{this.state.nameError}</div>
@@ -639,7 +647,7 @@ class PasswordEditDialog extends Component {
               <label htmlFor="edit-password-form-uri">URL</label>
               <input id="edit-password-form-uri" name="uri" className="fluid" maxLength="1024" type="text"
                 autoComplete="off" value={this.state.uri} onChange={this.handleInputChange} placeholder="URL"
-                disabled={this.state.processing}/>
+                disabled={this.hasAllInputDisabled()}/>
               {this.state.uriError &&
               <div className="error message">{this.state.uriError}</div>
               }
@@ -648,7 +656,7 @@ class PasswordEditDialog extends Component {
               <label htmlFor="edit-password-form-username">Username</label>
               <input id="edit-password-form-username" name="username" type="text" className="fluid" maxLength="64"
                 autoComplete="off" value={this.state.username} onChange={this.handleInputChange} placeholder="Username"
-                disabled={this.state.processing}/>
+                disabled={this.hasAllInputDisabled()}/>
               {this.state.usernameError &&
               <div className="error message">{this.state.usernameError}</div>
               }
@@ -661,21 +669,21 @@ class PasswordEditDialog extends Component {
                   onKeyUp={this.handlePasswordInputKeyUp} value={this.state.password}
                   placeholder={passwordPlaceholder} onFocus={this.handlePasswordInputFocus}
                   onBlur={this.handlePasswordInputBlur} onChange={this.handleInputChange}
-                  disabled={this.isPasswordDisabled()} style={passwordInputStyle} ref={this.passwordInputRef}/>
+                  disabled={this.hasAllInputDisabled() || this.isPasswordDisabled()} style={passwordInputStyle} ref={this.passwordInputRef}/>
                 <div className="security-token"
                   style={securityTokenStyle}>{securityTokenCode}</div>
               </div>
               <ul className="actions inline">
                 <li>
                   <a onClick={this.handleViewPasswordButtonClick}
-                    className={`password-view button button-icon toggle ${this.state.viewPassword ? "selected" : ""} ${this.state.processing ? "disabled" : ""}`}>
+                    className={`password-view button button-icon toggle ${this.state.viewPassword ? "selected" : ""} ${this.hasAllInputDisabled() ? "disabled" : ""}`}>
                     <Icon name='eye-open' big={true}/>
                     <span className="visually-hidden">view</span>
                   </a>
                 </li>
                 <li>
                   <a onClick={this.handleGeneratePasswordButtonClick}
-                    className={`password-generate button-icon button ${this.state.processing ? "disabled" : ""}`}>
+                    className={`password-generate button-icon button ${this.hasAllInputDisabled() ? "disabled" : ""}`}>
                     <Icon name='magic-wand' big={true}/>
                     <span className="visually-hidden">generate</span>
                   </a>
@@ -712,7 +720,7 @@ class PasswordEditDialog extends Component {
               </label>
               <textarea id="edit-password-form-description" name="description" maxLength="10000"
                 className="required" placeholder={this.getDescriptionPlaceholder()} value={this.state.description}
-                disabled={this.isDescriptionDisabled()} onChange={this.handleInputChange} ref={this.descriptionInputRef}
+                disabled={this.hasAllInputDisabled() ||this.isDescriptionDisabled()} onChange={this.handleInputChange} ref={this.descriptionInputRef}
                 onFocus={this.handleDescriptionInputFocus} onBlur={this.handleDescriptionInputBlur}>
               </textarea>
               {this.state.descriptionError &&
@@ -721,8 +729,8 @@ class PasswordEditDialog extends Component {
             </div>
           </div>
           <div className="submit-wrapper clearfix">
-            <FormSubmitButton value="Save" disabled={this.state.processing} processing={this.state.processing}/>
-            <FormCancelButton disabled={this.state.processing} onClick={this.handleClose}/>
+            <FormSubmitButton value="Save" disabled={this.hasAllInputDisabled() || this.isPasswordDisabled() || this.isDescriptionDisabled()} processing={this.hasAllInputDisabled()}/>
+            <FormCancelButton disabled={this.hasAllInputDisabled() || this.isPasswordDisabled() || this.isDescriptionDisabled()} onClick={this.handleClose}/>
           </div>
         </form>
       </DialogWrapper>
