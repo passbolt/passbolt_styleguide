@@ -48,7 +48,8 @@ class PasswordCreateDialog extends Component {
       descriptionError: "",
       viewPassword: false,
       passwordInputHasFocus: false,
-      encryptDescription: false
+      encryptDescription: false,
+      hasAlreadyBeenValidated: false // True if the form has already been submitted once
     };
   }
 
@@ -113,6 +114,7 @@ class PasswordCreateDialog extends Component {
       return;
     }
 
+    await this.setState({hasAlreadyBeenValidated: true});
     await this.toggleProcessing();
 
     if (!await this.validate()) {
@@ -400,15 +402,20 @@ class PasswordCreateDialog extends Component {
    * Handle name input keyUp event.
    */
   handleNameInputKeyUp() {
-    const state = this.validateNameInput();
-    this.setState(state);
+    if (this.state.hasAlreadyBeenValidated) {
+      const state = this.validateNameInput();
+      this.setState(state);
+    }
   }
 
   /**
    * Handle password input keyUp event.
    */
   handlePasswordInputKeyUp() {
-    this.validatePasswordInput();
+    if (this.state.hasAlreadyBeenValidated) {
+      const state = this.validatePasswordInput();
+      this.setState(state);
+    }
   }
 
   /**
