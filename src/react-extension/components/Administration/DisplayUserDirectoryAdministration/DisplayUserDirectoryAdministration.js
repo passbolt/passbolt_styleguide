@@ -50,6 +50,7 @@ class DisplayUserDirectoryAdministration extends React.Component {
       openDirectoryConfiguration: false, // section directory configuration open
       openSynchronizationOptions: false, // section synchronization options open
 
+      openConnectionType: false, // select connection type
       openDefaultAdmin: false, // select default user admin
       openDefaultGroupAdmin: false, // select default group user admin
 
@@ -123,6 +124,7 @@ class DisplayUserDirectoryAdministration extends React.Component {
     this.handleCredentialTitleClicked = this.handleCredentialTitleClicked.bind(this);
     this.handleDirectoryConfigurationTitleClicked = this.handleDirectoryConfigurationTitleClicked.bind(this);
     this.handleSynchronizationOptionsTitleClicked = this.handleSynchronizationOptionsTitleClicked.bind(this);
+    this.handleConnectionTypeClicked = this.handleConnectionTypeClicked.bind(this);
     this.handleDefaultAdminClicked = this.handleDefaultAdminClicked.bind(this);
     this.handleDefaultGroupAdminClicked = this.handleDefaultGroupAdminClicked.bind(this);
 
@@ -131,6 +133,7 @@ class DisplayUserDirectoryAdministration extends React.Component {
     this.handlePortInputKeyUp = this.handlePortInputKeyUp.bind(this);
     this.handleDomainInputKeyUp = this.handleDomainInputKeyUp.bind(this);
     this.stopPropagation = this.stopPropagation.bind(this);
+    this.handleConnectionTypeChange = this.handleConnectionTypeChange.bind(this);
     this.handleUserToBeDefaultAdminClick = this.handleUserToBeDefaultAdminClick.bind(this);
     this.handleUserToBeDefaultGroupAdminClick = this.handleUserToBeDefaultGroupAdminClick.bind(this);
   }
@@ -139,6 +142,7 @@ class DisplayUserDirectoryAdministration extends React.Component {
    * Create DOM nodes or React elements references in order to be able to access them programmatically.
    */
   createRefs() {
+    this.connectionTypeRef = React.createRef();
     this.defaultAdminRef = React.createRef();
     this.defaultGroupAdminRef = React.createRef();
   }
@@ -165,6 +169,9 @@ class DisplayUserDirectoryAdministration extends React.Component {
     }
     if (this.defaultGroupAdminRef.current !== null && !this.defaultGroupAdminRef.current.contains(event.target)) {
       this.setState({openDefaultGroupAdmin: false});
+    }
+    if (this.connectionTypeRef.current !== null && !this.connectionTypeRef.current.contains(event.target)) {
+      this.setState({openConnectionType: false});
     }
   }
 
@@ -304,7 +311,16 @@ class DisplayUserDirectoryAdministration extends React.Component {
   }
 
   /**
-   * Handle the click on the credential title
+   * Handle the click on the connection type
+   */
+  handleConnectionTypeClicked() {
+    if (!this.hasAllInputDisabled()) {
+      this.setState({openConnectionType: !this.state.openConnectionType});
+    }
+  }
+
+  /**
+   * Handle the click on the default admin
    */
   handleDefaultAdminClicked() {
     if (!this.hasAllInputDisabled()) {
@@ -313,7 +329,7 @@ class DisplayUserDirectoryAdministration extends React.Component {
   }
 
   /**
-   * Handle the click on the credential title
+   * Handle the click on the default group admin
    */
   handleDefaultGroupAdminClicked() {
     if (!this.hasAllInputDisabled()) {
@@ -383,6 +399,17 @@ class DisplayUserDirectoryAdministration extends React.Component {
     const target = event.target;
     const userId = target.dataset.id;
     this.setState({defaultGroupAdmin: userId});
+    this.handleEnabledSaveButton();
+  }
+
+  /**
+   * Handle connection typeclick event
+   * @param event
+   */
+  handleConnectionTypeChange(event) {
+    const target = event.target;
+    const connectionType = target.dataset.id;
+    this.setState({connectionType});
     this.handleEnabledSaveButton();
   }
 
@@ -721,6 +748,17 @@ class DisplayUserDirectoryAdministration extends React.Component {
   }
 
   /**
+   * get the connection type
+   */
+  get connectionType() {
+    return {
+      plain: "ldap://",
+      ssl: "ldaps:// (ssl)",
+      tls: "ldaps:// (tls)"
+    };
+  }
+
+  /**
    * Display default group admin
    */
   displayDefaultGroupAdmin() {
@@ -791,14 +829,26 @@ class DisplayUserDirectoryAdministration extends React.Component {
                     <div className="singleline connection_info protocol_host_port clearfix required ad openldap">
                       <label>Server url</label>
                       <div className="input text field_protocol_host ad openldap">
-                        <div className="input text protocol ad openldap chosen-container chosen-container-single">
-                          <select id="connection-type-input" name="connectionType"
-                            className="chosen-single required form-element" required="required"
-                            value={this.state.connectionType} onChange={this.handleInputChange} disabled={this.hasAllInputDisabled()}>
-                            <option value="plain">ldap://</option>
-                            <option value="ssl">ldaps:// (ssl)</option>
-                            <option value="tls">ldaps:// (tls)</option>
-                          </select>
+                        <div onClick={this.handleConnectionTypeClicked} ref={this.connectionTypeRef}
+                          className={`chosen-container chosen-container-single connection-type ${this.hasAllInputDisabled() ? "chosen-disabled" : "chosen-container-active"} ${this.state.openConnectionType ? "chosen-with-drop" : ""}`}>
+                          <a className="chosen-single">
+                            <span id="connection-type-input">{this.connectionType[this.state.connectionType]}</span>
+                            <div>
+                              {!this.state.openDefaultGroupAdmin &&
+                              <Icon name="caret-down" baseline={true}/>
+                              }
+                              {this.state.openDefaultGroupAdmin &&
+                              <Icon name="caret-up" baseline={true}/>
+                              }
+                            </div>
+                          </a>
+                          <div className="chosen-drop">
+                            <ul className="chosen-results">
+                              <li className="active-result" onClick={this.handleConnectionTypeChange} data-id={"plain"}>ldap://</li>
+                              <li className="active-result" onClick={this.handleConnectionTypeChange} data-id={"ssl"}>ldaps:// (ssl)</li>
+                              <li className="active-result" onClick={this.handleConnectionTypeChange} data-id={"tls"}>ldaps:// (tls)</li>
+                            </ul>
+                          </div>
                         </div>
                         <div className="input text host ad openldap">
                           <input id="server-input" type="text" className="required fluid form-element" name="host"

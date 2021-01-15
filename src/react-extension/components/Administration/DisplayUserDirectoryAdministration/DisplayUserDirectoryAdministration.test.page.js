@@ -91,10 +91,17 @@ export default class DisplayUserDirectoryAdministrationPage {
   }
 
   /**
-   * Returns the connection type input element
+   * Returns the connection type element
    */
   get connectionType() {
     return this._page.container.querySelector('#connection-type-input');
+  }
+
+  /**
+   * Returns the connection type select element
+   */
+  get connectionTypeSelect() {
+    return this._page.container.querySelector('.chosen-container.chosen-container-single.connection-type');
   }
 
   /**
