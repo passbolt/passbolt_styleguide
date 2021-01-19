@@ -82,10 +82,24 @@ class ApiTriage extends Component {
    * @returns {string}
    */
   getCsrfToken() {
-    return document.cookie
-      .split('; ')
-      .find(row => row.startsWith('csrfToken'))
-      .split('=')[1];
+    const cookieString = document.cookie;
+    if (!cookieString) {
+      return undefined;
+    }
+    const cookieArray = cookieString.split('; ');
+    if (!cookieArray) {
+      return undefined;
+    }
+    const csrfCookie = cookieArray.find(row => row.startsWith('csrfToken'))
+    if (!csrfCookie) {
+      return undefined;
+    }
+    const csrfToken = csrfCookie.split('=');
+    if (csrfToken && csrfToken.length === 2) {
+      return csrfToken[1];
+    }
+
+    return undefined;
   }
 
   /**

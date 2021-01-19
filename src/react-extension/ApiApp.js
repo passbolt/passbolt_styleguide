@@ -66,6 +66,7 @@ class ApiApp extends Component {
       loggedInUser: null, // The logged in user
       siteSettings: null, // The site settings
       trustedDomain: this.baseUrl, // The site domain (use trusted domain for compatibility with browser extension applications)
+      basename: (new URL(this.baseUrl)).pathname, // Base path to be used for routing if needed ex. /workspace
       getApiClientOptions: this.getApiClientOptions.bind(this), // Get the api client options
 
       displayTestUserDirectoryDialogProps: {
@@ -137,10 +138,24 @@ class ApiApp extends Component {
    * @returns {string}
    */
   getCsrfToken() {
-    return document.cookie
-      .split('; ')
-      .find(row => row.startsWith('csrfToken'))
-      .split('=')[1];
+    const cookieString = document.cookie;
+    if (!cookieString) {
+      return undefined;
+    }
+    const cookieArray = cookieString.split('; ');
+    if (!cookieArray) {
+      return undefined;
+    }
+    const csrfCookie = cookieArray.find(row => row.startsWith('csrfToken'))
+    if (!csrfCookie) {
+      return undefined;
+    }
+    const csrfToken = csrfCookie.split('=');
+    if (csrfToken && csrfToken.length === 2) {
+      return csrfToken[1];
+    }
+
+    return undefined;
   }
 
   /**
@@ -212,7 +227,7 @@ class ApiApp extends Component {
                 <ShareActionFeedbacks/>
                 { /* Session expired handler */}
                 <HandleSessionExpired/>
-                <Router>
+                <Router basename={this.state.basename}>
                   <NavigationContextProvider>
                     <Switch>
                       <Route exact path="/app/administration">
