@@ -87,10 +87,22 @@ class PasswordSearchBar extends Component {
   search(text) {
     clearTimeout(this.state.debounceTimeoutId);
     const debounceTimeoutId = setTimeout(() => {
-      const filter = {type: ResourceWorkspaceFilterTypes.TEXT, payload: text};
+      const filter = this.generateFilter(text);
       this.props.history.push({pathname: '/app/passwords', state: {filter}});
     }, 300);
     this.setState({debounceTimeoutId, text});
+  }
+
+  /**
+   * Generate the filter to apply on resources
+   * @param text
+   * @returns {{payload, type: string}|{type: string}}
+   */
+  generateFilter(text) {
+    if (text.length > 0) {
+      return {type: ResourceWorkspaceFilterTypes.TEXT, payload: text};
+    }
+    return {type: ResourceWorkspaceFilterTypes.ALL};
   }
 
   /**
