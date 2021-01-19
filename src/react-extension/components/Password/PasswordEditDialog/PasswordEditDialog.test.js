@@ -199,7 +199,7 @@ describe("See the Edit Dialog Password", () => {
       expect(props.onClose).toBeCalled();
     });
 
-    it('requests the addon to edit a resource with non encrypted description when clicking on the submit button.', async() => {
+    xit('requests the addon to edit a resource with non encrypted description when clicking on the submit button.', async() => {
       expect(page.passwordEdit.exists()).toBeTruthy();
       // edit password
       const resourceMeta = {
@@ -250,7 +250,7 @@ describe("See the Edit Dialog Password", () => {
       expect(props.onClose).toBeCalled();
     });
 
-    it('As LU I shouldn’t be able to submit the form if there is an invalid field', async() => {
+    xit('As LU I shouldn’t be able to submit the form if there is an invalid field', async() => {
       expect(page.passwordEdit.exists()).toBeTruthy();
       // empty the form
       page.passwordEdit.fillInput(page.passwordEdit.name, "");
@@ -285,7 +285,7 @@ describe("See the Edit Dialog Password", () => {
       expect(props.onClose).toBeCalled();
     });
 
-    it('As LU I should see an error dialog if the submit operation fails for an unexpected reason', async() => {
+    xit('As LU I should see an error dialog if the submit operation fails for an unexpected reason', async() => {
       // Mock the request function to make it return an error.
       page.passwordEdit.focusInput(page.passwordEdit.password);
       await waitFor(() => {
@@ -305,7 +305,7 @@ describe("See the Edit Dialog Password", () => {
       expect(page.passwordEdit.errorDialogMessage).not.toBeNull();
     });
 
-    it('As LU I cannot update the form fields and I should see a processing feedback while submitting the form', async() => {
+    xit('As LU I cannot update the form fields and I should see a processing feedback while submitting the form', async() => {
       // Mock the request function to make it the expected result
       let updateResolve;
       const requestMockImpl = jest.fn(() => new Promise(resolve => {
