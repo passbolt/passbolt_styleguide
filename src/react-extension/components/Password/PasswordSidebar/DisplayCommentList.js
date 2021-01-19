@@ -126,9 +126,16 @@ class DisplayCommentList extends React.Component {
                   <div className="right-column">
                     <p> {comment.content} </p>
                     <div className="metadata">
+                      {this.isOwner(comment) &&
+                      <span className="author username">
+                        You
+                      </span>
+                      }
+                      {!this.isOwner(comment) &&
                       <span className="author username">
                         {comment.creator.profile.first_name} {comment.creator.profile.last_name}
                       </span>
+                      }
                       <span
                         className="modified">{moment(comment.created).fromNow()}
                       </span>
