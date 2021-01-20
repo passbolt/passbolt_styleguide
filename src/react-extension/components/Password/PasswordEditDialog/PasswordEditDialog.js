@@ -85,9 +85,11 @@ class PasswordEditDialog extends Component {
   }
 
   async initialize() {
-    await this.decryptSecret();
-    const encrypt = this.mustEncryptDescription();
-    this.setState({encryptDescription: encrypt});
+    const isDecrypted = await this.decryptSecret();
+    if (isDecrypted) {
+      const encrypt = this.mustEncryptDescription();
+      this.setState({encryptDescription: encrypt});
+    }
   }
 
   /*
@@ -449,8 +451,8 @@ class PasswordEditDialog extends Component {
    * Handle close button click.
    */
   handleClose() {
-    this.props.onClose();
     this.context.setContext({passwordEditDialogProps: null});
+    this.props.onClose();
   }
 
   /**
@@ -490,16 +492,11 @@ class PasswordEditDialog extends Component {
         description: secretDto.description,
         isSecretDecrypting: false
       });
+      return true;
     } catch (error) {
-      this.passwordInputRef.current.blur();
-      this.setState({
-        isSecretDecrypting: false
-      });
-
+      this.handleClose();
       return false;
     }
-
-    return true;
   }
 
   /**
@@ -720,7 +717,7 @@ class PasswordEditDialog extends Component {
               </label>
               <textarea id="edit-password-form-description" name="description" maxLength="10000"
                 className="required" placeholder={this.getDescriptionPlaceholder()} value={this.state.description}
-                disabled={this.hasAllInputDisabled() ||this.isDescriptionDisabled()} onChange={this.handleInputChange} ref={this.descriptionInputRef}
+                disabled={this.hasAllInputDisabled() || this.isDescriptionDisabled()} onChange={this.handleInputChange} ref={this.descriptionInputRef}
                 onFocus={this.handleDescriptionInputFocus} onBlur={this.handleDescriptionInputBlur}>
               </textarea>
               {this.state.descriptionError &&
