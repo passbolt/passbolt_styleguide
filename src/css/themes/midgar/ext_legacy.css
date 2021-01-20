@@ -4173,7 +4173,7 @@ input[type=email].fluid {
 }
 .dialog label {
   clear: both;
-  font-size: 0.938em;
+  font-size: 0.9375em;
   /* 15px */
   line-height: 1.6em;
   /* 24px */
@@ -5578,7 +5578,7 @@ input[type=email].fluid {
   margin-top: 0.5em;
 }
 .passphrase-entry.login-form .input.checkbox label {
-  font-size: 0.938em;
+  font-size: 0.9375em;
 }
 /* password share tab */
 .dialog .share-tab {

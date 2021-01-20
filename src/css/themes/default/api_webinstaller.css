@@ -4905,7 +4905,7 @@ input[type=email].fluid {
 }
 .dialog label {
   clear: both;
-  font-size: 0.938em;
+  font-size: 0.9375em;
   /* 15px */
   line-height: 1.6em;
   /* 24px */
@@ -5170,7 +5170,7 @@ input[type=email].fluid {
   display: block;
 }
 .panel .navigation li {
-  font-size: 0.938em;
+  font-size: 0.9375em;
   /* 15px from 16px base */
   padding: 0.469em 0 0.469em 1.333em;
   border-left: 5px solid #FFF;

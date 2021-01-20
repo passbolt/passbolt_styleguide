@@ -5112,7 +5112,7 @@ article table.table-parameters tbody tr td em {
 }
 .dialog label {
   clear: both;
-  font-size: 0.938em;
+  font-size: 0.9375em;
   /* 15px */
   line-height: 1.6em;
   /* 24px */
@@ -5390,7 +5390,7 @@ article table.table-parameters tbody tr td em {
   display: block;
 }
 .panel .navigation-help ul li a {
-  font-size: 0.938em;
+  font-size: 0.9375em;
   /* 15px from 16px base */
   padding: 0.469em 0 0.469em 1.333em;
   border-left: 5px solid #FFF;
@@ -6466,13 +6466,13 @@ input[type="search"]::-webkit-search-cancel-button {
 }
 .page.search .search-results a.url {
   color: #009900;
-  font-size: 0.938em;
+  font-size: 0.9375em;
 }
 .page.search .search-results a.url:hover {
   border: 0;
 }
 .page.search .search-results p {
-  font-size: 0.938em;
+  font-size: 0.9375em;
 }
 .page.search .no-result .suggestions li {
   margin-left: 1.1em;
