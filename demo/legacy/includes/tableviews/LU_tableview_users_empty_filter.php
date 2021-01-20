@@ -12,7 +12,7 @@
 					<div class="input checkbox"><label for="checkbox-select-all-people">select all</label></div>
 				</th>
 
-				<th class="js_grid_column js_grid_column_avatar grid_column_avatar s1-cell cell_avatar">
+				<th class="js_grid_column js_grid_column_avatar grid_column_avatar s1-cell cell-avatar">
 
 				</th>
 

@@ -17,6 +17,7 @@
 /* tooltip */
 /* loading animation */
 /* svg fill */
+/* favorite icon fill */
 /* ==========================================================================
  * Reset is a mix of :
  *
@@ -853,6 +854,9 @@ p {
   font-size: 0.688em;
   /* 11px base 16 */
 }
+.capitalize {
+  text-transform: capitalize;
+}
 /* lists */
 article ul {
   list-style-type: circle;
@@ -891,7 +895,8 @@ article ol.lower-alpha {
   list-style-type: lower-alpha;
 }
 ul.checklist li:before {
-  content: '✔';
+  content: '\2714';
+  /* unicode character  ✔ */
   width: 1em;
   margin-right: 1em;
 }
@@ -3279,7 +3284,7 @@ ul.checklist li:before {
   position: relative;
 }
 .button .svg-icon + span:not(.visuallyhidden) {
-  margin-left: 2px;
+  margin-left: 0.5em;
   display: inline-block;
 }
 .button:hover .svg-icon svg,
@@ -3316,6 +3321,15 @@ a.disabled .svg-icon svg {
 }
 a.disabled:hover .svg-icon svg {
   fill: #888;
+}
+a.fav .svg-icon svg {
+  fill: #D40101;
+}
+a.unfav {
+  display: inline-flex;
+}
+a.unfav .svg-icon.star svg {
+  fill: #DDD;
 }
 /*
 	Generic buttons
@@ -3572,7 +3586,8 @@ label {
 	.required		- additional red star
 */
 .required label:after {
-  content: " *";
+  content: " \002A";
+  /* unicode character * */
   color: #D40101;
   font-weight: bold;
 }
@@ -3631,7 +3646,8 @@ textarea:focus,
 input[type=password]:focus,
 input[type=search]:focus,
 input[type=text]:focus,
-input[type=number]:focus input[type=email]:focus {
+input[type=number]:focus,
+input[type=email]:focus {
   box-shadow: inset 1px 1px 2px rgba(0, 0, 0, 0.2);
   border: 1px solid #2894DF;
 }
@@ -3639,15 +3655,15 @@ input[type=number]:focus input[type=email]:focus {
   box-shadow: inset 1px 1px 2px rgba(0, 0, 0, 0.2);
   border: 1px solid #2894DF;
 }
-textarea:disabled,
-input[type=email]:disabled,
 input[type=password]:disabled,
 input[type=search]:disabled,
 input[type=text]:disabled,
-input[type=number]:disabled {
+input[type=number]:disabled,
+input[type=email]:disabled,
+textarea:disabled {
   border: 1px solid #DDD;
   box-shadow: 0 0 0 0;
-  cursor: default;
+  cursor: pointer;
   background: #F3F3F3;
 }
 /*
@@ -3658,9 +3674,8 @@ input[type=number]:disabled {
 	.lage		 	 - make the box bigger
 */
 textarea {
-  height: 3.6em;
-  /* 4 char (default input length) x 1em (average char length) + .6em (padding) */
-  line-height: 16px;
+  height: 4.8em;
+  line-height: 1.5em;
   resize: none;
 }
 .textarea.large textarea {
@@ -3669,6 +3684,11 @@ textarea {
 }
 textarea.message_notice {
   margin-bottom: 0;
+}
+textarea.full_report {
+  height: 12em;
+  line-height: 1.5em;
+  resize: none;
 }
 /* text and textarea */
 .text.input .input-addon,
@@ -3908,17 +3928,12 @@ input[type=email].fluid {
   width: 93%;
 }
 .form-content .accordion h3.accordion-header a {
-  margin-left: 1em;
   border: 0;
 }
 .form-content .accordion h3.accordion-header a:hover {
   border: 0;
 }
 .form-content .accordion h3.accordion-header a:before {
-  margin-left: -1.25em;
-  margin-top: 0.25em;
-  content: "\f0d7";
-  /* caret down */
   font: normal normal normal 1em FontAwesome;
   text-rendering: auto;
   -webkit-font-smoothing: antialiased;
@@ -3927,10 +3942,6 @@ input[type=email].fluid {
   height: 1em;
   position: absolute;
   text-align: center;
-}
-.form-content .accordion.closed h3.accordion-header a:before {
-  content: "\f0da";
-  /* caret right */
 }
 .form-content table {
   width: 100%;
@@ -3984,100 +3995,93 @@ input[type=email].fluid {
  * Page layout
  */
 .page {
-  min-width: 320px;
-}
-.page,
-.panel,
-.header {
   width: 100%;
-}
-.page,
-.panel {
-  position: absolute;
-  overflow: auto;
-}
-.header {
-  overflow: hidden;
-}
-.page {
+  min-width: 320px;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
+  position: absolute;
+  overflow: auto;
+  /* main workspace panels  position depend on how many headers are there */
+  /* Grid */
+  /* if the other grid is used
+   don't center the grid inside main panel */
 }
-/* headers */
-.header.first {
-  min-height: 2.4em;
-}
-.header.second {
-  top: 2.375em;
-  height: 4.5em;
-}
-.header.third {
-  top: 6.875em;
-  height: 3em;
-}
-/* main workspace panel */
-.panel {
+.page .panel {
   height: 100%;
+  width: 100%;
+  position: absolute;
+  overflow: auto;
 }
-.panel.main {
+.page .panel.main {
   top: 10em;
   bottom: 2.45em;
   height: auto;
   padding: 0;
 }
-.panel.main .row {
+.page .panel.main .row {
   padding-left: 0;
 }
-.panel.main .panel.left {
+.page .panel.main .panel.left {
   background: #ffffff;
 }
-/* its position depends on how many headers are there */
-.header.second + .panel.main {
+.page .header.second + .panel.main {
   top: 6.875em;
 }
-.header.third + .panel.main {
+.page .header.third + .panel.main {
   top: 10em;
   border-top: 1px solid #DDD;
 }
-/* columns */
-.panel,
-.col1,
-.col2,
-.col3,
-.col2_3 {
+.page .header {
+  width: 100%;
+  overflow: hidden;
+  /* headers */
+}
+.page .header.first {
+  min-height: 2.4em;
+}
+.page .header.second {
+  top: 2.375em;
+  height: 4.5em;
+}
+.page .header.third {
+  top: 6.875em;
+  height: 3em;
+}
+.page .col1,
+.page .col2,
+.page .col3,
+.page .col2_3 {
   position: absolute;
 }
-.col1,
-.panel.left {
+.page .col1,
+.page .panel.left {
   width: 17.25%;
   box-sizing: border-box;
 }
-.panel.middle {
+.page .panel.middle {
   width: 82%;
   left: 18%;
   overflow: hidden;
 }
-.panel.middle.scroll {
+.page .panel.middle.scroll {
   overflow-y: scroll;
 }
-.col2 {
+.page .col2 {
   width: 70%;
   left: 18%;
 }
-.col3,
-.panel.right {
+.page .col3,
+.page .panel.right {
   width: 24%;
   left: 75%;
 }
-.col2_3 {
+.page .col2_3 {
   width: 81.5%;
   left: 18%;
 }
-/* if the other grid is used
-   don't center the grid inside main panel */
-.panel.main .grid-responsive-12 {
+.page .panel.main .grid-responsive-12 {
   float: left;
   width: 100%;
   max-width: none;
@@ -4086,40 +4090,40 @@ input[type=email].fluid {
 }
 /* hide left column when there is no space */
 @media all and (max-width: 1024px) {
-  .panel.left {
+  .page .panel.left {
     display: none;
   }
-  .header.second .col2 {
+  .page .header.second .col2 {
     display: none;
   }
-  .header.second .col2_3 {
+  .page .header.second .col2_3 {
     display: none;
   }
-  .header.third {
+  .page .header.third {
     height: 4.5em;
   }
-  .header.third .col1,
-  .header.third .col2,
-  .header.third .col2_3 {
+  .page .header.third .col1,
+  .page .header.third .col2,
+  .page .header.third .col2_3 {
     position: relative;
     float: left;
     left: auto;
     width: auto;
   }
-  .header.third .col3 {
+  .page .header.third .col3 {
     display: none;
   }
-  .panel.main .panel.left {
+  .page .panel.main .panel.left {
     display: none;
   }
-  .panel.main .panel.middle {
+  .page .panel.main .panel.middle {
     width: 100%;
     left: 0;
   }
-  .panel.main .row {
+  .page .panel.main .row {
     padding-left: 0.5em;
   }
-  .panel.main .panel.aside {
+  .page .panel.main .panel.aside {
     min-width: auto;
   }
 }
@@ -4832,7 +4836,7 @@ article table.table-parameters tbody tr td em {
   color: #333;
 }
 .logo.no-img {
-  background: transparent url('../img/logo/logo.png') 0 0 no-repeat;
+  background: transparent url('../img/logo/logo.svg') 0 0 no-repeat;
   background-size: 150px auto;
   width: 150px;
   height: 30px;
@@ -4925,6 +4929,10 @@ article table.table-parameters tbody tr td em {
   bottom: 2.35em;
   z-index: 991;
 }
+.update-loading-bar .progress-bar span {
+  transition: width 2s;
+  transition-timing-function: cubic-bezier(0.45, 1.27, 0.76, 0.9);
+}
 /*
  * Notification
  */
@@ -4942,6 +4950,8 @@ article table.table-parameters tbody tr td em {
   position: relative;
   left: 50%;
   float: left;
+  clear: both;
+  margin-bottom: 1em;
 }
 .notification-container .notification .message {
   box-shadow: 0px 0px 10px 0px #333;
@@ -4950,17 +4960,22 @@ article table.table-parameters tbody tr td em {
   position: relative;
   left: -50%;
   float: left;
-  background: #FEF0BF;
-  border: 1px solid #fccd28;
   color: #000;
   font-weight: normal;
   width: auto;
 }
-.notification-container .notification .message strong {
+.notification-container .notification .message .content {
+  margin-right: 1em;
+}
+.notification-container .notification .message .content strong {
   text-transform: capitalize;
 }
-.notification-container .notification .message strong:after {
-  content: ':';
+.notification-container .notification .message .action {
+  border-bottom: none;
+  margin-left: 0.4em;
+}
+.notification-container .notification .message .action:hover .svg-icon svg {
+  fill: #000000;
 }
 /*
  * Breadcrumbs
@@ -4972,17 +4987,20 @@ article table.table-parameters tbody tr td em {
   background: #FFF;
 }
 .breadcrumbs ul {
-  padding-top: 0.2em;
+  padding-top: 0.45em;
   margin-left: 0.1875em;
 }
 .breadcrumbs ul li {
-  display: inline;
+  display: inline-block;
   font-size: 0.8em;
   /* 12px/base16>15 */
   margin-left: 0.25em;
+  max-width: 25%;
+  float: left;
 }
 .breadcrumbs ul li:before {
-  content: "›";
+  content: "\203A";
+  /* unicode character › */
   margin-right: 0.5em;
 }
 .breadcrumbs ul li:first-child {
@@ -5094,7 +5112,7 @@ article table.table-parameters tbody tr td em {
 }
 .dialog label {
   clear: both;
-  font-size: 0.938em;
+  font-size: 0.9375em;
   /* 15px */
   line-height: 1.6em;
   /* 24px */
@@ -5262,7 +5280,7 @@ article table.table-parameters tbody tr td em {
  * Footer
  */
 .footer {
-  margin-top: 0em;
+  margin-top: 0;
   position: fixed;
   bottom: 0;
   padding: 1.167em 1.5% 0 0.5%;
@@ -5282,6 +5300,10 @@ article table.table-parameters tbody tr td em {
 .footer .footer-links li {
   display: inline;
   margin-right: 1.5em;
+}
+.footer .footer-links li.error-message a {
+  background-color: #FFF;
+  color: #D40101;
 }
 .footer .footer-links li .github-star {
   display: inline;
@@ -5368,7 +5390,7 @@ article table.table-parameters tbody tr td em {
   display: block;
 }
 .panel .navigation-help ul li a {
-  font-size: 0.938em;
+  font-size: 0.9375em;
   /* 15px from 16px base */
   padding: 0.469em 0 0.469em 1.333em;
   border-left: 5px solid #FFF;
@@ -5535,11 +5557,13 @@ table.table-info.vertical td .alt.side {
 }
 table.table-info td .alt.side:before,
 table.table-info.vertical td .alt.side:before {
-  content: "(";
+  content: "\0028";
+  /* unicode character ( */
 }
 table.table-info td .alt.side:after,
 table.table-info.vertical td .alt.side:after {
-  content: ")";
+  content: "\0029";
+  /* unicode character ) */
 }
 table.table-info td + td,
 table.table-info.vertical td + td {
@@ -5549,18 +5573,31 @@ table.table-info.vertical td + td {
 /* horizontal tableview */
 table.table-info.horizontal {
   width: 100%;
-  border-collapse: separate;
+  border-collapse: collapse;
   padding: 0;
   border: 1px solid #DDD;
   margin-bottom: 1em;
 }
+table.table-info.horizontal.with-borders td,
+table.table-info.horizontal.with-borders th {
+  border-right: 1px solid #DDD;
+}
 table.table-info.horizontal td,
 table.table-info.horizontal th {
-  padding: 0.5em;
+  padding: 0.5em 0.5em 0.5em 0.75em;
   margin: 0;
 }
 table.table-info.horizontal th {
   border-bottom: 1px solid #DDD;
+}
+table.table-info.horizontal th a {
+  display: block;
+  border: 0;
+}
+table.table-info.horizontal th a.sortable .svg-icon svg {
+  top: 0.15em;
+  position: relative;
+  margin-left: 0.5em;
 }
 table.table-info.horizontal thead tr {
   background: #FFF;
@@ -5570,6 +5607,35 @@ table.table-info.horizontal tbody {
 }
 table.table-info.horizontal tbody tr:nth-child(odd) {
   background: #FFF;
+}
+table.table-info.horizontal tbody tr:hover {
+  background: #f8f8f8;
+}
+.table-info-pagination .pagination-limit {
+  margin-top: -0.5em;
+  float: left;
+}
+.table-info-pagination .pagination-limit label {
+  float: left;
+  font-weight: normal;
+}
+.table-info-pagination .pagination-limit select {
+  float: left;
+  margin: 0.35em;
+}
+.table-info-pagination .pagination-pages {
+  float: right;
+}
+.table-info-pagination .pagination-pages .page-location {
+  float: left;
+}
+.table-info-pagination .pagination-pages .page-buttons {
+  float: right;
+}
+.table-info-pagination .pagination-pages .button {
+  float: left;
+  margin: -0.5em 0 0 0.75em;
+  padding: 0.35em 0.75em;
 }
 /**
  * Tooltips!
@@ -6324,16 +6390,22 @@ input[type="search"]::-webkit-search-cancel-button {
   .page.error.error-400 .row {
     max-width: 400px;
     margin: auto;
-    padding-top: 440px;
   }
-  .page.error.error-404 .grid {
-    background: transparent url('../img/illustrations/birds6_850.png') center 1.5em no-repeat;
-    background-size: 500px auto;
+  .page.error.error-500 .grid:before,
+  .page.error.error-404 .grid:before,
+  .page.error.error-400 .grid:before {
+    font-size: 15em;
+    font-weight: bold;
+    color: #333;
   }
-  .page.error.error-400 .grid,
-  .page.error.error-500 .grid {
-    background: transparent url('../img/illustrations/birds3_850.png') center 3em no-repeat;
-    background-size: 640px auto;
+  .page.error.error-404 .grid:before {
+    content: "404";
+  }
+  .page.error.error-400 .grid:before {
+    content: "400";
+  }
+  .page.error.error-500 .grid:before {
+    content: "500";
   }
 }
 .page.search .search-results h2 {
@@ -6355,13 +6427,13 @@ input[type="search"]::-webkit-search-cancel-button {
 }
 .page.search .search-results a.url {
   color: #009900;
-  font-size: 0.938em;
+  font-size: 0.9375em;
 }
 .page.search .search-results a.url:hover {
   border: 0;
 }
 .page.search .search-results p {
-  font-size: 0.938em;
+  font-size: 0.9375em;
 }
 .page.search .no-result .suggestions li {
   margin-left: 1.1em;

@@ -1,7 +1,7 @@
-import React, { Component} from "react";
-import MainMenu from "./components/Common/MainMenu/MainMenu";
+import React, {Component} from "react";
+import MainMenu from "./components/Common/Navigation/MainMenu/MainMenu";
 import ReportsWorkspace from "./components/Workspace/Reports/ReportsWorkspace";
-import Footer from "./components/Common/Footer/Footer";
+import Footer from "./components/Common/Navigation/Footer/Footer";
 import AppContext from "./contexts/AppContext";
 import Workspace from "./components/Workspace/Passwords/Workspace";
 
@@ -17,7 +17,7 @@ import {
   Link
 } from "react-router-dom";
 
-class App extends Component{
+class App extends Component {
   /**
    * Constructor
    * @param {Object} props
@@ -31,7 +31,6 @@ class App extends Component{
 
   componentDidMount() {
     this.setState({"loading": false});
-
 
     this.initServerSettingsWithDefaults();
     this.getSettings();
@@ -55,7 +54,7 @@ class App extends Component{
         "url": baseUrl
       }
     };
-    this.setState({ "appContext" : { ...this.state.appContext, serverSettings: serverSettings } });
+    this.setState({"appContext": {...this.state.appContext, serverSettings: serverSettings}});
   }
 
   getDefaultState() {
@@ -67,7 +66,7 @@ class App extends Component{
         "accountSettings": {},
         "currentUser": {}
       }
-    }
+    };
   }
 
   getBaseUrl() {
@@ -80,38 +79,35 @@ class App extends Component{
   }
 
   getSettings() {
+    console.log(config);
     fetch(config.url.settings)
-    .then(response => {
-      return response.json()
-    })
-    .then((serverSettings) => {
-      this.state.appContext.serverSettings = serverSettings;
-      this.setState({ "appContext" : { ...this.state.appContext, serverSettings: serverSettings } });
-    });
+      .then(response => response.json())
+      .then(serverSettings => {
+        this.state.appContext.serverSettings = serverSettings;
+        this.setState({"appContext": {...this.state.appContext, serverSettings: serverSettings}});
+      });
   }
 
   getLoggedInUser() {
     fetch(config.url.currentUser)
-    .then(response => {
-      return response.json()
-    })
-    .then((currentUser) => {
-      this.state.appContext.currentUser = currentUser.body;
-      this.setState({ "appContext" : { ...this.state.appContext, currentUser: currentUser.body } });
-    });
+      .then(response => response.json())
+      .then(currentUser => {
+        this.state.appContext.currentUser = currentUser.body;
+        this.setState({"appContext": {...this.state.appContext, currentUser: currentUser.body}});
+      });
   }
 
   getAccountSettings() {
     // TODO: Only make the call if allowed.
-    fetch(config.url.accountSettings).then((accountSettings) => {
+    fetch(config.url.accountSettings).then(accountSettings => {
       this.state.appContext.accountSettings = accountSettings.body;
-      this.setState({ "appContext" : { ...this.state.appContext, accountSettings: accountSettings } });
+      this.setState({"appContext": {...this.state.appContext, accountSettings: accountSettings}});
     });
   }
 
   handleWorkspaceSelect(menuItem) {
     // If we selected anything else than reports, redirect to the corresponding url.
-    if(menuItem.id === 'reports') {
+    if (menuItem.id === 'reports') {
       console.log("display report");
       return;
     }
@@ -119,7 +115,7 @@ class App extends Component{
     if (process.env.NODE_ENV === 'development') {
       console.log("go to url", menuItem.url);
     } else {
-      document.location.href= menuItem.url;
+      document.location.href = menuItem.url;
     }
   }
 
@@ -133,9 +129,9 @@ class App extends Component{
             </h1>
           </div>
           <div className="progress-bar-wrapper">
-        <span className="progress-bar big infinite">
-          <span className="progress "></span>
-        </span>
+            <span className="progress-bar big infinite">
+              <span className="progress "></span>
+            </span>
           </div>
           <p className="details">loading, please wait...</p>
         </div>
@@ -146,7 +142,7 @@ class App extends Component{
   MainMenu() {
     return (
       <div className="home">
-        <div style={{padding:'1em'}}>
+        <div style={{padding: '1em'}}>
           <h1>Reports</h1>
           <ul>
             <li>
@@ -171,36 +167,36 @@ class App extends Component{
   }
 
 
-  render(){
-    return(
-        <AppContext.Provider value={this.state.appContext}>
-          <Router basename="/app">
-            <div>
-              <div id="container" className="page">
-                {this.state.loading &&
+  render() {
+    return (
+      <AppContext.Provider value={this.state.appContext}>
+        <Router basename="/app">
+          <div>
+            <div id="container" className="page">
+              {this.state.loading &&
                   <this.LaunchingScreen/>
-                }
-                <div className="header first">
-                  <MainMenu onClick={this.handleWorkspaceSelect} />
-                </div>
-                <Switch>
-                  <Route path="/passwords">
-                    <Workspace onMenuItemClick={this.handleWorkspaceSelect}/>
-                  </Route>
-                  <Route path="/reports">
-                    <ReportsWorkspace onMenuItemClick={this.handleWorkspaceSelect}/>
-                  </Route>
-                  {process.env.NODE_ENV === 'development' &&
+              }
+              <div className="header first">
+                <MainMenu onClick={this.handleWorkspaceSelect} />
+              </div>
+              <Switch>
+                <Route path="/passwords">
+                  <Workspace onMenuItemClick={this.handleWorkspaceSelect}/>
+                </Route>
+                <Route path="/reports">
+                  <ReportsWorkspace onMenuItemClick={this.handleWorkspaceSelect}/>
+                </Route>
+                {process.env.NODE_ENV === 'development' &&
                   <Route path="/">
                     <this.MainMenu/>
                   </Route>
-                  }
-                </Switch>
-              </div>
-              <Footer/>
+                }
+              </Switch>
             </div>
-          </Router>
-        </AppContext.Provider>
+            <Footer/>
+          </div>
+        </Router>
+      </AppContext.Provider>
     );
   }
 }

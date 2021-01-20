@@ -11,7 +11,7 @@
         <span class="visuallyhidden">Edit</span>
         </a>
 
-        <p class="description_content">
+        <p class="description-content">
             <?php if (!isset($_GET['empty'])) { ?>
                 Inkscape is a professional vector graphics editor. It is free and open source.
             <?php } else { ?>
@@ -59,16 +59,16 @@
     // Demo only
     function edit_description() {
       $('#js_rs_details_description #js_rs_details_edit_description').removeClass('hidden');
-      $('#js_rs_details_description .description_content').addClass('hidden');
+      $('#js_rs_details_description .description-content').addClass('hidden');
       return false;
     }
 
-    $('.description_content').click(edit_description);
+    $('.description-content').click(edit_description);
     $('#js_rs_details_description #js_edit_description_button').click(edit_description);
 
     $('#js_rs_details_description .description-submit').click(function() {
       $('#js_rs_details_description #js_rs_details_edit_description').addClass('hidden');
-      $('#js_rs_details_description .description_content').removeClass('hidden');
+      $('#js_rs_details_description .description-content').removeClass('hidden');
       return false;
     });
 </script>

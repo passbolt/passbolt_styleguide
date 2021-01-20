@@ -1,123 +1,128 @@
 /*
  * Profile user card
  */
- .user.profile {
-    max-width: 16em;
-    float: right;
-    border: 1px solid @border-default;
-    margin-top: .5em;
-    background: @background-lighter;
-    overflow: hidden;
-    cursor: pointer;
-    border-radius: 3px;
+.user.profile {
+  max-width: 16em;
+  float: right;
+  border: 1px solid @border-default;
+  margin-top: .5em;
+  background: @background-lighter;
+  overflow: hidden;
+  cursor: pointer;
+  border-radius: 3px;
+  .button-background();
+
+  .more {
     .button-background();
+    border-left: 1px dotted @border-default;
+  }
 
-    .more {
-        .button-background();
-        border-left: 1px dotted @border-default;
+  /* fixed fluid fixed layout */
+  .left-cell,
+  .right-cell,
+  .center-cell-wrapper {
+    float: left;
+    height: 3.125em; /* 50px */
+  }
+  .center-cell-wrapper {
+    width: 100%;
+  }
+  .center-cell {
+    margin: 0 0 0 3.125em;
+    overflow: hidden;
+  }
+  .left-cell {
+    width: 3.125em;
+    margin-left: -100%;
+  }
+  .right-cell {
+    width: 1.6875em;
+    margin-left: -1.75em;
+  }
+
+  /* user card styling */
+  .picture img {
+    width: 2.6em;
+    padding: 0.28em 0.35em 0.35em 0.35em;
+    border-radius: 50%;
+  }
+  .details {
+    float: left;
+    font-size: .875em;
+    padding: .357em 1em .5em 1em; /* 5/14/7/14px */
+
+    .name,
+    .email {
+      width: 11em;
+      float: left;
+      clear: both;
+      text-overflow: clip;
+      word-wrap: break-word;
+      overflow: hidden;
+      display: inline-block;
+      line-height: normal;
+      .ellipsis();
+    }
+    .name {
+      font-weight: bold;
+      padding-top: 0;
+    }
+    .email {
+      padding-bottom: 0;
+    }
+  }
+
+  .more a {
+    position: absolute;
+    display: block;
+    border: 0;
+    color: @font-dim;
+
+    .svg-icon {
+      margin: 16px 0 0 7px;
+      display: inline-block;
+      svg {
+        fill: @fill-color;
+      }
     }
 
-    /* fixed fluid fixed layout */
-    .left-cell,
-    .right-cell,
-    .center-cell-wrapper {
-        float: left;
-        height: 3.125em; /* 50px */
-    }
-    .center-cell-wrapper {
-        width: 100%;
-    }
-    .center-cell {
-        margin: 0 1.75em 0 3.125em;
-        overflow: hidden;
-    }
-    .left-cell {
-        width: 3.125em;
-        margin-left: -100%;
-    }
-    .right-cell {
-        width: 1.6875em;
-        margin-left: -1.75em;
+    &:hover {
+      color: @blacker;
+
+      svg {
+        fill: @fill-hover-color;
+      }
     }
 
-    /* user card styling */
-    .picture img {
-        width: 2.6em;
-        padding: 0.28em 0.35em 0.35em 0.35em;
-        border-radius: 50%;
+    span:last-child {
+      visibility: hidden;
     }
+  }
 
-    .details {
-        float: left;
-        height: 2.8125em;
-        font-size: .9em;
-        padding: .3125em 1em; /* 5/10px */
+  .dropdown-content {
+    top: 59px;
+    max-width: 16em;
+    width: 100%;
+    background: @dropdown-background;
 
-        .name,
-        .email {
-            width:11em;
-            float: left;
-            clear: both;
-            text-overflow: clip;
-            word-wrap: break-word;
-            overflow: hidden;
-            display: inline-block;
-            line-height: normal;
-            .ellipsis();
-        }
-        .name {
-            font-weight: bold;
-            padding-top: 0;
-        }
-        .email {
-            padding-bottom: 0;
-        }
+    &.visible {
+      display: block;
     }
-    .more a {
-        position:absolute;
-        display: block;
-        border: 0;
-        color:@font-dim;
-        .svg-icon {
-            margin: 18px 0 0 7px;
-            display: inline-block;
-        }
-	    .svg-icon svg {
-            fill: @fill-color;
-        }
-        &:hover {
-            color: @blacker;
-            svg {
-                fill: @fill-hover-color;
-            }
-        }
-        span:last-child {
-            visibility: hidden;
-        }
-    }
-    .dropdown-content {
-        top: 59px;
-        max-width: 18em;
-        width: 80%;
-        background: @dropdown-background;
-
-        &.visible {
-            display: block;
-        }
-    }
+  }
 }
 
 /* hide left column when there is no space */
 @media all and (max-width: 1024px) {
-    .user.profile {
-        display: block;
-        width: auto;
+  .user.profile {
+    display: block;
+    width: auto;
 
-        .center-cell {
-            display: none;
-        }
-        .right-cell {
-            display: none;
-        }
+    .center-cell {
+      display: none;
     }
+
+    .right-cell {
+      display: none;
+    }
+  }
 }

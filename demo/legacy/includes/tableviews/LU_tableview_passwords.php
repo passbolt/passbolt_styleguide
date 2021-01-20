@@ -10,7 +10,7 @@
             <tbody>
             <?php for ($i = 0; $i < sizeof($resources); $i++): $resource = $resources[$i]; ?>
                 <tr class="<?php if (!$i) echo 'selected'; ?>" id="resource<?= $resource['id']; ?>">
-                    <td class="js_grid_column_multipleSelect cell_multipleSelect selections s-cell">
+                    <td class="js_grid_column_multipleSelect cell-multiple-select selections s-cell">
                         <div>
                             <div class="mad_form_checkbox js_checkbox_multiple_select mad_view_form_checkbox ready"
                                  id="multiple_select_checkbox_<?php $resource['id']; ?>">
@@ -21,7 +21,7 @@
                             </div>
                         </div>
                     </td>
-                    <td class="js_grid_column_favorite cell_favorite selections s-cell">
+                    <td class="js_grid_column_favorite cell-favorite selections s-cell">
                         <div>
                             <div class="passbolt_component_favorite js_component passbolt_view_component_favorite ready" id="favorite_<?= $resource['id']; ?>">
                                 <a href="#" class="">
@@ -31,22 +31,22 @@
                             </div>
                         </div>
                     </td>
-                    <td class="js_grid_column_avatar grid_column_avatar grid_column_avatar s1-cell cell_avatar">
+                    <td class="js_grid_column_avatar grid_column_avatar grid_column_avatar s1-cell cell-avatar">
                         <div title="">
                             <?php include('includes/svg-icons/folder.php'); ?>
                         </div>
                     </td>
-                    <td class="js_grid_column_name cell_name m-cell" data-view-id="1424">
+                    <td class="js_grid_column_name cell-name m-cell" data-view-id="1424">
                         <div title="<?= $resource['name']; ?>" data-view-id="1425">
                             <?= $resource['name']; ?>
                         </div>
                     </td>
-                    <td class="js_grid_column_username cell_username m-cell" data-view-id="1426">
+                    <td class="js_grid_column_username cell-username m-cell" data-view-id="1426">
                         <div title="<?= $resource['username']; ?>" data-view-id="1427">
                             <?= $resource['username']; ?>
                         </div>
                     </td>
-                    <td class="js_grid_column_secret cell_secret m-cell password">
+                    <td class="js_grid_column_secret cell-secret m-cell password">
                         <div title="" data-view-id="1429">
                             <div class="secret-copy">
                                 <a id="grid_secret_copy_<?= $resource['id']; ?>" href="#copy_secret">
@@ -55,14 +55,14 @@
                             </div>
                         </div>
                     </td>
-                    <td class="js_grid_column_uri cell_uri l-cell">
+                    <td class="js_grid_column_uri cell-uri l-cell">
                         <div title="<?= $resource['uri']; ?>" data-view-id="1431">
                             <a href="<?= $resource['uri']; ?>">
                                 <?= $resource['uri']; ?>
                             </a>
                         </div>
                     </td>
-                    <td class="js_grid_column_modified cell_modified m-cell">
+                    <td class="js_grid_column_modified cell-modified m-cell">
                         <div title="<?= $resource['modified']; ?>">
                             <?= $resource['modified']; ?>
                         </div>

@@ -1,36 +1,14 @@
 /* sidebar / user details in overview */
-.panel.aside .user,
-.panel.aside .group {
-    .sidebar-header {
-        .clearfix();
-        img {
-            margin:1em 0 1em 1em;
-            float: left;
-            width: 55px;
-            height: 55px;
-            border: 1px solid @border-default;
-            border-radius: 50%;
-        }
-        h3 {
-            float: left;
-            width: 67%;
-            margin-top: 1em;
-            padding: 0 0 0 1em;
-            display: table-cell;
-            vertical-align: middle;
-            border: 0;
-            .name {
-                font-size: 1.2em;
-                display: block;
-                .ellipsis();
-            }
-            .type,
-            .username {
-                font-size: 0.8em;
-                color: @font-lighter;
-                font-weight: normal;
-                display: block;
-                .ellipsis();
+.panel.aside {
+    .user,
+    .group {
+        .sidebar-header {
+            .logo {
+                img {
+                    margin: 0;
+                    width: 3em;
+                    height: 3em;
+                }
             }
         }
     }
@@ -60,14 +38,14 @@
 /* tabel view adjustments for avatar */
 .page.people {
     .tableview-header {
-        th.cell_icon,
-        th.cell_avatar {
+        th.cell-icon,
+        th.cell-avatar {
             width: 45px;
         }
     }
     .tableview-content {
-        th.cell_icon,
-        td.cell_avatar {
+        th.cell-icon,
+        td.cell-avatar {
             margin: 0;
             text-align: left;
             width: 45px;

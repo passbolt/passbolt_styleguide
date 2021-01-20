@@ -1,12 +1,12 @@
 /**
  * Passbolt ~ Open source password manager for teams
- * Copyright (c) 2019 Passbolt SA (https://www.passbolt.com)
+ * Copyright (c) 2020 Passbolt SA (https://www.passbolt.com)
  *
  * Licensed under GNU Affero General Public License version 3 of the or any later version.
  * For full copyright and license information, please see the LICENSE.txt
  * Redistributions of files must retain the above copyright notice.
  *
- * @copyright     Copyright (c) 2019 Passbolt SA (https://www.passbolt.com)
+ * @copyright     Copyright (c) 2020 Passbolt SA (https://www.passbolt.com)
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         2.12.0
@@ -14,8 +14,8 @@
 import React, {Component} from "react";
 import PropTypes from "prop-types";
 import AppContext from "../../../contexts/AppContext";
-import UserAbortsOperationError from "../../../lib/errors/userAbortsOperationError";
-import Icon from "../../Common/Icons/Icon";
+import UserAbortsOperationError from "../../../../react/lib/Common/Error/UserAbortsOperationError";
+import Icon from "../../../../react/components/Common/Icons/Icon";
 
 class PassphraseEntryDialog extends Component {
   constructor(props) {
@@ -28,7 +28,8 @@ class PassphraseEntryDialog extends Component {
   componentDidMount() {
     // Init the default remember me duration based on the remember me options given in options.
     if (this.hasRememberMeOptions()) {
-      const rememberMeDurations = Object.keys(this.context.rememberMeOptions);
+      const rememberMeOptions = this.context.siteSettings.getRememberMeOptions();
+      const rememberMeDurations = Object.keys(rememberMeOptions);
       const rememberMeDuration = parseInt(rememberMeDurations[0]);
       this.setState({rememberMeDuration: rememberMeDuration});
     }
@@ -69,7 +70,8 @@ class PassphraseEntryDialog extends Component {
    */
   close() {
     const error = new UserAbortsOperationError("The dialog has been closed.");
-    port.emit(this.props.requestId, "ERROR", error);
+    this.context.port.emit(this.context.passphraseRequestId, "ERROR", error);
+    this.context.setContext({passphraseRequestId: null});
     this.props.onClose();
   }
 
@@ -114,9 +116,8 @@ class PassphraseEntryDialog extends Component {
    */
   async isValidPassphrase() {
     try {
-      await port.request("passbolt.keyring.private.checkpassphrase", this.state.passphrase);
+      await this.context.port.request("passbolt.keyring.private.checkpassphrase", this.state.passphrase);
     } catch (error) {
-      console.error(error);
       return false;
     }
     return true;
@@ -126,7 +127,9 @@ class PassphraseEntryDialog extends Component {
    * Check if remember me options are provided.
    */
   hasRememberMeOptions() {
-    return Object.keys(this.context.rememberMeOptions).length > 0;
+    const options = this.context.siteSettings.getRememberMeOptions();
+
+    return options !== null && Object.keys(options).length > 0;
   }
 
   /**
@@ -138,10 +141,11 @@ class PassphraseEntryDialog extends Component {
       rememberMe = this.state.rememberMeDuration;
     }
 
-    port.emit(this.props.requestId, "SUCCESS", {
+    this.context.port.emit(this.context.passphraseRequestId, "SUCCESS", {
       passphrase: this.state.passphrase,
       rememberMe: rememberMe
     });
+    this.context.setContext({passphraseRequestId: null});
     this.props.onClose();
   }
 
@@ -207,9 +211,12 @@ class PassphraseEntryDialog extends Component {
    */
   getPassphraseInputStyle() {
     if (this.state.passphraseInputHasFocus) {
+      const backgroundColor = this.context.userSettings.getSecurityTokenBackgroundColor();
+      const textColor = this.context.userSettings.getSecurityTokenTextColor();
+
       return {
-        background: this.context.user["user.settings.securityToken.color"],
-        color: this.context.user["user.settings.securityToken.textColor"]
+        background: backgroundColor,
+        color: textColor
       };
     }
 
@@ -224,16 +231,19 @@ class PassphraseEntryDialog extends Component {
    * @return {Object}
    */
   getSecurityTokenStyle() {
+    const backgroundColor = this.context.userSettings.getSecurityTokenBackgroundColor();
+    const textColor = this.context.userSettings.getSecurityTokenTextColor();
+
     if (this.state.passphraseInputHasFocus) {
       return {
-        background: this.context.user["user.settings.securityToken.textColor"],
-        color: this.context.user["user.settings.securityToken.color"],
+        background: textColor,
+        color: backgroundColor,
       };
     }
 
     return {
-      background: this.context.user["user.settings.securityToken.color"],
-      color: this.context.user["user.settings.securityToken.textColor"],
+      background: backgroundColor,
+      color: textColor,
     };
   }
 
@@ -243,15 +253,23 @@ class PassphraseEntryDialog extends Component {
    */
   renderRememberMeOptions() {
     const selectOptions = [];
-    for (const time in this.context.rememberMeOptions) {
-      selectOptions.push(<option value={time} key={time}>{this.context.rememberMeOptions[time].toString()}</option>);
+    const rememberMeOptions = this.context.siteSettings.getRememberMeOptions();
+
+    for (const time in rememberMeOptions) {
+      selectOptions.push(<option value={time} key={time}>{rememberMeOptions[time]}</option>);
     }
+
     return selectOptions;
   }
 
+  /**
+   * Render the component
+   * @returns {JSX}
+   */
   render() {
     const passphraseStyle = this.getPassphraseInputStyle();
     const securityTokenStyle = this.getSecurityTokenStyle();
+    const securityTokenCode = this.context.userSettings.getSecurityTokenCode();
     let passphraseInputLabel = "You need your passphrase to continue.";
     if (this.state.passphraseError) {
       passphraseInputLabel = "Please enter a valid passphrase.";
@@ -262,7 +280,7 @@ class PassphraseEntryDialog extends Component {
       <div className="dialog-wrapper" onKeyDown={this.handleKeyDown}>
         <div className="dialog passphrase-entry">
           <div className="dialog-header">
-            <h2>Please enter your passphrase</h2>
+            <h2>Please enter your passphrase.</h2>
             <a className="dialog-close" onClick={this.handleCloseClick}>
               <Icon name="close"/>
               <span className="visually-hidden">cancel</span>
@@ -272,7 +290,7 @@ class PassphraseEntryDialog extends Component {
           <div className="dialog-content">
             <form onSubmit={this.handleFormSubmit}>
               <div className="form-content">
-                <div className="input text required">
+                <div className={`input text password required ${this.state.passphraseError ? "error" : ""}`}>
                   <label htmlFor="passphrase-entry-form-passphrase">{passphraseInputLabel}</label>
                   <input id="passphrase-entry-form-passphrase" type="password" name="passphrase"
                     placeholder="Passphrase" required="required" ref={this.passphraseInputRef}
@@ -280,7 +298,7 @@ class PassphraseEntryDialog extends Component {
                     autoFocus={true} onFocus={this.handlePassphraseInputFocus} onBlur={this.handlePassphraseInputBlur}
                     onChange={this.handleInputChange} disabled={this.state.processing} style={passphraseStyle}/>
                   <div className="security-token"
-                    style={securityTokenStyle}>{this.context.user["user.settings.securityToken.code"]}</div>
+                    style={securityTokenStyle}>{securityTokenCode}</div>
                   {this.state.passphraseError &&
                   <div className="input text">
                     <div className="message error">{this.state.passphraseError}</div>
@@ -311,7 +329,7 @@ class PassphraseEntryDialog extends Component {
             </form>
           </div>
           }
-          {this.state.attempt == 3 &&
+          {this.state.attempt === 3 &&
           <div className="dialog-content">
             <div className="form-content">
               Your passphrase is wrong! The operation has been aborted.
@@ -330,7 +348,6 @@ class PassphraseEntryDialog extends Component {
 PassphraseEntryDialog.contextType = AppContext;
 
 PassphraseEntryDialog.propTypes = {
-  requestId: PropTypes.string,
   onClose: PropTypes.func
 };
 

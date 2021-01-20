@@ -16,24 +16,37 @@
         position: relative;
         left: 50%;
         float: left;
+        clear: both;
+        margin-bottom: 1em;
 
         .message {
             .box-shadow-dark();
             border-radius:2px;
             padding: .5em 1em;
             position: relative; left: -50%; float: left;
-            background: @background-warning;
-            border: 1px solid darken(@background-warning, 30%);
             color: @blacker;
             font-weight: normal;
             width:auto;
 
-            strong {
-                text-transform: capitalize;
+            .content {
+                strong {
+                    text-transform: capitalize;
+                }
+                margin-right: 1em;
             }
-            strong:after {
-                content:':';
+
+            .action {
+                border-bottom: none;
+                margin-left: .4em;
+
+                &:hover {
+
+                    .svg-icon svg {
+                        fill: rgb(0,0,0);
+                    }
+                }
             }
+
         }
     }
 }

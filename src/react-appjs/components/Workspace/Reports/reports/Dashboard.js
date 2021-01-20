@@ -81,38 +81,32 @@ class Dashboard extends Component {
       <div className="report-wrapper">
         <div className="grid grid-responsive-12 report-dashboard">
           <div className="row">
-            <div className="col9 push2">
-              <div className="grid-responsive-12">
-                <div className="row">
-                  <div className="col12 last">
-                    <h2>Dashboard</h2>
-                  </div>
-                </div>
-                <div className="row">
-                  <div className="col4">
-                    <DashboardCount iconName="user" className="users" label="users" value="37" />
-                  </div>
-                  <div className="col4">
-                    <DashboardCount iconName="users" className="groups" label="groups" value="14" />
-                  </div>
-                  <div className="col4 last">
-                    <DashboardCount iconName="key" className="items"  label="items" value="1150" />
-                  </div>
-                </div>
-                <div className="row">
-                  <div className="col6">
-                    <DashboardPlots title={this.plot1Data.title} data={this.plot1Data.data} className="users" />
-                  </div>
-                  <div className="col6 last">
-                    <DashboardPlots title={this.plot2Data.title} data={this.plot2Data.data} className="items" />
-                  </div>
-                </div>
-                <div className="row">
-                  <div className="col12 last">
-                    <LoginHistory/>
-                  </div>
-                </div>
-              </div>
+            <div className="col12 last">
+                <h2>Dashboard</h2>
+            </div>
+          </div>
+          <div className="row">
+            <div className="col4">
+              <DashboardCount iconName="user" className="users" label="users" value="37" />
+            </div>
+            <div className="col4">
+              <DashboardCount iconName="users" className="groups" label="groups" value="14" />
+            </div>
+            <div className="col4 last">
+              <DashboardCount iconName="key" className="items"  label="items" value="1150" />
+            </div>
+          </div>
+          <div className="row">
+            <div className="col6">
+              <DashboardPlots title={this.plot1Data.title} data={this.plot1Data.data} className="users" />
+            </div>
+            <div className="col6 last">
+              <DashboardPlots title={this.plot2Data.title} data={this.plot2Data.data} className="items" />
+            </div>
+          </div>
+          <div className="row">
+            <div className="col12 last">
+              <LoginHistory/>
             </div>
           </div>
         </div>

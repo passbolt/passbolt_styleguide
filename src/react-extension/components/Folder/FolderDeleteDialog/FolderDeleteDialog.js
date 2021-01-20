@@ -1,12 +1,12 @@
 /**
  * Passbolt ~ Open source password manager for teams
- * Copyright (c) 2019 Passbolt SA (https://www.passbolt.com)
+ * Copyright (c) 2020 Passbolt SA (https://www.passbolt.com)
  *
  * Licensed under GNU Affero General Public License version 3 of the or any later version.
  * For full copyright and license information, please see the LICENSE.txt
  * Redistributions of files must retain the above copyright notice.
  *
- * @copyright     Copyright (c) 2019 Passbolt SA (https://www.passbolt.com)
+ * @copyright     Copyright (c) 2020 Passbolt SA (https://www.passbolt.com)
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         2.14.0
@@ -14,10 +14,13 @@
 import React, {Component} from "react";
 import PropTypes from "prop-types";
 import AppContext from "../../../contexts/AppContext";
-import ErrorDialog from "../../Common/ErrorDialog/ErrorDialog";
-import FormSubmitButton from "../../Common/FormSubmitButton/FormSubmitButton";
-import FormCancelButton from "../../Common/FormSubmitButton/FormCancelButton";
-import DialogWrapper from "../../Common/DialogWrapper/DialogWrapper";
+import ErrorDialog from "../../Dialog/ErrorDialog/ErrorDialog";
+import FormSubmitButton from "../../../../react/components/Common/Inputs/FormSubmitButton/FormSubmitButton";
+import FormCancelButton from "../../../../react/components/Common/Inputs/FormSubmitButton/FormCancelButton";
+import DialogWrapper from "../../../../react/components/Common/Dialog/DialogWrapper/DialogWrapper";
+import {withDialog} from "../../../../react/contexts/Common/DialogContext";
+import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
+import {withLoading} from "../../../../react/contexts/Common/LoadingContext";
 
 class FolderDeleteDialog extends Component {
   /**
@@ -37,7 +40,7 @@ class FolderDeleteDialog extends Component {
    * @return {void}
    */
   async componentDidMount() {
-    this.setState({loading:false});
+    this.setState({loading: false});
   }
 
   /**
@@ -50,10 +53,6 @@ class FolderDeleteDialog extends Component {
       loading: true,
       processing: false,
 
-      // Error dialog trigger
-      serviceError: false,
-      errorMessage: '',
-
       // Cascade checkbox
       cascade: false
     };
@@ -64,7 +63,6 @@ class FolderDeleteDialog extends Component {
    */
   bindEventHandlers() {
     this.handleClose = this.handleClose.bind(this);
-    this.handleCloseError = this.handleCloseError.bind(this);
     this.handleFormSubmit = this.handleFormSubmit.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
   }
@@ -81,17 +79,17 @@ class FolderDeleteDialog extends Component {
    */
   getStateBasedOnContext(context, props, defaultState) {
     const folders = context.folders;
-    const errorMessage = 'The folder could not be found. Maybe it was deleted or you lost access.';
+    const error = {
+      message: 'The folder could not be found. Maybe it was deleted or you lost access.'
+    };
     if (!folders) {
       console.error(`No folders context defined.`);
-      defaultState.serviceError = true;
-      defaultState.errorMessage = errorMessage;
+      this.handleError(error);
     }
-    const folder = context.folders.find(item => item.id === props.folderId) || false;
+    const folder = context.folders.find(item => item.id === context.folder.id) || false;
     if (!folder) {
-      console.error(`Folder ${props.folderId} not found in context.`);
-      defaultState.serviceError = true;
-      defaultState.errorMessage = errorMessage;
+      console.error(`Folder ${context.folder.id} not found in context.`);
+      this.handleError(error);
     } else {
       defaultState.name = folder.name;
     }
@@ -110,20 +108,54 @@ class FolderDeleteDialog extends Component {
       return;
     }
 
-    this.toggleProcessing();
+    await this.toggleProcessing();
 
     try {
-      await port.request("passbolt.folders.delete", this.props.folderId, this.state.cascade);
-      this.displayNotification("success", "The folder was deleted." + this.state.cascade);
-      this.props.onClose();
+      this.props.loadingContext.add();
+      await this.context.port.request("passbolt.folders.delete", this.context.folder.id, this.state.cascade);
+      await this.handleSaveSuccess();
     } catch (error) {
-      console.error(error);
-      this.setState({
-        serviceError: true,
-        errorMessage: error.message,
-        processing: false
-      });
+      this.handleSaveError(error);
     }
+  }
+
+  /**
+   * Handle save operation success.
+   */
+  async handleSaveSuccess() {
+    this.props.loadingContext.remove();
+    await this.props.actionFeedbackContext.displaySuccess("The folder was deleted successfully");
+    this.props.onClose();
+  }
+
+  /**
+   * Handle save operation error.
+   * @param {object} error The returned error
+   */
+  handleSaveError(error) {
+    this.props.loadingContext.remove();
+    // It can happen when the user has closed the passphrase entry dialog by instance.
+    if (error.name === "UserAbortsOperationError") {
+      this.setState({processing: false});
+    } else {
+      // Unexpected error occurred.
+      console.error(error);
+      this.handleError(error);
+      this.setState({processing: false});
+    }
+  }
+
+  /**
+   * handle error to display the error dialog
+   * @param error
+   */
+  handleError(error) {
+    const errorDialogProps = {
+      title: "There was an unexpected error...",
+      message: error.message
+    };
+    this.context.setContext({errorDialogProps});
+    this.props.dialogContext.open(ErrorDialog);
   }
 
   /**
@@ -134,16 +166,7 @@ class FolderDeleteDialog extends Component {
     const prev = this.state.processing;
     return new Promise(resolve => {
       this.setState({processing: !prev}, resolve());
-    })
-  }
-
-  /**
-   * Notify the user.
-   * @param {string} status Can be success, error or info
-   * @param {string} message The message to display
-   */
-  displayNotification(status, message) {
-    port.emit("passbolt.notification.display", {status: status, message: message});
+    });
   }
 
   /**
@@ -157,15 +180,6 @@ class FolderDeleteDialog extends Component {
     this.setState({
       [name]: value
     });
-  }
-
-  /**
-   * Handle close error dialog
-   * @returns {void}
-   */
-  handleCloseError() {
-    // Close error dialog / we do not close main dialog to allow retry
-    this.setState({serviceError: false, serviceErrorMessage: ''});
   }
 
   /**
@@ -188,31 +202,24 @@ class FolderDeleteDialog extends Component {
 
   render() {
     return (
-      <div>
-        <DialogWrapper className='folder-create-dialog' title="Are you sure?"
-                       onClose={this.handleClose} disabled={this.hasAllInputDisabled()}>
-          <form className="folder-create-form" onSubmit={this.handleFormSubmit} noValidate>
-            <div className="form-content">
-                <p>
-                  You're about to delete the folder <strong>{this.state.name}</strong>.
-                  Other users may loose access. This action cannot be undone.
-                </p>
-                <div className="input checkbox">
-                  <input id="delete-cascade" type="checkbox" name="cascade" onChange={this.handleInputChange}
-                         autoFocus={true} disabled={this.hasAllInputDisabled()} />&nbsp;
-                  <label htmlFor="delete-cascade">Also delete items inside this folder.</label>
-                </div>
-              </div>
-              <div className="submit-wrapper clearfix">
-                <FormSubmitButton disabled={this.hasAllInputDisabled()} processing={this.state.processing} value="Delete" warning={true}/>
-                <FormCancelButton disabled={this.hasAllInputDisabled()} onClick={this.handleClose} />
-              </div>
-            </form>
-          </DialogWrapper>
-        {this.state.serviceError &&
-          <ErrorDialog message={this.state.errorMessage} onClose={this.handleCloseError}/>
-        }
-      </div>
+      <DialogWrapper className='folder-create-dialog' title="Delete folder?"
+        onClose={this.handleClose} disabled={this.hasAllInputDisabled()}>
+        <form className="folder-create-form" onSubmit={this.handleFormSubmit} noValidate>
+          <div className="form-content">
+            <p>Are you sure you want to delete the folder <strong>{this.state.name}</strong>?</p>
+            <p>Warning: This action can’t be undone. Other users may lose access.</p>
+            <div className="input checkbox">
+              <input id="delete-cascade" type="checkbox" name="cascade" onChange={this.handleInputChange}
+                autoFocus={true} disabled={this.hasAllInputDisabled()} />&nbsp;
+              <label htmlFor="delete-cascade">Also delete items inside this folder.</label>
+            </div>
+          </div>
+          <div className="submit-wrapper clearfix">
+            <FormSubmitButton disabled={this.hasAllInputDisabled()} processing={this.state.processing} value="Delete" warning={true}/>
+            <FormCancelButton disabled={this.hasAllInputDisabled()} onClick={this.handleClose} />
+          </div>
+        </form>
+      </DialogWrapper>
     );
   }
 }
@@ -220,9 +227,10 @@ class FolderDeleteDialog extends Component {
 FolderDeleteDialog.contextType = AppContext;
 
 FolderDeleteDialog.propTypes = {
-  className: PropTypes.string,
-  folderId: PropTypes.string,
-  onClose: PropTypes.func
+  onClose: PropTypes.func,
+  actionFeedbackContext: PropTypes.any, // The action feedback context
+  dialogContext: PropTypes.any, // The dialog context
+  loadingContext: PropTypes.any // The loading context
 };
 
-export default FolderDeleteDialog;
+export default withLoading(withDialog(withActionFeedback(FolderDeleteDialog)));

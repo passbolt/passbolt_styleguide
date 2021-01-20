@@ -13,8 +13,8 @@
  */
 import React from "react";
 import PropTypes from "prop-types";
-import UserAvatar from "../../../Common/UserAvatar/UserAvatar";
-import GroupAvatar from "../../../Common/UserAvatar/GroupAvatar";
+import UserAvatar from "../../../Common/Avatar/UserAvatar";
+import GroupAvatar from "../../../Common/Avatar/GroupAvatar";
 import Icon from "../../../Common/Icons/Icon";
 
 class FolderSidebarPermissionsSection extends React.Component {
@@ -117,7 +117,7 @@ class FolderSidebarPermissionsSection extends React.Component {
         </div>
         <div className="accordion-content">
           {canShare &&
-          <a onClick={this.handlePermissionsEditClickEvent} className="section-action">
+          <a onClick={this.handlePermissionsEditClickEvent} className="section-action" role="button">
             <Icon name="edit"/>
             <span className="visuallyhidden">modify</span>
           </a>

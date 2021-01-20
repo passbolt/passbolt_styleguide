@@ -1,0 +1,104 @@
+
+/**
+Report HTML layout definition.
+ */
+.page.printable-report {
+    background-color: @grey-lightest;
+
+    .page-wrapper {
+        width: 900px;
+        min-height: 1536px;
+        background-color: white;
+        padding: 3em;
+        margin:3em auto;
+        box-sizing:border-box;
+        .box-shadow();
+
+        .report-header {
+            .creator-info {
+                .label {
+                    display: inline-block;
+                    width: 150px;
+                    margin-bottom: 0.25em;
+                }
+                .value {
+                    display: inline-block;
+                    margin-bottom: 0.25em;
+                }
+            }
+
+            .company-info {
+                text-align: right;
+
+                .logo {
+                    margin-top: 65px;
+                    width: 200px;
+                    float: right;
+                }
+            }
+        }
+
+        .report-content {
+            margin-top: 2em;
+
+            .row.charts {
+                margin-top: 2em;
+            }
+
+            .row.list {
+                margin-top: 3em;
+            }
+
+            .table-info {
+                border-right: 0;
+                border-left: 0;
+                border-bottom: 0;
+
+                tr {
+                    th:first-of-type,
+                    td:first-of-type {
+                        width: 30%;
+                    }
+
+                    td {
+                        word-wrap: break-word;
+                        color: @grey-darkest;
+                        vertical-align: middle;
+
+                        & + td {
+                            color: @grey-darkest;
+                        }
+                    }
+
+                    span.name, span.email {
+                        display: block;
+                        max-width: 300px;
+                    }
+
+                    span.email {
+                        font-size: 0.8em;
+                        color: @grey-dark;
+                    }
+                }
+            }
+        }
+    }
+}
+
+/**
+Print rules.
+ */
+@media print {
+    // This takes care of removing the meta information put automatically by the browser on printed page.
+    @page { size: auto;  margin: 0mm; }
+
+    .page.printable-report {
+        background-color: white;
+        .page-wrapper {
+            min-height: 0 !important;
+            box-shadow: none !important;
+
+            color: @grey;
+        }
+    }
+}

@@ -117,11 +117,10 @@ class FoldersTreeItemContextualMenu extends React.Component {
    * Handle click on the create a folder menu option.
    */
   handleCreateFolderItemClickEvent() {
+
     if (!this.canUpdate()) {
       return;
     }
-    const folderParentId = this.props.folder.id;
-    Plugin.send('passbolt.plugin.folders.open-create-dialog', {folderParentId});
     this.destroy();
   }
 
@@ -213,7 +212,7 @@ class FoldersTreeItemContextualMenu extends React.Component {
             <div className="row">
               <div className="main-cell-wrapper">
                 <div className="main-cell">
-                  <a onClick={this.handleCreateFolderItemClickEvent}><span>Create folder</span></a>
+                  <a onClick={this.handleCreateFolderItemClickEvent} role="button"><span>Create folder</span></a>
                 </div>
               </div>
             </div>
@@ -222,7 +221,7 @@ class FoldersTreeItemContextualMenu extends React.Component {
             <div className="row">
               <div className="main-cell-wrapper">
                 <div className="main-cell">
-                  <a onClick={this.handleRenameFolderItemClickEvent}><span>Rename</span></a>
+                  <a onClick={this.handleRenameFolderItemClickEvent} role="button"><span>Rename</span></a>
                 </div>
               </div>
             </div>
@@ -231,7 +230,7 @@ class FoldersTreeItemContextualMenu extends React.Component {
             <div className="row">
               <div className="main-cell-wrapper">
                 <div className="main-cell">
-                  <a onClick={this.handleShareFolderItemClickEvent}><span>Share</span></a>
+                  <a onClick={this.handleShareFolderItemClickEvent} role="button"><span>Share</span></a>
                 </div>
               </div>
             </div>
@@ -240,7 +239,7 @@ class FoldersTreeItemContextualMenu extends React.Component {
             <div className="row">
               <div className="main-cell-wrapper">
                 <div className="main-cell">
-                  <a onClick={this.handleExportFolderItemClickEvent}><span>Export</span></a>
+                  <a onClick={this.handleExportFolderItemClickEvent} role="button"><span>Export</span></a>
                 </div>
               </div>
             </div>
@@ -249,7 +248,7 @@ class FoldersTreeItemContextualMenu extends React.Component {
             <div className="row">
               <div className="main-cell-wrapper">
                 <div className="main-cell">
-                  <a onClick={this.handleDeleteFolderItemClickEvent}><span>Delete</span></a>
+                  <a onClick={this.handleDeleteFolderItemClickEvent} role="button"><span>Delete</span></a>
                 </div>
               </div>
             </div>

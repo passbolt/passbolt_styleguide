@@ -1,12 +1,12 @@
 /**
  * Passbolt ~ Open source password manager for teams
- * Copyright (c) 2019 Passbolt SA (https://www.passbolt.com)
+ * Copyright (c) 2020 Passbolt SA (https://www.passbolt.com)
  *
  * Licensed under GNU Affero General Public License version 3 of the or any later version.
  * For full copyright and license information, please see the LICENSE.txt
  * Redistributions of files must retain the above copyright notice.
  *
- * @copyright     Copyright (c) 2019 Passbolt SA (https://www.passbolt.com)
+ * @copyright     Copyright (c) 2020 Passbolt SA (https://www.passbolt.com)
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         2.14.0
@@ -14,23 +14,30 @@
 import React, {Component} from "react";
 import PropTypes from "prop-types";
 import AppContext from "../../../contexts/AppContext";
-import Icon from "../../Common/Icons/Icon";
-import Tooltip from "../../Common/Tooltip/Tooltip";
+import Icon from "../../../../react/components/Common/Icons/Icon";
+import Tooltip from "../../../../react/components/Common/Tooltip/Tooltip";
+import SecretComplexity from "../../../lib/Secret/SecretComplexity";
+import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
+import {withDialog} from "../../../../react/contexts/Common/DialogContext";
+import ErrorDialog from "../../Dialog/ErrorDialog/ErrorDialog";
+import DialogWrapper from "../../../../react/components/Common/Dialog/DialogWrapper/DialogWrapper";
+import FormSubmitButton from "../../../../react/components/Common/Inputs/FormSubmitButton/FormSubmitButton";
+import FormCancelButton from "../../../../react/components/Common/Inputs/FormSubmitButton/FormCancelButton";
+import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 
 class PasswordEditDialog extends Component {
   constructor(props, context) {
     super(props, context);
-    this.state = this.getDefaultState(props, context);
+    this.state = this.getDefaultState(context);
     this.initEventHandlers();
     this.createInputRef();
   }
 
-  getDefaultState(props, context) {
-    const resource = context.resources.find(item => item.id === props.id) || {};
+  getDefaultState(context) {
+    const resource = context.resources.find(item => item.id === this.context.passwordEditDialogProps.id) || {};
 
     return {
       nameOriginal: resource.name || "",
-      error: "",
       name: resource.name || "",
       nameError: "",
       username: resource.username || "",
@@ -43,14 +50,14 @@ class PasswordEditDialog extends Component {
       descriptionError: "",
       viewPassword: false,
       passwordInputHasFocus: false,
-      isSecretDecrypted: false,
-      isSecretDecrypting: false
+      isSecretDecrypting: true,
+      encryptDescription: null,
+      resourceTypeId: resource.resource_type_id || ""
     };
   }
 
   initEventHandlers() {
-    this.handleCloseClick = this.handleCloseClick.bind(this);
-    this.handleKeyDown = this.handleKeyDown.bind(this);
+    this.handleClose = this.handleClose.bind(this);
     this.handleFormSubmit = this.handleFormSubmit.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handlePasswordInputFocus = this.handlePasswordInputFocus.bind(this);
@@ -59,6 +66,9 @@ class PasswordEditDialog extends Component {
     this.handlePasswordInputKeyUp = this.handlePasswordInputKeyUp.bind(this);
     this.handleViewPasswordButtonClick = this.handleViewPasswordButtonClick.bind(this);
     this.handleGeneratePasswordButtonClick = this.handleGeneratePasswordButtonClick.bind(this);
+    this.handleDescriptionInputFocus = this.handleDescriptionInputFocus.bind(this);
+    this.handleDescriptionInputBlur = this.handleDescriptionInputBlur.bind(this);
+    this.handleDescriptionToggle = this.handleDescriptionToggle.bind(this);
   }
 
   /**
@@ -67,8 +77,48 @@ class PasswordEditDialog extends Component {
   createInputRef() {
     this.nameInputRef = React.createRef();
     this.passwordInputRef = React.createRef();
+    this.descriptionInputRef = React.createRef();
   }
 
+  componentDidMount() {
+    this.initialize();
+  }
+
+  async initialize() {
+    const isDecrypted = await this.decryptSecret();
+    if (isDecrypted) {
+      const encrypt = this.mustEncryptDescription();
+      this.setState({encryptDescription: encrypt});
+    }
+  }
+
+  /*
+   * =============================================================
+   *  Resource type helpers
+   * =============================================================
+   */
+  isEncryptedDescriptionEnabled() {
+    return this.context.resourceTypesSettings.isEncryptedDescriptionEnabled();
+  }
+
+  areResourceTypesEnabled() {
+    return this.context.resourceTypesSettings.areResourceTypesEnabled();
+  }
+
+  /**
+   * Must the description be kept encrypted?
+   * E.g. prevent downgrading from an encrypted description to a cleartext one
+   * @returns {boolean}
+   */
+  mustEncryptDescription() {
+    return this.context.resourceTypesSettings.mustEncryptDescription(this.state.resourceTypeId);
+  }
+
+  /*
+   * =============================================================
+   *  Form submit
+   * =============================================================
+   */
   /**
    * Handle form submit event.
    * @params {ReactEvent} The react event
@@ -81,257 +131,39 @@ class PasswordEditDialog extends Component {
       return;
     }
 
-    this.save();
-  }
-
-  /**
-   * Handle form input change.
-   * @params {ReactEvent} The react event.
-   */
-  handleInputChange(event) {
-    const target = event.target;
-    const value = target.value;
-    const name = target.name;
-    this.setState({
-      [name]: value
-    });
-  }
-
-  /**
-   * Handle password input focus.
-   */
-  async handlePasswordInputFocus() {
-    const passwordInputHasFocus = true;
-    this.setState({passwordInputHasFocus: passwordInputHasFocus});
-    if (!this.state.isSecretDecrypted) {
-      await this.decryptSecret();
-      this.passwordInputRef.current.focus();
-    }
-  }
-
-  /**
-   * Handle password input blur.
-   */
-  handlePasswordInputBlur() {
-    const passwordInputHasFocus = false;
-    this.setState({passwordInputHasFocus: passwordInputHasFocus});
-  }
-
-  /**
-   * Handle name input keyUp event.
-   */
-  handleNameInputKeyUp() {
-    const state = this.validateNameInput();
-    this.setState(state);
-  }
-
-  /**
-   * Handle password input keyUp event.
-   */
-  handlePasswordInputKeyUp() {
-    this.validatePasswordInput();
-  }
-
-  /**
-   * Handle view password button click.
-   */
-  async handleViewPasswordButtonClick() {
-    if (this.state.processing) {
-      return;
-    }
-    let isSecretDecrypted = this.state.isSecretDecrypted;
-    if (!isSecretDecrypted) {
-      isSecretDecrypted = await this.decryptSecret();
-    }
-    if (isSecretDecrypted) {
-      this.setState({viewPassword: !this.state.viewPassword});
-    }
-  }
-
-  /**
-   * Handle generate password button click.
-   */
-  handleGeneratePasswordButtonClick() {
-    if (this.state.processing || !this.state.isSecretDecrypted) {
-      return;
-    }
-    const password = secretComplexity.generate();
-    this.setState({password: password});
-  }
-
-  /**
-   * Handle close button click.
-   */
-  handleCloseClick() {
-    this.props.onClose();
-  }
-
-  /**
-   * Handle key down on the component.
-   * @params {ReactEvent} The react event
-   */
-  handleKeyDown(event) {
-    // Close the dialog when the user presses the "ESC" key.
-    if (event.keyCode === 27) {
-      // Stop the event propagation in order to avoid a parent component to react to this ESC event.
-      event.stopPropagation();
-      this.props.onClose();
-    }
-  }
-
-  /**
-   * Save the changes.
-   */
-  async save() {
-    this.setState({processing: true});
+    await this.toggleProcessing();
 
     if (!await this.validate()) {
-      this.setState({processing: false});
+      await this.toggleProcessing();
       this.focusFirstFieldError();
       return;
     }
 
     try {
-      await this.updateResource();
-      this.displayNotification("success", "The password has been updated successfully");
-      this.selectAndScrollToResource(this.props.id);
-      this.props.onClose();
+      const resource = await this.updateResource();
+      await this.handleSaveSuccess(resource);
     } catch (error) {
-      // It can happen when the user has closed the passphrase entry dialog by instance.
-      if (error.name === "UserAbortsOperationError") {
-        this.setState({processing: false});
-      } else {
-        // Unexpected error occurred.
-        console.error(error);
-        this.setState({
-          error: error.message,
-          processing: false
-        });
-      }
+      await this.toggleProcessing();
+      this.handleSaveError(error);
     }
   }
 
   /**
-   * Create the resource
-   * @returns {Promise}
+   * Toggle processing state
+   * @returns {Promise<void>}
    */
-  updateResource() {
-    const resourceMeta = {
-      id: this.props.id,
-      name: this.state.name,
-      username: this.state.username,
-      uri: this.state.uri,
-      description: this.state.description
-    };
-    let secret = "";
-    if (this.state.isSecretDecrypted) {
-      secret = this.state.password;
-    }
-
-    return port.request("passbolt.resources.update", resourceMeta, secret);
-  }
-
-  /**
-   * Focus the first field of the form which is in error state.
-   */
-  focusFirstFieldError() {
-    if (this.state.nameError) {
-      this.nameInputRef.current.focus();
-    } else if (this.state.passwordError) {
-      this.passwordInputRef.current.focus();
-    }
-  }
-
-  /**
-   * Notify the user.
-   * @param {string} status Can be success, error or info
-   * @param {string} message The message to display
-   */
-  displayNotification(status, message) {
-    port.emit("passbolt.notification.display", {status: status, message: message});
-  }
-
-  /**
-   * Select and scroll to a given resource.
-   * @param {string} id The resource id.
-   */
-  selectAndScrollToResource(id) {
-    port.emit("passbolt.resources.select-and-scroll-to", id);
-  }
-
-  /**
-   * Decrypt the password secret
-   * @return {Promise<boolean>}
-   */
-  async decryptSecret() {
-    this.setState({
-      isSecretDecrypting: true
-    });
-
-    try {
-      const secret = await this.getDecryptedSecret();
-      this.setState({
-        password: secret,
-        isSecretDecrypting: false,
-        isSecretDecrypted: true
-      });
-    } catch (error) {
-      console.error(error);
-      this.setState({
-        isSecretDecrypting: false,
-        isSecretDecrypted: false
-      });
-
-      return false;
-    }
-
-    return true;
-  }
-
-  /**
-   * Get the decrypted password secret
-   * @return {Promise<string>}
-   */
-  async getDecryptedSecret() {
-    return port.request("passbolt.secret-edit.decrypt", this.props.id);
-  }
-
-  /**
-   * Validate the name input.
-   * @return {Promise}
-   */
-  validateNameInput() {
-    const name = this.state.name.trim();
-    let nameError = "";
-    if (!name.length) {
-      nameError = "A name is required.";
-    }
-
+  async toggleProcessing() {
+    const prev = this.state.processing;
     return new Promise(resolve => {
-      this.setState({nameError: nameError}, resolve);
+      this.setState({processing: !prev}, resolve());
     });
   }
 
-  /**
-   * Validate the password input.
-   * @return {Promise}
+  /*
+   * =============================================================
+   *  Validation
+   * =============================================================
    */
-  validatePasswordInput() {
-    if (!this.state.isSecretDecrypted) {
-      return;
-    }
-
-    const password = this.state.password;
-    let passwordError = "";
-    if (!password.length) {
-      passwordError = "A password is required.";
-    }
-
-    return new Promise(resolve => {
-      this.setState({passwordError: passwordError}, resolve);
-    });
-  }
-
   /**
    * Validate the form.
    * @return {Promise<boolean>}
@@ -357,14 +189,348 @@ class PasswordEditDialog extends Component {
   }
 
   /**
+   * Validate the name input.
+   * @return {Promise}
+   */
+  validateNameInput() {
+    const name = this.state.name.trim();
+    let nameError = "";
+    if (!name.length) {
+      nameError = "A name is required.";
+    }
+
+    return new Promise(resolve => {
+      this.setState({nameError: nameError}, resolve);
+    });
+  }
+
+  /**
+   * Validate the password input.
+   * @return {Promise}
+   */
+  validatePasswordInput() {
+    const password = this.state.password;
+    let passwordError = "";
+    if (!password.length) {
+      passwordError = "A password is required.";
+    }
+
+    return new Promise(resolve => {
+      this.setState({passwordError: passwordError}, resolve);
+    });
+  }
+
+  /*
+   * =============================================================
+   *  Update resource
+   * =============================================================
+   */
+  /**
+   * Update the resource
+   * @returns {Promise<Object>} updated resource
+   */
+  async updateResource() {
+    const resourceDto = {
+      id: this.context.passwordEditDialogProps.id,
+      name: this.state.name,
+      username: this.state.username,
+      uri: this.state.uri,
+    };
+
+    if (!this.areResourceTypesEnabled()) {
+      return this.updateResourceLegacy(resourceDto);
+    }
+
+    // Resource types enabled but legacy type requested
+    if (!this.state.encryptDescription) {
+      return this.updateWithoutEncryptedDescription(resourceDto);
+    }
+
+    return this.updateWithEncryptedDescription(resourceDto);
+  }
+
+  /**
+   * Update the resource (LEGACY)
+   * @returns {Promise<Object>} updated resource
+   * @deprecated will be removed when v2 support is dropped
+   */
+  async updateResourceLegacy(resourceDto) {
+    resourceDto.description = this.state.description;
+    const plaintextDto = this.state.password;
+
+    return this.context.port.request("passbolt.resources.update", resourceDto, plaintextDto);
+  }
+
+  /**
+   * Update the resource with non encrypted description content type
+   * @param resourceDto
+   */
+  async updateWithoutEncryptedDescription(resourceDto) {
+    resourceDto.description = this.state.description;
+    resourceDto.resource_type_id = this.context.resourceTypesSettings.findResourceTypeIdBySlug(
+      this.context.resourceTypesSettings.DEFAULT_RESOURCE_TYPES_SLUGS.PASSWORD_STRING
+    );
+    const plaintextDto = this.state.password;
+
+    return this.context.port.request("passbolt.resources.update", resourceDto, plaintextDto);
+  }
+
+  /**
+   * Update the resource with encrypted description content type
+   * @param resourceDto
+   */
+  async updateWithEncryptedDescription(resourceDto) {
+    resourceDto.resource_type_id = this.context.resourceTypesSettings.findResourceTypeIdBySlug(
+      this.context.resourceTypesSettings.DEFAULT_RESOURCE_TYPES_SLUGS.PASSWORD_AND_DESCRIPTION
+    );
+    resourceDto.description = '';
+    const plaintextDto = {
+      description: this.state.description,
+      password: this.state.password
+    };
+
+    return this.context.port.request("passbolt.resources.update", resourceDto, plaintextDto);
+  }
+
+  /**
+   * Handle save operation success.
+   */
+  async handleSaveSuccess() {
+    await this.props.actionFeedbackContext.displaySuccess("The password has been updated successfully");
+    this.selectAndScrollToResource(this.context.passwordEditDialogProps.id);
+    this.props.resourceWorkspaceContext.onResourceEdited();
+    this.props.onClose();
+    this.context.setContext({passwordEditDialogProps: null});
+  }
+
+  /*
+   * =============================================================
+   *  Error handling
+   * =============================================================
+   */
+
+  /**
+   * Handle save operation error.
+   * @param {object} error The returned error
+   */
+  handleSaveError(error) {
+    // It can happen when the user has closed the passphrase entry dialog by instance.
+    if (error.name === "UserAbortsOperationError") {
+      // Do nothing
+    } else {
+      // Unexpected error occurred.
+      console.error(error);
+      this.handleError(error);
+    }
+  }
+
+  /**
+   * handle error to display the error dialog
+   * @param error
+   */
+  handleError(error) {
+    const errorDialogProps = {
+      title: "There was an unexpected error...",
+      message: error.message
+    };
+    this.context.setContext({errorDialogProps});
+    this.props.dialogContext.open(ErrorDialog);
+  }
+
+  /**
+   * Focus the first field of the form which is in error state.
+   */
+  focusFirstFieldError() {
+    if (this.state.nameError) {
+      this.nameInputRef.current.focus();
+    } else if (this.state.passwordError) {
+      this.passwordInputRef.current.focus();
+    }
+  }
+
+  /*
+   * =============================================================
+   *  Out of dialog actions
+   * =============================================================
+   */
+  /**
+   * Select and scroll to a given resource.
+   * @param {string} id The resource id.
+   */
+  selectAndScrollToResource(id) {
+    this.context.port.emit("passbolt.resources.select-and-scroll-to", id);
+  }
+
+  /*
+   * =============================================================
+   *  Dialog actions event handlers
+   * =============================================================
+   */
+  /**
+   * Handle form input change.
+   * @params {ReactEvent} The react event.
+   */
+  handleInputChange(event) {
+    const target = event.target;
+    const value = target.value;
+    const name = target.name;
+    this.setState({
+      [name]: value
+    });
+  }
+
+  /**
+   * Handle password input focus.
+   */
+  async handlePasswordInputFocus() {
+    const passwordInputHasFocus = true;
+    this.setState({passwordInputHasFocus: passwordInputHasFocus});
+    this.passwordInputRef.current.focus();
+  }
+
+  /**
+   * Handle description input focus.
+   */
+  async handleDescriptionInputFocus() {
+    const descriptionHasFocus = true;
+    this.setState({passwordInputHasFocus: descriptionHasFocus});
+    this.descriptionInputRef.current.focus();
+  }
+
+  /**
+   * Handle password input blur.
+   */
+  handlePasswordInputBlur() {
+    this.setState({passwordInputHasFocus: false});
+  }
+
+  /**
+   * Handle description input blur.
+   */
+  handleDescriptionInputBlur() {
+    this.setState({descriptionInputHasFocus: false});
+  }
+
+  /**
+   * Handle name input keyUp event.
+   */
+  handleNameInputKeyUp() {
+    const state = this.validateNameInput();
+    this.setState(state);
+  }
+
+  /**
+   * Handle password input keyUp event.
+   */
+  handlePasswordInputKeyUp() {
+    this.validatePasswordInput();
+  }
+
+  /**
+   * Handle view password button click.
+   */
+  async handleViewPasswordButtonClick() {
+    if (this.hasAllInputDisabled()) {
+      return;
+    }
+    this.setState({viewPassword: !this.state.viewPassword});
+  }
+
+  /**
+   * Handle generate password button click.
+   */
+  handleGeneratePasswordButtonClick() {
+    if (this.hasAllInputDisabled()) {
+      return;
+    }
+    const password = SecretComplexity.generate();
+    this.setState({password: password});
+  }
+
+  /**
+   * Handle close button click.
+   */
+  handleClose() {
+    this.context.setContext({passwordEditDialogProps: null});
+    this.props.onClose();
+  }
+
+  /**
+   * Switch to toggle description field encryption
+   */
+  async handleDescriptionToggle() {
+    // Description is not encrypted and encrypted description type is not supported => leave it alone
+    if (!this.isEncryptedDescriptionEnabled() && !this.state.encryptDescription) {
+      return;
+    }
+
+    // No obligation to keep description encrypted, allow toggle
+    if (!this.mustEncryptDescription()) {
+      const encrypt = !this.state.encryptDescription;
+      this.setState({encryptDescription: encrypt});
+    }
+  }
+
+  /*
+   * =============================================================
+   *  Decryption
+   * =============================================================
+   */
+  /**
+   * Decrypt the password secret
+   * @return {Promise<boolean>}
+   */
+  async decryptSecret() {
+    this.setState({
+      isSecretDecrypting: true
+    });
+
+    try {
+      const secretDto = await this.getDecryptedSecret();
+      this.setState({
+        password: secretDto.password,
+        description: secretDto.description,
+        isSecretDecrypting: false
+      });
+      return true;
+    } catch (error) {
+      this.handleClose();
+      return false;
+    }
+  }
+
+  /**
+   * Get the decrypted password secret
+   * @return {Promise<Object>}
+   */
+  async getDecryptedSecret() {
+    const plaintext = await this.context.port.request("passbolt.secret.decrypt", this.context.passwordEditDialogProps.id, {showProgress: false});
+    if (typeof plaintext === 'string') {
+      return {
+        password: plaintext,
+        description: this.state.description
+      };
+    }
+    return plaintext;
+  }
+
+  /*
+   * =============================================================
+   *  Security token style
+   * =============================================================
+   */
+  /**
    * Get the password input style.
    * @return {Object}
    */
   getPasswordInputStyle() {
     if (this.state.passwordInputHasFocus) {
+      const backgroundColor = this.context.userSettings.getSecurityTokenBackgroundColor();
+      const textColor = this.context.userSettings.getSecurityTokenTextColor();
+
       return {
-        background: this.context.user["user.settings.securityToken.color"],
-        color: this.context.user["user.settings.securityToken.textColor"]
+        background: backgroundColor,
+        color: textColor
       };
     }
 
@@ -379,149 +545,192 @@ class PasswordEditDialog extends Component {
    * @return {Object}
    */
   getSecurityTokenStyle() {
+    const backgroundColor = this.context.userSettings.getSecurityTokenBackgroundColor();
+    const textColor = this.context.userSettings.getSecurityTokenTextColor();
+
     if (this.state.passwordInputHasFocus) {
       return {
-        background: this.context.user["user.settings.securityToken.textColor"],
-        color: this.context.user["user.settings.securityToken.color"],
+        background: textColor,
+        color: backgroundColor,
       };
     }
 
     return {
-      background: this.context.user["user.settings.securityToken.color"],
-      color: this.context.user["user.settings.securityToken.textColor"],
+      background: backgroundColor,
+      color: textColor,
     };
   }
+
+  /*
+   * =============================================================
+   *  Placeholder texts / status helpers
+   * =============================================================
+   */
 
   /**
    * Get the password input field placeholder.
    * @returns {string}
    */
   getPasswordInputPlaceholder() {
-    let placeholder = "Click here to unlock";
+    let placeholder =  "Password";
     if (this.state.isSecretDecrypting) {
       placeholder = "Decrypting";
-    } else if (this.state.isSecretDecrypted) {
-      placeholder = "Password";
     }
 
     return placeholder;
   }
 
+  /**
+   * Get the description placeholder text depending on state
+   * @returns {string}
+   */
+  getDescriptionPlaceholder() {
+    if (this.state.isSecretDecrypting && this.mustEncryptDescription()) {
+      return "Decrypting";
+    }
+    return "Description";
+  }
+
+  /**
+   * Should input be disabled? True if state is processing
+   * @returns {boolean}
+   */
+  hasAllInputDisabled() {
+    return this.state.processing;
+  }
+
+  /**
+   * @returns {boolean}
+   */
+  isPasswordDisabled() {
+    return this.state.isSecretDecrypting;
+  }
+
+  /**
+   * @returns {boolean}
+   */
+  isDescriptionDisabled() {
+    return (this.state.isSecretDecrypting && this.mustEncryptDescription());
+  }
+
+  /*
+   * =============================================================
+   *  Render view
+   * =============================================================
+   */
   render() {
     const passwordInputStyle = this.getPasswordInputStyle();
     const securityTokenStyle = this.getSecurityTokenStyle();
-    const passwordStrength = secretComplexity.strength(this.state.password);
-    const passwordStrengthLabel = secretComplexity.STRENGTH[passwordStrength].label;
-    const passwordStrengthLabelClass = secretComplexity.STRENGTH[passwordStrength].id;
+    const securityTokenCode = this.context.userSettings.getSecurityTokenCode();
+    const passwordStrength = SecretComplexity.getStrength(this.state.password);
     const passwordPlaceholder = this.getPasswordInputPlaceholder();
 
     return (
-      <div className="dialog-wrapper" onKeyDown={this.handleKeyDown}>
-        <div className="dialog edit-password-dialog">
-          <div className="dialog-header">
-            <h2>
-              <span className="dialog-header-title">Edit</span>
-              <span className="dialog-header-subtitle">{this.state.nameOriginal}</span>
-            </h2>
-            <a className="dialog-close" onClick={this.handleCloseClick}>
-              <Icon name='close' />
-              <span className="visually-hidden">cancel</span>
-            </a>
-          </div>
-          <div className="dialog-content">
-            <form onSubmit={this.handleFormSubmit} noValidate>
-              <div className="form-content">
-                <div className={`input text required ${this.state.nameError ? "error" : ""}`}>
-                  <label htmlFor="edit-password-form-name">Name</label>
-                  <input id="edit-password-form-name" name="name" type="text" value={this.state.name}
-                    onKeyUp={this.handleNameInputKeyUp} onChange={this.handleInputChange}
-                    disabled={this.state.processing} ref={this.nameInputRef} className="required fluid" maxLength="64"
-                    required="required" autoComplete="off" autoFocus={true}/>
-                  {this.state.nameError &&
-                  <div className="name error message">{this.state.nameError}</div>
-                  }
-                </div>
-                <div className={`input text ${this.state.uriError ? "error" : ""}`}>
-                  <label htmlFor="edit-password-form-uri">URL</label>
-                  <input id="edit-password-form-uri" name="uri" className="fluid" maxLength="1024" type="text"
-                    autoComplete="off" value={this.state.uri} onChange={this.handleInputChange}
-                    disabled={this.state.processing}/>
-                  {this.state.uriError &&
-                  <div className="error message">{this.state.uriError}</div>
-                  }
-                </div>
-                <div className={`input text ${this.state.usernameError ? "error" : ""}`}>
-                  <label htmlFor="edit-password-form-username">Username</label>
-                  <input id="edit-password-form-username" name="username" type="text" className="fluid" maxLength="64"
-                    autoComplete="off" value={this.state.username} onChange={this.handleInputChange}
-                    disabled={this.state.processing}/>
-                  {this.state.usernameError &&
-                  <div className="error message">{this.state.usernameError}</div>
-                  }
-                </div>
-                <div className={`input-password-wrapper required ${this.state.passwordError ? "error" : ""}`}>
-                  <label htmlFor="edit-password-form-password">Password</label>
-                  <div className="input text password">
-                    <input id="edit-password-form-password" name="password" className="required"
-                      required="required" type={this.state.viewPassword ? "text" : "password"}
-                      onKeyUp={this.handlePasswordInputKeyUp} value={this.state.password}
-                      placeholder={passwordPlaceholder} onFocus={this.handlePasswordInputFocus}
-                      onBlur={this.handlePasswordInputBlur} onChange={this.handleInputChange}
-                      disabled={this.state.processing} style={passwordInputStyle} ref={this.passwordInputRef}/>
-                    <div className="security-token"
-                      style={securityTokenStyle}>{this.context.user["user.settings.securityToken.code"]}</div>
-                  </div>
-                  <ul className="actions inline">
-                    <li>
-                      <a onClick={this.handleViewPasswordButtonClick}
-                        className={`password-view button button-icon toggle ${this.state.viewPassword ? "selected" : ""}`}>
-                        <Icon name='eye-open' big={true}/>
-                        <span className="visually-hidden">view</span>
-                      </a>
-                    </li>
-                    <li>
-                      <a onClick={this.handleGeneratePasswordButtonClick}
-                        className={`password-generate button-icon button ${this.state.processing || !this.state.isSecretDecrypted ? "disabled" : ""}`}>
-                        <Icon name='magic-wand' big={true}/>
-                        <span className="visually-hidden">generate</span>
-                      </a>
-                    </li>
-                  </ul>
-                  <div className={`password-complexity ${passwordStrengthLabelClass}`}>
-                    <span className="progress"><span
-                      className={`progress-bar ${passwordStrengthLabelClass}`}></span></span>
-                    <span className="complexity-text">complexity: <strong>{passwordStrengthLabel}</strong></span>
-                  </div>
-                  {this.state.passwordError &&
-                  <div className="input text">
-                    <div className="password message error">{this.state.passwordError}</div>
-                  </div>
-                  }
-                </div>
-                <div className="input textarea">
-                  <label htmlFor="edit-password-form-description">Description&nbsp;
-                    <Tooltip message="Do not store sensitive data. Unlike the password, this data is not encrypted." icon="warning" />
-                  </label>
-                  <textarea id="edit-password-form-description" name="description" maxLength="10000"
-                    className="required" placeholder="add a description" value={this.state.description}
-                    disabled={this.state.processing} onChange={this.handleInputChange}>
-                  </textarea>
-                  {this.state.descriptionError &&
-                  <div className="error message">{this.state.descriptionError}</div>
-                  }
-                </div>
-              </div>
-              {this.state.error &&
-              <div className="feedbacks message error">{this.state.error}</div>
+      <DialogWrapper title={`Edit`} subtitle={this.state.nameOriginal} className="edit-password-dialog"
+        disabled={this.hasAllInputDisabled()} onClose={this.handleClose}>
+        <form onSubmit={this.handleFormSubmit} noValidate>
+          <div className="form-content">
+            <div className={`input text required ${this.state.nameError ? "error" : ""}`}>
+              <label htmlFor="edit-password-form-name">Name</label>
+              <input id="edit-password-form-name" name="name" type="text" value={this.state.name}
+                onKeyUp={this.handleNameInputKeyUp} onChange={this.handleInputChange}
+                disabled={this.hasAllInputDisabled()} ref={this.nameInputRef} className="required fluid" maxLength="64"
+                required="required" autoComplete="off" autoFocus={true}/>
+              {this.state.nameError &&
+              <div className="name error message">{this.state.nameError}</div>
               }
-              <div className="submit-wrapper clearfix">
-                <input type="submit" className="button primary" role="button" value="Save"/>
-                <a className="cancel" role="button" onClick={this.handleCloseClick}>Cancel</a>
+            </div>
+            <div className={`input text ${this.state.uriError ? "error" : ""}`}>
+              <label htmlFor="edit-password-form-uri">URL</label>
+              <input id="edit-password-form-uri" name="uri" className="fluid" maxLength="1024" type="text"
+                autoComplete="off" value={this.state.uri} onChange={this.handleInputChange} placeholder="URL"
+                disabled={this.hasAllInputDisabled()}/>
+              {this.state.uriError &&
+              <div className="error message">{this.state.uriError}</div>
+              }
+            </div>
+            <div className={`input text ${this.state.usernameError ? "error" : ""}`}>
+              <label htmlFor="edit-password-form-username">Username</label>
+              <input id="edit-password-form-username" name="username" type="text" className="fluid" maxLength="64"
+                autoComplete="off" value={this.state.username} onChange={this.handleInputChange} placeholder="Username"
+                disabled={this.hasAllInputDisabled()}/>
+              {this.state.usernameError &&
+              <div className="error message">{this.state.usernameError}</div>
+              }
+            </div>
+            <div className={`input-password-wrapper input required ${this.state.passwordError ? "error" : ""}`}>
+              <label htmlFor="edit-password-form-password">Password</label>
+              <div className="input text password">
+                <input id="edit-password-form-password" name="password" className={`required ${this.state.isSecretDecrypting ? "" : "decrypted"}`}
+                  required="required" type={this.state.viewPassword ? "text" : "password"}
+                  onKeyUp={this.handlePasswordInputKeyUp} value={this.state.password}
+                  placeholder={passwordPlaceholder} onFocus={this.handlePasswordInputFocus}
+                  onBlur={this.handlePasswordInputBlur} onChange={this.handleInputChange}
+                  disabled={this.hasAllInputDisabled() || this.isPasswordDisabled()} style={passwordInputStyle} ref={this.passwordInputRef}/>
+                <div className="security-token"
+                  style={securityTokenStyle}>{securityTokenCode}</div>
               </div>
-            </form>
+              <ul className="actions inline">
+                <li>
+                  <a onClick={this.handleViewPasswordButtonClick}
+                    className={`password-view button button-icon toggle ${this.state.viewPassword ? "selected" : ""} ${this.hasAllInputDisabled() ? "disabled" : ""}`}>
+                    <Icon name='eye-open' big={true}/>
+                    <span className="visually-hidden">view</span>
+                  </a>
+                </li>
+                <li>
+                  <a onClick={this.handleGeneratePasswordButtonClick}
+                    className={`password-generate button-icon button ${this.hasAllInputDisabled() ? "disabled" : ""}`}>
+                    <Icon name='magic-wand' big={true}/>
+                    <span className="visually-hidden">generate</span>
+                  </a>
+                </li>
+              </ul>
+              <div className={`password-complexity ${passwordStrength.id}`}>
+                <span className="progress">
+                  <span className={`progress-bar ${passwordStrength.id}`}/>
+                </span>
+                <span className="complexity-text">complexity: <strong>{passwordStrength.label}</strong></span>
+              </div>
+              {this.state.passwordError &&
+              <div className="input text">
+                <div className="password message error">{this.state.passwordError}</div>
+              </div>
+              }
+            </div>
+            <div className="input textarea">
+              <label htmlFor="edit-password-form-description">Description&nbsp;
+                {!this.areResourceTypesEnabled() &&
+                <Tooltip message="Do not store sensitive data. Unlike the password, this data is not encrypted. Upgrade to version 3 to encrypt this information."
+                  icon="info-circle"/>
+                }
+                {this.areResourceTypesEnabled() && !this.state.encryptDescription &&
+                <a role="button" onClick={this.handleDescriptionToggle} className="lock-toggle">
+                  <Tooltip message="Do not store sensitive data or click here to enable encryption for the description field." icon="lock-open" />
+                </a>
+                }
+                {this.areResourceTypesEnabled() && this.state.encryptDescription &&
+                <a role="button" onClick={this.handleDescriptionToggle} className="lock-toggle">
+                  <Tooltip message="The description content will be encrypted." icon="lock" />
+                </a>
+                }
+              </label>
+              <textarea id="edit-password-form-description" name="description" maxLength="10000"
+                className="required" placeholder={this.getDescriptionPlaceholder()} value={this.state.description}
+                disabled={this.hasAllInputDisabled() || this.isDescriptionDisabled()} onChange={this.handleInputChange} ref={this.descriptionInputRef}
+                onFocus={this.handleDescriptionInputFocus} onBlur={this.handleDescriptionInputBlur}>
+              </textarea>
+              {this.state.descriptionError &&
+              <div className="error message">{this.state.descriptionError}</div>
+              }
+            </div>
           </div>
-        </div>
-      </div>
+          <div className="submit-wrapper clearfix">
+            <FormSubmitButton value="Save" disabled={this.hasAllInputDisabled() || this.isPasswordDisabled() || this.isDescriptionDisabled()} processing={this.hasAllInputDisabled()}/>
+            <FormCancelButton disabled={this.hasAllInputDisabled() || this.isPasswordDisabled() || this.isDescriptionDisabled()} onClick={this.handleClose}/>
+          </div>
+        </form>
+      </DialogWrapper>
     );
   }
 }
@@ -529,9 +738,10 @@ class PasswordEditDialog extends Component {
 PasswordEditDialog.contextType = AppContext;
 
 PasswordEditDialog.propTypes = {
-  className: PropTypes.string,
   onClose: PropTypes.func,
-  id: PropTypes.string
+  resourceWorkspaceContext: PropTypes.any, // The resource workspace context
+  actionFeedbackContext: PropTypes.any, // The action feedback context
+  dialogContext: PropTypes.any // The dialog context
 };
 
-export default PasswordEditDialog;
+export default withResourceWorkspace(withActionFeedback(withDialog(PasswordEditDialog)));

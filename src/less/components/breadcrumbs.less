@@ -7,14 +7,16 @@
     margin-bottom: 0;
     background: @breadcrumb-background;
     ul {
-        padding-top: 0.2em;
+        padding-top: 0.45em;
         margin-left: .1875em;
         li {
-            display: inline;
+            display: inline-block;
             font-size: .8em; /* 12px/base16>15 */
             margin-left: .25em;
+            max-width: 25%;
+            float: left;
             &:before {
-                content: "›";
+                content: "\203A"; /* unicode character › */
                 margin-right: .5em;
             }
             &:first-child {

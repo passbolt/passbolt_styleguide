@@ -1,10 +1,9 @@
-<?php include('_includes/bootstrap.php'); ?><!doctype html>
-<?php if (!isset($base)) $base = '../../'; ?>
-<html class="no-js no-passboltplugin version alpha" lang="en">
-<head>
+<?php include('../../legacy/_includes/bootstrap.php'); ?><!doctype html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
     <title>Form input tests</title>
-    <?php include('../includes/meta/AN_meta.php'); ?>
-    <link rel="stylesheet" type="text/css" href="src/css/themes/default/api_main.css" />
+    <link rel="stylesheet" type="text/css" href="../../../src/css/themes/<?= $theme; ?>/api_main.css">
 </head>
 <body>
 <div style="width:640px;margin:auto">

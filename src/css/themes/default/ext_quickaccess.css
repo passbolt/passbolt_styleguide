@@ -17,6 +17,7 @@
 /* tooltip */
 /* loading animation */
 /* svg fill */
+/* favorite icon fill */
 /*! normalize.css v8.0.0 | MIT License | github.com/necolas/normalize.css */
 /* Document
    ========================================================================== */
@@ -345,7 +346,7 @@ body {
 }
 h1 {
   font-size: 2.2rem;
-  line-height: 2.4rem;
+  line-height: 3.2rem;
 }
 h2 {
   font-size: 1.6rem;
@@ -658,7 +659,8 @@ label {
 	.required		- additional red star
 */
 .required label:after {
-  content: " *";
+  content: " \002A";
+  /* unicode character * */
   color: #D40101;
   font-weight: bold;
 }
@@ -691,6 +693,18 @@ textarea {
   margin-bottom: 0.8rem;
   border: 1px solid #CCC;
   border-top: 1px solid #BBB;
+  vertical-align: middle;
+}
+input[type=file] {
+  box-sizing: border-box;
+  font-size: 1.6rem;
+  line-height: 2.4rem;
+  color: #333;
+  background: #FFF;
+  width: 100%;
+  max-width: 64rem;
+  display: inline-block;
+  margin-bottom: 0.8rem;
   vertical-align: middle;
 }
 textarea:hover,
@@ -730,7 +744,6 @@ input[type=email]:disabled {
 textarea {
   height: 3.6rem;
   /* 4 char (default input length) x 1em (average char length) + .6em (padding) */
-  line-height: 1.6rem;
 }
 .textarea.large textarea {
   width: 30rem;
@@ -741,6 +754,9 @@ textarea {
   opacity: 0;
   cursor: pointer;
 }
+.checkbox input[type=checkbox].error {
+  color: #D40101;
+}
 .checkbox input[type=checkbox] + label {
   font-weight: normal;
   position: relative;
@@ -750,12 +766,12 @@ textarea {
 }
 .checkbox input[type=checkbox] + label:before {
   content: '';
-  margin-top: 0.3rem;
+  margin-top: 0.39rem;
   margin-right: 1rem;
   display: inline-block;
   vertical-align: text-top;
-  width: 1.6rem;
-  height: 1.6rem;
+  width: 1.4rem;
+  height: 1.4rem;
   background: #FFF;
   border: 1px solid #DDD;
 }
@@ -775,19 +791,19 @@ textarea {
 }
 .checkbox input[type=checkbox]:disabled + label:before {
   box-shadow: none;
-  background: #FFF;
+  background: #F3F3F3;
 }
 .checkbox input[type=checkbox]:checked + label:after {
   content: '';
   position: absolute;
   left: 0.3rem;
-  top: 0.6rem;
-  width: 1.2rem;
-  height: 1.2rem;
-  background-size: 1.2rem 1.2rem;
+  top: 0.79rem;
+  width: 1rem;
+  height: 1rem;
+  background-size: 1rem 1rem;
   background-color: #333;
-  -webkit-mask-image: url('../../../img/fa/fas/check.svg');
-  mask-image: url('../../../img/fa/fas/check.svg');
+  -webkit-mask-image: url('../../../img/controls/check_black.svg');
+  mask-image: url('../../../img/controls/check_black.svg');
 }
 .checkbox.small input[type=checkbox] {
   cursor: pointer;
@@ -824,6 +840,7 @@ textarea {
   font-weight: normal;
   color: #D40101;
   background: #FFF;
+  clear: both;
 }
 .input .help-message {
   padding: 0;
@@ -841,27 +858,6 @@ textarea {
   background-size: 20rem auto;
   width: 20rem;
   height: 4.5rem;
-}
-.fa.icon svg {
-  width: 1.6rem;
-  height: 1.6rem;
-}
-.fa.icon svg path {
-  fill: #888;
-}
-.app .fa.icon {
-  font-size: 1.33333333em;
-  vertical-align: -15%;
-}
-.app .dialog-close .fa.icon svg {
-  margin-top: -7px;
-}
-.app .fa.icon svg {
-  width: 1rem;
-  height: 1rem;
-}
-.app .fa.icon svg path {
-  fill: #333;
 }
 /* lists */
 ul {
@@ -1061,6 +1057,27 @@ ul li {
   background-size: 100% 40px, 100% 40px, 100% 14px, 100% 14px;
   /* Opera doesn't support this in the shorthand */
   background-attachment: local, local, scroll, scroll;
+}
+.fa.icon svg {
+  width: 1.6rem;
+  height: 1.6rem;
+}
+.fa.icon svg path {
+  fill: #888;
+}
+.app .fa.icon {
+  font-size: 1.33333333em;
+  vertical-align: -15%;
+}
+.app .dialog-close .fa.icon svg {
+  margin-top: -7px;
+}
+.app .fa.icon svg {
+  width: 1rem;
+  height: 1rem;
+}
+.app .fa.icon svg path {
+  fill: #333;
 }
 .security-token {
   font-size: 1.6rem;
@@ -1439,7 +1456,7 @@ ul li {
   -ms-text-overflow: ellipsis;
 }
 .quickaccess .index-list .resource-entry a:after {
-  background: transparent url('../../../img/fa/fas/chevron-right.svg') 23rem center no-repeat;
+  background: transparent url('../../../img/controls/chevron-right_black.svg') 23rem center no-repeat;
   background-size: 1.6rem 1.6rem;
   content: "";
   display: block;
@@ -1481,7 +1498,7 @@ ul li {
   position: relative;
 }
 .quickaccess .index-list .filter-entry a:after {
-  background: transparent url('../../../img/fa/fas/chevron-right.svg') 23rem center no-repeat;
+  background: transparent url('../../../img/controls/chevron-right_black.svg') 23rem center no-repeat;
   background-size: 1.6rem 1.6rem;
   content: "";
   display: block;
@@ -1732,7 +1749,7 @@ ul li {
   display: block;
   margin: 0.1rem;
 }
-.quickaccess .resource-create .password .password-strength .password-strength-bar-value.very_weak {
+.quickaccess .resource-create .password .password-strength .password-strength-bar-value.very-weak {
   background: #000;
   width: 5%;
 }
@@ -1748,7 +1765,7 @@ ul li {
   background: #66CC00;
   width: 80%;
 }
-.quickaccess .resource-create .password .password-strength .password-strength-bar-value.very_strong {
+.quickaccess .resource-create .password .password-strength .password-strength-bar-value.very-strong {
   background: #009900;
   width: 99.5%;
 }

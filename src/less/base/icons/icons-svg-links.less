@@ -15,4 +15,15 @@ a {
             fill: @font-light;
         }
     }
+    &.fav {
+      .svg-icon svg {
+        fill: @favorite-fill-color;
+      }
+    }
+    &.unfav {
+      .svg-icon.star svg {
+        fill: @unfavorite-fill-color;
+      }
+      display: inline-flex;
+    }
 }

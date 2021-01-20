@@ -15,11 +15,11 @@ import React, {Component} from "react";
 import PropTypes from "prop-types";
 
 import SharePermissionDeleteButton from "./SharePermissionDeleteButton";
-import TooltipHtml from "../Common/Tooltip/TooltipHtml";
+import TooltipHtml from "../../../react/components/Common/Tooltip/TooltipHtml";
 import ShareVariesDetails from "./ShareVariesDetails";
 import AppContext from "../../contexts/AppContext";
-import UserAvatar from "../Common/Avatar/UserAvatar";
-import GroupAvatar from "../Common/Avatar/GroupAvatar";
+import UserAvatar from "../../../react/components/Common/Avatar/UserAvatar";
+import GroupAvatar from "../../../react/components/Common/Avatar/GroupAvatar";
 
 class SharePermissionItem extends Component {
   /**
@@ -76,7 +76,7 @@ class SharePermissionItem extends Component {
 
   getAroName() {
     if (this.props.aro.profile) {
-      let profile = this.props.aro.profile;
+      const profile = this.props.aro.profile;
       return `${profile.first_name} ${profile.last_name}`;
     } else {
       return this.props.aro.name;
@@ -108,22 +108,22 @@ class SharePermissionItem extends Component {
   }
 
   handleUpdate(event) {
-    let newType = parseInt(event.target.value);
+    const newType = parseInt(event.target.value);
     this.props.onUpdate(this.props.id, newType);
   }
 
-  handleDelete(event) {
+  handleDelete() {
     this.props.onDelete(this.props.id);
   }
 
   render() {
-    return(
-      <li id={"permission-item-" + this.props.id} className={this.getClassName()}>
+    return (
+      <li id={`permission-item-${this.props.id}`} className={this.getClassName()}>
         {this.isUser() &&
-          <UserAvatar user={this.props.aro} />
+        <UserAvatar user={this.props.aro} baseUrl={this.context.userSettings.getTrustedDomain()}/>
         }
         {this.isGroup() &&
-          <GroupAvatar group={this.props.aro} />
+        <GroupAvatar group={this.props.aro} baseUrl={this.context.userSettings.getTrustedDomain()}/>
         }
 
         <div className="aro">
@@ -137,10 +137,10 @@ class SharePermissionItem extends Component {
 
         <div className="select rights">
           <select name="permissionSelect"
-                  className={this.getSelectClassName()}
-                  value={this.state.permissionType}
-                  disabled={this.isInputDisabled()}
-                  onChange={this.handleUpdate}
+            className={this.getSelectClassName()}
+            value={this.state.permissionType}
+            disabled={this.isInputDisabled()}
+            onChange={this.handleUpdate}
           >
             <option value="1">can read</option>
             <option value="7">can update</option>
@@ -174,7 +174,8 @@ SharePermissionItem.propTypes = {
   updated: PropTypes.bool,
   disabled: PropTypes.bool,
   onUpdate: PropTypes.func,
-  onDelete: PropTypes.func
+  onDelete: PropTypes.func,
+  permissionType: PropTypes.number,
 };
 
 export default SharePermissionItem;

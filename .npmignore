@@ -3,7 +3,6 @@ demo
 docker
 .idea
 src/react-appjs
-src/react-extension
 src/css
 src/less
 src/video

@@ -1,6 +1,6 @@
 /* left panel navigation */
 .panel .navigation {
-    font-size: .938em;
+    font-size: .9375em;
 
     li {
         .clearfix();
@@ -88,26 +88,27 @@
                 padding: .125em;
                 color:@font-light;
                 border:1px solid transparent;
+
+                .svg-icon {
+                  position:absolute;
+                  width:16px;
+                  height:16px;
+                  line-height: 16px;
+                  text-align: center;
+                  vertical-align: center;
+
+                  svg {
+                    fill: @grey-darker;
+                    &:hover {
+                      fill: @font-focus;
+                    }
+                  }
+                }
             }
-            a:after {
-                position:absolute;
-                width:16px;
-                height:16px;
-                content: "\f0fe";
-                font: normal normal normal 14px/1 FontAwesome;
-                line-height: 16px;
-                text-align: center;
-                vertical-align: center;
-            }
-            a.filter:after {
-                content: "\f0b0";
-            }
+
             a:hover {
                 color:@font-focus;
                 background:@background-default;
-            }
-            span {
-                .visuallyhidden();
             }
         }
 
@@ -116,7 +117,7 @@
          */
         &.title {
             .right-cell {
-                margin-top: -1.625em;
+                margin-top: -1.825em;
             }
         }
     }
@@ -128,13 +129,6 @@
             a {
                 display:block;
             }
-            a.filter {
-                border: 1px solid @border-default;
-            }
         }
-    }
-
-    .empty-content {
-        padding-left: 1em;
     }
 }

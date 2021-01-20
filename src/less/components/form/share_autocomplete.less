@@ -77,15 +77,21 @@
                 .ellipsis();
                 display: block;
             }
-        }
-        & .loading {
-            background-color: @background-default;
 
-            img {
-                border-radius:0;
-                width:1.75em;
-                height:1.75em;
-                padding:.5em 1.5em 0 .25em;
+            &.loading {
+                .info {
+                    margin-left: 3.8em;
+
+                    &:after {
+                        width: 60%;
+                        height: 100%;
+                        position: absolute;
+                        content: " ";
+                        top: 0px;
+                        left: 1.45em;
+                        background: transparent @loading left center no-repeat;
+                    }
+                }
             }
         }
     }

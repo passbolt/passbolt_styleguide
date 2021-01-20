@@ -1,12 +1,12 @@
 /**
  * Passbolt ~ Open source password manager for teams
- * Copyright (c) 2019 Passbolt SA (https://www.passbolt.com)
+ * Copyright (c) 2020 Passbolt SA (https://www.passbolt.com)
  *
  * Licensed under GNU Affero General Public License version 3 of the or any later version.
  * For full copyright and license information, please see the LICENSE.txt
  * Redistributions of files must retain the above copyright notice.
  *
- * @copyright     Copyright (c) 2019 Passbolt SA (https://www.passbolt.com)
+ * @copyright     Copyright (c) 2020 Passbolt SA (https://www.passbolt.com)
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         2.12.0
@@ -15,10 +15,12 @@ import React, {Component} from "react";
 import PropTypes from "prop-types";
 
 import AppContext from "../../../contexts/AppContext";
-import ErrorDialog from "../../Common/ErrorDialog/ErrorDialog";
-import DialogWrapper from "../../Common/DialogWrapper/DialogWrapper";
-import FormSubmitButton from "../../Common/FormSubmitButton/FormSubmitButton";
-import FormCancelButton from "../../Common/FormSubmitButton/FormCancelButton";
+import ErrorDialog from "../../Dialog/ErrorDialog/ErrorDialog";
+import DialogWrapper from "../../../../react/components/Common/Dialog/DialogWrapper/DialogWrapper";
+import FormSubmitButton from "../../../../react/components/Common/Inputs/FormSubmitButton/FormSubmitButton";
+import FormCancelButton from "../../../../react/components/Common/Inputs/FormSubmitButton/FormCancelButton";
+import {withDialog} from "../../../../react/contexts/Common/DialogContext";
+import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 
 class FolderRenameDialog extends Component {
   /**
@@ -39,7 +41,7 @@ class FolderRenameDialog extends Component {
    * @return {void}
    */
   async componentDidMount() {
-    this.setState({loading:false}, () => {
+    this.setState({loading: false}, () => {
       this.nameRef.current.focus();
     });
   }
@@ -54,10 +56,6 @@ class FolderRenameDialog extends Component {
       loading: true,
       processing: false,
       inlineValidation: false,
-
-      // Error dialog trigger
-      serviceError: false,
-      errorMessage: '',
 
       // Fields and errors
       name: 'loading...',
@@ -77,17 +75,17 @@ class FolderRenameDialog extends Component {
    */
   getStateBasedOnContext(context, props, defaultState) {
     const folders = context.folders;
-    const errorMessage = 'The folder could not be found. Maybe it was deleted or you lost access.';
+    const error = {
+      message: 'The folder could not be found. Maybe it was deleted or you lost access.'
+    };
     if (!folders) {
       console.error(`No folders context defined.`);
-      defaultState.serviceError = true;
-      defaultState.errorMessage = errorMessage;
+      this.handleError(error);
     }
-    const folder = context.folders.find(item => item.id === props.folderId) || false;
+    const folder = context.folders.find(item => item.id === context.folder.id) || false;
     if (!folder) {
-      console.error(`Folder ${props.folderId} not found in context.`);
-      defaultState.serviceError = true;
-      defaultState.errorMessage = errorMessage;
+      console.error(`Folder ${context.folder.id} not found in context.`);
+      this.handleError(error);
     } else {
       defaultState.name = folder.name;
     }
@@ -108,7 +106,6 @@ class FolderRenameDialog extends Component {
    */
   bindEventHandlers() {
     this.handleClose = this.handleClose.bind(this);
-    this.handleCloseError = this.handleCloseError.bind(this);
     this.handleFormSubmit = this.handleFormSubmit.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
   }
@@ -118,20 +115,7 @@ class FolderRenameDialog extends Component {
    * @returns {void}
    */
   handleClose() {
-    // ignore closing event of main folder create dialog
-    // if service error is displayed on top
-    if (!this.state.serviceError) {
-      this.props.onClose();
-    }
-  }
-
-  /**
-   * Handle close error dialog
-   * @returns {void}
-   */
-  handleCloseError() {
-    // Close error dialog / we do not close main dialog to allow retry
-    this.setState({serviceError: false, serviceErrorMessage: ''});
+    this.props.onClose();
   }
 
   /**
@@ -180,17 +164,48 @@ class FolderRenameDialog extends Component {
 
     try {
       const folder = await this.updateFolder();
-      this.displayNotification("success", "The folder was renamed successfully");
-      this.selectAndScrollToFolder(folder.id);
-      this.props.onClose();
+      await this.handleSaveSuccess(folder.id);
     } catch (error) {
-      console.error(error);
-      this.setState({
-        serviceError: true,
-        errorMessage: error.message,
-        processing: false
-      });
+      this.handleSaveError(error);
     }
+  }
+
+  /**
+   * Handle save operation success.
+   */
+  async handleSaveSuccess(folderId) {
+    await this.props.actionFeedbackContext.displaySuccess("The folder was renamed successfully");
+    this.selectAndScrollToFolder(folderId);
+    this.props.onClose();
+  }
+
+  /**
+   * Handle save operation error.
+   * @param {object} error The returned error
+   */
+  handleSaveError(error) {
+    // It can happen when the user has closed the passphrase entry dialog by instance.
+    if (error.name === "UserAbortsOperationError") {
+      this.setState({processing: false});
+    } else {
+      // Unexpected error occurred.
+      console.error(error);
+      this.handleError(error);
+      this.setState({processing: false});
+    }
+  }
+
+  /**
+   * handle error to display the error dialog
+   * @param error
+   */
+  handleError(error) {
+    const errorDialogProps = {
+      title: "There was an unexpected error...",
+      message: error.message
+    };
+    this.context.setContext({errorDialogProps});
+    this.props.dialogContext.open(ErrorDialog);
   }
 
   /**
@@ -201,7 +216,7 @@ class FolderRenameDialog extends Component {
     const prev = this.state.processing;
     return new Promise(resolve => {
       this.setState({processing: !prev}, resolve());
-    })
+    });
   }
 
   /**
@@ -218,19 +233,10 @@ class FolderRenameDialog extends Component {
    */
   async updateFolder() {
     const folderDto = {
-      id: this.props.folderId,
+      id: this.context.folder.id,
       name: this.state.name
     };
-    return await port.request("passbolt.folders.update", folderDto);
-  }
-
-  /**
-   * Notify the user.
-   * @param {string} status Can be success, error or info
-   * @param {string} message The message to display
-   */
-  displayNotification(status, message) {
-    port.emit("passbolt.notification.display", {status: status, message: message});
+    return await this.context.port.request("passbolt.folders.update", folderDto);
   }
 
   /**
@@ -239,7 +245,7 @@ class FolderRenameDialog extends Component {
    * @returns {void}
    */
   selectAndScrollToFolder(id) {
-    port.emit("passbolt.folders.select-and-scroll-to", id);
+    this.context.port.emit("passbolt.folders.select-and-scroll-to", id);
   }
 
   /**
@@ -276,7 +282,7 @@ class FolderRenameDialog extends Component {
       nameError = "A name can not be more than 64 char in length.";
     }
     return new Promise(resolve => {
-      this.setState({nameError}, resolve);
+      this.setState({nameError: nameError}, resolve);
     });
   }
 
@@ -285,7 +291,7 @@ class FolderRenameDialog extends Component {
    * @returns {boolean}
    */
   hasValidationError() {
-    return (this.state.nameError !== false)
+    return (this.state.nameError !== false);
   }
 
   /**
@@ -302,36 +308,31 @@ class FolderRenameDialog extends Component {
    */
   render() {
     return (
-      <div>
-        <DialogWrapper className='rename-folder-dialog' title="Rename a folder"
-                       onClose={this.handleClose} disabled={this.hasAllInputDisabled()}>
-          <form className="folder-rename-form" onSubmit={this.handleFormSubmit} noValidate>
-            <div className="form-content">
-              <div className={`input text required ${this.state.nameError ? "error" : ""}`}>
-                <label htmlFor="folder-name-input">Folder name</label>
-                <input id="folder-name-input" name="name"
-                       ref={this.nameRef}
-                       type="text" value={this.state.name} placeholder="Untitled folder"
-                       maxLength="64" required="required"
-                       onChange={this.handleInputChange}
-                       disabled={this.hasAllInputDisabled()}
-                       autoComplete="off" autoFocus={true}
-                />
-                {this.state.nameError &&
-                  <div className="name error message">{this.state.nameError}</div>
-                }
-              </div>
+      <DialogWrapper className='rename-folder-dialog' title="Rename a folder"
+        onClose={this.handleClose} disabled={this.hasAllInputDisabled()}>
+        <form className="folder-rename-form" onSubmit={this.handleFormSubmit} noValidate>
+          <div className="form-content">
+            <div className={`input text required ${this.state.nameError ? "error" : ""}`}>
+              <label htmlFor="folder-name-input">Folder name</label>
+              <input id="folder-name-input" name="name"
+                ref={this.nameRef}
+                type="text" value={this.state.name} placeholder="Untitled folder"
+                maxLength="64" required="required"
+                onChange={this.handleInputChange}
+                disabled={this.hasAllInputDisabled()}
+                autoComplete="off" autoFocus={true}
+              />
+              {this.state.nameError &&
+                <div className="name error message">{this.state.nameError}</div>
+              }
             </div>
-            <div className="submit-wrapper clearfix">
-              <FormSubmitButton disabled={this.hasAllInputDisabled()} processing={this.state.processing} value="Rename"/>
-              <FormCancelButton disabled={this.hasAllInputDisabled()} onClick={this.handleClose} />
-            </div>
-          </form>
-        </DialogWrapper>
-        {this.state.serviceError &&
-          <ErrorDialog message={this.state.errorMessage} onClose={this.handleCloseError}/>
-        }
-      </div>
+          </div>
+          <div className="submit-wrapper clearfix">
+            <FormSubmitButton disabled={this.hasAllInputDisabled()} processing={this.state.processing} value="Rename"/>
+            <FormCancelButton disabled={this.hasAllInputDisabled()} onClick={this.handleClose} />
+          </div>
+        </form>
+      </DialogWrapper>
     );
   }
 }
@@ -339,8 +340,9 @@ class FolderRenameDialog extends Component {
 FolderRenameDialog.contextType = AppContext;
 
 FolderRenameDialog.propTypes = {
-  folderId: PropTypes.string,
-  onClose: PropTypes.func
+  onClose: PropTypes.func,
+  actionFeedbackContext: PropTypes.any, // The action feedback context
+  dialogContext: PropTypes.any // The dialog context
 };
 
-export default FolderRenameDialog;
+export default withDialog(withActionFeedback(FolderRenameDialog));

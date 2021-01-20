@@ -24,10 +24,18 @@
     }
     .secondary {
         float: right;
-    }
-    .secondary .button {
-        font-size: .875em;
-        min-width: 1em;
+
+        .button {
+            font-size: .875em;
+            min-width: 1em;
+
+            &.info {
+                padding: 0.3285714em 1.025em 0.3285714em 1.025em;
+                .svg-icon {
+                    font-size: 1.33333333em;
+                }
+            }
+        }
     }
 }
 
@@ -50,9 +58,6 @@
         }
         i + span {
             margin-left: 0;
-        }
-        #js_wsp_pwd_import_button {
-            display:none;
         }
         .disabled {
             display: none;

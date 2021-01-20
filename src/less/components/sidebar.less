@@ -13,19 +13,63 @@
 
     /* Controls */
     .sidebar-header {
+        .clearfix();
         h3 {
-            padding:1em;
-            margin:0;
+            float: left;
+            width: 67%;
+            margin-top: 0.88em;
+            padding: 0 0 0 0.6em;
+            display: table-cell;
+            vertical-align: middle;
             border: 0;
+            .title-wrapper {
+                width: 100%;
+                line-height: 1.2em;
+                font-size: 1.2em;
+                .name {
+                    max-width: 85%;
+                    float: left;
+                    .ellipsis();
+                }
+                .title-link {
+                  border: 0;
+                  color: @font-dim;
+                  font-size: 0.875em;
+                  margin-left: .429em;
+                  vertical-align: bottom;
+                  &:hover {
+                    color: @font-focus;
+                  }
+                    .svg-icon {
+                        margin-top: 0.25em;
+                    }
+                }
+            }
+            .subtitle {
+                font-size: 0.8em;
+                color: @font-lighter;
+                font-weight: normal;
+                display: block;
+                .ellipsis();
+            }
         }
-        .title-link {
-            border: 0;
-            color: @font-dim;
-            font-size: 0.875em;
-            margin-left: .429em;
-            vertical-align: bottom;
-            &:hover {
-                color: @font-focus;
+        .teaser-image {
+            margin: 1em 0 1em 1em;
+            float: left;
+            width: 3em;
+            height: 3em;
+            border: 1px solid @grey;
+            line-height: 3em;
+            text-align: center;
+            border-radius: 50%;
+            .svg-icon svg {
+                width: 1.5rem;
+                height: 1.5rem;
+                margin-top:.75em;
+            }
+            img {
+                width: 3em;
+                height: 3em;
             }
         }
         .dialog-close {
@@ -50,9 +94,10 @@
         }
 
         .accordion-content {
-            padding:1em 1.25em 1.5em 1.25em;
+            padding:1.25em 1.25em 1.5em 1.25em;
             background: @sidebar-section-header-background;
 
+            // button displayed next to caret that open/close
             .section-action {
                 font-size: 1.125em;
                 position:absolute;
@@ -64,55 +109,87 @@
                 border:0;
             }
 
-            span {
-                .ellipsis();
-            }
-            .label {
-                width: 30%;
-                display: inline-block;
-                margin-right: 10%;
-                float: left;
-                height: 1.8em;
-            }
-            .value {
-                width: 60%;
-                display: inline-block;
-                float: left;
-                height: 1.8em;
-            }
-
-            .processing-wrapper {
-                background-color: @background-default;
-                text-align: center;
-                padding: 0.5em 0;
-                
-                .processing-text {
-                    position: relative;
-                    padding-left: 1.5em;
-                }
-                .processing-text:before {
-                    width: 100%;
-                    height: 100%;
-                    position: absolute;
-                    content: " ";
-                    top: 0px;
-                    left: 0px;
-                    background: transparent @loading left center no-repeat;
-                    background-size: auto 75% ;
-                }
-            }
         }
     }
 
     /** SECTIONS **/
-    .description {
-        .description_content {
-            white-space: pre-line;
+    .detailed-information {
+      li {
+        .clearfix();
+        padding-bottom:.25em;
+
+        span {
+          .ellipsis();
+        }
+        .label {
+          width: 30%;
+          display: inline-block;
+          margin-right: 10%;
+          float: left;
+          height: 1.8em;
+        }
+        .value {
+          width: 60%;
+          display: inline-block;
+          float: left;
+          height: 1.8em;
+        }
+      }
+    }
+
+    .description-content {
+      white-space: pre-line;
+    }
+
+    .description-editor {
+        .actions {
+            margin: .5em 0 1em 0;
+
+            .description-lock {
+                float: left;
+
+                span.tooltip.tooltip-right {
+                  white-space: normal;
+                  .svg-icon {
+                    overflow: initial;
+                  }
+                }
+            }
         }
     }
-    .key-information textarea {
+
+    .key-information {
+      .fingerprint .value {
+        height: 3.2em;
+      }
+      textarea {
         min-height: 30em;
         line-height: normal;
+        margin-top: 0.8em;
+        width: 100%;
+        box-sizing: border-box;
+      }
+      li {
+        .clearfix();
+        padding-bottom:.25em;
+
+        span {
+          .ellipsis();
+        }
+        .label {
+          width: 30%;
+          display: inline-block;
+          margin-right: 10%;
+          float: left;
+          height: 1.8em;
+        }
+        .value {
+          width: 60%;
+          display: inline-block;
+          float: left;
+          height: 1.8em;
+        }
+      }
     }
 
     /** Sidebar forms **/
@@ -146,7 +223,7 @@
             margin:0;
             font-size:.929em; /* 13px */
             background: @background-notice;
-            
+
             span:last-child {
                 display: inline-block;
             }
@@ -158,7 +235,7 @@
 @media all and (max-width: 1024px) {
     .panel.aside {
         position: absolute;
-        right: 0em;
+        right: 0;
         width: 100%;
         bottom: 0;
         top: 0;

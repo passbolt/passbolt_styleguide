@@ -5,16 +5,30 @@
 	  /_/    \__,_/____/____/_.___/\____/_/\__/
 
 	The open source password manager for teams
-	(c) 2020 Passbolt SA
+	(c) 2021 Passbolt SA
 
 
 License
 ==============
 
-Passbolt is distributed under [Affero General Public License v3](http://www.gnu.org/licenses/agpl-3.0.html)
+Passbolt - Open source password manager for teams
+(c) 2021 Passbolt SA
+
+This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
+Public License as published by the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+The name Passbolt is a registered trademark of Passbolt SA, and Passbolt SA hereby declines to grant a trademark
+license to "Passbolt" pursuant to AGPLv3, Section 7(e) without a separate agreement with Passbolt SA.
+
+This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Affero General Public License for more
+details.
+
+You should have received a copy of the GNU Affero General Public License along with this program.  If not,
+see <https://www.gnu.org/licenses/>.
 
 Images and logos in /src/img/third_party belongs to their respective owner.
-
 
 About
 =========
@@ -57,34 +71,21 @@ grunt watch
 Edit one LESS file to see if it works!
 
 
-How to run the react demo?
+Quick how-to for developers
 ==========================
 
-After running this command, the react demo will be located at 
+## Starting the demo
+After running this commands, the demo will be accessible from
 [http://localhost:3000](http://localhost:3000)
 
 ```
-webpack-dev-server --mode development --config webpack-appjs.config.js
+npm run start-app-dev-server
 ```
 
-or
+Each change made on the js applications source code will trigger a build and refresh the browser tab where the demo has
+been started.
 
-```
-webpack-dev-server --mode development --config webpack-extension.config.js
-```
 
-How to compile the react app?
-==========================
-
-```
-./node_modules/.bin/webpack --mode production --config ./webpack-appjs.config.js
-```
-
-Do not forget to copy / paste it inside the passbolt_api (TODO: has to be automated)
-
-```
-cp -f ./build/js/dist/passbolt.react.js ../passbolt_pro_api/webroot/js/app/bundles/passbolt-react/
-```
 
 How to update the styleguide?
 =============================
