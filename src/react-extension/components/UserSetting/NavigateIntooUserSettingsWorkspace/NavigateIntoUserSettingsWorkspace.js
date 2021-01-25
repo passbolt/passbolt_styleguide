@@ -38,6 +38,14 @@ class NavigateIntoUserSettingsWorkspace extends React.Component {
   }
 
   /**
+   * Can the user access the mobile capability.
+   * @returns {bool}
+   */
+  get canIUseMobileCapability() {
+    return this.context.siteSettings && this.context.siteSettings.canIUse('mobile');
+  }
+
+  /**
    * Render the component
    */
   render() {
@@ -57,6 +65,20 @@ class NavigateIntoUserSettingsWorkspace extends React.Component {
               </div>
             </div>
           </li>
+          {this.canIUseMobileCapability &&
+          <li>
+            <div
+              className={`row ${isSelected('mobile') ? 'selected' : ''}`}>
+              <div className="main-cell-wrapper">
+                <div className="main-cell">
+                  <a onClick={this.props.navigationContext.onGoToUserSettingsMobileRequested}>
+                    <span>Mobile</span>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </li>
+          }
           {this.canIUseThemeCapability &&
           <li>
             <div

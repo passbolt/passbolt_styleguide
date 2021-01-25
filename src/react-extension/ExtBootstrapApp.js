@@ -124,6 +124,7 @@ class ExtBootstrapApp extends Component {
               "/app/settings",
               "/app/settings/keys",
               "/app/settings/profile",
+              "/app/settings/mobile",
               "/app/settings/theme",
               "/app/users/view/:selectedUserId",
               "/app/users",

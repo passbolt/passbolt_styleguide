@@ -106,6 +106,9 @@ export default () => {
         },
         "groups": {
           "version": "2.0.0"
+        },
+        "mobile": {
+          "version": "1.0.0"
         }
       }
     },

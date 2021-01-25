@@ -38,6 +38,8 @@ export const NavigationContext = React.createContext({
   }, // Whenever the user wants to navigate to the users settings workspace mfa section.
   onGoToUserSettingsKeysRequested: () => {
   }, // Whenever the user wants to navigate to the users settings workspace keys section.
+  onGoToUserSettingsMobileRequested: () => {
+  }, // Whenever the user wants to navigate to the users settings workspace mobile section.
 });
 
 /**
@@ -69,6 +71,7 @@ class NavigationContextProvider extends React.Component {
       onGoToUserSettingsThemeRequested: this.onGoToUserSettingsThemeRequested.bind(this), // Whenever the user wants to navigate to the users settings workspace theme section.
       onGoToUserSettingsMfaRequested: this.onGoToUserSettingsMfaRequested.bind(this), // Whenever the user wants to navigate to the users settings workspace mfa section.
       onGoToUserSettingsKeysRequested: this.onGoToUserSettingsKeysRequested.bind(this), // Whenever the user wants to navigate to the users settings workspace keys section.
+      onGoToUserSettingsMobileRequested: this.onGoToUserSettingsMobileRequested.bind(this), // Whenever the user wants to navigate to the users settings workspace mobile section.
     };
   }
 
@@ -190,6 +193,14 @@ class NavigationContextProvider extends React.Component {
    */
   async onGoToUserSettingsKeysRequested() {
     await this.goTo("browser-extension", "/app/settings/keys");
+  }
+
+  /**
+   * Whenever the user wants to navigate to the users settings workspace keys section.
+   * @returns {Promise<void>}
+   */
+  async onGoToUserSettingsMobileRequested() {
+    await this.goTo("browser-extension", "/app/settings/mobile");
   }
 
   /**
