@@ -32,31 +32,7 @@ class DisplayUserProfile extends React.Component {
    */
   constructor(props) {
     super(props);
-    this.state = this.defaultState;
     this.bindHandlers();
-  }
-
-  /**
-   * Whenever the component is mounted
-   */
-  async componentDidMount() {
-    await this.populate();
-  }
-
-  /**
-   * Whenever the component has been updated
-   */
-  async componentDidUpdate() {
-    await this.populateIfNeeded();
-  }
-
-  /**
-   * Returns the component default state
-   */
-  get defaultState() {
-    return {
-      keyId: "" // The user key id
-    };
   }
 
   /**
@@ -81,30 +57,6 @@ class DisplayUserProfile extends React.Component {
   }
 
   /**
-   * Populates the component with data
-   */
-  async populate() {
-    if (this.user) {
-      const keyId = await this.fetchKeyId();
-      await this.setState({keyId});
-    }
-  }
-
-  /**
-   * Populates the component with data in case the logged in user has not been populated
-   */
-  async populateIfNeeded() {
-    const mustPopulate = this.user && !this.state.keyId;
-    const canVoid = this.user && this.state.keyId;
-    if (mustPopulate) {
-      const keyId = await this.fetchKeyId();
-      await this.setState({keyId});
-    } else if (canVoid) {
-      this.populateIfNeeded = () => {};
-    }
-  }
-
-  /**
    * Format date in time ago
    * @param {string} date The date to format
    * @return {string}
@@ -112,14 +64,6 @@ class DisplayUserProfile extends React.Component {
   formatDateTimeAgo(date) {
     const serverTimezone = this.context.siteSettings.getServerTimezone();
     return moment.tz(date, serverTimezone).fromNow();
-  }
-
-  /**
-   * Fetch the user key id
-   */
-  async fetchKeyId() {
-    const {keyId} = await this.context.port.request('passbolt.keyring.get-public-key-info-by-user', this.user.id);
-    return keyId;
   }
 
   render() {
@@ -187,6 +131,3 @@ DisplayUserProfile.propTypes = {
 };
 
 export default withDialog(DisplayUserProfile);
-
-
-
