@@ -267,7 +267,7 @@ class ExtApp extends Component {
    */
   async getGroups() {
     const storageData = await this.props.storage.local.get(["groups"]);
-    if (storageData.groups && storageData.groups.length) {
+    if (storageData.groups) {
       const groups = storageData.groups;
       this.setState({groups: groups});
     }
