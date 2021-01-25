@@ -56,7 +56,8 @@ class DisplayUserSettingsWorkspaceBreadcrumb extends Component {
       'security-token': this.translate("Security Token"),
       theme: this.translate("Theme"),
       mfa: this.translate("Multi Factor Authentication"),
-      keys: this.translate("Keys inspector")
+      keys: this.translate("Keys inspector"),
+      mobile: this.translate("Mobile transfer")
     };
     const matchedKey = Object.keys(names).find(matchPathSuffix);
     return names[matchedKey];

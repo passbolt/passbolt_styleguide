@@ -44,6 +44,7 @@ import mockRequestGroupsUpdateLocalStorage from "./request/mockRequestGroupsUpda
 import mockRequestResources from "./request/mockRequestResources";
 import mockRequestUsersFindLoggedInUser from "./request/mockRequestUsersFindLoggedInUser";
 import mockRequestGpgKeysFindByUserId from "./request/mockRequestGpgKeysFindByUserId";
+import mockRequestPrivateKeys from "./request/mockRequestPrivateKey";
 import mockRequestUserDeleteDryRun from "./request/mockRequestUserDeleteDryRun";
 import mockRequestImportFile from "./request/mockRequestImportFile";
 import mockRequestDisableMFA from "./request/mockRequestDisableMFA";
@@ -95,6 +96,7 @@ export default (storage) => {
   mockPort.addRequestListener("passbolt.groups.update-local-storage", mockRequestGroupsUpdateLocalStorage);
   mockPort.addRequestListener("passbolt.resources.find-all", mockRequestResources);
   mockPort.addRequestListener("passbolt.keyring.get-public-key-info-by-user", mockRequestGpgKeysFindByUserId);
+  mockPort.addRequestListener("passbolt.keyring.get-private-key", mockRequestPrivateKeys);
   mockPort.addRequestListener("passbolt.users.delete-dry-run", mockRequestUserDeleteDryRun);
   mockPort.addRequestListener("passbolt.import-passwords.import-file", mockRequestImportFile);
   mockPort.addRequestListener("passbolt.users.disable-mfa", mockRequestDisableMFA);

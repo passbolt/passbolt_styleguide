@@ -30,6 +30,7 @@ import DisplayUserGpgInformation from "../DisplayUserGpgInformation/DisplayUserG
 import SearchBar from "../../Common/Navigation/Search/SearchBar";
 import DisplayUserPassphrase from "../ChangeUserPassphrase/ChangeUserPassphrase";
 import DisplayUserChooseSecurityToken from "../ChangeUserSecurityToken/ChangeUserSecurityToken";
+import TransferToMobile from "../TransferToMobile/TransferToMobile";
 
 /**
  * This component is a container for all the user settings workspace features
@@ -41,6 +42,14 @@ class DisplayUserSettingsWorkspace extends React.Component {
    */
   get canIUseThemeCapability() {
     return this.props.context.siteSettings && this.props.context.siteSettings.canIUse('accountSettings');
+  }
+
+  /**
+   * Can the user access the mobile transfer capability.
+   * @returns {bool}
+   */
+  get canIUseMobileTransferCapability() {
+    return this.context.siteSettings && this.context.siteSettings.canIUse('mobile');
   }
 
   /**
@@ -71,7 +80,10 @@ class DisplayUserSettingsWorkspace extends React.Component {
             {this.canIUseThemeCapability &&
             <Route path={`${path}/theme`} component={DisplayUserTheme}/>
             }
-            <Route path={`${path}/keys`} component={DisplayUserGpgInformation}/>
+            {this.canIUseMobileTransferCapability &&
+            <Route path={`${path}/mobile`} component={TransferToMobile}></Route>
+            }
+            <Route path={`${path}/keys`} component={DisplayUserGpgInformation}></Route>
           </div>
         </div>
       </div>
