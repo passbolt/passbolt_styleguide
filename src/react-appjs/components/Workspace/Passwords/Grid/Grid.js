@@ -205,6 +205,11 @@ class Grid extends React.Component {
   handleDragStartEvent(event, resource) {
     let selectedResources = this.props.selectedResources;
 
+    // Firefox ESR 68 fix. Associate data to the drag event.
+    // Call event.preventDefault() on any drop functions.
+    // see example on MDN: https://developer.mozilla.org/en-US/docs/Web/API/Document/dragstart_event
+    event.dataTransfer.setData('text/plain', null);
+
     if (!this.isResourceSelected(resource)) {
       selectedResources = this.selectResource(resource);
     }
@@ -265,7 +270,7 @@ class Grid extends React.Component {
    * @return {array} The filtered resources.
    */
   filterResourcesBySearch(resources, needle) {
-    if (needle == '' || !needle) {
+    if (needle === '' || !needle) {
       return resources;
     }
 
@@ -281,7 +286,8 @@ class Grid extends React.Component {
         match &= (regexes[i].test(resource.name)
           || regexes[i].test(resource.username)
           || regexes[i].test(resource.uri)
-          || regexes[i].test(resource.description));
+          || regexes[i].test(resource.description)
+          || resource.tags && resource.tags.some(tag => regexes[i].test(tag.slug)));
       }
 
       return match;
@@ -527,11 +533,9 @@ class Grid extends React.Component {
           {isEmpty && !isSearching && ["default", "modified", "owned_by_me"].includes(this.props.filterType) &&
           <React.Fragment>
             <div className="empty-content">
-              <h1>Welcome to passbolt!</h1>
-              <p>It does feel a bit empty here. Create your first password or<br/>wait for a team member to share one with you.
-              </p>
+              <h2>Welcome to passbolt!</h2>
+              <p>It does feel a bit empty here. Create your first password or<br/>wait for a team member to share one with you.</p>
             </div>
-            <div className="tableview-content scroll"></div>
           </React.Fragment>
           }
           {!isEmpty &&

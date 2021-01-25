@@ -108,6 +108,7 @@ class FoldersTree extends React.Component {
     const openFolders = this.state.openFolders;
     openFolders.push(folder);
     this.setState({openFolders});
+    Plugin.request('passbolt.plugin.folders.update-local-storage');
   }
 
   /**
@@ -115,6 +116,7 @@ class FoldersTree extends React.Component {
    */
   handleClickOnTitle() {
     this.props.onSelectRoot();
+    Plugin.request('passbolt.plugin.folders.update-local-storage');
   }
 
   /**
@@ -147,6 +149,9 @@ class FoldersTree extends React.Component {
    */
   handleSectionTitleClickCaretEvent() {
     const open = !this.state.open;
+    if (open) {
+      Plugin.request('passbolt.plugin.folders.update-local-storage');
+    }
     this.setState({open});
   }
 
@@ -177,8 +182,14 @@ class FoldersTree extends React.Component {
 
   /**
    * Handle when the user is dropping the content on the title.
+   * @param {ReactEvent} event The event
    */
-  handleDropTitle() {
+  handleDropTitle(event) {
+    // Firefox ESR 68 fix. Prevent event default when data is associated to the drag event to avoid the user to be
+    // redirected to www.null.com
+    // see example on MDN: https://developer.mozilla.org/en-US/docs/Web/API/Document/dragstart_event
+    event.preventDefault();
+
     const folders = this.state.draggedItems.folders.map(folder => folder.id);
     const resources = this.state.draggedItems.resources.map(resource => resource.id);
     const folderParentId = null;
@@ -208,6 +219,11 @@ class FoldersTree extends React.Component {
    * @param {Object} folder The dragged folder
    */
   handleFolderDragStartEvent(event, folder) {
+    // Firefox ESR 68 fix. Associate data to the drag event.
+    // Call event.preventDefault() on any drop functions.
+    // see example on MDN: https://developer.mozilla.org/en-US/docs/Web/API/Document/dragstart_event
+    event.dataTransfer.setData('text/plain', null);
+
     const dragging = true;
     const draggedItems = {
       folders: [folder],
@@ -223,6 +239,17 @@ class FoldersTree extends React.Component {
    * @param {Object} folder The drop folder
    */
   handleFolderDropEvent(event, folder) {
+    // Firefox ESR 68 fix. Prevent event default when data is associated to the drag event to avoid the user to be
+    // redirected to www.null.com
+    // see example on MDN: https://developer.mozilla.org/en-US/docs/Web/API/Document/dragstart_event
+    event.preventDefault();
+
+    // The user cannot drop the dragged content on a dragged item.
+    const isDroppingOnDraggedItem = this.state.draggedItems.folders.some(item => item.id === folder.id);
+    if (isDroppingOnDraggedItem) {
+      return;
+    }
+
     const folders = this.state.draggedItems.folders.map(folder => folder.id);
     const resources = this.state.draggedItems.resources.map(resource => resource.id);
     const folderParentId = folder.id;
@@ -235,6 +262,7 @@ class FoldersTree extends React.Component {
    * @param {Object} folder The folder
    */
   handleFolderSelectEvent(event, folder) {
+    Plugin.request('passbolt.plugin.folders.update-local-storage');
     this.props.onSelect(folder);
   }
 
@@ -434,7 +462,7 @@ class FoldersTree extends React.Component {
     }
 
     return (
-      <div className="folders navigation first accordion">
+      <div className="folders navigation accordion">
         {this.renderDragFeedback()}
         <div className="accordion-header1">
           <div className={`${isOpen ? "open" : "close"} node root`}>
@@ -463,6 +491,9 @@ class FoldersTree extends React.Component {
                       >Folders</span>
                     </span>
                   </h3>
+                </div>
+                <div className="right-cell more-ctrl">
+                  <a onClick={this.handleRootContextualMenuEvent}><span>more</span></a>
                 </div>
               </div>
             </div>
