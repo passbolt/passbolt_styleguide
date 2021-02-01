@@ -31,5 +31,6 @@ export function defaultAppContext(appContext) {
  * @returns {{resourceWorkspaceContext}}
  */
 export function defaultProps() {
-  return {};
+  return {
+  };
 }

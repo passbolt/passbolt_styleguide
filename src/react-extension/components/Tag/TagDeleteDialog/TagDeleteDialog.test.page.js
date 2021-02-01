@@ -19,6 +19,7 @@ import ManageDialogs from "../../../../react/components/Common/Dialog/ManageDial
 import DialogContextProvider from "../../../../react/contexts/Common/DialogContext";
 import TagDeleteDialog from "./TagDeleteDialog";
 import {BrowserRouter as Router} from "react-router-dom";
+import SetupTranslations from "../../../SetupTranslations";
 
 /**
  * The CreateUserDialog component represented as a page
@@ -31,14 +32,16 @@ export default class TagDeleteDialogPage {
    */
   constructor(appContext, props) {
     this._page = render(
-      <AppContext.Provider value={appContext}>
-        <DialogContextProvider>
-          <Router>
-            <ManageDialogs/>
-            <TagDeleteDialog {...props}/>
-          </Router>
-        </DialogContextProvider>
-      </AppContext.Provider>
+      <SetupTranslations>
+        <AppContext.Provider value={appContext}>
+          <DialogContextProvider>
+            <Router>
+              <ManageDialogs/>
+              <TagDeleteDialog {...props}/>
+            </Router>
+          </DialogContextProvider>
+        </AppContext.Provider>
+      </SetupTranslations>
     );
     this.setupPageObjects();
   }

@@ -23,6 +23,7 @@ import FormCancelButton from "../../../../react/components/Common/Inputs/FormSub
 import {withLoading} from "../../../../react/contexts/Common/LoadingContext";
 import {ResourceWorkspaceFilterTypes, withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 import {withRouter} from "react-router-dom";
+import {withTranslation} from "react-i18next";
 
 /**
  * Component allows the user to edit a tag from a dialog
@@ -151,7 +152,7 @@ class TagEditDialog extends Component {
     this.props.loadingContext.remove();
     this.props.onClose();
 
-    await this.props.actionFeedbackContext.displaySuccess("The tag has been updated successfully");
+    await this.props.actionFeedbackContext.displaySuccess(this.translate("The tag has been updated successfully"));
 
     const previousTagId = this.context.tagToEdit.id;
     this.context.setContext({tagToEdit: null});
@@ -190,7 +191,7 @@ class TagEditDialog extends Component {
       // Unexpected error occurred.
       console.error(error);
       const errorDialogProps = {
-        title: "There was an unexpected error...",
+        title: this.translate("There was an unexpected error..."),
         message: error.message
       };
       this.context.setContext({errorDialogProps});
@@ -215,7 +216,7 @@ class TagEditDialog extends Component {
     const name = this.state.name.trim();
     let nameError = "";
     if (!name.length) {
-      nameError = "A tag name is required.";
+      nameError = this.translate("A tag name is required.");
     }
 
     return new Promise(resolve => {
@@ -248,17 +249,25 @@ class TagEditDialog extends Component {
     return this.state.processing;
   }
 
+  /**
+   * Get the translate function
+   * @returns {function(...[*]=)}
+   */
+  get translate() {
+    return this.props.t;
+  }
+
   render() {
     return (
       <DialogWrapper
-        title="Edit tag"
+        title={this.translate("Edit tag")}
         onClose={this.handleCloseClick}
         disabled={this.state.processing}
         className="edit-tag-dialog">
         <form onSubmit={this.handleFormSubmit} noValidate>
           <div className="form-content">
             <div className={`input text required ${this.state.nameError ? "error" : ""}`}>
-              <label htmlFor="edit-tag-form-name">Tag name</label>
+              <label htmlFor="edit-tag-form-name">{this.translate("Tag name")}</label>
               <input id="edit-tag-form-name" name="name" type="text" value={this.state.name}
                 onKeyUp={this.handleNameInputKeyUp} onChange={this.handleInputChange}
                 disabled={this.state.processing} ref={this.nameInputRef} className="required fluid"
@@ -270,7 +279,7 @@ class TagEditDialog extends Component {
             </div>
           </div>
           <div className="submit-wrapper clearfix">
-            <FormSubmitButton disabled={this.hasAllInputDisabled()} processing={this.state.processing} value="Save"/>
+            <FormSubmitButton disabled={this.hasAllInputDisabled()} processing={this.state.processing} value={this.translate("Save")}/>
             <FormCancelButton disabled={this.hasAllInputDisabled()} onClick={this.handleCloseClick} />
           </div>
         </form>
@@ -290,6 +299,7 @@ TagEditDialog.propTypes = {
   location: PropTypes.object, // Router location prop
   match: PropTypes.object, // Router match prop
   history: PropTypes.object, // Route history prop
+  t: PropTypes.func, // The translation function
 };
 
-export default withRouter(withResourceWorkspace(withLoading(withActionFeedback(withDialog(TagEditDialog)))));
+export default withRouter(withResourceWorkspace(withLoading(withActionFeedback(withDialog(withTranslation('common')(TagEditDialog))))));

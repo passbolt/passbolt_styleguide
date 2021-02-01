@@ -24,6 +24,7 @@ import DeleteUserWithConflictsDialog from "../DeleteUser/DeleteUserWithConflicts
 import ErrorDialog from "../../Dialog/ErrorDialog/ErrorDialog";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import ConfirmDisableUserMFA from "../DisableUserMFA/ConfirmDisableUserMFA";
+import {withTranslation} from "react-i18next";
 
 /**
  * This component is a container of multiple actions applicable on user
@@ -178,7 +179,7 @@ class DisplayUserWorkspaceActions extends React.Component {
    */
   handleError(error) {
     const errorDialogProps = {
-      title: "There was an unexpected error...",
+      title: this.translate("There was an unexpected error..."),
       message: error.message
     };
     this.context.setContext({errorDialogProps});
@@ -317,7 +318,7 @@ class DisplayUserWorkspaceActions extends React.Component {
     const baseUrl = this.context.userSettings.getTrustedDomain();
     const permalink = `${baseUrl}/app/users/view/${this.selectedUser.id}`;
     await this.context.port.request("passbolt.clipboard.copy", permalink);
-    this.props.actionFeedbackContext.displaySuccess("The permalink has been copied to clipboard");
+    this.props.actionFeedbackContext.displaySuccess(this.translate("The permalink has been copied to clipboard"));
   }
 
   /**
@@ -333,7 +334,7 @@ class DisplayUserWorkspaceActions extends React.Component {
    * Whenever the resend invite succeeds
    */
   onResendInviteSuccess() {
-    this.props.actionFeedbackContext.displaySuccess("The invite has been resent successfully");
+    this.props.actionFeedbackContext.displaySuccess(this.translate("The invite has been resent successfully"));
     this.toggleMoreMenu();
   }
 
@@ -352,6 +353,14 @@ class DisplayUserWorkspaceActions extends React.Component {
   }
 
   /**
+   * Get the translate function
+   * @returns {function(...[*]=)}
+   */
+  get translate() {
+    return this.props.t;
+  }
+
+  /**
    * Render the component
    * @returns {JSX}
    */
@@ -364,20 +373,20 @@ class DisplayUserWorkspaceActions extends React.Component {
             <li>
               <a className={`button ready ${this.isButtonDisabled() ? "disabled" : ""}`} onClick={this.handleEditClickEvent}>
                 <Icon name="edit"/>
-                <span>Edit</span>
+                <span>{this.translate("Edit")}</span>
               </a>
             </li>
             <li>
               <a className={`button ready ${!this.canDelete ? "disabled" : ""}`} onClick={this.handleDeleteClickEvent}>
                 <Icon name="trash"/>
-                <span>Delete</span>
+                <span>{this.translate("Delete")}</span>
               </a>
             </li>
             <div className="dropdown" ref={this.moreMenuRef}>
               <a
                 className={`button ready ${this.hasMoreActionAllowed ? "" : "disabled"}`}
                 onClick={this.handleMoreClickEvent}>
-                <span>More</span>
+                <span>{this.translate("More")}</span>
                 <Icon name="caret-down"/>
               </a>
               <ul className={`dropdown-content menu ready ${this.state.moreMenuOpen ? "visible" : ""}`}>
@@ -388,7 +397,7 @@ class DisplayUserWorkspaceActions extends React.Component {
                         <a
                           onClick={this.handleCopyPermalinkEvent}
                           className={`${this.canCopyPermalink ? "" : "disabled"}`}>
-                          <span>Copy permalink to clipboard</span>
+                          <span>{this.translate("Copy permalink to clipboard")}</span>
                         </a>
                       </div>
                     </div>
@@ -401,7 +410,7 @@ class DisplayUserWorkspaceActions extends React.Component {
                       <div className="main-cell">
                         <a onClick={this.handleResendInviteClickEvent}
                           className={`${this.canResendInviteToUser ? "" : "disabled"}`}>
-                          <span>Resend invite</span>
+                          <span>{this.translate("Resend invite")}</span>
                         </a>
                       </div>
                     </div>
@@ -417,7 +426,7 @@ class DisplayUserWorkspaceActions extends React.Component {
                           id="disable-mfa"
                           onClick={this.handleDisableMfaEvent}
                           className={this.canDisableMfaForUser ? '' : 'disabled'}>
-                          <span>Disable MFA</span>
+                          <span>{this.translate("Disable MFA")}</span>
                         </a>
                       </div>
                     </div>
@@ -451,7 +460,8 @@ DisplayUserWorkspaceActions.contextType = AppContext;
 DisplayUserWorkspaceActions.propTypes = {
   userWorkspaceContext: PropTypes.any, // the user workspace context
   dialogContext: PropTypes.any, // the dialog context
-  actionFeedbackContext: PropTypes.object // the action feeedback context
+  actionFeedbackContext: PropTypes.object, // the action feeedback context
+  t: PropTypes.func, // The translation function
 };
 
-export default withActionFeedback(withDialog(withUserWorkspace(DisplayUserWorkspaceActions)));
+export default withActionFeedback(withDialog(withUserWorkspace(withTranslation('common')(DisplayUserWorkspaceActions))));

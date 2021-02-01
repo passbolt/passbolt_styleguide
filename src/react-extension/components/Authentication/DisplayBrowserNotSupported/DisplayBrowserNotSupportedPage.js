@@ -16,6 +16,7 @@
 import {render} from "@testing-library/react";
 import React from "react";
 import DisplayBrowserNotSupported from "./DisplayBrowserNotSupported";
+import SetupTranslations from "../../../SetupTranslations";
 
 /**
  * The PasswordSidebarCommentSection component represented as a page
@@ -28,7 +29,9 @@ export default class DisplayBrowserNotSupportedPage {
    */
   constructor() {
     this._page = render(
-      <DisplayBrowserNotSupported/>
+      <SetupTranslations>
+        <DisplayBrowserNotSupported/>
+      </SetupTranslations>
     );
   }
 

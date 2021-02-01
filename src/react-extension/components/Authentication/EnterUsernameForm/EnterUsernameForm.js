@@ -17,6 +17,7 @@ import PropTypes from "prop-types";
 import {withAppContext} from "../../../contexts/AppContext";
 import {withApiTriageContext} from "../../../contexts/ApiTriageContext";
 import FormSubmitButton from "../../../../react/components/Common/Inputs/FormSubmitButton/FormSubmitButton";
+import {withTranslation} from "react-i18next";
 
 class EnterUsernameForm extends Component {
   /**
@@ -159,7 +160,7 @@ class EnterUsernameForm extends Component {
         await this.toggleProcessing();
         return;
       }
-      this.props.apiTriageContext.onTriageRequested(this.state.username);
+      this.props.apiTriageContext.onTriageRequested(this.state.username.trim());
     }
   }
 
@@ -192,9 +193,9 @@ class EnterUsernameForm extends Component {
     let usernameError = null;
     const username = this.state.username.trim();
     if (!username.length) {
-      usernameError = "A username is required.";
+      usernameError = this.translate("A username is required.");
     } else if (!this.isEmail(username)) {
-      usernameError = "Please enter a valid email address.";
+      usernameError = this.translate("Please enter a valid email address.");
     }
     return this.setState({username, usernameError});
   }
@@ -263,18 +264,26 @@ class EnterUsernameForm extends Component {
   }
 
   /**
+   * Get the translate function
+   * @returns {function(...[*]=)}
+   */
+  get translate() {
+    return this.props.t;
+  }
+
+  /**
    * Render
    * @returns {JSX.Element}
    */
   render() {
     return (
       <div className="enter-username">
-        <h1>Please enter your email to continue.</h1>
+        <h1>{this.translate("Please enter your email to continue.")}</h1>
         <form acceptCharset="utf-8" onSubmit={this.handleFormSubmit} noValidate>
           <div className={`input text required ${this.state.usernameError ? "error" : ""}`}>
-            <label htmlFor="username">Email</label>
+            <label htmlFor="username">{this.translate("Email")}</label>
             <input id="username-input" type="text" ref={this.usernameRef} name="username" value={this.state.username}
-              onKeyUp={this.handleUsernameInputOnKeyUp} onChange={this.handleInputChange} placeholder="you@organization.com"
+              onKeyUp={this.handleUsernameInputOnKeyUp} onChange={this.handleInputChange} placeholder={this.translate("you@organization.com")}
               required="required" disabled={this.hasAllInputDisabled()}/>
             {this.state.usernameError &&
             <div className="error-message">{this.state.usernameError}</div>
@@ -287,11 +296,11 @@ class EnterUsernameForm extends Component {
             <label htmlFor="checkbox-terms">
               {(this.privacyLink || this.termsLink) &&
               <span>
-                I accept the&nbsp;
-                {this.termsLink && <a href={this.termsLink} target="_blank" rel="noopener noreferrer">terms</a>}
-                {(this.termsLink && this.privacyLink) && <span> and </span>}
+                {this.translate("I accept the")}&nbsp;
+                {this.termsLink && <a href={this.termsLink} target="_blank" rel="noopener noreferrer">{this.translate("terms")}</a>}
+                {(this.termsLink && this.privacyLink) && <span> {this.translate("and")} </span>}
                 {this.privacyLink &&
-                <a href={this.privacyLink} target="_blank" rel="noopener noreferrer">privacy policy</a>}.
+                <a href={this.privacyLink} target="_blank" rel="noopener noreferrer">{this.translate("privacy policy")}</a>}.
               </span>
               }
             </label>
@@ -300,7 +309,7 @@ class EnterUsernameForm extends Component {
           <div className="form-actions">
             <FormSubmitButton
               disabled={this.hasAllInputDisabled()} big={true} processing={this.state.processing} fullWidth={true}
-              value="Next"
+              value={this.translate("Next")}
             />
           </div>
         </form>
@@ -312,6 +321,7 @@ class EnterUsernameForm extends Component {
 EnterUsernameForm.propTypes = {
   apiTriageContext: PropTypes.object, // The api triage context
   context: PropTypes.any, // The application context provider
+  t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withApiTriageContext(EnterUsernameForm));
+export default withAppContext(withApiTriageContext(withTranslation('common')(EnterUsernameForm)));

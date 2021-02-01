@@ -16,9 +16,10 @@ import React from "react";
 import PropTypes from "prop-types";
 import Icon from "../../../../react/components/Common/Icons/Icon";
 import {withUserWorkspace} from "../../../contexts/UserWorkspaceContext";
-import moment from "moment";
 import AppContext from "../../../contexts/AppContext";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
+import {DateTime} from "luxon";
+import {withTranslation} from "react-i18next";
 
 /**
  * This component displays the user details about public key
@@ -90,7 +91,7 @@ class DisplayUserDetailsPublicKey extends React.Component {
     const fingerprint = gpgkeyInfo.fingerprint;
     const type = this.gpgkeyType[gpgkeyInfo.algorithm];
     const created = this.formatDate(gpgkeyInfo.created);
-    const expires = gpgkeyInfo.expires === "Never" ? "Never" : this.formatDate(gpgkeyInfo.expires);
+    const expires = gpgkeyInfo.expires === "Never" ? this.translate("Never") : this.formatDate(gpgkeyInfo.expires);
     const armoredKey = gpgkeyInfo.key;
 
     const formatedGpgkeyInfo = {fingerprint, type, created, expires, armoredKey};
@@ -104,7 +105,7 @@ class DisplayUserDetailsPublicKey extends React.Component {
    */
   formatDate(data) {
     try {
-      return moment(new Date(data)).format("LLL");
+      return DateTime.fromJSDate(new Date(data)).setLocale(this.props.i18n.lng).toLocaleString(DateTime.DATETIME_FULL);
     } catch (error) {
       return "";
     }
@@ -176,7 +177,15 @@ class DisplayUserDetailsPublicKey extends React.Component {
   async handlePublicKeyCopy() {
     const armoredKey = this.state.gpgkeyInfo.armoredKey;
     await this.context.port.request("passbolt.clipboard.copy", armoredKey);
-    this.props.actionFeedbackContext.displaySuccess("The public key has been copied to clipboard");
+    this.props.actionFeedbackContext.displaySuccess(this.translate("The public key has been copied to clipboard"));
+  }
+
+  /**
+   * Get the translate function
+   * @returns {function(...[*]=)}
+   */
+  get translate() {
+    return this.props.t;
   }
 
   /**
@@ -191,7 +200,7 @@ class DisplayUserDetailsPublicKey extends React.Component {
         <div className="accordion-header">
           <h4>
             <a onClick={this.handleTitleClicked} role="button">
-              Public key
+              {this.translate("Public key")}
               {this.state.open && <Icon name="caret-down"/>}
               {!this.state.open && <Icon name="caret-right"/>}
             </a>
@@ -201,35 +210,35 @@ class DisplayUserDetailsPublicKey extends React.Component {
           {isLoading &&
           <ul>
             <li className="processing-wrapper">
-              <span className="processing-text">Retrieving public key</span>
+              <span className="processing-text">{this.translate("Retrieving public key")}</span>
             </li>
           </ul>
           }
           {!isLoading &&
           <ul>
             <li className="fingerprint">
-              <span className="label">Fingerprint</span>
+              <span className="label">{this.translate("Fingerprint")}</span>
               <span className="value">{this.formatFingerprint(this.state.gpgkeyInfo.fingerprint)}</span>
             </li>
             <li className="type">
-              <span className="label">Type</span>
+              <span className="label">{this.translate("Type")}</span>
               <span className="value">{this.state.gpgkeyInfo.type}</span>
             </li>
             <li className="created">
-              <span className="label">Created</span>
+              <span className="label">{this.translate("Created")}</span>
               <span className="value">{this.state.gpgkeyInfo.created}</span>
             </li>
             <li className="expires">
-              <span className="label">Expires</span>
+              <span className="label">{this.translate("Expires")}</span>
               <span className="value">{this.state.gpgkeyInfo.expires}</span>
             </li>
             <li className="key">
-              <span className="label">Public key</span>
+              <span className="label">{this.translate("Public key")}</span>
               <span className="value">
                 <a
                   className="button copy-public-key"
                   onClick={this.handlePublicKeyCopy}>
-                  <span>Copy</span>
+                  <span>{this.translate("Copy")}</span>
                 </a>
               </span>
             </li>
@@ -251,7 +260,9 @@ class DisplayUserDetailsPublicKey extends React.Component {
 DisplayUserDetailsPublicKey.contextType = AppContext;
 DisplayUserDetailsPublicKey.propTypes = {
   userWorkspaceContext: PropTypes.object, // The user workspace context
-  actionFeedbackContext: PropTypes.object // The action feedback context
+  actionFeedbackContext: PropTypes.object, // The action feedback context
+  t: PropTypes.func, // The translation function
+  i18n: PropTypes.any // The i18n context translation
 };
 
-export default withActionFeedback(withUserWorkspace(DisplayUserDetailsPublicKey));
+export default withActionFeedback(withUserWorkspace(withTranslation('common')(DisplayUserDetailsPublicKey)));

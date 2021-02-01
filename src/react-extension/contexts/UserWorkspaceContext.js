@@ -16,12 +16,12 @@
 import * as React from "react";
 import PropTypes from "prop-types";
 import {withRouter} from "react-router-dom";
-import moment from "moment";
 import AppContext from "./AppContext";
 import {withLoading} from "../../react/contexts/Common/LoadingContext";
 import {withActionFeedback} from "./ActionFeedbackContext";
 import EditUserGroup from "../components/User/EditUserGroup/EditUserGroup";
 import {withDialog} from "../../react/contexts/Common/DialogContext";
+import {DateTime} from "luxon";
 
 /**
  * Context related to users ( filter, current selections, etc.)
@@ -410,7 +410,7 @@ class UserWorkspaceContextProvider extends React.Component {
    * @param filter A recently modified filter
    */
   async searchByRecentlyModified(filter) {
-    const recentlyModifiedSorter = (user1, user2) => moment(user2.modified).diff(moment(user1.modified));
+    const recentlyModifiedSorter = (user1, user2) => DateTime.fromISO(user2.modified) < DateTime.fromISO(user1.modified) ? -1 : 1;
     const filteredUsers = this.users.sort(recentlyModifiedSorter);
     await this.setState({filter, filteredUsers});
   }
@@ -531,7 +531,7 @@ class UserWorkspaceContextProvider extends React.Component {
     const keySorter = (key, sorter) => baseSorter((s1, s2) => sorter(s1[key], s2[key]));
     const plainObjectSorter = sorter => baseSorter(sorter);
 
-    const dateSorter = (d1, d2) => !d1 ? -1 : (!d2 ? 1 : moment(d1).diff(moment(d2)));
+    const dateSorter = (d1, d2) => !d1 ? -1 : (!d2 ? 1 : DateTime.fromISO(d1) < DateTime.fromISO(d2) ? -1 : 1);
     const stringSorter = (s1, s2) => s1.localeCompare(s2);
     const mfaSorter = (u1, u2) => (u2.is_mfa_enabled === u1.is_mfa_enabled) ? 0 : u2.is_mfa_enabled ? -1 : 1;
     const getUserFullName = user => `${user.profile.first_name} ${user.profile.last_name}`;

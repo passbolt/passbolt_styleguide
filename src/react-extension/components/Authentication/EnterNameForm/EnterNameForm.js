@@ -16,6 +16,7 @@ import PropTypes from "prop-types";
 import {withAppContext} from "../../../contexts/AppContext";
 import {withApiTriageContext} from "../../../contexts/ApiTriageContext";
 import FormSubmitButton from "../../../../react/components/Common/Inputs/FormSubmitButton/FormSubmitButton";
+import {withTranslation} from "react-i18next";
 
 class EnterNameForm extends Component {
   /**
@@ -165,7 +166,7 @@ class EnterNameForm extends Component {
     let firstnameError = null;
     const firstname = this.state.firstname.trim();
     if (!firstname.length) {
-      firstnameError = "A first name is required.";
+      firstnameError = this.translate("A first name is required.");
     }
     return this.setState({firstnameError});
   }
@@ -178,7 +179,7 @@ class EnterNameForm extends Component {
     let lastnameError = null;
     const lastname = this.state.lastname.trim();
     if (!lastname.length) {
-      lastnameError = "A last name is required.";
+      lastnameError = this.translate("A last name is required.");
     }
     return this.setState({lastnameError});
   }
@@ -211,25 +212,33 @@ class EnterNameForm extends Component {
     return this.state.processing || this.state.loading;
   }
 
+  /**
+   * Get the translate function
+   * @returns {function(...[*]=)}
+   */
+  get translate() {
+    return this.props.t;
+  }
+
   render() {
     return (
       <div className="enter-name">
-        <h1>New here? Enter your name to get started.</h1>
+        <h1>{this.translate("New here? Enter your name to get started.")}</h1>
         <form acceptCharset="utf-8" onSubmit={this.handleFormSubmit} noValidate>
           <div className={`input text required ${this.state.firstnameError ? "error" : ""}`}>
-            <label htmlFor="firstname">First Name</label>
+            <label htmlFor="firstname">{this.translate("First Name")}</label>
             <input id="firstname-input" type="text" name="firstname" ref={this.firstnameRef} value={this.state.firstname}
               onKeyUp={this.handleFirstnameInputOnKeyUp} onChange={this.handleInputChange}
-              disabled={this.hasAllInputDisabled()} placeholder="first name" required="required"/>
+              disabled={this.hasAllInputDisabled()} placeholder={this.translate("first name")} required="required"/>
             {this.state.firstnameError &&
             <div className="error-message">{this.state.firstnameError}</div>
             }
           </div>
           <div className={`input text required ${this.state.lastnameError ? "error" : ""}`}>
-            <label htmlFor="lastname">Last Name</label>
+            <label htmlFor="lastname">{this.translate("Last Name")}</label>
             <input id="lastname-input" type="text" name="lastname" ref={this.lastnameRef} value={this.state.lastname}
               onKeyUp={this.handleLastnameInputOnKeyUp} onChange={this.handleInputChange}
-              disabled={this.hasAllInputDisabled()} placeholder="last name" required="required"/>
+              disabled={this.hasAllInputDisabled()} placeholder={this.translate("last name")} required="required"/>
             {this.state.lastnameError &&
             <div className="error-message">{this.state.lastnameError}</div>
             }
@@ -237,9 +246,9 @@ class EnterNameForm extends Component {
           <div className="form-actions">
             <FormSubmitButton
               disabled={this.hasAllInputDisabled()} big={true} fullWidth={true} processing={this.state.processing}
-              value="Sign up"
+              value={this.translate("Sign up")}
             />
-            <a href={`${this.props.context.trustedDomain}/auth/login`}>I already have an account</a>
+            <a href={`${this.props.context.trustedDomain}/auth/login`}>{this.translate("I already have an account")}</a>
           </div>
         </form>
       </div>
@@ -250,6 +259,7 @@ class EnterNameForm extends Component {
 EnterNameForm.propTypes = {
   apiTriageContext: PropTypes.object, // The api triage context
   context: PropTypes.any, // The application context provider
+  t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withApiTriageContext(EnterNameForm));
+export default withAppContext(withApiTriageContext(withTranslation('common')(EnterNameForm)));

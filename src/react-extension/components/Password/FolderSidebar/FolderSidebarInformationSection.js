@@ -14,10 +14,11 @@
 import React from "react";
 import Icon from "../../../../react/components/Common/Icons/Icon";
 import PropTypes from "prop-types";
-import moment from "moment-timezone";
 import AppContext from "../../../contexts/AppContext";
 import {withRouter} from "react-router-dom";
 import {ResourceWorkspaceFilterTypes, withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
+import {withTranslation} from "react-i18next";
+import {DateTime} from "luxon";
 
 class FolderSidebarInformationSection extends React.Component {
   /**
@@ -82,8 +83,7 @@ class FolderSidebarInformationSection extends React.Component {
    * @return {string}
    */
   formatDateTimeAgo(date) {
-    const serverTimezone = this.context.siteSettings.getServerTimezone();
-    return moment.tz(date, serverTimezone).fromNow();
+    return DateTime.fromISO(date).toRelative({locale: this.props.i18n.lng});
   }
 
   /**
@@ -120,6 +120,14 @@ class FolderSidebarInformationSection extends React.Component {
   }
 
   /**
+   * Get the translate function
+   * @returns {function(...[*]=)}
+   */
+  get translate() {
+    return this.props.t;
+  }
+
+  /**
    * Render the component
    * @returns {JSX}
    */
@@ -135,7 +143,7 @@ class FolderSidebarInformationSection extends React.Component {
         <div className="accordion-header">
           <h4>
             <a onClick={this.handleTitleClickEvent} role="button">
-              Information
+              {this.translate("Information")}
               {this.state.open &&
               <Icon name="caret-down"/>
               }
@@ -148,27 +156,27 @@ class FolderSidebarInformationSection extends React.Component {
         <div className="accordion-content">
           <ul>
             <li className="username">
-              <span className="label">Name</span>
+              <span className="label">{this.translate("Name")}</span>
               <span className="value">{this.folder.name}</span>
             </li>
             <li className="modified">
-              <span className="label">Modified</span>
+              <span className="label">{this.translate("Modified")}</span>
               <span className="value">{modifiedDateTimeAgo}</span>
             </li>
             <li className="modified-by">
-              <span className="label">Modified by</span>
+              <span className="label">{this.translate("Modified by")}</span>
               <span className="value">{modifierUsername}</span>
             </li>
             <li className="modified">
-              <span className="label">Created</span>
+              <span className="label">{this.translate("Created")}</span>
               <span className="value">{createdDateTimeAgo}</span>
             </li>
             <li className="modified-by">
-              <span className="label">Created by</span>
+              <span className="label">{this.translate("Created by")}</span>
               <span className="value">{creatorUsername}</span>
             </li>
             <li className="location">
-              <span className="label">Location</span>
+              <span className="label">{this.translate("Location")}</span>
               <span className="value">
                 <a onClick={this.handleFolderParentClickEvent} className={`folder-link ${!this.context.folders ? "disabled" : ""}`}>
                   <Icon name="folder"/> {folderParentName}
@@ -186,7 +194,9 @@ FolderSidebarInformationSection.contextType = AppContext;
 
 FolderSidebarInformationSection.propTypes = {
   history: PropTypes.object,
-  resourceWorkspaceContext: PropTypes.object
+  resourceWorkspaceContext: PropTypes.object,
+  t: PropTypes.func, // The translation function
+  i18n: PropTypes.any // The i18n context translation
 };
 
-export default withRouter(withResourceWorkspace(FolderSidebarInformationSection));
+export default withRouter(withResourceWorkspace(withTranslation('common')(FolderSidebarInformationSection)));

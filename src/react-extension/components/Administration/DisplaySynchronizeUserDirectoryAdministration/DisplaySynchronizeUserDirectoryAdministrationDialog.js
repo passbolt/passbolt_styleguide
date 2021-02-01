@@ -18,6 +18,7 @@ import Icon from "../../../../react/components/Common/Icons/Icon";
 import DisplayLoadingDialog from "../DisplayLoadingDialog/DisplayLoadingDialog";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import {withAdministrationWorkspace} from "../../../contexts/AdministrationWorkspaceContext";
+import {withTranslation} from "react-i18next";
 
 class DisplaySynchronizeUserDirectoryAdministrationDialog extends Component {
   /**
@@ -214,20 +215,21 @@ class DisplaySynchronizeUserDirectoryAdministrationDialog extends Component {
   getUsersFullReport() {
     let userFullReport = '';
     if (this.usersSuccess.length > 0 || this.usersError.length > 0 || this.usersIgnored.length > 0) {
-      const usersHeader = '---------------------------------------------------------------------\n' + 'Users\n' +
-        '---------------------------------------------------------------------\n';
+      const usersHeader = `---------------------------------------------------------------------\n
+      ${this.translate("Users")}\n
+      ---------------------------------------------------------------------\n`;
       userFullReport = userFullReport.concat(usersHeader);
       const addMessage = user => userFullReport = userFullReport.concat(`- ${user.message}\n`);
       if (this.usersSuccess.length > 0) {
-        userFullReport = userFullReport.concat('\nSuccess:\n');
+        userFullReport = userFullReport.concat(`\n${this.translate("Success:")}\n`);
         this.usersSuccess.map(addMessage);
       }
       if (this.usersError.length > 0) {
-        userFullReport = userFullReport.concat('\nErrors:\n');
+        userFullReport = userFullReport.concat(`\n${this.translate("Errors:")}\n`);
         this.usersError.map(addMessage);
       }
       if (this.usersIgnored.length > 0) {
-        userFullReport = userFullReport.concat('\nIgnored:\n');
+        userFullReport = userFullReport.concat(`\n${this.translate("Ignored:")}\n`);
         this.usersIgnored.map(addMessage);
       }
     }
@@ -241,24 +243,33 @@ class DisplaySynchronizeUserDirectoryAdministrationDialog extends Component {
   getGroupsFullReport() {
     let groupFullReport = '';
     if (this.groupsSuccess.length > 0 || this.groupsError.length > 0 || this.groupsIgnored.length > 0) {
-      const groupsHeader = '---------------------------------------------------------------------\n' + 'Groups\n' +
-        '---------------------------------------------------------------------\n';
+      const groupsHeader = `---------------------------------------------------------------------\n
+       ${this.translate("Groups")}\n
+       ---------------------------------------------------------------------\n`;
       groupFullReport = groupFullReport.concat(groupsHeader);
       const addMessage = group => groupFullReport = groupFullReport.concat(`- ${group.message}\n`);
       if (this.groupsSuccess.length > 0) {
-        groupFullReport = groupFullReport.concat('\nSuccess:\n');
+        groupFullReport = groupFullReport.concat(`\n${this.translate("Success:")}\n`);
         this.groupsSuccess.map(addMessage);
       }
       if (this.groupsError.length > 0) {
-        groupFullReport = groupFullReport.concat('\nErrors:\n');
+        groupFullReport = groupFullReport.concat(`\n${this.translate("Errors:")}\n`);
         this.groupsError.map(addMessage);
       }
       if (this.groupsIgnored.length > 0) {
-        groupFullReport = groupFullReport.concat('\nIgnored:\n');
+        groupFullReport = groupFullReport.concat(`\n${this.translate("Ignored:")}\n`);
         this.groupsIgnored.map(addMessage);
       }
     }
     return groupFullReport;
+  }
+
+  /**
+   * Get the translate function
+   * @returns {function(...[*]=)}
+   */
+  get translate() {
+    return this.props.t;
   }
 
   /**
@@ -269,30 +280,32 @@ class DisplaySynchronizeUserDirectoryAdministrationDialog extends Component {
     return (
       <div>
         {this.isLoading() &&
-        <DisplayLoadingDialog onClose={this.handleClose} title="Synchronize"></DisplayLoadingDialog>
+        <DisplayLoadingDialog onClose={this.handleClose} title={this.translate("Synchronize")}></DisplayLoadingDialog>
         }
         {!this.isLoading() &&
-        <DialogWrapper className='ldap-simulate-synchronize-dialog' title="Synchronize report"
+        <DialogWrapper className='ldap-simulate-synchronize-dialog' title={this.translate("Synchronize report")}
           onClose={this.handleClose} disabled={this.isLoading()}>
           <div className="form-content" onSubmit={this.handleFormSubmit}>
             <p>
-              <strong>The operation was successfull.</strong>
+              <strong>{this.translate("The operation was successfull.")}</strong>
             </p>
             <p></p>
             {this.hasSuccessResource() &&
-            <p id="resources-synchronize"> {this.usersSuccess.length} user(s) and {this.groupsSuccess.length} group(s) have been synchronized. </p>
+            <p id="resources-synchronize"> {this.translate("{{users}} and {{groups}} have been synchronized.", {users: this.translate("{{count}} user", {count: this.usersSuccess.length}), groups: this.translate("{{count}} group", {count: this.groupsSuccess.length})})} </p>
             }
             {!this.hasSuccessResource() &&
-            <p id="no-resources"> No resources have been synchronized. </p>
+            <p id="no-resources"> {this.translate("No resources have been synchronized.")} </p>
             }
             {this.hasErrorOrIgnoreResource() &&
-            <p className="error inline-error">Some resources will not be synchronized and will require your attention, see the full report.</p>
+            <p className="error inline-error">
+              {this.translate("Some resources will not be synchronized and will require your attention, see the full report.")}
+            </p>
             }
             <div className={`accordion operation-details ${this.state.openFullReport ? "" : "closed"}`}>
               <div className="accordion-header" onClick={this.handleFullReportClicked}>
                 {this.state.openListGroupsUsers && <Icon name="caret-down" baseline={true}/>}
                 {!this.state.openListGroupsUsers && <Icon name="caret-right" baseline={true}/>}
-                <a role="link">Full report</a>
+                <a role="link">{this.translate("Full report")}</a>
               </div>
               <div className="accordion-content">
                 <div className="input text">
@@ -303,7 +316,7 @@ class DisplaySynchronizeUserDirectoryAdministrationDialog extends Component {
             <p></p>
           </div>
           <div className="submit-wrapper clearfix">
-            <a className={`button primary ${this.isLoading() ? "disabled" : ""}`} role="button" onClick={this.handleClose}>Ok</a>
+            <a className={`button primary ${this.isLoading() ? "disabled" : ""}`} role="button" onClick={this.handleClose}>{this.translate("Ok")}</a>
           </div>
         </DialogWrapper>
         }
@@ -316,6 +329,7 @@ DisplaySynchronizeUserDirectoryAdministrationDialog.propTypes = {
   onClose: PropTypes.func,
   actionFeedbackContext: PropTypes.any, // The action feedback context
   administrationWorkspaceContext: PropTypes.object, // The administration workspace context
+  t: PropTypes.func, // The translation function
 };
 
-export default withActionFeedback(withAdministrationWorkspace(DisplaySynchronizeUserDirectoryAdministrationDialog));
+export default withActionFeedback(withAdministrationWorkspace(withTranslation('common')(DisplaySynchronizeUserDirectoryAdministrationDialog)));

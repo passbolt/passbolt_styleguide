@@ -13,13 +13,13 @@
  */
 import React from "react";
 import PropTypes from "prop-types";
-import moment from "moment-timezone";
 import UserAvatar from "../../../../react/components/Common/Avatar/UserAvatar";
 import GroupAvatar from "../../../../react/components/Common/Avatar/GroupAvatar";
 import AppContext from "../../../contexts/AppContext";
 import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 import Icon from "../../../../react/components/Common/Icons/Icon";
-import {Link} from "react-router-dom";
+import {Trans, withTranslation} from "react-i18next";
+import {DateTime} from "luxon";
 
 const LIMIT_ACTIVITIES_PER_PAGE = 5;
 
@@ -159,8 +159,7 @@ class PasswordSidebarActivitySection extends React.Component {
    * @return {string}
    */
   formatDateTimeAgo(date) {
-    const serverTimezone = this.context.siteSettings.getServerTimezone();
-    return moment.tz(date, serverTimezone).fromNow();
+    return DateTime.fromISO(date).toRelative({locale: this.props.i18n.lng});
   }
 
   /**
@@ -192,11 +191,11 @@ class PasswordSidebarActivitySection extends React.Component {
   getPermissionLabel(permission) {
     switch (permission.type) {
       case 1:
-        return "can read";
+        return this.translate("can read");
       case 7:
-        return "can update";
+        return this.translate("can update");
       case 15:
-        return "is owner";
+        return this.translate("is owner");
     }
   }
 
@@ -207,11 +206,11 @@ class PasswordSidebarActivitySection extends React.Component {
   getPermissionChangeTypeLabel(type) {
     switch (type) {
       case "created":
-        return "new";
+        return this.translate("new");
       case "updated":
-        return "updated";
+        return this.translate("updated");
       case "removed":
-        return "deleted";
+        return this.translate("deleted");
     }
   }
 
@@ -231,7 +230,9 @@ class PasswordSidebarActivitySection extends React.Component {
         <div className="content-wrapper">
           <div className="content">
             <div className="name">
-              <span className="creator">{activityCreatorName}</span> created item <Link to={resourceLink}>{resourceName}</Link>
+              <Trans>
+                <span className="creator">{{activityCreatorName}}</span> created item <a target="_blank" rel="noopener noreferrer" href={resourceLink}>{{resourceName}}</a>
+              </Trans>
             </div>
             <div className="subinfo light">{activityFormattedDate}</div>
           </div>
@@ -257,7 +258,9 @@ class PasswordSidebarActivitySection extends React.Component {
         <div className="content-wrapper">
           <div className="content">
             <div className="name">
-              <span className="creator">{activityCreatorName}</span> updated item <Link to={resourceLink}>{resourceName}</Link>
+              <Trans>
+                <span className="creator">{{activityCreatorName}}</span> updated item <a target="_blank" rel="noopener noreferrer" href={resourceLink}>{{resourceName}}</a>
+              </Trans>
             </div>
             <div className="subinfo light">{activityFormattedDate}</div>
           </div>
@@ -283,7 +286,9 @@ class PasswordSidebarActivitySection extends React.Component {
         <div className="content-wrapper">
           <div className="content">
             <div className="name">
-              <span className="creator">{activityCreatorName}</span> accessed secret of item <Link to={resourceLink}>{resourceName}</Link>
+              <Trans>
+                <span className="creator">{{activityCreatorName}}</span> accessed secret of item <a target="_blank" rel="noopener noreferrer" href={resourceLink}>{{resourceName}}</a>
+              </Trans>
             </div>
             <div className="subinfo light">{activityFormattedDate}</div>
           </div>
@@ -309,7 +314,9 @@ class PasswordSidebarActivitySection extends React.Component {
         <div className="content-wrapper">
           <div className="content">
             <div className="name">
-              <span className="creator">{activityCreatorName}</span> updated secret of item <Link to={resourceLink}>{resourceName}</Link>
+              <Trans>
+                <span className="creator">{{activityCreatorName}}</span> updated secret of item <a target="_blank" rel="noopener noreferrer" href={resourceLink}>{{resourceName}}</a>
+              </Trans>
             </div>
             <div className="subinfo light">{activityFormattedDate}</div>
           </div>
@@ -363,7 +370,9 @@ class PasswordSidebarActivitySection extends React.Component {
         <div className="content-wrapper">
           <div className="content">
             <div className="name">
-              <span className="creator">{activityCreatorName}</span> changed permissions of item <Link to={resourceLink}>{resourceName}</Link> with
+              <Trans>
+                <span className="creator">{{activityCreatorName}}</span> changed permissions of item <a target="_blank" rel="noopener noreferrer" href={resourceLink}>{{resourceName}}</a> with
+              </Trans>
             </div>
             <div className="subinfo light">{activityFormattedDate}</div>
             <ul className="permissions-list">
@@ -387,7 +396,7 @@ class PasswordSidebarActivitySection extends React.Component {
       <li key={activity.id} className="usercard-detailed-col-2">
         <div className="content-wrapper">
           <div className="content">
-            Unknown activity, please contact your administrator.
+            {this.translate("Unknown activity, please contact your administrator.")}
           </div>
         </div>
       </li>
@@ -447,6 +456,14 @@ class PasswordSidebarActivitySection extends React.Component {
   }
 
   /**
+   * Get the translate function
+   * @returns {function(...[*]=)}
+   */
+  get translate() {
+    return this.props.t;
+  }
+
+  /**
    * Render the component
    * @returns {JSX}
    */
@@ -456,7 +473,7 @@ class PasswordSidebarActivitySection extends React.Component {
         <div className="accordion-header">
           <h4>
             <a onClick={this.handleTitleClickEvent} role="button">
-              Activity
+              {this.translate("Activity")}
               {this.state.open &&
               <Icon name="caret-down"/>
               }
@@ -469,7 +486,7 @@ class PasswordSidebarActivitySection extends React.Component {
         <div className="accordion-content">
           {this.state.loading &&
           <div className="processing-wrapper">
-            <span className="processing-text">Retrieving activities</span>
+            <span className="processing-text">{this.translate("Retrieving activities")}</span>
           </div>
           }
           {!this.state.loading &&
@@ -480,7 +497,7 @@ class PasswordSidebarActivitySection extends React.Component {
             {this.mustDisplayMoreButton() &&
             <div className="actions">
               <a onClick={this.handleMoreClickEvent} className={`button action-logs-load-more ${this.state.loadingMore ? "processing disabled" : ""}`} role="button">
-                <span>More</span>
+                <span>{this.translate("More")}</span>
               </a>
             </div>
             }
@@ -495,7 +512,9 @@ class PasswordSidebarActivitySection extends React.Component {
 PasswordSidebarActivitySection.contextType = AppContext;
 
 PasswordSidebarActivitySection.propTypes = {
-  resourceWorkspaceContext: PropTypes.any
+  resourceWorkspaceContext: PropTypes.any,
+  t: PropTypes.func, // The translation function
+  i18n: PropTypes.any // The i18n context translation
 };
 
-export default withResourceWorkspace(PasswordSidebarActivitySection);
+export default withResourceWorkspace(withTranslation('common')(PasswordSidebarActivitySection));

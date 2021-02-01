@@ -1348,6 +1348,6 @@ export function defaultProps() {
           ],
         },
       }
-    },
+    }
   };
 }

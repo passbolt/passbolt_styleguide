@@ -23,6 +23,7 @@ import ConfirmCommentDeletionPageObject from "./ConfirmCommentDeletion.test.page
 import PropTypes from "prop-types";
 import ManageDialogs from "../../../../react/components/Common/Dialog/ManageDialogs/ManageDialogs";
 import DialogContextProvider from "../../../../react/contexts/Common/DialogContext";
+import SetupTranslations from "../../../SetupTranslations";
 
 /**
  * The PasswordSidebarCommentSection component represented as a page
@@ -35,12 +36,14 @@ export default class PasswordSidebarCommentSectionPage {
    */
   constructor(appContext, props) {
     this._page = render(
-      <AppContextProvider context={appContext}>
-        <DialogContextProvider>
-          <ManageDialogs/>
-          <PasswordSidebarCommentSection {...props}/>
-        </DialogContextProvider>
-      </AppContextProvider>
+      <SetupTranslations>
+        <AppContextProvider context={appContext}>
+          <DialogContextProvider>
+            <ManageDialogs/>
+            <PasswordSidebarCommentSection {...props}/>
+          </DialogContextProvider>
+        </AppContextProvider>
+      </SetupTranslations>
     );
     this.setupPageObjects();
   }

@@ -17,10 +17,11 @@ import React from 'react';
 import PropTypes from "prop-types";
 import UserAvatar from "../../../../react/components/Common/Avatar/UserAvatar";
 import AppContext from "../../../contexts/AppContext";
-import moment from "moment-timezone";
 import Icon from "../../../../react/components/Common/Icons/Icon";
 import {withDialog} from "../../../../react/contexts/Common/DialogContext";
 import UploadUserProfileAvatar from "../UploadUserProfileAvatar/UploadUserProfileAvatar";
+import {withTranslation} from "react-i18next";
+import {DateTime} from "luxon";
 
 /**
  * This component displays the user profile information
@@ -62,8 +63,15 @@ class DisplayUserProfile extends React.Component {
    * @return {string}
    */
   formatDateTimeAgo(date) {
-    const serverTimezone = this.context.siteSettings.getServerTimezone();
-    return moment.tz(date, serverTimezone).fromNow();
+    return DateTime.fromISO(date).toRelative({locale: this.props.i18n.lng});
+  }
+
+  /**
+   * Get the translate function
+   * @returns {function(...[*]=)}
+   */
+  get translate() {
+    return this.props.t;
   }
 
   render() {
@@ -76,30 +84,30 @@ class DisplayUserProfile extends React.Component {
             <table className="table-info profile">
               <tbody>
                 <tr className="name">
-                  <td className="label">Name</td>
+                  <td className="label">{this.translate("Name")}</td>
                   <td className="value">{`${this.user.profile.first_name} ${this.user.profile.last_name}`}</td>
                 </tr>
                 <tr className="email">
-                  <td className="label">Email</td>
+                  <td className="label">{this.translate("Email")}</td>
                   <td className="value">{this.user.username}</td>
                 </tr>
                 <tr className="role">
-                  <td className="label">Role</td>
+                  <td className="label">{this.translate("Role")}</td>
                   <td className="value">{this.user.role.name}</td>
                 </tr>
                 <tr className="modified">
-                  <td className="label">Modified</td>
+                  <td className="label">{this.translate("Modified")}</td>
                   <td className="value">{this.formatDateTimeAgo(this.user.modified)}</td>
                 </tr>
                 <tr className="created">
-                  <td className="label">Created</td>
+                  <td className="label">{this.translate("Created")}</td>
                   <td className="value">{this.formatDateTimeAgo(this.user.created)}</td>
                 </tr>
               </tbody>
             </table>
           </div>
           <div className="avatar col6 last">
-            <h3>Avatar</h3>
+            <h3>{this.translate("Avatar")}</h3>
             <div className="avatar">
               <div className="value">
                 <UserAvatar
@@ -113,7 +121,7 @@ class DisplayUserProfile extends React.Component {
                   title="Change Avatar"
                   onClick={this.handleUploadPicture}>
                   <Icon name="camera"/>
-                  <span className="help-text">Upload a new avatar picture</span>
+                  <span className="help-text">{this.translate("Upload a new avatar picture")}</span>
                 </a>
               </div>
             </div>
@@ -127,7 +135,9 @@ class DisplayUserProfile extends React.Component {
 
 DisplayUserProfile.contextType = AppContext;
 DisplayUserProfile.propTypes = {
-  dialogContext: PropTypes.object // The dialog context
+  dialogContext: PropTypes.object, // The dialog context
+  t: PropTypes.func, // The translation function
+  i18n: PropTypes.any // The i18n context translation
 };
 
-export default withDialog(DisplayUserProfile);
+export default withDialog(withTranslation('common')(DisplayUserProfile));

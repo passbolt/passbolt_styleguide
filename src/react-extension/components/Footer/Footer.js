@@ -14,6 +14,7 @@
 import React, {Component} from "react";
 import Icon from "../../../react/components/Common/Icons/Icon";
 import PropTypes from "prop-types";
+import {withTranslation} from "react-i18next";
 
 const CREDITS_URL = "https://www.passbolt.com/credits";
 const UNSAFE_URL = "https://help.passbolt.com/faq/hosting/why-unsafe";
@@ -84,6 +85,14 @@ class Footer extends Component {
   }
 
   /**
+   * Get the translate function
+   * @returns {function(...[*]=)}
+   */
+  get translate() {
+    return this.props.t;
+  }
+
+  /**
    * Render the component
    * @return {JSX}
    */
@@ -99,7 +108,7 @@ class Footer extends Component {
                 title="terms of service"
                 href={this.unsafeUrl}
                 target="_blank" rel="noopener noreferrer">
-                Unsafe mode
+                {this.translate("Unsafe mode")}
               </a>
             </li>
             }
@@ -108,7 +117,7 @@ class Footer extends Component {
               <a href={this.termsUrl}
                 target="_blank"
                 rel="noopener noreferrer">
-                Terms
+                {this.translate("Terms")}
               </a>
             </li>
             }
@@ -117,7 +126,7 @@ class Footer extends Component {
               <a href={this.privacyUrl}
                 target="_blank"
                 rel="noopener noreferrer">
-                Privacy
+                {this.translate("Privacy")}
               </a>
             </li>
             }
@@ -125,7 +134,7 @@ class Footer extends Component {
               <a href={this.creditsUrl}
                 target="_blank"
                 rel="noopener noreferrer">
-                Credits
+                {this.translate("Credits")}
               </a>
             </li>
             <li>
@@ -148,7 +157,8 @@ class Footer extends Component {
 
 Footer.propTypes = {
   siteSettings: PropTypes.object, // The site settings
-  extensionVersion: PropTypes.string // The extension version
+  extensionVersion: PropTypes.string, // The extension version
+  t: PropTypes.func, // The translation function
 };
 
-export default Footer;
+export default withTranslation('common')(Footer);

@@ -16,6 +16,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import {ResourceWorkspaceFilterTypes, withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 import {withRouter} from "react-router-dom";
+import {withTranslation} from "react-i18next";
 
 /**
  * This component allows to select shortcut filters applied on resources
@@ -116,6 +117,14 @@ class FilterResourcesByShortcuts extends React.Component {
     this.props.history.push({pathname: '/app/passwords', state: {filter}});
   }
 
+  /**
+   * Get the translate function
+   * @returns {function(...[*]=)}
+   */
+  get translate() {
+    return this.props.t;
+  }
+
   render() {
     return (
       <div className="navigation first shortcuts">
@@ -125,7 +134,7 @@ class FilterResourcesByShortcuts extends React.Component {
               <div className="main-cell-wrapper">
                 <div className="main-cell">
                   <a onClick={this.handleAllItemsClick}>
-                    <span>All items</span>
+                    <span>{this.translate("All items")}</span>
                   </a>
                 </div>
               </div>
@@ -136,7 +145,7 @@ class FilterResourcesByShortcuts extends React.Component {
               <div className="main-cell-wrapper">
                 <div className="main-cell">
                   <a onClick={this.handleFavoriteClick}>
-                    <span>Favorites</span>
+                    <span>{this.translate("Favorites")}</span>
                   </a>
                 </div>
               </div>
@@ -147,7 +156,7 @@ class FilterResourcesByShortcuts extends React.Component {
               <div className="main-cell-wrapper">
                 <div className="main-cell">
                   <a onClick={this.handleRecentlyModifiedClick}>
-                    <span>Recently Modified</span>
+                    <span>{this.translate("Recently Modified")}</span>
                   </a>
                 </div>
               </div>
@@ -158,7 +167,7 @@ class FilterResourcesByShortcuts extends React.Component {
               <div className="main-cell-wrapper">
                 <div className="main-cell">
                   <a onClick={this.handleSharedWithMeClick}>
-                    <span>Shared with me</span>
+                    <span>{this.translate("Shared with me")}</span>
                   </a>
                 </div>
               </div>
@@ -169,7 +178,7 @@ class FilterResourcesByShortcuts extends React.Component {
               <div className="main-cell-wrapper">
                 <div className="main-cell">
                   <a onClick={this.handleItemsIOwnClick}>
-                    <span>Owned by me</span>
+                    <span>{this.translate("Owned by me")}</span>
                   </a>
                 </div>
               </div>
@@ -183,7 +192,8 @@ class FilterResourcesByShortcuts extends React.Component {
 
 FilterResourcesByShortcuts.propTypes = {
   history: PropTypes.object,
-  resourceWorkspaceContext: PropTypes.object
+  resourceWorkspaceContext: PropTypes.object,
+  t: PropTypes.func, // The translation function
 };
 
-export default withRouter(withResourceWorkspace(FilterResourcesByShortcuts));
+export default withRouter(withResourceWorkspace(withTranslation('common')(FilterResourcesByShortcuts)));

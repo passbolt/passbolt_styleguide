@@ -26,6 +26,7 @@ import AppContext from "../../contexts/AppContext";
 import {withDialog} from "../../../react/contexts/Common/DialogContext";
 import {withActionFeedback} from "../../contexts/ActionFeedbackContext";
 import {withResourceWorkspace} from "../../contexts/ResourceWorkspaceContext";
+import {withTranslation} from "react-i18next";
 
 class ShareDialog extends Component {
   /**
@@ -156,7 +157,7 @@ class ShareDialog extends Component {
    * Handle save operation success.
    */
   async handleSaveSuccess() {
-    await this.props.actionFeedbackContext.displaySuccess("The permissions have been changed successfully.");
+    await this.props.actionFeedbackContext.displaySuccess(this.translate("The permissions have been changed successfully."));
     await this.props.resourceWorkspaceContext.onResourceShared();
     this.props.onClose();
   }
@@ -183,7 +184,7 @@ class ShareDialog extends Component {
    */
   handleError(error) {
     const errorDialogProps = {
-      title: "There was an unexpected error...",
+      title: this.translate("There was an unexpected error..."),
       message: error.message
     };
     this.context.setContext({errorDialogProps});
@@ -251,7 +252,7 @@ class ShareDialog extends Component {
    */
   async shareSave() {
     if (this.context.shareDialogProps.resourcesIds && this.context.shareDialogProps.foldersIds) {
-      throw new Error('Multi resource and folder share is not implemented.');
+      throw new Error(this.translate("Multi resource and folder share is not implemented."));
     }
     if (this.context.shareDialogProps.resourcesIds) {
       await this.context.port.request("passbolt.share.resources.save", this.resources, this.shareChanges.getResourcesChanges());
@@ -333,22 +334,22 @@ class ShareDialog extends Component {
    */
   getTitle() {
     if (this.state.loading) {
-      return `Loading...`;
+      return this.translate("Loading...");
     }
     if (this.isAboutItems()) {
-      return `Share ${this.context.shareDialogProps.resourcesIds.length + this.context.shareDialogProps.foldersIds.length} items`;
+      return this.translate("Share {{numberItems}} items", {numberItems: this.context.shareDialogProps.resourcesIds.length + this.context.shareDialogProps.foldersIds.length});
     }
     if (this.isAboutAResource()) {
-      return `Share resource ${this.resources[0].name}`;
+      return this.translate("Share resource {{resourceName}}", {resourceName: this.resources[0].name});
     }
     if (this.isAboutResources()) {
-      return `Share ${this.context.shareDialogProps.resourcesIds.length} resources`;
+      return this.translate("Share {{numberResource}} resources", {numberResource: this.context.shareDialogProps.resourcesIds.length});
     }
     if (this.isAboutAFolder()) {
-      return `Share folder ${this.folders[0].name}`;
+      return this.translate("Share folder {{folderName}}", {folderName: this.folders[0].name});
     }
     if (this.isAboutFolders()) {
-      return `Share ${this.context.shareDialogProps.foldersIds.length} folders`;
+      return this.translate("Share {numberFolder} folders", {numberFolder: this.context.shareDialogProps.foldersIds.length});
     }
   }
 
@@ -405,6 +406,14 @@ class ShareDialog extends Component {
   }
 
   /**
+   * Get the translate function
+   * @returns {function(...[*]=)}
+   */
+  get translate() {
+    return this.props.t;
+  }
+
+  /**
    * Render
    * @returns {*}
    */
@@ -442,20 +451,20 @@ class ShareDialog extends Component {
           </div>
           {(this.hasNoOwner()) &&
             <div className="message error">
-              Please make sure there is at least one owner.
+              {this.translate("Please make sure there is at least one owner.")}
             </div>
           }
           {(this.hasChanges() && !this.hasNoOwner()) &&
             <div className="message warning">
-              Click save to apply your pending changes.
+              {this.translate("Click save to apply your pending changes.")}
             </div>
           }
           <div className="form-content permission-add">
             <Autocomplete
               id="share-name-input"
               name="name"
-              label="Share with people or groups"
-              placeholder="Start typing a user or group name"
+              label={this.translate("Share with people or groups")}
+              placeholder={this.translate("Start typing a user or group name")}
               searchCallback={this.fetchAutocompleteItems}
               onSelect={this.handleAutocompleteSelect}
               onOpen={this.handleAutocompleteOpen}
@@ -465,7 +474,7 @@ class ShareDialog extends Component {
             />
           </div>
           <div className="submit-wrapper clearfix">
-            <FormSubmitButton disabled={this.hasSubmitDisabled()} processing={this.state.processing} value="Save"/>
+            <FormSubmitButton disabled={this.hasSubmitDisabled()} processing={this.state.processing} value={this.translate("Save")}/>
             <FormCancelButton disabled={this.hasAllInputDisabled()} onClick={this.handleClose} />
           </div>
         </form>
@@ -480,7 +489,8 @@ ShareDialog.propTypes = {
   onClose: PropTypes.func,
   resourceWorkspaceContext: PropTypes.any, // The resource workspace context
   actionFeedbackContext: PropTypes.any, // The action feedback context
-  dialogContext: PropTypes.any // The dialog context
+  dialogContext: PropTypes.any, // The dialog context
+  t: PropTypes.func, // The translation function
 };
 
-export default withResourceWorkspace(withActionFeedback(withDialog(ShareDialog)));
+export default withResourceWorkspace(withActionFeedback(withDialog(withTranslation('common')(ShareDialog))));

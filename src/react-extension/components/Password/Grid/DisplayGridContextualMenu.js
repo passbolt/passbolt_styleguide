@@ -25,6 +25,7 @@ import {
   withResourceWorkspace
 } from "../../../contexts/ResourceWorkspaceContext";
 import sanitizeUrl, {urlProtocols} from "../../../../react/lib/Common/Sanitize/sanitizeUrl";
+import {withTranslation} from "react-i18next";
 
 class DisplayGridContextualMenu extends React.Component {
   /**
@@ -77,7 +78,7 @@ class DisplayGridContextualMenu extends React.Component {
    */
   async handleUsernameClickEvent() {
     await this.context.port.request("passbolt.clipboard.copy", this.resource.username);
-    this.props.actionFeedbackContext.displaySuccess("The username has been copied to clipboard");
+    this.props.actionFeedbackContext.displaySuccess(this.translate("The username has been copied to clipboard"));
     this.props.hide();
   }
 
@@ -86,7 +87,7 @@ class DisplayGridContextualMenu extends React.Component {
    */
   async handleUriClickEvent() {
     await this.context.port.request("passbolt.clipboard.copy", this.resource.uri);
-    this.props.actionFeedbackContext.displaySuccess("The uri has been copied to clipboard");
+    this.props.actionFeedbackContext.displaySuccess(this.translate("The uri has been copied to clipboard"));
     this.props.hide();
   }
 
@@ -97,7 +98,7 @@ class DisplayGridContextualMenu extends React.Component {
     const baseUrl = this.context.userSettings.getTrustedDomain();
     const permalink = `${baseUrl}/app/passwords/view/${this.resource.id}`;
     await this.context.port.request("passbolt.clipboard.copy", permalink);
-    this.props.actionFeedbackContext.displaySuccess("The permalink has been copied to clipboard");
+    this.props.actionFeedbackContext.displaySuccess(this.translate("The permalink has been copied to clipboard"));
     this.props.hide();
   }
 
@@ -110,7 +111,7 @@ class DisplayGridContextualMenu extends React.Component {
    */
   async copyPasswordToClipboard(plaintextDto) {
     if (!plaintextDto) {
-      throw new TypeError(__('The password is empty.'));
+      throw new TypeError(this.translate("The password is empty."));
     }
     if (typeof plaintextDto === 'string') {
       await this.context.port.request("passbolt.clipboard.copy", plaintextDto);
@@ -120,7 +121,7 @@ class DisplayGridContextualMenu extends React.Component {
         await this.context.port.request("passbolt.clipboard.copy", plaintextDto.password);
         this.props.resourceWorkspaceContext.onResourceCopied();
       } else {
-        throw new TypeError(__('The password field is not defined.'));
+        throw new TypeError(this.translate("The password field is not defined."));
       }
     }
   }
@@ -134,7 +135,7 @@ class DisplayGridContextualMenu extends React.Component {
     try {
       const plaintextDto = await this.context.port.request("passbolt.secret.decrypt", this.resource.id, {showProgress: true});
       await this.copyPasswordToClipboard(plaintextDto);
-      this.props.actionFeedbackContext.displaySuccess("The secret has been copied to clipboard");
+      this.props.actionFeedbackContext.displaySuccess(this.translate("The secret has been copied to clipboard"));
     } catch (error) {
       if (error.name !== "UserAbortsOperationError") {
         this.props.actionFeedbackContext.displayError(error.message);
@@ -210,6 +211,14 @@ class DisplayGridContextualMenu extends React.Component {
   }
 
   /**
+   * Get the translate function
+   * @returns {function(...[*]=)}
+   */
+  get translate() {
+    return this.props.t;
+  }
+
+  /**
    * Render the component.
    * @returns {JSX}
    */
@@ -224,7 +233,7 @@ class DisplayGridContextualMenu extends React.Component {
             <div className="main-cell-wrapper">
               <div className="main-cell">
                 <a id="username" className={`${this.canCopyUsername() ? "" : "disabled"}`}
-                  onClick={this.handleUsernameClickEvent}><span>Copy username</span></a>
+                  onClick={this.handleUsernameClickEvent}><span>{this.translate("Copy username")}</span></a>
               </div>
             </div>
           </div>
@@ -233,7 +242,7 @@ class DisplayGridContextualMenu extends React.Component {
           <div className="row">
             <div className="main-cell-wrapper">
               <div className="main-cell">
-                <a id="password" onClick={this.handlePasswordClickEvent}><span>Copy password</span></a>
+                <a id="password" onClick={this.handlePasswordClickEvent}><span>{this.translate("Copy password")}</span></a>
               </div>
             </div>
           </div>
@@ -243,7 +252,7 @@ class DisplayGridContextualMenu extends React.Component {
             <div className="main-cell-wrapper">
               <div className="main-cell">
                 <a id="username" className={`${this.canCopyUri() ? "" : "disabled"}`}
-                  onClick={this.handleUriClickEvent}><span>Copy URI</span></a>
+                  onClick={this.handleUriClickEvent}><span>{this.translate("Copy URI")}</span></a>
               </div>
             </div>
           </div>
@@ -252,7 +261,7 @@ class DisplayGridContextualMenu extends React.Component {
           <div className="row">
             <div className="main-cell-wrapper">
               <div className="main-cell">
-                <a id="permalink" onClick={this.handlePermalinkClickEvent}><span>Copy permalink</span></a>
+                <a id="permalink" onClick={this.handlePermalinkClickEvent}><span>{this.translate("Copy permalink")}</span></a>
               </div>
             </div>
           </div>
@@ -263,7 +272,7 @@ class DisplayGridContextualMenu extends React.Component {
               <div className="main-cell">
                 <a id="permalink"
                   className={`${this.safeUri ? "" : "disabled"}`}
-                  onClick={this.handleGoToResourceUriClick}><span>Open URI in a new Tab</span></a>
+                  onClick={this.handleGoToResourceUriClick}><span>{this.translate("Open URI in a new Tab")}</span></a>
               </div>
             </div>
           </div>
@@ -273,7 +282,7 @@ class DisplayGridContextualMenu extends React.Component {
             <div className="main-cell-wrapper">
               <div className="main-cell">
                 <a id="edit" className={`${this.canUpdate() ? "" : "disabled"}`}
-                  onClick={this.handleEditClickEvent}><span>Edit</span></a>
+                  onClick={this.handleEditClickEvent}><span>{this.translate("Edit")}</span></a>
               </div>
             </div>
           </div>
@@ -284,7 +293,7 @@ class DisplayGridContextualMenu extends React.Component {
               <div className="main-cell">
                 <a
                   id="share" className={`${this.canShare() ? "" : "disabled"}`}
-                  onClick={this.handleShareClickEvent}><span>Share</span></a>
+                  onClick={this.handleShareClickEvent}><span>{this.translate("Share")}</span></a>
               </div>
             </div>
           </div>
@@ -295,7 +304,7 @@ class DisplayGridContextualMenu extends React.Component {
               <div className="main-cell">
                 <a
                   id="delete" className={`${this.canUpdate() ? "" : "disabled"}`}
-                  onClick={this.handleDeleteClickEvent}><span>Delete</span></a>
+                  onClick={this.handleDeleteClickEvent}><span>{this.translate("Delete")}</span></a>
               </div>
             </div>
           </div>
@@ -315,6 +324,7 @@ DisplayGridContextualMenu.propTypes = {
   dialogContext: PropTypes.any, // the dialog context
   resource: PropTypes.object, // resource selected
   actionFeedbackContext: PropTypes.any, // The action feedback context
+  t: PropTypes.func, // The translation function
 };
 
-export default withResourceWorkspace(withDialog(withActionFeedback(DisplayGridContextualMenu)));
+export default withResourceWorkspace(withDialog(withActionFeedback(withTranslation('common')(DisplayGridContextualMenu))));

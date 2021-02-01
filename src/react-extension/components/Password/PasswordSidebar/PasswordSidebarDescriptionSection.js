@@ -17,6 +17,7 @@ import Icon from "../../../../react/components/Common/Icons/Icon";
 import DescriptionEditor from "./DescriptionEditor";
 import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 import AppContext from "../../../contexts/AppContext";
+import {withTranslation} from "react-i18next";
 
 /**
  * This component display the description section of a resource
@@ -137,7 +138,7 @@ class PasswordSidebarDescriptionSection extends React.Component {
         description: undefined,
         isSecretDecrypting: false,
         error: true,
-        errorMsg: `Decryption failed, click here to retry ${error.message || ''}`
+        errorMsg: this.translate("Decryption failed, click here to retry") + (error.message || '')
       });
 
       return false;
@@ -271,6 +272,14 @@ class PasswordSidebarDescriptionSection extends React.Component {
   }
 
   /**
+   * Get the translate function
+   * @returns {function(...[*]=)}
+   */
+  get translate() {
+    return this.props.t;
+  }
+
+  /**
    * Render the component
    * @returns {JSX}
    */
@@ -280,7 +289,7 @@ class PasswordSidebarDescriptionSection extends React.Component {
         <div className="accordion-header">
           <h4>
             <a onClick={this.handleTitleClickEvent} role="button" className="section-opener">
-              Description
+              {this.translate("Description")}
               {this.state.open &&
               <Icon name="caret-down"/>
               }
@@ -300,7 +309,7 @@ class PasswordSidebarDescriptionSection extends React.Component {
           {this.state.isSecretDecrypting &&
           <p className="description-content">
             <span className="processing-wrapper">
-              <span className="processing-text">Decrypting</span>
+              <span className="processing-text">{this.translate("Decrypting")}</span>
             </span>
           </p>
           }
@@ -314,11 +323,11 @@ class PasswordSidebarDescriptionSection extends React.Component {
           {this.mustShowEmptyDescription() &&
           <p className="description-content">
             {!this.canEdit() &&
-              <em className="empty-content">There is no description.</em>
+              <em className="empty-content">{this.translate("There is no description.")}</em>
             }
             {this.canEdit() &&
             <em className="empty-content" onClick={this.toggleInputDescriptionEditor}>
-              There is no description yet, click here to add one.
+              {this.translate("There is no description yet, click here to add one.")}
             </em>
             }
           </p>
@@ -345,6 +354,7 @@ PasswordSidebarDescriptionSection.contextType = AppContext;
 
 PasswordSidebarDescriptionSection.propTypes = {
   resourceWorkspaceContext: PropTypes.any, // The resource
+  t: PropTypes.func, // The translation function
 };
 
-export default withResourceWorkspace(PasswordSidebarDescriptionSection);
+export default withResourceWorkspace(withTranslation('common')(PasswordSidebarDescriptionSection));

@@ -19,6 +19,7 @@ import AppContext from "../../../../contexts/AppContext";
 import React from "react";
 import SidebarGroupFilterSection from "./SidebarGroupFilterSection";
 import {BrowserRouter as Router} from "react-router-dom";
+import SetupTranslations from "../../../../SetupTranslations";
 
 /**
  * The PasswordSidebarActivitySection component represented as a page
@@ -31,11 +32,13 @@ export default class SidebarGroupFilterSectionPage {
    */
   constructor(appContext, props) {
     this._page = render(
-      <AppContext.Provider value={appContext}>
-        <Router>
-          <SidebarGroupFilterSection.WrappedComponent {...props}/>
-        </Router>
-      </AppContext.Provider>
+      <SetupTranslations>
+        <AppContext.Provider value={appContext}>
+          <Router>
+            <SidebarGroupFilterSection.WrappedComponent {...props}/>
+          </Router>
+        </AppContext.Provider>
+      </SetupTranslations>
     );
     this.setupPageObjects();
   }

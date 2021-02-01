@@ -20,6 +20,7 @@ import AppContext from "../../../contexts/AppContext";
 import {withDialog} from "../../../../react/contexts/Common/DialogContext";
 import ShareDialog from "../../Share/ShareDialog";
 import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
+import {withTranslation} from "react-i18next";
 
 class FolderSidebarPermissionsSection extends React.Component {
   /**
@@ -153,11 +154,11 @@ class FolderSidebarPermissionsSection extends React.Component {
   getPermissionLabel(permission) {
     switch (permission.type) {
       case 1:
-        return "can read";
+        return this.translate("can read");
       case 7:
-        return "can update";
+        return this.translate("can update");
       case 15:
-        return "is owner";
+        return this.translate("is owner");
     }
   }
 
@@ -178,6 +179,14 @@ class FolderSidebarPermissionsSection extends React.Component {
   }
 
   /**
+   * Get the translate function
+   * @returns {function(...[*]=)}
+   */
+  get translate() {
+    return this.props.t;
+  }
+
+  /**
    * Render the component
    * @returns {JSX}
    */
@@ -187,7 +196,7 @@ class FolderSidebarPermissionsSection extends React.Component {
         <div className="accordion-header">
           <h4>
             <a onClick={this.handleTitleClickEvent} role="button">
-              Shared with
+              {this.translate("Shared with")}
               {this.state.open &&
               <Icon name="caret-down"/>
               }
@@ -208,7 +217,7 @@ class FolderSidebarPermissionsSection extends React.Component {
             <ul className="shared-with ready">
               {this.isLoading() &&
               <div className="processing-wrapper">
-                <span className="processing-text">Retrieving permissions</span>
+                <span className="processing-text">{this.translate("Retrieving permissions")}</span>
               </div>
               }
               {this.state.permissions && this.state.permissions.map(permission => (
@@ -239,7 +248,8 @@ FolderSidebarPermissionsSection.contextType = AppContext;
 
 FolderSidebarPermissionsSection.propTypes = {
   resourceWorkspaceContext: PropTypes.object,
-  dialogContext: PropTypes.any
+  dialogContext: PropTypes.any,
+  t: PropTypes.func, // The translation function
 };
 
-export default withDialog(withResourceWorkspace(FolderSidebarPermissionsSection));
+export default withDialog(withResourceWorkspace(withTranslation('common')(FolderSidebarPermissionsSection)));

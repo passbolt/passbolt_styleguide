@@ -18,6 +18,7 @@ import AppContext from "../../../contexts/AppContext";
 import Autocomplete from "./Autocomplete/Autocomplete";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import {withLoading} from "../../../../react/contexts/Common/LoadingContext";
+import {withTranslation} from "react-i18next";
 
 const TAG_MAX_LENGTH = 128;
 
@@ -253,16 +254,16 @@ class TagEditor extends React.Component {
       return false;
     }
     if (this.isTagExceedMaxLength(slug.trim())) {
-      this.setErrorMessage(`This tag can't be added, the length cannot exceeds ${TAG_MAX_LENGTH}`);
+      this.setErrorMessage(this.translate("This tag can't be added, the length cannot exceeds {{tagMaxLength}}", {tagMaxLength: TAG_MAX_LENGTH}));
       return false;
     }
     if (!this.props.isOwner && slug.startsWith("#")) {
-      this.setErrorMessage("This shared tag can't be added, you are not the owner");
+      this.setErrorMessage(this.translate("This shared tag can't be added, you are not the owner"));
       return false;
     }
     if (this.isTagAlreadyPresent(slug.trim())) {
       this.blinkTagAlreadyPresent(slug.trim());
-      this.setErrorMessage("This tag is already present");
+      this.setErrorMessage(this.translate("This tag is already present"));
       this.resetInputTagValue();
       return false;
     }
@@ -326,7 +327,7 @@ class TagEditor extends React.Component {
         this.setState({tags});
         this.setErrorMessage("");
       } else {
-        this.setErrorMessage("This shared tag can't be deleted, you are not the owner");
+        this.setErrorMessage(this.translate("This shared tag can't be deleted, you are not the owner"));
       }
     }
   }
@@ -408,7 +409,7 @@ class TagEditor extends React.Component {
       this.props.loadingContext.add();
       await this.context.port.request("passbolt.tags.update-resource-tags", this.props.resourceId, this.state.tags);
       this.props.loadingContext.remove();
-      await this.props.actionFeedbackContext.displaySuccess("The tags have been updated successfully");
+      await this.props.actionFeedbackContext.displaySuccess(this.translate("The tags have been updated successfully"));
       this.setState({processing: false});
       this.props.toggleInputTagEditor();
     } catch (error) {
@@ -480,6 +481,14 @@ class TagEditor extends React.Component {
   }
 
   /**
+   * Get the translate function
+   * @returns {function(...[*]=)}
+   */
+  get translate() {
+    return this.props.t;
+  }
+
+  /**
    * Render the component
    * @returns {JSX}
    */
@@ -494,8 +503,9 @@ class TagEditor extends React.Component {
                   <span
                     className={`tag-content ellipsis ${this.state.tagAlreadyPresent === tag.slug ? "blink-fast" : ""}`}>{tag.slug}</span>
                   {this.isTagDeletable(tag) &&
-                  <span className={`tag-delete`} onClick={event => this.deleteTag(event, index)}><Icon
-                    name="close"></Icon></span>
+                  <span className={`tag-delete`} onClick={event => this.deleteTag(event, index)}>
+                    <Icon name="close"/>
+                  </span>
                   }
                 </div>
               )
@@ -521,8 +531,7 @@ class TagEditor extends React.Component {
           {!this.state.errorMessage && this.props.isOwner &&
           <div className="message notice">
             <Icon baseline={true} name="info-circle"/>
-            <strong>Pro tip:</strong> Tags starting with # are shared with all users who have access. Separate tags
-            using commas.
+            <strong>{this.translate("Pro tip:")}</strong> {this.translate("Tags starting with # are shared with all users who have access. Separate tags using commas.")}
           </div>
           }
           {this.state.errorMessage &&
@@ -532,10 +541,10 @@ class TagEditor extends React.Component {
         <div className="actions">
           <a className={`button tag-editor-submit ${this.hasAllInputDisabled() ? "primary processing disabled" : ""}`}
             onClick={this.handleOnSubmit}>
-            <span>Save</span>
+            <span>{this.translate("Save")}</span>
           </a>
           <a className={`button cancel tag-editor-cancel ${this.hasAllInputDisabled() ? "disabled" : ""}`} role="button"
-            onClick={this.props.toggleInputTagEditor}><span>Cancel</span></a>
+            onClick={this.props.toggleInputTagEditor}><span>{this.translate("Cancel")}</span></a>
         </div>
       </div>
     );
@@ -550,7 +559,8 @@ TagEditor.propTypes = {
   toggleInputTagEditor: PropTypes.func, // toggle to display or not the editor
   resourceId: PropTypes.string, // the id of the resource
   actionFeedbackContext: PropTypes.any, // The action feedback context
-  loadingContext: PropTypes.any // The loading context
+  loadingContext: PropTypes.any, // The loading context
+  t: PropTypes.func, // The translation function
 };
 
-export default withLoading(withActionFeedback(TagEditor));
+export default withLoading(withActionFeedback(withTranslation('common')(TagEditor)));

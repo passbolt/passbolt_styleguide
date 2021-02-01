@@ -29,7 +29,8 @@ const config = {
         options: {
           presets: ["@babel/react"],
         }
-      }
+      },
+      {test: /\.json$/, loader: 'json-loader'}
     ]
   },
   optimization: {

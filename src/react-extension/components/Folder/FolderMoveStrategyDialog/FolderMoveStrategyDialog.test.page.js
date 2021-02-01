@@ -17,6 +17,7 @@ import {fireEvent, render, waitFor} from "@testing-library/react";
 import React from "react";
 import AppContext from "../../../contexts/AppContext";
 import FolderMoveStrategyDialog from "./FolderMoveStrategyDialog";
+import SetupTranslations from "../../../SetupTranslations";
 
 /**
  * The FolderMoveStrategyDialogPage component represented as a page
@@ -29,9 +30,11 @@ export default class FolderMoveStrategyDialogPage {
    */
   constructor(appContext, props) {
     this._page = render(
-      <AppContext.Provider  value={appContext}>
-        <FolderMoveStrategyDialog {...props}></FolderMoveStrategyDialog>
-      </AppContext.Provider>
+      <SetupTranslations>
+        <AppContext.Provider  value={appContext}>
+          <FolderMoveStrategyDialog {...props}></FolderMoveStrategyDialog>
+        </AppContext.Provider>
+      </SetupTranslations>
     );
   }
 

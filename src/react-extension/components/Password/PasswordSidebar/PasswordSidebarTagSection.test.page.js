@@ -21,6 +21,7 @@ import AppContext from "../../../contexts/AppContext";
 import PasswordSidebarTagSection from "./PasswordSidebarTagSection";
 import TagItemViewerPageObject from "./TagItemViewer.test.page";
 import TagEditorPageObject from "./TagEditor.test.page";
+import SetupTranslations from "../../../SetupTranslations";
 
 /**
  * The PasswordSidebarTagSection component represented as a page
@@ -33,11 +34,13 @@ export default class PasswordSidebarTagSectionPage {
    */
   constructor(appContext, props) {
     this._page = render(
-      <AppContext.Provider value={appContext}>
-        <Router>
-          <PasswordSidebarTagSection  {...props}/>
-        </Router>
-      </AppContext.Provider>
+      <SetupTranslations>
+        <AppContext.Provider value={appContext}>
+          <Router>
+            <PasswordSidebarTagSection  {...props}/>
+          </Router>
+        </AppContext.Provider>
+      </SetupTranslations>
     );
     this.setupPageObjects();
   }

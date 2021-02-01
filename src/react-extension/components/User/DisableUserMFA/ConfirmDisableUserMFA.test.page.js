@@ -4,6 +4,7 @@ import DialogContextProvider from "../../../../react/contexts/Common/DialogConte
 import ManageDialogs from "../../../../react/components/Common/Dialog/ManageDialogs/ManageDialogs";
 import React from "react";
 import ConfirmDisableUserMFA from "./ConfirmDisableUserMFA";
+import SetupTranslations from "../../../SetupTranslations";
 
 /**
  * The ConfirmDisableUserMFATestPage component represented as a page
@@ -16,12 +17,14 @@ export default class ConfirmDisableUserMFATestPage {
    */
   constructor(appContext, props) {
     this._page = render(
-      <AppContext.Provider value={appContext}>
-        <DialogContextProvider>
-          <ManageDialogs/>
-          <ConfirmDisableUserMFA {...props}/>
-        </DialogContextProvider>
-      </AppContext.Provider>
+      <SetupTranslations>
+        <AppContext.Provider value={appContext}>
+          <DialogContextProvider>
+            <ManageDialogs/>
+            <ConfirmDisableUserMFA {...props}/>
+          </DialogContextProvider>
+        </AppContext.Provider>
+      </SetupTranslations>
     );
   }
 

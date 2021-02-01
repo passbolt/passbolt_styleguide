@@ -17,6 +17,7 @@ import AppContext from "../../../contexts/AppContext";
 import DialogWrapper from "../../../../react/components/Common/Dialog/DialogWrapper/DialogWrapper";
 import Icon from "../../../../react/components/Common/Icons/Icon";
 import DisplayStructureGroupsUsersTreeItem from "./DisplayStructureGroupsUsersTreeItem";
+import {withTranslation} from "react-i18next";
 
 class DisplayTestUserDirectoryAdministrationDialog extends Component {
   /**
@@ -143,6 +144,14 @@ class DisplayTestUserDirectoryAdministrationDialog extends Component {
   }
 
   /**
+   * Get the translate function
+   * @returns {function(...[*]=)}
+   */
+  get translate() {
+    return this.props.t;
+  }
+
+  /**
    * Render
    * @returns {JSX}
    */
@@ -153,24 +162,26 @@ class DisplayTestUserDirectoryAdministrationDialog extends Component {
         <div className="form-content">
           <p>
             <strong>
-              A connection could be established. Well done!
+              {this.translate("A connection could be established. Well done!")}
             </strong>
           </p>
           <p></p>
           <div className="ldap-test-settings-report">
-            <p>{this.users.length} user(s) and {this.groups.length} group(s) have been found.</p>
+            <p>
+              {this.translate("{{users}} and {{groups}} have been found.", {users: this.translate("{{count}} user", {count: this.users.length}), groups: this.translate("{{count}} group", {count: this.groups.length})})}
+            </p>
             <div className={`accordion directory-list ${this.state.openListGroupsUsers ? "" : "closed"}`}>
               <div className="accordion-header" onClick={this.handleListGroupsUsersClicked}>
                 {this.state.openListGroupsUsers && <Icon name="caret-down" baseline={true}/>}
                 {!this.state.openListGroupsUsers && <Icon name="caret-right" baseline={true}/>}
-                <a role="link">See list</a>
+                <a role="link">{this.translate("See list")}</a>
               </div>
               <div className="accordion-content">
                 <table>
                   <tbody>
                     <tr>
-                      <td>Groups</td>
-                      <td>Users</td>
+                      <td>{this.translate("Groups")}</td>
+                      <td>{this.translate("Users")}</td>
                     </tr>
                     <tr>
                       <td>
@@ -199,7 +210,7 @@ class DisplayTestUserDirectoryAdministrationDialog extends Component {
               <div className="accordion-header" onClick={this.handleStructureGroupsUsersClicked}>
                 {this.state.openStructureGroupsUsers && <Icon name="caret-down" baseline={true}/>}
                 {!this.state.openStructureGroupsUsers && <Icon name="caret-right" baseline={true}/>}
-                <a role="link">See structure</a>
+                <a role="link">{this.translate("See structure")}</a>
               </div>
               <div className="accordion-content">
                 <div className="directory-structure">
@@ -217,12 +228,12 @@ class DisplayTestUserDirectoryAdministrationDialog extends Component {
             </div>
             {this.errors.length > 0 &&
             <div>
-              <p className="directory-errors error">{this.errors.length} entries had errors and will be ignored during synchronization.</p>
+              <p className="directory-errors error">{this.translate("{{count}} entry had errors and will be ignored during synchronization.", {count: this.errors.length})}</p>
               <div className={`accordion accordion-directory-errors ${this.state.openErrors ? "" : "closed"}`}>
                 <div className="accordion-header" onClick={this.handleErrorsClicked}>
                   {this.state.openErrors && <Icon name="caret-down" baseline={true}/>}
                   {!this.state.openErrors && <Icon name="caret-right" baseline={true}/>}
-                  <a role="link">See error details</a>
+                  <a role="link">{this.translate("See error details")}</a>
                 </div>
                 <div className="accordion-content">
                   <div className="directory-errors">
@@ -235,7 +246,7 @@ class DisplayTestUserDirectoryAdministrationDialog extends Component {
           </div>
         </div>
         <div className="submit-wrapper clearfix">
-          <a className={`button primary ${this.hasAllInputDisabled() ? "disabled" : ""}`} role="button" onClick={this.handleClose}>OK</a>
+          <a className={`button primary ${this.hasAllInputDisabled() ? "disabled" : ""}`} role="button" onClick={this.handleClose}>{this.translate("OK")}</a>
         </div>
       </DialogWrapper>
     );
@@ -246,6 +257,7 @@ DisplayTestUserDirectoryAdministrationDialog.contextType = AppContext;
 
 DisplayTestUserDirectoryAdministrationDialog.propTypes = {
   onClose: PropTypes.func,
+  t: PropTypes.func, // The translation function
 };
 
-export default DisplayTestUserDirectoryAdministrationDialog;
+export default withTranslation('common')(DisplayTestUserDirectoryAdministrationDialog);

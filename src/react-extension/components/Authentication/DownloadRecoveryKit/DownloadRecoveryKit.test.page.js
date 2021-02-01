@@ -2,6 +2,7 @@ import {fireEvent, render, waitFor} from "@testing-library/react";
 import React from "react";
 import AuthenticationContextProvider from "../../../contexts/AuthenticationContext";
 import DownloadRecoveryKit from "./DownloadRecoveryKit";
+import SetupTranslations from "../../../SetupTranslations";
 
 /**
  * The DownloadRecoveryKitPage component represented as a page
@@ -14,9 +15,11 @@ export default class DownloadRecoveryKitPage {
    */
   constructor(context, props) {
     this._page = render(
-      <AuthenticationContextProvider value={context}>
-        <DownloadRecoveryKit {...props} />
-      </AuthenticationContextProvider>
+      <SetupTranslations>
+        <AuthenticationContextProvider value={context}>
+          <DownloadRecoveryKit {...props} />
+        </AuthenticationContextProvider>
+      </SetupTranslations>
     );
   }
 

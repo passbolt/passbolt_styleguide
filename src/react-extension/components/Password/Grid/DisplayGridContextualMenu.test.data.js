@@ -50,7 +50,7 @@ export function propsResourceOnlyRead() {
     top: 0,
     dialogContext: {
       open: jest.fn()
-    },
+    }
   };
 }
 

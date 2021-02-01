@@ -18,6 +18,7 @@ import React from "react";
 import CreateGroupDialog from "./CreateGroupDialog";
 import ManageDialogs from "../../../../react/components/Common/Dialog/ManageDialogs/ManageDialogs";
 import DialogContextProvider from "../../../../react/contexts/Common/DialogContext";
+import SetupTranslations from "../../../SetupTranslations";
 
 /**
  * The CreateGroupDialog component represented as a page
@@ -30,12 +31,14 @@ export default class CreateGroupDialogPage {
    */
   constructor(appContext, props) {
     this._page = render(
-      <AppContext.Provider value={appContext}>
-        <DialogContextProvider>
-          <ManageDialogs/>
-          <CreateGroupDialog {...props}/>
-        </DialogContextProvider>
-      </AppContext.Provider>
+      <SetupTranslations>
+        <AppContext.Provider value={appContext}>
+          <DialogContextProvider>
+            <ManageDialogs/>
+            <CreateGroupDialog {...props}/>
+          </DialogContextProvider>
+        </AppContext.Provider>
+      </SetupTranslations>
     );
     this.setupPageObjects();
   }

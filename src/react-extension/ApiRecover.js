@@ -19,6 +19,7 @@ import {ApiClientOptions} from "./lib/apiClient/apiClientOptions";
 import Footer from "./components/Footer/Footer";
 import {ApiClient} from "./lib/apiClient/apiClient";
 import SiteSettings from "./lib/Settings/SiteSettings";
+import SetupTranslations from "./SetupTranslations";
 
 /**
  * The recover application served by the API.
@@ -114,21 +115,23 @@ class ApiRecover extends Component {
    */
   render() {
     return (
-      <AppContext.Provider value={this.state}>
-        <div id="container" className="container page login">
-          <div className="content">
-            <div className="header">
-              <div className="logo"><span className="visually-hidden">Passbolt</span></div>
-            </div>
-            <div className="login-form">
-              <ApiRecoverContextProvider value={{userId: this.userId, token: this.token}}>
-                <OrchestrateApiRecover/>
-              </ApiRecoverContextProvider>
+      <SetupTranslations loadingPath={`${this.state.trustedDomain}/locales/{{lng}}/{{ns}}.json`}>
+        <AppContext.Provider value={this.state}>
+          <div id="container" className="container page login">
+            <div className="content">
+              <div className="header">
+                <div className="logo"><span className="visually-hidden">Passbolt</span></div>
+              </div>
+              <div className="login-form">
+                <ApiRecoverContextProvider value={{userId: this.userId, token: this.token}}>
+                  <OrchestrateApiRecover/>
+                </ApiRecoverContextProvider>
+              </div>
             </div>
           </div>
-        </div>
-        <Footer siteSettings={this.state.siteSettings}/>
-      </AppContext.Provider>
+          <Footer siteSettings={this.state.siteSettings}/>
+        </AppContext.Provider>
+      </SetupTranslations>
     );
   }
 }

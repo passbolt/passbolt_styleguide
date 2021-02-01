@@ -19,6 +19,7 @@ import React from "react";
 import AppContext from "../../../contexts/AppContext";
 import {BrowserRouter as Router} from "react-router-dom";
 import FilterUsersByText from "./FilterUsersByText";
+import SetupTranslations from "../../../SetupTranslations";
 
 /**
  * The FilterUsersByGroups component represented as a page
@@ -31,11 +32,13 @@ export default class FilterUsersByTextPage {
    */
   constructor(appContext, props) {
     this._page = render(
-      <AppContext.Provider value={appContext}>
-        <Router>
-          <FilterUsersByText.WrappedComponent {...props}/>
-        </Router>
-      </AppContext.Provider>
+      <SetupTranslations>
+        <AppContext.Provider value={appContext}>
+          <Router>
+            <FilterUsersByText.WrappedComponent {...props}/>
+          </Router>
+        </AppContext.Provider>
+      </SetupTranslations>
     );
   }
 

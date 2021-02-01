@@ -18,6 +18,7 @@ import React from "react";
 import ManageDialogs from "../../../../react/components/Common/Dialog/ManageDialogs/ManageDialogs";
 import DialogContextProvider from "../../../../react/contexts/Common/DialogContext";
 import EditUserDialog from "./EditUserDialog";
+import SetupTranslations from "../../../SetupTranslations";
 
 /**
  * The CreateUserDialog component represented as a page
@@ -30,12 +31,14 @@ export default class EditUserDialogPage {
    */
   constructor(appContext, props) {
     this._page = render(
-      <AppContext.Provider value={appContext}>
-        <DialogContextProvider>
-          <ManageDialogs/>
-          <EditUserDialog {...props}/>
-        </DialogContextProvider>
-      </AppContext.Provider>
+      <SetupTranslations>
+        <AppContext.Provider value={appContext}>
+          <DialogContextProvider>
+            <ManageDialogs/>
+            <EditUserDialog {...props}/>
+          </DialogContextProvider>
+        </AppContext.Provider>
+      </SetupTranslations>
     );
     this.setupPageObjects();
   }

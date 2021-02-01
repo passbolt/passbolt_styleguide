@@ -20,6 +20,7 @@ import DialogWrapper from "../../../../react/components/Common/Dialog/DialogWrap
 import UserAbortsOperationError from "../../../../react/lib/Common/Error/UserAbortsOperationError";
 import ErrorDialog from "../../Dialog/ErrorDialog/ErrorDialog";
 import {withDialog} from "../../../../react/contexts/Common/DialogContext";
+import {withTranslation} from "react-i18next";
 
 class FolderMoveStrategyDialog extends Component {
   /**
@@ -83,7 +84,7 @@ class FolderMoveStrategyDialog extends Component {
   getStateBasedOnContext(context, props, defaultState) {
     const folders = context.folders;
     const error = {
-      message: 'The folder could not be found. Maybe it was deleted or you lost access.'
+      message: this.translate("The folder could not be found. Maybe it was deleted or you lost access.")
     };
 
     if (!folders) {
@@ -153,7 +154,7 @@ class FolderMoveStrategyDialog extends Component {
    */
   handleError(error) {
     const errorDialogProps = {
-      title: "There was an unexpected error...",
+      title: this.translate("There was an unexpected error..."),
       message: error.message
     };
     this.context.setContext({errorDialogProps});
@@ -191,7 +192,7 @@ class FolderMoveStrategyDialog extends Component {
     if (this.state.processing) {
       return;
     }
-    const error = new UserAbortsOperationError("The dialog has been closed.");
+    const error = new UserAbortsOperationError(this.translate("The dialog has been closed."));
     this.context.port.emit(this.context.folderMoveStrategyProps.requestId, "ERROR", error);
     this.context.setContext({folderMoveStrategyProps: {}});
     this.props.onClose();
@@ -212,17 +213,17 @@ class FolderMoveStrategyDialog extends Component {
   getIntroMessage() {
     let message = '';
     if (this.isAboutItems()) {
-      message = 'You are about to move several items.' + ' ';
+      message = `${this.translate("You are about to move several items.")} `;
     } else if (this.isAboutAFolder()) {
-      message = 'You are about to move a folder.' + ' ';
+      message = `${this.translate("You are about to move a folder.")} `;
     } else if (this.isAboutFolders()) {
-      message = 'You are about to move several folders.' + ' ';
+      message = `${this.translate("You are about to move several folders.")} `;
     } else if (this.isAboutAResource()) {
-      message = 'You are about to move one resource.' + ' ';
+      message = `${this.translate("You are about to move one resource.")} `;
     } else {
-      message = 'You are about to move several resources.' + ' ';
+      message = `${this.translate("You are about to move several resources.")} `;
     }
-    message += 'The permissions do not match the destination folder permissions.';
+    message += this.translate("The permissions do not match the destination folder permissions.");
     return message;
   }
 
@@ -269,9 +270,17 @@ class FolderMoveStrategyDialog extends Component {
     return this.context.folderMoveStrategyProps.resources && this.context.folderMoveStrategyProps.resources.length === 1;
   }
 
+  /**
+   * Get the translate function
+   * @returns {function(...[*]=)}
+   */
+  get translate() {
+    return this.props.t;
+  }
+
   render() {
     return (
-      <DialogWrapper className='move-folder-strategy-dialog' title="How do you want to proceed?"
+      <DialogWrapper className='move-folder-strategy-dialog' title={this.translate("How do you want to proceed?")}
         onClose={this.handleClose} disabled={this.hasAllInputDisabled()}>
         <form className="folder-create-form" onSubmit={this.handleFormSubmit} noValidate>
           <div className="form-content">
@@ -281,22 +290,22 @@ class FolderMoveStrategyDialog extends Component {
                 <input name="moveOption" value="change" id="moveOptionChange" type="radio"
                   onChange={this.handleInputChange} ref={this.moveOptionChangeRef} checked={this.state.moveOption === 'change'} />
                 <label htmlFor="moveOptionChange">
-                  <span className="strategy-name">Change permissions</span>
-                  <span className="strategy-info">Remove old inherited permissions and apply the new destination folder permissions recursively.</span>
+                  <span className="strategy-name">{this.translate("Change permissions")}</span>
+                  <span className="strategy-info">{this.translate("Remove old inherited permissions and apply the new destination folder permissions recursively.")}</span>
                 </label>
               </div>
               <div className="input radio last">
                 <input name="moveOption" value="keep" id="moveOptionKeep" type="radio"
                   onChange={this.handleInputChange} ref={this.moveOptionKeepRef}  checked={this.state.moveOption === 'keep'}/>
                 <label htmlFor="moveOptionKeep">
-                  <span className="strategy-name">Keep existing permissions</span>
-                  <span className="strategy-info">Keep the original permissions, do not apply the destination folder permissions.</span>
+                  <span className="strategy-name">{this.translate("Keep existing permissions")}</span>
+                  <span className="strategy-info">{this.translate("Keep the original permissions, do not apply the destination folder permissions.")}</span>
                 </label>
               </div>
             </div>
           </div>
           <div className="submit-wrapper clearfix">
-            <FormSubmitButton disabled={this.hasAllInputDisabled()} processing={this.state.processing} value="Move" />
+            <FormSubmitButton disabled={this.hasAllInputDisabled()} processing={this.state.processing} value={this.translate("Move")} />
             <FormCancelButton disabled={this.hasAllInputDisabled()} onClick={this.handleClose} />
           </div>
         </form>
@@ -309,7 +318,8 @@ FolderMoveStrategyDialog.contextType = AppContext;
 
 FolderMoveStrategyDialog.propTypes = {
   onClose: PropTypes.func,
-  dialogContext: PropTypes.any // The dialog context
+  dialogContext: PropTypes.any, // The dialog context
+  t: PropTypes.func, // The translation function
 };
 
-export default withDialog(FolderMoveStrategyDialog);
+export default withDialog(withTranslation('common')(FolderMoveStrategyDialog));

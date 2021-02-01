@@ -19,6 +19,7 @@ import React from "react";
 import AppContext from "../../../contexts/AppContext";
 import {BrowserRouter as Router} from "react-router-dom";
 import DisplayUserWorkspaceActions from "./DisplayUserWorkspaceActions";
+import SetupTranslations from "../../../SetupTranslations";
 
 /**
  * The DisplayUserWorkspaceActionsPage component represented as a page
@@ -31,11 +32,13 @@ export default class DisplayUserWorkspaceActionsPage {
    */
   constructor(appContext, props) {
     this._page = render(
-      <AppContext.Provider value={appContext}>
-        <Router>
-          <DisplayUserWorkspaceActions {...props}/>
-        </Router>
-      </AppContext.Provider>
+      <SetupTranslations>
+        <AppContext.Provider value={appContext}>
+          <Router>
+            <DisplayUserWorkspaceActions {...props}/>
+          </Router>
+        </AppContext.Provider>
+      </SetupTranslations>
     );
   }
 

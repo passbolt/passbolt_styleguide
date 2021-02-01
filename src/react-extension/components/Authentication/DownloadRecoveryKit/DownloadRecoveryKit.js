@@ -13,6 +13,8 @@
  */
 import React, {Component} from "react";
 import {AuthenticationContext} from "../../../contexts/AuthenticationContext";
+import {withTranslation} from "react-i18next";
+import PropTypes from "prop-types";
 
 /**
  * This component downloads autamatically the recovery kit including the GPG key
@@ -70,16 +72,24 @@ class DownloadRecoveryKit extends Component {
   }
 
   /**
+   * Get the translate function
+   * @returns {function(...[*]=)}
+   */
+  get translate() {
+    return this.props.t;
+  }
+
+  /**
    * Render the component
    * @returns {JSX.Element}
    */
   render() {
     return (
       <div className="generate-key-feedback">
-        <h1>Keep your recovery kit in a safe place.</h1>
+        <h1>{this.translate("Keep your recovery kit in a safe place.")}</h1>
         <p>
-          A download of your recovery kit, containing your secret key, has automatically started.
-          Make sure you store it in a safe place. You may need it later.
+          {this.translate("A download of your recovery kit, containing your secret key, has automatically started.")}
+          {this.translate("Make sure you store it in a safe place. You may need it later.")}
         </p>
         <div className="form-actions">
           <button
@@ -92,7 +102,7 @@ class DownloadRecoveryKit extends Component {
           <a
             id="download-kit"
             onClick={this.handleDownload}>
-            Download the kit again!
+            {this.translate("Download the kit again!")}
           </a>
         </div>
       </div>
@@ -102,4 +112,8 @@ class DownloadRecoveryKit extends Component {
 
 DownloadRecoveryKit.contextType = AuthenticationContext;
 
-export default DownloadRecoveryKit;
+DownloadRecoveryKit.propTypes = {
+  t: PropTypes.func, // The translation function
+};
+
+export default withTranslation('common')(DownloadRecoveryKit);

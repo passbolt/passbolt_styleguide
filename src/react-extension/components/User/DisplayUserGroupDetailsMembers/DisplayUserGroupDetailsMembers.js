@@ -20,6 +20,7 @@ import AppContext from "../../../contexts/AppContext";
 import DisplayUserGroupDetailsMembersGroupMember from "./DisplayUserGroupDetailsMembersGroupMember";
 import EditUserGroup from "../EditUserGroup/EditUserGroup";
 import {withDialog} from "../../../../react/contexts/Common/DialogContext";
+import {withTranslation} from "react-i18next";
 
 /**
  * This component displays the group details about members
@@ -90,6 +91,14 @@ class DisplayUserGroupDetailsMembers extends React.Component {
   }
 
   /**
+   * Get the translate function
+   * @returns {function(...[*]=)}
+   */
+  get translate() {
+    return this.props.t;
+  }
+
+  /**
    * Render the component
    */
   render() {
@@ -98,7 +107,7 @@ class DisplayUserGroupDetailsMembers extends React.Component {
         <div className="accordion-header">
           <h4>
             <a onClick={this.handleTitleClicked}  role="button">
-              Group Members
+              {this.translate("Group Members")}
               {this.state.open && <Icon name="caret-down"/>}
               {!this.state.open && <Icon name="caret-right"/>}
             </a>
@@ -111,7 +120,7 @@ class DisplayUserGroupDetailsMembers extends React.Component {
           </a>
           {this.isLoading() &&
           <div className="processing-wrapper">
-            <span className="processing-text">Retrieving group members</span>
+            <span className="processing-text">{this.translate("Retrieving group members")}</span>
           </div>
           }
           {!this.isLoading() && this.state.open &&
@@ -134,7 +143,8 @@ class DisplayUserGroupDetailsMembers extends React.Component {
 DisplayUserGroupDetailsMembers.contextType = AppContext;
 DisplayUserGroupDetailsMembers.propTypes = {
   userWorkspaceContext: PropTypes.object, // The user workspace context
-  dialogContext: PropTypes.object // The dialog context
+  dialogContext: PropTypes.object, // The dialog context
+  t: PropTypes.func, // The translation function
 };
 
-export default withDialog(withUserWorkspace(DisplayUserGroupDetailsMembers));
+export default withDialog(withUserWorkspace(withTranslation('common')(DisplayUserGroupDetailsMembers)));

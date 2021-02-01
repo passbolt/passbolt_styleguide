@@ -13,6 +13,8 @@
  */
 import React, {Component} from "react";
 import {AuthenticationContext} from "../../../contexts/AuthenticationContext";
+import {withTranslation} from "react-i18next";
+import PropTypes from "prop-types";
 
 /**
  * This component notifies the user that the server key change and ask to acccept it
@@ -134,14 +136,22 @@ class AcceptLoginServerKeyChange extends Component {
   }
 
   /**
+   * Get the translate function
+   * @returns {function(...[*]=)}
+   */
+  get translate() {
+    return this.props.t;
+  }
+
+  /**
    * Render the component
    */
   render() {
     const disabledClassName = this.mustBeDisabled ? 'disabled' : '';
     return (
       <div>
-        <h1>Sorry, the server key has changed.</h1>
-        <p>For security reasons please check with your administrator that this is a change that they initiated. The new fingerprint: </p>
+        <h1>{this.translate("Sorry, the server key has changed.")}</h1>
+        <p>{this.translate("For security reasons please check with your administrator that this is a change that they initiated. The new fingerprint:")} </p>
         <pre>{this.state.fingerprint}</pre>
         <form
           acceptCharset="utf-8"
@@ -154,14 +164,14 @@ class AcceptLoginServerKeyChange extends Component {
               value={this.state.hasAccepted}
               onChange={this.handleAcceptChange}/>
             <label htmlFor="accept-new-key">
-              Yes I checked and it is all fine.
+              {this.translate("Yes I checked and it is all fine.")}
             </label>
           </div>
           {this.state.hasBeenValidated &&
           <>
             <br/>
             {this.state.errors.hasNotAccepted &&
-            <div className="has-not-accepted error message">You must accept the new server key</div>
+            <div className="has-not-accepted error message">{this.translate("You must accept the new server key")}</div>
             }
           </>
           }
@@ -171,7 +181,7 @@ class AcceptLoginServerKeyChange extends Component {
               className={`button primary big full-width ${disabledClassName}`}
               role="button"
               disabled={this.mustBeDisabled}>
-              Accept new key
+              {this.translate("Accept new key")}
             </button>
           </div>
         </form>
@@ -182,4 +192,8 @@ class AcceptLoginServerKeyChange extends Component {
 
 AcceptLoginServerKeyChange.contextType = AuthenticationContext;
 
-export default AcceptLoginServerKeyChange;
+AcceptLoginServerKeyChange.propTypes = {
+  t: PropTypes.func, // The translation function
+};
+
+export default withTranslation('common')(AcceptLoginServerKeyChange);

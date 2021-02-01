@@ -18,6 +18,7 @@ import ManageDialogs from "../../../../react/components/Common/Dialog/ManageDial
 import DialogContextProvider from "../../../../react/contexts/Common/DialogContext";
 import EditUserGroup from "./EditUserGroup";
 import {BrowserRouter as Router} from "react-router-dom";
+import SetupTranslations from "../../../SetupTranslations";
 
 /**
  * The EsitUserGroupTestPage component represented as a page
@@ -31,12 +32,14 @@ export default class EditUserGroupTestPage {
   constructor(appContext, props) {
     this._page = render(
       <Router>
-        <AppContext.Provider value={appContext}>
-          <DialogContextProvider>
-            <ManageDialogs/>
-            <EditUserGroup {...props}/>
-          </DialogContextProvider>
-        </AppContext.Provider>
+        <SetupTranslations>
+          <AppContext.Provider value={appContext}>
+            <DialogContextProvider>
+              <ManageDialogs/>
+              <EditUserGroup {...props}/>
+            </DialogContextProvider>
+          </AppContext.Provider>
+        </SetupTranslations>
       </Router>
     );
   }

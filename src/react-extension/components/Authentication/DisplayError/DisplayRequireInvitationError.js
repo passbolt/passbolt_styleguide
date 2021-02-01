@@ -14,8 +14,17 @@
 import React, {Component} from "react";
 import {withAppContext} from "../../../contexts/AppContext";
 import PropTypes from "prop-types";
+import {withTranslation} from "react-i18next";
 
 class DisplayRequireInvitationError extends Component {
+  /**
+   * Get the translate function
+   * @returns {function(...[*]=)}
+   */
+  get translate() {
+    return this.props.t;
+  }
+
   /**
    * Render the component
    * @returns {JSX}
@@ -23,10 +32,10 @@ class DisplayRequireInvitationError extends Component {
   render() {
     return (
       <div className="setup-error">
-        <h1>Access to this service requires an invitation.</h1>
-        <p>This email is not associated with any approved users on this domain. Please contact your administrator to request an invitation link.</p>
+        <h1>{this.translate("Access to this service requires an invitation.")}</h1>
+        <p>{this.translate("This email is not associated with any approved users on this domain.")} {this.translate("Please contact your administrator to request an invitation link.")}</p>
         <div className="form-actions">
-          <a href={`${this.props.context.trustedDomain}/users/recover`} className="button primary big full-width" role="button">Try with another email</a>
+          <a href={`${this.props.context.trustedDomain}/users/recover`} className="button primary big full-width" role="button">{this.translate("Try with another email")}</a>
         </div>
       </div>
     );
@@ -35,5 +44,6 @@ class DisplayRequireInvitationError extends Component {
 
 DisplayRequireInvitationError.propTypes = {
   context: PropTypes.any, // The application context
+  t: PropTypes.func, // The translation function
 };
-export default withAppContext(DisplayRequireInvitationError);
+export default withAppContext(withTranslation('common')(DisplayRequireInvitationError));

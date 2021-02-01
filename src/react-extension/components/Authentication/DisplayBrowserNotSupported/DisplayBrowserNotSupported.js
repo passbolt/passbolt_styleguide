@@ -14,11 +14,20 @@
 import React, {Component} from "react";
 import PropTypes from "prop-types";
 import {withAppContext} from "../../../contexts/AppContext";
+import {withTranslation} from "react-i18next";
 
 const DOWNLOAD_FIREFOX_URL = "https://www.mozilla.org/firefox/download/thanks/";
 const DOWNLOAD_CHROME_URL = "https://www.google.com/chrome/";
 
 class DisplayBrowserNotSupported extends Component {
+  /**
+   * Get the translate function
+   * @returns {function(...[*]=)}
+   */
+  get translate() {
+    return this.props.t;
+  }
+
   /**
    * Render the component
    * @returns {JSX}
@@ -26,14 +35,14 @@ class DisplayBrowserNotSupported extends Component {
   render() {
     return (
       <div className="browser-not-supported">
-        <h1>Sorry, your browser is not supported.</h1>
-        <p>Please download chrome or firefox to get started with passbolt.</p>
+        <h1>{this.translate("Sorry, your browser is not supported.")}</h1>
+        <p>{this.translate("Please download chrome or firefox to get started with passbolt.")}</p>
         <a href={`${DOWNLOAD_FIREFOX_URL}`} className="browser" target="_blank" rel="noopener noreferrer">
           <img src={`${this.props.context.trustedDomain}/img/third_party/firefox_logo.png`} />
         </a>
         <div className="form-actions">
-          <a href={DOWNLOAD_FIREFOX_URL} className="button primary big full-width" role="button" target="_blank" rel="noopener noreferrer">Download Firefox</a>
-          <a href={DOWNLOAD_CHROME_URL} role="button" target="_blank" rel="noopener noreferrer">Download Chrome</a>
+          <a href={DOWNLOAD_FIREFOX_URL} className="button primary big full-width" role="button" target="_blank" rel="noopener noreferrer">{this.translate("Download Firefox")}</a>
+          <a href={DOWNLOAD_CHROME_URL} role="button" target="_blank" rel="noopener noreferrer">{this.translate("Download Chrome")}</a>
           {/*<a role="button">Why is my browser not supported?</a>*/}
         </div>
       </div>
@@ -43,5 +52,6 @@ class DisplayBrowserNotSupported extends Component {
 
 DisplayBrowserNotSupported.propTypes = {
   context: PropTypes.any, // The application context
+  t: PropTypes.func, // The translation function
 };
-export default withAppContext(DisplayBrowserNotSupported);
+export default withAppContext(withTranslation('common')(DisplayBrowserNotSupported));

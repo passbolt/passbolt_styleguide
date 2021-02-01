@@ -11,6 +11,7 @@ import HelpOnPassphraseLostSecondaryAction
   from "../../Authentication/CheckPassphrase/HelpOnPassphraseLostSecondaryAction";
 import DisplayUnexpectedError from "../../Authentication/DisplayError/DisplayUnexpectedError";
 import DisplayLoginInProgress from "../../AuthenticationLogin/DisplayLoginInProgress/DisplayLoginInProgress";
+import {withTranslation} from "react-i18next";
 
 /**
  * The component orchestrates the recover authentication process
@@ -56,13 +57,21 @@ class RecoverAuthentication extends Component {
   }
 
   /**
+   * Get the translate function
+   * @returns {function(...[*]=)}
+   */
+  get translate() {
+    return this.props.t;
+  }
+
+  /**
    * Render the component
    */
   render() {
     switch (this.context.state)  {
       case AuthenticationContextState.RECOVER_INITIALIZED:
         return <ImportGpgKey
-          title="Welcome back, please enter your private key to begin with the recovery process."
+          title={this.translate("Welcome back, please enter your private key to begin with the recovery process.")}
           secondaryAction={<HelpOnPrivateKeyLostSecondaryAction/>}/>;
       case AuthenticationContextState.GPG_KEY_VALIDATED:
         return <CheckPassphrase canRememberMe={this.canRememberMe} secondaryAction={<HelpOnPassphraseLostSecondaryAction/>}/>;
@@ -83,6 +92,7 @@ class RecoverAuthentication extends Component {
 RecoverAuthentication.contextType = AuthenticationContext;
 RecoverAuthentication.propTypes = {
   siteSettings: PropTypes.object, // The site settings
+  t: PropTypes.func, // The translation function
 };
 
-export default RecoverAuthentication;
+export default withTranslation('common')(RecoverAuthentication);

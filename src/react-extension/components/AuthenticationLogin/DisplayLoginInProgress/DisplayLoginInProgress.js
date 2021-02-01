@@ -12,11 +12,21 @@
  * @since         3.0.0
  */
 import React, {Component} from "react";
+import {withTranslation} from "react-i18next";
+import PropTypes from "prop-types";
 
 /**
  * This component displays an in progress feedback to the user when he's log in
  */
 class DisplayLoginInProgress extends Component {
+  /**
+   * Get the translate function
+   * @returns {function(...[*]=)}
+   */
+  get translate() {
+    return this.props.t;
+  }
+
   /**
    * Render the component
    */
@@ -26,10 +36,14 @@ class DisplayLoginInProgress extends Component {
         <div className="processing-wrapper">
           <span className="processing"></span>
         </div>
-        <h1>Signing in, please wait...</h1>
+        <h1>{this.translate("Signing in, please wait...")}</h1>
       </div>
     );
   }
 }
 
-export default DisplayLoginInProgress;
+DisplayLoginInProgress.propTypes = {
+  t: PropTypes.func, // The translation function
+};
+
+export default withTranslation('common')(DisplayLoginInProgress);

@@ -18,6 +18,7 @@ import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import PropTypes from "prop-types";
 import AppContext from "../../../contexts/AppContext";
 import {withLoading} from "../../../../react/contexts/Common/LoadingContext";
+import {withTranslation} from "react-i18next";
 
 /**
  * This component allows the current user to add a new comment on a resource
@@ -109,7 +110,7 @@ class AddComment extends React.Component {
    */
   async handleSubmitSuccess(addedComment) {
     this.props.loadingContext.remove();
-    await this.props.actionFeedbackContext.displaySuccess("The comment has been added successfully");
+    await this.props.actionFeedbackContext.displaySuccess(this.translate("The comment has been added successfully"));
     this.props.onAdd(addedComment);
   }
 
@@ -188,6 +189,14 @@ class AddComment extends React.Component {
   }
 
   /**
+   * Get the translate function
+   * @returns {function(...[*]=)}
+   */
+  get translate() {
+    return this.props.t;
+  }
+
+  /**
    * Render the component
    * @returns {JSX}
    */
@@ -202,23 +211,23 @@ class AddComment extends React.Component {
 
               <div className="input textarea required">
                 <textarea ref={this.textareaRef}
-                  placeholder="Add a comment"
+                  placeholder={this.translate("Add a comment")}
                   onChange={this.handleContentChanged}
                   onKeyDown={this.handleEscapeKeyPressed}
                   disabled={this.state.actions.processing}>
                 </textarea>
                 <div className="message error">
-                  {this.state.errors.isEmpty && "A comment is required."}
-                  {this.state.errors.isTooLong && "A comment must be less than 256 characters"}
+                  {this.state.errors.isEmpty && this.translate("A comment is required.")}
+                  {this.state.errors.isTooLong && this.translate("A comment must be less than 256 characters")}
                   {this.state.errors.technicalError}
                 </div>
               </div>
 
               <div className="metadata">
                 <span className="author username">
-                  You
+                  {this.translate("You")}
                 </span>
-                <span className="modified">right now</span>
+                <span className="modified">{this.translate("right now")}</span>
               </div>
               <div className="actions">
                 <button
@@ -226,7 +235,7 @@ class AddComment extends React.Component {
                   type="submit"
                   onClick={this.handleSubmitEvent}
                   disabled={this.state.actions.processing}>
-                  Save
+                  {this.translate("Save")}
                 </button>
                 {
                   this.props.cancellable &&
@@ -235,7 +244,7 @@ class AddComment extends React.Component {
                     role="button"
                     onClick={this.handleCancelEvent}
                     disabled={this.state.actions.processing}>
-                    <span>Cancel</span>
+                    <span>{this.translate("Cancel")}</span>
                   </button>
                 }
               </div>
@@ -261,7 +270,8 @@ AddComment.propTypes = {
   onCancel: PropTypes.func, // Called after the add operation has been cancelled
   cancellable: PropTypes.bool, // Flag to determine if the user can cancel
   actionFeedbackContext: PropTypes.any, // The action feedback context
-  loadingContext: PropTypes.any // The loading context
+  loadingContext: PropTypes.any, // The loading context
+  t: PropTypes.func, // The translation function
 };
 
-export default withLoading(withActionFeedback(AddComment));
+export default withLoading(withActionFeedback(withTranslation('common')(AddComment)));

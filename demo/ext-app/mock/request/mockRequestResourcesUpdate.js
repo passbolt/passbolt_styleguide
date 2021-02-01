@@ -12,14 +12,14 @@
  * @since         3.0.0
  */
 
-import moment from 'moment/moment';
+import {DateTime} from "luxon";
 
 export default (resourceDto, password, storage) => {
   return new Promise(async (resolve) => {
     const {resources} = await storage.local.get(["resources"]);
     const resourceIndex = resources.findIndex(item => item.id === resourceDto.id);
     const resource = resources[resourceIndex];
-    resource.modified = moment().format("YYYY-MM-DD[T]HH:mm:ss[+]00:00");
+    resource.modified = DateTime.now().toISO();
     resource.modified_by = "f848277c-5398-58f8-a82a-72397af2d450";
     resource.name = resourceDto.name;
     resource.uri = resourceDto.uri;

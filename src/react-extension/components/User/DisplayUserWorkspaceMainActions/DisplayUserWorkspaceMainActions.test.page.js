@@ -19,6 +19,7 @@ import React from "react";
 import ManageDialogs from "../../../../react/components/Common/Dialog/ManageDialogs/ManageDialogs";
 import DialogContextProvider from "../../../../react/contexts/Common/DialogContext";
 import DisplayUserWorkspaceMainActions from "./DisplayUserWorkspaceMainActions";
+import SetupTranslations from "../../../SetupTranslations";
 
 /**
  * The PasswordSidebarCommentSection component represented as a page
@@ -31,12 +32,14 @@ export default class DisplayUserWorkspaceMainActionsTestPage {
    */
   constructor(appContext, props) {
     this._page = render(
-      <AppContext.Provider value={appContext}>
-        <DialogContextProvider>
-          <ManageDialogs/>
-          <DisplayUserWorkspaceMainActions {...props}/>
-        </DialogContextProvider>
-      </AppContext.Provider>
+      <SetupTranslations>
+        <AppContext.Provider value={appContext}>
+          <DialogContextProvider>
+            <ManageDialogs/>
+            <DisplayUserWorkspaceMainActions {...props}/>
+          </DialogContextProvider>
+        </AppContext.Provider>
+      </SetupTranslations>
     );
     this.setupPageObjects();
   }

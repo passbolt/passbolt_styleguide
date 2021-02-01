@@ -17,19 +17,22 @@ import React from "react";
 import DialogContextProvider from "../../../../react/contexts/Common/DialogContext";
 import PasswordEditDialog from "./PasswordEditDialog";
 import {MemoryRouter, Route} from "react-router-dom";
+import SetupTranslations from "../../../SetupTranslations";
 
 
 /**
  * Page template for the PasswordEditDialog component
  */
 export const PasswordEditDialogPageTemplate = (appContext, props) =>
-  <AppContext.Provider value={appContext}>
-    <DialogContextProvider>
-      <MemoryRouter initialEntries={['/']}>
-        <Route component={routerProps => <PasswordEditDialog {...props} {...routerProps}/>}></Route>
-      </MemoryRouter>
-    </DialogContextProvider>
-  </AppContext.Provider>;
+  <SetupTranslations>
+    <AppContext.Provider value={appContext}>
+      <DialogContextProvider>
+        <MemoryRouter initialEntries={['/']}>
+          <Route component={routerProps => <PasswordEditDialog {...props} {...routerProps}/>}></Route>
+        </MemoryRouter>
+      </DialogContextProvider>
+    </AppContext.Provider>;
+  </SetupTranslations>
 
 /**
  * The PasswordEditDialog component represented as a page

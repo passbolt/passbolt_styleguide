@@ -13,13 +13,13 @@
  */
 import React from "react";
 import PropTypes from "prop-types";
-import moment from "moment-timezone";
+import {DateTime} from "luxon";
 import UserAvatar from "../../../../react/components/Common/Avatar/UserAvatar";
 import GroupAvatar from "../../../../react/components/Common/Avatar/GroupAvatar";
 import AppContext from "../../../contexts/AppContext";
 import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
-import {Link} from "react-router-dom";
 import Icon from "../../../../react/components/Common/Icons/Icon";
+import {Trans, withTranslation} from "react-i18next";
 
 const LIMIT_ACTIVITIES_PER_PAGE = 5;
 
@@ -131,8 +131,7 @@ class FolderSidebarActivitySection extends React.Component {
    * @return {string}
    */
   formatDateTimeAgo(date) {
-    const serverTimezone = this.context.siteSettings.getServerTimezone();
-    return moment.tz(date, serverTimezone).fromNow();
+    return DateTime.fromISO(date).toRelative({locale: this.props.i18n.lng});
   }
 
   /**
@@ -150,7 +149,8 @@ class FolderSidebarActivitySection extends React.Component {
    * @returns {string}
    */
   getFolderPermalink(folder) {
-    return `/app/folders/view/${folder.id}`;
+    const baseUrl = this.context.userSettings.getTrustedDomain();
+    return `${baseUrl}/app/folders/view/${folder.id}`;
   }
 
   /**
@@ -173,11 +173,11 @@ class FolderSidebarActivitySection extends React.Component {
   getPermissionLabel(permission) {
     switch (permission.type) {
       case 1:
-        return "can read";
+        return this.translate("can read");
       case 7:
-        return "can update";
+        return this.translate("can update");
       case 15:
-        return "is owner";
+        return this.translate("is owner");
     }
   }
 
@@ -188,11 +188,11 @@ class FolderSidebarActivitySection extends React.Component {
   getPermissionChangeTypeLabel(type) {
     switch (type) {
       case "created":
-        return "new";
+        return this.translate("new");
       case "updated":
-        return "updated";
+        return this.translate("updated");
       case "removed":
-        return "deleted";
+        return this.translate("deleted");
     }
   }
 
@@ -212,7 +212,9 @@ class FolderSidebarActivitySection extends React.Component {
         <div className="content-wrapper">
           <div className="content">
             <div className="name">
-              <span className="creator">{activityCreatorName}</span> created folder <Link to={folderPermalink}>{folderName}</Link>
+              <Trans>
+                <span className="creator">{{activityCreatorName}}</span> created folder <a target="_blank" rel="noopener noreferrer" href={folderPermalink}>{{folderName}}</a>
+              </Trans>
             </div>
             <div className="subinfo light">{activityFormattedDate}</div>
           </div>
@@ -238,7 +240,9 @@ class FolderSidebarActivitySection extends React.Component {
         <div className="content-wrapper">
           <div className="content">
             <div className="name">
-              <span className="creator">{activityCreatorName}</span> udpated folder <Link to={folderPermalink}>{folderName}</Link>
+              <Trans>
+                <span className="creator">{{activityCreatorName}}</span> updated folder <a target="_blank" rel="noopener noreferrer" href={folderPermalink}>{{folderName}}</a>
+              </Trans>
             </div>
             <div className="subinfo light">{activityFormattedDate}</div>
           </div>
@@ -292,7 +296,9 @@ class FolderSidebarActivitySection extends React.Component {
         <div className="content-wrapper">
           <div className="content">
             <div className="name">
-              <span className="creator">{activityCreatorName}</span> changed permissions of folder <Link to={folderPermalink}>{folderName}</Link> with
+              <Trans>
+                <span className="creator">{{activityCreatorName}}</span> changed permissions of folder <a target="_blank" rel="noopener noreferrer" href={folderPermalink}>{{folderName}}</a> with
+              </Trans>
             </div>
             <div className="subinfo light">{activityFormattedDate}</div>
             <ul className="permissions-list">
@@ -316,7 +322,7 @@ class FolderSidebarActivitySection extends React.Component {
       <li className="usercard-detailed-col-2">
         <div className="content-wrapper">
           <div className="content">
-            Unknown activity, please contact your administrator.
+            {this.translate("Unknown activity, please contact your administrator.")}
           </div>
         </div>
       </li>
@@ -372,6 +378,14 @@ class FolderSidebarActivitySection extends React.Component {
   }
 
   /**
+   * Get the translate function
+   * @returns {function(...[*]=)}
+   */
+  get translate() {
+    return this.props.t;
+  }
+
+  /**
    * Render the component
    * @returns {JSX}
    */
@@ -384,7 +398,7 @@ class FolderSidebarActivitySection extends React.Component {
         <div className="accordion-header">
           <h4>
             <a onClick={this.handleTitleClickEvent} role="button">
-              Activity
+              {this.translate("Activity")}
               {this.state.open &&
               <Icon name="caret-down"/>
               }
@@ -397,7 +411,7 @@ class FolderSidebarActivitySection extends React.Component {
         <div className="accordion-content">
           {loadingActivities &&
           <div className="processing-wrapper">
-            <span className="processing-text">Retrieving activities</span>
+            <span className="processing-text">{this.translate("Retrieving activities")}</span>
           </div>
           }
           {!loadingActivities &&
@@ -408,7 +422,7 @@ class FolderSidebarActivitySection extends React.Component {
             {isMoreButtonVisible &&
             <div className="actions">
               <a onClick={this.handleMoreClickEvent} className={`button action-logs-load-more ${this.state.loadingMore ? "processing disabled" : ""}`} role="button">
-                <span>more</span>
+                <span>{this.translate("More")}</span>
               </a>
             </div>
             }
@@ -423,7 +437,9 @@ class FolderSidebarActivitySection extends React.Component {
 FolderSidebarActivitySection.contextType = AppContext;
 
 FolderSidebarActivitySection.propTypes = {
-  resourceWorkspaceContext: PropTypes.any
+  resourceWorkspaceContext: PropTypes.any,
+  t: PropTypes.func, // The translation function
+  i18n: PropTypes.any // The i18n context translation
 };
 
-export default withResourceWorkspace(FolderSidebarActivitySection);
+export default withResourceWorkspace(withTranslation('common')(FolderSidebarActivitySection));

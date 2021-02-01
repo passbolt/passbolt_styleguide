@@ -13,15 +13,15 @@
  */
 
 import {v4 as uuidv4} from "uuid";
-import moment from 'moment/moment';
+import {DateTime} from "luxon";
 
 export default (eventObject, storage) => {
   return new Promise(async (resolve) => {
     const {folders} = await storage.local.get(["folders"]);
     eventObject.id = uuidv4();
-    eventObject.created = moment().format("YYYY-MM-DD[T]HH:mm:ss[+]00:00");
+    eventObject.created = DateTime.now().toISO();
     eventObject.created_by = "f848277c-5398-58f8-a82a-72397af2d450";
-    eventObject.modified = moment().format("YYYY-MM-DD[T]HH:mm:ss[+]00:00");
+    eventObject.modified = DateTime.now().toISO();
     eventObject.modified_by = "f848277c-5398-58f8-a82a-72397af2d450";
     eventObject.private = true;
     eventObject.permission = {

@@ -153,7 +153,7 @@ describe("See the Edit User Group", () => {
 
       await page.save();
 
-      await waitFor(() => expect(page.groupNameErrorMessage).toBe("The group name test already exists."));
+      await waitFor(() => expect(page.groupNameErrorMessage).toBe("The group name already exists."));
     });
 
     it('As AD I should see an error message when the editing group has no group manager anymore', async() => {

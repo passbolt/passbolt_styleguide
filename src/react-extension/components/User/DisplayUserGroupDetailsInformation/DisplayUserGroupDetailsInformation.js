@@ -16,9 +16,9 @@ import React from "react";
 import PropTypes from "prop-types";
 import Icon from "../../../../react/components/Common/Icons/Icon";
 import {withUserWorkspace} from "../../../contexts/UserWorkspaceContext";
-import moment from "moment";
-import "moment-timezone";
 import AppContext from "../../../contexts/AppContext";
+import {withTranslation} from "react-i18next";
+import {DateTime} from "luxon";
 
 /**
  * This component displays the group details about information
@@ -70,8 +70,15 @@ class DisplayUserGroupDetailsInformation extends React.Component {
    * @return {string} The formatted date
    */
   formatDateTimeAgo(date) {
-    const serverTimezone = this.context.siteSettings.getServerTimezone();
-    return moment.tz(date, serverTimezone).fromNow();
+    return DateTime.fromISO(date).toRelative({locale: this.props.i18n.lng});
+  }
+
+  /**
+   * Get the translate function
+   * @returns {function(...[*]=)}
+   */
+  get translate() {
+    return this.props.t;
   }
 
   /**
@@ -81,14 +88,14 @@ class DisplayUserGroupDetailsInformation extends React.Component {
     const created = this.formatDateTimeAgo(this.group.created);
     const modified = this.formatDateTimeAgo(this.group.modified);
     const modifiedByUser = this.context.users.find(user => user.id === this.group.modified_by);
-    const modifiedByUserName = modifiedByUser ? `${modifiedByUser.profile.first_name} ${modifiedByUser.profile.last_name}` : 'Unknown user';
+    const modifiedByUserName = modifiedByUser ? `${modifiedByUser.profile.first_name} ${modifiedByUser.profile.last_name}` : this.translate("Unknown user");
     const membersCount = this.group.groups_users.length;
     return (
       <div className={`detailed-information accordion sidebar-section ${this.state.open ? "" : "closed"}`}>
         <div className="accordion-header">
           <h4>
             <a onClick={this.handleTitleClicked}  role="button">
-              Information
+              {this.translate("Information")}
               {this.state.open && <Icon name="caret-down"/>}
               {!this.state.open && <Icon name="caret-right"/>}
             </a>
@@ -97,19 +104,19 @@ class DisplayUserGroupDetailsInformation extends React.Component {
         <div className="accordion-content">
           <ul>
             <li className="created">
-              <span className="label">Created</span>
+              <span className="label">{this.translate("Created")}</span>
               <span className="value">{created}</span>
             </li>
             <li className="modified">
-              <span className="label">Modified</span>
+              <span className="label">{this.translate("Modified")}</span>
               <span className="value">{modified}</span>
             </li>
             <li className="modified-by">
-              <span className="label">Modified by</span>
+              <span className="label">{this.translate("Modified by")}</span>
               <span className="value">{modifiedByUserName}</span>
             </li>
             <li className="members">
-              <span className="label">Members</span>
+              <span className="label">{this.translate("Members")}</span>
               <span className="value">{membersCount}</span>
             </li>
           </ul>
@@ -121,7 +128,9 @@ class DisplayUserGroupDetailsInformation extends React.Component {
 
 DisplayUserGroupDetailsInformation.contextType = AppContext;
 DisplayUserGroupDetailsInformation.propTypes = {
-  userWorkspaceContext: PropTypes.object // The user workspace context
+  userWorkspaceContext: PropTypes.object, // The user workspace context
+  t: PropTypes.func, // The translation function
+  i18n: PropTypes.any // The i18n context translation
 };
 
-export default withUserWorkspace(DisplayUserGroupDetailsInformation);
+export default withUserWorkspace(withTranslation('common')(DisplayUserGroupDetailsInformation));

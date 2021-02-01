@@ -15,6 +15,7 @@ import {fireEvent, render, waitFor} from "@testing-library/react";
 import AppContext from "../../../contexts/AppContext";
 import React from "react";
 import DisplayUserDirectoryAdministration from "./DisplayUserDirectoryAdministration";
+import SetupTranslations from "../../../SetupTranslations";
 
 /**
  * The DisplayUserDirectoryAdministration component represented as a page
@@ -27,17 +28,21 @@ export default class DisplayUserDirectoryAdministrationPage {
    */
   constructor(appContext, props) {
     this._page = render(
-      <AppContext.Provider value={appContext}>
-        <DisplayUserDirectoryAdministration {...props}/>
-      </AppContext.Provider>
+      <SetupTranslations>
+        <AppContext.Provider value={appContext}>
+          <DisplayUserDirectoryAdministration {...props}/>
+        </AppContext.Provider>
+      </SetupTranslations>
     );
   }
 
   rerender(appContext, props) {
     this._page.rerender(
-      <AppContext.Provider value={appContext}>
-        <DisplayUserDirectoryAdministration {...props}/>
-      </AppContext.Provider>
+      <SetupTranslations>
+        <AppContext.Provider value={appContext}>
+          <DisplayUserDirectoryAdministration {...props}/>
+        </AppContext.Provider>
+      </SetupTranslations>
     );
   }
 

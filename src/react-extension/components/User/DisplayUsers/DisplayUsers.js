@@ -14,8 +14,6 @@
 import PropTypes from "prop-types";
 import React from "react";
 import ReactList from "react-list";
-import moment from 'moment/moment';
-import 'moment-timezone/builds/moment-timezone-with-data-2012-2022';
 import AppContext from "../../../contexts/AppContext";
 import Icon from "../../../../react/components/Common/Icons/Icon";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
@@ -23,6 +21,8 @@ import {withRouter} from "react-router-dom";
 import {withContextualMenu} from "../../../../react/contexts/Common/ContextualMenuContext";
 import {UserWorkspaceFilterTypes, withUserWorkspace} from "../../../contexts/UserWorkspaceContext";
 import DisplayUsersContextualMenu from "../DisplayUsersContextualMenu/DisplayUsersContextualMenu";
+import {withTranslation} from "react-i18next";
+import {DateTime} from "luxon";
 
 
 /**
@@ -241,13 +241,21 @@ class DisplayUsers extends React.Component {
     return this.context.loggedInUser && this.context.loggedInUser.role.name === 'admin';
   }
 
+  /**
+   * Format date in time ago
+   * @param {string} date The date to format
+   * @return {string} The formatted date
+   */
+  formatDateTimeAgo(date) {
+    return DateTime.fromISO(date).toRelative({locale: this.props.i18n.lng});
+  }
+
   renderItem(index, key) {
     const user = this.users[index];
     const isSelected = this.isUserSelected(user);
-    const serverTimezone = this.context.siteSettings.getServerTimezone();
-    const modifiedFormatted = moment.tz(user.modified, serverTimezone).fromNow();
-    const lastLoggedInFormatted = user.last_logged_in ? moment.tz(user.last_logged_in, serverTimezone).fromNow() : "";
-    const mfa = user.is_mfa_enabled ? "Enabled" : "Disabled";
+    const modifiedFormatted = this.formatDateTimeAgo(user.modified);
+    const lastLoggedInFormatted = user.last_logged_in ? this.formatDateTimeAgo(user.last_logged_in) : "";
+    const mfa = user.is_mfa_enabled ? this.translate("Enabled") : this.translate("Disabled");
     const rowClassName = `${isSelected ? "selected" : ""} ${user.active ? "" : "inactive"}`;
 
     return (
@@ -298,6 +306,14 @@ class DisplayUsers extends React.Component {
   }
 
   /**
+   * Get the translate function
+   * @returns {function(...[*]=)}
+   */
+  get translate() {
+    return this.props.t;
+  }
+
+  /**
    * Renders the component
    */
   render() {
@@ -316,8 +332,8 @@ class DisplayUsers extends React.Component {
           {isEmpty &&
            filterType === UserWorkspaceFilterTypes.TEXT &&
           <div className="empty-content">
-            <h2>None of the users matched this search.</h2>
-            <p className="try-another-search">Try another search or use the left panel to navigate into your organization.</p>
+            <h2>{this.translate("None of the users matched this search.")}</h2>
+            <p className="try-another-search">{this.translate("Try another search or use the left panel to navigate into your organization.")}</p>
           </div>
           }
           {!isEmpty &&
@@ -336,7 +352,7 @@ class DisplayUsers extends React.Component {
                     </th>
                     <th className="cell-name l-cell sortable">
                       <a onClick={ev => this.handleSortByColumnClick(ev, "name")}>
-                        Name
+                        {this.translate("Name")}
                         {this.isSortedColumn("name") && this.isSortedAsc() &&
                         <Icon baseline={true} name="caret-up"/>
                         }
@@ -347,7 +363,7 @@ class DisplayUsers extends React.Component {
                     </th>
                     <th className="cell-username l-cell username sortable">
                       <a onClick={ev => this.handleSortByColumnClick(ev, "username")}>
-                        Username
+                        {this.translate("Username")}
                         {this.isSortedColumn("username") && this.isSortedAsc() &&
                         <Icon baseline={true} name="caret-up"/>
                         }
@@ -358,7 +374,7 @@ class DisplayUsers extends React.Component {
                     </th>
                     <th className="cell-modified m-cell sortable">
                       <a onClick={ev => this.handleSortByColumnClick(ev, "modified")}>
-                        Modified
+                        {this.translate("Modified")}
                         {this.isSortedColumn("modified") && this.isSortedAsc() &&
                         <Icon baseline={true} name="caret-up"/>
                         }
@@ -369,7 +385,7 @@ class DisplayUsers extends React.Component {
                     </th>
                     <th className="cell-last_logged_in m-cell sortable">
                       <a onClick={ev => this.handleSortByColumnClick(ev, "last_logged_in")}>
-                        Last logged in
+                        {this.translate("Last logged in")}
                         {this.isSortedColumn("last_logged_in") && this.isSortedAsc() &&
                         <Icon baseline={true} name="caret-up"/>
                         }
@@ -382,7 +398,7 @@ class DisplayUsers extends React.Component {
                     {this.isLoggedInUserAdmin() &&
                       <th className="cell-is_mfa_enabled m-cell sortable">
                         <a onClick={ev => this.handleSortByColumnClick(ev, "is_mfa_enabled")}>
-                          MFA
+                          {this.translate("MFA")}
                           {this.isSortedColumn("is_mfa_enabled") && this.isSortedAsc() &&
                           <Icon baseline={true} name="caret-up"/>
                           }
@@ -422,6 +438,8 @@ DisplayUsers.propTypes = {
   userWorkspaceContext: PropTypes.any, // The user workspace context
   actionFeedbackContext: PropTypes.any, // The action feedback context
   contextualMenuContext: PropTypes.any, // The contextual menu context
+  t: PropTypes.func, // The translation function
+  i18n: PropTypes.any // The i18n context translation
 };
 
-export default withRouter(withActionFeedback(withContextualMenu(withUserWorkspace(DisplayUsers))));
+export default withRouter(withActionFeedback(withContextualMenu(withUserWorkspace(withTranslation('common')(DisplayUsers)))));

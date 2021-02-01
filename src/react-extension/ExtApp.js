@@ -51,6 +51,8 @@ import Footer from "./components/Footer/Footer";
 import HandleExtAppRouteChanged from "./components/Route/HandleExtAppRouteChanged";
 import NavigationContextProvider from "./contexts/NavigationContext";
 
+import SetupTranslations from "./SetupTranslations";
+
 /**
  * The passbolt application served by the browser extension.
  * Briefly it takes care of:
@@ -383,106 +385,108 @@ class ExtApp extends Component {
     const isReady = this.isReady();
 
     return (
-      <AppContext.Provider value={this.state}>
-        <ActionFeedbackContextProvider>
-          <DialogContextProvider>
-            <ContextualMenuContextProvider>
-              <LoadingContextProvider>
+      <SetupTranslations loadingPath="/data/locales/{{lng}}/{{ns}}.json">
+        <AppContext.Provider value={this.state}>
+          <ActionFeedbackContextProvider>
+            <DialogContextProvider>
+              <ContextualMenuContextProvider>
+                <LoadingContextProvider>
 
-                { /* Action Feedback Management */}
-                <ShareActionFeedbacks/>
+                  { /* Action Feedback Management */}
+                  <ShareActionFeedbacks/>
 
-                { /* Dialogs Management */}
-                <HandlePassphraseEntryDialogEvents/>
-                <HandleFolderMoveStrategyDialogEvents/>
-                <HandleProgressDialogEvents/>
-                <HandleErrorDialogEvents/>
-                <HandleSessionExpired/>
+                  { /* Dialogs Management */}
+                  <HandlePassphraseEntryDialogEvents/>
+                  <HandleFolderMoveStrategyDialogEvents/>
+                  <HandleProgressDialogEvents/>
+                  <HandleErrorDialogEvents/>
+                  <HandleSessionExpired/>
 
-                <Router>
-                  <NavigationContextProvider>
-                    <HandleExtAppRouteChanged/>
-                    <Switch>
-                      { /* The following routes are not handled by the browser extension application. */}
-                      <Route path={[
-                        "/app/administration",
-                        "/app/settings/mfa",
-                      ]}/>
-                      {/* Passwords workspace */}
-                      <Route path={[
-                        "/app/folders/view/:filterByFolderId",
-                        "/app/passwords/view/:selectedResourceId",
-                        "/app/passwords",
-                      ]}>
-                        {isReady &&
-                        <ResourceWorkspaceContextProvider>
-                          <ManageDialogs/>
-                          <ManageContextualMenu/>
-                          <div id="container" className="page password">
-                            <div id="app" className={`app ${isReady ? "ready" : ""}`} tabIndex="1000">
-                              <div className="header first">
-                                <DisplayMainMenu/>
+                  <Router>
+                    <NavigationContextProvider>
+                      <HandleExtAppRouteChanged/>
+                      <Switch>
+                        { /* The following routes are not handled by the browser extension application. */}
+                        <Route path={[
+                          "/app/administration",
+                          "/app/settings/mfa",
+                        ]}/>
+                        {/* Passwords workspace */}
+                        <Route path={[
+                          "/app/folders/view/:filterByFolderId",
+                          "/app/passwords/view/:selectedResourceId",
+                          "/app/passwords",
+                        ]}>
+                          {isReady &&
+                          <ResourceWorkspaceContextProvider>
+                            <ManageDialogs/>
+                            <ManageContextualMenu/>
+                            <div id="container" className="page password">
+                              <div id="app" className={`app ${isReady ? "ready" : ""}`} tabIndex="1000">
+                                <div className="header first">
+                                  <DisplayMainMenu/>
+                                </div>
+                                <PasswordWorkspace onMenuItemClick={this.handleWorkspaceSelect}/>
                               </div>
-                              <PasswordWorkspace onMenuItemClick={this.handleWorkspaceSelect}/>
                             </div>
-                          </div>
-                        </ResourceWorkspaceContextProvider>
-                        }
-                      </Route>
-                      {/* Users workspace */}
-                      <Route path={[
-                        "/app/groups/view/:selectedGroupId",
-                        "/app/groups/edit/:selectedGroupId",
-                        "/app/users/view/:selectedUserId",
-                        "/app/users",
-                      ]}>
-                        {isReady &&
-                        <UserWorkspaceContextProvider>
-                          <ManageDialogs/>
-                          <ManageContextualMenu/>
-                          <div id="container" className="page user">
-                            <div id="app" className={`app ${isReady ? "ready" : ""}`} tabIndex="1000">
-                              <div className="header first">
-                                <DisplayMainMenu/>
+                          </ResourceWorkspaceContextProvider>
+                          }
+                        </Route>
+                        {/* Users workspace */}
+                        <Route path={[
+                          "/app/groups/view/:selectedGroupId",
+                          "/app/groups/edit/:selectedGroupId",
+                          "/app/users/view/:selectedUserId",
+                          "/app/users",
+                        ]}>
+                          {isReady &&
+                          <UserWorkspaceContextProvider>
+                            <ManageDialogs/>
+                            <ManageContextualMenu/>
+                            <div id="container" className="page user">
+                              <div id="app" className={`app ${isReady ? "ready" : ""}`} tabIndex="1000">
+                                <div className="header first">
+                                  <DisplayMainMenu/>
+                                </div>
+                                <DisplayUserWorkspace/>
                               </div>
-                              <DisplayUserWorkspace/>
                             </div>
-                          </div>
-                        </UserWorkspaceContextProvider>
-                        }
-                      </Route>
-                      {/* User settings workspace */}
-                      <Route path={"/app/settings"}>
-                        {isReady &&
-                        <>
-                          <ManageDialogs/>
-                          <div id="container" className="page settings">
-                            <div id="app" className={`app ${isReady ? "ready" : ""}`} tabIndex="1000">
-                              <div className="header first">
-                                <DisplayMainMenu/>
+                          </UserWorkspaceContextProvider>
+                          }
+                        </Route>
+                        {/* User settings workspace */}
+                        <Route path={"/app/settings"}>
+                          {isReady &&
+                          <>
+                            <ManageDialogs/>
+                            <div id="container" className="page settings">
+                              <div id="app" className={`app ${isReady ? "ready" : ""}`} tabIndex="1000">
+                                <div className="header first">
+                                  <DisplayMainMenu/>
+                                </div>
+                                <DisplayUserSettingsWorkspace/>
                               </div>
-                              <DisplayUserSettingsWorkspace/>
                             </div>
-                          </div>
-                        </>
-                        }
-                      </Route>
-                      {/* Fallback */}
-                      <Route path="/">
-                        <HandleRouteFallback/>
-                      </Route>
-                    </Switch>
-                  </NavigationContextProvider>
-                </Router>
-                <ManageLoading/>
-                <Footer
-                  siteSettings={this.state.siteSettings}
-                  extensionVersion={this.state.extensionVersion}/>
-              </LoadingContextProvider>
-            </ContextualMenuContextProvider>
-          </DialogContextProvider>
-        </ActionFeedbackContextProvider>
-      </AppContext.Provider>
+                          </>
+                          }
+                        </Route>
+                        {/* Fallback */}
+                        <Route path="/">
+                          <HandleRouteFallback/>
+                        </Route>
+                      </Switch>
+                    </NavigationContextProvider>
+                  </Router>
+                  <ManageLoading/>
+                  <Footer
+                    siteSettings={this.state.siteSettings}
+                    extensionVersion={this.state.extensionVersion}/>
+                </LoadingContextProvider>
+              </ContextualMenuContextProvider>
+            </DialogContextProvider>
+          </ActionFeedbackContextProvider>
+        </AppContext.Provider>
+      </SetupTranslations>
     );
   }
 }

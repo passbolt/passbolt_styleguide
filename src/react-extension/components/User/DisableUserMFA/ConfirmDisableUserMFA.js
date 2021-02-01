@@ -21,6 +21,7 @@ import FormSubmitButton from "../../../../react/components/Common/Inputs/FormSub
 import FormCancelButton from "../../../../react/components/Common/Inputs/FormSubmitButton/FormCancelButton";
 import {withUserWorkspace} from "../../../contexts/UserWorkspaceContext";
 import ErrorDialog from "../../Dialog/ErrorDialog/ErrorDialog";
+import {Trans, withTranslation} from "react-i18next";
 
 class ConfirmDisableUserMFA extends Component {
   /**
@@ -104,7 +105,7 @@ class ConfirmDisableUserMFA extends Component {
    */
   async onDisableMFASuccess() {
     await this.setState({actions: {processing: false}});
-    this.props.actionFeedbackContext.displaySuccess("Multi-factor authentication has been disabled successfully");
+    this.props.actionFeedbackContext.displaySuccess(this.translate("Multi-factor authentication has been disabled successfully"));
     this.props.onClose();
   }
 
@@ -114,7 +115,7 @@ class ConfirmDisableUserMFA extends Component {
   async onDisableMFAFailure(error) {
     await this.setState({actions: {processing: false}});
     const errorDialogProps = {
-      title: "There was an unexpected error...",
+      title: this.translate("There was an unexpected error..."),
       message: error.message
     };
     this.context.setContext({errorDialogProps});
@@ -129,6 +130,14 @@ class ConfirmDisableUserMFA extends Component {
   }
 
   /**
+   * Get the translate function
+   * @returns {function(...[*]=)}
+   */
+  get translate() {
+    return this.props.t;
+  }
+
+  /**
    * Render the component
    */
   render() {
@@ -136,7 +145,7 @@ class ConfirmDisableUserMFA extends Component {
     const username = this.user.username;
     return (
       <DialogWrapper
-        title="Are you sure?"
+        title={this.translate("Are you sure?")}
         onClose={this.handleClose}
         disabled={this.areActionsDisabled}>
         <form
@@ -144,13 +153,17 @@ class ConfirmDisableUserMFA extends Component {
           noValidate>
 
           <div className="form-content">
-            <p>You are about to disable second-factor authentication (MFA) for the user <strong>{name} ({username})</strong>.</p>
-            <p>Warning: Existing settings will be lost. This action cannot be undone.</p>
+            <p>
+              <Trans>
+                You are about to disable second-factor authentication (MFA) for the user <strong>{{name}} ({{username}})</strong>.
+              </Trans>
+            </p>
+            <p>{this.translate("Warning: Existing settings will be lost. This action cannot be undone.")}</p>
           </div>
 
           <div className="submit-wrapper clearfix">
             <FormSubmitButton
-              value="Disable MFA"
+              value={this.translate("Disable MFA")}
               warning={true}
               processing={this.isProcessing}
               disabled={this.areActionsDisabled}/>
@@ -173,6 +186,7 @@ ConfirmDisableUserMFA.propTypes = {
   onClose: PropTypes.func,
   dialogContext: PropTypes.any, // The dialog context
   userWorkspaceContext: PropTypes.any, // The user workspace context
+  t: PropTypes.func, // The translation function
 };
 
-export default withUserWorkspace(withActionFeedback(withDialog(ConfirmDisableUserMFA)));
+export default withUserWorkspace(withActionFeedback(withDialog(withTranslation('common')(ConfirmDisableUserMFA))));

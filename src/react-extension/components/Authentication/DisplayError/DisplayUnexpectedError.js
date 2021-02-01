@@ -13,6 +13,7 @@
  */
 import React, {Component} from "react";
 import PropTypes from "prop-types";
+import {withTranslation} from "react-i18next";
 
 class DisplayUnexpectedError extends Component {
   /**
@@ -23,17 +24,25 @@ class DisplayUnexpectedError extends Component {
   }
 
   /**
+   * Get the translate function
+   * @returns {function(...[*]=)}
+   */
+  get translate() {
+    return this.props.t;
+  }
+
+  /**
    * Render the component
    * @returns {JSX}
    */
   render() {
     return (
       <div className="setup-error">
-        <h1>Something went wrong.</h1>
-        <p>The operation failed with the following error:</p>
+        <h1>{this.translate("Something went wrong.")}</h1>
+        <p>{this.translate("The operation failed with the following error:")}</p>
         <p>{this.props.error && this.props.error.message}</p>
         <div className="form-actions">
-          <button onClick={this.onClick.bind(this)} className="button primary big full-width" role="button">Try again</button>
+          <button onClick={this.onClick.bind(this)} className="button primary big full-width" role="button">{this.translate("Try again")}</button>
         </div>
       </div>
     );
@@ -44,5 +53,6 @@ DisplayUnexpectedError.propTypes = {
   error: PropTypes.any, // The error to display
   errorActionLabel: PropTypes.string, // The action label
   errorActionCallback: PropTypes.func, // The action callback
+  t: PropTypes.func, // The translation function
 };
-export default DisplayUnexpectedError;
+export default withTranslation('common')(DisplayUnexpectedError);

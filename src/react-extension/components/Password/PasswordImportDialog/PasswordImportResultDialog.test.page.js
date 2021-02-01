@@ -17,6 +17,7 @@ import AppContext from "../../../contexts/AppContext";
 import React from "react";
 import PasswordImportResultDialog from "./PasswordImportResultDialog";
 import {BrowserRouter as Router} from "react-router-dom";
+import SetupTranslations from "../../../SetupTranslations";
 
 /**
  * The PasswordImportResultDialog component represented as a page
@@ -29,11 +30,13 @@ export default class PasswordImportResultDialogPage {
    */
   constructor(appContext, props) {
     this._page = render(
-      <Router>
-        <AppContext.Provider value={appContext}>
-          <PasswordImportResultDialog.WrappedComponent {...props}/>
-        </AppContext.Provider>
-      </Router>
+      <SetupTranslations>
+        <Router>
+          <AppContext.Provider value={appContext}>
+            <PasswordImportResultDialog.WrappedComponent {...props}/>
+          </AppContext.Provider>
+        </Router>
+      </SetupTranslations>
     );
   }
 

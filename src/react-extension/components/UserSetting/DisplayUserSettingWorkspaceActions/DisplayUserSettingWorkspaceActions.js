@@ -19,6 +19,7 @@ import AppContext from "../../../contexts/AppContext";
 import Icon from "../../../../react/components/Common/Icons/Icon";
 import {withDialog} from "../../../../react/contexts/Common/DialogContext";
 import EditUserProfile from "../EditUserProfile/EditUserProfile";
+import {withTranslation} from "react-i18next";
 
 /**
  * This component is a container of multiple actions applicable on user settings
@@ -64,6 +65,14 @@ class DisplayUserSettingsWorkspaceActions extends React.Component {
   }
 
   /**
+   * Get the translate function
+   * @returns {function(...[*]=)}
+   */
+  get translate() {
+    return this.props.t;
+  }
+
+  /**
    * Render the component
    * @returns {JSX}
    */
@@ -79,7 +88,7 @@ class DisplayUserSettingsWorkspaceActions extends React.Component {
                   className="button ready"
                   onClick={this.handleEdit}>
                   <Icon name="edit"/>
-                  <span>Edit</span>
+                  <span>{this.translate("Edit")}</span>
                 </a>
               </li>
             </Route>
@@ -89,7 +98,7 @@ class DisplayUserSettingsWorkspaceActions extends React.Component {
                   className="button ready"
                   onClick={this.handleDownloadPublicKey}>
                   <Icon name="download"/>
-                  <span>Public</span>
+                  <span>{this.translate("Public")}</span>
                 </a>
               </li>
               <li>
@@ -97,7 +106,7 @@ class DisplayUserSettingsWorkspaceActions extends React.Component {
                   className="button ready"
                   onClick={this.handleDownloadPrivateKey}>
                   <Icon name="download"/>
-                  <span>Private</span>
+                  <span>{this.translate("Private")}</span>
                 </a>
               </li>
             </Route>
@@ -113,6 +122,7 @@ DisplayUserSettingsWorkspaceActions.contextType = AppContext;
 DisplayUserSettingsWorkspaceActions.propTypes = {
   match: PropTypes.object, // The router match
   dialogContext: PropTypes.any, // the dialog context
+  t: PropTypes.func, // The translation function
 };
 
-export default withRouter(withDialog(DisplayUserSettingsWorkspaceActions));
+export default withRouter(withDialog(withTranslation('common')(DisplayUserSettingsWorkspaceActions)));

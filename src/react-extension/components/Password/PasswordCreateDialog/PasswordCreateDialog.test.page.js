@@ -19,6 +19,7 @@ import ManageDialogs from "../../../../react/components/Common/Dialog/ManageDial
 import DialogContextProvider from "../../../../react/contexts/Common/DialogContext";
 import PasswordCreateDialog from "./PasswordCreateDialog";
 import {MemoryRouter} from "react-router-dom";
+import SetupTranslations from "../../../SetupTranslations";
 
 /**
  * The PasswordCreateDialog component represented as a page
@@ -31,18 +32,20 @@ export default class PasswordCreateDialogPage {
    */
   constructor(appContext, props) {
     this._page = render(
-      <AppContext.Provider value={appContext}>
-        <DialogContextProvider>
-          <MemoryRouter initialEntries={[
-            "/app/folders/view/:filterByFolderId",
-            "/app/passwords/view/:selectedResourceId",
-            "/app/passwords",
-          ]}>
-            <ManageDialogs/>
-            <PasswordCreateDialog {...props}/>
-          </MemoryRouter>
-        </DialogContextProvider>
-      </AppContext.Provider>
+      <SetupTranslations>
+        <AppContext.Provider value={appContext}>
+          <DialogContextProvider>
+            <MemoryRouter initialEntries={[
+              "/app/folders/view/:filterByFolderId",
+              "/app/passwords/view/:selectedResourceId",
+              "/app/passwords",
+            ]}>
+              <ManageDialogs/>
+              <PasswordCreateDialog {...props}/>
+            </MemoryRouter>
+          </DialogContextProvider>
+        </AppContext.Provider>
+      </SetupTranslations>
     );
     this.setupPageObjects();
   }

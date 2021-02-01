@@ -36,7 +36,6 @@ export function defaultProps() {
       refresh: {
         activities: false
       }
-
     }
   };
 }

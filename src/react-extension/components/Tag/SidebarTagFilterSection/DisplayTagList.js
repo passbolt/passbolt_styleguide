@@ -18,6 +18,7 @@ import {ResourceWorkspaceFilterTypes, withResourceWorkspace} from "../../../cont
 import {withContextualMenu} from "../../../../react/contexts/Common/ContextualMenuContext";
 import {withRouter} from "react-router-dom";
 import Icon from "../../../../react/components/Common/Icons/Icon";
+import {withTranslation} from "react-i18next";
 
 class DisplayTagList extends React.Component {
   /**
@@ -165,6 +166,14 @@ class DisplayTagList extends React.Component {
   }
 
   /**
+   * Get the translate function
+   * @returns {function(...[*]=)}
+   */
+  get translate() {
+    return this.props.t;
+  }
+
+  /**
    * Render the component
    * @returns {JSX}
    */
@@ -173,11 +182,11 @@ class DisplayTagList extends React.Component {
       <div className="accordion-content">
         {this.isLoading() &&
         <div className="processing-wrapper">
-          <span className="processing-text">Retrieving tags</span>
+          <span className="processing-text">{this.translate("Retrieving tags")}</span>
         </div>
         }
         {!this.isLoading() && this.filteredTags.length === 0 &&
-        <em className="empty-content">empty</em>
+        <em className="empty-content">{this.translate("empty")}</em>
         }
         {!this.isLoading() && this.filteredTags.length > 0 &&
         <ul className="tree ready">
@@ -213,10 +222,11 @@ DisplayTagList.propTypes = {
   tags: PropTypes.array,
   filterType: PropTypes.string,
   resourceWorkspaceContext: PropTypes.object,
-  history: PropTypes.any
+  history: PropTypes.any,
+  t: PropTypes.func, // The translation function
 };
 
-export default withRouter(withResourceWorkspace(withContextualMenu(DisplayTagList)));
+export default withRouter(withResourceWorkspace(withContextualMenu(withTranslation('common')(DisplayTagList))));
 
 export const filterByTagsOptions = {
   all: "all",

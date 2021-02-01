@@ -16,6 +16,7 @@
 import {render} from "@testing-library/react";
 import React from "react";
 import CheckMailBox from "./CheckMailBox";
+import SetupTranslations from "../../../SetupTranslations";
 
 /**
  * The CheckMailBoxPage component represented as a page
@@ -28,7 +29,9 @@ export default class CheckMailBoxPage {
    */
   constructor() {
     this._page = render(
-      <CheckMailBox/>
+      <SetupTranslations>
+        <CheckMailBox/>
+      </SetupTranslations>
     );
   }
 

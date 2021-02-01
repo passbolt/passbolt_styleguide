@@ -20,6 +20,7 @@ import AppContext from "../../../contexts/AppContext";
 import DisplayCommentList from "./DisplayCommentList";
 import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 import Icon from "../../../../react/components/Common/Icons/Icon";
+import {withTranslation} from "react-i18next";
 
 class PasswordSidebarCommentSection extends React.Component {
   /**
@@ -130,6 +131,14 @@ class PasswordSidebarCommentSection extends React.Component {
   }
 
   /**
+   * Get the translate function
+   * @returns {function(...[*]=)}
+   */
+  get translate() {
+    return this.props.t;
+  }
+
+  /**
    * Render the component
    * @returns {JSX}
    */
@@ -139,7 +148,7 @@ class PasswordSidebarCommentSection extends React.Component {
         <div className="accordion-header">
           <h4>
             <a onClick={this.handleTitleClickedEvent} role="button">
-              Comments
+              {this.translate("Comments")}
               {this.state.open &&
               <Icon name="caret-down"/>
               }
@@ -189,6 +198,7 @@ PasswordSidebarCommentSection.contextType = AppContext;
 
 PasswordSidebarCommentSection.propTypes = {
   resourceWorkspaceContext: PropTypes.any, // The resource context
+  t: PropTypes.func, // The translation function
 };
 
-export default withResourceWorkspace(PasswordSidebarCommentSection);
+export default withResourceWorkspace(withTranslation('common')(PasswordSidebarCommentSection));

@@ -24,6 +24,7 @@ import DialogWrapper from "../../../../react/components/Common/Dialog/DialogWrap
 import FormSubmitButton from "../../../../react/components/Common/Inputs/FormSubmitButton/FormSubmitButton";
 import FormCancelButton from "../../../../react/components/Common/Inputs/FormSubmitButton/FormCancelButton";
 import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
+import {withTranslation} from "react-i18next";
 
 class PasswordEditDialog extends Component {
   constructor(props, context) {
@@ -196,7 +197,7 @@ class PasswordEditDialog extends Component {
     const name = this.state.name.trim();
     let nameError = "";
     if (!name.length) {
-      nameError = "A name is required.";
+      nameError = this.translate("A name is required.");
     }
 
     return new Promise(resolve => {
@@ -212,7 +213,7 @@ class PasswordEditDialog extends Component {
     const password = this.state.password;
     let passwordError = "";
     if (!password.length) {
-      passwordError = "A password is required.";
+      passwordError = this.translate("A password is required.");
     }
 
     return new Promise(resolve => {
@@ -296,7 +297,7 @@ class PasswordEditDialog extends Component {
    * Handle save operation success.
    */
   async handleSaveSuccess() {
-    await this.props.actionFeedbackContext.displaySuccess("The password has been updated successfully");
+    await this.props.actionFeedbackContext.displaySuccess(this.translate("The password has been updated successfully"));
     this.selectAndScrollToResource(this.context.passwordEditDialogProps.id);
     this.props.resourceWorkspaceContext.onResourceEdited();
     this.props.onClose();
@@ -330,7 +331,7 @@ class PasswordEditDialog extends Component {
    */
   handleError(error) {
     const errorDialogProps = {
-      title: "There was an unexpected error...",
+      title: this.translate("There was an unexpected error..."),
       message: error.message
     };
     this.context.setContext({errorDialogProps});
@@ -572,9 +573,9 @@ class PasswordEditDialog extends Component {
    * @returns {string}
    */
   getPasswordInputPlaceholder() {
-    let placeholder =  "Password";
+    let placeholder =  this.translate("Password");
     if (this.state.isSecretDecrypting) {
-      placeholder = "Decrypting";
+      placeholder = this.translate("Decrypting");
     }
 
     return placeholder;
@@ -586,9 +587,9 @@ class PasswordEditDialog extends Component {
    */
   getDescriptionPlaceholder() {
     if (this.state.isSecretDecrypting && this.mustEncryptDescription()) {
-      return "Decrypting";
+      return this.translate("Decrypting");
     }
-    return "Description";
+    return this.translate("Description");
   }
 
   /**
@@ -613,6 +614,14 @@ class PasswordEditDialog extends Component {
     return (this.state.isSecretDecrypting && this.mustEncryptDescription());
   }
 
+  /**
+   * Get the translate function
+   * @returns {function(...[*]=)}
+   */
+  get translate() {
+    return this.props.t;
+  }
+
   /*
    * =============================================================
    *  Render view
@@ -624,14 +633,24 @@ class PasswordEditDialog extends Component {
     const securityTokenCode = this.context.userSettings.getSecurityTokenCode();
     const passwordStrength = SecretComplexity.getStrength(this.state.password);
     const passwordPlaceholder = this.getPasswordInputPlaceholder();
+    /*
+     * The parser can't find the translation for passwordStrength.label
+     * To fix that we can use it in comment
+     * this.translate("n/a")
+     * this.translate("very weak")
+     * this.translate("weak")
+     * this.translate("fair")
+     * this.translate("strong")
+     * this.translate("very strong")
+     */
 
     return (
-      <DialogWrapper title={`Edit`} subtitle={this.state.nameOriginal} className="edit-password-dialog"
+      <DialogWrapper title={this.translate("Edit")} subtitle={this.state.nameOriginal} className="edit-password-dialog"
         disabled={this.hasAllInputDisabled()} onClose={this.handleClose}>
         <form onSubmit={this.handleFormSubmit} noValidate>
           <div className="form-content">
             <div className={`input text required ${this.state.nameError ? "error" : ""}`}>
-              <label htmlFor="edit-password-form-name">Name</label>
+              <label htmlFor="edit-password-form-name">{this.translate("Name")}</label>
               <input id="edit-password-form-name" name="name" type="text" value={this.state.name}
                 onKeyUp={this.handleNameInputKeyUp} onChange={this.handleInputChange}
                 disabled={this.hasAllInputDisabled()} ref={this.nameInputRef} className="required fluid" maxLength="64"
@@ -641,25 +660,25 @@ class PasswordEditDialog extends Component {
               }
             </div>
             <div className={`input text ${this.state.uriError ? "error" : ""}`}>
-              <label htmlFor="edit-password-form-uri">URL</label>
+              <label htmlFor="edit-password-form-uri">{this.translate("URI")}</label>
               <input id="edit-password-form-uri" name="uri" className="fluid" maxLength="1024" type="text"
-                autoComplete="off" value={this.state.uri} onChange={this.handleInputChange} placeholder="URL"
+                autoComplete="off" value={this.state.uri} onChange={this.handleInputChange} placeholder={this.translate("URI")}
                 disabled={this.hasAllInputDisabled()}/>
               {this.state.uriError &&
               <div className="error message">{this.state.uriError}</div>
               }
             </div>
             <div className={`input text ${this.state.usernameError ? "error" : ""}`}>
-              <label htmlFor="edit-password-form-username">Username</label>
+              <label htmlFor="edit-password-form-username">{this.translate("Username")}</label>
               <input id="edit-password-form-username" name="username" type="text" className="fluid" maxLength="64"
-                autoComplete="off" value={this.state.username} onChange={this.handleInputChange} placeholder="Username"
+                autoComplete="off" value={this.state.username} onChange={this.handleInputChange} placeholder={this.translate("Username")}
                 disabled={this.hasAllInputDisabled()}/>
               {this.state.usernameError &&
               <div className="error message">{this.state.usernameError}</div>
               }
             </div>
             <div className={`input-password-wrapper input required ${this.state.passwordError ? "error" : ""}`}>
-              <label htmlFor="edit-password-form-password">Password</label>
+              <label htmlFor="edit-password-form-password">{this.translate("Password")}</label>
               <div className="input text password">
                 <input id="edit-password-form-password" name="password" className={`required ${this.state.isSecretDecrypting ? "" : "decrypted"}`}
                   required="required" type={this.state.viewPassword ? "text" : "password"}
@@ -690,7 +709,7 @@ class PasswordEditDialog extends Component {
                 <span className="progress">
                   <span className={`progress-bar ${passwordStrength.id}`}/>
                 </span>
-                <span className="complexity-text">complexity: <strong>{passwordStrength.label}</strong></span>
+                <span className="complexity-text">{this.translate("complexity:")} <strong>{this.translate(passwordStrength.label)}</strong></span>
               </div>
               {this.state.passwordError &&
               <div className="input text">
@@ -699,19 +718,19 @@ class PasswordEditDialog extends Component {
               }
             </div>
             <div className="input textarea">
-              <label htmlFor="edit-password-form-description">Description&nbsp;
+              <label htmlFor="edit-password-form-description">{this.translate("Description")}&nbsp;
                 {!this.areResourceTypesEnabled() &&
-                <Tooltip message="Do not store sensitive data. Unlike the password, this data is not encrypted. Upgrade to version 3 to encrypt this information."
+                <Tooltip message={this.translate("Do not store sensitive data. Unlike the password, this data is not encrypted. Upgrade to version 3 to encrypt this information.")}
                   icon="info-circle"/>
                 }
                 {this.areResourceTypesEnabled() && !this.state.encryptDescription &&
                 <a role="button" onClick={this.handleDescriptionToggle} className="lock-toggle">
-                  <Tooltip message="Do not store sensitive data or click here to enable encryption for the description field." icon="lock-open" />
+                  <Tooltip message={this.translate("Do not store sensitive data or click here to enable encryption for the description field.")} icon="lock-open" />
                 </a>
                 }
                 {this.areResourceTypesEnabled() && this.state.encryptDescription &&
                 <a role="button" onClick={this.handleDescriptionToggle} className="lock-toggle">
-                  <Tooltip message="The description content will be encrypted." icon="lock" />
+                  <Tooltip message={this.translate("The description content will be encrypted.")} icon="lock" />
                 </a>
                 }
               </label>
@@ -726,7 +745,7 @@ class PasswordEditDialog extends Component {
             </div>
           </div>
           <div className="submit-wrapper clearfix">
-            <FormSubmitButton value="Save" disabled={this.hasAllInputDisabled() || this.isPasswordDisabled() || this.isDescriptionDisabled()} processing={this.hasAllInputDisabled()}/>
+            <FormSubmitButton value={this.translate("Save")} disabled={this.hasAllInputDisabled() || this.isPasswordDisabled() || this.isDescriptionDisabled()} processing={this.hasAllInputDisabled()}/>
             <FormCancelButton disabled={this.hasAllInputDisabled() || this.isPasswordDisabled() || this.isDescriptionDisabled()} onClick={this.handleClose}/>
           </div>
         </form>
@@ -741,7 +760,8 @@ PasswordEditDialog.propTypes = {
   onClose: PropTypes.func,
   resourceWorkspaceContext: PropTypes.any, // The resource workspace context
   actionFeedbackContext: PropTypes.any, // The action feedback context
-  dialogContext: PropTypes.any // The dialog context
+  dialogContext: PropTypes.any, // The dialog context,
+  t: PropTypes.func, // The translation function
 };
 
-export default withResourceWorkspace(withActionFeedback(withDialog(PasswordEditDialog)));
+export default withResourceWorkspace(withActionFeedback(withDialog(withTranslation('common')(PasswordEditDialog))));

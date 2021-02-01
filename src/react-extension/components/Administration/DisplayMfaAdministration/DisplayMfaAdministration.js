@@ -17,6 +17,7 @@ import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import XRegExp from "xregexp";
 import Icon from "../../../../react/components/Common/Icons/Icon";
 import {withAdministrationWorkspace} from "../../../contexts/AdministrationWorkspaceContext";
+import {withTranslation} from "react-i18next";
 
 /**
  * This component allows to display the MFA for the administration
@@ -216,15 +217,15 @@ class DisplayMfaAdministration extends React.Component {
     if (this.isYubikeyChecked()) {
       const yubikeyClientIdentifier = this.state.yubikeyClientIdentifier.trim();
       if (!yubikeyClientIdentifier.length) {
-        yubikeyClientIdentifierError = "A client identifier is required.";
+        yubikeyClientIdentifierError = this.translate("A client identifier is required.");
       } else if (!XRegExp("^[0-9]{1,64}$").test(yubikeyClientIdentifier)) {
-        yubikeyClientIdentifierError = "The client identifier should be an integer.";
+        yubikeyClientIdentifierError = this.translate("The client identifier should be an integer.");
       }
       const yubikeySecretKey = this.state.yubikeySecretKey.trim();
       if (!yubikeySecretKey.length) {
-        yubikeySecretKeyError = "A secret key is required.";
+        yubikeySecretKeyError = this.translate("A secret key is required.");
       } else if (!XRegExp("^[a-zA-Z0-9\\/=+]{10,128}$").test(yubikeySecretKey)) {
-        yubikeySecretKeyError = "This secret key is not valid.";
+        yubikeySecretKeyError = this.translate("This secret key is not valid.");
       }
     }
     return this.setState({yubikeyClientIdentifierError, yubikeySecretKeyError});
@@ -243,30 +244,30 @@ class DisplayMfaAdministration extends React.Component {
     if (this.isDuoChecked()) {
       const duoHostname = this.state.duoHostname.trim();
       if (!duoHostname.length) {
-        duoHostnameError = "A hostname is required.";
+        duoHostnameError = this.translate("A hostname is required.");
       } else if (!XRegExp("^api-[a-fA-F0-9]{8,16}\\.duosecurity\\.com$").test(duoHostname)) {
-        duoHostnameError = "This is not a valid hostname.";
+        duoHostnameError = this.translate("This is not a valid hostname.");
       }
 
       const duoIntegrationKey = this.state.duoIntegrationKey.trim();
       if (!duoIntegrationKey.length) {
-        duoIntegrationKeyError = "An integration key is required.";
+        duoIntegrationKeyError = this.translate("An integration key is required.");
       } else if (!XRegExp("^[a-zA-Z0-9]{16,32}$").test(duoIntegrationKey)) {
-        duoIntegrationKeyError = "This is not a valid integration key.";
+        duoIntegrationKeyError = this.translate("This is not a valid integration key.");
       }
 
       const duoSalt = this.state.duoSalt.trim();
       if (!duoSalt.length) {
-        duoSaltError = "A salt is required.";
+        duoSaltError = this.translate("A salt is required.");
       } else if (!XRegExp("^.{40,128}$").test(duoSalt)) {
-        duoSaltError = "The salt should be between 40 and 128 characters in length.";
+        duoSaltError = this.translate("The salt should be between 40 and 128 characters in length.");
       }
 
       const duoSecretKey = this.state.duoSecretKey.trim();
       if (!duoSecretKey.length) {
-        duoSecretKeyError = "A secret key is required.";
+        duoSecretKeyError = this.translate("A secret key is required.");
       } else if (!XRegExp("^[a-zA-Z0-9]{32,128}$").test(duoSecretKey)) {
-        duoSecretKeyError = "This is not a valid secret key.";
+        duoSecretKeyError = this.translate("This is not a valid secret key.");
       }
     }
     return this.setState({duoHostnameError, duoIntegrationKeyError, duoSaltError, duoSecretKeyError});
@@ -356,7 +357,7 @@ class DisplayMfaAdministration extends React.Component {
    * Handle save operation success.
    */
   async handleSaveSuccess() {
-    await this.props.actionFeedbackContext.displaySuccess("The multi factor authentication settings for the organization were updated.");
+    await this.props.actionFeedbackContext.displaySuccess(this.translate("The multi factor authentication settings for the organization were updated."));
     this.setState({processing: false});
   }
 
@@ -394,6 +395,14 @@ class DisplayMfaAdministration extends React.Component {
   }
 
   /**
+   * Get the translate function
+   * @returns {function(...[*]=)}
+   */
+  get translate() {
+    return this.props.t;
+  }
+
+  /**
    * Render the component
    * @returns {JSX}
    */
@@ -409,18 +418,16 @@ class DisplayMfaAdministration extends React.Component {
                     onChange={this.handleInputChange} checked={this.state.totpProviderToggle} disabled={this.hasAllInputDisabled()}/>
                   <label className="toggle-switch-button" htmlFor="totp-provider-toggle-button"/>
                 </span>
-                <label>Time-based One Time Password</label>
+                <label>{this.translate("Time-based One Time Password")}</label>
               </h3>
               {!this.isOtpProviderChecked() &&
               <p className="description">
-                The Time-based One Time Password provider is disabled for all users.
+                {this.translate("The Time-based One Time Password provider is disabled for all users.")}
               </p>
               }
               {this.isOtpProviderChecked() &&
               <p className="description">
-                The Time-based One Time Password provider is enabled for all users. They can setup this provider in
-                their
-                profile and use it as second factor authentication.
+                {this.translate("The Time-based One Time Password provider is enabled for all users. They can setup this provider in their profile and use it as second factor authentication.")}
               </p>
               }
             </div>
@@ -435,19 +442,17 @@ class DisplayMfaAdministration extends React.Component {
               </h3>
               {!this.isYubikeyChecked() &&
               <p className="description">
-                The Yubikey provider is disabled for all users.
+                {this.translate("The Yubikey provider is disabled for all users.")}
               </p>
               }
               {this.isYubikeyChecked() &&
               <div>
                 <p className="description">
-                  The Yubikey provider is enabled for all users. They can setup this provider in their profile and use
-                  it as
-                  second factor authentication.
+                  {this.translate("The Yubikey provider is enabled for all users. They can setup this provider in their profile and use it as second factor authentication.")}
                 </p>
                 <div className="form-content">
                   <div className="input text required">
-                    <label>Client identifier</label>
+                    <label>{this.translate("Client identifier")}</label>
                     <input id="yubikeyClientIdentifier" type="text" name="yubikeyClientIdentifier" required="required" className="required fluid form-element ready" placeholder="123456789"
                       onChange={this.handleInputChange} value={this.state.yubikeyClientIdentifier} disabled={this.hasAllInputDisabled()}/>
                     {this.state.yubikeyClientIdentifierError &&
@@ -455,7 +460,7 @@ class DisplayMfaAdministration extends React.Component {
                     }
                   </div>
                   <div className="input text required">
-                    <label>Secret key</label>
+                    <label>{this.translate("Secret key")}</label>
                     <input id="yubikeySecretKey" name="yubikeySecretKey" required="required" className="required fluid form-element" placeholder="**********" type="password"
                       onChange={this.handleInputChange} value={this.state.yubikeySecretKey} disabled={this.hasAllInputDisabled()}/>
                     {this.state.yubikeySecretKeyError &&
@@ -477,18 +482,17 @@ class DisplayMfaAdministration extends React.Component {
               </h3>
               {!this.isDuoChecked() &&
               <p className="description">
-                The Duo provider is disabled for all users.
+                {this.translate("The Duo provider is disabled for all users.")}
               </p>
               }
               {this.isDuoChecked() &&
               <div>
                 <p className="description enabled">
-                  The Duo provider is enabled for all users. They can setup this provider in their profile and use it as
-                  second factor authentication.
+                  {this.translate("The Duo provider is enabled for all users. They can setup this provider in their profile and use it as second factor authentication.")}
                 </p>
                 <div className="form-content">
                   <div className="input text required">
-                    <label>Hostname</label>
+                    <label>{this.translate("Hostname")}</label>
                     <input id="duoHostname" type="text" name="duoHostname" required="required" className="required fluid form-element ready"
                       placeholder="api-24zlkn4.duosecurity.com" value={this.state.duoHostname}
                       onChange={this.handleInputChange} disabled={this.hasAllInputDisabled()}/>
@@ -497,7 +501,7 @@ class DisplayMfaAdministration extends React.Component {
                     }
                   </div>
                   <div className="input text required">
-                    <label>Integration key</label>
+                    <label>{this.translate("Integration key")}</label>
                     <input id="duoIntegrationKey" type="text" name="duoIntegrationKey" required="required" className="required fluid form-element ready"
                       placeholder="HASJKDSQJO213123KQSLDF" value={this.state.duoIntegrationKey}
                       onChange={this.handleInputChange} disabled={this.hasAllInputDisabled()}/>
@@ -506,7 +510,7 @@ class DisplayMfaAdministration extends React.Component {
                     }
                   </div>
                   <div className="input text required">
-                    <label>Salt</label>
+                    <label>{this.translate("Salt")}</label>
                     <input id="duoSalt" name="duoSalt" required="required" className="required fluid form-element ready" placeholder="**********" type="password"
                       value={this.state.duoSalt} onChange={this.handleInputChange} disabled={this.hasAllInputDisabled()}/>
                     {this.state.duoSaltError &&
@@ -514,7 +518,7 @@ class DisplayMfaAdministration extends React.Component {
                     }
                   </div>
                   <div className="input text required">
-                    <label>Secret key</label>
+                    <label>{this.translate("Secret key")}</label>
                     <input id="duoSecretKey" name="duoSecretKey" required="required" className="required fluid form-element ready" placeholder="**********" type="password"
                       value={this.state.duoSecretKey} onChange={this.handleInputChange} disabled={this.hasAllInputDisabled()}/>
                     {this.state.duoSecretKeyError &&
@@ -528,11 +532,11 @@ class DisplayMfaAdministration extends React.Component {
           </form>
         </div>
         <div className="col4 last">
-          <h2>Need help?</h2>
-          <p>Check out our Multi Factor Authentication configuration guide.</p>
+          <h2>{this.translate("Need help?")}</h2>
+          <p>{this.translate("Check out our Multi Factor Authentication configuration guide.")}</p>
           <a className="button" href="https://help.passbolt.com/configure" target="_blank" rel="noopener noreferrer">
             <Icon name="life-ring"/>
-            <span>Read documentation</span>
+            <span>{this.translate("Read documentation")}</span>
           </a>
         </div>
       </div>
@@ -543,6 +547,7 @@ class DisplayMfaAdministration extends React.Component {
 DisplayMfaAdministration.propTypes = {
   administrationWorkspaceContext: PropTypes.object, // The administration workspace context
   actionFeedbackContext: PropTypes.any, // The action feedback context
+  t: PropTypes.func, // The translation function
 };
 
-export default withActionFeedback(withAdministrationWorkspace(DisplayMfaAdministration));
+export default withActionFeedback(withAdministrationWorkspace(withTranslation('common')(DisplayMfaAdministration)));

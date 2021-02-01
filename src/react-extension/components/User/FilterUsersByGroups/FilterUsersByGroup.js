@@ -20,6 +20,7 @@ import {UserWorkspaceFilterTypes, withUserWorkspace} from "../../../contexts/Use
 import {withContextualMenu} from "../../../../react/contexts/Common/ContextualMenuContext";
 import FilterUsersByGroupContextualMenu from "./FilterUsersByGroupContextualMenu";
 import DisplayGroupContextualMenu from "./DisplayGroupContextualMenu";
+import {withTranslation} from "react-i18next";
 
 /**
  * This component display groups to filter the users
@@ -42,7 +43,7 @@ class FilterUsersByGroup extends React.Component {
   get defaultState() {
     return {
       open: true, // open the group section
-      title: "All groups", // title of the section
+      title: this.translate("All groups"), // title of the section
       filterType: null // type of the filter selected
     };
   }
@@ -95,8 +96,11 @@ class FilterUsersByGroup extends React.Component {
     // Prevent the browser contextual menu to pop up.
     event.preventDefault();
     // No operation available if not admin user
-    if (this.isLoggedInUserAdmin()) {
-      this.showGroupContextualMenu(event.pageY, event.pageX, group);
+    if (this.isCurrentUserAdmin) {
+      const top = event.pageY;
+      const left = event.pageX;
+      const contextualMenuProps = {group, left, top};
+      this.props.contextualMenuContext.show(DisplayGroupContextualMenu, contextualMenuProps);
     }
   }
 
@@ -143,9 +147,9 @@ class FilterUsersByGroup extends React.Component {
    */
   get titles() {
     return {
-      [filterByGroupsOptions.manage]: "Groups I manage",
-      [filterByGroupsOptions.member]: "Groups I am member of",
-      default: "All groups"
+      [filterByGroupsOptions.manage]: this.translate("Groups I manage"),
+      [filterByGroupsOptions.member]: this.translate("Groups I am member of"),
+      default: this.translate("All groups")
     };
   }
 
@@ -253,6 +257,14 @@ class FilterUsersByGroup extends React.Component {
   }
 
   /**
+   * Get the translate function
+   * @returns {function(...[*]=)}
+   */
+  get translate() {
+    return this.props.t;
+  }
+
+  /**
    * Render the component
    * @returns {JSX}
    */
@@ -289,11 +301,11 @@ class FilterUsersByGroup extends React.Component {
         <div className="accordion-content">
           {this.isLoading() &&
           <div className="processing-wrapper">
-            <span className="processing-text">Retrieving groups</span>
+            <span className="processing-text">{this.translate("Retrieving groups")}</span>
           </div>
           }
           {!this.isLoading() && !this.hasGroup() &&
-          <em className="empty-content">empty</em>
+          <em className="empty-content">{this.translate("empty")}</em>
           }
           {!this.isLoading() && this.hasGroup() &&
           <ul className="tree ready">
@@ -338,9 +350,10 @@ FilterUsersByGroup.propTypes = {
   userWorkspaceContext: PropTypes.any, // user workspace context
   history: PropTypes.object,
   contextualMenuContext: PropTypes.any, // The contextual menu context
+  t: PropTypes.func, // The translation function
 };
 
-export default withRouter(withUserWorkspace(withContextualMenu(FilterUsersByGroup)));
+export default withRouter(withUserWorkspace(withContextualMenu(withTranslation('common')(FilterUsersByGroup))));
 
 export const filterByGroupsOptions = {
   all: "all",

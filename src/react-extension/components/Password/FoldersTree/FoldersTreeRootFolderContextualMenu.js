@@ -19,6 +19,7 @@ import FolderCreateDialog from "../../Folder/FolderCreateDialog/FolderCreateDial
 import {withDialog} from "../../../../react/contexts/Common/DialogContext";
 import ExportResources from "../ExportResources/ExportResources";
 import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
+import {withTranslation} from "react-i18next";
 
 class FoldersTreeRootFolderContextualMenu extends React.Component {
   /**
@@ -94,6 +95,14 @@ class FoldersTreeRootFolderContextualMenu extends React.Component {
   }
 
   /**
+   * Get the translate function
+   * @returns {function(...[*]=)}
+   */
+  get translate() {
+    return this.props.t;
+  }
+
+  /**
    * Render the component.
    * @returns {JSX}
    */
@@ -107,7 +116,7 @@ class FoldersTreeRootFolderContextualMenu extends React.Component {
           <div className="row">
             <div className="main-cell-wrapper">
               <div className="main-cell">
-                <a onClick={this.handleCreateFolderItemClickEvent}><span>Create folder</span></a>
+                <a onClick={this.handleCreateFolderItemClickEvent}><span>{this.translate("Create folder")}</span></a>
               </div>
             </div>
           </div>
@@ -116,7 +125,7 @@ class FoldersTreeRootFolderContextualMenu extends React.Component {
           <div className="row">
             <div className="main-cell-wrapper">
               <div className="main-cell">
-                <a onClick={this.handleExportFolderItemClickEvent}><span>Export all</span></a>
+                <a onClick={this.handleExportFolderItemClickEvent}><span>{this.translate("Export all")}</span></a>
               </div>
             </div>
           </div>
@@ -133,7 +142,8 @@ FoldersTreeRootFolderContextualMenu.propTypes = {
   left: PropTypes.number, // left position in px of the page
   top: PropTypes.number, // top position in px of the page
   dialogContext: PropTypes.any, // The dialog context
-  resourceWorkspaceContext: PropTypes.any // The resource workspace context
+  resourceWorkspaceContext: PropTypes.any, // The resource workspace context
+  t: PropTypes.func, // The translation function
 };
 
-export default withResourceWorkspace(withDialog(FoldersTreeRootFolderContextualMenu));
+export default withResourceWorkspace(withDialog(withTranslation('common')(FoldersTreeRootFolderContextualMenu)));

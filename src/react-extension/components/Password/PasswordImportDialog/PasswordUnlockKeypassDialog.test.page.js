@@ -16,6 +16,7 @@ import {fireEvent, render, waitFor} from "@testing-library/react";
 import AppContext from "../../../contexts/AppContext";
 import React from "react";
 import PasswordUnlockKeypassDialog from "./PasswordUnlockKeypassDialog";
+import SetupTranslations from "../../../SetupTranslations";
 
 /**
  * The PasswordUnlockKeypassDialog component represented as a page
@@ -28,9 +29,11 @@ export default class PasswordUnlockKeypassDialogPage {
    */
   constructor(appContext, props) {
     this._page = render(
-      <AppContext.Provider value={appContext}>
-        <PasswordUnlockKeypassDialog {...props}/>
-      </AppContext.Provider>
+      <SetupTranslations>
+        <AppContext.Provider value={appContext}>
+          <PasswordUnlockKeypassDialog {...props}/>
+        </AppContext.Provider>
+      </SetupTranslations>
     );
   }
 

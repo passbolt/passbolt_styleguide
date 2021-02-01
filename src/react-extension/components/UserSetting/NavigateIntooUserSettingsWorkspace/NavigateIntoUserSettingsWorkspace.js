@@ -17,6 +17,7 @@ import PropTypes from "prop-types";
 import {withRouter} from "react-router-dom";
 import AppContext from "../../../contexts/AppContext";
 import {withNavigationContext} from "../../../contexts/NavigationContext";
+import {withTranslation} from "react-i18next";
 
 /**
  * This component allows to navigate throught the differents sections of the user settings workspace
@@ -38,6 +39,14 @@ class NavigateIntoUserSettingsWorkspace extends React.Component {
   }
 
   /**
+   * Get the translate function
+   * @returns {function(...[*]=)}
+   */
+  get translate() {
+    return this.props.t;
+  }
+
+  /**
    * Render the component
    */
   render() {
@@ -51,7 +60,7 @@ class NavigateIntoUserSettingsWorkspace extends React.Component {
               <div className="main-cell-wrapper">
                 <div className="main-cell">
                   <a onClick={this.props.navigationContext.onGoToUserSettingsProfileRequested}>
-                    <span>Profile</span>
+                    <span>{this.translate("Profile")}</span>
                   </a>
                 </div>
               </div>
@@ -88,7 +97,7 @@ class NavigateIntoUserSettingsWorkspace extends React.Component {
               <div className="main-cell-wrapper">
                 <div className="main-cell">
                   <a onClick={this.props.navigationContext.onGoToUserSettingsThemeRequested}>
-                    <span>Theme</span>
+                    <span>{this.translate("Theme")}</span>
                   </a>
                 </div>
               </div>
@@ -102,7 +111,7 @@ class NavigateIntoUserSettingsWorkspace extends React.Component {
                 <div className="main-cell-wrapper">
                   <div className="main-cell">
                     <a onClick={this.props.navigationContext.onGoToUserSettingsMfaRequested}>
-                      <span>Multi Factor Authentication</span>
+                      <span>{this.translate("Multi Factor Authentication")}</span>
                     </a>
                   </div>
                 </div>
@@ -115,7 +124,7 @@ class NavigateIntoUserSettingsWorkspace extends React.Component {
               <div className="main-cell-wrapper">
                 <div className="main-cell">
                   <a onClick={this.props.navigationContext.onGoToUserSettingsKeysRequested}>
-                    <span>Keys inspector</span>
+                    <span>{this.translate("Keys inspector")}</span>
                   </a>
                 </div>
               </div>
@@ -131,7 +140,8 @@ NavigateIntoUserSettingsWorkspace.contextType = AppContext;
 NavigateIntoUserSettingsWorkspace.propTypes = {
   navigationContext: PropTypes.any, // The application navigation context
   history: PropTypes.object,
-  location: PropTypes.object
+  location: PropTypes.object,
+  t: PropTypes.func, // The translation function
 };
 
-export default withRouter(withNavigationContext(NavigateIntoUserSettingsWorkspace));
+export default withRouter(withNavigationContext(withTranslation('common')(NavigateIntoUserSettingsWorkspace)));

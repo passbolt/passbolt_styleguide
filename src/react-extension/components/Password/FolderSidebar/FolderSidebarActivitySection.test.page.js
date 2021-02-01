@@ -17,6 +17,7 @@ import AppContext from "../../../contexts/AppContext";
 import React from "react";
 import FolderSidebarActivitySection from "./FolderSidebarActivitySection";
 import {BrowserRouter as Router} from 'react-router-dom';
+import SetupTranslations from "../../../SetupTranslations";
 
 /**
  * The FolderSidebarActivitySection component represented as a page
@@ -29,11 +30,13 @@ export default class FolderSidebarActivitySectionPage {
    */
   constructor(appContext, props) {
     this._page = render(
-      <Router>
-        <AppContext.Provider value={appContext}>
-          <FolderSidebarActivitySection {...props}/>
-        </AppContext.Provider>
-      </Router>
+      <SetupTranslations>
+        <Router>
+          <AppContext.Provider value={appContext}>
+            <FolderSidebarActivitySection {...props}/>
+          </AppContext.Provider>
+        </Router>
+      </SetupTranslations>
     );
     this.setupPageObjects();
   }

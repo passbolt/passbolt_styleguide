@@ -23,6 +23,7 @@ import FormCancelButton from "../../../../react/components/Common/Inputs/FormSub
 import ErrorDialog from "../../Dialog/ErrorDialog/ErrorDialog";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import ExportResourcesCredentials from "./ExportResourcesCredentials";
+import {withTranslation} from "react-i18next";
 
 /**
  * This component allows to export resources to a specified format
@@ -239,7 +240,7 @@ class ExportResources extends React.Component {
    */
   async onExportSuccess() {
     await this.setState({actions: {processing: false}});
-    await this.props.actionFeedbackContext.displaySuccess("The passwords have been exported successfully");
+    await this.props.actionFeedbackContext.displaySuccess(this.translate("The passwords have been exported successfully"));
     await this.props.resourceWorkspaceContext.onResourcesToExport({resourcesIds: null, foldersIds: null});
     this.close();
   }
@@ -255,7 +256,7 @@ class ExportResources extends React.Component {
     }
 
     const errorDialogProps = {
-      title: "There was an unexpected error...",
+      title: this.translate("There was an unexpected error..."),
       message: error.message
     };
     await this.setState({actions: {processing: false}});
@@ -271,6 +272,14 @@ class ExportResources extends React.Component {
   }
 
   /**
+   * Get the translate function
+   * @returns {function(...[*]=)}
+   */
+  get translate() {
+    return this.props.t;
+  }
+
+  /**
    * Render the component
    */
   render() {
@@ -279,7 +288,7 @@ class ExportResources extends React.Component {
 
     return (
       <DialogWrapper
-        title="Export passwords"
+        title={this.translate("Export passwords")}
         onClose={this.handleClose}
         disabled={!this.areActionsAllowed}>
         <form
@@ -289,7 +298,7 @@ class ExportResources extends React.Component {
           <div className="form-content">
 
             <div className="input text required">
-              <label htmlFor="export-format">Choose the export format (csv and kdbx are supported)</label>
+              <label htmlFor="export-format">{this.translate("Choose the export format (csv and kdbx are supported)")}</label>
               <select
                 id="export-format"
                 value={this.state.selectedExportFormat}
@@ -308,17 +317,13 @@ class ExportResources extends React.Component {
             </div>
             <p>
               {this.hasFoldersToExport && !this.hasResourcesToExport &&
-                <em>{foldersIdsToExport.length} folder{foldersIdsToExport.length > 1 ? 's are' : ' is'} going to be exported.</em>
+                <em>{this.translate("{{count}} folder is going to be exported.", {count: foldersIdsToExport.length})}</em>
               }
               {this.hasFoldersToExport && this.hasResourcesToExport &&
-                <em>{resourcesIdsToExport.length} password{resourcesIdsToExport.length > 1 ? 's' : ''} and {foldersIdsToExport.length} folder{foldersIdsToExport.length > 1 ? 's' : ''} are going to be exported.</em>
+                <em>{this.translate("{{resources}} and {{folders}} are going to be exported.", {resources: this.translate("{{count}} password", {count: resourcesIdsToExport.length}), folders: this.translate("{{count}} folder", {count: foldersIdsToExport.length})})}</em>
               }
               {!this.hasFoldersToExport && this.hasResourcesToExport &&
-                <>
-                  {resourcesIdsToExport.length === 1 && <em>One password is going to be exported</em>}
-                  {resourcesIdsToExport.length > 1 &&
-                  <em>{resourcesIdsToExport.length} passwords are going to be exported.</em>}
-                </>
+                <em>{this.translate("{{count}} password is going to be exported.", {count: resourcesIdsToExport.length})}</em>
               }
             </p>
           </div>
@@ -327,7 +332,7 @@ class ExportResources extends React.Component {
             <FormSubmitButton
               disabled={!this.areActionsAllowed}
               processing={this.isProcessing}
-              value="Export"/>
+              value={this.translate("Export")}/>
             <FormCancelButton
               disabled={!this.areActionsAllowed}
               processing={this.isProcessing}
@@ -346,7 +351,8 @@ ExportResources.propTypes = {
   onClose: PropTypes.func, // Whenever the dialog is closes
   resourceWorkspaceContext: PropTypes.object, // The resource workspace context
   dialogContext: PropTypes.object, // The dialog context
-  actionFeedbackContext: PropTypes.object // The action feedback context
+  actionFeedbackContext: PropTypes.object, // The action feedback context
+  t: PropTypes.func, // The translation function
 };
 
-export default withActionFeedback(withDialog(withResourceWorkspace(ExportResources)));
+export default withActionFeedback(withDialog(withResourceWorkspace(withTranslation('common')(ExportResources))));

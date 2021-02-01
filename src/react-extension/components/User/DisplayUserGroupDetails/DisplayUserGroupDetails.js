@@ -21,6 +21,7 @@ import DisplayUserGroupDetailsInformation
 import GroupAvatar from "../../../../react/components/Common/Avatar/GroupAvatar";
 import DisplayUserGroupDetailsMembers from "../DisplayUserGroupDetailsMembers/DisplayUserGroupDetailsMembers";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
+import {withTranslation} from "react-i18next";
 
 /**
  * This component displays the details of a users group
@@ -64,7 +65,7 @@ class DisplayUserGroupDetails extends React.Component {
     const baseUrl = this.context.userSettings.getTrustedDomain();
     const permalink = `${baseUrl}/app/groups/view/${this.group.id}`;
     await this.context.port.request("passbolt.clipboard.copy", permalink);
-    this.props.actionFeedbackContext.displaySuccess("The permalink has been copied to clipboard");
+    this.props.actionFeedbackContext.displaySuccess(this.translate("The permalink has been copied to clipboard"));
   }
 
 
@@ -73,6 +74,14 @@ class DisplayUserGroupDetails extends React.Component {
    */
   handleCloseClick() {
     this.props.userWorkspaceContext.onDetailsLocked();
+  }
+
+  /**
+   * Get the translate function
+   * @returns {function(...[*]=)}
+   */
+  get translate() {
+    return this.props.t;
   }
 
   /**
@@ -92,12 +101,12 @@ class DisplayUserGroupDetails extends React.Component {
             <h3>
               <div className="title-wrapper">
                 <span className="name sidebar-header-title">{this.group.name}</span>
-                <a className="title-link" title="Copy the link to this group" onClick={this.handlePermalinkClick}>
+                <a className="title-link" title={this.translate("Copy the link to this group")} onClick={this.handlePermalinkClick}>
                   <Icon name="link"/>
                   <span className="visuallyhidden">Copy the link to this group</span>
                 </a>
               </div>
-              <span className="subtitle">Group</span>
+              <span className="subtitle">{this.translate("Group")}</span>
             </h3>
             <a className="dialog-close" onClick={this.handleCloseClick}>
               <Icon name="close"/>
@@ -117,6 +126,7 @@ DisplayUserGroupDetails.contextType = AppContext;
 DisplayUserGroupDetails.propTypes = {
   actionFeedbackContext: PropTypes.any, // The action feedback context,
   userWorkspaceContext: PropTypes.any, // The user workspace context
+  t: PropTypes.func, // The translation function
 };
 
-export default withActionFeedback(withUserWorkspace(DisplayUserGroupDetails));
+export default withActionFeedback(withUserWorkspace(withTranslation('common')(DisplayUserGroupDetails)));

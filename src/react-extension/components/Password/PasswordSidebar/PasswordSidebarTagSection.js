@@ -17,6 +17,7 @@ import TagItemViewer from "./TagItemViewer";
 import TagEditor from "./TagEditor";
 import Icon from "../../../../react/components/Common/Icons/Icon";
 import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
+import {withTranslation} from "react-i18next";
 
 class PasswordSidebarTagSection extends React.Component {
   /**
@@ -72,6 +73,14 @@ class PasswordSidebarTagSection extends React.Component {
   }
 
   /**
+   * Get the translate function
+   * @returns {function(...[*]=)}
+   */
+  get translate() {
+    return this.props.t;
+  }
+
+  /**
    * Render the component
    * @returns {JSX}
    */
@@ -85,7 +94,7 @@ class PasswordSidebarTagSection extends React.Component {
         <div className="accordion-header">
           <h4>
             <a onClick={this.handleTitleClickEvent} role="button">
-              Tags
+              {this.translate("Tags")}
               {this.state.open &&
               <Icon name="caret-down"/>
               }
@@ -123,7 +132,8 @@ class PasswordSidebarTagSection extends React.Component {
 
 PasswordSidebarTagSection.propTypes = {
   history: PropTypes.any,
-  resourceWorkspaceContext: PropTypes.any
+  resourceWorkspaceContext: PropTypes.any,
+  t: PropTypes.func, // The translation function
 };
 
-export default withResourceWorkspace(PasswordSidebarTagSection);
+export default withResourceWorkspace(withTranslation('common')(PasswordSidebarTagSection));

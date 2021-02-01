@@ -18,6 +18,7 @@ import TagEditDialog from "../TagEditDialog/TagEditDialog";
 import TagDeleteDialog from "../TagDeleteDialog/TagDeleteDialog";
 import {withDialog} from "../../../../react/contexts/Common/DialogContext";
 import ContextualMenuWrapper from "../../../../react/components/Common/ContextualMenu/ContextualMenuWrapper";
+import {withTranslation} from "react-i18next";
 
 class DisplayTagListContextualMenu extends React.Component {
   /**
@@ -56,6 +57,14 @@ class DisplayTagListContextualMenu extends React.Component {
   }
 
   /**
+   * Get the translate function
+   * @returns {function(...[*]=)}
+   */
+  get translate() {
+    return this.props.t;
+  }
+
+  /**
    * Render the component.
    * @returns {JSX}
    */
@@ -69,7 +78,7 @@ class DisplayTagListContextualMenu extends React.Component {
           <div className="row">
             <div className="main-cell-wrapper">
               <div className="main-cell">
-                <a id="edit-tag" onClick={this.handleEditClickEvent}><span>Edit Tag</span></a>
+                <a id="edit-tag" onClick={this.handleEditClickEvent}><span>{this.translate("Edit Tag")}</span></a>
               </div>
             </div>
           </div>
@@ -78,7 +87,7 @@ class DisplayTagListContextualMenu extends React.Component {
           <div className="row">
             <div className="main-cell-wrapper">
               <div className="main-cell">
-                <a id="delete-tag" onClick={this.handleDeleteClickEvent}><span>Delete Tag</span></a>
+                <a id="delete-tag" onClick={this.handleDeleteClickEvent}><span>{this.translate("Delete Tag")}</span></a>
               </div>
             </div>
           </div>
@@ -95,7 +104,8 @@ DisplayTagListContextualMenu.propTypes = {
   left: PropTypes.number, // left position in px of the page
   top: PropTypes.number, // top position in px of the page
   selectedTag: PropTypes.object,
-  dialogContext: PropTypes.any
+  dialogContext: PropTypes.any,
+  t: PropTypes.func, // The translation function
 };
 
-export default withDialog(DisplayTagListContextualMenu);
+export default withDialog(withTranslation('common')(DisplayTagListContextualMenu));

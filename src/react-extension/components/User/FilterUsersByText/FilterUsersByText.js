@@ -16,6 +16,7 @@ import PropTypes from "prop-types";
 import {withRouter} from "react-router-dom";
 import SearchBar from "../../../../react/components/Common/Navigation/Search/SearchBar";
 import {UserWorkspaceFilterTypes, withUserWorkspace} from "../../../contexts/UserWorkspaceContext";
+import {withTranslation} from "react-i18next";
 
 /**
  * This component allows to filter the list of users by text
@@ -97,6 +98,14 @@ class FilterUsersByText extends Component {
   }
 
   /**
+   * Get the translate function
+   * @returns {function(...[*]=)}
+   */
+  get translate() {
+    return this.props.t;
+  }
+
+  /**
    * Render the component
    * @return {JSX}
    */
@@ -105,7 +114,7 @@ class FilterUsersByText extends Component {
       <SearchBar
         disabled={this.props.disabled}
         onSearch={this.handleSearchEvent}
-        placeholder="Search users"
+        placeholder={this.translate("Search users")}
         value={this.state.text} />
     );
   }
@@ -114,9 +123,10 @@ class FilterUsersByText extends Component {
 FilterUsersByText.propTypes = {
   disabled: PropTypes.bool, // The disable flag
   userWorkspaceContext: PropTypes.object, // The user workspace context
-  history: PropTypes.object // The router history
+  history: PropTypes.object, // The router history
+  t: PropTypes.func, // The translation function
 };
 
 
-export default withRouter(withUserWorkspace(FilterUsersByText));
+export default withRouter(withUserWorkspace(withTranslation('common')(FilterUsersByText)));
 

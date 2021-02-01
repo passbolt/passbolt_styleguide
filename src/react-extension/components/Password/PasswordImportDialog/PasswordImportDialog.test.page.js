@@ -16,6 +16,7 @@ import {fireEvent, render, waitFor} from "@testing-library/react";
 import AppContext from "../../../contexts/AppContext";
 import React from "react";
 import PasswordImportDialog from "./PasswordImportDialog";
+import SetupTranslations from "../../../SetupTranslations";
 
 /**
  * The PasswordImportDialog component represented as a page
@@ -28,9 +29,11 @@ export default class PasswordImportDialogPage {
    */
   constructor(appContext, props) {
     this._page = render(
-      <AppContext.Provider value={appContext}>
-        <PasswordImportDialog {...props}/>
-      </AppContext.Provider>
+      <SetupTranslations>
+        <AppContext.Provider value={appContext}>
+          <PasswordImportDialog {...props}/>
+        </AppContext.Provider>
+      </SetupTranslations>
     );
   }
 

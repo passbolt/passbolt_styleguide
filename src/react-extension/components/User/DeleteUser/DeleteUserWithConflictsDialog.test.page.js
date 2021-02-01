@@ -19,6 +19,7 @@ import ManageDialogs from "../../../../react/components/Common/Dialog/ManageDial
 import DialogContextProvider from "../../../../react/contexts/Common/DialogContext";
 import AppContext from "../../../contexts/AppContext";
 import DeleteUserWithConflictsDialog from "./DeleteUserWithConflictsDialog";
+import SetupTranslations from "../../../SetupTranslations";
 
 /**
  * The PasswordSidebarCommentSection component represented as a page
@@ -31,12 +32,14 @@ export default class DeleteUserWithConflictsDialogTestPage {
    */
   constructor(appContext, props) {
     this._page = render(
-      <AppContext.Provider value={appContext}>
-        <DialogContextProvider>
-          <ManageDialogs/>
-          <DeleteUserWithConflictsDialog {...props}/>
-        </DialogContextProvider>
-      </AppContext.Provider>
+      <SetupTranslations>
+        <AppContext.Provider value={appContext}>
+          <DialogContextProvider>
+            <ManageDialogs/>
+            <DeleteUserWithConflictsDialog {...props}/>
+          </DialogContextProvider>
+        </AppContext.Provider>
+      </SetupTranslations>
     );
     this.setupPageObjects();
   }

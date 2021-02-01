@@ -20,6 +20,7 @@ import AppContext from "../../../contexts/AppContext";
 import {BrowserRouter as Router} from "react-router-dom";
 import {UserWorkspaceContext} from "../../../contexts/UserWorkspaceContext";
 import DisplayUserGroupDetails from "./DisplayUserGroupDetails";
+import SetupTranslations from "../../../SetupTranslations";
 
 /**
  * The DisplayUserGroupDetails component represented as a page
@@ -32,13 +33,15 @@ export default class DisplayUserGroupDetailsPage {
    */
   constructor(appContext, props) {
     this._page = render(
-      <AppContext.Provider value={appContext}>
-        <Router>
-          <UserWorkspaceContext.Provider value={props.userWorkspaceContext}>
-            <DisplayUserGroupDetails {...props}/>
-          </UserWorkspaceContext.Provider>
-        </Router>
-      </AppContext.Provider>
+      <SetupTranslations>
+        <AppContext.Provider value={appContext}>
+          <Router>
+            <UserWorkspaceContext.Provider value={props.userWorkspaceContext}>
+              <DisplayUserGroupDetails {...props}/>
+            </UserWorkspaceContext.Provider>
+          </Router>
+        </AppContext.Provider>
+      </SetupTranslations>
     );
   }
 

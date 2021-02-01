@@ -15,6 +15,7 @@ import React, {Component} from "react";
 import {BROWSER_NAMES, detectBrowserName} from "../../../lib/Browser/detectBrowserName";
 import {withAppContext} from "../../../contexts/AppContext";
 import PropTypes from "prop-types";
+import {withTranslation} from "react-i18next";
 
 const CHROME_STORE_BROWSER_EXTENSION_URL = "https://chrome.google.com/webstore/detail/passbolt-extension/didegimhafipceonhjepacocaffmoppf";
 const FIREFOX_STORE_BROWSER_EXTENSION_URL = "https://addons.mozilla.org/fr/firefox/addon/passbolt";
@@ -92,22 +93,30 @@ class InstallExtension extends Component {
   }
 
   /**
+   * Get the translate function
+   * @returns {function(...[*]=)}
+   */
+  get translate() {
+    return this.props.t;
+  }
+
+  /**
    * Render the component
    * @returns {JSX}
    */
   render() {
     return (
       <div className="install-extension">
-        <h1>Please install the browser extension.</h1>
-        <p>Please download the browser extension and refresh this page to continue.</p>
+        <h1>{this.translate("Please install the browser extension.")}</h1>
+        <p>{this.translate("Please download the browser extension and refresh this page to continue.")}</p>
         {this.state.browserName &&
         <a href={this.storeUrl} className={this.storeClassName} target="_blank" rel="noopener noreferrer">
           <img src={this.browserStoreThumbnailUrl}/>
         </a>
         }
         <div className="form-actions">
-          <a href={this.storeUrl} className="button primary big full-width" role="button" target="_blank" rel="noopener noreferrer">Download extension</a>
-          <a onClick={this.handleRefreshClick} role="button">Refresh to detect extension</a>
+          <a href={this.storeUrl} className="button primary big full-width" role="button" target="_blank" rel="noopener noreferrer">{this.translate("Download extension")}</a>
+          <a onClick={this.handleRefreshClick} role="button">{this.translate("Refresh to detect extension")}</a>
         </div>
       </div>
     );
@@ -116,5 +125,6 @@ class InstallExtension extends Component {
 
 InstallExtension.propTypes = {
   context: PropTypes.any, // The application context
+  t: PropTypes.func, // The translation function
 };
-export default withAppContext(InstallExtension);
+export default withAppContext(withTranslation('common')(InstallExtension));

@@ -20,6 +20,7 @@ import PropTypes from "prop-types";
 import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 import {withDialog} from "../../../../react/contexts/Common/DialogContext";
 import ShareDialog from "../../Share/ShareDialog";
+import {withTranslation} from "react-i18next";
 
 const PERMISSIONS_LABEL = {
   1: 'can read',
@@ -184,6 +185,14 @@ class PasswordSidebarPermissionsSection extends React.Component {
   }
 
   /**
+   * Get the translate function
+   * @returns {function(...[*]=)}
+   */
+  get translate() {
+    return this.props.t;
+  }
+
+  /**
    * Render the component
    * @returns {JSX}
    */
@@ -193,7 +202,7 @@ class PasswordSidebarPermissionsSection extends React.Component {
         <div className="accordion-header">
           <h4>
             <a onClick={this.handleTitleClickEvent} role="button">
-              Shared with
+              {this.translate("Shared with")}
               {this.state.open &&
               <Icon name="caret-down"/>
               }
@@ -212,7 +221,7 @@ class PasswordSidebarPermissionsSection extends React.Component {
           }
           {this.isLoading() &&
           <div className="processing-wrapper">
-            <span className="processing-text">Retrieving permissions</span>
+            <span className="processing-text">{this.translate("Retrieving permissions")}</span>
           </div>
           }
           {!this.isLoading() &&
@@ -222,7 +231,7 @@ class PasswordSidebarPermissionsSection extends React.Component {
                 <div className="content-wrapper">
                   <div className="content">
                     <div className="name">{this.getPermissionAroName(permission)}</div>
-                    <div className="subinfo">{PERMISSIONS_LABEL[permission.type]}</div>
+                    <div className="subinfo">{this.translate(PERMISSIONS_LABEL[permission.type])}</div>
                   </div>
                 </div>
                 {permission.user &&
@@ -245,7 +254,8 @@ PasswordSidebarPermissionsSection.contextType = AppContext;
 
 PasswordSidebarPermissionsSection.propTypes = {
   resourceWorkspaceContext: PropTypes.object,
-  dialogContext: PropTypes.any
+  dialogContext: PropTypes.any,
+  t: PropTypes.func, // The translation function
 };
 
-export default withDialog(withResourceWorkspace(PasswordSidebarPermissionsSection));
+export default withDialog(withResourceWorkspace(withTranslation('common')(PasswordSidebarPermissionsSection)));

@@ -17,6 +17,7 @@ import AppContext from "../../../contexts/AppContext";
 import React from "react";
 import PasswordSidebarActivitySection from "./PasswordSidebarActivitySection";
 import {BrowserRouter as Router} from 'react-router-dom';
+import SetupTranslations from "../../../SetupTranslations";
 
 /**
  * The PasswordSidebarActivitySection component represented as a page
@@ -29,11 +30,13 @@ export default class PasswordSidebarActivitySectionPage {
    */
   constructor(appContext, props) {
     this._page = render(
-      <Router>
-        <AppContext.Provider value={appContext}>
-          <PasswordSidebarActivitySection {...props}/>
-        </AppContext.Provider>
-      </Router>
+      <SetupTranslations>
+        <Router>
+          <AppContext.Provider value={appContext}>
+            <PasswordSidebarActivitySection {...props}/>
+          </AppContext.Provider>
+        </Router>
+      </SetupTranslations>
     );
     this.setupPageObjects();
   }

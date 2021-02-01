@@ -20,6 +20,7 @@ import {withContextualMenu} from "../../../../react/contexts/Common/ContextualMe
 import {ResourceWorkspaceFilterTypes, withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 import AppContext from "../../../contexts/AppContext";
 import {withRouter} from "react-router-dom";
+import {withTranslation} from "react-i18next";
 
 /**
  * This component display the tag to filter the resources
@@ -42,7 +43,7 @@ class SidebarTagFilterSection extends React.Component {
   getDefaultState() {
     return {
       open: true,
-      title: "Filter by tags",
+      title: this.translate("Filter by tags"),
       filterType: null // type of the filter selected
     };
   }
@@ -127,9 +128,9 @@ class SidebarTagFilterSection extends React.Component {
    */
   get titles() {
     return {
-      personal: "My tags",
-      shared: "Shared tags",
-      default: "Filter by tags"
+      personal: this.translate("My tags"),
+      shared: this.translate("Shared tags"),
+      default: this.translate("Filter by tags")
     };
   }
 
@@ -158,6 +159,14 @@ class SidebarTagFilterSection extends React.Component {
       return tags.sort((tagA, tagB) => tagA.slug.localeCompare(tagB.slug));
     }
     return null;
+  }
+
+  /**
+   * Get the translate function
+   * @returns {function(...[*]=)}
+   */
+  get translate() {
+    return this.props.t;
   }
 
   /**
@@ -210,7 +219,8 @@ SidebarTagFilterSection.contextType = AppContext;
 SidebarTagFilterSection.propTypes = {
   contextualMenuContext: PropTypes.any, // The contextual menu context
   resourceWorkspaceContext: PropTypes.object,
-  history: PropTypes.any
+  history: PropTypes.any,
+  t: PropTypes.func, // The translation function
 };
 
-export default withRouter(withResourceWorkspace(withContextualMenu(SidebarTagFilterSection)));
+export default withRouter(withResourceWorkspace(withContextualMenu(withTranslation('common')(SidebarTagFilterSection))));

@@ -14,8 +14,6 @@
 import PropTypes from "prop-types";
 import React from "react";
 import ReactList from "react-list";
-import moment from 'moment/moment';
-import 'moment-timezone/builds/moment-timezone-with-data-2012-2022';
 import {withAppContext} from "../../../contexts/AppContext";
 import {
   resourceLinkAuthorizedProtocols,
@@ -29,6 +27,8 @@ import {withRouter} from "react-router-dom";
 import DisplayGridContextualMenu from "./DisplayGridContextualMenu";
 import {withContextualMenu} from "../../../../react/contexts/Common/ContextualMenuContext";
 import sanitizeUrl, {urlProtocols} from "../../../../react/lib/Common/Sanitize/sanitizeUrl";
+import {Trans, withTranslation} from "react-i18next";
+import {DateTime} from "luxon";
 
 /**
  * This component allows to display the filtered resources into a grid
@@ -224,7 +224,7 @@ class Grid extends React.Component {
     ev.stopPropagation();
 
     await this.props.context.port.request("passbolt.clipboard.copy", resource.username);
-    this.props.actionFeedbackContext.displaySuccess("The username has been copied to clipboard");
+    this.props.actionFeedbackContext.displaySuccess(this.translate("The username has been copied to clipboard"));
   }
 
   /**
@@ -254,7 +254,7 @@ class Grid extends React.Component {
    */
   extractPlaintextPassword(plaintextDto) {
     if (!plaintextDto) {
-      throw new TypeError('The secret plaintext is empty.');
+      throw new TypeError(this.translate("The secret plaintext is empty."));
     }
     if (typeof plaintextDto === 'string') {
       return plaintextDto;
@@ -291,7 +291,7 @@ class Grid extends React.Component {
     }
     await this.props.context.port.request("passbolt.clipboard.copy", password);
     await this.props.resourceWorkspaceContext.onResourceCopied();
-    await this.props.actionFeedbackContext.displaySuccess("The secret has been copied to clipboard");
+    await this.props.actionFeedbackContext.displaySuccess(this.translate("The secret has been copied to clipboard"));
   }
 
   /**
@@ -416,7 +416,7 @@ class Grid extends React.Component {
   async favoriteResource(resource) {
     try {
       await this.props.context.port.request('passbolt.favorite.add', resource.id);
-      this.displaySuccessNotification("The password has been added as a favorite");
+      this.displaySuccessNotification(this.translate("The password has been added as a favorite"));
     } catch (error) {
       this.displayErrorNotification(error.message);
     }
@@ -425,7 +425,7 @@ class Grid extends React.Component {
   async unfavoriteResource(resource) {
     try {
       await this.props.context.port.request('passbolt.favorite.delete', resource.id);
-      this.displaySuccessNotification("The password has been removed from favorites");
+      this.displaySuccessNotification(this.translate("The password has been removed from favorites"));
     } catch (error) {
       this.displayErrorNotification(error.message);
     }
@@ -525,8 +525,7 @@ class Grid extends React.Component {
     const isSelected = this.isResourceSelected(resource);
     const isFavorite = resource.favorite !== null && resource.favorite !== undefined;
     const safeUri = this.safeUri(resource);
-    const serverTimezone = this.props.context.siteSettings.getServerTimezone();
-    const modifiedFormatted = moment.tz(resource.modified, serverTimezone).fromNow();
+    const modifiedFormatted = DateTime.fromISO(resource.modified).toRelative({locale: this.props.i18n.lng});
     const isPasswordPreviewed = this.isPasswordPreviewed(resource.id);
 
     return (
@@ -631,6 +630,14 @@ class Grid extends React.Component {
     );
   }
 
+  /**
+   * Get the translate function
+   * @returns {function(...[*]=)}
+   */
+  get translate() {
+    return this.props.t;
+  }
+
   render() {
     const isReady = this.resources !== null;
     const isEmpty = isReady && this.resources.length === 0;
@@ -642,32 +649,32 @@ class Grid extends React.Component {
         <React.Fragment>
           {isEmpty && filterType === ResourceWorkspaceFilterTypes.TEXT &&
           <div className="empty-content">
-            <h2>None of your passwords matched this search.</h2>
-            <p>Try another search or use the left panel to navigate into your passwords.</p>
+            <h2>{this.translate("None of your passwords matched this search.")}</h2>
+            <p>{this.translate("Try another search or use the left panel to navigate into your passwords.")}</p>
           </div>
           }
           {isEmpty && filterType === ResourceWorkspaceFilterTypes.FAVORITE &&
           <div className="empty-content">
-            <h2>None of your passwords are yet marked as favorite.</h2>
-            <p>Add stars to passwords your want to easily find later.</p>
+            <h2>{this.translate("None of your passwords are yet marked as favorite.")}</h2>
+            <p>{this.translate("Add stars to passwords you want to easily find later.")}</p>
           </div>
           }
           {isEmpty && filterType === ResourceWorkspaceFilterTypes.GROUP &&
           <div className="empty-content">
-            <h2>No passwords are shared with this group yet.</h2>
-            <p>Share a password with this group or wait for a team member to share one with this group.</p>
+            <h2>{this.translate("No passwords are shared with this group yet.")}</h2>
+            <p>{this.translate("Share a password with this group or wait for a team member to share one with this group.")}</p>
           </div>
           }
           {isEmpty && filterType === ResourceWorkspaceFilterTypes.FOLDER &&
           <div className="empty-content">
-            <h2>No passwords in this folder yet.</h2>
-            <p>It does feel a bit empty here.</p>
+            <h2>{this.translate("No passwords in this folder yet.")}</h2>
+            <p>{this.translate("It does feel a bit empty here.")}</p>
           </div>
           }
           {isEmpty &&  filterType === ResourceWorkspaceFilterTypes.SHARED_WITH_ME &&
           <div className="empty-content">
-            <h2>No passwords are shared with you yet.</h2>
-            <p>It does feel a bit empty here. Wait for a team member to share a password with you.</p>
+            <h2>{this.translate("No passwords are shared with you yet.")}</h2>
+            <p>{this.translate("It does feel a bit empty here. Wait for a team member to share a password with you.")}</p>
           </div>
           }
           {isEmpty &&
@@ -677,8 +684,11 @@ class Grid extends React.Component {
           ) &&
           <React.Fragment>
             <div className="empty-content">
-              <h1>Welcome to passbolt!</h1>
-              <p>It does feel a bit empty here. Create your first password or<br/>wait for a team member to share one with you.
+              <h1>{this.translate("Welcome to passbolt!")}</h1>
+              <p>
+                <Trans>
+                  It does feel a bit empty here. Create your first password or<br/>wait for a team member to share one with you.
+                </Trans>
               </p>
             </div>
           </React.Fragment>
@@ -714,7 +724,7 @@ class Grid extends React.Component {
                     </th>
                     <th className="cell-name m-cell sortable">
                       <a onClick={ev => this.handleSortByColumnClick(ev, "name")}>
-                        Resource
+                        {this.translate("Resource")}
                         {this.isSortedColumn("name") && this.isSortedAsc() &&
                         <Icon baseline={true} name="caret-up"/>
                         }
@@ -725,7 +735,7 @@ class Grid extends React.Component {
                     </th>
                     <th className="cell-username m-cell username sortable">
                       <a onClick={ev => this.handleSortByColumnClick(ev, "username")}>
-                        Username
+                        {this.translate("Username")}
                         {this.isSortedColumn("username") && this.isSortedAsc() &&
                         <Icon baseline={true} name="caret-up"/>
                         }
@@ -735,11 +745,11 @@ class Grid extends React.Component {
                       </a>
                     </th>
                     <th className="cell-secret m-cell password">
-                      Password
+                      {this.translate("Password")}
                     </th>
                     <th className="cell-uri l-cell sortable">
                       <a onClick={ev => this.handleSortByColumnClick(ev, "uri")}>
-                        URI
+                        {this.translate("URI")}
                         {this.isSortedColumn("uri") && this.isSortedAsc() &&
                         <Icon baseline={true} name="caret-up"/>
                         }
@@ -750,7 +760,7 @@ class Grid extends React.Component {
                     </th>
                     <th className="cell-modified m-cell sortable">
                       <a onClick={ev => this.handleSortByColumnClick(ev, "modified")}>
-                        Modified
+                        {this.translate("Modified")}
                         {this.isSortedColumn("modified") && this.isSortedAsc() &&
                         <Icon baseline={true} name="caret-up"/>
                         }
@@ -790,7 +800,9 @@ Grid.propTypes = {
   resourceWorkspaceContext: PropTypes.any,
   actionFeedbackContext: PropTypes.any, // The action feedback context
   contextualMenuContext: PropTypes.any, // The contextual menu context
-  history: PropTypes.any
+  history: PropTypes.any,
+  t: PropTypes.func, // The translation function
+  i18n: PropTypes.any // The i18n context translation
 };
 
-export default withAppContext(withRouter(withActionFeedback(withContextualMenu(withResourceWorkspace(Grid)))));
+export default withAppContext(withRouter(withActionFeedback(withContextualMenu(withResourceWorkspace(withTranslation('common')(Grid))))));

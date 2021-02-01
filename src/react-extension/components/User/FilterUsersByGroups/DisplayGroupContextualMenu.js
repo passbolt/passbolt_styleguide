@@ -21,6 +21,7 @@ import ErrorDialog from "../../Dialog/ErrorDialog/ErrorDialog";
 import DeleteGroupDialog from "../../Group/DeleteGroup/DeleteGroupDialog";
 import EditUserGroup from "../EditUserGroup/EditUserGroup";
 import {withUserWorkspace} from "../../../contexts/UserWorkspaceContext";
+import {withTranslation} from "react-i18next";
 
 class DisplayGroupContextualMenu extends React.Component {
   /**
@@ -101,7 +102,7 @@ class DisplayGroupContextualMenu extends React.Component {
    */
   handleError(error) {
     const errorDialogProps = {
-      title: "There was an unexpected error...",
+      title: this.translate("There was an unexpected error..."),
       message: error.message
     };
     this.context.setContext({errorDialogProps});
@@ -117,6 +118,14 @@ class DisplayGroupContextualMenu extends React.Component {
     await this.props.userWorkspaceContext.onGroupToEdit(this.props.group);
     this.props.dialogContext.open(EditUserGroup);
     this.props.hide();
+  }
+
+  /**
+   * Get the translate function
+   * @returns {function(...[*]=)}
+   */
+  get translate() {
+    return this.props.t;
   }
 
   /**
@@ -136,7 +145,7 @@ class DisplayGroupContextualMenu extends React.Component {
                 <a
                   id="edit-group"
                   onClick={this.handleEditGroup}>
-                  <span>Edit group</span>
+                  <span>{this.translate("Edit group")}</span>
                 </a>
               </div>
             </div>
@@ -150,7 +159,7 @@ class DisplayGroupContextualMenu extends React.Component {
                   <a
                     id="delete-group"
                     onClick={this.handleDeleteClickEvent}>
-                    <span>Delete Group</span>
+                    <span>{this.translate("Delete Group")}</span>
                   </a>
                 </div>
               </div>
@@ -170,7 +179,8 @@ DisplayGroupContextualMenu.propTypes = {
   top: PropTypes.number, // top position in px of the page
   group: PropTypes.object,
   dialogContext: PropTypes.any, // The dialog context
-  userWorkspaceContext: PropTypes.object // The user workspace context
+  userWorkspaceContext: PropTypes.object, // The user workspace context
+  t: PropTypes.func, // The translation function
 };
 
-export default withUserWorkspace(withDialog(DisplayGroupContextualMenu));
+export default withUserWorkspace(withDialog(withTranslation('common')(DisplayGroupContextualMenu)));

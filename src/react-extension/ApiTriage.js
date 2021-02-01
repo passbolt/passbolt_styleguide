@@ -19,6 +19,7 @@ import OrchestrateApiTriage from "./components/AuthenticationLogin/OrchestrateAp
 import {ApiClient} from "./lib/apiClient/apiClient";
 import SiteSettings from "./lib/Settings/SiteSettings";
 import Footer from "./components/Footer/Footer";
+import SetupTranslations from "./SetupTranslations";
 
 /**
  * The triage application served by the API.
@@ -121,21 +122,23 @@ class ApiTriage extends Component {
    */
   render() {
     return (
-      <AppContext.Provider value={this.state}>
-        <div id="container" className="container page login">
-          <div className="content">
-            <div className="header">
-              <div className="logo"><span className="visually-hidden">Passbolt</span></div>
-            </div>
-            <div className="login-form">
-              <ApiTriageContextProvider>
-                <OrchestrateApiTriage/>
-              </ApiTriageContextProvider>
+      <SetupTranslations loadingPath={`${this.state.trustedDomain}/locales/{{lng}}/{{ns}}.json`}>
+        <AppContext.Provider value={this.state}>
+          <div id="container" className="container page login">
+            <div className="content">
+              <div className="header">
+                <div className="logo"><span className="visually-hidden">Passbolt</span></div>
+              </div>
+              <div className="login-form">
+                <ApiTriageContextProvider>
+                  <OrchestrateApiTriage/>
+                </ApiTriageContextProvider>
+              </div>
             </div>
           </div>
-        </div>
-        <Footer siteSettings={this.state.siteSettings}/>
-      </AppContext.Provider>
+          <Footer siteSettings={this.state.siteSettings}/>
+        </AppContext.Provider>
+      </SetupTranslations>
     );
   }
 }

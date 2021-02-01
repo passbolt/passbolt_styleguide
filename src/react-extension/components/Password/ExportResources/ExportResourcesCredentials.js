@@ -23,6 +23,7 @@ import FormCancelButton from "../../../../react/components/Common/Inputs/FormSub
 import Icon from "../../../../react/components/Common/Icons/Icon";
 import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 import ErrorDialog from "../../Dialog/ErrorDialog/ErrorDialog";
+import {withTranslation} from "react-i18next";
 
 /**
  * This component is the second step of the export dialog when the file to import is KDB(X) file
@@ -181,7 +182,7 @@ class ExportResourcesCredentials extends Component {
    */
   async onExportSuccess() {
     await this.props.resourceWorkspaceContext.onResourcesToExport({resourcesIds: null, foldersIds: null});
-    await this.props.actionFeedbackContext.displaySuccess("The passwords have been exported successfully");
+    await this.props.actionFeedbackContext.displaySuccess(this.translate("The passwords have been exported successfully"));
     this.close();
   }
 
@@ -196,7 +197,7 @@ class ExportResourcesCredentials extends Component {
     }
 
     const errorDialogProps = {
-      title: "There was an unexpected error...",
+      title: this.translate("There was an unexpected error..."),
       message: error.message
     };
     await this.setState({actions: {processing: false}});
@@ -212,12 +213,20 @@ class ExportResourcesCredentials extends Component {
   }
 
   /**
+   * Get the translate function
+   * @returns {function(...[*]=)}
+   */
+  get translate() {
+    return this.props.t;
+  }
+
+  /**
    * Render the component
    */
   render() {
     return (
       <DialogWrapper
-        title="Enter the password and/or key file"
+        title={this.translate("Enter the password and/or key file")}
         className="export-password-dialog"
         onClose={this.handleCancel}
         disabled={!this.areActionsAllowed}>
@@ -226,11 +235,11 @@ class ExportResourcesCredentials extends Component {
           <div className="form-content">
 
             <div className="input-password-wrapper">
-              <label htmlFor="password">Keepass password</label>
+              <label htmlFor="password">{this.translate("Keepass password")}</label>
               <div className="input text password">
                 <input id="password"
                   type={this.state.showPassword ? "text" : "password"}
-                  placeholder="Passphrase"
+                  placeholder={this.translate("Passphrase")}
                   ref={this.passwordInputRef}
                   disabled={!this.areActionsAllowed}/>
               </div>
@@ -251,14 +260,14 @@ class ExportResourcesCredentials extends Component {
                 <input type="file"
                   ref={this.fileUploaderRef}
                   onChange={this.handleFileSelected}/>
-                <label>Keepass key file (optional)</label>
+                <label>{this.translate("Keepass key file (optional)")}</label>
                 <input type="text"
-                  placeholder="No key file selected"
+                  placeholder={this.translate("No key file selected")}
                   disabled
                   value={this.selectedFilename}/>
                 <a className={`button primary ${!this.areActionsAllowed ? "disabled" : ""}`}
                   onClick={this.handleSelectFile}>
-                  <Icon name="upload-a"/> Choose a file
+                  <Icon name="upload-a"/> {this.translate("Choose a file")}
                 </a>
               </div>
             </div>
@@ -268,7 +277,7 @@ class ExportResourcesCredentials extends Component {
             <FormSubmitButton
               disabled={!this.areActionsAllowed}
               processing={this.isProcessing}
-              value="Export"/>
+              value={this.translate("Export")}/>
             <FormCancelButton
               disabled={!this.areActionsAllowed}
               onClick={this.handleCancel}/>
@@ -285,8 +294,9 @@ ExportResourcesCredentials.propTypes = {
   onClose: PropTypes.func,
   actionFeedbackContext: PropTypes.any, // The action feedback context
   dialogContext: PropTypes.any, // The dialog context
-  resourceWorkspaceContext: PropTypes.any // The resource workspace context
+  resourceWorkspaceContext: PropTypes.any, // The resource workspace context
+  t: PropTypes.func, // The translation function
 };
 
-export default withResourceWorkspace(withActionFeedback(withDialog(ExportResourcesCredentials)));
+export default withResourceWorkspace(withActionFeedback(withDialog(withTranslation('common')(ExportResourcesCredentials))));
 

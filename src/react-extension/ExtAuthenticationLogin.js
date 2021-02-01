@@ -20,6 +20,7 @@ import {BrowserRouter as Router} from "react-router-dom";
 import OrchestrateLogin from "./components/AuthenticationLogin/OrchestrateLogin/OrchestrateLogin";
 import SiteSettings from "./lib/Settings/SiteSettings";
 import Footer from "./components/Footer/Footer";
+import SetupTranslations from "./SetupTranslations";
 
 
 /**
@@ -97,27 +98,29 @@ class ExtAuthenticationLogin extends Component {
    */
   render() {
     return (
-      <Router>
-        <AuthenticationContextProvider value={this.defaultContextValue}>
-          <DialogContextProvider>
-            <div id="container" className="container page login">
-              <ManageDialogs/>
-              <div className="content">
-                <div className="header">
-                  <div className="logo"><span className="visually-hidden">Passbolt</span></div>
-                </div>
-                <div className="login-form">
-                  <OrchestrateLogin
-                    siteSettings={this.state.siteSettings}/>
+      <SetupTranslations loadingPath="/data/locales/{{lng}}/{{ns}}.json">
+        <Router>
+          <AuthenticationContextProvider value={this.defaultContextValue}>
+            <DialogContextProvider>
+              <div id="container" className="container page login">
+                <ManageDialogs/>
+                <div className="content">
+                  <div className="header">
+                    <div className="logo"><span className="visually-hidden">Passbolt</span></div>
+                  </div>
+                  <div className="login-form">
+                    <OrchestrateLogin
+                      siteSettings={this.state.siteSettings}/>
+                  </div>
                 </div>
               </div>
-            </div>
-            <Footer
-              siteSettings={this.state.siteSettings}
-              extensionVersion={this.state.extensionVersion}/>
-          </DialogContextProvider>
-        </AuthenticationContextProvider>
-      </Router>
+              <Footer
+                siteSettings={this.state.siteSettings}
+                extensionVersion={this.state.extensionVersion}/>
+            </DialogContextProvider>
+          </AuthenticationContextProvider>
+        </Router>
+      </SetupTranslations>
     );
   }
 }

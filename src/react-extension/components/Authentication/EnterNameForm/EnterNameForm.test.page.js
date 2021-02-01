@@ -16,6 +16,7 @@ import {fireEvent, render, waitFor} from "@testing-library/react";
 import React from "react";
 import EnterNameForm from "./EnterNameForm";
 import {BrowserRouter as Router} from "react-router-dom";
+import SetupTranslations from "../../../SetupTranslations";
 
 /**
  * The EnterNameForm component represented as a page
@@ -27,9 +28,11 @@ export default class EnterNameFormPage {
    */
   constructor(props) {
     this._page = render(
-      <Router>
-        <EnterNameForm {...props}/>
-      </Router>
+      <SetupTranslations>
+        <Router>
+          <EnterNameForm {...props}/>
+        </Router>
+      </SetupTranslations>
     );
   }
 
