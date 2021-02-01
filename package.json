@@ -12,6 +12,10 @@
     "@babel/preset-env": "^7.11.5",
     "@babel/preset-react": "^7.10.4",
     "@babel/runtime": "^7.11.2",
+    "@storybook/addon-actions": "^6.1.15",
+    "@storybook/addon-essentials": "^6.1.15",
+    "@storybook/addon-links": "^6.1.15",
+    "@storybook/react": "^6.1.15",
     "apexcharts": "^3.25.0",
     "babel-loader": "^8.0.4",
     "can-util": "^3.14.0",
@@ -66,6 +70,8 @@
     "test": "jest --config .jest.config.json --no-cache ./src --maxWorkers=4",
     "test-coverage": "jest --config .jest.config.json --no-cache ./src --maxWorkers=4 --coverage",
     "eslint": "eslint -c .eslintrc.json src/react/* src/react-extension/*",
-    "eslint-fix": "eslint -c .eslintrc.json --fix src/react/* src/react-extension/*"
+    "eslint-fix": "eslint -c .eslintrc.json --fix src/react/* src/react-extension/*",
+    "storybook": "start-storybook -p 6006",
+    "build-storybook": "build-storybook"
   }
 }

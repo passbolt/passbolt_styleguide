@@ -29,6 +29,9 @@ export function defaultAppContext(appContext) {
       Object.assign(this, newContext);
     },
     resources,
+    passwordEditDialogProps: {
+      id: mockResource.id
+    }
   };
   return Object.assign(defaultAppContext, appContext || {});
 }
