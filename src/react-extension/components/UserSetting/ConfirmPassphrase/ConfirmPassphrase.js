@@ -19,6 +19,7 @@ import {withUserSettings} from "../../../contexts/UserSettingsContext";
 import FormSubmitButton from "../../../../react/components/Common/Inputs/FormSubmitButton/FormSubmitButton";
 import ErrorDialog from "../../Dialog/ErrorDialog/ErrorDialog";
 import {withDialog} from "../../../../react/contexts/Common/DialogContext";
+import Icon from "../../../../react/components/Common/Icons/Icon";
 
 /**
  * This component displays the user confirm passphrase information
@@ -43,6 +44,7 @@ class ConfirmPassphrase extends React.Component {
       processing: false, // component is processing or not
       passphrase: "", // The passphrase input
       passphraseError: null, // The passphrase error input
+      isObfuscated: true, // True if the passphrase should not be visible
     };
   }
 
@@ -51,6 +53,7 @@ class ConfirmPassphrase extends React.Component {
    */
   bindCallbacks() {
     this.handleInputChange = this.handleInputChange.bind(this);
+    this.handleToggleObfuscate = this.handleToggleObfuscate.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleCancel = this.handleCancel.bind(this);
   }
@@ -79,6 +82,20 @@ class ConfirmPassphrase extends React.Component {
     const value = target.value;
     const name = target.name;
     this.setState({[name]: value});
+  }
+
+  /**
+   * Whenever one wants to toggle the obfusctated mode
+   */
+  handleToggleObfuscate() {
+    this.toggleObfuscate();
+  }
+
+  /**
+   * Toggle the obfuscate mode of the passphrase view
+   */
+  toggleObfuscate() {
+    this.setState({isObfuscated: !this.state.isObfuscated});
   }
 
   /**
@@ -160,11 +177,18 @@ class ConfirmPassphrase extends React.Component {
             <form className="enter-passphrase" onSubmit={this.handleSubmit}>
               <h3>Please enter your passphrase to continue</h3>
               <div className="form-content">
-                <div className={`input text password password-only required ${this.state.passphraseError ? "error" : ""}`}>
+                <div className={`input text password required ${this.state.passphraseError ? "error" : ""}`}>
                   <label htmlFor="passphrase-input">Passphrase</label>
-                  <input id="passphrase-input" type="password" name="passphrase" placeholder="Passphrase" required="required"
+                  <input id="passphrase-input" type={`${this.state.isObfuscated ? "password" : "text"}`} name="passphrase" placeholder="Passphrase" required="required"
                     ref={this.passphraseInputRef} className={`required ${this.state.passphraseError ? "error" : ""}`} autoFocus={true}
                     value={this.state.passphrase} onChange={this.handleInputChange} disabled={this.hasAllInputDisabled()} />
+                  <a
+                    className={`password-view button-icon button button-toggle ${this.state.isObfuscated ? "" : "selected"}`}
+                    role="button"
+                    onClick={this.handleToggleObfuscate}>
+                    <Icon name="eye-open"/>
+                    <span className="visually-hidden">view</span>
+                  </a>
                   {this.state.passphraseError &&
                   <div className="input text">
                     <div className="message error">{this.state.passphraseError}</div>
