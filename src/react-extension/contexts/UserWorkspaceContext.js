@@ -132,11 +132,10 @@ class UserWorkspaceContextProvider extends React.Component {
   async handleFilterChange(previousFilter) {
     const hasFilterChanged = previousFilter !== this.state.filter;
     if (hasFilterChanged) {
-      this.populate();
-
       // Avoid a side-effect whenever one inputs a specific user url (it unselect the user otherwise )
       const isNotNonePreviousFilter = previousFilter.type !== UserWorkspaceFilterTypes.NONE;
       if (isNotNonePreviousFilter) {
+        this.populate();
         await this.unselectAll();
       }
     }
@@ -147,15 +146,11 @@ class UserWorkspaceContextProvider extends React.Component {
    */
   async handleUsersChange() {
     const hasUsersChanged = this.context.users && this.context.users !== this.users;
-    const areUsersFirstLoad = this.users === null;
     if (hasUsersChanged) {
       this.users = this.context.users;
       await this.search(this.state.filter);
       await this.updateDetails();
       await this.unselectUnknownUsers();
-      if (!areUsersFirstLoad) {
-        await this.redirectAfterSelection();
-      }
     }
   }
 

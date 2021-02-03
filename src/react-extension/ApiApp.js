@@ -146,7 +146,7 @@ class ApiApp extends Component {
     if (!cookieArray) {
       return undefined;
     }
-    const csrfCookie = cookieArray.find(row => row.startsWith('csrfToken'))
+    const csrfCookie = cookieArray.find(row => row.startsWith('csrfToken'));
     if (!csrfCookie) {
       return undefined;
     }

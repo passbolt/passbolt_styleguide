@@ -175,14 +175,10 @@ export class ResourceWorkspaceContextProvider extends React.Component {
   async handleFilterChange(previousFilter) {
     const hasFilterChanged = previousFilter !== this.state.filter;
     if (hasFilterChanged) {
-      const wasNotPreviouslyNone = previousFilter.type !== ResourceWorkspaceFilterTypes.NONE;
-      if (wasNotPreviouslyNone) {
-        this.populate();
-      }
-
       // Avoid a side-effect whenever one inputs a specific resource url (it unselect the resource otherwise )
       const isNotNonePreviousFilter = previousFilter.type !== ResourceWorkspaceFilterTypes.NONE;
       if (isNotNonePreviousFilter) {
+        this.populate();
         await this.unselectAll();
       }
     }
@@ -214,15 +210,11 @@ export class ResourceWorkspaceContextProvider extends React.Component {
    */
   async handleResourcesChange() {
     const hasResourcesChanged = this.context.resources && this.context.resources !== this.resources;
-    const areResourcesFirstLoad = this.resources === null;
     if (hasResourcesChanged) {
       this.resources = this.context.resources;
       await this.search(this.state.filter);
       await this.updateDetails();
       await this.unselectUnknownResources();
-      if (!areResourcesFirstLoad) {
-        //await this.redirectAfterSelection();
-      }
     }
   }
 
