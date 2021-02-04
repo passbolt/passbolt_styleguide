@@ -18,6 +18,7 @@ import PropTypes from "prop-types";
 import {withDialog} from "../../../../react/contexts/Common/DialogContext";
 import UserAvatar from "../../../../react/components/Common/Avatar/UserAvatar";
 import {Link} from "react-router-dom";
+import Icon from "../../../../react/components/Common/Icons/Icon";
 
 /**
  * This component allows the user to log in with his account
@@ -45,6 +46,7 @@ class Login extends Component {
       actions: {
         processing: false // True if one's processing passphrase
       },
+      isObfuscated: true, // True if the paasphrase should not be visible
       hasPassphraseFocus: false, // The password input has focues
       hasBeenValidated: false, // true if the form has already validated once
       errors: {
@@ -153,6 +155,7 @@ class Login extends Component {
     this.handleToggleRememberMe = this.handleToggleRememberMe.bind(this);
     this.handleFocusPassphrase = this.handleFocusPassphrase.bind(this);
     this.handleBlurPassphrase = this.handleBlurPassphrase.bind(this);
+    this.handleToggleObfuscate = this.handleToggleObfuscate.bind(this);
   }
 
   /**
@@ -208,6 +211,13 @@ class Login extends Component {
    */
   async handleToggleRememberMe() {
     await this.toggleRemmemberMe();
+  }
+
+  /**
+   * Whenever one wants to toggle the obfusctated mode
+   */
+  handleToggleObfuscate() {
+    this.toggleObfuscate();
   }
 
   /**
@@ -297,6 +307,13 @@ class Login extends Component {
   }
 
   /**
+   * Toggle the obfuscate mode of the passphrase view
+   */
+  toggleObfuscate() {
+    this.setState({isObfuscated: !this.state.isObfuscated});
+  }
+
+  /**
    * Render the component
    */
   render() {
@@ -324,7 +341,7 @@ class Login extends Component {
                   <input
                     id="passphrase"
                     ref={this.passphraseInputRef}
-                    type="password"
+                    type={this.state.isObfuscated ? "password" : "text"}
                     name="passphrase"
                     className="login-passphrase-input"
                     style={this.passphraseInputStyle}
@@ -334,6 +351,13 @@ class Login extends Component {
                     onBlur={this.handleBlurPassphrase}
                     disabled={!this.areActionsAllowed}
                     autoFocus={true}/>
+                  <a
+                    className={`password-view button-icon button button-toggle ${this.state.isObfuscated ? "" : "selected"}`}
+                    role="button"
+                    onClick={this.handleToggleObfuscate}>
+                    <Icon name="eye-open"/>
+                    <span className="visually-hidden">view</span>
+                  </a>
                   <span
                     className="login-passphrase-security-token"
                     style={this.securityTokenStyle}>
