@@ -21,7 +21,7 @@ const _passbolt_data = {
     "user.firstname": "Ada",
     "user.id": "f848277c-5398-58f8-a82a-72397af2d450",
     "user.lastname": "Lovelace",
-    "user.settings.securityToken.code": "XgJ",
+    "user.settings.securityToken.code": "III",
     "user.settings.securityToken.color": "#4DB397",
     "user.settings.securityToken.textColor": "#000",
     "user.settings.theme" : {

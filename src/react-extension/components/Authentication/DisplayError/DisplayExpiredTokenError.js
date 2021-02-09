@@ -26,7 +26,7 @@ class DisplayExpiredTokenError extends Component {
         <h1>The invitation is expired.</h1>
         <p>You can request another invitation email by clicking on the button below.</p>
         <div className="form-actions">
-          <a href={`${this.props.context.trustedDomain}/users/recover`} className="button primary big" role="button">Request invitation</a>
+          <a href={`${this.props.context.trustedDomain}/users/recover`} className="button primary big full-width" role="button">Request invitation</a>
         </div>
       </div>
     );

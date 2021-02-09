@@ -41,7 +41,7 @@ class CheckPassphrase extends Component {
     return {
       passphrase: '', // The passphrase
       rememberMe: false, // The remember passphrase flag
-      isObfuscated: true, // True if the paasphrase should not be visible
+      isObfuscated: true, // True if the passphrase should not be visible
       actions: {
         processing: false // True if one's processing passphrase
       },
@@ -232,11 +232,9 @@ class CheckPassphrase extends Component {
   render() {
     const processingClassName = this.isProcessing ? 'processing' : '';
     return (
-      <div className="enter-passphrase">
+      <div className="check-passphrase">
         <h1>Please enter your passphrase to continue.</h1>
-        <form
-          acceptCharset="utf-8"
-          onSubmit={this.handleSubmit}>
+        <form acceptCharset="utf-8" onSubmit={this.handleSubmit} className="enter-passphrase">
           <div className="form-content">
             <div className={`input text password required ${this.hasErrors ? "error" : ""}`}>
               <label htmlFor="passphrase">Passphrase</label>
@@ -284,7 +282,7 @@ class CheckPassphrase extends Component {
           <div className="form-actions">
             <button
               type="submit"
-              className={`button primary big ${processingClassName}`}
+              className={`button primary big full-width ${processingClassName}`}
               role="button"
               disabled={this.isProcessing}>
               Verify

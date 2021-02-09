@@ -1058,40 +1058,6 @@ ul li {
   /* Opera doesn't support this in the shorthand */
   background-attachment: local, local, scroll, scroll;
 }
-.fa.icon svg {
-  width: 1.6rem;
-  height: 1.6rem;
-}
-.fa.icon svg path {
-  fill: #888;
-}
-.app .fa.icon {
-  font-size: 1.33333333em;
-  vertical-align: -15%;
-}
-.app .dialog-close .fa.icon svg {
-  margin-top: -7px;
-}
-.app .fa.icon svg {
-  width: 1rem;
-  height: 1rem;
-}
-.app .fa.icon svg path {
-  fill: #333;
-}
-.security-token {
-  font-size: 1.6rem;
-  padding: 0.6rem 1.6rem;
-  text-align: center;
-  display: inline-block;
-  width: 6.4rem;
-  margin-top: -0.8rem;
-  margin-left: -0.4rem;
-  border: 1px solid #BBB;
-  line-height: 2.4rem;
-  vertical-align: middle;
-  box-sizing: border-box;
-}
 .quickaccess {
   /*
      * Clearfix: contain floats
@@ -1377,6 +1343,13 @@ ul li {
 .quickaccess .quickaccess-header .option-link {
   margin: -0.8rem -0.8rem 0 0;
 }
+.quickaccess .fa.icon svg {
+  width: 1.6rem;
+  height: 1.6rem;
+}
+.quickaccess .fa.icon svg path {
+  fill: #888;
+}
 .quickaccess .index-list .submit-wrapper {
   padding: 0 1.8rem 1.8rem 1.8rem;
 }
@@ -1538,6 +1511,32 @@ ul li {
 }
 .login-form {
   padding: 0 1.8rem 1.8rem 1.8rem;
+}
+.quickaccess .passphrase input[type=password] {
+  box-sizing: border-box;
+  width: calc(100% - 4.5rem);
+}
+.quickaccess .passphrase .form-container {
+  padding: 0 1.8rem 0 1.8rem;
+}
+.quickaccess .passphrase .submit-wrapper {
+  padding: 0 1.8rem 1.8rem 1.8rem;
+}
+.quickaccess .passphrase .too-many-attempts-error {
+  margin: 0.8rem 3rem 0.8rem 1.6rem;
+}
+.quickaccess .security-token {
+  width: 4.5rem;
+  font-size: 1.4rem;
+  margin-top: -0.2rem;
+  padding: 0.4rem 0.8rem;
+  text-align: center;
+  display: inline-block;
+  margin-left: -0.4rem;
+  border: 1px solid #BBB;
+  line-height: 2.4rem;
+  vertical-align: middle;
+  box-sizing: border-box;
 }
 .quickaccess .item-browse .properties {
   padding: 1.2rem 0 0 0;
@@ -1834,15 +1833,6 @@ ul li {
   box-shadow: inset -1px 1px 1px rgba(0, 0, 0, 0.2);
   border: 1px solid #2894DF;
   border-left: 0;
-}
-.quickaccess .passphrase .form-container {
-  padding: 0 1.8rem 0 1.8rem;
-}
-.quickaccess .passphrase .submit-wrapper {
-  padding: 0 1.8rem 1.8rem 1.8rem;
-}
-.quickaccess .passphrase .too-many-attempts-error {
-  margin: 0.8rem 3rem 0.8rem 1.6rem;
 }
 .slideNoTransition-exit {
   display: none;

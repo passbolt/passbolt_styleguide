@@ -1322,22 +1322,148 @@ a.unfav .svg-icon svg {
   height: 12rem;
   resize: none;
 }
-.passphrase input[type=password] {
-  box-sizing: border-box;
-  width: calc(100% - 6.7rem);
+.enter-passphrase {
+  /** Passphrase input with security token **/
 }
-.security-token {
-  font-size: 1.6rem;
-  padding: 0.6rem 1.6rem;
-  text-align: center;
-  display: inline-block;
-  width: 6.4rem;
-  margin-top: -0.8rem;
-  margin-left: -0.4rem;
-  border: 1px solid #BBB;
-  line-height: 2.4rem;
-  vertical-align: middle;
+.enter-passphrase .password {
+  /*
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
+  /*
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
+  /* toggle button to preview passphrase */
+}
+.enter-passphrase .password:before,
+.enter-passphrase .password:after {
+  content: "";
+  display: table;
+}
+.enter-passphrase .password:after {
+  clear: both;
+}
+.enter-passphrase .password:before,
+.enter-passphrase .password:after {
+  content: "";
+  display: table;
+}
+.enter-passphrase .password:after {
+  clear: both;
+}
+.enter-passphrase .password input[type=text],
+.enter-passphrase .password input[type=password] {
+  float: left;
   box-sizing: border-box;
+  width: calc(100% - 4.1rem);
+}
+.enter-passphrase .password .password-view {
+  width: 3em;
+  float: left;
+  margin-top: 0;
+  margin-right: 0;
+  margin-left: -0.1rem;
+  height: 2.714em;
+  border-radius: 0;
+  padding: 0.6rem 0.8rem 0.6rem 1rem;
+  background: #FFF;
+  border-left: 0;
+  border-top: 1px solid #BBB;
+}
+.enter-passphrase .password .password-view.selected {
+  background: #EEE;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+.enter-passphrase .password .password-view svg {
+  margin-top: 3px;
+}
+.enter-passphrase .password input[type=text]:focus ~ .password-view,
+.enter-passphrase .password input[type=password]:focus ~ .password-view {
+  border: 1px solid #2894DF;
+  border-left: 0;
+}
+.enter-passphrase .password.with-token input[type=text],
+.enter-passphrase .password.with-token input[type=password] {
+  width: calc(100% - 11rem);
+}
+.enter-passphrase .password.with-token .password-view {
+  margin-right: 1rem;
+}
+.enter-passphrase .password.with-token .security-token {
+  width: 4em;
+  float: left;
+  margin-top: 0;
+  margin-right: 0;
+  border-radius: 0;
+  padding: 1.05rem 0;
+  text-align: center;
+  background: #FFF;
+  border-left: 0;
+  border-top: 1px solid #BBB;
+}
+.password-complexity .complexity-text {
+  float: right;
+  clear: right;
+  width: 30%;
+  font-size: 11px;
+  text-align: left;
+  padding-left: 0;
+}
+.password-complexity.not_available .complexity-text {
+  color: #DDD;
+}
+.password-complexity .progress {
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid #DDD;
+  height: 10px;
+  display: block;
+  clear: both;
+  margin: 0.25em 0 0.5em 0;
+  float: left;
+}
+.password-complexity .progress-bar {
+  background: #000;
+  width: 0;
+  height: 6px;
+  display: block;
+  float: left;
+  margin: 1px;
+}
+.password-complexity .progress-bar.very-weak {
+  background: #000;
+  width: 5%;
+}
+.password-complexity .progress-bar.weak {
+  background: #D40101;
+  width: 10%;
+}
+.password-complexity .progress-bar.fair {
+  background: #FFBD2E;
+  width: 60%;
+}
+.password-complexity .progress-bar.strong {
+  background: #66CC00;
+  width: 80%;
+}
+.password-complexity .progress-bar.very-strong {
+  background: #009900;
+  width: 99.5%;
 }
 .password-hints {
   margin: 0.5em 0 1em 0;
@@ -1712,9 +1838,6 @@ body {
   text-align: center;
   padding-top: 1.2em;
 }
-.login.page .login-form .button {
-  width: 100%;
-}
 .login.page .login-form .button + a {
   font-size: 1.6rem;
   line-height: 2.4rem;
@@ -1828,147 +1951,6 @@ body {
   margin-left: auto;
   margin-right: auto;
 }
-.login.page .enter-passphrase .password,
-.login.page .choose-passphrase .password {
-  /*
-     * Clearfix: contain floats
-     *
-     * For modern browsers
-     * 1. The space content is one way to avoid an Opera bug when the
-     *	`contenteditable` attribute is included anywhere else in the document.
-     *	Otherwise it causes space to appear at the top and bottom of elements
-     *	that receive the `clearfix` class.
-     * 2. The use of `table` rather than `block` is only necessary if using
-     *	`:before` to contain the top-margins of child elements.
-     */
-  /*
-     * Clearfix: contain floats
-     *
-     * For modern browsers
-     * 1. The space content is one way to avoid an Opera bug when the
-     *	`contenteditable` attribute is included anywhere else in the document.
-     *	Otherwise it causes space to appear at the top and bottom of elements
-     *	that receive the `clearfix` class.
-     * 2. The use of `table` rather than `block` is only necessary if using
-     *	`:before` to contain the top-margins of child elements.
-     */
-}
-.login.page .enter-passphrase .password:before,
-.login.page .choose-passphrase .password:before,
-.login.page .enter-passphrase .password:after,
-.login.page .choose-passphrase .password:after {
-  content: "";
-  display: table;
-}
-.login.page .enter-passphrase .password:after,
-.login.page .choose-passphrase .password:after {
-  clear: both;
-}
-.login.page .enter-passphrase .password:before,
-.login.page .choose-passphrase .password:before,
-.login.page .enter-passphrase .password:after,
-.login.page .choose-passphrase .password:after {
-  content: "";
-  display: table;
-}
-.login.page .enter-passphrase .password:after,
-.login.page .choose-passphrase .password:after {
-  clear: both;
-}
-.login.page .enter-passphrase .password input,
-.login.page .choose-passphrase .password input {
-  float: left;
-  box-sizing: border-box;
-  width: calc(100% - 4.1rem);
-}
-.login.page .enter-passphrase .password .password-view,
-.login.page .choose-passphrase .password .password-view {
-  width: 3em;
-  float: left;
-  margin-top: 0;
-  margin-right: 0;
-  margin-left: -0.1rem;
-  height: 2.714em;
-  border-radius: 0;
-  padding: 0.6rem 0.8rem 0.6rem 1rem;
-  background: #FFF;
-  border: 1px solid #CCC;
-  border-left: 0;
-  border-top: 1px solid #BBB;
-}
-.login.page .enter-passphrase .password .password-view.selected,
-.login.page .choose-passphrase .password .password-view.selected {
-  background: #EEE;
-  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.2);
-}
-.login.page .enter-passphrase .password .password-view svg,
-.login.page .choose-passphrase .password .password-view svg {
-  margin-top: 3px;
-}
-.login.page .enter-passphrase .password input:focus + .password-view,
-.login.page .choose-passphrase .password input:focus + .password-view {
-  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.2);
-  border: 1px solid #2894DF;
-  border-left: 0;
-}
-.login.page .enter-passphrase .password-complexity .complexity-text,
-.login.page .choose-passphrase .password-complexity .complexity-text {
-  float: right;
-  clear: right;
-  width: 30%;
-  font-size: 11px;
-  text-align: left;
-  padding-left: 0;
-}
-.login.page .enter-passphrase .password-complexity.not_available .complexity-text,
-.login.page .choose-passphrase .password-complexity.not_available .complexity-text {
-  color: #DDD;
-}
-.login.page .enter-passphrase .password-complexity .progress,
-.login.page .choose-passphrase .password-complexity .progress {
-  width: 100%;
-  box-sizing: border-box;
-  border: 1px solid #DDD;
-  height: 10px;
-  display: block;
-  clear: both;
-  margin: 0.25em 0 0.5em 0;
-  float: left;
-}
-.login.page .enter-passphrase .password-complexity .progress-bar,
-.login.page .choose-passphrase .password-complexity .progress-bar {
-  background: #000;
-  width: 0;
-  height: 6px;
-  display: block;
-  float: left;
-  margin: 1px;
-}
-.login.page .enter-passphrase .password-complexity .progress-bar.very-weak,
-.login.page .choose-passphrase .password-complexity .progress-bar.very-weak {
-  background: #000;
-  width: 5%;
-}
-.login.page .enter-passphrase .password-complexity .progress-bar.weak,
-.login.page .choose-passphrase .password-complexity .progress-bar.weak {
-  background: #D40101;
-  width: 10%;
-}
-.login.page .enter-passphrase .password-complexity .progress-bar.fair,
-.login.page .choose-passphrase .password-complexity .progress-bar.fair {
-  background: #FFBD2E;
-  width: 60%;
-}
-.login.page .enter-passphrase .password-complexity .progress-bar.strong,
-.login.page .choose-passphrase .password-complexity .progress-bar.strong {
-  background: #66CC00;
-  width: 80%;
-}
-.login.page .enter-passphrase .password-complexity .progress-bar.very-strong,
-.login.page .choose-passphrase .password-complexity .progress-bar.very-strong {
-  background: #009900;
-  width: 99.5%;
-}
 .login.page .login .login-user {
   width: 100%;
   margin: auto;
@@ -1984,24 +1966,6 @@ body {
 .login.page .login .login-user .login-user-email {
   font-size: 1.6rem;
   line-height: 1rem;
-}
-.login.page .login .login-passphrase {
-  display: flex;
-  flex-wrap: nowrap;
-  align-items: stretch;
-}
-.login.page .login .login-passphrase .login-input {
-  flex: 1 1 auto;
-  border-right: none;
-}
-.login.page .login .login-passphrase .login-passphrase-security-token {
-  display: flex;
-  align-items: center;
-  border: 1px solid #DDD;
-  border-left: 0;
-  border-top: 1px solid #BBB;
-  padding: 0.6rem 1.2rem;
-  height: 1.75em;
 }
 .login.page .login-processing {
   display: flex;

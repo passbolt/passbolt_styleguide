@@ -247,7 +247,7 @@ class ImportGpgKey extends Component {
           <div className="form-actions">
             <button
               type="submit"
-              className={`button primary big ${processingClassName}`}
+              className={`button primary big full-width ${processingClassName}`}
               role="button"
               disabled={this.isProcessing}>
               Next

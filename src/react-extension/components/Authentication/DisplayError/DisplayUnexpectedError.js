@@ -33,7 +33,7 @@ class DisplayUnexpectedError extends Component {
         <p>The operation failed with the following error:</p>
         <p>{this.props.error && this.props.error.message}</p>
         <div className="form-actions">
-          <button onClick={this.onClick.bind(this)} className="button primary big" role="button">Try again</button>
+          <button onClick={this.onClick.bind(this)} className="button primary big full-width" role="button">Try again</button>
         </div>
       </div>
     );

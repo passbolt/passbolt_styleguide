@@ -3517,7 +3517,8 @@ input[type=submit].button.processing {
   border-radius: 5px;
 }
 /* toggle selected */
-.toggle.button.selected {
+.toggle.button.selected,
+.button-toggle.button.selected {
   background: #EEE;
   box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.2);
   border: 1px solid #BBB;
@@ -5893,25 +5894,6 @@ table.table-info.horizontal tbody tr:hover {
   .fa.fa-lg {
     line-height: 1;
   }
-}
-.password-hints {
-  margin: 0.5em 0 1em 0;
-}
-.password-hints li {
-  font-size: 1.5rem;
-  line-height: 2.4rem;
-}
-.password-hints li:before {
-  content: "\25CF";
-  /* unicode character ● */
-  color: #DDD;
-  padding-right: 0.5em;
-}
-.password-hints li.success:before {
-  color: #009900;
-}
-.password-hints li.error:before {
-  color: #D40101;
 }
 .ribbon {
   position: absolute;

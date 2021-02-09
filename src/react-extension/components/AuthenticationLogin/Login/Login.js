@@ -46,8 +46,8 @@ class Login extends Component {
       actions: {
         processing: false // True if one's processing passphrase
       },
-      isObfuscated: true, // True if the paasphrase should not be visible
-      hasPassphraseFocus: false, // The password input has focues
+      isObfuscated: true, // True if the passphrase should not be visible
+      hasPassphraseFocus: false, // The password input has focus
       hasBeenValidated: false, // true if the form has already validated once
       errors: {
         emptyPassphrase: false, // True if the passphrase is empty
@@ -323,21 +323,17 @@ class Login extends Component {
         {this.isReady &&
           <div className="login">
             <div className="login-user">
-              <UserAvatar
-                baseUrl={this.trustedDomain}
-                className="big avatar user-avatar"/>
+              <UserAvatar baseUrl={this.trustedDomain} className="big avatar user-avatar"/>
               <p className="login-user-name">{this.fullname}</p>
               <p className="login-user-email">{this.username}</p>
             </div>
 
-            <form
-              acceptCharset="utf-8"
-              onSubmit={this.handleSubmit}>
+            <form acceptCharset="utf-8" onSubmit={this.handleSubmit} className="enter-passphrase">
               <div className={`input text required ${this.hasErrors ? "error" : ""}`}>
                 <label htmlFor="passphrase">
                   Passphrase
                 </label>
-                <div className="login-passphrase">
+                <div className="password with-token">
                   <input
                     id="passphrase"
                     ref={this.passphraseInputRef}
@@ -358,9 +354,7 @@ class Login extends Component {
                     <Icon name="eye-open"/>
                     <span className="visually-hidden">view</span>
                   </a>
-                  <span
-                    className="login-passphrase-security-token"
-                    style={this.securityTokenStyle}>
+                  <span className="security-token" style={this.securityTokenStyle}>
                     {this.securityTokenCode}
                   </span>
                 </div>
@@ -396,7 +390,7 @@ class Login extends Component {
               <div className="form-actions">
                 <button
                   type="submit"
-                  className={`button primary big ${processingClassName}`}
+                  className={`button primary big full-width ${processingClassName}`}
                   role="button"
                   disabled={this.isProcessing}>
                   Sign in

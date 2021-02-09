@@ -43,7 +43,8 @@ class PassphraseEntryDialog extends Component {
       rememberMe: false,
       passphraseError: "",
       rememberMeDuration: 0,
-      passphraseInputHasFocus: true
+      passphraseInputHasFocus: true,
+      isObfuscated: true, // True if the passphrase should not be visible
     };
   }
 
@@ -55,6 +56,7 @@ class PassphraseEntryDialog extends Component {
     this.handlePassphraseInputBlur = this.handlePassphraseInputBlur.bind(this);
     this.handleKeyDown = this.handleKeyDown.bind(this);
     this.handleCloseClick = this.handleCloseClick.bind(this);
+    this.handleToggleObfuscate = this.handleToggleObfuscate.bind(this);
   }
 
   /**
@@ -248,6 +250,20 @@ class PassphraseEntryDialog extends Component {
   }
 
   /**
+   * Whenever one wants to toggle the obfusctated mode
+   */
+  handleToggleObfuscate() {
+    this.toggleObfuscate();
+  }
+
+  /**
+   * Toggle the obfuscate mode of the passphrase view
+   */
+  toggleObfuscate() {
+    this.setState({isObfuscated: !this.state.isObfuscated});
+  }
+
+  /**
    * Render the remember me options
    * @return {array<JSX>}
    */
@@ -292,13 +308,31 @@ class PassphraseEntryDialog extends Component {
               <div className="form-content">
                 <div className={`input text password required ${this.state.passphraseError ? "error" : ""}`}>
                   <label htmlFor="passphrase-entry-form-passphrase">{passphraseInputLabel}</label>
-                  <input id="passphrase-entry-form-passphrase" type="password" name="passphrase"
-                    placeholder="Passphrase" required="required" ref={this.passphraseInputRef}
-                    className={`required ${this.state.passphraseError ? "error" : ""}`} value={this.state.passphrase}
-                    autoFocus={true} onFocus={this.handlePassphraseInputFocus} onBlur={this.handlePassphraseInputBlur}
-                    onChange={this.handleInputChange} disabled={this.state.processing} style={passphraseStyle}/>
+                  <input
+                    id="passphrase-entry-form-passphrase"
+                    type={this.state.isObfuscated ? "password" : "text"}
+                    name="passphrase"
+                    placeholder="Passphrase"
+                    required="required" ref={this.passphraseInputRef}
+                    className={`required ${this.state.passphraseError ? "error" : ""}`}
+                    value={this.state.passphrase}
+                    autoFocus={true}
+                    onFocus={this.handlePassphraseInputFocus}
+                    onBlur={this.handlePassphraseInputBlur}
+                    onChange={this.handleInputChange}
+                    disabled={this.state.processing}
+                    style={passphraseStyle}
+                  />
+                  <a
+                    className={`password-view button-icon button button-toggle ${this.state.isObfuscated ? "" : "selected"}`}
+                    role="button"
+                    onClick={this.handleToggleObfuscate}>
+                    <Icon name="eye-open"/>
+                    <span className="visually-hidden">view</span>
+                  </a>
                   <div className="security-token"
-                    style={securityTokenStyle}>{securityTokenCode}</div>
+                    style={securityTokenStyle}>{securityTokenCode}
+                  </div>
                   {this.state.passphraseError &&
                   <div className="input text">
                     <div className="message error">{this.state.passphraseError}</div>

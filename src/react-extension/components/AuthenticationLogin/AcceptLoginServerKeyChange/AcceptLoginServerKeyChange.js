@@ -168,7 +168,7 @@ class AcceptLoginServerKeyChange extends Component {
           <div className="form-actions">
             <button
               type="submit"
-              className={`button primary big ${disabledClassName}`}
+              className={`button primary big full-width ${disabledClassName}`}
               role="button"
               disabled={this.mustBeDisabled}>
               Accept new key

@@ -59,7 +59,7 @@ class DisplayLoginError extends Component {
           <div className="form-actions">
             <button
               type="submit"
-              className={`button primary big`}
+              className={`button primary big full-width`}
               role="button">
               Try again
             </button>

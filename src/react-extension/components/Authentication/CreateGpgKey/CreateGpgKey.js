@@ -242,11 +242,9 @@ class CreateGpgKey extends Component {
     const processingClassName = this.isProcessing ? 'processing' : '';
     const disabledClassName = this.mustBeDisabled ? 'disabled' : '';
     return (
-      <div className="choose-passphrase">
+      <div className="create-gpg-key">
         <h1>Welcome to Passbolt, please select a passphrase!</h1>
-        <form
-          acceptCharset="utf-8"
-          onSubmit={this.handleSubmit}>
+        <form acceptCharset="utf-8" onSubmit={this.handleSubmit} className="enter-passphrase">
           <p>
             This passphrase is the only passphrase you will need to remember from now on, choose wisely!
           </p>
@@ -307,7 +305,7 @@ class CreateGpgKey extends Component {
           <div className="form-actions">
             <button
               type="submit"
-              className={`button primary big ${disabledClassName} ${processingClassName}`}
+              className={`button primary big full-width ${disabledClassName} ${processingClassName}`}
               role="button"
               disabled={this.mustBeDisabled || this.isProcessing}>
               Next

@@ -84,7 +84,7 @@ class DownloadRecoveryKit extends Component {
         <div className="form-actions">
           <button
             type="submit"
-            className={`button primary big`}
+            className={`button primary big full-width`}
             onClick={this.handleNext}
             role="button">
             Next

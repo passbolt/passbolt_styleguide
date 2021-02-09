@@ -32,7 +32,7 @@ class DisplayBrowserNotSupported extends Component {
           <img src={`${this.props.context.trustedDomain}/img/third_party/firefox_logo.png`} />
         </a>
         <div className="form-actions">
-          <a href={DOWNLOAD_FIREFOX_URL} className="button primary big" role="button" target="_blank" rel="noopener noreferrer">Download Firefox</a>
+          <a href={DOWNLOAD_FIREFOX_URL} className="button primary big full-width" role="button" target="_blank" rel="noopener noreferrer">Download Firefox</a>
           <a href={DOWNLOAD_CHROME_URL} role="button" target="_blank" rel="noopener noreferrer">Download Chrome</a>
           {/*<a role="button">Why is my browser not supported?</a>*/}
         </div>

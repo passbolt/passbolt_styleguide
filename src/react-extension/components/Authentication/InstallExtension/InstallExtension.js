@@ -106,7 +106,7 @@ class InstallExtension extends Component {
         </a>
         }
         <div className="form-actions">
-          <a href={this.storeUrl} className="button primary big" role="button" target="_blank" rel="noopener noreferrer">Download extension</a>
+          <a href={this.storeUrl} className="button primary big full-width" role="button" target="_blank" rel="noopener noreferrer">Download extension</a>
           <a onClick={this.handleRefreshClick} role="button">Refresh to detect extension</a>
         </div>
       </div>

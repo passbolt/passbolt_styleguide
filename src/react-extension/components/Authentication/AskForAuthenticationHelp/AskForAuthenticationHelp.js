@@ -62,7 +62,7 @@ class AskForAuthenticationHelp extends Component {
         <div className="form-actions">
           <a
             href={`${this.props.context.trustedDomain}/users/recover`}
-            className="button primary big"
+            className="button primary big full-width"
             role="button"
             target="_parent"
             rel="noopener noreferrer">
