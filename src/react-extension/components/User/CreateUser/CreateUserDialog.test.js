@@ -48,7 +48,7 @@ describe("See the Create Dialog User", () => {
           first_name: "user",
           last_name: "admin",
         },
-        username: "admin@passbolt.com",
+        username: "   admin@passbolt.com   ",
         is_admin: true,
       };
       // Fill the form
