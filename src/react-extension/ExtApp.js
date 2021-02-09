@@ -50,7 +50,6 @@ import HandleSessionExpired
 import Footer from "./components/Footer/Footer";
 import HandleExtAppRouteChanged from "./components/Route/HandleExtAppRouteChanged";
 import NavigationContextProvider from "./contexts/NavigationContext";
-import PassphraseEntryDialog from "./components/Passphrase/PassphraseEntryDialog/PassphraseEntryDialog";
 
 /**
  * The passbolt application served by the browser extension.
