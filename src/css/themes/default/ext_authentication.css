@@ -1413,8 +1413,7 @@ a.unfav .svg-icon svg {
   padding: 1.05rem 0;
   text-align: center;
   background: #FFF;
-  border-left: 0;
-  border-top: 1px solid #BBB;
+  border: 1px solid #BBB;
 }
 .password-complexity .complexity-text {
   float: right;
