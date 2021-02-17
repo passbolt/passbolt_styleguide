@@ -265,7 +265,7 @@ class CreateUserDialog extends Component {
         first_name: this.state.first_name,
         last_name: this.state.last_name
       },
-      username: this.state.username,
+      username: this.state.username.trim(),
       role_id: role.id
     };
     return await this.context.port.request("passbolt.users.create", userDto);
