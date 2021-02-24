@@ -4940,6 +4940,33 @@ h6 .input.toggle-switch {
   height: 72px;
   border-radius: 50%;
 }
+.announcement {
+  margin: 0;
+  top: 0;
+  position: absolute;
+  height: 2em;
+  padding-top: 0.425em;
+  font-size: 0.85em;
+  text-align: center;
+  background: #FEF0BF;
+  color: #000;
+  width: 100%;
+}
+.announcement a {
+  color: #000;
+  display: inline-block;
+  margin-left: 0.5em;
+  border-bottom-color: #666;
+}
+.announcement .announcement-close {
+  float: right;
+  border: 0;
+  margin-right: 0.5em;
+  margin-top: 0.15em;
+}
+.announcement + #container.page {
+  top: 2em;
+}
 /*
  * Breadcrumbs
  */

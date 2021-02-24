@@ -6247,11 +6247,15 @@ input[type="search"]::-webkit-search-cancel-button {
 }
 .announcement a {
   color: #000;
+  display: inline-block;
+  margin-left: 0.5em;
+  border-bottom-color: #444442;
 }
 .announcement .announcement-close {
   float: right;
   border: 0;
   margin-right: 0.5em;
+  margin-top: 0.15em;
 }
 .announcement + #container.page {
   top: 2em;
