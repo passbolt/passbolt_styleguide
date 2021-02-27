@@ -288,11 +288,8 @@ class ExtApp extends Component {
    * Get the list of roles from local storage and set it in the state
    */
   async getRoles() {
-    const storageData = await this.props.storage.local.get(["roles"]);
-    if (storageData.roles && storageData.roles.length) {
-      const roles = storageData.roles;
-      this.setState({roles});
-    }
+    const roles = await this.props.port.request("passbolt.role.get-all");
+    this.setState({roles});
   }
 
   /**
@@ -300,10 +297,12 @@ class ExtApp extends Component {
    * Using ResourceTypesSettings
    */
   async getResourceTypes() {
-    const storageData = await this.props.storage.local.get(["resourceTypes"]);
     let resourceTypes = [];
-    if (storageData.resourceTypes && storageData.resourceTypes.length) {
-      resourceTypes = storageData.resourceTypes;
+    try {
+      resourceTypes = await this.props.port.request("passbolt.resource-type.get-all");
+    } catch (error) {
+      // @deprecated Catching this error will be removed with v4. Expected error with API < v3.0
+      console.error(error);
     }
     const resourceTypesSettings = new ResourceTypesSettings(this.state.siteSettings, resourceTypes);
     this.setState({resourceTypesSettings});
