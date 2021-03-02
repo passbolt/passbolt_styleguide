@@ -113,3 +113,24 @@ in your project you should also have a grunt task to manage the copy/pasting in 
 ```
 grunt styleguide-update
 ```
+
+How to use Storybook?
+=============================
+
+We try to refer all the styleguide components in Storybook. This way you can play with every single component in
+an isolated way.
+
+Besides, we develop any new component by first testing it against Storybook and hence avoiding
+the whole application reload.
+
+To run Storybook, you just need to run the following command:
+
+```
+npm run storybook
+```
+
+Building the related static website is possible as well using the following command:
+
+```
+npm run build-storybook
+```
