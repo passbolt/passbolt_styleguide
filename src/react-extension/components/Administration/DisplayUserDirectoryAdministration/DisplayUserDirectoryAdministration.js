@@ -573,12 +573,20 @@ class DisplayUserDirectoryAdministration extends React.Component {
     const sync_groups_update = this.state.updateGroups;
     const enabled = this.state.userDirectoryToggle;
 
-    const use_email_prefix_suffix = this.state.useEmailPrefix;
-    let email_prefix = null;
-    let email_suffix = null;
-    if (use_email_prefix_suffix) {
-      email_prefix = this.state.emailPrefix;
-      email_suffix = this.state.emailSuffix;
+    let group_object_class = "";
+    let user_object_class = "";
+    let use_email_prefix_suffix = false;
+    let email_prefix = "";
+    let email_suffix = "";
+    if (directory_type == "openldap") {
+      group_object_class = this.state.groupObjectClass;
+      user_object_class = this.state.userObjectClass;
+      use_email_prefix_suffix = this.state.useEmailPrefix;
+
+      if (use_email_prefix_suffix) {
+        email_prefix = this.state.emailPrefix;
+        email_suffix = this.state.emailSuffix;
+      }
     }
 
     return {
@@ -592,6 +600,8 @@ class DisplayUserDirectoryAdministration extends React.Component {
       base_dn,
       group_path,
       user_path,
+      group_object_class,
+      user_object_class,
       default_user,
       default_group_admin_user,
       groups_parent_group,
