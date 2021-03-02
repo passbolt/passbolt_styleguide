@@ -6079,7 +6079,7 @@ h6 .input.toggle-switch {
 }
 .security-token {
   font-size: 1em;
-  padding: 0.375em 1em;
+  padding: 0.375em 0;
   text-align: center;
   display: inline-block;
   width: 4em;

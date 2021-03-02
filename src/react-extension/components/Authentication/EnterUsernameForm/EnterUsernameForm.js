@@ -298,7 +298,10 @@ class EnterUsernameForm extends Component {
           </div>
           }
           <div className="form-actions">
-            <FormSubmitButton disabled={this.hasAllInputDisabled()} big={true} processing={this.state.processing} value="Next"/>
+            <FormSubmitButton
+              disabled={this.hasAllInputDisabled()} big={true} processing={this.state.processing} fullWidth={true}
+              value="Next"
+            />
           </div>
         </form>
       </div>
