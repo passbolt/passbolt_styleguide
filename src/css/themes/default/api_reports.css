@@ -9557,6 +9557,170 @@ iframe.cachette {
 .page.settings .key-export .input.textarea.gpgkey textarea.fluid.code {
   height: 27em;
 }
+.page.settings .profile-passphrase .password-management-bg {
+  background: transparent url('../../../img/illustrations/password_management1_850.png') center center no-repeat;
+  background-size: auto 100%;
+  height: 16rem;
+}
+.page.settings .profile-passphrase .input.checkbox {
+  margin-bottom: 1em;
+}
+.page.settings .profile-passphrase .passphrase-help {
+  margin-top: 2em;
+  padding: 1.5em;
+  background-color: #daecf9;
+}
+.page.settings .profile-passphrase .passphrase-help h3 {
+  margin: 0;
+  border-bottom: none;
+}
+.page.settings .profile-passphrase .password {
+  /*
+     * For IE 6/7 only
+     * Include this rule to trigger hasLayout and contain floats.
+     */
+  /*
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
+  /*
+     * For IE 6/7 only
+     * Include this rule to trigger hasLayout and contain floats.
+     */
+  zoom: 1;
+  /*
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
+}
+.page.settings .profile-passphrase .password:before,
+.page.settings .profile-passphrase .password:after {
+  content: "";
+  display: table;
+}
+.page.settings .profile-passphrase .password:after {
+  clear: both;
+}
+.page.settings .profile-passphrase .password:before,
+.page.settings .profile-passphrase .password:after {
+  content: "";
+  display: table;
+}
+.page.settings .profile-passphrase .password:after {
+  clear: both;
+}
+.page.settings .profile-passphrase .password input {
+  width: calc(100% - 20rem);
+}
+.page.settings .profile-passphrase .password.password-only input {
+  width: calc(100% - 16.5rem);
+  float: none;
+}
+.page.settings .profile-passphrase .password .password-view {
+  width: 2em;
+  height: 1.5em;
+  padding: 0.44rem 0.8rem 0.5rem 0.9rem;
+}
+.page.settings .profile-passphrase .password-complexity .progress {
+  width: calc(100% - 16.6rem);
+}
+.page.settings .profile-passphrase .password-hints {
+  margin: 0.5em 0 1em 0;
+}
+.page.settings .profile-passphrase .password-hints li {
+  font-size: 1rem;
+  line-height: 1.5rem;
+}
+.page.settings .profile-choose-security-token .input-security-token {
+  /*
+     * For IE 6/7 only
+     * Include this rule to trigger hasLayout and contain floats.
+     */
+  /*
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
+  /*
+     * For IE 6/7 only
+     * Include this rule to trigger hasLayout and contain floats.
+     */
+  zoom: 1;
+  /*
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
+  margin: 1em 0 1.5em 0;
+}
+.page.settings .profile-choose-security-token .input-security-token:before,
+.page.settings .profile-choose-security-token .input-security-token:after {
+  content: "";
+  display: table;
+}
+.page.settings .profile-choose-security-token .input-security-token:after {
+  clear: both;
+}
+.page.settings .profile-choose-security-token .input-security-token:before,
+.page.settings .profile-choose-security-token .input-security-token:after {
+  content: "";
+  display: table;
+}
+.page.settings .profile-choose-security-token .input-security-token:after {
+  clear: both;
+}
+.page.settings .profile-choose-security-token .input-security-token label {
+  margin-bottom: 0.5em;
+}
+.page.settings .profile-choose-security-token .input-security-token .input.text {
+  -webkit-border-radius: 0.214em;
+  -moz-border-radius: 0.214em;
+  border-radius: 0.214em;
+  font-size: 2rem;
+  max-width: 5rem;
+  float: left;
+  text-align: center;
+  margin-right: 1em;
+}
+.page.settings .profile-choose-security-token .input-security-token .circle-picker {
+  float: left;
+}
+.page.settings .profile-choose-security-token .input-security-token .randomize-button-wrapper {
+  float: left;
+  text-align: center;
+  clear: both;
+  cursor: pointer;
+}
+.page.settings .profile-choose-security-token .input-security-token .svg-icon svg {
+  height: 0.85em;
+  width: 0.85em;
+}
 /* hide icons if there is no space */
 @media all and (max-width: 950px) {
   .page.settings .profile-detailed-information .avatar {

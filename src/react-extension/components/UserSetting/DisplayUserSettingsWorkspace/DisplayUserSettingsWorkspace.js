@@ -28,6 +28,9 @@ import DisplayUserSettingsWorkspaceActions
   from "../DisplayUserSettingWorkspaceActions/DisplayUserSettingWorkspaceActions";
 import DisplayUserGpgInformation from "../DisplayUserGpgInformation/DisplayUserGpgInformation";
 import SearchBar from "../../../../react/components/Common/Navigation/Search/SearchBar";
+import DisplayUserPassphrase from "../ChangeUserPassphrase/ChangeUserPassphrase";
+import UserSettingsContextProvider from "../../../contexts/UserSettingsContext";
+import DisplayUserChooseSecurityToken from "../ChangeUserSecurityToken/ChangeUserSecurityToken";
 
 /**
  * This component is a container for all the user settings workspace features
@@ -63,11 +66,15 @@ class DisplayUserSettingsWorkspace extends React.Component {
           </div>
           <div className="panel middle">
             <DisplayUserSettingsWorkspaceBreadcrumb/>
-            <Route path={`${path}/profile`} component={DisplayUserProfile}></Route>
-            {this.canIUseThemeCapability &&
-            <Route path={`${path}/theme`} component={DisplayUserTheme}></Route>
-            }
-            <Route path={`${path}/keys`} component={DisplayUserGpgInformation}></Route>
+            <UserSettingsContextProvider>
+              <Route path={`${path}/profile`} component={DisplayUserProfile}/>
+              <Route path={`${path}/passphrase`} component={DisplayUserPassphrase}/>
+              <Route path={`${path}/security-token`} component={DisplayUserChooseSecurityToken}></Route>
+              {this.canIUseThemeCapability &&
+              <Route path={`${path}/theme`} component={DisplayUserTheme}/>
+              }
+              <Route path={`${path}/keys`} component={DisplayUserGpgInformation}/>
+            </UserSettingsContextProvider>
           </div>
         </div>
       </div>

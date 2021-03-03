@@ -32,6 +32,10 @@ export const NavigationContext = React.createContext({
   // User settings
   onGoToUserSettingsProfileRequested: () => {
   }, // Whenever the user wants to navigate to the users settings workspace profile section.
+  onGoToUserSettingsPassphraseRequested: () => {
+  }, // Whenever the user wants to navigate to the users settings workspace passphrase section.
+  onGoToUserSettingsSecurityTokenRequested: () => {
+  }, // Whenever the user wants to navigate to the users settings workspace security token section.
   onGoToUserSettingsThemeRequested: () => {
   }, // Whenever the user wants to navigate to the users settings workspace theme section.
   onGoToUserSettingsMfaRequested: () => {
@@ -66,6 +70,8 @@ class NavigationContextProvider extends React.Component {
       onGoToUsersRequested: this.onGoToUsersRequested.bind(this), // Whenever the user wants to navigate to the users workspace
       // User settings
       onGoToUserSettingsProfileRequested: this.onGoToUserSettingsProfileRequested.bind(this), // Whenever the user wants to navigate to the users settings workspace profile section.
+      onGoToUserSettingsPassphraseRequested: this.onGoToUserSettingsPassphraseRequested.bind(this), // Whenever the user wants to navigate to the users settings workspace pasphrase section.
+      onGoToUserSettingsSecurityTokenRequested: this.onGoToUserSettingsSecurityTokenRequested.bind(this), // Whenever the user wants to navigate to the users settings workspace security token section.
       onGoToUserSettingsThemeRequested: this.onGoToUserSettingsThemeRequested.bind(this), // Whenever the user wants to navigate to the users settings workspace theme section.
       onGoToUserSettingsMfaRequested: this.onGoToUserSettingsMfaRequested.bind(this), // Whenever the user wants to navigate to the users settings workspace mfa section.
       onGoToUserSettingsKeysRequested: this.onGoToUserSettingsKeysRequested.bind(this), // Whenever the user wants to navigate to the users settings workspace keys section.
@@ -166,6 +172,22 @@ class NavigationContextProvider extends React.Component {
    */
   async onGoToUserSettingsProfileRequested() {
     await this.goTo("browser-extension", "/app/settings/profile");
+  }
+
+  /**
+   * Whenever the user wants to navigate to the users settings workspace passphrase section.
+   * @returns {Promise<void>}
+   */
+  async onGoToUserSettingsPassphraseRequested() {
+    await this.goTo("browser-extension", "/app/settings/passphrase");
+  }
+
+  /**
+   * Whenever the user wants to navigate to the users settings workspace security token section.
+   * @returns {Promise<void>}
+   */
+  async onGoToUserSettingsSecurityTokenRequested() {
+    await this.goTo("browser-extension", "/app/settings/security-token");
   }
 
   /**

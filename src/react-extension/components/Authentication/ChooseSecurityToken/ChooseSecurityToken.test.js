@@ -4,6 +4,7 @@
 import {defaultAppContext, defaultProps} from "./ChooseSecurityToken.test.data";
 import ErrorDialog from "../../Dialog/ErrorDialog/ErrorDialog";
 import ChooseSecurityTokenPage from "./ChooseSecurityToken.test.page";
+import "../../../test/lib/crypto/cryptoGetRandomvalues";
 
 
 beforeEach(() => {
@@ -34,6 +35,8 @@ describe("Choose security token", () => {
   });
 
   it('As AN I should be able to randomize the code of my security token', async() => {
+    const colorToPick = '#009688';
+    await page.selectColor(colorToPick);
     await page.randomize();
     expect(page.code.length).toBe(3);
   });
