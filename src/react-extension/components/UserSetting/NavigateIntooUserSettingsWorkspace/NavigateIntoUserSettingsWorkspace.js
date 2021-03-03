@@ -57,6 +57,30 @@ class NavigateIntoUserSettingsWorkspace extends React.Component {
               </div>
             </div>
           </li>
+          <li>
+            <div
+              className={`row ${isSelected('passphrase') ? 'selected' : ''}`}>
+              <div className="main-cell-wrapper">
+                <div className="main-cell">
+                  <a onClick={this.props.navigationContext.onGoToUserSettingsPassphraseRequested}>
+                    <span>Passphrase</span>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </li>
+          <li>
+            <div
+              className={`row ${isSelected('security-token') ? 'selected' : ''}`}>
+              <div className="main-cell-wrapper">
+                <div className="main-cell">
+                  <a onClick={this.props.navigationContext.onGoToUserSettingsSecurityTokenRequested}>
+                    <span>Security Token</span>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </li>
           {this.canIUseThemeCapability &&
           <li>
             <div

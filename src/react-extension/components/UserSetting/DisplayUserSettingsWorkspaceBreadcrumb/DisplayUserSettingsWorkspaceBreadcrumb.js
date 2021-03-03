@@ -51,6 +51,8 @@ class DisplayUserSettingsWorkspaceBreadcrumb extends Component {
     const matchPathSuffix = pathSuffix => this.props.location.pathname.endsWith(pathSuffix);
     const names = {
       profile: "Profile",
+      passphrase: "Passphrase",
+      'security-token': "Security Token",
       theme: "Theme",
       mfa: "Multi Factor Authentication",
       keys: "Keys inspector"

@@ -9135,6 +9135,176 @@ table.table-info.horizontal tbody tr:hover {
 .usercard-detailed-col-2 .content-wrapper .content .name .creator {
   color: #333;
 }
+.enter-passphrase {
+  /** Passphrase input with security token **/
+}
+.enter-passphrase .password {
+  /*
+     * For IE 6/7 only
+     * Include this rule to trigger hasLayout and contain floats.
+     */
+  /*
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
+  /*
+     * For IE 6/7 only
+     * Include this rule to trigger hasLayout and contain floats.
+     */
+  zoom: 1;
+  /*
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
+  /* toggle button to preview passphrase */
+}
+.enter-passphrase .password:before,
+.enter-passphrase .password:after {
+  content: "";
+  display: table;
+}
+.enter-passphrase .password:after {
+  clear: both;
+}
+.enter-passphrase .password:before,
+.enter-passphrase .password:after {
+  content: "";
+  display: table;
+}
+.enter-passphrase .password:after {
+  clear: both;
+}
+.enter-passphrase .password input[type=text],
+.enter-passphrase .password input[type=password] {
+  float: left;
+  box-sizing: border-box;
+  width: calc(100% - 4.1rem);
+}
+.enter-passphrase .password .password-view {
+  width: 3em;
+  float: left;
+  margin-top: 0;
+  margin-right: 0;
+  margin-left: -0.1rem;
+  height: 2.714em;
+  border-radius: 0;
+  padding: 0.6rem 0.8rem 0.6rem 1rem;
+  background: #FFF;
+  border-left: 0;
+  border-top: 1px solid #BBB;
+}
+.enter-passphrase .password .password-view.selected {
+  background: #EEE;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+.enter-passphrase .password .password-view svg {
+  margin-top: 3px;
+}
+.enter-passphrase .password input[type=text]:focus ~ .password-view,
+.enter-passphrase .password input[type=password]:focus ~ .password-view {
+  border: 1px solid #2894DF;
+  border-left: 0;
+}
+.enter-passphrase .password.with-token input[type=text],
+.enter-passphrase .password.with-token input[type=password] {
+  width: calc(100% - 11rem);
+}
+.enter-passphrase .password.with-token .password-view {
+  margin-right: 1rem;
+}
+.enter-passphrase .password.with-token .security-token {
+  width: 4em;
+  float: left;
+  margin-top: 0;
+  margin-right: 0;
+  border-radius: 0;
+  padding: 1.05rem 0;
+  text-align: center;
+  background: #FFF;
+  border: 1px solid #BBB;
+}
+.password-complexity .complexity-text {
+  float: right;
+  clear: right;
+  width: 30%;
+  font-size: 11px;
+  text-align: left;
+  padding-left: 0;
+}
+.password-complexity.not_available .complexity-text {
+  color: #DDD;
+}
+.password-complexity .progress {
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid #DDD;
+  height: 10px;
+  display: block;
+  clear: both;
+  margin: 0.25em 0 0.5em 0;
+  float: left;
+}
+.password-complexity .progress-bar {
+  background: #000;
+  width: 0;
+  height: 6px;
+  display: block;
+  float: left;
+  margin: 1px;
+}
+.password-complexity .progress-bar.very-weak {
+  background: #000;
+  width: 5%;
+}
+.password-complexity .progress-bar.weak {
+  background: #D40101;
+  width: 10%;
+}
+.password-complexity .progress-bar.fair {
+  background: #FFBD2E;
+  width: 60%;
+}
+.password-complexity .progress-bar.strong {
+  background: #66CC00;
+  width: 80%;
+}
+.password-complexity .progress-bar.very-strong {
+  background: #009900;
+  width: 99.5%;
+}
+.password-hints {
+  margin: 0.5em 0 1em 0;
+}
+.password-hints li {
+  font-size: 1.5rem;
+  line-height: 2.4rem;
+}
+.password-hints li:before {
+  content: "\25CF";
+  /* unicode character ● */
+  color: #DDD;
+  padding-right: 0.5em;
+}
+.password-hints li.success:before {
+  color: #009900;
+}
+.password-hints li.error:before {
+  color: #D40101;
+}
 /* password share tab */
 .dialog .share-tab {
   /* message */
@@ -9910,6 +10080,170 @@ table.table-info.horizontal tbody tr:hover {
 }
 .page.settings .key-export .input.textarea.gpgkey textarea.fluid.code {
   height: 27em;
+}
+.page.settings .profile-passphrase .password-management-bg {
+  background: transparent url('../../../img/illustrations/password_management1_850.png') center center no-repeat;
+  background-size: auto 100%;
+  height: 16rem;
+}
+.page.settings .profile-passphrase .input.checkbox {
+  margin-bottom: 1em;
+}
+.page.settings .profile-passphrase .passphrase-help {
+  margin-top: 2em;
+  padding: 1.5em;
+  background-color: #daecf9;
+}
+.page.settings .profile-passphrase .passphrase-help h3 {
+  margin: 0;
+  border-bottom: none;
+}
+.page.settings .profile-passphrase .password {
+  /*
+     * For IE 6/7 only
+     * Include this rule to trigger hasLayout and contain floats.
+     */
+  /*
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
+  /*
+     * For IE 6/7 only
+     * Include this rule to trigger hasLayout and contain floats.
+     */
+  zoom: 1;
+  /*
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
+}
+.page.settings .profile-passphrase .password:before,
+.page.settings .profile-passphrase .password:after {
+  content: "";
+  display: table;
+}
+.page.settings .profile-passphrase .password:after {
+  clear: both;
+}
+.page.settings .profile-passphrase .password:before,
+.page.settings .profile-passphrase .password:after {
+  content: "";
+  display: table;
+}
+.page.settings .profile-passphrase .password:after {
+  clear: both;
+}
+.page.settings .profile-passphrase .password input {
+  width: calc(100% - 20rem);
+}
+.page.settings .profile-passphrase .password.password-only input {
+  width: calc(100% - 16.5rem);
+  float: none;
+}
+.page.settings .profile-passphrase .password .password-view {
+  width: 2em;
+  height: 1.5em;
+  padding: 0.44rem 0.8rem 0.5rem 0.9rem;
+}
+.page.settings .profile-passphrase .password-complexity .progress {
+  width: calc(100% - 16.6rem);
+}
+.page.settings .profile-passphrase .password-hints {
+  margin: 0.5em 0 1em 0;
+}
+.page.settings .profile-passphrase .password-hints li {
+  font-size: 1rem;
+  line-height: 1.5rem;
+}
+.page.settings .profile-choose-security-token .input-security-token {
+  /*
+     * For IE 6/7 only
+     * Include this rule to trigger hasLayout and contain floats.
+     */
+  /*
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
+  /*
+     * For IE 6/7 only
+     * Include this rule to trigger hasLayout and contain floats.
+     */
+  zoom: 1;
+  /*
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
+  margin: 1em 0 1.5em 0;
+}
+.page.settings .profile-choose-security-token .input-security-token:before,
+.page.settings .profile-choose-security-token .input-security-token:after {
+  content: "";
+  display: table;
+}
+.page.settings .profile-choose-security-token .input-security-token:after {
+  clear: both;
+}
+.page.settings .profile-choose-security-token .input-security-token:before,
+.page.settings .profile-choose-security-token .input-security-token:after {
+  content: "";
+  display: table;
+}
+.page.settings .profile-choose-security-token .input-security-token:after {
+  clear: both;
+}
+.page.settings .profile-choose-security-token .input-security-token label {
+  margin-bottom: 0.5em;
+}
+.page.settings .profile-choose-security-token .input-security-token .input.text {
+  -webkit-border-radius: 0.214em;
+  -moz-border-radius: 0.214em;
+  border-radius: 0.214em;
+  font-size: 2rem;
+  max-width: 5rem;
+  float: left;
+  text-align: center;
+  margin-right: 1em;
+}
+.page.settings .profile-choose-security-token .input-security-token .circle-picker {
+  float: left;
+}
+.page.settings .profile-choose-security-token .input-security-token .randomize-button-wrapper {
+  float: left;
+  text-align: center;
+  clear: both;
+  cursor: pointer;
+}
+.page.settings .profile-choose-security-token .input-security-token .svg-icon svg {
+  height: 0.85em;
+  width: 0.85em;
 }
 /* hide icons if there is no space */
 @media all and (max-width: 950px) {

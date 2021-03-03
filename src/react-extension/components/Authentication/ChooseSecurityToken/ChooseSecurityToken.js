@@ -18,6 +18,7 @@ import {AuthenticationContext} from "../../../contexts/AuthenticationContext";
 import ErrorDialog from "../../Dialog/ErrorDialog/ErrorDialog";
 import {withDialog} from "../../../../react/contexts/Common/DialogContext";
 import PropTypes from "prop-types";
+import SecretComplexity from "../../../lib/Secret/SecretComplexity";
 
 class ChooseSecurityToken extends Component {
   /**
@@ -225,12 +226,7 @@ class ChooseSecurityToken extends Component {
    * Randomize a token code
    */
   async randomizeCode() {
-    let code = '';
-    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    const charactersLength = characters.length;
-    for (let i = 0; i < 3; i++) {
-      code += characters.charAt(Math.floor(Math.random() * charactersLength));
-    }
+    const code = SecretComplexity.generate(3, ["uppercase"]);
     await this.selectCode(code);
     if (this.state.hasBeenValidated) {
       await this.validate();
@@ -243,11 +239,12 @@ class ChooseSecurityToken extends Component {
   async randomizeColor() {
     let color;
     do {
+      const number = parseInt(SecretComplexity.generate(3, ["digit"])) % this.defaultColors.length;
       color = {
-        hex: this.defaultColors[Math.floor(Math.random() * this.defaultColors.length)]
+        hex: this.defaultColors[number]
       };
-      await this.selectColor(color);
-    } while (color.hex !== this.state.background);
+    } while (color.hex === this.state.background);
+    await this.selectColor(color);
   }
 
   /**
