@@ -9560,9 +9560,9 @@ iframe.cachette {
   height: 27em;
 }
 .page.settings .profile-passphrase .password-management-bg {
-  background: transparent url('../../../img/illustrations/password_management1_850.png') center center no-repeat;
-  background-size: auto 100%;
-  height: 16rem;
+  background: transparent url('../../../img/illustrations/passphrase_intro.png') center center no-repeat;
+  background-size: contain;
+  height: 16em;
 }
 .page.settings .profile-passphrase .input.checkbox {
   margin-bottom: 1em;
@@ -9626,11 +9626,10 @@ iframe.cachette {
   clear: both;
 }
 .page.settings .profile-passphrase .password input {
-  width: calc(100% - 20rem);
+  width: calc(100% - 16rem);
 }
-.page.settings .profile-passphrase .password.password-only input {
-  width: calc(100% - 16.5rem);
-  float: none;
+.page.settings .profile-passphrase .password .input .message.error {
+  clear: both;
 }
 .page.settings .profile-passphrase .password .password-view {
   width: 2em;
@@ -9638,7 +9637,7 @@ iframe.cachette {
   padding: 0.44rem 0.8rem 0.5rem 0.9rem;
 }
 .page.settings .profile-passphrase .password-complexity .progress {
-  width: calc(100% - 16.6rem);
+  width: calc(100% - 12.6rem);
 }
 .page.settings .profile-passphrase .password-hints {
   margin: 0.5em 0 1em 0;

@@ -24,10 +24,10 @@ import {waitFor} from "@testing-library/react";
 import {UserSettingsContextState} from "../../../contexts/UserSettingsContext";
 
 jest.mock("../../../../react/components/Common/Loading/LoadingSpinner/LoadingSpinner", () => () => <span className="loading"></span>);
-jest.mock("../DisplayChangePassphraseIntroduction/DisplayChangePassphraseIntroduction", () => () => <span className="introduction"></span>);
-jest.mock("../ConfirmPassphrase/ConfirmPassphrase", () => () => <span className="confirm"></span>);
-jest.mock("../EnterNewPassphrase/EnterNewPassphrase", () => () => <span className="update"></span>);
-jest.mock("../DownloadRecoveryKit/DownloadRecoveryKit", () => () => <span className="download"></span>);
+jest.mock("./DisplayChangePassphraseIntroduction", () => () => <span className="introduction"></span>);
+jest.mock("./ConfirmPassphrase", () => () => <span className="confirm"></span>);
+jest.mock("./EnterNewPassphrase", () => () => <span className="update"></span>);
+jest.mock("./DownloadRecoveryKit", () => () => <span className="download"></span>);
 
 
 beforeEach(() => {

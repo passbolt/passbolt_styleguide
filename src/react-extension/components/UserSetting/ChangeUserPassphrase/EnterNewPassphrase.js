@@ -50,7 +50,7 @@ class EnterNewPassphrase extends React.Component {
         id: '',
         label: ''
       },
-      isObfuscated: true, // True if the paasphrase should not be visible
+      isObfuscated: true, // True if the passphrase should not be visible
       errors: {}, // The list of errors
       actions: {
         processing: false // True if one's processing passphrase
