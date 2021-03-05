@@ -19,11 +19,12 @@ import {withUserSettings} from "../../../contexts/UserSettingsContext";
 import FormSubmitButton from "../../../../react/components/Common/Inputs/FormSubmitButton/FormSubmitButton";
 import ErrorDialog from "../../Dialog/ErrorDialog/ErrorDialog";
 import {withDialog} from "../../../../react/contexts/Common/DialogContext";
+import Icon from "../../../../react/components/Common/Icons/Icon";
 
 /**
  * This component displays the user confirm passphrase information
  */
-class DisplayUserConfirmPassphrase extends React.Component {
+class ConfirmPassphrase extends React.Component {
   /**
    * Default constructor
    * @param props Component props
@@ -43,6 +44,7 @@ class DisplayUserConfirmPassphrase extends React.Component {
       processing: false, // component is processing or not
       passphrase: "", // The passphrase input
       passphraseError: null, // The passphrase error input
+      isObfuscated: true, // True if the passphrase should not be visible
     };
   }
 
@@ -51,6 +53,7 @@ class DisplayUserConfirmPassphrase extends React.Component {
    */
   bindCallbacks() {
     this.handleInputChange = this.handleInputChange.bind(this);
+    this.handleToggleObfuscate = this.handleToggleObfuscate.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleCancel = this.handleCancel.bind(this);
   }
@@ -79,6 +82,20 @@ class DisplayUserConfirmPassphrase extends React.Component {
     const value = target.value;
     const name = target.name;
     this.setState({[name]: value});
+  }
+
+  /**
+   * Whenever one wants to toggle the obfusctated mode
+   */
+  handleToggleObfuscate() {
+    this.toggleObfuscate();
+  }
+
+  /**
+   * Toggle the obfuscate mode of the passphrase view
+   */
+  toggleObfuscate() {
+    this.setState({isObfuscated: !this.state.isObfuscated});
   }
 
   /**
@@ -126,12 +143,12 @@ class DisplayUserConfirmPassphrase extends React.Component {
 
   /**
    * Is valid passphrase.
-   * Passphrase has to be at least 8 characters long to be valid
+   * Passphrase has to be valid
    * @returns {boolean}
    */
   IsValidPassphrase() {
     const passphrase = this.state.passphrase;
-    if (passphrase.length < 8 || passphrase.trim() === '') {
+    if (passphrase.trim() === '') {
       return false;
     }
     return true;
@@ -145,6 +162,13 @@ class DisplayUserConfirmPassphrase extends React.Component {
     return this.state.processing;
   }
 
+  /**
+   * Returns true if the component must be in a disabled mode
+   */
+  mustBeDisabled() {
+    return this.hasAllInputDisabled() || !this.IsValidPassphrase();
+  }
+
   render() {
     return (
       <div className="grid grid-responsive-12 profile-passphrase">
@@ -153,11 +177,18 @@ class DisplayUserConfirmPassphrase extends React.Component {
             <form className="enter-passphrase" onSubmit={this.handleSubmit}>
               <h3>Please enter your passphrase to continue</h3>
               <div className="form-content">
-                <div className={`input text password password-only required ${this.state.passphraseError ? "error" : ""}`}>
+                <div className={`input text password required ${this.state.passphraseError ? "error" : ""}`}>
                   <label htmlFor="passphrase-input">Passphrase</label>
-                  <input id="passphrase-input" type="password" name="passphrase" placeholder="Passphrase" required="required"
+                  <input id="passphrase-input" type={`${this.state.isObfuscated ? "password" : "text"}`} name="passphrase" placeholder="Passphrase" required="required"
                     ref={this.passphraseInputRef} className={`required ${this.state.passphraseError ? "error" : ""}`} autoFocus={true}
                     value={this.state.passphrase} onChange={this.handleInputChange} disabled={this.hasAllInputDisabled()} />
+                  <a
+                    className={`password-view button-icon button button-toggle ${this.state.isObfuscated ? "" : "selected"}`}
+                    role="button"
+                    onClick={this.handleToggleObfuscate}>
+                    <Icon name="eye-open"/>
+                    <span className="visually-hidden">view</span>
+                  </a>
                   {this.state.passphraseError &&
                   <div className="input text">
                     <div className="message error">{this.state.passphraseError}</div>
@@ -169,7 +200,7 @@ class DisplayUserConfirmPassphrase extends React.Component {
                 <button className="button big" type="button" disabled={this.hasAllInputDisabled()} onClick={this.handleCancel}>
                   Cancel
                 </button>
-                <FormSubmitButton big={true} disabled={this.hasAllInputDisabled() || !this.IsValidPassphrase()} processing={this.state.processing} value="Verify"/>
+                <FormSubmitButton big={true} disabled={this.mustBeDisabled()} processing={this.state.processing} value="Verify"/>
               </div>
             </form>
           </div>
@@ -186,9 +217,9 @@ class DisplayUserConfirmPassphrase extends React.Component {
   }
 }
 
-DisplayUserConfirmPassphrase.propTypes = {
+ConfirmPassphrase.propTypes = {
   userSettingsContext: PropTypes.object, // The user settings context
   dialogContext: PropTypes.any, // The dialog context
 };
 
-export default withDialog(withUserSettings(DisplayUserConfirmPassphrase));
+export default withDialog(withUserSettings(ConfirmPassphrase));

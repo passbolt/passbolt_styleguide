@@ -20,7 +20,7 @@ import {withUserSettings} from "../../../contexts/UserSettingsContext";
 /**
  * This component displays the user profile information
  */
-class DisplayUserDownloadRecoveryKit extends React.Component {
+class DownloadRecoveryKit extends React.Component {
   /**
    * Default constructor
    * @param props Component props
@@ -70,7 +70,7 @@ class DisplayUserDownloadRecoveryKit extends React.Component {
                 <p>Your passphrase has been changed. Make sure you keep a backup of your secret key encrypted with this new passphrase.</p>
                 <p>Keep this backup in a safe place, you will need it in case of emergency.</p>
                 <p>
-                  <a className="button primary" role="button" onClick={this.handleDownloadBackup}>Download backup</a>
+                  <a className="button big primary" role="button" onClick={this.handleDownloadBackup}>Download backup</a>
                 </p>
               </div>
             </div>
@@ -81,8 +81,8 @@ class DisplayUserDownloadRecoveryKit extends React.Component {
   }
 }
 
-DisplayUserDownloadRecoveryKit.propTypes = {
+DownloadRecoveryKit.propTypes = {
   userSettingsContext: PropTypes.object // The user settings context
 };
 
-export default withUserSettings(DisplayUserDownloadRecoveryKit);
+export default withUserSettings(DownloadRecoveryKit);

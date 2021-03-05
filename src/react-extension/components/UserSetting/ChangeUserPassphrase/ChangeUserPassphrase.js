@@ -16,11 +16,11 @@
 import React, {Component} from "react";
 import PropTypes from "prop-types";
 import {UserSettingsContextState, withUserSettings} from "../../../contexts/UserSettingsContext";
-import DisplayChangePassphraseIntroduction from "../DisplayChangePassphraseIntroduction/DisplayChangePassphraseIntroduction";
+import DisplayChangePassphraseIntroduction from "./DisplayChangePassphraseIntroduction";
 import LoadingSpinner from "../../../../react/components/Common/Loading/LoadingSpinner/LoadingSpinner";
-import ConfirmPassphrase from "../ConfirmPassphrase/ConfirmPassphrase";
-import DownloadRecoveryKit from "../DownloadRecoveryKit/DownloadRecoveryKit";
-import EnterNewPassphrase from "../EnterNewPassphrase/EnterNewPassphrase";
+import ConfirmPassphrase from "./ConfirmPassphrase";
+import DownloadRecoveryKit from "./DownloadRecoveryKit";
+import EnterNewPassphrase from "./EnterNewPassphrase";
 
 /**
  * The component orchestrates the setup authentication process
