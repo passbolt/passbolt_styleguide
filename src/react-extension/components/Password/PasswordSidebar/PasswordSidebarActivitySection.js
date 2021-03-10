@@ -56,8 +56,12 @@ class PasswordSidebarActivitySection extends React.Component {
    * @param prevProps
    */
   async componentDidUpdate(prevProps) {
-    await this.handleResourceChange(prevProps.resourceWorkspaceContext.details.resource);
-    await this.handleResourceActivitiesRefresh(prevProps.resourceWorkspaceContext.refresh.activities);
+    if (prevProps.resourceWorkspaceContext.details) {
+      await this.handleResourceChange(prevProps.resourceWorkspaceContext.details.resource);
+    }
+    if (prevProps.resourceWorkspaceContext.refresh) {
+      await this.handleResourceActivitiesRefresh(prevProps.resourceWorkspaceContext.refresh.activities);
+    }
   }
 
   /**

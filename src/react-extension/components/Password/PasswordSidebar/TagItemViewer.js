@@ -62,7 +62,6 @@ class TagItemViewer extends React.Component {
    */
   render() {
     const isLoading = this.isLoading();
-
     return (
       <div>
         {isLoading &&
