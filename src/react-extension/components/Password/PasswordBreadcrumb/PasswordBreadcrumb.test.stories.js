@@ -1,8 +1,8 @@
-import PasswordBreadcrumb from "../../../react-extension/components/Password/PasswordBreadcrumb/PasswordBreadcrumb";
+import PasswordBreadcrumb from "./PasswordBreadcrumb";
 import React from "react";
-import {ResourceWorkspaceFilterTypes} from "../../../react-extension/contexts/ResourceWorkspaceContext";
+import {ResourceWorkspaceFilterTypes} from "../../../contexts/ResourceWorkspaceContext";
 import {Route, MemoryRouter} from "react-router-dom";
-import "../../../css/themes/midgar/ext_app.css"
+import "../../../../css/themes/midgar/ext_app.css";
 
 
 export default {
@@ -11,9 +11,9 @@ export default {
 };
 
 
-const Template = (args) =>
+const Template = args =>
   <MemoryRouter initialEntries={['/']}>
-    <Route component={(routerProps) => <PasswordBreadcrumb {...args} {...routerProps}/>}></Route>
+    <Route component={routerProps => <PasswordBreadcrumb {...args} {...routerProps}/>}></Route>
   </MemoryRouter>;
 
 
