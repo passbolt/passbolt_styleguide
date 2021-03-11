@@ -17,7 +17,7 @@ import {withAppContext} from "../../contexts/AppContext";
 import {withNavigationContext} from "../../contexts/NavigationContext";
 import UserAvatar from "../../../react/components/Common/Avatar/UserAvatar";
 import Icon from "../../../react/components/Common/Icons/Icon";
-import {withTranslation} from "react-i18next";
+import {Trans, withTranslation} from "react-i18next";
 
 class UserBadgeMenu extends Component {
   /**
@@ -206,7 +206,7 @@ class UserBadgeMenu extends Component {
             <div className="more right-cell">
               <a role="button">
                 <Icon name="caret-down"/>
-                <span>{this.translate("more")}</span>
+                <span><Trans>more</Trans></span>
               </a>
             </div>
           </div>
@@ -215,7 +215,7 @@ class UserBadgeMenu extends Component {
             <li key="profile">
               <div className="row">
                 <a role="button" tabIndex="1" onClick={this.handleProfileClick}>
-                  <span>{this.translate("Profile")}</span>
+                  <span><Trans>Profile</Trans></span>
                 </a>
               </div>
             </li>
@@ -223,7 +223,7 @@ class UserBadgeMenu extends Component {
             <li key="theme">
               <div className="row">
                 <a role="button" tabIndex="2" onClick={this.handleThemeClick}>
-                  <span>{this.translate("Theme")}</span>
+                  <span><Trans>Theme</Trans></span>
                 </a>
               </div>
             </li>
@@ -231,7 +231,7 @@ class UserBadgeMenu extends Component {
             <li key="logout">
               <div className="row">
                 <a role="button" tabIndex="3" onClick={this.handleLogoutClick}>
-                  <span>{this.translate("Sign out")}</span>
+                  <span><Trans>Sign out</Trans></span>
                 </a>
               </div>
             </li>

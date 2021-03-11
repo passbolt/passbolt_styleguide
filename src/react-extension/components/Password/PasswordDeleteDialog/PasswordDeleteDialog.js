@@ -163,12 +163,12 @@ class PasswordDeleteDialog extends Component {
                   Are you sure you want to delete the password <strong>{{resourceName: this.resources[0].name}}</strong>?
                 </Trans>
               </p>
-              <p>{this.translate("Warning: Once the password is deleted, it’ll be removed permanently and will not be recoverable.")}</p>
+              <p><Trans>Warning: Once the password is deleted, it’ll be removed permanently and will not be recoverable.</Trans></p>
             </div>
             }
             {this.hasMultipleResources() &&
             <p>
-              {this.translate("Please confirm you really want to delete the passwords. After clicking ok, the passwords will be deleted permanently.")}
+              <Trans>Please confirm you really want to delete the passwords. After clicking ok, the passwords will be deleted permanently.</Trans>
             </p>
             }
           </div>

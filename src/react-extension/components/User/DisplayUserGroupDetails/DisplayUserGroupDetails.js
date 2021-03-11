@@ -21,7 +21,7 @@ import DisplayUserGroupDetailsInformation
 import GroupAvatar from "../../../../react/components/Common/Avatar/GroupAvatar";
 import DisplayUserGroupDetailsMembers from "../DisplayUserGroupDetailsMembers/DisplayUserGroupDetailsMembers";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
-import {withTranslation} from "react-i18next";
+import {Trans, withTranslation} from "react-i18next";
 
 /**
  * This component displays the details of a users group
@@ -103,10 +103,10 @@ class DisplayUserGroupDetails extends React.Component {
                 <span className="name sidebar-header-title">{this.group.name}</span>
                 <a className="title-link" title={this.translate("Copy the link to this group")} onClick={this.handlePermalinkClick}>
                   <Icon name="link"/>
-                  <span className="visuallyhidden">Copy the link to this group</span>
+                  <span className="visuallyhidden"><Trans>Copy the link to this group</Trans></span>
                 </a>
               </div>
-              <span className="subtitle">{this.translate("Group")}</span>
+              <span className="subtitle"><Trans>Group</Trans></span>
             </h3>
             <a className="dialog-close" onClick={this.handleCloseClick}>
               <Icon name="close"/>

@@ -17,7 +17,7 @@ import AppContext from "../../../../contexts/AppContext";
 import {ResourceWorkspaceFilterTypes, withResourceWorkspace} from "../../../../contexts/ResourceWorkspaceContext";
 import PropTypes from "prop-types";
 import {withRouter} from "react-router-dom";
-import {withTranslation} from "react-i18next";
+import {Trans, withTranslation} from "react-i18next";
 
 /**
  * This component display groups to filter the resources
@@ -135,7 +135,7 @@ class SidebarGroupFilterSection extends React.Component {
                         <Icon name="caret-right"/>
                           }
                         </Fragment>
-                        <span>{this.translate("Filter by groups")}</span>
+                        <span><Trans>Filter by groups</Trans></span>
                       </span>
                     </h3>
                   </div>

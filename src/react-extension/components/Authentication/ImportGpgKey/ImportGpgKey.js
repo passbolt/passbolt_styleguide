@@ -16,7 +16,7 @@ import ErrorDialog from "../../Dialog/ErrorDialog/ErrorDialog";
 import {withDialog} from "../../../../react/contexts/Common/DialogContext";
 import {AuthenticationContext} from "../../../contexts/AuthenticationContext";
 import PropTypes from "prop-types";
-import {withTranslation} from "react-i18next";
+import {Trans, withTranslation} from "react-i18next";
 
 /**
  * This component allows the user to import his Gpg key
@@ -225,7 +225,7 @@ class ImportGpgKey extends Component {
           acceptCharset="utf-8"
           onSubmit={this.handleSubmit}>
           <div className={`input textarea required openpgp-key ${this.hasErrors ? "error" : ""}`}>
-            <label htmlFor="private-key">{this.translate("Private key")}</label>
+            <label htmlFor="private-key"><Trans>Private key</Trans></label>
             <textarea
               name="private-key"
               ref={this.privateKeyInputRef}
@@ -244,7 +244,7 @@ class ImportGpgKey extends Component {
               {this.state.hasBeenValidated &&
               <>
                 {this.state.errors.emptyPrivateKey &&
-                  <div className="empty-private-key error-message">{this.translate("The private key should not be empty.")}</div>
+                  <div className="empty-private-key error-message"><Trans>The private key should not be empty.</Trans></div>
                 }
                 {this.state.errors.invalidPrivateKey &&
                   <div className="invalid-private-key error-message">{this.state.errorMessage}</div>
@@ -259,7 +259,7 @@ class ImportGpgKey extends Component {
               className={`button primary big full-width ${processingClassName}`}
               role="button"
               disabled={this.isProcessing}>
-              {this.translate("Next")}
+              <Trans>Next</Trans>
             </button>
             {this.props.secondaryAction}
           </div>

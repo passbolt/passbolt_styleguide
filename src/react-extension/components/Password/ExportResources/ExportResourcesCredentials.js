@@ -23,7 +23,7 @@ import FormCancelButton from "../../../../react/components/Common/Inputs/FormSub
 import Icon from "../../../../react/components/Common/Icons/Icon";
 import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 import ErrorDialog from "../../Dialog/ErrorDialog/ErrorDialog";
-import {withTranslation} from "react-i18next";
+import {Trans, withTranslation} from "react-i18next";
 
 /**
  * This component is the second step of the export dialog when the file to import is KDB(X) file
@@ -235,7 +235,7 @@ class ExportResourcesCredentials extends Component {
           <div className="form-content">
 
             <div className="input-password-wrapper">
-              <label htmlFor="password">{this.translate("Keepass password")}</label>
+              <label htmlFor="password"><Trans>Keepass password</Trans></label>
               <div className="input text password">
                 <input id="password"
                   type={this.state.showPassword ? "text" : "password"}
@@ -260,14 +260,14 @@ class ExportResourcesCredentials extends Component {
                 <input type="file"
                   ref={this.fileUploaderRef}
                   onChange={this.handleFileSelected}/>
-                <label>{this.translate("Keepass key file (optional)")}</label>
+                <label><Trans>Keepass key file (optional)</Trans></label>
                 <input type="text"
                   placeholder={this.translate("No key file selected")}
                   disabled
                   value={this.selectedFilename}/>
                 <a className={`button primary ${!this.areActionsAllowed ? "disabled" : ""}`}
                   onClick={this.handleSelectFile}>
-                  <Icon name="upload-a"/> {this.translate("Choose a file")}
+                  <Icon name="upload-a"/> <Trans>Choose a file</Trans>
                 </a>
               </div>
             </div>

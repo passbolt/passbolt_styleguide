@@ -18,7 +18,7 @@ import PropTypes from "prop-types";
 import {withDialog} from "../../../../react/contexts/Common/DialogContext";
 import UserAvatar from "../../../../react/components/Common/Avatar/UserAvatar";
 import {Link} from "react-router-dom";
-import {withTranslation} from "react-i18next";
+import {Trans, withTranslation} from "react-i18next";
 import Icon from "../../../../react/components/Common/Icons/Icon";
 
 /**
@@ -340,7 +340,7 @@ class Login extends Component {
             <form acceptCharset="utf-8" onSubmit={this.handleSubmit} className="enter-passphrase">
               <div className={`input text required ${this.hasErrors ? "error" : ""}`}>
                 <label htmlFor="passphrase">
-                  {this.translate("Passphrase")}
+                  <Trans>Passphrase</Trans>
                 </label>
                 <div className="password with-token">
                   <input
@@ -370,13 +370,13 @@ class Login extends Component {
                 {this.state.hasBeenValidated &&
                 <>
                   {this.state.errors.emptyPassphrase &&
-                  <div className="empty-passphrase error-message">{this.translate("The passphrase should not be empty.")}</div>
+                  <div className="empty-passphrase error-message"><Trans>The passphrase should not be empty.</Trans></div>
                   }
                   {this.state.errors.invalidPassphrase &&
-                  <div className="invalid-passphrase error-message">{this.translate("The passphrase is invalid.")}</div>
+                  <div className="invalid-passphrase error-message"><Trans>The passphrase is invalid.</Trans></div>
                   }
                   {this.state.errors.invalidGpgKey &&
-                  <div className="invalid-gpg-key error-message">{this.translate("The private key is invalid.")}</div>
+                  <div className="invalid-gpg-key error-message"><Trans>The private key is invalid.</Trans></div>
                   }
                 </>
                 }
@@ -391,7 +391,7 @@ class Login extends Component {
                     onChange={this.handleToggleRememberMe}
                     disabled={!this.areActionsAllowed}/>
                   <label htmlFor="remember-me">
-                    {this.translate("Remember until signed out.")}
+                    <Trans>Remember until signed out.</Trans>
                   </label>
                 </div>
               }
@@ -402,13 +402,13 @@ class Login extends Component {
                   className={`button primary big full-width ${processingClassName}`}
                   role="button"
                   disabled={this.isProcessing}>
-                  {this.translate("Sign in")}
+                  <Trans>Sign in</Trans>
                 </button>
                 <Link
                   to={{pathname: `${this.trustedDomain}/users/recover`}}
                   target="_parent"
                   rel="noopener noreferrer">
-                  {this.translate("Or switch to another account.")}
+                  <Trans>Or switch to another account.</Trans>
                 </Link>
               </div>
             </form>

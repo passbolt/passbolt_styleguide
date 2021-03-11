@@ -16,7 +16,7 @@ import PropTypes from "prop-types";
 import AppContext from "../../../contexts/AppContext";
 import UserAbortsOperationError from "../../../../react/lib/Common/Error/UserAbortsOperationError";
 import Icon from "../../../../react/components/Common/Icons/Icon";
-import {withTranslation} from "react-i18next";
+import {Trans, withTranslation} from "react-i18next";
 
 class PassphraseEntryDialog extends Component {
   constructor(props) {
@@ -305,7 +305,7 @@ class PassphraseEntryDialog extends Component {
       <div className="dialog-wrapper" onKeyDown={this.handleKeyDown}>
         <div className="dialog passphrase-entry">
           <div className="dialog-header">
-            <h2>{this.translate("Please enter your passphrase.")}</h2>
+            <h2><Trans>Please enter your passphrase.</Trans></h2>
             <a className="dialog-close" onClick={this.handleCloseClick}>
               <Icon name="close"/>
               <span className="visually-hidden">cancel</span>
@@ -353,7 +353,7 @@ class PassphraseEntryDialog extends Component {
                   <div className="input checkbox">
                     <input id="passphrase-entry-form-remember-me" type="checkbox" name="rememberMe"
                       checked={this.state.rememberMe} onChange={this.handleInputChange}/>
-                    <label htmlFor="passphrase-entry-form-remember-me">{this.translate("Remember it for")} </label>
+                    <label htmlFor="passphrase-entry-form-remember-me"><Trans>Remember it for</Trans> </label>
                   </div>
                   <div className="input select">
                     <select name="rememberMeDuration" value={this.state.rememberMeDuration}
@@ -367,7 +367,7 @@ class PassphraseEntryDialog extends Component {
               </div>
               <div className="submit-wrapper clearfix">
                 <input type="submit" className="button primary" role="button" value={this.translate("OK")}/>
-                <a className="cancel" onClick={this.handleCloseClick}>{this.translate("Cancel")}</a>
+                <a className="cancel" onClick={this.handleCloseClick}><Trans>Cancel</Trans></a>
               </div>
             </form>
           </div>
@@ -375,10 +375,10 @@ class PassphraseEntryDialog extends Component {
           {this.state.attempt === 3 &&
           <div className="dialog-content">
             <div className="form-content">
-              {this.translate("Your passphrase is wrong! The operation has been aborted.")}
+              <Trans>Your passphrase is wrong! The operation has been aborted.</Trans>
             </div>
             <div className="submit-wrapper clearfix">
-              <a className="button primary" role="button" onClick={this.handleCloseClick}>{this.translate("Close")}</a>
+              <a className="button primary" role="button" onClick={this.handleCloseClick}><Trans>Close</Trans></a>
             </div>
           </div>
           }

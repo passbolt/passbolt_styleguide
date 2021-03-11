@@ -22,7 +22,7 @@ import ConfirmDisableUserMFA from "../DisableUserMFA/ConfirmDisableUserMFA";
 import DeleteUserWithConflictsDialog from "../DeleteUser/DeleteUserWithConflictsDialog";
 import DeleteUserDialog from "../DeleteUser/DeleteUserDialog";
 import ErrorDialog from "../../Dialog/ErrorDialog/ErrorDialog";
-import {withTranslation} from "react-i18next";
+import {Trans, withTranslation} from "react-i18next";
 
 class DisplayUsersContextualMenu extends React.Component {
   /**
@@ -289,7 +289,7 @@ class DisplayUsersContextualMenu extends React.Component {
             <div className="main-cell-wrapper">
               <div className="main-cell">
                 <a onClick={this.handlePermalinkCopy}>
-                  <span>{this.translate("Copy permalink")}</span>
+                  <span><Trans>Copy permalink</Trans></span>
                 </a>
               </div>
             </div>
@@ -302,7 +302,7 @@ class DisplayUsersContextualMenu extends React.Component {
             <div className="main-cell-wrapper">
               <div className="main-cell">
                 <a onClick={this.handlePublicKeyCopy}>
-                  <span>{this.translate("Copy public key")}</span>
+                  <span><Trans>Copy public key</Trans></span>
                 </a>
               </div>
             </div>
@@ -315,7 +315,7 @@ class DisplayUsersContextualMenu extends React.Component {
             <div className="main-cell-wrapper">
               <div className="main-cell">
                 <a onClick={this.handleUsernameCopy}>
-                  <span>{this.translate("Copy email address")}</span>
+                  <span><Trans>Copy email address</Trans></span>
                 </a>
               </div>
             </div>
@@ -326,7 +326,7 @@ class DisplayUsersContextualMenu extends React.Component {
           <div className="row">
             <div className="main-cell-wrapper">
               <div className="main-cell">
-                <a id="edit" onClick={this.handleEditClickEvent}><span>{this.translate("Edit")}</span></a>
+                <a id="edit" onClick={this.handleEditClickEvent}><span><Trans>Edit</Trans></span></a>
               </div>
             </div>
           </div>
@@ -339,7 +339,7 @@ class DisplayUsersContextualMenu extends React.Component {
               <div className="main-cell">
                 <a id="resend"
                   onClick={this.handleResendInviteClickEvent}
-                  className={`${this.canResendInviteToUser ? "" : "disabled"}`}><span>{this.translate("Resend invite")}</span></a>
+                  className={`${this.canResendInviteToUser ? "" : "disabled"}`}><span><Trans>Resend invite</Trans></span></a>
               </div>
             </div>
           </div>
@@ -354,7 +354,7 @@ class DisplayUsersContextualMenu extends React.Component {
                   id="disable-mfa"
                   onClick={this.handleDisableMfaEvent}
                   className={this.canDisableMfaForUser ? '' : 'disabled'}>
-                  <span>{this.translate("Disable MFA")}</span>
+                  <span><Trans>Disable MFA</Trans></span>
                 </a>
               </div>
             </div>
@@ -366,7 +366,7 @@ class DisplayUsersContextualMenu extends React.Component {
           <div className="row">
             <div className="main-cell-wrapper">
               <div className="main-cell">
-                <a id="delete" onClick={this.handleDeleteClickEvent} className={`${!this.canDeleteUser() ? "disabled" : ""}`}><span>{this.translate("Delete")}</span></a>
+                <a id="delete" onClick={this.handleDeleteClickEvent} className={`${!this.canDeleteUser() ? "disabled" : ""}`}><span><Trans>Delete</Trans></span></a>
               </div>
             </div>
           </div>

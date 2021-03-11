@@ -16,7 +16,7 @@ import PropTypes from "prop-types";
 import {withActionFeedback} from "../../../../react-extension/contexts/ActionFeedbackContext";
 import Icon from "../../../../react/components/Common/Icons/Icon";
 import {withAdministrationWorkspace} from "../../../contexts/AdministrationWorkspaceContext";
-import {withTranslation} from "react-i18next";
+import {Trans, withTranslation} from "react-i18next";
 
 /**
  * This component allows to display the email notifications for the administration
@@ -340,45 +340,45 @@ class DisplayEmailNotificationsAdministration extends React.Component {
           {this.hasDatabaseSetting() && this.hasFileConfigSetting() &&
           <div className="warning message" id="email-notification-setting-overridden-banner">
             <p>
-              {this.translate("Settings have been found in your database as well as in your passbolt.php (or environment variables).")} {this.translate("The settings displayed in the form below are the one stored in your database and have precedence over others.")}
+              <Trans>Settings have been found in your database as well as in your passbolt.php (or environment variables).</Trans> <Trans>The settings displayed in the form below are the one stored in your database and have precedence over others.</Trans>
             </p>
           </div>
           }
           {!this.hasDatabaseSetting() && this.hasFileConfigSetting() &&
           <div className="warning message hidden" id="email-notification-fileconfig-exists-banner">
             <p>
-              {this.translate("You seem to have Email Notification Settings defined in your passbolt.php (or via environmentvariables).")} {this.translate("Submitting the form will overwrite those settings with the ones you choose in the form below.")}
+              <Trans>You seem to have Email Notification Settings defined in your passbolt.php (or via environment variables).</Trans> <Trans>Submitting the form will overwrite those settings with the ones you choose in the form below.</Trans>
             </p>
           </div>
           }
-          <h3>{this.translate("Email delivery")}</h3>
+          <h3><Trans>Email delivery</Trans></h3>
           <p>
-            {this.translate("In this section you can choose which email notifications will be sent.")}
+            <Trans>In this section you can choose which email notifications will be sent.</Trans>
           </p>
           <form className="form">
             <div className="row">
               <div className="col6">
                 <label>Passwords</label>
                 <span className="input toggle-switch form-element">
-                  <label htmlFor="send-password-create-toggle-button">{this.translate("When a password is created, notify its creator.")}</label>
+                  <label htmlFor="send-password-create-toggle-button"><Trans>When a password is created, notify its creator.</Trans></label>
                   <input type="checkbox" className="toggle-switch-checkbox checkbox" name="passwordCreate" disabled={this.hasAllInputDisabled()}
                     onChange={this.handleInputChange} checked={this.state.passwordCreate} id="send-password-create-toggle-button"/>
                   <label className="toggle-switch-button" htmlFor="send-password-create-toggle-button"/>
                 </span>
                 <span className="input toggle-switch form-element">
-                  <label htmlFor="send-password-update-toggle-button">{this.translate("When a password is updated, notify the users who have access to it.")}</label>
+                  <label htmlFor="send-password-update-toggle-button"><Trans>When a password is updated, notify the users who have access to it.</Trans></label>
                   <input type="checkbox" className="toggle-switch-checkbox checkbox" name="passwordUpdate" disabled={this.hasAllInputDisabled()}
                     onChange={this.handleInputChange} checked={this.state.passwordUpdate} id="send-password-update-toggle-button"/>
                   <label className="toggle-switch-button" htmlFor="send-password-update-toggle-button"/>
                 </span>
                 <span className="input toggle-switch form-element">
-                  <label htmlFor="send-password-delete-toggle-button">{this.translate("When a password is deleted, notify the users who had access to it.")}</label>
+                  <label htmlFor="send-password-delete-toggle-button"><Trans>When a password is deleted, notify the users who had access to it.</Trans></label>
                   <input type="checkbox" className="toggle-switch-checkbox checkbox" name="passwordDelete" disabled={this.hasAllInputDisabled()}
                     onChange={this.handleInputChange} checked={this.state.passwordDelete} id="send-password-delete-toggle-button"/>
                   <label className="toggle-switch-button" htmlFor="send-password-delete-toggle-button"/>
                 </span>
                 <span className="input toggle-switch form-element">
-                  <label htmlFor="send-password-share-toggle-button">{this.translate("When a password is shared, notify the users who gain access to it.")}</label>
+                  <label htmlFor="send-password-share-toggle-button"><Trans>When a password is shared, notify the users who gain access to it.</Trans></label>
                   <input type="checkbox" className="toggle-switch-checkbox checkbox" name="passwordShare" disabled={this.hasAllInputDisabled()}
                     onChange={this.handleInputChange} checked={this.state.passwordShare} id="send-password-share-toggle-button"/>
                   <label className="toggle-switch-button" htmlFor="send-password-share-toggle-button"/>
@@ -387,25 +387,25 @@ class DisplayEmailNotificationsAdministration extends React.Component {
               <div className="col6 last">
                 <label>Folders</label>
                 <span className="input toggle-switch form-element">
-                  <label htmlFor="send-folder-create-toggle-button">{this.translate("When a folder is created, notify its creator.")}</label>
+                  <label htmlFor="send-folder-create-toggle-button"><Trans>When a folder is created, notify its creator.</Trans></label>
                   <input type="checkbox" className="toggle-switch-checkbox checkbox" name="folderCreate" disabled={this.hasAllInputDisabled()}
                     onChange={this.handleInputChange} checked={this.state.folderCreate} id="send-folder-create-toggle-button"/>
                   <label className="toggle-switch-button" htmlFor="send-folder-create-toggle-button"/>
                 </span>
                 <span className="input toggle-switch form-element">
-                  <label htmlFor="send-folder-update-toggle-button">{this.translate("When a folder is updated, notify the users who have access to it.")}</label>
+                  <label htmlFor="send-folder-update-toggle-button"><Trans>When a folder is updated, notify the users who have access to it.</Trans></label>
                   <input type="checkbox" className="toggle-switch-checkbox checkbox" name="folderUpdate" disabled={this.hasAllInputDisabled()}
                     onChange={this.handleInputChange} checked={this.state.folderUpdate} id="send-folder-update-toggle-button"/>
                   <label className="toggle-switch-button" htmlFor="send-folder-update-toggle-button"/>
                 </span>
                 <span className="input toggle-switch form-element">
-                  <label htmlFor="send-folder-delete-toggle-button">{this.translate("When a folder is deleted, notify the users who had access to it.")}</label>
+                  <label htmlFor="send-folder-delete-toggle-button"><Trans>When a folder is deleted, notify the users who had access to it.</Trans></label>
                   <input type="checkbox" className="toggle-switch-checkbox checkbox" name="folderDelete" disabled={this.hasAllInputDisabled()}
                     onChange={this.handleInputChange} checked={this.state.folderDelete} id="send-folder-delete-toggle-button"/>
                   <label className="toggle-switch-button" htmlFor="send-folder-delete-toggle-button"/>
                 </span>
                 <span className="input toggle-switch form-element">
-                  <label htmlFor="send-folder-share-toggle-button">{this.translate("When a folder is shared, notify the users who gain access to it.")}</label>
+                  <label htmlFor="send-folder-share-toggle-button"><Trans>When a folder is shared, notify the users who gain access to it.</Trans></label>
                   <input type="checkbox" className="toggle-switch-checkbox checkbox" name="folderShare" disabled={this.hasAllInputDisabled()}
                     onChange={this.handleInputChange} checked={this.state.folderShare} id="send-folder-share-toggle-button"/>
                   <label className="toggle-switch-button" htmlFor="send-folder-share-toggle-button"/>
@@ -414,9 +414,9 @@ class DisplayEmailNotificationsAdministration extends React.Component {
               <div className="row">
               </div>
               <div className="col6 last">
-                <label>{this.translate("Comments")}</label>
+                <label><Trans>Comments</Trans></label>
                 <span className="input toggle-switch form-element">
-                  <label htmlFor="send-comment-add-toggle-button">{this.translate("When a comment is posted on a password, notify the users who have access to this password.")}</label>
+                  <label htmlFor="send-comment-add-toggle-button"><Trans>When a comment is posted on a password, notify the users who have access to this password.</Trans></label>
                   <input type="checkbox" className="toggle-switch-checkbox checkbox" name="commentAdd" disabled={this.hasAllInputDisabled()}
                     onChange={this.handleInputChange} checked={this.state.commentAdd} id="send-comment-add-toggle-button"/>
                   <label className="toggle-switch-button" htmlFor="send-comment-add-toggle-button"/>
@@ -425,49 +425,49 @@ class DisplayEmailNotificationsAdministration extends React.Component {
             </div>
             <div className="row">
               <div className="col6">
-                <label>{this.translate("Group membership")}</label>
+                <label><Trans>Group membership</Trans></label>
                 <span className="input toggle-switch form-element">
-                  <label htmlFor="send-group-delete-toggle-button">{this.translate("When a group is deleted, notify the users who were member of it.")}</label>
+                  <label htmlFor="send-group-delete-toggle-button"><Trans>When a group is deleted, notify the users who were member of it.</Trans></label>
                   <input type="checkbox" className="toggle-switch-checkbox checkbox" name="groupDelete" disabled={this.hasAllInputDisabled()}
                     onChange={this.handleInputChange} checked={this.state.groupDelete} id="send-group-delete-toggle-button"/>
                   <label className="toggle-switch-button" htmlFor="send-group-delete-toggle-button"/>
                 </span>
                 <span className="input toggle-switch form-element">
-                  <label htmlFor="group-user-add-toggle-button">{this.translate("When users are added to a group, notify them.")}</label>
+                  <label htmlFor="group-user-add-toggle-button"><Trans>When users are added to a group, notify them.</Trans></label>
                   <input type="checkbox" className="toggle-switch-checkbox checkbox" name="groupUserAdd" disabled={this.hasAllInputDisabled()}
                     onChange={this.handleInputChange} checked={this.state.groupUserAdd} id="send-group-user-add-toggle-button"/>
                   <label className="toggle-switch-button" htmlFor="send-group-user-add-toggle-button"/>
                 </span>
                 <span className="input toggle-switch form-element">
-                  <label htmlFor="send-group-user-delete-toggle-button">{this.translate("When users are removed from a group, notify them.")}</label>
+                  <label htmlFor="send-group-user-delete-toggle-button"><Trans>When users are removed from a group, notify them.</Trans></label>
                   <input type="checkbox" className="toggle-switch-checkbox checkbox" name="groupUserDelete" disabled={this.hasAllInputDisabled()}
                     onChange={this.handleInputChange} checked={this.state.groupUserDelete} id="send-group-user-delete-toggle-button"/>
                   <label className="toggle-switch-button" htmlFor="send-group-user-delete-toggle-button"/>
                 </span>
                 <span className="input toggle-switch form-element">
-                  <label htmlFor="send-group-user-update-toggle-button">{this.translate("When user roles change in a group, notify the corresponding users.")}</label>
+                  <label htmlFor="send-group-user-update-toggle-button"><Trans>When user roles change in a group, notify the corresponding users.</Trans></label>
                   <input type="checkbox" className="toggle-switch-checkbox checkbox" name="groupUserUpdate" disabled={this.hasAllInputDisabled()}
                     onChange={this.handleInputChange} checked={this.state.groupUserUpdate} id="send-group-user-update-toggle-button"/>
                   <label className="toggle-switch-button" htmlFor="send-group-user-update-toggle-button"/>
                 </span>
               </div>
               <div className="col6 last">
-                <label>{this.translate("Group manager")}</label>
+                <label><Trans>Group manager</Trans></label>
                 <span className="input toggle-switch form-element">
-                  <label htmlFor="send-group-manager-update-toggle-button">{this.translate("When members of a group change, notify the group manager(s).")}</label>
+                  <label htmlFor="send-group-manager-update-toggle-button"><Trans>When members of a group change, notify the group manager(s).</Trans></label>
                   <input type="checkbox" className="toggle-switch-checkbox checkbox" name="groupManagerUpdate" disabled={this.hasAllInputDisabled()}
                     onChange={this.handleInputChange} checked={this.state.groupManagerUpdate} id="send-group-manager-update-toggle-button"/>
                   <label className="toggle-switch-button" htmlFor="send-group-manager-update-toggle-button"/>
                 </span>
                 <label>Registration & Recovery</label>
                 <span className="input toggle-switch form-element">
-                  <label htmlFor="send-user-create-toggle-button">{this.translate("When new users are invited to passbolt, notify them.")}</label>
+                  <label htmlFor="send-user-create-toggle-button"><Trans>When new users are invited to passbolt, notify them.</Trans></label>
                   <input type="checkbox" className="toggle-switch-checkbox checkbox" name="userCreate" disabled={this.hasAllInputDisabled()}
                     onChange={this.handleInputChange} checked={this.state.userCreate} id="send-user-create-toggle-button"/>
                   <label className="toggle-switch-button" htmlFor="send-user-create-toggle-button"/>
                 </span>
                 <span className="input toggle-switch form-element">
-                  <label htmlFor="send-user-recover-toggle-button">{this.translate("When users try to recover their account, notify them.")}</label>
+                  <label htmlFor="send-user-recover-toggle-button"><Trans>When users try to recover their account, notify them.</Trans></label>
                   <input type="checkbox" className="toggle-switch-checkbox checkbox" name="userRecover" disabled={this.hasAllInputDisabled()}
                     onChange={this.handleInputChange} checked={this.state.userRecover} id="send-user-recover-toggle-button"/>
                   <label className="toggle-switch-button" htmlFor="send-user-recover-toggle-button"/>
@@ -475,30 +475,30 @@ class DisplayEmailNotificationsAdministration extends React.Component {
               </div>
             </div>
             <div className="row">
-              <h3>{this.translate("Email content visibility")}</h3>
-              <p>{this.translate("In this section you can adjust the composition of the emails, e.g. which information will be included in the notification.")}</p>
+              <h3><Trans>Email content visibility</Trans></h3>
+              <p><Trans>In this section you can adjust the composition of the emails, e.g. which information will be included in the notification.</Trans></p>
               <div className="col6">
-                <label>{this.translate("Passwords")}</label>
+                <label><Trans>Passwords</Trans></label>
                 <span className="input toggle-switch form-element">
-                  <label htmlFor="show-username-toggle-button">{this.translate("Username")}</label>
+                  <label htmlFor="show-username-toggle-button"><Trans>Username</Trans></label>
                   <input type="checkbox" className="toggle-switch-checkbox checkbox" name="showUsername" disabled={this.hasAllInputDisabled()}
                     onChange={this.handleInputChange} checked={this.state.showUsername} id="show-username-toggle-button"/>
                   <label className="toggle-switch-button" htmlFor="show-username-toggle-button"/>
                 </span>
                 <span className="input toggle-switch form-element">
-                  <label htmlFor="show-uri-toggle-button">{this.translate("URI")}</label>
+                  <label htmlFor="show-uri-toggle-button"><Trans>URI</Trans></label>
                   <input type="checkbox" className="toggle-switch-checkbox checkbox" name="showUri" disabled={this.hasAllInputDisabled()}
                     onChange={this.handleInputChange} checked={this.state.showUri} id="show-uri-toggle-button"/>
                   <label className="toggle-switch-button" htmlFor="show-uri-toggle-button"/>
                 </span>
                 <span className="input toggle-switch form-element ready">
-                  <label htmlFor="show-secret-toggle-button">{this.translate("Encrypted secret")}</label>
+                  <label htmlFor="show-secret-toggle-button"><Trans>Encrypted secret</Trans></label>
                   <input type="checkbox" className="toggle-switch-checkbox checkbox" name="showSecret" disabled={this.hasAllInputDisabled()}
                     onChange={this.handleInputChange} checked={this.state.showSecret} id="show-secret-toggle-button"/>
                   <label className="toggle-switch-button" htmlFor="show-secret-toggle-button"/>
                 </span>
                 <span className="input toggle-switch form-element">
-                  <label htmlFor="show-description-toggle-button">{this.translate("Description")}</label>
+                  <label htmlFor="show-description-toggle-button"><Trans>Description</Trans></label>
                   <input type="checkbox" className="toggle-switch-checkbox checkbox" name="showDescription" disabled={this.hasAllInputDisabled()}
                     onChange={this.handleInputChange} checked={this.state.showDescription} id="show-description-toggle-button"/>
                   <label className="toggle-switch-button" htmlFor="show-description-toggle-button"/>
@@ -507,7 +507,7 @@ class DisplayEmailNotificationsAdministration extends React.Component {
               <div className="col6 last">
                 <label>Comments</label>
                 <span className="input toggle-switch form-element">
-                  <label htmlFor="show-comment-toggle-button">{this.translate("Comment content")}</label>
+                  <label htmlFor="show-comment-toggle-button"><Trans>Comment content</Trans></label>
                   <input type="checkbox" className="toggle-switch-checkbox checkbox" name="showComment" disabled={this.hasAllInputDisabled()}
                     onChange={this.handleInputChange} checked={this.state.showComment} id="show-comment-toggle-button"/>
                   <label className="toggle-switch-button" htmlFor="show-comment-toggle-button"/>
@@ -517,11 +517,11 @@ class DisplayEmailNotificationsAdministration extends React.Component {
           </form>
         </div>
         <div className="col4 last">
-          <h3>{this.translate("Need some help?")}</h3>
-          <p>{this.translate("For more information about email notification, checkout the dedicated page on the help website.")}</p>
+          <h3><Trans>Need some help?</Trans></h3>
+          <p><Trans>For more information about email notification, checkout the dedicated page on the help website.</Trans></p>
           <a className="button" href="https://help.passbolt.com/configure/notification/email" target="_blank" rel="noopener noreferrer">
             <Icon name="life-ring"/>
-            <span>{this.translate("Read documentation")}</span>
+            <span><Trans>Read documentation</Trans></span>
           </a>
         </div>
       </div>

@@ -19,7 +19,7 @@ import ManageDialogs from "../../../../react/components/Common/Dialog/ManageDial
 import DialogContextProvider from "../../../../react/contexts/Common/DialogContext";
 import PasswordCreateDialog from "./PasswordCreateDialog";
 import {MemoryRouter} from "react-router-dom";
-import SetupTranslations from "../../../SetupTranslations";
+import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 
 /**
  * The PasswordCreateDialog component represented as a page
@@ -32,7 +32,7 @@ export default class PasswordCreateDialogPage {
    */
   constructor(appContext, props) {
     this._page = render(
-      <SetupTranslations>
+      <MockTranslationProvider>
         <AppContext.Provider value={appContext}>
           <DialogContextProvider>
             <MemoryRouter initialEntries={[
@@ -45,7 +45,7 @@ export default class PasswordCreateDialogPage {
             </MemoryRouter>
           </DialogContextProvider>
         </AppContext.Provider>
-      </SetupTranslations>
+      </MockTranslationProvider>
     );
     this.setupPageObjects();
   }

@@ -15,7 +15,7 @@ import React, {Component} from "react";
 import AppContext from "../../../contexts/AppContext";
 import DialogWrapper from "../../../../react/components/Common/Dialog/DialogWrapper/DialogWrapper";
 import {withRouter} from "react-router-dom";
-import {withTranslation} from "react-i18next";
+import {Trans, withTranslation} from "react-i18next";
 import PropTypes from "prop-types";
 
 /**
@@ -78,7 +78,7 @@ class SessionExpired extends Component {
         onClose={this.handleCloseClick}
         className="session-expired-dialog">
         <div className="form-content">
-          <p>{this.translate("Your session has expired, you need to sign in.")}</p>
+          <p><Trans>Your session has expired, you need to sign in.</Trans></p>
         </div>
         <div className="submit-wrapper clearfix">
           <a ref={this.loginLinkRef}
@@ -86,7 +86,7 @@ class SessionExpired extends Component {
             className="primary button"
             target="_parent"
             role="button"
-            rel="noopener noreferrer">{this.translate("Sign in")}</a>
+            rel="noopener noreferrer"><Trans>Sign in</Trans></a>
         </div>
       </DialogWrapper>
     );

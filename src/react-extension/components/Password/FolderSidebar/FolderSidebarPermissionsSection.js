@@ -20,7 +20,7 @@ import AppContext from "../../../contexts/AppContext";
 import {withDialog} from "../../../../react/contexts/Common/DialogContext";
 import ShareDialog from "../../Share/ShareDialog";
 import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
-import {withTranslation} from "react-i18next";
+import {Trans, withTranslation} from "react-i18next";
 
 class FolderSidebarPermissionsSection extends React.Component {
   /**
@@ -196,7 +196,7 @@ class FolderSidebarPermissionsSection extends React.Component {
         <div className="accordion-header">
           <h4>
             <a onClick={this.handleTitleClickEvent} role="button">
-              {this.translate("Shared with")}
+              <Trans>Shared with</Trans>
               {this.state.open &&
               <Icon name="caret-down"/>
               }
@@ -210,14 +210,14 @@ class FolderSidebarPermissionsSection extends React.Component {
           {this.canShare() &&
           <a onClick={this.handlePermissionsEditClickEvent} className="section-action">
             <Icon name="edit"/>
-            <span className="visuallyhidden">modify</span>
+            <span className="visuallyhidden"><Trans>modify</Trans></span>
           </a>
           }
           <div>
             <ul className="shared-with ready">
               {this.isLoading() &&
               <div className="processing-wrapper">
-                <span className="processing-text">{this.translate("Retrieving permissions")}</span>
+                <span className="processing-text"><Trans>Retrieving permissions</Trans></span>
               </div>
               }
               {this.state.permissions && this.state.permissions.map(permission => (

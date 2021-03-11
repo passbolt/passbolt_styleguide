@@ -14,7 +14,7 @@
 import React, {Component} from "react";
 import PropTypes from "prop-types";
 import {AuthenticationContext} from "../../../contexts/AuthenticationContext";
-import {withTranslation} from "react-i18next";
+import {Trans, withTranslation} from "react-i18next";
 
 /**
  * This component displays an error when the user cannot log in
@@ -59,8 +59,8 @@ class DisplayLoginError extends Component {
   render() {
     return (
       <div>
-        <h1>{this.translate("Sorry, you have not been signed in.")}</h1>
-        <p>{this.translate("Something went wrong, the sign in failed with the following error:")} </p>
+        <h1><Trans>Sorry, you have not been signed in.</Trans></h1>
+        <p><Trans>Something went wrong, the sign in failed with the following error:</Trans> </p>
         <p>{this.props.error && this.props.error.message}</p>
         <form
           acceptCharset="utf-8"
@@ -70,7 +70,7 @@ class DisplayLoginError extends Component {
               type="submit"
               className={`button primary big full-width`}
               role="button">
-              {this.translate("Try again")}
+              <Trans>Try again</Trans>
             </button>
           </div>
         </form>

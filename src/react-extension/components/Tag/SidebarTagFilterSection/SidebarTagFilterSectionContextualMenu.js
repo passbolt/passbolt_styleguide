@@ -15,7 +15,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import ContextualMenuWrapper from "../../../../react/components/Common/ContextualMenu/ContextualMenuWrapper";
 import {filterByTagsOptions} from "./DisplayTagList";
-import {withTranslation} from "react-i18next";
+import {Trans, withTranslation} from "react-i18next";
 
 class SidebarTagFilterSectionContextualMenu extends React.Component {
   /**
@@ -65,7 +65,7 @@ class SidebarTagFilterSectionContextualMenu extends React.Component {
           <div className="row">
             <div className="main-cell-wrapper">
               <div className="main-cell">
-                <a id="all-tag" onClick={() => this.handleFilterClickEvent(filterByTagsOptions.all)}><span>{this.translate("All tags")}</span></a>
+                <a id="all-tag" onClick={() => this.handleFilterClickEvent(filterByTagsOptions.all)}><span><Trans>All tags</Trans></span></a>
               </div>
             </div>
           </div>
@@ -74,7 +74,7 @@ class SidebarTagFilterSectionContextualMenu extends React.Component {
           <div className="row">
             <div className="main-cell-wrapper">
               <div className="main-cell">
-                <a id="personal-tag" onClick={() => this.handleFilterClickEvent(filterByTagsOptions.personal)}><span>{this.translate("My tags")}</span></a>
+                <a id="personal-tag" onClick={() => this.handleFilterClickEvent(filterByTagsOptions.personal)}><span><Trans>My tags</Trans></span></a>
               </div>
             </div>
           </div>
@@ -83,7 +83,7 @@ class SidebarTagFilterSectionContextualMenu extends React.Component {
           <div className="row">
             <div className="main-cell-wrapper">
               <div className="main-cell">
-                <a id="shared-tag" onClick={() => this.handleFilterClickEvent(filterByTagsOptions.shared)}><span>{this.translate("Shared tags")}</span></a>
+                <a id="shared-tag" onClick={() => this.handleFilterClickEvent(filterByTagsOptions.shared)}><span><Trans>Shared tags</Trans></span></a>
               </div>
             </div>
           </div>

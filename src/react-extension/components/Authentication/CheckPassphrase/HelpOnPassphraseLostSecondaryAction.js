@@ -13,7 +13,7 @@
  */
 import React, {Component} from "react";
 import {AuthenticationContext} from "../../../contexts/AuthenticationContext";
-import {withTranslation} from "react-i18next";
+import {Trans, withTranslation} from "react-i18next";
 import PropTypes from "prop-types";
 
 class HelpOnPassphraseLostSecondaryAction extends Component {
@@ -28,7 +28,7 @@ class HelpOnPassphraseLostSecondaryAction extends Component {
   render() {
     return (
       <a onClick={this.context.onPassphraseLost}>
-        {this.translate("Help, I lost my passphrase.")}
+        <Trans>Help, I lost my passphrase.</Trans>
       </a>
     );
   }

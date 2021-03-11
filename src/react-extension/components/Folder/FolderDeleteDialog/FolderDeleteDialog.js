@@ -220,11 +220,11 @@ class FolderDeleteDialog extends Component {
                 Are you sure you want to delete the folder <strong>{{folderName: this.state.name}}</strong>?
               </Trans>
             </p>
-            <p>{this.translate("Warning: This action can’t be undone. Other users may lose access.")}</p>
+            <p><Trans>Warning: This action can’t be undone. Other users may lose access.</Trans></p>
             <div className="input checkbox">
               <input id="delete-cascade" type="checkbox" name="cascade" onChange={this.handleInputChange}
                 autoFocus={true} disabled={this.hasAllInputDisabled()} />&nbsp;
-              <label htmlFor="delete-cascade">{this.translate("Also delete items inside this folder.")}</label>
+              <label htmlFor="delete-cascade"><Trans>Also delete items inside this folder.</Trans></label>
             </div>
           </div>
           <div className="submit-wrapper clearfix">

@@ -17,7 +17,7 @@ import PropTypes from "prop-types";
 import {withRouter} from "react-router-dom";
 import AppContext from "../../../contexts/AppContext";
 import {withNavigationContext} from "../../../contexts/NavigationContext";
-import {withTranslation} from "react-i18next";
+import {Trans, withTranslation} from "react-i18next";
 
 /**
  * This component allows to navigate throught the differents sections of the user settings workspace
@@ -60,7 +60,7 @@ class NavigateIntoUserSettingsWorkspace extends React.Component {
               <div className="main-cell-wrapper">
                 <div className="main-cell">
                   <a onClick={this.props.navigationContext.onGoToUserSettingsProfileRequested}>
-                    <span>{this.translate("Profile")}</span>
+                    <span><Trans>Profile</Trans></span>
                   </a>
                 </div>
               </div>
@@ -97,7 +97,7 @@ class NavigateIntoUserSettingsWorkspace extends React.Component {
               <div className="main-cell-wrapper">
                 <div className="main-cell">
                   <a onClick={this.props.navigationContext.onGoToUserSettingsThemeRequested}>
-                    <span>{this.translate("Theme")}</span>
+                    <span><Trans>Theme</Trans></span>
                   </a>
                 </div>
               </div>
@@ -111,7 +111,7 @@ class NavigateIntoUserSettingsWorkspace extends React.Component {
                 <div className="main-cell-wrapper">
                   <div className="main-cell">
                     <a onClick={this.props.navigationContext.onGoToUserSettingsMfaRequested}>
-                      <span>{this.translate("Multi Factor Authentication")}</span>
+                      <span><Trans>Multi Factor Authentication</Trans></span>
                     </a>
                   </div>
                 </div>
@@ -124,7 +124,7 @@ class NavigateIntoUserSettingsWorkspace extends React.Component {
               <div className="main-cell-wrapper">
                 <div className="main-cell">
                   <a onClick={this.props.navigationContext.onGoToUserSettingsKeysRequested}>
-                    <span>{this.translate("Keys inspector")}</span>
+                    <span><Trans>Keys inspector</Trans></span>
                   </a>
                 </div>
               </div>

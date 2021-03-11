@@ -15,7 +15,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import {ResourceWorkspaceFilterTypes, withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 import {withRouter} from "react-router-dom";
-import {withTranslation} from "react-i18next";
+import {Trans, withTranslation} from "react-i18next";
 
 class TagItemViewer extends React.Component {
   /**
@@ -75,12 +75,12 @@ class TagItemViewer extends React.Component {
       <div>
         {isLoading &&
         <div className="processing-wrapper">
-          <span className="processing-text">{this.translate("Retrieving tags")}</span>
+          <span className="processing-text"><Trans>Retrieving tags</Trans></span>
         </div>
         }
         {!isLoading && this.props.tags.length === 0 &&
         <em className="empty-content"
-          onClick={this.props.toggleInputTagEditor}>{this.translate("There is no tag, click here to add one")}</em>
+          onClick={this.props.toggleInputTagEditor}><Trans>There is no tag, click here to add one</Trans></em>
         }
         {!isLoading && this.props.tags.length > 0 &&
         <ul className="tags tags-list" onClick={this.props.toggleInputTagEditor}>

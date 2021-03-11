@@ -25,7 +25,7 @@ import {
   withResourceWorkspace
 } from "../../../contexts/ResourceWorkspaceContext";
 import sanitizeUrl, {urlProtocols} from "../../../../react/lib/Common/Sanitize/sanitizeUrl";
-import {withTranslation} from "react-i18next";
+import {Trans, withTranslation} from "react-i18next";
 
 class DisplayGridContextualMenu extends React.Component {
   /**
@@ -233,7 +233,7 @@ class DisplayGridContextualMenu extends React.Component {
             <div className="main-cell-wrapper">
               <div className="main-cell">
                 <a id="username" className={`${this.canCopyUsername() ? "" : "disabled"}`}
-                  onClick={this.handleUsernameClickEvent}><span>{this.translate("Copy username")}</span></a>
+                  onClick={this.handleUsernameClickEvent}><span><Trans>Copy username</Trans></span></a>
               </div>
             </div>
           </div>
@@ -242,7 +242,7 @@ class DisplayGridContextualMenu extends React.Component {
           <div className="row">
             <div className="main-cell-wrapper">
               <div className="main-cell">
-                <a id="password" onClick={this.handlePasswordClickEvent}><span>{this.translate("Copy password")}</span></a>
+                <a id="password" onClick={this.handlePasswordClickEvent}><span><Trans>Copy password</Trans></span></a>
               </div>
             </div>
           </div>
@@ -252,7 +252,7 @@ class DisplayGridContextualMenu extends React.Component {
             <div className="main-cell-wrapper">
               <div className="main-cell">
                 <a id="username" className={`${this.canCopyUri() ? "" : "disabled"}`}
-                  onClick={this.handleUriClickEvent}><span>{this.translate("Copy URI")}</span></a>
+                  onClick={this.handleUriClickEvent}><span><Trans>Copy URI</Trans></span></a>
               </div>
             </div>
           </div>
@@ -261,7 +261,7 @@ class DisplayGridContextualMenu extends React.Component {
           <div className="row">
             <div className="main-cell-wrapper">
               <div className="main-cell">
-                <a id="permalink" onClick={this.handlePermalinkClickEvent}><span>{this.translate("Copy permalink")}</span></a>
+                <a id="permalink" onClick={this.handlePermalinkClickEvent}><span><Trans>Copy permalink</Trans></span></a>
               </div>
             </div>
           </div>
@@ -272,7 +272,7 @@ class DisplayGridContextualMenu extends React.Component {
               <div className="main-cell">
                 <a id="permalink"
                   className={`${this.safeUri ? "" : "disabled"}`}
-                  onClick={this.handleGoToResourceUriClick}><span>{this.translate("Open URI in a new Tab")}</span></a>
+                  onClick={this.handleGoToResourceUriClick}><span><Trans>Open URI in a new Tab</Trans></span></a>
               </div>
             </div>
           </div>
@@ -282,7 +282,7 @@ class DisplayGridContextualMenu extends React.Component {
             <div className="main-cell-wrapper">
               <div className="main-cell">
                 <a id="edit" className={`${this.canUpdate() ? "" : "disabled"}`}
-                  onClick={this.handleEditClickEvent}><span>{this.translate("Edit")}</span></a>
+                  onClick={this.handleEditClickEvent}><span><Trans>Edit</Trans></span></a>
               </div>
             </div>
           </div>
@@ -293,7 +293,7 @@ class DisplayGridContextualMenu extends React.Component {
               <div className="main-cell">
                 <a
                   id="share" className={`${this.canShare() ? "" : "disabled"}`}
-                  onClick={this.handleShareClickEvent}><span>{this.translate("Share")}</span></a>
+                  onClick={this.handleShareClickEvent}><span><Trans>Share</Trans></span></a>
               </div>
             </div>
           </div>
@@ -304,7 +304,7 @@ class DisplayGridContextualMenu extends React.Component {
               <div className="main-cell">
                 <a
                   id="delete" className={`${this.canUpdate() ? "" : "disabled"}`}
-                  onClick={this.handleDeleteClickEvent}><span>{this.translate("Delete")}</span></a>
+                  onClick={this.handleDeleteClickEvent}><span><Trans>Delete</Trans></span></a>
               </div>
             </div>
           </div>

@@ -13,7 +13,7 @@
  */
 import React, {Component} from "react";
 import AppContext from "../../../contexts/AppContext";
-import {withTranslation} from "react-i18next";
+import {Trans, withTranslation} from "react-i18next";
 import PropTypes from "prop-types";
 
 class ProgressDialog extends Component {
@@ -52,7 +52,7 @@ class ProgressDialog extends Component {
           </div>
           <div className="dialog-content">
             <div className="form-content">
-              <label>{this.translate("Take a deep breath and enjoy being in the present moment...")}</label>
+              <label><Trans>Take a deep breath and enjoy being in the present moment...</Trans></label>
               <div className="progress-bar-wrapper">
                 <span className="progress-bar big infinite" style={progressBarStyle}>
                   <span className="progress"></span>

@@ -20,7 +20,7 @@ import FormSubmitButton from "../../../../react/components/Common/Inputs/FormSub
 import FormCancelButton from "../../../../react/components/Common/Inputs/FormSubmitButton/FormCancelButton";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import {withDialog} from "../../../../react/contexts/Common/DialogContext";
-import {withTranslation} from "react-i18next";
+import {Trans, withTranslation} from "react-i18next";
 
 class FolderCreateDialog extends Component {
   /**
@@ -291,7 +291,7 @@ class FolderCreateDialog extends Component {
         <form className="folder-create-form" onSubmit={this.handleFormSubmit} noValidate>
           <div className="form-content">
             <div className="input text required">
-              <label htmlFor="folder-name-input">{this.translate("Name")}</label>
+              <label htmlFor="folder-name-input"><Trans>Name</Trans></label>
               <input id="folder-name-input" name="name"
                 ref={this.nameRef}
                 type="text" value={this.state.name} placeholder={this.translate("Untitled folder")}

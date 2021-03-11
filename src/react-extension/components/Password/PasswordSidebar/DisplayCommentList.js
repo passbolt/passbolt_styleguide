@@ -17,7 +17,7 @@ import PropTypes from "prop-types";
 import AppContext from "../../../contexts/AppContext";
 import UserAvatar from "../../../../react/components/Common/Avatar/UserAvatar";
 import DeleteComment from "./DeleteComment";
-import {withTranslation} from "react-i18next";
+import {Trans, withTranslation} from "react-i18next";
 import {DateTime} from "luxon";
 
 class DisplayCommentList extends React.Component {
@@ -137,7 +137,7 @@ class DisplayCommentList extends React.Component {
                     <div className="metadata">
                       {this.isOwner(comment) &&
                       <span className="author username">
-                        {this.translate("You")}
+                        <Trans>You</Trans>
                       </span>
                       }
                       {!this.isOwner(comment) &&
@@ -175,7 +175,7 @@ class DisplayCommentList extends React.Component {
         }
         {this.state.actions.loading &&
         <div className="processing-wrapper">
-          <span className="processing-text">{this.translate("Retrieving comments")}</span>
+          <span className="processing-text"><Trans>Retrieving comments</Trans></span>
         </div>
         }
       </>

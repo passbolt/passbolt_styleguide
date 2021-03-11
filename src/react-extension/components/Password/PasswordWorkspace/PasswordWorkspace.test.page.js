@@ -18,7 +18,7 @@ import AppContext from "../../../contexts/AppContext";
 import React from "react";
 import PasswordWorkspace from "./PasswordWorkspace";
 import {BrowserRouter as Router} from "react-router-dom";
-import SetupTranslations from "../../../SetupTranslations";
+import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 
 /**
  * The PasswordWorkspace component represented as a page
@@ -31,13 +31,13 @@ export default class PasswordWorkspacePage {
    */
   constructor(appContext, props) {
     this._page = render(
-      <SetupTranslations>
+      <MockTranslationProvider>
         <AppContext.Provider value={appContext}>
           <Router>
             <PasswordWorkspace {...props}/>
           </Router>
         </AppContext.Provider>
-      </SetupTranslations>
+      </MockTranslationProvider>
     );
     this.setupPageObjects();
   }

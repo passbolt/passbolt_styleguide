@@ -19,7 +19,7 @@ import React from "react";
 import AppContext from "../../../contexts/AppContext";
 import FilterUserByShortcut from "./FilterUserByShortcut";
 import {BrowserRouter as Router} from "react-router-dom";
-import SetupTranslations from "../../../SetupTranslations";
+import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 
 /**
  * The FilterUsersByGroups component represented as a page
@@ -32,13 +32,13 @@ export default class FilterUsersByShortcutPage {
    */
   constructor(appContext, props) {
     this._page = render(
-      <SetupTranslations>
+      <MockTranslationProvider>
         <AppContext.Provider value={appContext}>
           <Router>
             <FilterUserByShortcut.WrappedComponent {...props}/>
           </Router>
         </AppContext.Provider>
-      </SetupTranslations>
+      </MockTranslationProvider>
     );
   }
 

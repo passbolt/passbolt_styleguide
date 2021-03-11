@@ -301,10 +301,10 @@ class ChooseSecurityToken extends Component {
     const processingClassName = this.isProcessing ? 'processing' : '';
     return (
       <div className="choose-security-token">
-        <h1>{this.translate("Pick a color and enter three characters.")}</h1>
+        <h1><Trans>Pick a color and enter three characters.</Trans></h1>
         <form onSubmit={this.handleSubmit}>
           <div className={`input-security-token input required ${this.hasErrors ? "error" : ""}`}>
-            <label htmlFor="security-token-text">{this.translate("Security token")}</label>
+            <label htmlFor="security-token-text"><Trans>Security token</Trans></label>
             <input
               id="security-token-text"
               ref={this.tokenCodeInputRef}
@@ -331,22 +331,22 @@ class ChooseSecurityToken extends Component {
                 className="randomize-button"
                 role="button"
                 onClick={this.handleRandomize}>
-                <Icon name="magic-wand"/> {this.translate("Randomize")}
+                <Icon name="magic-wand"/> <Trans>Randomize</Trans>
               </a>
             </div>
           </div>
           {this.state.hasBeenValidated &&
           <div className="input text">
             {this.state.errors.emptyCode &&
-            <div className="empty-code error-message">{this.translate("The security token code should not be empty.")}</div>
+            <div className="empty-code error-message"><Trans>The security token code should not be empty.</Trans></div>
             }
             {this.state.errors.lengthCode &&
-            <div className="not-good-length-code error-message">{this.translate("The security token code should be 3 characters long.")}</div>
+            <div className="not-good-length-code error-message"><Trans>The security token code should be 3 characters long.</Trans></div>
             }
           </div>
           }
           <p>
-            {this.translate("This security token will be displayed when your passphrase is requested, so you can quickly verify the form is coming from passbolt.")}
+            <Trans>This security token will be displayed when your passphrase is requested, so you can quickly verify the form is coming from passbolt.</Trans>
             <Trans>
               This will help protect you from <a href="https://en.wikipedia.org/wiki/Phishing" target="_blank" rel="noopener noreferrer">
                 phishing attacks</a>.
@@ -358,7 +358,7 @@ class ChooseSecurityToken extends Component {
               className={`button primary big full-width ${processingClassName}`}
               role="button"
               disabled={this.isProcessing}>
-              {this.translate("Next")}
+              <Trans>Next</Trans>
             </button>
           </div>
         </form>

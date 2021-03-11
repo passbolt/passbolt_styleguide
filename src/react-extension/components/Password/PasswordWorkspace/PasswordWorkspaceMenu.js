@@ -23,7 +23,7 @@ import PasswordDeleteDialog from "../PasswordDeleteDialog/PasswordDeleteDialog";
 import PasswordEditDialog from "../PasswordEditDialog/PasswordEditDialog";
 import ShareDialog from "../../Share/ShareDialog";
 import ExportResources from "../ExportResources/ExportResources";
-import {withTranslation} from "react-i18next";
+import {Trans, withTranslation} from "react-i18next";
 
 /**
  * This component allows the current user to add a new comment on a resource
@@ -365,21 +365,21 @@ class PasswordWorkspaceMenu extends React.Component {
               <a className={`button ready ${this.hasOneResourceSelected() ? "" : "disabled"}`}
                 onClick={this.handleCopySecretClickEvent}>
                 <Icon name="copy-to-clipboard"/>
-                <span>{this.translate("Copy")}</span>
+                <span><Trans>Copy</Trans></span>
               </a>
             </li>
             <li id="edit_action">
               <a className={`button ready ${this.hasOneResourceSelected() && this.canUpdate() ? "" : "disabled"}`}
                 onClick={this.handleEditClickEvent}>
                 <Icon name="edit"></Icon>
-                <span>{this.translate("Edit")}</span>
+                <span><Trans>Edit</Trans></span>
               </a>
             </li>
             <li id="share_action">
               <a className={`button ready ${this.hasResourceSelected() && this.canShare() ? "" : "disabled"}`}
                 onClick={this.handleShareClickEvent}>
                 <Icon name="share"/>
-                <span>{this.translate("Share")}</span>
+                <span><Trans>Share</Trans></span>
               </a>
             </li>
             <li id="export_action">
@@ -387,14 +387,14 @@ class PasswordWorkspaceMenu extends React.Component {
                 className={`button ready ${this.hasResourceSelected() && this.canExport() ? "" : "disabled"}`}
                 onClick={this.handleExportClickEvent}>
                 <Icon name="upload"/>
-                <span>{this.translate("Export")}</span>
+                <span><Trans>Export</Trans></span>
               </a>
             </li>
             <li>
               <div className="dropdown" ref={this.moreMenuRef}>
                 <a className={`button more ready ${this.hasMoreActionAllowed() ? "" : "disabled"}`}
                   onClick={this.handleMoreClickEvent}>
-                  <span>{this.translate("More")}</span>
+                  <span><Trans>More</Trans></span>
                   <Icon name="caret-down"/>
                 </a>
                 <ul className={`dropdown-content menu ready ${this.state.moreMenuOpen ? "visible" : ""}`}>
@@ -405,7 +405,7 @@ class PasswordWorkspaceMenu extends React.Component {
                           <a
                             className={`${this.canCopyUsername() ? "" : "disabled"}`}
                             onClick={this.handleCopyUsernameClickEvent}>
-                            <span>{this.translate("Copy username to clipboard")}</span>
+                            <span><Trans>Copy username to clipboard</Trans></span>
                           </a>
                         </div>
                       </div>
@@ -417,7 +417,7 @@ class PasswordWorkspaceMenu extends React.Component {
                         <div className="main-cell">
                           <a className={`${this.hasOneResourceSelected() ? "" : "disabled"}`}
                             onClick={this.handleCopySecretClickEvent}>
-                            <span>{this.translate("Copy password to clipboard")}</span>
+                            <span><Trans>Copy password to clipboard</Trans></span>
                           </a>
                         </div>
                       </div>
@@ -429,7 +429,7 @@ class PasswordWorkspaceMenu extends React.Component {
                         <div className="main-cell">
                           <a className={`${this.canUpdate() ? "" : "disabled"}`}
                             onClick={this.handleDeleteClickEvent}>
-                            <span>{this.translate("Delete")}</span>
+                            <span><Trans>Delete</Trans></span>
                           </a>
                         </div>
                       </div>
@@ -441,7 +441,7 @@ class PasswordWorkspaceMenu extends React.Component {
                         <div className="main-cell">
                           <a className={`${this.hasOneResourceSelected() ? "" : "disabled"}`}
                             onClick={this.handleCopyPermalinkClickEvent}>
-                            <span>{this.translate("Copy permalink to clipboard")}</span>
+                            <span><Trans>Copy permalink to clipboard</Trans></span>
                           </a>
                         </div>
                       </div>
@@ -458,7 +458,7 @@ class PasswordWorkspaceMenu extends React.Component {
               <a className={`button button-toggle info ${this.hasLockDetail() ? "selected" : ""}`}
                 onClick={this.handleViewDetailClickEvent}>
                 <Icon name="info-circle"/>
-                <span className="visuallyhidden">View detail</span>
+                <span className="visuallyhidden"><Trans>View detail</Trans></span>
               </a>
             </li>
           </ul>

@@ -20,7 +20,7 @@ import SetupAuthentication from "./components/AuthenticationSetup/SetupAuthentic
 import SiteSettings from "./lib/Settings/SiteSettings";
 import Footer from "./components/Footer/Footer";
 import AppContext from "./contexts/AppContext";
-import SetupTranslations from "./SetupTranslations";
+import TranslationProvider from "./components/Internationalisation/TranslationProvider";
 
 /**
  * The setup application served by the browser extension.
@@ -98,7 +98,7 @@ class ExtAuthenticationSetup extends Component {
    */
   render() {
     return (
-      <SetupTranslations loadingPath="/data/locales/{{lng}}/{{ns}}.json">
+      <TranslationProvider loadingPath="/data/locales/{{lng}}/{{ns}}.json">
         <AppContext.Provider value={this.state}>
           <AuthenticationContextProvider value={this.defaultContextValue}>
             <DialogContextProvider>
@@ -119,7 +119,7 @@ class ExtAuthenticationSetup extends Component {
             </DialogContextProvider>
           </AuthenticationContextProvider>
         </AppContext.Provider>
-      </SetupTranslations>
+      </TranslationProvider>
     );
   }
 }

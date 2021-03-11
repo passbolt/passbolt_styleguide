@@ -19,7 +19,7 @@ import {
 } from "../../../contexts/AdministrationWorkspaceContext";
 import AppContext, {withAppContext} from "../../../contexts/AppContext";
 import {withRouter} from "react-router-dom";
-import {withTranslation} from "react-i18next";
+import {Trans, withTranslation} from "react-i18next";
 
 /**
  * This component allows to display the menu of the administration
@@ -127,7 +127,7 @@ class DisplayAdministrationMenu extends React.Component {
               <div className={`row  ${this.isMfaSelected() ? "selected" : ""}`}>
                 <div className="main-cell-wrapper">
                   <div className="main-cell">
-                    <a onClick={this.handleMfaClick}><span>{this.translate("Multi Factor Authentication")}</span></a>
+                    <a onClick={this.handleMfaClick}><span><Trans>Multi Factor Authentication</Trans></span></a>
                   </div>
                 </div>
               </div>
@@ -138,7 +138,7 @@ class DisplayAdministrationMenu extends React.Component {
               <div className={`row  ${this.isUserDirectorySelected() ? "selected" : ""}`}>
                 <div className="main-cell-wrapper">
                   <div className="main-cell">
-                    <a onClick={this.handleUserDirectoryClick}><span>{this.translate("Users Directory")}</span></a>
+                    <a onClick={this.handleUserDirectoryClick}><span><Trans>Users Directory</Trans></span></a>
                   </div>
                 </div>
               </div>
@@ -148,7 +148,7 @@ class DisplayAdministrationMenu extends React.Component {
             <div className={`row  ${this.isEmailNotificationsSelected() ? "selected" : ""}`}>
               <div className="main-cell-wrapper">
                 <div className="main-cell">
-                  <a onClick={this.handleEmailNotificationsClick}><span>{this.translate("Email Notifications")}</span></a>
+                  <a onClick={this.handleEmailNotificationsClick}><span><Trans>Email Notifications</Trans></span></a>
                 </div>
               </div>
             </div>

@@ -15,7 +15,7 @@ import PropTypes from "prop-types";
 import {withRouter} from "react-router-dom";
 import AppContext from "../../contexts/AppContext";
 import {withNavigationContext} from "../../contexts/NavigationContext";
-import {withTranslation} from "react-i18next";
+import {Trans, withTranslation} from "react-i18next";
 
 class DisplayMainMenu extends Component {
   /**
@@ -66,7 +66,7 @@ class DisplayMainMenu extends Component {
               <div className={`row ${this.isSelected("passwords") ? "selected" : ""}`}>
                 <div className="main-cell-wrapper">
                   <div className="main-cell">
-                    <a onClick={this.props.navigationContext.onGoToPasswordsRequested} role="button"><span>{this.translate("passwords")}</span></a>
+                    <a onClick={this.props.navigationContext.onGoToPasswordsRequested} role="button"><span><Trans>passwords</Trans></span></a>
                   </div>
                 </div>
               </div>
@@ -75,7 +75,7 @@ class DisplayMainMenu extends Component {
               <div className={`row ${this.isSelected("users") ? "selected" : ""}`}>
                 <div className="main-cell-wrapper">
                   <div className="main-cell">
-                    <a onClick={this.props.navigationContext.onGoToUsersRequested} role="button"><span>{this.translate("users")}</span></a>
+                    <a onClick={this.props.navigationContext.onGoToUsersRequested} role="button"><span><Trans>users</Trans></span></a>
                   </div>
                 </div>
               </div>
@@ -85,7 +85,7 @@ class DisplayMainMenu extends Component {
               <div className={`row ${this.isSelected("administration") ? "selected" : ""}`}>
                 <div className="main-cell-wrapper">
                   <div className="main-cell">
-                    <a onClick={this.props.navigationContext.onGoToAdministrationRequested} role="button"><span>{this.translate("administration")}</span></a>
+                    <a onClick={this.props.navigationContext.onGoToAdministrationRequested} role="button"><span><Trans>administration</Trans></span></a>
                   </div>
                 </div>
               </div>
@@ -99,7 +99,7 @@ class DisplayMainMenu extends Component {
                       role="button"
                       target="_blank"
                       rel="noopener noreferrer">
-                      <span>{this.translate("help")}</span>
+                      <span><Trans>help</Trans></span>
                     </a>
                   </div>
                 </div>
@@ -113,7 +113,7 @@ class DisplayMainMenu extends Component {
                   <div className="main-cell">
                     <a role="button"
                       onClick={this.context.onLogoutRequested}>
-                      <span>{this.translate("sign out")}</span>
+                      <span><Trans>sign out</Trans></span>
                     </a>
                   </div>
                 </div>

@@ -19,7 +19,7 @@ import Icon from "../../../../react/components/Common/Icons/Icon";
 import CreateUserDialog from "../CreateUser/CreateUserDialog";
 import {withDialog} from "../../../../react/contexts/Common/DialogContext";
 import CreateGroupDialog from "../../Group/CreateGroup/CreateGroupDialog";
-import {withTranslation} from "react-i18next";
+import {Trans, withTranslation} from "react-i18next";
 
 /**
  * This component is a container of multiple actions applicable on user
@@ -188,7 +188,7 @@ class DisplayUserWorkspaceMainActions extends React.Component {
         <div className="dropdown" ref={this.createMenuRef}>
           <a className="button create primary ready" onClick={this.handleCreateClickEvent}>
             <Icon name="plus-circle"/>
-            <span>{this.translate("Create")}</span>
+            <span><Trans>Create</Trans></span>
           </a>
           <ul className={`dropdown-content menu ready ${this.state.createMenuOpen ? "visible" : ""}`}>
             <li id="user_action">
@@ -196,7 +196,7 @@ class DisplayUserWorkspaceMainActions extends React.Component {
                 <div className="main-cell-wrapper">
                   <div className="main-cell">
                     <a onClick={this.handleCreateMenuUserClickEvent}>
-                      <span>{this.translate("New user")}</span>
+                      <span><Trans>New user</Trans></span>
                     </a>
                   </div>
                 </div>
@@ -207,7 +207,7 @@ class DisplayUserWorkspaceMainActions extends React.Component {
                 <div className="main-cell-wrapper">
                   <div className="main-cell">
                     <a onClick={this.handleCreateMenuGroupClickEvent}>
-                      <span>{this.translate("New group")}</span>
+                      <span><Trans>New group</Trans></span>
                     </a>
                   </div>
                 </div>

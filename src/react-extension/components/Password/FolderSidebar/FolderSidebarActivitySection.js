@@ -322,7 +322,7 @@ class FolderSidebarActivitySection extends React.Component {
       <li className="usercard-detailed-col-2">
         <div className="content-wrapper">
           <div className="content">
-            {this.translate("Unknown activity, please contact your administrator.")}
+            <Trans>Unknown activity, please contact your administrator.</Trans>
           </div>
         </div>
       </li>
@@ -398,7 +398,7 @@ class FolderSidebarActivitySection extends React.Component {
         <div className="accordion-header">
           <h4>
             <a onClick={this.handleTitleClickEvent} role="button">
-              {this.translate("Activity")}
+              <Trans>Activity</Trans>
               {this.state.open &&
               <Icon name="caret-down"/>
               }
@@ -411,7 +411,7 @@ class FolderSidebarActivitySection extends React.Component {
         <div className="accordion-content">
           {loadingActivities &&
           <div className="processing-wrapper">
-            <span className="processing-text">{this.translate("Retrieving activities")}</span>
+            <span className="processing-text"><Trans>Retrieving activities</Trans></span>
           </div>
           }
           {!loadingActivities &&
@@ -422,7 +422,7 @@ class FolderSidebarActivitySection extends React.Component {
             {isMoreButtonVisible &&
             <div className="actions">
               <a onClick={this.handleMoreClickEvent} className={`button action-logs-load-more ${this.state.loadingMore ? "processing disabled" : ""}`} role="button">
-                <span>{this.translate("More")}</span>
+                <span><Trans>More</Trans></span>
               </a>
             </div>
             }

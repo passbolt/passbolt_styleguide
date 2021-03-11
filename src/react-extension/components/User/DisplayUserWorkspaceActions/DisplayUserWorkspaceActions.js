@@ -24,7 +24,7 @@ import DeleteUserWithConflictsDialog from "../DeleteUser/DeleteUserWithConflicts
 import ErrorDialog from "../../Dialog/ErrorDialog/ErrorDialog";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import ConfirmDisableUserMFA from "../DisableUserMFA/ConfirmDisableUserMFA";
-import {withTranslation} from "react-i18next";
+import {Trans, withTranslation} from "react-i18next";
 
 /**
  * This component is a container of multiple actions applicable on user
@@ -373,20 +373,20 @@ class DisplayUserWorkspaceActions extends React.Component {
             <li>
               <a className={`button ready ${this.isButtonDisabled() ? "disabled" : ""}`} onClick={this.handleEditClickEvent}>
                 <Icon name="edit"/>
-                <span>{this.translate("Edit")}</span>
+                <span><Trans>Edit</Trans></span>
               </a>
             </li>
             <li>
               <a className={`button ready ${!this.canDelete ? "disabled" : ""}`} onClick={this.handleDeleteClickEvent}>
                 <Icon name="trash"/>
-                <span>{this.translate("Delete")}</span>
+                <span><Trans>Delete</Trans></span>
               </a>
             </li>
             <div className="dropdown" ref={this.moreMenuRef}>
               <a
                 className={`button ready ${this.hasMoreActionAllowed ? "" : "disabled"}`}
                 onClick={this.handleMoreClickEvent}>
-                <span>{this.translate("More")}</span>
+                <span><Trans>More</Trans></span>
                 <Icon name="caret-down"/>
               </a>
               <ul className={`dropdown-content menu ready ${this.state.moreMenuOpen ? "visible" : ""}`}>
@@ -397,7 +397,7 @@ class DisplayUserWorkspaceActions extends React.Component {
                         <a
                           onClick={this.handleCopyPermalinkEvent}
                           className={`${this.canCopyPermalink ? "" : "disabled"}`}>
-                          <span>{this.translate("Copy permalink to clipboard")}</span>
+                          <span><Trans>Copy permalink to clipboard</Trans></span>
                         </a>
                       </div>
                     </div>
@@ -410,7 +410,7 @@ class DisplayUserWorkspaceActions extends React.Component {
                       <div className="main-cell">
                         <a onClick={this.handleResendInviteClickEvent}
                           className={`${this.canResendInviteToUser ? "" : "disabled"}`}>
-                          <span>{this.translate("Resend invite")}</span>
+                          <span><Trans>Resend invite</Trans></span>
                         </a>
                       </div>
                     </div>
@@ -426,7 +426,7 @@ class DisplayUserWorkspaceActions extends React.Component {
                           id="disable-mfa"
                           onClick={this.handleDisableMfaEvent}
                           className={this.canDisableMfaForUser ? '' : 'disabled'}>
-                          <span>{this.translate("Disable MFA")}</span>
+                          <span><Trans>Disable MFA</Trans></span>
                         </a>
                       </div>
                     </div>

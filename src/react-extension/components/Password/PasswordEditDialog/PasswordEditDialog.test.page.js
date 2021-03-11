@@ -17,14 +17,14 @@ import React from "react";
 import DialogContextProvider from "../../../../react/contexts/Common/DialogContext";
 import PasswordEditDialog from "./PasswordEditDialog";
 import {MemoryRouter, Route} from "react-router-dom";
-import SetupTranslations from "../../../SetupTranslations";
+import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 
 
 /**
  * Page template for the PasswordEditDialog component
  */
 export const PasswordEditDialogPageTemplate = (appContext, props) =>
-  <SetupTranslations>
+  <MockTranslationProvider>
     <AppContext.Provider value={appContext}>
       <DialogContextProvider>
         <MemoryRouter initialEntries={['/']}>
@@ -32,7 +32,7 @@ export const PasswordEditDialogPageTemplate = (appContext, props) =>
         </MemoryRouter>
       </DialogContextProvider>
     </AppContext.Provider>;
-  </SetupTranslations>
+  </MockTranslationProvider>
 
 /**
  * The PasswordEditDialog component represented as a page

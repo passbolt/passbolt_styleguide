@@ -13,7 +13,7 @@
  */
 import React, {Component} from "react";
 import {AuthenticationContext} from "../../../contexts/AuthenticationContext";
-import {withTranslation} from "react-i18next";
+import {Trans, withTranslation} from "react-i18next";
 import PropTypes from "prop-types";
 
 /**
@@ -150,8 +150,8 @@ class AcceptLoginServerKeyChange extends Component {
     const disabledClassName = this.mustBeDisabled ? 'disabled' : '';
     return (
       <div>
-        <h1>{this.translate("Sorry, the server key has changed.")}</h1>
-        <p>{this.translate("For security reasons please check with your administrator that this is a change that they initiated. The new fingerprint:")} </p>
+        <h1><Trans>Sorry, the server key has changed.</Trans></h1>
+        <p><Trans>For security reasons please check with your administrator that this is a change that they initiated. The new fingerprint:</Trans> </p>
         <pre>{this.state.fingerprint}</pre>
         <form
           acceptCharset="utf-8"
@@ -164,14 +164,14 @@ class AcceptLoginServerKeyChange extends Component {
               value={this.state.hasAccepted}
               onChange={this.handleAcceptChange}/>
             <label htmlFor="accept-new-key">
-              {this.translate("Yes I checked and it is all fine.")}
+              <Trans>Yes I checked and it is all fine.</Trans>
             </label>
           </div>
           {this.state.hasBeenValidated &&
           <>
             <br/>
             {this.state.errors.hasNotAccepted &&
-            <div className="has-not-accepted error message">{this.translate("You must accept the new server key")}</div>
+            <div className="has-not-accepted error message"><Trans>You must accept the new server key</Trans></div>
             }
           </>
           }
@@ -181,7 +181,7 @@ class AcceptLoginServerKeyChange extends Component {
               className={`button primary big full-width ${disabledClassName}`}
               role="button"
               disabled={this.mustBeDisabled}>
-              {this.translate("Accept new key")}
+              <Trans>Accept new key</Trans>
             </button>
           </div>
         </form>

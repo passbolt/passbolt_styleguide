@@ -12,7 +12,7 @@
  * @since         3.0.0
  */
 import React, {Component} from "react";
-import {withTranslation} from "react-i18next";
+import {Trans, withTranslation} from "react-i18next";
 import PropTypes from "prop-types";
 
 /**
@@ -36,7 +36,7 @@ class DisplayLoginInProgress extends Component {
         <div className="processing-wrapper">
           <span className="processing"></span>
         </div>
-        <h1>{this.translate("Signing in, please wait...")}</h1>
+        <h1><Trans>Signing in, please wait...</Trans></h1>
       </div>
     );
   }

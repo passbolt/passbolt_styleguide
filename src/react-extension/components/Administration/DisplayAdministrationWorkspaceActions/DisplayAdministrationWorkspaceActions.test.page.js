@@ -16,7 +16,7 @@ import {fireEvent, render, waitFor} from "@testing-library/react";
 import AppContext from "../../../contexts/AppContext";
 import React from "react";
 import DisplayUserWorkspaceActions from "./DisplayAdministrationWorkspaceActions";
-import SetupTranslations from "../../../SetupTranslations";
+import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 
 /**
  * The DisplayUserWorkspaceActions component represented as a page
@@ -29,11 +29,11 @@ export default class DisplayUserWorkspaceActionsPage {
    */
   constructor(appContext, props) {
     this._page = render(
-      <SetupTranslations>
+      <MockTranslationProvider>
         <AppContext.Provider value={appContext}>
           <DisplayUserWorkspaceActions {...props}/>
         </AppContext.Provider>
-      </SetupTranslations>
+      </MockTranslationProvider>
     );
   }
 

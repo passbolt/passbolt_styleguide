@@ -19,7 +19,7 @@ import FolderCreateDialog from "../../Folder/FolderCreateDialog/FolderCreateDial
 import {withDialog} from "../../../../react/contexts/Common/DialogContext";
 import ExportResources from "../ExportResources/ExportResources";
 import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
-import {withTranslation} from "react-i18next";
+import {Trans, withTranslation} from "react-i18next";
 
 class FoldersTreeRootFolderContextualMenu extends React.Component {
   /**
@@ -116,7 +116,7 @@ class FoldersTreeRootFolderContextualMenu extends React.Component {
           <div className="row">
             <div className="main-cell-wrapper">
               <div className="main-cell">
-                <a onClick={this.handleCreateFolderItemClickEvent}><span>{this.translate("Create folder")}</span></a>
+                <a onClick={this.handleCreateFolderItemClickEvent}><span><Trans>Create folder</Trans></span></a>
               </div>
             </div>
           </div>
@@ -125,7 +125,7 @@ class FoldersTreeRootFolderContextualMenu extends React.Component {
           <div className="row">
             <div className="main-cell-wrapper">
               <div className="main-cell">
-                <a onClick={this.handleExportFolderItemClickEvent}><span>{this.translate("Export all")}</span></a>
+                <a onClick={this.handleExportFolderItemClickEvent}><span><Trans>Export all</Trans></span></a>
               </div>
             </div>
           </div>

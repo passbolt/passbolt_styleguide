@@ -21,7 +21,7 @@ import {withRouter} from "react-router-dom";
 import {withContextualMenu} from "../../../../react/contexts/Common/ContextualMenuContext";
 import {UserWorkspaceFilterTypes, withUserWorkspace} from "../../../contexts/UserWorkspaceContext";
 import DisplayUsersContextualMenu from "../DisplayUsersContextualMenu/DisplayUsersContextualMenu";
-import {withTranslation} from "react-i18next";
+import {Trans, withTranslation} from "react-i18next";
 import {DateTime} from "luxon";
 
 
@@ -332,8 +332,8 @@ class DisplayUsers extends React.Component {
           {isEmpty &&
            filterType === UserWorkspaceFilterTypes.TEXT &&
           <div className="empty-content">
-            <h2>{this.translate("None of the users matched this search.")}</h2>
-            <p className="try-another-search">{this.translate("Try another search or use the left panel to navigate into your organization.")}</p>
+            <h2><Trans>None of the users matched this search.</Trans></h2>
+            <p className="try-another-search"><Trans>Try another search or use the left panel to navigate into your organization.</Trans></p>
           </div>
           }
           {!isEmpty &&
@@ -352,7 +352,7 @@ class DisplayUsers extends React.Component {
                     </th>
                     <th className="cell-name l-cell sortable">
                       <a onClick={ev => this.handleSortByColumnClick(ev, "name")}>
-                        {this.translate("Name")}
+                        <Trans>Name</Trans>
                         {this.isSortedColumn("name") && this.isSortedAsc() &&
                         <Icon baseline={true} name="caret-up"/>
                         }
@@ -363,7 +363,7 @@ class DisplayUsers extends React.Component {
                     </th>
                     <th className="cell-username l-cell username sortable">
                       <a onClick={ev => this.handleSortByColumnClick(ev, "username")}>
-                        {this.translate("Username")}
+                        <Trans>Username</Trans>
                         {this.isSortedColumn("username") && this.isSortedAsc() &&
                         <Icon baseline={true} name="caret-up"/>
                         }
@@ -374,7 +374,7 @@ class DisplayUsers extends React.Component {
                     </th>
                     <th className="cell-modified m-cell sortable">
                       <a onClick={ev => this.handleSortByColumnClick(ev, "modified")}>
-                        {this.translate("Modified")}
+                        <Trans>Modified</Trans>
                         {this.isSortedColumn("modified") && this.isSortedAsc() &&
                         <Icon baseline={true} name="caret-up"/>
                         }
@@ -385,7 +385,7 @@ class DisplayUsers extends React.Component {
                     </th>
                     <th className="cell-last_logged_in m-cell sortable">
                       <a onClick={ev => this.handleSortByColumnClick(ev, "last_logged_in")}>
-                        {this.translate("Last logged in")}
+                        <Trans>Last logged in</Trans>
                         {this.isSortedColumn("last_logged_in") && this.isSortedAsc() &&
                         <Icon baseline={true} name="caret-up"/>
                         }
@@ -398,7 +398,7 @@ class DisplayUsers extends React.Component {
                     {this.isLoggedInUserAdmin() &&
                       <th className="cell-is_mfa_enabled m-cell sortable">
                         <a onClick={ev => this.handleSortByColumnClick(ev, "is_mfa_enabled")}>
-                          {this.translate("MFA")}
+                          <Trans>MFA</Trans>
                           {this.isSortedColumn("is_mfa_enabled") && this.isSortedAsc() &&
                           <Icon baseline={true} name="caret-up"/>
                           }

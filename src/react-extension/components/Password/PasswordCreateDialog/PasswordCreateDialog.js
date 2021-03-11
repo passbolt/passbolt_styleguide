@@ -26,7 +26,7 @@ import DialogWrapper from "../../../../react/components/Common/Dialog/DialogWrap
 import FormSubmitButton from "../../../../react/components/Common/Inputs/FormSubmitButton/FormSubmitButton";
 import FormCancelButton from "../../../../react/components/Common/Inputs/FormSubmitButton/FormCancelButton";
 
-import {withTranslation} from "react-i18next";
+import {Trans, withTranslation} from "react-i18next";
 
 class PasswordCreateDialog extends Component {
   constructor() {
@@ -549,7 +549,7 @@ class PasswordCreateDialog extends Component {
         <form onSubmit={this.handleFormSubmit} noValidate>
           <div className="form-content">
             <div className={`input text required ${this.state.nameError ? "error" : ""}`}>
-              <label htmlFor="create-password-form-name">{this.translate("Name")}</label>
+              <label htmlFor="create-password-form-name"><Trans>Name</Trans></label>
               <input id="create-password-form-name" name="name" type="text" value={this.state.name}
                 onKeyUp={this.handleNameInputKeyUp} onChange={this.handleInputChange}
                 disabled={this.state.processing} ref={this.nameInputRef} className="required fluid" maxLength="64"
@@ -559,7 +559,7 @@ class PasswordCreateDialog extends Component {
               }
             </div>
             <div className={`input text ${this.state.uriError ? "error" : ""}`}>
-              <label htmlFor="create-password-form-uri">{this.translate("URI")}</label>
+              <label htmlFor="create-password-form-uri"><Trans>URI</Trans></label>
               <input id="create-password-form-uri" name="uri" className="fluid" maxLength="1024" type="text"
                 autoComplete="off" value={this.state.uri} onChange={this.handleInputChange} placeholder={this.translate("URI")}
                 disabled={this.state.processing}/>
@@ -568,7 +568,7 @@ class PasswordCreateDialog extends Component {
               }
             </div>
             <div className={`input text ${this.state.usernameError ? "error" : ""}`}>
-              <label htmlFor="create-password-form-username">{this.translate("Username")}</label>
+              <label htmlFor="create-password-form-username"><Trans>Username</Trans></label>
               <input id="create-password-form-username" name="username" type="text" className="fluid" maxLength="64"
                 autoComplete="off" value={this.state.username} onChange={this.handleInputChange} placeholder={this.translate("Username")}
                 disabled={this.state.processing}/>
@@ -577,7 +577,7 @@ class PasswordCreateDialog extends Component {
               }
             </div>
             <div className={`input-password-wrapper input required ${this.state.passwordError ? "error" : ""}`}>
-              <label htmlFor="create-password-form-password">{this.translate("Password")}</label>
+              <label htmlFor="create-password-form-password"><Trans>Password</Trans></label>
               <div className="input text password">
                 <input id="create-password-form-password" name="password" className="required" maxLength="4096"
                   placeholder={this.translate("Password")} required="required" type={this.state.viewPassword ? "text" : "password"}
@@ -608,7 +608,7 @@ class PasswordCreateDialog extends Component {
                 <span className="progress">
                   <span className={`progress-bar ${passwordStrength.id}`} />
                 </span>
-                <span className="complexity-text">{this.translate("complexity:")} <strong>{this.translate(passwordStrength.label)}</strong></span>
+                <span className="complexity-text"><Trans>complexity:</Trans> <strong>{this.translate(passwordStrength.label)}</strong></span>
               </div>
               {this.state.passwordError &&
               <div className="input text">
@@ -617,7 +617,7 @@ class PasswordCreateDialog extends Component {
               }
             </div>
             <div className="input textarea">
-              <label htmlFor="create-password-form-description">{this.translate("Description")}&nbsp;
+              <label htmlFor="create-password-form-description"><Trans>Description</Trans>&nbsp;
                 {!this.areResourceTypesEnabled() &&
                 <Tooltip message={this.translate("Do not store sensitive data. Unlike the password, this data is not encrypted. Upgrade to version 3 to encrypt this information.")} icon="info-circle"/>
                 }

@@ -20,7 +20,7 @@ import {withDialog} from "../../../../react/contexts/Common/DialogContext";
 import PropTypes from "prop-types";
 import debounce from "debounce-promise";
 import SecretComplexity from "../../../lib/Secret/SecretComplexity";
-import {withTranslation} from "react-i18next";
+import {Trans, withTranslation} from "react-i18next";
 
 /**
  * The component allows the user to create a Gpg key by automatic generation or by manually importing one
@@ -252,10 +252,10 @@ class CreateGpgKey extends Component {
     const disabledClassName = this.mustBeDisabled ? 'disabled' : '';
     return (
       <div className="create-gpg-key">
-        <h1>{this.translate("Welcome to Passbolt, please select a passphrase!")}</h1>
+        <h1><Trans>Welcome to Passbolt, please select a passphrase!</Trans></h1>
         <form acceptCharset="utf-8" onSubmit={this.handleSubmit} className="enter-passphrase">
           <p>
-            {this.translate("This passphrase is the only passphrase you will need to remember from now on, choose wisely!")}
+            <Trans>This passphrase is the only passphrase you will need to remember from now on, choose wisely!</Trans>
           </p>
           <div className="input text password required">
             {this.state.isObfuscated &&
@@ -294,19 +294,19 @@ class CreateGpgKey extends Component {
           <div className="password-hints">
             <ul>
               <li className={this.state.hintClassNames.enoughLength}>
-                {this.translate("It is at least 8 characters in length")}
+                <Trans>It is at least 8 characters in length</Trans>
               </li>
               <li className={this.state.hintClassNames.uppercase}>
-                {this.translate("It contains lower and uppercase characters")}
+                <Trans>It contains lower and uppercase characters</Trans>
               </li>
               <li className={this.state.hintClassNames.alphanumeric}>
-                {this.translate("It contains letters and numbers")}
+                <Trans>It contains letters and numbers</Trans>
               </li>
               <li className={this.state.hintClassNames.specialCharacters}>
-                {this.translate("It contains special characters (like / or * or %)")}
+                <Trans>It contains special characters (like / or * or %)</Trans>
               </li>
               <li className={this.state.hintClassNames.notInDictionary}>
-                {this.translate("It is not part of a dictionary")}
+                <Trans>It is not part of a dictionary</Trans>
               </li>
             </ul>
           </div>
@@ -317,13 +317,13 @@ class CreateGpgKey extends Component {
               className={`button primary big full-width ${disabledClassName} ${processingClassName}`}
               role="button"
               disabled={this.mustBeDisabled || this.isProcessing}>
-              {this.translate("Next")}
+              <Trans>Next</Trans>
             </button>
             <a
               id="import-key-link"
               onClick={this.handleImportGpgKey}
               disabled={!this.areActionsAllowed}>
-              {this.translate("Or use an existing private key.")}
+              <Trans>Or use an existing private key.</Trans>
             </a>
           </div>
         </form>

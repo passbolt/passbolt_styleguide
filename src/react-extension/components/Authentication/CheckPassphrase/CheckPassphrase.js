@@ -17,7 +17,7 @@ import {AuthenticationContext} from "../../../contexts/AuthenticationContext";
 import PropTypes from "prop-types";
 import {withDialog} from "../../../../react/contexts/Common/DialogContext";
 import Icon from "../../../../react/components/Common/Icons/Icon";
-import {withTranslation} from "react-i18next";
+import {Trans, withTranslation} from "react-i18next";
 
 /**
  * This component checks the passphrase of an user gpg key
@@ -242,11 +242,11 @@ class CheckPassphrase extends Component {
     const processingClassName = this.isProcessing ? 'processing' : '';
     return (
       <div className="check-passphrase">
-        <h1>{this.translate("Please enter your passphrase to continue.")}</h1>
+        <h1><Trans>Please enter your passphrase to continue.</Trans></h1>
         <form acceptCharset="utf-8" onSubmit={this.handleSubmit} className="enter-passphrase">
           <div className="form-content">
             <div className={`input text password required ${this.hasErrors ? "error" : ""}`}>
-              <label htmlFor="passphrase">{this.translate("Passphrase")}</label>
+              <label htmlFor="passphrase"><Trans>Passphrase</Trans></label>
               <input
                 id="passphrase"
                 ref={this.passphraseInputRef}
@@ -265,10 +265,10 @@ class CheckPassphrase extends Component {
               {this.state.hasBeenValidated &&
               <>
                 {this.state.errors.emptyPassphrase &&
-                  <div className="empty-passphrase error-message">{this.translate("The passphrase should not be empty.")}</div>
+                  <div className="empty-passphrase error-message"><Trans>The passphrase should not be empty.</Trans></div>
                 }
                 {this.state.errors.invalidPassphrase &&
-                <div className="invalid-passphrase error-message">{this.translate("The passphrase is invalid.")}</div>
+                <div className="invalid-passphrase error-message"><Trans>The passphrase is invalid.</Trans></div>
                 }
               </>
               }
@@ -283,7 +283,7 @@ class CheckPassphrase extends Component {
                   onChange={this.handleToggleRememberMe}
                   disabled={!this.areActionsAllowed}/>
                 <label htmlFor="remember-me">
-                  {this.translate("Remember until signed out.")}
+                  <Trans>Remember until signed out.</Trans>
                 </label>
               </div>
             }
@@ -294,7 +294,7 @@ class CheckPassphrase extends Component {
               className={`button primary big full-width ${processingClassName}`}
               role="button"
               disabled={this.isProcessing}>
-              {this.translate("Verify")}
+              <Trans>Verify</Trans>
             </button>
             {this.props.secondaryAction}
           </div>

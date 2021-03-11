@@ -17,7 +17,7 @@ import Icon from "../../../../react/components/Common/Icons/Icon";
 import DescriptionEditor from "./DescriptionEditor";
 import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 import AppContext from "../../../contexts/AppContext";
-import {withTranslation} from "react-i18next";
+import {Trans, withTranslation} from "react-i18next";
 
 /**
  * This component display the description section of a resource
@@ -289,7 +289,7 @@ class PasswordSidebarDescriptionSection extends React.Component {
         <div className="accordion-header">
           <h4>
             <a onClick={this.handleTitleClickEvent} role="button" className="section-opener">
-              {this.translate("Description")}
+              <Trans>Description</Trans>
               {this.state.open &&
               <Icon name="caret-down"/>
               }
@@ -303,13 +303,13 @@ class PasswordSidebarDescriptionSection extends React.Component {
           {this.canEdit() &&
           <a className="section-action" onClick={this.handleEditClickEvent}>
             <Icon name="edit"/>
-            <span className="visuallyhidden">edit</span>
+            <span className="visuallyhidden"><Trans>edit</Trans></span>
           </a>
           }
           {this.state.isSecretDecrypting &&
           <p className="description-content">
             <span className="processing-wrapper">
-              <span className="processing-text">{this.translate("Decrypting")}</span>
+              <span className="processing-text"><Trans>Decrypting</Trans></span>
             </span>
           </p>
           }
@@ -323,11 +323,11 @@ class PasswordSidebarDescriptionSection extends React.Component {
           {this.mustShowEmptyDescription() &&
           <p className="description-content">
             {!this.canEdit() &&
-              <em className="empty-content">{this.translate("There is no description.")}</em>
+              <em className="empty-content"><Trans>There is no description.</Trans></em>
             }
             {this.canEdit() &&
             <em className="empty-content" onClick={this.toggleInputDescriptionEditor}>
-              {this.translate("There is no description yet, click here to add one.")}
+              <Trans>There is no description yet, click here to add one.</Trans>
             </em>
             }
           </p>

@@ -18,7 +18,7 @@ import Icon from "../../../../react/components/Common/Icons/Icon";
 import {withUserWorkspace} from "../../../contexts/UserWorkspaceContext";
 import AppContext from "../../../contexts/AppContext";
 import GroupAvatar from "../../../../react/components/Common/Avatar/GroupAvatar";
-import {withTranslation} from "react-i18next";
+import {Trans, withTranslation} from "react-i18next";
 
 /**
  * This component displays the user details about information
@@ -128,7 +128,7 @@ class DisplayUserDetailsGroups extends React.Component {
               ))
             }
             {!hasGroups &&
-              <em className="empty-feedback empty-group-feedback">{this.translate("The user is not a member of any group yet")}</em>
+              <em className="empty-feedback empty-group-feedback"><Trans>The user is not a member of any group yet</Trans></em>
             }
           </ul>
         </div>

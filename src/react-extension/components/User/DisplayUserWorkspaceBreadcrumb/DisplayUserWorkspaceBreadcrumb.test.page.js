@@ -3,7 +3,7 @@ import React from "react";
 import AppContext from "../../../contexts/AppContext";
 import {BrowserRouter as Router} from "react-router-dom";
 import DisplayUserWorkspaceBreadcrumb from "./DisplayUserWorkspaceBreadcrumb";
-import SetupTranslations from "../../../SetupTranslations";
+import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 
 /**
  * The DisplayUserWorkspaceBreadcrumbPage component represented as a page
@@ -16,13 +16,13 @@ export default class DisplayUserWorkspaceBreadcrumbPage {
    */
   constructor(appContext, props) {
     this._page = render(
-      <SetupTranslations>
+      <MockTranslationProvider>
         <AppContext.Provider value={appContext}>
           <Router>
             <DisplayUserWorkspaceBreadcrumb {...props}/>
           </Router>
         </AppContext.Provider>
-      </SetupTranslations>
+      </MockTranslationProvider>
     );
   }
 

@@ -13,7 +13,7 @@
  */
 import React, {Component} from "react";
 import PropTypes from "prop-types";
-import {withTranslation} from "react-i18next";
+import {Trans, withTranslation} from "react-i18next";
 
 class DisplayUnexpectedError extends Component {
   /**
@@ -38,11 +38,11 @@ class DisplayUnexpectedError extends Component {
   render() {
     return (
       <div className="setup-error">
-        <h1>{this.translate("Something went wrong.")}</h1>
-        <p>{this.translate("The operation failed with the following error:")}</p>
+        <h1><Trans>Something went wrong.</Trans></h1>
+        <p><Trans>The operation failed with the following error:</Trans></p>
         <p>{this.props.error && this.props.error.message}</p>
         <div className="form-actions">
-          <button onClick={this.onClick.bind(this)} className="button primary big full-width" role="button">{this.translate("Try again")}</button>
+          <button onClick={this.onClick.bind(this)} className="button primary big full-width" role="button"><Trans>Try again</Trans></button>
         </div>
       </div>
     );

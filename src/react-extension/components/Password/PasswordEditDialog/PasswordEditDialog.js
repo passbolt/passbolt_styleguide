@@ -24,7 +24,7 @@ import DialogWrapper from "../../../../react/components/Common/Dialog/DialogWrap
 import FormSubmitButton from "../../../../react/components/Common/Inputs/FormSubmitButton/FormSubmitButton";
 import FormCancelButton from "../../../../react/components/Common/Inputs/FormSubmitButton/FormCancelButton";
 import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
-import {withTranslation} from "react-i18next";
+import {Trans, withTranslation} from "react-i18next";
 
 class PasswordEditDialog extends Component {
   constructor(props, context) {
@@ -650,7 +650,7 @@ class PasswordEditDialog extends Component {
         <form onSubmit={this.handleFormSubmit} noValidate>
           <div className="form-content">
             <div className={`input text required ${this.state.nameError ? "error" : ""}`}>
-              <label htmlFor="edit-password-form-name">{this.translate("Name")}</label>
+              <label htmlFor="edit-password-form-name"><Trans>Name</Trans></label>
               <input id="edit-password-form-name" name="name" type="text" value={this.state.name}
                 onKeyUp={this.handleNameInputKeyUp} onChange={this.handleInputChange}
                 disabled={this.hasAllInputDisabled()} ref={this.nameInputRef} className="required fluid" maxLength="64"
@@ -660,7 +660,7 @@ class PasswordEditDialog extends Component {
               }
             </div>
             <div className={`input text ${this.state.uriError ? "error" : ""}`}>
-              <label htmlFor="edit-password-form-uri">{this.translate("URI")}</label>
+              <label htmlFor="edit-password-form-uri"><Trans>URI</Trans></label>
               <input id="edit-password-form-uri" name="uri" className="fluid" maxLength="1024" type="text"
                 autoComplete="off" value={this.state.uri} onChange={this.handleInputChange} placeholder={this.translate("URI")}
                 disabled={this.hasAllInputDisabled()}/>
@@ -669,7 +669,7 @@ class PasswordEditDialog extends Component {
               }
             </div>
             <div className={`input text ${this.state.usernameError ? "error" : ""}`}>
-              <label htmlFor="edit-password-form-username">{this.translate("Username")}</label>
+              <label htmlFor="edit-password-form-username"><Trans>Username</Trans></label>
               <input id="edit-password-form-username" name="username" type="text" className="fluid" maxLength="64"
                 autoComplete="off" value={this.state.username} onChange={this.handleInputChange} placeholder={this.translate("Username")}
                 disabled={this.hasAllInputDisabled()}/>
@@ -678,7 +678,7 @@ class PasswordEditDialog extends Component {
               }
             </div>
             <div className={`input-password-wrapper input required ${this.state.passwordError ? "error" : ""}`}>
-              <label htmlFor="edit-password-form-password">{this.translate("Password")}</label>
+              <label htmlFor="edit-password-form-password"><Trans>Password</Trans></label>
               <div className="input text password">
                 <input id="edit-password-form-password" name="password" className={`required ${this.state.isSecretDecrypting ? "" : "decrypted"}`}
                   required="required" type={this.state.viewPassword ? "text" : "password"}
@@ -709,7 +709,7 @@ class PasswordEditDialog extends Component {
                 <span className="progress">
                   <span className={`progress-bar ${passwordStrength.id}`}/>
                 </span>
-                <span className="complexity-text">{this.translate("complexity:")} <strong>{this.translate(passwordStrength.label)}</strong></span>
+                <span className="complexity-text"><Trans>complexity:</Trans> <strong>{this.translate(passwordStrength.label)}</strong></span>
               </div>
               {this.state.passwordError &&
               <div className="input text">
@@ -718,7 +718,7 @@ class PasswordEditDialog extends Component {
               }
             </div>
             <div className="input textarea">
-              <label htmlFor="edit-password-form-description">{this.translate("Description")}&nbsp;
+              <label htmlFor="edit-password-form-description"><Trans>Description</Trans>&nbsp;
                 {!this.areResourceTypesEnabled() &&
                 <Tooltip message={this.translate("Do not store sensitive data. Unlike the password, this data is not encrypted. Upgrade to version 3 to encrypt this information.")}
                   icon="info-circle"/>

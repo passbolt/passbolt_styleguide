@@ -25,7 +25,7 @@ import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import UserAvatar from "../../../../react/components/Common/Avatar/UserAvatar";
 import Icon from "../../../../react/components/Common/Icons/Icon";
 import TooltipHtml from "../../../../react/components/Common/Tooltip/TooltipHtml";
-import {withTranslation} from "react-i18next";
+import {Trans, withTranslation} from "react-i18next";
 
 class CreateGroupDialog extends Component {
   /**
@@ -448,7 +448,7 @@ class CreateGroupDialog extends Component {
         <form className="group-form" onSubmit={this.handleFormSubmit} noValidate>
           <div className="form-content">
             <div className={`input text required ${this.state.nameError ? "error" : ""}`}>
-              <label htmlFor="group_name">{this.translate("Group name")}</label>
+              <label htmlFor="group_name"><Trans>Group name</Trans></label>
               <input id="group-name-input" name="name" className="required" maxLength="50" type="text" placeholder={this.translate("group name")}
                 onKeyUp={this.handleNameInputKeyUp} onChange={this.handleInputChange}
                 disabled={this.state.processing} ref={this.nameInputRef}/>
@@ -458,7 +458,7 @@ class CreateGroupDialog extends Component {
             </div>
 
             <div className="input required">
-              <label htmlFor="group_permission">{this.translate("Group members")}</label>
+              <label htmlFor="group_permission"><Trans>Group members</Trans></label>
             </div>
           </div>
           <div className="group_members">
@@ -477,14 +477,14 @@ class CreateGroupDialog extends Component {
                         </TooltipHtml>
                       </div>
                       <div className="permission_changes">
-                        <span>{this.translate("Will be added")}</span>
+                        <span><Trans>Will be added</Trans></span>
                       </div>
                     </div>
                     <div className="select rights">
                       <select value={groups_user.is_admin} disabled={this.hasAllInputDisabled()}
                         onChange={event => this.handleSelectUpdate(event, groups_user.user.id)}>
-                        <option value="false">{this.translate("Member")}</option>
-                        <option value="true">{this.translate("Group manager")}</option>
+                        <option value="false"><Trans>Member</Trans></option>
+                        <option value="true"><Trans>Group manager</Trans></option>
                       </select>
                     </div>
                     <div className="actions">
@@ -501,17 +501,17 @@ class CreateGroupDialog extends Component {
               }
               {!this.hasMembers() &&
               <div className="message warning">
-                <span>{this.translate("The group is empty, please add a group manager.")}</span>
+                <span><Trans>The group is empty, please add a group manager.</Trans></span>
               </div>
               }
               {this.hasMembers() && !this.hasManager() &&
               <div className="message error">
-                <span>{this.translate("Please make sure there is at least one group manager.")}</span>
+                <span><Trans>Please make sure there is at least one group manager.</Trans></span>
               </div>
               }
               {this.hasManager() &&
               <div className="message warning">
-                <span>{this.translate("You need to click save for the changes to take place.")}</span>
+                <span><Trans>You need to click save for the changes to take place.</Trans></span>
               </div>
               }
             </div>

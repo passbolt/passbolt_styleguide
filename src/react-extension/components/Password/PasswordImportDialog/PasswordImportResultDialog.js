@@ -269,7 +269,7 @@ class PasswordImportResultDialog extends Component {
             }
             {this.hasErrorsResources &&
             <>
-              <p className="error inline-error">{this.translate("There was an issue while importing passwords:")}</p>
+              <p className="error inline-error"><Trans>There was an issue while importing passwords:</Trans></p>
               <p>
                 <Trans count={this.resultCreatedResourcesCount + this.resultErrorsResources.length}>
                   <strong>{{numberResourceSuccess: this.resultCreatedResourcesCount}} out of {{count: this.resultCreatedResourcesCount + this.resultErrorsResources.length}}</strong> password has been imported.
@@ -284,7 +284,7 @@ class PasswordImportResultDialog extends Component {
             }
             {this.canIUseFolders && this.resultHasErrorsFolders &&
             <>
-              <p className="error inline-error">{this.translate("There was an issue while importing folders:")}</p>
+              <p className="error inline-error"><Trans>There was an issue while importing folders:</Trans></p>
               <p>
                 <Trans count={this.resultCreatedFoldersCount + this.resultErrorsFolders.length}>
                   <strong>{{numberFolderSuccess: this.resultCreatedFoldersCount}} out of {{count: this.resultCreatedFoldersCount + this.resultErrorsFolders.length}}</strong> folder has been imported.
@@ -310,7 +310,7 @@ class PasswordImportResultDialog extends Component {
             <div className="accordion error-details">
               <div className="accordion-header">
                 <a onClick={this.handleErrorDetailsToggle}>
-                  {this.translate("Errors details")}
+                  <Trans>Errors details</Trans>
                   <Icon baseline={true} name={this.state.showErrorDetails ? "caret-up" : "caret-down"}/>
                 </a>
               </div>
@@ -320,7 +320,7 @@ class PasswordImportResultDialog extends Component {
                   <label
                     htmlFor="js_field_debug"
                     className="visuallyhidden">
-                    {this.translate("Errors details")}
+                    <Trans>Errors details</Trans>
                   </label>
                   <textarea
                     id="js_field_debug"

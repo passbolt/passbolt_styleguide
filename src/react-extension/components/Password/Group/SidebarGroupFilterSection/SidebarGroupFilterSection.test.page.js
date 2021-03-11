@@ -19,7 +19,7 @@ import AppContext from "../../../../contexts/AppContext";
 import React from "react";
 import SidebarGroupFilterSection from "./SidebarGroupFilterSection";
 import {BrowserRouter as Router} from "react-router-dom";
-import SetupTranslations from "../../../../SetupTranslations";
+import MockTranslationProvider from "../../../../test/mock/components/Internationalisation/MockTranslationProvider";
 
 /**
  * The PasswordSidebarActivitySection component represented as a page
@@ -32,13 +32,13 @@ export default class SidebarGroupFilterSectionPage {
    */
   constructor(appContext, props) {
     this._page = render(
-      <SetupTranslations>
+      <MockTranslationProvider>
         <AppContext.Provider value={appContext}>
           <Router>
             <SidebarGroupFilterSection.WrappedComponent {...props}/>
           </Router>
         </AppContext.Provider>
-      </SetupTranslations>
+      </MockTranslationProvider>
     );
     this.setupPageObjects();
   }

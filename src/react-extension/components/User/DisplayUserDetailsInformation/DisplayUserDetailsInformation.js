@@ -17,7 +17,7 @@ import PropTypes from "prop-types";
 import Icon from "../../../../react/components/Common/Icons/Icon";
 import {withUserWorkspace} from "../../../contexts/UserWorkspaceContext";
 import AppContext from "../../../contexts/AppContext";
-import {withTranslation} from "react-i18next";
+import {Trans, withTranslation} from "react-i18next";
 import {DateTime} from "luxon";
 
 /**
@@ -105,7 +105,7 @@ class DisplayUserDetailsInformation extends React.Component {
         <div className="accordion-header">
           <h4>
             <a onClick={this.handleTitleClicked}  role="button">
-              {this.translate("Information")}
+              <Trans>Information</Trans>
               {this.state.open && <Icon name="caret-down"/>}
               {!this.state.open && <Icon name="caret-right"/>}
             </a>
@@ -114,15 +114,15 @@ class DisplayUserDetailsInformation extends React.Component {
         <div className="accordion-content">
           <ul>
             <li className="role">
-              <span className="label">{this.translate("Role")}</span>
+              <span className="label"><Trans>Role</Trans></span>
               <span className="value capitalize">{role}</span>
             </li>
             <li className="modified">
-              <span className="label">{this.translate("Modified")}</span>
+              <span className="label"><Trans>Modified</Trans></span>
               <span className="value">{modified}</span>
             </li>
             <li className="status">
-              <span className="label">{this.translate("Status")}</span>
+              <span className="label"><Trans>Status</Trans></span>
               <span className="value">{status}</span>
             </li>
           </ul>

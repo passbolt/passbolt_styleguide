@@ -19,7 +19,7 @@ import FormCancelButton from "../../../../react/components/Common/Inputs/FormSub
 import DialogWrapper from "../../../../react/components/Common/Dialog/DialogWrapper/DialogWrapper";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import {withLoading} from "../../../../react/contexts/Common/LoadingContext";
-import {withTranslation} from "react-i18next";
+import {Trans, withTranslation} from "react-i18next";
 
 class ConfirmDeleteDialog extends Component {
   /**
@@ -128,8 +128,8 @@ class ConfirmDeleteDialog extends Component {
             onSubmit={this.handleConfirm}
             noValidate>
             <div className="form-content">
-              <p>{this.translate("Are you sure you want to delete the comment?")}</p>
-              <p>{this.translate("Warning: Once the comment is deleted, it’ll be removed permanently and will not be recoverable.")}</p>
+              <p><Trans>Are you sure you want to delete the comment?</Trans></p>
+              <p><Trans>Warning: Once the comment is deleted, it’ll be removed permanently and will not be recoverable.</Trans></p>
             </div>
             <div className="submit-wrapper clearfix">
               <FormSubmitButton

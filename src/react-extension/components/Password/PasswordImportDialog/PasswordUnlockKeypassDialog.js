@@ -24,7 +24,7 @@ import Icon from "../../../../react/components/Common/Icons/Icon";
 import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 import PasswordImportResultDialog from "./PasswordImportResultDialog";
 import ErrorDialog from "../../Dialog/ErrorDialog/ErrorDialog";
-import {withTranslation} from "react-i18next";
+import {Trans, withTranslation} from "react-i18next";
 
 /**
  * This component is the second step of the import dialog when the file to import is KDB(X) file
@@ -269,13 +269,13 @@ class PasswordUnlockKeypassDialog extends Component {
           <div className="form-content">
 
             <div className="input-password-wrapper">
-              <label htmlFor="import-password-dialog-password">{this.translate("Keepass password")}</label>
+              <label htmlFor="import-password-dialog-password"><Trans>Keepass password</Trans></label>
               <div className="input password">
                 <input
                   id="import-password-dialog-password"
                   type={this.state.showPassword ? "text" : "password"}
                   disabled={this.hasAllInputDisabled()}
-                  placeholder="Passphrase"
+                  placeholder={this.translate('Passphrase')}
                   ref={this.passwordInputRef}/>
               </div>
               <ul className="actions inline">
@@ -296,23 +296,23 @@ class PasswordUnlockKeypassDialog extends Component {
                 ref={this.fileUploaderRef}
                 onChange={this.handleFileSelected}/>
               <div className="input text">
-                <label>{this.translate("Keepass key file (optional)")}</label>
+                <label><Trans>Keepass key file (optional)</Trans></label>
                 <input
                   type="text"
-                  placeholder="No key file selected"
+                  placeholder={this.translate('No key file selected')}
                   disabled
                   value={this.selectedFilename}/>
                 <a
                   className={`button primary ${this.hasAllInputDisabled() ? "disabled" : ""}`}
                   onClick={this.handleSelectFile}>
-                  <Icon name="upload-a"/> {this.translate("Choose a file")}
+                  <Icon name="upload-a"/> <Trans>Choose a file</Trans>
                 </a>
               </div>
             </div>
 
             {isInvalidPasswordOrKeyFile &&
             <div className="message ready error">
-              {this.translate("Cannot decrypt the file, invalid credentials.")}
+              <Trans>Cannot decrypt the file, invalid credentials.</Trans>
             </div>
             }
           </div>

@@ -16,7 +16,7 @@ import {fireEvent, render, waitFor} from "@testing-library/react";
 import AppContext from "../../../contexts/AppContext";
 import React from "react";
 import ExportResourcesCredentials from "./ExportResourcesCredentials";
-import SetupTranslations from "../../../SetupTranslations";
+import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 
 /**
  * The ExportResourcesCredentials component represented as a page
@@ -29,11 +29,11 @@ export default class ExportResourcesCredentialsPage {
    */
   constructor(appContext, props) {
     this._page = render(
-      <SetupTranslations>
+      <MockTranslationProvider>
         <AppContext.Provider value={appContext}>
           <ExportResourcesCredentials {...props}/>
         </AppContext.Provider>
-      </SetupTranslations>
+      </MockTranslationProvider>
     );
   }
 

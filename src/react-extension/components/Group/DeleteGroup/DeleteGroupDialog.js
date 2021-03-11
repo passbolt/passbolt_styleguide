@@ -134,7 +134,7 @@ class DeleteGroupDialog extends Component {
                 Are you sure you want to delete the group <strong>{{groupName: this.group.name}}</strong>?
               </Trans>
             </p>
-            <p>{this.translate("Warning: This action can’t be undone. Users in this group may lose access to the content shared with it.")}</p>
+            <p><Trans>Warning: This action can’t be undone. Users in this group may lose access to the content shared with it.</Trans></p>
           </div>
           <div className="submit-wrapper clearfix">
             <FormSubmitButton disabled={this.hasAllInputDisabled()} processing={this.state.processing} value={this.translate("Delete")} warning={true}/>

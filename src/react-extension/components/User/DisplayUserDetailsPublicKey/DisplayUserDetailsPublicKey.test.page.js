@@ -20,7 +20,7 @@ import AppContext from "../../../contexts/AppContext";
 import {BrowserRouter as Router} from "react-router-dom";
 import {UserWorkspaceContext} from "../../../contexts/UserWorkspaceContext";
 import DisplayUserDetailsPublicKey from "./DisplayUserDetailsPublicKey";
-import SetupTranslations from "../../../SetupTranslations";
+import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 
 /**
  * The DisplayUserDetailsPublicKeyPage component represented as a page
@@ -33,7 +33,7 @@ export default class DisplayUserDetailsPublicKeyPage {
    */
   constructor(appContext, props) {
     this._page = render(
-      <SetupTranslations>
+      <MockTranslationProvider>
         <AppContext.Provider value={appContext}>
           <Router>
             <UserWorkspaceContext.Provider value={props.userWorkspaceContext}>
@@ -41,7 +41,7 @@ export default class DisplayUserDetailsPublicKeyPage {
             </UserWorkspaceContext.Provider>
           </Router>
         </AppContext.Provider>
-      </SetupTranslations>
+      </MockTranslationProvider>
     );
   }
 

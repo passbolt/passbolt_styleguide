@@ -22,7 +22,7 @@ import {withContextualMenu} from "../../../../react/contexts/Common/ContextualMe
 import PropTypes from "prop-types";
 import {withDialog} from "../../../../react/contexts/Common/DialogContext";
 import ReactList from "react-list";
-import {withTranslation} from "react-i18next";
+import {Trans, withTranslation} from "react-i18next";
 
 // Root virtual folder identifier.
 const ROOT = null;
@@ -353,7 +353,7 @@ class FoldersTree extends React.Component {
         dragFeedbackText = this.state.draggedItems.folders[0].name;
       } else {
         error = true;
-        dragFeedbackText = "You are not allowed to move this content";
+        dragFeedbackText = this.translate("You are not allowed to move this content");
       }
     }
 
@@ -479,7 +479,7 @@ class FoldersTree extends React.Component {
                         onDrop={this.handleDropTitle}
                         onClick={this.handleClickOnTitle}
                         onContextMenu={this.handleTitleContextualMenuEvent}
-                      >{this.translate("Folders")}</span>
+                      ><Trans>Folders</Trans></span>
                     </span>
                   </h3>
                 </div>

@@ -11,20 +11,15 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since        3.0.3
  */
-
-
 import i18n from 'i18next';
 import {initReactI18next} from 'react-i18next';
-import HttpApi from 'i18next-http-backend';
-import LanguageDetector from 'i18next-browser-languagedetector';
 import {Component} from "react";
 import PropTypes from "prop-types";
 
 /**
  * This component set up the translation process
  */
-
-class SetupTranslations extends Component {
+class MockTranslationProvider extends Component {
   /**
    *
    * @returns {Promise<void>}
@@ -34,20 +29,14 @@ class SetupTranslations extends Component {
     await i18n
       // pass the i18n instance to react-i18next.
       .use(initReactI18next)
-      .use(HttpApi)
-      .use(LanguageDetector)
-      /*
-       * init i18next
-       * for all options read: https://www.i18next.com/overview/configuration-options
-       */
+      // init i18next, for all options read: https://www.i18next.com/overview/configuration-options
       .init({
+        lng: 'en-US',
+        load: 'currentOnly',
         react: {
           useSuspense: false,
         },
-        backend: {
-          loadPath: this.props.loadingPath || '/locales/{{lng}}/{{ns}}.json'
-        },
-        fallbackLng: this.props.defaultLanguage || 'en-US',
+        fallbackLng: false,
         ns: ['common'],
         defaultNS: 'common',
         keySeparator: false, // don't use the dot for separator of nested json object
@@ -56,15 +45,17 @@ class SetupTranslations extends Component {
       });
   }
 
+  /**
+   * Render the component.
+   * @returns {JSX}
+   */
   render() {
     return ({...this.props.children});
   }
 }
 
-SetupTranslations.propTypes = {
-  defaultLanguage: PropTypes.string, // The default language
-  loadingPath: PropTypes.any, // The way to load translations files
+MockTranslationProvider.propTypes = {
   children: PropTypes.any, // The children components
 };
 
-export default SetupTranslations;
+export default MockTranslationProvider;

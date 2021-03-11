@@ -20,7 +20,7 @@ import {BrowserRouter as Router} from "react-router-dom";
 import OrchestrateLogin from "./components/AuthenticationLogin/OrchestrateLogin/OrchestrateLogin";
 import SiteSettings from "./lib/Settings/SiteSettings";
 import Footer from "./components/Footer/Footer";
-import SetupTranslations from "./SetupTranslations";
+import TranslationProvider from "./components/Internationalisation/TranslationProvider";
 
 
 /**
@@ -98,7 +98,7 @@ class ExtAuthenticationLogin extends Component {
    */
   render() {
     return (
-      <SetupTranslations loadingPath="/data/locales/{{lng}}/{{ns}}.json">
+      <TranslationProvider loadingPath="/data/locales/{{lng}}/{{ns}}.json">
         <Router>
           <AuthenticationContextProvider value={this.defaultContextValue}>
             <DialogContextProvider>
@@ -120,7 +120,7 @@ class ExtAuthenticationLogin extends Component {
             </DialogContextProvider>
           </AuthenticationContextProvider>
         </Router>
-      </SetupTranslations>
+      </TranslationProvider>
     );
   }
 }

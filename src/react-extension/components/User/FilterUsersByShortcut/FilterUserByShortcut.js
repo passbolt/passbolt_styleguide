@@ -16,7 +16,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import {withRouter} from "react-router-dom";
 import {UserWorkspaceFilterTypes, withUserWorkspace} from "../../../contexts/UserWorkspaceContext";
-import {withTranslation} from "react-i18next";
+import {Trans, withTranslation} from "react-i18next";
 
 /**
  * This component allows to select shortcut filters applied on users
@@ -86,7 +86,7 @@ class FilterUsersByShortcut extends React.Component {
               <div className="main-cell-wrapper">
                 <div className="main-cell">
                   <a id="all-users" onClick={this.handleAllItemsClick}>
-                    <span>{this.translate("All users")}</span>
+                    <span><Trans>All users</Trans></span>
                   </a>
                 </div>
               </div>
@@ -97,7 +97,7 @@ class FilterUsersByShortcut extends React.Component {
               <div className="main-cell-wrapper">
                 <div className="main-cell">
                   <a id="recently-modified"  onClick={this.handleRecentlyModifiedClick}>
-                    <span>{this.translate("Recently Modified")}</span>
+                    <span><Trans>Recently Modified</Trans></span>
                   </a>
                 </div>
               </div>

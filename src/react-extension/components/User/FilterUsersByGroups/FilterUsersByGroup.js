@@ -20,7 +20,7 @@ import {UserWorkspaceFilterTypes, withUserWorkspace} from "../../../contexts/Use
 import {withContextualMenu} from "../../../../react/contexts/Common/ContextualMenuContext";
 import FilterUsersByGroupContextualMenu from "./FilterUsersByGroupContextualMenu";
 import DisplayGroupContextualMenu from "./DisplayGroupContextualMenu";
-import {withTranslation} from "react-i18next";
+import {Trans, withTranslation} from "react-i18next";
 
 /**
  * This component display groups to filter the users
@@ -301,11 +301,11 @@ class FilterUsersByGroup extends React.Component {
         <div className="accordion-content">
           {this.isLoading() &&
           <div className="processing-wrapper">
-            <span className="processing-text">{this.translate("Retrieving groups")}</span>
+            <span className="processing-text"><Trans>Retrieving groups</Trans></span>
           </div>
           }
           {!this.isLoading() && !this.hasGroup() &&
-          <em className="empty-content">{this.translate("empty")}</em>
+          <em className="empty-content"><Trans>empty</Trans></em>
           }
           {!this.isLoading() && this.hasGroup() &&
           <ul className="tree ready">

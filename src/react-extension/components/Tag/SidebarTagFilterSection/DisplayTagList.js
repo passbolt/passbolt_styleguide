@@ -18,7 +18,7 @@ import {ResourceWorkspaceFilterTypes, withResourceWorkspace} from "../../../cont
 import {withContextualMenu} from "../../../../react/contexts/Common/ContextualMenuContext";
 import {withRouter} from "react-router-dom";
 import Icon from "../../../../react/components/Common/Icons/Icon";
-import {withTranslation} from "react-i18next";
+import {Trans, withTranslation} from "react-i18next";
 
 class DisplayTagList extends React.Component {
   /**
@@ -182,11 +182,11 @@ class DisplayTagList extends React.Component {
       <div className="accordion-content">
         {this.isLoading() &&
         <div className="processing-wrapper">
-          <span className="processing-text">{this.translate("Retrieving tags")}</span>
+          <span className="processing-text"><Trans>Retrieving tags</Trans></span>
         </div>
         }
         {!this.isLoading() && this.filteredTags.length === 0 &&
-        <em className="empty-content">{this.translate("empty")}</em>
+        <em className="empty-content"><Trans>empty</Trans></em>
         }
         {!this.isLoading() && this.filteredTags.length > 0 &&
         <ul className="tree ready">

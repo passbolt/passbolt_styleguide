@@ -23,7 +23,7 @@ import FormCancelButton from "../../../../react/components/Common/Inputs/FormSub
 import ErrorDialog from "../../Dialog/ErrorDialog/ErrorDialog";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import ExportResourcesCredentials from "./ExportResourcesCredentials";
-import {withTranslation} from "react-i18next";
+import {Trans, withTranslation} from "react-i18next";
 
 /**
  * This component allows to export resources to a specified format
@@ -298,7 +298,7 @@ class ExportResources extends React.Component {
           <div className="form-content">
 
             <div className="input text required">
-              <label htmlFor="export-format">{this.translate("Choose the export format (csv and kdbx are supported)")}</label>
+              <label htmlFor="export-format"><Trans>Choose the export format (csv and kdbx are supported)</Trans></label>
               <select
                 id="export-format"
                 value={this.state.selectedExportFormat}

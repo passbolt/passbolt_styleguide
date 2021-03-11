@@ -27,6 +27,7 @@ import TooltipHtml from "../../../../react/components/Common/Tooltip/TooltipHtml
 import Autocomplete from "../../../../react/components/Common/Inputs/Autocomplete/Autocomplete";
 import {withRouter} from "react-router-dom";
 import {withTranslation} from "react-i18next";
+import {Trans, withTranslation} from "react-i18next";
 
 /**
  * This component allows to edit an user group
@@ -685,7 +686,7 @@ class EditUserGroup extends Component {
 
             <div className="form-content">
               <div className={`input text required ${this.hasErrors("name") ? "error" : ""}`}>
-                <label htmlFor="js_field_name">{this.translate("Group name")}</label>
+                <label htmlFor="js_field_name"><Trans>Group name</Trans></label>
                 <input
                   id="group-name-input"
                   ref={this.references.name}
@@ -697,18 +698,18 @@ class EditUserGroup extends Component {
                   disabled={!this.areActionsAllowed}/>
                 {this.hasErrors("name", "empty") &&
                 <div className="name error message">
-                  {this.translate("A name is required.")}
+                  <Trans>A name is required.</Trans>
                 </div>
                 }
                 {this.hasErrors("name", "alreadyExists") &&
                 <div className="name error message">
-                  {this.translate("The group name already exists.")}
+                  <Trans>The group name already exists.</Trans>
                 </div>
                 }
               </div>
 
               <div className="input required">
-                <label>{this.translate("Group members")}</label>
+                <label><Trans>Group members</Trans></label>
               </div>
             </div>
 
@@ -732,10 +733,10 @@ class EditUserGroup extends Component {
                         </TooltipHtml>
                       </div>
                       <div className="permission_changes">
-                        {this.isMemberAdded(groupUser) && <span>{this.translate("Will be added")}</span>}
+                        {this.isMemberAdded(groupUser) && <span><Trans>Will be added</Trans></span>}
                         {this.isMemberChanged(groupUser) && !this.isMemberAdded(groupUser) &&
-                        <span>{this.translate("Will be updated")}</span>}
-                        {!this.isMemberChanged(groupUser) && !this.isMemberAdded(groupUser) && <span>{this.translate("Unchanged")}</span>}
+                        <span><Trans>Will be updated</Trans></span>}
+                        {!this.isMemberChanged(groupUser) && !this.isMemberAdded(groupUser) && <span><Trans>Unchanged</Trans></span>}
 
                       </div>
                     </div>
@@ -746,8 +747,8 @@ class EditUserGroup extends Component {
                         value={groupUser.is_admin}
                         onChange={event => this.handleMemberRoleChange(event, groupUser)}
                         disabled={!this.areActionsAllowed}>
-                        <option value={false}>{this.translate("Member")}</option>
-                        <option value={true}>{this.translate("Group manager")}</option>
+                        <option value={false}><Trans>Member</Trans></option>
+                        <option value={true}><Trans>Group manager</Trans></option>
                       </select>
                     </div>
 
@@ -766,22 +767,22 @@ class EditUserGroup extends Component {
               </ul>
               {!this.hasMembers &&
               <div className="message warning">
-                <span>{this.translate("The group is empty, please add a group manager.")}</span>
+                <span><Trans>The group is empty, please add a group manager.</Trans></span>
               </div>
               }
               {this.hasMembers && !this.hasManager &&
               <div className="message error at-least-one-manager">
-                <span>{this.translate("Please make sure there is at least one group manager.")}</span>
+                <span><Trans>Please make sure there is at least one group manager.</Trans></span>
               </div>
               }
               {!this.isManager &&
               <div className="message warning feedback cannot-add-user">
-                <span>{this.translate("Only the group manager can add new people to a group.")}</span>
+                <span><Trans>Only the group manager can add new people to a group.</Trans></span>
               </div>
               }
               {this.hasMembersChanges && this.hasManager &&
               <div className="message warning feedback">
-                <span>{this.translate("You need to click save for the changes to take place.")}</span>
+                <span><Trans>You need to click save for the changes to take place.</Trans></span>
               </div>
               }
             </div>

@@ -19,7 +19,7 @@ import {withUserWorkspace} from "../../../contexts/UserWorkspaceContext";
 import AppContext from "../../../contexts/AppContext";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import {DateTime} from "luxon";
-import {withTranslation} from "react-i18next";
+import {Trans, withTranslation} from "react-i18next";
 
 /**
  * This component displays the user details about public key
@@ -200,7 +200,7 @@ class DisplayUserDetailsPublicKey extends React.Component {
         <div className="accordion-header">
           <h4>
             <a onClick={this.handleTitleClicked} role="button">
-              {this.translate("Public key")}
+              <Trans>Public key</Trans>
               {this.state.open && <Icon name="caret-down"/>}
               {!this.state.open && <Icon name="caret-right"/>}
             </a>
@@ -210,35 +210,35 @@ class DisplayUserDetailsPublicKey extends React.Component {
           {isLoading &&
           <ul>
             <li className="processing-wrapper">
-              <span className="processing-text">{this.translate("Retrieving public key")}</span>
+              <span className="processing-text"><Trans>Retrieving public key</Trans></span>
             </li>
           </ul>
           }
           {!isLoading &&
           <ul>
             <li className="fingerprint">
-              <span className="label">{this.translate("Fingerprint")}</span>
+              <span className="label"><Trans>Fingerprint</Trans></span>
               <span className="value">{this.formatFingerprint(this.state.gpgkeyInfo.fingerprint)}</span>
             </li>
             <li className="type">
-              <span className="label">{this.translate("Type")}</span>
+              <span className="label"><Trans>Type</Trans></span>
               <span className="value">{this.state.gpgkeyInfo.type}</span>
             </li>
             <li className="created">
-              <span className="label">{this.translate("Created")}</span>
+              <span className="label"><Trans>Created</Trans></span>
               <span className="value">{this.state.gpgkeyInfo.created}</span>
             </li>
             <li className="expires">
-              <span className="label">{this.translate("Expires")}</span>
+              <span className="label"><Trans>Expires</Trans></span>
               <span className="value">{this.state.gpgkeyInfo.expires}</span>
             </li>
             <li className="key">
-              <span className="label">{this.translate("Public key")}</span>
+              <span className="label"><Trans>Public key</Trans></span>
               <span className="value">
                 <a
                   className="button copy-public-key"
                   onClick={this.handlePublicKeyCopy}>
-                  <span>{this.translate("Copy")}</span>
+                  <span><Trans>Copy</Trans></span>
                 </a>
               </span>
             </li>

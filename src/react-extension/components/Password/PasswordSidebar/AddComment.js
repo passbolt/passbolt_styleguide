@@ -18,7 +18,7 @@ import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import PropTypes from "prop-types";
 import AppContext from "../../../contexts/AppContext";
 import {withLoading} from "../../../../react/contexts/Common/LoadingContext";
-import {withTranslation} from "react-i18next";
+import {Trans, withTranslation} from "react-i18next";
 
 /**
  * This component allows the current user to add a new comment on a resource
@@ -225,9 +225,9 @@ class AddComment extends React.Component {
 
               <div className="metadata">
                 <span className="author username">
-                  {this.translate("You")}
+                  <Trans>You</Trans>
                 </span>
-                <span className="modified">{this.translate("right now")}</span>
+                <span className="modified"><Trans>right now</Trans></span>
               </div>
               <div className="actions">
                 <button
@@ -235,7 +235,7 @@ class AddComment extends React.Component {
                   type="submit"
                   onClick={this.handleSubmitEvent}
                   disabled={this.state.actions.processing}>
-                  {this.translate("Save")}
+                  <Trans>Save</Trans>
                 </button>
                 {
                   this.props.cancellable &&
@@ -244,7 +244,7 @@ class AddComment extends React.Component {
                     role="button"
                     onClick={this.handleCancelEvent}
                     disabled={this.state.actions.processing}>
-                    <span>{this.translate("Cancel")}</span>
+                    <span><Trans>Cancel</Trans></span>
                   </button>
                 }
               </div>

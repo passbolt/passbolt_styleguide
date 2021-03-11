@@ -17,7 +17,7 @@ import AppContext from "../../../contexts/AppContext";
 import React from "react";
 import FolderSidebar from "./FolderSidebar";
 import {BrowserRouter as Router} from 'react-router-dom';
-import SetupTranslations from "../../../SetupTranslations";
+import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 
 /**
  * The FolderSidebar component represented as a page
@@ -30,13 +30,13 @@ export default class FolderSidebarPage {
    */
   constructor(appContext, props) {
     this._page = render(
-      <SetupTranslations>
+      <MockTranslationProvider>
         <Router>
           <AppContext.Provider value={appContext}>
             <FolderSidebar {...props}/>
           </AppContext.Provider>
         </Router>
-      </SetupTranslations>
+      </MockTranslationProvider>
     );
   }
 

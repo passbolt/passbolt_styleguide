@@ -22,7 +22,7 @@ import UserSettings from "../../../lib/Settings/UserSettings";
 import userSettingsFixture from "../../../test/fixture/Settings/userSettings";
 import SiteSettings from "../../../lib/Settings/SiteSettings";
 import siteSettingsFixture from "../../../test/fixture/Settings/siteSettings";
-import SetupTranslations from "../../../SetupTranslations";
+import TranslationProvider from "../../Internationalisation/TranslationProvider";
 
 beforeEach(() => {
   jest.resetModules();
@@ -43,11 +43,11 @@ const renderPassphraseEntryDialog = function(appContext, props) {
   appContext = getAppContext(appContext);
   props = props || {};
   return render(
-    <SetupTranslations>
+    <TranslationProvider>
       <AppContext.Provider value={appContext}>
         <PassphraseEntryDialog debug t={text => text} onClose={props.onClose || jest.fn()}/>
       </AppContext.Provider>
-    </SetupTranslations>
+    </TranslationProvider>
   );
 };
 

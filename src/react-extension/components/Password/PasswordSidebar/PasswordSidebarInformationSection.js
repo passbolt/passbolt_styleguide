@@ -23,7 +23,7 @@ import {
 import {withRouter} from "react-router-dom";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import sanitizeUrl, {urlProtocols} from "../../../../react/lib/Common/Sanitize/sanitizeUrl";
-import {withTranslation} from "react-i18next";
+import {Trans, withTranslation} from "react-i18next";
 import {DateTime} from "luxon";
 
 class PasswordSidebarInformationSection extends React.Component {
@@ -342,7 +342,7 @@ class PasswordSidebarInformationSection extends React.Component {
         <div className="accordion-header">
           <h4>
             <a onClick={this.handleTitleClickEvent} role="button">
-              {this.translate("Information")}
+              <Trans>Information</Trans>
               {this.state.open &&
               <Icon name="caret-down"/>
               }
@@ -354,18 +354,18 @@ class PasswordSidebarInformationSection extends React.Component {
         </div>
         <ul className="accordion-content">
           <li className="username">
-            <span className="label">{this.translate("Username")}</span>
+            <span className="label"><Trans>Username</Trans></span>
             <span className="value"><a onClick={this.handleUsernameClickEvent}>{this.resource.username}</a></span>
           </li>
           <li className="password">
-            <span className="label">{this.translate("Password")}</span>
+            <span className="label"><Trans>Password</Trans></span>
             <div className="value">
               <div className={`secret ${isPasswordPreviewed ? "" : "secret-copy"}`}
                 title={isPasswordPreviewed ? this.state.previewedPassword : "secret"}>
                 <a onClick={this.handlePasswordClickEvent}>
                   <span>
                     {isPasswordPreviewed && this.state.previewedPassword}
-                    {!isPasswordPreviewed && "Copy password to clipboard"}
+                    {!isPasswordPreviewed && <Trans>copy password to clipboard</Trans>}
                   </span>
                 </a>
               </div>
@@ -379,31 +379,31 @@ class PasswordSidebarInformationSection extends React.Component {
             </div>
           </li>
           <li className="uri">
-            <span className="label">{this.translate("URI")}</span>
+            <span className="label"><Trans>URI</Trans></span>
             <span className="value">
               {this.safeUri && <a onClick={this.handleGoToResourceUriClick}>{this.resource.uri}</a>}
               {!this.safeUri && <span>{this.resource.uri}</span>}
             </span>
           </li>
           <li className="modified">
-            <span className="label">{this.translate("Modified")}</span>
+            <span className="label"><Trans>Modified</Trans></span>
             <span className="value">{modifiedDateTimeAgo}</span>
           </li>
           <li className="modified-by">
-            <span className="label">{this.translate("Modified by")}</span>
+            <span className="label"><Trans>Modified by</Trans></span>
             <span className="value">{modifierUsername}</span>
           </li>
           <li className="modified">
-            <span className="label">{this.translate("Created")}</span>
+            <span className="label"><Trans>Created</Trans></span>
             <span className="value">{createdDateTimeAgo}</span>
           </li>
           <li className="modified-by">
-            <span className="label">{this.translate("Created by")}</span>
+            <span className="label"><Trans>Created by</Trans></span>
             <span className="value">{creatorUsername}</span>
           </li>
           {canUseFolders &&
           <li className="location">
-            <span className="label">{this.translate("Location")}</span>
+            <span className="label"><Trans>Location</Trans></span>
             <span className="value">
               <a onClick={this.handleFolderParentClickEvent} className={`folder-link ${!this.context.folders ? "disabled" : ""}`}>
                 <Icon name="folder"/> {this.getFolderName(this.resource.folder_parent_id)}

@@ -17,7 +17,7 @@ import PropTypes from "prop-types";
 import Icon from "../../../../react/components/Common/Icons/Icon";
 import {withUserWorkspace} from "../../../contexts/UserWorkspaceContext";
 import AppContext from "../../../contexts/AppContext";
-import {withTranslation} from "react-i18next";
+import {Trans, withTranslation} from "react-i18next";
 import {DateTime} from "luxon";
 
 /**
@@ -95,7 +95,7 @@ class DisplayUserGroupDetailsInformation extends React.Component {
         <div className="accordion-header">
           <h4>
             <a onClick={this.handleTitleClicked}  role="button">
-              {this.translate("Information")}
+              <Trans>Information</Trans>
               {this.state.open && <Icon name="caret-down"/>}
               {!this.state.open && <Icon name="caret-right"/>}
             </a>
@@ -104,19 +104,19 @@ class DisplayUserGroupDetailsInformation extends React.Component {
         <div className="accordion-content">
           <ul>
             <li className="created">
-              <span className="label">{this.translate("Created")}</span>
+              <span className="label"><Trans>Created</Trans></span>
               <span className="value">{created}</span>
             </li>
             <li className="modified">
-              <span className="label">{this.translate("Modified")}</span>
+              <span className="label"><Trans>Modified</Trans></span>
               <span className="value">{modified}</span>
             </li>
             <li className="modified-by">
-              <span className="label">{this.translate("Modified by")}</span>
+              <span className="label"><Trans>Modified by</Trans></span>
               <span className="value">{modifiedByUserName}</span>
             </li>
             <li className="members">
-              <span className="label">{this.translate("Members")}</span>
+              <span className="label"><Trans>Members</Trans></span>
               <span className="value">{membersCount}</span>
             </li>
           </ul>

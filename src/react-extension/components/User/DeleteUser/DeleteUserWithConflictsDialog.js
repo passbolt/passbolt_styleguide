@@ -486,17 +486,17 @@ class DeleteUserWithConflictsDialog extends Component {
                 You are about to delete the user <strong>{{user: this.getUserFullName(this.userToDelete)}}</strong>.
               </Trans>
             </p>
-            <p>{this.translate("This user is the sole owner of some content. You need to transfer the ownership to others to continue.")}</p>
+            <p><Trans>This user is the sole owner of some content. You need to transfer the ownership to others to continue.</Trans></p>
           </div>
           <div className="ownership-transfer">
             {this.hasFolderConflict() &&
             <div>
-              <h3>{this.translate("Folders")}</h3>
+              <h3><Trans>Folders</Trans></h3>
               <ul className="ownership-transfer-items">
                 {this.foldersErrors.map(folderError =>
                   <li key={folderError.id}>
                     <div className="input select required">
-                      <label htmlFor="transfer_folder_owner">{folderError.name} {this.translate("(Folder) new owner:")}</label>
+                      <label htmlFor="transfer_folder_owner">{folderError.name} <Trans>(Folder)</Trans> <Trans>new owner</Trans>:</label>
                       <select className="fluid form-element ready" value={this.state.owners[folderError.id]} onChange={event => this.handleOnChangeOwner(event, folderError.id)}>
                         {this.acosPermissionsOptions[folderError.id].map(permission => (
                           <option key={permission.id} value={permission.id}>
@@ -518,7 +518,7 @@ class DeleteUserWithConflictsDialog extends Component {
                 {this.resourcesErrors.map(resourceError =>
                   <li key={resourceError.id}>
                     <div className="input select required">
-                      <label htmlFor="transfer_resource_owner">{resourceError.name} {this.translate("(Password) new owner:")}</label>
+                      <label htmlFor="transfer_resource_owner">{resourceError.name} <Trans>(Password)</Trans> <Trans>new owner</Trans>:</label>
                       <select className="fluid form-element ready" value={this.state.owners[resourceError.id]} onChange={event => this.handleOnChangeOwner(event, resourceError.id)}>
                         {this.acosPermissionsOptions[resourceError.id].map(permission => (
                           <option key={permission.id} value={permission.id}>
@@ -540,7 +540,7 @@ class DeleteUserWithConflictsDialog extends Component {
                 {this.groupsErrors.map(groupError =>
                   <li key={groupError.id}>
                     <div className="input select required">
-                      <label htmlFor="transfer_group_manager">{groupError.name} {this.translate("(Group) new manager:")}</label>
+                      <label htmlFor="transfer_group_manager">{groupError.name} <Trans>(Group)</Trans> <Trans>new manager</Trans>:</label>
                       <select className="fluid form-element ready" value={this.state.managers[groupError.id]} onChange={event => this.handleOnChangeManager(event, groupError.id)}>
                         {this.groupsGroupsUsersOptions[groupError.id].map(groupUser => (
                           <option key={groupUser.id} value={groupUser.id}>{this.getUserOptionLabel(groupUser.user)}</option>

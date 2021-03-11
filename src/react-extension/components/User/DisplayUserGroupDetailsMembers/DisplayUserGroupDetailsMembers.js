@@ -20,7 +20,7 @@ import AppContext from "../../../contexts/AppContext";
 import DisplayUserGroupDetailsMembersGroupMember from "./DisplayUserGroupDetailsMembersGroupMember";
 import EditUserGroup from "../EditUserGroup/EditUserGroup";
 import {withDialog} from "../../../../react/contexts/Common/DialogContext";
-import {withTranslation} from "react-i18next";
+import {Trans, withTranslation} from "react-i18next";
 
 /**
  * This component displays the group details about members
@@ -107,7 +107,7 @@ class DisplayUserGroupDetailsMembers extends React.Component {
         <div className="accordion-header">
           <h4>
             <a onClick={this.handleTitleClicked}  role="button">
-              {this.translate("Group Members")}
+              <Trans>Group Members</Trans>
               {this.state.open && <Icon name="caret-down"/>}
               {!this.state.open && <Icon name="caret-right"/>}
             </a>
@@ -120,7 +120,7 @@ class DisplayUserGroupDetailsMembers extends React.Component {
           </a>
           {this.isLoading() &&
           <div className="processing-wrapper">
-            <span className="processing-text">{this.translate("Retrieving group members")}</span>
+            <span className="processing-text"><Trans>Retrieving group members</Trans></span>
           </div>
           }
           {!this.isLoading() && this.state.open &&

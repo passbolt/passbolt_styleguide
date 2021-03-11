@@ -17,7 +17,7 @@ import TagItemViewer from "./TagItemViewer";
 import TagEditor from "./TagEditor";
 import Icon from "../../../../react/components/Common/Icons/Icon";
 import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
-import {withTranslation} from "react-i18next";
+import {Trans, withTranslation} from "react-i18next";
 
 class PasswordSidebarTagSection extends React.Component {
   /**
@@ -94,7 +94,7 @@ class PasswordSidebarTagSection extends React.Component {
         <div className="accordion-header">
           <h4>
             <a onClick={this.handleTitleClickEvent} role="button">
-              {this.translate("Tags")}
+              <Trans>Tags</Trans>
               {this.state.open &&
               <Icon name="caret-down"/>
               }

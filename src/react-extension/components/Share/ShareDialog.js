@@ -26,7 +26,7 @@ import AppContext from "../../contexts/AppContext";
 import {withDialog} from "../../../react/contexts/Common/DialogContext";
 import {withActionFeedback} from "../../contexts/ActionFeedbackContext";
 import {withResourceWorkspace} from "../../contexts/ResourceWorkspaceContext";
-import {withTranslation} from "react-i18next";
+import {Trans, withTranslation} from "react-i18next";
 
 class ShareDialog extends Component {
   /**
@@ -451,12 +451,12 @@ class ShareDialog extends Component {
           </div>
           {(this.hasNoOwner()) &&
             <div className="message error">
-              {this.translate("Please make sure there is at least one owner.")}
+              <Trans>Please make sure there is at least one owner.</Trans>
             </div>
           }
           {(this.hasChanges() && !this.hasNoOwner()) &&
             <div className="message warning">
-              {this.translate("Click save to apply your pending changes.")}
+              <Trans>Click save to apply your pending changes.</Trans>
             </div>
           }
           <div className="form-content permission-add">

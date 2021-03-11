@@ -19,7 +19,7 @@ import OrchestrateApiTriage from "./components/AuthenticationLogin/OrchestrateAp
 import {ApiClient} from "./lib/apiClient/apiClient";
 import SiteSettings from "./lib/Settings/SiteSettings";
 import Footer from "./components/Footer/Footer";
-import SetupTranslations from "./SetupTranslations";
+import TranslationProvider from "./components/Internationalisation/TranslationProvider";
 
 /**
  * The triage application served by the API.
@@ -122,7 +122,7 @@ class ApiTriage extends Component {
    */
   render() {
     return (
-      <SetupTranslations loadingPath={`${this.state.trustedDomain}/locales/{{lng}}/{{ns}}.json`}>
+      <TranslationProvider loadingPath={`${this.state.trustedDomain}/locales/{{lng}}/{{ns}}.json`}>
         <AppContext.Provider value={this.state}>
           <div id="container" className="container page login">
             <div className="content">
@@ -138,7 +138,7 @@ class ApiTriage extends Component {
           </div>
           <Footer siteSettings={this.state.siteSettings}/>
         </AppContext.Provider>
-      </SetupTranslations>
+      </TranslationProvider>
     );
   }
 }

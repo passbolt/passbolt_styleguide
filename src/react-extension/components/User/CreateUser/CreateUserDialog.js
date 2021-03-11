@@ -21,7 +21,7 @@ import FormSubmitButton from "../../../../react/components/Common/Inputs/FormSub
 import FormCancelButton from "../../../../react/components/Common/Inputs/FormSubmitButton/FormCancelButton";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import {withDialog} from "../../../../react/contexts/Common/DialogContext";
-import {withTranslation} from "react-i18next";
+import {Trans, withTranslation} from "react-i18next";
 
 class CreateUserDialog extends Component {
   /**
@@ -373,7 +373,7 @@ class CreateUserDialog extends Component {
         <form className="user-create-form" onSubmit={this.handleFormSubmit} noValidate>
           <div className="form-content">
             <div className={`input text required ${this.state.first_nameError ? "error" : ""}`}>
-              <label htmlFor="user-first-name-input">{this.translate("First Name")}</label>
+              <label htmlFor="user-first-name-input"><Trans>First Name</Trans></label>
               <input id="user-first-name-input" name="first_name"
                 ref={this.firstNameRef}
                 type="text" value={this.state.first_name} placeholder={this.translate("first name")}
@@ -386,7 +386,7 @@ class CreateUserDialog extends Component {
               }
             </div>
             <div className={`input text required ${this.state.last_nameError ? "error" : ""}`}>
-              <label htmlFor="user-last-name-input">{this.translate("Last Name")}</label>
+              <label htmlFor="user-last-name-input"><Trans>Last Name</Trans></label>
               <input id="user-last-name-input" name="last_name"
                 ref={this.lastNameRef}
                 type="text" value={this.state.last_name} placeholder={this.translate("last name")}
@@ -399,7 +399,7 @@ class CreateUserDialog extends Component {
               }
             </div>
             <div className={`input text required ${this.state.usernameError ? "error" : ""}`}>
-              <label htmlFor="user-username-input">{this.translate("Username / Email")}</label>
+              <label htmlFor="user-username-input"><Trans>Username / Email</Trans></label>
               <input id="user-username-input" name="username"
                 ref={this.usernameRef} type="text" value={this.state.username} placeholder={this.translate("email")}
                 required="required" disabled={this.hasAllInputDisabled()}
@@ -411,14 +411,14 @@ class CreateUserDialog extends Component {
               }
             </div>
             <div className="input checkbox required">
-              <label htmlFor="is_admin">{this.translate("Role")}</label>
+              <label htmlFor="is_admin"><Trans>Role</Trans></label>
               <div id="is_admin">
                 <input id="is_admin_checkbox" name="is_admin" onChange={this.handleCheckboxClick}
                   checked={this.state.is_admin} disabled={this.hasAllInputDisabled()} type="checkbox"/>
-                <span> {this.translate("This user is an administrator")}</span>
+                <span> <Trans>This user is an administrator</Trans></span>
               </div>
               <div className="message helptext">
-                {this.translate("Note: Administrators can add and delete users. They can also create groups and assign group managers. Admin can not see all passwords.")}
+                <Trans>Note: Administrators can add and delete users; They can also create groups and assign group managers; Admin can not see all passwords.</Trans>
               </div>
             </div>
           </div>

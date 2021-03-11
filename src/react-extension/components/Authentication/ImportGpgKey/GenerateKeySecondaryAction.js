@@ -13,7 +13,7 @@
  */
 import React, {Component} from "react";
 import {AuthenticationContext} from "../../../contexts/AuthenticationContext";
-import {withTranslation} from "react-i18next";
+import {Trans, withTranslation} from "react-i18next";
 import PropTypes from "prop-types";
 
 export class GenerateKeySecondaryAction extends Component {
@@ -28,7 +28,7 @@ export class GenerateKeySecondaryAction extends Component {
   render() {
     return (
       <a onClick={this.context.onGoToGenerateGpgKeyRequested}>
-        {this.translate("Or generate a new private key.")}
+        <Trans>Or generate a new private key.</Trans>
       </a>
     );
   }

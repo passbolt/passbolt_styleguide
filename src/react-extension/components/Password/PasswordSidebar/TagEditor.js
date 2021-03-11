@@ -18,7 +18,7 @@ import AppContext from "../../../contexts/AppContext";
 import Autocomplete from "./Autocomplete/Autocomplete";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import {withLoading} from "../../../../react/contexts/Common/LoadingContext";
-import {withTranslation} from "react-i18next";
+import {Trans, withTranslation} from "react-i18next";
 
 const TAG_MAX_LENGTH = 128;
 
@@ -531,7 +531,7 @@ class TagEditor extends React.Component {
           {!this.state.errorMessage && this.props.isOwner &&
           <div className="message notice">
             <Icon baseline={true} name="info-circle"/>
-            <strong>{this.translate("Pro tip:")}</strong> {this.translate("Tags starting with # are shared with all users who have access. Separate tags using commas.")}
+            <strong><Trans>Pro tip</Trans>:</strong> <Trans>Tags starting with # are shared with all users who have access. Separate tags using commas.</Trans>
           </div>
           }
           {this.state.errorMessage &&
@@ -541,10 +541,10 @@ class TagEditor extends React.Component {
         <div className="actions">
           <a className={`button tag-editor-submit ${this.hasAllInputDisabled() ? "primary processing disabled" : ""}`}
             onClick={this.handleOnSubmit}>
-            <span>{this.translate("Save")}</span>
+            <span><Trans>Save</Trans></span>
           </a>
           <a className={`button cancel tag-editor-cancel ${this.hasAllInputDisabled() ? "disabled" : ""}`} role="button"
-            onClick={this.props.toggleInputTagEditor}><span>{this.translate("Cancel")}</span></a>
+            onClick={this.props.toggleInputTagEditor}><span><Trans>Cancel</Trans></span></a>
         </div>
       </div>
     );

@@ -17,7 +17,7 @@ import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import XRegExp from "xregexp";
 import Icon from "../../../../react/components/Common/Icons/Icon";
 import {withAdministrationWorkspace} from "../../../contexts/AdministrationWorkspaceContext";
-import {withTranslation} from "react-i18next";
+import {Trans, withTranslation} from "react-i18next";
 
 /**
  * This component allows to display the MFA for the administration
@@ -418,16 +418,16 @@ class DisplayMfaAdministration extends React.Component {
                     onChange={this.handleInputChange} checked={this.state.totpProviderToggle} disabled={this.hasAllInputDisabled()}/>
                   <label className="toggle-switch-button" htmlFor="totp-provider-toggle-button"/>
                 </span>
-                <label>{this.translate("Time-based One Time Password")}</label>
+                <label><Trans>Time-based One Time Password</Trans></label>
               </h3>
               {!this.isOtpProviderChecked() &&
               <p className="description">
-                {this.translate("The Time-based One Time Password provider is disabled for all users.")}
+                <Trans>The Time-based One Time Password provider is disabled for all users.</Trans>
               </p>
               }
               {this.isOtpProviderChecked() &&
               <p className="description">
-                {this.translate("The Time-based One Time Password provider is enabled for all users. They can setup this provider in their profile and use it as second factor authentication.")}
+                <Trans>The Time-based One Time Password provider is enabled for all users. They can setup this provider in their profile and use it as second factor authentication.</Trans>
               </p>
               }
             </div>
@@ -442,17 +442,17 @@ class DisplayMfaAdministration extends React.Component {
               </h3>
               {!this.isYubikeyChecked() &&
               <p className="description">
-                {this.translate("The Yubikey provider is disabled for all users.")}
+                <Trans>The Yubikey provider is disabled for all users.</Trans>
               </p>
               }
               {this.isYubikeyChecked() &&
               <div>
                 <p className="description">
-                  {this.translate("The Yubikey provider is enabled for all users. They can setup this provider in their profile and use it as second factor authentication.")}
+                  <Trans>The Yubikey provider is enabled for all users. They can setup this provider in their profile and use it as second factor authentication.</Trans>
                 </p>
                 <div className="form-content">
                   <div className="input text required">
-                    <label>{this.translate("Client identifier")}</label>
+                    <label><Trans>Client identifier</Trans></label>
                     <input id="yubikeyClientIdentifier" type="text" name="yubikeyClientIdentifier" required="required" className="required fluid form-element ready" placeholder="123456789"
                       onChange={this.handleInputChange} value={this.state.yubikeyClientIdentifier} disabled={this.hasAllInputDisabled()}/>
                     {this.state.yubikeyClientIdentifierError &&
@@ -460,7 +460,7 @@ class DisplayMfaAdministration extends React.Component {
                     }
                   </div>
                   <div className="input text required">
-                    <label>{this.translate("Secret key")}</label>
+                    <label><Trans>Secret key</Trans></label>
                     <input id="yubikeySecretKey" name="yubikeySecretKey" required="required" className="required fluid form-element" placeholder="**********" type="password"
                       onChange={this.handleInputChange} value={this.state.yubikeySecretKey} disabled={this.hasAllInputDisabled()}/>
                     {this.state.yubikeySecretKeyError &&
@@ -482,17 +482,17 @@ class DisplayMfaAdministration extends React.Component {
               </h3>
               {!this.isDuoChecked() &&
               <p className="description">
-                {this.translate("The Duo provider is disabled for all users.")}
+                <Trans>The Duo provider is disabled for all users.</Trans>
               </p>
               }
               {this.isDuoChecked() &&
               <div>
                 <p className="description enabled">
-                  {this.translate("The Duo provider is enabled for all users. They can setup this provider in their profile and use it as second factor authentication.")}
+                  <Trans>The Duo provider is enabled for all users. They can setup this provider in their profile and use it as second factor authentication.</Trans>
                 </p>
                 <div className="form-content">
                   <div className="input text required">
-                    <label>{this.translate("Hostname")}</label>
+                    <label><Trans>Hostname</Trans></label>
                     <input id="duoHostname" type="text" name="duoHostname" required="required" className="required fluid form-element ready"
                       placeholder="api-24zlkn4.duosecurity.com" value={this.state.duoHostname}
                       onChange={this.handleInputChange} disabled={this.hasAllInputDisabled()}/>
@@ -501,7 +501,7 @@ class DisplayMfaAdministration extends React.Component {
                     }
                   </div>
                   <div className="input text required">
-                    <label>{this.translate("Integration key")}</label>
+                    <label><Trans>Integration key</Trans></label>
                     <input id="duoIntegrationKey" type="text" name="duoIntegrationKey" required="required" className="required fluid form-element ready"
                       placeholder="HASJKDSQJO213123KQSLDF" value={this.state.duoIntegrationKey}
                       onChange={this.handleInputChange} disabled={this.hasAllInputDisabled()}/>
@@ -510,7 +510,7 @@ class DisplayMfaAdministration extends React.Component {
                     }
                   </div>
                   <div className="input text required">
-                    <label>{this.translate("Salt")}</label>
+                    <label><Trans>Salt</Trans></label>
                     <input id="duoSalt" name="duoSalt" required="required" className="required fluid form-element ready" placeholder="**********" type="password"
                       value={this.state.duoSalt} onChange={this.handleInputChange} disabled={this.hasAllInputDisabled()}/>
                     {this.state.duoSaltError &&
@@ -518,7 +518,7 @@ class DisplayMfaAdministration extends React.Component {
                     }
                   </div>
                   <div className="input text required">
-                    <label>{this.translate("Secret key")}</label>
+                    <label><Trans>Secret key</Trans></label>
                     <input id="duoSecretKey" name="duoSecretKey" required="required" className="required fluid form-element ready" placeholder="**********" type="password"
                       value={this.state.duoSecretKey} onChange={this.handleInputChange} disabled={this.hasAllInputDisabled()}/>
                     {this.state.duoSecretKeyError &&
@@ -532,11 +532,11 @@ class DisplayMfaAdministration extends React.Component {
           </form>
         </div>
         <div className="col4 last">
-          <h2>{this.translate("Need help?")}</h2>
-          <p>{this.translate("Check out our Multi Factor Authentication configuration guide.")}</p>
+          <h2><Trans>Need help?</Trans></h2>
+          <p><Trans>Check out our Multi Factor Authentication configuration guide.</Trans></p>
           <a className="button" href="https://help.passbolt.com/configure" target="_blank" rel="noopener noreferrer">
             <Icon name="life-ring"/>
-            <span>{this.translate("Read documentation")}</span>
+            <span><Trans>Read documentation</Trans></span>
           </a>
         </div>
       </div>

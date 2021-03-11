@@ -20,7 +20,7 @@ import DialogWrapper from "../../../../react/components/Common/Dialog/DialogWrap
 import UserAbortsOperationError from "../../../../react/lib/Common/Error/UserAbortsOperationError";
 import ErrorDialog from "../../Dialog/ErrorDialog/ErrorDialog";
 import {withDialog} from "../../../../react/contexts/Common/DialogContext";
-import {withTranslation} from "react-i18next";
+import {Trans, withTranslation} from "react-i18next";
 
 class FolderMoveStrategyDialog extends Component {
   /**
@@ -213,17 +213,17 @@ class FolderMoveStrategyDialog extends Component {
   getIntroMessage() {
     let message = '';
     if (this.isAboutItems()) {
-      message = `${this.translate("You are about to move several items.")} `;
+      message = <Trans>You are about to move several items.</Trans>;
     } else if (this.isAboutAFolder()) {
-      message = `${this.translate("You are about to move a folder.")} `;
+      message = <Trans>You are about to move a folder.</Trans>;
     } else if (this.isAboutFolders()) {
-      message = `${this.translate("You are about to move several folders.")} `;
+      message = <Trans>You are about to move several folders.</Trans>;
     } else if (this.isAboutAResource()) {
-      message = `${this.translate("You are about to move one resource.")} `;
+      message = <Trans>You are about to move one resource.</Trans>;
     } else {
-      message = `${this.translate("You are about to move several resources.")} `;
+      message = <Trans>You are about to move several resources.</Trans>;
     }
-    message += this.translate("The permissions do not match the destination folder permissions.");
+    message += <Trans>The permissions do not match the destination folder permissions.</Trans>;
     return message;
   }
 
@@ -290,16 +290,16 @@ class FolderMoveStrategyDialog extends Component {
                 <input name="moveOption" value="change" id="moveOptionChange" type="radio"
                   onChange={this.handleInputChange} ref={this.moveOptionChangeRef} checked={this.state.moveOption === 'change'} />
                 <label htmlFor="moveOptionChange">
-                  <span className="strategy-name">{this.translate("Change permissions")}</span>
-                  <span className="strategy-info">{this.translate("Remove old inherited permissions and apply the new destination folder permissions recursively.")}</span>
+                  <span className="strategy-name"><Trans>Change permissions</Trans></span>
+                  <span className="strategy-info"><Trans>Remove old inherited permissions and apply the new destination folder permissions recursively.</Trans></span>
                 </label>
               </div>
               <div className="input radio last">
                 <input name="moveOption" value="keep" id="moveOptionKeep" type="radio"
                   onChange={this.handleInputChange} ref={this.moveOptionKeepRef}  checked={this.state.moveOption === 'keep'}/>
                 <label htmlFor="moveOptionKeep">
-                  <span className="strategy-name">{this.translate("Keep existing permissions")}</span>
-                  <span className="strategy-info">{this.translate("Keep the original permissions, do not apply the destination folder permissions.")}</span>
+                  <span className="strategy-name"><Trans>Keep existing permissions</Trans></span>
+                  <span className="strategy-info"><Trans>Keep the original permissions, do not apply the destination folder permissions.</Trans></span>
                 </label>
               </div>
             </div>

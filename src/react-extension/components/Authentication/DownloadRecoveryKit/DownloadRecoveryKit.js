@@ -13,7 +13,7 @@
  */
 import React, {Component} from "react";
 import {AuthenticationContext} from "../../../contexts/AuthenticationContext";
-import {withTranslation} from "react-i18next";
+import {Trans, withTranslation} from "react-i18next";
 import PropTypes from "prop-types";
 
 /**
@@ -86,10 +86,10 @@ class DownloadRecoveryKit extends Component {
   render() {
     return (
       <div className="generate-key-feedback">
-        <h1>{this.translate("Keep your recovery kit in a safe place.")}</h1>
+        <h1><Trans>Keep your recovery kit in a safe place.</Trans></h1>
         <p>
-          {this.translate("A download of your recovery kit, containing your secret key, has automatically started.")}
-          {this.translate("Make sure you store it in a safe place. You may need it later.")}
+          <Trans>A download of your recovery kit, containing your secret key, has automatically started.</Trans>
+          <Trans>Make sure you store it in a safe place. You may need it later.</Trans>
         </p>
         <div className="form-actions">
           <button
@@ -102,7 +102,7 @@ class DownloadRecoveryKit extends Component {
           <a
             id="download-kit"
             onClick={this.handleDownload}>
-            {this.translate("Download the kit again!")}
+            <Trans>Download the kit again!</Trans>
           </a>
         </div>
       </div>

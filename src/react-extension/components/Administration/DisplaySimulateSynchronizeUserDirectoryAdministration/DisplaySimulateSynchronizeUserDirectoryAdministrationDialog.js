@@ -19,7 +19,7 @@ import Icon from "../../../../react/components/Common/Icons/Icon";
 import DisplayLoadingDialog from "../DisplayLoadingDialog/DisplayLoadingDialog";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import {withAdministrationWorkspace} from "../../../contexts/AdministrationWorkspaceContext";
-import {withTranslation} from "react-i18next";
+import {Trans, withTranslation} from "react-i18next";
 
 class DisplaySimulateSynchronizeUserDirectoryAdministrationDialog extends Component {
   /**
@@ -289,25 +289,25 @@ class DisplaySimulateSynchronizeUserDirectoryAdministrationDialog extends Compon
           onClose={this.handleClose} disabled={this.isLoading()}>
           <div className="form-content" onSubmit={this.handleFormSubmit}>
             <p>
-              <strong>{this.translate("The operation was successfull.")}</strong>
+              <strong><Trans>The operation was successfull.</Trans></strong>
             </p>
             <p></p>
             {this.hasSuccessResource() &&
             <p id="resources-synchronize"> {this.translate("{{users}} and {{groups}} will be synchronized.", {users: this.translate("{{count}} user", {count: this.usersSuccess.length}), groups: this.translate("{{count}} group", {count: this.groupsSuccess.length})})} </p>
             }
             {!this.hasSuccessResource() &&
-            <p id="no-resources"> {this.translate("No resources will be synchronized.")} </p>
+            <p id="no-resources"> <Trans>No resources will be synchronized.</Trans> </p>
             }
             {this.hasErrorOrIgnoreResource() &&
             <p className="error inline-error">
-              {this.translate("Some resources will not be synchronized and will require your attention, see the full report.")}
+              <Trans>Some resources will not be synchronized and will require your attention, see the full report.</Trans>
             </p>
             }
             <div className={`accordion operation-details ${this.state.openFullReport ? "" : "closed"}`}>
               <div className="accordion-header" onClick={this.handleFullReportClicked}>
                 {this.state.openListGroupsUsers && <Icon name="caret-down" baseline={true}/>}
                 {!this.state.openListGroupsUsers && <Icon name="caret-right" baseline={true}/>}
-                <a role="link">{this.translate("Full report")}</a>
+                <a role="link"><Trans>Full report</Trans></a>
               </div>
               <div className="accordion-content">
                 <div className="input text">
@@ -318,7 +318,7 @@ class DisplaySimulateSynchronizeUserDirectoryAdministrationDialog extends Compon
             <p></p>
           </div>
           <div className="submit-wrapper clearfix">
-            <a className={`button primary ${this.isLoading() ? "disabled" : ""}`} role="button" onClick={this.handleSynchronize}>{this.translate("Synchronize")}</a>
+            <a className={`button primary ${this.isLoading() ? "disabled" : ""}`} role="button" onClick={this.handleSynchronize}><Trans>Synchronize</Trans></a>
             <FormCancelButton disabled={this.isLoading()} onClick={this.handleClose}/>
           </div>
         </DialogWrapper>

@@ -51,7 +51,7 @@ import Footer from "./components/Footer/Footer";
 import HandleExtAppRouteChanged from "./components/Route/HandleExtAppRouteChanged";
 import NavigationContextProvider from "./contexts/NavigationContext";
 
-import SetupTranslations from "./SetupTranslations";
+import TranslationProvider from "./components/Internationalisation/TranslationProvider";
 
 /**
  * The passbolt application served by the browser extension.
@@ -385,7 +385,7 @@ class ExtApp extends Component {
     const isReady = this.isReady();
 
     return (
-      <SetupTranslations loadingPath="/data/locales/{{lng}}/{{ns}}.json">
+      <TranslationProvider loadingPath="/data/locales/{{lng}}/{{ns}}.json">
         <AppContext.Provider value={this.state}>
           <ActionFeedbackContextProvider>
             <DialogContextProvider>
@@ -486,7 +486,7 @@ class ExtApp extends Component {
             </DialogContextProvider>
           </ActionFeedbackContextProvider>
         </AppContext.Provider>
-      </SetupTranslations>
+      </TranslationProvider>
     );
   }
 }

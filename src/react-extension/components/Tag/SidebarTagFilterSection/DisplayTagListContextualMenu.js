@@ -18,7 +18,7 @@ import TagEditDialog from "../TagEditDialog/TagEditDialog";
 import TagDeleteDialog from "../TagDeleteDialog/TagDeleteDialog";
 import {withDialog} from "../../../../react/contexts/Common/DialogContext";
 import ContextualMenuWrapper from "../../../../react/components/Common/ContextualMenu/ContextualMenuWrapper";
-import {withTranslation} from "react-i18next";
+import {Trans, withTranslation} from "react-i18next";
 
 class DisplayTagListContextualMenu extends React.Component {
   /**
@@ -78,7 +78,7 @@ class DisplayTagListContextualMenu extends React.Component {
           <div className="row">
             <div className="main-cell-wrapper">
               <div className="main-cell">
-                <a id="edit-tag" onClick={this.handleEditClickEvent}><span>{this.translate("Edit Tag")}</span></a>
+                <a id="edit-tag" onClick={this.handleEditClickEvent}><span><Trans>Edit Tag</Trans></span></a>
               </div>
             </div>
           </div>
@@ -87,7 +87,7 @@ class DisplayTagListContextualMenu extends React.Component {
           <div className="row">
             <div className="main-cell-wrapper">
               <div className="main-cell">
-                <a id="delete-tag" onClick={this.handleDeleteClickEvent}><span>{this.translate("Delete Tag")}</span></a>
+                <a id="delete-tag" onClick={this.handleDeleteClickEvent}><span><Trans>Delete Tag</Trans></span></a>
               </div>
             </div>
           </div>

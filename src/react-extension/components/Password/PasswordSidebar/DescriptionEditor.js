@@ -18,7 +18,7 @@ import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import {withLoading} from "../../../../react/contexts/Common/LoadingContext";
 import Tooltip from "../../../../react/components/Common/Tooltip/Tooltip";
 import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
-import {withTranslation} from "react-i18next";
+import {Trans, withTranslation} from "react-i18next";
 
 /**
  * This component allows the current user to edit the description of a resource
@@ -384,10 +384,10 @@ class DescriptionEditor extends React.Component {
           <div className="actions">
             <a className={`button description-editor-submit ${this.hasAllInputDisabled() ? "primary processing disabled" : ""}`}
               onClick={this.handleFormSubmit} role="button">
-              <span>{this.translate("Save")}</span>
+              <span><Trans>Save</Trans></span>
             </a>
             <a className={`cancel button ${this.hasAllInputDisabled() ? "disabled" : ""}`} role="button"
-              onClick={this.handleCancel}>{this.translate("Cancel")}</a>
+              onClick={this.handleCancel}><Trans>Cancel</Trans></a>
             <div className="description-lock">
               {!this.areResourceTypesEnabled() &&
               <Tooltip message={this.translate("Do not store sensitive data. Unlike the password, this data is not encrypted. Upgrade to version 3 to encrypt this information.")}

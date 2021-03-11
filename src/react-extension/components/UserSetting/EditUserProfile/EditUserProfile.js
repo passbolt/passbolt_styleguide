@@ -20,7 +20,7 @@ import FormCancelButton from "../../../../react/components/Common/Inputs/FormSub
 import ErrorDialog from "../../Dialog/ErrorDialog/ErrorDialog";
 import {withDialog} from "../../../../react/contexts/Common/DialogContext";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
-import {withTranslation} from "react-i18next";
+import {Trans, withTranslation} from "react-i18next";
 
 class EditUserProfile extends Component {
   /**
@@ -250,7 +250,7 @@ class EditUserProfile extends Component {
           <div className="form-content">
 
             <div className={`input text required ${firstnameErrorSelector}`}>
-              <label htmlFor="user-profile-firstname-input">{this.translate("First Name")}</label>
+              <label htmlFor="user-profile-firstname-input"><Trans>First Name</Trans></label>
               <input
                 id="user-profile-firstname-input"
                 name="first_name"
@@ -265,13 +265,13 @@ class EditUserProfile extends Component {
                 disabled={!this.areActionsAllowed}/>
               {this.state.errors.isFirstnameEmpty &&
               <div className="first_name error message">
-                {this.translate("A first name is required.")}
+                <Trans>A first name is required.</Trans>
               </div>
               }
             </div>
 
             <div className={`input text required ${lasttnameErrorSelector}`}>
-              <label htmlFor="user-profile-lastname-input">{this.translate("Last Name")}</label>
+              <label htmlFor="user-profile-lastname-input"><Trans>Last Name</Trans></label>
               <input
                 id="user-profile-lastname-input"
                 name="last_name"
@@ -285,13 +285,13 @@ class EditUserProfile extends Component {
                 disabled={!this.areActionsAllowed}/>
               {this.state.errors.isLastnameEmpty &&
               <div className="last_name error message">
-                {this.translate("A last name is required.")}
+                <Trans>A last name is required.</Trans>
               </div>
               }
             </div>
 
             <div className="input text required">
-              <label htmlFor="user-profile-username-input">{this.translate("Username / Email")}</label>
+              <label htmlFor="user-profile-username-input"><Trans>Username / Email</Trans></label>
               <input
                 id="user-profile-username-input"
                 name="username"

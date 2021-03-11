@@ -17,7 +17,7 @@ import {fireEvent, render, waitFor} from "@testing-library/react";
 import React from "react";
 import AppContext from "../../../contexts/AppContext";
 import FolderDeleteDialog from "./FolderDeleteDialog";
-import SetupTranslations from "../../../SetupTranslations";
+import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 
 /**
  * The FolderDeleteDialogPage component represented as a page
@@ -30,11 +30,11 @@ export default class FolderDeleteDialogPage {
    */
   constructor(appContext, props) {
     this._page = render(
-      <SetupTranslations>
+      <MockTranslationProvider>
         <AppContext.Provider  value={appContext}>
           <FolderDeleteDialog {...props}></FolderDeleteDialog>
         </AppContext.Provider>
-      </SetupTranslations>
+      </MockTranslationProvider>
     );
   }
 

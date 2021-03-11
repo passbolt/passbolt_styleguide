@@ -20,7 +20,7 @@ import PropTypes from "prop-types";
 import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 import {withDialog} from "../../../../react/contexts/Common/DialogContext";
 import ShareDialog from "../../Share/ShareDialog";
-import {withTranslation} from "react-i18next";
+import {Trans, withTranslation} from "react-i18next";
 
 const PERMISSIONS_LABEL = {
   1: 'can read',
@@ -202,7 +202,7 @@ class PasswordSidebarPermissionsSection extends React.Component {
         <div className="accordion-header">
           <h4>
             <a onClick={this.handleTitleClickEvent} role="button">
-              {this.translate("Shared with")}
+              <Trans>Shared with</Trans>
               {this.state.open &&
               <Icon name="caret-down"/>
               }
@@ -221,7 +221,7 @@ class PasswordSidebarPermissionsSection extends React.Component {
           }
           {this.isLoading() &&
           <div className="processing-wrapper">
-            <span className="processing-text">{this.translate("Retrieving permissions")}</span>
+            <span className="processing-text"><Trans>Retrieving permissions</Trans></span>
           </div>
           }
           {!this.isLoading() &&

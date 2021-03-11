@@ -16,7 +16,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import {ResourceWorkspaceFilterTypes, withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 import {withRouter} from "react-router-dom";
-import {withTranslation} from "react-i18next";
+import {Trans, withTranslation} from "react-i18next";
 
 /**
  * This component allows to select shortcut filters applied on resources
@@ -134,7 +134,7 @@ class FilterResourcesByShortcuts extends React.Component {
               <div className="main-cell-wrapper">
                 <div className="main-cell">
                   <a onClick={this.handleAllItemsClick}>
-                    <span>{this.translate("All items")}</span>
+                    <span><Trans>All items</Trans></span>
                   </a>
                 </div>
               </div>
@@ -145,7 +145,7 @@ class FilterResourcesByShortcuts extends React.Component {
               <div className="main-cell-wrapper">
                 <div className="main-cell">
                   <a onClick={this.handleFavoriteClick}>
-                    <span>{this.translate("Favorites")}</span>
+                    <span><Trans>Favorites</Trans></span>
                   </a>
                 </div>
               </div>
@@ -156,7 +156,7 @@ class FilterResourcesByShortcuts extends React.Component {
               <div className="main-cell-wrapper">
                 <div className="main-cell">
                   <a onClick={this.handleRecentlyModifiedClick}>
-                    <span>{this.translate("Recently Modified")}</span>
+                    <span><Trans>Recently Modified</Trans></span>
                   </a>
                 </div>
               </div>
@@ -167,7 +167,7 @@ class FilterResourcesByShortcuts extends React.Component {
               <div className="main-cell-wrapper">
                 <div className="main-cell">
                   <a onClick={this.handleSharedWithMeClick}>
-                    <span>{this.translate("Shared with me")}</span>
+                    <span><Trans>Shared with me</Trans></span>
                   </a>
                 </div>
               </div>
@@ -178,7 +178,7 @@ class FilterResourcesByShortcuts extends React.Component {
               <div className="main-cell-wrapper">
                 <div className="main-cell">
                   <a onClick={this.handleItemsIOwnClick}>
-                    <span>{this.translate("Owned by me")}</span>
+                    <span><Trans>Owned by me</Trans></span>
                   </a>
                 </div>
               </div>

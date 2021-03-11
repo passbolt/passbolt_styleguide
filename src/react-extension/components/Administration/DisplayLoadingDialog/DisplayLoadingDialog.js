@@ -15,7 +15,7 @@ import React, {Component} from "react";
 import PropTypes from "prop-types";
 import AppContext from "../../../contexts/AppContext";
 import DialogWrapper from "../../../../react/components/Common/Dialog/DialogWrapper/DialogWrapper";
-import {withTranslation} from "react-i18next";
+import {Trans, withTranslation} from "react-i18next";
 
 class DisplayLoadingDialog extends Component {
   /**
@@ -60,7 +60,7 @@ class DisplayLoadingDialog extends Component {
       <DialogWrapper className='loading-dialog' title={this.props.title}
         onClose={this.handleClose} disabled={false}>
         <div className="form-content">
-          <label>{this.translate("Take a deep breath and enjoy being in the present moment...")}</label>
+          <label><Trans>Take a deep breath and enjoy being in the present moment...</Trans></label>
           <div className="progress-bar-wrapper">
             <span style={{"width": `100%`}} className="progress-bar big infinite">
               <span className="progress"></span>

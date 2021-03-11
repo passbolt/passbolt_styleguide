@@ -20,7 +20,7 @@ import ShareVariesDetails from "./ShareVariesDetails";
 import AppContext from "../../contexts/AppContext";
 import UserAvatar from "../../../react/components/Common/Avatar/UserAvatar";
 import GroupAvatar from "../../../react/components/Common/Avatar/GroupAvatar";
-import {withTranslation} from "react-i18next";
+import {Trans, withTranslation} from "react-i18next";
 
 class SharePermissionItem extends Component {
   /**
@@ -151,11 +151,11 @@ class SharePermissionItem extends Component {
             disabled={this.isInputDisabled()}
             onChange={this.handleUpdate}
           >
-            <option value="1">{this.translate("can read")}</option>
-            <option value="7">{this.translate("can update")}</option>
-            <option value="15">{this.translate("is owner")}</option>
+            <option value="1"><Trans>can read</Trans></option>
+            <option value="7"><Trans>can update</Trans></option>
+            <option value="15"><Trans>is owner</Trans></option>
             { (this.props.variesDetails) &&
-            <option value="-1">{this.translate("varies")}</option>
+            <option value="-1"><Trans>varies</Trans></option>
             }
           </select>
 

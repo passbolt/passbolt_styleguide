@@ -19,7 +19,7 @@ import OrchestrateApiSetup from "./components/AuthenticationSetup/OrchestrateApi
 import Footer from "./components/Footer/Footer";
 import {ApiClient} from "./lib/apiClient/apiClient";
 import SiteSettings from "./lib/Settings/SiteSettings";
-import SetupTranslations from "./SetupTranslations";
+import TranslationProvider from "./components/Internationalisation/TranslationProvider";
 
 /**
  * The setup application served by the API.
@@ -115,7 +115,7 @@ class ApiSetup extends Component {
    */
   render() {
     return (
-      <SetupTranslations loadingPath={`${this.state.trustedDomain}/locales/{{lng}}/{{ns}}.json`}>
+      <TranslationProvider loadingPath={`${this.state.trustedDomain}/locales/{{lng}}/{{ns}}.json`}>
         <AppContext.Provider value={this.state}>
           <div id="container" className="container page login">
             <div className="content">
@@ -131,7 +131,7 @@ class ApiSetup extends Component {
           </div>
           <Footer siteSettings={this.state.siteSettings}/>
         </AppContext.Provider>
-      </SetupTranslations>
+      </TranslationProvider>
     );
   }
 }

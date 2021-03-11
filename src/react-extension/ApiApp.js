@@ -31,7 +31,7 @@ import DisplayMainMenu from "./components/navigation/DisplayMainMenu";
 import NavigationContextProvider from "./contexts/NavigationContext";
 import HandleSessionExpired from "./components/Auth/HandleSessionExpired/HandleSessionExpired";
 import PassboltApiFetchError from "./lib/Error/passboltApiFetchError";
-import SetupTranslations from "./SetupTranslations";
+import TranslationProvider from "./components/Internationalisation/TranslationProvider";
 
 /**
  * The passbolt application served by the API.
@@ -220,7 +220,7 @@ class ApiApp extends Component {
     return (
       <>
         {this.isReady &&
-        <SetupTranslations loadingPath={`${this.state.trustedDomain}/locales/{{lng}}/{{ns}}.json`}>
+        <TranslationProvider loadingPath={`${this.state.trustedDomain}/locales/{{lng}}/{{ns}}.json`}>
           <AppContext.Provider value={this.state}>
             <ActionFeedbackContextProvider>
               <DialogContextProvider>
@@ -267,7 +267,7 @@ class ApiApp extends Component {
               </DialogContextProvider>
             </ActionFeedbackContextProvider>
           </AppContext.Provider>
-        </SetupTranslations>
+        </TranslationProvider>
         }
       </>
     );

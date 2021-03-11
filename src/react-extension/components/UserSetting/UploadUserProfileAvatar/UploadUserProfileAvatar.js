@@ -23,7 +23,7 @@ import FormCancelButton from "../../../../react/components/Common/Inputs/FormSub
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import ErrorDialog from "../../Dialog/ErrorDialog/ErrorDialog";
 import Icon from "../../../../react/components/Common/Icons/Icon";
-import {withTranslation} from "react-i18next";
+import {Trans, withTranslation} from "react-i18next";
 
 /**
  * This component displays the user profile information
@@ -272,7 +272,7 @@ class UploadUserProfileAvatar extends React.Component {
 
               <div className={`input text required ${this.hasNoFileError ? "error" : ""}`}>
                 <label htmlFor="dialog-upload-avatar-input">
-                  {this.translate("Avatar")}
+                  <Trans>Avatar</Trans>
                 </label>
 
                 <input
@@ -284,7 +284,7 @@ class UploadUserProfileAvatar extends React.Component {
                   id="dialog-upload-avatar-input"
                   className={`button primary ${this.areActionsAllowed ? "" : "disabled"}`}
                   onClick={this.handleSelectFile}>
-                  <Icon name="upload-a"/> {this.translate("Choose a file")}
+                  <Icon name="upload-a"/> <Trans>Choose a file</Trans>
                 </a>
               </div>
             </div>

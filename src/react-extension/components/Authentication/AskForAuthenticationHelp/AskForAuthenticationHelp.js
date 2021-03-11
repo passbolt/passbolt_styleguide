@@ -15,7 +15,7 @@ import React, {Component} from "react";
 import PropTypes from "prop-types";
 import {withAppContext} from "../../../contexts/AppContext";
 import {AuthenticationContext, AuthenticationContextProcess} from "../../../contexts/AuthenticationContext";
-import {withTranslation} from "react-i18next";
+import {Trans, withTranslation} from "react-i18next";
 
 /**
  * This component propose to help the use who lost his gpg key or passphrase
@@ -63,9 +63,9 @@ class AskForAuthenticationHelp extends Component {
   render() {
     return (
       <div className="ask-for-authentication-help">
-        <h1>{this.translate("Sorry... maybe an administrator can help?")}</h1>
+        <h1><Trans>Sorry... maybe an administrator can help?</Trans></h1>
         <p>
-          {this.translate("Both the private key and passphrase are required to perform an account recovery.")} {this.translate("If you do not access, you can request a new account to the administrator.")}
+          <Trans>Both the private key and passphrase are required to perform an account recovery.</Trans> <Trans>If you do not access, you can request a new account to the administrator.</Trans>
         </p>
         <div className="form-actions">
           <a
@@ -74,10 +74,10 @@ class AskForAuthenticationHelp extends Component {
             role="button"
             target="_parent"
             rel="noopener noreferrer">
-            {this.translate("Request new account")}
+            <Trans>Request new account</Trans>
           </a>
           <a onClick={this.onGoToImportGpgKeyRequested}>
-            {this.translate("I want to try again.")}
+            <Trans>I want to try again.</Trans>
           </a>
         </div>
       </div>

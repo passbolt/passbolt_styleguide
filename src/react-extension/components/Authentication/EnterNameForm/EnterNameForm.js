@@ -16,7 +16,7 @@ import PropTypes from "prop-types";
 import {withAppContext} from "../../../contexts/AppContext";
 import {withApiTriageContext} from "../../../contexts/ApiTriageContext";
 import FormSubmitButton from "../../../../react/components/Common/Inputs/FormSubmitButton/FormSubmitButton";
-import {withTranslation} from "react-i18next";
+import {Trans, withTranslation} from "react-i18next";
 
 class EnterNameForm extends Component {
   /**
@@ -223,10 +223,10 @@ class EnterNameForm extends Component {
   render() {
     return (
       <div className="enter-name">
-        <h1>{this.translate("New here? Enter your name to get started.")}</h1>
+        <h1><Trans>New here? Enter your name to get started.</Trans></h1>
         <form acceptCharset="utf-8" onSubmit={this.handleFormSubmit} noValidate>
           <div className={`input text required ${this.state.firstnameError ? "error" : ""}`}>
-            <label htmlFor="firstname">{this.translate("First Name")}</label>
+            <label htmlFor="firstname"><Trans>First Name</Trans></label>
             <input id="firstname-input" type="text" name="firstname" ref={this.firstnameRef} value={this.state.firstname}
               onKeyUp={this.handleFirstnameInputOnKeyUp} onChange={this.handleInputChange}
               disabled={this.hasAllInputDisabled()} placeholder={this.translate("first name")} required="required"/>
@@ -235,7 +235,7 @@ class EnterNameForm extends Component {
             }
           </div>
           <div className={`input text required ${this.state.lastnameError ? "error" : ""}`}>
-            <label htmlFor="lastname">{this.translate("Last Name")}</label>
+            <label htmlFor="lastname"><Trans>Last Name</Trans></label>
             <input id="lastname-input" type="text" name="lastname" ref={this.lastnameRef} value={this.state.lastname}
               onKeyUp={this.handleLastnameInputOnKeyUp} onChange={this.handleInputChange}
               disabled={this.hasAllInputDisabled()} placeholder={this.translate("last name")} required="required"/>
@@ -248,7 +248,7 @@ class EnterNameForm extends Component {
               disabled={this.hasAllInputDisabled()} big={true} fullWidth={true} processing={this.state.processing}
               value={this.translate("Sign up")}
             />
-            <a href={`${this.props.context.trustedDomain}/auth/login`}>{this.translate("I already have an account")}</a>
+            <a href={`${this.props.context.trustedDomain}/auth/login`}><Trans>I already have an account</Trans></a>
           </div>
         </form>
       </div>

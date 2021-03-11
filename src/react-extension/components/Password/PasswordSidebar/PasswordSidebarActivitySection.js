@@ -396,7 +396,7 @@ class PasswordSidebarActivitySection extends React.Component {
       <li key={activity.id} className="usercard-detailed-col-2">
         <div className="content-wrapper">
           <div className="content">
-            {this.translate("Unknown activity, please contact your administrator.")}
+            <Trans>Unknown activity, please contact your administrator.</Trans>
           </div>
         </div>
       </li>
@@ -473,7 +473,7 @@ class PasswordSidebarActivitySection extends React.Component {
         <div className="accordion-header">
           <h4>
             <a onClick={this.handleTitleClickEvent} role="button">
-              {this.translate("Activity")}
+              <Trans>Activity</Trans>
               {this.state.open &&
               <Icon name="caret-down"/>
               }
@@ -486,7 +486,7 @@ class PasswordSidebarActivitySection extends React.Component {
         <div className="accordion-content">
           {this.state.loading &&
           <div className="processing-wrapper">
-            <span className="processing-text">{this.translate("Retrieving activities")}</span>
+            <span className="processing-text"><Trans>Retrieving activities</Trans></span>
           </div>
           }
           {!this.state.loading &&
@@ -497,7 +497,7 @@ class PasswordSidebarActivitySection extends React.Component {
             {this.mustDisplayMoreButton() &&
             <div className="actions">
               <a onClick={this.handleMoreClickEvent} className={`button action-logs-load-more ${this.state.loadingMore ? "processing disabled" : ""}`} role="button">
-                <span>{this.translate("More")}</span>
+                <span><Trans>More</Trans></span>
               </a>
             </div>
             }

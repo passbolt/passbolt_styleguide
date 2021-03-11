@@ -18,7 +18,7 @@ import React from "react";
 import CreateGroupDialog from "./CreateGroupDialog";
 import ManageDialogs from "../../../../react/components/Common/Dialog/ManageDialogs/ManageDialogs";
 import DialogContextProvider from "../../../../react/contexts/Common/DialogContext";
-import SetupTranslations from "../../../SetupTranslations";
+import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 
 /**
  * The CreateGroupDialog component represented as a page
@@ -31,14 +31,14 @@ export default class CreateGroupDialogPage {
    */
   constructor(appContext, props) {
     this._page = render(
-      <SetupTranslations>
+      <MockTranslationProvider>
         <AppContext.Provider value={appContext}>
           <DialogContextProvider>
             <ManageDialogs/>
             <CreateGroupDialog {...props}/>
           </DialogContextProvider>
         </AppContext.Provider>
-      </SetupTranslations>
+      </MockTranslationProvider>
     );
     this.setupPageObjects();
   }

@@ -17,7 +17,7 @@ import PropTypes from "prop-types";
 import {withAppContext} from "../../../contexts/AppContext";
 import {withApiTriageContext} from "../../../contexts/ApiTriageContext";
 import FormSubmitButton from "../../../../react/components/Common/Inputs/FormSubmitButton/FormSubmitButton";
-import {withTranslation} from "react-i18next";
+import {Trans, withTranslation} from "react-i18next";
 
 class EnterUsernameForm extends Component {
   /**
@@ -278,10 +278,10 @@ class EnterUsernameForm extends Component {
   render() {
     return (
       <div className="enter-username">
-        <h1>{this.translate("Please enter your email to continue.")}</h1>
+        <h1><Trans>Please enter your email to continue.</Trans></h1>
         <form acceptCharset="utf-8" onSubmit={this.handleFormSubmit} noValidate>
           <div className={`input text required ${this.state.usernameError ? "error" : ""}`}>
-            <label htmlFor="username">{this.translate("Email")}</label>
+            <label htmlFor="username"><Trans>Email</Trans></label>
             <input id="username-input" type="text" ref={this.usernameRef} name="username" value={this.state.username}
               onKeyUp={this.handleUsernameInputOnKeyUp} onChange={this.handleInputChange} placeholder={this.translate("you@organization.com")}
               required="required" disabled={this.hasAllInputDisabled()}/>
@@ -296,11 +296,11 @@ class EnterUsernameForm extends Component {
             <label htmlFor="checkbox-terms">
               {(this.privacyLink || this.termsLink) &&
               <span>
-                {this.translate("I accept the")}&nbsp;
-                {this.termsLink && <a href={this.termsLink} target="_blank" rel="noopener noreferrer">{this.translate("terms")}</a>}
-                {(this.termsLink && this.privacyLink) && <span> {this.translate("and")} </span>}
+                <Trans>I accept the</Trans>&nbsp;
+                {this.termsLink && <a href={this.termsLink} target="_blank" rel="noopener noreferrer"><Trans>terms</Trans></a>}
+                {(this.termsLink && this.privacyLink) && <span> <Trans>and</Trans> </span>}
                 {this.privacyLink &&
-                <a href={this.privacyLink} target="_blank" rel="noopener noreferrer">{this.translate("privacy policy")}</a>}.
+                <a href={this.privacyLink} target="_blank" rel="noopener noreferrer"><Trans>privacy policy</Trans></a>}.
               </span>
               }
             </label>

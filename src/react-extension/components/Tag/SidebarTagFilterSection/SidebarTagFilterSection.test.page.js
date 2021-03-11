@@ -24,7 +24,7 @@ import SidebarTagFilterSection from "./SidebarTagFilterSection";
 import SidebarTagFilterSectionContextualMenuPageObject from "./SidebarTagFilterSectionContextualMenu.test.page";
 import DisplayTagListContextualMenuPageObject from "./DisplayTagListContextualMenu.test.page";
 import {ResourceWorkspaceContext} from "../../../contexts/ResourceWorkspaceContext";
-import SetupTranslations from "../../../SetupTranslations";
+import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 
 /**
  * The SidebarTagFilterSection component represented as a page
@@ -37,7 +37,7 @@ export default class SidebarTagFilterSectionPage {
    */
   constructor(appContext, props, resourceWorkspaceContext) {
     this._page = render(
-      <SetupTranslations>
+      <MockTranslationProvider>
         <AppContext.Provider value={appContext}>
           <Router>
             <ResourceWorkspaceContext.Provider value={resourceWorkspaceContext}>
@@ -48,7 +48,7 @@ export default class SidebarTagFilterSectionPage {
             </ResourceWorkspaceContext.Provider>
           </Router>
         </AppContext.Provider>
-      </SetupTranslations>
+      </MockTranslationProvider>
     );
     this.setupPageObjects();
   }

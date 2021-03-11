@@ -16,7 +16,7 @@
 import {render} from "@testing-library/react";
 import React from "react";
 import DisplayError from "./DisplayRequireInvitationError";
-import SetupTranslations from "../../../SetupTranslations";
+import TranslationProvider from "../../Internationalisation/TranslationProvider";
 
 /**
  * The DisplayError component represented as a page
@@ -29,9 +29,9 @@ export default class DisplayRequireInvitationErrorPage {
    */
   constructor() {
     this._page = render(
-      <SetupTranslations>
+      <TranslationProvider>
         <DisplayError/>
-      </SetupTranslations>
+      </TranslationProvider>
     );
   }
 

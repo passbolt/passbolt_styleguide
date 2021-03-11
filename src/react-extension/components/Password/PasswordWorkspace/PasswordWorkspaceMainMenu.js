@@ -21,7 +21,7 @@ import {ResourceWorkspaceFilterTypes, withResourceWorkspace} from "../../../cont
 import PasswordCreateDialog from "../PasswordCreateDialog/PasswordCreateDialog";
 import FolderCreateDialog from "../../Folder/FolderCreateDialog/FolderCreateDialog";
 import PasswordImportDialog from "../PasswordImportDialog/PasswordImportDialog";
-import {withTranslation} from "react-i18next";
+import {Trans, withTranslation} from "react-i18next";
 
 /**
  * This component allows the current user to create a new resource
@@ -230,7 +230,7 @@ class PasswordWorkspaceMainMenu extends React.Component {
         <div className="dropdown" ref={this.createMenuRef}>
           <a className={`button create primary ready ${this.canCreate() ? "" : "disabled"}`} onClick={this.handleCreateClickEvent}>
             <Icon name="plus-circle"/>
-            <span>{this.translate("Create")}</span>
+            <span><Trans>Create</Trans></span>
           </a>
           <ul className={`dropdown-content menu ready ${this.state.createMenuOpen ? "visible" : ""}`}>
             <li id="password_action">
@@ -238,7 +238,7 @@ class PasswordWorkspaceMainMenu extends React.Component {
                 <div className="main-cell-wrapper">
                   <div className="main-cell">
                     <a onClick={this.handleCreateMenuPasswordClickEvent}>
-                      <span>{this.translate("New password")}</span>
+                      <span><Trans>New password</Trans></span>
                     </a>
                   </div>
                 </div>
@@ -249,7 +249,7 @@ class PasswordWorkspaceMainMenu extends React.Component {
                 <div className="main-cell-wrapper">
                   <div className="main-cell">
                     <a onClick={this.handleMenuCreateFolderClickEvent}>
-                      <span>{this.translate("New folder")}</span>
+                      <span><Trans>New folder</Trans></span>
                     </a>
                   </div>
                 </div>
@@ -262,7 +262,7 @@ class PasswordWorkspaceMainMenu extends React.Component {
             className="button"
             onClick={this.handleImportClickEvent}>
             <Icon name="upload-a" />
-            <span className="visuallyhidden">upload</span>
+            <span className="visuallyhidden"><Trans>upload</Trans></span>
           </a>
         }
       </>

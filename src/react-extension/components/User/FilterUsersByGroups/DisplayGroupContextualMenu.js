@@ -21,7 +21,7 @@ import ErrorDialog from "../../Dialog/ErrorDialog/ErrorDialog";
 import DeleteGroupDialog from "../../Group/DeleteGroup/DeleteGroupDialog";
 import EditUserGroup from "../EditUserGroup/EditUserGroup";
 import {withUserWorkspace} from "../../../contexts/UserWorkspaceContext";
-import {withTranslation} from "react-i18next";
+import {Trans, withTranslation} from "react-i18next";
 
 class DisplayGroupContextualMenu extends React.Component {
   /**
@@ -145,7 +145,7 @@ class DisplayGroupContextualMenu extends React.Component {
                 <a
                   id="edit-group"
                   onClick={this.handleEditGroup}>
-                  <span>{this.translate("Edit group")}</span>
+                  <span><Trans>Edit group</Trans></span>
                 </a>
               </div>
             </div>
@@ -159,7 +159,7 @@ class DisplayGroupContextualMenu extends React.Component {
                   <a
                     id="delete-group"
                     onClick={this.handleDeleteClickEvent}>
-                    <span>{this.translate("Delete Group")}</span>
+                    <span><Trans>Delete Group</Trans></span>
                   </a>
                 </div>
               </div>

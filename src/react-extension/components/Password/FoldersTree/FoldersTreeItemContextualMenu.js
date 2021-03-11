@@ -22,7 +22,7 @@ import FolderDeleteDialog from "../../Folder/FolderDeleteDialog/FolderDeleteDial
 import ShareDialog from "../../Share/ShareDialog";
 import ExportResources from "../ExportResources/ExportResources";
 import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
-import {withTranslation} from "react-i18next";
+import {Trans, withTranslation} from "react-i18next";
 
 class FoldersTreeItemContextualMenu extends React.Component {
   /**
@@ -168,7 +168,7 @@ class FoldersTreeItemContextualMenu extends React.Component {
           <div className="row">
             <div className="main-cell-wrapper">
               <div className="main-cell">
-                <a onClick={this.handleCreateFolderItemClickEvent}><span>{this.translate("Create folder")}</span></a>
+                <a onClick={this.handleCreateFolderItemClickEvent}><span><Trans>Create folder</Trans></span></a>
               </div>
             </div>
           </div>
@@ -177,7 +177,7 @@ class FoldersTreeItemContextualMenu extends React.Component {
           <div className="row">
             <div className="main-cell-wrapper">
               <div className="main-cell">
-                <a onClick={this.handleRenameFolderItemClickEvent}><span>{this.translate("Rename")}</span></a>
+                <a onClick={this.handleRenameFolderItemClickEvent}><span><Trans>Rename</Trans></span></a>
               </div>
             </div>
           </div>
@@ -186,7 +186,7 @@ class FoldersTreeItemContextualMenu extends React.Component {
           <div className="row">
             <div className="main-cell-wrapper">
               <div className="main-cell">
-                <a onClick={this.handleShareFolderItemClickEvent}><span>{this.translate("Share")}</span></a>
+                <a onClick={this.handleShareFolderItemClickEvent}><span><Trans>Share</Trans></span></a>
               </div>
             </div>
           </div>
@@ -198,7 +198,7 @@ class FoldersTreeItemContextualMenu extends React.Component {
                 <a
                   className={`${this.canExport() ? "" : "disabled"}`}
                   onClick={this.handleExportFolderItemClickEvent}>
-                  <span>{this.translate("Export")}</span>
+                  <span><Trans>Export</Trans></span>
                 </a>
               </div>
             </div>
@@ -208,7 +208,7 @@ class FoldersTreeItemContextualMenu extends React.Component {
           <div className="row">
             <div className="main-cell-wrapper">
               <div className="main-cell">
-                <a onClick={this.handleDeleteFolderItemClickEvent}><span>{this.translate("Delete")}</span></a>
+                <a onClick={this.handleDeleteFolderItemClickEvent}><span><Trans>Delete</Trans></span></a>
               </div>
             </div>
           </div>

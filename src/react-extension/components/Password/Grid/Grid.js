@@ -649,32 +649,32 @@ class Grid extends React.Component {
         <React.Fragment>
           {isEmpty && filterType === ResourceWorkspaceFilterTypes.TEXT &&
           <div className="empty-content">
-            <h2>{this.translate("None of your passwords matched this search.")}</h2>
-            <p>{this.translate("Try another search or use the left panel to navigate into your passwords.")}</p>
+            <h2><Trans>None of your passwords matched this search.</Trans></h2>
+            <p><Trans>Try another search or use the left panel to navigate into your passwords.</Trans></p>
           </div>
           }
           {isEmpty && filterType === ResourceWorkspaceFilterTypes.FAVORITE &&
           <div className="empty-content">
-            <h2>{this.translate("None of your passwords are yet marked as favorite.")}</h2>
-            <p>{this.translate("Add stars to passwords you want to easily find later.")}</p>
+            <h2><Trans>None of your passwords are yet marked as favorite.</Trans></h2>
+            <p><Trans>Add stars to passwords you want to easily find later.</Trans></p>
           </div>
           }
           {isEmpty && filterType === ResourceWorkspaceFilterTypes.GROUP &&
           <div className="empty-content">
-            <h2>{this.translate("No passwords are shared with this group yet.")}</h2>
-            <p>{this.translate("Share a password with this group or wait for a team member to share one with this group.")}</p>
+            <h2><Trans>No passwords are shared with this group yet.</Trans></h2>
+            <p><Trans>Share a password with this group or wait for a team member to share one with this group.</Trans></p>
           </div>
           }
           {isEmpty && filterType === ResourceWorkspaceFilterTypes.FOLDER &&
           <div className="empty-content">
-            <h2>{this.translate("No passwords in this folder yet.")}</h2>
-            <p>{this.translate("It does feel a bit empty here.")}</p>
+            <h2><Trans>No passwords in this folder yet.</Trans></h2>
+            <p><Trans>It does feel a bit empty here.</Trans></p>
           </div>
           }
           {isEmpty &&  filterType === ResourceWorkspaceFilterTypes.SHARED_WITH_ME &&
           <div className="empty-content">
-            <h2>{this.translate("No passwords are shared with you yet.")}</h2>
-            <p>{this.translate("It does feel a bit empty here. Wait for a team member to share a password with you.")}</p>
+            <h2><Trans>No passwords are shared with you yet.</Trans></h2>
+            <p><Trans>It does feel a bit empty here. Wait for a team member to share a password with you.</Trans></p>
           </div>
           }
           {isEmpty &&
@@ -684,7 +684,7 @@ class Grid extends React.Component {
           ) &&
           <React.Fragment>
             <div className="empty-content">
-              <h1>{this.translate("Welcome to passbolt!")}</h1>
+              <h1><Trans>Welcome to passbolt!</Trans></h1>
               <p>
                 <Trans>
                   It does feel a bit empty here. Create your first password or<br/>wait for a team member to share one with you.
@@ -724,7 +724,7 @@ class Grid extends React.Component {
                     </th>
                     <th className="cell-name m-cell sortable">
                       <a onClick={ev => this.handleSortByColumnClick(ev, "name")}>
-                        {this.translate("Resource")}
+                        <Trans>Resource</Trans>
                         {this.isSortedColumn("name") && this.isSortedAsc() &&
                         <Icon baseline={true} name="caret-up"/>
                         }
@@ -735,7 +735,7 @@ class Grid extends React.Component {
                     </th>
                     <th className="cell-username m-cell username sortable">
                       <a onClick={ev => this.handleSortByColumnClick(ev, "username")}>
-                        {this.translate("Username")}
+                        <Trans>Username</Trans>
                         {this.isSortedColumn("username") && this.isSortedAsc() &&
                         <Icon baseline={true} name="caret-up"/>
                         }
@@ -745,11 +745,11 @@ class Grid extends React.Component {
                       </a>
                     </th>
                     <th className="cell-secret m-cell password">
-                      {this.translate("Password")}
+                      <Trans>Password</Trans>
                     </th>
                     <th className="cell-uri l-cell sortable">
                       <a onClick={ev => this.handleSortByColumnClick(ev, "uri")}>
-                        {this.translate("URI")}
+                        <Trans>URI</Trans>
                         {this.isSortedColumn("uri") && this.isSortedAsc() &&
                         <Icon baseline={true} name="caret-up"/>
                         }
@@ -760,7 +760,7 @@ class Grid extends React.Component {
                     </th>
                     <th className="cell-modified m-cell sortable">
                       <a onClick={ev => this.handleSortByColumnClick(ev, "modified")}>
-                        {this.translate("Modified")}
+                        <Trans>Modified</Trans>
                         {this.isSortedColumn("modified") && this.isSortedAsc() &&
                         <Icon baseline={true} name="caret-up"/>
                         }

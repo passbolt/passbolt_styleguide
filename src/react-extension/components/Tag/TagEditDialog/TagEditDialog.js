@@ -23,7 +23,7 @@ import FormCancelButton from "../../../../react/components/Common/Inputs/FormSub
 import {withLoading} from "../../../../react/contexts/Common/LoadingContext";
 import {ResourceWorkspaceFilterTypes, withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 import {withRouter} from "react-router-dom";
-import {withTranslation} from "react-i18next";
+import {Trans, withTranslation} from "react-i18next";
 
 /**
  * Component allows the user to edit a tag from a dialog
@@ -267,7 +267,7 @@ class TagEditDialog extends Component {
         <form onSubmit={this.handleFormSubmit} noValidate>
           <div className="form-content">
             <div className={`input text required ${this.state.nameError ? "error" : ""}`}>
-              <label htmlFor="edit-tag-form-name">{this.translate("Tag name")}</label>
+              <label htmlFor="edit-tag-form-name"><Trans>Tag name</Trans></label>
               <input id="edit-tag-form-name" name="name" type="text" value={this.state.name}
                 onKeyUp={this.handleNameInputKeyUp} onChange={this.handleInputChange}
                 disabled={this.state.processing} ref={this.nameInputRef} className="required fluid"

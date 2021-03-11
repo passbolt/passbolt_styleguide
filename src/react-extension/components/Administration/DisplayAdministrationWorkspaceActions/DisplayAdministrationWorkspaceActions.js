@@ -25,7 +25,7 @@ import DisplaySimulateSynchronizeUserDirectoryAdministrationDialog
 import {withDialog} from "../../../../react/contexts/Common/DialogContext";
 import DisplaySynchronizeUserDirectoryAdministrationDialog
   from "../DisplaySynchronizeUserDirectoryAdministration/DisplaySynchronizeUserDirectoryAdministrationDialog";
-import {withTranslation} from "react-i18next";
+import {Trans, withTranslation} from "react-i18next";
 
 /**
  * This component is a container of multiple actions applicable on setting
@@ -146,7 +146,7 @@ class DisplayAdministrationWorkspaceActions extends React.Component {
             <li>
               <a className={`button ${this.isSaveEnabled() ? "" : "disabled"}`} onClick={this.handleSaveClick}>
                 <Icon name="save"/>
-                <span>{this.translate("Save settings")}</span>
+                <span><Trans>Save settings</Trans></span>
               </a>
             </li>
             {this.isUserDirectorySelected() &&
@@ -154,19 +154,19 @@ class DisplayAdministrationWorkspaceActions extends React.Component {
               <li>
                 <a className={`button ${this.isTestEnabled() ? "" : "disabled"}`} onClick={this.handleTestClick}>
                   <Icon name="plug"/>
-                  <span>{this.translate("Test settings")}</span>
+                  <span><Trans>Test settings</Trans></span>
                 </a>
               </li>
               <li>
                 <a className={`button ${this.isSynchronizeEnabled() ? "" : "disabled"}`} onClick={this.handleSimulateSynchronizeClick}>
                   <Icon name="magic-wand"/>
-                  <span>{this.translate("Simulate synchronize")}</span>
+                  <span><Trans>Simulate synchronize</Trans></span>
                 </a>
               </li>
               <li>
                 <a className={`button ${this.isSynchronizeEnabled() ? "" : "disabled"}`} onClick={this.handleSynchronizeClick}>
                   <Icon name="refresh"/>
-                  <span>{this.translate("Synchronize")}</span>
+                  <span><Trans>Synchronize</Trans></span>
                 </a>
               </li>
             </div>

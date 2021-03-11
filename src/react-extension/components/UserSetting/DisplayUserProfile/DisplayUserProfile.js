@@ -20,7 +20,7 @@ import AppContext from "../../../contexts/AppContext";
 import Icon from "../../../../react/components/Common/Icons/Icon";
 import {withDialog} from "../../../../react/contexts/Common/DialogContext";
 import UploadUserProfileAvatar from "../UploadUserProfileAvatar/UploadUserProfileAvatar";
-import {withTranslation} from "react-i18next";
+import {Trans, withTranslation} from "react-i18next";
 import {DateTime} from "luxon";
 
 /**
@@ -84,30 +84,30 @@ class DisplayUserProfile extends React.Component {
             <table className="table-info profile">
               <tbody>
                 <tr className="name">
-                  <td className="label">{this.translate("Name")}</td>
+                  <td className="label"><Trans>Name</Trans></td>
                   <td className="value">{`${this.user.profile.first_name} ${this.user.profile.last_name}`}</td>
                 </tr>
                 <tr className="email">
-                  <td className="label">{this.translate("Email")}</td>
+                  <td className="label"><Trans>Email</Trans></td>
                   <td className="value">{this.user.username}</td>
                 </tr>
                 <tr className="role">
-                  <td className="label">{this.translate("Role")}</td>
+                  <td className="label"><Trans>Role</Trans></td>
                   <td className="value">{this.user.role.name}</td>
                 </tr>
                 <tr className="modified">
-                  <td className="label">{this.translate("Modified")}</td>
+                  <td className="label"><Trans>Modified</Trans></td>
                   <td className="value">{this.formatDateTimeAgo(this.user.modified)}</td>
                 </tr>
                 <tr className="created">
-                  <td className="label">{this.translate("Created")}</td>
+                  <td className="label"><Trans>Created</Trans></td>
                   <td className="value">{this.formatDateTimeAgo(this.user.created)}</td>
                 </tr>
               </tbody>
             </table>
           </div>
           <div className="avatar col6 last">
-            <h3>{this.translate("Avatar")}</h3>
+            <h3><Trans>Avatar</Trans></h3>
             <div className="avatar">
               <div className="value">
                 <UserAvatar
@@ -121,7 +121,7 @@ class DisplayUserProfile extends React.Component {
                   title="Change Avatar"
                   onClick={this.handleUploadPicture}>
                   <Icon name="camera"/>
-                  <span className="help-text">{this.translate("Upload a new avatar picture")}</span>
+                  <span className="help-text"><Trans>Upload a new avatar picture</Trans></span>
                 </a>
               </div>
             </div>

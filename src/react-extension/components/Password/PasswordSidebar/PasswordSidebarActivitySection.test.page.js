@@ -17,7 +17,7 @@ import AppContext from "../../../contexts/AppContext";
 import React from "react";
 import PasswordSidebarActivitySection from "./PasswordSidebarActivitySection";
 import {BrowserRouter as Router} from 'react-router-dom';
-import SetupTranslations from "../../../SetupTranslations";
+import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 
 /**
  * The PasswordSidebarActivitySection component represented as a page
@@ -30,13 +30,13 @@ export default class PasswordSidebarActivitySectionPage {
    */
   constructor(appContext, props) {
     this._page = render(
-      <SetupTranslations>
+      <MockTranslationProvider>
         <Router>
           <AppContext.Provider value={appContext}>
             <PasswordSidebarActivitySection {...props}/>
           </AppContext.Provider>
         </Router>
-      </SetupTranslations>
+      </MockTranslationProvider>
     );
     this.setupPageObjects();
   }

@@ -15,7 +15,7 @@
 import {fireEvent, render, waitFor} from "@testing-library/react";
 import React from "react";
 import EnterUsernameForm from "./EnterUsernameForm";
-import SetupTranslations from "../../../SetupTranslations";
+import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 
 /**
  * The EnterUsernameForm component represented as a page
@@ -28,9 +28,9 @@ export default class EnterUsernameFormPage {
    */
   constructor(props) {
     this._page = render(
-      <SetupTranslations>
+      <MockTranslationProvider>
         <EnterUsernameForm {...props}/>
-      </SetupTranslations>
+      </MockTranslationProvider>
     );
   }
 

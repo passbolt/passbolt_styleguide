@@ -17,7 +17,7 @@ import AppContext from "../../../contexts/AppContext";
 import React from "react";
 import DisplayAdministrationWorkspaceBreadcrumb from "./DisplayAdministrationWorkspaceBreadcrumb";
 import {BrowserRouter as Router} from 'react-router-dom';
-import SetupTranslations from "../../../SetupTranslations";
+import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 
 /**
  * The DisplayAdministrationWorkspaceBreadcrumb component represented as a page
@@ -30,13 +30,13 @@ export default class DisplayAdministrationWorkspaceBreadcrumbPage {
    */
   constructor(appContext, props) {
     this._page = render(
-      <SetupTranslations>
+      <MockTranslationProvider>
         <Router>
           <AppContext.Provider value={appContext}>
             <DisplayAdministrationWorkspaceBreadcrumb {...props}/>
           </AppContext.Provider>
         </Router>
-      </SetupTranslations>
+      </MockTranslationProvider>
     );
   }
 

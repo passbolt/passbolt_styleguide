@@ -14,7 +14,7 @@
 import React, {Component} from "react";
 import Icon from "../../../react/components/Common/Icons/Icon";
 import PropTypes from "prop-types";
-import {withTranslation} from "react-i18next";
+import {Trans, withTranslation} from "react-i18next";
 
 const CREDITS_URL = "https://www.passbolt.com/credits";
 const UNSAFE_URL = "https://help.passbolt.com/faq/hosting/why-unsafe";
@@ -108,7 +108,7 @@ class Footer extends Component {
                 title="terms of service"
                 href={this.unsafeUrl}
                 target="_blank" rel="noopener noreferrer">
-                {this.translate("Unsafe mode")}
+                <Trans>Unsafe mode</Trans>
               </a>
             </li>
             }
@@ -117,7 +117,7 @@ class Footer extends Component {
               <a href={this.termsUrl}
                 target="_blank"
                 rel="noopener noreferrer">
-                {this.translate("Terms")}
+                <Trans>Terms</Trans>
               </a>
             </li>
             }
@@ -126,7 +126,7 @@ class Footer extends Component {
               <a href={this.privacyUrl}
                 target="_blank"
                 rel="noopener noreferrer">
-                {this.translate("Privacy")}
+                <Trans>Privacy</Trans>
               </a>
             </li>
             }
@@ -134,7 +134,7 @@ class Footer extends Component {
               <a href={this.creditsUrl}
                 target="_blank"
                 rel="noopener noreferrer">
-                {this.translate("Credits")}
+                <Trans>Credits</Trans>
               </a>
             </li>
             <li>

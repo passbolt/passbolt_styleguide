@@ -12,7 +12,7 @@
  * @since         3.0.0
  */
 import React, {Component} from "react";
-import {withTranslation} from "react-i18next";
+import {Trans, withTranslation} from "react-i18next";
 import PropTypes from "prop-types";
 
 class CheckMailBox extends Component {
@@ -33,9 +33,9 @@ class CheckMailBox extends Component {
       <div className="email-sent-instructions">
         <div className="email-sent-bg">
         </div>
-        <h1>{this.translate("Check your mailbox!")}</h1>
-        <p>{this.translate("We send you a link to verify your email.")}<br/>
-          {this.translate("Check your spam folder if you do not see hear from us after a while.")}</p>
+        <h1><Trans>Check your mailbox!</Trans></h1>
+        <p><Trans>We send you a link to verify your email.</Trans><br/>
+          <Trans>Check your spam folder if you do not see hear from us after a while.</Trans></p>
       </div>
     );
   }
