@@ -33,6 +33,7 @@ class MockTranslationProvider extends Component {
       .init({
         lng: 'en-US',
         load: 'currentOnly',
+        resources: [],
         react: {
           useSuspense: false,
         },
