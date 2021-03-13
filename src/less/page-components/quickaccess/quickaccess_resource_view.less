@@ -8,6 +8,20 @@
                     display:block;
                     border:0;
                 }
+                .password-view {
+                  display: block;
+                  position: relative;
+                  box-sizing: content-box;
+                  margin: .4rem 0 0 .3rem;
+                  padding: .1rem .3rem .1rem .3rem;
+                  background: 0 0;
+                  border: 0;
+                  float: left;
+
+                  &.selected {
+                    background: @button-selected-background;
+                  }
+                }
             }
             .property-value {
                 width:18rem;
@@ -35,18 +49,25 @@
                   }
                 }
             }
-            .secret-copy {
+            .secret {
                 margin-top:.4rem;
-                background: transparent @controls-dot repeat-x left 3px;
                 display: inline-block;
-                width:10.3rem;
                 height: .8rem;
                 float: left;
                 border: 0;
                 margin-left:1.8rem;
-
-                &:hover {
+                &.secret-copy {
+                  width:10.3rem;
+                  background: transparent @controls-dot repeat-x left 3px;
+                  &:hover {
                     background: transparent @controls-dot-hover repeat-x left 3px;
+                  }
+                }
+                &.decrypted {
+                  max-width: 16rem;
+                  width: inherit;
+                  margin-left: 0;
+                  padding-right: 0;
                 }
             }
         }

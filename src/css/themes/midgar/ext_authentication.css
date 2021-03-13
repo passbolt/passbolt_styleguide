@@ -1321,7 +1321,6 @@ a.unfav .svg-icon svg {
 }
 .openpgp-key textarea {
   height: 12rem;
-  resize: none;
 }
 .enter-passphrase {
   /** Passphrase input with security token **/

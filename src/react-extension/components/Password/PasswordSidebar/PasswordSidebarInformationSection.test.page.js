@@ -130,7 +130,21 @@ class DisplayInformationPageObject {
    * Returns the password elements of information
    */
   get password() {
-    return this._container.querySelector('.secret-copy a');
+    return this._container.querySelector('.secret a span');
+  }
+
+  /**
+   * Returns the view password elements of information
+   */
+  get viewPassword() {
+    return this._container.querySelector('.password .password-view');
+  }
+
+  /**
+   * Get view password exist
+   */
+  get isViewPasswordExist() {
+    return Boolean(this._container.querySelector('.password .password-view'));
   }
 
   /**

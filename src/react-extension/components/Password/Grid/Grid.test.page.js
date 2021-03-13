@@ -64,6 +64,12 @@ export default class GridPage {
       get name() {
         return element.querySelector('.uri div').textContent;
       },
+      get password() {
+        return element.querySelector('.password .secret a span').textContent;
+      },
+      get isViewPasswordExist() {
+        return Boolean(element.querySelector('.password .password-view'));
+      },
       async selectFavorite() {
         const favorite = element.querySelector('.cell-favorite div a');
         fireEvent.click(favorite, leftClick);
@@ -75,8 +81,13 @@ export default class GridPage {
         await waitFor(() => {});
       },
       async selectPassword() {
-        const password = element.querySelector('.password div a');
+        const password = element.querySelector('.password .secret a');
         fireEvent.click(password, leftClick);
+        await waitFor(() => {});
+      },
+      async selectViewPassword() {
+        const viewPassword = element.querySelector('.password .password-view');
+        fireEvent.click(viewPassword, leftClick);
         await waitFor(() => {});
       },
       async selectUri() {

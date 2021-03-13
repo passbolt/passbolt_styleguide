@@ -10,7 +10,8 @@ export function defaultAppContext(appContext) {
   const defaultAppContext = {
     port: new MockPort(),
     siteSettings: {
-      getServerTimezone: () => ''
+      getServerTimezone: () => '',
+      canIUse: () => true,
     },
     loggedInResource: {
       role: {
@@ -50,6 +51,7 @@ export function defaultProps() {
         type: ResourceWorkspaceFilterTypes.ALL
       },
       onGoToResourceUriRequested: jest.fn(),
+      onResourceCopied: jest.fn(),
     },
     contextualMenuContext: {
       show: jest.fn()

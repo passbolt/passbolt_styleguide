@@ -42,7 +42,8 @@ class PasswordSidebarInformationSection extends React.Component {
    */
   getDefaultState() {
     return {
-      open: true
+      open: true,
+      previewedPassword: null // The current resource password decrypted
     };
   }
 
@@ -54,7 +55,28 @@ class PasswordSidebarInformationSection extends React.Component {
     this.handleTitleClickEvent = this.handleTitleClickEvent.bind(this);
     this.handleUsernameClickEvent = this.handleUsernameClickEvent.bind(this);
     this.handlePasswordClickEvent = this.handlePasswordClickEvent.bind(this);
+    this.handleViewPasswordButtonClick = this.handleViewPasswordButtonClick.bind(this);
     this.handleGoToResourceUriClick = this.handleGoToResourceUriClick.bind(this);
+  }
+
+  /**
+   * Whenever the component has updated in terms of props
+   * @param prevProps
+   */
+  async componentDidUpdate(prevProps) {
+    await this.handleResourceChange(prevProps.resourceWorkspaceContext.details.resource);
+  }
+
+  /**
+   * Check if the resource has changed and fetch
+   * @param previousResource
+   */
+  handleResourceChange(previousResource) {
+    const hasResourceChanged = this.resource.id !== previousResource.id;
+    const hasResourceUpdated = this.resource.modified !== previousResource.modified;
+    if ((hasResourceChanged || hasResourceUpdated) && this.state.open) {
+      this.setState({previewedPassword: null});
+    }
   }
 
   /**
@@ -152,37 +174,132 @@ class PasswordSidebarInformationSection extends React.Component {
   }
 
   /**
-   * Copy password from dto to clipboard
-   * Support original password (a simple string) and composed objects)
-   *
-   * @param {string|object} plaintextDto
+   * Handle copy password click.
+   */
+  async handlePasswordClickEvent() {
+    await this.copyPasswordToClipboard();
+  }
+
+  /**
+   * Handle preview password button click.
+   */
+  async handleViewPasswordButtonClick() {
+    await this.togglePreviewPassword();
+  }
+
+  /**
+   * Copy the resource password to clipboard.
    * @returns {Promise<void>}
    */
-  async copyPasswordToClipboard(plaintextDto) {
-    if (!plaintextDto) {
-      throw new TypeError(__('The password is empty.'));
-    }
-    if (typeof plaintextDto === 'string') {
-      await this.context.port.request("passbolt.clipboard.copy", plaintextDto);
+  async copyPasswordToClipboard() {
+    const resourceId = this.resource.id;
+    const isPasswordPreviewed = this.isPasswordPreviewed();
+    let password;
+
+    if (isPasswordPreviewed) {
+      password = this.state.previewedPassword;
     } else {
-      if (Object.prototype.hasOwnProperty.call(plaintextDto, 'password')) {
-        await this.context.port.request("passbolt.clipboard.copy", plaintextDto.password);
-      } else {
-        throw new TypeError(__('The password field is not defined.'));
+      try {
+        const plaintext = await this.decryptResourceSecret(resourceId);
+        password = this.extractPlaintextPassword(plaintext);
+      } catch (error) {
+        if (error.name !== "UserAbortsOperationError") {
+          this.props.actionFeedbackContext.displayError(error.message);
+          return;
+        }
       }
+    }
+    await this.context.port.request("passbolt.clipboard.copy", password);
+    await this.props.resourceWorkspaceContext.onResourceCopied();
+    await this.props.actionFeedbackContext.displaySuccess("The secret has been copied to clipboard");
+  }
+
+  /**
+   * Toggle preview password
+   * @returns {Promise<void>}
+   */
+  async togglePreviewPassword() {
+    const isPasswordPreviewed = this.isPasswordPreviewed();
+    if (isPasswordPreviewed) {
+      this.hidePreviewedPassword();
+    } else {
+      await this.previewPassword();
     }
   }
 
-  async handlePasswordClickEvent() {
+  /**
+   * Hide the previewed resource password.
+   */
+  hidePreviewedPassword() {
+    this.setState({previewedPassword: null});
+  }
+
+  /**
+   * Preview password
+   * @returns {Promise<void>}
+   */
+  async previewPassword() {
+    const resourceId = this.resource.id;
+    let previewedPassword;
+
     try {
-      const plaintextDto = await this.context.port.request("passbolt.secret.decrypt", this.resource.id, {showProgress: true});
-      await this.copyPasswordToClipboard(plaintextDto);
-      this.displaySuccessNotification("The secret has been copied to clipboard");
+      const plaintext = await this.decryptResourceSecret(resourceId);
+      previewedPassword = this.extractPlaintextPassword(plaintext);
     } catch (error) {
       if (error.name !== "UserAbortsOperationError") {
         this.props.actionFeedbackContext.displayError(error.message);
+        return;
       }
     }
+
+    this.setState({previewedPassword});
+  }
+
+  /**
+   * Decrypt the resource secret
+   * @param {string} resourceId The target resource id
+   * @returns {Promise<object>} The secret in plaintext format
+   * @throw UserAbortsOperationError If the user cancel the operation
+   */
+  decryptResourceSecret(resourceId) {
+    return this.context.port.request("passbolt.secret.decrypt", resourceId, {showProgress: true});
+  }
+
+  /**
+   * Get the password property from a secret plaintext object.
+   * @param {string|object} plaintextDto The secret plaintext
+   * @returns {string}
+   */
+  extractPlaintextPassword(plaintextDto) {
+    if (!plaintextDto) {
+      throw new TypeError('The secret plaintext is empty.');
+    }
+    if (typeof plaintextDto === 'string') {
+      return plaintextDto;
+    }
+    if (typeof plaintextDto !== 'object') {
+      throw new TypeError('The secret plaintext must be a string or an object.');
+    }
+    if (!Object.prototype.hasOwnProperty.call(plaintextDto, 'password')) {
+      throw new TypeError('The secret plaintext must have a password property.');
+    }
+    return plaintextDto.password;
+  }
+
+  /**
+   * Check if the password is previewed
+   * @returns {boolean}
+   */
+  isPasswordPreviewed() {
+    return this.state.previewedPassword !== null;
+  }
+
+  /**
+   * Returns true if the logged in user can use the preview password capability.
+   * @returns {boolean}
+   */
+  get canUsePreviewPassword() {
+    return this.context.siteSettings.canIUse('previewPassword');
   }
 
   /**
@@ -210,6 +327,7 @@ class PasswordSidebarInformationSection extends React.Component {
     const modifierUsername = this.getUserUsername(this.resource.modified_by);
     const createdDateTimeAgo = this.formatDateTimeAgo(this.resource.created);
     const modifiedDateTimeAgo = this.formatDateTimeAgo(this.resource.modified);
+    const isPasswordPreviewed = this.isPasswordPreviewed();
 
     return (
       <div className={`detailed-information accordion sidebar-section ${this.state.open ? "" : "closed"}`}>
@@ -226,55 +344,66 @@ class PasswordSidebarInformationSection extends React.Component {
             </a>
           </h4>
         </div>
-        <div className="accordion-content">
-          <ul>
-            <li className="username">
-              <span className="label">Username</span>
-              <span className="value"><a onClick={this.handleUsernameClickEvent}>{this.resource.username}</a></span>
-            </li>
-            <li className="password">
-              <span className="label">Password</span>
-              <div className="value">
-                <div className="secret-copy">
-                  <a onClick={this.handlePasswordClickEvent}><span>copy password to clipboard</span></a>
-                </div>
-              </div>
-            </li>
-            <li className="uri">
-              <span className="label">URI</span>
-              <span className="value">
-                {this.safeUri && <a onClick={this.handleGoToResourceUriClick}>{this.resource.uri}</a>}
-                {!this.safeUri && <span>{this.resource.uri}</span>}
-              </span>
-            </li>
-            <li className="modified">
-              <span className="label">Modified</span>
-              <span className="value">{modifiedDateTimeAgo}</span>
-            </li>
-            <li className="modified-by">
-              <span className="label">Modified by</span>
-              <span className="value">{modifierUsername}</span>
-            </li>
-            <li className="modified">
-              <span className="label">Created</span>
-              <span className="value">{createdDateTimeAgo}</span>
-            </li>
-            <li className="modified-by">
-              <span className="label">Created by</span>
-              <span className="value">{creatorUsername}</span>
-            </li>
-            {canUseFolders &&
-            <li className="location">
-              <span className="label">Location</span>
-              <span className="value">
-                <a onClick={this.handleFolderParentClickEvent} className={`folder-link ${!this.context.folders ? "disabled" : ""}`}>
-                  <Icon name="folder"/> {this.getFolderName(this.resource.folder_parent_id)}
+        <ul className="accordion-content">
+          <li className="username">
+            <span className="label">Username</span>
+            <span className="value"><a onClick={this.handleUsernameClickEvent}>{this.resource.username}</a></span>
+          </li>
+          <li className="password">
+            <span className="label">Password</span>
+            <div className="value">
+              <div className={`secret ${isPasswordPreviewed ? "" : "secret-copy"}`}
+                title={isPasswordPreviewed ? this.state.previewedPassword : "secret"}>
+                <a onClick={this.handlePasswordClickEvent}>
+                  <span>
+                    {isPasswordPreviewed && this.state.previewedPassword}
+                    {!isPasswordPreviewed && "Copy password to clipboard"}
+                  </span>
                 </a>
-              </span>
-            </li>
-            }
-          </ul>
-        </div>
+              </div>
+              {this.canUsePreviewPassword &&
+              <a onClick={this.handleViewPasswordButtonClick}
+                className={`password-view button button-icon button-toggle ${isPasswordPreviewed ? "selected" : ""}`}>
+                <Icon name='eye-open'/>
+                <span className="visually-hidden">view</span>
+              </a>
+              }
+            </div>
+          </li>
+          <li className="uri">
+            <span className="label">URI</span>
+            <span className="value">
+              {this.safeUri && <a onClick={this.handleGoToResourceUriClick}>{this.resource.uri}</a>}
+              {!this.safeUri && <span>{this.resource.uri}</span>}
+            </span>
+          </li>
+          <li className="modified">
+            <span className="label">Modified</span>
+            <span className="value">{modifiedDateTimeAgo}</span>
+          </li>
+          <li className="modified-by">
+            <span className="label">Modified by</span>
+            <span className="value">{modifierUsername}</span>
+          </li>
+          <li className="modified">
+            <span className="label">Created</span>
+            <span className="value">{createdDateTimeAgo}</span>
+          </li>
+          <li className="modified-by">
+            <span className="label">Created by</span>
+            <span className="value">{creatorUsername}</span>
+          </li>
+          {canUseFolders &&
+          <li className="location">
+            <span className="label">Location</span>
+            <span className="value">
+              <a onClick={this.handleFolderParentClickEvent} className={`folder-link ${!this.context.folders ? "disabled" : ""}`}>
+                <Icon name="folder"/> {this.getFolderName(this.resource.folder_parent_id)}
+              </a>
+            </span>
+          </li>
+          }
+        </ul>
       </div>
     );
   }

@@ -88,7 +88,8 @@ class PasswordSidebar extends React.Component {
    */
   render() {
     const canUseTags = this.context.siteSettings.canIUse("tags");
-    const canUseAuditLog = this.context.siteSettings.canIUse("audit_log");
+    const canUseAuditLog = this.context.siteSettings.canIUse("auditLog") ||
+      this.context.siteSettings.canIUse("audit_log"); // @deprecated remove with v4
 
     return (
       <div className="panel aside ready">

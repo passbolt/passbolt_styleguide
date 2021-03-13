@@ -83,6 +83,30 @@ describe("Display Resources", () => {
       expect(page.resource(3).name).toBe('test');
     });
 
+    it('AS LU, I should be able to see my password decrypted for a resource', async() => {
+      page = new GridPage(context, props);
+      await waitFor(() => {});
+      jest.spyOn(context.port, 'request').mockImplementationOnce(() => 'secret-copy');
+      jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementationOnce(() => {});
+      await page.resource(1).selectViewPassword();
+      expect(page.resource(1).password).toBe('secret-copy');
+      expect(context.port.request).toHaveBeenCalledWith('passbolt.secret.decrypt', props.resourceWorkspaceContext.filteredResources[0].id, {showProgress: true});
+      await page.resource(1).selectViewPassword();
+      expect(page.resource(1).password).toBe('Copy password to clipboard');
+    });
+
+    it('AS LU, I shouldn\'t be able to see the password view button for a resource', async() => {
+      const appContext = {
+        siteSettings: {
+          getServerTimezone: () => '',
+          canIUse: () => false,
+        }
+      };
+      page = new GridPage(defaultAppContext(appContext), props);
+      await waitFor(() => {});
+      await expect(page.resource(1).isViewPasswordExist).toBeFalsy();
+    });
+
     it('As LU, I should be able to open a contextual menu for a resource', async() => {
       page = new GridPage(context, props);
       await waitFor(() => {});
@@ -211,9 +235,9 @@ describe("Display Resources", () => {
       jest.spyOn(context.port, 'request').mockImplementationOnce(() => 'secret-copy');
       jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementationOnce(() => {});
       await page.resource(1).selectPassword();
-      expect(context.port.request).toHaveBeenCalledWith('passbolt.secret.decrypt', props.resourceWorkspaceContext.filteredResources[0].id, {showProgress: true});
-      expect(context.port.request).toHaveBeenCalledWith('passbolt.clipboard.copy', 'secret-copy');
-      expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalled();
+      await waitFor(() => expect(context.port.request).toHaveBeenCalledWith('passbolt.secret.decrypt', props.resourceWorkspaceContext.filteredResources[0].id, {showProgress: true}));
+      await waitFor(() => expect(context.port.request).toHaveBeenCalledWith('passbolt.clipboard.copy', 'secret-copy'));
+      await waitFor(() => expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalled());
     });
 
     it('As LU, I should be able to follow the uri of a resource', async() => {
