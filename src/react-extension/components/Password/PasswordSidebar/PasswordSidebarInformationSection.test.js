@@ -16,13 +16,13 @@
  * Unit tests on PasswordSidebarInformationSection in regard of specifications
  */
 
-
 import {
   defaultAppContext,
   defaultProps,
 } from "./PasswordSidebarInformationSection.test.data";
 import PasswordSidebarInformationSectionPage from "./PasswordSidebarInformationSection.test.page";
 import {ActionFeedbackContext} from "../../../contexts/ActionFeedbackContext";
+import {waitFor} from "@testing-library/dom";
 
 beforeEach(() => {
   jest.resetModules();
@@ -43,12 +43,9 @@ describe("See information", () => {
      * And I should be able to identify each information name
      * And I should be able to see each information value
      */
-
-    beforeEach(() => {
-      page = new PasswordSidebarInformationSectionPage(context, props);
-    });
-
     it('I should see the information of a resource', async() => {
+      page = new PasswordSidebarInformationSectionPage(context, props);
+      await waitFor(() => {});
       expect(page.title.hyperlink.textContent).toBe("Information");
 
       expect(page.displayInformationList.exists()).toBeTruthy();
@@ -56,19 +53,13 @@ describe("See information", () => {
     });
 
     it('I should be able to identify each information name', async() => {
-      mockContextRequest(copyClipboardMockImpl);
-      jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementation(() => {});
+      page = new PasswordSidebarInformationSectionPage(context, props);
+      await waitFor(() => {});
 
       expect(page.displayInformationList.usernameLabel).toBe('Username');
       expect(page.displayInformationList.username.textContent).toBe(props.resourceWorkspaceContext.details.resource.username);
-      await page.displayInformationList.click(page.displayInformationList.username);
-      expect(context.port.request).toHaveBeenCalledWith("passbolt.clipboard.copy", props.resourceWorkspaceContext.details.resource.username);
-      expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalledWith("The username has been copied to clipboard");
       expect(page.displayInformationList.passwordLabel).toBe('Password');
-      expect(page.displayInformationList.password.textContent).toBe("copy password to clipboard");
-      await page.displayInformationList.click(page.displayInformationList.password);
-      expect(context.port.request).toHaveBeenCalledWith("passbolt.secret.decrypt", props.resourceWorkspaceContext.details.resource.id, {"showProgress": true});
-      expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalledWith("The secret has been copied to clipboard");
+      expect(page.displayInformationList.password.textContent).toBe("Copy password to clipboard");
       expect(page.displayInformationList.uriLabel).toBe('URI');
       expect(page.displayInformationList.uri.textContent).toBe(props.resourceWorkspaceContext.details.resource.uri);
       expect(page.displayInformationList.modifiedLabel(1)).toBe('Modified');
@@ -82,6 +73,52 @@ describe("See information", () => {
       expect(page.displayInformationList.locationLabel).toBe('Location');
       expect(page.displayInformationList.location.textContent).toBe(" root");
       await page.displayInformationList.click(page.displayInformationList.location);
+    });
+
+    it('AS LU, I should be able to copy the username of a resource to clipboard', async() => {
+      page = new PasswordSidebarInformationSectionPage(context, props);
+      await waitFor(() => {});
+      mockContextRequest(copyClipboardMockImpl);
+      jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementation(() => {});
+
+      await page.displayInformationList.click(page.displayInformationList.username);
+      expect(context.port.request).toHaveBeenCalledWith("passbolt.clipboard.copy", props.resourceWorkspaceContext.details.resource.username);
+      expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalledWith("The username has been copied to clipboard");
+    });
+
+    it('AS LU, I should be able to copy the password of a resource to clipboard', async() => {
+      page = new PasswordSidebarInformationSectionPage(context, props);
+      await waitFor(() => {});
+      mockContextRequest(copyClipboardMockImpl);
+      jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementation(() => {});
+
+      await page.displayInformationList.click(page.displayInformationList.password);
+      expect(context.port.request).toHaveBeenCalledWith("passbolt.secret.decrypt", props.resourceWorkspaceContext.details.resource.id, {"showProgress": true});
+      expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalledWith("The secret has been copied to clipboard");
+    });
+
+    it('AS LU, I should be able to see my password decrypted for a resource', async() => {
+      page = new PasswordSidebarInformationSectionPage(context, props);
+      await waitFor(() => {});
+      mockContextRequest(() => 'secret-copy');
+      jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementationOnce(() => {});
+      await page.displayInformationList.click(page.displayInformationList.viewPassword);
+      expect(page.displayInformationList.password.textContent).toBe('secret-copy');
+      expect(context.port.request).toHaveBeenCalledWith('passbolt.secret.decrypt', props.resourceWorkspaceContext.details.resource.id, {showProgress: true});
+      await page.displayInformationList.click(page.displayInformationList.viewPassword);
+      expect(page.displayInformationList.password.textContent).toBe('Copy password to clipboard');
+    });
+
+    it('AS LU, I shouldn\'t be able to see the password view button for a resource if I cannot use the preview capability', async() => {
+      const appContext = {
+        siteSettings: {
+          getServerTimezone: () => '',
+          canIUse: () => false,
+        }
+      };
+      page = new PasswordSidebarInformationSectionPage(defaultAppContext(appContext), props);
+      await waitFor(() => {});
+      await expect(page.displayInformationList.isViewPasswordExist).toBeFalsy();
     });
   });
 });

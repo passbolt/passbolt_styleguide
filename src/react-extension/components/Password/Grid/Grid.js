@@ -30,7 +30,6 @@ import DisplayGridContextualMenu from "./DisplayGridContextualMenu";
 import {withContextualMenu} from "../../../../react/contexts/Common/ContextualMenuContext";
 import sanitizeUrl, {urlProtocols} from "../../../../react/lib/Common/Sanitize/sanitizeUrl";
 
-
 /**
  * This component allows to display the filtered resources into a grid
  */
@@ -54,6 +53,7 @@ class Grid extends React.Component {
     return {
       resources: [], // The current list of resources to display
       selectStrategy: "",
+      previewedPassword: null, // The previewed password.
     };
   }
 
@@ -70,6 +70,7 @@ class Grid extends React.Component {
     this.handleFavoriteClick = this.handleFavoriteClick.bind(this);
     this.handleSortByColumnClick = this.handleSortByColumnClick.bind(this);
     this.handleGoToResourceUriClick = this.handleGoToResourceUriClick.bind(this);
+    this.handlePreviewPasswordButtonClick = this.handlePreviewPasswordButtonClick.bind(this);
   }
 
   /**
@@ -82,7 +83,7 @@ class Grid extends React.Component {
   /**
    * Returns true if the component should be re-rendered
    */
-  shouldComponentUpdate(prevProps) {
+  shouldComponentUpdate(prevProps, prevState) {
     const {filteredResources, selectedResources, sorter, scrollTo} = this.props.resourceWorkspaceContext;
     const hasFilteredResourcesChanged = prevProps.resourceWorkspaceContext.filteredResources !== filteredResources;
     const hasBothSingleSelection = selectedResources.length === 1 && prevProps.resourceWorkspaceContext.selectedResources.length === 1;
@@ -90,11 +91,17 @@ class Grid extends React.Component {
     const hasSelectedResourcesLengthChanged = prevProps.resourceWorkspaceContext.selectedResources.length !== selectedResources.length;
     const hasSorterChanged = sorter !== prevProps.resourceWorkspaceContext.sorter;
     const hasResourceToScrollChange = Boolean(scrollTo.resource && scrollTo.resource.id);
+    const hasResourcePreviewPasswordChange = prevState.previewedPassword !== this.state.previewedPassword;
+    const mustHidePreviewPassword = hasFilteredResourcesChanged || hasSingleSelectedResourceChanged || hasSelectedResourcesLengthChanged || hasSorterChanged;
+    if (mustHidePreviewPassword) {
+      this.hidePreviewedPassword();
+    }
     return hasFilteredResourcesChanged ||
       hasSelectedResourcesLengthChanged ||
       hasSingleSelectedResourceChanged ||
       hasSorterChanged ||
-      hasResourceToScrollChange;
+      hasResourceToScrollChange ||
+      hasResourcePreviewPasswordChange;
   }
 
   /**
@@ -197,6 +204,14 @@ class Grid extends React.Component {
   }
 
   /**
+   * Returns true if the logged in user can use the preview password capability.
+   * @returns {boolean}
+   */
+  get canUsePreviewPassword() {
+    return this.props.context.siteSettings.canIUse('previewPassword');
+  }
+
+  /**
    * Returns true if the given resource is selected
    * @param resource A resource
    */
@@ -213,41 +228,122 @@ class Grid extends React.Component {
   }
 
   /**
-   * Copy password from dto to clipboard
-   * Support original password (a simple string) and composed objects)
-   *
-   * @param {string|object} plaintextDto
-   * @returns {Promise<void>}
+   * Handle copy password button click.
    */
-  async copyPasswordToClipboard(plaintextDto) {
-    if (!plaintextDto) {
-      throw new TypeError(__('The password is empty.'));
-    }
-    if (typeof plaintextDto === 'string') {
-      await this.props.context.port.request("passbolt.clipboard.copy", plaintextDto);
-    } else {
-      if (Object.prototype.hasOwnProperty.call(plaintextDto, 'password')) {
-        await this.props.context.port.request("passbolt.clipboard.copy", plaintextDto.password);
-      } else {
-        throw new TypeError(__('The password field is not defined.'));
-      }
-    }
-  }
-
   async handleCopyPasswordClick(ev, resource) {
     // Avoid the grid to select the resource while copying a resource secret.
     ev.stopPropagation();
 
+    await this.copyPasswordToClipboard(resource.id);
+  }
+
+  /**
+   * Handle preview password button click.
+   */
+  async handlePreviewPasswordButtonClick(ev, resourceId) {
+    // Avoid the grid to select the resource while previewing its secret.
+    ev.stopPropagation();
+
+    await this.togglePreviewPassword(resourceId);
+  }
+
+  /**
+   * Get the password property from a secret plaintext object.
+   * @param {string|object} plaintextDto The secret plaintext
+   * @returns {string}
+   */
+  extractPlaintextPassword(plaintextDto) {
+    if (!plaintextDto) {
+      throw new TypeError('The secret plaintext is empty.');
+    }
+    if (typeof plaintextDto === 'string') {
+      return plaintextDto;
+    }
+    if (typeof plaintextDto !== 'object') {
+      throw new TypeError('The secret plaintext must be a string or an object.');
+    }
+    if (!Object.prototype.hasOwnProperty.call(plaintextDto, 'password')) {
+      throw new TypeError('The secret plaintext must have a password property.');
+    }
+    return plaintextDto.password;
+  }
+
+  /**
+   * Copy a resource secret to clipboard.
+   * @param {string} resourceId The target resource id
+   * @returns {Promise<void>}
+   */
+  async copyPasswordToClipboard(resourceId) {
+    let password;
+
+    if (this.isPasswordPreviewed(resourceId)) {
+      password = this.state.previewedPassword.password;
+    } else {
+      try {
+        const plaintext = await this.decryptResourceSecret(resourceId);
+        password = this.extractPlaintextPassword(plaintext);
+      } catch (error) {
+        if (error.name !== "UserAbortsOperationError") {
+          this.props.actionFeedbackContext.displayError(error.message);
+          return;
+        }
+      }
+    }
+    await this.props.context.port.request("passbolt.clipboard.copy", password);
+    await this.props.resourceWorkspaceContext.onResourceCopied();
+    await this.props.actionFeedbackContext.displaySuccess("The secret has been copied to clipboard");
+  }
+
+  /**
+   * Toggle preview password for a given resource
+   * @param {string} resourceId The resource id to preview the password for
+   * @returns {Promise<void>}
+   */
+  async togglePreviewPassword(resourceId) {
+    const isPasswordPreviewedPreviewed = this.isPasswordPreviewed(resourceId);
+    if (isPasswordPreviewedPreviewed) {
+      this.hidePreviewedPassword();
+    } else {
+      await this.previewPassword(resourceId);
+    }
+  }
+
+  /**
+   * Hide the previewed resource password.
+   */
+  hidePreviewedPassword() {
+    this.setState({previewedPassword: null});
+  }
+
+  /**
+   * Preview password for a given resource
+   * @param {string} resourceId The resource id to preview the password for
+   * @returns {Promise<void>}
+   */
+  async previewPassword(resourceId) {
+    let password;
     try {
-      const plaintextDto = await this.props.context.port.request("passbolt.secret.decrypt", resource.id, {showProgress: true});
-      await this.copyPasswordToClipboard(plaintextDto);
-      this.props.resourceWorkspaceContext.onResourceCopied();
-      this.props.actionFeedbackContext.displaySuccess("The secret has been copied to clipboard");
+      const plaintext = await this.decryptResourceSecret(resourceId);
+      password = this.extractPlaintextPassword(plaintext);
     } catch (error) {
       if (error.name !== "UserAbortsOperationError") {
         this.props.actionFeedbackContext.displayError(error.message);
+        return;
       }
     }
+
+    const previewedPassword = {resourceId, password};
+    this.setState({previewedPassword});
+  }
+
+  /**
+   * Decrypt the resource secret
+   * @param {string} resourceId The target resource id
+   * @returns {Promise<object>} The secret in plaintext format
+   * @throw UserAbortsOperationError If the user cancel the operation
+   */
+  decryptResourceSecret(resourceId) {
+    return this.props.context.port.request("passbolt.secret.decrypt", resourceId, {showProgress: true});
   }
 
   async handleFavoriteClick(event, resource) {
@@ -403,6 +499,15 @@ class Grid extends React.Component {
   }
 
   /**
+   * Check if the password of the given resource is previewed.
+   * @param {string} resourceId The resource id
+   * @returns {boolean}
+   */
+  isPasswordPreviewed(resourceId) {
+    return this.state.previewedPassword && this.state.previewedPassword.resourceId === resourceId;
+  }
+
+  /**
    * Get safe uri of a resource
    * @param {object} resource The resource to get the safe uri for
    * @return {string}
@@ -422,10 +527,11 @@ class Grid extends React.Component {
     const safeUri = this.safeUri(resource);
     const serverTimezone = this.props.context.siteSettings.getServerTimezone();
     const modifiedFormatted = moment.tz(resource.modified, serverTimezone).fromNow();
+    const isPasswordPreviewed = this.isPasswordPreviewed(resource.id);
 
     return (
       <tr id={`resource_${resource.id}`} key={key} draggable="true" className={isSelected ? "selected" : ""}
-        unselectable={this.state.selectStrategy == "range" ? "on" : ""}
+        unselectable={this.state.selectStrategy === "range" ? "on" : ""}
         onClick={ev => this.handleResourceSelected(ev, resource)}
         onContextMenu={ev => this.handleResourceRightClick(ev, resource)}
         onDragStart={event => this.handleDragStartEvent(event, resource)}
@@ -442,7 +548,7 @@ class Grid extends React.Component {
         <td className="cell-favorite selections s-cell">
           <div className="ready">
             <a className={`no-text ${isFavorite ? "fav" : "unfav"}`} onClick={ev => this.handleFavoriteClick(ev, resource)}>
-              <Icon baseline={true} name="star"></Icon>
+              <Icon baseline={true} name="star"/>
               <span className="visuallyhidden">fav</span>
             </a>
           </div>
@@ -458,11 +564,22 @@ class Grid extends React.Component {
           </div>
         </td>
         <td className="cell-secret m-cell password">
-          <div title="secret" className="secret-copy">
-            <a onClick={ev => this.handleCopyPasswordClick(ev, resource)}>
-              <span>Copy password to clipboard</span>
+          <div className={`secret ${isPasswordPreviewed ? "" : "secret-copy"}`}
+            title={isPasswordPreviewed ? this.state.previewedPassword.password : "secret"}>
+            <a onClick={async ev => this.handleCopyPasswordClick(ev, resource)}>
+              <span>
+                {isPasswordPreviewed && this.state.previewedPassword.password}
+                {!isPasswordPreviewed && "Copy password to clipboard"}
+              </span>
             </a>
           </div>
+          {this.canUsePreviewPassword &&
+          <a onClick={async ev => this.handlePreviewPasswordButtonClick(ev, resource.id)}
+            className={`password-view button button-icon button-toggle ${this.isPasswordPreviewed(resource.id) ? "selected" : ""}`}>
+            <Icon name='eye-open' baseline={true}/>
+            <span className="visually-hidden">view</span>
+          </a>
+          }
         </td>
         <td className="cell-uri l-cell">
           <div title={resource.uri}>
@@ -529,25 +646,25 @@ class Grid extends React.Component {
             <p>Try another search or use the left panel to navigate into your passwords.</p>
           </div>
           }
-          {isEmpty && filterType == ResourceWorkspaceFilterTypes.FAVORITE &&
+          {isEmpty && filterType === ResourceWorkspaceFilterTypes.FAVORITE &&
           <div className="empty-content">
             <h2>None of your passwords are yet marked as favorite.</h2>
             <p>Add stars to passwords your want to easily find later.</p>
           </div>
           }
-          {isEmpty && filterType == ResourceWorkspaceFilterTypes.GROUP &&
+          {isEmpty && filterType === ResourceWorkspaceFilterTypes.GROUP &&
           <div className="empty-content">
             <h2>No passwords are shared with this group yet.</h2>
             <p>Share a password with this group or wait for a team member to share one with this group.</p>
           </div>
           }
-          {isEmpty && filterType == ResourceWorkspaceFilterTypes.FOLDER &&
+          {isEmpty && filterType === ResourceWorkspaceFilterTypes.FOLDER &&
           <div className="empty-content">
             <h2>No passwords in this folder yet.</h2>
             <p>It does feel a bit empty here.</p>
           </div>
           }
-          {isEmpty &&  filterType == ResourceWorkspaceFilterTypes.SHARED_WITH_ME &&
+          {isEmpty &&  filterType === ResourceWorkspaceFilterTypes.SHARED_WITH_ME &&
           <div className="empty-content">
             <h2>No passwords are shared with you yet.</h2>
             <p>It does feel a bit empty here. Wait for a team member to share a password with you.</p>
@@ -585,7 +702,7 @@ class Grid extends React.Component {
                     </th>
                     <th className="cell-favorite selections s-cell sortable">
                       <a onClick={ev => this.handleSortByColumnClick(ev, "favorite")} className="unfav">
-                        <Icon baseline={true} name="star"></Icon>
+                        <Icon baseline={true} name="star"/>
                         <span className="visuallyhidden">fav</span>
                         {this.isSortedColumn("favorite") && this.isSortedAsc() &&
                         <Icon baseline={true} name="caret-up"/>

@@ -22,7 +22,7 @@ import {v4 as uuidv4} from "uuid";
 export const ActionFeedbackContext = React.createContext({
   feedbacks: [], // Current displayed feedbacks
   displaySuccess: () => {}, // Inform a user about an successful action feedback
-  displayError: () => {}, // Inform a user about an  action failure's eedback
+  displayError: () => {}, // Inform a user about an action failure's feedback
   remove: () => {} // Remove a particular feedback
 });
 

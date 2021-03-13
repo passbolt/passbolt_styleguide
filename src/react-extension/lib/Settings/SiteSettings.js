@@ -65,6 +65,7 @@ export default class SiteSettings {
     return pluginSettings.options || {};
   }
 
+
   /**
    * Check if the remember options include the "until I logout" options
    * @return {boolean}

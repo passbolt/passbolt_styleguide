@@ -5,6 +5,26 @@
                 .value {
                     height: 1.6em;
                     padding-top: 0.2em;
+                    .secret {
+                      float: left;
+                      max-width: calc(100% - 1.8rem); // password field - token
+                      overflow: hidden;
+                      text-overflow: ellipsis;
+                    }
+                }
+                .password-view {
+                  display: block;
+                  position: relative;
+                  box-sizing: content-box;
+                  margin: 0 0 0 .3rem;
+                  padding: .05rem .3rem 0 .3rem;
+                  background: 0 0;
+                  border: 0;
+                  float: left;
+
+                  &.selected {
+                    background: @button-selected-background;
+                  }
                 }
             }
         }
