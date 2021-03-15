@@ -432,6 +432,7 @@ class ExtApp extends Component {
                       {/* Users workspace */}
                       <Route path={[
                         "/app/groups/view/:selectedGroupId",
+                        "/app/groups/edit/:selectedGroupId",
                         "/app/users/view/:selectedUserId",
                         "/app/users",
                       ]}>

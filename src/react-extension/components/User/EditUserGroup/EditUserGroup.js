@@ -25,6 +25,7 @@ import UserAvatar from "../../../../react/components/Common/Avatar/UserAvatar";
 import Icon from "../../../../react/components/Common/Icons/Icon";
 import TooltipHtml from "../../../../react/components/Common/Tooltip/TooltipHtml";
 import Autocomplete from "../../../../react/components/Common/Inputs/Autocomplete/Autocomplete";
+import {withRouter} from "react-router-dom";
 
 /**
  * This component allows to edit an user group
@@ -564,7 +565,7 @@ class EditUserGroup extends Component {
    */
   async onEditSuccess() {
     await this.props.actionFeedbackContext.displaySuccess("The group has been updated successfully");
-    this.props.onClose();
+    this.close();
   }
 
   /**
@@ -604,6 +605,11 @@ class EditUserGroup extends Component {
    * Close the dialog
    */
   close() {
+    // Case of groups/edit url inputting
+    const isEditPath = this.props.location.pathname.includes('groups/edit');
+    if (isEditPath) {
+      this.props.history.push(this.props.location.pathname.replace("edit", "view"));
+    }
     this.props.onClose();
   }
 
@@ -660,7 +666,7 @@ class EditUserGroup extends Component {
         onClose={this.handleClose}
         disabled={!this.areActionsAllowed}>
 
-        {!this.isLoading &&
+        {!this.isLoading &&  this.context.loggedInUser &&
         <form
           className="group-form"
           onSubmit={this.handleSubmit}
@@ -812,7 +818,9 @@ EditUserGroup.propTypes = {
   actionFeedbackContext: PropTypes.any, // The action feedback context
   onClose: PropTypes.func,
   dialogContext: PropTypes.any, // The dialog context
-  userWorkspaceContext: PropTypes.object // The user workspace context
+  userWorkspaceContext: PropTypes.object, // The user workspace context,
+  location: PropTypes.object, // Route location
+  history: PropTypes.object // Router history
 };
 
-export default withUserWorkspace(withActionFeedback(withDialog(EditUserGroup)));
+export default withRouter(withUserWorkspace(withActionFeedback(withDialog(EditUserGroup))));
