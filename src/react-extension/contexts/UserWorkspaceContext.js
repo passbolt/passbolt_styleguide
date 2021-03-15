@@ -20,6 +20,8 @@ import moment from "moment";
 import AppContext from "./AppContext";
 import {withLoading} from "../../react/contexts/Common/LoadingContext";
 import {withActionFeedback} from "./ActionFeedbackContext";
+import EditUserGroup from "../components/User/EditUserGroup/EditUserGroup";
+import {withDialog} from "../../react/contexts/Common/DialogContext";
 
 /**
  * Context related to users ( filter, current selections, etc.)
@@ -187,11 +189,18 @@ class UserWorkspaceContextProvider extends React.Component {
     const hasUsersAndGroups = this.users !== null && this.groups !== null;
     if (hasUsersAndGroups) {
       const groupId = this.props.match.params.selectedGroupId;
-      if (groupId) {
+      if (groupId && this.context.groups) {
         const group = this.context.groups.find(group => group.id === groupId);
         if (group) { // Known group
           await this.search({type: UserWorkspaceFilterTypes.GROUP, payload: {group}});
           await this.detailGroup(group);
+
+          // Case of edit path
+          const isEditRoute = this.props.location.pathname.includes('edit');
+          if (isEditRoute) {
+            await this.updateGroupToEdit(group);
+            this.props.dialogContext.open(EditUserGroup);
+          }
         } else { // Unknown group
           this.handleUnknownGroup();
         }
@@ -651,10 +660,11 @@ UserWorkspaceContextProvider.propTypes = {
   match: PropTypes.object, // The router match helper
   history: PropTypes.object, // The router history
   actionFeedbackContext: PropTypes.object, // The action feedback context
-  loadingContext: PropTypes.object // The loading context
+  loadingContext: PropTypes.object, // The loading context
+  dialogContext: PropTypes.any // The dialog context
 };
 
-export default withRouter(withActionFeedback(withLoading(UserWorkspaceContextProvider)));
+export default withRouter(withDialog(withActionFeedback(withLoading(UserWorkspaceContextProvider))));
 
 /**
  * User Workspace Context Consumer HOC
