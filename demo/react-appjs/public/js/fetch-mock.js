@@ -55,6 +55,9 @@ fetch = async function (url) {
           },
           "log": {
             "version": "1.0.0"
+          },
+          "previewPassword": {
+            "version": "3.0.0"
           }
         }
       }
