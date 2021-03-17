@@ -18,7 +18,7 @@
         </div>
         <div class="list-container" data-simplebar>
             <ul class="list-items">
-                <?php include(dirname(__DIR__) . '../../legacy/fixtures/groups.php'); ?>
+                <?php include(dirname(__DIR__) . '/../legacy/fixtures/groups.php'); ?>
                 <?php foreach($groups as $group): ?>
                 <li class="filter-entry">
                     <a href="#filters">

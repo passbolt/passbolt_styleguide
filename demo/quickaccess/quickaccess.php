@@ -73,5 +73,10 @@
     <?php include('includes/quickaccess_resource_view.php'); ?>
 </div>
 </div>
+<div class="container-item">
+    <div class="container-wrapper">
+        <?php include('includes/quickaccess_resource_view_decrypted.php'); ?>
+    </div>
+</div>
 </body>
 </html>

@@ -1377,7 +1377,7 @@ ul li {
      * 2. The use of `table` rather than `block` is only necessary if using
      *	`:before` to contain the top-margins of child elements.
      */
-  max-height: 26.1rem;
+  max-height: 28rem;
 }
 .quickaccess .index-list .list-container:before,
 .quickaccess .index-list .list-container:after {
@@ -1590,7 +1590,7 @@ ul li {
   display: block;
   position: relative;
   box-sizing: content-box;
-  margin: 0.4rem 0 0 0.3rem;
+  margin: 0 0 0 0.5rem;
   padding: 0.1rem 0.3rem 0.1rem 0.3rem;
   background: 0 0;
   border: 0;
@@ -1621,19 +1621,19 @@ ul li {
   padding: 0.8rem 1rem 0.4rem 1.8rem;
 }
 .quickaccess .item-browse .properties .property-action {
-  margin-top: 1.8rem;
+  margin-top: 2rem;
   margin-right: 1rem;
 }
 .quickaccess .item-browse .properties .property-action.disabled path {
   fill: #444442;
 }
 .quickaccess .item-browse .properties .secret {
-  margin-top: 0.4rem;
   display: inline-block;
   height: 0.8rem;
   float: left;
   border: 0;
   margin-left: 1.8rem;
+  margin-bottom: 1rem;
 }
 .quickaccess .item-browse .properties .secret.secret-copy {
   width: 10.3rem;
