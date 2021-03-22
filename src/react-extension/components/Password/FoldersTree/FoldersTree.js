@@ -22,6 +22,7 @@ import {withContextualMenu} from "../../../../react/contexts/Common/ContextualMe
 import PropTypes from "prop-types";
 import {withDialog} from "../../../../react/contexts/Common/DialogContext";
 import ReactList from "react-list";
+import {Trans, withTranslation} from "react-i18next";
 
 // Root virtual folder identifier.
 const ROOT = null;
@@ -352,7 +353,7 @@ class FoldersTree extends React.Component {
         dragFeedbackText = this.state.draggedItems.folders[0].name;
       } else {
         error = true;
-        dragFeedbackText = "You are not allowed to move this content";
+        dragFeedbackText = this.translate("You are not allowed to move this content");
       }
     }
 
@@ -422,6 +423,14 @@ class FoldersTree extends React.Component {
   }
 
   /**
+   * Get the translate function
+   * @returns {function(...[*]=)}
+   */
+  get translate() {
+    return this.props.t;
+  }
+
+  /**
    * Render the component
    * @returns {JSX}
    */
@@ -470,7 +479,7 @@ class FoldersTree extends React.Component {
                         onDrop={this.handleDropTitle}
                         onClick={this.handleClickOnTitle}
                         onContextMenu={this.handleTitleContextualMenuEvent}
-                      >Folders</span>
+                      ><Trans>Folders</Trans></span>
                     </span>
                   </h3>
                 </div>
@@ -522,7 +531,8 @@ FoldersTree.propTypes = {
   contextualMenuContext: PropTypes.any, // The contextual menu context
   history: PropTypes.object,
   resourceWorkspaceContext: PropTypes.object,
-  dialogContext: PropTypes.any
+  dialogContext: PropTypes.any,
+  t: PropTypes.func, // The translation function
 };
 
-export default withRouter(withDialog(withContextualMenu(withResourceWorkspace(withAppContext(FoldersTree)))));
+export default withRouter(withDialog(withContextualMenu(withResourceWorkspace(withAppContext(withTranslation('common')(FoldersTree))))));

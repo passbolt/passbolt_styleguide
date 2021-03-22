@@ -23,6 +23,7 @@ import FormCancelButton from "../../../../react/components/Common/Inputs/FormSub
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import ErrorDialog from "../../Dialog/ErrorDialog/ErrorDialog";
 import Icon from "../../../../react/components/Common/Icons/Icon";
+import {Trans, withTranslation} from "react-i18next";
 
 /**
  * This component displays the user profile information
@@ -169,7 +170,7 @@ class UploadUserProfileAvatar extends React.Component {
   async onUploadSuccess() {
     await this.toggleProcessing();
     await this.refreshUserProfile();
-    await this.props.actionFeedbackContext.displaySuccess("The user has been updated successfully");
+    await this.props.actionFeedbackContext.displaySuccess(this.translate("The user has been updated successfully"));
     this.props.onClose();
   }
 
@@ -180,7 +181,7 @@ class UploadUserProfileAvatar extends React.Component {
     console.error(error);
     await this.toggleProcessing();
     const errorDialogProps = {
-      title: "There was an unexpected error...",
+      title: this.translate("There was an unexpected error..."),
       message: error.message
     };
     this.context.setContext({errorDialogProps});
@@ -240,6 +241,14 @@ class UploadUserProfileAvatar extends React.Component {
   }
 
   /**
+   * Get the translate function
+   * @returns {function(...[*]=)}
+   */
+  get translate() {
+    return this.props.t;
+  }
+
+  /**
    * Render the component
    */
   render() {
@@ -248,7 +257,7 @@ class UploadUserProfileAvatar extends React.Component {
         className="update-avatar-dialog"
         onClose={this.handleClose}
         disabled={!this.areActionsAllowed}
-        title="Edit Avatar">
+        title={this.translate("Edit Avatar")}>
         <form
           onSubmit={this.handleUpload} noValidate>
 
@@ -263,7 +272,7 @@ class UploadUserProfileAvatar extends React.Component {
 
               <div className={`input text required ${this.hasNoFileError ? "error" : ""}`}>
                 <label htmlFor="dialog-upload-avatar-input">
-                  Avatar
+                  <Trans>Avatar</Trans>
                 </label>
 
                 <input
@@ -275,7 +284,7 @@ class UploadUserProfileAvatar extends React.Component {
                   id="dialog-upload-avatar-input"
                   className={`button primary ${this.areActionsAllowed ? "" : "disabled"}`}
                   onClick={this.handleSelectFile}>
-                  <Icon name="upload-a"/> Choose a file
+                  <Icon name="upload-a"/> <Trans>Choose a file</Trans>
                 </a>
               </div>
             </div>
@@ -285,7 +294,7 @@ class UploadUserProfileAvatar extends React.Component {
             <FormSubmitButton
               disabled={!this.areActionsAllowed}
               processing={this.isProcessing}
-              value="Save"/>
+              value={this.translate("Save")}/>
             <FormCancelButton
               disabled={!this.areActionsAllowed}
               processing={this.isProcessing}
@@ -302,7 +311,8 @@ UploadUserProfileAvatar.contextType = AppContext;
 UploadUserProfileAvatar.propTypes = {
   onClose: PropTypes.func, // The close callback
   dialogContext: PropTypes.object, // The dialog context
-  actionFeedbackContext: PropTypes.object // The action feedback context
+  actionFeedbackContext: PropTypes.object, // The action feedback context
+  t: PropTypes.func, // The translation function
 };
 
-export default withActionFeedback(withDialog(UploadUserProfileAvatar));
+export default withActionFeedback(withDialog(withTranslation('common')(UploadUserProfileAvatar)));

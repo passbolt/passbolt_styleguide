@@ -16,8 +16,9 @@ import React from "react";
 import PropTypes from "prop-types";
 import AppContext from "../../../contexts/AppContext";
 import UserAvatar from "../../../../react/components/Common/Avatar/UserAvatar";
-import moment from "moment";
 import DeleteComment from "./DeleteComment";
+import {Trans, withTranslation} from "react-i18next";
+import {DateTime} from "luxon";
 
 class DisplayCommentList extends React.Component {
   /**
@@ -66,7 +67,7 @@ class DisplayCommentList extends React.Component {
     const resourceId = this.props.resource.id;
     const comments = await this.context.port.request('passbolt.comments.find-all-by-resource', resourceId);
 
-    const commentsSorter = (comment1, comment2) => moment(comment2.created).diff(moment(comment1.created));
+    const commentsSorter = (comment1, comment2) => DateTime.fromISO(comment2.created) < DateTime.fromISO(comment1.created) ? -1 : 1;
     await this.setState({comments: comments.sort(commentsSorter)});
 
     this.props.onFetch(comments);
@@ -108,6 +109,14 @@ class DisplayCommentList extends React.Component {
   }
 
   /**
+   * Get the translate function
+   * @returns {function(...[*]=)}
+   */
+  get translate() {
+    return this.props.t;
+  }
+
+  /**
    * Render the component
    * @returns {JSX}
    */
@@ -128,7 +137,7 @@ class DisplayCommentList extends React.Component {
                     <div className="metadata">
                       {this.isOwner(comment) &&
                       <span className="author username">
-                        You
+                        <Trans>You</Trans>
                       </span>
                       }
                       {!this.isOwner(comment) &&
@@ -137,7 +146,7 @@ class DisplayCommentList extends React.Component {
                       </span>
                       }
                       <span
-                        className="modified">{moment(comment.created).fromNow()}
+                        className="modified">{DateTime.fromISO(comment.created).toRelative({locale: this.props.i18n.lng})}
                       </span>
                     </div>
                     <div className="actions">
@@ -166,7 +175,7 @@ class DisplayCommentList extends React.Component {
         }
         {this.state.actions.loading &&
         <div className="processing-wrapper">
-          <span className="processing-text">Retrieving comments</span>
+          <span className="processing-text"><Trans>Retrieving comments</Trans></span>
         </div>
         }
       </>
@@ -174,12 +183,14 @@ class DisplayCommentList extends React.Component {
   }
 }
 
-export default DisplayCommentList;
+export default withTranslation('common')(DisplayCommentList);
 
 DisplayCommentList.contextType = AppContext;
 
 DisplayCommentList.propTypes = {
   resource: PropTypes.object, // The resource from which the comments will be provided
   onFetch: PropTypes.func, // Callback when the comments are fetched
-  mustRefresh: PropTypes.bool // Flag to force the refresh of the list
+  mustRefresh: PropTypes.bool, // Flag to force the refresh of the list
+  t: PropTypes.func, // The translation function
+  i18n: PropTypes.any // The i18n context translation
 };

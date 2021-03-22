@@ -25,6 +25,7 @@ import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import UserAvatar from "../../../../react/components/Common/Avatar/UserAvatar";
 import Icon from "../../../../react/components/Common/Icons/Icon";
 import TooltipHtml from "../../../../react/components/Common/Tooltip/TooltipHtml";
+import {Trans, withTranslation} from "react-i18next";
 
 class CreateGroupDialog extends Component {
   /**
@@ -205,7 +206,7 @@ class CreateGroupDialog extends Component {
    * Handle save operation success.
    */
   async handleSaveSuccess() {
-    await this.props.actionFeedbackContext.displaySuccess("The group has been created successfully.");
+    await this.props.actionFeedbackContext.displaySuccess(this.translate("The group has been created successfully."));
     this.props.onClose();
   }
 
@@ -242,7 +243,7 @@ class CreateGroupDialog extends Component {
    */
   handleError(error) {
     const errorDialogProps = {
-      title: "There was an unexpected error...",
+      title: this.translate("There was an unexpected error..."),
       message: error.message
     };
     this.context.setContext({errorDialogProps});
@@ -283,7 +284,7 @@ class CreateGroupDialog extends Component {
     const name = this.state.name.trim();
     let nameError = "";
     if (!name.length) {
-      nameError = "A name is required.";
+      nameError = this.translate("A name is required.");
     }
 
     return new Promise(resolve => {
@@ -426,21 +427,29 @@ class CreateGroupDialog extends Component {
   }
 
   /**
+   * Get the translate function
+   * @returns {function(...[*]=)}
+   */
+  get translate() {
+    return this.props.t;
+  }
+
+  /**
    * Render
    * @returns {*}
    */
   render() {
     return (
       <DialogWrapper
-        title="Create group"
+        title={this.translate("Create group")}
         className="edit-group-dialog"
         onClose={this.handleClose}
         disabled={this.hasAllInputDisabled()}>
         <form className="group-form" onSubmit={this.handleFormSubmit} noValidate>
           <div className="form-content">
             <div className={`input text required ${this.state.nameError ? "error" : ""}`}>
-              <label htmlFor="group_name">Group name</label>
-              <input id="group-name-input" name="name" className="required" maxLength="50" type="text" placeholder="group name"
+              <label htmlFor="group_name"><Trans>Group name</Trans></label>
+              <input id="group-name-input" name="name" className="required" maxLength="50" type="text" placeholder={this.translate("group name")}
                 onKeyUp={this.handleNameInputKeyUp} onChange={this.handleInputChange}
                 disabled={this.state.processing} ref={this.nameInputRef}/>
               {this.state.nameError &&
@@ -449,7 +458,7 @@ class CreateGroupDialog extends Component {
             </div>
 
             <div className="input required">
-              <label htmlFor="group_permission">Group members</label>
+              <label htmlFor="group_permission"><Trans>Group members</Trans></label>
             </div>
           </div>
           <div className="group_members">
@@ -468,14 +477,14 @@ class CreateGroupDialog extends Component {
                         </TooltipHtml>
                       </div>
                       <div className="permission_changes">
-                        <span>Will be added</span>
+                        <span><Trans>Will be added</Trans></span>
                       </div>
                     </div>
                     <div className="select rights">
                       <select value={groups_user.is_admin} disabled={this.hasAllInputDisabled()}
                         onChange={event => this.handleSelectUpdate(event, groups_user.user.id)}>
-                        <option value="false">Member</option>
-                        <option value="true">Group manager</option>
+                        <option value="false"><Trans>Member</Trans></option>
+                        <option value="true"><Trans>Group manager</Trans></option>
                       </select>
                     </div>
                     <div className="actions">
@@ -492,17 +501,17 @@ class CreateGroupDialog extends Component {
               }
               {!this.hasMembers() &&
               <div className="message warning">
-                <span>The group is empty, please add a group manager.</span>
+                <span><Trans>The group is empty, please add a group manager.</Trans></span>
               </div>
               }
               {this.hasMembers() && !this.hasManager() &&
               <div className="message error">
-                <span>Please make sure there is at least one group manager.</span>
+                <span><Trans>Please make sure there is at least one group manager.</Trans></span>
               </div>
               }
               {this.hasManager() &&
               <div className="message warning">
-                <span>You need to click save for the changes to take place.</span>
+                <span><Trans>You need to click save for the changes to take place.</Trans></span>
               </div>
               }
             </div>
@@ -510,8 +519,8 @@ class CreateGroupDialog extends Component {
               <Autocomplete
                 id="user-name-input"
                 name="name"
-                label="Add people"
-                placeholder="Start typing a person name"
+                label={this.translate("Add people")}
+                placeholder={this.translate("Start typing a person name")}
                 searchCallback={this.fetchAutocompleteItems}
                 onSelect={this.handleAutocompleteSelect}
                 onOpen={this.handleAutocompleteOpen}
@@ -522,7 +531,7 @@ class CreateGroupDialog extends Component {
             </div>
           </div>
           <div className="submit-wrapper clearfix">
-            <FormSubmitButton disabled={this.hasSubmitDisabled()} processing={this.state.processing} value="Save"/>
+            <FormSubmitButton disabled={this.hasSubmitDisabled()} processing={this.state.processing} value={this.translate("Save")}/>
             <FormCancelButton disabled={this.hasAllInputDisabled()} onClick={this.handleClose}/>
           </div>
         </form>
@@ -536,7 +545,8 @@ CreateGroupDialog.contextType = AppContext;
 CreateGroupDialog.propTypes = {
   onClose: PropTypes.func,
   actionFeedbackContext: PropTypes.any, // The action feedback context
-  dialogContext: PropTypes.any // The dialog context
+  dialogContext: PropTypes.any, // The dialog context
+  t: PropTypes.func, // The translation function
 };
 
-export default withActionFeedback(withDialog(CreateGroupDialog));
+export default withActionFeedback(withDialog(withTranslation('common')(CreateGroupDialog)));

@@ -31,6 +31,7 @@ import DisplayMainMenu from "./components/navigation/DisplayMainMenu";
 import NavigationContextProvider from "./contexts/NavigationContext";
 import HandleSessionExpired from "./components/Auth/HandleSessionExpired/HandleSessionExpired";
 import PassboltApiFetchError from "./lib/Error/passboltApiFetchError";
+import TranslationProvider from "./components/Internationalisation/TranslationProvider";
 
 /**
  * The passbolt application served by the API.
@@ -219,52 +220,54 @@ class ApiApp extends Component {
     return (
       <>
         {this.isReady &&
-        <AppContext.Provider value={this.state}>
-          <ActionFeedbackContextProvider>
-            <DialogContextProvider>
-              <ContextualMenuContextProvider>
-                { /* Action Feedback Management */}
-                <ShareActionFeedbacks/>
-                { /* Session expired handler */}
-                <HandleSessionExpired/>
-                <Router basename={this.state.basename}>
-                  <NavigationContextProvider>
-                    <Switch>
-                      <Route exact path="/app/administration">
-                        {this.isMfaEnabled &&
-                        <Redirect to="/app/administration/mfa"/>}
-                        {!this.isMfaEnabled && this.isUserDirectoryEnabled &&
-                        <Redirect to="/app/administration/users-directory"/>}
-                        {!this.isMfaEnabled && !this.isUserDirectoryEnabled &&
-                        <Redirect to="/app/administration/email-notification"/>}
-                      </Route>
-                      <Route path="/app/administration">
-                        <AdministrationWorkspaceContextProvider>
+        <TranslationProvider loadingPath={`${this.state.trustedDomain}/locales/{{lng}}/{{ns}}.json`}>
+          <AppContext.Provider value={this.state}>
+            <ActionFeedbackContextProvider>
+              <DialogContextProvider>
+                <ContextualMenuContextProvider>
+                  { /* Action Feedback Management */}
+                  <ShareActionFeedbacks/>
+                  { /* Session expired handler */}
+                  <HandleSessionExpired/>
+                  <Router basename={this.state.basename}>
+                    <NavigationContextProvider>
+                      <Switch>
+                        <Route exact path="/app/administration">
+                          {this.isMfaEnabled &&
+                          <Redirect to="/app/administration/mfa"/>}
+                          {!this.isMfaEnabled && this.isUserDirectoryEnabled &&
+                          <Redirect to="/app/administration/users-directory"/>}
+                          {!this.isMfaEnabled && !this.isUserDirectoryEnabled &&
+                          <Redirect to="/app/administration/email-notification"/>}
+                        </Route>
+                        <Route path="/app/administration">
+                          <AdministrationWorkspaceContextProvider>
+                            <ManageDialogs/>
+                            <ManageContextualMenu/>
+                            <AdministrationWorkspace/>
+                          </AdministrationWorkspaceContextProvider>
+                        </Route>
+                        <Route path="/app/settings/mfa">
                           <ManageDialogs/>
                           <ManageContextualMenu/>
-                          <AdministrationWorkspace/>
-                        </AdministrationWorkspaceContextProvider>
-                      </Route>
-                      <Route path="/app/settings/mfa">
-                        <ManageDialogs/>
-                        <ManageContextualMenu/>
-                        <div id="container" className="page settings">
-                          <div id="app" className="app" tabIndex="1000">
-                            <div className="header first">
-                              <DisplayMainMenu/>
+                          <div id="container" className="page settings">
+                            <div id="app" className="app" tabIndex="1000">
+                              <div className="header first">
+                                <DisplayMainMenu/>
+                              </div>
+                              <DisplayApiUserSettingsWorkspace/>
                             </div>
-                            <DisplayApiUserSettingsWorkspace/>
                           </div>
-                        </div>
-                      </Route>
-                    </Switch>
-                  </NavigationContextProvider>
-                </Router>
-                <Footer siteSettings={this.state.siteSettings}/>
-              </ContextualMenuContextProvider>
-            </DialogContextProvider>
-          </ActionFeedbackContextProvider>
-        </AppContext.Provider>
+                        </Route>
+                      </Switch>
+                    </NavigationContextProvider>
+                  </Router>
+                  <Footer siteSettings={this.state.siteSettings}/>
+                </ContextualMenuContextProvider>
+              </DialogContextProvider>
+            </ActionFeedbackContextProvider>
+          </AppContext.Provider>
+        </TranslationProvider>
         }
       </>
     );

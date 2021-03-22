@@ -13,6 +13,8 @@
  */
 import React, {Component} from "react";
 import AppContext from "../../../contexts/AppContext";
+import {Trans, withTranslation} from "react-i18next";
+import PropTypes from "prop-types";
 
 class ProgressDialog extends Component {
   calculateProgress() {
@@ -28,6 +30,14 @@ class ProgressDialog extends Component {
     return progress;
   }
 
+  /**
+   * Get the translate function
+   * @returns {function(...[*]=)}
+   */
+  get translate() {
+    return this.props.t;
+  }
+
   render() {
     const displayDetailsSection = this.context.progressDialogProps.goals || false;
     const progress = this.calculateProgress();
@@ -38,11 +48,11 @@ class ProgressDialog extends Component {
       <div className="dialog-wrapper progress-dialog">
         <div className="dialog">
           <div className="dialog-header">
-            <h2>{this.context.progressDialogProps.title || 'Please wait...' }</h2>
+            <h2>{this.context.progressDialogProps.title || this.translate("Please wait...") }</h2>
           </div>
           <div className="dialog-content">
             <div className="form-content">
-              <label>Take a deep breath and enjoy being in the present moment...</label>
+              <label><Trans>Take a deep breath and enjoy being in the present moment...</Trans></label>
               <div className="progress-bar-wrapper">
                 <span className="progress-bar big infinite" style={progressBarStyle}>
                   <span className="progress"></span>
@@ -50,7 +60,7 @@ class ProgressDialog extends Component {
               </div>
               {displayDetailsSection &&
               <div className="progress-details">
-                <span className="progress-step-label">&nbsp; {this.context.progressDialogProps.message ||  'Please wait...' }</span>
+                <span className="progress-step-label">&nbsp; {this.context.progressDialogProps.message ||  this.translate("Please wait...") }</span>
                 <span style={progressLabelStyle} className="progress-percent">{progress}%</span>
               </div>
               }
@@ -67,4 +77,8 @@ class ProgressDialog extends Component {
 
 ProgressDialog.contextType = AppContext;
 
-export default ProgressDialog;
+ProgressDialog.propTypes = {
+  t: PropTypes.func, // The translation function
+};
+
+export default withTranslation('common')(ProgressDialog);

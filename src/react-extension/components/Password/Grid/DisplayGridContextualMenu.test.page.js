@@ -16,6 +16,7 @@ import {fireEvent, render, waitFor} from "@testing-library/react";
 import AppContext from "../../../contexts/AppContext";
 import DisplayGridContextualMenu from "./DisplayGridContextualMenu";
 import React from "react";
+import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 
 /**
  * The DisplayGridContextualMenu component represented as a page
@@ -28,9 +29,11 @@ export default class DisplayGridContextualMenuPage {
    */
   constructor(appContext, props) {
     this._page = render(
-      <AppContext.Provider value={appContext}>
-        <DisplayGridContextualMenu {...props}/>
-      </AppContext.Provider>
+      <MockTranslationProvider>
+        <AppContext.Provider value={appContext}>
+          <DisplayGridContextualMenu {...props}/>
+        </AppContext.Provider>
+      </MockTranslationProvider>
     );
   }
 

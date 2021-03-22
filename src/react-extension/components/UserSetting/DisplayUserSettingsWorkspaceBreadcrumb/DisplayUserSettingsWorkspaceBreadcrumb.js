@@ -17,6 +17,7 @@ import Breadcrumbs from "../../../../react/components/Common/Navigation/Breadcru
 import AppContext from "../../../contexts/AppContext";
 import Breadcrumb from "../../../../react/components/Common/Navigation/Breadcrumbs/Breadcrumb";
 import {withNavigationContext} from "../../../contexts/NavigationContext";
+import {withTranslation} from "react-i18next";
 
 /**
  * The component displays a navigation breadcrumb given the applied users filter
@@ -28,7 +29,7 @@ class DisplayUserSettingsWorkspaceBreadcrumb extends Component {
    */
   get items() {
     return [
-      <Breadcrumb key="bread-1" name="All users" onClick={this.props.navigationContext.onGoToUsersRequested}/>,
+      <Breadcrumb key="bread-1" name={this.translate("All users")} onClick={this.props.navigationContext.onGoToUsersRequested}/>,
       <Breadcrumb key="bread-2" name={this.loggedInUserName} onClick={this.props.navigationContext.onGoToUserSettingsProfileRequested}/>,
       <Breadcrumb key="bread-3" name={this.getLastBreadcrumbItemName} onClick={this.onLastBreadcrumbClick.bind(this)}/>
     ];
@@ -50,12 +51,12 @@ class DisplayUserSettingsWorkspaceBreadcrumb extends Component {
   get getLastBreadcrumbItemName() {
     const matchPathSuffix = pathSuffix => this.props.location.pathname.endsWith(pathSuffix);
     const names = {
-      profile: "Profile",
-      passphrase: "Passphrase",
-      'security-token': "Security Token",
-      theme: "Theme",
-      mfa: "Multi Factor Authentication",
-      keys: "Keys inspector"
+      profile: this.translate("Profile"),
+      passphrase: this.translate("Passphrase"),
+      'security-token': this.translate("Security Token"),
+      theme: this.translate("Theme"),
+      mfa: this.translate("Multi Factor Authentication"),
+      keys: this.translate("Keys inspector")
     };
     const matchedKey = Object.keys(names).find(matchPathSuffix);
     return names[matchedKey];
@@ -68,6 +69,14 @@ class DisplayUserSettingsWorkspaceBreadcrumb extends Component {
   async onLastBreadcrumbClick() {
     const pathname = this.props.location.pathname;
     this.props.history.push({pathname});
+  }
+
+  /**
+   * Get the translate function
+   * @returns {function(...[*]=)}
+   */
+  get translate() {
+    return this.props.t;
   }
 
   /**
@@ -87,6 +96,7 @@ DisplayUserSettingsWorkspaceBreadcrumb.propTypes = {
   location: PropTypes.object, // The router location
   history: PropTypes.object, // The router history
   navigationContext: PropTypes.any, // The application navigation context
+  t: PropTypes.func, // The translation function
 };
 
-export default withRouter(withNavigationContext(DisplayUserSettingsWorkspaceBreadcrumb));
+export default withRouter(withNavigationContext(withTranslation('common')(DisplayUserSettingsWorkspaceBreadcrumb)));

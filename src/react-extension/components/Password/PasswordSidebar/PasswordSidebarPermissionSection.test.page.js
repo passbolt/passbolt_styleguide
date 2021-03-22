@@ -16,6 +16,7 @@ import {fireEvent, render, waitFor} from "@testing-library/react";
 import AppContext from "../../../contexts/AppContext";
 import React from "react";
 import PasswordSidebarPermissionsSection from "./PasswordSidebarPermissionsSection";
+import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 
 /**
  * The PasswordSidebarPermissionSection component represented as a page
@@ -28,9 +29,11 @@ export default class PasswordSidebarPermissionSectionPage {
    */
   constructor(appContext, props) {
     this._page = render(
-      <AppContext.Provider value={appContext}>
-        <PasswordSidebarPermissionsSection debug {...props}/>
-      </AppContext.Provider>
+      <MockTranslationProvider>
+        <AppContext.Provider value={appContext}>
+          <PasswordSidebarPermissionsSection debug {...props}/>
+        </AppContext.Provider>
+      </MockTranslationProvider>
     );
     this.setupPageObjects();
   }

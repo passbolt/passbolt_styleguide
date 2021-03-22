@@ -40,7 +40,7 @@ export function defaultProps() {
   return {
     history: {
       push: jest.fn()
-    },
+    }
   };
 }
 

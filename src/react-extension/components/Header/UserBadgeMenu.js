@@ -17,6 +17,7 @@ import {withAppContext} from "../../contexts/AppContext";
 import {withNavigationContext} from "../../contexts/NavigationContext";
 import UserAvatar from "../../../react/components/Common/Avatar/UserAvatar";
 import Icon from "../../../react/components/Common/Icons/Icon";
+import {Trans, withTranslation} from "react-i18next";
 
 class UserBadgeMenu extends Component {
   /**
@@ -179,6 +180,14 @@ class UserBadgeMenu extends Component {
   }
 
   /**
+   * Get the translate function
+   * @returns {function(...[*]=)}
+   */
+  get translate() {
+    return this.props.t;
+  }
+
+  /**
    * Render the component
    * @return {JSX}
    */
@@ -197,7 +206,7 @@ class UserBadgeMenu extends Component {
             <div className="more right-cell">
               <a role="button">
                 <Icon name="caret-down"/>
-                <span>more</span>
+                <span><Trans>more</Trans></span>
               </a>
             </div>
           </div>
@@ -206,7 +215,7 @@ class UserBadgeMenu extends Component {
             <li key="profile">
               <div className="row">
                 <a role="button" tabIndex="1" onClick={this.handleProfileClick}>
-                  <span>Profile</span>
+                  <span><Trans>Profile</Trans></span>
                 </a>
               </div>
             </li>
@@ -214,7 +223,7 @@ class UserBadgeMenu extends Component {
             <li key="theme">
               <div className="row">
                 <a role="button" tabIndex="2" onClick={this.handleThemeClick}>
-                  <span>Theme</span>
+                  <span><Trans>Theme</Trans></span>
                 </a>
               </div>
             </li>
@@ -222,7 +231,7 @@ class UserBadgeMenu extends Component {
             <li key="logout">
               <div className="row">
                 <a role="button" tabIndex="3" onClick={this.handleLogoutClick}>
-                  <span>Sign out</span>
+                  <span><Trans>Sign out</Trans></span>
                 </a>
               </div>
             </li>
@@ -239,6 +248,7 @@ UserBadgeMenu.propTypes = {
   navigationContext: PropTypes.any, // The application navigation context
   baseUrl: PropTypes.string,
   user: PropTypes.object,
+  t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withNavigationContext(UserBadgeMenu));
+export default withAppContext(withNavigationContext(withTranslation('common')(UserBadgeMenu)));

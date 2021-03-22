@@ -21,6 +21,7 @@ import {withDialog} from "../../../../react/contexts/Common/DialogContext";
 import FormSubmitButton from "../../../../react/components/Common/Inputs/FormSubmitButton/FormSubmitButton";
 import FormCancelButton from "../../../../react/components/Common/Inputs/FormSubmitButton/FormCancelButton";
 import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
+import {Trans, withTranslation} from "react-i18next";
 
 /**
  * This component allows user to delete a tag of the resources
@@ -75,11 +76,7 @@ class PasswordDeleteDialog extends Component {
    * Handle save operation success.
    */
   async handleSaveSuccess() {
-    let message = "The password has been deleted successfully";
-    if (this.hasMultipleResources()) {
-      message = "The passwords have been deleted successfully";
-    }
-    await this.props.actionFeedbackContext.displaySuccess(message);
+    await this.props.actionFeedbackContext.displaySuccess(this.translate("The password has been deleted successfully", {count: this.resources.length}));
     this.props.onClose();
   }
 
@@ -119,7 +116,7 @@ class PasswordDeleteDialog extends Component {
    */
   handleError(error) {
     const errorDialogProps = {
-      title: "There was an unexpected error...",
+      title: this.translate("There was an unexpected error..."),
       message: error.message
     };
     this.context.setContext({errorDialogProps});
@@ -142,10 +139,18 @@ class PasswordDeleteDialog extends Component {
     return this.resources.length > 1;
   }
 
+  /**
+   * Get the translate function
+   * @returns {function(...[*]=)}
+   */
+  get translate() {
+    return this.props.t;
+  }
+
   render() {
     return (
       <DialogWrapper
-        title="Delete password?"
+        title={this.translate("Delete password?")}
         onClose={this.handleCloseClick}
         disabled={this.state.processing}
         className="delete-password-dialog">
@@ -153,17 +158,22 @@ class PasswordDeleteDialog extends Component {
           <div className="form-content">
             {!this.hasMultipleResources() &&
             <div>
-              <p>Are you sure you want to delete the password <strong>{this.resources[0].name}</strong>?</p>
-              <p>Warning: Once the password is deleted, it’ll be removed permanently and will not be recoverable.</p>
+              <p>
+                <Trans>
+                  Are you sure you want to delete the password <strong>{{resourceName: this.resources[0].name}}</strong>?
+                </Trans>
+              </p>
+              <p><Trans>Warning: Once the password is deleted, it’ll be removed permanently and will not be recoverable.</Trans></p>
             </div>
             }
             {this.hasMultipleResources() &&
-            <p>Please confirm you really want to delete the passwords. After clicking ok, the passwords will be deleted
-              permanently.</p>
+            <p>
+              <Trans>Please confirm you really want to delete the passwords. After clicking ok, the passwords will be deleted permanently.</Trans>
+            </p>
             }
           </div>
           <div className="submit-wrapper clearfix">
-            <FormSubmitButton disabled={this.hasAllInputDisabled()} processing={this.state.processing} value="Delete" warning={true}/>
+            <FormSubmitButton disabled={this.hasAllInputDisabled()} processing={this.state.processing} value={this.translate("Delete")} warning={true}/>
             <FormCancelButton disabled={this.hasAllInputDisabled()} onClick={this.handleCloseClick}/>
           </div>
         </form>
@@ -178,7 +188,8 @@ PasswordDeleteDialog.propTypes = {
   onClose: PropTypes.func, // Whenever the dialog is closed
   actionFeedbackContext: PropTypes.any, // The action feedback context
   dialogContext: PropTypes.any, // The dialog context
-  resourceWorkspaceContext: PropTypes.any // The resource workspace context
+  resourceWorkspaceContext: PropTypes.any, // The resource workspace context
+  t: PropTypes.func, // The translation function
 };
 
-export default withResourceWorkspace(withActionFeedback(withDialog(PasswordDeleteDialog)));
+export default withResourceWorkspace(withActionFeedback(withDialog(withTranslation('common')(PasswordDeleteDialog))));

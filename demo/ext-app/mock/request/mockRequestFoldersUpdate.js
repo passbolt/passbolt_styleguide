@@ -12,14 +12,14 @@
  * @since         3.0.0
  */
 
-import moment from 'moment/moment';
+import {DateTime} from "luxon";
 
 export default (eventObject, storage) => {
   return new Promise(async (resolve) => {
     const {folders} = await storage.local.get(["folders"]);
     const folderIndex = folders.findIndex(item => item.id === eventObject.id);
     const folder = folders[folderIndex];
-    folder.modified = moment().format("YYYY-MM-DD[T]HH:mm:ss[+]00:00");
+    folder.modified = DateTime.now().toISO();
     folder.modified_by = "f848277c-5398-58f8-a82a-72397af2d450";
     folder.name = eventObject.name;
     folders[folderIndex] = folder;

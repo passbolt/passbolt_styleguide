@@ -17,6 +17,7 @@ import {fireEvent, render, waitFor} from "@testing-library/react";
 import React from "react";
 import AppContext from "../../../contexts/AppContext";
 import FolderRenameDialog from "./FolderRenameDialog";
+import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 
 /**
  * The FolderRenameDialogPage component represented as a page
@@ -29,9 +30,11 @@ export default class FolderRenameDialogPage {
    */
   constructor(appContext, props) {
     this._page = render(
-      <AppContext.Provider  value={appContext}>
-        <FolderRenameDialog {...props}></FolderRenameDialog>
-      </AppContext.Provider>
+      <MockTranslationProvider>
+        <AppContext.Provider  value={appContext}>
+          <FolderRenameDialog {...props}></FolderRenameDialog>
+        </AppContext.Provider>
+      </MockTranslationProvider>
     );
   }
 

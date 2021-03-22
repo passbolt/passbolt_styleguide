@@ -26,9 +26,9 @@ export default class InstallExtensionPage {
    * @param appContext An app context
    * @param props Props to attach
    */
-  constructor() {
+  constructor(props) {
     this._page = render(
-      <InstallExtension/>
+      <InstallExtension {...props}/>
     );
   }
 

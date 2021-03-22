@@ -17,6 +17,7 @@
  */
 
 import InstallExtensionPage from "./InstallExtensionPage";
+import {defaultProps} from "./InstallExtension.test.data";
 
 beforeEach(() => {
   jest.resetModules();
@@ -24,6 +25,7 @@ beforeEach(() => {
 
 describe("As AN I should see install extension page", () => {
   let page; // The page to test against
+  const props = defaultProps();
 
   describe('As AN I should be able to be requested to download the extension during the setup of my account', () => {
     /**
@@ -31,7 +33,7 @@ describe("As AN I should see install extension page", () => {
      * Then I should see an install extension page
      */
     it('As AN I should see the install extension for an unsupported browser', () => {
-      page = new InstallExtensionPage();
+      page = new InstallExtensionPage(props);
       // browser image
       expect(page.browser.className).toBe("browser-webstore unknown");
     });

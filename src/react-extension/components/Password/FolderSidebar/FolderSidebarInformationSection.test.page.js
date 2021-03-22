@@ -17,6 +17,7 @@ import AppContext from "../../../contexts/AppContext";
 import React from "react";
 import FolderSidebarInformationSection from "./FolderSidebarInformationSection";
 import {BrowserRouter as Router} from 'react-router-dom';
+import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 
 /**
  * The FolderSidebarInformationSection component represented as a page
@@ -29,11 +30,13 @@ export default class FolderSidebarInformationSectionPage {
    */
   constructor(appContext, props) {
     this._page = render(
-      <AppContext.Provider value={appContext}>
-        <Router>
-          <FolderSidebarInformationSection {...props}/>
-        </Router>
-      </AppContext.Provider>
+      <MockTranslationProvider>
+        <AppContext.Provider value={appContext}>
+          <Router>
+            <FolderSidebarInformationSection {...props}/>
+          </Router>
+        </AppContext.Provider>
+      </MockTranslationProvider>
     );
     this.setupPageObjects();
   }

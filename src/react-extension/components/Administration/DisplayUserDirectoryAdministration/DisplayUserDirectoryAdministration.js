@@ -21,6 +21,7 @@ import XRegExp from "xregexp";
 import DisplayTestUserDirectoryAdministrationDialog
   from "../DisplayTestUserDirectoryAdministration/DisplayTestUserDirectoryAdministrationDialog";
 import {withDialog} from "../../../../react/contexts/Common/DialogContext";
+import {Trans, withTranslation} from "react-i18next";
 
 /**
  * This component allows to display the MFA for the administration
@@ -480,7 +481,7 @@ class DisplayUserDirectoryAdministration extends React.Component {
     let hostError = null;
     const host = this.state.host.trim();
     if (!host.length) {
-      hostError = "A host is required.";
+      hostError = this.translate("A host is required.");
     }
     return this.setState({hostError});
   }
@@ -493,9 +494,9 @@ class DisplayUserDirectoryAdministration extends React.Component {
     let portError = null;
     const port = this.state.port.trim();
     if (!port.length) {
-      portError = "A port is required.";
+      portError = this.translate("A port is required.");
     } else if (!XRegExp("^[0-9]+").test(port)) {
-      portError = "Only numeric characters allowed.";
+      portError = this.translate("Only numeric characters allowed.");
     }
     return this.setState({portError});
   }
@@ -508,7 +509,7 @@ class DisplayUserDirectoryAdministration extends React.Component {
     let domainError = null;
     const domain = this.state.domain.trim();
     if (!domain.length) {
-      domainError = "A domain name is required.";
+      domainError = this.translate("A domain name is required.");
     }
     return this.setState({domainError});
   }
@@ -651,7 +652,7 @@ class DisplayUserDirectoryAdministration extends React.Component {
    * Handle save operation success.
    */
   async handleSaveSuccess() {
-    await this.props.actionFeedbackContext.displaySuccess("The user directory settings for the organization were updated.");
+    await this.props.actionFeedbackContext.displaySuccess(this.translate("The user directory settings for the organization were updated."));
   }
 
   /**
@@ -780,6 +781,14 @@ class DisplayUserDirectoryAdministration extends React.Component {
   }
 
   /**
+   * Get the translate function
+   * @returns {function(...[*]=)}
+   */
+  get translate() {
+    return this.props.t;
+  }
+
+  /**
    * Render the component
    * @returns {JSX}
    */
@@ -797,17 +806,17 @@ class DisplayUserDirectoryAdministration extends React.Component {
                   onChange={this.handleInputChange} checked={this.state.userDirectoryToggle} disabled={this.hasAllInputDisabled()}
                   id="userDirectoryToggle"/>
                 <label className="toggle-switch-button" htmlFor="userDirectoryToggle"></label>
-              </span><label>Users Directory</label>
+              </span><label><Trans>Users Directory</Trans></label>
             </h3>
             {!this.isUserDirectoryChecked() &&
             <p className="description">
-              No Users Directory is configured. Enable it to synchronise your users and groups with passbolt.
+              <Trans>No Users Directory is configured. Enable it to synchronise your users and groups with passbolt.</Trans>
             </p>
             }
             {this.isUserDirectoryChecked() &&
             <div>
               <p className="description">
-                A Users Directory is configured. The users and groups of passbolt will synchronize with it.
+                <Trans>A Users Directory is configured. The users and groups of passbolt will synchronize with it.</Trans>
               </p>
               <div className="form-content">
                 <div className={`accordion section-general ${this.state.openCredentials ? "" : "closed"}`}>
@@ -815,29 +824,29 @@ class DisplayUserDirectoryAdministration extends React.Component {
                     <a onClick={this.handleCredentialTitleClicked}>
                       {this.state.openCredentials && <Icon name="caret-down" baseline={true}/>}
                       {!this.state.openCredentials && <Icon name="caret-right" baseline={true}/>}
-                      Credentials
+                      <Trans>Credentials</Trans>
                     </a>
                   </h3>
                   <div className="accordion-content">
                     <div className="radiolist required">
-                      <label>Directory type</label>
+                      <label><Trans>Directory type</Trans></label>
                       <div className="input radio ad openldap form-element ">
                         <div className="input radio">
                           <input type="radio" value="ad" onChange={this.handleInputChange} name="directoryType"
                             checked={this.state.directoryType === "ad"} id="directoryTypeAd"
                             disabled={this.hasAllInputDisabled()}/>
-                          <label htmlFor="directoryTypeAd">Active Directory</label>
+                          <label htmlFor="directoryTypeAd"><Trans>Active Directory</Trans></label>
                         </div>
                         <div className="input radio">
                           <input type="radio" value="openldap" onChange={this.handleInputChange} name="directoryType"
                             checked={this.state.directoryType === "openldap"} id="directoryTypeOpenLdap"
                             disabled={this.hasAllInputDisabled()}/>
-                          <label htmlFor="directoryTypeOpenLdap">Open Ldap</label>
+                          <label htmlFor="directoryTypeOpenLdap"><Trans>Open Ldap</Trans></label>
                         </div>
                       </div>
                     </div>
                     <div className="singleline connection_info protocol_host_port clearfix required ad openldap">
-                      <label>Server url</label>
+                      <label><Trans>Server url</Trans></label>
                       <div className="input text field_protocol_host ad openldap">
                         <div onClick={this.handleConnectionTypeClicked} ref={this.connectionTypeRef}
                           className={`chosen-container chosen-container-single connection-type ${this.hasAllInputDisabled() ? "chosen-disabled" : "chosen-container-active"} ${this.state.openConnectionType ? "chosen-with-drop" : ""}`}>
@@ -863,7 +872,7 @@ class DisplayUserDirectoryAdministration extends React.Component {
                         <div className="input text host ad openldap">
                           <input id="server-input" type="text" className="required fluid form-element" name="host"
                             value={this.state.host} onChange={this.handleInputChange} onKeyUp={this.handleHostInputKeyUp}
-                            placeholder="host" disabled={this.hasAllInputDisabled()}/>
+                            placeholder={this.translate("host")} disabled={this.hasAllInputDisabled()}/>
                           {this.state.hostError &&
                           <div id="server-input-feedback" className="message error">{this.state.hostError}</div>
                           }
@@ -871,7 +880,7 @@ class DisplayUserDirectoryAdministration extends React.Component {
                       </div>
                       <div className="input text port ad openldap">
                         <input id="port-input" type="number" className="required fluid form-element" name="port"
-                          value={this.state.port} onChange={this.handleInputChange} onKeyUp={this.handlePortInputKeyUp} placeholder="port"
+                          value={this.state.port} onChange={this.handleInputChange} onKeyUp={this.handlePortInputKeyUp} placeholder={this.translate("port")}
                           disabled={this.hasAllInputDisabled()}/>
                         {this.state.portError &&
                         <div id="port-input-feedback" className="message error">{this.state.portError}</div>
@@ -880,34 +889,34 @@ class DisplayUserDirectoryAdministration extends React.Component {
                     </div>
                     <div className="singleline clearfix">
                       <div className="input text first-field ad openldap">
-                        <label>Username</label>
+                        <label><Trans>Username</Trans></label>
                         <input id="username-input" type="text" className="fluid form-element" name="username"
-                          value={this.state.username} onChange={this.handleInputChange} placeholder="username"
+                          value={this.state.username} onChange={this.handleInputChange} placeholder={this.translate("username")}
                           disabled={this.hasAllInputDisabled()}/>
                       </div>
                       <div className="input text last-field ad openldap">
-                        <label>Password</label>
+                        <label><Trans>Password</Trans></label>
                         <input id="password-input" className="fluid form-element" name="password"
-                          value={this.state.password} onChange={this.handleInputChange} placeholder="password" type="password"
+                          value={this.state.password} onChange={this.handleInputChange} placeholder={this.translate("password")} type="password"
                           disabled={this.hasAllInputDisabled()}/>
                       </div>
                     </div>
                     <div className="input text required ad openldap">
-                      <label>Domain</label>
+                      <label><Trans>Domain</Trans></label>
                       <input id="domain-name-input" type="text" name="domain" value={this.state.domain}
                         onChange={this.handleInputChange} className="required fluid form-element" onKeyUp={this.handleDomainInputKeyUp}
-                        placeholder="domain.ext" disabled={this.hasAllInputDisabled()}/>
+                        placeholder={this.translate("domain.ext")} disabled={this.hasAllInputDisabled()}/>
                       {this.state.domainError &&
                       <div id="domain-name-input-feedback" className="message error">{this.state.domainError}</div>
                       }
                     </div>
                     <div className="input text ad openldap">
-                      <label>Base DN</label>
+                      <label><Trans>Base DN</Trans></label>
                       <input id="base-dn-input" type="text" name="baseDn" value={this.state.baseDn}
-                        onChange={this.handleInputChange} className="fluid form-element" placeholder="OU=OrgUsers,DC=mydomain,DC=local"
+                        onChange={this.handleInputChange} className="fluid form-element" placeholder={this.translate("OU=OrgUsers,DC=mydomain,DC=local")}
                         disabled={this.hasAllInputDisabled()}/>
-                      <div className="message">The base DN (default naming context) for the domain. If this is empty
-                        then it will be queried from the RootDSE.
+                      <div className="message">
+                        <Trans>The base DN (default naming context) for the domain.</Trans> <Trans>If this is empty then it will be queried from the RootDSE.</Trans>
                       </div>
                     </div>
                   </div>
@@ -918,77 +927,79 @@ class DisplayUserDirectoryAdministration extends React.Component {
                     <a onClick={this.handleDirectoryConfigurationTitleClicked}>
                       {this.state.openDirectoryConfiguration && <Icon name="caret-down" baseline={true}/>}
                       {!this.state.openDirectoryConfiguration && <Icon name="caret-right" baseline={true}/>}
-                      Directory configuration
+                      <Trans>Directory configuration</Trans>
                     </a>
                   </h3>
                   <div className="accordion-content">
                     <div className="input text ad openldap">
-                      <label>Group path</label>
+                      <label><Trans>Group path</Trans></label>
                       <input id="group-path-input" type="text" name="groupPath" value={this.state.groupPath}
-                        onChange={this.handleInputChange} className="required fluid form-element" placeholder="Group Path"
+                        onChange={this.handleInputChange} className="required fluid form-element" placeholder={this.translate("Group Path")}
                         disabled={this.hasAllInputDisabled()}/>
-                      <div className="message">Group path is used in addition to the base DN while searching groups.
-                        Leave empty if users and groups are in the same DN.
+                      <div className="message">
+                        <Trans>Group path is used in addition to the base DN while searching groups.</Trans> <Trans>Leave empty if users and groups are in the same DN.</Trans>
                       </div>
                     </div>
                     <div className="input text ad openldap">
-                      <label>User path</label>
+                      <label><Trans>User path</Trans></label>
                       <input id="user-path-input" type="text" name="userPath" value={this.state.userPath}
-                        onChange={this.handleInputChange} className="required fluid form-element" placeholder="User Path"
+                        onChange={this.handleInputChange} className="required fluid form-element" placeholder={this.translate("User Path")}
                         disabled={this.hasAllInputDisabled()}/>
-                      <div className="message">User path is used in addition to base DN while searching users.</div>
+                      <div className="message"><Trans>User path is used in addition to base DN while searching users.</Trans></div>
                     </div>
                     {this.isOpenLdapChecked() &&
                     <div>
                       <div className="input text openldap">
-                        <label>Group object class</label>
+                        <label><Trans>Group object class</Trans></label>
                         <input id="group-object-class-input" type="text" name="groupObjectClass"
                           value={this.state.groupObjectClass} onChange={this.handleInputChange} className="required fluid"
-                          placeholder="GroupObjectClass" disabled={this.hasAllInputDisabled()}/>
-                        <div className="message">For Openldap only. Defines which group object to use. (Default:
-                          posixGroup)
+                          placeholder={this.translate("GroupObjectClass")} disabled={this.hasAllInputDisabled()}/>
+                        <div className="message">
+                          <Trans>For Openldap only. Defines which group object to use.</Trans> <Trans>(Default: posixGroup)</Trans>
                         </div>
                       </div>
                       <div className="input text openldap">
-                        <label>User object class</label>
+                        <label><Trans>User object class</Trans></label>
                         <input id="user-object-class-input" type="text" name="userObjectClass"
                           value={this.state.userObjectClass} onChange={this.handleInputChange} className="required fluid form-element"
-                          placeholder="UserObjectClass" disabled={this.hasAllInputDisabled()}/>
-                        <div className="message">For Openldap only. Defines which user object to use. (Default:
-                          inetOrgPerson)
+                          placeholder={this.translate("UserObjectClass")} disabled={this.hasAllInputDisabled()}/>
+                        <div className="message"><Trans>For Openldap only. Defines which user object to use.</Trans> <Trans>(Default: inetOrgPerson)</Trans>
                         </div>
                       </div>
                       <div className="input text openldap">
-                        <label>Use email prefix / suffix?</label>
+                        <label><Trans>Use email prefix / suffix?</Trans></label>
                         <div className="input toggle-switch openldap form-element">
-                          <label htmlFor="use-email-prefix-suffix-toggle-button">Build email based on a prefix and
-                            suffix?</label>
+                          <label htmlFor="use-email-prefix-suffix-toggle-button">
+                            <Trans>Build email based on a prefix and suffix?</Trans>
+                          </label>
                           <input type="checkbox" className="toggle-switch-checkbox checkbox" name="useEmailPrefix"
                             value={this.state.useEmailPrefix} onChange={this.handleInputChange} id="use-email-prefix-suffix-toggle-button"
                             disabled={this.hasAllInputDisabled()}/>
                           <label className="toggle-switch-button" htmlFor="use-email-prefix-suffix-toggle-button"></label>
                         </div>
-                        <div className="message">Use this option when user entries do not include an email address by
-                          default
+                        <div className="message">
+                          <Trans>Use this option when user entries do not include an email address by default</Trans>
                         </div>
                       </div>
                       {this.isUseEmailPrefixChecked() &&
                       <div className="singleline clearfix" id="use-email-prefix-suffix-options">
                         <div className="input text first-field openldap">
-                          <label>Email prefix</label>
+                          <label><Trans>Email prefix</Trans></label>
                           <input id="email-prefix-input" type="text" name="emailPrefix" checked={this.state.emailPrefix}
-                            onChange={this.handleInputChange} className="required fluid form-element" placeholder="username"
+                            onChange={this.handleInputChange} className="required fluid form-element" placeholder={this.translate("username")}
                             disabled={this.hasAllInputDisabled()}/>
-                          <div className="message">The attribute you would like to use for the first part of the email
-                            (usually username).
+                          <div className="message">
+                            <Trans>The attribute you would like to use for the first part of the email (usually username).</Trans>
                           </div>
                         </div>
                         <div className="input text last-field openldap">
-                          <label>Email suffix</label>
+                          <label><Trans>Email suffix</Trans></label>
                           <input id="email-suffix-input" type="text" name="emailSuffix" value={this.state.emailSuffix}
                             onChange={this.handleInputChange} className="required form-element"
-                            placeholder="@your-domain.com" disabled={this.hasAllInputDisabled()}/>
-                          <div className="message">The domain name part of the email (@your-domain-name).</div>
+                            placeholder={this.translate("@your-domain.com")} disabled={this.hasAllInputDisabled()}/>
+                          <div className="message">
+                            <Trans>The domain name part of the email (@your-domain-name).</Trans>
+                          </div>
                         </div>
                       </div>
                       }
@@ -1002,12 +1013,12 @@ class DisplayUserDirectoryAdministration extends React.Component {
                     <a onClick={this.handleSynchronizationOptionsTitleClicked}>
                       {this.state.openSynchronizationOptions && <Icon name="caret-down" baseline={true}/>}
                       {!this.state.openSynchronizationOptions && <Icon name="caret-right" baseline={true}/>}
-                      Synchronization options
+                      <Trans>Synchronization options</Trans>
                     </a>
                   </h3>
                   <div className="accordion-content">
                     <div className="input select required ad openldap">
-                      <label>Default admin</label>
+                      <label><Trans>Default admin</Trans></label>
                       <div onClick={this.handleDefaultAdminClicked} ref={this.defaultAdminRef}>
                         <div
                           className={`chosen-container chosen-container-single ${this.hasAllInputDisabled() ? "chosen-disabled" : "chosen-container-active"} ${this.state.openDefaultAdmin ? "chosen-with-drop" : ""}`}>
@@ -1038,19 +1049,19 @@ class DisplayUserDirectoryAdministration extends React.Component {
                               }
                               {userAllowedToBeDefaultAdmin.length === 0 &&
                               <li className="no-results" onClick={this.stopPropagation}>
-                                No results match <span>{this.state.defaultAdminSearch}</span>
+                                <Trans>No results match</Trans> <span>{this.state.defaultAdminSearch}</span>
                               </li>
                               }
                             </ul>
                           </div>
                         </div>
                       </div>
-                      <div className="message">The default admin user is the admin user that will perform the operations
-                        for the the directory.
+                      <div className="message">
+                        <Trans>The default admin user is the admin user that will perform the operations for the the directory.</Trans>
                       </div>
                     </div>
                     <div className="input select required ad openldap">
-                      <label>Default group admin</label>
+                      <label><Trans>Default group admin</Trans></label>
                       <div onClick={this.handleDefaultGroupAdminClicked} ref={this.defaultGroupAdminRef}>
                         <div
                           className={`chosen-container chosen-container-single ${this.hasAllInputDisabled() ? "chosen-disabled" : "chosen-container-active"} ${this.state.openDefaultGroupAdmin ? "chosen-with-drop" : ""}`}>
@@ -1081,36 +1092,40 @@ class DisplayUserDirectoryAdministration extends React.Component {
                               }
                               {userAllowedToBeDefaultGroupAdmin.length === 0 &&
                               <li className="no-results" onClick={this.stopPropagation}>
-                                No results match <span>{this.state.defaultGroupAdminSearch}</span>
+                                <Trans>No results match</Trans> <span>{this.state.defaultGroupAdminSearch}</span>
                               </li>
                               }
                             </ul>
                           </div>
                         </div>
                       </div>
-                      <div className="message">The default group admin user is the admin user that will be the group
-                        manager of newly created group.
+                      <div className="message">
+                        <Trans>The default group admin user is the admin user that will be the group manager of newly created group.</Trans>
                       </div>
                     </div>
                     <div className="input text ad openldap">
-                      <label>Groups parent group</label>
+                      <label><Trans>Groups parent group</Trans></label>
                       <input id="groups-parent-group-input" type="text" name="groupsParentGroup"
-                        value={this.state.groupsParentGroup} onChange={this.handleInputChange} className="fluid form-element" placeholder="Group name"
+                        value={this.state.groupsParentGroup} onChange={this.handleInputChange} className="fluid form-element" placeholder={this.translate("Group name")}
                         disabled={this.hasAllInputDisabled()}/>
-                      <div className="message">Synchronize only the groups which are members of this group.</div>
+                      <div className="message">
+                        <Trans>Synchronize only the groups which are members of this group.</Trans>
+                      </div>
                     </div>
                     <div className="input text ad openldap">
-                      <label>Users parent group</label>
+                      <label><Trans>Users parent group</Trans></label>
                       <input id="users-parent-group-input" type="text" name="usersParentGroup"
-                        value={this.state.usersParentGroup} onChange={this.handleInputChange} className="fluid form-element" placeholder="Group name"
+                        value={this.state.usersParentGroup} onChange={this.handleInputChange} className="fluid form-element" placeholder={this.translate("Group name")}
                         disabled={this.hasAllInputDisabled()}/>
-                      <div className="message">Synchronize only the users which are members of this group.</div>
+                      <div className="message">
+                        <Trans>Synchronize only the users which are members of this group.</Trans>
+                      </div>
                     </div>
                     {this.isActiveDirectoryChecked() &&
                     <div className="input text clearfix ad">
-                      <label>Enabled users only</label>
+                      <label><Trans>Enabled users only</Trans></label>
                       <div className="input toggle-switch ad form-element">
-                        <label htmlFor="enabled-users-only-toggle-button">Only synchronize enabled users (AD)</label>
+                        <label htmlFor="enabled-users-only-toggle-button"><Trans>Only synchronize enabled users (AD)</Trans></label>
                         <input type="checkbox" className="toggle-switch-checkbox checkbox" name="enabledUsersOnly"
                           checked={this.state.enabledUsersOnly} onChange={this.handleInputChange} id="enabled-users-only-toggle-button"
                           disabled={this.hasAllInputDisabled()}/>
@@ -1119,17 +1134,17 @@ class DisplayUserDirectoryAdministration extends React.Component {
                     </div>
                     }
                     <div className="input text clearfix ad openldap">
-                      <label>Sync operations</label>
+                      <label><Trans>Sync operations</Trans></label>
                       <div className="col6">
                         <div className="input toggle-switch ad openldap form-element">
-                          <label htmlFor="sync-users-create-toggle-button">Create users</label>
+                          <label htmlFor="sync-users-create-toggle-button"><Trans>Create users</Trans></label>
                           <input type="checkbox" className="toggle-switch-checkbox checkbox" name="createUsers"
                             checked={this.state.createUsers} onChange={this.handleInputChange} id="sync-users-create-toggle-button"
                             disabled={this.hasAllInputDisabled()}/>
                           <label className="toggle-switch-button" htmlFor="sync-users-create-toggle-button"></label>
                         </div>
                         <div className="input toggle-switch ad openldap form-element">
-                          <label htmlFor="sync-users-delete-toggle-button">Delete users</label>
+                          <label htmlFor="sync-users-delete-toggle-button"><Trans>Delete users</Trans></label>
                           <input type="checkbox" className="toggle-switch-checkbox checkbox" name="deleteUsers"
                             checked={this.state.deleteUsers} onChange={this.handleInputChange} id="sync-users-delete-toggle-button"
                             disabled={this.hasAllInputDisabled()}/>
@@ -1138,21 +1153,21 @@ class DisplayUserDirectoryAdministration extends React.Component {
                       </div>
                       <div className="col6 last">
                         <div className="input toggle-switch ad openldap form-element">
-                          <label htmlFor="sync-groups-create-toggle-button">Create groups</label>
+                          <label htmlFor="sync-groups-create-toggle-button"><Trans>Create groups</Trans></label>
                           <input type="checkbox" className="toggle-switch-checkbox checkbox" name="createGroups"
                             checked={this.state.createGroups} onChange={this.handleInputChange} id="sync-groups-create-toggle-button"
                             disabled={this.hasAllInputDisabled()}/>
                           <label className="toggle-switch-button" htmlFor="sync-groups-create-toggle-button"></label>
                         </div>
                         <div className="input toggle-switch ad openldap form-element">
-                          <label htmlFor="sync-groups-delete-toggle-button">Delete groups</label>
+                          <label htmlFor="sync-groups-delete-toggle-button"><Trans>Delete groups</Trans></label>
                           <input type="checkbox" className="toggle-switch-checkbox checkbox" name="deleteGroups"
                             checked={this.state.deleteGroups} onChange={this.handleInputChange} id="sync-groups-delete-toggle-button"
                             disabled={this.hasAllInputDisabled()}/>
                           <label className="toggle-switch-button" htmlFor="sync-groups-delete-toggle-button"></label>
                         </div>
                         <div className="input toggle-switch ad openldap form-element">
-                          <label htmlFor="sync-groups-update-toggle-button">Update groups</label>
+                          <label htmlFor="sync-groups-update-toggle-button"><Trans>Update groups</Trans></label>
                           <input type="checkbox" className="toggle-switch-checkbox checkbox" name="updateGroups"
                             checked={this.state.updateGroups} onChange={this.handleInputChange} id="sync-groups-update-toggle-button"
                             disabled={this.hasAllInputDisabled()}/>
@@ -1168,11 +1183,11 @@ class DisplayUserDirectoryAdministration extends React.Component {
           </form>
         </div>
         <div className="col4 last">
-          <h2>Need help?</h2>
-          <p>Check out our ldap configuration guide.</p>
+          <h2><Trans>Need help?</Trans></h2>
+          <p><Trans>Check out our ldap configuration guide.</Trans></p>
           <a className="button" href="https://help.passbolt.com/configure/ldap" target="_blank" rel="noopener noreferrer">
             <Icon name="life-ring"/>
-            <span>Read documentation</span>
+            <span><Trans>Read documentation</Trans></span>
           </a>
         </div>
       </div>
@@ -1184,7 +1199,8 @@ DisplayUserDirectoryAdministration.propTypes = {
   context: PropTypes.object, // Application context
   administrationWorkspaceContext: PropTypes.object, // The administration workspace context
   actionFeedbackContext: PropTypes.any, // The action feedback context
-  dialogContext: PropTypes.any // The dialog context
+  dialogContext: PropTypes.any, // The dialog context
+  t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withActionFeedback(withDialog(withAdministrationWorkspace(DisplayUserDirectoryAdministration))));
+export default withAppContext(withActionFeedback(withDialog(withAdministrationWorkspace(withTranslation('common')(DisplayUserDirectoryAdministration)))));

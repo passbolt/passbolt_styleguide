@@ -19,6 +19,7 @@ import React from "react";
 import AppContext from "../../../contexts/AppContext";
 import {BrowserRouter as Router} from "react-router-dom";
 import DisplayUsersContextualMenu from "./DisplayUsersContextualMenu";
+import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 
 /**
  * The DisplayUsersContextualMenuPage component represented as a page
@@ -31,11 +32,13 @@ export default class DisplayUsersContextualMenuPage {
    */
   constructor(appContext, props) {
     this._page = render(
-      <AppContext.Provider value={appContext}>
-        <Router>
-          <DisplayUsersContextualMenu {...props}/>
-        </Router>
-      </AppContext.Provider>
+      <MockTranslationProvider>
+        <AppContext.Provider value={appContext}>
+          <Router>
+            <DisplayUsersContextualMenu {...props}/>
+          </Router>
+        </AppContext.Provider>
+      </MockTranslationProvider>
     );
   }
 

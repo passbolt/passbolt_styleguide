@@ -16,6 +16,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import {withRouter} from "react-router-dom";
 import {UserWorkspaceFilterTypes, withUserWorkspace} from "../../../contexts/UserWorkspaceContext";
+import {Trans, withTranslation} from "react-i18next";
 
 /**
  * This component allows to select shortcut filters applied on users
@@ -68,6 +69,13 @@ class FilterUsersByShortcut extends React.Component {
     this.props.history.push({pathname: '/app/users', state: {filter}});
   }
 
+  /**
+   * Get the translate function
+   * @returns {function(...[*]=)}
+   */
+  get translate() {
+    return this.props.t;
+  }
 
   render() {
     return (
@@ -78,7 +86,7 @@ class FilterUsersByShortcut extends React.Component {
               <div className="main-cell-wrapper">
                 <div className="main-cell">
                   <a id="all-users" onClick={this.handleAllItemsClick}>
-                    <span>All users</span>
+                    <span><Trans>All users</Trans></span>
                   </a>
                 </div>
               </div>
@@ -89,7 +97,7 @@ class FilterUsersByShortcut extends React.Component {
               <div className="main-cell-wrapper">
                 <div className="main-cell">
                   <a id="recently-modified"  onClick={this.handleRecentlyModifiedClick}>
-                    <span>Recently Modified</span>
+                    <span><Trans>Recently Modified</Trans></span>
                   </a>
                 </div>
               </div>
@@ -103,7 +111,8 @@ class FilterUsersByShortcut extends React.Component {
 
 FilterUsersByShortcut.propTypes = {
   history: PropTypes.object,
-  userWorkspaceContext: PropTypes.object
+  userWorkspaceContext: PropTypes.object,
+  t: PropTypes.func, // The translation function
 };
 
-export default withRouter(withUserWorkspace(FilterUsersByShortcut));
+export default withRouter(withUserWorkspace(withTranslation('common')(FilterUsersByShortcut)));

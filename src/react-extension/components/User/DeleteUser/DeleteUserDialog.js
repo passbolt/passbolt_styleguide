@@ -21,6 +21,7 @@ import {withDialog} from "../../../../react/contexts/Common/DialogContext";
 import FormSubmitButton from "../../../../react/components/Common/Inputs/FormSubmitButton/FormSubmitButton";
 import FormCancelButton from "../../../../react/components/Common/Inputs/FormSubmitButton/FormCancelButton";
 import {withLoading} from "../../../../react/contexts/Common/LoadingContext";
+import {Trans, withTranslation} from "react-i18next";
 
 /**
  * This component allows user to delete a user
@@ -73,7 +74,7 @@ class DeleteUserDialog extends Component {
       this.props.loadingContext.add();
       await this.context.port.request("passbolt.users.delete", this.context.deleteUserDialogProps.user.id);
       this.props.loadingContext.remove();
-      await this.props.actionFeedbackContext.displaySuccess("The user has been deleted successfully");
+      await this.props.actionFeedbackContext.displaySuccess(this.translate("The user has been deleted successfully"));
       this.props.onClose();
       this.context.setContext({deleteUserDialogProps: null});
     } catch (error) {
@@ -92,7 +93,7 @@ class DeleteUserDialog extends Component {
 
   handleError(error) {
     const errorDialogProps = {
-      title: "There was an unexpected error...",
+      title: this.translate("There was an unexpected error..."),
       message: error.message
     };
     this.context.setContext({errorDialogProps});
@@ -119,20 +120,32 @@ class DeleteUserDialog extends Component {
     return `${first_name} ${last_name} (${username})`;
   }
 
+  /**
+   * Get the translate function
+   * @returns {function(...[*]=)}
+   */
+  get translate() {
+    return this.props.t;
+  }
+
   render() {
     return (
       <DialogWrapper
-        title="Delete user?"
+        title={this.translate("Delete user?")}
         onClose={this.handleCloseClick}
         disabled={this.state.processing}
         className="delete-user-dialog">
         <form onSubmit={this.handleFormSubmit} noValidate>
           <div className="form-content">
-            <p>Are you sure you want to delete <strong>{this.getUser()}</strong>?</p>
-            <p>Warning: This action can’t be undone. All the data associated with this user will be permanently deleted.</p>
+            <p>
+              <Trans>
+                Are you sure you want to delete <strong>{{user: this.getUser()}}</strong>?
+              </Trans>
+            </p>
+            <p><Trans>Warning: This action can’t be undone. All the data associated with this user will be permanently deleted.</Trans></p>
           </div>
           <div className="submit-wrapper clearfix">
-            <FormSubmitButton disabled={this.hasAllInputDisabled()} processing={this.state.processing} value="Delete" warning={true}/>
+            <FormSubmitButton disabled={this.hasAllInputDisabled()} processing={this.state.processing} value={this.translate("Delete")} warning={true}/>
             <FormCancelButton disabled={this.hasAllInputDisabled()} onClick={this.handleCloseClick}/>
           </div>
         </form>
@@ -147,7 +160,8 @@ DeleteUserDialog.propTypes = {
   onClose: PropTypes.func,
   actionFeedbackContext: PropTypes.any, // The action feedback context
   dialogContext: PropTypes.any, // The dialog context
-  loadingContext: PropTypes.any // The loading context
+  loadingContext: PropTypes.any, // The loading context
+  t: PropTypes.func, // The translation function
 };
 
-export default withLoading(withActionFeedback(withDialog(DeleteUserDialog)));
+export default withLoading(withActionFeedback(withDialog(withTranslation('common')(DeleteUserDialog))));

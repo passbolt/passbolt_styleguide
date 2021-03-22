@@ -21,6 +21,7 @@ import {withDialog} from "../../../../react/contexts/Common/DialogContext";
 import FormSubmitButton from "../../../../react/components/Common/Inputs/FormSubmitButton/FormSubmitButton";
 import FormCancelButton from "../../../../react/components/Common/Inputs/FormSubmitButton/FormCancelButton";
 import {withLoading} from "../../../../react/contexts/Common/LoadingContext";
+import {Trans, withTranslation} from "react-i18next";
 
 /**
  * This component allows user to delete a user with conflict to reassign ownership of folders, resources and groups
@@ -349,7 +350,7 @@ class DeleteUserWithConflictsDialog extends Component {
       this.props.loadingContext.add();
       await this.context.port.request("passbolt.users.delete", this.userToDelete.id, userDeleteTransfer);
       this.props.loadingContext.remove();
-      await this.props.actionFeedbackContext.displaySuccess("The user has been deleted successfully");
+      await this.props.actionFeedbackContext.displaySuccess(this.translate("The user has been deleted successfully"));
       this.props.onClose();
       this.context.setContext({deleteUserWithConflictsDialogProps: null});
     } catch (error) {
@@ -368,7 +369,7 @@ class DeleteUserWithConflictsDialog extends Component {
 
   handleError(error) {
     const errorDialogProps = {
-      title: "There was an unexpected error...",
+      title: this.translate("There was an unexpected error..."),
       message: error.message
     };
     this.context.setContext({errorDialogProps});
@@ -463,27 +464,39 @@ class DeleteUserWithConflictsDialog extends Component {
     return this.state.processing;
   }
 
+  /**
+   * Get the translate function
+   * @returns {function(...[*]=)}
+   */
+  get translate() {
+    return this.props.t;
+  }
+
   render() {
     return (
       <DialogWrapper
-        title="You cannot delete this user!"
+        title={this.translate("You cannot delete this user!")}
         onClose={this.handleCloseClick}
         disabled={this.state.processing}
         className="delete-user-dialog">
         <form onSubmit={this.handleFormSubmit} noValidate>
           <div className="form-content intro">
-            <p>You are about to delete the user <strong>{this.getUserFullName(this.userToDelete)}</strong>.</p>
-            <p>This user is the sole owner of some content. You need to transfer the ownership to others to continue.</p>
+            <p>
+              <Trans>
+                You are about to delete the user <strong>{{user: this.getUserFullName(this.userToDelete)}}</strong>.
+              </Trans>
+            </p>
+            <p><Trans>This user is the sole owner of some content. You need to transfer the ownership to others to continue.</Trans></p>
           </div>
           <div className="ownership-transfer">
             {this.hasFolderConflict() &&
             <div>
-              <h3>Folders</h3>
+              <h3><Trans>Folders</Trans></h3>
               <ul className="ownership-transfer-items">
                 {this.foldersErrors.map(folderError =>
                   <li key={folderError.id}>
                     <div className="input select required">
-                      <label htmlFor="transfer_folder_owner">{folderError.name} (Folder) new owner:</label>
+                      <label htmlFor="transfer_folder_owner">{folderError.name} <Trans>(Folder)</Trans> <Trans>new owner</Trans>:</label>
                       <select className="fluid form-element ready" value={this.state.owners[folderError.id]} onChange={event => this.handleOnChangeOwner(event, folderError.id)}>
                         {this.acosPermissionsOptions[folderError.id].map(permission => (
                           <option key={permission.id} value={permission.id}>
@@ -505,7 +518,7 @@ class DeleteUserWithConflictsDialog extends Component {
                 {this.resourcesErrors.map(resourceError =>
                   <li key={resourceError.id}>
                     <div className="input select required">
-                      <label htmlFor="transfer_resource_owner">{resourceError.name} (Password) new owner:</label>
+                      <label htmlFor="transfer_resource_owner">{resourceError.name} <Trans>(Password)</Trans> <Trans>new owner</Trans>:</label>
                       <select className="fluid form-element ready" value={this.state.owners[resourceError.id]} onChange={event => this.handleOnChangeOwner(event, resourceError.id)}>
                         {this.acosPermissionsOptions[resourceError.id].map(permission => (
                           <option key={permission.id} value={permission.id}>
@@ -527,7 +540,7 @@ class DeleteUserWithConflictsDialog extends Component {
                 {this.groupsErrors.map(groupError =>
                   <li key={groupError.id}>
                     <div className="input select required">
-                      <label htmlFor="transfer_group_manager">{groupError.name} (Group) new manager:</label>
+                      <label htmlFor="transfer_group_manager">{groupError.name} <Trans>(Group)</Trans> <Trans>new manager</Trans>:</label>
                       <select className="fluid form-element ready" value={this.state.managers[groupError.id]} onChange={event => this.handleOnChangeManager(event, groupError.id)}>
                         {this.groupsGroupsUsersOptions[groupError.id].map(groupUser => (
                           <option key={groupUser.id} value={groupUser.id}>{this.getUserOptionLabel(groupUser.user)}</option>
@@ -541,7 +554,7 @@ class DeleteUserWithConflictsDialog extends Component {
             }
           </div>
           <div className="submit-wrapper clearfix">
-            <FormSubmitButton disabled={this.hasAllInputDisabled()} processing={this.state.processing} value="Delete" warning={true}/>
+            <FormSubmitButton disabled={this.hasAllInputDisabled()} processing={this.state.processing} value={this.translate("Delete")} warning={true}/>
             <FormCancelButton disabled={this.hasAllInputDisabled()} onClick={this.handleCloseClick}/>
           </div>
         </form>
@@ -556,7 +569,8 @@ DeleteUserWithConflictsDialog.propTypes = {
   onClose: PropTypes.func,
   actionFeedbackContext: PropTypes.any, // The action feedback context
   dialogContext: PropTypes.any, // The dialog context
-  loadingContext: PropTypes.any // The loading context
+  loadingContext: PropTypes.any, // The loading context
+  t: PropTypes.func, // The translation function
 };
 
-export default withLoading(withActionFeedback(withDialog(DeleteUserWithConflictsDialog)));
+export default withLoading(withActionFeedback(withDialog(withTranslation('common')(DeleteUserWithConflictsDialog))));

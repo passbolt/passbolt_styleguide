@@ -28,6 +28,7 @@ import PasswordWorkspaceMenu from "./PasswordWorkspaceMenu";
 import Logo from "../../../../react/components/Common/Navigation/Header/Logo";
 import PasswordWorkspaceMainMenu from "./PasswordWorkspaceMainMenu";
 import SidebarGroupFilterSection from "../Group/SidebarGroupFilterSection/SidebarGroupFilterSection";
+import {withTranslation} from "react-i18next";
 
 class Workspace extends Component {
   /**
@@ -36,6 +37,14 @@ class Workspace extends Component {
    */
   hasLockDetail() {
     return this.props.resourceWorkspaceContext.lockDisplayDetail;
+  }
+
+  /**
+   * Get the translate function
+   * @returns {function(...[*]=)}
+   */
+  get translate() {
+    return this.props.t;
   }
 
   /**
@@ -51,7 +60,7 @@ class Workspace extends Component {
         <div className="header second">
           <Logo/>
           <PasswordSearchBar
-            placeholder="Search passwords"/>
+            placeholder={this.translate("Search passwords")}/>
           <UserBadgeMenu baseUrl={this.context.userSettings.getTrustedDomain()} user={this.context.loggedInUser}/>
         </div>
         <div className="header third">
@@ -89,7 +98,8 @@ class Workspace extends Component {
 
 Workspace.contextType = AppContext;
 Workspace.propTypes = {
-  resourceWorkspaceContext: PropTypes.any
+  resourceWorkspaceContext: PropTypes.any,
+  t: PropTypes.func, // The translation function
 };
 
-export default withResourceWorkspace(Workspace);
+export default withResourceWorkspace(withTranslation('common')(Workspace));

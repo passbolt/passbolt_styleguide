@@ -21,6 +21,7 @@ import {withDialog} from "../../../../react/contexts/Common/DialogContext";
 import FormSubmitButton from "../../../../react/components/Common/Inputs/FormSubmitButton/FormSubmitButton";
 import FormCancelButton from "../../../../react/components/Common/Inputs/FormSubmitButton/FormCancelButton";
 import {withLoading} from "../../../../react/contexts/Common/LoadingContext";
+import {Trans, withTranslation} from "react-i18next";
 
 /**
  * This component allows user to delete a group with conflict to reassign ownership of folders, resources
@@ -245,7 +246,7 @@ class DeleteGroupWithConflictsDialog extends Component {
       this.props.loadingContext.add();
       await this.context.port.request("passbolt.groups.delete", this.groupToDelete.id, groupDeleteTransfer);
       this.props.loadingContext.remove();
-      await this.props.actionFeedbackContext.displaySuccess("The group has been deleted successfully");
+      await this.props.actionFeedbackContext.displaySuccess(this.translate("The group has been deleted successfully"));
       this.props.onClose();
       this.context.setContext({deleteUserWithConflictsDialogProps: null});
     } catch (error) {
@@ -264,7 +265,7 @@ class DeleteGroupWithConflictsDialog extends Component {
 
   handleError(error) {
     const errorDialogProps = {
-      title: "There was an unexpected error...",
+      title: this.translate("There was an unexpected error..."),
       message: error.message
     };
     this.context.setContext({errorDialogProps});
@@ -340,27 +341,39 @@ class DeleteGroupWithConflictsDialog extends Component {
     return `${first_name} ${last_name} (${username})`;
   }
 
+  /**
+   * Get the translate function
+   * @returns {function(...[*]=)}
+   */
+  get translate() {
+    return this.props.t;
+  }
+
   render() {
     return (
       <DialogWrapper
-        title="You cannot delete this group!"
+        title={this.translate("You cannot delete this group!")}
         onClose={this.handleCloseClick}
         disabled={this.state.processing}
         className="delete-group-dialog">
         <form onSubmit={this.handleFormSubmit} noValidate>
           <div className="form-content intro">
-            <p>You are about to delete the group <strong>{this.groupToDelete.name}</strong>.</p>
-            <p>This group is the sole owner of some content. You need to transfer the ownership to others to continue.</p>
+            <p>
+              <Trans>
+                You are about to delete the group <strong>{{groupName: this.groupToDelete.name}}</strong>.
+              </Trans>
+            </p>
+            <p><Trans>This group is the sole owner of some content. You need to transfer the ownership to others to continue.</Trans></p>
           </div>
           <div className="ownership-transfer">
             {this.hasFolderConflict() &&
             <div>
-              <h3>Folders</h3>
+              <h3><Trans>Folders</Trans></h3>
               <ul className="ownership-transfer-items">
                 {this.foldersErrors.map(folderError =>
                   <li key={folderError.id}>
                     <div className="input select required">
-                      <label htmlFor="transfer_folder_owner">{folderError.name} (Folder) new owner:</label>
+                      <label htmlFor="transfer_folder_owner">{folderError.name} <Trans>(Folder) new owner:</Trans></label>
                       <select className="fluid form-element ready" value={this.state.owners[folderError.id]} onChange={event => this.handleOnChangeOwner(event, folderError.id)}>
                         {this.acosPermissionsOptions[folderError.id].map(permission => (
                           <option key={permission.id} value={permission.id}>
@@ -377,12 +390,12 @@ class DeleteGroupWithConflictsDialog extends Component {
             }
             {this.hasResourcesConflict() &&
             <div>
-              <h3>Passwords</h3>
+              <h3><Trans>Passwords</Trans></h3>
               <ul className="ownership-transfer-items">
                 {this.resourcesErrors.map(resourceError =>
                   <li key={resourceError.id}>
                     <div className="input select required">
-                      <label htmlFor="transfer_resource_owner">{resourceError.name} (Password) new owner:</label>
+                      <label htmlFor="transfer_resource_owner">{resourceError.name} <Trans>(Password) new owner:</Trans></label>
                       <select className="fluid form-element ready" value={this.state.owners[resourceError.id]} onChange={event => this.handleOnChangeOwner(event, resourceError.id)}>
                         {this.acosPermissionsOptions[resourceError.id].map(permission => (
                           <option key={permission.id} value={permission.id}>
@@ -399,7 +412,7 @@ class DeleteGroupWithConflictsDialog extends Component {
             }
           </div>
           <div className="submit-wrapper clearfix">
-            <FormSubmitButton disabled={this.hasAllInputDisabled()} processing={this.state.processing} value="Delete" warning={true}/>
+            <FormSubmitButton disabled={this.hasAllInputDisabled()} processing={this.state.processing} value={this.translate("Delete")} warning={true}/>
             <FormCancelButton disabled={this.hasAllInputDisabled()} onClick={this.handleCloseClick}/>
           </div>
         </form>
@@ -414,7 +427,8 @@ DeleteGroupWithConflictsDialog.propTypes = {
   onClose: PropTypes.func,
   actionFeedbackContext: PropTypes.any, // The action feedback context
   dialogContext: PropTypes.any, // The dialog context
-  loadingContext: PropTypes.any // The loading context
+  loadingContext: PropTypes.any, // The loading context
+  t: PropTypes.func, // The translation function
 };
 
-export default withLoading(withActionFeedback(withDialog(DeleteGroupWithConflictsDialog)));
+export default withLoading(withActionFeedback(withDialog(withTranslation('common')(DeleteGroupWithConflictsDialog))));

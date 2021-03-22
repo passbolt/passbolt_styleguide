@@ -21,6 +21,7 @@ import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import DialogWrapper from "../../../../react/components/Common/Dialog/DialogWrapper/DialogWrapper";
 import FormSubmitButton from "../../../../react/components/Common/Inputs/FormSubmitButton/FormSubmitButton";
 import Icon from "../../../../react/components/Common/Icons/Icon";
+import {Trans, withTranslation} from "react-i18next";
 
 /**
  * This component displays the success of a resource file import
@@ -234,20 +235,21 @@ class PasswordImportResultDialog extends Component {
   get formatErrors() {
     let result = "";
     if (this.hasErrorsResources) {
-      result += `${"----------------------------\n" +
-        "Resources errors\n" +
-        "----------------------------\n"}${
-        JSON.stringify(this.resultErrorsResources, null, 4)
-      }\n\n`;
+      result += `----------------------------\n${this.translate("Resources errors")}\n----------------------------\n${JSON.stringify(this.resultErrorsResources, null, 4)}\n\n`;
     }
     if (this.resultHasErrorsFolders) {
-      result += `${"----------------------------\n" +
-        "Folders errors\n" +
-        "----------------------------\n"}${
-        JSON.stringify(this.resultErrorsFolders, null, 4)}`;
+      result += `----------------------------\n${this.translate("Folders errors")}\n----------------------------\n${JSON.stringify(this.resultErrorsFolders, null, 4)}`;
     }
 
     return result;
+  }
+
+  /**
+   * Get the translate function
+   * @returns {function(...[*]=)}
+   */
+  get translate() {
+    return this.props.t;
   }
 
   /**
@@ -256,49 +258,59 @@ class PasswordImportResultDialog extends Component {
   render() {
     return (
       <DialogWrapper
-        title={this.resultHasErrors ? "Something went wrong!" : "Import success!"}
+        title={this.resultHasErrors ? this.translate("Something went wrong!") : this.translate("Import success!")}
         onClose={this.handleClose}>
         <form onSubmit={this.handleClose}>
           <div className="form-content">
             {!this.hasErrorsResources &&
             <p>
-              <strong>{this.resultCreatedResourcesCount ? this.resultCreatedResourcesCount : 'No'} password{this.resultCreatedResourcesCount === 1 ? ' has' : 's have'} been imported successfully.</strong>
+              <strong>{this.translate("{{count}} password has been imported successfully.", {count: this.resultCreatedResourcesCount})}</strong>
             </p>
             }
             {this.hasErrorsResources &&
             <>
-              <p className="error inline-error">There was an issue while importing passwords:</p>
+              <p className="error inline-error"><Trans>There was an issue while importing passwords:</Trans></p>
               <p>
-                <strong>{this.resultCreatedResourcesCount} out of {this.resultCreatedResourcesCount + this.resultErrorsResources.length}</strong> password{(this.resultCreatedResourcesCount + this.resultErrorsResources.length) === 1 ? ' has' : 's have'} been imported.
+                <Trans count={this.resultCreatedResourcesCount + this.resultErrorsResources.length}>
+                  <strong>{{numberResourceSuccess: this.resultCreatedResourcesCount}} out of {{count: this.resultCreatedResourcesCount + this.resultErrorsResources.length}}</strong> password has been imported.
+                </Trans>
               </p>
             </>
             }
             {this.canIUseFolders && !this.resultHasErrorsFolders &&
             <p>
-              <strong>{this.resultCreatedFoldersCount ? this.resultCreatedFoldersCount : ' No'} folder{this.resultCreatedFoldersCount === 1 ? ' has' : 's have'} been imported successfully.</strong>
+              <strong>{this.translate("{{count}} folder has been imported successfully.", {count: this.resultCreatedFoldersCount})}</strong>
             </p>
             }
             {this.canIUseFolders && this.resultHasErrorsFolders &&
             <>
-              <p className="error inline-error">There was an issue while importing folders:</p>
+              <p className="error inline-error"><Trans>There was an issue while importing folders:</Trans></p>
               <p>
-                <strong>{this.resultCreatedFoldersCount} out of {this.resultCreatedFoldersCount + this.resultErrorsFolders.length}</strong> folder{(this.resultCreatedFoldersCount + this.resultErrorsFolders.length) === 1 ? ' has' : 's have'} been imported.
+                <Trans count={this.resultCreatedFoldersCount + this.resultErrorsFolders.length}>
+                  <strong>{{numberFolderSuccess: this.resultCreatedFoldersCount}} out of {{count: this.resultCreatedFoldersCount + this.resultErrorsFolders.length}}</strong> folder has been imported.
+                </Trans>
               </p>
             </>
             }
             {this.canIUseFolders && this.resultReferenceFolder &&
-            <p>You can find these newly imported passwords in the folder <a onClick={this.handleReferenceFolderClick}>{this.resultReferenceFolder.name}</a>.
+            <p>
+              <Trans>
+                You can find these newly imported passwords in the folder <a onClick={this.handleReferenceFolderClick}>{{folderName: this.resultReferenceFolder.name}}</a>.
+              </Trans>
             </p>
             }
             {this.canIUseTags && !this.resultReferenceFolder && this.resultReferenceTag &&
-            <p>You can find these newly imported passwords under the tag <a onClick={this.handleReferenceTagClick}>{this.resultReferenceTag.slug}</a>.
+            <p>
+              <Trans>
+                You can find these newly imported passwords under the tag <a onClick={this.handleReferenceTagClick}>{{tagName: this.resultReferenceTag.slug}}</a>.
+              </Trans>
             </p>
             }
             {this.resultHasErrors &&
             <div className="accordion error-details">
               <div className="accordion-header">
                 <a onClick={this.handleErrorDetailsToggle}>
-                  Errors details
+                  <Trans>Errors details</Trans>
                   <Icon baseline={true} name={this.state.showErrorDetails ? "caret-up" : "caret-down"}/>
                 </a>
               </div>
@@ -308,7 +320,7 @@ class PasswordImportResultDialog extends Component {
                   <label
                     htmlFor="js_field_debug"
                     className="visuallyhidden">
-                    Errors details
+                    <Trans>Errors details</Trans>
                   </label>
                   <textarea
                     id="js_field_debug"
@@ -323,7 +335,7 @@ class PasswordImportResultDialog extends Component {
 
           <div className="submit-wrapper clearfix">
             <FormSubmitButton
-              value="Ok"/>
+              value={this.translate("Ok")}/>
           </div>
         </form>
       </DialogWrapper>
@@ -337,7 +349,8 @@ PasswordImportResultDialog.propTypes = {
   onClose: PropTypes.func, // Whenever the dialogs closes
   actionFeedbackContext: PropTypes.any, // The action feedback context
   history: PropTypes.object, // History property from the rooter
-  resourceWorkspaceContext: PropTypes.any // The resource context
+  resourceWorkspaceContext: PropTypes.any, // The resource context
+  t: PropTypes.func, // The translation function
 };
 
-export default withRouter(withResourceWorkspace(withActionFeedback(PasswordImportResultDialog)));
+export default withRouter(withResourceWorkspace(withActionFeedback(withTranslation('common')(PasswordImportResultDialog))));

@@ -1345,6 +1345,6 @@ export function defaultProps() {
           ],
         },
       }
-    },
+    }
   };
 }

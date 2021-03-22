@@ -17,6 +17,7 @@ import AppContext from "../../../../contexts/AppContext";
 import {ResourceWorkspaceFilterTypes, withResourceWorkspace} from "../../../../contexts/ResourceWorkspaceContext";
 import PropTypes from "prop-types";
 import {withRouter} from "react-router-dom";
+import {Trans, withTranslation} from "react-i18next";
 
 /**
  * This component display groups to filter the resources
@@ -103,6 +104,14 @@ class SidebarGroupFilterSection extends React.Component {
   }
 
   /**
+   * Get the translate function
+   * @returns {function(...[*]=)}
+   */
+  get translate() {
+    return this.props.t;
+  }
+
+  /**
    * Render the component
    * @returns {JSX}
    */
@@ -126,7 +135,7 @@ class SidebarGroupFilterSection extends React.Component {
                         <Icon name="caret-right"/>
                           }
                         </Fragment>
-                        <span>Filter by groups</span>
+                        <span><Trans>Filter by groups</Trans></span>
                       </span>
                     </h3>
                   </div>
@@ -164,7 +173,8 @@ SidebarGroupFilterSection.contextType = AppContext;
 
 SidebarGroupFilterSection.propTypes = {
   resourceWorkspaceContext: PropTypes.any,
-  history: PropTypes.object
+  history: PropTypes.object,
+  t: PropTypes.func, // The translation function
 };
 
-export default withRouter(withResourceWorkspace(SidebarGroupFilterSection));
+export default withRouter(withResourceWorkspace(withTranslation('common')(SidebarGroupFilterSection)));

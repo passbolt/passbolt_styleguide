@@ -15,6 +15,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import ContextualMenuWrapper from "../../../../react/components/Common/ContextualMenu/ContextualMenuWrapper";
 import {filterByGroupsOptions} from "./FilterUsersByGroup";
+import {Trans, withTranslation} from "react-i18next";
 
 class FilterUsersByGroupContextualMenu extends React.Component {
   /**
@@ -43,6 +44,14 @@ class FilterUsersByGroupContextualMenu extends React.Component {
   }
 
   /**
+   * Get the translate function
+   * @returns {function(...[*]=)}
+   */
+  get translate() {
+    return this.props.t;
+  }
+
+  /**
    * Render the component.
    * @returns {JSX}
    */
@@ -56,7 +65,7 @@ class FilterUsersByGroupContextualMenu extends React.Component {
           <div className="row">
             <div className="main-cell-wrapper">
               <div className="main-cell">
-                <a id="all-groups" onClick={() => this.handleFilterClickEvent(filterByGroupsOptions.all)}><span>All groups</span></a>
+                <a id="all-groups" onClick={() => this.handleFilterClickEvent(filterByGroupsOptions.all)}><span><Trans>All groups</Trans></span></a>
               </div>
             </div>
           </div>
@@ -65,7 +74,7 @@ class FilterUsersByGroupContextualMenu extends React.Component {
           <div className="row">
             <div className="main-cell-wrapper">
               <div className="main-cell">
-                <a id="groups-manage" onClick={() => this.handleFilterClickEvent(filterByGroupsOptions.manage)}><span>Groups I manage</span></a>
+                <a id="groups-manage" onClick={() => this.handleFilterClickEvent(filterByGroupsOptions.manage)}><span><Trans>Groups I manage</Trans></span></a>
               </div>
             </div>
           </div>
@@ -74,7 +83,7 @@ class FilterUsersByGroupContextualMenu extends React.Component {
           <div className="row">
             <div className="main-cell-wrapper">
               <div className="main-cell">
-                <a id="groups-member" onClick={() => this.handleFilterClickEvent(filterByGroupsOptions.member)}><span>Groups I am member of</span></a>
+                <a id="groups-member" onClick={() => this.handleFilterClickEvent(filterByGroupsOptions.member)}><span><Trans>Groups I am member of</Trans></span></a>
               </div>
             </div>
           </div>
@@ -88,7 +97,8 @@ FilterUsersByGroupContextualMenu.propTypes = {
   onFilterSelected: PropTypes.func,
   left: PropTypes.number, // left position in px of the menu
   hide: PropTypes.func, // Hide the contextual menu
-  top: PropTypes.number // top position in px of the menu
+  top: PropTypes.number, // top position in px of the menu
+  t: PropTypes.func, // The translation function
 };
 
-export default FilterUsersByGroupContextualMenu;
+export default withTranslation('common')(FilterUsersByGroupContextualMenu);

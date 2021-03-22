@@ -2,6 +2,7 @@ import {fireEvent, render, waitFor} from "@testing-library/react";
 import React from "react";
 import AuthenticationContextProvider from "../../../contexts/AuthenticationContext";
 import CheckPassphrase from "./CheckPassphrase";
+import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 
 /**
  * The CheckPassphrase component represented as a page
@@ -14,9 +15,11 @@ export default class CheckPassphrasePage {
    */
   constructor(context, props) {
     this._page = render(
-      <AuthenticationContextProvider value={context}>
-        <CheckPassphrase {...props}/>
-      </AuthenticationContextProvider>
+      <MockTranslationProvider>
+        <AuthenticationContextProvider value={context}>
+          <CheckPassphrase {...props}/>
+        </AuthenticationContextProvider>
+      </MockTranslationProvider>
     );
   }
 

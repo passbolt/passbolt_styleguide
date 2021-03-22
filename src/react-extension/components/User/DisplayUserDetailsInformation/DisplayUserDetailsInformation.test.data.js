@@ -80,6 +80,6 @@ export function defaultProps() {
           is_mfa_enabled: false
         }
       }
-    },
+    }
   };
 }

@@ -20,6 +20,7 @@ import ShareVariesDetails from "./ShareVariesDetails";
 import AppContext from "../../contexts/AppContext";
 import UserAvatar from "../../../react/components/Common/Avatar/UserAvatar";
 import GroupAvatar from "../../../react/components/Common/Avatar/GroupAvatar";
+import {Trans, withTranslation} from "react-i18next";
 
 class SharePermissionItem extends Component {
   /**
@@ -30,7 +31,7 @@ class SharePermissionItem extends Component {
     super(props);
     this.state = {};
     if (!Number.isInteger(props.permissionType)) {
-      throw new TypeError('Invalid permission type for share permission item.');
+      throw new TypeError(this.translate("Invalid permission type for share permission item."));
     }
     this.state.permissionType = props.permissionType;
     this.bindEventHandlers();
@@ -116,6 +117,14 @@ class SharePermissionItem extends Component {
     this.props.onDelete(this.props.id);
   }
 
+  /**
+   * Get the translate function
+   * @returns {function(...[*]=)}
+   */
+  get translate() {
+    return this.props.t;
+  }
+
   render() {
     return (
       <li id={`permission-item-${this.props.id}`} className={this.getClassName()}>
@@ -142,11 +151,11 @@ class SharePermissionItem extends Component {
             disabled={this.isInputDisabled()}
             onChange={this.handleUpdate}
           >
-            <option value="1">can read</option>
-            <option value="7">can update</option>
-            <option value="15">is owner</option>
+            <option value="1"><Trans>can read</Trans></option>
+            <option value="7"><Trans>can update</Trans></option>
+            <option value="15"><Trans>is owner</Trans></option>
             { (this.props.variesDetails) &&
-            <option value="-1">varies</option>
+            <option value="-1"><Trans>varies</Trans></option>
             }
           </select>
 
@@ -176,6 +185,7 @@ SharePermissionItem.propTypes = {
   onUpdate: PropTypes.func,
   onDelete: PropTypes.func,
   permissionType: PropTypes.number,
+  t: PropTypes.func, // The translation function
 };
 
-export default SharePermissionItem;
+export default withTranslation('common')(SharePermissionItem);

@@ -20,6 +20,7 @@ import {BrowserRouter as Router} from "react-router-dom";
 import AppContext from "../../../contexts/AppContext";
 import PasswordSidebarDescriptionSection from "./PasswordSidebarDescriptionSection";
 import DescriptionEditorPageObject from "./DescriptionEditor.test.page";
+import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 
 /**
  * The PasswordSidebarDescriptionSection component represented as a page
@@ -32,11 +33,13 @@ export default class PasswordSidebarDescriptionSectionPage {
    */
   constructor(appContext, props) {
     this._page = render(
-      <AppContext.Provider value={appContext}>
-        <Router>
-          <PasswordSidebarDescriptionSection  {...props}/>
-        </Router>
-      </AppContext.Provider>
+      <MockTranslationProvider>
+        <AppContext.Provider value={appContext}>
+          <Router>
+            <PasswordSidebarDescriptionSection  {...props}/>
+          </Router>
+        </AppContext.Provider>
+      </MockTranslationProvider>
     );
     this.setupPageObjects();
   }
