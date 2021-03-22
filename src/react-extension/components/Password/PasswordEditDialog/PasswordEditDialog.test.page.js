@@ -31,8 +31,8 @@ export const PasswordEditDialogPageTemplate = (appContext, props) =>
           <Route component={routerProps => <PasswordEditDialog {...props} {...routerProps}/>}></Route>
         </MemoryRouter>
       </DialogContextProvider>
-    </AppContext.Provider>;
-  </MockTranslationProvider>
+    </AppContext.Provider>
+  </MockTranslationProvider>;
 
 /**
  * The PasswordEditDialog component represented as a page

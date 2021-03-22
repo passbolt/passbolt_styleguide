@@ -26,7 +26,6 @@ import Icon from "../../../../react/components/Common/Icons/Icon";
 import TooltipHtml from "../../../../react/components/Common/Tooltip/TooltipHtml";
 import Autocomplete from "../../../../react/components/Common/Inputs/Autocomplete/Autocomplete";
 import {withRouter} from "react-router-dom";
-import {withTranslation} from "react-i18next";
 import {Trans, withTranslation} from "react-i18next";
 
 /**
@@ -828,9 +827,8 @@ EditUserGroup.propTypes = {
   actionFeedbackContext: PropTypes.any, // The action feedback context
   onClose: PropTypes.func,
   dialogContext: PropTypes.any, // The dialog context
-  userWorkspaceContext: PropTypes.object, // The user workspace context,
   location: PropTypes.object, // Route location
-  history: PropTypes.object // Router history
+  history: PropTypes.object, // Router history
   userWorkspaceContext: PropTypes.object, // The user workspace context
   t: PropTypes.func, // The translation function
 };

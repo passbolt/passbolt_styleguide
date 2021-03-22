@@ -365,7 +365,7 @@ class PasswordSidebarInformationSection extends React.Component {
                 <a onClick={this.handlePasswordClickEvent}>
                   <span>
                     {isPasswordPreviewed && this.state.previewedPassword}
-                    {!isPasswordPreviewed && <Trans>copy password to clipboard</Trans>}
+                    {!isPasswordPreviewed && <Trans>Copy password to clipboard</Trans>}
                   </span>
                 </a>
               </div>
