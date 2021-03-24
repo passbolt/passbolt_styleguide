@@ -17,6 +17,7 @@ import AppContext from "../../../contexts/AppContext";
 import React from "react";
 import SessionExpired from "./SessionExpired";
 import {BrowserRouter as Router} from "react-router-dom";
+import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 
 /**
  * The CreateUserDialog component represented as a page
@@ -29,11 +30,13 @@ export default class SessionExpiredPage {
    */
   constructor(appContext, props) {
     this._page = render(
-      <AppContext.Provider value={appContext}>
-        <Router>
-          <SessionExpired.WrappedComponent {...props}/>
-        </Router>
-      </AppContext.Provider>
+      <MockTranslationProvider>
+        <AppContext.Provider value={appContext}>
+          <Router>
+            <SessionExpired {...props}/>
+          </Router>
+        </AppContext.Provider>
+      </MockTranslationProvider>
     );
   }
 

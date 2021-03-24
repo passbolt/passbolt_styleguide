@@ -16,10 +16,10 @@ import * as React from "react";
 import PropTypes from "prop-types";
 import AppContext from "./AppContext";
 import {withRouter} from "react-router-dom";
-import moment from "moment";
 import {withActionFeedback} from "./ActionFeedbackContext";
 import {withLoading} from "../../react/contexts/Common/LoadingContext";
 import sanitizeUrl, {urlProtocols} from "../../react/lib/Common/Sanitize/sanitizeUrl";
+import {DateTime} from "luxon";
 
 /**
  * Context related to resources ( filter, current selections, etc.)
@@ -649,7 +649,7 @@ export class ResourceWorkspaceContextProvider extends React.Component {
    * @param filter A recently modified filter
    */
   async searchByRecentlyModified(filter) {
-    const recentlyModifiedSorter = (resource1, resource2) => moment(resource2.modified).diff(moment(resource1.modified));
+    const recentlyModifiedSorter = (resource1, resource2) => DateTime.fromISO(resource2.modified) < DateTime.fromISO(resource1.modified) ? -1 : 1;
     const filteredResources = this.resources.sort(recentlyModifiedSorter);
     await this.setState({filter, filteredResources});
   }

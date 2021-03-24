@@ -18,6 +18,7 @@ import React from "react";
 import {BrowserRouter as Router} from 'react-router-dom';
 import FoldersTree from "./FoldersTree";
 import {FoldersTreeItemPageObject} from "./FoldersTreeItem.test.page";
+import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 
 /**
  * The FolderTree component represented as a page
@@ -30,11 +31,13 @@ export default class FoldersTreePage {
    */
   constructor(appContext, props) {
     this._page = render(
-      <AppContext.Provider value={appContext}>
-        <Router>
-          <FoldersTree.WrappedComponent {...props}/>
-        </Router>
-      </AppContext.Provider>
+      <MockTranslationProvider>
+        <AppContext.Provider value={appContext}>
+          <Router>
+            <FoldersTree.WrappedComponent {...props}/>
+          </Router>
+        </AppContext.Provider>
+      </MockTranslationProvider>
     );
     this.setupPageObjects();
   }

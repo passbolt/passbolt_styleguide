@@ -18,6 +18,7 @@ import React from "react";
 import CreateUserDialog from "./CreateUserDialog";
 import ManageDialogs from "../../../../react/components/Common/Dialog/ManageDialogs/ManageDialogs";
 import DialogContextProvider from "../../../../react/contexts/Common/DialogContext";
+import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 
 /**
  * The CreateUserDialog component represented as a page
@@ -30,12 +31,14 @@ export default class CreateUserDialogPage {
    */
   constructor(appContext, props) {
     this._page = render(
-      <AppContext.Provider value={appContext}>
-        <DialogContextProvider>
-          <ManageDialogs/>
-          <CreateUserDialog {...props}/>
-        </DialogContextProvider>
-      </AppContext.Provider>
+      <MockTranslationProvider>
+        <AppContext.Provider value={appContext}>
+          <DialogContextProvider>
+            <ManageDialogs/>
+            <CreateUserDialog {...props}/>
+          </DialogContextProvider>
+        </AppContext.Provider>
+      </MockTranslationProvider>
     );
     this.setupPageObjects();
   }

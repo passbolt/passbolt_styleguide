@@ -20,6 +20,7 @@ import AppContext from "../../../contexts/AppContext";
 import DisplayCommentList from "./DisplayCommentList";
 import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 import Icon from "../../../../react/components/Common/Icons/Icon";
+import {Trans, withTranslation} from "react-i18next";
 
 class PasswordSidebarCommentSection extends React.Component {
   /**
@@ -130,6 +131,14 @@ class PasswordSidebarCommentSection extends React.Component {
   }
 
   /**
+   * Get the translate function
+   * @returns {function(...[*]=)}
+   */
+  get translate() {
+    return this.props.t;
+  }
+
+  /**
    * Render the component
    * @returns {JSX}
    */
@@ -139,7 +148,7 @@ class PasswordSidebarCommentSection extends React.Component {
         <div className="accordion-header">
           <h4>
             <a onClick={this.handleTitleClickedEvent} role="button">
-              Comments
+              <Trans>Comments</Trans>
               {this.state.open &&
               <Icon name="caret-down"/>
               }
@@ -162,7 +171,7 @@ class PasswordSidebarCommentSection extends React.Component {
                   d="M1344 960v-128q0-26-19-45t-45-19h-256v-256q0-26-19-45t-45-19h-128q-26 0-45 19t-19 45v256h-256q-26 0-45 19t-19 45v128q0 26 19 45t45 19h256v256q0 26 19 45t45 19h128q26 0 45-19t19-45v-256h256q26 0 45-19t19-45zm320-64q0 209-103 385.5t-279.5 279.5-385.5 103-385.5-103-279.5-279.5-103-385.5 103-385.5 279.5-279.5 385.5-103 385.5 103 279.5 279.5 103 385.5z"/>
               </svg>
             </span>
-            <span className="visuallyhidden">Create</span>
+            <span className="visuallyhidden"><Trans>Create</Trans></span>
           </a>
             }
 
@@ -189,6 +198,7 @@ PasswordSidebarCommentSection.contextType = AppContext;
 
 PasswordSidebarCommentSection.propTypes = {
   resourceWorkspaceContext: PropTypes.any, // The resource context
+  t: PropTypes.func, // The translation function
 };
 
-export default withResourceWorkspace(PasswordSidebarCommentSection);
+export default withResourceWorkspace(withTranslation('common')(PasswordSidebarCommentSection));

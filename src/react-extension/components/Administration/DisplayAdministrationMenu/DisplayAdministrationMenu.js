@@ -19,6 +19,7 @@ import {
 } from "../../../contexts/AdministrationWorkspaceContext";
 import AppContext, {withAppContext} from "../../../contexts/AppContext";
 import {withRouter} from "react-router-dom";
+import {Trans, withTranslation} from "react-i18next";
 
 /**
  * This component allows to display the menu of the administration
@@ -106,6 +107,14 @@ class DisplayAdministrationMenu extends React.Component {
   }
 
   /**
+   * Get the translate function
+   * @returns {function(...[*]=)}
+   */
+  get translate() {
+    return this.props.t;
+  }
+
+  /**
    * Render the component
    * @returns {JSX}
    */
@@ -118,7 +127,7 @@ class DisplayAdministrationMenu extends React.Component {
               <div className={`row  ${this.isMfaSelected() ? "selected" : ""}`}>
                 <div className="main-cell-wrapper">
                   <div className="main-cell">
-                    <a onClick={this.handleMfaClick}><span>Multi Factor Authentication</span></a>
+                    <a onClick={this.handleMfaClick}><span><Trans>Multi Factor Authentication</Trans></span></a>
                   </div>
                 </div>
               </div>
@@ -129,7 +138,7 @@ class DisplayAdministrationMenu extends React.Component {
               <div className={`row  ${this.isUserDirectorySelected() ? "selected" : ""}`}>
                 <div className="main-cell-wrapper">
                   <div className="main-cell">
-                    <a onClick={this.handleUserDirectoryClick}><span>Users Directory</span></a>
+                    <a onClick={this.handleUserDirectoryClick}><span><Trans>Users Directory</Trans></span></a>
                   </div>
                 </div>
               </div>
@@ -139,7 +148,7 @@ class DisplayAdministrationMenu extends React.Component {
             <div className={`row  ${this.isEmailNotificationsSelected() ? "selected" : ""}`}>
               <div className="main-cell-wrapper">
                 <div className="main-cell">
-                  <a onClick={this.handleEmailNotificationsClick}><span>Email Notifications</span></a>
+                  <a onClick={this.handleEmailNotificationsClick}><span><Trans>Email Notifications</Trans></span></a>
                 </div>
               </div>
             </div>
@@ -156,6 +165,7 @@ DisplayAdministrationMenu.propTypes = {
   context: PropTypes.object, // The app context
   administrationWorkspaceContext: PropTypes.object, // The administration workspace context
   history: PropTypes.object, // The router history
+  t: PropTypes.func, // The translation function
 };
 
-export default withRouter(withAppContext(withAdministrationWorkspace(DisplayAdministrationMenu)));
+export default withRouter(withAppContext(withAdministrationWorkspace(withTranslation('common')(DisplayAdministrationMenu))));

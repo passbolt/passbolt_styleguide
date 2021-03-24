@@ -15,6 +15,7 @@ import {fireEvent, render, waitFor} from "@testing-library/react";
 import AppContext from "../../../contexts/AppContext";
 import React from "react";
 import DisplayTestUserDirectoryAdministrationDialog from "./DisplayTestUserDirectoryAdministrationDialog";
+import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 
 /**
  * The DisplayTestUserDirectoryAdministrationDialog component represented as a page
@@ -27,9 +28,11 @@ export default class DisplayTestUserDirectoryAdministrationDialogPage {
    */
   constructor(appContext, props) {
     this._page = render(
-      <AppContext.Provider value={appContext}>
-        <DisplayTestUserDirectoryAdministrationDialog {...props}/>
-      </AppContext.Provider>
+      <MockTranslationProvider>
+        <AppContext.Provider value={appContext}>
+          <DisplayTestUserDirectoryAdministrationDialog {...props}/>
+        </AppContext.Provider>
+      </MockTranslationProvider>
     );
     this.setupPageObjects();
   }

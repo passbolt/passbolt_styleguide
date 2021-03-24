@@ -26,6 +26,8 @@ import DialogWrapper from "../../../../react/components/Common/Dialog/DialogWrap
 import FormSubmitButton from "../../../../react/components/Common/Inputs/FormSubmitButton/FormSubmitButton";
 import FormCancelButton from "../../../../react/components/Common/Inputs/FormSubmitButton/FormCancelButton";
 
+import {Trans, withTranslation} from "react-i18next";
+
 class PasswordCreateDialog extends Component {
   constructor() {
     super();
@@ -78,6 +80,8 @@ class PasswordCreateDialog extends Component {
     if (this.isEncryptedDescriptionEnabled()) {
       this.setState({encryptDescription: true});
     }
+
+    //console.log(i18n.changeLanguage('en', 'common'));
   }
 
   /*
@@ -179,7 +183,7 @@ class PasswordCreateDialog extends Component {
     const password = this.state.password;
     let passwordError = "";
     if (!password.length) {
-      passwordError = "A password is required.";
+      passwordError = this.translate("A password is required.");
     }
 
     return new Promise(resolve => {
@@ -195,7 +199,7 @@ class PasswordCreateDialog extends Component {
     const name = this.state.name.trim();
     let nameError = "";
     if (!name.length) {
-      nameError = "A name is required.";
+      nameError = this.translate("A name is required.");
     }
 
     return new Promise(resolve => {
@@ -286,7 +290,7 @@ class PasswordCreateDialog extends Component {
    * Handle save operation success.
    */
   async handleSaveSuccess(resource) {
-    await this.props.actionFeedbackContext.displaySuccess("The password has been added successfully");
+    await this.props.actionFeedbackContext.displaySuccess(this.translate("The password has been added successfully"));
     if (resource.folder_parent_id) {
       // TODO and select resource inside that folder
       this.selectAndScrollToFolder(resource.folder_parent_id);
@@ -324,7 +328,7 @@ class PasswordCreateDialog extends Component {
    */
   handleError(error) {
     const errorDialogProps = {
-      title: "There was an unexpected error...",
+      title: this.translate("There was an unexpected error..."),
       message: error.message
     };
     this.context.setContext({errorDialogProps});
@@ -510,6 +514,14 @@ class PasswordCreateDialog extends Component {
     };
   }
 
+  /**
+   * Get the translate function
+   * @returns {function(...[*]=)}
+   */
+  get translate() {
+    return this.props.t;
+  }
+
   /*
    * =============================================================
    *  Render view
@@ -520,45 +532,55 @@ class PasswordCreateDialog extends Component {
     const securityTokenStyle = this.getSecurityTokenStyle();
     const securityTokenCode = this.context.userSettings.getSecurityTokenCode();
     const passwordStrength = SecretComplexity.getStrength(this.state.password);
+    /*
+     * The parser can't find the translation for passwordStrength.label
+     * To fix that we can use it in comment
+     * this.translate("n/a")
+     * this.translate("very weak")
+     * this.translate("weak")
+     * this.translate("fair")
+     * this.translate("strong")
+     * this.translate("very strong")
+     */
 
     return (
-      <DialogWrapper title="Create a password" className="create-password-dialog"
+      <DialogWrapper title={this.translate("Create a password")} className="create-password-dialog"
         disabled={this.state.processing} onClose={this.handleClose}>
         <form onSubmit={this.handleFormSubmit} noValidate>
           <div className="form-content">
             <div className={`input text required ${this.state.nameError ? "error" : ""}`}>
-              <label htmlFor="create-password-form-name">Name</label>
+              <label htmlFor="create-password-form-name"><Trans>Name</Trans></label>
               <input id="create-password-form-name" name="name" type="text" value={this.state.name}
                 onKeyUp={this.handleNameInputKeyUp} onChange={this.handleInputChange}
                 disabled={this.state.processing} ref={this.nameInputRef} className="required fluid" maxLength="64"
-                required="required" autoComplete="off" autoFocus={true} placeholder="Name"/>
+                required="required" autoComplete="off" autoFocus={true} placeholder={this.translate("Name")}/>
               {this.state.nameError &&
               <div className="name error message">{this.state.nameError}</div>
               }
             </div>
             <div className={`input text ${this.state.uriError ? "error" : ""}`}>
-              <label htmlFor="create-password-form-uri">URL</label>
+              <label htmlFor="create-password-form-uri"><Trans>URI</Trans></label>
               <input id="create-password-form-uri" name="uri" className="fluid" maxLength="1024" type="text"
-                autoComplete="off" value={this.state.uri} onChange={this.handleInputChange} placeholder="URI"
+                autoComplete="off" value={this.state.uri} onChange={this.handleInputChange} placeholder={this.translate("URI")}
                 disabled={this.state.processing}/>
               {this.state.uriError &&
               <div className="error message">{this.state.uriError}</div>
               }
             </div>
             <div className={`input text ${this.state.usernameError ? "error" : ""}`}>
-              <label htmlFor="create-password-form-username">Username</label>
+              <label htmlFor="create-password-form-username"><Trans>Username</Trans></label>
               <input id="create-password-form-username" name="username" type="text" className="fluid" maxLength="64"
-                autoComplete="off" value={this.state.username} onChange={this.handleInputChange} placeholder="Username"
+                autoComplete="off" value={this.state.username} onChange={this.handleInputChange} placeholder={this.translate("Username")}
                 disabled={this.state.processing}/>
               {this.state.usernameError &&
               <div className="error message">{this.state.usernameError}</div>
               }
             </div>
             <div className={`input-password-wrapper input required ${this.state.passwordError ? "error" : ""}`}>
-              <label htmlFor="create-password-form-password">Password</label>
+              <label htmlFor="create-password-form-password"><Trans>Password</Trans></label>
               <div className="input text password">
                 <input id="create-password-form-password" name="password" className="required" maxLength="4096"
-                  placeholder="Password" required="required" type={this.state.viewPassword ? "text" : "password"}
+                  placeholder={this.translate("Password")} required="required" type={this.state.viewPassword ? "text" : "password"}
                   onKeyUp={this.handlePasswordInputKeyUp} value={this.state.password}
                   onFocus={this.handlePasswordInputFocus} onBlur={this.handlePasswordInputBlur}
                   onChange={this.handleInputChange} disabled={this.state.processing}
@@ -586,7 +608,7 @@ class PasswordCreateDialog extends Component {
                 <span className="progress">
                   <span className={`progress-bar ${passwordStrength.id}`} />
                 </span>
-                <span className="complexity-text">complexity: <strong>{passwordStrength.label}</strong></span>
+                <span className="complexity-text"><Trans>complexity:</Trans> <strong>{this.translate(passwordStrength.label)}</strong></span>
               </div>
               {this.state.passwordError &&
               <div className="input text">
@@ -595,23 +617,23 @@ class PasswordCreateDialog extends Component {
               }
             </div>
             <div className="input textarea">
-              <label htmlFor="create-password-form-description">Description&nbsp;
+              <label htmlFor="create-password-form-description"><Trans>Description</Trans>&nbsp;
                 {!this.areResourceTypesEnabled() &&
-                <Tooltip message="Do not store sensitive data. Unlike the password, this data is not encrypted. Upgrade to version 3 to encrypt this information." icon="info-circle"/>
+                <Tooltip message={this.translate("Do not store sensitive data. Unlike the password, this data is not encrypted. Upgrade to version 3 to encrypt this information.")} icon="info-circle"/>
                 }
                 {this.areResourceTypesEnabled() && !this.state.encryptDescription &&
                 <a role="button" onClick={this.handleDescriptionToggle} className="lock-toggle">
-                  <Tooltip message="Do not store sensitive data or click here to enable encryption for the description field." icon="lock-open" />
+                  <Tooltip message={this.translate("Do not store sensitive data or click here to enable encryption for the description field.")} icon="lock-open" />
                 </a>
                 }
                 {this.areResourceTypesEnabled() && this.state.encryptDescription &&
                 <a role="button" onClick={this.handleDescriptionToggle} className="lock-toggle">
-                  <Tooltip message="The description content will be encrypted." icon="lock" />
+                  <Tooltip message={this.translate("The description content will be encrypted.")} icon="lock" />
                 </a>
                 }
               </label>
               <textarea id="create-password-form-description" name="description" maxLength="10000"
-                className="required" placeholder="Add a description" value={this.state.description}
+                className="required" placeholder={this.translate("Add a description")} value={this.state.description}
                 disabled={this.state.processing} onChange={this.handleInputChange}>
               </textarea>
               {this.state.descriptionError &&
@@ -620,7 +642,7 @@ class PasswordCreateDialog extends Component {
             </div>
           </div>
           <div className="submit-wrapper clearfix">
-            <FormSubmitButton value="Create" disabled={this.state.processing} processing={this.state.processing}/>
+            <FormSubmitButton value={this.translate("Create")} disabled={this.state.processing} processing={this.state.processing}/>
             <FormCancelButton disabled={this.state.processing} onClick={this.handleClose}/>
           </div>
         </form>
@@ -635,7 +657,8 @@ PasswordCreateDialog.propTypes = {
   history: PropTypes.object, // Router history
   onClose: PropTypes.func, // Whenever the component must be closed
   actionFeedbackContext: PropTypes.any, // The action feedback context
-  dialogContext: PropTypes.any // The dialog context
+  dialogContext: PropTypes.any, // The dialog context
+  t: PropTypes.func, // The translation function
 };
 
-export default withActionFeedback(withRouter(withDialog(PasswordCreateDialog)));
+export default  withActionFeedback(withRouter(withDialog(withTranslation('common')(PasswordCreateDialog))));

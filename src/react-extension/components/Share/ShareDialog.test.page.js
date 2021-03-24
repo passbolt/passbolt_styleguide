@@ -16,6 +16,7 @@ import {fireEvent, render, waitFor} from "@testing-library/react";
 import React from "react";
 import ShareDialog from "./ShareDialog";
 import AppContext from "../../contexts/AppContext";
+import MockTranslationProvider from "../../test/mock/components/Internationalisation/MockTranslationProvider";
 
 /**
  * The ShareDialog component represented as a page
@@ -28,9 +29,11 @@ export default class ShareDialogPage {
    */
   constructor(appContext, props) {
     this._page = render(
-      <AppContext.Provider value={appContext}>
-        <ShareDialog {...props}/>
-      </AppContext.Provider>
+      <MockTranslationProvider>
+        <AppContext.Provider value={appContext}>
+          <ShareDialog {...props}/>
+        </AppContext.Provider>
+      </MockTranslationProvider>
     );
   }
 

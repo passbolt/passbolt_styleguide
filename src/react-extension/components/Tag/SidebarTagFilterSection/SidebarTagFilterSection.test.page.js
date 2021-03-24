@@ -24,6 +24,7 @@ import SidebarTagFilterSection from "./SidebarTagFilterSection";
 import SidebarTagFilterSectionContextualMenuPageObject from "./SidebarTagFilterSectionContextualMenu.test.page";
 import DisplayTagListContextualMenuPageObject from "./DisplayTagListContextualMenu.test.page";
 import {ResourceWorkspaceContext} from "../../../contexts/ResourceWorkspaceContext";
+import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 
 /**
  * The SidebarTagFilterSection component represented as a page
@@ -36,16 +37,18 @@ export default class SidebarTagFilterSectionPage {
    */
   constructor(appContext, props, resourceWorkspaceContext) {
     this._page = render(
-      <AppContext.Provider value={appContext}>
-        <Router>
-          <ResourceWorkspaceContext.Provider value={resourceWorkspaceContext}>
-            <ContextualMenuContextProvider>
-              <ManageContextualMenu/>
-              <SidebarTagFilterSection.WrappedComponent {...props}/>
-            </ContextualMenuContextProvider>
-          </ResourceWorkspaceContext.Provider>
-        </Router>
-      </AppContext.Provider>
+      <MockTranslationProvider>
+        <AppContext.Provider value={appContext}>
+          <Router>
+            <ResourceWorkspaceContext.Provider value={resourceWorkspaceContext}>
+              <ContextualMenuContextProvider>
+                <ManageContextualMenu/>
+                <SidebarTagFilterSection.WrappedComponent {...props}/>
+              </ContextualMenuContextProvider>
+            </ResourceWorkspaceContext.Provider>
+          </Router>
+        </AppContext.Provider>
+      </MockTranslationProvider>
     );
     this.setupPageObjects();
   }

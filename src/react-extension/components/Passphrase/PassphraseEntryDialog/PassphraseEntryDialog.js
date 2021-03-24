@@ -16,6 +16,7 @@ import PropTypes from "prop-types";
 import AppContext from "../../../contexts/AppContext";
 import UserAbortsOperationError from "../../../../react/lib/Common/Error/UserAbortsOperationError";
 import Icon from "../../../../react/components/Common/Icons/Icon";
+import {Trans, withTranslation} from "react-i18next";
 
 class PassphraseEntryDialog extends Component {
   constructor(props) {
@@ -159,7 +160,7 @@ class PassphraseEntryDialog extends Component {
     this.setState({
       processing: false,
       attempt: attempt,
-      passphraseError: "This is not a valid passphrase."
+      passphraseError: this.translate("This is not a valid passphrase.")
     });
     if (attempt < 3) {
       // Force the passphrase input focus. The autoFocus attribute only works during the first rendering.
@@ -279,6 +280,14 @@ class PassphraseEntryDialog extends Component {
   }
 
   /**
+   * Get the translate function
+   * @returns {function(...[*]=)}
+   */
+  get translate() {
+    return this.props.t;
+  }
+
+  /**
    * Render the component
    * @returns {JSX}
    */
@@ -286,9 +295,9 @@ class PassphraseEntryDialog extends Component {
     const passphraseStyle = this.getPassphraseInputStyle();
     const securityTokenStyle = this.getSecurityTokenStyle();
     const securityTokenCode = this.context.userSettings.getSecurityTokenCode();
-    let passphraseInputLabel = "You need your passphrase to continue.";
+    let passphraseInputLabel = this.translate("You need your passphrase to continue.");
     if (this.state.passphraseError) {
-      passphraseInputLabel = "Please enter a valid passphrase.";
+      passphraseInputLabel = this.translate("Please enter a valid passphrase.");
     }
     const hasRememberMeOptions = this.hasRememberMeOptions();
 
@@ -296,7 +305,7 @@ class PassphraseEntryDialog extends Component {
       <div className="dialog-wrapper" onKeyDown={this.handleKeyDown}>
         <div className="dialog passphrase-entry">
           <div className="dialog-header">
-            <h2>Please enter your passphrase.</h2>
+            <h2><Trans>Please enter your passphrase.</Trans></h2>
             <a className="dialog-close" onClick={this.handleCloseClick}>
               <Icon name="close"/>
               <span className="visually-hidden">cancel</span>
@@ -312,7 +321,7 @@ class PassphraseEntryDialog extends Component {
                     id="passphrase-entry-form-passphrase"
                     type={this.state.isObfuscated ? "password" : "text"}
                     name="passphrase"
-                    placeholder="Passphrase"
+                    placeholder={this.translate("Passphrase")}
                     required="required" ref={this.passphraseInputRef}
                     className={`required ${this.state.passphraseError ? "error" : ""}`}
                     value={this.state.passphrase}
@@ -344,7 +353,7 @@ class PassphraseEntryDialog extends Component {
                   <div className="input checkbox">
                     <input id="passphrase-entry-form-remember-me" type="checkbox" name="rememberMe"
                       checked={this.state.rememberMe} onChange={this.handleInputChange}/>
-                    <label htmlFor="passphrase-entry-form-remember-me">Remember it for </label>
+                    <label htmlFor="passphrase-entry-form-remember-me"><Trans>Remember it for</Trans> </label>
                   </div>
                   <div className="input select">
                     <select name="rememberMeDuration" value={this.state.rememberMeDuration}
@@ -357,8 +366,8 @@ class PassphraseEntryDialog extends Component {
                 }
               </div>
               <div className="submit-wrapper clearfix">
-                <input type="submit" className="button primary" role="button" value="OK"/>
-                <a className="cancel" onClick={this.handleCloseClick}>Cancel</a>
+                <input type="submit" className="button primary" role="button" value={this.translate("OK")}/>
+                <a className="cancel" onClick={this.handleCloseClick}><Trans>Cancel</Trans></a>
               </div>
             </form>
           </div>
@@ -366,10 +375,10 @@ class PassphraseEntryDialog extends Component {
           {this.state.attempt === 3 &&
           <div className="dialog-content">
             <div className="form-content">
-              Your passphrase is wrong! The operation has been aborted.
+              <Trans>Your passphrase is wrong! The operation has been aborted.</Trans>
             </div>
             <div className="submit-wrapper clearfix">
-              <a className="button primary" role="button" onClick={this.handleCloseClick}>Close</a>
+              <a className="button primary" role="button" onClick={this.handleCloseClick}><Trans>Close</Trans></a>
             </div>
           </div>
           }
@@ -382,7 +391,8 @@ class PassphraseEntryDialog extends Component {
 PassphraseEntryDialog.contextType = AppContext;
 
 PassphraseEntryDialog.propTypes = {
-  onClose: PropTypes.func
+  onClose: PropTypes.func,
+  t: PropTypes.func, // The translation function
 };
 
-export default PassphraseEntryDialog;
+export default withTranslation('common')(PassphraseEntryDialog);

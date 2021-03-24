@@ -22,6 +22,7 @@ import {
 } from "../../../contexts/AdministrationWorkspaceContext";
 import {withNavigationContext} from "../../../contexts/NavigationContext";
 import Breadcrumb from "../../../../react/components/Common/Navigation/Breadcrumbs/Breadcrumb";
+import {withTranslation} from "react-i18next";
 
 /**
  * The component displays a navigation breadcrumb given the administration setting selected
@@ -36,9 +37,9 @@ class DisplayAdministrationWorkspaceBreadcrumb extends Component {
         return [];
       default:
         return [
-          <Breadcrumb key="bread-1" name="Administration" onClick={this.props.navigationContext.onGoToAdministrationRequested}/>,
+          <Breadcrumb key="bread-1" name={this.translate("Administration")} onClick={this.props.navigationContext.onGoToAdministrationRequested}/>,
           <Breadcrumb key="bread-2" name={this.getLastBreadcrumbItemName()} onClick={this.onLastBreadcrumbClick.bind(this)}/>,
-          <Breadcrumb key="bread-3" name="Settings" onClick={this.onLastBreadcrumbClick.bind(this)}/>
+          <Breadcrumb key="bread-3" name={this.translate("Settings")} onClick={this.onLastBreadcrumbClick.bind(this)}/>
         ];
     }
   }
@@ -50,11 +51,11 @@ class DisplayAdministrationWorkspaceBreadcrumb extends Component {
   getLastBreadcrumbItemName() {
     switch (this.props.administrationWorkspaceContext.selectedAdministration) {
       case AdministrationWorkspaceMenuTypes.MFA:
-        return "Multi factor authentication";
+        return this.translate("Multi factor authentication");
       case AdministrationWorkspaceMenuTypes.USER_DIRECTORY:
-        return "Users Directory";
+        return this.translate("Users Directory");
       case AdministrationWorkspaceMenuTypes.EMAIL_NOTIFICATION:
-        return "Email Notification";
+        return this.translate("Email Notification");
       default:
         return "";
     }
@@ -67,6 +68,14 @@ class DisplayAdministrationWorkspaceBreadcrumb extends Component {
   async onLastBreadcrumbClick() {
     const pathname = this.props.location.pathname;
     this.props.history.push({pathname});
+  }
+
+  /**
+   * Get the translate function
+   * @returns {function(...[*]=)}
+   */
+  get translate() {
+    return this.props.t;
   }
 
   /**
@@ -87,6 +96,7 @@ DisplayAdministrationWorkspaceBreadcrumb.propTypes = {
   location: PropTypes.object, // The router location
   history: PropTypes.object, // The router history
   navigationContext: PropTypes.any, // The application navigation context
+  t: PropTypes.func, // The translation function
 };
 
-export default withRouter(withNavigationContext(withAdministrationWorkspace(DisplayAdministrationWorkspaceBreadcrumb)));
+export default withRouter(withNavigationContext(withAdministrationWorkspace(withTranslation('common')(DisplayAdministrationWorkspaceBreadcrumb))));

@@ -19,6 +19,7 @@ import Breadcrumbs from "../../../../react/components/Common/Navigation/Breadcru
 import AppContext from "../../../contexts/AppContext";
 import Breadcrumb from "../../../../react/components/Common/Navigation/Breadcrumbs/Breadcrumb";
 import {withNavigationContext} from "../../../contexts/NavigationContext";
+import {withTranslation} from "react-i18next";
 
 /**
  * The component displays a navigation breadcrumb given the applied resources filter
@@ -38,32 +39,32 @@ class PasswordBreadcrumbs extends Component {
       case ResourceWorkspaceFilterTypes.TEXT: {
         const isEmptySearchText = !this.props.resourceWorkspaceContext.filter.payload;
         const filterText = this.props.resourceWorkspaceContext.filter.payload;
-        return isEmptySearchText ? items : [...items, this.getLastBreadcrumb(`Search : ${filterText}`)];
+        return isEmptySearchText ? items : [...items, this.getLastBreadcrumb(this.translate("Search: {{filterText}}", {filterText}))];
       }
       case ResourceWorkspaceFilterTypes.FAVORITE:
-        return [...items, this.getLastBreadcrumb("Favorite")];
+        return [...items, this.getLastBreadcrumb(this.translate("Favorite"))];
       case ResourceWorkspaceFilterTypes.RECENTLY_MODIFIED:
-        return [...items, this.getLastBreadcrumb("Recently modified")];
+        return [...items, this.getLastBreadcrumb(this.translate("Recently modified"))];
       case ResourceWorkspaceFilterTypes.SHARED_WITH_ME:
-        return [...items, this.getLastBreadcrumb("Shared with me")];
+        return [...items, this.getLastBreadcrumb(this.translate("Shared with me"))];
       case ResourceWorkspaceFilterTypes.ITEMS_I_OWN:
-        return [...items, this.getLastBreadcrumb("Items I own")];
+        return [...items, this.getLastBreadcrumb(this.translate("Items I own"))];
       case ResourceWorkspaceFilterTypes.TAG: {
         const filteredTagName = this.props.resourceWorkspaceContext.filter.payload.tag.slug;
-        return [...items, this.getLastBreadcrumb(`${filteredTagName} (tag)`)];
+        return [...items, this.getLastBreadcrumb(this.translate("{{filteredTagName}} (tag)", {filteredTagName}))];
       }
       case ResourceWorkspaceFilterTypes.ROOT_FOLDER: {
-        return [...items, this.getLastBreadcrumb(`root (folder)`)];
+        return [...items, this.getLastBreadcrumb(this.translate("root (folder)"))];
       }
       case ResourceWorkspaceFilterTypes.FOLDER: {
         const folder = this.props.resourceWorkspaceContext.filter.payload.folder;
-        const currentFolderName = (folder && folder.name) || "N/A";
-        return [...items, this.getLastBreadcrumb(`${currentFolderName} (folder)`)];
+        const currentFolderName = (folder && folder.name) || this.translate("N/A");
+        return [...items, this.getLastBreadcrumb(this.translate("{{currentFolderName}} (folder)", {currentFolderName}))];
       }
       case ResourceWorkspaceFilterTypes.GROUP: {
         const group = this.props.resourceWorkspaceContext.filter.payload.group;
-        const currentGroupName = (group && group.name) || "N/A";
-        return [...items, this.getLastBreadcrumb(`${currentGroupName} (group)`)];
+        const currentGroupName = (group && group.name) || this.translate("N/A");
+        return [...items, this.getLastBreadcrumb(this.translate("{{currentGroupName}} (group)", {currentGroupName}))];
       }
     }
 
@@ -75,7 +76,7 @@ class PasswordBreadcrumbs extends Component {
    * @return {JSX.Element}
    */
   get allItemsBreadcrumb() {
-    return <Breadcrumb name="All items" onClick={this.props.navigationContext.onGoToPasswordsRequested}/>;
+    return <Breadcrumb name={this.translate("All items")} onClick={this.props.navigationContext.onGoToPasswordsRequested}/>;
   }
 
   /**
@@ -97,6 +98,14 @@ class PasswordBreadcrumbs extends Component {
   }
 
   /**
+   * Get the translate function
+   * @returns {function(...[*]=)}
+   */
+  get translate() {
+    return this.props.t;
+  }
+
+  /**
    * Render the component
    * @returns {JSX}
    */
@@ -114,6 +123,7 @@ PasswordBreadcrumbs.propTypes = {
   location: PropTypes.object, // The router location
   history: PropTypes.object, // The router history
   navigationContext: PropTypes.any, // The application navigation context
+  t: PropTypes.func, // The translation function
 };
 
-export default withRouter(withNavigationContext(withResourceWorkspace(PasswordBreadcrumbs)));
+export default withRouter(withNavigationContext(withResourceWorkspace(withTranslation('common')(PasswordBreadcrumbs))));

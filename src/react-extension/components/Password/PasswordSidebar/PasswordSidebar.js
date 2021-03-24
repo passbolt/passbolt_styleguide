@@ -23,6 +23,7 @@ import PasswordSidebarPermissionsSection from "./PasswordSidebarPermissionsSecti
 import AppContext from "../../../contexts/AppContext";
 import PasswordSidebarActivitySection from "./PasswordSidebarActivitySection";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
+import {withTranslation} from "react-i18next";
 
 class PasswordSidebar extends React.Component {
   /**
@@ -46,7 +47,7 @@ class PasswordSidebar extends React.Component {
    * Get the sidebar subtitle
    */
   get subtitle() {
-    const defaultSubtitle = "Resource";
+    const defaultSubtitle = this.translate("Resource");
     const resource = this.props.resourceWorkspaceContext.details.resource;
 
     // Resources types might not be yet initialized at the moment this component is rendered.
@@ -58,7 +59,7 @@ class PasswordSidebar extends React.Component {
       const resourceType = this.context.resourceTypesSettings.findResourceTypeSlugById(resource.resource_type_id);
       switch (resourceType) {
         case this.context.resourceTypesSettings.DEFAULT_RESOURCE_TYPES_SLUGS.PASSWORD_AND_DESCRIPTION:
-          return "Resource with encrypted description";
+          return this.translate("Resource with encrypted description");
       }
     }
 
@@ -72,7 +73,7 @@ class PasswordSidebar extends React.Component {
     const baseUrl = this.context.userSettings.getTrustedDomain();
     const permalink = `${baseUrl}/app/passwords/view/${this.props.resourceWorkspaceContext.details.resource.id}`;
     await this.context.port.request("passbolt.clipboard.copy", permalink);
-    this.props.actionFeedbackContext.displaySuccess("The permalink has been copied to clipboard");
+    this.props.actionFeedbackContext.displaySuccess(this.translate("The permalink has been copied to clipboard"));
   }
 
   /**
@@ -80,6 +81,14 @@ class PasswordSidebar extends React.Component {
    */
   handleCloseClick() {
     this.props.resourceWorkspaceContext.onLockDetail();
+  }
+
+  /**
+   * Get the translate function
+   * @returns {function(...[*]=)}
+   */
+  get translate() {
+    return this.props.t;
   }
 
   /**
@@ -101,7 +110,7 @@ class PasswordSidebar extends React.Component {
             <h3>
               <div className="title-wrapper">
                 <span className="name">{this.props.resourceWorkspaceContext.details.resource.name}</span>
-                <a className="title-link" title="Copy the link to this password" onClick={this.handlePermalinkClick}>
+                <a className="title-link" title={this.translate("Copy the link to this password")} onClick={this.handlePermalinkClick}>
                   <Icon name="link"/>
                   <span className="visuallyhidden">Copy the link to this password</span>
                 </a>
@@ -134,6 +143,7 @@ PasswordSidebar.contextType = AppContext;
 PasswordSidebar.propTypes = {
   resourceWorkspaceContext: PropTypes.object,
   actionFeedbackContext: PropTypes.any, // The action feedback context
+  t: PropTypes.func, // The translation function
 };
 
-export default withResourceWorkspace(withActionFeedback(PasswordSidebar));
+export default withResourceWorkspace(withActionFeedback(withTranslation('common')(PasswordSidebar)));

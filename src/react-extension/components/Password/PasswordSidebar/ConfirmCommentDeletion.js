@@ -19,6 +19,7 @@ import FormCancelButton from "../../../../react/components/Common/Inputs/FormSub
 import DialogWrapper from "../../../../react/components/Common/Dialog/DialogWrapper/DialogWrapper";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import {withLoading} from "../../../../react/contexts/Common/LoadingContext";
+import {Trans, withTranslation} from "react-i18next";
 
 class ConfirmDeleteDialog extends Component {
   /**
@@ -74,7 +75,7 @@ class ConfirmDeleteDialog extends Component {
       this.props.loadingContext.remove();
 
       // Asks for a success  message
-      await this.props.actionFeedbackContext.displaySuccess("The comment has been deleted successfully");
+      await this.props.actionFeedbackContext.displaySuccess(this.translate("The comment has been deleted successfully"));
 
       // Stop processing
       await this.setState({actions: {processing: false}});
@@ -106,12 +107,20 @@ class ConfirmDeleteDialog extends Component {
     this.props.onClose();
   }
 
+  /**
+   * Get the translate function
+   * @returns {function(...[*]=)}
+   */
+  get translate() {
+    return this.props.t;
+  }
+
   render() {
     return (
       <div>
         <DialogWrapper
           className='comment-delete-dialog'
-          title="Delete comment?"
+          title={this.translate("Delete comment?")}
           onClose={this.handleClose}
           disabled={this.state.actions.processing}>
           <form
@@ -119,14 +128,14 @@ class ConfirmDeleteDialog extends Component {
             onSubmit={this.handleConfirm}
             noValidate>
             <div className="form-content">
-              <p>Are you sure you want to delete the comment?</p>
-              <p>Warning: Once the comment is deleted, it’ll be removed permanently and will not be recoverable.</p>
+              <p><Trans>Are you sure you want to delete the comment?</Trans></p>
+              <p><Trans>Warning: Once the comment is deleted, it’ll be removed permanently and will not be recoverable.</Trans></p>
             </div>
             <div className="submit-wrapper clearfix">
               <FormSubmitButton
                 disabled={this.state.actions.processing}
                 processing={this.state.processing}
-                value="Delete"
+                value={this.translate("Delete")}
                 warning={true}/>
               <FormCancelButton
                 disabled={this.state.actions.processing}
@@ -144,7 +153,8 @@ ConfirmDeleteDialog.contextType = AppContext;
 ConfirmDeleteDialog.propTypes = {
   actionFeedbackContext: PropTypes.object, // The action feedback context
   loadingContext: PropTypes.object, // The loading context
-  onClose: PropTypes.func // Whenever the dialog is clsoed
+  onClose: PropTypes.func, // Whenever the dialog is closed
+  t: PropTypes.func, // The translation function
 };
 
-export default withLoading(withActionFeedback(ConfirmDeleteDialog));
+export default withLoading(withActionFeedback(withTranslation('common')(ConfirmDeleteDialog)));

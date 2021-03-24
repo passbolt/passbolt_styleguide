@@ -20,6 +20,7 @@ import {withLoading} from "../../../../react/contexts/Common/LoadingContext";
 import ErrorDialog from "../../Dialog/ErrorDialog/ErrorDialog";
 import {withDialog} from "../../../../react/contexts/Common/DialogContext";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
+import {withTranslation} from "react-i18next";
 
 
 /**
@@ -98,7 +99,7 @@ class DisplayUserTheme extends React.Component {
    */
   async onSelectSuccess() {
     await this.props.loadingContext.remove();
-    await this.props.actionFeedbackContext.displaySuccess("The theme has been updated successfully");
+    await this.props.actionFeedbackContext.displaySuccess(this.translate("The theme has been updated successfully"));
   }
 
   /**
@@ -107,11 +108,19 @@ class DisplayUserTheme extends React.Component {
   async onSelectFailure(error) {
     await this.props.loadingContext.remove();
     const errorDialogProps = {
-      title: "There was an unexpected error...",
+      title: this.translate("There was an unexpected error..."),
       message: error.message
     };
     this.context.setContext({errorDialogProps});
     this.props.dialogContext.open(ErrorDialog);
+  }
+
+  /**
+   * Get the translate function
+   * @returns {function(...[*]=)}
+   */
+  get translate() {
+    return this.props.t;
   }
 
   /**
@@ -153,10 +162,11 @@ DisplayUserTheme.contextType = AppContext;
 DisplayUserTheme.propTypes = {
   actionFeedbackContext: PropTypes.object, // The action feedback context
   dialogContext: PropTypes.object, // The dialog context
-  loadingContext: PropTypes.object // The loading context
+  loadingContext: PropTypes.object, // The loading context
+  t: PropTypes.func, // The translation function
 };
 
-export default withActionFeedback(withDialog(withLoading(DisplayUserTheme)));
+export default withActionFeedback(withDialog(withLoading(withTranslation('common')(DisplayUserTheme))));
 
 
 

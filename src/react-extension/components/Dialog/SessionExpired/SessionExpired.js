@@ -15,6 +15,8 @@ import React, {Component} from "react";
 import AppContext from "../../../contexts/AppContext";
 import DialogWrapper from "../../../../react/components/Common/Dialog/DialogWrapper/DialogWrapper";
 import {withRouter} from "react-router-dom";
+import {Trans, withTranslation} from "react-i18next";
+import PropTypes from "prop-types";
 
 /**
  * This component allows user to delete a tag of the resources
@@ -61,14 +63,22 @@ class SessionExpired extends Component {
     return `${baseUrl}/auth/login`;
   }
 
+  /**
+   * Get the translate function
+   * @returns {function(...[*]=)}
+   */
+  get translate() {
+    return this.props.t;
+  }
+
   render() {
     return (
       <DialogWrapper
-        title="Session Expired"
+        title={this.translate("Session Expired")}
         onClose={this.handleCloseClick}
         className="session-expired-dialog">
         <div className="form-content">
-          <p>Your session has expired, you need to sign in.</p>
+          <p><Trans>Your session has expired, you need to sign in.</Trans></p>
         </div>
         <div className="submit-wrapper clearfix">
           <a ref={this.loginLinkRef}
@@ -76,7 +86,7 @@ class SessionExpired extends Component {
             className="primary button"
             target="_parent"
             role="button"
-            rel="noopener noreferrer">Sign in</a>
+            rel="noopener noreferrer"><Trans>Sign in</Trans></a>
         </div>
       </DialogWrapper>
     );
@@ -85,4 +95,8 @@ class SessionExpired extends Component {
 
 SessionExpired.contextType = AppContext;
 
-export default withRouter(SessionExpired);
+SessionExpired.propTypes = {
+  t: PropTypes.func, // The translation function
+};
+
+export default withRouter(withTranslation('common')(SessionExpired));

@@ -21,6 +21,7 @@ import {ResourceWorkspaceFilterTypes, withResourceWorkspace} from "../../../cont
 import PasswordCreateDialog from "../PasswordCreateDialog/PasswordCreateDialog";
 import FolderCreateDialog from "../../Folder/FolderCreateDialog/FolderCreateDialog";
 import PasswordImportDialog from "../PasswordImportDialog/PasswordImportDialog";
+import {Trans, withTranslation} from "react-i18next";
 
 /**
  * This component allows the current user to create a new resource
@@ -211,6 +212,13 @@ class PasswordWorkspaceMainMenu extends React.Component {
     return this.folderSelected === null || this.folderSelected.permission.type >= 7;
   }
 
+  /**
+   * Get the translate function
+   * @returns {function(...[*]=)}
+   */
+  get translate() {
+    return this.props.t;
+  }
 
   /**
    * Render the component
@@ -222,7 +230,7 @@ class PasswordWorkspaceMainMenu extends React.Component {
         <div className="dropdown" ref={this.createMenuRef}>
           <a className={`button create primary ready ${this.canCreate() ? "" : "disabled"}`} onClick={this.handleCreateClickEvent}>
             <Icon name="plus-circle"/>
-            <span>Create</span>
+            <span><Trans>Create</Trans></span>
           </a>
           <ul className={`dropdown-content menu ready ${this.state.createMenuOpen ? "visible" : ""}`}>
             <li id="password_action">
@@ -230,7 +238,7 @@ class PasswordWorkspaceMainMenu extends React.Component {
                 <div className="main-cell-wrapper">
                   <div className="main-cell">
                     <a onClick={this.handleCreateMenuPasswordClickEvent}>
-                      <span>New password</span>
+                      <span><Trans>New password</Trans></span>
                     </a>
                   </div>
                 </div>
@@ -241,7 +249,7 @@ class PasswordWorkspaceMainMenu extends React.Component {
                 <div className="main-cell-wrapper">
                   <div className="main-cell">
                     <a onClick={this.handleMenuCreateFolderClickEvent}>
-                      <span>New folder</span>
+                      <span><Trans>New folder</Trans></span>
                     </a>
                   </div>
                 </div>
@@ -254,7 +262,7 @@ class PasswordWorkspaceMainMenu extends React.Component {
             className="button"
             onClick={this.handleImportClickEvent}>
             <Icon name="upload-a" />
-            <span className="visuallyhidden">upload</span>
+            <span className="visuallyhidden"><Trans>upload</Trans></span>
           </a>
         }
       </>
@@ -266,7 +274,8 @@ PasswordWorkspaceMainMenu.contextType = AppContext;
 
 PasswordWorkspaceMainMenu.propTypes = {
   dialogContext: PropTypes.any, // the dialog context
-  resourceWorkspaceContext: PropTypes.any // the resource workspace context
+  resourceWorkspaceContext: PropTypes.any, // the resource workspace context
+  t: PropTypes.func, // The translation function
 };
 
-export default withDialog(withResourceWorkspace(PasswordWorkspaceMainMenu));
+export default withDialog(withResourceWorkspace(withTranslation('common')(PasswordWorkspaceMainMenu)));

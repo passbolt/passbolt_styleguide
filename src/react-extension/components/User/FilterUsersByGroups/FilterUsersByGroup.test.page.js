@@ -23,6 +23,7 @@ import DisplayGroupsFilterContextualMenuPageObject from "./FilterUsersByGroupCon
 import ManageContextualMenu from "../../ManageContextualMenu";
 import ContextualMenuContextProvider from "../../../../react/contexts/Common/ContextualMenuContext";
 import DisplayGroupsContextualMenuPageObject from "./DisplayGroupContextualMenu.test.page";
+import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 
 /**
  * The FilterUsersByGroups component represented as a page
@@ -35,14 +36,16 @@ export default class FilterUsersByGroupPage {
    */
   constructor(appContext, props) {
     this._page = render(
-      <AppContext.Provider value={appContext}>
-        <Router>
-          <ContextualMenuContextProvider>
-            <ManageContextualMenu/>
-            <DisplayGroups {...props}/>
-          </ContextualMenuContextProvider>
-        </Router>
-      </AppContext.Provider>
+      <MockTranslationProvider>
+        <AppContext.Provider value={appContext}>
+          <Router>
+            <ContextualMenuContextProvider>
+              <ManageContextualMenu/>
+              <DisplayGroups {...props}/>
+            </ContextualMenuContextProvider>
+          </Router>
+        </AppContext.Provider>
+      </MockTranslationProvider>
     );
     this.setupPageObjects();
   }

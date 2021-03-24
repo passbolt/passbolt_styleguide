@@ -18,6 +18,7 @@ import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import {withLoading} from "../../../../react/contexts/Common/LoadingContext";
 import Tooltip from "../../../../react/components/Common/Tooltip/Tooltip";
 import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
+import {Trans, withTranslation} from "react-i18next";
 
 /**
  * This component allows the current user to edit the description of a resource
@@ -149,7 +150,7 @@ class DescriptionEditor extends React.Component {
 
     try {
       await this.updateResource();
-      await this.props.actionFeedbackContext.displaySuccess("The description has been updated successfully");
+      await this.props.actionFeedbackContext.displaySuccess(this.translate("The description has been updated successfully"));
       await this.props.resourceWorkspaceContext.onResourceDescriptionEdited();
       this.close();
     } catch (error) {
@@ -350,6 +351,14 @@ class DescriptionEditor extends React.Component {
     }
   }
 
+  /**
+   * Get the translate function
+   * @returns {function(...[*]=)}
+   */
+  get translate() {
+    return this.props.t;
+  }
+
   /*
    * =============================================================
    * Render
@@ -365,7 +374,7 @@ class DescriptionEditor extends React.Component {
         <div className="form-content" ref={this.elementRef}>
           <div className="input textarea required">
             <textarea name="description" className="fluid" ref={this.textareaRef}
-              maxLength="10000" placeholder="Enter a description" value={this.description}
+              maxLength="10000" placeholder={this.translate("Enter a description")} value={this.description}
               onChange={this.handleInputChange}
               disabled={this.hasAllInputDisabled()} autoComplete="off"/>
           </div>
@@ -375,23 +384,23 @@ class DescriptionEditor extends React.Component {
           <div className="actions">
             <a className={`button description-editor-submit ${this.hasAllInputDisabled() ? "primary processing disabled" : ""}`}
               onClick={this.handleFormSubmit} role="button">
-              <span>Save</span>
+              <span><Trans>Save</Trans></span>
             </a>
             <a className={`cancel button ${this.hasAllInputDisabled() ? "disabled" : ""}`} role="button"
-              onClick={this.handleCancel}>Cancel</a>
+              onClick={this.handleCancel}><Trans>Cancel</Trans></a>
             <div className="description-lock">
               {!this.areResourceTypesEnabled() &&
-              <Tooltip message="Do not store sensitive data. Unlike the password, this data is not encrypted. Upgrade to version 3 to encrypt this information."
+              <Tooltip message={this.translate("Do not store sensitive data. Unlike the password, this data is not encrypted. Upgrade to version 3 to encrypt this information.")}
                 icon="info-circle"/>
               }
               {this.areResourceTypesEnabled() && !this.state.encryptDescription &&
               <a role="button" onClick={event => this.handleDescriptionToggle(event)} className="lock-toggle">
-                <Tooltip message="Do not store sensitive data or click here to enable encryption for the description field." icon="lock-open" />
+                <Tooltip message={this.translate("Do not store sensitive data or click here to enable encryption for the description field.")} icon="lock-open" />
               </a>
               }
               {this.areResourceTypesEnabled() && this.state.encryptDescription &&
               <a role="button" onClick={event => this.handleDescriptionToggle(event)} className="lock-toggle">
-                <Tooltip message="The description content will be encrypted." icon="lock" />
+                <Tooltip message={this.translate("The description content will be encrypted.")} icon="lock" />
               </a>
               }
             </div>
@@ -411,7 +420,8 @@ DescriptionEditor.propTypes = {
   onClose: PropTypes.func, // toggle to display or not the editor
   resourceWorkspaceContext: PropTypes.any, // The resource workspace context
   actionFeedbackContext: PropTypes.any, // The action feedback context
-  loadingContext: PropTypes.any // The loading context
+  loadingContext: PropTypes.any, // The loading context
+  t: PropTypes.func, // The translation function
 };
 
-export default withResourceWorkspace(withLoading(withActionFeedback(DescriptionEditor)));
+export default withResourceWorkspace(withLoading(withActionFeedback(withTranslation('common')(DescriptionEditor))));

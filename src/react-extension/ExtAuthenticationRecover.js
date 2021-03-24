@@ -20,6 +20,7 @@ import DialogContextProvider from "../react/contexts/Common/DialogContext";
 import RecoverAuthentication from "./components/AuthenticationRecover/RecoverAuthentication/RecoverAuthentication";
 import SiteSettings from "./lib/Settings/SiteSettings";
 import Footer from "./components/Footer/Footer";
+import TranslationProvider from "./components/Internationalisation/TranslationProvider";
 
 /**
  * The recover application served by the browser extension.
@@ -98,26 +99,28 @@ class ExtAuthenticationRecover extends Component {
    */
   render() {
     return (
-      <AppContext.Provider value={this.state}>
-        <AuthenticationContextProvider value={this.defaultContextValue}>
-          <DialogContextProvider>
-            <div id="container" className="container page login">
-              <ManageDialogs/>
-              <div className="content">
-                <div className="header">
-                  <div className="logo"><span className="visually-hidden">Passbolt</span></div>
-                </div>
-                <div className="login-form">
-                  <RecoverAuthentication siteSettings={this.state.siteSettings}/>
+      <TranslationProvider loadingPath="/data/locales/{{lng}}/{{ns}}.json">
+        <AppContext.Provider value={this.state}>
+          <AuthenticationContextProvider value={this.defaultContextValue}>
+            <DialogContextProvider>
+              <div id="container" className="container page login">
+                <ManageDialogs/>
+                <div className="content">
+                  <div className="header">
+                    <div className="logo"><span className="visually-hidden">Passbolt</span></div>
+                  </div>
+                  <div className="login-form">
+                    <RecoverAuthentication siteSettings={this.state.siteSettings}/>
+                  </div>
                 </div>
               </div>
-            </div>
-            <Footer
-              siteSettings={this.state.siteSettings}
-              extensionVersion={this.state.extensionVersion}/>
-          </DialogContextProvider>
-        </AuthenticationContextProvider>
-      </AppContext.Provider>
+              <Footer
+                siteSettings={this.state.siteSettings}
+                extensionVersion={this.state.extensionVersion}/>
+            </DialogContextProvider>
+          </AuthenticationContextProvider>
+        </AppContext.Provider>
+      </TranslationProvider>
     );
   }
 }

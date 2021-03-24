@@ -20,6 +20,7 @@ import FormSubmitButton from "../../../../react/components/Common/Inputs/FormSub
 import FormCancelButton from "../../../../react/components/Common/Inputs/FormSubmitButton/FormCancelButton";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import {withDialog} from "../../../../react/contexts/Common/DialogContext";
+import {Trans, withTranslation} from "react-i18next";
 
 class FolderCreateDialog extends Component {
   /**
@@ -56,7 +57,7 @@ class FolderCreateDialog extends Component {
       inlineValidation: false,
 
       // Fields and errors
-      name: 'loading...',
+      name: this.translate("loading..."),
       nameError: false
     };
   }
@@ -143,7 +144,7 @@ class FolderCreateDialog extends Component {
    * Handle save operation success.
    */
   async handleSaveSuccess(folderId) {
-    await this.props.actionFeedbackContext.displaySuccess("The folder has been added successfully");
+    await this.props.actionFeedbackContext.displaySuccess(this.translate("The folder has been added successfully"));
     this.selectAndScrollToFolder(folderId);
     this.props.onClose();
   }
@@ -170,7 +171,7 @@ class FolderCreateDialog extends Component {
    */
   handleError(error) {
     const errorDialogProps = {
-      title: "There was an unexpected error...",
+      title: this.translate("There was an unexpected error..."),
       message: error.message
     };
     this.context.setContext({errorDialogProps});
@@ -245,10 +246,10 @@ class FolderCreateDialog extends Component {
     let nameError = false;
     const name = this.state.name.trim();
     if (!name.length) {
-      nameError = "A name is required.";
+      nameError = this.translate("A name is required.");
     }
     if (name.length > 64) {
-      nameError = "A name can not be more than 64 char in length.";
+      nameError = this.translate("A name can not be more than 64 char in length.");
     }
     return new Promise(resolve => {
       this.setState({nameError: nameError}, resolve);
@@ -272,20 +273,28 @@ class FolderCreateDialog extends Component {
   }
 
   /**
+   * Get the translate function
+   * @returns {function(...[*]=)}
+   */
+  get translate() {
+    return this.props.t;
+  }
+
+  /**
    * Render
    * @returns {JSX}
    */
   render() {
     return (
-      <DialogWrapper className='folder-create-dialog' title="Create a new folder"
+      <DialogWrapper className='folder-create-dialog' title={this.translate("Create a new folder")}
         onClose={this.handleClose} disabled={this.hasAllInputDisabled()}>
         <form className="folder-create-form" onSubmit={this.handleFormSubmit} noValidate>
           <div className="form-content">
             <div className="input text required">
-              <label htmlFor="folder-name-input">Name</label>
+              <label htmlFor="folder-name-input"><Trans>Name</Trans></label>
               <input id="folder-name-input" name="name"
                 ref={this.nameRef}
-                type="text" value={this.state.name} placeholder="Untitled folder"
+                type="text" value={this.state.name} placeholder={this.translate("Untitled folder")}
                 maxLength="64" required="required"
                 disabled={this.hasAllInputDisabled()}
                 onChange={this.handleInputChange}
@@ -297,7 +306,7 @@ class FolderCreateDialog extends Component {
             </div>
           </div>
           <div className="submit-wrapper clearfix">
-            <FormSubmitButton disabled={this.hasAllInputDisabled()} processing={this.state.processing} value="Save"/>
+            <FormSubmitButton disabled={this.hasAllInputDisabled()} processing={this.state.processing} value={this.translate("Save")}/>
             <FormCancelButton disabled={this.hasAllInputDisabled()} onClick={this.handleClose}/>
           </div>
         </form>
@@ -311,7 +320,8 @@ FolderCreateDialog.contextType = AppContext;
 FolderCreateDialog.propTypes = {
   actionFeedbackContext: PropTypes.any, // The action feedback context
   onClose: PropTypes.func,
-  dialogContext: PropTypes.any // The dialog context
+  dialogContext: PropTypes.any, // The dialog context
+  t: PropTypes.func, // The translation function
 };
 
-export default withActionFeedback(withDialog(FolderCreateDialog));
+export default withActionFeedback(withDialog(withTranslation('common')(FolderCreateDialog)));

@@ -12,9 +12,10 @@
  */
 
 import React from 'react';
-import moment from "moment";
 import AppContext from "../../../contexts/AppContext";
-import {withDialog} from "../../../../react/contexts/Common/DialogContext";
+import {Trans, withTranslation} from "react-i18next";
+import PropTypes from "prop-types";
+import {DateTime} from "luxon";
 
 /**
  * This component displays the user GPG information
@@ -138,7 +139,7 @@ class DisplayUserGpgInformation extends React.Component {
    */
   formatDate(data) {
     try {
-      return moment(new Date(data)).format("LLL");
+      return DateTime.fromJSDate(new Date(data)).setLocale(this.props.i18n.lng).toLocaleString(DateTime.DATETIME_FULL);
     } catch (error) {
       return "";
     }
@@ -161,6 +162,14 @@ class DisplayUserGpgInformation extends React.Component {
   }
 
   /**
+   * Get the translate function
+   * @returns {function(...[*]=)}
+   */
+  get translate() {
+    return this.props.t;
+  }
+
+  /**
    * Render the component
    */
   render() {
@@ -168,15 +177,15 @@ class DisplayUserGpgInformation extends React.Component {
       <div className="grid grid-responsive-12 profile-key-inspector-information">
         <div className="row">
           <div className="col6 key-info">
-            <h3>Information for public and secret key</h3>
+            <h3><Trans>Information for public and secret key</Trans></h3>
             <table className="table-info" id="privkeyinfo">
               <tbody>
                 <tr>
-                  <td>Key Id</td>
+                  <td><Trans>Key Id</Trans></td>
                   <td className="keyId">
                     <div
                       className="input select tooltip-top"
-                      data-tooltip="sorry you can only have one key set at the moment">
+                      data-tooltip={this.translate("sorry you can only have one key set at the moment")}>
                       <select
                         id="keyId"
                         disabled={true}>
@@ -188,34 +197,34 @@ class DisplayUserGpgInformation extends React.Component {
                   </td>
                 </tr>
                 <tr>
-                  <td>Uid</td>
+                  <td><Trans>Uid</Trans></td>
                   <td className="uid">{this.userFullname}</td>
                 </tr>
                 <tr>
-                  <td>Fingerprint</td>
+                  <td><Trans>Fingerprint</Trans></td>
                   <td className="fingerprint">{this.gpgKeyInfo.fingerprint}</td>
                 </tr>
                 <tr>
-                  <td>Created</td>
+                  <td><Trans>Created</Trans></td>
                   <td className="created">{this.gpgKeyInfo.created}</td>
                 </tr>
                 <tr>
-                  <td>Expires</td>
+                  <td><Trans>Expires</Trans></td>
                   <td className="expires">{this.gpgKeyInfo.expires}</td>
                 </tr>
                 <tr>
-                  <td>Key Length</td>
+                  <td><Trans>Key Length</Trans></td>
                   <td className="length">{this.gpgKeyInfo.length}</td>
                 </tr>
                 <tr>
-                  <td>Algorithm</td>
+                  <td><Trans>Algorithm</Trans></td>
                   <td className="algorithm">{this.gpgKeyInfo.type}</td>
                 </tr>
               </tbody>
             </table>
           </div>
           <div className="col6 last key-export">
-            <h3>Public key block</h3>
+            <h3><Trans>Public key block</Trans></h3>
             <div className="input textarea gpgkey" rel="publicKey">
               <textarea
                 defaultValue={this.gpgKeyInfo.armoredKey}
@@ -230,5 +239,10 @@ class DisplayUserGpgInformation extends React.Component {
 
 DisplayUserGpgInformation.contextType = AppContext;
 
-export default withDialog(DisplayUserGpgInformation);
+DisplayUserGpgInformation.propTypes = {
+  t: PropTypes.func, // The translation function
+  i18n: PropTypes.any // The i18n context translation
+};
+
+export default withTranslation('common')(DisplayUserGpgInformation);
 

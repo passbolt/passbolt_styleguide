@@ -12,22 +12,22 @@
  * @since         3.0.0
  */
 
-import moment from 'moment/moment';
+import {DateTime} from "luxon";
 
 export default (resourceId, storage) => {
   return new Promise(async (resolve) => {
     const {resources} = await storage.local.get(["resources"]);
     const resourceIndex = resources.findIndex(item => item.id === resourceId);
     const resource = resources[resourceIndex];
-    resource.modified = moment().format("YYYY-MM-DD[T]HH:mm:ss[+]00:00");
+    resource.modified = DateTime.now().toISO();
     resource.modified_by = "f848277c-5398-58f8-a82a-72397af2d450";
     const favorite = {
       id: "56216dba-b6da-592b-87cb-fb5cbbd0a424",
       user_id: "f848277c-5398-58f8-a82a-72397af2d450",
       foreign_key: "8e3874ae-4b40-590b-968a-418f704b9d9a",
       foreign_model: "Resource",
-      created: moment().format("YYYY-MM-DD[T]HH:mm:ss[+]00:00"),
-      modified: moment().format("YYYY-MM-DD[T]HH:mm:ss[+]00:00")
+      created: DateTime.now().toISO(),
+      modified: DateTime.now().toISO(),
     };
     resource.favorite = favorite
     resources[resourceIndex] = resource;

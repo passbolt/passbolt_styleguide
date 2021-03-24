@@ -27,7 +27,7 @@ describe("ProgressDialog", () => {
 
     const {container} = render(
       <AppContext.Provider value={appContext}>
-        <ProgressDialog debug/>
+        <ProgressDialog debug t={text => text}/>
       </AppContext.Provider>
     );
 

@@ -13,16 +13,29 @@
  */
 import React, {Component} from "react";
 import {AuthenticationContext} from "../../../contexts/AuthenticationContext";
+import {Trans, withTranslation} from "react-i18next";
+import PropTypes from "prop-types";
 
 class GenerateKeyOnPassphraseLostSecondaryAction extends Component {
+  /**
+   * Get the translate function
+   * @returns {function(...[*]=)}
+   */
+  get translate() {
+    return this.props.t;
+  }
+
   render() {
     return (
       <a onClick={this.context.onGoToGenerateGpgKeyRequested}>
-        I lost my passphrase, generate a new private key.
+        <Trans>I lost my passphrase, generate a new private key.</Trans>
       </a>
     );
   }
 }
 
 GenerateKeyOnPassphraseLostSecondaryAction.contextType = AuthenticationContext;
-export default GenerateKeyOnPassphraseLostSecondaryAction;
+GenerateKeyOnPassphraseLostSecondaryAction.propTypes = {
+  t: PropTypes.func, // The translation function
+};
+export default withTranslation('common')(GenerateKeyOnPassphraseLostSecondaryAction);

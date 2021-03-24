@@ -17,6 +17,7 @@ import {AuthenticationContext} from "../../../contexts/AuthenticationContext";
 import PropTypes from "prop-types";
 import {withDialog} from "../../../../react/contexts/Common/DialogContext";
 import Icon from "../../../../react/components/Common/Icons/Icon";
+import {Trans, withTranslation} from "react-i18next";
 
 /**
  * This component checks the passphrase of an user gpg key
@@ -227,17 +228,25 @@ class CheckPassphrase extends Component {
   }
 
   /**
+   * Get the translate function
+   * @returns {function(...[*]=)}
+   */
+  get translate() {
+    return this.props.t;
+  }
+
+  /**
    * Render the component
    */
   render() {
     const processingClassName = this.isProcessing ? 'processing' : '';
     return (
       <div className="check-passphrase">
-        <h1>Please enter your passphrase to continue.</h1>
+        <h1><Trans>Please enter your passphrase to continue.</Trans></h1>
         <form acceptCharset="utf-8" onSubmit={this.handleSubmit} className="enter-passphrase">
           <div className="form-content">
             <div className={`input text password required ${this.hasErrors ? "error" : ""}`}>
-              <label htmlFor="passphrase">Passphrase</label>
+              <label htmlFor="passphrase"><Trans>Passphrase</Trans></label>
               <input
                 id="passphrase"
                 ref={this.passphraseInputRef}
@@ -256,10 +265,10 @@ class CheckPassphrase extends Component {
               {this.state.hasBeenValidated &&
               <>
                 {this.state.errors.emptyPassphrase &&
-                  <div className="empty-passphrase error-message">The passphrase should not be empty.</div>
+                  <div className="empty-passphrase error-message"><Trans>The passphrase should not be empty.</Trans></div>
                 }
                 {this.state.errors.invalidPassphrase &&
-                <div className="invalid-passphrase error-message">The passphrase is invalid.</div>
+                <div className="invalid-passphrase error-message"><Trans>The passphrase is invalid.</Trans></div>
                 }
               </>
               }
@@ -274,7 +283,7 @@ class CheckPassphrase extends Component {
                   onChange={this.handleToggleRememberMe}
                   disabled={!this.areActionsAllowed}/>
                 <label htmlFor="remember-me">
-                  Remember until signed out.
+                  <Trans>Remember until signed out.</Trans>
                 </label>
               </div>
             }
@@ -285,7 +294,7 @@ class CheckPassphrase extends Component {
               className={`button primary big full-width ${processingClassName}`}
               role="button"
               disabled={this.isProcessing}>
-              Verify
+              <Trans>Verify</Trans>
             </button>
             {this.props.secondaryAction}
           </div>
@@ -299,6 +308,7 @@ CheckPassphrase.contextType = AuthenticationContext;
 CheckPassphrase.propTypes = {
   canRememberMe: PropTypes.bool, // True if the remember me flag must be displayed
   dialogContext: PropTypes.any, // The dialog context
-  secondaryAction: PropTypes.any // Secondary action to display
+  secondaryAction: PropTypes.any, // Secondary action to display
+  t: PropTypes.func, // The translation function
 };
-export default withDialog(CheckPassphrase);
+export default withDialog(withTranslation('common')(CheckPassphrase));

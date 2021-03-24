@@ -25,6 +25,7 @@ import DisplaySimulateSynchronizeUserDirectoryAdministrationDialog
 import {withDialog} from "../../../../react/contexts/Common/DialogContext";
 import DisplaySynchronizeUserDirectoryAdministrationDialog
   from "../DisplaySynchronizeUserDirectoryAdministration/DisplaySynchronizeUserDirectoryAdministrationDialog";
+import {Trans, withTranslation} from "react-i18next";
 
 /**
  * This component is a container of multiple actions applicable on setting
@@ -126,6 +127,14 @@ class DisplayAdministrationWorkspaceActions extends React.Component {
   }
 
   /**
+   * Get the translate function
+   * @returns {function(...[*]=)}
+   */
+  get translate() {
+    return this.props.t;
+  }
+
+  /**
    * Render the component
    * @returns {JSX}
    */
@@ -137,7 +146,7 @@ class DisplayAdministrationWorkspaceActions extends React.Component {
             <li>
               <a className={`button ${this.isSaveEnabled() ? "" : "disabled"}`} onClick={this.handleSaveClick}>
                 <Icon name="save"/>
-                <span>Save settings</span>
+                <span><Trans>Save settings</Trans></span>
               </a>
             </li>
             {this.isUserDirectorySelected() &&
@@ -145,19 +154,19 @@ class DisplayAdministrationWorkspaceActions extends React.Component {
               <li>
                 <a className={`button ${this.isTestEnabled() ? "" : "disabled"}`} onClick={this.handleTestClick}>
                   <Icon name="plug"/>
-                  <span>Test settings</span>
+                  <span><Trans>Test settings</Trans></span>
                 </a>
               </li>
               <li>
                 <a className={`button ${this.isSynchronizeEnabled() ? "" : "disabled"}`} onClick={this.handleSimulateSynchronizeClick}>
                   <Icon name="magic-wand"/>
-                  <span>Simulate synchronize</span>
+                  <span><Trans>Simulate synchronize</Trans></span>
                 </a>
               </li>
               <li>
                 <a className={`button ${this.isSynchronizeEnabled() ? "" : "disabled"}`} onClick={this.handleSynchronizeClick}>
                   <Icon name="refresh"/>
-                  <span>Synchronize</span>
+                  <span><Trans>Synchronize</Trans></span>
                 </a>
               </li>
             </div>
@@ -173,7 +182,8 @@ DisplayAdministrationWorkspaceActions.contextType = AppContext;
 
 DisplayAdministrationWorkspaceActions.propTypes = {
   administrationWorkspaceContext: PropTypes.object, // The administration workspace context
-  dialogContext: PropTypes.any // The dialog context
+  dialogContext: PropTypes.any, // The dialog context
+  t: PropTypes.func, // The translation function
 };
 
-export default withDialog(withAdministrationWorkspace(DisplayAdministrationWorkspaceActions));
+export default withDialog(withAdministrationWorkspace(withTranslation('common')(DisplayAdministrationWorkspaceActions)));

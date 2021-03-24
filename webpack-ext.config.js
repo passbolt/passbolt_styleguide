@@ -3,6 +3,7 @@
  * Only used for demo purpose as the browser extension build its own artefact.
  */
 const path = require("path");
+const CopyPlugin = require("copy-webpack-plugin");
 
 /**
  * Demo entries used while testing with webpack-dev-server (add the argument --env.demo=true to the command)
@@ -34,6 +35,14 @@ const config = {
       }
     ]
   },
+  plugins: [
+    new CopyPlugin([
+      {
+        from: "src/react-extension/assets/i18n/**/*.json",
+        to: path.resolve(__dirname, "build/js/dist/"),
+      },
+    ]),
+  ],
   optimization: {
     splitChunks: {
       cacheGroups: {
