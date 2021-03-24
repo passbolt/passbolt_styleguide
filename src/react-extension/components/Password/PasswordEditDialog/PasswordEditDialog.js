@@ -26,6 +26,12 @@ import FormCancelButton from "../../../../react/components/Common/Inputs/FormSub
 import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 import {Trans, withTranslation} from "react-i18next";
 
+/** Resource password max length */
+const RESOURCE_PASSWORD_MAX_LENGTH = 4096;
+
+/** Resource description max length */
+const RESOURCE_DESCRIPTION_MAX_LENGTH = 10000;
+
 class PasswordEditDialog extends Component {
   constructor(props, context) {
     super(props, context);
@@ -47,8 +53,10 @@ class PasswordEditDialog extends Component {
       uriError: "",
       password: "",
       passwordError: "",
+      passwordWarning: "",
       description: resource.description || "",
       descriptionError: "",
+      descriptionWarning: "",
       viewPassword: false,
       passwordInputHasFocus: false,
       isSecretDecrypting: true,
@@ -70,6 +78,7 @@ class PasswordEditDialog extends Component {
     this.handleDescriptionInputFocus = this.handleDescriptionInputFocus.bind(this);
     this.handleDescriptionInputBlur = this.handleDescriptionInputBlur.bind(this);
     this.handleDescriptionToggle = this.handleDescriptionToggle.bind(this);
+    this.handleDescriptionInputKeyUp = this.handleDescriptionInputKeyUp.bind(this);
   }
 
   /**
@@ -423,8 +432,12 @@ class PasswordEditDialog extends Component {
   /**
    * Handle password input keyUp event.
    */
-  handlePasswordInputKeyUp() {
-    this.validatePasswordInput();
+  async handlePasswordInputKeyUp() {
+    const hasResourcePasswordMaxLength = this.state.password.length >= RESOURCE_PASSWORD_MAX_LENGTH;
+    await this.validatePasswordInput();
+    const warningMessage = this.translate("Warning: this is the maximum size for this field, make sure your data was not truncated");
+    const passwordWarning = hasResourcePasswordMaxLength ? warningMessage : '';
+    this.setState({passwordWarning});
   }
 
   /**
@@ -470,6 +483,17 @@ class PasswordEditDialog extends Component {
       const encrypt = !this.state.encryptDescription;
       this.setState({encryptDescription: encrypt});
     }
+  }
+
+  /**
+   * Whenever the user input keys in the description area
+   */
+  handleDescriptionInputKeyUp() {
+    const hasResourceDescriptionMaxLength = this.state.description.length >= RESOURCE_DESCRIPTION_MAX_LENGTH;
+
+    const warningMessage = this.translate("Warning: this is the maximum size for this field, make sure your data was not truncated");
+    const descriptionWarning = hasResourceDescriptionMaxLength ? warningMessage : '';
+    this.setState({descriptionWarning});
   }
 
   /*
@@ -716,6 +740,11 @@ class PasswordEditDialog extends Component {
                 <div className="password message error">{this.state.passwordError}</div>
               </div>
               }
+              {this.state.passwordWarning &&
+              <div className="input text">
+                <div className="password warning message">{this.state.passwordWarning}</div>
+              </div>
+              }
             </div>
             <div className="input textarea">
               <label htmlFor="edit-password-form-description"><Trans>Description</Trans>&nbsp;
@@ -737,10 +766,14 @@ class PasswordEditDialog extends Component {
               <textarea id="edit-password-form-description" name="description" maxLength="10000"
                 className="required" placeholder={this.getDescriptionPlaceholder()} value={this.state.description}
                 disabled={this.hasAllInputDisabled() || this.isDescriptionDisabled()} onChange={this.handleInputChange} ref={this.descriptionInputRef}
-                onFocus={this.handleDescriptionInputFocus} onBlur={this.handleDescriptionInputBlur}>
+                onFocus={this.handleDescriptionInputFocus} onBlur={this.handleDescriptionInputBlur}
+                onKeyUp={this.handleDescriptionInputKeyUp}>
               </textarea>
               {this.state.descriptionError &&
               <div className="error message">{this.state.descriptionError}</div>
+              }
+              {this.state.descriptionWarning &&
+              <div className="warning message">{this.state.descriptionWarning}</div>
               }
             </div>
           </div>

@@ -28,6 +28,12 @@ import FormCancelButton from "../../../../react/components/Common/Inputs/FormSub
 
 import {Trans, withTranslation} from "react-i18next";
 
+/** Resource password max length */
+const RESOURCE_PASSWORD_MAX_LENGTH = 4096;
+
+/** Resource description max length */
+const RESOURCE_DESCRIPTION_MAX_LENGTH = 10000;
+
 class PasswordCreateDialog extends Component {
   constructor() {
     super();
@@ -46,8 +52,10 @@ class PasswordCreateDialog extends Component {
       uriError: "",
       password: "",
       passwordError: "",
+      passwordWarning: "",
       description: "",
       descriptionError: "",
+      descriptionWarning: "",
       viewPassword: false,
       passwordInputHasFocus: false,
       encryptDescription: false,
@@ -66,6 +74,7 @@ class PasswordCreateDialog extends Component {
     this.handleViewPasswordButtonClick = this.handleViewPasswordButtonClick.bind(this);
     this.handleGeneratePasswordButtonClick = this.handleGeneratePasswordButtonClick.bind(this);
     this.handleDescriptionToggle = this.handleDescriptionToggle.bind(this);
+    this.handleDescriptionInputKeyUp = this.handleDescriptionInputKeyUp.bind(this);
   }
 
   /**
@@ -203,7 +212,7 @@ class PasswordCreateDialog extends Component {
     }
 
     return new Promise(resolve => {
-      this.setState({nameError: nameError}, resolve);
+      this.setState({nameError: nameError, nameWarning: ''}, resolve);
     });
   }
 
@@ -419,6 +428,11 @@ class PasswordCreateDialog extends Component {
     if (this.state.hasAlreadyBeenValidated) {
       const state = this.validatePasswordInput();
       this.setState(state);
+    } else {
+      const hasResourcePasswordMaxLength = this.state.password.length >= RESOURCE_PASSWORD_MAX_LENGTH;
+      const warningMessage = this.translate("Warning: this is the maximum size for this field, make sure your data was not truncated");
+      const passwordWarning = hasResourcePasswordMaxLength ? warningMessage : '';
+      this.setState({passwordWarning});
     }
   }
 
@@ -464,6 +478,19 @@ class PasswordCreateDialog extends Component {
     }
     if (!isCurrentlyEncrypted && this.isEncryptedDescriptionEnabled()) {
       return this.setState({encryptDescription: true});
+    }
+  }
+
+  /**
+   * Whenever the user input keys in the description area
+   */
+  handleDescriptionInputKeyUp() {
+    if (!this.state.hasAlreadyBeenValidated) {
+      const hasResourceDescriptionMaxLength = this.state.description.length >= RESOURCE_DESCRIPTION_MAX_LENGTH;
+
+      const warningMessage = this.translate("Warning: this is the maximum size for this field, make sure your data was not truncated");
+      const descriptionWarning = hasResourceDescriptionMaxLength ? warningMessage : '';
+      this.setState({descriptionWarning});
     }
   }
 
@@ -587,6 +614,7 @@ class PasswordCreateDialog extends Component {
                   style={passwordInputStyle} ref={this.passwordInputRef}/>
                 <div className="security-token"
                   style={securityTokenStyle}>{securityTokenCode}</div>
+
               </div>
               <ul className="actions inline">
                 <li>
@@ -615,6 +643,11 @@ class PasswordCreateDialog extends Component {
                 <div className="password message error">{this.state.passwordError}</div>
               </div>
               }
+              {this.state.passwordWarning &&
+              <div className="input text">
+                <div className="password warning message">{this.state.passwordWarning}</div>
+              </div>
+              }
             </div>
             <div className="input textarea">
               <label htmlFor="create-password-form-description"><Trans>Description</Trans>&nbsp;
@@ -634,10 +667,13 @@ class PasswordCreateDialog extends Component {
               </label>
               <textarea id="create-password-form-description" name="description" maxLength="10000"
                 className="required" placeholder={this.translate("Add a description")} value={this.state.description}
-                disabled={this.state.processing} onChange={this.handleInputChange}>
+                disabled={this.state.processing}  onKeyUp={this.handleDescriptionInputKeyUp} onChange={this.handleInputChange}>
               </textarea>
               {this.state.descriptionError &&
               <div className="error message">{this.state.descriptionError}</div>
+              }
+              {this.state.descriptionWarning &&
+              <div className="warning message">{this.state.descriptionWarning}</div>
               }
             </div>
           </div>
