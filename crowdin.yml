@@ -1,4 +1,4 @@
 files:
   - source: /src/locales/en-US/*.json
-    translation: /folder/%locale%/%original_file_name%
+    translation: /src/locales/%locale%/%original_file_name%
 commit_message: '[skip-ci]'
