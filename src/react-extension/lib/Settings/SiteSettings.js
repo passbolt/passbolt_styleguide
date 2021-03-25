@@ -140,4 +140,20 @@ export default class SiteSettings {
   get version() {
     return getPropValue(this.settings, "app.version.number");
   }
+
+  /**
+   * Get application locale
+   * @returns {string}
+   */
+  get locale() {
+    return getPropValue(this.settings, "app.locale");
+  }
+
+  /**
+   * Get supported languages
+   * @returns {Object}
+   */
+  get supportedLocales() {
+    return getPropValue(this.settings, "passbolt.plugins.locale.options");
+  }
 }

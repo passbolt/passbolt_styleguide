@@ -16,19 +16,21 @@
 import {fireEvent, render, waitFor} from "@testing-library/react";
 import React from "react";
 import InstallExtension from "./InstallExtension";
+import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 
 /**
- * The PasswordSidebarCommentSection component represented as a page
+ * The InstallExtension component represented as a page
  */
 export default class InstallExtensionPage {
   /**
    * Default constructor
-   * @param appContext An app context
    * @param props Props to attach
    */
   constructor(props) {
     this._page = render(
-      <InstallExtension {...props}/>
+      <MockTranslationProvider>
+        <InstallExtension {...props}/>
+      </MockTranslationProvider>
     );
   }
 

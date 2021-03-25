@@ -16,6 +16,7 @@ import React from "react";
 import {render} from "@testing-library/react";
 import ProgressDialog from "./ProgressDialog";
 import AppContext from "../../../contexts/AppContext";
+import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 
 beforeEach(() => {
   jest.resetModules();
@@ -27,7 +28,9 @@ describe("ProgressDialog", () => {
 
     const {container} = render(
       <AppContext.Provider value={appContext}>
-        <ProgressDialog debug t={text => text}/>
+        <MockTranslationProvider>
+          <ProgressDialog debug t={text => text}/>
+        </MockTranslationProvider>
       </AppContext.Provider>
     );
 
@@ -59,7 +62,9 @@ describe("ProgressDialog", () => {
 
     const {container} = render(
       <AppContext.Provider value={appContext}>
-        <ProgressDialog debug />
+        <MockTranslationProvider>
+          <ProgressDialog debug />
+        </MockTranslationProvider>
       </AppContext.Provider>
     );
 

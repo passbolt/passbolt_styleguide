@@ -81,7 +81,7 @@ class DisplayUserDetailsInformation extends React.Component {
    * @return {string} The formatted date
    */
   formatDateTimeAgo(date) {
-    return DateTime.fromISO(date).toRelative({locale: this.props.i18n.lng});
+    return DateTime.fromISO(date).toRelative({locale: this.context.locale});
   }
 
   /**
@@ -136,7 +136,6 @@ DisplayUserDetailsInformation.contextType = AppContext;
 DisplayUserDetailsInformation.propTypes = {
   userWorkspaceContext: PropTypes.object, // The user workspace context
   t: PropTypes.func, // The translation function
-  i18n: PropTypes.any // The i18n context translation
 };
 
 export default withUserWorkspace(withTranslation('common')(DisplayUserDetailsInformation));

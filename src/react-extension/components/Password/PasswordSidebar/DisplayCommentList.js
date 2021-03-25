@@ -146,7 +146,7 @@ class DisplayCommentList extends React.Component {
                       </span>
                       }
                       <span
-                        className="modified">{DateTime.fromISO(comment.created).toRelative({locale: this.props.i18n.lng})}
+                        className="modified">{DateTime.fromISO(comment.created).toRelative({locale: this.context.locale})}
                       </span>
                     </div>
                     <div className="actions">
@@ -192,5 +192,4 @@ DisplayCommentList.propTypes = {
   onFetch: PropTypes.func, // Callback when the comments are fetched
   mustRefresh: PropTypes.bool, // Flag to force the refresh of the list
   t: PropTypes.func, // The translation function
-  i18n: PropTypes.any // The i18n context translation
 };

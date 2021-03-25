@@ -18,9 +18,10 @@ import ManageDialogs from "../react/components/Common/Dialog/ManageDialogs/Manag
 import DialogContextProvider from "../react/contexts/Common/DialogContext";
 import {BrowserRouter as Router} from "react-router-dom";
 import OrchestrateLogin from "./components/AuthenticationLogin/OrchestrateLogin/OrchestrateLogin";
-import SiteSettings from "./lib/Settings/SiteSettings";
 import Footer from "./components/Footer/Footer";
 import TranslationProvider from "./components/Internationalisation/TranslationProvider";
+import SiteSettings from "./lib/Settings/SiteSettings";
+import AppContext from "./contexts/AppContext";
 
 
 /**
@@ -29,11 +30,28 @@ import TranslationProvider from "./components/Internationalisation/TranslationPr
 class ExtAuthenticationLogin extends Component {
   /**
    * Default constructor
-   * @param props Component props
+   * @param props The component props
    */
   constructor(props) {
     super(props);
     this.state = this.defaultState;
+  }
+
+  async componentDidMount() {
+    this.removeSkeleton();
+    await this.getSiteSettings();
+    await this.getExtensionVersion();
+    this.getLocale();
+  }
+
+  /**
+   * Remove skeleton preloaded in html if any
+   */
+  removeSkeleton() {
+    const skeleton = document.getElementById("temporary-skeleton");
+    if (skeleton) {
+      skeleton.remove();
+    }
   }
 
   /**
@@ -42,7 +60,11 @@ class ExtAuthenticationLogin extends Component {
   get defaultState() {
     return {
       siteSettings: null, // The site settings
-      extensionVersion: null // The extension version
+      extensionVersion: null, // The extension version
+      locale: null, // The locale
+
+      // Locale
+      onUpdateLocaleRequested: this.onUpdateLocaleRequested.bind(this),
     };
   }
 
@@ -56,23 +78,8 @@ class ExtAuthenticationLogin extends Component {
     };
   }
 
-  /**
-   * Whenever the component is mounted
-   */
-  async componentDidMount() {
-    this.removeSkeleton();
-    await this.getSiteSettings();
-    await this.getExtensionVersion();
-  }
-
-  /**
-   * Remove skeleton preloaded in html if any
-   */
-  removeSkeleton() {
-    const skeleton = document.getElementById("temporary-skeleton");
-    if (skeleton) {
-      skeleton.remove();
-    }
+  isReady() {
+    return this.state.siteSettings !== null && this.state.locale !== null;
   }
 
   /**
@@ -89,8 +96,23 @@ class ExtAuthenticationLogin extends Component {
    * Get extension version
    */
   async getExtensionVersion() {
-    const extensionVersion = await this.props.port.request('passbolt.addon.get-version');
+    const extensionVersion = await this.props.port.request("passbolt.addon.get-version");
     this.setState({extensionVersion});
+  }
+
+  /**
+   * Get the locale
+   */
+  async getLocale() {
+    const locale = await this.props.port.request("passbolt.locale.get");
+    this.setState({locale});
+  }
+
+  /**
+   * Whenever the update of the locale is requested
+   */
+  async onUpdateLocaleRequested(locale) {
+    await this.setState({locale});
   }
 
   /**
@@ -98,29 +120,30 @@ class ExtAuthenticationLogin extends Component {
    */
   render() {
     return (
-      <TranslationProvider loadingPath="/data/locales/{{lng}}/{{ns}}.json">
-        <Router>
-          <AuthenticationContextProvider value={this.defaultContextValue}>
-            <DialogContextProvider>
-              <div id="container" className="container page login">
-                <ManageDialogs/>
-                <div className="content">
-                  <div className="header">
-                    <div className="logo"><span className="visually-hidden">Passbolt</span></div>
-                  </div>
-                  <div className="login-form">
-                    <OrchestrateLogin
-                      siteSettings={this.state.siteSettings}/>
+      <AppContext.Provider value={this.state}>
+        {this.isReady() &&
+        <TranslationProvider loadingPath="/data/locales/{{lng}}/{{ns}}.json">
+          <Router>
+            <AuthenticationContextProvider value={this.defaultContextValue}>
+              <DialogContextProvider>
+                <div id="container" className="container page login">
+                  <ManageDialogs/>
+                  <div className="content">
+                    <div className="header">
+                      <div className="logo"><span className="visually-hidden">Passbolt</span></div>
+                    </div>
+                    <div className="login-form">
+                      <OrchestrateLogin/>
+                    </div>
                   </div>
                 </div>
-              </div>
-              <Footer
-                siteSettings={this.state.siteSettings}
-                extensionVersion={this.state.extensionVersion}/>
-            </DialogContextProvider>
-          </AuthenticationContextProvider>
-        </Router>
-      </TranslationProvider>
+                <Footer/>
+              </DialogContextProvider>
+            </AuthenticationContextProvider>
+          </Router>
+        </TranslationProvider>
+        }
+      </AppContext.Provider>
     );
   }
 }

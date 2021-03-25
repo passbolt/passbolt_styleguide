@@ -83,7 +83,7 @@ class FolderSidebarInformationSection extends React.Component {
    * @return {string}
    */
   formatDateTimeAgo(date) {
-    return DateTime.fromISO(date).toRelative({locale: this.props.i18n.lng});
+    return DateTime.fromISO(date).toRelative({locale: this.context.locale});
   }
 
   /**
@@ -196,7 +196,6 @@ FolderSidebarInformationSection.propTypes = {
   history: PropTypes.object,
   resourceWorkspaceContext: PropTypes.object,
   t: PropTypes.func, // The translation function
-  i18n: PropTypes.any // The i18n context translation
 };
 
 export default withRouter(withResourceWorkspace(withTranslation('common')(FolderSidebarInformationSection)));

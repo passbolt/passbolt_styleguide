@@ -43,6 +43,7 @@ class ApiTriage extends Component {
       siteSettings: null, // The site settings
       trustedDomain: this.baseUrl, // The site domain (use trusted domain for compatibility with browser extension applications)
       getApiClientOptions: this.getApiClientOptions.bind(this), // Get the api client options
+      locale: null, // The locale
     };
   }
 
@@ -51,8 +52,9 @@ class ApiTriage extends Component {
    * Invoked immediately after component is inserted into the tree
    * @return {void}
    */
-  componentDidMount() {
-    this.getSiteSettings();
+  async componentDidMount() {
+    await this.getSiteSettings();
+    this.getLocale();
   }
 
   /**
@@ -117,13 +119,46 @@ class ApiTriage extends Component {
   }
 
   /**
+   * Get the locale to use to translate the application
+   * @returns {string|string}
+   */
+  getLocale() {
+    this.setState({locale: this.guessLocale()});
+  }
+
+  /**
+   * Guess the locale to use to translate the application
+   * @returns {string|string}
+   */
+  guessLocale() {
+    const locale = navigator.language;
+    const supportedLocales = Object.keys(this.state.siteSettings.supportedLocales);
+    if (supportedLocales.includes(locale)) {
+      return locale;
+    }
+
+    const nonExplicitLanguage = locale.split('-')[0];
+    const similarLanguage = supportedLocales.find(supportedLanguage => nonExplicitLanguage === supportedLanguage.split('-')[0]);
+    if (similarLanguage) {
+      return similarLanguage;
+    }
+
+    return this.state.siteSettings.locale;
+  }
+
+  isReady() {
+    return this.state.siteSettings !== null && this.state.locale !== null;
+  }
+
+  /**
    * Render the component
    * @returns {JSX}
    */
   render() {
     return (
-      <TranslationProvider loadingPath={`${this.state.trustedDomain}/locales/{{lng}}/{{ns}}.json`}>
-        <AppContext.Provider value={this.state}>
+      <AppContext.Provider value={this.state}>
+        {this.isReady() &&
+        <TranslationProvider loadingPath={`${this.state.trustedDomain}/locales/{{lng}}/{{ns}}.json`}>
           <div id="container" className="container page login">
             <div className="content">
               <div className="header">
@@ -137,8 +172,9 @@ class ApiTriage extends Component {
             </div>
           </div>
           <Footer/>
-        </AppContext.Provider>
-      </TranslationProvider>
+        </TranslationProvider>
+        }
+      </AppContext.Provider>
     );
   }
 }

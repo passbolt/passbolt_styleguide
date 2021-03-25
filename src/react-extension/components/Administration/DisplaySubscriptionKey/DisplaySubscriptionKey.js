@@ -270,7 +270,7 @@ class DisplaySubscriptionKey extends React.Component {
    */
   formatDate(date) {
     try {
-      return DateTime.fromISO(date).setLocale(this.props.i18n.lng).toLocaleString(DateTime.DATE_SHORT);
+      return DateTime.fromISO(date).setLocale(this.props.context.locale).toLocaleString(DateTime.DATE_SHORT);
     } catch (error) {
       return "";
     }
@@ -382,7 +382,7 @@ class DisplaySubscriptionKey extends React.Component {
                   <span
                     className={`label ${this.hasSubscriptionKeyExpired() ? "error" : ""} ${this.hasSubscriptionKeyGoingToExpire() ? "warning" : ""}`}><Trans>Expires on:</Trans></span>
                   <span
-                    className={`value ${this.hasSubscriptionKeyExpired() ? "error" : ""} ${this.hasSubscriptionKeyGoingToExpire() ? "warning" : ""}`}>{this.formatDate(this.state.expiry)} ({`${this.hasSubscriptionKeyExpired() ? this.translate("expired ") : ""}${DateTime.fromISO(this.state.expiry).toRelative({locale: this.props.i18n.lng})}`})</span>
+                    className={`value ${this.hasSubscriptionKeyExpired() ? "error" : ""} ${this.hasSubscriptionKeyGoingToExpire() ? "warning" : ""}`}>{this.formatDate(this.state.expiry)} ({`${this.hasSubscriptionKeyExpired() ? this.translate("expired ") : ""}${DateTime.fromISO(this.state.expiry).toRelative({locale: this.props.context.locale})}`})</span>
                 </li>
               </ul>
               }
@@ -426,7 +426,6 @@ DisplaySubscriptionKey.propTypes = {
   administrationWorkspaceContext: PropTypes.object, // The administration workspace context
   dialogContext: PropTypes.any, // The dialog congtext
   t: PropTypes.func,
-  i18n: PropTypes.any
 };
 
 export default withAppContext(withNavigationContext(withAdministrationWorkspace(withDialog(withTranslation('common')(DisplaySubscriptionKey)))));

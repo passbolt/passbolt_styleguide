@@ -6,6 +6,7 @@ import {ApiClientOptions} from "../lib/apiClient/apiClientOptions";
 import {ApiClient} from "../lib/apiClient/apiClient";
 import PassboltApiFetchError from "../lib/Error/passboltApiFetchError";
 import PassboltSubscriptionError from "../../react/lib/Common/Error/PassboltSubscriptionError";
+import UserSettings from "../lib/Settings/UserSettings";
 
 /**
  * The ApiApp context provider
@@ -13,7 +14,7 @@ import PassboltSubscriptionError from "../../react/lib/Common/Error/PassboltSubs
 class ApiAppContextProvider extends React.Component {
   constructor(props) {
     super(props);
-    this.state = this.getDefaultState(props);
+    this.state = this.defaultState;
   }
 
   /**
@@ -24,6 +25,7 @@ class ApiAppContextProvider extends React.Component {
   async componentDidMount() {
     await this.getLoggedInUser();
     await this.getSiteSettings();
+    this.getLocale();
     this.removeSplashScreen();
   }
 
@@ -31,14 +33,15 @@ class ApiAppContextProvider extends React.Component {
    * Default state
    * @returns {object}
    */
-  getDefaultState(props) {
+  get defaultState() {
     return {
       name: "api", // The application name
       loggedInUser: null, // The logged in user
       siteSettings: null, // The site settings
-      trustedDomain: props.trustedDomain, // The site domain (use trusted domain for compatibility with browser extension applications)
-      basename: props.basename, // Base path to be used for routing if needed ex. /workspace
+      trustedDomain: this.baseUrl, // The site domain (use trusted domain for compatibility with browser extension applications)
+      basename: (new URL(this.baseUrl)).pathname, // Base path to be used for routing if needed ex. /workspace
       getApiClientOptions: this.getApiClientOptions.bind(this), // Get the api client options
+      locale: null, // The locale
 
       displayTestUserDirectoryDialogProps: {
         userDirectoryTestResult: null, // The result of the test user directory
@@ -62,8 +65,21 @@ class ApiAppContextProvider extends React.Component {
    * Returns true when the component can be rendered
    */
   get isReady() {
-    // Waiting for the site settings to have the appropriate redirection
-    return this.state.siteSettings;
+    // Waiting for the site settings and locale to have the appropriate redirection
+    return this.state.siteSettings !== null && this.state.locale !== null;
+  }
+
+  /**
+   * Get the application base url
+   * @return {string}
+   */
+  get baseUrl() {
+    const baseElement = document.getElementsByTagName('base') && document.getElementsByTagName('base')[0];
+    if (baseElement) {
+      return baseElement.attributes.href.value.replace(/\/*$/g, '');
+    }
+    console.error("Unable to retrieve the page base tag");
+    return "";
   }
 
   /**
@@ -121,6 +137,38 @@ class ApiAppContextProvider extends React.Component {
     const apiClient = new ApiClient(apiClientOptions);
     const siteSettings = await apiClient.findAll();
     await this.setState({siteSettings: new SiteSettings(siteSettings.body)});
+  }
+
+  /**
+   * Get the locale
+   */
+  async getLocale() {
+    const apiClientOptions = this.getApiClientOptions().setResourceName("account/settings");
+    const apiClient = new ApiClient(apiClientOptions);
+    const userSettings = await apiClient.findAll();
+    const locale = new UserSettings(userSettings.body).locale;
+    const hasLocale = locale && locale.length > 0;
+    hasLocale ? this.setState({locale}) : this.setState({locale: this.guessLocale()});
+  }
+
+  /**
+   * Guess the locale to use to translate the application
+   * @returns {string|string}
+   */
+  guessLocale() {
+    const locale = navigator.language;
+    const supportedLocales = Object.keys(this.state.siteSettings.supportedLocales);
+    if (supportedLocales.includes(locale)) {
+      return locale;
+    }
+
+    const nonExplicitLanguage = locale.split('-')[0];
+    const similarLanguage = supportedLocales.find(supportedLanguage => nonExplicitLanguage === supportedLanguage.split('-')[0]);
+    if (similarLanguage) {
+      return similarLanguage;
+    }
+
+    return this.state.siteSettings.locale;
   }
 
   /**
@@ -196,8 +244,6 @@ class ApiAppContextProvider extends React.Component {
 }
 
 ApiAppContextProvider.propTypes = {
-  basename: PropTypes.string, // The basename
-  trustedDomain: PropTypes.string, // The trusted domain
   children: PropTypes.any // The children components
 };
 

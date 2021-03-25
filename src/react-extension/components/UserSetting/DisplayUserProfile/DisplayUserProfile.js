@@ -22,6 +22,7 @@ import {withDialog} from "../../../../react/contexts/Common/DialogContext";
 import UploadUserProfileAvatar from "../UploadUserProfileAvatar/UploadUserProfileAvatar";
 import {Trans, withTranslation} from "react-i18next";
 import {DateTime} from "luxon";
+import {withUserSettings} from "../../../contexts/UserSettingsContext";
 
 /**
  * This component displays the user profile information
@@ -63,7 +64,18 @@ class DisplayUserProfile extends React.Component {
    * @return {string}
    */
   formatDateTimeAgo(date) {
-    return DateTime.fromISO(date).toRelative({locale: this.props.i18n.lng});
+    return DateTime.fromISO(date).toRelative({locale: this.context.locale});
+  }
+
+  /**
+   * Get the locale
+   * @returns {{[p: string]: string}}
+   */
+  get locale() {
+    return {
+      [locale.ENGLISH]: "English (default)",
+      [locale.FRENCH]: "Français"
+    };
   }
 
   /**
@@ -80,7 +92,7 @@ class DisplayUserProfile extends React.Component {
         {this.user &&
         <div className="row">
           <div className="profile col6">
-            <h3>Profile</h3>
+            <h3><Trans>Profile</Trans></h3>
             <table className="table-info profile">
               <tbody>
                 <tr className="name">
@@ -102,6 +114,15 @@ class DisplayUserProfile extends React.Component {
                 <tr className="created">
                   <td className="label"><Trans>Created</Trans></td>
                   <td className="value">{this.formatDateTimeAgo(this.user.created)}</td>
+                </tr>
+              </tbody>
+            </table>
+            <h3><Trans>Internationalisation</Trans></h3>
+            <table className="table-info profile">
+              <tbody>
+                <tr className="locale">
+                  <td className="label"><Trans>Language</Trans></td>
+                  <td className="value">{this.locale[this.context.locale]}</td>
                 </tr>
               </tbody>
             </table>
@@ -136,8 +157,14 @@ class DisplayUserProfile extends React.Component {
 DisplayUserProfile.contextType = AppContext;
 DisplayUserProfile.propTypes = {
   dialogContext: PropTypes.object, // The dialog context
+  userSettingsContext: PropTypes.object, // The user settings context
   t: PropTypes.func, // The translation function
   i18n: PropTypes.any // The i18n context translation
 };
 
-export default withDialog(withTranslation('common')(DisplayUserProfile));
+export default withDialog(withUserSettings(withTranslation('common')(DisplayUserProfile)));
+
+export const locale = {
+  ENGLISH: "en-US",
+  FRENCH: "fr-FR",
+};

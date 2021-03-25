@@ -16,7 +16,6 @@ import PropTypes from "prop-types";
 import AppContext from "./AppContext";
 
 export const UserSettingsContext = React.createContext({
-  port: null, // The contextual port
   state: null, // The state in the user settings process
   oldPassphrase: null, // The old passphrase to update
   onIntroductionPassphraseRequested: () => {
@@ -33,6 +32,8 @@ export const UserSettingsContext = React.createContext({
   }, // Whenever the user wants download the recovery kit.
   onUpdateSecurityTokenRequested: () => {
   }, // Whenever the user wants update the security token.
+  onUpdateLocaleUserRequested: () => {
+  }, // Whenever the update of the language is requested.
 });
 
 /**
@@ -62,6 +63,7 @@ class UserSettingsContextProvider extends React.Component {
       onGoToIntroductionPassphraseRequested: this.onGoToIntroductionPassphraseRequested.bind(this),
       onDownloadRecoveryKitRequested: this.onDownloadRecoveryKitRequested.bind(this),
       onUpdateSecurityTokenRequested: this.onUpdateSecurityTokenRequested.bind(this),
+      onUpdateLocaleUserRequested: this.handleUpdateLocaleUserRequested.bind(this),
     };
   }
 
@@ -118,6 +120,14 @@ class UserSettingsContextProvider extends React.Component {
    */
   async onUpdateSecurityTokenRequested(securityTokenDto) {
     await this.context.port.request('passbolt.users.update-security-token', securityTokenDto);
+  }
+
+  /**
+   * Whenever the update of the locale is requested
+   * @param locale the locale
+   */
+  async handleUpdateLocaleUserRequested(locale) {
+    await this.context.port.request("passbolt.locale.update", {locale});
   }
 
   /**

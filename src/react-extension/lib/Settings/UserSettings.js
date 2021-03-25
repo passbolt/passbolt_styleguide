@@ -53,4 +53,12 @@ export default class UserSettings {
   getSecurityTokenCode() {
     return this.settings["user.settings.securityToken.code"];
   }
+
+  /**
+   * Returns the current user locale
+   * @returns {*}
+   */
+  get locale() {
+    return this.settings["user.settings.locale"];
+  }
 }

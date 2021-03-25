@@ -25,6 +25,7 @@ class ExtAppContextProvider extends React.Component {
     await this.getExtensionVersion();
     this.getUserSettings();
     this.getLoggedInUser();
+    this.getLocale();
     this.getResources();
     this.getResourceTypes();
     this.getFolders();
@@ -62,6 +63,7 @@ class ExtAppContextProvider extends React.Component {
       siteSettings: null,
       userSettings: null,
       extensionVersion: null, // The extension version
+      locale: null, // The locale
 
       setContext: context => {
         this.setState(context);
@@ -148,6 +150,9 @@ class ExtAppContextProvider extends React.Component {
 
       // Subscription
       onGetSubscriptionKeyRequested: () => this.onGetSubscriptionKeyRequested(),
+
+      // Locale
+      onUpdateLocaleRequested: this.onUpdateLocaleRequested.bind(this),
     };
   }
 
@@ -160,7 +165,7 @@ class ExtAppContextProvider extends React.Component {
   }
 
   isReady() {
-    return this.state.userSettings !== null && this.state.siteSettings !== null;
+    return this.state.userSettings !== null && this.state.siteSettings !== null && this.state.locale !== null;
   }
 
   /*
@@ -272,6 +277,14 @@ class ExtAppContextProvider extends React.Component {
     this.setState({userSettings});
   }
 
+  /**
+   * Get the locale
+   */
+  async getLocale() {
+    const locale = await this.props.port.request("passbolt.locale.get");
+    this.setState({locale});
+  }
+
   /*
    * =============================================================
    *  State changes on local storage change
@@ -333,6 +346,13 @@ class ExtAppContextProvider extends React.Component {
    */
   async onGetSubscriptionKeyRequested() {
     return await this.props.port.request("passbolt.subscription.get");
+  }
+
+  /**
+   * Whenever the update of the locale is requested
+   */
+  async onUpdateLocaleRequested(locale) {
+    await this.setState({locale});
   }
 
   /**

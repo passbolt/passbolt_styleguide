@@ -523,7 +523,7 @@ class Grid extends React.Component {
     const isSelected = this.isResourceSelected(resource);
     const isFavorite = resource.favorite !== null && resource.favorite !== undefined;
     const safeUri = this.safeUri(resource);
-    const modifiedFormatted = DateTime.fromISO(resource.modified).toRelative({locale: this.props.i18n.lng});
+    const modifiedFormatted = DateTime.fromISO(resource.modified).toRelative({locale: this.props.context.locale});
     const isPasswordPreviewed = this.isPasswordPreviewed(resource.id);
 
     return (
@@ -800,7 +800,6 @@ Grid.propTypes = {
   contextualMenuContext: PropTypes.any, // The contextual menu context
   history: PropTypes.any,
   t: PropTypes.func, // The translation function
-  i18n: PropTypes.any // The i18n context translation
 };
 
 export default withAppContext(withRouter(withActionFeedback(withContextualMenu(withResourceWorkspace(withTranslation('common')(Grid))))));

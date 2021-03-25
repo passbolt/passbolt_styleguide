@@ -74,5 +74,11 @@ describe("UserSettings Context", () => {
       await userContext.onUpdateSecurityTokenRequested(securityTokenDto);
       expect(userContext.context.port.request).toHaveBeenCalledWith("passbolt.users.update-security-token", securityTokenDto);
     });
+
+    it('As LU I should update the language', async() => {
+      const locale = "fr-FR";
+      await userContext.state.onUpdateLocaleUserRequested(locale);
+      expect(userContext.context.port.request).toHaveBeenCalledWith("passbolt.locale.update", {locale});
+    });
   });
 });

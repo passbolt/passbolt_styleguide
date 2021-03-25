@@ -139,7 +139,7 @@ class DisplayUserGpgInformation extends React.Component {
    */
   formatDate(data) {
     try {
-      return DateTime.fromJSDate(new Date(data)).setLocale(this.props.i18n.lng).toLocaleString(DateTime.DATETIME_FULL);
+      return DateTime.fromJSDate(new Date(data)).setLocale(this.context.locale).toLocaleString(DateTime.DATETIME_FULL);
     } catch (error) {
       return "";
     }

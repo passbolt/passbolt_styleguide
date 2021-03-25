@@ -47,14 +47,15 @@ import Footer from "./components/Footer/Footer";
 import HandleExtAppRouteChanged from "./components/Route/HandleExtAppRouteChanged";
 import NavigationContextProvider from "./contexts/NavigationContext";
 import AdministrationWorkspaceContextProvider from "./contexts/AdministrationWorkspaceContext";
-import ManageAnnouncements from "./components/Announcement/ManageAnnouncements/ManageAnnouncements";
-import AnnouncementContextProvider from "./contexts/AnnouncementContext";
-import HandleSubscriptionAnnouncement from "./components/Announcement/HandleSubscriptionAnnouncement/HandleSubscriptionAnnouncement";
-import ExtAppContextProvider from "./contexts/ExtAppContext";
-
 import TranslationProvider from "./components/Internationalisation/TranslationProvider";
 import AdministrationWorkspace from "./components/Administration/AdministrationWorkspace";
 import AppContext from "./contexts/AppContext";
+import UserSettingsContextProvider from "./contexts/UserSettingsContext";
+import ManageAnnouncements from "./components/Announcement/ManageAnnouncements/ManageAnnouncements";
+import HandleSubscriptionAnnouncement
+  from "./components/Announcement/HandleSubscriptionAnnouncement/HandleSubscriptionAnnouncement";
+import ExtAppContextProvider from "./contexts/ExtAppContext";
+import AnnouncementContextProvider from "./contexts/AnnouncementContext";
 
 /**
  * The passbolt application served by the browser extension.
@@ -71,10 +72,10 @@ class ExtApp extends Component {
    */
   render() {
     return (
-      <TranslationProvider loadingPath="/data/locales/{{lng}}/{{ns}}.json">
-        <ExtAppContextProvider port={this.props.port} storage={this.props.storage}>
-          <AppContext.Consumer>
-            {appContext =>
+      <ExtAppContextProvider port={this.props.port} storage={this.props.storage}>
+        <AppContext.Consumer>
+          {appContext =>
+            <TranslationProvider loadingPath="/data/locales/{{lng}}/{{ns}}.json">
               <ActionFeedbackContextProvider>
                 <DialogContextProvider>
                   <AnnouncementContextProvider>
@@ -151,7 +152,7 @@ class ExtApp extends Component {
                               </Route>
                               {/* User settings workspace */}
                               <Route path={"/app/settings"}>
-                                <>
+                                <UserSettingsContextProvider>
                                   <ManageDialogs/>
                                   <ManageAnnouncements/>
                                   <div id="container" className="page settings">
@@ -162,7 +163,7 @@ class ExtApp extends Component {
                                       <DisplayUserSettingsWorkspace/>
                                     </div>
                                   </div>
-                                </>
+                                </UserSettingsContextProvider>
                               </Route>
                               {/* Subscription settings */}
                               <Route path={"/app/administration"}>
@@ -186,10 +187,10 @@ class ExtApp extends Component {
                   </AnnouncementContextProvider>
                 </DialogContextProvider>
               </ActionFeedbackContextProvider>
-            }
-          </AppContext.Consumer>
-        </ExtAppContextProvider>
-      </TranslationProvider>
+            </TranslationProvider>
+          }
+        </AppContext.Consumer>
+      </ExtAppContextProvider>
     );
   }
 }

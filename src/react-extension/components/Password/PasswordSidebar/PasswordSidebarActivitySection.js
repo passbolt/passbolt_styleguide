@@ -159,7 +159,7 @@ class PasswordSidebarActivitySection extends React.Component {
    * @return {string}
    */
   formatDateTimeAgo(date) {
-    return DateTime.fromISO(date).toRelative({locale: this.props.i18n.lng});
+    return DateTime.fromISO(date).toRelative({locale: this.context.locale});
   }
 
   /**
@@ -514,7 +514,6 @@ PasswordSidebarActivitySection.contextType = AppContext;
 PasswordSidebarActivitySection.propTypes = {
   resourceWorkspaceContext: PropTypes.any,
   t: PropTypes.func, // The translation function
-  i18n: PropTypes.any // The i18n context translation
 };
 
 export default withResourceWorkspace(withTranslation('common')(PasswordSidebarActivitySection));
