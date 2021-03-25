@@ -185,7 +185,7 @@ module.exports = function(grunt) {
       },
     },
     i18next: {
-      translate: {
+      externalize: {
         src: 'src/**/*.{js,html}',
         dest: 'src',
         options: {
@@ -210,7 +210,7 @@ module.exports = function(grunt) {
           },
           removeUnusedKeys: true,
           sort: true,
-          debug: true,
+          debug: false,
         }
       }
     },
@@ -257,8 +257,8 @@ module.exports = function(grunt) {
 
 	// 'grunt' will check code quality, and if no errors,
 	// compile LESS to CSS, and minify and concatonate all JS and CSS
-	grunt.registerTask('default', [ 'clean:all', 'less', 'cssmin', 'header', 'symlink', 'shell:copy-demo-css', 'shell:copy-demo-lang', 'shell:build-apps']);
+	grunt.registerTask('default', [ 'clean:all', 'less', 'cssmin', 'header', 'symlink', 'shell:copy-demo-css', 'shell:copy-demo-lang', 'shell:build-apps', 'externalize-locale-string']);
   grunt.registerTask('css', [ 'clean:css', 'less']);
   grunt.registerTask('lang', ['shell:copy-demo-lang']);
-  grunt.registerTask('translate', ['i18next']);
+  grunt.registerTask('externalize-locale-string', ['i18next']);
 };
