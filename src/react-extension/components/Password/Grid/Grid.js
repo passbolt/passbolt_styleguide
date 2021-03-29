@@ -325,15 +325,13 @@ class Grid extends React.Component {
     try {
       const plaintext = await this.decryptResourceSecret(resourceId);
       password = this.extractPlaintextPassword(plaintext);
+      const previewedPassword = {resourceId, password};
+      this.setState({previewedPassword});
     } catch (error) {
       if (error.name !== "UserAbortsOperationError") {
         this.props.actionFeedbackContext.displayError(error.message);
-        return;
       }
     }
-
-    const previewedPassword = {resourceId, password};
-    this.setState({previewedPassword});
   }
 
   /**
