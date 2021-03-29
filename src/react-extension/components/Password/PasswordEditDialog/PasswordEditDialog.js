@@ -681,7 +681,7 @@ class PasswordEditDialog extends Component {
               <label htmlFor="edit-password-form-password"><Trans>Password</Trans></label>
               <div className="input text password">
                 <input id="edit-password-form-password" name="password" className={`required ${this.state.isSecretDecrypting ? "" : "decrypted"}`}
-                  required="required" type={this.state.viewPassword ? "text" : "password"}
+                  required="required" maxLength="4096" type={this.state.viewPassword ? "text" : "password"}
                   onKeyUp={this.handlePasswordInputKeyUp} value={this.state.password}
                   placeholder={passwordPlaceholder} onFocus={this.handlePasswordInputFocus}
                   onBlur={this.handlePasswordInputBlur} onChange={this.handleInputChange}
