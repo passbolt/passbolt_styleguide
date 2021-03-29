@@ -410,12 +410,12 @@ class CreateUserDialog extends Component {
               <div className="username error message">{this.state.usernameError}</div>
               }
             </div>
-            <div className="input checkbox required">
+            <div className="input checkbox">
               <label htmlFor="is_admin"><Trans>Role</Trans></label>
               <div id="is_admin">
                 <input id="is_admin_checkbox" name="is_admin" onChange={this.handleCheckboxClick}
                   checked={this.state.is_admin} disabled={this.hasAllInputDisabled()} type="checkbox"/>
-                <span> <Trans>This user is an administrator</Trans></span>
+                <label htmlFor="is_admin_checkbox"> <Trans>This user is an administrator</Trans></label>
               </div>
               <div className="message helptext">
                 <Trans>Note: Administrators can add and delete users; They can also create groups and assign group managers; Admin can not see all passwords.</Trans>
