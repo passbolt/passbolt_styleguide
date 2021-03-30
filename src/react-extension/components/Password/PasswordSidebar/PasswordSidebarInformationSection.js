@@ -245,14 +245,12 @@ class PasswordSidebarInformationSection extends React.Component {
     try {
       const plaintext = await this.decryptResourceSecret(resourceId);
       previewedPassword = this.extractPlaintextPassword(plaintext);
+      this.setState({previewedPassword});
     } catch (error) {
       if (error.name !== "UserAbortsOperationError") {
         this.props.actionFeedbackContext.displayError(error.message);
-        return;
       }
     }
-
-    this.setState({previewedPassword});
   }
 
   /**
