@@ -52,7 +52,7 @@ class UserAvatar extends Component {
       this.props.user.profile &&
       this.props.user.profile.avatar &&
       this.props.user.profile.avatar.url &&
-      this.props.user.profile.avatar.url.small;
+      this.props.user.profile.avatar.url.medium;
   }
 
   /**
@@ -61,7 +61,7 @@ class UserAvatar extends Component {
    * @returns {boolean}
    */
   propsUrlHasProtocol() {
-    return this.props.user.profile.avatar.url.small.startsWith('https://');
+    return this.props.user.profile.avatar.url.medium.startsWith('https://');
   }
 
   /**
@@ -88,9 +88,9 @@ class UserAvatar extends Component {
   getAvatarSrc() {
     if (!this.state.error && this.propsHasUrl()) {
       if (this.propsUrlHasProtocol()) {
-        return this.props.user.profile.avatar.url.small;
+        return this.props.user.profile.avatar.url.medium;
       } else {
-        return this.formatUrl(this.props.user.profile.avatar.url.small);
+        return this.formatUrl(this.props.user.profile.avatar.url.medium);
       }
     }
     return this.getDefaultAvatarUrl();
