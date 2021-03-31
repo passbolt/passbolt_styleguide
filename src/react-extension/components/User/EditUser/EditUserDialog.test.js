@@ -16,7 +16,7 @@
  * Unit tests on CreateUserDialog in regard of specifications
  */
 import {ActionFeedbackContext} from "../../../contexts/ActionFeedbackContext";
-import PassboltApiFetchError from "../../../../react/lib/Common/Error/PassboltApiFetchError";
+import PassboltApiFetchError from "../../../lib/Error/PassboltApiFetchError";
 import {waitFor} from "@testing-library/react";
 import EditUserDialogPage from "./EditUserDialog.test.page";
 import {defaultAppContext, defaultProps} from "./EditUserDialog.test.data";

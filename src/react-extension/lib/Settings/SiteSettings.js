@@ -11,8 +11,8 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         3.0.0
  */
-import getPropValue from "../../../react/lib/Common/Object/getPropValue";
-import sanitizeUrl from "../../../react/lib/Common/Sanitize/sanitizeUrl";
+import getPropValue from "../Object/getPropValue";
+import sanitizeUrl from "../Sanitize/sanitizeUrl";
 
 export default class SiteSettings {
   constructor(settings) {

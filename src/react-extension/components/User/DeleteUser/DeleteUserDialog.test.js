@@ -18,7 +18,7 @@
 
 import {ActionFeedbackContext} from "../../../contexts/ActionFeedbackContext";
 import {fireEvent, waitFor} from "@testing-library/react";
-import PassboltApiFetchError from "../../../../react/lib/Common/Error/PassboltApiFetchError";
+import PassboltApiFetchError from "../../../lib/Error/PassboltApiFetchError";
 import DeleteUserDialogTestPage from "./DeleteUserDialog.test.page";
 import {defaultAppContext, defaultProps, mockUser} from "./DeleteUserDialog.test.data";
 

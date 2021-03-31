@@ -13,7 +13,7 @@
  */
 import React, {Component} from "react";
 import PropTypes from "prop-types";
-import LoadingSpinner from "../../../../react/components/Common/Loading/LoadingSpinner/LoadingSpinner";
+import LoadingSpinner from "../../Common/Loading/LoadingSpinner/LoadingSpinner";
 import {ApiTriageContextState, withApiTriageContext} from "../../../contexts/ApiTriageContext";
 import EnterUsernameForm from "../../Authentication/EnterUsernameForm/EnterUsernameForm";
 import EnterNameForm from "../../Authentication/EnterNameForm/EnterNameForm";

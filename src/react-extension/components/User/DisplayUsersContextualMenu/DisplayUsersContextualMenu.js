@@ -14,14 +14,14 @@
 import React from "react";
 import PropTypes from "prop-types";
 import AppContext from "../../../contexts/AppContext";
-import {withDialog} from "../../../../react/contexts/Common/DialogContext";
-import ContextualMenuWrapper from "../../../../react/components/Common/ContextualMenu/ContextualMenuWrapper";
+import {withDialog} from "../../../contexts/DialogContext";
+import ContextualMenuWrapper from "../../Common/ContextualMenu/ContextualMenuWrapper";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import EditUserDialog from "../EditUser/EditUserDialog";
 import ConfirmDisableUserMFA from "../DisableUserMFA/ConfirmDisableUserMFA";
 import DeleteUserWithConflictsDialog from "../DeleteUser/DeleteUserWithConflictsDialog";
 import DeleteUserDialog from "../DeleteUser/DeleteUserDialog";
-import ErrorDialog from "../../Dialog/ErrorDialog/ErrorDialog";
+import ErrorDialog from "../../Common/Dialog/ErrorDialog/ErrorDialog";
 import {Trans, withTranslation} from "react-i18next";
 
 class DisplayUsersContextualMenu extends React.Component {

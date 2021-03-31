@@ -15,11 +15,11 @@ import React, {Component} from "react";
 import PropTypes from "prop-types";
 
 import AppContext from "../../../contexts/AppContext";
-import ErrorDialog from "../../Dialog/ErrorDialog/ErrorDialog";
-import DialogWrapper from "../../../../react/components/Common/Dialog/DialogWrapper/DialogWrapper";
-import FormSubmitButton from "../../../../react/components/Common/Inputs/FormSubmitButton/FormSubmitButton";
-import FormCancelButton from "../../../../react/components/Common/Inputs/FormSubmitButton/FormCancelButton";
-import {withDialog} from "../../../../react/contexts/Common/DialogContext";
+import ErrorDialog from "../../Common/Dialog/ErrorDialog/ErrorDialog";
+import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
+import FormSubmitButton from "../../Common/Inputs/FormSubmitButton/FormSubmitButton";
+import FormCancelButton from "../../Common/Inputs/FormSubmitButton/FormCancelButton";
+import {withDialog} from "../../../contexts/DialogContext";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import {Trans, withTranslation} from "react-i18next";
 

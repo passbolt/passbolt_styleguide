@@ -15,8 +15,8 @@ import React, {Component} from "react";
 import PropTypes from "prop-types";
 import {withAppContext} from "../../contexts/AppContext";
 import {withNavigationContext} from "../../contexts/NavigationContext";
-import UserAvatar from "../../../react/components/Common/Avatar/UserAvatar";
-import Icon from "../../../react/components/Common/Icons/Icon";
+import UserAvatar from "../Common/Avatar/UserAvatar";
+import Icon from "../Common/Icons/Icon";
 import {Trans, withTranslation} from "react-i18next";
 
 class UserBadgeMenu extends Component {

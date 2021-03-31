@@ -13,8 +13,8 @@
  */
 import React, {Component} from "react";
 import PropTypes from "prop-types";
-import DialogWrapper from "../../../../react/components/Common/Dialog/DialogWrapper/DialogWrapper";
-import Icon from "../../../../react/components/Common/Icons/Icon";
+import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
+import Icon from "../../Common/Icons/Icon";
 import DisplayLoadingDialog from "../DisplayLoadingDialog/DisplayLoadingDialog";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import {withAdministrationWorkspace} from "../../../contexts/AdministrationWorkspaceContext";

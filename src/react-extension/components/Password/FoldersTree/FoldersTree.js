@@ -12,15 +12,15 @@
  * @since         2.13.0
  */
 import React, {Fragment} from "react";
-import Icon from "../../../../react/components/Common/Icons/Icon";
+import Icon from "../../Common/Icons/Icon";
 import FoldersTreeItem from "./FoldersTreeItem";
 import {ResourceWorkspaceFilterTypes, withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 import {withRouter} from "react-router-dom";
 import {withAppContext} from "../../../contexts/AppContext";
 import FoldersTreeRootFolderContextualMenu from "./FoldersTreeRootFolderContextualMenu";
-import {withContextualMenu} from "../../../../react/contexts/Common/ContextualMenuContext";
+import {withContextualMenu} from "../../../contexts/ContextualMenuContext";
 import PropTypes from "prop-types";
-import {withDialog} from "../../../../react/contexts/Common/DialogContext";
+import {withDialog} from "../../../contexts/DialogContext";
 import ReactList from "react-list";
 import {Trans, withTranslation} from "react-i18next";
 

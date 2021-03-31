@@ -12,11 +12,11 @@
  * @since         3.0.0
  */
 import React, {Component} from "react";
-import Icon from "../../../../react/components/Common/Icons/Icon";
+import Icon from "../../Common/Icons/Icon";
 import SecurityComplexity from "../../../lib/Secret/SecretComplexity";
 import {AuthenticationContext} from "../../../contexts/AuthenticationContext";
-import ErrorDialog from "../../Dialog/ErrorDialog/ErrorDialog";
-import {withDialog} from "../../../../react/contexts/Common/DialogContext";
+import ErrorDialog from "../../Common/Dialog/ErrorDialog/ErrorDialog";
+import {withDialog} from "../../../contexts/DialogContext";
 import PropTypes from "prop-types";
 import debounce from "debounce-promise";
 import SecretComplexity from "../../../lib/Secret/SecretComplexity";

@@ -18,9 +18,9 @@ import PropTypes from "prop-types";
 import AppContext from "../../../contexts/AppContext";
 import {ResourceWorkspaceFilterTypes, withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
-import DialogWrapper from "../../../../react/components/Common/Dialog/DialogWrapper/DialogWrapper";
-import FormSubmitButton from "../../../../react/components/Common/Inputs/FormSubmitButton/FormSubmitButton";
-import Icon from "../../../../react/components/Common/Icons/Icon";
+import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
+import FormSubmitButton from "../../Common/Inputs/FormSubmitButton/FormSubmitButton";
+import Icon from "../../Common/Icons/Icon";
 import {Trans, withTranslation} from "react-i18next";
 
 /**

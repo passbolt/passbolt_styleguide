@@ -15,13 +15,13 @@
 import React from "react";
 import PropTypes from "prop-types";
 import AppContext from "../../../contexts/AppContext";
-import Icon from "../../../../react/components/Common/Icons/Icon";
+import Icon from "../../Common/Icons/Icon";
 import {withUserWorkspace} from "../../../contexts/UserWorkspaceContext";
 import EditUserDialog from "../EditUser/EditUserDialog";
-import {withDialog} from "../../../../react/contexts/Common/DialogContext";
+import {withDialog} from "../../../contexts/DialogContext";
 import DeleteUserDialog from "../DeleteUser/DeleteUserDialog";
 import DeleteUserWithConflictsDialog from "../DeleteUser/DeleteUserWithConflictsDialog";
-import ErrorDialog from "../../Dialog/ErrorDialog/ErrorDialog";
+import ErrorDialog from "../../Common/Dialog/ErrorDialog/ErrorDialog";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import ConfirmDisableUserMFA from "../DisableUserMFA/ConfirmDisableUserMFA";
 import {Trans, withTranslation} from "react-i18next";

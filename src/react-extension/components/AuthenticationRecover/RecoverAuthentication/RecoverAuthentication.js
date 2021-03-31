@@ -4,7 +4,7 @@ import ImportGpgKey from "../../Authentication/ImportGpgKey/ImportGpgKey";
 import CheckPassphrase from "../../Authentication/CheckPassphrase/CheckPassphrase";
 import ChooseSecurityToken from "../../Authentication/ChooseSecurityToken/ChooseSecurityToken";
 import AskForAuthenticationHelp from "../../Authentication/AskForAuthenticationHelp/AskForAuthenticationHelp";
-import LoadingSpinner from "../../../../react/components/Common/Loading/LoadingSpinner/LoadingSpinner";
+import LoadingSpinner from "../../Common/Loading/LoadingSpinner/LoadingSpinner";
 import PropTypes from "prop-types";
 import HelpOnPrivateKeyLostSecondaryAction from "../../Authentication/CheckPassphrase/HelpOnPrivateKeyLostSecondaryAction";
 import HelpOnPassphraseLostSecondaryAction

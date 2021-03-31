@@ -16,8 +16,8 @@ import React from "react";
 import PropTypes from "prop-types";
 import {withRouter, Route} from "react-router-dom";
 import AppContext from "../../../contexts/AppContext";
-import Icon from "../../../../react/components/Common/Icons/Icon";
-import {withDialog} from "../../../../react/contexts/Common/DialogContext";
+import Icon from "../../Common/Icons/Icon";
+import {withDialog} from "../../../contexts/DialogContext";
 import EditUserProfile from "../EditUserProfile/EditUserProfile";
 import {Trans, withTranslation} from "react-i18next";
 

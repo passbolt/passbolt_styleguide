@@ -1,4 +1,4 @@
-import Gauge from '../react-appjs/lib/reports/widgets/gauge';
+import Gauge from '../react-extension/lib/reports/widgets/gauge';
 
 $(()=> {
   $('.report-widget.gauge').each((i, e) => {

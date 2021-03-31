@@ -15,12 +15,12 @@ import React from "react";
 import PropTypes from "prop-types";
 import {withAppContext} from "../../../contexts/AppContext";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
-import Icon from "../../../../react/components/Common/Icons/Icon";
+import Icon from "../../Common/Icons/Icon";
 import {withAdministrationWorkspace} from "../../../contexts/AdministrationWorkspaceContext";
 import XRegExp from "xregexp";
 import DisplayTestUserDirectoryAdministrationDialog
   from "../DisplayTestUserDirectoryAdministration/DisplayTestUserDirectoryAdministrationDialog";
-import {withDialog} from "../../../../react/contexts/Common/DialogContext";
+import {withDialog} from "../../../contexts/DialogContext";
 import {Trans, withTranslation} from "react-i18next";
 
 /**

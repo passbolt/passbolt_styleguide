@@ -14,7 +14,7 @@
 import React, {Component} from "react";
 import PropTypes from "prop-types";
 import {withRouter} from "react-router-dom";
-import SearchBar from "../../../../react/components/Common/Navigation/Search/SearchBar";
+import SearchBar from "../../Common/Navigation/Search/SearchBar";
 import {ResourceWorkspaceFilterTypes, withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 
 class PasswordSearchBar extends Component {

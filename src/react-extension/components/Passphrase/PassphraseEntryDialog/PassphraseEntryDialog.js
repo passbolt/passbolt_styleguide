@@ -14,8 +14,8 @@
 import React, {Component} from "react";
 import PropTypes from "prop-types";
 import AppContext from "../../../contexts/AppContext";
-import UserAbortsOperationError from "../../../../react/lib/Common/Error/UserAbortsOperationError";
-import Icon from "../../../../react/components/Common/Icons/Icon";
+import UserAbortsOperationError from "../../../lib/Error/UserAbortsOperationError";
+import Icon from "../../Common/Icons/Icon";
 import {Trans, withTranslation} from "react-i18next";
 
 class PassphraseEntryDialog extends Component {

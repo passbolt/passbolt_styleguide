@@ -23,7 +23,7 @@ import {
 } from "./PasswordSidebarDescriptionSection.test.data";
 import PasswordSidebarDescriptionSectionPage from "./PasswordSidebarDescriptionSection.test.page";
 import {ActionFeedbackContext} from "../../../contexts/ActionFeedbackContext";
-import PassboltApiFetchError from "../../../../react/lib/Common/Error/PassboltApiFetchError";
+import PassboltApiFetchError from "../../../lib/Error/PassboltApiFetchError";
 
 beforeEach(() => {
   jest.resetModules();

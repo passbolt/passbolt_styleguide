@@ -5,7 +5,7 @@ import SiteSettings from "../lib/Settings/SiteSettings";
 import {ApiClientOptions} from "../lib/apiClient/apiClientOptions";
 import {ApiClient} from "../lib/apiClient/apiClient";
 import PassboltApiFetchError from "../lib/Error/passboltApiFetchError";
-import PassboltSubscriptionError from "../../react/lib/Common/Error/PassboltSubscriptionError";
+import PassboltSubscriptionError from "../lib/Error/PassboltSubscriptionError";
 
 /**
  * The ApiApp context provider

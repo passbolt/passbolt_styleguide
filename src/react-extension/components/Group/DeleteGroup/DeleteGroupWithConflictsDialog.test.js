@@ -18,7 +18,7 @@
 
 import {ActionFeedbackContext} from "../../../contexts/ActionFeedbackContext";
 import {fireEvent, waitFor} from "@testing-library/react";
-import PassboltApiFetchError from "../../../../react/lib/Common/Error/PassboltApiFetchError";
+import PassboltApiFetchError from "../../../lib/Error/PassboltApiFetchError";
 import DeleteGroupWithConflictsDialogTestPage from "./DeleteGroupWithConflictsDialog.test.page";
 import {
   defaultAppContext,

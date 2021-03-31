@@ -33,7 +33,7 @@ jest.mock("../DisplayUserWorkspaceMainActions/DisplayUserWorkspaceMainActions", 
 jest.mock("../DisplayUserWorkspaceBreadcrumb/DisplayUserWorkspaceBreadcrumb", () => () => <></>);
 jest.mock("../DisplayUserDetails/DisplayUserDetails", () => () => <span className="user-details"></span>);
 jest.mock("../DisplayUserWorkspaceActions/DisplayUserWorkspaceActions", () => () => <></>);
-jest.mock("../../../../react/components/Common/Navigation/Header/Logo");
+jest.mock("../../Common/Navigation/Header/Logo");
 jest.mock("../../Header/UserBadgeMenu", () => () => <></>);
 
 beforeEach(() => {

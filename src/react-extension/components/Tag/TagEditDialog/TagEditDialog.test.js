@@ -16,7 +16,7 @@
  * Unit tests on TagEditDialog in regard of specifications
  */
 import {ActionFeedbackContext} from "../../../contexts/ActionFeedbackContext";
-import PassboltApiFetchError from "../../../../react/lib/Common/Error/PassboltApiFetchError";
+import PassboltApiFetchError from "../../../lib/Error/PassboltApiFetchError";
 import {waitFor} from "@testing-library/react";
 import TagEditDialogPage from "./TagEditDialog.test.page";
 import {defaultAppContext, defaultProps} from "./TagEditDialog.test.data";

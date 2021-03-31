@@ -13,7 +13,7 @@
  */
 import React from "react";
 import PropTypes from "prop-types";
-import Icon from "../../../../react/components/Common/Icons/Icon";
+import Icon from "../../Common/Icons/Icon";
 import DescriptionEditor from "./DescriptionEditor";
 import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 import AppContext from "../../../contexts/AppContext";

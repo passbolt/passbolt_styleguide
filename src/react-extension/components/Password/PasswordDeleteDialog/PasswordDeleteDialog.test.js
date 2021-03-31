@@ -21,7 +21,7 @@ import {defaultAppContext, defaultPropsOneResource} from "./PasswordDeleteDialog
 import {ActionFeedbackContext} from "../../../contexts/ActionFeedbackContext";
 import PasswordDeleteDialogPage from "./PasswordDeleteDialogPage";
 import {fireEvent} from "@testing-library/react";
-import PassboltApiFetchError from "../../../../react/lib/Common/Error/PassboltApiFetchError";
+import PassboltApiFetchError from "../../../lib/Error/PassboltApiFetchError";
 import {defaultPropsMultipleResource} from "../PasswordWorkspace/PasswordWorkspaceMenu.test.data";
 
 beforeEach(() => {

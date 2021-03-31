@@ -12,7 +12,7 @@
  * @since         2.13.0
  */
 import React from "react";
-import Icon from "../../../../react/components/Common/Icons/Icon";
+import Icon from "../../Common/Icons/Icon";
 import PropTypes from "prop-types";
 import AppContext from "../../../contexts/AppContext";
 import {
@@ -22,7 +22,7 @@ import {
 } from "../../../contexts/ResourceWorkspaceContext";
 import {withRouter} from "react-router-dom";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
-import sanitizeUrl, {urlProtocols} from "../../../../react/lib/Common/Sanitize/sanitizeUrl";
+import sanitizeUrl, {urlProtocols} from "../../../lib/Sanitize/sanitizeUrl";
 import {Trans, withTranslation} from "react-i18next";
 import {DateTime} from "luxon";
 

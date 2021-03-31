@@ -16,7 +16,7 @@ import React from "react";
 import {render, fireEvent, waitFor} from "@testing-library/react";
 import PassphraseEntryDialog from "./PassphraseEntryDialog";
 import AppContext from "../../../contexts/AppContext";
-import UserAbortsOperationError from "../../../../react/lib/Common/Error/UserAbortsOperationError";
+import UserAbortsOperationError from "../../../lib/Error/UserAbortsOperationError";
 import MockPort from "../../../test/mock/MockPort";
 import UserSettings from "../../../lib/Settings/UserSettings";
 import userSettingsFixture from "../../../test/fixture/Settings/userSettings";

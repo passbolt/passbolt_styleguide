@@ -2,7 +2,7 @@
  * Unit tests on CreateGpgKey in regard of specifications
  */
 import {defaultAppContext, defaultProps} from "./ChooseSecurityToken.test.data";
-import ErrorDialog from "../../Dialog/ErrorDialog/ErrorDialog";
+import ErrorDialog from "../../Common/Dialog/ErrorDialog/ErrorDialog";
 import ChooseSecurityTokenPage from "./ChooseSecurityToken.test.page";
 import "../../../test/lib/crypto/cryptoGetRandomvalues";
 

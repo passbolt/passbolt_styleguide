@@ -18,9 +18,9 @@
 import ShareDialogPage from "./ShareDialog.test.page";
 import {autocompleteResult, defaultAppContext, defaultProps, folders, resources} from "./ShareDialog.test.data";
 import {ActionFeedbackContext} from "../../contexts/ActionFeedbackContext";
-import PassboltApiFetchError from "../../../react/lib/Common/Error/PassboltApiFetchError";
+import PassboltApiFetchError from "../../lib/Error/PassboltApiFetchError";
 import {waitFor} from "@testing-library/react";
-import ErrorDialog from "../Dialog/ErrorDialog/ErrorDialog";
+import ErrorDialog from "../Common/Dialog/ErrorDialog/ErrorDialog";
 
 beforeEach(() => {
   jest.resetModules();

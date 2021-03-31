@@ -16,7 +16,7 @@
  * Unit tests on TagDeleteDialog in regard of specifications
  */
 import {ActionFeedbackContext} from "../../../contexts/ActionFeedbackContext";
-import PassboltApiFetchError from "../../../../react/lib/Common/Error/PassboltApiFetchError";
+import PassboltApiFetchError from "../../../lib/Error/PassboltApiFetchError";
 import {waitFor} from "@testing-library/react";
 import TagDeleteDialogPage from "./TagDeleteDialog.test.page";
 import {defaultAppContext, defaultProps} from "./TagDeleteDialog.test.data";

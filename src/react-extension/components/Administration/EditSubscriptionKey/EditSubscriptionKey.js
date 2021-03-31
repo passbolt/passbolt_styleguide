@@ -14,12 +14,12 @@
 import React, {Component} from "react";
 import PropTypes from "prop-types";
 import {withAppContext} from "../../../contexts/AppContext";
-import DialogWrapper from "../../../../react/components/Common/Dialog/DialogWrapper/DialogWrapper";
+import DialogWrapper from "../../../../react-extension/components/Common/Dialog/DialogWrapper/DialogWrapper";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
-import {withDialog} from "../../../../react/contexts/Common/DialogContext";
-import ErrorDialog from "../../Dialog/ErrorDialog/ErrorDialog";
-import FormSubmitButton from "../../../../react/components/Common/Inputs/FormSubmitButton/FormSubmitButton";
-import FormCancelButton from "../../../../react/components/Common/Inputs/FormSubmitButton/FormCancelButton";
+import {withDialog} from "../../../contexts/DialogContext";
+import ErrorDialog from "../../Common/Dialog/ErrorDialog/ErrorDialog";
+import FormSubmitButton from "../../../../react-extension/components/Common/Inputs/FormSubmitButton/FormSubmitButton";
+import FormCancelButton from "../../../../react-extension/components/Common/Inputs/FormSubmitButton/FormCancelButton";
 import {withAdministrationWorkspace} from "../../../contexts/AdministrationWorkspaceContext";
 import {Trans, withTranslation} from "react-i18next";
 

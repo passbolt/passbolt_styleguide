@@ -15,7 +15,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import TagItemViewer from "./TagItemViewer";
 import TagEditor from "./TagEditor";
-import Icon from "../../../../react/components/Common/Icons/Icon";
+import Icon from "../../Common/Icons/Icon";
 import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 import {Trans, withTranslation} from "react-i18next";
 

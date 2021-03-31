@@ -21,12 +21,12 @@ import {
   withResourceWorkspace
 } from "../../../contexts/ResourceWorkspaceContext";
 import debounce from "debounce-promise";
-import Icon from "../../../../react/components/Common/Icons/Icon";
+import Icon from "../../Common/Icons/Icon";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import {withRouter} from "react-router-dom";
 import DisplayGridContextualMenu from "./DisplayGridContextualMenu";
-import {withContextualMenu} from "../../../../react/contexts/Common/ContextualMenuContext";
-import sanitizeUrl, {urlProtocols} from "../../../../react/lib/Common/Sanitize/sanitizeUrl";
+import {withContextualMenu} from "../../../contexts/ContextualMenuContext";
+import sanitizeUrl, {urlProtocols} from "../../../lib/Sanitize/sanitizeUrl";
 import {Trans, withTranslation} from "react-i18next";
 import {DateTime} from "luxon";
 

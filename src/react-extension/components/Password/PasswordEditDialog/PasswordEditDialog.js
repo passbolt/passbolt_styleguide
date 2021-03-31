@@ -14,15 +14,15 @@
 import React, {Component} from "react";
 import PropTypes from "prop-types";
 import AppContext from "../../../contexts/AppContext";
-import Icon from "../../../../react/components/Common/Icons/Icon";
-import Tooltip from "../../../../react/components/Common/Tooltip/Tooltip";
+import Icon from "../../Common/Icons/Icon";
+import Tooltip from "../../Common/Tooltip/Tooltip";
 import SecretComplexity from "../../../lib/Secret/SecretComplexity";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
-import {withDialog} from "../../../../react/contexts/Common/DialogContext";
-import ErrorDialog from "../../Dialog/ErrorDialog/ErrorDialog";
-import DialogWrapper from "../../../../react/components/Common/Dialog/DialogWrapper/DialogWrapper";
-import FormSubmitButton from "../../../../react/components/Common/Inputs/FormSubmitButton/FormSubmitButton";
-import FormCancelButton from "../../../../react/components/Common/Inputs/FormSubmitButton/FormCancelButton";
+import {withDialog} from "../../../contexts/DialogContext";
+import ErrorDialog from "../../Common/Dialog/ErrorDialog/ErrorDialog";
+import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
+import FormSubmitButton from "../../Common/Inputs/FormSubmitButton/FormSubmitButton";
+import FormCancelButton from "../../Common/Inputs/FormSubmitButton/FormCancelButton";
 import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 import {Trans, withTranslation} from "react-i18next";
 

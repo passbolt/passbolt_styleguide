@@ -15,16 +15,16 @@ import React, {Component} from "react";
 import PropTypes from "prop-types";
 
 import AppContext from "../../../contexts/AppContext";
-import Icon from "../../../../react/components/Common/Icons/Icon";
-import Tooltip from "../../../../react/components/Common/Tooltip/Tooltip";
+import Icon from "../../Common/Icons/Icon";
+import Tooltip from "../../Common/Tooltip/Tooltip";
 import SecretComplexity from "../../../lib/Secret/SecretComplexity";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
-import ErrorDialog from "../../Dialog/ErrorDialog/ErrorDialog";
-import {withDialog} from "../../../../react/contexts/Common/DialogContext";
+import ErrorDialog from "../../Common/Dialog/ErrorDialog/ErrorDialog";
+import {withDialog} from "../../../contexts/DialogContext";
 import {withRouter} from "react-router-dom";
-import DialogWrapper from "../../../../react/components/Common/Dialog/DialogWrapper/DialogWrapper";
-import FormSubmitButton from "../../../../react/components/Common/Inputs/FormSubmitButton/FormSubmitButton";
-import FormCancelButton from "../../../../react/components/Common/Inputs/FormSubmitButton/FormCancelButton";
+import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
+import FormSubmitButton from "../../Common/Inputs/FormSubmitButton/FormSubmitButton";
+import FormCancelButton from "../../Common/Inputs/FormSubmitButton/FormCancelButton";
 
 import {Trans, withTranslation} from "react-i18next";
 

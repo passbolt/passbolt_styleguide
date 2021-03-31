@@ -14,9 +14,9 @@
 import React from "react";
 import PropTypes from "prop-types";
 import AppContext from "../../../contexts/AppContext";
-import ContextualMenuWrapper from "../../../../react/components/Common/ContextualMenu/ContextualMenuWrapper";
+import ContextualMenuWrapper from "../../Common/ContextualMenu/ContextualMenuWrapper";
 import FolderCreateDialog from "../../Folder/FolderCreateDialog/FolderCreateDialog";
-import {withDialog} from "../../../../react/contexts/Common/DialogContext";
+import {withDialog} from "../../../contexts/DialogContext";
 import ExportResources from "../ExportResources/ExportResources";
 import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 import {Trans, withTranslation} from "react-i18next";

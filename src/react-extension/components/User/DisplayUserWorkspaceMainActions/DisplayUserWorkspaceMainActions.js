@@ -15,9 +15,9 @@
 import React from "react";
 import PropTypes from "prop-types";
 import AppContext from "../../../contexts/AppContext";
-import Icon from "../../../../react/components/Common/Icons/Icon";
+import Icon from "../../Common/Icons/Icon";
 import CreateUserDialog from "../CreateUser/CreateUserDialog";
-import {withDialog} from "../../../../react/contexts/Common/DialogContext";
+import {withDialog} from "../../../contexts/DialogContext";
 import CreateGroupDialog from "../../Group/CreateGroup/CreateGroupDialog";
 import {Trans, withTranslation} from "react-i18next";
 

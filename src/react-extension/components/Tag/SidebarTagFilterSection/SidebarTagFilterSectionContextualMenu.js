@@ -13,7 +13,7 @@
  */
 import React from "react";
 import PropTypes from "prop-types";
-import ContextualMenuWrapper from "../../../../react/components/Common/ContextualMenu/ContextualMenuWrapper";
+import ContextualMenuWrapper from "../../Common/ContextualMenu/ContextualMenuWrapper";
 import {filterByTagsOptions} from "./DisplayTagList";
 import {Trans, withTranslation} from "react-i18next";
 

@@ -16,10 +16,10 @@
  * Unit tests on EditUserGroup in regard of specifications
  */
 import {defaultAppContext, defaultProps, mockGpgKey} from "./EditUserGroup.test.data";
-import PassboltApiFetchError from "../../../../react/lib/Common/Error/PassboltApiFetchError";
+import PassboltApiFetchError from "../../../lib/Error/PassboltApiFetchError";
 import {waitFor} from "@testing-library/react";
 import EditUserGroupTestPage from "./EditUserGroup.test.page";
-import ErrorDialog from "../../Dialog/ErrorDialog/ErrorDialog";
+import ErrorDialog from "../../Common/Dialog/ErrorDialog/ErrorDialog";
 
 beforeEach(() => {
   jest.resetModules();

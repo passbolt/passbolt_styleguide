@@ -15,8 +15,8 @@
 import {fireEvent, render, waitFor} from "@testing-library/react";
 import AppContext from "../../../contexts/AppContext";
 import React from "react";
-import ManageDialogs from "../../../../react/components/Common/Dialog/ManageDialogs/ManageDialogs";
-import DialogContextProvider from "../../../../react/contexts/Common/DialogContext";
+import ManageDialogs from "../../Common/Dialog/ManageDialogs/ManageDialogs";
+import DialogContextProvider from "../../../contexts/DialogContext";
 import TagEditDialog from "./TagEditDialog";
 import {BrowserRouter as Router} from "react-router-dom";
 

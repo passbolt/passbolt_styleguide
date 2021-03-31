@@ -13,11 +13,11 @@
  */
 import React from "react";
 import PropTypes from "prop-types";
-import UserAvatar from "../../../../react/components/Common/Avatar/UserAvatar";
-import GroupAvatar from "../../../../react/components/Common/Avatar/GroupAvatar";
+import UserAvatar from "../../Common/Avatar/UserAvatar";
+import GroupAvatar from "../../Common/Avatar/GroupAvatar";
 import AppContext from "../../../contexts/AppContext";
 import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
-import Icon from "../../../../react/components/Common/Icons/Icon";
+import Icon from "../../Common/Icons/Icon";
 import {Trans, withTranslation} from "react-i18next";
 import {DateTime} from "luxon";
 

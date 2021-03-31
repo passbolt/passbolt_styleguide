@@ -2,7 +2,7 @@
  * Unit tests on ChangeUserSecurityToken in regard of specifications
  */
 import {defaultProps} from "./ChangeUserSecurityToken.test.data";
-import ErrorDialog from "../../Dialog/ErrorDialog/ErrorDialog";
+import ErrorDialog from "../../Common/Dialog/ErrorDialog/ErrorDialog";
 import ChangeUserSecurityTokenPage from "./ChangeUserSecurityToken.test.page";
 import "../../../test/lib/crypto/cryptoGetRandomvalues";
 

@@ -12,9 +12,9 @@
  * @since         2.13.0
  */
 import React, {Fragment} from "react";
-import Icon from "../../../../react/components/Common/Icons/Icon";
+import Icon from "../../Common/Icons/Icon";
 import PropTypes from "prop-types";
-import {withContextualMenu} from "../../../../react/contexts/Common/ContextualMenuContext";
+import {withContextualMenu} from "../../../contexts/ContextualMenuContext";
 import FoldersTreeItemContextualMenu from "./FoldersTreeItemContextualMenu";
 import {withAppContext} from "../../../contexts/AppContext";
 import {ResourceWorkspaceFilterTypes, withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";

@@ -16,9 +16,9 @@
 import React from 'react';
 import PropTypes from "prop-types";
 import AppContext from "../../../contexts/AppContext";
-import {withLoading} from "../../../../react/contexts/Common/LoadingContext";
-import ErrorDialog from "../../Dialog/ErrorDialog/ErrorDialog";
-import {withDialog} from "../../../../react/contexts/Common/DialogContext";
+import {withLoading} from "../../../contexts/LoadingContext";
+import ErrorDialog from "../../Common/Dialog/ErrorDialog/ErrorDialog";
+import {withDialog} from "../../../contexts/DialogContext";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import {withTranslation} from "react-i18next";
 

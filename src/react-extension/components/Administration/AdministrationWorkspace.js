@@ -17,8 +17,8 @@ import {
   AdministrationWorkspaceMenuTypes,
   withAdministrationWorkspace
 } from "../../contexts/AdministrationWorkspaceContext";
-import DisplayMainMenu from "../navigation/DisplayMainMenu";
-import Logo from "../../../react/components/Common/Navigation/Header/Logo";
+import DisplayMainMenu from "../Navigation/DisplayMainMenu";
+import Logo from "../Common/Navigation/Header/Logo";
 import UserBadgeMenu from "../Header/UserBadgeMenu";
 import DisplayAdministrationMenu from "./DisplayAdministrationMenu/DisplayAdministrationMenu";
 import DisplayMfaAdministration from "./DisplayMfaAdministration/DisplayMfaAdministration";
@@ -29,7 +29,7 @@ import DisplayUserDirectoryAdministration
   from "./DisplayUserDirectoryAdministration/DisplayUserDirectoryAdministration";
 import DisplayEmailNotificationsAdministration
   from "./DisplayEmailNotificationsAdministration/DisplayEmailNotificationsAdministration";
-import SearchBar from "../../../react/components/Common/Navigation/Search/SearchBar";
+import SearchBar from "../Common/Navigation/Search/SearchBar";
 import DisplaySubscriptionKey from "./DisplaySubscriptionKey/DisplaySubscriptionKey";
 
 class AdministrationWorkspace extends Component {

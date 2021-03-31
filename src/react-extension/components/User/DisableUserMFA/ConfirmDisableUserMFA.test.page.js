@@ -1,7 +1,7 @@
 import {fireEvent, render, waitFor} from "@testing-library/react";
 import AppContext from "../../../contexts/AppContext";
-import DialogContextProvider from "../../../../react/contexts/Common/DialogContext";
-import ManageDialogs from "../../../../react/components/Common/Dialog/ManageDialogs/ManageDialogs";
+import DialogContextProvider from "../../../contexts/DialogContext";
+import ManageDialogs from "../../Common/Dialog/ManageDialogs/ManageDialogs";
 import React from "react";
 import ConfirmDisableUserMFA from "./ConfirmDisableUserMFA";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";

@@ -14,17 +14,17 @@
 import React, {Component} from "react";
 import PropTypes from "prop-types";
 
-import FormSubmitButton from "../../../../react/components/Common/Inputs/FormSubmitButton/FormSubmitButton";
-import DialogWrapper from "../../../../react/components/Common/Dialog/DialogWrapper/DialogWrapper";
-import FormCancelButton from "../../../../react/components/Common/Inputs/FormSubmitButton/FormCancelButton";
-import ErrorDialog from "../../Dialog/ErrorDialog/ErrorDialog";
-import Autocomplete from "../../../../react/components/Common/Inputs/Autocomplete/Autocomplete";
+import FormSubmitButton from "../../Common/Inputs/FormSubmitButton/FormSubmitButton";
+import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
+import FormCancelButton from "../../Common/Inputs/FormSubmitButton/FormCancelButton";
+import ErrorDialog from "../../Common/Dialog/ErrorDialog/ErrorDialog";
+import Autocomplete from "../../Common/Inputs/Autocomplete/Autocomplete";
 import AppContext from "../../../contexts/AppContext";
-import {withDialog} from "../../../../react/contexts/Common/DialogContext";
+import {withDialog} from "../../../contexts/DialogContext";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
-import UserAvatar from "../../../../react/components/Common/Avatar/UserAvatar";
-import Icon from "../../../../react/components/Common/Icons/Icon";
-import TooltipHtml from "../../../../react/components/Common/Tooltip/TooltipHtml";
+import UserAvatar from "../../Common/Avatar/UserAvatar";
+import Icon from "../../Common/Icons/Icon";
+import TooltipHtml from "../../Common/Tooltip/TooltipHtml";
 import {Trans, withTranslation} from "react-i18next";
 
 class CreateGroupDialog extends Component {

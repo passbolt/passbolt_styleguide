@@ -2,7 +2,7 @@
  * Unit tests on EditSubscriptionKey in regard of specifications
  */
 import {defaultProps} from "./EditSubscriptionKey.test.data";
-import ErrorDialog from "../../Dialog/ErrorDialog/ErrorDialog";
+import ErrorDialog from "../../Common/Dialog/ErrorDialog/ErrorDialog";
 import EditSubscriptionKeyPage from "./EditSubscriptionKey.test.page";
 
 

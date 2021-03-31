@@ -24,12 +24,12 @@ import {
   mockUsers
 } from "./DisplaySubscriptionKey.test.data";
 import DisplaySubscriptionKeyPage from "./DisplaySubscriptionKey.test.page";
-import PassboltApiFetchError from "../../../../react/lib/Common/Error/PassboltApiFetchError";
+import PassboltApiFetchError from "../../../../react-extension/lib/Error/PassboltApiFetchError";
 import {waitFor} from "@testing-library/react";
 import {DateTime} from "luxon";
 import EditSubscriptionKey from "../EditSubscriptionKey/EditSubscriptionKey";
 import MockPort from "../../../test/mock/MockPort";
-import PassboltSubscriptionError from "../../../../react/lib/Common/Error/PassboltSubscriptionError";
+import PassboltSubscriptionError from "../../../lib/Error/PassboltSubscriptionError";
 
 beforeEach(() => {
   jest.resetModules();

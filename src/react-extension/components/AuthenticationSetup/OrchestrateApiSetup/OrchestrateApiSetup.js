@@ -13,7 +13,7 @@
  */
 import React, {Component} from "react";
 import PropTypes from "prop-types";
-import LoadingSpinner from "../../../../react/components/Common/Loading/LoadingSpinner/LoadingSpinner";
+import LoadingSpinner from "../../Common/Loading/LoadingSpinner/LoadingSpinner";
 import {ApiSetupContextState, withApiSetupContext} from "../../../contexts/ApiSetupContext";
 import InstallExtension from "../../Authentication/InstallExtension/InstallExtension";
 import DisplayBrowserNotSupported from "../../Authentication/DisplayBrowserNotSupported/DisplayBrowserNotSupported";

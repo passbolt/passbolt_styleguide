@@ -12,7 +12,7 @@
  * @since         2.13.0
  */
 import React, {Fragment} from "react";
-import Icon from "../../../../../react/components/Common/Icons/Icon";
+import Icon from "../../../Common/Icons/Icon";
 import AppContext from "../../../../contexts/AppContext";
 import {ResourceWorkspaceFilterTypes, withResourceWorkspace} from "../../../../contexts/ResourceWorkspaceContext";
 import PropTypes from "prop-types";

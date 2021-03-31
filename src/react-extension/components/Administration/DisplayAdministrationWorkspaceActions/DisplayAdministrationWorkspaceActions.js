@@ -15,14 +15,14 @@
 import React from "react";
 import PropTypes from "prop-types";
 import AppContext from "../../../contexts/AppContext";
-import Icon from "../../../../react/components/Common/Icons/Icon";
+import Icon from "../../Common/Icons/Icon";
 import {
   AdministrationWorkspaceMenuTypes,
   withAdministrationWorkspace
 } from "../../../contexts/AdministrationWorkspaceContext";
 import DisplaySimulateSynchronizeUserDirectoryAdministrationDialog
   from "../DisplaySimulateSynchronizeUserDirectoryAdministration/DisplaySimulateSynchronizeUserDirectoryAdministrationDialog";
-import {withDialog} from "../../../../react/contexts/Common/DialogContext";
+import {withDialog} from "../../../contexts/DialogContext";
 import DisplaySynchronizeUserDirectoryAdministrationDialog
   from "../DisplaySynchronizeUserDirectoryAdministration/DisplaySynchronizeUserDirectoryAdministrationDialog";
 import {Trans, withTranslation} from "react-i18next";

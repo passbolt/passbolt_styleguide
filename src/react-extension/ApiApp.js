@@ -12,18 +12,18 @@
  */
 import React, {Component} from "react";
 import ActionFeedbackContextProvider from "./contexts/ActionFeedbackContext";
-import DialogContextProvider from "../react/contexts/Common/DialogContext";
-import ContextualMenuContextProvider from "../react/contexts/Common/ContextualMenuContext";
+import DialogContextProvider from "./contexts/DialogContext";
+import ContextualMenuContextProvider from "./contexts/ContextualMenuContext";
 import ShareActionFeedbacks from "./components/Share/ShareActionFeedbacks";
 import {BrowserRouter as Router, Route, Switch} from "react-router-dom";
 import AdministrationWorkspaceContextProvider from "./contexts/AdministrationWorkspaceContext";
-import ManageDialogs from "../react/components/Common/Dialog/ManageDialogs/ManageDialogs";
-import ManageContextualMenu from "./components/ManageContextualMenu";
+import ManageDialogs from "./components/Common/Dialog/ManageDialogs/ManageDialogs";
+import ManageContextualMenu from "./components/Common/ContextualMenu/ManageContextualMenu";
 import AdministrationWorkspace from "./components/Administration/AdministrationWorkspace";
 import Footer from "./components/Footer/Footer";
 import DisplayApiUserSettingsWorkspace
   from "./components/UserSetting/DisplayUserSettingsWorkspace/DisplayApiUserSettingsWorkspace";
-import DisplayMainMenu from "./components/navigation/DisplayMainMenu";
+import DisplayMainMenu from "./components/Navigation/DisplayMainMenu";
 import NavigationContextProvider from "./contexts/NavigationContext";
 import HandleSessionExpired from "./components/Auth/HandleSessionExpired/HandleSessionExpired";
 import AnnouncementContextProvider from "./contexts/AnnouncementContext";

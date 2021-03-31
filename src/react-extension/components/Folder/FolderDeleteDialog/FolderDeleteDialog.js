@@ -14,13 +14,13 @@
 import React, {Component} from "react";
 import PropTypes from "prop-types";
 import AppContext from "../../../contexts/AppContext";
-import ErrorDialog from "../../Dialog/ErrorDialog/ErrorDialog";
-import FormSubmitButton from "../../../../react/components/Common/Inputs/FormSubmitButton/FormSubmitButton";
-import FormCancelButton from "../../../../react/components/Common/Inputs/FormSubmitButton/FormCancelButton";
-import DialogWrapper from "../../../../react/components/Common/Dialog/DialogWrapper/DialogWrapper";
-import {withDialog} from "../../../../react/contexts/Common/DialogContext";
+import ErrorDialog from "../../Common/Dialog/ErrorDialog/ErrorDialog";
+import FormSubmitButton from "../../Common/Inputs/FormSubmitButton/FormSubmitButton";
+import FormCancelButton from "../../Common/Inputs/FormSubmitButton/FormCancelButton";
+import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
+import {withDialog} from "../../../contexts/DialogContext";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
-import {withLoading} from "../../../../react/contexts/Common/LoadingContext";
+import {withLoading} from "../../../contexts/LoadingContext";
 import {Trans, withTranslation} from "react-i18next";
 
 class FolderDeleteDialog extends Component {

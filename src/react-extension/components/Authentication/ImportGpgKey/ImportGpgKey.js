@@ -12,8 +12,8 @@
  * @since         3.0.0
  */
 import React, {Component} from "react";
-import ErrorDialog from "../../Dialog/ErrorDialog/ErrorDialog";
-import {withDialog} from "../../../../react/contexts/Common/DialogContext";
+import ErrorDialog from "../../Common/Dialog/ErrorDialog/ErrorDialog";
+import {withDialog} from "../../../contexts/DialogContext";
 import {AuthenticationContext} from "../../../contexts/AuthenticationContext";
 import PropTypes from "prop-types";
 import {Trans, withTranslation} from "react-i18next";

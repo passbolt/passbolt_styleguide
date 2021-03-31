@@ -14,7 +14,7 @@
 import {fireEvent, render, waitFor} from "@testing-library/react";
 import AppContext from "../../../contexts/AppContext";
 import React from "react";
-import DialogContextProvider from "../../../../react/contexts/Common/DialogContext";
+import DialogContextProvider from "../../../contexts/DialogContext";
 import PasswordEditDialog from "./PasswordEditDialog";
 import {MemoryRouter, Route} from "react-router-dom";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";

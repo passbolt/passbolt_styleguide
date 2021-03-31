@@ -20,7 +20,7 @@ import {withRouter} from "react-router-dom";
 import PropTypes from "prop-types";
 import DisplayUserDetails from "../DisplayUserDetails/DisplayUserDetails";
 import DisplayUserWorkspaceActions from "../DisplayUserWorkspaceActions/DisplayUserWorkspaceActions";
-import Logo from "../../../../react/components/Common/Navigation/Header/Logo";
+import Logo from "../../Common/Navigation/Header/Logo";
 import UserBadgeMenu from "../../Header/UserBadgeMenu";
 import AppContext from "../../../contexts/AppContext";
 import DisplayGroups from "../FilterUsersByGroups/FilterUsersByGroup";

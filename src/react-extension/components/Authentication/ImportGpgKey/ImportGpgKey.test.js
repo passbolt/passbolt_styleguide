@@ -2,7 +2,7 @@
  * Unit tests on CreateGpgKey in regard of specifications
  */
 import {defaultAppContext, defaultProps} from "./ImportGpgKey.test.data";
-import ErrorDialog from "../../Dialog/ErrorDialog/ErrorDialog";
+import ErrorDialog from "../../Common/Dialog/ErrorDialog/ErrorDialog";
 import ImportGpgKeyPage from "./ImportGpgKey.test.page";
 
 

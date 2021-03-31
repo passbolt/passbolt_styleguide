@@ -16,7 +16,7 @@
  * Unit tests on FolderRenameDialog in regard of specifications
  */
 import {defaultAppContext, defaultProps} from "./FolderRenameDialog.test.data";
-import ErrorDialog from "../../Dialog/ErrorDialog/ErrorDialog";
+import ErrorDialog from "../../Common/Dialog/ErrorDialog/ErrorDialog";
 import FolderRenameDialogPage from "./FolderRenameDialog.test.page";
 
 beforeEach(() => {

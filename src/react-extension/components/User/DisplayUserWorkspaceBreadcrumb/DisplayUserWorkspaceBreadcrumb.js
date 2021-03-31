@@ -14,10 +14,10 @@
 import React, {Component} from "react";
 import {withRouter} from "react-router-dom";
 import PropTypes from "prop-types";
-import Breadcrumbs from "../../../../react/components/Common/Navigation/Breadcrumbs/Breadcrumbs";
+import Breadcrumbs from "../../Common/Navigation/Breadcrumbs/Breadcrumbs";
 import AppContext from "../../../contexts/AppContext";
 import {UserWorkspaceFilterTypes, withUserWorkspace} from "../../../contexts/UserWorkspaceContext";
-import Breadcrumb from "../../../../react/components/Common/Navigation/Breadcrumbs/Breadcrumb";
+import Breadcrumb from "../../Common/Navigation/Breadcrumbs/Breadcrumb";
 import {withNavigationContext} from "../../../contexts/NavigationContext";
 import {withTranslation} from "react-i18next";
 

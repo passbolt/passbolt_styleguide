@@ -19,7 +19,7 @@ import PropTypes from "prop-types";
 import AppContext from "../../../contexts/AppContext";
 import DisplayCommentList from "./DisplayCommentList";
 import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
-import Icon from "../../../../react/components/Common/Icons/Icon";
+import Icon from "../../Common/Icons/Icon";
 import {Trans, withTranslation} from "react-i18next";
 
 class PasswordSidebarCommentSection extends React.Component {

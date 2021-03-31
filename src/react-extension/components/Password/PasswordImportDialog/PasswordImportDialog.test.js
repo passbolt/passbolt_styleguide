@@ -15,12 +15,12 @@
 /**
  * Unit tests on PasswordImportDialog in regard of specifications
  */
-import PassboltApiFetchError from "../../../../react/lib/Common/Error/PassboltApiFetchError";
+import PassboltApiFetchError from "../../../lib/Error/PassboltApiFetchError";
 import {waitFor} from "@testing-library/react";
 import PasswordImportDialogPage from "./PasswordImportDialog.test.page";
 import {defaultAppContext, defaultProps} from "./PasswordImportDialog.test.data";
 import PasswordImportResultDialog from "./PasswordImportResultDialog";
-import ErrorDialog from "../../Dialog/ErrorDialog/ErrorDialog";
+import ErrorDialog from "../../Common/Dialog/ErrorDialog/ErrorDialog";
 import PasswordUnlockKeypassDialog from "./PasswordUnlockKeypassDialog";
 
 beforeEach(() => {

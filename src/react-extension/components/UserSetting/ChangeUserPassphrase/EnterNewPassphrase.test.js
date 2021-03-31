@@ -18,8 +18,8 @@
 import EnterNewPassphrasePage from "./EnterNewPassphrase.test.page";
 import {defaultProps} from "./EnterNewPassphrase.test.data";
 import {waitFor} from "@testing-library/react";
-import PassboltApiFetchError from "../../../../react/lib/Common/Error/PassboltApiFetchError";
-import ErrorDialog from "../../Dialog/ErrorDialog/ErrorDialog";
+import PassboltApiFetchError from "../../../lib/Error/PassboltApiFetchError";
+import ErrorDialog from "../../Common/Dialog/ErrorDialog/ErrorDialog";
 
 beforeEach(() => {
   jest.resetModules();

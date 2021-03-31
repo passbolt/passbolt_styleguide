@@ -18,7 +18,7 @@
 import CreateUserDialogPage from "./CreateUserDialog.test.page";
 import {defaultAppContext, defaultProps} from "./CreateUserDialog.test.data";
 import {ActionFeedbackContext} from "../../../contexts/ActionFeedbackContext";
-import PassboltApiFetchError from "../../../../react/lib/Common/Error/PassboltApiFetchError";
+import PassboltApiFetchError from "../../../lib/Error/PassboltApiFetchError";
 import {waitFor} from "@testing-library/react";
 
 beforeEach(() => {

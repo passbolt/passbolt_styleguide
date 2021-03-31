@@ -15,7 +15,7 @@
 import React from 'react';
 import AppContext from "../../../contexts/AppContext";
 import PassphraseEntryDialog from "../PassphraseEntryDialog/PassphraseEntryDialog";
-import {withDialog} from "../../../../react/contexts/Common/DialogContext";
+import {withDialog} from "../../../contexts/DialogContext";
 import PropTypes from "prop-types";
 
 /**

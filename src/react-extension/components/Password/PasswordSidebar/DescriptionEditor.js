@@ -15,8 +15,8 @@ import React from "react";
 import PropTypes from "prop-types";
 import AppContext from "../../../contexts/AppContext";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
-import {withLoading} from "../../../../react/contexts/Common/LoadingContext";
-import Tooltip from "../../../../react/components/Common/Tooltip/Tooltip";
+import {withLoading} from "../../../contexts/LoadingContext";
+import Tooltip from "../../Common/Tooltip/Tooltip";
 import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 import {Trans, withTranslation} from "react-i18next";
 

@@ -14,7 +14,7 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import Icon from "../../../../react/components/Common/Icons/Icon";
+import Icon from "../../Common/Icons/Icon";
 import {withUserWorkspace} from "../../../contexts/UserWorkspaceContext";
 import AppContext from "../../../contexts/AppContext";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";

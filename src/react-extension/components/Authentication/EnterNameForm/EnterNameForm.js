@@ -15,7 +15,7 @@ import React, {Component} from "react";
 import PropTypes from "prop-types";
 import {withAppContext} from "../../../contexts/AppContext";
 import {withApiTriageContext} from "../../../contexts/ApiTriageContext";
-import FormSubmitButton from "../../../../react/components/Common/Inputs/FormSubmitButton/FormSubmitButton";
+import FormSubmitButton from "../../Common/Inputs/FormSubmitButton/FormSubmitButton";
 import {Trans, withTranslation} from "react-i18next";
 
 class EnterNameForm extends Component {

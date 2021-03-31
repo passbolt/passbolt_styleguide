@@ -13,8 +13,8 @@
  */
 
 import React from 'react';
-import {withDialog} from "../../../../react/contexts/Common/DialogContext";
-import ErrorDialog from "../../Dialog/ErrorDialog/ErrorDialog";
+import {withDialog} from "../../../contexts/DialogContext";
+import ErrorDialog from "../../Common/Dialog/ErrorDialog/ErrorDialog";
 import PropTypes from "prop-types";
 import AppContext from "../../../contexts/AppContext";
 

@@ -13,7 +13,7 @@
  */
 import React, {Component} from "react";
 import AppContext from "../../../contexts/AppContext";
-import DialogWrapper from "../../../../react/components/Common/Dialog/DialogWrapper/DialogWrapper";
+import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
 import {withRouter} from "react-router-dom";
 import {Trans, withTranslation} from "react-i18next";
 import PropTypes from "prop-types";

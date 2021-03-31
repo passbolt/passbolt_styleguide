@@ -13,8 +13,8 @@
  */
 import React from "react";
 import PropTypes from "prop-types";
-import {withDialog} from "../../../../react/contexts/Common/DialogContext";
-import ContextualMenuWrapper from "../../../../react/components/Common/ContextualMenu/ContextualMenuWrapper";
+import {withDialog} from "../../../contexts/DialogContext";
+import ContextualMenuWrapper from "../../Common/ContextualMenu/ContextualMenuWrapper";
 import FolderCreateDialog from "../../Folder/FolderCreateDialog/FolderCreateDialog";
 import AppContext from "../../../contexts/AppContext";
 import FolderRenameDialog from "../../Folder/FolderRenameDialog/FolderRenameDialog";

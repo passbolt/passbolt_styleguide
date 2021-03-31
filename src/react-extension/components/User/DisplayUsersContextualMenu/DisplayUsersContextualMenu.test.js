@@ -28,7 +28,7 @@ import {waitFor} from "@testing-library/dom";
 import EditUserDialog from "../EditUser/EditUserDialog";
 import ConfirmDisableUserMFA from "../DisableUserMFA/ConfirmDisableUserMFA";
 import DeleteUserDialog from "../DeleteUser/DeleteUserDialog";
-import ErrorDialog from "../../Dialog/ErrorDialog/ErrorDialog";
+import ErrorDialog from "../../Common/Dialog/ErrorDialog/ErrorDialog";
 
 beforeEach(() => {
   jest.resetModules();

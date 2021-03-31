@@ -16,7 +16,7 @@
  * Unit tests on PasswordCreateDialog in regard of specifications
  */
 import {ActionFeedbackContext} from "../../../contexts/ActionFeedbackContext";
-import PassboltApiFetchError from "../../../../react/lib/Common/Error/PassboltApiFetchError";
+import PassboltApiFetchError from "../../../lib/Error/PassboltApiFetchError";
 import {waitFor} from "@testing-library/react";
 import {defaultAppContext, defaultProps} from "./PasswordCreateDialog.test.data";
 import PasswordCreateDialogPage from "./PasswordCreateDialog.test.page";

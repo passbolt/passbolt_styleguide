@@ -25,7 +25,7 @@ import PasswordSearchBar from "../PasswordSearchBar/PasswordSearchBar";
 import FilterResourcesByShortcuts from "../FilterResourcesByShortcuts/FilterResourcesByShortcuts";
 import PasswordBreadcrumb from "../PasswordBreadcrumb/PasswordBreadcrumb";
 import PasswordWorkspaceMenu from "./PasswordWorkspaceMenu";
-import Logo from "../../../../react/components/Common/Navigation/Header/Logo";
+import Logo from "../../Common/Navigation/Header/Logo";
 import PasswordWorkspaceMainMenu from "./PasswordWorkspaceMainMenu";
 import SidebarGroupFilterSection from "../Group/SidebarGroupFilterSection/SidebarGroupFilterSection";
 import {withTranslation} from "react-i18next";

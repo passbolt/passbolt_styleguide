@@ -15,11 +15,11 @@
 /**
  * Unit tests on ExportResources in regard of specifications
  */
-import PassboltApiFetchError from "../../../../react/lib/Common/Error/PassboltApiFetchError";
+import PassboltApiFetchError from "../../../lib/Error/PassboltApiFetchError";
 import {waitFor} from "@testing-library/react";
 import ExportResourcesPage from "./ExportResources.test.page";
 import {defaultAppContext, defaultProps} from "./ExportResources.test.data";
-import ErrorDialog from "../../Dialog/ErrorDialog/ErrorDialog";
+import ErrorDialog from "../../Common/Dialog/ErrorDialog/ErrorDialog";
 import {ActionFeedbackContext} from "../../../contexts/ActionFeedbackContext";
 import ExportResourcesCredentials from "./ExportResourcesCredentials";
 

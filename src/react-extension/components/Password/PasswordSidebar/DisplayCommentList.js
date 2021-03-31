@@ -15,7 +15,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import AppContext from "../../../contexts/AppContext";
-import UserAvatar from "../../../../react/components/Common/Avatar/UserAvatar";
+import UserAvatar from "../../Common/Avatar/UserAvatar";
 import DeleteComment from "./DeleteComment";
 import {Trans, withTranslation} from "react-i18next";
 import {DateTime} from "luxon";

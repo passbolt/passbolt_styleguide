@@ -12,12 +12,12 @@
  * @since         2.13.0
  */
 import React, {Fragment} from "react";
-import Icon from "../../../../react/components/Common/Icons/Icon";
+import Icon from "../../Common/Icons/Icon";
 import AppContext from "../../../contexts/AppContext";
 import PropTypes from "prop-types";
 import {withRouter} from "react-router-dom";
 import {UserWorkspaceFilterTypes, withUserWorkspace} from "../../../contexts/UserWorkspaceContext";
-import {withContextualMenu} from "../../../../react/contexts/Common/ContextualMenuContext";
+import {withContextualMenu} from "../../../contexts/ContextualMenuContext";
 import FilterUsersByGroupContextualMenu from "./FilterUsersByGroupContextualMenu";
 import DisplayGroupContextualMenu from "./DisplayGroupContextualMenu";
 import {Trans, withTranslation} from "react-i18next";

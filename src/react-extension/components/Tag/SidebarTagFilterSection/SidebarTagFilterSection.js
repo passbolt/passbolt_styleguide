@@ -13,10 +13,10 @@
  */
 import React, {Fragment} from "react";
 import PropTypes from "prop-types";
-import Icon from "../../../../react/components/Common/Icons/Icon";
+import Icon from "../../Common/Icons/Icon";
 import SidebarTagFilterSectionContextualMenu from "./SidebarTagFilterSectionContextualMenu";
 import DisplayTagList from "./DisplayTagList";
-import {withContextualMenu} from "../../../../react/contexts/Common/ContextualMenuContext";
+import {withContextualMenu} from "../../../contexts/ContextualMenuContext";
 import {ResourceWorkspaceFilterTypes, withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 import AppContext from "../../../contexts/AppContext";
 import {withRouter} from "react-router-dom";

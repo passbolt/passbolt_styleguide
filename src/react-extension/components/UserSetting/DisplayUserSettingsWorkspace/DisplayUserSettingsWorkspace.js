@@ -16,7 +16,7 @@
 import React from 'react';
 import {Route, withRouter} from "react-router-dom";
 import PropTypes from "prop-types";
-import Logo from "../../../../react/components/Common/Navigation/Header/Logo";
+import Logo from "../../Common/Navigation/Header/Logo";
 import UserBadgeMenu from "../../Header/UserBadgeMenu";
 import AppContext from "../../../contexts/AppContext";
 import NavigateIntoUserSettingsWorkspace from "../NavigateIntooUserSettingsWorkspace/NavigateIntoUserSettingsWorkspace";
@@ -27,7 +27,7 @@ import DisplayUserSettingsWorkspaceBreadcrumb
 import DisplayUserSettingsWorkspaceActions
   from "../DisplayUserSettingWorkspaceActions/DisplayUserSettingWorkspaceActions";
 import DisplayUserGpgInformation from "../DisplayUserGpgInformation/DisplayUserGpgInformation";
-import SearchBar from "../../../../react/components/Common/Navigation/Search/SearchBar";
+import SearchBar from "../../Common/Navigation/Search/SearchBar";
 import DisplayUserPassphrase from "../ChangeUserPassphrase/ChangeUserPassphrase";
 import UserSettingsContextProvider from "../../../contexts/UserSettingsContext";
 import DisplayUserChooseSecurityToken from "../ChangeUserSecurityToken/ChangeUserSecurityToken";

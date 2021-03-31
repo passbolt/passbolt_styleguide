@@ -17,7 +17,7 @@
  */
 import {defaultAppContext, defaultProps} from "./FolderCreateDialog.test.data";
 import FolderCreateDialogPage from "./FolderCreateDialog.test.page";
-import ErrorDialog from "../../Dialog/ErrorDialog/ErrorDialog";
+import ErrorDialog from "../../Common/Dialog/ErrorDialog/ErrorDialog";
 
 beforeEach(() => {
   jest.resetModules();

@@ -11,7 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         2.13.0
  */
-import PassboltApiFetchError from "../Error/passboltApiFetchError";
+import PassboltApiFetchError from "../Error/PassboltApiFetchError";
 import PassboltBadResponseError from "../Error/passboltBadResponseError";
 import PassboltServiceUnavailableError from "../Error/passboltServiceUnavailableError";
 

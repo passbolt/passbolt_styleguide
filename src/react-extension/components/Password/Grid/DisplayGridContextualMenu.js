@@ -14,8 +14,8 @@
 import React from "react";
 import PropTypes from "prop-types";
 import AppContext from "../../../contexts/AppContext";
-import {withDialog} from "../../../../react/contexts/Common/DialogContext";
-import ContextualMenuWrapper from "../../../../react/components/Common/ContextualMenu/ContextualMenuWrapper";
+import {withDialog} from "../../../contexts/DialogContext";
+import ContextualMenuWrapper from "../../Common/ContextualMenu/ContextualMenuWrapper";
 import PasswordEditDialog from "../PasswordEditDialog/PasswordEditDialog";
 import ShareDialog from "../../Share/ShareDialog";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
@@ -24,7 +24,7 @@ import {
   resourceLinkAuthorizedProtocols,
   withResourceWorkspace
 } from "../../../contexts/ResourceWorkspaceContext";
-import sanitizeUrl, {urlProtocols} from "../../../../react/lib/Common/Sanitize/sanitizeUrl";
+import sanitizeUrl, {urlProtocols} from "../../../lib/Sanitize/sanitizeUrl";
 import {Trans, withTranslation} from "react-i18next";
 
 class DisplayGridContextualMenu extends React.Component {

@@ -4,10 +4,10 @@ import Login from "../Login/Login";
 import DisplayLoginInProgress from "../DisplayLoginInProgress/DisplayLoginInProgress";
 import DisplayLoginError from "../DisplayLoginError/DisplayLoginError";
 import AcceptLoginServerKeyChange from "../AcceptLoginServerKeyChange/AcceptLoginServerKeyChange";
-import ErrorDialog from "../../Dialog/ErrorDialog/ErrorDialog";
-import {withDialog} from "../../../../react/contexts/Common/DialogContext";
+import ErrorDialog from "../../Common/Dialog/ErrorDialog/ErrorDialog";
+import {withDialog} from "../../../contexts/DialogContext";
 import PropTypes from "prop-types";
-import LoadingSpinner from "../../../../react/components/Common/Loading/LoadingSpinner/LoadingSpinner";
+import LoadingSpinner from "../../Common/Loading/LoadingSpinner/LoadingSpinner";
 import DisplayUnexpectedError from "../../Authentication/DisplayError/DisplayUnexpectedError";
 
 /**

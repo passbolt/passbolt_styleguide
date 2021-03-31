@@ -15,11 +15,11 @@
 /**
  * Unit tests on PasswordUnlockKeypassDialog in regard of specifications
  */
-import PassboltApiFetchError from "../../../../react/lib/Common/Error/PassboltApiFetchError";
+import PassboltApiFetchError from "../../../lib/Error/PassboltApiFetchError";
 import {waitFor} from "@testing-library/react";
 import PasswordUnlockKeypassDialogPage from "./ExportResourcesCredentials.test.page";
 import {defaultAppContext, defaultProps} from "./ExportResourcesCredentials.test.data";
-import ErrorDialog from "../../Dialog/ErrorDialog/ErrorDialog";
+import ErrorDialog from "../../Common/Dialog/ErrorDialog/ErrorDialog";
 import {ActionFeedbackContext} from "../../../contexts/ActionFeedbackContext";
 
 beforeEach(() => {

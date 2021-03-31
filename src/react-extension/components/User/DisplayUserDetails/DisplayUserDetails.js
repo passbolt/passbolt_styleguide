@@ -12,7 +12,7 @@
  * @since         2.13.0
  */
 import React from "react";
-import Icon from "../../../../react/components/Common/Icons/Icon";
+import Icon from "../../Common/Icons/Icon";
 import PropTypes from "prop-types";
 import AppContext from "../../../contexts/AppContext";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
@@ -20,7 +20,7 @@ import {withUserWorkspace} from "../../../contexts/UserWorkspaceContext";
 import DisplayUserDetailsInformation from "../DisplayUserDetailsInformation/DisplayUserDetailsInformation";
 import DisplayUserDetailsGroups from "../DisplayUserDetailsGroups/DisplayUserDetailsGroups";
 import DisplayUserDetailsPublicKey from "../DisplayUserDetailsPublicKey/DisplayUserDetailsPublicKey";
-import UserAvatar from "../../../../react/components/Common/Avatar/UserAvatar";
+import UserAvatar from "../../Common/Avatar/UserAvatar";
 import {withTranslation} from "react-i18next";
 
 class DisplayUserDetails extends React.Component {
