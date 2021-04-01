@@ -16,9 +16,9 @@ import React from "react";
 import PropTypes from "prop-types";
 import AppContext from "../../../contexts/AppContext";
 import Icon from "../../Common/Icons/Icon";
-import CreateUserDialog from "../CreateUser/CreateUserDialog";
+import CreateUser from "../CreateUser/CreateUser";
 import {withDialog} from "../../../contexts/DialogContext";
-import CreateGroupDialog from "../../Group/CreateGroup/CreateGroupDialog";
+import CreateUserGroup from "../../UserGroup/CreateUserGroup/CreateUserGroup";
 import {Trans, withTranslation} from "react-i18next";
 
 /**
@@ -128,7 +128,7 @@ class DisplayUserWorkspaceMainActions extends React.Component {
    * Open create user dialog
    */
   openCreateUserDialog() {
-    this.props.dialogContext.open(CreateUserDialog);
+    this.props.dialogContext.open(CreateUser);
   }
 
   /**
@@ -143,7 +143,7 @@ class DisplayUserWorkspaceMainActions extends React.Component {
    * Open create group dialog
    */
   openCreateGroupDialog() {
-    this.props.dialogContext.open(CreateGroupDialog);
+    this.props.dialogContext.open(CreateUserGroup);
   }
 
   /**

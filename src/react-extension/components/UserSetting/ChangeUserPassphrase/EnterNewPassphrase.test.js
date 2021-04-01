@@ -19,7 +19,7 @@ import EnterNewPassphrasePage from "./EnterNewPassphrase.test.page";
 import {defaultProps} from "./EnterNewPassphrase.test.data";
 import {waitFor} from "@testing-library/react";
 import PassboltApiFetchError from "../../../lib/Error/PassboltApiFetchError";
-import ErrorDialog from "../../Common/Dialog/ErrorDialog/ErrorDialog";
+import NotifyError from "../../Common/Error/NotifyError/NotifyError";
 
 beforeEach(() => {
   jest.resetModules();
@@ -155,7 +155,7 @@ describe("As LU I should see the user confirm passphrase page", () => {
 
       await page.update();
       const ErrorDialogProps = {message: "Jest simulate API error."};
-      expect(props.dialogContext.open).toHaveBeenCalledWith(ErrorDialog, ErrorDialogProps);
+      expect(props.dialogContext.open).toHaveBeenCalledWith(NotifyError, ErrorDialogProps);
     });
   });
 });

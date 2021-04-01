@@ -21,12 +21,12 @@ import PropTypes from "prop-types";
 import DisplayUserDetails from "../DisplayUserDetails/DisplayUserDetails";
 import DisplayUserWorkspaceActions from "../DisplayUserWorkspaceActions/DisplayUserWorkspaceActions";
 import Logo from "../../Common/Navigation/Header/Logo";
-import UserBadgeMenu from "../../Header/UserBadgeMenu";
+import DisplayUserBadgeMenu from "../DisplayUserBadgeMenu/DisplayUserBadgeMenu";
 import AppContext from "../../../contexts/AppContext";
 import DisplayGroups from "../FilterUsersByGroups/FilterUsersByGroup";
 import FilterUsersByShortcut from "../FilterUsersByShortcut/FilterUserByShortcut";
 import FilterUsersByText from "../FilterUsersByText/FilterUsersByText";
-import DisplayUserGroupDetails from "../DisplayUserGroupDetails/DisplayUserGroupDetails";
+import DisplayUserGroupDetails from "../../UserGroup/DisplayUserGroupDetails/DisplayUserGroupDetails";
 import DisplayUserWorkspaceMainActions from "../DisplayUserWorkspaceMainActions/DisplayUserWorkspaceMainActions";
 import DisplayUserWorkspaceBreadcrumb from "../DisplayUserWorkspaceBreadcrumb/DisplayUserWorkspaceBreadcrumb";
 
@@ -60,7 +60,7 @@ class DisplayUserWorkspace extends React.Component {
         <div className="header second">
           <Logo/>
           <FilterUsersByText/>
-          <UserBadgeMenu baseUrl={this.context.userSettings.getTrustedDomain()} user={this.context.loggedInUser}/>
+          <DisplayUserBadgeMenu baseUrl={this.context.userSettings.getTrustedDomain()} user={this.context.loggedInUser}/>
         </div>
         <div className="header third">
           <DisplayUserWorkspaceMainActions/>

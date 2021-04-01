@@ -17,7 +17,7 @@ import React from 'react';
 import {Route, withRouter} from "react-router-dom";
 import PropTypes from "prop-types";
 import Logo from "../../Common/Navigation/Header/Logo";
-import UserBadgeMenu from "../../Header/UserBadgeMenu";
+import DisplayUserBadgeMenu from "../../User/DisplayUserBadgeMenu/DisplayUserBadgeMenu";
 import AppContext from "../../../contexts/AppContext";
 import NavigateIntoUserSettingsWorkspace from "../NavigateIntooUserSettingsWorkspace/NavigateIntoUserSettingsWorkspace";
 import DisplayUserProfile from "../DisplayUserProfile/DisplayUserProfile";
@@ -55,7 +55,7 @@ class DisplayUserSettingsWorkspace extends React.Component {
         <div className="header second">
           <Logo/>
           <SearchBar disabled={true}/>
-          <UserBadgeMenu baseUrl={this.context.userSettings.getTrustedDomain()} user={this.context.loggedInUser}/>
+          <DisplayUserBadgeMenu baseUrl={this.context.userSettings.getTrustedDomain()} user={this.context.loggedInUser}/>
         </div>
         <div className="header third">
           <DisplayUserSettingsWorkspaceActions/>

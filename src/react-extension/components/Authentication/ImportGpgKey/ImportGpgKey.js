@@ -12,7 +12,7 @@
  * @since         3.0.0
  */
 import React, {Component} from "react";
-import ErrorDialog from "../../Common/Dialog/ErrorDialog/ErrorDialog";
+import NotifyError from "../../Common/Error/NotifyError/NotifyError";
 import {withDialog} from "../../../contexts/DialogContext";
 import {AuthenticationContext} from "../../../contexts/AuthenticationContext";
 import PropTypes from "prop-types";
@@ -154,7 +154,7 @@ class ImportGpgKey extends Component {
       this.setState({errors: {invalidPrivateKey: true}, errorMessage: error.message});
     } else {
       const ErrorDialogProps = {message: error.message};
-      this.props.dialogContext.open(ErrorDialog, ErrorDialogProps);
+      this.props.dialogContext.open(NotifyError, ErrorDialogProps);
     }
   }
 

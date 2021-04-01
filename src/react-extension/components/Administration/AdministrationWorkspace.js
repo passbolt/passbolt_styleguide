@@ -17,9 +17,9 @@ import {
   AdministrationWorkspaceMenuTypes,
   withAdministrationWorkspace
 } from "../../contexts/AdministrationWorkspaceContext";
-import DisplayMainMenu from "../Navigation/DisplayMainMenu";
+import DisplayMainMenu from "../Common/Menu/DisplayMainMenu";
 import Logo from "../Common/Navigation/Header/Logo";
-import UserBadgeMenu from "../Header/UserBadgeMenu";
+import DisplayUserBadgeMenu from "../User/DisplayUserBadgeMenu/DisplayUserBadgeMenu";
 import DisplayAdministrationMenu from "./DisplayAdministrationMenu/DisplayAdministrationMenu";
 import DisplayMfaAdministration from "./DisplayMfaAdministration/DisplayMfaAdministration";
 import DisplayAdministrationWorkspaceActions from "./DisplayAdministrationWorkspaceActions/DisplayAdministrationWorkspaceActions";
@@ -75,7 +75,7 @@ class AdministrationWorkspace extends Component {
           <div className="header second">
             <Logo/>
             <SearchBar disabled={true}/>
-            <UserBadgeMenu baseUrl={this.props.context.trustedDomain || this.props.context.userSettings.getTrustedDomain()} user={this.props.context.loggedInUser}/>
+            <DisplayUserBadgeMenu baseUrl={this.props.context.trustedDomain || this.props.context.userSettings.getTrustedDomain()} user={this.props.context.loggedInUser}/>
           </div>
           <div className="header third">
             <div className="col1 main-action-wrapper">

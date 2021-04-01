@@ -20,7 +20,7 @@ import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
 import FormSubmitButton from "../../Common/Inputs/FormSubmitButton/FormSubmitButton";
 import FormCancelButton from "../../Common/Inputs/FormSubmitButton/FormCancelButton";
 import {withUserWorkspace} from "../../../contexts/UserWorkspaceContext";
-import ErrorDialog from "../../Common/Dialog/ErrorDialog/ErrorDialog";
+import NotifyError from "../../Common/Error/NotifyError/NotifyError";
 import {Trans, withTranslation} from "react-i18next";
 
 class ConfirmDisableUserMFA extends Component {
@@ -119,7 +119,7 @@ class ConfirmDisableUserMFA extends Component {
       message: error.message
     };
     this.context.setContext({errorDialogProps});
-    this.props.dialogContext.open(ErrorDialog);
+    this.props.dialogContext.open(NotifyError);
   }
 
   /**

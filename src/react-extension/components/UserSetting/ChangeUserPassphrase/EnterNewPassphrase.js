@@ -17,7 +17,7 @@ import React from 'react';
 import PropTypes from "prop-types";
 import {withUserSettings} from "../../../contexts/UserSettingsContext";
 import FormSubmitButton from "../../Common/Inputs/FormSubmitButton/FormSubmitButton";
-import ErrorDialog from "../../Common/Dialog/ErrorDialog/ErrorDialog";
+import NotifyError from "../../Common/Error/NotifyError/NotifyError";
 import {withDialog} from "../../../contexts/DialogContext";
 import Icon from "../../Common/Icons/Icon";
 import debounce from "debounce-promise";
@@ -207,7 +207,7 @@ class EnterNewPassphrase extends React.Component {
   async onGpgKeyGeneratedFailure(error) {
     await this.toggleProcessing();
     const ErrorDialogProps = {message: error.message};
-    this.props.dialogContext.open(ErrorDialog, ErrorDialogProps);
+    this.props.dialogContext.open(NotifyError, ErrorDialogProps);
   }
 
   /**

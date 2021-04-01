@@ -12,7 +12,7 @@
  * @since         3.0.0
  */
 import React, {Component} from "react";
-import ErrorDialog from "../../Common/Dialog/ErrorDialog/ErrorDialog";
+import NotifyError from "../../Common/Error/NotifyError/NotifyError";
 import {AuthenticationContext} from "../../../contexts/AuthenticationContext";
 import PropTypes from "prop-types";
 import {withDialog} from "../../../contexts/DialogContext";
@@ -173,7 +173,7 @@ class CheckPassphrase extends Component {
       this.setState({errors: {invalidPassphrase: true}});
     } else {
       const ErrorDialogProps = {message: error.message};
-      this.props.dialogContext.open(ErrorDialog, ErrorDialogProps);
+      this.props.dialogContext.open(NotifyError, ErrorDialogProps);
     }
   }
 

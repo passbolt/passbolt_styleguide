@@ -19,7 +19,7 @@ import {defaultAppContext, defaultProps} from "./ConfirmDisableUserMFA.test.data
 import ConfirmDisableUserMFATestPage from "./ConfirmDisableUserMFA.test.page";
 import {ActionFeedbackContext} from "../../../contexts/ActionFeedbackContext";
 import {waitFor} from "@testing-library/react";
-import ErrorDialog from "../../Common/Dialog/ErrorDialog/ErrorDialog";
+import NotifyError from "../../Common/Error/NotifyError/NotifyError";
 
 beforeEach(() => {
   jest.resetModules();
@@ -70,7 +70,7 @@ describe("See the Create Dialog User", () => {
       mockContextRequest(context, () => Promise.reject("Some error"));
       jest.spyOn(props.dialogContext, 'open').mockImplementation(() => {});
       await page.confirm();
-      expect(props.dialogContext.open).toHaveBeenCalledWith(ErrorDialog);
+      expect(props.dialogContext.open).toHaveBeenCalledWith(NotifyError);
     });
   });
 });

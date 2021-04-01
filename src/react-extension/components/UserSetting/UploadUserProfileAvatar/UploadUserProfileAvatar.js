@@ -21,7 +21,7 @@ import {withDialog} from "../../../contexts/DialogContext";
 import FormSubmitButton from "../../Common/Inputs/FormSubmitButton/FormSubmitButton";
 import FormCancelButton from "../../Common/Inputs/FormSubmitButton/FormCancelButton";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
-import ErrorDialog from "../../Common/Dialog/ErrorDialog/ErrorDialog";
+import NotifyError from "../../Common/Error/NotifyError/NotifyError";
 import Icon from "../../Common/Icons/Icon";
 import {Trans, withTranslation} from "react-i18next";
 
@@ -226,7 +226,7 @@ class UploadUserProfileAvatar extends React.Component {
         message: error.message
       };
       this.context.setContext({errorDialogProps});
-      this.props.dialogContext.open(ErrorDialog);
+      this.props.dialogContext.open(NotifyError);
     }
   }
 

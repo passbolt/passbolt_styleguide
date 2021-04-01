@@ -18,9 +18,9 @@ import InsertAppIframe from "./components/InsertAppIframe";
 import InsertFileIframe from "./components/InsertFileIframe";
 import InsertClipboardIframe from "./components/InsertClipboardIframe";
 import UserSettings from "./lib/Settings/UserSettings";
-import HandleLegacyAppjs from "./components/Legacy/HandleLegacyAppjs";
-import HandleExtAppBootstrapRouteChangeRequested from "./components/Route/HandleExtAppBootstrapRouteChangeRequested";
-import CleanupLegacyAppjs from "./components/Legacy/CleanupLegacyAppjs";
+import HandleLegacyAppjs from "./components/Common/Legacy/HandleLegacyAppjs";
+import HandleExtAppBootstrapRouteChangeRequested from "./components/Common/Route/HandleExtAppBootstrapRouteChangeRequested";
+import CleanupLegacyAppjs from "./components/Common/Legacy/CleanupLegacyAppjs";
 
 /**
  * The bootstrap of the passbolt application served by the browser extension.

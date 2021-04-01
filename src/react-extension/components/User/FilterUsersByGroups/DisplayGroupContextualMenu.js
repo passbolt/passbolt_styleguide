@@ -16,9 +16,9 @@ import PropTypes from "prop-types";
 import AppContext from "../../../contexts/AppContext";
 import {withDialog} from "../../../contexts/DialogContext";
 import ContextualMenuWrapper from "../../Common/ContextualMenu/ContextualMenuWrapper";
-import DeleteGroupWithConflictsDialog from "../../Group/DeleteGroup/DeleteGroupWithConflictsDialog";
-import ErrorDialog from "../../Common/Dialog/ErrorDialog/ErrorDialog";
-import DeleteGroupDialog from "../../Group/DeleteGroup/DeleteGroupDialog";
+import DeleteUserGroupWithConflicts from "../../UserGroup/DeleteUserGroup/DeleteUserGroupWithConflicts";
+import NotifyError from "../../Common/Error/NotifyError/NotifyError";
+import DeleteUserGroup from "../../UserGroup/DeleteUserGroup/DeleteUserGroup";
 import EditUserGroup from "../EditUserGroup/EditUserGroup";
 import {withUserWorkspace} from "../../../contexts/UserWorkspaceContext";
 import {Trans, withTranslation} from "react-i18next";
@@ -81,7 +81,7 @@ class DisplayGroupContextualMenu extends React.Component {
       group: this.group
     };
     this.context.setContext({deleteGroupDialogProps});
-    this.props.dialogContext.open(DeleteGroupDialog);
+    this.props.dialogContext.open(DeleteUserGroup);
   }
 
   /**
@@ -93,7 +93,7 @@ class DisplayGroupContextualMenu extends React.Component {
       errors
     };
     this.context.setContext({deleteGroupWithConflictsDialogProps});
-    this.props.dialogContext.open(DeleteGroupWithConflictsDialog);
+    this.props.dialogContext.open(DeleteUserGroupWithConflicts);
   }
 
   /**
@@ -106,7 +106,7 @@ class DisplayGroupContextualMenu extends React.Component {
       message: error.message
     };
     this.context.setContext({errorDialogProps});
-    this.props.dialogContext.open(ErrorDialog);
+    this.props.dialogContext.open(NotifyError);
   }
 
 

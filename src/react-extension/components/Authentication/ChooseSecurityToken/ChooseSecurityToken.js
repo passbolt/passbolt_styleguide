@@ -15,7 +15,7 @@ import React, {Component} from "react";
 import {CirclePicker} from "react-color";
 import Icon from "../../Common/Icons/Icon";
 import {AuthenticationContext} from "../../../contexts/AuthenticationContext";
-import ErrorDialog from "../../Common/Dialog/ErrorDialog/ErrorDialog";
+import NotifyError from "../../Common/Error/NotifyError/NotifyError";
 import {withDialog} from "../../../contexts/DialogContext";
 import PropTypes from "prop-types";
 import SecretComplexity from "../../../lib/Secret/SecretComplexity";
@@ -201,7 +201,7 @@ class ChooseSecurityToken extends Component {
   async onSaveFailure(error) {
     await this.toggleProcessing();
     const ErrorDialogProps = {message: error.message};
-    this.props.dialogContext.open(ErrorDialog, ErrorDialogProps);
+    this.props.dialogContext.open(NotifyError, ErrorDialogProps);
   }
 
 

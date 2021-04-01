@@ -18,9 +18,9 @@ import ManageDialogs from "./components/Common/Dialog/ManageDialogs/ManageDialog
 import DialogContextProvider from "./contexts/DialogContext";
 import SetupAuthentication from "./components/AuthenticationSetup/SetupAuthentication/SetupAuthentication";
 import SiteSettings from "./lib/Settings/SiteSettings";
-import Footer from "./components/Footer/Footer";
+import Footer from "./components/Common/Footer/Footer";
 import AppContext from "./contexts/AppContext";
-import TranslationProvider from "./components/Internationalisation/TranslationProvider";
+import TranslationProvider from "./components/Common/Internationalisation/TranslationProvider";
 
 /**
  * The setup application served by the browser extension.

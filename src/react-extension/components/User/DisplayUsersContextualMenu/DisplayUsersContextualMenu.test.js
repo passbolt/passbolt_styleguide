@@ -25,10 +25,10 @@ import {
 } from "./DisplayUsersContextualMenu.test.data";
 import DisplayUsersContextualMenuPage from "./DisplayUsersContextualMenu.test.page";
 import {waitFor} from "@testing-library/dom";
-import EditUserDialog from "../EditUser/EditUserDialog";
+import EditUser from "../EditUser/EditUser";
 import ConfirmDisableUserMFA from "../DisableUserMFA/ConfirmDisableUserMFA";
-import DeleteUserDialog from "../DeleteUser/DeleteUserDialog";
-import ErrorDialog from "../../Common/Dialog/ErrorDialog/ErrorDialog";
+import DeleteUser from "../DeleteUser/DeleteUser";
+import NotifyError from "../../Common/Error/NotifyError/NotifyError";
 
 beforeEach(() => {
   jest.resetModules();
@@ -99,7 +99,7 @@ describe("Display Users Contextual Menu", () => {
     await page.edit();
 
     expect(context.setContext).toHaveBeenLastCalledWith({"editUserDialogProps": {"id": "640ebc06-5ec1-5322-a1ae-6120ed2f3a74"}});
-    expect(props.dialogContext.open).toHaveBeenCalledWith(EditUserDialog);
+    expect(props.dialogContext.open).toHaveBeenCalledWith(EditUser);
     expect(props.hide).toHaveBeenCalled();
   });
 
@@ -165,7 +165,7 @@ describe("Display Users Contextual Menu", () => {
 
     expect(context.port.request).toHaveBeenLastCalledWith("passbolt.users.delete-dry-run", "640ebc06-5ec1-5322-a1ae-6120ed2f3a74");
     expect(context.setContext).toHaveBeenLastCalledWith({"deleteUserDialogProps": {user: props.user}});
-    expect(props.dialogContext.open).toHaveBeenCalledWith(DeleteUserDialog);
+    expect(props.dialogContext.open).toHaveBeenCalledWith(DeleteUser);
     expect(props.hide).toHaveBeenCalled();
   });
 
@@ -181,7 +181,7 @@ describe("Display Users Contextual Menu", () => {
 
     expect(context.port.request).toHaveBeenLastCalledWith("passbolt.users.delete-dry-run", "640ebc06-5ec1-5322-a1ae-6120ed2f3a74");
     expect(context.setContext).toHaveBeenLastCalledWith({errorDialogProps});
-    expect(props.dialogContext.open).toHaveBeenCalledWith(ErrorDialog);
+    expect(props.dialogContext.open).toHaveBeenCalledWith(NotifyError);
   });
 
   it('As LU I should see an delete dry error message if the delete request has a delete dry error', async() => {

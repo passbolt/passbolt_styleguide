@@ -2,7 +2,7 @@
  * Unit tests on CreateGpgKey in regard of specifications
  */
 import {defaultAppContext, defaultProps} from "./ImportGpgKey.test.data";
-import ErrorDialog from "../../Common/Dialog/ErrorDialog/ErrorDialog";
+import NotifyError from "../../Common/Error/NotifyError/NotifyError";
 import ImportGpgKeyPage from "./ImportGpgKey.test.page";
 
 
@@ -76,6 +76,6 @@ describe("Create GPG key", () => {
     jest.spyOn(props.dialogContext, 'open').mockImplementationOnce(jest.fn());
     await page.fill('Some private key');
     await page.verifyKey();
-    expect(props.dialogContext.open).toBeCalledWith(ErrorDialog, expectedError);
+    expect(props.dialogContext.open).toBeCalledWith(NotifyError, expectedError);
   });
 });

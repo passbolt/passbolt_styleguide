@@ -23,7 +23,7 @@ import AdministrationWorkspace from "./components/Administration/AdministrationW
 import Footer from "./components/Footer/Footer";
 import DisplayApiUserSettingsWorkspace
   from "./components/UserSetting/DisplayUserSettingsWorkspace/DisplayApiUserSettingsWorkspace";
-import DisplayMainMenu from "./components/Navigation/DisplayMainMenu";
+import DisplayMainMenu from "./components/Common/Menu/DisplayMainMenu";
 import NavigationContextProvider from "./contexts/NavigationContext";
 import HandleSessionExpired from "./components/Auth/HandleSessionExpired/HandleSessionExpired";
 import AnnouncementContextProvider from "./contexts/AnnouncementContext";

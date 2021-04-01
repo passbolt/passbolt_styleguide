@@ -19,7 +19,7 @@ import {withRouter} from "react-router-dom";
 import AppContext from "./AppContext";
 import {withLoading} from "./LoadingContext";
 import {withActionFeedback} from "./ActionFeedbackContext";
-import EditUserGroup from "../components/User/EditUserGroup/EditUserGroup";
+import EditUserGroup from "../components/UserGroup/EditUserGroup/EditUserGroup";
 import {withDialog} from "./DialogContext";
 import {DateTime} from "luxon";
 

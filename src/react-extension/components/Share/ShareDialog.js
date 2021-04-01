@@ -17,7 +17,7 @@ import PropTypes from "prop-types";
 import FormSubmitButton from "../Common/Inputs/FormSubmitButton/FormSubmitButton";
 import DialogWrapper from "../Common/Dialog/DialogWrapper/DialogWrapper";
 import FormCancelButton from "../Common/Inputs/FormSubmitButton/FormCancelButton";
-import ErrorDialog from "../Common/Dialog/ErrorDialog/ErrorDialog";
+import NotifyError from "../Common/Error/NotifyError/NotifyError";
 import Autocomplete from "../Common/Inputs/Autocomplete/Autocomplete";
 import ShareChanges from "./Utility/ShareChanges";
 import SharePermissionItem from "./SharePermissionItem";
@@ -188,7 +188,7 @@ class ShareDialog extends Component {
       message: error.message
     };
     this.context.setContext({errorDialogProps});
-    this.props.dialogContext.open(ErrorDialog);
+    this.props.dialogContext.open(NotifyError);
   }
 
   /**

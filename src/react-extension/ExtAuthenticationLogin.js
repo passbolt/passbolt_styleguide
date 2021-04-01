@@ -19,8 +19,8 @@ import DialogContextProvider from "./contexts/DialogContext";
 import {BrowserRouter as Router} from "react-router-dom";
 import OrchestrateLogin from "./components/AuthenticationLogin/OrchestrateLogin/OrchestrateLogin";
 import SiteSettings from "./lib/Settings/SiteSettings";
-import Footer from "./components/Footer/Footer";
-import TranslationProvider from "./components/Internationalisation/TranslationProvider";
+import Footer from "./components/Common/Footer/Footer";
+import TranslationProvider from "./components/Common/Internationalisation/TranslationProvider";
 
 
 /**

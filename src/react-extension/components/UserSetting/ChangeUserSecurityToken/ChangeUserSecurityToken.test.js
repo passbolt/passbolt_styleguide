@@ -2,7 +2,7 @@
  * Unit tests on ChangeUserSecurityToken in regard of specifications
  */
 import {defaultProps} from "./ChangeUserSecurityToken.test.data";
-import ErrorDialog from "../../Common/Dialog/ErrorDialog/ErrorDialog";
+import NotifyError from "../../Common/Error/NotifyError/NotifyError";
 import ChangeUserSecurityTokenPage from "./ChangeUserSecurityToken.test.page";
 import "../../../test/lib/crypto/cryptoGetRandomvalues";
 
@@ -84,7 +84,7 @@ describe("Display change user security token", () => {
     jest.spyOn(props.dialogContext, 'open').mockImplementationOnce(jest.fn());
     await page.fillCode('ABC');
     await page.save();
-    expect(props.dialogContext.open).toBeCalledWith(ErrorDialog, expectedError);
+    expect(props.dialogContext.open).toBeCalledWith(NotifyError, expectedError);
   });
 });
 
