@@ -15,7 +15,7 @@ import PropTypes from "prop-types";
 import {withAppContext} from "./AppContext";
 import {withRouter} from "react-router-dom";
 import {withLoading} from "./LoadingContext";
-import {ApiClient} from "../lib/apiClient/apiClient";
+import {ApiClient} from "../../lib/apiClient/apiClient";
 
 /**
  * Context related to resources ( filter, current selections, etc.)

@@ -17,6 +17,13 @@ export default class UserSettings {
   }
 
   /**
+   * Returns the user id
+   */
+  get id() {
+    return this.settings["user.id"];
+  }
+
+  /**
    * Returns the user full name
    */
   get fullName() {

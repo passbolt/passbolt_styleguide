@@ -13,11 +13,11 @@
  */
 import React, {Component} from "react";
 import AppContext from "./contexts/AppContext";
-import {ApiClientOptions} from "./lib/apiClient/apiClientOptions";
+import {ApiClientOptions} from "../lib/apiClient/apiClientOptions";
 import ApiTriageContextProvider from "./contexts/ApiTriageContext";
 import OrchestrateApiTriage from "./components/AuthenticationLogin/OrchestrateApiTriage/OrchestrateApiTriage";
-import {ApiClient} from "./lib/apiClient/apiClient";
-import SiteSettings from "./lib/Settings/SiteSettings";
+import {ApiClient} from "../lib/apiClient/apiClient";
+import SiteSettings from "../lib/Settings/SiteSettings";
 import Footer from "./components/Common/Footer/Footer";
 import TranslationProvider from "./components/Common/Internationalisation/TranslationProvider";
 

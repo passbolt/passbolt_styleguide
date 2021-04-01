@@ -20,7 +20,7 @@ import PropTypes from "prop-types";
 import {withAppContext} from "../../../contexts/AppContext";
 import {withUserSettings} from "../../../contexts/UserSettingsContext";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
-import SecretComplexity from "../../../lib/Secret/SecretComplexity";
+import SecretComplexity from "../../../../lib/Secret/SecretComplexity";
 
 /**
  * This component displays the user choose security token information

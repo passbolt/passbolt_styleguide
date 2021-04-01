@@ -13,13 +13,13 @@
  */
 import React, {Component} from "react";
 import Icon from "../../Common/Icons/Icon";
-import SecurityComplexity from "../../../lib/Secret/SecretComplexity";
+import SecurityComplexity from "../../../../lib/Secret/SecretComplexity";
 import {AuthenticationContext} from "../../../contexts/AuthenticationContext";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
 import {withDialog} from "../../../contexts/DialogContext";
 import PropTypes from "prop-types";
 import debounce from "debounce-promise";
-import SecretComplexity from "../../../lib/Secret/SecretComplexity";
+import SecretComplexity from "../../../../lib/Secret/SecretComplexity";
 import {Trans, withTranslation} from "react-i18next";
 
 /**

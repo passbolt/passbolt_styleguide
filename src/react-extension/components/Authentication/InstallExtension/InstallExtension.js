@@ -12,7 +12,7 @@
  * @since         3.0.0
  */
 import React, {Component} from "react";
-import {BROWSER_NAMES, detectBrowserName} from "../../../lib/Browser/detectBrowserName";
+import {BROWSER_NAMES, detectBrowserName} from "../../../../lib/Browser/detectBrowserName";
 import {withAppContext} from "../../../contexts/AppContext";
 import PropTypes from "prop-types";
 import {Trans, withTranslation} from "react-i18next";

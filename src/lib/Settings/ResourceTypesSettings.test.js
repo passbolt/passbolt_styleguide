@@ -12,9 +12,9 @@
  * @since         3.0.0
  */
 import ResourceTypesSettings from "./ResourceTypesSettings";
-import resourceTypesFixture from "../../test/fixture/ResourceTypes/resourceTypes";
+import resourceTypesFixture from "../../react-extension/test/fixture/ResourceTypes/resourceTypes";
 import SiteSettings from "./SiteSettings";
-import siteSettingsFixture from "../../test/fixture/Settings/siteSettings";
+import siteSettingsFixture from "../../react-extension/test/fixture/Settings/siteSettings";
 
 describe("ResourceTypeSettings", () => {
   it("areResourceTypesEnabled is false if site settings is undefined", () => {

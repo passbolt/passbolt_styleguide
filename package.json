@@ -62,6 +62,7 @@
     "react-color": "^2.19.3",
     "react-i18next": "^11.8.5",
     "react-list": "^0.8.15",
+    "react-transition-group": "^4.4.1",
     "simplebar": "^5.2.1",
     "webextension-polyfill": "^0.6.0",
     "xregexp": "^4.3.0"

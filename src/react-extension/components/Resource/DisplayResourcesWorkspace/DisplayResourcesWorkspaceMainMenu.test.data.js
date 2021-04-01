@@ -1,5 +1,5 @@
 import MockPort from "../../../test/mock/MockPort";
-import SiteSettings from "../../../lib/Settings/SiteSettings";
+import SiteSettings from "../../../../lib/Settings/SiteSettings";
 import siteSettingsFixture from "../../../test/fixture/Settings/siteSettings";
 import {ResourceWorkspaceFilterTypes} from "../../../contexts/ResourceWorkspaceContext";
 

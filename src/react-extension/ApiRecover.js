@@ -15,10 +15,10 @@ import React, {Component} from "react";
 import AppContext from "./contexts/AppContext";
 import ApiRecoverContextProvider from "./contexts/ApiRecoverContext";
 import OrchestrateApiRecover from "./components/AuthenticationRecover/OrchestrateApiRecover/OrchestrateApiRecover";
-import {ApiClientOptions} from "./lib/apiClient/apiClientOptions";
+import {ApiClientOptions} from "../lib/apiClient/apiClientOptions";
 import Footer from "./components/Common/Footer/Footer";
-import {ApiClient} from "./lib/apiClient/apiClient";
-import SiteSettings from "./lib/Settings/SiteSettings";
+import {ApiClient} from "../lib/apiClient/apiClient";
+import SiteSettings from "../lib/Settings/SiteSettings";
 import TranslationProvider from "./components/Common/Internationalisation/TranslationProvider";
 
 /**
