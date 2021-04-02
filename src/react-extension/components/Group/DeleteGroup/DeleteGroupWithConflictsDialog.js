@@ -395,7 +395,7 @@ class DeleteGroupWithConflictsDialog extends Component {
                 {this.resourcesErrors.map(resourceError =>
                   <li key={resourceError.id}>
                     <div className="input select required">
-                      <label htmlFor="transfer_resource_owner">{resourceError.name} <Trans>(Password) new owner:</Trans></label>
+                      <label htmlFor="transfer_resource_owner">{resourceError.name} (<Trans>Password</Trans>) <Trans>new owner</Trans>:</label>
                       <select className="fluid form-element ready" value={this.state.owners[resourceError.id]} onChange={event => this.handleOnChangeOwner(event, resourceError.id)}>
                         {this.acosPermissionsOptions[resourceError.id].map(permission => (
                           <option key={permission.id} value={permission.id}>

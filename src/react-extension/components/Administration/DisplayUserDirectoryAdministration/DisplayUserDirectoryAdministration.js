@@ -905,7 +905,7 @@ class DisplayUserDirectoryAdministration extends React.Component {
                       <label><Trans>Domain</Trans></label>
                       <input id="domain-name-input" type="text" name="domain" value={this.state.domain}
                         onChange={this.handleInputChange} className="required fluid form-element" onKeyUp={this.handleDomainInputKeyUp}
-                        placeholder={this.translate("domain.ext")} disabled={this.hasAllInputDisabled()}/>
+                        placeholder="domain.ext" disabled={this.hasAllInputDisabled()}/>
                       {this.state.domainError &&
                       <div id="domain-name-input-feedback" className="message error">{this.state.domainError}</div>
                       }
@@ -913,7 +913,7 @@ class DisplayUserDirectoryAdministration extends React.Component {
                     <div className="input text ad openldap">
                       <label><Trans>Base DN</Trans></label>
                       <input id="base-dn-input" type="text" name="baseDn" value={this.state.baseDn}
-                        onChange={this.handleInputChange} className="fluid form-element" placeholder={this.translate("OU=OrgUsers,DC=mydomain,DC=local")}
+                        onChange={this.handleInputChange} className="fluid form-element" placeholder="OU=OrgUsers,DC=mydomain,DC=local"
                         disabled={this.hasAllInputDisabled()}/>
                       <div className="message">
                         <Trans>The base DN (default naming context) for the domain.</Trans> <Trans>If this is empty then it will be queried from the RootDSE.</Trans>
@@ -953,17 +953,17 @@ class DisplayUserDirectoryAdministration extends React.Component {
                         <label><Trans>Group object class</Trans></label>
                         <input id="group-object-class-input" type="text" name="groupObjectClass"
                           value={this.state.groupObjectClass} onChange={this.handleInputChange} className="required fluid"
-                          placeholder={this.translate("GroupObjectClass")} disabled={this.hasAllInputDisabled()}/>
+                          placeholder="GroupObjectClass" disabled={this.hasAllInputDisabled()}/>
                         <div className="message">
-                          <Trans>For Openldap only. Defines which group object to use.</Trans> <Trans>(Default: posixGroup)</Trans>
+                          <Trans>For Openldap only. Defines which group object to use.</Trans> (<Trans>Default</Trans>: posixGroup)
                         </div>
                       </div>
                       <div className="input text openldap">
                         <label><Trans>User object class</Trans></label>
                         <input id="user-object-class-input" type="text" name="userObjectClass"
                           value={this.state.userObjectClass} onChange={this.handleInputChange} className="required fluid form-element"
-                          placeholder={this.translate("UserObjectClass")} disabled={this.hasAllInputDisabled()}/>
-                        <div className="message"><Trans>For Openldap only. Defines which user object to use.</Trans> <Trans>(Default: inetOrgPerson)</Trans>
+                          placeholder="UserObjectClass" disabled={this.hasAllInputDisabled()}/>
+                        <div className="message"><Trans>For Openldap only. Defines which user object to use.</Trans> (<Trans>Default</Trans>: inetOrgPerson)
                         </div>
                       </div>
                       <div className="input text openldap">
