@@ -16,7 +16,7 @@
  * Unit tests on CheckMailBox in regard of specifications
  */
 
-import CheckMailBoxPage from "./CheckMailBoxPage";
+import CheckMailBoxTestPage from "./CheckMailBox.test.page";
 
 beforeEach(() => {
   jest.resetModules();
@@ -32,7 +32,7 @@ describe("As AN I should see the check mail box", () => {
      */
 
     beforeEach(() => {
-      page = new CheckMailBoxPage();
+      page = new CheckMailBoxTestPage();
     });
 
     it('As AN I should see that an email has been sent', () => {

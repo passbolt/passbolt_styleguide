@@ -20,11 +20,11 @@ import {
   AdministrationWorkspaceMenuTypes,
   withAdministrationWorkspace
 } from "../../../contexts/AdministrationWorkspaceContext";
-import DisplaySimulateSynchronizeUserDirectoryAdministrationDialog
-  from "../DisplaySimulateSynchronizeUserDirectoryAdministration/DisplaySimulateSynchronizeUserDirectoryAdministrationDialog";
+import DisplaySimulateSynchronizeUserDirectoryAdministration
+  from "../DisplaySimulateSynchronizeUserDirectoryAdministration/DisplaySimulateSynchronizeUserDirectoryAdministration";
 import {withDialog} from "../../../contexts/DialogContext";
-import DisplaySynchronizeUserDirectoryAdministrationDialog
-  from "../DisplaySynchronizeUserDirectoryAdministration/DisplaySynchronizeUserDirectoryAdministrationDialog";
+import DisplaySynchronizeUserDirectoryAdministration
+  from "../DisplaySynchronizeUserDirectoryAdministration/DisplaySynchronizeUserDirectoryAdministration";
 import {Trans, withTranslation} from "react-i18next";
 
 /**
@@ -88,14 +88,14 @@ class DisplayAdministrationWorkspaceActions extends React.Component {
    * Handle simulate synchronize settings
    */
   handleSimulateSynchronizeClick() {
-    this.props.dialogContext.open(DisplaySimulateSynchronizeUserDirectoryAdministrationDialog);
+    this.props.dialogContext.open(DisplaySimulateSynchronizeUserDirectoryAdministration);
   }
 
   /**
    * Handle synchronize settings
    */
   handleSynchronizeClick() {
-    this.props.dialogContext.open(DisplaySynchronizeUserDirectoryAdministrationDialog);
+    this.props.dialogContext.open(DisplaySynchronizeUserDirectoryAdministration);
   }
 
   /**

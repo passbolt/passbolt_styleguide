@@ -14,24 +14,24 @@ import React, {Component} from "react";
 import ActionFeedbackContextProvider from "./contexts/ActionFeedbackContext";
 import DialogContextProvider from "./contexts/DialogContext";
 import ContextualMenuContextProvider from "./contexts/ContextualMenuContext";
-import ShareActionFeedbacks from "./components/Share/ShareActionFeedbacks";
+import DisplayActionFeedbacks from "./components/Common/ActionFeedback/DisplayActionFeedbacks";
 import {BrowserRouter as Router, Route, Switch} from "react-router-dom";
 import AdministrationWorkspaceContextProvider from "./contexts/AdministrationWorkspaceContext";
 import ManageDialogs from "./components/Common/Dialog/ManageDialogs/ManageDialogs";
 import ManageContextualMenu from "./components/Common/ContextualMenu/ManageContextualMenu";
 import AdministrationWorkspace from "./components/Administration/AdministrationWorkspace";
-import Footer from "./components/Footer/Footer";
+import Footer from "./components/Common/Footer/Footer";
 import DisplayApiUserSettingsWorkspace
   from "./components/UserSetting/DisplayUserSettingsWorkspace/DisplayApiUserSettingsWorkspace";
 import DisplayMainMenu from "./components/Common/Menu/DisplayMainMenu";
 import NavigationContextProvider from "./contexts/NavigationContext";
-import HandleSessionExpired from "./components/Auth/HandleSessionExpired/HandleSessionExpired";
+import HandleSessionExpired from "./components/Authentication/HandleSessionExpired/HandleSessionExpired";
 import AnnouncementContextProvider from "./contexts/AnnouncementContext";
 import HandleSubscriptionAnnouncement
   from "./components/Announcement/HandleSubscriptionAnnouncement/HandleSubscriptionAnnouncement";
 import ManageAnnouncements from "./components/Announcement/ManageAnnouncements/ManageAnnouncements";
 import ApiAppContextProvider from "./contexts/ApiAppContext";
-import TranslationProvider from "./components/Internationalisation/TranslationProvider";
+import TranslationProvider from "./components/Common/Internationalisation/TranslationProvider";
 import AppContext from "./contexts/AppContext";
 
 /**
@@ -78,7 +78,7 @@ class ApiApp extends Component {
                   <AnnouncementContextProvider>
                     <ContextualMenuContextProvider>
                       { /* Action Feedback Management */}
-                      <ShareActionFeedbacks/>
+                      <DisplayActionFeedbacks/>
                       { /* Session expired handler */}
                       <HandleSessionExpired/>
                       { /* Announcement Management */}

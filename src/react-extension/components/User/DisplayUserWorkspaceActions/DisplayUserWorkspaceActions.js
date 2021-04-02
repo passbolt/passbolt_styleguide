@@ -23,7 +23,7 @@ import DeleteUser from "../DeleteUser/DeleteUser";
 import DeleteUserWithConflicts from "../DeleteUser/DeleteUserWithConflicts";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
-import ConfirmDisableUserMFA from "../DisableUserMFA/ConfirmDisableUserMFA";
+import ConfirmDisableUserMFA from "../ConfirmDisableUserMFA/ConfirmDisableUserMFA";
 import {Trans, withTranslation} from "react-i18next";
 
 /**

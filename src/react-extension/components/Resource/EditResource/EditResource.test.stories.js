@@ -1,4 +1,4 @@
-import {defaultAppContext} from "./PasswordEditDialog.test.data";
+import {defaultAppContext} from "./EditResource.test.data";
 import EditResource from "./EditResource";
 import {EditResourcePageTemplate} from "./EditResource.test.page";
 

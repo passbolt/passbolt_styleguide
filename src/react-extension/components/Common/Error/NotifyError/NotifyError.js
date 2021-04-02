@@ -13,7 +13,7 @@
  */
 import React, {Component} from "react";
 import PropTypes from "prop-types";
-import DialogCloseButton from "../../../../../react/components/Common/Dialog/DialogCloseButton/DialogCloseButton";
+import DialogCloseButton from "../../Dialog/DialogCloseButton/DialogCloseButton";
 import AppContext from "../../../../contexts/AppContext";
 
 class NotifyError extends Component {

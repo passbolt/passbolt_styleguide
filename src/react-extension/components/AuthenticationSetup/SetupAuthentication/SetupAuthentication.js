@@ -11,7 +11,7 @@ import GenerateKeyOnPassphraseLostSecondaryAction
   from "../../Authentication/CheckPassphrase/GenerateKeyOnPassphraseLostSecondaryAction";
 import GenerateKeySecondaryAction
   from "../../Authentication/ImportGpgKey/GenerateKeySecondaryAction";
-import DisplayUnexpectedError from "../../Authentication/DisplayError/DisplayUnexpectedError";
+import DisplayUnexpectedError from "../../Authentication/DisplayUnexpectedError/DisplayUnexpectedError";
 import DisplayLoginInProgress from "../../AuthenticationLogin/DisplayLoginInProgress/DisplayLoginInProgress";
 import {withTranslation} from "react-i18next";
 

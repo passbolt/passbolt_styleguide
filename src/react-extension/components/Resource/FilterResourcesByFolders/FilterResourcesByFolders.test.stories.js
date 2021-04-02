@@ -22,7 +22,9 @@ const context = {
 const Template = args =>
   <AppContext.Provider value={context}>
     <MemoryRouter initialEntries={['/']}>
-      <Route component={routerProps => <FilterResourcesByFolders {...args} {...routerProps}/>}></Route>
+      <div className="panel">
+        <Route component={routerProps => <FilterResourcesByFolders {...args} {...routerProps}/>}></Route>
+      </div>
     </MemoryRouter>
   </AppContext.Provider>;
 

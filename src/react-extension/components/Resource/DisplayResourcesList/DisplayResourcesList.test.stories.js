@@ -1,17 +1,18 @@
-import Grid from "./Grid";
+import DisplayResourcesList from "./DisplayResourcesList";
 import React from "react";
 import {MemoryRouter, Route} from "react-router-dom";
 import {ResourceWorkspaceFilterTypes} from "../../../contexts/ResourceWorkspaceContext";
 import AppContext from "../../../contexts/AppContext";
 
 export default {
-  title: 'Passbolt/Password/Grid',
-  component: Grid
+  title: 'Passbolt/Resource/DisplayResourcesList',
+  component: DisplayResourcesList
 };
 
 const defaultContext = {
   siteSettings: {
-    getServerTimezone: () => new Date().toLocaleString()
+    getServerTimezone: () => new Date().toLocaleString(),
+    canIUse: () => true,
   }
 };
 
@@ -19,7 +20,9 @@ const defaultContext = {
 const Template = args =>
   <AppContext.Provider value={defaultContext}>
     <MemoryRouter initialEntries={['/']}>
-      <Route component={routerProps => <Grid {...args} {...routerProps}/>}></Route>
+      <div className="panel">
+        <Route component={routerProps => <DisplayResourcesList {...args} {...routerProps}/>}></Route>
+      </div>
     </MemoryRouter>
   </AppContext.Provider>;
 

@@ -5,6 +5,7 @@ import "../../../../css/themes/midgar/ext_app.css";
 import UserSettings from "../../../lib/Settings/UserSettings";
 import userSettingsFixture from "../../../test/fixture/Settings/userSettings";
 import DisplayResourceDetailsActivity from "./DisplayResourceDetailsActivity";
+import TranslationProvider from "../../Common/Internationalisation/TranslationProvider";
 
 
 export default {
@@ -34,11 +35,15 @@ const context = {
 };
 
 const Template = args =>
-  <AppContext.Provider value={context}>
-    <MemoryRouter initialEntries={['/']}>
-      <Route component={routerProps => <DisplayResourceDetailsActivity {...args} {...routerProps}/>}></Route>
-    </MemoryRouter>
-  </AppContext.Provider>;
+  <TranslationProvider loadingPath="/data/locales/{{lng}}/{{ns}}.json">
+    <AppContext.Provider value={context}>
+      <MemoryRouter initialEntries={['/']}>
+        <div className="panel">
+          <Route component={routerProps => <DisplayResourceDetailsActivity {...args} {...routerProps}/>}></Route>
+        </div>
+      </MemoryRouter>
+    </AppContext.Provider>
+  </TranslationProvider>;
 
 export const Initial = Template.bind({});
 Initial.args = {

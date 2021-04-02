@@ -17,7 +17,7 @@ import {withAppContext} from "../../../contexts/AppContext";
 import DialogWrapper from "../../../../react-extension/components/Common/Dialog/DialogWrapper/DialogWrapper";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import {withDialog} from "../../../contexts/DialogContext";
-import ErrorDialog from "../../Common/Dialog/ErrorDialog/ErrorDialog";
+import NotifyError from "../../Common/Error/NotifyError/NotifyError";
 import FormSubmitButton from "../../../../react-extension/components/Common/Inputs/FormSubmitButton/FormSubmitButton";
 import FormCancelButton from "../../../../react-extension/components/Common/Inputs/FormSubmitButton/FormCancelButton";
 import {withAdministrationWorkspace} from "../../../contexts/AdministrationWorkspaceContext";
@@ -212,7 +212,7 @@ class EditSubscriptionKey extends Component {
         message: error.message
       };
       this.props.context.setContext({errorDialogProps});
-      this.props.dialogContext.open(ErrorDialog);
+      this.props.dialogContext.open(NotifyError);
     }
   }
 

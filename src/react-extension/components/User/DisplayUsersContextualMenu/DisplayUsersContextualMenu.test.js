@@ -26,7 +26,7 @@ import {
 import DisplayUsersContextualMenuPage from "./DisplayUsersContextualMenu.test.page";
 import {waitFor} from "@testing-library/dom";
 import EditUser from "../EditUser/EditUser";
-import ConfirmDisableUserMFA from "../DisableUserMFA/ConfirmDisableUserMFA";
+import ConfirmDisableUserMFA from "../ConfirmDisableUserMFA/ConfirmDisableUserMFA";
 import DeleteUser from "../DeleteUser/DeleteUser";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
 

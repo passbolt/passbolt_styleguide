@@ -18,7 +18,7 @@ import {withDialog} from "../../../contexts/DialogContext";
 import ContextualMenuWrapper from "../../Common/ContextualMenu/ContextualMenuWrapper";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import EditUser from "../EditUser/EditUser";
-import ConfirmDisableUserMFA from "../DisableUserMFA/ConfirmDisableUserMFA";
+import ConfirmDisableUserMFA from "../ConfirmDisableUserMFA/ConfirmDisableUserMFA";
 import DeleteUserWithConflicts from "../DeleteUser/DeleteUserWithConflicts";
 import DeleteUser from "../DeleteUser/DeleteUser";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";

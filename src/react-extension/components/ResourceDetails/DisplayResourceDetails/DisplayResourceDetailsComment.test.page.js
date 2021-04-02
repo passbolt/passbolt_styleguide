@@ -17,9 +17,9 @@ import {fireEvent, render, waitFor} from "@testing-library/react";
 import AppContext from "../../../contexts/AppContext";
 import React from "react";
 import DisplayResourceDetailsComment from "./DisplayResourceDetailsComment";
-import AddCommentPageObject from "../../ResourceComment/AddResourceComment/AddComment.test.page.object";
-import DisplayCommentListPageObject from "../../ResourceComment/DisplayResourceCommentList/DisplayCommentList.test.page.object";
-import ConfirmCommentDeletionPageObject from "../../ResourceComment/ConfirmResourceCommentDeletion/ConfirmCommentDeletion.test.page.object";
+import AddResourceCommentPageObject from "../../ResourceComment/AddResourceComment/AddResourceComment.test.page.object";
+import DisplayResourceCommentListPageObject from "../../ResourceComment/DisplayResourceCommentList/DisplayResourceCommentList.test.page.object";
+import ConfirmResourceCommentDeletionPageObject from "../../ResourceComment/ConfirmResourceCommentDeletion/ConfirmResourceCommentDeletion.test.page.object";
 import PropTypes from "prop-types";
 import ManageDialogs from "../../Common/Dialog/ManageDialogs/ManageDialogs";
 import DialogContextProvider from "../../../contexts/DialogContext";
@@ -52,11 +52,11 @@ export default class PasswordSidebarCommentSectionPage {
    * Set up the objects of the page
    */
   setupPageObjects() {
-    this._addComment = new AddCommentPageObject(this._page.container);
-    this._displayCommentList = new DisplayCommentListPageObject(this._page.container);
+    this._addComment = new AddResourceCommentPageObject(this._page.container);
+    this._displayCommentList = new DisplayResourceCommentListPageObject(this._page.container);
     this._titleHeader = new TitleHeaderPageObject(this._page.container);
     this._addIcon = new AddIconPageObject(this._page.container);
-    this._confirmDeleteComment = new ConfirmCommentDeletionPageObject(this._page.container);
+    this._confirmDeleteComment = new ConfirmResourceCommentDeletionPageObject(this._page.container);
   }
 
   /**

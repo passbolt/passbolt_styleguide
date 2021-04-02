@@ -96,9 +96,9 @@ class DisplayMainMenu extends Component {
                 <div className="main-cell-wrapper">
                   <div className="main-cell">
                     <a href="https://help.passbolt.com"
-                       role="button"
-                       target="_blank"
-                       rel="noopener noreferrer">
+                      role="button"
+                      target="_blank"
+                      rel="noopener noreferrer">
                       <span><Trans>help</Trans></span>
                     </a>
                   </div>
@@ -112,7 +112,7 @@ class DisplayMainMenu extends Component {
                 <div className="main-cell-wrapper">
                   <div className="main-cell">
                     <a role="button"
-                       onClick={this.context.onLogoutRequested}>
+                      onClick={this.context.onLogoutRequested}>
                       <span><Trans>sign out</Trans></span>
                     </a>
                   </div>

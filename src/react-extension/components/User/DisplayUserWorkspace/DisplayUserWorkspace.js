@@ -18,17 +18,17 @@ import DisplayUsers from "../DisplayUsers/DisplayUsers";
 import {withUserWorkspace} from "../../../contexts/UserWorkspaceContext";
 import {withRouter} from "react-router-dom";
 import PropTypes from "prop-types";
-import DisplayUserDetails from "../DisplayUserDetails/DisplayUserDetails";
+import DisplayUserDetails from "../../UserDetails/DisplayUserDetails/DisplayUserDetails";
 import DisplayUserWorkspaceActions from "../DisplayUserWorkspaceActions/DisplayUserWorkspaceActions";
 import Logo from "../../Common/Navigation/Header/Logo";
 import DisplayUserBadgeMenu from "../DisplayUserBadgeMenu/DisplayUserBadgeMenu";
 import AppContext from "../../../contexts/AppContext";
 import DisplayGroups from "../FilterUsersByGroups/FilterUsersByGroup";
-import FilterUsersByShortcut from "../FilterUsersByShortcut/FilterUserByShortcut";
+import FilterUsersByShortcut from "../FilterUsersByShortcut/FilterUsersByShortcut";
 import FilterUsersByText from "../FilterUsersByText/FilterUsersByText";
 import DisplayUserGroupDetails from "../../UserGroup/DisplayUserGroupDetails/DisplayUserGroupDetails";
 import DisplayUserWorkspaceMainActions from "../DisplayUserWorkspaceMainActions/DisplayUserWorkspaceMainActions";
-import DisplayUserWorkspaceBreadcrumb from "../DisplayUserWorkspaceBreadcrumb/DisplayUserWorkspaceBreadcrumb";
+import FilterUsersByBreadcrumb from "../FilterUsersByBreadcrumb/FilterUsersByBreadcrumb";
 
 /**
  * This component is a container for all the user workspace features
@@ -72,7 +72,7 @@ class DisplayUserWorkspace extends React.Component {
             <DisplayGroups/>
           </div>
           <div className="panel middle">
-            <DisplayUserWorkspaceBreadcrumb/>
+            <FilterUsersByBreadcrumb/>
             <DisplayUsers/>
             {this.mustDisplayUserDetails && <DisplayUserDetails/>}
             {this.mustDisplayGroupDetails && <DisplayUserGroupDetails/>}

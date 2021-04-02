@@ -12,9 +12,9 @@
  * @since         2.13.0
  */
 import React, {Fragment} from "react";
-import Icon from "../../../Common/Icons/Icon";
-import AppContext from "../../../../contexts/AppContext";
-import {ResourceWorkspaceFilterTypes, withResourceWorkspace} from "../../../../contexts/ResourceWorkspaceContext";
+import Icon from "../../Common/Icons/Icon";
+import AppContext from "../../../contexts/AppContext";
+import {ResourceWorkspaceFilterTypes, withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 import PropTypes from "prop-types";
 import {withRouter} from "react-router-dom";
 import {Trans, withTranslation} from "react-i18next";

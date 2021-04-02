@@ -19,7 +19,7 @@ import ContextualMenuWrapper from "../../Common/ContextualMenu/ContextualMenuWra
 import DeleteUserGroupWithConflicts from "../../UserGroup/DeleteUserGroup/DeleteUserGroupWithConflicts";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
 import DeleteUserGroup from "../../UserGroup/DeleteUserGroup/DeleteUserGroup";
-import EditUserGroup from "../EditUserGroup/EditUserGroup";
+import EditUserGroup from "../../UserGroup/EditUserGroup/EditUserGroup";
 import {withUserWorkspace} from "../../../contexts/UserWorkspaceContext";
 import {Trans, withTranslation} from "react-i18next";
 

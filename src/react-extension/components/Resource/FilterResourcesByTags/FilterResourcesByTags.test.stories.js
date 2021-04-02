@@ -31,7 +31,9 @@ const defaultContext = {
 const Template = ({context, ...args}) =>
   <AppContext.Provider value={context}>
     <MemoryRouter initialEntries={['/']}>
-      <Route component={routerProps => <FilterResourcesByTags {...args} {...routerProps}/>}></Route>
+      <div className="panel">
+        <Route component={routerProps => <FilterResourcesByTags {...args} {...routerProps}/>}></Route>
+      </div>
     </MemoryRouter>
   </AppContext.Provider>;
 

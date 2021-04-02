@@ -21,7 +21,7 @@ import {
   resourceOwnedWithNoDescriptionMock,
   resourceWithDescriptionMock,
 } from "./DisplayResourceDetailsDescription.test.data";
-import PasswordSidebarDescriptionSectionPage from "./DisplayResourceDetailsDescription.test.page";
+import DisplayResourceDetailsDescriptionPage from "./DisplayResourceDetailsDescription.test.page";
 import {ActionFeedbackContext} from "../../../contexts/ActionFeedbackContext";
 import PassboltApiFetchError from "../../../lib/Error/PassboltApiFetchError";
 
@@ -45,7 +45,7 @@ describe("See description", () => {
      */
 
     beforeEach(() => {
-      page = new PasswordSidebarDescriptionSectionPage(context, props);
+      page = new DisplayResourceDetailsDescriptionPage(context, props);
     });
 
     it('I should see the description of the resource', async() => {
@@ -115,7 +115,7 @@ describe("See description", () => {
      */
 
     beforeEach(() => {
-      page = new PasswordSidebarDescriptionSectionPage(context, props);
+      page = new DisplayResourceDetailsDescriptionPage(context, props);
     });
 
     it('See an empty message if the resource has no description', async() => {
@@ -197,7 +197,7 @@ describe("See description", () => {
      */
 
     beforeEach(() => {
-      page = new PasswordSidebarDescriptionSectionPage(context, props);
+      page = new DisplayResourceDetailsDescriptionPage(context, props);
     });
 
     it('See an empty message if the resource has no description', async() => {

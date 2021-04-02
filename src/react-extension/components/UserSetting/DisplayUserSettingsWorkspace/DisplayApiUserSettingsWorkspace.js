@@ -15,9 +15,9 @@
 import React from 'react';
 import {Route, withRouter} from "react-router-dom";
 import Logo from "../../Common/Navigation/Header/Logo";
-import UserBadgeMenu from "../../User/DisplayUserBadgeMenu/UserBadgeMenu";
+import DisplayUserBadgeMenu from "../../User/DisplayUserBadgeMenu/DisplayUserBadgeMenu";
 import {withAppContext} from "../../../contexts/AppContext";
-import NavigateIntoUserSettingsWorkspace from "../NavigateIntooUserSettingsWorkspace/NavigateIntoUserSettingsWorkspace";
+import NavigateIntoUserSettingsWorkspace from "../NavigateIntoUserSettingsWorkspace/NavigateIntoUserSettingsWorkspace";
 import DisplayUserSettingsWorkspaceBreadcrumb
   from "../DisplayUserSettingsWorkspaceBreadcrumb/DisplayUserSettingsWorkspaceBreadcrumb";
 import DisplayUserMfa from "../DisplayUserMfa/DisplayUserMfa";
@@ -38,7 +38,7 @@ class DisplayApiUserSettingsWorkspace extends React.Component {
         <div className="header second">
           <Logo/>
           <SearchBar disabled={true}/>
-          <UserBadgeMenu baseUrl={this.props.context.trustedDomain} user={this.props.context.loggedInUser}/>
+          <DisplayUserBadgeMenu baseUrl={this.props.context.trustedDomain} user={this.props.context.loggedInUser}/>
         </div>
         <div className="header third">
         </div>

@@ -18,8 +18,8 @@ import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import Icon from "../../Common/Icons/Icon";
 import {withAdministrationWorkspace} from "../../../contexts/AdministrationWorkspaceContext";
 import XRegExp from "xregexp";
-import DisplayTestUserDirectoryAdministrationDialog
-  from "../DisplayTestUserDirectoryAdministration/DisplayTestUserDirectoryAdministrationDialog";
+import DisplayTestUserDirectoryAdministration
+  from "../DisplayTestUserDirectoryAdministration/DisplayTestUserDirectoryAdministration";
 import {withDialog} from "../../../contexts/DialogContext";
 import {Trans, withTranslation} from "react-i18next";
 
@@ -645,7 +645,7 @@ class DisplayUserDirectoryAdministration extends React.Component {
       userDirectoryTestResult: result.body
     };
     this.props.context.setContext({displayTestUserDirectoryDialogProps});
-    this.props.dialogContext.open(DisplayTestUserDirectoryAdministrationDialog);
+    this.props.dialogContext.open(DisplayTestUserDirectoryAdministration);
   }
 
   /**

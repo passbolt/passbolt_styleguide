@@ -18,7 +18,7 @@ import {ApiTriageContextState, withApiTriageContext} from "../../../contexts/Api
 import EnterUsernameForm from "../../Authentication/EnterUsernameForm/EnterUsernameForm";
 import EnterNameForm from "../../Authentication/EnterNameForm/EnterNameForm";
 import CheckMailBox from "../../Authentication/CheckMailBox/CheckMailBox";
-import DisplayRequireInvitationError from "../../Authentication/DisplayError/DisplayRequireInvitationError";
+import DisplayRequireInvitationError from "../../Authentication/DisplayRequireInvitationError/DisplayRequireInvitationError";
 
 /**
  * The component orchestrates the api triage workflow.

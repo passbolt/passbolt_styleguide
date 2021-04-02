@@ -160,7 +160,7 @@ class DeleteResource extends Component {
             <div>
               <p>
                 <Trans>
-                  Are you sure you want to delete the password <strong>{{resourceName: this.resources[0].name}}</strong>?
+                  Are you sure you want to delete the password <strong>{this.resources[0].name}</strong>?
                 </Trans>
               </p>
               <p><Trans>Warning: Once the password is deleted, it’ll be removed permanently and will not be recoverable.</Trans></p>

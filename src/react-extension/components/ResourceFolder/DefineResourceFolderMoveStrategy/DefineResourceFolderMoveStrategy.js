@@ -92,7 +92,7 @@ class DefineResourceFolderMoveStrategy extends Component {
       this.handleError(error);
     }
 
-    const folder = context.folders.find(item => item.id === this.context.folderMoveStrategyProps.folders[0]) || false;
+    const folder = context.folders.find(item => item.id === this.context.folderMoveStrategyProps.folders[0].id) || false;
     if (!folder) {
       console.error(`Folder ${this.context.folderMoveStrategyProps.folders[0]} not found in context.`);
       this.handleError(error);
@@ -223,7 +223,7 @@ class DefineResourceFolderMoveStrategy extends Component {
     } else {
       message = <Trans>You are about to move several resources.</Trans>;
     }
-    message += <Trans>The permissions do not match the destination folder permissions.</Trans>;
+    message = <span>{message} <Trans>The permissions do not match the destination folder permissions.</Trans></span>;
     return message;
   }
 

@@ -18,7 +18,7 @@ import PropTypes from "prop-types";
 import AppContext from "../../../contexts/AppContext";
 import {withLoading} from "../../../contexts/LoadingContext";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
-import {withDialog} from "../../../../react/contexts/Common/DialogContext";
+import {withDialog} from "../../../contexts/DialogContext";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import {withTranslation} from "react-i18next";
 

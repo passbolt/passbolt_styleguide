@@ -2,7 +2,7 @@
  * Unit tests on EditSubscriptionKey in regard of specifications
  */
 import {defaultProps} from "./EditSubscriptionKey.test.data";
-import ErrorDialog from "../../Common/Dialog/ErrorDialog/ErrorDialog";
+import NotifyError from "../../Common/Error/NotifyError/NotifyError";
 import EditSubscriptionKeyPage from "./EditSubscriptionKey.test.page";
 
 
@@ -77,6 +77,6 @@ describe("As AD I should edit the subscription key", () => {
     jest.spyOn(props.dialogContext, 'open').mockImplementationOnce(jest.fn());
     await page.fill('Some subscription key');
     await page.updateKey();
-    expect(props.dialogContext.open).toBeCalledWith(ErrorDialog);
+    expect(props.dialogContext.open).toBeCalledWith(NotifyError);
   });
 });

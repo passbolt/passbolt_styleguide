@@ -1,14 +1,13 @@
 import React from "react";
 import {MemoryRouter, Route} from "react-router-dom";
-import SidebarGroupFilterSection
-  from "./SidebarGroupFilterSection";
 import AppContext from "../../../contexts/AppContext";
 import {ResourceWorkspaceFilterTypes} from "../../../contexts/ResourceWorkspaceContext";
+import FilterResourcesByGroups from "./FilterResourcesByGroups";
 
 
 export default {
-  title: 'Passbolt/Password/Group/SidebarGroupFilterSection',
-  component: SidebarGroupFilterSection
+  title: 'Passbolt/Resource/FilterResourcesByGroups',
+  component: FilterResourcesByGroups
 };
 
 const context = {
@@ -22,7 +21,9 @@ const context = {
 const Template = args =>
   <AppContext.Provider value={context}>
     <MemoryRouter initialEntries={['/']}>
-      <Route component={routerProps => <SidebarGroupFilterSection {...args} {...routerProps}/>}></Route>
+      <div className="panel">
+        <Route component={routerProps => <FilterResourcesByGroups {...args} {...routerProps}/>}></Route>
+      </div>
     </MemoryRouter>
   </AppContext.Provider>;
 

@@ -17,8 +17,8 @@ import LoadingSpinner from "../../Common/Loading/LoadingSpinner/LoadingSpinner";
 import {ApiRecoverContextState, withApiRecoverContext} from "../../../contexts/ApiRecoverContext";
 import InstallExtension from "../../Authentication/InstallExtension/InstallExtension";
 import DisplayBrowserNotSupported from "../../Authentication/DisplayBrowserNotSupported/DisplayBrowserNotSupported";
-import DisplayRequireInvitationError from "../../Authentication/DisplayError/DisplayRequireInvitationError";
-import DisplayExpiredTokenError from "../../Authentication/DisplayError/DisplayExpiredTokenError";
+import DisplayRequireInvitationError from "../../Authentication/DisplayRequireInvitationError/DisplayRequireInvitationError";
+import DisplayExpiredTokenError from "../../Authentication/DisplayExpiredTokenError/DisplayExpiredTokenError";
 
 /**
  * The component orchestrates the api recover authentication workflow.

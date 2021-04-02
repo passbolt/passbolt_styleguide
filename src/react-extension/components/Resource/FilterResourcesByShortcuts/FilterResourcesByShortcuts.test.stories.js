@@ -6,7 +6,7 @@ import FilterResourcesByShortcuts from "./FilterResourcesByShortcuts";
 
 
 export default {
-  title: 'Passbolt/Password/FilterResourcesByShortcuts',
+  title: 'Passbolt/Resource/FilterResourcesByShortcuts',
   component: FilterResourcesByShortcuts
 };
 
@@ -15,7 +15,9 @@ const context = {};
 const Template = args =>
   <AppContext.Provider value={context}>
     <MemoryRouter initialEntries={['/']}>
-      <Route component={routerProps => <FilterResourcesByShortcuts {...args} {...routerProps}/>}></Route>
+      <div className="panel">
+        <Route component={routerProps => <FilterResourcesByShortcuts {...args} {...routerProps}/>}></Route>
+      </div>
     </MemoryRouter>
   </AppContext.Provider>;
 

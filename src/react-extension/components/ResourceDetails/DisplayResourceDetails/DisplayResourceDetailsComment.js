@@ -14,10 +14,10 @@
  */
 
 import React from "react";
-import AddComment from "../../ResourceComment/AddResourceComment/AddComment";
+import AddResourceComment from "../../ResourceComment/AddResourceComment/AddResourceComment";
 import PropTypes from "prop-types";
 import AppContext from "../../../contexts/AppContext";
-import DisplayCommentList from "../../ResourceComment/DisplayResourceCommentList/DisplayCommentList";
+import DisplayResourceCommentList from "../../ResourceComment/DisplayResourceCommentList/DisplayResourceCommentList";
 import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 import Icon from "../../Common/Icons/Icon";
 import {Trans, withTranslation} from "react-i18next";
@@ -176,13 +176,13 @@ class DisplayResourceDetailsComment extends React.Component {
             }
 
             { this.state.canAdd &&
-              <AddComment
+              <AddResourceComment
                 resource={this.resource}
                 onAdd={this.handleAddedEvent}
                 onCancel={this.handleCancelledAddEvent}
                 cancellable={this.state.canAddByIcon}/>
             }
-            <DisplayCommentList
+            <DisplayResourceCommentList
               resource={this.resource}
               onFetch={this.handleFetchedEvent}
               mustRefresh={this.state.mustRefresh}/>

@@ -12,10 +12,10 @@
  * @since         2.13.0
  */
 import React, {Component} from "react";
-import Icon from "../Common/Icons/Icon";
+import Icon from "../Icons/Icon";
 import PropTypes from "prop-types";
 import {Trans, withTranslation} from "react-i18next";
-import {withAppContext} from "../../contexts/AppContext";
+import {withAppContext} from "../../../contexts/AppContext";
 
 const CREDITS_URL = "https://www.passbolt.com/credits";
 const UNSAFE_URL = "https://help.passbolt.com/faq/hosting/why-unsafe";

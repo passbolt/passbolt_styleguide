@@ -16,7 +16,7 @@ import PropTypes from "prop-types";
 import Icon from "../../Common/Icons/Icon";
 import FilterResourcesByTagsContextualMenu from "./FilterResourcesByTagsContextualMenu";
 import FilterResourcesByTagsList from "./FilterResourcesByTagsList";
-import {withContextualMenu} from "../../../../react/contexts/Common/ContextualMenuContext";
+import {withContextualMenu} from "../../../contexts/ContextualMenuContext";
 import {ResourceWorkspaceFilterTypes, withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 import AppContext from "../../../contexts/AppContext";
 import {withRouter} from "react-router-dom";

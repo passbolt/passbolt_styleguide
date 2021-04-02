@@ -36,7 +36,7 @@ jest.mock("../FilterResourcesByFolders/FilterResourcesByFolders", () => () => <s
 jest.mock("../FilterResourcesByShortcuts/FilterResourcesByShortcuts", () => () => <></>);
 jest.mock("./DisplayResourcesWorkspaceMenu", () => () => <></>);
 jest.mock("./DisplayResourcesWorkspaceMainMenu", () => () => <></>);
-jest.mock("../../../../react/components/Common/Navigation/Header/Logo");
+jest.mock("../../Common/Navigation/Header/Logo");
 jest.mock("../../User/DisplayUserBadgeMenu/DisplayUserBadgeMenu", () => () => <></>);
 
 beforeEach(() => {

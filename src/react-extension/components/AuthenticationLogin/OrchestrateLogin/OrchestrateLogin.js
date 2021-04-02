@@ -8,7 +8,7 @@ import NotifyError from "../../Common/Error/NotifyError/NotifyError";
 import {withDialog} from "../../../contexts/DialogContext";
 import PropTypes from "prop-types";
 import LoadingSpinner from "../../Common/Loading/LoadingSpinner/LoadingSpinner";
-import DisplayUnexpectedError from "../../Authentication/DisplayError/DisplayUnexpectedError";
+import DisplayUnexpectedError from "../../Authentication/DisplayUnexpectedError/DisplayUnexpectedError";
 
 /**
  * The component orchestrates the login authentication process

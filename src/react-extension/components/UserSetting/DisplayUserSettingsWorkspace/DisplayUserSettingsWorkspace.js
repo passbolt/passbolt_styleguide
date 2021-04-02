@@ -19,7 +19,7 @@ import PropTypes from "prop-types";
 import Logo from "../../Common/Navigation/Header/Logo";
 import DisplayUserBadgeMenu from "../../User/DisplayUserBadgeMenu/DisplayUserBadgeMenu";
 import AppContext from "../../../contexts/AppContext";
-import NavigateIntoUserSettingsWorkspace from "../NavigateIntooUserSettingsWorkspace/NavigateIntoUserSettingsWorkspace";
+import NavigateIntoUserSettingsWorkspace from "../NavigateIntoUserSettingsWorkspace/NavigateIntoUserSettingsWorkspace";
 import DisplayUserProfile from "../DisplayUserProfile/DisplayUserProfile";
 import DisplayUserTheme from "../DisplayUserTheme/DisplayUserTheme";
 import DisplayUserSettingsWorkspaceBreadcrumb

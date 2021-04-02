@@ -13,10 +13,10 @@
  */
 import React, {Component} from "react";
 import PropTypes from "prop-types";
-import {withAppContext} from "../../contexts/AppContext";
-import {withNavigationContext} from "../../contexts/NavigationContext";
-import UserAvatar from "../Common/Avatar/UserAvatar";
-import Icon from "../Common/Icons/Icon";
+import {withAppContext} from "../../../contexts/AppContext";
+import {withNavigationContext} from "../../../contexts/NavigationContext";
+import UserAvatar from "../../Common/Avatar/UserAvatar";
+import Icon from "../../Common/Icons/Icon";
 import {Trans, withTranslation} from "react-i18next";
 
 class DisplayUserBadgeMenu extends Component {

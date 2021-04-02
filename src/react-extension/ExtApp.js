@@ -13,49 +13,46 @@
  */
 
 /* eslint-disable no-unused-vars */
-import Simplebar from "simplebar/dist/simplebar";
 /* eslint-enable no-unused-vars */
 import React, {Component} from "react";
-import {Route, BrowserRouter as Router, Switch} from "react-router-dom";
+import {BrowserRouter as Router, Route, Switch} from "react-router-dom";
 import PropTypes from "prop-types";
-import DisplayMainMenu from "./components/navigation/DisplayMainMenu";
-import import DisplayMainMenu from "./components/navigation/DisplayMainMenu";
-from "./components/Password/PasswordWorkspace/PasswordWorkspace";
+import DisplayMainMenu from "./components/Common/Menu/DisplayMainMenu";
 import ActionFeedbackContextProvider from "./contexts/ActionFeedbackContext";
 import DisplayActionFeedbacks from "./components/Common/ActionFeedback/DisplayActionFeedbacks";
-import DialogContextProvider from "../react/contexts/Common/DialogContext";
-import ManageDialogs from "../react/components/Common/Dialog/ManageDialogs/ManageDialogs";
-import HandlePassphraseEntryEvents
-  from "./components/AuthenticationPassphrase/HandlePassphraseEntryEvents/HandlePassphraseEntryEvents";
-import HandleProgressEvents
-  from "./components/Common/Progress/HandleProgressEvents/HandleProgressEvents";
-import HandleErrorEvents from "./components/Common/Error/HandleErrorEvents/HandleErrorEvents";
+import DialogContextProvider from "./contexts/DialogContext";
+import ManageDialogs from "./components/Common/Dialog/ManageDialogs/ManageDialogs";
 import ResourceWorkspaceContextProvider from "./contexts/ResourceWorkspaceContext";
 import UserWorkspaceContextProvider from "./contexts/UserWorkspaceContext";
-import ContextualMenuContextProvider from "../react/contexts/Common/ContextualMenuContext";
-import ManageContextualMenu from "./components/ManageContextualMenu";
-import HandleFolderMoveStrategyEvents
-  from "./components/ResourceFolder/HandleFolderMoveStrategyEvents/HandleFolderMoveStrategyEvents";
+import ContextualMenuContextProvider from "./contexts/ContextualMenuContext";
+import ManageContextualMenu from "./components/Common/ContextualMenu/ManageContextualMenu";
 import ManageLoading from "./components/Common/Loading/ManageLoading/ManageLoading";
 import LoadingContextProvider from "./contexts/LoadingContext";
 import DisplayUserWorkspace from "./components/User/DisplayUserWorkspace/DisplayUserWorkspace";
 import HandleRouteFallback from "./components/Common/Route/HandleRouteFallback";
 import DisplayUserSettingsWorkspace
   from "./components/UserSetting/DisplayUserSettingsWorkspace/DisplayUserSettingsWorkspace";
-import HandleSessionExpired
-  from "./components/Authentication/HandleSessionExpired/HandleSessionExpired";
+import HandleSessionExpired from "./components/Authentication/HandleSessionExpired/HandleSessionExpired";
 import Footer from "./components/Common/Footer/Footer";
 import HandleExtAppRouteChanged from "./components/Common/Route/HandleExtAppRouteChanged";
 import NavigationContextProvider from "./contexts/NavigationContext";
 import AdministrationWorkspaceContextProvider from "./contexts/AdministrationWorkspaceContext";
 import ManageAnnouncements from "./components/Announcement/ManageAnnouncements/ManageAnnouncements";
 import AnnouncementContextProvider from "./contexts/AnnouncementContext";
-import HandleSubscriptionAnnouncement from "./components/Announcement/HandleSubscriptionAnnouncement/HandleSubscriptionAnnouncement";
+import HandleSubscriptionAnnouncement
+  from "./components/Announcement/HandleSubscriptionAnnouncement/HandleSubscriptionAnnouncement";
 import ExtAppContextProvider from "./contexts/ExtAppContext";
 
 import TranslationProvider from "./components/Common/Internationalisation/TranslationProvider";
 import AdministrationWorkspace from "./components/Administration/AdministrationWorkspace";
 import AppContext from "./contexts/AppContext";
+import HandlePassphraseEntryEvents
+  from "./components/AuthenticationPassphrase/HandlePassphraseEntryEvents/HandlePassphraseEntryEvents";
+import HandleFolderMoveStrategyEvents
+  from "./components/ResourceFolder/HandleFolderMoveStrategyEvents/HandleFolderMoveStrategyEvents";
+import HandleProgressEvents from "./components/Common/Progress/HandleProgressEvents/HandleProgressEvents";
+import HandleErrorEvents from "./components/Common/Error/HandleErrorEvents/HandleErrorEvents";
+import DisplayResourcesWorkspace from "./components/Resource/DisplayResourcesWorkspace/DisplayResourcesWorkspace";
 
 /**
  * The passbolt application served by the browser extension.
@@ -86,10 +83,10 @@ class ExtApp extends Component {
                         <DisplayActionFeedbacks/>
 
                         { /* Dialogs Management */}
-                        <HandlePassphraseEntryDialogEvents/>
-                        <HandleFolderMoveStrategyDialogEvents/>
-                        <HandleProgressDialogEvents/>
-                        <HandleErrorDialogEvents/>
+                        <HandlePassphraseEntryEvents/>
+                        <HandleFolderMoveStrategyEvents/>
+                        <HandleProgressEvents/>
+                        <HandleErrorEvents/>
                         <HandleSessionExpired/>
 
                         { /* Announcement Management */}

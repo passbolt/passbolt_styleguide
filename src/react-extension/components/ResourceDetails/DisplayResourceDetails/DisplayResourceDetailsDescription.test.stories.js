@@ -4,12 +4,13 @@ import AppContext from "../../../contexts/AppContext";
 import "../../../../css/themes/midgar/ext_app.css";
 import UserSettings from "../../../lib/Settings/UserSettings";
 import userSettingsFixture from "../../../test/fixture/Settings/userSettings";
-import PasswordSidebarDescriptionSection from "./PasswordSidebarDescriptionSection";
+import DisplayResourceDetailsDescription from "./DisplayResourceDetailsDescription";
+import TranslationProvider from "../../Common/Internationalisation/TranslationProvider";
 
 
 export default {
-  title: 'Passbolt/Password/PasswordSidebarDescriptionSection',
-  component: PasswordSidebarDescriptionSection
+  title: 'Passbolt/ResourceDetails/DisplayResourceDetailsDescription',
+  component: DisplayResourceDetailsDescription
 };
 
 const context = {
@@ -23,11 +24,15 @@ const context = {
 };
 
 const Template = args =>
-  <AppContext.Provider value={context}>
-    <MemoryRouter initialEntries={['/']}>
-      <Route component={routerProps => <PasswordSidebarDescriptionSection {...args} {...routerProps}/>}></Route>
-    </MemoryRouter>
-  </AppContext.Provider>;
+  <TranslationProvider loadingPath="/data/locales/{{lng}}/{{ns}}.json">
+    <AppContext.Provider value={context}>
+      <MemoryRouter initialEntries={['/']}>
+        <div className="panel">
+          <Route component={routerProps => <DisplayResourceDetailsDescription {...args} {...routerProps}/>}></Route>
+        </div>
+      </MemoryRouter>
+    </AppContext.Provider>
+  </TranslationProvider>;
 
 export const DecryptedDescription = Template.bind({});
 DecryptedDescription.args = {

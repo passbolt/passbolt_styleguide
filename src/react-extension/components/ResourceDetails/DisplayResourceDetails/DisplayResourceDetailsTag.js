@@ -15,7 +15,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import EditResourceTagsItemViewer from "../../ResourceTag/EditResourceTags/EditResourceTagsItemViewer";
 import EditResourceTags from "../../ResourceTag/EditResourceTags/EditResourceTags";
-import Icon from "../../../../react/components/Common/Icons/Icon";
+import Icon from "../../Common/Icons/Icon";
 import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 import {Trans, withTranslation} from "react-i18next";
 
