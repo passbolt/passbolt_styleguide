@@ -232,9 +232,12 @@ class Autocomplete extends Component {
         selected = 0;
       }
       this.props.onOpen();
-      return new Promise(resolve => {
-        this.setState({autocompleteItems, processing: false, selected: selected}, resolve());
-      });
+      // This verification avoid that a long promise erase the last call
+      if (keyword === this.state.name) {
+        return new Promise(resolve => {
+          this.setState({autocompleteItems, processing: false, selected: selected}, resolve());
+        });
+      }
     } catch (error) {
       console.error(error);
       this.closeAutocomplete();

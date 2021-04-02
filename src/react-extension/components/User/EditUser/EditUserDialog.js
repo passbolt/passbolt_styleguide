@@ -386,7 +386,7 @@ class EditUserDialog extends Component {
                   onChange={this.handleCheckboxClick}
                   checked={this.state.is_admin}
                   type="checkbox"/>
-                <span> <Trans>This user is an administrator</Trans></span>
+                <label htmlFor="is_admin_checkbox"> <Trans>This user is an administrator</Trans></label>
               </div>
               <div className="message helptext">
                 <Trans>Note: Administrators can add and delete users; They can also create groups and assign group managers; Admin can not see all passwords.</Trans>

@@ -204,7 +204,8 @@ class PasswordSidebarDescriptionSection extends React.Component {
    * Display or not the input tag editor
    */
   toggleInputDescriptionEditor() {
-    if (this.canEdit()) {
+    const hasTextSelected = Boolean(window.getSelection().toString());
+    if (!hasTextSelected && this.canEdit()) {
       const showDescriptionEditor = !this.state.showDescriptionEditor;
       this.setState({showDescriptionEditor});
     }
