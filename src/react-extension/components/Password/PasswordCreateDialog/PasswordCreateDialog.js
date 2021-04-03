@@ -212,7 +212,7 @@ class PasswordCreateDialog extends Component {
     }
 
     return new Promise(resolve => {
-      this.setState({nameError: nameError, nameWarning: ''}, resolve);
+      this.setState({nameError: nameError}, resolve);
     });
   }
 
@@ -487,8 +487,10 @@ class PasswordCreateDialog extends Component {
   handleDescriptionInputKeyUp() {
     if (!this.state.hasAlreadyBeenValidated) {
       const hasResourceDescriptionMaxLength = this.state.description.length >= RESOURCE_DESCRIPTION_MAX_LENGTH;
+      console.log(hasResourceDescriptionMaxLength);
 
       const warningMessage = this.translate("Warning: this is the maximum size for this field, make sure your data was not truncated");
+      console.log("warningMessage", warningMessage);
       const descriptionWarning = hasResourceDescriptionMaxLength ? warningMessage : '';
       this.setState({descriptionWarning});
     }
