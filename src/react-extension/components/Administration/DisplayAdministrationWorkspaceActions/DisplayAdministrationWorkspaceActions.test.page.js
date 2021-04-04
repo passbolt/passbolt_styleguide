@@ -80,6 +80,13 @@ export default class DisplayUserWorkspaceActionsPage {
   }
 
   /**
+   * Returns the edit subscription key button
+   */
+  get editSubscriptionKeyButton() {
+    return this._page.container.querySelector('li a');
+  }
+
+  /**
    * Returns true if the page object exists in the container
    */
   exists() {
@@ -112,6 +119,11 @@ export default class DisplayUserWorkspaceActionsPage {
   /** Click on the synchronize element */
   async synchronize() {
     await this.click(this.synchronizeButton);
+  }
+
+  /** Click on the edit subscription key element */
+  async editSubscriptionKey() {
+    await this.click(this.editSubscriptionKeyButton);
   }
 }
 

@@ -189,10 +189,10 @@ class DisplayUserDirectoryAdministration extends React.Component {
    * @param previousAdministrationWorkspaceContext Previous administration workspace context settings
    */
   async handleMustSubmit(previousAdministrationWorkspaceContext) {
-    const hasMustSaveChanged = this.props.administrationWorkspaceContext.mustSaveSettings !== previousAdministrationWorkspaceContext.mustSaveSettings;
-    const hasMustTestChanged = this.props.administrationWorkspaceContext.mustTestSettings !== previousAdministrationWorkspaceContext.mustTestSettings;
-    if ((hasMustSaveChanged && this.props.administrationWorkspaceContext.mustSaveSettings)
-      || (hasMustTestChanged && this.props.administrationWorkspaceContext.mustTestSettings)) {
+    const hasMustSaveChanged = this.props.administrationWorkspaceContext.must.save !== previousAdministrationWorkspaceContext.must.save;
+    const hasMustTestChanged = this.props.administrationWorkspaceContext.must.test !== previousAdministrationWorkspaceContext.must.test;
+    if ((hasMustSaveChanged && this.props.administrationWorkspaceContext.must.save)
+      || (hasMustTestChanged && this.props.administrationWorkspaceContext.must.test)) {
       await this.handleFormSubmit();
       this.props.administrationWorkspaceContext.onResetActionsSettings();
     }
@@ -538,10 +538,10 @@ class DisplayUserDirectoryAdministration extends React.Component {
         return;
       }
       try {
-        if (this.props.administrationWorkspaceContext.mustSaveSettings) {
+        if (this.props.administrationWorkspaceContext.must.save) {
           await this.saveUserDirectory();
           await this.handleSaveSuccess();
-        } else if (this.props.administrationWorkspaceContext.mustTestSettings) {
+        } else if (this.props.administrationWorkspaceContext.must.test) {
           await this.testUserDirectory();
         }
         this.setState({processing: false});

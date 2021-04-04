@@ -15,6 +15,7 @@ import React, {Component} from "react";
 import Icon from "../../../react/components/Common/Icons/Icon";
 import PropTypes from "prop-types";
 import {Trans, withTranslation} from "react-i18next";
+import {withAppContext} from "../../contexts/AppContext";
 
 const CREDITS_URL = "https://www.passbolt.com/credits";
 const UNSAFE_URL = "https://help.passbolt.com/faq/hosting/why-unsafe";
@@ -27,14 +28,14 @@ class Footer extends Component {
    * Returns true if the component is ready to be displayed
    */
   get isReady() {
-    return this.props.siteSettings;
+    return this.props.context.siteSettings;
   }
 
   /**
    * Returns the terms link url
    */
   get privacyUrl() {
-    return this.props.siteSettings.privacyLink;
+    return this.props.context.siteSettings.privacyLink;
   }
 
   /**
@@ -55,7 +56,7 @@ class Footer extends Component {
    * Returns the privacy link url
    */
   get termsUrl() {
-    return this.props.siteSettings.termsLink;
+    return this.props.context.siteSettings.termsLink;
   }
 
   /**
@@ -64,12 +65,12 @@ class Footer extends Component {
    */
   get versions() {
     const versions = [];
-    const serverVersion = this.props.siteSettings.version;
+    const serverVersion = this.props.context.siteSettings.version;
     if (serverVersion) {
       versions.push(serverVersion);
     }
-    if (this.props.extensionVersion) {
-      versions.push(this.props.extensionVersion);
+    if (this.props.context.extensionVersion) {
+      versions.push(this.props.context.extensionVersion);
     }
 
     return versions.join(' / ');
@@ -79,8 +80,8 @@ class Footer extends Component {
    * Returns true if the application is in an unsafe mode
    */
   get isUnsafeMode() {
-    const debug = this.props.siteSettings.debug;
-    const isHttpMode = this.props.siteSettings.url.startsWith('http://');
+    const debug = this.props.context.siteSettings.debug;
+    const isHttpMode = this.props.context.siteSettings.url.startsWith('http://');
     return debug || isHttpMode;
   }
 
@@ -156,9 +157,8 @@ class Footer extends Component {
 }
 
 Footer.propTypes = {
-  siteSettings: PropTypes.object, // The site settings
-  extensionVersion: PropTypes.string, // The extension version
+  context: PropTypes.any, // The app context
   t: PropTypes.func, // The translation function
 };
 
-export default withTranslation('common')(Footer);
+export default withAppContext(withTranslation('common')(Footer));

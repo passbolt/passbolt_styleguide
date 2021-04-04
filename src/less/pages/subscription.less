@@ -1,0 +1,49 @@
+.subscription-key {
+  .subscription-information {
+    width: 100%;
+    li {
+      .clearfix();
+      padding-bottom:.25em;
+
+      span {
+        .ellipsis();
+      }
+      .label {
+        width: 30%;
+        display: inline-block;
+        margin-right: 5%;
+        float: left;
+        height: 1.8em;
+        color: @font-lighter;
+
+        &.error {
+          color: @font-error;
+        }
+        &.warning {
+          color: @font-warning;
+        }
+      }
+      .value {
+        width: 65%;
+        display: inline-block;
+        float: left;
+        height: 1.8em;
+
+        &.error {
+          color: @font-error;
+        }
+        &.warning {
+          color: @font-warning;
+        }
+      }
+    }
+
+    a {
+      margin-top: 1em;
+
+      &.button {
+        margin-right: 1.5em;
+      }
+    }
+  }
+}

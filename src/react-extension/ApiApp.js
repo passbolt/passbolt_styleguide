@@ -11,27 +11,28 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  */
 import React, {Component} from "react";
-import AppContext from "./contexts/AppContext";
 import ActionFeedbackContextProvider from "./contexts/ActionFeedbackContext";
 import DialogContextProvider from "../react/contexts/Common/DialogContext";
 import ContextualMenuContextProvider from "../react/contexts/Common/ContextualMenuContext";
 import ShareActionFeedbacks from "./components/Share/ShareActionFeedbacks";
-import {Redirect, BrowserRouter as Router, Route, Switch} from "react-router-dom";
+import {BrowserRouter as Router, Route, Switch} from "react-router-dom";
 import AdministrationWorkspaceContextProvider from "./contexts/AdministrationWorkspaceContext";
 import ManageDialogs from "../react/components/Common/Dialog/ManageDialogs/ManageDialogs";
 import ManageContextualMenu from "./components/ManageContextualMenu";
 import AdministrationWorkspace from "./components/Administration/AdministrationWorkspace";
-import {ApiClientOptions} from "./lib/apiClient/apiClientOptions";
-import {ApiClient} from "./lib/apiClient/apiClient";
-import SiteSettings from "./lib/Settings/SiteSettings";
 import Footer from "./components/Footer/Footer";
 import DisplayApiUserSettingsWorkspace
   from "./components/UserSetting/DisplayUserSettingsWorkspace/DisplayApiUserSettingsWorkspace";
 import DisplayMainMenu from "./components/navigation/DisplayMainMenu";
 import NavigationContextProvider from "./contexts/NavigationContext";
 import HandleSessionExpired from "./components/Auth/HandleSessionExpired/HandleSessionExpired";
-import PassboltApiFetchError from "./lib/Error/passboltApiFetchError";
+import AnnouncementContextProvider from "./contexts/AnnouncementContext";
+import HandleSubscriptionAnnouncement
+  from "./components/Announcement/HandleSubscriptionAnnouncement/HandleSubscriptionAnnouncement";
+import ManageAnnouncements from "./components/Announcement/ManageAnnouncements/ManageAnnouncements";
+import ApiAppContextProvider from "./contexts/ApiAppContext";
 import TranslationProvider from "./components/Internationalisation/TranslationProvider";
+import AppContext from "./contexts/AppContext";
 
 /**
  * The passbolt application served by the API.
@@ -43,45 +44,13 @@ import TranslationProvider from "./components/Internationalisation/TranslationPr
 class ApiApp extends Component {
   constructor(props) {
     super(props);
-    this.state = this.getDefaultState(props);
+    this.state = this.defaultState;
   }
 
-  /**
-   * ComponentDidMount
-   * Invoked immediately after component is inserted into the tree
-   * @return {void}
-   */
-  async componentDidMount() {
-    await this.getLoggedInUser();
-    await this.getSiteSettings();
-    this.removeSplashScreen();
-  }
-
-  /**
-   * Default state
-   * @returns {object}
-   */
-  getDefaultState() {
+  get defaultState() {
     return {
-      name: "api", // The application name
-      loggedInUser: null, // The logged in user
-      siteSettings: null, // The site settings
       trustedDomain: this.baseUrl, // The site domain (use trusted domain for compatibility with browser extension applications)
       basename: (new URL(this.baseUrl)).pathname, // Base path to be used for routing if needed ex. /workspace
-      getApiClientOptions: this.getApiClientOptions.bind(this), // Get the api client options
-
-      displayTestUserDirectoryDialogProps: {
-        userDirectoryTestResult: null, // The result of the test user directory
-      },
-
-      // @todo check if still necessary
-      setContext: context => {
-        this.setState(context);
-      },
-
-      // Navigation
-      onLogoutRequested: () => this.onLogoutRequested(),
-      onCheckIsAuthenticatedRequested: () => this.onCheckIsAuthenticatedRequested(),
     };
   }
 
@@ -98,178 +67,65 @@ class ApiApp extends Component {
     return "";
   }
 
-  /**
-   * Returns true if the user has the MFA capability
-   * @returns {boolean}
-   */
-  get isMfaEnabled() {
-    const siteSettings = this.state.siteSettings;
-    return siteSettings && siteSettings.canIUse('multiFactorAuthentication');
-  }
-
-  /**
-   * Returns true if the user has the user directory capability
-   * @returns {boolean}
-   */
-  get isUserDirectoryEnabled() {
-    const siteSettings = this.state.siteSettings;
-    return siteSettings && siteSettings.canIUse('directorySync');
-  }
-
-  /**
-   * Returns true when the component can be rendered
-   */
-  get isReady() {
-    // Waiting for the site settings to have the appropriate redirection
-    return this.state.siteSettings;
-  }
-
-  /**
-   * Get the API client options
-   * @returns {ApiClientOptions}
-   */
-  getApiClientOptions() {
-    return new ApiClientOptions()
-      .setBaseUrl(this.state.trustedDomain)
-      .setCsrfToken(this.getCsrfToken());
-  }
-
-  /**
-   * Get csrf token
-   * @returns {string}
-   */
-  getCsrfToken() {
-    const cookieString = document.cookie;
-    if (!cookieString) {
-      return undefined;
-    }
-    const cookieArray = cookieString.split('; ');
-    if (!cookieArray) {
-      return undefined;
-    }
-    const csrfCookie = cookieArray.find(row => row.startsWith('csrfToken'));
-    if (!csrfCookie) {
-      return undefined;
-    }
-    const csrfToken = csrfCookie.split('=');
-    if (csrfToken && csrfToken.length === 2) {
-      return csrfToken[1];
-    }
-
-    return undefined;
-  }
-
-  /**
-   * Retrieve the logged in user.
-   * @returns {Promise<object>}
-   */
-  async getLoggedInUser() {
-    const apiClientOptions = this.getApiClientOptions().setResourceName("users");
-    const apiClient = new ApiClient(apiClientOptions);
-    const result = await apiClient.get("me");
-    const loggedInUser = result.body;
-    this.setState({loggedInUser});
-  }
-
-  /**
-   * Fetch the site settings
-   */
-  async getSiteSettings() {
-    const apiClientOptions = this.getApiClientOptions().setResourceName("settings");
-    const apiClient = new ApiClient(apiClientOptions);
-    const siteSettings = await apiClient.findAll();
-    await this.setState({siteSettings: new SiteSettings(siteSettings.body)});
-  }
-
-  /**
-   * Remove the splashscreen.
-   */
-  removeSplashScreen() {
-    document.getElementsByTagName("html")[0].classList.remove("launching");
-  }
-
-  /**
-   * Listen when the user wants to logout.
-   */
-  onLogoutRequested() {
-    document.location.href = `${this.state.trustedDomain}/auth/logout`;
-  }
-
-  /**
-   * Whenever the user authentication status must be checked
-   * @return {Promise<boolean>}
-   * @throw Error if an unexpected error occurred while checking the session
-   */
-  async onCheckIsAuthenticatedRequested() {
-    try {
-      const apiClientOptions = this.getApiClientOptions().setResourceName("auth");
-      const apiClient = new ApiClient(apiClientOptions);
-      await apiClient.get('is-authenticated');
-      return true;
-    } catch (error) {
-      if (error instanceof PassboltApiFetchError) {
-        if (error.data.code === 403) {
-          return false;
-        }
-      }
-      throw error;
-    }
-  }
-
   render() {
     return (
-      <>
-        {this.isReady &&
-        <TranslationProvider loadingPath={`${this.state.trustedDomain}/locales/{{lng}}/{{ns}}.json`}>
-          <AppContext.Provider value={this.state}>
-            <ActionFeedbackContextProvider>
-              <DialogContextProvider>
-                <ContextualMenuContextProvider>
-                  { /* Action Feedback Management */}
-                  <ShareActionFeedbacks/>
-                  { /* Session expired handler */}
-                  <HandleSessionExpired/>
-                  <Router basename={this.state.basename}>
-                    <NavigationContextProvider>
-                      <Switch>
-                        <Route exact path="/app/administration">
-                          {this.isMfaEnabled &&
-                          <Redirect to="/app/administration/mfa"/>}
-                          {!this.isMfaEnabled && this.isUserDirectoryEnabled &&
-                          <Redirect to="/app/administration/users-directory"/>}
-                          {!this.isMfaEnabled && !this.isUserDirectoryEnabled &&
-                          <Redirect to="/app/administration/email-notification"/>}
-                        </Route>
-                        <Route path="/app/administration">
-                          <AdministrationWorkspaceContextProvider>
-                            <ManageDialogs/>
-                            <ManageContextualMenu/>
-                            <AdministrationWorkspace/>
-                          </AdministrationWorkspaceContextProvider>
-                        </Route>
-                        <Route path="/app/settings/mfa">
-                          <ManageDialogs/>
-                          <ManageContextualMenu/>
-                          <div id="container" className="page settings">
-                            <div id="app" className="app" tabIndex="1000">
-                              <div className="header first">
-                                <DisplayMainMenu/>
+      <TranslationProvider loadingPath={`${this.state.trustedDomain}/locales/{{lng}}/{{ns}}.json`}>
+        <ApiAppContextProvider trustedDomain={this.state.trustedDomain} basename={this.state.basename}>
+          <AppContext.Consumer>
+            {appContext =>
+              <ActionFeedbackContextProvider>
+                <DialogContextProvider>
+                  <AnnouncementContextProvider>
+                    <ContextualMenuContextProvider>
+                      { /* Action Feedback Management */}
+                      <ShareActionFeedbacks/>
+                      { /* Session expired handler */}
+                      <HandleSessionExpired/>
+                      { /* Announcement Management */}
+                      {appContext.loggedInUser && appContext.loggedInUser.role.name === "admin"
+                      && appContext.siteSettings.canIUse('ee')
+                      && <HandleSubscriptionAnnouncement/>}
+
+                      <Router basename={this.state.basename}>
+                        <NavigationContextProvider>
+                          <Switch>
+                            { /* The following routes are not handled by the browser extension application. */}
+                            <Route exact path={[
+                              "/app/administration/subscription"
+                            ]}/>
+                            <Route path="/app/administration">
+                              <AdministrationWorkspaceContextProvider>
+                                <ManageDialogs/>
+                                <ManageContextualMenu/>
+                                <ManageAnnouncements/>
+                                <AdministrationWorkspace/>
+                              </AdministrationWorkspaceContextProvider>
+                            </Route>
+                            <Route path="/app/settings/mfa">
+                              <ManageDialogs/>
+                              <ManageContextualMenu/>
+                              <ManageAnnouncements/>
+                              <div id="container" className="page settings">
+                                <div id="app" className="app" tabIndex="1000">
+                                  <div className="header first">
+                                    <DisplayMainMenu/>
+                                  </div>
+                                  <DisplayApiUserSettingsWorkspace/>
+                                </div>
                               </div>
-                              <DisplayApiUserSettingsWorkspace/>
-                            </div>
-                          </div>
-                        </Route>
-                      </Switch>
-                    </NavigationContextProvider>
-                  </Router>
-                  <Footer siteSettings={this.state.siteSettings}/>
-                </ContextualMenuContextProvider>
-              </DialogContextProvider>
-            </ActionFeedbackContextProvider>
-          </AppContext.Provider>
-        </TranslationProvider>
-        }
-      </>
+                            </Route>
+                          </Switch>
+                        </NavigationContextProvider>
+                      </Router>
+                      <Footer/>
+                    </ContextualMenuContextProvider>
+                  </AnnouncementContextProvider>
+                </DialogContextProvider>
+              </ActionFeedbackContextProvider>
+            }
+          </AppContext.Consumer>
+        </ApiAppContextProvider>
+      </TranslationProvider>
     );
   }
 }

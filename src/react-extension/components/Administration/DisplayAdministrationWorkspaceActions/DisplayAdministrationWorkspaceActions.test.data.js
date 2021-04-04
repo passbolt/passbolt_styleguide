@@ -18,10 +18,14 @@ export function defaultProps(selectedAdministration) {
   return {
     administrationWorkspaceContext: {
       selectedAdministration,
-      isSaveEnabled: false,
-      isTestEnabled: false,
-      isSynchronizeEnabled: false,
-      mustSynchronizeSettings: false,
+      can: {
+        save: false,
+        test: false,
+        synchronize: false
+      },
+      must: {
+        synchronize: false
+      },
       onResetActionsSettings: jest.fn(),
       onMustSaveSettings: jest.fn(),
       onMustTestSettings: jest.fn(),

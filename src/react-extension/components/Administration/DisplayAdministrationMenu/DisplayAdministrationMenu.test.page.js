@@ -76,6 +76,13 @@ export default class DisplayAdministrationMenuPage {
   }
 
   /**
+   * Returns the subscription menu
+   */
+  get subscription() {
+    return this._page.container.querySelector('#subscription_menu .row .main-cell-wrapper .main-cell a');
+  }
+
+  /**
    * Returns true if the page object exists in the container
    */
   exists() {
@@ -103,6 +110,11 @@ export default class DisplayAdministrationMenuPage {
   /** Click on the email notifications element */
   async goToEmailNotifications() {
     await this.click(this.emailNotifications);
+  }
+
+  /** Click on the subscription element */
+  async goToSubscription() {
+    await this.click(this.subscription);
   }
 }
 

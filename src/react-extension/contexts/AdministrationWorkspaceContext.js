@@ -12,7 +12,7 @@
  */
 import * as React from "react";
 import PropTypes from "prop-types";
-import AppContext, {withAppContext} from "./AppContext";
+import {withAppContext} from "./AppContext";
 import {withRouter} from "react-router-dom";
 import {withLoading} from "../../react/contexts/Common/LoadingContext";
 import {ApiClient} from "../lib/apiClient/apiClient";
@@ -22,12 +22,18 @@ import {ApiClient} from "../lib/apiClient/apiClient";
  */
 export const AdministrationWorkspaceContext = React.createContext({
   selectedAdministration: null, // The current menu administration selected
-  isSaveEnabled: false, // If the button save settings is enable
-  mustSaveSettings: false, // Must save settings
-  isTestEnabled: false, // If the button test settings is enable
-  mustTestSettings: false, // Must test settings
-  isSynchronizeEnabled: false, // If the button synchronize settings is enable
-  mustSynchronizeSettings: false, // Must synchronize settings
+  can: {
+    save: false, // If the button save settings is enable
+    test: false, // If the button test settings is enable
+    synchronize: false // If the button synchronize settings is enable
+  },
+  must: {
+    save: false, // Must save settings
+    test: false, // Must test settings
+    synchronize: false, // Must synchronize settings
+    editSubscriptionKey: false, // Must edit subscription key
+    refreshSubscriptionKey: false // Must refresh the subscription key
+  },
   onGetMfaRequested: () => {}, // Whenever the user access to the Mfa page
   onSaveMfaRequested: () => {}, // Whenever the user wants save Mfa settings
   onGetUsersDirectoryRequested: () => {}, // Whenever the user access to the users directory page
@@ -39,12 +45,15 @@ export const AdministrationWorkspaceContext = React.createContext({
   onGetUsersRequested: () => {}, // Whenever we need get the users
   onGetEmailNotificationsRequested: () => {}, // Whenever the user access to the email notifications page
   onSaveEmailNotificationsRequested: () => {}, // Whenever the user save the email notifications settings
+  onUpdateSubscriptionKeyRequested: () => {}, // Whenever the user update the subscription key
   onSaveEnabled: () => {}, // Whenever a user change settings
   onMustSaveSettings: () => {}, // Whenever a user wants save settings
   onTestEnabled: () => {}, // Whenever a user change settings
   onMustTestSettings: () => {}, // Whenever a user wants save settings
   onSynchronizeEnabled: () => {}, // Whenever a user have settings to be synchronized
   onMustSynchronizeSettings: () => {}, // Whenever a user wants synchronized settings
+  onMustEditSubscriptionKey: () => {}, // Whenever a user wants edit the susbcription key
+  onMustRefreshSubscriptionKey: () => {}, // Whenever the susbcription key needs to be refreshed
   onResetActionsSettings: () => {}, // Reset states after a user do an action for the settings
 });
 
@@ -67,12 +76,18 @@ class AdministrationWorkspaceContextProvider extends React.Component {
   get defaultState() {
     return {
       selectedAdministration: AdministrationWorkspaceMenuTypes.NONE, // The current menu administration selected
-      isSaveEnabled: false, // If the button save settings is enable
-      mustSaveSettings: false, // Must save settings
-      isTestEnabled: false, // If the button test settings is enable
-      mustTestSettings: false, // Must test settings
-      isSynchronizeEnabled: false, // If the button synchronize settings is enable
-      mustSynchronizeSettings: false, // Must synchronize settings
+      can: {
+        save: false, // If the button save settings is enable
+        test: false, // If the button test settings is enable
+        synchronize: false // If the button synchronize settings is enable
+      },
+      must: {
+        save: false, // Must save settings
+        test: false, // Must test settings
+        synchronize: false, // Must synchronize settings
+        editSubscriptionKey: false, // Must edit subscription key
+        refreshSubscriptionKey: false // Must refresh the susbcription key
+      },
       onGetMfaRequested: this.onGetMfaRequested.bind(this), // Whenever the user access to the Mfa page
       onSaveMfaRequested: this.onSaveMfaRequested.bind(this), // Whenever the user wants save the Mfa page
       onGetUsersDirectoryRequested: this.onGetUsersDirectoryRequested.bind(this), // Whenever the user access to the users directory page
@@ -84,12 +99,15 @@ class AdministrationWorkspaceContextProvider extends React.Component {
       onGetUsersRequested: this.onGetUsersRequested.bind(this), // Whenever we need get the users
       onGetEmailNotificationsRequested: this.onGetEmailNotificationsRequested.bind(this), // Whenever the user access to the email notifications page
       onSaveEmailNotificationsRequested: this.onSaveEmailNotificationsRequested.bind(this), // Whenever the user save the email notifications settings
+      onUpdateSubscriptionKeyRequested: this.onUpdateSubscriptionKeyRequested.bind(this), // Whenever the user update the subscription key
       onSaveEnabled: this.handleSaveEnabled.bind(this), // Whenever a user change settings
       onMustSaveSettings: this.handleMustSaveSettings.bind(this), // Whenever a user wants save settings
       onTestEnabled: this.handleTestEnabled.bind(this), // Whenever a user have settings to be tested
       onMustTestSettings: this.handleMustTestSettings.bind(this), // Whenever a user wants test settings
       onSynchronizeEnabled: this.handleSynchronizeEnabled.bind(this), // Whenever a user have settings to be synchronized
       onMustSynchronizeSettings: this.handleMustSynchronizeSettings.bind(this), // Whenever a user wants synchronized settings
+      onMustEditSubscriptionKey: this.handleMustEditSubscriptionKey.bind(this), // Whenever a user wants edit the susbcription key
+      onMustRefreshSubscriptionKey: this.handleMustRefreshSubscriptionKey.bind(this), // Whenever the susbcription key needs to be refreshed
       onResetActionsSettings: this.handleResetActionsSettings.bind(this), // Reset states after a user do an action for the settings
     };
   }
@@ -113,49 +131,70 @@ class AdministrationWorkspaceContextProvider extends React.Component {
    * Handle save enabled
    */
   async handleSaveEnabled() {
-    await this.setState({isSaveEnabled: true});
+    await this.setState({can: {...this.state.can, save: true}});
   }
 
   /**
    * Handle must save settings
    */
   async handleMustSaveSettings() {
-    await this.setState({mustSaveSettings: true});
+    await this.setState({must: {...this.state.must, save: true}});
   }
 
   /**
    * Handle test enabled
    */
   async handleTestEnabled(boolean) {
-    await this.setState({isTestEnabled: boolean});
+    await this.setState({can: {...this.state.can, test: boolean}});
   }
 
   /**
    * Handle must test settings
    */
   async handleMustTestSettings() {
-    await this.setState({mustTestSettings: true});
+    await this.setState({must: {...this.state.must, test: true}});
   }
 
   /**
    * Handle synchronize enabled
    */
   async handleSynchronizeEnabled(boolean) {
-    await this.setState({isSynchronizeEnabled: boolean});
+    await this.setState({can: {...this.state.can, synchronize: boolean}});
   }
 
   /**
    * Handle must synchronize settings
    */
   async handleMustSynchronizeSettings() {
-    await this.setState({mustSynchronizeSettings: true});
+    await this.setState({must: {...this.state.must, synchronize: true}});
+  }
+
+  /**
+   * Handle must edit subscription key
+   */
+  async handleMustEditSubscriptionKey() {
+    await this.setState({must: {...this.state.must, editSubscriptionKey: true}});
+  }
+
+  /**
+   * Handle must refresh subscription key
+   */
+  async handleMustRefreshSubscriptionKey() {
+    await this.setState({must: {...this.state.must, refreshSubscriptionKey: true}});
   }
 
   /**
    * Handle reset state settings
    */
   async handleResetActionsSettings() {
-    await this.setState({mustSaveSettings: false, mustTestSettings: false, mustSynchronizeSettings: false});
+    const must = {
+      save: false,
+      test: false,
+      synchronize: false,
+      editSubscriptionKey: false,
+      refreshSubscriptionKey: false
+    };
+    await this.setState({must});
   }
 
   /**
@@ -176,11 +215,19 @@ class AdministrationWorkspaceContextProvider extends React.Component {
     const isMfaLocation = this.props.location.pathname.includes('mfa');
     const isUserDirectoryLocation = this.props.location.pathname.includes('users-directory');
     const isEmailNotificationLocation = this.props.location.pathname.includes('email-notification');
-    const isSaveEnabled = false;
-    const mustSaveSettings = false;
-    const isTestEnabled = false;
-    const mustTestSettings = false;
-    const isSynchronizeEnabled = false;
+    const isSubscriptionLocation = this.props.location.pathname.includes('subscription');
+    const can = {
+      save: false,
+      test: false,
+      synchronize: false
+    };
+    const must = {
+      save: false,
+      test: false,
+      synchronize: false,
+      editSubscriptionKey: false,
+      refreshSubscriptionKey: false
+    };
 
     let selectedAdministration;
     if (isMfaLocation) {
@@ -189,8 +236,10 @@ class AdministrationWorkspaceContextProvider extends React.Component {
       selectedAdministration =  AdministrationWorkspaceMenuTypes.USER_DIRECTORY;
     } else if (isEmailNotificationLocation) {
       selectedAdministration =  AdministrationWorkspaceMenuTypes.EMAIL_NOTIFICATION;
+    } else if (isSubscriptionLocation) {
+      selectedAdministration =  AdministrationWorkspaceMenuTypes.SUBSCRIPTION;
     }
-    await this.setState({selectedAdministration, isSaveEnabled, mustSaveSettings, isTestEnabled, mustTestSettings, isSynchronizeEnabled});
+    await this.setState({selectedAdministration, can, must});
   }
 
   /**
@@ -304,6 +353,15 @@ class AdministrationWorkspaceContextProvider extends React.Component {
   }
 
   /**
+   * Whenever the update of the subscription is requested.
+   * @param keyDto The new subscription key
+   * @return {Promise<object>}
+   */
+  async onUpdateSubscriptionKeyRequested(keyDto) {
+    return this.props.context.port.request("passbolt.subscription.update", keyDto);
+  }
+
+  /**
    * Render the component
    * @returns {JSX}
    */
@@ -317,7 +375,7 @@ class AdministrationWorkspaceContextProvider extends React.Component {
 }
 
 AdministrationWorkspaceContextProvider.displayName = 'AdministrationWorkspaceContextProvider';
-AdministrationWorkspaceContextProvider.contextType = AppContext;
+
 AdministrationWorkspaceContextProvider.propTypes = {
   context: PropTypes.object, // The application context
   children: PropTypes.any, // The component children
@@ -355,4 +413,5 @@ export const AdministrationWorkspaceMenuTypes = {
   MFA: 'MFA', // MFA administration menu selected
   USER_DIRECTORY: 'USER-DIRECTORY', // User directory administration menu selected
   EMAIL_NOTIFICATION: 'EMAIL-NOTIFICATION', // Email notification administration menu selected
+  SUBSCRIPTION: 'SUBSCRIPTION', // Subscription administration menu selected
 };

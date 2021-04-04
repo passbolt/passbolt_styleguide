@@ -106,8 +106,11 @@ class ExtBootstrapApp extends Component {
         <Router basename={this.basename}>
           <HandleExtAppBootstrapRouteChangeRequested port={this.props.port}/>
           <Switch>
-            <Route path={[
+            <Route exact path={[
               "/app/administration",
+              "/app/administration/mfa",
+              "/app/administration/users-directory",
+              "/app/administration/email-notification",
               "/app/settings/mfa"
             ]}>
               <>
@@ -117,6 +120,7 @@ class ExtBootstrapApp extends Component {
               </>
             </Route>
             <Route exact path={[
+              "/app/administration/subscription",
               "/app/folders/view/:filterByFolderId",
               "/app/groups/view/:selectedGroupId",
               "/app/groups/edit/:selectedGroupId",

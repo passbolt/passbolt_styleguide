@@ -20,6 +20,7 @@ import {
 import AppContext, {withAppContext} from "../../../contexts/AppContext";
 import {withRouter} from "react-router-dom";
 import {Trans, withTranslation} from "react-i18next";
+import {withNavigationContext} from "../../../contexts/NavigationContext";
 
 /**
  * This component allows to display the menu of the administration
@@ -53,33 +54,50 @@ class DisplayAdministrationMenu extends React.Component {
   }
 
   /**
+   * Can I use the EE plugin
+   * @returns {boolean}
+   */
+  get canIUseEE() {
+    const siteSettings = this.props.context.siteSettings;
+    return siteSettings && siteSettings.canIUse('ee');
+  }
+
+  /**
    * Bind callbacks methods
    */
   bindCallbacks() {
     this.handleMfaClick = this.handleMfaClick.bind(this);
     this.handleUserDirectoryClick = this.handleUserDirectoryClick.bind(this);
     this.handleEmailNotificationsClick = this.handleEmailNotificationsClick.bind(this);
+    this.handleSubscriptionClick = this.handleSubscriptionClick.bind(this);
   }
 
   /**
    * Handle when the user click on the mfa menu
    */
   handleMfaClick() {
-    this.props.history.push({pathname: '/app/administration/mfa'});
+    this.props.navigationContext.onGoToAdministrationMfaRequested();
   }
 
   /**
    * Handle when the user click on the user directory menu
    */
   handleUserDirectoryClick() {
-    this.props.history.push({pathname: '/app/administration/users-directory'});
+    this.props.navigationContext.onGoToAdministrationUsersDirectoryRequested();
   }
 
   /**
    * Handle when the user click on the email notifications menu
    */
   handleEmailNotificationsClick() {
-    this.props.history.push({pathname: '/app/administration/email-notification'});
+    this.props.navigationContext.onGoToAdministrationEmailNotificationsRequested();
+  }
+
+  /**
+   * Handle when the user click on the subscription menu
+   */
+  handleSubscriptionClick() {
+    this.props.navigationContext.onGoToAdministrationSubscriptionRequested();
   }
 
   /**
@@ -104,6 +122,14 @@ class DisplayAdministrationMenu extends React.Component {
    */
   isEmailNotificationsSelected() {
     return AdministrationWorkspaceMenuTypes.EMAIL_NOTIFICATION === this.props.administrationWorkspaceContext.selectedAdministration;
+  }
+
+  /**
+   * If Subscription menu is selected
+   * @returns {boolean}
+   */
+  isSubscriptionSelected() {
+    return AdministrationWorkspaceMenuTypes.SUBSCRIPTION === this.props.administrationWorkspaceContext.selectedAdministration;
   }
 
   /**
@@ -153,6 +179,17 @@ class DisplayAdministrationMenu extends React.Component {
               </div>
             </div>
           </li>
+          {this.canIUseEE &&
+          <li id="subscription_menu">
+            <div className={`row  ${this.isSubscriptionSelected() ? "selected" : ""}`}>
+              <div className="main-cell-wrapper">
+                <div className="main-cell">
+                  <a onClick={this.handleSubscriptionClick}><span><Trans>Subscription</Trans></span></a>
+                </div>
+              </div>
+            </div>
+          </li>
+          }
         </ul>
       </div>
     );
@@ -165,7 +202,8 @@ DisplayAdministrationMenu.propTypes = {
   context: PropTypes.object, // The app context
   administrationWorkspaceContext: PropTypes.object, // The administration workspace context
   history: PropTypes.object, // The router history
+  navigationContext: PropTypes.any, // The application navigation context
   t: PropTypes.func, // The translation function
 };
 
-export default withRouter(withAppContext(withAdministrationWorkspace(withTranslation('common')(DisplayAdministrationMenu))));
+export default withRouter(withAppContext(withNavigationContext(withAdministrationWorkspace(withTranslation('common')(DisplayAdministrationMenu)))));

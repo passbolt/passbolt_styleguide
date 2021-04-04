@@ -89,7 +89,7 @@ class DisplayEmailNotificationsAdministration extends React.Component {
    * @param prevProps
    */
   async componentDidUpdate(prevProps) {
-    await this.handleMustSave(prevProps.administrationWorkspaceContext.mustSaveSettings);
+    await this.handleMustSave(prevProps.administrationWorkspaceContext.must.save);
   }
 
   /**
@@ -104,8 +104,8 @@ class DisplayEmailNotificationsAdministration extends React.Component {
    * @param previousMustSaveSettings Previous must save settings
    */
   async handleMustSave(previousMustSaveSettings) {
-    const hasMustSaveChanged = this.props.administrationWorkspaceContext.mustSaveSettings !== previousMustSaveSettings;
-    if (hasMustSaveChanged && this.props.administrationWorkspaceContext.mustSaveSettings) {
+    const hasMustSaveChanged = this.props.administrationWorkspaceContext.must.save !== previousMustSaveSettings;
+    if (hasMustSaveChanged && this.props.administrationWorkspaceContext.must.save) {
       await this.handleFormSubmit();
       this.props.administrationWorkspaceContext.onResetActionsSettings();
     }

@@ -56,6 +56,8 @@ class DisplayAdministrationWorkspaceBreadcrumb extends Component {
         return this.translate("Users Directory");
       case AdministrationWorkspaceMenuTypes.EMAIL_NOTIFICATION:
         return this.translate("Email Notification");
+      case AdministrationWorkspaceMenuTypes.SUBSCRIPTION:
+        return this.translate("Subscription");
       default:
         return "";
     }

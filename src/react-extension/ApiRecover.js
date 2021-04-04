@@ -129,7 +129,7 @@ class ApiRecover extends Component {
               </div>
             </div>
           </div>
-          <Footer siteSettings={this.state.siteSettings}/>
+          <Footer/>
         </AppContext.Provider>
       </TranslationProvider>
     );

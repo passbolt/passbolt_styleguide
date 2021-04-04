@@ -92,8 +92,10 @@ describe("As AD I should see the user directory settings", () => {
       expect(props.administrationWorkspaceContext.onTestEnabled).toHaveBeenCalled();
       const propsUpdated = {
         administrationWorkspaceContext: {
-          mustSaveSettings: false,
-          mustTestSettings: true,
+          must: {
+            save: false,
+            test: true
+          },
           onResetActionsSettings: jest.fn(),
           isSaveEnabled: false,
           onSaveEnabled: jest.fn(),
@@ -122,8 +124,10 @@ describe("As AD I should see the user directory settings", () => {
       expect(props.administrationWorkspaceContext.onTestEnabled).toHaveBeenCalled();
       const propsUpdated = {
         administrationWorkspaceContext: {
-          mustSaveSettings: true,
-          mustTestSettings: false,
+          must: {
+            save: true,
+            test: false
+          },
           onResetActionsSettings: jest.fn(),
           isSaveEnabled: true,
           onSaveEnabled: jest.fn(),
@@ -148,8 +152,10 @@ describe("As AD I should see the user directory settings", () => {
 
       const propsUpdated = {
         administrationWorkspaceContext: {
-          mustSaveSettings: true,
-          mustTestSettings: false,
+          must: {
+            save: true,
+            test: false
+          },
           onResetActionsSettings: jest.fn(),
           isSaveEnabled: true,
           onSaveEnabled: jest.fn(),
@@ -177,8 +183,10 @@ describe("As AD I should see the user directory settings", () => {
 
       const propsUpdated = {
         administrationWorkspaceContext: {
-          mustSaveSettings: true,
-          mustTestSettings: false,
+          must: {
+            save: true,
+            test: false
+          },
           onResetActionsSettings: jest.fn(),
           isSaveEnabled: true,
           onSaveEnabled: jest.fn(),
@@ -200,8 +208,10 @@ describe("As AD I should see the user directory settings", () => {
 
       const propsUpdated = {
         administrationWorkspaceContext: {
-          mustSaveSettings: true,
-          mustTestSettings: false,
+          must: {
+            save: true,
+            test: false
+          },
           onResetActionsSettings: jest.fn(),
           isSaveEnabled: true,
           onSaveEnabled: jest.fn(),
@@ -239,7 +249,10 @@ describe("As AD I should see the user directory settings", () => {
       await page.click(page.directoryConfigurationTitle);
       const propsUpdated = {
         administrationWorkspaceContext: {
-          mustSaveSettings: true,
+          must: {
+            save: true,
+            test: false
+          },
           onResetActionsSettings: jest.fn(),
           isSaveEnabled: true,
           onSaveEnabled: jest.fn(),

@@ -19,6 +19,7 @@ import React from "react";
 import {BrowserRouter as Router} from "react-router-dom";
 import AdministrationWorkspace from "./AdministrationWorkspace";
 import AppContext from "../../contexts/AppContext";
+import MockTranslationProvider from "../../test/mock/components/Internationalisation/MockTranslationProvider";
 
 /**
  * The AdministrationWorkspacePage component represented as a page
@@ -31,11 +32,13 @@ export default class AdministrationWorkspacePage {
    */
   constructor(appContext, props) {
     this._page = render(
-      <AppContext.Provider value={appContext}>
-        <Router>
-          <AdministrationWorkspace {...props}/>
-        </Router>
-      </AppContext.Provider>
+      <MockTranslationProvider>
+        <AppContext.Provider value={appContext}>
+          <Router>
+            <AdministrationWorkspace {...props}/>
+          </Router>
+        </AppContext.Provider>
+      </MockTranslationProvider>
     );
   }
 

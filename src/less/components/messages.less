@@ -61,12 +61,14 @@
     }
 }
 
-/* success animation */
-.message.success.success-large.animated {
+/* animation */
+.message.animated {
     background: @background-default;
     color: @font-default;
     @circle-length: 180px;
+    @warning-length: 180px;
     @check-length: 50px;
+    @cross-length: 50px;
     display:flex;
     border:1px solid @border-light;
     border-radius:3px;
@@ -99,6 +101,24 @@
         }
     }
 
+    @keyframes drawCross {
+      0% {
+        stroke-dashoffset: @cross-length;
+      }
+      100% {
+        stroke-dashoffset: 0;
+      }
+    }
+
+    @keyframes drawWarning {
+      0% {
+        stroke-dashoffset: @warning-length;
+      }
+      100% {
+        stroke-dashoffset: 0;
+      }
+    }
+
     #successAnimationCircle {
         stroke-dasharray: @circle-length @circle-length;
         stroke: @green;
@@ -109,21 +129,50 @@
         stroke: @green;
     }
 
-    #successAnimation.animated {
+    #errorAnimationCircle {
+      stroke-dasharray: @circle-length @circle-length;
+      stroke: @red;
+    }
+
+    #errorAnimationCross {
+      stroke-dasharray: @cross-length @cross-length;
+      stroke: @red;
+    }
+
+    #warningAnimation {
+      stroke-dasharray: @warning-length @warning-length;
+      stroke: @orange;
+      stroke-linecap: square;
+      stroke-linejoin: round;
+
+      &.round {
+        stroke-linecap: round;
+      }
+    }
+
+    .animated {
         animation: .75s ease-out 0s 1 both pop;
 
-        #successAnimationCircle {
+        #successAnimationCircle, #errorAnimationCircle {
             animation: .75s cubic-bezier(0.77, 0, 0.175, 1) 0s 1 both drawCircle;
         }
 
         #successAnimationCheck {
             animation: .75s cubic-bezier(0.77, 0, 0.175, 1) 0s 1 both drawCheck;
         }
+
+        #errorAnimationCross {
+          animation: .75s cubic-bezier(0.77, 0, 0.175, 1) 0s 1 both drawCross;
+        }
+
+        #warningAnimation {
+          animation: .75s cubic-bezier(0.77, 0, 0.175, 1) 0s 1 both drawWarning;
+        }
     }
 }
 
 @media only screen and (max-width: 767px) {
-    .message.success.success-large.animated {
+    .message.animated {
         flex-direction: column;
     }
 }
