@@ -74,7 +74,9 @@ describe("See the Email Notifications Settings", () => {
       expect(props.administrationWorkspaceContext.onSaveEnabled).toHaveBeenCalled();
       const propsUpdated = {
         administrationWorkspaceContext: {
-          mustSaveSettings: true,
+          must: {
+            save: true
+          },
           onResetActionsSettings: jest.fn(),
           isSaveEnabled: true,
           onSaveEnabled: jest.fn(),
@@ -96,7 +98,9 @@ describe("See the Email Notifications Settings", () => {
 
       const propsUpdated = {
         administrationWorkspaceContext: {
-          mustSaveSettings: true,
+          must: {
+            save: true
+          },
           onResetActionsSettings: jest.fn(),
           isSaveEnabled: true,
           onSaveEnabled: jest.fn(),
@@ -144,7 +148,9 @@ describe("See the Email Notifications Settings", () => {
 
       const propsUpdated = {
         administrationWorkspaceContext: {
-          mustSaveSettings: true,
+          must: {
+            save: true
+          },
           onResetActionsSettings: jest.fn(),
           isSaveEnabled: true,
           onSaveEnabled: jest.fn(),

@@ -22,10 +22,13 @@ export function defaultProps(selectedAdministration) {
       }
     },
     administrationWorkspaceContext: {
-      selectedAdministration,
+      selectedAdministration
     },
-    history: {
-      push: jest.fn()
+    navigationContext: {
+      onGoToAdministrationSubscriptionRequested: jest.fn(),
+      onGoToAdministrationEmailNotificationsRequested: jest.fn(),
+      onGoToAdministrationUsersDirectoryRequested: jest.fn(),
+      onGoToAdministrationMfaRequested: jest.fn()
     }
   };
 }

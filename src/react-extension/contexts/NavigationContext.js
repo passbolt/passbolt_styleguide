@@ -23,6 +23,14 @@ export const NavigationContext = React.createContext({
   // Administration
   onGoToAdministrationRequested: () => {
   }, // Whenever the users wants to navigate to the administration workspace
+  onGoToAdministrationMfaRequested: () => {
+  }, // Whenever the users wants to navigate to the administration workspace mfa
+  onGoToAdministrationUsersDirectoryRequested: () => {
+  }, // Whenever the users wants to navigate to the administration workspace users directory
+  onGoToAdministrationEmailNotificationsRequested: () => {
+  }, // Whenever the users wants to navigate to the administration workspace email notifications
+  onGoToAdministrationSubscriptionRequested: () => {
+  }, // Whenever the users wants to navigate to the administration workspace subscription
   // Passwords
   onGoToPasswordsRequested: () => {
   }, // Whenever the user wants to navigate to the passwords workspace
@@ -42,6 +50,8 @@ export const NavigationContext = React.createContext({
   }, // Whenever the user wants to navigate to the users settings workspace mfa section.
   onGoToUserSettingsKeysRequested: () => {
   }, // Whenever the user wants to navigate to the users settings workspace keys section.
+  onGoToNewTab: () => {
+  }, // Whenever the user want to navigate to a new url.
 });
 
 /**
@@ -62,8 +72,14 @@ class NavigationContextProvider extends React.Component {
    */
   get defaultState() {
     return {
+      // Common
+      onGoToNewTab: this.onGoToNewTab.bind(this), //
       // Administration
       onGoToAdministrationRequested: this.onGoToAdministrationRequested.bind(this), // Whenever the user wants to navigate to the administration workspace
+      onGoToAdministrationMfaRequested: this.onGoToAdministrationMfaRequested.bind(this), // Whenever the user wants to navigate to the administration workspace mfa
+      onGoToAdministrationUsersDirectoryRequested: this.onGoToAdministrationUsersDirectoryRequested.bind(this), // Whenever the user wants to navigate to the administration workspace users directory
+      onGoToAdministrationEmailNotificationsRequested: this.onGoToAdministrationEmailNotificationsRequested.bind(this), // Whenever the user wants to navigate to the administration workspace email notifications
+      onGoToAdministrationSubscriptionRequested: this.onGoToAdministrationSubscriptionRequested.bind(this), // Whenever the user wants to navigate to the administration workspace subscription
       // Passwords
       onGoToPasswordsRequested: this.onGoToPasswordsRequested.bind(this), // Whenever the user wants to navigate to the passwords workspace
       // Users
@@ -94,6 +110,14 @@ class NavigationContextProvider extends React.Component {
     }
   }
 
+  /**
+   * Open new tab.
+   * @param {string} url The url to go too
+   */
+  onGoToNewTab(url) {
+    window.open(url, '_blank', 'noopener,noreferrer');
+  }
+
   /*
    * =============================================================
    *  Administration navigation
@@ -112,6 +136,38 @@ class NavigationContextProvider extends React.Component {
       pathname = "/app/administration/users-directory";
     }
     await this.goTo("api", pathname);
+  }
+
+  /**
+   * Whenever the user wants to navigate to the administration workspace mfa.
+   * @returns {Promise<void>}
+   */
+  async onGoToAdministrationMfaRequested() {
+    await this.goTo("api", "/app/administration/mfa");
+  }
+
+  /**
+   * Whenever the user wants to navigate to the administration workspace users directory.
+   * @returns {Promise<void>}
+   */
+  async onGoToAdministrationUsersDirectoryRequested() {
+    await this.goTo("api", "/app/administration/users-directory");
+  }
+
+  /**
+   * Whenever the user wants to navigate to the administration workspace email notifications.
+   * @returns {Promise<void>}
+   */
+  async onGoToAdministrationEmailNotificationsRequested() {
+    await this.goTo("api", "/app/administration/email-notification");
+  }
+
+  /**
+   * Whenever the user wants to navigate to the administration workspace subscription.
+   * @returns {Promise<void>}
+   */
+  async onGoToAdministrationSubscriptionRequested() {
+    await this.goTo("browser-extension", "/app/administration/subscription");
   }
 
   /**

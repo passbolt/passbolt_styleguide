@@ -83,9 +83,11 @@ describe("As AD I can see the administration menu", () => {
     const props = {
       administrationWorkspaceContext: {
         selectedAdministration: AdministrationWorkspaceMenuTypes.USER_DIRECTORY,
-        isSaveEnabled: true,
-        isTestEnabled: true,
-        isSynchronizeEnabled: true,
+        can: {
+          save: true,
+          test: true,
+          synchronize: true
+        }
       }
     };
     page = new DisplayUserWorkspaceActionsPage(context, props);
@@ -99,9 +101,11 @@ describe("As AD I can see the administration menu", () => {
     const props = {
       administrationWorkspaceContext: {
         selectedAdministration: AdministrationWorkspaceMenuTypes.USER_DIRECTORY,
-        isSaveEnabled: true,
-        isTestEnabled: false,
-        isSynchronizeEnabled: false,
+        can: {
+          save: true,
+          test: false,
+          synchronize: false
+        },
         mustSynchronizeSettings: false,
         onMustSaveSettings: jest.fn(),
       },
@@ -115,9 +119,11 @@ describe("As AD I can see the administration menu", () => {
     const props = {
       administrationWorkspaceContext: {
         selectedAdministration: AdministrationWorkspaceMenuTypes.USER_DIRECTORY,
-        isSaveEnabled: true,
-        isTestEnabled: true,
-        isSynchronizeEnabled: false,
+        can: {
+          save: true,
+          test: true,
+          synchronize: false
+        },
         onMustTestSettings: jest.fn(),
       },
       dialogContext: {
@@ -133,9 +139,11 @@ describe("As AD I can see the administration menu", () => {
     const props = {
       administrationWorkspaceContext: {
         selectedAdministration: AdministrationWorkspaceMenuTypes.USER_DIRECTORY,
-        isSaveEnabled: true,
-        isTestEnabled: true,
-        isSynchronizeEnabled: true,
+        can: {
+          save: true,
+          test: true,
+          synchronize: true
+        },
         onMustTestSettings: jest.fn(),
       },
       dialogContext: {
@@ -151,9 +159,11 @@ describe("As AD I can see the administration menu", () => {
     const props = {
       administrationWorkspaceContext: {
         selectedAdministration: AdministrationWorkspaceMenuTypes.USER_DIRECTORY,
-        isSaveEnabled: true,
-        isTestEnabled: true,
-        isSynchronizeEnabled: true,
+        can: {
+          save: true,
+          test: true,
+          synchronize: true
+        },
         onMustTestSettings: jest.fn(),
       },
       dialogContext: {
@@ -163,5 +173,25 @@ describe("As AD I can see the administration menu", () => {
     page = new DisplayUserWorkspaceActionsPage(context, props);
     await page.synchronize();
     expect(props.dialogContext.open).toHaveBeenCalledWith(DisplaySynchronizeUserDirectoryAdministrationDialog);
+  });
+
+  it('As AD I can edit a subscription key', async() => {
+    const props = {
+      administrationWorkspaceContext: {
+        selectedAdministration: AdministrationWorkspaceMenuTypes.SUBSCRIPTION,
+        can: {
+          save: false,
+          test: false,
+          synchronize: false
+        },
+        onMustEditSubscriptionKey: jest.fn(),
+      },
+      dialogContext: {
+        open: jest.fn()
+      }
+    };
+    page = new DisplayUserWorkspaceActionsPage(context, props);
+    await page.editSubscriptionKey();
+    expect(props.administrationWorkspaceContext.onMustEditSubscriptionKey).toHaveBeenCalled();
   });
 });

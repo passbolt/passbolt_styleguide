@@ -17,13 +17,9 @@ import Simplebar from "simplebar/dist/simplebar";
 /* eslint-enable no-unused-vars */
 import React, {Component} from "react";
 import {Route, BrowserRouter as Router, Switch} from "react-router-dom";
-import AppContext from './contexts/AppContext';
 import PropTypes from "prop-types";
 import DisplayMainMenu from "./components/navigation/DisplayMainMenu";
 import PasswordWorkspace from "./components/Password/PasswordWorkspace/PasswordWorkspace";
-import SiteSettings from "./lib/Settings/SiteSettings";
-import UserSettings from "./lib/Settings/UserSettings";
-import ResourceTypesSettings from "./lib/Settings/ResourceTypesSettings";
 import ActionFeedbackContextProvider from "./contexts/ActionFeedbackContext";
 import ShareActionFeedbacks from "./components/Share/ShareActionFeedbacks";
 import DialogContextProvider from "../react/contexts/Common/DialogContext";
@@ -50,8 +46,15 @@ import HandleSessionExpired
 import Footer from "./components/Footer/Footer";
 import HandleExtAppRouteChanged from "./components/Route/HandleExtAppRouteChanged";
 import NavigationContextProvider from "./contexts/NavigationContext";
+import AdministrationWorkspaceContextProvider from "./contexts/AdministrationWorkspaceContext";
+import ManageAnnouncements from "./components/Announcement/ManageAnnouncements/ManageAnnouncements";
+import AnnouncementContextProvider from "./contexts/AnnouncementContext";
+import HandleSubscriptionAnnouncement from "./components/Announcement/HandleSubscriptionAnnouncement/HandleSubscriptionAnnouncement";
+import ExtAppContextProvider from "./contexts/ExtAppContext";
 
 import TranslationProvider from "./components/Internationalisation/TranslationProvider";
+import AdministrationWorkspace from "./components/Administration/AdministrationWorkspace";
+import AppContext from "./contexts/AppContext";
 
 /**
  * The passbolt application served by the browser extension.
@@ -61,431 +64,131 @@ import TranslationProvider from "./components/Internationalisation/TranslationPr
  * - Most of the user settings MFA screen. Because of duo constraints.
  */
 class ExtApp extends Component {
-  constructor(props) {
-    super(props);
-    this.state = this.getDefaultState(props);
-    this.bindCallbacks();
-    this.initEventHandlers();
-  }
-
-  async componentDidMount() {
-    await this.getSiteSettings();
-    await this.getExtensionVersion();
-    this.getUserSettings();
-    this.getLoggedInUser();
-    this.getResources();
-    this.getResourceTypes();
-    this.getFolders();
-    this.getGroups();
-    this.getUsers();
-    this.getRoles();
-    const skeleton = document.getElementById("temporary-skeleton");
-    if (skeleton) {
-      skeleton.remove();
-    }
-  }
-
-  getDefaultState(props) {
-    return {
-      name: "browser-extension", // The application name
-      port: props.port,
-      storage: props.storage,
-
-      user: null,
-      resources: null,
-      folders: null,
-      users: null, // The current list of all users
-      groups: null,
-
-      siteSettings: null,
-      userSettings: null,
-      extensionVersion: null, // The extension version
-
-      setContext: context => {
-        this.setState(context);
-      },
-
-      // passphrase dialog
-      passphraseRequestId: '',
-
-      // Resource create / edit / delete dialogs
-      resourceCreateDialogProps: {
-        folderParentId: null
-      },
-
-      passwordEditDialogProps: {
-        id: null
-      },
-      passwordDeleteDialogProps: {
-        resources: null
-      },
-
-      // folder dialogs
-      folder: {},
-      folderCreateDialogProps: {
-        folderParentId: null
-      },
-      folderMoveStrategyProps: {
-        requestId: null,
-        folderId: null,
-        foldersIds: [],
-        resourcesIds: []
-      },
-
-      // share dialog
-      shareDialogProps: {
-        foldersIds: null,
-        resourcesIds: null,
-      },
-
-      // user dialog
-      editUserDialogProps: {
-        id: null // The id of the current user to edit
-      },
-
-      deleteUserDialogProps: {
-        user: null
-      },
-
-      deleteUserWithConflictsDialogProps: {
-        user: null, // The user to delete
-        errors: {}, // The dry run errors
-      },
-
-      // tag dialog
-      tagToEdit: null, // The current tag to edit
-      tagToDelete: null, // The current tag to delete
-
-      // group dialog
-      deleteGroupDialogProps: {
-        group: null, // the group to delete
-        numberResourcesOwned: null
-      },
-
-      deleteGroupWithConflictsDialogProps: {
-        group: null, // the group to delete
-        errors: {}, // The dry run errors
-      },
-
-      // progress dialog
-      progressDialogProps: {},
-
-      // error dialog
-      errorDialogProps: {
-        title: null,
-        message: null
-      },
-
-      // Resource comment dialog
-      resourceCommentId: null, // Selected resource comment id
-      mustRefreshComments: false, // Flag telling whether the current list of comments should be refreshed
-
-      // Navigation
-      onLogoutRequested: () => this.onLogoutRequested(),
-      onCheckIsAuthenticatedRequested: () => this.onCheckIsAuthenticatedRequested(),
-
-    };
-  }
-
-  bindCallbacks() {
-    this.handleStorageChange = this.handleStorageChange.bind(this);
-    this.handleIsReadyEvent = this.handleIsReadyEvent.bind(this);
-    this.onLogoutRequested = this.onLogoutRequested.bind(this);
-    this.onCheckIsAuthenticatedRequested = this.onCheckIsAuthenticatedRequested.bind(this);
-  }
-
-  initEventHandlers() {
-    this.props.storage.onChanged.addListener(this.handleStorageChange);
-    this.props.port.on('passbolt.react-app.is-ready', this.handleIsReadyEvent);
-  }
-
-  handleIsReadyEvent(requestId) {
-    if (this.isReady()) {
-      this.props.port.emit(requestId, "SUCCESS");
-    } else {
-      this.props.port.emit(requestId, "ERROR");
-    }
-  }
-
-  isReady() {
-    return this.state.userSettings !== null && this.state.siteSettings !== null;
-  }
-
-  /*
-   * =============================================================
-   *  State initialization
-   * =============================================================
-   */
-  /**
-   * Get the current user info from background page and set it in the state
-   */
-  async getLoggedInUser() {
-    const loggedInUser = await this.props.port.request("passbolt.users.find-logged-in-user");
-    this.setState({loggedInUser});
-  }
-
-  /**
-   * Get the list of site settings from background page and set it in the state
-   * Using SiteSettings
-   */
-  async getSiteSettings() {
-    const settings = await this.props.port.request("passbolt.site.settings");
-    const siteSettings = new SiteSettings(settings);
-    this.setState({siteSettings});
-  }
-
-  /**
-   * Get extension version
-   */
-  async getExtensionVersion() {
-    const extensionVersion = await this.props.port.request("passbolt.addon.get-version");
-    this.setState({extensionVersion});
-  }
-
-  /**
-   * Get the list of resources from local storage and set it in the state
-   */
-  async getResources() {
-    const storageData = await this.props.storage.local.get(["resources"]);
-    if (storageData.resources) {
-      const resources = storageData.resources;
-      this.setState({resources: resources});
-    }
-  }
-
-  /**
-   * Get the list of folders from local storage and set it in the state
-   */
-  async getFolders() {
-    const storageData = await this.props.storage.local.get(["folders"]);
-    if (storageData.folders) {
-      const folders = storageData.folders;
-      this.setState({folders: folders});
-    }
-  }
-
-  /**
-   * Returns the list of all groups
-   */
-  async getGroups() {
-    const storageData = await this.props.storage.local.get(["groups"]);
-    if (storageData.groups) {
-      const groups = storageData.groups;
-      this.setState({groups: groups});
-    }
-  }
-
-  /**
-   * Get the list of users from local storage and set it in the state
-   */
-  async getUsers() {
-    const storageData = await this.props.storage.local.get(["users"]);
-    if (storageData.users && storageData.users.length) {
-      const users = storageData.users;
-      this.setState({users: users});
-    }
-  }
-
-  /**
-   * Get the list of roles from local storage and set it in the state
-   */
-  async getRoles() {
-    const roles = await this.props.port.request("passbolt.role.get-all");
-    this.setState({roles});
-  }
-
-  /**
-   * Get the list of resource types from local storage and set it in the state
-   * Using ResourceTypesSettings
-   */
-  async getResourceTypes() {
-    let resourceTypes = [];
-    try {
-      resourceTypes = await this.props.port.request("passbolt.resource-type.get-all");
-    } catch (error) {
-      // @deprecated Catching this error will be removed with v4. Expected error with API < v3.0
-      console.error(error);
-    }
-    const resourceTypesSettings = new ResourceTypesSettings(this.state.siteSettings, resourceTypes);
-    this.setState({resourceTypesSettings});
-  }
-
-  /**
-   * Get the list of user settings from local storage and set it in the state
-   * Using UserSettings
-   */
-  async getUserSettings() {
-    const storageData = await this.props.storage.local.get(["_passbolt_data"]);
-    const userSettings = new UserSettings(storageData._passbolt_data.config);
-    this.setState({userSettings});
-  }
-
-  /*
-   * =============================================================
-   *  State changes on local storage change
-   * =============================================================
-   */
-  /**
-   * Handle the change in the storage
-   * @param changes
-   */
-  handleStorageChange(changes) {
-    if (changes.resources && changes.resources.newValue) {
-      const resources = changes.resources.newValue;
-      this.setState({resources});
-    }
-    if (changes._passbolt_data && changes._passbolt_data.newValue) {
-      const userData = changes._passbolt_data.newValue;
-      const userSettings = new UserSettings(userData.config);
-      this.setState({userSettings});
-    }
-    if (changes.resourceTypes && changes.resourceTypes.newValue) {
-      const resourceTypes = changes.resourceTypes.newValue;
-      const resourceTypesSettings = new ResourceTypesSettings(this.state.siteSettings, resourceTypes);
-      this.setState({resourceTypesSettings});
-    }
-    if (changes.folders && changes.folders.newValue) {
-      const folders = changes.folders.newValue;
-      this.setState({folders});
-    }
-    if (changes.users && changes.users.newValue) {
-      const users = changes.users.newValue;
-      this.setState({users});
-    }
-    if (changes.groups && changes.groups.newValue) {
-      const groups = changes.groups.newValue;
-      this.setState({groups});
-    }
-    if (changes.roles && changes.roles.newValue) {
-      const roles = changes.roles.newValue;
-      this.setState({roles});
-    }
-  }
-
-  /**
-   * Listen when the user wants to logout.
-   */
-  onLogoutRequested() {
-    this.props.port.request('passbolt.auth.navigate-to-logout');
-  }
-
-  /**
-   * Whenever the user authentication status must be checked
-   */
-  async onCheckIsAuthenticatedRequested() {
-    return await this.props.port.request("passbolt.auth.is-authenticated", {requestApi: false});
-  }
-
   /*
    * =============================================================
    *  View
    * =============================================================
    */
   render() {
-    const isReady = this.isReady();
-
     return (
       <TranslationProvider loadingPath="/data/locales/{{lng}}/{{ns}}.json">
-        <AppContext.Provider value={this.state}>
-          <ActionFeedbackContextProvider>
-            <DialogContextProvider>
-              <ContextualMenuContextProvider>
-                <LoadingContextProvider>
+        <ExtAppContextProvider port={this.props.port} storage={this.props.storage}>
+          <AppContext.Consumer>
+            {appContext =>
+              <ActionFeedbackContextProvider>
+                <DialogContextProvider>
+                  <AnnouncementContextProvider>
+                    <ContextualMenuContextProvider>
+                      <LoadingContextProvider>
 
-                  { /* Action Feedback Management */}
-                  <ShareActionFeedbacks/>
+                        { /* Action Feedback Management */}
+                        <ShareActionFeedbacks/>
 
-                  { /* Dialogs Management */}
-                  <HandlePassphraseEntryDialogEvents/>
-                  <HandleFolderMoveStrategyDialogEvents/>
-                  <HandleProgressDialogEvents/>
-                  <HandleErrorDialogEvents/>
-                  <HandleSessionExpired/>
+                        { /* Dialogs Management */}
+                        <HandlePassphraseEntryDialogEvents/>
+                        <HandleFolderMoveStrategyDialogEvents/>
+                        <HandleProgressDialogEvents/>
+                        <HandleErrorDialogEvents/>
+                        <HandleSessionExpired/>
 
-                  <Router>
-                    <NavigationContextProvider>
-                      <HandleExtAppRouteChanged/>
-                      <Switch>
-                        { /* The following routes are not handled by the browser extension application. */}
-                        <Route path={[
-                          "/app/administration",
-                          "/app/settings/mfa",
-                        ]}/>
-                        {/* Passwords workspace */}
-                        <Route path={[
-                          "/app/folders/view/:filterByFolderId",
-                          "/app/passwords/view/:selectedResourceId",
-                          "/app/passwords",
-                        ]}>
-                          {isReady &&
-                          <ResourceWorkspaceContextProvider>
-                            <ManageDialogs/>
-                            <ManageContextualMenu/>
-                            <div id="container" className="page password">
-                              <div id="app" className={`app ${isReady ? "ready" : ""}`} tabIndex="1000">
-                                <div className="header first">
-                                  <DisplayMainMenu/>
-                                </div>
-                                <PasswordWorkspace onMenuItemClick={this.handleWorkspaceSelect}/>
-                              </div>
-                            </div>
-                          </ResourceWorkspaceContextProvider>
-                          }
-                        </Route>
-                        {/* Users workspace */}
-                        <Route path={[
-                          "/app/groups/view/:selectedGroupId",
-                          "/app/groups/edit/:selectedGroupId",
-                          "/app/users/view/:selectedUserId",
-                          "/app/users",
-                        ]}>
-                          {isReady &&
-                          <UserWorkspaceContextProvider>
-                            <ManageDialogs/>
-                            <ManageContextualMenu/>
-                            <div id="container" className="page user">
-                              <div id="app" className={`app ${isReady ? "ready" : ""}`} tabIndex="1000">
-                                <div className="header first">
-                                  <DisplayMainMenu/>
-                                </div>
-                                <DisplayUserWorkspace/>
-                              </div>
-                            </div>
-                          </UserWorkspaceContextProvider>
-                          }
-                        </Route>
-                        {/* User settings workspace */}
-                        <Route path={"/app/settings"}>
-                          {isReady &&
-                          <>
-                            <ManageDialogs/>
-                            <div id="container" className="page settings">
-                              <div id="app" className={`app ${isReady ? "ready" : ""}`} tabIndex="1000">
-                                <div className="header first">
-                                  <DisplayMainMenu/>
-                                </div>
-                                <DisplayUserSettingsWorkspace/>
-                              </div>
-                            </div>
-                          </>
-                          }
-                        </Route>
-                        {/* Fallback */}
-                        <Route path="/">
-                          <HandleRouteFallback/>
-                        </Route>
-                      </Switch>
-                    </NavigationContextProvider>
-                  </Router>
-                  <ManageLoading/>
-                  <Footer
-                    siteSettings={this.state.siteSettings}
-                    extensionVersion={this.state.extensionVersion}/>
-                </LoadingContextProvider>
-              </ContextualMenuContextProvider>
-            </DialogContextProvider>
-          </ActionFeedbackContextProvider>
-        </AppContext.Provider>
+                        { /* Announcement Management */}
+                        {appContext.loggedInUser && appContext.loggedInUser.role.name === "admin"
+                          && appContext.siteSettings.canIUse('ee')
+                          && <HandleSubscriptionAnnouncement/>}
+
+                        <Router>
+                          <NavigationContextProvider>
+                            <HandleExtAppRouteChanged/>
+                            <Switch>
+                              { /* The following routes are not handled by the browser extension application. */}
+                              <Route exact path={[
+                                "/app/administration",
+                                "/app/administration/mfa",
+                                "/app/administration/users-directory",
+                                "/app/administration/email-notification",
+                                "/app/settings/mfa"
+                              ]}/>
+                              {/* Passwords workspace */}
+                              <Route path={[
+                                "/app/folders/view/:filterByFolderId",
+                                "/app/passwords/view/:selectedResourceId",
+                                "/app/passwords",
+                              ]}>
+                                <ResourceWorkspaceContextProvider>
+                                  <ManageDialogs/>
+                                  <ManageContextualMenu/>
+                                  <ManageAnnouncements/>
+                                  <div id="container" className="page password">
+                                    <div id="app" className="app ready" tabIndex="1000">
+                                      <div className="header first">
+                                        <DisplayMainMenu/>
+                                      </div>
+                                      <PasswordWorkspace onMenuItemClick={this.handleWorkspaceSelect}/>
+                                    </div>
+                                  </div>
+                                </ResourceWorkspaceContextProvider>
+                              </Route>
+                              {/* Users workspace */}
+                              <Route path={[
+                                "/app/groups/view/:selectedGroupId",
+                                "/app/groups/edit/:selectedGroupId",
+                                "/app/users/view/:selectedUserId",
+                                "/app/users",
+                              ]}>
+                                <UserWorkspaceContextProvider>
+                                  <ManageDialogs/>
+                                  <ManageContextualMenu/>
+                                  <ManageAnnouncements/>
+                                  <div id="container" className="page user">
+                                    <div id="app" className="app ready" tabIndex="1000">
+                                      <div className="header first">
+                                        <DisplayMainMenu/>
+                                      </div>
+                                      <DisplayUserWorkspace/>
+                                    </div>
+                                  </div>
+                                </UserWorkspaceContextProvider>
+                              </Route>
+                              {/* User settings workspace */}
+                              <Route path={"/app/settings"}>
+                                <>
+                                  <ManageDialogs/>
+                                  <ManageAnnouncements/>
+                                  <div id="container" className="page settings">
+                                    <div id="app" className="app ready" tabIndex="1000">
+                                      <div className="header first">
+                                        <DisplayMainMenu/>
+                                      </div>
+                                      <DisplayUserSettingsWorkspace/>
+                                    </div>
+                                  </div>
+                                </>
+                              </Route>
+                              {/* Subscription settings */}
+                              <Route path={"/app/administration"}>
+                                <AdministrationWorkspaceContextProvider>
+                                  <ManageDialogs/>
+                                  <ManageAnnouncements/>
+                                  <AdministrationWorkspace/>
+                                </AdministrationWorkspaceContextProvider>
+                              </Route>
+                              {/* Fallback */}
+                              <Route path="/">
+                                <HandleRouteFallback/>
+                              </Route>
+                            </Switch>
+                          </NavigationContextProvider>
+                        </Router>
+                        <ManageLoading/>
+                        <Footer/>
+                      </LoadingContextProvider>
+                    </ContextualMenuContextProvider>
+                  </AnnouncementContextProvider>
+                </DialogContextProvider>
+              </ActionFeedbackContextProvider>
+            }
+          </AppContext.Consumer>
+        </ExtAppContextProvider>
       </TranslationProvider>
     );
   }

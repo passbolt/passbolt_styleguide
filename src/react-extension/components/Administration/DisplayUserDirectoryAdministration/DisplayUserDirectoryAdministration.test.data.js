@@ -21,8 +21,10 @@ export function defaultAppContext(appContext) {
 export function defaultProps() {
   return {
     administrationWorkspaceContext: {
-      mustSaveSettings: false,
-      mustTestSettings: false,
+      must: {
+        save: false,
+        test: false
+      },
       onResetActionsSettings: jest.fn(),
       isSaveEnabled: false,
       onSaveEnabled: jest.fn(),

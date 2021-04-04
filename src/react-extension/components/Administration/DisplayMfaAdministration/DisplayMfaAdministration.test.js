@@ -61,7 +61,9 @@ describe("See the MFA settings", () => {
       expect(props.administrationWorkspaceContext.onSaveEnabled).toHaveBeenCalled();
       const propsUpdated = {
         administrationWorkspaceContext: {
-          mustSaveSettings: true,
+          must: {
+            save: true
+          },
           onResetActionsSettings: jest.fn(),
           isSaveEnabled: true,
           onSaveEnabled: jest.fn(),
@@ -89,7 +91,9 @@ describe("See the MFA settings", () => {
 
       const propsUpdated = {
         administrationWorkspaceContext: {
-          mustSaveSettings: true,
+          must: {
+            save: true
+          },
           onResetActionsSettings: jest.fn(),
           isSaveEnabled: true,
           onSaveEnabled: jest.fn(),
@@ -122,7 +126,9 @@ describe("See the MFA settings", () => {
 
       const propsUpdated = {
         administrationWorkspaceContext: {
-          mustSaveSettings: true,
+          must: {
+            save: true
+          },
           onResetActionsSettings: jest.fn(),
           isSaveEnabled: true,
           onSaveEnabled: jest.fn()
@@ -146,7 +152,9 @@ describe("See the MFA settings", () => {
 
       const propsUpdated = {
         administrationWorkspaceContext: {
-          mustSaveSettings: true,
+          must: {
+            save: true
+          },
           onResetActionsSettings: jest.fn(),
           isSaveEnabled: true,
           onSaveEnabled: jest.fn(),

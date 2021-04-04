@@ -39,7 +39,7 @@ describe("As AD I can see the administration menu", () => {
     expect(page.exists()).toBeTruthy();
     await page.goToMfa();
     expect(page.menuSelected).toBe('Multi Factor Authentication');
-    expect(props.history.push).toHaveBeenCalledWith({pathname: '/app/administration/mfa'});
+    expect(props.navigationContext.onGoToAdministrationMfaRequested).toHaveBeenCalled();
   });
 
   it('As AD I should be able to go to user directory', async() => {
@@ -48,7 +48,7 @@ describe("As AD I can see the administration menu", () => {
     expect(page.exists()).toBeTruthy();
     await page.goToUserDirectory();
     expect(page.menuSelected).toBe('Users Directory');
-    expect(props.history.push).toHaveBeenCalledWith({pathname: '/app/administration/users-directory'});
+    expect(props.navigationContext.onGoToAdministrationUsersDirectoryRequested).toHaveBeenCalled();
   });
 
   it('As AD I should be able to go to email notifications', async() => {
@@ -57,6 +57,15 @@ describe("As AD I can see the administration menu", () => {
     expect(page.exists()).toBeTruthy();
     await page.goToEmailNotifications();
     expect(page.menuSelected).toBe('Email Notifications');
-    expect(props.history.push).toHaveBeenCalledWith({pathname: '/app/administration/email-notification'});
+    expect(props.navigationContext.onGoToAdministrationEmailNotificationsRequested).toHaveBeenCalled();
+  });
+
+  it('As AD I should be able to go to subscription', async() => {
+    const props = defaultProps(AdministrationWorkspaceMenuTypes.SUBSCRIPTION); // The props to pass
+    page = new DisplayAdministrationMenuPage(context, props);
+    expect(page.exists()).toBeTruthy();
+    await page.goToSubscription();
+    expect(page.menuSelected).toBe('Subscription');
+    expect(props.navigationContext.onGoToAdministrationSubscriptionRequested).toHaveBeenCalledWith();
   });
 });

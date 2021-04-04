@@ -1641,6 +1641,15 @@ a.unfav .svg-icon svg {
   clear: both;
   width: 100%;
 }
+.dialog textarea + .message.warning,
+.dialog input + .message.warning,
+.dialog .input .message.warning {
+  display: block;
+  clear: both;
+  width: 100%;
+  color: #9F6000;
+  background-color: transparent;
+}
 .dialog .inline-error {
   color: #FF6B70;
   font-weight: bold;

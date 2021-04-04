@@ -47,42 +47,56 @@ export default class AdministrationWorkspaceContextPage {
    * Returns the contextual is save enabled
    */
   get isSaveEnabled() {
-    return this.administrationWorkspaceContext.isSaveEnabled;
+    return this.administrationWorkspaceContext.can.save;
   }
 
   /**
    * Returns the must save settings
    */
   get mustSaveSettings() {
-    return this.administrationWorkspaceContext.mustSaveSettings;
+    return this.administrationWorkspaceContext.must.save;
   }
 
   /**
    * Returns the is test enabled
    */
   get isTestEnabled() {
-    return this.administrationWorkspaceContext.isTestEnabled;
+    return this.administrationWorkspaceContext.can.test;
   }
 
   /**
    * Returns the must test settings
    */
   get mustTestSettings() {
-    return this.administrationWorkspaceContext.mustTestSettings;
+    return this.administrationWorkspaceContext.must.test;
   }
 
   /**
    * Returns the is synchronize enabled
    */
   get isSynchronizeEnabled() {
-    return this.administrationWorkspaceContext.isSynchronizeEnabled;
+    return this.administrationWorkspaceContext.can.synchronize;
   }
 
   /**
    * Returns the must synchronize settings
    */
   get mustSynchronizeSettings() {
-    return this.administrationWorkspaceContext.mustSynchronizeSettings;
+    return this.administrationWorkspaceContext.must.synchronize;
+  }
+
+  /**
+   * Returns the must edit subscription key
+   */
+  get mustEditSubscriptionKey() {
+    return this.administrationWorkspaceContext.must.editSubscriptionKey;
+  }
+
+  /**
+   * Returns the must refresh subscription key
+   */
+  get mustRefreshSubscriptionKey() {
+    return this.administrationWorkspaceContext.must.refreshSubscriptionKey;
   }
 
   /**
@@ -119,6 +133,13 @@ export default class AdministrationWorkspaceContextPage {
     await this.goToLink('.email-notifications');
   }
 
+  /**
+   * Go to the subscription route
+   */
+  async goToSubscription() {
+    await this.goToLink('.subscription');
+  }
+
 
   /**
    * on save enabled
@@ -153,6 +174,22 @@ export default class AdministrationWorkspaceContextPage {
   }
 
   /**
+   * on must edit subscription key
+   */
+  async onMustEditSubscriptionKey() {
+    await this.administrationWorkspaceContext.onMustEditSubscriptionKey();
+    await waitFor(() => {});
+  }
+
+  /**
+   * on must refresh subscription key
+   */
+  async onMustRefreshSubscriptionKey() {
+    await this.administrationWorkspaceContext.onMustRefreshSubscriptionKey();
+    await waitFor(() => {});
+  }
+
+  /**
    * on synchronize enabled
    */
   async onSynchronizeEnabled() {
@@ -173,6 +210,14 @@ export default class AdministrationWorkspaceContextPage {
    */
   async onResetActionsSettings() {
     await this.administrationWorkspaceContext.onResetActionsSettings();
+    await waitFor(() => {});
+  }
+
+  /**
+   * on update subscription requested
+   */
+  async onUpdateSubscriptionKeyRequested(keyDto) {
+    await this.administrationWorkspaceContext.onUpdateSubscriptionKeyRequested(keyDto);
     await waitFor(() => {});
   }
 
@@ -216,6 +261,10 @@ export default class AdministrationWorkspaceContextPage {
           <NavLink
             to={{pathname: "/app/administration/email-notification"}}>
             <a className="email-notifications"></a>
+          </NavLink>
+          <NavLink
+            to={{pathname: "/app/administration/subscription"}}>
+            <a className="subscription"></a>
           </NavLink>
         </Router>
       </AppContext.Provider>
