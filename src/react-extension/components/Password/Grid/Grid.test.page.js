@@ -19,6 +19,7 @@ import React from "react";
 import AppContext from "../../../contexts/AppContext";
 import {BrowserRouter as Router} from "react-router-dom";
 import Grid from "./Grid";
+import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 
 /**
  * The Grid component represented as a page
@@ -31,11 +32,13 @@ export default class GridPage {
    */
   constructor(appContext, props) {
     this._page = render(
-      <AppContext.Provider value={appContext}>
-        <Router>
-          <Grid {...props}/>
-        </Router>
-      </AppContext.Provider>
+      <MockTranslationProvider>
+        <AppContext.Provider value={appContext}>
+          <Router>
+            <Grid {...props}/>
+          </Router>
+        </AppContext.Provider>
+      </MockTranslationProvider>
     );
   }
 
@@ -64,6 +67,12 @@ export default class GridPage {
       get name() {
         return element.querySelector('.uri div').textContent;
       },
+      get password() {
+        return element.querySelector('.password .secret a span').textContent;
+      },
+      get isViewPasswordExist() {
+        return Boolean(element.querySelector('.password .password-view'));
+      },
       async selectFavorite() {
         const favorite = element.querySelector('.cell-favorite div a');
         fireEvent.click(favorite, leftClick);
@@ -75,8 +84,13 @@ export default class GridPage {
         await waitFor(() => {});
       },
       async selectPassword() {
-        const password = element.querySelector('.password div a');
+        const password = element.querySelector('.password .secret a');
         fireEvent.click(password, leftClick);
+        await waitFor(() => {});
+      },
+      async selectViewPassword() {
+        const viewPassword = element.querySelector('.password .password-view');
+        fireEvent.click(viewPassword, leftClick);
         await waitFor(() => {});
       },
       async selectUri() {

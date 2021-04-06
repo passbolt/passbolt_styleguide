@@ -25,6 +25,7 @@ import DisplaySimulateSynchronizeUserDirectoryAdministrationDialog
 import {withDialog} from "../../../../react/contexts/Common/DialogContext";
 import DisplaySynchronizeUserDirectoryAdministrationDialog
   from "../DisplaySynchronizeUserDirectoryAdministration/DisplaySynchronizeUserDirectoryAdministrationDialog";
+import {Trans, withTranslation} from "react-i18next";
 
 /**
  * This component is a container of multiple actions applicable on setting
@@ -47,6 +48,7 @@ class DisplayAdministrationWorkspaceActions extends React.Component {
     this.handleTestClick = this.handleTestClick.bind(this);
     this.handleSimulateSynchronizeClick = this.handleSimulateSynchronizeClick.bind(this);
     this.handleSynchronizeClick = this.handleSynchronizeClick.bind(this);
+    this.handleEditSubscriptionClick = this.handleEditSubscriptionClick.bind(this);
   }
 
   /**
@@ -54,15 +56,15 @@ class DisplayAdministrationWorkspaceActions extends React.Component {
    * @param prevProps
    */
   async componentDidUpdate(prevProps) {
-    await this.handleMustSynchronize(prevProps.administrationWorkspaceContext.mustSynchronizeSettings);
+    await this.handleMustSynchronize(prevProps.administrationWorkspaceContext.must.synchronize);
   }
 
   /**
    * Handle must synchronize settings
    */
   handleMustSynchronize(previousMustSynchronizeSettings) {
-    const hasMustSynchronizeChanged = this.props.administrationWorkspaceContext.mustSynchronizeSettings !== previousMustSynchronizeSettings;
-    if (hasMustSynchronizeChanged && this.props.administrationWorkspaceContext.mustSynchronizeSettings) {
+    const hasMustSynchronizeChanged = this.props.administrationWorkspaceContext.must.synchronize !== previousMustSynchronizeSettings;
+    if (hasMustSynchronizeChanged && this.props.administrationWorkspaceContext.must.synchronize) {
       this.handleSynchronizeClick();
       this.props.administrationWorkspaceContext.onResetActionsSettings();
     }
@@ -97,24 +99,31 @@ class DisplayAdministrationWorkspaceActions extends React.Component {
   }
 
   /**
+   * Handle edit subscription key
+   */
+  handleEditSubscriptionClick() {
+    this.props.administrationWorkspaceContext.onMustEditSubscriptionKey();
+  }
+
+  /**
    * Is save button enable
    */
   isSaveEnabled() {
-    return this.props.administrationWorkspaceContext.isSaveEnabled;
+    return this.props.administrationWorkspaceContext.can.save;
   }
 
   /**
    * Is test button enable
    */
   isTestEnabled() {
-    return this.props.administrationWorkspaceContext.isTestEnabled;
+    return this.props.administrationWorkspaceContext.can.test;
   }
 
   /**
    * Is save button enable
    */
   isSynchronizeEnabled() {
-    return this.props.administrationWorkspaceContext.isSynchronizeEnabled;
+    return this.props.administrationWorkspaceContext.can.synchronize;
   }
 
   /**
@@ -126,6 +135,22 @@ class DisplayAdministrationWorkspaceActions extends React.Component {
   }
 
   /**
+   * If subscription menu is selected
+   * @returns {boolean}
+   */
+  isSubscriptionSelected() {
+    return AdministrationWorkspaceMenuTypes.SUBSCRIPTION === this.props.administrationWorkspaceContext.selectedAdministration;
+  }
+
+  /**
+   * Get the translate function
+   * @returns {function(...[*]=)}
+   */
+  get translate() {
+    return this.props.t;
+  }
+
+  /**
    * Render the component
    * @returns {JSX}
    */
@@ -133,11 +158,12 @@ class DisplayAdministrationWorkspaceActions extends React.Component {
     return (
       <div className="col2_3 actions-wrapper">
         <div className="actions">
+          {!this.isSubscriptionSelected() &&
           <div>
             <li>
               <a className={`button ${this.isSaveEnabled() ? "" : "disabled"}`} onClick={this.handleSaveClick}>
                 <Icon name="save"/>
-                <span>Save settings</span>
+                <span><Trans>Save settings</Trans></span>
               </a>
             </li>
             {this.isUserDirectorySelected() &&
@@ -145,24 +171,35 @@ class DisplayAdministrationWorkspaceActions extends React.Component {
               <li>
                 <a className={`button ${this.isTestEnabled() ? "" : "disabled"}`} onClick={this.handleTestClick}>
                   <Icon name="plug"/>
-                  <span>Test settings</span>
+                  <span><Trans>Test settings</Trans></span>
                 </a>
               </li>
               <li>
                 <a className={`button ${this.isSynchronizeEnabled() ? "" : "disabled"}`} onClick={this.handleSimulateSynchronizeClick}>
                   <Icon name="magic-wand"/>
-                  <span>Simulate synchronize</span>
+                  <span><Trans>Simulate synchronize</Trans></span>
                 </a>
               </li>
               <li>
                 <a className={`button ${this.isSynchronizeEnabled() ? "" : "disabled"}`} onClick={this.handleSynchronizeClick}>
                   <Icon name="refresh"/>
-                  <span>Synchronize</span>
+                  <span><Trans>Synchronize</Trans></span>
                 </a>
               </li>
             </div>
             }
           </div>
+          }
+          {this.isSubscriptionSelected() &&
+          <div>
+            <li>
+              <a className="button" onClick={this.handleEditSubscriptionClick}>
+                <Icon name="edit"/>
+                <span><Trans>Update key</Trans></span>
+              </a>
+            </li>
+          </div>
+          }
         </div>
       </div>
     );
@@ -173,7 +210,8 @@ DisplayAdministrationWorkspaceActions.contextType = AppContext;
 
 DisplayAdministrationWorkspaceActions.propTypes = {
   administrationWorkspaceContext: PropTypes.object, // The administration workspace context
-  dialogContext: PropTypes.any // The dialog context
+  dialogContext: PropTypes.any, // The dialog context
+  t: PropTypes.func, // The translation function
 };
 
-export default withDialog(withAdministrationWorkspace(DisplayAdministrationWorkspaceActions));
+export default withDialog(withAdministrationWorkspace(withTranslation('common')(DisplayAdministrationWorkspaceActions)));

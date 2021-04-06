@@ -13,22 +13,31 @@
  */
 import React, {Component} from "react";
 import PropTypes from "prop-types";
+import {Trans, withTranslation} from "react-i18next";
 
 class ShareVariesDetails extends Component {
+  /**
+   * Get the translate function
+   * @returns {function(...[*]=)}
+   */
+  get translate() {
+    return this.props.t;
+  }
+
   render() {
     return (
       <span className="share-varies-details">
         {(this.props.variesDetails[0].length > 0) &&
-        <span><strong>No access: {this.props.variesDetails[0].join(', ')}</strong><br/></span>
+        <span><strong><Trans>No access</Trans>: {this.props.variesDetails[0].join(', ')}</strong><br/></span>
         }
         {(this.props.variesDetails[1].length > 0) &&
-        <span><strong>Can read: {this.props.variesDetails[1].join(', ')}</strong><br/></span>
+        <span><strong><Trans>Can read</Trans>: {this.props.variesDetails[1].join(', ')}</strong><br/></span>
         }
         {(this.props.variesDetails[7].length > 0) &&
-        <span><strong>Can edit: {this.props.variesDetails[7].join(', ')}</strong><br/></span>
+        <span><strong><Trans>Can edit</Trans>: {this.props.variesDetails[7].join(', ')}</strong><br/></span>
         }
         {(this.props.variesDetails[15].length > 0) &&
-        <span><strong>Is owner: {this.props.variesDetails[15].join(', ')}</strong><br/></span>
+        <span><strong><Trans>Is owner</Trans>: {this.props.variesDetails[15].join(', ')}</strong><br/></span>
         }
       </span>
     );
@@ -36,7 +45,8 @@ class ShareVariesDetails extends Component {
 }
 
 ShareVariesDetails.propTypes = {
-  variesDetails: PropTypes.object
+  variesDetails: PropTypes.object,
+  t: PropTypes.func, // The translation function
 };
 
-export default ShareVariesDetails;
+export default withTranslation('common')(ShareVariesDetails);

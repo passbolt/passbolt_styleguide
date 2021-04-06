@@ -33,7 +33,7 @@ export function defaultProps() {
       resourcesToExport: {
         foldersIds: [{id: "1"}],
         resourcesIds: [{id: "1"}, {id: "2"}]
-      },
+      }
     }
   };
 }

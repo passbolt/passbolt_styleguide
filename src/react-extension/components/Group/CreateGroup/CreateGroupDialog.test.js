@@ -21,10 +21,6 @@ import {ActionFeedbackContext} from "../../../contexts/ActionFeedbackContext";
 import PassboltApiFetchError from "../../../../react/lib/Common/Error/PassboltApiFetchError";
 import {waitFor} from "@testing-library/react";
 
-beforeEach(() => {
-  jest.resetModules();
-});
-
 describe("See the Create Dialog Group", () => {
   let page; // The page to test against
   const context = defaultAppContext(); // The applicative context

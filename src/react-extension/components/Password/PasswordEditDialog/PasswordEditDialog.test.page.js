@@ -1,4 +1,3 @@
-
 /**
  * Passbolt ~ Open source password manager for teams
  * Copyright (c) 2020 Passbolt SA (https://www.passbolt.com)
@@ -15,9 +14,25 @@
 import {fireEvent, render, waitFor} from "@testing-library/react";
 import AppContext from "../../../contexts/AppContext";
 import React from "react";
-import ManageDialogs from "../../../../react/components/Common/Dialog/ManageDialogs/ManageDialogs";
 import DialogContextProvider from "../../../../react/contexts/Common/DialogContext";
 import PasswordEditDialog from "./PasswordEditDialog";
+import {MemoryRouter, Route} from "react-router-dom";
+import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
+
+
+/**
+ * Page template for the PasswordEditDialog component
+ */
+export const PasswordEditDialogPageTemplate = (appContext, props) =>
+  <MockTranslationProvider>
+    <AppContext.Provider value={appContext}>
+      <DialogContextProvider>
+        <MemoryRouter initialEntries={['/']}>
+          <Route component={routerProps => <PasswordEditDialog {...props} {...routerProps}/>}></Route>
+        </MemoryRouter>
+      </DialogContextProvider>
+    </AppContext.Provider>
+  </MockTranslationProvider>;
 
 /**
  * The PasswordEditDialog component represented as a page
@@ -29,14 +44,7 @@ export default class PasswordEditDialogPage {
    * @param props Props to attach
    */
   constructor(appContext, props) {
-    this._page = render(
-      <AppContext.Provider value={appContext}>
-        <DialogContextProvider>
-          <ManageDialogs/>
-          <PasswordEditDialog {...props}/>
-        </DialogContextProvider>
-      </AppContext.Provider>
-    );
+    this._page = render(PasswordEditDialogPageTemplate(appContext, props));
     this.setupPageObjects();
   }
 

@@ -14,6 +14,12 @@ export function defaultAppContext(appContext) {
  */
 export function defaultProps(selectedAdministration) {
   return {
+    context: {
+      trustedDomain: "",
+      userSettings: {
+        getTrustedDomain: jest.fn()
+      }
+    },
     administrationWorkspaceContext: {
       selectedAdministration
     }

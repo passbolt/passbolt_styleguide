@@ -13,6 +13,7 @@ import GenerateKeySecondaryAction
   from "../../Authentication/ImportGpgKey/GenerateKeySecondaryAction";
 import DisplayUnexpectedError from "../../Authentication/DisplayError/DisplayUnexpectedError";
 import DisplayLoginInProgress from "../../AuthenticationLogin/DisplayLoginInProgress/DisplayLoginInProgress";
+import {withTranslation} from "react-i18next";
 
 /**
  * The component orchestrates the setup authentication process
@@ -57,6 +58,14 @@ class SetupAuthentication extends Component {
   }
 
   /**
+   * Get the translate function
+   * @returns {function(...[*]=)}
+   */
+  get translate() {
+    return this.props.t;
+  }
+
+  /**
    * Render the component
    */
   render() {
@@ -70,7 +79,7 @@ class SetupAuthentication extends Component {
         return <ChooseSecurityToken/>;
       case AuthenticationContextState.GPG_KEY_TO_IMPORT_REQUESTED:
         return <ImportGpgKey
-          title="Welcome, please enter your private key to continue."
+          title={this.translate("Welcome, please enter your private key to continue.")}
           secondaryAction={<GenerateKeySecondaryAction/>}/>;
       case AuthenticationContextState.GPG_KEY_VALIDATED:
         return <CheckPassphrase canRememberMe={this.canRememberMe} secondaryAction={<GenerateKeyOnPassphraseLostSecondaryAction/>}/>;
@@ -87,5 +96,6 @@ class SetupAuthentication extends Component {
 SetupAuthentication.contextType = AuthenticationContext;
 SetupAuthentication.propTypes = {
   siteSettings: PropTypes.object, // The site settings
+  t: PropTypes.func, // The translation function
 };
-export default SetupAuthentication;
+export default withTranslation('common')(SetupAuthentication);

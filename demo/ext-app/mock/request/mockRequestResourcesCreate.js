@@ -13,15 +13,15 @@
  */
 
 import {v4 as uuidv4} from "uuid";
-import moment from 'moment/moment';
+import {DateTime} from "luxon";
 
 export default (resourceDto, password, storage) => {
   return new Promise(async (resolve) => {
     const {resources} = await storage.local.get(["resources"]);
     resourceDto.id = uuidv4();
-    resourceDto.created = moment().format("YYYY-MM-DD[T]HH:mm:ss[+]00:00");
+    resourceDto.created = DateTime.now().toISO();
     resourceDto.created_by = "f848277c-5398-58f8-a82a-72397af2d450";
-    resourceDto.modified = moment().format("YYYY-MM-DD[T]HH:mm:ss[+]00:00");
+    resourceDto.modified = DateTime.now().toISO();
     resourceDto.modified_by = "f848277c-5398-58f8-a82a-72397af2d450";
     resourceDto.private = true;
     resourceDto.favorite = null;

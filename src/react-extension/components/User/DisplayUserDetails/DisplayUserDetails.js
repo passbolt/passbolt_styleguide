@@ -21,6 +21,7 @@ import DisplayUserDetailsInformation from "../DisplayUserDetailsInformation/Disp
 import DisplayUserDetailsGroups from "../DisplayUserDetailsGroups/DisplayUserDetailsGroups";
 import DisplayUserDetailsPublicKey from "../DisplayUserDetailsPublicKey/DisplayUserDetailsPublicKey";
 import UserAvatar from "../../../../react/components/Common/Avatar/UserAvatar";
+import {withTranslation} from "react-i18next";
 
 class DisplayUserDetails extends React.Component {
   /**
@@ -61,7 +62,7 @@ class DisplayUserDetails extends React.Component {
     const baseUrl = this.context.userSettings.getTrustedDomain();
     const permalink = `${baseUrl}/app/users/view/${this.user.id}`;
     await this.context.port.request("passbolt.clipboard.copy", permalink);
-    await this.props.actionFeedbackContext.displaySuccess("The permalink has been copied to clipboard");
+    await this.props.actionFeedbackContext.displaySuccess(this.translate("The permalink has been copied to clipboard"));
   }
 
   /**
@@ -69,6 +70,14 @@ class DisplayUserDetails extends React.Component {
    */
   handleCloseClick() {
     this.props.userWorkspaceContext.onDetailsLocked();
+  }
+
+  /**
+   * Get the translate function
+   * @returns {function(...[*]=)}
+   */
+  get translate() {
+    return this.props.t;
   }
 
   /**
@@ -88,7 +97,7 @@ class DisplayUserDetails extends React.Component {
             <h3>
               <div className="title-wrapper">
                 <span className="name">{`${this.user.profile.first_name} ${this.user.profile.last_name}`}</span>
-                <a className="title-link" title="Copy the link to this user" onClick={this.handlePermalinkClick}>
+                <a className="title-link" title={this.translate("Copy the link to this user")} onClick={this.handlePermalinkClick}>
                   <Icon name="link"/>
                   <span className="visuallyhidden">Copy the link to this user</span>
                 </a>
@@ -114,6 +123,7 @@ DisplayUserDetails.contextType = AppContext;
 DisplayUserDetails.propTypes = {
   actionFeedbackContext: PropTypes.any, // The action feedback context
   userWorkspaceContext: PropTypes.any, // The user workspace context
+  t: PropTypes.func, // The translation function
 };
 
-export default withUserWorkspace(withActionFeedback(DisplayUserDetails));
+export default withUserWorkspace(withActionFeedback(withTranslation('common')(DisplayUserDetails)));

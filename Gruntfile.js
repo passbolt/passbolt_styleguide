@@ -16,7 +16,7 @@ module.exports = function(grunt) {
 		clean: {
 			all: [
 				'build/css/*',
-				'src/css/**'
+				'src/css/**',
 			],
       css: [
         'src/css/**'
@@ -97,6 +97,15 @@ module.exports = function(grunt) {
           'cp ./src/css/themes/midgar/ext_authentication.css ./demo/ext-app/public/css/themes/midgar/.'
         ].join('&& ')
       },
+      'copy-demo-lang': {
+        options: {
+          stdout: true
+        },
+        command: [
+          'rm -rf ./demo/ext-app/public/locales/*',
+          'cp -R ./src/locales/ ./demo/ext-app/public/locales/.',
+        ].join('&& ')
+      },
       'build-apps': {
         command: [
           'npm run build'
@@ -158,6 +167,53 @@ module.exports = function(grunt) {
         ext: '.min.css'
       }
     },
+    symlink: {
+      options: {
+        // Enable overwrite to delete symlinks before recreating them
+        overwrite: true,
+      },
+      expanded: {
+        files: [
+          {
+            expand: true,
+            overwrite: true,
+            cwd: 'demo/ext-app/public/',
+            src: ['locales'],
+            dest: 'build'
+          },
+        ]
+      },
+    },
+    i18next: {
+      externalize: {
+        src: 'src/**/*.{js,html}',
+        dest: 'src',
+        options: {
+          lngs: ['en-US'],
+          func: {
+            list: ['this.props.t', 'this.translate'], // function use to parse and find new translation
+            extensions: ['.js', '.jsx']
+          },
+          trans: {
+            component: 'Trans',
+            i18nKey: 'i18nKey',
+            defaultsKey: 'defaults',
+            extensions: ['.js', '.jsx'],
+            fallbackKey: true
+          },
+          nsSeparator: false,
+          keySeparator: false,
+          defaultNs: 'common',
+          resource: {
+            loadPath: 'src/locales/{{lng}}/{{ns}}.json',
+            savePath: 'locales/{{lng}}/{{ns}}.json'
+          },
+          removeUnusedKeys: true,
+          sort: true,
+          debug: false,
+        }
+      }
+    },
 		watch: {
 			less: {
 				files: [
@@ -167,7 +223,13 @@ module.exports = function(grunt) {
 					'src/less/**/*.less'
         ],
 				tasks: ['css', 'shell:copy-demo-css']
-			}
+			},
+      lang: {
+        files: [
+          'src/locales/**/*.json'
+        ],
+        tasks: ['lang', 'shell:copy-demo-lang']
+      }
 		}
 	});
 
@@ -178,9 +240,11 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-contrib-concat');
 	grunt.loadNpmTasks('grunt-contrib-clean');
 	grunt.loadNpmTasks('grunt-contrib-less');
+  grunt.loadNpmTasks('grunt-contrib-symlink');
 	grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-header');
 	grunt.loadNpmTasks('grunt-shell');
+  grunt.loadNpmTasks('i18next-scanner');
 
 	// ========================================================================
 	// Register Tasks
@@ -193,6 +257,8 @@ module.exports = function(grunt) {
 
 	// 'grunt' will check code quality, and if no errors,
 	// compile LESS to CSS, and minify and concatonate all JS and CSS
-	grunt.registerTask('default', [ 'clean:all', 'less', 'cssmin', 'header', 'shell:copy-demo-css', 'shell:build-apps']);
+	grunt.registerTask('default', [ 'clean:all', 'less', 'cssmin', 'header', 'symlink', 'shell:copy-demo-css', 'shell:copy-demo-lang', 'shell:build-apps', 'externalize-locale-string']);
   grunt.registerTask('css', [ 'clean:css', 'less']);
+  grunt.registerTask('lang', ['shell:copy-demo-lang']);
+  grunt.registerTask('externalize-locale-string', ['i18next']);
 };

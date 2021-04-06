@@ -20,6 +20,7 @@ import FolderSidebarActivitySection from "./FolderSidebarActivitySection";
 import AppContext from "../../../contexts/AppContext";
 import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
+import {Trans, withTranslation} from "react-i18next";
 
 class FolderSidebar extends React.Component {
   /**
@@ -53,7 +54,15 @@ class FolderSidebar extends React.Component {
     const baseUrl = this.context.userSettings.getTrustedDomain();
     const permalink = `${baseUrl}/app/folders/view/${this.props.resourceWorkspaceContext.details.folder.id}`;
     await this.context.port.request("passbolt.clipboard.copy", permalink);
-    this.props.actionFeedbackContext.displaySuccess("The permalink has been copied to clipboard");
+    this.props.actionFeedbackContext.displaySuccess(this.translate("The permalink has been copied to clipboard"));
+  }
+
+  /**
+   * Get the translate function
+   * @returns {function(...[*]=)}
+   */
+  get translate() {
+    return this.props.t;
   }
 
   /**
@@ -71,12 +80,12 @@ class FolderSidebar extends React.Component {
             <h3>
               <div className="title-wrapper">
                 <span className="name">{this.props.resourceWorkspaceContext.details.folder.name}</span>
-                <a className="title-link" title="Copy the link to this folder" onClick={this.handlePermalinkClick}>
+                <a className="title-link" title={this.translate("Copy the link to this folder")} onClick={this.handlePermalinkClick}>
                   <Icon name="link"/>
-                  <span className="visuallyhidden">Copy the link to this folder</span>
+                  <span className="visuallyhidden"><Trans>Copy the link to this folder</Trans></span>
                 </a>
               </div>
-              <span className="subtitle">folder</span>
+              <span className="subtitle"><Trans>folder</Trans></span>
             </h3>
             <a className="dialog-close" onClick={this.handleCloseClick}>
               <Icon name="close"/>
@@ -102,6 +111,7 @@ FolderSidebar.propTypes = {
   users: PropTypes.array,
   resourceWorkspaceContext: PropTypes.object,
   actionFeedbackContext: PropTypes.any, // The action feedback context
+  t: PropTypes.func, // The translation function
 };
 
-export default withResourceWorkspace(withActionFeedback(FolderSidebar));
+export default withResourceWorkspace(withActionFeedback(withTranslation('common')(FolderSidebar)));

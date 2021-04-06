@@ -17,6 +17,7 @@ import AppContext from "../../../contexts/AppContext";
 import React from "react";
 import DisplayAdministrationMenu from "./DisplayAdministrationMenu";
 import {BrowserRouter as Router} from 'react-router-dom';
+import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 
 /**
  * The DisplayAdministrationMenu component represented as a page
@@ -29,11 +30,13 @@ export default class DisplayAdministrationMenuPage {
    */
   constructor(appContext, props) {
     this._page = render(
-      <Router>
-        <AppContext.Provider value={appContext}>
-          <DisplayAdministrationMenu.WrappedComponent {...props}/>
-        </AppContext.Provider>
-      </Router>
+      <MockTranslationProvider>
+        <Router>
+          <AppContext.Provider value={appContext}>
+            <DisplayAdministrationMenu.WrappedComponent {...props}/>
+          </AppContext.Provider>
+        </Router>
+      </MockTranslationProvider>
     );
   }
 
@@ -73,6 +76,13 @@ export default class DisplayAdministrationMenuPage {
   }
 
   /**
+   * Returns the subscription menu
+   */
+  get subscription() {
+    return this._page.container.querySelector('#subscription_menu .row .main-cell-wrapper .main-cell a');
+  }
+
+  /**
    * Returns true if the page object exists in the container
    */
   exists() {
@@ -100,6 +110,11 @@ export default class DisplayAdministrationMenuPage {
   /** Click on the email notifications element */
   async goToEmailNotifications() {
     await this.click(this.emailNotifications);
+  }
+
+  /** Click on the subscription element */
+  async goToSubscription() {
+    await this.click(this.subscription);
   }
 }
 

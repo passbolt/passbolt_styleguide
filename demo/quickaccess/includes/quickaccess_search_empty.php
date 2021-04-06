@@ -9,7 +9,7 @@
                 </div>
                 <ul class="list-items">
                     <li class="empty-entry">
-                        <p>No result match your search. Try with another search term.</p>
+                        <p>No passwords found for the current page. You can use the search.</p>
                     </li>
                 </ul>
             </div>

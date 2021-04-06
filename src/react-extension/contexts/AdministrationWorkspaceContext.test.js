@@ -76,6 +76,17 @@ describe("Administration Workspace Context", () => {
       expect(page.isSynchronizeEnabled).toBeFalsy();
       expect(page.mustSynchronizeSettings).toBeFalsy();
     });
+
+    it("As AD I should have subscription settings with all disabled", async() => {
+      await page.goToSubscription();
+      expect(page.selectedAdministration).toBe(AdministrationWorkspaceMenuTypes.SUBSCRIPTION);
+      expect(page.isSaveEnabled).toBeFalsy();
+      expect(page.mustSaveSettings).toBeFalsy();
+      expect(page.isTestEnabled).toBeFalsy();
+      expect(page.mustTestSettings).toBeFalsy();
+      expect(page.isSynchronizeEnabled).toBeFalsy();
+      expect(page.mustSynchronizeSettings).toBeFalsy();
+    });
   });
 
   describe("As AD I should have the appropriate button enabled at any time", () => {
@@ -111,17 +122,40 @@ describe("Administration Workspace Context", () => {
       expect(page.mustSynchronizeSettings).toBeTruthy();
     });
 
+    it("As AD I should enabled must edit subscription key", async() => {
+      await page.onMustEditSubscriptionKey();
+      expect(page.mustEditSubscriptionKey).toBeTruthy();
+    });
+
+    it("As AD I should enabled must refresh subscription key", async() => {
+      await page.onMustRefreshSubscriptionKey();
+      expect(page.mustRefreshSubscriptionKey).toBeTruthy();
+    });
+
     it("As AD I should enabled reset all action settings", async() => {
       await page.onMustSaveSettings();
       await page.onMustTestSettings();
       await page.onMustSynchronizeSettings();
+      await page.onMustEditSubscriptionKey();
+      await page.onMustRefreshSubscriptionKey();
       expect(page.mustSaveSettings).toBeTruthy();
       expect(page.mustTestSettings).toBeTruthy();
       expect(page.mustSynchronizeSettings).toBeTruthy();
+      expect(page.mustEditSubscriptionKey).toBeTruthy();
+      expect(page.mustRefreshSubscriptionKey).toBeTruthy();
       await page.onResetActionsSettings();
       expect(page.mustSaveSettings).toBeFalsy();
       expect(page.mustTestSettings).toBeFalsy();
       expect(page.mustSynchronizeSettings).toBeFalsy();
+      expect(page.mustEditSubscriptionKey).toBeFalsy();
+      expect(page.mustRefreshSubscriptionKey).toBeFalsy();
+    });
+
+    it("As AD I should update the subscription", async() => {
+      jest.spyOn(context.port, 'request').mockImplementation(jest.fn());
+      const keyDto = {data: "key"};
+      await page.onUpdateSubscriptionKeyRequested(keyDto);
+      expect(context.port.request).toBeCalledWith("passbolt.subscription.update", keyDto);
     });
   });
 });

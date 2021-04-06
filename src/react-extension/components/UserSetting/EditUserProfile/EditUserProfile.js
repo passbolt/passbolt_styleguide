@@ -20,6 +20,7 @@ import FormCancelButton from "../../../../react/components/Common/Inputs/FormSub
 import ErrorDialog from "../../Dialog/ErrorDialog/ErrorDialog";
 import {withDialog} from "../../../../react/contexts/Common/DialogContext";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
+import {Trans, withTranslation} from "react-i18next";
 
 class EditUserProfile extends Component {
   /**
@@ -163,7 +164,7 @@ class EditUserProfile extends Component {
    * Whenever the save has been successful
    */
   async onSaveSuccess() {
-    await this.props.actionFeedbackContext.displaySuccess("The user has been updated successfully");
+    await this.props.actionFeedbackContext.displaySuccess(this.translate("The user has been updated successfully"));
     const loggedInUser = await this.context.port.request("passbolt.users.find-logged-in-user");
     this.context.setContext({loggedInUser});
     this.props.onClose();
@@ -175,7 +176,7 @@ class EditUserProfile extends Component {
    */
   async onSaveError(error) {
     const errorDialogProps = {
-      title: "There was an unexpected error...",
+      title: this.translate("There was an unexpected error..."),
       message: error.message
     };
     this.context.setContext({errorDialogProps});
@@ -222,6 +223,14 @@ class EditUserProfile extends Component {
   }
 
   /**
+   * Get the translate function
+   * @returns {function(...[*]=)}
+   */
+  get translate() {
+    return this.props.t;
+  }
+
+  /**
    * Render the component
    */
   render() {
@@ -229,7 +238,7 @@ class EditUserProfile extends Component {
     const lasttnameErrorSelector = this.state.errors.isLastnameEmpty ? "error" : "";
     return (
       <DialogWrapper
-        title="Edit profile"
+        title={this.translate("Edit profile")}
         onClose={this.handleClose}
         disabled={!this.areActionsAllowed}>
 
@@ -241,12 +250,12 @@ class EditUserProfile extends Component {
           <div className="form-content">
 
             <div className={`input text required ${firstnameErrorSelector}`}>
-              <label htmlFor="user-profile-firstname-input">First Name</label>
+              <label htmlFor="user-profile-firstname-input"><Trans>First Name</Trans></label>
               <input
                 id="user-profile-firstname-input"
                 name="first_name"
                 type="text"
-                placeholder="first name"
+                placeholder={this.translate("first name")}
                 required="required"
                 autoComplete="off"
                 autoFocus={true}
@@ -256,18 +265,18 @@ class EditUserProfile extends Component {
                 disabled={!this.areActionsAllowed}/>
               {this.state.errors.isFirstnameEmpty &&
               <div className="first_name error message">
-                A first name is required
+                <Trans>A first name is required.</Trans>
               </div>
               }
             </div>
 
             <div className={`input text required ${lasttnameErrorSelector}`}>
-              <label htmlFor="user-profile-lastname-input">Last Name</label>
+              <label htmlFor="user-profile-lastname-input"><Trans>Last Name</Trans></label>
               <input
                 id="user-profile-lastname-input"
                 name="last_name"
                 type="text"
-                placeholder="last name"
+                placeholder={this.translate("last name")}
                 required="required"
                 autoComplete="off"
                 ref={this.lastnameRef}
@@ -276,13 +285,13 @@ class EditUserProfile extends Component {
                 disabled={!this.areActionsAllowed}/>
               {this.state.errors.isLastnameEmpty &&
               <div className="last_name error message">
-                A last name is required
+                <Trans>A last name is required.</Trans>
               </div>
               }
             </div>
 
             <div className="input text required">
-              <label htmlFor="user-profile-username-input">Username / Email</label>
+              <label htmlFor="user-profile-username-input"><Trans>Username / Email</Trans></label>
               <input
                 id="user-profile-username-input"
                 name="username"
@@ -297,7 +306,7 @@ class EditUserProfile extends Component {
             <FormSubmitButton
               disabled={!this.areActionsAllowed}
               processing={this.isProcessing}
-              value="Save"/>
+              value={this.translate("Save")}/>
             <FormCancelButton
               disabled={!this.areActionsAllowed}
               onClick={this.handleClose}/>
@@ -314,6 +323,7 @@ EditUserProfile.propTypes = {
   onClose: PropTypes.func, // Whenever the dialog must be closed
   dialogContext: PropTypes.object, // The dialog context
   actionFeedbackContext: PropTypes.object, // The action feedback context
+  t: PropTypes.func, // The translation function
 };
 
-export default withActionFeedback(withDialog(EditUserProfile));
+export default withActionFeedback(withDialog(withTranslation('common')(EditUserProfile)));

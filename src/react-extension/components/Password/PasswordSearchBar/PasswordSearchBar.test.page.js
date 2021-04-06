@@ -17,6 +17,7 @@ import AppContext from "../../../contexts/AppContext";
 import React from "react";
 import PasswordSearchBar from "./PasswordSearchBar";
 import {BrowserRouter as Router} from 'react-router-dom';
+import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 
 /**
  * The PasswordSearchBar component represented as a page
@@ -29,11 +30,13 @@ export default class PasswordSearchBarPage {
    */
   constructor(appContext, props) {
     this._page = render(
-      <Router>
-        <AppContext.Provider value={appContext}>
-          <PasswordSearchBar.WrappedComponent {...props}/>
-        </AppContext.Provider>
-      </Router>
+      <MockTranslationProvider>
+        <Router>
+          <AppContext.Provider value={appContext}>
+            <PasswordSearchBar.WrappedComponent {...props}/>
+          </AppContext.Provider>
+        </Router>
+      </MockTranslationProvider>
     );
     this.setupPageObjects();
   }

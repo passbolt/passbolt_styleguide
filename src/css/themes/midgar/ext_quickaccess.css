@@ -724,6 +724,7 @@ input[type=email]:focus {
   box-shadow: inset 1px 1px 2px rgba(0, 0, 0, 0.2);
   border: 1px solid #2894DF;
 }
+textarea:disabled,
 input[type=password]:disabled,
 input[type=search]:disabled,
 input[type=text]:disabled,
@@ -1058,40 +1059,6 @@ ul li {
   /* Opera doesn't support this in the shorthand */
   background-attachment: local, local, scroll, scroll;
 }
-.fa.icon svg {
-  width: 1.6rem;
-  height: 1.6rem;
-}
-.fa.icon svg path {
-  fill: #8B8B89;
-}
-.app .fa.icon {
-  font-size: 1.33333333em;
-  vertical-align: -15%;
-}
-.app .dialog-close .fa.icon svg {
-  margin-top: -7px;
-}
-.app .fa.icon svg {
-  width: 1rem;
-  height: 1rem;
-}
-.app .fa.icon svg path {
-  fill: #FFFFFC;
-}
-.security-token {
-  font-size: 1.6rem;
-  padding: 0.6rem 1.6rem;
-  text-align: center;
-  display: inline-block;
-  width: 6.4rem;
-  margin-top: -0.8rem;
-  margin-left: -0.4rem;
-  border: 1px solid #30302D;
-  line-height: 2.4rem;
-  vertical-align: middle;
-  box-sizing: border-box;
-}
 .quickaccess {
   /*
      * Clearfix: contain floats
@@ -1377,6 +1344,13 @@ ul li {
 .quickaccess .quickaccess-header .option-link {
   margin: -0.8rem -0.8rem 0 0;
 }
+.quickaccess .fa.icon svg {
+  width: 1.6rem;
+  height: 1.6rem;
+}
+.quickaccess .fa.icon svg path {
+  fill: #8B8B89;
+}
 .quickaccess .index-list .submit-wrapper {
   padding: 0 1.8rem 1.8rem 1.8rem;
 }
@@ -1403,7 +1377,7 @@ ul li {
      * 2. The use of `table` rather than `block` is only necessary if using
      *	`:before` to contain the top-margins of child elements.
      */
-  max-height: 26.1rem;
+  max-height: 28rem;
 }
 .quickaccess .index-list .list-container:before,
 .quickaccess .index-list .list-container:after {
@@ -1539,6 +1513,32 @@ ul li {
 .login-form {
   padding: 0 1.8rem 1.8rem 1.8rem;
 }
+.quickaccess .passphrase input[type=password] {
+  box-sizing: border-box;
+  width: calc(100% - 4.5rem);
+}
+.quickaccess .passphrase .form-container {
+  padding: 0 1.8rem 0 1.8rem;
+}
+.quickaccess .passphrase .submit-wrapper {
+  padding: 0 1.8rem 1.8rem 1.8rem;
+}
+.quickaccess .passphrase .too-many-attempts-error {
+  margin: 0.8rem 3rem 0.8rem 1.6rem;
+}
+.quickaccess .security-token {
+  width: 4.5rem;
+  font-size: 1.4rem;
+  margin-top: -0.2rem;
+  padding: 0.4rem 0.8rem;
+  text-align: center;
+  display: inline-block;
+  margin-left: -0.4rem;
+  border: 1px solid #30302D;
+  line-height: 2.4rem;
+  vertical-align: middle;
+  box-sizing: border-box;
+}
 .quickaccess .item-browse .properties {
   padding: 1.2rem 0 0 0;
 }
@@ -1586,6 +1586,19 @@ ul li {
   display: block;
   border: 0;
 }
+.quickaccess .item-browse .properties .property .password-view {
+  display: block;
+  position: relative;
+  box-sizing: content-box;
+  margin: 0 0 0 0.5rem;
+  padding: 0.1rem 0.3rem 0.1rem 0.3rem;
+  background: 0 0;
+  border: 0;
+  float: left;
+}
+.quickaccess .item-browse .properties .property .password-view.selected {
+  background: #222220;
+}
 .quickaccess .item-browse .properties .property-value {
   width: 18rem;
   float: left;
@@ -1608,24 +1621,32 @@ ul li {
   padding: 0.8rem 1rem 0.4rem 1.8rem;
 }
 .quickaccess .item-browse .properties .property-action {
-  margin-top: 1.8rem;
+  margin-top: 2rem;
   margin-right: 1rem;
 }
 .quickaccess .item-browse .properties .property-action.disabled path {
   fill: #444442;
 }
-.quickaccess .item-browse .properties .secret-copy {
-  margin-top: 0.4rem;
-  background: transparent url('../../../img/controls/dot_white.svg') repeat-x left 3px;
+.quickaccess .item-browse .properties .secret {
   display: inline-block;
-  width: 10.3rem;
   height: 0.8rem;
   float: left;
   border: 0;
   margin-left: 1.8rem;
+  margin-bottom: 1rem;
 }
-.quickaccess .item-browse .properties .secret-copy:hover {
+.quickaccess .item-browse .properties .secret.secret-copy {
+  width: 10.3rem;
+  background: transparent url('../../../img/controls/dot_white.svg') repeat-x left 3px;
+}
+.quickaccess .item-browse .properties .secret.secret-copy:hover {
   background: transparent url('../../../img/controls/dot_red.svg') repeat-x left 3px;
+}
+.quickaccess .item-browse .properties .secret.decrypted {
+  max-width: 16rem;
+  width: inherit;
+  margin-left: 0;
+  padding-right: 0;
 }
 .quickaccess .item-browse .submit-wrapper {
   margin-top: 0;
@@ -1834,15 +1855,6 @@ ul li {
   box-shadow: inset -1px 1px 1px rgba(0, 0, 0, 0.2);
   border: 1px solid #2894DF;
   border-left: 0;
-}
-.quickaccess .passphrase .form-container {
-  padding: 0 1.8rem 0 1.8rem;
-}
-.quickaccess .passphrase .submit-wrapper {
-  padding: 0 1.8rem 1.8rem 1.8rem;
-}
-.quickaccess .passphrase .too-many-attempts-error {
-  margin: 0.8rem 3rem 0.8rem 1.6rem;
 }
 .slideNoTransition-exit {
   display: none;

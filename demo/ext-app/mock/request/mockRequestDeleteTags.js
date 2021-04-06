@@ -12,7 +12,7 @@
  * @since         3.0.0
  */
 
-import moment from 'moment/moment';
+import {DateTime} from "luxon";
 
 export default (eventObject, storage) => {
   return new Promise(async (resolve) => {
@@ -22,7 +22,7 @@ export default (eventObject, storage) => {
         const tagIndex = resource.tags.findIndex(tag => tag.id === eventObject);
         if (tagIndex !== -1) {
           resource.tags.splice(tagIndex,1);
-          resource.modified = moment().format("YYYY-MM-DD[T]HH:mm:ss[+]00:00");
+          resource.modified = DateTime.now().toISO();
           resource.modified_by = "f848277c-5398-58f8-a82a-72397af2d450";
           resources[resourceIndex] = resource;
         }

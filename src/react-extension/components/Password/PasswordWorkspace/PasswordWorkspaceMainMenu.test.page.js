@@ -20,6 +20,7 @@ import PropTypes from "prop-types";
 import ManageDialogs from "../../../../react/components/Common/Dialog/ManageDialogs/ManageDialogs";
 import DialogContextProvider from "../../../../react/contexts/Common/DialogContext";
 import PasswordWorkspaceMainMenu from "./PasswordWorkspaceMainMenu";
+import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 
 /**
  * The PasswordSidebarCommentSection component represented as a page
@@ -32,12 +33,14 @@ export default class PasswordWorkspaceMainMenuPage {
    */
   constructor(appContext, props) {
     this._page = render(
-      <AppContextProvider context={appContext}>
-        <DialogContextProvider>
-          <ManageDialogs/>
-          <PasswordWorkspaceMainMenu {...props}/>
-        </DialogContextProvider>
-      </AppContextProvider>
+      <MockTranslationProvider>
+        <AppContextProvider context={appContext}>
+          <DialogContextProvider>
+            <ManageDialogs/>
+            <PasswordWorkspaceMainMenu {...props}/>
+          </DialogContextProvider>
+        </AppContextProvider>
+      </MockTranslationProvider>
     );
     this.setupPageObjects();
   }

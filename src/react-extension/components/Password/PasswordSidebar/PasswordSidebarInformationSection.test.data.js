@@ -42,7 +42,8 @@ export function defaultProps() {
           },
           "tags": []
         }
-      }
+      },
+      onResourceCopied: jest.fn()
     }
   };
 }

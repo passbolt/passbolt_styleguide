@@ -114,6 +114,34 @@
         }
       }
     }
+
+    td.password {
+      .secret {
+        float: left;
+        max-width: calc(100% - 1.8rem); // password field - token
+      }
+      .password-view {
+        display: none;
+        position: relative;
+        box-sizing: content-box;
+        margin: 0 0 0 .3rem;
+        padding: 0 .3rem 0 .3rem;
+        background: 0 0;
+        border: 0;
+        float: left;
+
+        &.selected {
+          margin-top: .1rem;
+          display: block;
+          background: @button-selected-background;
+        }
+      }
+      &:hover {
+        .password-view {
+          display: block;
+        }
+      }
+    }
   }
 }
 

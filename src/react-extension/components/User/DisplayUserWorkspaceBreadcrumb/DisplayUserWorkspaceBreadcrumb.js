@@ -19,6 +19,7 @@ import AppContext from "../../../contexts/AppContext";
 import {UserWorkspaceFilterTypes, withUserWorkspace} from "../../../contexts/UserWorkspaceContext";
 import Breadcrumb from "../../../../react/components/Common/Navigation/Breadcrumbs/Breadcrumb";
 import {withNavigationContext} from "../../../contexts/NavigationContext";
+import {withTranslation} from "react-i18next";
 
 /**
  * The component displays a navigation breadcrumb given the applied users filter
@@ -38,14 +39,14 @@ class DisplayUserWorkspaceBreadcrumb extends Component {
       case UserWorkspaceFilterTypes.TEXT: {
         const isEmptySearchText = !this.props.userWorkspaceContext.filter.payload;
         const currentSearchText = this.props.userWorkspaceContext.filter.payload;
-        return isEmptySearchText ? items : [...items, this.getLastBreadcrumb(`Search : ${currentSearchText}`)];
+        return isEmptySearchText ? items : [...items, this.getLastBreadcrumb(this.translate("Search: {{currentSearchText}}", {currentSearchText}))];
       }
       case UserWorkspaceFilterTypes.RECENTLY_MODIFIED:
-        return [...items, this.getLastBreadcrumb("Recently modified")];
+        return [...items, this.getLastBreadcrumb(this.translate("Recently modified"))];
       case UserWorkspaceFilterTypes.GROUP: {
         const group = this.props.userWorkspaceContext.filter.payload.group;
-        const currentGroupName = (group && group.name) || "N/A";
-        return [...items, this.getLastBreadcrumb(`${currentGroupName} (group)`)];
+        const currentGroupName = (group && group.name) || this.translate("N/A");
+        return [...items, this.getLastBreadcrumb(this.translate("{{currentGroupName}} (group)", {currentGroupName}))];
       }
     }
 
@@ -57,7 +58,7 @@ class DisplayUserWorkspaceBreadcrumb extends Component {
    * @return {JSX.Element}
    */
   get allUsersBreadcrumb() {
-    return <Breadcrumb name="All users" onClick={this.props.navigationContext.onGoToUsersRequested}/>;
+    return <Breadcrumb name={this.translate("All users")} onClick={this.props.navigationContext.onGoToUsersRequested}/>;
   }
 
   /**
@@ -79,6 +80,14 @@ class DisplayUserWorkspaceBreadcrumb extends Component {
   }
 
   /**
+   * Get the translate function
+   * @returns {function(...[*]=)}
+   */
+  get translate() {
+    return this.props.t;
+  }
+
+  /**
    * Render the component
    * @returns {JSX}
    */
@@ -96,6 +105,7 @@ DisplayUserWorkspaceBreadcrumb.propTypes = {
   location: PropTypes.object, // The router location
   history: PropTypes.object, // The router history
   navigationContext: PropTypes.any, // The application navigation context
+  t: PropTypes.func, // The translation function
 };
 
-export default withRouter(withNavigationContext(withUserWorkspace(DisplayUserWorkspaceBreadcrumb)));
+export default withRouter(withNavigationContext(withUserWorkspace(withTranslation('common')(DisplayUserWorkspaceBreadcrumb))));

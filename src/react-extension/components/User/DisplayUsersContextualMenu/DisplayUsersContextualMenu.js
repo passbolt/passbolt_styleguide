@@ -22,6 +22,7 @@ import ConfirmDisableUserMFA from "../DisableUserMFA/ConfirmDisableUserMFA";
 import DeleteUserWithConflictsDialog from "../DeleteUser/DeleteUserWithConflictsDialog";
 import DeleteUserDialog from "../DeleteUser/DeleteUserDialog";
 import ErrorDialog from "../../Dialog/ErrorDialog/ErrorDialog";
+import {Trans, withTranslation} from "react-i18next";
 
 class DisplayUsersContextualMenu extends React.Component {
   /**
@@ -89,7 +90,7 @@ class DisplayUsersContextualMenu extends React.Component {
     const baseUrl = this.context.userSettings.getTrustedDomain();
     const permalink = `${baseUrl}/app/users/view/${this.user.id}`;
     await this.context.port.request("passbolt.clipboard.copy", permalink);
-    this.props.actionFeedbackContext.displaySuccess("The permalink has been copied to clipboard");
+    this.props.actionFeedbackContext.displaySuccess(this.translate("The permalink has been copied to clipboard"));
     this.props.hide();
   }
 
@@ -99,7 +100,7 @@ class DisplayUsersContextualMenu extends React.Component {
   async handleUsernameCopy() {
     const username = `${this.user.username}`;
     await this.context.port.request("passbolt.clipboard.copy", username);
-    this.props.actionFeedbackContext.displaySuccess("The email has been copied to clipboard");
+    this.props.actionFeedbackContext.displaySuccess(this.translate("The email has been copied to clipboard"));
     this.props.hide();
   }
 
@@ -109,7 +110,7 @@ class DisplayUsersContextualMenu extends React.Component {
   async handlePublicKeyCopy() {
     const gpgkeyInfo = await this.context.port.request('passbolt.keyring.get-public-key-info-by-user', this.user.id);
     await this.context.port.request("passbolt.clipboard.copy", gpgkeyInfo.key);
-    this.props.actionFeedbackContext.displaySuccess("The public key has been copied to clipboard");
+    this.props.actionFeedbackContext.displaySuccess(this.translate("The public key has been copied to clipboard"));
     this.props.hide();
   }
 
@@ -185,7 +186,7 @@ class DisplayUsersContextualMenu extends React.Component {
    */
   handleError(error) {
     const errorDialogProps = {
-      title: "There was an unexpected error...",
+      title: this.translate("There was an unexpected error..."),
       message: error.message
     };
     this.context.setContext({errorDialogProps});
@@ -245,7 +246,7 @@ class DisplayUsersContextualMenu extends React.Component {
    * Whenever the resend invite succeeds
    */
   onResendInviteSuccess() {
-    this.props.actionFeedbackContext.displaySuccess("The invite has been resent successfully");
+    this.props.actionFeedbackContext.displaySuccess(this.translate("The invite has been resent successfully"));
     this.props.hide();
   }
 
@@ -255,12 +256,20 @@ class DisplayUsersContextualMenu extends React.Component {
    */
   onResendInviteFailure(error) {
     const errorDialogProps = {
-      title: "There was an unexpected error...",
+      title: this.translate("There was an unexpected error..."),
       message: error.message
     };
     this.props.hide();
     this.context.setContext({errorDialogProps});
     this.props.dialogContext.open(ErrorDialog);
+  }
+
+  /**
+   * Get the translate function
+   * @returns {function(...[*]=)}
+   */
+  get translate() {
+    return this.props.t;
   }
 
   /**
@@ -280,7 +289,7 @@ class DisplayUsersContextualMenu extends React.Component {
             <div className="main-cell-wrapper">
               <div className="main-cell">
                 <a onClick={this.handlePermalinkCopy}>
-                  <span>Copy permalink</span>
+                  <span><Trans>Copy permalink</Trans></span>
                 </a>
               </div>
             </div>
@@ -293,7 +302,7 @@ class DisplayUsersContextualMenu extends React.Component {
             <div className="main-cell-wrapper">
               <div className="main-cell">
                 <a onClick={this.handlePublicKeyCopy}>
-                  <span>Copy public key</span>
+                  <span><Trans>Copy public key</Trans></span>
                 </a>
               </div>
             </div>
@@ -306,7 +315,7 @@ class DisplayUsersContextualMenu extends React.Component {
             <div className="main-cell-wrapper">
               <div className="main-cell">
                 <a onClick={this.handleUsernameCopy}>
-                  <span>Copy email address</span>
+                  <span><Trans>Copy email address</Trans></span>
                 </a>
               </div>
             </div>
@@ -317,7 +326,7 @@ class DisplayUsersContextualMenu extends React.Component {
           <div className="row">
             <div className="main-cell-wrapper">
               <div className="main-cell">
-                <a id="edit" onClick={this.handleEditClickEvent}><span>Edit</span></a>
+                <a id="edit" onClick={this.handleEditClickEvent}><span><Trans>Edit</Trans></span></a>
               </div>
             </div>
           </div>
@@ -330,7 +339,7 @@ class DisplayUsersContextualMenu extends React.Component {
               <div className="main-cell">
                 <a id="resend"
                   onClick={this.handleResendInviteClickEvent}
-                  className={`${this.canResendInviteToUser ? "" : "disabled"}`}><span>Resend invite</span></a>
+                  className={`${this.canResendInviteToUser ? "" : "disabled"}`}><span><Trans>Resend invite</Trans></span></a>
               </div>
             </div>
           </div>
@@ -345,7 +354,7 @@ class DisplayUsersContextualMenu extends React.Component {
                   id="disable-mfa"
                   onClick={this.handleDisableMfaEvent}
                   className={this.canDisableMfaForUser ? '' : 'disabled'}>
-                  <span>Disable MFA</span>
+                  <span><Trans>Disable MFA</Trans></span>
                 </a>
               </div>
             </div>
@@ -357,7 +366,7 @@ class DisplayUsersContextualMenu extends React.Component {
           <div className="row">
             <div className="main-cell-wrapper">
               <div className="main-cell">
-                <a id="delete" onClick={this.handleDeleteClickEvent} className={`${!this.canDeleteUser() ? "disabled" : ""}`}><span>Delete</span></a>
+                <a id="delete" onClick={this.handleDeleteClickEvent} className={`${!this.canDeleteUser() ? "disabled" : ""}`}><span><Trans>Delete</Trans></span></a>
               </div>
             </div>
           </div>
@@ -377,7 +386,8 @@ DisplayUsersContextualMenu.propTypes = {
   dialogContext: PropTypes.any, // the dialog context
   user: PropTypes.object, // user selected
   actionFeedbackContext: PropTypes.any, // The action feedback context
+  t: PropTypes.func, // The translation function
 };
 
-export default withDialog(withActionFeedback(DisplayUsersContextualMenu));
+export default withDialog(withActionFeedback(withTranslation('common')(DisplayUsersContextualMenu)));
 

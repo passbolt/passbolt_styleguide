@@ -30,6 +30,7 @@ import DisplayUserDirectoryAdministration
 import DisplayEmailNotificationsAdministration
   from "./DisplayEmailNotificationsAdministration/DisplayEmailNotificationsAdministration";
 import SearchBar from "../../../react/components/Common/Navigation/Search/SearchBar";
+import DisplaySubscriptionKey from "./DisplaySubscriptionKey/DisplaySubscriptionKey";
 
 class AdministrationWorkspace extends Component {
   /**
@@ -56,6 +57,14 @@ class AdministrationWorkspace extends Component {
     return AdministrationWorkspaceMenuTypes.EMAIL_NOTIFICATION === this.props.administrationWorkspaceContext.selectedAdministration;
   }
 
+  /**
+   * If Subscription menu is selected
+   * @returns {boolean}
+   */
+  isSubscriptionSelected() {
+    return AdministrationWorkspaceMenuTypes.SUBSCRIPTION === this.props.administrationWorkspaceContext.selectedAdministration;
+  }
+
   render() {
     return (
       <div id="container" className="page administration">
@@ -66,7 +75,7 @@ class AdministrationWorkspace extends Component {
           <div className="header second">
             <Logo/>
             <SearchBar disabled={true}/>
-            <UserBadgeMenu baseUrl={this.props.context.trustedDomain} user={this.props.context.loggedInUser}/>
+            <UserBadgeMenu baseUrl={this.props.context.trustedDomain || this.props.context.userSettings.getTrustedDomain()} user={this.props.context.loggedInUser}/>
           </div>
           <div className="header third">
             <div className="col1 main-action-wrapper">
@@ -90,6 +99,9 @@ class AdministrationWorkspace extends Component {
                     }
                     {this.isEmailNotificationsSelected() &&
                     <DisplayEmailNotificationsAdministration/>
+                    }
+                    {this.isSubscriptionSelected() &&
+                    <DisplaySubscriptionKey/>
                     }
                   </div>
                 </div>

@@ -20,6 +20,7 @@ import {withDialog} from "../../../../react/contexts/Common/DialogContext";
 import PropTypes from "prop-types";
 import debounce from "debounce-promise";
 import SecretComplexity from "../../../lib/Secret/SecretComplexity";
+import {Trans, withTranslation} from "react-i18next";
 
 /**
  * The component allows the user to create a Gpg key by automatic generation or by manually importing one
@@ -236,19 +237,25 @@ class CreateGpgKey extends Component {
   }
 
   /**
+   * Get the translate function
+   * @returns {function(...[*]=)}
+   */
+  get translate() {
+    return this.props.t;
+  }
+
+  /**
    * Render the component
    */
   render() {
     const processingClassName = this.isProcessing ? 'processing' : '';
     const disabledClassName = this.mustBeDisabled ? 'disabled' : '';
     return (
-      <div className="choose-passphrase">
-        <h1>Welcome to Passbolt, please select a passphrase!</h1>
-        <form
-          acceptCharset="utf-8"
-          onSubmit={this.handleSubmit}>
+      <div className="create-gpg-key">
+        <h1><Trans>Welcome to Passbolt, please select a passphrase!</Trans></h1>
+        <form acceptCharset="utf-8" onSubmit={this.handleSubmit} className="enter-passphrase">
           <p>
-            This passphrase is the only passphrase you will need to remember from now on, choose wisely!
+            <Trans>This passphrase is the only passphrase you will need to remember from now on, choose wisely!</Trans>
           </p>
           <div className="input text password required">
             {this.state.isObfuscated &&
@@ -287,19 +294,19 @@ class CreateGpgKey extends Component {
           <div className="password-hints">
             <ul>
               <li className={this.state.hintClassNames.enoughLength}>
-                It is at least 8 characters in length
+                <Trans>It is at least 8 characters in length</Trans>
               </li>
               <li className={this.state.hintClassNames.uppercase}>
-                It contains lower and uppercase characters
+                <Trans>It contains lower and uppercase characters</Trans>
               </li>
               <li className={this.state.hintClassNames.alphanumeric}>
-                It contains letters and numbers
+                <Trans>It contains letters and numbers</Trans>
               </li>
               <li className={this.state.hintClassNames.specialCharacters}>
-                It contains special characters (like / or * or %)
+                <Trans>It contains special characters (like / or * or %)</Trans>
               </li>
               <li className={this.state.hintClassNames.notInDictionary}>
-                It is not part of a dictionary
+                <Trans>It is not part of a dictionary</Trans>
               </li>
             </ul>
           </div>
@@ -307,16 +314,16 @@ class CreateGpgKey extends Component {
           <div className="form-actions">
             <button
               type="submit"
-              className={`button primary big ${disabledClassName} ${processingClassName}`}
+              className={`button primary big full-width ${disabledClassName} ${processingClassName}`}
               role="button"
               disabled={this.mustBeDisabled || this.isProcessing}>
-              Next
+              <Trans>Next</Trans>
             </button>
             <a
               id="import-key-link"
               onClick={this.handleImportGpgKey}
               disabled={!this.areActionsAllowed}>
-              Or use an existing private key.
+              <Trans>Or use an existing private key.</Trans>
             </a>
           </div>
         </form>
@@ -327,7 +334,8 @@ class CreateGpgKey extends Component {
 
 CreateGpgKey.contextType = AuthenticationContext;
 CreateGpgKey.propTypes = {
-  dialogContext: PropTypes.any // The dialog context
+  dialogContext: PropTypes.any, // The dialog context
+  t: PropTypes.func, // The translation function
 };
 
-export default withDialog(CreateGpgKey);
+export default withDialog(withTranslation('common')(CreateGpgKey));

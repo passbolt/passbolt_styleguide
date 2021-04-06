@@ -44,8 +44,8 @@ export default {
       "license": {
         "version": "2.0.0"
       },
-      "pro": {
-        "version": "2.0.0"
+      "ee": {
+        "version": "3.0.0"
       },
       "accountSettings": {
         "version": "1.0.0",
@@ -92,6 +92,9 @@ export default {
       },
       "folders": {
         "version": "2.0.0"
+      },
+      "previewPassword": {
+        "version": "3.0.0"
       },
       "mobile": {
         "version": "1.0.0"

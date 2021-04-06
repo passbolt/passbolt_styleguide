@@ -3,9 +3,11 @@
  * @param appContext An existing app context
  * @returns {any}
  */
+import mockPort from "../../../demo/ext-app/mock/mockPort";
 
 export function defaultAppContext(appContext) {
   const defaultAppContext = {
+    port: mockPort()
   };
   return Object.assign(defaultAppContext, appContext || {});
 }

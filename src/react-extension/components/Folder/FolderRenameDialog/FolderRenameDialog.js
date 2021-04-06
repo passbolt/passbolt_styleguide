@@ -21,6 +21,7 @@ import FormSubmitButton from "../../../../react/components/Common/Inputs/FormSub
 import FormCancelButton from "../../../../react/components/Common/Inputs/FormSubmitButton/FormCancelButton";
 import {withDialog} from "../../../../react/contexts/Common/DialogContext";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
+import {Trans, withTranslation} from "react-i18next";
 
 class FolderRenameDialog extends Component {
   /**
@@ -58,7 +59,7 @@ class FolderRenameDialog extends Component {
       inlineValidation: false,
 
       // Fields and errors
-      name: 'loading...',
+      name: this.translate("loading..."),
       nameError: false,
     };
   }
@@ -76,7 +77,7 @@ class FolderRenameDialog extends Component {
   getStateBasedOnContext(context, props, defaultState) {
     const folders = context.folders;
     const error = {
-      message: 'The folder could not be found. Maybe it was deleted or you lost access.'
+      message: this.translate("The folder could not be found. Maybe it was deleted or you lost access.")
     };
     if (!folders) {
       console.error(`No folders context defined.`);
@@ -174,7 +175,7 @@ class FolderRenameDialog extends Component {
    * Handle save operation success.
    */
   async handleSaveSuccess(folderId) {
-    await this.props.actionFeedbackContext.displaySuccess("The folder was renamed successfully");
+    await this.props.actionFeedbackContext.displaySuccess(this.translate("The folder was renamed successfully"));
     this.selectAndScrollToFolder(folderId);
     this.props.onClose();
   }
@@ -201,7 +202,7 @@ class FolderRenameDialog extends Component {
    */
   handleError(error) {
     const errorDialogProps = {
-      title: "There was an unexpected error...",
+      title: this.translate("There was an unexpected error..."),
       message: error.message
     };
     this.context.setContext({errorDialogProps});
@@ -276,10 +277,10 @@ class FolderRenameDialog extends Component {
     let nameError = false;
     const name = this.state.name.trim();
     if (!name.length) {
-      nameError = "A name is required.";
+      nameError = this.translate("A name is required.");
     }
     if (name.length > 64) {
-      nameError = "A name can not be more than 64 char in length.";
+      nameError = this.translate("A name can not be more than 64 char in length.");
     }
     return new Promise(resolve => {
       this.setState({nameError: nameError}, resolve);
@@ -303,20 +304,28 @@ class FolderRenameDialog extends Component {
   }
 
   /**
+   * Get the translate function
+   * @returns {function(...[*]=)}
+   */
+  get translate() {
+    return this.props.t;
+  }
+
+  /**
    * Render
    * @returns {*}
    */
   render() {
     return (
-      <DialogWrapper className='rename-folder-dialog' title="Rename a folder"
+      <DialogWrapper className='rename-folder-dialog' title={this.translate("Rename a folder")}
         onClose={this.handleClose} disabled={this.hasAllInputDisabled()}>
         <form className="folder-rename-form" onSubmit={this.handleFormSubmit} noValidate>
           <div className="form-content">
             <div className={`input text required ${this.state.nameError ? "error" : ""}`}>
-              <label htmlFor="folder-name-input">Folder name</label>
+              <label htmlFor="folder-name-input"><Trans>Folder name</Trans></label>
               <input id="folder-name-input" name="name"
                 ref={this.nameRef}
-                type="text" value={this.state.name} placeholder="Untitled folder"
+                type="text" value={this.state.name} placeholder={this.translate("Untitled folder")}
                 maxLength="64" required="required"
                 onChange={this.handleInputChange}
                 disabled={this.hasAllInputDisabled()}
@@ -328,7 +337,7 @@ class FolderRenameDialog extends Component {
             </div>
           </div>
           <div className="submit-wrapper clearfix">
-            <FormSubmitButton disabled={this.hasAllInputDisabled()} processing={this.state.processing} value="Rename"/>
+            <FormSubmitButton disabled={this.hasAllInputDisabled()} processing={this.state.processing} value={this.translate("Rename")}/>
             <FormCancelButton disabled={this.hasAllInputDisabled()} onClick={this.handleClose} />
           </div>
         </form>
@@ -342,7 +351,8 @@ FolderRenameDialog.contextType = AppContext;
 FolderRenameDialog.propTypes = {
   onClose: PropTypes.func,
   actionFeedbackContext: PropTypes.any, // The action feedback context
-  dialogContext: PropTypes.any // The dialog context
+  dialogContext: PropTypes.any, // The dialog context
+  t: PropTypes.func, // The translation function
 };
 
-export default withDialog(withActionFeedback(FolderRenameDialog));
+export default withDialog(withActionFeedback(withTranslation('common')(FolderRenameDialog)));

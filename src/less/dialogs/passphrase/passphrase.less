@@ -1,46 +1,46 @@
-.passphrase-entry {
-    width:95%;
-
-    input[type=text] {
-        width: 90%;
-    }
-    input[type=password] {
-        width: calc(90% - 4em);
-    }
-}
-
 .passphrase-entry.dialog {
-    label {
-        margin-bottom: 1em;
-        margin-left:.5em;
-    }
+  width:95%;
 
-    // Invisible field that Will receive the first focus
-    // before the passphrase field.
-    input[type=text].focus_first {
-        border-width: 0;
-        font-size: 0;
-        line-height: 0;
-        width:1px;
-        height:1px;
-    }
+  .password {
+    .clearfix();
 
-    .input.checkbox,
-    .input.select {
-        display: inline;
+    input[type=text],
+    input[type=password] {
+      float:left;
+      box-sizing: border-box;
+      width: calc(90% - 5em);
     }
-}
+    .security-token {
+      float:left;
+      margin-top:0;
+      margin-left:0;
+    }
+    .button.password-view {
+      font-size:.975em;
+      padding: .45em 1em;
+      box-sizing: border-box;
+      border-left:0;
+      float:left;
+      margin-left:-1px;
+      border-radius:0;
+      background: @input-background;
 
-.passphrase-entry.login-form {
+      &.selected {
+        background: @button-selected-background;
+      }
+    }
+    input[type=text]:focus ~ .button.password-view,
+    input[type=password]:focus ~ .button.password-view {
+      border: 1px solid @border-focus;
+      border-left:0;
+    }
+  }
 
-    .submit-wrapper {
-        .button {
-            margin-top: .5em;
-        }
-    }
-    .input.checkbox {
-        label {
-            font-size: 0.9375em;
-        }
-    }
+  .input.checkbox,
+  .input.select {
+    display: inline;
+  }
+  input[type="checkbox"] + label {
+    margin-left:.5em;
+  }
 }

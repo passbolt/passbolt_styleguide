@@ -13,6 +13,7 @@
  */
 import React, {Component} from "react";
 import PropTypes from "prop-types";
+import {withTranslation} from "react-i18next";
 
 class FormCancelButton extends Component {
   /**
@@ -55,19 +56,28 @@ class FormCancelButton extends Component {
   }
 
   /**
+   * Get the translate function
+   * @returns {function(...[*]=)}
+   */
+  get translate() {
+    return this.props.t;
+  }
+
+  /**
    * Render the component
    * @return {JSX}
    */
   render() {
     return (
-      <a className={this.getClassName()} role="button" onClick={this.handleClick}>Cancel</a>
+      <a className={this.getClassName()} role="button" onClick={this.handleClick}>{this.translate("Cancel")}</a>
     );
   }
 }
 
 FormCancelButton.propTypes = {
   disabled: PropTypes.bool,
-  onClick: PropTypes.func
+  onClick: PropTypes.func,
+  t: PropTypes.func, // The translation function
 };
 
-export default FormCancelButton;
+export default withTranslation('common')(FormCancelButton);

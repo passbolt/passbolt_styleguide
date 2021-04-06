@@ -17,6 +17,7 @@ import Icon from "../../../../react/components/Common/Icons/Icon";
 import DescriptionEditor from "./DescriptionEditor";
 import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 import AppContext from "../../../contexts/AppContext";
+import {Trans, withTranslation} from "react-i18next";
 
 /**
  * This component display the description section of a resource
@@ -137,7 +138,7 @@ class PasswordSidebarDescriptionSection extends React.Component {
         description: undefined,
         isSecretDecrypting: false,
         error: true,
-        errorMsg: `Decryption failed, click here to retry ${error.message || ''}`
+        errorMsg: this.translate("Decryption failed, click here to retry") + (error.message || '')
       });
 
       return false;
@@ -203,7 +204,8 @@ class PasswordSidebarDescriptionSection extends React.Component {
    * Display or not the input tag editor
    */
   toggleInputDescriptionEditor() {
-    if (this.canEdit()) {
+    const hasTextSelected = Boolean(window.getSelection().toString());
+    if (!hasTextSelected && this.canEdit()) {
       const showDescriptionEditor = !this.state.showDescriptionEditor;
       this.setState({showDescriptionEditor});
     }
@@ -271,6 +273,14 @@ class PasswordSidebarDescriptionSection extends React.Component {
   }
 
   /**
+   * Get the translate function
+   * @returns {function(...[*]=)}
+   */
+  get translate() {
+    return this.props.t;
+  }
+
+  /**
    * Render the component
    * @returns {JSX}
    */
@@ -280,7 +290,7 @@ class PasswordSidebarDescriptionSection extends React.Component {
         <div className="accordion-header">
           <h4>
             <a onClick={this.handleTitleClickEvent} role="button" className="section-opener">
-              Description
+              <Trans>Description</Trans>
               {this.state.open &&
               <Icon name="caret-down"/>
               }
@@ -294,13 +304,13 @@ class PasswordSidebarDescriptionSection extends React.Component {
           {this.canEdit() &&
           <a className="section-action" onClick={this.handleEditClickEvent}>
             <Icon name="edit"/>
-            <span className="visuallyhidden">edit</span>
+            <span className="visuallyhidden"><Trans>edit</Trans></span>
           </a>
           }
           {this.state.isSecretDecrypting &&
           <p className="description-content">
             <span className="processing-wrapper">
-              <span className="processing-text">Decrypting</span>
+              <span className="processing-text"><Trans>Decrypting</Trans></span>
             </span>
           </p>
           }
@@ -314,11 +324,11 @@ class PasswordSidebarDescriptionSection extends React.Component {
           {this.mustShowEmptyDescription() &&
           <p className="description-content">
             {!this.canEdit() &&
-              <em className="empty-content">There is no description.</em>
+              <em className="empty-content"><Trans>There is no description.</Trans></em>
             }
             {this.canEdit() &&
             <em className="empty-content" onClick={this.toggleInputDescriptionEditor}>
-              There is no description yet, click here to add one.
+              <Trans>There is no description yet, click here to add one.</Trans>
             </em>
             }
           </p>
@@ -345,6 +355,7 @@ PasswordSidebarDescriptionSection.contextType = AppContext;
 
 PasswordSidebarDescriptionSection.propTypes = {
   resourceWorkspaceContext: PropTypes.any, // The resource
+  t: PropTypes.func, // The translation function
 };
 
-export default withResourceWorkspace(PasswordSidebarDescriptionSection);
+export default withResourceWorkspace(withTranslation('common')(PasswordSidebarDescriptionSection));

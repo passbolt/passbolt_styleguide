@@ -20,6 +20,7 @@ import FormSubmitButton from "../../../../react/components/Common/Inputs/FormSub
 import FormCancelButton from "../../../../react/components/Common/Inputs/FormSubmitButton/FormCancelButton";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import {withDialog} from "../../../../react/contexts/Common/DialogContext";
+import {Trans, withTranslation} from "react-i18next";
 
 class EditUserDialog extends Component {
   /**
@@ -185,7 +186,7 @@ class EditUserDialog extends Component {
    * Handle save operation success.
    */
   async handleSaveSuccess() {
-    await this.props.actionFeedbackContext.displaySuccess("The user has been updated successfully");
+    await this.props.actionFeedbackContext.displaySuccess(this.translate("The user has been updated successfully"));
     await this.updateLoggedInUserIfNeeded();
     this.props.onClose();
   }
@@ -212,7 +213,7 @@ class EditUserDialog extends Component {
    */
   handleError(error) {
     const errorDialogProps = {
-      title: "There was an unexpected error...",
+      title: this.translate("There was an unexpected error..."),
       message: error.message
     };
     this.context.setContext({errorDialogProps});
@@ -291,7 +292,7 @@ class EditUserDialog extends Component {
     let first_nameError = null;
     const first_name = this.state.first_name.trim();
     if (!first_name.length) {
-      first_nameError = "A first name is required.";
+      first_nameError = this.translate("A first name is required.");
     }
     return this.setState({first_nameError});
   }
@@ -304,7 +305,7 @@ class EditUserDialog extends Component {
     let last_nameError = null;
     const last_name = this.state.last_name.trim();
     if (!last_name.length) {
-      last_nameError = "A last name is required.";
+      last_nameError = this.translate("A last name is required.");
     }
     return this.setState({last_nameError});
   }
@@ -326,6 +327,14 @@ class EditUserDialog extends Component {
   }
 
   /**
+   * Get the translate function
+   * @returns {function(...[*]=)}
+   */
+  get translate() {
+    return this.props.t;
+  }
+
+  /**
    * Render
    * @returns {JSX}
    */
@@ -336,9 +345,9 @@ class EditUserDialog extends Component {
         <form className="user-edit-form" onSubmit={this.handleFormSubmit} noValidate>
           <div className="form-content">
             <div className={`input text required ${this.state.first_nameError ? "error" : ""}`}>
-              <label htmlFor="user-first-name-input">First Name</label>
+              <label htmlFor="user-first-name-input"><Trans>First Name</Trans></label>
               <input id="user-first-name-input" name="first_name"
-                ref={this.firstNameRef} type="text" value={this.state.first_name} placeholder="first name"
+                ref={this.firstNameRef} type="text" value={this.state.first_name} placeholder={this.translate("first name")}
                 required="required" disabled={this.hasAllInputDisabled()}
                 onKeyUp={this.handleFirstNameInputOnKeyUp} onChange={this.handleInputChange}
                 autoComplete='off' autoFocus={true}
@@ -348,9 +357,9 @@ class EditUserDialog extends Component {
               }
             </div>
             <div className={`input text required ${this.state.last_nameError ? "error" : ""}`}>
-              <label htmlFor="user-last-name-input">Last Name</label>
+              <label htmlFor="user-last-name-input"><Trans>Last Name</Trans></label>
               <input id="user-last-name-input" name="last_name"
-                ref={this.lastNameRef} type="text" value={this.state.last_name} placeholder="last name"
+                ref={this.lastNameRef} type="text" value={this.state.last_name} placeholder={this.translate("last name")}
                 required="required" disabled={this.hasAllInputDisabled()}
                 onKeyUp={this.handleLastNameInputOnKeyUp} onChange={this.handleInputChange}
                 autoComplete='off' autoFocus={true}
@@ -360,7 +369,7 @@ class EditUserDialog extends Component {
               }
             </div>
             <div className="input text required">
-              <label htmlFor="user-username-input">Username / Email</label>
+              <label htmlFor="user-username-input"><Trans>Username / Email</Trans></label>
               <input id="user-username-input" name="username"
                 type="text" value={this.state.username} placeholder="username"
                 required="required" disabled={true}
@@ -368,7 +377,7 @@ class EditUserDialog extends Component {
               />
             </div>
             <div className="input checkbox">
-              <label htmlFor="is_admin">Role</label>
+              <label htmlFor="is_admin"><Trans>Role</Trans></label>
               <div id="is_admin">
                 <input
                   id="is_admin_checkbox"
@@ -377,15 +386,15 @@ class EditUserDialog extends Component {
                   onChange={this.handleCheckboxClick}
                   checked={this.state.is_admin}
                   type="checkbox"/>
-                <span> This user is an administrator</span>
+                <label htmlFor="is_admin_checkbox"> <Trans>This user is an administrator</Trans></label>
               </div>
-              <div className="message helptext">Note: Administrators can add and delete users. They can also create
-                groups and assign group managers. Admin can not see all passwords.
+              <div className="message helptext">
+                <Trans>Note: Administrators can add and delete users; They can also create groups and assign group managers; Admin can not see all passwords.</Trans>
               </div>
             </div>
           </div>
           <div className="submit-wrapper clearfix">
-            <FormSubmitButton disabled={this.hasAllInputDisabled()} processing={this.state.processing} value="Save"/>
+            <FormSubmitButton disabled={this.hasAllInputDisabled()} processing={this.state.processing} value={this.translate("Save")}/>
             <FormCancelButton disabled={this.hasAllInputDisabled()} onClick={this.handleClose}/>
           </div>
         </form>
@@ -399,7 +408,8 @@ EditUserDialog.contextType = AppContext;
 EditUserDialog.propTypes = {
   actionFeedbackContext: PropTypes.any, // The action feedback context
   onClose: PropTypes.func,
-  dialogContext: PropTypes.any // The dialog context
+  dialogContext: PropTypes.any, // The dialog context
+  t: PropTypes.func, // The translation function
 };
 
-export default withActionFeedback(withDialog(EditUserDialog));
+export default withActionFeedback(withDialog(withTranslation('common')(EditUserDialog)));

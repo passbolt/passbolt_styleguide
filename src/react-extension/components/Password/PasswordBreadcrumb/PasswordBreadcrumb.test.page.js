@@ -18,6 +18,7 @@ import React from "react";
 import PasswordBreadcrumb from "./PasswordBreadcrumb";
 import {BrowserRouter as Router} from 'react-router-dom';
 import {ResourceWorkspaceContext} from "../../../contexts/ResourceWorkspaceContext";
+import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 
 /**
  * The PasswordBreadcrumb component represented as a page
@@ -30,13 +31,15 @@ export default class PasswordBreadcrumbPage {
    */
   constructor(appContext, resourceWorkspaceContext) {
     this._page = render(
-      <Router>
-        <AppContext.Provider value={appContext}>
-          <ResourceWorkspaceContext.Provider value={resourceWorkspaceContext}>
-            <PasswordBreadcrumb/>
-          </ResourceWorkspaceContext.Provider>
-        </AppContext.Provider>
-      </Router>
+      <MockTranslationProvider>
+        <Router>
+          <AppContext.Provider value={appContext}>
+            <ResourceWorkspaceContext.Provider value={resourceWorkspaceContext}>
+              <PasswordBreadcrumb/>
+            </ResourceWorkspaceContext.Provider>
+          </AppContext.Provider>
+        </Router>
+      </MockTranslationProvider>
     );
     this.setupPageObjects();
   }

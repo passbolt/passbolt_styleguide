@@ -21,8 +21,10 @@ export function defaultAppContext(appContext) {
 export function defaultProps() {
   return {
     administrationWorkspaceContext: {
-      mustSaveSettings: false,
-      mustTestSettings: false,
+      must: {
+        save: false,
+        test: false
+      },
       onResetActionsSettings: jest.fn(),
       isSaveEnabled: false,
       onSaveEnabled: jest.fn(),
@@ -45,8 +47,11 @@ export const mockResult = {
   "default_user": "d57c10f5-639d-5160-9c81-8a0c6c4ec856",
   "directory_type": "ad",
   "domain_name": "passbolt.local",
-  "email_prefix": null,
-  "email_suffix": null,
+  "email_prefix": "",
+  "email_suffix": "",
+  "group_object_class": "",
+  "use_email_prefix_suffix": false,
+  "user_object_class": "",
   "enabled": true,
   "enabled_users_only": false,
   "group_path": undefined,
@@ -59,7 +64,6 @@ export const mockResult = {
   "sync_groups_update": true,
   "sync_users_create": true,
   "sync_users_delete": true,
-  "use_email_prefix_suffix": undefined,
   "user_path": undefined,
   "username": "username",
   "users_parent_group": undefined,

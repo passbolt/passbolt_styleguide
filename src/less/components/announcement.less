@@ -1,24 +1,30 @@
 .announcement {
-    margin:0;
-    top:0;
-    position: absolute;
-    height:2em;
-    padding-top:.425em;
-    font-size:.85em;
-    text-align:center;
-    background: @background-warning;
-    color: @blacker;
-    width:100%;
+  margin: 0;
+  top: 0;
+  position: absolute;
+  height: 2em;
+  padding-top: .425em;
+  font-size: .85em;
+  text-align: center;
+  background: @background-warning;
+  color: @blacker;
+  width: 100%;
 
-    a {
-        color: @blacker;
-    }
-    .announcement-close {
-        float:right;
-        border:0;
-        margin-right:.5em;
-    }
+  a {
+    color: @blacker;
+    display: inline-block;
+    margin-left: 0.5em;
+    border-bottom-color: @grey-darkest;
+  }
+
+  .announcement-close {
+    float: right;
+    border: 0;
+    margin-right: .5em;
+    margin-top: .15em;
+  }
 }
+
 .announcement + #container.page {
-    top:2em;
+  top: 2em;
 }

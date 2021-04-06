@@ -13,12 +13,12 @@
  */
 
 import {v4 as uuidv4} from "uuid";
-import moment from 'moment/moment';
+import {DateTime} from "luxon";
 
 export default (groupDto, storage) => {
   return new Promise(async (resolve) => {
     const {groups} = await storage.local.get(["groups"]);
-    groupDto.modified = moment().format("YYYY-MM-DD[T]HH:mm:ss[+]00:00");
+    groupDto.modified = DateTime.now().toISO();
     groupDto.modified_by = "f848277c-5398-58f8-a82a-72397af2d450";
     groupDto.groups_users.forEach(groupUser => {
       groupUser.id = groupUser.id || uuidv4();

@@ -18,6 +18,8 @@ import PropTypes from "prop-types";
 import {withDialog} from "../../../../react/contexts/Common/DialogContext";
 import UserAvatar from "../../../../react/components/Common/Avatar/UserAvatar";
 import {Link} from "react-router-dom";
+import {Trans, withTranslation} from "react-i18next";
+import Icon from "../../../../react/components/Common/Icons/Icon";
 
 /**
  * This component allows the user to log in with his account
@@ -45,7 +47,8 @@ class Login extends Component {
       actions: {
         processing: false // True if one's processing passphrase
       },
-      hasPassphraseFocus: false, // The password input has focues
+      isObfuscated: true, // True if the passphrase should not be visible
+      hasPassphraseFocus: false, // The password input has focus
       hasBeenValidated: false, // true if the form has already validated once
       errors: {
         emptyPassphrase: false, // True if the passphrase is empty
@@ -153,6 +156,7 @@ class Login extends Component {
     this.handleToggleRememberMe = this.handleToggleRememberMe.bind(this);
     this.handleFocusPassphrase = this.handleFocusPassphrase.bind(this);
     this.handleBlurPassphrase = this.handleBlurPassphrase.bind(this);
+    this.handleToggleObfuscate = this.handleToggleObfuscate.bind(this);
   }
 
   /**
@@ -208,6 +212,13 @@ class Login extends Component {
    */
   async handleToggleRememberMe() {
     await this.toggleRemmemberMe();
+  }
+
+  /**
+   * Whenever one wants to toggle the obfusctated mode
+   */
+  handleToggleObfuscate() {
+    this.toggleObfuscate();
   }
 
   /**
@@ -297,6 +308,21 @@ class Login extends Component {
   }
 
   /**
+   * Toggle the obfuscate mode of the passphrase view
+   */
+  toggleObfuscate() {
+    this.setState({isObfuscated: !this.state.isObfuscated});
+  }
+
+  /**
+   * Get the translate function
+   * @returns {function(...[*]=)}
+   */
+  get translate() {
+    return this.props.t;
+  }
+
+  /**
    * Render the component
    */
   render() {
@@ -306,25 +332,21 @@ class Login extends Component {
         {this.isReady &&
           <div className="login">
             <div className="login-user">
-              <UserAvatar
-                baseUrl={this.trustedDomain}
-                className="big avatar user-avatar"/>
+              <UserAvatar baseUrl={this.trustedDomain} className="big avatar user-avatar"/>
               <p className="login-user-name">{this.fullname}</p>
               <p className="login-user-email">{this.username}</p>
             </div>
 
-            <form
-              acceptCharset="utf-8"
-              onSubmit={this.handleSubmit}>
+            <form acceptCharset="utf-8" onSubmit={this.handleSubmit} className="enter-passphrase">
               <div className={`input text required ${this.hasErrors ? "error" : ""}`}>
                 <label htmlFor="passphrase">
-                  Passphrase
+                  <Trans>Passphrase</Trans>
                 </label>
-                <div className="login-passphrase">
+                <div className="password with-token">
                   <input
                     id="passphrase"
                     ref={this.passphraseInputRef}
-                    type="password"
+                    type={this.state.isObfuscated ? "password" : "text"}
                     name="passphrase"
                     className="login-passphrase-input"
                     style={this.passphraseInputStyle}
@@ -334,22 +356,27 @@ class Login extends Component {
                     onBlur={this.handleBlurPassphrase}
                     disabled={!this.areActionsAllowed}
                     autoFocus={true}/>
-                  <span
-                    className="login-passphrase-security-token"
-                    style={this.securityTokenStyle}>
+                  <a
+                    className={`password-view button-icon button button-toggle ${this.state.isObfuscated ? "" : "selected"}`}
+                    role="button"
+                    onClick={this.handleToggleObfuscate}>
+                    <Icon name="eye-open"/>
+                    <span className="visually-hidden">view</span>
+                  </a>
+                  <span className="security-token" style={this.securityTokenStyle}>
                     {this.securityTokenCode}
                   </span>
                 </div>
                 {this.state.hasBeenValidated &&
                 <>
                   {this.state.errors.emptyPassphrase &&
-                  <div className="empty-passphrase error-message">The passphrase should not be empty.</div>
+                  <div className="empty-passphrase error-message"><Trans>The passphrase should not be empty.</Trans></div>
                   }
                   {this.state.errors.invalidPassphrase &&
-                  <div className="invalid-passphrase error-message">The passphrase is invalid.</div>
+                  <div className="invalid-passphrase error-message"><Trans>The passphrase is invalid.</Trans></div>
                   }
                   {this.state.errors.invalidGpgKey &&
-                  <div className="invalid-gpg-key error-message">The private key is invalid.</div>
+                  <div className="invalid-gpg-key error-message"><Trans>The private key is invalid.</Trans></div>
                   }
                 </>
                 }
@@ -364,7 +391,7 @@ class Login extends Component {
                     onChange={this.handleToggleRememberMe}
                     disabled={!this.areActionsAllowed}/>
                   <label htmlFor="remember-me">
-                    Remember until signed out.
+                    <Trans>Remember until signed out.</Trans>
                   </label>
                 </div>
               }
@@ -372,16 +399,16 @@ class Login extends Component {
               <div className="form-actions">
                 <button
                   type="submit"
-                  className={`button primary big ${processingClassName}`}
+                  className={`button primary big full-width ${processingClassName}`}
                   role="button"
                   disabled={this.isProcessing}>
-                  Sign in
+                  <Trans>Sign in</Trans>
                 </button>
                 <Link
                   to={{pathname: `${this.trustedDomain}/users/recover`}}
                   target="_parent"
                   rel="noopener noreferrer">
-                  Or switch to another account.
+                  <Trans>Or switch to another account.</Trans>
                 </Link>
               </div>
             </form>
@@ -395,6 +422,7 @@ class Login extends Component {
 Login.contextType = AuthenticationContext;
 Login.propTypes = {
   canRememberMe: PropTypes.bool, // True if the remember me flag must be displayed
-  dialogContext: PropTypes.any // The dialog context
+  dialogContext: PropTypes.any, // The dialog context
+  t: PropTypes.func, // The translation function
 };
-export default withDialog(Login);
+export default withDialog(withTranslation('common')(Login));

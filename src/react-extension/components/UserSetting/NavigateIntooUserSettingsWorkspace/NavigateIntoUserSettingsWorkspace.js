@@ -17,6 +17,7 @@ import PropTypes from "prop-types";
 import {withRouter} from "react-router-dom";
 import AppContext from "../../../contexts/AppContext";
 import {withNavigationContext} from "../../../contexts/NavigationContext";
+import {Trans, withTranslation} from "react-i18next";
 
 /**
  * This component allows to navigate throught the differents sections of the user settings workspace
@@ -46,6 +47,14 @@ class NavigateIntoUserSettingsWorkspace extends React.Component {
   }
 
   /**
+   * Get the translate function
+   * @returns {function(...[*]=)}
+   */
+  get translate() {
+    return this.props.t;
+  }
+
+  /**
    * Render the component
    */
   render() {
@@ -59,7 +68,7 @@ class NavigateIntoUserSettingsWorkspace extends React.Component {
               <div className="main-cell-wrapper">
                 <div className="main-cell">
                   <a onClick={this.props.navigationContext.onGoToUserSettingsProfileRequested}>
-                    <span>Profile</span>
+                    <span><Trans>Profile</Trans></span>
                   </a>
                 </div>
               </div>
@@ -79,6 +88,30 @@ class NavigateIntoUserSettingsWorkspace extends React.Component {
             </div>
           </li>
           }
+          <li>
+            <div
+              className={`row ${isSelected('passphrase') ? 'selected' : ''}`}>
+              <div className="main-cell-wrapper">
+                <div className="main-cell">
+                  <a onClick={this.props.navigationContext.onGoToUserSettingsPassphraseRequested}>
+                    <span>Passphrase</span>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </li>
+          <li>
+            <div
+              className={`row ${isSelected('security-token') ? 'selected' : ''}`}>
+              <div className="main-cell-wrapper">
+                <div className="main-cell">
+                  <a onClick={this.props.navigationContext.onGoToUserSettingsSecurityTokenRequested}>
+                    <span>Security Token</span>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </li>
           {this.canIUseThemeCapability &&
           <li>
             <div
@@ -86,7 +119,7 @@ class NavigateIntoUserSettingsWorkspace extends React.Component {
               <div className="main-cell-wrapper">
                 <div className="main-cell">
                   <a onClick={this.props.navigationContext.onGoToUserSettingsThemeRequested}>
-                    <span>Theme</span>
+                    <span><Trans>Theme</Trans></span>
                   </a>
                 </div>
               </div>
@@ -100,7 +133,7 @@ class NavigateIntoUserSettingsWorkspace extends React.Component {
                 <div className="main-cell-wrapper">
                   <div className="main-cell">
                     <a onClick={this.props.navigationContext.onGoToUserSettingsMfaRequested}>
-                      <span>Multi Factor Authentication</span>
+                      <span><Trans>Multi Factor Authentication</Trans></span>
                     </a>
                   </div>
                 </div>
@@ -113,7 +146,7 @@ class NavigateIntoUserSettingsWorkspace extends React.Component {
               <div className="main-cell-wrapper">
                 <div className="main-cell">
                   <a onClick={this.props.navigationContext.onGoToUserSettingsKeysRequested}>
-                    <span>Keys inspector</span>
+                    <span><Trans>Keys inspector</Trans></span>
                   </a>
                 </div>
               </div>
@@ -129,7 +162,8 @@ NavigateIntoUserSettingsWorkspace.contextType = AppContext;
 NavigateIntoUserSettingsWorkspace.propTypes = {
   navigationContext: PropTypes.any, // The application navigation context
   history: PropTypes.object,
-  location: PropTypes.object
+  location: PropTypes.object,
+  t: PropTypes.func, // The translation function
 };
 
-export default withRouter(withNavigationContext(NavigateIntoUserSettingsWorkspace));
+export default withRouter(withNavigationContext(withTranslation('common')(NavigateIntoUserSettingsWorkspace)));

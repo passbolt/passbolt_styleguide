@@ -68,6 +68,93 @@
       height: 27em;
     }
   }
+
+  .profile-passphrase {
+    .password-management-bg {
+      background: transparent url('@{images}/illustrations/passphrase_intro.png') center center no-repeat;
+      background-size: contain;
+      height: 16em;
+    }
+    .input.checkbox {
+      margin-bottom: 1em;
+    }
+    .passphrase-help {
+      h3 {
+        margin: 0;
+        border-bottom: none;
+      }
+      margin-top: 2em;
+      padding: 1.5em;
+      background-color: @background-notice;
+    }
+
+    .password {
+      .clearfix();
+
+      input {
+        width: calc(100% - 16rem); // password field - show button
+      }
+
+      .input {
+        .message.error {
+          clear: both;
+        }
+      }
+
+      .password-view {
+        width: 2em;
+        height: 1.5em;
+        padding: .44rem .8rem .5rem .9rem;
+      }
+    }
+
+    .password-complexity {
+      .progress {
+        width: calc(100% - 12.6rem); // align with password field and show button
+      }
+    }
+
+    .password-hints {
+      margin:.5em 0 1em 0;
+
+      li {
+        font-size: 1rem;
+        line-height: 1.5rem;
+      }
+    }
+  }
+
+  .profile-choose-security-token {
+    .input-security-token {
+      .clearfix();
+      margin: 1em 0 1.5em 0;
+      label {
+        margin-bottom:.5em;
+      }
+      .input.text {
+        .rounded();
+        font-size: 2rem;
+        max-width: 5rem;
+        float: left;
+        text-align: center;
+        margin-right: 1em;
+      }
+      .circle-picker {
+        float:left;
+      }
+      .randomize-button-wrapper {
+        float:left;
+        text-align: center;
+        clear:both;
+        cursor: pointer;
+      }
+
+      .svg-icon svg{
+        height:.85em;
+        width:.85em;
+      }
+    }
+  }
 }
 
 /* hide icons if there is no space */

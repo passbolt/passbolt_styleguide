@@ -23,6 +23,7 @@ import PasswordDeleteDialog from "../PasswordDeleteDialog/PasswordDeleteDialog";
 import PasswordEditDialog from "../PasswordEditDialog/PasswordEditDialog";
 import ShareDialog from "../../Share/ShareDialog";
 import ExportResources from "../ExportResources/ExportResources";
+import {Trans, withTranslation} from "react-i18next";
 
 /**
  * This component allows the current user to add a new comment on a resource
@@ -165,7 +166,7 @@ class PasswordWorkspaceMenu extends React.Component {
     const baseUrl = this.context.userSettings.getTrustedDomain();
     const permalink = `${baseUrl}/app/passwords/view/${this.selectedResources[0].id}`;
     await this.context.port.request("passbolt.clipboard.copy", permalink);
-    this.displaySuccessNotification("The permalink has been copied to clipboard");
+    this.displaySuccessNotification(this.translate("The permalink has been copied to clipboard"));
   }
 
   /**
@@ -174,7 +175,7 @@ class PasswordWorkspaceMenu extends React.Component {
   async handleCopyUsernameClickEvent() {
     this.handleCloseMoreMenu();
     await this.context.port.request("passbolt.clipboard.copy", this.selectedResources[0].username);
-    this.displaySuccessNotification("The username has been copied to clipboard");
+    this.displaySuccessNotification(this.translate("The username has been copied to clipboard"));
   }
 
   /**
@@ -186,7 +187,7 @@ class PasswordWorkspaceMenu extends React.Component {
    */
   async copyPasswordToClipboard(plaintextDto) {
     if (!plaintextDto) {
-      throw new TypeError(__('The password is empty.'));
+      throw new TypeError(this.translate("The password is empty."));
     }
     if (typeof plaintextDto === 'string') {
       await this.context.port.request("passbolt.clipboard.copy", plaintextDto);
@@ -194,7 +195,7 @@ class PasswordWorkspaceMenu extends React.Component {
       if (Object.prototype.hasOwnProperty.call(plaintextDto, 'password')) {
         await this.context.port.request("passbolt.clipboard.copy", plaintextDto.password);
       } else {
-        throw new TypeError(__('The password field is not defined.'));
+        throw new TypeError(this.translate("The password field is not defined."));
       }
     }
   }
@@ -209,7 +210,7 @@ class PasswordWorkspaceMenu extends React.Component {
       const plaintextDto = await this.context.port.request("passbolt.secret.decrypt", this.selectedResources[0].id, {showProgress: true});
       await this.copyPasswordToClipboard(plaintextDto);
       this.props.resourceWorkspaceContext.onResourceCopied();
-      this.props.actionFeedbackContext.displaySuccess("The secret has been copied to clipboard");
+      this.props.actionFeedbackContext.displaySuccess(this.translate("The secret has been copied to clipboard"));
     } catch (error) {
       if (error.name !== "UserAbortsOperationError") {
         this.props.actionFeedbackContext.displayError(error.message);
@@ -344,6 +345,14 @@ class PasswordWorkspaceMenu extends React.Component {
   }
 
   /**
+   * Get the translate function
+   * @returns {function(...[*]=)}
+   */
+  get translate() {
+    return this.props.t;
+  }
+
+  /**
    * Render the component
    * @returns {JSX}
    */
@@ -356,21 +365,21 @@ class PasswordWorkspaceMenu extends React.Component {
               <a className={`button ready ${this.hasOneResourceSelected() ? "" : "disabled"}`}
                 onClick={this.handleCopySecretClickEvent}>
                 <Icon name="copy-to-clipboard"/>
-                <span>Copy</span>
+                <span><Trans>Copy</Trans></span>
               </a>
             </li>
             <li id="edit_action">
               <a className={`button ready ${this.hasOneResourceSelected() && this.canUpdate() ? "" : "disabled"}`}
                 onClick={this.handleEditClickEvent}>
                 <Icon name="edit"></Icon>
-                <span>Edit</span>
+                <span><Trans>Edit</Trans></span>
               </a>
             </li>
             <li id="share_action">
               <a className={`button ready ${this.hasResourceSelected() && this.canShare() ? "" : "disabled"}`}
                 onClick={this.handleShareClickEvent}>
                 <Icon name="share"/>
-                <span>Share</span>
+                <span><Trans>Share</Trans></span>
               </a>
             </li>
             <li id="export_action">
@@ -378,14 +387,14 @@ class PasswordWorkspaceMenu extends React.Component {
                 className={`button ready ${this.hasResourceSelected() && this.canExport() ? "" : "disabled"}`}
                 onClick={this.handleExportClickEvent}>
                 <Icon name="upload"/>
-                <span>Export</span>
+                <span><Trans>Export</Trans></span>
               </a>
             </li>
             <li>
               <div className="dropdown" ref={this.moreMenuRef}>
                 <a className={`button more ready ${this.hasMoreActionAllowed() ? "" : "disabled"}`}
                   onClick={this.handleMoreClickEvent}>
-                  <span>More</span>
+                  <span><Trans>More</Trans></span>
                   <Icon name="caret-down"/>
                 </a>
                 <ul className={`dropdown-content menu ready ${this.state.moreMenuOpen ? "visible" : ""}`}>
@@ -396,7 +405,7 @@ class PasswordWorkspaceMenu extends React.Component {
                           <a
                             className={`${this.canCopyUsername() ? "" : "disabled"}`}
                             onClick={this.handleCopyUsernameClickEvent}>
-                            <span>Copy username to clipboard</span>
+                            <span><Trans>Copy username to clipboard</Trans></span>
                           </a>
                         </div>
                       </div>
@@ -408,7 +417,7 @@ class PasswordWorkspaceMenu extends React.Component {
                         <div className="main-cell">
                           <a className={`${this.hasOneResourceSelected() ? "" : "disabled"}`}
                             onClick={this.handleCopySecretClickEvent}>
-                            <span>Copy password to clipboard</span>
+                            <span><Trans>Copy password to clipboard</Trans></span>
                           </a>
                         </div>
                       </div>
@@ -420,7 +429,7 @@ class PasswordWorkspaceMenu extends React.Component {
                         <div className="main-cell">
                           <a className={`${this.canUpdate() ? "" : "disabled"}`}
                             onClick={this.handleDeleteClickEvent}>
-                            <span>Delete</span>
+                            <span><Trans>Delete</Trans></span>
                           </a>
                         </div>
                       </div>
@@ -432,7 +441,7 @@ class PasswordWorkspaceMenu extends React.Component {
                         <div className="main-cell">
                           <a className={`${this.hasOneResourceSelected() ? "" : "disabled"}`}
                             onClick={this.handleCopyPermalinkClickEvent}>
-                            <span>Copy permalink to clipboard</span>
+                            <span><Trans>Copy permalink to clipboard</Trans></span>
                           </a>
                         </div>
                       </div>
@@ -446,10 +455,10 @@ class PasswordWorkspaceMenu extends React.Component {
         <div className="actions secondary">
           <ul className="ready">
             <li>
-              <a className={`button toggle info ${this.hasLockDetail() ? "selected" : ""}`}
+              <a className={`button button-toggle info ${this.hasLockDetail() ? "selected" : ""}`}
                 onClick={this.handleViewDetailClickEvent}>
                 <Icon name="info-circle"/>
-                <span className="visuallyhidden">View detail</span>
+                <span className="visuallyhidden"><Trans>View detail</Trans></span>
               </a>
             </li>
           </ul>
@@ -464,7 +473,8 @@ PasswordWorkspaceMenu.contextType = AppContext;
 PasswordWorkspaceMenu.propTypes = {
   actionFeedbackContext: PropTypes.any, // The action feedback context
   resourceWorkspaceContext: PropTypes.any, // the resource workspace context
-  dialogContext: PropTypes.any // the dialog context
+  dialogContext: PropTypes.any, // the dialog context
+  t: PropTypes.func, // The translation function
 };
 
-export default withDialog(withResourceWorkspace(withActionFeedback(PasswordWorkspaceMenu)));
+export default withDialog(withResourceWorkspace(withActionFeedback(withTranslation('common')(PasswordWorkspaceMenu))));

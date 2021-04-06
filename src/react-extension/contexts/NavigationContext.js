@@ -23,6 +23,14 @@ export const NavigationContext = React.createContext({
   // Administration
   onGoToAdministrationRequested: () => {
   }, // Whenever the users wants to navigate to the administration workspace
+  onGoToAdministrationMfaRequested: () => {
+  }, // Whenever the users wants to navigate to the administration workspace mfa
+  onGoToAdministrationUsersDirectoryRequested: () => {
+  }, // Whenever the users wants to navigate to the administration workspace users directory
+  onGoToAdministrationEmailNotificationsRequested: () => {
+  }, // Whenever the users wants to navigate to the administration workspace email notifications
+  onGoToAdministrationSubscriptionRequested: () => {
+  }, // Whenever the users wants to navigate to the administration workspace subscription
   // Passwords
   onGoToPasswordsRequested: () => {
   }, // Whenever the user wants to navigate to the passwords workspace
@@ -32,6 +40,10 @@ export const NavigationContext = React.createContext({
   // User settings
   onGoToUserSettingsProfileRequested: () => {
   }, // Whenever the user wants to navigate to the users settings workspace profile section.
+  onGoToUserSettingsPassphraseRequested: () => {
+  }, // Whenever the user wants to navigate to the users settings workspace passphrase section.
+  onGoToUserSettingsSecurityTokenRequested: () => {
+  }, // Whenever the user wants to navigate to the users settings workspace security token section.
   onGoToUserSettingsThemeRequested: () => {
   }, // Whenever the user wants to navigate to the users settings workspace theme section.
   onGoToUserSettingsMfaRequested: () => {
@@ -40,6 +52,8 @@ export const NavigationContext = React.createContext({
   }, // Whenever the user wants to navigate to the users settings workspace keys section.
   onGoToUserSettingsMobileRequested: () => {
   }, // Whenever the user wants to navigate to the users settings workspace mobile section.
+  onGoToNewTab: () => {
+  }, // Whenever the user want to navigate to a new url.
 });
 
 /**
@@ -60,14 +74,22 @@ class NavigationContextProvider extends React.Component {
    */
   get defaultState() {
     return {
+      // Common
+      onGoToNewTab: this.onGoToNewTab.bind(this), //
       // Administration
       onGoToAdministrationRequested: this.onGoToAdministrationRequested.bind(this), // Whenever the user wants to navigate to the administration workspace
+      onGoToAdministrationMfaRequested: this.onGoToAdministrationMfaRequested.bind(this), // Whenever the user wants to navigate to the administration workspace mfa
+      onGoToAdministrationUsersDirectoryRequested: this.onGoToAdministrationUsersDirectoryRequested.bind(this), // Whenever the user wants to navigate to the administration workspace users directory
+      onGoToAdministrationEmailNotificationsRequested: this.onGoToAdministrationEmailNotificationsRequested.bind(this), // Whenever the user wants to navigate to the administration workspace email notifications
+      onGoToAdministrationSubscriptionRequested: this.onGoToAdministrationSubscriptionRequested.bind(this), // Whenever the user wants to navigate to the administration workspace subscription
       // Passwords
       onGoToPasswordsRequested: this.onGoToPasswordsRequested.bind(this), // Whenever the user wants to navigate to the passwords workspace
       // Users
       onGoToUsersRequested: this.onGoToUsersRequested.bind(this), // Whenever the user wants to navigate to the users workspace
       // User settings
       onGoToUserSettingsProfileRequested: this.onGoToUserSettingsProfileRequested.bind(this), // Whenever the user wants to navigate to the users settings workspace profile section.
+      onGoToUserSettingsPassphraseRequested: this.onGoToUserSettingsPassphraseRequested.bind(this), // Whenever the user wants to navigate to the users settings workspace pasphrase section.
+      onGoToUserSettingsSecurityTokenRequested: this.onGoToUserSettingsSecurityTokenRequested.bind(this), // Whenever the user wants to navigate to the users settings workspace security token section.
       onGoToUserSettingsThemeRequested: this.onGoToUserSettingsThemeRequested.bind(this), // Whenever the user wants to navigate to the users settings workspace theme section.
       onGoToUserSettingsMfaRequested: this.onGoToUserSettingsMfaRequested.bind(this), // Whenever the user wants to navigate to the users settings workspace mfa section.
       onGoToUserSettingsKeysRequested: this.onGoToUserSettingsKeysRequested.bind(this), // Whenever the user wants to navigate to the users settings workspace keys section.
@@ -91,6 +113,14 @@ class NavigationContextProvider extends React.Component {
     }
   }
 
+  /**
+   * Open new tab.
+   * @param {string} url The url to go too
+   */
+  onGoToNewTab(url) {
+    window.open(url, '_blank', 'noopener,noreferrer');
+  }
+
   /*
    * =============================================================
    *  Administration navigation
@@ -109,6 +139,38 @@ class NavigationContextProvider extends React.Component {
       pathname = "/app/administration/users-directory";
     }
     await this.goTo("api", pathname);
+  }
+
+  /**
+   * Whenever the user wants to navigate to the administration workspace mfa.
+   * @returns {Promise<void>}
+   */
+  async onGoToAdministrationMfaRequested() {
+    await this.goTo("api", "/app/administration/mfa");
+  }
+
+  /**
+   * Whenever the user wants to navigate to the administration workspace users directory.
+   * @returns {Promise<void>}
+   */
+  async onGoToAdministrationUsersDirectoryRequested() {
+    await this.goTo("api", "/app/administration/users-directory");
+  }
+
+  /**
+   * Whenever the user wants to navigate to the administration workspace email notifications.
+   * @returns {Promise<void>}
+   */
+  async onGoToAdministrationEmailNotificationsRequested() {
+    await this.goTo("api", "/app/administration/email-notification");
+  }
+
+  /**
+   * Whenever the user wants to navigate to the administration workspace subscription.
+   * @returns {Promise<void>}
+   */
+  async onGoToAdministrationSubscriptionRequested() {
+    await this.goTo("browser-extension", "/app/administration/subscription");
   }
 
   /**
@@ -169,6 +231,22 @@ class NavigationContextProvider extends React.Component {
    */
   async onGoToUserSettingsProfileRequested() {
     await this.goTo("browser-extension", "/app/settings/profile");
+  }
+
+  /**
+   * Whenever the user wants to navigate to the users settings workspace passphrase section.
+   * @returns {Promise<void>}
+   */
+  async onGoToUserSettingsPassphraseRequested() {
+    await this.goTo("browser-extension", "/app/settings/passphrase");
+  }
+
+  /**
+   * Whenever the user wants to navigate to the users settings workspace security token section.
+   * @returns {Promise<void>}
+   */
+  async onGoToUserSettingsSecurityTokenRequested() {
+    await this.goTo("browser-extension", "/app/settings/security-token");
   }
 
   /**

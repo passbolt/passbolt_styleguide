@@ -18,6 +18,8 @@ import {AuthenticationContext} from "../../../contexts/AuthenticationContext";
 import ErrorDialog from "../../Dialog/ErrorDialog/ErrorDialog";
 import {withDialog} from "../../../../react/contexts/Common/DialogContext";
 import PropTypes from "prop-types";
+import SecretComplexity from "../../../lib/Secret/SecretComplexity";
+import {Trans, withTranslation} from "react-i18next";
 
 class ChooseSecurityToken extends Component {
   /**
@@ -225,12 +227,7 @@ class ChooseSecurityToken extends Component {
    * Randomize a token code
    */
   async randomizeCode() {
-    let code = '';
-    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    const charactersLength = characters.length;
-    for (let i = 0; i < 3; i++) {
-      code += characters.charAt(Math.floor(Math.random() * charactersLength));
-    }
+    const code = SecretComplexity.generate(3, ["uppercase"]);
     await this.selectCode(code);
     if (this.state.hasBeenValidated) {
       await this.validate();
@@ -243,11 +240,12 @@ class ChooseSecurityToken extends Component {
   async randomizeColor() {
     let color;
     do {
+      const number = parseInt(SecretComplexity.generate(3, ["digit"])) % this.defaultColors.length;
       color = {
-        hex: this.defaultColors[Math.floor(Math.random() * this.defaultColors.length)]
+        hex: this.defaultColors[number]
       };
-      await this.selectColor(color);
-    } while (color.hex !== this.state.background);
+    } while (color.hex === this.state.background);
+    await this.selectColor(color);
   }
 
   /**
@@ -289,16 +287,24 @@ class ChooseSecurityToken extends Component {
   }
 
   /**
+   * Get the translate function
+   * @returns {function(...[*]=)}
+   */
+  get translate() {
+    return this.props.t;
+  }
+
+  /**
    * Render the component
    */
   render() {
     const processingClassName = this.isProcessing ? 'processing' : '';
     return (
       <div className="choose-security-token">
-        <h1>Pick a color and enter three characters.</h1>
+        <h1><Trans>Pick a color and enter three characters.</Trans></h1>
         <form onSubmit={this.handleSubmit}>
           <div className={`input-security-token input required ${this.hasErrors ? "error" : ""}`}>
-            <label htmlFor="security-token-text">Security token</label>
+            <label htmlFor="security-token-text"><Trans>Security token</Trans></label>
             <input
               id="security-token-text"
               ref={this.tokenCodeInputRef}
@@ -325,34 +331,34 @@ class ChooseSecurityToken extends Component {
                 className="randomize-button"
                 role="button"
                 onClick={this.handleRandomize}>
-                <Icon name="magic-wand"/> Randomize
+                <Icon name="magic-wand"/> <Trans>Randomize</Trans>
               </a>
             </div>
           </div>
           {this.state.hasBeenValidated &&
           <div className="input text">
             {this.state.errors.emptyCode &&
-            <div className="empty-code error-message">The security token code should not be empty.</div>
+            <div className="empty-code error-message"><Trans>The security token code should not be empty.</Trans></div>
             }
             {this.state.errors.lengthCode &&
-            <div className="not-good-length-code error-message">The security token code should be 3 characters long.</div>
+            <div className="not-good-length-code error-message"><Trans>The security token code should be 3 characters long.</Trans></div>
             }
           </div>
           }
           <p>
-            This security token will be displayed when your passphrase is requested,
-            so you can quickly verify the form is coming from passbolt.
-            This will help protect you from <a href="https://en.wikipedia.org/wiki/Phishing" target="_blank" rel="noopener noreferrer">
-              phishing attacks
-            </a>.
+            <Trans>This security token will be displayed when your passphrase is requested, so you can quickly verify the form is coming from passbolt.</Trans>
+            <Trans>
+              This will help protect you from <a href="https://en.wikipedia.org/wiki/Phishing" target="_blank" rel="noopener noreferrer">
+                phishing attacks</a>.
+            </Trans>
           </p>
           <div className="form-actions">
             <button
               type="submit"
-              className={`button primary big ${processingClassName}`}
+              className={`button primary big full-width ${processingClassName}`}
               role="button"
               disabled={this.isProcessing}>
-              Next
+              <Trans>Next</Trans>
             </button>
           </div>
         </form>
@@ -363,7 +369,8 @@ class ChooseSecurityToken extends Component {
 
 ChooseSecurityToken.contextType = AuthenticationContext;
 ChooseSecurityToken.propTypes = {
-  dialogContext: PropTypes.any // The dialog context
+  dialogContext: PropTypes.any, // The dialog context
+  t: PropTypes.func, // The translation function
 };
 
-export default withDialog(ChooseSecurityToken);
+export default withDialog(withTranslation('common')(ChooseSecurityToken));

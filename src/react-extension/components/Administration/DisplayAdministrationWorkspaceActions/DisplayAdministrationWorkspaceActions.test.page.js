@@ -16,6 +16,7 @@ import {fireEvent, render, waitFor} from "@testing-library/react";
 import AppContext from "../../../contexts/AppContext";
 import React from "react";
 import DisplayUserWorkspaceActions from "./DisplayAdministrationWorkspaceActions";
+import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 
 /**
  * The DisplayUserWorkspaceActions component represented as a page
@@ -28,9 +29,11 @@ export default class DisplayUserWorkspaceActionsPage {
    */
   constructor(appContext, props) {
     this._page = render(
-      <AppContext.Provider value={appContext}>
-        <DisplayUserWorkspaceActions {...props}/>
-      </AppContext.Provider>
+      <MockTranslationProvider>
+        <AppContext.Provider value={appContext}>
+          <DisplayUserWorkspaceActions {...props}/>
+        </AppContext.Provider>
+      </MockTranslationProvider>
     );
   }
 
@@ -77,6 +80,13 @@ export default class DisplayUserWorkspaceActionsPage {
   }
 
   /**
+   * Returns the edit subscription key button
+   */
+  get editSubscriptionKeyButton() {
+    return this._page.container.querySelector('li a');
+  }
+
+  /**
    * Returns true if the page object exists in the container
    */
   exists() {
@@ -109,6 +119,11 @@ export default class DisplayUserWorkspaceActionsPage {
   /** Click on the synchronize element */
   async synchronize() {
     await this.click(this.synchronizeButton);
+  }
+
+  /** Click on the edit subscription key element */
+  async editSubscriptionKey() {
+    await this.click(this.editSubscriptionKeyButton);
   }
 }
 

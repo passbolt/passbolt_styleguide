@@ -25,6 +25,8 @@ import UserAvatar from "../../../../react/components/Common/Avatar/UserAvatar";
 import Icon from "../../../../react/components/Common/Icons/Icon";
 import TooltipHtml from "../../../../react/components/Common/Tooltip/TooltipHtml";
 import Autocomplete from "../../../../react/components/Common/Inputs/Autocomplete/Autocomplete";
+import {withRouter} from "react-router-dom";
+import {Trans, withTranslation} from "react-i18next";
 
 /**
  * This component allows to edit an user group
@@ -563,8 +565,8 @@ class EditUserGroup extends Component {
    * @returns {Promise<void>}
    */
   async onEditSuccess() {
-    await this.props.actionFeedbackContext.displaySuccess("The group has been updated successfully");
-    this.props.onClose();
+    await this.props.actionFeedbackContext.displaySuccess(this.translate("The group has been updated successfully"));
+    this.close();
   }
 
   /**
@@ -593,7 +595,7 @@ class EditUserGroup extends Component {
    */
   onError(error) {
     const errorDialogProps = {
-      title: "There was an unexpected error...",
+      title: this.translate("There was an unexpected error..."),
       message: error.message
     };
     this.context.setContext({errorDialogProps});
@@ -604,6 +606,11 @@ class EditUserGroup extends Component {
    * Close the dialog
    */
   close() {
+    // Case of groups/edit url inputting
+    const isEditPath = this.props.location.pathname.includes('groups/edit');
+    if (isEditPath) {
+      this.props.history.push(this.props.location.pathname.replace("edit", "view"));
+    }
     this.props.onClose();
   }
 
@@ -650,6 +657,14 @@ class EditUserGroup extends Component {
   }
 
   /**
+   * Get the translate function
+   * @returns {function(...[*]=)}
+   */
+  get translate() {
+    return this.props.t;
+  }
+
+  /**
    * Render the component
    */
   render() {
@@ -660,7 +675,7 @@ class EditUserGroup extends Component {
         onClose={this.handleClose}
         disabled={!this.areActionsAllowed}>
 
-        {!this.isLoading &&
+        {!this.isLoading &&  this.context.loggedInUser &&
         <form
           className="group-form"
           onSubmit={this.handleSubmit}
@@ -670,30 +685,30 @@ class EditUserGroup extends Component {
 
             <div className="form-content">
               <div className={`input text required ${this.hasErrors("name") ? "error" : ""}`}>
-                <label htmlFor="js_field_name">Group name</label>
+                <label htmlFor="js_field_name"><Trans>Group name</Trans></label>
                 <input
                   id="group-name-input"
                   ref={this.references.name}
                   value={this.state.groupToEdit.name}
                   maxLength="50"
                   type="text"
-                  placeholder="group name"
+                  placeholder={this.translate("group name")}
                   onChange={this.handleNameChange}
                   disabled={!this.areActionsAllowed}/>
                 {this.hasErrors("name", "empty") &&
                 <div className="name error message">
-                  A name is required
+                  <Trans>A name is required.</Trans>
                 </div>
                 }
                 {this.hasErrors("name", "alreadyExists") &&
                 <div className="name error message">
-                  The group name test already exists.
+                  <Trans>The group name already exists.</Trans>
                 </div>
                 }
               </div>
 
               <div className="input required">
-                <label>Group members</label>
+                <label><Trans>Group members</Trans></label>
               </div>
             </div>
 
@@ -717,10 +732,10 @@ class EditUserGroup extends Component {
                         </TooltipHtml>
                       </div>
                       <div className="permission_changes">
-                        {this.isMemberAdded(groupUser) && <span>Will be added</span>}
+                        {this.isMemberAdded(groupUser) && <span><Trans>Will be added</Trans></span>}
                         {this.isMemberChanged(groupUser) && !this.isMemberAdded(groupUser) &&
-                        <span>Will be updated</span>}
-                        {!this.isMemberChanged(groupUser) && !this.isMemberAdded(groupUser) && <span>Unchanged</span>}
+                        <span><Trans>Will be updated</Trans></span>}
+                        {!this.isMemberChanged(groupUser) && !this.isMemberAdded(groupUser) && <span><Trans>Unchanged</Trans></span>}
 
                       </div>
                     </div>
@@ -731,8 +746,8 @@ class EditUserGroup extends Component {
                         value={groupUser.is_admin}
                         onChange={event => this.handleMemberRoleChange(event, groupUser)}
                         disabled={!this.areActionsAllowed}>
-                        <option value={false}>Member</option>
-                        <option value={true}>Group manager</option>
+                        <option value={false}><Trans>Member</Trans></option>
+                        <option value={true}><Trans>Group manager</Trans></option>
                       </select>
                     </div>
 
@@ -751,22 +766,22 @@ class EditUserGroup extends Component {
               </ul>
               {!this.hasMembers &&
               <div className="message warning">
-                <span>The group is empty, please add a group manager.</span>
+                <span><Trans>The group is empty, please add a group manager.</Trans></span>
               </div>
               }
               {this.hasMembers && !this.hasManager &&
               <div className="message error at-least-one-manager">
-                <span>Please make sure there is at least one group manager.</span>
+                <span><Trans>Please make sure there is at least one group manager.</Trans></span>
               </div>
               }
               {!this.isManager &&
               <div className="message warning feedback cannot-add-user">
-                <span>Only the group manager can add new people to a group.</span>
+                <span><Trans>Only the group manager can add new people to a group.</Trans></span>
               </div>
               }
               {this.hasMembersChanges && this.hasManager &&
               <div className="message warning feedback">
-                <span>You need to click save for the changes to take place.</span>
+                <span><Trans>You need to click save for the changes to take place.</Trans></span>
               </div>
               }
             </div>
@@ -777,8 +792,8 @@ class EditUserGroup extends Component {
             <Autocomplete
               id="user-name-input"
               name="name"
-              label="Add people"
-              placeholder="Start typing a person name"
+              label={this.translate("Add people")}
+              placeholder={this.translate("Start typing a person name")}
               searchCallback={this.fetchAutocompleteItems}
               onSelect={this.handleAutocompleteSelect}
               onOpen={this.handleAutocompleteOpen}
@@ -790,7 +805,7 @@ class EditUserGroup extends Component {
 
           <div className="submit-wrapper clearfix">
             <FormSubmitButton
-              value="Save"
+              value={this.translate("Save")}
               disabled={this.hasSubmitDisabled}
               processing={this.isProcessing}/>
             <FormCancelButton
@@ -812,7 +827,10 @@ EditUserGroup.propTypes = {
   actionFeedbackContext: PropTypes.any, // The action feedback context
   onClose: PropTypes.func,
   dialogContext: PropTypes.any, // The dialog context
-  userWorkspaceContext: PropTypes.object // The user workspace context
+  location: PropTypes.object, // Route location
+  history: PropTypes.object, // Router history
+  userWorkspaceContext: PropTypes.object, // The user workspace context
+  t: PropTypes.func, // The translation function
 };
 
-export default withUserWorkspace(withActionFeedback(withDialog(EditUserGroup)));
+export default withRouter(withUserWorkspace(withActionFeedback(withDialog(withTranslation('common')(EditUserGroup)))));

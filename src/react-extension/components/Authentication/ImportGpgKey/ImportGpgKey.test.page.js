@@ -2,6 +2,7 @@ import {fireEvent, render, waitFor} from "@testing-library/react";
 import React from "react";
 import AuthenticationContextProvider from "../../../contexts/AuthenticationContext";
 import ImportGpgKey from "./ImportGpgKey";
+import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 
 /**
  * The CreateGpgKeyPage component represented as a page
@@ -14,9 +15,11 @@ export default class ImportGpgKeyPage {
    */
   constructor(context, props) {
     this._page = render(
-      <AuthenticationContextProvider value={context}>
-        <ImportGpgKey {...props}/>
-      </AuthenticationContextProvider>
+      <MockTranslationProvider>
+        <AuthenticationContextProvider value={context}>
+          <ImportGpgKey {...props}/>
+        </AuthenticationContextProvider>
+      </MockTranslationProvider>
     );
   }
 

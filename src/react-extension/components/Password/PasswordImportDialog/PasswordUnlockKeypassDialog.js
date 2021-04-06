@@ -24,6 +24,7 @@ import Icon from "../../../../react/components/Common/Icons/Icon";
 import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 import PasswordImportResultDialog from "./PasswordImportResultDialog";
 import ErrorDialog from "../../Dialog/ErrorDialog/ErrorDialog";
+import {Trans, withTranslation} from "react-i18next";
 
 /**
  * This component is the second step of the import dialog when the file to import is KDB(X) file
@@ -211,7 +212,7 @@ class PasswordUnlockKeypassDialog extends Component {
     } else {
       // If an unexpected error occurred.
       const errorDialogProps = {
-        title: "There was an unexpected error...",
+        title: this.translate("There was an unexpected error..."),
         message: error.message
       };
       this.context.setContext({errorDialogProps});
@@ -244,6 +245,14 @@ class PasswordUnlockKeypassDialog extends Component {
   }
 
   /**
+   * Get the translate function
+   * @returns {function(...[*]=)}
+   */
+  get translate() {
+    return this.props.t;
+  }
+
+  /**
    * Render the component
    */
   render() {
@@ -251,7 +260,7 @@ class PasswordUnlockKeypassDialog extends Component {
     const isInvalidPasswordOrKeyFile = errors && errors.invalidPasswordOrKeyfile;
     return (
       <DialogWrapper
-        title="Enter the password and/or key file"
+        title={this.translate("Enter the password and/or key file")}
         className="import-password-dialog"
         disabled={this.hasAllInputDisabled()}
         onClose={this.handleCancel}>
@@ -260,13 +269,13 @@ class PasswordUnlockKeypassDialog extends Component {
           <div className="form-content">
 
             <div className="input-password-wrapper">
-              <label htmlFor="import-password-dialog-password">Keepass password</label>
+              <label htmlFor="import-password-dialog-password"><Trans>Keepass password</Trans></label>
               <div className="input password">
                 <input
                   id="import-password-dialog-password"
                   type={this.state.showPassword ? "text" : "password"}
                   disabled={this.hasAllInputDisabled()}
-                  placeholder="Passphrase"
+                  placeholder={this.translate('Passphrase')}
                   ref={this.passwordInputRef}/>
               </div>
               <ul className="actions inline">
@@ -287,30 +296,30 @@ class PasswordUnlockKeypassDialog extends Component {
                 ref={this.fileUploaderRef}
                 onChange={this.handleFileSelected}/>
               <div className="input text">
-                <label>Keepass key file (optional)</label>
+                <label><Trans>Keepass key file (optional)</Trans></label>
                 <input
                   type="text"
-                  placeholder="No key file selected"
+                  placeholder={this.translate('No key file selected')}
                   disabled
                   value={this.selectedFilename}/>
                 <a
                   className={`button primary ${this.hasAllInputDisabled() ? "disabled" : ""}`}
                   onClick={this.handleSelectFile}>
-                  <Icon name="upload-a"/> Choose a file
+                  <Icon name="upload-a"/> <Trans>Choose a file</Trans>
                 </a>
               </div>
             </div>
 
             {isInvalidPasswordOrKeyFile &&
             <div className="message ready error">
-              Cannot decrypt the file, invalid credentials.
+              <Trans>Cannot decrypt the file, invalid credentials.</Trans>
             </div>
             }
           </div>
 
           <div className="submit-wrapper clearfix">
             <FormSubmitButton
-              value="Continue import"
+              value={this.translate("Continue import")}
               disabled={this.hasAllInputDisabled()}
               processing={this.state.processing}/>
             <FormCancelButton
@@ -329,7 +338,8 @@ PasswordUnlockKeypassDialog.propTypes = {
   onClose: PropTypes.func,
   actionFeedbackContext: PropTypes.any, // The action feedback context
   dialogContext: PropTypes.any, // The dialog context
-  resourceWorkspaceContext: PropTypes.any // The resource workspace context
+  resourceWorkspaceContext: PropTypes.any, // The resource workspace context
+  t: PropTypes.func, // The translation function
 };
 
-export default withResourceWorkspace(withActionFeedback(withDialog(PasswordUnlockKeypassDialog)));
+export default  withResourceWorkspace(withActionFeedback(withDialog(withTranslation('common')(PasswordUnlockKeypassDialog))));

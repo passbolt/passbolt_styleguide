@@ -19,6 +19,7 @@ import ManageDialogs from "../../../../react/components/Common/Dialog/ManageDial
 import DialogContextProvider from "../../../../react/contexts/Common/DialogContext";
 import AppContext from "../../../contexts/AppContext";
 import DeleteGroupDialog from "./DeleteGroupDialog";
+import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 
 /**
  * The PasswordSidebarCommentSection component represented as a page
@@ -31,12 +32,14 @@ export default class DeleteGroupDialogTestPage {
    */
   constructor(appContext, props) {
     this._page = render(
-      <AppContext.Provider value={appContext}>
-        <DialogContextProvider>
-          <ManageDialogs/>
-          <DeleteGroupDialog {...props}/>
-        </DialogContextProvider>
-      </AppContext.Provider>
+      <MockTranslationProvider>
+        <AppContext.Provider value={appContext}>
+          <DialogContextProvider>
+            <ManageDialogs/>
+            <DeleteGroupDialog {...props}/>
+          </DialogContextProvider>
+        </AppContext.Provider>
+      </MockTranslationProvider>
     );
     this.setupPageObjects();
   }

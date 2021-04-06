@@ -16,10 +16,12 @@
 import * as React from "react";
 import PropTypes from "prop-types";
 import {withRouter} from "react-router-dom";
-import moment from "moment";
 import AppContext from "./AppContext";
 import {withLoading} from "../../react/contexts/Common/LoadingContext";
 import {withActionFeedback} from "./ActionFeedbackContext";
+import EditUserGroup from "../components/User/EditUserGroup/EditUserGroup";
+import {withDialog} from "../../react/contexts/Common/DialogContext";
+import {DateTime} from "luxon";
 
 /**
  * Context related to users ( filter, current selections, etc.)
@@ -132,11 +134,10 @@ class UserWorkspaceContextProvider extends React.Component {
   async handleFilterChange(previousFilter) {
     const hasFilterChanged = previousFilter !== this.state.filter;
     if (hasFilterChanged) {
-      this.populate();
-
       // Avoid a side-effect whenever one inputs a specific user url (it unselect the user otherwise )
       const isNotNonePreviousFilter = previousFilter.type !== UserWorkspaceFilterTypes.NONE;
       if (isNotNonePreviousFilter) {
+        this.populate();
         await this.unselectAll();
       }
     }
@@ -147,15 +148,11 @@ class UserWorkspaceContextProvider extends React.Component {
    */
   async handleUsersChange() {
     const hasUsersChanged = this.context.users && this.context.users !== this.users;
-    const areUsersFirstLoad = this.users === null;
     if (hasUsersChanged) {
       this.users = this.context.users;
       await this.search(this.state.filter);
       await this.updateDetails();
       await this.unselectUnknownUsers();
-      if (!areUsersFirstLoad) {
-        await this.redirectAfterSelection();
-      }
     }
   }
 
@@ -192,11 +189,18 @@ class UserWorkspaceContextProvider extends React.Component {
     const hasUsersAndGroups = this.users !== null && this.groups !== null;
     if (hasUsersAndGroups) {
       const groupId = this.props.match.params.selectedGroupId;
-      if (groupId) {
+      if (groupId && this.context.groups) {
         const group = this.context.groups.find(group => group.id === groupId);
         if (group) { // Known group
           await this.search({type: UserWorkspaceFilterTypes.GROUP, payload: {group}});
           await this.detailGroup(group);
+
+          // Case of edit path
+          const isEditRoute = this.props.location.pathname.includes('edit');
+          if (isEditRoute) {
+            await this.updateGroupToEdit(group);
+            this.props.dialogContext.open(EditUserGroup);
+          }
         } else { // Unknown group
           this.handleUnknownGroup();
         }
@@ -406,7 +410,7 @@ class UserWorkspaceContextProvider extends React.Component {
    * @param filter A recently modified filter
    */
   async searchByRecentlyModified(filter) {
-    const recentlyModifiedSorter = (user1, user2) => moment(user2.modified).diff(moment(user1.modified));
+    const recentlyModifiedSorter = (user1, user2) => DateTime.fromISO(user2.modified) < DateTime.fromISO(user1.modified) ? -1 : 1;
     const filteredUsers = this.users.sort(recentlyModifiedSorter);
     await this.setState({filter, filteredUsers});
   }
@@ -527,7 +531,7 @@ class UserWorkspaceContextProvider extends React.Component {
     const keySorter = (key, sorter) => baseSorter((s1, s2) => sorter(s1[key], s2[key]));
     const plainObjectSorter = sorter => baseSorter(sorter);
 
-    const dateSorter = (d1, d2) => !d1 ? -1 : (!d2 ? 1 : moment(d1).diff(moment(d2)));
+    const dateSorter = (d1, d2) => !d1 ? -1 : (!d2 ? 1 : DateTime.fromISO(d1) < DateTime.fromISO(d2) ? -1 : 1);
     const stringSorter = (s1, s2) => s1.localeCompare(s2);
     const mfaSorter = (u1, u2) => (u2.is_mfa_enabled === u1.is_mfa_enabled) ? 0 : u2.is_mfa_enabled ? -1 : 1;
     const getUserFullName = user => `${user.profile.first_name} ${user.profile.last_name}`;
@@ -656,10 +660,11 @@ UserWorkspaceContextProvider.propTypes = {
   match: PropTypes.object, // The router match helper
   history: PropTypes.object, // The router history
   actionFeedbackContext: PropTypes.object, // The action feedback context
-  loadingContext: PropTypes.object // The loading context
+  loadingContext: PropTypes.object, // The loading context
+  dialogContext: PropTypes.any // The dialog context
 };
 
-export default withRouter(withActionFeedback(withLoading(UserWorkspaceContextProvider)));
+export default withRouter(withDialog(withActionFeedback(withLoading(UserWorkspaceContextProvider))));
 
 /**
  * User Workspace Context Consumer HOC

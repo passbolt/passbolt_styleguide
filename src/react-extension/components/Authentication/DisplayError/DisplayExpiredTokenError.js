@@ -14,8 +14,17 @@
 import React, {Component} from "react";
 import {withAppContext} from "../../../contexts/AppContext";
 import PropTypes from "prop-types";
+import {Trans, withTranslation} from "react-i18next";
 
 class DisplayExpiredTokenError extends Component {
+  /**
+   * Get the translate function
+   * @returns {function(...[*]=)}
+   */
+  get translate() {
+    return this.props.t;
+  }
+
   /**
    * Render the component
    * @returns {JSX}
@@ -23,10 +32,10 @@ class DisplayExpiredTokenError extends Component {
   render() {
     return (
       <div className="setup-error">
-        <h1>The invitation is expired.</h1>
-        <p>You can request another invitation email by clicking on the button below.</p>
+        <h1><Trans>The invitation is expired.</Trans></h1>
+        <p><Trans>You can request another invitation email by clicking on the button below.</Trans></p>
         <div className="form-actions">
-          <a href={`${this.props.context.trustedDomain}/users/recover`} className="button primary big" role="button">Request invitation</a>
+          <a href={`${this.props.context.trustedDomain}/users/recover`} className="button primary big full-width" role="button"><Trans>Request invitation</Trans></a>
         </div>
       </div>
     );
@@ -35,5 +44,6 @@ class DisplayExpiredTokenError extends Component {
 
 DisplayExpiredTokenError.propTypes = {
   context: PropTypes.any, // The application context
+  t: PropTypes.func, // The translation function
 };
-export default withAppContext(DisplayExpiredTokenError);
+export default withAppContext(withTranslation('common')(DisplayExpiredTokenError));

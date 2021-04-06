@@ -15,6 +15,7 @@ import {fireEvent, render, waitFor} from "@testing-library/react";
 import AppContext from "../../../contexts/AppContext";
 import React from "react";
 import DisplaySimulateSynchronizeUserDirectoryAdministrationDialog from "./DisplaySimulateSynchronizeUserDirectoryAdministrationDialog";
+import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 
 /**
  * The DisplaySimulateSynchronizeUserDirectoryAdministrationDialog component represented as a page
@@ -27,9 +28,11 @@ export default class DisplaySimulateSynchronizeUserDirectoryAdministrationDialog
    */
   constructor(appContext, props) {
     this._page = render(
-      <AppContext.Provider value={appContext}>
-        <DisplaySimulateSynchronizeUserDirectoryAdministrationDialog {...props}/>
-      </AppContext.Provider>
+      <MockTranslationProvider>
+        <AppContext.Provider value={appContext}>
+          <DisplaySimulateSynchronizeUserDirectoryAdministrationDialog {...props}/>
+        </AppContext.Provider>
+      </MockTranslationProvider>
     );
     this.setupPageObjects();
   }

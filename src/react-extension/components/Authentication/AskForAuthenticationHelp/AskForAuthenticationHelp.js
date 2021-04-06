@@ -15,6 +15,7 @@ import React, {Component} from "react";
 import PropTypes from "prop-types";
 import {withAppContext} from "../../../contexts/AppContext";
 import {AuthenticationContext, AuthenticationContextProcess} from "../../../contexts/AuthenticationContext";
+import {Trans, withTranslation} from "react-i18next";
 
 /**
  * This component propose to help the use who lost his gpg key or passphrase
@@ -48,28 +49,35 @@ class AskForAuthenticationHelp extends Component {
   }
 
   /**
+   * Get the translate function
+   * @returns {function(...[*]=)}
+   */
+  get translate() {
+    return this.props.t;
+  }
+
+  /**
    * Render the component
    * @returns {JSX.Element}
    */
   render() {
     return (
       <div className="ask-for-authentication-help">
-        <h1>Sorry... maybe an administrator can help?</h1>
+        <h1><Trans>Sorry... maybe an administrator can help?</Trans></h1>
         <p>
-          Both the private key and passphrase are required to perform an account recovery. If you do not access, you can request
-          a new account to the administrator.
+          <Trans>Both the private key and passphrase are required to perform an account recovery.</Trans> <Trans>If you do not access, you can request a new account to the administrator.</Trans>
         </p>
         <div className="form-actions">
           <a
             href={`${this.props.context.trustedDomain}/users/recover`}
-            className="button primary big"
+            className="button primary big full-width"
             role="button"
             target="_parent"
             rel="noopener noreferrer">
-            Request new account
+            <Trans>Request new account</Trans>
           </a>
           <a onClick={this.onGoToImportGpgKeyRequested}>
-            I want to try again.
+            <Trans>I want to try again.</Trans>
           </a>
         </div>
       </div>
@@ -81,6 +89,7 @@ AskForAuthenticationHelp.contextType = AuthenticationContext;
 
 AskForAuthenticationHelp.propTypes = {
   context: PropTypes.object, // The application context
+  t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(AskForAuthenticationHelp);
+export default withAppContext(withTranslation('common')(AskForAuthenticationHelp));

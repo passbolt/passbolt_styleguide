@@ -1,5 +1,9 @@
 .quickaccess {
     .passphrase {
+        input[type=password] {
+            box-sizing: border-box;
+            width: calc(100% - 4.5rem); // password field - token
+        }
         .form-container {
             padding:0 1.8rem 0 1.8rem;
         }
@@ -9,5 +13,19 @@
         .too-many-attempts-error {
             margin:.8rem 3rem .8rem 1.6rem;
         }
+    }
+
+    .security-token {
+      width: 4.5rem;
+      font-size: 1.4rem;
+      margin-top: -.2rem;
+      padding: .4rem .8rem;
+      text-align: center;
+      display: inline-block;
+      margin-left: -.4rem;
+      border: 1px solid @border-input-light;
+      line-height: 2.4rem;
+      vertical-align: middle;
+      box-sizing: border-box;
     }
 }

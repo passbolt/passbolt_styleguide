@@ -19,6 +19,7 @@ import OrchestrateApiTriage from "./components/AuthenticationLogin/OrchestrateAp
 import {ApiClient} from "./lib/apiClient/apiClient";
 import SiteSettings from "./lib/Settings/SiteSettings";
 import Footer from "./components/Footer/Footer";
+import TranslationProvider from "./components/Internationalisation/TranslationProvider";
 
 /**
  * The triage application served by the API.
@@ -90,7 +91,7 @@ class ApiTriage extends Component {
     if (!cookieArray) {
       return undefined;
     }
-    const csrfCookie = cookieArray.find(row => row.startsWith('csrfToken'))
+    const csrfCookie = cookieArray.find(row => row.startsWith('csrfToken'));
     if (!csrfCookie) {
       return undefined;
     }
@@ -121,21 +122,23 @@ class ApiTriage extends Component {
    */
   render() {
     return (
-      <AppContext.Provider value={this.state}>
-        <div id="container" className="container page login">
-          <div className="content">
-            <div className="header">
-              <div className="logo"><span className="visually-hidden">Passbolt</span></div>
-            </div>
-            <div className="login-form">
-              <ApiTriageContextProvider>
-                <OrchestrateApiTriage/>
-              </ApiTriageContextProvider>
+      <TranslationProvider loadingPath={`${this.state.trustedDomain}/locales/{{lng}}/{{ns}}.json`}>
+        <AppContext.Provider value={this.state}>
+          <div id="container" className="container page login">
+            <div className="content">
+              <div className="header">
+                <div className="logo"><span className="visually-hidden">Passbolt</span></div>
+              </div>
+              <div className="login-form">
+                <ApiTriageContextProvider>
+                  <OrchestrateApiTriage/>
+                </ApiTriageContextProvider>
+              </div>
             </div>
           </div>
-        </div>
-        <Footer siteSettings={this.state.siteSettings}/>
-      </AppContext.Provider>
+          <Footer/>
+        </AppContext.Provider>
+      </TranslationProvider>
     );
   }
 }

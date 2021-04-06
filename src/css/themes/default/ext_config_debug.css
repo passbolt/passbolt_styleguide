@@ -3482,7 +3482,8 @@ input[type=submit].button.processing {
   border-radius: 5px;
 }
 /* toggle selected */
-.toggle.button.selected {
+.toggle.button.selected,
+.button-toggle.button.selected {
   background: #EEE;
   box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.2);
   border: 1px solid #BBB;
@@ -3598,7 +3599,6 @@ textarea:disabled {
 textarea {
   height: 4.8em;
   line-height: 1.5em;
-  resize: none;
 }
 .textarea.large textarea {
   width: 30em;
@@ -3610,7 +3610,6 @@ textarea.message_notice {
 textarea.full_report {
   height: 12em;
   line-height: 1.5em;
-  resize: none;
 }
 /* text and textarea */
 .text.input .input-addon,
@@ -4776,18 +4775,18 @@ input[type=email].fluid {
 .message.side-message p {
   padding-bottom: 1em;
 }
-/* success animation */
-.message.success.success-large.animated {
+/* animation */
+.message.animated {
   background: #FFF;
   color: #333;
   display: flex;
   border: 1px solid #DDD;
   border-radius: 3px;
 }
-.message.success.success-large.animated .illustration {
+.message.animated .illustration {
   flex: 0 0 180px;
 }
-.message.success.success-large.animated .additional-information {
+.message.animated .additional-information {
   flex: 1;
   line-height: 180px;
   margin-top: 1.5em;
@@ -4809,25 +4808,65 @@ input[type=email].fluid {
     stroke-dashoffset: 0;
   }
 }
-.message.success.success-large.animated #successAnimationCircle {
+@keyframes drawCross {
+  0% {
+    stroke-dashoffset: 50px;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes drawWarning {
+  0% {
+    stroke-dashoffset: 180px;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+.message.animated #successAnimationCircle {
   stroke-dasharray: 180px 180px;
   stroke: #009900;
 }
-.message.success.success-large.animated #successAnimationCheck {
+.message.animated #successAnimationCheck {
   stroke-dasharray: 50px 50px;
   stroke: #009900;
 }
-.message.success.success-large.animated #successAnimation.animated {
+.message.animated #errorAnimationCircle {
+  stroke-dasharray: 180px 180px;
+  stroke: #D40101;
+}
+.message.animated #errorAnimationCross {
+  stroke-dasharray: 50px 50px;
+  stroke: #D40101;
+}
+.message.animated #warningAnimation {
+  stroke-dasharray: 180px 180px;
+  stroke: #9F6000;
+  stroke-linecap: square;
+  stroke-linejoin: round;
+}
+.message.animated #warningAnimation.round {
+  stroke-linecap: round;
+}
+.message.animated .animated {
   animation: 0.75s ease-out 0s 1 both pop;
 }
-.message.success.success-large.animated #successAnimation.animated #successAnimationCircle {
+.message.animated .animated #successAnimationCircle,
+.message.animated .animated #errorAnimationCircle {
   animation: 0.75s cubic-bezier(0.77, 0, 0.175, 1) 0s 1 both drawCircle;
 }
-.message.success.success-large.animated #successAnimation.animated #successAnimationCheck {
+.message.animated .animated #successAnimationCheck {
   animation: 0.75s cubic-bezier(0.77, 0, 0.175, 1) 0s 1 both drawCheck;
 }
+.message.animated .animated #errorAnimationCross {
+  animation: 0.75s cubic-bezier(0.77, 0, 0.175, 1) 0s 1 both drawCross;
+}
+.message.animated .animated #warningAnimation {
+  animation: 0.75s cubic-bezier(0.77, 0, 0.175, 1) 0s 1 both drawWarning;
+}
 @media only screen and (max-width: 767px) {
-  .message.success.success-large.animated {
+  .message.animated {
     flex-direction: column;
   }
 }

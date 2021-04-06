@@ -21,6 +21,7 @@ import FormSubmitButton from "../../../../react/components/Common/Inputs/FormSub
 import FormCancelButton from "../../../../react/components/Common/Inputs/FormSubmitButton/FormCancelButton";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import {withDialog} from "../../../../react/contexts/Common/DialogContext";
+import {Trans, withTranslation} from "react-i18next";
 
 class CreateUserDialog extends Component {
   /**
@@ -187,7 +188,7 @@ class CreateUserDialog extends Component {
    * Handle save operation success.
    */
   async handleSaveSuccess() {
-    await this.props.actionFeedbackContext.displaySuccess("The user has been added successfully");
+    await this.props.actionFeedbackContext.displaySuccess(this.translate("The user has been added successfully"));
     this.props.onClose();
   }
 
@@ -224,7 +225,7 @@ class CreateUserDialog extends Component {
    */
   handleError(error) {
     const errorDialogProps = {
-      title: "There was an unexpected error...",
+      title: this.translate("There was an unexpected error..."),
       message: error.message
     };
     this.context.setContext({errorDialogProps});
@@ -265,7 +266,7 @@ class CreateUserDialog extends Component {
         first_name: this.state.first_name,
         last_name: this.state.last_name
       },
-      username: this.state.username,
+      username: this.state.username.trim(),
       role_id: role.id
     };
     return await this.context.port.request("passbolt.users.create", userDto);
@@ -293,7 +294,7 @@ class CreateUserDialog extends Component {
     let first_nameError = null;
     const first_name = this.state.first_name.trim();
     if (!first_name.length) {
-      first_nameError = "A first name is required.";
+      first_nameError = this.translate("A first name is required.");
     }
     return this.setState({first_nameError});
   }
@@ -306,7 +307,7 @@ class CreateUserDialog extends Component {
     let last_nameError = null;
     const last_name = this.state.last_name.trim();
     if (!last_name.length) {
-      last_nameError = "A last name is required.";
+      last_nameError = this.translate("A last name is required.");
     }
     return this.setState({last_nameError});
   }
@@ -319,9 +320,9 @@ class CreateUserDialog extends Component {
     let usernameError = null;
     const username = this.state.username.trim();
     if (!username.length) {
-      usernameError = "A username is required.";
+      usernameError = this.translate("A username is required.");
     } else if (!this.isEmail(username)) {
-      usernameError = "The username should be a valid username address.";
+      usernameError = this.translate("The username should be a valid username address.");
     }
     return this.setState({usernameError});
   }
@@ -354,20 +355,28 @@ class CreateUserDialog extends Component {
   }
 
   /**
+   * Get the translate function
+   * @returns {function(...[*]=)}
+   */
+  get translate() {
+    return this.props.t;
+  }
+
+  /**
    * Render
    * @returns {JSX}
    */
   render() {
     return (
-      <DialogWrapper className='user-create-dialog' title="Add User"
+      <DialogWrapper className='user-create-dialog' title={this.translate("Add User")}
         onClose={this.handleClose} disabled={this.hasAllInputDisabled()}>
         <form className="user-create-form" onSubmit={this.handleFormSubmit} noValidate>
           <div className="form-content">
             <div className={`input text required ${this.state.first_nameError ? "error" : ""}`}>
-              <label htmlFor="user-first-name-input">First Name</label>
+              <label htmlFor="user-first-name-input"><Trans>First Name</Trans></label>
               <input id="user-first-name-input" name="first_name"
                 ref={this.firstNameRef}
-                type="text" value={this.state.first_name} placeholder="first name"
+                type="text" value={this.state.first_name} placeholder={this.translate("first name")}
                 required="required" disabled={this.hasAllInputDisabled()}
                 onKeyUp={this.handleFirstNameInputKeyUp} onChange={this.handleInputChange}
                 autoComplete='off' autoFocus={true}
@@ -377,10 +386,10 @@ class CreateUserDialog extends Component {
               }
             </div>
             <div className={`input text required ${this.state.last_nameError ? "error" : ""}`}>
-              <label htmlFor="user-last-name-input">Last Name</label>
+              <label htmlFor="user-last-name-input"><Trans>Last Name</Trans></label>
               <input id="user-last-name-input" name="last_name"
                 ref={this.lastNameRef}
-                type="text" value={this.state.last_name} placeholder="last name"
+                type="text" value={this.state.last_name} placeholder={this.translate("last name")}
                 required="required" disabled={this.hasAllInputDisabled()}
                 onKeyUp={this.handleLastNameInputOnKeyUp} onChange={this.handleInputChange}
                 autoComplete='off' autoFocus={true}
@@ -390,9 +399,9 @@ class CreateUserDialog extends Component {
               }
             </div>
             <div className={`input text required ${this.state.usernameError ? "error" : ""}`}>
-              <label htmlFor="user-username-input">Username / Email</label>
+              <label htmlFor="user-username-input"><Trans>Username / Email</Trans></label>
               <input id="user-username-input" name="username"
-                ref={this.usernameRef} type="text" value={this.state.username} placeholder="email"
+                ref={this.usernameRef} type="text" value={this.state.username} placeholder={this.translate("email")}
                 required="required" disabled={this.hasAllInputDisabled()}
                 onKeyUp={this.handleUsernameInputOnKeyUp} onChange={this.handleInputChange}
                 autoComplete='off' autoFocus={true}
@@ -401,20 +410,20 @@ class CreateUserDialog extends Component {
               <div className="username error message">{this.state.usernameError}</div>
               }
             </div>
-            <div className="input checkbox required">
-              <label htmlFor="is_admin">Role</label>
+            <div className="input checkbox">
+              <label htmlFor="is_admin"><Trans>Role</Trans></label>
               <div id="is_admin">
                 <input id="is_admin_checkbox" name="is_admin" onChange={this.handleCheckboxClick}
                   checked={this.state.is_admin} disabled={this.hasAllInputDisabled()} type="checkbox"/>
-                <span> This user is an administrator</span>
+                <label htmlFor="is_admin_checkbox"> <Trans>This user is an administrator</Trans></label>
               </div>
-              <div className="message helptext">Note: Administrators can add and delete users. They can also create
-                groups and assign group managers. Admin can not see all passwords.
+              <div className="message helptext">
+                <Trans>Note: Administrators can add and delete users; They can also create groups and assign group managers; Admin can not see all passwords.</Trans>
               </div>
             </div>
           </div>
           <div className="submit-wrapper clearfix">
-            <FormSubmitButton disabled={this.hasAllInputDisabled()} processing={this.state.processing} value="Save"/>
+            <FormSubmitButton disabled={this.hasAllInputDisabled()} processing={this.state.processing} value={this.translate("Save")}/>
             <FormCancelButton disabled={this.hasAllInputDisabled()} onClick={this.handleClose}/>
           </div>
         </form>
@@ -428,7 +437,8 @@ CreateUserDialog.contextType = AppContext;
 CreateUserDialog.propTypes = {
   actionFeedbackContext: PropTypes.any, // The action feedback context
   onClose: PropTypes.func,
-  dialogContext: PropTypes.any // The dialog context
+  dialogContext: PropTypes.any, // The dialog context
+  t: PropTypes.func, // The translation function
 };
 
-export default withActionFeedback(withDialog(CreateUserDialog));
+export default withActionFeedback(withDialog(withTranslation('common')(CreateUserDialog)));
