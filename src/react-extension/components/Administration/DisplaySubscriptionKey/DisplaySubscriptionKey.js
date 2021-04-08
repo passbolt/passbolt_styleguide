@@ -127,10 +127,10 @@ class DisplaySubscriptionKey extends React.Component {
   async findSubscriptionKey() {
     try {
       const subscription = await this.props.context.onGetSubscriptionKeyRequested();
-      const customerId = subscription.customer_id || "N/A";
-      const subscriptionId = subscription.subscription_id || "N/A";
+      const customerId = subscription.customer_id;
+      const subscriptionId = subscription.subscription_id;
       const users = subscription.users;
-      const email = subscription.email || "N/A";
+      const email = subscription.email;
       const expiry = subscription.expiry;
       const created = subscription.created;
       const data = subscription.data;
@@ -185,9 +185,9 @@ class DisplaySubscriptionKey extends React.Component {
    */
   handleRenewKey() {
     if (this.hasLimitUsersExceeded()) {
-      this.props.navigationContext.onGoToNewTab(`https://www.passbolt.com/subscription/ee/update/qty?subscription_id=${this.state.subscriptionId}`);
+      this.props.navigationContext.onGoToNewTab(`https://www.passbolt.com/subscription/ee/update/qty?subscription_id=${this.state.subscriptionId}&customer_id=${this.state.customerId}`);
     } else if (this.hasSubscriptionKeyExpired() || this.hasSubscriptionKeyGoingToExpire()) {
-      this.props.navigationContext.onGoToNewTab(`https://www.passbolt.com/subscription/ee/update/renew?subscription_id=${this.state.subscriptionId}`);
+      this.props.navigationContext.onGoToNewTab(`https://www.passbolt.com/subscription/ee/update/renew?subscription_id=${this.state.subscriptionId}&customer_id=${this.state.customerId}`);
     }
   }
 
