@@ -62,13 +62,22 @@ describe("As AD I should edit the subscription key", () => {
     expect(page.subscriptionKeyErrorMessage).toBe("A subscription key is required.");
   });
 
-  it('As AD I should see an error if the private key is invalid', async() => {
+  it('As AD I should see an error if the subscription key is invalid', async() => {
     const expectedError = {name: 'PassboltSubscriptionError', message: "The key is invalid."};
     jest.spyOn(props.administrationWorkspaceContext, 'onUpdateSubscriptionKeyRequested').mockImplementationOnce(() => Promise.reject(expectedError));
     await page.fill('Some subscription key');
     await page.updateKey();
     expect(page.hasSubscriptionKeyError).toBeTruthy();
     expect(page.subscriptionKeyErrorMessage).toBe("The key is invalid.");
+  });
+
+  it('As AD I should see an error if the fields of the subscription key is invalid', async() => {
+    const expectedError = {name: 'EntityValidationError', message: "Could not validate entity Subscription."};
+    jest.spyOn(props.administrationWorkspaceContext, 'onUpdateSubscriptionKeyRequested').mockImplementationOnce(() => Promise.reject(expectedError));
+    await page.fill('Some subscription key');
+    await page.updateKey();
+    expect(page.hasSubscriptionKeyError).toBeTruthy();
+    expect(page.subscriptionKeyErrorMessage).toBe("The subscription key is invalid.");
   });
 
   it('As AD I should see an error if the submission failed for an unexpected reason', async() => {
