@@ -14,7 +14,7 @@
 import React, {Component} from "react";
 import PropTypes from "prop-types";
 import DialogCloseButton from "../../Dialog/DialogCloseButton/DialogCloseButton";
-import AppContext from "../../../../contexts/AppContext";
+import {withAppContext} from "../../../../contexts/AppContext";
 
 class NotifyError extends Component {
   /**
@@ -57,7 +57,7 @@ class NotifyError extends Component {
    * @returns {String|string} return default if string is empty
    */
   getTitle() {
-    const contextTitle = this.context.errorDialogProps && this.context.errorDialogProps.title;
+    const contextTitle = this.props.context.errorDialogProps && this.props.context.errorDialogProps.title;
     return contextTitle || this.props.title ||  NotifyError.defaultProps.title;
   }
 
@@ -66,7 +66,7 @@ class NotifyError extends Component {
    * @returns {String|string} return default if string is empty
    */
   getMessage() {
-    const contextMessage = this.context.errorDialogProps && this.context.errorDialogProps.message;
+    const contextMessage = this.props.context.errorDialogProps && this.props.context.errorDialogProps.message;
     return contextMessage || this.props.message ||  NotifyError.defaultProps.message;
   }
 
@@ -109,17 +109,16 @@ class NotifyError extends Component {
   }
 }
 
-NotifyError.contextType = AppContext;
-
 NotifyError.defaultProps = {
   title: "Oops something went wrong.",
   message: "An internal error occurred, please try again later."
 };
 
 NotifyError.propTypes = {
+  context: PropTypes.any, // The application context
   title: PropTypes.string,
   message: PropTypes.string,
   onClose: PropTypes.func
 };
 
-export default NotifyError;
+export default withAppContext(NotifyError);

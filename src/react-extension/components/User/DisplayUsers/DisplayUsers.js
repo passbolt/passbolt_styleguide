@@ -14,7 +14,7 @@
 import PropTypes from "prop-types";
 import React from "react";
 import ReactList from "react-list";
-import AppContext from "../../../contexts/AppContext";
+import {withAppContext} from "../../../contexts/AppContext";
 import Icon from "../../Common/Icons/Icon";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import {withRouter} from "react-router-dom";
@@ -238,7 +238,7 @@ class DisplayUsers extends React.Component {
    * @return {boolean}
    */
   isLoggedInUserAdmin() {
-    return this.context.loggedInUser && this.context.loggedInUser.role.name === 'admin';
+    return this.props.context.loggedInUser && this.props.context.loggedInUser.role.name === 'admin';
   }
 
   /**
@@ -249,7 +249,7 @@ class DisplayUsers extends React.Component {
   formatDateTimeAgo(date) {
     const dateTime = DateTime.fromISO(date);
     const duration = dateTime.diffNow().toMillis();
-    return duration < 1000 && duration > 0 ? this.translate('Just now') : dateTime.toRelative({locale: this.context.locale});
+    return duration < 1000 && duration > 0 ? this.translate('Just now') : dateTime.toRelative({locale: this.props.context.locale});
   }
 
   renderItem(index, key) {
@@ -434,13 +434,12 @@ class DisplayUsers extends React.Component {
   }
 }
 
-DisplayUsers.contextType = AppContext;
-
 DisplayUsers.propTypes = {
+  context: PropTypes.any, // The application context
   userWorkspaceContext: PropTypes.any, // The user workspace context
   actionFeedbackContext: PropTypes.any, // The action feedback context
   contextualMenuContext: PropTypes.any, // The contextual menu context
   t: PropTypes.func, // The translation function
 };
 
-export default withRouter(withActionFeedback(withContextualMenu(withUserWorkspace(withTranslation('common')(DisplayUsers)))));
+export default withAppContext(withRouter(withActionFeedback(withContextualMenu(withUserWorkspace(withTranslation('common')(DisplayUsers))))));

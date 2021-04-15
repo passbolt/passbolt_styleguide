@@ -13,7 +13,7 @@
  */
 
 import React from 'react';
-import AppContext from "../../../contexts/AppContext";
+import {withAppContext} from "../../../contexts/AppContext";
 import InputPassphrase from "../InputPassphrase/InputPassphrase";
 import {withDialog} from "../../../contexts/DialogContext";
 import PropTypes from "prop-types";
@@ -48,7 +48,7 @@ class HandlePassphraseEntryEvents extends React.Component {
    * Listen the progress dialog event from the context and acts accordingly
    */
   listen() {
-    this.context.port.on("passbolt.passphrase.request", this.handlePassphraseEntryRequestEvent);
+    this.props.context.port.on("passbolt.passphrase.request", this.handlePassphraseEntryRequestEvent);
   }
 
   /**
@@ -56,7 +56,7 @@ class HandlePassphraseEntryEvents extends React.Component {
    * @param requestId
    */
   async handlePassphraseEntryRequestEvent(requestId) {
-    await this.context.setContext({passphraseRequestId: requestId});
+    await this.props.context.setContext({passphraseRequestId: requestId});
     this.props.dialogContext.open(InputPassphrase);
   }
 
@@ -69,10 +69,9 @@ class HandlePassphraseEntryEvents extends React.Component {
   }
 }
 
-HandlePassphraseEntryEvents.contextType = AppContext;
-
 HandlePassphraseEntryEvents.propTypes = {
+  context: PropTypes.object, // The application context
   dialogContext: PropTypes.any, // the dialog context
 };
 
-export default withDialog(HandlePassphraseEntryEvents);
+export default withAppContext(withDialog(HandlePassphraseEntryEvents));

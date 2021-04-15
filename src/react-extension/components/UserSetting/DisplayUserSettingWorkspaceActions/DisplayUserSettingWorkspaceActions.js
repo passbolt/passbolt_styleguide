@@ -15,7 +15,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import {withRouter, Route} from "react-router-dom";
-import AppContext from "../../../contexts/AppContext";
+import {withAppContext} from "../../../contexts/AppContext";
 import Icon from "../../Common/Icons/Icon";
 import {withDialog} from "../../../contexts/DialogContext";
 import EditUserProfile from "../EditUserProfile/EditUserProfile";
@@ -54,14 +54,14 @@ class DisplayUserSettingsWorkspaceActions extends React.Component {
    * Whenever the user wants to download his public key
    */
   async handleDownloadPublicKey() {
-    await this.context.port.request("passbolt.keyring.download-my-public-key");
+    await this.props.context.port.request("passbolt.keyring.download-my-public-key");
   }
 
   /**
    * Whenever the user wants to download his private key
    */
   async handleDownloadPrivateKey() {
-    await this.context.port.request("passbolt.keyring.download-my-private-key");
+    await this.props.context.port.request("passbolt.keyring.download-my-private-key");
   }
 
   /**
@@ -117,12 +117,11 @@ class DisplayUserSettingsWorkspaceActions extends React.Component {
   }
 }
 
-DisplayUserSettingsWorkspaceActions.contextType = AppContext;
-
 DisplayUserSettingsWorkspaceActions.propTypes = {
+  context: PropTypes.any, // The application context
   match: PropTypes.object, // The router match
   dialogContext: PropTypes.any, // the dialog context
   t: PropTypes.func, // The translation function
 };
 
-export default withRouter(withDialog(withTranslation('common')(DisplayUserSettingsWorkspaceActions)));
+export default withAppContext(withRouter(withDialog(withTranslation('common')(DisplayUserSettingsWorkspaceActions))));

@@ -16,7 +16,7 @@ import DisplayUserBadgeMenu from "../../User/DisplayUserBadgeMenu/DisplayUserBad
 import FilterResourcesByFolders from "../FilterResourcesByFolders/FilterResourcesByFolders";
 import DisplayResourceFolderDetails from "../../ResourceFolderDetails/DisplayResourceFolderDetails/DisplayResourceFolderDetails";
 import DisplayResourceDetails from "../../ResourceDetails/DisplayResourceDetails/DisplayResourceDetails";
-import AppContext from "../../../contexts/AppContext";
+import {withAppContext} from "../../../contexts/AppContext";
 import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 import FilterResourcesByTags from "../FilterResourcesByTags/FilterResourcesByTags";
 import PropTypes from "prop-types";
@@ -52,8 +52,8 @@ class Workspace extends Component {
    * @return {JSX}
    */
   render() {
-    const canUseFolders = this.context.siteSettings.canIUse("folders");
-    const canUseTags = this.context.siteSettings.canIUse("tags");
+    const canUseFolders = this.props.context.siteSettings.canIUse("folders");
+    const canUseTags = this.props.context.siteSettings.canIUse("tags");
 
     return (
       <div>
@@ -61,7 +61,7 @@ class Workspace extends Component {
           <Logo/>
           <FilterResourcesByText
             placeholder={this.translate("Search passwords")}/>
-          <DisplayUserBadgeMenu baseUrl={this.context.userSettings.getTrustedDomain()} user={this.context.loggedInUser}/>
+          <DisplayUserBadgeMenu baseUrl={this.props.context.userSettings.getTrustedDomain()} user={this.props.context.loggedInUser}/>
         </div>
         <div className="header third">
           <div className="col1 main-action-wrapper">
@@ -96,10 +96,10 @@ class Workspace extends Component {
   }
 }
 
-Workspace.contextType = AppContext;
 Workspace.propTypes = {
+  context: PropTypes.any, // The application context
   resourceWorkspaceContext: PropTypes.any,
   t: PropTypes.func, // The translation function
 };
 
-export default withResourceWorkspace(withTranslation('common')(Workspace));
+export default withAppContext(withResourceWorkspace(withTranslation('common')(Workspace)));

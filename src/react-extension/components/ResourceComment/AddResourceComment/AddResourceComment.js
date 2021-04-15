@@ -16,7 +16,7 @@ import React from "react";
 import UserAvatar from "../../Common/Avatar/UserAvatar";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import PropTypes from "prop-types";
-import AppContext from "../../../contexts/AppContext";
+import {withAppContext} from "../../../contexts/AppContext";
 import {withLoading} from "../../../contexts/LoadingContext";
 import {Trans, withTranslation} from "react-i18next";
 
@@ -168,10 +168,10 @@ class AddResourceComment extends React.Component {
       foreign_key: this.props.resource.id,
       foreign_model: 'Resource',
       content: commentToAdd,
-      user_id: this.context.loggedInUser.id
+      user_id: this.props.context.loggedInUser.id
     };
 
-    return await this.context.port.request('passbolt.comments.create', payload);
+    return await this.props.context.port.request('passbolt.comments.create', payload);
   }
 
   /**
@@ -253,8 +253,8 @@ class AddResourceComment extends React.Component {
         </div>
         <div className="left-column">
           <UserAvatar
-            user={this.context.loggedInUser}
-            baseUrl={this.context.siteSettings.settings.app.url}
+            user={this.props.context.loggedInUser}
+            baseUrl={this.props.context.siteSettings.settings.app.url}
             className="author profile picture avatar"/>
         </div>
       </form>
@@ -262,9 +262,8 @@ class AddResourceComment extends React.Component {
   }
 }
 
-AddResourceComment.contextType = AppContext;
-
 AddResourceComment.propTypes = {
+  context: PropTypes.any, // The application context
   resource: PropTypes.object, // The resource to which one add a comment
   onAdd: PropTypes.func, // Called after the comment has been added
   onCancel: PropTypes.func, // Called after the add operation has been cancelled
@@ -274,4 +273,4 @@ AddResourceComment.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withLoading(withActionFeedback(withTranslation('common')(AddResourceComment)));
+export default withAppContext(withLoading(withActionFeedback(withTranslation('common')(AddResourceComment))));

@@ -14,7 +14,10 @@
 import React, {Component} from "react";
 import PropTypes from "prop-types";
 import {withAppContext} from "../../../contexts/AppContext";
-import {AuthenticationContext, AuthenticationContextProcess} from "../../../contexts/AuthenticationContext";
+import {
+  AuthenticationContextProcess,
+  withAuthenticationContext
+} from "../../../contexts/AuthenticationContext";
 import {Trans, withTranslation} from "react-i18next";
 
 /**
@@ -41,10 +44,10 @@ class AskForAuthenticationHelp extends Component {
    * When the user wants to enter its credentials again
    */
   onGoToImportGpgKeyRequested() {
-    if (this.context.process === AuthenticationContextProcess.SETUP) {
-      this.context.onGoToImportGpgKeyRequested();
+    if (this.props.authenticationContext.process === AuthenticationContextProcess.SETUP) {
+      this.props.authenticationContext.onGoToImportGpgKeyRequested();
     } else {
-      this.context.onInitializeRecoverRequested();
+      this.props.authenticationContext.onInitializeRecoverRequested();
     }
   }
 
@@ -85,11 +88,10 @@ class AskForAuthenticationHelp extends Component {
   }
 }
 
-AskForAuthenticationHelp.contextType = AuthenticationContext;
-
 AskForAuthenticationHelp.propTypes = {
   context: PropTypes.object, // The application context
+  authenticationContext: PropTypes.any, // The authentication context
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withTranslation('common')(AskForAuthenticationHelp));
+export default withAppContext(withAuthenticationContext(withTranslation('common')(AskForAuthenticationHelp)));

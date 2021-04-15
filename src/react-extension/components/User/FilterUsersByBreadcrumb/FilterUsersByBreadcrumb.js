@@ -15,7 +15,6 @@ import React, {Component} from "react";
 import {withRouter} from "react-router-dom";
 import PropTypes from "prop-types";
 import Breadcrumbs from "../../Common/Navigation/Breadcrumbs/Breadcrumbs";
-import AppContext from "../../../contexts/AppContext";
 import {UserWorkspaceFilterTypes, withUserWorkspace} from "../../../contexts/UserWorkspaceContext";
 import Breadcrumb from "../../Common/Navigation/Breadcrumbs/Breadcrumb";
 import {withNavigationContext} from "../../../contexts/NavigationContext";
@@ -97,8 +96,6 @@ class FilterUsersByBreadcrumb extends Component {
     );
   }
 }
-
-FilterUsersByBreadcrumb.context = AppContext;
 
 FilterUsersByBreadcrumb.propTypes = {
   userWorkspaceContext: PropTypes.object, // The user workspace context

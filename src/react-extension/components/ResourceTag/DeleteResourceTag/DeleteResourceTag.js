@@ -13,7 +13,7 @@
  */
 import React, {Component} from "react";
 import PropTypes from "prop-types";
-import AppContext from "../../../contexts/AppContext";
+import {withAppContext} from "../../../contexts/AppContext";
 import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
@@ -62,7 +62,7 @@ class DeleteResourceTag extends Component {
    */
   handleCloseClick() {
     this.props.onClose();
-    this.context.setContext({tagToDelete: null});
+    this.props.context.setContext({tagToDelete: null});
   }
 
   /**
@@ -73,11 +73,11 @@ class DeleteResourceTag extends Component {
 
     try {
       this.props.loadingContext.add();
-      await this.context.port.request("passbolt.tags.delete", this.context.tagToDelete.id);
+      await this.props.context.port.request("passbolt.tags.delete", this.props.context.tagToDelete.id);
       this.props.loadingContext.remove();
       await this.props.actionFeedbackContext.displaySuccess(this.translate("The tag has been deleted successfully"));
       this.props.onClose();
-      this.context.setContext({tagToDelete: null});
+      this.props.context.setContext({tagToDelete: null});
     } catch (error) {
       this.props.loadingContext.remove();
       // It can happen when the user has closed the passphrase entry dialog by instance.
@@ -97,7 +97,7 @@ class DeleteResourceTag extends Component {
       title: this.translate("There was an unexpected error..."),
       message: error.message
     };
-    this.context.setContext({errorDialogProps});
+    this.props.context.setContext({errorDialogProps});
     this.props.dialogContext.open(NotifyError);
   }
 
@@ -128,7 +128,7 @@ class DeleteResourceTag extends Component {
           <div className="form-content">
             <p>
               <Trans>
-                Are you sure you want to delete the tag <strong>{{tagName: this.context.tagToDelete.slug}}</strong>?
+                Are you sure you want to delete the tag <strong>{{tagName: this.props.context.tagToDelete.slug}}</strong>?
               </Trans>
             </p>
             <p><Trans>Warning: Once the tag is deleted, it’ll be removed permanently and will not be recoverable.</Trans></p>
@@ -143,9 +143,8 @@ class DeleteResourceTag extends Component {
   }
 }
 
-DeleteResourceTag.contextType = AppContext;
-
 DeleteResourceTag.propTypes = {
+  context: PropTypes.any, // The application context
   onClose: PropTypes.func,
   actionFeedbackContext: PropTypes.any, // The action feedback context
   dialogContext: PropTypes.any, // The dialog context
@@ -153,4 +152,4 @@ DeleteResourceTag.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withLoading(withActionFeedback(withDialog(withTranslation('common')(DeleteResourceTag))));
+export default withAppContext(withLoading(withActionFeedback(withDialog(withTranslation('common')(DeleteResourceTag)))));

@@ -12,18 +12,18 @@
  * @since         2.12.0
  */
 import React, {Component} from "react";
-import AppContext from "../../../../contexts/AppContext";
+import {withAppContext} from "../../../../contexts/AppContext";
 import {Trans, withTranslation} from "react-i18next";
 import PropTypes from "prop-types";
 
 class DisplayProgress extends Component {
   calculateProgress() {
-    if (!this.context.progressDialogProps.goals) {
+    if (!this.props.context.progressDialogProps.goals) {
       return 100; // displays a spinning 100% progress bar by default.
     }
 
-    const completed = this.context.progressDialogProps.completed || 0;
-    let progress = Math.round((100 * completed) / this.context.progressDialogProps.goals);
+    const completed = this.props.context.progressDialogProps.completed || 0;
+    let progress = Math.round((100 * completed) / this.props.context.progressDialogProps.goals);
     if (progress > 100) {
       progress = 100;
     }
@@ -39,7 +39,7 @@ class DisplayProgress extends Component {
   }
 
   render() {
-    const displayDetailsSection = this.context.progressDialogProps.goals || false;
+    const displayDetailsSection = this.props.context.progressDialogProps.goals || false;
     const progress = this.calculateProgress();
     const progressBarStyle = {width: `${progress}%`};
     const progressLabelStyle = {float: "right"};
@@ -48,7 +48,7 @@ class DisplayProgress extends Component {
       <div className="dialog-wrapper progress-dialog">
         <div className="dialog">
           <div className="dialog-header">
-            <h2>{this.context.progressDialogProps.title || this.translate("Please wait...") }</h2>
+            <h2>{this.props.context.progressDialogProps.title || this.translate("Please wait...") }</h2>
           </div>
           <div className="dialog-content">
             <div className="form-content">
@@ -60,7 +60,7 @@ class DisplayProgress extends Component {
               </div>
               {displayDetailsSection &&
               <div className="progress-details">
-                <span className="progress-step-label">&nbsp; {this.context.progressDialogProps.message ||  this.translate("Please wait...") }</span>
+                <span className="progress-step-label">&nbsp; {this.props.context.progressDialogProps.message ||  this.translate("Please wait...") }</span>
                 <span style={progressLabelStyle} className="progress-percent">{progress}%</span>
               </div>
               }
@@ -75,10 +75,9 @@ class DisplayProgress extends Component {
   }
 }
 
-DisplayProgress.contextType = AppContext;
-
 DisplayProgress.propTypes = {
+  context: PropTypes.any, // The application context
   t: PropTypes.func, // The translation function
 };
 
-export default withTranslation('common')(DisplayProgress);
+export default withAppContext(withTranslation('common')(DisplayProgress));

@@ -18,7 +18,7 @@ import {Route, withRouter} from "react-router-dom";
 import PropTypes from "prop-types";
 import Logo from "../../Common/Navigation/Header/Logo";
 import DisplayUserBadgeMenu from "../../User/DisplayUserBadgeMenu/DisplayUserBadgeMenu";
-import AppContext from "../../../contexts/AppContext";
+import {withAppContext} from "../../../contexts/AppContext";
 import NavigateIntoUserSettingsWorkspace from "../NavigateIntoUserSettingsWorkspace/NavigateIntoUserSettingsWorkspace";
 import DisplayUserProfile from "../DisplayUserProfile/DisplayUserProfile";
 import DisplayUserTheme from "../DisplayUserTheme/DisplayUserTheme";
@@ -40,7 +40,7 @@ class DisplayUserSettingsWorkspace extends React.Component {
    * @returns {bool}
    */
   get canIUseThemeCapability() {
-    return this.context.siteSettings && this.context.siteSettings.canIUse('accountSettings');
+    return this.props.context.siteSettings && this.props.context.siteSettings.canIUse('accountSettings');
   }
 
   /**
@@ -54,7 +54,7 @@ class DisplayUserSettingsWorkspace extends React.Component {
         <div className="header second">
           <Logo/>
           <SearchBar disabled={true}/>
-          <DisplayUserBadgeMenu baseUrl={this.context.userSettings.getTrustedDomain()} user={this.context.loggedInUser}/>
+          <DisplayUserBadgeMenu baseUrl={this.props.context.userSettings.getTrustedDomain()} user={this.props.context.loggedInUser}/>
         </div>
         <div className="header third">
           <DisplayUserSettingsWorkspaceActions/>
@@ -79,9 +79,9 @@ class DisplayUserSettingsWorkspace extends React.Component {
   }
 }
 
-DisplayUserSettingsWorkspace.contextType = AppContext;
 DisplayUserSettingsWorkspace.propTypes = {
+  context: PropTypes.any, // The application context
   match: PropTypes.any,
 };
 
-export default withRouter(DisplayUserSettingsWorkspace);
+export default withAppContext(withRouter(DisplayUserSettingsWorkspace));

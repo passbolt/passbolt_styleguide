@@ -13,7 +13,7 @@
  */
 import React, {Component} from "react";
 import PropTypes from "prop-types";
-import AppContext from "../../../contexts/AppContext";
+import {withAppContext} from "../../../contexts/AppContext";
 import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
@@ -63,7 +63,7 @@ class DeleteUserWithConflicts extends Component {
    * - The list is sorted alphabetically by group name
    */
   getGroupsErrors() {
-    const errors = this.context.deleteUserWithConflictsDialogProps.errors;
+    const errors = this.props.context.deleteUserWithConflictsDialogProps.errors;
     const groupsErrors = errors.groups && errors.groups.sole_manager || [];
     const groupsSorterByName = (groupA, groupB) => groupA.name.localeCompare(groupB.name);
     return groupsErrors.sort(groupsSorterByName);
@@ -75,7 +75,7 @@ class DeleteUserWithConflicts extends Component {
    * - The list is sorted alphabetically by folder name
    */
   getFoldersErrors() {
-    const errors = this.context.deleteUserWithConflictsDialogProps.errors;
+    const errors = this.props.context.deleteUserWithConflictsDialogProps.errors;
     const foldersErrors = errors.folders && errors.folders.sole_owner || [];
     const foldersSorterByName = (folderA, folderB) => folderA.name.localeCompare(folderB.name);
     return foldersErrors.sort(foldersSorterByName);
@@ -87,7 +87,7 @@ class DeleteUserWithConflicts extends Component {
    * - The list is sorted alphabetically by resource name
    */
   getResourcesErrors() {
-    const errors = this.context.deleteUserWithConflictsDialogProps.errors;
+    const errors = this.props.context.deleteUserWithConflictsDialogProps.errors;
     const resourcesErrors = errors.resources && errors.resources.sole_owner || [];
     const resourcesSorterByName = (resourcesA, resourcesB) => resourcesA.name.localeCompare(resourcesB.name);
     return resourcesErrors.sort(resourcesSorterByName);
@@ -225,7 +225,7 @@ class DeleteUserWithConflicts extends Component {
    * @returns {object}
    */
   getUser(id) {
-    return this.context.users.find(user => user.id === id);
+    return this.props.context.users.find(user => user.id === id);
   }
 
   /**
@@ -234,7 +234,7 @@ class DeleteUserWithConflicts extends Component {
    * @returns {object}
    */
   getGroup(id) {
-    return this.context.groups.find(group => group.id === id);
+    return this.props.context.groups.find(group => group.id === id);
   }
 
   /**
@@ -264,7 +264,7 @@ class DeleteUserWithConflicts extends Component {
    */
   handleCloseClick() {
     this.props.onClose();
-    this.context.setContext({deleteUserWithConflictsDialogProps: null});
+    this.props.context.setContext({deleteUserWithConflictsDialogProps: null});
   }
 
   /**
@@ -348,11 +348,11 @@ class DeleteUserWithConflicts extends Component {
     try {
       const userDeleteTransfer = this.createUserDeleteTransfer();
       this.props.loadingContext.add();
-      await this.context.port.request("passbolt.users.delete", this.userToDelete.id, userDeleteTransfer);
+      await this.props.context.port.request("passbolt.users.delete", this.userToDelete.id, userDeleteTransfer);
       this.props.loadingContext.remove();
       await this.props.actionFeedbackContext.displaySuccess(this.translate("The user has been deleted successfully"));
       this.props.onClose();
-      this.context.setContext({deleteUserWithConflictsDialogProps: null});
+      this.props.context.setContext({deleteUserWithConflictsDialogProps: null});
     } catch (error) {
       this.props.loadingContext.remove();
       // It can happen when the user has closed the passphrase entry dialog by instance.
@@ -372,7 +372,7 @@ class DeleteUserWithConflicts extends Component {
       title: this.translate("There was an unexpected error..."),
       message: error.message
     };
-    this.context.setContext({errorDialogProps});
+    this.props.context.setContext({errorDialogProps});
     this.props.dialogContext.open(NotifyError);
   }
 
@@ -417,7 +417,7 @@ class DeleteUserWithConflicts extends Component {
    * @returns {object}
    */
   get userToDelete() {
-    return this.context.deleteUserWithConflictsDialogProps.user;
+    return this.props.context.deleteUserWithConflictsDialogProps.user;
   }
 
   /**
@@ -563,9 +563,8 @@ class DeleteUserWithConflicts extends Component {
   }
 }
 
-DeleteUserWithConflicts.contextType = AppContext;
-
 DeleteUserWithConflicts.propTypes = {
+  context: PropTypes.any, // The application context
   onClose: PropTypes.func,
   actionFeedbackContext: PropTypes.any, // The action feedback context
   dialogContext: PropTypes.any, // The dialog context
@@ -573,4 +572,4 @@ DeleteUserWithConflicts.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withLoading(withActionFeedback(withDialog(withTranslation('common')(DeleteUserWithConflicts))));
+export default withAppContext(withLoading(withActionFeedback(withDialog(withTranslation('common')(DeleteUserWithConflicts)))));

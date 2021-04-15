@@ -15,7 +15,6 @@ import React, {Component} from "react";
 import {withRouter} from "react-router-dom";
 import PropTypes from "prop-types";
 import Breadcrumbs from "../../Common/Navigation/Breadcrumbs/Breadcrumbs";
-import AppContext from "../../../contexts/AppContext";
 import {
   AdministrationWorkspaceMenuTypes,
   withAdministrationWorkspace
@@ -92,8 +91,6 @@ class DisplayAdministrationWorkspaceBreadcrumb extends Component {
     );
   }
 }
-
-DisplayAdministrationWorkspaceBreadcrumb.context = AppContext;
 
 DisplayAdministrationWorkspaceBreadcrumb.propTypes = {
   administrationWorkspaceContext: PropTypes.object, // The user workspace context

@@ -14,7 +14,7 @@
 
 import React from 'react';
 import DisplayProgress from "../DisplayProgress/DisplayProgress";
-import AppContext from "../../../../contexts/AppContext";
+import {withAppContext} from "../../../../contexts/AppContext";
 import {withDialog} from "../../../../contexts/DialogContext";
 import PropTypes from "prop-types";
 
@@ -61,10 +61,10 @@ class HandleProgressEvents extends React.Component {
    * Listen the progress dialog event from the context and acts accordingly
    */
   listen() {
-    this.context.port.on('passbolt.progress.open-progress-dialog', this.handleProgressDialogOpenEvent);
-    this.context.port.on("passbolt.progress.update", this.handleProgressDialogUpdateEvent);
-    this.context.port.on("passbolt.progress.update-goals", this.handleProgressDialogUpdateGoalsEvent);
-    this.context.port.on('passbolt.progress.close-progress-dialog', this.handleProgressDialogCloseEvent);
+    this.props.context.port.on('passbolt.progress.open-progress-dialog', this.handleProgressDialogOpenEvent);
+    this.props.context.port.on("passbolt.progress.update", this.handleProgressDialogUpdateEvent);
+    this.props.context.port.on("passbolt.progress.update-goals", this.handleProgressDialogUpdateGoalsEvent);
+    this.props.context.port.on('passbolt.progress.close-progress-dialog', this.handleProgressDialogCloseEvent);
   }
 
   /**
@@ -75,7 +75,7 @@ class HandleProgressEvents extends React.Component {
    */
   handleProgressDialogOpenEvent(title, goals, message) {
     const progressDialogProps = {title, goals, message};
-    this.context.setContext({progressDialogProps});
+    this.props.context.setContext({progressDialogProps});
     const dialogIndex = this.props.dialogContext.open(DisplayProgress);
     this.setState({dialogIndex});
   }
@@ -88,12 +88,12 @@ class HandleProgressEvents extends React.Component {
   handleProgressDialogUpdateEvent(message, completed) {
     const progressDialogProps = Object.assign(
       {},
-      this.context.progressDialogProps,
+      this.props.context.progressDialogProps,
       {
-        message: message || this.context.progressDialogProps.message,
+        message: message || this.props.context.progressDialogProps.message,
         completed
       });
-    this.context.setContext({progressDialogProps});
+    this.props.context.setContext({progressDialogProps});
   }
 
   /**
@@ -103,9 +103,9 @@ class HandleProgressEvents extends React.Component {
   handleProgressDialogUpdateGoalsEvent(goals) {
     const progressDialogProps = Object.assign(
       {},
-      this.context.progressDialogProps,
+      this.props.context.progressDialogProps,
       {goals});
-    this.context.setContext({progressDialogProps});
+    this.props.context.setContext({progressDialogProps});
   }
 
   /**
@@ -113,7 +113,7 @@ class HandleProgressEvents extends React.Component {
    */
   handleProgressDialogCloseEvent() {
     this.props.dialogContext.close(this.state.dialogIndex);
-    this.context.setContext({progressDialogProps: {}});
+    this.props.context.setContext({progressDialogProps: {}});
   }
 
   /**
@@ -125,10 +125,9 @@ class HandleProgressEvents extends React.Component {
   }
 }
 
-HandleProgressEvents.contextType = AppContext;
-
 HandleProgressEvents.propTypes = {
+  context: PropTypes.any, // The application context
   dialogContext: PropTypes.any, // the dialog context
 };
 
-export default withDialog(HandleProgressEvents);
+export default withAppContext(withDialog(HandleProgressEvents));

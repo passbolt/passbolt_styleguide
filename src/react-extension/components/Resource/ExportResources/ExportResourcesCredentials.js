@@ -14,7 +14,7 @@
 
 import React, {Component} from "react";
 import PropTypes from "prop-types";
-import AppContext from "../../../contexts/AppContext";
+import {withAppContext} from "../../../contexts/AppContext";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import {withDialog} from "../../../contexts/DialogContext";
 import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
@@ -150,7 +150,7 @@ class ExportResourcesCredentials extends Component {
       resources_ids: resourcesIds,
       options: options
     };
-    await this.context.port.request("passbolt.export-resources.export-to-file", exportDto);
+    await this.props.context.port.request("passbolt.export-resources.export-to-file", exportDto);
   }
 
   /**
@@ -201,7 +201,7 @@ class ExportResourcesCredentials extends Component {
       message: error.message
     };
     await this.setState({actions: {processing: false}});
-    await this.context.setContext({errorDialogProps});
+    await this.props.context.setContext({errorDialogProps});
     this.props.dialogContext.open(NotifyError);
   }
 
@@ -288,9 +288,8 @@ class ExportResourcesCredentials extends Component {
   }
 }
 
-ExportResourcesCredentials.contextType = AppContext;
-
 ExportResourcesCredentials.propTypes = {
+  context: PropTypes.any, // The application context
   onClose: PropTypes.func,
   actionFeedbackContext: PropTypes.any, // The action feedback context
   dialogContext: PropTypes.any, // The dialog context
@@ -298,5 +297,5 @@ ExportResourcesCredentials.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withResourceWorkspace(withActionFeedback(withDialog(withTranslation('common')(ExportResourcesCredentials))));
+export default withAppContext(withResourceWorkspace(withActionFeedback(withDialog(withTranslation('common')(ExportResourcesCredentials)))));
 

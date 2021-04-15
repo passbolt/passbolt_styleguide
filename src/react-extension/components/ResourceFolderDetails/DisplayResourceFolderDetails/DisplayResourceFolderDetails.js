@@ -17,7 +17,7 @@ import PropTypes from "prop-types";
 import DisplayResourceFolderDetailsInformation from "./DisplayResourceFolderDetailsInformation";
 import DisplayResourceFolderDetailsPermissions from "./DisplayResourceFolderDetailsPermissions";
 import DisplayResourceFolderDetailsActivity from "./DisplayResourceFolderDetailsActivity";
-import AppContext from "../../../contexts/AppContext";
+import {withAppContext} from "../../../contexts/AppContext";
 import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import {Trans, withTranslation} from "react-i18next";
@@ -51,9 +51,9 @@ class DisplayResourceFolderDetails extends React.Component {
    * Handle when the user copies the permalink.
    */
   async handlePermalinkClick() {
-    const baseUrl = this.context.userSettings.getTrustedDomain();
+    const baseUrl = this.props.context.userSettings.getTrustedDomain();
     const permalink = `${baseUrl}/app/folders/view/${this.props.resourceWorkspaceContext.details.folder.id}`;
-    await this.context.port.request("passbolt.clipboard.copy", permalink);
+    await this.props.context.port.request("passbolt.clipboard.copy", permalink);
     this.props.actionFeedbackContext.displaySuccess(this.translate("The permalink has been copied to clipboard"));
   }
 
@@ -101,9 +101,8 @@ class DisplayResourceFolderDetails extends React.Component {
   }
 }
 
-DisplayResourceFolderDetails.contextType = AppContext;
-
 DisplayResourceFolderDetails.propTypes = {
+  context: PropTypes.any, // The application context
   groups: PropTypes.array,
   onSelectFolderParent: PropTypes.func,
   onSelectRoot: PropTypes.func,
@@ -114,4 +113,4 @@ DisplayResourceFolderDetails.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withResourceWorkspace(withActionFeedback(withTranslation('common')(DisplayResourceFolderDetails)));
+export default withAppContext(withResourceWorkspace(withActionFeedback(withTranslation('common')(DisplayResourceFolderDetails))));

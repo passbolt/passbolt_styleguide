@@ -23,7 +23,7 @@ import Icon from "../../Common/Icons/Icon";
 import ImportResourcesKeyUnlock from "./ImportResourcesKeyUnlock";
 import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 import ImportResourcesResult from "./ImportResourcesResult";
-import AppContext from "../../../contexts/AppContext";
+import {withAppContext} from "../../../contexts/AppContext";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
 import {Trans, withTranslation} from "react-i18next";
 
@@ -33,9 +33,9 @@ class ImportResources extends Component {
    * @param props Component props
    * @param context Component context
    */
-  constructor(props, context) {
+  constructor(props) {
     super(props);
-    this.state = this.geDefaultState(context);
+    this.state = this.defaultState;
     this.bindHandlers();
     this.createReferences();
   }
@@ -43,9 +43,9 @@ class ImportResources extends Component {
   /**
    * Returns the default state
    */
-  geDefaultState(context) {
-    const canUseTags = context.siteSettings.canIUse("tags");
-    const canUseFolders = context.siteSettings.canIUse("folders");
+  get defaultState() {
+    const canUseTags = this.props.context.siteSettings.canIUse("tags");
+    const canUseFolders = this.props.context.siteSettings.canIUse("folders");
 
     return {
       // Dialog states
@@ -229,7 +229,7 @@ class ImportResources extends Component {
 
     await this.toggleProcessing();
     try {
-      const importResult = await this.context.port.request("passbolt.import-resources.import-file", fileType, b64FileContent, options);
+      const importResult = await this.props.context.port.request("passbolt.import-resources.import-file", fileType, b64FileContent, options);
       this.handleImportSuccess(importResult);
     } catch (error) {
       this.handleImportError(error, b64FileContent, fileType);
@@ -279,7 +279,7 @@ class ImportResources extends Component {
         title: this.translate("There was an unexpected error..."),
         message: error.message
       };
-      this.context.setContext({errorDialogProps});
+      this.props.context.setContext({errorDialogProps});
       this.props.dialogContext.open(NotifyError);
     }
   }
@@ -331,8 +331,8 @@ class ImportResources extends Component {
     const isInvalidCsvFile = errors && errors.invalidCsvFile;
     const isInvalidKdbxFile = errors && errors.invalidKdbxFile;
     const invalidFileClassName = isInvalidCsvFile || isInvalidKdbxFile ? 'errors' : '';
-    const canUseTags = this.context.siteSettings.canIUse("tags");
-    const canUseFolders = this.context.siteSettings.canIUse("folders");
+    const canUseTags = this.props.context.siteSettings.canIUse("tags");
+    const canUseFolders = this.props.context.siteSettings.canIUse("folders");
 
     return (
       <DialogWrapper
@@ -419,9 +419,8 @@ class ImportResources extends Component {
   }
 }
 
-ImportResources.contextType = AppContext;
-
 ImportResources.propTypes = {
+  context: PropTypes.any, // The application context
   onClose: PropTypes.func,
   actionFeedbackContext: PropTypes.any, // The action feedback context
   dialogContext: PropTypes.any, // The dialog context
@@ -429,4 +428,4 @@ ImportResources.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withResourceWorkspace(withActionFeedback(withDialog(withTranslation('common')(ImportResources))));
+export default withAppContext(withResourceWorkspace(withActionFeedback(withDialog(withTranslation('common')(ImportResources)))));

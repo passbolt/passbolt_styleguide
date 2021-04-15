@@ -12,7 +12,7 @@
  * @since         2.14.0
  */
 import React, {Component} from "react";
-import AppContext from "../../../contexts/AppContext";
+import {withAppContext} from "../../../contexts/AppContext";
 import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
 import {withRouter} from "react-router-dom";
 import {Trans, withTranslation} from "react-i18next";
@@ -58,8 +58,8 @@ class NotifyExpiredSession extends Component {
    * @returns {string}
    */
   get loginUrl() {
-    let baseUrl = this.context.userSettings && this.context.userSettings.getTrustedDomain();
-    baseUrl = baseUrl || this.context.trustedDomain;
+    let baseUrl = this.props.context.userSettings && this.props.context.userSettings.getTrustedDomain();
+    baseUrl = baseUrl || this.props.context.trustedDomain;
     return `${baseUrl}/auth/login`;
   }
 
@@ -93,10 +93,9 @@ class NotifyExpiredSession extends Component {
   }
 }
 
-NotifyExpiredSession.contextType = AppContext;
-
 NotifyExpiredSession.propTypes = {
+  context: PropTypes.any, // The application context
   t: PropTypes.func, // The translation function
 };
 
-export default withRouter(withTranslation('common')(NotifyExpiredSession));
+export default withAppContext(withRouter(withTranslation('common')(NotifyExpiredSession)));

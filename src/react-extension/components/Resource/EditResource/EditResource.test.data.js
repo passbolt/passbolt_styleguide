@@ -7,11 +7,10 @@ import ResourceTypesSettings from "../../../../shared/lib/Settings/ResourceTypes
 import resourceTypesFixture from "../../../test/fixture/ResourceTypes/resourceTypes";
 
 /**
- * Returns the default app context for the unit test
- * @param appContext An existing app context
- * @returns {any}
+ * Default props
+ * @returns {}
  */
-export function defaultAppContext(appContext) {
+export function defaultProps() {
   const port = new MockPort();
   port.addRequestListener("passbolt.secret.decrypt", () => "secret-decrypted");
   const userSettings = new UserSettings(userSettingsFixture);
@@ -19,29 +18,21 @@ export function defaultAppContext(appContext) {
   const resourceTypesSettings = new ResourceTypesSettings(siteSettings, resourceTypesFixture);
   const resources = [mockResource];
 
-  const defaultAppContext = {
-    userSettings,
-    siteSettings,
-    resourceTypesSettings,
-    port,
-    setContext: function(newContext) {
-      // In this scope this reference the object context.
-      Object.assign(this, newContext);
-    },
-    resources,
-    passwordEditDialogProps: {
-      id: mockResource.id
-    }
-  };
-  return Object.assign(defaultAppContext, appContext || {});
-}
-
-/**
- * Default props
- * @returns {{resource: {id: string, name: string}}}
- */
-export function defaultProps() {
   return {
+    context: {
+      userSettings,
+      siteSettings,
+      resourceTypesSettings,
+      port,
+      setContext: function(newContext) {
+        // In this scope this reference the object context.
+        Object.assign(this, newContext);
+      },
+      resources,
+      passwordEditDialogProps: {
+        id: mockResource.id
+      }
+    },
     onClose: jest.fn()
   };
 }

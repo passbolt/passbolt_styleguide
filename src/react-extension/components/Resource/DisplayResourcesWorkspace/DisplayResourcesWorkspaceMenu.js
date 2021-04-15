@@ -15,7 +15,7 @@
 import React from "react";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import PropTypes from "prop-types";
-import AppContext from "../../../contexts/AppContext";
+import {withAppContext} from "../../../contexts/AppContext";
 import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 import Icon from "../../Common/Icons/Icon";
 import {withDialog} from "../../../contexts/DialogContext";
@@ -133,7 +133,7 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
     const passwordDeleteDialogProps = {
       resources: this.selectedResources
     };
-    this.context.setContext({passwordDeleteDialogProps});
+    this.props.context.setContext({passwordDeleteDialogProps});
     this.props.dialogContext.open(DeleteResource);
     this.handleCloseMoreMenu();
   }
@@ -145,7 +145,7 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
     const passwordEditDialogProps = {
       id: this.selectedResources[0].id
     };
-    this.context.setContext({passwordEditDialogProps});
+    this.props.context.setContext({passwordEditDialogProps});
     this.props.dialogContext.open(EditResource);
   }
 
@@ -154,7 +154,7 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
    */
   async handleShareClickEvent() {
     const resourcesIds = this.selectedResources.map(resource => resource.id);
-    await this.context.setContext({shareDialogProps: {resourcesIds}});
+    await this.props.context.setContext({shareDialogProps: {resourcesIds}});
     this.props.dialogContext.open(ShareDialog);
   }
 
@@ -163,9 +163,9 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
    */
   async handleCopyPermalinkClickEvent() {
     this.handleCloseMoreMenu();
-    const baseUrl = this.context.userSettings.getTrustedDomain();
+    const baseUrl = this.props.context.userSettings.getTrustedDomain();
     const permalink = `${baseUrl}/app/passwords/view/${this.selectedResources[0].id}`;
-    await this.context.port.request("passbolt.clipboard.copy", permalink);
+    await this.props.context.port.request("passbolt.clipboard.copy", permalink);
     this.displaySuccessNotification(this.translate("The permalink has been copied to clipboard"));
   }
 
@@ -174,7 +174,7 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
    */
   async handleCopyUsernameClickEvent() {
     this.handleCloseMoreMenu();
-    await this.context.port.request("passbolt.clipboard.copy", this.selectedResources[0].username);
+    await this.props.context.port.request("passbolt.clipboard.copy", this.selectedResources[0].username);
     this.displaySuccessNotification(this.translate("The username has been copied to clipboard"));
   }
 
@@ -190,10 +190,10 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
       throw new TypeError(this.translate("The password is empty."));
     }
     if (typeof plaintextDto === 'string') {
-      await this.context.port.request("passbolt.clipboard.copy", plaintextDto);
+      await this.props.context.port.request("passbolt.clipboard.copy", plaintextDto);
     } else {
       if (Object.prototype.hasOwnProperty.call(plaintextDto, 'password')) {
-        await this.context.port.request("passbolt.clipboard.copy", plaintextDto.password);
+        await this.props.context.port.request("passbolt.clipboard.copy", plaintextDto.password);
       } else {
         throw new TypeError(this.translate("The password field is not defined."));
       }
@@ -207,7 +207,7 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
     this.handleCloseMoreMenu();
 
     try {
-      const plaintextDto = await this.context.port.request("passbolt.secret.decrypt", this.selectedResources[0].id, {showProgress: true});
+      const plaintextDto = await this.props.context.port.request("passbolt.secret.decrypt", this.selectedResources[0].id, {showProgress: true});
       await this.copyPasswordToClipboard(plaintextDto);
       this.props.resourceWorkspaceContext.onResourceCopied();
       this.props.actionFeedbackContext.displaySuccess(this.translate("The secret has been copied to clipboard"));
@@ -292,7 +292,7 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
    * Returns true if the user can export
    */
   canExport() {
-    return this.hasResourceSelected() && this.context.siteSettings.settings.passbolt.plugins.export;
+    return this.hasResourceSelected() && this.props.context.siteSettings.settings.passbolt.plugins.export;
   }
 
   /**
@@ -468,13 +468,12 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
   }
 }
 
-DisplayResourcesWorkspaceMenu.contextType = AppContext;
-
 DisplayResourcesWorkspaceMenu.propTypes = {
+  context: PropTypes.any, // The application context
   actionFeedbackContext: PropTypes.any, // The action feedback context
   resourceWorkspaceContext: PropTypes.any, // the resource workspace context
   dialogContext: PropTypes.any, // the dialog context
   t: PropTypes.func, // The translation function
 };
 
-export default withDialog(withResourceWorkspace(withActionFeedback(withTranslation('common')(DisplayResourcesWorkspaceMenu))));
+export default withAppContext(withDialog(withResourceWorkspace(withActionFeedback(withTranslation('common')(DisplayResourcesWorkspaceMenu)))));

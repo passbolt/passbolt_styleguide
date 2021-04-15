@@ -13,7 +13,7 @@
  */
 import React, {Component} from "react";
 import PropTypes from "prop-types";
-import AppContext from "../../../contexts/AppContext";
+import {withAppContext} from "../../../contexts/AppContext";
 import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import {withDialog} from "../../../contexts/DialogContext";
@@ -62,7 +62,7 @@ class EditResourceTag extends Component {
    * Whenever the component is mounted
    */
   componentDidMount() {
-    this.setState({name:  this.context.tagToEdit.slug});
+    this.setState({name:  this.props.context.tagToEdit.slug});
   }
 
   /**
@@ -103,7 +103,7 @@ class EditResourceTag extends Component {
    * Handle close button click.
    */
   handleCloseClick() {
-    this.context.setContext({tagToEdit: null});
+    this.props.context.setContext({tagToEdit: null});
     this.props.onClose();
   }
 
@@ -119,14 +119,14 @@ class EditResourceTag extends Component {
     }
 
     const tagDto = {
-      id: this.context.tagToEdit.id,
+      id: this.props.context.tagToEdit.id,
       slug: this.state.name,
-      is_shared: this.context.tagToEdit.is_shared
+      is_shared: this.props.context.tagToEdit.is_shared
     };
 
     try {
       this.props.loadingContext.add();
-      const updatedTag = await this.context.port.request("passbolt.tags.update", tagDto);
+      const updatedTag = await this.props.context.port.request("passbolt.tags.update", tagDto);
       await this.handleSaveSuccess(updatedTag);
     } catch (error) {
       this.handleSaveError(error);
@@ -154,8 +154,8 @@ class EditResourceTag extends Component {
 
     await this.props.actionFeedbackContext.displaySuccess(this.translate("The tag has been updated successfully"));
 
-    const previousTagId = this.context.tagToEdit.id;
-    this.context.setContext({tagToEdit: null});
+    const previousTagId = this.props.context.tagToEdit.id;
+    this.props.context.setContext({tagToEdit: null});
     this.selectUpdatedTag(previousTagId, updatedTag);
   }
 
@@ -194,7 +194,7 @@ class EditResourceTag extends Component {
         title: this.translate("There was an unexpected error..."),
         message: error.message
       };
-      this.context.setContext({errorDialogProps});
+      this.props.context.setContext({errorDialogProps});
       this.props.dialogContext.open(NotifyError);
     }
   }
@@ -288,9 +288,8 @@ class EditResourceTag extends Component {
   }
 }
 
-EditResourceTag.contextType = AppContext;
-
 EditResourceTag.propTypes = {
+  context: PropTypes.any, // The application context
   onClose: PropTypes.func,
   actionFeedbackContext: PropTypes.any, // The action feedback context
   dialogContext: PropTypes.any, // The dialog congtext
@@ -302,4 +301,4 @@ EditResourceTag.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withRouter(withResourceWorkspace(withLoading(withActionFeedback(withDialog(withTranslation('common')(EditResourceTag))))));
+export default withAppContext(withRouter(withResourceWorkspace(withLoading(withActionFeedback(withDialog(withTranslation('common')(EditResourceTag)))))));

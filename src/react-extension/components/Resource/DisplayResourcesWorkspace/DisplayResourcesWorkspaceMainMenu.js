@@ -14,7 +14,7 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import AppContext from "../../../contexts/AppContext";
+import {withAppContext} from "../../../contexts/AppContext";
 import Icon from "../../Common/Icons/Icon";
 import {withDialog} from "../../../contexts/DialogContext";
 import {ResourceWorkspaceFilterTypes, withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
@@ -115,7 +115,7 @@ class DisplayResourcesWorkspaceMainMenu extends React.Component {
    * Handle create click event
    */
   handleCreateClickEvent() {
-    const canUseFolders = this.context.siteSettings.canIUse('folders');
+    const canUseFolders = this.props.context.siteSettings.canIUse('folders');
     if (canUseFolders) {
       const createMenuOpen = !this.state.createMenuOpen;
       this.setState({createMenuOpen});
@@ -146,7 +146,7 @@ class DisplayResourcesWorkspaceMainMenu extends React.Component {
     const resourceCreateDialogProps = {
       folderParentId: this.folderIdSelected
     };
-    this.context.setContext({resourceCreateDialogProps});
+    this.props.context.setContext({resourceCreateDialogProps});
     this.props.dialogContext.open(CreateResource);
   }
 
@@ -165,7 +165,7 @@ class DisplayResourcesWorkspaceMainMenu extends React.Component {
     const folderCreateDialogProps = {
       folderParentId: this.folderIdSelected
     };
-    this.context.setContext({folderCreateDialogProps});
+    this.props.context.setContext({folderCreateDialogProps});
     this.props.dialogContext.open(CreateResourceFolder);
   }
 
@@ -201,7 +201,7 @@ class DisplayResourcesWorkspaceMainMenu extends React.Component {
    * Returns true if the current user can import a CSV/KDBX file
    */
   get canImport() {
-    return this.context.siteSettings.canIUse("import");
+    return this.props.context.siteSettings.canIUse("import");
   }
 
   /**
@@ -270,12 +270,11 @@ class DisplayResourcesWorkspaceMainMenu extends React.Component {
   }
 }
 
-DisplayResourcesWorkspaceMainMenu.contextType = AppContext;
-
 DisplayResourcesWorkspaceMainMenu.propTypes = {
+  context: PropTypes.any, // The application context
   dialogContext: PropTypes.any, // the dialog context
   resourceWorkspaceContext: PropTypes.any, // the resource workspace context
   t: PropTypes.func, // The translation function
 };
 
-export default withDialog(withResourceWorkspace(withTranslation('common')(DisplayResourcesWorkspaceMainMenu)));
+export default withAppContext(withDialog(withResourceWorkspace(withTranslation('common')(DisplayResourcesWorkspaceMainMenu))));

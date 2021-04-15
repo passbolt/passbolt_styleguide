@@ -14,7 +14,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import Icon from "../../Common/Icons/Icon";
-import AppContext from "../../../contexts/AppContext";
+import {withAppContext} from "../../../contexts/AppContext";
 import Autocomplete from "../../Common/Autocomplete/Autocomplete";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import {withLoading} from "../../../contexts/LoadingContext";
@@ -109,7 +109,7 @@ class EditResourceTags extends React.Component {
    * @return {Promise<void>}
    */
   async fetchAllTags() {
-    const allTags = await this.context.port.request("passbolt.tags.find-all");
+    const allTags = await this.props.context.port.request("passbolt.tags.find-all");
     if (allTags) {
       this.setState({allTags});
     }
@@ -407,7 +407,7 @@ class EditResourceTags extends React.Component {
   async updateTags() {
     try {
       this.props.loadingContext.add();
-      await this.context.port.request("passbolt.tags.update-resource-tags", this.props.resourceId, this.state.tags);
+      await this.props.context.port.request("passbolt.tags.update-resource-tags", this.props.resourceId, this.state.tags);
       this.props.loadingContext.remove();
       await this.props.actionFeedbackContext.displaySuccess(this.translate("The tags have been updated successfully"));
       this.setState({processing: false});
@@ -551,9 +551,8 @@ class EditResourceTags extends React.Component {
   }
 }
 
-EditResourceTags.contextType = AppContext;
-
 EditResourceTags.propTypes = {
+  context: PropTypes.any, // The application context
   tags: PropTypes.array, // tags of the resource
   isOwner: PropTypes.bool, // if the user is owner of the resource
   toggleInputTagEditor: PropTypes.func, // toggle to display or not the editor
@@ -563,4 +562,4 @@ EditResourceTags.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withLoading(withActionFeedback(withTranslation('common')(EditResourceTags)));
+export default withAppContext(withLoading(withActionFeedback(withTranslation('common')(EditResourceTags))));

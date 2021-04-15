@@ -13,7 +13,7 @@
  */
 import React, {Fragment} from "react";
 import Icon from "../../Common/Icons/Icon";
-import AppContext from "../../../contexts/AppContext";
+import {withAppContext} from "../../../contexts/AppContext";
 import {ResourceWorkspaceFilterTypes, withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 import PropTypes from "prop-types";
 import {withRouter} from "react-router-dom";
@@ -84,7 +84,7 @@ class FilterResourcesByGroups extends React.Component {
    * @returns {*|boolean}
    */
   hasGroup() {
-    return this.context.groups && this.groups.length > 0;
+    return this.props.context.groups && this.groups.length > 0;
   }
 
   /**
@@ -92,7 +92,7 @@ class FilterResourcesByGroups extends React.Component {
    * @returns {*}
    */
   get groups() {
-    return this.context.groups.filter(group => group.my_group_user !== null);
+    return this.props.context.groups.filter(group => group.my_group_user !== null);
   }
 
   /**
@@ -169,12 +169,11 @@ class FilterResourcesByGroups extends React.Component {
   }
 }
 
-FilterResourcesByGroups.contextType = AppContext;
-
 FilterResourcesByGroups.propTypes = {
+  context: PropTypes.any, // The application context
   resourceWorkspaceContext: PropTypes.any,
   history: PropTypes.object,
   t: PropTypes.func, // The translation function
 };
 
-export default withRouter(withResourceWorkspace(withTranslation('common')(FilterResourcesByGroups)));
+export default withRouter(withAppContext(withResourceWorkspace(withTranslation('common')(FilterResourcesByGroups))));

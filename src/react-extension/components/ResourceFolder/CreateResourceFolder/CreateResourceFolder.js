@@ -13,7 +13,7 @@
  */
 import React, {Component} from "react";
 import PropTypes from "prop-types";
-import AppContext from "../../../contexts/AppContext";
+import {withAppContext} from "../../../contexts/AppContext";
 import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
 import FormSubmitButton from "../../Common/Inputs/FormSubmitButton/FormSubmitButton";
@@ -174,7 +174,7 @@ class CreateResourceFolder extends Component {
       title: this.translate("There was an unexpected error..."),
       message: error.message
     };
-    this.context.setContext({errorDialogProps});
+    this.props.context.setContext({errorDialogProps});
     this.props.dialogContext.open(NotifyError);
   }
 
@@ -204,9 +204,9 @@ class CreateResourceFolder extends Component {
   async createFolder() {
     const folderDto = {
       name: this.state.name,
-      folder_parent_id: this.context.folderCreateDialogProps.folderParentId
+      folder_parent_id: this.props.context.folderCreateDialogProps.folderParentId
     };
-    return await this.context.port.request("passbolt.folders.create", folderDto);
+    return await this.props.context.port.request("passbolt.folders.create", folderDto);
   }
 
   /**
@@ -215,7 +215,7 @@ class CreateResourceFolder extends Component {
    * @returns {void}
    */
   selectAndScrollToFolder(id) {
-    this.context.port.emit("passbolt.folders.select-and-scroll-to", id);
+    this.props.context.port.emit("passbolt.folders.select-and-scroll-to", id);
   }
 
   /**
@@ -315,13 +315,12 @@ class CreateResourceFolder extends Component {
   }
 }
 
-CreateResourceFolder.contextType = AppContext;
-
 CreateResourceFolder.propTypes = {
+  context: PropTypes.any, // The application context
   actionFeedbackContext: PropTypes.any, // The action feedback context
   onClose: PropTypes.func,
   dialogContext: PropTypes.any, // The dialog context
   t: PropTypes.func, // The translation function
 };
 
-export default withActionFeedback(withDialog(withTranslation('common')(CreateResourceFolder)));
+export default withAppContext(withActionFeedback(withDialog(withTranslation('common')(CreateResourceFolder))));

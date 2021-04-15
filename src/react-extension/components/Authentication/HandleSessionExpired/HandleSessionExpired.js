@@ -12,7 +12,7 @@
  */
 import React from 'react';
 import PropTypes from "prop-types";
-import AppContext from "../../../contexts/AppContext";
+import {withAppContext} from "../../../contexts/AppContext";
 import {withDialog} from "../../../contexts/DialogContext";
 import NotifyExpiredSession from "../../Authentication/NotifyExpiredSession/NotifyExpiredSession";
 
@@ -71,7 +71,7 @@ class HandleSessionExpired extends React.Component {
    * @returns {Promise<boolean>}
    */
   async checkIsAuthenticated() {
-    return await this.context.onCheckIsAuthenticatedRequested();
+    return await this.props.context.onCheckIsAuthenticatedRequested();
   }
 
   /**
@@ -90,10 +90,9 @@ class HandleSessionExpired extends React.Component {
   }
 }
 
-HandleSessionExpired.contextType = AppContext;
-
 HandleSessionExpired.propTypes = {
+  context: PropTypes.any, // The application context
   dialogContext: PropTypes.any, // the dialog context
 };
 
-export default withDialog(HandleSessionExpired);
+export default withAppContext(withDialog(HandleSessionExpired));

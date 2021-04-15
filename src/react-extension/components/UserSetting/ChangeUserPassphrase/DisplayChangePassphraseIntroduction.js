@@ -15,7 +15,6 @@
 
 import React from 'react';
 import PropTypes from "prop-types";
-import AppContext from "../../../contexts/AppContext";
 import {withUserSettings} from "../../../contexts/UserSettingsContext";
 import {Trans, withTranslation} from "react-i18next";
 
@@ -161,7 +160,6 @@ class DisplayChangePassphraseIntroduction extends React.Component {
   }
 }
 
-DisplayChangePassphraseIntroduction.contextType = AppContext;
 DisplayChangePassphraseIntroduction.propTypes = {
   userSettingsContext: PropTypes.object, // The user settings context
   t: PropTypes.func, // The translation function

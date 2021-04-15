@@ -15,7 +15,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import {withUserWorkspace} from "../../../contexts/UserWorkspaceContext";
-import AppContext from "../../../contexts/AppContext";
+import {withAppContext} from "../../../contexts/AppContext";
 import UserAvatar from "../../Common/Avatar/UserAvatar";
 import {withTranslation} from "react-i18next";
 
@@ -28,7 +28,7 @@ class DisplayUserGroupDetailsMembersGroupMember extends React.Component {
    * @return {object}
    */
   get user() {
-    return this.context.users.find(user => user.id === this.props.groupUser.user_id);
+    return this.props.context.users.find(user => user.id === this.props.groupUser.user_id);
   }
 
   /**
@@ -43,7 +43,7 @@ class DisplayUserGroupDetailsMembersGroupMember extends React.Component {
    * Returns the base url
    */
   get baseUrl() {
-    return this.context.userSettings.getTrustedDomain();
+    return this.props.context.userSettings.getTrustedDomain();
   }
 
   /**
@@ -76,11 +76,11 @@ class DisplayUserGroupDetailsMembersGroupMember extends React.Component {
   }
 }
 
-DisplayUserGroupDetailsMembersGroupMember.contextType = AppContext;
 DisplayUserGroupDetailsMembersGroupMember.propTypes = {
+  context: PropTypes.any, // The application context
   groupUser: PropTypes.object, // The group user
   userWorkspaceContext: PropTypes.object, // The user workspace context
   t: PropTypes.func, // The translation function
 };
 
-export default withUserWorkspace(withTranslation('common')(DisplayUserGroupDetailsMembersGroupMember));
+export default withAppContext(withUserWorkspace(withTranslation('common')(DisplayUserGroupDetailsMembersGroupMember)));

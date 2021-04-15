@@ -16,7 +16,7 @@ import PropTypes from "prop-types";
 import {withDialog} from "../../../contexts/DialogContext";
 import ContextualMenuWrapper from "../../Common/ContextualMenu/ContextualMenuWrapper";
 import CreateResourceFolder from "../../ResourceFolder/CreateResourceFolder/CreateResourceFolder";
-import AppContext from "../../../contexts/AppContext";
+import {withAppContext} from "../../../contexts/AppContext";
 import RenameResourceFolder from "../../ResourceFolder/RenameResourceFolder/RenameResourceFolder";
 import DeleteResourceFolder from "../../ResourceFolder/DeleteResourceFolder/DeleteResourceFolder";
 import ShareDialog from "../../Share/ShareDialog";
@@ -59,7 +59,7 @@ class FilterResourcesByFoldersItemContextualMenu extends React.Component {
    */
   handleCreateFolderItemClickEvent() {
     if (this.canUpdate()) {
-      this.context.setContext({folderCreateDialogProps: {folderParentId: this.props.folder.id}});
+      this.props.context.setContext({folderCreateDialogProps: {folderParentId: this.props.folder.id}});
       this.props.dialogContext.open(CreateResourceFolder);
       this.props.hide();
     }
@@ -70,7 +70,7 @@ class FilterResourcesByFoldersItemContextualMenu extends React.Component {
    */
   handleRenameFolderItemClickEvent() {
     if (this.canUpdate()) {
-      this.context.setContext({folder: this.props.folder});
+      this.props.context.setContext({folder: this.props.folder});
       this.props.dialogContext.open(RenameResourceFolder);
       this.props.hide();
     }
@@ -82,7 +82,7 @@ class FilterResourcesByFoldersItemContextualMenu extends React.Component {
   handleShareFolderItemClickEvent() {
     if (this.canShare()) {
       const foldersIds = [this.props.folder.id];
-      this.context.setContext({shareDialogProps: {foldersIds}});
+      this.props.context.setContext({shareDialogProps: {foldersIds}});
       this.props.dialogContext.open(ShareDialog);
       this.props.hide();
     }
@@ -103,7 +103,7 @@ class FilterResourcesByFoldersItemContextualMenu extends React.Component {
    */
   handleDeleteFolderItemClickEvent() {
     if (this.canUpdate()) {
-      this.context.setContext({folder: this.props.folder});
+      this.props.context.setContext({folder: this.props.folder});
       this.props.dialogContext.open(DeleteResourceFolder);
       this.props.hide();
     }
@@ -130,7 +130,7 @@ class FilterResourcesByFoldersItemContextualMenu extends React.Component {
    * Returns true if the user can export
    */
   canExport() {
-    return this.context.siteSettings.settings.passbolt.plugins.export;
+    return this.props.context.siteSettings.settings.passbolt.plugins.export;
   }
 
   /**
@@ -218,9 +218,8 @@ class FilterResourcesByFoldersItemContextualMenu extends React.Component {
   }
 }
 
-FilterResourcesByFoldersItemContextualMenu.contextType = AppContext;
-
 FilterResourcesByFoldersItemContextualMenu.propTypes = {
+  context: PropTypes.any, // The application context
   folder: PropTypes.object,
   hide: PropTypes.func, // Hide the contextual menu
   left: PropTypes.number, // left position in px of the page
@@ -230,4 +229,4 @@ FilterResourcesByFoldersItemContextualMenu.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withResourceWorkspace(withDialog(withTranslation('common')(FilterResourcesByFoldersItemContextualMenu)));
+export default withAppContext(withResourceWorkspace(withDialog(withTranslation('common')(FilterResourcesByFoldersItemContextualMenu))));

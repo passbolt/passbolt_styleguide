@@ -16,7 +16,7 @@ import PropTypes from "prop-types";
 import UserAvatar from "../../Common/Avatar/UserAvatar";
 import GroupAvatar from "../../Common/Avatar/GroupAvatar";
 import Icon from "../../Common/Icons/Icon";
-import AppContext from "../../../contexts/AppContext";
+import {withAppContext} from "../../../contexts/AppContext";
 import {withDialog} from "../../../contexts/DialogContext";
 import ShareDialog from "../../Share/ShareDialog";
 import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
@@ -77,7 +77,7 @@ class DisplayResourceFolderDetailsPermissions extends React.Component {
    */
   async fetch() {
     this.setState({loading: true});
-    const permissions = await this.context.port.request('passbolt.folders.find-permissions', this.folder.id);
+    const permissions = await this.props.context.port.request('passbolt.folders.find-permissions', this.folder.id);
     if (permissions) {
       permissions.sort((permissionA, permissionB) => this.sortPermissions(permissionA, permissionB));
     }
@@ -123,7 +123,7 @@ class DisplayResourceFolderDetailsPermissions extends React.Component {
    */
   handlePermissionsEditClickEvent() {
     const foldersIds = [this.folder.id];
-    this.context.setContext({shareDialogProps: {foldersIds}});
+    this.props.context.setContext({shareDialogProps: {foldersIds}});
     this.props.dialogContext.open(ShareDialog);
   }
 
@@ -229,10 +229,10 @@ class DisplayResourceFolderDetailsPermissions extends React.Component {
                     </div>
                   </div>
                   {permission.user &&
-                  <UserAvatar user={permission.user} baseUrl={this.context.userSettings.getTrustedDomain()}/>
+                  <UserAvatar user={permission.user} baseUrl={this.props.context.userSettings.getTrustedDomain()}/>
                   }
                   {permission.group &&
-                  <GroupAvatar group={permission.group} baseUrl={this.context.userSettings.getTrustedDomain()}/>
+                  <GroupAvatar group={permission.group} baseUrl={this.props.context.userSettings.getTrustedDomain()}/>
                   }
                 </li>
               ))}
@@ -244,12 +244,11 @@ class DisplayResourceFolderDetailsPermissions extends React.Component {
   }
 }
 
-DisplayResourceFolderDetailsPermissions.contextType = AppContext;
-
 DisplayResourceFolderDetailsPermissions.propTypes = {
+  context: PropTypes.any, // The application context
   resourceWorkspaceContext: PropTypes.object,
   dialogContext: PropTypes.any,
   t: PropTypes.func, // The translation function
 };
 
-export default withDialog(withResourceWorkspace(withTranslation('common')(DisplayResourceFolderDetailsPermissions)));
+export default withAppContext(withDialog(withResourceWorkspace(withTranslation('common')(DisplayResourceFolderDetailsPermissions))));

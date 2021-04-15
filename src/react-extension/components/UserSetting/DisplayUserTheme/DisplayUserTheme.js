@@ -15,7 +15,7 @@
 
 import React from 'react';
 import PropTypes from "prop-types";
-import AppContext from "../../../contexts/AppContext";
+import {withAppContext} from "../../../contexts/AppContext";
 import {withLoading} from "../../../contexts/LoadingContext";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
 import {withDialog} from "../../../contexts/DialogContext";
@@ -75,8 +75,8 @@ class DisplayUserTheme extends React.Component {
    */
   async populate() {
     this.props.loadingContext.add();
-    const themes = await this.context.port.request('passbolt.themes.find-all');
-    const selectedTheme = this.context.userSettings.getTheme();
+    const themes = await this.props.context.port.request('passbolt.themes.find-all');
+    const selectedTheme = this.props.context.userSettings.getTheme();
     await this.setState({themes, selectedTheme});
     this.props.loadingContext.remove();
   }
@@ -88,7 +88,7 @@ class DisplayUserTheme extends React.Component {
     const isAlreadySelected = this.state.selectedTheme === theme.name;
     if (!isAlreadySelected) {
       await this.setState({selectedTheme: theme.name});
-      this.context.port.request("passbolt.themes.change", theme.name)
+      this.props.context.port.request("passbolt.themes.change", theme.name)
         .then(this.onSelectSuccess.bind(this))
         .catch(this.onSelectFailure.bind(this));
     }
@@ -111,7 +111,7 @@ class DisplayUserTheme extends React.Component {
       title: this.translate("There was an unexpected error..."),
       message: error.message
     };
-    this.context.setContext({errorDialogProps});
+    this.props.context.setContext({errorDialogProps});
     this.props.dialogContext.open(NotifyError);
   }
 
@@ -158,15 +158,15 @@ class DisplayUserTheme extends React.Component {
   }
 }
 
-DisplayUserTheme.contextType = AppContext;
 DisplayUserTheme.propTypes = {
+  context: PropTypes.any, // The application context
   actionFeedbackContext: PropTypes.object, // The action feedback context
   dialogContext: PropTypes.object, // The dialog context
   loadingContext: PropTypes.object, // The loading context
   t: PropTypes.func, // The translation function
 };
 
-export default withActionFeedback(withDialog(withLoading(withTranslation('common')(DisplayUserTheme))));
+export default withAppContext(withActionFeedback(withDialog(withLoading(withTranslation('common')(DisplayUserTheme)))));
 
 
 

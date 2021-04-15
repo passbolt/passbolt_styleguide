@@ -17,7 +17,7 @@ import {
   AdministrationWorkspaceMenuTypes,
   withAdministrationWorkspace
 } from "../../../contexts/AdministrationWorkspaceContext";
-import AppContext, {withAppContext} from "../../../contexts/AppContext";
+import {withAppContext} from "../../../contexts/AppContext";
 import {withRouter} from "react-router-dom";
 import {Trans, withTranslation} from "react-i18next";
 import {withNavigationContext} from "../../../contexts/NavigationContext";
@@ -231,8 +231,6 @@ class DisplayAdministrationMenu extends React.Component {
     );
   }
 }
-
-DisplayAdministrationMenu.contextType = AppContext;
 
 DisplayAdministrationMenu.propTypes = {
   context: PropTypes.object, // The app context

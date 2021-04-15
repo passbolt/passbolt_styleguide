@@ -12,7 +12,7 @@
  * @since         2.14.0
  */
 import React, {Component} from "react";
-import AppContext from "../../../contexts/AppContext";
+import {withAppContext} from "../../../contexts/AppContext";
 import PropTypes from "prop-types";
 import FormSubmitButton from "../../Common/Inputs/FormSubmitButton/FormSubmitButton";
 import FormCancelButton from "../../Common/Inputs/FormSubmitButton/FormCancelButton";
@@ -69,7 +69,7 @@ class ConfirmDeleteDialog extends Component {
       this.props.loadingContext.add();
 
       // Persist
-      await this.context.port.request("passbolt.comments.delete", this.context.resourceCommentId);
+      await this.props.context.port.request("passbolt.comments.delete", this.props.context.resourceCommentId);
 
       // Complete loading bar
       this.props.loadingContext.remove();
@@ -81,7 +81,7 @@ class ConfirmDeleteDialog extends Component {
       await this.setState({actions: {processing: false}});
 
       // Update the context
-      this.context.setContext({resourceCommentId: null, mustRefreshComments: true});
+      this.props.context.setContext({resourceCommentId: null, mustRefreshComments: true});
 
       // Hides the dialog
       this.props.onClose();
@@ -92,7 +92,7 @@ class ConfirmDeleteDialog extends Component {
       await this.props.actionFeedbackContext.displayError(error);
 
       // Update the context
-      this.context.setContext({resourceCommentId: null, mustRefreshComments: false});
+      this.props.context.setContext({resourceCommentId: null, mustRefreshComments: false});
 
       // Hides the dialog
       this.props.onClose();
@@ -103,7 +103,7 @@ class ConfirmDeleteDialog extends Component {
    * Handle close button click.
    */
   handleClose() {
-    this.context.setContext({resourceCommentId: null});
+    this.props.context.setContext({resourceCommentId: null});
     this.props.onClose();
   }
 
@@ -148,13 +148,12 @@ class ConfirmDeleteDialog extends Component {
   }
 }
 
-ConfirmDeleteDialog.contextType = AppContext;
-
 ConfirmDeleteDialog.propTypes = {
+  context: PropTypes.any, // The application context
   actionFeedbackContext: PropTypes.object, // The action feedback context
   loadingContext: PropTypes.object, // The loading context
   onClose: PropTypes.func, // Whenever the dialog is closed
   t: PropTypes.func, // The translation function
 };
 
-export default withLoading(withActionFeedback(withTranslation('common')(ConfirmDeleteDialog)));
+export default withAppContext(withLoading(withActionFeedback(withTranslation('common')(ConfirmDeleteDialog))));

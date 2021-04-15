@@ -13,7 +13,7 @@
  */
 import React, {Component} from "react";
 import PropTypes from "prop-types";
-import AppContext from "../../../contexts/AppContext";
+import {withAppContext} from "../../../contexts/AppContext";
 import Icon from "../../Common/Icons/Icon";
 import Tooltip from "../../Common/Tooltip/Tooltip";
 import SecretComplexity from "../../../../shared/lib/Secret/SecretComplexity";
@@ -33,15 +33,15 @@ const RESOURCE_PASSWORD_MAX_LENGTH = 4096;
 const RESOURCE_DESCRIPTION_MAX_LENGTH = 10000;
 
 class EditResource extends Component {
-  constructor(props, context) {
-    super(props, context);
-    this.state = this.getDefaultState(context);
+  constructor(props) {
+    super(props);
+    this.state = this.defaultState;
     this.initEventHandlers();
     this.createInputRef();
   }
 
-  getDefaultState(context) {
-    const resource = context.resources.find(item => item.id === this.context.passwordEditDialogProps.id) || {};
+  get defaultState() {
+    const resource = this.props.context.resources.find(item => item.id === this.props.context.passwordEditDialogProps.id) || {};
 
     return {
       nameOriginal: resource.name || "",
@@ -108,11 +108,11 @@ class EditResource extends Component {
    * =============================================================
    */
   isEncryptedDescriptionEnabled() {
-    return this.context.resourceTypesSettings.isEncryptedDescriptionEnabled();
+    return this.props.context.resourceTypesSettings.isEncryptedDescriptionEnabled();
   }
 
   areResourceTypesEnabled() {
-    return this.context.resourceTypesSettings.areResourceTypesEnabled();
+    return this.props.context.resourceTypesSettings.areResourceTypesEnabled();
   }
 
   /**
@@ -121,7 +121,7 @@ class EditResource extends Component {
    * @returns {boolean}
    */
   mustEncryptDescription() {
-    return this.context.resourceTypesSettings.mustEncryptDescription(this.state.resourceTypeId);
+    return this.props.context.resourceTypesSettings.mustEncryptDescription(this.state.resourceTypeId);
   }
 
   /*
@@ -241,7 +241,7 @@ class EditResource extends Component {
    */
   async updateResource() {
     const resourceDto = {
-      id: this.context.passwordEditDialogProps.id,
+      id: this.props.context.passwordEditDialogProps.id,
       name: this.state.name,
       username: this.state.username,
       uri: this.state.uri,
@@ -268,7 +268,7 @@ class EditResource extends Component {
     resourceDto.description = this.state.description;
     const plaintextDto = this.state.password;
 
-    return this.context.port.request("passbolt.resources.update", resourceDto, plaintextDto);
+    return this.props.context.port.request("passbolt.resources.update", resourceDto, plaintextDto);
   }
 
   /**
@@ -277,12 +277,12 @@ class EditResource extends Component {
    */
   async updateWithoutEncryptedDescription(resourceDto) {
     resourceDto.description = this.state.description;
-    resourceDto.resource_type_id = this.context.resourceTypesSettings.findResourceTypeIdBySlug(
-      this.context.resourceTypesSettings.DEFAULT_RESOURCE_TYPES_SLUGS.PASSWORD_STRING
+    resourceDto.resource_type_id = this.props.context.resourceTypesSettings.findResourceTypeIdBySlug(
+      this.props.context.resourceTypesSettings.DEFAULT_RESOURCE_TYPES_SLUGS.PASSWORD_STRING
     );
     const plaintextDto = this.state.password;
 
-    return this.context.port.request("passbolt.resources.update", resourceDto, plaintextDto);
+    return this.props.context.port.request("passbolt.resources.update", resourceDto, plaintextDto);
   }
 
   /**
@@ -290,8 +290,8 @@ class EditResource extends Component {
    * @param resourceDto
    */
   async updateWithEncryptedDescription(resourceDto) {
-    resourceDto.resource_type_id = this.context.resourceTypesSettings.findResourceTypeIdBySlug(
-      this.context.resourceTypesSettings.DEFAULT_RESOURCE_TYPES_SLUGS.PASSWORD_AND_DESCRIPTION
+    resourceDto.resource_type_id = this.props.context.resourceTypesSettings.findResourceTypeIdBySlug(
+      this.props.context.resourceTypesSettings.DEFAULT_RESOURCE_TYPES_SLUGS.PASSWORD_AND_DESCRIPTION
     );
     resourceDto.description = '';
     const plaintextDto = {
@@ -299,7 +299,7 @@ class EditResource extends Component {
       password: this.state.password
     };
 
-    return this.context.port.request("passbolt.resources.update", resourceDto, plaintextDto);
+    return this.props.context.port.request("passbolt.resources.update", resourceDto, plaintextDto);
   }
 
   /**
@@ -307,10 +307,10 @@ class EditResource extends Component {
    */
   async handleSaveSuccess() {
     await this.props.actionFeedbackContext.displaySuccess(this.translate("The password has been updated successfully"));
-    this.selectAndScrollToResource(this.context.passwordEditDialogProps.id);
+    this.selectAndScrollToResource(this.props.context.passwordEditDialogProps.id);
     this.props.resourceWorkspaceContext.onResourceEdited();
     this.props.onClose();
-    this.context.setContext({passwordEditDialogProps: null});
+    this.props.context.setContext({passwordEditDialogProps: null});
   }
 
   /*
@@ -343,7 +343,7 @@ class EditResource extends Component {
       title: this.translate("There was an unexpected error..."),
       message: error.message
     };
-    this.context.setContext({errorDialogProps});
+    this.props.context.setContext({errorDialogProps});
     this.props.dialogContext.open(NotifyError);
   }
 
@@ -368,7 +368,7 @@ class EditResource extends Component {
    * @param {string} id The resource id.
    */
   selectAndScrollToResource(id) {
-    this.context.port.emit("passbolt.resources.select-and-scroll-to", id);
+    this.props.context.port.emit("passbolt.resources.select-and-scroll-to", id);
   }
 
   /*
@@ -465,7 +465,7 @@ class EditResource extends Component {
    * Handle close button click.
    */
   handleClose() {
-    this.context.setContext({passwordEditDialogProps: null});
+    this.props.context.setContext({passwordEditDialogProps: null});
     this.props.onClose();
   }
 
@@ -529,7 +529,7 @@ class EditResource extends Component {
    * @return {Promise<Object>}
    */
   async getDecryptedSecret() {
-    const plaintext = await this.context.port.request("passbolt.secret.decrypt", this.context.passwordEditDialogProps.id, {showProgress: false});
+    const plaintext = await this.props.context.port.request("passbolt.secret.decrypt", this.props.context.passwordEditDialogProps.id, {showProgress: false});
     if (typeof plaintext === 'string') {
       return {
         password: plaintext,
@@ -550,8 +550,8 @@ class EditResource extends Component {
    */
   getPasswordInputStyle() {
     if (this.state.passwordInputHasFocus) {
-      const backgroundColor = this.context.userSettings.getSecurityTokenBackgroundColor();
-      const textColor = this.context.userSettings.getSecurityTokenTextColor();
+      const backgroundColor = this.props.context.userSettings.getSecurityTokenBackgroundColor();
+      const textColor = this.props.context.userSettings.getSecurityTokenTextColor();
 
       return {
         background: backgroundColor,
@@ -570,8 +570,8 @@ class EditResource extends Component {
    * @return {Object}
    */
   getSecurityTokenStyle() {
-    const backgroundColor = this.context.userSettings.getSecurityTokenBackgroundColor();
-    const textColor = this.context.userSettings.getSecurityTokenTextColor();
+    const backgroundColor = this.props.context.userSettings.getSecurityTokenBackgroundColor();
+    const textColor = this.props.context.userSettings.getSecurityTokenTextColor();
 
     if (this.state.passwordInputHasFocus) {
       return {
@@ -654,7 +654,7 @@ class EditResource extends Component {
   render() {
     const passwordInputStyle = this.getPasswordInputStyle();
     const securityTokenStyle = this.getSecurityTokenStyle();
-    const securityTokenCode = this.context.userSettings.getSecurityTokenCode();
+    const securityTokenCode = this.props.context.userSettings.getSecurityTokenCode();
     const passwordStrength = SecretComplexity.getStrength(this.state.password);
     const passwordPlaceholder = this.getPasswordInputPlaceholder();
     /*
@@ -787,9 +787,8 @@ class EditResource extends Component {
   }
 }
 
-EditResource.contextType = AppContext;
-
 EditResource.propTypes = {
+  context: PropTypes.any, // The application context
   onClose: PropTypes.func,
   resourceWorkspaceContext: PropTypes.any, // The resource workspace context
   actionFeedbackContext: PropTypes.any, // The action feedback context
@@ -797,4 +796,4 @@ EditResource.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withResourceWorkspace(withActionFeedback(withDialog(withTranslation('common')(EditResource))));
+export default withAppContext(withResourceWorkspace(withActionFeedback(withDialog(withTranslation('common')(EditResource)))));

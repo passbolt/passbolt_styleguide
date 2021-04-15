@@ -13,7 +13,7 @@
  */
 import React, {Component} from "react";
 import PropTypes from "prop-types";
-import {AuthenticationContext} from "../../../contexts/AuthenticationContext";
+import {withAuthenticationContext} from "../../../contexts/AuthenticationContext";
 import {Trans, withTranslation} from "react-i18next";
 
 /**
@@ -42,7 +42,7 @@ class DisplayLoginError extends Component {
    */
   async handleSubmit(event) {
     event.preventDefault();
-    await this.context.onTryLoginAgainRequested();
+    await this.props.authenticationContext.onTryLoginAgainRequested();
   }
 
   /**
@@ -79,9 +79,9 @@ class DisplayLoginError extends Component {
   }
 }
 
-DisplayLoginError.contextType = AuthenticationContext;
 DisplayLoginError.propTypes = {
+  authenticationContext: PropTypes.any, // The authentication context
   error: PropTypes.any, // The error to display
   t: PropTypes.func, // The translation function
 };
-export default withTranslation('common')(DisplayLoginError);
+export default withAuthenticationContext(withTranslation('common')(DisplayLoginError));

@@ -16,7 +16,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import Icon from "../../Common/Icons/Icon";
 import {withUserWorkspace} from "../../../contexts/UserWorkspaceContext";
-import AppContext from "../../../contexts/AppContext";
+import {withAppContext} from "../../../contexts/AppContext";
 import DisplayUserGroupDetailsMembersGroupMember from "./DisplayUserGroupDetailsMembersGroupMember";
 import EditUserGroup from "../EditUserGroup/EditUserGroup";
 import {withDialog} from "../../../contexts/DialogContext";
@@ -64,7 +64,7 @@ class DisplayUserGroupDetailsMembers extends React.Component {
    * Returns the base url
    */
   get baseUrl() {
-    return this.context.userSettings.getTrustedDomain();
+    return this.props.context.userSettings.getTrustedDomain();
   }
 
   /**
@@ -87,7 +87,7 @@ class DisplayUserGroupDetailsMembers extends React.Component {
    * @returns {boolean}
    */
   isLoading() {
-    return !this.context.users;
+    return !this.props.context.users;
   }
 
   /**
@@ -140,11 +140,11 @@ class DisplayUserGroupDetailsMembers extends React.Component {
   }
 }
 
-DisplayUserGroupDetailsMembers.contextType = AppContext;
 DisplayUserGroupDetailsMembers.propTypes = {
+  context: PropTypes.any, // The application context
   userWorkspaceContext: PropTypes.object, // The user workspace context
   dialogContext: PropTypes.object, // The dialog context
   t: PropTypes.func, // The translation function
 };
 
-export default withDialog(withUserWorkspace(withTranslation('common')(DisplayUserGroupDetailsMembers)));
+export default withAppContext(withDialog(withUserWorkspace(withTranslation('common')(DisplayUserGroupDetailsMembers))));

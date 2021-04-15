@@ -1,5 +1,8 @@
 import React, {Component} from "react";
-import {AuthenticationContext, AuthenticationContextState} from "../../../contexts/AuthenticationContext";
+import {
+  AuthenticationContextState,
+  withAuthenticationContext
+} from "../../../contexts/AuthenticationContext";
 import ImportGpgKey from "../../Authentication/ImportGpgKey/ImportGpgKey";
 import CheckPassphrase from "../../Authentication/CheckPassphrase/CheckPassphrase";
 import ChooseSecurityToken from "../../Authentication/ChooseSecurityToken/ChooseSecurityToken";
@@ -44,8 +47,8 @@ class RecoverAuthentication extends Component {
    * Whenever the security token has been saved
    */
   handleSecurityTokenSaved() {
-    if (this.context.state === AuthenticationContextState.SECURITY_TOKEN_SAVED) {
-      this.context.onCompleteRecoverRequested();
+    if (this.props.authenticationContext.state === AuthenticationContextState.SECURITY_TOKEN_SAVED) {
+      this.props.authenticationContext.onCompleteRecoverRequested();
     }
   }
 
@@ -53,7 +56,7 @@ class RecoverAuthentication extends Component {
    * Initialize the authentication recover process
    */
   initializeRecover() {
-    this.context.onInitializeRecoverRequested();
+    this.props.authenticationContext.onInitializeRecoverRequested();
   }
 
   /**
@@ -68,7 +71,7 @@ class RecoverAuthentication extends Component {
    * Render the component
    */
   render() {
-    switch (this.context.state)  {
+    switch (this.props.authenticationContext.state)  {
       case AuthenticationContextState.RECOVER_INITIALIZED:
         return <ImportGpgKey
           title={this.translate("Welcome back, please enter your private key to begin with the recovery process.")}
@@ -82,17 +85,17 @@ class RecoverAuthentication extends Component {
       case  AuthenticationContextState.RECOVER_COMPLETED:
         return <DisplayLoginInProgress/>;
       case AuthenticationContextState.UNEXPECTED_ERROR:
-        return <DisplayUnexpectedError error={this.context.error}/>;
+        return <DisplayUnexpectedError error={this.props.authenticationContext.error}/>;
       default:
         return <LoadingSpinner/>;
     }
   }
 }
 
-RecoverAuthentication.contextType = AuthenticationContext;
 RecoverAuthentication.propTypes = {
+  authenticationContext: PropTypes.any, // The authentication context
   siteSettings: PropTypes.object, // The site settings
   t: PropTypes.func, // The translation function
 };
 
-export default withTranslation('common')(RecoverAuthentication);
+export default withAuthenticationContext(withTranslation('common')(RecoverAuthentication));

@@ -13,7 +13,7 @@
 import React, {Component} from "react";
 import PropTypes from "prop-types";
 import {withRouter} from "react-router-dom";
-import AppContext from "../../../contexts/AppContext";
+import {withAppContext} from "../../../contexts/AppContext";
 import {withNavigationContext} from "../../../contexts/NavigationContext";
 import {Trans, withTranslation} from "react-i18next";
 
@@ -42,7 +42,7 @@ class DisplayMainMenu extends Component {
    * @returns {boolean}
    */
   isLoggedInUserAdmin() {
-    return this.context.loggedInUser && this.context.loggedInUser.role.name === 'admin';
+    return this.props.context.loggedInUser && this.props.context.loggedInUser.role.name === 'admin';
   }
 
   /**
@@ -112,7 +112,7 @@ class DisplayMainMenu extends Component {
                 <div className="main-cell-wrapper">
                   <div className="main-cell">
                     <a role="button"
-                      onClick={this.context.onLogoutRequested}>
+                      onClick={this.props.context.onLogoutRequested}>
                       <span><Trans>sign out</Trans></span>
                     </a>
                   </div>
@@ -126,13 +126,12 @@ class DisplayMainMenu extends Component {
   }
 }
 
-DisplayMainMenu.contextType = AppContext;
-
 DisplayMainMenu.propTypes = {
+  context: PropTypes.object, // The application context
   navigationContext: PropTypes.any, // The navigation context
   history: PropTypes.object, // The router history
   location: PropTypes.object, // Router location prop
   t: PropTypes.func, // The translation function
 };
 
-export default withRouter(withNavigationContext(withTranslation('common')(DisplayMainMenu)));
+export default withAppContext(withRouter(withNavigationContext(withTranslation('common')(DisplayMainMenu))));
