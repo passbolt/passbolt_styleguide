@@ -518,12 +518,23 @@ class DisplayResourcesList extends React.Component {
       }) || "";
   }
 
+  /**
+   * Format date in time ago
+   * @param {string} date The date to format
+   * @return {string}
+   */
+  formatDateTimeAgo(date) {
+    const dateTime = DateTime.fromISO(date);
+    const duration = dateTime.diffNow().toMillis();
+    return duration < 1000 && duration > 0 ? this.translate('Just now') : dateTime.toRelative({locale: this.props.context.locale});
+  }
+
   renderItem(index, key) {
     const resource = this.resources[index];
     const isSelected = this.isResourceSelected(resource);
     const isFavorite = resource.favorite !== null && resource.favorite !== undefined;
     const safeUri = this.safeUri(resource);
-    const modifiedFormatted = DateTime.fromISO(resource.modified).toRelative({locale: this.props.context.locale});
+    const modifiedFormatted = this.formatDateTimeAgo(resource.modified);
     const isPasswordPreviewed = this.isPasswordPreviewed(resource.id);
 
     return (

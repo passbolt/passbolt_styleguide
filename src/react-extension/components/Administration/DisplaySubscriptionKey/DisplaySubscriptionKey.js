@@ -277,6 +277,17 @@ class DisplaySubscriptionKey extends React.Component {
   }
 
   /**
+   * Format date in time ago
+   * @param {string} date The date to format
+   * @return {string}
+   */
+  formatDateTimeAgo(date) {
+    const dateTime = DateTime.fromISO(date);
+    const duration = dateTime.diffNow().toMillis();
+    return duration < 1000 && duration > 0 ? this.translate('Just now') : dateTime.toRelative({locale: this.props.context.locale});
+  }
+
+  /**
    * Get active users
    * @returns {*}
    * @constructor
@@ -382,7 +393,7 @@ class DisplaySubscriptionKey extends React.Component {
                   <span
                     className={`label ${this.hasSubscriptionKeyExpired() ? "error" : ""} ${this.hasSubscriptionKeyGoingToExpire() ? "warning" : ""}`}><Trans>Expires on:</Trans></span>
                   <span
-                    className={`value ${this.hasSubscriptionKeyExpired() ? "error" : ""} ${this.hasSubscriptionKeyGoingToExpire() ? "warning" : ""}`}>{this.formatDate(this.state.expiry)} ({`${this.hasSubscriptionKeyExpired() ? this.translate("expired ") : ""}${DateTime.fromISO(this.state.expiry).toRelative({locale: this.props.context.locale})}`})</span>
+                    className={`value ${this.hasSubscriptionKeyExpired() ? "error" : ""} ${this.hasSubscriptionKeyGoingToExpire() ? "warning" : ""}`}>{this.formatDate(this.state.expiry)} ({`${this.hasSubscriptionKeyExpired() ? this.translate("expired ") : ""}${this.formatDateTimeAgo(this.state.expiry)}`})</span>
                 </li>
               </ul>
               }

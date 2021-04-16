@@ -247,7 +247,9 @@ class DisplayUsers extends React.Component {
    * @return {string} The formatted date
    */
   formatDateTimeAgo(date) {
-    return DateTime.fromISO(date).toRelative({locale: this.context.locale});
+    const dateTime = DateTime.fromISO(date);
+    const duration = dateTime.diffNow().toMillis();
+    return duration < 1000 && duration > 0 ? this.translate('Just now') : dateTime.toRelative({locale: this.context.locale});
   }
 
   renderItem(index, key) {
