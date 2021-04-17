@@ -14,13 +14,13 @@
 import React, {Component} from "react";
 import PropTypes from "prop-types";
 import AuthenticationContextProvider from "./contexts/AuthenticationContext";
-import ManageDialogs from "../react/components/Common/Dialog/ManageDialogs/ManageDialogs";
-import DialogContextProvider from "../react/contexts/Common/DialogContext";
+import ManageDialogs from "./components/Common/Dialog/ManageDialogs/ManageDialogs";
+import DialogContextProvider from "./contexts/DialogContext";
 import SetupAuthentication from "./components/AuthenticationSetup/SetupAuthentication/SetupAuthentication";
 import SiteSettings from "./lib/Settings/SiteSettings";
-import Footer from "./components/Footer/Footer";
+import Footer from "./components/Common/Footer/Footer";
 import AppContext from "./contexts/AppContext";
-import TranslationProvider from "./components/Internationalisation/TranslationProvider";
+import TranslationProvider from "./components/Common/Internationalisation/TranslationProvider";
 
 /**
  * The setup application served by the browser extension.

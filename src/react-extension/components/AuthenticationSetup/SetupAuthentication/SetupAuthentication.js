@@ -5,13 +5,13 @@ import DownloadRecoveryKit from "../../Authentication/DownloadRecoveryKit/Downlo
 import ChooseSecurityToken from "../../Authentication/ChooseSecurityToken/ChooseSecurityToken";
 import ImportGpgKey from "../../Authentication/ImportGpgKey/ImportGpgKey";
 import CheckPassphrase from "../../Authentication/CheckPassphrase/CheckPassphrase";
-import LoadingSpinner from "../../../../react/components/Common/Loading/LoadingSpinner/LoadingSpinner";
+import LoadingSpinner from "../../Common/Loading/LoadingSpinner/LoadingSpinner";
 import PropTypes from "prop-types";
 import GenerateKeyOnPassphraseLostSecondaryAction
   from "../../Authentication/CheckPassphrase/GenerateKeyOnPassphraseLostSecondaryAction";
 import GenerateKeySecondaryAction
   from "../../Authentication/ImportGpgKey/GenerateKeySecondaryAction";
-import DisplayUnexpectedError from "../../Authentication/DisplayError/DisplayUnexpectedError";
+import DisplayUnexpectedError from "../../Authentication/DisplayUnexpectedError/DisplayUnexpectedError";
 import DisplayLoginInProgress from "../../AuthenticationLogin/DisplayLoginInProgress/DisplayLoginInProgress";
 import {withTranslation} from "react-i18next";
 

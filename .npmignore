@@ -2,7 +2,6 @@ node_modules
 demo
 docker
 .idea
-src/react-appjs
 src/css
 src/less
 src/video

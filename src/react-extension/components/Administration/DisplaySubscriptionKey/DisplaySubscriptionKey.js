@@ -13,14 +13,14 @@
  */
 import React from "react";
 import PropTypes from "prop-types";
-import Icon from "../../../../react/components/Common/Icons/Icon";
 import {withAppContext} from "../../../contexts/AppContext";
 import {DateTime} from "luxon";
 import {withAdministrationWorkspace} from "../../../contexts/AdministrationWorkspaceContext";
 import {Trans, withTranslation} from "react-i18next";
-import {withDialog} from "../../../../react/contexts/Common/DialogContext";
+import {withDialog} from "../../../../react-extension/contexts/DialogContext";
 import EditSubscriptionKey from "../EditSubscriptionKey/EditSubscriptionKey";
 import {withNavigationContext} from "../../../contexts/NavigationContext";
+import Icon from "../../Common/Icons/Icon";
 
 /**
  * This component allows to display the subscription key for the administration

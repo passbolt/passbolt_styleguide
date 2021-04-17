@@ -12,14 +12,14 @@
  * @since         3.0.0
  */
 import React, {Component} from "react";
-import ErrorDialog from "../../Dialog/ErrorDialog/ErrorDialog";
+import NotifyError from "../../Common/Error/NotifyError/NotifyError";
 import {AuthenticationContext} from "../../../contexts/AuthenticationContext";
 import PropTypes from "prop-types";
-import {withDialog} from "../../../../react/contexts/Common/DialogContext";
-import UserAvatar from "../../../../react/components/Common/Avatar/UserAvatar";
+import {withDialog} from "../../../contexts/DialogContext";
+import UserAvatar from "../../Common/Avatar/UserAvatar";
 import {Link} from "react-router-dom";
 import {Trans, withTranslation} from "react-i18next";
-import Icon from "../../../../react/components/Common/Icons/Icon";
+import Icon from "../../Common/Icons/Icon";
 
 /**
  * This component allows the user to log in with his account
@@ -249,7 +249,7 @@ class Login extends Component {
     } else {
       this.setState({actions: {processing: false}});
       const ErrorDialogProps = {message: error.message};
-      this.props.dialogContext.open(ErrorDialog, ErrorDialogProps);
+      this.props.dialogContext.open(NotifyError, ErrorDialogProps);
     }
     return Promise.reject(error);
   }
@@ -268,7 +268,7 @@ class Login extends Component {
    */
   onLoginFailure(error) {
     const ErrorDialogProps = {message: error.message};
-    this.props.dialogContext.open(ErrorDialog, ErrorDialogProps);
+    this.props.dialogContext.open(NotifyError, ErrorDialogProps);
     return Promise.reject(error);
   }
 

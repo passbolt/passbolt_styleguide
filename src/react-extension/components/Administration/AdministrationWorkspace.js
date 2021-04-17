@@ -17,9 +17,9 @@ import {
   AdministrationWorkspaceMenuTypes,
   withAdministrationWorkspace
 } from "../../contexts/AdministrationWorkspaceContext";
-import DisplayMainMenu from "../navigation/DisplayMainMenu";
-import Logo from "../../../react/components/Common/Navigation/Header/Logo";
-import UserBadgeMenu from "../Header/UserBadgeMenu";
+import DisplayMainMenu from "../Common/Menu/DisplayMainMenu";
+import Logo from "../Common/Navigation/Header/Logo";
+import DisplayUserBadgeMenu from "../User/DisplayUserBadgeMenu/DisplayUserBadgeMenu";
 import DisplayAdministrationMenu from "./DisplayAdministrationMenu/DisplayAdministrationMenu";
 import DisplayMfaAdministration from "./DisplayMfaAdministration/DisplayMfaAdministration";
 import DisplayAdministrationWorkspaceActions from "./DisplayAdministrationWorkspaceActions/DisplayAdministrationWorkspaceActions";
@@ -29,7 +29,7 @@ import DisplayUserDirectoryAdministration
   from "./DisplayUserDirectoryAdministration/DisplayUserDirectoryAdministration";
 import DisplayEmailNotificationsAdministration
   from "./DisplayEmailNotificationsAdministration/DisplayEmailNotificationsAdministration";
-import SearchBar from "../../../react/components/Common/Navigation/Search/SearchBar";
+import SearchBar from "../Common/Navigation/Search/SearchBar";
 import DisplaySubscriptionKey from "./DisplaySubscriptionKey/DisplaySubscriptionKey";
 
 class AdministrationWorkspace extends Component {
@@ -75,7 +75,7 @@ class AdministrationWorkspace extends Component {
           <div className="header second">
             <Logo/>
             <SearchBar disabled={true}/>
-            <UserBadgeMenu baseUrl={this.props.context.trustedDomain || this.props.context.userSettings.getTrustedDomain()} user={this.props.context.loggedInUser}/>
+            <DisplayUserBadgeMenu baseUrl={this.props.context.trustedDomain || this.props.context.userSettings.getTrustedDomain()} user={this.props.context.loggedInUser}/>
           </div>
           <div className="header third">
             <div className="col1 main-action-wrapper">

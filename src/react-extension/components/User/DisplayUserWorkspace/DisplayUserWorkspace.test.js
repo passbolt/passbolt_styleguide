@@ -26,15 +26,15 @@ import DisplayUserWorkspacePage from "./DisplayUserWorkspace.test.page";
 import {waitFor} from "@testing-library/dom";
 
 jest.mock("../FilterUsersByGroups/FilterUsersByGroup", () => () => <></>); // eslint-disable-line no-use-before-define
-jest.mock("../FilterUsersByShortcut/FilterUserByShortcut", () => () => <></>);
+jest.mock("../FilterUsersByShortcut/FilterUsersByShortcut", () => () => <></>);
 jest.mock("../FilterUsersByText/FilterUsersByText", () => () => <></>);
-jest.mock("../DisplayUserGroupDetails/DisplayUserGroupDetails", () => () => <span className="user-group-details"></span>);
+jest.mock("../../UserGroup/DisplayUserGroupDetails/DisplayUserGroupDetails", () => () => <span className="user-group-details"></span>);
 jest.mock("../DisplayUserWorkspaceMainActions/DisplayUserWorkspaceMainActions", () => () => <></>);
-jest.mock("../DisplayUserWorkspaceBreadcrumb/DisplayUserWorkspaceBreadcrumb", () => () => <></>);
-jest.mock("../DisplayUserDetails/DisplayUserDetails", () => () => <span className="user-details"></span>);
+jest.mock("../FilterUsersByBreadcrumb/FilterUsersByBreadcrumb", () => () => <></>);
+jest.mock("../../UserDetails/DisplayUserDetails/DisplayUserDetails", () => () => <span className="user-details"></span>);
 jest.mock("../DisplayUserWorkspaceActions/DisplayUserWorkspaceActions", () => () => <></>);
-jest.mock("../../../../react/components/Common/Navigation/Header/Logo");
-jest.mock("../../Header/UserBadgeMenu", () => () => <></>);
+jest.mock("../../Common/Navigation/Header/Logo");
+jest.mock("../DisplayUserBadgeMenu/DisplayUserBadgeMenu", () => () => <></>);
 
 beforeEach(() => {
   jest.resetModules();

@@ -17,8 +17,8 @@ import PropTypes from "prop-types";
 import AppContext from "./AppContext";
 import {withRouter} from "react-router-dom";
 import {withActionFeedback} from "./ActionFeedbackContext";
-import {withLoading} from "../../react/contexts/Common/LoadingContext";
-import sanitizeUrl, {urlProtocols} from "../../react/lib/Common/Sanitize/sanitizeUrl";
+import {withLoading} from "./LoadingContext";
+import sanitizeUrl, {urlProtocols} from "../lib/Sanitize/sanitizeUrl";
 import {DateTime} from "luxon";
 
 /**

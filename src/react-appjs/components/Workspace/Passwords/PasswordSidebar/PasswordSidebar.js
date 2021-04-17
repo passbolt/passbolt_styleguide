@@ -14,10 +14,10 @@
 import React from "react";
 import Icon from "../../../Common/Icons/Icon";
 import PropTypes from "prop-types";
-import PasswordSidebarInformationSection from "./PasswordSidebarInformationSection";
-import PasswordSidebarTagSection from "./PasswordSidebarTagSection";
+import DisplayResourceDetailsInformation from "./DisplayResourceDetailsInformation";
+import DisplayResourceDetailsTag from "./DisplayResourceDetailsTag";
 
-import PasswordSidebarPermissionsSection from "./PasswordSidebarPermissionsSection";
+import DisplayResourceDetailsPermission from "./DisplayResourceDetailsPermission";
 
 class PasswordSidebar extends React.Component {
 
@@ -102,7 +102,7 @@ class PasswordSidebar extends React.Component {
               <span className="visuallyhidden">Close</span>
             </a>
           </div>
-          <PasswordSidebarInformationSection
+          <DisplayResourceDetailsInformation
             resource={this.props.resource}
             folders={this.props.folders}
             onSelectFolderParent={this.props.onSelectFolderParent}
@@ -117,7 +117,7 @@ class PasswordSidebar extends React.Component {
           {/*  permissions={this.state.permissions}*/}
           {/*  groups={this.props.groups}*/}
           {/*  users={this.props.users}/>*/}
-          <PasswordSidebarTagSection
+          <DisplayResourceDetailsTag
             resource={this.props.resource}/>
 
         </div>

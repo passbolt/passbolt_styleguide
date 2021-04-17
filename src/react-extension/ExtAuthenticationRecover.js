@@ -15,12 +15,12 @@ import React, {Component} from "react";
 import PropTypes from "prop-types";
 import AppContext from "./contexts/AppContext";
 import AuthenticationContextProvider, {AuthenticationContext} from "./contexts/AuthenticationContext";
-import ManageDialogs from "../react/components/Common/Dialog/ManageDialogs/ManageDialogs";
-import DialogContextProvider from "../react/contexts/Common/DialogContext";
+import ManageDialogs from "./components/Common/Dialog/ManageDialogs/ManageDialogs";
+import DialogContextProvider from "./contexts/DialogContext";
 import RecoverAuthentication from "./components/AuthenticationRecover/RecoverAuthentication/RecoverAuthentication";
 import SiteSettings from "./lib/Settings/SiteSettings";
-import Footer from "./components/Footer/Footer";
-import TranslationProvider from "./components/Internationalisation/TranslationProvider";
+import Footer from "./components/Common/Footer/Footer";
+import TranslationProvider from "./components/Common/Internationalisation/TranslationProvider";
 
 /**
  * The recover application served by the browser extension.

@@ -18,7 +18,7 @@
 import DisplayUserIntroductionPassphrasePage from "./DisplayUserIntroductionPassphrase.test.page";
 import {defaultProps} from "./DisplayUserIntroductionPassphrase.test.data";
 import {waitFor} from "@testing-library/react";
-import {defaultAppContext} from "../../Password/PasswordSidebar/PasswordSidebarPermissionSection.test.data";
+import {defaultAppContext} from "../../ResourceDetails/DisplayResourceDetails/DisplayResourceDetailsPermission.test.data";
 
 beforeEach(() => {
   jest.resetModules();

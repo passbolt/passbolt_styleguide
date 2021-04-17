@@ -16,7 +16,7 @@
  * Unit tests on  InstallExtension in regard of specifications
  */
 
-import InstallExtensionPage from "./InstallExtensionPage";
+import InstallExtensionTestPage from "./InstallExtension.test.page";
 import {defaultProps} from "./InstallExtension.test.data";
 
 beforeEach(() => {
@@ -33,7 +33,7 @@ describe("As AN I should see install extension page", () => {
      * Then I should see an install extension page
      */
     it('As AN I should see the install extension for an unsupported browser', () => {
-      page = new InstallExtensionPage(props);
+      page = new InstallExtensionTestPage(props);
       // browser image
       expect(page.browser.className).toBe("browser-webstore unknown");
     });
@@ -43,7 +43,7 @@ describe("As AN I should see install extension page", () => {
         value: {userAgent: "Firefox"},
         writable: true
       });
-      page = new InstallExtensionPage();
+      page = new InstallExtensionTestPage();
       // browser image
       expect(page.browser.className).toBe("browser-webstore firefox");
     });
@@ -54,7 +54,7 @@ describe("As AN I should see install extension page", () => {
         writable: true
       });
       window.chrome = {runtime: "true"};
-      page = new InstallExtensionPage();
+      page = new InstallExtensionTestPage();
       expect(page.exists()).toBeTruthy();
       // title
       expect(page.title).toBe("Please install the browser extension.");
@@ -72,7 +72,7 @@ describe("As AN I should see install extension page", () => {
       Object.defineProperty(window, "location", {
         value: {reload: jest.fn()},
       });
-      page = new InstallExtensionPage();
+      page = new InstallExtensionTestPage();
       await page.refresh();
       expect(window.location.reload).toHaveBeenCalled();
     });

@@ -14,7 +14,7 @@ import * as React from "react";
 import PropTypes from "prop-types";
 import {withAppContext} from "./AppContext";
 import {withRouter} from "react-router-dom";
-import {withLoading} from "../../react/contexts/Common/LoadingContext";
+import {withLoading} from "./LoadingContext";
 import {ApiClient} from "../lib/apiClient/apiClient";
 
 /**

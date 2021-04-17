@@ -2,7 +2,7 @@
  * Unit tests on CreateGpgKey in regard of specifications
  */
 import {defaultAppContext, defaultProps, propsWithCannotRememberMe} from "./CheckPassphrase.test.data";
-import ErrorDialog from "../../Dialog/ErrorDialog/ErrorDialog";
+import NotifyError from "../../Common/Error/NotifyError/NotifyError";
 import CheckPassphrasePage from "./CheckPassphrase.test.page";
 
 
@@ -84,7 +84,7 @@ describe("Check passphrase", () => {
       jest.spyOn(props.dialogContext, 'open').mockImplementationOnce(jest.fn());
       await page.fillPassphrase('some passphrase');
       await page.verify();
-      expect(props.dialogContext.open).toBeCalledWith(ErrorDialog, expectedError);
+      expect(props.dialogContext.open).toBeCalledWith(NotifyError, expectedError);
     });
   });
 

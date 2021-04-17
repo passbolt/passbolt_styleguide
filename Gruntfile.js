@@ -52,11 +52,6 @@ module.exports = function(grunt) {
       },
 		},
 		shell: {
-		  // 'bundle-reports': {
-		  //   command: [
-		  //     'webpack --entry ./src/js/reports/index.js --output-path ./src/react-appjs/lib/ --output-filename reports.js'
-      //     ].join('&& ')
-      // },
 			'publish': {
 				options: {
 					stdout: true
@@ -74,15 +69,6 @@ module.exports = function(grunt) {
           stdout: true
         },
         command: [
-          // 'rm -f ./demo/react-appjs/public/css/themes/default/api_reports.css',
-          // 'rm -f ./demo/react-appjs/public/css/themes/midgar/api_reports.css',
-          // 'rm -f ./demo/react-appjs/public/css/themes/default/api_main.css',
-          // 'rm -f ./demo/react-appjs/public/css/themes/midgar/api_main.css',
-          // 'cp ./src/css/themes/default/api_reports.css ./demo/react-appjs/public/css/themes/default/.',
-          // 'cp ./src/css/themes/midgar/api_reports.css ./demo/react-appjs/public/css/themes/midgar/.',
-          // 'cp ./src/css/themes/default/api_main.css ./demo/react-appjs/public/css/themes/default/.',
-          // 'cp ./src/css/themes/midgar/api_main.css ./demo/react-appjs/public/css/themes/midgar/.',
-
           'rm -f ./demo/api-app/public/css/themes/default/*.css',
           'rm -f ./demo/api-app/public/css/themes/midgar/*.css',
           'cp ./src/css/themes/default/api_main.css ./demo/api-app/public/css/themes/default/.',

@@ -15,11 +15,11 @@ import React, {Component} from "react";
 import PropTypes from "prop-types";
 
 import SharePermissionDeleteButton from "./SharePermissionDeleteButton";
-import TooltipHtml from "../../../react/components/Common/Tooltip/TooltipHtml";
+import TooltipHtml from "../Common/Tooltip/TooltipHtml";
 import ShareVariesDetails from "./ShareVariesDetails";
 import AppContext from "../../contexts/AppContext";
-import UserAvatar from "../../../react/components/Common/Avatar/UserAvatar";
-import GroupAvatar from "../../../react/components/Common/Avatar/GroupAvatar";
+import UserAvatar from "../Common/Avatar/UserAvatar";
+import GroupAvatar from "../Common/Avatar/GroupAvatar";
 import {Trans, withTranslation} from "react-i18next";
 
 class SharePermissionItem extends Component {

@@ -16,10 +16,10 @@ import AppContext from "./contexts/AppContext";
 import ApiRecoverContextProvider from "./contexts/ApiRecoverContext";
 import OrchestrateApiRecover from "./components/AuthenticationRecover/OrchestrateApiRecover/OrchestrateApiRecover";
 import {ApiClientOptions} from "./lib/apiClient/apiClientOptions";
-import Footer from "./components/Footer/Footer";
+import Footer from "./components/Common/Footer/Footer";
 import {ApiClient} from "./lib/apiClient/apiClient";
 import SiteSettings from "./lib/Settings/SiteSettings";
-import TranslationProvider from "./components/Internationalisation/TranslationProvider";
+import TranslationProvider from "./components/Common/Internationalisation/TranslationProvider";
 
 /**
  * The recover application served by the API.

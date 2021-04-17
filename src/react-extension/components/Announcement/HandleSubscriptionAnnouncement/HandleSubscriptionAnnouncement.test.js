@@ -15,7 +15,7 @@
 import {defaultProps, mockSubscriptionGoingToExpired} from "./HandleSubscriptionAnnouncement.test.data";
 import HandleSubscriptionAnnouncementPage from "./HandleSubscriptionAnnouncement.test.page";
 import {waitFor} from "@testing-library/react";
-import PassboltSubscriptionError from "../../../../react/lib/Common/Error/PassboltSubscriptionError";
+import PassboltSubscriptionError from "../../../lib/Error/PassboltSubscriptionError";
 import DisplayGoingToExpireSubscriptionAnnouncement from "./DisplayGoingToExpireSubscriptionAnnouncement";
 import DisplayExpiredSubscriptionAnnouncement from "./DisplayExpiredSubscriptionAnnouncement";
 import DisplayInvalidSubscriptionAnnouncement from "./DisplayInvalidSubscriptionAnnouncement";
