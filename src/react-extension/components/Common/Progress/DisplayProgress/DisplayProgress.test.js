@@ -14,8 +14,9 @@
 
 import React from "react";
 import {render} from "@testing-library/react";
-import AppContext from "../../../../contexts/AppContext";
 import DisplayProgress from "./DisplayProgress";
+import AppContext from "../../../../contexts/AppContext";
+import MockTranslationProvider from "../../../../test/mock/components/Internationalisation/MockTranslationProvider";
 
 beforeEach(() => {
   jest.resetModules();
@@ -27,7 +28,9 @@ describe("DisplayProgress", () => {
 
     const {container} = render(
       <AppContext.Provider value={appContext}>
-        <DisplayProgress debug t={text => text}/>
+        <MockTranslationProvider>
+          <DisplayProgress debug t={text => text}/>
+        </MockTranslationProvider>
       </AppContext.Provider>
     );
 
@@ -59,7 +62,9 @@ describe("DisplayProgress", () => {
 
     const {container} = render(
       <AppContext.Provider value={appContext}>
-        <DisplayProgress debug />
+        <MockTranslationProvider>
+          <DisplayProgress debug />
+        </MockTranslationProvider>
       </AppContext.Provider>
     );
 

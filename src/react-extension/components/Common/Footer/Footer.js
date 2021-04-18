@@ -25,13 +25,6 @@ const UNSAFE_URL = "https://help.passbolt.com/faq/hosting/why-unsafe";
  */
 class Footer extends Component {
   /**
-   * Returns true if the component is ready to be displayed
-   */
-  get isReady() {
-    return this.props.context.siteSettings;
-  }
-
-  /**
    * Returns the terms link url
    */
   get privacyUrl() {
@@ -101,7 +94,6 @@ class Footer extends Component {
     return (
       <footer>
         <div className="footer">
-          {this.isReady &&
           <ul className="footer-links">
             {this.isUnsafeMode &&
             <li className="error-message">
@@ -149,7 +141,6 @@ class Footer extends Component {
               </a>
             </li>
           </ul>
-          }
         </div>
       </footer>
     );

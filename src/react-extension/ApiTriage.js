@@ -43,6 +43,7 @@ class ApiTriage extends Component {
       siteSettings: null, // The site settings
       trustedDomain: this.baseUrl, // The site domain (use trusted domain for compatibility with browser extension applications)
       getApiClientOptions: this.getApiClientOptions.bind(this), // Get the api client options
+      locale: null, // The locale
     };
   }
 
@@ -51,8 +52,9 @@ class ApiTriage extends Component {
    * Invoked immediately after component is inserted into the tree
    * @return {void}
    */
-  componentDidMount() {
-    this.getSiteSettings();
+  async componentDidMount() {
+    await this.getSiteSettings();
+    this.getLocale();
   }
 
   /**
@@ -117,13 +119,46 @@ class ApiTriage extends Component {
   }
 
   /**
+   * Get the locale following this priority:
+   * 1. The browser locale or similar if supported;
+   * 2. The organization locale;
+   * @warning Require the site settings to be fetch to work.
+   */
+  async getLocale() {
+    const locale = this.getBrowserLocale() || this.state.siteSettings.locale;
+    this.setState({locale});
+  }
+
+  /**
+   * Get the browser locale if supported.
+   * @returns {object}
+   */
+  getBrowserLocale() {
+    const browserSupportedLocale = this.state.siteSettings.supportedLocales.find(supportedLocale => navigator.language === supportedLocale.locale);
+    if (browserSupportedLocale) {
+      return browserSupportedLocale.locale;
+    }
+
+    const nonExplicitLanguage = navigator.language.split('-')[0];
+    const similarSupportedLocale = this.state.siteSettings.supportedLocales.find(supportedLocale => nonExplicitLanguage === supportedLocale.locale.split('-')[0]);
+    if (similarSupportedLocale) {
+      return similarSupportedLocale.locale;
+    }
+  }
+
+  isReady() {
+    return this.state.siteSettings !== null && this.state.locale !== null;
+  }
+
+  /**
    * Render the component
    * @returns {JSX}
    */
   render() {
     return (
-      <TranslationProvider loadingPath={`${this.state.trustedDomain}/locales/{{lng}}/{{ns}}.json`}>
-        <AppContext.Provider value={this.state}>
+      <AppContext.Provider value={this.state}>
+        {this.isReady() &&
+        <TranslationProvider loadingPath={`${this.state.trustedDomain}/locales/{{lng}}/{{ns}}.json`}>
           <div id="container" className="container page login">
             <div className="content">
               <div className="header">
@@ -137,8 +172,9 @@ class ApiTriage extends Component {
             </div>
           </div>
           <Footer/>
-        </AppContext.Provider>
-      </TranslationProvider>
+        </TranslationProvider>
+        }
+      </AppContext.Provider>
     );
   }
 }

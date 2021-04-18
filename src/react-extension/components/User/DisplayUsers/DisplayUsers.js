@@ -247,7 +247,7 @@ class DisplayUsers extends React.Component {
    * @return {string} The formatted date
    */
   formatDateTimeAgo(date) {
-    return DateTime.fromISO(date).toRelative({locale: this.props.i18n.lng});
+    return DateTime.fromISO(date).toRelative({locale: this.context.locale});
   }
 
   renderItem(index, key) {
@@ -439,7 +439,6 @@ DisplayUsers.propTypes = {
   actionFeedbackContext: PropTypes.any, // The action feedback context
   contextualMenuContext: PropTypes.any, // The contextual menu context
   t: PropTypes.func, // The translation function
-  i18n: PropTypes.any // The i18n context translation
 };
 
 export default withRouter(withActionFeedback(withContextualMenu(withUserWorkspace(withTranslation('common')(DisplayUsers)))));

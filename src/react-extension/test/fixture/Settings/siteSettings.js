@@ -95,6 +95,17 @@ export default {
       },
       "previewPassword": {
         "version": "3.0.0"
+      },
+      "locale": {
+        "options": [
+          {
+            "locale": "en-US",
+            "label": "English"
+          }, {
+            "locale": "fr-FR",
+            "label": "Français"
+          }
+        ]
       }
     }
   }

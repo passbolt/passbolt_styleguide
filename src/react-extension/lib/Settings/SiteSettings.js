@@ -140,4 +140,41 @@ export default class SiteSettings {
   get version() {
     return getPropValue(this.settings, "app.version.number");
   }
+
+  /**
+   * Get application locale
+   * @returns {object}
+   */
+  get locale() {
+    const organizationLocale = getPropValue(this.settings, "app.locale");
+    return organizationLocale || SiteSettings.DEFAULT_LOCALE.locale;
+  }
+
+  /**
+   * Get supported languages
+   * @returns {object}
+   */
+  get supportedLocales() {
+    const supportedLocales = getPropValue(this.settings, "passbolt.plugins.locale.options");
+    return supportedLocales || SiteSettings.DEFAULT_SUPPORTED_LOCALES;
+  }
+
+  /**
+   * Get the default supported locales.
+   * @type {array<object>}
+   */
+  static get DEFAULT_SUPPORTED_LOCALES() {
+    return [SiteSettings.DEFAULT_LOCALE];
+  }
+
+  /**
+   * Get the default locale.
+   * @type {object}
+   */
+  static get DEFAULT_LOCALE() {
+    return {
+      "locale": "en-US",
+      "label": "English"
+    };
+  }
 }

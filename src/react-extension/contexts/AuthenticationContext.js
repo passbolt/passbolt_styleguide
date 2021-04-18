@@ -14,6 +14,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import UserSettings from "../lib/Settings/UserSettings";
+import AppContext from "./AppContext";
 
 export const AuthenticationContext = React.createContext({
   port: null, // The contextual port
@@ -111,6 +112,8 @@ class AuthenticationContextProvider extends React.Component {
    */
   async onInitializeSetupRequested() {
     const setupInfo = await this.state.port.request('passbolt.setup.info');
+    // update the locale to use the user locale
+    this.context.onUpdateLocaleRequested();
     // In case of error the background page should just disconnect the extension setup application.
     await this.setState({
       state: AuthenticationContextState.SETUP_INITIALIZED,
@@ -125,6 +128,8 @@ class AuthenticationContextProvider extends React.Component {
    */
   async onInitializeRecoverRequested() {
     const recoverInfo = await this.state.port.request('passbolt.recover.info');
+    // update the locale to use the user locale
+    await this.context.onUpdateLocaleRequested();
     // In case of error the background page should just disconnect the extension setup application.
     await this.setState({
       state: AuthenticationContextState.RECOVER_INITIALIZED,
@@ -379,6 +384,8 @@ class AuthenticationContextProvider extends React.Component {
     );
   }
 }
+
+AuthenticationContextProvider.contextType = AppContext;
 
 AuthenticationContextProvider.propTypes = {
   value: PropTypes.any, // The initial value of the context

@@ -9,6 +9,7 @@ import {withDialog} from "../../../contexts/DialogContext";
 import PropTypes from "prop-types";
 import LoadingSpinner from "../../Common/Loading/LoadingSpinner/LoadingSpinner";
 import DisplayUnexpectedError from "../../Authentication/DisplayUnexpectedError/DisplayUnexpectedError";
+import {withAppContext} from "../../../contexts/AppContext";
 
 /**
  * The component orchestrates the login authentication process
@@ -61,7 +62,7 @@ class OrchestrateLogin extends Component {
    * @return {boolean}
    */
   get canRememberMe() {
-    return this.props.siteSettings.hasRememberMeUntilILogoutOption;
+    return this.props.context.siteSettings.hasRememberMeUntilILogoutOption;
   }
 
   /**
@@ -70,7 +71,7 @@ class OrchestrateLogin extends Component {
   render() {
     switch (this.context.state) {
       case AuthenticationContextState.LOGIN_INITIALIZED:
-        if (this.props.siteSettings) {
+        if (this.props.context.siteSettings) {
           return <Login canRememberMe={this.canRememberMe}/>;
         } else {
           return <LoadingSpinner/>;
@@ -91,7 +92,7 @@ class OrchestrateLogin extends Component {
 
 OrchestrateLogin.contextType = AuthenticationContext;
 OrchestrateLogin.propTypes = {
-  siteSettings: PropTypes.object, // The site settings
+  context: PropTypes.any, // The application context
   dialogContext: PropTypes.any // The dialog context
 };
-export default withDialog(OrchestrateLogin);
+export default withAppContext(withDialog(OrchestrateLogin));

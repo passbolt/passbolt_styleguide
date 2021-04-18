@@ -131,7 +131,7 @@ class DisplayResourceFolderDetailsActivity extends React.Component {
    * @return {string}
    */
   formatDateTimeAgo(date) {
-    return DateTime.fromISO(date).toRelative({locale: this.props.i18n.lng});
+    return DateTime.fromISO(date).toRelative({locale: this.context.locale});
   }
 
   /**
@@ -439,7 +439,6 @@ DisplayResourceFolderDetailsActivity.contextType = AppContext;
 DisplayResourceFolderDetailsActivity.propTypes = {
   resourceWorkspaceContext: PropTypes.any,
   t: PropTypes.func, // The translation function
-  i18n: PropTypes.any // The i18n context translation
 };
 
 export default withResourceWorkspace(withTranslation('common')(DisplayResourceFolderDetailsActivity));

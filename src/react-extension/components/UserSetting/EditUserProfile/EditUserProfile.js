@@ -21,6 +21,7 @@ import NotifyError from "../../Common/Error/NotifyError/NotifyError";
 import {withDialog} from "../../../contexts/DialogContext";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import {Trans, withTranslation} from "react-i18next";
+import {withUserSettings} from "../../../contexts/UserSettingsContext";
 
 class EditUserProfile extends Component {
   /**
@@ -37,8 +38,8 @@ class EditUserProfile extends Component {
   /**
    * Whenever the component is mounted
    */
-  componentDidMount() {
-    this.populate();
+  async componentDidMount() {
+    await this.populate();
   }
 
   /**
@@ -49,7 +50,8 @@ class EditUserProfile extends Component {
       profile: { // The editing user profile data
         first_name: "",
         last_name: "",
-        username: ""
+        username: "",
+        locale: "",
       },
       actions: {
         processing: false // True if one is processing the edit
@@ -135,9 +137,10 @@ class EditUserProfile extends Component {
   /**
    * Populates the component with data
    */
-  populate() {
+  async populate() {
     const {first_name, last_name} = this.context.loggedInUser.profile;
-    this.setState({profile: {first_name, last_name}});
+    const locale = this.context.locale;
+    await this.setState({profile: {first_name, last_name, locale}});
   }
 
   /**
@@ -152,12 +155,43 @@ class EditUserProfile extends Component {
       this.focusFirstFieldError();
       return;
     }
-    const {id, username} = this.context.loggedInUser;
-    const {profile} = this.state;
-    const userToUpdate = {id, username, profile};
-    await this.context.port.request("passbolt.users.update", userToUpdate)
+    await this.updateUserProfile()
       .then(this.onSaveSuccess.bind(this))
       .catch(this.onSaveError.bind(this));
+  }
+
+  /**
+   * Update the user profile.
+   * @returns {Promise<void>}
+   */
+  async updateUserProfile() {
+    const userToUpdateDto = this.buildUserToUpdateDto();
+    await this.context.port.request("passbolt.users.update", userToUpdateDto);
+    if (this.canIUseLocale) {
+      const localeToUpdateDto = this.buildLocaleToUpdateDto();
+      await this.props.userSettingsContext.onUpdateLocaleUserRequested(localeToUpdateDto);
+    }
+  }
+
+  /**
+   * Build the user to update DTO
+   * @returns {object}
+   */
+  buildUserToUpdateDto() {
+    const {id, username} = this.context.loggedInUser;
+    const profile = {
+      first_name: this.state.profile.first_name,
+      last_name: this.state.profile.last_name,
+    };
+    return {id, username, profile};
+  }
+
+  /**
+   * Build the locale to update DTO
+   * @returns {object}
+   */
+  buildLocaleToUpdateDto() {
+    return {locale: this.state.profile.locale};
   }
 
   /**
@@ -167,6 +201,7 @@ class EditUserProfile extends Component {
     await this.props.actionFeedbackContext.displaySuccess(this.translate("The user has been updated successfully"));
     const loggedInUser = await this.context.port.request("passbolt.users.find-logged-in-user");
     this.context.setContext({loggedInUser});
+    this.context.onUpdateLocaleRequested();
     this.props.onClose();
   }
 
@@ -175,6 +210,7 @@ class EditUserProfile extends Component {
    * @param error The error
    */
   async onSaveError(error) {
+    await this.toggleProcessing();
     const errorDialogProps = {
       title: this.translate("There was an unexpected error..."),
       message: error.message
@@ -231,11 +267,27 @@ class EditUserProfile extends Component {
   }
 
   /**
+   * Get the supported locales
+   * @returns {array}
+   */
+  get supportedLocales() {
+    return this.context.siteSettings.supportedLocales || [];
+  }
+
+  /**
+   * Can I use the locale plugin.
+   * @type {boolean}
+   */
+  get canIUseLocale() {
+    return this.context.siteSettings.canIUse('locale');
+  }
+
+  /**
    * Render the component
    */
   render() {
     const firstnameErrorSelector = this.state.errors.isFirstnameEmpty ? "error" : "";
-    const lasttnameErrorSelector = this.state.errors.isLastnameEmpty ? "error" : "";
+    const lastnameErrorSelector = this.state.errors.isLastnameEmpty ? "error" : "";
     return (
       <DialogWrapper
         title={this.translate("Edit profile")}
@@ -270,7 +322,7 @@ class EditUserProfile extends Component {
               }
             </div>
 
-            <div className={`input text required ${lasttnameErrorSelector}`}>
+            <div className={`input text required ${lastnameErrorSelector}`}>
               <label htmlFor="user-profile-lastname-input"><Trans>Last Name</Trans></label>
               <input
                 id="user-profile-lastname-input"
@@ -300,6 +352,19 @@ class EditUserProfile extends Component {
                 value={this.context.loggedInUser.username}/>
             </div>
 
+            {this.canIUseLocale &&
+            <div className="input select locale required">
+              <label htmlFor="user-profile-locale-input"><Trans>Language</Trans></label>
+              <select className="large" id="user-profile-locale-input" name="locale" value={this.state.profile.locale} onChange={this.handleInputChange}>
+                {this.supportedLocales.map(supportedLocale =>
+                  <option key={supportedLocale.locale} value={supportedLocale.locale}>
+                    {supportedLocale.label}
+                  </option>
+                )}
+              </select>
+            </div>
+            }
+
           </div>
 
           <div className="submit-wrapper clearfix">
@@ -322,8 +387,9 @@ EditUserProfile.contextType = AppContext;
 EditUserProfile.propTypes = {
   onClose: PropTypes.func, // Whenever the dialog must be closed
   dialogContext: PropTypes.object, // The dialog context
+  userSettingsContext: PropTypes.object, // The user settings context
   actionFeedbackContext: PropTypes.object, // The action feedback context
   t: PropTypes.func, // The translation function
 };
 
-export default withActionFeedback(withDialog(withTranslation('common')(EditUserProfile)));
+export default withActionFeedback(withDialog(withUserSettings(withTranslation('common')(EditUserProfile))));
