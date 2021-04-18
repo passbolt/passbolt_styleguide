@@ -9,7 +9,7 @@
  * @copyright     Copyright (c) 2020 Passbolt SA (https://www.passbolt.com)
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
- * @since        3.0.3
+ * @since        3.2.0
  */
 import i18n from 'i18next';
 import {initReactI18next} from 'react-i18next';
@@ -38,7 +38,7 @@ class TranslationProvider extends Component {
    */
   get defaultState() {
     return {
-      ready: false // if the setup locale is ready
+      ready: false // if i18n ready
     };
   }
 
@@ -69,15 +69,19 @@ class TranslationProvider extends Component {
   }
 
   /**
-   * Get supported languages
+   * Get supported locales.
    * @returns {string[]}
    */
   get supportedLocales() {
-    return Object.keys(this.props.context.siteSettings.supportedLocales);
+    if (!this.props.context.siteSettings.supportedLocales) {
+      return [this.locale];
+    }
+    return this.props.context.siteSettings.supportedLocales.map(supportedLocale => supportedLocale.locale);
   }
 
   /**
-   * Get the language
+   * Get the locale
+   * @type {string}
    */
   get locale() {
     return this.props.context.locale;
@@ -106,7 +110,7 @@ class TranslationProvider extends Component {
    * Returns true when the component can be rendered
    */
   get isReady() {
-    // Waiting for the setup language is completed
+    // Waiting for the i18n initialization to be completed
     return this.state.ready;
   }
 

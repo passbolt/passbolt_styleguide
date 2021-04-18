@@ -89,7 +89,7 @@ class ExtAuthenticationSetup extends Component {
    * Using SiteSettings
    */
   async getSiteSettings() {
-    const settings = await this.props.port.request("passbolt.setup.site-settings");
+    const settings = await this.props.port.request("passbolt.organization-settings.get");
     const siteSettings = new SiteSettings(settings);
     this.setState({siteSettings});
   }
@@ -106,15 +106,16 @@ class ExtAuthenticationSetup extends Component {
    * Get the locale
    */
   async getLocale() {
-    const locale = await this.props.port.request("passbolt.locale.get");
+    const {locale} = await this.props.port.request("passbolt.locale.get");
     this.setState({locale});
   }
 
   /**
    * Whenever the update of the locale is requested
    */
-  async onUpdateLocaleRequested(locale) {
-    await this.setState({locale});
+  async onUpdateLocaleRequested() {
+    const {locale} = await this.props.port.request("passbolt.locale.get");
+    this.setState({locale});
   }
 
   /**

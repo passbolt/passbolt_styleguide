@@ -160,15 +160,38 @@ class EditUserProfile extends Component {
       .catch(this.onSaveError.bind(this));
   }
 
+  /**
+   * Update the user profile.
+   * @returns {Promise<void>}
+   */
   async updateUserProfile() {
+    const userToUpdateDto = this.buildUserToUpdateDto();
+    await this.context.port.request("passbolt.users.update", userToUpdateDto);
+    if (this.canIUseLocale) {
+      const localeToUpdateDto = this.buildLocaleToUpdateDto();
+      await this.props.userSettingsContext.onUpdateLocaleUserRequested(localeToUpdateDto);
+    }
+  }
+
+  /**
+   * Build the user to update DTO
+   * @returns {object}
+   */
+  buildUserToUpdateDto() {
     const {id, username} = this.context.loggedInUser;
     const profile = {
       first_name: this.state.profile.first_name,
       last_name: this.state.profile.last_name,
     };
-    const userToUpdate = {id, username, profile};
-    await this.context.port.request("passbolt.users.update", userToUpdate);
-    await this.props.userSettingsContext.onUpdateLocaleUserRequested(this.state.profile.locale);
+    return {id, username, profile};
+  }
+
+  /**
+   * Build the locale to update DTO
+   * @returns {object}
+   */
+  buildLocaleToUpdateDto() {
+    return {locale: this.state.profile.locale};
   }
 
   /**
@@ -178,7 +201,7 @@ class EditUserProfile extends Component {
     await this.props.actionFeedbackContext.displaySuccess(this.translate("The user has been updated successfully"));
     const loggedInUser = await this.context.port.request("passbolt.users.find-logged-in-user");
     this.context.setContext({loggedInUser});
-    this.context.onUpdateLocaleRequested(this.state.profile.locale);
+    this.context.onUpdateLocaleRequested();
     this.props.onClose();
   }
 
@@ -241,6 +264,22 @@ class EditUserProfile extends Component {
    */
   get translate() {
     return this.props.t;
+  }
+
+  /**
+   * Get the supported locales
+   * @returns {array}
+   */
+  get supportedLocales() {
+    return this.context.siteSettings.supportedLocales || [];
+  }
+
+  /**
+   * Can I use the locale plugin.
+   * @type {boolean}
+   */
+  get canIUseLocale() {
+    return this.context.siteSettings.canIUse('locale');
   }
 
   /**
@@ -313,17 +352,18 @@ class EditUserProfile extends Component {
                 value={this.context.loggedInUser.username}/>
             </div>
 
+            {this.canIUseLocale &&
             <div className="input select locale required">
               <label htmlFor="user-profile-locale-input"><Trans>Language</Trans></label>
               <select className="large" id="user-profile-locale-input" name="locale" value={this.state.profile.locale} onChange={this.handleInputChange}>
-                {Object.entries(this.context.siteSettings.supportedLocales).map(([key, locale]) =>
-                  <option key={key} value={key}>
-                    {locale}
+                {this.supportedLocales.map(supportedLocale =>
+                  <option key={supportedLocale.locale} value={supportedLocale.locale}>
+                    {supportedLocale.label}
                   </option>
-                )
-                }
+                )}
               </select>
             </div>
+            }
 
           </div>
 

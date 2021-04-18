@@ -47,7 +47,7 @@ describe("Authentication Context", () => {
       jest.spyOn(authenticationContext.state.port, 'request').mockImplementation(requestSetupInfoMock);
       await authenticationContext.onInitializeSetupRequested();
       expect(authenticationContext.state.port.request).toHaveBeenCalledWith("passbolt.setup.info");
-      expect(authenticationContext.context.onUpdateLocaleRequested).toHaveBeenCalledWith(setupInfo.locale);
+      expect(authenticationContext.context.onUpdateLocaleRequested).toHaveBeenCalled();
       expect(authenticationContext.state.state).toBe(AuthenticationContextState.SETUP_INITIALIZED);
       expect(authenticationContext.state.process).toBe('setup');
     });
@@ -152,7 +152,7 @@ describe("Authentication Context", () => {
       jest.spyOn(authenticationContext.state.port, 'request').mockImplementation(requestRecoverInfoMock);
       await authenticationContext.onInitializeRecoverRequested();
       expect(authenticationContext.state.port.request).toHaveBeenCalledWith("passbolt.recover.info");
-      expect(authenticationContext.context.onUpdateLocaleRequested).toHaveBeenCalledWith(recoverInfo.locale);
+      expect(authenticationContext.context.onUpdateLocaleRequested).toHaveBeenCalled();
       expect(authenticationContext.state.state).toBe(AuthenticationContextState.RECOVER_INITIALIZED);
       expect(authenticationContext.state.process).toBe('recover');
     });

@@ -32,8 +32,8 @@ export const UserSettingsContext = React.createContext({
   }, // Whenever the user wants download the recovery kit.
   onUpdateSecurityTokenRequested: () => {
   }, // Whenever the user wants update the security token.
-  onUpdateLocaleUserRequested: () => {
-  }, // Whenever the update of the language is requested.
+  onUpdateUserLocaleRequested: () => {
+  }, // Whenever the update of the locale is requested.
 });
 
 /**
@@ -74,7 +74,6 @@ class UserSettingsContextProvider extends React.Component {
     await this.setState({state: UserSettingsContextState.PASSPHRASE_INTRODUCTION});
   }
 
-
   /**
    * Whenever the provide passphrase is requested
    */
@@ -100,10 +99,10 @@ class UserSettingsContextProvider extends React.Component {
 
   /**
    * Whenever the update passphrase is requested
-   * @param passphrase A passphrase
+   * @param {string} passphrase The new passphrase
    */
-  async onUpdatePassphraseRequested(newPassphrase) {
-    await this.context.port.request('passbolt.user.update-private-key', this.state.oldPassphrase, newPassphrase);
+  async onUpdatePassphraseRequested(passphrase) {
+    await this.context.port.request('passbolt.user.update-private-key', this.state.oldPassphrase, passphrase);
     await this.setState({state: UserSettingsContextState.PASSPHRASE_UPDATED, oldPassphrase: null});
   }
 
@@ -116,7 +115,7 @@ class UserSettingsContextProvider extends React.Component {
 
   /**
    * Whenever the update security token is requested
-   * @param securityTokenDto A security token
+   * @param securityTokenDto The security token DTO
    */
   async onUpdateSecurityTokenRequested(securityTokenDto) {
     await this.context.port.request('passbolt.users.update-security-token', securityTokenDto);
@@ -124,10 +123,10 @@ class UserSettingsContextProvider extends React.Component {
 
   /**
    * Whenever the update of the locale is requested
-   * @param locale the locale
+   * @param localeDto The locale DTO
    */
-  async handleUpdateLocaleUserRequested(locale) {
-    await this.context.port.request("passbolt.locale.update", {locale});
+  async handleUpdateLocaleUserRequested(localeDto) {
+    await this.context.port.request("passbolt.locale.update-user-locale", localeDto);
   }
 
   /**

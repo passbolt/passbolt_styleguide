@@ -119,31 +119,31 @@ class ApiTriage extends Component {
   }
 
   /**
-   * Get the locale to use to translate the application
-   * @returns {string|string}
+   * Get the locale following this priority:
+   * 1. The browser locale or similar if supported;
+   * 2. The organization locale;
+   * @warning Require the site settings to be fetch to work.
    */
-  getLocale() {
-    this.setState({locale: this.guessLocale()});
+  async getLocale() {
+    const locale = this.getBrowserLocale() || this.state.siteSettings.locale;
+    this.setState({locale});
   }
 
   /**
-   * Guess the locale to use to translate the application
-   * @returns {string|string}
+   * Get the browser locale if supported.
+   * @returns {object}
    */
-  guessLocale() {
-    const locale = navigator.language;
-    const supportedLocales = Object.keys(this.state.siteSettings.supportedLocales);
-    if (supportedLocales.includes(locale)) {
-      return locale;
+  getBrowserLocale() {
+    const browserSupportedLocale = this.state.siteSettings.supportedLocales.find(supportedLocale => navigator.language === supportedLocale.locale);
+    if (browserSupportedLocale) {
+      return browserSupportedLocale.locale;
     }
 
-    const nonExplicitLanguage = locale.split('-')[0];
-    const similarLanguage = supportedLocales.find(supportedLanguage => nonExplicitLanguage === supportedLanguage.split('-')[0]);
-    if (similarLanguage) {
-      return similarLanguage;
+    const nonExplicitLanguage = navigator.language.split('-')[0];
+    const similarSupportedLocale = this.state.siteSettings.supportedLocales.find(supportedLocale => nonExplicitLanguage === supportedLocale.locale.split('-')[0]);
+    if (similarSupportedLocale) {
+      return similarSupportedLocale.locale;
     }
-
-    return this.state.siteSettings.locale;
   }
 
   isReady() {

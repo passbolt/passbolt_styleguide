@@ -77,8 +77,8 @@ describe("UserSettings Context", () => {
 
     it('As LU I should update the language', async() => {
       const locale = "fr-FR";
-      await userContext.state.onUpdateLocaleUserRequested(locale);
-      expect(userContext.context.port.request).toHaveBeenCalledWith("passbolt.locale.update", {locale});
+      await userContext.state.onUpdateLocaleUserRequested({locale});
+      expect(userContext.context.port.request).toHaveBeenCalledWith("passbolt.locale.update-user-locale", {locale});
     });
   });
 });

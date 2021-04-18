@@ -1,4 +1,3 @@
-
 /**
  * Passbolt ~ Open source password manager for teams
  * Copyright (c) 2020 Passbolt SA (https://www.passbolt.com)
@@ -68,14 +67,12 @@ class DisplayUserProfile extends React.Component {
   }
 
   /**
-   * Get the locale
-   * @returns {{[p: string]: string}}
+   * Get the locale label.
    */
-  get locale() {
-    return {
-      [locale.ENGLISH]: "English (default)",
-      [locale.FRENCH]: "Français"
-    };
+  get userLocaleLabel() {
+    const supportedLocales = this.context.siteSettings.supportedLocales || [];
+    const locale = supportedLocales.find(supportedLocale => supportedLocale.locale === this.context.locale);
+    return locale ? locale.label : "N/A";
   }
 
   /**
@@ -84,6 +81,14 @@ class DisplayUserProfile extends React.Component {
    */
   get translate() {
     return this.props.t;
+  }
+
+  /**
+   * Can I use the locale plugin.
+   * @type {boolean}
+   */
+  get canIUseLocale() {
+    return this.context.siteSettings.canIUse('locale');
   }
 
   render() {
@@ -117,15 +122,19 @@ class DisplayUserProfile extends React.Component {
                 </tr>
               </tbody>
             </table>
-            <h3><Trans>Internationalisation</Trans></h3>
-            <table className="table-info profile">
-              <tbody>
-                <tr className="locale">
-                  <td className="label"><Trans>Language</Trans></td>
-                  <td className="value">{this.locale[this.context.locale]}</td>
-                </tr>
-              </tbody>
-            </table>
+            {this.canIUseLocale &&
+            <>
+              <h3><Trans>Internationalisation</Trans></h3>
+              <table className="table-info profile">
+                <tbody>
+                  <tr className="locale">
+                    <td className="label"><Trans>Language</Trans></td>
+                    <td className="value">{this.userLocaleLabel}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </>
+            }
           </div>
           <div className="avatar col6 last">
             <h3><Trans>Avatar</Trans></h3>
@@ -163,8 +172,3 @@ DisplayUserProfile.propTypes = {
 };
 
 export default withDialog(withUserSettings(withTranslation('common')(DisplayUserProfile)));
-
-export const locale = {
-  ENGLISH: "en-US",
-  FRENCH: "fr-FR",
-};

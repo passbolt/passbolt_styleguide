@@ -6,7 +6,6 @@ import {ApiClientOptions} from "../lib/apiClient/apiClientOptions";
 import {ApiClient} from "../lib/apiClient/apiClient";
 import PassboltApiFetchError from "../lib/Error/passboltApiFetchError";
 import PassboltSubscriptionError from "../../react/lib/Common/Error/PassboltSubscriptionError";
-import UserSettings from "../lib/Settings/UserSettings";
 
 /**
  * The ApiApp context provider
@@ -140,35 +139,42 @@ class ApiAppContextProvider extends React.Component {
   }
 
   /**
-   * Get the locale
+   * Get the locale following this priority:
+   * 1. The user locale if set;
+   * 2. The organization locale;
+   * @warning Require the site settings to be fetch to work.
    */
   async getLocale() {
-    const apiClientOptions = this.getApiClientOptions().setResourceName("account/settings");
-    const apiClient = new ApiClient(apiClientOptions);
-    const userSettings = await apiClient.findAll();
-    const locale = new UserSettings(userSettings.body).locale;
-    const hasLocale = locale && locale.length > 0;
-    hasLocale ? this.setState({locale}) : this.setState({locale: this.guessLocale()});
+    const userLocale = await this.getUserLocale();
+    if (userLocale) {
+      return this.setState({locale: userLocale.locale});
+    }
+
+    const organizationLocale = this.state.siteSettings.locale;
+    return this.setState({locale: organizationLocale.locale});
   }
 
   /**
-   * Guess the locale to use to translate the application
-   * @returns {string|string}
+   * Get the user locale.
+   * @returns {Promise<object>}
    */
-  guessLocale() {
-    const locale = navigator.language;
-    const supportedLocales = Object.keys(this.state.siteSettings.supportedLocales);
-    if (supportedLocales.includes(locale)) {
-      return locale;
+  async getUserLocale() {
+    const userSettings = await this.getUserSettings();
+    const userLocaleSettings = userSettings.find(userSetting => userSetting.property === "locale");
+    if (userLocaleSettings) {
+      return this.state.siteSettings.supportedLocales.find(supportedLocale => supportedLocale.locale === userLocaleSettings.value);
     }
+  }
 
-    const nonExplicitLanguage = locale.split('-')[0];
-    const similarLanguage = supportedLocales.find(supportedLanguage => nonExplicitLanguage === supportedLanguage.split('-')[0]);
-    if (similarLanguage) {
-      return similarLanguage;
-    }
-
-    return this.state.siteSettings.locale;
+  /**
+   * Get the user settings.
+   * @returns {Promise<array>}
+   */
+  async getUserSettings() {
+    const apiClientOptions = this.getApiClientOptions().setResourceName("account/settings");
+    const apiClient = new ApiClient(apiClientOptions);
+    const userSettings = await apiClient.findAll();
+    return userSettings.body;
   }
 
   /**
