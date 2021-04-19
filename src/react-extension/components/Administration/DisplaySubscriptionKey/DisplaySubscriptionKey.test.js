@@ -24,7 +24,7 @@ import {
   mockUsers
 } from "./DisplaySubscriptionKey.test.data";
 import DisplaySubscriptionKeyPage from "./DisplaySubscriptionKey.test.page";
-import PassboltApiFetchError from "../../../../react-extension/lib/Error/PassboltApiFetchError";
+import PassboltApiFetchError from "../../../../shared/lib/Error/PassboltApiFetchError";
 import {waitFor} from "@testing-library/react";
 import {DateTime} from "luxon";
 import EditSubscriptionKey from "../EditSubscriptionKey/EditSubscriptionKey";

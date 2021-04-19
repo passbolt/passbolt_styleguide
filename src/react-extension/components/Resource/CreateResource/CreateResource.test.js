@@ -16,7 +16,7 @@
  * Unit tests on CreateResource in regard of specifications
  */
 import {ActionFeedbackContext} from "../../../contexts/ActionFeedbackContext";
-import PassboltApiFetchError from "../../../lib/Error/PassboltApiFetchError";
+import PassboltApiFetchError from "../../../../shared/lib/Error/PassboltApiFetchError";
 import {waitFor} from "@testing-library/react";
 import {defaultAppContext, defaultProps} from "./CreateResource.test.data";
 import CreateResourcePage from "./CreateResource.test.page";

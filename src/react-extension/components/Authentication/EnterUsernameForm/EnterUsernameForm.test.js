@@ -19,7 +19,7 @@ import EnterUsernameFormPage from "./EnterUsernameForm.test.page";
 import {defaultProps} from "./EnterUsernameForm.test.data";
 import {waitFor} from "@testing-library/react";
 import siteSettingsFixture from "../../../test/fixture/Settings/siteSettings";
-import SiteSettings from "../../../lib/Settings/SiteSettings";
+import SiteSettings from "../../../../shared/lib/Settings/SiteSettings";
 
 beforeEach(() => {
   jest.resetModules();

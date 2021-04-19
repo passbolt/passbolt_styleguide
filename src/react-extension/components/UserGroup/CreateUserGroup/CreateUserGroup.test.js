@@ -18,7 +18,7 @@
 import CreateUserGroupPage from "./CreateUserGroup.test.page";
 import {defaultAppContext, defaultProps, mockGpgKey, mockUsers} from "./CreateUserGroup.test.data";
 import {ActionFeedbackContext} from "../../../contexts/ActionFeedbackContext";
-import PassboltApiFetchError from "../../../lib/Error/PassboltApiFetchError";
+import PassboltApiFetchError from "../../../../shared/lib/Error/PassboltApiFetchError";
 import {waitFor} from "@testing-library/react";
 
 describe("See the Create Dialog Group", () => {

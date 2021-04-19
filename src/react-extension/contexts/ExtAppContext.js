@@ -1,9 +1,9 @@
 import React from "react";
 import AppContext from "./AppContext";
 import PropTypes from "prop-types";
-import SiteSettings from "../lib/Settings/SiteSettings";
-import ResourceTypesSettings from "../lib/Settings/ResourceTypesSettings";
-import UserSettings from "../lib/Settings/UserSettings";
+import SiteSettings from "../../shared/lib/Settings/SiteSettings";
+import ResourceTypesSettings from "../../shared/lib/Settings/ResourceTypesSettings";
+import UserSettings from "../../shared/lib/Settings/UserSettings";
 
 /**
  * The ExtApp context provider

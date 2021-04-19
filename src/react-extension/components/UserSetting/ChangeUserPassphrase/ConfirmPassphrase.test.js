@@ -18,7 +18,7 @@
 import ConfirmPassphrasePage from "./ConfirmPassphrase.test.page";
 import {defaultProps} from "./ConfirmPassphrase.test.data";
 import {waitFor} from "@testing-library/react";
-import PassboltApiFetchError from "../../../lib/Error/PassboltApiFetchError";
+import PassboltApiFetchError from "../../../../shared/lib/Error/PassboltApiFetchError";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
 
 beforeEach(() => {

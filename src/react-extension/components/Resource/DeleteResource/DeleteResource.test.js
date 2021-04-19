@@ -21,7 +21,7 @@ import {defaultAppContext, defaultPropsOneResource} from "./DeleteResource.test.
 import {ActionFeedbackContext} from "../../../contexts/ActionFeedbackContext";
 import DeleteResourcePage from "./DeleteResource.test.page";
 import {fireEvent} from "@testing-library/react";
-import PassboltApiFetchError from "../../../lib/Error/PassboltApiFetchError";
+import PassboltApiFetchError from "../../../../shared/lib/Error/PassboltApiFetchError";
 import {defaultPropsMultipleResource} from "../DisplayResourcesWorkspace/DisplayResourcesWorkspaceMenu.test.data";
 
 beforeEach(() => {

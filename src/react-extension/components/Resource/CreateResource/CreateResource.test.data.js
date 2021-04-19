@@ -1,9 +1,9 @@
 import MockPort from "../../../test/mock/MockPort";
-import UserSettings from "../../../lib/Settings/UserSettings";
+import UserSettings from "../../../../shared/lib/Settings/UserSettings";
 import userSettingsFixture from "../../../test/fixture/Settings/userSettings";
-import SiteSettings from "../../../lib/Settings/SiteSettings";
+import SiteSettings from "../../../../shared/lib/Settings/SiteSettings";
 import siteSettingsFixture from "../../../test/fixture/Settings/siteSettings";
-import ResourceTypesSettings from "../../../lib/Settings/ResourceTypesSettings";
+import ResourceTypesSettings from "../../../../shared/lib/Settings/ResourceTypesSettings";
 import resourceTypesFixture from "../../../test/fixture/ResourceTypes/resourceTypes";
 
 /**

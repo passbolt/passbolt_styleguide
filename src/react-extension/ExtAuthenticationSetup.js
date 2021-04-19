@@ -17,7 +17,7 @@ import AuthenticationContextProvider from "./contexts/AuthenticationContext";
 import ManageDialogs from "./components/Common/Dialog/ManageDialogs/ManageDialogs";
 import DialogContextProvider from "./contexts/DialogContext";
 import SetupAuthentication from "./components/AuthenticationSetup/SetupAuthentication/SetupAuthentication";
-import SiteSettings from "./lib/Settings/SiteSettings";
+import SiteSettings from "../shared/lib/Settings/SiteSettings";
 import Footer from "./components/Common/Footer/Footer";
 import AppContext from "./contexts/AppContext";
 import TranslationProvider from "./components/Common/Internationalisation/TranslationProvider";

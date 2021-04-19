@@ -15,7 +15,7 @@
 /**
  * Unit tests on ImportResources in regard of specifications
  */
-import PassboltApiFetchError from "../../../lib/Error/PassboltApiFetchError";
+import PassboltApiFetchError from "../../../../shared/lib/Error/PassboltApiFetchError";
 import {waitFor} from "@testing-library/react";
 import {defaultAppContext, defaultProps} from "./ImportResources.test.data";
 import ImportResourcesResult from "./ImportResourcesResult";

@@ -16,7 +16,7 @@ import PropTypes from "prop-types";
 import AppContext from "../../../contexts/AppContext";
 import Icon from "../../Common/Icons/Icon";
 import Tooltip from "../../Common/Tooltip/Tooltip";
-import SecretComplexity from "../../../lib/Secret/SecretComplexity";
+import SecretComplexity from "../../../../shared/lib/Secret/SecretComplexity";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import {withDialog} from "../../../contexts/DialogContext";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";

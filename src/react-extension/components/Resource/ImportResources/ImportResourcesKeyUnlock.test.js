@@ -15,7 +15,7 @@
 /**
  * Unit tests on ImportResourcesKeyUnlock in regard of specifications
  */
-import PassboltApiFetchError from "../../../lib/Error/PassboltApiFetchError";
+import PassboltApiFetchError from "../../../../shared/lib/Error/PassboltApiFetchError";
 import {waitFor} from "@testing-library/react";
 import ImportResourcesKeyUnlockPage from "./ImportResourcesKeyUnlock.test.page";
 import {defaultAppContext, defaultProps} from "./ImportResourcesKeyUnlock.test.data";

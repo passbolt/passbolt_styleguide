@@ -16,7 +16,7 @@
  * Unit tests on EditUserGroup in regard of specifications
  */
 import {defaultAppContext, defaultProps, mockGpgKey} from "./EditUserGroup.test.data";
-import PassboltApiFetchError from "../../../lib/Error/PassboltApiFetchError";
+import PassboltApiFetchError from "../../../../shared/lib/Error/PassboltApiFetchError";
 import {waitFor} from "@testing-library/react";
 import EditUserGroupTestPage from "./EditUserGroup.test.page";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";

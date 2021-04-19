@@ -15,7 +15,7 @@
 /**
  * Unit tests on PasswordUnlockKeypassDialog in regard of specifications
  */
-import PassboltApiFetchError from "../../../lib/Error/PassboltApiFetchError";
+import PassboltApiFetchError from "../../../../shared/lib/Error/PassboltApiFetchError";
 import {waitFor} from "@testing-library/react";
 import ExportResourcesCredentialsPage from "./ExportResourcesCredentials.test.page";
 import {defaultAppContext, defaultProps} from "./ExportResourcesCredentials.test.data";
