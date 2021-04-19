@@ -20,10 +20,9 @@ import {BrowserRouter as Router, Route} from "react-router-dom";
 import PrivateRoute from "./components/PrivateRoute/PrivateRoute";
 import AnimatedSwitch from "./components/AnimatedSwitch/AnimatedSwitch";
 import PassphraseDialog from "./components/PassphraseDialog/PassphraseDialog";
-import {Trans, withTranslation} from "react-i18next";
 import PropTypes from "prop-types";
-import SiteSettings from "../lib/Settings/SiteSettings";
-import UserSettings from "../lib/Settings/UserSettings";
+import SiteSettings from "../shared/lib/Settings/SiteSettings";
+import UserSettings from "../shared/lib/Settings/UserSettings";
 import TranslationProvider from "./components/Internationalisation/TranslationProvider";
 
 const SEARCH_VISIBLE_ROUTES = [
@@ -72,15 +71,17 @@ class ExtQuickAccess extends React.Component {
     await this.getUser();
     await this.getSiteSettings();
     this.checkAuthStatus();
+    this.getLocale();
   }
 
   initState(props) {
-    return  {
+    return {
       storage: props.storage,
       port: props.port,
       isAuthenticated: null,
       userSettings: null,
       siteSettings: null,
+      locale: "en-US", // To avoid any weird blink, launch the quickaccess with a default english locale
       // Search
       search: "",
       searchHistory: {},
@@ -115,9 +116,14 @@ class ExtQuickAccess extends React.Component {
   }
 
   async getSiteSettings() {
-    const settings = await this.props.port.request("passbolt.site.settings");
-    const siteSettings = new SiteSettings(settings);
+    const siteSettingsDto = await this.state.port.request('passbolt.organization-settings.get');
+    const siteSettings = new SiteSettings(siteSettingsDto);
     this.setState({siteSettings});
+  }
+
+  async getLocale() {
+    const {locale} = await this.state.port.request("passbolt.locale.get");
+    this.setState({locale});
   }
 
   async checkAuthStatus() {
@@ -160,22 +166,23 @@ class ExtQuickAccess extends React.Component {
   isReady() {
     return this.state.isAuthenticated !== null
       && this.state.userSettings !== null
-      && this.state.siteSettings != null;
+      && this.state.siteSettings != null
+      && this.state.locale !== null;
   }
 
   render() {
     const isReady = this.isReady();
 
     return (
-      <TranslationProvider loadingPath="/data/locales/{{lng}}/{{ns}}.json">
-        <Router>
-          <Route render={props => (
-            <AppContext.Provider value={this.state}>
+      <AppContext.Provider value={this.state}>
+        <TranslationProvider loadingPath="/data/locales/{{lng}}/{{ns}}.json">
+          <Router>
+            <Route render={props => (
               <div className="container page quickaccess" onKeyDown={this.handleKeyDown}>
                 <Header logoutSuccessCallback={this.logoutSuccessCallback}/>
                 {!isReady &&
                 <div className="processing-wrapper">
-                  <p className="processing-text"><Trans>Connecting your account</Trans></p>
+                  <p className="processing-text">Connecting your account</p>
                 </div>
                 }
                 {isReady &&
@@ -208,10 +215,10 @@ class ExtQuickAccess extends React.Component {
                 </React.Fragment>
                 }
               </div>
-            </AppContext.Provider>
-          )}/>
-        </Router>
-      </TranslationProvider>
+            )}/>
+          </Router>
+        </TranslationProvider>
+      </AppContext.Provider>
     );
   }
 }
@@ -221,4 +228,4 @@ ExtQuickAccess.propTypes = {
   storage: PropTypes.object,
 };
 
-export default withTranslation('common')(ExtQuickAccess);
+export default ExtQuickAccess;

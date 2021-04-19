@@ -21,8 +21,8 @@ import NotifyError from "../../Common/Error/NotifyError/NotifyError";
 import {withDialog} from "../../../contexts/DialogContext";
 import Icon from "../../Common/Icons/Icon";
 import debounce from "debounce-promise";
-import SecurityComplexity from "../../../../lib/Secret/SecretComplexity";
-import SecretComplexity from "../../../../lib/Secret/SecretComplexity";
+import SecurityComplexity from "../../../../shared/lib/Secret/SecretComplexity";
+import SecretComplexity from "../../../../shared/lib/Secret/SecretComplexity";
 
 /**
  * This component displays the user choose passphrase information

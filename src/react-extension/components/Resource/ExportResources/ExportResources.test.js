@@ -15,7 +15,7 @@
 /**
  * Unit tests on ExportResources in regard of specifications
  */
-import PassboltApiFetchError from "../../../lib/Error/PassboltApiFetchError";
+import PassboltApiFetchError from "../../../../shared/lib/Error/PassboltApiFetchError";
 import {waitFor} from "@testing-library/react";
 import ExportResourcesPage from "./ExportResources.test.page";
 import {defaultAppContext, defaultProps} from "./ExportResources.test.data";

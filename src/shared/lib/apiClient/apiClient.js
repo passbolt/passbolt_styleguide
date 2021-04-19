@@ -12,8 +12,8 @@
  * @since         2.13.0
  */
 import PassboltApiFetchError from "../Error/PassboltApiFetchError";
-import PassboltBadResponseError from "../Error/passboltBadResponseError";
-import PassboltServiceUnavailableError from "../Error/passboltServiceUnavailableError";
+import PassboltBadResponseError from "../Error/PassboltBadResponseError";
+import PassboltServiceUnavailableError from "../Error/PassboltServiceUnavailableError";
 
 export class ApiClient {
   /**

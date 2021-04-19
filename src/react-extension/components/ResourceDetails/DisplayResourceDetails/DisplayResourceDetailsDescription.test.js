@@ -23,7 +23,7 @@ import {
 } from "./DisplayResourceDetailsDescription.test.data";
 import DisplayResourceDetailsDescriptionPage from "./DisplayResourceDetailsDescription.test.page";
 import {ActionFeedbackContext} from "../../../contexts/ActionFeedbackContext";
-import PassboltApiFetchError from "../../../lib/Error/PassboltApiFetchError";
+import PassboltApiFetchError from "../../../../shared/lib/Error/PassboltApiFetchError";
 
 beforeEach(() => {
   jest.resetModules();

@@ -1,10 +1,10 @@
 import React from "react";
 import AppContext from "./AppContext";
 import PropTypes from "prop-types";
-import SiteSettings from "../lib/Settings/SiteSettings";
-import {ApiClientOptions} from "../lib/apiClient/apiClientOptions";
-import {ApiClient} from "../lib/apiClient/apiClient";
-import PassboltApiFetchError from "../lib/Error/passboltApiFetchError";
+import SiteSettings from "../../shared/lib/Settings/SiteSettings";
+import {ApiClientOptions} from "../../shared/lib/apiClient/apiClientOptions";
+import {ApiClient} from "../../shared/lib/apiClient/apiClient";
+import PassboltApiFetchError from "../../shared/lib/Error/PassboltApiFetchError";
 import PassboltSubscriptionError from "../lib/Error/PassboltSubscriptionError";
 
 /**

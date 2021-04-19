@@ -18,7 +18,7 @@
 import CreateUserPage from "./CreateUser.test.page";
 import {defaultAppContext, defaultProps} from "./CreateUser.test.data";
 import {ActionFeedbackContext} from "../../../contexts/ActionFeedbackContext";
-import PassboltApiFetchError from "../../../lib/Error/PassboltApiFetchError";
+import PassboltApiFetchError from "../../../../shared/lib/Error/PassboltApiFetchError";
 import {waitFor} from "@testing-library/react";
 
 beforeEach(() => {

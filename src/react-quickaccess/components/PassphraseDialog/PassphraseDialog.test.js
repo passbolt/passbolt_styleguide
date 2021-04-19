@@ -3,7 +3,7 @@ import {render, fireEvent, cleanup} from '@testing-library/react';
 import PassphraseDialog from "./PassphraseDialog";
 import MockTranslationProvider
   from "../../../react-extension/test/mock/components/Internationalisation/MockTranslationProvider";
-import UserSettings from "../../../lib/Settings/UserSettings";
+import UserSettings from "../../../shared/lib/Settings/UserSettings";
 import userSettingsFixture from "../../../react-extension/test/fixture/Settings/userSettings";
 import {waitFor} from "@testing-library/dom";
 

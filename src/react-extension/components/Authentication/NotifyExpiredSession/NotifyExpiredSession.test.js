@@ -17,7 +17,7 @@
  */
 import NotifyExpiredSessionPage from "./NotifyExpiredSession.test.page";
 import {defaultAppContext, defaultProps} from "./NotifyExpiredSession.test.data";
-import UserSettings from "../../../lib/Settings/UserSettings";
+import UserSettings from "../../../../shared/lib/Settings/UserSettings";
 import userSettingsFixture from "../../../test/fixture/Settings/userSettings";
 
 beforeEach(() => {

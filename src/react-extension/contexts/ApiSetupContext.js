@@ -14,9 +14,9 @@
 import React from "react";
 import PropTypes from "prop-types";
 import {withAppContext} from "./AppContext";
-import {ApiClient} from "../../lib/apiClient/apiClient";
-import {BROWSER_NAMES, detectBrowserName} from "../../lib/Browser/detectBrowserName";
-import PassboltApiFetchError from "../../lib/Error/PassboltApiFetchError";
+import {ApiClient} from "../../shared/lib/apiClient/apiClient";
+import {BROWSER_NAMES, detectBrowserName} from "../../shared/lib/Browser/detectBrowserName";
+import PassboltApiFetchError from "../../shared/lib/Error/PassboltApiFetchError";
 import getPropValue from "../lib/Object/getPropValue";
 
 /**

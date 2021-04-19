@@ -5,7 +5,7 @@ import PropTypes from "prop-types";
 import {withRouter} from "react-router-dom";
 import {Trans, withTranslation} from "react-i18next";
 import {withAppContext} from "../../contexts/AppContext";
-import SecretComplexity from "../../../lib/Secret/SecretComplexity";
+import SecretComplexity from "../../../shared/lib/Secret/SecretComplexity";
 
 class ResourceCreatePage extends React.Component {
   constructor(props) {

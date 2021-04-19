@@ -1,4 +1,4 @@
-import UserSettings from "../../../lib/Settings/UserSettings";
+import UserSettings from "../../../shared/lib/Settings/UserSettings";
 import userSettingsFixture from "../../test/fixture/Settings/userSettings";
 import MockPort from "../../test/mock/MockPort";
 

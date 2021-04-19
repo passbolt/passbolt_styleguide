@@ -13,7 +13,7 @@
  */
 import React from "react";
 import PropTypes from "prop-types";
-import UserSettings from "../../lib/Settings/UserSettings";
+import UserSettings from "../../shared/lib/Settings/UserSettings";
 import AppContext from "./AppContext";
 
 export const AuthenticationContext = React.createContext({

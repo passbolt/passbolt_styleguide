@@ -31,7 +31,7 @@ class Header extends React.Component {
     return (
       <div className="quickaccess-header">
         <h1 className="logo">
-          <a href={this.props.context.user ? this.props.context.user["user.settings.trustedDomain"] : "#"} target="_blank" rel="noopener noreferrer" title={this.translate("open passbolt in a new tab")}>
+          <a href={this.props.context.userSettings ? this.props.context.userSettings.getTrustedDomain() : "#"} target="_blank" rel="noopener noreferrer" title={this.translate("open passbolt in a new tab")}>
             <span className="visually-hidden">Passbolt</span>
           </a>
         </h1>

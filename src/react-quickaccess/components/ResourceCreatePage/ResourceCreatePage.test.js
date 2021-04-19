@@ -2,7 +2,7 @@ import React from "react";
 import {render, fireEvent, cleanup} from '@testing-library/react';
 import {StaticRouter} from 'react-router';
 import ResourceCreatePage from "./ResourceCreatePage";
-import "../../../lib/Secret/SecretComplexity";
+import "../../../shared/lib/Secret/SecretComplexity";
 import {waitFor} from "@testing-library/dom";
 import MockTranslationProvider
   from "../../../react-extension/test/mock/components/Internationalisation/MockTranslationProvider";

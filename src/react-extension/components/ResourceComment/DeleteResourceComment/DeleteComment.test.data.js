@@ -12,8 +12,8 @@
  * @since         2.11.0
  */
 
-import UserSettings from "../../../../lib/Settings/UserSettings";
-import SiteSettings from "../../../../lib/Settings/SiteSettings";
+import UserSettings from "../../../../shared/lib/Settings/UserSettings";
+import SiteSettings from "../../../../shared/lib/Settings/SiteSettings";
 import MockPort from "../../../test/mock/MockPort";
 import {v4 as uuidv4} from "uuid";
 import userSettingsFixture from "../../../test/fixture/Settings/userSettings";
