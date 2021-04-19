@@ -1,4 +1,4 @@
-import browser from "webextension-polyfill/dist/browser-polyfill";
+
 import React from "react";
 import PropTypes from "prop-types";
 import {withRouter} from "react-router-dom";
@@ -148,6 +148,6 @@ LoginPage.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withTranslation('common')(withRouter(LoginPage)));
+export default withAppContext(withRouter(withTranslation('common')(LoginPage)));
 
 

@@ -4,9 +4,9 @@ import "../../../../css/themes/midgar/ext_app.css";
 import AppContext from "../../../contexts/AppContext";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import EditResourceDescription from "./EditResourceDescription";
-import SiteSettings from "../../../lib/Settings/SiteSettings";
+import SiteSettings from "../../../../shared/lib/Settings/SiteSettings";
 import siteSettingsFixture from "../../../test/fixture/Settings/siteSettings";
-import ResourceTypesSettings from "../../../lib/Settings/ResourceTypesSettings";
+import ResourceTypesSettings from "../../../../shared/lib/Settings/ResourceTypesSettings";
 import resourceTypesFixture from "../../../test/fixture/ResourceTypes/resourceTypes";
 
 

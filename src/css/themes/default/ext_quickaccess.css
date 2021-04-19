@@ -884,7 +884,7 @@ ul li {
 .simplebar-wrapper {
   overflow: hidden;
   width: inherit;
-  height: inherit;
+  height: 28rem;
   max-width: inherit;
   max-height: inherit;
 }

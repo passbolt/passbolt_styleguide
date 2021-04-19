@@ -1,5 +1,4 @@
 import React from "react";
-import browser from "webextension-polyfill/dist/browser-polyfill";
 import AppContext from "./contexts/AppContext";
 import FilterResourcesByFavoritePage from "./components/FilterResourcesByFavoritePage/FilterResourcesByFavoritePage";
 import FilterResourcesByItemsIOwnPage from "./components/FilterResourcesByItemsIOwnPage/FilterResourcesByItemsIOwnPage";
@@ -43,7 +42,6 @@ class ExtQuickAccess extends React.Component {
     this.searchRef = React.createRef();
     this.bindCallbacks();
     this.state = this.initState(props);
-
   }
 
   /**
@@ -98,7 +96,7 @@ class ExtQuickAccess extends React.Component {
   }
 
   focusSearch() {
-    //this.searchRef.current.focus();
+    this.searchRef.current.focus();
   }
 
   async checkPluginIsConfigured() {
