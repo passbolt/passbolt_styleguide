@@ -109,6 +109,17 @@ class DisplayResourceCommentList extends React.Component {
   }
 
   /**
+   * Format date in time ago
+   * @param {string} date The date to format
+   * @return {string}
+   */
+  formatDateTimeAgo(date) {
+    const dateTime = DateTime.fromISO(date);
+    const duration = dateTime.diffNow().toMillis();
+    return duration < 1000 && duration > 0 ? this.translate('Just now') : dateTime.toRelative({locale: this.context.locale});
+  }
+
+  /**
    * Get the translate function
    * @returns {function(...[*]=)}
    */
@@ -146,7 +157,7 @@ class DisplayResourceCommentList extends React.Component {
                       </span>
                       }
                       <span
-                        className="modified">{DateTime.fromISO(comment.created).toRelative({locale: this.context.locale})}
+                        className="modified">{this.formatDateTimeAgo(comment.created)}
                       </span>
                     </div>
                     <div className="actions">
