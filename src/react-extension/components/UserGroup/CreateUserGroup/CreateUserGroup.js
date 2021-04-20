@@ -483,8 +483,8 @@ class CreateUserGroup extends Component {
                     <div className="select rights">
                       <select value={groups_user.is_admin} disabled={this.hasAllInputDisabled()}
                         onChange={event => this.handleSelectUpdate(event, groups_user.user.id)}>
-                        <option value="false"><Trans>Member</Trans></option>
-                        <option value="true"><Trans>Group manager</Trans></option>
+                        <option value="false">{this.translate("Member")}</option>
+                        <option value="true">{this.translate("Group manager")}</option>
                       </select>
                     </div>
                     <div className="actions">
