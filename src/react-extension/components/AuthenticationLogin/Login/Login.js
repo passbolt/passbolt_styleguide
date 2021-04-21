@@ -20,6 +20,7 @@ import UserAvatar from "../../Common/Avatar/UserAvatar";
 import {Link} from "react-router-dom";
 import {Trans, withTranslation} from "react-i18next";
 import Icon from "../../Common/Icons/Icon";
+import {withAppContext} from "../../../contexts/AppContext";
 
 /**
  * This component allows the user to log in with his account
@@ -405,7 +406,7 @@ class Login extends Component {
                   <Trans>Sign in</Trans>
                 </button>
                 <Link
-                  to={{pathname: `${this.trustedDomain}/users/recover`}}
+                  to={{pathname: `${this.trustedDomain}/users/recover?locale=${this.props.context.locale}`}}
                   target="_parent"
                   rel="noopener noreferrer">
                   <Trans>Or switch to another account.</Trans>
@@ -421,8 +422,9 @@ class Login extends Component {
 
 Login.contextType = AuthenticationContext;
 Login.propTypes = {
+  context: PropTypes.any, // The application context
   canRememberMe: PropTypes.bool, // True if the remember me flag must be displayed
   dialogContext: PropTypes.any, // The dialog context
   t: PropTypes.func, // The translation function
 };
-export default withDialog(withTranslation('common')(Login));
+export default withAppContext(withDialog(withTranslation('common')(Login)));

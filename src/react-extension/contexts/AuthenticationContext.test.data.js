@@ -9,7 +9,7 @@ import MockPort from "../test/mock/MockPort";
  */
 export function defaultAppContext() {
   const defaultAppContext = {
-    onUpdateLocaleRequested: jest.fn(),
+    onRefreshLocaleRequested: jest.fn()
   };
   return defaultAppContext;
 }

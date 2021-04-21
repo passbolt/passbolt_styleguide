@@ -113,7 +113,7 @@ class AuthenticationContextProvider extends React.Component {
   async onInitializeSetupRequested() {
     const setupInfo = await this.state.port.request('passbolt.setup.info');
     // update the locale to use the user locale
-    this.context.onUpdateLocaleRequested();
+    this.context.onRefreshLocaleRequested(setupInfo.locale);
     // In case of error the background page should just disconnect the extension setup application.
     await this.setState({
       state: AuthenticationContextState.SETUP_INITIALIZED,
@@ -128,8 +128,8 @@ class AuthenticationContextProvider extends React.Component {
    */
   async onInitializeRecoverRequested() {
     const recoverInfo = await this.state.port.request('passbolt.recover.info');
-    // update the locale to use the user locale
-    await this.context.onUpdateLocaleRequested();
+    // The user might have already set a locale, the recover info update the background page locale, refresh the locale.
+    this.context.onRefreshLocaleRequested(recoverInfo.locale);
     // In case of error the background page should just disconnect the extension setup application.
     await this.setState({
       state: AuthenticationContextState.RECOVER_INITIALIZED,
