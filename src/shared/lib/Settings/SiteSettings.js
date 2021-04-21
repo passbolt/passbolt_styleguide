@@ -181,7 +181,7 @@ export default class SiteSettings {
    */
   static get DEFAULT_LOCALE() {
     return {
-      "locale": "en-US",
+      "locale": "en-UK",
       "label": "English"
     };
   }

@@ -4,7 +4,7 @@ export default {
       "number": "2.13.5",
       "name": "Stomp"
     },
-    "locale": "en-US",
+    "locale": "en-UK",
     "url": "http://127.0.0.1:3001",
     "debug": 1,
     "server_timezone": "UTC",
@@ -100,7 +100,7 @@ export default {
       "locale": {
         "options": [
           {
-            "locale": "en-US",
+            "locale": "en-UK",
             "label": "English"
           }, {
             "locale": "fr-FR",
