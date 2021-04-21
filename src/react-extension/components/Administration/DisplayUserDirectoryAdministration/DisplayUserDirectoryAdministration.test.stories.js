@@ -27,10 +27,14 @@ Template.propTypes = {
 export const Initial = Template.bind({});
 Initial.args = {
   administrationWorkspaceContext: {
-    mustSaveSettings: false,
-    mustTestSettings: false,
+    must: {
+      save: false,
+      test: false
+    },
     onResetActionsSettings: () => {},
-    isSaveEnabled: false,
+    can: {
+      save: false
+    },
     onSaveEnabled: () => {},
     onTestEnabled: () => {},
     onSynchronizeEnabled: () => {},

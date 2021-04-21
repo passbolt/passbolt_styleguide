@@ -58,6 +58,8 @@ class DisplayAdministrationWorkspaceBreadcrumb extends Component {
         return this.translate("Email Notification");
       case AdministrationWorkspaceMenuTypes.SUBSCRIPTION:
         return this.translate("Subscription");
+      case AdministrationWorkspaceMenuTypes.INTERNATIONALIZATION:
+        return this.translate("Internationalization");
       default:
         return "";
     }

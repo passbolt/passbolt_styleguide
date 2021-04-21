@@ -97,7 +97,9 @@ describe("As AD I should see the user directory settings", () => {
             test: true
           },
           onResetActionsSettings: jest.fn(),
-          isSaveEnabled: false,
+          can: {
+            save: false
+          },
           onSaveEnabled: jest.fn(),
           onTestEnabled: jest.fn(),
           onSynchronizeEnabled: jest.fn(),
@@ -129,7 +131,9 @@ describe("As AD I should see the user directory settings", () => {
             test: false
           },
           onResetActionsSettings: jest.fn(),
-          isSaveEnabled: true,
+          can: {
+            save: true
+          },
           onSaveEnabled: jest.fn(),
           onTestEnabled: jest.fn(),
           onSynchronizeEnabled: jest.fn(),
@@ -157,7 +161,9 @@ describe("As AD I should see the user directory settings", () => {
             test: false
           },
           onResetActionsSettings: jest.fn(),
-          isSaveEnabled: true,
+          can: {
+            save: true
+          },
           onSaveEnabled: jest.fn(),
           onTestEnabled: jest.fn(),
           onSynchronizeEnabled: jest.fn(),
@@ -188,7 +194,9 @@ describe("As AD I should see the user directory settings", () => {
             test: false
           },
           onResetActionsSettings: jest.fn(),
-          isSaveEnabled: true,
+          can: {
+            save: true
+          },
           onSaveEnabled: jest.fn(),
           onTestEnabled: jest.fn(),
           onSynchronizeEnabled: jest.fn(),
@@ -213,7 +221,9 @@ describe("As AD I should see the user directory settings", () => {
             test: false
           },
           onResetActionsSettings: jest.fn(),
-          isSaveEnabled: true,
+          can: {
+            save: true
+          },
           onSaveEnabled: jest.fn(),
           onTestEnabled: jest.fn(),
           onSynchronizeEnabled: jest.fn(),
@@ -254,7 +264,9 @@ describe("As AD I should see the user directory settings", () => {
             test: false
           },
           onResetActionsSettings: jest.fn(),
-          isSaveEnabled: true,
+          can: {
+            save: true
+          },
           onSaveEnabled: jest.fn(),
           onUpdateUsersDirectoryRequested: jest.fn()
         }

@@ -26,7 +26,9 @@ export function defaultProps() {
         test: false
       },
       onResetActionsSettings: jest.fn(),
-      isSaveEnabled: false,
+      can: {
+        save: false
+      },
       onSaveEnabled: jest.fn(),
       onTestEnabled: jest.fn(),
       onSynchronizeEnabled: jest.fn(),

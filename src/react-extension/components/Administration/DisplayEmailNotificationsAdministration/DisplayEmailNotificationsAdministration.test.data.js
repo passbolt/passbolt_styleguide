@@ -24,7 +24,6 @@ export function defaultProps() {
         save: false
       },
       onResetActionsSettings: jest.fn(),
-      isSaveEnabled: false,
       onSaveEnabled: jest.fn(),
       onGetEmailNotificationsRequested: () => mockEmailNotificationsSettings
     }

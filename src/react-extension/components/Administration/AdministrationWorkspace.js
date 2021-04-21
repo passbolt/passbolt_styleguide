@@ -31,6 +31,8 @@ import DisplayEmailNotificationsAdministration
   from "./DisplayEmailNotificationsAdministration/DisplayEmailNotificationsAdministration";
 import SearchBar from "../Common/Navigation/Search/SearchBar";
 import DisplaySubscriptionKey from "./DisplaySubscriptionKey/DisplaySubscriptionKey";
+import DisplayInternationalizationAdministration
+  from "./DisplayInternationalizationAdministration/DisplayInternationalizationAdministration";
 
 class AdministrationWorkspace extends Component {
   /**
@@ -63,6 +65,14 @@ class AdministrationWorkspace extends Component {
    */
   isSubscriptionSelected() {
     return AdministrationWorkspaceMenuTypes.SUBSCRIPTION === this.props.administrationWorkspaceContext.selectedAdministration;
+  }
+
+  /**
+   * If Internationalization menu is selected
+   * @returns {boolean}
+   */
+  isInternationalizationSelected() {
+    return AdministrationWorkspaceMenuTypes.INTERNATIONALIZATION === this.props.administrationWorkspaceContext.selectedAdministration;
   }
 
   render() {
@@ -102,6 +112,9 @@ class AdministrationWorkspace extends Component {
                     }
                     {this.isSubscriptionSelected() &&
                     <DisplaySubscriptionKey/>
+                    }
+                    {this.isInternationalizationSelected() &&
+                    <DisplayInternationalizationAdministration/>
                     }
                   </div>
                 </div>

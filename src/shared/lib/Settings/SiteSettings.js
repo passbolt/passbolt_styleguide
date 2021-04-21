@@ -151,6 +151,14 @@ export default class SiteSettings {
   }
 
   /**
+   * Set the application locale
+   * @param locale
+   */
+  async setLocale(locale) {
+    this.settings.app.locale = locale;
+  }
+
+  /**
    * Get supported languages
    * @returns {object}
    */
