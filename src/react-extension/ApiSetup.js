@@ -20,6 +20,7 @@ import Footer from "./components/Common/Footer/Footer";
 import {ApiClient} from "../shared/lib/apiClient/apiClient";
 import SiteSettings from "../shared/lib/Settings/SiteSettings";
 import TranslationProvider from "./components/Common/Internationalisation/TranslationProvider";
+import ChangeLocale from "./components/Internationalisation/ChangeLocale";
 
 /**
  * The setup application served by the API.
@@ -47,6 +48,9 @@ class ApiSetup extends Component {
       trustedDomain: this.baseUrl, // The site domain (use trusted domain for compatibility with browser extension applications)
       getApiClientOptions: this.getApiClientOptions.bind(this), // Get the api client options
       locale: null, // The locale
+
+      // Locale
+      onUpdateLocaleRequested: this.onUpdateLocaleRequested.bind(this),
     };
   }
 
@@ -57,7 +61,7 @@ class ApiSetup extends Component {
    */
   async componentDidMount() {
     await this.getSiteSettings();
-    this.getLocale();
+    this.initLocale();
   }
 
   /**
@@ -112,14 +116,37 @@ class ApiSetup extends Component {
   }
 
   /**
-   * Get the locale following this priority:
-   * 1. The browser locale or similar if supported;
-   * 2. The organization locale;
+   * Init the locale following this priority:
+   * 1. The browser url locale if passed in argument;
+   *    It allows us to offer a consistent experience when the user is coming from the login page by instance and wants to switch of
+   *    account given that the user is using a locale that is not the browser locale.
+   * 2. The browser locale if supported;
+   * 3. The browser similar locale;
+   * 4. The organization locale;
    * @warning Require the site settings to be fetch to work.
    */
-  getLocale() {
-    const locale = this.getBrowserLocale() || this.state.siteSettings.locale;
+  initLocale() {
+    const locale = this.getUrlLocale()
+      || this.getBrowserLocale()
+      || this.getBrowserSimilarLocale()
+      || this.state.siteSettings.locale;
     this.setState({locale});
+    this.setUrlLocale(locale);
+  }
+
+  /**
+   * Get the locale from the url i.e. ?locale=en-UK
+   * @returns {string}
+   */
+  getUrlLocale() {
+    const url = new URL(window.location.href);
+    const locale = url.searchParams.get('locale');
+    if (locale) {
+      const urlLocale = this.state.siteSettings.supportedLocales.find(supportedLocale => locale === supportedLocale.locale);
+      if (urlLocale) {
+        return urlLocale.locale;
+      }
+    }
   }
 
   /**
@@ -131,12 +158,37 @@ class ApiSetup extends Component {
     if (browserSupportedLocale) {
       return browserSupportedLocale.locale;
     }
+  }
 
+  /**
+   * Get the browser similar locale if supported.
+   * @returns {string}
+   */
+  getBrowserSimilarLocale() {
     const nonExplicitLanguage = navigator.language.split('-')[0];
     const similarSupportedLocale = this.state.siteSettings.supportedLocales.find(supportedLocale => nonExplicitLanguage === supportedLocale.locale.split('-')[0]);
     if (similarSupportedLocale) {
       return similarSupportedLocale.locale;
     }
+  }
+
+  /**
+   * Whenever the update of the locale is requested
+   * @param {string} locale The locale identifier
+   */
+  async onUpdateLocaleRequested(locale) {
+    await this.setState({locale});
+    this.setUrlLocale(locale);
+  }
+
+  /**
+   * Update the locale url parameter.
+   * @param locale
+   */
+  setUrlLocale(locale) {
+    const url = new URL(window.location.href);
+    url.searchParams.set('locale', locale);
+    window.history.replaceState(null, null, url);
   }
 
   isReady() {
@@ -162,6 +214,7 @@ class ApiSetup extends Component {
                   <OrchestrateApiSetup/>
                 </ApiSetupContextProvider>
               </div>
+              <ChangeLocale/>
             </div>
           </div>
           <Footer/>

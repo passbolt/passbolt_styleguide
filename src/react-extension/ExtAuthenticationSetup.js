@@ -21,6 +21,7 @@ import SiteSettings from "../shared/lib/Settings/SiteSettings";
 import Footer from "./components/Common/Footer/Footer";
 import AppContext from "./contexts/AppContext";
 import TranslationProvider from "./components/Common/Internationalisation/TranslationProvider";
+import ChangeLocale from "./components/Internationalisation/ChangeLocale";
 
 /**
  * The setup application served by the browser extension.
@@ -46,6 +47,7 @@ class ExtAuthenticationSetup extends Component {
 
       // Locale
       onUpdateLocaleRequested: this.onUpdateLocaleRequested.bind(this),
+      onRefreshLocaleRequested: this.onRefreshLocaleRequested.bind(this),
     };
   }
 
@@ -67,7 +69,7 @@ class ExtAuthenticationSetup extends Component {
     this.removeSkeleton();
     await this.getSiteSettings();
     await this.getExtensionVersion();
-    this.getLocale();
+    this.initLocale();
   }
 
   /**
@@ -103,18 +105,27 @@ class ExtAuthenticationSetup extends Component {
   }
 
   /**
-   * Get the locale
+   * Init the locale
    */
-  async getLocale() {
+  async initLocale() {
     const {locale} = await this.props.port.request("passbolt.locale.get");
     this.setState({locale});
   }
 
   /**
    * Whenever the update of the locale is requested
+   * @param {string} locale The locale identifier
    */
-  async onUpdateLocaleRequested() {
-    const {locale} = await this.props.port.request("passbolt.locale.get");
+  async onUpdateLocaleRequested(locale) {
+    const localeDto = {locale};
+    await this.props.port.request("passbolt.locale.update-user-locale", localeDto);
+    this.onRefreshLocaleRequested(locale);
+  }
+
+  /**
+   * Whenever the refresh of the locale is requested
+   */
+  onRefreshLocaleRequested(locale) {
     this.setState({locale});
   }
 
@@ -137,6 +148,7 @@ class ExtAuthenticationSetup extends Component {
                   <div className="login-form">
                     <SetupAuthentication siteSettings={this.state.siteSettings}/>
                   </div>
+                  <ChangeLocale/>
                 </div>
               </div>
               <Footer/>

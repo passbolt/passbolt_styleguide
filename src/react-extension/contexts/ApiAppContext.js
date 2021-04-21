@@ -24,7 +24,7 @@ class ApiAppContextProvider extends React.Component {
   async componentDidMount() {
     await this.getLoggedInUser();
     await this.getSiteSettings();
-    this.getLocale();
+    this.initLocale();
     this.removeSplashScreen();
   }
 
@@ -144,7 +144,7 @@ class ApiAppContextProvider extends React.Component {
    * 2. The organization locale;
    * @warning Require the site settings to be fetch to work.
    */
-  async getLocale() {
+  async initLocale() {
     const userLocale = await this.getUserLocale();
     if (userLocale) {
       return this.setState({locale: userLocale.locale});

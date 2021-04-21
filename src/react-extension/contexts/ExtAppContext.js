@@ -25,7 +25,7 @@ class ExtAppContextProvider extends React.Component {
     await this.getExtensionVersion();
     this.getUserSettings();
     this.getLoggedInUser();
-    this.getLocale();
+    this.initLocale();
     this.getResources();
     this.getResourceTypes();
     this.getFolders();
@@ -278,9 +278,9 @@ class ExtAppContextProvider extends React.Component {
   }
 
   /**
-   * Get the locale
+   * Init the locale
    */
-  async getLocale() {
+  async initLocale() {
     const {locale} = await this.props.port.request("passbolt.locale.get");
     this.setState({locale});
   }

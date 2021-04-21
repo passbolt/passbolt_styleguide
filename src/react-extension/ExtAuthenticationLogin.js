@@ -40,7 +40,7 @@ class ExtAuthenticationLogin extends Component {
     this.removeSkeleton();
     await this.getSiteSettings();
     await this.getExtensionVersion();
-    this.getLocale();
+    this.initLocale();
   }
 
   /**
@@ -100,9 +100,9 @@ class ExtAuthenticationLogin extends Component {
   }
 
   /**
-   * Get the locale
+   * Init the locale
    */
-  async getLocale() {
+  async initLocale() {
     const {locale} = await this.props.port.request("passbolt.locale.get");
     this.setState({locale});
   }
