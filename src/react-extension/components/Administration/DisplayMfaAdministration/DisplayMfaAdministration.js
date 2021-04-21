@@ -158,7 +158,7 @@ class DisplayMfaAdministration extends React.Component {
    * Handle enabled the save button
    */
   handleEnabledSaveButton() {
-    if (!this.props.administrationWorkspaceContext.isSaveEnabled) {
+    if (!this.props.administrationWorkspaceContext.can.save) {
       this.props.administrationWorkspaceContext.onSaveEnabled();
     }
   }

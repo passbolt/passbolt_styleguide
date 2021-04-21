@@ -63,6 +63,15 @@ class DisplayAdministrationMenu extends React.Component {
   }
 
   /**
+   * Can I use the locale plugin.
+   * @type {boolean}
+   */
+  get canIUseLocale() {
+    const siteSettings = this.props.context.siteSettings;
+    return siteSettings && this.props.context.siteSettings.canIUse('locale');
+  }
+
+  /**
    * Bind callbacks methods
    */
   bindCallbacks() {
@@ -70,6 +79,7 @@ class DisplayAdministrationMenu extends React.Component {
     this.handleUserDirectoryClick = this.handleUserDirectoryClick.bind(this);
     this.handleEmailNotificationsClick = this.handleEmailNotificationsClick.bind(this);
     this.handleSubscriptionClick = this.handleSubscriptionClick.bind(this);
+    this.handleInternationalizationClick = this.handleInternationalizationClick.bind(this);
   }
 
   /**
@@ -98,6 +108,13 @@ class DisplayAdministrationMenu extends React.Component {
    */
   handleSubscriptionClick() {
     this.props.navigationContext.onGoToAdministrationSubscriptionRequested();
+  }
+
+  /**
+   * Handle when the user click on the internationalization menu
+   */
+  handleInternationalizationClick() {
+    this.props.navigationContext.onGoToAdministrationInternationalizationRequested();
   }
 
   /**
@@ -130,6 +147,14 @@ class DisplayAdministrationMenu extends React.Component {
    */
   isSubscriptionSelected() {
     return AdministrationWorkspaceMenuTypes.SUBSCRIPTION === this.props.administrationWorkspaceContext.selectedAdministration;
+  }
+
+  /**
+   * If Internationalization menu is selected
+   * @returns {boolean}
+   */
+  isInternationalizationSelected() {
+    return AdministrationWorkspaceMenuTypes.INTERNATIONALIZATION === this.props.administrationWorkspaceContext.selectedAdministration;
   }
 
   /**
@@ -179,6 +204,17 @@ class DisplayAdministrationMenu extends React.Component {
               </div>
             </div>
           </li>
+          {this.canIUseLocale &&
+          <li id="internationalization_menu">
+            <div className={`row  ${this.isInternationalizationSelected() ? "selected" : ""}`}>
+              <div className="main-cell-wrapper">
+                <div className="main-cell">
+                  <a onClick={this.handleInternationalizationClick}><span><Trans>Internationalization</Trans></span></a>
+                </div>
+              </div>
+            </div>
+          </li>
+          }
           {this.canIUseEE &&
           <li id="subscription_menu">
             <div className={`row  ${this.isSubscriptionSelected() ? "selected" : ""}`}>

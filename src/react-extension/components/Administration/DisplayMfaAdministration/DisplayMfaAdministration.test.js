@@ -65,7 +65,9 @@ describe("See the MFA settings", () => {
             save: true
           },
           onResetActionsSettings: jest.fn(),
-          isSaveEnabled: true,
+          can: {
+            save: true
+          },
           onSaveEnabled: jest.fn(),
           onGetMfaRequested: () => mockMfaSettings,
           onSaveMfaRequested: jest.fn()
@@ -95,7 +97,9 @@ describe("See the MFA settings", () => {
             save: true
           },
           onResetActionsSettings: jest.fn(),
-          isSaveEnabled: true,
+          can: {
+            save: true
+          },
           onSaveEnabled: jest.fn(),
           onGetMfaRequested: () => mockMfaSettings,
           onSaveMfaRequested: jest.fn()
@@ -130,7 +134,9 @@ describe("See the MFA settings", () => {
             save: true
           },
           onResetActionsSettings: jest.fn(),
-          isSaveEnabled: true,
+          can: {
+            save: true
+          },
           onSaveEnabled: jest.fn()
         }
       };
@@ -156,7 +162,9 @@ describe("See the MFA settings", () => {
             save: true
           },
           onResetActionsSettings: jest.fn(),
-          isSaveEnabled: true,
+          can: {
+            save: true
+          },
           onSaveEnabled: jest.fn(),
           onGetMfaRequested: () => mockMfaSettings,
           onSaveMfaRequested: jest.fn()

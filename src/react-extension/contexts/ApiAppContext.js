@@ -57,6 +57,9 @@ class ApiAppContextProvider extends React.Component {
 
       // Subscription
       onGetSubscriptionKeyRequested: () => this.onGetSubscriptionKeyRequested(),
+
+      // Locale
+      onRefreshLocaleRequested: this.onRefreshLocaleRequested.bind(this)
     };
   }
 
@@ -233,6 +236,15 @@ class ApiAppContextProvider extends React.Component {
       }
       throw error;
     }
+  }
+
+  /**
+   * Refresh the organization locale
+   * @param locale
+   */
+  onRefreshLocaleRequested(locale) {
+    this.state.siteSettings.setLocale(locale);
+    this.setState({locale});
   }
 
   /**
