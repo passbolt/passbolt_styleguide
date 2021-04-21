@@ -21,9 +21,9 @@ import {defaultProps} from "./DisplayInternationalizationAdministration.test.dat
 import DisplayInternationalisationAdministrationPage from "./DisplayInternationalizationAdministration.test.page";
 import {waitFor} from "@testing-library/react";
 import {ActionFeedbackContext} from "../../../contexts/ActionFeedbackContext";
-import SiteSettings from "../../../lib/Settings/SiteSettings";
+import SiteSettings from "../../../../shared/lib/Settings/SiteSettings";
 import siteSettingsFixture from "../../../test/fixture/Settings/siteSettings";
-import PassboltApiFetchError from "../../../lib/Error/PassboltApiFetchError";
+import PassboltApiFetchError from "../../../../shared/lib/Error/PassboltApiFetchError";
 
 beforeEach(() => {
   jest.resetModules();

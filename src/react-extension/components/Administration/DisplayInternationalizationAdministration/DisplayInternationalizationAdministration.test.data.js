@@ -2,7 +2,7 @@
  * Default props
  * @returns {{resource: {id: string, name: string}}}
  */
-import SiteSettings from "../../../lib/Settings/SiteSettings";
+import SiteSettings from "../../../../shared/lib/Settings/SiteSettings";
 import siteSettingsFixture from "../../../test/fixture/Settings/siteSettings";
 
 
