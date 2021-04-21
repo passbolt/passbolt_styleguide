@@ -48,7 +48,7 @@ describe("See the Edit Resource", () => {
     it('matches the styleguide', () => {
       // Dialog title exists and correct
       expect(page.passwordEdit.exists()).toBeTruthy();
-      expect(page.title.header.textContent).toBe("Edit");
+      expect(page.title.header.textContent).toBe("Edit resource");
       expect(page.title.subtitle.textContent).toBe(mockResource.name);
 
       // Close button exists

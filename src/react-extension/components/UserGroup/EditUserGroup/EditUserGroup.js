@@ -671,7 +671,7 @@ class EditUserGroup extends Component {
     return (
       <DialogWrapper
         className='edit-group-dialog'
-        title="Edit group"
+        title={this.translate('Edit group')}
         onClose={this.handleClose}
         disabled={!this.areActionsAllowed}>
 

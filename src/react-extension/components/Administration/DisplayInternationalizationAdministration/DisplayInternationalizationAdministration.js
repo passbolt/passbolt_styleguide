@@ -202,7 +202,7 @@ class DisplayInternationalizationAdministration extends React.Component {
                   </option>
                 )}
               </select>
-              <p><Trans>The language to use if the setting has not been overridden by users settings</Trans></p>
+              <p><Trans>The default language of the organisation.</Trans></p>
             </div>
           </form>
         </div>

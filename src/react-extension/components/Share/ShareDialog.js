@@ -330,7 +330,7 @@ class ShareDialog extends Component {
 
   /**
    * Return a relevant title in case of single resource/folder or multiple item share, etc.
-   * @returns {boolean}
+   * @returns {string}
    */
   getTitle() {
     if (this.state.loading) {
@@ -340,16 +340,32 @@ class ShareDialog extends Component {
       return this.translate("Share {{numberItems}} items", {numberItems: this.context.shareDialogProps.resourcesIds.length + this.context.shareDialogProps.foldersIds.length});
     }
     if (this.isAboutAResource()) {
-      return this.translate("Share resource {{resourceName}}", {resourceName: this.resources[0].name});
+      return this.translate("Share resource");
     }
     if (this.isAboutResources()) {
       return this.translate("Share {{numberResource}} resources", {numberResource: this.context.shareDialogProps.resourcesIds.length});
     }
     if (this.isAboutAFolder()) {
-      return this.translate("Share folder {{folderName}}", {folderName: this.folders[0].name});
+      return this.translate("Share folder");
     }
     if (this.isAboutFolders()) {
       return this.translate("Share {numberFolder} folders", {numberFolder: this.context.shareDialogProps.foldersIds.length});
+    }
+  }
+
+  /**
+   * Return a relevant subtitle in case of single resource/folder or multiple item share, etc.
+   * @returns {string}
+   */
+  getSubtitle() {
+    if (this.state.loading) {
+      return;
+    }
+    if (this.isAboutAResource()) {
+      return this.resources[0].name;
+    }
+    if (this.isAboutAFolder()) {
+      return this.folders[0].name;
     }
   }
 
@@ -421,6 +437,7 @@ class ShareDialog extends Component {
     return (
       <DialogWrapper
         title={this.getTitle()}
+        subtitle={this.getSubtitle()}
         tooltip={this.getTooltip()}
         onClose={this.handleClose}
         disabled={this.hasAllInputDisabled()}>

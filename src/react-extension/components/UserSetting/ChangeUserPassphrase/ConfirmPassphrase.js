@@ -20,6 +20,7 @@ import FormSubmitButton from "../../Common/Inputs/FormSubmitButton/FormSubmitBut
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
 import {withDialog} from "../../../contexts/DialogContext";
 import Icon from "../../Common/Icons/Icon";
+import {Trans, withTranslation} from "react-i18next";
 
 /**
  * This component displays the user confirm passphrase information
@@ -127,7 +128,7 @@ class ConfirmPassphrase extends React.Component {
     // Whenever the passphrase is invalid.
     this.toggleProcessing();
     if (error.name === "InvalidMasterPasswordError") {
-      this.setState({passphraseError: "The passphrase is invalid."});
+      this.setState({passphraseError: this.translate("The passphrase is invalid.")});
     } else {
       const ErrorDialogProps = {message: error.message};
       this.props.dialogContext.open(NotifyError, ErrorDialogProps);
@@ -169,17 +170,25 @@ class ConfirmPassphrase extends React.Component {
     return this.hasAllInputDisabled() || !this.IsValidPassphrase();
   }
 
+  /**
+   * Get the translate function
+   * @returns {function(...[*]=)}
+   */
+  get translate() {
+    return this.props.t;
+  }
+
   render() {
     return (
       <div className="grid grid-responsive-12 profile-passphrase">
         <div className="row">
           <div className="col6">
             <form className="enter-passphrase" onSubmit={this.handleSubmit}>
-              <h3>Please enter your passphrase to continue</h3>
+              <h3><Trans>Please enter your passphrase to continue</Trans></h3>
               <div className="form-content">
                 <div className={`input text password required ${this.state.passphraseError ? "error" : ""}`}>
-                  <label htmlFor="passphrase-input">Passphrase</label>
-                  <input id="passphrase-input" type={`${this.state.isObfuscated ? "password" : "text"}`} name="passphrase" placeholder="Passphrase" required="required"
+                  <label htmlFor="passphrase-input"><Trans>Passphrase</Trans></label>
+                  <input id="passphrase-input" type={`${this.state.isObfuscated ? "password" : "text"}`} name="passphrase" placeholder={this.translate('Passphrase')} required="required"
                     ref={this.passphraseInputRef} className={`required ${this.state.passphraseError ? "error" : ""}`} autoFocus={true}
                     value={this.state.passphrase} onChange={this.handleInputChange} disabled={this.hasAllInputDisabled()} />
                   <a
@@ -198,17 +207,17 @@ class ConfirmPassphrase extends React.Component {
               </div>
               <div className="submit-wrapper">
                 <button className="button big" type="button" disabled={this.hasAllInputDisabled()} onClick={this.handleCancel}>
-                  Cancel
+                  <Trans>Cancel</Trans>
                 </button>
-                <FormSubmitButton big={true} disabled={this.mustBeDisabled()} processing={this.state.processing} value="Verify"/>
+                <FormSubmitButton big={true} disabled={this.mustBeDisabled()} processing={this.state.processing} value={this.translate('Verify')}/>
               </div>
             </form>
           </div>
           <div className="col4 last passphrase-help">
-            <h3>What if I forgot my passphrase?</h3>
-            <p>Unfortunately you need your passphrase in order to continue. If you forgot it, please contact your administrator.</p>
+            <h3><Trans>What if I forgot my passphrase?</Trans></h3>
+            <p><Trans>Unfortunately you need your passphrase in order to continue. If you forgot it, please contact your administrator.</Trans></p>
             <a className="button big" href="https://help.passbolt.com/faq/start/passphrase-recovery" target="_blank" rel="noopener noreferrer">
-              <span>Learn more</span>
+              <span><Trans>Learn more</Trans></span>
             </a>
           </div>
         </div>
@@ -220,6 +229,7 @@ class ConfirmPassphrase extends React.Component {
 ConfirmPassphrase.propTypes = {
   userSettingsContext: PropTypes.object, // The user settings context
   dialogContext: PropTypes.any, // The dialog context
+  t: PropTypes.func, // The translation function
 };
 
-export default withDialog(withUserSettings(ConfirmPassphrase));
+export default withDialog(withUserSettings(withTranslation('common')(ConfirmPassphrase)));

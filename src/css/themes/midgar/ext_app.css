@@ -9949,7 +9949,8 @@ table.table-info.horizontal tbody tr:hover {
 }
 .page.password .tableview.empty .empty-content {
   text-align: center;
-  margin: 2em 0.5em 0.67em 0.5em;
+  margin: auto;
+  width: 50%;
   padding-top: 2em;
 }
 .page.password .tableview.empty .empty-content h1 {
@@ -10482,7 +10483,7 @@ table.table-info.horizontal tbody tr:hover {
   -ms-text-overflow: ellipsis;
 }
 .subscription-key .subscription-information li .label {
-  width: 30%;
+  width: 40%;
   display: inline-block;
   margin-right: 5%;
   float: left;
@@ -10496,7 +10497,7 @@ table.table-info.horizontal tbody tr:hover {
   color: #9F6000;
 }
 .subscription-key .subscription-information li .value {
-  width: 65%;
+  width: 55%;
   display: inline-block;
   float: left;
   height: 1.8em;

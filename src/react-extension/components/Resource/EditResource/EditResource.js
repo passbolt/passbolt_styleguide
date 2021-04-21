@@ -669,7 +669,7 @@ class EditResource extends Component {
      */
 
     return (
-      <DialogWrapper title={this.translate("Edit")} subtitle={this.state.nameOriginal} className="edit-password-dialog"
+      <DialogWrapper title={this.translate("Edit resource")} subtitle={this.state.nameOriginal} className="edit-password-dialog"
         disabled={this.hasAllInputDisabled()} onClose={this.handleClose}>
         <form onSubmit={this.handleFormSubmit} noValidate>
           <div className="form-content">

@@ -45,6 +45,13 @@ export default class ShareDialogPage {
   }
 
   /**
+   * Returns the dialog subtitle
+   */
+  get subtitle() {
+    return this._page.container.querySelector(".dialog-header-subtitle").textContent;
+  }
+
+  /**
    * Returns the dialog element
    */
   get form() {

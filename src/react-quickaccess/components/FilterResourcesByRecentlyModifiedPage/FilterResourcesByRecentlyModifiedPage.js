@@ -175,8 +175,10 @@ class FilterResourcesByRecentlyModifiedPage extends React.Component {
                   <li className="empty-entry">
                     <p>
                       {isSearching && <Trans>No result match your search. Try with another search term.</Trans>}
-                      {!isSearching && <Trans>It does feel a bit empty here. Create your first password or
-                        wait for a team member to share one with you.</Trans>}
+                      {!isSearching && <>
+                        <Trans>It does feel a bit empty here.</Trans>&nbsp;
+                        <Trans>Create your first password or wait for a team member to share one with you.</Trans>
+                      </>}
                     </p>
                   </li>
                 }

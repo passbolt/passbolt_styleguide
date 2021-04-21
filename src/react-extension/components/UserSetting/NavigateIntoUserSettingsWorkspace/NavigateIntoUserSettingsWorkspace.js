@@ -72,7 +72,7 @@ class NavigateIntoUserSettingsWorkspace extends React.Component {
               <div className="main-cell-wrapper">
                 <div className="main-cell">
                   <a onClick={this.props.navigationContext.onGoToUserSettingsPassphraseRequested}>
-                    <span>Passphrase</span>
+                    <span><Trans>Passphrase</Trans></span>
                   </a>
                 </div>
               </div>
@@ -84,7 +84,7 @@ class NavigateIntoUserSettingsWorkspace extends React.Component {
               <div className="main-cell-wrapper">
                 <div className="main-cell">
                   <a onClick={this.props.navigationContext.onGoToUserSettingsSecurityTokenRequested}>
-                    <span>Security Token</span>
+                    <span><Trans>Security Token</Trans></span>
                   </a>
                 </div>
               </div>
