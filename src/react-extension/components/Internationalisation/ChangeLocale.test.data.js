@@ -8,7 +8,7 @@ import siteSettingsFixture from "../../test/fixture/Settings/siteSettings";
 export function defaultProps() {
   const props = {
     context: {
-      locale: "en-US",
+      locale: "en-UK",
       siteSettings: new SiteSettings(siteSettingsFixture),
       onUpdateLocaleRequested: jest.fn()
     }

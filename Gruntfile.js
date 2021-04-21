@@ -147,7 +147,7 @@ module.exports = function(grunt) {
         src: 'src/**/*.{js,html}',
         dest: 'src',
         options: {
-          lngs: ['en-US'],
+          lngs: ['en-UK'],
           func: {
             list: ['this.props.t', 'this.translate'], // function use to parse and find new translation
             extensions: ['.js', '.jsx']

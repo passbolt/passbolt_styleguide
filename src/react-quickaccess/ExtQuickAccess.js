@@ -79,7 +79,7 @@ class ExtQuickAccess extends React.Component {
       isAuthenticated: null,
       userSettings: null,
       siteSettings: null,
-      locale: "en-US", // To avoid any weird blink, launch the quickaccess with a default english locale
+      locale: "en-UK", // To avoid any weird blink, launch the quickaccess with a default english locale
       // Search
       search: "",
       searchHistory: {},
