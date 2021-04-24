@@ -3802,6 +3802,20 @@ select {
   font-size: 16px;
   margin: 0.55em 0;
 }
+select.large {
+  line-height: 24px;
+  color: #FFFFFC;
+  background: #0C0C0A;
+  width: 14em;
+  /* 20 char (default input length) x .7em (average char length) */
+  padding: 0.375em 0.425em 0.375em 0.425em;
+  display: inline-block;
+  margin-bottom: 0.5em;
+  border: 1px solid #222220;
+  border-top: 1px solid #30302D;
+  vertical-align: middle;
+  box-sizing: content-box;
+}
 /* select */
 input[type=file] {
   width: 100%;
@@ -4178,7 +4192,8 @@ input[type=email].fluid {
   /* 24px */
 }
 .dialog input[type=text],
-.dialog textarea {
+.dialog textarea,
+.dialog select {
   width: 100%;
   box-sizing: border-box;
   /*
@@ -4215,24 +4230,30 @@ input[type=email].fluid {
 }
 .dialog input[type=text]:before,
 .dialog textarea:before,
+.dialog select:before,
 .dialog input[type=text]:after,
-.dialog textarea:after {
+.dialog textarea:after,
+.dialog select:after {
   content: "";
   display: table;
 }
 .dialog input[type=text]:after,
-.dialog textarea:after {
+.dialog textarea:after,
+.dialog select:after {
   clear: both;
 }
 .dialog input[type=text]:before,
 .dialog textarea:before,
+.dialog select:before,
 .dialog input[type=text]:after,
-.dialog textarea:after {
+.dialog textarea:after,
+.dialog select:after {
   content: "";
   display: table;
 }
 .dialog input[type=text]:after,
-.dialog textarea:after {
+.dialog textarea:after,
+.dialog select:after {
   clear: both;
 }
 .dialog textarea + .message,

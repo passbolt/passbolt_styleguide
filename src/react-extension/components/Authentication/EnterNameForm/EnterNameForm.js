@@ -15,7 +15,7 @@ import React, {Component} from "react";
 import PropTypes from "prop-types";
 import {withAppContext} from "../../../contexts/AppContext";
 import {withApiTriageContext} from "../../../contexts/ApiTriageContext";
-import FormSubmitButton from "../../../../react/components/Common/Inputs/FormSubmitButton/FormSubmitButton";
+import FormSubmitButton from "../../Common/Inputs/FormSubmitButton/FormSubmitButton";
 import {Trans, withTranslation} from "react-i18next";
 
 class EnterNameForm extends Component {
@@ -248,7 +248,7 @@ class EnterNameForm extends Component {
               disabled={this.hasAllInputDisabled()} big={true} fullWidth={true} processing={this.state.processing}
               value={this.translate("Sign up")}
             />
-            <a href={`${this.props.context.trustedDomain}/auth/login`}><Trans>I already have an account</Trans></a>
+            <a href={`${this.props.context.trustedDomain}/auth/login?locale=${this.props.context.locale}`}><Trans>I already have an account</Trans></a>
           </div>
         </form>
       </div>

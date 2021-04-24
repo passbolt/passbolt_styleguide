@@ -114,6 +114,12 @@ export default () => {
         "previewPassword": {
           "version": "3.0.0"
         },
+        "locale": {
+          "options": {
+            "en-US": "English (default)",
+            "fr-FR": "Français"
+          }
+        },
         "mobile": {
           "version": "1.0.0"
         }

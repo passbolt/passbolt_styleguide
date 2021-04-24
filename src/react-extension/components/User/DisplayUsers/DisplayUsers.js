@@ -15,10 +15,10 @@ import PropTypes from "prop-types";
 import React from "react";
 import ReactList from "react-list";
 import AppContext from "../../../contexts/AppContext";
-import Icon from "../../../../react/components/Common/Icons/Icon";
+import Icon from "../../Common/Icons/Icon";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import {withRouter} from "react-router-dom";
-import {withContextualMenu} from "../../../../react/contexts/Common/ContextualMenuContext";
+import {withContextualMenu} from "../../../contexts/ContextualMenuContext";
 import {UserWorkspaceFilterTypes, withUserWorkspace} from "../../../contexts/UserWorkspaceContext";
 import DisplayUsersContextualMenu from "../DisplayUsersContextualMenu/DisplayUsersContextualMenu";
 import {Trans, withTranslation} from "react-i18next";
@@ -247,7 +247,9 @@ class DisplayUsers extends React.Component {
    * @return {string} The formatted date
    */
   formatDateTimeAgo(date) {
-    return DateTime.fromISO(date).toRelative({locale: this.props.i18n.lng});
+    const dateTime = DateTime.fromISO(date);
+    const duration = dateTime.diffNow().toMillis();
+    return duration < 1000 && duration > 0 ? this.translate('Just now') : dateTime.toRelative({locale: this.context.locale});
   }
 
   renderItem(index, key) {
@@ -439,7 +441,6 @@ DisplayUsers.propTypes = {
   actionFeedbackContext: PropTypes.any, // The action feedback context
   contextualMenuContext: PropTypes.any, // The contextual menu context
   t: PropTypes.func, // The translation function
-  i18n: PropTypes.any // The i18n context translation
 };
 
 export default withRouter(withActionFeedback(withContextualMenu(withUserWorkspace(withTranslation('common')(DisplayUsers)))));

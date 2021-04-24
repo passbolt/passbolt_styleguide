@@ -18,9 +18,9 @@
 import ShareDialogPage from "./ShareDialog.test.page";
 import {autocompleteResult, defaultAppContext, defaultProps, folders, resources} from "./ShareDialog.test.data";
 import {ActionFeedbackContext} from "../../contexts/ActionFeedbackContext";
-import PassboltApiFetchError from "../../../react/lib/Common/Error/PassboltApiFetchError";
+import PassboltApiFetchError from "../../../shared/lib/Error/PassboltApiFetchError";
 import {waitFor} from "@testing-library/react";
-import ErrorDialog from "../Dialog/ErrorDialog/ErrorDialog";
+import NotifyError from "../Common/Error/NotifyError/NotifyError";
 
 beforeEach(() => {
   jest.resetModules();
@@ -161,7 +161,7 @@ describe("As Lu I should see the share dialog", () => {
       await page.savePermissions();
 
       // Throw general error message
-      expect(props.dialogContext.open).toHaveBeenCalledWith(ErrorDialog);
+      expect(props.dialogContext.open).toHaveBeenCalledWith(NotifyError);
     });
   });
 
@@ -285,7 +285,7 @@ describe("As Lu I should see the share dialog", () => {
 
       await page.savePermissions();
       // Throw general error message
-      expect(props.dialogContext.open).toHaveBeenCalledWith(ErrorDialog);
+      expect(props.dialogContext.open).toHaveBeenCalledWith(NotifyError);
     });
   });
 });

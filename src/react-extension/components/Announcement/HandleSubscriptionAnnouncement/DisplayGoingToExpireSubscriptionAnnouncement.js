@@ -19,11 +19,23 @@ import {DateTime} from "luxon";
 import {withNavigationContext} from "../../../contexts/NavigationContext";
 import {Trans, withTranslation} from "react-i18next";
 import {withAnnouncement} from "../../../contexts/AnnouncementContext";
+import {withAppContext} from "../../../contexts/AppContext";
 
 /**
  * This component allows to display the subscription announcement
  */
 class DisplayGoingToExpireSubscriptionAnnouncement extends React.Component {
+  /**
+   * Format date in time ago
+   * @param {string} date The date to format
+   * @return {string}
+   */
+  formatDateTimeAgo(date) {
+    const dateTime = DateTime.fromISO(date);
+    const duration = dateTime.diffNow().toMillis();
+    return duration < 1000 && duration > 0 ? this.translate('Just now') : dateTime.toRelative({locale: this.props.context.locale});
+  }
+
   /**
    * Render the component
    * @returns {JSX}
@@ -33,7 +45,7 @@ class DisplayGoingToExpireSubscriptionAnnouncement extends React.Component {
       <AnnouncementWrapper className="subscription" onClose={this.props.onClose} canClose={true}>
         <p>
           <Trans>Warning: </Trans>
-          <Trans>your subscription key will expire</Trans> {DateTime.fromISO(this.props.expiry).toRelative({locale: this.props.i18n.lng})}.
+          <Trans>your subscription key will expire</Trans> {this.formatDateTimeAgo(this.props.expiry)}.
           <a onClick={this.props.navigationContext.onGoToAdministrationSubscriptionRequested}>
             <Trans>Manage Subscription</Trans>
           </a>
@@ -44,10 +56,10 @@ class DisplayGoingToExpireSubscriptionAnnouncement extends React.Component {
 }
 
 DisplayGoingToExpireSubscriptionAnnouncement.propTypes = {
+  context: PropTypes.any, // The application context
   expiry: PropTypes.string, // The subscription expiry date
   navigationContext: PropTypes.any, // The application navigation context
   onClose: PropTypes.func, // The close function
-  i18n: PropTypes.any
 };
 
-export default withNavigationContext(withAnnouncement(withTranslation('common')(DisplayGoingToExpireSubscriptionAnnouncement)));
+export default withAppContext(withNavigationContext(withAnnouncement(withTranslation('common')(DisplayGoingToExpireSubscriptionAnnouncement))));

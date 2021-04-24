@@ -14,13 +14,14 @@
 import React, {Component} from "react";
 import PropTypes from "prop-types";
 import AuthenticationContextProvider from "./contexts/AuthenticationContext";
-import ManageDialogs from "../react/components/Common/Dialog/ManageDialogs/ManageDialogs";
-import DialogContextProvider from "../react/contexts/Common/DialogContext";
+import ManageDialogs from "./components/Common/Dialog/ManageDialogs/ManageDialogs";
+import DialogContextProvider from "./contexts/DialogContext";
 import SetupAuthentication from "./components/AuthenticationSetup/SetupAuthentication/SetupAuthentication";
-import SiteSettings from "./lib/Settings/SiteSettings";
-import Footer from "./components/Footer/Footer";
+import SiteSettings from "../shared/lib/Settings/SiteSettings";
+import Footer from "./components/Common/Footer/Footer";
 import AppContext from "./contexts/AppContext";
-import TranslationProvider from "./components/Internationalisation/TranslationProvider";
+import TranslationProvider from "./components/Common/Internationalisation/TranslationProvider";
+import ChangeLocale from "./components/Internationalisation/ChangeLocale";
 
 /**
  * The setup application served by the browser extension.
@@ -41,7 +42,12 @@ class ExtAuthenticationSetup extends Component {
   get defaultState() {
     return {
       siteSettings: null, // The site settings
-      extensionVersion: null // The extension version
+      extensionVersion: null, // The extension version
+      locale: null, // The locale
+
+      // Locale
+      onUpdateLocaleRequested: this.onUpdateLocaleRequested.bind(this),
+      onRefreshLocaleRequested: this.onRefreshLocaleRequested.bind(this),
     };
   }
 
@@ -63,6 +69,7 @@ class ExtAuthenticationSetup extends Component {
     this.removeSkeleton();
     await this.getSiteSettings();
     await this.getExtensionVersion();
+    this.initLocale();
   }
 
   /**
@@ -75,12 +82,16 @@ class ExtAuthenticationSetup extends Component {
     }
   }
 
+  isReady() {
+    return this.state.siteSettings !== null && this.state.locale !== null;
+  }
+
   /**
    * Get the list of site settings from background page and set it in the state
    * Using SiteSettings
    */
   async getSiteSettings() {
-    const settings = await this.props.port.request("passbolt.setup.site-settings");
+    const settings = await this.props.port.request("passbolt.organization-settings.get");
     const siteSettings = new SiteSettings(settings);
     this.setState({siteSettings});
   }
@@ -94,12 +105,38 @@ class ExtAuthenticationSetup extends Component {
   }
 
   /**
+   * Init the locale
+   */
+  async initLocale() {
+    const {locale} = await this.props.port.request("passbolt.locale.get");
+    this.setState({locale});
+  }
+
+  /**
+   * Whenever the update of the locale is requested
+   * @param {string} locale The locale identifier
+   */
+  async onUpdateLocaleRequested(locale) {
+    const localeDto = {locale};
+    await this.props.port.request("passbolt.locale.update-user-locale", localeDto);
+    this.onRefreshLocaleRequested(locale);
+  }
+
+  /**
+   * Whenever the refresh of the locale is requested
+   */
+  onRefreshLocaleRequested(locale) {
+    this.setState({locale});
+  }
+
+  /**
    * Renders the component
    */
   render() {
     return (
-      <TranslationProvider loadingPath="/data/locales/{{lng}}/{{ns}}.json">
-        <AppContext.Provider value={this.state}>
+      <AppContext.Provider value={this.state}>
+        {this.isReady() &&
+        <TranslationProvider loadingPath="/data/locales/{{lng}}/{{ns}}.json">
           <AuthenticationContextProvider value={this.defaultContextValue}>
             <DialogContextProvider>
               <div id="container" className="container page login">
@@ -111,15 +148,15 @@ class ExtAuthenticationSetup extends Component {
                   <div className="login-form">
                     <SetupAuthentication siteSettings={this.state.siteSettings}/>
                   </div>
+                  <ChangeLocale/>
                 </div>
               </div>
-              <Footer
-                siteSettings={this.state.siteSettings}
-                extensionVersion={this.state.extensionVersion}/>
+              <Footer/>
             </DialogContextProvider>
           </AuthenticationContextProvider>
-        </AppContext.Provider>
-      </TranslationProvider>
+        </TranslationProvider>
+        }
+      </AppContext.Provider>
     );
   }
 }

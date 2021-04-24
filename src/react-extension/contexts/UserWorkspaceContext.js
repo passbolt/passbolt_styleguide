@@ -17,10 +17,10 @@ import * as React from "react";
 import PropTypes from "prop-types";
 import {withRouter} from "react-router-dom";
 import AppContext from "./AppContext";
-import {withLoading} from "../../react/contexts/Common/LoadingContext";
+import {withLoading} from "./LoadingContext";
 import {withActionFeedback} from "./ActionFeedbackContext";
-import EditUserGroup from "../components/User/EditUserGroup/EditUserGroup";
-import {withDialog} from "../../react/contexts/Common/DialogContext";
+import EditUserGroup from "../components/UserGroup/EditUserGroup/EditUserGroup";
+import {withDialog} from "./DialogContext";
 import {DateTime} from "luxon";
 
 /**

@@ -14,8 +14,8 @@ import * as React from "react";
 import PropTypes from "prop-types";
 import {withAppContext} from "./AppContext";
 import {withRouter} from "react-router-dom";
-import {withLoading} from "../../react/contexts/Common/LoadingContext";
-import {ApiClient} from "../lib/apiClient/apiClient";
+import {withLoading} from "./LoadingContext";
+import {ApiClient} from "../../shared/lib/apiClient/apiClient";
 
 /**
  * Context related to resources ( filter, current selections, etc.)
@@ -46,6 +46,7 @@ export const AdministrationWorkspaceContext = React.createContext({
   onGetEmailNotificationsRequested: () => {}, // Whenever the user access to the email notifications page
   onSaveEmailNotificationsRequested: () => {}, // Whenever the user save the email notifications settings
   onUpdateSubscriptionKeyRequested: () => {}, // Whenever the user update the subscription key
+  onSaveLocaleRequested: () => {}, // Whenever the user access save the locale settings
   onSaveEnabled: () => {}, // Whenever a user change settings
   onMustSaveSettings: () => {}, // Whenever a user wants save settings
   onTestEnabled: () => {}, // Whenever a user change settings
@@ -100,6 +101,7 @@ class AdministrationWorkspaceContextProvider extends React.Component {
       onGetEmailNotificationsRequested: this.onGetEmailNotificationsRequested.bind(this), // Whenever the user access to the email notifications page
       onSaveEmailNotificationsRequested: this.onSaveEmailNotificationsRequested.bind(this), // Whenever the user save the email notifications settings
       onUpdateSubscriptionKeyRequested: this.onUpdateSubscriptionKeyRequested.bind(this), // Whenever the user update the subscription key
+      onSaveLocaleRequested: this.onSaveLocaleRequested.bind(this), // Whenever the user save the locale settings
       onSaveEnabled: this.handleSaveEnabled.bind(this), // Whenever a user change settings
       onMustSaveSettings: this.handleMustSaveSettings.bind(this), // Whenever a user wants save settings
       onTestEnabled: this.handleTestEnabled.bind(this), // Whenever a user have settings to be tested
@@ -216,6 +218,7 @@ class AdministrationWorkspaceContextProvider extends React.Component {
     const isUserDirectoryLocation = this.props.location.pathname.includes('users-directory');
     const isEmailNotificationLocation = this.props.location.pathname.includes('email-notification');
     const isSubscriptionLocation = this.props.location.pathname.includes('subscription');
+    const isInternationalizationLocation = this.props.location.pathname.includes('internationalization');
     const can = {
       save: false,
       test: false,
@@ -238,6 +241,8 @@ class AdministrationWorkspaceContextProvider extends React.Component {
       selectedAdministration =  AdministrationWorkspaceMenuTypes.EMAIL_NOTIFICATION;
     } else if (isSubscriptionLocation) {
       selectedAdministration =  AdministrationWorkspaceMenuTypes.SUBSCRIPTION;
+    } else if (isInternationalizationLocation) {
+      selectedAdministration =  AdministrationWorkspaceMenuTypes.INTERNATIONALIZATION;
     }
     await this.setState({selectedAdministration, can, must});
   }
@@ -362,6 +367,17 @@ class AdministrationWorkspaceContextProvider extends React.Component {
   }
 
   /**
+   * Whenever the locale is requested.
+   * @param {string} value the locale
+   * @return {Promise<object>}
+   */
+  async onSaveLocaleRequested(value) {
+    const apiClientOptions = this.props.context.getApiClientOptions().setResourceName("locale/settings");
+    const apiClient = new ApiClient(apiClientOptions);
+    return apiClient.create({value});
+  }
+
+  /**
    * Render the component
    * @returns {JSX}
    */
@@ -414,4 +430,5 @@ export const AdministrationWorkspaceMenuTypes = {
   USER_DIRECTORY: 'USER-DIRECTORY', // User directory administration menu selected
   EMAIL_NOTIFICATION: 'EMAIL-NOTIFICATION', // Email notification administration menu selected
   SUBSCRIPTION: 'SUBSCRIPTION', // Subscription administration menu selected
+  INTERNATIONALIZATION: 'INTERNATIONALIZATION', // Email notification administration menu selected
 };

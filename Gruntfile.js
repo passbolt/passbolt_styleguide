@@ -52,11 +52,6 @@ module.exports = function(grunt) {
       },
 		},
 		shell: {
-		  // 'bundle-reports': {
-		  //   command: [
-		  //     'webpack --entry ./src/js/reports/index.js --output-path ./src/react-appjs/lib/ --output-filename reports.js'
-      //     ].join('&& ')
-      // },
 			'publish': {
 				options: {
 					stdout: true
@@ -69,43 +64,6 @@ module.exports = function(grunt) {
 					'npm publish'
 				].join('&& ')
 			},
-      'copy-demo-css': {
-        options: {
-          stdout: true
-        },
-        command: [
-          // 'rm -f ./demo/react-appjs/public/css/themes/default/api_reports.css',
-          // 'rm -f ./demo/react-appjs/public/css/themes/midgar/api_reports.css',
-          // 'rm -f ./demo/react-appjs/public/css/themes/default/api_main.css',
-          // 'rm -f ./demo/react-appjs/public/css/themes/midgar/api_main.css',
-          // 'cp ./src/css/themes/default/api_reports.css ./demo/react-appjs/public/css/themes/default/.',
-          // 'cp ./src/css/themes/midgar/api_reports.css ./demo/react-appjs/public/css/themes/midgar/.',
-          // 'cp ./src/css/themes/default/api_main.css ./demo/react-appjs/public/css/themes/default/.',
-          // 'cp ./src/css/themes/midgar/api_main.css ./demo/react-appjs/public/css/themes/midgar/.',
-
-          'rm -f ./demo/api-app/public/css/themes/default/*.css',
-          'rm -f ./demo/api-app/public/css/themes/midgar/*.css',
-          'cp ./src/css/themes/default/api_main.css ./demo/api-app/public/css/themes/default/.',
-          'cp ./src/css/themes/midgar/api_main.css ./demo/api-app/public/css/themes/midgar/.',
-          'cp ./src/css/themes/default/api_authentication.css ./demo/api-app/public/css/themes/default/.',
-
-          'rm -f ./demo/ext-app/public/css/themes/default/*.css',
-          'rm -f ./demo/ext-app/public/css/themes/midgar/*.css',
-          'cp ./src/css/themes/default/ext_app.css ./demo/ext-app/public/css/themes/default/.',
-          'cp ./src/css/themes/midgar/ext_app.css ./demo/ext-app/public/css/themes/midgar/.',
-          'cp ./src/css/themes/default/ext_authentication.css ./demo/ext-app/public/css/themes/default/.',
-          'cp ./src/css/themes/midgar/ext_authentication.css ./demo/ext-app/public/css/themes/midgar/.'
-        ].join('&& ')
-      },
-      'copy-demo-lang': {
-        options: {
-          stdout: true
-        },
-        command: [
-          'rm -rf ./demo/ext-app/public/locales/*',
-          'cp -R ./src/locales/ ./demo/ext-app/public/locales/.',
-        ].join('&& ')
-      },
       'build-apps': {
         command: [
           'npm run build'
@@ -177,7 +135,7 @@ module.exports = function(grunt) {
           {
             expand: true,
             overwrite: true,
-            cwd: 'demo/ext-app/public/',
+            cwd: 'src',
             src: ['locales'],
             dest: 'build'
           },
@@ -189,7 +147,7 @@ module.exports = function(grunt) {
         src: 'src/**/*.{js,html}',
         dest: 'src',
         options: {
-          lngs: ['en-US'],
+          lngs: ['en-UK'],
           func: {
             list: ['this.props.t', 'this.translate'], // function use to parse and find new translation
             extensions: ['.js', '.jsx']
@@ -222,14 +180,8 @@ module.exports = function(grunt) {
 					'src/less/*.less',
 					'src/less/**/*.less'
         ],
-				tasks: ['css', 'shell:copy-demo-css']
-			},
-      lang: {
-        files: [
-          'src/locales/**/*.json'
-        ],
-        tasks: ['lang', 'shell:copy-demo-lang']
-      }
+				tasks: ['css']
+			}
 		}
 	});
 
@@ -257,8 +209,7 @@ module.exports = function(grunt) {
 
 	// 'grunt' will check code quality, and if no errors,
 	// compile LESS to CSS, and minify and concatonate all JS and CSS
-	grunt.registerTask('default', [ 'clean:all', 'less', 'cssmin', 'header', 'symlink', 'shell:copy-demo-css', 'shell:copy-demo-lang', 'shell:build-apps', 'externalize-locale-string']);
+	grunt.registerTask('default', [ 'clean:all', 'less', 'cssmin', 'header', 'shell:build-apps', 'externalize-locale-string', 'symlink']);
   grunt.registerTask('css', [ 'clean:css', 'less']);
-  grunt.registerTask('lang', ['shell:copy-demo-lang']);
   grunt.registerTask('externalize-locale-string', ['i18next']);
 };

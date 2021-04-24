@@ -14,7 +14,7 @@
 import React, {Component} from "react";
 import PropTypes from "prop-types";
 import {withRouter} from "react-router-dom";
-import SearchBar from "../../../../react/components/Common/Navigation/Search/SearchBar";
+import SearchBar from "../../Common/Navigation/Search/SearchBar";
 import {UserWorkspaceFilterTypes, withUserWorkspace} from "../../../contexts/UserWorkspaceContext";
 import {withTranslation} from "react-i18next";
 

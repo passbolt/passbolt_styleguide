@@ -20,8 +20,8 @@ import {BrowserRouter as Router} from "react-router-dom";
 import AppContext from "../../../contexts/AppContext";
 import DisplayGroups from "./FilterUsersByGroup";
 import DisplayGroupsFilterContextualMenuPageObject from "./FilterUsersByGroupContextualMenu.test.page";
-import ManageContextualMenu from "../../ManageContextualMenu";
-import ContextualMenuContextProvider from "../../../../react/contexts/Common/ContextualMenuContext";
+import ManageContextualMenu from "../../Common/ContextualMenu/ManageContextualMenu";
+import ContextualMenuContextProvider from "../../../contexts/ContextualMenuContext";
 import DisplayGroupsContextualMenuPageObject from "./DisplayGroupContextualMenu.test.page";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 

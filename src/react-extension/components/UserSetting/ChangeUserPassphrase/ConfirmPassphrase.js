@@ -16,10 +16,10 @@
 import React from 'react';
 import PropTypes from "prop-types";
 import {withUserSettings} from "../../../contexts/UserSettingsContext";
-import FormSubmitButton from "../../../../react/components/Common/Inputs/FormSubmitButton/FormSubmitButton";
-import ErrorDialog from "../../Dialog/ErrorDialog/ErrorDialog";
-import {withDialog} from "../../../../react/contexts/Common/DialogContext";
-import Icon from "../../../../react/components/Common/Icons/Icon";
+import FormSubmitButton from "../../Common/Inputs/FormSubmitButton/FormSubmitButton";
+import NotifyError from "../../Common/Error/NotifyError/NotifyError";
+import {withDialog} from "../../../contexts/DialogContext";
+import Icon from "../../Common/Icons/Icon";
 
 /**
  * This component displays the user confirm passphrase information
@@ -130,7 +130,7 @@ class ConfirmPassphrase extends React.Component {
       this.setState({passphraseError: "The passphrase is invalid."});
     } else {
       const ErrorDialogProps = {message: error.message};
-      this.props.dialogContext.open(ErrorDialog, ErrorDialogProps);
+      this.props.dialogContext.open(NotifyError, ErrorDialogProps);
     }
   }
 

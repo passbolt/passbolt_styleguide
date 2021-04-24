@@ -83,6 +83,13 @@ export default class DisplayAdministrationMenuPage {
   }
 
   /**
+   * Returns the internationalization menu
+   */
+  get internationalization() {
+    return this._page.container.querySelector('#internationalization_menu .row .main-cell-wrapper .main-cell a');
+  }
+
+  /**
    * Returns true if the page object exists in the container
    */
   exists() {
@@ -115,6 +122,11 @@ export default class DisplayAdministrationMenuPage {
   /** Click on the subscription element */
   async goToSubscription() {
     await this.click(this.subscription);
+  }
+
+  /** Click on the email notifications element */
+  async goToInternationalization() {
+    await this.click(this.internationalization);
   }
 }
 

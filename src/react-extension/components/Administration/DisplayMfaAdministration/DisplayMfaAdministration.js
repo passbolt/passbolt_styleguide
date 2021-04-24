@@ -15,7 +15,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import XRegExp from "xregexp";
-import Icon from "../../../../react/components/Common/Icons/Icon";
+import Icon from "../../Common/Icons/Icon";
 import {withAdministrationWorkspace} from "../../../contexts/AdministrationWorkspaceContext";
 import {Trans, withTranslation} from "react-i18next";
 
@@ -158,7 +158,7 @@ class DisplayMfaAdministration extends React.Component {
    * Handle enabled the save button
    */
   handleEnabledSaveButton() {
-    if (!this.props.administrationWorkspaceContext.isSaveEnabled) {
+    if (!this.props.administrationWorkspaceContext.can.save) {
       this.props.administrationWorkspaceContext.onSaveEnabled();
     }
   }

@@ -13,14 +13,14 @@
  */
 import React from "react";
 import PropTypes from "prop-types";
-import Icon from "../../../../react/components/Common/Icons/Icon";
 import {withAppContext} from "../../../contexts/AppContext";
 import {DateTime} from "luxon";
 import {withAdministrationWorkspace} from "../../../contexts/AdministrationWorkspaceContext";
 import {Trans, withTranslation} from "react-i18next";
-import {withDialog} from "../../../../react/contexts/Common/DialogContext";
+import {withDialog} from "../../../../react-extension/contexts/DialogContext";
 import EditSubscriptionKey from "../EditSubscriptionKey/EditSubscriptionKey";
 import {withNavigationContext} from "../../../contexts/NavigationContext";
+import Icon from "../../Common/Icons/Icon";
 
 /**
  * This component allows to display the subscription key for the administration
@@ -127,10 +127,10 @@ class DisplaySubscriptionKey extends React.Component {
   async findSubscriptionKey() {
     try {
       const subscription = await this.props.context.onGetSubscriptionKeyRequested();
-      const customerId = subscription.customer_id || "N/A";
-      const subscriptionId = subscription.subscription_id || "N/A";
+      const customerId = subscription.customer_id;
+      const subscriptionId = subscription.subscription_id;
       const users = subscription.users;
-      const email = subscription.email || "N/A";
+      const email = subscription.email;
       const expiry = subscription.expiry;
       const created = subscription.created;
       const data = subscription.data;
@@ -185,9 +185,9 @@ class DisplaySubscriptionKey extends React.Component {
    */
   handleRenewKey() {
     if (this.hasLimitUsersExceeded()) {
-      this.props.navigationContext.onGoToNewTab(`https://www.passbolt.com/subscription/ee/update/qty?subscription_id=${this.state.subscriptionId}`);
+      this.props.navigationContext.onGoToNewTab(`https://www.passbolt.com/subscription/ee/update/qty?subscription_id=${this.state.subscriptionId}&customer_id=${this.state.customerId}`);
     } else if (this.hasSubscriptionKeyExpired() || this.hasSubscriptionKeyGoingToExpire()) {
-      this.props.navigationContext.onGoToNewTab(`https://www.passbolt.com/subscription/ee/update/renew?subscription_id=${this.state.subscriptionId}`);
+      this.props.navigationContext.onGoToNewTab(`https://www.passbolt.com/subscription/ee/update/renew?subscription_id=${this.state.subscriptionId}&customer_id=${this.state.customerId}`);
     }
   }
 
@@ -270,10 +270,21 @@ class DisplaySubscriptionKey extends React.Component {
    */
   formatDate(date) {
     try {
-      return DateTime.fromISO(date).setLocale(this.props.i18n.lng).toLocaleString(DateTime.DATE_SHORT);
+      return DateTime.fromISO(date).setLocale(this.props.context.locale).toLocaleString(DateTime.DATE_SHORT);
     } catch (error) {
       return "";
     }
+  }
+
+  /**
+   * Format date in time ago
+   * @param {string} date The date to format
+   * @return {string}
+   */
+  formatDateTimeAgo(date) {
+    const dateTime = DateTime.fromISO(date);
+    const duration = dateTime.diffNow().toMillis();
+    return duration < 1000 && duration > 0 ? this.translate('Just now') : dateTime.toRelative({locale: this.props.context.locale});
   }
 
   /**
@@ -382,7 +393,7 @@ class DisplaySubscriptionKey extends React.Component {
                   <span
                     className={`label ${this.hasSubscriptionKeyExpired() ? "error" : ""} ${this.hasSubscriptionKeyGoingToExpire() ? "warning" : ""}`}><Trans>Expires on:</Trans></span>
                   <span
-                    className={`value ${this.hasSubscriptionKeyExpired() ? "error" : ""} ${this.hasSubscriptionKeyGoingToExpire() ? "warning" : ""}`}>{this.formatDate(this.state.expiry)} ({`${this.hasSubscriptionKeyExpired() ? this.translate("expired ") : ""}${DateTime.fromISO(this.state.expiry).toRelative({locale: this.props.i18n.lng})}`})</span>
+                    className={`value ${this.hasSubscriptionKeyExpired() ? "error" : ""} ${this.hasSubscriptionKeyGoingToExpire() ? "warning" : ""}`}>{this.formatDate(this.state.expiry)} ({`${this.hasSubscriptionKeyExpired() ? this.translate("expired ") : ""}${this.formatDateTimeAgo(this.state.expiry)}`})</span>
                 </li>
               </ul>
               }
@@ -426,7 +437,6 @@ DisplaySubscriptionKey.propTypes = {
   administrationWorkspaceContext: PropTypes.object, // The administration workspace context
   dialogContext: PropTypes.any, // The dialog congtext
   t: PropTypes.func,
-  i18n: PropTypes.any
 };
 
 export default withAppContext(withNavigationContext(withAdministrationWorkspace(withDialog(withTranslation('common')(DisplaySubscriptionKey)))));

@@ -14,14 +14,14 @@
 import React, {Component} from "react";
 import PropTypes from "prop-types";
 import AuthenticationContextProvider, {AuthenticationContext} from "./contexts/AuthenticationContext";
-import ManageDialogs from "../react/components/Common/Dialog/ManageDialogs/ManageDialogs";
-import DialogContextProvider from "../react/contexts/Common/DialogContext";
+import ManageDialogs from "./components/Common/Dialog/ManageDialogs/ManageDialogs";
+import DialogContextProvider from "./contexts/DialogContext";
 import {BrowserRouter as Router} from "react-router-dom";
 import OrchestrateLogin from "./components/AuthenticationLogin/OrchestrateLogin/OrchestrateLogin";
-import SiteSettings from "./lib/Settings/SiteSettings";
-import Footer from "./components/Footer/Footer";
-import TranslationProvider from "./components/Internationalisation/TranslationProvider";
-
+import SiteSettings from "../shared/lib/Settings/SiteSettings";
+import Footer from "./components/Common/Footer/Footer";
+import TranslationProvider from "./components/Common/Internationalisation/TranslationProvider";
+import AppContext from "./contexts/AppContext";
 
 /**
  * The login application served by the browser extension.
@@ -29,40 +29,18 @@ import TranslationProvider from "./components/Internationalisation/TranslationPr
 class ExtAuthenticationLogin extends Component {
   /**
    * Default constructor
-   * @param props Component props
+   * @param props The component props
    */
   constructor(props) {
     super(props);
     this.state = this.defaultState;
   }
 
-  /**
-   * Returns the component default state
-   */
-  get defaultState() {
-    return {
-      siteSettings: null, // The site settings
-      extensionVersion: null // The extension version
-    };
-  }
-
-  /**
-   * Returns the component default state
-   */
-  get defaultContextValue() {
-    return {
-      port: this.props.port,
-      storage: this.props.storage,
-    };
-  }
-
-  /**
-   * Whenever the component is mounted
-   */
   async componentDidMount() {
     this.removeSkeleton();
     await this.getSiteSettings();
     await this.getExtensionVersion();
+    this.initLocale();
   }
 
   /**
@@ -76,11 +54,39 @@ class ExtAuthenticationLogin extends Component {
   }
 
   /**
+   * Returns the component default state
+   */
+  get defaultState() {
+    return {
+      siteSettings: null, // The site settings
+      extensionVersion: null, // The extension version
+      locale: null, // The locale
+
+      // Locale
+      onUpdateLocaleRequested: this.onUpdateLocaleRequested.bind(this),
+    };
+  }
+
+  /**
+   * Returns the component default state
+   */
+  get defaultContextValue() {
+    return {
+      port: this.props.port,
+      storage: this.props.storage,
+    };
+  }
+
+  isReady() {
+    return this.state.siteSettings !== null && this.state.locale !== null;
+  }
+
+  /**
    * Get the list of site settings from background page and set it in the state
    * Using SiteSettings
    */
   async getSiteSettings() {
-    const settings = await this.props.port.request("passbolt.site.settings");
+    const settings = await this.props.port.request("passbolt.organization-settings.get");
     const siteSettings = new SiteSettings(settings);
     this.setState({siteSettings});
   }
@@ -89,8 +95,24 @@ class ExtAuthenticationLogin extends Component {
    * Get extension version
    */
   async getExtensionVersion() {
-    const extensionVersion = await this.props.port.request('passbolt.addon.get-version');
+    const extensionVersion = await this.props.port.request("passbolt.addon.get-version");
     this.setState({extensionVersion});
+  }
+
+  /**
+   * Init the locale
+   */
+  async initLocale() {
+    const {locale} = await this.props.port.request("passbolt.locale.get");
+    this.setState({locale});
+  }
+
+  /**
+   * Whenever the update of the locale is requested
+   */
+  async onUpdateLocaleRequested() {
+    const {locale} = await this.props.port.request("passbolt.locale.get");
+    this.setState({locale});
   }
 
   /**
@@ -98,29 +120,30 @@ class ExtAuthenticationLogin extends Component {
    */
   render() {
     return (
-      <TranslationProvider loadingPath="/data/locales/{{lng}}/{{ns}}.json">
-        <Router>
-          <AuthenticationContextProvider value={this.defaultContextValue}>
-            <DialogContextProvider>
-              <div id="container" className="container page login">
-                <ManageDialogs/>
-                <div className="content">
-                  <div className="header">
-                    <div className="logo"><span className="visually-hidden">Passbolt</span></div>
-                  </div>
-                  <div className="login-form">
-                    <OrchestrateLogin
-                      siteSettings={this.state.siteSettings}/>
+      <AppContext.Provider value={this.state}>
+        {this.isReady() &&
+        <TranslationProvider loadingPath="/data/locales/{{lng}}/{{ns}}.json">
+          <Router>
+            <AuthenticationContextProvider value={this.defaultContextValue}>
+              <DialogContextProvider>
+                <div id="container" className="container page login">
+                  <ManageDialogs/>
+                  <div className="content">
+                    <div className="header">
+                      <div className="logo"><span className="visually-hidden">Passbolt</span></div>
+                    </div>
+                    <div className="login-form">
+                      <OrchestrateLogin/>
+                    </div>
                   </div>
                 </div>
-              </div>
-              <Footer
-                siteSettings={this.state.siteSettings}
-                extensionVersion={this.state.extensionVersion}/>
-            </DialogContextProvider>
-          </AuthenticationContextProvider>
-        </Router>
-      </TranslationProvider>
+                <Footer/>
+              </DialogContextProvider>
+            </AuthenticationContextProvider>
+          </Router>
+        </TranslationProvider>
+        }
+      </AppContext.Provider>
     );
   }
 }

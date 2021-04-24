@@ -15,15 +15,15 @@
 import React from "react";
 import PropTypes from "prop-types";
 import AppContext from "../../../contexts/AppContext";
-import Icon from "../../../../react/components/Common/Icons/Icon";
+import Icon from "../../Common/Icons/Icon";
 import {withUserWorkspace} from "../../../contexts/UserWorkspaceContext";
-import EditUserDialog from "../EditUser/EditUserDialog";
-import {withDialog} from "../../../../react/contexts/Common/DialogContext";
-import DeleteUserDialog from "../DeleteUser/DeleteUserDialog";
-import DeleteUserWithConflictsDialog from "../DeleteUser/DeleteUserWithConflictsDialog";
-import ErrorDialog from "../../Dialog/ErrorDialog/ErrorDialog";
+import EditUser from "../EditUser/EditUser";
+import {withDialog} from "../../../contexts/DialogContext";
+import DeleteUser from "../DeleteUser/DeleteUser";
+import DeleteUserWithConflicts from "../DeleteUser/DeleteUserWithConflicts";
+import NotifyError from "../../Common/Error/NotifyError/NotifyError";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
-import ConfirmDisableUserMFA from "../DisableUserMFA/ConfirmDisableUserMFA";
+import ConfirmDisableUserMFA from "../ConfirmDisableUserMFA/ConfirmDisableUserMFA";
 import {Trans, withTranslation} from "react-i18next";
 
 /**
@@ -131,7 +131,7 @@ class DisplayUserWorkspaceActions extends React.Component {
       id: this.selectedUser.id
     };
     this.context.setContext({editUserDialogProps});
-    this.props.dialogContext.open(EditUserDialog);
+    this.props.dialogContext.open(EditUser);
   }
 
   /**
@@ -158,7 +158,7 @@ class DisplayUserWorkspaceActions extends React.Component {
       user: this.selectedUser
     };
     this.context.setContext({deleteUserDialogProps});
-    this.props.dialogContext.open(DeleteUserDialog);
+    this.props.dialogContext.open(DeleteUser);
   }
 
   /**
@@ -170,7 +170,7 @@ class DisplayUserWorkspaceActions extends React.Component {
       errors: errors,
     };
     this.context.setContext({deleteUserWithConflictsDialogProps});
-    this.props.dialogContext.open(DeleteUserWithConflictsDialog);
+    this.props.dialogContext.open(DeleteUserWithConflicts);
   }
 
   /**
@@ -183,7 +183,7 @@ class DisplayUserWorkspaceActions extends React.Component {
       message: error.message
     };
     this.context.setContext({errorDialogProps});
-    this.props.dialogContext.open(ErrorDialog);
+    this.props.dialogContext.open(NotifyError);
   }
 
   /**
@@ -349,7 +349,7 @@ class DisplayUserWorkspaceActions extends React.Component {
     };
     this.toggleMoreMenu();
     this.context.setContext({errorDialogProps});
-    this.props.dialogContext.open(ErrorDialog);
+    this.props.dialogContext.open(NotifyError);
   }
 
   /**

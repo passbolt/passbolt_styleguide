@@ -1,0 +1,147 @@
+/**
+ * Returns the default app context for the unit test
+ * @param appContext An existing app context
+ * @returns {any}
+ */
+import MockPort from "../../../react-extension/test/mock/MockPort";
+import UserSettings from "../../../shared/lib/Settings/UserSettings";
+import userSettingsFixture from "../../../react-extension/test/fixture/Settings/userSettings";
+
+export function defaultAppContext(appContext) {
+  const defaultAppContext = {
+    port: new MockPort(),
+    focusSearch: () => {},
+    updateSearch: () => {},
+    userSettings: new UserSettings(userSettingsFixture),
+    searchHistory: {},
+    search: ""
+  };
+  return Object.assign(defaultAppContext, appContext || {});
+}
+
+/**
+ * Mocked resources
+ */
+const mockResources = [
+  {
+    "id": "8e3874ae-4b40-590b-968a-418f704b9d9a",
+    "name": "apache",
+    "username": "www-data",
+    "uri": "http:\/\/www.apache.org\/",
+    "description": "Apache is the world\u0027s most used web server software.",
+    "deleted": false,
+    "created": "2020-08-15T16:37:15+00:00",
+    "modified": "2020-08-16T16:37:15+00:00",
+    "created_by": "f848277c-5398-58f8-a82a-72397af2d450",
+    "modified_by": "f848277c-5398-58f8-a82a-72397af2d450",
+    "permissions": [
+      {
+        "id": "8dfd59a7-852d-5c57-bd45-75c28bbb3f6c",
+        "aco": "Resource",
+        "aco_foreign_key": "8e3874ae-4b40-590b-968a-418f704b9d9a",
+        "aro": "User",
+        "aro_foreign_key": "f848277c-5398-58f8-a82a-72397af2d450",
+        "type": 15,
+        "created": "2020-08-17T16:37:15+00:00",
+        "modified": "2020-08-17T16:37:15+00:00"
+      },
+      {
+        "id": "898ce1d0-601f-5194-976b-147a680dd472",
+        "aco": "Resource",
+        "aco_foreign_key": "8e3874ae-4b40-590b-968a-418f704b9d9a",
+        "aro": "User",
+        "aro_foreign_key": "640ebc06-5ec1-5322-a1ae-6120ed2f3a74",
+        "type": 1,
+        "created": "2020-08-17T16:37:15+00:00",
+        "modified": "2020-08-17T16:37:15+00:00"
+      }
+    ]
+  },
+  {
+    "id": "f9f79749-4bce-4e61-8016-68c942a8f2d9",
+    "name": "esaie",
+    "username": "test",
+    "uri": "http:\/\/www.essaie.org\/",
+    "description": "",
+    "deleted": false,
+    "created": "2020-08-18T07:51:47+00:00",
+    "modified": "2020-08-18T09:51:45+00:00",
+    "created_by": "d57c10f5-639d-5160-9c81-8a0c6c4ec856",
+    "modified_by": "d57c10f5-639d-5160-9c81-8a0c6c4ec856",
+    "permissions": [
+      {
+        "id": "640ebc06-5ec1-5322-a1ae-6120ed2f3a77",
+        "aco": "Resource",
+        "aco_foreign_key": "f9f79749-4bce-4e61-8016-68c942a8f2d9",
+        "aro": "User",
+        "aro_foreign_key": "f848277c-5398-58f8-a82a-72397af2d450",
+        "type": 15,
+        "created": "2020-08-18T08:05:17+00:00",
+        "modified": "2020-08-21T08:53:00+00:00"
+      },
+      {
+        "id": "fa5f5d7a-32cc-4c5b-9478-f58584ca4222",
+        "aco": "Resource",
+        "aco_foreign_key": "f9f79749-4bce-4e61-8016-68c942a8f2d9",
+        "aro": "User",
+        "aro_foreign_key": "640ebc06-5ec1-5322-a1ae-6120ed2f3a74",
+        "type": 1,
+        "created": "2020-08-18T07:51:47+00:00",
+        "modified": "2020-08-21T08:53:00+00:00"
+      },
+      {
+        "id": "fa5f5d7a-32cc-4c5b-9478-f58584ca4222",
+        "aco": "Resource",
+        "aco_foreign_key": "f9f79749-4bce-4e61-8016-68c942a8f2d9",
+        "aro": "Group",
+        "aro_foreign_key": "d57c10f5-639d-5160-9c81-8a0c6c4ec857",
+        "type": 1,
+        "created": "2020-08-18T07:51:47+00:00",
+        "modified": "2020-08-21T08:53:00+00:00"
+      }
+    ],
+    "folder_parent_id": "9e03fd73-04c0-5514-95fa-1a6cf2c7c093",
+    "personal": false
+  }
+];
+
+/**
+ * Mocked a group
+ */
+export const mockGroups = [{
+  "id": "d57c10f5-639d-5160-9c81-8a0c6c4ec857",
+  "name": "Test",
+  "deleted": false,
+  "created": "2016-01-29T13:39:25+00:00",
+  "modified": "2016-01-29T13:39:25+00:00",
+  "created_by": "d57c10f5-639d-5160-9c81-8a0c6c4ec856",
+  "modified_by": "d57c10f5-639d-5160-9c81-8a0c6c4ec856",
+  "my_group_user": {
+    "id": "2510a118-c838-5470-a0dd-aff268d4a2b6",
+    "group_id": "516c2db6-0aed-52d8-854f-b3f3499995e7",
+    "user_id": "d57c10f5-639d-5160-9c81-8a0c6c4ec856",
+    "is_admin": true,
+    "created": "2020-08-17T16:37:13+00:00"
+  },
+  "groups_users": [
+    {
+      "id": "16714bc3-f96d-5a36-a10a-088094b5bcbc",
+      "group_id": "00ddc3e6-17d6-5a18-b793-05a4484a71a7",
+      "user_id": "1e73e104-d53e-579d-a0c4-e9aeaca76c56",
+      "is_admin": true,
+      "created": "2020-08-17T16:37:15+00:00"
+    },
+    {
+      "id": "285dc1c5-c358-507e-af2a-9201d9fed9f5",
+      "group_id": "00ddc3e6-17d6-5a18-b793-05a4484a71a7",
+      "user_id": "86b3eb2f-2dd0-56b3-8978-920615cf7c17",
+      "is_admin": true,
+      "created": "2020-08-17T16:37:15+00:00"
+    },
+  ],
+}];
+
+export const mockResults = {
+  "passbolt.resources.find-all": mockResources,
+  "passbolt.groups.find-all": mockGroups
+};

@@ -55,6 +55,7 @@ import mockRequestFindAllThemes from "./request/mockRequestFindAllThemes";
 import mockRequestFindActivities from "./request/mockRequestFindActivities";
 import mockRequestSetupInfo from "./request/mockRequestSetupInfo";
 import mockRequestAuthIsAuthenticated from "./request/mockRequestAuthIsAuthenticated";
+import mockRequestGetLocale from "./request/mockRequestGetLocale";
 
 export default (storage) => {
   const mockPort = new MockPort(storage);
@@ -102,6 +103,7 @@ export default (storage) => {
   mockPort.addRequestListener("passbolt.themes.find-all", mockRequestFindAllThemes);
   mockPort.addRequestListener("passbolt.setup.info", mockRequestSetupInfo);
   mockPort.addRequestListener("passbolt.auth.is-authenticated", mockRequestAuthIsAuthenticated);
+  mockPort.addRequestListener("passbolt.locale.get", mockRequestGetLocale);
 
   return mockPort;
 };

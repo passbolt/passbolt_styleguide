@@ -38,12 +38,13 @@
     "grunt-contrib-watch": "^1.1.0",
     "grunt-header": "^1.1.0",
     "grunt-shell": "^3.0.1",
-    "i18next-scanner": "github:Benj1er/i18next-scanner#master",
+    "i18next-scanner": "passbolt/i18next-scanner#master",
     "jquery": "^3.5.0",
     "prop-types": "^15.7.2",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
     "react-router-dom": "^5.2.0",
+    "react-transition-group": "^4.4.1",
     "uuid": "^8.3.0",
     "webpack": "^4.44.2",
     "webpack-cli": "^3.3.12",
@@ -63,6 +64,7 @@
     "react-color": "^2.19.3",
     "react-i18next": "^11.8.5",
     "react-list": "^0.8.15",
+    "react-transition-group": "^4.4.1",
     "simplebar": "^5.2.1",
     "webextension-polyfill": "^0.6.0",
     "xregexp": "^4.3.0"
@@ -75,8 +77,8 @@
     "start-ext-app-dev-server": "webpack-dev-server --env.debug=true --env.demo=true --config webpack-ext.config.js",
     "test": "jest --config .jest.config.json --no-cache ./src --maxWorkers=4",
     "test-coverage": "jest --config .jest.config.json --no-cache ./src --maxWorkers=4 --coverage",
-    "eslint": "eslint -c .eslintrc.json src/react/* src/react-extension/*",
-    "eslint-fix": "eslint -c .eslintrc.json --fix src/react/* src/react-extension/*",
+    "eslint": "eslint -c .eslintrc.json src/react-extension/*",
+    "eslint-fix": "eslint -c .eslintrc.json --fix src/react-extension/*",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook"
   }

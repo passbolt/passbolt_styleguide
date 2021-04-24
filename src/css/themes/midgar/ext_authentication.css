@@ -1582,7 +1582,8 @@ a.unfav .svg-icon svg {
   /* 24px */
 }
 .dialog input[type=text],
-.dialog textarea {
+.dialog textarea,
+.dialog select {
   width: 100%;
   box-sizing: border-box;
   /*
@@ -1610,24 +1611,30 @@ a.unfav .svg-icon svg {
 }
 .dialog input[type=text]:before,
 .dialog textarea:before,
+.dialog select:before,
 .dialog input[type=text]:after,
-.dialog textarea:after {
+.dialog textarea:after,
+.dialog select:after {
   content: "";
   display: table;
 }
 .dialog input[type=text]:after,
-.dialog textarea:after {
+.dialog textarea:after,
+.dialog select:after {
   clear: both;
 }
 .dialog input[type=text]:before,
 .dialog textarea:before,
+.dialog select:before,
 .dialog input[type=text]:after,
-.dialog textarea:after {
+.dialog textarea:after,
+.dialog select:after {
   content: "";
   display: table;
 }
 .dialog input[type=text]:after,
-.dialog textarea:after {
+.dialog textarea:after,
+.dialog select:after {
   clear: both;
 }
 .dialog textarea + .message,

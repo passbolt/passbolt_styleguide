@@ -82,6 +82,7 @@ class NavigationContextProvider extends React.Component {
       onGoToAdministrationUsersDirectoryRequested: this.onGoToAdministrationUsersDirectoryRequested.bind(this), // Whenever the user wants to navigate to the administration workspace users directory
       onGoToAdministrationEmailNotificationsRequested: this.onGoToAdministrationEmailNotificationsRequested.bind(this), // Whenever the user wants to navigate to the administration workspace email notifications
       onGoToAdministrationSubscriptionRequested: this.onGoToAdministrationSubscriptionRequested.bind(this), // Whenever the user wants to navigate to the administration workspace subscription
+      onGoToAdministrationInternationalizationRequested: this.onGoToAdministrationInternationalizationRequested.bind(this), // Whenever the user wants to navigate to the administration workspace subscription
       // Passwords
       onGoToPasswordsRequested: this.onGoToPasswordsRequested.bind(this), // Whenever the user wants to navigate to the passwords workspace
       // Users
@@ -171,6 +172,14 @@ class NavigationContextProvider extends React.Component {
    */
   async onGoToAdministrationSubscriptionRequested() {
     await this.goTo("browser-extension", "/app/administration/subscription");
+  }
+
+  /**
+   * Whenever the user wants to navigate to the administration workspace internationalization.
+   * @returns {Promise<void>}
+   */
+  async onGoToAdministrationInternationalizationRequested() {
+    await this.goTo("api", "/app/administration/internationalization");
   }
 
   /**

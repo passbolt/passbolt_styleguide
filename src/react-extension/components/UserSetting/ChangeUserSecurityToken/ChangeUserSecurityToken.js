@@ -13,14 +13,14 @@
  */
 import React, {Component} from "react";
 import {CirclePicker} from "react-color";
-import Icon from "../../../../react/components/Common/Icons/Icon";
-import ErrorDialog from "../../Dialog/ErrorDialog/ErrorDialog";
-import {withDialog} from "../../../../react/contexts/Common/DialogContext";
+import Icon from "../../Common/Icons/Icon";
+import NotifyError from "../../Common/Error/NotifyError/NotifyError";
+import {withDialog} from "../../../contexts/DialogContext";
 import PropTypes from "prop-types";
 import {withAppContext} from "../../../contexts/AppContext";
 import {withUserSettings} from "../../../contexts/UserSettingsContext";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
-import SecretComplexity from "../../../lib/Secret/SecretComplexity";
+import SecretComplexity from "../../../../shared/lib/Secret/SecretComplexity";
 
 /**
  * This component displays the user choose security token information
@@ -219,7 +219,7 @@ class ChangeUserSecurityToken extends Component {
   async onSaveFailure(error) {
     await this.toggleProcessing();
     const ErrorDialogProps = {message: error.message};
-    this.props.dialogContext.open(ErrorDialog, ErrorDialogProps);
+    this.props.dialogContext.open(NotifyError, ErrorDialogProps);
   }
 
   /**

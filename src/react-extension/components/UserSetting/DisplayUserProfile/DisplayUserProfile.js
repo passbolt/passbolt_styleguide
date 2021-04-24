@@ -15,13 +15,14 @@
 
 import React from 'react';
 import PropTypes from "prop-types";
-import UserAvatar from "../../../../react/components/Common/Avatar/UserAvatar";
+import UserAvatar from "../../Common/Avatar/UserAvatar";
 import AppContext from "../../../contexts/AppContext";
-import Icon from "../../../../react/components/Common/Icons/Icon";
-import {withDialog} from "../../../../react/contexts/Common/DialogContext";
+import Icon from "../../Common/Icons/Icon";
+import {withDialog} from "../../../contexts/DialogContext";
 import UploadUserProfileAvatar from "../UploadUserProfileAvatar/UploadUserProfileAvatar";
 import {Trans, withTranslation} from "react-i18next";
 import {DateTime} from "luxon";
+import {withUserSettings} from "../../../contexts/UserSettingsContext";
 
 /**
  * This component displays the user profile information
@@ -63,7 +64,18 @@ class DisplayUserProfile extends React.Component {
    * @return {string}
    */
   formatDateTimeAgo(date) {
-    return DateTime.fromISO(date).toRelative({locale: this.props.i18n.lng});
+    const dateTime = DateTime.fromISO(date);
+    const duration = dateTime.diffNow().toMillis();
+    return duration < 1000 && duration > 0 ? this.translate('Just now') : dateTime.toRelative({locale: this.context.locale});
+  }
+
+  /**
+   * Get the locale label.
+   */
+  get userLocaleLabel() {
+    const supportedLocales = this.context.siteSettings.supportedLocales || [];
+    const locale = supportedLocales.find(supportedLocale => supportedLocale.locale === this.context.locale);
+    return locale ? locale.label : "N/A";
   }
 
   /**
@@ -74,13 +86,21 @@ class DisplayUserProfile extends React.Component {
     return this.props.t;
   }
 
+  /**
+   * Can I use the locale plugin.
+   * @type {boolean}
+   */
+  get canIUseLocale() {
+    return this.context.siteSettings.canIUse('locale');
+  }
+
   render() {
     return (
       <div className="grid grid-responsive-12 profile-detailed-information">
         {this.user &&
         <div className="row">
           <div className="profile col6">
-            <h3>Profile</h3>
+            <h3><Trans>Profile</Trans></h3>
             <table className="table-info profile">
               <tbody>
                 <tr className="name">
@@ -105,6 +125,19 @@ class DisplayUserProfile extends React.Component {
                 </tr>
               </tbody>
             </table>
+            {this.canIUseLocale &&
+            <>
+              <h3><Trans>Internationalization</Trans></h3>
+              <table className="table-info profile">
+                <tbody>
+                  <tr className="locale">
+                    <td className="label"><Trans>Language</Trans></td>
+                    <td className="value">{this.userLocaleLabel}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </>
+            }
           </div>
           <div className="avatar col6 last">
             <h3><Trans>Avatar</Trans></h3>
@@ -136,8 +169,9 @@ class DisplayUserProfile extends React.Component {
 DisplayUserProfile.contextType = AppContext;
 DisplayUserProfile.propTypes = {
   dialogContext: PropTypes.object, // The dialog context
+  userSettingsContext: PropTypes.object, // The user settings context
   t: PropTypes.func, // The translation function
   i18n: PropTypes.any // The i18n context translation
 };
 
-export default withDialog(withTranslation('common')(DisplayUserProfile));
+export default withDialog(withUserSettings(withTranslation('common')(DisplayUserProfile)));

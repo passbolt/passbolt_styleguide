@@ -20,10 +20,10 @@
 import DisplayUserWorkspaceActionsPage from "./DisplayAdministrationWorkspaceActions.test.page";
 import {AdministrationWorkspaceMenuTypes} from "../../../contexts/AdministrationWorkspaceContext";
 import {defaultAppContext, defaultProps} from "./DisplayAdministrationWorkspaceActions.test.data";
-import DisplaySimulateSynchronizeUserDirectoryAdministrationDialog
-  from "../DisplaySimulateSynchronizeUserDirectoryAdministration/DisplaySimulateSynchronizeUserDirectoryAdministrationDialog";
-import DisplaySynchronizeUserDirectoryAdministrationDialog
-  from "../DisplaySynchronizeUserDirectoryAdministration/DisplaySynchronizeUserDirectoryAdministrationDialog";
+import DisplaySimulateSynchronizeUserDirectoryAdministration
+  from "../DisplaySimulateSynchronizeUserDirectoryAdministration/DisplaySimulateSynchronizeUserDirectoryAdministration";
+import DisplaySynchronizeUserDirectoryAdministration
+  from "../DisplaySynchronizeUserDirectoryAdministration/DisplaySynchronizeUserDirectoryAdministration";
 
 beforeEach(() => {
   jest.resetModules();
@@ -152,7 +152,7 @@ describe("As AD I can see the administration menu", () => {
     };
     page = new DisplayUserWorkspaceActionsPage(context, props);
     await page.simulateSynchronize();
-    expect(props.dialogContext.open).toHaveBeenCalledWith(DisplaySimulateSynchronizeUserDirectoryAdministrationDialog);
+    expect(props.dialogContext.open).toHaveBeenCalledWith(DisplaySimulateSynchronizeUserDirectoryAdministration);
   });
 
   it('As AD I can synchronize a user directory', async() => {
@@ -172,7 +172,7 @@ describe("As AD I can see the administration menu", () => {
     };
     page = new DisplayUserWorkspaceActionsPage(context, props);
     await page.synchronize();
-    expect(props.dialogContext.open).toHaveBeenCalledWith(DisplaySynchronizeUserDirectoryAdministrationDialog);
+    expect(props.dialogContext.open).toHaveBeenCalledWith(DisplaySynchronizeUserDirectoryAdministration);
   });
 
   it('As AD I can edit a subscription key', async() => {

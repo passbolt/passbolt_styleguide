@@ -24,12 +24,12 @@ import {
   mockUsers
 } from "./DisplaySubscriptionKey.test.data";
 import DisplaySubscriptionKeyPage from "./DisplaySubscriptionKey.test.page";
-import PassboltApiFetchError from "../../../../react/lib/Common/Error/PassboltApiFetchError";
+import PassboltApiFetchError from "../../../../shared/lib/Error/PassboltApiFetchError";
 import {waitFor} from "@testing-library/react";
 import {DateTime} from "luxon";
 import EditSubscriptionKey from "../EditSubscriptionKey/EditSubscriptionKey";
 import MockPort from "../../../test/mock/MockPort";
-import PassboltSubscriptionError from "../../../../react/lib/Common/Error/PassboltSubscriptionError";
+import PassboltSubscriptionError from "../../../lib/Error/PassboltSubscriptionError";
 
 beforeEach(() => {
   jest.resetModules();
@@ -86,7 +86,7 @@ describe("As AD I should see the subscription", () => {
       expect(page.expiry).toBe(`${formatDate(mockSubscriptionUsersExceeded.expiry)} (${DateTime.fromISO(mockSubscriptionUsersExceeded.expiry).toRelative()})`);
 
       await page.goToRenewKey();
-      expect(props.navigationContext.onGoToNewTab).toHaveBeenCalledWith(`https://www.passbolt.com/subscription/ee/update/qty?subscription_id=${mockSubscriptionUsersExceeded.subscription_id}`);
+      expect(props.navigationContext.onGoToNewTab).toHaveBeenCalledWith(`https://www.passbolt.com/subscription/ee/update/qty?subscription_id=${mockSubscriptionUsersExceeded.subscription_id}&customer_id=${mockSubscriptionUsersExceeded.customer_id}`);
     });
 
     it('As AD I should be able to identify if the key is expired', async() => {
@@ -107,7 +107,7 @@ describe("As AD I should see the subscription", () => {
       expect(page.expiry).toBe(`${formatDate(mockSubscriptionExpired.expiry)} (expired ${DateTime.fromISO(mockSubscriptionExpired.expiry).toRelative()})`);
 
       await page.goToRenewKey();
-      expect(props.navigationContext.onGoToNewTab).toHaveBeenCalledWith(`https://www.passbolt.com/subscription/ee/update/renew?subscription_id=${mockSubscriptionExpired.subscription_id}`);
+      expect(props.navigationContext.onGoToNewTab).toHaveBeenCalledWith(`https://www.passbolt.com/subscription/ee/update/renew?subscription_id=${mockSubscriptionExpired.subscription_id}&customer_id=${mockSubscriptionExpired.customer_id}`);
     });
 
     it('As AD I should be able to identify if the key is missing', async() => {

@@ -23,8 +23,8 @@ import {
 import DisplayUserDirectoryAdministrationPage from "./DisplayUserDirectoryAdministration.test.page";
 import {waitFor} from "@testing-library/react";
 import {ActionFeedbackContext} from "../../../contexts/ActionFeedbackContext";
-import DisplayTestUserDirectoryAdministrationDialog
-  from "../DisplayTestUserDirectoryAdministration/DisplayTestUserDirectoryAdministrationDialog";
+import DisplayTestUserDirectoryAdministration
+  from "../DisplayTestUserDirectoryAdministration/DisplayTestUserDirectoryAdministration";
 
 beforeEach(() => {
   jest.resetModules();
@@ -97,7 +97,9 @@ describe("As AD I should see the user directory settings", () => {
             test: true
           },
           onResetActionsSettings: jest.fn(),
-          isSaveEnabled: false,
+          can: {
+            save: false
+          },
           onSaveEnabled: jest.fn(),
           onTestEnabled: jest.fn(),
           onSynchronizeEnabled: jest.fn(),
@@ -115,7 +117,7 @@ describe("As AD I should see the user directory settings", () => {
       page.rerender(context, propsUpdated);
       await waitFor(() => {});
       expect(propsUpdated.administrationWorkspaceContext.onTestUsersDirectoryRequested).toHaveBeenCalledWith(mockResult);
-      expect(propsUpdated.dialogContext.open).toHaveBeenCalledWith(DisplayTestUserDirectoryAdministrationDialog);
+      expect(propsUpdated.dialogContext.open).toHaveBeenCalledWith(DisplayTestUserDirectoryAdministration);
     });
 
     it('As AD I should save the user directory on the administration settings page', async() => {
@@ -129,7 +131,9 @@ describe("As AD I should see the user directory settings", () => {
             test: false
           },
           onResetActionsSettings: jest.fn(),
-          isSaveEnabled: true,
+          can: {
+            save: true
+          },
           onSaveEnabled: jest.fn(),
           onTestEnabled: jest.fn(),
           onSynchronizeEnabled: jest.fn(),
@@ -157,7 +161,9 @@ describe("As AD I should see the user directory settings", () => {
             test: false
           },
           onResetActionsSettings: jest.fn(),
-          isSaveEnabled: true,
+          can: {
+            save: true
+          },
           onSaveEnabled: jest.fn(),
           onTestEnabled: jest.fn(),
           onSynchronizeEnabled: jest.fn(),
@@ -188,7 +194,9 @@ describe("As AD I should see the user directory settings", () => {
             test: false
           },
           onResetActionsSettings: jest.fn(),
-          isSaveEnabled: true,
+          can: {
+            save: true
+          },
           onSaveEnabled: jest.fn(),
           onTestEnabled: jest.fn(),
           onSynchronizeEnabled: jest.fn(),
@@ -213,7 +221,9 @@ describe("As AD I should see the user directory settings", () => {
             test: false
           },
           onResetActionsSettings: jest.fn(),
-          isSaveEnabled: true,
+          can: {
+            save: true
+          },
           onSaveEnabled: jest.fn(),
           onTestEnabled: jest.fn(),
           onSynchronizeEnabled: jest.fn(),
@@ -254,7 +264,9 @@ describe("As AD I should see the user directory settings", () => {
             test: false
           },
           onResetActionsSettings: jest.fn(),
-          isSaveEnabled: true,
+          can: {
+            save: true
+          },
           onSaveEnabled: jest.fn(),
           onUpdateUsersDirectoryRequested: jest.fn()
         }

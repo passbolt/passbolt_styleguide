@@ -21,7 +21,9 @@ export function defaultProps() {
         save: false
       },
       onResetActionsSettings: jest.fn(),
-      isSaveEnabled: false,
+      can: {
+        save: false
+      },
       onSaveEnabled: jest.fn(),
       onGetMfaRequested: () => mockMfaSettings,
       onSaveMfaRequested: jest.fn()

@@ -78,7 +78,9 @@ describe("See the Email Notifications Settings", () => {
             save: true
           },
           onResetActionsSettings: jest.fn(),
-          isSaveEnabled: true,
+          can: {
+            save: true
+          },
           onSaveEnabled: jest.fn(),
           onSaveEmailNotificationsRequested: jest.fn()
         }
@@ -102,7 +104,9 @@ describe("See the Email Notifications Settings", () => {
             save: true
           },
           onResetActionsSettings: jest.fn(),
-          isSaveEnabled: true,
+          can: {
+            save: true
+          },
           onSaveEnabled: jest.fn(),
           onSaveEmailNotificationsRequested: jest.fn()
         }
@@ -152,7 +156,9 @@ describe("See the Email Notifications Settings", () => {
             save: true
           },
           onResetActionsSettings: jest.fn(),
-          isSaveEnabled: true,
+          can: {
+            save: true
+          },
           onSaveEnabled: jest.fn(),
           onSaveEmailNotificationsRequested: jest.fn()
         }

@@ -14,7 +14,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import {withAppContext} from "./AppContext";
-import {ApiClient} from "../lib/apiClient/apiClient";
+import {ApiClient} from "../../shared/lib/apiClient/apiClient";
 
 /**
  * The Api triage context.

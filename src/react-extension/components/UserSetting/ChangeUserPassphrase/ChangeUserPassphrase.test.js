@@ -23,7 +23,7 @@ import ChangeUserPassphrasePage
 import {waitFor} from "@testing-library/react";
 import {UserSettingsContextState} from "../../../contexts/UserSettingsContext";
 
-jest.mock("../../../../react/components/Common/Loading/LoadingSpinner/LoadingSpinner", () => () => <span className="loading"></span>);
+jest.mock("../../Common/Loading/LoadingSpinner/LoadingSpinner", () => () => <span className="loading"></span>);
 jest.mock("./DisplayChangePassphraseIntroduction", () => () => <span className="introduction"></span>);
 jest.mock("./ConfirmPassphrase", () => () => <span className="confirm"></span>);
 jest.mock("./EnterNewPassphrase", () => () => <span className="update"></span>);

@@ -17,7 +17,7 @@ import React, {Component} from "react";
 import PropTypes from "prop-types";
 import {UserSettingsContextState, withUserSettings} from "../../../contexts/UserSettingsContext";
 import DisplayChangePassphraseIntroduction from "./DisplayChangePassphraseIntroduction";
-import LoadingSpinner from "../../../../react/components/Common/Loading/LoadingSpinner/LoadingSpinner";
+import LoadingSpinner from "../../Common/Loading/LoadingSpinner/LoadingSpinner";
 import ConfirmPassphrase from "./ConfirmPassphrase";
 import DownloadRecoveryKit from "./DownloadRecoveryKit";
 import EnterNewPassphrase from "./EnterNewPassphrase";
