@@ -23,6 +23,7 @@ import Icon from "../../Common/Icons/Icon";
 import debounce from "debounce-promise";
 import SecurityComplexity from "../../../../shared/lib/Secret/SecretComplexity";
 import SecretComplexity from "../../../../shared/lib/Secret/SecretComplexity";
+import {Trans, withTranslation} from "react-i18next";
 
 /**
  * This component displays the user choose passphrase information
@@ -231,13 +232,21 @@ class EnterNewPassphrase extends React.Component {
     this.setState({isObfuscated: !this.state.isObfuscated});
   }
 
+  /**
+   * Get the translate function
+   * @returns {function(...[*]=)}
+   */
+  get translate() {
+    return this.props.t;
+  }
+
   render() {
     return (
       <div className="grid grid-responsive-12 profile-passphrase">
         <div className="row">
           <div className="col6">
             <form className="enter-passphrase" onSubmit={this.handleSubmit}>
-              <h3>Please enter a new passphrase</h3>
+              <h3><Trans>Please enter a new passphrase</Trans></h3>
               <div className="form-content">
                 <div className="input text password required">
                   {this.state.isObfuscated &&
@@ -276,37 +285,37 @@ class EnterNewPassphrase extends React.Component {
                 <div className="password-hints">
                   <ul>
                     <li className={this.state.hintClassNames.enoughLength}>
-                      It is at least 8 characters in length
+                      <Trans>It is at least 8 characters in length</Trans>
                     </li>
                     <li className={this.state.hintClassNames.uppercase}>
-                      It contains lower and uppercase characters
+                      <Trans>It contains lower and uppercase characters</Trans>
                     </li>
                     <li className={this.state.hintClassNames.alphanumeric}>
-                      It contains letters and numbers
+                      <Trans>It contains letters and numbers</Trans>
                     </li>
                     <li className={this.state.hintClassNames.specialCharacters}>
-                      It contains special characters (like / or * or %)
+                      <Trans>It contains special characters (like / or * or %)</Trans>
                     </li>
                     <li className={this.state.hintClassNames.notInDictionary}>
-                      It is not part of a dictionary
+                      <Trans>It is not part of a dictionary</Trans>
                     </li>
                   </ul>
                 </div>
               </div>
               <div className="submit-wrapper">
                 <button className="button big" type="button" disabled={!this.areActionsAllowed} onClick={this.handleCancel}>
-                  Cancel
+                  <Trans>Cancel</Trans>
                 </button>
-                <FormSubmitButton big={true} disabled={this.mustBeDisabled} processing={this.isProcessing} value="Update"/>
+                <FormSubmitButton big={true} disabled={this.mustBeDisabled} processing={this.isProcessing} value={this.translate('Update')}/>
               </div>
             </form>
           </div>
           <div className="col4 last passphrase-help">
-            <h3>Tips for choosing a good passphrase</h3>
-            <p>Make sure your passphrase is hard to guess but also that is long enough. For example you can use your favorite lyric from a song,
-              grab the first couple of characters from the words in your favorite line.</p>
+            <h3><Trans>Tips for choosing a good passphrase</Trans></h3>
+            <p><Trans>Make sure your passphrase is hard to guess but also that is long enough. For example you can use your favorite lyric from a song,
+              grab the first couple of characters from the words in your favorite line.</Trans></p>
             <a className="button big">
-              <span>Learn more</span>
+              <span><Trans>Learn more</Trans></span>
             </a>
           </div>
         </div>
@@ -318,6 +327,7 @@ class EnterNewPassphrase extends React.Component {
 EnterNewPassphrase.propTypes = {
   userSettingsContext: PropTypes.object, // The user settings context
   dialogContext: PropTypes.any, // The dialog context
+  t: PropTypes.func, // The translation function
 };
 
-export default withDialog(withUserSettings(EnterNewPassphrase));
+export default withDialog(withUserSettings(withTranslation('common')(EnterNewPassphrase)));

@@ -683,7 +683,10 @@ class DisplayResourcesList extends React.Component {
           {isEmpty &&  filterType === ResourceWorkspaceFilterTypes.SHARED_WITH_ME &&
           <div className="empty-content">
             <h2><Trans>No passwords are shared with you yet.</Trans></h2>
-            <p><Trans>It does feel a bit empty here. Wait for a team member to share a password with you.</Trans></p>
+            <p>
+              <Trans>It does feel a bit empty here.</Trans>&nbsp;
+              <Trans>Wait for a team member to share a password with you.</Trans>
+            </p>
           </div>
           }
           {isEmpty &&
@@ -695,9 +698,8 @@ class DisplayResourcesList extends React.Component {
             <div className="empty-content">
               <h1><Trans>Welcome to passbolt!</Trans></h1>
               <p>
-                <Trans>
-                  It does feel a bit empty here. Create your first password or<br/>wait for a team member to share one with you.
-                </Trans>
+                <Trans>It does feel a bit empty here.</Trans>&nbsp;
+                <Trans>Create your first password or wait for a team member to share one with you.</Trans>
               </p>
             </div>
           </React.Fragment>

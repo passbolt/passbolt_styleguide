@@ -89,6 +89,7 @@ class DownloadRecoveryKit extends Component {
         <h1><Trans>Keep your recovery kit in a safe place.</Trans></h1>
         <p>
           <Trans>A download of your recovery kit, containing your secret key, has automatically started.</Trans>
+          &nbsp;
           <Trans>Make sure you store it in a safe place. You may need it later.</Trans>
         </p>
         <div className="form-actions">

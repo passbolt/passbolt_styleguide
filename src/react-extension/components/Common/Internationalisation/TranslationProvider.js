@@ -53,6 +53,14 @@ class TranslationProvider extends Component {
         load: 'currentOnly',
         react: {
           useSuspense: false,
+          /*
+           * For information, some autoclosing tags are not transformed by the <Trans> component but are transformed by the library we
+           * are using to externalize the strings. Therefore, the string containing these tags can generate missingKey error
+           * while executing the i18next.t function. Avoid using these tags in the <Trans> component:
+           * @see https://react.i18next.com/latest/trans-component#using-for-less-than-br-greater-than-and-other-simple-html-elements-in-translations-v-10-4-0
+           * transSupportBasicHtmlNodes: true,
+           * transKeepBasicHtmlNodesFor: ['br', 'strong', 'i', 'p']
+           */
         },
         backend: {
           loadPath: this.props.loadingPath || defaultLocalesPath

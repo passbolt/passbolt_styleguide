@@ -21,6 +21,7 @@ import {withAppContext} from "../../../contexts/AppContext";
 import {withUserSettings} from "../../../contexts/UserSettingsContext";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import SecretComplexity from "../../../../shared/lib/Secret/SecretComplexity";
+import {Trans, withTranslation} from "react-i18next";
 
 /**
  * This component displays the user choose security token information
@@ -205,7 +206,7 @@ class ChangeUserSecurityToken extends Component {
     };
     try {
       await this.props.userSettingsContext.onUpdateSecurityTokenRequested(securityTokenDto);
-      await this.props.actionFeedbackContext.displaySuccess("The security token has been updated successfully");
+      await this.props.actionFeedbackContext.displaySuccess(this.translate("The security token has been updated successfully"));
       await this.toggleProcessing();
     } catch (error) {
       await this.onSaveFailure(error);
@@ -271,13 +272,13 @@ class ChangeUserSecurityToken extends Component {
   async validate() {
     const {code} = this.state;
 
-    const emptyCode =  code.trim() === '';
+    const emptyCode = code.trim() === '';
     if (emptyCode) {
       await this.setState({hasBeenValidated: true, errors: {emptyCode}});
       return;
     }
 
-    const lengthCode =  code.trim().length !== 3;
+    const lengthCode = code.trim().length !== 3;
     if (lengthCode) {
       await this.setState({hasBeenValidated: true, errors: {lengthCode}});
       return;
@@ -300,7 +301,15 @@ class ChangeUserSecurityToken extends Component {
   get hasErrors() {
     return this.state.errors
       && (this.state.errors.emptyCode
-      || this.state.errors.lengthCode);
+        || this.state.errors.lengthCode);
+  }
+
+  /**
+   * Get the translate function
+   * @returns {function(...[*]=)}
+   */
+  get translate() {
+    return this.props.t;
   }
 
   /**
@@ -313,9 +322,9 @@ class ChangeUserSecurityToken extends Component {
         <div className="row">
           <div className="col6">
             <form onSubmit={this.handleSubmit}>
-              <h3>Update the Security Token</h3>
+              <h3><Trans>Update the Security Token</Trans></h3>
               <div className={`input-security-token input required ${this.hasErrors ? "error" : ""}`}>
-                <label htmlFor="security-token-text">Security token</label>
+                <label htmlFor="security-token-text"><Trans>Security token</Trans></label>
                 <input
                   id="security-token-text"
                   ref={this.tokenCodeInputRef}
@@ -330,8 +339,8 @@ class ChangeUserSecurityToken extends Component {
                 <input type="hidden" id="security-token-background-color" name="security-token-background-color"/>
                 <input type="hidden" id="security-token-text-color" name="security-token-text-color"/>
                 <CirclePicker
-                  color={ this.state.background }
-                  onChange={ this.handleSelectColor }
+                  color={this.state.background}
+                  onChange={this.handleSelectColor}
                   width={240}
                   circleSize={24}
                   circleSpacing={16}
@@ -342,32 +351,36 @@ class ChangeUserSecurityToken extends Component {
                     className={`randomize-button ${this.isProcessing ? "disabled" : ""}`}
                     role="button"
                     onClick={this.handleRandomize}>
-                    <Icon name="magic-wand"/> Randomize
+                    <Icon name="magic-wand"/> <Trans>Randomize</Trans>
                   </a>
                 </div>
               </div>
               {this.state.hasBeenValidated &&
               <div className="input text">
                 {this.state.errors.emptyCode &&
-                <div className="empty-code message error">The security token code should not be empty.</div>
+                <div className="empty-code message error"><Trans>The security token code should not be empty.</Trans>
+                </div>
                 }
                 {this.state.errors.lengthCode &&
-                <div className="not-good-length-code message error">The security token code should be 3 characters long.</div>
+                <div className="not-good-length-code message error"><Trans>The security token code should be 3
+                  characters long.</Trans></div>
                 }
               </div>
               }
               <div className="submit-wrapper">
                 <button className={`button big ${processingClassName}`} type="submit" disabled={this.isProcessing}>
-                  Save
+                  <Trans>Save</Trans>
                 </button>
               </div>
             </form>
           </div>
           <div className="col4 last">
-            <h3>Why is this token needed?</h3>
-            <p>This security token will be displayed when your passphrase is requested,
-              so you can verify quickly the form is coming from passbolt.
-              This will help protect you from phishing attack</p>
+            <h3><Trans>Why is this token needed?</Trans></h3>
+            <p>
+              <Trans>This security token will be displayed when your passphrase is requested,
+                so you can verify quickly the form is coming from passbolt.</Trans>&nbsp;
+              <Trans>This will help protect you from phishing attack</Trans>
+            </p>
           </div>
         </div>
       </div>
@@ -380,6 +393,7 @@ ChangeUserSecurityToken.propTypes = {
   userSettingsContext: PropTypes.object, // The user settings context
   dialogContext: PropTypes.any, // The dialog context
   actionFeedbackContext: PropTypes.object, // The action feedback context
+  t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withDialog(withActionFeedback(withUserSettings(ChangeUserSecurityToken))));
+export default withAppContext(withDialog(withActionFeedback(withUserSettings(withTranslation('common')(ChangeUserSecurityToken)))));

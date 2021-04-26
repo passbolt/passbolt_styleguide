@@ -340,7 +340,7 @@ class EditUser extends Component {
    */
   render() {
     return (
-      <DialogWrapper className='user-edit-dialog' title="Edit User"
+      <DialogWrapper className='user-edit-dialog' title={this.translate('Edit User')}
         onClose={this.handleClose} disabled={this.hasAllInputDisabled()}>
         <form className="user-edit-form" onSubmit={this.handleFormSubmit} noValidate>
           <div className="form-content">

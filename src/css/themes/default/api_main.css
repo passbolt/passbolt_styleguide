@@ -9228,6 +9228,16 @@ iframe.cachette {
   bottom: 0;
   right: 0;
 }
+/*
+ * Locale
+ */
+#user-locale-input {
+  border: none;
+  background: transparent url('../../../img/controls/chevron-down_black.svg') right center / 1rem no-repeat;
+  appearance: none;
+  margin-top: 0.4rem;
+  padding-right: 1rem;
+}
 .input-password-wrapper {
   overflow: hidden;
 }
@@ -9497,7 +9507,8 @@ iframe.cachette {
 }
 .page.password .tableview.empty .empty-content {
   text-align: center;
-  margin: 2em 0.5em 0.67em 0.5em;
+  margin: auto;
+  width: 50%;
   padding-top: 2em;
 }
 .page.password .tableview.empty .empty-content h1 {

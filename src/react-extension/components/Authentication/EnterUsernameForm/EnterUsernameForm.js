@@ -296,11 +296,15 @@ class EnterUsernameForm extends Component {
             <label htmlFor="checkbox-terms">
               {(this.privacyLink || this.termsLink) &&
               <span>
-                <Trans>I accept the</Trans>&nbsp;
-                {this.termsLink && <a href={this.termsLink} target="_blank" rel="noopener noreferrer"><Trans>terms</Trans></a>}
-                {(this.termsLink && this.privacyLink) && <span> <Trans>and</Trans> </span>}
-                {this.privacyLink &&
-                <a href={this.privacyLink} target="_blank" rel="noopener noreferrer"><Trans>privacy policy</Trans></a>}.
+                {this.termsLink && !this.privacyLink &&
+                <Trans>I accept the <a href={this.termsLink} target="_blank" rel="noopener noreferrer">terms</a></Trans>
+                }
+                {!this.termsLink && this.privacyLink &&
+                <Trans>I accept the <a href={this.privacyLink} target="_blank" rel="noopener noreferrer">privacy policy</a></Trans>
+                }
+                {this.termsLink && this.privacyLink &&
+                <Trans>I accept the <a href={this.termsLink} target="_blank" rel="noopener noreferrer">terms</a> and the <a href={this.privacyLink} target="_blank" rel="noopener noreferrer">privacy policy</a></Trans>
+                }
               </span>
               }
             </label>

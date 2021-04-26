@@ -182,7 +182,8 @@ describe("As Lu I should see the share dialog", () => {
     it('As LU I see a success toaster message after sharing one resource to users and groups with success', async() => {
       expect(context.port.request).toHaveBeenCalledWith('passbolt.share.get-resources', shareDialogProps.resourcesIds);
       expect(page.exists()).toBeTruthy();
-      expect(page.title).toBe('Share resource apache');
+      expect(page.title).toBe('Share resource');
+      expect(page.subtitle).toBe('apache');
       expect(page.count).toBe(11);
 
       const requestAutocompleteResultMockImpl = jest.fn(() => autocompleteResult);
@@ -230,7 +231,8 @@ describe("As Lu I should see the share dialog", () => {
     it('As LU I see a success toaster message after sharing one folder to users and groups with success', async() => {
       expect(context.port.request).toHaveBeenCalledWith('passbolt.share.get-folders', shareDialogProps.foldersIds);
       expect(page.exists()).toBeTruthy();
-      expect(page.title).toBe('Share folder apache');
+      expect(page.title).toBe('Share folder');
+      expect(page.subtitle).toBe('apache');
       expect(page.count).toBe(2);
 
       const requestAutocompleteResultMockImpl = jest.fn(() => autocompleteResult);
