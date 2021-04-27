@@ -57,7 +57,7 @@ class DownloadRecoveryKit extends React.Component {
         <div className="row">
           <div className="col7 last">
             <h3>The passphrase was updated!</h3>
-            <div className="success success-large message animated">
+            <div className="feedback-card">
               <div className="illustration">
                 <svg id="successAnimation" className="animated" xmlns="http://www.w3.org/2000/svg" width="170" height="170" viewBox="0 0 70 70">
                   <circle id="successAnimationCircle" cx="35" cy="35" r="24" stroke="#000000" strokeWidth="3"

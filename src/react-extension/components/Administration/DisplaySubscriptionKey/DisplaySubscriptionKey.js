@@ -21,6 +21,7 @@ import {withDialog} from "../../../../react-extension/contexts/DialogContext";
 import EditSubscriptionKey from "../EditSubscriptionKey/EditSubscriptionKey";
 import {withNavigationContext} from "../../../contexts/NavigationContext";
 import Icon from "../../Common/Icons/Icon";
+import AnimatedFeedback from "../../Common/Icons/AnimatedFeedback";
 
 /**
  * This component allows to display the subscription key for the administration
@@ -316,37 +317,16 @@ class DisplaySubscriptionKey extends React.Component {
         {!this.isLoading() &&
         <div className="subscription-key col8">
           <h3><Trans>Subscription key details</Trans></h3>
-          <div className="message animated">
-            <div className="illustration">
-              {this.hasValidSubscription() && !this.hasSubscriptionKeyGoingToExpire() &&
-              <svg id="successAnimation" className="animated" xmlns="http://www.w3.org/2000/svg" width="170"
-                height="170" viewBox="0 0 70 70">
-                <circle id="successAnimationCircle" cx="35" cy="35" r="24" stroke="#000000" strokeWidth="3"
-                  strokeLinecap="round" fill="transparent"/>
-                <polyline id="successAnimationCheck" stroke="#000000" strokeWidth="3" points="23 34 34 43 47 27"
-                  linecap="round" fill="transparent"/>
-              </svg>
-              }
-              {this.hasInvalidSubscription() &&
-              <svg id="errorAnimation" className="animated" xmlns="http://www.w3.org/2000/svg" width="170"
-                height="170" viewBox="0 0 70 70">
-                <circle id="errorAnimationCircle" cx="35" cy="35" r="24" stroke="#000000" strokeWidth="3"
-                  strokeLinecap="round" fill="transparent"/>
-                <polyline id="errorAnimationCross" stroke="#000000" strokeWidth="3" points="26 26 44 44"
-                  linecap="round" fill="transparent"/>
-                <polyline id="errorAnimationCross" stroke="#000000" strokeWidth="3" points="44 26 26 44"
-                  linecap="round" fill="transparent"/>
-              </svg>
-              }
-              {this.hasValidSubscription() && this.hasSubscriptionKeyGoingToExpire() &&
-              <svg id="warningAnimation" className="animated" xmlns="http://www.w3.org/2000/svg" width="170"
-                height="170" viewBox="0 0 70 70">
-                <polyline id="warningAnimation" className="round" stroke="#000000" strokeWidth="3" points="35 9 10 55 60 55 35 9" linecap="round" fill="transparent"></polyline>
-                <polyline id="warningAnimation" stroke="#000000" strokeWidth="3" points="35 23 35 42" linecap="square" fill="transparent"></polyline>
-                <polyline id="warningAnimation" stroke="#000000" strokeWidth="3" points="35 50 35 50" linecap="square" fill="transparent"></polyline>
-              </svg>
-              }
-            </div>
+          <div className="feedback-card">
+            {this.hasValidSubscription() && !this.hasSubscriptionKeyGoingToExpire() &&
+            <AnimatedFeedback name="success" />
+            }
+            {this.hasInvalidSubscription() &&
+            <AnimatedFeedback name="warning" />
+            }
+            {this.hasValidSubscription() && this.hasSubscriptionKeyGoingToExpire() &&
+            <AnimatedFeedback name="error" />
+            }
             <div className="subscription-information">
               {!this.hasSubscriptionKey() &&
               <>

@@ -915,7 +915,7 @@ ul li {
   margin: 0;
   -webkit-overflow-scrolling: touch;
 }
-.simplebar-content {
+.simplebar-content-wrapper {
   direction: inherit;
   box-sizing: border-box !important;
   position: relative;
@@ -923,13 +923,22 @@ ul li {
   height: 100%;
   /* Required for horizontal native scrollbar to not appear if parent is taller than natural height */
   width: auto;
-  visibility: visible;
-  overflow: scroll;
-  /* Scroll on this element otherwise element can't have a padding applied properly */
   max-width: 100%;
   /* Not required for horizontal scroll to trigger */
   max-height: 100%;
   /* Needed for vertical scroll to trigger */
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.simplebar-content-wrapper::-webkit-scrollbar,
+.simplebar-hide-scrollbar::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+.simplebar-content:before,
+.simplebar-content:after {
+  content: ' ';
+  display: table;
 }
 .simplebar-placeholder {
   max-height: 100%;
@@ -975,6 +984,15 @@ ul li {
   right: 0;
   bottom: 0;
   pointer-events: none;
+  overflow: hidden;
+}
+[data-simplebar].simplebar-dragging .simplebar-content {
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+[data-simplebar].simplebar-dragging .simplebar-track {
+  pointer-events: all;
 }
 .simplebar-scrollbar {
   position: absolute;
@@ -984,7 +1002,7 @@ ul li {
 }
 .simplebar-scrollbar:before {
   position: absolute;
-  content: "";
+  content: '';
   background: black;
   border-radius: 7px;
   left: 0;
@@ -992,7 +1010,7 @@ ul li {
   opacity: 0;
   transition: opacity 0.2s linear;
 }
-.simplebar-track .simplebar-scrollbar.simplebar-visible:before {
+.simplebar-scrollbar.simplebar-visible:before {
   /* When hovered, remove all transitions from drag handle */
   opacity: 0.5;
   transition: opacity 0s linear;
@@ -1024,7 +1042,7 @@ ul li {
   width: auto;
 }
 /* Rtl support */
-[data-simplebar-direction="rtl"] .simplebar-track.simplebar-vertical {
+[data-simplebar-direction='rtl'] .simplebar-track.simplebar-vertical {
   right: auto;
   left: 0;
 }
@@ -1037,6 +1055,14 @@ ul li {
   width: 500px;
   overflow-y: hidden;
   overflow-x: scroll;
+}
+.simplebar-hide-scrollbar {
+  position: fixed;
+  left: 0;
+  visibility: hidden;
+  overflow-y: scroll;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
 /* credit: http://lea.verou.me/2012/04/background-attachment-local/ */
 .scroll-shadow {
@@ -1812,6 +1838,16 @@ iframe.cachette {
   bottom: 0;
   right: 0;
 }
+/*
+ * Locale
+ */
+#user-locale-input {
+  border: none;
+  background: transparent url('../../../img/controls/chevron-down_black.svg') right center / 1rem no-repeat;
+  appearance: none;
+  margin-top: 0.4rem;
+  padding-right: 1rem;
+}
 html,
 body {
   height: 100%;
@@ -2017,5 +2053,9 @@ body {
     margin: auto;
     padding: 4.8rem 4rem 5.6rem 4rem;
     background: #FFF;
+  }
+  .login.page .content .input.select.locale {
+    max-width: 45.2rem;
+    margin: auto;
   }
 }
