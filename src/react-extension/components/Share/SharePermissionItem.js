@@ -20,7 +20,7 @@ import ShareVariesDetails from "./ShareVariesDetails";
 import AppContext from "../../contexts/AppContext";
 import UserAvatar from "../Common/Avatar/UserAvatar";
 import GroupAvatar from "../Common/Avatar/GroupAvatar";
-import {Trans, withTranslation} from "react-i18next";
+import {withTranslation} from "react-i18next";
 
 class SharePermissionItem extends Component {
   /**
