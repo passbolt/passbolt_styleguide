@@ -746,8 +746,8 @@ class EditUserGroup extends Component {
                         value={groupUser.is_admin}
                         onChange={event => this.handleMemberRoleChange(event, groupUser)}
                         disabled={!this.areActionsAllowed}>
-                        <option value={false}><Trans>Member</Trans></option>
-                        <option value={true}><Trans>Group manager</Trans></option>
+                        <option value={false}>{this.translate("Member")}</option>
+                        <option value={true}>{this.translate("Group manager")}</option>
                       </select>
                     </div>
 
