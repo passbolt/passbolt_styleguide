@@ -61,7 +61,7 @@ class NavigateIntoUserSettingsWorkspace extends React.Component {
     const isSelected = pathSuffix => this.props.location.pathname.endsWith(pathSuffix);
     return (
       <div className="navigation first shortcuts">
-        <ul >
+        <ul>
           <li>
             <div
               className={`row ${isSelected('profile') ? 'selected' : ''}`}>
@@ -69,6 +69,18 @@ class NavigateIntoUserSettingsWorkspace extends React.Component {
                 <div className="main-cell">
                   <a onClick={this.props.navigationContext.onGoToUserSettingsProfileRequested}>
                     <span><Trans>Profile</Trans></span>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </li>
+          <li>
+            <div
+              className={`row ${isSelected('keys') ? 'selected' : ''}`}>
+              <div className="main-cell-wrapper">
+                <div className="main-cell">
+                  <a onClick={this.props.navigationContext.onGoToUserSettingsKeysRequested}>
+                    <span><Trans>Keys inspector</Trans></span>
                   </a>
                 </div>
               </div>
@@ -98,20 +110,6 @@ class NavigateIntoUserSettingsWorkspace extends React.Component {
               </div>
             </div>
           </li>
-          {this.canIUseMobileCapability &&
-          <li>
-            <div
-              className={`row ${isSelected('mobile') ? 'selected' : ''}`}>
-              <div className="main-cell-wrapper">
-                <div className="main-cell">
-                  <a onClick={this.props.navigationContext.onGoToUserSettingsMobileRequested}>
-                    <span>Mobile</span>
-                  </a>
-                </div>
-              </div>
-            </div>
-          </li>
-          }
           {this.canIUseThemeCapability &&
           <li>
             <div
@@ -140,18 +138,20 @@ class NavigateIntoUserSettingsWorkspace extends React.Component {
               </div>
             </li>
           }
+          {this.canIUseMobileCapability &&
           <li>
             <div
-              className={`row ${isSelected('keys') ? 'selected' : ''}`}>
+              className={`row ${isSelected('mobile') ? 'selected' : ''}`}>
               <div className="main-cell-wrapper">
                 <div className="main-cell">
-                  <a onClick={this.props.navigationContext.onGoToUserSettingsKeysRequested}>
-                    <span><Trans>Keys inspector</Trans></span>
+                  <a onClick={this.props.navigationContext.onGoToUserSettingsMobileRequested}>
+                    <span><Trans>Mobile setup</Trans></span>
                   </a>
                 </div>
               </div>
             </div>
           </li>
+          }
         </ul>
       </div>
     );

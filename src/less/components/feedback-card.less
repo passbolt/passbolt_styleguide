@@ -1,0 +1,26 @@
+.feedback-card,
+/* @deprecated .message.animated */ .message.animated
+{
+  background: @background-default;
+  color: @font-default;
+  display:flex;
+  border:1px solid @border-light;
+  border-radius:3px;
+
+  .illustration {
+    flex: 0 0 180px;;
+  }
+  .additional-information {
+    flex: 1;
+    line-height: 180px;;
+    margin-top: 1.5em;
+    padding-left:1em;
+  }
+}
+
+@media only screen and (max-width: 767px) {
+  .feedback-card,
+  .message.animated {
+    flex-direction: column;
+  }
+}

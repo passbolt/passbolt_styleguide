@@ -58,6 +58,9 @@ import mockRequestAuthIsAuthenticated from "./request/mockRequestAuthIsAuthentic
 import mockRequestGetLocale from "./request/mockRequestGetLocale";
 import mockRequestRoleGet from "./request/mockRequestRoleGet";
 import mockRequestRecoverInfo from "./request/mockRequestRecoverInfo";
+import mockRequestMobileTransferCreate from "./request/mockRequestMobileTransferCreate";
+import mockRequestMobileTransferGet from "./request/mockRequestMobileTransferGet";
+import mockRequestMobileTransferUpdate from "./request/mockRequestMobileTransferUpdate";
 
 export default (storage) => {
   const mockPort = new MockPort(storage);
@@ -108,6 +111,15 @@ export default (storage) => {
   mockPort.addRequestListener("passbolt.auth.is-authenticated", mockRequestAuthIsAuthenticated);
   mockPort.addRequestListener("passbolt.locale.get", mockRequestGetLocale);
   mockPort.addRequestListener("passbolt.recover.info", mockRequestRecoverInfo);
+  mockPort.addRequestListener("passbolt.mobile.transfer.create", mockRequestMobileTransferCreate);
+  mockPort.addRequestListener("passbolt.mobile.transfer.update", mockRequestMobileTransferUpdate);
+  mockPort.addRequestListener("passbolt.mobile.transfer.get", mockRequestMobileTransferGet);
+
+  // Deprecated events
+  const deprecatedEvent = (name) => {throw new Error(`This event is deprecated.`)};
+  mockPort.addRequestListener("passbolt.site.settings", deprecatedEvent);
+  mockPort.addRequestListener("passbolt.recover.site-settings", deprecatedEvent);
+  mockPort.addRequestListener("passbolt.setup.site-settings", deprecatedEvent);
 
   return mockPort;
 };

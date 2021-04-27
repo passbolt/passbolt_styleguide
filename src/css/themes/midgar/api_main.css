@@ -858,6 +858,9 @@ p {
 .capitalize {
   text-transform: capitalize;
 }
+.font-dim {
+  color: #cacac9;
+}
 /*!
  *  Font Awesome 4.7.0 by @davegandy - http://fontawesome.io - @fontawesome
  *  License - http://fontawesome.io/license (Font: SIL OFL 1.1, CSS: MIT License)
@@ -3289,6 +3292,84 @@ a.unfav {
 a.unfav .svg-icon.star svg {
   fill: #8B8B89;
 }
+@keyframes drawCircle {
+  0% {
+    stroke-dashoffset: 180px;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes drawCheck {
+  0% {
+    stroke-dashoffset: 50px;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes drawCross {
+  0% {
+    stroke-dashoffset: 50px;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes drawWarning {
+  0% {
+    stroke-dashoffset: 230px;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+.icon-feedback .success-animation-circle {
+  stroke-dasharray: 180px 180px;
+  stroke: #009900;
+}
+.icon-feedback .success-animation-line {
+  stroke-dasharray: 50px 50px;
+  stroke: #009900;
+}
+.icon-feedback .success-animation-line2 {
+  stroke-dasharray: 50px 50px;
+  stroke: #009900;
+}
+.icon-feedback .error-animation-circle {
+  stroke-dasharray: 180px 180px;
+  stroke: #D40101;
+}
+.icon-feedback .error-animation-line {
+  stroke-dasharray: 50px 50px;
+  stroke: #D40101;
+}
+.icon-feedback .warning-animation-line {
+  stroke-dasharray: 230px 230px;
+  stroke: #9F6000;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.icon-feedback .warning-animation-circle {
+  fill: #9F6000;
+}
+.icon-feedback .animated {
+  animation: 0.75s ease-out 0s 1 both pop;
+}
+.icon-feedback .animated .success-animation-circle,
+.icon-feedback .animated .error-animation-circle,
+.icon-feedback .animated .warning-animation-circle {
+  animation: 0.75s cubic-bezier(0.77, 0, 0.175, 1) 0s 1 both drawCircle;
+}
+.icon-feedback .animated .success-animation-line {
+  animation: 0.75s cubic-bezier(0.77, 0, 0.175, 1) 0s 1 both drawCheck;
+}
+.icon-feedback .animated .error-animation-line {
+  animation: 0.75s cubic-bezier(0.77, 0, 0.175, 1) 0s 1 both drawCross;
+}
+.icon-feedback .animated .warning-animation-line {
+  animation: 0.75s cubic-bezier(0.77, 0, 0.175, 1) 0s 1 both drawWarning;
+}
 /*
 	Generic buttons
 	Description	: We support <input[submit]>, <input.button>, <button> and <a.button>
@@ -5557,7 +5638,7 @@ input[type="search"]::-webkit-search-cancel-button {
 .message.side-message p {
   padding-bottom: 1em;
 }
-/* animation */
+.feedback-card,
 .message.animated {
   background: #30302D;
   color: #FFFFFC;
@@ -5565,89 +5646,19 @@ input[type="search"]::-webkit-search-cancel-button {
   border: 1px solid #0C0C0A;
   border-radius: 3px;
 }
+.feedback-card .illustration,
 .message.animated .illustration {
   flex: 0 0 180px;
 }
+.feedback-card .additional-information,
 .message.animated .additional-information {
   flex: 1;
   line-height: 180px;
   margin-top: 1.5em;
   padding-left: 1em;
 }
-@keyframes drawCircle {
-  0% {
-    stroke-dashoffset: 180px;
-  }
-  100% {
-    stroke-dashoffset: 0;
-  }
-}
-@keyframes drawCheck {
-  0% {
-    stroke-dashoffset: 50px;
-  }
-  100% {
-    stroke-dashoffset: 0;
-  }
-}
-@keyframes drawCross {
-  0% {
-    stroke-dashoffset: 50px;
-  }
-  100% {
-    stroke-dashoffset: 0;
-  }
-}
-@keyframes drawWarning {
-  0% {
-    stroke-dashoffset: 180px;
-  }
-  100% {
-    stroke-dashoffset: 0;
-  }
-}
-.message.animated #successAnimationCircle {
-  stroke-dasharray: 180px 180px;
-  stroke: #009900;
-}
-.message.animated #successAnimationCheck {
-  stroke-dasharray: 50px 50px;
-  stroke: #009900;
-}
-.message.animated #errorAnimationCircle {
-  stroke-dasharray: 180px 180px;
-  stroke: #D40101;
-}
-.message.animated #errorAnimationCross {
-  stroke-dasharray: 50px 50px;
-  stroke: #D40101;
-}
-.message.animated #warningAnimation {
-  stroke-dasharray: 180px 180px;
-  stroke: #9F6000;
-  stroke-linecap: square;
-  stroke-linejoin: round;
-}
-.message.animated #warningAnimation.round {
-  stroke-linecap: round;
-}
-.message.animated .animated {
-  animation: 0.75s ease-out 0s 1 both pop;
-}
-.message.animated .animated #successAnimationCircle,
-.message.animated .animated #errorAnimationCircle {
-  animation: 0.75s cubic-bezier(0.77, 0, 0.175, 1) 0s 1 both drawCircle;
-}
-.message.animated .animated #successAnimationCheck {
-  animation: 0.75s cubic-bezier(0.77, 0, 0.175, 1) 0s 1 both drawCheck;
-}
-.message.animated .animated #errorAnimationCross {
-  animation: 0.75s cubic-bezier(0.77, 0, 0.175, 1) 0s 1 both drawCross;
-}
-.message.animated .animated #warningAnimation {
-  animation: 0.75s cubic-bezier(0.77, 0, 0.175, 1) 0s 1 both drawWarning;
-}
 @media only screen and (max-width: 767px) {
+  .feedback-card,
   .message.animated {
     flex-direction: column;
   }
@@ -8407,8 +8418,8 @@ table.table-info.horizontal tbody tr:hover {
   height: 100%;
   position: absolute;
   content: " ";
-  top: 0px;
-  left: 0px;
+  top: 0;
+  left: 0;
   background: transparent url('../../../img/controls/loading_dark.svg') left center no-repeat;
   background-size: auto 75% ;
 }
@@ -9845,6 +9856,12 @@ iframe.cachette {
 .page.settings .profile-choose-security-token .input-security-token .svg-icon svg {
   height: 0.85em;
   width: 0.85em;
+}
+.page.settings .profile-mobile-transfer .mobile-transfer-bg {
+  background: transparent url('../../../img/diagrams/mobile-transfer.svg') left center no-repeat;
+  background-size: contain;
+  height: 16em;
+  margin: 2em 0;
 }
 /* hide icons if there is no space */
 @media all and (max-width: 950px) {
