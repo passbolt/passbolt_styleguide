@@ -61,8 +61,12 @@ export default function (url, suggestedUrl) {
     return urlObject.hostname === suggestedUrlObject.hostname;
   }
 
-  // Otherwise check if the suggested url hostname is a parent host of the url hostname.
-  return isParentHostname(suggestedUrlObject.hostname, urlObject.hostname);
+  // Otherwise check if the suggested url hostname contain a dot and is a parent host of the url hostname
+  if (suggestedUrlObject.hostname.indexOf(".") !== -1) {
+    return isParentHostname(suggestedUrlObject.hostname, urlObject.hostname);
+  }
+
+  return false;
 }
 
 /**
