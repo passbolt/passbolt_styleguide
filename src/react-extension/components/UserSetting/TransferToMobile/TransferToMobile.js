@@ -26,7 +26,7 @@ import AnimatedFeedback from "../../Common/Icons/AnimatedFeedback";
 
 // Ref. http://blog.qr4.nl/page/QR-Code-Data-Capacity.aspx
 const QRCODE_VERSION = 27;
-const QRCODE_ERROR_CORRECTION = 'L'
+const QRCODE_ERROR_CORRECTION = 'L';
 const QRCODE_MAXSLICE = 1465;
 const QRCODE_MARGIN = 4;
 const QRCCODE_PROTOCOL_VERSION = 1;
@@ -104,7 +104,7 @@ class TransferToMobile extends React.Component {
       await this.toggleProcessing();
       await this.createTransfer();
       await this.toggleProcessing();
-    } catch(error) {
+    } catch (error) {
       // Could be that the user canceled or couldn't remember the passphrase
       if (error.name === "UserAbortsOperationError") {
         return this.handleTransferCancel();
@@ -128,7 +128,7 @@ class TransferToMobile extends React.Component {
     }
 
     if (transferDto.total_pages !== totalPages || transferDto.hash !== hash) {
-      let error = new Error(this.translate('Server response does not match initial request.'));
+      const error = new Error(this.translate('Server response does not match initial request.'));
       error.data = {transferDto: transferDto, totalPages, hash};
       throw error;
     }
@@ -148,9 +148,11 @@ class TransferToMobile extends React.Component {
     return await this.getQrCode(slices[0]);
   }
 
-  //
-  // Data prep
-  //
+  /*
+   *
+   * Data prep
+   *
+   */
   /**
    * Get first QR code data
    *
@@ -193,9 +195,11 @@ class TransferToMobile extends React.Component {
     return await sha512(message);
   }
 
-  //
-  // QR Code generation
-  //
+  /*
+   *
+   * QR Code generation
+   *
+   */
   /**
    * Build QR codes
    * Get the raw data, slices it according to desired QR code size, build QR codes as images
@@ -221,8 +225,10 @@ class TransferToMobile extends React.Component {
   stringToSlices(data, startPage) {
     const slices = [];
 
-    // 2 reserved byte for page number, max page number 65535
-    // 1 reserved byte for protocol version
+    /*
+     * 2 reserved byte for page number, max page number 65535
+     * 1 reserved byte for protocol version
+     */
     const sliceSize = QRCODE_MAXSLICE - (2 + 1);
     const sliceNeeded = Math.ceil(data.length / sliceSize);
 
@@ -233,12 +239,12 @@ class TransferToMobile extends React.Component {
       startPage = 0;
     }
 
-    for (let i = 0; i < sliceNeeded; i++ ) {
+    for (let i = 0; i < sliceNeeded; i++) {
       const start = (i === 0) ? 0 : (i * sliceSize);
-      let end = (i === 0) ? (sliceSize) : (sliceSize * (i+1));
+      let end = (i === 0) ? (sliceSize) : (sliceSize * (i + 1));
       end = (end > data.length) ? data.length : end; // see slice signature, end is not returned
       const pageCounter = startPage + i;
-      const page = (pageCounter < 255) ? '0' + pageCounter.toString() : pageCounter.toString();
+      const page = (pageCounter < 255) ? `0${pageCounter.toString()}` : pageCounter.toString();
       const slice = QRCCODE_PROTOCOL_VERSION.toString() + page + data.slice(start, end);
       slices[i] = this.str2bytes(slice);
     }
@@ -253,7 +259,7 @@ class TransferToMobile extends React.Component {
    */
   str2bytes(str) {
     const buffer = new Uint8ClampedArray(str.length);
-    for (let i=0, strLen=str.length; i < strLen; i++) {
+    for (let i = 0, strLen = str.length; i < strLen; i++) {
       buffer[i] = str.charCodeAt(i);
     }
     return buffer;
@@ -281,9 +287,11 @@ class TransferToMobile extends React.Component {
     }
   }
 
-  //
-  // API CALLS
-  //
+  /*
+   *
+   * API CALLS
+   *
+   */
   /**
    * Fetch the user key id
    */
@@ -305,9 +313,11 @@ class TransferToMobile extends React.Component {
     return key.fingerprint;
   }
 
-  //
-  // Transfer state machine
-  //
+  /*
+   *
+   * Transfer state machine
+   *
+   */
   /**
    * Initiate the exchange by creating a transfer entity server side
    * This will allow the clients to coordinate the transfer
@@ -350,7 +360,7 @@ class TransferToMobile extends React.Component {
       return;
     }
 
-    if (transferDto){
+    if (transferDto) {
       switch (transferDto.status) {
         case 'start':
           // update QR code only if the page changed
@@ -417,7 +427,7 @@ class TransferToMobile extends React.Component {
   async handleTransferCancelled() {
     this.clearInterval();
     const cancelState = this.defaultState;
-    cancelState.step = 'cancel'
+    cancelState.step = 'cancel';
     this.setState(cancelState);
   }
 
@@ -445,9 +455,11 @@ class TransferToMobile extends React.Component {
     this.handleError(error);
   }
 
-  //
-  // Update polling
-  //
+  /*
+   *
+   * Update polling
+   *
+   */
   /**
    * componentWillUnmount
    * This method is called when a component is being removed from the DOM
@@ -479,9 +491,11 @@ class TransferToMobile extends React.Component {
     this.request = 0;
   }
 
-  //
-  // UI related events
-  //
+  /*
+   *
+   * UI related events
+   *
+   */
   /**
    * What happens when the user clicks cancel
    *
@@ -511,9 +525,11 @@ class TransferToMobile extends React.Component {
     });
   }
 
-  //
-  // JSX Helpers
-  //
+  /*
+   *
+   * JSX Helpers
+   *
+   */
   /**
    * Handle error to display the error info and retry
    * @param {Error} error
@@ -556,7 +572,7 @@ class TransferToMobile extends React.Component {
               </p>
               <div className="submit-wrapper">
                 <a className={`button primary big ${processingClassName}`} role="button" onClick={this.handleClickStart}>
-                <Trans>Start</Trans>
+                  <Trans>Start</Trans>
                 </a>
               </div>
             </div>
@@ -578,7 +594,7 @@ class TransferToMobile extends React.Component {
             <div className="mobile-transfer-step-in-progress">
               <div className="profile col6">
                 <h3><Trans>Transfer in progress...</Trans></h3>
-                <img id="qr-canvas" style={{width: QRCODE_WIDTH + 'px', height: QRCODE_WIDTH + 'px', marginBottom: '1em'}} src={this.getCurrentQrCodeSrc()}/>
+                <img id="qr-canvas" style={{width: `${QRCODE_WIDTH}px`, height: `${QRCODE_WIDTH}px`, marginBottom: '1em'}} src={this.getCurrentQrCodeSrc()}/>
                 <a className={`button cancel ${processingClassName}`} role="button" onClick={this.handleClickCancel}>
                   <Trans>Cancel</Trans>
                 </a>

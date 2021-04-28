@@ -70,7 +70,7 @@ export default class TransferToMobileTestPage {
    * @returns {boolean}
    */
   isStep(step) {
-    switch(step) {
+    switch (step) {
       case 'start':
         return this._page.container.querySelector('.profile-mobile-transfer .mobile-transfer-step-start') !== null;
       case 'in progress':
