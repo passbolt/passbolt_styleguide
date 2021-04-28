@@ -15,7 +15,6 @@ import React, {Component} from "react";
 import PropTypes from "prop-types";
 
 class AnimatedFeedback extends Component {
-
   /**
    * Render the component
    * @return {JSX}
@@ -31,9 +30,9 @@ class AnimatedFeedback extends Component {
         }
         {this.props.name === 'warning' &&
         <svg id="icon-feedback-warning" className="animated"  width="160" height="160" xmlns="http://www.w3.org/2000/svg" viewBox="-16 -16 100 100">
-          <g transform="translate(1.285714 1.857143)" fill="none" fill-rule="evenodd">
-            <path className="warning-animation-line" d="M.71428571 70.1428571H70.7142857c-23.3333333-46.6666666-35-69.99999996-35-69.99999996L.71428571 70.1428571z" stroke="#000" stroke-width="4" stroke-linejoin="round"/>
-            <path className="warning-animation-line" stroke="#000" stroke-width="5" fill="#000" fill-rule="nonzero" stroke-linecap="round" d="M36.3214286 28.2244898v19.4285714"/>
+          <g transform="translate(1.285714 1.857143)" fill="none" fillRule="evenodd">
+            <path className="warning-animation-line" d="M.71428571 70.1428571H70.7142857c-23.3333333-46.6666666-35-69.99999996-35-69.99999996L.71428571 70.1428571z" stroke="#000" strokeWidth="4" strokeLinejoin="round"/>
+            <path className="warning-animation-line" stroke="#000" strokeWidth="5" fill="#000" fillRule="nonzero" strokeLinecap="round" d="M36.3214286 28.2244898v19.4285714"/>
             <circle className="warning-animation-circle" fill="#000" cx="36.2142857" cy="57.6428571" r="3.5"/>
           </g>
         </svg>

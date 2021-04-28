@@ -42,15 +42,19 @@ describe("As LU I should be able to configure my account on my mobile phone", ()
       expect(page.title).toContain('mobile');
       expect(page.isStep('start')).toBe(true);
 
-      // await page.clickStart();
-      //
-      // let expectedData = context.user.id;
-      // let expectedParameters =  ['passbolt.keyring.get-public-key-info-by-user', expectedData];
-      // expect(context.port.request).toHaveBeenCalledWith(...expectedParameters);
+      /*
+       * await page.clickStart();
+       *
+       * let expectedData = context.user.id;
+       * let expectedParameters =  ['passbolt.keyring.get-public-key-info-by-user', expectedData];
+       * expect(context.port.request).toHaveBeenCalledWith(...expectedParameters);
+       */
 
-      // expectedData = {folder_parent_id: "some folder parent id", name: "My super folder"};
-      // expectedParameters =  ['passbolt.mobile.transfer.create', expectedData];
-      // expect(context.port.request).toHaveBeenCalledWith(...expectedParameters);
+      /*
+       * expectedData = {folder_parent_id: "some folder parent id", name: "My super folder"};
+       * expectedParameters =  ['passbolt.mobile.transfer.create', expectedData];
+       * expect(context.port.request).toHaveBeenCalledWith(...expectedParameters);
+       */
     });
   });
 });
