@@ -325,18 +325,19 @@ class UploadUserProfileAvatar extends React.Component {
                 <label htmlFor="dialog-upload-avatar-input">
                   <Trans>Avatar</Trans>
                 </label>
-
-                <input
-                  type="text"
-                  disabled={true}
-                  placeholder="No file selected"
-                  defaultValue={this.selectedFilename}/>
-                <a
-                  id="dialog-upload-avatar-input"
-                  className={`button primary ${this.areActionsAllowed ? "" : "disabled"}`}
-                  onClick={this.handleSelectFile}>
-                  <Icon name="upload-a"/> <Trans>Choose a file</Trans>
-                </a>
+                <div className="input-file-inline">
+                  <input
+                    type="text"
+                    disabled={true}
+                    placeholder="No file selected"
+                    defaultValue={this.selectedFilename}/>
+                  <a
+                    id="dialog-upload-avatar-input"
+                    className={`button primary ${this.areActionsAllowed ? "" : "disabled"}`}
+                    onClick={this.handleSelectFile}>
+                    <Icon name="upload-a"/> <Trans>Choose a file</Trans>
+                  </a>
+                </div>
                 {this.state.errors.message &&
                 <div className="error message">{this.state.errors.message}</div>
                 }

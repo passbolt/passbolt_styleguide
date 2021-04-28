@@ -261,14 +261,16 @@ class ExportResourcesCredentials extends Component {
                   ref={this.fileUploaderRef}
                   onChange={this.handleFileSelected}/>
                 <label><Trans>Keepass key file (optional)</Trans></label>
-                <input type="text"
-                  placeholder={this.translate("No key file selected")}
-                  disabled
-                  value={this.selectedFilename}/>
-                <a className={`button primary ${!this.areActionsAllowed ? "disabled" : ""}`}
-                  onClick={this.handleSelectFile}>
-                  <Icon name="upload-a"/> <Trans>Choose a file</Trans>
-                </a>
+                <div className="input-file-inline">
+                  <input type="text"
+                    placeholder={this.translate("No key file selected")}
+                    disabled
+                    value={this.selectedFilename}/>
+                  <a className={`button primary ${!this.areActionsAllowed ? "disabled" : ""}`}
+                    onClick={this.handleSelectFile}>
+                    <Icon name="upload-a"/> <Trans>Choose a file</Trans>
+                  </a>
+                </div>
               </div>
             </div>
           </div>

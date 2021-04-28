@@ -26,16 +26,26 @@
     input[type="file"] {
       display: none;
     }
-    input[type="text"] {
-      width: 60%;
-      text-overflow: ellipsis;
-    }
-    .button.primary {
-      display: inline-block;
-      top: -3px;
-      padding: .60em 1.225em .55em 1.225em;
-      border-top-left-radius: 0;
-      border-bottom-left-radius: 0;
+    .input-file-inline {
+      display: flex;
+      align-items: center;
+
+      input[type="text"] {
+        width: 60%;
+        text-overflow: ellipsis;
+      }
+      .button.primary {
+        width: 40%;
+        display: inline-block;
+        top: -4px;
+        padding: .60em 1.225em .55em 1.225em;
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+        margin: 0;
+      }
     }
   }
 }
