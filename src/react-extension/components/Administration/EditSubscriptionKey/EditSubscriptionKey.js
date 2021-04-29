@@ -204,7 +204,12 @@ class EditSubscriptionKey extends Component {
   async handleSaveError(error) {
     if (error.name === "PassboltSubscriptionError") {
       this.setState({keyError: error.message});
-    } else {
+    } else if (error.name === "EntityValidationError") {
+      this.setState({keyError: this.translate("The subscription key is invalid.")});
+    } else if (error.name === "PassboltApiFetchError" && error.data && error.data.code === 400) {
+      this.setState({keyError: error.message});
+    }
+    else {
       // Unexpected error occurred.
       console.error(error);
       const errorDialogProps = {
