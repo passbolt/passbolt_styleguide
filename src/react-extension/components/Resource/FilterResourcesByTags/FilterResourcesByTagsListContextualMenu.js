@@ -13,12 +13,11 @@
  */
 import React from "react";
 import PropTypes from "prop-types";
-import AppContext from "../../../contexts/AppContext";
+import {withAppContext} from "../../../contexts/AppContext";
 import EditResourceTag from "../../ResourceTag/EditResourceTag/EditResourceTag";
 import DeleteResourceTag from "../../ResourceTag/DeleteResourceTag/DeleteResourceTag";
 import {withDialog} from "../../../contexts/DialogContext";
 import ContextualMenuWrapper from "../../Common/ContextualMenu/ContextualMenuWrapper";
-
 import {Trans, withTranslation} from "react-i18next";
 
 class FilterResourcesByTagsListContextualMenu extends React.Component {
@@ -43,7 +42,7 @@ class FilterResourcesByTagsListContextualMenu extends React.Component {
    * Handle click on the edit tag menu option.
    */
   handleEditClickEvent() {
-    this.context.setContext({tagToEdit: this.props.selectedTag});
+    this.props.context.setContext({tagToEdit: this.props.selectedTag});
     this.props.dialogContext.open(EditResourceTag);
     this.props.hide();
   }
@@ -52,7 +51,7 @@ class FilterResourcesByTagsListContextualMenu extends React.Component {
    * Handle click on the delete tag menu option.
    */
   handleDeleteClickEvent() {
-    this.context.setContext({tagToDelete: this.props.selectedTag});
+    this.props.context.setContext({tagToDelete: this.props.selectedTag});
     this.props.dialogContext.open(DeleteResourceTag);
     this.props.hide();
   }
@@ -98,9 +97,8 @@ class FilterResourcesByTagsListContextualMenu extends React.Component {
   }
 }
 
-FilterResourcesByTagsListContextualMenu.contextType = AppContext;
-
 FilterResourcesByTagsListContextualMenu.propTypes = {
+  context: PropTypes.any, // The application context
   hide: PropTypes.func, // Hide the contextual menu
   left: PropTypes.number, // left position in px of the page
   top: PropTypes.number, // top position in px of the page
@@ -109,4 +107,4 @@ FilterResourcesByTagsListContextualMenu.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withDialog(withTranslation('common')(FilterResourcesByTagsListContextualMenu));
+export default withAppContext(withDialog(withTranslation('common')(FilterResourcesByTagsListContextualMenu)));

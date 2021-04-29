@@ -12,7 +12,7 @@
  * @since         3.0.0
  */
 import React, {Component} from "react";
-import {AuthenticationContext} from "../../../contexts/AuthenticationContext";
+import {withAuthenticationContext} from "../../../contexts/AuthenticationContext";
 import {Trans, withTranslation} from "react-i18next";
 import PropTypes from "prop-types";
 
@@ -58,7 +58,7 @@ class AcceptLoginServerKeyChange extends Component {
    * @returns {Promise<void>}
    */
   async fetchServerKey() {
-    let {fingerprint} = await this.context.onGetServerKeyRequested();
+    let {fingerprint} = await this.props.authenticationContext.onGetServerKeyRequested();
     fingerprint = fingerprint.replace(/.{4}/g, '$& ');
     fingerprint = <>{fingerprint.substr(0, 24)}<br/>{fingerprint.substr(25)}</>;
     this.setState({fingerprint});
@@ -110,7 +110,7 @@ class AcceptLoginServerKeyChange extends Component {
    * Accepts the new Gpg key
    */
   async accept() {
-    await this.context.onAcceptLoginNewServerKeyRequested();
+    await this.props.authenticationContext.onAcceptLoginNewServerKeyRequested();
   }
 
   /**
@@ -190,10 +190,9 @@ class AcceptLoginServerKeyChange extends Component {
   }
 }
 
-AcceptLoginServerKeyChange.contextType = AuthenticationContext;
-
 AcceptLoginServerKeyChange.propTypes = {
+  authenticationContext: PropTypes.any, // The authentication context
   t: PropTypes.func, // The translation function
 };
 
-export default withTranslation('common')(AcceptLoginServerKeyChange);
+export default withAuthenticationContext(withTranslation('common')(AcceptLoginServerKeyChange));

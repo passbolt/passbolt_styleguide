@@ -14,7 +14,7 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import AppContext from "../../../contexts/AppContext";
+import {withAppContext} from "../../../contexts/AppContext";
 import Icon from "../../Common/Icons/Icon";
 import CreateUser from "../CreateUser/CreateUser";
 import {withDialog} from "../../../contexts/DialogContext";
@@ -166,7 +166,7 @@ class DisplayUserWorkspaceMainActions extends React.Component {
    * @returns {boolean}
    */
   isLoggedInUserAdmin() {
-    return this.context.loggedInUser && this.context.loggedInUser.role.name === 'admin';
+    return this.props.context.loggedInUser && this.props.context.loggedInUser.role.name === 'admin';
   }
 
   /**
@@ -221,11 +221,10 @@ class DisplayUserWorkspaceMainActions extends React.Component {
   }
 }
 
-DisplayUserWorkspaceMainActions.contextType = AppContext;
-
 DisplayUserWorkspaceMainActions.propTypes = {
+  context: PropTypes.any, // The application context
   dialogContext: PropTypes.any, // the dialog context
   t: PropTypes.func, // The translation function
 };
 
-export default withDialog(withTranslation('common')(DisplayUserWorkspaceMainActions));
+export default withAppContext(withDialog(withTranslation('common')(DisplayUserWorkspaceMainActions)));

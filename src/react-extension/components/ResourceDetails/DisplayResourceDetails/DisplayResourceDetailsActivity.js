@@ -15,7 +15,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import UserAvatar from "../../Common/Avatar/UserAvatar";
 import GroupAvatar from "../../Common/Avatar/GroupAvatar";
-import AppContext from "../../../contexts/AppContext";
+import {withAppContext} from "../../../contexts/AppContext";
 import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 import Icon from "../../Common/Icons/Icon";
 import {Trans, withTranslation} from "react-i18next";
@@ -141,7 +141,7 @@ class DisplayResourceDetailsActivity extends React.Component {
     const limit = LIMIT_ACTIVITIES_PER_PAGE;
     const page = this.state.activitiesPage;
     const options = {limit, page};
-    const newActivities = await this.context.port.request("passbolt.actionlogs.find-all-for", "Resource", this.resource.id, options);
+    const newActivities = await this.props.context.port.request("passbolt.actionlogs.find-all-for", "Resource", this.resource.id, options);
 
     let activities;
     // For the first page need to reset activities state
@@ -161,7 +161,7 @@ class DisplayResourceDetailsActivity extends React.Component {
   formatDateTimeAgo(date) {
     const dateTime = DateTime.fromISO(date);
     const duration = dateTime.diffNow().toMillis();
-    return duration < 1000 && duration > 0 ? this.translate('Just now') : dateTime.toRelative({locale: this.context.locale});
+    return duration < 1000 && duration > 0 ? this.translate('Just now') : dateTime.toRelative({locale: this.props.context.locale});
   }
 
   /**
@@ -239,7 +239,7 @@ class DisplayResourceDetailsActivity extends React.Component {
             <div className="subinfo light">{activityFormattedDate}</div>
           </div>
         </div>
-        <UserAvatar user={activity.creator} baseUrl={this.context.userSettings.getTrustedDomain()}/>
+        <UserAvatar user={activity.creator} baseUrl={this.props.context.userSettings.getTrustedDomain()}/>
       </li>
     );
   }
@@ -267,7 +267,7 @@ class DisplayResourceDetailsActivity extends React.Component {
             <div className="subinfo light">{activityFormattedDate}</div>
           </div>
         </div>
-        <UserAvatar user={activity.creator} baseUrl={this.context.userSettings.getTrustedDomain()}/>
+        <UserAvatar user={activity.creator} baseUrl={this.props.context.userSettings.getTrustedDomain()}/>
       </li>
     );
   }
@@ -295,7 +295,7 @@ class DisplayResourceDetailsActivity extends React.Component {
             <div className="subinfo light">{activityFormattedDate}</div>
           </div>
         </div>
-        <UserAvatar user={activity.creator} baseUrl={this.context.userSettings.getTrustedDomain()}/>
+        <UserAvatar user={activity.creator} baseUrl={this.props.context.userSettings.getTrustedDomain()}/>
       </li>
     );
   }
@@ -323,7 +323,7 @@ class DisplayResourceDetailsActivity extends React.Component {
             <div className="subinfo light">{activityFormattedDate}</div>
           </div>
         </div>
-        <UserAvatar user={activity.creator} baseUrl={this.context.userSettings.getTrustedDomain()}/>
+        <UserAvatar user={activity.creator} baseUrl={this.props.context.userSettings.getTrustedDomain()}/>
       </li>
     );
   }
@@ -342,10 +342,10 @@ class DisplayResourceDetailsActivity extends React.Component {
     return (
       <li key={permission.id} className="clearfix">
         {permission.user &&
-        <UserAvatar user={permission.user} baseUrl={this.context.userSettings.getTrustedDomain()}/>
+        <UserAvatar user={permission.user} baseUrl={this.props.context.userSettings.getTrustedDomain()}/>
         }
         {permission.group &&
-        <GroupAvatar group={permission.group} baseUrl={this.context.userSettings.getTrustedDomain()}/>
+        <GroupAvatar group={permission.group} baseUrl={this.props.context.userSettings.getTrustedDomain()}/>
         }
         <div className="name">
           <span className="creator">{permissionAroName}</span>
@@ -384,7 +384,7 @@ class DisplayResourceDetailsActivity extends React.Component {
             </ul>
           </div>
         </div>
-        <UserAvatar user={activity.creator} baseUrl={this.context.userSettings.getTrustedDomain()}/>
+        <UserAvatar user={activity.creator} baseUrl={this.props.context.userSettings.getTrustedDomain()}/>
       </li>
     );
   }
@@ -511,11 +511,10 @@ class DisplayResourceDetailsActivity extends React.Component {
   }
 }
 
-DisplayResourceDetailsActivity.contextType = AppContext;
-
 DisplayResourceDetailsActivity.propTypes = {
+  context: PropTypes.any, // The application context
   resourceWorkspaceContext: PropTypes.any,
   t: PropTypes.func, // The translation function
 };
 
-export default withResourceWorkspace(withTranslation('common')(DisplayResourceDetailsActivity));
+export default withAppContext(withResourceWorkspace(withTranslation('common')(DisplayResourceDetailsActivity)));

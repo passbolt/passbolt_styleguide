@@ -17,7 +17,7 @@ import PropTypes from "prop-types";
 import SharePermissionDeleteButton from "./SharePermissionDeleteButton";
 import TooltipHtml from "../Common/Tooltip/TooltipHtml";
 import ShareVariesDetails from "./ShareVariesDetails";
-import AppContext from "../../contexts/AppContext";
+import {withAppContext} from "../../contexts/AppContext";
 import UserAvatar from "../Common/Avatar/UserAvatar";
 import GroupAvatar from "../Common/Avatar/GroupAvatar";
 import {withTranslation} from "react-i18next";
@@ -129,10 +129,10 @@ class SharePermissionItem extends Component {
     return (
       <li id={`permission-item-${this.props.id}`} className={this.getClassName()}>
         {this.isUser() &&
-        <UserAvatar user={this.props.aro} baseUrl={this.context.userSettings.getTrustedDomain()}/>
+        <UserAvatar user={this.props.aro} baseUrl={this.props.context.userSettings.getTrustedDomain()}/>
         }
         {this.isGroup() &&
-        <GroupAvatar group={this.props.aro} baseUrl={this.context.userSettings.getTrustedDomain()}/>
+        <GroupAvatar group={this.props.aro} baseUrl={this.props.context.userSettings.getTrustedDomain()}/>
         }
 
         <div className="aro">
@@ -174,9 +174,8 @@ class SharePermissionItem extends Component {
   }
 }
 
-SharePermissionItem.contextType = AppContext;
-
 SharePermissionItem.propTypes = {
+  context: PropTypes.any, // The application context
   id: PropTypes.string, // uuid
   aro: PropTypes.object, // {id: <uuid>, name: <string>, ...etc}
   variesDetails: PropTypes.object, // {type: [resource1, ...resourceN]}
@@ -188,4 +187,4 @@ SharePermissionItem.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withTranslation('common')(SharePermissionItem);
+export default withAppContext(withTranslation('common')(SharePermissionItem));

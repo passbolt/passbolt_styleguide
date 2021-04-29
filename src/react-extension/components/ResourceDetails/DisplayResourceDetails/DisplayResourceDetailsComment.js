@@ -16,7 +16,6 @@
 import React from "react";
 import AddResourceComment from "../../ResourceComment/AddResourceComment/AddResourceComment";
 import PropTypes from "prop-types";
-import AppContext from "../../../contexts/AppContext";
 import DisplayResourceCommentList from "../../ResourceComment/DisplayResourceCommentList/DisplayResourceCommentList";
 import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 import Icon from "../../Common/Icons/Icon";
@@ -193,8 +192,6 @@ class DisplayResourceDetailsComment extends React.Component {
     );
   }
 }
-
-DisplayResourceDetailsComment.contextType = AppContext;
 
 DisplayResourceDetailsComment.propTypes = {
   resourceWorkspaceContext: PropTypes.any, // The resource context

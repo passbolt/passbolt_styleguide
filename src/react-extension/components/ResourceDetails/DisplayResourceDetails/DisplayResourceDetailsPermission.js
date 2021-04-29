@@ -15,7 +15,7 @@ import React from "react";
 import UserAvatar from "../../Common/Avatar/UserAvatar";
 import GroupAvatar from "../../Common/Avatar/GroupAvatar";
 import Icon from "../../Common/Icons/Icon";
-import AppContext from "../../../contexts/AppContext";
+import {withAppContext} from "../../../contexts/AppContext";
 import PropTypes from "prop-types";
 import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 import {withDialog} from "../../../contexts/DialogContext";
@@ -106,7 +106,7 @@ class DisplayResourceDetailsPermission extends React.Component {
    */
   async fetch() {
     this.setState({loading: true});
-    const permissions = await this.context.port.request('passbolt.resources.find-permissions', this.resource.id);
+    const permissions = await this.props.context.port.request('passbolt.resources.find-permissions', this.resource.id);
     if (permissions) {
       permissions.sort((permissionA, permissionB) => this.sortPermissions(permissionA, permissionB));
     }
@@ -151,7 +151,7 @@ class DisplayResourceDetailsPermission extends React.Component {
    */
   handlePermissionsEditClickEvent() {
     const resourcesIds = [this.resource.id];
-    this.context.setContext({shareDialogProps: {resourcesIds}});
+    this.props.context.setContext({shareDialogProps: {resourcesIds}});
     this.props.dialogContext.open(ShareDialog);
   }
 
@@ -235,10 +235,10 @@ class DisplayResourceDetailsPermission extends React.Component {
                   </div>
                 </div>
                 {permission.user &&
-                <UserAvatar user={permission.user} baseUrl={this.context.userSettings.getTrustedDomain()}/>
+                <UserAvatar user={permission.user} baseUrl={this.props.context.userSettings.getTrustedDomain()}/>
                 }
                 {permission.group &&
-                <GroupAvatar group={permission.group} baseUrl={this.context.userSettings.getTrustedDomain()}/>
+                <GroupAvatar group={permission.group} baseUrl={this.props.context.userSettings.getTrustedDomain()}/>
                 }
               </li>
             )}
@@ -250,12 +250,11 @@ class DisplayResourceDetailsPermission extends React.Component {
   }
 }
 
-DisplayResourceDetailsPermission.contextType = AppContext;
-
 DisplayResourceDetailsPermission.propTypes = {
+  context: PropTypes.any, // The application context
   resourceWorkspaceContext: PropTypes.object,
   dialogContext: PropTypes.any,
   t: PropTypes.func, // The translation function
 };
 
-export default withDialog(withResourceWorkspace(withTranslation('common')(DisplayResourceDetailsPermission)));
+export default withAppContext(withDialog(withResourceWorkspace(withTranslation('common')(DisplayResourceDetailsPermission))));

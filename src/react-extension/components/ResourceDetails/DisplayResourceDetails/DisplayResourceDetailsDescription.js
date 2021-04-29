@@ -16,7 +16,7 @@ import PropTypes from "prop-types";
 import Icon from "../../Common/Icons/Icon";
 import EditResourceDescription from "../../ResourceDescription/EditResourceDescription/EditResourceDescription";
 import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
-import AppContext from "../../../contexts/AppContext";
+import {withAppContext} from "../../../contexts/AppContext";
 import {Trans, withTranslation} from "react-i18next";
 
 /**
@@ -95,7 +95,7 @@ class DisplayResourceDetailsDescription extends React.Component {
     if (!this.resource.resource_type_id) {
       return false;
     }
-    return this.context.resourceTypesSettings.assertResourceTypeIdHasEncryptedDescription(
+    return this.props.context.resourceTypesSettings.assertResourceTypeIdHasEncryptedDescription(
       this.resource.resource_type_id
     );
   }
@@ -123,7 +123,7 @@ class DisplayResourceDetailsDescription extends React.Component {
     this.setState({isSecretDecrypting: true});
 
     try {
-      const plaintextDto = await this.context.port.request("passbolt.secret.decrypt", this.resource.id, {showProgress: false});
+      const plaintextDto = await this.props.context.port.request("passbolt.secret.decrypt", this.resource.id, {showProgress: false});
       const description = this.getSecretDescription(plaintextDto);
       this.setState({
         plaintextDto: plaintextDto,
@@ -173,7 +173,7 @@ class DisplayResourceDetailsDescription extends React.Component {
    * @returns {object} resource dto
    */
   get resourceTypesSettings() {
-    return this.context.resourceTypesSettings.resourceTypesSettings;
+    return this.props.context.resourceTypesSettings.resourceTypesSettings;
   }
 
   /**
@@ -351,11 +351,10 @@ class DisplayResourceDetailsDescription extends React.Component {
   }
 }
 
-DisplayResourceDetailsDescription.contextType = AppContext;
-
 DisplayResourceDetailsDescription.propTypes = {
+  context: PropTypes.any, // The application context
   resourceWorkspaceContext: PropTypes.any, // The resource
   t: PropTypes.func, // The translation function
 };
 
-export default withResourceWorkspace(withTranslation('common')(DisplayResourceDetailsDescription));
+export default withAppContext(withResourceWorkspace(withTranslation('common')(DisplayResourceDetailsDescription)));

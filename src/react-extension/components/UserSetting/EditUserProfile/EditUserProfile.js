@@ -13,7 +13,7 @@
  */
 import React, {Component} from "react";
 import PropTypes from "prop-types";
-import AppContext from "../../../contexts/AppContext";
+import {withAppContext} from "../../../contexts/AppContext";
 import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
 import FormSubmitButton from "../../Common/Inputs/FormSubmitButton/FormSubmitButton";
 import FormCancelButton from "../../Common/Inputs/FormSubmitButton/FormCancelButton";
@@ -138,8 +138,8 @@ class EditUserProfile extends Component {
    * Populates the component with data
    */
   async populate() {
-    const {first_name, last_name} = this.context.loggedInUser.profile;
-    const locale = this.context.locale;
+    const {first_name, last_name} = this.props.context.loggedInUser.profile;
+    const locale = this.props.context.locale;
     await this.setState({profile: {first_name, last_name, locale}});
   }
 
@@ -166,7 +166,7 @@ class EditUserProfile extends Component {
    */
   async updateUserProfile() {
     const userToUpdateDto = this.buildUserToUpdateDto();
-    await this.context.port.request("passbolt.users.update", userToUpdateDto);
+    await this.props.context.port.request("passbolt.users.update", userToUpdateDto);
     if (this.canIUseLocale) {
       const localeToUpdateDto = this.buildLocaleToUpdateDto();
       await this.props.userSettingsContext.onUpdateLocaleUserRequested(localeToUpdateDto);
@@ -178,7 +178,7 @@ class EditUserProfile extends Component {
    * @returns {object}
    */
   buildUserToUpdateDto() {
-    const {id, username} = this.context.loggedInUser;
+    const {id, username} = this.props.context.loggedInUser;
     const profile = {
       first_name: this.state.profile.first_name,
       last_name: this.state.profile.last_name,
@@ -199,9 +199,9 @@ class EditUserProfile extends Component {
    */
   async onSaveSuccess() {
     await this.props.actionFeedbackContext.displaySuccess(this.translate("The user has been updated successfully"));
-    const loggedInUser = await this.context.port.request("passbolt.users.find-logged-in-user");
-    this.context.setContext({loggedInUser});
-    this.context.onUpdateLocaleRequested();
+    const loggedInUser = await this.props.context.port.request("passbolt.users.find-logged-in-user");
+    this.props.context.setContext({loggedInUser});
+    this.props.context.onUpdateLocaleRequested();
     this.props.onClose();
   }
 
@@ -215,7 +215,7 @@ class EditUserProfile extends Component {
       title: this.translate("There was an unexpected error..."),
       message: error.message
     };
-    this.context.setContext({errorDialogProps});
+    this.props.context.setContext({errorDialogProps});
     this.props.dialogContext.open(NotifyError);
   }
 
@@ -271,7 +271,7 @@ class EditUserProfile extends Component {
    * @returns {array}
    */
   get supportedLocales() {
-    return this.context.siteSettings.supportedLocales || [];
+    return this.props.context.siteSettings.supportedLocales || [];
   }
 
   /**
@@ -279,7 +279,7 @@ class EditUserProfile extends Component {
    * @type {boolean}
    */
   get canIUseLocale() {
-    return this.context.siteSettings.canIUse('locale');
+    return this.props.context.siteSettings.canIUse('locale');
   }
 
   /**
@@ -349,7 +349,7 @@ class EditUserProfile extends Component {
                 name="username"
                 type="text"
                 disabled={true}
-                value={this.context.loggedInUser.username}/>
+                value={this.props.context.loggedInUser.username}/>
             </div>
 
             {this.canIUseLocale &&
@@ -384,8 +384,8 @@ class EditUserProfile extends Component {
   }
 }
 
-EditUserProfile.contextType = AppContext;
 EditUserProfile.propTypes = {
+  context: PropTypes.any, // The application context
   onClose: PropTypes.func, // Whenever the dialog must be closed
   dialogContext: PropTypes.object, // The dialog context
   userSettingsContext: PropTypes.object, // The user settings context
@@ -393,4 +393,4 @@ EditUserProfile.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withActionFeedback(withDialog(withUserSettings(withTranslation('common')(EditUserProfile))));
+export default withAppContext(withActionFeedback(withDialog(withUserSettings(withTranslation('common')(EditUserProfile)))));

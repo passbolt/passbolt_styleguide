@@ -13,7 +13,7 @@
  */
 import React from "react";
 import PropTypes from "prop-types";
-import AppContext from "../../../contexts/AppContext";
+import {withAppContext} from "../../../contexts/AppContext";
 import {withDialog} from "../../../contexts/DialogContext";
 import ContextualMenuWrapper from "../../Common/ContextualMenu/ContextualMenuWrapper";
 import EditResource from "../EditResource/EditResource";
@@ -58,7 +58,7 @@ class DisplayResourcesListContextualMenu extends React.Component {
     const passwordEditDialogProps = {
       id: this.resource.id
     };
-    this.context.setContext({passwordEditDialogProps});
+    this.props.context.setContext({passwordEditDialogProps});
     this.props.dialogContext.open(EditResource);
     this.props.hide();
   }
@@ -68,7 +68,7 @@ class DisplayResourcesListContextualMenu extends React.Component {
    */
   handleShareClickEvent() {
     const resourcesIds = [this.resource.id];
-    this.context.setContext({shareDialogProps: {resourcesIds}});
+    this.props.context.setContext({shareDialogProps: {resourcesIds}});
     this.props.dialogContext.open(ShareDialog);
     this.props.hide();
   }
@@ -77,7 +77,7 @@ class DisplayResourcesListContextualMenu extends React.Component {
    * handle username resource
    */
   async handleUsernameClickEvent() {
-    await this.context.port.request("passbolt.clipboard.copy", this.resource.username);
+    await this.props.context.port.request("passbolt.clipboard.copy", this.resource.username);
     this.props.actionFeedbackContext.displaySuccess(this.translate("The username has been copied to clipboard"));
     this.props.hide();
   }
@@ -86,7 +86,7 @@ class DisplayResourcesListContextualMenu extends React.Component {
    * handle uri resource
    */
   async handleUriClickEvent() {
-    await this.context.port.request("passbolt.clipboard.copy", this.resource.uri);
+    await this.props.context.port.request("passbolt.clipboard.copy", this.resource.uri);
     this.props.actionFeedbackContext.displaySuccess(this.translate("The uri has been copied to clipboard"));
     this.props.hide();
   }
@@ -95,9 +95,9 @@ class DisplayResourcesListContextualMenu extends React.Component {
    * handle permalink resource
    */
   async handlePermalinkClickEvent() {
-    const baseUrl = this.context.userSettings.getTrustedDomain();
+    const baseUrl = this.props.context.userSettings.getTrustedDomain();
     const permalink = `${baseUrl}/app/passwords/view/${this.resource.id}`;
-    await this.context.port.request("passbolt.clipboard.copy", permalink);
+    await this.props.context.port.request("passbolt.clipboard.copy", permalink);
     this.props.actionFeedbackContext.displaySuccess(this.translate("The permalink has been copied to clipboard"));
     this.props.hide();
   }
@@ -114,11 +114,11 @@ class DisplayResourcesListContextualMenu extends React.Component {
       throw new TypeError(this.translate("The password is empty."));
     }
     if (typeof plaintextDto === 'string') {
-      await this.context.port.request("passbolt.clipboard.copy", plaintextDto);
+      await this.props.context.port.request("passbolt.clipboard.copy", plaintextDto);
       this.props.resourceWorkspaceContext.onResourceCopied();
     } else {
       if (Object.prototype.hasOwnProperty.call(plaintextDto, 'password')) {
-        await this.context.port.request("passbolt.clipboard.copy", plaintextDto.password);
+        await this.props.context.port.request("passbolt.clipboard.copy", plaintextDto.password);
         this.props.resourceWorkspaceContext.onResourceCopied();
       } else {
         throw new TypeError(this.translate("The password field is not defined."));
@@ -133,7 +133,7 @@ class DisplayResourcesListContextualMenu extends React.Component {
     this.props.hide();
 
     try {
-      const plaintextDto = await this.context.port.request("passbolt.secret.decrypt", this.resource.id, {showProgress: true});
+      const plaintextDto = await this.props.context.port.request("passbolt.secret.decrypt", this.resource.id, {showProgress: true});
       await this.copyPasswordToClipboard(plaintextDto);
       this.props.actionFeedbackContext.displaySuccess(this.translate("The secret has been copied to clipboard"));
     } catch (error) {
@@ -148,7 +148,7 @@ class DisplayResourcesListContextualMenu extends React.Component {
    */
   handleDeleteClickEvent() {
     const resources = [this.resource];
-    this.context.setContext({passwordDeleteDialogProps: {resources}});
+    this.props.context.setContext({passwordDeleteDialogProps: {resources}});
     this.props.dialogContext.open(DeleteResource);
     this.props.hide();
   }
@@ -314,9 +314,8 @@ class DisplayResourcesListContextualMenu extends React.Component {
   }
 }
 
-DisplayResourcesListContextualMenu.contextType = AppContext;
-
 DisplayResourcesListContextualMenu.propTypes = {
+  context: PropTypes.any, // The application context
   hide: PropTypes.func, // Hide the contextual menu
   left: PropTypes.number, // left position in px of the page
   top: PropTypes.number, // top position in px of the page
@@ -327,4 +326,4 @@ DisplayResourcesListContextualMenu.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withResourceWorkspace(withDialog(withActionFeedback(withTranslation('common')(DisplayResourcesListContextualMenu))));
+export default withAppContext(withResourceWorkspace(withDialog(withActionFeedback(withTranslation('common')(DisplayResourcesListContextualMenu)))));

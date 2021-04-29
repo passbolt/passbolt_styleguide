@@ -15,7 +15,6 @@
 
 
 import {fireEvent, render, waitFor} from "@testing-library/react";
-import AppContext from "../../../contexts/AppContext";
 import React from "react";
 import {BrowserRouter as Router} from "react-router-dom";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
@@ -27,17 +26,14 @@ import FilterResourcesByGroups from "./FilterResourcesByGroups";
 export default class FilterResourcesByGroupsPage {
   /**
    * Default constructor
-   * @param appContext An app context
    * @param props Props to attach
    */
-  constructor(appContext, props) {
+  constructor(props) {
     this._page = render(
       <MockTranslationProvider>
-        <AppContext.Provider value={appContext}>
-          <Router>
-            <FilterResourcesByGroups.WrappedComponent {...props}/>
-          </Router>
-        </AppContext.Provider>
+        <Router>
+          <FilterResourcesByGroups.WrappedComponent {...props}/>
+        </Router>
       </MockTranslationProvider>
     );
     this.setupPageObjects();

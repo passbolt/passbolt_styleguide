@@ -14,7 +14,7 @@
 import React, {Component} from "react";
 import Icon from "../../Common/Icons/Icon";
 import SecurityComplexity from "../../../../shared/lib/Secret/SecretComplexity";
-import {AuthenticationContext} from "../../../contexts/AuthenticationContext";
+import {withAuthenticationContext} from "../../../contexts/AuthenticationContext";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
 import {withDialog} from "../../../contexts/DialogContext";
 import PropTypes from "prop-types";
@@ -201,7 +201,7 @@ class CreateGpgKey extends Component {
    */
   async generateGpgKey() {
     await this.toggleProcessing();
-    this.context.onGenerateGpgKeyRequested(this.state.passphrase)
+    this.props.authenticationContext.onGenerateGpgKeyRequested(this.state.passphrase)
       .catch(this.onGpgKeyGeneratedFailure.bind(this));
   }
 
@@ -219,7 +219,7 @@ class CreateGpgKey extends Component {
    * Request to import the gpg key
    */
   importGpgKey() {
-    this.context.onGoToImportGpgKeyRequested();
+    this.props.authenticationContext.onGoToImportGpgKeyRequested();
   }
 
   /**
@@ -332,10 +332,10 @@ class CreateGpgKey extends Component {
   }
 }
 
-CreateGpgKey.contextType = AuthenticationContext;
 CreateGpgKey.propTypes = {
+  authenticationContext: PropTypes.any, // The authentication context
   dialogContext: PropTypes.any, // The dialog context
   t: PropTypes.func, // The translation function
 };
 
-export default withDialog(withTranslation('common')(CreateGpgKey));
+export default withAuthenticationContext(withDialog(withTranslation('common')(CreateGpgKey)));

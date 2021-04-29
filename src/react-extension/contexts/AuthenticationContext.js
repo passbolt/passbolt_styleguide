@@ -14,7 +14,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import UserSettings from "../../shared/lib/Settings/UserSettings";
-import AppContext from "./AppContext";
+import {withAppContext} from "./AppContext";
 
 export const AuthenticationContext = React.createContext({
   port: null, // The contextual port
@@ -67,7 +67,7 @@ export const AuthenticationContext = React.createContext({
 /**
  * The related context provider
  */
-class AuthenticationContextProvider extends React.Component {
+export class AuthenticationContextProvider extends React.Component {
   /**
    * Default constructor
    * @param props The component props
@@ -113,7 +113,7 @@ class AuthenticationContextProvider extends React.Component {
   async onInitializeSetupRequested() {
     const setupInfo = await this.state.port.request('passbolt.setup.info');
     // update the locale to use the user locale
-    this.context.onRefreshLocaleRequested(setupInfo.locale);
+    this.props.context.onRefreshLocaleRequested(setupInfo.locale);
     // In case of error the background page should just disconnect the extension setup application.
     await this.setState({
       state: AuthenticationContextState.SETUP_INITIALIZED,
@@ -129,7 +129,7 @@ class AuthenticationContextProvider extends React.Component {
   async onInitializeRecoverRequested() {
     const recoverInfo = await this.state.port.request('passbolt.recover.info');
     // The user might have already set a locale, the recover info update the background page locale, refresh the locale.
-    this.context.onRefreshLocaleRequested(recoverInfo.locale);
+    this.props.context.onRefreshLocaleRequested(recoverInfo.locale);
     // In case of error the background page should just disconnect the extension setup application.
     await this.setState({
       state: AuthenticationContextState.RECOVER_INITIALIZED,
@@ -385,13 +385,30 @@ class AuthenticationContextProvider extends React.Component {
   }
 }
 
-AuthenticationContextProvider.contextType = AppContext;
-
 AuthenticationContextProvider.propTypes = {
+  context: PropTypes.any, // The application context
   value: PropTypes.any, // The initial value of the context
   children: PropTypes.any // The children components
 };
-export default AuthenticationContextProvider;
+export default withAppContext(AuthenticationContextProvider);
+
+/**
+ * Resource Workspace Context Consumer HOC
+ * @param WrappedComponent
+ */
+export function withAuthenticationContext(WrappedComponent) {
+  return class WithAuthenticationContext extends React.Component {
+    render() {
+      return (
+        <AuthenticationContext.Consumer>
+          {
+            AuthenticationContext => <WrappedComponent authenticationContext={AuthenticationContext} {...this.props} />
+          }
+        </AuthenticationContext.Consumer>
+      );
+    }
+  };
+}
 
 /**
  * The authentication types of process

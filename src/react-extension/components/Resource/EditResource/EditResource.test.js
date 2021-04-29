@@ -18,7 +18,7 @@
 import {ActionFeedbackContext} from "../../../contexts/ActionFeedbackContext";
 import PassboltApiFetchError from "../../../../shared/lib/Error/PassboltApiFetchError";
 import {waitFor} from "@testing-library/react";
-import {defaultAppContext, defaultProps, mockResource} from "./EditResource.test.data";
+import {defaultProps, mockResource} from "./EditResource.test.data";
 import EditResourcePage from "./EditResource.test.page";
 import "../../../test/lib/crypto/cryptoGetRandomvalues";
 
@@ -28,21 +28,20 @@ beforeEach(() => {
 
 describe("See the Edit Resource", () => {
   let page; // The page to test against
-  const context = defaultAppContext(); // The applicative context
   const props = defaultProps(); // The props to pass
   const passwordEditDialogProps = {
     id: "8e3874ae-4b40-590b-968a-418f704b9d9a"
   };
 
-  const mockContextRequest = implementation => jest.spyOn(context.port, 'request').mockImplementation(implementation);
+  const mockContextRequest = implementation => jest.spyOn(props.context.port, 'request').mockImplementation(implementation);
 
   describe('As LU I can start adding a password', () => {
     /**
      * I should see the edit password dialog
      */
     beforeEach(() => {
-      context.setContext({passwordEditDialogProps});
-      page = new EditResourcePage(context, props);
+      props.context.setContext({passwordEditDialogProps});
+      page = new EditResourcePage(props);
     });
 
     it('matches the styleguide', () => {
@@ -180,7 +179,7 @@ describe("See the Edit Resource", () => {
 
       const requestMockImpl = jest.fn();
       mockContextRequest(requestMockImpl);
-      jest.spyOn(context.port, 'emit').mockImplementation(jest.fn());
+      jest.spyOn(props.context.port, 'emit').mockImplementation(jest.fn());
       jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementation(() => {});
 
       const onApiUpdateResourceMeta = {
@@ -193,9 +192,9 @@ describe("See the Edit Resource", () => {
       };
 
       await page.passwordEdit.click(page.passwordEdit.saveButton);
-      expect(context.port.request).toHaveBeenCalledWith("passbolt.resources.update", onApiUpdateResourceMeta, resourceMeta.password);
+      expect(props.context.port.request).toHaveBeenCalledWith("passbolt.resources.update", onApiUpdateResourceMeta, resourceMeta.password);
       expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalled();
-      expect(context.port.emit).toHaveBeenNthCalledWith(1, "passbolt.resources.select-and-scroll-to", "8e3874ae-4b40-590b-968a-418f704b9d9a");
+      expect(props.context.port.emit).toHaveBeenNthCalledWith(1, "passbolt.resources.select-and-scroll-to", "8e3874ae-4b40-590b-968a-418f704b9d9a");
       expect(props.onClose).toBeCalled();
     });
 
@@ -226,7 +225,7 @@ describe("See the Edit Resource", () => {
 
       const requestMockImpl = jest.fn();
       mockContextRequest(requestMockImpl);
-      jest.spyOn(context.port, 'emit').mockImplementation(jest.fn());
+      jest.spyOn(props.context.port, 'emit').mockImplementation(jest.fn());
       jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementation(() => {});
 
       const onApiUpdateResourceDto = {
@@ -244,9 +243,9 @@ describe("See the Edit Resource", () => {
 
       await page.passwordEdit.click(page.passwordEdit.saveButton);
 
-      expect(context.port.request).toHaveBeenCalledWith("passbolt.resources.update", onApiUpdateResourceDto, onApiUpdateSecretDto);
+      expect(props.context.port.request).toHaveBeenCalledWith("passbolt.resources.update", onApiUpdateResourceDto, onApiUpdateSecretDto);
       expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalled();
-      expect(context.port.emit).toHaveBeenNthCalledWith(1, "passbolt.resources.select-and-scroll-to", "8e3874ae-4b40-590b-968a-418f704b9d9a");
+      expect(props.context.port.emit).toHaveBeenNthCalledWith(1, "passbolt.resources.select-and-scroll-to", "8e3874ae-4b40-590b-968a-418f704b9d9a");
       expect(props.onClose).toBeCalled();
     });
 
@@ -294,7 +293,7 @@ describe("See the Edit Resource", () => {
       page.passwordEdit.fillInput(page.passwordEdit.password, "password");
       page.passwordEdit.blurInput(page.passwordEdit.password);
 
-      jest.spyOn(context.port, 'request').mockImplementationOnce(() => {
+      jest.spyOn(props.context.port, 'request').mockImplementationOnce(() => {
         throw new PassboltApiFetchError("Jest simulate API error.");
       });
 

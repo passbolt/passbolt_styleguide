@@ -16,7 +16,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 import {withDialog} from "../../../contexts/DialogContext";
-import AppContext from "../../../contexts/AppContext";
+import {withAppContext} from "../../../contexts/AppContext";
 import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
 import FormSubmitButton from "../../Common/Inputs/FormSubmitButton/FormSubmitButton";
 import FormCancelButton from "../../Common/Inputs/FormSubmitButton/FormCancelButton";
@@ -126,7 +126,7 @@ class ExportResources extends React.Component {
    * @param folderId A folder identifier
    */
   getChildrenFoldersIds(folderId) {
-    const folders = this.context.folders;
+    const folders = this.props.context.folders;
     const childrenFoldersIds = folders
       .filter(folder => folder.folder_parent_id === folderId)
       .map(folder => folder.id);
@@ -156,7 +156,7 @@ class ExportResources extends React.Component {
    */
   getResourcesIdsOfFoldersToExport(foldersIds) {
     const belongsToFolder = resource => foldersIds.some(folderId => folderId === resource.folder_parent_id);
-    return this.context.resources.filter(belongsToFolder).map(resource => resource.id);
+    return this.props.context.resources.filter(belongsToFolder).map(resource => resource.id);
   }
 
   /**
@@ -232,7 +232,7 @@ class ExportResources extends React.Component {
       folders_ids: foldersIds,
       resources_ids: resourcesIds
     };
-    await this.context.port.request("passbolt.export-resources.export-to-file", exportDto);
+    await this.props.context.port.request("passbolt.export-resources.export-to-file", exportDto);
   }
 
   /**
@@ -260,7 +260,7 @@ class ExportResources extends React.Component {
       message: error.message
     };
     await this.setState({actions: {processing: false}});
-    await this.context.setContext({errorDialogProps});
+    await this.props.context.setContext({errorDialogProps});
     this.props.dialogContext.open(NotifyError);
   }
 
@@ -345,9 +345,8 @@ class ExportResources extends React.Component {
   }
 }
 
-ExportResources.contextType = AppContext;
-
 ExportResources.propTypes = {
+  context: PropTypes.any, // The application context
   onClose: PropTypes.func, // Whenever the dialog is closes
   resourceWorkspaceContext: PropTypes.object, // The resource workspace context
   dialogContext: PropTypes.object, // The dialog context
@@ -355,4 +354,4 @@ ExportResources.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withActionFeedback(withDialog(withResourceWorkspace(withTranslation('common')(ExportResources))));
+export default withAppContext(withActionFeedback(withDialog(withResourceWorkspace(withTranslation('common')(ExportResources)))));

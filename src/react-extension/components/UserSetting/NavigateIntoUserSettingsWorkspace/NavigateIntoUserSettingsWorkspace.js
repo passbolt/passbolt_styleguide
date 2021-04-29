@@ -15,7 +15,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import {withRouter} from "react-router-dom";
-import AppContext from "../../../contexts/AppContext";
+import {withAppContext} from "../../../contexts/AppContext";
 import {withNavigationContext} from "../../../contexts/NavigationContext";
 import {Trans, withTranslation} from "react-i18next";
 
@@ -27,7 +27,7 @@ class NavigateIntoUserSettingsWorkspace extends React.Component {
    * Returns true if the use has the MFA capability
    */
   get isMfaEnabled() {
-    return this.context.siteSettings.canIUse("multiFactorAuthentication");
+    return this.props.context.siteSettings.canIUse("multiFactorAuthentication");
   }
 
   /**
@@ -35,7 +35,7 @@ class NavigateIntoUserSettingsWorkspace extends React.Component {
    * @returns {bool}
    */
   get canIUseThemeCapability() {
-    return this.context.siteSettings && this.context.siteSettings.canIUse('accountSettings');
+    return this.props.context.siteSettings && this.props.context.siteSettings.canIUse('accountSettings');
   }
 
   /**
@@ -136,12 +136,12 @@ class NavigateIntoUserSettingsWorkspace extends React.Component {
   }
 }
 
-NavigateIntoUserSettingsWorkspace.contextType = AppContext;
 NavigateIntoUserSettingsWorkspace.propTypes = {
+  context: PropTypes.any, // The application context
   navigationContext: PropTypes.any, // The application navigation context
   history: PropTypes.object,
   location: PropTypes.object,
   t: PropTypes.func, // The translation function
 };
 
-export default withRouter(withNavigationContext(withTranslation('common')(NavigateIntoUserSettingsWorkspace)));
+export default withAppContext(withRouter(withNavigationContext(withTranslation('common')(NavigateIntoUserSettingsWorkspace))));

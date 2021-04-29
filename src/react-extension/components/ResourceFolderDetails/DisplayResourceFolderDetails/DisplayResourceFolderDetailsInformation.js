@@ -14,7 +14,7 @@
 import React from "react";
 import Icon from "../../Common/Icons/Icon";
 import PropTypes from "prop-types";
-import AppContext from "../../../contexts/AppContext";
+import {withAppContext} from "../../../contexts/AppContext";
 import {withRouter} from "react-router-dom";
 import {ResourceWorkspaceFilterTypes, withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 import {Trans, withTranslation} from "react-i18next";
@@ -54,7 +54,7 @@ class DisplayResourceFolderDetailsInformation extends React.Component {
    */
   handleFolderParentClickEvent() {
     if (this.folder.folder_parent_id) { // Case of specific folder
-      const folderParent = this.context.folders.find(item => item.id === this.folder.folder_parent_id);
+      const folderParent = this.props.context.folders.find(item => item.id === this.folder.folder_parent_id);
       this.props.history.push(`/app/folders/view/${folderParent.id}`);
     } else { // Case of root folder
       const filter = {type: ResourceWorkspaceFilterTypes.ROOT_FOLDER};
@@ -85,7 +85,7 @@ class DisplayResourceFolderDetailsInformation extends React.Component {
   formatDateTimeAgo(date) {
     const dateTime = DateTime.fromISO(date);
     const duration = dateTime.diffNow().toMillis();
-    return duration < 1000 && duration > 0 ? this.translate('Just now') : dateTime.toRelative({locale: this.context.locale});
+    return duration < 1000 && duration > 0 ? this.translate('Just now') : dateTime.toRelative({locale: this.props.context.locale});
   }
 
   /**
@@ -93,8 +93,8 @@ class DisplayResourceFolderDetailsInformation extends React.Component {
    * @param {string} userId The user id
    */
   getUserUsername(userId) {
-    if (this.context.users) {
-      const user = this.context.users.find(item => item.id === userId);
+    if (this.props.context.users) {
+      const user = this.props.context.users.find(item => item.id === userId);
       if (user) {
         return user.username;
       }
@@ -113,8 +113,8 @@ class DisplayResourceFolderDetailsInformation extends React.Component {
       return '/';
     }
 
-    if (this.context.folders) {
-      const folder = this.context.folders.find(item => item.id === folderId);
+    if (this.props.context.folders) {
+      const folder = this.props.context.folders.find(item => item.id === folderId);
       return folder.name;
     }
 
@@ -180,7 +180,7 @@ class DisplayResourceFolderDetailsInformation extends React.Component {
             <li className="location">
               <span className="label"><Trans>Location</Trans></span>
               <span className="value">
-                <a onClick={this.handleFolderParentClickEvent} className={`folder-link ${!this.context.folders ? "disabled" : ""}`}>
+                <a onClick={this.handleFolderParentClickEvent} className={`folder-link ${!this.props.context.folders ? "disabled" : ""}`}>
                   <Icon name="folder"/> {folderParentName}
                 </a>
               </span>
@@ -192,12 +192,11 @@ class DisplayResourceFolderDetailsInformation extends React.Component {
   }
 }
 
-DisplayResourceFolderDetailsInformation.contextType = AppContext;
-
 DisplayResourceFolderDetailsInformation.propTypes = {
+  context: PropTypes.any, // The application context
   history: PropTypes.object,
   resourceWorkspaceContext: PropTypes.object,
   t: PropTypes.func, // The translation function
 };
 
-export default withRouter(withResourceWorkspace(withTranslation('common')(DisplayResourceFolderDetailsInformation)));
+export default withAppContext(withRouter(withResourceWorkspace(withTranslation('common')(DisplayResourceFolderDetailsInformation))));

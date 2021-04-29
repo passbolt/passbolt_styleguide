@@ -13,7 +13,7 @@
  */
 import React, {Fragment} from "react";
 import Icon from "../../Common/Icons/Icon";
-import AppContext from "../../../contexts/AppContext";
+import {withAppContext} from "../../../contexts/AppContext";
 import PropTypes from "prop-types";
 import {withRouter} from "react-router-dom";
 import {UserWorkspaceFilterTypes, withUserWorkspace} from "../../../contexts/UserWorkspaceContext";
@@ -179,7 +179,7 @@ class FilterUsersByGroup extends React.Component {
    * Returns true if the current user is admin
    */
   get isCurrentUserAdmin() {
-    return this.context.loggedInUser && this.context.loggedInUser.role.name === 'admin';
+    return this.props.context.loggedInUser && this.props.context.loggedInUser.role.name === 'admin';
   }
 
   /**
@@ -187,7 +187,7 @@ class FilterUsersByGroup extends React.Component {
    * @returns {*}
    */
   get groups() {
-    return this.context.groups;
+    return this.props.context.groups;
   }
 
   /**
@@ -344,16 +344,15 @@ class FilterUsersByGroup extends React.Component {
   }
 }
 
-FilterUsersByGroup.contextType = AppContext;
-
 FilterUsersByGroup.propTypes = {
+  context: PropTypes.any, // The application context
   userWorkspaceContext: PropTypes.any, // user workspace context
   history: PropTypes.object,
   contextualMenuContext: PropTypes.any, // The contextual menu context
   t: PropTypes.func, // The translation function
 };
 
-export default withRouter(withUserWorkspace(withContextualMenu(withTranslation('common')(FilterUsersByGroup))));
+export default withAppContext(withRouter(withUserWorkspace(withContextualMenu(withTranslation('common')(FilterUsersByGroup)))));
 
 export const filterByGroupsOptions = {
   all: "all",

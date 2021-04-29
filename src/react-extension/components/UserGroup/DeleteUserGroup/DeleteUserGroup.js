@@ -13,7 +13,7 @@
  */
 import React, {Component} from "react";
 import PropTypes from "prop-types";
-import AppContext from "../../../contexts/AppContext";
+import {withAppContext} from "../../../contexts/AppContext";
 import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
@@ -62,7 +62,7 @@ class DeleteUserGroup extends Component {
    */
   handleCloseClick() {
     this.props.onClose();
-    this.context.setContext({deleteGroupDialogProps: null});
+    this.props.context.setContext({deleteGroupDialogProps: null});
   }
 
   /**
@@ -72,11 +72,11 @@ class DeleteUserGroup extends Component {
     this.setState({processing: true});
     try {
       this.props.loadingContext.add();
-      await this.context.port.request("passbolt.groups.delete", this.group.id);
+      await this.props.context.port.request("passbolt.groups.delete", this.group.id);
       this.props.loadingContext.remove();
       await this.props.actionFeedbackContext.displaySuccess(this.translate("The group has been deleted successfully"));
       this.props.onClose();
-      this.context.setContext({deleteGroupDialogProps: null});
+      this.props.context.setContext({deleteGroupDialogProps: null});
     } catch (error) {
       this.props.loadingContext.remove();
       // It can happen when the user has closed the passphrase entry dialog by instance.
@@ -96,7 +96,7 @@ class DeleteUserGroup extends Component {
       title: this.translate("There was an unexpected error..."),
       message: error.message
     };
-    this.context.setContext({errorDialogProps});
+    this.props.context.setContext({errorDialogProps});
     this.props.dialogContext.open(NotifyError);
   }
 
@@ -109,7 +109,7 @@ class DeleteUserGroup extends Component {
   }
 
   get group() {
-    return this.context.deleteGroupDialogProps.group;
+    return this.props.context.deleteGroupDialogProps.group;
   }
 
   /**
@@ -146,9 +146,8 @@ class DeleteUserGroup extends Component {
   }
 }
 
-DeleteUserGroup.contextType = AppContext;
-
 DeleteUserGroup.propTypes = {
+  context: PropTypes.any, // The app context
   onClose: PropTypes.func,
   actionFeedbackContext: PropTypes.any, // The action feedback context
   dialogContext: PropTypes.any, // The dialog context
@@ -156,4 +155,4 @@ DeleteUserGroup.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withLoading(withActionFeedback(withDialog(withTranslation('common')(DeleteUserGroup))));
+export default withAppContext(withLoading(withActionFeedback(withDialog(withTranslation('common')(DeleteUserGroup)))));

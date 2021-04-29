@@ -13,7 +13,7 @@
  */
 import React, {Component} from "react";
 import PropTypes from "prop-types";
-import AppContext from "../../../contexts/AppContext";
+import {withAppContext} from "../../../contexts/AppContext";
 import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
@@ -49,7 +49,7 @@ class DeleteResource extends Component {
    * @returns {[]|null}
    */
   get resources() {
-    return this.context.passwordDeleteDialogProps.resources;
+    return this.props.context.passwordDeleteDialogProps.resources;
   }
 
   /**
@@ -103,7 +103,7 @@ class DeleteResource extends Component {
     this.setState({processing: true});
     try {
       const resourcesIds = this.resources.map(resource => resource.id);
-      await this.context.port.request("passbolt.resources.delete-all", resourcesIds);
+      await this.props.context.port.request("passbolt.resources.delete-all", resourcesIds);
       await this.handleSaveSuccess();
     } catch (error) {
       this.handleSaveError(error);
@@ -119,7 +119,7 @@ class DeleteResource extends Component {
       title: this.translate("There was an unexpected error..."),
       message: error.message
     };
-    this.context.setContext({errorDialogProps});
+    this.props.context.setContext({errorDialogProps});
     this.props.dialogContext.open(NotifyError);
   }
 
@@ -182,9 +182,8 @@ class DeleteResource extends Component {
   }
 }
 
-DeleteResource.contextType = AppContext;
-
 DeleteResource.propTypes = {
+  context: PropTypes.any, // The application context
   onClose: PropTypes.func, // Whenever the dialog is closed
   actionFeedbackContext: PropTypes.any, // The action feedback context
   dialogContext: PropTypes.any, // The dialog context
@@ -192,4 +191,4 @@ DeleteResource.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withResourceWorkspace(withActionFeedback(withDialog(withTranslation('common')(DeleteResource))));
+export default withAppContext(withResourceWorkspace(withActionFeedback(withDialog(withTranslation('common')(DeleteResource)))));

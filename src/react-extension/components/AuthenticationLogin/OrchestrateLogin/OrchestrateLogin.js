@@ -1,5 +1,8 @@
 import React, {Component} from "react";
-import {AuthenticationContext, AuthenticationContextState} from "../../../contexts/AuthenticationContext";
+import {
+  AuthenticationContextState,
+  withAuthenticationContext
+} from "../../../contexts/AuthenticationContext";
 import Login from "../Login/Login";
 import DisplayLoginInProgress from "../DisplayLoginInProgress/DisplayLoginInProgress";
 import DisplayLoginError from "../DisplayLoginError/DisplayLoginError";
@@ -26,8 +29,8 @@ class OrchestrateLogin extends Component {
    * Whenever the component changes
    */
   componentDidUpdate() {
-    const isServerKeyChecked = this.context.state === AuthenticationContextState.LOGIN_SERVER_KEY_CHECKED;
-    const isServerKeyAccepted = this.context.state === AuthenticationContextState.LOGIN_NEW_SERVER_KEY_ACCEPTED;
+    const isServerKeyChecked = this.props.authenticationContext.state === AuthenticationContextState.LOGIN_SERVER_KEY_CHECKED;
+    const isServerKeyAccepted = this.props.authenticationContext.state === AuthenticationContextState.LOGIN_NEW_SERVER_KEY_ACCEPTED;
     const canInitialize = isServerKeyAccepted || isServerKeyChecked;
     if (canInitialize) {
       this.initializeLogin();
@@ -38,7 +41,7 @@ class OrchestrateLogin extends Component {
    * Verify the potential change of server key
    */
   verifyServerKey() {
-    this.context.onVerifyServerKeyRequested()
+    this.props.authenticationContext.onVerifyServerKeyRequested()
       .catch(this.onVerifyServerKeyFailure.bind(this));
   }
 
@@ -54,7 +57,7 @@ class OrchestrateLogin extends Component {
    * Initialize the login process
    */
   initializeLogin() {
-    this.context.onInitializeLoginRequested();
+    this.props.authenticationContext.onInitializeLoginRequested();
   }
 
   /**
@@ -69,7 +72,7 @@ class OrchestrateLogin extends Component {
    * Render the component
    */
   render() {
-    switch (this.context.state) {
+    switch (this.props.authenticationContext.state) {
       case AuthenticationContextState.LOGIN_INITIALIZED:
         if (this.props.context.siteSettings) {
           return <Login canRememberMe={this.canRememberMe}/>;
@@ -79,20 +82,21 @@ class OrchestrateLogin extends Component {
       case AuthenticationContextState.LOGIN_IN_PROGRESS:
         return <DisplayLoginInProgress/>;
       case AuthenticationContextState.LOGIN_FAILED:
-        return <DisplayLoginError error={this.context.error}/>;
+        return <DisplayLoginError error={this.props.authenticationContext.error}/>;
       case AuthenticationContextState.LOGIN_SERVER_KEY_CHANGED:
         return <AcceptLoginServerKeyChange/>;
       case AuthenticationContextState.UNEXPECTED_ERROR:
-        return <DisplayUnexpectedError error={this.context.error}/>;
+        return <DisplayUnexpectedError error={this.props.authenticationContext.error}/>;
       default:
         return <LoadingSpinner/>;
     }
   }
 }
 
-OrchestrateLogin.contextType = AuthenticationContext;
 OrchestrateLogin.propTypes = {
   context: PropTypes.any, // The application context
+  authenticationContext: PropTypes.any, // The authentication context
+  siteSettings: PropTypes.object, // The site settings
   dialogContext: PropTypes.any // The dialog context
 };
-export default withAppContext(withDialog(OrchestrateLogin));
+export default withAppContext(withAuthenticationContext(withDialog(OrchestrateLogin)));

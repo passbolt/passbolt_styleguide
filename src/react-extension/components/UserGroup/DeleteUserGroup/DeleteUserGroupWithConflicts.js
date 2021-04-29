@@ -13,7 +13,7 @@
  */
 import React, {Component} from "react";
 import PropTypes from "prop-types";
-import AppContext from "../../../contexts/AppContext";
+import {withAppContext} from "../../../contexts/AppContext";
 import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
@@ -62,7 +62,7 @@ class DeleteUserGroupWithConflicts extends Component {
    * - The list is sorted alphabetically by folder name
    */
   getFoldersErrors() {
-    const errors = this.context.deleteGroupWithConflictsDialogProps.errors;
+    const errors = this.props.context.deleteGroupWithConflictsDialogProps.errors;
     const foldersErrors = errors.folders && errors.folders.sole_owner || [];
     const foldersSorterByName = (folderA, folderB) => folderA.name.localeCompare(folderB.name);
     return foldersErrors.sort(foldersSorterByName);
@@ -74,7 +74,7 @@ class DeleteUserGroupWithConflicts extends Component {
    * - The list is sorted alphabetically by resource name
    */
   getResourcesErrors() {
-    const errors = this.context.deleteGroupWithConflictsDialogProps.errors;
+    const errors = this.props.context.deleteGroupWithConflictsDialogProps.errors;
     const resourcesErrors = errors.resources && errors.resources.sole_owner || [];
     const resourcesSorterByName = (resourcesA, resourcesB) => resourcesA.name.localeCompare(resourcesB.name);
     return resourcesErrors.sort(resourcesSorterByName);
@@ -156,7 +156,7 @@ class DeleteUserGroupWithConflicts extends Component {
    * @returns {object}
    */
   getUser(id) {
-    return this.context.users.find(user => user.id === id);
+    return this.props.context.users.find(user => user.id === id);
   }
 
   /**
@@ -165,7 +165,7 @@ class DeleteUserGroupWithConflicts extends Component {
    * @returns {object}
    */
   getGroup(id) {
-    return this.context.groups.find(group => group.id === id);
+    return this.props.context.groups.find(group => group.id === id);
   }
 
   /**
@@ -195,7 +195,7 @@ class DeleteUserGroupWithConflicts extends Component {
    */
   handleCloseClick() {
     this.props.onClose();
-    this.context.setContext({deleteUserWithConflictsDialogProps: null});
+    this.props.context.setContext({deleteUserWithConflictsDialogProps: null});
   }
 
   /**
@@ -244,11 +244,11 @@ class DeleteUserGroupWithConflicts extends Component {
     try {
       const groupDeleteTransfer = this.createUserDeleteTransfer();
       this.props.loadingContext.add();
-      await this.context.port.request("passbolt.groups.delete", this.groupToDelete.id, groupDeleteTransfer);
+      await this.props.context.port.request("passbolt.groups.delete", this.groupToDelete.id, groupDeleteTransfer);
       this.props.loadingContext.remove();
       await this.props.actionFeedbackContext.displaySuccess(this.translate("The group has been deleted successfully"));
       this.props.onClose();
-      this.context.setContext({deleteUserWithConflictsDialogProps: null});
+      this.props.context.setContext({deleteUserWithConflictsDialogProps: null});
     } catch (error) {
       this.props.loadingContext.remove();
       // It can happen when the user has closed the passphrase entry dialog by instance.
@@ -268,7 +268,7 @@ class DeleteUserGroupWithConflicts extends Component {
       title: this.translate("There was an unexpected error..."),
       message: error.message
     };
-    this.context.setContext({errorDialogProps});
+    this.props.context.setContext({errorDialogProps});
     this.props.dialogContext.open(NotifyError);
   }
 
@@ -310,7 +310,7 @@ class DeleteUserGroupWithConflicts extends Component {
    * @returns {null}
    */
   get groupToDelete() {
-    return this.context.deleteGroupWithConflictsDialogProps.group;
+    return this.props.context.deleteGroupWithConflictsDialogProps.group;
   }
 
   /**
@@ -421,9 +421,8 @@ class DeleteUserGroupWithConflicts extends Component {
   }
 }
 
-DeleteUserGroupWithConflicts.contextType = AppContext;
-
 DeleteUserGroupWithConflicts.propTypes = {
+  context: PropTypes.any, // The app context
   onClose: PropTypes.func,
   actionFeedbackContext: PropTypes.any, // The action feedback context
   dialogContext: PropTypes.any, // The dialog context
@@ -431,4 +430,4 @@ DeleteUserGroupWithConflicts.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withLoading(withActionFeedback(withDialog(withTranslation('common')(DeleteUserGroupWithConflicts))));
+export default withAppContext(withLoading(withActionFeedback(withDialog(withTranslation('common')(DeleteUserGroupWithConflicts)))));

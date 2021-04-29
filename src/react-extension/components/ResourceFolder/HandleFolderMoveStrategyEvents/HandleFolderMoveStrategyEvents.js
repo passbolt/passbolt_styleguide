@@ -13,7 +13,7 @@
  */
 
 import React from 'react';
-import AppContext from "../../../contexts/AppContext";
+import {withAppContext} from "../../../contexts/AppContext";
 import {withDialog} from "../../../contexts/DialogContext";
 import DefineResourceFolderMoveStrategy from "../DefineResourceFolderMoveStrategy/DefineResourceFolderMoveStrategy";
 import PropTypes from "prop-types";
@@ -48,7 +48,7 @@ class HandleFolderMoveStrategyEvents extends React.Component {
    * Listen the progress dialog event from the context and acts accordingly
    */
   listen() {
-    this.context.port.on('passbolt.folders.move-strategy.request', this.handleFolderMoveStrategyRequestEvent);
+    this.props.context.port.on('passbolt.folders.move-strategy.request', this.handleFolderMoveStrategyRequestEvent);
   }
 
   /**
@@ -57,7 +57,7 @@ class HandleFolderMoveStrategyEvents extends React.Component {
    */
   handleFolderMoveStrategyRequestEvent(requestId, folderParentId, folders, resources) {
     const folderMoveStrategyProps = {requestId, folderParentId, folders, resources};
-    this.context.setContext({folderMoveStrategyProps});
+    this.props.context.setContext({folderMoveStrategyProps});
     this.props.dialogContext.open(DefineResourceFolderMoveStrategy);
   }
 
@@ -70,10 +70,9 @@ class HandleFolderMoveStrategyEvents extends React.Component {
   }
 }
 
-HandleFolderMoveStrategyEvents.contextType = AppContext;
-
 HandleFolderMoveStrategyEvents.propTypes = {
+  context: PropTypes.any, // The application context
   dialogContext: PropTypes.any, // the dialog context
 };
 
-export default withDialog(HandleFolderMoveStrategyEvents);
+export default withAppContext(withDialog(HandleFolderMoveStrategyEvents));

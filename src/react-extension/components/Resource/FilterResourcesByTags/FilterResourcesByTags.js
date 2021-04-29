@@ -18,7 +18,7 @@ import FilterResourcesByTagsContextualMenu from "./FilterResourcesByTagsContextu
 import FilterResourcesByTagsList from "./FilterResourcesByTagsList";
 import {withContextualMenu} from "../../../contexts/ContextualMenuContext";
 import {ResourceWorkspaceFilterTypes, withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
-import AppContext from "../../../contexts/AppContext";
+import {withAppContext} from "../../../contexts/AppContext";
 import {withRouter} from "react-router-dom";
 import {withTranslation} from "react-i18next";
 
@@ -147,9 +147,9 @@ class FilterResourcesByTags extends React.Component {
    * @returns {array} all tags from resources
    */
   getTagsFromResources() {
-    if (this.context.resources) {
+    if (this.props.context.resources) {
       // get all tags, flat in array and reduce to have unique tag)
-      const tags =  this.context.resources.map(resource => resource.tags).flat().reduce((accumulator, resourceTags) => {
+      const tags =  this.props.context.resources.map(resource => resource.tags).flat().reduce((accumulator, resourceTags) => {
         if (resourceTags) {
           !accumulator.find(tag => tag.id === resourceTags.id) && accumulator.push(resourceTags);
         }
@@ -214,13 +214,12 @@ class FilterResourcesByTags extends React.Component {
   }
 }
 
-FilterResourcesByTags.contextType = AppContext;
-
 FilterResourcesByTags.propTypes = {
+  context: PropTypes.any, // The application context
   contextualMenuContext: PropTypes.any, // The contextual menu context
   resourceWorkspaceContext: PropTypes.object,
   history: PropTypes.any,
   t: PropTypes.func, // The translation function
 };
 
-export default withRouter(withResourceWorkspace(withContextualMenu(withTranslation('common')(FilterResourcesByTags))));
+export default withRouter(withAppContext(withResourceWorkspace(withContextualMenu(withTranslation('common')(FilterResourcesByTags)))));

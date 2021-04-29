@@ -14,7 +14,7 @@
 import React, {Component} from "react";
 import {CirclePicker} from "react-color";
 import Icon from "../../Common/Icons/Icon";
-import {AuthenticationContext} from "../../../contexts/AuthenticationContext";
+import {withAuthenticationContext} from "../../../contexts/AuthenticationContext";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
 import {withDialog} from "../../../contexts/DialogContext";
 import PropTypes from "prop-types";
@@ -190,7 +190,7 @@ class ChooseSecurityToken extends Component {
       textcolor: this.textColor,
       code: this.state.code
     };
-    await this.context.onSaveSecurityTokenRequested(securityTokenDto)
+    await this.props.authenticationContext.onSaveSecurityTokenRequested(securityTokenDto)
       .catch(this.onSaveFailure.bind(this));
   }
 
@@ -368,10 +368,10 @@ class ChooseSecurityToken extends Component {
   }
 }
 
-ChooseSecurityToken.contextType = AuthenticationContext;
 ChooseSecurityToken.propTypes = {
+  authenticationContext: PropTypes.any, // The authentication context
   dialogContext: PropTypes.any, // The dialog context
   t: PropTypes.func, // The translation function
 };
 
-export default withDialog(withTranslation('common')(ChooseSecurityToken));
+export default withAuthenticationContext(withDialog(withTranslation('common')(ChooseSecurityToken)));

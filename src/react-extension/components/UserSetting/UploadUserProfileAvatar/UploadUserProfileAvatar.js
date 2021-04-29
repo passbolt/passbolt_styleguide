@@ -16,7 +16,7 @@
 import React from 'react';
 import PropTypes from "prop-types";
 import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
-import AppContext from "../../../contexts/AppContext";
+import {withAppContext} from "../../../contexts/AppContext";
 import {withDialog} from "../../../contexts/DialogContext";
 import FormSubmitButton from "../../Common/Inputs/FormSubmitButton/FormSubmitButton";
 import FormCancelButton from "../../Common/Inputs/FormSubmitButton/FormCancelButton";
@@ -69,7 +69,7 @@ class UploadUserProfileAvatar extends React.Component {
    * Returns the current user
    */
   get user() {
-    return this.context.loggedInUser;
+    return this.props.context.loggedInUser;
   }
 
   /**
@@ -174,7 +174,7 @@ class UploadUserProfileAvatar extends React.Component {
       return;
     }
     const avatarDto = await this.createAvatarDto();
-    await this.context.port.request("passbolt.users.update-avatar", this.user.id, avatarDto)
+    await this.props.context.port.request("passbolt.users.update-avatar", this.user.id, avatarDto)
       .then(this.onUploadSuccess.bind(this))
       .catch(this.onUploadFailure.bind(this));
   }
@@ -225,7 +225,7 @@ class UploadUserProfileAvatar extends React.Component {
         title: this.translate("There was an unexpected error..."),
         message: error.message
       };
-      this.context.setContext({errorDialogProps});
+      this.props.context.setContext({errorDialogProps});
       this.props.dialogContext.open(NotifyError);
     }
   }
@@ -279,8 +279,8 @@ class UploadUserProfileAvatar extends React.Component {
    * Refresh the user profile
    */
   async refreshUserProfile() {
-    const loggedInUser = await this.context.port.request("passbolt.users.find-logged-in-user");
-    this.context.setContext({loggedInUser});
+    const loggedInUser = await this.props.context.port.request("passbolt.users.find-logged-in-user");
+    this.props.context.setContext({loggedInUser});
   }
 
   /**
@@ -361,12 +361,12 @@ class UploadUserProfileAvatar extends React.Component {
   }
 }
 
-UploadUserProfileAvatar.contextType = AppContext;
 UploadUserProfileAvatar.propTypes = {
+  context: PropTypes.any, // The application context
   onClose: PropTypes.func, // The close callback
   dialogContext: PropTypes.object, // The dialog context
   actionFeedbackContext: PropTypes.object, // The action feedback context
   t: PropTypes.func, // The translation function
 };
 
-export default withActionFeedback(withDialog(withTranslation('common')(UploadUserProfileAvatar)));
+export default withAppContext(withActionFeedback(withDialog(withTranslation('common')(UploadUserProfileAvatar))));

@@ -15,7 +15,7 @@
 import React, {Component} from "react";
 import {withRouter} from "react-router-dom";
 import PropTypes from "prop-types";
-import AppContext from "../../../contexts/AppContext";
+import {withAppContext} from "../../../contexts/AppContext";
 import {ResourceWorkspaceFilterTypes, withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
@@ -114,7 +114,7 @@ class ImportResourcesResult extends Component {
    * @returns {boolean}
    */
   get canIUseTags() {
-    return this.context.siteSettings.canIUse("tags");
+    return this.props.context.siteSettings.canIUse("tags");
   }
 
   /**
@@ -122,7 +122,7 @@ class ImportResourcesResult extends Component {
    * @returns {boolean}
    */
   get canIUseFolders() {
-    return this.context.siteSettings.canIUse("folders");
+    return this.props.context.siteSettings.canIUse("folders");
   }
 
   /**
@@ -343,9 +343,8 @@ class ImportResourcesResult extends Component {
   }
 }
 
-ImportResourcesResult.contextType = AppContext;
-
 ImportResourcesResult.propTypes = {
+  context: PropTypes.any, // The application context
   onClose: PropTypes.func, // Whenever the dialogs closes
   actionFeedbackContext: PropTypes.any, // The action feedback context
   history: PropTypes.object, // History property from the rooter
@@ -353,4 +352,4 @@ ImportResourcesResult.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withRouter(withResourceWorkspace(withActionFeedback(withTranslation('common')(ImportResourcesResult))));
+export default withRouter(withAppContext(withResourceWorkspace(withActionFeedback(withTranslation('common')(ImportResourcesResult)))));

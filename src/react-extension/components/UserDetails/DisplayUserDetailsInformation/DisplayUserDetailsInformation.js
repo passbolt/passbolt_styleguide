@@ -16,7 +16,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import Icon from "../../Common/Icons/Icon";
 import {withUserWorkspace} from "../../../contexts/UserWorkspaceContext";
-import AppContext from "../../../contexts/AppContext";
+import {withAppContext} from "../../../contexts/AppContext";
 import {Trans, withTranslation} from "react-i18next";
 import {DateTime} from "luxon";
 
@@ -61,8 +61,8 @@ class DisplayUserDetailsInformation extends React.Component {
    * Get user role name
    */
   getRoleName() {
-    if (this.context.roles) {
-      const role = this.context.roles.find(role => role.id === this.user.role_id);
+    if (this.props.context.roles) {
+      const role = this.props.context.roles.find(role => role.id === this.user.role_id);
       return role ? role.name : "";
     }
     return "";
@@ -83,7 +83,7 @@ class DisplayUserDetailsInformation extends React.Component {
   formatDateTimeAgo(date) {
     const dateTime = DateTime.fromISO(date);
     const duration = dateTime.diffNow().toMillis();
-    return duration < 1000 && duration > 0 < 1000 ? this.translate('Just now') : dateTime.toRelative({locale: this.context.locale});
+    return duration < 1000 && duration > 0 < 1000 ? this.translate('Just now') : dateTime.toRelative({locale: this.props.context.locale});
   }
 
   /**
@@ -134,10 +134,10 @@ class DisplayUserDetailsInformation extends React.Component {
   }
 }
 
-DisplayUserDetailsInformation.contextType = AppContext;
 DisplayUserDetailsInformation.propTypes = {
+  context: PropTypes.any, // The application context
   userWorkspaceContext: PropTypes.object, // The user workspace context
   t: PropTypes.func, // The translation function
 };
 
-export default withUserWorkspace(withTranslation('common')(DisplayUserDetailsInformation));
+export default withAppContext(withUserWorkspace(withTranslation('common')(DisplayUserDetailsInformation)));

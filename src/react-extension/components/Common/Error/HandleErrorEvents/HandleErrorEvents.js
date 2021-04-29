@@ -16,7 +16,7 @@ import React from 'react';
 import {withDialog} from "../../../../contexts/DialogContext";
 import NotifyError from "../NotifyError/NotifyError";
 import PropTypes from "prop-types";
-import AppContext from "../../../../contexts/AppContext";
+import {withAppContext} from "../../../../contexts/AppContext";
 
 /**
  * This component listens any event related to error dialog actions to perform
@@ -33,7 +33,7 @@ class HandleErrorEvents extends React.Component {
    * Listen the progress dialog event from the context and acts accordingly
    */
   listen() {
-    this.context.port.on('passbolt.errors.open-error-dialog', this.handleErrorDialogOpenEvent);
+    this.props.context.port.on('passbolt.errors.open-error-dialog', this.handleErrorDialogOpenEvent);
   }
 
   /**
@@ -56,10 +56,9 @@ class HandleErrorEvents extends React.Component {
   }
 }
 
-HandleErrorEvents.contextType = AppContext;
-
 HandleErrorEvents.propTypes = {
+  context: PropTypes.any, // The application context
   dialogContext: PropTypes.any
 };
 
-export default withDialog(HandleErrorEvents);
+export default withAppContext(withDialog(HandleErrorEvents));

@@ -14,7 +14,7 @@
 
 import * as React from "react";
 import PropTypes from "prop-types";
-import AppContext from "./AppContext";
+import {withAppContext} from "./AppContext";
 import {withRouter} from "react-router-dom";
 import {withActionFeedback} from "./ActionFeedbackContext";
 import {withLoading} from "./LoadingContext";
@@ -197,9 +197,9 @@ export class ResourceWorkspaceContextProvider extends React.Component {
    * Whenever the folders change
    */
   async handleFoldersChange() {
-    const hasFoldersChanged = this.context.folders !== this.folders;
+    const hasFoldersChanged = this.props.context.folders !== this.folders;
     if (hasFoldersChanged) {
-      this.folders = this.context.folders;
+      this.folders = this.props.context.folders;
       await this.refreshSearchFilter();
       await this.updateDetails();
     }
@@ -209,9 +209,9 @@ export class ResourceWorkspaceContextProvider extends React.Component {
    * Handle the resources changes
    */
   async handleResourcesChange() {
-    const hasResourcesChanged = this.context.resources && this.context.resources !== this.resources;
+    const hasResourcesChanged = this.props.context.resources && this.props.context.resources !== this.resources;
     if (hasResourcesChanged) {
-      this.resources = this.context.resources;
+      this.resources = this.props.context.resources;
       await this.search(this.state.filter);
       await this.updateDetails();
       await this.unselectUnknownResources();
@@ -237,10 +237,10 @@ export class ResourceWorkspaceContextProvider extends React.Component {
    * E.g. /folder/view.:filterByFolderId
    */
   async handleFolderRouteChange() {
-    if (this.context.folders !== null) {
+    if (this.props.context.folders !== null) {
       const folderId = this.props.match.params.filterByFolderId;
       if (folderId) {
-        const folder = this.context.folders.find(folder => folder.id === folderId);
+        const folder = this.props.context.folders.find(folder => folder.id === folderId);
         if (folder) { // Known folder
           await this.search({type: ResourceWorkspaceFilterTypes.FOLDER, payload: {folder}});
           await this.detailFolder(folder);
@@ -458,7 +458,7 @@ export class ResourceWorkspaceContextProvider extends React.Component {
    * Handle the intial loading of the resources
    */
   handleResourcesLoaded() {
-    const hasResourcesBeenInitialized = this.resources === null && this.context.resources;
+    const hasResourcesBeenInitialized = this.resources === null && this.props.context.resources;
     if (hasResourcesBeenInitialized) {
       this.props.loadingContext.remove();
       this.handleResourcesLoaded = () => {};
@@ -508,12 +508,12 @@ export class ResourceWorkspaceContextProvider extends React.Component {
    * Populate the context with initial data such as resources and folders
    */
   populate() {
-    if (this.context.siteSettings.canIUse("folders")) {
-      this.context.port.request("passbolt.folders.update-local-storage");
+    if (this.props.context.siteSettings.canIUse("folders")) {
+      this.props.context.port.request("passbolt.folders.update-local-storage");
     }
-    this.context.port.request("passbolt.resources.update-local-storage");
-    this.context.port.request("passbolt.groups.update-local-storage");
-    this.context.port.request("passbolt.users.update-local-storage");
+    this.props.context.port.request("passbolt.resources.update-local-storage");
+    this.props.context.port.request("passbolt.groups.update-local-storage");
+    this.props.context.port.request("passbolt.users.update-local-storage");
   }
 
   /** RESOURCE SEARCH  **/
@@ -589,7 +589,7 @@ export class ResourceWorkspaceContextProvider extends React.Component {
   async searchByText(filter) {
     const text = filter.payload;
     const words =  (text && text.split(/\s+/)) || [''];
-    const canUseTags = this.context.siteSettings.canIUse("tags");
+    const canUseTags = this.props.context.siteSettings.canIUse("tags");
 
     // Test match of some escaped test words against the name / username / uri / description /tags resource properties
     const escapeWord = word =>  word.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
@@ -613,7 +613,7 @@ export class ResourceWorkspaceContextProvider extends React.Component {
     const filters = {'is-shared-with-group': groupId};
     // get the resources with the group
     this.props.loadingContext.add();
-    const resourcesFilteredByGroup = await this.context.port.request('passbolt.resources.find-all', {filters}) || [];
+    const resourcesFilteredByGroup = await this.props.context.port.request('passbolt.resources.find-all', {filters}) || [];
     const resourceIds = resourcesFilteredByGroup.map(resource => resource.id);
     // keep only the resource with the group
     const groupResources = this.resources.filter(resource => resourceIds.includes(resource.id));
@@ -766,7 +766,7 @@ export class ResourceWorkspaceContextProvider extends React.Component {
    * Navigate to the appropriate url after some resources selection operation
    */
   redirectAfterSelection() {
-    const canUseFolders = this.context.siteSettings.canIUse('folders');
+    const canUseFolders = this.props.context.siteSettings.canIUse('folders');
     const contentLoaded = this.resources !== null && (!canUseFolders || this.folders !== null);
     if (contentLoaded) {
       const hasSingleSelectionNow = this.state.selectedResources.length === 1;
@@ -983,8 +983,8 @@ export class ResourceWorkspaceContextProvider extends React.Component {
   }
 }
 ResourceWorkspaceContextProvider.displayName = 'ResourceWorkspaceContextProvider';
-ResourceWorkspaceContextProvider.contextType = AppContext;
 ResourceWorkspaceContextProvider.propTypes = {
+  context: PropTypes.any, // The application context
   children: PropTypes.any,
   location: PropTypes.object,
   match: PropTypes.object,
@@ -993,7 +993,7 @@ ResourceWorkspaceContextProvider.propTypes = {
   loadingContext: PropTypes.object // The loading context
 };
 
-export default withLoading(withActionFeedback(withRouter(ResourceWorkspaceContextProvider)));
+export default withAppContext(withLoading(withActionFeedback(withRouter(ResourceWorkspaceContextProvider))));
 
 /**
  * Resource Workspace Context Consumer HOC

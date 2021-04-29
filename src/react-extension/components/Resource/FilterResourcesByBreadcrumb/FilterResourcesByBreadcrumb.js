@@ -16,7 +16,6 @@ import {withRouter} from "react-router-dom";
 import PropTypes from "prop-types";
 import {ResourceWorkspaceFilterTypes, withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 import Breadcrumbs from "../../Common/Navigation/Breadcrumbs/Breadcrumbs";
-import AppContext from "../../../contexts/AppContext";
 import Breadcrumb from "../../Common/Navigation/Breadcrumbs/Breadcrumb";
 import {withNavigationContext} from "../../../contexts/NavigationContext";
 import {withTranslation} from "react-i18next";
@@ -115,8 +114,6 @@ class FilterResourcesByBreadcrumb extends Component {
     );
   }
 }
-
-FilterResourcesByBreadcrumb.context = AppContext;
 
 FilterResourcesByBreadcrumb.propTypes = {
   resourceWorkspaceContext: PropTypes.object,

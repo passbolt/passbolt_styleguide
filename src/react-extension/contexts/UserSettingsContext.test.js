@@ -12,8 +12,8 @@
  * @since         3.1.0
  */
 
-import {defaultAppContext, defaultProps} from "./UserSettingsContext.test.data";
-import UserSettingsContextProvider, {UserSettingsContextState} from "./UserSettingsContext";
+import {defaultProps} from "./UserSettingsContext.test.data";
+import {UserSettingsContextProvider, UserSettingsContextState} from "./UserSettingsContext";
 
 beforeEach(() => {
   jest.resetModules();
@@ -26,11 +26,10 @@ describe("UserSettings Context", () => {
   describe('As LU I should complete an authentication setup', () => {
     beforeEach(() => {
       userContext = new UserSettingsContextProvider(defaultProps());
-      userContext.context = defaultAppContext();
       const setStateMock = state => userContext.state = Object.assign(userContext.state, state);
       jest.spyOn(userContext, 'setState').mockImplementation(setStateMock);
       const requestMock = jest.fn(() => new Promise(resolve => resolve()));
-      jest.spyOn(userContext.context.port, 'request').mockImplementation(requestMock);
+      jest.spyOn(userContext.props.context.port, 'request').mockImplementation(requestMock);
     });
 
     it('As LU I should start with the state INITIAL_STATE', () => {
@@ -47,7 +46,7 @@ describe("UserSettings Context", () => {
       await userContext.onProvidePassphraseRequested();
       expect(userContext.state.state).toBe(UserSettingsContextState.PASSPHRASE_TO_PROVIDE_REQUESTED);
       await userContext.onCheckProvidePassphraseRequested(passphrase);
-      expect(userContext.context.port.request).toHaveBeenCalledWith("passbolt.auth.verify-passphrase", passphrase);
+      expect(userContext.props.context.port.request).toHaveBeenCalledWith("passbolt.auth.verify-passphrase", passphrase);
       expect(userContext.state.state).toBe(UserSettingsContextState.PASSPHRASE_TO_PROVIDE_CHECKED);
     });
 
@@ -56,13 +55,13 @@ describe("UserSettings Context", () => {
       const passphrase = 'some passphrase';
       await userContext.onCheckProvidePassphraseRequested(oldPassphrase);
       await userContext.onUpdatePassphraseRequested(passphrase);
-      expect(userContext.context.port.request).toHaveBeenCalledWith("passbolt.user.update-private-key", oldPassphrase, passphrase);
+      expect(userContext.props.context.port.request).toHaveBeenCalledWith("passbolt.user.update-private-key", oldPassphrase, passphrase);
       expect(userContext.state.state).toBe(UserSettingsContextState.PASSPHRASE_UPDATED);
     });
 
     it('As LU I should request to download the recovery kit', async() => {
       await userContext.onDownloadRecoveryKitRequested();
-      expect(userContext.context.port.request).toHaveBeenCalledWith("passbolt.keyring.download-my-private-key");
+      expect(userContext.props.context.port.request).toHaveBeenCalledWith("passbolt.keyring.download-my-private-key");
     });
 
     it('As LU I should update my security token', async() => {
@@ -72,13 +71,13 @@ describe("UserSettings Context", () => {
         code: 'ABC'
       };
       await userContext.onUpdateSecurityTokenRequested(securityTokenDto);
-      expect(userContext.context.port.request).toHaveBeenCalledWith("passbolt.users.update-security-token", securityTokenDto);
+      expect(userContext.props.context.port.request).toHaveBeenCalledWith("passbolt.users.update-security-token", securityTokenDto);
     });
 
     it('As LU I should update the language', async() => {
       const locale = "fr-FR";
       await userContext.state.onUpdateLocaleUserRequested({locale});
-      expect(userContext.context.port.request).toHaveBeenCalledWith("passbolt.locale.update-user-locale", {locale});
+      expect(userContext.props.context.port.request).toHaveBeenCalledWith("passbolt.locale.update-user-locale", {locale});
     });
   });
 });

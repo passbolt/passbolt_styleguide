@@ -14,7 +14,7 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import AppContext from "../../../contexts/AppContext";
+import {withAppContext} from "../../../contexts/AppContext";
 import UserAvatar from "../../Common/Avatar/UserAvatar";
 import DeleteComment from "../DeleteResourceComment/DeleteComment";
 import {Trans, withTranslation} from "react-i18next";
@@ -65,7 +65,7 @@ class DisplayResourceCommentList extends React.Component {
     await this.setState({actions: {loading: true}});
 
     const resourceId = this.props.resource.id;
-    const comments = await this.context.port.request('passbolt.comments.find-all-by-resource', resourceId);
+    const comments = await this.props.context.port.request('passbolt.comments.find-all-by-resource', resourceId);
 
     const commentsSorter = (comment1, comment2) => DateTime.fromISO(comment2.created) < DateTime.fromISO(comment1.created) ? -1 : 1;
     await this.setState({comments: comments.sort(commentsSorter)});
@@ -81,13 +81,13 @@ class DisplayResourceCommentList extends React.Component {
    */
   checkRefresh(previousValue) {
     // Either refresh comes from parent or from the application context
-    const mustRefresh = (this.props.mustRefresh && !previousValue) || this.context.mustRefreshComments;
+    const mustRefresh = (this.props.mustRefresh && !previousValue) || this.props.context.mustRefreshComments;
     if (mustRefresh) {
       this.fetch();
     }
 
-    if (this.context.mustRefreshComments) {
-      this.context.setContext({mustRefreshComments: false});
+    if (this.props.context.mustRefreshComments) {
+      this.props.context.setContext({mustRefreshComments: false});
     }
   }
 
@@ -104,7 +104,7 @@ class DisplayResourceCommentList extends React.Component {
    * @param comment A comment
    */
   isOwner(comment) {
-    const isOwner = this.context.loggedInUser.id === comment.created_by;
+    const isOwner = this.props.context.loggedInUser.id === comment.created_by;
     return isOwner;
   }
 
@@ -116,7 +116,7 @@ class DisplayResourceCommentList extends React.Component {
   formatDateTimeAgo(date) {
     const dateTime = DateTime.fromISO(date);
     const duration = dateTime.diffNow().toMillis();
-    return duration < 1000 && duration > 0 ? this.translate('Just now') : dateTime.toRelative({locale: this.context.locale});
+    return duration < 1000 && duration > 0 ? this.translate('Just now') : dateTime.toRelative({locale: this.props.context.locale});
   }
 
   /**
@@ -175,7 +175,7 @@ class DisplayResourceCommentList extends React.Component {
                 <div className="left-column">
                   <UserAvatar
                     user={comment.creator}
-                    baseUrl={this.context.siteSettings.settings.app.url}
+                    baseUrl={this.props.context.siteSettings.settings.app.url}
                     className="author profile picture avatar"/>
                 </div>
 
@@ -194,11 +194,10 @@ class DisplayResourceCommentList extends React.Component {
   }
 }
 
-export default withTranslation('common')(DisplayResourceCommentList);
-
-DisplayResourceCommentList.contextType = AppContext;
+export default withAppContext(withTranslation('common')(DisplayResourceCommentList));
 
 DisplayResourceCommentList.propTypes = {
+  context: PropTypes.any, // The application context
   resource: PropTypes.object, // The resource from which the comments will be provided
   onFetch: PropTypes.func, // Callback when the comments are fetched
   mustRefresh: PropTypes.bool, // Flag to force the refresh of the list

@@ -12,8 +12,8 @@
  * @since         2.11.0
  */
 
-import {defaultAppContext, defaultProps} from "./AuthenticationContext.test.data";
-import AuthenticationContextProvider, {AuthenticationContextState} from "./AuthenticationContext";
+import {defaultProps} from "./AuthenticationContext.test.data";
+import {AuthenticationContextProvider, AuthenticationContextState} from "./AuthenticationContext";
 
 beforeEach(() => {
   jest.resetModules();
@@ -22,13 +22,11 @@ beforeEach(() => {
 
 describe("Authentication Context", () => {
   let authenticationContext; // The authenticationContext to text
-  const context = defaultAppContext();
   const props = defaultProps(); // The props to pass
 
   describe('As AN I should complete an authentication setup', () => {
     beforeEach(() => {
       authenticationContext = new AuthenticationContextProvider(props);
-      authenticationContext.context = context;
       const setStateMock = state => authenticationContext.state = Object.assign(authenticationContext.state, state);
       jest.spyOn(authenticationContext, 'setState').mockImplementation(setStateMock);
       const requestMock = jest.fn(() => new Promise(resolve => resolve()));
@@ -47,7 +45,7 @@ describe("Authentication Context", () => {
       jest.spyOn(authenticationContext.state.port, 'request').mockImplementation(requestSetupInfoMock);
       await authenticationContext.onInitializeSetupRequested();
       expect(authenticationContext.state.port.request).toHaveBeenCalledWith("passbolt.setup.info");
-      expect(authenticationContext.context.onRefreshLocaleRequested).toHaveBeenCalledWith(setupInfo.locale);
+      expect(authenticationContext.props.context.onRefreshLocaleRequested).toHaveBeenCalledWith(setupInfo.locale);
       expect(authenticationContext.state.state).toBe(AuthenticationContextState.SETUP_INITIALIZED);
       expect(authenticationContext.state.process).toBe('setup');
     });
@@ -133,7 +131,6 @@ describe("Authentication Context", () => {
   describe('AS AN I should complete an authentication recover', () => {
     beforeEach(() => {
       authenticationContext = new AuthenticationContextProvider(props);
-      authenticationContext.context = context;
       const setStateMock = state => authenticationContext.state = Object.assign(authenticationContext.state, state);
       jest.spyOn(authenticationContext, 'setState').mockImplementation(setStateMock);
       const requestMock = jest.fn(() => new Promise(resolve => resolve()));
@@ -152,7 +149,7 @@ describe("Authentication Context", () => {
       jest.spyOn(authenticationContext.state.port, 'request').mockImplementation(requestRecoverInfoMock);
       await authenticationContext.onInitializeRecoverRequested();
       expect(authenticationContext.state.port.request).toHaveBeenCalledWith("passbolt.recover.info");
-      expect(authenticationContext.context.onRefreshLocaleRequested).toHaveBeenCalledWith(recoverInfo.locale);
+      expect(authenticationContext.props.context.onRefreshLocaleRequested).toHaveBeenCalledWith(recoverInfo.locale);
       expect(authenticationContext.state.state).toBe(AuthenticationContextState.RECOVER_INITIALIZED);
       expect(authenticationContext.state.process).toBe('recover');
     });
