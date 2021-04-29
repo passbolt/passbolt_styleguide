@@ -20,6 +20,11 @@
         margin-bottom: 1em;
 
         .message {
+            &.warning {
+              color:@message-warning-color;
+              background: @message-warning-background;
+            }
+
             .box-shadow-dark();
             border-radius:2px;
             padding: .5em 1em;
