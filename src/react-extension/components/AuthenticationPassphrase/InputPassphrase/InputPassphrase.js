@@ -342,12 +342,13 @@ class InputPassphrase extends Component {
                   <div className="security-token"
                     style={securityTokenStyle}>{securityTokenCode}
                   </div>
-                  {this.state.passphraseError &&
-                  <div className="input text">
-                    <div className="message error">{this.state.passphraseError}</div>
-                  </div>
-                  }
+
                 </div>
+                {this.state.passphraseError &&
+                <div className="input text">
+                  <div className="message error">{this.state.passphraseError}</div>
+                </div>
+                }
                 {hasRememberMeOptions &&
                 <div>
                   <div className="input checkbox">
