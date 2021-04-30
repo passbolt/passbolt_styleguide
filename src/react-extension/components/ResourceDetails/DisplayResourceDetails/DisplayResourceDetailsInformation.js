@@ -207,8 +207,8 @@ class DisplayResourceDetailsInformation extends React.Component {
       } catch (error) {
         if (error.name !== "UserAbortsOperationError") {
           this.props.actionFeedbackContext.displayError(error.message);
-          return;
         }
+        return;
       }
     }
     await this.props.context.port.request("passbolt.clipboard.copy", password);
