@@ -14,6 +14,7 @@
 import React, {Component} from "react";
 import PropTypes from "prop-types";
 import Icon from "../../Icons/Icon";
+import {withTranslation} from "react-i18next";
 
 class SearchBar extends Component {
   /**
@@ -87,7 +88,7 @@ class SearchBar extends Component {
             <input ref={this.searchInputRef} className="required" type="search"
               disabled={this.props.disabled ? 'disabled' : ''}
               onChange={this.handleChangeEvent}
-              placeholder={this.props.placeholder}
+              placeholder={this.props.placeholder || this.props.t('Search')}
               value={this.props.value}/>
           </div>
           <button value="search" type="submit" disabled={this.props.disabled ? 'disabled' : ''}>
@@ -105,11 +106,11 @@ SearchBar.propTypes = {
   onSearch: PropTypes.func,
   placeholder: PropTypes.string,
   value: PropTypes.string,
+  t: PropTypes.func, // The translation function
 };
 
 SearchBar.defaultProps = {
-  disabled: false,
-  placeholder: 'Search',
+  disabled: false
 };
 
-export default SearchBar;
+export default withTranslation('common')(SearchBar);
