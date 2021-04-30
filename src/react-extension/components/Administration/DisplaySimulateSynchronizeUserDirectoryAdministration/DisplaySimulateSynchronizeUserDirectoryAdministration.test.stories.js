@@ -6,7 +6,6 @@ import DisplaySimulateSynchronizeUserDirectoryAdministration
   from "./DisplaySimulateSynchronizeUserDirectoryAdministration";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 
-
 export default {
   title: 'Passbolt/Administration/DisplaySimulateSynchronizeUserDirectoryAdministration',
   component: DisplaySimulateSynchronizeUserDirectoryAdministration
