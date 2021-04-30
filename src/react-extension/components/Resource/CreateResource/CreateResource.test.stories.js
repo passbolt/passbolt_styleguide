@@ -3,6 +3,7 @@ import React from "react";
 import AppContext from "../../../contexts/AppContext";
 import PropTypes from "prop-types";
 import CreateResource from "./CreateResource";
+import "../../../../css/themes/default/ext_app.css";
 
 
 export default {

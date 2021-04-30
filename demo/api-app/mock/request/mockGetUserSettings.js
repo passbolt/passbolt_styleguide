@@ -1,5 +1,3 @@
-import siteSettingsFixture from "../../../../src/react-extension/test/fixture/Settings/siteSettings";
-
 /**
  * Passbolt ~ Open source password manager for teams
  * Copyright (c) 2020 Passbolt SA (https://www.passbolt.com)
@@ -17,7 +15,17 @@ import siteSettingsFixture from "../../../../src/react-extension/test/fixture/Se
 export default () => {
   return {
     body: {
-      body: siteSettingsFixture
+      body: [{
+        "user.settings.trustedDomain": "http://localhost:3001",
+        "user.firstname": "Admin",
+        "user.id": "f848277c-5398-58f8-a82a-72397af2d450",
+        "user.lastname": "User",
+        "user.settings.securityToken.code": "TST",
+        "user.settings.securityToken.color": "#000000",
+        "user.settings.securityToken.textColor": "#FFFFFF",
+        "user.username": "admin@passbolt.com",
+        "user.settings.locale": "en-UK"
+      }]
     }
-  }
+  };
 };

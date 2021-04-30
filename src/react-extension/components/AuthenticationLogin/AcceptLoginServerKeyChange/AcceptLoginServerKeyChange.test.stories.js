@@ -1,6 +1,6 @@
 import React from "react";
 import {MemoryRouter, Route} from "react-router-dom";
-import "../../../../css/themes/midgar/ext_app.css";
+import "../../../../css/themes/default/ext_authentication.css";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import AcceptLoginServerKeyChange from "./AcceptLoginServerKeyChange";
 import {AuthenticationContext} from "../../../contexts/AuthenticationContext";
@@ -20,7 +20,13 @@ const Template = args =>
   <MockTranslationProvider>
     <AuthenticationContext.Provider value={context}>
       <MemoryRouter initialEntries={['/']}>
-        <Route component={routerProps => <AcceptLoginServerKeyChange {...args} {...routerProps}/>}></Route>
+        <div id="container" className="container page login">
+          <div className="content">
+            <div className="login-form">
+              <Route component={routerProps => <AcceptLoginServerKeyChange {...args} {...routerProps}/>}></Route>
+            </div>
+          </div>
+        </div>
       </MemoryRouter>
     </AuthenticationContext.Provider>
   </MockTranslationProvider>;

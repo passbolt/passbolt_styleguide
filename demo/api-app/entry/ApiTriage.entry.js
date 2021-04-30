@@ -24,5 +24,6 @@ import mockFetch from "../mock/mockFetch";
 
 mockFetch();
 const appDomElement = document.createElement("div");
+document.cookie = "csrfToken=demo";
 document.body.appendChild(appDomElement);
 ReactDOM.render(<ApiTriage/>, appDomElement);
