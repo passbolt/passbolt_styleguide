@@ -27,6 +27,8 @@ import {withAppContext} from "../../../contexts/AppContext";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
 import {Trans, withTranslation} from "react-i18next";
 
+const FILE_TYPE_KDBX = "kdbx";
+
 class ImportResources extends Component {
   /**
    * Default constructor
@@ -200,9 +202,43 @@ class ImportResources extends Component {
   }
 
   /**
-   * Read the selected file and returns its content in a base 64
+   * Convert a Unicode string to a string in which
+   * each 16-bit unit occupies only one byte
+   * @param string
+   * @returns {string}
    */
-  readFile() {
+  toBinary(string) {
+    const codeUnits = new Uint16Array(string.length);
+    for (let i = 0; i < codeUnits.length; i++) {
+      codeUnits[i] = string.charCodeAt(i);
+    }
+    return String.fromCharCode(...new Uint8Array(codeUnits.buffer));
+  }
+
+  /**
+   * Read the selected CSV file and returns its content in a base 64
+   */
+  readFileCsv() {
+    const reader = new FileReader();
+    return new Promise((resolve, reject) => {
+      reader.onloadend = event => {
+        try {
+          const file = this.toBinary(event.target.result);
+          const fileBase64 = btoa(file);
+          resolve(fileBase64);
+        } catch (e) {
+          reject(e);
+        }
+      };
+      reader.readAsText(this.state.fileToImport);
+    });
+  }
+
+  /**
+   * Read the selected KDBX file and returns its content in a base 64
+   * @return {Promise<string>}
+   */
+  readFileKdbx() {
     const reader = new FileReader();
     return new Promise((resolve, reject) => {
       reader.onloadend = event => {
@@ -222,8 +258,8 @@ class ImportResources extends Component {
    * Import the selected file with its given base 64 content
    */
   async import() {
-    const b64FileContent = await this.readFile();
     const fileType = this.selectedFileExtension;
+    const b64FileContent = fileType === FILE_TYPE_KDBX ? await this.readFileKdbx() : await this.readFileCsv();
     const credentialsOptions = {credentials: {password: null, keyFile: null}};
     const options = Object.assign({}, this.state.options, credentialsOptions);
 
