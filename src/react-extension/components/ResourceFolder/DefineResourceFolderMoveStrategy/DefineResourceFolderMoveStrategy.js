@@ -91,7 +91,7 @@ class DefineResourceFolderMoveStrategy extends Component {
       this.handleError(error);
     }
 
-    const folder = props.context.folders.find(item => item.id === this.props.context.folderMoveStrategyProps.folders[0].id) || false;
+    const folder = props.context.folders.find(item => item.id === this.props.context.folderMoveStrategyProps.folders[0]) || false;
     if (!folder) {
       console.error(`Folder ${this.props.context.folderMoveStrategyProps.folders[0]} not found in context.`);
       this.handleError(error);
