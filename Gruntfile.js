@@ -52,18 +52,6 @@ module.exports = function(grunt) {
       },
 		},
 		shell: {
-			'publish': {
-				options: {
-					stdout: true
-				},
-				command: [
-					'git commit -S -am \'<%= pkg.version %>\'',
-					'git tag -a <%= pkg.version %> -m \'<%= pkg.version %>\'',
-					'git push origin <%= pkg.version %>',
-					'git push',
-					'npm publish'
-				].join('&& ')
-			},
       'build-apps': {
         command: [
           'npm run build'
@@ -200,10 +188,6 @@ module.exports = function(grunt) {
 
 	// ========================================================================
 	// Register Tasks
-
-	// Tag and publish the styleguide
-	grunt.registerTask('styleguide-publish', [ 'shell:publish']);
-	grunt.registerTask('publish', [ 'shell:publish']);
 
   // grunt.registerTask('bundle-reports', [ 'shell:bundle-reports']);
 

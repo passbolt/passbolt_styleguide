@@ -82,8 +82,8 @@
     "eslint-fix": "eslint -c .eslintrc.json --fix src/react-extension/*",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook",
-    "preversion": "npm test && npm run eslint",
-    "version": "npx grunt && git add -A build src/css src/locales",
+    "preversion": "npm test && npm run eslint && npm audit",
+    "version": "npx grunt && git add -A",
     "postversion": "git push && git push --tags"
   }
 }

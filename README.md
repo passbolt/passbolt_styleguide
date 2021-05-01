@@ -86,30 +86,50 @@ Each change made on the js applications source code will trigger a build and ref
 been started.
 
 
-
-How to update the styleguide?
+How to publish the styleguide?
 =============================
 
 We are using npm to manage the styleguide package in project using it.
 Checkout npm documentation: https://docs.npmjs.com/developers
 
-In a nutshell, once you are done changing, make sure you change the version
-number in the package.json.
+In a nutshell, once you are done changing you can publish the styleguide using npm tools as following:
+
+1. Change the version, rebuild and tag the new package.
+
+If you want to bump the minor version of the package by instance to go from v3.1.2 to v3.2.0
 ```
-{
-  "name": "passbolt-styleguide",
-  "version": "X.X.X",
-  [...]
-}
+npm version v3.2.0
 ```
 
-You need to commit your changes and tag the new version of the styleguide.
-This is how npm knows a new version is available in the project using the package.
+In a development scenario if you want to publish an alpha version of the package, you might want to go from
+v3.1.2 to v3.2.0-alpha-0
 ```
-grunt styleguide-publish
+npm version v3.2.0-alpha.0
 ```
 
-in your project you should also have a grunt task to manage the copy/pasting in the right place such as
+Npm offers additional versions identifiers to not have to deal manually with the version numbers, if you want check out
+the [npm version documentation](https://docs.npmjs.com/cli/v7/commands/npm-version).
+
+2. Publish the new version of the package.
+
+Once the package versioned you can publish it on the npm production channel to make it available to others.
+```
+npm publish
+```
+
+In a development scenario, you would prefer to publish the package on the alpha channel
+```
+npm publish --tag alpha
+```
+
+3. Upgrade the styleguide in the third party projects.
+
+Upgrade the version of the styleguide in your project.
+```
+npm upgrade passbolt-styleguide
+```
+
+In some passbolt projects an additional grunt task help you manage the deployment of the styleguide assets
 ```
 grunt styleguide-update
 ```
