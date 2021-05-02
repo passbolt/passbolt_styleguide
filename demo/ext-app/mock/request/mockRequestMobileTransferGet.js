@@ -27,27 +27,23 @@ export default () => {
       mockResponse.status = 'start'
       mockResponse.current_page = 0;
       break;
-    // fake waiting
     case 1:
-      mockResponse.current_page = 0;
-      break;
-    case 3:
       mockResponse.status = 'in progress'
       mockResponse.current_page = 1;
       break;
-    case 4:
+    case 2:
       mockResponse.current_page = 2;
       break;
-    case 5:
+    case 3:
       mockResponse.current_page = 3;
       break;
-    case 6:
+    case 4:
       mockResponse.current_page = 4;
       break;
-    case 7: case 8:
+    case 5:
       mockResponse.current_page = 5;
       break;
-    case 9:
+    case 6:
       mockResponse.status = 'complete';
       count = -1; // reset count.
       break;

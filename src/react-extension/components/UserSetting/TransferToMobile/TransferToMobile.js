@@ -32,6 +32,9 @@ const QRCODE_MARGIN = 4;
 const QRCCODE_PROTOCOL_VERSION = 1;
 const QRCODE_WIDTH = 325;
 
+const FETCH_INTERVAL = 350; //in ms
+const MAX_UINT16 = 65535;
+
 /**
  * This component displays the user profile information
  */
@@ -232,7 +235,7 @@ class TransferToMobile extends React.Component {
     const sliceSize = QRCODE_MAXSLICE - (2 + 1);
     const sliceNeeded = Math.ceil(data.length / sliceSize);
 
-    if (sliceNeeded > 65535) {
+    if (sliceNeeded > MAX_UINT16) {
       throw new Error('Cannot transfer the data, the private key is probably too big.');
     }
     if (typeof startPage === 'undefined') {
@@ -240,13 +243,22 @@ class TransferToMobile extends React.Component {
     }
 
     for (let i = 0; i < sliceNeeded; i++) {
+      const pageCounter = startPage + i;
+
+      // header
+      const version = new Uint8ClampedArray([QRCCODE_PROTOCOL_VERSION]); // 0 - 255, 1 byte
+      const page = new Uint8ClampedArray((new Uint16Array([pageCounter])).buffer); // 0 - 65535, 2 bytes
+      const uint8Header = new Uint8ClampedArray([version[0], page[1], page[0]]);
+
+      // data
       const start = (i === 0) ? 0 : (i * sliceSize);
       let end = (i === 0) ? (sliceSize) : (sliceSize * (i + 1));
-      end = (end > data.length) ? data.length : end; // see slice signature, end is not returned
-      const pageCounter = startPage + i;
-      const page = (pageCounter < 255) ? `0${pageCounter.toString()}` : pageCounter.toString();
-      const slice = QRCCODE_PROTOCOL_VERSION.toString() + page + data.slice(start, end);
-      slices[i] = this.str2bytes(slice);
+      end = (end > data.length) ? data.length : end;
+      const slicedData = data.slice(start, end);
+      const uint8Data = this.str2bytes(slicedData);
+
+      // together
+      slices[i] = Uint8ClampedArray.from([...uint8Header, ...uint8Data]);
     }
 
     return slices;
@@ -477,7 +489,7 @@ class TransferToMobile extends React.Component {
       if (this.request === 0) {
         this.getUpdatedTransfer();
       }
-    }, 250);
+    }, FETCH_INTERVAL);
   }
 
   /**
