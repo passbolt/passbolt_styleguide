@@ -244,7 +244,7 @@ class ApiAppContextProvider extends React.Component {
    */
   onRefreshLocaleRequested(locale) {
     this.state.siteSettings.setLocale(locale);
-    this.setState({locale});
+    this.initLocale();
   }
 
   /**

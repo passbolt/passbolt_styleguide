@@ -1,6 +1,6 @@
 import React from "react";
 import {MemoryRouter, Route} from "react-router-dom";
-import "../../../../css/themes/midgar/ext_app.css";
+import "../../../../css/themes/default/ext_app.css";
 import AppContext from "../../../contexts/AppContext";
 import PropTypes from "prop-types";
 import RenameResourceFolder from "./RenameResourceFolder";

@@ -1,6 +1,6 @@
 import React from "react";
 import {MemoryRouter, Route} from "react-router-dom";
-import "../../../../css/themes/midgar/ext_app.css";
+import "../../../../css/themes/default/ext_app.css";
 import ImportResourcesResult from "./ImportResourcesResult";
 import AppContext from "../../../contexts/AppContext";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";

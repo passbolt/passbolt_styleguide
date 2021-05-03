@@ -14,7 +14,6 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import AppContext from "../../../contexts/AppContext";
 import Icon from "../../Common/Icons/Icon";
 import {
   AdministrationWorkspaceMenuTypes,
@@ -205,8 +204,6 @@ class DisplayAdministrationWorkspaceActions extends React.Component {
     );
   }
 }
-
-DisplayAdministrationWorkspaceActions.contextType = AppContext;
 
 DisplayAdministrationWorkspaceActions.propTypes = {
   administrationWorkspaceContext: PropTypes.object, // The administration workspace context

@@ -14,7 +14,7 @@
 import React from "react";
 import Icon from "../../Common/Icons/Icon";
 import PropTypes from "prop-types";
-import AppContext from "../../../contexts/AppContext";
+import {withAppContext} from "../../../contexts/AppContext";
 import {withUserWorkspace} from "../../../contexts/UserWorkspaceContext";
 import DisplayUserGroupDetailsInformation
   from "../DisplayUserGroupDetailsInformation/DisplayUserGroupDetailsInformation";
@@ -55,16 +55,16 @@ class DisplayUserGroupDetails extends React.Component {
    * Returns the base url
    */
   get baseUrl() {
-    return this.context.userSettings.getTrustedDomain();
+    return this.props.context.userSettings.getTrustedDomain();
   }
 
   /**
    * Handle when the user copies the permalink.
    */
   async handlePermalinkClick() {
-    const baseUrl = this.context.userSettings.getTrustedDomain();
+    const baseUrl = this.props.context.userSettings.getTrustedDomain();
     const permalink = `${baseUrl}/app/groups/view/${this.group.id}`;
-    await this.context.port.request("passbolt.clipboard.copy", permalink);
+    await this.props.context.port.request("passbolt.clipboard.copy", permalink);
     this.props.actionFeedbackContext.displaySuccess(this.translate("The permalink has been copied to clipboard"));
   }
 
@@ -121,12 +121,11 @@ class DisplayUserGroupDetails extends React.Component {
   }
 }
 
-DisplayUserGroupDetails.contextType = AppContext;
-
 DisplayUserGroupDetails.propTypes = {
+  context: PropTypes.any, // The application context
   actionFeedbackContext: PropTypes.any, // The action feedback context,
   userWorkspaceContext: PropTypes.any, // The user workspace context
   t: PropTypes.func, // The translation function
 };
 
-export default withActionFeedback(withUserWorkspace(withTranslation('common')(DisplayUserGroupDetails)));
+export default withAppContext(withActionFeedback(withUserWorkspace(withTranslation('common')(DisplayUserGroupDetails))));

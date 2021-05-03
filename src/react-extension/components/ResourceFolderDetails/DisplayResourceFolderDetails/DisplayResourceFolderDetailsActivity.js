@@ -16,7 +16,7 @@ import PropTypes from "prop-types";
 import {DateTime} from "luxon";
 import UserAvatar from "../../Common/Avatar/UserAvatar";
 import GroupAvatar from "../../Common/Avatar/GroupAvatar";
-import AppContext from "../../../contexts/AppContext";
+import {withAppContext} from "../../../contexts/AppContext";
 import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 import Icon from "../../Common/Icons/Icon";
 import {Trans, withTranslation} from "react-i18next";
@@ -113,7 +113,7 @@ class DisplayResourceFolderDetailsActivity extends React.Component {
     const limit = LIMIT_ACTIVITIES_PER_PAGE;
     const page = this.state.activitiesPage;
     const options = {limit, page};
-    const newActivities = await this.context.port.request("passbolt.actionlogs.find-all-for", "Folder", this.folder.id, options);
+    const newActivities = await this.props.context.port.request("passbolt.actionlogs.find-all-for", "Folder", this.folder.id, options);
 
     let activities;
     // For the first page need to reset activities state
@@ -133,7 +133,7 @@ class DisplayResourceFolderDetailsActivity extends React.Component {
   formatDateTimeAgo(date) {
     const dateTime = DateTime.fromISO(date);
     const duration = dateTime.diffNow().toMillis();
-    return duration < 1000 && duration > 0 ? this.translate('Just now') : dateTime.toRelative({locale: this.context.locale});
+    return duration > -1000 && duration < 0 ? this.translate('Just now') : dateTime.toRelative({locale: this.props.context.locale});
   }
 
   /**
@@ -151,7 +151,7 @@ class DisplayResourceFolderDetailsActivity extends React.Component {
    * @returns {string}
    */
   getFolderPermalink(folder) {
-    const baseUrl = this.context.userSettings.getTrustedDomain();
+    const baseUrl = this.props.context.userSettings.getTrustedDomain();
     return `${baseUrl}/app/folders/view/${folder.id}`;
   }
 
@@ -221,7 +221,7 @@ class DisplayResourceFolderDetailsActivity extends React.Component {
             <div className="subinfo light">{activityFormattedDate}</div>
           </div>
         </div>
-        <UserAvatar user={activity.creator} baseUrl={this.context.userSettings.getTrustedDomain()}/>
+        <UserAvatar user={activity.creator} baseUrl={this.props.context.userSettings.getTrustedDomain()}/>
       </li>
     );
   }
@@ -249,7 +249,7 @@ class DisplayResourceFolderDetailsActivity extends React.Component {
             <div className="subinfo light">{activityFormattedDate}</div>
           </div>
         </div>
-        <UserAvatar user={activity.creator} baseUrl={this.context.userSettings.getTrustedDomain()}/>
+        <UserAvatar user={activity.creator} baseUrl={this.props.context.userSettings.getTrustedDomain()}/>
       </li>
     );
   }
@@ -268,10 +268,10 @@ class DisplayResourceFolderDetailsActivity extends React.Component {
     return (
       <li key={permission.id} className="clearfix">
         {permission.user &&
-        <UserAvatar user={permission.user} baseUrl={this.context.userSettings.getTrustedDomain()}/>
+        <UserAvatar user={permission.user} baseUrl={this.props.context.userSettings.getTrustedDomain()}/>
         }
         {permission.group &&
-        <GroupAvatar group={permission.group} baseUrl={this.context.userSettings.getTrustedDomain()}/>
+        <GroupAvatar group={permission.group} baseUrl={this.props.context.userSettings.getTrustedDomain()}/>
         }
         <div className="name">
           <span className="creator">{permissionAroName}</span>
@@ -310,7 +310,7 @@ class DisplayResourceFolderDetailsActivity extends React.Component {
             </ul>
           </div>
         </div>
-        <UserAvatar user={activity.creator} baseUrl={this.context.userSettings.getTrustedDomain()}/>
+        <UserAvatar user={activity.creator} baseUrl={this.props.context.userSettings.getTrustedDomain()}/>
       </li>
     );
   }
@@ -436,11 +436,10 @@ class DisplayResourceFolderDetailsActivity extends React.Component {
   }
 }
 
-DisplayResourceFolderDetailsActivity.contextType = AppContext;
-
 DisplayResourceFolderDetailsActivity.propTypes = {
+  context: PropTypes.any, // The application context
   resourceWorkspaceContext: PropTypes.any,
   t: PropTypes.func, // The translation function
 };
 
-export default withResourceWorkspace(withTranslation('common')(DisplayResourceFolderDetailsActivity));
+export default withAppContext(withResourceWorkspace(withTranslation('common')(DisplayResourceFolderDetailsActivity)));

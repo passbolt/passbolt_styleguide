@@ -23,9 +23,11 @@ import Icon from "../../Common/Icons/Icon";
 import ImportResourcesKeyUnlock from "./ImportResourcesKeyUnlock";
 import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 import ImportResourcesResult from "./ImportResourcesResult";
-import AppContext from "../../../contexts/AppContext";
+import {withAppContext} from "../../../contexts/AppContext";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
 import {Trans, withTranslation} from "react-i18next";
+
+const FILE_TYPE_KDBX = "kdbx";
 
 class ImportResources extends Component {
   /**
@@ -33,9 +35,9 @@ class ImportResources extends Component {
    * @param props Component props
    * @param context Component context
    */
-  constructor(props, context) {
+  constructor(props) {
     super(props);
-    this.state = this.geDefaultState(context);
+    this.state = this.defaultState;
     this.bindHandlers();
     this.createReferences();
   }
@@ -43,9 +45,9 @@ class ImportResources extends Component {
   /**
    * Returns the default state
    */
-  geDefaultState(context) {
-    const canUseTags = context.siteSettings.canIUse("tags");
-    const canUseFolders = context.siteSettings.canIUse("folders");
+  get defaultState() {
+    const canUseTags = this.props.context.siteSettings.canIUse("tags");
+    const canUseFolders = this.props.context.siteSettings.canIUse("folders");
 
     return {
       // Dialog states
@@ -200,9 +202,43 @@ class ImportResources extends Component {
   }
 
   /**
-   * Read the selected file and returns its content in a base 64
+   * Convert a Unicode string to a string in which
+   * each 16-bit unit occupies only one byte
+   * @param string
+   * @returns {string}
    */
-  readFile() {
+  toBinary(string) {
+    const codeUnits = new Uint16Array(string.length);
+    for (let i = 0; i < codeUnits.length; i++) {
+      codeUnits[i] = string.charCodeAt(i);
+    }
+    return String.fromCharCode(...new Uint8Array(codeUnits.buffer));
+  }
+
+  /**
+   * Read the selected CSV file and returns its content in a base 64
+   */
+  readFileCsv() {
+    const reader = new FileReader();
+    return new Promise((resolve, reject) => {
+      reader.onloadend = event => {
+        try {
+          const file = this.toBinary(event.target.result);
+          const fileBase64 = btoa(file);
+          resolve(fileBase64);
+        } catch (e) {
+          reject(e);
+        }
+      };
+      reader.readAsText(this.state.fileToImport);
+    });
+  }
+
+  /**
+   * Read the selected KDBX file and returns its content in a base 64
+   * @return {Promise<string>}
+   */
+  readFileKdbx() {
     const reader = new FileReader();
     return new Promise((resolve, reject) => {
       reader.onloadend = event => {
@@ -222,14 +258,14 @@ class ImportResources extends Component {
    * Import the selected file with its given base 64 content
    */
   async import() {
-    const b64FileContent = await this.readFile();
     const fileType = this.selectedFileExtension;
+    const b64FileContent = fileType === FILE_TYPE_KDBX ? await this.readFileKdbx() : await this.readFileCsv();
     const credentialsOptions = {credentials: {password: null, keyFile: null}};
     const options = Object.assign({}, this.state.options, credentialsOptions);
 
     await this.toggleProcessing();
     try {
-      const importResult = await this.context.port.request("passbolt.import-resources.import-file", fileType, b64FileContent, options);
+      const importResult = await this.props.context.port.request("passbolt.import-resources.import-file", fileType, b64FileContent, options);
       this.handleImportSuccess(importResult);
     } catch (error) {
       this.handleImportError(error, b64FileContent, fileType);
@@ -279,7 +315,7 @@ class ImportResources extends Component {
         title: this.translate("There was an unexpected error..."),
         message: error.message
       };
-      this.context.setContext({errorDialogProps});
+      this.props.context.setContext({errorDialogProps});
       this.props.dialogContext.open(NotifyError);
     }
   }
@@ -331,8 +367,8 @@ class ImportResources extends Component {
     const isInvalidCsvFile = errors && errors.invalidCsvFile;
     const isInvalidKdbxFile = errors && errors.invalidKdbxFile;
     const invalidFileClassName = isInvalidCsvFile || isInvalidKdbxFile ? 'errors' : '';
-    const canUseTags = this.context.siteSettings.canIUse("tags");
-    const canUseFolders = this.context.siteSettings.canIUse("folders");
+    const canUseTags = this.props.context.siteSettings.canIUse("tags");
+    const canUseFolders = this.props.context.siteSettings.canIUse("folders");
 
     return (
       <DialogWrapper
@@ -351,22 +387,22 @@ class ImportResources extends Component {
 
               <div className={`input text required ${invalidFileClassName}`}>
                 <label htmlFor="dialog-import-passwords">
-                  <Trans>Select a file to import</Trans>
+                  <Trans>Select a file to import</Trans>&nbsp;
                   (<a role="link" data-tooltip={this.translate("csv exports from keepassx, lastpass and 1password are supported")}>csv</a> {this.translate("or")} <a role="link" data-tooltip={this.translate("kdbx files are files generated by keepass v2.x")}>kdbx</a>)
                 </label>
-
-                <input
-                  type="text"
-                  disabled={true}
-                  placeholder={this.translate("No file selected")}
-                  defaultValue={this.selectedFilename}/>
-                <a
-                  id="dialog-import-passwords-choose-file"
-                  className={`button primary ${this.hasAllInputDisabled() ? "disabled" : ""}`}
-                  onClick={this.handleSelectFile}>
-                  <Icon name="upload-a"/> <Trans>Choose a file</Trans>
-                </a>
-
+                <div className="input-file-inline">
+                  <input
+                    type="text"
+                    disabled={true}
+                    placeholder={this.translate("No file selected")}
+                    defaultValue={this.selectedFilename}/>
+                  <a
+                    id="dialog-import-passwords-choose-file"
+                    className={`button primary ${this.hasAllInputDisabled() ? "disabled" : ""}`}
+                    onClick={this.handleSelectFile}>
+                    <Icon name="upload-a"/> <Trans>Choose a file</Trans>
+                  </a>
+                </div>
                 {isInvalidCsvFile &&
                   <div className="message ready error">
                     {this.state.errors.invalidCsvFile}
@@ -419,9 +455,8 @@ class ImportResources extends Component {
   }
 }
 
-ImportResources.contextType = AppContext;
-
 ImportResources.propTypes = {
+  context: PropTypes.any, // The application context
   onClose: PropTypes.func,
   actionFeedbackContext: PropTypes.any, // The action feedback context
   dialogContext: PropTypes.any, // The dialog context
@@ -429,4 +464,4 @@ ImportResources.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withResourceWorkspace(withActionFeedback(withDialog(withTranslation('common')(ImportResources))));
+export default withAppContext(withResourceWorkspace(withActionFeedback(withDialog(withTranslation('common')(ImportResources)))));

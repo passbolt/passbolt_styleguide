@@ -12,7 +12,6 @@
  * @since         2.11.0
  */
 import {fireEvent, render, waitFor} from "@testing-library/react";
-import AppContext from "../../../contexts/AppContext";
 import React from "react";
 import DialogContextProvider from "../../../contexts/DialogContext";
 import {MemoryRouter, Route} from "react-router-dom";
@@ -23,15 +22,13 @@ import EditResource from "./EditResource";
 /**
  * Page template for the EditResource component
  */
-export const EditResourcePageTemplate = (appContext, props) =>
+export const EditResourcePageTemplate = props =>
   <MockTranslationProvider>
-    <AppContext.Provider value={appContext}>
-      <DialogContextProvider>
-        <MemoryRouter initialEntries={['/']}>
-          <Route component={routerProps => <EditResource {...props} {...routerProps}/>}></Route>
-        </MemoryRouter>
-      </DialogContextProvider>
-    </AppContext.Provider>
+    <DialogContextProvider>
+      <MemoryRouter initialEntries={['/']}>
+        <Route component={routerProps => <EditResource {...props} {...routerProps}/>}/>
+      </MemoryRouter>
+    </DialogContextProvider>
   </MockTranslationProvider>;
 
 /**
@@ -40,11 +37,10 @@ export const EditResourcePageTemplate = (appContext, props) =>
 export default class EditResourcePage {
   /**
    * Default constructor
-   * @param appContext An app context
    * @param props Props to attach
    */
-  constructor(appContext, props) {
-    this._page = render(EditResourcePageTemplate(appContext, props));
+  constructor(props) {
+    this._page = render(EditResourcePageTemplate(props));
     this.setupPageObjects();
   }
 

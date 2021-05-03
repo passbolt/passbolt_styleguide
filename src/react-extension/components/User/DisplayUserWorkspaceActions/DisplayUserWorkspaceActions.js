@@ -14,7 +14,7 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import AppContext from "../../../contexts/AppContext";
+import {withAppContext} from "../../../contexts/AppContext";
 import Icon from "../../Common/Icons/Icon";
 import {withUserWorkspace} from "../../../contexts/UserWorkspaceContext";
 import EditUser from "../EditUser/EditUser";
@@ -89,7 +89,7 @@ class DisplayUserWorkspaceActions extends React.Component {
    * Returns true if the current user can delete the current selected user
    */
   get canDelete() {
-    const isNotCurrentUser = this.selectedUser && this.context.loggedInUser.id !== this.selectedUser.id;
+    const isNotCurrentUser = this.selectedUser && this.props.context.loggedInUser.id !== this.selectedUser.id;
     return !this.isButtonDisabled() && isNotCurrentUser;
   }
 
@@ -130,7 +130,7 @@ class DisplayUserWorkspaceActions extends React.Component {
     const editUserDialogProps = {
       id: this.selectedUser.id
     };
-    this.context.setContext({editUserDialogProps});
+    this.props.context.setContext({editUserDialogProps});
     this.props.dialogContext.open(EditUser);
   }
 
@@ -139,7 +139,7 @@ class DisplayUserWorkspaceActions extends React.Component {
    */
   async handleDeleteClickEvent() {
     try {
-      await this.context.port.request("passbolt.users.delete-dry-run", this.selectedUser.id);
+      await this.props.context.port.request("passbolt.users.delete-dry-run", this.selectedUser.id);
       this.displayDeleteUserDialog();
     } catch (error) {
       if (error.name === "DeleteDryRunError") {
@@ -157,7 +157,7 @@ class DisplayUserWorkspaceActions extends React.Component {
     const deleteUserDialogProps = {
       user: this.selectedUser
     };
-    this.context.setContext({deleteUserDialogProps});
+    this.props.context.setContext({deleteUserDialogProps});
     this.props.dialogContext.open(DeleteUser);
   }
 
@@ -169,7 +169,7 @@ class DisplayUserWorkspaceActions extends React.Component {
       user: this.selectedUser,
       errors: errors,
     };
-    this.context.setContext({deleteUserWithConflictsDialogProps});
+    this.props.context.setContext({deleteUserWithConflictsDialogProps});
     this.props.dialogContext.open(DeleteUserWithConflicts);
   }
 
@@ -182,7 +182,7 @@ class DisplayUserWorkspaceActions extends React.Component {
       title: this.translate("There was an unexpected error..."),
       message: error.message
     };
-    this.context.setContext({errorDialogProps});
+    this.props.context.setContext({errorDialogProps});
     this.props.dialogContext.open(NotifyError);
   }
 
@@ -238,7 +238,7 @@ class DisplayUserWorkspaceActions extends React.Component {
    * Can the logged in user use the mfa capability.
    */
   get canIUseMfa() {
-    return this.context.siteSettings.canIUse("multiFactorAuthentication");
+    return this.props.context.siteSettings.canIUse("multiFactorAuthentication");
   }
 
   /**
@@ -283,7 +283,7 @@ class DisplayUserWorkspaceActions extends React.Component {
    * @returns {boolean}
    */
   isLoggedInUserAdmin() {
-    return this.context.loggedInUser && this.context.loggedInUser.role.name === "admin";
+    return this.props.context.loggedInUser && this.props.context.loggedInUser.role.name === "admin";
   }
 
   /**
@@ -315,9 +315,9 @@ class DisplayUserWorkspaceActions extends React.Component {
    */
   async copyPermalink() {
     this.closeMoreMenu();
-    const baseUrl = this.context.userSettings.getTrustedDomain();
+    const baseUrl = this.props.context.userSettings.getTrustedDomain();
     const permalink = `${baseUrl}/app/users/view/${this.selectedUser.id}`;
-    await this.context.port.request("passbolt.clipboard.copy", permalink);
+    await this.props.context.port.request("passbolt.clipboard.copy", permalink);
     this.props.actionFeedbackContext.displaySuccess(this.translate("The permalink has been copied to clipboard"));
   }
 
@@ -325,7 +325,7 @@ class DisplayUserWorkspaceActions extends React.Component {
    * Resend an invite to the given user
    */
   resendInvite() {
-    this.context.port.request('passbolt.users.resend-invite', this.selectedUser.username)
+    this.props.context.port.request('passbolt.users.resend-invite', this.selectedUser.username)
       .then(this.onResendInviteSuccess.bind(this))
       .catch(this.onResendInviteFailure.bind(this));
   }
@@ -348,7 +348,7 @@ class DisplayUserWorkspaceActions extends React.Component {
       message: error.message
     };
     this.toggleMoreMenu();
-    this.context.setContext({errorDialogProps});
+    this.props.context.setContext({errorDialogProps});
     this.props.dialogContext.open(NotifyError);
   }
 
@@ -455,13 +455,12 @@ class DisplayUserWorkspaceActions extends React.Component {
   }
 }
 
-DisplayUserWorkspaceActions.contextType = AppContext;
-
 DisplayUserWorkspaceActions.propTypes = {
+  context: PropTypes.any, // The application context
   userWorkspaceContext: PropTypes.any, // the user workspace context
   dialogContext: PropTypes.any, // the dialog context
   actionFeedbackContext: PropTypes.object, // the action feeedback context
   t: PropTypes.func, // The translation function
 };
 
-export default withActionFeedback(withDialog(withUserWorkspace(withTranslation('common')(DisplayUserWorkspaceActions))));
+export default withAppContext(withActionFeedback(withDialog(withUserWorkspace(withTranslation('common')(DisplayUserWorkspaceActions)))));

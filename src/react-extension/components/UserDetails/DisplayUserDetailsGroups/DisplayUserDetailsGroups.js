@@ -16,7 +16,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import Icon from "../../Common/Icons/Icon";
 import {withUserWorkspace} from "../../../contexts/UserWorkspaceContext";
-import AppContext from "../../../contexts/AppContext";
+import {withAppContext} from "../../../contexts/AppContext";
 import GroupAvatar from "../../Common/Avatar/GroupAvatar";
 import {Trans, withTranslation} from "react-i18next";
 
@@ -54,7 +54,7 @@ class DisplayUserDetailsGroups extends React.Component {
    * The groups the current selected user belongs to
    */
   get groups() {
-    const {groups} = this.context;
+    const {groups} = this.props.context;
     const selectedUser = this.props.userWorkspaceContext.details.user;
     if (selectedUser) {
       const belongsToGroup = group => group.groups_users.some(group_user => group_user.user_id === selectedUser.id);
@@ -73,7 +73,7 @@ class DisplayUserDetailsGroups extends React.Component {
    * Returns the base url
    */
   get baseUrl() {
-    return this.context.userSettings.getTrustedDomain();
+    return this.props.context.userSettings.getTrustedDomain();
   }
 
   /**
@@ -137,10 +137,10 @@ class DisplayUserDetailsGroups extends React.Component {
   }
 }
 
-DisplayUserDetailsGroups.contextType = AppContext;
 DisplayUserDetailsGroups.propTypes = {
+  context: PropTypes.any, // The application context
   userWorkspaceContext: PropTypes.object, // The user workspace context
   t: PropTypes.func, // The translation function
 };
 
-export default withUserWorkspace(withTranslation('common')(DisplayUserDetailsGroups));
+export default withAppContext(withUserWorkspace(withTranslation('common')(DisplayUserDetailsGroups)));

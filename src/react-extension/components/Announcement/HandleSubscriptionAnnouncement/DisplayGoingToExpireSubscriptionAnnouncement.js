@@ -33,7 +33,7 @@ class DisplayGoingToExpireSubscriptionAnnouncement extends React.Component {
   formatDateTimeAgo(date) {
     const dateTime = DateTime.fromISO(date);
     const duration = dateTime.diffNow().toMillis();
-    return duration < 1000 && duration > 0 ? this.translate('Just now') : dateTime.toRelative({locale: this.props.context.locale});
+    return duration > -1000 && duration < 0 ? this.translate('Just now') : dateTime.toRelative({locale: this.props.context.locale});
   }
 
   /**

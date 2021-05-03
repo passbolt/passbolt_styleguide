@@ -14,7 +14,7 @@
 import React from "react";
 import Icon from "../../Common/Icons/Icon";
 import PropTypes from "prop-types";
-import AppContext from "../../../contexts/AppContext";
+import {withAppContext} from "../../../contexts/AppContext";
 import {
   resourceLinkAuthorizedProtocols,
   ResourceWorkspaceFilterTypes,
@@ -105,7 +105,7 @@ class DisplayResourceDetailsInformation extends React.Component {
    */
   handleFolderParentClickEvent() {
     if (this.resource.folder_parent_id) { // Case of specific folder
-      const folderParent = this.context.folders.find(item => item.id === this.resource.folder_parent_id);
+      const folderParent = this.props.context.folders.find(item => item.id === this.resource.folder_parent_id);
       this.props.history.push(`/app/folders/view/${folderParent.id}`);
     } else { // Case of root folder
       const filter = {type: ResourceWorkspaceFilterTypes.ROOT_FOLDER};
@@ -125,7 +125,7 @@ class DisplayResourceDetailsInformation extends React.Component {
    * Handle when the user select the username of the resource
    */
   async handleUsernameClickEvent() {
-    await this.context.port.request("passbolt.clipboard.copy", this.resource.username);
+    await this.props.context.port.request("passbolt.clipboard.copy", this.resource.username);
     this.displaySuccessNotification(this.translate("The username has been copied to clipboard"));
   }
 
@@ -137,7 +137,7 @@ class DisplayResourceDetailsInformation extends React.Component {
   formatDateTimeAgo(date) {
     const dateTime = DateTime.fromISO(date);
     const duration = dateTime.diffNow().toMillis();
-    return duration < 1000 && duration > 0 ? this.translate('Just now') : dateTime.toRelative({locale: this.context.locale});
+    return duration > -1000 && duration < 0 ? this.translate('Just now') : dateTime.toRelative({locale: this.props.context.locale});
   }
 
   /**
@@ -145,8 +145,8 @@ class DisplayResourceDetailsInformation extends React.Component {
    * @param {string} userId The user id
    */
   getUserUsername(userId) {
-    if (this.context.users) {
-      const user = this.context.users.find(item => item.id === userId);
+    if (this.props.context.users) {
+      const user = this.props.context.users.find(item => item.id === userId);
       if (user) {
         return user.username;
       }
@@ -165,8 +165,8 @@ class DisplayResourceDetailsInformation extends React.Component {
       return this.translate("root");
     }
 
-    if (this.context.folders) {
-      const folder = this.context.folders.find(item => item.id === folderParentId);
+    if (this.props.context.folders) {
+      const folder = this.props.context.folders.find(item => item.id === folderParentId);
       if (folder) {
         return folder.name;
       }
@@ -207,11 +207,11 @@ class DisplayResourceDetailsInformation extends React.Component {
       } catch (error) {
         if (error.name !== "UserAbortsOperationError") {
           this.props.actionFeedbackContext.displayError(error.message);
-          return;
         }
+        return;
       }
     }
-    await this.context.port.request("passbolt.clipboard.copy", password);
+    await this.props.context.port.request("passbolt.clipboard.copy", password);
     await this.props.resourceWorkspaceContext.onResourceCopied();
     await this.props.actionFeedbackContext.displaySuccess(this.translate("The secret has been copied to clipboard"));
   }
@@ -262,7 +262,7 @@ class DisplayResourceDetailsInformation extends React.Component {
    * @throw UserAbortsOperationError If the user cancel the operation
    */
   decryptResourceSecret(resourceId) {
-    return this.context.port.request("passbolt.secret.decrypt", resourceId, {showProgress: true});
+    return this.props.context.port.request("passbolt.secret.decrypt", resourceId, {showProgress: true});
   }
 
   /**
@@ -299,7 +299,7 @@ class DisplayResourceDetailsInformation extends React.Component {
    * @returns {boolean}
    */
   get canUsePreviewPassword() {
-    return this.context.siteSettings.canIUse('previewPassword');
+    return this.props.context.siteSettings.canIUse('previewPassword');
   }
 
   /**
@@ -330,7 +330,7 @@ class DisplayResourceDetailsInformation extends React.Component {
    * @returns {JSX}
    */
   render() {
-    const canUseFolders = this.context.siteSettings.canIUse("folders");
+    const canUseFolders = this.props.context.siteSettings.canIUse("folders");
     const creatorUsername = this.getUserUsername(this.resource.created_by);
     const modifierUsername = this.getUserUsername(this.resource.modified_by);
     const createdDateTimeAgo = this.formatDateTimeAgo(this.resource.created);
@@ -405,7 +405,7 @@ class DisplayResourceDetailsInformation extends React.Component {
           <li className="location">
             <span className="label"><Trans>Location</Trans></span>
             <span className="value">
-              <a onClick={this.handleFolderParentClickEvent} className={`folder-link ${!this.context.folders ? "disabled" : ""}`}>
+              <a onClick={this.handleFolderParentClickEvent} className={`folder-link ${!this.props.context.folders ? "disabled" : ""}`}>
                 <Icon name="folder"/> {this.getFolderName(this.resource.folder_parent_id)}
               </a>
             </span>
@@ -417,9 +417,8 @@ class DisplayResourceDetailsInformation extends React.Component {
   }
 }
 
-DisplayResourceDetailsInformation.contextType = AppContext;
-
 DisplayResourceDetailsInformation.propTypes = {
+  context: PropTypes.any, // The application context
   onSelectFolderParent: PropTypes.func,
   onSelectRoot: PropTypes.func,
   history: PropTypes.object,
@@ -428,4 +427,4 @@ DisplayResourceDetailsInformation.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withRouter(withActionFeedback(withResourceWorkspace(withTranslation('common')(DisplayResourceDetailsInformation))));
+export default withAppContext(withRouter(withActionFeedback(withResourceWorkspace(withTranslation('common')(DisplayResourceDetailsInformation)))));

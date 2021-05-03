@@ -16,7 +16,7 @@ import {I18nextProvider} from 'react-i18next';
 import HttpApi from 'i18next-http-backend';
 import React, {Component} from "react";
 import PropTypes from "prop-types";
-import AppContext from "../../contexts/AppContext";
+import {withAppContext} from "../../contexts/AppContext";
 
 /**
  * The locales default path.
@@ -94,7 +94,7 @@ class TranslationProvider extends Component {
         defaultNS: 'common',
         keySeparator: false, // don't use the dot for separator of nested json object
         nsSeparator: false, // allowed ':' in key to avoid namespace separator
-        debug: true,
+        debug: false,
       }, () => this.setState({i18next}));
   }
 
@@ -103,7 +103,7 @@ class TranslationProvider extends Component {
    * @type {string}
    */
   get locale() {
-    return this.context.locale;
+    return this.props.context.locale;
   }
 
   /**
@@ -111,10 +111,10 @@ class TranslationProvider extends Component {
    * @returns {string[]}
    */
   get supportedLocales() {
-    if (!this.context.siteSettings || !this.context.siteSettings.supportedLocales) {
+    if (!this.props.context.siteSettings || !this.props.context.siteSettings.supportedLocales) {
       return [this.locale];
     }
-    return this.context.siteSettings.supportedLocales.map(supportedLocale => supportedLocale.locale);
+    return this.props.context.siteSettings.supportedLocales.map(supportedLocale => supportedLocale.locale);
   }
 
   /**
@@ -142,10 +142,10 @@ class TranslationProvider extends Component {
   }
 }
 
-TranslationProvider.contextType = AppContext;
 TranslationProvider.propTypes = {
+  context: PropTypes.any, // The application context
   loadingPath: PropTypes.any, // The way to load translations files
   children: PropTypes.any, // The children components
 };
 
-export default TranslationProvider;
+export default withAppContext(TranslationProvider);

@@ -1,6 +1,9 @@
 import React, {Component} from "react";
 import CreateGpgKey from "../../Authentication/CreateGpgKey/CreateGpgKey";
-import {AuthenticationContext, AuthenticationContextState} from "../../../contexts/AuthenticationContext";
+import {
+  AuthenticationContextState,
+  withAuthenticationContext
+} from "../../../contexts/AuthenticationContext";
 import DownloadRecoveryKit from "../../Authentication/DownloadRecoveryKit/DownloadRecoveryKit";
 import ChooseSecurityToken from "../../Authentication/ChooseSecurityToken/ChooseSecurityToken";
 import ImportGpgKey from "../../Authentication/ImportGpgKey/ImportGpgKey";
@@ -45,8 +48,8 @@ class SetupAuthentication extends Component {
    * Whenever the security token has been saved
    */
   handleSecurityTokenSaved() {
-    if (this.context.state === AuthenticationContextState.SECURITY_TOKEN_SAVED) {
-      this.context.onCompleteSetupRequested();
+    if (this.props.authenticationContext.state === AuthenticationContextState.SECURITY_TOKEN_SAVED) {
+      this.props.authenticationContext.onCompleteSetupRequested();
     }
   }
 
@@ -54,7 +57,7 @@ class SetupAuthentication extends Component {
    * Initialize the authentication setup process
    */
   initializeSetup() {
-    this.context.onInitializeSetupRequested();
+    this.props.authenticationContext.onInitializeSetupRequested();
   }
 
   /**
@@ -69,7 +72,7 @@ class SetupAuthentication extends Component {
    * Render the component
    */
   render() {
-    switch (this.context.state)  {
+    switch (this.props.authenticationContext.state)  {
       case AuthenticationContextState.SETUP_INITIALIZED:
         return <CreateGpgKey/>;
       case AuthenticationContextState.GPG_KEY_GENERATED:
@@ -86,16 +89,16 @@ class SetupAuthentication extends Component {
       case  AuthenticationContextState.SETUP_COMPLETED:
         return <DisplayLoginInProgress/>;
       case AuthenticationContextState.UNEXPECTED_ERROR:
-        return <DisplayUnexpectedError error={this.context.error}/>;
+        return <DisplayUnexpectedError error={this.props.authenticationContext.error}/>;
       default:
         return <LoadingSpinner/>;
     }
   }
 }
 
-SetupAuthentication.contextType = AuthenticationContext;
 SetupAuthentication.propTypes = {
+  authenticationContext: PropTypes.any, // The authentication context
   siteSettings: PropTypes.object, // The site settings
   t: PropTypes.func, // The translation function
 };
-export default withTranslation('common')(SetupAuthentication);
+export default withAuthenticationContext(withTranslation('common')(SetupAuthentication));

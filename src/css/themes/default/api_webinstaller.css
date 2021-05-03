@@ -4893,6 +4893,10 @@ input[type=email].fluid {
   font-weight: normal;
   width: auto;
 }
+.notification-container .notification .message.warning {
+  color: #333;
+  background: #FEF0BF;
+}
 .notification-container .notification .message .content {
   margin-right: 1em;
 }
@@ -5006,7 +5010,7 @@ input[type=email].fluid {
 }
 .dialog input[type=text],
 .dialog textarea,
-.dialog select {
+.dialog select.large {
   width: 100%;
   box-sizing: border-box;
   /*
@@ -5043,30 +5047,30 @@ input[type=email].fluid {
 }
 .dialog input[type=text]:before,
 .dialog textarea:before,
-.dialog select:before,
+.dialog select.large:before,
 .dialog input[type=text]:after,
 .dialog textarea:after,
-.dialog select:after {
+.dialog select.large:after {
   content: "";
   display: table;
 }
 .dialog input[type=text]:after,
 .dialog textarea:after,
-.dialog select:after {
+.dialog select.large:after {
   clear: both;
 }
 .dialog input[type=text]:before,
 .dialog textarea:before,
-.dialog select:before,
+.dialog select.large:before,
 .dialog input[type=text]:after,
 .dialog textarea:after,
-.dialog select:after {
+.dialog select.large:after {
   content: "";
   display: table;
 }
 .dialog input[type=text]:after,
 .dialog textarea:after,
-.dialog select:after {
+.dialog select.large:after {
   clear: both;
 }
 .dialog textarea + .message,

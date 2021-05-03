@@ -14,7 +14,7 @@
 import React, {Component} from "react";
 import PropTypes from "prop-types";
 
-import AppContext from "../../../contexts/AppContext";
+import {withAppContext} from "../../../contexts/AppContext";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
 import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
 import FormSubmitButton from "../../Common/Inputs/FormSubmitButton/FormSubmitButton";
@@ -29,9 +29,9 @@ class RenameResourceFolder extends Component {
    * @param {Object} props
    * @param {Object} context
    */
-  constructor(props, context) {
-    super(props, context);
-    this.state = this.getStateBasedOnContext(context, props,  this.getDefaultState());
+  constructor(props) {
+    super(props);
+    this.state = this.getStateBasedOnContext(props,  this.getDefaultState());
     this.createInputRefs();
     this.bindEventHandlers();
   }
@@ -69,13 +69,12 @@ class RenameResourceFolder extends Component {
    * For example if folder doesn't exist then we show an error message
    * Otherwise set the input name value
    *
-   * @param context
    * @param props
    * @param defaultState
    * @returns {*}
    */
-  getStateBasedOnContext(context, props, defaultState) {
-    const folders = context.folders;
+  getStateBasedOnContext(props, defaultState) {
+    const folders = props.context.folders;
     const error = {
       message: this.translate("The folder could not be found. Maybe it was deleted or you lost access.")
     };
@@ -83,9 +82,9 @@ class RenameResourceFolder extends Component {
       console.error(`No folders context defined.`);
       this.handleError(error);
     }
-    const folder = context.folders.find(item => item.id === context.folder.id) || false;
+    const folder = props.context.folders.find(item => item.id === props.context.folder.id) || false;
     if (!folder) {
-      console.error(`Folder ${context.folder.id} not found in context.`);
+      console.error(`Folder ${props.context.folder.id} not found in context.`);
       this.handleError(error);
     } else {
       defaultState.name = folder.name;
@@ -205,7 +204,7 @@ class RenameResourceFolder extends Component {
       title: this.translate("There was an unexpected error..."),
       message: error.message
     };
-    this.context.setContext({errorDialogProps});
+    this.props.context.setContext({errorDialogProps});
     this.props.dialogContext.open(NotifyError);
   }
 
@@ -234,10 +233,10 @@ class RenameResourceFolder extends Component {
    */
   async updateFolder() {
     const folderDto = {
-      id: this.context.folder.id,
+      id: this.props.context.folder.id,
       name: this.state.name
     };
-    return await this.context.port.request("passbolt.folders.update", folderDto);
+    return await this.props.context.port.request("passbolt.folders.update", folderDto);
   }
 
   /**
@@ -246,7 +245,7 @@ class RenameResourceFolder extends Component {
    * @returns {void}
    */
   selectAndScrollToFolder(id) {
-    this.context.port.emit("passbolt.folders.select-and-scroll-to", id);
+    this.props.context.port.emit("passbolt.folders.select-and-scroll-to", id);
   }
 
   /**
@@ -346,13 +345,12 @@ class RenameResourceFolder extends Component {
   }
 }
 
-RenameResourceFolder.contextType = AppContext;
-
 RenameResourceFolder.propTypes = {
+  context: PropTypes.any, // The application context
   onClose: PropTypes.func,
   actionFeedbackContext: PropTypes.any, // The action feedback context
   dialogContext: PropTypes.any, // The dialog context
   t: PropTypes.func, // The translation function
 };
 
-export default withDialog(withActionFeedback(withTranslation('common')(RenameResourceFolder)));
+export default withAppContext(withDialog(withActionFeedback(withTranslation('common')(RenameResourceFolder))));

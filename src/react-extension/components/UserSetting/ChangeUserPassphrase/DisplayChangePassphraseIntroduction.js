@@ -15,8 +15,8 @@
 
 import React from 'react';
 import PropTypes from "prop-types";
-import AppContext from "../../../contexts/AppContext";
 import {withUserSettings} from "../../../contexts/UserSettingsContext";
+import {Trans, withTranslation} from "react-i18next";
 
 /**
  * This component displays the user profile information
@@ -127,31 +127,31 @@ class DisplayChangePassphraseIntroduction extends React.Component {
         <div className="row">
           <div className="col6">
             <form onSubmit={this.handleSubmit}>
-              <h3>Before getting started...</h3>
+              <h3><Trans>Before getting started...</Trans></h3>
               <div className="password-management-bg">
               </div>
-              <p>The passphrase is stored on your device and never sent server side.<br/>
-                Changing your passphrase will only change it locally.
-                If you have multiple browsers configured, the passphrase will need to be changed in all places individually.
+              <p><Trans>The passphrase is stored on your device and never sent server side.</Trans><br/>
+                <Trans>Changing your passphrase will only change it locally.</Trans>&nbsp;
+                <Trans>If you have multiple browsers configured, the passphrase will need to be changed in all places individually.</Trans>
               </p>
               <div className={`input checkbox ${this.state.understandPassphraseError ? 'error' : ''}`}>
                 <input id="passphrase-update-understand" type="checkbox" checked={this.state.understandPassphrase}
                   disabled={this.hasAllInputDisabled()} name="understandPassphrase" onChange={this.handleInputChange}/>
-                <label htmlFor="passphrase-update-understand"> Ok, I understand what I need to do.</label>
+                <label htmlFor="passphrase-update-understand"> <Trans>Ok, I understand what I need to do.</Trans></label>
               </div>
               <div className="submit-wrapper">
                 <button className="button big submit" type="submit" disabled={this.hasAllInputDisabled()}>
-                  Start
+                  <Trans>Start</Trans>
                 </button>
               </div>
             </form>
           </div>
           <div className="col4 last passphrase-help">
-            <h3>What is the role of the passphrase?</h3>
-            <p>The passphrase is used to encrypt your secret key, which is required to decrypt your secrets, such as the passwords.</p>
-            <p>Without the private key and the passphrase it is not possible to decrypt!</p>
+            <h3><Trans>What is the role of the passphrase?</Trans></h3>
+            <p><Trans>The passphrase is used to encrypt your secret key, which is required to decrypt your secrets, such as the passwords.</Trans></p>
+            <p><Trans>Without the private key and the passphrase it is not possible to decrypt!</Trans></p>
             <a className="button big" href="https://help.passbolt.com/tech/auth.html" target="_blank" rel="noopener noreferrer">
-              <span>Learn more</span>
+              <span><Trans>Learn more</Trans></span>
             </a>
           </div>
         </div>
@@ -160,9 +160,9 @@ class DisplayChangePassphraseIntroduction extends React.Component {
   }
 }
 
-DisplayChangePassphraseIntroduction.contextType = AppContext;
 DisplayChangePassphraseIntroduction.propTypes = {
-  userSettingsContext: PropTypes.object // The user settings context
+  userSettingsContext: PropTypes.object, // The user settings context
+  t: PropTypes.func, // The translation function
 };
 
-export default withUserSettings(DisplayChangePassphraseIntroduction);
+export default withUserSettings(withTranslation('common')(DisplayChangePassphraseIntroduction));

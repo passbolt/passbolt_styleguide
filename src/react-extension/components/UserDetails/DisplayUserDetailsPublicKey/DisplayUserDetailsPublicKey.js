@@ -16,7 +16,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import Icon from "../../Common/Icons/Icon";
 import {withUserWorkspace} from "../../../contexts/UserWorkspaceContext";
-import AppContext from "../../../contexts/AppContext";
+import {withAppContext} from "../../../contexts/AppContext";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import {DateTime} from "luxon";
 import {Trans, withTranslation} from "react-i18next";
@@ -85,7 +85,7 @@ class DisplayUserDetailsPublicKey extends React.Component {
    * @returns {Promise<void>}
    */
   async fetchGpgkeyInfo() {
-    const gpgkeyInfo = await this.context.port.request('passbolt.keyring.get-public-key-info-by-user', this.user.id);
+    const gpgkeyInfo = await this.props.context.port.request('passbolt.keyring.get-public-key-info-by-user', this.user.id);
 
     // format the gpgkey info.
     const fingerprint = gpgkeyInfo.fingerprint;
@@ -105,7 +105,7 @@ class DisplayUserDetailsPublicKey extends React.Component {
    */
   formatDate(data) {
     try {
-      return DateTime.fromJSDate(new Date(data)).setLocale(this.context.locale).toLocaleString(DateTime.DATETIME_FULL);
+      return DateTime.fromJSDate(new Date(data)).setLocale(this.props.context.locale).toLocaleString(DateTime.DATETIME_FULL);
     } catch (error) {
       return "";
     }
@@ -176,7 +176,7 @@ class DisplayUserDetailsPublicKey extends React.Component {
    */
   async handlePublicKeyCopy() {
     const armoredKey = this.state.gpgkeyInfo.armoredKey;
-    await this.context.port.request("passbolt.clipboard.copy", armoredKey);
+    await this.props.context.port.request("passbolt.clipboard.copy", armoredKey);
     this.props.actionFeedbackContext.displaySuccess(this.translate("The public key has been copied to clipboard"));
   }
 
@@ -257,12 +257,12 @@ class DisplayUserDetailsPublicKey extends React.Component {
   }
 }
 
-DisplayUserDetailsPublicKey.contextType = AppContext;
 DisplayUserDetailsPublicKey.propTypes = {
+  context: PropTypes.any, // The application context
   userWorkspaceContext: PropTypes.object, // The user workspace context
   actionFeedbackContext: PropTypes.object, // The action feedback context
   t: PropTypes.func, // The translation function
   i18n: PropTypes.any // The i18n context translation
 };
 
-export default withActionFeedback(withUserWorkspace(withTranslation('common')(DisplayUserDetailsPublicKey)));
+export default withAppContext(withActionFeedback(withUserWorkspace(withTranslation('common')(DisplayUserDetailsPublicKey))));

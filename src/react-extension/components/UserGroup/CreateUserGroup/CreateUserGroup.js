@@ -19,7 +19,7 @@ import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
 import FormCancelButton from "../../Common/Inputs/FormSubmitButton/FormCancelButton";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
 import Autocomplete from "../../Common/Inputs/Autocomplete/Autocomplete";
-import AppContext from "../../../contexts/AppContext";
+import {withAppContext} from "../../../contexts/AppContext";
 import {withDialog} from "../../../contexts/DialogContext";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import UserAvatar from "../../Common/Avatar/UserAvatar";
@@ -246,7 +246,7 @@ class CreateUserGroup extends Component {
       title: this.translate("There was an unexpected error..."),
       message: error.message
     };
-    this.context.setContext({errorDialogProps});
+    this.props.context.setContext({errorDialogProps});
     this.props.dialogContext.open(NotifyError);
   }
 
@@ -254,7 +254,7 @@ class CreateUserGroup extends Component {
    * Adds the current user in the group as group manager
    */
   async addCurrentUser() {
-    const [user] = await this.decorateUsersWithGpgKey([this.context.loggedInUser]);
+    const [user] = await this.decorateUsersWithGpgKey([this.props.context.loggedInUser]);
     this.state.groups_users.push({user, is_admin: true});
   }
 
@@ -335,7 +335,7 @@ class CreateUserGroup extends Component {
       is_admin: groups_user.is_admin
     }));
     const groupDto = {name: this.state.name, groups_users};
-    return await this.context.port.request("passbolt.groups.create", groupDto);
+    return await this.props.context.port.request("passbolt.groups.create", groupDto);
   }
 
   /**
@@ -358,7 +358,7 @@ class CreateUserGroup extends Component {
     const matchUser = (word, user) => matchUsernameProperty(word, user) || matchNameProperty(word, user);
     const matchText = user => words.every(word => matchUser(word, user));
 
-    const usersMatched = this.context.users.filter(user => user.active === true && !userAlreadyAdded(user))
+    const usersMatched = this.props.context.users.filter(user => user.active === true && !userAlreadyAdded(user))
       .filter(matchText);
 
     return this.decorateUsersWithGpgKey(usersMatched);
@@ -370,7 +370,7 @@ class CreateUserGroup extends Component {
    * @returns {array}
    */
   async decorateUsersWithGpgKey(users) {
-    const decorateGroupsUsersWithGpgKey = async user => Object.assign(user, {gpgkey: await this.context.port.request('passbolt.keyring.get-public-key-info-by-user', user.id)});
+    const decorateGroupsUsersWithGpgKey = async user => Object.assign(user, {gpgkey: await this.props.context.port.request('passbolt.keyring.get-public-key-info-by-user', user.id)});
     const usersWithGPGKey = await Promise.all(users.map(decorateGroupsUsersWithGpgKey));
     return usersWithGPGKey;
   }
@@ -467,7 +467,7 @@ class CreateUserGroup extends Component {
               <ul className="permissions scroll groups_users" ref={this.groupUsersListRef}>
                 {this.state.groups_users.map(groups_user =>
                   <li key={groups_user.user.id} className="row">
-                    <UserAvatar user={groups_user.user} baseUrl={this.context.userSettings.getTrustedDomain()}/>
+                    <UserAvatar user={groups_user.user} baseUrl={this.props.context.userSettings.getTrustedDomain()}/>
                     <div className="aro">
                       <div className="aro-name">
                         <span className="ellipsis">{this.getUserFullname(groups_user.user)}</span>
@@ -483,8 +483,8 @@ class CreateUserGroup extends Component {
                     <div className="select rights">
                       <select value={groups_user.is_admin} disabled={this.hasAllInputDisabled()}
                         onChange={event => this.handleSelectUpdate(event, groups_user.user.id)}>
-                        <option value="false"><Trans>Member</Trans></option>
-                        <option value="true"><Trans>Group manager</Trans></option>
+                        <option value="false">{this.translate("Member")}</option>
+                        <option value="true">{this.translate("Group manager")}</option>
                       </select>
                     </div>
                     <div className="actions">
@@ -526,7 +526,7 @@ class CreateUserGroup extends Component {
                 onOpen={this.handleAutocompleteOpen}
                 onClose={this.handleAutocompleteClose}
                 disabled={this.hasAllInputDisabled()}
-                baseUrl={this.context.userSettings.getTrustedDomain()}
+                baseUrl={this.props.context.userSettings.getTrustedDomain()}
               />
             </div>
           </div>
@@ -540,13 +540,12 @@ class CreateUserGroup extends Component {
   }
 }
 
-CreateUserGroup.contextType = AppContext;
-
 CreateUserGroup.propTypes = {
+  context: PropTypes.any, // The app context
   onClose: PropTypes.func,
   actionFeedbackContext: PropTypes.any, // The action feedback context
   dialogContext: PropTypes.any, // The dialog context
   t: PropTypes.func, // The translation function
 };
 
-export default withActionFeedback(withDialog(withTranslation('common')(CreateUserGroup)));
+export default withAppContext(withActionFeedback(withDialog(withTranslation('common')(CreateUserGroup))));

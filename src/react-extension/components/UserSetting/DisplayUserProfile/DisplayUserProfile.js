@@ -16,7 +16,7 @@
 import React from 'react';
 import PropTypes from "prop-types";
 import UserAvatar from "../../Common/Avatar/UserAvatar";
-import AppContext from "../../../contexts/AppContext";
+import {withAppContext} from "../../../contexts/AppContext";
 import Icon from "../../Common/Icons/Icon";
 import {withDialog} from "../../../contexts/DialogContext";
 import UploadUserProfileAvatar from "../UploadUserProfileAvatar/UploadUserProfileAvatar";
@@ -41,7 +41,7 @@ class DisplayUserProfile extends React.Component {
    * Returns the current user
    */
   get user() {
-    return this.context.loggedInUser;
+    return this.props.context.loggedInUser;
   }
 
   /**
@@ -66,15 +66,15 @@ class DisplayUserProfile extends React.Component {
   formatDateTimeAgo(date) {
     const dateTime = DateTime.fromISO(date);
     const duration = dateTime.diffNow().toMillis();
-    return duration < 1000 && duration > 0 ? this.translate('Just now') : dateTime.toRelative({locale: this.context.locale});
+    return duration > -1000 && duration < 0 ? this.translate('Just now') : dateTime.toRelative({locale: this.props.context.locale});
   }
 
   /**
    * Get the locale label.
    */
   get userLocaleLabel() {
-    const supportedLocales = this.context.siteSettings.supportedLocales || [];
-    const locale = supportedLocales.find(supportedLocale => supportedLocale.locale === this.context.locale);
+    const supportedLocales = this.props.context.siteSettings.supportedLocales || [];
+    const locale = supportedLocales.find(supportedLocale => supportedLocale.locale === this.props.context.locale);
     return locale ? locale.label : "N/A";
   }
 
@@ -91,7 +91,7 @@ class DisplayUserProfile extends React.Component {
    * @type {boolean}
    */
   get canIUseLocale() {
-    return this.context.siteSettings.canIUse('locale');
+    return this.props.context.siteSettings.canIUse('locale');
   }
 
   render() {
@@ -144,8 +144,8 @@ class DisplayUserProfile extends React.Component {
             <div className="avatar">
               <div className="value">
                 <UserAvatar
-                  user={this.context.loggedInUser}
-                  baseUrl={this.context.userSettings.getTrustedDomain()}
+                  user={this.props.context.loggedInUser}
+                  baseUrl={this.props.context.userSettings.getTrustedDomain()}
                   className=""/>
               </div>
               <div className="edit">
@@ -166,12 +166,12 @@ class DisplayUserProfile extends React.Component {
   }
 }
 
-DisplayUserProfile.contextType = AppContext;
 DisplayUserProfile.propTypes = {
+  context: PropTypes.any, // The application context
   dialogContext: PropTypes.object, // The dialog context
   userSettingsContext: PropTypes.object, // The user settings context
   t: PropTypes.func, // The translation function
   i18n: PropTypes.any // The i18n context translation
 };
 
-export default withDialog(withUserSettings(withTranslation('common')(DisplayUserProfile)));
+export default withAppContext(withDialog(withUserSettings(withTranslation('common')(DisplayUserProfile))));

@@ -1,3 +1,5 @@
+import siteSettingsFixture from "../../../../src/react-extension/test/fixture/Settings/siteSettings";
+
 /**
  * Passbolt ~ Open source password manager for teams
  * Copyright (c) 2020 Passbolt SA (https://www.passbolt.com)
@@ -14,103 +16,8 @@
 
 export default () => {
   return {
-    "app": {
-      "version": {
-        "number": "2.13.5",
-        "name": "Stomp"
-      },
-      "url": "http://127.0.0.1:3000",
-      "debug": 1,
-      "server_timezone": "UTC",
-      "session_timeout": 24,
-      "image_storage": {
-        "public_path": "img/public/"
-      },
-      "legal": {
-        "terms": "https://www.passbolt.com/licence",
-        "privacy": "https://www.passbolt.com/privacy"
-      }
-    },
-    "passbolt": {
-      "edition": "pro",
-      "plugins": {
-        "import": {
-          "version": "2.0.1",
-          "config": {
-            "format": [
-              "kdbx",
-              "csv"
-            ]
-          }
-        },
-        "export": {
-          "version": "2.0.0"
-        },
-        "selenium_api": {
-          "version": "2.2.0"
-        },
-        "passbolt_test_data": {
-          "version": "2.0"
-        },
-        "license": {
-          "version": "2.0.0"
-        },
-        "pro": {
-          "version": "2.0.0"
-        },
-        "accountSettings": {
-          "version": "1.0.0",
-          "themes": {
-            "css": "api_main.min.css"
-          }
-        },
-        "rememberMe": {
-          "version": "2.0.0",
-          "options": {
-            "300": "5 minutes",
-            "900": "15 minutes",
-            "1800": "30 minutes",
-            "3600": "1 hour",
-            "-1": "until I log out"
-          }
-        },
-        "emailNotificationSettings": {
-          "version": "1.1.0"
-        },
-        "emailDigest": {
-          "version": "1.0.0"
-        },
-        "reports": {
-          "version": "1.0.0"
-        },
-        "resourceTypes": {
-          "version": "1.0.0"
-        },
-        "multiFactorAuthentication": {
-          "version": "1.1.0"
-        },
-        "directorySync": {
-          "version": "1.0.0"
-        },
-        "tags": {
-          "version": "1.0.1"
-        },
-        "log": {
-          "version": "1.0.0"
-        },
-        "audit_log": {
-          "version": "1.0.0"
-        },
-        "folders": {
-          "version": "2.0.0"
-        },
-        "groups": {
-          "version": "2.0.0"
-        },
-        "mobile": {
-          "version": "1.0.0"
-        }
-      }
-    },
+    body: {
+      body: siteSettingsFixture
+    }
   }
 };

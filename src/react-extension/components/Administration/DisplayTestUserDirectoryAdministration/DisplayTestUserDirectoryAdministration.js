@@ -13,7 +13,7 @@
  */
 import React, {Component} from "react";
 import PropTypes from "prop-types";
-import AppContext from "../../../contexts/AppContext";
+import {withAppContext} from "../../../contexts/AppContext";
 import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
 import Icon from "../../Common/Icons/Icon";
 import DisplayStructureGroupsUsersTreeItem from "./DisplayStructureGroupsUsersTreeItem";
@@ -92,7 +92,7 @@ class DisplayTestUserDirectoryAdministration extends Component {
    */
   handleClose() {
     this.props.onClose();
-    this.context.setContext({displayTestUserDirectoryDialogProps: null});
+    this.props.context.setContext({displayTestUserDirectoryDialogProps: null});
   }
 
   /**
@@ -116,7 +116,7 @@ class DisplayTestUserDirectoryAdministration extends Component {
    * @returns {*}
    */
   get users() {
-    return this.context.displayTestUserDirectoryDialogProps.userDirectoryTestResult.users;
+    return this.props.context.displayTestUserDirectoryDialogProps.userDirectoryTestResult.users;
   }
 
   /**
@@ -124,7 +124,7 @@ class DisplayTestUserDirectoryAdministration extends Component {
    * @returns {*}
    */
   get groups() {
-    return this.context.displayTestUserDirectoryDialogProps.userDirectoryTestResult.groups;
+    return this.props.context.displayTestUserDirectoryDialogProps.userDirectoryTestResult.groups;
   }
 
   /**
@@ -132,7 +132,7 @@ class DisplayTestUserDirectoryAdministration extends Component {
    * @returns {*}
    */
   get tree() {
-    return this.context.displayTestUserDirectoryDialogProps.userDirectoryTestResult.tree;
+    return this.props.context.displayTestUserDirectoryDialogProps.userDirectoryTestResult.tree;
   }
 
   /**
@@ -140,7 +140,7 @@ class DisplayTestUserDirectoryAdministration extends Component {
    * @returns {*}
    */
   get errors() {
-    return this.context.displayTestUserDirectoryDialogProps.userDirectoryTestResult.errors;
+    return this.props.context.displayTestUserDirectoryDialogProps.userDirectoryTestResult.errors;
   }
 
   /**
@@ -253,11 +253,10 @@ class DisplayTestUserDirectoryAdministration extends Component {
   }
 }
 
-DisplayTestUserDirectoryAdministration.contextType = AppContext;
-
 DisplayTestUserDirectoryAdministration.propTypes = {
+  context: PropTypes.any, // The application context
   onClose: PropTypes.func,
   t: PropTypes.func, // The translation function
 };
 
-export default withTranslation('common')(DisplayTestUserDirectoryAdministration);
+export default withAppContext(withTranslation('common')(DisplayTestUserDirectoryAdministration));

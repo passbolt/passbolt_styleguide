@@ -14,7 +14,7 @@ import React, {Component} from "react";
 import {withRouter} from "react-router-dom";
 import PropTypes from "prop-types";
 import Breadcrumbs from "../../Common/Navigation/Breadcrumbs/Breadcrumbs";
-import AppContext from "../../../contexts/AppContext";
+import {withAppContext} from "../../../contexts/AppContext";
 import Breadcrumb from "../../Common/Navigation/Breadcrumbs/Breadcrumb";
 import {withNavigationContext} from "../../../contexts/NavigationContext";
 import {withTranslation} from "react-i18next";
@@ -40,7 +40,7 @@ class DisplayUserSettingsWorkspaceBreadcrumb extends Component {
    * @returns {string}
    */
   get loggedInUserName() {
-    const user = this.context.loggedInUser;
+    const user = this.props.context.loggedInUser;
     return user ? `${user.profile.first_name} ${user.profile.last_name}` : "";
   }
 
@@ -91,13 +91,12 @@ class DisplayUserSettingsWorkspaceBreadcrumb extends Component {
   }
 }
 
-DisplayUserSettingsWorkspaceBreadcrumb.contextType = AppContext;
-
 DisplayUserSettingsWorkspaceBreadcrumb.propTypes = {
+  context: PropTypes.any, // The application context
   location: PropTypes.object, // The router location
   history: PropTypes.object, // The router history
   navigationContext: PropTypes.any, // The application navigation context
   t: PropTypes.func, // The translation function
 };
 
-export default withRouter(withNavigationContext(withTranslation('common')(DisplayUserSettingsWorkspaceBreadcrumb)));
+export default withAppContext(withRouter(withNavigationContext(withTranslation('common')(DisplayUserSettingsWorkspaceBreadcrumb))));

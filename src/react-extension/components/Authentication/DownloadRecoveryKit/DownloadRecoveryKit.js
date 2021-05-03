@@ -12,7 +12,7 @@
  * @since         3.0.0
  */
 import React, {Component} from "react";
-import {AuthenticationContext} from "../../../contexts/AuthenticationContext";
+import {withAuthenticationContext} from "../../../contexts/AuthenticationContext";
 import {Trans, withTranslation} from "react-i18next";
 import PropTypes from "prop-types";
 
@@ -61,14 +61,14 @@ class DownloadRecoveryKit extends Component {
    * Continue the setup process
    */
   continueSetup() {
-    this.context.onRecoveryKitDownloaded();
+    this.props.authenticationContext.onRecoveryKitDownloaded();
   }
 
   /**
    * Download the recovery kit
    */
   async download() {
-    await this.context.onDownloadRecoveryKitRequested();
+    await this.props.authenticationContext.onDownloadRecoveryKitRequested();
   }
 
   /**
@@ -89,6 +89,7 @@ class DownloadRecoveryKit extends Component {
         <h1><Trans>Keep your recovery kit in a safe place.</Trans></h1>
         <p>
           <Trans>A download of your recovery kit, containing your secret key, has automatically started.</Trans>
+          &nbsp;
           <Trans>Make sure you store it in a safe place. You may need it later.</Trans>
         </p>
         <div className="form-actions">
@@ -110,10 +111,9 @@ class DownloadRecoveryKit extends Component {
   }
 }
 
-DownloadRecoveryKit.contextType = AuthenticationContext;
-
 DownloadRecoveryKit.propTypes = {
+  authenticationContext: PropTypes.any, // The authentication context
   t: PropTypes.func, // The translation function
 };
 
-export default withTranslation('common')(DownloadRecoveryKit);
+export default withAuthenticationContext(withTranslation('common')(DownloadRecoveryKit));

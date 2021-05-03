@@ -13,7 +13,7 @@
  */
 import React, {Component} from "react";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
-import {AuthenticationContext} from "../../../contexts/AuthenticationContext";
+import {withAuthenticationContext} from "../../../contexts/AuthenticationContext";
 import PropTypes from "prop-types";
 import {withDialog} from "../../../contexts/DialogContext";
 import UserAvatar from "../../Common/Avatar/UserAvatar";
@@ -64,7 +64,7 @@ class Login extends Component {
    * @returns {boolean}
    */
   get isReady() {
-    return Boolean(this.context.loginInfo);
+    return Boolean(this.props.authenticationContext.loginInfo);
   }
 
   /**
@@ -103,28 +103,28 @@ class Login extends Component {
    * Returns the user full name
    */
   get fullname() {
-    return this.context.loginInfo.userSettings.fullName;
+    return this.props.authenticationContext.loginInfo.userSettings.fullName;
   }
 
   /**
    * Returns the username
    */
   get username() {
-    return this.context.loginInfo.userSettings.username;
+    return this.props.authenticationContext.loginInfo.userSettings.username;
   }
 
   /**
    * Returns the security token code of the suer
    */
   get securityTokenCode() {
-    return this.context.loginInfo.userSettings.getSecurityTokenCode();
+    return this.props.authenticationContext.loginInfo.userSettings.getSecurityTokenCode();
   }
 
   /**
    * Returns the style of the security token (color and text color)
    */
   get securityTokenStyle() {
-    const {userSettings} = this.context.loginInfo;
+    const {userSettings} = this.props.authenticationContext.loginInfo;
     const inverseStyle =  {background: userSettings.getSecurityTokenTextColor(), color: userSettings.getSecurityTokenBackgroundColor()};
     const fullStyle =  {background: userSettings.getSecurityTokenBackgroundColor(), color: userSettings.getSecurityTokenTextColor()};
     return this.state.hasPassphraseFocus ? inverseStyle : fullStyle;
@@ -135,7 +135,7 @@ class Login extends Component {
    * @return {Object}
    */
   get passphraseInputStyle() {
-    const {userSettings} = this.context.loginInfo;
+    const {userSettings} = this.props.authenticationContext.loginInfo;
     const emptyStyle =  {background: "", color: ""};
     const fullStyle =  {background: userSettings.getSecurityTokenBackgroundColor(), color: userSettings.getSecurityTokenTextColor()};
     return this.state.hasPassphraseFocus ? fullStyle : emptyStyle;
@@ -145,7 +145,7 @@ class Login extends Component {
    * Returns the trusted domain
    */
   get trustedDomain() {
-    return this.context.loginInfo.userSettings.getTrustedDomain();
+    return this.props.authenticationContext.loginInfo.userSettings.getTrustedDomain();
   }
 
   /**
@@ -226,14 +226,14 @@ class Login extends Component {
    * Whenever the user needs help because he lost his passphrase
    */
   async onPassphraseLost() {
-    await this.context.onPassphraseLost();
+    await this.props.authenticationContext.onPassphraseLost();
   }
 
   /**
    * Check the private gpg key passphrase
    */
   async check() {
-    await this.context.onCheckLoginPassphraseRequested(this.state.passphrase)
+    await this.props.authenticationContext.onCheckLoginPassphraseRequested(this.state.passphrase)
       .catch(this.onCheckFailure.bind(this));
   }
 
@@ -260,7 +260,7 @@ class Login extends Component {
    * @returns {Promise<void>}
    */
   async login() {
-    await this.context.onLoginRequested(this.state.passphrase, this.state.rememberMe);
+    await this.props.authenticationContext.onLoginRequested(this.state.passphrase, this.state.rememberMe);
   }
 
   /**
@@ -420,11 +420,11 @@ class Login extends Component {
   }
 }
 
-Login.contextType = AuthenticationContext;
 Login.propTypes = {
   context: PropTypes.any, // The application context
+  authenticationContext: PropTypes.any, // The authentication context
   canRememberMe: PropTypes.bool, // True if the remember me flag must be displayed
   dialogContext: PropTypes.any, // The dialog context
   t: PropTypes.func, // The translation function
 };
-export default withAppContext(withDialog(withTranslation('common')(Login)));
+export default withAppContext(withAuthenticationContext(withDialog(withTranslation('common')(Login))));

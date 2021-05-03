@@ -13,7 +13,7 @@
  */
 import React, {Component} from "react";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
-import {AuthenticationContext} from "../../../contexts/AuthenticationContext";
+import {withAuthenticationContext} from "../../../contexts/AuthenticationContext";
 import PropTypes from "prop-types";
 import {withDialog} from "../../../contexts/DialogContext";
 import Icon from "../../Common/Icons/Icon";
@@ -151,14 +151,14 @@ class CheckPassphrase extends Component {
    * Whenever the user needs help because he lost his passphrase
    */
   async onPassphraseLost() {
-    await this.context.onPassphraseLost();
+    await this.props.authenticationContext.onPassphraseLost();
   }
 
   /**
    * Check the private gpg key passphrase
    */
   async check() {
-    await this.context.onCheckImportedGpgKeyPassphraseRequested(this.state.passphrase, this.state.rememberMe)
+    await this.props.authenticationContext.onCheckImportedGpgKeyPassphraseRequested(this.state.passphrase, this.state.rememberMe)
       .catch(this.onCheckFailure.bind(this));
   }
 
@@ -304,11 +304,11 @@ class CheckPassphrase extends Component {
   }
 }
 
-CheckPassphrase.contextType = AuthenticationContext;
 CheckPassphrase.propTypes = {
+  authenticationContext: PropTypes.any, // The authentication context
   canRememberMe: PropTypes.bool, // True if the remember me flag must be displayed
   dialogContext: PropTypes.any, // The dialog context
   secondaryAction: PropTypes.any, // Secondary action to display
   t: PropTypes.func, // The translation function
 };
-export default withDialog(withTranslation('common')(CheckPassphrase));
+export default withAuthenticationContext(withDialog(withTranslation('common')(CheckPassphrase)));

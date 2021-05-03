@@ -360,7 +360,7 @@ export const mockResources = [
         "modified": "2020-08-21T08:53:00+00:00"
       },
       {
-        "id": "fa5f5d7a-32cc-4c5b-9478-f58584ca4222",
+        "id": "za5f5d7a-32cc-4c5b-9478-f58584ca4222",
         "aco": "Resource",
         "aco_foreign_key": "f9f79749-4bce-4e61-8016-68c942a8f2d9",
         "aro": "Group",

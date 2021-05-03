@@ -14,7 +14,7 @@
 import React, {Component} from "react";
 import PropTypes from "prop-types";
 import {withRouter} from "react-router-dom";
-import AppContext, {withAppContext} from "../../../contexts/AppContext";
+import {withAppContext} from "../../../contexts/AppContext";
 
 /**
  * This component tracks any navigation changes and handle it
@@ -33,7 +33,7 @@ class HandleExtAppRouteChanged extends Component {
    */
   handleRouteChanged() {
     this.props.history.listen(location => {
-      this.context.port.emit('passbolt.app.route-changed', location.pathname);
+      this.props.context.port.emit('passbolt.app.route-changed', location.pathname);
     });
   }
 
@@ -48,8 +48,8 @@ class HandleExtAppRouteChanged extends Component {
   }
 }
 
-HandleExtAppRouteChanged.contextType = AppContext;
 HandleExtAppRouteChanged.propTypes = {
+  context: PropTypes.any, // The application context
   history: PropTypes.object
 };
 export default withAppContext(withRouter(HandleExtAppRouteChanged));

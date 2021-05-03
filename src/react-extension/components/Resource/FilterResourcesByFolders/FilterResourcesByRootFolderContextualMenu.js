@@ -13,7 +13,7 @@
  */
 import React from "react";
 import PropTypes from "prop-types";
-import AppContext from "../../../contexts/AppContext";
+import {withAppContext} from "../../../contexts/AppContext";
 import ContextualMenuWrapper from "../../Common/ContextualMenu/ContextualMenuWrapper";
 import CreateResourceFolder from "../../ResourceFolder/CreateResourceFolder/CreateResourceFolder";
 import {withDialog} from "../../../contexts/DialogContext";
@@ -60,7 +60,7 @@ class FilterResourcesByRootFolderContextualMenu extends React.Component {
    * Handle click on the create a folder menu option.
    */
   handleCreateFolderItemClickEvent() {
-    this.context.setContext({
+    this.props.context.setContext({
       folderCreateDialogProps: {
         folderParentId: null
       }
@@ -81,15 +81,15 @@ class FilterResourcesByRootFolderContextualMenu extends React.Component {
    * Returns true if the user can export
    */
   canExport() {
-    return this.context.siteSettings.settings.passbolt.plugins.export;
+    return this.props.context.siteSettings.settings.passbolt.plugins.export;
   }
 
   /**
    * Exports the selected resources
    */
   async export() {
-    const foldersIds = this.context.folders.filter(folder => folder.folder_parent_id === null).map(folder => folder.id);
-    const resourcesIds = this.context.resources.filter(resource => resource.folder_parent_id === null).map(resource => resource.id);
+    const foldersIds = this.props.context.folders.filter(folder => folder.folder_parent_id === null).map(folder => folder.id);
+    const resourcesIds = this.props.context.resources.filter(resource => resource.folder_parent_id === null).map(resource => resource.id);
     await this.props.resourceWorkspaceContext.onResourcesToExport({foldersIds, resourcesIds});
     await this.props.dialogContext.open(ExportResources);
   }
@@ -135,9 +135,8 @@ class FilterResourcesByRootFolderContextualMenu extends React.Component {
   }
 }
 
-FilterResourcesByRootFolderContextualMenu.contextType = AppContext;
-
 FilterResourcesByRootFolderContextualMenu.propTypes = {
+  context: PropTypes.any, // The application context
   hide: PropTypes.func, // Hide the contextual menu
   left: PropTypes.number, // left position in px of the page
   top: PropTypes.number, // top position in px of the page
@@ -146,4 +145,4 @@ FilterResourcesByRootFolderContextualMenu.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withResourceWorkspace(withDialog(withTranslation('common')(FilterResourcesByRootFolderContextualMenu)));
+export default withAppContext(withResourceWorkspace(withDialog(withTranslation('common')(FilterResourcesByRootFolderContextualMenu))));

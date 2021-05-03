@@ -14,7 +14,7 @@
 
 import React, {Component} from "react";
 import PropTypes from "prop-types";
-import AppContext from "../../../contexts/AppContext";
+import {withAppContext} from "../../../contexts/AppContext";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import {withDialog} from "../../../contexts/DialogContext";
 import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
@@ -169,7 +169,7 @@ class ImportResourcesKeyUnlock extends Component {
     this.toggleProcessing();
     await this.resetValidation();
     try {
-      const result = await this.context.port.request("passbolt.import-resources.import-file", fileType, b64FileContent, options);
+      const result = await this.props.context.port.request("passbolt.import-resources.import-file", fileType, b64FileContent, options);
       this.handleImportSuccess(result);
     } catch (error) {
       this.handleImportError(error);
@@ -215,7 +215,7 @@ class ImportResourcesKeyUnlock extends Component {
         title: this.translate("There was an unexpected error..."),
         message: error.message
       };
-      this.context.setContext({errorDialogProps});
+      this.props.context.setContext({errorDialogProps});
       this.props.dialogContext.open(NotifyError);
     }
   }
@@ -297,16 +297,18 @@ class ImportResourcesKeyUnlock extends Component {
                 onChange={this.handleFileSelected}/>
               <div className="input text">
                 <label><Trans>Keepass key file (optional)</Trans></label>
-                <input
-                  type="text"
-                  placeholder={this.translate('No key file selected')}
-                  disabled
-                  value={this.selectedFilename}/>
-                <a
-                  className={`button primary ${this.hasAllInputDisabled() ? "disabled" : ""}`}
-                  onClick={this.handleSelectFile}>
-                  <Icon name="upload-a"/> <Trans>Choose a file</Trans>
-                </a>
+                <div className="input-file-inline">
+                  <input
+                    type="text"
+                    placeholder={this.translate('No key file selected')}
+                    disabled
+                    value={this.selectedFilename}/>
+                  <a
+                    className={`button primary ${this.hasAllInputDisabled() ? "disabled" : ""}`}
+                    onClick={this.handleSelectFile}>
+                    <Icon name="upload-a"/> <Trans>Choose a file</Trans>
+                  </a>
+                </div>
               </div>
             </div>
 
@@ -332,9 +334,8 @@ class ImportResourcesKeyUnlock extends Component {
   }
 }
 
-ImportResourcesKeyUnlock.contextType = AppContext;
-
 ImportResourcesKeyUnlock.propTypes = {
+  context: PropTypes.any, // The application context
   onClose: PropTypes.func,
   actionFeedbackContext: PropTypes.any, // The action feedback context
   dialogContext: PropTypes.any, // The dialog context
@@ -342,4 +343,4 @@ ImportResourcesKeyUnlock.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default  withResourceWorkspace(withActionFeedback(withDialog(withTranslation('common')(ImportResourcesKeyUnlock))));
+export default  withAppContext(withResourceWorkspace(withActionFeedback(withDialog(withTranslation('common')(ImportResourcesKeyUnlock)))));

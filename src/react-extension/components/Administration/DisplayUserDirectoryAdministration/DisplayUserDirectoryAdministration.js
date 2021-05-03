@@ -1057,7 +1057,7 @@ class DisplayUserDirectoryAdministration extends React.Component {
                         </div>
                       </div>
                       <div className="message">
-                        <Trans>The default admin user is the admin user that will perform the operations for the the directory.</Trans>
+                        <Trans>The default admin user is the user that will perform the operations for the the directory.</Trans>
                       </div>
                     </div>
                     <div className="input select required ad openldap">
@@ -1100,7 +1100,7 @@ class DisplayUserDirectoryAdministration extends React.Component {
                         </div>
                       </div>
                       <div className="message">
-                        <Trans>The default group admin user is the admin user that will be the group manager of newly created group.</Trans>
+                        <Trans>The default group manager is the user that will be the group manager of newly created groups.</Trans>
                       </div>
                     </div>
                     <div className="input text ad openldap">

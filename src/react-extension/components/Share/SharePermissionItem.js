@@ -17,10 +17,10 @@ import PropTypes from "prop-types";
 import SharePermissionDeleteButton from "./SharePermissionDeleteButton";
 import TooltipHtml from "../Common/Tooltip/TooltipHtml";
 import ShareVariesDetails from "./ShareVariesDetails";
-import AppContext from "../../contexts/AppContext";
+import {withAppContext} from "../../contexts/AppContext";
 import UserAvatar from "../Common/Avatar/UserAvatar";
 import GroupAvatar from "../Common/Avatar/GroupAvatar";
-import {Trans, withTranslation} from "react-i18next";
+import {withTranslation} from "react-i18next";
 
 class SharePermissionItem extends Component {
   /**
@@ -129,10 +129,10 @@ class SharePermissionItem extends Component {
     return (
       <li id={`permission-item-${this.props.id}`} className={this.getClassName()}>
         {this.isUser() &&
-        <UserAvatar user={this.props.aro} baseUrl={this.context.userSettings.getTrustedDomain()}/>
+        <UserAvatar user={this.props.aro} baseUrl={this.props.context.userSettings.getTrustedDomain()}/>
         }
         {this.isGroup() &&
-        <GroupAvatar group={this.props.aro} baseUrl={this.context.userSettings.getTrustedDomain()}/>
+        <GroupAvatar group={this.props.aro} baseUrl={this.props.context.userSettings.getTrustedDomain()}/>
         }
 
         <div className="aro">
@@ -151,11 +151,11 @@ class SharePermissionItem extends Component {
             disabled={this.isInputDisabled()}
             onChange={this.handleUpdate}
           >
-            <option value="1"><Trans>can read</Trans></option>
-            <option value="7"><Trans>can update</Trans></option>
-            <option value="15"><Trans>is owner</Trans></option>
+            <option value="1">{this.translate("can read")}</option>
+            <option value="7">{this.translate("can update")}</option>
+            <option value="15">{this.translate("is owner")}</option>
             { (this.props.variesDetails) &&
-            <option value="-1"><Trans>varies</Trans></option>
+            <option value="-1">{this.translate("varies")}</option>
             }
           </select>
 
@@ -174,9 +174,8 @@ class SharePermissionItem extends Component {
   }
 }
 
-SharePermissionItem.contextType = AppContext;
-
 SharePermissionItem.propTypes = {
+  context: PropTypes.any, // The application context
   id: PropTypes.string, // uuid
   aro: PropTypes.object, // {id: <uuid>, name: <string>, ...etc}
   variesDetails: PropTypes.object, // {type: [resource1, ...resourceN]}
@@ -188,4 +187,4 @@ SharePermissionItem.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withTranslation('common')(SharePermissionItem);
+export default withAppContext(withTranslation('common')(SharePermissionItem));

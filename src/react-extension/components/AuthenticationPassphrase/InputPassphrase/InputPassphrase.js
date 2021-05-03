@@ -13,7 +13,7 @@
  */
 import React, {Component} from "react";
 import PropTypes from "prop-types";
-import AppContext from "../../../contexts/AppContext";
+import {withAppContext} from "../../../contexts/AppContext";
 import UserAbortsOperationError from "../../../lib/Error/UserAbortsOperationError";
 import Icon from "../../Common/Icons/Icon";
 import {Trans, withTranslation} from "react-i18next";
@@ -29,7 +29,7 @@ class InputPassphrase extends Component {
   componentDidMount() {
     // Init the default remember me duration based on the remember me options given in options.
     if (this.hasRememberMeOptions()) {
-      const rememberMeOptions = this.context.siteSettings.getRememberMeOptions();
+      const rememberMeOptions = this.props.context.siteSettings.getRememberMeOptions();
       const rememberMeDurations = Object.keys(rememberMeOptions);
       const rememberMeDuration = parseInt(rememberMeDurations[0]);
       this.setState({rememberMeDuration: rememberMeDuration});
@@ -73,8 +73,8 @@ class InputPassphrase extends Component {
    */
   close() {
     const error = new UserAbortsOperationError("The dialog has been closed.");
-    this.context.port.emit(this.context.passphraseRequestId, "ERROR", error);
-    this.context.setContext({passphraseRequestId: null});
+    this.props.context.port.emit(this.props.context.passphraseRequestId, "ERROR", error);
+    this.props.context.setContext({passphraseRequestId: null});
     this.props.onClose();
   }
 
@@ -119,7 +119,7 @@ class InputPassphrase extends Component {
    */
   async isValidPassphrase() {
     try {
-      await this.context.port.request("passbolt.keyring.private.checkpassphrase", this.state.passphrase);
+      await this.props.context.port.request("passbolt.keyring.private.checkpassphrase", this.state.passphrase);
     } catch (error) {
       return false;
     }
@@ -130,7 +130,7 @@ class InputPassphrase extends Component {
    * Check if remember me options are provided.
    */
   hasRememberMeOptions() {
-    const options = this.context.siteSettings.getRememberMeOptions();
+    const options = this.props.context.siteSettings.getRememberMeOptions();
 
     return options !== null && Object.keys(options).length > 0;
   }
@@ -144,11 +144,11 @@ class InputPassphrase extends Component {
       rememberMe = this.state.rememberMeDuration;
     }
 
-    this.context.port.emit(this.context.passphraseRequestId, "SUCCESS", {
+    this.props.context.port.emit(this.props.context.passphraseRequestId, "SUCCESS", {
       passphrase: this.state.passphrase,
       rememberMe: rememberMe
     });
-    this.context.setContext({passphraseRequestId: null});
+    this.props.context.setContext({passphraseRequestId: null});
     this.props.onClose();
   }
 
@@ -214,8 +214,8 @@ class InputPassphrase extends Component {
    */
   getPassphraseInputStyle() {
     if (this.state.passphraseInputHasFocus) {
-      const backgroundColor = this.context.userSettings.getSecurityTokenBackgroundColor();
-      const textColor = this.context.userSettings.getSecurityTokenTextColor();
+      const backgroundColor = this.props.context.userSettings.getSecurityTokenBackgroundColor();
+      const textColor = this.props.context.userSettings.getSecurityTokenTextColor();
 
       return {
         background: backgroundColor,
@@ -234,8 +234,8 @@ class InputPassphrase extends Component {
    * @return {Object}
    */
   getSecurityTokenStyle() {
-    const backgroundColor = this.context.userSettings.getSecurityTokenBackgroundColor();
-    const textColor = this.context.userSettings.getSecurityTokenTextColor();
+    const backgroundColor = this.props.context.userSettings.getSecurityTokenBackgroundColor();
+    const textColor = this.props.context.userSettings.getSecurityTokenTextColor();
 
     if (this.state.passphraseInputHasFocus) {
       return {
@@ -270,7 +270,7 @@ class InputPassphrase extends Component {
    */
   renderRememberMeOptions() {
     const selectOptions = [];
-    const rememberMeOptions = this.context.siteSettings.getRememberMeOptions();
+    const rememberMeOptions = this.props.context.siteSettings.getRememberMeOptions();
 
     for (const time in rememberMeOptions) {
       selectOptions.push(<option value={time} key={time}>{rememberMeOptions[time]}</option>);
@@ -294,7 +294,7 @@ class InputPassphrase extends Component {
   render() {
     const passphraseStyle = this.getPassphraseInputStyle();
     const securityTokenStyle = this.getSecurityTokenStyle();
-    const securityTokenCode = this.context.userSettings.getSecurityTokenCode();
+    const securityTokenCode = this.props.context.userSettings.getSecurityTokenCode();
     let passphraseInputLabel = this.translate("You need your passphrase to continue.");
     if (this.state.passphraseError) {
       passphraseInputLabel = this.translate("Please enter a valid passphrase.");
@@ -342,12 +342,13 @@ class InputPassphrase extends Component {
                   <div className="security-token"
                     style={securityTokenStyle}>{securityTokenCode}
                   </div>
-                  {this.state.passphraseError &&
-                  <div className="input text">
-                    <div className="message error">{this.state.passphraseError}</div>
-                  </div>
-                  }
+
                 </div>
+                {this.state.passphraseError &&
+                <div className="input text">
+                  <div className="message error">{this.state.passphraseError}</div>
+                </div>
+                }
                 {hasRememberMeOptions &&
                 <div>
                   <div className="input checkbox">
@@ -388,11 +389,10 @@ class InputPassphrase extends Component {
   }
 }
 
-InputPassphrase.contextType = AppContext;
-
 InputPassphrase.propTypes = {
+  context: PropTypes.object, // The application context
   onClose: PropTypes.func,
   t: PropTypes.func, // The translation function
 };
 
-export default withTranslation('common')(InputPassphrase);
+export default withAppContext(withTranslation('common')(InputPassphrase));

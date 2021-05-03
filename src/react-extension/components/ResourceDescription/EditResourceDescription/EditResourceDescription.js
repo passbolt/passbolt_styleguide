@@ -13,7 +13,7 @@
  */
 import React from "react";
 import PropTypes from "prop-types";
-import AppContext from "../../../contexts/AppContext";
+import {withAppContext} from "../../../contexts/AppContext";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import {withLoading} from "../../../contexts/LoadingContext";
 import Tooltip from "../../Common/Tooltip/Tooltip";
@@ -95,7 +95,7 @@ class EditResourceDescription extends React.Component {
    * @returns {boolean}
    */
   mustEncryptDescription() {
-    return this.context.resourceTypesSettings.mustEncryptDescription(this.props.resource.resource_type_id);
+    return this.props.context.resourceTypesSettings.mustEncryptDescription(this.props.resource.resource_type_id);
   }
 
   /*
@@ -107,7 +107,7 @@ class EditResourceDescription extends React.Component {
    * @returns {ResourceTypesSettings}
    */
   get resourceTypesSettings() {
-    return this.context.resourceTypesSettings;
+    return this.props.context.resourceTypesSettings;
   }
 
   /*
@@ -190,7 +190,7 @@ class EditResourceDescription extends React.Component {
     const resourceDto = {...this.props.resource};
     resourceDto.description = this.description;
 
-    return this.context.port.request("passbolt.resources.update", resourceDto, null);
+    return this.props.context.port.request("passbolt.resources.update", resourceDto, null);
   }
 
   /**
@@ -200,13 +200,13 @@ class EditResourceDescription extends React.Component {
   async updateWithEncryptedDescription() {
     const resourceDto = {...this.props.resource};
     resourceDto.description = '';
-    resourceDto.resource_type_id = this.context.resourceTypesSettings.findResourceTypeIdBySlug(
-      this.context.resourceTypesSettings.DEFAULT_RESOURCE_TYPES_SLUGS.PASSWORD_AND_DESCRIPTION
+    resourceDto.resource_type_id = this.props.context.resourceTypesSettings.findResourceTypeIdBySlug(
+      this.props.context.resourceTypesSettings.DEFAULT_RESOURCE_TYPES_SLUGS.PASSWORD_AND_DESCRIPTION
     );
 
     let plaintextDto = {};
     if (this.plaintextDto === undefined) {
-      const password = await this.context.port.request("passbolt.secret.decrypt", resourceDto.id, {showProgress: false});
+      const password = await this.props.context.port.request("passbolt.secret.decrypt", resourceDto.id, {showProgress: false});
       plaintextDto.password = password;
     } else {
       plaintextDto = {...this.plaintextDto};
@@ -215,7 +215,7 @@ class EditResourceDescription extends React.Component {
     plaintextDto.description = this.description;
     await this.setState({plaintextDto});
 
-    return this.context.port.request("passbolt.resources.update", resourceDto, plaintextDto);
+    return this.props.context.port.request("passbolt.resources.update", resourceDto, plaintextDto);
   }
 
   /*
@@ -411,9 +411,8 @@ class EditResourceDescription extends React.Component {
   }
 }
 
-EditResourceDescription.contextType = AppContext;
-
 EditResourceDescription.propTypes = {
+  context: PropTypes.any, // The application context
   description: PropTypes.string, // the description
   resource: PropTypes.any, // the resource to update the description for
   plaintextDto: PropTypes.any, // the plaintext secret to update if description is encrypted
@@ -424,4 +423,4 @@ EditResourceDescription.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withResourceWorkspace(withLoading(withActionFeedback(withTranslation('common')(EditResourceDescription))));
+export default withAppContext(withResourceWorkspace(withLoading(withActionFeedback(withTranslation('common')(EditResourceDescription)))));

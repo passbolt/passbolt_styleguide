@@ -16,6 +16,7 @@
 import React from 'react';
 import PropTypes from "prop-types";
 import {withUserSettings} from "../../../contexts/UserSettingsContext";
+import {Trans, withTranslation} from "react-i18next";
 
 /**
  * This component displays the user profile information
@@ -56,7 +57,7 @@ class DownloadRecoveryKit extends React.Component {
       <div className="grid grid-responsive-12 profile-passphrase">
         <div className="row">
           <div className="col7 last">
-            <h3>The passphrase was updated!</h3>
+            <h3><Trans>The passphrase was updated!</Trans></h3>
             <div className="feedback-card">
               <div className="illustration">
                 <svg id="successAnimation" className="animated" xmlns="http://www.w3.org/2000/svg" width="170" height="170" viewBox="0 0 70 70">
@@ -67,10 +68,10 @@ class DownloadRecoveryKit extends React.Component {
                 </svg>
               </div>
               <div className="additional-information">
-                <p>Your passphrase has been changed. Make sure you keep a backup of your secret key encrypted with this new passphrase.</p>
-                <p>Keep this backup in a safe place, you will need it in case of emergency.</p>
+                <p><Trans>Your passphrase has been changed. Make sure you keep a backup of your secret key encrypted with this new passphrase.</Trans></p>
+                <p><Trans>Keep this backup in a safe place, you will need it in case of emergency.</Trans></p>
                 <p>
-                  <a className="button big primary" role="button" onClick={this.handleDownloadBackup}>Download backup</a>
+                  <a className="button big primary" role="button" onClick={this.handleDownloadBackup}><Trans>Download backup</Trans></a>
                 </p>
               </div>
             </div>
@@ -85,4 +86,4 @@ DownloadRecoveryKit.propTypes = {
   userSettingsContext: PropTypes.object // The user settings context
 };
 
-export default withUserSettings(DownloadRecoveryKit);
+export default withUserSettings(withTranslation('common')(DownloadRecoveryKit));

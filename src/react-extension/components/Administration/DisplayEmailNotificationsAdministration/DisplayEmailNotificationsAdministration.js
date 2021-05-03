@@ -358,7 +358,7 @@ class DisplayEmailNotificationsAdministration extends React.Component {
           <form className="form">
             <div className="row">
               <div className="col6">
-                <label>Passwords</label>
+                <label><Trans>Passwords</Trans></label>
                 <span className="input toggle-switch form-element">
                   <label htmlFor="send-password-create-toggle-button"><Trans>When a password is created, notify its creator.</Trans></label>
                   <input type="checkbox" className="toggle-switch-checkbox checkbox" name="passwordCreate" disabled={this.hasAllInputDisabled()}
@@ -385,7 +385,7 @@ class DisplayEmailNotificationsAdministration extends React.Component {
                 </span>
               </div>
               <div className="col6 last">
-                <label>Folders</label>
+                <label><Trans>Folders</Trans></label>
                 <span className="input toggle-switch form-element">
                   <label htmlFor="send-folder-create-toggle-button"><Trans>When a folder is created, notify its creator.</Trans></label>
                   <input type="checkbox" className="toggle-switch-checkbox checkbox" name="folderCreate" disabled={this.hasAllInputDisabled()}
@@ -459,7 +459,7 @@ class DisplayEmailNotificationsAdministration extends React.Component {
                     onChange={this.handleInputChange} checked={this.state.groupManagerUpdate} id="send-group-manager-update-toggle-button"/>
                   <label className="toggle-switch-button" htmlFor="send-group-manager-update-toggle-button"/>
                 </span>
-                <label>Registration & Recovery</label>
+                <label><Trans>Registration & Recovery</Trans></label>
                 <span className="input toggle-switch form-element">
                   <label htmlFor="send-user-create-toggle-button"><Trans>When new users are invited to passbolt, notify them.</Trans></label>
                   <input type="checkbox" className="toggle-switch-checkbox checkbox" name="userCreate" disabled={this.hasAllInputDisabled()}
@@ -505,7 +505,7 @@ class DisplayEmailNotificationsAdministration extends React.Component {
                 </span>
               </div>
               <div className="col6 last">
-                <label>Comments</label>
+                <label><Trans>Comments</Trans></label>
                 <span className="input toggle-switch form-element">
                   <label htmlFor="show-comment-toggle-button"><Trans>Comment content</Trans></label>
                   <input type="checkbox" className="toggle-switch-checkbox checkbox" name="showComment" disabled={this.hasAllInputDisabled()}

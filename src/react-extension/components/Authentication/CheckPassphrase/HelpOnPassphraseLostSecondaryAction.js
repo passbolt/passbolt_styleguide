@@ -12,7 +12,7 @@
  * @since         3.0.0
  */
 import React, {Component} from "react";
-import {AuthenticationContext} from "../../../contexts/AuthenticationContext";
+import {withAuthenticationContext} from "../../../contexts/AuthenticationContext";
 import {Trans, withTranslation} from "react-i18next";
 import PropTypes from "prop-types";
 
@@ -27,15 +27,15 @@ class HelpOnPassphraseLostSecondaryAction extends Component {
 
   render() {
     return (
-      <a onClick={this.context.onPassphraseLost}>
+      <a onClick={this.props.authenticationContext.onPassphraseLost}>
         <Trans>Help, I lost my passphrase.</Trans>
       </a>
     );
   }
 }
 
-HelpOnPassphraseLostSecondaryAction.contextType = AuthenticationContext;
 HelpOnPassphraseLostSecondaryAction.propTypes = {
+  authenticationContext: PropTypes.any, // The authentication context
   t: PropTypes.func, // The translation function
 };
-export default withTranslation('common')(HelpOnPassphraseLostSecondaryAction);
+export default withAuthenticationContext(withTranslation('common')(HelpOnPassphraseLostSecondaryAction));

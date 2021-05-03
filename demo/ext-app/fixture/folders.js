@@ -25,7 +25,7 @@ const createFolder = index => {
 
 export default (() => {
   let folders = [];
-  for(let i = 0; i < 0; i++) {
+  for(let i = 0; i < 10; i++) {
     folders.push(createFolder( "" + i));
   }
   return folders;

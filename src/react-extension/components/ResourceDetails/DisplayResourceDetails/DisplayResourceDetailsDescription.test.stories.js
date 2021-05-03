@@ -1,7 +1,7 @@
 import React from "react";
 import {MemoryRouter, Route} from "react-router-dom";
 import AppContext from "../../../contexts/AppContext";
-import "../../../../css/themes/midgar/ext_app.css";
+import "../../../../css/themes/default/ext_app.css";
 import UserSettings from "../../../../shared/lib/Settings/UserSettings";
 import userSettingsFixture from "../../../test/fixture/Settings/userSettings";
 import DisplayResourceDetailsDescription from "./DisplayResourceDetailsDescription";

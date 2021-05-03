@@ -13,7 +13,7 @@
  */
 import React, {Component} from "react";
 import PropTypes from "prop-types";
-import AppContext from "../../../contexts/AppContext";
+import {withAppContext} from "../../../contexts/AppContext";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import {withDialog} from "../../../contexts/DialogContext";
 import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
@@ -95,7 +95,7 @@ class ConfirmDisableUserMFA extends Component {
    */
   async disableMFA() {
     await this.setState({actions: {processing: true}});
-    await this.context.port.request("passbolt.mfa.disable-for-user", this.user.id)
+    await this.props.context.port.request("passbolt.mfa.disable-for-user", this.user.id)
       .then(this.onDisableMFASuccess.bind(this))
       .catch(this.onDisableMFAFailure.bind(this));
   }
@@ -118,7 +118,7 @@ class ConfirmDisableUserMFA extends Component {
       title: this.translate("There was an unexpected error..."),
       message: error.message
     };
-    this.context.setContext({errorDialogProps});
+    this.props.context.setContext({errorDialogProps});
     this.props.dialogContext.open(NotifyError);
   }
 
@@ -179,9 +179,8 @@ class ConfirmDisableUserMFA extends Component {
   }
 }
 
-ConfirmDisableUserMFA.contextType = AppContext;
-
 ConfirmDisableUserMFA.propTypes = {
+  context: PropTypes.any, // The application context
   actionFeedbackContext: PropTypes.any, // The action feedback context
   onClose: PropTypes.func,
   dialogContext: PropTypes.any, // The dialog context
@@ -189,4 +188,4 @@ ConfirmDisableUserMFA.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withUserWorkspace(withActionFeedback(withDialog(withTranslation('common')(ConfirmDisableUserMFA))));
+export default withAppContext(withUserWorkspace(withActionFeedback(withDialog(withTranslation('common')(ConfirmDisableUserMFA)))));

@@ -21,6 +21,9 @@ import mockPostRequestUserDirectorySettings from "./request/mockPostRequestUserD
 import mockGetRequestSimulateSynchronize from "./request/mockGetRequestSimulateSynchronize";
 import mockGetRequestEmailNotificationsSettings from "./request/mockGetRequestEmailNotificationsSettings";
 import mockGetSiteSettings from "./request/mockGetSiteSettings";
+import mockGetUserSettings from "./request/mockGetUserSettings";
+import mockGetRecoverSettings from "./request/mockGetRecoverSettings";
+import mockGetSetupSettings from "./request/mockGetSetupSettings";
 
 export default () => {
   const mockFetch = new MockFetch();
@@ -37,6 +40,9 @@ export default () => {
   mockFetch.addPutFetchRequest("http://localhost:3000/directorysync/settings.json?api-version=v2", mockPutRequestUserDirectorySettings);
   mockFetch.addDeleteFetchRequest("http://localhost:3000/directorysync/settings.json?api-version=v2", mockPutRequestUserDirectorySettings);
   mockFetch.addGetFetchRequest("http://localhost:3000/settings.json?api-version=v2", mockGetSiteSettings);
+  mockFetch.addGetFetchRequest("http://localhost:3000/account/settings.json?api-version=v2", mockGetUserSettings);
+  mockFetch.addGetFetchRequest("http://localhost:3000/setup/recover/d7dcd030-391b-4870-bd13-c9e498c67582/064c08e6-0cfb-4b73-91e3-f634c4b48088.json?api-version=v2", mockGetRecoverSettings);
+  mockFetch.addGetFetchRequest("http://localhost:3000/setup/install/d7dcd030-391b-4870-bd13-c9e498c67582/064c08e6-0cfb-4b73-91e3-f634c4b48088.json?api-version=v2", mockGetSetupSettings);
 
   return mockFetch;
 };

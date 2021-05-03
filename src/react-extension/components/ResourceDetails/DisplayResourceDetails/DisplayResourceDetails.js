@@ -20,7 +20,7 @@ import DisplayResourceDetailsComment from "./DisplayResourceDetailsComment";
 import DisplayResourceDetailsDescription from "./DisplayResourceDetailsDescription";
 import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 import DisplayResourceDetailsPermission from "./DisplayResourceDetailsPermission";
-import AppContext from "../../../contexts/AppContext";
+import {withAppContext} from "../../../contexts/AppContext";
 import DisplayResourceDetailsActivity from "./DisplayResourceDetailsActivity";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import {withTranslation} from "react-i18next";
@@ -51,14 +51,14 @@ class DisplayResourceDetails extends React.Component {
     const resource = this.props.resourceWorkspaceContext.details.resource;
 
     // Resources types might not be yet initialized at the moment this component is rendered.
-    if (!this.context.resourceTypesSettings) {
+    if (!this.props.context.resourceTypesSettings) {
       return "";
     }
 
     if (resource.resource_type_id) {
-      const resourceType = this.context.resourceTypesSettings.findResourceTypeSlugById(resource.resource_type_id);
+      const resourceType = this.props.context.resourceTypesSettings.findResourceTypeSlugById(resource.resource_type_id);
       switch (resourceType) {
-        case this.context.resourceTypesSettings.DEFAULT_RESOURCE_TYPES_SLUGS.PASSWORD_AND_DESCRIPTION:
+        case this.props.context.resourceTypesSettings.DEFAULT_RESOURCE_TYPES_SLUGS.PASSWORD_AND_DESCRIPTION:
           return this.translate("Resource with encrypted description");
       }
     }
@@ -70,9 +70,9 @@ class DisplayResourceDetails extends React.Component {
    * Handle when the user copies the permalink.
    */
   async handlePermalinkClick() {
-    const baseUrl = this.context.userSettings.getTrustedDomain();
+    const baseUrl = this.props.context.userSettings.getTrustedDomain();
     const permalink = `${baseUrl}/app/passwords/view/${this.props.resourceWorkspaceContext.details.resource.id}`;
-    await this.context.port.request("passbolt.clipboard.copy", permalink);
+    await this.props.context.port.request("passbolt.clipboard.copy", permalink);
     this.props.actionFeedbackContext.displaySuccess(this.translate("The permalink has been copied to clipboard"));
   }
 
@@ -96,9 +96,9 @@ class DisplayResourceDetails extends React.Component {
    * @returns {JSX}
    */
   render() {
-    const canUseTags = this.context.siteSettings.canIUse("tags");
-    const canUseAuditLog = this.context.siteSettings.canIUse("auditLog") ||
-      this.context.siteSettings.canIUse("audit_log"); // @deprecated remove with v4
+    const canUseTags = this.props.context.siteSettings.canIUse("tags");
+    const canUseAuditLog = this.props.context.siteSettings.canIUse("auditLog") ||
+      this.props.context.siteSettings.canIUse("audit_log"); // @deprecated remove with v4
 
     return (
       <div className="panel aside ready">
@@ -138,12 +138,11 @@ class DisplayResourceDetails extends React.Component {
   }
 }
 
-DisplayResourceDetails.contextType = AppContext;
-
 DisplayResourceDetails.propTypes = {
+  context: PropTypes.any, // The application context
   resourceWorkspaceContext: PropTypes.object,
   actionFeedbackContext: PropTypes.any, // The action feedback context
   t: PropTypes.func, // The translation function
 };
 
-export default withResourceWorkspace(withActionFeedback(withTranslation('common')(DisplayResourceDetails)));
+export default withAppContext(withResourceWorkspace(withActionFeedback(withTranslation('common')(DisplayResourceDetails))));

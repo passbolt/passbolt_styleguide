@@ -12,7 +12,7 @@
  * @since         3.0.0
  */
 import React, {Component} from "react";
-import {AuthenticationContext} from "../../../contexts/AuthenticationContext";
+import {withAuthenticationContext} from "../../../contexts/AuthenticationContext";
 import {Trans, withTranslation} from "react-i18next";
 import PropTypes from "prop-types";
 
@@ -27,14 +27,14 @@ export class GenerateKeySecondaryAction extends Component {
 
   render() {
     return (
-      <a onClick={this.context.onGoToGenerateGpgKeyRequested}>
+      <a onClick={this.props.authenticationContext.onGoToGenerateGpgKeyRequested}>
         <Trans>Or generate a new private key.</Trans>
       </a>
     );
   }
 }
-GenerateKeySecondaryAction.contextType = AuthenticationContext;
 GenerateKeySecondaryAction.propTypes = {
+  authenticationContext: PropTypes.any, // The authentication context
   t: PropTypes.func, // The translation function
 };
-export default withTranslation('common')(GenerateKeySecondaryAction);
+export default withAuthenticationContext(withTranslation('common')(GenerateKeySecondaryAction));

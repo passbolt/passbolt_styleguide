@@ -5563,6 +5563,10 @@ input[type="search"]::-webkit-search-cancel-button {
   font-weight: normal;
   width: auto;
 }
+.notification-container .notification .message.warning {
+  color: #333;
+  background: #FEF0BF;
+}
 .notification-container .notification .message .content {
   margin-right: 1em;
 }
@@ -5832,7 +5836,7 @@ input[type="search"]::-webkit-search-cancel-button {
 }
 .dialog input[type=text],
 .dialog textarea,
-.dialog select {
+.dialog select.large {
   width: 100%;
   box-sizing: border-box;
   /*
@@ -5869,30 +5873,30 @@ input[type="search"]::-webkit-search-cancel-button {
 }
 .dialog input[type=text]:before,
 .dialog textarea:before,
-.dialog select:before,
+.dialog select.large:before,
 .dialog input[type=text]:after,
 .dialog textarea:after,
-.dialog select:after {
+.dialog select.large:after {
   content: "";
   display: table;
 }
 .dialog input[type=text]:after,
 .dialog textarea:after,
-.dialog select:after {
+.dialog select.large:after {
   clear: both;
 }
 .dialog input[type=text]:before,
 .dialog textarea:before,
-.dialog select:before,
+.dialog select.large:before,
 .dialog input[type=text]:after,
 .dialog textarea:after,
-.dialog select:after {
+.dialog select.large:after {
   content: "";
   display: table;
 }
 .dialog input[type=text]:after,
 .dialog textarea:after,
-.dialog select:after {
+.dialog select.large:after {
   clear: both;
 }
 .dialog textarea + .message,
@@ -9520,7 +9524,8 @@ iframe.cachette {
 }
 .page.password .tableview.empty .empty-content {
   text-align: center;
-  margin: 2em 0.5em 0.67em 0.5em;
+  margin: auto;
+  width: 50%;
   padding-top: 2em;
 }
 .page.password .tableview.empty .empty-content h1 {

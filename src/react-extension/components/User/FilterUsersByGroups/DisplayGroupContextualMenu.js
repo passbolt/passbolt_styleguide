@@ -13,7 +13,7 @@
  */
 import React from "react";
 import PropTypes from "prop-types";
-import AppContext from "../../../contexts/AppContext";
+import {withAppContext} from "../../../contexts/AppContext";
 import {withDialog} from "../../../contexts/DialogContext";
 import ContextualMenuWrapper from "../../Common/ContextualMenu/ContextualMenuWrapper";
 import DeleteUserGroupWithConflicts from "../../UserGroup/DeleteUserGroup/DeleteUserGroupWithConflicts";
@@ -53,7 +53,7 @@ class DisplayGroupContextualMenu extends React.Component {
    * Returns true if the current user is admin
    */
   get isCurrentUserAdmin() {
-    return this.context.loggedInUser && this.context.loggedInUser.role.name === 'admin';
+    return this.props.context.loggedInUser && this.props.context.loggedInUser.role.name === 'admin';
   }
 
   /**
@@ -61,7 +61,7 @@ class DisplayGroupContextualMenu extends React.Component {
    */
   async handleDeleteClickEvent() {
     try {
-      await this.context.port.request("passbolt.groups.delete-dry-run", this.group.id);
+      await this.props.context.port.request("passbolt.groups.delete-dry-run", this.group.id);
       this.displayDeleteGroupDialog();
     } catch (error) {
       if (error.name === "DeleteDryRunError") {
@@ -80,7 +80,7 @@ class DisplayGroupContextualMenu extends React.Component {
     const deleteGroupDialogProps = {
       group: this.group
     };
-    this.context.setContext({deleteGroupDialogProps});
+    this.props.context.setContext({deleteGroupDialogProps});
     this.props.dialogContext.open(DeleteUserGroup);
   }
 
@@ -92,7 +92,7 @@ class DisplayGroupContextualMenu extends React.Component {
       group: this.group,
       errors
     };
-    this.context.setContext({deleteGroupWithConflictsDialogProps});
+    this.props.context.setContext({deleteGroupWithConflictsDialogProps});
     this.props.dialogContext.open(DeleteUserGroupWithConflicts);
   }
 
@@ -105,7 +105,7 @@ class DisplayGroupContextualMenu extends React.Component {
       title: this.translate("There was an unexpected error..."),
       message: error.message
     };
-    this.context.setContext({errorDialogProps});
+    this.props.context.setContext({errorDialogProps});
     this.props.dialogContext.open(NotifyError);
   }
 
@@ -171,9 +171,8 @@ class DisplayGroupContextualMenu extends React.Component {
   }
 }
 
-DisplayGroupContextualMenu.contextType = AppContext;
-
 DisplayGroupContextualMenu.propTypes = {
+  context: PropTypes.any, // The application context
   hide: PropTypes.func, // Hide the contextual menu
   left: PropTypes.number, // left position in px of the page
   top: PropTypes.number, // top position in px of the page
@@ -183,4 +182,4 @@ DisplayGroupContextualMenu.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withUserWorkspace(withDialog(withTranslation('common')(DisplayGroupContextualMenu)));
+export default withAppContext(withUserWorkspace(withDialog(withTranslation('common')(DisplayGroupContextualMenu))));

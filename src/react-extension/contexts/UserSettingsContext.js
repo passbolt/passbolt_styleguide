@@ -13,7 +13,7 @@
  */
 import React from "react";
 import PropTypes from "prop-types";
-import AppContext from "./AppContext";
+import {withAppContext} from "./AppContext";
 
 export const UserSettingsContext = React.createContext({
   state: null, // The state in the user settings process
@@ -39,7 +39,7 @@ export const UserSettingsContext = React.createContext({
 /**
  * The related context provider
  */
-class UserSettingsContextProvider extends React.Component {
+export class UserSettingsContextProvider extends React.Component {
   /**
    * Default constructor
    * @param props The component props
@@ -86,7 +86,7 @@ class UserSettingsContextProvider extends React.Component {
    * @param passphrase A passphrase
    */
   async onCheckProvidePassphraseRequested(passphrase) {
-    await this.context.port.request('passbolt.auth.verify-passphrase', passphrase);
+    await this.props.context.port.request('passbolt.auth.verify-passphrase', passphrase);
     await this.setState({state: UserSettingsContextState.PASSPHRASE_TO_PROVIDE_CHECKED, oldPassphrase: passphrase});
   }
 
@@ -102,7 +102,7 @@ class UserSettingsContextProvider extends React.Component {
    * @param {string} passphrase The new passphrase
    */
   async onUpdatePassphraseRequested(passphrase) {
-    await this.context.port.request('passbolt.user.update-private-key', this.state.oldPassphrase, passphrase);
+    await this.props.context.port.request('passbolt.user.update-private-key', this.state.oldPassphrase, passphrase);
     await this.setState({state: UserSettingsContextState.PASSPHRASE_UPDATED, oldPassphrase: null});
   }
 
@@ -110,7 +110,7 @@ class UserSettingsContextProvider extends React.Component {
    * Whenever the download of the recovery kit is requested
    */
   async onDownloadRecoveryKitRequested() {
-    await this.context.port.request('passbolt.keyring.download-my-private-key');
+    await this.props.context.port.request('passbolt.keyring.download-my-private-key');
   }
 
   /**
@@ -118,7 +118,7 @@ class UserSettingsContextProvider extends React.Component {
    * @param securityTokenDto The security token DTO
    */
   async onUpdateSecurityTokenRequested(securityTokenDto) {
-    await this.context.port.request('passbolt.users.update-security-token', securityTokenDto);
+    await this.props.context.port.request('passbolt.users.update-security-token', securityTokenDto);
   }
 
   /**
@@ -126,7 +126,7 @@ class UserSettingsContextProvider extends React.Component {
    * @param localeDto The locale DTO
    */
   async handleUpdateLocaleUserRequested(localeDto) {
-    await this.context.port.request("passbolt.locale.update-user-locale", localeDto);
+    await this.props.context.port.request("passbolt.locale.update-user-locale", localeDto);
   }
 
   /**
@@ -142,12 +142,12 @@ class UserSettingsContextProvider extends React.Component {
   }
 }
 
-UserSettingsContextProvider.contextType = AppContext;
 UserSettingsContextProvider.propTypes = {
+  context: PropTypes.any, // The application context
   value: PropTypes.any, // The initial value of the context
   children: PropTypes.any // The children components
 };
-export default UserSettingsContextProvider;
+export default withAppContext(UserSettingsContextProvider);
 
 /**
  * UserSettings Context Consumer HOC

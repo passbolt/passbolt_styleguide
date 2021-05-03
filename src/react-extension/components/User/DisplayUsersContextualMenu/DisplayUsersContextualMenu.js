@@ -13,7 +13,7 @@
  */
 import React from "react";
 import PropTypes from "prop-types";
-import AppContext from "../../../contexts/AppContext";
+import {withAppContext} from "../../../contexts/AppContext";
 import {withDialog} from "../../../contexts/DialogContext";
 import ContextualMenuWrapper from "../../Common/ContextualMenu/ContextualMenuWrapper";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
@@ -51,7 +51,7 @@ class DisplayUsersContextualMenu extends React.Component {
    * Can the logged in user use the mfa capability.
    */
   get canIUseMfa() {
-    return this.context.siteSettings.canIUse("multiFactorAuthentication") && this.isLoggedInUserAdmin();
+    return this.props.context.siteSettings.canIUse("multiFactorAuthentication") && this.isLoggedInUserAdmin();
   }
 
   /**
@@ -87,9 +87,9 @@ class DisplayUsersContextualMenu extends React.Component {
    * Handle the copy of user permalink
    */
   async handlePermalinkCopy() {
-    const baseUrl = this.context.userSettings.getTrustedDomain();
+    const baseUrl = this.props.context.userSettings.getTrustedDomain();
     const permalink = `${baseUrl}/app/users/view/${this.user.id}`;
-    await this.context.port.request("passbolt.clipboard.copy", permalink);
+    await this.props.context.port.request("passbolt.clipboard.copy", permalink);
     this.props.actionFeedbackContext.displaySuccess(this.translate("The permalink has been copied to clipboard"));
     this.props.hide();
   }
@@ -99,7 +99,7 @@ class DisplayUsersContextualMenu extends React.Component {
    */
   async handleUsernameCopy() {
     const username = `${this.user.username}`;
-    await this.context.port.request("passbolt.clipboard.copy", username);
+    await this.props.context.port.request("passbolt.clipboard.copy", username);
     this.props.actionFeedbackContext.displaySuccess(this.translate("The email has been copied to clipboard"));
     this.props.hide();
   }
@@ -108,8 +108,8 @@ class DisplayUsersContextualMenu extends React.Component {
    * Handle the copy of public key
    */
   async handlePublicKeyCopy() {
-    const gpgkeyInfo = await this.context.port.request('passbolt.keyring.get-public-key-info-by-user', this.user.id);
-    await this.context.port.request("passbolt.clipboard.copy", gpgkeyInfo.key);
+    const gpgkeyInfo = await this.props.context.port.request('passbolt.keyring.get-public-key-info-by-user', this.user.id);
+    await this.props.context.port.request("passbolt.clipboard.copy", gpgkeyInfo.key);
     this.props.actionFeedbackContext.displaySuccess(this.translate("The public key has been copied to clipboard"));
     this.props.hide();
   }
@@ -121,7 +121,7 @@ class DisplayUsersContextualMenu extends React.Component {
     const editUserDialogProps = {
       id: this.user.id
     };
-    this.context.setContext({editUserDialogProps});
+    this.props.context.setContext({editUserDialogProps});
     this.props.dialogContext.open(EditUser);
     this.props.hide();
   }
@@ -145,7 +145,7 @@ class DisplayUsersContextualMenu extends React.Component {
    */
   async handleDeleteClickEvent() {
     try {
-      await this.context.port.request("passbolt.users.delete-dry-run", this.user.id);
+      await this.props.context.port.request("passbolt.users.delete-dry-run", this.user.id);
       this.displayDeleteUserDialog();
     } catch (error) {
       if (error.name === "DeleteDryRunError") {
@@ -164,7 +164,7 @@ class DisplayUsersContextualMenu extends React.Component {
     const deleteUserDialogProps = {
       user: this.user
     };
-    this.context.setContext({deleteUserDialogProps});
+    this.props.context.setContext({deleteUserDialogProps});
     this.props.dialogContext.open(DeleteUser);
   }
 
@@ -176,7 +176,7 @@ class DisplayUsersContextualMenu extends React.Component {
       user: this.user,
       errors: errors
     };
-    this.context.setContext({deleteUserWithConflictsDialogProps});
+    this.props.context.setContext({deleteUserWithConflictsDialogProps});
     this.props.dialogContext.open(DeleteUserWithConflicts);
   }
 
@@ -189,7 +189,7 @@ class DisplayUsersContextualMenu extends React.Component {
       title: this.translate("There was an unexpected error..."),
       message: error.message
     };
-    this.context.setContext({errorDialogProps});
+    this.props.context.setContext({errorDialogProps});
     this.props.dialogContext.open(NotifyError);
   }
 
@@ -214,7 +214,7 @@ class DisplayUsersContextualMenu extends React.Component {
    * @returns {boolean}
    */
   canDeleteUser() {
-    return this.context.loggedInUser.id !== this.user.id;
+    return this.props.context.loggedInUser.id !== this.user.id;
   }
 
   /**
@@ -222,7 +222,7 @@ class DisplayUsersContextualMenu extends React.Component {
    * @returns {boolean}
    */
   isLoggedInUserAdmin() {
-    return this.context.loggedInUser && this.context.loggedInUser.role.name === 'admin';
+    return this.props.context.loggedInUser && this.props.context.loggedInUser.role.name === 'admin';
   }
 
   /**
@@ -237,7 +237,7 @@ class DisplayUsersContextualMenu extends React.Component {
    * Resend an invite to the given user
    */
   resendInvite() {
-    this.context.port.request("passbolt.users.resend-invite", this.user.username)
+    this.props.context.port.request("passbolt.users.resend-invite", this.user.username)
       .then(this.onResendInviteSuccess.bind(this))
       .catch(this.onResendInviteFailure.bind(this));
   }
@@ -260,7 +260,7 @@ class DisplayUsersContextualMenu extends React.Component {
       message: error.message
     };
     this.props.hide();
-    this.context.setContext({errorDialogProps});
+    this.props.context.setContext({errorDialogProps});
     this.props.dialogContext.open(NotifyError);
   }
 
@@ -377,9 +377,8 @@ class DisplayUsersContextualMenu extends React.Component {
   }
 }
 
-DisplayUsersContextualMenu.contextType = AppContext;
-
 DisplayUsersContextualMenu.propTypes = {
+  context: PropTypes.any, // The application context
   hide: PropTypes.func, // Hide the contextual menu
   left: PropTypes.number, // left position in px of the page
   top: PropTypes.number, // top position in px of the page
@@ -389,5 +388,5 @@ DisplayUsersContextualMenu.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withDialog(withActionFeedback(withTranslation('common')(DisplayUsersContextualMenu)));
+export default withAppContext(withDialog(withActionFeedback(withTranslation('common')(DisplayUsersContextualMenu))));
 

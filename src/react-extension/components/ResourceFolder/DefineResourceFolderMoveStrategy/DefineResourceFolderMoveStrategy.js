@@ -13,7 +13,7 @@
  */
 import React, {Component} from "react";
 import PropTypes from "prop-types";
-import AppContext from "../../../contexts/AppContext";
+import {withAppContext} from "../../../contexts/AppContext";
 import FormSubmitButton from "../../Common/Inputs/FormSubmitButton/FormSubmitButton";
 import FormCancelButton from "../../Common/Inputs/FormSubmitButton/FormCancelButton";
 import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
@@ -28,9 +28,9 @@ class DefineResourceFolderMoveStrategy extends Component {
    * @param {Object} props
    * @param {Object} context
    */
-  constructor(props, context) {
-    super(props, context);
-    this.state = this.getStateBasedOnContext(context, props,  this.getDefaultState());
+  constructor(props) {
+    super(props);
+    this.state = this.getStateBasedOnContext(props,  this.getDefaultState());
     this.moveOptionChangeRef = React.createRef();
     this.moveOptionKeepRef = React.createRef();
     this.bindEventHandlers();
@@ -76,13 +76,12 @@ class DefineResourceFolderMoveStrategy extends Component {
    * For example if folder doesn't exist then we show an error message
    * Otherwise set the input name value
    *
-   * @param context
    * @param props
    * @param defaultState
    * @returns {*}
    */
-  getStateBasedOnContext(context, props, defaultState) {
-    const folders = context.folders;
+  getStateBasedOnContext(props, defaultState) {
+    const folders = props.context.folders;
     const error = {
       message: this.translate("The folder could not be found. Maybe it was deleted or you lost access.")
     };
@@ -92,9 +91,9 @@ class DefineResourceFolderMoveStrategy extends Component {
       this.handleError(error);
     }
 
-    const folder = context.folders.find(item => item.id === this.context.folderMoveStrategyProps.folders[0].id) || false;
+    const folder = props.context.folders.find(item => item.id === this.props.context.folderMoveStrategyProps.folders[0]) || false;
     if (!folder) {
-      console.error(`Folder ${this.context.folderMoveStrategyProps.folders[0]} not found in context.`);
+      console.error(`Folder ${this.props.context.folderMoveStrategyProps.folders[0]} not found in context.`);
       this.handleError(error);
     } else {
       defaultState.name = folder.name;
@@ -117,7 +116,7 @@ class DefineResourceFolderMoveStrategy extends Component {
     await this.toggleProcessing();
 
     try {
-      await this.context.port.emit(this.context.folderMoveStrategyProps.requestId, "SUCCESS", {moveOption: this.state.moveOption});
+      await this.props.context.port.emit(this.props.context.folderMoveStrategyProps.requestId, "SUCCESS", {moveOption: this.state.moveOption});
       this.handleSaveSuccess();
     } catch (error) {
       this.handleSaveError(error);
@@ -128,7 +127,7 @@ class DefineResourceFolderMoveStrategy extends Component {
    * Handle save operation success.
    */
   handleSaveSuccess() {
-    this.context.setContext({folderMoveStrategyProps: {}});
+    this.props.context.setContext({folderMoveStrategyProps: {}});
     this.props.onClose();
   }
 
@@ -157,7 +156,7 @@ class DefineResourceFolderMoveStrategy extends Component {
       title: this.translate("There was an unexpected error..."),
       message: error.message
     };
-    this.context.setContext({errorDialogProps});
+    this.props.context.setContext({errorDialogProps});
     this.props.dialogContext.open(NotifyError);
   }
 
@@ -193,8 +192,8 @@ class DefineResourceFolderMoveStrategy extends Component {
       return;
     }
     const error = new UserAbortsOperationError(this.translate("The dialog has been closed."));
-    this.context.port.emit(this.context.folderMoveStrategyProps.requestId, "ERROR", error);
-    this.context.setContext({folderMoveStrategyProps: {}});
+    this.props.context.port.emit(this.props.context.folderMoveStrategyProps.requestId, "ERROR", error);
+    this.props.context.setContext({folderMoveStrategyProps: {}});
     this.props.onClose();
   }
 
@@ -232,10 +231,10 @@ class DefineResourceFolderMoveStrategy extends Component {
    * @returns {boolean}
    */
   isAboutItems() {
-    return this.context.folderMoveStrategyProps.resources
-      && this.context.folderMoveStrategyProps.folders
-      && this.context.folderMoveStrategyProps.resources.length
-      && this.context.folderMoveStrategyProps.folders.length;
+    return this.props.context.folderMoveStrategyProps.resources
+      && this.props.context.folderMoveStrategyProps.folders
+      && this.props.context.folderMoveStrategyProps.resources.length
+      && this.props.context.folderMoveStrategyProps.folders.length;
   }
 
   /**
@@ -243,7 +242,7 @@ class DefineResourceFolderMoveStrategy extends Component {
    * @returns {boolean}
    */
   isAboutResources() {
-    return this.context.folderMoveStrategyProps.resources && this.context.folderMoveStrategyProps.resources.length > 1;
+    return this.props.context.folderMoveStrategyProps.resources && this.props.context.folderMoveStrategyProps.resources.length > 1;
   }
 
   /**
@@ -251,7 +250,7 @@ class DefineResourceFolderMoveStrategy extends Component {
    * @returns {boolean}
    */
   isAboutFolders() {
-    return this.context.folderMoveStrategyProps.folders && this.context.folderMoveStrategyProps.folders.length > 1;
+    return this.props.context.folderMoveStrategyProps.folders && this.props.context.folderMoveStrategyProps.folders.length > 1;
   }
 
   /**
@@ -259,7 +258,7 @@ class DefineResourceFolderMoveStrategy extends Component {
    * @returns {boolean}
    */
   isAboutAFolder() {
-    return this.context.folderMoveStrategyProps.folders && this.context.folderMoveStrategyProps.folders.length === 1;
+    return this.props.context.folderMoveStrategyProps.folders && this.props.context.folderMoveStrategyProps.folders.length === 1;
   }
 
   /**
@@ -267,7 +266,7 @@ class DefineResourceFolderMoveStrategy extends Component {
    * @returns {boolean}
    */
   isAboutAResource() {
-    return this.context.folderMoveStrategyProps.resources && this.context.folderMoveStrategyProps.resources.length === 1;
+    return this.props.context.folderMoveStrategyProps.resources && this.props.context.folderMoveStrategyProps.resources.length === 1;
   }
 
   /**
@@ -314,12 +313,11 @@ class DefineResourceFolderMoveStrategy extends Component {
   }
 }
 
-DefineResourceFolderMoveStrategy.contextType = AppContext;
-
 DefineResourceFolderMoveStrategy.propTypes = {
+  context: PropTypes.any, // The application context
   onClose: PropTypes.func,
   dialogContext: PropTypes.any, // The dialog context
   t: PropTypes.func, // The translation function
 };
 
-export default withDialog(withTranslation('common')(DefineResourceFolderMoveStrategy));
+export default withAppContext(withDialog(withTranslation('common')(DefineResourceFolderMoveStrategy)));

@@ -14,7 +14,7 @@
 import React, {Component} from "react";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
 import {withDialog} from "../../../contexts/DialogContext";
-import {AuthenticationContext} from "../../../contexts/AuthenticationContext";
+import {withAuthenticationContext} from "../../../contexts/AuthenticationContext";
 import PropTypes from "prop-types";
 import {Trans, withTranslation} from "react-i18next";
 
@@ -139,7 +139,7 @@ class ImportGpgKey extends Component {
    * Verify and save the private gpg key
    */
   async save() {
-    await this.context.onImportGpgKeyRequested(this.state.privateKey)
+    await this.props.authenticationContext.onImportGpgKeyRequested(this.state.privateKey)
       .catch(this.onSaveFailure.bind(this));
   }
 
@@ -269,11 +269,11 @@ class ImportGpgKey extends Component {
   }
 }
 
-ImportGpgKey.contextType = AuthenticationContext;
 ImportGpgKey.propTypes = {
+  authenticationContext: PropTypes.any, // The authentication context
   title: PropTypes.string, // title
   dialogContext: PropTypes.any, // The dialog context
   secondaryAction: PropTypes.any, // Secondary action to display
   t: PropTypes.func, // The translation function
 };
-export default withDialog(withTranslation('common')(ImportGpgKey));
+export default withAuthenticationContext(withDialog(withTranslation('common')(ImportGpgKey)));

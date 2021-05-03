@@ -8,6 +8,7 @@ describe("canSuggestUrl", () => {
     expect(canSuggestUrl("ftp://www.passbolt.com", "ftp://www.passbolt.com")).toBe(true);
     expect(canSuggestUrl("https://www.passbolt.com", "https://www.passbolt.com")).toBe(true);
     expect(canSuggestUrl("https://www.passbolt.com:443", "https://www.passbolt.com:443")).toBe(true);
+    expect(canSuggestUrl("https://email", "https://email")).toBe(true);
   });
 
   it("should suggest matching international domain urls", () => {
@@ -65,6 +66,9 @@ describe("canSuggestUrl", () => {
     expect(canSuggestUrl("https://bolt.com", "passbolt.com")).toBe(false);
     expect(canSuggestUrl("https://pass", "passbolt.com")).toBe(false);
     expect(canSuggestUrl("https://www.attacker-passbolt.com", "passbolt.com")).toBe(false);
+    expect(canSuggestUrl("https://titan.email", "email")).toBe(false);
+    expect(canSuggestUrl("https://email", "http://email")).toBe(false);
+    expect(canSuggestUrl("https://titan.email", "https://email")).toBe(false);
   });
 
   it("shouldn't suggest IPs not matching the exact domain", () => {

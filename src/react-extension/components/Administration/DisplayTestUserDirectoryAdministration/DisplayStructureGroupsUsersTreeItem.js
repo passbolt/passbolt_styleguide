@@ -13,7 +13,6 @@
  */
 import React from "react";
 import PropTypes from "prop-types";
-import AppContext from "../../../contexts/AppContext";
 
 class DisplayStructureGroupsUsersTreeItem extends React.Component {
   /**
@@ -79,8 +78,6 @@ class DisplayStructureGroupsUsersTreeItem extends React.Component {
     );
   }
 }
-
-DisplayStructureGroupsUsersTreeItem.contextType = AppContext;
 
 DisplayStructureGroupsUsersTreeItem.propTypes = {
   node: PropTypes.object,

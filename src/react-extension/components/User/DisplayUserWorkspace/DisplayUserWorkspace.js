@@ -22,7 +22,7 @@ import DisplayUserDetails from "../../UserDetails/DisplayUserDetails/DisplayUser
 import DisplayUserWorkspaceActions from "../DisplayUserWorkspaceActions/DisplayUserWorkspaceActions";
 import Logo from "../../Common/Navigation/Header/Logo";
 import DisplayUserBadgeMenu from "../DisplayUserBadgeMenu/DisplayUserBadgeMenu";
-import AppContext from "../../../contexts/AppContext";
+import {withAppContext} from "../../../contexts/AppContext";
 import DisplayGroups from "../FilterUsersByGroups/FilterUsersByGroup";
 import FilterUsersByShortcut from "../FilterUsersByShortcut/FilterUsersByShortcut";
 import FilterUsersByText from "../FilterUsersByText/FilterUsersByText";
@@ -60,7 +60,7 @@ class DisplayUserWorkspace extends React.Component {
         <div className="header second">
           <Logo/>
           <FilterUsersByText/>
-          <DisplayUserBadgeMenu baseUrl={this.context.userSettings.getTrustedDomain()} user={this.context.loggedInUser}/>
+          <DisplayUserBadgeMenu baseUrl={this.props.context.userSettings.getTrustedDomain()} user={this.props.context.loggedInUser}/>
         </div>
         <div className="header third">
           <DisplayUserWorkspaceMainActions/>
@@ -83,10 +83,10 @@ class DisplayUserWorkspace extends React.Component {
   }
 }
 
-DisplayUserWorkspace.contextType = AppContext;
 DisplayUserWorkspace.propTypes = {
+  context: PropTypes.any, // The application context
   history: PropTypes.any,
   userWorkspaceContext: PropTypes.any
 };
 
-export default withRouter(withUserWorkspace(DisplayUserWorkspace));
+export default withAppContext(withRouter(withUserWorkspace(DisplayUserWorkspace)));

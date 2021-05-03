@@ -15,7 +15,7 @@
 /**
  * Unit tests on FilterResourcesByGroups in regard of specifications
  */
-import {defaultAppContext, defaultProps, groupsMock} from "./FilterResourcesByGroups.test.data";
+import {defaultProps, groupsMock} from "./FilterResourcesByGroups.test.data";
 import SidebarGroupFilterSectionPage from "./FilterResourcesByGroups.test.page";
 import MockPort from "../../../test/mock/MockPort";
 import {ResourceWorkspaceFilterTypes} from "../../../contexts/ResourceWorkspaceContext";
@@ -26,7 +26,6 @@ beforeEach(() => {
 
 describe("See groups", () => {
   let page; // The page to test against
-  const context = defaultAppContext(); // The applicative context
   const props = defaultProps(); // The props to pass
 
   describe(' As LU I can see groups', () => {
@@ -38,7 +37,7 @@ describe("See groups", () => {
      */
 
     beforeEach(() => {
-      page = new SidebarGroupFilterSectionPage(context, props);
+      page = new SidebarGroupFilterSectionPage(props);
     });
 
     it('I should see the 10 groups made on the resource', async() => {
@@ -78,18 +77,20 @@ describe("See groups", () => {
 
   describe(' As LU I shouldn\'t see the group section', () => {
     // force context to have no groups belongs to the user
-    const appContext = {
-      port: new MockPort(),
-      groups: [groupsMock[3]]
+    const context = {
+      context: {
+        port: new MockPort(),
+        groups: [groupsMock[3]]
+      }
     };
-    const context = defaultAppContext(appContext); // The applicative context
+    const props = defaultProps(context); // The props
     /**
      * Given a user belongs to 0 groups
      * Then I shouldn't see the group section
      */
 
     beforeEach(() => {
-      page = new SidebarGroupFilterSectionPage(context, props);
+      page = new SidebarGroupFilterSectionPage(props);
     });
 
     it('I shouldn\'t see the groups section', () => {

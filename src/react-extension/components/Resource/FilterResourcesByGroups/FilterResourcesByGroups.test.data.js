@@ -2,25 +2,16 @@ import MockPort from "../../../test/mock/MockPort";
 import {ResourceWorkspaceFilterTypes} from "../../../contexts/ResourceWorkspaceContext";
 
 /**
- * Returns the default app context for the unit test
- * @param appContext An existing app context
- * @returns {any | ({userSettings: UserSettings, siteSettings: SiteSettings, port: MockPort} & {})}
- */
-export function defaultAppContext(appContext) {
-  const defaultAppContext = {
-    port: new MockPort(),
-    groups: groupsMock,
-  };
-  return Object.assign(defaultAppContext, appContext || {});
-}
-
-
-/**
  * Default props
- * @returns {any}
+ * @param props
+ * @returns {{context: {port: MockPort, groups: [{deleted: boolean, created: string, name: string, modified_by: string, modified: string, id: string, created_by: string, my_group_user: {is_admin: boolean, group_id: string, user_id: string, created: string, id: string}}, {deleted: boolean, created: string, name: string, modified_by: string, modified: string, id: string, created_by: string, my_group_user: {is_admin: boolean, group_id: string, user_id: string, created: string, id: string}}, {deleted: boolean, created: string, name: string, modified_by: string, modified: string, id: string, created_by: string, my_group_user: {is_admin: boolean, group_id: string, user_id: string, created: string, id: string}}, {deleted: boolean, created: string, name: string, modified_by: string, modified: string, id: string, created_by: string, my_group_user: null}, {deleted: boolean, created: string, name: string, modified_by: string, modified: string, id: string, created_by: string, my_group_user: {is_admin: boolean, group_id: string, user_id: string, created: string, id: string}}, null, null, null, null, null]}, history: {push: jest.Mock}, resourceWorkspaceContext: {filter: {payload: {group: {id: string}}, type: string}}}}
  */
-export function defaultProps() {
-  return {
+export function defaultProps(props) {
+  const defaultProps = {
+    context: {
+      port: new MockPort(),
+      groups: groupsMock,
+    },
     history: {
       push: jest.fn()
     },
@@ -35,6 +26,7 @@ export function defaultProps() {
       }
     }
   };
+  return Object.assign(defaultProps, props || {});
 }
 
 /**

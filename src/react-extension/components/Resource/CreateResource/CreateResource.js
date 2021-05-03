@@ -14,7 +14,7 @@
 import React, {Component} from "react";
 import PropTypes from "prop-types";
 
-import AppContext from "../../../contexts/AppContext";
+import {withAppContext} from "../../../contexts/AppContext";
 import Icon from "../../Common/Icons/Icon";
 import Tooltip from "../../Common/Tooltip/Tooltip";
 import SecretComplexity from "../../../../shared/lib/Secret/SecretComplexity";
@@ -97,15 +97,15 @@ class CreateResource extends Component {
    * =============================================================
    */
   isEncryptedDescriptionEnabled() {
-    return this.context.resourceTypesSettings.isEncryptedDescriptionEnabled();
+    return this.props.context.resourceTypesSettings.isEncryptedDescriptionEnabled();
   }
 
   isLegacyResourceTypeEnabled() {
-    return this.context.resourceTypesSettings.isLegacyResourceTypeEnabled();
+    return this.props.context.resourceTypesSettings.isLegacyResourceTypeEnabled();
   }
 
   areResourceTypesEnabled() {
-    return this.context.resourceTypesSettings.areResourceTypesEnabled();
+    return this.props.context.resourceTypesSettings.areResourceTypesEnabled();
   }
 
   /*
@@ -228,7 +228,7 @@ class CreateResource extends Component {
       name: this.state.name,
       username: this.state.username,
       uri: this.state.uri,
-      folder_parent_id: this.context.resourceCreateDialogProps.folderParentId
+      folder_parent_id: this.props.context.resourceCreateDialogProps.folderParentId
     };
 
     // No resource types, legacy case
@@ -259,7 +259,7 @@ class CreateResource extends Component {
   async createResourceLegacy(resourceDto, secretString) {
     resourceDto.description = this.state.description;
 
-    return this.context.port.request("passbolt.resources.create", resourceDto, secretString);
+    return this.props.context.port.request("passbolt.resources.create", resourceDto, secretString);
   }
 
   /**
@@ -270,11 +270,11 @@ class CreateResource extends Component {
    * @returns {Promise<*>}
    */
   async createWithEncryptedDescription(resourceDto, secretDto) {
-    resourceDto.resource_type_id = this.context.resourceTypesSettings.findResourceTypeIdBySlug(
-      this.context.resourceTypesSettings.DEFAULT_RESOURCE_TYPES_SLUGS.PASSWORD_AND_DESCRIPTION
+    resourceDto.resource_type_id = this.props.context.resourceTypesSettings.findResourceTypeIdBySlug(
+      this.props.context.resourceTypesSettings.DEFAULT_RESOURCE_TYPES_SLUGS.PASSWORD_AND_DESCRIPTION
     );
 
-    return this.context.port.request("passbolt.resources.create", resourceDto, secretDto);
+    return this.props.context.port.request("passbolt.resources.create", resourceDto, secretDto);
   }
 
   /**
@@ -285,12 +285,12 @@ class CreateResource extends Component {
    * @returns {Promise<*>}
    */
   async createWithoutEncryptedDescription(resourceDto, secretString) {
-    resourceDto.resource_type_id = this.context.resourceTypesSettings.findResourceTypeIdBySlug(
-      this.context.resourceTypesSettings.DEFAULT_RESOURCE_TYPES_SLUGS.PASSWORD_STRING
+    resourceDto.resource_type_id = this.props.context.resourceTypesSettings.findResourceTypeIdBySlug(
+      this.props.context.resourceTypesSettings.DEFAULT_RESOURCE_TYPES_SLUGS.PASSWORD_STRING
     );
     resourceDto.description = this.state.description;
 
-    return this.context.port.request("passbolt.resources.create", resourceDto, secretString);
+    return this.props.context.port.request("passbolt.resources.create", resourceDto, secretString);
   }
 
   /**
@@ -304,7 +304,7 @@ class CreateResource extends Component {
     } else {
       this.selectAndScrollToResource(resource.id);
     }
-    this.context.setContext({passwordEditDialogProps: null});
+    this.props.context.setContext({passwordEditDialogProps: null});
     this.props.history.push(`/app/passwords/view/${resource.id}`);
     this.props.onClose();
   }
@@ -338,7 +338,7 @@ class CreateResource extends Component {
       title: this.translate("There was an unexpected error..."),
       message: error.message
     };
-    this.context.setContext({errorDialogProps});
+    this.props.context.setContext({errorDialogProps});
     this.props.dialogContext.open(NotifyError);
   }
 
@@ -363,7 +363,7 @@ class CreateResource extends Component {
    * @param {string} id The resource id.
    */
   selectAndScrollToResource(id) {
-    this.context.port.emit("passbolt.resources.select-and-scroll-to", id);
+    this.props.context.port.emit("passbolt.resources.select-and-scroll-to", id);
   }
 
   /**
@@ -372,7 +372,7 @@ class CreateResource extends Component {
    * @returns {void}
    */
   selectAndScrollToFolder(id) {
-    this.context.port.emit("passbolt.folders.select-and-scroll-to", id);
+    this.props.context.port.emit("passbolt.folders.select-and-scroll-to", id);
   }
 
   /*
@@ -463,7 +463,7 @@ class CreateResource extends Component {
    */
   handleClose() {
     this.props.onClose();
-    this.context.setContext({resourceCreateDialogProps: null});
+    this.props.context.setContext({resourceCreateDialogProps: null});
   }
 
   /**
@@ -503,8 +503,8 @@ class CreateResource extends Component {
    */
   getPasswordInputStyle() {
     if (this.state.passwordInputHasFocus) {
-      const backgroundColor = this.context.userSettings.getSecurityTokenBackgroundColor();
-      const textColor = this.context.userSettings.getSecurityTokenTextColor();
+      const backgroundColor = this.props.context.userSettings.getSecurityTokenBackgroundColor();
+      const textColor = this.props.context.userSettings.getSecurityTokenTextColor();
 
       return {
         background: backgroundColor,
@@ -523,8 +523,8 @@ class CreateResource extends Component {
    * @return {Object}
    */
   getSecurityTokenStyle() {
-    const backgroundColor = this.context.userSettings.getSecurityTokenBackgroundColor();
-    const textColor = this.context.userSettings.getSecurityTokenTextColor();
+    const backgroundColor = this.props.context.userSettings.getSecurityTokenBackgroundColor();
+    const textColor = this.props.context.userSettings.getSecurityTokenTextColor();
 
     if (this.state.passwordInputHasFocus) {
       return {
@@ -555,7 +555,7 @@ class CreateResource extends Component {
   render() {
     const passwordInputStyle = this.getPasswordInputStyle();
     const securityTokenStyle = this.getSecurityTokenStyle();
-    const securityTokenCode = this.context.userSettings.getSecurityTokenCode();
+    const securityTokenCode = this.props.context.userSettings.getSecurityTokenCode();
     const passwordStrength = SecretComplexity.getStrength(this.state.password);
     /*
      * The parser can't find the translation for passwordStrength.label
@@ -685,9 +685,8 @@ class CreateResource extends Component {
   }
 }
 
-CreateResource.contextType = AppContext;
-
 CreateResource.propTypes = {
+  context: PropTypes.any, // The application context
   history: PropTypes.object, // Router history
   onClose: PropTypes.func, // Whenever the component must be closed
   actionFeedbackContext: PropTypes.any, // The action feedback context
@@ -695,4 +694,4 @@ CreateResource.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default  withActionFeedback(withRouter(withDialog(withTranslation('common')(CreateResource))));
+export default  withAppContext(withActionFeedback(withRouter(withDialog(withTranslation('common')(CreateResource)))));

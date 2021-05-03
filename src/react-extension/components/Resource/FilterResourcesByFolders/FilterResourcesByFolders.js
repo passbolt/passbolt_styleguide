@@ -492,7 +492,7 @@ class FilterResourcesByFolders extends React.Component {
         </div>
         <div className="accordion-content">
           {!isLoading && isOpen && rootFolders.length === 0 &&
-          <em className="empty-content">empty</em>
+          <em className="empty-content"><Trans>empty</Trans></em>
           }
           {!isLoading && isOpen && rootFolders.length > 0 &&
           <ReactList

@@ -56,6 +56,8 @@ import mockRequestFindActivities from "./request/mockRequestFindActivities";
 import mockRequestSetupInfo from "./request/mockRequestSetupInfo";
 import mockRequestAuthIsAuthenticated from "./request/mockRequestAuthIsAuthenticated";
 import mockRequestGetLocale from "./request/mockRequestGetLocale";
+import mockRequestRoleGet from "./request/mockRequestRoleGet";
+import mockRequestRecoverInfo from "./request/mockRequestRecoverInfo";
 import mockRequestMobileTransferCreate from "./request/mockRequestMobileTransferCreate";
 import mockRequestMobileTransferGet from "./request/mockRequestMobileTransferGet";
 import mockRequestMobileTransferUpdate from "./request/mockRequestMobileTransferUpdate";
@@ -68,7 +70,10 @@ export default (storage) => {
   mockPort.addRequestListener("passbolt.folders.update", mockRequestFoldersUpdate);
   mockPort.addRequestListener("passbolt.folders.find-permissions", mockRequestFoldersFindPermissions);
   mockPort.addRequestListener("passbolt.user.get", mockRequestUserGet);
+  mockPort.addRequestListener("passbolt.role.get-all", mockRequestRoleGet);
   mockPort.addRequestListener("passbolt.organization-settings.get", mockRequestSiteSettings);
+  mockPort.addRequestListener("passbolt.recover.site-settings", mockRequestSiteSettings);
+  mockPort.addRequestListener("passbolt.setup.site-settings", mockRequestSiteSettings);
   mockPort.addRequestListener("passbolt.folders.update-local-storage", mockRequestFoldersUpdateLocalStorage);
   mockPort.addRequestListener("passbolt.resources.update-local-storage", mockRequestResourcesUpdateLocalStorage);
   mockPort.addRequestListener("passbolt.users.update-local-storage", mockRequestUsersUpdateLocalStorage);
@@ -105,6 +110,7 @@ export default (storage) => {
   mockPort.addRequestListener("passbolt.setup.info", mockRequestSetupInfo);
   mockPort.addRequestListener("passbolt.auth.is-authenticated", mockRequestAuthIsAuthenticated);
   mockPort.addRequestListener("passbolt.locale.get", mockRequestGetLocale);
+  mockPort.addRequestListener("passbolt.recover.info", mockRequestRecoverInfo);
   mockPort.addRequestListener("passbolt.mobile.transfer.create", mockRequestMobileTransferCreate);
   mockPort.addRequestListener("passbolt.mobile.transfer.update", mockRequestMobileTransferUpdate);
   mockPort.addRequestListener("passbolt.mobile.transfer.get", mockRequestMobileTransferGet);

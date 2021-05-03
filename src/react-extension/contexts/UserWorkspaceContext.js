@@ -16,7 +16,7 @@
 import * as React from "react";
 import PropTypes from "prop-types";
 import {withRouter} from "react-router-dom";
-import AppContext from "./AppContext";
+import {withAppContext} from "./AppContext";
 import {withLoading} from "./LoadingContext";
 import {withActionFeedback} from "./ActionFeedbackContext";
 import EditUserGroup from "../components/UserGroup/EditUserGroup/EditUserGroup";
@@ -147,9 +147,9 @@ class UserWorkspaceContextProvider extends React.Component {
    * Handle the users changes
    */
   async handleUsersChange() {
-    const hasUsersChanged = this.context.users && this.context.users !== this.users;
+    const hasUsersChanged = this.props.context.users && this.props.context.users !== this.users;
     if (hasUsersChanged) {
-      this.users = this.context.users;
+      this.users = this.props.context.users;
       await this.search(this.state.filter);
       await this.updateDetails();
       await this.unselectUnknownUsers();
@@ -160,9 +160,9 @@ class UserWorkspaceContextProvider extends React.Component {
    * Handle the groups change
    */
   async handleGroupsChange() {
-    const hasGroupsChanged = this.context.groups && this.context.groups !== this.groups;
+    const hasGroupsChanged = this.props.context.groups && this.props.context.groups !== this.groups;
     if (hasGroupsChanged) {
-      this.groups = this.context.groups;
+      this.groups = this.props.context.groups;
       await this.refreshSearchFilter();
       await this.updateDetails();
     }
@@ -189,8 +189,8 @@ class UserWorkspaceContextProvider extends React.Component {
     const hasUsersAndGroups = this.users !== null && this.groups !== null;
     if (hasUsersAndGroups) {
       const groupId = this.props.match.params.selectedGroupId;
-      if (groupId && this.context.groups) {
-        const group = this.context.groups.find(group => group.id === groupId);
+      if (groupId && this.props.context.groups) {
+        const group = this.props.context.groups.find(group => group.id === groupId);
         if (group) { // Known group
           await this.search({type: UserWorkspaceFilterTypes.GROUP, payload: {group}});
           await this.detailGroup(group);
@@ -326,7 +326,7 @@ class UserWorkspaceContextProvider extends React.Component {
    * Handle the intial loading of the users
    */
   handleUsersLoaded() {
-    const hasUsersBeenInitialized = this.users === null && this.context.users;
+    const hasUsersBeenInitialized = this.users === null && this.props.context.users;
     if (hasUsersBeenInitialized) {
       this.props.loadingContext.remove();
       this.handleUsersLoaded = () => {};
@@ -337,8 +337,8 @@ class UserWorkspaceContextProvider extends React.Component {
    * Populate the context with initial data such as users and groups
    */
   populate() {
-    this.context.port.request("passbolt.users.update-local-storage");
-    this.context.port.request("passbolt.groups.update-local-storage");
+    this.props.context.port.request("passbolt.users.update-local-storage");
+    this.props.context.port.request("passbolt.groups.update-local-storage");
   }
 
   /** USER SEARCH  **/
@@ -653,8 +653,8 @@ class UserWorkspaceContextProvider extends React.Component {
 }
 
 UserWorkspaceContextProvider.displayName = 'UserWorkspaceContextProvider';
-UserWorkspaceContextProvider.contextType = AppContext;
 UserWorkspaceContextProvider.propTypes = {
+  context: PropTypes.any, // The application context
   children: PropTypes.any, // The component children
   location: PropTypes.object, // The router location
   match: PropTypes.object, // The router match helper
@@ -664,7 +664,7 @@ UserWorkspaceContextProvider.propTypes = {
   dialogContext: PropTypes.any // The dialog context
 };
 
-export default withRouter(withDialog(withActionFeedback(withLoading(UserWorkspaceContextProvider))));
+export default withAppContext(withRouter(withDialog(withActionFeedback(withLoading(UserWorkspaceContextProvider)))));
 
 /**
  * User Workspace Context Consumer HOC

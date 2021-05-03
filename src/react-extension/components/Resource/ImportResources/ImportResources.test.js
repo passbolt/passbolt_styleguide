@@ -60,7 +60,7 @@ describe("As LU I should see the password import dialog", () => {
       await page.submitImport();
       await waitFor(() => {});
 
-      const base64Content = "dGVzdA==";
+      const base64Content = "dABlAHMAdAA=";
       const extension = 'csv';
       const options = {credentials: {password: null, keyFile: null}, folders: false, tags: false};
 

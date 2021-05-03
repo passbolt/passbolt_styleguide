@@ -14,7 +14,7 @@
 import React, {Component} from "react";
 import PropTypes from "prop-types";
 import XRegExp from "xregexp";
-import AppContext from "../../../contexts/AppContext";
+import {withAppContext} from "../../../contexts/AppContext";
 import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
 import FormSubmitButton from "../../Common/Inputs/FormSubmitButton/FormSubmitButton";
@@ -228,7 +228,7 @@ class CreateUser extends Component {
       title: this.translate("There was an unexpected error..."),
       message: error.message
     };
-    this.context.setContext({errorDialogProps});
+    this.props.context.setContext({errorDialogProps});
     this.props.dialogContext.open(NotifyError);
   }
 
@@ -260,7 +260,7 @@ class CreateUser extends Component {
    * @returns {Promise<Object>} User entity or Error
    */
   async createUser() {
-    const role = this.context.roles.find(role => this.state.is_admin ? role.name === "admin" : role.name === "user");
+    const role = this.props.context.roles.find(role => this.state.is_admin ? role.name === "admin" : role.name === "user");
     const userDto = {
       profile: {
         first_name: this.state.first_name,
@@ -269,7 +269,7 @@ class CreateUser extends Component {
       username: this.state.username.trim(),
       role_id: role.id
     };
-    return await this.context.port.request("passbolt.users.create", userDto);
+    return await this.props.context.port.request("passbolt.users.create", userDto);
   }
 
   /**
@@ -432,13 +432,12 @@ class CreateUser extends Component {
   }
 }
 
-CreateUser.contextType = AppContext;
-
 CreateUser.propTypes = {
+  context: PropTypes.any, // The application context
   actionFeedbackContext: PropTypes.any, // The action feedback context
   onClose: PropTypes.func,
   dialogContext: PropTypes.any, // The dialog context
   t: PropTypes.func, // The translation function
 };
 
-export default withActionFeedback(withDialog(withTranslation('common')(CreateUser)));
+export default withAppContext(withActionFeedback(withDialog(withTranslation('common')(CreateUser))));

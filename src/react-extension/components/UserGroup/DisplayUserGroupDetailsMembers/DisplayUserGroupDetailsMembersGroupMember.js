@@ -15,8 +15,9 @@
 import React from "react";
 import PropTypes from "prop-types";
 import {withUserWorkspace} from "../../../contexts/UserWorkspaceContext";
-import AppContext from "../../../contexts/AppContext";
+import {withAppContext} from "../../../contexts/AppContext";
 import UserAvatar from "../../Common/Avatar/UserAvatar";
+import {withTranslation} from "react-i18next";
 
 /**
  * This component displays a group member for the group details members
@@ -27,7 +28,7 @@ class DisplayUserGroupDetailsMembersGroupMember extends React.Component {
    * @return {object}
    */
   get user() {
-    return this.context.users.find(user => user.id === this.props.groupUser.user_id);
+    return this.props.context.users.find(user => user.id === this.props.groupUser.user_id);
   }
 
   /**
@@ -42,7 +43,15 @@ class DisplayUserGroupDetailsMembersGroupMember extends React.Component {
    * Returns the base url
    */
   get baseUrl() {
-    return this.context.userSettings.getTrustedDomain();
+    return this.props.context.userSettings.getTrustedDomain();
+  }
+
+  /**
+   * Get the translate function
+   * @returns {function(...[*]=)}
+   */
+  get translate() {
+    return this.props.t;
   }
 
   /**
@@ -56,7 +65,7 @@ class DisplayUserGroupDetailsMembersGroupMember extends React.Component {
         <div className="content-wrapper">
           <div className="content">
             <div className="name">{`${this.user.profile.first_name} ${this.user.profile.last_name}`}</div>
-            <div className="subinfo">{this.roleName}</div>
+            <div className="subinfo">{this.translate(this.roleName)}</div>
           </div>
         </div>
         <UserAvatar
@@ -67,10 +76,11 @@ class DisplayUserGroupDetailsMembersGroupMember extends React.Component {
   }
 }
 
-DisplayUserGroupDetailsMembersGroupMember.contextType = AppContext;
 DisplayUserGroupDetailsMembersGroupMember.propTypes = {
+  context: PropTypes.any, // The application context
   groupUser: PropTypes.object, // The group user
-  userWorkspaceContext: PropTypes.object // The user workspace context
+  userWorkspaceContext: PropTypes.object, // The user workspace context
+  t: PropTypes.func, // The translation function
 };
 
-export default withUserWorkspace(DisplayUserGroupDetailsMembersGroupMember);
+export default withAppContext(withUserWorkspace(withTranslation('common')(DisplayUserGroupDetailsMembersGroupMember)));

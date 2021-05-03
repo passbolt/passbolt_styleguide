@@ -12,7 +12,7 @@
  */
 
 import React from 'react';
-import AppContext from "../../../contexts/AppContext";
+import {withAppContext} from "../../../contexts/AppContext";
 import {Trans, withTranslation} from "react-i18next";
 import PropTypes from "prop-types";
 import {DateTime} from "luxon";
@@ -57,7 +57,7 @@ class DisplayUserGpgInformation extends React.Component {
    * Returns the current user
    */
   get user() {
-    return this.context.loggedInUser;
+    return this.props.context.loggedInUser;
   }
 
   /**
@@ -89,7 +89,7 @@ class DisplayUserGpgInformation extends React.Component {
    * Fetch the user key id
    */
   async fetchGpgkeyInfo() {
-    const gpgkeyInfo = await this.context.port.request('passbolt.keyring.get-public-key-info-by-user', this.user.id);
+    const gpgkeyInfo = await this.props.context.port.request('passbolt.keyring.get-public-key-info-by-user', this.user.id);
 
     // format the gpgkey info.
     const keyId = gpgkeyInfo.keyId;
@@ -139,7 +139,7 @@ class DisplayUserGpgInformation extends React.Component {
    */
   formatDate(data) {
     try {
-      return DateTime.fromJSDate(new Date(data)).setLocale(this.context.locale).toLocaleString(DateTime.DATETIME_FULL);
+      return DateTime.fromJSDate(new Date(data)).setLocale(this.props.context.locale).toLocaleString(DateTime.DATETIME_FULL);
     } catch (error) {
       return "";
     }
@@ -237,12 +237,11 @@ class DisplayUserGpgInformation extends React.Component {
   }
 }
 
-DisplayUserGpgInformation.contextType = AppContext;
-
 DisplayUserGpgInformation.propTypes = {
+  context: PropTypes.any, // The application context
   t: PropTypes.func, // The translation function
   i18n: PropTypes.any // The i18n context translation
 };
 
-export default withTranslation('common')(DisplayUserGpgInformation);
+export default withAppContext(withTranslation('common')(DisplayUserGpgInformation));
 

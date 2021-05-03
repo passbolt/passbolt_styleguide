@@ -1,6 +1,6 @@
 import React from "react";
 import {MemoryRouter, Route} from "react-router-dom";
-import "../../../../css/themes/midgar/ext_app.css";
+import "../../../../css/themes/default/ext_authentication.css";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import InputPassphrase from "./InputPassphrase";
 import AppContext from "../../../contexts/AppContext";

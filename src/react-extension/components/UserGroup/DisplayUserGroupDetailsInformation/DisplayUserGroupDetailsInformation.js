@@ -16,7 +16,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import Icon from "../../Common/Icons/Icon";
 import {withUserWorkspace} from "../../../contexts/UserWorkspaceContext";
-import AppContext from "../../../contexts/AppContext";
+import {withAppContext} from "../../../contexts/AppContext";
 import {Trans, withTranslation} from "react-i18next";
 import {DateTime} from "luxon";
 
@@ -72,7 +72,7 @@ class DisplayUserGroupDetailsInformation extends React.Component {
   formatDateTimeAgo(date) {
     const dateTime = DateTime.fromISO(date);
     const duration = dateTime.diffNow().toMillis();
-    return duration < 1000 && duration > 0 ? this.translate('Just now') : dateTime.toRelative({locale: this.context.locale});
+    return duration > -1000 && duration < 0 ? this.translate('Just now') : dateTime.toRelative({locale: this.props.context.locale});
   }
 
   /**
@@ -89,7 +89,7 @@ class DisplayUserGroupDetailsInformation extends React.Component {
   render() {
     const created = this.formatDateTimeAgo(this.group.created);
     const modified = this.formatDateTimeAgo(this.group.modified);
-    const modifiedByUser = this.context.users.find(user => user.id === this.group.modified_by);
+    const modifiedByUser = this.props.context.users.find(user => user.id === this.group.modified_by);
     const modifiedByUserName = modifiedByUser ? `${modifiedByUser.profile.first_name} ${modifiedByUser.profile.last_name}` : this.translate("Unknown user");
     const membersCount = this.group.groups_users.length;
     return (
@@ -128,10 +128,10 @@ class DisplayUserGroupDetailsInformation extends React.Component {
   }
 }
 
-DisplayUserGroupDetailsInformation.contextType = AppContext;
 DisplayUserGroupDetailsInformation.propTypes = {
+  context: PropTypes.any, // The application context
   userWorkspaceContext: PropTypes.object, // The user workspace context
   t: PropTypes.func, // The translation function
 };
 
-export default withUserWorkspace(withTranslation('common')(DisplayUserGroupDetailsInformation));
+export default withAppContext(withUserWorkspace(withTranslation('common')(DisplayUserGroupDetailsInformation)));

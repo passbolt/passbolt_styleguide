@@ -96,7 +96,9 @@ class ExtQuickAccess extends React.Component {
   }
 
   focusSearch() {
-    this.searchRef.current.focus();
+    if (this.searchRef.current) {
+      this.searchRef.current.focus();
+    }
   }
 
   async checkPluginIsConfigured() {
@@ -190,7 +192,7 @@ class ExtQuickAccess extends React.Component {
                   }
                   <div className={`${this.state.passphraseRequired ? "visually-hidden" : ""}`}>
                     <Route path={SEARCH_VISIBLE_ROUTES} render={() => (
-                      <Search ref={this.searchRef}/>
+                      <Search ref={el => this.searchRef = el}/>
                     )}/>
                     <AnimatedSwitch location={props.location}>
                       <Route path="/data/quickaccess/login" render={() => (

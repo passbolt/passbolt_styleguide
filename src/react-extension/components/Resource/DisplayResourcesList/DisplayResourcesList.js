@@ -285,8 +285,8 @@ class DisplayResourcesList extends React.Component {
       } catch (error) {
         if (error.name !== "UserAbortsOperationError") {
           this.props.actionFeedbackContext.displayError(error.message);
-          return;
         }
+        return;
       }
     }
     await this.props.context.port.request("passbolt.clipboard.copy", password);
@@ -526,7 +526,7 @@ class DisplayResourcesList extends React.Component {
   formatDateTimeAgo(date) {
     const dateTime = DateTime.fromISO(date);
     const duration = dateTime.diffNow().toMillis();
-    return duration < 1000 && duration > 0 ? this.translate('Just now') : dateTime.toRelative({locale: this.props.context.locale});
+    return duration > -1000 && duration < 0 ? this.translate('Just now') : dateTime.toRelative({locale: this.props.context.locale});
   }
 
   renderItem(index, key) {
@@ -683,7 +683,10 @@ class DisplayResourcesList extends React.Component {
           {isEmpty &&  filterType === ResourceWorkspaceFilterTypes.SHARED_WITH_ME &&
           <div className="empty-content">
             <h2><Trans>No passwords are shared with you yet.</Trans></h2>
-            <p><Trans>It does feel a bit empty here. Wait for a team member to share a password with you.</Trans></p>
+            <p>
+              <Trans>It does feel a bit empty here.</Trans>&nbsp;
+              <Trans>Wait for a team member to share a password with you.</Trans>
+            </p>
           </div>
           }
           {isEmpty &&
@@ -695,9 +698,8 @@ class DisplayResourcesList extends React.Component {
             <div className="empty-content">
               <h1><Trans>Welcome to passbolt!</Trans></h1>
               <p>
-                <Trans>
-                  It does feel a bit empty here. Create your first password or<br/>wait for a team member to share one with you.
-                </Trans>
+                <Trans>It does feel a bit empty here.</Trans>&nbsp;
+                <Trans>Create your first password or wait for a team member to share one with you.</Trans>
               </p>
             </div>
           </React.Fragment>

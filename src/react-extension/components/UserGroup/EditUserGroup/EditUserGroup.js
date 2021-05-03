@@ -13,7 +13,7 @@
  */
 import React, {Component} from "react";
 import PropTypes from "prop-types";
-import AppContext from "../../../contexts/AppContext";
+import {withAppContext} from "../../../contexts/AppContext";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import {withDialog} from "../../../contexts/DialogContext";
 import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
@@ -143,7 +143,7 @@ class EditUserGroup extends Component {
    * @returns {Promise<object>}
    */
   async findUser(userId) {
-    const user = this.context.users.find(user => user.id === userId);
+    const user = this.props.context.users.find(user => user.id === userId);
     user.gpgkey = await this.findUserGpgkey(user.id);
     return user;
   }
@@ -154,7 +154,7 @@ class EditUserGroup extends Component {
    * @returns {Promise<object>}
    */
   async findUserGpgkey(userId) {
-    return await this.context.port.request('passbolt.keyring.get-public-key-info-by-user', userId);
+    return await this.props.context.port.request('passbolt.keyring.get-public-key-info-by-user', userId);
   }
 
   /**
@@ -230,7 +230,7 @@ class EditUserGroup extends Component {
    * @type {boolean}
    */
   get isManager() {
-    return this.groupToEdit.groups_users.some(group_user => group_user.user_id === this.context.loggedInUser.id && group_user.is_admin);
+    return this.groupToEdit.groups_users.some(group_user => group_user.user_id === this.props.context.loggedInUser.id && group_user.is_admin);
   }
 
   /**
@@ -557,7 +557,7 @@ class EditUserGroup extends Component {
       }))
     };
 
-    await this.context.port.request('passbolt.groups.update', groupDto);
+    await this.props.context.port.request('passbolt.groups.update', groupDto);
   }
 
   /**
@@ -598,7 +598,7 @@ class EditUserGroup extends Component {
       title: this.translate("There was an unexpected error..."),
       message: error.message
     };
-    this.context.setContext({errorDialogProps});
+    this.props.context.setContext({errorDialogProps});
     this.props.dialogContext.open(NotifyError);
   }
 
@@ -651,7 +651,7 @@ class EditUserGroup extends Component {
     const matchUser = (word, user) => matchUsernameProperty(word, user) || matchNameProperty(word, user);
     const matchText = user => words.every(word => matchUser(word, user));
 
-    const usersMatched = this.context.users.filter(user => user.active === true && !this.isMember(user))
+    const usersMatched = this.props.context.users.filter(user => user.active === true && !this.isMember(user))
       .filter(matchText);
     return this.decorateUsersWithGpgkey(usersMatched);
   }
@@ -671,11 +671,11 @@ class EditUserGroup extends Component {
     return (
       <DialogWrapper
         className='edit-group-dialog'
-        title="Edit group"
+        title={this.translate('Edit group')}
         onClose={this.handleClose}
         disabled={!this.areActionsAllowed}>
 
-        {!this.isLoading &&  this.context.loggedInUser &&
+        {!this.isLoading &&  this.props.context.loggedInUser &&
         <form
           className="group-form"
           onSubmit={this.handleSubmit}
@@ -720,7 +720,7 @@ class EditUserGroup extends Component {
                     className={`row ${this.isMemberChanged(groupUser) ? 'permission-updated' : ''}`}>
 
                     <UserAvatar
-                      baseUrl={this.context.userSettings.getTrustedDomain()}
+                      baseUrl={this.props.context.userSettings.getTrustedDomain()}
                       user={groupUser.user}/>
 
                     <div className="aro">
@@ -746,8 +746,8 @@ class EditUserGroup extends Component {
                         value={groupUser.is_admin}
                         onChange={event => this.handleMemberRoleChange(event, groupUser)}
                         disabled={!this.areActionsAllowed}>
-                        <option value={false}><Trans>Member</Trans></option>
-                        <option value={true}><Trans>Group manager</Trans></option>
+                        <option value={false}>{this.translate("Member")}</option>
+                        <option value={true}>{this.translate("Group manager")}</option>
                       </select>
                     </div>
 
@@ -799,7 +799,7 @@ class EditUserGroup extends Component {
               onOpen={this.handleAutocompleteOpen}
               onClose={this.handleAutocompleteClose}
               disabled={!this.areActionsAllowed}
-              baseUrl={this.context.userSettings.getTrustedDomain()}/>
+              baseUrl={this.props.context.userSettings.getTrustedDomain()}/>
           </div>
           }
 
@@ -821,9 +821,8 @@ class EditUserGroup extends Component {
   }
 }
 
-EditUserGroup.contextType = AppContext;
-
 EditUserGroup.propTypes = {
+  context: PropTypes.any, // The application context
   actionFeedbackContext: PropTypes.any, // The action feedback context
   onClose: PropTypes.func,
   dialogContext: PropTypes.any, // The dialog context
@@ -833,4 +832,4 @@ EditUserGroup.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withRouter(withUserWorkspace(withActionFeedback(withDialog(withTranslation('common')(EditUserGroup)))));
+export default withAppContext(withRouter(withUserWorkspace(withActionFeedback(withDialog(withTranslation('common')(EditUserGroup))))));
