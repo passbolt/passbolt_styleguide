@@ -51,7 +51,7 @@ class NavigateIntoUserSettingsWorkspace extends React.Component {
    * @returns {bool}
    */
   get canIUseMobileCapability() {
-    return this.context.siteSettings && this.context.siteSettings.canIUse('mobile');
+    return this.props.context.siteSettings && this.props.context.siteSettings.canIUse('mobile');
   }
 
   /**

@@ -49,7 +49,7 @@ class DisplayUserSettingsWorkspace extends React.Component {
    * @returns {bool}
    */
   get canIUseMobileTransferCapability() {
-    return this.context.siteSettings && this.context.siteSettings.canIUse('mobile');
+    return this.props.context.siteSettings && this.props.context.siteSettings.canIUse('mobile');
   }
 
   /**
