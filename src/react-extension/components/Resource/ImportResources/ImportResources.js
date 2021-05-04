@@ -212,7 +212,7 @@ class ImportResources extends Component {
     for (let i = 0; i < codeUnits.length; i++) {
       codeUnits[i] = string.charCodeAt(i);
     }
-    return String.fromCharCode(...new Uint8Array(codeUnits.buffer));
+    return new TextDecoder("utf-8").decode(new Uint8Array(codeUnits.buffer));
   }
 
   /**
