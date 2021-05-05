@@ -661,12 +661,14 @@ class TransferToMobile extends React.Component {
           {this.state.step === 'cancel' &&
           <div className="mobile-transfer-step-error">
             <div className="profile col6">
-              <h3><Trans>The operation was cancelled by the mobile.</Trans></h3>
+              <h3><Trans>The operation was cancelled.</Trans></h3>
               <div className="feedback-card">
                 <AnimatedFeedback name='error' />
                 <div className="additional-information">
                   <p>
-                    <Trans>If there was an issue during the transfer, please try again later or contact your administrator.</Trans>
+                    <Trans>If there was an issue during the transfer, either the operation was cancelled on the mobile side,
+                      or the authentication token expired.</Trans>&nbsp;
+                    <Trans>Please try again later or contact your administrator.</Trans>
                   </p>
                   <p>
                     <a className={`button primary ${processingClassName}`} role="button" onClick={this.handleClickStart}>
