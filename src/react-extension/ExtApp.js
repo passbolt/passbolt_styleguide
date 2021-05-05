@@ -23,6 +23,7 @@ import DisplayActionFeedbacks from "./components/Common/ActionFeedback/DisplayAc
 import DialogContextProvider from "./contexts/DialogContext";
 import ManageDialogs from "./components/Common/Dialog/ManageDialogs/ManageDialogs";
 import ResourceWorkspaceContextProvider from "./contexts/ResourceWorkspaceContext";
+import ResourcePasswordGeneratorContextProvider from "./contexts/ResourcePasswordGeneratorContext";
 import UserWorkspaceContextProvider from "./contexts/UserWorkspaceContext";
 import ContextualMenuContextProvider from "./contexts/ContextualMenuContext";
 import ManageContextualMenu from "./components/Common/ContextualMenu/ManageContextualMenu";
@@ -114,17 +115,19 @@ class ExtApp extends Component {
                                 "/app/passwords",
                               ]}>
                                 <ResourceWorkspaceContextProvider>
-                                  <ManageDialogs/>
-                                  <ManageContextualMenu/>
-                                  <ManageAnnouncements/>
-                                  <div id="container" className="page password">
-                                    <div id="app" className="app ready" tabIndex="1000">
-                                      <div className="header first">
-                                        <DisplayMainMenu/>
+                                  <ResourcePasswordGeneratorContextProvider>
+                                    <ManageDialogs/>
+                                    <ManageContextualMenu/>
+                                    <ManageAnnouncements/>
+                                    <div id="container" className="page password">
+                                      <div id="app" className="app ready" tabIndex="1000">
+                                        <div className="header first">
+                                          <DisplayMainMenu/>
+                                        </div>
+                                        <DisplayResourcesWorkspace onMenuItemClick={this.handleWorkspaceSelect}/>
                                       </div>
-                                      <DisplayResourcesWorkspace onMenuItemClick={this.handleWorkspaceSelect}/>
                                     </div>
-                                  </div>
+                                  </ResourcePasswordGeneratorContextProvider>
                                 </ResourceWorkspaceContextProvider>
                               </Route>
                               {/* Users workspace */}

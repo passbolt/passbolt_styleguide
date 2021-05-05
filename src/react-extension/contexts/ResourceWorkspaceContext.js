@@ -72,7 +72,7 @@ export const ResourceWorkspaceContext = React.createContext({
   onResourceFileToImport: () => {}, // Whenever a resource file will be imported
   onResourceFileImportResult: () => {}, // Whenever the import result has been provided
   onResourcesToExport: () => {}, // Whenever resources and/or folder will be exported
-  onGoToResourceUriRequested: () => {} // Whenever the users wants to follow a resource uri
+  onGoToResourceUriRequested: () => {}, // Whenever the users wants to follow a resource uri
 });
 
 /**
@@ -136,7 +136,7 @@ export class ResourceWorkspaceContextProvider extends React.Component {
       onResourceFileToImport: this.handleResourceFileToImport.bind(this), // Whenever a resource file will be imported
       onResourceFileImportResult: this.handleResourceFileImportResult.bind(this), // Whenever the import result has been provided
       onResourcesToExport: this.handleResourcesToExportChange.bind(this), // Whenever resources and/or folder have to be exported
-      onGoToResourceUriRequested: this.onGoToResourceUriRequested.bind(this) // Whenever the users wants to follow a resource uri
+      onGoToResourceUriRequested: this.onGoToResourceUriRequested.bind(this), // Whenever the users wants to follow a resource uri
     };
   }
 
@@ -151,7 +151,7 @@ export class ResourceWorkspaceContextProvider extends React.Component {
   /**
    * Whenever the component is mounted
    */
-  componentDidMount() {
+  async componentDidMount() {
     this.populate();
     this.handleResourcesWaitedFor();
   }
@@ -178,7 +178,7 @@ export class ResourceWorkspaceContextProvider extends React.Component {
       // Avoid a side-effect whenever one inputs a specific resource url (it unselect the resource otherwise )
       const isNotNonePreviousFilter = previousFilter.type !== ResourceWorkspaceFilterTypes.NONE;
       if (isNotNonePreviousFilter) {
-        this.populate();
+        await this.populate();
         await this.unselectAll();
       }
     }
@@ -503,6 +503,7 @@ export class ResourceWorkspaceContextProvider extends React.Component {
       window.open(safeUri, '_blank', 'noopener,noreferrer');
     }
   }
+
 
   /**
    * Populate the context with initial data such as resources and folders

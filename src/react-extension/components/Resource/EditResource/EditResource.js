@@ -25,6 +25,9 @@ import FormSubmitButton from "../../Common/Inputs/FormSubmitButton/FormSubmitBut
 import FormCancelButton from "../../Common/Inputs/FormSubmitButton/FormCancelButton";
 import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 import {Trans, withTranslation} from "react-i18next";
+import {SecretGenerator} from "../../../../shared/lib/SecretGenerator/SecretGenerator";
+import GenerateResourcePassword from "../../ResourcePassword/GenerateResourcePassword/GenerateResourcePassword";
+import {withResourcePasswordGeneratorContext} from "../../../contexts/ResourcePasswordGeneratorContext";
 
 /** Resource password max length */
 const RESOURCE_PASSWORD_MAX_LENGTH = 4096;
@@ -74,6 +77,7 @@ class EditResource extends Component {
     this.handleNameInputKeyUp = this.handleNameInputKeyUp.bind(this);
     this.handlePasswordInputKeyUp = this.handlePasswordInputKeyUp.bind(this);
     this.handleViewPasswordButtonClick = this.handleViewPasswordButtonClick.bind(this);
+    this.handleOpenGenerator = this.handleOpenGenerator.bind(this);
     this.handleGeneratePasswordButtonClick = this.handleGeneratePasswordButtonClick.bind(this);
     this.handleDescriptionInputFocus = this.handleDescriptionInputFocus.bind(this);
     this.handleDescriptionInputBlur = this.handleDescriptionInputBlur.bind(this);
@@ -90,8 +94,19 @@ class EditResource extends Component {
     this.descriptionInputRef = React.createRef();
   }
 
+  /**
+   * Whenever the component has been mounted
+   */
   componentDidMount() {
     this.initialize();
+  }
+
+  /**
+   * Whenever the component has been changed (props)
+   * @param prevProps The previous component props
+   */
+  componentDidUpdate(prevProps) {
+    this.handleLastGeneratedPasswordChanged(prevProps.resourcePasswordGeneratorContext.lastGeneratedPassword);
   }
 
   async initialize() {
@@ -99,6 +114,28 @@ class EditResource extends Component {
     if (isDecrypted) {
       const encrypt = this.mustEncryptDescription();
       this.setState({encryptDescription: encrypt});
+    }
+  }
+
+  /*
+   * =============================================================
+   *  Resource password generator
+   * =============================================================
+   */
+  get currentGeneratorConfiguration() {
+    const type = this.props.resourcePasswordGeneratorContext.type;
+    return this.props.resourcePasswordGeneratorContext.settings.generators.find(generator => generator.type === type);
+  }
+
+  /**
+   * Whenever a new password has been generated through the generator
+   * @param previousLastGeneratedPassword The previous last generated password value
+   */
+  handleLastGeneratedPasswordChanged(previousLastGeneratedPassword) {
+    const currentLastGeneratedPassword = this.props.resourcePasswordGeneratorContext.lastGeneratedPassword;
+    const hasLastGeneratedPasswordChanged = previousLastGeneratedPassword !== currentLastGeneratedPassword;
+    if (hasLastGeneratedPasswordChanged) {
+      this.setState({password: currentLastGeneratedPassword});
     }
   }
 
@@ -457,8 +494,15 @@ class EditResource extends Component {
     if (this.hasAllInputDisabled()) {
       return;
     }
-    const password = SecretComplexity.generate();
+    const password = SecretGenerator.generate(this.currentGeneratorConfiguration);
     this.setState({password: password});
+  }
+
+  /**
+   * Whenever the user wants to open the password generator
+   */
+  handleOpenGenerator() {
+    this.props.dialogContext.open(GenerateResourcePassword);
   }
 
   /**
@@ -539,52 +583,7 @@ class EditResource extends Component {
     return plaintext;
   }
 
-  /*
-   * =============================================================
-   *  Security token style
-   * =============================================================
-   */
-  /**
-   * Get the password input style.
-   * @return {Object}
-   */
-  getPasswordInputStyle() {
-    if (this.state.passwordInputHasFocus) {
-      const backgroundColor = this.props.context.userSettings.getSecurityTokenBackgroundColor();
-      const textColor = this.props.context.userSettings.getSecurityTokenTextColor();
 
-      return {
-        background: backgroundColor,
-        color: textColor
-      };
-    }
-
-    return {
-      background: "",
-      color: "",
-    };
-  }
-
-  /**
-   * Get the security token style.
-   * @return {Object}
-   */
-  getSecurityTokenStyle() {
-    const backgroundColor = this.props.context.userSettings.getSecurityTokenBackgroundColor();
-    const textColor = this.props.context.userSettings.getSecurityTokenTextColor();
-
-    if (this.state.passwordInputHasFocus) {
-      return {
-        background: textColor,
-        color: backgroundColor,
-      };
-    }
-
-    return {
-      background: backgroundColor,
-      color: textColor,
-    };
-  }
 
   /*
    * =============================================================
@@ -652,9 +651,6 @@ class EditResource extends Component {
    * =============================================================
    */
   render() {
-    const passwordInputStyle = this.getPasswordInputStyle();
-    const securityTokenStyle = this.getSecurityTokenStyle();
-    const securityTokenCode = this.props.context.userSettings.getSecurityTokenCode();
     const passwordStrength = SecretComplexity.getStrength(this.state.password);
     const passwordPlaceholder = this.getPasswordInputPlaceholder();
     /*
@@ -709,23 +705,26 @@ class EditResource extends Component {
                   onKeyUp={this.handlePasswordInputKeyUp} value={this.state.password}
                   placeholder={passwordPlaceholder} onFocus={this.handlePasswordInputFocus}
                   onBlur={this.handlePasswordInputBlur} onChange={this.handleInputChange}
-                  disabled={this.hasAllInputDisabled() || this.isPasswordDisabled()} style={passwordInputStyle} ref={this.passwordInputRef}/>
-                <div className="security-token"
-                  style={securityTokenStyle}>{securityTokenCode}</div>
+                  disabled={this.hasAllInputDisabled() || this.isPasswordDisabled()}ref={this.passwordInputRef}/>
+                <a onClick={this.handleViewPasswordButtonClick}
+                  className={`password-view button button-icon toggle ${this.state.viewPassword ? "selected" : ""}`}>
+                  <Icon name='eye-open' big={true}/>
+                  <span className="visually-hidden">view</span>
+                </a>
               </div>
               <ul className="actions inline">
-                <li>
-                  <a onClick={this.handleViewPasswordButtonClick}
-                    className={`password-view button button-icon toggle ${this.state.viewPassword ? "selected" : ""} ${this.hasAllInputDisabled() ? "disabled" : ""}`}>
-                    <Icon name='eye-open' big={true}/>
-                    <span className="visually-hidden">view</span>
-                  </a>
-                </li>
                 <li>
                   <a onClick={this.handleGeneratePasswordButtonClick}
                     className={`password-generate button-icon button ${this.hasAllInputDisabled() ? "disabled" : ""}`}>
                     <Icon name='magic-wand' big={true}/>
                     <span className="visually-hidden">generate</span>
+                  </a>
+                </li>
+                <li>
+                  <a onClick={this.handleOpenGenerator}
+                    className="password-generator button-icon button">
+                    <Icon name='cog' big={true}/>
+                    <span className="visually-hidden">open generator</span>
                   </a>
                 </li>
               </ul>
@@ -790,10 +789,16 @@ class EditResource extends Component {
 EditResource.propTypes = {
   context: PropTypes.any, // The application context
   onClose: PropTypes.func,
+  resourcePasswordGeneratorContext: PropTypes.any, // The resource password generator context
   resourceWorkspaceContext: PropTypes.any, // The resource workspace context
   actionFeedbackContext: PropTypes.any, // The action feedback context
   dialogContext: PropTypes.any, // The dialog context,
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withResourceWorkspace(withActionFeedback(withDialog(withTranslation('common')(EditResource)))));
+export default withAppContext(
+  withResourceWorkspace(
+    withResourcePasswordGeneratorContext(
+      withActionFeedback(
+        withDialog(
+          withTranslation('common')(EditResource))))));

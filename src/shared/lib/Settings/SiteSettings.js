@@ -168,6 +168,14 @@ export default class SiteSettings {
   }
 
   /**
+   * Get the generator configuration
+   * @return {*}
+   */
+  get generatorConfiguration() {
+    return getPropValue(this.settings, "passbolt.plugins.generator.configuration");
+  }
+
+  /**
    * Get the default supported locales.
    * @type {array<object>}
    */

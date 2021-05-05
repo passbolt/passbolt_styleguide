@@ -665,6 +665,19 @@ input[type=submit].button.processing {
   box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.2);
   border: 1px solid #BBB;
 }
+/* group */
+.button-group {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  gap: 0.5em;
+}
+.button-group--nowrap > .button {
+  white-space: nowrap;
+}
+.button-group > * {
+  flex: 0 0 10%;
+}
 /*
 	Base form components styling
 	Check components/form for more advanced/fancy input
@@ -1194,6 +1207,48 @@ h6 .input.toggle-switch {
 .singleline .input input[type="password"],
 .singleline .input input[type="search"] {
   width: 100%;
+}
+.slider {
+  display: flex;
+  align-items: center;
+}
+.slider input[type=range] {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 1px;
+  border-radius: 5px;
+  background: #DDD;
+  outline: none;
+  opacity: 0.7;
+  -webkit-transition: 0.2s;
+  transition: opacity 0.2s;
+  flex-grow: 1;
+}
+.slider input[type=range]:hover {
+  opacity: 1;
+}
+.slider input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  border-width: 1px;
+  border-style: solid;
+  border-color: #969696;
+  background: #DDD;
+  cursor: pointer;
+}
+.slider input[type=range]::-moz-range-thumb {
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background: #DDD;
+  cursor: pointer;
+}
+.slider input[type=number] {
+  width: 3em;
+  margin-left: 1em;
 }
 .svg-icon {
   display: inline-flex;

@@ -21,6 +21,7 @@ import {waitFor} from "@testing-library/react";
 import {defaultAppContext, defaultProps} from "./CreateResource.test.data";
 import CreateResourcePage from "./CreateResource.test.page";
 import "../../../test/lib/crypto/cryptoGetRandomvalues";
+import NotifyError from "../../Common/Error/NotifyError/NotifyError";
 
 beforeEach(() => {
   jest.resetModules();
@@ -70,13 +71,6 @@ describe("See the Create Resource", () => {
       // Complexity label exists but is not yet defined.
       expect(page.passwordCreate.complexityText.textContent).toBe("complexity: n/a");
 
-      // Security token element exists.
-      expect(page.passwordCreate.securityToken.textContent).toBe("TST");
-      // And the default style is applied.
-      const securityTokenStyle = window.getComputedStyle(page.passwordCreate.securityToken);
-      expect(securityTokenStyle.background).toBe("rgb(0, 0, 0)");
-      expect(securityTokenStyle.color).toBe("rgb(255, 255, 255)");
-
       // Password view button exists.
       expect(page.passwordCreate.passwordViewButton).not.toBeNull();
       expect(page.passwordCreate.passwordViewButton.classList.contains("selected")).toBe(false);
@@ -92,32 +86,6 @@ describe("See the Create Resource", () => {
 
       // Cancel button exists
       expect(page.passwordCreate.cancelButton.textContent).toBe("Cancel");
-    });
-
-    it('changes the style of its security token when the password input get or lose focus when the password is already decrypted', async() => {
-      /*
-       * Password input got focus.
-       * Assert style change.
-       */
-      page.passwordCreate.focusInput(page.passwordCreate.password);
-      let securityTokenStyle = window.getComputedStyle(page.passwordCreate.securityToken);
-      let passwordInputStyle = window.getComputedStyle(page.passwordCreate.password);
-      expect(passwordInputStyle.background).toBe("rgb(0, 0, 0)");
-      expect(passwordInputStyle.color).toBe("rgb(255, 255, 255)");
-      expect(securityTokenStyle.background).toBe("rgb(255, 255, 255)");
-      expect(securityTokenStyle.color).toBe("rgb(0, 0, 0)");
-
-      /*
-       * Password input lost focus.
-       * Assert style
-       */
-      page.passwordCreate.blurInput(page.passwordCreate.password);
-      securityTokenStyle = window.getComputedStyle(page.passwordCreate.securityToken);
-      passwordInputStyle = window.getComputedStyle(page.passwordCreate.password);
-      expect(passwordInputStyle.background).toBe("white");
-      expect(passwordInputStyle.color).toBe("");
-      expect(securityTokenStyle.background).toBe("rgb(0, 0, 0)");
-      expect(securityTokenStyle.color).toBe("rgb(255, 255, 255)");
     });
 
     it('generates password when clicking on the generate button.', async() => {
@@ -293,12 +261,23 @@ describe("See the Create Resource", () => {
       jest.spyOn(context.port, 'request').mockImplementationOnce(() => {
         throw new PassboltApiFetchError("Jest simulate API error.");
       });
+      jest.spyOn(props.dialogContext, 'open').mockImplementationOnce(jest.fn);
 
       await page.passwordCreate.click(page.passwordCreate.saveButton);
 
       // Throw general error message
-      expect(page.passwordCreate.errorDialog).not.toBeNull();
-      expect(page.passwordCreate.errorDialogMessage).not.toBeNull();
+      expect(props.dialogContext.open).toHaveBeenCalledWith(NotifyError);
+    });
+
+    it('As LU I should access to the password generator dialog', async() => {
+      jest.spyOn(props.dialogContext, 'open').mockImplementationOnce(jest.fn);
+      await page.passwordCreate.openPasswordGenerator();
+      expect(props.dialogContext.open).toBeCalled();
+    });
+
+    it('As LU I should access to the password generator dialog', async() => {
+      await page.passwordCreate.openPasswordGenerator();
+      expect(page.passwordCreate.passwordGeneratorDialog).not.toBeNull();
     });
   });
 });
