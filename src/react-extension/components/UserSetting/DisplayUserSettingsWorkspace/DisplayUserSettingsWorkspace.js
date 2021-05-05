@@ -49,7 +49,7 @@ class DisplayUserSettingsWorkspace extends React.Component {
    * @returns {bool}
    */
   get canIUseMobileTransferCapability() {
-    return this.context.siteSettings && this.context.siteSettings.canIUse('mobile');
+    return this.props.context.siteSettings && this.props.context.siteSettings.canIUse('mobile');
   }
 
   /**
@@ -83,7 +83,7 @@ class DisplayUserSettingsWorkspace extends React.Component {
             {this.canIUseMobileTransferCapability &&
             <Route path={`${path}/mobile`} component={TransferToMobile}></Route>
             }
-            <Route path={`${path}/keys`} component={DisplayUserGpgInformation}/>
+            <Route path={`${path}/keys`} component={DisplayUserGpgInformation}></Route>
           </div>
         </div>
       </div>
