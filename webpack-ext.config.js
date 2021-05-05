@@ -36,12 +36,13 @@ const config = {
     ]
   },
   plugins: [
-    new CopyPlugin([
-      {
-        from: "src/react-extension/assets/i18n/**/*.json",
+    new CopyPlugin({
+      patterns: [{
+        from: "src/locales/**/*.json",
         to: path.resolve(__dirname, "build/js/dist/"),
-      },
-    ]),
+      }],
+    }),
+
   ],
   optimization: {
     splitChunks: {
