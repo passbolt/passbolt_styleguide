@@ -20,7 +20,6 @@
       th.m-cell.sortable, th.l-cell.sortable {
         .svg-icon svg {
           margin-left: 0.55em;
-          margin-top: -0.8em;
         }
       }
     }
@@ -50,7 +49,7 @@
 
     th, td {
       text-align: left;
-      padding: .2em .6em; /* 3px 9px */
+      padding: .2em .2em; /* 3px 3px */
       vertical-align: middle;
     }
 
@@ -82,6 +81,23 @@
     .xl-cell {
       width: 19em;
       max-width: 19em;
+    }
+
+    .cell-header {
+      display: flex;
+    }
+
+    .cell-header-text {
+      flex: 0 1 auto;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+    }
+
+    .cell-header-icon-sort {
+      .svg-icon {
+        display: inherit;
+      }
     }
 
     tbody tr {
