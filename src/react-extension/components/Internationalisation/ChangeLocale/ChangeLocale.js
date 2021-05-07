@@ -13,7 +13,7 @@
  */
 import React, {Component} from "react";
 import PropTypes from "prop-types";
-import {withAppContext} from "../../contexts/AppContext";
+import {withAppContext} from "../../../contexts/AppContext";
 
 /**
  * This component allows the user to change the locale
@@ -150,7 +150,6 @@ class ChangeLocale extends Component {
 
 ChangeLocale.propTypes = {
   context: PropTypes.any, // The application context
-  t: PropTypes.func, // The translation function
 };
 
 export default withAppContext(ChangeLocale);

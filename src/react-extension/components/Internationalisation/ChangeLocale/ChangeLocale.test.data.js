@@ -1,5 +1,5 @@
-import SiteSettings from "../../../shared/lib/Settings/SiteSettings";
-import siteSettingsFixture from "../../test/fixture/Settings/siteSettings";
+import SiteSettings from "../../../../shared/lib/Settings/SiteSettings";
+import siteSettingsFixture from "../../../test/fixture/Settings/siteSettings";
 
 /**
  * Default props

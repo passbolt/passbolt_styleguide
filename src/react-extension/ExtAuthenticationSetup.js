@@ -21,7 +21,7 @@ import SiteSettings from "../shared/lib/Settings/SiteSettings";
 import Footer from "./components/Common/Footer/Footer";
 import AppContext from "./contexts/AppContext";
 import TranslationProvider from "./components/Common/Internationalisation/TranslationProvider";
-import ChangeLocale from "./components/Internationalisation/ChangeLocale";
+import ChangeAuthenticationLocale from "./components/Internationalisation/ChangeLocale/ChangeExtAuthenticationLocale";
 
 /**
  * The setup application served by the browser extension.
@@ -148,7 +148,7 @@ class ExtAuthenticationSetup extends Component {
                   <div className="login-form">
                     <SetupAuthentication siteSettings={this.state.siteSettings}/>
                   </div>
-                  <ChangeLocale/>
+                  <ChangeAuthenticationLocale/>
                 </div>
               </div>
               <Footer/>

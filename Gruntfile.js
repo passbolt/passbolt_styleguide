@@ -156,7 +156,7 @@ module.exports = function(grunt) {
           },
           removeUnusedKeys: true,
           sort: true,
-          debug: true,
+          debug: false,
         }
       }
     },

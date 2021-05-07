@@ -15,12 +15,12 @@ import React, {Component} from "react";
 import AppContext from "./contexts/AppContext";
 import {ApiClientOptions} from "../shared/lib/apiClient/apiClientOptions";
 import ApiTriageContextProvider from "./contexts/ApiTriageContext";
-import OrchestrateApiTriage from "./components/AuthenticationLogin/OrchestrateApiTriage/OrchestrateApiTriage";
+import OrchestrateApiTriage from "./components/AuthenticationTriage/OrchestrateApiTriage/OrchestrateApiTriage";
 import {ApiClient} from "../shared/lib/apiClient/apiClient";
 import SiteSettings from "../shared/lib/Settings/SiteSettings";
 import Footer from "./components/Common/Footer/Footer";
 import TranslationProvider from "./components/Common/Internationalisation/TranslationProvider";
-import ChangeLocale from "./components/Internationalisation/ChangeLocale";
+import ChangeApiTriageLocale from "./components/Internationalisation/ChangeLocale/ChangeApiTriageLocale";
 
 /**
  * The triage application served by the API.
@@ -210,20 +210,20 @@ class ApiTriage extends Component {
       <AppContext.Provider value={this.state}>
         {this.isReady() &&
         <TranslationProvider loadingPath={`${this.state.trustedDomain}/locales/{{lng}}/{{ns}}.json`}>
-          <div id="container" className="container page login">
-            <div className="content">
-              <div className="header">
-                <div className="logo"><span className="visually-hidden">Passbolt</span></div>
-              </div>
-              <div className="login-form">
-                <ApiTriageContextProvider>
+          <ApiTriageContextProvider>
+            <div id="container" className="container page login">
+              <div className="content">
+                <div className="header">
+                  <div className="logo"><span className="visually-hidden">Passbolt</span></div>
+                </div>
+                <div className="login-form">
                   <OrchestrateApiTriage/>
-                </ApiTriageContextProvider>
+                </div>
+                <ChangeApiTriageLocale/>
               </div>
-              <ChangeLocale/>
             </div>
-          </div>
-          <Footer/>
+            <Footer/>
+          </ApiTriageContextProvider>
         </TranslationProvider>
         }
       </AppContext.Provider>
