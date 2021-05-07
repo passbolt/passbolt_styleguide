@@ -735,49 +735,77 @@ class DisplayResourcesList extends React.Component {
                     </th>
                     <th className="cell-name m-cell sortable">
                       <a onClick={ev => this.handleSortByColumnClick(ev, "name")}>
-                        <Trans>Resource</Trans>
-                        {this.isSortedColumn("name") && this.isSortedAsc() &&
-                        <Icon baseline={true} name="caret-up"/>
-                        }
-                        {this.isSortedColumn("name") && !this.isSortedAsc() &&
-                        <Icon baseline={true} name="caret-down"/>
-                        }
+                        <div className="cell-header">
+                          <span className="cell-header-text">
+                            <Trans>Resource</Trans>
+                          </span>
+                          <span className="cell-header-icon-sort">
+                            {this.isSortedColumn("name") && this.isSortedAsc() &&
+                            <Icon baseline={true} name="caret-up"/>
+                            }
+                            {this.isSortedColumn("name") && !this.isSortedAsc() &&
+                            <Icon baseline={true} name="caret-down"/>
+                            }
+                          </span>
+                        </div>
                       </a>
                     </th>
                     <th className="cell-username m-cell username sortable">
                       <a onClick={ev => this.handleSortByColumnClick(ev, "username")}>
-                        <Trans>Username</Trans>
-                        {this.isSortedColumn("username") && this.isSortedAsc() &&
-                        <Icon baseline={true} name="caret-up"/>
-                        }
-                        {this.isSortedColumn("username") && !this.isSortedAsc() &&
-                        <Icon baseline={true} name="caret-down"/>
-                        }
+                        <div className="cell-header">
+                          <span className="cell-header-text">
+                            <Trans>Username</Trans>
+                          </span>
+                          <span className="cell-header-icon-sort">
+                            {this.isSortedColumn("username") && this.isSortedAsc() &&
+                            <Icon baseline={true} name="caret-up"/>
+                            }
+                            {this.isSortedColumn("username") && !this.isSortedAsc() &&
+                            <Icon baseline={true} name="caret-down"/>
+                            }
+                          </span>
+                        </div>
                       </a>
                     </th>
                     <th className="cell-secret m-cell password">
-                      <Trans>Password</Trans>
+                      <div className="cell-header">
+                        <span className="cell-header-text">
+                          <Trans>Password</Trans>
+                        </span>
+                      </div>
                     </th>
                     <th className="cell-uri l-cell sortable">
                       <a onClick={ev => this.handleSortByColumnClick(ev, "uri")}>
-                        <Trans>URI</Trans>
-                        {this.isSortedColumn("uri") && this.isSortedAsc() &&
-                        <Icon baseline={true} name="caret-up"/>
-                        }
-                        {this.isSortedColumn("uri") && !this.isSortedAsc() &&
-                        <Icon baseline={true} name="caret-down"/>
-                        }
+                        <div className="cell-header">
+                          <span className="cell-header-text">
+                            <Trans>URI</Trans>
+                          </span>
+                          <span className="cell-header-icon-sort">
+                            {this.isSortedColumn("uri") && this.isSortedAsc() &&
+                            <Icon baseline={true} name="caret-up"/>
+                            }
+                            {this.isSortedColumn("uri") && !this.isSortedAsc() &&
+                            <Icon baseline={true} name="caret-down"/>
+                            }
+                          </span>
+                        </div>
                       </a>
                     </th>
                     <th className="cell-modified m-cell sortable">
                       <a onClick={ev => this.handleSortByColumnClick(ev, "modified")}>
-                        <Trans>Modified</Trans>
-                        {this.isSortedColumn("modified") && this.isSortedAsc() &&
-                        <Icon baseline={true} name="caret-up"/>
-                        }
-                        {this.isSortedColumn("modified") && !this.isSortedAsc() &&
-                        <Icon baseline={true} name="caret-down"/>
-                        }
+                        <div className="cell-header">
+                          <span className="cell-header-text">
+                            <Trans>Modified</Trans>
+                          </span>
+                          <span className="cell-header-icon-sort">
+                            {this.isSortedColumn("modified") && this.isSortedAsc() &&
+                            <Icon baseline={true} name="caret-up"/>
+                            }
+                            {this.isSortedColumn("modified") && !this.isSortedAsc() &&
+                            <Icon baseline={true} name="caret-down"/>
+                            }
+                          </span>
+                        </div>
                       </a>
                     </th>
                   </tr>
