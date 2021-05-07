@@ -7282,7 +7282,6 @@ input[type="search"]::-webkit-search-cancel-button {
 .tableview .tableview-header table th.m-cell.sortable .svg-icon svg,
 .tableview .tableview-header table th.l-cell.sortable .svg-icon svg {
   margin-left: 0.55em;
-  margin-top: -0.8em;
 }
 .tableview .tableview-content {
   top: 2.125em;
@@ -7306,8 +7305,8 @@ input[type="search"]::-webkit-search-cancel-button {
 .tableview table th,
 .tableview table td {
   text-align: left;
-  padding: 0.2em 0.6em;
-  /* 3px 9px */
+  padding: 0.2em 0.2em;
+  /* 3px 3px */
   vertical-align: middle;
 }
 .tableview table th {
@@ -7337,6 +7336,18 @@ input[type="search"]::-webkit-search-cancel-button {
 .tableview table .xl-cell {
   width: 19em;
   max-width: 19em;
+}
+.tableview table .cell-header {
+  display: flex;
+}
+.tableview table .cell-header-text {
+  flex: 0 1 auto;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+.tableview table .cell-header-icon-sort .svg-icon {
+  display: inherit;
 }
 .tableview table tbody tr {
   height: 2em;
