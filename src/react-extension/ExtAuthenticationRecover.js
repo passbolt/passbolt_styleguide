@@ -21,7 +21,7 @@ import RecoverAuthentication from "./components/AuthenticationRecover/RecoverAut
 import SiteSettings from "../shared/lib/Settings/SiteSettings";
 import Footer from "./components/Common/Footer/Footer";
 import TranslationProvider from "./components/Common/Internationalisation/TranslationProvider";
-import ChangeLocale from "./components/Internationalisation/ChangeLocale";
+import ChangeExtAuthenticationLocale from "./components/Internationalisation/ChangeLocale/ChangeExtAuthenticationLocale";
 
 /**
  * The recover application served by the browser extension.
@@ -150,7 +150,7 @@ class ExtAuthenticationRecover extends Component {
                   <div className="login-form">
                     <RecoverAuthentication siteSettings={this.state.siteSettings}/>
                   </div>
-                  <ChangeLocale/>
+                  <ChangeExtAuthenticationLocale/>
                 </div>
               </div>
               <Footer/>

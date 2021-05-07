@@ -20,7 +20,7 @@ import Footer from "./components/Common/Footer/Footer";
 import {ApiClient} from "../shared/lib/apiClient/apiClient";
 import SiteSettings from "../shared/lib/Settings/SiteSettings";
 import TranslationProvider from "./components/Common/Internationalisation/TranslationProvider";
-import ChangeLocale from "./components/Internationalisation/ChangeLocale";
+import ChangeApiSetupLocale from "./components/Internationalisation/ChangeLocale/ChangeApiSetupLocale";
 
 /**
  * The setup application served by the API.
@@ -204,20 +204,20 @@ class ApiSetup extends Component {
       <AppContext.Provider value={this.state}>
         {this.isReady() &&
         <TranslationProvider loadingPath={`${this.state.trustedDomain}/locales/{{lng}}/{{ns}}.json`}>
-          <div id="container" className="container page login">
-            <div className="content">
-              <div className="header">
-                <div className="logo"><span className="visually-hidden">Passbolt</span></div>
-              </div>
-              <div className="login-form">
-                <ApiSetupContextProvider value={{userId: this.userId, token: this.token}}>
+          <ApiSetupContextProvider value={{userId: this.userId, token: this.token}}>
+            <div id="container" className="container page login">
+              <div className="content">
+                <div className="header">
+                  <div className="logo"><span className="visually-hidden">Passbolt</span></div>
+                </div>
+                <div className="login-form">
                   <OrchestrateApiSetup/>
-                </ApiSetupContextProvider>
+                </div>
+                <ChangeApiSetupLocale/>
               </div>
-              <ChangeLocale/>
             </div>
-          </div>
-          <Footer/>
+            <Footer/>
+          </ApiSetupContextProvider>
         </TranslationProvider>
         }
       </AppContext.Provider>

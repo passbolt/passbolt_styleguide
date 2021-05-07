@@ -20,7 +20,7 @@ import Footer from "./components/Common/Footer/Footer";
 import {ApiClient} from "../shared/lib/apiClient/apiClient";
 import SiteSettings from "../shared/lib/Settings/SiteSettings";
 import TranslationProvider from "./components/Common/Internationalisation/TranslationProvider";
-import ChangeLocale from "./components/Internationalisation/ChangeLocale";
+import ChangeApiRecoverLocale from "./components/Internationalisation/ChangeLocale/ChangeApiRecoverLocale";
 
 /**
  * The recover application served by the API.
@@ -203,20 +203,20 @@ class ApiRecover extends Component {
       <AppContext.Provider value={this.state}>
         {this.isReady() &&
         <TranslationProvider loadingPath={`${this.state.trustedDomain}/locales/{{lng}}/{{ns}}.json`}>
-          <div id="container" className="container page login">
-            <div className="content">
-              <div className="header">
-                <div className="logo"><span className="visually-hidden">Passbolt</span></div>
-              </div>
-              <div className="login-form">
-                <ApiRecoverContextProvider value={{userId: this.userId, token: this.token}}>
+          <ApiRecoverContextProvider value={{userId: this.userId, token: this.token}}>
+            <div id="container" className="container page login">
+              <div className="content">
+                <div className="header">
+                  <div className="logo"><span className="visually-hidden">Passbolt</span></div>
+                </div>
+                <div className="login-form">
                   <OrchestrateApiRecover/>
-                </ApiRecoverContextProvider>
+                </div>
+                <ChangeApiRecoverLocale/>
               </div>
-              <ChangeLocale/>
             </div>
-          </div>
-          <Footer/>
+            <Footer/>
+          </ApiRecoverContextProvider>
         </TranslationProvider>
         }
       </AppContext.Provider>
