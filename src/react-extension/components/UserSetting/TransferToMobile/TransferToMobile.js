@@ -32,8 +32,8 @@ const QRCODE_MARGIN = 4;
 const QRCCODE_PROTOCOL_VERSION = 1;
 const QRCODE_WIDTH = 325;
 
-const FETCH_INTERVAL = 350; //in ms
-const MAX_UINT16 = 65535;
+const FETCH_INTERVAL = 333; //in ms
+const MAX_UINT8 = 255;
 
 /**
  * This component displays the user profile information
@@ -229,14 +229,14 @@ class TransferToMobile extends React.Component {
     const slices = [];
 
     /*
-     * 2 reserved byte for page number, max page number 65535
+     * 2 reserved byte for page number, max page number 255
      * 1 reserved byte for protocol version
      */
     const sliceSize = QRCODE_MAXSLICE - (2 + 1);
     const sliceNeeded = Math.ceil(data.length / sliceSize);
 
-    if (sliceNeeded > MAX_UINT16) {
-      throw new Error('Cannot transfer the data, the private key is probably too big.');
+    if (sliceNeeded > MAX_UINT8) {
+      throw new Error('Cannot transfer the data, the private key is too big.');
     }
     if (typeof startPage === 'undefined') {
       startPage = 0;
@@ -245,12 +245,21 @@ class TransferToMobile extends React.Component {
     for (let i = 0; i < sliceNeeded; i++) {
       const pageCounter = startPage + i;
 
-      // header
-      const version = new Uint8ClampedArray([QRCCODE_PROTOCOL_VERSION]); // 0 - 255, 1 byte
-      const page = new Uint8ClampedArray((new Uint16Array([pageCounter])).buffer); // 0 - 65535, 2 bytes
-      const uint8Header = new Uint8ClampedArray([version[0], page[1], page[0]]);
+      // Header - Version and page
+      // UInt8 => Hex string => Unicode value of the individual characters
+      // 255 => "ff" => 70 70
+      //
+      // Unfortunately we we cannot send these numbers as bytes.
+      // This sub optimal encoding is due to compatibility issues with iOS QR Code scanning library
+      const version = (QRCCODE_PROTOCOL_VERSION.toString(16));
+      let page = (pageCounter.toString(16)).padStart(2, '0');
+      const uint8Header = new Uint8ClampedArray([
+        version.charCodeAt(0), page.charCodeAt(0), page.charCodeAt(1)
+      ]);
 
-      // data
+      // Data
+      // Similar encoding, but since data is just ASCII chars, one less step
+      // "F" => 102
       const start = (i === 0) ? 0 : (i * sliceSize);
       let end = (i === 0) ? (sliceSize) : (sliceSize * (i + 1));
       end = (end > data.length) ? data.length : end;
