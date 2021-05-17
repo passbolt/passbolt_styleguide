@@ -1,23 +1,6 @@
 /* ==========================================================================
  *	Helper classes
  * ========================================================================== */
-/*
- * Image replacement
- */
-.ir {
-    background-color: transparent;
-    border: 0;
-    overflow: hidden;
-    /* IE 6/7 fallback */
-    *text-indent: -9999px;
-}
-
-.ir:before {
-    content: "";
-    display: block;
-    width: 0;
-    height: 150%;
-}
 
 /*
  * Hide from both screenreaders and browsers: h5bp.com/u
@@ -53,25 +36,12 @@ html body .hidden {
         width: auto;
     }
 }
-
 .visually-hidden,
 .visuallyhidden {
     .visuallyhidden();
 }
 
-/*
- * Hide visually and from screenreaders, but maintain layout
- */
-.invisible {
-    visibility: hidden;
-}
-
 .clearfix() {
-    /*
-     * For IE 6/7 only
-     * Include this rule to trigger hasLayout and contain floats.
-     */
-    zoom: 1;
     /*
      * Clearfix: contain floats
      *
@@ -91,7 +61,6 @@ html body .hidden {
         clear: both;
     }
 }
-
 .clearfix {
     .clearfix();
 }
@@ -104,19 +73,10 @@ html body .hidden {
     -moz-border-radius: 0.214em;
     border-radius: 0.214em;
 }
-
 .rounded {
     .rounded();
 }
 
-/* position shortcuts */
-.left {
-    float: left;
-}
-
-.right {
-    float: right;
-}
 
 /* ellipsis */
 .ellipsis() {
@@ -126,73 +86,8 @@ html body .hidden {
     -o-text-overflow: ellipsis;
     -ms-text-overflow: ellipsis;
 }
-
 .ellipsis {
     .ellipsis();
-}
-
-/* force display of a block inline */
-.inline {
-    display: inline-block;
-}
-
-/* make something spin */
-@-webkit-keyframes rotate {
-    from {
-        -webkit-transform: rotate(0deg);
-    }
-    to {
-        -webkit-transform: rotate(-360deg);
-    }
-}
-
-@-moz-keyframes rotate {
-    from {
-        -moz-transform: rotate(0deg);
-    }
-    to {
-        -moz-transform: rotate(-360deg);
-    }
-}
-
-/* rotations */
-.rotate() {
-    -webkit-animation-name: rotate;
-    -webkit-animation-duration: 4s;
-    -webkit-animation-iteration-count: infinite;
-    -webkit-animation-timing-function: linear;
-    -moz-animation-name: rotate;
-    -moz-animation-duration: 4s;
-    -moz-animation-iteration-count: infinite;
-    -moz-animation-timing-function: linear;
-}
-.rotate {
-    .rotate();
-}
-.rotate-right {
-    transform: rotate(-90deg);
-}
-
-/* list */
-.bulletlist () {
-    margin-left: 1.1em;
-    padding-left: .5em;
-    margin-bottom: .5em;
-    list-style-type: circle;
-}
-
-/* seriously? */
-.blink {
-    animation: blinker 1s linear infinite;
-}
-.blink-fast {
-    animation: blinker .25s linear infinite;
-}
-
-@keyframes blinker {
-    50% {
-        opacity: 0.0;
-    }
 }
 
 /* box shadows */
@@ -200,5 +95,10 @@ html body .hidden {
     box-shadow: 0px 0px 10px 0px @shadow;
 }
 .box-shadow-dark() {
-    box-shadow: 0px 0px 10px 0px @shadow-dark;
+    box-shadow: 0px 0px 10px 0px @shadow;
+}
+
+/* rotations */
+.rotate-right {
+    transform: rotate(-90deg);
 }

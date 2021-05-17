@@ -549,7 +549,9 @@ class DisplayResourcesList extends React.Component {
           <div className="ready">
             <div className="input checkbox">
               <input type="checkbox" id={`checkbox_multiple_select_checkbox_${resource.id}`} checked={isSelected} readOnly={true}/>
-              <label htmlFor={`checkbox_multiple_select_checkbox_${resource.id}`}></label>
+              <label htmlFor={`checkbox_multiple_select_checkbox_${resource.id}`}>
+                <span className="visually-hidden"><Trans>Select resource</Trans></span>
+              </label>
             </div>
           </div>
         </td>
@@ -718,7 +720,9 @@ class DisplayResourcesList extends React.Component {
                           name="select all"
                           checked={selectAll}
                           onChange={this.handleSelectAllChange}/>
-                        <label htmlFor="js-passwords-select-all">select all</label>
+                        <label htmlFor="js-passwords-select-all">
+                          <span className="visually-hidden">select all</span>
+                        </label>
                       </div>
                     </th>
                     <th className="cell-favorite selections s-cell sortable">

@@ -351,7 +351,7 @@ class ChangeUserSecurityToken extends Component {
                     className={`randomize-button ${this.isProcessing ? "disabled" : ""}`}
                     role="button"
                     onClick={this.handleRandomize}>
-                    <Icon name="magic-wand"/> <Trans>Randomize</Trans>
+                    <Trans>Randomize</Trans>
                   </a>
                 </div>
               </div>

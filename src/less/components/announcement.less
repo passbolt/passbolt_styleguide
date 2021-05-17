@@ -2,29 +2,50 @@
   margin: 0;
   top: 0;
   position: absolute;
-  height: 2em;
-  padding-top: .425em;
-  font-size: .85em;
+  height: 3.8rem;
+  font-size: 1.4rem;
   text-align: center;
   background: @background-warning;
   color: @blacker;
   width: 100%;
 
+  p {
+    padding:0;
+    margin:.8rem;
+  }
+
   a {
-    color: @blacker;
+    color: @black;
+    border-bottom: 1px solid @grey-darkest;
     display: inline-block;
-    margin-left: 0.5em;
-    border-bottom-color: @grey-darkest;
+    padding-bottom: 0;
+    line-height: 1.6rem;
+    margin-left: .8rem;
+
+    &:link, &:visited {
+      color: @black;
+    }
+    &:hover {
+      text-decoration: none;
+      cursor: pointer;
+      color: @blue;
+      border-bottom: 1px solid @blue;
+    }
+    &:active, &:focus {
+      outline: 0;
+      color: @blue;
+      border: 0;
+    }
   }
 
   .announcement-close {
     float: right;
     border: 0;
-    margin-right: .5em;
-    margin-top: .15em;
+    margin-right: 1.6rem;
+    margin-top: .4rem;
   }
 }
 
 .announcement + #container.page {
-  top: 2em;
+  top: 3.8rem;
 }

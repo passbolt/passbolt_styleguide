@@ -4,15 +4,14 @@
 .tableview {
   background: @tableview-background;
   position: relative;
-  font-size: .9375em; /* 15px */
+  font-size: 1.5rem; /* 15px */
   height: 100%;
 
   /* header */
   .tableview-header {
     background: @tableview-header-background;
-    height: 2.125em;
+    height: 3.8rem;
     overflow-y: scroll;
-    padding-top: .125em;
 
     table {
       width: 100%;
@@ -28,7 +27,7 @@
   /* main content */
   .tableview-content {
     top: 2.125em;
-    bottom: 2.45em;
+    bottom: 3.2rem;
     padding: 0;
     position: absolute;
     width: 100%;
@@ -49,7 +48,7 @@
 
     th, td {
       text-align: left;
-      padding: .2em .2em; /* 3px 3px */
+      padding: .3rem .3rem;
       vertical-align: middle;
     }
 
@@ -62,25 +61,25 @@
     }
 
     .s-cell {
-      width:1em;
-      max-width: 1em;
-      min-width: 1em;
+      width: 2rem;
+      max-width: 2rem;
+      min-width: 2rem;
     }
 
     .m-cell {
-      width: 9em;
-      max-width: 9em;
+      width: 14.5rem;
+      max-width: 14.5rem;
       vertical-align: middle;
     }
 
     .l-cell {
-      width: 14em;
-      max-width: 14em;
+      width: 21rem;
+      max-width: 21rem;
     }
 
     .xl-cell {
-      width: 19em;
-      max-width: 19em;
+      width: 28.5rem;
+      max-width: 28.5rem;
     }
 
     .cell-header {
@@ -101,7 +100,7 @@
     }
 
     tbody tr {
-      height: 2em;
+      height: 3.2rem;
 
       &.selected {
         background: @tableview-background-selected;
@@ -124,9 +123,12 @@
     th.cell-multiple-select,
     td.cell-multiple-select {
       text-align: center;
+
       .input.checkbox {
+        padding-left: .3rem; // some space for focus state
         label {
-          display: none;
+          padding:0;
+          margin:0;
         }
       }
     }
@@ -156,20 +158,6 @@
         .password-view {
           display: block;
         }
-      }
-    }
-  }
-}
-
-// CHROME exclusive crassette
-@supports (-webkit-appearance:none) and (not (overflow:-webkit-marquee))
-and (not (-ms-ime-align:auto)) and (not (-moz-appearance:none))
-{
-  .tableview table {
-    th.cell-multiple-select,
-    td.cell-multiple-select {
-      .input.checkbox {
-        margin-top: 1px; //damn you chrome
       }
     }
   }

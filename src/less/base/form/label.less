@@ -1,9 +1,9 @@
 /* input label */
 label {
     font-weight: bold;
-    font-size: 1em; /* 16px */
-    line-height: 1.333333em; /* 24px */
-    padding: .5em 0;
+    font-size: 1.6rem; /* 16px */
+    line-height: 2.4rem; /* 24px */
+    padding: .8rem 0;
     display: block;
 }
 
@@ -14,7 +14,10 @@ label {
 	.required		- additional red star
 */
 .required label:after {
-    content: " \002A"; /* unicode character * */;
+    content: " \002A"; /* unicode character * */
     color: @font-error;
     font-weight: bold;
+}
+.input.error label {
+    color: @font-error;
 }

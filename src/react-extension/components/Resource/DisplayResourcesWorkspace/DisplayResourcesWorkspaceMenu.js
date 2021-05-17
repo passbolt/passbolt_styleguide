@@ -457,7 +457,7 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
             <li>
               <a className={`button button-toggle info ${this.hasLockDetail() ? "selected" : ""}`}
                 onClick={this.handleViewDetailClickEvent}>
-                <Icon name="info-circle"/>
+                <Icon name="info-circle" big={true}/>
                 <span className="visuallyhidden"><Trans>View detail</Trans></span>
               </a>
             </li>

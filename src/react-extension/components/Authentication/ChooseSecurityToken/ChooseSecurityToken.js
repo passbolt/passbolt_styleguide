@@ -331,7 +331,7 @@ class ChooseSecurityToken extends Component {
                 className="randomize-button"
                 role="button"
                 onClick={this.handleRandomize}>
-                <Icon name="magic-wand"/> <Trans>Randomize</Trans>
+                <Trans>Randomize</Trans>
               </a>
             </div>
           </div>

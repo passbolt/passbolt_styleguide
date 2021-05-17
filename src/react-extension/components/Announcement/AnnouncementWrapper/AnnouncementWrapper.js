@@ -48,12 +48,10 @@ class AnnouncementWrapper extends Component {
     return (
       <div className={`${this.props.className} announcement`}>
         <div className="announcement-content">
-          {this.props.canClose &&
           <a className="announcement-close" onClick={this.handleClose} role="button">
             <Icon name='close'/>
             <span className="visually-hidden">Close</span>
           </a>
-          }
           {this.props.children}
         </div>
       </div>

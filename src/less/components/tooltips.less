@@ -16,6 +16,7 @@
 .tooltip:after {
     position: absolute;
     visibility: hidden;
+    filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
     opacity: 0;
     transition: opacity 0.2s ease-in-out,
     visibility 0.2s ease-in-out,
@@ -37,6 +38,7 @@
 .always-show:before,
 .always-show:after {
     visibility: visible;
+    filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100);
     opacity: 1;
 }
 
@@ -44,7 +46,7 @@
 .tooltip:before,
 [data-tooltip]:before {
     z-index: 990;
-    border: 6px solid transparent;
+    border: .6rem solid transparent;
     background: transparent;
     content: "";
 }
@@ -53,13 +55,13 @@
 .tooltip:after,
 [data-tooltip]:after {
     z-index: 990;
-    padding: 8px;
-    width: 160px;
-    background-color: @tooltip-background;
+    padding: .4rem;
+    width: 16rem;
+    background-color: hsla(0, 0%, 20%, 0.9);
     color: @font-inverse;
     content: attr(data-tooltip);
-    font-size: 14px;
-    line-height: 1.2em;
+    font-size: 1.4rem;
+    line-height: 2.4rem;
     font-weight: normal;
     text-shadow: none;
 }
@@ -79,16 +81,16 @@
 [data-tooltip]:before,
 .tooltip:before,
 .tooltip-top:before {
-    margin-left: -6px;
-    margin-bottom: -12px;
-    border-top-color: @tooltip-background;
+    margin-left: -.6rem;
+    margin-bottom: -1.2rem;
+    border-top-color: hsla(0, 0%, 20%, 0.9);
 }
 
 /* Horizontally align top/bottom tooltips */
 [data-tooltip]:after,
 .tooltip:after,
 .tooltip-top:after {
-    margin-left: -80px;
+    margin-left: -8rem;
 }
 
 [data-tooltip]:hover:before,
@@ -107,9 +109,7 @@
 .tooltip-top:hover:after,
 .tooltip-top:focus:before,
 .tooltip-top:focus:after {
-    -webkit-transform: translateY(-12px);
-    -moz-transform: translateY(-12px);
-    transform: translateY(-12px);
+    transform: translateY(-1.2rem);
 }
 
 /* Left */
@@ -122,10 +122,9 @@
 
 .tooltip-left:before {
     margin-left: 0;
-    margin-right: -12px;
+    margin-right: -1.2rem;
     margin-bottom: 0;
     border-top-color: transparent;
-    border-left-color: @background-dark;
     border-left-color: hsla(0, 0%, 20%, 0.9);
 }
 
@@ -135,9 +134,7 @@
 .tooltip-left.always-show:before,
 .tooltip-left:focus:before,
 .tooltip-left:focus:after {
-    -webkit-transform: translateX(-12px);
-    -moz-transform: translateX(-12px);
-    transform: translateX(-12px);
+    transform: translateX(-1.2rem);
 }
 
 /* Bottom */
@@ -149,10 +146,9 @@
 }
 
 .tooltip-bottom:before {
-    margin-top: -12px;
+    margin-top: -1.2rem;
     margin-bottom: 0;
     border-top-color: transparent;
-    border-bottom-color: @background-dark;
     border-bottom-color: hsla(0, 0%, 20%, 0.9);
 }
 
@@ -162,9 +158,7 @@
 .tooltip-bottom.always-show:before,
 .tooltip-bottom:focus:before,
 .tooltip-bottom:focus:after {
-    -webkit-transform: translateY(12px);
-    -moz-transform: translateY(12px);
-    transform: translateY(12px);
+    transform: translateY(1.2rem);
 }
 
 /* Right */
@@ -176,7 +170,7 @@
 
 .tooltip-right:before {
     margin-bottom: 0;
-    margin-left: -12px;
+    margin-left: -1.2rem;
     border-top-color: transparent;
     border-right-color: @background-dark;
 }
@@ -187,35 +181,33 @@
 .tooltip-right.always-show:before,
 .tooltip-right:focus:before,
 .tooltip-right:focus:after {
-    -webkit-transform: translateX(12px);
-    -moz-transform: translateX(12px);
-    transform: translateX(12px);
+    transform: translateX(1.2rem);
 }
 
 /* Move directional arrows down a bit for left/right tooltips */
 .tooltip-left:before,
 .tooltip-right:before {
-    top: 3px;
+    top: .3rem;
 }
 
 /* Vertically center tooltip content for left/right tooltips */
 .tooltip-left:after,
 .tooltip-right:after {
     margin-left: 0;
-    margin-bottom: -16px;
+    margin-bottom: -1.6rem;
 }
 
 /* large width */
 .tooltip.large:after,
 [data-tooltip].large:after {
-    width: 240px;
+    width: 240rem;
 }
 
 .tooltip-right.large:before,
 .tooltip-right.large:after,
 .tooltip-left.large:before,
 .tooltip-left.large:after {
-    margin-top: 6px;
+    margin-top: .6rem;
 }
 
 /*
@@ -224,53 +216,53 @@
 */
 /* Tooltip container */
 .tooltip-alt {
-    cursor: pointer;
-    display: inline-block;
-    border-bottom: 0;
+  cursor: pointer;
+  display: inline-block;
+  border-bottom: 0;
 
-    /* Tooltip text */
-    .tooltip-text {
+  /* Tooltip text */
+  .tooltip-text {
+    position: absolute;
+    visibility: hidden;
+    width: 180px;
+    background-color: @background-dark;
+    color: @font-inverse;
+    padding: .5em 1em;
+    transition: opacity 0.2s ease-in-out,
+    visibility 0.2s ease-in-out,
+    transform 0.2s cubic-bezier(0.71, 1.7, 0.77, 1.24);
+    transform: translate3d(0, 0, 0);
+    z-index: 99999;
+
+    /* only right for now */
+    &.right {
+      margin-left: 1em;
+      margin-top: -1.75em;
+      &::after {
+        content: " ";
         position: absolute;
-        visibility: hidden;
-        width: 180px;
-        background-color: @background-dark;
-        color: @font-inverse;
-        padding: .5em 1em;
-        transition: opacity 0.2s ease-in-out,
-        visibility 0.2s ease-in-out,
-        transform 0.2s cubic-bezier(0.71, 1.7, 0.77, 1.24);
-        transform: translate3d(0, 0, 0);
-        z-index: 99999;
-
-        /* only right for now */
-        &.right {
-            margin-left: 1em;
-            margin-top: -1.75em;
-            &::after {
-                content: " ";
-                position: absolute;
-                top: 1.125em;
-                right: 100%;
-                margin-top: -5px;
-                border: 5px @black solid;
-                border-color: transparent @background-dark transparent transparent;
-            }
-        }
+        top: 1.125em;
+        right: 100%;
+        margin-top: -5px;
+        border: 5px @black solid;
+        border-color: transparent @background-dark transparent transparent;
+      }
     }
+  }
 
-    /* Ease the tooltip left when you mouse over the tooltip container */
-    &:hover .tooltip-text {
-        transform: translateX(12px);
-        visibility: visible;
-        filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100);
-        opacity: 1;
-    }
+  /* Ease the tooltip left when you mouse over the tooltip container */
+  &:hover .tooltip-text {
+    transform: translateX(12px);
+    visibility: visible;
+    filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100);
+    opacity: 1;
+  }
 
 }
 
 // Icons
 .tooltip svg,
 .tooltip-alt svg{
-    fill: @font-dim;
-    .svg-baseline();
+  fill: @font-dim;
+  .svg-baseline();
 }

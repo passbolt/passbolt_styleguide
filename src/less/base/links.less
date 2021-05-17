@@ -1,0 +1,32 @@
+/* links */
+a {
+    outline: 0;
+    text-decoration: none;
+    cursor: pointer;
+    border-bottom: 1px solid @border-default;
+
+    &:link, &:visited {
+        color: @font-default;
+    }
+    &:hover {
+        text-decoration: none;
+        cursor: pointer;
+        color: @font-focus;
+        border-bottom: 1px solid @border-focus;
+    }
+    &:active, &:focus {
+        outline: 0;
+        color: @font-focus;
+        border: 0;
+    }
+    &.no-border, &:hover.no-border {
+        border-bottom:0;
+    }
+    &.disabled {
+        outline: 0;
+        text-decoration: none;
+        cursor: default;
+        color: @grey-darker;
+        pointer-events: none;
+    }
+}
