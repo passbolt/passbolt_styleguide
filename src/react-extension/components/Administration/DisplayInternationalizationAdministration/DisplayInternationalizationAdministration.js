@@ -209,7 +209,7 @@ class DisplayInternationalizationAdministration extends React.Component {
         <div className="col4 last">
           <h3><Trans>Want to contribute?</Trans></h3>
           <p><Trans>Your language is missing or you discovered an error in the translation, help us to improve passbolt.</Trans></p>
-          <a className="button" target="_blank" rel="noopener noreferrer">
+          <a className="button" href="https://help.passbolt.com/contribute/translation" target="_blank" rel="noopener noreferrer">
             <Icon name="heart-o"/>
             <span><Trans>Contribute</Trans></span>
           </a>
