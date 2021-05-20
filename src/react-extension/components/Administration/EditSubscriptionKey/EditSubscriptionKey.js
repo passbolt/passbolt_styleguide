@@ -308,7 +308,7 @@ class EditSubscriptionKey extends Component {
                   disabled={this.hasAllInputDisabled()}
                   onChange={this.handleSelectSubscriptionKeyFile}/>
                 {this.state.keyError &&
-                <div className="key error message">{this.state.keyError}</div>
+                <div className="key error-message">{this.state.keyError}</div>
                 }
               </div>
             </div>

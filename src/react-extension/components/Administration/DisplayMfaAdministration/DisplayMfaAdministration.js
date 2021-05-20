@@ -409,7 +409,7 @@ class DisplayMfaAdministration extends React.Component {
   render() {
     return (
       <div className="row">
-        <div className="mfa-settings col8">
+        <div className="mfa-settings col7">
           <form className="form ready">
             <div className="provider-section totp">
               <h3>
@@ -456,7 +456,7 @@ class DisplayMfaAdministration extends React.Component {
                     <input id="yubikeyClientIdentifier" type="text" name="yubikeyClientIdentifier" required="required" className="required fluid form-element ready" placeholder="123456789"
                       onChange={this.handleInputChange} value={this.state.yubikeyClientIdentifier} disabled={this.hasAllInputDisabled()}/>
                     {this.state.yubikeyClientIdentifierError &&
-                    <div className="yubikey_client_identifier message error">{this.state.yubikeyClientIdentifierError}</div>
+                    <div className="yubikey_client_identifier error-message">{this.state.yubikeyClientIdentifierError}</div>
                     }
                   </div>
                   <div className="input text required">
@@ -464,7 +464,7 @@ class DisplayMfaAdministration extends React.Component {
                     <input id="yubikeySecretKey" name="yubikeySecretKey" required="required" className="required fluid form-element" placeholder="**********" type="password"
                       onChange={this.handleInputChange} value={this.state.yubikeySecretKey} disabled={this.hasAllInputDisabled()}/>
                     {this.state.yubikeySecretKeyError &&
-                    <div className="yubikey_secret_key message error">{this.state.yubikeySecretKeyError}</div>
+                    <div className="yubikey_secret_key error-message">{this.state.yubikeySecretKeyError}</div>
                     }
                   </div>
                 </div>
@@ -497,7 +497,7 @@ class DisplayMfaAdministration extends React.Component {
                       placeholder="api-24zlkn4.duosecurity.com" value={this.state.duoHostname}
                       onChange={this.handleInputChange} disabled={this.hasAllInputDisabled()}/>
                     {this.state.duoHostnameError &&
-                    <div className="duo_hostname message error">{this.state.duoHostnameError}</div>
+                    <div className="duo_hostname error-message">{this.state.duoHostnameError}</div>
                     }
                   </div>
                   <div className="input text required">
@@ -506,7 +506,7 @@ class DisplayMfaAdministration extends React.Component {
                       placeholder="HASJKDSQJO213123KQSLDF" value={this.state.duoIntegrationKey}
                       onChange={this.handleInputChange} disabled={this.hasAllInputDisabled()}/>
                     {this.state.duoIntegrationKeyError &&
-                    <div className="duo_integration_key message error">{this.state.duoIntegrationKeyError}</div>
+                    <div className="duo_integration_key error-message">{this.state.duoIntegrationKeyError}</div>
                     }
                   </div>
                   <div className="input text required">
@@ -514,7 +514,7 @@ class DisplayMfaAdministration extends React.Component {
                     <input id="duoSalt" name="duoSalt" required="required" className="required fluid form-element ready" placeholder="**********" type="password"
                       value={this.state.duoSalt} onChange={this.handleInputChange} disabled={this.hasAllInputDisabled()}/>
                     {this.state.duoSaltError &&
-                    <div className="duo_salt message error">{this.state.duoSaltError}</div>
+                    <div className="duo_salt error-message">{this.state.duoSaltError}</div>
                     }
                   </div>
                   <div className="input text required">
@@ -522,7 +522,7 @@ class DisplayMfaAdministration extends React.Component {
                     <input id="duoSecretKey" name="duoSecretKey" required="required" className="required fluid form-element ready" placeholder="**********" type="password"
                       value={this.state.duoSecretKey} onChange={this.handleInputChange} disabled={this.hasAllInputDisabled()}/>
                     {this.state.duoSecretKeyError &&
-                    <div className="duo_secret_key message error">{this.state.duoSecretKeyError}</div>
+                    <div className="duo_secret_key error-message">{this.state.duoSecretKeyError}</div>
                     }
                   </div>
                 </div>
@@ -532,12 +532,14 @@ class DisplayMfaAdministration extends React.Component {
           </form>
         </div>
         <div className="col4 last">
-          <h2><Trans>Need help?</Trans></h2>
-          <p><Trans>Check out our Multi Factor Authentication configuration guide.</Trans></p>
-          <a className="button" href="https://help.passbolt.com/configure" target="_blank" rel="noopener noreferrer">
-            <Icon name="life-ring"/>
-            <span><Trans>Read documentation</Trans></span>
-          </a>
+          <div className="sidebar-help">
+            <h3><Trans>Need help?</Trans></h3>
+            <p><Trans>Check out our Multi Factor Authentication configuration guide.</Trans></p>
+            <a className="button" href="https://help.passbolt.com/configure" target="_blank" rel="noopener noreferrer">
+              <Icon name="life-ring"/>
+              <span><Trans>Read documentation</Trans></span>
+            </a>
+          </div>
         </div>
       </div>
     );

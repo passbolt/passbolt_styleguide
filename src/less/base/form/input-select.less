@@ -1,0 +1,31 @@
+.input.select {
+  select {
+    display: inline-block;
+    font-size: 1.6rem;
+    line-height: 2.4rem;
+    color: @font-default;
+    padding: 0.6rem 1.2rem;
+    width: 100%;
+    max-width: 64rem;
+    box-sizing: border-box;
+    margin: 0 0 0.8rem 0;
+    border: 1px solid @border-input;
+
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    appearance: none;
+
+    background-color: @background-default;
+    background-image: @controls-chevron-down, linear-gradient(to bottom, @input-background 0%,@input-background 100%);
+    background-repeat: no-repeat, repeat;
+    background-position: right 1.1rem top 50%, 0 0;
+    background-size: 1rem auto, 100%;
+
+    &:focus {
+      outline: none;
+      border:1px solid @border-focus;
+      border-radius: 0;
+      background-image: @controls-chevron-down-focus, linear-gradient(to bottom, @input-background 0%, @input-background 100%);
+    }
+  }
+}

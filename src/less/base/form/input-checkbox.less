@@ -62,7 +62,7 @@
             content: '';
             position: absolute;
             left: .3rem;
-            top: .79rem;
+            top: .8rem;
             width: 1rem;
             height: 1rem;
             background-size: 1rem 1rem;
@@ -72,6 +72,29 @@
         }
     }
 }
+.checkbox.medium {
+  input[type=checkbox] {
+    cursor: pointer;
+    & + label {
+      font-size:1.5rem;
+    }
+    & + label:before {
+      margin-top:.3rem;
+      margin-right: 1rem;
+      width: 1.4rem;
+      height: 1.4rem;
+    }
+
+    &:checked + label:after {
+      left: .3rem;
+      top: .8rem;
+      width: 1rem;
+      height: 1rem;
+      background-size: 1rem 1rem;
+    }
+  }
+}
+
 .checkbox.small {
     input[type=checkbox] {
         cursor: pointer;

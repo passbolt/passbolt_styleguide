@@ -453,7 +453,7 @@ class CreateUserGroup extends Component {
                 onKeyUp={this.handleNameInputKeyUp} onChange={this.handleInputChange}
                 disabled={this.state.processing} ref={this.nameInputRef}/>
               {this.state.nameError &&
-              <div className="name error message">{this.state.nameError}</div>
+              <div className="name error-message">{this.state.nameError}</div>
               }
             </div>
 

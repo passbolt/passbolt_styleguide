@@ -28,21 +28,20 @@
             font-size: 1.8rem;
             .ellipsis();
         }
-
-        .tooltip-alt {
-            margin-left: 0.3em;
-            font-size: 0.7em;
-            font-weight: normal;
-            color: @font-default;
-            .tooltip-text {
-                white-space: normal;
-            }
-        }
         .dialog-header-subtitle {
-            padding-top: 0.3em;
-            padding-left: 1em;
-            font-size: 0.7em;
+            padding-top: .4rem;
+            padding-left: .8rem;
+            font-size: 1.4rem;
             color: @font-default;
+        }
+        .tooltip-alt {
+          margin-left: .8rem;
+          font-size: 1.2rem;
+          font-weight: normal;
+          color: @font-default;
+          .tooltip-text {
+            white-space: normal;
+          }
         }
         .dialog-close {
             margin-top: -2.5em;
@@ -52,25 +51,29 @@
     /* inputs */
     .form-content {
         background: @background-default;
-        padding: 1rem 2rem 2rem 2rem;
+        padding: 1rem 2rem 2.4rem 2rem;
+    }
+    .error-message {
+      margin-bottom: 1rem;
     }
 
     p {
-        margin-top:.5em;
+        margin-top: .8rem;
         font-size: 1.5rem; /* 15px */
     }
     p + .checkbox {
-        padding-bottom:.5em;
+        padding-bottom:.8rem;
         & label {
-            font-size: 1em;
+            font-size: 1.6rem;
         }
     }
 
+    /* form input resizing */
     label {
         clear: both;
         font-size: 1.5rem; /* 15px */
-        line-height: 1.6em; /* 24px */
     }
+
     input[type=text], textarea {
         width: 100%;
         box-sizing: border-box;
@@ -101,27 +104,24 @@
         margin: 0;
         clear: both;
         width: 100%;
-        padding: .75em 0;
+        padding: 1.2rem 0;
 
         .cancel,
         .button {
             float: right;
-            margin-right: 1.25em;
-            font-size: 1.125em;
+            margin-right: 1.6rem;
         }
         .button {
             box-sizing: border-box;
-            min-width:5em;
+            min-width: 8rem;
         }
-        .secondary {
-            float: left;
-            margin-left: 1.5em;
-            margin-top: .7em;
-            font-size: 1em;
+        .primary {
+          font-size: 1.8rem;
+          padding: 1.2rem 2.4rem;
         }
         .cancel {
             margin-top: .7em;
-            font-size: 1em;
+            font-size: 1.6rem;
         }
     }
 }

@@ -119,7 +119,7 @@ class FilterResourcesByGroups extends React.Component {
     return (
       <div>
         {this.hasGroup() &&
-        <div className="folders navigation first accordion">
+        <div className="navigation-secondary-tree navigation-secondary accordion">
           <ul className="accordion-header">
             <li className={`node root ${this.state.open ? "open" : "close"}`}>
               <div className="row title">

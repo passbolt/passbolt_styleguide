@@ -3228,7 +3228,7 @@ ul.checklist li:before {
 }
 .svg-icon.dim svg,
 .svg-icon.light svg {
-  fill: #888;
+  fill: #888888;
 }
 .svg-icon.icon-only svg {
   position: relative;
@@ -3263,21 +3263,21 @@ ul.checklist li:before {
   fill: #2894DF;
 }
 .button.disabled .svg-icon svg {
-  fill: #888;
+  fill: #888888;
 }
 .button.disabled .svg-icon svg:hover {
-  fill: #888;
+  fill: #888888;
 }
 a:hover .svg-icon svg {
   fill: #2894DF;
 }
 a.disabled .svg-icon svg {
-  fill: #888;
+  fill: #888888;
   pointer-events: none;
   cursor: default;
 }
 a.disabled:hover .svg-icon svg {
-  fill: #888;
+  fill: #888888;
 }
 a.fav .svg-icon svg {
   fill: #D40101;
@@ -3317,8 +3317,7 @@ button,
   color: #333;
   font-weight: normal;
   text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.5);
-  background: #EEE;
-  background-image: linear-gradient(top, #F3F3F3, #EEE);
+  background: #F3F3F3;
   -webkit-border-radius: 0.214em;
   -moz-border-radius: 0.214em;
   border-radius: 0.214em;
@@ -3336,8 +3335,7 @@ button:hover,
 .button:hover {
   color: #333;
   text-decoration: none;
-  background: #F3F3F3;
-  background-image: linear-gradient(top, #F3F3F3, #F3F3F3);
+  background: #EEE;
   border: 1px solid #BBB;
 }
 /* focus */
@@ -3401,7 +3399,7 @@ button:active,
 }
 .button.disabled {
   cursor: default;
-  color: #888;
+  color: #888888;
   background: #FFF;
   border: 1px solid #DDD;
   text-shadow: none;
@@ -3413,7 +3411,7 @@ button:active,
 .button.disabled:focus {
   box-shadow: 0 0 0;
   top: 0;
-  color: #888;
+  color: #888888;
   background: #FFF;
   border: 1px solid #DDD;
 }
@@ -3779,7 +3777,7 @@ input[type=checkbox] + label {
   color: #D40101;
 }
 .input .message.helptext {
-  color: #888;
+  color: #888888;
   font-weight: normal;
 }
 .input .message:empty {
@@ -3897,22 +3895,6 @@ input[type=email].fluid {
 .singleline .input.text input[type="search"] {
   width: 93%;
 }
-.form-content .accordion h3.accordion-header a {
-  border: 0;
-}
-.form-content .accordion h3.accordion-header a:hover {
-  border: 0;
-}
-.form-content .accordion h3.accordion-header a:before {
-  font: normal normal normal 1em FontAwesome;
-  text-rendering: auto;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  width: 1em;
-  height: 1em;
-  position: absolute;
-  text-align: center;
-}
 .form-content table {
   width: 100%;
   margin-bottom: 1em;
@@ -3957,7 +3939,7 @@ input[type=email].fluid {
   font-size: 1em;
 }
 .form-content table tbody tr td em {
-  color: #888;
+  color: #888888;
   font-size: 0.8em;
   font-style: normal;
 }
@@ -3988,6 +3970,9 @@ input[type=email].fluid {
   bottom: 3.8rem;
   height: auto;
   padding: 0;
+}
+.page .panel.main .grid {
+  padding-bottom: 1.6rem;
 }
 .page .panel.main .row {
   padding-left: 0;
@@ -4702,7 +4687,7 @@ article video {
   border: 0;
   font-size: 1em;
   font-weight: normal;
-  background: #888;
+  background: #888888;
   padding: 0.45em 1em 0.42em 1em;
   -webkit-border-radius: 0;
   -moz-border-radius: 0;
@@ -4837,7 +4822,7 @@ article video {
   filter: alpha(opacity=5);
 }
 .progress-details {
-  color: #888;
+  color: #888888;
   margin: 0.5em 0 0.5em 0;
 }
 .progress-details .progress-percent {
@@ -4898,13 +4883,6 @@ article video {
 }
 .notification-container .notification .message .content strong {
   text-transform: capitalize;
-}
-.notification-container .notification .message .action {
-  border-bottom: none;
-  margin-left: 0.4em;
-}
-.notification-container .notification .message .action:hover .svg-icon svg {
-  fill: #000000;
 }
 /*
  * Breadcrumbs
@@ -4969,6 +4947,7 @@ article video {
   box-shadow: 0px 0px 10px 0px #DDD;
   /* header */
   /* inputs */
+  /* form input resizing */
   /* Error display */
   /* submit / cancel */
 }
@@ -4985,45 +4964,46 @@ article video {
   -o-text-overflow: ellipsis;
   -ms-text-overflow: ellipsis;
 }
+.dialog .dialog-header .dialog-header-subtitle {
+  padding-top: 0.4rem;
+  padding-left: 0.8rem;
+  font-size: 1.4rem;
+  color: #333;
+}
 .dialog .dialog-header .tooltip-alt {
-  margin-left: 0.3em;
-  font-size: 0.7em;
+  margin-left: 0.8rem;
+  font-size: 1.2rem;
   font-weight: normal;
   color: #333;
 }
 .dialog .dialog-header .tooltip-alt .tooltip-text {
   white-space: normal;
 }
-.dialog .dialog-header .dialog-header-subtitle {
-  padding-top: 0.3em;
-  padding-left: 1em;
-  font-size: 0.7em;
-  color: #333;
-}
 .dialog .dialog-header .dialog-close {
   margin-top: -2.5em;
 }
 .dialog .form-content {
   background: #FFF;
-  padding: 1rem 2rem 2rem 2rem;
+  padding: 1rem 2rem 2.4rem 2rem;
+}
+.dialog .error-message {
+  margin-bottom: 1rem;
 }
 .dialog p {
-  margin-top: 0.5em;
+  margin-top: 0.8rem;
   font-size: 1.5rem;
   /* 15px */
 }
 .dialog p + .checkbox {
-  padding-bottom: 0.5em;
+  padding-bottom: 0.8rem;
 }
 .dialog p + .checkbox label {
-  font-size: 1em;
+  font-size: 1.6rem;
 }
 .dialog label {
   clear: both;
   font-size: 1.5rem;
   /* 15px */
-  line-height: 1.6em;
-  /* 24px */
 }
 .dialog input[type=text],
 .dialog textarea {
@@ -5105,27 +5085,24 @@ article video {
   margin: 0;
   clear: both;
   width: 100%;
-  padding: 0.75em 0;
+  padding: 1.2rem 0;
 }
 .dialog .submit-wrapper .cancel,
 .dialog .submit-wrapper .button {
   float: right;
-  margin-right: 1.25em;
-  font-size: 1.125em;
+  margin-right: 1.6rem;
 }
 .dialog .submit-wrapper .button {
   box-sizing: border-box;
-  min-width: 5em;
+  min-width: 8rem;
 }
-.dialog .submit-wrapper .secondary {
-  float: left;
-  margin-left: 1.5em;
-  margin-top: 0.7em;
-  font-size: 1em;
+.dialog .submit-wrapper .primary {
+  font-size: 1.8rem;
+  padding: 1.2rem 2.4rem;
 }
 .dialog .submit-wrapper .cancel {
   margin-top: 0.7em;
-  font-size: 1em;
+  font-size: 1.6rem;
 }
 /* can also be used outside a dialog, like the sidebar */
 .dialog-close,
@@ -5284,46 +5261,46 @@ article video {
     except there is an option to have several levels
     and there is no option to have empty list items (all items are working links)
  */
-.panel .navigation-help {
+.navigation-help {
   margin-top: 1em;
 }
-.panel .navigation-help h2 {
+.navigation-help h2 {
   padding: 0 0 0.5em 0;
   margin: 0 0 0 1.25em;
 }
-.panel .navigation-help a {
+.navigation-help a {
   color: #333;
   border: 0;
   display: block;
 }
-.panel .navigation-help ul li a {
+.navigation-help ul li a {
   font-size: 0.9375em;
   /* 15px from 16px base */
   padding: 0.469em 0 0.469em 1.333em;
   border-left: 5px solid #FFF;
 }
-.panel .navigation-help ul li a:hover {
+.navigation-help ul li a:hover {
   color: #333;
   border-left: 5px solid #DDD;
 }
-.panel .navigation-help ul li ul li a {
+.navigation-help ul li ul li a {
   padding-left: 2.5em;
   font-weight: normal;
   border-left: 5px solid #FFF;
 }
-.panel .navigation-help ul li.active a,
-.panel .navigation-help ul li.selected a {
+.navigation-help ul li.active a,
+.navigation-help ul li.selected a {
   font-weight: bold;
   border-left: 5px solid #D40101;
 }
-.panel .navigation-help ul li.active ul li a,
-.panel .navigation-help ul li.selected ul li a {
+.navigation-help ul li.active ul li a,
+.navigation-help ul li.selected ul li a {
   padding-left: 2.5em;
   font-weight: normal;
   border-left: 5px solid #FFF;
 }
-.panel .navigation-help ul li.active ul li a:hover,
-.panel .navigation-help ul li.selected ul li a:hover {
+.navigation-help ul li.active ul li a:hover,
+.navigation-help ul li.selected ul li a:hover {
   border-left: 5px solid #DDD;
 }
 /*
@@ -5338,10 +5315,10 @@ article video {
 }
 /* message styling per types */
 .message {
-  padding: 1em;
+  padding: 1.6rem;
 }
 .message a {
-  border-bottom: 1px solid #888;
+  border-bottom: 1px solid #888888;
 }
 .message a:hover {
   border-bottom: 1px solid #2894DF;
@@ -5353,11 +5330,11 @@ article video {
 .message.error a:link,
 .message.error a:visited {
   color: #333;
-  border-bottom: 1px dotted #888;
+  border-bottom: 1px dotted #888888;
 }
 .message.error a:hover {
   color: #333;
-  border-bottom: 1px solid #888;
+  border-bottom: 1px solid #888888;
 }
 .message.success {
   color: #333;
@@ -5376,13 +5353,13 @@ article video {
 }
 /* big side info message blocks on setup or profile pages */
 .message.side-message {
-  margin-left: 1em;
-  font-size: 1em;
-  margin-right: 2em;
+  margin-left: 1.6rem;
+  font-size: 1.6rem;
+  margin-right: 3.2rem;
 }
 .message.side-message ul,
 .message.side-message p {
-  padding-bottom: 1em;
+  padding-bottom: 1.6rem;
 }
 /* animation */
 .message.animated {
@@ -5390,20 +5367,20 @@ article video {
   color: #333;
   display: flex;
   border: 1px solid #DDD;
-  border-radius: 3px;
+  border-radius: 0.3rem;
 }
 .message.animated .illustration {
-  flex: 0 0 180px;
+  flex: 0 0 18rem;
 }
 .message.animated .additional-information {
   flex: 1;
-  line-height: 180px;
-  margin-top: 1.5em;
-  padding-left: 1em;
+  line-height: 18rem;
+  margin: 2.4rem 0;
+  padding-left: 1.6rem;
 }
 @keyframes drawCircle {
   0% {
-    stroke-dashoffset: 180px;
+    stroke-dashoffset: 18rem;
   }
   100% {
     stroke-dashoffset: 0;
@@ -5411,7 +5388,7 @@ article video {
 }
 @keyframes drawCheck {
   0% {
-    stroke-dashoffset: 50px;
+    stroke-dashoffset: 5rem;
   }
   100% {
     stroke-dashoffset: 0;
@@ -5419,7 +5396,7 @@ article video {
 }
 @keyframes drawCross {
   0% {
-    stroke-dashoffset: 50px;
+    stroke-dashoffset: 5rem;
   }
   100% {
     stroke-dashoffset: 0;
@@ -5427,30 +5404,30 @@ article video {
 }
 @keyframes drawWarning {
   0% {
-    stroke-dashoffset: 180px;
+    stroke-dashoffset: 18rem;
   }
   100% {
     stroke-dashoffset: 0;
   }
 }
 .message.animated #successAnimationCircle {
-  stroke-dasharray: 180px 180px;
+  stroke-dasharray: 18rem 18rem;
   stroke: #009900;
 }
 .message.animated #successAnimationCheck {
-  stroke-dasharray: 50px 50px;
+  stroke-dasharray: 5rem 5rem;
   stroke: #009900;
 }
 .message.animated #errorAnimationCircle {
-  stroke-dasharray: 180px 180px;
+  stroke-dasharray: 18rem 18rem;
   stroke: #D40101;
 }
 .message.animated #errorAnimationCross {
-  stroke-dasharray: 50px 50px;
+  stroke-dasharray: 5rem 5rem;
   stroke: #D40101;
 }
 .message.animated #warningAnimation {
-  stroke-dasharray: 180px 180px;
+  stroke-dasharray: 18rem 18rem;
   stroke: #9F6000;
   stroke-linecap: square;
   stroke-linejoin: round;
@@ -5485,8 +5462,7 @@ table.table-info.vertical {
 }
 table.table-info td,
 table.table-info.vertical td {
-  padding: 0.625em;
-  padding-right: 1.25em;
+  padding: 0.8rem 1.8rem 0.8rem 0;
   color: #666;
 }
 table.table-info td.warning,
@@ -5515,7 +5491,7 @@ table.table-info.vertical td .alt.side:after {
 table.table-info td + td,
 table.table-info.vertical td + td {
   color: #333;
-  padding-right: 0.625em;
+  padding-right: 1rem;
 }
 /* horizontal tableview */
 table.table-info.horizontal {
@@ -5989,7 +5965,7 @@ input[type="search"]::-webkit-search-cancel-button {
   float: left;
   width: 30%;
   padding-top: 0.25em;
-  color: #888;
+  color: #888888;
 }
 .tile .tile-title {
   float: right;

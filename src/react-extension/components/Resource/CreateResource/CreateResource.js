@@ -580,7 +580,7 @@ class CreateResource extends Component {
                 disabled={this.state.processing} ref={this.nameInputRef} className="required fluid" maxLength="64"
                 required="required" autoComplete="off" autoFocus={true} placeholder={this.translate("Name")}/>
               {this.state.nameError &&
-              <div className="name error message">{this.state.nameError}</div>
+              <div className="name error-message">{this.state.nameError}</div>
               }
             </div>
             <div className={`input text ${this.state.uriError ? "error" : ""}`}>
@@ -589,7 +589,7 @@ class CreateResource extends Component {
                 autoComplete="off" value={this.state.uri} onChange={this.handleInputChange} placeholder={this.translate("URI")}
                 disabled={this.state.processing}/>
               {this.state.uriError &&
-              <div className="error message">{this.state.uriError}</div>
+              <div className="error-message">{this.state.uriError}</div>
               }
             </div>
             <div className={`input text ${this.state.usernameError ? "error" : ""}`}>
@@ -598,7 +598,7 @@ class CreateResource extends Component {
                 autoComplete="off" value={this.state.username} onChange={this.handleInputChange} placeholder={this.translate("Username")}
                 disabled={this.state.processing}/>
               {this.state.usernameError &&
-              <div className="error message">{this.state.usernameError}</div>
+              <div className="error-message">{this.state.usernameError}</div>
               }
             </div>
             <div className={`input-password-wrapper input required ${this.state.passwordError ? "error" : ""}`}>
@@ -611,7 +611,8 @@ class CreateResource extends Component {
                   onChange={this.handleInputChange} disabled={this.state.processing}
                   style={passwordInputStyle} ref={this.passwordInputRef}/>
                 <div className="security-token"
-                  style={securityTokenStyle}>{securityTokenCode}</div>
+                  style={securityTokenStyle}>{securityTokenCode}
+                </div>
 
               </div>
               <ul className="actions inline">
@@ -638,7 +639,7 @@ class CreateResource extends Component {
               </div>
               {this.state.passwordError &&
               <div className="input text">
-                <div className="password message error">{this.state.passwordError}</div>
+                <div className="password error-message">{this.state.passwordError}</div>
               </div>
               }
               {this.state.passwordWarning &&

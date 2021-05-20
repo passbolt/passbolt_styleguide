@@ -316,7 +316,7 @@ class EditUserProfile extends Component {
                 onChange={this.handleInputChange}
                 disabled={!this.areActionsAllowed}/>
               {this.state.errors.isFirstnameEmpty &&
-              <div className="first_name error message">
+              <div className="first_name error-message">
                 <Trans>A first name is required.</Trans>
               </div>
               }
@@ -336,7 +336,7 @@ class EditUserProfile extends Component {
                 onChange={this.handleInputChange}
                 disabled={!this.areActionsAllowed}/>
               {this.state.errors.isLastnameEmpty &&
-              <div className="last_name error message">
+              <div className="last_name error-message">
                 <Trans>A last name is required.</Trans>
               </div>
               }

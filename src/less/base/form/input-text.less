@@ -7,6 +7,7 @@
 	:active			- inset box shadow
 	.disabled		- grey out to indicate it cannot be used
 */
+input[type=number],
 input[type=text],
 input[type=email],
 input[type=password],
@@ -28,6 +29,10 @@ textarea {
     vertical-align: middle;
 }
 
+input[type=number] {
+  box-sizing: initial;
+}
+
 input[type=file] {
   box-sizing: border-box;
   font-size: 1.6rem;
@@ -43,6 +48,7 @@ input[type=file] {
 }
 
 textarea:hover,
+input[type=number]:hover,
 input[type=password]:hover,
 input[type=search]:hover,
 input[type=text]:hover,
@@ -51,6 +57,7 @@ input[type=email]:hover {
 }
 
 textarea:focus,
+input[type=number]:focus,
 input[type=password]:focus,
 input[type=search]:focus,
 input[type=text]:focus,
@@ -61,6 +68,7 @@ input[type=email]:focus {
 }
 
 textarea:disabled,
+input[type=number]:disabled,
 input[type=password]:disabled,
 input[type=search]:disabled,
 input[type=text]:disabled,
@@ -74,16 +82,12 @@ input[type=email]:disabled {
 
 /*
 	Textarea Textfield
-	Description	: textarea.textarea is pretty much the same than div.input.text.
-
-	.required		- additional red star
-	.lage		 	 - make the box bigger
 */
 textarea {
-    height: 7rem; /* 4 char (default input length) x 1em (average char length) + .6em (padding) */
+    height: 9rem;
 }
 
 .textarea.large textarea {
     width: 30rem;
-    height: 7rem;
+    height: 9rem;
 }

@@ -268,7 +268,8 @@ class ExportResourcesCredentials extends Component {
                     value={this.selectedFilename}/>
                   <a className={`button primary ${!this.areActionsAllowed ? "disabled" : ""}`}
                     onClick={this.handleSelectFile}>
-                    <Icon name="upload-a"/> <Trans>Choose a file</Trans>
+                    <Icon name="upload-a"/>
+                    <span><Trans>Choose a file</Trans></span>
                   </a>
                 </div>
               </div>

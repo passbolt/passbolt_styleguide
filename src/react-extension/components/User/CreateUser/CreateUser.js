@@ -382,7 +382,7 @@ class CreateUser extends Component {
                 autoComplete='off' autoFocus={true}
               />
               {this.state.first_nameError &&
-              <div className="first_name error message">{this.state.first_nameError}</div>
+              <div className="first_name error-message">{this.state.first_nameError}</div>
               }
             </div>
             <div className={`input text required ${this.state.last_nameError ? "error" : ""}`}>
@@ -395,7 +395,7 @@ class CreateUser extends Component {
                 autoComplete='off' autoFocus={true}
               />
               {this.state.last_nameError &&
-              <div className="last_name error message">{this.state.last_nameError}</div>
+              <div className="last_name error-message">{this.state.last_nameError}</div>
               }
             </div>
             <div className={`input text required ${this.state.usernameError ? "error" : ""}`}>
@@ -407,7 +407,7 @@ class CreateUser extends Component {
                 autoComplete='off' autoFocus={true}
               />
               {this.state.usernameError &&
-              <div className="username error message">{this.state.usernameError}</div>
+              <div className="username error-message">{this.state.usernameError}</div>
               }
             </div>
             <div className="input checkbox">
@@ -417,7 +417,7 @@ class CreateUser extends Component {
                   checked={this.state.is_admin} disabled={this.hasAllInputDisabled()} type="checkbox"/>
                 <label htmlFor="is_admin_checkbox"> <Trans>This user is an administrator</Trans></label>
               </div>
-              <div className="message helptext">
+              <div className="help-message">
                 <Trans>Note: Administrators can add and delete users; They can also create groups and assign group managers; Admin can not see all passwords.</Trans>
               </div>
             </div>

@@ -379,7 +379,7 @@ class EditResourceDescription extends React.Component {
               disabled={this.hasAllInputDisabled()} autoComplete="off"/>
           </div>
           {this.state.error &&
-          <div className="feedbacks message error">{this.state.error}</div>
+          <div className="feedbacks error-message">{this.state.error}</div>
           }
           <div className="actions">
             <a className={`button description-editor-submit ${this.hasAllInputDisabled() ? "primary processing disabled" : ""}`}

@@ -323,6 +323,9 @@ template {
 [hidden] {
   display: none;
 }
+div {
+  outline: none;
+}
 /* ==========================================================================
  *	Helper classes
  * ========================================================================== */
@@ -512,12 +515,17 @@ h1 {
   line-height: 3.2rem;
 }
 h2 {
+  font-size: 1.8rem;
+  line-height: 2.4rem;
+}
+h3 {
   font-size: 1.6rem;
   line-height: 2.4rem;
 }
 p {
-  font-size: 1.4rem;
-  line-height: 2.4rem;
+  font-size: 1.5rem;
+  line-height: 2.2rem;
+  margin-top: 0;
 }
 code {
   font-size: 1.1rem;
@@ -537,7 +545,7 @@ code {
 }
 .svg-icon.dim svg,
 .svg-icon.light svg {
-  fill: #888;
+  fill: #888888;
 }
 .svg-icon.icon-only svg {
   padding: 0.1rem;
@@ -548,12 +556,12 @@ a:hover .svg-icon svg {
   fill: #2894DF;
 }
 a.disabled .svg-icon svg {
-  fill: #888;
+  fill: #888888;
   pointer-events: none;
   cursor: default;
 }
 a.disabled:hover .svg-icon svg {
-  fill: #888;
+  fill: #888888;
 }
 a.fav .svg-icon svg {
   fill: #D40101;
@@ -562,11 +570,11 @@ a.unfav .svg-icon svg {
   fill: #DDD;
 }
 .button .svg-icon svg {
-  top: 0.125em;
+  top: 0.2rem;
   position: relative;
 }
 .button .svg-icon + span:not(.visuallyhidden) {
-  margin-left: 2px;
+  margin-left: 0.8rem;
   display: inline-block;
 }
 .button:hover .svg-icon svg,
@@ -588,17 +596,17 @@ a.unfav .svg-icon svg {
   fill: #2894DF;
 }
 .button.disabled .svg-icon svg {
-  fill: #888;
+  fill: #888888;
 }
 .button.disabled .svg-icon svg:hover {
-  fill: #888;
+  fill: #888888;
 }
 /*
 	Generic buttons
 */
 button,
 .button {
-  font-size: 1.6rem;
+  font-size: 1.4rem;
   padding: 0.8rem 1.6rem;
   line-height: 1.6rem;
   margin-right: 0.8rem;
@@ -609,21 +617,29 @@ button,
   cursor: pointer;
   text-align: center;
   text-decoration: none;
-  border: 1px solid #CCC;
+  border-top: 1px solid #CCC;
+  border-right: 1px solid #CCC;
+  border-bottom: 1px solid #BBB;
+  border-left: 1px solid #CCC;
   color: #333;
   font-weight: normal;
   text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.5);
-  background: #EEE;
-  background-image: linear-gradient(top, #F3F3F3, #EEE);
+  background: #F3F3F3;
   -webkit-border-radius: 0.214em;
   -moz-border-radius: 0.214em;
   border-radius: 0.214em;
   box-sizing: border-box;
 }
 /* sizes */
+.button.medium {
+  font-size: 1.6rem;
+  line-height: 2.4rem;
+  padding: 0.8rem 2.4rem;
+}
 .button.big {
   font-size: 1.8rem;
-  padding: 1.6rem 3.2rem;
+  line-height: 3.2rem;
+  padding: 0.8rem 3.2rem;
 }
 .button.full-width {
   width: 100%;
@@ -676,8 +692,7 @@ button,
 .button:hover {
   color: #333;
   text-decoration: none;
-  background: #F3F3F3;
-  background-image: linear-gradient(top, #F3F3F3, #F3F3F3);
+  background: #EEE;
   border: 1px solid #BBB;
 }
 /* focus */
@@ -696,7 +711,7 @@ button,
 /* disabled */
 .button.disabled {
   cursor: default;
-  color: #888;
+  color: #888888;
   background: #FFF;
   border: 1px solid #DDD;
   text-shadow: none;
@@ -707,7 +722,7 @@ button,
 .button.disabled:focus {
   box-shadow: 0 0 0;
   top: 0;
-  color: #888;
+  color: #888888;
   background: #FFF;
   border: 1px solid #DDD;
 }
@@ -781,6 +796,7 @@ label {
 	:active			- inset box shadow
 	.disabled		- grey out to indicate it cannot be used
 */
+input[type=number],
 input[type=text],
 input[type=email],
 input[type=password],
@@ -800,6 +816,9 @@ textarea {
   border-top: 1px solid #BBB;
   vertical-align: middle;
 }
+input[type=number] {
+  box-sizing: initial;
+}
 input[type=file] {
   box-sizing: border-box;
   font-size: 1.6rem;
@@ -813,6 +832,7 @@ input[type=file] {
   vertical-align: middle;
 }
 textarea:hover,
+input[type=number]:hover,
 input[type=password]:hover,
 input[type=search]:hover,
 input[type=text]:hover,
@@ -820,6 +840,7 @@ input[type=email]:hover {
   border: 1px solid #BBB;
 }
 textarea:focus,
+input[type=number]:focus,
 input[type=password]:focus,
 input[type=search]:focus,
 input[type=text]:focus,
@@ -829,6 +850,7 @@ input[type=email]:focus {
   border: 1px solid #2894DF;
 }
 textarea:disabled,
+input[type=number]:disabled,
 input[type=password]:disabled,
 input[type=search]:disabled,
 input[type=text]:disabled,
@@ -841,18 +863,13 @@ input[type=email]:disabled {
 }
 /*
 	Textarea Textfield
-	Description	: textarea.textarea is pretty much the same than div.input.text.
-
-	.required		- additional red star
-	.lage		 	 - make the box bigger
 */
 textarea {
-  height: 7rem;
-  /* 4 char (default input length) x 1em (average char length) + .6em (padding) */
+  height: 9rem;
 }
 .textarea.large textarea {
   width: 30rem;
-  height: 7rem;
+  height: 9rem;
 }
 .checkbox input[type=checkbox] {
   position: absolute;
@@ -902,13 +919,32 @@ textarea {
   content: '';
   position: absolute;
   left: 0.3rem;
-  top: 0.79rem;
+  top: 0.8rem;
   width: 1rem;
   height: 1rem;
   background-size: 1rem 1rem;
   background-color: #333;
   -webkit-mask-image: url('../../../img/controls/check_black.svg');
   mask-image: url('../../../img/controls/check_black.svg');
+}
+.checkbox.medium input[type=checkbox] {
+  cursor: pointer;
+}
+.checkbox.medium input[type=checkbox] + label {
+  font-size: 1.5rem;
+}
+.checkbox.medium input[type=checkbox] + label:before {
+  margin-top: 0.3rem;
+  margin-right: 1rem;
+  width: 1.4rem;
+  height: 1.4rem;
+}
+.checkbox.medium input[type=checkbox]:checked + label:after {
+  left: 0.3rem;
+  top: 0.8rem;
+  width: 1rem;
+  height: 1rem;
+  background-size: 1rem 1rem;
 }
 .checkbox.small input[type=checkbox] {
   cursor: pointer;
@@ -929,18 +965,78 @@ textarea {
   height: 1.1rem;
   background-size: 1.1rem 1.1rem;
 }
+.radiolist {
+  margin-bottom: 0.8rem;
+  /*
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
+  /*
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
+}
+.radiolist:before,
+.radiolist:after {
+  content: "";
+  display: table;
+}
+.radiolist:after {
+  clear: both;
+}
+.radiolist:before,
+.radiolist:after {
+  content: "";
+  display: table;
+}
+.radiolist:after {
+  clear: both;
+}
+.radiolist .input.radio {
+  float: left;
+}
+.radiolist .input.radio input {
+  float: left;
+  margin-top: 0.8rem;
+}
+.radiolist .input.radio input + label {
+  float: left;
+  font-weight: normal;
+  display: inline-block;
+  margin-left: 1rem;
+  font-size: 1.6rem;
+  margin-right: 3.2rem;
+  line-height: 1.4rem;
+}
+.radiolist .input.radio input + label:after {
+  content: initial;
+}
 .input.toggle-switch {
   display: flex;
-  padding-top: 1em;
-  padding-bottom: 0.5em;
+  padding-top: 1.6rem;
+  padding-bottom: 0.8rem;
 }
 .input.toggle-switch label {
-  padding-top: 0.15em;
-  padding-left: 1em;
+  padding-top: 0;
+  padding-left: 1.6rem;
   order: 2;
   flex: 1;
   font-weight: normal;
-  font-size: 1em;
+  font-size: 1.6rem;
 }
 .input.toggle-switch.disabled label {
   color: #969696;
@@ -1075,6 +1171,32 @@ h6 .input.toggle-switch {
   float: left;
   padding: 0.4em 1em 0 0;
 }
+.input.select select {
+  display: inline-block;
+  font-size: 1.6rem;
+  line-height: 2.4rem;
+  color: #333;
+  padding: 0.6rem 1.2rem;
+  width: 100%;
+  max-width: 64rem;
+  box-sizing: border-box;
+  margin: 0 0 0.8rem 0;
+  border: 1px solid #CCC;
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  appearance: none;
+  background-color: #FFF;
+  background-image: url('../../../img/controls/chevron-down_black.svg'), linear-gradient(to bottom, #FFF 0%, #FFF 100%);
+  background-repeat: no-repeat, repeat;
+  background-position: right 1.1rem top 50%, 0 0;
+  background-size: 1rem auto, 100%;
+}
+.input.select select:focus {
+  outline: none;
+  border: 1px solid #2894DF;
+  border-radius: 0;
+  background-image: url('../../../img/controls/chevron-down_blue.svg'), linear-gradient(to bottom, #FFF 0%, #FFF 100%);
+}
 /*
 	Messages for validation error and example
 
@@ -1100,9 +1222,64 @@ h6 .input.toggle-switch {
   margin-bottom: 1.6rem;
   background-color: transparent;
   border: 0;
-  color: #888;
+  color: #888888;
   font-weight: normal;
   background: #FFF;
+  clear: both;
+}
+.singleline {
+  /*
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
+  /*
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
+}
+.singleline:before,
+.singleline:after {
+  content: "";
+  display: table;
+}
+.singleline:after {
+  clear: both;
+}
+.singleline:before,
+.singleline:after {
+  content: "";
+  display: table;
+}
+.singleline:after {
+  clear: both;
+}
+.singleline .input {
+  float: left;
+  width: 49%;
+}
+.singleline .input:first-child,
+.singleline .input.first-field {
+  margin-right: 2%;
+}
+.singleline .input input[type="text"],
+.singleline .input input[type="email"],
+.singleline .input input[type="password"],
+.singleline .input input[type="search"] {
+  width: 100%;
 }
 /*
  * Page layout
@@ -1131,6 +1308,9 @@ h6 .input.toggle-switch {
   bottom: 3.8rem;
   height: auto;
   padding: 0;
+}
+.page .panel.main .grid {
+  padding-bottom: 1.6rem;
 }
 .page .panel.main .row {
   padding-left: 0;
@@ -1890,10 +2070,10 @@ h6 .input.toggle-switch {
 }
 /* message styling per types */
 .message {
-  padding: 1em;
+  padding: 1.6rem;
 }
 .message a {
-  border-bottom: 1px solid #888;
+  border-bottom: 1px solid #888888;
 }
 .message a:hover {
   border-bottom: 1px solid #2894DF;
@@ -1905,11 +2085,11 @@ h6 .input.toggle-switch {
 .message.error a:link,
 .message.error a:visited {
   color: #333;
-  border-bottom: 1px dotted #888;
+  border-bottom: 1px dotted #888888;
 }
 .message.error a:hover {
   color: #333;
-  border-bottom: 1px solid #888;
+  border-bottom: 1px solid #888888;
 }
 .message.success {
   color: #333;
@@ -1928,13 +2108,13 @@ h6 .input.toggle-switch {
 }
 /* big side info message blocks on setup or profile pages */
 .message.side-message {
-  margin-left: 1em;
-  font-size: 1em;
-  margin-right: 2em;
+  margin-left: 1.6rem;
+  font-size: 1.6rem;
+  margin-right: 3.2rem;
 }
 .message.side-message ul,
 .message.side-message p {
-  padding-bottom: 1em;
+  padding-bottom: 1.6rem;
 }
 /* animation */
 .message.animated {
@@ -1942,20 +2122,20 @@ h6 .input.toggle-switch {
   color: #333;
   display: flex;
   border: 1px solid #DDD;
-  border-radius: 3px;
+  border-radius: 0.3rem;
 }
 .message.animated .illustration {
-  flex: 0 0 180px;
+  flex: 0 0 18rem;
 }
 .message.animated .additional-information {
   flex: 1;
-  line-height: 180px;
-  margin-top: 1.5em;
-  padding-left: 1em;
+  line-height: 18rem;
+  margin: 2.4rem 0;
+  padding-left: 1.6rem;
 }
 @keyframes drawCircle {
   0% {
-    stroke-dashoffset: 180px;
+    stroke-dashoffset: 18rem;
   }
   100% {
     stroke-dashoffset: 0;
@@ -1963,7 +2143,7 @@ h6 .input.toggle-switch {
 }
 @keyframes drawCheck {
   0% {
-    stroke-dashoffset: 50px;
+    stroke-dashoffset: 5rem;
   }
   100% {
     stroke-dashoffset: 0;
@@ -1971,7 +2151,7 @@ h6 .input.toggle-switch {
 }
 @keyframes drawCross {
   0% {
-    stroke-dashoffset: 50px;
+    stroke-dashoffset: 5rem;
   }
   100% {
     stroke-dashoffset: 0;
@@ -1979,30 +2159,30 @@ h6 .input.toggle-switch {
 }
 @keyframes drawWarning {
   0% {
-    stroke-dashoffset: 180px;
+    stroke-dashoffset: 18rem;
   }
   100% {
     stroke-dashoffset: 0;
   }
 }
 .message.animated #successAnimationCircle {
-  stroke-dasharray: 180px 180px;
+  stroke-dasharray: 18rem 18rem;
   stroke: #009900;
 }
 .message.animated #successAnimationCheck {
-  stroke-dasharray: 50px 50px;
+  stroke-dasharray: 5rem 5rem;
   stroke: #009900;
 }
 .message.animated #errorAnimationCircle {
-  stroke-dasharray: 180px 180px;
+  stroke-dasharray: 18rem 18rem;
   stroke: #D40101;
 }
 .message.animated #errorAnimationCross {
-  stroke-dasharray: 50px 50px;
+  stroke-dasharray: 5rem 5rem;
   stroke: #D40101;
 }
 .message.animated #warningAnimation {
-  stroke-dasharray: 180px 180px;
+  stroke-dasharray: 18rem 18rem;
   stroke: #9F6000;
   stroke-linecap: square;
   stroke-linejoin: round;
@@ -2042,8 +2222,7 @@ table.table-info.vertical {
 }
 table.table-info td,
 table.table-info.vertical td {
-  padding: 0.625em;
-  padding-right: 1.25em;
+  padding: 0.8rem 1.8rem 0.8rem 0;
   color: #666;
 }
 table.table-info td.warning,
@@ -2072,7 +2251,7 @@ table.table-info.vertical td .alt.side:after {
 table.table-info td + td,
 table.table-info.vertical td + td {
   color: #333;
-  padding-right: 0.625em;
+  padding-right: 1rem;
 }
 /* horizontal tableview */
 table.table-info.horizontal {
@@ -2142,30 +2321,37 @@ table.table-info.horizontal tbody tr:hover {
   padding: 0.35em 0.75em;
 }
 /* left panel navigation */
-.panel .navigation {
+.panel .navigation,
+.navigation-setup {
   margin-top: 1em;
 }
-.panel .navigation h2 {
+.panel .navigation h2,
+.navigation-setup h2 {
   padding: 0;
   margin: 0;
 }
-.panel .navigation a {
+.panel .navigation a,
+.navigation-setup a {
   color: #333;
   border: 0;
   display: block;
 }
-.panel .navigation li {
+.panel .navigation li,
+.navigation-setup li {
   font-size: 0.9375em;
   /* 15px from 16px base */
   padding: 0.469em 0 0.469em 1.333em;
   border-left: 5px solid #FFF;
 }
-.panel .navigation li:hover {
+.panel .navigation li:hover,
+.navigation-setup li:hover {
   color: #333;
   border-left: 5px solid #DDD;
 }
 .panel .navigation li.active,
-.panel .navigation li.selected {
+.navigation-setup li.active,
+.panel .navigation li.selected,
+.navigation-setup li.selected {
   font-weight: bold;
   border-left: 5px solid #D40101;
 }

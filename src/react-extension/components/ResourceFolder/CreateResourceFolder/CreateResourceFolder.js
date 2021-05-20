@@ -301,7 +301,7 @@ class CreateResourceFolder extends Component {
                 autoComplete='off' autoFocus={true}
               />
               {this.state.nameError &&
-              <div className="error message">{this.state.nameError}</div>
+              <div className="error-message">{this.state.nameError}</div>
               }
             </div>
           </div>

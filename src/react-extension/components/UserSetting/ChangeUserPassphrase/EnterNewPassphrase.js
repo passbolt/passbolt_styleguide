@@ -303,20 +303,22 @@ class EnterNewPassphrase extends React.Component {
                 </div>
               </div>
               <div className="submit-wrapper">
-                <button className="button big" type="button" disabled={!this.areActionsAllowed} onClick={this.handleCancel}>
+                <button className="button cancel medium" type="button" disabled={!this.areActionsAllowed} onClick={this.handleCancel}>
                   <Trans>Cancel</Trans>
                 </button>
-                <FormSubmitButton big={true} disabled={this.mustBeDisabled} processing={this.isProcessing} value={this.translate('Update')}/>
+                <FormSubmitButton primary={true} medium={true} disabled={this.mustBeDisabled} processing={this.isProcessing} value={this.translate('Update')}/>
               </div>
             </form>
           </div>
-          <div className="col4 last passphrase-help">
-            <h3><Trans>Tips for choosing a good passphrase</Trans></h3>
-            <p><Trans>Make sure your passphrase is hard to guess but also that is long enough. For example you can use your favorite lyric from a song,
-              grab the first couple of characters from the words in your favorite line.</Trans></p>
-            <a className="button big">
-              <span><Trans>Learn more</Trans></span>
-            </a>
+          <div className="col4 last">
+            <div className="sidebar-help">
+              <h3><Trans>Tips for choosing a good passphrase</Trans></h3>
+              <p><Trans>Make sure your passphrase is hard to guess but also that is long enough. For example you can use your favorite lyric from a song,
+                grab the first couple of characters from the words in your favorite line.</Trans></p>
+              <a className="button">
+                <span><Trans>Learn more</Trans></span>
+              </a>
+            </div>
           </div>
         </div>
       </div>

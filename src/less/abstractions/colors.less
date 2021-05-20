@@ -23,7 +23,7 @@
 @red-dark: #92000C;
 
 @grey-darkest: #666;
-@grey-darker: #888;
+@grey-darker: #888888;
 @grey-dark: #969696;
 @grey-2: #BBB;
 @grey-3: #CCC;
@@ -76,13 +76,18 @@
 @button-text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.5);
 @button-primary-text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.2);
 .button-background() {
-    background: @background-lighter;
-    background-image: linear-gradient(top, @background-lightest, @background-lighter);
+  background: @background-lightest;
 }
 .button-hover-background() {
-    background: @background-lightest;
-    background-image: linear-gradient(top, @background-lightest, @background-lightest);
+    background: @background-lighter;
 }
+
+@button-border: @border-input;
+@button-border-bottom: @grey-2;
+@button-border-top: @button-border;
+@button-border-left: @button-border;
+@button-border-right: @button-border;
+
 @button-primary-background: @blue;
 @button-primary-border: @blue;
 @button-primary-color: @font-inverse;
@@ -142,6 +147,7 @@
 @controls-check:url('@{images}/controls/check_black.svg');
 @controls-chevron-right:url('@{images}/controls/chevron-right_black.svg');
 @controls-chevron-down:url('@{images}/controls/chevron-down_black.svg');
+@controls-chevron-down-focus:url('@{images}/controls/chevron-down_blue.svg');
 
 /* tables */
 @table-background: @background-default;

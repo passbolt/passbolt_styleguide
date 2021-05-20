@@ -125,12 +125,12 @@ class DisplayChangePassphraseIntroduction extends React.Component {
     return (
       <div className="grid grid-responsive-12 profile-passphrase">
         <div className="row">
-          <div className="col6">
+          <div className="col7">
             <form onSubmit={this.handleSubmit}>
               <h3><Trans>Before getting started...</Trans></h3>
               <div className="password-management-bg">
               </div>
-              <p><Trans>The passphrase is stored on your device and never sent server side.</Trans><br/>
+              <p><Trans>The passphrase is stored on your device and never sent server side.</Trans>&nbsp;
                 <Trans>Changing your passphrase will only change it locally.</Trans>&nbsp;
                 <Trans>If you have multiple browsers configured, the passphrase will need to be changed in all places individually.</Trans>
               </p>
@@ -140,19 +140,21 @@ class DisplayChangePassphraseIntroduction extends React.Component {
                 <label htmlFor="passphrase-update-understand"> <Trans>Ok, I understand what I need to do.</Trans></label>
               </div>
               <div className="submit-wrapper">
-                <button className="button big submit" type="submit" disabled={this.hasAllInputDisabled()}>
+                <button className="button primary medium submit" type="submit" disabled={this.hasAllInputDisabled()}>
                   <Trans>Start</Trans>
                 </button>
               </div>
             </form>
           </div>
-          <div className="col4 last passphrase-help">
-            <h3><Trans>What is the role of the passphrase?</Trans></h3>
-            <p><Trans>The passphrase is used to encrypt your secret key, which is required to decrypt your secrets, such as the passwords.</Trans></p>
-            <p><Trans>Without the private key and the passphrase it is not possible to decrypt!</Trans></p>
-            <a className="button big" href="https://help.passbolt.com/tech/auth.html" target="_blank" rel="noopener noreferrer">
-              <span><Trans>Learn more</Trans></span>
-            </a>
+          <div className="col4 last">
+            <div className="sidebar-help">
+              <h3><Trans>What is the role of the passphrase?</Trans></h3>
+              <p><Trans>The passphrase is used to encrypt your secret key, which is required to decrypt your secrets, such as the passwords.</Trans></p>
+              <p><Trans>Without the private key and the passphrase it is not possible to decrypt!</Trans></p>
+              <a className="button" href="https://help.passbolt.com/tech/auth.html" target="_blank" rel="noopener noreferrer">
+                <span><Trans>Learn more</Trans></span>
+              </a>
+            </div>
           </div>
         </div>
       </div>

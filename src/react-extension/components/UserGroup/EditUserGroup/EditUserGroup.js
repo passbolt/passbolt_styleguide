@@ -696,12 +696,12 @@ class EditUserGroup extends Component {
                   onChange={this.handleNameChange}
                   disabled={!this.areActionsAllowed}/>
                 {this.hasErrors("name", "empty") &&
-                <div className="name error message">
+                <div className="name error-message">
                   <Trans>A name is required.</Trans>
                 </div>
                 }
                 {this.hasErrors("name", "alreadyExists") &&
-                <div className="name error message">
+                <div className="name error-message">
                   <Trans>The group name already exists.</Trans>
                 </div>
                 }

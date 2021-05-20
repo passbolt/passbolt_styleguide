@@ -680,7 +680,7 @@ class EditResource extends Component {
                 disabled={this.hasAllInputDisabled()} ref={this.nameInputRef} className="required fluid" maxLength="64"
                 required="required" autoComplete="off" autoFocus={true}/>
               {this.state.nameError &&
-              <div className="name error message">{this.state.nameError}</div>
+              <div className="name error-message">{this.state.nameError}</div>
               }
             </div>
             <div className={`input text ${this.state.uriError ? "error" : ""}`}>
@@ -689,7 +689,7 @@ class EditResource extends Component {
                 autoComplete="off" value={this.state.uri} onChange={this.handleInputChange} placeholder={this.translate("URI")}
                 disabled={this.hasAllInputDisabled()}/>
               {this.state.uriError &&
-              <div className="error message">{this.state.uriError}</div>
+              <div className="error-message">{this.state.uriError}</div>
               }
             </div>
             <div className={`input text ${this.state.usernameError ? "error" : ""}`}>
@@ -698,7 +698,7 @@ class EditResource extends Component {
                 autoComplete="off" value={this.state.username} onChange={this.handleInputChange} placeholder={this.translate("Username")}
                 disabled={this.hasAllInputDisabled()}/>
               {this.state.usernameError &&
-              <div className="error message">{this.state.usernameError}</div>
+              <div className="error-message">{this.state.usernameError}</div>
               }
             </div>
             <div className={`input-password-wrapper input required ${this.state.passwordError ? "error" : ""}`}>
@@ -737,7 +737,7 @@ class EditResource extends Component {
               </div>
               {this.state.passwordError &&
               <div className="input text">
-                <div className="password message error">{this.state.passwordError}</div>
+                <div className="password error-message">{this.state.passwordError}</div>
               </div>
               }
               {this.state.passwordWarning &&
@@ -770,7 +770,7 @@ class EditResource extends Component {
                 onKeyUp={this.handleDescriptionInputKeyUp}>
               </textarea>
               {this.state.descriptionError &&
-              <div className="error message">{this.state.descriptionError}</div>
+              <div className="error-message">{this.state.descriptionError}</div>
               }
               {this.state.descriptionWarning &&
               <div className="warning message">{this.state.descriptionWarning}</div>

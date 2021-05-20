@@ -3,7 +3,7 @@
 */
 button,
 .button {
-    font-size: 1.6rem;
+    font-size: 1.4rem;
     padding: .8rem 1.6rem;
     line-height: 1.6rem;
     margin-right: .8rem;
@@ -14,7 +14,10 @@ button,
     cursor: pointer;
     text-align: center;
     text-decoration: none;
-    border: 1px solid @border-input;
+    border-top: 1px solid @button-border-top;
+    border-right: 1px solid @button-border-right;
+    border-bottom: 1px solid @button-border-bottom;
+    border-left: 1px solid @button-border-left;
     color: @font-default;
     font-weight: normal;
     text-shadow: @button-text-shadow;
@@ -24,9 +27,15 @@ button,
 }
 
 /* sizes */
+.button.medium {
+  font-size: 1.6rem;
+  line-height: 2.4rem;
+  padding: .8rem 2.4rem;
+}
 .button.big {
-    font-size: 1.8rem;
-    padding: 1.6rem 3.2rem;
+  font-size: 1.8rem;
+  line-height: 3.2rem;
+  padding: .8rem 3.2rem;
 }
 .button.full-width {
     width:100%;

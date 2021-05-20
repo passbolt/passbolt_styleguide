@@ -7,7 +7,7 @@
 			return 'selected';
 	}
 ?>
-<div class="navigation first">
+<div class="navigation-secondary">
 	<ul class="clearfix passbolt_controller_component_preference_menu_controller mad_view_component_tree menu ready"
 			id="js_wk_preference_menu">
 		<li class="<?php echo isselected('profile'); ?>">
