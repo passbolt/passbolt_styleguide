@@ -451,7 +451,7 @@ class DisplayMfaAdministration extends React.Component {
                   <Trans>The Yubikey provider is enabled for all users. They can setup this provider in their profile and use it as second factor authentication.</Trans>
                 </p>
                 <div className="form-content">
-                  <div className="input text required">
+                  <div className={`input text required ${this.state.yubikeyClientIdentifierError ? "error" : ""}`}>
                     <label><Trans>Client identifier</Trans></label>
                     <input id="yubikeyClientIdentifier" type="text" name="yubikeyClientIdentifier" required="required" className="required fluid form-element ready" placeholder="123456789"
                       onChange={this.handleInputChange} value={this.state.yubikeyClientIdentifier} disabled={this.hasAllInputDisabled()}/>
@@ -459,7 +459,7 @@ class DisplayMfaAdministration extends React.Component {
                     <div className="yubikey_client_identifier error-message">{this.state.yubikeyClientIdentifierError}</div>
                     }
                   </div>
-                  <div className="input text required">
+                  <div className={`input text required ${this.state.yubikeySecretKeyError ? "error" : ""}`}>
                     <label><Trans>Secret key</Trans></label>
                     <input id="yubikeySecretKey" name="yubikeySecretKey" required="required" className="required fluid form-element" placeholder="**********" type="password"
                       onChange={this.handleInputChange} value={this.state.yubikeySecretKey} disabled={this.hasAllInputDisabled()}/>
@@ -491,7 +491,7 @@ class DisplayMfaAdministration extends React.Component {
                   <Trans>The Duo provider is enabled for all users. They can setup this provider in their profile and use it as second factor authentication.</Trans>
                 </p>
                 <div className="form-content">
-                  <div className="input text required">
+                  <div className={`input text required ${this.state.duoHostnameError ? "error" : ""}`}>
                     <label><Trans>Hostname</Trans></label>
                     <input id="duoHostname" type="text" name="duoHostname" required="required" className="required fluid form-element ready"
                       placeholder="api-24zlkn4.duosecurity.com" value={this.state.duoHostname}
@@ -500,7 +500,7 @@ class DisplayMfaAdministration extends React.Component {
                     <div className="duo_hostname error-message">{this.state.duoHostnameError}</div>
                     }
                   </div>
-                  <div className="input text required">
+                  <div className={`input text required ${this.state.duoIntegrationKeyError ? "error" : ""}`}>
                     <label><Trans>Integration key</Trans></label>
                     <input id="duoIntegrationKey" type="text" name="duoIntegrationKey" required="required" className="required fluid form-element ready"
                       placeholder="HASJKDSQJO213123KQSLDF" value={this.state.duoIntegrationKey}
@@ -509,7 +509,7 @@ class DisplayMfaAdministration extends React.Component {
                     <div className="duo_integration_key error-message">{this.state.duoIntegrationKeyError}</div>
                     }
                   </div>
-                  <div className="input text required">
+                  <div className={`input text required ${this.state.duoSaltError ? "error" : ""}`}>
                     <label><Trans>Salt</Trans></label>
                     <input id="duoSalt" name="duoSalt" required="required" className="required fluid form-element ready" placeholder="**********" type="password"
                       value={this.state.duoSalt} onChange={this.handleInputChange} disabled={this.hasAllInputDisabled()}/>
@@ -517,7 +517,7 @@ class DisplayMfaAdministration extends React.Component {
                     <div className="duo_salt error-message">{this.state.duoSaltError}</div>
                     }
                   </div>
-                  <div className="input text required">
+                  <div className={`input text required ${this.state.duoSecretKeyError ? "error" : ""}`}>
                     <label><Trans>Secret key</Trans></label>
                     <input id="duoSecretKey" name="duoSecretKey" required="required" className="required fluid form-element ready" placeholder="**********" type="password"
                       value={this.state.duoSecretKey} onChange={this.handleInputChange} disabled={this.hasAllInputDisabled()}/>

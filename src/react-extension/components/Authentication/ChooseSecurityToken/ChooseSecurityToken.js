@@ -13,7 +13,6 @@
  */
 import React, {Component} from "react";
 import {CirclePicker} from "react-color";
-import Icon from "../../Common/Icons/Icon";
 import {withAuthenticationContext} from "../../../contexts/AuthenticationContext";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
 import {withDialog} from "../../../contexts/DialogContext";

@@ -2502,7 +2502,7 @@ html {
   white-space: normal;
 }
 .dialog .dialog-header .dialog-close {
-  margin-top: -2.5em;
+  margin-top: -3.6rem;
 }
 .dialog .form-content {
   background: #30302D;
@@ -5603,50 +5603,50 @@ MIT License, https://github.com/harvesthq/chosen/blob/master/LICENSE.md
   -ms-text-overflow: ellipsis;
 }
 .panel.aside .sidebar-header .teaser-image {
-  margin: 1em 0 1em 1em;
+  margin: 1.6rem 0 1.6rem 1.6rem;
   float: left;
-  width: 3em;
-  height: 3em;
+  width: 4.8rem;
+  height: 4.8rem;
   border: 1px solid #8B8B89;
   line-height: 3em;
   text-align: center;
   border-radius: 50%;
 }
 .panel.aside .sidebar-header .teaser-image .svg-icon svg {
-  width: 1.5rem;
-  height: 1.5rem;
-  margin-top: 0.75em;
+  width: 2.4rem;
+  height: 2.4rem;
+  margin-top: 1.2rem;
 }
 .panel.aside .sidebar-header .teaser-image img {
-  width: 3em;
-  height: 3em;
+  width: 4.8rem;
+  height: 4.8rem;
 }
 .panel.aside .sidebar-header .dialog-close {
   position: absolute;
-  right: 1em;
-  top: 1em;
+  right: 1.6rem;
+  top: 1.6rem;
 }
 .panel.aside .sidebar-section {
   margin-top: -1px;
   border-bottom: 1px solid #0C0C0A;
   border-top: 1px solid #0C0C0A;
-  font-size: 0.875em;
+  font-size: 1.4rem;
   background: #3B3B39;
 }
 .panel.aside .sidebar-section h4 {
-  font-size: 1.125em;
-  padding: 1em 1.125em;
+  font-size: 1.6rem;
+  padding: 1.4rem 1.6rem;
   margin: 0;
   display: block;
 }
 .panel.aside .sidebar-section .accordion-content {
-  padding: 2rem 2rem 2.4rem 2rem;
+  padding: 1.6rem 2rem 2.4rem 2rem;
   background: #30302D;
 }
 .panel.aside .sidebar-section .accordion-content .section-action {
   font-size: 1.6rem;
   position: absolute;
-  margin-top: -5.4rem;
+  margin-top: -4.8rem;
   right: 5.2rem;
   width: 1.6rem;
   height: 1.6rem;
@@ -6190,6 +6190,22 @@ table.table-info.horizontal tbody tr:hover {
   display: block;
 }
 /* tags */
+.tag {
+  float: left;
+  position: relative;
+  margin: 0 0.8rem 0.8rem 0;
+  text-decoration: none;
+  border-radius: 0.2rem;
+  border: 1px solid #b8d0fd;
+  background: rgba(42, 156, 235, 0.1);
+  color: #d4e4ff;
+}
+.tag:active,
+.tag:hover {
+  border: 1px solid #2A9CEB;
+  background: #30302D;
+  color: #2A9CEB;
+}
 .tags-list {
   /*
      * Clearfix: contain floats
@@ -6234,6 +6250,9 @@ table.table-info.horizontal tbody tr:hover {
   float: left;
   max-width: 95%;
 }
+.tags-list .tag {
+  padding: 0.4rem 0.6rem;
+}
 .tag-editor {
   margin-bottom: 1em;
 }
@@ -6247,7 +6266,7 @@ table.table-info.horizontal tbody tr:hover {
   padding-right: 0.15em;
 }
 .tag-editor .tag {
-  padding-right: 0;
+  padding: 0 0.6rem;
 }
 .tag-editor .tag-content {
   padding-right: 0.5em;
@@ -6357,27 +6376,6 @@ table.table-info.horizontal tbody tr:hover {
 }
 .tag-editor .autocomplete-suggestions .autocomplete-suggestion.row.selected {
   background: #3B3B39;
-}
-.tags-list .tag,
-.tag-editor .tag {
-  padding: 0 0.25em;
-  float: left;
-  position: relative;
-  margin: 0 0.5em 0.5em 0;
-  text-decoration: none;
-  border-radius: 3px;
-  max-width: 95%;
-  border: 1px solid #b8d0fd;
-  background: rgba(42, 156, 235, 0.1);
-  color: #d4e4ff;
-}
-.tags-list .tag:active,
-.tag-editor .tag:active,
-.tags-list .tag:hover,
-.tag-editor .tag:hover {
-  border: 1px solid #2A9CEB;
-  background: #30302D;
-  color: #2A9CEB;
 }
 .usercard-col-2 {
   /*

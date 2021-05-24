@@ -171,7 +171,7 @@ class DisplayAdministrationMenu extends React.Component {
    */
   render() {
     return (
-      <div className="navigation-secondary">
+      <div className="navigation-secondary navigation-administration">
         <ul id="administration_menu" className="clearfix menu ready">
           {this.isMfaEnabled &&
             <li id="mfa_menu">

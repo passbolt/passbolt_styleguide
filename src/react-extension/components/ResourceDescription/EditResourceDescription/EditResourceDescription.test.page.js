@@ -42,7 +42,7 @@ export default class EditResourceDescriptionPageObject {
    * Returns the error message content
    */
   get errorMessage() {
-    return this._container.querySelector('.feedbacks.message.error').textContent;
+    return this._container.querySelector('.feedbacks.error-message').textContent;
   }
 
   /**

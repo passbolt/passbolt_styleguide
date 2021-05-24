@@ -2499,7 +2499,7 @@ html {
   white-space: normal;
 }
 .dialog .dialog-header .dialog-close {
-  margin-top: -2.5em;
+  margin-top: -3.6rem;
 }
 .dialog .form-content {
   background: #FFF;
@@ -4617,6 +4617,7 @@ MIT License, https://github.com/harvesthq/chosen/blob/master/LICENSE.md
   padding-right: 1.6rem;
   padding-left: 0.4rem;
   line-height: 2rem;
+  width: auto;
 }
 /* update avatar dialogs */
 .update-avatar-dialog .input-file-chooser-wrapper input[type="file"] {

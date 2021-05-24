@@ -51,7 +51,7 @@ export default class RenameResourceFolderPage {
    * Returns true it the folder name is invalid
    */
   get hasInvalidName() {
-    return Boolean(this._page.container.querySelector('.error.message'));
+    return Boolean(this._page.container.querySelector('.error-message'));
   }
 
   /**

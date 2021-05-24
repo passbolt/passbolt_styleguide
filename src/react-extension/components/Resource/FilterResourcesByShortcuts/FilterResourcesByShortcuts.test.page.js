@@ -41,7 +41,7 @@ export default class FilterResourcesByShortcutsPage {
    * Returns the filter resources by shortcuts
    */
   get filterResourcesByShortcuts() {
-    return this._page.container.querySelector('.navigation.first.shortcuts');
+    return this._page.container.querySelector('.navigation-secondary.navigation-shortcuts');
   }
 
   /**

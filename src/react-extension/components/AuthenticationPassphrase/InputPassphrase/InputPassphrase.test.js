@@ -221,7 +221,7 @@ describe("InputPassphrase", () => {
     expect(dialogLabel.textContent).toBe("Please enter a valid passphrase.");
 
     // Throw passphrase error message
-    const errorMessage = container.querySelector(".error.message");
+    const errorMessage = container.querySelector(".error-message");
     expect(errorMessage.textContent).toBe("This is not a valid passphrase.");
   });
 

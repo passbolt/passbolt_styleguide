@@ -126,7 +126,7 @@ class PasswordCreatePageObject {
    * Returns the name error mesage input element
    */
   get nameErrorMessage() {
-    return this._container.querySelector('.name.error.message');
+    return this._container.querySelector('.name.error-message');
   }
 
   /**
@@ -154,7 +154,7 @@ class PasswordCreatePageObject {
    * Returns the password error mesage input element
    */
   get passwordErrorMessage() {
-    return this._container.querySelector('.password.error.message');
+    return this._container.querySelector('.password.error-message');
   }
 
   /**

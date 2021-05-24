@@ -37,14 +37,14 @@ export default class EditSubscriptionKeyPage {
    * Returns true if a subscription key error appears
    */
   get hasSubscriptionKeyError() {
-    return Boolean(this._page.container.querySelector('.key.error.message'));
+    return Boolean(this._page.container.querySelector('.key.error-message'));
   }
 
   /**
    * Returns true if a subscription key error message
    */
   get subscriptionKeyErrorMessage() {
-    return this._page.container.querySelector('.key.error.message').textContent;
+    return this._page.container.querySelector('.key.error-message').textContent;
   }
 
 

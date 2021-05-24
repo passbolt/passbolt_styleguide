@@ -175,7 +175,7 @@ class FilterResourcesByTags extends React.Component {
    */
   render() {
     return (
-      <div className="navigation-secondary-tree navigation-secondary accordion">
+      <div className="navigation-secondary-tree navigation-secondary navigation-tags accordion">
         <ul className="accordion-header">
           <li className={`node root ${this.state.open ? "open" : "close"}`}>
             <div className="row title">

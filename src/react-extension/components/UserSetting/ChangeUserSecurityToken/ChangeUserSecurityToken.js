@@ -13,7 +13,6 @@
  */
 import React, {Component} from "react";
 import {CirclePicker} from "react-color";
-import Icon from "../../Common/Icons/Icon";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
 import {withDialog} from "../../../contexts/DialogContext";
 import PropTypes from "prop-types";
@@ -382,7 +381,7 @@ class ChangeUserSecurityToken extends Component {
                   so you can verify quickly the form is coming from passbolt.</Trans>&nbsp;
                 <Trans>This will help protect you from phishing attack</Trans>
               </p>
-              </div>
+            </div>
           </div>
         </div>
       </div>

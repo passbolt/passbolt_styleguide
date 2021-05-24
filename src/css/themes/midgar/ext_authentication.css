@@ -2585,7 +2585,7 @@ html {
   white-space: normal;
 }
 .dialog .dialog-header .dialog-close {
-  margin-top: -2.5em;
+  margin-top: -3.6rem;
 }
 .dialog .form-content {
   background: #30302D;
@@ -2842,6 +2842,7 @@ iframe.cachette {
   padding-right: 1.6rem;
   padding-left: 0.4rem;
   line-height: 2rem;
+  width: auto;
 }
 html,
 body {
@@ -3018,7 +3019,7 @@ body {
   }
   .login.page {
     display: grid;
-    height: 100%;
+    height: calc(100% - 4rem);
     grid-template-columns: 1fr 1.5fr 1fr;
     grid-template-rows: 0 1fr 0.05fr;
     grid-gap: 1px;
