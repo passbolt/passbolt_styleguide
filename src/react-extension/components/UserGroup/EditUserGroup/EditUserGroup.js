@@ -200,6 +200,14 @@ class EditUserGroup extends Component {
   }
 
   /**
+   * Is the logged in user admin
+   * @returns {boolean}
+   */
+  isLoggedInUserAdmin() {
+    return this.props.context.loggedInUser && this.props.context.loggedInUser.role.name === 'admin';
+  }
+
+  /**
    * Returns true if there are some changes on the group members
    * @type {boolean}
    */
@@ -694,7 +702,7 @@ class EditUserGroup extends Component {
                   type="text"
                   placeholder={this.translate("group name")}
                   onChange={this.handleNameChange}
-                  disabled={!this.areActionsAllowed}/>
+                  disabled={!this.areActionsAllowed || !this.isLoggedInUserAdmin()}/>
                 {this.hasErrors("name", "empty") &&
                 <div className="name error message">
                   <Trans>A name is required.</Trans>
