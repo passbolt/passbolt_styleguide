@@ -1098,14 +1098,21 @@ h6 .input.toggle-switch {
   background-color: #30302D;
   background-image: url('../../../img/controls/chevron-down_white.svg'), linear-gradient(to bottom, #0C0C0A 0%, #0C0C0A 100%);
   background-repeat: no-repeat, repeat;
-  background-position: right 1.1rem top 50%, 0 0;
+  background-position: right 0.6rem top 50%, 0 0;
   background-size: 1rem auto, 100%;
+}
+.input.select select.medium {
+  width: 50%;
 }
 .input.select select:focus {
   outline: none;
   border: 1px solid #2894DF;
   border-radius: 0;
   background-image: url('../../../img/controls/chevron-down_blue.svg'), linear-gradient(to bottom, #0C0C0A 0%, #0C0C0A 100%);
+}
+.input.select select:disabled {
+  background-image: url('../../../img/controls/chevron-down_white.svg'), linear-gradient(to bottom, #444442 0%, #444442 100%);
+  color: #8B8B89;
 }
 /*
 	Messages for validation error and example
@@ -2343,8 +2350,8 @@ html {
   /* only right for now */
 }
 .tooltip-alt .tooltip-text.right {
-  margin-left: 1em;
-  margin-top: -1.75em;
+  margin-left: 1.2rem;
+  margin-top: -2.65rem;
 }
 .tooltip-alt .tooltip-text.right::after {
   content: " ";
@@ -2843,6 +2850,12 @@ iframe.cachette {
   padding-left: 0.4rem;
   line-height: 2rem;
   width: auto;
+}
+#user-locale-input:focus {
+  outline: none;
+  border: 1px solid #2894DF;
+  border-radius: 0;
+  background-image: url('../../../img/controls/chevron-down_blue.svg'), linear-gradient(to bottom, #0C0C0A 0%, #0C0C0A 100%);
 }
 html,
 body {

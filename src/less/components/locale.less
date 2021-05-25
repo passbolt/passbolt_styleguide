@@ -10,4 +10,11 @@
   padding-left: .4rem;
   line-height: 2rem;
   width: auto;
+
+  &:focus {
+    outline: none;
+    border:1px solid @border-focus;
+    border-radius: 0;
+    background-image: @controls-chevron-down-focus, linear-gradient(to bottom, @input-background 0%, @input-background 100%);
+  }
 }

@@ -355,7 +355,7 @@ class EditUserProfile extends Component {
             {this.canIUseLocale &&
             <div className="input select locale required">
               <label htmlFor="user-profile-locale-input"><Trans>Language</Trans></label>
-              <select className="large" id="user-profile-locale-input" name="locale" value={this.state.profile.locale}
+              <select id="user-profile-locale-input" name="locale" value={this.state.profile.locale}
                 disabled={!this.areActionsAllowed} onChange={this.handleInputChange}>
                 {this.supportedLocales.map(supportedLocale =>
                   <option key={supportedLocale.locale} value={supportedLocale.locale}>

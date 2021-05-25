@@ -1098,14 +1098,21 @@ h6 .input.toggle-switch {
   background-color: #30302D;
   background-image: url('../../../img/controls/chevron-down_white.svg'), linear-gradient(to bottom, #0C0C0A 0%, #0C0C0A 100%);
   background-repeat: no-repeat, repeat;
-  background-position: right 1.1rem top 50%, 0 0;
+  background-position: right 0.6rem top 50%, 0 0;
   background-size: 1rem auto, 100%;
+}
+.input.select select.medium {
+  width: 50%;
 }
 .input.select select:focus {
   outline: none;
   border: 1px solid #2894DF;
   border-radius: 0;
   background-image: url('../../../img/controls/chevron-down_blue.svg'), linear-gradient(to bottom, #0C0C0A 0%, #0C0C0A 100%);
+}
+.input.select select:disabled {
+  background-image: url('../../../img/controls/chevron-down_white.svg'), linear-gradient(to bottom, #444442 0%, #444442 100%);
+  color: #8B8B89;
 }
 /*
 	Messages for validation error and example
@@ -3495,8 +3502,8 @@ input[type="search"]::-webkit-search-cancel-button {
   /* only right for now */
 }
 .tooltip-alt .tooltip-text.right {
-  margin-left: 1em;
-  margin-top: -1.75em;
+  margin-left: 1.2rem;
+  margin-top: -2.65rem;
 }
 .tooltip-alt .tooltip-text.right::after {
   content: " ";
@@ -5352,12 +5359,12 @@ MIT License, https://github.com/harvesthq/chosen/blob/master/LICENSE.md
 .dialog .permissions .row .remove-item {
   color: #cacac9;
   float: right;
-  margin-right: 1em;
+  margin-right: 1rem;
   border: 0;
-  padding: 0.625em;
-  width: 1em;
-  height: 1em;
-  margin-top: 0.2em;
+  padding: 0.625rem;
+  width: 1rem;
+  height: 1rem;
+  margin-top: 0.2rem;
   /* hover */
   /* focus */
   /* active */
@@ -6660,7 +6667,7 @@ table.table-info.horizontal tbody tr:hover {
   width: auto;
 }
 .export-password-dialog .input-password-wrapper .actions.inline .button {
-  padding: 0.6em 0 0.4285714em 0;
+  padding: 0.8rem 0 0.7rem 0;
   border-left: 0;
   border-top-left-radius: 0;
   border-bottom-left-radius: 0;
@@ -6679,8 +6686,8 @@ table.table-info.horizontal tbody tr:hover {
 .export-password-dialog .input-file-chooser-wrapper .input-file-inline .button.primary {
   width: 40%;
   display: inline-block;
-  top: -4px;
-  padding: 0.6em 1.225em 0.55em 1.225em;
+  top: -0.4rem;
+  padding: 1rem 1.4rem 0.9rem 1.4rem;
   border-top-left-radius: 0;
   border-bottom-left-radius: 0;
   text-overflow: ellipsis;
@@ -6702,7 +6709,7 @@ table.table-info.horizontal tbody tr:hover {
   width: auto;
 }
 .import-password-dialog .input-password-wrapper .actions.inline .button {
-  padding: 0.6em 0 0.4285714em 0;
+  padding: 0.8rem 0 0.7rem 0;
   border-left: 0;
   border-top-left-radius: 0;
   border-bottom-left-radius: 0;
@@ -6723,7 +6730,7 @@ table.table-info.horizontal tbody tr:hover {
   width: 40%;
   display: inline-block;
   top: -0.4rem;
-  padding: 0.9rem 0;
+  padding: 1rem 1.4rem 0.9rem 1.4rem;
   border-top-left-radius: 0;
   border-bottom-left-radius: 0;
   text-overflow: ellipsis;
@@ -7001,7 +7008,90 @@ table.table-info.horizontal tbody tr:hover {
 }
 .delete-user-dialog .ownership-transfer li select,
 .delete-group-dialog .ownership-transfer li select {
-  width: 100%;
+  padding: 0.2rem 2.2rem 0.2rem 0.6rem;
+}
+.passphrase-entry.dialog {
+  width: 95%;
+}
+.passphrase-entry.dialog .password {
+  /*
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
+  /*
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
+}
+.passphrase-entry.dialog .password:before,
+.passphrase-entry.dialog .password:after {
+  content: "";
+  display: table;
+}
+.passphrase-entry.dialog .password:after {
+  clear: both;
+}
+.passphrase-entry.dialog .password:before,
+.passphrase-entry.dialog .password:after {
+  content: "";
+  display: table;
+}
+.passphrase-entry.dialog .password:after {
+  clear: both;
+}
+.passphrase-entry.dialog .password input[type=text],
+.passphrase-entry.dialog .password input[type=password] {
+  float: left;
+  box-sizing: border-box;
+  width: calc(90% - 5em);
+}
+.passphrase-entry.dialog .password .security-token {
+  float: left;
+  margin-top: 0;
+  margin-left: 0;
+}
+.passphrase-entry.dialog .password .button.password-view {
+  font-size: 0.975em;
+  padding: 0.9rem 1.6rem;
+  box-sizing: border-box;
+  border-left: 0;
+  float: left;
+  margin-left: -1px;
+  border-radius: 0;
+  background: #0C0C0A;
+}
+.passphrase-entry.dialog .password .button.password-view.selected {
+  background: #222220;
+}
+.passphrase-entry.dialog .password input[type=text]:focus ~ .button.password-view,
+.passphrase-entry.dialog .password input[type=password]:focus ~ .button.password-view {
+  border: 1px solid #2894DF;
+  border-left: 0;
+}
+.passphrase-entry.dialog .input.checkbox,
+.passphrase-entry.dialog .input.select {
+  display: inline-block;
+}
+.passphrase-entry.dialog input[type="checkbox"] + label {
+  margin-left: 0.8rem;
+}
+.passphrase-entry.dialog .input.select select {
+  margin-left: 0.8rem;
+  padding: 0.2rem 2.2rem 0.2rem 0.6rem;
 }
 .progress-bar-wrapper .progress-bar.big.infinite {
   width: 0;
@@ -7308,6 +7398,11 @@ table.table-info.horizontal tbody tr:hover {
 }
 .page.settings .profile-key-inspector-information .input.select.tooltip-top {
   display: inline-block;
+}
+.page.settings .profile-key-inspector-information .key-info .table-info .select select {
+  margin: 0;
+  padding: 0.1rem 1.8rem 0.1rem 0.2rem;
+  background-size: 0.8rem auto, 100%;
 }
 .page.settings .key-export .actions {
   margin: 1em 0;

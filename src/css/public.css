@@ -5808,8 +5808,8 @@ table.table-info.horizontal tbody tr:hover {
   /* only right for now */
 }
 .tooltip-alt .tooltip-text.right {
-  margin-left: 1em;
-  margin-top: -1.75em;
+  margin-left: 1.2rem;
+  margin-top: -2.65rem;
 }
 .tooltip-alt .tooltip-text.right::after {
   content: " ";

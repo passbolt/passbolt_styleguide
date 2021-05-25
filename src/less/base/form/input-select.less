@@ -18,14 +18,23 @@
     background-color: @background-default;
     background-image: @controls-chevron-down, linear-gradient(to bottom, @input-background 0%,@input-background 100%);
     background-repeat: no-repeat, repeat;
-    background-position: right 1.1rem top 50%, 0 0;
+    background-position: right .6rem top 50%, 0 0;
     background-size: 1rem auto, 100%;
+
+    &.medium {
+      width: 50%;
+    }
 
     &:focus {
       outline: none;
       border:1px solid @border-focus;
       border-radius: 0;
       background-image: @controls-chevron-down-focus, linear-gradient(to bottom, @input-background 0%, @input-background 100%);
+    }
+
+    &:disabled {
+      background-image: @controls-chevron-down, linear-gradient(to bottom, @input-background-disabled 0%, @input-background-disabled 100%);
+      color: @font-light;
     }
   }
 }
