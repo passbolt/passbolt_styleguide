@@ -150,7 +150,7 @@ class DeleteResource extends Component {
   render() {
     return (
       <DialogWrapper
-        title={this.translate("Delete password?")}
+        title={this.translate("Delete password?", {count: this.resources.length})}
         onClose={this.handleCloseClick}
         disabled={this.state.processing}
         className="delete-password-dialog">
