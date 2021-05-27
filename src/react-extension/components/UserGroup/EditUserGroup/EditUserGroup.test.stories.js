@@ -27,6 +27,13 @@ const context = {
       user_id: "640ebc06-5ec1-5322-a1ae-6120ed2f3a74",
       first_name: "Carol",
       last_name: "Shaw"
+    },
+    role: {
+      created: "2012-07-04T13:39:25+00:00",
+      description: "Logged in user",
+      id: "a58de6d3-f52c-5080-b79b-a601a647ac85",
+      modified: "2012-07-04T13:39:25+00:00",
+      name: "admin"
     }
   }
 };
