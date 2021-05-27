@@ -59,7 +59,7 @@ export default class AddResourceCommentPageObject {
    * Returns the error message element
    */
   get errorMessage() {
-    return this.form.querySelector('.message.error');
+    return this.form.querySelector('.error-message');
   }
 
   /**

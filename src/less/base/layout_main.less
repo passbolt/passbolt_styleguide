@@ -3,7 +3,7 @@
  */
 .page {
   width: 100%;
-  min-width: 320px;
+  min-width: 32rem;
   top: 0;
   left: 0;
   right: 0;
@@ -18,10 +18,13 @@
     overflow: auto;
 
     &.main {
-      top: 10em;
-      bottom: 2.45em;
+      bottom: 3.8rem;
       height: auto;
       padding: 0;
+
+      .grid {
+        padding-bottom: 1.6rem;
+      }
 
       .row {
         padding-left: 0;
@@ -53,17 +56,15 @@
     &.first {
       // let the height be automatically set
       // it breaks the greedy nav on firefox otherwise
-      min-height: 2.4em;
+      min-height: 3.2rem;
     }
 
     &.second {
-      top: 2.375em;
-      height: 4.5em;
+      height: 7rem;
     }
 
     &.third {
-      top: 6.875em;
-      height: 3em;
+      height: 4.8rem;
     }
   }
 

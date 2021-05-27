@@ -1,10 +1,10 @@
-<?php include('_includes/bootstrap.php'); ?><!doctype html>
+<?php include('../_includes/bootstrap.php'); ?><!doctype html>
 <?php if (!isset($base)) $base = '../../../'; ?>
 <html class="no-js no-passboltplugin version alpha" lang="en">
 <head>
     <title>Login</title>
     <?php include('../includes/meta/AN_meta.php'); ?>
-    <link rel="stylesheet" type="text/css" href="src/css/themes/default/api_login.css" />
+    <link rel="stylesheet" type="text/css" href="src/css/themes/default/api_authentication.css" />
 </head>
 <body>
 <div id="container" class="container page login v240918">
@@ -28,7 +28,7 @@
                     <label for="remember" >Remember this device for a month.</label>
                 </div>
                 <div class="form-actions">
-                    <button type="submit" class="button primary big" role="button">verify</button>
+                    <button type="submit" class="button primary big full-width" role="button">verify</button>
                     <a href="https://my.passbolt.io/mfa/verify/yubikey">
                         Or try with another provider    </a>
                 </div>

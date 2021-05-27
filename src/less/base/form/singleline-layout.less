@@ -1,0 +1,17 @@
+.singleline {
+    .clearfix();
+
+    .input {
+        float: left;
+        width: 49%;
+        &:first-child, &.first-field {
+            margin-right:2%;
+        }
+        input[type="text"],
+        input[type="email"],
+        input[type="password"],
+        input[type="search"] {
+            width:100%;
+        }
+    }
+}

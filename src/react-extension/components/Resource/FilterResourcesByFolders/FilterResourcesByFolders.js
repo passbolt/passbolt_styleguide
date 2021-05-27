@@ -453,7 +453,7 @@ class FilterResourcesByFolders extends React.Component {
     }
 
     return (
-      <div className="folders navigation first accordion">
+      <div className="navigation-secondary-tree navigation-secondary navigation-folders accordion">
         {this.renderDragFeedback()}
         <div className="accordion-header">
           <div className={`${isOpen ? "open" : "close"} node root`}>

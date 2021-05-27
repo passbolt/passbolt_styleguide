@@ -37,7 +37,7 @@
 						<div class="inline email input <?php if ($error) : ?>error<?php endif;?> required">
                             <label for="RegistrationEmail">Email</label>
                             <input name="data[Registration][email]" class="required fluid" placeholder="your@organization.com" id="RegistrationEmail" required="required" type="email">
-                            <?php if ($error) : ?><div class="error message">The username should be a valid email address</div><?php endif;?>
+                            <?php if ($error) : ?><div class="error-message">The username should be a valid email address</div><?php endif;?>
                         </div>
 						<div class="inline company input">
 							<label for="RegistrationEmail">Company name</label>
@@ -48,12 +48,12 @@
 							<div class="field-url">
 								<span class="base-url">https://cloud.passbolt.com/</span><input name="data[Registration][email]" class="fluid" placeholder="worskspace" id="RegistrationEmail" type="text">
                             </div>
-                            <?php if ($error) : ?><div class="error message">This domain is already taken.</div><?php endif;?>
+                            <?php if ($error) : ?><div class="error-message">This domain is already taken.</div><?php endif;?>
 						</div>
                         <div class="input checkbox terms <?php if ($error) : ?>error<?php endif; ?>">
                             <input type="checkbox" name="tos" id="tos" value="value">
                             <label for="tos">I agree to the <a href="#">terms</a> and <a href="#">privacy policy</a>.</label>
-                            <?php if ($error) : ?><div class="error message">Please agree with the terms and conditions.</div><?php endif;?>
+                            <?php if ($error) : ?><div class="error-message">Please agree with the terms and conditions.</div><?php endif;?>
                         </div>
                         <div class="submit">
                             <button id="submit-button" class="button primary big">Get started</button>

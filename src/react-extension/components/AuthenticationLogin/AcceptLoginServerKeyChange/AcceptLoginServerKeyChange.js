@@ -171,7 +171,7 @@ class AcceptLoginServerKeyChange extends Component {
           <>
             <br/>
             {this.state.errors.hasNotAccepted &&
-            <div className="has-not-accepted error message"><Trans>You must accept the new server key</Trans></div>
+            <div className="has-not-accepted error-message"><Trans>You must accept the new server key</Trans></div>
             }
           </>
           }

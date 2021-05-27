@@ -331,7 +331,7 @@ class RenameResourceFolder extends Component {
                 autoComplete="off" autoFocus={true}
               />
               {this.state.nameError &&
-                <div className="name error message">{this.state.nameError}</div>
+                <div className="name error-message">{this.state.nameError}</div>
               }
             </div>
           </div>

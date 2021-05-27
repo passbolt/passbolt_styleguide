@@ -71,7 +71,7 @@ class DownloadRecoveryKit extends React.Component {
                 <p><Trans>Your passphrase has been changed. Make sure you keep a backup of your secret key encrypted with this new passphrase.</Trans></p>
                 <p><Trans>Keep this backup in a safe place, you will need it in case of emergency.</Trans></p>
                 <p>
-                  <a className="button big primary" role="button" onClick={this.handleDownloadBackup}><Trans>Download backup</Trans></a>
+                  <a className="button primary medium" role="button" onClick={this.handleDownloadBackup}><Trans>Download backup</Trans></a>
                 </p>
               </div>
             </div>

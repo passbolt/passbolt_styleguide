@@ -119,7 +119,7 @@ class TagEditPageObject {
    * Returns the tag name error mesage element
    */
   get tagNameErrorMessage() {
-    return this._container.querySelector('.name.error.message');
+    return this._container.querySelector('.name.error-message');
   }
 
   /**

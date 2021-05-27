@@ -25,7 +25,7 @@
 		<div class="input text required error">
 			<label class="error" for="js_field_name">Text field (Error)</label>
 			<input name="passbolt.model.Resource.name" class="required error" maxlength="50" id="js_field_name" placeholder="input text error" type="text">
-			<div id="js_field_name_feedback" class="message error">Error message for input text</div>
+			<div id="js_field_name_feedback" class="error-message">Error message for input text</div>
 		</div>
 
 		<br>

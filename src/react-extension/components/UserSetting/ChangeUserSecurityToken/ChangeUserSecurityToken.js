@@ -13,7 +13,6 @@
  */
 import React, {Component} from "react";
 import {CirclePicker} from "react-color";
-import Icon from "../../Common/Icons/Icon";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
 import {withDialog} from "../../../contexts/DialogContext";
 import PropTypes from "prop-types";
@@ -320,7 +319,7 @@ class ChangeUserSecurityToken extends Component {
     return (
       <div className="grid grid-responsive-12 profile-choose-security-token">
         <div className="row">
-          <div className="col6">
+          <div className="col7">
             <form onSubmit={this.handleSubmit}>
               <h3><Trans>Update the Security Token</Trans></h3>
               <div className={`input-security-token input required ${this.hasErrors ? "error" : ""}`}>
@@ -351,36 +350,38 @@ class ChangeUserSecurityToken extends Component {
                     className={`randomize-button ${this.isProcessing ? "disabled" : ""}`}
                     role="button"
                     onClick={this.handleRandomize}>
-                    <Icon name="magic-wand"/> <Trans>Randomize</Trans>
+                    <Trans>Randomize</Trans>
                   </a>
                 </div>
               </div>
               {this.state.hasBeenValidated &&
               <div className="input text">
                 {this.state.errors.emptyCode &&
-                <div className="empty-code message error"><Trans>The security token code should not be empty.</Trans>
+                <div className="empty-code error-message"><Trans>The security token code should not be empty.</Trans>
                 </div>
                 }
                 {this.state.errors.lengthCode &&
-                <div className="not-good-length-code message error"><Trans>The security token code should be 3
+                <div className="not-good-length-code error-message"><Trans>The security token code should be 3
                   characters long.</Trans></div>
                 }
               </div>
               }
               <div className="submit-wrapper">
-                <button className={`button big ${processingClassName}`} type="submit" disabled={this.isProcessing}>
+                <button className={`button primary medium ${processingClassName}`} type="submit" disabled={this.isProcessing}>
                   <Trans>Save</Trans>
                 </button>
               </div>
             </form>
           </div>
-          <div className="col4 last">
-            <h3><Trans>Why is this token needed?</Trans></h3>
-            <p>
-              <Trans>This security token will be displayed when your passphrase is requested,
-                so you can verify quickly the form is coming from passbolt.</Trans>&nbsp;
-              <Trans>This will help protect you from phishing attack</Trans>
-            </p>
+          <div className="col4 last ">
+            <div className="sidebar-help">
+              <h3><Trans>Why is this token needed?</Trans></h3>
+              <p>
+                <Trans>This security token will be displayed when your passphrase is requested,
+                  so you can verify quickly the form is coming from passbolt.</Trans>&nbsp;
+                <Trans>This will help protect you from phishing attack</Trans>
+              </p>
+            </div>
           </div>
         </div>
       </div>

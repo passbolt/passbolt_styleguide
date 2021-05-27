@@ -306,7 +306,8 @@ class ImportResourcesKeyUnlock extends Component {
                   <a
                     className={`button primary ${this.hasAllInputDisabled() ? "disabled" : ""}`}
                     onClick={this.handleSelectFile}>
-                    <Icon name="upload-a"/> <Trans>Choose a file</Trans>
+                    <Icon name="upload-a"/>
+                    <span><Trans>Choose a file</Trans></span>
                   </a>
                 </div>
               </div>

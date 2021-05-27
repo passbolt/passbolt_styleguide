@@ -55,7 +55,7 @@ export default class ConfirmPassphrasePage {
    * Returns the passphrase error message element
    */
   get passphraseErrorMessage() {
-    return this._page.container.querySelector('.message.error').innerHTML;
+    return this._page.container.querySelector('.error-message').innerHTML;
   }
 
   /**

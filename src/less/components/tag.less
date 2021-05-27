@@ -1,10 +1,31 @@
 /* tags */
+.tag {
+  float: left;
+  position: relative;
+  margin: 0 .8rem .8rem 0;
+  text-decoration: none;
+  border-radius: .2rem;
+  border: 1px solid @tag-border;
+  background: @tag-background;
+  color: @tag-color;
+
+  &:active,
+  &:hover {
+    border: 1px solid @tag-hover-border;
+    background: @tag-hover-background;
+    color: @tag-hover-color;
+  }
+}
+
 .tags-list {
     .clearfix();
 
     .tag-list-item{
         float: left;
         max-width: 95%;
+    }
+    .tag {
+      padding: .4rem .6rem;
     }
 }
 .tag-editor {
@@ -21,7 +42,7 @@
         }
     }
     .tag {
-        padding-right: 0;
+      padding: 0 .6rem;
     }
     .tag-content {
         padding-right: .5em;
@@ -100,27 +121,5 @@
                 background: @background-lighter;
             }
         }
-
-
-    }
-}
-.tags-list .tag,
-.tag-editor .tag {
-    padding: 0 .25em;
-    float: left;
-    position: relative;
-    margin: 0 .5em .5em 0;
-    text-decoration: none;
-    border-radius: 3px;
-    max-width: 95%; // TODO review size
-    border: 1px solid @tag-border;
-    background: @tag-background;
-    color: @tag-color;
-
-    &:active,
-    &:hover {
-        border: 1px solid @tag-hover-border;
-        background: @tag-hover-background;
-        color: @tag-hover-color;
     }
 }

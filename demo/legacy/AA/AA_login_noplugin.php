@@ -53,12 +53,12 @@
                 <div class="input text required error">
                     <label for="UserUsername">Passphrase</label>
                     <input name="data[User][passphrase]" class="required fluid" maxlength="50" id="UserUsername" required="required" value="" type="password">
-                    <div class="error message">This is not a valid passphrase.</div>
+                    <div class="error-message">This is not a valid passphrase.</div>
                 </div>
                 <div class="input checkbox">
                     <input name="remember-me" id="rememberMe" type="checkbox">
                     <label for="rememberMe">Remember passphrase until I log out</label>
-                    <div class="error message">Please agree.</div>
+                    <div class="error-message">Please agree.</div>
                 </div>
                 <div class="form-actions">
                     <input type="button" class="button primary big" role="button" value="Login"/>

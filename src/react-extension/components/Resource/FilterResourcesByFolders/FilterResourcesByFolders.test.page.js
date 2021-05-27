@@ -112,7 +112,7 @@ class FilterResourcesByFoldersPageObject {
    * Returns the folder tree component
    */
   get component() {
-    return this._container.querySelector('.folders.navigation.first.accordion');
+    return this._container.querySelector('.navigation-secondary.navigation-folders');
   }
 
   /**

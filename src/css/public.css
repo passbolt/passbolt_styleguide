@@ -23,8 +23,8 @@
  *
  * Meyer Reset v2.0 | Public Domain
  * http://meyerweb.com/eric/tools/css/reset/
- *  
- * normalize.css v1.1.2 | MIT License 
+ *
+ * normalize.css v1.1.2 | MIT License
  * https://github.com/necolas/normalize.css
  *
  * ========================================================================== */
@@ -520,22 +520,6 @@ textarea {
   /* 2 */
 }
 /* ==========================================================================
-   Tables
-   ========================================================================== */
-/**
- * Remove most spacing between table cells.
- * tables still need 'cellspacing="0"' in the markup
- */
-table {
-  border-collapse: collapse;
-  border-spacing: 0;
-}
-table th,
-table td {
-  text-align: left;
-  font-weight: normal;
-}
-/* ==========================================================================
  *	Helper classes
  * ========================================================================== */
 /*
@@ -700,33 +684,6 @@ body {
 }
 body.iframe {
   background: transparent;
-}
-/* links */
-a:link,
-a:visited {
-  color: #333;
-}
-a:hover {
-  color: #2894DF;
-}
-a:active,
-a:focus {
-  outline: 0;
-  color: #2894DF;
-  border: 0;
-}
-a {
-  border-bottom: 1px solid #DDD;
-}
-a:hover {
-  border-bottom: 1px solid #2894DF;
-}
-a.disabled {
-  outline: 0;
-  text-decoration: none;
-  cursor: default;
-  color: #888;
-  pointer-events: none;
 }
 html {
   scroll-behavior: smooth;
@@ -3271,7 +3228,7 @@ ul.checklist li:before {
 }
 .svg-icon.dim svg,
 .svg-icon.light svg {
-  fill: #888;
+  fill: #888888;
 }
 .svg-icon.icon-only svg {
   position: relative;
@@ -3306,21 +3263,21 @@ ul.checklist li:before {
   fill: #2894DF;
 }
 .button.disabled .svg-icon svg {
-  fill: #888;
+  fill: #888888;
 }
 .button.disabled .svg-icon svg:hover {
-  fill: #888;
+  fill: #888888;
 }
 a:hover .svg-icon svg {
   fill: #2894DF;
 }
 a.disabled .svg-icon svg {
-  fill: #888;
+  fill: #888888;
   pointer-events: none;
   cursor: default;
 }
 a.disabled:hover .svg-icon svg {
-  fill: #888;
+  fill: #888888;
 }
 a.fav .svg-icon svg {
   fill: #D40101;
@@ -3360,8 +3317,7 @@ button,
   color: #333;
   font-weight: normal;
   text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.5);
-  background: #EEE;
-  background-image: linear-gradient(top, #F3F3F3, #EEE);
+  background: #F3F3F3;
   -webkit-border-radius: 0.214em;
   -moz-border-radius: 0.214em;
   border-radius: 0.214em;
@@ -3379,8 +3335,7 @@ button:hover,
 .button:hover {
   color: #333;
   text-decoration: none;
-  background: #F3F3F3;
-  background-image: linear-gradient(top, #F3F3F3, #F3F3F3);
+  background: #EEE;
   border: 1px solid #BBB;
 }
 /* focus */
@@ -3444,7 +3399,7 @@ button:active,
 }
 .button.disabled {
   cursor: default;
-  color: #888;
+  color: #888888;
   background: #FFF;
   border: 1px solid #DDD;
   text-shadow: none;
@@ -3456,7 +3411,7 @@ button:active,
 .button.disabled:focus {
   box-shadow: 0 0 0;
   top: 0;
-  color: #888;
+  color: #888888;
   background: #FFF;
   border: 1px solid #DDD;
 }
@@ -3822,7 +3777,7 @@ input[type=checkbox] + label {
   color: #D40101;
 }
 .input .message.helptext {
-  color: #888;
+  color: #888888;
   font-weight: normal;
 }
 .input .message:empty {
@@ -3940,22 +3895,6 @@ input[type=email].fluid {
 .singleline .input.text input[type="search"] {
   width: 93%;
 }
-.form-content .accordion h3.accordion-header a {
-  border: 0;
-}
-.form-content .accordion h3.accordion-header a:hover {
-  border: 0;
-}
-.form-content .accordion h3.accordion-header a:before {
-  font: normal normal normal 1em FontAwesome;
-  text-rendering: auto;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  width: 1em;
-  height: 1em;
-  position: absolute;
-  text-align: center;
-}
 .form-content table {
   width: 100%;
   margin-bottom: 1em;
@@ -4000,7 +3939,7 @@ input[type=email].fluid {
   font-size: 1em;
 }
 .form-content table tbody tr td em {
-  color: #888;
+  color: #888888;
   font-size: 0.8em;
   font-style: normal;
 }
@@ -4044,7 +3983,7 @@ form.public .input select {
  */
 .page {
   width: 100%;
-  min-width: 320px;
+  min-width: 32rem;
   top: 0;
   left: 0;
   right: 0;
@@ -4063,10 +4002,12 @@ form.public .input select {
   overflow: auto;
 }
 .page .panel.main {
-  top: 10em;
-  bottom: 2.45em;
+  bottom: 3.8rem;
   height: auto;
   padding: 0;
+}
+.page .panel.main .grid {
+  padding-bottom: 1.6rem;
 }
 .page .panel.main .row {
   padding-left: 0;
@@ -4087,15 +4028,13 @@ form.public .input select {
   /* headers */
 }
 .page .header.first {
-  min-height: 2.4em;
+  min-height: 3.2rem;
 }
 .page .header.second {
-  top: 2.375em;
-  height: 4.5em;
+  height: 7rem;
 }
 .page .header.third {
-  top: 6.875em;
-  height: 3em;
+  height: 4.8rem;
 }
 .page .col1,
 .page .col2,
@@ -4652,48 +4591,6 @@ video {
 article video {
   margin: 1em 0;
 }
-article table.table-parameters {
-  width: 100%;
-  margin-bottom: 1em;
-}
-article table.table-parameters thead {
-  background-color: transparent !important;
-}
-article table.table-parameters thead th {
-  background-color: transparent;
-  font-weight: bold;
-  border: 1px solid #DDD;
-  padding: 0.7em 0.5em;
-}
-article table.table-parameters tbody tr:nth-child(even) {
-  background-color: transparent;
-}
-article table.table-parameters tbody tr:nth-child(odd) {
-  background-color: #F3F3F3;
-}
-article table.table-parameters tbody tr td {
-  padding: 0.5em 0.5em;
-  border: 1px solid #DDD;
-}
-article table.table-parameters tbody tr td code {
-  padding: 0.2em 0.3em;
-  background-color: #DDD;
-}
-article table.table-parameters tbody tr td pre {
-  margin: 0;
-  padding: 0;
-  background-color: transparent;
-}
-article table.table-parameters tbody tr td code,
-article table.table-parameters tbody tr td pre {
-  font-family: monospace,serif;
-  font-size: 1em;
-}
-article table.table-parameters tbody tr td em {
-  color: #969696;
-  font-size: 0.8em;
-  font-style: normal;
-}
 /* headers */
 .header {
   overflow: visible !important;
@@ -4825,7 +4722,7 @@ article table.table-parameters tbody tr td em {
   border: 0;
   font-size: 1em;
   font-weight: normal;
-  background: #888;
+  background: #888888;
   padding: 0.45em 1em 0.42em 1em;
   -webkit-border-radius: 0;
   -moz-border-radius: 0;
@@ -4960,7 +4857,7 @@ article table.table-parameters tbody tr td em {
   filter: alpha(opacity=5);
 }
 .progress-details {
-  color: #888;
+  color: #888888;
   margin: 0.5em 0 0.5em 0;
 }
 .progress-details .progress-percent {
@@ -5022,19 +4919,12 @@ article table.table-parameters tbody tr td em {
 .notification-container .notification .message .content strong {
   text-transform: capitalize;
 }
-.notification-container .notification .message .action {
-  border-bottom: none;
-  margin-left: 0.4em;
-}
-.notification-container .notification .message .action:hover .svg-icon svg {
-  fill: #000000;
-}
 /*
  * Breadcrumbs
  */
 .breadcrumbs {
-  height: 2em;
-  padding: 0.1875em 0 0.1875em 0.1875em;
+  height: 3.2rem;
+  padding: 0;
   margin-bottom: 0;
   background: #FFF;
 }
@@ -5080,98 +4970,78 @@ article table.table-parameters tbody tr td em {
   background: rgba(255, 255, 255, 0.9);
   overflow: auto;
 }
-.dialog-wrapper .placeholder {
-  position: relative;
-  width: 1em;
-  margin: auto;
-  height: 100%;
-}
-.dialog-wrapper .placeholder .loading {
-  position: absolute;
-  top: 30%;
-  height: 2em;
-  width: 2em;
-  background: url('../img/controls/loading_light.svg');
-  background-size: 2em 2em;
-}
 .dialog {
   position: relative;
-  max-width: 30em;
+  max-width: 48rem;
   border: 1px solid #DDD;
   background: #F3F3F3;
   margin: auto;
   margin-top: 1%;
   /* some space for the footer / notification area in case it is really tall */
-  margin-bottom: 3em;
+  margin-bottom: 4.8rem;
   box-shadow: 0px 0px 10px 0px #DDD;
   /* header */
   /* inputs */
+  /* form input resizing */
   /* Error display */
   /* submit / cancel */
 }
-.dialog.medium {
-  max-width: 36em;
-}
 .dialog .dialog-header {
-  padding: 0.5em 1em 0 1em;
-  height: 3em;
+  padding: 0.8rem 1.6rem 0 1.6rem;
+  height: 4.8rem;
 }
 .dialog .dialog-header h2 {
-  margin: 0.25em 2em 0.5em 0.2em;
-  font-size: 1.2em;
+  margin: 0.8rem 0 1rem 0.4rem;
+  font-size: 1.8rem;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   -o-text-overflow: ellipsis;
   -ms-text-overflow: ellipsis;
 }
-.dialog .dialog-header h2 svg {
-  position: relative;
-  top: 0.0625em;
+.dialog .dialog-header .dialog-header-subtitle {
+  padding-top: 0.4rem;
+  padding-left: 0.8rem;
+  font-size: 1.4rem;
+  color: #333;
 }
 .dialog .dialog-header .tooltip-alt {
-  margin-left: 0.3em;
-  font-size: 0.7em;
+  margin-left: 0.8rem;
+  font-size: 1.2rem;
   font-weight: normal;
   color: #333;
 }
 .dialog .dialog-header .tooltip-alt .tooltip-text {
   white-space: normal;
 }
-.dialog .dialog-header .dialog-header-subtitle {
-  padding-top: 0.3em;
-  padding-left: 1em;
-  font-size: 0.7em;
-  color: #333;
-}
 .dialog .dialog-header .dialog-close {
-  margin-top: -2.5em;
+  margin-top: -3.6rem;
 }
 .dialog .form-content {
   background: #FFF;
-  padding: 0.813em 1.5em 1.5em 1.5em;
+  padding: 1rem 2rem 2.4rem 2rem;
+}
+.dialog .error-message {
+  margin-bottom: 1rem;
 }
 .dialog p {
-  margin-top: 0.5em;
-  font-size: 1em;
+  margin-top: 0.8rem;
+  font-size: 1.5rem;
   /* 15px */
 }
 .dialog p + .checkbox {
-  padding-bottom: 0.5em;
+  padding-bottom: 0.8rem;
 }
 .dialog p + .checkbox label {
-  font-size: 1em;
+  font-size: 1.6rem;
 }
 .dialog label {
   clear: both;
-  font-size: 0.9375em;
+  font-size: 1.5rem;
   /* 15px */
-  line-height: 1.6em;
-  /* 24px */
 }
 .dialog input[type=text],
-.dialog textarea,
-.dialog select.large {
+.dialog textarea {
   width: 100%;
   box-sizing: border-box;
   /*
@@ -5208,30 +5078,24 @@ article table.table-parameters tbody tr td em {
 }
 .dialog input[type=text]:before,
 .dialog textarea:before,
-.dialog select.large:before,
 .dialog input[type=text]:after,
-.dialog textarea:after,
-.dialog select.large:after {
+.dialog textarea:after {
   content: "";
   display: table;
 }
 .dialog input[type=text]:after,
-.dialog textarea:after,
-.dialog select.large:after {
+.dialog textarea:after {
   clear: both;
 }
 .dialog input[type=text]:before,
 .dialog textarea:before,
-.dialog select.large:before,
 .dialog input[type=text]:after,
-.dialog textarea:after,
-.dialog select.large:after {
+.dialog textarea:after {
   content: "";
   display: table;
 }
 .dialog input[type=text]:after,
-.dialog textarea:after,
-.dialog select.large:after {
+.dialog textarea:after {
   clear: both;
 }
 .dialog textarea + .message,
@@ -5245,15 +5109,6 @@ article table.table-parameters tbody tr td em {
   clear: both;
   width: 100%;
 }
-.dialog textarea + .message.warning,
-.dialog input + .message.warning,
-.dialog .input .message.warning {
-  display: block;
-  clear: both;
-  width: 100%;
-  color: #9F6000;
-  background-color: transparent;
-}
 .dialog .inline-error {
   color: #D40101;
   font-weight: bold;
@@ -5265,27 +5120,24 @@ article table.table-parameters tbody tr td em {
   margin: 0;
   clear: both;
   width: 100%;
-  padding: 0.75em 0;
+  padding: 1.2rem 0;
 }
 .dialog .submit-wrapper .cancel,
 .dialog .submit-wrapper .button {
   float: right;
-  margin-right: 1.25em;
-  font-size: 1.125em;
+  margin-right: 1.6rem;
 }
 .dialog .submit-wrapper .button {
   box-sizing: border-box;
-  min-width: 5em;
+  min-width: 8rem;
 }
-.dialog .submit-wrapper .secondary {
-  float: left;
-  margin-left: 1.5em;
-  margin-top: 0.7em;
-  font-size: 1em;
+.dialog .submit-wrapper .primary {
+  font-size: 1.8rem;
+  padding: 1.2rem 2.4rem;
 }
 .dialog .submit-wrapper .cancel {
   margin-top: 0.7em;
-  font-size: 1em;
+  font-size: 1.6rem;
 }
 /* can also be used outside a dialog, like the sidebar */
 .dialog-close,
@@ -5351,19 +5203,18 @@ article table.table-parameters tbody tr td em {
   margin-top: 0;
   position: fixed;
   bottom: 0;
-  padding: 1.167em 1.5% 0 0.5%;
   text-align: right;
-  font-size: 0.75em;
+  font-size: 1.2rem;
   /* 12px */
-  width: 98%;
-  height: 2em;
+  width: 100%;
+  height: 3.8rem;
   background: #FFF;
   border-top: 1px solid #DDD;
   z-index: 890;
 }
 .footer .footer-links {
+  padding-top: 1rem;
   width: 100%;
-  margin-top: -0.25em;
 }
 .footer .footer-links li {
   display: inline;
@@ -5445,46 +5296,46 @@ article table.table-parameters tbody tr td em {
     except there is an option to have several levels
     and there is no option to have empty list items (all items are working links)
  */
-.panel .navigation-help {
+.navigation-help {
   margin-top: 1em;
 }
-.panel .navigation-help h2 {
+.navigation-help h2 {
   padding: 0 0 0.5em 0;
   margin: 0 0 0 1.25em;
 }
-.panel .navigation-help a {
+.navigation-help a {
   color: #333;
   border: 0;
   display: block;
 }
-.panel .navigation-help ul li a {
+.navigation-help ul li a {
   font-size: 0.9375em;
   /* 15px from 16px base */
   padding: 0.469em 0 0.469em 1.333em;
   border-left: 5px solid #FFF;
 }
-.panel .navigation-help ul li a:hover {
+.navigation-help ul li a:hover {
   color: #333;
   border-left: 5px solid #DDD;
 }
-.panel .navigation-help ul li ul li a {
+.navigation-help ul li ul li a {
   padding-left: 2.5em;
   font-weight: normal;
   border-left: 5px solid #FFF;
 }
-.panel .navigation-help ul li.active a,
-.panel .navigation-help ul li.selected a {
+.navigation-help ul li.active a,
+.navigation-help ul li.selected a {
   font-weight: bold;
   border-left: 5px solid #D40101;
 }
-.panel .navigation-help ul li.active ul li a,
-.panel .navigation-help ul li.selected ul li a {
+.navigation-help ul li.active ul li a,
+.navigation-help ul li.selected ul li a {
   padding-left: 2.5em;
   font-weight: normal;
   border-left: 5px solid #FFF;
 }
-.panel .navigation-help ul li.active ul li a:hover,
-.panel .navigation-help ul li.selected ul li a:hover {
+.navigation-help ul li.active ul li a:hover,
+.navigation-help ul li.selected ul li a:hover {
   border-left: 5px solid #DDD;
 }
 /*
@@ -5499,10 +5350,10 @@ article table.table-parameters tbody tr td em {
 }
 /* message styling per types */
 .message {
-  padding: 1em;
+  padding: 1.6rem;
 }
 .message a {
-  border-bottom: 1px solid #888;
+  border-bottom: 1px solid #888888;
 }
 .message a:hover {
   border-bottom: 1px solid #2894DF;
@@ -5514,11 +5365,11 @@ article table.table-parameters tbody tr td em {
 .message.error a:link,
 .message.error a:visited {
   color: #333;
-  border-bottom: 1px dotted #888;
+  border-bottom: 1px dotted #888888;
 }
 .message.error a:hover {
   color: #333;
-  border-bottom: 1px solid #888;
+  border-bottom: 1px solid #888888;
 }
 .message.success {
   color: #333;
@@ -5537,13 +5388,13 @@ article table.table-parameters tbody tr td em {
 }
 /* big side info message blocks on setup or profile pages */
 .message.side-message {
-  margin-left: 1em;
-  font-size: 1em;
-  margin-right: 2em;
+  margin-left: 1.6rem;
+  font-size: 1.6rem;
+  margin-right: 3.2rem;
 }
 .message.side-message ul,
 .message.side-message p {
-  padding-bottom: 1em;
+  padding-bottom: 1.6rem;
 }
 /* animation */
 .message.animated {
@@ -5551,20 +5402,20 @@ article table.table-parameters tbody tr td em {
   color: #333;
   display: flex;
   border: 1px solid #DDD;
-  border-radius: 3px;
+  border-radius: 0.3rem;
 }
 .message.animated .illustration {
-  flex: 0 0 180px;
+  flex: 0 0 18rem;
 }
 .message.animated .additional-information {
   flex: 1;
-  line-height: 180px;
-  margin-top: 1.5em;
-  padding-left: 1em;
+  line-height: 18rem;
+  margin: 2.4rem 0;
+  padding-left: 1.6rem;
 }
 @keyframes drawCircle {
   0% {
-    stroke-dashoffset: 180px;
+    stroke-dashoffset: 18rem;
   }
   100% {
     stroke-dashoffset: 0;
@@ -5572,7 +5423,7 @@ article table.table-parameters tbody tr td em {
 }
 @keyframes drawCheck {
   0% {
-    stroke-dashoffset: 50px;
+    stroke-dashoffset: 5rem;
   }
   100% {
     stroke-dashoffset: 0;
@@ -5580,7 +5431,7 @@ article table.table-parameters tbody tr td em {
 }
 @keyframes drawCross {
   0% {
-    stroke-dashoffset: 50px;
+    stroke-dashoffset: 5rem;
   }
   100% {
     stroke-dashoffset: 0;
@@ -5588,30 +5439,30 @@ article table.table-parameters tbody tr td em {
 }
 @keyframes drawWarning {
   0% {
-    stroke-dashoffset: 180px;
+    stroke-dashoffset: 18rem;
   }
   100% {
     stroke-dashoffset: 0;
   }
 }
 .message.animated #successAnimationCircle {
-  stroke-dasharray: 180px 180px;
+  stroke-dasharray: 18rem 18rem;
   stroke: #009900;
 }
 .message.animated #successAnimationCheck {
-  stroke-dasharray: 50px 50px;
+  stroke-dasharray: 5rem 5rem;
   stroke: #009900;
 }
 .message.animated #errorAnimationCircle {
-  stroke-dasharray: 180px 180px;
+  stroke-dasharray: 18rem 18rem;
   stroke: #D40101;
 }
 .message.animated #errorAnimationCross {
-  stroke-dasharray: 50px 50px;
+  stroke-dasharray: 5rem 5rem;
   stroke: #D40101;
 }
 .message.animated #warningAnimation {
-  stroke-dasharray: 180px 180px;
+  stroke-dasharray: 18rem 18rem;
   stroke: #9F6000;
   stroke-linecap: square;
   stroke-linejoin: round;
@@ -5646,8 +5497,7 @@ table.table-info.vertical {
 }
 table.table-info td,
 table.table-info.vertical td {
-  padding: 0.625em;
-  padding-right: 1.25em;
+  padding: 0.8rem 1.8rem 0.8rem 0;
   color: #666;
 }
 table.table-info td.warning,
@@ -5676,7 +5526,7 @@ table.table-info.vertical td .alt.side:after {
 table.table-info td + td,
 table.table-info.vertical td + td {
   color: #333;
-  padding-right: 0.625em;
+  padding-right: 1rem;
 }
 /* horizontal tableview */
 table.table-info.horizontal {
@@ -5762,6 +5612,7 @@ table.table-info.horizontal tbody tr:hover {
 .tooltip:after {
   position: absolute;
   visibility: hidden;
+  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
   opacity: 0;
   transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out, transform 0.2s cubic-bezier(0.71, 1.7, 0.77, 1.24);
   transform: translate3d(0, 0, 0);
@@ -5780,13 +5631,14 @@ table.table-info.horizontal tbody tr:hover {
 .always-show:before,
 .always-show:after {
   visibility: visible;
+  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100);
   opacity: 1;
 }
 /* Base styles for the tooltip's directional arrow */
 .tooltip:before,
 [data-tooltip]:before {
   z-index: 990;
-  border: 6px solid transparent;
+  border: 0.6rem solid transparent;
   background: transparent;
   content: "";
 }
@@ -5794,13 +5646,13 @@ table.table-info.horizontal tbody tr:hover {
 .tooltip:after,
 [data-tooltip]:after {
   z-index: 990;
-  padding: 8px;
-  width: 160px;
-  background-color: #333;
+  padding: 0.4rem;
+  width: 16rem;
+  background-color: hsla(0, 0%, 20%, 0.9);
   color: #FFF;
   content: attr(data-tooltip);
-  font-size: 14px;
-  line-height: 1.2em;
+  font-size: 1.4rem;
+  line-height: 2.4rem;
   font-weight: normal;
   text-shadow: none;
 }
@@ -5818,15 +5670,15 @@ table.table-info.horizontal tbody tr:hover {
 [data-tooltip]:before,
 .tooltip:before,
 .tooltip-top:before {
-  margin-left: -6px;
-  margin-bottom: -12px;
-  border-top-color: #333;
+  margin-left: -0.6rem;
+  margin-bottom: -1.2rem;
+  border-top-color: hsla(0, 0%, 20%, 0.9);
 }
 /* Horizontally align top/bottom tooltips */
 [data-tooltip]:after,
 .tooltip:after,
 .tooltip-top:after {
-  margin-left: -80px;
+  margin-left: -8rem;
 }
 [data-tooltip]:hover:before,
 [data-tooltip]:hover:after,
@@ -5844,9 +5696,7 @@ table.table-info.horizontal tbody tr:hover {
 .tooltip-top:hover:after,
 .tooltip-top:focus:before,
 .tooltip-top:focus:after {
-  -webkit-transform: translateY(-12px);
-  -moz-transform: translateY(-12px);
-  transform: translateY(-12px);
+  transform: translateY(-1.2rem);
 }
 /* Left */
 .tooltip-left:before,
@@ -5857,10 +5707,9 @@ table.table-info.horizontal tbody tr:hover {
 }
 .tooltip-left:before {
   margin-left: 0;
-  margin-right: -12px;
+  margin-right: -1.2rem;
   margin-bottom: 0;
   border-top-color: transparent;
-  border-left-color: #333;
   border-left-color: hsla(0, 0%, 20%, 0.9);
 }
 .tooltip-left:hover:before,
@@ -5869,9 +5718,7 @@ table.table-info.horizontal tbody tr:hover {
 .tooltip-left.always-show:before,
 .tooltip-left:focus:before,
 .tooltip-left:focus:after {
-  -webkit-transform: translateX(-12px);
-  -moz-transform: translateX(-12px);
-  transform: translateX(-12px);
+  transform: translateX(-1.2rem);
 }
 /* Bottom */
 .tooltip-bottom:before,
@@ -5881,10 +5728,9 @@ table.table-info.horizontal tbody tr:hover {
   left: 50%;
 }
 .tooltip-bottom:before {
-  margin-top: -12px;
+  margin-top: -1.2rem;
   margin-bottom: 0;
   border-top-color: transparent;
-  border-bottom-color: #333;
   border-bottom-color: hsla(0, 0%, 20%, 0.9);
 }
 .tooltip-bottom:hover:before,
@@ -5893,9 +5739,7 @@ table.table-info.horizontal tbody tr:hover {
 .tooltip-bottom.always-show:before,
 .tooltip-bottom:focus:before,
 .tooltip-bottom:focus:after {
-  -webkit-transform: translateY(12px);
-  -moz-transform: translateY(12px);
-  transform: translateY(12px);
+  transform: translateY(1.2rem);
 }
 /* Right */
 .tooltip-right:before,
@@ -5905,7 +5749,7 @@ table.table-info.horizontal tbody tr:hover {
 }
 .tooltip-right:before {
   margin-bottom: 0;
-  margin-left: -12px;
+  margin-left: -1.2rem;
   border-top-color: transparent;
   border-right-color: #333;
 }
@@ -5915,31 +5759,29 @@ table.table-info.horizontal tbody tr:hover {
 .tooltip-right.always-show:before,
 .tooltip-right:focus:before,
 .tooltip-right:focus:after {
-  -webkit-transform: translateX(12px);
-  -moz-transform: translateX(12px);
-  transform: translateX(12px);
+  transform: translateX(1.2rem);
 }
 /* Move directional arrows down a bit for left/right tooltips */
 .tooltip-left:before,
 .tooltip-right:before {
-  top: 3px;
+  top: 0.3rem;
 }
 /* Vertically center tooltip content for left/right tooltips */
 .tooltip-left:after,
 .tooltip-right:after {
   margin-left: 0;
-  margin-bottom: -16px;
+  margin-bottom: -1.6rem;
 }
 /* large width */
 .tooltip.large:after,
 [data-tooltip].large:after {
-  width: 240px;
+  width: 240rem;
 }
 .tooltip-right.large:before,
 .tooltip-right.large:after,
 .tooltip-left.large:before,
 .tooltip-left.large:after {
-  margin-top: 6px;
+  margin-top: 0.6rem;
 }
 /*
 	More complex tooltips
@@ -5966,8 +5808,8 @@ table.table-info.horizontal tbody tr:hover {
   /* only right for now */
 }
 .tooltip-alt .tooltip-text.right {
-  margin-left: 1em;
-  margin-top: -1.75em;
+  margin-left: 1.2rem;
+  margin-top: -2.65rem;
 }
 .tooltip-alt .tooltip-text.right::after {
   content: " ";
@@ -6048,34 +5890,34 @@ article figure .legend {
 }
 /* search */
 form.search {
-  margin-top: 1em;
+  margin-top: 1.6rem;
 }
 form.search legend,
 form.search label {
   display: none;
-  width: 10em;
+  width: 16rem;
 }
 form.search input[type=search] {
   float: left;
   width: 65%;
   margin-bottom: 0;
   border-right: 1px solid #FFF;
-  padding: 0.313em 0.625em;
+  padding: 0.5rem 1rem;
 }
 form.search input[type=search]:focus,
 form.search input[type=search]:active {
   border-right: 1px solid #2894DF;
 }
 form.search button {
-  height: 2.571em;
+  height: 3.6rem;
   /* 36px */
-  width: 4.5em;
+  width: 6.5rem;
   float: left;
   margin-left: 0;
-  border-radius: 0px 2px 2px 0px;
+  border-radius: 0 2px 2px 0;
 }
-form.search button .svg-icon.icon-only svg {
-  top: 0.125em;
+form.search button .svg-icon svg {
+  top: 0.1rem;
 }
 /* remove webkit search input decoration and cancel button */
 input[type="search"]::-webkit-search-decoration,
@@ -6158,7 +6000,7 @@ input[type="search"]::-webkit-search-cancel-button {
   float: left;
   width: 30%;
   padding-top: 0.25em;
-  color: #888;
+  color: #888888;
 }
 .tile .tile-title {
   float: right;
@@ -7022,7 +6864,6 @@ Full source at https://github.com/harvesthq/chosen
 Copyright (c) 2011-2018 Harvest http://getharvest.com
 
 MIT License, https://github.com/harvesthq/chosen/blob/master/LICENSE.md
-This file is generated by `grunt build`, do not edit it by hand.
 */
 /* @group Base */
 .chosen-container {
@@ -7053,11 +6894,12 @@ This file is generated by `grunt build`, do not edit it by hand.
 }
 .chosen-container.chosen-container-single {
   padding: 0;
-  width: 83%;
+  width: 100%;
+  max-width: 64rem;
 }
 .chosen-container.chosen-container-single.connection-type {
   float: left;
-  width: 23%;
+  width: 25%;
 }
 .chosen-container.chosen-with-drop .chosen-drop {
   display: block;
@@ -7108,12 +6950,12 @@ This file is generated by `grunt build`, do not edit it by hand.
   position: absolute;
 }
 .chosen-container-single .chosen-default {
-  color: #888;
+  color: #888888;
 }
 .chosen-container-single .chosen-single span {
   display: block;
   overflow: hidden;
-  margin-right: 26px;
+  margin-right: 32px;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -7139,9 +6981,9 @@ This file is generated by `grunt build`, do not edit it by hand.
 .chosen-container-single .chosen-single div {
   position: absolute;
   top: 0;
-  right: 0;
+  right: 0.8rem;
   display: block;
-  width: 18px;
+  width: 1.8rem;
   height: 100%;
 }
 .chosen-container-single .chosen-single div b {
@@ -7270,7 +7112,7 @@ This file is generated by `grunt build`, do not edit it by hand.
   background: transparent !important;
   -webkit-box-shadow: none;
   box-shadow: none;
-  color: #888;
+  color: #888888;
   font-size: 100%;
   font-family: sans-serif;
   line-height: normal;
@@ -7746,6 +7588,115 @@ input[type="range"]:focus + .rangeslider .rangeslider__handle {
 }
 .github-btn-dark .gh-count::after {
   border-right-color: #1b1f23;
+}
+article table.table-parameters {
+  width: 100%;
+  margin-bottom: 1em;
+}
+article table.table-parameters thead {
+  background-color: transparent !important;
+}
+article table.table-parameters thead th {
+  background-color: transparent;
+  font-weight: bold;
+  border: 1px solid #DDD;
+  padding: 0.7em 0.5em;
+}
+article table.table-parameters tbody tr:nth-child(even) {
+  background-color: transparent;
+}
+article table.table-parameters tbody tr:nth-child(odd) {
+  background-color: #F3F3F3;
+}
+article table.table-parameters tbody tr td {
+  padding: 0.5em 0.5em;
+  border: 1px solid #DDD;
+}
+article table.table-parameters tbody tr td code {
+  padding: 0.2em 0.3em;
+  background-color: #DDD;
+}
+article table.table-parameters tbody tr td pre {
+  margin: 0;
+  padding: 0;
+  background-color: transparent;
+}
+article table.table-parameters tbody tr td code,
+article table.table-parameters tbody tr td pre {
+  font-family: monospace,serif;
+  font-size: 1em;
+}
+article table.table-parameters tbody tr td em {
+  color: #969696;
+  font-size: 0.8em;
+  font-style: normal;
+}
+/* Special error page treatment for larger screen */
+@media all and (min-width: 460px) {
+  .page.error .grid {
+    text-align: center;
+    width: 100%;
+    margin-bottom: 2.5em;
+  }
+  .page.error.error-404 .row,
+  .page.error.error-500 .row,
+  .page.error.error-400 .row {
+    max-width: 400px;
+    margin: auto;
+  }
+  .page.error.error-500 .grid:before,
+  .page.error.error-404 .grid:before,
+  .page.error.error-400 .grid:before {
+    font-size: 15em;
+    font-weight: bold;
+    color: #333;
+  }
+  .page.error.error-404 .grid:before {
+    content: "404";
+  }
+  .page.error.error-400 .grid:before {
+    content: "400";
+  }
+  .page.error.error-500 .grid:before {
+    content: "500";
+  }
+}
+.page.start h2 {
+  color: #666;
+  font-weight: normal;
+}
+.page.start .grid {
+  max-width: 860px;
+}
+.page.start .intro {
+  padding-top: 1em;
+  text-align: center;
+}
+.page.start .big-choice {
+  margin: 1em 0;
+  border: 1px solid #eaeaea;
+  padding: 1em;
+  padding-bottom: 1.5em;
+  min-height: 10em;
+  border-radius: 0.25em;
+  position: relative;
+}
+.page.start .big-choice:hover {
+  border: 1px solid #DDD;
+}
+.page.start h3 {
+  border: 0;
+  padding: 0.5em 0 1em 0;
+  margin: 0;
+}
+.page.start .help {
+  margin-bottom: 5em;
+  background: #f0f7fd;
+  border: 1px solid #f0f7fd;
+}
+.page.start .help:hover {
+  background: #f0f7fd;
+  border: 1px solid #f0f7fd;
 }
 .faq ul.list {
   margin: 0;
@@ -8283,7 +8234,7 @@ input[type="range"]:focus + .rangeslider .rangeslider__handle {
   .page-row.sponsors h3 {
     margin-top: 0;
     font-size: 1.5em;
-    color: #888;
+    color: #888888;
   }
   .page-row.sponsors .sponsors-list {
     /*
@@ -9088,7 +9039,7 @@ input[type="range"]:focus + .rangeslider .rangeslider__handle {
   margin-bottom: 0.5em;
 }
 .page.services.featured.cart .cart .payment_info .order-line .times {
-  color: #888;
+  color: #888888;
   font-size: 0.8em;
   padding: 0 0.2em;
 }
@@ -9969,73 +9920,6 @@ input[type="range"]:focus + .rangeslider .rangeslider__handle {
   .page.cloud-signup-email-sent .email-sent-instructions .email-sent-bg {
     background-position: left;
   }
-}
-/* Special error page treatment for larger screen */
-@media all and (min-width: 460px) {
-  .page.error .grid {
-    text-align: center;
-    width: 100%;
-    margin-bottom: 2.5em;
-  }
-  .page.error.error-404 .row,
-  .page.error.error-500 .row,
-  .page.error.error-400 .row {
-    max-width: 400px;
-    margin: auto;
-  }
-  .page.error.error-500 .grid:before,
-  .page.error.error-404 .grid:before,
-  .page.error.error-400 .grid:before {
-    font-size: 15em;
-    font-weight: bold;
-    color: #333;
-  }
-  .page.error.error-404 .grid:before {
-    content: "404";
-  }
-  .page.error.error-400 .grid:before {
-    content: "400";
-  }
-  .page.error.error-500 .grid:before {
-    content: "500";
-  }
-}
-.page.start h2 {
-  color: #666;
-  font-weight: normal;
-}
-.page.start .grid {
-  max-width: 860px;
-}
-.page.start .intro {
-  padding-top: 1em;
-  text-align: center;
-}
-.page.start .big-choice {
-  margin: 1em 0;
-  border: 1px solid #eaeaea;
-  padding: 1em;
-  padding-bottom: 1.5em;
-  min-height: 10em;
-  border-radius: 0.25em;
-  position: relative;
-}
-.page.start .big-choice:hover {
-  border: 1px solid #DDD;
-}
-.page.start h3 {
-  border: 0;
-  padding: 0.5em 0 1em 0;
-  margin: 0;
-}
-.page.start .help {
-  margin-bottom: 5em;
-  background: #f0f7fd;
-  border: 1px solid #f0f7fd;
-}
-.page.start .help:hover {
-  background: #f0f7fd;
-  border: 1px solid #f0f7fd;
 }
 .checkout.page form.stripe {
   width: 480px;

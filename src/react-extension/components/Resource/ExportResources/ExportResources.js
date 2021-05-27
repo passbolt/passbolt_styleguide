@@ -297,7 +297,7 @@ class ExportResources extends React.Component {
 
           <div className="form-content">
 
-            <div className="input text required">
+            <div className="input select required">
               <label htmlFor="export-format"><Trans>Choose the export format (csv and kdbx are supported)</Trans></label>
               <select
                 id="export-format"

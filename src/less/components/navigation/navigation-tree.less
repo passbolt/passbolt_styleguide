@@ -1,0 +1,129 @@
+.navigation-secondary-tree {
+    .folders-label-selected {
+        background: @grey-lightest;
+    }
+
+    .folders-label-height {
+        height: 2.8rem;
+    }
+
+    .row {
+        .main-cell {
+            span {
+                .ellipsis();
+                display: inline-block;
+                margin-top: 0.3rem;
+                width: calc(100% - 4rem);
+            }
+            .svg-icon {
+                display: inline;
+            }
+            .svg-icon.hidden {
+                display: none;
+            }
+            .svg-icon svg {
+                width: 1.3rem;
+                height: 1.3rem;
+                position: absolute;
+                margin-top: 0.7rem;
+                fill: @font-default;
+            }
+            a {
+                padding: 0 0 0 3.5rem;
+
+                .svg-icon.caret-right svg,
+                .svg-icon.caret-down svg {
+                    margin-left: -2rem;
+                    margin-top: .2rem;
+                    width: 1.6rem;
+                    height: 1.6rem;
+                    position: absolute;
+                }
+                .folder-name {
+                    margin-left:1.3em;
+                }
+            }
+        }
+        .right-cell {
+          margin-top: -2.4rem;
+        }
+
+        /* title row */
+        &.title {
+            .main-cell {
+                h3 {
+                    padding-top:.4rem;
+                    padding-bottom:0;
+                    border:0;
+                    margin-top:0;
+                    line-height: 1.9rem;
+
+                    span {
+                        width: 100%;
+                        margin-top: 0;
+                    }
+                    a {
+                        padding-left: 0;
+                    }
+                    a::before, a::after {
+                        display: none;
+                    }
+                    .folders-label {
+                        width: 100%;
+                        margin-left: 1.6rem;
+                        cursor: pointer;
+
+                        span {
+                            width: calc(100% - 2.4rem);
+                        }
+                        .svg-icon.caret-right svg,
+                        .svg-icon.caret-down svg {
+                            margin-left: -2rem;
+                            margin-top: .2rem;
+                            width: 1.6rem;
+                            height: 1.6rem;
+                            position: absolute;
+                        }
+                        .svg-icon.spinner svg {
+                            margin-left: -1.6rem;
+                            margin-top: 4rem;
+                            width: 1.6rem;
+                            height: 1.6rem;
+                            position: absolute;
+                        }
+                    }
+                }
+            }
+            .right-cell {
+              margin-top: -2.4rem;
+            }
+        }
+
+        /* disabled row */
+        &.disabled {
+            cursor: default;
+            pointer-events: none;
+            .main-cell {
+                span.folder-name{
+                    color: @font-light;
+                    text-shadow: none;
+                    font-weight: normal;
+                }
+                span.svg-icon svg {
+                    fill: @font-light;
+                }
+
+                a:before {
+                    color: @font-light;
+                }
+            }
+            &.is-dragged {
+                pointer-events: auto;
+            }
+        }
+    }
+
+    li li {
+        padding-left: 1.15em;
+    }
+}

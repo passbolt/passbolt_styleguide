@@ -216,7 +216,7 @@ class AddResourceComment extends React.Component {
                   onKeyDown={this.handleEscapeKeyPressed}
                   disabled={this.state.actions.processing}>
                 </textarea>
-                <div className="message error">
+                <div className="error-message">
                   {this.state.errors.isEmpty && this.translate("A comment is required.")}
                   {this.state.errors.isTooLong && this.translate("A comment must be less than 256 characters")}
                   {this.state.errors.technicalError}

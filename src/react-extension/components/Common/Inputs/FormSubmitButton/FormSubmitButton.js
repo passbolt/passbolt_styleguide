@@ -50,6 +50,9 @@ class FormSubmitButton extends Component {
     if (this.props.big) {
       name += ' big';
     }
+    if (this.props.medium) {
+      name += ' medium';
+    }
     if (this.props.fullWidth) {
       name += ' full-width';
     }
@@ -81,6 +84,7 @@ FormSubmitButton.propTypes = {
   value: PropTypes.string,
   warning: PropTypes.bool,
   big: PropTypes.bool,
+  medium: PropTypes.bool,
   fullWidth: PropTypes.bool
 };
 

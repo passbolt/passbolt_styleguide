@@ -1,0 +1,121 @@
+.input.toggle-switch {
+    display:flex;
+    padding-top:1.6rem;
+    padding-bottom:.8rem;
+
+    label {
+        padding-top:0;
+        padding-left:1.6rem;
+        order: 2;
+        flex:1;
+        font-weight: normal;
+        font-size:1.6rem;
+    }
+
+    &.disabled label {
+        color: @font-lighter;
+    }
+    .toggle-switch-checkbox {
+        order: -1;
+        flex:0 0 3em;
+        display: none;
+
+        // add default box-sizing for this scope
+        &,
+        &:after,
+        &:before,
+        & *,
+        & *:after,
+        & *:before,
+        & + .toggle-switch-button {
+            box-sizing: border-box;
+            &::selection {
+                background: none;
+            }
+        }
+    }
+    .toggle-switch-button {
+        order: -1;
+        flex:none;
+        outline: 0;
+        display: block;
+        width: 3em;
+        height: 1.5em;
+        position: relative;
+        cursor: pointer;
+        user-select: none;
+        background: @background-lightest;
+        border-radius: 2em;
+        padding: 2px;
+        transition: all .4s ease;
+        border: 1px solid @border-default;
+
+        span {
+            .visuallyhidden();
+        }
+        &:hover:after {
+            will-change: padding;
+        }
+
+        &:active {
+            box-shadow: inset 0 0 0 2em #e8eae9;
+            &:after {
+                padding-right: .8em;
+            }
+        }
+        &:after,
+        &:before {
+            position: relative;
+            display: block;
+            content: "";
+            width: 50%;
+            height: 100%;
+        }
+
+        &:after {
+            left: 0;
+            border-radius: 2em;
+            background: @white;
+            transition:
+                    left .3s cubic-bezier(
+                            0.175, 0.885, 0.320, 1.275
+                    ),
+                    padding .3s ease, margin .3s ease;
+            box-shadow:
+                    0 0 0 1px rgba(0,0,0,.1),
+                    0 4px 0 rgba(0,0,0,.08);
+        }
+
+        &:before {
+            display: none;
+        }
+    }
+
+    .toggle-switch-checkbox:checked + .toggle-switch-button:after {
+        left: 50%;
+    }
+
+    .toggle-switch-checkbox:disabled + .toggle-switch-button {
+        background:@background-default;
+        cursor:not-allowed;
+    }
+
+    .toggle-switch-checkbox:checked + .toggle-switch-button {
+        background: @green-light;
+        &:active {
+            box-shadow: none;
+            &:after {
+                margin-left: -.8em;
+            }
+        }
+    }
+    .toggle-switch-checkbox:disabled:checked + .toggle-switch-button {
+        background:lighten(@green-light, 50%);
+    }
+}
+h1, h2, h3, h4, h5, h6 {
+    .input.toggle-switch {
+        float: left;
+        padding: 0.40em 1em 0 0;
+    }
+}

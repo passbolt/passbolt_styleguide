@@ -18,7 +18,7 @@
 /* loading animation */
 /* svg fill */
 /* favorite icon fill */
-/*! normalize.css v8.0.0 | MIT License | github.com/necolas/normalize.css */
+/*! normalize.css v8.0.1 | MIT License | github.com/necolas/normalize.css */
 /* Document
    ========================================================================== */
 /**
@@ -38,6 +38,12 @@ html {
  */
 body {
   margin: 0;
+}
+/**
+ * Render the `main` element consistently in IE.
+ */
+main {
+  display: block;
 }
 /**
  * Correct the font size and margin on `h1` elements within `section` and
@@ -317,47 +323,8 @@ template {
 [hidden] {
   display: none;
 }
-/* opensans */
-@font-face {
-  font-family: 'Open Sans';
-  font-style: normal;
-  font-weight: 400;
-  src: local('Open Sans'), local('OpenSans'), url('../../../fonts/opensans-regular.woff') format('woff');
-}
-@font-face {
-  font-family: 'Open Sans';
-  font-style: normal;
-  font-weight: 700;
-  src: local('Open Sans Bold'), local('OpenSans-Bold'), url('../../../fonts/opensans-bold.woff') format('woff');
-}
-body {
-  font-family: 'Open Sans', Verdana, sans-serif;
-}
-.code {
-  font-family: 'Courier New', Courier, monospace;
-}
-html {
-  font-size: 62.5%;
-  /* =10px */
-}
-body {
-  font-size: 1.4rem;
-  /* =14px */
-}
-h1 {
-  font-size: 2.2rem;
-  line-height: 3.2rem;
-}
-h2 {
-  font-size: 1.6rem;
-  line-height: 2.4rem;
-}
-p {
-  font-size: 1.4rem;
-  line-height: 2.4rem;
-}
-code {
-  font-size: 1.1rem;
+div {
+  outline: none;
 }
 /* ==========================================================================
  *	Helper classes
@@ -441,7 +408,7 @@ html body .hidden {
 }
 /* body */
 html {
-  line-height: 1.6rem;
+  line-height: normal;
 }
 body {
   color: #333;
@@ -450,17 +417,67 @@ body {
 body.iframe {
   background: transparent;
 }
+/* opensans */
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Open Sans'), local('OpenSans'), url('../../../fonts/opensans-regular.woff') format('woff');
+}
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 700;
+  src: local('Open Sans Bold'), local('OpenSans-Bold'), url('../../../fonts/opensans-bold.woff') format('woff');
+}
+body {
+  font-family: 'Open Sans', Verdana, sans-serif;
+}
+.code {
+  font-family: 'Courier New', Courier, monospace;
+}
+html {
+  font-size: 62.5%;
+  /* =10px */
+}
+body {
+  font-size: 1.6rem;
+  /* =16px */
+}
+h1 {
+  font-size: 2.2rem;
+  line-height: 3.2rem;
+}
+h2 {
+  font-size: 1.8rem;
+  line-height: 2.4rem;
+}
+h3 {
+  font-size: 1.6rem;
+  line-height: 2.4rem;
+}
+p {
+  font-size: 1.5rem;
+  line-height: 2.2rem;
+  margin-top: 0;
+}
+code {
+  font-size: 1.1rem;
+}
 /* links */
 a {
-  line-height: 1.5rem;
-  border-bottom: 1px solid #DDD;
+  outline: 0;
   text-decoration: none;
+  cursor: pointer;
+  border-bottom: 1px solid #DDD;
 }
 a:link,
 a:visited {
   color: #333;
 }
 a:hover {
+  text-decoration: none;
+  cursor: pointer;
   color: #2894DF;
   border-bottom: 1px solid #2894DF;
 }
@@ -478,47 +495,58 @@ a.disabled {
   outline: 0;
   text-decoration: none;
   cursor: default;
-  color: #888;
+  color: #888888;
   pointer-events: none;
+}
+/* lists */
+ul {
+  padding: 0;
+  margin: 0;
+}
+ul li {
+  list-style: none;
+  padding: 0;
+  margin: 0;
 }
 /*
 	Generic buttons
 */
+button,
 .button {
   font-size: 1.4rem;
-  padding: 0.4rem 1.6rem;
-  line-height: 1.5rem;
+  padding: 0.8rem 1.6rem;
+  line-height: 1.6rem;
+  margin-right: 0.8rem;
   position: relative;
   display: inline-block;
   vertical-align: baseline;
-  margin-right: 1.6rem;
   outline: none;
   cursor: pointer;
   text-align: center;
   text-decoration: none;
-  border: 1px solid #CCC;
+  border-top: 1px solid #CCC;
+  border-right: 1px solid #CCC;
+  border-bottom: 1px solid #BBB;
+  border-left: 1px solid #CCC;
   color: #333;
   font-weight: normal;
   text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.5);
-  background: #EEE;
-  background-image: linear-gradient(top, #F3F3F3, #EEE);
+  background: #F3F3F3;
   -webkit-border-radius: 0.214em;
   -moz-border-radius: 0.214em;
   border-radius: 0.214em;
   box-sizing: border-box;
 }
 /* sizes */
-.button.small {
-  font-size: 1.4rem;
-  padding: 0.4rem 1.6rem;
-}
 .button.medium {
   font-size: 1.6rem;
-  padding: 0.8rem 1.6rem;
+  line-height: 2.4rem;
+  padding: 0.8rem 2.4rem;
 }
 .button.big {
   font-size: 1.8rem;
-  padding: 1.6rem 3.2rem;
+  line-height: 3.2rem;
+  padding: 0.8rem 3.2rem;
 }
 .button.full-width {
   width: 100%;
@@ -571,8 +599,7 @@ a.disabled {
 .button:hover {
   color: #333;
   text-decoration: none;
-  background: #F3F3F3;
-  background-image: linear-gradient(top, #F3F3F3, #F3F3F3);
+  background: #EEE;
   border: 1px solid #BBB;
 }
 /* focus */
@@ -591,7 +618,7 @@ a.disabled {
 /* disabled */
 .button.disabled {
   cursor: default;
-  color: #888;
+  color: #888888;
   background: #FFF;
   border: 1px solid #DDD;
   text-shadow: none;
@@ -602,7 +629,7 @@ a.disabled {
 .button.disabled:focus {
   box-shadow: 0 0 0;
   top: 0;
-  color: #888;
+  color: #888888;
   background: #FFF;
   border: 1px solid #DDD;
 }
@@ -676,6 +703,7 @@ label {
 	:active			- inset box shadow
 	.disabled		- grey out to indicate it cannot be used
 */
+input[type=number],
 input[type=text],
 input[type=email],
 input[type=password],
@@ -695,6 +723,9 @@ textarea {
   border-top: 1px solid #BBB;
   vertical-align: middle;
 }
+input[type=number] {
+  box-sizing: initial;
+}
 input[type=file] {
   box-sizing: border-box;
   font-size: 1.6rem;
@@ -708,6 +739,7 @@ input[type=file] {
   vertical-align: middle;
 }
 textarea:hover,
+input[type=number]:hover,
 input[type=password]:hover,
 input[type=search]:hover,
 input[type=text]:hover,
@@ -715,6 +747,7 @@ input[type=email]:hover {
   border: 1px solid #BBB;
 }
 textarea:focus,
+input[type=number]:focus,
 input[type=password]:focus,
 input[type=search]:focus,
 input[type=text]:focus,
@@ -724,6 +757,7 @@ input[type=email]:focus {
   border: 1px solid #2894DF;
 }
 textarea:disabled,
+input[type=number]:disabled,
 input[type=password]:disabled,
 input[type=search]:disabled,
 input[type=text]:disabled,
@@ -736,18 +770,13 @@ input[type=email]:disabled {
 }
 /*
 	Textarea Textfield
-	Description	: textarea.textarea is pretty much the same than div.input.text.
-
-	.required		- additional red star
-	.lage		 	 - make the box bigger
 */
 textarea {
-  height: 3.6rem;
-  /* 4 char (default input length) x 1em (average char length) + .6em (padding) */
+  height: 9rem;
 }
 .textarea.large textarea {
   width: 30rem;
-  height: 7rem;
+  height: 9rem;
 }
 .checkbox input[type=checkbox] {
   position: absolute;
@@ -797,13 +826,32 @@ textarea {
   content: '';
   position: absolute;
   left: 0.3rem;
-  top: 0.79rem;
+  top: 0.8rem;
   width: 1rem;
   height: 1rem;
   background-size: 1rem 1rem;
   background-color: #333;
   -webkit-mask-image: url('../../../img/controls/check_black.svg');
   mask-image: url('../../../img/controls/check_black.svg');
+}
+.checkbox.medium input[type=checkbox] {
+  cursor: pointer;
+}
+.checkbox.medium input[type=checkbox] + label {
+  font-size: 1.5rem;
+}
+.checkbox.medium input[type=checkbox] + label:before {
+  margin-top: 0.3rem;
+  margin-right: 1rem;
+  width: 1.4rem;
+  height: 1.4rem;
+}
+.checkbox.medium input[type=checkbox]:checked + label:after {
+  left: 0.3rem;
+  top: 0.8rem;
+  width: 1rem;
+  height: 1rem;
+  background-size: 1rem 1rem;
 }
 .checkbox.small input[type=checkbox] {
   cursor: pointer;
@@ -823,6 +871,245 @@ textarea {
   width: 1.1rem;
   height: 1.1rem;
   background-size: 1.1rem 1.1rem;
+}
+.radiolist {
+  margin-bottom: 0.8rem;
+  /*
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
+  /*
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
+}
+.radiolist:before,
+.radiolist:after {
+  content: "";
+  display: table;
+}
+.radiolist:after {
+  clear: both;
+}
+.radiolist:before,
+.radiolist:after {
+  content: "";
+  display: table;
+}
+.radiolist:after {
+  clear: both;
+}
+.radiolist .input.radio {
+  float: left;
+}
+.radiolist .input.radio input {
+  float: left;
+  margin-top: 0.8rem;
+}
+.radiolist .input.radio input + label {
+  float: left;
+  font-weight: normal;
+  display: inline-block;
+  margin-left: 1rem;
+  font-size: 1.6rem;
+  margin-right: 3.2rem;
+  line-height: 1.4rem;
+}
+.radiolist .input.radio input + label:after {
+  content: initial;
+}
+.input.toggle-switch {
+  display: flex;
+  padding-top: 1.6rem;
+  padding-bottom: 0.8rem;
+}
+.input.toggle-switch label {
+  padding-top: 0;
+  padding-left: 1.6rem;
+  order: 2;
+  flex: 1;
+  font-weight: normal;
+  font-size: 1.6rem;
+}
+.input.toggle-switch.disabled label {
+  color: #969696;
+}
+.input.toggle-switch .toggle-switch-checkbox {
+  order: -1;
+  flex: 0 0 3em;
+  display: none;
+}
+.input.toggle-switch .toggle-switch-checkbox,
+.input.toggle-switch .toggle-switch-checkbox:after,
+.input.toggle-switch .toggle-switch-checkbox:before,
+.input.toggle-switch .toggle-switch-checkbox *,
+.input.toggle-switch .toggle-switch-checkbox *:after,
+.input.toggle-switch .toggle-switch-checkbox *:before,
+.input.toggle-switch .toggle-switch-checkbox + .toggle-switch-button {
+  box-sizing: border-box;
+}
+.input.toggle-switch .toggle-switch-checkbox::selection,
+.input.toggle-switch .toggle-switch-checkbox:after::selection,
+.input.toggle-switch .toggle-switch-checkbox:before::selection,
+.input.toggle-switch .toggle-switch-checkbox *::selection,
+.input.toggle-switch .toggle-switch-checkbox *:after::selection,
+.input.toggle-switch .toggle-switch-checkbox *:before::selection,
+.input.toggle-switch .toggle-switch-checkbox + .toggle-switch-button::selection {
+  background: none;
+}
+.input.toggle-switch .toggle-switch-button {
+  order: -1;
+  flex: none;
+  outline: 0;
+  display: block;
+  width: 3em;
+  height: 1.5em;
+  position: relative;
+  cursor: pointer;
+  user-select: none;
+  background: #F3F3F3;
+  border-radius: 2em;
+  padding: 2px;
+  transition: all 0.4s ease;
+  border: 1px solid #DDD;
+}
+.input.toggle-switch .toggle-switch-button span {
+  /*
+     * Extends the .visuallyhidden class to allow the element to be focusable
+     * when navigated to via the keyboard: h5bp.com/p
+     */
+  border: 0;
+  clip: rect(0 0 0 0);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
+  /*
+     * Extends the .visuallyhidden class to allow the element to be focusable
+     * when navigated to via the keyboard: h5bp.com/p
+     */
+}
+.input.toggle-switch .toggle-switch-button span .focusable:active,
+.input.toggle-switch .toggle-switch-button span .focusable:focus {
+  clip: auto;
+  height: auto;
+  margin: 0;
+  overflow: visible;
+  position: static;
+  width: auto;
+}
+.input.toggle-switch .toggle-switch-button span .focusable:active,
+.input.toggle-switch .toggle-switch-button span .focusable:focus {
+  clip: auto;
+  height: auto;
+  margin: 0;
+  overflow: visible;
+  position: static;
+  width: auto;
+}
+.input.toggle-switch .toggle-switch-button:hover:after {
+  will-change: padding;
+}
+.input.toggle-switch .toggle-switch-button:active {
+  box-shadow: inset 0 0 0 2em #e8eae9;
+}
+.input.toggle-switch .toggle-switch-button:active:after {
+  padding-right: 0.8em;
+}
+.input.toggle-switch .toggle-switch-button:after,
+.input.toggle-switch .toggle-switch-button:before {
+  position: relative;
+  display: block;
+  content: "";
+  width: 50%;
+  height: 100%;
+}
+.input.toggle-switch .toggle-switch-button:after {
+  left: 0;
+  border-radius: 2em;
+  background: #FFF;
+  transition: left 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), padding 0.3s ease, margin 0.3s ease;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1), 0 4px 0 rgba(0, 0, 0, 0.08);
+}
+.input.toggle-switch .toggle-switch-button:before {
+  display: none;
+}
+.input.toggle-switch .toggle-switch-checkbox:checked + .toggle-switch-button:after {
+  left: 50%;
+}
+.input.toggle-switch .toggle-switch-checkbox:disabled + .toggle-switch-button {
+  background: #FFF;
+  cursor: not-allowed;
+}
+.input.toggle-switch .toggle-switch-checkbox:checked + .toggle-switch-button {
+  background: #66CC00;
+}
+.input.toggle-switch .toggle-switch-checkbox:checked + .toggle-switch-button:active {
+  box-shadow: none;
+}
+.input.toggle-switch .toggle-switch-checkbox:checked + .toggle-switch-button:active:after {
+  margin-left: -0.8em;
+}
+.input.toggle-switch .toggle-switch-checkbox:disabled:checked + .toggle-switch-button {
+  background: #e6ffcc;
+}
+h1 .input.toggle-switch,
+h2 .input.toggle-switch,
+h3 .input.toggle-switch,
+h4 .input.toggle-switch,
+h5 .input.toggle-switch,
+h6 .input.toggle-switch {
+  float: left;
+  padding: 0.4em 1em 0 0;
+}
+.input.select select {
+  display: inline-block;
+  font-size: 1.6rem;
+  line-height: 2.4rem;
+  color: #333;
+  padding: 0.6rem 1.2rem;
+  width: 100%;
+  max-width: 64rem;
+  box-sizing: border-box;
+  margin: 0 0 0.8rem 0;
+  border: 1px solid #CCC;
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  appearance: none;
+  background-color: #FFF;
+  background-image: url('../../../img/controls/chevron-down_black.svg'), linear-gradient(to bottom, #FFF 0%, #FFF 100%);
+  background-repeat: no-repeat, repeat;
+  background-position: right 0.6rem top 50%, 0 0;
+  background-size: 1rem auto, 100%;
+}
+.input.select select.medium {
+  width: 50%;
+}
+.input.select select:focus {
+  outline: none;
+  border: 1px solid #2894DF;
+  border-radius: 0;
+  background-image: url('../../../img/controls/chevron-down_blue.svg'), linear-gradient(to bottom, #FFF 0%, #FFF 100%);
+}
+.input.select select:disabled {
+  background-image: url('../../../img/controls/chevron-down_black.svg'), linear-gradient(to bottom, #F3F3F3 0%, #F3F3F3 100%);
+  color: #888888;
 }
 /*
 	Messages for validation error and example
@@ -849,9 +1136,147 @@ textarea {
   margin-bottom: 1.6rem;
   background-color: transparent;
   border: 0;
-  color: #888;
+  color: #888888;
   font-weight: normal;
   background: #FFF;
+  clear: both;
+}
+.singleline {
+  /*
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
+  /*
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
+}
+.singleline:before,
+.singleline:after {
+  content: "";
+  display: table;
+}
+.singleline:after {
+  clear: both;
+}
+.singleline:before,
+.singleline:after {
+  content: "";
+  display: table;
+}
+.singleline:after {
+  clear: both;
+}
+.singleline .input {
+  float: left;
+  width: 49%;
+}
+.singleline .input:first-child,
+.singleline .input.first-field {
+  margin-right: 2%;
+}
+.singleline .input input[type="text"],
+.singleline .input input[type="email"],
+.singleline .input input[type="password"],
+.singleline .input input[type="search"] {
+  width: 100%;
+}
+.svg-icon {
+  display: inline-flex;
+  align-self: center;
+}
+.svg-icon svg {
+  fill: #333;
+  height: 1em;
+  width: 1em;
+}
+.svg-icon.baseline svg {
+  top: 0.125em;
+  position: relative;
+}
+.svg-icon.dim svg,
+.svg-icon.light svg {
+  fill: #888888;
+}
+.svg-icon.icon-only svg {
+  padding: 0.1rem;
+  height: 1.6rem;
+  width: 1.6rem;
+}
+a:hover .svg-icon svg {
+  fill: #2894DF;
+}
+a.disabled .svg-icon svg {
+  fill: #888888;
+  pointer-events: none;
+  cursor: default;
+}
+a.disabled:hover .svg-icon svg {
+  fill: #888888;
+}
+a.fav .svg-icon svg {
+  fill: #D40101;
+}
+a.unfav .svg-icon svg {
+  fill: #DDD;
+}
+.button .svg-icon svg {
+  top: 0.2rem;
+  position: relative;
+}
+.button .svg-icon + span:not(.visuallyhidden) {
+  margin-left: 0.8rem;
+  display: inline-block;
+}
+.button:hover .svg-icon svg,
+.button .svg-icon svg:hover {
+  fill: #333;
+}
+/* warning */
+.button.primary:active .svg-icon svg,
+.button.primary:focus .svg-icon svg,
+.button.warning .svg-icon svg,
+.button.warning:hover .svg-icon svg,
+.button.warning:focus .svg-icon svg,
+.button.warning:active .svg-icon svg {
+  fill: #FFF;
+}
+/* focus */
+.button:focus .svg-icon svg,
+.button:active .svg-icon svg {
+  fill: #2894DF;
+}
+.button.disabled .svg-icon svg {
+  fill: #888888;
+}
+.button.disabled .svg-icon svg:hover {
+  fill: #888888;
+}
+/**
+ * Remove most spacing between table cells.
+ */
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+table th,
+table td {
+  text-align: left;
+  font-weight: normal;
 }
 .logo {
   background: transparent url('../../../img/logo/logo.svg') 0 0 no-repeat;
@@ -859,15 +1284,48 @@ textarea {
   width: 20rem;
   height: 4.5rem;
 }
-/* lists */
-ul {
-  padding: 0;
-  margin: 0;
+/*
+ * shadow on scroll
+ */
+.scroll {
+  overflow-y: scroll;
+  background: linear-gradient(#FFF 30%, rgba(255, 255, 255, 0)), linear-gradient(rgba(255, 255, 255, 0), #FFF 70%) 0 100%, radial-gradient(farthest-side at 75% 0, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0)), radial-gradient(farthest-side at 75% 100%, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0)) 0 100%;
+  background-repeat: no-repeat;
+  background-color: #FFF;
+  background-size: 100% 10px, 100% 10px, 100% 5px, 100% 5px;
 }
-ul li {
-  list-style: none;
-  padding: 0;
-  margin: 0;
+::-webkit-scrollbar {
+  width: 1em;
+}
+::-webkit-scrollbar-track {
+  background: #F9F9F9;
+  border-top: 0;
+  border-bottom: 0;
+}
+::-webkit-scrollbar-thumb {
+  background: #C1C1C1;
+  border-radius: 1em;
+  border: 4px solid #F9F9F9;
+}
+/* credit: http://lea.verou.me/2012/04/background-attachment-local/ */
+.scroll-shadow {
+  overflow: auto;
+  background: linear-gradient(#FFF 30%, rgba(255, 255, 255, 0)), linear-gradient(rgba(255, 255, 255, 0), #FFF 70%) 0 100%, /* Shadows */ radial-gradient(farthest-side at 50% 0, rgba(0, 0, 0, 0.08), rgba(0, 0, 0, 0)), radial-gradient(farthest-side at 50% 100%, rgba(0, 0, 0, 0.08), rgba(0, 0, 0, 0)) 0 100%;
+  background-repeat: no-repeat;
+  background-color: #FFF;
+  background-size: 100% 40px, 100% 40px, 100% 14px, 100% 14px;
+  /* Opera doesn't support this in the shorthand */
+  background-attachment: local, local, scroll, scroll;
+}
+.simplebar-content {
+  /* Opera doesn't support this in the shorthand */
+  overflow: auto;
+  background: linear-gradient(#FFF 30%, rgba(255, 255, 255, 0)), linear-gradient(rgba(255, 255, 255, 0), #FFF 70%) 0 100%, /* Shadows */ radial-gradient(farthest-side at 50% 0, rgba(0, 0, 0, 0.08), rgba(0, 0, 0, 0)), radial-gradient(farthest-side at 50% 100%, rgba(0, 0, 0, 0.08), rgba(0, 0, 0, 0)) 0 100%;
+  background-repeat: no-repeat;
+  background-color: #FFF;
+  background-size: 100% 40px, 100% 40px, 100% 14px, 100% 14px;
+  /* Opera doesn't support this in the shorthand */
+  background-attachment: local, local, scroll, scroll;
 }
 [data-simplebar] {
   position: relative;
@@ -1064,97 +1522,617 @@ ul li {
   scrollbar-width: none;
   -ms-overflow-style: none;
 }
-/* credit: http://lea.verou.me/2012/04/background-attachment-local/ */
-.scroll-shadow {
+.shimmer {
+  display: block;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  content: '';
+  animation: shimmer 2s infinite;
+  background: linear-gradient(45deg, rgba(255, 255, 255, 0) 0, rgba(255, 255, 255, 0.1) 30%, rgba(255, 255, 255, 0.5) 50%, rgba(255, 255, 255, 0));
+}
+@keyframes shimmer {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+html {
+  scroll-behavior: smooth;
+}
+.animated {
+  -webkit-animation-duration: 0.5s;
+  animation-duration: 0.5s;
+  -webkit-animation-fill-mode: both;
+  animation-fill-mode: both;
+}
+/* fadeinup */
+@keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    -webkit-transform: translateY(20px);
+    -ms-transform: translateY(20px);
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    -webkit-transform: translateY(0);
+    -ms-transform: translateY(0);
+    transform: translateY(0);
+  }
+}
+@keyframes fadeOutUp {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+    transform: translate3d(0, -100%, 0);
+  }
+}
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translate3d(0, -100%, 0);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes pop {
+  0% {
+    opacity: 0;
+    transform: scale(1);
+  }
+  55% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  65% {
+    opacity: 1;
+    transform: scale(1.25);
+  }
+  75% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+.fadeInDown {
+  animation-name: fadeInDown;
+}
+.fadeOutUp {
+  animation-name: fadeOutUp;
+}
+.fadeInUp {
+  animation-name: fadeInUp;
+}
+.pop {
+  animation-name: pop;
+}
+/*
+ * Page layout
+ */
+.page {
+  width: 100%;
+  min-width: 32rem;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  position: absolute;
   overflow: auto;
-  background: linear-gradient(#FFF 30%, rgba(255, 255, 255, 0)), linear-gradient(rgba(255, 255, 255, 0), #FFF 70%) 0 100%, /* Shadows */ radial-gradient(farthest-side at 50% 0, rgba(0, 0, 0, 0.08), rgba(0, 0, 0, 0)), radial-gradient(farthest-side at 50% 100%, rgba(0, 0, 0, 0.08), rgba(0, 0, 0, 0)) 0 100%;
-  background-repeat: no-repeat;
-  background-color: #FFF;
-  background-size: 100% 40px, 100% 40px, 100% 14px, 100% 14px;
-  /* Opera doesn't support this in the shorthand */
-  background-attachment: local, local, scroll, scroll;
+  /* main workspace panels  position depend on how many headers are there */
+  /* Grid */
+  /* if the other grid is used
+   don't center the grid inside main panel */
 }
-.simplebar-content {
-  /* Opera doesn't support this in the shorthand */
+.page .panel {
+  height: 100%;
+  width: 100%;
+  position: absolute;
   overflow: auto;
-  background: linear-gradient(#FFF 30%, rgba(255, 255, 255, 0)), linear-gradient(rgba(255, 255, 255, 0), #FFF 70%) 0 100%, /* Shadows */ radial-gradient(farthest-side at 50% 0, rgba(0, 0, 0, 0.08), rgba(0, 0, 0, 0)), radial-gradient(farthest-side at 50% 100%, rgba(0, 0, 0, 0.08), rgba(0, 0, 0, 0)) 0 100%;
-  background-repeat: no-repeat;
-  background-color: #FFF;
-  background-size: 100% 40px, 100% 40px, 100% 14px, 100% 14px;
-  /* Opera doesn't support this in the shorthand */
-  background-attachment: local, local, scroll, scroll;
 }
-.svg-icon {
-  display: inline-flex;
-  align-self: center;
+.page .panel.main {
+  bottom: 3.8rem;
+  height: auto;
+  padding: 0;
 }
-.svg-icon svg {
-  fill: #333;
-  height: 1em;
-  width: 1em;
+.page .panel.main .grid {
+  padding-bottom: 1.6rem;
 }
-.svg-icon.baseline svg {
-  top: 0.125em;
+.page .panel.main .row {
+  padding-left: 0;
+}
+.page .panel.main .panel.left {
+  background: #ffffff;
+}
+.page .header.second + .panel.main {
+  top: 6.875em;
+}
+.page .header.third + .panel.main {
+  top: 10em;
+  border-top: 1px solid #DDD;
+}
+.page .header {
+  width: 100%;
+  overflow: hidden;
+  /* headers */
+}
+.page .header.first {
+  min-height: 3.2rem;
+}
+.page .header.second {
+  height: 7rem;
+}
+.page .header.third {
+  height: 4.8rem;
+}
+.page .col1,
+.page .col2,
+.page .col3,
+.page .col2_3 {
+  position: absolute;
+}
+.page .col1,
+.page .panel.left {
+  width: 17.25%;
+  box-sizing: border-box;
+}
+.page .panel.middle {
+  width: 82%;
+  left: 18%;
+  overflow: hidden;
+}
+.page .panel.middle.scroll {
+  overflow-y: scroll;
+}
+.page .col2 {
+  width: 70%;
+  left: 18%;
+}
+.page .col3,
+.page .panel.right {
+  width: 24%;
+  left: 75%;
+}
+.page .col2_3 {
+  width: 81.5%;
+  left: 18%;
+}
+.page .panel.main .grid-responsive-12 {
+  float: left;
+  width: 100%;
+  max-width: none;
+  padding-left: 0.25em;
+  box-sizing: border-box;
+}
+/* hide left column when there is no space */
+@media all and (max-width: 1024px) {
+  .page .panel.left {
+    display: none;
+  }
+  .page .header.second .col2 {
+    display: none;
+  }
+  .page .header.second .col2_3 {
+    display: none;
+  }
+  .page .header.third {
+    height: 4.5em;
+  }
+  .page .header.third .col1,
+  .page .header.third .col2,
+  .page .header.third .col2_3 {
+    position: relative;
+    float: left;
+    left: auto;
+    width: auto;
+  }
+  .page .header.third .col3 {
+    display: none;
+  }
+  .page .panel.main .panel.left {
+    display: none;
+  }
+  .page .panel.main .panel.middle {
+    width: 100%;
+    left: 0;
+  }
+  .page .panel.main .row {
+    padding-left: 0.5em;
+  }
+  .page .panel.main .panel.aside {
+    min-width: auto;
+  }
+}
+/*
+	Grid Layout
+	@credit: One% CSS Grid - 12 Columns Fluid CSS Grid System
+*/
+/*
+ * Main container for all
+ */
+.grid-responsive-12,
+.grid {
+  margin: 0 auto;
+  padding: 0;
+  max-width: 1220px;
+}
+.grid-responsive-12 .row,
+.grid .row {
+  /*
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
+  /*
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
+  padding: 0 0.5em 0 0.5em;
+}
+.grid-responsive-12 .row:before,
+.grid .row:before,
+.grid-responsive-12 .row:after,
+.grid .row:after {
+  content: "";
+  display: table;
+}
+.grid-responsive-12 .row:after,
+.grid .row:after {
+  clear: both;
+}
+.grid-responsive-12 .row:before,
+.grid .row:before,
+.grid-responsive-12 .row:after,
+.grid .row:after {
+  content: "";
+  display: table;
+}
+.grid-responsive-12 .row:after,
+.grid .row:after {
+  clear: both;
+}
+.grid-responsive-12 .row .col1,
+.grid .row .col1,
+.grid-responsive-12 .row .col2,
+.grid .row .col2,
+.grid-responsive-12 .row .col3,
+.grid .row .col3,
+.grid-responsive-12 .row .col4,
+.grid .row .col4,
+.grid-responsive-12 .row .col5,
+.grid .row .col5,
+.grid-responsive-12 .row .col6,
+.grid .row .col6,
+.grid-responsive-12 .row .col7,
+.grid .row .col7,
+.grid-responsive-12 .row .col8,
+.grid .row .col8,
+.grid-responsive-12 .row .col9,
+.grid .row .col9,
+.grid-responsive-12 .row .col10,
+.grid .row .col10,
+.grid-responsive-12 .row .col11,
+.grid .row .col11,
+.grid-responsive-12 .row .col12,
+.grid .row .col12 {
+  /*
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
+  /*
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
   position: relative;
+  left: auto;
+  float: none;
+  width: 99%;
+  box-sizing: border-box;
 }
-.svg-icon.dim svg,
-.svg-icon.light svg {
-  fill: #888;
+.grid-responsive-12 .row .col1:before,
+.grid .row .col1:before,
+.grid-responsive-12 .row .col2:before,
+.grid .row .col2:before,
+.grid-responsive-12 .row .col3:before,
+.grid .row .col3:before,
+.grid-responsive-12 .row .col4:before,
+.grid .row .col4:before,
+.grid-responsive-12 .row .col5:before,
+.grid .row .col5:before,
+.grid-responsive-12 .row .col6:before,
+.grid .row .col6:before,
+.grid-responsive-12 .row .col7:before,
+.grid .row .col7:before,
+.grid-responsive-12 .row .col8:before,
+.grid .row .col8:before,
+.grid-responsive-12 .row .col9:before,
+.grid .row .col9:before,
+.grid-responsive-12 .row .col10:before,
+.grid .row .col10:before,
+.grid-responsive-12 .row .col11:before,
+.grid .row .col11:before,
+.grid-responsive-12 .row .col12:before,
+.grid .row .col12:before,
+.grid-responsive-12 .row .col1:after,
+.grid .row .col1:after,
+.grid-responsive-12 .row .col2:after,
+.grid .row .col2:after,
+.grid-responsive-12 .row .col3:after,
+.grid .row .col3:after,
+.grid-responsive-12 .row .col4:after,
+.grid .row .col4:after,
+.grid-responsive-12 .row .col5:after,
+.grid .row .col5:after,
+.grid-responsive-12 .row .col6:after,
+.grid .row .col6:after,
+.grid-responsive-12 .row .col7:after,
+.grid .row .col7:after,
+.grid-responsive-12 .row .col8:after,
+.grid .row .col8:after,
+.grid-responsive-12 .row .col9:after,
+.grid .row .col9:after,
+.grid-responsive-12 .row .col10:after,
+.grid .row .col10:after,
+.grid-responsive-12 .row .col11:after,
+.grid .row .col11:after,
+.grid-responsive-12 .row .col12:after,
+.grid .row .col12:after {
+  content: "";
+  display: table;
 }
-.svg-icon.icon-only svg {
-  position: relative;
-  top: 0.25em;
-  width: 1.1rem;
-  height: 1.1rem;
+.grid-responsive-12 .row .col1:after,
+.grid .row .col1:after,
+.grid-responsive-12 .row .col2:after,
+.grid .row .col2:after,
+.grid-responsive-12 .row .col3:after,
+.grid .row .col3:after,
+.grid-responsive-12 .row .col4:after,
+.grid .row .col4:after,
+.grid-responsive-12 .row .col5:after,
+.grid .row .col5:after,
+.grid-responsive-12 .row .col6:after,
+.grid .row .col6:after,
+.grid-responsive-12 .row .col7:after,
+.grid .row .col7:after,
+.grid-responsive-12 .row .col8:after,
+.grid .row .col8:after,
+.grid-responsive-12 .row .col9:after,
+.grid .row .col9:after,
+.grid-responsive-12 .row .col10:after,
+.grid .row .col10:after,
+.grid-responsive-12 .row .col11:after,
+.grid .row .col11:after,
+.grid-responsive-12 .row .col12:after,
+.grid .row .col12:after {
+  clear: both;
 }
-a:hover .svg-icon svg {
-  fill: #2894DF;
+.grid-responsive-12 .row .col1:before,
+.grid .row .col1:before,
+.grid-responsive-12 .row .col2:before,
+.grid .row .col2:before,
+.grid-responsive-12 .row .col3:before,
+.grid .row .col3:before,
+.grid-responsive-12 .row .col4:before,
+.grid .row .col4:before,
+.grid-responsive-12 .row .col5:before,
+.grid .row .col5:before,
+.grid-responsive-12 .row .col6:before,
+.grid .row .col6:before,
+.grid-responsive-12 .row .col7:before,
+.grid .row .col7:before,
+.grid-responsive-12 .row .col8:before,
+.grid .row .col8:before,
+.grid-responsive-12 .row .col9:before,
+.grid .row .col9:before,
+.grid-responsive-12 .row .col10:before,
+.grid .row .col10:before,
+.grid-responsive-12 .row .col11:before,
+.grid .row .col11:before,
+.grid-responsive-12 .row .col12:before,
+.grid .row .col12:before,
+.grid-responsive-12 .row .col1:after,
+.grid .row .col1:after,
+.grid-responsive-12 .row .col2:after,
+.grid .row .col2:after,
+.grid-responsive-12 .row .col3:after,
+.grid .row .col3:after,
+.grid-responsive-12 .row .col4:after,
+.grid .row .col4:after,
+.grid-responsive-12 .row .col5:after,
+.grid .row .col5:after,
+.grid-responsive-12 .row .col6:after,
+.grid .row .col6:after,
+.grid-responsive-12 .row .col7:after,
+.grid .row .col7:after,
+.grid-responsive-12 .row .col8:after,
+.grid .row .col8:after,
+.grid-responsive-12 .row .col9:after,
+.grid .row .col9:after,
+.grid-responsive-12 .row .col10:after,
+.grid .row .col10:after,
+.grid-responsive-12 .row .col11:after,
+.grid .row .col11:after,
+.grid-responsive-12 .row .col12:after,
+.grid .row .col12:after {
+  content: "";
+  display: table;
 }
-a.disabled .svg-icon svg {
-  fill: #888;
-  pointer-events: none;
-  cursor: default;
+.grid-responsive-12 .row .col1:after,
+.grid .row .col1:after,
+.grid-responsive-12 .row .col2:after,
+.grid .row .col2:after,
+.grid-responsive-12 .row .col3:after,
+.grid .row .col3:after,
+.grid-responsive-12 .row .col4:after,
+.grid .row .col4:after,
+.grid-responsive-12 .row .col5:after,
+.grid .row .col5:after,
+.grid-responsive-12 .row .col6:after,
+.grid .row .col6:after,
+.grid-responsive-12 .row .col7:after,
+.grid .row .col7:after,
+.grid-responsive-12 .row .col8:after,
+.grid .row .col8:after,
+.grid-responsive-12 .row .col9:after,
+.grid .row .col9:after,
+.grid-responsive-12 .row .col10:after,
+.grid .row .col10:after,
+.grid-responsive-12 .row .col11:after,
+.grid .row .col11:after,
+.grid-responsive-12 .row .col12:after,
+.grid .row .col12:after {
+  clear: both;
 }
-a.disabled:hover .svg-icon svg {
-  fill: #888;
+.grid-responsive-12 .row .col1 img,
+.grid .row .col1 img,
+.grid-responsive-12 .row .col2 img,
+.grid .row .col2 img,
+.grid-responsive-12 .row .col3 img,
+.grid .row .col3 img,
+.grid-responsive-12 .row .col4 img,
+.grid .row .col4 img,
+.grid-responsive-12 .row .col5 img,
+.grid .row .col5 img,
+.grid-responsive-12 .row .col6 img,
+.grid .row .col6 img,
+.grid-responsive-12 .row .col7 img,
+.grid .row .col7 img,
+.grid-responsive-12 .row .col8 img,
+.grid .row .col8 img,
+.grid-responsive-12 .row .col9 img,
+.grid .row .col9 img,
+.grid-responsive-12 .row .col10 img,
+.grid .row .col10 img,
+.grid-responsive-12 .row .col11 img,
+.grid .row .col11 img,
+.grid-responsive-12 .row .col12 img,
+.grid .row .col12 img {
+  width: 100%;
+  height: auto;
+  display: block;
 }
-a.fav .svg-icon svg {
-  fill: #D40101;
+/*
+ * large devices
+ */
+@media all and (min-width: 780px) {
+  /*
+     * Common columns definitions
+     */
+  .grid .row {
+    padding: 0 0.5em 0 0.5em;
+  }
+  .grid .row .col1,
+  .grid .row .col2,
+  .grid .row .col3,
+  .grid .row .col4,
+  .grid .row .col5,
+  .grid .row .col6,
+  .grid .row .col7,
+  .grid .row .col8,
+  .grid .row .col9,
+  .grid .row .col10,
+  .grid .row .col11,
+  .grid .row .col12 {
+    float: left;
+    position: relative;
+    margin: 0 3% 0 0;
+  }
+  .grid .row .last {
+    margin-right: 0;
+  }
+  .grid .row .col1 {
+    width: 5.5%;
+  }
+  .grid .row .col2 {
+    width: 14%;
+  }
+  .grid .row .col3 {
+    width: 22.5%;
+  }
+  .grid .row .col4 {
+    width: 31%;
+  }
+  .grid .row .col5 {
+    width: 39.5%;
+  }
+  .grid .row .col6 {
+    width: 48%;
+  }
+  .grid .row .col7 {
+    width: 56.5%;
+  }
+  .grid .row .col8 {
+    width: 65%;
+  }
+  .grid .row .col9 {
+    width: 73.5%;
+  }
+  .grid .row .col10 {
+    width: 82%;
+  }
+  .grid .row .col11 {
+    width: 90.5%;
+  }
+  .grid .row .col12 {
+    width: 99%;
+    margin: 0;
+  }
+  .grid .row .push1 {
+    margin-left: 5.5%;
+  }
+  .grid .row .push2 {
+    margin-left: 14%;
+  }
+  .grid .row .push3 {
+    margin-left: 22.5%;
+  }
+  .grid .row .push4 {
+    margin-left: 31%;
+  }
 }
-a.unfav .svg-icon svg {
-  fill: #DDD;
-}
-.button .svg-icon svg {
-  top: 0.125em;
-  position: relative;
-}
-.button .svg-icon + span:not(.visuallyhidden) {
-  margin-left: 2px;
-  display: inline-block;
-}
-.button:hover .svg-icon svg,
-.button .svg-icon svg:hover {
-  fill: #333;
-}
-/* warning */
-.button.primary:active .svg-icon svg,
-.button.primary:focus .svg-icon svg,
-.button.warning .svg-icon svg,
-.button.warning:hover .svg-icon svg,
-.button.warning:focus .svg-icon svg,
-.button.warning:active .svg-icon svg {
-  fill: #FFF;
-}
-/* focus */
-.button:focus .svg-icon svg,
-.button:active .svg-icon svg {
-  fill: #2894DF;
-}
-.button.disabled .svg-icon svg {
-  fill: #888;
-}
-.button.disabled .svg-icon svg:hover {
-  fill: #888;
+/*
+ * Utilities
+ */
+@media all and (max-width: 768px) {
+  .hidden-xs {
+    display: none;
+  }
 }
 /**
  * Tooltips!
@@ -1344,6 +2322,55 @@ a.unfav .svg-icon svg {
 .tooltip-left.large:after {
   margin-top: 0.6rem;
 }
+/*
+	More complex tooltips
+	That allows HTML in them
+*/
+/* Tooltip container */
+.tooltip-alt {
+  cursor: pointer;
+  display: inline-block;
+  border-bottom: 0;
+  /* Tooltip text */
+  /* Ease the tooltip left when you mouse over the tooltip container */
+}
+.tooltip-alt .tooltip-text {
+  position: absolute;
+  visibility: hidden;
+  width: 180px;
+  background-color: #333;
+  color: #FFF;
+  padding: 0.5em 1em;
+  transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out, transform 0.2s cubic-bezier(0.71, 1.7, 0.77, 1.24);
+  transform: translate3d(0, 0, 0);
+  z-index: 99999;
+  /* only right for now */
+}
+.tooltip-alt .tooltip-text.right {
+  margin-left: 1.2rem;
+  margin-top: -2.65rem;
+}
+.tooltip-alt .tooltip-text.right::after {
+  content: " ";
+  position: absolute;
+  top: 1.125em;
+  right: 100%;
+  margin-top: -5px;
+  border: 5px #333 solid;
+  border-color: transparent #333 transparent transparent;
+}
+.tooltip-alt:hover .tooltip-text {
+  transform: translateX(12px);
+  visibility: visible;
+  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100);
+  opacity: 1;
+}
+.tooltip svg,
+.tooltip-alt svg {
+  fill: #666;
+  top: 0.125em;
+  position: relative;
+}
 .openpgp-key textarea {
   height: 12rem;
 }
@@ -1395,15 +2422,15 @@ a.unfav .svg-icon svg {
 .enter-passphrase .password input[type=password] {
   float: left;
   box-sizing: border-box;
-  width: calc(100% - 4.1rem);
+  width: calc(100% - 4.2rem);
 }
 .enter-passphrase .password .password-view {
-  width: 3em;
+  width: 4.2rem;
   float: left;
   margin-top: 0;
   margin-right: 0;
   margin-left: -0.1rem;
-  height: 2.714em;
+  height: 3.8rem;
   border-radius: 0;
   padding: 0.6rem 0.8rem 0.6rem 1rem;
   background: #FFF;
@@ -1415,7 +2442,7 @@ a.unfav .svg-icon svg {
   box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.2);
 }
 .enter-passphrase .password .password-view svg {
-  margin-top: 3px;
+  margin-top: 0.2rem;
 }
 .enter-passphrase .password input[type=text]:focus ~ .password-view,
 .enter-passphrase .password input[type=password]:focus ~ .password-view {
@@ -1424,18 +2451,18 @@ a.unfav .svg-icon svg {
 }
 .enter-passphrase .password.with-token input[type=text],
 .enter-passphrase .password.with-token input[type=password] {
-  width: calc(100% - 11rem);
+  width: calc(100% - 11.7rem);
 }
 .enter-passphrase .password.with-token .password-view {
-  margin-right: 1rem;
+  margin-right: 0.8rem;
 }
 .enter-passphrase .password.with-token .security-token {
-  width: 4em;
+  width: 6rem;
   float: left;
   margin-top: 0;
   margin-right: 0;
   border-radius: 0;
-  padding: 1.05rem 0;
+  padding: 0.7rem 0;
   text-align: center;
   background: #FFF;
   border: 1px solid #BBB;
@@ -1517,98 +2544,78 @@ a.unfav .svg-icon svg {
   background: rgba(255, 255, 255, 0.9);
   overflow: auto;
 }
-.dialog-wrapper .placeholder {
-  position: relative;
-  width: 1em;
-  margin: auto;
-  height: 100%;
-}
-.dialog-wrapper .placeholder .loading {
-  position: absolute;
-  top: 30%;
-  height: 2em;
-  width: 2em;
-  background: url('../../../img/controls/loading_light.svg');
-  background-size: 2em 2em;
-}
 .dialog {
   position: relative;
-  max-width: 30em;
+  max-width: 48rem;
   border: 1px solid #DDD;
   background: #F3F3F3;
   margin: auto;
   margin-top: 1%;
   /* some space for the footer / notification area in case it is really tall */
-  margin-bottom: 3em;
+  margin-bottom: 4.8rem;
   box-shadow: 0px 0px 10px 0px #DDD;
   /* header */
   /* inputs */
+  /* form input resizing */
   /* Error display */
   /* submit / cancel */
 }
-.dialog.medium {
-  max-width: 36em;
-}
 .dialog .dialog-header {
-  padding: 0.5em 1em 0 1em;
-  height: 3em;
+  padding: 0.8rem 1.6rem 0 1.6rem;
+  height: 4.8rem;
 }
 .dialog .dialog-header h2 {
-  margin: 0.25em 2em 0.5em 0.2em;
-  font-size: 1.2em;
+  margin: 0.8rem 0 1rem 0.4rem;
+  font-size: 1.8rem;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   -o-text-overflow: ellipsis;
   -ms-text-overflow: ellipsis;
 }
-.dialog .dialog-header h2 svg {
-  position: relative;
-  top: 0.0625em;
+.dialog .dialog-header .dialog-header-subtitle {
+  padding-top: 0.4rem;
+  padding-left: 0.8rem;
+  font-size: 1.4rem;
+  color: #333;
 }
 .dialog .dialog-header .tooltip-alt {
-  margin-left: 0.3em;
-  font-size: 0.7em;
+  margin-left: 0.8rem;
+  font-size: 1.2rem;
   font-weight: normal;
   color: #333;
 }
 .dialog .dialog-header .tooltip-alt .tooltip-text {
   white-space: normal;
 }
-.dialog .dialog-header .dialog-header-subtitle {
-  padding-top: 0.3em;
-  padding-left: 1em;
-  font-size: 0.7em;
-  color: #333;
-}
 .dialog .dialog-header .dialog-close {
-  margin-top: -2.5em;
+  margin-top: -3.6rem;
 }
 .dialog .form-content {
   background: #FFF;
-  padding: 0.813em 1.5em 1.5em 1.5em;
+  padding: 1rem 2rem 2.4rem 2rem;
+}
+.dialog .error-message {
+  margin-bottom: 1rem;
 }
 .dialog p {
-  margin-top: 0.5em;
-  font-size: 1em;
+  margin-top: 0.8rem;
+  font-size: 1.5rem;
   /* 15px */
 }
 .dialog p + .checkbox {
-  padding-bottom: 0.5em;
+  padding-bottom: 0.8rem;
 }
 .dialog p + .checkbox label {
-  font-size: 1em;
+  font-size: 1.6rem;
 }
 .dialog label {
   clear: both;
-  font-size: 0.9375em;
+  font-size: 1.5rem;
   /* 15px */
-  line-height: 1.6em;
-  /* 24px */
 }
 .dialog input[type=text],
-.dialog textarea,
-.dialog select.large {
+.dialog textarea {
   width: 100%;
   box-sizing: border-box;
   /*
@@ -1636,30 +2643,24 @@ a.unfav .svg-icon svg {
 }
 .dialog input[type=text]:before,
 .dialog textarea:before,
-.dialog select.large:before,
 .dialog input[type=text]:after,
-.dialog textarea:after,
-.dialog select.large:after {
+.dialog textarea:after {
   content: "";
   display: table;
 }
 .dialog input[type=text]:after,
-.dialog textarea:after,
-.dialog select.large:after {
+.dialog textarea:after {
   clear: both;
 }
 .dialog input[type=text]:before,
 .dialog textarea:before,
-.dialog select.large:before,
 .dialog input[type=text]:after,
-.dialog textarea:after,
-.dialog select.large:after {
+.dialog textarea:after {
   content: "";
   display: table;
 }
 .dialog input[type=text]:after,
-.dialog textarea:after,
-.dialog select.large:after {
+.dialog textarea:after {
   clear: both;
 }
 .dialog textarea + .message,
@@ -1673,15 +2674,6 @@ a.unfav .svg-icon svg {
   clear: both;
   width: 100%;
 }
-.dialog textarea + .message.warning,
-.dialog input + .message.warning,
-.dialog .input .message.warning {
-  display: block;
-  clear: both;
-  width: 100%;
-  color: #9F6000;
-  background-color: transparent;
-}
 .dialog .inline-error {
   color: #D40101;
   font-weight: bold;
@@ -1693,27 +2685,24 @@ a.unfav .svg-icon svg {
   margin: 0;
   clear: both;
   width: 100%;
-  padding: 0.75em 0;
+  padding: 1.2rem 0;
 }
 .dialog .submit-wrapper .cancel,
 .dialog .submit-wrapper .button {
   float: right;
-  margin-right: 1.25em;
-  font-size: 1.125em;
+  margin-right: 1.6rem;
 }
 .dialog .submit-wrapper .button {
   box-sizing: border-box;
-  min-width: 5em;
+  min-width: 8rem;
 }
-.dialog .submit-wrapper .secondary {
-  float: left;
-  margin-left: 1.5em;
-  margin-top: 0.7em;
-  font-size: 1em;
+.dialog .submit-wrapper .primary {
+  font-size: 1.8rem;
+  padding: 1.2rem 2.4rem;
 }
 .dialog .submit-wrapper .cancel {
   margin-top: 0.7em;
-  font-size: 1em;
+  font-size: 1.6rem;
 }
 /* can also be used outside a dialog, like the sidebar */
 .dialog-close,
@@ -1779,19 +2768,18 @@ a.unfav .svg-icon svg {
   margin-top: 0;
   position: fixed;
   bottom: 0;
-  padding: 1.167em 1.5% 0 0.5%;
   text-align: right;
-  font-size: 0.857em;
+  font-size: 1.2rem;
   /* 12px */
-  width: 98%;
-  height: 2em;
+  width: 100%;
+  height: 3.8rem;
   background: #FFF;
   border-top: 1px solid #DDD;
   z-index: 890;
 }
 .footer .footer-links {
+  padding-top: 1rem;
   width: 100%;
-  margin-top: -0.25em;
 }
 .footer .footer-links li {
   display: inline;
@@ -1820,6 +2808,15 @@ a.unfav .svg-icon svg {
   height: 72px;
   border-radius: 50%;
 }
+iframe {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  outline: 0;
+  font-size: 100%;
+  vertical-align: baseline;
+  background: 0 0;
+}
 iframe.full-screen {
   position: absolute;
   width: 100%;
@@ -1845,15 +2842,21 @@ iframe.cachette {
   border: none;
   background: transparent url('../../../img/controls/chevron-down_black.svg') right center / 1rem no-repeat;
   appearance: none;
-  margin-top: 0.4rem;
-  padding-right: 1rem;
+  margin-top: 0.8rem;
+  padding-right: 1.6rem;
+  padding-left: 0.4rem;
+  line-height: 2rem;
+  width: auto;
+}
+#user-locale-input:focus {
+  outline: none;
+  border: 1px solid #2894DF;
+  border-radius: 0;
+  background-image: url('../../../img/controls/chevron-down_blue.svg'), linear-gradient(to bottom, #FFF 0%, #FFF 100%);
 }
 html,
 body {
   height: 100%;
-}
-.login.page {
-  padding: 2.4rem;
 }
 .login.page h1 {
   margin-top: 0;
@@ -1862,11 +2865,12 @@ body {
 }
 .login.page p {
   font-size: 1.6rem;
+  line-height: 2.4rem;
 }
 .login.page .processing-wrapper {
   display: block;
-  width: 10em;
-  height: 10em;
+  width: 16rem;
+  height: 16rem;
   margin: auto;
 }
 .login.page .processing-wrapper .processing {
@@ -1875,8 +2879,8 @@ body {
 }
 .login.page .processing-wrapper .processing:after {
   display: block;
-  width: 10em;
-  height: 10em;
+  width: 16rem;
+  height: 16rem;
   content: " ";
   background: transparent url('../../../img/controls/loading_light.svg') center center no-repeat;
   background-size: auto 40%;
@@ -1905,11 +2909,11 @@ body {
   height: 16rem;
 }
 .login.page .email-sent-instructions h1 {
-  margin-top: 1.5em;
-  font-size: 2.4rem;
+  margin-top: 2.4rem;
+  font-size: 3.8rem;
 }
 .login.page .email-sent-instructions p {
-  padding: 0.5em 0.5em 0 0.5em;
+  padding: 0.8rem 0.8rem 0 0.8rem;
   margin-bottom: 0;
 }
 .login.page .choose-security-token .input-security-token {
@@ -1954,7 +2958,7 @@ body {
   clear: both;
 }
 .login.page .choose-security-token .input-security-token label {
-  margin-bottom: 0.5em;
+  margin-bottom: 0.8rem;
 }
 .login.page .choose-security-token .input-security-token .input.text {
   -webkit-border-radius: 0.214em;
@@ -1964,7 +2968,7 @@ body {
   max-width: 10rem;
   float: left;
   text-align: center;
-  margin-right: 1em;
+  margin-right: 3rem;
 }
 .login.page .choose-security-token .input-security-token .circle-picker {
   float: left;
@@ -1976,10 +2980,6 @@ body {
   clear: both;
   cursor: pointer;
 }
-.login.page .choose-security-token .input-security-token .svg-icon svg {
-  height: 0.85em;
-  width: 0.85em;
-}
 .login.page .install-extension a.browser-webstore {
   border: 0;
 }
@@ -1990,7 +2990,7 @@ body {
   max-width: 26rem;
 }
 .login.page .install-extension a.browser-webstore.firefox img {
-  padding: 1em 0;
+  padding: 1.6rem 0;
 }
 .login.page .browser-not-supported a.browser {
   border: 0;
@@ -2029,7 +3029,7 @@ body {
   }
   .login.page {
     display: grid;
-    height: 100%;
+    height: calc(100% - 4rem);
     grid-template-columns: 1fr 1.5fr 1fr;
     grid-template-rows: 0 1fr 0.05fr;
     grid-gap: 1px;

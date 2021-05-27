@@ -119,7 +119,7 @@ class CreateGroupPageObject {
    * Returns the name error mesage input element
    */
   get nameErrorMessage() {
-    return this._container.querySelector('.name.error.message');
+    return this._container.querySelector('.name.error-message');
   }
 
   /**
@@ -140,7 +140,7 @@ class CreateGroupPageObject {
    * Returns the error message element
    */
   get errorMessage() {
-    return this._container.querySelector('.message.error').textContent;
+    return this._container.querySelector('.error-message').textContent;
   }
 
   /**

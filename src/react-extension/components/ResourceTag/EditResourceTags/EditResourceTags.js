@@ -535,7 +535,7 @@ class EditResourceTags extends React.Component {
           </div>
           }
           {this.state.errorMessage &&
-          <div className="message error">{this.state.errorMessage}</div>
+          <div className="error-message">{this.state.errorMessage}</div>
           }
         </div>
         <div className="actions">

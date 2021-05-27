@@ -190,12 +190,12 @@ class DisplayInternationalizationAdministration extends React.Component {
   render() {
     return (
       <div className="row">
-        <div className="internationalisation-settings col8">
+        <div className="internationalisation-settings col7">
           <h3><Trans>Internationalisation</Trans></h3>
           <form className="form">
             <div className="input select locale">
               <label htmlFor="app-locale-input"><Trans>Language</Trans></label>
-              <select className="large" id="locale-input" name="locale" value={this.state.locale} onChange={this.handleInputChange}>
+              <select className="medium" id="locale-input" name="locale" value={this.state.locale} onChange={this.handleInputChange}>
                 {this.supportedLocales.map(supportedLocale =>
                   <option key={supportedLocale.locale} value={supportedLocale.locale}>
                     {supportedLocale.label}
@@ -207,12 +207,14 @@ class DisplayInternationalizationAdministration extends React.Component {
           </form>
         </div>
         <div className="col4 last">
-          <h3><Trans>Want to contribute?</Trans></h3>
-          <p><Trans>Your language is missing or you discovered an error in the translation, help us to improve passbolt.</Trans></p>
-          <a className="button" href="https://help.passbolt.com/contribute/translation" target="_blank" rel="noopener noreferrer">
-            <Icon name="heart-o"/>
-            <span><Trans>Contribute</Trans></span>
-          </a>
+          <div className="sidebar-help">
+            <h3><Trans>Want to contribute?</Trans></h3>
+            <p><Trans>Your language is missing or you discovered an error in the translation, help us to improve passbolt.</Trans></p>
+            <a className="button" href="https://help.passbolt.com/contribute/translation" target="_blank" rel="noopener noreferrer">
+              <Icon name="heart-o"/>
+              <span><Trans>Contribute</Trans></span>
+            </a>
+          </div>
         </div>
       </div>
     );

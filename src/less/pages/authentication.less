@@ -2,7 +2,6 @@ html, body {
   height: 100%;
 }
 .login.page {
-  padding:2.4rem;
 
   h1 {
     margin-top:0;
@@ -11,12 +10,13 @@ html, body {
   }
   p {
     font-size: 1.6rem;
+    line-height: 2.4rem;
   }
 
   .processing-wrapper {
     display:block;
-    width: 10em;
-    height: 10em;
+    width: 16rem;
+    height: 16rem;
     margin:auto;
 
     .processing {
@@ -25,8 +25,8 @@ html, body {
     }
     .processing:after {
       display:block;
-      width: 10em;
-      height: 10em;
+      width: 16rem;
+      height: 16rem;
       content: " ";
       background: transparent @loading center center no-repeat;
       background-size: auto 40%;
@@ -59,11 +59,11 @@ html, body {
       height: 16rem;
     }
     h1 {
-      margin-top: 1.5em;
-      font-size: 2.4rem;
+      margin-top: 2.4rem;
+      font-size: 3.8rem;
     }
     p {
-      padding: 0.5em 0.5em 0 0.5em;
+      padding: 0.8rem 0.8rem 0 0.8rem;
       margin-bottom: 0;
     }
   }
@@ -73,7 +73,7 @@ html, body {
       .clearfix();
       margin: 1em 0 1.5em 0;
       label {
-        margin-bottom:.5em;
+        margin-bottom:.8rem;
       }
       .input.text {
         .rounded();
@@ -81,7 +81,7 @@ html, body {
         max-width: 10rem;
         float: left;
         text-align: center;
-        margin-right: 1em;
+        margin-right: 3rem;
       }
       .circle-picker {
         float:left;
@@ -92,12 +92,6 @@ html, body {
         text-align: center;
         clear:both;
         cursor: pointer;
-      }
-
-
-      .svg-icon svg{
-        height:.85em;
-        width:.85em;
       }
     }
   }
@@ -112,7 +106,7 @@ html, body {
         max-width: 26rem;
       }
       &.firefox img{
-        padding: 1em 0;
+        padding: 1.6rem 0;
       }
     }
   }
@@ -167,7 +161,7 @@ html, body {
   }
   .login.page {
     display: grid;
-    height: 100%;
+    height: calc(100% - 4rem); // footer space
     grid-template-columns: 1fr 1.5fr 1fr;
     grid-template-rows: 0 1fr 0.05fr;
     grid-gap: 1px;
