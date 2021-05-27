@@ -152,7 +152,7 @@ class EditResourceDescription extends React.Component {
       await this.updateResource();
       await this.props.actionFeedbackContext.displaySuccess(this.translate("The description has been updated successfully"));
       await this.props.resourceWorkspaceContext.onResourceDescriptionEdited();
-      this.close();
+      this.close(this.state.description);
     } catch (error) {
       // It can happen when the user has closed the passphrase entry dialog by instance.
       if (error.name === "UserAbortsOperationError") {
@@ -225,10 +225,11 @@ class EditResourceDescription extends React.Component {
    */
   /**
    * Toggle the editor back to display mode
-   * @returns {string} send back the updated description and plaintextDto to avoid potential unnecessary decrypt round
+   * @param description The description to display
+   * @returns {string} Send back the updated description and plaintextDto to avoid potential unnecessary decrypt round
    */
-  close() {
-    return this.props.onClose(this.description, this.plaintextDto);
+  close(description) {
+    return this.props.onClose(description, this.plaintextDto);
   }
 
   /**
@@ -269,7 +270,7 @@ class EditResourceDescription extends React.Component {
     if (this.elementRef.current.contains(event.target) || this.state.processing) {
       return;
     }
-    this.close();
+    this.close(this.props.description);
   }
 
   /**
@@ -289,7 +290,7 @@ class EditResourceDescription extends React.Component {
     if (event.keyCode === 27) {
       // Stop the event propagation in order to avoid a parent component to react to this ESC event.
       event.stopPropagation();
-      this.close();
+      this.close(this.props.description);
     }
   }
 
@@ -297,7 +298,7 @@ class EditResourceDescription extends React.Component {
    * On cancel button click
    */
   handleCancel() {
-    this.close();
+    this.close(this.props.description);
   }
 
   /**
