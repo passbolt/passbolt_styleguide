@@ -1,3 +1,4 @@
+import browser from "webextension-polyfill";
 import React from "react";
 import AppContext from "./contexts/AppContext";
 import FilterResourcesByFavoritePage from "./components/FilterResourcesByFavoritePage/FilterResourcesByFavoritePage";
@@ -67,8 +68,8 @@ class ExtQuickAccess extends React.Component {
     this.state.port.on('passbolt.passphrase.request', this.handleBackgroundPageRequiresPassphraseEvent);
     await this.checkPluginIsConfigured();
     await this.getUser();
-    await this.getSiteSettings();
     this.checkAuthStatus();
+    await this.getSiteSettings();
     this.getLocale();
   }
 
@@ -126,6 +127,15 @@ class ExtQuickAccess extends React.Component {
     this.setState({locale});
   }
 
+  /**
+   * Retrieve the authentication status.
+   *
+   * If the user is authenticated but the MFA challenge is required, close the quickaccess and redirect the user to
+   * the passbolt application.
+   *
+   * This function requires the user settings to be present in the component state.
+   * @returns {Promise<void>}
+   */
   async checkAuthStatus() {
     const {isAuthenticated, isMfaRequired} = await this.state.port.request("passbolt.auth.check-status");
     if (isMfaRequired) {
