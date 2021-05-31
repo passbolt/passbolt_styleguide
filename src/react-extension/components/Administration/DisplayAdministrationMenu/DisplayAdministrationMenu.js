@@ -209,7 +209,7 @@ class DisplayAdministrationMenu extends React.Component {
             <div className={`row  ${this.isInternationalizationSelected() ? "selected" : ""}`}>
               <div className="main-cell-wrapper">
                 <div className="main-cell">
-                  <a onClick={this.handleInternationalizationClick}><span><Trans>Internationalization</Trans></span></a>
+                  <a onClick={this.handleInternationalizationClick}><span><Trans>Internationalisation</Trans></span></a>
                 </div>
               </div>
             </div>

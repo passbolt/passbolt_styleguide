@@ -81,7 +81,7 @@ describe("As AD I can see a Breadcrumb", () => {
     page = new DisplayAdministrationWorkspaceBreadcrumbPage(context, props);
     expect(page.count).toBe(3);
     expect(page.item(1)).toBe("Administration");
-    expect(page.item(2)).toBe("Internationalization");
+    expect(page.item(2)).toBe("Internationalisation");
     expect(page.item(3)).toBe("Settings");
   });
 });

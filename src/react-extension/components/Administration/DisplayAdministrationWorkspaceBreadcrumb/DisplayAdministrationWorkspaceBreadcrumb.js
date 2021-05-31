@@ -58,7 +58,7 @@ class DisplayAdministrationWorkspaceBreadcrumb extends Component {
       case AdministrationWorkspaceMenuTypes.SUBSCRIPTION:
         return this.translate("Subscription");
       case AdministrationWorkspaceMenuTypes.INTERNATIONALIZATION:
-        return this.translate("Internationalization");
+        return this.translate("Internationalisation");
       default:
         return "";
     }

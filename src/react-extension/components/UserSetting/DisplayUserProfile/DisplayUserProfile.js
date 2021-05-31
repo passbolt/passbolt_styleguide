@@ -127,7 +127,7 @@ class DisplayUserProfile extends React.Component {
             </table>
             {this.canIUseLocale &&
             <>
-              <h3><Trans>Internationalization</Trans></h3>
+              <h3><Trans>Internationalisation</Trans></h3>
               <table className="table-info profile">
                 <tbody>
                   <tr className="locale">
