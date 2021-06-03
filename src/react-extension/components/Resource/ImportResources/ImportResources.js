@@ -212,7 +212,8 @@ class ImportResources extends Component {
     for (let i = 0; i < codeUnits.length; i++) {
       codeUnits[i] = string.charCodeAt(i);
     }
-    return new TextDecoder("utf-8").decode(new Uint8Array(codeUnits.buffer));
+    const concatenateStringFromByte = (data, byte) => data + String.fromCharCode(byte);
+    return new Uint8Array(codeUnits.buffer).reduce(concatenateStringFromByte, '');
   }
 
   /**
