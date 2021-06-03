@@ -69,7 +69,7 @@ describe("See the Create Resource", () => {
       expect(passwordInputStyle.color).toBe("");
 
       // Complexity label exists but is not yet defined.
-      expect(page.passwordCreate.complexityText.textContent).toBe("complexity: n/a");
+      expect(page.passwordCreate.complexityText.textContent).toBe("Complexity: n/aEntropy: NaN bits");
 
       // Password view button exists.
       expect(page.passwordCreate.passwordViewButton).not.toBeNull();
@@ -91,7 +91,7 @@ describe("See the Create Resource", () => {
     it('generates password when clicking on the generate button.', async() => {
       page.passwordCreate.focusInput(page.passwordCreate.password);
       await page.passwordCreate.click(page.passwordCreate.passwordGenerateButton);
-      expect(page.passwordCreate.complexityText.textContent).not.toBe("complexity: n/a");
+      expect(page.passwordCreate.complexityText.textContent).not.toBe("Complexity: n/aEntropy: NaN bits");
       expect(page.passwordCreate.progressBar.classList.contains("not_available")).toBe(false);
     });
 
@@ -129,7 +129,7 @@ describe("See the Create Resource", () => {
       page.passwordCreate.fillInput(page.passwordCreate.uri, resourceMeta.uri);
       page.passwordCreate.fillInput(page.passwordCreate.username, resourceMeta.username);
       page.passwordCreate.fillInput(page.passwordCreate.password, resourceMeta.password);
-      expect(page.passwordCreate.complexityText.textContent).not.toBe("complexity: n/a");
+      expect(page.passwordCreate.complexityText.textContent).not.toBe("Complexity: n/aEntropy: NaN bits");
       expect(page.passwordCreate.progressBar.classList.contains("not_available")).toBe(false);
       page.passwordCreate.fillInput(page.passwordCreate.description, resourceMeta.description);
       await page.passwordCreate.click(page.passwordCreate.descriptionEncryptedLock);
@@ -171,7 +171,7 @@ describe("See the Create Resource", () => {
       page.passwordCreate.fillInput(page.passwordCreate.uri, resourceMeta.uri);
       page.passwordCreate.fillInput(page.passwordCreate.username, resourceMeta.username);
       page.passwordCreate.fillInput(page.passwordCreate.password, resourceMeta.password);
-      expect(page.passwordCreate.complexityText.textContent).not.toBe("complexity: n/a");
+      expect(page.passwordCreate.complexityText.textContent).not.toBe("Complexity: n/aEntropy: NaN bits");
       expect(page.passwordCreate.progressBar.classList.contains("not_available")).toBe(false);
       page.passwordCreate.fillInput(page.passwordCreate.description, resourceMeta.description);
 

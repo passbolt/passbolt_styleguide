@@ -538,7 +538,13 @@ class CreateResource extends Component {
     }
   }
 
-
+  /**
+   * Returns true if the logged in user can use the password generator capability.
+   * @returns {boolean}
+   */
+  get canUsePasswordGenerator() {
+    return this.props.context.siteSettings.canIUse('passwordGenerator');
+  }
 
   /**
    * Get the translate function
@@ -555,6 +561,7 @@ class CreateResource extends Component {
    */
   render() {
     const passwordStrength = SecretComplexity.getStrength(this.state.password);
+    const passwordEntropy = SecretComplexity.entropy(this.state.password);
     /*
      * The parser can't find the translation for passwordStrength.label
      * To fix that we can use it in comment
@@ -623,19 +630,28 @@ class CreateResource extends Component {
                     <span className="visually-hidden">generate</span>
                   </a>
                 </li>
+                {this.canUsePasswordGenerator &&
                 <li>
                   <a onClick={this.handleOpenGenerator}
-                    className="password-generator button-icon button">
+                     className="password-generator button-icon button">
                     <Icon name='cog' big={true}/>
                     <span className="visually-hidden">open generator</span>
                   </a>
                 </li>
+                }
               </ul>
               <div className={`password-complexity ${passwordStrength.id}`}>
                 <span className="progress">
                   <span className={`progress-bar ${passwordStrength.id}`} />
                 </span>
-                <span className="complexity-text"><Trans>complexity:</Trans> <strong>{this.translate(passwordStrength.label)}</strong></span>
+                <span className="complexity-text">
+                  <div>
+                    <Trans>Complexity:</Trans> <strong>{this.translate(passwordStrength.label)}</strong>
+                  </div>
+                  <div>
+                    <Trans>Entropy:</Trans> <strong>{passwordEntropy.toFixed(1)} bits</strong>
+                  </div>
+                </span>
               </div>
               {this.state.passwordError &&
               <div className="input text">

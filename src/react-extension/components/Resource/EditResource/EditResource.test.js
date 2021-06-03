@@ -68,7 +68,7 @@ describe("See the Edit Resource", () => {
       expect(passwordInputStyle.color).toBe("");
 
       // Complexity label exists but is not yet defined.
-      expect(page.passwordEdit.complexityText.textContent).toBe("complexity: n/a");
+      expect(page.passwordEdit.complexityText.textContent).toBe("Complexity: n/aEntropy: NaN bits");
 
       // Password view button exists.
       expect(page.passwordEdit.passwordViewButton).not.toBeNull();
@@ -94,7 +94,7 @@ describe("See the Edit Resource", () => {
         expect(page.passwordEdit.password.classList).toContain("decrypted");
       });
       await page.passwordEdit.click(page.passwordEdit.passwordGenerateButton);
-      expect(page.passwordEdit.complexityText.textContent).not.toBe("complexity: n/a");
+      expect(page.passwordEdit.complexityText.textContent).not.toBe("Complexity: n/aEntropy: NaN bits");
       expect(page.passwordEdit.progressBar.classList.contains("not_available")).toBe(false);
     });
 
@@ -138,7 +138,7 @@ describe("See the Edit Resource", () => {
       });
       page.passwordEdit.fillInput(page.passwordEdit.password, resourceMeta.password);
       page.passwordEdit.blurInput(page.passwordEdit.password);
-      expect(page.passwordEdit.complexityText.textContent).not.toBe("complexity: n/a");
+      expect(page.passwordEdit.complexityText.textContent).not.toBe("Complexity: n/aEntropy: NaN bits");
       expect(page.passwordEdit.progressBar.classList.contains("not_available")).toBe(false);
       page.passwordEdit.fillInput(page.passwordEdit.description, resourceMeta.description);
 
@@ -183,7 +183,7 @@ describe("See the Edit Resource", () => {
       });
       page.passwordEdit.fillInput(page.passwordEdit.password, resourceMeta.password);
       page.passwordEdit.blurInput(page.passwordEdit.password);
-      expect(page.passwordEdit.complexityText.textContent).not.toBe("complexity: n/a");
+      expect(page.passwordEdit.complexityText.textContent).not.toBe("Complexity: n/aEntropy: NaN bits");
       expect(page.passwordEdit.progressBar.classList.contains("not_available")).toBe(false);
       page.passwordEdit.fillInput(page.passwordEdit.description, resourceMeta.description);
       await page.passwordEdit.click(page.passwordEdit.descriptionEncryptedLock);
