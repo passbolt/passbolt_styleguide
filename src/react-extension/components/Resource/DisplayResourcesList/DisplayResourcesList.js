@@ -676,7 +676,7 @@ class DisplayResourcesList extends React.Component {
             <p><Trans>Share a password with this group or wait for a team member to share one with this group.</Trans></p>
           </div>
           }
-          {isEmpty && filterType === ResourceWorkspaceFilterTypes.FOLDER &&
+          {isEmpty && (filterType === ResourceWorkspaceFilterTypes.FOLDER || filterType === ResourceWorkspaceFilterTypes.ROOT_FOLDER) &&
           <div className="empty-content">
             <h2><Trans>No passwords in this folder yet.</Trans></h2>
             <p><Trans>It does feel a bit empty here.</Trans></p>
