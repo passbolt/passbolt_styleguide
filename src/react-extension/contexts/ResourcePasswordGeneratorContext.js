@@ -22,7 +22,6 @@ import PropTypes from "prop-types";
 export const ResourcePasswordGeneratorContext = React.createContext({
   type: null,
   lastGeneratedPassword: null, // The last password generated
-  onGeneratorTypeChanged: () => {}, // Whenever the users wants to change the default generator type
   onPasswordGenerated: () => {} // Whenever the a password has been generated with the generator
 });
 
@@ -46,7 +45,6 @@ export class ResourcePasswordGeneratorContextProvider extends React.Component {
     return {
       type: null, // The current generator type
       lastGeneratedPassword: null, // The last password generated
-      onGeneratorTypeChanged: this.onGeneratorTypeChanged.bind(this), // Whenever the users wants to change the default generator type
       onPasswordGenerated: this.onPasswordGenerated.bind(this) // Whenever the a password has been generated with the generator
     };
   }
@@ -70,17 +68,12 @@ export class ResourcePasswordGeneratorContextProvider extends React.Component {
   }
 
   /**
-   * Whenever the user wants to change the default generator type
-   */
-  async onGeneratorTypeChanged(type) {
-    this.changeGeneratorType(type);
-  }
-
-  /**
    * Whenever a password has been generated with the generator
    * @param password The generated password
    */
-  async onPasswordGenerated(password) {
+  async onPasswordGenerated(password, generator) {
+    await this.changeGeneratorType(generator.type);
+    await this.changeGenerator(generator);
     await this.updateGeneratedPassword(password);
   }
 
@@ -90,6 +83,16 @@ export class ResourcePasswordGeneratorContextProvider extends React.Component {
    */
   changeGeneratorType(type) {
     this.setState({type});
+  }
+
+  /**
+   * Change the default password generator
+   * @param generator A generator
+   */
+  changeGenerator(generator) {
+    const settings = {... this.state.settings};
+    settings.generators = settings.generators.map(defaultGenerator => defaultGenerator.type === generator.type ? generator : defaultGenerator);
+    this.setState({settings});
   }
 
   /**

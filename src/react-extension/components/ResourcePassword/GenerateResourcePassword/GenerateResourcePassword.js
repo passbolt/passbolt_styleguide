@@ -86,7 +86,6 @@ class GenerateResourcePassword extends Component {
    */
   async handleGeneratorChanged(generatorConfiguration) {
     await this.setState({generator: generatorConfiguration});
-    await this.props.resourcePasswordGeneratorContext.onGeneratorTypeChanged(generatorConfiguration.type);
     this.generatePassword();
   }
 
@@ -133,7 +132,7 @@ class GenerateResourcePassword extends Component {
    */
   async handleSubmit(event) {
     event.preventDefault();
-    await this.props.resourcePasswordGeneratorContext.onPasswordGenerated(this.state.password);
+    await this.props.resourcePasswordGeneratorContext.onPasswordGenerated(this.state.password, this.state.generator);
     this.props.onClose();
   }
 
