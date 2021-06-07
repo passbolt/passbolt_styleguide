@@ -673,13 +673,13 @@ input[type=submit].button.processing {
   display: flex;
   flex-wrap: wrap;
   justify-content: flex-start;
-  gap: 0.5em;
 }
 .button-group--nowrap > .button {
   white-space: nowrap;
 }
 .button-group > * {
-  flex: 0 0 10%;
+  flex-grow: 1;
+  margin-bottom: 0.5em;
 }
 /*
 	Base form components styling

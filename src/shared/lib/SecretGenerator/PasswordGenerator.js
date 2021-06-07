@@ -18,6 +18,14 @@ import SecretComplexity from "../Secret/SecretComplexity";
 
 
 /**
+ * The list of look-alike substitution
+ */
+const lookAlikeSubstitutions = {
+  "O": "o",
+  "l": "I",
+}
+
+/**
  * Returns a number between the given min and max
  * @param min The minimum number
  * @param max The maximum number
@@ -30,10 +38,27 @@ function randomNumberRange(min, max) {
 }
 
 /**
+ * Exclude look-alike characters
+ * @param password A given password
+ */
+function excludeLookAlikeCharacters(password) {
+  if (!password) {
+    return password;
+  }
+  let newPassword = '';
+  const replaceLookAlikeCharacter = character => lookAlikeSubstitutions[character] || character;
+  for (let character of password) {
+    newPassword += replaceLookAlikeCharacter(character);
+  }
+  return newPassword;
+}
+
+/**
  * Returns a generated password given a generator configuration
  * @param configuration The generator configuration
  */
 function generate(configuration) {
+  const mustExcludeLookAlikeCharacters = configuration.default_options.look_alike;
   let secret = '';
   let mask = [];
 
@@ -44,6 +69,7 @@ function generate(configuration) {
     // Build the mask to use to generate a secret.
     availableMasks.forEach(currentMask => mask = [...mask, ...currentMask.characters]);
 
+
     /*
      * Generate a password which should fit the expected entropy.
      * Try maximum 10 times.
@@ -51,14 +77,17 @@ function generate(configuration) {
     let j = 0;
     const expectedEntropy = SecretComplexity.calculEntropy(secretLength, mask.length);
 
+
     do {
       secret = '';
       for (let i = 0; i < secretLength; i++) {
         secret += mask[randomNumberRange(0, mask.length - 1)];
       }
+      if (mustExcludeLookAlikeCharacters) {
+        secret = excludeLookAlikeCharacters(secret);
+      }
     } while (SecretComplexity.entropy(secret) < expectedEntropy && j++ < 10);
   }
-
   return secret;
 }
 
