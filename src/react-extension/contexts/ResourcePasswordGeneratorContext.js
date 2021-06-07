@@ -43,7 +43,7 @@ export class ResourcePasswordGeneratorContextProvider extends React.Component {
    */
   get defaultState() {
     return {
-      type: null, // The current generator type
+      settings: null, // The current settings of generators
       lastGeneratedPassword: null, // The last password generated
       onPasswordGenerated: this.onPasswordGenerated.bind(this) // Whenever the a password has been generated with the generator
     };
@@ -62,7 +62,6 @@ export class ResourcePasswordGeneratorContextProvider extends React.Component {
   async initializePasswordGenerator() {
     const generatorSettings = await this.props.context.port.request('passbolt.password-generator.settings');
     this.setState({
-      type: generatorSettings && generatorSettings.default_generator,
       settings: generatorSettings
     });
   }
@@ -72,17 +71,8 @@ export class ResourcePasswordGeneratorContextProvider extends React.Component {
    * @param password The generated password
    */
   async onPasswordGenerated(password, generator) {
-    await this.changeGeneratorType(generator.type);
     await this.changeGenerator(generator);
     await this.updateGeneratedPassword(password);
-  }
-
-  /**
-   * Change the default password generator type
-   * @param type A generator type
-   */
-  changeGeneratorType(type) {
-    this.setState({type});
   }
 
   /**
@@ -91,6 +81,7 @@ export class ResourcePasswordGeneratorContextProvider extends React.Component {
    */
   changeGenerator(generator) {
     const settings = {... this.state.settings};
+    settings.default_generator = generator.type;
     settings.generators = settings.generators.map(defaultGenerator => defaultGenerator.type === generator.type ? generator : defaultGenerator);
     this.setState({settings});
   }

@@ -46,10 +46,14 @@ function extractWordWithCase(words, wordCase) {
  */
 export const PassphraseGenerator = {
   generate: configuration => {
-    const wordCase = configuration.default_options.word_case;
-    const words = PassphraseGeneratorWords['en-UK'];
-    const extractWordMapper = () => extractWordWithCase(words, wordCase);
-    const wordsGenerated = Array.from({length:configuration.default_options.word_count}, extractWordMapper);
-    return wordsGenerated.join(configuration.default_options.separator);
+    const wordCount = configuration.default_options.word_count
+    if (wordCount >=  configuration.default_options.min_word && wordCount <=  configuration.default_options.max_word) {
+      const wordCase = configuration.default_options.word_case;
+      const words = PassphraseGeneratorWords['en-UK'];
+      const extractWordMapper = () => extractWordWithCase(words, wordCase);
+      const wordsGenerated = Array.from({length:wordCount}, extractWordMapper);
+      return wordsGenerated.join(configuration.default_options.separator);
+    }
+    return "";
   }
 };

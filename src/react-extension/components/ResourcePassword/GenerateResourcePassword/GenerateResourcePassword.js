@@ -52,7 +52,7 @@ class GenerateResourcePassword extends Component {
    * Whenever the component has been mounted
    */
   async componentDidMount() {
-    const {type} = this.props.resourcePasswordGeneratorContext;
+    const type = this.props.resourcePasswordGeneratorContext.settings.default_generator;
     const initialGenerator = this.generators.find(generator => generator.type === type);
 
     await this.handleGeneratorChanged(initialGenerator);
@@ -160,6 +160,10 @@ class GenerateResourcePassword extends Component {
     return this.props.t;
   }
 
+  isPasswordEmpty() {
+    return this.state.password === "";
+  }
+
   /**
    * Render the component
    * @returns {JSX}
@@ -252,7 +256,7 @@ class GenerateResourcePassword extends Component {
               </Tabs>
             </div>
             <div className="submit-wrapper clearfix">
-              <FormSubmitButton value={this.translate("Apply")} disabled={this.state.processing} processing={this.state.processing}/>
+              <FormSubmitButton value={this.translate("Apply")} disabled={this.state.processing || this.isPasswordEmpty()} processing={this.state.processing}/>
               <FormCancelButton disabled={this.state.processing} onClick={this.handleClose}/>
             </div>
           </form>

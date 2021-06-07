@@ -34,7 +34,6 @@ const Template = args =>
 export const Initial = Template.bind({});
 Initial.args = {
   resourcePasswordGeneratorContext: {
-    type: 'passphrase',
     settings: {
       default_generator: "passphrase",
       generators: [

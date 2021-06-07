@@ -114,7 +114,7 @@ class CreateResource extends Component {
    * =============================================================
    */
   get currentGeneratorConfiguration() {
-    const type = this.props.resourcePasswordGeneratorContext.type;
+    const type = this.props.resourcePasswordGeneratorContext.settings.default_generator;
     return this.props.resourcePasswordGeneratorContext.settings.generators.find(generator => generator.type === type);
   }
 

@@ -53,15 +53,11 @@ class ConfigurePassphraseGenerator extends Component {
    * @params {ReactEvent} The react event.
    */
   handleWordCountChange(event) {
-    const target = event.target;
-    const value = target.value;
-    if (value >= this.numberOfWords.min && value <= this.numberOfWords.max) {
-      const configuration = {...this.state.configuration};
-      configuration.default_options.word_count = value;
+    const configuration = {...this.state.configuration};
+    configuration.default_options.word_count = event.target.value;
 
-      this.setState({configuration});
-      this.props.onChanged(configuration);
-    }
+    this.setState({configuration});
+    this.props.onChanged(configuration);
   }
 
   /**

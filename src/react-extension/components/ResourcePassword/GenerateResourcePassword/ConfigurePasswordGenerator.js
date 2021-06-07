@@ -76,8 +76,10 @@ class ConfigurePasswordGenerator extends React.Component {
    * Whenever the length option value has been changed
    */
   handleLengthChanged(event) {
+    const value = event.target.value;
     const configuration = {...this.state.configuration};
-    configuration.default_options.length = event.target.value;
+    configuration.default_options.length = value;
+
     this.setState({configuration});
     this.props.onChanged(configuration);
   }
@@ -149,7 +151,7 @@ class ConfigurePasswordGenerator extends React.Component {
               this.masks.map(mask => (
                 <button
                   key={mask.name}
-                  className={`button button-toggle ${((mask.active || mask.required) ? 'selected' : '')}`}
+                  className={`button button-toggle ${(mask.active ? 'selected' : '')}`}
                   onClick={event => this.handleMaskToggled(mask.name, event)}>
                   {mask.label}
                 </button>

@@ -34,7 +34,6 @@ export function defaultProps() {
       }
     },
     resourcePasswordGeneratorContext: {
-      type: 'passphrase',
       settings: {
         "default_generator": "passphrase",
         "generators": [

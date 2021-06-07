@@ -37,24 +37,27 @@ function generate(configuration) {
   let secret = '';
   let mask = [];
 
-  const availableMasks = configuration.masks.filter(mask => mask.required || mask.active);
+  const availableMasks = configuration.masks.filter(mask => mask.active);
+  const secretLength = configuration.default_options.length;
 
-  // Build the mask to use to generate a secret.
-  availableMasks.forEach(currentMask => mask = [...mask, ...currentMask.characters]);
+  if (availableMasks.length > 0 && (secretLength >= configuration.default_options.min_length && secretLength <=  configuration.default_options.max_length)) {
+    // Build the mask to use to generate a secret.
+    availableMasks.forEach(currentMask => mask = [...mask, ...currentMask.characters]);
 
-  /*
-   * Generate a password which should fit the expected entropy.
-   * Try maximum 10 times.
-   */
-  let j = 0;
-  const expectedEntropy = SecretComplexity.calculEntropy(configuration.default_options.length, mask.length);
+    /*
+     * Generate a password which should fit the expected entropy.
+     * Try maximum 10 times.
+     */
+    let j = 0;
+    const expectedEntropy = SecretComplexity.calculEntropy(secretLength, mask.length);
 
-  do {
-    secret = '';
-    for (let i = 0; i < configuration.default_options.length; i++) {
-      secret += mask[randomNumberRange(0, mask.length - 1)];
-    }
-  } while (SecretComplexity.entropy(secret) < expectedEntropy && j++ < 10);
+    do {
+      secret = '';
+      for (let i = 0; i < secretLength; i++) {
+        secret += mask[randomNumberRange(0, mask.length - 1)];
+      }
+    } while (SecretComplexity.entropy(secret) < expectedEntropy && j++ < 10);
+  }
 
   return secret;
 }

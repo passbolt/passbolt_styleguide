@@ -37,7 +37,6 @@ export function defaultAppContext(appContext) {
 export function defaultProps() {
   return {
     resourcePasswordGeneratorContext: {
-      type: 'passphrase',
       settings: {
         "default_generator": "passphrase",
         "generators": [
