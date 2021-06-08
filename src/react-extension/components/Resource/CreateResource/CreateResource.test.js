@@ -69,7 +69,7 @@ describe("See the Create Resource", () => {
       expect(passwordInputStyle.color).toBe("");
 
       // Complexity label exists but is not yet defined.
-      expect(page.passwordCreate.complexityText.textContent).toBe("Complexity: n/aEntropy: NaN bits");
+      expect(page.passwordCreate.complexityText.textContent).toBe("Complexity: n/aEntropy: 0.0 bits");
 
       // Password view button exists.
       expect(page.passwordCreate.passwordViewButton).not.toBeNull();
