@@ -188,7 +188,7 @@ class ExtQuickAccess extends React.Component {
         <TranslationProvider loadingPath="/data/locales/{{lng}}/{{ns}}.json">
           <Router>
             <Route render={props => (
-              <div className="container page quickaccess" onKeyDown={this.handleKeyDown}>
+              <div className="container quickaccess" onKeyDown={this.handleKeyDown}>
                 <Header logoutSuccessCallback={this.logoutSuccessCallback}/>
                 {!isReady &&
                 <div className="processing-wrapper">
