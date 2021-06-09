@@ -30,8 +30,13 @@ export default function (url, suggestedUrl) {
 
   const suggestedUrlObject = parseSuggestedUrl(suggestedUrl);
 
-  // Unable to parse the suggested url.
-  if (!suggestedUrlObject) {
+  // Unable to parse the hostname of the url
+  if (!urlObject || !urlObject.hostname) {
+    return false;
+  }
+
+  // Unable to parse the suggested url or the suggested url has no hostname.
+  if (!suggestedUrlObject || !suggestedUrlObject.hostname) {
     return false;
   }
 
@@ -49,7 +54,7 @@ export default function (url, suggestedUrl) {
     }
   }
 
-  // Perfect match.
+  // Check the hostname, if the suggest url has defined it. Perfect match
   if (urlObject.hostname === suggestedUrlObject.hostname) {
     return true;
   }
