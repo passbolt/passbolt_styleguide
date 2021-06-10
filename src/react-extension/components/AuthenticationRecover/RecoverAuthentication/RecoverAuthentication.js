@@ -15,6 +15,7 @@ import HelpOnPassphraseLostSecondaryAction
 import DisplayUnexpectedError from "../../Authentication/DisplayUnexpectedError/DisplayUnexpectedError";
 import DisplayLoginInProgress from "../../AuthenticationLogin/DisplayLoginInProgress/DisplayLoginInProgress";
 import {withTranslation} from "react-i18next";
+import IntroduceSetupExtension from "../../Authentication/IntroduceSetupExtension/IntroduceSetupExtension";
 
 /**
  * The component orchestrates the recover authentication process
@@ -72,7 +73,10 @@ class RecoverAuthentication extends Component {
    */
   render() {
     switch (this.props.authenticationContext.state)  {
+      case AuthenticationContextState.INTRODUCE_SETUP_EXTENSION_INITIALIZED:
+        return <IntroduceSetupExtension/>;
       case AuthenticationContextState.RECOVER_INITIALIZED:
+      case AuthenticationContextState.INTRODUCE_SETUP_EXTENSION_COMPLETED:
         return <ImportGpgKey
           title={this.translate("Welcome back, please enter your private key to begin with the recovery process.")}
           secondaryAction={<HelpOnPrivateKeyLostSecondaryAction/>}/>;

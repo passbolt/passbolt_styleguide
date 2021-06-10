@@ -60,6 +60,8 @@ export const AuthenticationContext = React.createContext({
   }, // Whenever the check of server key is requested
   onGetServerKeyRequested: () => {
   }, // Whenever the server key is requested.
+  onCompleteIntroduceSetupExtension: () => {
+  }, // Whenever the setup extension is completed.
   onUnexpectedError: () => {
   }, // Whenever an unexpected error occurred.
 });
@@ -103,6 +105,7 @@ export class AuthenticationContextProvider extends React.Component {
       onVerifyServerKeyRequested: this.onVerifyServerKeyRequested.bind(this),
       onGetServerKeyRequested: this.onGetServerKeyRequested.bind(this),
       onTryLoginAgainRequested: this.onTryLoginAgainRequested.bind(this),
+      onCompleteIntroduceSetupExtension: this.onCompleteIntroduceSetupExtension.bind(this),
       onUnexpectedError: this.onUnexpectedError.bind(this),
     };
   }
@@ -111,12 +114,13 @@ export class AuthenticationContextProvider extends React.Component {
    * Initialize the authentication setup
    */
   async onInitializeSetupRequested() {
+    const firstInstall = await this.state.port.request('passbolt.setup.first-install');
     const setupInfo = await this.state.port.request('passbolt.setup.info');
     // update the locale to use the user locale
     this.props.context.onRefreshLocaleRequested(setupInfo.locale);
     // In case of error the background page should just disconnect the extension setup application.
     await this.setState({
-      state: AuthenticationContextState.SETUP_INITIALIZED,
+      state: firstInstall ? AuthenticationContextState.INTRODUCE_SETUP_EXTENSION_INITIALIZED : AuthenticationContextState.SETUP_INITIALIZED,
       setupInfo,
       process: AuthenticationContextProcess.SETUP
     });
@@ -127,12 +131,13 @@ export class AuthenticationContextProvider extends React.Component {
    * Initialize the authentication recover
    */
   async onInitializeRecoverRequested() {
+    const firstInstall = await this.state.port.request('passbolt.recover.first-install');
     const recoverInfo = await this.state.port.request('passbolt.recover.info');
     // The user might have already set a locale, the recover info update the background page locale, refresh the locale.
     this.props.context.onRefreshLocaleRequested(recoverInfo.locale);
     // In case of error the background page should just disconnect the extension setup application.
     await this.setState({
-      state: AuthenticationContextState.RECOVER_INITIALIZED,
+      state: firstInstall ? AuthenticationContextState.INTRODUCE_SETUP_EXTENSION_INITIALIZED : AuthenticationContextState.RECOVER_INITIALIZED,
       recoverInfo,
       process: AuthenticationContextProcess.RECOVER
     });
@@ -192,6 +197,15 @@ export class AuthenticationContextProvider extends React.Component {
   async onUnexpectedError(error) {
     const state = AuthenticationContextState.UNEXPECTED_ERROR;
     await this.setState({state, error});
+  }
+
+  /**
+   * Whenever a setup extension is required for first install
+   * @returns {Promise<void>}
+   */
+  async onCompleteIntroduceSetupExtension() {
+    const state = AuthenticationContextState.INTRODUCE_SETUP_EXTENSION_COMPLETED;
+    await this.setState({state});
   }
 
   /**
@@ -424,6 +438,8 @@ export const AuthenticationContextProcess = {
  */
 export const AuthenticationContextState = {
   INITIAL_STATE: 'Initial State',
+  INTRODUCE_SETUP_EXTENSION_INITIALIZED: 'Introduce Setup Extension Initialized',
+  INTRODUCE_SETUP_EXTENSION_COMPLETED: 'Introduce Setup Extension Completed',
   SETUP_INITIALIZED: 'Setup Initialized',
   RECOVER_INITIALIZED: 'Recover Initialized',
   SETUP_COMPLETED: 'Setup Completed',
