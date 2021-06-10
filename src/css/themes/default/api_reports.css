@@ -665,19 +665,6 @@ input[type=submit].button.processing {
   box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.2);
   border: 1px solid #BBB;
 }
-/* group */
-.button-group {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-start;
-}
-.button-group--nowrap > .button {
-  white-space: nowrap;
-}
-.button-group > * {
-  flex-grow: 1;
-  margin-bottom: 0.5em;
-}
 /*
 	Base form components styling
 	Check components/form for more advanced/fancy input
@@ -1207,48 +1194,6 @@ h6 .input.toggle-switch {
 .singleline .input input[type="password"],
 .singleline .input input[type="search"] {
   width: 100%;
-}
-.slider {
-  display: flex;
-  align-items: center;
-}
-.slider input[type=range] {
-  -webkit-appearance: none;
-  width: 100%;
-  height: 1px;
-  border-radius: 5px;
-  background: #DDD;
-  outline: none;
-  opacity: 0.7;
-  -webkit-transition: 0.2s;
-  transition: opacity 0.2s;
-  flex-grow: 1;
-}
-.slider input[type=range]:hover {
-  opacity: 1;
-}
-.slider input[type=range]::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  appearance: none;
-  width: 15px;
-  height: 15px;
-  border-radius: 50%;
-  border-width: 1px;
-  border-style: solid;
-  border-color: #969696;
-  background: #DDD;
-  cursor: pointer;
-}
-.slider input[type=range]::-moz-range-thumb {
-  width: 15px;
-  height: 15px;
-  border-radius: 50%;
-  background: #DDD;
-  cursor: pointer;
-}
-.slider input[type=number] {
-  width: 3em;
-  margin-left: 1em;
 }
 .svg-icon {
   display: inline-flex;
@@ -3977,30 +3922,16 @@ iframe.cachette {
   clear: both;
 }
 .input-password-wrapper .input.password {
-  display: inline-flex;
+  float: left;
   width: 65.5%;
 }
 .input-password-wrapper .input.password input[type=text],
 .input-password-wrapper .input.password input[type=password] {
-  flex: 1;
+  width: calc(100% - 3.5em);
   box-sizing: border-box;
 }
 .input-password-wrapper .input.password input[type=password].decrypting {
   background: transparent url('../../../img/controls/loading_light.svg') no-repeat 90% center;
-}
-.input-password-wrapper .password-view {
-  padding: 0.8rem 1.4rem;
-  margin-top: 0;
-  margin-right: 0;
-  margin-left: -0.1rem;
-  margin-bottom: 0.8rem;
-  border-radius: 0;
-  background: #FFF;
-  border-left: 0;
-  border-top: 1px solid #BBB;
-}
-.input-password-wrapper .password-view.selected {
-  background: #EEE;
 }
 .input-password-wrapper .actions.inline {
   float: right;
