@@ -14,16 +14,13 @@
  * Generate a password following a configuration.
  * @param configuration The generator configuration
  */
-import SecretComplexity from "../Secret/SecretComplexity";
 
+import {SecretGeneratorComplexity} from "./SecretGeneratorComplexity";
 
 /**
  * The list of look-alike substitution
  */
-const lookAlikeSubstitutions = {
-  "O": "o",
-  "l": "I",
-}
+const charactersToExclude = ["O", "l", "|", "I", "0", "1"];
 
 /**
  * Returns a number between the given min and max
@@ -39,18 +36,22 @@ function randomNumberRange(min, max) {
 
 /**
  * Exclude look-alike characters
- * @param password A given password
+ * @param characterArray A given character array
  */
-function excludeLookAlikeCharacters(password) {
-  if (!password) {
-    return password;
+function excludeLookAlikeCharacters(characterArray) {
+  if (!characterArray) {
+    return characterArray;
   }
-  let newPassword = '';
-  const replaceLookAlikeCharacter = character => lookAlikeSubstitutions[character] || character;
-  for (let character of password) {
-    newPassword += replaceLookAlikeCharacter(character);
+  let newCharacterArray = [];
+  const isNotLookAlikeCharacter = character => charactersToExclude.includes(character);
+  const isEmoji = character => character.length > 1;
+  const isCharacterToKeep = character => isEmoji(character) || isNotLookAlikeCharacter(character);
+  for (let character of characterArray) {
+    if(isCharacterToKeep(character)) {
+      newCharacterArray.push(character);
+    }
   }
-  return newPassword;
+  return newCharacterArray;
 }
 
 /**
@@ -65,31 +66,32 @@ function generate(configuration) {
   const availableMasks = configuration.masks.filter(mask => mask.active);
   const secretLength = configuration.default_options.length;
 
-  if (availableMasks.length > 0 && (secretLength >= configuration.default_options.min_length && secretLength <=  configuration.default_options.max_length)) {
-    // Build the mask to use to generate a secret.
-    availableMasks.forEach(currentMask => mask = [...mask, ...currentMask.characters]);
+  const canGenerate = availableMasks.length > 0 &&
+    (secretLength >= configuration.default_options.min_length &&
+      secretLength <=  configuration.default_options.max_length);
 
+  if (canGenerate) {
+    // Build the mask to use to generate a secret.
+    mask = availableMasks.reduce((mask, currentMask) => [...mask, ...currentMask.characters], []);
+    if (mustExcludeLookAlikeCharacters) {
+      mask = excludeLookAlikeCharacters(mask);
+    }
 
     /*
      * Generate a password which should fit the expected entropy.
      * Try maximum 10 times.
      */
-    let j = 0;
-    const expectedEntropy = SecretComplexity.calculEntropy(secretLength, mask.length);
-
+    let attempt = 0;
+    const expectedEntropy = SecretGeneratorComplexity.calculEntropy(secretLength, mask.length);
 
     do {
       secret = '';
       for (let i = 0; i < secretLength; i++) {
         secret += mask[randomNumberRange(0, mask.length - 1)];
       }
-      if (mustExcludeLookAlikeCharacters) {
-        secret = excludeLookAlikeCharacters(secret);
-      }
-    } while (SecretComplexity.entropy(secret) < expectedEntropy && j++ < 10);
+    } while (SecretGeneratorComplexity.entropyPassword(secret) < expectedEntropy && attempt++ < 10);
   }
   return secret;
 }
-
 
 export const PasswordGenerator = {generate};

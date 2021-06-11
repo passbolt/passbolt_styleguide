@@ -24,9 +24,9 @@ import ConfigurePassphraseGenerator from "./ConfigurePassphraseGenerator";
 import {withAppContext} from "../../../contexts/AppContext";
 import ConfigurePasswordGenerator from "./ConfigurePasswordGenerator";
 import {SecretGenerator} from "../../../../shared/lib/SecretGenerator/SecretGenerator";
-import SecretComplexity from "../../../../shared/lib/Secret/SecretComplexity";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import {withResourcePasswordGeneratorContext} from "../../../contexts/ResourcePasswordGeneratorContext";
+import {SecretGeneratorComplexity} from "../../../../shared/lib/SecretGenerator/SecretGeneratorComplexity";
 
 /**
  * This component generate password or passphrase following configuration
@@ -42,7 +42,7 @@ class GenerateResourcePassword extends Component {
     return {
       password: "", // The password
       isObfuscated: true, // True if the paasphrase should not be visible
-      generator: null, // The current password generator
+      generator: {}, // The current password generator
       loading: true,
       processing: false
     };
@@ -169,13 +169,28 @@ class GenerateResourcePassword extends Component {
    * @returns {JSX}
    */
   render() {
-    const passwordStrength = SecretComplexity.getStrength(this.state.password);
-    const passwordEntropy = SecretComplexity.entropy(this.state.password);
+    const passwordEntropy = SecretGenerator.entropy(this.state.password);
+    const passwordStrength = SecretGeneratorComplexity.strength(passwordEntropy);
+    /*
+     * The parser can't find the translation for passwordStrength.label
+     * To fix that we can use it in comment
+     * this.translate("n/a")
+     * this.translate("very weak")
+     * this.translate("weak")
+     * this.translate("fair")
+     * this.translate("strong")
+     * this.translate("very strong")
+     *
+     * The parser can't find the translation for generator.name
+     * To fix that we can use it in comment
+     * this.translate("Password")
+     * this.translate("Passphrase")
+     */
     return (
       <>
         {!this.state.loading &&
         <DialogWrapper
-          title="Password Generator"
+          title={this.translate("Password Generator")}
           className="generate-resource-password-dialog"
           disabled={this.state.processing}
           onClose={this.handleClose}>
@@ -187,6 +202,7 @@ class GenerateResourcePassword extends Component {
                   <input
                     id="generate-resource-password-form-password"
                     name="password"
+                    readOnly="readOnly"
                     className="required"
                     placeholder={this.translate("Password")}
                     type={this.state.isObfuscated ? "password" : "text"}
@@ -237,7 +253,7 @@ class GenerateResourcePassword extends Component {
               <Tabs activeTabName={this.state.generator.name}>
                 {this.generators.map(generator =>
                   <Tab
-                    key={generator.type}
+                    key={generator.name}
                     name={generator.name}
                     type={generator.type}
                     onClick={() => this.handleGeneratorChanged(generator)}>

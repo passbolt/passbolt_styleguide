@@ -9,7 +9,7 @@
  * @copyright     Copyright (c) Passbolt SA (https://www.passbolt.com)
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
- * @since         3.2.0
+ * @since         3.3.0
  */
 import React from "react";
 import PropTypes from "prop-types";
@@ -90,6 +90,7 @@ class ConfigurePasswordGenerator extends React.Component {
    * @param event Dom Click event
    */
   handleMaskToggled(maskName, event) {
+    // Avoid side effect
     event.preventDefault();
     const configuration = {...this.state.configuration};
     configuration.masks = configuration.masks.map(mask => {

@@ -31,7 +31,7 @@ function randomNumberRange(min, max) {
  * @param wordCase A case strategy to apply to the word
  */
 function extractWordWithCase(words, wordCase) {
-  const extractWord = () => words[randomNumberRange(0, words.length)];
+  const extractWord = () => words[randomNumberRange(0, words.length-1)];
   const toCamelCase = word => word.charAt(0).toUpperCase() + word.slice(1);
   switch (wordCase) {
     case "lowercase": return  extractWord().toLowerCase(); break;
@@ -42,18 +42,68 @@ function extractWordWithCase(words, wordCase) {
 }
 
 /**
+ * Detects if the given secret is a Passbolt passphrase.
+ * If yes, it returns the number of words, the separator and the flag to tell it's a passphrase
+ * @param secret
+ */
+function detectPassphrase(secret) {
+  if (!secret) {
+    return {
+      isPassphrase: false
+    };
+  }
+
+  const separatorsSecret = PassphraseGeneratorWords['en-UK'].reduce( (result, word) => {
+    const remainingSecret = result.remainingSecret.replace(new RegExp(word), '');
+    const newNumberReplacement = (result.remainingSecret.length - remainingSecret.length) / word.length;
+    return {
+      numberReplacement: result.numberReplacement + newNumberReplacement,
+      remainingSecret: remainingSecret
+    }
+  }, {numberReplacement: 0, remainingSecret: secret});
+
+  const numberSeparators = separatorsSecret.numberReplacement -1;
+  const lengthSeparators = separatorsSecret.remainingSecret.length / numberSeparators;
+  const cannotBeSplitSeparatorsWithSameLength = separatorsSecret.remainingSecret.length % numberSeparators !== 0;
+  const hasEmptySeparator = separatorsSecret.remainingSecret.length == 0;
+  if (cannotBeSplitSeparatorsWithSameLength) {
+    return {
+      isPassphrase: false
+    };
+  }
+  if (hasEmptySeparator) {
+    return {
+      numberWords: separatorsSecret.remainingSecret.numberReplacement,
+      separator: '',
+      isPassphrase: true
+    };
+  }
+
+  const firstSeparator = separatorsSecret.remainingSecret.substring(0,lengthSeparators);
+  const isPassphrase = separatorsSecret.remainingSecret.replace(new RegExp(firstSeparator), '').length === 0;
+  return {
+    numberWords:  separatorsSecret.numberReplacement,
+    separator: firstSeparator,
+    isPassphrase: isPassphrase && !secret.startsWith(firstSeparator) && !secret.endsWith(firstSeparator)
+  } ;
+}
+
+/**
  * Passphrase generator using diceware method from a file containing words
  */
 export const PassphraseGenerator = {
   generate: configuration => {
-    const wordCount = configuration.default_options.word_count
-    if (wordCount >=  configuration.default_options.min_word && wordCount <=  configuration.default_options.max_word) {
+    const wordCount = configuration.default_options.word_count;
+    const canGenerate = wordCount >=  configuration.default_options.min_word && wordCount <=  configuration.default_options.max_word;
+    if (canGenerate) {
       const wordCase = configuration.default_options.word_case;
       const words = PassphraseGeneratorWords['en-UK'];
       const extractWordMapper = () => extractWordWithCase(words, wordCase);
       const wordsGenerated = Array.from({length:wordCount}, extractWordMapper);
-      return wordsGenerated.join(configuration.default_options.separator);
+      const secret = wordsGenerated.join(configuration.default_options.separator)
+      return secret;
     }
-    return "";
-  }
+    return '';
+  },
+  detectPassphrase
 };

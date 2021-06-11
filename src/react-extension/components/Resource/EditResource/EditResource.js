@@ -16,7 +16,6 @@ import PropTypes from "prop-types";
 import {withAppContext} from "../../../contexts/AppContext";
 import Icon from "../../Common/Icons/Icon";
 import Tooltip from "../../Common/Tooltip/Tooltip";
-import SecretComplexity from "../../../../shared/lib/Secret/SecretComplexity";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import {withDialog} from "../../../contexts/DialogContext";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
@@ -28,6 +27,7 @@ import {Trans, withTranslation} from "react-i18next";
 import {SecretGenerator} from "../../../../shared/lib/SecretGenerator/SecretGenerator";
 import GenerateResourcePassword from "../../ResourcePassword/GenerateResourcePassword/GenerateResourcePassword";
 import {withResourcePasswordGeneratorContext} from "../../../contexts/ResourcePasswordGeneratorContext";
+import {SecretGeneratorComplexity} from "../../../../shared/lib/SecretGenerator/SecretGeneratorComplexity";
 
 /** Resource password max length */
 const RESOURCE_PASSWORD_MAX_LENGTH = 4096;
@@ -659,8 +659,8 @@ class EditResource extends Component {
    * =============================================================
    */
   render() {
-    const passwordStrength = SecretComplexity.getStrength(this.state.password);
-    const passwordEntropy = SecretComplexity.entropy(this.state.password);
+    const passwordEntropy = SecretGenerator.entropy(this.state.password);
+    const passwordStrength = SecretGeneratorComplexity.strength(passwordEntropy);
     const passwordPlaceholder = this.getPasswordInputPlaceholder();
     /*
      * The parser can't find the translation for passwordStrength.label
@@ -714,7 +714,8 @@ class EditResource extends Component {
                   onKeyUp={this.handlePasswordInputKeyUp} value={this.state.password}
                   placeholder={passwordPlaceholder} onFocus={this.handlePasswordInputFocus}
                   onBlur={this.handlePasswordInputBlur} onChange={this.handleInputChange}
-                  disabled={this.hasAllInputDisabled() || this.isPasswordDisabled()}ref={this.passwordInputRef}/>
+                  disabled={this.hasAllInputDisabled() || this.isPasswordDisabled()}
+                  ref={this.passwordInputRef}/>
                 <a onClick={this.handleViewPasswordButtonClick}
                   className={`password-view button button-icon toggle ${this.state.viewPassword ? "selected" : ""}`}>
                   <Icon name='eye-open' big={true}/>
@@ -732,7 +733,7 @@ class EditResource extends Component {
                 {this.canUsePasswordGenerator &&
                 <li>
                   <a onClick={this.handleOpenGenerator}
-                     className="password-generator button-icon button">
+                    className="password-generator button-icon button">
                     <Icon name='cog' big={true}/>
                     <span className="visually-hidden">open generator</span>
                   </a>

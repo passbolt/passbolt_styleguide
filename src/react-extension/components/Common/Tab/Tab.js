@@ -1,4 +1,16 @@
-
+/**
+ * Passbolt ~ Open source password manager for teams
+ * Copyright (c) 2020 Passbolt SA (https://www.passbolt.com)
+ *
+ * Licensed under GNU Affero General Public License version 3 of the or any later version.
+ * For full copyright and license information, please see the LICENSE.txt
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @copyright     Copyright (c) 2020 Passbolt SA (https://www.passbolt.com)
+ * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
+ * @link          https://www.passbolt.com Passbolt(tm)
+ * @since         3.3.0
+ */
 
 import React from "react";
 import PropTypes from "prop-types";
@@ -27,8 +39,7 @@ class Tab extends React.Component {
    * Handle click
    * @param event
    */
-  handleClick(event) {
-    event.preventDefault();
+  handleClick() {
     this.props.onClick(this.props.name);
   }
 
@@ -44,15 +55,11 @@ class Tab extends React.Component {
 }
 
 Tab.propTypes = {
-  name: PropTypes.string,
-  type: PropTypes.string,
-  isActive: PropTypes.bool,
-  onClick: PropTypes.func,
-  children: PropTypes.any
-};
-
-Tab.defaultProps = {
-  name: "default"
+  name: PropTypes.string, // The tab name as label
+  type: PropTypes.string, // The tab type
+  isActive: PropTypes.bool, // The current tab is active
+  onClick: PropTypes.func, // The click event callback
+  children: PropTypes.any // The childrent content of the tab
 };
 
 export default Tab;

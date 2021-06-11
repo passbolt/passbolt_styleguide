@@ -1,3 +1,17 @@
+/**
+ * Passbolt ~ Open source password manager for teams
+ * Copyright (c) 2020 Passbolt SA (https://www.passbolt.com)
+ *
+ * Licensed under GNU Affero General Public License version 3 of the or any later version.
+ * For full copyright and license information, please see the LICENSE.txt
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @copyright     Copyright (c) 2020 Passbolt SA (https://www.passbolt.com)
+ * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
+ * @link          https://www.passbolt.com Passbolt(tm)
+ * @since         3.3.0
+ */
+
 import React from "react";
 import PropTypes from "prop-types";
 import Tab from "./Tab";
@@ -35,17 +49,17 @@ class Tabs extends React.Component {
 
   /**
    * Toggle currently active tab
-   * @param tabName
+   * @param tabItem The item which represents the tab
    */
-  handleTabClick(props) {
-    this.setState({activeTabName: props.name});
-    props.onClick();
+  handleTabClick(tabItem) {
+    this.setState({activeTabName: tabItem.name});
+    tabItem.onClick();
   }
 
   render() {
     return (
       <div className="tabs">
-        <ul className="tabs-nav tabs-nav--bordered nav navbar-nav navbar-left">
+        <ul className="tabs-nav tabs-nav--bordered">
           {
             this.props.children.map(({key, props}) =>
               <Tab
@@ -65,12 +79,8 @@ class Tabs extends React.Component {
 }
 
 Tabs.propTypes = {
-  activeTabName: PropTypes.string,
-  children: PropTypes.any
-};
-
-Tabs.defaultProps = {
-  activeTabName: "default"
+  activeTabName: PropTypes.string, // The active tab name
+  children: PropTypes.any // The different tab components
 };
 
 export default Tabs;

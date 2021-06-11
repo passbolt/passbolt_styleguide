@@ -9,7 +9,7 @@
  * @copyright     Copyright (c) 2020 Passbolt SA (https://www.passbolt.com)
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
- * @since         3.2.0
+ * @since         3.3.0
  */
 
 import * as React from "react";
@@ -20,9 +20,10 @@ import PropTypes from "prop-types";
  * Context related to resources ( filter, current selections, etc.)
  */
 export const ResourcePasswordGeneratorContext = React.createContext({
-  type: null,
+  settings: null, // The current settings of generators
   lastGeneratedPassword: null, // The last password generated
-  onPasswordGenerated: () => {} // Whenever the a password has been generated with the generator
+  onPasswordGenerated: () => {}, // Whenever the a password has been generated with the generator
+  onClearLastGeneratedPassword: () => {} // Whenever the last generated password must be cleared
 });
 
 /**
@@ -45,7 +46,8 @@ export class ResourcePasswordGeneratorContextProvider extends React.Component {
     return {
       settings: null, // The current settings of generators
       lastGeneratedPassword: null, // The last password generated
-      onPasswordGenerated: this.onPasswordGenerated.bind(this) // Whenever the a password has been generated with the generator
+      onPasswordGenerated: this.onPasswordGenerated.bind(this), // Whenever the a password has been generated with the generator
+      onLastGeneratedPasswordCleared: this.onLastGeneratedPasswordCleared.bind(this) // Whenever the last generated password must be cleared
     };
   }
 
@@ -73,6 +75,13 @@ export class ResourcePasswordGeneratorContextProvider extends React.Component {
   async onPasswordGenerated(password, generator) {
     await this.changeGenerator(generator);
     await this.updateGeneratedPassword(password);
+  }
+
+  /**
+   * Whenever the last generated password must be cleared
+   */
+  onLastGeneratedPasswordCleared() {
+    this.setState({lastGeneratedPassword: {}});
   }
 
   /**

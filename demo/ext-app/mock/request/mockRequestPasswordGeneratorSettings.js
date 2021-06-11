@@ -9,7 +9,7 @@
  * @copyright     Copyright (c) 2020 Passbolt SA (https://www.passbolt.com)
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
- * @since         3.0.0
+ * @since         3.3.0
  */
 
 export default () => {
@@ -42,7 +42,7 @@ export default () => {
             "name": "digit",
             "label": "0-9",
             "characters": "0123456789",
-            "required": true,
+            "active": true
           },
           {
             "name": "parenthesis",
