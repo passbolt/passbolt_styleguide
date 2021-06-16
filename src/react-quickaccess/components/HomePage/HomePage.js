@@ -28,12 +28,14 @@ class HomePage extends React.Component {
   initEventHandlers() {
     this.handleStorageChange = this.handleStorageChange.bind(this);
     this.props.context.storage.onChanged.addListener(this.handleStorageChange);
+    this.handleUseOnThisTabClick = this.handleUseOnThisTabClick.bind(this);
   }
 
   initState() {
     return {
       resources: null,
-      activeTabUrl: null
+      activeTabUrl: null,
+      usingOnThisTab: false
     };
   }
 
@@ -176,6 +178,24 @@ class HomePage extends React.Component {
     return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
   }
 
+  async handleUseOnThisTabClick(resource) {
+    this.setState({usingOnThisTab: true});
+    try {
+      await this.props.context.port.request('passbolt.quickaccess.use-resource-on-current-tab', resource.id, resource.username);
+      window.close();
+    } catch (error) {
+      if (error && error.name === "UserAbortsOperationError") {
+        this.setState({usingOnThisTab: false});
+      } else {
+        console.error('An error occured', error);
+        this.setState({
+          usingOnThisTab: false,
+          useOnThisTabError: "Unable to use the password on this page. Copy and paste the information instead."
+        });
+      }
+    }
+  }
+
   render() {
     const isReady = this.state.resources !== null;
     const showSuggestedSection = !this.props.context.search.length;
@@ -214,11 +234,13 @@ class HomePage extends React.Component {
                 }
                 {(isReady && suggestedResources.length > 0) &&
                   suggestedResources.map(resource => (
-                    <li className="resource-entry" key={resource.id}>
-                      <Link to={`/data/quickaccess/resources/view/${resource.id}`}>
+                    <li className="suggested-resource-entry" key={resource.id}>
+                      <a role="button" className="resource-details" onClick={() => this.handleUseOnThisTabClick(resource)}>
                         <span className="title">{resource.name}</span>
                         <span className="username"> {resource.username ? `(${resource.username})` : ""}</span>
                         <span className="url">{resource.uri}</span>
+                      </a>
+                      <Link className="chevron-right" to={`/data/quickaccess/resources/view/${resource.id}`}>
                       </Link>
                     </li>
                   ))}
@@ -244,11 +266,13 @@ class HomePage extends React.Component {
                   }
                   {(isReady && browsedResources.length > 0) &&
                     browsedResources.map(resource => (
-                      <li className="resource-entry" key={resource.id}>
+                      <li className="browse-resource-entry" key={resource.id}>
                         <Link to={`/data/quickaccess/resources/view/${resource.id}`}>
-                          <span className="title">{resource.name}</span>
-                          <span className="username"> {resource.username ? `(${resource.username})` : ""}</span>
-                          <span className="url">{resource.uri}</span>
+                          <div className="inline-resource-entry">
+                            <span className="title">{resource.name}</span>
+                            <span className="username"> {resource.username ? `(${resource.username})` : ""}</span>
+                            <span className="url">{resource.uri}</span>
+                          </div>
                         </Link>
                       </li>
                     ))}
@@ -296,6 +320,7 @@ class HomePage extends React.Component {
           <Link to={`/data/quickaccess/resources/create`} id="popupAction" className="button primary big full-width" role="button">
             <Trans>Create new</Trans>
           </Link>
+          <div className="error-message">{this.state.useOnThisTabError}</div>
         </div>
       </div>
     );
