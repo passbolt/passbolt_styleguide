@@ -24,6 +24,7 @@ import PropTypes from "prop-types";
 import SiteSettings from "../shared/lib/Settings/SiteSettings";
 import UserSettings from "../shared/lib/Settings/UserSettings";
 import TranslationProvider from "./components/Internationalisation/TranslationProvider";
+import SetupExtensionInProgress from "./components/ExtensionSetup/SetupExtensionInProgress/SetupExtensionInProgress";
 
 const SEARCH_VISIBLE_ROUTES = [
   '/data/quickaccess.html',
@@ -219,6 +220,7 @@ class ExtQuickAccess extends React.Component {
                       <PrivateRoute path="/data/quickaccess/resources/create" component={ResourceCreatePage}/>
                       <PrivateRoute path="/data/quickaccess/resources/view/:id" component={ResourceViewPage}/>
                       <PrivateRoute exact path="/data/quickaccess/more-filters" component={MoreFiltersPage}/>
+                      <PrivateRoute exact path="/data/quickaccess/setup-extension-in-progress" component={SetupExtensionInProgress}/>
                       <PrivateRoute exact path="/data/quickaccess.html" component={HomePage}/>
                     </AnimatedSwitch>
                   </div>

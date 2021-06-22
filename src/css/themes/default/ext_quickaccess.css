@@ -2931,6 +2931,23 @@ html {
   border: 1px solid #2894DF;
   border-left: 0;
 }
+.setup-extension span.icon.fa svg {
+  width: 80%;
+  height: 80%;
+  margin: auto;
+  display: block;
+  opacity: 0.1;
+}
+.setup-extension h3 {
+  padding: 0.8rem 2.5rem;
+  text-align: center;
+  margin-bottom: 0;
+}
+.setup-extension p {
+  padding: 0.8rem 2.5rem;
+  text-align: center;
+  font-size: 1.6rem;
+}
 .slideNoTransition-exit {
   display: none;
   transform: translateX(0%);
