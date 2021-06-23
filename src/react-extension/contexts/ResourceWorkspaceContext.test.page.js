@@ -236,7 +236,6 @@ export default class ResourceWorkspaceContextPage {
   setup(appContext, args = {}) {
     this._page = render(
       <AppContext.Provider value={appContext}>
-
         <Router history={createMemoryHistory({initialEntries: [
           "/app/folders/view/:filterByFolderId",
           "/app/passwords/view/:selectedResourceId",

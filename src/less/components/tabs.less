@@ -1,6 +1,5 @@
 /* tabs */
 .tabs {
-    border-bottom: 1px solid @border-default;
     width: 100%;
 }
 
@@ -30,6 +29,26 @@
             }
         }
     }
+
+    &--bordered {
+
+      li {
+        background-color: @tab-unselected-background;
+        margin-right: .5rem;
+        display: inline-block;
+
+        a {
+          margin-left: 0;
+        }
+
+        &.active {
+          border: 1px solid @border-default;
+          border-bottom: 1px solid @tab-selected-background;
+          margin-bottom: -10px;
+          background-color: @tab-selected-background;
+        }
+      }
+    }
 }
 
 /* tab content */
@@ -38,4 +57,8 @@
     &.selected {
         display: block;
     }
+}
+
+.tabs-active-content {
+  margin-top: .5em;
 }

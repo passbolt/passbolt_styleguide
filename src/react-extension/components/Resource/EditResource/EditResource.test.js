@@ -68,14 +68,7 @@ describe("See the Edit Resource", () => {
       expect(passwordInputStyle.color).toBe("");
 
       // Complexity label exists but is not yet defined.
-      expect(page.passwordEdit.complexityText.textContent).toBe("complexity: n/a");
-
-      // Security token element exists.
-      expect(page.passwordEdit.securityToken.textContent).toBe("TST");
-      // And the default style is applied.
-      const securityTokenStyle = window.getComputedStyle(page.passwordEdit.securityToken);
-      expect(securityTokenStyle.background).toBe("rgb(0, 0, 0)");
-      expect(securityTokenStyle.color).toBe("rgb(255, 255, 255)");
+      expect(page.passwordEdit.complexityText.textContent).toBe("Complexity: n/aEntropy: 0.0 bits");
 
       // Password view button exists.
       expect(page.passwordEdit.passwordViewButton).not.toBeNull();
@@ -94,34 +87,6 @@ describe("See the Edit Resource", () => {
       expect(page.passwordEdit.cancelButton.textContent).toBe("Cancel");
     });
 
-    it('changes the style of its security token when the password input get or lose focus when the password is already decrypted', async() => {
-      /*
-       * Password input got focus.
-       * Assert style change.
-       */
-      page.passwordEdit.focusInput(page.passwordEdit.password);
-      await waitFor(() => {
-        expect(page.passwordEdit.password.classList).toContain("decrypted");
-      });
-      let securityTokenStyle = window.getComputedStyle(page.passwordEdit.securityToken);
-      let passwordInputStyle = window.getComputedStyle(page.passwordEdit.password);
-      expect(passwordInputStyle.background).toBe("rgb(0, 0, 0)");
-      expect(passwordInputStyle.color).toBe("rgb(255, 255, 255)");
-      expect(securityTokenStyle.background).toBe("rgb(255, 255, 255)");
-      expect(securityTokenStyle.color).toBe("rgb(0, 0, 0)");
-
-      /*
-       * Password input lost focus.
-       * Assert style
-       */
-      page.passwordEdit.blurInput(page.passwordEdit.password);
-      securityTokenStyle = window.getComputedStyle(page.passwordEdit.securityToken);
-      passwordInputStyle = window.getComputedStyle(page.passwordEdit.password);
-      expect(passwordInputStyle.background).toBe("white");
-      expect(passwordInputStyle.color).toBe("");
-      expect(securityTokenStyle.background).toBe("rgb(0, 0, 0)");
-      expect(securityTokenStyle.color).toBe("rgb(255, 255, 255)");
-    });
 
     it('generates password when clicking on the generate button.', async() => {
       page.passwordEdit.focusInput(page.passwordEdit.password);
@@ -129,7 +94,7 @@ describe("See the Edit Resource", () => {
         expect(page.passwordEdit.password.classList).toContain("decrypted");
       });
       await page.passwordEdit.click(page.passwordEdit.passwordGenerateButton);
-      expect(page.passwordEdit.complexityText.textContent).not.toBe("complexity: n/a");
+      expect(page.passwordEdit.complexityText.textContent).not.toBe("Complexity: n/aEntropy: NaN bits");
       expect(page.passwordEdit.progressBar.classList.contains("not_available")).toBe(false);
     });
 
@@ -173,7 +138,7 @@ describe("See the Edit Resource", () => {
       });
       page.passwordEdit.fillInput(page.passwordEdit.password, resourceMeta.password);
       page.passwordEdit.blurInput(page.passwordEdit.password);
-      expect(page.passwordEdit.complexityText.textContent).not.toBe("complexity: n/a");
+      expect(page.passwordEdit.complexityText.textContent).not.toBe("Complexity: n/aEntropy: NaN bits");
       expect(page.passwordEdit.progressBar.classList.contains("not_available")).toBe(false);
       page.passwordEdit.fillInput(page.passwordEdit.description, resourceMeta.description);
 
@@ -218,7 +183,7 @@ describe("See the Edit Resource", () => {
       });
       page.passwordEdit.fillInput(page.passwordEdit.password, resourceMeta.password);
       page.passwordEdit.blurInput(page.passwordEdit.password);
-      expect(page.passwordEdit.complexityText.textContent).not.toBe("complexity: n/a");
+      expect(page.passwordEdit.complexityText.textContent).not.toBe("Complexity: n/aEntropy: NaN bits");
       expect(page.passwordEdit.progressBar.classList.contains("not_available")).toBe(false);
       page.passwordEdit.fillInput(page.passwordEdit.description, resourceMeta.description);
       await page.passwordEdit.click(page.passwordEdit.descriptionEncryptedLock);
@@ -332,6 +297,12 @@ describe("See the Edit Resource", () => {
         expect(page.passwordEdit.cancelButton.className).toBe("cancel disabled");
         updateResolve();
       });
+    });
+
+    it('As LU I should access to the password generator dialog', async() => {
+      jest.spyOn(props.dialogContext, 'open').mockImplementationOnce(jest.fn);
+      await page.passwordEdit.openPasswordGenerator();
+      expect(props.dialogContext.open).toBeCalled();
     });
   });
 });

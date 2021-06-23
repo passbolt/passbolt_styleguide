@@ -20,6 +20,62 @@ const context = {
   resourceTypesSettings: {
     areResourceTypesEnabled: () => true,
     isEncryptedDescriptionEnabled: () => true
+  },
+  siteSettings: {
+    generatorConfiguration: {
+      "default_generator": "passphrase",
+      "generators": [
+        {
+          "name": "Password",
+          "type": "password",
+          "default_options": {
+            "length": 18,
+            "look_alike": true,
+            "min_length": 8,
+            "max_length": 128,
+          },
+          "masks": [
+            {
+              "name": "upper",
+              "label": "A-Z",
+              "characters": "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+            },
+            {
+              "name": "lower",
+              "label": "a-z",
+              "characters": "abcdefghijklmnopqrstuvwxyz",
+            },
+            {
+              "name": "digit",
+              "label": "0-9",
+              "characters": "0123456789",
+              "required": true,
+            },
+            {
+              "name": "parenthesis",
+              "label": "([|])",
+              "characters": "([|])",
+            },
+            {
+              "name": "TBD",
+              "label": "TBD",
+              "characters": ""
+            },
+          ],
+        },
+        {
+          "name": "Passphrase",
+          "type": "passphrase",
+          "default_options": {
+            "word_count": 8,
+            "word_case": "lowercase",
+            "min_word": 4,
+            "max_word": 40,
+            "separator": " "
+          }
+        }
+      ]
+    }
   }
 };
 

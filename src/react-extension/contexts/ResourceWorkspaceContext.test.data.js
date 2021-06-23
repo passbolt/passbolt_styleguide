@@ -24,7 +24,6 @@ export function defaultProps() {
   return {};
 }
 
-
 /**
  * Default resources
  */

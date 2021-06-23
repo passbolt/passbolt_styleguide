@@ -97,6 +97,9 @@ export default {
       "previewPassword": {
         "version": "3.0.0"
       },
+      "passwordGenerator": {
+        "version": "3.3.0"
+      },
       "locale": {
         "options": [
           {
