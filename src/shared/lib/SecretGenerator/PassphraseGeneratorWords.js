@@ -1,17 +1,12 @@
 /**
- * Passbolt ~ Open source password manager for teams
- * Copyright (c) Passbolt SA (https://www.passbolt.com)
+ * List of words used to generate a passphrase.
+ * The list is an original work of the EFF https://www.eff.org/dice. Thank you!
  *
- * Licensed under GNU Affero General Public License version 3 of the or any later version.
- * For full copyright and license information, please see the LICENSE.txt
- * Redistributions of files must retain the above copyright notice.
- *
- * @copyright     Copyright (c) Passbolt SA (https://www.passbolt.com)
- * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
- * @link          https://www.passbolt.com Passbolt(tm)
+ * @copyright     Copyright (c) Electronic Frontier foundation (https://www.eff.org)
+ * @license       https://creativecommons.org/licenses/by/3.0/us/ CC BY 3.0 US
+ * @link          https://www.eff.org
  * @since         3.3.0
  */
-// Words list come from: https://www.eff.org/files/2016/07/18/eff_large_wordlist.txt sorted with the longest words
 export default {
   "en-UK": [
     "abdominal",
