@@ -45,7 +45,7 @@ function excludeLookAlikeCharacters(characterArray) {
   }
 
   const filterExcludedCharacters = (newCharacterArray, character) => {
-    if(!charactersToExclude.includes(character)) {
+    if (!charactersToExclude.includes(character)) {
       newCharacterArray.push(character);
     }
     return newCharacterArray;
@@ -77,19 +77,26 @@ function generate(configuration) {
     }
 
     /*
-     * Generate a password which should fit the expected entropy.
-     * Try maximum 10 times.
+     * Generate a password. Try to maximize the entropy of this one by fixing a goal entropy, if not reached keep
+     * the password with the highest entropy. Try maximum 10 times.
      */
     let attempt = 0;
-    const expectedEntropy = SecretGeneratorComplexity.calculEntropy(secretLength, mask.length);
+    const goalEntropy = Math.floor(SecretGeneratorComplexity.calculEntropy(secretLength, mask.length));
+    let secretEntropy = 0;
 
     do {
-      secret = '';
+      let newSecret = '';
       for (let i = 0; i < secretLength; i++) {
-        secret += mask[randomNumberRange(0, mask.length - 1)];
+        newSecret += mask[randomNumberRange(0, mask.length - 1)];
       }
-    } while (SecretGeneratorComplexity.entropyPassword(secret) < expectedEntropy && attempt++ < 10);
+      const newSecretEntropy = SecretGeneratorComplexity.entropyPassword(newSecret);
+      if (newSecretEntropy > secretEntropy) {
+        secret = newSecret;
+        secretEntropy = newSecretEntropy;
+      }
+    } while (secretEntropy < goalEntropy && attempt++ < 10);
   }
+
   return secret;
 }
 
