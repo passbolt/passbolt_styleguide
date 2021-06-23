@@ -37,21 +37,20 @@ function randomNumberRange(min, max) {
 /**
  * Exclude look-alike characters
  * @param characterArray A given character array
+ * @return {array}
  */
 function excludeLookAlikeCharacters(characterArray) {
   if (!characterArray) {
     return characterArray;
   }
-  let newCharacterArray = [];
-  const isNotLookAlikeCharacter = character => charactersToExclude.includes(character);
-  const isEmoji = character => character.length > 1;
-  const isCharacterToKeep = character => isEmoji(character) || isNotLookAlikeCharacter(character);
-  for (let character of characterArray) {
-    if(isCharacterToKeep(character)) {
+
+  const filterExcludedCharacters = (newCharacterArray, character) => {
+    if(!charactersToExclude.includes(character)) {
       newCharacterArray.push(character);
     }
-  }
-  return newCharacterArray;
+    return newCharacterArray;
+  };
+  return characterArray.reduce(filterExcludedCharacters, []);
 }
 
 /**

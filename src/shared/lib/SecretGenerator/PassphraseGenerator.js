@@ -37,7 +37,7 @@ function extractWordWithCase(words, wordCase) {
     case "lowercase": return  extractWord().toLowerCase(); break;
     case "uppercase": return  extractWord().toUpperCase(); break;
     case "camelcase": return  toCamelCase(extractWord()); break;
-    default: return extractWord()
+    default: return extractWord();
   }
 }
 
@@ -53,16 +53,18 @@ function detectPassphrase(secret) {
     };
   }
 
-  const separatorsSecret = PassphraseGeneratorWords['en-UK'].reduce( (result, word) => {
-    const remainingSecret = result.remainingSecret.replace(new RegExp(word), '');
+  // Remove all the words from the dictionary present in the secret and keep the count.
+  const separatorsSecret = PassphraseGeneratorWords['en-UK'].reduce((result, word) => {
+    const remainingSecret = result.remainingSecret.replace(new RegExp(word, 'g'), '');
     const newNumberReplacement = (result.remainingSecret.length - remainingSecret.length) / word.length;
     return {
       numberReplacement: result.numberReplacement + newNumberReplacement,
       remainingSecret: remainingSecret
-    }
-  }, {numberReplacement: 0, remainingSecret: secret});
+    };
+  }, {numberReplacement: 0, remainingSecret: secret.toLowerCase()});
 
-  const numberSeparators = separatorsSecret.numberReplacement -1;
+  // From the remaining, check if a separator can be identified.
+  const numberSeparators = separatorsSecret.numberReplacement - 1;
   const lengthSeparators = separatorsSecret.remainingSecret.length / numberSeparators;
   const cannotBeSplitSeparatorsWithSameLength = separatorsSecret.remainingSecret.length % numberSeparators !== 0;
   const hasEmptySeparator = separatorsSecret.remainingSecret.length == 0;
@@ -73,19 +75,20 @@ function detectPassphrase(secret) {
   }
   if (hasEmptySeparator) {
     return {
-      numberWords: separatorsSecret.remainingSecret.numberReplacement,
+      numberWords: separatorsSecret.numberReplacement,
       separator: '',
       isPassphrase: true
     };
   }
 
-  const firstSeparator = separatorsSecret.remainingSecret.substring(0,lengthSeparators);
-  const isPassphrase = separatorsSecret.remainingSecret.replace(new RegExp(firstSeparator), '').length === 0;
+  const firstSeparator = separatorsSecret.remainingSecret.substring(0, lengthSeparators);
+  const firstSeparatorRegexEscaped = String(firstSeparator).replace(/([-()\[\]{}+?*.$\^|,:#<!\\])/g, '\\$1');
+  const isPassphrase = separatorsSecret.remainingSecret.replace(new RegExp(firstSeparatorRegexEscaped, 'g'), '').length === 0;
   return {
-    numberWords:  separatorsSecret.numberReplacement,
+    numberWords: separatorsSecret.numberReplacement,
     separator: firstSeparator,
     isPassphrase: isPassphrase && !secret.startsWith(firstSeparator) && !secret.endsWith(firstSeparator)
-  } ;
+  };
 }
 
 /**
