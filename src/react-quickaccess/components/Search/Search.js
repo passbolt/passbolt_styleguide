@@ -12,6 +12,15 @@ class Search extends React.Component {
   }
 
   /**
+   * ComponentDidMount
+   * Invoked immediately after component is inserted into the tree
+   * @return {void}
+   */
+  componentDidMount() {
+    this.focus();
+  }
+
+  /**
    * Get the translate function
    * @returns {function(...[*]=)}
    */
