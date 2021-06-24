@@ -45,7 +45,7 @@ describe("Authentication Context", () => {
       jest.spyOn(authenticationContext.state.port, 'request').mockImplementationOnce(jest.fn(() => false));
       jest.spyOn(authenticationContext.state.port, 'request').mockImplementation(requestSetupInfoMock);
       await authenticationContext.onInitializeSetupRequested();
-      expect(authenticationContext.state.port.request).toHaveBeenCalledWith("passbolt.setup.first-install");
+      expect(authenticationContext.state.port.request).toHaveBeenCalledWith("passbolt.setup.is-first-install");
       expect(authenticationContext.state.port.request).toHaveBeenCalledWith("passbolt.setup.info");
       expect(authenticationContext.props.context.onRefreshLocaleRequested).toHaveBeenCalledWith(setupInfo.locale);
       expect(authenticationContext.state.state).toBe(AuthenticationContextState.SETUP_INITIALIZED);
@@ -59,7 +59,7 @@ describe("Authentication Context", () => {
       const requestSetupInfoMock = jest.fn(() => setupInfo);
       jest.spyOn(authenticationContext.state.port, 'request').mockImplementation(requestSetupInfoMock);
       await authenticationContext.onInitializeSetupRequested();
-      expect(authenticationContext.state.port.request).toHaveBeenCalledWith("passbolt.setup.first-install");
+      expect(authenticationContext.state.port.request).toHaveBeenCalledWith("passbolt.setup.is-first-install");
       expect(authenticationContext.state.port.request).toHaveBeenCalledWith("passbolt.setup.info");
       expect(authenticationContext.props.context.onRefreshLocaleRequested).toHaveBeenCalledWith(setupInfo.locale);
       expect(authenticationContext.state.state).toBe(AuthenticationContextState.INTRODUCE_SETUP_EXTENSION_INITIALIZED);

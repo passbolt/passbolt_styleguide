@@ -114,13 +114,13 @@ export class AuthenticationContextProvider extends React.Component {
    * Initialize the authentication setup
    */
   async onInitializeSetupRequested() {
-    const firstInstall = await this.state.port.request('passbolt.setup.first-install');
+    const isFirstInstall = await this.state.port.request('passbolt.setup.is-first-install');
     const setupInfo = await this.state.port.request('passbolt.setup.info');
     // update the locale to use the user locale
     this.props.context.onRefreshLocaleRequested(setupInfo.locale);
     // In case of error the background page should just disconnect the extension setup application.
     await this.setState({
-      state: firstInstall ? AuthenticationContextState.INTRODUCE_SETUP_EXTENSION_INITIALIZED : AuthenticationContextState.SETUP_INITIALIZED,
+      state: isFirstInstall ? AuthenticationContextState.INTRODUCE_SETUP_EXTENSION_INITIALIZED : AuthenticationContextState.SETUP_INITIALIZED,
       setupInfo,
       process: AuthenticationContextProcess.SETUP
     });
