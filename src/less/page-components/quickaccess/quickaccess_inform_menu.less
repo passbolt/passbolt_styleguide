@@ -1,0 +1,79 @@
+.quickaccess {
+
+  .in-form-menu {
+    font-size:1.4rem;
+    color: @font-default;
+    width: 35rem;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+
+
+    &--scrollable {
+      overflow-y: scroll;
+      height: 20rem;
+      .scroll-shadow();
+    }
+
+    &-item {
+      display: flex;
+      padding: 1rem;
+      text-decoration: none; // Remove default CSS rules on a tag
+      border-bottom: 0; // Remove default CSS rules on a tag
+
+      &:not(:last-child) {
+        border-bottom: 1px solid  @border-default;
+      }
+
+      &:hover {
+        color: @font-default;
+        background-color: @background-lightest;
+
+
+        .in-form-menu-item-content-subheader-password:before {
+          position: absolute;
+          bottom: 0;
+          height: 100%;
+          width: 100%;
+          content: "";
+          background: linear-gradient(to left,
+          rgba(@background-lightest, 1) 20%,
+          rgba(@background-lightest, 0) 80%);
+          pointer-events: none; /* so the text is still selectable */
+        }
+      }
+
+      &-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-basis: 4rem;
+      }
+
+      &-content {
+        flex: 1;
+
+        &-subheader {
+
+          &-password {
+            position: relative;
+
+            &:before {
+              position: absolute;
+              bottom: 0;
+              height: 100%;
+              width: 100%;
+              content: "";
+              background: linear-gradient(to left,
+              rgba(@background-default , 1) 20%,
+              rgba(@background-default , 0) 80%);
+              pointer-events: none; /* so the text is still selectable */
+            }
+          }
+        }
+
+        &-description {
+          color: @font-dim;
+        }
+      }
+    }
+  }
+}
