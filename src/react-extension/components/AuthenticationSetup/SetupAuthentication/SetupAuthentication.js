@@ -17,6 +17,7 @@ import GenerateKeySecondaryAction
 import DisplayUnexpectedError from "../../Authentication/DisplayUnexpectedError/DisplayUnexpectedError";
 import DisplayLoginInProgress from "../../AuthenticationLogin/DisplayLoginInProgress/DisplayLoginInProgress";
 import {withTranslation} from "react-i18next";
+import IntroduceSetupExtension from "../../Authentication/IntroduceSetupExtension/IntroduceSetupExtension";
 
 /**
  * The component orchestrates the setup authentication process
@@ -73,7 +74,10 @@ class SetupAuthentication extends Component {
    */
   render() {
     switch (this.props.authenticationContext.state)  {
+      case AuthenticationContextState.INTRODUCE_SETUP_EXTENSION_INITIALIZED:
+        return <IntroduceSetupExtension/>;
       case AuthenticationContextState.SETUP_INITIALIZED:
+      case AuthenticationContextState.INTRODUCE_SETUP_EXTENSION_COMPLETED:
         return <CreateGpgKey/>;
       case AuthenticationContextState.GPG_KEY_GENERATED:
         return <DownloadRecoveryKit/>;

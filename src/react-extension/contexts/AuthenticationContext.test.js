@@ -42,11 +42,29 @@ describe("Authentication Context", () => {
         locale: "fr-FR"
       };
       const requestSetupInfoMock = jest.fn(() => setupInfo);
+      jest.spyOn(authenticationContext.state.port, 'request').mockImplementationOnce(jest.fn(() => false));
       jest.spyOn(authenticationContext.state.port, 'request').mockImplementation(requestSetupInfoMock);
       await authenticationContext.onInitializeSetupRequested();
+      expect(authenticationContext.state.port.request).toHaveBeenCalledWith("passbolt.setup.is-first-install");
       expect(authenticationContext.state.port.request).toHaveBeenCalledWith("passbolt.setup.info");
       expect(authenticationContext.props.context.onRefreshLocaleRequested).toHaveBeenCalledWith(setupInfo.locale);
       expect(authenticationContext.state.state).toBe(AuthenticationContextState.SETUP_INITIALIZED);
+      expect(authenticationContext.state.process).toBe('setup');
+    });
+
+    it('As AN I should start initially with the INTRODUCE_SETUP_EXTENSION_INITIALIZED state', async() => {
+      const setupInfo = {
+        locale: "fr-FR"
+      };
+      const requestSetupInfoMock = jest.fn(() => setupInfo);
+      jest.spyOn(authenticationContext.state.port, 'request').mockImplementation(requestSetupInfoMock);
+      await authenticationContext.onInitializeSetupRequested();
+      expect(authenticationContext.state.port.request).toHaveBeenCalledWith("passbolt.setup.is-first-install");
+      expect(authenticationContext.state.port.request).toHaveBeenCalledWith("passbolt.setup.info");
+      expect(authenticationContext.props.context.onRefreshLocaleRequested).toHaveBeenCalledWith(setupInfo.locale);
+      expect(authenticationContext.state.state).toBe(AuthenticationContextState.INTRODUCE_SETUP_EXTENSION_INITIALIZED);
+      await authenticationContext.onCompleteIntroduceSetupExtension();
+      expect(authenticationContext.state.state).toBe(AuthenticationContextState.INTRODUCE_SETUP_EXTENSION_COMPLETED);
       expect(authenticationContext.state.process).toBe('setup');
     });
 
@@ -146,11 +164,29 @@ describe("Authentication Context", () => {
         locale: "fr-FR"
       };
       const requestRecoverInfoMock = jest.fn(() => recoverInfo);
+      jest.spyOn(authenticationContext.state.port, 'request').mockImplementationOnce(jest.fn(() => false));
       jest.spyOn(authenticationContext.state.port, 'request').mockImplementation(requestRecoverInfoMock);
       await authenticationContext.onInitializeRecoverRequested();
       expect(authenticationContext.state.port.request).toHaveBeenCalledWith("passbolt.recover.info");
+      expect(authenticationContext.state.port.request).toHaveBeenCalledWith("passbolt.recover.first-install");
       expect(authenticationContext.props.context.onRefreshLocaleRequested).toHaveBeenCalledWith(recoverInfo.locale);
       expect(authenticationContext.state.state).toBe(AuthenticationContextState.RECOVER_INITIALIZED);
+      expect(authenticationContext.state.process).toBe('recover');
+    });
+
+    it('As AN I should start initially with the INTRODUCE_SETUP_EXTENSION_INITIALIZED state', async() => {
+      const recoverInfo = {
+        locale: "fr-FR"
+      };
+      const requestRecoverInfoMock = jest.fn(() => recoverInfo);
+      jest.spyOn(authenticationContext.state.port, 'request').mockImplementation(requestRecoverInfoMock);
+      await authenticationContext.onInitializeRecoverRequested();
+      expect(authenticationContext.state.port.request).toHaveBeenCalledWith("passbolt.recover.info");
+      expect(authenticationContext.state.port.request).toHaveBeenCalledWith("passbolt.recover.first-install");
+      expect(authenticationContext.props.context.onRefreshLocaleRequested).toHaveBeenCalledWith(recoverInfo.locale);
+      expect(authenticationContext.state.state).toBe(AuthenticationContextState.INTRODUCE_SETUP_EXTENSION_INITIALIZED);
+      await authenticationContext.onCompleteIntroduceSetupExtension();
+      expect(authenticationContext.state.state).toBe(AuthenticationContextState.INTRODUCE_SETUP_EXTENSION_COMPLETED);
       expect(authenticationContext.state.process).toBe('recover');
     });
 
