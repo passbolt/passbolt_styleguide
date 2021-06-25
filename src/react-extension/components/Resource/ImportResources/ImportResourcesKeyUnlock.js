@@ -277,17 +277,17 @@ class ImportResourcesKeyUnlock extends Component {
                   disabled={this.hasAllInputDisabled()}
                   placeholder={this.translate('Passphrase')}
                   ref={this.passwordInputRef}/>
+                <ul className="actions inline">
+                  <li>
+                    <a
+                      onClick={this.handlePasswordViewToggled}
+                      className={`password-view button button-icon toggle ${this.state.showPassword ? "selected" : ""} ${this.hasAllInputDisabled() ? "disabled" : ""}`}>
+                      <Icon name='eye-open' big={true}/>
+                      <span className="visually-hidden">view</span>
+                    </a>
+                  </li>
+                </ul>
               </div>
-              <ul className="actions inline">
-                <li>
-                  <a
-                    onClick={this.handlePasswordViewToggled}
-                    className={`password-view button button-icon toggle ${this.state.showPassword ? "selected" : ""} ${this.hasAllInputDisabled() ? "disabled" : ""}`}>
-                    <Icon name='eye-open' big={true}/>
-                    <span className="visually-hidden">view</span>
-                  </a>
-                </li>
-              </ul>
             </div>
 
             <div className="input-file-chooser-wrapper">
