@@ -53,7 +53,7 @@ class InFormMenuItem extends React.Component {
 
 InFormMenuItem.propTypes = {
   title: PropTypes.string,
-  subtitle: PropTypes.string,
+  subtitle: PropTypes.any,
   description: PropTypes.string,
   icon: PropTypes.any
 }
