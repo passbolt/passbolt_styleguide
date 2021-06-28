@@ -2214,7 +2214,7 @@ html {
      */
   background: #FFF;
   box-sizing: border-box;
-  width: 26rem;
+  width: 38rem;
 }
 .quickaccess:before,
 .quickaccess:after {
@@ -2396,6 +2396,20 @@ html {
 .quickaccess .submit-wrapper .button {
   font-size: 1.6rem;
   padding: 1.1rem 3.2rem;
+}
+.quickaccess .submit-wrapper .cancel {
+  margin-right: 3rem;
+  border: none;
+  color: #333;
+}
+.quickaccess .submit-wrapper .cancel:hover {
+  color: #2894DF;
+}
+.quickaccess .submit-wrapper.flex-row-end {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
 }
 .quickaccess .processing-wrapper {
   background-color: #FFF;
@@ -2890,7 +2904,7 @@ html {
   float: left;
   display: block;
   box-sizing: border-box;
-  width: 18.6rem;
+  width: 30.6rem;
   height: 0.6rem;
   border: 1px solid #DDD;
 }
@@ -2917,6 +2931,144 @@ html {
   width: 80%;
 }
 .quickaccess .resource-create .password .password-strength .password-strength-bar-value.very-strong {
+  background: #009900;
+  width: 99.5%;
+}
+.quickaccess .resource-auto-save .title {
+  padding: 0 1.8rem 0.8rem 1.8rem;
+  margin: 0;
+}
+.quickaccess .resource-auto-save .resource-auto-save-form {
+  max-height: 35.1rem;
+}
+.quickaccess .resource-auto-save .form-container {
+  padding: 0 1.8rem 0.8rem 1.8rem;
+}
+.quickaccess .resource-auto-save .submit-wrapper {
+  padding: 0 1.8rem 1.8rem 1.8rem;
+}
+.quickaccess .resource-auto-save .password {
+  /*
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
+  /*
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
+}
+.quickaccess .resource-auto-save .password:before,
+.quickaccess .resource-auto-save .password:after {
+  content: "";
+  display: table;
+}
+.quickaccess .resource-auto-save .password:after {
+  clear: both;
+}
+.quickaccess .resource-auto-save .password:before,
+.quickaccess .resource-auto-save .password:after {
+  content: "";
+  display: table;
+}
+.quickaccess .resource-auto-save .password:after {
+  clear: both;
+}
+.quickaccess .resource-auto-save .password input {
+  float: left;
+  box-sizing: border-box;
+  width: calc(100% - 3.5rem);
+}
+.quickaccess .resource-auto-save .password .password-view {
+  float: left;
+  margin-top: 0.2rem;
+  margin-left: -0.1rem;
+  height: 2rem;
+  border-radius: 0;
+  padding: 0.6rem 0.8rem 0.6rem 1rem;
+  background: #FFF;
+  border: 1px solid #CCC;
+  border-left: 0;
+  border-top: 1px solid #BBB;
+}
+.quickaccess .resource-auto-save .password .password-view svg {
+  margin-top: 0.2rem;
+}
+.quickaccess .resource-auto-save .password input:focus + .password-view {
+  box-shadow: inset -1px 1px 1px rgba(0, 0, 0, 0.2);
+  border: 1px solid #2894DF;
+  border-left: 0;
+}
+.quickaccess .resource-auto-save .password .password-strength .password-strength-value,
+.quickaccess .resource-auto-save .password .password-strength .password-strength-label {
+  border: 0;
+  clip: rect(0 0 0 0);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
+  /*
+     * Extends the .visuallyhidden class to allow the element to be focusable
+     * when navigated to via the keyboard: h5bp.com/p
+     */
+}
+.quickaccess .resource-auto-save .password .password-strength .password-strength-value .focusable:active,
+.quickaccess .resource-auto-save .password .password-strength .password-strength-label .focusable:active,
+.quickaccess .resource-auto-save .password .password-strength .password-strength-value .focusable:focus,
+.quickaccess .resource-auto-save .password .password-strength .password-strength-label .focusable:focus {
+  clip: auto;
+  height: auto;
+  margin: 0;
+  overflow: visible;
+  position: static;
+  width: auto;
+}
+.quickaccess .resource-auto-save .password .password-strength .password-strength-bar {
+  float: left;
+  display: block;
+  box-sizing: border-box;
+  width: 34.3rem;
+  height: 0.6rem;
+  border: 1px solid #DDD;
+}
+.quickaccess .resource-auto-save .password .password-strength .password-strength-bar-value {
+  float: left;
+  height: 0.2rem;
+  display: block;
+  margin: 0.1rem;
+}
+.quickaccess .resource-auto-save .password .password-strength .password-strength-bar-value.very-weak {
+  background: #000;
+  width: 5%;
+}
+.quickaccess .resource-auto-save .password .password-strength .password-strength-bar-value.weak {
+  background: #D40101;
+  width: 10%;
+}
+.quickaccess .resource-auto-save .password .password-strength .password-strength-bar-value.fair {
+  background: #FFBD2E;
+  width: 60%;
+}
+.quickaccess .resource-auto-save .password .password-strength .password-strength-bar-value.strong {
+  background: #66CC00;
+  width: 80%;
+}
+.quickaccess .resource-auto-save .password .password-strength .password-strength-bar-value.very-strong {
   background: #009900;
   width: 99.5%;
 }
