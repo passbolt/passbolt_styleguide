@@ -2,7 +2,7 @@
     .clearfix();
     background:@background-default;
     box-sizing: border-box;
-    width:26rem;
+    width:38rem;
 
     h2 {
         margin:0;
@@ -97,6 +97,20 @@
         .button {
             font-size: 1.6rem;
             padding: 1.1rem 3.2rem;
+        }
+        .cancel {
+            margin-right: 3rem;
+            border: none;
+            color: @font-default;
+            &:hover {
+              color: @font-focus;
+            }
+        }
+        &.flex-row-end {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: flex-end;
         }
     }
     .processing-wrapper {

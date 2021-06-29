@@ -71,6 +71,13 @@ export default class CreateResourcePage {
   get passwordCreate() {
     return this._passwordCreate;
   }
+
+  /**
+   * REturns the password generator dialog element
+   */
+  get passwordGeneratorDialog() {
+    return this._page.container.querySelector('.password-generator-dialog');
+  }
 }
 
 /**
@@ -164,12 +171,6 @@ class PasswordCreatePageObject {
     return this._container.querySelector('.complexity-text');
   }
 
-  /**
-   * Returns the security token input element
-   */
-  get securityToken() {
-    return this._container.querySelector('.security-token');
-  }
 
   /**
    * Returns the description input element
@@ -207,11 +208,22 @@ class PasswordCreatePageObject {
   }
 
   /**
+   * Returns the password generator button element
+   */
+  get passwordGeneratorButton() {
+    return this._container.querySelector('.password-generator');
+  }
+
+
+
+  /**
    * Returns the save button element
    */
   get saveButton() {
     return this._container.querySelector('.submit-wrapper input[type=\"submit\"]');
   }
+
+
 
   /**
    * Returns the cancel button element
@@ -227,6 +239,8 @@ class PasswordCreatePageObject {
   get errorDialogMessage() {
     return this._container.querySelector('.error-dialog .dialog .dialog-content .form-content');
   }
+
+
 
   /**
    * Returns true if the page object exists in the container
@@ -269,5 +283,10 @@ class PasswordCreatePageObject {
   /** blur the input element with data */
   blurInput(element)  {
     fireEvent.blur(element);
+  }
+
+  /** Open the password generator*/
+  async openPasswordGenerator() {
+    await this.click(this.passwordGeneratorButton);
   }
 }
