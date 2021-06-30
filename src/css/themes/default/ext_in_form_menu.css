@@ -6,7 +6,7 @@
 /* box shadows */
 /* dropdown menus */
 /* inputs */
-/* icons */
+/* logos */
 /* grid */
 /* messages */
 /* sidebar */
@@ -2189,34 +2189,77 @@ html {
     display: none;
   }
 }
-body {
-  background: transparent;
+.in-form-menu {
+  font-size: 1.4rem;
+  color: #333;
+  width: 35rem;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
 }
-.web-integration .in-form-icon-logo {
-  background: transparent url('../../../img/logo/icon-16.png') 0 0 no-repeat;
-  margin: 0;
-  float: left;
-  width: 16px;
-  height: 16px;
+.in-form-menu--scrollable {
+  overflow-y: scroll;
+  height: 20rem;
+  /* Opera doesn't support this in the shorthand */
+  overflow: auto;
+  background: linear-gradient(#FFF 30%, rgba(255, 255, 255, 0)), linear-gradient(rgba(255, 255, 255, 0), #FFF 70%) 0 100%, /* Shadows */ radial-gradient(farthest-side at 50% 0, rgba(0, 0, 0, 0.08), rgba(0, 0, 0, 0)), radial-gradient(farthest-side at 50% 100%, rgba(0, 0, 0, 0.08), rgba(0, 0, 0, 0)) 0 100%;
+  background-repeat: no-repeat;
+  background-color: #FFF;
+  background-size: 100% 40px, 100% 40px, 100% 14px, 100% 14px;
+  /* Opera doesn't support this in the shorthand */
+  background-attachment: local, local, scroll, scroll;
 }
-.web-integration .in-form-icon-logo--1 {
-  background: transparent url('../../../img/logo/icon-16-badge-1.png') 0 0 no-repeat;
+.in-form-menu-item {
+  display: flex;
+  padding: 1rem;
+  text-decoration: none;
+  border-bottom: 0;
 }
-.web-integration .in-form-icon-logo--2 {
-  background: transparent url('../../../img/logo/icon-16-badge-2.png') 0 0 no-repeat;
+.in-form-menu-item:not(:last-child) {
+  border-bottom: 1px solid #DDD;
 }
-.web-integration .in-form-icon-logo--3 {
-  background: transparent url('../../../img/logo/icon-16-badge-3.png') 0 0 no-repeat;
+.in-form-menu-item:hover {
+  color: #333;
+  background-color: #F3F3F3;
 }
-.web-integration .in-form-icon-logo--4 {
-  background: transparent url('../../../img/logo/icon-16-badge-4.png') 0 0 no-repeat;
+.in-form-menu-item:hover .in-form-menu-item-content-subheader-password:before {
+  position: absolute;
+  bottom: 0;
+  height: 100%;
+  width: 100%;
+  content: "";
+  background: linear-gradient(to left, #f3f3f3 20%, rgba(243, 243, 243, 0) 80%);
+  pointer-events: none;
+  /* so the text is still selectable */
 }
-.web-integration .in-form-icon-logo--5 {
-  background: transparent url('../../../img/logo/icon-16-badge-5.png') 0 0 no-repeat;
+.in-form-menu-item-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-basis: 4rem;
 }
-.web-integration .in-form-icon-logo--5-plus {
-  background: transparent url('../../../img/logo/icon-16-badge-5-plus.png') 0 0 no-repeat;
+.in-form-menu-item-icon .fa.icon svg {
+  width: 1.6rem;
+  height: 1.6rem;
 }
-.web-integration .in-form-icon-logo--inactive {
-  background: transparent url('../../../img/logo/icon-16-signout.png') 0 0 no-repeat;
+.in-form-menu-item-icon .fa.icon svg path {
+  fill: #888888;
+}
+.in-form-menu-item-content {
+  flex: 1;
+  color: #333;
+}
+.in-form-menu-item-content-subheader-password {
+  position: relative;
+}
+.in-form-menu-item-content-subheader-password:before {
+  position: absolute;
+  bottom: 0;
+  height: 100%;
+  width: 100%;
+  content: "";
+  background: linear-gradient(to left, #ffffff 20%, rgba(255, 255, 255, 0) 80%);
+  pointer-events: none;
+  /* so the text is still selectable */
+}
+.in-form-menu-item-content-description {
+  color: #666;
 }

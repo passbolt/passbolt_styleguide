@@ -36,15 +36,5 @@ describe("See the Create Resource", () => {
       expect(page.isActive).toBeFalsy();
     });
   });
-
-  describe('As a logged in user on a webpage with a form', () => {
-    beforeEach(() => {
-      page = new AskInFormMenuDisplayTestPage(contextWithAuthenticatedUser);
-    });
-
-    it('I should see a red Passbolt icon when I mouseover or focus on a username or password fields', async() => {
-      expect(page.isActive).toBeTruthy();
-    });
-  });
-
+  
 });

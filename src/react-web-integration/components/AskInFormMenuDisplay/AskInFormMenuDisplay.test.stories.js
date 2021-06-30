@@ -19,7 +19,7 @@ import "../../../css/themes/default/ext_in_form_cta.css";
 import AppContext from "../../contexts/AppContext";
 
 export default {
-  title: 'Passbolt/QuickAccess/AskInFormMenuDisplay',
+  title: 'Passbolt/WebIntegration/AskInFormMenuDisplay',
   component: AskInFormMenuDisplay
 };
 
@@ -57,20 +57,31 @@ const Template = ({context}) =>
     <InFormAnchor context={context}/>
   </div>;
 
-export const Active = Template.bind({});
-Active.args = {
-  context: {
-    port: {
-      request: () => ({isAuthenticated: true, isMfaRequired: false})
-    }
-  }
-};
+
 
 export const Inactive = Template.bind({});
 Inactive.args = {
   context: {
     port: {
-      request: () => ({isAuthenticated: false, isMfaRequired: false})
+      request: () => {throw {data: {code: 401}}}
+    }
+  }
+};
+
+export const ActiveWithNoSuggestion = Template.bind({});
+ActiveWithNoSuggestion.args = {
+  context: {
+    port: {
+      request: () => ({isActive: true, suggestedResourcesCount: 0})
+    }
+  }
+};
+
+export const ActiveWithOneSuggestion = Template.bind({});
+ActiveWithOneSuggestion.args = {
+  context: {
+    port: {
+      request: () => ({isActive: true, suggestedResourcesCount: 1})
     }
   }
 };

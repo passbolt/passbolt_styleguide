@@ -28,7 +28,9 @@ class ExtInFormCallToAction extends React.Component {
   render() {
     return (
       <AppContext.Provider value={this.state}>
-        <AskInFormMenuDisplay />
+        <div className="web-integration">
+          <AskInFormMenuDisplay />
+        </div>
       </AppContext.Provider>
     );
   }

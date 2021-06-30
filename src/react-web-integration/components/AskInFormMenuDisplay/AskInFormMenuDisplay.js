@@ -24,6 +24,14 @@ import PropTypes from "prop-types";
  */
 class AskInFormMenuDisplay extends React.Component {
   /**
+   * Returns the authentication check status
+   * @return {number}
+   */
+  static get informCallToActionCheckPeriod() {
+    return 6000;
+  }
+
+  /**
    * Default constructor
    * @param props Component props
    */
@@ -36,8 +44,15 @@ class AskInFormMenuDisplay extends React.Component {
   /**
    * Whenever the component is mounted
    */
-  async componentDidMount() {
-    await this.checkAuthenticationStatus();
+  componentDidMount() {
+    this.scheduleCheckInformCallToActionStatus();
+  }
+
+  /**
+   * Whenever the component will unmount
+   */
+  componentWillUnmount() {
+    clearTimeout(this.scheduledCheckIsAuthenticatedTimeout);
   }
 
   /**
@@ -45,67 +60,88 @@ class AskInFormMenuDisplay extends React.Component {
    */
   get defaultState() {
     return {
-      isUserAuthenticated: false
+      isReady: false, // True if the component is ready to be rendered
+      status: {
+        isActive: false, // By default, inactive call-to-action
+        suggestedResourcesCount: null // The number of resources to suggest
+      }
     }
   }
 
+
+
   /**
-   * Returns the authentication check status
-   * @return {number}
+   * Returns the count of suggested resources
    */
-  get isAuthenticatedCheckPeriod() {
-    return 6000;
+  get suggestedResourcesCount() {
+    return this.state.status.suggestedResourcesCount;
   }
 
   /**
    * Bind the event handlers
    */
   bindEventHandlers() {
-    this.openInFormMenu = this.openInFormMenu.bind(this);
+    this.handleIconClick = this.handleIconClick.bind(this);
   }
 
   /**
-   * Check periodically the user authentication status
+   * Whenever the user clicks on the in-form passbolt icon
    */
-  scheduleCheckAuthenticationStatus() {
-    this.checkAuthenticationStatus();
+  handleIconClick() {
+    this.execute();
+  }
+
+  /**
+   * Check periodically the in-form call-to-action status
+   */
+  async scheduleCheckInformCallToActionStatus() {
+    await this.checkAuthenticationStatus();
     this.scheduledCheckIsAuthenticatedTimeout = setTimeout(async() => {
       await this.checkAuthenticationStatus();
-      this.scheduleCheckAuthenticationStatus();
-    }, this.isAuthenticatedCheckPeriod);
+      await this.scheduleCheckInformCallToActionStatus();
+    }, AskInFormMenuDisplay.informCallToActionCheckPeriod);
   }
 
   /**
    * Check the user authentication status
    */
   async checkAuthenticationStatus() {
-    const {isAuthenticated, isMfaRequired} = await this.props.context.port.request("passbolt.auth.check-status");
+    const {isAuthenticated, isMfaRequired} = await this.props.context.port.request("passbolt.in-form-cta.check-status");
     this.setState({
-      isUserAuthenticated: isAuthenticated && !isMfaRequired
+      isReady: true,
+      status: {
+        isActive: isAuthenticated && !isMfaRequired,
+        suggestedResourcesCount: 0
+      },
     });
   }
 
-  /**
-   * Open the in-form menu
+  /**é
+   * Perform the call-to-action
    */
-  openInFormMenu() {
-    this.props.context.port.request("passbolt.inform.open");
+  execute() {
+    this.props.context.port.request("passbolt.in-form-cta.execute");
   }
 
   /**
    * Render the component
    */
   render() {
+    const logoClassModifier = this.state.status.isActive ? this.suggestedResourcesCount : 'inactive';
     return (
       <>
-        <a onClick={this.openInFormMenu}>
-          <div className="in-form-icon">
-            <div className={`in-form-icon-logo ${this.state.isUserAuthenticated? '' : 'in-form-icon-logo--inactive'}`} />
-          </div>
-        </a>
+        {this.state.isReady &&
+          <a onClick={this.handleIconClick}>
+            <div className="in-form-icon">
+              <div className={`in-form-icon-logo  in-form-icon-logo--${logoClassModifier}`} />
+            </div>
+          </a>
+        }
+
       </>
     );
   }
+
 }
 
 AskInFormMenuDisplay.propTypes = {

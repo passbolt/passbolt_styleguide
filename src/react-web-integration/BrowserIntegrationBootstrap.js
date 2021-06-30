@@ -15,10 +15,12 @@
  */
 import {QuickAccessEvent} from "./Events/Quickaccess/QuickAccessEvent";
 import {AuthLogin} from "./AuthLogin/AuthLogin";
+import InFormManager from "./lib/InForm/InFormManager";
 
 function init() {
   AuthLogin.legacyAuthLogin();
   QuickAccessEvent.fillForm();
+  InFormManager.initialize();
 }
 
 export const BrowserIntegrationBootstrap = {init};
