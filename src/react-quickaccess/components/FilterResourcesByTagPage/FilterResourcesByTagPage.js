@@ -310,11 +310,13 @@ class FilterResourcesByTagPage extends React.Component {
                     }
                     {(browsedResources.length > 0) &&
                       browsedResources.map(resource =>
-                        <li className="resource-entry" key={resource.id}>
+                        <li className="browse-resource-entry" key={resource.id}>
                           <a href="#" onClick={ev => this.handleSelectResourceClick(ev, resource.id)}>
-                            <span className="title">{resource.name}</span>
-                            <span className="username"> {resource.username ? `(${resource.username})` : ""}</span>
-                            <span className="url">{resource.uri}</span>
+                            <div className="inline-resource-entry">
+                              <span className="title">{resource.name}</span>
+                              <span className="username"> {resource.username ? `(${resource.username})` : ""}</span>
+                              <span className="url">{resource.uri}</span>
+                            </div>
                           </a>
                         </li>
                       )}
