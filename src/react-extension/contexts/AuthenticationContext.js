@@ -15,6 +15,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import UserSettings from "../../shared/lib/Settings/UserSettings";
 import {withAppContext} from "./AppContext";
+import {BROWSER_NAMES, detectBrowserName} from "../../shared/lib/Browser/detectBrowserName";
 
 export const AuthenticationContext = React.createContext({
   port: null, // The contextual port
@@ -115,12 +116,13 @@ export class AuthenticationContextProvider extends React.Component {
    */
   async onInitializeSetupRequested() {
     const isFirstInstall = await this.state.port.request('passbolt.setup.is-first-install');
+    const isChromeBrowser = detectBrowserName() === BROWSER_NAMES.CHROME;
     const setupInfo = await this.state.port.request('passbolt.setup.info');
     // update the locale to use the user locale
     this.props.context.onRefreshLocaleRequested(setupInfo.locale);
     // In case of error the background page should just disconnect the extension setup application.
     await this.setState({
-      state: isFirstInstall ? AuthenticationContextState.INTRODUCE_SETUP_EXTENSION_INITIALIZED : AuthenticationContextState.SETUP_INITIALIZED,
+      state: isFirstInstall && isChromeBrowser ? AuthenticationContextState.INTRODUCE_SETUP_EXTENSION_INITIALIZED : AuthenticationContextState.SETUP_INITIALIZED,
       setupInfo,
       process: AuthenticationContextProcess.SETUP
     });
@@ -131,13 +133,14 @@ export class AuthenticationContextProvider extends React.Component {
    * Initialize the authentication recover
    */
   async onInitializeRecoverRequested() {
-    const firstInstall = await this.state.port.request('passbolt.recover.first-install');
+    const isFirstInstall = await this.state.port.request('passbolt.recover.first-install');
+    const isChromeBrowser = detectBrowserName() === BROWSER_NAMES.CHROME;
     const recoverInfo = await this.state.port.request('passbolt.recover.info');
     // The user might have already set a locale, the recover info update the background page locale, refresh the locale.
     this.props.context.onRefreshLocaleRequested(recoverInfo.locale);
     // In case of error the background page should just disconnect the extension setup application.
     await this.setState({
-      state: firstInstall ? AuthenticationContextState.INTRODUCE_SETUP_EXTENSION_INITIALIZED : AuthenticationContextState.RECOVER_INITIALIZED,
+      state: isFirstInstall && isChromeBrowser ? AuthenticationContextState.INTRODUCE_SETUP_EXTENSION_INITIALIZED : AuthenticationContextState.RECOVER_INITIALIZED,
       recoverInfo,
       process: AuthenticationContextProcess.RECOVER
     });

@@ -14,10 +14,12 @@
 
 import {defaultProps} from "./AuthenticationContext.test.data";
 import {AuthenticationContextProvider, AuthenticationContextState} from "./AuthenticationContext";
+import { clear, mockUserAgent } from 'jest-useragent-mock'
 
 beforeEach(() => {
   jest.resetModules();
   jest.clearAllMocks();
+  clear();
 });
 
 describe("Authentication Context", () => {
@@ -52,7 +54,8 @@ describe("Authentication Context", () => {
       expect(authenticationContext.state.process).toBe('setup');
     });
 
-    it('As AN I should start initially with the INTRODUCE_SETUP_EXTENSION_INITIALIZED state', async() => {
+    it('As AN I should start initially with the INTRODUCE_SETUP_EXTENSION_INITIALIZED state when on chrome with a plugin just installed', async() => {
+      mockUserAgent('chrome');
       const setupInfo = {
         locale: "fr-FR"
       };
@@ -174,7 +177,8 @@ describe("Authentication Context", () => {
       expect(authenticationContext.state.process).toBe('recover');
     });
 
-    it('As AN I should start initially with the INTRODUCE_SETUP_EXTENSION_INITIALIZED state', async() => {
+    it('As AN I should start initially with the INTRODUCE_SETUP_EXTENSION_INITIALIZED state when on chrome with a plugin just installed', async() => {
+      mockUserAgent('chrome');
       const recoverInfo = {
         locale: "fr-FR"
       };
