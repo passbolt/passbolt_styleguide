@@ -22,6 +22,7 @@ import {withActionFeedback} from "./ActionFeedbackContext";
 import EditUserGroup from "../components/UserGroup/EditUserGroup/EditUserGroup";
 import {withDialog} from "./DialogContext";
 import {DateTime} from "luxon";
+import {withTranslation} from "react-i18next";
 
 /**
  * Context related to users ( filter, current selections, etc.)
@@ -90,6 +91,7 @@ class UserWorkspaceContextProvider extends React.Component {
         user: null // The user to scroll to
       },
       groupToEdit: null, // The group to edit
+      getTranslatedRoleName: this.getTranslatedRoleName.bind(this), // Tools to retrieve a user translated role name
       onUserScrolled: this.handleUserScrolled.bind(this), // Whenever one scrolled to a user
       onDetailsLocked: this.handleDetailsLocked.bind(this), // Lock or unlock detail  (hide or display the group or user details)
       onSorterChanged: this.handleSorterChange.bind(this), // Whenever the sorter changed
@@ -536,18 +538,22 @@ class UserWorkspaceContextProvider extends React.Component {
     const mfaSorter = (u1, u2) => (u2.is_mfa_enabled === u1.is_mfa_enabled) ? 0 : u2.is_mfa_enabled ? -1 : 1;
     const getUserFullName = user => `${user.profile.first_name} ${user.profile.last_name}`;
     const nameSorter = (u1, u2) => getUserFullName(u1).localeCompare(getUserFullName(u2));
-    const dateOrStringsorter = ['modified', 'last_logged_in'].includes(this.state.sorter.propertyName) ? dateSorter : stringSorter;
+    const roleNameSorter = (roleIdU1, roleIdU2) => this.getTranslatedRoleName(roleIdU1).localeCompare(this.getTranslatedRoleName(roleIdU2));
+    const dateOrStringSorter = ['modified', 'last_logged_in'].includes(this.state.sorter.propertyName) ? dateSorter : stringSorter;
 
     const isNameProperty = this.state.sorter.propertyName === 'name';
     const isMfaProperty = this.state.sorter.propertyName === 'is_mfa_enabled';
+    const isRoleNameProperty = this.state.sorter.propertyName === 'role.name';
 
     let propertySorter;
     if (isNameProperty) {
       propertySorter = plainObjectSorter(nameSorter);
     } else if (isMfaProperty) {
       propertySorter = plainObjectSorter(mfaSorter);
+    } else if (isRoleNameProperty) {
+      propertySorter = keySorter("role_id", roleNameSorter);
     } else {
-      propertySorter = keySorter(this.state.sorter.propertyName, dateOrStringsorter);
+      propertySorter = keySorter(this.state.sorter.propertyName, dateOrStringSorter);
     }
 
     await this.setState({filteredUsers: this.state.filteredUsers.sort(propertySorter)});
@@ -639,6 +645,26 @@ class UserWorkspaceContextProvider extends React.Component {
     await this.setState({groupToEdit});
   }
 
+  /** Common roles getters **/
+
+  /**
+   * Get the translated role name by role id
+   * @param {string} id The role id
+   * @return {string}
+   */
+  getTranslatedRoleName(id) {
+    if (this.props.context.roles) {
+      /*
+       * The i18n parser can't find the translation for passwordStrength.label
+       * To fix that we can use it in comment
+       * this.translate("admin")
+       * this.translate("user")
+       */
+      return this.props.t(this.props.context.roles.find(role => role.id === id).name);
+    }
+    return "";
+  }
+
   /**
    * Render the component
    * @returns {JSX}
@@ -661,10 +687,11 @@ UserWorkspaceContextProvider.propTypes = {
   history: PropTypes.object, // The router history
   actionFeedbackContext: PropTypes.object, // The action feedback context
   loadingContext: PropTypes.object, // The loading context
-  dialogContext: PropTypes.any // The dialog context
+  dialogContext: PropTypes.any, // The dialog context
+  t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withRouter(withDialog(withActionFeedback(withLoading(UserWorkspaceContextProvider)))));
+export default withAppContext(withRouter(withDialog(withActionFeedback(withLoading(withTranslation('common')(UserWorkspaceContextProvider))))));
 
 /**
  * User Workspace Context Consumer HOC

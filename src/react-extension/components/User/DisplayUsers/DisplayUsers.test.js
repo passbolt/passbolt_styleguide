@@ -93,6 +93,12 @@ describe("Display Users", () => {
       expect(props.userWorkspaceContext.onSorterChanged).toHaveBeenCalledWith('username');
     });
 
+    it('As LU, I should sort the users by role', async() => {
+      jest.spyOn(props.userWorkspaceContext, 'onSorterChanged').mockImplementationOnce(() => {});
+      await page.sortByRole();
+      expect(props.userWorkspaceContext.onSorterChanged).toHaveBeenCalledWith('role.name');
+    });
+
     it('As LU, I should sort the users by modified', async() => {
       jest.spyOn(props.userWorkspaceContext, 'onSorterChanged').mockImplementationOnce(() => {});
       await page.sortByModified();

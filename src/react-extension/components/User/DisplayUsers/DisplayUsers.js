@@ -257,6 +257,7 @@ class DisplayUsers extends React.Component {
     const isSelected = this.isUserSelected(user);
     const modifiedFormatted = this.formatDateTimeAgo(user.modified);
     const lastLoggedInFormatted = user.last_logged_in ? this.formatDateTimeAgo(user.last_logged_in) : "";
+    const roleName = this.props.userWorkspaceContext.getTranslatedRoleName(user.role_id);
     const mfa = user.is_mfa_enabled ? this.translate("Enabled") : this.translate("Disabled");
     const rowClassName = `${isSelected ? "selected" : ""} ${user.active ? "" : "inactive"}`;
 
@@ -286,6 +287,11 @@ class DisplayUsers extends React.Component {
         <td className="cell-username l-cell username">
           <div title={user.username}>
             {user.username}
+          </div>
+        </td>
+        <td className="cell-role m-cell role">
+          <div title={roleName}>
+            {roleName}
           </div>
         </td>
         <td className="cell-modified m-cell">
@@ -384,6 +390,23 @@ class DisplayUsers extends React.Component {
                             <Icon baseline={true} name="caret-up"/>
                             }
                             {this.isSortedColumn("username") && !this.isSortedAsc() &&
+                            <Icon baseline={true} name="caret-down"/>
+                            }
+                          </span>
+                        </div>
+                      </a>
+                    </th>
+                    <th className="cell-role m-cell role sortable">
+                      <a onClick={ev => this.handleSortByColumnClick(ev, "role.name")}>
+                        <div className="cell-header">
+                          <span className="cell-header-text">
+                            <Trans>Role</Trans>
+                          </span>
+                          <span className="cell-header-icon-sort">
+                            {this.isSortedColumn("role.name") && this.isSortedAsc() &&
+                            <Icon baseline={true} name="caret-up"/>
+                            }
+                            {this.isSortedColumn("role.name") && !this.isSortedAsc() &&
                             <Icon baseline={true} name="caret-down"/>
                             }
                           </span>
