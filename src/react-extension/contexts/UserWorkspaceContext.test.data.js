@@ -12,6 +12,7 @@ export function defaultAppContext(appContext) {
       canIUse: () => true
     },
     users,
+    roles,
     groups
   };
   return Object.assign(defaultAppContext, appContext || {});
@@ -31,13 +32,6 @@ export function defaultProps() {
 export const users = [{
   "id": "640ebc06-5ec1-5322-a1ae-6120ed2f3a74",
   "role_id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
-  "role": {
-    "created": "2012-07-04T13:39:25+00:00",
-    "description": "Logged in user",
-    "id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
-    "modified": "2012-07-04T13:39:25+00:00",
-    "name": "user"
-  },
   "username": "carol@passbolt.com",
   "active": true,
   "deleted": false,
@@ -76,13 +70,6 @@ export const users = [{
 }, {
   "id": "54c6278e-f824-5fda-91ff-3e946b18d994",
   "role_id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
-  "role": {
-    "created": "2012-07-04T13:39:25+00:00",
-    "description": "Logged in user",
-    "id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
-    "modified": "2012-07-04T13:39:25+00:00",
-    "name": "user"
-  },
   "username": "dame@passbolt.com",
   "active": true,
   "deleted": false,
@@ -121,13 +108,6 @@ export const users = [{
 }, {
   "id": "1ebc0060-9274-5451-aa12-ad0f31bc29dd",
   "role_id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
-  "role": {
-    "created": "2012-07-04T13:39:25+00:00",
-    "description": "Logged in user",
-    "id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
-    "modified": "2012-07-04T13:39:25+00:00",
-    "name": "user"
-  },
   "username": "edith@passbolt.com",
   "active": true,
   "deleted": false,
@@ -166,13 +146,6 @@ export const users = [{
 }, {
   "id": "e97b14ba-8957-57c9-a357-f78a6e1e1a46",
   "role_id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
-  "role": {
-    "created": "2012-07-04T13:39:25+00:00",
-    "description": "Logged in user",
-    "id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
-    "modified": "2012-07-04T13:39:25+00:00",
-    "name": "user"
-  },
   "username": "betty@passbolt.com",
   "active": true,
   "deleted": false,
@@ -211,13 +184,6 @@ export const users = [{
 }, {
   "id": "f848277c-5398-58f8-a82a-72397af2d450",
   "role_id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
-  "role": {
-    "created": "2012-07-04T13:39:25+00:00",
-    "description": "Logged in user",
-    "id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
-    "modified": "2012-07-04T13:39:25+00:00",
-    "name": "user"
-  },
   "username": "ada@passbolt.com",
   "active": true,
   "deleted": false,
@@ -255,13 +221,6 @@ export const users = [{
 }, {
   "id": "887422c0-bef6-59a7-bbda-84c253ee0848",
   "role_id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
-  "role": {
-    "created": "2012-07-04T13:39:25+00:00",
-    "description": "Logged in user",
-    "id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
-    "modified": "2012-07-04T13:39:25+00:00",
-    "name": "user"
-  },
   "username": "frances@passbolt.com",
   "active": true,
   "deleted": false,
@@ -300,13 +259,6 @@ export const users = [{
 }, {
   "id": "32d29702-85e2-539d-98ac-6abfa7aadf01",
   "role_id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
-  "role": {
-    "created": "2012-07-04T13:39:25+00:00",
-    "description": "Logged in user",
-    "id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
-    "modified": "2012-07-04T13:39:25+00:00",
-    "name": "user"
-  },
   "username": "kathleen@passbolt.com",
   "active": true,
   "deleted": false,
@@ -345,13 +297,6 @@ export const users = [{
 }, {
   "id": "ecc26246-0331-5297-ac16-1c1e57d22ebd",
   "role_id": "0d51c3a8-5e67-5e3d-882f-e1868966d817",
-  "role": {
-    "created": "2012-07-04T13:39:25+00:00",
-    "description": "Logged in admin",
-    "id": "0d51c3a8-5e67-5e3d-882f-e1868966d817",
-    "modified": "2012-07-04T13:39:25+00:00",
-    "name": "admin"
-  },
   "username": "xss12@passbolt.com",
   "active": true,
   "deleted": false,
@@ -371,13 +316,6 @@ export const users = [{
 }, {
   "id": "e7fa0375-61df-5dbc-9e42-e0d363bd0ecf",
   "role_id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
-  "role": {
-    "created": "2012-07-04T13:39:25+00:00",
-    "description": "Logged in user",
-    "id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
-    "modified": "2012-07-04T13:39:25+00:00",
-    "name": "user"
-  },
   "username": "nancy@passbolt.com",
   "active": true,
   "deleted": false,
@@ -398,13 +336,6 @@ export const users = [{
 }, {
   "id": "4404acbb-8066-5910-a5e1-c3eb0e63dfff",
   "role_id": "0d51c3a8-5e67-5e3d-882f-e1868966d817",
-  "role": {
-    "created": "2012-07-04T13:39:25+00:00",
-    "description": "Logged in admin",
-    "id": "0d51c3a8-5e67-5e3d-882f-e1868966d817",
-    "modified": "2012-07-04T13:39:25+00:00",
-    "name": "admin"
-  },
   "username": "xss8@passbolt.com",
   "active": true,
   "deleted": false,
@@ -424,13 +355,6 @@ export const users = [{
 }, {
   "id": "1e73e104-d53e-579d-a0c4-e9aeaca76c56",
   "role_id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
-  "role": {
-    "created": "2012-07-04T13:39:25+00:00",
-    "description": "Logged in user",
-    "id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
-    "modified": "2012-07-04T13:39:25+00:00",
-    "name": "user"
-  },
   "username": "lynne@passbolt.com",
   "active": true,
   "deleted": false,
@@ -451,13 +375,6 @@ export const users = [{
 }, {
   "id": "92946500-2940-54ff-889a-3da69afe5078",
   "role_id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
-  "role": {
-    "created": "2012-07-04T13:39:25+00:00",
-    "description": "Logged in user",
-    "id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
-    "modified": "2012-07-04T13:39:25+00:00",
-    "name": "user"
-  },
   "username": "joan@passbolt.com",
   "active": true,
   "deleted": false,
@@ -478,13 +395,6 @@ export const users = [{
 }, {
   "id": "bab9c9c5-3b61-5594-9855-b352fbbc348c",
   "role_id": "0d51c3a8-5e67-5e3d-882f-e1868966d817",
-  "role": {
-    "created": "2012-07-04T13:39:25+00:00",
-    "description": "Logged in admin",
-    "id": "0d51c3a8-5e67-5e3d-882f-e1868966d817",
-    "modified": "2012-07-04T13:39:25+00:00",
-    "name": "admin"
-  },
   "username": "xss14@passbolt.com",
   "active": true,
   "deleted": false,
@@ -505,13 +415,6 @@ export const users = [{
 }, {
   "id": "5b81d798-df23-5d02-9f49-709851a4501f",
   "role_id": "0d51c3a8-5e67-5e3d-882f-e1868966d817",
-  "role": {
-    "created": "2012-07-04T13:39:25+00:00",
-    "description": "Logged in admin",
-    "id": "0d51c3a8-5e67-5e3d-882f-e1868966d817",
-    "modified": "2012-07-04T13:39:25+00:00",
-    "name": "admin"
-  },
   "username": "xss2@passbolt.com",
   "active": true,
   "deleted": false,
@@ -532,13 +435,6 @@ export const users = [{
 }, {
   "id": "8d04cf98-716b-5f6d-9fe8-c130f8992646",
   "role_id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
-  "role": {
-    "created": "2012-07-04T13:39:25+00:00",
-    "description": "Logged in user",
-    "id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
-    "modified": "2012-07-04T13:39:25+00:00",
-    "name": "user"
-  },
   "username": "hedy@passbolt.com",
   "active": true,
   "deleted": false,
@@ -559,13 +455,6 @@ export const users = [{
 }, {
   "id": "2eb86906-983b-59dc-ba9f-6e8e7754c416",
   "role_id": "0d51c3a8-5e67-5e3d-882f-e1868966d817",
-  "role": {
-    "created": "2012-07-04T13:39:25+00:00",
-    "description": "Logged in admin",
-    "id": "0d51c3a8-5e67-5e3d-882f-e1868966d817",
-    "modified": "2012-07-04T13:39:25+00:00",
-    "name": "admin"
-  },
   "username": "xss16@passbolt.com",
   "active": true,
   "deleted": false,
@@ -585,13 +474,6 @@ export const users = [{
 }, {
   "id": "688efba3-0fe6-5bb3-9524-c4088274c178",
   "role_id": "0d51c3a8-5e67-5e3d-882f-e1868966d817",
-  "role": {
-    "created": "2012-07-04T13:39:25+00:00",
-    "description": "Logged in admin",
-    "id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
-    "modified": "2012-07-04T13:39:25+00:00",
-    "name": "administr"
-  },
   "username": "xss0@passbolt.com",
   "active": true,
   "deleted": false,
@@ -612,13 +494,6 @@ export const users = [{
 }, {
   "id": "67ed8efc-0ab0-5797-be26-2449f979e82a",
   "role_id": "0d51c3a8-5e67-5e3d-882f-e1868966d817",
-  "role": {
-    "created": "2012-07-04T13:39:25+00:00",
-    "description": "Logged in admin",
-    "id": "0d51c3a8-5e67-5e3d-882f-e1868966d817",
-    "modified": "2012-07-04T13:39:25+00:00",
-    "name": "admin"
-  },
   "username": "xss7@passbolt.com",
   "active": true,
   "deleted": false,
@@ -638,13 +513,6 @@ export const users = [{
 }, {
   "id": "8d038399-ecac-55b4-8ad3-b7f0650de2a2",
   "role_id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
-  "role": {
-    "created": "2012-07-04T13:39:25+00:00",
-    "description": "Logged in user",
-    "id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
-    "modified": "2012-07-04T13:39:25+00:00",
-    "name": "user"
-  },
   "username": "orna@passbolt.com",
   "active": true,
   "deleted": false,
@@ -665,13 +533,6 @@ export const users = [{
 }, {
   "id": "f7e9754a-2f64-5cdd-8ba2-178b33383505",
   "role_id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
-  "role": {
-    "created": "2012-07-04T13:39:25+00:00",
-    "description": "Logged in user",
-    "id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
-    "modified": "2012-07-04T13:39:25+00:00",
-    "name": "user"
-  },
   "username": "ping@passbolt.com",
   "active": true,
   "deleted": false,
@@ -692,13 +553,6 @@ export const users = [{
 }, {
   "id": "742554b6-2940-5b7d-a8e7-b03a19f78b8e",
   "role_id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
-  "role": {
-    "created": "2012-07-04T13:39:25+00:00",
-    "description": "Logged in user",
-    "id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
-    "modified": "2012-07-04T13:39:25+00:00",
-    "name": "user"
-  },
   "username": "margaret@passbolt.com",
   "active": true,
   "deleted": false,
@@ -719,13 +573,6 @@ export const users = [{
 }, {
   "id": "7afa66ed-53aa-5d65-84c5-506d2b362898",
   "role_id": "0d51c3a8-5e67-5e3d-882f-e1868966d817",
-  "role": {
-    "created": "2012-07-04T13:39:25+00:00",
-    "description": "Logged in admin",
-    "id": "0d51c3a8-5e67-5e3d-882f-e1868966d817",
-    "modified": "2012-07-04T13:39:25+00:00",
-    "name": "admin"
-  },
   "username": "xss6@passbolt.com",
   "active": true,
   "deleted": false,
@@ -745,13 +592,6 @@ export const users = [{
 }, {
   "id": "9244beb0-db82-5f76-a29b-f537c6b644ef",
   "role_id": "0d51c3a8-5e67-5e3d-882f-e1868966d817",
-  "role": {
-    "created": "2012-07-04T13:39:25+00:00",
-    "description": "Logged in admin",
-    "id": "0d51c3a8-5e67-5e3d-882f-e1868966d817",
-    "modified": "2012-07-04T13:39:25+00:00",
-    "name": "admin"
-  },
   "username": "xss15@passbolt.com",
   "active": true,
   "deleted": false,
@@ -772,13 +612,6 @@ export const users = [{
 }, {
   "id": "86b3eb2f-2dd0-56b3-8978-920615cf7c17",
   "role_id": "0d51c3a8-5e67-5e3d-882f-e1868966d817",
-  "role": {
-    "created": "2012-07-04T13:39:25+00:00",
-    "description": "Logged in admin",
-    "id": "0d51c3a8-5e67-5e3d-882f-e1868966d817",
-    "modified": "2012-07-04T13:39:25+00:00",
-    "name": "admin"
-  },
   "username": "xss1@passbolt.com",
   "active": true,
   "deleted": false,
@@ -798,13 +631,6 @@ export const users = [{
 }, {
   "id": "d57c10f5-639d-5160-9c81-8a0c6c4ec856",
   "role_id": "0d51c3a8-5e67-5e3d-882f-e1868966d817",
-  "role": {
-    "created": "2012-07-04T13:39:25+00:00",
-    "description": "Logged in admin",
-    "id": "0d51c3a8-5e67-5e3d-882f-e1868966d817",
-    "modified": "2012-07-04T13:39:25+00:00",
-    "name": "admin"
-  },
   "username": "admin@passbolt.com",
   "active": true,
   "deleted": false,
@@ -825,13 +651,6 @@ export const users = [{
 }, {
   "id": "e428e724-9264-5599-b28f-b7b622fcf1e6",
   "role_id": "0d51c3a8-5e67-5e3d-882f-e1868966d817",
-  "role": {
-    "created": "2012-07-04T13:39:25+00:00",
-    "description": "Logged in admin",
-    "id": "0d51c3a8-5e67-5e3d-882f-e1868966d817",
-    "modified": "2012-07-04T13:39:25+00:00",
-    "name": "admin"
-  },
   "username": "xss3@passbolt.com",
   "active": true,
   "deleted": false,
@@ -852,13 +671,6 @@ export const users = [{
 }, {
   "id": "98c2bef5-cd5f-59e7-a1a7-0107c9a7cf08",
   "role_id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
-  "role": {
-    "created": "2012-07-04T13:39:25+00:00",
-    "description": "Logged in user",
-    "id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
-    "modified": "2012-07-04T13:39:25+00:00",
-    "name": "user"
-  },
   "username": "wang@passbolt.com",
   "active": true,
   "deleted": false,
@@ -898,13 +710,6 @@ export const users = [{
 }, {
   "id": "92f42805-bc0f-58fd-9de6-aab13ed0c28d",
   "role_id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
-  "role": {
-    "created": "2012-07-04T13:39:25+00:00",
-    "description": "Logged in user",
-    "id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
-    "modified": "2012-07-04T13:39:25+00:00",
-    "name": "user"
-  },
   "username": "ruth@passbolt.com",
   "active": false,
   "deleted": false,
@@ -925,13 +730,6 @@ export const users = [{
 }, {
   "id": "be030f90-6fd8-57b1-b48a-a693a7684a43",
   "role_id": "0d51c3a8-5e67-5e3d-882f-e1868966d817",
-  "role": {
-    "created": "2012-07-04T13:39:25+00:00",
-    "description": "Logged in admin",
-    "id": "0d51c3a8-5e67-5e3d-882f-e1868966d817",
-    "modified": "2012-07-04T13:39:25+00:00",
-    "name": "admin"
-  },
   "username": "xss4@passbolt.com",
   "active": true,
   "deleted": false,
@@ -951,13 +749,6 @@ export const users = [{
 }, {
   "id": "e1ebc592-b90d-5e22-9f40-50e52911673b",
   "role_id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
-  "role": {
-    "created": "2012-07-04T13:39:25+00:00",
-    "description": "Logged in user",
-    "id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
-    "modified": "2012-07-04T13:39:25+00:00",
-    "name": "user"
-  },
   "username": "marlyn@passbolt.com",
   "active": true,
   "deleted": false,
@@ -978,13 +769,6 @@ export const users = [{
 }, {
   "id": "af5e1f70-a0ee-5b76-935b-c846f8a6a190",
   "role_id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
-  "role": {
-    "created": "2012-07-04T13:39:25+00:00",
-    "description": "Logged in user",
-    "id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
-    "modified": "2012-07-04T13:39:25+00:00",
-    "name": "user"
-  },
   "username": "adele@passbolt.com",
   "active": true,
   "deleted": false,
@@ -1024,13 +808,6 @@ export const users = [{
 }, {
   "id": "c92a1885-1644-5bdb-8486-12d751b976ff",
   "role_id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
-  "role": {
-    "created": "2012-07-04T13:39:25+00:00",
-    "description": "Logged in user",
-    "id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
-    "modified": "2012-07-04T13:39:25+00:00",
-    "name": "user"
-  },
   "username": "thelma@passbolt.com",
   "active": true,
   "deleted": false,
@@ -1051,13 +828,6 @@ export const users = [{
 }, {
   "id": "6aabffc9-f788-58f8-9bc9-f4c102ad2f53",
   "role_id": "6f02b8d2-e24c-51fe-a452-5a027c26dbef",
-  "role": {
-    "created": "2012-07-04T13:39:25+00:00",
-    "description": "Logged in Group Manager",
-    "id": "6f02b8d2-e24c-51fe-a452-5a027c26dbef\"",
-    "modified": "2012-07-04T13:39:25+00:00",
-    "name": "manager"
-  },
   "username": "anonymous@passbolt.com",
   "active": true,
   "deleted": false,
@@ -1078,13 +848,6 @@ export const users = [{
 }, {
   "id": "620de627-8f07-5427-9149-e2c43219c5aa",
   "role_id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
-  "role": {
-    "created": "2012-07-04T13:39:25+00:00",
-    "description": "Logged in user",
-    "id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
-    "modified": "2012-07-04T13:39:25+00:00",
-    "name": "user"
-  },
   "username": "grace@passbolt.com",
   "active": true,
   "deleted": false,
@@ -1105,13 +868,6 @@ export const users = [{
 }, {
   "id": "0da907bd-5c57-5acc-ba39-c6ebe091f613",
   "role_id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
-  "role": {
-    "created": "2012-07-04T13:39:25+00:00",
-    "description": "Logged in user",
-    "id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
-    "modified": "2012-07-04T13:39:25+00:00",
-    "name": "user"
-  },
   "username": "jean@passbolt.com",
   "active": true,
   "deleted": false,
@@ -1132,13 +888,6 @@ export const users = [{
 }, {
   "id": "2cff151f-3c67-5ca9-8af9-884fb06d96cf",
   "role_id": "0d51c3a8-5e67-5e3d-882f-e1868966d817",
-  "role": {
-    "created": "2012-07-04T13:39:25+00:00",
-    "description": "Logged in admin",
-    "id": "0d51c3a8-5e67-5e3d-882f-e1868966d817",
-    "modified": "2012-07-04T13:39:25+00:00",
-    "name": "admin"
-  },
   "username": "xss11@passbolt.com",
   "active": true,
   "deleted": false,
@@ -1159,13 +908,6 @@ export const users = [{
 }, {
   "id": "442a3c46-df26-5f93-8c50-2b52f08e7d83",
   "role_id": "0d51c3a8-5e67-5e3d-882f-e1868966d817",
-  "role": {
-    "created": "2012-07-04T13:39:25+00:00",
-    "description": "Logged in admin",
-    "id": "0d51c3a8-5e67-5e3d-882f-e1868966d817",
-    "modified": "2012-07-04T13:39:25+00:00",
-    "name": "admin"
-  },
   "username": "xss10@passbolt.com",
   "active": true,
   "deleted": false,
@@ -1186,13 +928,6 @@ export const users = [{
 }, {
   "id": "928c44c3-fcb5-5d28-b975-a749b288ad0f",
   "role_id": "0d51c3a8-5e67-5e3d-882f-e1868966d817",
-  "role": {
-    "created": "2012-07-04T13:39:25+00:00",
-    "description": "Logged in admin",
-    "id": "0d51c3a8-5e67-5e3d-882f-e1868966d817",
-    "modified": "2012-07-04T13:39:25+00:00",
-    "name": "admin"
-  },
   "username": "xss17@passbolt.com",
   "active": true,
   "deleted": false,
@@ -1213,13 +948,6 @@ export const users = [{
 }, {
   "id": "796ce5c5-964a-5f79-8212-5e88bd33e6bd",
   "role_id": "0d51c3a8-5e67-5e3d-882f-e1868966d817",
-  "role": {
-    "created": "2012-07-04T13:39:25+00:00",
-    "description": "Logged in admin",
-    "id": "0d51c3a8-5e67-5e3d-882f-e1868966d817",
-    "modified": "2012-07-04T13:39:25+00:00",
-    "name": "admin"
-  },
   "username": "xss9@passbolt.com",
   "active": true,
   "deleted": false,
@@ -1260,13 +988,6 @@ export const users = [{
 }, {
   "id": "a0559bb5-050b-50a3-ad39-c6756a46dbb7",
   "role_id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
-  "role": {
-    "created": "2012-07-04T13:39:25+00:00",
-    "description": "Logged in user",
-    "id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
-    "modified": "2012-07-04T13:39:25+00:00",
-    "name": "user"
-  },
   "username": "yvonne@passbolt.com",
   "active": true,
   "deleted": false,
@@ -1287,13 +1008,6 @@ export const users = [{
 }, {
   "id": "81504708-c785-58e7-bd19-c1f2385dd074",
   "role_id": "0d51c3a8-5e67-5e3d-882f-e1868966d817",
-  "role": {
-    "created": "2012-07-04T13:39:25+00:00",
-    "description": "Logged in admin",
-    "id": "0d51c3a8-5e67-5e3d-882f-e1868966d817",
-    "modified": "2012-07-04T13:39:25+00:00",
-    "name": "admin"
-  },
   "username": "xss13@passbolt.com",
   "active": true,
   "deleted": false,
@@ -2642,5 +2356,21 @@ export const groups = [
         "created": "2020-08-17T16:37:15+00:00"
       }
     ],
+  }
+];
+
+const roles = [
+  {
+    "id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
+    "name": "user",
+    "description": "Logged in user",
+    "created": "2012-07-04T13:39:25+00:00",
+    "modified": "2012-07-04T13:39:25+00:00"
+  }, {
+    "id": "0d51c3a8-5e67-5e3d-882f-e1868966d817",
+    "name": "admin",
+    "description": "Logged in admin",
+    "created": "2012-07-04T13:39:25+00:00",
+    "modified": "2012-07-04T13:39:25+00:00"
   }
 ];

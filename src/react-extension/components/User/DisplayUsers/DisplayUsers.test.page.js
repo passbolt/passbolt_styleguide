@@ -20,6 +20,7 @@ import AppContext from "../../../contexts/AppContext";
 import {BrowserRouter as Router} from "react-router-dom";
 import DisplayUsers from "./DisplayUsers";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
+import {UserWorkspaceContext} from "../../../contexts/UserWorkspaceContext";
 
 /**
  * The FilterUsersByGroups component represented as a page
@@ -34,9 +35,11 @@ export default class DisplayUsersPage {
     this._page = render(
       <MockTranslationProvider>
         <AppContext.Provider value={appContext}>
-          <Router>
-            <DisplayUsers {...props}/>
-          </Router>
+          <UserWorkspaceContext.Provider value={props.userWorkspaceContext}>
+            <Router>
+              <DisplayUsers {...props}/>
+            </Router>
+          </UserWorkspaceContext.Provider>
         </AppContext.Provider>
       </MockTranslationProvider>
     );
@@ -102,10 +105,20 @@ export default class DisplayUsersPage {
   }
 
   /**
+   * Sort the users by role
+   */
+  async sortByRole() {
+    const element = this._page.container.querySelectorAll('thead th a')[2];
+    const leftClick = {button: 0};
+    fireEvent.click(element, leftClick);
+    await waitFor(() => {});
+  }
+
+  /**
    * Sort the users by their last date of modification
    */
   async sortByModified() {
-    const element = this._page.container.querySelectorAll('thead th a')[2];
+    const element = this._page.container.querySelectorAll('thead th a')[3];
     const leftClick = {button: 0};
     fireEvent.click(element, leftClick);
     await waitFor(() => {});
@@ -115,7 +128,7 @@ export default class DisplayUsersPage {
    * Sort the users by their last date of login
    */
   async sortByLastLoggedIn() {
-    const element = this._page.container.querySelectorAll('thead th a')[3];
+    const element = this._page.container.querySelectorAll('thead th a')[4];
     const leftClick = {button: 0};
     fireEvent.click(element, leftClick);
     await waitFor(() => {});
@@ -125,7 +138,7 @@ export default class DisplayUsersPage {
    * Sort the users by their mfa enable status
    */
   async sortByMFAEnabled() {
-    const element = this._page.container.querySelectorAll('thead th a')[4];
+    const element = this._page.container.querySelectorAll('thead th a')[5];
     const leftClick = {button: 0};
     fireEvent.click(element, leftClick);
     await waitFor(() => {});

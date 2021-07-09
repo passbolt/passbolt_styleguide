@@ -180,7 +180,8 @@ export function defaultProps() {
       }],
       filter: {
         type: UserWorkspaceFilterTypes.ALL
-      }
+      },
+      getTranslatedRoleName: jest.fn(name => name),
     }
   };
 }
