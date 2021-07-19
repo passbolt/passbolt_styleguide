@@ -6,7 +6,7 @@
 /* box shadows */
 /* dropdown menus */
 /* inputs */
-/* logo */
+/* icons */
 /* grid */
 /* messages */
 /* sidebar */
@@ -3046,6 +3046,21 @@ body {
 }
 .login.page .install-extension a.browser-webstore.firefox img {
   padding: 1.6rem 0;
+}
+.login.page .introduce-setup-extension .animated-setup-introduction.chrome {
+  background: transparent url('../../../img/illustrations/pin_passbolt.gif') center center no-repeat;
+  background-size: contain;
+  height: 25rem;
+}
+.login.page .introduce-setup-extension .arrow {
+  background: transparent url('../../../img/illustrations/arrow.png') right top no-repeat;
+  width: 40%;
+  height: 50%;
+  position: absolute;
+  top: 0;
+  right: 4.8%;
+  background-size: cover;
+  z-index: -1;
 }
 .login.page .browser-not-supported a.browser {
   border: 0;

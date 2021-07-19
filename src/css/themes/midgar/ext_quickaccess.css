@@ -6,7 +6,7 @@
 /* box shadows */
 /* dropdown menus */
 /* inputs */
-/* logo */
+/* icons */
 /* grid */
 /* messages */
 /* controls */
@@ -2258,6 +2258,7 @@ html {
 .quickaccess .error-message {
   font-size: 1.2rem;
   margin-bottom: 0.4rem;
+  color: #FF6B70;
 }
 .quickaccess .passphrase input[type=password] {
   box-sizing: border-box;
@@ -2395,10 +2396,6 @@ html {
 }
 .quickaccess .submit-wrapper:after {
   clear: both;
-}
-.quickaccess .submit-wrapper .button {
-  font-size: 1.6rem;
-  padding: 1.1rem 3.2rem;
 }
 .quickaccess .submit-wrapper .cancel {
   margin-right: 3rem;
@@ -2563,44 +2560,31 @@ html {
   position: relative;
   margin: 0.8rem 3rem 0.8rem 1.6rem;
 }
-.quickaccess .index-list .resource-entry a {
+.quickaccess .index-list .suggested-resource-entry {
+  display: flex;
+  flex-direction: row;
+}
+.quickaccess .index-list .suggested-resource-entry .resource-details {
   color: #FFFFFC;
-  position: relative;
-  display: block;
-  padding: 1.4rem 2.8rem 1.4rem 1.8rem;
+  padding: 1.4rem 2rem 1.4rem 1.8rem;
   box-sizing: border-box;
   border-bottom: 1px solid #0C0C0A;
+  width: 80%;
+  flex: 1 1 auto;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   -o-text-overflow: ellipsis;
   -ms-text-overflow: ellipsis;
 }
-.quickaccess .index-list .resource-entry a:after {
-  background: transparent url('../../../img/controls/chevron-right_white.svg') 23rem center no-repeat;
-  background-size: 1.6rem 1.6rem;
-  content: "";
-  display: block;
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  opacity: 0.1;
-}
-.quickaccess .index-list .resource-entry a:focus {
+.quickaccess .index-list .suggested-resource-entry .resource-details:focus {
   color: #2894DF;
 }
-.quickaccess .index-list .resource-entry a:focus:after {
-  opacity: 0.4;
-}
-.quickaccess .index-list .resource-entry a:hover {
+.quickaccess .index-list .suggested-resource-entry .resource-details:hover {
   color: #2894DF;
+  background-color: #3B3B39;
 }
-.quickaccess .index-list .resource-entry a:hover:after {
-  opacity: 0.4;
-}
-.quickaccess .index-list .resource-entry a .url {
+.quickaccess .index-list .suggested-resource-entry .resource-details .url {
   display: block;
   font-size: 1.2rem;
   padding-top: 0.4rem;
@@ -2611,32 +2595,67 @@ html {
   -o-text-overflow: ellipsis;
   -ms-text-overflow: ellipsis;
 }
-.quickaccess .index-list .filter-entry a {
+.quickaccess .index-list .suggested-resource-entry .chevron-right {
+  background: linear-gradient(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.9)), url('../../../img/controls/chevron-right_white.svg') center center no-repeat;
+  background-size: 1.6rem 1.6rem;
+  box-sizing: border-box;
+  border-bottom: 1px solid #0C0C0A;
+  width: 4rem;
+  flex: 0 1 auto;
+}
+.quickaccess .index-list .suggested-resource-entry .chevron-right:focus {
+  background-image: linear-gradient(rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0.6)), url('../../../img/controls/chevron-right_white.svg');
+}
+.quickaccess .index-list .suggested-resource-entry .chevron-right:hover {
+  background-color: #3B3B39;
+  background-image: linear-gradient(rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0.6)), url('../../../img/controls/chevron-right_white.svg');
+}
+.quickaccess .index-list .browse-resource-entry a .inline-resource-entry {
+  display: inline-block;
+}
+.quickaccess .index-list .browse-resource-entry a .inline-resource-entry .url {
+  display: block;
+  font-size: 1.2rem;
+  padding-top: 0.4rem;
+  color: #cacac9;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -o-text-overflow: ellipsis;
+  -ms-text-overflow: ellipsis;
+}
+.quickaccess .index-list .browse-resource-entry a:after {
+  margin-top: 1.4rem;
+}
+.quickaccess .index-list .filter-entry a,
+.quickaccess .index-list .browse-resource-entry a {
   color: #FFFFFC;
   display: block;
   border-bottom: 1px solid #0C0C0A;
-  padding: 1.4rem 2.8rem 1.4rem 1.8rem;
+  padding: 1.4rem 0rem 1.4rem 1.8rem;
   position: relative;
 }
-.quickaccess .index-list .filter-entry a:after {
-  background: transparent url('../../../img/controls/chevron-right_white.svg') 23rem center no-repeat;
+.quickaccess .index-list .filter-entry a:after,
+.quickaccess .index-list .browse-resource-entry a:after {
+  background: transparent url('../../../img/controls/chevron-right_white.svg') center center no-repeat;
   background-size: 1.6rem 1.6rem;
+  width: 4rem;
+  height: 2rem;
   content: "";
-  display: block;
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
   opacity: 0.1;
+  float: right;
 }
-.quickaccess .index-list .filter-entry a:hover {
+.quickaccess .index-list .filter-entry a:hover,
+.quickaccess .index-list .browse-resource-entry a:hover {
   color: #2894DF;
+  background-color: #3B3B39;
 }
-.quickaccess .index-list .filter-entry a:hover:after {
+.quickaccess .index-list .filter-entry a:hover:after,
+.quickaccess .index-list .browse-resource-entry a:hover:after {
   opacity: 0.4;
 }
-.quickaccess .index-list .filter-entry .icon svg {
+.quickaccess .index-list .filter-entry .icon svg,
+.quickaccess .index-list .browse-resource-entry .icon svg {
   float: left;
   margin-right: 0.8rem;
 }
@@ -2649,6 +2668,7 @@ html {
 }
 .quickaccess .index-list .option-entry a:hover {
   color: #2894DF;
+  background-color: #3B3B39;
 }
 .quickaccess .index-list .option-entry a:hover:after {
   opacity: 0.4;
@@ -2747,7 +2767,7 @@ html {
   background: #222220;
 }
 .quickaccess .item-browse .properties .property-value {
-  width: 18rem;
+  width: 28rem;
   float: left;
   padding: 0 1rem 1.6rem 1.8rem;
   white-space: nowrap;
@@ -2763,7 +2783,7 @@ html {
 .quickaccess .item-browse .properties .property-name {
   font-size: 1.3rem;
   color: #8B8B89;
-  width: 18rem;
+  width: 28rem;
   float: left;
   padding: 0.8rem 1rem 0.4rem 1.8rem;
 }
@@ -2790,7 +2810,7 @@ html {
   background: transparent url('../../../img/controls/dot_red.svg') repeat-x left 3px;
 }
 .quickaccess .item-browse .properties .secret.decrypted {
-  max-width: 16rem;
+  max-width: 28rem;
   width: inherit;
   margin-left: 0;
   padding-right: 0;
@@ -3231,4 +3251,78 @@ html {
   100% {
     opacity: 1;
   }
+}
+.in-form-menu {
+  font-size: 1.4rem;
+  color: #FFFFFC;
+  width: 35rem;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+}
+.in-form-menu--scrollable {
+  overflow-y: scroll;
+  height: 20rem;
+  /* Opera doesn't support this in the shorthand */
+  overflow: auto;
+  background: linear-gradient(#30302D 30%, rgba(255, 255, 255, 0)), linear-gradient(rgba(255, 255, 255, 0), #30302D 70%) 0 100%, /* Shadows */ radial-gradient(farthest-side at 50% 0, rgba(0, 0, 0, 0.08), rgba(0, 0, 0, 0)), radial-gradient(farthest-side at 50% 100%, rgba(0, 0, 0, 0.08), rgba(0, 0, 0, 0)) 0 100%;
+  background-repeat: no-repeat;
+  background-color: #30302D;
+  background-size: 100% 40px, 100% 40px, 100% 14px, 100% 14px;
+  /* Opera doesn't support this in the shorthand */
+  background-attachment: local, local, scroll, scroll;
+}
+.in-form-menu-item {
+  display: flex;
+  padding: 1rem;
+  text-decoration: none;
+  border-bottom: 0;
+}
+.in-form-menu-item:not(:last-child) {
+  border-bottom: 1px solid #0C0C0A;
+}
+.in-form-menu-item:hover {
+  color: #FFFFFC;
+  background-color: #444442;
+}
+.in-form-menu-item:hover .in-form-menu-item-content-subheader-password:before {
+  position: absolute;
+  bottom: 0;
+  height: 100%;
+  width: 100%;
+  content: "";
+  background: linear-gradient(to left, #444442 20%, rgba(68, 68, 66, 0) 80%);
+  pointer-events: none;
+  /* so the text is still selectable */
+}
+.in-form-menu-item-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-basis: 4rem;
+}
+.in-form-menu-item-icon .fa.icon svg {
+  width: 1.6rem;
+  height: 1.6rem;
+}
+.in-form-menu-item-icon .fa.icon svg path {
+  fill: #8B8B89;
+}
+.in-form-menu-item-content {
+  flex: 1;
+  color: #FFFFFC;
+}
+.in-form-menu-item-content-subheader-password {
+  position: relative;
+}
+.in-form-menu-item-content-subheader-password:before {
+  position: absolute;
+  bottom: 0;
+  height: 100%;
+  width: 100%;
+  content: "";
+  background: linear-gradient(to left, #30302d 20%, rgba(48, 48, 45, 0) 80%);
+  pointer-events: none;
+  /* so the text is still selectable */
+}
+.in-form-menu-item-content-description {
+  color: #cacac9;
 }

@@ -75,9 +75,10 @@
   "scripts": {
     "build": "npm run build-api-app",
     "build-api-app": "webpack --config webpack-api.config.js",
-    "start-app-dev-server": "npm run start-api-app-dev-server & npm run start-ext-app-dev-server",
+    "start-app-dev-server": "npm run start-api-app-dev-server & npm run start-ext-app-dev-server & npm run start-in-form-menu-app-dev-server",
     "start-api-app-dev-server": "webpack serve --env debug=true --env demo=true --config webpack-api.config.js",
     "start-ext-app-dev-server": "webpack serve --env debug=true --env demo=true --config webpack-ext.config.js",
+    "start-in-form-menu-app-dev-server": "webpack serve --env debug=true --env demo=true --config webpack-in-form-menu.config.js",
     "test": "jest --config .jest.config.json --no-cache ./src --maxWorkers=4",
     "test-coverage": "jest --config .jest.config.json --no-cache ./src --maxWorkers=4 --coverage",
     "eslint": "eslint -c .eslintrc.json src/react-extension/*",
