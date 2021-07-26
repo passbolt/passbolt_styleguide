@@ -26,6 +26,7 @@ import TranslationProvider from "./components/Internationalisation/TranslationPr
 import SetupExtensionInProgress from "./components/ExtensionSetup/SetupExtensionInProgress/SetupExtensionInProgress";
 import ManageQuickAccessMode from "./components/ManageQuickAccessMode/ManageQuickAccessMode";
 import PrivateRoute from "./components/PrivateRoute/PrivateRoute";
+import SaveResource from "./components/ResourceAutoSave/SaveResource";
 
 const SEARCH_VISIBLE_ROUTES = [
   '/data/quickaccess.html',
@@ -245,6 +246,7 @@ class ExtQuickAccess extends React.Component {
                     <PrivateRoute exact path="/data/quickaccess/resources/recently-modified" component={FilterResourcesByRecentlyModifiedPage}/>
                     <PrivateRoute exact path="/data/quickaccess/resources/shared-with-me" component={FilterResourcesBySharedWithMePage}/>
                     <PrivateRoute path="/data/quickaccess/resources/create" component={ResourceCreatePage}/>
+                    <PrivateRoute exact path="/data/quickaccess/resources/autosave" component={SaveResource}/>
                     <PrivateRoute path="/data/quickaccess/resources/view/:id" component={ResourceViewPage}/>
                     <PrivateRoute exact path="/data/quickaccess/more-filters" component={MoreFiltersPage}/>
                     <PrivateRoute exact path="/data/quickaccess/setup-extension-in-progress" component={SetupExtensionInProgress}/>

@@ -52,9 +52,9 @@ class ResourceCreatePage extends React.Component {
   }
 
   async loadPasswordMetaFromTabForm() {
-    const {name, url, username, password} = await this.props.context.port.request("passbolt.auto-save.get-info");
-    this.setState({name, url, username, password});
-    this.loadPassword(password);
+    const {name, uri, username, secret_clear} = await this.props.context.port.request("passbolt.resource.prepare-autosave");
+    this.setState({name, url: uri, username, password: secret_clear});
+    this.loadPassword(secret_clear);
     this.setState({loaded: true});
   }
 
@@ -69,13 +69,13 @@ class ResourceCreatePage extends React.Component {
       error: "",
       nameError: "",
       usernameError: "",
-      uriError: "",
+      urlError: "",
     });
 
     const resourceDto = {
       name: this.state.name,
       username: this.state.username,
-      uri: this.state.uri
+      uri: this.state.url
     };
     const secretDto = this.state.password;
 
@@ -95,7 +95,7 @@ class ResourceCreatePage extends React.Component {
       this.setState({
         nameError: this.formatValidationFieldError(error.data.body.name),
         usernameError: this.formatValidationFieldError(error.data.body.username),
-        uriError: this.formatValidationFieldError(error.data.body.uri),
+        urlError: this.formatValidationFieldError(error.data.body.uri),
         processing: false
       });
     } else {
@@ -156,9 +156,9 @@ class ResourceCreatePage extends React.Component {
                   className="required fluid" maxLength="64" type="text" id="name" required="required" autoComplete="off" />
                 <div className="error-message">{this.state.nameError}</div>
               </div>
-              <div className={`input text ${this.state.uriError ? "error" : ""}`}>
-                <label htmlFor="uri"><Trans>URL</Trans></label>
-                <input name="uri" value={this.state.url} onChange={this.handleInputChange} disabled={this.state.processing}
+              <div className={`input text ${this.state.urlError ? "error" : ""}`}>
+                <label htmlFor="url"><Trans>URL</Trans></label>
+                <input name="url" value={this.state.url} onChange={this.handleInputChange} disabled={this.state.processing}
                   className="fluid" maxLength="1024" type="text" id="url" autoComplete="off" />
                 <div className="error-message">{this.state.urlError}</div>
               </div>
