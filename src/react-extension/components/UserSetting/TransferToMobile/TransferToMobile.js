@@ -245,21 +245,25 @@ class TransferToMobile extends React.Component {
     for (let i = 0; i < sliceNeeded; i++) {
       const pageCounter = startPage + i;
 
-      // Header - Version and page
-      // UInt8 => Hex string => Unicode value of the individual characters
-      // 255 => "ff" => 70 70
-      //
-      // Unfortunately we we cannot send these numbers as bytes.
-      // This sub optimal encoding is due to compatibility issues with iOS QR Code scanning library
+      /*
+       * Header - Version and page
+       * UInt8 => Hex string => Unicode value of the individual characters
+       * 255 => "ff" => 70 70
+       *
+       * Unfortunately we we cannot send these numbers as bytes.
+       * This sub optimal encoding is due to compatibility issues with iOS QR Code scanning library
+       */
       const version = (QRCCODE_PROTOCOL_VERSION.toString(16));
-      let page = (pageCounter.toString(16)).padStart(2, '0');
+      const page = (pageCounter.toString(16)).padStart(2, '0');
       const uint8Header = new Uint8ClampedArray([
         version.charCodeAt(0), page.charCodeAt(0), page.charCodeAt(1)
       ]);
 
-      // Data
-      // Similar encoding, but since data is just ASCII chars, one less step
-      // "F" => 102
+      /*
+       * Data
+       * Similar encoding, but since data is just ASCII chars, one less step
+       * "F" => 102
+       */
       const start = (i === 0) ? 0 : (i * sliceSize);
       let end = (i === 0) ? (sliceSize) : (sliceSize * (i + 1));
       end = (end > data.length) ? data.length : end;

@@ -128,7 +128,6 @@ class ExtBootstrapApp extends Component {
               "/app/passwords",
               "/app/settings",
               "/app/settings/keys",
-              "/app/settings/mobile",
               "/app/settings/profile",
               "/app/settings/passphrase",
               "/app/settings/security-token",
