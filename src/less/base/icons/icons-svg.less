@@ -19,13 +19,16 @@
     &.light svg {
         fill: @fill-light-color;
     }
-    &.icon-only svg {
-        position:relative;
-        top: .25em;
-        width: 1.1rem;
-        height: 1.1rem;
+
+    &.icon-only {
+      svg {
+        padding: .1rem;
+        height:1.6rem;
+        width:1.6rem;
+      }
     }
 }
 
 @import "icons-svg-links.less";
 @import "icons-svg-buttons.less";
+@import "icons-feedback.less";

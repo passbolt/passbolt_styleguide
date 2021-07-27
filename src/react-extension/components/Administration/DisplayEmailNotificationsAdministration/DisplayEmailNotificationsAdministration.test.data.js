@@ -1,3 +1,5 @@
+import SiteSettings from "../../../../shared/lib/Settings/SiteSettings";
+import siteSettingsFixture from "../../../test/fixture/Settings/siteSettings";
 
 /**
  * Returns the default app context for the unit test
@@ -6,6 +8,7 @@
  */
 export function defaultAppContext(appContext) {
   const defaultAppContext = {
+    siteSettings: new SiteSettings(siteSettingsFixture)
   };
   return Object.assign(defaultAppContext, appContext || {});
 }

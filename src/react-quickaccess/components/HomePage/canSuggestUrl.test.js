@@ -139,4 +139,10 @@ describe("canSuggestUrl", () => {
     expect(canSuggestUrl("http://127.0.0.1", "127.0.0.1:80")).toBe(false);
     expect(canSuggestUrl("https://www.passbolt.com", "www.passbolt.com:443")).toBe(false);
   });
+
+  it("shouldn't suggest urls with no hostname to url with no hostname", () => {
+    expect(canSuggestUrl("https://no%20identified%20domain%20url.com", "no%20identified%20domain%20url")).toBe(false);
+    expect(canSuggestUrl("about:addons", "about:addons")).toBe(false);
+    expect(canSuggestUrl("about:addons", "no%20identified%20domain%20url")).toBe(false);
+  });
 });

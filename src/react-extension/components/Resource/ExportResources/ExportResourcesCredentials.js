@@ -242,17 +242,17 @@ class ExportResourcesCredentials extends Component {
                   placeholder={this.translate("Passphrase")}
                   ref={this.passwordInputRef}
                   disabled={!this.areActionsAllowed}/>
+                <ul className="actions inline">
+                  <li>
+                    <a
+                      onClick={this.handlePasswordViewToggled}
+                      className={`password-view button button-icon toggle ${this.state.showPassword ? "selected" : ""} ${!this.areActionsAllowed ? "disabled" : ""}`}>
+                      <Icon name="eye-open" big={true}/>
+                      <span className="visually-hidden">view</span>
+                    </a>
+                  </li>
+                </ul>
               </div>
-              <ul className="actions inline">
-                <li>
-                  <a
-                    onClick={this.handlePasswordViewToggled}
-                    className={`password-view button button-icon toggle ${this.state.showPassword ? "selected" : ""} ${!this.areActionsAllowed ? "disabled" : ""}`}>
-                    <Icon name="eye-open" big={true}/>
-                    <span className="visually-hidden">view</span>
-                  </a>
-                </li>
-              </ul>
             </div>
 
             <div className="input-file-chooser-wrapper">
@@ -268,7 +268,8 @@ class ExportResourcesCredentials extends Component {
                     value={this.selectedFilename}/>
                   <a className={`button primary ${!this.areActionsAllowed ? "disabled" : ""}`}
                     onClick={this.handleSelectFile}>
-                    <Icon name="upload-a"/> <Trans>Choose a file</Trans>
+                    <Icon name="upload-a"/>
+                    <span><Trans>Choose a file</Trans></span>
                   </a>
                 </div>
               </div>

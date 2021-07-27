@@ -149,10 +149,7 @@ class ConfirmPassphrase extends React.Component {
    */
   IsValidPassphrase() {
     const passphrase = this.state.passphrase;
-    if (passphrase.trim() === '') {
-      return false;
-    }
-    return true;
+    return passphrase.trim() !== '';
   }
 
   /**
@@ -188,37 +185,57 @@ class ConfirmPassphrase extends React.Component {
               <div className="form-content">
                 <div className={`input text password required ${this.state.passphraseError ? "error" : ""}`}>
                   <label htmlFor="passphrase-input"><Trans>Passphrase</Trans></label>
-                  <input id="passphrase-input" type={`${this.state.isObfuscated ? "password" : "text"}`} name="passphrase" placeholder={this.translate('Passphrase')} required="required"
-                    ref={this.passphraseInputRef} className={`required ${this.state.passphraseError ? "error" : ""}`} autoFocus={true}
-                    value={this.state.passphrase} onChange={this.handleInputChange} disabled={this.hasAllInputDisabled()} />
+                  <input
+                    id="passphrase-input"
+                    type={`${this.state.isObfuscated ? "password" : "text"}`}
+                    name="passphrase" placeholder={this.translate('Passphrase')}
+                    required="required"
+                    ref={this.passphraseInputRef}
+                    className={`required ${this.state.passphraseError ? "error" : ""}`}
+                    autoFocus={true}
+                    value={this.state.passphrase}
+                    onChange={this.handleInputChange}
+                    disabled={this.hasAllInputDisabled()}
+                  />
                   <a
                     className={`password-view button-icon button button-toggle ${this.state.isObfuscated ? "" : "selected"}`}
                     role="button"
                     onClick={this.handleToggleObfuscate}>
                     <Icon name="eye-open"/>
-                    <span className="visually-hidden">view</span>
+                    <span className="visually-hidden"><Trans>View</Trans></span>
                   </a>
                   {this.state.passphraseError &&
-                  <div className="input text">
-                    <div className="message error">{this.state.passphraseError}</div>
-                  </div>
+                    <div className="error-message">{this.state.passphraseError}</div>
+                  }
+                  {!this.state.passphraseError &&
+                    <div className="help-message">You need to enter your current passphrase.</div>
                   }
                 </div>
               </div>
               <div className="submit-wrapper">
-                <button className="button big" type="button" disabled={this.hasAllInputDisabled()} onClick={this.handleCancel}>
+                <button
+                  className="button cancel medium"
+                  type="button"
+                  disabled={this.hasAllInputDisabled()}
+                  onClick={this.handleCancel}>
                   <Trans>Cancel</Trans>
                 </button>
-                <FormSubmitButton big={true} disabled={this.mustBeDisabled()} processing={this.state.processing} value={this.translate('Verify')}/>
+                <FormSubmitButton
+                  primary={true} medium={true}
+                  disabled={this.mustBeDisabled()}
+                  processing={this.state.processing}
+                  value={this.translate('Verify')}/>
               </div>
             </form>
           </div>
-          <div className="col4 last passphrase-help">
-            <h3><Trans>What if I forgot my passphrase?</Trans></h3>
-            <p><Trans>Unfortunately you need your passphrase in order to continue. If you forgot it, please contact your administrator.</Trans></p>
-            <a className="button big" href="https://help.passbolt.com/faq/start/passphrase-recovery" target="_blank" rel="noopener noreferrer">
-              <span><Trans>Learn more</Trans></span>
-            </a>
+          <div className="col4 last">
+            <div className="sidebar-help">
+              <h3><Trans>What if I forgot my passphrase?</Trans></h3>
+              <p><Trans>Unfortunately you need your passphrase in order to continue. If you forgot it, please contact your administrator.</Trans></p>
+              <a className="button" href="https://help.passbolt.com/faq/start/passphrase-recovery" target="_blank" rel="noopener noreferrer">
+                <span><Trans>Learn more</Trans></span>
+              </a>
+            </div>
           </div>
         </div>
       </div>

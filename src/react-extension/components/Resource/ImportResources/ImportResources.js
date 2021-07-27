@@ -212,7 +212,8 @@ class ImportResources extends Component {
     for (let i = 0; i < codeUnits.length; i++) {
       codeUnits[i] = string.charCodeAt(i);
     }
-    return String.fromCharCode(...new Uint8Array(codeUnits.buffer));
+    const concatenateStringFromByte = (data, byte) => data + String.fromCharCode(byte);
+    return new Uint8Array(codeUnits.buffer).reduce(concatenateStringFromByte, '');
   }
 
   /**
@@ -400,7 +401,8 @@ class ImportResources extends Component {
                     id="dialog-import-passwords-choose-file"
                     className={`button primary ${this.hasAllInputDisabled() ? "disabled" : ""}`}
                     onClick={this.handleSelectFile}>
-                    <Icon name="upload-a"/> <Trans>Choose a file</Trans>
+                    <Icon name="upload-a"/>
+                    <span><Trans>Choose a file</Trans></span>
                   </a>
                 </div>
                 {isInvalidCsvFile &&
@@ -417,26 +419,26 @@ class ImportResources extends Component {
             </div>
 
             {canUseTags &&
-            <div className="input text">
+            <div className="input checkbox medium">
               <input
                 id="dialog-import-passwords-import-tags"
                 type="checkbox"
                 checked={this.state.options.tags}
                 disabled={this.hasAllInputDisabled()}
                 onChange={this.handleImportOptionTagsChanged}/>
-              <label htmlFor="dialog-import-passwords-import-tags"> <Trans>Add a unique import tag to passwords</Trans></label>
+              <label htmlFor="dialog-import-passwords-import-tags"><Trans>Add a unique import tag to passwords</Trans></label>
             </div>
             }
 
             {canUseFolders &&
-            <div className="input text">
+            <div className="input checkbox medium">
               <input
                 id="dialog-import-passwords-import-folders"
                 type="checkbox"
                 checked={this.state.options.folders}
                 disabled={this.hasAllInputDisabled()}
                 onChange={this.handleImportOptionFoldersChanged}/>
-              <label htmlFor="dialog-import-passwords-import-folders"> <Trans>Import folders</Trans></label>
+              <label htmlFor="dialog-import-passwords-import-folders"><Trans>Import folders</Trans></label>
             </div>
             }
           </div>

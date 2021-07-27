@@ -3,25 +3,24 @@
 @import "abstractions/colors.less";
 
 // Baseline
-@import "base/reset.less";
-@import "base/helpers.less";
-@import "base/colors.less";
+@import "base/legacy/reset.less";
+@import "base/legacy/helpers.less";
+@import "base/legacy/colors.less";
 @import "base/animations.less";
-@import "base/typography.less";
-@import "base/lists.less";
-@import "base/icons.less";
-@import "base/buttons.less";
-@import "base/form.less";
+@import "base/legacy/typography.less";
+@import "base/legacy/lists.less";
+@import "base/legacy/icons.less";
+@import "base/legacy/buttons.less";
+@import "base/legacy/form.less";
 @import "base/layout_main.less";
 @import "base/layout_responsive_grid.less";
-@import "base/layout_main_alt.less";
+@import "base/legacy/layout_main_alt.less";
 @import "base/scrollbar.less";
-@import "base/video.less";
-@import "base/table.less";
+@import "base/legacy/video.less";
 
 // Components
 @import "components/header.less";
-@import "components/greedynav.less";
+@import "components/legacy/public/greedynav.less";
 @import "components/logo.less";
 @import "components/loadingbar.less";
 @import "components/notification.less";
@@ -30,7 +29,7 @@
 @import "components/footer.less";
 @import "components/plugincheck.less";
 @import "components/video.less";
-@import "components/panelnavigation_help.less";
+@import "components/navigation/navigation-help.less";
 @import "components/messages.less";
 @import "components/tableinfo.less";
 @import "components/tooltips.less";
@@ -38,11 +37,12 @@
 @import "components/tldr.less";
 @import "components/search.less";
 @import "components/tiles.less";
-@import "components/cards.less";
+@import "components/legacy/public/cards.less";
 @import "components/ribbon.less";
+@import "components/article/table.less";
 
 // Pages
-@import "pages/faq.less";
+@import "pages/help/faq.less";
 @import "pages/errors.less";
-@import "pages/search.less";
+@import "pages/help/search.less";
 @import "pages/help.less";

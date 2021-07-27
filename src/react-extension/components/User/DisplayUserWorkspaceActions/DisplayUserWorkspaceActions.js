@@ -442,9 +442,9 @@ class DisplayUserWorkspaceActions extends React.Component {
           <ul className="ready">
             <li>
               <a
-                className={`button toggle info ${this.hasDetailsLocked() ? "selected" : ""}`}
+                className={`button button-toggle info ${this.hasDetailsLocked() ? "selected" : ""}`}
                 onClick={this.handleDetailsLockedEvent}>
-                <Icon name="info-circle"/>
+                <Icon name="info-circle" big={true}/>
                 <span className="visuallyhidden">View detail</span>
               </a>
             </li>

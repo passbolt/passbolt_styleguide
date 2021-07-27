@@ -60,8 +60,8 @@ class NavigateIntoUserSettingsWorkspace extends React.Component {
   render() {
     const isSelected = pathSuffix => this.props.location.pathname.endsWith(pathSuffix);
     return (
-      <div className="navigation first shortcuts">
-        <ul>
+      <div className="navigation-secondary navigation-shortcuts">
+        <ul >
           <li>
             <div
               className={`row ${isSelected('profile') ? 'selected' : ''}`}>

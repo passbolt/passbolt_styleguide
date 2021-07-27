@@ -61,7 +61,7 @@ class DisplayMainMenu extends Component {
     return (
       <nav>
         <div className="primary navigation top">
-          <ul className="left">
+          <ul>
             <li key="password">
               <div className={`row ${this.isSelected("passwords") ? "selected" : ""}`}>
                 <div className="main-cell-wrapper">
@@ -105,9 +105,7 @@ class DisplayMainMenu extends Component {
                 </div>
               </div>
             </li>
-          </ul>
-          <ul className="right">
-            <li key="logout">
+            <li key="logout" className="right">
               <div className="row">
                 <div className="main-cell-wrapper">
                   <div className="main-cell">

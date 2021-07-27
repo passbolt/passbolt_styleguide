@@ -65,7 +65,7 @@ export default class EditUserGroupTestPage {
    * Returns the group name error message if exists
    */
   get groupNameErrorMessage() {
-    return this._page.container.querySelector('.name.error.message').textContent;
+    return this._page.container.querySelector('.name.error-message').textContent;
   }
 
   get hasNoManager() {

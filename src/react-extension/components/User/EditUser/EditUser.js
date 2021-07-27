@@ -353,7 +353,7 @@ class EditUser extends Component {
                 autoComplete='off' autoFocus={true}
               />
               {this.state.first_nameError &&
-              <div className="first_name error message">{this.state.first_nameError}</div>
+              <div className="first_name error-message">{this.state.first_nameError}</div>
               }
             </div>
             <div className={`input text required ${this.state.last_nameError ? "error" : ""}`}>
@@ -365,7 +365,7 @@ class EditUser extends Component {
                 autoComplete='off' autoFocus={true}
               />
               {this.state.last_nameError &&
-              <div className="last_name error message">{this.state.last_nameError}</div>
+              <div className="last_name error-message">{this.state.last_nameError}</div>
               }
             </div>
             <div className="input text required">
@@ -388,7 +388,7 @@ class EditUser extends Component {
                   type="checkbox"/>
                 <label htmlFor="is_admin_checkbox"> <Trans>This user is an administrator</Trans></label>
               </div>
-              <div className="message helptext">
+              <div className="help-message">
                 <Trans>Note: Administrators can add and delete users; They can also create groups and assign group managers; Admin can not see all passwords.</Trans>
               </div>
             </div>

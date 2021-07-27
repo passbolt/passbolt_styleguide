@@ -79,7 +79,7 @@ class FilterUsersByShortcut extends React.Component {
 
   render() {
     return (
-      <div className="navigation first shortcuts">
+      <div className="navigation-secondary navigation-shortcuts">
         <ul >
           <li>
             <div className={`row ${this.isAllItemsSelected ? "selected" : ""}`}>

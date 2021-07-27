@@ -171,7 +171,7 @@ class DisplayAdministrationMenu extends React.Component {
    */
   render() {
     return (
-      <div className="navigation first">
+      <div className="navigation-secondary navigation-administration">
         <ul id="administration_menu" className="clearfix menu ready">
           {this.isMfaEnabled &&
             <li id="mfa_menu">
@@ -209,7 +209,7 @@ class DisplayAdministrationMenu extends React.Component {
             <div className={`row  ${this.isInternationalizationSelected() ? "selected" : ""}`}>
               <div className="main-cell-wrapper">
                 <div className="main-cell">
-                  <a onClick={this.handleInternationalizationClick}><span><Trans>Internationalization</Trans></span></a>
+                  <a onClick={this.handleInternationalizationClick}><span><Trans>Internationalisation</Trans></span></a>
                 </div>
               </div>
             </div>

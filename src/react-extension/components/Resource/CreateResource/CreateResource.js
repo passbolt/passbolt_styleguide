@@ -17,7 +17,6 @@ import PropTypes from "prop-types";
 import {withAppContext} from "../../../contexts/AppContext";
 import Icon from "../../Common/Icons/Icon";
 import Tooltip from "../../Common/Tooltip/Tooltip";
-import SecretComplexity from "../../../../shared/lib/Secret/SecretComplexity";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
 import {withDialog} from "../../../contexts/DialogContext";
@@ -27,6 +26,11 @@ import FormSubmitButton from "../../Common/Inputs/FormSubmitButton/FormSubmitBut
 import FormCancelButton from "../../Common/Inputs/FormSubmitButton/FormCancelButton";
 
 import {Trans, withTranslation} from "react-i18next";
+import GenerateResourcePassword from "../../ResourcePassword/GenerateResourcePassword/GenerateResourcePassword";
+import {SecretGenerator} from "../../../../shared/lib/SecretGenerator/SecretGenerator";
+import {withResourcePasswordGeneratorContext} from "../../../contexts/ResourcePasswordGeneratorContext";
+import {SecretGeneratorComplexity} from "../../../../shared/lib/SecretGenerator/SecretGeneratorComplexity";
+
 
 /** Resource password max length */
 const RESOURCE_PASSWORD_MAX_LENGTH = 4096;
@@ -75,6 +79,8 @@ class CreateResource extends Component {
     this.handleGeneratePasswordButtonClick = this.handleGeneratePasswordButtonClick.bind(this);
     this.handleDescriptionToggle = this.handleDescriptionToggle.bind(this);
     this.handleDescriptionInputKeyUp = this.handleDescriptionInputKeyUp.bind(this);
+    this.handleOpenGenerator = this.handleOpenGenerator.bind(this);
+    this.handleLastGeneratedPasswordChanged = this.handleLastGeneratedPasswordChanged.bind(this);
   }
 
   /**
@@ -85,9 +91,42 @@ class CreateResource extends Component {
     this.passwordInputRef = React.createRef();
   }
 
+  /**
+   * Whenever the component has been mounted
+   */
   componentDidMount() {
     if (this.isEncryptedDescriptionEnabled()) {
       this.setState({encryptDescription: true});
+    }
+  }
+
+  /**
+   * Whenever the component has been changed (props)
+   * @param prevProps The previous component props
+   */
+  componentDidUpdate(prevProps) {
+    this.handleLastGeneratedPasswordChanged(prevProps.resourcePasswordGeneratorContext.lastGeneratedPassword);
+  }
+
+  /*
+   * =============================================================
+   *  Resource password generator
+   * =============================================================
+   */
+  get currentGeneratorConfiguration() {
+    const type = this.props.resourcePasswordGeneratorContext.settings.default_generator;
+    return this.props.resourcePasswordGeneratorContext.settings.generators.find(generator => generator.type === type);
+  }
+
+  /**
+   * Whenever a new password has been generated through the generator
+   * @param previousLastGeneratedPassword The previous last generated password value
+   */
+  handleLastGeneratedPasswordChanged(previousLastGeneratedPassword) {
+    const currentLastGeneratedPassword = this.props.resourcePasswordGeneratorContext.lastGeneratedPassword;
+    const hasLastGeneratedPasswordChanged = previousLastGeneratedPassword !== currentLastGeneratedPassword;
+    if (hasLastGeneratedPasswordChanged) {
+      this.setState({password: currentLastGeneratedPassword});
     }
   }
 
@@ -258,7 +297,6 @@ class CreateResource extends Component {
    */
   async createResourceLegacy(resourceDto, secretString) {
     resourceDto.description = this.state.description;
-
     return this.props.context.port.request("passbolt.resources.create", resourceDto, secretString);
   }
 
@@ -451,11 +489,19 @@ class CreateResource extends Component {
     if (this.state.processing) {
       return;
     }
-    const password = SecretComplexity.generate();
+
+    const password = SecretGenerator.generate(this.currentGeneratorConfiguration);
     this.setState({
       password: password,
       passwordError: ""
     });
+  }
+
+  /**
+   * Whenever the user wants to open the password generator
+   */
+  handleOpenGenerator() {
+    this.props.dialogContext.open(GenerateResourcePassword);
   }
 
   /**
@@ -492,51 +538,12 @@ class CreateResource extends Component {
     }
   }
 
-  /*
-   * =============================================================
-   *  Security token style
-   * =============================================================
-   */
   /**
-   * Get the password input style.
-   * @return {Object}
+   * Returns true if the logged in user can use the password generator capability.
+   * @returns {boolean}
    */
-  getPasswordInputStyle() {
-    if (this.state.passwordInputHasFocus) {
-      const backgroundColor = this.props.context.userSettings.getSecurityTokenBackgroundColor();
-      const textColor = this.props.context.userSettings.getSecurityTokenTextColor();
-
-      return {
-        background: backgroundColor,
-        color: textColor
-      };
-    }
-
-    return {
-      background: "",
-      color: "",
-    };
-  }
-
-  /**
-   * Get the security token style.
-   * @return {Object}
-   */
-  getSecurityTokenStyle() {
-    const backgroundColor = this.props.context.userSettings.getSecurityTokenBackgroundColor();
-    const textColor = this.props.context.userSettings.getSecurityTokenTextColor();
-
-    if (this.state.passwordInputHasFocus) {
-      return {
-        background: textColor,
-        color: backgroundColor,
-      };
-    }
-
-    return {
-      background: backgroundColor,
-      color: textColor,
-    };
+  get canUsePasswordGenerator() {
+    return this.props.context.siteSettings.canIUse('passwordGenerator');
   }
 
   /**
@@ -553,10 +560,8 @@ class CreateResource extends Component {
    * =============================================================
    */
   render() {
-    const passwordInputStyle = this.getPasswordInputStyle();
-    const securityTokenStyle = this.getSecurityTokenStyle();
-    const securityTokenCode = this.props.context.userSettings.getSecurityTokenCode();
-    const passwordStrength = SecretComplexity.getStrength(this.state.password);
+    const passwordEntropy = SecretGenerator.entropy(this.state.password);
+    const passwordStrength = SecretGeneratorComplexity.strength(passwordEntropy);
     /*
      * The parser can't find the translation for passwordStrength.label
      * To fix that we can use it in comment
@@ -580,7 +585,7 @@ class CreateResource extends Component {
                 disabled={this.state.processing} ref={this.nameInputRef} className="required fluid" maxLength="64"
                 required="required" autoComplete="off" autoFocus={true} placeholder={this.translate("Name")}/>
               {this.state.nameError &&
-              <div className="name error message">{this.state.nameError}</div>
+              <div className="name error-message">{this.state.nameError}</div>
               }
             </div>
             <div className={`input text ${this.state.uriError ? "error" : ""}`}>
@@ -589,7 +594,7 @@ class CreateResource extends Component {
                 autoComplete="off" value={this.state.uri} onChange={this.handleInputChange} placeholder={this.translate("URI")}
                 disabled={this.state.processing}/>
               {this.state.uriError &&
-              <div className="error message">{this.state.uriError}</div>
+              <div className="error-message">{this.state.uriError}</div>
               }
             </div>
             <div className={`input text ${this.state.usernameError ? "error" : ""}`}>
@@ -598,7 +603,7 @@ class CreateResource extends Component {
                 autoComplete="off" value={this.state.username} onChange={this.handleInputChange} placeholder={this.translate("Username")}
                 disabled={this.state.processing}/>
               {this.state.usernameError &&
-              <div className="error message">{this.state.usernameError}</div>
+              <div className="error-message">{this.state.usernameError}</div>
               }
             </div>
             <div className={`input-password-wrapper input required ${this.state.passwordError ? "error" : ""}`}>
@@ -609,19 +614,15 @@ class CreateResource extends Component {
                   onKeyUp={this.handlePasswordInputKeyUp} value={this.state.password}
                   onFocus={this.handlePasswordInputFocus} onBlur={this.handlePasswordInputBlur}
                   onChange={this.handleInputChange} disabled={this.state.processing}
-                  style={passwordInputStyle} ref={this.passwordInputRef}/>
-                <div className="security-token"
-                  style={securityTokenStyle}>{securityTokenCode}</div>
+                  ref={this.passwordInputRef}/>
+                <a onClick={this.handleViewPasswordButtonClick}
+                  className={`password-view button button-icon toggle ${this.state.viewPassword ? "selected" : ""}`}>
+                  <Icon name='eye-open' big={true}/>
+                  <span className="visually-hidden">view</span>
+                </a>
 
               </div>
               <ul className="actions inline">
-                <li>
-                  <a onClick={this.handleViewPasswordButtonClick}
-                    className={`password-view button button-icon toggle ${this.state.viewPassword ? "selected" : ""}`}>
-                    <Icon name='eye-open' big={true}/>
-                    <span className="visually-hidden">view</span>
-                  </a>
-                </li>
                 <li>
                   <a onClick={this.handleGeneratePasswordButtonClick}
                     className="password-generate button-icon button">
@@ -629,16 +630,32 @@ class CreateResource extends Component {
                     <span className="visually-hidden">generate</span>
                   </a>
                 </li>
+                {this.canUsePasswordGenerator &&
+                <li>
+                  <a onClick={this.handleOpenGenerator}
+                    className="password-generator button-icon button">
+                    <Icon name='cog' big={true}/>
+                    <span className="visually-hidden">open generator</span>
+                  </a>
+                </li>
+                }
               </ul>
               <div className={`password-complexity ${passwordStrength.id}`}>
                 <span className="progress">
                   <span className={`progress-bar ${passwordStrength.id}`} />
                 </span>
-                <span className="complexity-text"><Trans>complexity:</Trans> <strong>{this.translate(passwordStrength.label)}</strong></span>
+                <span className="complexity-text">
+                  <div>
+                    <Trans>Complexity:</Trans> <strong>{this.translate(passwordStrength.label)}</strong>
+                  </div>
+                  <div>
+                    <Trans>Entropy:</Trans> <strong>{passwordEntropy.toFixed(1)} bits</strong>
+                  </div>
+                </span>
               </div>
               {this.state.passwordError &&
               <div className="input text">
-                <div className="password message error">{this.state.passwordError}</div>
+                <div className="password error-message">{this.state.passwordError}</div>
               </div>
               }
               {this.state.passwordWarning &&
@@ -689,9 +706,10 @@ CreateResource.propTypes = {
   context: PropTypes.any, // The application context
   history: PropTypes.object, // Router history
   onClose: PropTypes.func, // Whenever the component must be closed
+  resourcePasswordGeneratorContext: PropTypes.any, // The resource password generator context
   actionFeedbackContext: PropTypes.any, // The action feedback context
   dialogContext: PropTypes.any, // The dialog context
   t: PropTypes.func, // The translation function
 };
 
-export default  withAppContext(withActionFeedback(withRouter(withDialog(withTranslation('common')(CreateResource)))));
+export default  withResourcePasswordGeneratorContext(withAppContext(withActionFeedback(withRouter(withDialog(withTranslation('common')(CreateResource))))));

@@ -13,7 +13,6 @@
  */
 import React, {Component} from "react";
 import {CirclePicker} from "react-color";
-import Icon from "../../Common/Icons/Icon";
 import {withAuthenticationContext} from "../../../contexts/AuthenticationContext";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
 import {withDialog} from "../../../contexts/DialogContext";
@@ -331,7 +330,7 @@ class ChooseSecurityToken extends Component {
                 className="randomize-button"
                 role="button"
                 onClick={this.handleRandomize}>
-                <Icon name="magic-wand"/> <Trans>Randomize</Trans>
+                <Trans>Randomize</Trans>
               </a>
             </div>
           </div>

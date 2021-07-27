@@ -549,7 +549,9 @@ class DisplayResourcesList extends React.Component {
           <div className="ready">
             <div className="input checkbox">
               <input type="checkbox" id={`checkbox_multiple_select_checkbox_${resource.id}`} checked={isSelected} readOnly={true}/>
-              <label htmlFor={`checkbox_multiple_select_checkbox_${resource.id}`}></label>
+              <label htmlFor={`checkbox_multiple_select_checkbox_${resource.id}`}>
+                <span className="visually-hidden"><Trans>Select resource</Trans></span>
+              </label>
             </div>
           </div>
         </td>
@@ -674,7 +676,7 @@ class DisplayResourcesList extends React.Component {
             <p><Trans>Share a password with this group or wait for a team member to share one with this group.</Trans></p>
           </div>
           }
-          {isEmpty && filterType === ResourceWorkspaceFilterTypes.FOLDER &&
+          {isEmpty && (filterType === ResourceWorkspaceFilterTypes.FOLDER || filterType === ResourceWorkspaceFilterTypes.ROOT_FOLDER) &&
           <div className="empty-content">
             <h2><Trans>No passwords in this folder yet.</Trans></h2>
             <p><Trans>It does feel a bit empty here.</Trans></p>
@@ -718,7 +720,9 @@ class DisplayResourcesList extends React.Component {
                           name="select all"
                           checked={selectAll}
                           onChange={this.handleSelectAllChange}/>
-                        <label htmlFor="js-passwords-select-all">select all</label>
+                        <label htmlFor="js-passwords-select-all">
+                          <span className="visually-hidden">select all</span>
+                        </label>
                       </div>
                     </th>
                     <th className="cell-favorite selections s-cell sortable">
@@ -735,49 +739,77 @@ class DisplayResourcesList extends React.Component {
                     </th>
                     <th className="cell-name m-cell sortable">
                       <a onClick={ev => this.handleSortByColumnClick(ev, "name")}>
-                        <Trans>Resource</Trans>
-                        {this.isSortedColumn("name") && this.isSortedAsc() &&
-                        <Icon baseline={true} name="caret-up"/>
-                        }
-                        {this.isSortedColumn("name") && !this.isSortedAsc() &&
-                        <Icon baseline={true} name="caret-down"/>
-                        }
+                        <div className="cell-header">
+                          <span className="cell-header-text">
+                            <Trans>Resource</Trans>
+                          </span>
+                          <span className="cell-header-icon-sort">
+                            {this.isSortedColumn("name") && this.isSortedAsc() &&
+                            <Icon baseline={true} name="caret-up"/>
+                            }
+                            {this.isSortedColumn("name") && !this.isSortedAsc() &&
+                            <Icon baseline={true} name="caret-down"/>
+                            }
+                          </span>
+                        </div>
                       </a>
                     </th>
                     <th className="cell-username m-cell username sortable">
                       <a onClick={ev => this.handleSortByColumnClick(ev, "username")}>
-                        <Trans>Username</Trans>
-                        {this.isSortedColumn("username") && this.isSortedAsc() &&
-                        <Icon baseline={true} name="caret-up"/>
-                        }
-                        {this.isSortedColumn("username") && !this.isSortedAsc() &&
-                        <Icon baseline={true} name="caret-down"/>
-                        }
+                        <div className="cell-header">
+                          <span className="cell-header-text">
+                            <Trans>Username</Trans>
+                          </span>
+                          <span className="cell-header-icon-sort">
+                            {this.isSortedColumn("username") && this.isSortedAsc() &&
+                            <Icon baseline={true} name="caret-up"/>
+                            }
+                            {this.isSortedColumn("username") && !this.isSortedAsc() &&
+                            <Icon baseline={true} name="caret-down"/>
+                            }
+                          </span>
+                        </div>
                       </a>
                     </th>
                     <th className="cell-secret m-cell password">
-                      <Trans>Password</Trans>
+                      <div className="cell-header">
+                        <span className="cell-header-text">
+                          <Trans>Password</Trans>
+                        </span>
+                      </div>
                     </th>
                     <th className="cell-uri l-cell sortable">
                       <a onClick={ev => this.handleSortByColumnClick(ev, "uri")}>
-                        <Trans>URI</Trans>
-                        {this.isSortedColumn("uri") && this.isSortedAsc() &&
-                        <Icon baseline={true} name="caret-up"/>
-                        }
-                        {this.isSortedColumn("uri") && !this.isSortedAsc() &&
-                        <Icon baseline={true} name="caret-down"/>
-                        }
+                        <div className="cell-header">
+                          <span className="cell-header-text">
+                            <Trans>URI</Trans>
+                          </span>
+                          <span className="cell-header-icon-sort">
+                            {this.isSortedColumn("uri") && this.isSortedAsc() &&
+                            <Icon baseline={true} name="caret-up"/>
+                            }
+                            {this.isSortedColumn("uri") && !this.isSortedAsc() &&
+                            <Icon baseline={true} name="caret-down"/>
+                            }
+                          </span>
+                        </div>
                       </a>
                     </th>
                     <th className="cell-modified m-cell sortable">
                       <a onClick={ev => this.handleSortByColumnClick(ev, "modified")}>
-                        <Trans>Modified</Trans>
-                        {this.isSortedColumn("modified") && this.isSortedAsc() &&
-                        <Icon baseline={true} name="caret-up"/>
-                        }
-                        {this.isSortedColumn("modified") && !this.isSortedAsc() &&
-                        <Icon baseline={true} name="caret-down"/>
-                        }
+                        <div className="cell-header">
+                          <span className="cell-header-text">
+                            <Trans>Modified</Trans>
+                          </span>
+                          <span className="cell-header-icon-sort">
+                            {this.isSortedColumn("modified") && this.isSortedAsc() &&
+                            <Icon baseline={true} name="caret-up"/>
+                            }
+                            {this.isSortedColumn("modified") && !this.isSortedAsc() &&
+                            <Icon baseline={true} name="caret-down"/>
+                            }
+                          </span>
+                        </div>
                       </a>
                     </th>
                   </tr>

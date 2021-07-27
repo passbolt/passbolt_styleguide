@@ -71,14 +71,14 @@ describe("As LU I should see the user confirm passphrase page", () => {
       await waitFor(() => {
         expect(page.passphrase.getAttribute("disabled")).not.toBeNull();
         expect(page.verifyButton.getAttribute("disabled")).not.toBeNull();
-        expect(page.verifyButton.className).toBe('button primary disabled processing big');
+        expect(page.verifyButton.className).toBe('button primary disabled processing medium');
         expect(page.cancelButton.getAttribute("disabled")).not.toBeNull();
       });
     });
 
     it('As LU I shouldn’t be able to submit the form if there is an invalid field', async() => {
       expect(page.verifyButton.getAttribute("disabled")).not.toBeNull();
-      expect(page.verifyButton.className).toBe('button primary disabled big');
+      expect(page.verifyButton.className).toBe('button primary disabled medium');
 
       // Fill the form
       page.insertPassphrase("passphrase");

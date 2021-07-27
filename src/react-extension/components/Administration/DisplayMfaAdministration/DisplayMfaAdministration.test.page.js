@@ -120,42 +120,42 @@ export default class DisplayMfaAdministrationPage {
    * Returns the yubikey client identifier error mesage input element
    */
   get yubikeyClientIdentifierErrorMessage() {
-    return this._page.container.querySelector('.yubikey_client_identifier.error.message').textContent;
+    return this._page.container.querySelector('.yubikey_client_identifier.error-message').textContent;
   }
 
   /**
    * Returns the yubikey client identifier error mesage input element
    */
   get yubikeySecretKeyErrorMessage() {
-    return this._page.container.querySelector('.yubikey_secret_key.error.message').textContent;
+    return this._page.container.querySelector('.yubikey_secret_key.error-message').textContent;
   }
 
   /**
    * Returns the duo hostname error mesage input element
    */
   get duoHostnameErrorMessage() {
-    return this._page.container.querySelector('.duo_hostname.error.message').textContent;
+    return this._page.container.querySelector('.duo_hostname.error-message').textContent;
   }
 
   /**
    * Returns the duo integration key error mesage input element
    */
   get duoIntegrationKeyErrorMessage() {
-    return this._page.container.querySelector('.duo_integration_key.error.message').textContent;
+    return this._page.container.querySelector('.duo_integration_key.error-message').textContent;
   }
 
   /**
    * Returns the duo salt error mesage input element
    */
   get duoSaltErrorMessage() {
-    return this._page.container.querySelector('.duo_salt.error.message').textContent;
+    return this._page.container.querySelector('.duo_salt.error-message').textContent;
   }
 
   /**
    * Returns the duo secret key error mesage input element
    */
   get duoSecretKeyErrorMessage() {
-    return this._page.container.querySelector('.duo_secret_key.error.message').textContent;
+    return this._page.container.querySelector('.duo_secret_key.error-message').textContent;
   }
 
   /**

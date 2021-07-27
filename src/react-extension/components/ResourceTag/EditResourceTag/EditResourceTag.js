@@ -274,7 +274,7 @@ class EditResourceTag extends Component {
                 maxLength="128"
                 required="required" autoComplete="off" autoFocus={true}/>
               {this.state.nameError &&
-                  <div className="name error message">{this.state.nameError}</div>
+                  <div className="name error-message">{this.state.nameError}</div>
               }
             </div>
           </div>

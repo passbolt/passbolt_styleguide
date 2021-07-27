@@ -398,12 +398,14 @@ class DisplaySubscriptionKey extends React.Component {
         }
         {!this.isLoading() &&
         <div className="col4 last">
-          <h2><Trans>Need help?</Trans></h2>
-          <p><Trans>For any change or question related to your passbolt subscription, kindly contact our sales team.</Trans></p>
-          <a className="button" target="_blank" rel="noopener noreferrer" href="https://www.passbolt.com/contact">
-            <Icon name="envelope"/>
-            <span><Trans>Contact Sales</Trans></span>
-          </a>
+          <div className="sidebar-help">
+            <h3><Trans>Need help?</Trans></h3>
+            <p><Trans>For any change or question related to your passbolt subscription, kindly contact our sales team.</Trans></p>
+            <a className="button" target="_blank" rel="noopener noreferrer" href="https://www.passbolt.com/contact">
+              <Icon name="envelope"/>
+              <span><Trans>Contact Sales</Trans></span>
+            </a>
+          </div>
         </div>
         }
       </div>

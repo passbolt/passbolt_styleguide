@@ -1,3 +1,4 @@
+import browser from "webextension-polyfill";
 import React from "react";
 import AppContext from "./contexts/AppContext";
 import FilterResourcesByFavoritePage from "./components/FilterResourcesByFavoritePage/FilterResourcesByFavoritePage";
@@ -23,6 +24,7 @@ import PropTypes from "prop-types";
 import SiteSettings from "../shared/lib/Settings/SiteSettings";
 import UserSettings from "../shared/lib/Settings/UserSettings";
 import TranslationProvider from "./components/Internationalisation/TranslationProvider";
+import SetupExtensionInProgress from "./components/ExtensionSetup/SetupExtensionInProgress/SetupExtensionInProgress";
 
 const SEARCH_VISIBLE_ROUTES = [
   '/data/quickaccess.html',
@@ -67,8 +69,8 @@ class ExtQuickAccess extends React.Component {
     this.state.port.on('passbolt.passphrase.request', this.handleBackgroundPageRequiresPassphraseEvent);
     await this.checkPluginIsConfigured();
     await this.getUser();
-    await this.getSiteSettings();
     this.checkAuthStatus();
+    await this.getSiteSettings();
     this.getLocale();
   }
 
@@ -126,6 +128,15 @@ class ExtQuickAccess extends React.Component {
     this.setState({locale});
   }
 
+  /**
+   * Retrieve the authentication status.
+   *
+   * If the user is authenticated but the MFA challenge is required, close the quickaccess and redirect the user to
+   * the passbolt application.
+   *
+   * This function requires the user settings to be present in the component state.
+   * @returns {Promise<void>}
+   */
   async checkAuthStatus() {
     const {isAuthenticated, isMfaRequired} = await this.state.port.request("passbolt.auth.check-status");
     if (isMfaRequired) {
@@ -178,7 +189,7 @@ class ExtQuickAccess extends React.Component {
         <TranslationProvider loadingPath="/data/locales/{{lng}}/{{ns}}.json">
           <Router>
             <Route render={props => (
-              <div className="container page quickaccess" onKeyDown={this.handleKeyDown}>
+              <div className="container quickaccess" onKeyDown={this.handleKeyDown}>
                 <Header logoutSuccessCallback={this.logoutSuccessCallback}/>
                 {!isReady &&
                 <div className="processing-wrapper">
@@ -209,6 +220,7 @@ class ExtQuickAccess extends React.Component {
                       <PrivateRoute path="/data/quickaccess/resources/create" component={ResourceCreatePage}/>
                       <PrivateRoute path="/data/quickaccess/resources/view/:id" component={ResourceViewPage}/>
                       <PrivateRoute exact path="/data/quickaccess/more-filters" component={MoreFiltersPage}/>
+                      <PrivateRoute exact path="/data/quickaccess/setup-extension-in-progress" component={SetupExtensionInProgress}/>
                       <PrivateRoute exact path="/data/quickaccess.html" component={HomePage}/>
                     </AnimatedSwitch>
                   </div>

@@ -14,9 +14,10 @@
 import {fireEvent, render, waitFor} from "@testing-library/react";
 import React from "react";
 import DialogContextProvider from "../../../contexts/DialogContext";
-import {MemoryRouter, Route} from "react-router-dom";
+import {MemoryRouter} from "react-router-dom";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import EditResource from "./EditResource";
+import ManageDialogs from "../../Common/Dialog/ManageDialogs/ManageDialogs";
 
 
 /**
@@ -26,8 +27,10 @@ export const EditResourcePageTemplate = props =>
   <MockTranslationProvider>
     <DialogContextProvider>
       <MemoryRouter initialEntries={['/']}>
-        <Route component={routerProps => <EditResource {...props} {...routerProps}/>}/>
+        <ManageDialogs/>
+        <EditResource {...props}/>
       </MemoryRouter>
+      <ManageDialogs/>
     </DialogContextProvider>
   </MockTranslationProvider>;
 
@@ -64,6 +67,13 @@ export default class EditResourcePage {
    */
   get passwordEdit() {
     return this._passwordEdit;
+  }
+
+  /**
+   * REturns the password generator dialog element
+   */
+  get passwordGeneratorDialog() {
+    return this._page.container.querySelector('.password-generator-dialog');
   }
 }
 
@@ -127,7 +137,7 @@ class PasswordEditPageObject {
    * Returns the name error mesage input element
    */
   get nameErrorMessage() {
-    return this._container.querySelector('.name.error.message');
+    return this._container.querySelector('.name.error-message');
   }
 
   /**
@@ -155,7 +165,7 @@ class PasswordEditPageObject {
    * Returns the password error mesage input element
    */
   get passwordErrorMessage() {
-    return this._container.querySelector('.password.error.message');
+    return this._container.querySelector('.password.error-message');
   }
 
   /**
@@ -163,13 +173,6 @@ class PasswordEditPageObject {
    */
   get complexityText() {
     return this._container.querySelector('.complexity-text');
-  }
-
-  /**
-   * Returns the security token input element
-   */
-  get securityToken() {
-    return this._container.querySelector('.security-token');
   }
 
   /**
@@ -205,6 +208,13 @@ class PasswordEditPageObject {
    */
   get passwordGenerateButton() {
     return this._container.querySelector('.password-generate');
+  }
+
+  /**
+   * Returns the password generator button element
+   */
+  get passwordGeneratorButton() {
+    return this._container.querySelector('.password-generator');
   }
 
   /**
@@ -270,5 +280,10 @@ class PasswordEditPageObject {
   /** blur the input element with data */
   blurInput(element)  {
     fireEvent.blur(element);
+  }
+
+  /** Open the password generator*/
+  async openPasswordGenerator() {
+    await this.clickWithoutWaitFor(this.passwordGeneratorButton);
   }
 }

@@ -143,6 +143,20 @@ an isolated way.
 Besides, we develop any new component by first testing it against Storybook and hence avoiding
 the whole application reload.
 
+To get started with storybook, first install its dependencies. As long as storybook has not migrated completely
+to webpack 4, the dependencies will need to be installed manually.
+
+```
+npm install \
+    @storybook/addon-actions@next \
+    @storybook/addon-essentials@next \
+    @storybook/addon-links@next \
+    @storybook/builder-webpack5@next \
+    @storybook/manager-webpack5@next \
+    @storybook/react@next \
+    --no-save
+```
+
 To run Storybook, you just need to run the following command:
 
 ```

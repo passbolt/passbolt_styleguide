@@ -82,7 +82,7 @@ export default class ShareDialogPage {
    * Returns the error message element
    */
   get errorMessage() {
-    return this._page.container.querySelector('.message.error').textContent;
+    return this._page.container.querySelector('.error.message').textContent;
   }
 
   /**

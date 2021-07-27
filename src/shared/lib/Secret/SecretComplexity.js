@@ -92,7 +92,7 @@ export default class SecretComplexity {
    * @return {int}
    */
   static calculEntropy(length, maskSize) {
-    return length * (Math.log(maskSize) / Math.log(2));
+    return (length && maskSize) ? length * (Math.log(maskSize) / Math.log(2)) : 0;
   }
 
   /**
@@ -100,7 +100,7 @@ export default class SecretComplexity {
    * @param pwd {srtring} The password to test the entropy
    * @return {int}
    */
-  static entropy(pwd) {
+  static entropy(pwd= '') {
     let maskSize = 0;
 
     for (const i in MASKS) {

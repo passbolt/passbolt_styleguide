@@ -1,4 +1,4 @@
-<div class="navigation first shortcuts">
+<div class="navigation-secondary shortcuts">
 	<ul id="js_wsp_pwd_rs_shortcuts"
 			class="clearfix passbolt_controller_component_users_shortcuts_controller mad_view_component_tree menu ready">
 		<li id="4ff84c60-2740-7283-1116-7af5d7f904d1" class="ready">

@@ -43,7 +43,7 @@ export default class EditResourceTagsPageObject {
    * Returns the error message content
    */
   get errorMessage() {
-    return this._container.querySelector('.message.error').textContent;
+    return this._container.querySelector('.error-message').textContent;
   }
 
   /**

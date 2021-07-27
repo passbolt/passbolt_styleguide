@@ -10,7 +10,7 @@ export default {
 
 const Template = () =>
   <MemoryRouter initialEntries={['/']}>
-    <Route component={routerProps => <div className="container page quickaccess"><MoreFiltersPage {...routerProps}/></div>}/>
+    <Route component={routerProps => <div className="container quickaccess"><MoreFiltersPage {...routerProps}/></div>}/>
   </MemoryRouter>;
 
 

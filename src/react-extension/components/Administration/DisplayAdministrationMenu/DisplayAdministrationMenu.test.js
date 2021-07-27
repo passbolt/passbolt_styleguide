@@ -69,12 +69,12 @@ describe("As AD I can see the administration menu", () => {
     expect(props.navigationContext.onGoToAdministrationSubscriptionRequested).toHaveBeenCalled();
   });
 
-  it('As AD I should be able to go to internationalization', async() => {
+  it('As AD I should be able to go to internationalisation', async() => {
     const props = defaultProps(AdministrationWorkspaceMenuTypes.INTERNATIONALIZATION); // The props to pass
     page = new DisplayAdministrationMenuPage(context, props);
     expect(page.exists()).toBeTruthy();
     await page.goToInternationalization();
-    expect(page.menuSelected).toBe('Internationalization');
+    expect(page.menuSelected).toBe('Internationalisation');
     expect(props.navigationContext.onGoToAdministrationInternationalizationRequested).toHaveBeenCalled();
   });
 });

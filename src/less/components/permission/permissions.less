@@ -24,6 +24,8 @@
             font-size: .813em;
             padding: .875em .5em .5em .875em;
             border-bottom: 1px dotted @border-default;
+            display: flex;
+            align-items: center;
 
             &:last-child {
                 border: 0;
@@ -37,7 +39,8 @@
                 float: left;
             }
             .aro {
-                width: 48%;
+                flex: 1 1 auto;
+                width: 40%;
                 float: left;
                 padding: 0 1em;
                 .aro-details {
@@ -63,7 +66,7 @@
             .rights {
                 float: left;
                 margin-top: .5em;
-                width: 27%;
+                flex: 0 1 auto;
                 select {
                     margin: 0;
                     font-size: 1em;
@@ -73,12 +76,12 @@
             .remove-item {
                 color: @font-dim;
                 float:right;
-                margin-right:1em;
+                margin-right:1rem;
                 border:0;
-                padding:.625em;
-                width:1em;
-                height:1em;
-                margin-top:.125em;
+                padding:.625rem;
+                width:1rem;
+                height:1rem;
+                margin-top:.2rem;
 
                 /* hover */
                 &:hover {

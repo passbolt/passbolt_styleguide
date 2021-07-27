@@ -27,7 +27,7 @@
                 <div class="row">
                     <div class="col12">
                         <h1>Your order</h1>
-                        <p class="message error">This is an error message</p>
+                        <p class="error-message">This is an error message</p>
                     </div>
                     <div class="col6">
                         <div class="box customer_information">

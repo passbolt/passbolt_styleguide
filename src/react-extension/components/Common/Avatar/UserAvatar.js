@@ -61,7 +61,8 @@ class UserAvatar extends Component {
    * @returns {boolean}
    */
   propsUrlHasProtocol() {
-    return this.props.user.profile.avatar.url.medium.startsWith('https://');
+    return this.props.user.profile.avatar.url.medium.startsWith('https://')
+      || this.props.user.profile.avatar.url.medium.startsWith('http://');
   }
 
   /**

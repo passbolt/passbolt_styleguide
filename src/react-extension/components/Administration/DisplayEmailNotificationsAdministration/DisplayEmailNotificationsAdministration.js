@@ -17,6 +17,7 @@ import {withActionFeedback} from "../../../../react-extension/contexts/ActionFee
 import Icon from "../../Common/Icons/Icon";
 import {withAdministrationWorkspace} from "../../../contexts/AdministrationWorkspaceContext";
 import {Trans, withTranslation} from "react-i18next";
+import {withAppContext} from "../../../contexts/AppContext";
 
 /**
  * This component allows to display the email notifications for the administration
@@ -322,6 +323,14 @@ class DisplayEmailNotificationsAdministration extends React.Component {
   }
 
   /**
+   * Can use folders
+   * @returns {*}
+   */
+  canUseFolders() {
+    return this.props.context.siteSettings.canIUse("folders");
+  }
+
+  /**
    * Get the translate function
    * @returns {function(...[*]=)}
    */
@@ -384,6 +393,7 @@ class DisplayEmailNotificationsAdministration extends React.Component {
                   <label className="toggle-switch-button" htmlFor="send-password-share-toggle-button"/>
                 </span>
               </div>
+              {this.canUseFolders() &&
               <div className="col6 last">
                 <label><Trans>Folders</Trans></label>
                 <span className="input toggle-switch form-element">
@@ -411,6 +421,7 @@ class DisplayEmailNotificationsAdministration extends React.Component {
                   <label className="toggle-switch-button" htmlFor="send-folder-share-toggle-button"/>
                 </span>
               </div>
+              }
               <div className="row">
               </div>
               <div className="col6 last">
@@ -517,12 +528,14 @@ class DisplayEmailNotificationsAdministration extends React.Component {
           </form>
         </div>
         <div className="col4 last">
-          <h3><Trans>Need some help?</Trans></h3>
-          <p><Trans>For more information about email notification, checkout the dedicated page on the help website.</Trans></p>
-          <a className="button" href="https://help.passbolt.com/configure/notification/email" target="_blank" rel="noopener noreferrer">
-            <Icon name="life-ring"/>
-            <span><Trans>Read the documentation</Trans></span>
-          </a>
+          <div className="sidebar-help">
+            <h3><Trans>Need some help?</Trans></h3>
+            <p><Trans>For more information about email notification, checkout the dedicated page on the help website.</Trans></p>
+            <a className="button" href="https://help.passbolt.com/configure/notification/email" target="_blank" rel="noopener noreferrer">
+              <Icon name="life-ring"/>
+              <span><Trans>Read the documentation</Trans></span>
+            </a>
+          </div>
         </div>
       </div>
     );
@@ -530,9 +543,10 @@ class DisplayEmailNotificationsAdministration extends React.Component {
 }
 
 DisplayEmailNotificationsAdministration.propTypes = {
+  context: PropTypes.any, // The application context
   administrationWorkspaceContext: PropTypes.object, // The administration workspace context
   actionFeedbackContext: PropTypes.any, // The action feedback context
   t: PropTypes.func, // The translation function
 };
 
-export default withActionFeedback(withAdministrationWorkspace(withTranslation('common')(DisplayEmailNotificationsAdministration)));
+export default withAppContext(withActionFeedback(withAdministrationWorkspace(withTranslation('common')(DisplayEmailNotificationsAdministration))));

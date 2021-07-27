@@ -14,7 +14,7 @@ export default {
 const Template = ({context, ...args}) =>
   <AppContext.Provider value={context}>
     <MemoryRouter initialEntries={['/']}>
-      <Route component={routerProps => <div className="container page quickaccess"><LoginPage {...args} {...routerProps}/></div>}/>
+      <Route component={routerProps => <div className="container quickaccess"><LoginPage {...args} {...routerProps}/></div>}/>
     </MemoryRouter>
   </AppContext.Provider>;
 

@@ -1,0 +1,73 @@
+/*
+	Generic buttons
+	Description	: We support <input[submit]>, <input.button>, <button> and <a.button>
+
+	:hover			- Subtle hover highlight and box shadow
+	:active			- Inset box shadow and 1px offset
+	.disabled		- Dims the button to indicate it cannot be used
+*/
+input[type=submit],
+button,
+.button {
+    position: relative;
+    font-size: 0.875em; /*	14px */
+    min-height:1.428571em; /* 20px */
+    padding: .4285714em 1.225em .4285714em 1.225em; /* 6px 16px */
+    display: inline-block;
+    vertical-align: baseline;
+    margin-right: .5em;
+    outline: none;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    border: 1px solid @border-input;
+    color: @font-default;
+    font-weight: normal;
+    text-shadow: @button-text-shadow;
+    .button-background();
+    .rounded();
+}
+
+/* size and position adjustments */
+.submit {
+    display: inline-block; /* in case there is a div wrapper */
+}
+
+.button.big {
+    font-size: 1.125em;
+}
+
+/* hover */
+button:hover,
+.button:hover {
+    color: @font-default;
+    text-decoration: none;
+    .button-hover-background();
+    border: 1px solid @border-input-light;
+}
+
+/* focus */
+button:focus,
+.button:focus {
+    color: @font-focus;
+    border: 1px solid @border-focus;
+}
+
+/* active */
+button:active,
+.button:active {
+    color: @font-focus;
+    border: 1px solid @border-focus;
+    background: @background-lighter;
+    position: relative;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, .2);
+}
+
+@import "buttons/buttons-cancel.less";
+@import "buttons/buttons-primary.less";
+@import "buttons/buttons-warning.less";
+@import "buttons/buttons-disabled.less";
+@import "buttons/buttons-duo.less";
+@import "buttons/buttons-spacer.less";
+@import "buttons/buttons-processing.less";
+@import "buttons/buttons-toggle.less";

@@ -1,6 +1,6 @@
-/*
- * Typography
- */
+//
+// FONT FAMILIES
+//
 /* opensans */
 @font-face {
     font-family: 'Open Sans';
@@ -15,43 +15,41 @@
     font-weight: 700;
     src: local('Open Sans Bold'), local('OpenSans-Bold'), url('@{fonts}/opensans-bold.woff') format('woff');
 }
-
 body {
     font-family: 'Open Sans', Verdana, sans-serif;
-    font-size: 100%;
-    line-height: 1.42;
-    font-weight: 400;
 }
-
-/* titles */
-h1 {
-    font-size: 1.5em; /* 24px base 16 */
-}
-
-h2 {
-    font-size: 1.250em; /* 20px base 16 */
-}
-
-h3 {
-    font-size: 1.125em; /* 18px base 16 */
-    display: block;
-    padding-bottom: .333em; /* 6px */
-    border-bottom: 1px dotted @border-default;
-}
-
-/* paragraph */
-p {
-    margin: 0 0 1em 0;
-    line-height: 1.5em;
-}
-
 .code {
-    font-family: "Courier New", Courier, monospace;
-    font-size: 0.688em; /* 11px base 16 */
+    font-family: 'Courier New', Courier, monospace;
 }
 
-.capitalize {
-  text-transform: capitalize;
+//
+// SIZE
+//
+html {
+    font-size: 62.5%; /* =10px */
+}
+body {
+    font-size: 1.6rem; /* =16px */
+}
+h1 {
+    font-size: 2.2rem;
+    line-height: 3.2rem;
+}
+h2 {
+    font-size: 1.8rem;
+    line-height: 2.4rem;
+}
+h3 {
+  font-size: 1.6rem;
+  line-height: 2.4rem;
+}
+p {
+    font-size: 1.5rem;
+    line-height: 2.2rem;
+    margin-top: 0;
+}
+code {
+    font-size: 1.1rem;
 }
 
 .font-dim {

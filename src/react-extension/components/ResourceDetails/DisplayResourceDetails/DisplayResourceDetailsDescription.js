@@ -82,7 +82,7 @@ class DisplayResourceDetailsDescription extends React.Component {
     if (this.isResourceDescriptionEncrypted()) {
       this.decryptSecret();
     } else {
-      this.setState({description: this.resource.description});
+      this.setState({description: this.resource.description, error: false});
     }
   }
 

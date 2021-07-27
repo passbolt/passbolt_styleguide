@@ -154,7 +154,7 @@ class ApiAppContextProvider extends React.Component {
     }
 
     const organizationLocale = this.state.siteSettings.locale;
-    return this.setState({locale: organizationLocale.locale});
+    return this.setState({locale: organizationLocale});
   }
 
   /**

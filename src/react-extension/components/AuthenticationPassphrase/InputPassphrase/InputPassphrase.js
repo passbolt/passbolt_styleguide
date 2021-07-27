@@ -346,7 +346,7 @@ class InputPassphrase extends Component {
                 </div>
                 {this.state.passphraseError &&
                 <div className="input text">
-                  <div className="message error">{this.state.passphraseError}</div>
+                  <div className="error-message">{this.state.passphraseError}</div>
                 </div>
                 }
                 {hasRememberMeOptions &&

@@ -96,7 +96,7 @@ export default class DisplayUserWorkspaceActionsPage {
    * Toggle the lock of the display of the details
    */
   async lockDetails() {
-    const element = this._page.container.querySelector('.button.toggle.info');
+    const element = this._page.container.querySelector('.button-toggle.info');
     const leftClick = {button: 0};
     fireEvent.click(element, leftClick);
     await waitFor(() => {});

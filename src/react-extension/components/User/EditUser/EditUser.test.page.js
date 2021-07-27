@@ -119,7 +119,7 @@ class EditUserPageObject {
    * Returns the first name error mesage input element
    */
   get firstNameErrorMessage() {
-    return this._container.querySelector('.first_name.error.message');
+    return this._container.querySelector('.first_name.error-message');
   }
 
   /**
@@ -133,7 +133,7 @@ class EditUserPageObject {
    * Returns the last name error mesage input element
    */
   get lastNameErrorMessage() {
-    return this._container.querySelector('.last_name.error.message');
+    return this._container.querySelector('.last_name.error-message');
   }
 
   /**

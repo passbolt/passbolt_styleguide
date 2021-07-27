@@ -74,6 +74,13 @@ export function defaultProps() {
 export const mockUsers = [{
   "id": "8e3874ae-4b40-590b-968a-418f704b9d9a",
   "role_id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
+  "role": {
+    "created": "2012-07-04T13:39:25+00:00",
+    "description": "Logged in user",
+    "id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
+    "modified": "2012-07-04T13:39:25+00:00",
+    "name": "admin"
+  },
   "username": "carol@passbolt.com",
   "active": true,
   "deleted": false,

@@ -6,7 +6,7 @@
 
     }
 ?>
-<div class="folders navigation first">
+<div class="navigation-folders">
     <div class="folders-tree-header">
         <div class="open node root">
             <div class="row title">

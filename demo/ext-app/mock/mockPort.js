@@ -58,6 +58,7 @@ import mockRequestAuthIsAuthenticated from "./request/mockRequestAuthIsAuthentic
 import mockRequestGetLocale from "./request/mockRequestGetLocale";
 import mockRequestRoleGet from "./request/mockRequestRoleGet";
 import mockRequestRecoverInfo from "./request/mockRequestRecoverInfo";
+import mockRequestPasswordGeneratorSettings from "./request/mockRequestPasswordGeneratorSettings";
 import mockRequestMobileTransferCreate from "./request/mockRequestMobileTransferCreate";
 import mockRequestMobileTransferGet from "./request/mockRequestMobileTransferGet";
 import mockRequestMobileTransferUpdate from "./request/mockRequestMobileTransferUpdate";
@@ -111,6 +112,7 @@ export default (storage) => {
   mockPort.addRequestListener("passbolt.auth.is-authenticated", mockRequestAuthIsAuthenticated);
   mockPort.addRequestListener("passbolt.locale.get", mockRequestGetLocale);
   mockPort.addRequestListener("passbolt.recover.info", mockRequestRecoverInfo);
+  mockPort.addRequestListener("passbolt.password-generator.settings", mockRequestPasswordGeneratorSettings);
   mockPort.addRequestListener("passbolt.mobile.transfer.create", mockRequestMobileTransferCreate);
   mockPort.addRequestListener("passbolt.mobile.transfer.update", mockRequestMobileTransferUpdate);
   mockPort.addRequestListener("passbolt.mobile.transfer.get", mockRequestMobileTransferGet);

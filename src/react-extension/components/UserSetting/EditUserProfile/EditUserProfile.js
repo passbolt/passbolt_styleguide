@@ -316,7 +316,7 @@ class EditUserProfile extends Component {
                 onChange={this.handleInputChange}
                 disabled={!this.areActionsAllowed}/>
               {this.state.errors.isFirstnameEmpty &&
-              <div className="first_name error message">
+              <div className="first_name error-message">
                 <Trans>A first name is required.</Trans>
               </div>
               }
@@ -336,7 +336,7 @@ class EditUserProfile extends Component {
                 onChange={this.handleInputChange}
                 disabled={!this.areActionsAllowed}/>
               {this.state.errors.isLastnameEmpty &&
-              <div className="last_name error message">
+              <div className="last_name error-message">
                 <Trans>A last name is required.</Trans>
               </div>
               }
@@ -355,7 +355,7 @@ class EditUserProfile extends Component {
             {this.canIUseLocale &&
             <div className="input select locale required">
               <label htmlFor="user-profile-locale-input"><Trans>Language</Trans></label>
-              <select className="large" id="user-profile-locale-input" name="locale" value={this.state.profile.locale}
+              <select id="user-profile-locale-input" name="locale" value={this.state.profile.locale}
                 disabled={!this.areActionsAllowed} onChange={this.handleInputChange}>
                 {this.supportedLocales.map(supportedLocale =>
                   <option key={supportedLocale.locale} value={supportedLocale.locale}>
