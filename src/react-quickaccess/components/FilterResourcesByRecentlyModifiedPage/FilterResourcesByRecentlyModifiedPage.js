@@ -1,7 +1,6 @@
 import PropTypes from "prop-types";
 import React from "react";
-import {withRouter} from "react-router";
-import {Link} from "react-router-dom";
+import {Link, withRouter} from "react-router-dom";
 import {withAppContext} from "../../contexts/AppContext";
 import SimpleBar from "../SimpleBar/SimpleBar";
 import {Trans, withTranslation} from "react-i18next";
@@ -217,4 +216,4 @@ FilterResourcesByRecentlyModifiedPage.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withTranslation('common')(withRouter(FilterResourcesByRecentlyModifiedPage)));
+export default withAppContext(withRouter(withTranslation('common')(FilterResourcesByRecentlyModifiedPage)));

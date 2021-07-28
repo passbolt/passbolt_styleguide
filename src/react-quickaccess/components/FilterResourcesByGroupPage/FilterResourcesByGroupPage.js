@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 import React from "react";
-import {withRouter} from "react-router";
+import {withRouter} from "react-router-dom";
 import {Link} from "react-router-dom";
 import {withAppContext} from "../../contexts/AppContext";
 import SimpleBar from "../SimpleBar/SimpleBar";
@@ -345,4 +345,4 @@ FilterResourcesByGroupPage.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withTranslation('common')(withRouter(FilterResourcesByGroupPage)));
+export default withAppContext(withRouter(withTranslation('common')(FilterResourcesByGroupPage)));

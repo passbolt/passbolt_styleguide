@@ -63,7 +63,7 @@ const TemplateAllItemsMenu = () => {
     )
 
   return (
-    <div className="quickaccess">
+    <div className="web-integration">
       <DisplayInFormMenu>
         <DisplayInFormMenuItem
           title="Twitter (company account)"

@@ -29,7 +29,9 @@ class ExtInForm extends React.Component {
   render() {
     return (
       <AppContext.Provider value={this.state}>
-        <DisplayInFormMenu/>
+        <div className="web-integration">
+          <DisplayInFormMenu/>
+        </div>
       </AppContext.Provider>
     );
   }

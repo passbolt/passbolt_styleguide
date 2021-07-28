@@ -38,6 +38,9 @@ class Icon extends Component {
     if (this.props.baseline) {
       className += ' baseline';
     }
+    if (this.props.dim) {
+      className += ' dim';
+    }
     return className;
   }
 
@@ -48,6 +51,12 @@ class Icon extends Component {
   render() {
     return (
       <span className={this.getClassName()} onClick={this.props.onClick}>
+        {this.props.name === 'add' &&
+        <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" data-prefix="fas"
+          data-icon="plus-circle"  role="img" viewBox="0 0 512 512">
+          <path d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm144 276c0 6.6-5.4 12-12 12h-92v92c0 6.6-5.4 12-12 12h-56c-6.6 0-12-5.4-12-12v-92h-92c-6.6 0-12-5.4-12-12v-56c0-6.6 5.4-12 12-12h92v-92c0-6.6 5.4-12 12-12h56c6.6 0 12 5.4 12 12v92h92c6.6 0 12 5.4 12 12v56z"/>
+        </svg>
+        }
         {this.props.name === 'ban' &&
         <svg width="1792" height="1792" viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg">
           <path d="M1440 893q0-161-87-295l-754 753q137 89 297 89 111 0 211.5-43.5t173.5-116.5 116-174.5 43-212.5zm-999 299l755-754q-135-91-300-91-148 0-273 73t-198 199-73 274q0 162 89 299zm1223-299q0 157-61 300t-163.5 246-245 164-298.5 61-298.5-61-245-164-163.5-246-61-300 61-299.5 163.5-245.5 245-164 298.5-61 298.5 61 245 164 163.5 245.5 61 299.5z"/>
@@ -291,6 +300,7 @@ class Icon extends Component {
 Icon.defaultProps = {
   big: false,
   baseline: false,
+  dim: false,
   onClick: () => {
   }
 };
@@ -298,6 +308,7 @@ Icon.defaultProps = {
 Icon.propTypes = {
   name: PropTypes.string,
   big: PropTypes.bool,
+  dim: PropTypes.bool,
   baseline: PropTypes.bool,
   onClick: PropTypes.func
 };

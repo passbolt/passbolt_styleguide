@@ -14,7 +14,7 @@
 
 import {defaultProps} from "./AuthenticationContext.test.data";
 import {AuthenticationContextProvider, AuthenticationContextState} from "./AuthenticationContext";
-import { clear, mockUserAgent } from 'jest-useragent-mock'
+import {clear, mockUserAgent} from 'jest-useragent-mock';
 
 beforeEach(() => {
   jest.resetModules();

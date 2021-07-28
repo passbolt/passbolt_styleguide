@@ -17,7 +17,6 @@ import ResourceCreatePage from "./components/ResourceCreatePage/ResourceCreatePa
 import ResourceViewPage from "./components/ResourceViewPage/ResourceViewPage";
 import Search from "./components/Search/Search";
 import {BrowserRouter as Router, Route} from "react-router-dom";
-import PrivateRoute from "./components/PrivateRoute/PrivateRoute";
 import AnimatedSwitch from "./components/AnimatedSwitch/AnimatedSwitch";
 import PassphraseDialog from "./components/PassphraseDialog/PassphraseDialog";
 import PropTypes from "prop-types";
@@ -25,6 +24,8 @@ import SiteSettings from "../shared/lib/Settings/SiteSettings";
 import UserSettings from "../shared/lib/Settings/UserSettings";
 import TranslationProvider from "./components/Internationalisation/TranslationProvider";
 import SetupExtensionInProgress from "./components/ExtensionSetup/SetupExtensionInProgress/SetupExtensionInProgress";
+import HandleRoute from "./components/Route/HandleRoute";
+import PrivateRoute from "./components/PrivateRoute/PrivateRoute";
 
 const SEARCH_VISIBLE_ROUTES = [
   '/data/quickaccess.html',
@@ -188,46 +189,45 @@ class ExtQuickAccess extends React.Component {
       <AppContext.Provider value={this.state}>
         <TranslationProvider loadingPath="/data/locales/{{lng}}/{{ns}}.json">
           <Router>
-            <Route render={props => (
-              <div className="container quickaccess" onKeyDown={this.handleKeyDown}>
-                <Header logoutSuccessCallback={this.logoutSuccessCallback}/>
-                {!isReady &&
-                <div className="processing-wrapper">
-                  <p className="processing-text">Connecting your account</p>
-                </div>
-                }
-                {isReady &&
-                <React.Fragment>
-                  {this.state.passphraseRequired &&
-                  <PassphraseDialog requestId={this.state.passphraseRequestId} onComplete={this.handlePassphraseDialogCompleted}/>
-                  }
-                  <div className={`${this.state.passphraseRequired ? "visually-hidden" : ""}`}>
-                    <Route path={SEARCH_VISIBLE_ROUTES} render={() => (
-                      <Search ref={el => this.searchRef = el}/>
-                    )}/>
-                    <AnimatedSwitch location={props.location}>
-                      <Route path="/data/quickaccess/login" render={() => (
-                        <LoginPage loginSuccessCallback={this.loginSuccessCallback} canRememberMe={this.canRememberMe}/>
-                      )}/>
-                      <PrivateRoute exact path="/data/quickaccess/resources/group" component={FilterResourcesByGroupPage}/>
-                      <PrivateRoute path="/data/quickaccess/resources/group/:id" component={FilterResourcesByGroupPage}/>
-                      <PrivateRoute exact path="/data/quickaccess/resources/tag" component={FilterResourcesByTagPage}/>
-                      <PrivateRoute path="/data/quickaccess/resources/tag/:id" component={FilterResourcesByTagPage}/>
-                      <PrivateRoute exact path="/data/quickaccess/resources/favorite" component={FilterResourcesByFavoritePage}/>
-                      <PrivateRoute exact path="/data/quickaccess/resources/owned-by-me" component={FilterResourcesByItemsIOwnPage}/>
-                      <PrivateRoute exact path="/data/quickaccess/resources/recently-modified" component={FilterResourcesByRecentlyModifiedPage}/>
-                      <PrivateRoute exact path="/data/quickaccess/resources/shared-with-me" component={FilterResourcesBySharedWithMePage}/>
-                      <PrivateRoute path="/data/quickaccess/resources/create" component={ResourceCreatePage}/>
-                      <PrivateRoute path="/data/quickaccess/resources/view/:id" component={ResourceViewPage}/>
-                      <PrivateRoute exact path="/data/quickaccess/more-filters" component={MoreFiltersPage}/>
-                      <PrivateRoute exact path="/data/quickaccess/setup-extension-in-progress" component={SetupExtensionInProgress}/>
-                      <PrivateRoute exact path="/data/quickaccess.html" component={HomePage}/>
-                    </AnimatedSwitch>
-                  </div>
-                </React.Fragment>
-                }
+            <div className="container quickaccess" onKeyDown={this.handleKeyDown}>
+              <Header logoutSuccessCallback={this.logoutSuccessCallback}/>
+              {!isReady &&
+              <div className="processing-wrapper">
+                <p className="processing-text">Connecting your account</p>
               </div>
-            )}/>
+              }
+              {isReady &&
+              <React.Fragment>
+                <HandleRoute/>
+                {this.state.passphraseRequired &&
+                <PassphraseDialog requestId={this.state.passphraseRequestId} onComplete={this.handlePassphraseDialogCompleted}/>
+                }
+                <div className={`${this.state.passphraseRequired ? "visually-hidden" : ""}`}>
+                  <Route path={SEARCH_VISIBLE_ROUTES} render={() => (
+                    <Search ref={el => this.searchRef = el}/>
+                  )}/>
+                  <AnimatedSwitch>
+                    <Route path="/data/quickaccess/login" render={() => (
+                      <LoginPage loginSuccessCallback={this.loginSuccessCallback} canRememberMe={this.canRememberMe}/>
+                    )}/>
+                    <PrivateRoute exact path="/data/quickaccess/resources/group" component={FilterResourcesByGroupPage}/>
+                    <PrivateRoute path="/data/quickaccess/resources/group/:id" component={FilterResourcesByGroupPage}/>
+                    <PrivateRoute exact path="/data/quickaccess/resources/tag" component={FilterResourcesByTagPage}/>
+                    <PrivateRoute path="/data/quickaccess/resources/tag/:id" component={FilterResourcesByTagPage}/>
+                    <PrivateRoute exact path="/data/quickaccess/resources/favorite" component={FilterResourcesByFavoritePage}/>
+                    <PrivateRoute exact path="/data/quickaccess/resources/owned-by-me" component={FilterResourcesByItemsIOwnPage}/>
+                    <PrivateRoute exact path="/data/quickaccess/resources/recently-modified" component={FilterResourcesByRecentlyModifiedPage}/>
+                    <PrivateRoute exact path="/data/quickaccess/resources/shared-with-me" component={FilterResourcesBySharedWithMePage}/>
+                    <PrivateRoute path="/data/quickaccess/resources/create" component={ResourceCreatePage}/>
+                    <PrivateRoute path="/data/quickaccess/resources/view/:id" component={ResourceViewPage}/>
+                    <PrivateRoute exact path="/data/quickaccess/more-filters" component={MoreFiltersPage}/>
+                    <PrivateRoute exact path="/data/quickaccess/setup-extension-in-progress" component={SetupExtensionInProgress}/>
+                    <PrivateRoute exact path="/data/quickaccess.html" component={HomePage}/>
+                  </AnimatedSwitch>
+                </div>
+              </React.Fragment>
+              }
+            </div>
           </Router>
         </TranslationProvider>
       </AppContext.Provider>

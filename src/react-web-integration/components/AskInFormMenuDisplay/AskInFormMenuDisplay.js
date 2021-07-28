@@ -116,7 +116,7 @@ class AskInFormMenuDisplay extends React.Component {
     });
   }
 
-  /**é
+  /**
    * Perform the call-to-action
    */
   execute() {

@@ -14,6 +14,7 @@
 
 import React from "react";
 import PropTypes from "prop-types";
+import Icon from "../../../react-extension/components/Common/Icons/Icon";
 
 class DisplayInFormMenuItem extends React.Component {
   /**
@@ -22,6 +23,34 @@ class DisplayInFormMenuItem extends React.Component {
    */
   constructor(props) {
     super(props);
+    this.bindCallbacks();
+  }
+
+  /**
+   * Binds methods callbacks
+   */
+  bindCallbacks() {
+    this.handleClick = this.handleClick.bind(this);
+  }
+
+  /**
+   * Get the input button classname
+   * @returns {string}
+   */
+  getClassName() {
+    let name = 'in-form-menu-item';
+    if (this.props.disabled) {
+      name += ' disabled';
+    }
+    return name;
+  }
+
+  /**
+   * Handle cancel click
+   * @return {void}
+   */
+  handleClick() {
+    this.props.onClick();
   }
 
   /**
@@ -29,9 +58,9 @@ class DisplayInFormMenuItem extends React.Component {
    */
   render() {
     return (
-      <a className="in-form-menu-item">
+      <a className={this.getClassName()} onClick={this.handleClick}>
         <div className="in-form-menu-item-icon">
-          {this.props.icon}
+          <Icon name={this.props.icon} big={true} dim={true}/>
         </div>
         <div className="in-form-menu-item-content">
           <div className="in-form-menu-item-content-header">
@@ -55,7 +84,9 @@ DisplayInFormMenuItem.propTypes = {
   title: PropTypes.string,
   subtitle: PropTypes.any,
   description: PropTypes.string,
-  icon: PropTypes.any
-}
+  icon: PropTypes.any,
+  disabled: PropTypes.bool,
+  onClick: PropTypes.func
+};
 
 export default DisplayInFormMenuItem;

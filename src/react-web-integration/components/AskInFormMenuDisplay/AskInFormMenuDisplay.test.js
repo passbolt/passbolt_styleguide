@@ -16,9 +16,8 @@
  * Unit tests on AskInFormMenuDisplay in regard of specifications
  */
 
-import CreateResourcePage from "../../../react-extension/components/Resource/CreateResource/CreateResource.test.page";
 import AskInFormMenuDisplayTestPage from "./AskInFormMenuDisplay.test.page";
-import {contextWithAuthenticatedUser, contextWithUnauthenticatedUser} from "./AskInFormMenuDisplay.test.data";
+import {contextWithUnauthenticatedUser} from "./AskInFormMenuDisplay.test.data";
 
 beforeEach(() => {
   jest.resetModules();
@@ -36,5 +35,5 @@ describe("See the Create Resource", () => {
       expect(page.isActive).toBeFalsy();
     });
   });
-  
+
 });

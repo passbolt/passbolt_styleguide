@@ -58,42 +58,52 @@ class ResourceCreatePage extends React.Component {
     this.nameInputRef = React.createRef();
     this.uriInputRef = React.createRef();
     this.usernameInputRef = React.createRef();
+    this.passwordInputRef = React.createRef();
   }
 
   async loadPasswordMetaFromTabInfo() {
-    const {name, uri} = await this.getPasswordMetaFromTabInfo();
-    this.setState({name, uri});
-    await this.focusFirstEmptyField(name, uri);
+    const {name, uri, username, password} = await this.getPasswordMetaFromTabInfo();
+    this.setState({name, uri, username, password});
+    await this.focusFirstEmptyField(name, uri, username, password);
     this.setState({loaded: true});
   }
 
   async getPasswordMetaFromTabInfo() {
     let name = "";
     let uri = "";
+    let username = "";
+    let password = "";
     const ignoreNames = ["newtab"];
     const ignoreUris = ["chrome://newtab/", "about:newtab"];
 
+
     try {
-      const tabInfo = await this.props.context.port.request("passbolt.active-tab.get-info");
-      if (!ignoreNames.includes(tabInfo["title"])) {
-        name = tabInfo["title"].substring(0, 64);
+      const tabInfo = await this.props.context.port.request("passbolt.quickaccess.prepare-create", this.props.location.state?.tabId);
+      if (!ignoreNames.includes(tabInfo["name"])) {
+        name = tabInfo["name"].substring(0, 64);
       }
-      if (!ignoreUris.includes(tabInfo["url"])) {
-        uri = tabInfo["url"];
+      if (!ignoreUris.includes(tabInfo["uri"])) {
+        uri = tabInfo["uri"];
+      }
+      if (tabInfo.username.length > 0) {
+        username = tabInfo.username;
+      }
+      if (tabInfo.secret_clear.length > 0) {
+        password = tabInfo.secret_clear;
       }
     } catch (error) {
       console.error(error);
     }
 
-    return {name, uri};
+    return {name, uri, username, password};
   }
 
-  focusFirstEmptyField(name, uri) {
+  focusFirstEmptyField(name, uri, username, password) {
     return new Promise(resolve => {
       /*
        * Wait 210ms, the time for the animation to be completed.
        * If we don't wait the animation to be completed, then the focus will screw the animation. Some browsers need
-       * elements to be visible to give them focus, therefor the browser makes it visible while the animation is
+       * elements to be visible to give them focus, therefore the browser makes it visible while the animation is
        * running, making the element blinking.
        */
       setTimeout(() => {
@@ -101,8 +111,10 @@ class ResourceCreatePage extends React.Component {
           this.nameInputRef.current.focus();
         } else if (uri === "") {
           this.uriInputRef.current.focus();
-        } else {
+        } else if (username === "") {
           this.usernameInputRef.current.focus();
+        } else if(password === "") {
+          this.passwordInputRef.current.focus();
         }
         resolve();
       }, 210);
@@ -253,7 +265,7 @@ class ResourceCreatePage extends React.Component {
               <div className="input text password required">
                 <label htmlFor="password"><Trans>Password</Trans></label>
                 <input name="password" maxLength="4096" value={this.state.password} onChange={this.handlePasswordChange} disabled={this.state.processing}
-                  type={this.state.viewPassword ? "text" : "password"} className="required" placeholder={this.translate('Password')} id="password" required="required" />
+                  ref={this.passwordInputRef} type={this.state.viewPassword ? "text" : "password"} className="required" placeholder={this.translate('Password')} id="password" required="required" />
                 <a onClick={this.handleViewPasswordButtonClick} className={`password-view button button-icon button-toggle ${this.state.viewPassword ? "selected" : ""}`}>
                   <span className="fa icon">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><path d="M569.354 231.631C512.969 135.949 407.81 72 288 72 168.14 72 63.004 135.994 6.646 231.631a47.999 47.999 0 0 0 0 48.739C63.031 376.051 168.19 440 288 440c119.86 0 224.996-63.994 281.354-159.631a47.997 47.997 0 0 0 0-48.738zM288 392c-75.162 0-136-60.827-136-136 0-75.162 60.826-136 136-136 75.162 0 136 60.826 136 136 0 75.162-60.826 136-136 136zm104-136c0 57.438-46.562 104-104 104s-104-46.562-104-104c0-17.708 4.431-34.379 12.236-48.973l-.001.032c0 23.651 19.173 42.823 42.824 42.823s42.824-19.173 42.824-42.823c0-23.651-19.173-42.824-42.824-42.824l-.032.001C253.621 156.431 270.292 152 288 152c57.438 0 104 46.562 104 104z" /></svg>
@@ -288,6 +300,7 @@ class ResourceCreatePage extends React.Component {
 ResourceCreatePage.propTypes = {
   context: PropTypes.any, // The application context
   history: PropTypes.object,
+  location: PropTypes.any,
   t: PropTypes.func, // The translation function
 };
 

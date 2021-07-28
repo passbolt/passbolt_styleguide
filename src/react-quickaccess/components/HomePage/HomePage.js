@@ -1,5 +1,5 @@
 import React from "react";
-import {Link} from "react-router-dom";
+import {Link, withRouter} from "react-router-dom";
 import {withAppContext} from "../../contexts/AppContext";
 import SimpleBar from "../SimpleBar/SimpleBar";
 import canSuggestUrl from "./canSuggestUrl";
@@ -23,6 +23,14 @@ class HomePage extends React.Component {
     this.props.context.focusSearch();
     this.findResources();
     this.getActiveTabUrl();
+  }
+
+  componentDidUpdate(prevProps) {
+    // The location keys are the unique identifier in case of location change
+    const locationPreviousStateHasChanged = this.props.location.key !== prevProps.location.key;
+    if(locationPreviousStateHasChanged) {
+      this.getActiveTabUrl();
+    }
   }
 
   initEventHandlers() {
@@ -85,7 +93,7 @@ class HomePage extends React.Component {
 
   async getActiveTabUrl() {
     try {
-      const activeTabUrl = await this.props.context.port.request("passbolt.active-tab.get-url");
+      const activeTabUrl = await this.props.context.port.request("passbolt.active-tab.get-url", this.props.location.state?.tabId);
       this.setState({activeTabUrl});
     } catch (error) {
       console.error(error);
@@ -329,7 +337,8 @@ class HomePage extends React.Component {
 
 HomePage.propTypes = {
   context: PropTypes.any, // The application context
+  location: PropTypes.any,
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withTranslation('common')(HomePage));
+export default withAppContext(withRouter(withTranslation('common')(HomePage)));
