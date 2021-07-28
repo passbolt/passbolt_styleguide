@@ -63,6 +63,7 @@
     "jssha": "^3.2.0",
     "luxon": "^1.27.0",
     "node-fetch": "^2.6.1",
+    "qrcode": "^1.4.4",
     "react-color": "^2.19.3",
     "react-i18next": "^11.8.5",
     "react-list": "^0.8.15",

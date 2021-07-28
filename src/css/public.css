@@ -5396,97 +5396,28 @@ article video {
 .message.side-message p {
   padding-bottom: 1.6rem;
 }
-/* animation */
+.feedback-card,
 .message.animated {
   background: #FFF;
   color: #333;
   display: flex;
   border: 1px solid #DDD;
-  border-radius: 0.3rem;
+  border-radius: 3px;
 }
+.feedback-card .illustration,
 .message.animated .illustration {
-  flex: 0 0 18rem;
+  flex: 0 0 180px;
 }
+.feedback-card .additional-information,
 .message.animated .additional-information {
   flex: 1;
-  line-height: 18rem;
-  margin: 2.4rem 0;
-  padding-left: 1.6rem;
-}
-@keyframes drawCircle {
-  0% {
-    stroke-dashoffset: 18rem;
-  }
-  100% {
-    stroke-dashoffset: 0;
-  }
-}
-@keyframes drawCheck {
-  0% {
-    stroke-dashoffset: 5rem;
-  }
-  100% {
-    stroke-dashoffset: 0;
-  }
-}
-@keyframes drawCross {
-  0% {
-    stroke-dashoffset: 5rem;
-  }
-  100% {
-    stroke-dashoffset: 0;
-  }
-}
-@keyframes drawWarning {
-  0% {
-    stroke-dashoffset: 18rem;
-  }
-  100% {
-    stroke-dashoffset: 0;
-  }
-}
-.message.animated #successAnimationCircle {
-  stroke-dasharray: 18rem 18rem;
-  stroke: #009900;
-}
-.message.animated #successAnimationCheck {
-  stroke-dasharray: 5rem 5rem;
-  stroke: #009900;
-}
-.message.animated #errorAnimationCircle {
-  stroke-dasharray: 18rem 18rem;
-  stroke: #D40101;
-}
-.message.animated #errorAnimationCross {
-  stroke-dasharray: 5rem 5rem;
-  stroke: #D40101;
-}
-.message.animated #warningAnimation {
-  stroke-dasharray: 18rem 18rem;
-  stroke: #9F6000;
-  stroke-linecap: square;
-  stroke-linejoin: round;
-}
-.message.animated #warningAnimation.round {
-  stroke-linecap: round;
-}
-.message.animated .animated {
-  animation: 0.75s ease-out 0s 1 both pop;
-}
-.message.animated .animated #successAnimationCircle,
-.message.animated .animated #errorAnimationCircle {
-  animation: 0.75s cubic-bezier(0.77, 0, 0.175, 1) 0s 1 both drawCircle;
-}
-.message.animated .animated #successAnimationCheck {
-  animation: 0.75s cubic-bezier(0.77, 0, 0.175, 1) 0s 1 both drawCheck;
-}
-.message.animated .animated #errorAnimationCross {
-  animation: 0.75s cubic-bezier(0.77, 0, 0.175, 1) 0s 1 both drawCross;
-}
-.message.animated .animated #warningAnimation {
-  animation: 0.75s cubic-bezier(0.77, 0, 0.175, 1) 0s 1 both drawWarning;
+  line-height: 180px;
+  margin-top: 1.5em;
+  padding-left: 1em;
+  padding-right: 1em;
 }
 @media only screen and (max-width: 767px) {
+  .feedback-card,
   .message.animated {
     flex-direction: column;
   }

@@ -42,7 +42,6 @@ const config = {
         to: path.resolve(__dirname, "build/js/dist/"),
       }],
     }),
-
   ],
   optimization: {
     splitChunks: {

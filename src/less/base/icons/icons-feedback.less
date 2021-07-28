@@ -1,0 +1,98 @@
+.icon-feedback {
+  @circle-length: 180px;
+  @warning-length: 230px;
+  @check-length: 50px;
+  @cross-length: 50px;
+
+  @keyframes drawCircle {
+    0% {
+      stroke-dashoffset: @circle-length;
+    }
+    100% {
+      stroke-dashoffset: 0;
+    }
+  }
+
+  @keyframes drawCheck {
+    0% {
+      stroke-dashoffset: @check-length;
+    }
+    100% {
+      stroke-dashoffset: 0;
+    }
+  }
+
+  @keyframes drawCross {
+    0% {
+      stroke-dashoffset: @cross-length;
+    }
+    100% {
+      stroke-dashoffset: 0;
+    }
+  }
+
+  @keyframes drawWarning {
+    0% {
+      stroke-dashoffset: @warning-length;
+    }
+    100% {
+      stroke-dashoffset: 0;
+    }
+  }
+
+  .success-animation-circle {
+    stroke-dasharray: @circle-length @circle-length;
+    stroke: @green;
+  }
+
+  .success-animation-line {
+    stroke-dasharray: @check-length @check-length;
+    stroke: @green;
+  }
+
+  .success-animation-line2 {
+    stroke-dasharray: @check-length @check-length;
+    stroke: @green;
+  }
+
+  .error-animation-circle {
+    stroke-dasharray: @circle-length @circle-length;
+    stroke: @red;
+  }
+
+  .error-animation-line {
+    stroke-dasharray: @cross-length @cross-length;
+    stroke: @red;
+  }
+
+  .warning-animation-line {
+    stroke-dasharray: @warning-length @warning-length;
+    stroke: @orange;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .warning-animation-circle {
+    fill: @orange;
+  }
+
+  .animated {
+    animation: .75s ease-out 0s 1 both pop;
+
+    .success-animation-circle, .error-animation-circle, .warning-animation-circle {
+      animation: .75s cubic-bezier(0.77, 0, 0.175, 1) 0s 1 both drawCircle;
+    }
+
+    .success-animation-line {
+      animation: .75s cubic-bezier(0.77, 0, 0.175, 1) 0s 1 both drawCheck;
+    }
+
+    .error-animation-line {
+      animation: .75s cubic-bezier(0.77, 0, 0.175, 1) 0s 1 both drawCross;
+    }
+
+    .warning-animation-line {
+      animation: .75s cubic-bezier(0.77, 0, 0.175, 1) 0s 1 both drawWarning;
+    }
+  }
+}

@@ -47,6 +47,14 @@ class NavigateIntoUserSettingsWorkspace extends React.Component {
   }
 
   /**
+   * Can the user access the mobile capability.
+   * @returns {bool}
+   */
+  get canIUseMobileCapability() {
+    return this.props.context.siteSettings && this.props.context.siteSettings.canIUse('mobile');
+  }
+
+  /**
    * Render the component
    */
   render() {
@@ -61,6 +69,18 @@ class NavigateIntoUserSettingsWorkspace extends React.Component {
                 <div className="main-cell">
                   <a onClick={this.props.navigationContext.onGoToUserSettingsProfileRequested}>
                     <span><Trans>Profile</Trans></span>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </li>
+          <li>
+            <div
+              className={`row ${isSelected('keys') ? 'selected' : ''}`}>
+              <div className="main-cell-wrapper">
+                <div className="main-cell">
+                  <a onClick={this.props.navigationContext.onGoToUserSettingsKeysRequested}>
+                    <span><Trans>Keys inspector</Trans></span>
                   </a>
                 </div>
               </div>
@@ -118,18 +138,20 @@ class NavigateIntoUserSettingsWorkspace extends React.Component {
               </div>
             </li>
           }
+          {this.canIUseMobileCapability &&
           <li>
             <div
-              className={`row ${isSelected('keys') ? 'selected' : ''}`}>
+              className={`row ${isSelected('mobile') ? 'selected' : ''}`}>
               <div className="main-cell-wrapper">
                 <div className="main-cell">
-                  <a onClick={this.props.navigationContext.onGoToUserSettingsKeysRequested}>
-                    <span><Trans>Keys inspector</Trans></span>
+                  <a onClick={this.props.navigationContext.onGoToUserSettingsMobileRequested}>
+                    <span><Trans>Mobile setup</Trans></span>
                   </a>
                 </div>
               </div>
             </div>
           </li>
+          }
         </ul>
       </div>
     );
