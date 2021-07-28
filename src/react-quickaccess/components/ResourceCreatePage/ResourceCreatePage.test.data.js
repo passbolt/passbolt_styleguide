@@ -21,6 +21,6 @@ const mockTabInfo = {
 };
 
 export const mockResults = {
-  "passbolt.active-tab.get-info": mockTabInfo,
+  "passbolt.quickaccess.prepare-create": mockTabInfo,
   "passbolt.resources.create": {}
 };

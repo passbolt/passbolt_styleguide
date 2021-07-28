@@ -1,5 +1,5 @@
 import React from "react";
-import {Link} from "react-router-dom";
+import {Link, withRouter} from "react-router-dom";
 import PropTypes from "prop-types";
 import {Trans, withTranslation} from "react-i18next";
 
@@ -96,4 +96,4 @@ MoreFiltersPage.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withTranslation('common')(MoreFiltersPage);
+export default withRouter(withTranslation('common')(MoreFiltersPage));

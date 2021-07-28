@@ -15,19 +15,20 @@
 
 import {v4 as uuidv4} from "uuid";
 import DomUtils from "../Dom/DomUtils";
+import browser from "webextension-polyfill";
 
 /**
- * An InFormField is represented by a DOM element identified as an username field and to which
+ * An InFormCallToActionField is represented by a DOM element identified as an username field and to which
  * in-form call-to-action and/or menu can be attached
  */
-class InFormField {
+class InFormCallToActionField {
 
   /**
    * Retrieve all the DOM elements which can be an in-form username fields
    */
   static findAll(selector) {
     const domFields =  Array.from(document.querySelectorAll(selector));
-    const iframesFields = InFormField.findAllInIframes(selector);
+    const iframesFields = InFormCallToActionField.findAllInIframes(selector);
     return domFields.concat(iframesFields);
   }
 
@@ -46,8 +47,11 @@ class InFormField {
   /** The field to which the in-form is attached */
   field;
 
-  /** An unique identifier for the field */
-  fieldId;
+  /** Type of the field ("username" or "password") */
+  fieldType;
+
+  /** An unique identifier for the iframe */
+  iframeId;
 
   /** The scrollable field parent */
   scrollableFieldParent;
@@ -58,15 +62,22 @@ class InFormField {
   /** In-form call-to-action click watcher */
   callToActionClickWatcher;
 
+  /** In-form call-to-action click listener callback */
+  callToActionClickCallback;
+
   /**
    * Default constructor
-   * @param field
+   * @param field The DOM element
+   * @param fieldType The type of field
    */
-  constructor(field) {
+  constructor(field, fieldType) {
     this.field = field;
-    this.fieldId = uuidv4();
+    this.fieldType = fieldType;
+    this.iframeId = uuidv4();
     this.scrollableFieldParent = null;
     this.isCallToActionMousingOver = false;
+    this.callToActionClickWatcher = null;
+    this.callToActionClickCallback = null;
     this.bindCallbacks();
     this.handleInsertionEvent();
     this.handleRemoveEvent();
@@ -84,6 +95,13 @@ class InFormField {
     this.destroy = this.destroy.bind(this);
   }
 
+  /**
+   * Handle a callback after on click on the in-form-call-to-action
+   * @param callback
+   */
+  onClick(callback) {
+    this.callToActionClickCallback = callback;
+  }
 
   /** CALL-TO-ACTION INSERTION */
 
@@ -104,7 +122,7 @@ class InFormField {
   insertInformCallToActionIframe() {
     const iframes = document.querySelectorAll('iframe');
     // Use of Array prototype some method cause NodeList is not an array !
-    const iframeId =  this.fieldId;
+    const iframeId =  this.iframeId;
     const isIframeAlreadyInserted = Array.prototype.some.call(iframes, iframe => iframe.id === iframeId);
     if (!isIframeAlreadyInserted) {
       const iframe = this.createCallToActionIframe();
@@ -119,9 +137,9 @@ class InFormField {
   createCallToActionIframe() {
     const iframe = document.createElement('iframe');
     document.body.appendChild(iframe);
-    const browserExtensionUrl = chrome.runtime.getURL("/");
+    const browserExtensionUrl = browser.runtime.getURL("/");
     const {top, left} = this.calculateFieldPosition();
-    iframe.id = this.fieldId;
+    iframe.id = this.iframeId;
     iframe.style.position = "fixed";
     iframe.style.top = top + 'px'
     iframe.style.left =  left + 'px';
@@ -169,8 +187,9 @@ class InFormField {
     this.callToActionClickWatcher = setInterval(() => {
       // Check if a click has been applied on some iframe
       const elem = document.activeElement;
-      if (elem && elem.tagName == 'IFRAME' && elem.id === this.fieldId) {
+      if (elem && elem.tagName == 'IFRAME' && elem.id === this.iframeId) {
         this.field.focus();
+        this.callToActionClickCallback();
         clearInterval(this.callToActionClickWatcher);
       }
     }, 100);
@@ -192,22 +211,22 @@ class InFormField {
   }
 
   /**
-   * Removes the in-form call-to-action iframe from the username field
+   * Removes the in-form call-to-action iframe from the username or password field
    */
   removeInFormCallToAction() {
-    const isUsernameIframeMouseOver = this.isCallToActionMousingOver;
+    const isIframeMouseOver = this.isCallToActionMousingOver;
     const isActiveElementAnAuthenticationField = document.activeElement === this.field;
-    if (!isUsernameIframeMouseOver && !isActiveElementAnAuthenticationField) {
+    if (!isIframeMouseOver && !isActiveElementAnAuthenticationField) {
       this.removeCallToActionIframe();
     }
   }
 
   /**
-   * Removes the call-to-action iframe from the username field when one moused out
+   * Removes the call-to-action iframe from the username or password field when one moused out
    * @param event The mouse-out event
    */
   removeInFormCallToActionWhenMouseOut(event) {
-    const isNotCallToActionIframe = event.relatedTarget && event.relatedTarget.id !== this.fieldId;
+    const isNotCallToActionIframe = event.relatedTarget && event.relatedTarget.id !== this.iframeId;
     const isActiveElementAnAuthenticationField = document.activeElement === this.field;
     if (isNotCallToActionIframe && !isActiveElementAnAuthenticationField) {
       this.removeCallToActionIframe();
@@ -220,7 +239,7 @@ class InFormField {
   removeCallToActionIframe() {
     const iframes = document.querySelectorAll('iframe');
     iframes.forEach(iframe => {
-      const identifierToMatch = this.fieldId;
+      const identifierToMatch = this.iframeId;
       if (iframe.id === identifierToMatch) {
         iframe.parentNode.removeChild(iframe);
       }
@@ -253,6 +272,6 @@ class InFormField {
   }
 }
 
-export default InFormField;
+export default InFormCallToActionField;
 
 

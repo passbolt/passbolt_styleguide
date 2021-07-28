@@ -30,10 +30,10 @@ describe("ResourceCreatePage", () => {
       // mock the passbolt messaging layer.
       context.port = {
         request: event => new Promise(resolve => {
-          if (event === "passbolt.active-tab.get-info") {
+          if (event === "passbolt.quickaccess.prepare-create") {
             resolve({
-              title: "Passbolt Browser Extension Test",
-              url: "https://passbolt-browser-extension/test"
+              name: "Passbolt Browser Extension Test",
+              uri: "https://passbolt-browser-extension/test"
             });
           }
         })
@@ -63,10 +63,10 @@ describe("ResourceCreatePage", () => {
       // mock the passbolt messaging layer.
       window.passbolt = {
         request: event => new Promise(resolve => {
-          if (event === "passbolt.active-tab.get-info") {
+          if (event === "passbolt.resources.prepare-create") {
             resolve({
-              title: "newtab",
-              url: "chrome://newtab/"
+              name: "newtab",
+              uri: "chrome://newtab/"
             });
           }
         })
@@ -98,10 +98,10 @@ describe("ResourceCreatePage", () => {
       // mock the passbolt messaging layer.
       window.passbolt = {
         request: event => new Promise(resolve => {
-          if (event === "passbolt.active-tab.get-info") {
+          if (event === "passbolt.resources.prepare-create") {
             resolve({
-              title: "",
-              url: "about:newtab"
+              name: "",
+              uri: "about:newtab"
             });
           }
         })
@@ -144,10 +144,10 @@ describe("ResourceCreatePage", () => {
       context.port = {
         request: function(event) {
           return new Promise(resolve => {
-            if (event === "passbolt.active-tab.get-info") {
+            if (event === "passbolt.quickaccess.prepare-create") {
               resolve({
-                title: "Passbolt Browser Extension Test",
-                url: "https://passbolt-browser-extension/test"
+                name: "Passbolt Browser Extension Test",
+                uri: "https://passbolt-browser-extension/test"
               });
             }
             else if (event === "passbolt.resources.create") {

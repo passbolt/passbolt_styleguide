@@ -3,6 +3,7 @@ import Transition from 'react-transition-group/Transition';
 import PropTypes from "prop-types";
 import {Trans, withTranslation} from "react-i18next";
 import {withAppContext} from "../../contexts/AppContext";
+import {withRouter} from "react-router-dom";
 
 class ResourceViewPage extends React.Component {
   constructor(props) {
@@ -435,4 +436,4 @@ ResourceViewPage.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withTranslation('common')(ResourceViewPage));
+export default withAppContext(withRouter(withTranslation('common')(ResourceViewPage)));

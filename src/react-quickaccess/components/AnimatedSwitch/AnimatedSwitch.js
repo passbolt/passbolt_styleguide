@@ -1,8 +1,9 @@
 import React from "react";
-import { Switch } from "react-router-dom";
+import {Switch, withRouter} from "react-router-dom";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
+import PropTypes from "prop-types";
 
-export default class AnimatedSwitch extends React.Component {
+class AnimatedSwitch extends React.Component {
   constructor(props) {
     super(props);
     this._previousLocationPathname = "";
@@ -187,3 +188,13 @@ export default class AnimatedSwitch extends React.Component {
     );
   }
 }
+
+AnimatedSwitch.propTypes = {
+  // Match, location and history props are injected by the withRouter decoration call.
+  match: PropTypes.object,
+  location: PropTypes.object,
+  history: PropTypes.object,
+  t: PropTypes.func, // The translation function
+};
+
+export default withRouter(AnimatedSwitch);

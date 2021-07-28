@@ -6,7 +6,7 @@
 /* box shadows */
 /* dropdown menus */
 /* inputs */
-/* icons */
+/* logos */
 /* grid */
 /* messages */
 /* controls */
@@ -3251,78 +3251,4 @@ html {
   100% {
     opacity: 1;
   }
-}
-.in-form-menu {
-  font-size: 1.4rem;
-  color: #FFFFFC;
-  width: 35rem;
-  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
-}
-.in-form-menu--scrollable {
-  overflow-y: scroll;
-  height: 20rem;
-  /* Opera doesn't support this in the shorthand */
-  overflow: auto;
-  background: linear-gradient(#30302D 30%, rgba(255, 255, 255, 0)), linear-gradient(rgba(255, 255, 255, 0), #30302D 70%) 0 100%, /* Shadows */ radial-gradient(farthest-side at 50% 0, rgba(0, 0, 0, 0.08), rgba(0, 0, 0, 0)), radial-gradient(farthest-side at 50% 100%, rgba(0, 0, 0, 0.08), rgba(0, 0, 0, 0)) 0 100%;
-  background-repeat: no-repeat;
-  background-color: #30302D;
-  background-size: 100% 40px, 100% 40px, 100% 14px, 100% 14px;
-  /* Opera doesn't support this in the shorthand */
-  background-attachment: local, local, scroll, scroll;
-}
-.in-form-menu-item {
-  display: flex;
-  padding: 1rem;
-  text-decoration: none;
-  border-bottom: 0;
-}
-.in-form-menu-item:not(:last-child) {
-  border-bottom: 1px solid #0C0C0A;
-}
-.in-form-menu-item:hover {
-  color: #FFFFFC;
-  background-color: #444442;
-}
-.in-form-menu-item:hover .in-form-menu-item-content-subheader-password:before {
-  position: absolute;
-  bottom: 0;
-  height: 100%;
-  width: 100%;
-  content: "";
-  background: linear-gradient(to left, #444442 20%, rgba(68, 68, 66, 0) 80%);
-  pointer-events: none;
-  /* so the text is still selectable */
-}
-.in-form-menu-item-icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-basis: 4rem;
-}
-.in-form-menu-item-icon .fa.icon svg {
-  width: 1.6rem;
-  height: 1.6rem;
-}
-.in-form-menu-item-icon .fa.icon svg path {
-  fill: #8B8B89;
-}
-.in-form-menu-item-content {
-  flex: 1;
-  color: #FFFFFC;
-}
-.in-form-menu-item-content-subheader-password {
-  position: relative;
-}
-.in-form-menu-item-content-subheader-password:before {
-  position: absolute;
-  bottom: 0;
-  height: 100%;
-  width: 100%;
-  content: "";
-  background: linear-gradient(to left, #30302d 20%, rgba(48, 48, 45, 0) 80%);
-  pointer-events: none;
-  /* so the text is still selectable */
-}
-.in-form-menu-item-content-description {
-  color: #cacac9;
 }

@@ -6,7 +6,7 @@
 /* box shadows */
 /* dropdown menus */
 /* inputs */
-/* icons */
+/* logos */
 /* grid */
 /* messages */
 /* sidebar */
@@ -3930,7 +3930,7 @@ iframe.cachette {
   border-bottom: none;
 }
 /*
-	Password fields in passbolt have complexity "progress bar"
+	Password callToActionFields in passbolt have complexity "progress bar"
 	and a custom layout to accommodate buttons on the left end
 */
 .input-password-wrapper {
@@ -4595,7 +4595,7 @@ MIT License, https://github.com/harvesthq/chosen/blob/master/LICENSE.md
   background-position: -1.8rem 0.8rem;
 }
 /** Specific layout for connection info field
- This layout contains 3 fields on a single line:
+ This layout contains 3 callToActionFields on a single line:
  - a chosen select field to select the protocol
  - a host name text field
  - a port text field

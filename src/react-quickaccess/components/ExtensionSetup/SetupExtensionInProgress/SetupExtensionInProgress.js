@@ -14,6 +14,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import {Trans, withTranslation} from "react-i18next";
+import {withRouter} from "react-router-dom";
 
 /**
  * The component display that setup extension is in progress
@@ -37,4 +38,4 @@ SetupExtensionInProgress.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withTranslation('common')(SetupExtensionInProgress);
+export default withRouter(withTranslation('common')(SetupExtensionInProgress));
