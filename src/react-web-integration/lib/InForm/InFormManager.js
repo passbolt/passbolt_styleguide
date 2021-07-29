@@ -16,7 +16,7 @@
 import InFormCallToActionField from "./InFormCallToActionField";
 import InFormFieldSelector from "./InFormFieldSelector";
 import InFormMenuField from "./InformMenuField";
-
+import {fireEvent} from "@testing-library/dom/dist/events";
 /**
  * Manages the in-form web integration including call-to-action and menu
  */
@@ -53,6 +53,7 @@ class InFormManager {
     this.handleInformCallToActionClickEvent();
     this.handleGetLastCallToActionClickedInput();
     this.handleGetCurrentCredentials();
+    this.handleFillCredentials();
   }
 
   /**
@@ -161,6 +162,27 @@ class InFormManager {
         password = this.callToActionFields.find(field => field.fieldType === 'password')?.field.value;
       }
       port.emit(requestId, 'SUCCESS', {username, password});
+    });
+  }
+
+  /**
+   * Whenever one requests to fill the current page form with given credentials
+   */
+  handleFillCredentials() {
+    port.on('passbolt.web-integration.fill-credentials', ({username, password}) => {
+      const currentFieldType = this.lastCallToActionFieldClicked?.fieldType;
+      const isUsernameType = currentFieldType === 'username';
+      const isPasswordType = currentFieldType === 'password';
+      if (!isUsernameType) {
+        const usernameField = this.callToActionFields.find(field => field.fieldType === 'username')?.field;
+        fireEvent.input(usernameField, { target: { value: username } });
+        fireEvent.input( this.lastCallToActionFieldClicked.field, { target: { value: password } });
+      }
+      if (!isPasswordType) {
+        const passwordField = this.callToActionFields.find(field => field.fieldType === 'password')?.field;
+        fireEvent.input( this.lastCallToActionFieldClicked.field, { target: { value: username } });
+        fireEvent.input(passwordField, { target: { value: password } });
+      }
     });
   }
 

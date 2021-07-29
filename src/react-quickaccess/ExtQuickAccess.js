@@ -68,6 +68,7 @@ class ExtQuickAccess extends React.Component {
 
   async componentDidMount() {
     this.state.port.on('passbolt.passphrase.request', this.handleBackgroundPageRequiresPassphraseEvent);
+    this.handlePassphraseRequest();
     await this.checkPluginIsConfigured();
     await this.getUser();
     this.checkAuthStatus();
@@ -130,6 +131,15 @@ class ExtQuickAccess extends React.Component {
   }
 
   /**
+   * Is request passphrase feature is present
+   * @returns {boolean}
+   */
+  get isRequestPassphraseFeature() {
+    const queryParameters = new URLSearchParams(window.location.search);
+    return queryParameters.get("feature") === "request-passphrase";
+  }
+
+  /**
    * Retrieve the authentication status.
    *
    * If the user is authenticated but the MFA challenge is required, close the quickaccess and redirect the user to
@@ -172,7 +182,18 @@ class ExtQuickAccess extends React.Component {
   }
 
   handlePassphraseDialogCompleted() {
-    this.setState({passphraseRequired: false, passphraseRequestId: null});
+    if (!this.isRequestPassphraseFeature) {
+      this.setState({passphraseRequired: false, passphraseRequestId: null});
+    } else {
+      window.close();
+    }
+  }
+
+  handlePassphraseRequest() {
+    if (this.isRequestPassphraseFeature) {
+      const queryParameters = new URLSearchParams(window.location.search);
+      this.handleBackgroundPageRequiresPassphraseEvent(queryParameters.get("requestId"));
+    }
   }
 
   isReady() {
