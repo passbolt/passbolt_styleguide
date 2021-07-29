@@ -50,6 +50,7 @@ class DisplayInFormMenu extends React.Component {
     this.handleCreateNewCredentialsRequestedEvent = this.handleCreateNewCredentialsRequestedEvent.bind(this);
     this.handleSaveCredentialsRequestedEvent = this.handleSaveCredentialsRequestedEvent.bind(this);
     this.handleBrowseCredentialsRequestedEvent = this.handleBrowseCredentialsRequestedEvent.bind(this);
+    this.handleUseSuggestedResourceRequestedEvent = this.handleUseSuggestedResourceRequestedEvent.bind(this);
   }
 
   /**
@@ -213,6 +214,7 @@ class DisplayInFormMenu extends React.Component {
       return menuItems.concat([
         <DisplayInFormMenuItem
           key={resource.id}
+          onClick={() => this.handleUseSuggestedResourceRequestedEvent(resource.id)}
           title={resource.name}
           description={resource.username}
           icon="key"/>
@@ -249,6 +251,13 @@ class DisplayInFormMenu extends React.Component {
     this.props.context.port.request('passbolt.in-form-menu.save-credentials');
   }
 
+  /**
+   * Whenever the user requests to use the suggested resource as credentials in the current page
+   * @param resourceId
+   */
+  handleUseSuggestedResourceRequestedEvent(resourceId) {
+    this.props.context.port.request('passbolt.in-form-menu.use-suggested-resource', resourceId);
+  }
   /**
    * Render the component
    */

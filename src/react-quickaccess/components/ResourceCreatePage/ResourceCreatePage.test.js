@@ -30,7 +30,7 @@ describe("ResourceCreatePage", () => {
       // mock the passbolt messaging layer.
       context.port = {
         request: event => new Promise(resolve => {
-          if (event === "passbolt.quickaccess.prepare-create") {
+          if (event === "passbolt.quickaccess.prepare-resource") {
             resolve({
               name: "Passbolt Browser Extension Test",
               uri: "https://passbolt-browser-extension/test"
@@ -63,7 +63,7 @@ describe("ResourceCreatePage", () => {
       // mock the passbolt messaging layer.
       window.passbolt = {
         request: event => new Promise(resolve => {
-          if (event === "passbolt.resources.prepare-create") {
+          if (event === "passbolt.quickaccess.prepare-resource") {
             resolve({
               name: "newtab",
               uri: "chrome://newtab/"
@@ -98,7 +98,7 @@ describe("ResourceCreatePage", () => {
       // mock the passbolt messaging layer.
       window.passbolt = {
         request: event => new Promise(resolve => {
-          if (event === "passbolt.resources.prepare-create") {
+          if (event === "passbolt.quickaccess.prepare-resource") {
             resolve({
               name: "",
               uri: "about:newtab"
@@ -144,7 +144,7 @@ describe("ResourceCreatePage", () => {
       context.port = {
         request: function(event) {
           return new Promise(resolve => {
-            if (event === "passbolt.quickaccess.prepare-create") {
+            if (event === "passbolt.quickaccess.prepare-resource") {
               resolve({
                 name: "Passbolt Browser Extension Test",
                 uri: "https://passbolt-browser-extension/test"

@@ -68,13 +68,19 @@ class AskInFormMenuDisplay extends React.Component {
     }
   }
 
-
-
   /**
    * Returns the count of suggested resources
    */
   get suggestedResourcesCount() {
     return this.state.status.suggestedResourcesCount;
+  }
+
+  /**
+   * Return the number of suggested resource to display the right logo
+   * @returns {string|null}
+   */
+  get logoNumber() {
+    return this.suggestedResourcesCount > 5 ? '5-plus' : this.suggestedResourcesCount;
   }
 
   /**
@@ -107,11 +113,16 @@ class AskInFormMenuDisplay extends React.Component {
    */
   async checkAuthenticationStatus() {
     const {isAuthenticated, isMfaRequired} = await this.props.context.port.request("passbolt.in-form-cta.check-status");
+    const isActive = isAuthenticated && !isMfaRequired;
+    let suggestedResourcesCount = 0;
+    if (isActive) {
+      suggestedResourcesCount = await this.props.context.port.request("passbolt.in-form-cta.suggested-resources");
+    }
     this.setState({
       isReady: true,
       status: {
-        isActive: isAuthenticated && !isMfaRequired,
-        suggestedResourcesCount: 0
+        isActive,
+        suggestedResourcesCount
       },
     });
   }
@@ -127,7 +138,7 @@ class AskInFormMenuDisplay extends React.Component {
    * Render the component
    */
   render() {
-    const logoClassModifier = this.state.status.isActive ? this.suggestedResourcesCount : 'inactive';
+    const logoClassModifier = this.state.status.isActive ? this.logoNumber : 'inactive';
     return (
       <>
         {this.state.isReady &&
