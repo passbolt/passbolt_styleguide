@@ -24,7 +24,7 @@ import SiteSettings from "../shared/lib/Settings/SiteSettings";
 import UserSettings from "../shared/lib/Settings/UserSettings";
 import TranslationProvider from "./components/Internationalisation/TranslationProvider";
 import SetupExtensionInProgress from "./components/ExtensionSetup/SetupExtensionInProgress/SetupExtensionInProgress";
-import HandleRoute from "./components/Route/HandleRoute";
+import ManageQuickAccessMode from "./components/ManageQuickAccessMode/ManageQuickAccessMode";
 import PrivateRoute from "./components/PrivateRoute/PrivateRoute";
 
 const SEARCH_VISIBLE_ROUTES = [
@@ -131,12 +131,13 @@ class ExtQuickAccess extends React.Component {
   }
 
   /**
-   * Is request passphrase feature is present
+   * Is feature is present
+   * @param feature {string}
    * @returns {boolean}
    */
-  get isRequestPassphraseFeature() {
+  isInFeature(feature) {
     const queryParameters = new URLSearchParams(window.location.search);
-    return queryParameters.get("feature") === "request-passphrase";
+    return queryParameters.get("feature") === feature;
   }
 
   /**
@@ -163,7 +164,11 @@ class ExtQuickAccess extends React.Component {
   }
 
   loginSuccessCallback() {
-    this.setState({isAuthenticated: true});
+    if (!this.isInFeature('login')) {
+      this.setState({isAuthenticated: true});
+    } else {
+      window.close();
+    }
   }
 
   logoutSuccessCallback() {
@@ -182,15 +187,15 @@ class ExtQuickAccess extends React.Component {
   }
 
   handlePassphraseDialogCompleted() {
-    if (!this.isRequestPassphraseFeature) {
-      this.setState({passphraseRequired: false, passphraseRequestId: null});
-    } else {
+    if (this.isInFeature("request-passphrase")) {
       window.close();
+    } else {
+      this.setState({passphraseRequired: false, passphraseRequestId: null});
     }
   }
 
   handlePassphraseRequest() {
-    if (this.isRequestPassphraseFeature) {
+    if (this.isInFeature("request-passphrase")) {
       const queryParameters = new URLSearchParams(window.location.search);
       this.handleBackgroundPageRequiresPassphraseEvent(queryParameters.get("requestId"));
     }
@@ -219,7 +224,7 @@ class ExtQuickAccess extends React.Component {
               }
               {isReady &&
               <React.Fragment>
-                <HandleRoute/>
+                <ManageQuickAccessMode/>
                 {this.state.passphraseRequired &&
                 <PassphraseDialog requestId={this.state.passphraseRequestId} onComplete={this.handlePassphraseDialogCompleted}/>
                 }

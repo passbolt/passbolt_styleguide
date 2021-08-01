@@ -22,6 +22,7 @@ class PrivateRoute extends Component {
               <Redirect
                 to={{
                   pathname: "/data/quickaccess/login",
+                  search: props.location.search,
                   state: {from: props.location}
                 }}
               />
