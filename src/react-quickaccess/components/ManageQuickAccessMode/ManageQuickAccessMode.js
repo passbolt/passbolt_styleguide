@@ -16,7 +16,7 @@ import {withRouter} from "react-router-dom";
 import PropTypes from "prop-types";
 import {withAppContext} from "../../contexts/AppContext";
 
-class HandleRoute extends Component {
+class ManageQuickAccessMode extends Component {
   /**
    * Default constructor
    */
@@ -28,13 +28,36 @@ class HandleRoute extends Component {
    * Whenever the component is mounted
    */
   componentDidMount() {
+    this.handleCloseOutsideWindowEvent();
     this.redirectFromFeatureParams();
   }
 
+  /**
+   * Get the query parameters from the url
+   * @returns {URLSearchParams}
+   */
+  get queryParameters() {
+    return new URLSearchParams(this.props.location.search);
+  }
+
+  /**
+   * Handle close outside window event
+   */
+  handleCloseOutsideWindowEvent() {
+    const mustCloseWindow = this.queryParameters.get("uiMode") === "detached"
+      && this.queryParameters.get("feature") !== null;
+    if (mustCloseWindow) {
+      const closeWindow = () => window.close();
+      window.addEventListener("blur", closeWindow);
+    }
+  }
+
+  /**
+   * Redirect on the right page according to the feature
+   */
   redirectFromFeatureParams() {
-    const queryParameters = new URLSearchParams(this.props.location.search);
-    const tabId = queryParameters.get("tabId");
-    switch (queryParameters.get("feature")) {
+    const tabId = this.queryParameters.get("tabId");
+    switch (this.queryParameters.get("feature")) {
       case "create-new-credentials":
       case "save-credentials":
         this.props.history.push({pathname: "/data/quickaccess/resources/create", state: {tabId}});
@@ -58,10 +81,10 @@ class HandleRoute extends Component {
   }
 }
 
-HandleRoute.propTypes = {
+ManageQuickAccessMode.propTypes = {
   context: PropTypes.any, // The application context
   history: PropTypes.any, // The router history
   location: PropTypes.any, // The router location
 };
 
-export default withAppContext(withRouter(HandleRoute));
+export default withAppContext(withRouter(ManageQuickAccessMode));
