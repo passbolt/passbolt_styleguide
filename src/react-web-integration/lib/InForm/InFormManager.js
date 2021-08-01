@@ -54,6 +54,7 @@ class InFormManager {
     this.handleGetLastCallToActionClickedInput();
     this.handleGetCurrentCredentials();
     this.handleFillCredentials();
+    this.handleFillPassword();
   }
 
   /**
@@ -183,6 +184,18 @@ class InFormManager {
         fireEvent.input( this.lastCallToActionFieldClicked.field, { target: { value: username } });
         fireEvent.input(passwordField, { target: { value: password } });
       }
+    });
+  }
+
+  /**
+   * Whenever one requests to fill the current page form with a password
+   */
+  handleFillPassword() {
+    port.on('passbolt.web-integration.fill-password', password => {
+      this.callToActionFields
+        .filter(callToActionField => callToActionField.fieldType === 'password')
+        .forEach(callToActionField => fireEvent.input(callToActionField.field, { target: { value: password }}));
+      this.menuField.removeMenuIframe();
     });
   }
 
