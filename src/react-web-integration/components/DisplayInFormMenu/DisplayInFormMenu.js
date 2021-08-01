@@ -16,6 +16,7 @@ import React from "react";
 import DisplayInFormMenuItem from "./DisplayInFormMenuItem";
 import {withAppContext} from "../../contexts/AppContext";
 import PropTypes from "prop-types";
+import {SecretGenerator} from "../../../shared/lib/SecretGenerator/SecretGenerator";
 
 
 
@@ -26,6 +27,9 @@ import PropTypes from "prop-types";
  * the menu proposes different available actions given the situation
  */
 class DisplayInFormMenu extends React.Component {
+  /** The maximum length of visibility of a generated password */
+  static #TRUNCATED_GENERATED_PASSWORD_MAX_LENGTH = 15;
+
   /**
    * Default constructor
    * @param props Component props
@@ -51,6 +55,7 @@ class DisplayInFormMenu extends React.Component {
     this.handleSaveCredentialsRequestedEvent = this.handleSaveCredentialsRequestedEvent.bind(this);
     this.handleBrowseCredentialsRequestedEvent = this.handleBrowseCredentialsRequestedEvent.bind(this);
     this.handleUseSuggestedResourceRequestedEvent = this.handleUseSuggestedResourceRequestedEvent.bind(this);
+    this.handleGeneratePasswordRequestedEvent = this.handleGeneratePasswordRequestedEvent.bind(this);
   }
 
   /**
@@ -61,8 +66,10 @@ class DisplayInFormMenu extends React.Component {
       configuration: {
         inputType: null, // Input inputType attached to the menu
         inputValue: null, // Input inputValue attached to the menu
-        suggestedResources: null // Suggested resources to display
-      } // The display configuration of the menu
+        suggestedResources: null, // Suggested resources to display
+        secretGeneratorConfiguration: null, // A secret generator configuration
+      }, // The display configuration of the menu
+      generatedPassword: null // Generated passord
     };
   }
 
@@ -116,6 +123,17 @@ class DisplayInFormMenu extends React.Component {
   }
 
   /**
+   * Returns the truncated version of generated password
+   */
+  get truncatedGeneratedPassword() {
+    if (this.state.generatedPassword) {
+      const uplimitIndex = Math.min(DisplayInFormMenu.#TRUNCATED_GENERATED_PASSWORD_MAX_LENGTH, Math.floor(this.state.generatedPassword.length/2));
+      return this.state.generatedPassword.substring(0,uplimitIndex);
+    }
+    return this.state.generatedPassword;
+  }
+
+  /**
    * Returns the list of menu items in case of filled username configuration
    * @return {JSX.Element[]}
    */
@@ -165,7 +183,10 @@ class DisplayInFormMenu extends React.Component {
    */
   get filledPasswordMenuItems() {
     return [
+      ...this.suggestedResourcesItems,
       <DisplayInFormMenuItem
+        key="save-credentials"
+        onClick={this.handleSaveCredentialsRequestedEvent}
         title="Save as new credential"
         description="Save the data entered as a new credential"
         icon="add"/>,
@@ -184,10 +205,12 @@ class DisplayInFormMenu extends React.Component {
    */
   get emptyPasswordMenuItems() {
     return [
+      ...this.suggestedResourcesItems,
       <DisplayInFormMenuItem
         key="generate-password"
+        onClick={this.handleGeneratePasswordRequestedEvent}
         title="Generate a new password securely"
-        subtitle={<span className="in-form-menu-item-content-subheader-password">Yfdfdlkrefkd,kfndjn"</span>}
+        subtitle={<span className="in-form-menu-item-content-subheader-password">{this.truncatedGeneratedPassword}"</span>}
         description="You will be able to save it after submitting"
         icon="magic-wand"/>,
       <DisplayInFormMenuItem
@@ -228,6 +251,10 @@ class DisplayInFormMenu extends React.Component {
   async handleDisplayConfigurationReceivedEvent() {
     const configuration = await this.props.context.port.request('passbolt.in-form-menu.init');
     this.setState({configuration});
+    if (!this.isPasswordFilled) {
+      // Pre-generate the password
+      this.setState({generatedPassword: SecretGenerator.generate(configuration.secretGeneratorConfiguration)});
+    }
   }
 
   /**
@@ -258,6 +285,15 @@ class DisplayInFormMenu extends React.Component {
   handleUseSuggestedResourceRequestedEvent(resourceId) {
     this.props.context.port.request('passbolt.in-form-menu.use-suggested-resource', resourceId);
   }
+
+  /**
+   * Whenever the user request to generate a password for the current page
+   */
+  handleGeneratePasswordRequestedEvent() {
+    this.props.context.port.request('passbolt.in-form-menu.fill-password', this.state.generatedPassword);
+  }
+
+
   /**
    * Render the component
    */
