@@ -72,7 +72,7 @@ describe("Display User Workspace Breadcrumb", () => {
     page = new FilterUsersByBreadcrumbPage(context, propsWithEmptyGroupNameFilter());
     await waitFor(() => {});
     expect(page.breadcrumbLabels(1)).toBe('All users');
-    expect(page.breadcrumbLabels(2)).toBe("N&amp;#x2F;A (group)");
+    expect(page.breadcrumbLabels(2)).toBe("N/A (group)");
   });
 });
 

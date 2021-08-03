@@ -38,14 +38,14 @@ class FilterUsersByBreadcrumb extends Component {
       case UserWorkspaceFilterTypes.TEXT: {
         const isEmptySearchText = !this.props.userWorkspaceContext.filter.payload;
         const currentSearchText = this.props.userWorkspaceContext.filter.payload;
-        return isEmptySearchText ? items : [...items, this.getLastBreadcrumb(this.translate("Search: {{currentSearchText}}", {currentSearchText}))];
+        return isEmptySearchText ? items : [...items, this.getLastBreadcrumb(`${this.translate("Search:")} ${currentSearchText}`)];
       }
       case UserWorkspaceFilterTypes.RECENTLY_MODIFIED:
         return [...items, this.getLastBreadcrumb(this.translate("Recently modified"))];
       case UserWorkspaceFilterTypes.GROUP: {
         const group = this.props.userWorkspaceContext.filter.payload.group;
         const currentGroupName = (group && group.name) || this.translate("N/A");
-        return [...items, this.getLastBreadcrumb(this.translate("{{currentGroupName}} (group)", {currentGroupName}))];
+        return [...items, this.getLastBreadcrumb(`${currentGroupName} ${this.translate("(group)")}`)];
       }
     }
 
