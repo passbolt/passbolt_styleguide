@@ -22,10 +22,18 @@ class ConfigurePasswordGenerator extends React.Component {
    */
   constructor(props) {
     super(props);
+    this.state = this.defaultState;
     this.bindCallbacks();
   }
 
-
+  /**
+   * Returns the default state
+   */
+  get defaultState() {
+    return {
+      configuration: JSON.parse(JSON.stringify(this.props.configuration))
+    };
+  }
 
   /**
    * Returns the current values of length option
@@ -44,63 +52,14 @@ class ConfigurePasswordGenerator extends React.Component {
    * Returns the current masks
    */
   get masks() {
-    //return this.state.configuration.masks;
-    return  [
-      {
-        "name": "upper",
-        "label": "A-Z",
-        "characters": "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
-        "active": true
-      },
-      {
-        "name": "lower",
-        "label": "a-z",
-        "characters": "abcdefghijklmnopqrstuvwxyz",
-        "active": true
-      },
-      {
-        "name": "digit",
-        "label": "0-9",
-        "characters": "0123456789",
-        "active": true
-      },
-      {
-        "name": "parenthesis",
-        "label": "{ [ ( | ) ] ] }",
-        "characters": "([|])",
-        "active": true
-      },
-      {
-        "name": "special_char1",
-        "label": "# $ % & @ ^ ~",
-        "characters": "#$%&@^~",
-        "active": true
-      },
-      {
-        "name": "special_char2",
-        "label": ". , : ;",
-        "characters": ".,:;",
-        "active": true
-      },
-      {
-        "name": "special_char5",
-        "label": "< * + ! ? =",
-        "characters": "<*+!?=",
-        "active": true
-      },
-      {
-        "name": "emoji",
-        "label": "😘",
-        "characters": "😀😃😄😁😆😅😂🤣🥲☺️😊😇🙂🙃😉😌😍🥰😘😗😙😚😋😛😝😜🤪🤨🧐🤓😎🥸🤩🥳😏😒😞😔😟😕🙁☹️😣😖😫😩🥺😢😭😤😠😡🤬🤯😳🥵🥶😱😨😰😥😓🤗🤔🤭🤫🤥😶😐😑😬🙄😯😦😧😮😲🥱😴🤤😪😵🤐🥴🤢🤮🤧😷🤒🤕🤑🤠😈👿👹👺🤡💩👻💀☠️👽👾🤖🎃😺😸😹😻😼😽🙀😿😾"
-      }
-    ];
+    return this.state.configuration.masks;
   }
 
   /**
    * Returns true if the options exclude-look-alike-characters is true
    */
   get isExcludeLookAlikeCharacters() {
-    return true; //this.state.configuration.default_options.look_alike;
+    return this.state.configuration.default_options.look_alike;
   }
 
   /**
@@ -150,6 +109,7 @@ class ConfigurePasswordGenerator extends React.Component {
   handleExcludeLookAlikeCharactersToggled() {
     const configuration = {...this.state.configuration};
     configuration.default_options.look_alike = !configuration.default_options.look_alike;
+    this.setState({configuration});
     this.props.onChanged(configuration);
   }
 
@@ -167,18 +127,18 @@ class ConfigurePasswordGenerator extends React.Component {
           <div className="slider">
             <input
               name="length"
-              min="4"
-              max="84"
-              value="25"
+              min={this.length.min}
+              max={this.length.max}
+              value={this.length.default}
               step="1"
               type="range"
               onChange={this.handleLengthChanged}/>
             <input
               id="configure-password-generator-form-length"
               type="number"
-              min="4"
-              max="84"
-              value="25"
+              min={this.length.min}
+              max={this.length.max}
+              value={this.length.default}
               onChange={this.handleLengthChanged}/>
           </div>
         </div>
@@ -202,7 +162,6 @@ class ConfigurePasswordGenerator extends React.Component {
         </div>
 
         <div>
-          <label/>
           <div className="input checkbox">
             <input
               id="configure-password-generator-form-exclude-look-alike"

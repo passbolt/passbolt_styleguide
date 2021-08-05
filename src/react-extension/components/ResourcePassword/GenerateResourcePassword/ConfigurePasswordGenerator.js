@@ -110,6 +110,7 @@ class ConfigurePasswordGenerator extends React.Component {
   handleExcludeLookAlikeCharactersToggled() {
     const configuration = {...this.state.configuration};
     configuration.default_options.look_alike = !configuration.default_options.look_alike;
+    this.setState({configuration});
     this.props.onChanged(configuration);
   }
 

@@ -18,7 +18,14 @@ import {Trans, withTranslation} from "react-i18next";
 class ConfigurePassphraseGenerator extends Component {
   constructor(props) {
     super(props);
+    this.state = this.getDefaultState(props);
     this.initEventHandlers();
+  }
+
+  getDefaultState(props) {
+    return {
+      configuration: JSON.parse(JSON.stringify(props.configuration)),
+    };
   }
 
   initEventHandlers() {
@@ -102,34 +109,28 @@ class ConfigurePassphraseGenerator extends Component {
           <div className="slider">
             <input
               name="word_count"
-              min="4"
-              max="8"
-              value="5"
+              min={this.numberOfWords.min}
+              max={this.numberOfWords.max}
+              value={this.numberOfWords.default}
               type="range"
               onChange={this.handleInputChange}/>
             <input
               type="number"
               id="configure-passphrase-generator-form-word-count"
               name="word_count"
-              min="4"
-              max="8"
-              value="5"
+              min={this.numberOfWords.min} max={this.numberOfWords.max}
+              value={this.numberOfWords.default}
               onChange={this.handleWordCountChange}/>
           </div>
         </div>
         <div className="input text">
           <label htmlFor="configure-passphrase-generator-form-words-separator"><Trans>Words separator</Trans></label>
-          <input
-            id="configure-passphrase-generator-form-words-separator"
-            type="text"
-            name="separator"
-            value="-"
-            onChange={this.handleInputChange}
+          <input type="text" id="configure-passphrase-generator-form-words-separator" name="separator" value={this.separator} onChange={this.handleInputChange}
             placeholder={this.translate("Type one or more characters")}/>
         </div>
         <div className="input select">
           <label htmlFor="configure-passphrase-generator-form-words-case"><Trans>Words case</Trans></label>
-          <select id="configure-passphrase-generator-form-words-case" name="word_case" value="lowercase" onChange={this.handleInputChange}>
+          <select id="configure-passphrase-generator-form-words-case" name="word_case" value={this.word_case} onChange={this.handleInputChange}>
             <option key="lowercase" value="lowercase">{this.translate("Lower case")}</option>
             <option key="uppercase" value="uppercase">{this.translate("Upper case")}</option>
             <option key="camelcase" value="camelcase">{this.translate("Camel case")}</option>

@@ -13,13 +13,13 @@
  */
 
 import * as React from "react";
-import {withAppContext} from "./AppContext";
 import PropTypes from "prop-types";
+import {withAppContext} from "./AppContext";
 
 /**
  * Context related to resources ( filter, current selections, etc.)
  */
-export const ResourcePasswordGeneratorContext = React.createContext({
+export const PasswordGeneratorContext = React.createContext({
   settings: null, // The current settings of generators
   lastGeneratedPassword: null, // The last password generated
   onPasswordGenerated: () => {}, // Whenever the a password has been generated with the generator
@@ -29,7 +29,7 @@ export const ResourcePasswordGeneratorContext = React.createContext({
 /**
  * The related context provider
  */
-class ResourcePasswordGeneratorContextProvider extends React.Component {
+class PasswordGeneratorContextProvider extends React.Component {
   /**
    * Default constructor
    * @param props The component props
@@ -109,35 +109,35 @@ class ResourcePasswordGeneratorContextProvider extends React.Component {
    */
   render() {
     return (
-      <ResourcePasswordGeneratorContext.Provider value={this.state}>
+      <PasswordGeneratorContext.Provider value={this.state}>
         {this.props.children}
-      </ResourcePasswordGeneratorContext.Provider>
+      </PasswordGeneratorContext.Provider>
     );
   }
 }
 
-ResourcePasswordGeneratorContextProvider.displayName = 'ResourcePasswordGeneratorContextProvider';
-ResourcePasswordGeneratorContextProvider.propTypes = {
+PasswordGeneratorContextProvider.displayName = 'PasswordGeneratorContextProvider';
+PasswordGeneratorContextProvider.propTypes = {
   context: PropTypes.any, // The application context
   children: PropTypes.any,
 };
 
 
-export default withAppContext(ResourcePasswordGeneratorContextProvider);
+export default withAppContext(PasswordGeneratorContextProvider);
 
 /**
- * Resource Workspace Context Consumer HOC
+ * Generate Password Context Consumer HOC
  * @param WrappedComponent
  */
-export function withResourcePasswordGeneratorContext(WrappedComponent) {
-  return class WithResourcePasswordGenerator extends React.Component {
+export function withPasswordGeneratorContext(WrappedComponent) {
+  return class WithPasswordGenerator extends React.Component {
     render() {
       return (
-        <ResourcePasswordGeneratorContext.Consumer>
+        <PasswordGeneratorContext.Consumer>
           {
-            ResourcePasswordGeneratorContext => <WrappedComponent resourcePasswordGeneratorContext={ResourcePasswordGeneratorContext} {...this.props} />
+            PasswordGeneratorContext => <WrappedComponent passwordGeneratorContext={PasswordGeneratorContext} {...this.props} />
           }
-        </ResourcePasswordGeneratorContext.Consumer>
+        </PasswordGeneratorContext.Consumer>
       );
     }
   };
