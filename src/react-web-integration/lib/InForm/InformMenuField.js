@@ -100,7 +100,7 @@ class InFormMenuField {
     let x = 0;
     let y = 0;
     let currentElement = this.field;
-    const {height} = this.field.getBoundingClientRect();
+    const {height, width} = this.field.getBoundingClientRect();
     const {top: topBody, left: leftBody} = document.body.getBoundingClientRect();
     // We loop to calculate the cumulated position of the field
     // from its ancestors and itself differential offset / scroll position
@@ -109,8 +109,8 @@ class InFormMenuField {
       y += currentElement.offsetTop - currentElement.scrollTop;
       currentElement = currentElement.offsetParent;
     }
-    // Then we add the body offset (notably in case of window scroll) + some local adjustments (margin / vertical aligment )
-    x = x + leftBody;
+    // Then we add the body offset (notably in case of window scroll) + some local adjustments (margin / vertical aligment ) to align with the call to action icon
+    x = x + leftBody + width - 361; // (-352 width of the iframe) (-9 adjustment of the call to action menu (25-16))
     y = y + topBody + height; // Calculate the middle position of the input, 8 is the half of the iframe height
     return { top: y, left: x };
   }
