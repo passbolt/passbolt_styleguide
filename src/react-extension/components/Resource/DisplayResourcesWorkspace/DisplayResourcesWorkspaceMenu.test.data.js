@@ -12,13 +12,7 @@ export function defaultAppContext(appContext) {
     port: new MockPort(),
     userSettings: new UserSettings(userSettingsFixture),
     siteSettings: {
-      settings: {
-        passbolt: {
-          plugins: {
-            export: 'something'
-          }
-        }
-      }
+      canIUse: () => true
     }
   };
   return Object.assign(defaultAppContext, appContext || {});

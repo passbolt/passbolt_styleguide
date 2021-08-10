@@ -292,7 +292,7 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
    * Returns true if the user can export
    */
   canExport() {
-    return this.hasResourceSelected() && this.props.context.siteSettings.settings.passbolt.plugins.export;
+    return this.hasResourceSelected() && this.props.context.siteSettings.canIUse("export");
   }
 
   /**

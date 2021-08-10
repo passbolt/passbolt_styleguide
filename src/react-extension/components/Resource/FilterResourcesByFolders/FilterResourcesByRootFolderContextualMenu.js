@@ -81,7 +81,7 @@ class FilterResourcesByRootFolderContextualMenu extends React.Component {
    * Returns true if the user can export
    */
   canExport() {
-    return this.props.context.siteSettings.settings.passbolt.plugins.export;
+    return this.props.context.siteSettings.canIUse("export");
   }
 
   /**
@@ -125,7 +125,12 @@ class FilterResourcesByRootFolderContextualMenu extends React.Component {
           <div className="row">
             <div className="main-cell-wrapper">
               <div className="main-cell">
-                <a onClick={this.handleExportFolderItemClickEvent}><span><Trans>Export all</Trans></span></a>
+                <a className={`${this.canExport() ? "" : "disabled"}`}
+                  onClick={this.handleExportFolderItemClickEvent}>
+                  <span>
+                    <Trans>Export all</Trans>
+                  </span>
+                </a>
               </div>
             </div>
           </div>
