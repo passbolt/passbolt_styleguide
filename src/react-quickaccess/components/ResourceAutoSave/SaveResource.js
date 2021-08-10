@@ -1,3 +1,17 @@
+/**
+ * Passbolt ~ Open source password manager for teams
+ * Copyright (c) 2021 Passbolt SA (https://www.passbolt.com)
+ *
+ * Licensed under GNU Affero General Public License version 3 of the or any later version.
+ * For full copyright and license information, please see the LICENSE.txt
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @copyright     Copyright (c) 2021 Passbolt SA (https://www.passbolt.com)
+ * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
+ * @link          https://www.passbolt.com Passbolt(tm)
+ * @since         3.4.0
+ *
+ */
 import React from "react";
 import SimpleBar from "../SimpleBar/SimpleBar";
 import PropTypes from "prop-types";
@@ -33,8 +47,8 @@ class ResourceCreatePage extends React.Component {
       nameError: "",
       username: "",
       usernameError: "",
-      url: "",
-      urlError: "",
+      uri: "",
+      uriError: "",
       password: "",
       passwordError: "",
       viewPassword: false,
@@ -52,9 +66,9 @@ class ResourceCreatePage extends React.Component {
   }
 
   async loadPasswordMetaFromTabForm() {
-    const {name, url, username, password} = await this.props.context.port.request("passbolt.auto-save.get-info");
-    this.setState({name, url, username, password});
-    this.loadPassword(password);
+    const {name, uri, username, secret_clear} = await this.props.context.port.request("passbolt.quickaccess.prepare-autosave");
+    this.setState({name, uri, username, password: secret_clear});
+    this.loadPassword(secret_clear);
     this.setState({loaded: true});
   }
 
@@ -158,9 +172,9 @@ class ResourceCreatePage extends React.Component {
               </div>
               <div className={`input text ${this.state.uriError ? "error" : ""}`}>
                 <label htmlFor="uri"><Trans>URL</Trans></label>
-                <input name="uri" value={this.state.url} onChange={this.handleInputChange} disabled={this.state.processing}
-                  className="fluid" maxLength="1024" type="text" id="url" autoComplete="off" />
-                <div className="error-message">{this.state.urlError}</div>
+                <input name="uri" value={this.state.uri} onChange={this.handleInputChange} disabled={this.state.processing}
+                  className="fluid" maxLength="1024" type="text" id="uri" autoComplete="off" />
+                <div className="error-message">{this.state.uriError}</div>
               </div>
               <div className="input text">
                 <label htmlFor="username"><Trans>Username</Trans></label>
@@ -187,7 +201,7 @@ class ResourceCreatePage extends React.Component {
             </div>
           </SimpleBar>
           <div className="submit-wrapper input flex-row-end">
-            <a className="cancel" disabled={this.state.processing} role="button" onClick={this.handleClose}>{this.translate("no, thanks")}</a>
+            <a className="cancel" role="button" onClick={this.handleClose}>{this.translate("no, thanks")}</a>
             <input type="submit" className={`button primary big ${this.state.processing ? "processing" : ""}`} role="button"
               value={this.translate("save")} disabled={this.state.processing} />
             <div className="error-message">{this.state.error}</div>

@@ -65,6 +65,9 @@ class ManageQuickAccessMode extends Component {
       case "browse-credentials":
         this.props.history.push({pathname: "/data/quickaccess.html", state: {tabId}});
         break;
+      case "autosave-credentials":
+        this.props.history.push({pathname: "/data/quickaccess/resources/autosave"});
+        break;
       default:
         break;
     }

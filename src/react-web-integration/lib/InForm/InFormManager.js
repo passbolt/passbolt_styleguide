@@ -17,6 +17,7 @@ import InFormCallToActionField from "./InFormCallToActionField";
 import InFormFieldSelector from "./InFormFieldSelector";
 import InFormMenuField from "./InformMenuField";
 import {fireEvent} from "@testing-library/dom/dist/events";
+import InFormCredentialsFormField from "./InFormCredentialsFormField";
 /**
  * Manages the in-form web integration including call-to-action and menu
  */
@@ -28,6 +29,9 @@ class InFormManager {
   /** In-form menu menuField in the target page*/
   menuField;
 
+  /** In-form form fields in the target page*/
+  credentialsFormFields;
+
   /** Mutation observer to detect any change on the DOM */
   mutationObserver;
 
@@ -36,6 +40,8 @@ class InFormManager {
    */
   constructor() {
     this.callToActionFields = [];
+    this.menuField = null;
+    this.credentialsFormFields = [];
     this.mutationObserver = null;
     this.bindCallbacks();
   }
@@ -68,9 +74,17 @@ class InFormManager {
   }
 
   /**
-   * Find authentication callToActionFields in the document and set them as object properties
+   * Find authentication fields in the document and set them as object properties
    */
   findAndSetAuthenticationFields() {
+    this.findAndSetUsernameAndPasswordFields();
+    this.findAndSetCredentialsFormFields();
+  }
+
+  /**
+   * Find authentication callToActionFields in the document and set them as object properties
+   */
+  findAndSetUsernameAndPasswordFields() {
     /* We find the username / passwords DOM callToActionFields.
      * If it was previously found, we reuse the same InformUsernameField, otherwise we create one
      */
@@ -82,6 +96,23 @@ class InFormManager {
       const existingField = this.callToActionFields.find(matchField(newField));
       const fieldType = newField.matches(InFormFieldSelector.USERNAME_FIELD_SELECTOR) ? 'username' : 'password';
       return existingField || new InFormCallToActionField(newField, fieldType);
+    });
+  }
+
+  /**
+   * Find authentication formFields in the document and set them as object properties
+   */
+  findAndSetCredentialsFormFields() {
+   /* We find the form DOM formFields.
+    * If it was previously found, we reuse the same InformFormField, otherwise we create one
+    */
+    const newCredentialsFormFields = InFormCredentialsFormField.findAll();
+    this.credentialsFormFields = newCredentialsFormFields.map(newField => {
+      const matchField = fieldToMatch => credentialsFormField => credentialsFormField.field === fieldToMatch;
+      const existingField = this.credentialsFormFields.find(matchField(newField));
+      const usernameField =  this.callToActionFields.find(callToActionField => callToActionField.fieldType === 'username' && newField.contains(callToActionField.field));
+      const passwordField =  this.callToActionFields.find(callToActionField => callToActionField.fieldType === 'password' && newField.contains(callToActionField.field));
+      return existingField || new InFormCredentialsFormField(newField, usernameField?.field, passwordField?.field);
     });
   }
 
@@ -196,6 +227,9 @@ class InFormManager {
         .filter(callToActionField => callToActionField.fieldType === 'password')
         .forEach(callToActionField => fireEvent.input(callToActionField.field, { target: { value: password }}));
       this.menuField.removeMenuIframe();
+      // Listen the auto-save on the appropriate form field
+      const formField = this.credentialsFormFields.find(formField => formField.field.contains(this.lastCallToActionFieldClicked.field));
+      formField?.handleAutoSaveEvent();
     });
   }
 
@@ -206,6 +240,7 @@ class InFormManager {
     this.mutationObserver.disconnect();
     this.callToActionFields.forEach(field => field.destroy());
     this.menuField?.destroy();
+    this.credentialsFormFields.forEach(field => field.destroy());
     window.removeEventListener('resize', this.clean);
   }
 

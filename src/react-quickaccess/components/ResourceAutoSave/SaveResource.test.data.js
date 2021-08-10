@@ -17,12 +17,12 @@ export function defaultAppContext(appContext) {
 
 const mockTabInfo = {
   name: "test",
-  url: "www.test.com",
+  uri: "www.test.com",
   username: "test@passbolt.com",
-  password: "test@passbolt.com"
+  secret_clear: "test@passbolt.com"
 };
 
 export const mockResults = {
-  "passbolt.auto-save.get-info": mockTabInfo,
+  "passbolt.resource.prepare-autosave": mockTabInfo,
   "passbolt.resources.create": {}
 };

@@ -398,7 +398,7 @@ class ResourceViewPage extends React.Component {
               </span>
               <span className="visually-hidden"><Trans>Open in new window</Trans></span>
             </a>
-            <span className="property-name">Url</span>
+            <span className="property-name">URI</span>
             {this.state.resource.uri && sanitizeResourceUrl &&
               <a href={this.sanitizeResourceUrl()} role="button" className="property-value" target="_blank" rel="noopener noreferrer">
                 {this.state.resource.uri}
