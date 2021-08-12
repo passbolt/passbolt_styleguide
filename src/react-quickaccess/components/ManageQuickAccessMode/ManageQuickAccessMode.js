@@ -85,9 +85,8 @@ class ManageQuickAccessMode extends Component {
 }
 
 ManageQuickAccessMode.propTypes = {
-  context: PropTypes.any, // The application context
   history: PropTypes.any, // The router history
   location: PropTypes.any, // The router location
 };
 
-export default withAppContext(withRouter(ManageQuickAccessMode));
+export default withRouter(ManageQuickAccessMode);

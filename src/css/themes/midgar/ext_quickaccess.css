@@ -6,7 +6,7 @@
 /* box shadows */
 /* dropdown menus */
 /* inputs */
-/* logos */
+/* logo */
 /* grid */
 /* messages */
 /* controls */
@@ -2397,19 +2397,9 @@ html {
 .quickaccess .submit-wrapper:after {
   clear: both;
 }
-.quickaccess .submit-wrapper .cancel {
-  margin-right: 3rem;
-  border: none;
-  color: #FFFFFC;
-}
-.quickaccess .submit-wrapper .cancel:hover {
-  color: #2894DF;
-}
-.quickaccess .submit-wrapper.flex-row-end {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: flex-end;
+.quickaccess .submit-wrapper .button {
+  font-size: 1.6rem;
+  padding: 1.1rem 3.2rem;
 }
 .quickaccess .processing-wrapper {
   background-color: #30302D;
@@ -2560,11 +2550,11 @@ html {
   position: relative;
   margin: 0.8rem 3rem 0.8rem 1.6rem;
 }
-.quickaccess .index-list .suggested-resource-entry {
+.quickaccess .index-list .resource-entry {
   display: flex;
   flex-direction: row;
 }
-.quickaccess .index-list .suggested-resource-entry .resource-details {
+.quickaccess .index-list .resource-entry .resource-details {
   color: #FFFFFC;
   padding: 1.4rem 2rem 1.4rem 1.8rem;
   box-sizing: border-box;
@@ -2577,14 +2567,14 @@ html {
   -o-text-overflow: ellipsis;
   -ms-text-overflow: ellipsis;
 }
-.quickaccess .index-list .suggested-resource-entry .resource-details:focus {
+.quickaccess .index-list .resource-entry .resource-details:focus {
   color: #2894DF;
 }
-.quickaccess .index-list .suggested-resource-entry .resource-details:hover {
+.quickaccess .index-list .resource-entry .resource-details:hover {
   color: #2894DF;
   background-color: #3B3B39;
 }
-.quickaccess .index-list .suggested-resource-entry .resource-details .url {
+.quickaccess .index-list .resource-entry .resource-details .url {
   display: block;
   font-size: 1.2rem;
   padding-top: 0.4rem;
@@ -2595,7 +2585,7 @@ html {
   -o-text-overflow: ellipsis;
   -ms-text-overflow: ellipsis;
 }
-.quickaccess .index-list .suggested-resource-entry .chevron-right {
+.quickaccess .index-list .resource-entry .chevron-right {
   background: linear-gradient(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.9)), url('../../../img/controls/chevron-right_white.svg') center center no-repeat;
   background-size: 1.6rem 1.6rem;
   box-sizing: border-box;
@@ -2603,40 +2593,21 @@ html {
   width: 4rem;
   flex: 0 1 auto;
 }
-.quickaccess .index-list .suggested-resource-entry .chevron-right:focus {
+.quickaccess .index-list .resource-entry .chevron-right:focus {
   background-image: linear-gradient(rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0.6)), url('../../../img/controls/chevron-right_white.svg');
 }
-.quickaccess .index-list .suggested-resource-entry .chevron-right:hover {
+.quickaccess .index-list .resource-entry .chevron-right:hover {
   background-color: #3B3B39;
   background-image: linear-gradient(rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0.6)), url('../../../img/controls/chevron-right_white.svg');
 }
-.quickaccess .index-list .browse-resource-entry a .inline-resource-entry {
-  display: inline-block;
-}
-.quickaccess .index-list .browse-resource-entry a .inline-resource-entry .url {
-  display: block;
-  font-size: 1.2rem;
-  padding-top: 0.4rem;
-  color: #cacac9;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  -o-text-overflow: ellipsis;
-  -ms-text-overflow: ellipsis;
-}
-.quickaccess .index-list .browse-resource-entry a:after {
-  margin-top: 1.4rem;
-}
-.quickaccess .index-list .filter-entry a,
-.quickaccess .index-list .browse-resource-entry a {
+.quickaccess .index-list .filter-entry a {
   color: #FFFFFC;
   display: block;
   border-bottom: 1px solid #0C0C0A;
   padding: 1.4rem 0rem 1.4rem 1.8rem;
   position: relative;
 }
-.quickaccess .index-list .filter-entry a:after,
-.quickaccess .index-list .browse-resource-entry a:after {
+.quickaccess .index-list .filter-entry a:after {
   background: transparent url('../../../img/controls/chevron-right_white.svg') center center no-repeat;
   background-size: 1.6rem 1.6rem;
   width: 4rem;
@@ -2645,17 +2616,14 @@ html {
   opacity: 0.1;
   float: right;
 }
-.quickaccess .index-list .filter-entry a:hover,
-.quickaccess .index-list .browse-resource-entry a:hover {
+.quickaccess .index-list .filter-entry a:hover {
   color: #2894DF;
   background-color: #3B3B39;
 }
-.quickaccess .index-list .filter-entry a:hover:after,
-.quickaccess .index-list .browse-resource-entry a:hover:after {
+.quickaccess .index-list .filter-entry a:hover:after {
   opacity: 0.4;
 }
-.quickaccess .index-list .filter-entry .icon svg,
-.quickaccess .index-list .browse-resource-entry .icon svg {
+.quickaccess .index-list .filter-entry .icon svg {
   float: left;
   margin-right: 0.8rem;
 }
@@ -2871,7 +2839,7 @@ html {
 .quickaccess .resource-create .password input {
   float: left;
   box-sizing: border-box;
-  width: calc(100% - 7.2rem);
+  width: calc(100% - 10.2rem);
 }
 .quickaccess .resource-create .password .password-view {
   float: left;
@@ -2927,7 +2895,7 @@ html {
   float: left;
   display: block;
   box-sizing: border-box;
-  width: 30.6rem;
+  width: calc(100% - 6.8rem);
   height: 0.6rem;
   border: 1px solid #0C0C0A;
 }
@@ -2954,144 +2922,6 @@ html {
   width: 80%;
 }
 .quickaccess .resource-create .password .password-strength .password-strength-bar-value.very-strong {
-  background: #009900;
-  width: 99.5%;
-}
-.quickaccess .resource-auto-save .title {
-  padding: 0 1.8rem 0.8rem 1.8rem;
-  margin: 0;
-}
-.quickaccess .resource-auto-save .resource-auto-save-form {
-  max-height: 35.1rem;
-}
-.quickaccess .resource-auto-save .form-container {
-  padding: 0 1.8rem 0.8rem 1.8rem;
-}
-.quickaccess .resource-auto-save .submit-wrapper {
-  padding: 0 1.8rem 1.8rem 1.8rem;
-}
-.quickaccess .resource-auto-save .password {
-  /*
-     * Clearfix: contain floats
-     *
-     * For modern browsers
-     * 1. The space content is one way to avoid an Opera bug when the
-     *	`contenteditable` attribute is included anywhere else in the document.
-     *	Otherwise it causes space to appear at the top and bottom of elements
-     *	that receive the `clearfix` class.
-     * 2. The use of `table` rather than `block` is only necessary if using
-     *	`:before` to contain the top-margins of child elements.
-     */
-  /*
-     * Clearfix: contain floats
-     *
-     * For modern browsers
-     * 1. The space content is one way to avoid an Opera bug when the
-     *	`contenteditable` attribute is included anywhere else in the document.
-     *	Otherwise it causes space to appear at the top and bottom of elements
-     *	that receive the `clearfix` class.
-     * 2. The use of `table` rather than `block` is only necessary if using
-     *	`:before` to contain the top-margins of child elements.
-     */
-}
-.quickaccess .resource-auto-save .password:before,
-.quickaccess .resource-auto-save .password:after {
-  content: "";
-  display: table;
-}
-.quickaccess .resource-auto-save .password:after {
-  clear: both;
-}
-.quickaccess .resource-auto-save .password:before,
-.quickaccess .resource-auto-save .password:after {
-  content: "";
-  display: table;
-}
-.quickaccess .resource-auto-save .password:after {
-  clear: both;
-}
-.quickaccess .resource-auto-save .password input {
-  float: left;
-  box-sizing: border-box;
-  width: calc(100% - 3.5rem);
-}
-.quickaccess .resource-auto-save .password .password-view {
-  float: left;
-  margin-top: 0.2rem;
-  margin-left: -0.1rem;
-  height: 2rem;
-  border-radius: 0;
-  padding: 0.6rem 0.8rem 0.6rem 1rem;
-  background: #0C0C0A;
-  border: 1px solid #222220;
-  border-left: 0;
-  border-top: 1px solid #30302D;
-}
-.quickaccess .resource-auto-save .password .password-view svg {
-  margin-top: 0.2rem;
-}
-.quickaccess .resource-auto-save .password input:focus + .password-view {
-  box-shadow: inset -1px 1px 1px rgba(0, 0, 0, 0.2);
-  border: 1px solid #2894DF;
-  border-left: 0;
-}
-.quickaccess .resource-auto-save .password .password-strength .password-strength-value,
-.quickaccess .resource-auto-save .password .password-strength .password-strength-label {
-  border: 0;
-  clip: rect(0 0 0 0);
-  height: 1px;
-  margin: -1px;
-  overflow: hidden;
-  padding: 0;
-  position: absolute;
-  width: 1px;
-  /*
-     * Extends the .visuallyhidden class to allow the element to be focusable
-     * when navigated to via the keyboard: h5bp.com/p
-     */
-}
-.quickaccess .resource-auto-save .password .password-strength .password-strength-value .focusable:active,
-.quickaccess .resource-auto-save .password .password-strength .password-strength-label .focusable:active,
-.quickaccess .resource-auto-save .password .password-strength .password-strength-value .focusable:focus,
-.quickaccess .resource-auto-save .password .password-strength .password-strength-label .focusable:focus {
-  clip: auto;
-  height: auto;
-  margin: 0;
-  overflow: visible;
-  position: static;
-  width: auto;
-}
-.quickaccess .resource-auto-save .password .password-strength .password-strength-bar {
-  float: left;
-  display: block;
-  box-sizing: border-box;
-  width: 34.3rem;
-  height: 0.6rem;
-  border: 1px solid #0C0C0A;
-}
-.quickaccess .resource-auto-save .password .password-strength .password-strength-bar-value {
-  float: left;
-  height: 0.2rem;
-  display: block;
-  margin: 0.1rem;
-}
-.quickaccess .resource-auto-save .password .password-strength .password-strength-bar-value.very-weak {
-  background: #000;
-  width: 5%;
-}
-.quickaccess .resource-auto-save .password .password-strength .password-strength-bar-value.weak {
-  background: #D40101;
-  width: 10%;
-}
-.quickaccess .resource-auto-save .password .password-strength .password-strength-bar-value.fair {
-  background: #FFBD2E;
-  width: 60%;
-}
-.quickaccess .resource-auto-save .password .password-strength .password-strength-bar-value.strong {
-  background: #66CC00;
-  width: 80%;
-}
-.quickaccess .resource-auto-save .password .password-strength .password-strength-bar-value.very-strong {
   background: #009900;
   width: 99.5%;
 }
@@ -3160,23 +2990,6 @@ html {
   box-shadow: inset -1px 1px 1px rgba(0, 0, 0, 0.2);
   border: 1px solid #2894DF;
   border-left: 0;
-}
-.setup-extension span.icon.fa svg {
-  width: 80%;
-  height: 80%;
-  margin: auto;
-  display: block;
-  opacity: 0.1;
-}
-.setup-extension h3 {
-  padding: 0.8rem 2.5rem;
-  text-align: center;
-  margin-bottom: 0;
-}
-.setup-extension p {
-  padding: 0.8rem 2.5rem;
-  text-align: center;
-  font-size: 1.6rem;
 }
 .slideNoTransition-exit {
   display: none;
@@ -3251,4 +3064,159 @@ html {
   100% {
     opacity: 1;
   }
+}
+.quickaccess .generate-password .form-container {
+  padding: 0 1.8rem 0.8rem 1.8rem;
+}
+.quickaccess .generate-password .submit-wrapper {
+  padding: 0 1.8rem 1.8rem 1.8rem;
+}
+.quickaccess .generate-password .password {
+  /*
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
+  /*
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
+}
+.quickaccess .generate-password .password:before,
+.quickaccess .generate-password .password:after {
+  content: "";
+  display: table;
+}
+.quickaccess .generate-password .password:after {
+  clear: both;
+}
+.quickaccess .generate-password .password:before,
+.quickaccess .generate-password .password:after {
+  content: "";
+  display: table;
+}
+.quickaccess .generate-password .password:after {
+  clear: both;
+}
+.quickaccess .generate-password .password input {
+  float: left;
+  box-sizing: border-box;
+  width: calc(100% - 15.2rem);
+}
+.quickaccess .generate-password .password .password-view {
+  float: left;
+  margin-top: 0.2rem;
+  margin-left: -0.1rem;
+  height: 2rem;
+  border-radius: 0;
+  padding: 0.6rem 0.8rem 0.6rem 1rem;
+  background: #0C0C0A;
+  border: 1px solid #222220;
+  border-left: 0;
+  border-top: 1px solid #30302D;
+}
+.quickaccess .generate-password .password .password-view svg {
+  margin-top: 0.2rem;
+}
+.quickaccess .generate-password .password input:focus + .password-view {
+  box-shadow: inset -1px 1px 1px rgba(0, 0, 0, 0.2);
+  border: 1px solid #2894DF;
+  border-left: 0;
+}
+.quickaccess .generate-password .password .actions.inline {
+  display: flex;
+  justify-content: flex-end;
+  padding-left: 0;
+  margin: 0;
+}
+.quickaccess .generate-password .password .actions.inline .password-generate {
+  margin-right: 0;
+  margin-left: 0.4rem;
+  margin-top: 0.2rem;
+}
+.quickaccess .generate-password .password .password-complexity .progress {
+  width: calc(100% - 11.8rem);
+}
+.quickaccess .generate-password .password .password-strength .password-strength-value,
+.quickaccess .generate-password .password .password-strength .password-strength-label {
+  border: 0;
+  clip: rect(0 0 0 0);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
+  /*
+     * Extends the .visuallyhidden class to allow the element to be focusable
+     * when navigated to via the keyboard: h5bp.com/p
+     */
+}
+.quickaccess .generate-password .password .password-strength .password-strength-value .focusable:active,
+.quickaccess .generate-password .password .password-strength .password-strength-label .focusable:active,
+.quickaccess .generate-password .password .password-strength .password-strength-value .focusable:focus,
+.quickaccess .generate-password .password .password-strength .password-strength-label .focusable:focus {
+  clip: auto;
+  height: auto;
+  margin: 0;
+  overflow: visible;
+  position: static;
+  width: auto;
+}
+.quickaccess .generate-password .password .password-strength .password-strength-bar {
+  float: left;
+  display: block;
+  box-sizing: border-box;
+  width: calc(100% - 6.8rem);
+  height: 0.6rem;
+  border: 1px solid #0C0C0A;
+}
+.quickaccess .generate-password .password .password-strength .password-strength-bar-value {
+  float: left;
+  height: 0.2rem;
+  display: block;
+  margin: 0.1rem;
+}
+.quickaccess .generate-password .password .password-strength .password-strength-bar-value.very-weak {
+  background: #000;
+  width: 5%;
+}
+.quickaccess .generate-password .password .password-strength .password-strength-bar-value.weak {
+  background: #D40101;
+  width: 10%;
+}
+.quickaccess .generate-password .password .password-strength .password-strength-bar-value.fair {
+  background: #FFBD2E;
+  width: 60%;
+}
+.quickaccess .generate-password .password .password-strength .password-strength-bar-value.strong {
+  background: #66CC00;
+  width: 80%;
+}
+.quickaccess .generate-password .password .password-strength .password-strength-bar-value.very-strong {
+  background: #009900;
+  width: 99.5%;
+}
+.quickaccess .generate-password .tabs-nav {
+  padding-left: 0;
+}
+.quickaccess .generate-password .tabs-nav a {
+  color: #FFFFFC;
+}
+.quickaccess .generate-password .button-group .button {
+  margin-left: 0;
+  margin-right: 0.3em;
 }

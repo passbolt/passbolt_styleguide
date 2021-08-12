@@ -21,10 +21,16 @@ class AnimatedSwitch extends React.Component {
     }
 
     // Resource create transition
+    else if (currentLocationPath === "/data/quickaccess/resources/create" && this._previousLocationPathname === "/data/quickaccess/resources/generate-password") {
+      transition = "slideRight";
+    }
     else if (currentLocationPath == "/data/quickaccess/resources/create") {
       transition = "slideLeft";
     }
     else if (currentLocationPath.indexOf("/data/quickaccess/resources/view") != -1 && this._previousLocationPathname == "/data/quickaccess/resources/create") {
+      transition = "slideLeft";
+    }
+    else if (currentLocationPath === "/data/quickaccess/resources/generate-password" && this._previousLocationPathname === "/data/quickaccess/resources/create") {
       transition = "slideLeft";
     }
     // Whatever current location is, if the previous location was the resource create page then slide right

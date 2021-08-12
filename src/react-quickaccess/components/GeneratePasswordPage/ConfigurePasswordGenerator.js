@@ -35,7 +35,6 @@ class ConfigurePasswordGenerator extends React.Component {
     };
   }
 
-
   /**
    * Returns the current values of length option
    * @return {{default: number, min: number, max: number}}
@@ -148,7 +147,7 @@ class ConfigurePasswordGenerator extends React.Component {
           <label htmlFor="configure-password-generator-form-masks">
             <Trans>Character Types</Trans>
           </label>
-          <div className="button-group button-group--nowrap">
+          <div className="button-group">
             {
               this.masks.map(mask => (
                 <button
@@ -163,7 +162,6 @@ class ConfigurePasswordGenerator extends React.Component {
         </div>
 
         <div>
-          <label/>
           <div className="input checkbox">
             <input
               id="configure-password-generator-form-exclude-look-alike"

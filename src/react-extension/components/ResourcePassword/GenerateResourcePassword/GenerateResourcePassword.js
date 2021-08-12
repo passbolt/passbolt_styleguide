@@ -41,7 +41,7 @@ class GenerateResourcePassword extends Component {
   get defaultState() {
     return {
       password: "", // The password
-      isObfuscated: true, // True if the paasphrase should not be visible
+      isObfuscated: true, // True if the passphrase should not be visible
       generator: {}, // The current password generator
       loading: true,
       processing: false
@@ -132,6 +132,7 @@ class GenerateResourcePassword extends Component {
    */
   async handleSubmit(event) {
     event.preventDefault();
+    await this.setState({processing: true});
     await this.props.resourcePasswordGeneratorContext.onPasswordGenerated(this.state.password, this.state.generator);
     this.props.onClose();
   }

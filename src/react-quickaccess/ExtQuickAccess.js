@@ -27,6 +27,8 @@ import SetupExtensionInProgress from "./components/ExtensionSetup/SetupExtension
 import ManageQuickAccessMode from "./components/ManageQuickAccessMode/ManageQuickAccessMode";
 import PrivateRoute from "./components/PrivateRoute/PrivateRoute";
 import SaveResource from "./components/ResourceAutoSave/SaveResource";
+import GeneratePasswordPage from "./components/GeneratePasswordPage/GeneratePasswordPage";
+import PasswordGeneratorContextProvider from "./contexts/PasswordGeneratorContext";
 
 const SEARCH_VISIBLE_ROUTES = [
   '/data/quickaccess.html',
@@ -233,25 +235,28 @@ class ExtQuickAccess extends React.Component {
                   <Route path={SEARCH_VISIBLE_ROUTES} render={() => (
                     <Search ref={el => this.searchRef = el}/>
                   )}/>
-                  <AnimatedSwitch>
-                    <Route path="/data/quickaccess/login" render={() => (
-                      <LoginPage loginSuccessCallback={this.loginSuccessCallback} canRememberMe={this.canRememberMe}/>
-                    )}/>
-                    <PrivateRoute exact path="/data/quickaccess/resources/group" component={FilterResourcesByGroupPage}/>
-                    <PrivateRoute path="/data/quickaccess/resources/group/:id" component={FilterResourcesByGroupPage}/>
-                    <PrivateRoute exact path="/data/quickaccess/resources/tag" component={FilterResourcesByTagPage}/>
-                    <PrivateRoute path="/data/quickaccess/resources/tag/:id" component={FilterResourcesByTagPage}/>
-                    <PrivateRoute exact path="/data/quickaccess/resources/favorite" component={FilterResourcesByFavoritePage}/>
-                    <PrivateRoute exact path="/data/quickaccess/resources/owned-by-me" component={FilterResourcesByItemsIOwnPage}/>
-                    <PrivateRoute exact path="/data/quickaccess/resources/recently-modified" component={FilterResourcesByRecentlyModifiedPage}/>
-                    <PrivateRoute exact path="/data/quickaccess/resources/shared-with-me" component={FilterResourcesBySharedWithMePage}/>
-                    <PrivateRoute path="/data/quickaccess/resources/create" component={ResourceCreatePage}/>
-                    <PrivateRoute exact path="/data/quickaccess/resources/autosave" component={SaveResource}/>
-                    <PrivateRoute path="/data/quickaccess/resources/view/:id" component={ResourceViewPage}/>
-                    <PrivateRoute exact path="/data/quickaccess/more-filters" component={MoreFiltersPage}/>
-                    <PrivateRoute exact path="/data/quickaccess/setup-extension-in-progress" component={SetupExtensionInProgress}/>
-                    <PrivateRoute exact path="/data/quickaccess.html" component={HomePage}/>
-                  </AnimatedSwitch>
+                  <PasswordGeneratorContextProvider>
+                    <AnimatedSwitch>
+                      <Route path="/data/quickaccess/login" render={() => (
+                        <LoginPage loginSuccessCallback={this.loginSuccessCallback} canRememberMe={this.canRememberMe}/>
+                      )}/>
+                      <PrivateRoute exact path="/data/quickaccess/resources/group" component={FilterResourcesByGroupPage}/>
+                      <PrivateRoute path="/data/quickaccess/resources/group/:id" component={FilterResourcesByGroupPage}/>
+                      <PrivateRoute exact path="/data/quickaccess/resources/tag" component={FilterResourcesByTagPage}/>
+                      <PrivateRoute path="/data/quickaccess/resources/tag/:id" component={FilterResourcesByTagPage}/>
+                      <PrivateRoute exact path="/data/quickaccess/resources/favorite" component={FilterResourcesByFavoritePage}/>
+                      <PrivateRoute exact path="/data/quickaccess/resources/owned-by-me" component={FilterResourcesByItemsIOwnPage}/>
+                      <PrivateRoute exact path="/data/quickaccess/resources/recently-modified" component={FilterResourcesByRecentlyModifiedPage}/>
+                      <PrivateRoute exact path="/data/quickaccess/resources/shared-with-me" component={FilterResourcesBySharedWithMePage}/>
+                      <PrivateRoute path="/data/quickaccess/resources/create" component={ResourceCreatePage}/>
+                      <PrivateRoute exact path="/data/quickaccess/resources/autosave" component={SaveResource}/>
+                      <PrivateRoute path="/data/quickaccess/resources/view/:id" component={ResourceViewPage}/>
+                      <PrivateRoute exact path="/data/quickaccess/more-filters" component={MoreFiltersPage}/>
+                      <PrivateRoute exact path="/data/quickaccess/setup-extension-in-progress" component={SetupExtensionInProgress}/>
+                      <PrivateRoute path="/data/quickaccess/resources/generate-password" component={GeneratePasswordPage}/>
+                      <PrivateRoute exact path="/data/quickaccess.html" component={HomePage}/>
+                    </AnimatedSwitch>
+                  </PasswordGeneratorContextProvider>
                 </div>
               </React.Fragment>
               }
