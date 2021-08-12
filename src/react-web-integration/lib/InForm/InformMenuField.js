@@ -14,6 +14,7 @@
 
 import {v4 as uuidv4} from "uuid";
 import browser from "webextension-polyfill";
+import DomUtils from "../Dom/DomUtils";
 
 /**
  * An InFormMenuField is represented by a DOM element identified as a menu field
@@ -31,6 +32,9 @@ class InFormMenuField {
   /** In-form menu click watcher */
   menuClickWatcher;
 
+  /** The scrollable field parent */
+  scrollableFieldParent;
+
   /**
    * Default constructor
    * @param field
@@ -40,9 +44,11 @@ class InFormMenuField {
     this.iframeId = uuidv4();
     this.isMenuMousingOver = false;
     this.menuClickWatcher = null;
+    this.scrollableFieldParent = null;
     this.bindCallbacks();
     this.insertInformMenuIframe();
     this.handleRemoveEvent();
+    this.handleScrollEvent();
   }
 
   /**
@@ -159,6 +165,17 @@ class InFormMenuField {
     });
   }
 
+  /** SCROLL REPOSITION */
+
+  /**
+   * Whenever the user scrolls the page
+   */
+  handleScrollEvent() {
+    // Remove the in form menu
+    this.scrollableFieldParent = DomUtils.getScrollParent(this.field);
+    this.scrollableFieldParent.addEventListener('scroll', this.removeMenuIframe);
+  }
+
   /** DESTROY */
 
   /**
@@ -166,6 +183,7 @@ class InFormMenuField {
    */
   destroy() {
     this.field.removeEventListener("blur",  this.removeInFormMenu);
+    this.scrollableFieldParent.removeEventListener('scroll', this.removeMenuIframe);
     this.removeMenuIframe();
   }
 }
