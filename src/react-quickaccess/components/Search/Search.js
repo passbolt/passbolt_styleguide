@@ -29,7 +29,10 @@ class Search extends React.Component {
   }
 
   focus() {
-    this.searchInputRef.current.focus();
+    const canFocus = document.activeElement === document.body || document.activeElement === null;
+    if (canFocus) {
+      this.searchInputRef.current.focus();
+    }
   }
 
   handleInputChange(event) {
