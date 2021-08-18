@@ -110,8 +110,8 @@ class InFormMenuField {
       currentElement = currentElement.offsetParent;
     }
     // Then we add the body offset (notably in case of window scroll) + some local adjustments (margin / vertical aligment ) to align with the call to action icon
-    x = x + leftBody + width - 361; // (-352 width of the iframe) (-9 adjustment of the call to action menu (25-16))
-    y = y + topBody + height; // Calculate the middle position of the input, 8 is the half of the iframe height
+    x = x + leftBody + width - 359; // (-352 width of the iframe) (-7 adjustment of the call to action menu (25-18))
+    y = y + topBody + height; // Calculate the bottom position of the input
     return { top: y, left: x };
   }
 
