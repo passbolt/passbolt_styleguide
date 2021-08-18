@@ -614,6 +614,7 @@ class CreateResource extends Component {
                   onKeyUp={this.handlePasswordInputKeyUp} value={this.state.password}
                   onFocus={this.handlePasswordInputFocus} onBlur={this.handlePasswordInputBlur}
                   onChange={this.handleInputChange} disabled={this.state.processing}
+                  autoComplete="off"
                   ref={this.passwordInputRef}/>
                 <a onClick={this.handleViewPasswordButtonClick}
                   className={`password-view button button-icon toggle ${this.state.viewPassword ? "selected" : ""}`}>
