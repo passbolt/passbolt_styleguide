@@ -30,6 +30,7 @@ class ManageQuickAccessMode extends Component {
   componentDidMount() {
     this.handleCloseOutsideWindowEvent();
     this.redirectFromFeatureParams();
+    this.handleResizeWindow();
   }
 
   /**
@@ -74,6 +75,19 @@ class ManageQuickAccessMode extends Component {
   }
 
   /**
+   * Handle resize window.
+   * When the quick access is in detached mode, request the BP to resize it when its height change to mimic the
+   * native behaviour of the quickaccess opened from the toolbar.
+   */
+  handleResizeWindow() {
+    const detachedMode = this.queryParameters.get("uiMode") === "detached";
+    if (detachedMode) {
+      const handleWindowResized = entries => this.props.context.port.emit("passbolt.quickaccess.update-window-height", entries[0].target.clientHeight);
+      const resizeObserver = new ResizeObserver(handleWindowResized);
+      resizeObserver.observe(document.body);
+    }
+  }
+  /**
    * Render the component
    * @return {JSX}
    */
@@ -87,6 +101,7 @@ class ManageQuickAccessMode extends Component {
 ManageQuickAccessMode.propTypes = {
   history: PropTypes.any, // The router history
   location: PropTypes.any, // The router location
+  context: PropTypes.any, // The application context
 };
 
-export default withRouter(ManageQuickAccessMode);
+export default withAppContext(withRouter(ManageQuickAccessMode));
