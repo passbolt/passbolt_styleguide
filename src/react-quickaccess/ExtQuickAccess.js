@@ -94,8 +94,19 @@ class ExtQuickAccess extends React.Component {
       focusSearch: this.focusSearch,
       // Passphrase
       passphraseRequired: false,
-      passphraseRequestId: ''
+      passphraseRequestId: '',
+      // Tab id to refer to the good one if detached mode
+      tabId: this.getTabIdFromUrl()
     };
+  }
+
+  /**
+   * Get the tabId from URL
+   * @returns {string}
+   */
+  getTabIdFromUrl() {
+    const queryParameters = new URLSearchParams(window.location.search);
+    return queryParameters.get('tabId');
   }
 
   updateSearch(search) {

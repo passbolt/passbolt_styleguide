@@ -57,14 +57,10 @@ class ManageQuickAccessMode extends Component {
    * Redirect on the right page according to the feature
    */
   redirectFromFeatureParams() {
-    const tabId = this.queryParameters.get("tabId");
     switch (this.queryParameters.get("feature")) {
       case "create-new-credentials":
       case "save-credentials":
-        this.props.history.push({pathname: "/data/quickaccess/resources/create", state: {tabId}});
-        break;
-      case "browse-credentials":
-        this.props.history.push({pathname: "/data/quickaccess.html", state: {tabId}});
+        this.props.history.push({pathname: "/data/quickaccess/resources/create"});
         break;
       case "autosave-credentials":
         this.props.history.push({pathname: "/data/quickaccess/resources/autosave"});

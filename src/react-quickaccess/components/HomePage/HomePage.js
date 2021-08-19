@@ -25,14 +25,6 @@ class HomePage extends React.Component {
     this.getActiveTabUrl();
   }
 
-  componentDidUpdate(prevProps) {
-    // The location keys are the unique identifier in case of location change
-    const locationPreviousStateHasChanged = this.props.location.key !== prevProps.location.key;
-    if(locationPreviousStateHasChanged) {
-      this.getActiveTabUrl();
-    }
-  }
-
   initEventHandlers() {
     this.handleStorageChange = this.handleStorageChange.bind(this);
     this.props.context.storage.onChanged.addListener(this.handleStorageChange);
@@ -93,7 +85,7 @@ class HomePage extends React.Component {
 
   async getActiveTabUrl() {
     try {
-      const activeTabUrl = await this.props.context.port.request("passbolt.active-tab.get-url", this.props.location.state?.tabId);
+      const activeTabUrl = await this.props.context.port.request("passbolt.active-tab.get-url", this.props.context.tabId);
       this.setState({activeTabUrl});
     } catch (error) {
       console.error(error);
@@ -189,7 +181,7 @@ class HomePage extends React.Component {
   async handleUseOnThisTabClick(resource) {
     this.setState({usingOnThisTab: true});
     try {
-      await this.props.context.port.request('passbolt.quickaccess.use-resource-on-current-tab', resource.id, resource.username);
+      await this.props.context.port.request('passbolt.quickaccess.use-resource-on-current-tab', resource.id, this.props.context.tabId);
       window.close();
     } catch (error) {
       if (error && error.name === "UserAbortsOperationError") {
@@ -337,7 +329,6 @@ class HomePage extends React.Component {
 
 HomePage.propTypes = {
   context: PropTypes.any, // The application context
-  location: PropTypes.any,
   t: PropTypes.func, // The translation function
 };
 
