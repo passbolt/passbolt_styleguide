@@ -464,6 +464,9 @@ p {
 code {
   font-size: 1.1rem;
 }
+.font-dim {
+  color: #666;
+}
 /* links */
 a {
   outline: 0;
@@ -1320,6 +1323,84 @@ a.unfav .svg-icon svg {
 }
 .button.disabled .svg-icon svg:hover {
   fill: #888888;
+}
+@keyframes drawCircle {
+  0% {
+    stroke-dashoffset: 180px;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes drawCheck {
+  0% {
+    stroke-dashoffset: 50px;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes drawCross {
+  0% {
+    stroke-dashoffset: 50px;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes drawWarning {
+  0% {
+    stroke-dashoffset: 230px;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+.icon-feedback .success-animation-circle {
+  stroke-dasharray: 180px 180px;
+  stroke: #009900;
+}
+.icon-feedback .success-animation-line {
+  stroke-dasharray: 50px 50px;
+  stroke: #009900;
+}
+.icon-feedback .success-animation-line2 {
+  stroke-dasharray: 50px 50px;
+  stroke: #009900;
+}
+.icon-feedback .error-animation-circle {
+  stroke-dasharray: 180px 180px;
+  stroke: #D40101;
+}
+.icon-feedback .error-animation-line {
+  stroke-dasharray: 50px 50px;
+  stroke: #D40101;
+}
+.icon-feedback .warning-animation-line {
+  stroke-dasharray: 230px 230px;
+  stroke: #9F6000;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.icon-feedback .warning-animation-circle {
+  fill: #9F6000;
+}
+.icon-feedback .animated {
+  animation: 0.75s ease-out 0s 1 both pop;
+}
+.icon-feedback .animated .success-animation-circle,
+.icon-feedback .animated .error-animation-circle,
+.icon-feedback .animated .warning-animation-circle {
+  animation: 0.75s cubic-bezier(0.77, 0, 0.175, 1) 0s 1 both drawCircle;
+}
+.icon-feedback .animated .success-animation-line {
+  animation: 0.75s cubic-bezier(0.77, 0, 0.175, 1) 0s 1 both drawCheck;
+}
+.icon-feedback .animated .error-animation-line {
+  animation: 0.75s cubic-bezier(0.77, 0, 0.175, 1) 0s 1 both drawCross;
+}
+.icon-feedback .animated .warning-animation-line {
+  animation: 0.75s cubic-bezier(0.77, 0, 0.175, 1) 0s 1 both drawWarning;
 }
 /**
  * Remove most spacing between table cells.
@@ -2868,7 +2949,7 @@ html {
 .quickaccess .resource-create .password input {
   float: left;
   box-sizing: border-box;
-  width: calc(100% - 7.2rem);
+  width: calc(100% - 10.2rem);
 }
 .quickaccess .resource-create .password .password-view {
   float: left;
@@ -2924,7 +3005,7 @@ html {
   float: left;
   display: block;
   box-sizing: border-box;
-  width: 30.6rem;
+  width: calc(100% - 6.8rem);
   height: 0.6rem;
   border: 1px solid #DDD;
 }
@@ -3248,4 +3329,209 @@ html {
   100% {
     opacity: 1;
   }
+}
+.quickaccess .generate-password .form-container {
+  padding: 0 1.8rem 0 1.8rem;
+}
+.quickaccess .generate-password .submit-wrapper {
+  padding: 0 1.8rem 1.8rem 1.8rem;
+}
+.quickaccess .generate-password .password {
+  /*
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
+  /*
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
+}
+.quickaccess .generate-password .password:before,
+.quickaccess .generate-password .password:after {
+  content: "";
+  display: table;
+}
+.quickaccess .generate-password .password:after {
+  clear: both;
+}
+.quickaccess .generate-password .password:before,
+.quickaccess .generate-password .password:after {
+  content: "";
+  display: table;
+}
+.quickaccess .generate-password .password:after {
+  clear: both;
+}
+.quickaccess .generate-password .password input {
+  float: left;
+  box-sizing: border-box;
+  width: calc(100% - 15rem);
+}
+.quickaccess .generate-password .password .password-view {
+  float: left;
+  margin-top: 0.2rem;
+  margin-left: -0.1rem;
+  height: 2rem;
+  border-radius: 0;
+  padding: 0.6rem 0.8rem 0.6rem 1rem;
+  background: #FFF;
+  border: 1px solid #CCC;
+  border-left: 0;
+  border-top: 1px solid #BBB;
+}
+.quickaccess .generate-password .password .password-view svg {
+  margin-top: 0.2rem;
+}
+.quickaccess .generate-password .password input:focus + .password-view {
+  box-shadow: inset -1px 1px 1px rgba(0, 0, 0, 0.2);
+  border: 1px solid #2894DF;
+  border-left: 0;
+}
+.quickaccess .generate-password .password .actions.inline {
+  display: flex;
+  justify-content: flex-end;
+  padding-left: 0;
+  margin: 0;
+}
+.quickaccess .generate-password .password .actions.inline .password-generate,
+.quickaccess .generate-password .password .actions.inline .copy-to-clipboard {
+  margin-right: 0;
+  margin-left: 0.4rem;
+  margin-top: 0.2rem;
+  line-height: 1.1rem;
+}
+.quickaccess .generate-password .password .password-complexity .progress {
+  width: calc(100% - 11.5rem);
+}
+.quickaccess .generate-password .password .password-complexity .complexity-text {
+  font-size: 1rem;
+  padding-bottom: 0.5rem;
+}
+.quickaccess .generate-password .password .password-complexity .complexity-text .text--nowrap {
+  white-space: nowrap;
+}
+.quickaccess .generate-password #configure-password-generator-form-exclude-look-alike {
+  position: fixed;
+}
+.quickaccess .generate-password .button-group .button {
+  margin-left: 0;
+  margin-right: 0.3em;
+}
+/* tabs */
+.tabs {
+  width: 100%;
+}
+.tabs-nav {
+  border-bottom: 1px solid #DDD;
+}
+.tabs-nav li {
+  display: inline;
+}
+.tabs-nav li div {
+  display: inline-block;
+}
+.tabs-nav li a {
+  display: inline-block;
+  padding: 0.4em 1.75em;
+  margin-left: 1.25em;
+  font-size: 15px;
+  border: 0;
+}
+.tabs-nav li a.selected {
+  margin-bottom: -1px;
+  border: 1px solid #DDD;
+  border-bottom: 1px solid #FFF;
+  background: #FFF;
+  -webkit-border-radius: 0.214em;
+  -moz-border-radius: 0.214em;
+  border-radius: 0.214em;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+.tabs-nav--bordered li {
+  background-color: #EEE;
+  margin-right: 0.5rem;
+  display: inline-block;
+}
+.tabs-nav--bordered li a {
+  margin-left: 0;
+}
+.tabs-nav--bordered li.active {
+  border: 1px solid #DDD;
+  border-bottom: 1px solid #FFF;
+  margin-bottom: -10px;
+  background-color: #FFF;
+}
+/* tab content */
+.tab-content {
+  display: none;
+}
+.tab-content.selected {
+  display: block;
+}
+.tabs-active-content {
+  margin-top: 0.5em;
+}
+.password-complexity .complexity-text {
+  float: right;
+  clear: right;
+  width: 30%;
+  font-size: 11px;
+  text-align: left;
+  padding-left: 0;
+}
+.password-complexity.not_available .complexity-text {
+  color: #DDD;
+}
+.password-complexity .progress {
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid #DDD;
+  height: 10px;
+  display: block;
+  clear: both;
+  margin: 0.25em 0 0.5em 0;
+  float: left;
+}
+.password-complexity .progress-bar {
+  background: #000;
+  width: 0;
+  height: 6px;
+  display: block;
+  float: left;
+  margin: 1px;
+}
+.password-complexity .progress-bar.very-weak {
+  background: #000;
+  width: 5%;
+}
+.password-complexity .progress-bar.weak {
+  background: #D40101;
+  width: 10%;
+}
+.password-complexity .progress-bar.fair {
+  background: #FFBD2E;
+  width: 60%;
+}
+.password-complexity .progress-bar.strong {
+  background: #66CC00;
+  width: 80%;
+}
+.password-complexity .progress-bar.very-strong {
+  background: #009900;
+  width: 99.5%;
 }

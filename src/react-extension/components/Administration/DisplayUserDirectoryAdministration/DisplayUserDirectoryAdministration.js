@@ -1188,7 +1188,7 @@ class DisplayUserDirectoryAdministration extends React.Component {
             <p><Trans>Check out our ldap configuration guide.</Trans></p>
             <a className="button" href="https://help.passbolt.com/configure/ldap" target="_blank" rel="noopener noreferrer">
               <Icon name="life-ring"/>
-              <span><Trans>Read documentation</Trans></span>
+              <span><Trans>Read the documentation</Trans></span>
             </a>
           </div>
         </div>

@@ -654,6 +654,9 @@ p {
 code {
   font-size: 1.1rem;
 }
+.font-dim {
+  color: #666;
+}
 .svg-icon {
   display: inline-flex;
   align-self: center;
@@ -724,6 +727,84 @@ a.unfav .svg-icon svg {
 }
 .button.disabled .svg-icon svg:hover {
   fill: #888888;
+}
+@keyframes drawCircle {
+  0% {
+    stroke-dashoffset: 180px;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes drawCheck {
+  0% {
+    stroke-dashoffset: 50px;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes drawCross {
+  0% {
+    stroke-dashoffset: 50px;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes drawWarning {
+  0% {
+    stroke-dashoffset: 230px;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+.icon-feedback .success-animation-circle {
+  stroke-dasharray: 180px 180px;
+  stroke: #009900;
+}
+.icon-feedback .success-animation-line {
+  stroke-dasharray: 50px 50px;
+  stroke: #009900;
+}
+.icon-feedback .success-animation-line2 {
+  stroke-dasharray: 50px 50px;
+  stroke: #009900;
+}
+.icon-feedback .error-animation-circle {
+  stroke-dasharray: 180px 180px;
+  stroke: #D40101;
+}
+.icon-feedback .error-animation-line {
+  stroke-dasharray: 50px 50px;
+  stroke: #D40101;
+}
+.icon-feedback .warning-animation-line {
+  stroke-dasharray: 230px 230px;
+  stroke: #9F6000;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.icon-feedback .warning-animation-circle {
+  fill: #9F6000;
+}
+.icon-feedback .animated {
+  animation: 0.75s ease-out 0s 1 both pop;
+}
+.icon-feedback .animated .success-animation-circle,
+.icon-feedback .animated .error-animation-circle,
+.icon-feedback .animated .warning-animation-circle {
+  animation: 0.75s cubic-bezier(0.77, 0, 0.175, 1) 0s 1 both drawCircle;
+}
+.icon-feedback .animated .success-animation-line {
+  animation: 0.75s cubic-bezier(0.77, 0, 0.175, 1) 0s 1 both drawCheck;
+}
+.icon-feedback .animated .error-animation-line {
+  animation: 0.75s cubic-bezier(0.77, 0, 0.175, 1) 0s 1 both drawCross;
+}
+.icon-feedback .animated .warning-animation-line {
+  animation: 0.75s cubic-bezier(0.77, 0, 0.175, 1) 0s 1 both drawWarning;
 }
 /*
 	Base form components styling

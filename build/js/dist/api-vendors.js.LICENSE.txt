@@ -166,6 +166,14 @@ object-assign
 
 /*! ../../modules/web.dom-collections.iterator */
 
+/*! ../../stable/array/from */
+
+/*! ../../stable/array/is-array */
+
+/*! ../../stable/instance/slice */
+
+/*! ../../stable/symbol */
+
 /*! ../../tools/output/blocks */
 
 /*! ../../tools/output/categories */
@@ -189,6 +197,10 @@ object-assign
 /*! ../array/virtual/slice */
 
 /*! ../array/virtual/sort */
+
+/*! ../es/get-iterator */
+
+/*! ../es/get-iterator-method */
 
 /*! ../es/parse-int */
 
@@ -215,6 +227,8 @@ object-assign
 /*! ../internals/array-reduce */
 
 /*! ../internals/array-sort */
+
+/*! ../internals/array-species-constructor */
 
 /*! ../internals/array-species-create */
 
@@ -302,6 +316,8 @@ object-assign
 
 /*! ../internals/is-regexp */
 
+/*! ../internals/is-symbol */
+
 /*! ../internals/iterator-close */
 
 /*! ../internals/iterators */
@@ -342,6 +358,8 @@ object-assign
 
 /*! ../internals/object-to-string */
 
+/*! ../internals/ordinary-to-primitive */
+
 /*! ../internals/path */
 
 /*! ../internals/redefine */
@@ -374,6 +392,10 @@ object-assign
 
 /*! ../internals/to-primitive */
 
+/*! ../internals/to-property-key */
+
+/*! ../internals/to-string */
+
 /*! ../internals/to-string-tag-support */
 
 /*! ../internals/uid */
@@ -386,6 +408,8 @@ object-assign
 
 /*! ../internals/whitespaces */
 
+/*! ../modules/es.array.iterator */
+
 /*! ../modules/es.parse-int */
 
 /*! ../modules/es.string.iterator */
@@ -393,6 +417,10 @@ object-assign
 /*! ../modules/web.dom-collections.iterator */
 
 /*! ../regexp/flags */
+
+/*! ../stable/get-iterator */
+
+/*! ../stable/get-iterator-method */
 
 /*! ../string/virtual/includes */
 
@@ -671,6 +699,10 @@ object-assign
   \*****************************************************/
 
 /*!******************************************************!*\
+  !*** ./node_modules/core-js-pure/es/get-iterator.js ***!
+  \******************************************************/
+
+/*!******************************************************!*\
   !*** ./node_modules/core-js-pure/es/instance/map.js ***!
   \******************************************************/
 
@@ -815,6 +847,10 @@ object-assign
   \**********************************************************/
 
 /*!**********************************************************!*\
+  !*** ./node_modules/core-js-pure/internals/is-symbol.js ***!
+  \**********************************************************/
+
+/*!**********************************************************!*\
   !*** ./node_modules/core-js-pure/internals/iterators.js ***!
   \**********************************************************/
 
@@ -824,6 +860,14 @@ object-assign
 
 /*!**********************************************************!*\
   !*** ./node_modules/core-js-pure/internals/to-object.js ***!
+  \**********************************************************/
+
+/*!**********************************************************!*\
+  !*** ./node_modules/core-js-pure/internals/to-string.js ***!
+  \**********************************************************/
+
+/*!**********************************************************!*\
+  !*** ./node_modules/core-js-pure/stable/get-iterator.js ***!
   \**********************************************************/
 
 /*!**********************************************************!*\
@@ -976,6 +1020,10 @@ object-assign
 
 /*!*************************************************************!*\
   !*** ./node_modules/core-js-pure/es/array/virtual/slice.js ***!
+  \*************************************************************/
+
+/*!*************************************************************!*\
+  !*** ./node_modules/core-js-pure/es/get-iterator-method.js ***!
   \*************************************************************/
 
 /*!*************************************************************!*\
@@ -1199,6 +1247,10 @@ object-assign
   \****************************************************************/
 
 /*!****************************************************************!*\
+  !*** ./node_modules/core-js-pure/internals/to-property-key.js ***!
+  \****************************************************************/
+
+/*!****************************************************************!*\
   !*** ./node_modules/core-js-pure/modules/es.array.for-each.js ***!
   \****************************************************************/
 
@@ -1264,6 +1316,10 @@ object-assign
 
 /*!*****************************************************************!*\
   !*** ./node_modules/core-js-pure/modules/es.symbol.iterator.js ***!
+  \*****************************************************************/
+
+/*!*****************************************************************!*\
+  !*** ./node_modules/core-js-pure/stable/get-iterator-method.js ***!
   \*****************************************************************/
 
 /*!*****************************************************************!*\
@@ -1467,6 +1523,10 @@ object-assign
   \**********************************************************************/
 
 /*!**********************************************************************!*\
+  !*** ./node_modules/core-js-pure/internals/ordinary-to-primitive.js ***!
+  \**********************************************************************/
+
+/*!**********************************************************************!*\
   !*** ./node_modules/core-js-pure/internals/to-string-tag-support.js ***!
   \**********************************************************************/
 
@@ -1572,6 +1632,10 @@ object-assign
 
 /*!**************************************************************************!*\
   !*** ./node_modules/@babel/runtime/helpers/esm/assertThisInitialized.js ***!
+  \**************************************************************************/
+
+/*!**************************************************************************!*\
+  !*** ./node_modules/core-js-pure/internals/array-species-constructor.js ***!
   \**************************************************************************/
 
 /*!**************************************************************************!*\

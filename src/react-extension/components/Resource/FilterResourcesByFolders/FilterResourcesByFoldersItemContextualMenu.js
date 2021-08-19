@@ -130,7 +130,7 @@ class FilterResourcesByFoldersItemContextualMenu extends React.Component {
    * Returns true if the user can export
    */
   canExport() {
-    return this.props.context.siteSettings.settings.passbolt.plugins.export;
+    return this.props.context.siteSettings.canIUse("export");
   }
 
   /**

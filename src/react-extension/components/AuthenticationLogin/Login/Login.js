@@ -349,6 +349,7 @@ class Login extends Component {
                     ref={this.passphraseInputRef}
                     type={this.state.isObfuscated ? "password" : "text"}
                     name="passphrase"
+                    placeholder={this.translate('Passphrase')}
                     className="login-passphrase-input"
                     style={this.passphraseInputStyle}
                     value={this.state.passphrase}

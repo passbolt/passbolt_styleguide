@@ -110,6 +110,9 @@ export default {
             "label": "Français"
           }
         ]
+      },
+      "mobile": {
+        "version": "1.0.0"
       }
     }
   }

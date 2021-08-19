@@ -3,176 +3,60 @@
 	this needs modernizer to work
 */
 .js .message.no-js {
-    display: none;
+  display: none;
 }
 
 .cookies .message.no-cookies {
-    display: none;
+  display: none;
 }
 
 /* message styling per types */
 .message {
-    padding: 1.6rem;
-    a {
-        border-bottom: 1px solid @border-dark;
+  padding: 1.6rem;
+  a {
+    border-bottom: 1px solid @border-dark;
+  }
+  a:hover {
+    border-bottom: 1px solid @blue;
+  }
+  &.error {
+    color: @message-error-color;
+    background: @message-error-background;
+
+    a:link, a:visited {
+      color: @message-error-color;
+      border-bottom: 1px dotted @border-dark;
     }
     a:hover {
-        border-bottom: 1px solid @blue;
+      color: @message-error-color;
+      border-bottom: 1px solid @border-dark;
     }
-    &.error {
-        color: @message-error-color;
-        background: @message-error-background;
+  }
+  &.success {
+    color:@message-success-color;
+    background: @message-success-background;
+  }
+  &.notice {
+    color:@message-notice-color;
+    background: @message-notice-background;
+  }
+  &.warning {
+    color:@message-warning-color;
+    background: @message-warning-background;
+  }
 
-        a:link, a:visited {
-            color: @message-error-color;
-            border-bottom: 1px dotted @border-dark;
-        }
-        a:hover {
-            color: @message-error-color;
-            border-bottom: 1px solid @border-dark;
-        }
-    }
-    &.success {
-        color:@message-success-color;
-        background: @message-success-background;
-    }
-    &.notice {
-        color:@message-notice-color;
-        background: @message-notice-background;
-    }
-    &.warning {
-        color:@message-warning-color;
-        background: @message-warning-background;
-    }
-
-    p:last-child {
-        margin-bottom:0;
-    }
+  p:last-child {
+    margin-bottom:0;
+  }
 }
 
 /* big side info message blocks on setup or profile pages */
 .message.side-message {
-    margin-left: 1.6rem;
-    font-size: 1.6rem;
-    margin-right: 3.2rem;
+  margin-left: 1.6rem;
+  font-size: 1.6rem;
+  margin-right: 3.2rem;
 
-    ul, p {
-        padding-bottom: 1.6rem;
-    }
-}
-
-/* animation */
-.message.animated {
-    background: @background-default;
-    color: @font-default;
-    @circle-length: 18rem;
-    @warning-length: 18rem;
-    @check-length: 5rem;
-    @cross-length: 5rem;
-    display:flex;
-    border:1px solid @border-light;
-    border-radius:.3rem;
-
-    .illustration {
-        flex: 0 0 @circle-length;
-    }
-    .additional-information {
-        flex: 1;
-        line-height: @circle-length;
-        margin: 2.4rem 0;
-        padding-left:1.6rem;
-    }
-
-    @keyframes drawCircle {
-        0% {
-            stroke-dashoffset: @circle-length;
-        }
-        100% {
-            stroke-dashoffset: 0;
-        }
-    }
-
-    @keyframes drawCheck {
-        0% {
-            stroke-dashoffset: @check-length;
-        }
-        100% {
-            stroke-dashoffset: 0;
-        }
-    }
-
-    @keyframes drawCross {
-      0% {
-        stroke-dashoffset: @cross-length;
-      }
-      100% {
-        stroke-dashoffset: 0;
-      }
-    }
-
-    @keyframes drawWarning {
-      0% {
-        stroke-dashoffset: @warning-length;
-      }
-      100% {
-        stroke-dashoffset: 0;
-      }
-    }
-
-    #successAnimationCircle {
-        stroke-dasharray: @circle-length @circle-length;
-        stroke: @green;
-    }
-
-    #successAnimationCheck {
-        stroke-dasharray: @check-length @check-length;
-        stroke: @green;
-    }
-
-    #errorAnimationCircle {
-      stroke-dasharray: @circle-length @circle-length;
-      stroke: @red;
-    }
-
-    #errorAnimationCross {
-      stroke-dasharray: @cross-length @cross-length;
-      stroke: @red;
-    }
-
-    #warningAnimation {
-      stroke-dasharray: @warning-length @warning-length;
-      stroke: @orange;
-      stroke-linecap: square;
-      stroke-linejoin: round;
-
-      &.round {
-        stroke-linecap: round;
-      }
-    }
-
-    .animated {
-        animation: .75s ease-out 0s 1 both pop;
-
-        #successAnimationCircle, #errorAnimationCircle {
-            animation: .75s cubic-bezier(0.77, 0, 0.175, 1) 0s 1 both drawCircle;
-        }
-
-        #successAnimationCheck {
-            animation: .75s cubic-bezier(0.77, 0, 0.175, 1) 0s 1 both drawCheck;
-        }
-
-        #errorAnimationCross {
-          animation: .75s cubic-bezier(0.77, 0, 0.175, 1) 0s 1 both drawCross;
-        }
-
-        #warningAnimation {
-          animation: .75s cubic-bezier(0.77, 0, 0.175, 1) 0s 1 both drawWarning;
-        }
-    }
-}
-
-@media only screen and (max-width: 767px) {
-    .message.animated {
-        flex-direction: column;
-    }
+  ul, p {
+    padding-bottom: 1.6rem;
+  }
 }
