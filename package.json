@@ -12,11 +12,6 @@
     "@babel/preset-env": "^7.14.2",
     "@babel/preset-react": "^7.10.4",
     "@babel/runtime": "^7.11.2",
-    "@storybook/addon-actions": "^6.2.9",
-    "@storybook/addon-essentials": "^6.2.9",
-    "@storybook/addon-links": "^6.2.9",
-    "@storybook/builder-webpack5": "^6.2.9",
-    "@storybook/react": "^6.2.9",
     "apexcharts": "^3.21.0",
     "babel-loader": "^8.0.4",
     "can-util": "^3.14.0",
@@ -52,7 +47,7 @@
     "uuid": "^8.3.0",
     "webpack": "^5.37.1",
     "webpack-cli": "^4.6.0",
-    "webpack-dev-server": "^3.11.0"
+    "webpack-dev-server": "^4.0.0"
   },
   "dependencies": {
     "@testing-library/dom": "^7.31.0",
