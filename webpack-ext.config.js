@@ -61,9 +61,13 @@ const config = {
     filename: "[name].js"
   },
   devServer: {
-    contentBase: path.join(__dirname, "demo/ext-app/public/"),
+    static: {
+      directory: path.join(__dirname, "demo/ext-app/public/"),
+    },
     port: 3001,
-    publicPath: "http://localhost:3001/dist/",
+    devMiddleware: {
+      publicPath: "http://localhost:3001/dist/",
+    },
     historyApiFallback: true
   },
 };
