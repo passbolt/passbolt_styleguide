@@ -81,7 +81,7 @@ describe("Integration test with real fetch", () => {
       await testClient.findAll();
       expect(true).toBeFalsy();
     } catch (error) {
-      expect(error.data.code).toBe(403);
+      expect(error.data.code).toBe(401);
       /*
        * TODO find out why we can't use:
        *   expect(error).toBeInstanceOf(PassboltApiFetchError)
