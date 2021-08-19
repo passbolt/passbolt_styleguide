@@ -51,9 +51,13 @@ const config = {
     filename: "[name].js"
   },
   devServer: {
-    contentBase: path.join(__dirname, "demo/api-app/public/"),
+    static: {
+      directory: path.join(__dirname, "demo/api-app/public/"),
+    },
     port: 3000,
-    publicPath: "http://localhost:3000/dist/",
+    devMiddleware: {
+      publicPath: "http://localhost:3000/dist/",
+    },
     historyApiFallback: {
       rewrites: [
         {from: /^\/app\/administration|^\/app\/settings\/mfa/, to: "/api-app.html"},
