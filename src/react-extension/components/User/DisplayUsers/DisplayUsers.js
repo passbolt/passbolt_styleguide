@@ -274,7 +274,7 @@ class DisplayUsers extends React.Component {
             <div className="input checkbox">
               <input type="checkbox" id={`checkbox_multiple_select_checkbox_${user.id}`} checked={isSelected} readOnly={true}/>
               <label htmlFor={`checkbox_multiple_select_checkbox_${user.id}`}>
-                <span className=""><Trans>Select user</Trans></span>
+                <span className="visually-hidden"><Trans>Select user</Trans></span>
               </label>
             </div>
           </div>
