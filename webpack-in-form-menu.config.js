@@ -48,9 +48,13 @@ const config = {
     filename: "[name].js"
   },
   devServer: {
-    contentBase: path.join(__dirname, "demo/in-form-menu/public/"),
+    static: {
+      directory: path.join(__dirname, "demo/in-form-menu/public/"),
+    },
     port: 3002,
-    publicPath: "http://localhost:3002/dist/in-form-menu",
+    devMiddleware: {
+      publicPath: "http://localhost:3002/dist/in-form-menu",
+    },
     historyApiFallback: true
   },
 };
