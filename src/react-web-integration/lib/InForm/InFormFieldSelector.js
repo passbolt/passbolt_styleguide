@@ -15,7 +15,7 @@
 
 
 /**
- * All the possible in-fields DOM selectors
+ * All the possible in-form fields DOM selectors
  */
 export default {
   /** Selectors to detect username inputs (input type text or not type with id or class or name contain user) */
@@ -58,5 +58,14 @@ export default {
   input[type='Text'][class*='password']:not([hidden]):not([disabled]),
   input[type='TEXT'][name*='password']:not([hidden]):not([disabled]),
   input[type='TEXT'][id*='password']:not([hidden]):not([disabled]),
-  input[type='TEXT'][class*='password']:not([hidden]):not([disabled])`
+  input[type='TEXT'][class*='password']:not([hidden]):not([disabled])
+  input[type='text'][name*='Password']:not([hidden]):not([disabled]),
+  input[type='text'][id*='Password']:not([hidden]):not([disabled]),
+  input[type='text'][class*='Password']:not([hidden]):not([disabled]),
+  input[type='Text'][name*='Password']:not([hidden]):not([disabled]),
+  input[type='Text'][id*='Password']:not([hidden]):not([disabled]),
+  input[type='Text'][class*='Password']:not([hidden]):not([disabled]),
+  input[type='TEXT'][name*='Password']:not([hidden]):not([disabled]),
+  input[type='TEXT'][id*='Password']:not([hidden]):not([disabled]),
+  input[type='TEXT'][class*='Password']:not([hidden]):not([disabled])`
 }
