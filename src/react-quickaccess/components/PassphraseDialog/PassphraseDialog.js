@@ -168,7 +168,7 @@ class PassphraseDialog extends React.Component {
               <Trans>Your passphrase is wrong!</Trans> <Trans>The operation has been aborted.</Trans>
             </div>
             <div className="submit-wrapper">
-              <a className="button primary big full-width" role="button" autoFocus onClick={this.handleCloseButtonClick}>
+              <a className="button primary big full-width" role="button" onClick={this.handleCloseButtonClick}>
                 <Trans>close</Trans>
               </a>
             </div>
