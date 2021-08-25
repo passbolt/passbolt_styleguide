@@ -42,6 +42,9 @@ class DisplayInFormMenuItem extends React.Component {
     if (this.props.disabled) {
       name += ' disabled';
     }
+    if (this.props.processing) {
+      name += ' processing';
+    }
     return name;
   }
 
@@ -59,9 +62,16 @@ class DisplayInFormMenuItem extends React.Component {
   render() {
     return (
       <a className={this.getClassName()} onClick={this.handleClick}>
+        {this.props.processing &&
+          <div className="processing-wrapper">
+            <div className="processing"></div>
+          </div>
+        }
+        {!this.props.processing &&
         <div className="in-form-menu-item-icon">
           <Icon name={this.props.icon} big={true} dim={true}/>
         </div>
+        }
         <div className="in-form-menu-item-content">
           <div className="in-form-menu-item-content-header">
             <strong>
@@ -85,6 +95,7 @@ DisplayInFormMenuItem.propTypes = {
   subtitle: PropTypes.any,
   description: PropTypes.string,
   icon: PropTypes.any,
+  processing: PropTypes.bool,
   disabled: PropTypes.bool,
   onClick: PropTypes.func
 };

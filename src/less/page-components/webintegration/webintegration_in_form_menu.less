@@ -25,6 +25,46 @@ body {
       text-decoration: none; // Remove default CSS rules on a tag
       border-bottom: 0; // Remove default CSS rules on a tag
 
+      /* disabled */
+      &.disabled {
+          cursor: default;
+          text-shadow: none;
+          font-weight: normal;
+
+          &:hover,
+          &:active,
+          &:focus {
+              box-shadow: 0 0 0;
+              top: 0;
+              color: @button-disabled-color;
+              background: @button-disabled-background;
+              border: 1px solid @button-disabled-border;
+          }
+
+          .in-form-menu-item-content {
+            color: @font-lighter;
+            &-description {
+              color: @font-lighter;
+            }
+          }
+      }
+
+      .processing-wrapper {
+          background-color: @background-default;
+          display: inline-flex;
+          align-self: center;
+          justify-content: center;
+          flex-basis: 4rem;
+
+          .processing {
+              width: 1.8rem;
+              height: 1.8rem;
+              background: transparent @loading left center no-repeat;
+              background-size: contain;
+          }
+      }
+
+
       &:not(:last-child) {
         border-bottom: 1px solid  @border-default;
       }
