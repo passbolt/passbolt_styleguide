@@ -144,8 +144,8 @@ class InFormCallToActionField {
     iframe.style.top = top + 'px'
     iframe.style.left =  left + 'px';
     iframe.style.border = 0;
-    iframe.style.width = '16px';
-    iframe.style.height = '16px';
+    iframe.style.width = '18px';
+    iframe.style.height = '18px';
     iframe.style.zIndex = "1000";  // For you Yahoo with love
     iframe.contentWindow.location = `${browserExtensionUrl}data/passbolt-iframe-in-form-call-to-action.html?passbolt=passbolt-iframe-in-form-call-to-action`;
     return iframe;
@@ -170,7 +170,7 @@ class InFormCallToActionField {
     }
     // Then we add the body offset (notably in case of window scroll) + some local adjustments (margin / vertical aligment )
     x = x + leftBody + width - 25;
-    y = y + topBody + Math.floor(height / 2) - 8; // Calculate the middle position of the input, 8 is the half of the iframe height
+    y = y + topBody + Math.floor(height / 2) - 9; // Calculate the middle position of the input, 9 is the half of the iframe height
     return { top: y, left: x };
   }
 
