@@ -128,7 +128,7 @@ class PassphraseDialog extends React.Component {
 
   render() {
     return (
-      <div className="passphrase shake" onKeyDown={this.handleKeyDown}>
+      <div className="passphrase" onKeyDown={this.handleKeyDown}>
         <div className="back-link">
           <a className="primary-action">
             <span className="primary-action-title"><Trans>Passphrase required</Trans></span>
