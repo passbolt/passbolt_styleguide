@@ -300,19 +300,25 @@ class ResourceCreatePage extends React.Component {
                 <label htmlFor="name"><Trans>Name</Trans></label>
                 <input name="name" value={this.state.name} onChange={this.handleInputChange} disabled={this.state.processing}
                   ref={this.nameInputRef} className="required fluid" maxLength="64" type="text" id="name" required="required" autoComplete="off" />
+                {this.state.nameError &&
                 <div className="error-message">{this.state.nameError}</div>
+                }
               </div>
               <div className={`input text ${this.state.uriError ? "error" : ""}`}>
                 <label htmlFor="uri"><Trans>URL</Trans></label>
                 <input name="uri" value={this.state.uri} onChange={this.handleInputChange} disabled={this.state.processing}
                   ref={this.uriInputRef} className="fluid" maxLength="1024" type="text" id="uri" autoComplete="off" />
+                {this.state.uriError &&
                 <div className="error-message">{this.state.uriError}</div>
+                }
               </div>
               <div className="input text">
                 <label htmlFor="username"><Trans>Username</Trans></label>
                 <input name="username" value={this.state.username} onChange={this.handleInputChange} disabled={this.state.processing}
                   ref={this.usernameInputRef} className="fluid" maxLength="64" type="text" id="username" autoComplete="off" />
+                {this.state.usernameError &&
                 <div className="error-message">{this.state.usernameError}</div>
+                }
               </div>
               <div className="input text password required">
                 <label htmlFor="password"><Trans>Password</Trans></label>
@@ -355,7 +361,9 @@ class ResourceCreatePage extends React.Component {
           <div className="submit-wrapper input">
             <input type="submit" className={`button primary big full-width ${this.state.processing ? "processing" : ""}`} role="button"
               value={this.translate("save")} disabled={this.state.processing} />
+            {this.state.error &&
             <div className="error-message">{this.state.error}</div>
+            }
           </div>
         </form>
       </div>

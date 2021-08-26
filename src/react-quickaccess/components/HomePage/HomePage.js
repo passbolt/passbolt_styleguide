@@ -320,7 +320,9 @@ class HomePage extends React.Component {
           <Link to={`/data/quickaccess/resources/create`} id="popupAction" className="button primary big full-width" role="button">
             <Trans>Create new</Trans>
           </Link>
+          {this.state.useOnThisTabError &&
           <div className="error-message">{this.state.useOnThisTabError}</div>
+          }
         </div>
       </div>
     );
