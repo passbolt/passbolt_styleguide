@@ -2474,7 +2474,7 @@ html {
   right: 1.5em;
   margin-top: 0.25em;
 }
-.accordion.navigation .accordion-header .main-cell a:before {
+.accordion.navigation-secondary .accordion-header .main-cell a:before {
   margin-left: -1.25em;
   margin-top: 0.25em;
   content: "\f0d7";
@@ -2488,7 +2488,7 @@ html {
   position: absolute;
   text-align: center;
 }
-.accordion.navigation .accordion-content > .empty-content {
+.accordion.navigation-secondary .accordion-content > .empty-content {
   padding: 0 0 0 2.5em;
 }
 .announcement {
@@ -6769,7 +6769,7 @@ table.table-info.horizontal tbody tr:hover {
 }
 /* import password dialogs */
 .export-password-dialog .input-password-wrapper .input.password {
-  width: 81%;
+  width: 100%;
 }
 .export-password-dialog .input-password-wrapper .input.password input[type="text"],
 .export-password-dialog .input-password-wrapper .input.password input[type="password"] {
@@ -6811,7 +6811,7 @@ table.table-info.horizontal tbody tr:hover {
 }
 /* import password dialogs */
 .import-password-dialog .input-password-wrapper .input.password {
-  width: 81%;
+  width: 100%;
 }
 .import-password-dialog .input-password-wrapper .input.password input[type="text"],
 .import-password-dialog .input-password-wrapper .input.password input[type="password"] {
@@ -7123,6 +7123,30 @@ table.table-info.horizontal tbody tr:hover {
 .delete-user-dialog .ownership-transfer li select,
 .delete-group-dialog .ownership-transfer li select {
   padding: 0.2rem 2.2rem 0.2rem 0.6rem;
+}
+/* update avatar dialogs */
+.update-avatar-dialog .input-file-chooser-wrapper input[type="file"] {
+  display: none;
+}
+.update-avatar-dialog .input-file-chooser-wrapper .input-file-inline {
+  display: flex;
+  align-items: center;
+}
+.update-avatar-dialog .input-file-chooser-wrapper .input-file-inline input[type="text"] {
+  width: 60%;
+  text-overflow: ellipsis;
+}
+.update-avatar-dialog .input-file-chooser-wrapper .input-file-inline .button.primary {
+  width: 40%;
+  display: inline-block;
+  top: -4px;
+  padding: 0.68em 1.225em 0.68em 1.225em;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  margin: 0;
 }
 .passphrase-entry.dialog {
   width: 95%;

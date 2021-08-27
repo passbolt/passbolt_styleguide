@@ -2274,30 +2274,30 @@ body {
   background: transparent;
 }
 .web-integration .in-form-icon-logo {
-  background: transparent url('../../../img/logo/icon-16.png') 0 0 no-repeat;
+  background: transparent url('../../../img/logo/icon-without-badge.svg') 0 0 no-repeat;
   margin: 0;
   float: left;
-  width: 16px;
-  height: 16px;
+  width: 18px;
+  height: 18px;
 }
 .web-integration .in-form-icon-logo--1 {
-  background: transparent url('../../../img/logo/icon-16-badge-1.png') 0 0 no-repeat;
+  background: transparent url('../../../img/logo/icon-badge-1.svg') 0 0 no-repeat;
 }
 .web-integration .in-form-icon-logo--2 {
-  background: transparent url('../../../img/logo/icon-16-badge-2.png') 0 0 no-repeat;
+  background: transparent url('../../../img/logo/icon-badge-2.svg') 0 0 no-repeat;
 }
 .web-integration .in-form-icon-logo--3 {
-  background: transparent url('../../../img/logo/icon-16-badge-3.png') 0 0 no-repeat;
+  background: transparent url('../../../img/logo/icon-badge-3.svg') 0 0 no-repeat;
 }
 .web-integration .in-form-icon-logo--4 {
-  background: transparent url('../../../img/logo/icon-16-badge-4.png') 0 0 no-repeat;
+  background: transparent url('../../../img/logo/icon-badge-4.svg') 0 0 no-repeat;
 }
 .web-integration .in-form-icon-logo--5 {
-  background: transparent url('../../../img/logo/icon-16-badge-5.png') 0 0 no-repeat;
+  background: transparent url('../../../img/logo/icon-badge-5.svg') 0 0 no-repeat;
 }
 .web-integration .in-form-icon-logo--5-plus {
-  background: transparent url('../../../img/logo/icon-16-badge-5+.png') 0 0 no-repeat;
+  background: transparent url('../../../img/logo/icon-badge-5+.svg') 0 0 no-repeat;
 }
 .web-integration .in-form-icon-logo--inactive {
-  background: transparent url('../../../img/logo/icon-16-signout.png') 0 0 no-repeat;
+  background: transparent url('../../../img/logo/icon-inactive.svg') 0 0 no-repeat;
 }
