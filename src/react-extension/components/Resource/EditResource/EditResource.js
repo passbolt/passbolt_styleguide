@@ -715,7 +715,7 @@ class EditResource extends Component {
                   placeholder={passwordPlaceholder} onFocus={this.handlePasswordInputFocus}
                   onBlur={this.handlePasswordInputBlur} onChange={this.handleInputChange}
                   disabled={this.hasAllInputDisabled() || this.isPasswordDisabled()}
-                  autoComplete="off"
+                  autoComplete="new-password"
                   ref={this.passwordInputRef}/>
                 <a onClick={this.handleViewPasswordButtonClick}
                   className={`password-view button button-icon toggle ${this.state.viewPassword ? "selected" : ""}`}>
