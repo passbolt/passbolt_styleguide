@@ -199,7 +199,9 @@ class ResourceCreatePage extends React.Component {
   }
 
   handleSubmitError(error) {
-    if (error.name === "PassboltApiFetchError"
+    if(error.name === "UserAbortsOperationError") {
+      this.setState({processing: false});
+    } else if (error.name === "PassboltApiFetchError"
       && error.data.code === 400 && error.data.body
       && (error.data.body.name || error.data.body.username || error.data.body.uri)) {
       // Could not validate resource data.
