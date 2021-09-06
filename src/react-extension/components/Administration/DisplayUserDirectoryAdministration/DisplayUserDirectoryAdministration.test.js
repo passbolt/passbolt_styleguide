@@ -243,7 +243,7 @@ describe("As AD I should see the user directory settings", () => {
       await waitFor(() => {
         expect(page.userDirectory.getAttribute("disabled")).not.toBeNull();
         expect(page.activeDirectory.getAttribute("disabled")).not.toBeNull();
-        expect(page.connectionTypeSelect.className).toBe("chosen-container chosen-container-single connection-type chosen-disabled ");
+        expect(page.connectionTypeSelect.className).toBe("protocol chosen-container chosen-container-single connection-type chosen-disabled ");
         expect(page.serverHost.getAttribute("disabled")).not.toBeNull();
         expect(page.port.getAttribute("disabled")).not.toBeNull();
         expect(page.username.getAttribute("disabled")).not.toBeNull();

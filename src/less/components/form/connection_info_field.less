@@ -5,62 +5,41 @@
  - a port text field
  */
 .singleline.connection_info {
-    &.protocol_host_port {
-        .input.text.field_protocol_host {
-            border:0;
-            padding:0;
-            width: 70%;
-
-            .input.text{
-                padding:0;
-                margin:0;
-                input {
-                    margin:0;
-                    border-left:none;
-                }
-
-                &.host {
-                    width: 75%;
-                    input[type=text] {
-                        width:95%;
-                    }
-                }
-
-                &.protocol {
-                    width: 25%;
-                    position: relative;
-                    .chosen-container {
-                        display: block;
-                        a.chosen-single {
-                            height: 3.8rem;
-                            div {
-                                b {
-                                    background-position: 0 1rem;
-                                }
-                            }
-                            span {
-                                font-size: 1.6rem;
-                                padding: .6rem 0 0 0;
-                            }
-                        }
-                    }
-                    .chosen-container-active.chosen-with-drop {
-                        a.chosen-single  {
-                            div b {
-                                background-position: -1.8rem 1rem;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        .input.text.port {
-            width: 9%;
-            margin-left:1%;
-            input[type=number] {
-                width:100%;
-            }
-        }
+  .input.text {
+    &:first-child, &.first-field {
+      margin-right: 0;
     }
+
+    &.protocol {
+      flex: 0 0 2.5rem;
+
+      .chosen-container {
+        display: block;
+
+        a.chosen-single {
+          div {
+            b {
+              background-position: 0 .8rem;
+            }
+          }
+        }
+      }
+
+      .chosen-container-active.chosen-with-drop {
+        a.chosen-single {
+          div b {
+            background-position: -1.8rem .8rem;
+          }
+        }
+      }
+    }
+
+    &.host {
+      flex: 1 0 auto;
+    }
+
+    &.port {
+      flex: 0 0 9.5rem;
+    }
+  }
 }
