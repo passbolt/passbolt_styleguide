@@ -420,7 +420,9 @@ class ResourceViewPage extends React.Component {
           <a href="#" id="popupAction" className={`button primary big full-width ${this.state.usingOnThisTab ? "processing" : ""}`} role="button" onClick={this.handleUseOnThisTabClick}>
             <Trans>use on this page</Trans>
           </a>
+          {this.state.useOnThisTabError &&
           <div className="error-message">{this.state.useOnThisTabError}</div>
+          }
         </div>
       </div>
     );

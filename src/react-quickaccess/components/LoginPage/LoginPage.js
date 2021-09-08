@@ -110,24 +110,28 @@ class LoginPage extends React.Component {
       <div className="quickaccess-login">
         <div className="login-form">
           <form onSubmit={this.handleFormSubmit}>
-            <div className="input text required">
-              <label htmlFor="username"><Trans>Username</Trans></label>
-              <input className="required" maxLength="50" type="text" id="username" required="required" value={this.props.context.userSettings.username} disabled="disabled" />
-            </div>
-            <div className="input text passphrase required">
-              <label htmlFor="passphrase"><Trans>Passphrase</Trans></label>
-              <input type="password" name="passphrase" placeholder={this.translate('passphrase')} id="passphrase" autoFocus ref={this.passphraseInputRef}
-                value={this.state.passphrase} onChange={this.handleInputChange} onFocus={this.handleInputFocus} onBlur={this.handleInputBlur}
-                disabled={this.state.processing} style={this.state.passphraseStyle} />
-              <span className="security-token" style={this.state.securityTokenStyle}>{this.props.context.userSettings.getSecurityTokenCode()}</span>
-              <div className="error-message">{this.state.error}</div>
-            </div>
-            {this.props.canRememberMe &&
-              <div className="input checkbox small">
-                <input type="checkbox" name="rememberMe" id="remember-me" checked={this.state.rememberMe} onChange={this.handleInputChange} disabled={this.state.processing} />
-                <label htmlFor="remember-me"><Trans>Remember until I log out.</Trans></label>
+            <div className="form-container">
+              <div className="input text required">
+                <label htmlFor="username"><Trans>Username</Trans></label>
+                <input className="required" maxLength="50" type="text" id="username" required="required" value={this.props.context.userSettings.username} disabled="disabled" />
               </div>
-            }
+              <div className="input text passphrase required">
+                <label htmlFor="passphrase"><Trans>Passphrase</Trans></label>
+                <input type="password" name="passphrase" placeholder={this.translate('passphrase')} id="passphrase" autoFocus ref={this.passphraseInputRef}
+                  value={this.state.passphrase} onChange={this.handleInputChange} onFocus={this.handleInputFocus} onBlur={this.handleInputBlur}
+                  disabled={this.state.processing} style={this.state.passphraseStyle} />
+                <span className="security-token" style={this.state.securityTokenStyle}>{this.props.context.userSettings.getSecurityTokenCode()}</span>
+                {this.state.error &&
+                <div className="error-message">{this.state.error}</div>
+                }
+              </div>
+              {this.props.canRememberMe &&
+                <div className="input checkbox small">
+                  <input type="checkbox" name="rememberMe" id="remember-me" checked={this.state.rememberMe} onChange={this.handleInputChange} disabled={this.state.processing} />
+                  <label htmlFor="remember-me"><Trans>Remember until I log out.</Trans></label>
+                </div>
+              }
+            </div>
             <div className="submit-wrapper">
               <input type="submit" className={`button primary big full-width ${this.state.processing ? "processing" : ""}`} role="button" value={this.translate('login')} disabled={this.state.processing} />
             </div>

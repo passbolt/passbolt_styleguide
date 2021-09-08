@@ -149,7 +149,9 @@ class PassphraseDialog extends React.Component {
                   value={this.state.passphrase} onChange={this.handleInputChange} onFocus={this.handleInputFocus} onBlur={this.handleInputBlur}
                   disabled={this.state.processing} style={this.state.passphraseStyle} />
                 <span className="security-token" style={this.state.securityTokenStyle}>{this.props.context.userSettings.getSecurityTokenCode()}</span>
+                {this.state.passphraseError &&
                 <div className="error-message">{this.state.passphraseError}</div>
+                }
               </div>
               <div className="input checkbox small">
                 <input type="checkbox" name="rememberMe" id="remember-me" checked={this.state.rememberMe} onChange={this.handleInputChange} />

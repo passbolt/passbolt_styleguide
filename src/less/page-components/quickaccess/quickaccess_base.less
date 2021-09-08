@@ -6,22 +6,25 @@
 
     h2 {
         margin:0;
-        font-size:1.4rem;
+        font-size:1.5rem;
         font-weight: normal;
-        padding: .2rem 1.8rem;
+        padding: .4rem 1.6rem;
+        line-height: 2rem;
     }
     label {
-        font-size:1.4rem;
+        font-size:1.5rem;
         padding-top: .8rem;
         padding-bottom: .2rem;
+        line-height: 2rem;
     }
     input[type="text"], input[type="email"], input[type="password"], input[type="search"], textarea {
-        font-size:1.4rem;
-        padding: .4rem .8rem;
-        margin: .2rem 0 .4rem 0;
+        font-size: 1.5rem;
+        padding: .8rem .8rem;
+        margin: .9rem 0 .4rem 0;
+        height: 3.6rem;
     }
     .error-message {
-        font-size:1.2rem;
+        font-size:1.3rem;
         margin-bottom: .4rem;
         color: @font-error;
     }
@@ -33,7 +36,7 @@
     }
     .security-token {
         width:4.5rem;
-        font-size:1.4rem;
+        font-size:1.5rem;
         margin-top:-.2rem;
         padding: .4rem .8rem;
     }
@@ -64,28 +67,31 @@
     .back-link {
         .clearfix();
         background:@background-lighter;
+        line-height: 2rem;
 
         .primary-action  {
             display:block;
             border:0;
             float:left;
             width: 18rem; // width - sidebar offset - secondary action width - padding
-            padding: 1.4rem 1.8rem 1.4rem 1.8rem;
+            padding: 1.6rem;
 
             .primary-action-title {
-                font-size: 1.4rem;
+                font-size: 1.5rem;
             }
             .icon {
                 float:left;
-                margin-right:.8rem;
+                margin-right: 1rem;
             }
-            svg path {
-                fill: @font-lighter;
+            svg {
+                vertical-align: middle;
+                path {
+                    fill: @font-lighter;
+                }
             }
         }
         .secondary-action {
-            margin-top:.6rem;
-            margin-right:1rem;
+            padding: 1.6rem;
             .icon {
                 float:right;
             }
@@ -94,9 +100,12 @@
 
     .submit-wrapper {
         .clearfix();
-        margin-top: 1.6rem;
+        padding: 1.6rem;
+        .button.primary.big {
+          line-height: 2.3rem;
+        }
         .cancel {
-            margin-right: 3rem;
+            padding-right: 3rem;
             border: none;
             color: @font-default;
             &:hover {
@@ -117,7 +126,7 @@
 
         .processing-text {
             position: relative;
-            padding-left: 1em;
+            padding-left: 1rem;
         }
         .processing-text:before {
             width: 100%;

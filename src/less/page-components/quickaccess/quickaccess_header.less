@@ -1,15 +1,18 @@
 .quickaccess {
     .quickaccess-header {
         .clearfix();
-        padding:1.8rem 1.8rem 1rem 1.8rem;
+        display: flex;
+        align-items: center;
+        flex-direction: row;
+        margin: 0;
 
         .logo {
-            margin:0;
-            float:left;
+            margin: 1.6rem;
             background: transparent @logourl 0 0 no-repeat;
             background-size: 10rem auto;
             width: 10rem;
-            height: 2.2rem;
+            height: 1.75rem;
+            flex: 1 1 auto;
 
             a {
                 display:block;
@@ -19,7 +22,7 @@
             }
         }
         .option-link {
-            margin:-.8rem -.8rem 0 0;
+            padding: 1.6rem;
         }
     }
 }
