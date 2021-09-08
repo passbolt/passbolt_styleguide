@@ -67,7 +67,14 @@ body {
         flex: 1;
         color: @font-default;
 
+        &-header{
+          width: 280px;
+          .ellipsis()
+        }
+
         &-subheader {
+          width: 280px;
+          .ellipsis();
 
           &-password {
             position: relative;
@@ -87,6 +94,8 @@ body {
         }
 
         &-description {
+          width: 280px;
+          .ellipsis();
           color: @font-dim;
         }
       }
