@@ -85,7 +85,7 @@ class InFormMenuField {
     iframe.style.top = top + 'px'
     iframe.style.left =  left + 'px';
     iframe.style.border = 0;
-    iframe.style.width = '352px'; // width of the menu + border
+    iframe.style.width = '370px'; // width of the menu 350px + 20px to display shadows
     iframe.style.height = '220px'; // For 3 items in a row to be display
     iframe.style.zIndex = "1000";
     iframe.contentWindow.location = `${browserExtensionUrl}data/passbolt-iframe-in-form-menu.html?passbolt=passbolt-iframe-in-form-menu`;
@@ -110,8 +110,8 @@ class InFormMenuField {
       currentElement = currentElement.offsetParent;
     }
     // Then we add the body offset (notably in case of window scroll) + some local adjustments (margin / vertical aligment ) to align with the call to action icon
-    x = x + leftBody + width - 359; // (-352 width of the iframe) (-7 adjustment of the call to action menu (25-18))
-    y = y + topBody + height; // Calculate the bottom position of the input
+    x = x + leftBody + width - 367; // (-370 width of the iframe + 10 to adjust with the shadow) (-7 adjustment of the call to action menu (18-25))
+    y = y + topBody + height; // Calculate the middle position of the input, 8 is the half of the iframe height
     return { top: y, left: x };
   }
 
