@@ -62,7 +62,7 @@ const Template = () =>
   <React.Fragment>
     <div style={{display: "grid", gridTemplateColumns: "repeat(auto-fill, 10%)"}}>
       {iconsNames.map(iconName =>
-        <div style={{marginTop: "1rem"}}>
+        <div key={iconName} style={{marginTop: "1rem"}}>
           <div style={{fontSize: "1rem", marginBottom: "1rem"}}>{iconName}</div>
           <Icon name={iconName} big={true} />
         </div>)}
