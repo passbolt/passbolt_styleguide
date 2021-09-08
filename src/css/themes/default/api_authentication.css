@@ -3134,14 +3134,12 @@ body {
   height: 25rem;
 }
 .login.page .introduce-setup-extension .arrow {
-  background: transparent url('../../../img/illustrations/arrow.png') right top no-repeat;
-  width: 40%;
-  height: 50%;
+  background: transparent url('../../../img/illustrations/wave-pin_my_extension.svg') center top no-repeat;
+  width: 10rem;
+  height: 10rem;
   position: absolute;
   top: 0;
-  right: 4.8%;
-  background-size: cover;
-  z-index: -1;
+  right: calc(3.75rem - calc(100vw - 100%));
 }
 .login.page .browser-not-supported a.browser {
   border: 0;
