@@ -130,7 +130,6 @@ class DisplayResourcesList extends React.Component {
   async handleResourceSelected(event, resource) {
     event.preventDefault();
     event.stopPropagation();
-
     await this.selectResource(resource, event);
   }
 
@@ -164,6 +163,8 @@ class DisplayResourcesList extends React.Component {
   }
 
   async handleCheckboxWrapperClick(event, resource) {
+    // Prevent event fired twice due to the input + label
+    event.preventDefault();
     /*
      * We want the td to extend the clickable area of the checkbox.
      * If we propagate the event, the tr will listen to the click and select only the clicked row.
@@ -216,7 +217,7 @@ class DisplayResourcesList extends React.Component {
    * @param resource A resource
    */
   isResourceSelected(resource) {
-    return this.props.resourceWorkspaceContext.selectedResources.some(selectedResource => resource.id === selectedResource.id);
+    return this.selectedResources.some(selectedResource => resource.id === selectedResource.id);
   }
 
   async handleCopyUsernameClick(ev, resource) {

@@ -113,6 +113,12 @@ class DisplayUsers extends React.Component {
    * @param user An user
    */
   handleCheckboxWrapperClick(event, user) {
+    // Prevent event fired twice due to the input + label
+    event.preventDefault();
+    /*
+     * We want the td to extend the clickable area of the checkbox.
+     * If we propagate the event, the tr will listen to the click and select only the clicked row.
+     */
     event.stopPropagation();
     this.props.userWorkspaceContext.onUserSelected.single(user);
   }
