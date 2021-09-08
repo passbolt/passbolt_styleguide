@@ -322,9 +322,9 @@ class AdministrationWorkspaceContextProvider extends React.Component {
    * @return {Promise<object>}
    */
   async onGetSynchronizeUsersDirectoryRequested() {
-    const apiClientOptions = this.props.context.getApiClientOptions().setResourceName("directorysync");
+    const apiClientOptions = this.props.context.getApiClientOptions().setResourceName("directorysync/synchronize");
     const apiClient = new ApiClient(apiClientOptions);
-    return apiClient.get("synchronize");
+    return apiClient.create({});
   }
 
   /**
