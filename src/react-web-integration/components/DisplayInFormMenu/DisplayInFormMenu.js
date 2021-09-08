@@ -69,7 +69,8 @@ class DisplayInFormMenu extends React.Component {
         suggestedResources: null, // Suggested resources to display
         secretGeneratorConfiguration: null, // A secret generator configuration
       }, // The display configuration of the menu
-      generatedPassword: null // Generated passord
+      generatedPassword: null, // Generated password
+      resourceIdProcessing: null // The resource id processing
     };
   }
 
@@ -238,6 +239,8 @@ class DisplayInFormMenu extends React.Component {
         <DisplayInFormMenuItem
           key={resource.id}
           onClick={() => this.handleUseSuggestedResourceRequestedEvent(resource.id)}
+          processing={this.state.resourceIdProcessing === resource.id}
+          disabled={this.state.resourceIdProcessing === resource.id}
           title={resource.name}
           description={resource.username}
           icon="key"/>
@@ -282,8 +285,14 @@ class DisplayInFormMenu extends React.Component {
    * Whenever the user requests to use the suggested resource as credentials in the current page
    * @param resourceId
    */
-  handleUseSuggestedResourceRequestedEvent(resourceId) {
-    this.props.context.port.request('passbolt.in-form-menu.use-suggested-resource', resourceId);
+  async handleUseSuggestedResourceRequestedEvent(resourceId) {
+    await this.setState({resourceIdProcessing: resourceId});
+    try {
+      await this.props.context.port.request('passbolt.in-form-menu.use-suggested-resource', resourceId);
+    } catch (error) {
+      console.log(error)
+    }
+    await this.setState({resourceIdProcessing: null});
   }
 
   /**
