@@ -845,11 +845,11 @@ class DisplayUserDirectoryAdministration extends React.Component {
                         </div>
                       </div>
                     </div>
-                    <div className="singleline connection_info protocol_host_port clearfix required ad openldap">
+                    <div className="clearfix required ad openldap">
                       <label><Trans>Server url</Trans></label>
-                      <div className="input text field_protocol_host ad openldap">
+                      <div className="input text singleline connection_info ad openldap">
                         <div onClick={this.handleConnectionTypeClicked} ref={this.connectionTypeRef}
-                          className={`chosen-container chosen-container-single connection-type ${this.hasAllInputDisabled() ? "chosen-disabled" : "chosen-container-active"} ${this.state.openConnectionType ? "chosen-with-drop" : ""}`}>
+                          className={`protocol chosen-container chosen-container-single connection-type ${this.hasAllInputDisabled() ? "chosen-disabled" : "chosen-container-active"} ${this.state.openConnectionType ? "chosen-with-drop" : ""}`}>
                           <a className="chosen-single">
                             <span id="connection-type-input">{this.connectionType[this.state.connectionType]}</span>
                             <div>
@@ -877,14 +877,14 @@ class DisplayUserDirectoryAdministration extends React.Component {
                           <div id="server-input-feedback" className="error-message">{this.state.hostError}</div>
                           }
                         </div>
-                      </div>
-                      <div className="input text port ad openldap">
-                        <input id="port-input" type="number" className="required fluid form-element" name="port"
-                          value={this.state.port} onChange={this.handleInputChange} onKeyUp={this.handlePortInputKeyUp} placeholder={this.translate("port")}
-                          disabled={this.hasAllInputDisabled()}/>
-                        {this.state.portError &&
-                        <div id="port-input-feedback" className="error-message">{this.state.portError}</div>
-                        }
+                        <div className="input text port ad openldap">
+                          <input id="port-input" type="number" className="required fluid form-element" name="port"
+                                 value={this.state.port} onChange={this.handleInputChange} onKeyUp={this.handlePortInputKeyUp} placeholder={this.translate("port")}
+                                 disabled={this.hasAllInputDisabled()}/>
+                          {this.state.portError &&
+                          <div id="port-input-feedback" className="error-message">{this.state.portError}</div>
+                          }
+                        </div>
                       </div>
                     </div>
                     <div className="singleline clearfix">

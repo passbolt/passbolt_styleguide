@@ -194,6 +194,6 @@ module.exports = function(grunt) {
 	// 'grunt' will check code quality, and if no errors,
 	// compile LESS to CSS, and minify and concatonate all JS and CSS
 	grunt.registerTask('default', [ 'clean:all', 'less', 'cssmin', 'header', 'shell:build-apps', 'externalize-locale-string', 'symlink']);
-  grunt.registerTask('css', [ 'clean:css', 'less']);
+  grunt.registerTask('css', [ 'clean:css', 'less', 'cssmin']);
   grunt.registerTask('externalize-locale-string', ['i18next']);
 };
