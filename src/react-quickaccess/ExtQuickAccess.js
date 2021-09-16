@@ -22,7 +22,7 @@ import PassphraseDialog from "./components/PassphraseDialog/PassphraseDialog";
 import PropTypes from "prop-types";
 import SiteSettings from "../shared/lib/Settings/SiteSettings";
 import UserSettings from "../shared/lib/Settings/UserSettings";
-import TranslationProvider from "./components/Internationalisation/TranslationProvider";
+import TranslationProvider from "../shared/components/Internationalisation/TranslationProvider";
 import SetupExtensionInProgress from "./components/ExtensionSetup/SetupExtensionInProgress/SetupExtensionInProgress";
 import ManageQuickAccessMode from "./components/ManageQuickAccessMode/ManageQuickAccessMode";
 import PrivateRoute from "./components/PrivateRoute/PrivateRoute";
@@ -227,7 +227,7 @@ class ExtQuickAccess extends React.Component {
 
     return (
       <AppContext.Provider value={this.state}>
-        <TranslationProvider loadingPath="/data/locales/{{lng}}/{{ns}}.json">
+        <TranslationProvider loadingPath="/data/locales/{{lng}}/{{ns}}.json" locale={this.state?.locale}>
           <Router>
             <div className="container quickaccess" onKeyDown={this.handleKeyDown}>
               <Header logoutSuccessCallback={this.logoutSuccessCallback}/>
