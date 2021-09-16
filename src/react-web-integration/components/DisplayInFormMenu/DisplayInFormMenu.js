@@ -1,25 +1,23 @@
 /**
  * Passbolt ~ Open source password manager for teams
- * Copyright (c) 2020 Passbolt SA (https://www.passbolt.com)
+ * Copyright (c) 2021 Passbolt SA (https://www.passbolt.com)
  *
  * Licensed under GNU Affero General Public License version 3 of the or any later version.
  * For full copyright and license information, please see the LICENSE.txt
  * Redistributions of files must retain the above copyright notice.
  *
- * @copyright     Copyright (c) 2020 Passbolt SA (https://www.passbolt.com)
+ * @copyright     Copyright (c) 2021 Passbolt SA (https://www.passbolt.com)
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
- * @since         3.4.0
+ * @since         3.3.0
  */
 
 import React from "react";
+import PropTypes from "prop-types";
+import {withTranslation} from "react-i18next";
 import DisplayInFormMenuItem from "./DisplayInFormMenuItem";
 import {withAppContext} from "../../contexts/AppContext";
-import PropTypes from "prop-types";
 import {SecretGenerator} from "../../../shared/lib/SecretGenerator/SecretGenerator";
-
-
-
 
 /**
  * This component is a menu integrated into a target web page which includes
@@ -28,7 +26,7 @@ import {SecretGenerator} from "../../../shared/lib/SecretGenerator/SecretGenerat
  */
 class DisplayInFormMenu extends React.Component {
   /** The maximum length of visibility of a generated password */
-  static #TRUNCATED_GENERATED_PASSWORD_MAX_LENGTH = 15;
+  static TRUNCATED_GENERATED_PASSWORD_MAX_LENGTH = 15;
 
   /**
    * Default constructor
@@ -128,7 +126,7 @@ class DisplayInFormMenu extends React.Component {
    */
   get truncatedGeneratedPassword() {
     if (this.state.generatedPassword) {
-      const uplimitIndex = Math.min(DisplayInFormMenu.#TRUNCATED_GENERATED_PASSWORD_MAX_LENGTH, Math.floor(this.state.generatedPassword.length/2));
+      const uplimitIndex = Math.min(DisplayInFormMenu.TRUNCATED_GENERATED_PASSWORD_MAX_LENGTH, Math.floor(this.state.generatedPassword.length/2));
       return this.state.generatedPassword.substring(0,uplimitIndex);
     }
     return this.state.generatedPassword;
@@ -141,18 +139,8 @@ class DisplayInFormMenu extends React.Component {
   get filledUsernameMenuItems() {
     return [
       ...this.suggestedResourcesItems,
-      <DisplayInFormMenuItem
-        key="save-credentials"
-        onClick={this.handleSaveCredentialsRequestedEvent}
-        title="Save as new credential"
-        description="Save the data entered as a new credential"
-        icon="add"/>,
-      <DisplayInFormMenuItem
-        key="browse-credentials"
-        onClick={this.handleBrowseCredentialsRequestedEvent}
-        title="Browse credentials"
-        description="Search among available credentials"
-        icon="search"/>
+      this.saveAsNewCredentialItem,
+      this.browseCredentialsItem
     ];
   }
 
@@ -163,18 +151,8 @@ class DisplayInFormMenu extends React.Component {
   get emptyUsernameMenuItems() {
     return [
       ...this.suggestedResourcesItems,
-      <DisplayInFormMenuItem
-        key="create-new-credentials"
-        onClick={this.handleCreateNewCredentialsRequestedEvent}
-        title="Create a new credential"
-        description="Create and customize it yourself"
-        icon="add"/>,
-      <DisplayInFormMenuItem
-        key="browse-credentials"
-        onClick={this.handleBrowseCredentialsRequestedEvent}
-        title="Browser credentials"
-        description="Search among available credentials"
-        icon="search"/>
+      this.createNewCredentialItem,
+      this.browseCredentialsItem
     ];
   }
 
@@ -185,18 +163,8 @@ class DisplayInFormMenu extends React.Component {
   get filledPasswordMenuItems() {
     return [
       ...this.suggestedResourcesItems,
-      <DisplayInFormMenuItem
-        key="save-credentials"
-        onClick={this.handleSaveCredentialsRequestedEvent}
-        title="Save as new credential"
-        description="Save the data entered as a new credential"
-        icon="add"/>,
-      <DisplayInFormMenuItem
-        key="browse-credentials"
-        onClick={this.handleBrowseCredentialsRequestedEvent}
-        title="Browse credentials"
-        description="Search among available credentials"
-        icon="search"/>
+      this.saveAsNewCredentialItem,
+      this.browseCredentialsItem
     ];
   }
 
@@ -207,30 +175,67 @@ class DisplayInFormMenu extends React.Component {
   get emptyPasswordMenuItems() {
     return [
       ...this.suggestedResourcesItems,
-      <DisplayInFormMenuItem
-        key="generate-password"
-        onClick={this.handleGeneratePasswordRequestedEvent}
-        title="Generate a new password securely"
-        subtitle={<span className="in-form-menu-item-content-subheader-password">{this.truncatedGeneratedPassword}"</span>}
-        description="You will be able to save it after submitting"
-        icon="magic-wand"/>,
-      <DisplayInFormMenuItem
-        key="create-new-credentials"
-        onClick={this.handleCreateNewCredentialsRequestedEvent}
-        title="Create a new credential"
-        description="Create and customize it yourself"
-        icon="add"/>,
-      <DisplayInFormMenuItem
-        key="browse-credentials"
-        onClick={this.handleBrowseCredentialsRequestedEvent}
-        title="Browser credentials"
-        description="Search among available credentials"
-        icon="search"/>
+      this.generateNewPasswordItem,
+      this.createNewCredentialItem,
+      this.browseCredentialsItem
     ];
   }
 
   /**
-   * Returns the list of susggested resources menu items
+   * Return the generate a new credential menu item.
+   * @returns {JSX.Element}
+   */
+  get generateNewPasswordItem() {
+    return <DisplayInFormMenuItem
+      key="generate-password"
+      onClick={this.handleGeneratePasswordRequestedEvent}
+      title={this.props.t("Generate a new password securely")}
+      subtitle={<span className="in-form-menu-item-content-subheader-password">{this.truncatedGeneratedPassword}"</span>}
+      description={this.props.t("You will be able to save it after submitting")}
+      icon="magic-wand"/>;
+  }
+
+  /**
+   * Return the save as new credential menu item.
+   * @returns {JSX.Element}
+   */
+  get saveAsNewCredentialItem() {
+    return <DisplayInFormMenuItem
+      key="save-credentials"
+      onClick={this.handleSaveCredentialsRequestedEvent}
+      title={this.props.t("Save as new credential")}
+      description={this.props.t("Save the data entered as a new credential")}
+      icon="add"/>;
+  }
+
+  /**
+   * Return the create a new credential menu item.
+   * @returns {JSX.Element}
+   */
+  get createNewCredentialItem() {
+    return <DisplayInFormMenuItem
+      key="create-new-credentials"
+      onClick={this.handleCreateNewCredentialsRequestedEvent}
+      title={this.props.t("Create a new credential")}
+      description={this.props.t("Create and customize it yourself")}
+      icon="add"/>;
+  }
+
+  /**
+   * Return the browse credentials menu item.
+   * @returns {JSX.Element}
+   */
+  get browseCredentialsItem() {
+    return <DisplayInFormMenuItem
+      key="browse-credentials"
+      onClick={this.handleBrowseCredentialsRequestedEvent}
+      title={this.props.t("Browse credentials")}
+      description={this.props.t("Search among available credentials")}
+      icon="search"/>;
+  }
+
+  /**
+   * Returns the list of suggested resources menu items
    */
   get suggestedResourcesItems() {
     const suggestedResources = (this.state.configuration && this.state.configuration.suggestedResources) || [];
@@ -321,7 +326,8 @@ class DisplayInFormMenu extends React.Component {
 }
 
 DisplayInFormMenu.propTypes = {
-  context: PropTypes.any // The application context
+  context: PropTypes.any, // The application context
+  t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(DisplayInFormMenu);
+export default withAppContext(withTranslation('common')(DisplayInFormMenu));

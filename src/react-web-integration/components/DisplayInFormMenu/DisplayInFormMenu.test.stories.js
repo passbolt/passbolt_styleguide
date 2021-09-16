@@ -1,15 +1,15 @@
 /**
  * Passbolt ~ Open source password manager for teams
- * Copyright (c) 2020 Passbolt SA (https://www.passbolt.com)
+ * Copyright (c) 2021 Passbolt SA (https://www.passbolt.com)
  *
  * Licensed under GNU Affero General Public License version 3 of the or any later version.
  * For full copyright and license information, please see the LICENSE.txt
  * Redistributions of files must retain the above copyright notice.
  *
- * @copyright     Copyright (c) 2020 Passbolt SA (https://www.passbolt.com)
+ * @copyright     Copyright (c) 2021 Passbolt SA (https://www.passbolt.com)
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
- * @since         3.4.0
+ * @since         3.3.0
  */
 
 import React from "react";
@@ -83,7 +83,7 @@ const TemplateAllItemsMenu = () => {
           description="Save the data entered as a new credential"
           icon={magicWandIcon}/>
         <DisplayInFormMenuItem
-          title="Browser credentials"
+          title="Browse credentials"
           description="Search among available credentials"
           icon={searchIcon}/>
         <DisplayInFormMenuItem
@@ -133,7 +133,7 @@ const TemplateNoScroll = () => {
           description="Save the data entered as a new credential"
           icon={magicWandIcon}/>
         <DisplayInFormMenuItem
-          title="Browser credentials"
+          title="Browse credentials"
           description="Search among available credentials"
           icon={searchIcon}/>
       </DisplayInFormMenu>
@@ -178,7 +178,7 @@ const TemplateWithScroll = () => {
           description="Save the data entered as a new credential"
           icon={magicWandIcon}/>
         <DisplayInFormMenuItem
-          title="Browser credentials"
+          title="Browse credentials"
           description="Search among available credentials"
           icon={searchIcon}/>
       </DisplayInFormMenu>

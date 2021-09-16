@@ -1,21 +1,19 @@
 /**
  * Passbolt ~ Open source password manager for teams
- * Copyright (c) 2020 Passbolt SA (https://www.passbolt.com)
+ * Copyright (c) 2021 Passbolt SA (https://www.passbolt.com)
  *
  * Licensed under GNU Affero General Public License version 3 of the or any later version.
  * For full copyright and license information, please see the LICENSE.txt
  * Redistributions of files must retain the above copyright notice.
  *
- * @copyright     Copyright (c) 2020 Passbolt SA (https://www.passbolt.com)
+ * @copyright     Copyright (c) 2021 Passbolt SA (https://www.passbolt.com)
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
- * @since        3.4.0
+ * @since         3.3.0
  */
-
 import React from "react";
 import {withAppContext} from "../../contexts/AppContext";
 import PropTypes from "prop-types";
-
 
 /**
  * This component is a call-to-action integrated into a target web page which includes
@@ -65,7 +63,7 @@ class AskInFormMenuDisplay extends React.Component {
         isActive: false, // By default, inactive call-to-action
         suggestedResourcesCount: null // The number of resources to suggest
       }
-    }
+    };
   }
 
   /**
@@ -144,7 +142,7 @@ class AskInFormMenuDisplay extends React.Component {
         {this.state.isReady &&
           <a onClick={this.handleIconClick}>
             <div className="in-form-icon">
-              <div className={`in-form-icon-logo  in-form-icon-logo--${logoClassModifier}`} />
+              <div className={`in-form-icon-logo in-form-icon-logo--${logoClassModifier}`} />
             </div>
           </a>
         }
