@@ -23,7 +23,8 @@ export const PasswordGeneratorContext = React.createContext({
   settings: null, // The current settings of generators
   lastGeneratedPassword: null, // The last password generated
   onPasswordGenerated: () => {}, // Whenever the a password has been generated with the generator
-  onLastGeneratedPasswordCleared: () => {} // Whenever the last generated password must be cleared
+  onLastGeneratedPasswordCleared: () => {}, // Whenever the last generated password must be cleared
+  getSettings: () => {} // Whenever the settings must be get
 });
 
 /**
@@ -47,7 +48,8 @@ class PasswordGeneratorContextProvider extends React.Component {
       settings: null, // The current settings of generators
       lastGeneratedPassword: null, // The last password generated
       onPasswordGenerated: this.onPasswordGenerated.bind(this), // Whenever the a password has been generated with the generator
-      onLastGeneratedPasswordCleared: this.onLastGeneratedPasswordCleared.bind(this) // Whenever the last generated password must be cleared
+      onLastGeneratedPasswordCleared: this.onLastGeneratedPasswordCleared.bind(this), // Whenever the last generated password must be cleared
+      getSettings: this.getSettings.bind(this) // Whenever the settings must be get
     };
   }
 
@@ -55,17 +57,39 @@ class PasswordGeneratorContextProvider extends React.Component {
    * Whenever the component has been mounted
    */
   async componentDidMount() {
-    await this.initializePasswordGenerator();
+    this.initializePasswordGenerator();
   }
 
   /**
    * Initialize the password generator
    */
   async initializePasswordGenerator() {
-    const generatorSettings = await this.props.context.port.request('passbolt.password-generator.settings');
-    this.setState({
-      settings: generatorSettings
-    });
+    if (this.props.context.isAuthenticated) {
+      const generatorSettings = await this.props.context.port.request('passbolt.password-generator.settings');
+      await this.setState({
+        settings: generatorSettings
+      });
+    }
+  }
+
+  /**
+   * Whenever the component updated
+   * @param previousProps The component previous props
+   */
+  async componentDidUpdate(previousProps) {
+    await this.handleIsAuthenticatedChange(previousProps.context.isAuthenticated);
+  }
+
+  /**
+   * Whenever the contextual isAuthenticated has changed
+   * @param previousIsAuthenticated The previous isAuthenticated
+   */
+  async handleIsAuthenticatedChange(previousIsAuthenticated) {
+    // This is a way to tell that the user has been authenticated
+    const isAuthenticatedNow = !previousIsAuthenticated && this.props.context.isAuthenticated;
+    if (isAuthenticatedNow) {
+      this.initializePasswordGenerator();
+    }
   }
 
   /**
@@ -101,6 +125,17 @@ class PasswordGeneratorContextProvider extends React.Component {
    */
   async updateGeneratedPassword(lastGeneratedPassword) {
     await this.setState({lastGeneratedPassword});
+  }
+
+  /**
+   * Get the settings of the password generator
+   * @returns {Promise<*>}
+   */
+  async getSettings() {
+    if (!this.state.settings) {
+      await this.initializePasswordGenerator();
+    }
+    return this.state.settings;
   }
 
   /**

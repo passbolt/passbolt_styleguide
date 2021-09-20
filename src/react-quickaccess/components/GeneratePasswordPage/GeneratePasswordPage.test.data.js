@@ -11,7 +11,7 @@ export function defaultProps() {
           {
             "name": "Password",
             "type": "password",
-            "default_options": {
+            "default_options":{
               "length": 18,
               "look_alike": true,
               "min_length": 8,
@@ -22,54 +22,67 @@ export function defaultProps() {
                 "name": "upper",
                 "label": "A-Z",
                 "characters": "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+                "active": true
               },
               {
                 "name": "lower",
                 "label": "a-z",
                 "characters": "abcdefghijklmnopqrstuvwxyz",
+                "active": true
               },
               {
                 "name": "digit",
                 "label": "0-9",
                 "characters": "0123456789",
-                "required": true,
+                "active": true
+              },
+              {
+                "name": "special_char1",
+                "label": "# $ % & @ ^ ~",
+                "characters": "#$%&@^~",
+                "active": true
               },
               {
                 "name": "parenthesis",
                 "label": "{ [ ( | ) ] ] }",
                 "characters": "([|])",
-              },
-              {
-                "name": "special_char1",
-                "label": "# $ % & @ ^ ~",
-                "characters": "#$%&@^~"
+                "active": true
               },
               {
                 "name": "special_char2",
                 "label": ". , : ;",
-                "characters": ".,:;"
+                "characters": ".,:;",
+                "active": true
+              },
+              {
+                "name": "special_char3",
+                "label": "' \" `",
+                "characters": "'\"`",
+                "active": true
+              },
+              {
+                "name": "special_char4",
+                "label": "/ \\ _ -",
+                "characters": "/\\_-",
+                "active": true
               },
               {
                 "name": "special_char5",
                 "label": "< * + ! ? =",
-                "characters": "<*+!?="
+                "characters": "<*+!?=",
+                "active": true
               },
               {
                 "name": "emoji",
                 "label": "😘",
                 "characters": "😀😃😄😁😆😅😂🤣🥲☺️😊😇🙂🙃😉😌😍🥰😘😗😙😚😋😛😝😜🤪🤨🧐🤓😎🥸🤩🥳😏😒😞😔😟😕🙁☹️😣😖😫😩🥺😢😭😤😠😡🤬🤯😳🥵🥶😱😨😰😥😓🤗🤔🤭🤫🤥😶😐😑😬🙄😯😦😧😮😲🥱😴🤤😪😵🤐🥴🤢🤮🤧😷🤒🤕🤑🤠😈👿👹👺🤡💩👻💀☠️👽👾🤖🎃😺😸😹😻😼😽🙀😿😾"
-              },
-              {
-                "name": "ascii",
-                "label": "ascii",
-                "characters": "%&¡¢£¤¥¦§¨©ª«¬®¯°±²³µ¶·¸¹º»¼½¾¿ÀÁ ÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõö÷øùúûüýþÿŒœŠšŸƒ—„†‡•…‰€™"
               }
             ],
           },
           {
             "name": "Passphrase",
             "type": "passphrase",
-            "default_options": {
+            "default_options":{
               "word_count": 8,
               "word_case": "lowercase",
               "min_word": 4,
