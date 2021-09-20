@@ -35,7 +35,15 @@ class DisplayInFormMenu extends React.Component {
   constructor(props) {
     super(props);
     this.state = this.defaultState;
+    this.createRefs();
     this.bindCallbacks();
+  }
+
+  /**
+   * Create DOM nodes or React elements references in order to be able to access them programmatically.
+   */
+  createRefs() {
+    this.inFormMenuRef = React.createRef();
   }
 
   /**
@@ -43,12 +51,31 @@ class DisplayInFormMenu extends React.Component {
    */
   componentDidMount() {
     this.handleDisplayConfigurationReceivedEvent();
+    document.addEventListener('click', this.handleInFormMenuClickEvent);
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('click', this.handleInFormMenuClickEvent);
+  }
+
+  /**
+   * Handle click events on in form menu. close the component if the click occurred outside of the component.
+   * @param {ReactEvent} event The event
+   */
+  handleInFormMenuClickEvent(event) {
+    // Prevent close when the user click on an element of the in form menu
+    if (this.inFormMenuRef.current.contains(event.target)) {
+      return;
+    }
+    this.props.context.port.request('passbolt.in-form-menu.close');
   }
 
   /**
    * Binds methods callbacks
    */
   bindCallbacks() {
+    this.handleInFormMenuClickEvent = this.handleInFormMenuClickEvent.bind(this);
+
     this.handleCreateNewCredentialsRequestedEvent = this.handleCreateNewCredentialsRequestedEvent.bind(this);
     this.handleSaveCredentialsRequestedEvent = this.handleSaveCredentialsRequestedEvent.bind(this);
     this.handleBrowseCredentialsRequestedEvent = this.handleBrowseCredentialsRequestedEvent.bind(this);
@@ -316,7 +343,7 @@ class DisplayInFormMenu extends React.Component {
     return (
       <>
         {this.hasConfiguration &&
-        <div className={`in-form-menu ${items.length > 3 ? 'in-form-menu--scrollable' : ''}`}>
+        <div className={`in-form-menu ${items.length > 3 ? 'in-form-menu--scrollable' : ''}`} ref={this.inFormMenuRef}>
           {items}
         </div>
         }
