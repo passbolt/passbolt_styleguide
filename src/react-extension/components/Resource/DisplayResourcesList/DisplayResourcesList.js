@@ -717,11 +717,12 @@ class DisplayResourcesList extends React.Component {
                     <th className="cell-multiple-select selections s-cell">
                       <div className="input checkbox">
                         <input
+                          id="passwords-select-all"
                           type="checkbox"
                           name="select all"
                           checked={selectAll}
                           onChange={this.handleSelectAllChange}/>
-                        <label htmlFor="js-passwords-select-all">
+                        <label htmlFor="passwords-select-all">
                           <span className="visually-hidden">select all</span>
                         </label>
                       </div>
