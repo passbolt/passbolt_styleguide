@@ -15,14 +15,50 @@
 import {QuickAccessEvent} from "./Events/Quickaccess/QuickAccessEvent";
 import {AuthLogin} from "./AuthLogin/AuthLogin";
 import InFormManager from "./lib/InForm/InFormManager";
+import SiteSettings from "../shared/lib/Settings/SiteSettings";
 
 /**
  * Bootstrap the browser integration with browsed pages.
  */
-function init() {
+async function init() {
   AuthLogin.legacyAuthLogin();
+
+  if (!await isBrowserExtensionConfigured()) {
+    return;
+  }
+
   QuickAccessEvent.fillForm();
-  InFormManager.initialize();
+
+  const siteSettings = await getSiteSettings();
+  if (siteSettings?.canIUse('inFormIntegration')) {
+    InFormManager.initialize();
+  }
+}
+
+/**
+ * Check if the browser extension is configured.
+ * @returns {Promise<unknown>}
+ */
+async function isBrowserExtensionConfigured() {
+  try {
+    return await port.request('passbolt.addon.is-configured');
+  } catch (error) {
+    console.error(error);
+    return false;
+  }
+}
+
+/**
+ * Get the site settings.
+ * @returns {Promise<SiteSettings>}
+ */
+async function getSiteSettings() {
+  try {
+    const siteSettingsDto = await port.request('passbolt.organization-settings.get');
+    return new SiteSettings(siteSettingsDto);
+  } catch(error) {
+    console.error(error);
+  }
 }
 
 export const BrowserIntegrationBootstrap = {init};
