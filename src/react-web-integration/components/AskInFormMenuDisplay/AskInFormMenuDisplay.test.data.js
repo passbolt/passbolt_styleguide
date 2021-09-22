@@ -18,6 +18,7 @@
  */
 export const contextWithUnauthenticatedUser = {
   port: {
+    on: jest.fn(),
     request: () => {
       return {isAuthenticated: false, isMfaRequired: false}
     }
@@ -30,6 +31,7 @@ export const contextWithUnauthenticatedUser = {
  */
 export const contextWithAuthenticatedUser = {
   port: {
+    on: jest.fn(),
     request: () => {
       return {isAuthenticated: true, isMfaRequired: false}
     }

@@ -22,14 +22,6 @@ import PropTypes from "prop-types";
  */
 class AskInFormMenuDisplay extends React.Component {
   /**
-   * Returns the authentication check status
-   * @return {number}
-   */
-  static get informCallToActionCheckPeriod() {
-    return 6000;
-  }
-
-  /**
    * Default constructor
    * @param props Component props
    */
@@ -43,14 +35,34 @@ class AskInFormMenuDisplay extends React.Component {
    * Whenever the component is mounted
    */
   componentDidMount() {
-    this.scheduleCheckInformCallToActionStatus();
+    this.props.context.port.on("passbolt.auth.after-logout", this.handleUserLoggedOut.bind(this));
+    this.props.context.port.on("passbolt.auth.after-login", this.handleUserLoggedIn.bind(this));
+    this.checkAuthenticationStatus();
   }
 
   /**
-   * Whenever the component will unmount
+   * Handle when the user is logged in.
    */
-  componentWillUnmount() {
-    clearTimeout(this.scheduledCheckIsAuthenticatedTimeout);
+  async handleUserLoggedIn() {
+    const suggestedResourcesCount = await this.props.context.port.request("passbolt.in-form-cta.suggested-resources");
+    this.setState({
+      status: {
+        isActive: true,
+        suggestedResourcesCount
+      },
+    });
+  }
+
+  /**
+   * Handle when the user is logged out.
+   */
+  handleUserLoggedOut() {
+    this.setState({
+      status: {
+        isActive: false,
+        suggestedResourcesCount: 0
+      },
+    });
   }
 
   /**
@@ -93,17 +105,6 @@ class AskInFormMenuDisplay extends React.Component {
    */
   handleIconClick() {
     this.execute();
-  }
-
-  /**
-   * Check periodically the in-form call-to-action status
-   */
-  async scheduleCheckInformCallToActionStatus() {
-    await this.checkAuthenticationStatus();
-    this.scheduledCheckIsAuthenticatedTimeout = setTimeout(async() => {
-      await this.checkAuthenticationStatus();
-      await this.scheduleCheckInformCallToActionStatus();
-    }, AskInFormMenuDisplay.informCallToActionCheckPeriod);
   }
 
   /**
