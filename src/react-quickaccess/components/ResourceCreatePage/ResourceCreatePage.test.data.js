@@ -10,7 +10,10 @@ import userSettingsFixture from "../../../react-extension/test/fixture/Settings/
 export function defaultAppContext(appContext) {
   const defaultAppContext = {
     port: new MockPort(),
-    userSettings: new UserSettings(userSettingsFixture)
+    userSettings: new UserSettings(userSettingsFixture),
+    siteSettings: {
+      canIUse: () => true
+    }
   };
   return Object.assign(defaultAppContext, appContext || {});
 }
