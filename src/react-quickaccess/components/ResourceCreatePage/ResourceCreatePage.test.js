@@ -1,12 +1,13 @@
 import React from "react";
 import {render, fireEvent, cleanup} from '@testing-library/react';
-import {StaticRouter} from 'react-router';
+import {StaticRouter} from 'react-router-dom';
 import ResourceCreatePage from "./ResourceCreatePage";
 import "../../../shared/lib/Secret/SecretComplexity";
 import {waitFor} from "@testing-library/dom";
 import MockTranslationProvider
   from "../../../react-extension/test/mock/components/Internationalisation/MockTranslationProvider";
 import MockPort from "../../../react-extension/test/mock/MockPort";
+import {defaultAppContext} from "./ResourceCreatePage.test.data";
 
 // Reset the modules before each test.
 beforeEach(() => {
@@ -24,9 +25,7 @@ describe("ResourceCreatePage", () => {
   describe("Form initialization", () => {
 
     it("should intialize the name and uri input fields with the active tab metadata", async() => {
-      const context = {
-        port: new MockPort()
-      };
+      const context = defaultAppContext();
       // mock the passbolt messaging layer.
       context.port = {
         request: event => new Promise(resolve => {
@@ -72,13 +71,13 @@ describe("ResourceCreatePage", () => {
         })
       };
 
-      const context = {};
+      const context = defaultAppContext();
 
       jest.useFakeTimers();
       const component = render(
         <MockTranslationProvider>
           <StaticRouter context={context}>
-            <ResourceCreatePage debug />
+            <ResourceCreatePage context={context} debug />
           </StaticRouter>
         </MockTranslationProvider>
       );
@@ -108,11 +107,11 @@ describe("ResourceCreatePage", () => {
       };
 
       jest.useFakeTimers();
-      const context = {};
+      const context = defaultAppContext();
       const component = render(
         <MockTranslationProvider>
           <StaticRouter context={context}>
-            <ResourceCreatePage debug />
+            <ResourceCreatePage context={context} debug />
           </StaticRouter>
         </MockTranslationProvider>
       );
@@ -137,9 +136,7 @@ describe("ResourceCreatePage", () => {
   describe("Form submition", () => {
     it("should create a new password on submit", async () => {
       const createPasswordEventMockCallback = jest.fn();
-      const context = {
-        port: new MockPort()
-      };
+      const context = defaultAppContext();
       // Mock the passbolt messaging layer.
       context.port = {
         request: function(event) {
