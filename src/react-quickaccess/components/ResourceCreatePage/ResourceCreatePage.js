@@ -70,8 +70,8 @@ class ResourceCreatePage extends React.Component {
    *  Resource password generator
    * =============================================================
    */
-  get currentGeneratorConfiguration() {
-    const type = this.props.passwordGeneratorContext.settings.default_generator;
+  async getCurrentGeneratorConfiguration() {
+    const type = (await this.props.passwordGeneratorContext.getSettings()).default_generator;
     return this.props.passwordGeneratorContext.settings.generators.find(generator => generator.type === type);
   }
 
@@ -121,9 +121,13 @@ class ResourceCreatePage extends React.Component {
       }
       if (tabInfo.username?.length > 0) {
         username = tabInfo.username;
+      } else {
+        username = this.props.context.userSettings.username;
       }
       if (tabInfo.secret_clear?.length > 0) {
         password = tabInfo.secret_clear;
+      } else {
+        password = SecretGenerator.generate(await this.getCurrentGeneratorConfiguration());
       }
     } catch (error) {
       console.error(error);
@@ -249,12 +253,12 @@ class ResourceCreatePage extends React.Component {
     this.setState({ viewPassword: !this.state.viewPassword });
   }
 
-  handleGeneratePasswordButtonClick() {
+  async handleGeneratePasswordButtonClick() {
     if (this.state.processing) {
       return;
     }
 
-    const password = SecretGenerator.generate(this.currentGeneratorConfiguration);
+    const password = SecretGenerator.generate(await this.getCurrentGeneratorConfiguration());
     this.loadPassword(password);
   }
 

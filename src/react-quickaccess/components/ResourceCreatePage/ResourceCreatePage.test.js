@@ -7,7 +7,8 @@ import {waitFor} from "@testing-library/dom";
 import MockTranslationProvider
   from "../../../react-extension/test/mock/components/Internationalisation/MockTranslationProvider";
 import MockPort from "../../../react-extension/test/mock/MockPort";
-import {defaultAppContext} from "./ResourceCreatePage.test.data";
+import "../../../react-extension/test/lib/crypto/cryptoGetRandomvalues";
+import {defaultAppContext, defaultProps} from "./ResourceCreatePage.test.data";
 
 // Reset the modules before each test.
 beforeEach(() => {
@@ -37,12 +38,13 @@ describe("ResourceCreatePage", () => {
           }
         })
       };
+      const props = defaultProps();
 
       jest.useFakeTimers();
       const component = render(
         <MockTranslationProvider>
           <StaticRouter context={context}>
-            <ResourceCreatePage context={context} debug />
+            <ResourceCreatePage context={context} passwordGeneratorContext={props.passwordGeneratorContext} debug />
           </StaticRouter>
         </MockTranslationProvider>
       );
@@ -56,6 +58,10 @@ describe("ResourceCreatePage", () => {
       expect(nameInput.value).toBe("Passbolt Browser Extension Test");
       const uriInput = component.container.querySelector('[name="uri"]');
       expect(uriInput.value).toBe("https://passbolt-browser-extension/test");
+      const usernameInput = component.container.querySelector('[name="username"]');
+      expect(usernameInput.value).toBe(context.userSettings.username);
+      const passwordInput = component.container.querySelector('[name="password"]');
+      expect(passwordInput.value).toBe("AAAAAAAAAAAAAAAAAA");
     });
 
     it("should not initialize with chrome new tab metadata", async () => {
