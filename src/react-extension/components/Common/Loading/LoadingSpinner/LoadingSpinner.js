@@ -12,6 +12,7 @@
  * @since         2.13.0
  */
 import React from "react";
+import PropTypes from "prop-types";
 
 /**
  * This component displays a waiting loading spinner
@@ -23,15 +24,23 @@ class LoadingSpinner extends React.Component {
   render() {
     return (
       <div className="login-processing">
+        <h1>{this.props.title}</h1>
         <div className="processing-wrapper">
           <div  className="processing">
           </div>
         </div>
-        <h1>Please wait...</h1>
       </div>
     );
   }
 }
+
+LoadingSpinner.propTypes = {
+  title: PropTypes.string,
+};
+
+LoadingSpinner.defaultProps = {
+  title: "Please wait..."
+};
 
 export default LoadingSpinner;
 

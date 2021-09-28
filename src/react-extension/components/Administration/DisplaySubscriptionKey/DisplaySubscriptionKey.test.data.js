@@ -40,13 +40,16 @@ export function formatDate(date) {
   }
 }
 
+const expiredDate = new Date();
+expiredDate.setMonth(expiredDate.getMonth() + 3);
+
 export const mockSubscription = {
   "customer_id": "1n6BPvHRWfizhmARz",
   "subscription_id": "1n6BPvHRWfizhmARz",
   "users": 5,
   "email": "ada@passbolt.com",
   "created": "2020-12-01",
-  "expiry": "2021-12-01",
+  "expiry": formatDate(expiredDate.toISOString()),
   "data": "data"
 };
 
