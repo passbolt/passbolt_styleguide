@@ -81,6 +81,14 @@ input[type=email]:disabled {
 }
 
 /*
+	Always visible arrow for Chrome to be coherent with Firefox
+*/
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  opacity: 1;
+}
+
+/*
 	Textarea Textfield
 */
 textarea {
