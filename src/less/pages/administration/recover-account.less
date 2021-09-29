@@ -1,0 +1,52 @@
+.recover-account-settings {
+  .input.radio {
+    display: flex;
+    align-items: center;
+    border: 1px solid @border-default;
+    background-color: @background-lighter;
+    padding: 1.6rem;
+    margin-top: 1.6rem;
+
+    &.checked {
+      border: 2px solid @border-focus;
+    }
+
+    label p {
+      font-weight: normal;
+    }
+
+    .radio-text {
+      padding-left: 1.6rem;
+    }
+  }
+
+  .recovery-key-details {
+    border: 1px solid @border-default;
+    padding: 1.6rem;
+    display: flex;
+    align-items: baseline;
+    background-color: @background-lighter;
+
+    .table-info {
+      flex: 1 1 auto;
+
+      .label {
+        color: @font-default;
+      }
+      .value {
+        color: @font-default;
+      }
+      .table-button {
+        float: right;
+
+        button {
+          margin: 0;
+        }
+      }
+
+      .empty-value {
+        color: @font-light;
+      }
+    }
+  }
+}
