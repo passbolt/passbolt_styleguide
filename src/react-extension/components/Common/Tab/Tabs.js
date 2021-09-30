@@ -53,7 +53,9 @@ class Tabs extends React.Component {
    */
   handleTabClick(tabItem) {
     this.setState({activeTabName: tabItem.name});
-    tabItem.onClick();
+    if (typeof tabItem.onClick == 'function') {
+      tabItem.onClick();
+    }
   }
 
   render() {
