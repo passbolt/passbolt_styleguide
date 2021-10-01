@@ -62,11 +62,15 @@ describe.only("SecretGeneratorComplexity", () => {
             "aaaaaa": 28.2,
             "AAAAAA": 28.2,
             "111111": 19.93,
-            "((((((": 13.93,
+            "((((((": 16.84,
             "#$%&@^~": 19.65,
             ".,:;": 8,
             "<*+!?=": 15.51,
             "aaaAAA1111": 59.54,
+            "🇫🇷": 0, // A char which doesn't match the known masks.
+            "😸😸😸😸😸😸😸😸": 50.58,
+            "😸😸😸😸😸😸😸🇫🇷": 50.58,
+            "aA1(~:<😸": 59,
         };
 
         for (let password in passwordsAndEntropy) {
@@ -74,28 +78,11 @@ describe.only("SecretGeneratorComplexity", () => {
             expect(roundedEntropy).toBe(passwordsAndEntropy[password]);
         }
     });
-    
-    //It is skipped for the moment as entropy computation with emoji is buggy.
-    //This should be part of the previous unit test but to avoid to skip all the password's entropy computation test,
-    //it has been splitted this way and marked as skipped.
-    //Later, when the bug is fixed, we might include these 2 tests in the previous test and remove this one.
-    //Also, the resulting entropy may vary a bit due to float rounding. So, results might need to be adapted a bit (reasonably of course).
-    it.skip("should compute the right entropy given a password that includes emojis", () => {
-        const passwordsAndEntropy = {
-            "🙀🙀🙀🙀🙀🙀": 41.22,
-            "aA1(~:<🙀": 61.03,
-        };
 
-        for (let password in passwordsAndEntropy) {
-            let roundedEntropy = roundEntropy(SecretGeneratorComplexity.entropyPassword(password));
-            expect(roundedEntropy).toBe(passwordsAndEntropy[password]);
-        }
-    });
-    
     it("should compute the right entropy given a passphrase", () => {
         const entropyOf = (wordCount, spacing) => roundEntropy(SecretGeneratorComplexity.entropyPassphrase(wordCount, spacing));
         //Currently, the tests are written considering that there are 7776 words in the dictionnary and 3 word cases
-        
+
         expect(entropyOf(5, "")).toBe(64.63);
         expect(entropyOf(5, "  ")).toBe(64.86);
         expect(entropyOf(10, "")).toBe(129.25);
