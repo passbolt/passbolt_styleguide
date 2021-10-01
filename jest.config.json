@@ -1,9 +1,0 @@
-{
-  "transform": {
-    "^.+\\.js$": "./.jest.transform.js"
-  },
-  "setupFiles": [
-    "jest-webextension-mock"
-  ],
-  "setupFilesAfterEnv": ["<rootDir>/.jest.setup.js"]
-}
