@@ -258,25 +258,15 @@ class CreateGpgKey extends Component {
             <Trans>This passphrase is the only passphrase you will need to remember from now on, choose wisely!</Trans>
           </p>
           <div className="input text password required">
-            {this.state.isObfuscated &&
-              <input
-                id="passphrase-input"
-                type="password"
-                ref={this.passphraseInput}
-                value={this.state.passphrase}
-                onChange={this.handlePassphraseChange}
-                disabled={!this.areActionsAllowed}
-                autoFocus={true}/>
-            }
-            {!this.state.isObfuscated &&
-              <input
-                id="passphrase-input"
-                type="text"
-                ref={this.passphraseInput}
-                value={this.state.passphrase}
-                onChange={this.handlePassphraseChange}
-                disabled={!this.areActionsAllowed}/>
-            }
+            <input
+              id="passphrase-input"
+              type={this.state.isObfuscated ? "password" : "text"}
+              ref={this.passphraseInput}
+              value={this.state.passphrase}
+              onChange={this.handlePassphraseChange}
+              disabled={!this.areActionsAllowed}
+              autoFocus={true}
+              autoComplete="off"/>
             <a
               className={`password-view button-icon button button-toggle ${this.state.isObfuscated ? "" : "selected"}`}
               role="button"

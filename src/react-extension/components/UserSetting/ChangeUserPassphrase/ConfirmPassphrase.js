@@ -196,6 +196,7 @@ class ConfirmPassphrase extends React.Component {
                     value={this.state.passphrase}
                     onChange={this.handleInputChange}
                     disabled={this.hasAllInputDisabled()}
+                    autoComplete="off"
                   />
                   <a
                     className={`password-view button-icon button button-toggle ${this.state.isObfuscated ? "" : "selected"}`}

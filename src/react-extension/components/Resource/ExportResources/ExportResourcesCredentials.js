@@ -241,7 +241,8 @@ class ExportResourcesCredentials extends Component {
                   type={this.state.showPassword ? "text" : "password"}
                   placeholder={this.translate("Passphrase")}
                   ref={this.passwordInputRef}
-                  disabled={!this.areActionsAllowed}/>
+                  disabled={!this.areActionsAllowed}
+                  autoComplete="off"/>
                 <ul className="actions inline">
                   <li>
                     <a

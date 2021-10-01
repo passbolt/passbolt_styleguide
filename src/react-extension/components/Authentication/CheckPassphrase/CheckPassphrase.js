@@ -254,7 +254,8 @@ class CheckPassphrase extends Component {
                 name="passphrase"
                 value={this.state.passphrase}
                 onChange={this.handleChangePassphrase}
-                disabled={!this.areActionsAllowed}/>
+                disabled={!this.areActionsAllowed}
+                autoComplete="off"/>
               <a
                 className={`password-view button-icon button button-toggle ${this.state.isObfuscated ? "" : "selected"}`}
                 role="button"
