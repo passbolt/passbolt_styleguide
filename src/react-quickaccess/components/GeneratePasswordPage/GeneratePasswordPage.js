@@ -191,14 +191,17 @@ class GeneratePasswordPage extends React.Component {
             <div className="form-container">
               <div className="input text password">
                 <label htmlFor="password"><Trans>Password</Trans></label>
-                <input name="password"
+                <input
+                  id="password"
+                  name="password"
                   readOnly="readOnly"
                   className="required"
                   placeholder={this.translate("Password")}
                   type={this.state.isObfuscated ? "password" : "text"}
                   value={this.state.password}
                   onChange={this.handleInputChange}
-                  disabled={this.state.processing} id="password"/>
+                  disabled={this.state.processing}
+                  autoComplete="off"/>
                 <a onClick={this.handleViewPasswordToggle}
                   className={`password-view button button-icon toggle ${this.state.isObfuscated ? "" : "selected"}`}>
                   <span className="fa icon">

@@ -119,7 +119,7 @@ class LoginPage extends React.Component {
                 <label htmlFor="passphrase"><Trans>Passphrase</Trans></label>
                 <input type="password" name="passphrase" placeholder={this.translate('passphrase')} id="passphrase" autoFocus ref={this.passphraseInputRef}
                   value={this.state.passphrase} onChange={this.handleInputChange} onFocus={this.handleInputFocus} onBlur={this.handleInputBlur}
-                  disabled={this.state.processing} style={this.state.passphraseStyle} />
+                  disabled={this.state.processing} style={this.state.passphraseStyle} autoComplete="off"/>
                 <span className="security-token" style={this.state.securityTokenStyle}>{this.props.context.userSettings.getSecurityTokenCode()}</span>
                 {this.state.error &&
                 <div className="error-message">{this.state.error}</div>

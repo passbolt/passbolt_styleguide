@@ -209,7 +209,8 @@ class GenerateResourcePassword extends Component {
                     type={this.state.isObfuscated ? "password" : "text"}
                     value={this.state.password}
                     onChange={this.handleInputChange}
-                    disabled={this.state.processing}/>
+                    disabled={this.state.processing}
+                    autoComplete="off"/>
                   <a
                     onClick={this.handleViewPasswordToggle}
                     className={`password-view button button-icon toggle ${this.state.isObfuscated ? "" : "selected"}`}>

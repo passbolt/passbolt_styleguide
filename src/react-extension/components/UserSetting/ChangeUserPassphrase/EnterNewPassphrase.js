@@ -249,25 +249,15 @@ class EnterNewPassphrase extends React.Component {
               <h3><Trans>Please enter a new passphrase</Trans></h3>
               <div className="form-content">
                 <div className="input text password required">
-                  {this.state.isObfuscated &&
                   <input
                     id="passphrase-input"
-                    type="password"
+                    type={this.state.isObfuscated ? "password" : "text"}
                     ref={this.passphraseInput}
                     value={this.state.passphrase}
                     onChange={this.handlePassphraseChange}
                     disabled={!this.areActionsAllowed}
-                    autoFocus={true}/>
-                  }
-                  {!this.state.isObfuscated &&
-                  <input
-                    id="passphrase-input"
-                    type="text"
-                    ref={this.passphraseInput}
-                    value={this.state.passphrase}
-                    onChange={this.handlePassphraseChange}
-                    disabled={!this.areActionsAllowed}/>
-                  }
+                    autoFocus={true}
+                    autoComplete="off"/>
                   <a
                     className={`password-view button-icon button button-toggle ${this.state.isObfuscated ? "" : "selected"}`}
                     role="button"

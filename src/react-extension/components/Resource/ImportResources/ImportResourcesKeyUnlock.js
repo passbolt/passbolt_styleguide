@@ -276,7 +276,8 @@ class ImportResourcesKeyUnlock extends Component {
                   type={this.state.showPassword ? "text" : "password"}
                   disabled={this.hasAllInputDisabled()}
                   placeholder={this.translate('Passphrase')}
-                  ref={this.passwordInputRef}/>
+                  ref={this.passwordInputRef}
+                  autoComplete="off"/>
                 <ul className="actions inline">
                   <li>
                     <a

@@ -357,7 +357,8 @@ class Login extends Component {
                     onFocus={this.handleFocusPassphrase}
                     onBlur={this.handleBlurPassphrase}
                     disabled={!this.areActionsAllowed}
-                    autoFocus={true}/>
+                    autoFocus={true}
+                    autoComplete="off"/>
                   <a
                     className={`password-view button-icon button button-toggle ${this.state.isObfuscated ? "" : "selected"}`}
                     role="button"

@@ -331,6 +331,7 @@ class InputPassphrase extends Component {
                     onChange={this.handleInputChange}
                     disabled={this.state.processing}
                     style={passphraseStyle}
+                    autoComplete="off"
                   />
                   <a
                     className={`password-view button-icon button button-toggle ${this.state.isObfuscated ? "" : "selected"}`}
