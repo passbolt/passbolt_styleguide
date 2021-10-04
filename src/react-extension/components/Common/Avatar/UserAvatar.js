@@ -13,6 +13,7 @@
  */
 import React, {Component} from "react";
 import PropTypes from "prop-types";
+import Icon from "../Icons/Icon";
 
 class UserAvatar extends Component {
   /**
@@ -131,6 +132,9 @@ class UserAvatar extends Component {
         {this.state.error &&
         <img src={this.getDefaultAvatarUrl()} alt={this.getAltText()}/>
         }
+        {this.props.pendingRecover &&
+        <Icon name="exclamation"/>
+        }
       </div>
     );
   }
@@ -143,6 +147,7 @@ UserAvatar.defaultProps = {
 UserAvatar.propTypes = {
   baseUrl: PropTypes.string,
   user: PropTypes.object,
+  pendingRecover: PropTypes.bool,
   className: PropTypes.string
 };
 
