@@ -109,17 +109,19 @@
         /* shimmering skeleton when loading */
         .row.skeleton {
             height:42px;
+            position:relative;
             .avatar {
                 float: left;
                 width:3em;
                 height:3em;
                 background:@input-background-disabled;
                 border-radius:50%;
+                flex:none
             }
             .aro {
                 .aro-name {
                     margin-top:.25em;
-                    width: 10em;
+                    width: 7em;
                     height: 1em;
                     background:@input-background-disabled;
                     .rounded();
@@ -127,7 +129,7 @@
                 .aro-details {
                     .rounded();
                     margin-top:.5em;
-                    width: 7em;
+                    width: 10em;
                     height: 1em;
                     background:@input-background-disabled;
                 }
@@ -136,19 +138,25 @@
             .select.rights {
                 .rounded();
                 float:left;
-                margin-top:1em;
-                width: 8em;
-                height: 1.2em;
+                margin-top:0.65rem;
+                width: 7.3em;
+                height: 1.9em;
                 background:@input-background-disabled;
             }
             .actions {
                 border-radius:50%;
                 float:right;
-                width: 1.5em;
-                height: 1.5em;
-                margin-top:.9em;
-                margin-right:1.5em;
+                width: 1.116rem;
+                height: 1.116rem;
+                margin-top:.7rem;
+                margin-right:1.62rem;
                 background:@input-background-disabled;
+                margin-left:0.625rem;
+            }
+            .shimmer {
+                position:absolute;
+                top:0;
+                left:0;
             }
         }
     }
