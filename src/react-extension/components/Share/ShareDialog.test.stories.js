@@ -34,7 +34,7 @@ const context = {
 
 const Template = args =>
   <MockTranslationProvider>
-    <AppContext.Provider value={context}>
+    <AppContext.Provider value={args.context}>
       <MemoryRouter initialEntries={['/']}>
         <Route component={routerProps => <ShareDialog {...args} {...routerProps}/>}></Route>
       </MemoryRouter>
@@ -42,6 +42,12 @@ const Template = args =>
   </MockTranslationProvider>;
 
 
-
 export const Initial = Template.bind({});
+Initial.args = {
+  context: context
+};
 
+export const Loading = Template.bind({});
+Loading.args = {
+  context: {...context, port: {}}
+};
