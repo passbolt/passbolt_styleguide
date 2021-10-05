@@ -1,5 +1,3 @@
-
-
 /**
  * Passbolt ~ Open source password manager for teams
  * Copyright (c) 2020 Passbolt SA (https://www.passbolt.com)
@@ -126,14 +124,15 @@ describe("Share Action Feedbacks", () => {
 
       it('I should not see the feedback message anymore', async() => {
         jest.spyOn(propsForDisplayTime.actionFeedbackContext, 'remove').mockImplementation(() => {}).mockClear();
-        await page.persist(1);
-        await page.close(1);
 
-        const twoSecondsAfterExpectedRemoval = 2000;
+        const twoSecondsAfterExpectedRemoval = 500;
         setTimeout(() => {
           const firstFeedback = propsWithOneSuccessMessage.actionFeedbackContext.feedbacks[0];
           expect(propsForDisplayTime.actionFeedbackContext.remove).toHaveBeenCalledWith(firstFeedback);
         }, twoSecondsAfterExpectedRemoval);
+
+        await page.persist(1);
+        await page.close(1);
         jest.runAllTimers();
       });
     });

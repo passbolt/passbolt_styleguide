@@ -1,9 +1,13 @@
 {
-  "transform": {
-    "^.+\\.js$": "./.jest.transform.js"
-  },
+  "testEnvironment": "jsdom",
   "setupFiles": [
     "jest-webextension-mock"
   ],
-  "setupFilesAfterEnv": ["<rootDir>/.jest.setup.js"]
+  "setupFilesAfterEnv": ["<rootDir>/.jest.setup.js"],
+  "transform": {
+    "^.+\\.js$": ["babel-jest", {
+      "presets": ["@babel/env", "@babel/react"],
+      "plugins": ["@babel/plugin-transform-runtime"]
+    }]
+  }
 }
