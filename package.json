@@ -1,6 +1,6 @@
 {
   "name": "passbolt-styleguide",
-  "version": "3.3.0-alpha.3",
+  "version": "3.3.0-alpha.4",
   "license": "AGPL-3.0",
   "copyright": "Copyright 2021 Passbolt SA",
   "description": "Passbolt styleguide contains common styling assets used by the different sites, plugin, etc.",
@@ -16,7 +16,6 @@
     "babel-jest": "^27.2.4",
     "babel-loader": "^8.0.4",
     "copy-webpack-plugin": "^8.1.1",
-    "debounce-promise": "^3.1.2",
     "eslint": "^7.27.0",
     "eslint-plugin-import": "^2.23.3",
     "eslint-plugin-jest": "^23.20.0",
@@ -45,6 +44,7 @@
   "dependencies": {
     "@testing-library/dom": "^7.31.0",
     "@testing-library/react": "^10.4.9",
+    "debounce-promise": "^3.1.2",
     "grapheme-splitter": "^1.0.4",
     "i18next": "^19.8.5",
     "i18next-http-backend": "^1.2.4",
