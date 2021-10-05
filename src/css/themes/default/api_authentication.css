@@ -389,9 +389,9 @@ html body .hidden {
  * Border radius
  */
 .rounded {
-  -webkit-border-radius: 0.214em;
-  -moz-border-radius: 0.214em;
-  border-radius: 0.214em;
+  -webkit-border-radius: 0.3rem;
+  -moz-border-radius: 0.3rem;
+  border-radius: 0.3rem;
 }
 /* ellipsis */
 .ellipsis {
@@ -535,9 +535,9 @@ button,
   font-weight: normal;
   text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.5);
   background: #F3F3F3;
-  -webkit-border-radius: 0.214em;
-  -moz-border-radius: 0.214em;
-  border-radius: 0.214em;
+  -webkit-border-radius: 0.3rem;
+  -moz-border-radius: 0.3rem;
+  border-radius: 0.3rem;
   box-sizing: border-box;
 }
 /* sizes */
@@ -651,9 +651,9 @@ button,
   background: #FFF url('../../../img/controls/loading_light.svg') center center no-repeat;
   background-size: auto 50% ;
   border: 1px solid #DDD;
-  -webkit-border-radius: 0.214em;
-  -moz-border-radius: 0.214em;
-  border-radius: 0.214em;
+  -webkit-border-radius: 0.3rem;
+  -moz-border-radius: 0.3rem;
+  border-radius: 0.3rem;
 }
 input[type=submit].button.processing {
   font-size: 0;
@@ -740,7 +740,7 @@ textarea {
   vertical-align: middle;
 }
 input[type=number] {
-  box-sizing: initial;
+  box-sizing: border-box;
 }
 input[type=file] {
   box-sizing: border-box;
@@ -783,6 +783,13 @@ input[type=email]:disabled {
   box-shadow: 0 0 0 0;
   cursor: default;
   background: #F3F3F3;
+}
+/*
+	Always visible arrow for Chrome to be coherent with Firefox
+*/
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  opacity: 1;
 }
 /*
 	Textarea Textfield
@@ -1180,6 +1187,8 @@ h6 .input.toggle-switch {
      * 2. The use of `table` rather than `block` is only necessary if using
      *	`:before` to contain the top-margins of child elements.
      */
+  display: flex;
+  max-width: 64rem;
 }
 .singleline:before,
 .singleline:after {
@@ -1198,18 +1207,11 @@ h6 .input.toggle-switch {
   clear: both;
 }
 .singleline .input {
-  float: left;
-  width: 49%;
+  flex: 1;
 }
 .singleline .input:first-child,
 .singleline .input.first-field {
   margin-right: 2%;
-}
-.singleline .input input[type="text"],
-.singleline .input input[type="email"],
-.singleline .input input[type="password"],
-.singleline .input input[type="search"] {
-  width: 100%;
 }
 .slider {
   display: flex;
@@ -1250,8 +1252,9 @@ h6 .input.toggle-switch {
   cursor: pointer;
 }
 .slider input[type=number] {
-  width: 3em;
-  margin-left: 1em;
+  width: 6.5rem;
+  margin-left: 1.6rem;
+  padding: 0.8rem;
 }
 .svg-icon {
   display: inline-flex;
@@ -2607,7 +2610,7 @@ html {
   float: right;
   clear: right;
   width: 30%;
-  font-size: 11px;
+  font-size: 1rem;
   text-align: left;
   padding-left: 0;
 }
@@ -2720,6 +2723,7 @@ html {
   font-size: 1.2rem;
   font-weight: normal;
   color: #333;
+  line-height: 1em;
 }
 .dialog .dialog-header .tooltip-alt .tooltip-text {
   white-space: normal;
@@ -2848,9 +2852,9 @@ html {
   border: 0;
 }
 .dialog-close:active {
-  -webkit-border-radius: 0.214em;
-  -moz-border-radius: 0.214em;
-  border-radius: 0.214em;
+  -webkit-border-radius: 0.3rem;
+  -moz-border-radius: 0.3rem;
+  border-radius: 0.3rem;
   box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.2);
 }
 .dialog-close .fa-close {
@@ -2862,9 +2866,9 @@ html {
   vertical-align: baseline;
   line-height: 0;
   border: 1px solid #EEE;
-  -webkit-border-radius: 0.214em;
-  -moz-border-radius: 0.214em;
-  border-radius: 0.214em;
+  -webkit-border-radius: 0.3rem;
+  -moz-border-radius: 0.3rem;
+  border-radius: 0.3rem;
 }
 .dialog-close .svg-icon {
   padding: 7px 0 7px 0;
@@ -2875,16 +2879,16 @@ html {
   vertical-align: baseline;
   line-height: 15px;
   border: 1px solid #EEE;
-  -webkit-border-radius: 0.214em;
-  -moz-border-radius: 0.214em;
-  border-radius: 0.214em;
+  -webkit-border-radius: 0.3rem;
+  -moz-border-radius: 0.3rem;
+  border-radius: 0.3rem;
 }
 .dialog-close:hover .fa-close,
 .dialog-close:hover .svg-icon {
   border: 1px solid #DDD;
-  -webkit-border-radius: 0.214em;
-  -moz-border-radius: 0.214em;
-  border-radius: 0.214em;
+  -webkit-border-radius: 0.3rem;
+  -moz-border-radius: 0.3rem;
+  border-radius: 0.3rem;
 }
 /* reduce font-size for small screen */
 @media all and (max-width: 480px) {
@@ -3097,9 +3101,9 @@ body {
   margin-bottom: 0.8rem;
 }
 .login.page .choose-security-token .input-security-token .input.text {
-  -webkit-border-radius: 0.214em;
-  -moz-border-radius: 0.214em;
-  border-radius: 0.214em;
+  -webkit-border-radius: 0.3rem;
+  -moz-border-radius: 0.3rem;
+  border-radius: 0.3rem;
   font-size: 3rem;
   max-width: 10rem;
   float: left;

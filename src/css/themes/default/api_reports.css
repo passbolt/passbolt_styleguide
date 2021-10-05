@@ -389,9 +389,9 @@ html body .hidden {
  * Border radius
  */
 .rounded {
-  -webkit-border-radius: 0.214em;
-  -moz-border-radius: 0.214em;
-  border-radius: 0.214em;
+  -webkit-border-radius: 0.3rem;
+  -moz-border-radius: 0.3rem;
+  border-radius: 0.3rem;
 }
 /* ellipsis */
 .ellipsis {
@@ -535,9 +535,9 @@ button,
   font-weight: normal;
   text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.5);
   background: #F3F3F3;
-  -webkit-border-radius: 0.214em;
-  -moz-border-radius: 0.214em;
-  border-radius: 0.214em;
+  -webkit-border-radius: 0.3rem;
+  -moz-border-radius: 0.3rem;
+  border-radius: 0.3rem;
   box-sizing: border-box;
 }
 /* sizes */
@@ -651,9 +651,9 @@ button,
   background: #FFF url('../../../img/controls/loading_light.svg') center center no-repeat;
   background-size: auto 50% ;
   border: 1px solid #DDD;
-  -webkit-border-radius: 0.214em;
-  -moz-border-radius: 0.214em;
-  border-radius: 0.214em;
+  -webkit-border-radius: 0.3rem;
+  -moz-border-radius: 0.3rem;
+  border-radius: 0.3rem;
 }
 input[type=submit].button.processing {
   font-size: 0;
@@ -740,7 +740,7 @@ textarea {
   vertical-align: middle;
 }
 input[type=number] {
-  box-sizing: initial;
+  box-sizing: border-box;
 }
 input[type=file] {
   box-sizing: border-box;
@@ -783,6 +783,13 @@ input[type=email]:disabled {
   box-shadow: 0 0 0 0;
   cursor: default;
   background: #F3F3F3;
+}
+/*
+	Always visible arrow for Chrome to be coherent with Firefox
+*/
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  opacity: 1;
 }
 /*
 	Textarea Textfield
@@ -1180,6 +1187,8 @@ h6 .input.toggle-switch {
      * 2. The use of `table` rather than `block` is only necessary if using
      *	`:before` to contain the top-margins of child elements.
      */
+  display: flex;
+  max-width: 64rem;
 }
 .singleline:before,
 .singleline:after {
@@ -1198,18 +1207,11 @@ h6 .input.toggle-switch {
   clear: both;
 }
 .singleline .input {
-  float: left;
-  width: 49%;
+  flex: 1;
 }
 .singleline .input:first-child,
 .singleline .input.first-field {
   margin-right: 2%;
-}
-.singleline .input input[type="text"],
-.singleline .input input[type="email"],
-.singleline .input input[type="password"],
-.singleline .input input[type="search"] {
-  width: 100%;
 }
 .slider {
   display: flex;
@@ -1250,8 +1252,9 @@ h6 .input.toggle-switch {
   cursor: pointer;
 }
 .slider input[type=number] {
-  width: 3em;
-  margin-left: 1em;
+  width: 6.5rem;
+  margin-left: 1.6rem;
+  padding: 0.8rem;
 }
 .svg-icon {
   display: inline-flex;
@@ -2637,6 +2640,7 @@ html {
   font-size: 1.2rem;
   font-weight: normal;
   color: #333;
+  line-height: 1em;
 }
 .dialog .dialog-header .tooltip-alt .tooltip-text {
   white-space: normal;
@@ -2765,9 +2769,9 @@ html {
   border: 0;
 }
 .dialog-close:active {
-  -webkit-border-radius: 0.214em;
-  -moz-border-radius: 0.214em;
-  border-radius: 0.214em;
+  -webkit-border-radius: 0.3rem;
+  -moz-border-radius: 0.3rem;
+  border-radius: 0.3rem;
   box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.2);
 }
 .dialog-close .fa-close {
@@ -2779,9 +2783,9 @@ html {
   vertical-align: baseline;
   line-height: 0;
   border: 1px solid #EEE;
-  -webkit-border-radius: 0.214em;
-  -moz-border-radius: 0.214em;
-  border-radius: 0.214em;
+  -webkit-border-radius: 0.3rem;
+  -moz-border-radius: 0.3rem;
+  border-radius: 0.3rem;
 }
 .dialog-close .svg-icon {
   padding: 7px 0 7px 0;
@@ -2792,16 +2796,16 @@ html {
   vertical-align: baseline;
   line-height: 15px;
   border: 1px solid #EEE;
-  -webkit-border-radius: 0.214em;
-  -moz-border-radius: 0.214em;
-  border-radius: 0.214em;
+  -webkit-border-radius: 0.3rem;
+  -moz-border-radius: 0.3rem;
+  border-radius: 0.3rem;
 }
 .dialog-close:hover .fa-close,
 .dialog-close:hover .svg-icon {
   border: 1px solid #DDD;
-  -webkit-border-radius: 0.214em;
-  -moz-border-radius: 0.214em;
-  border-radius: 0.214em;
+  -webkit-border-radius: 0.3rem;
+  -moz-border-radius: 0.3rem;
+  border-radius: 0.3rem;
 }
 /* reduce font-size for small screen */
 @media all and (max-width: 480px) {
@@ -3937,6 +3941,10 @@ iframe.cachette {
   padding: 2.4rem;
   background-color: #daecf9;
 }
+.sidebar-help.transparent {
+  background-color: transparent;
+  border: 1px solid #F3F3F3;
+}
 .sidebar-help h3 {
   margin: 0 0 1.6rem 0;
   border-bottom: none;
@@ -4013,6 +4021,12 @@ iframe.cachette {
 }
 .input-password-wrapper .password-view.selected {
   background: #EEE;
+}
+.input-password-wrapper input[type=text]:focus ~ .button.password-view,
+.input-password-wrapper input[type=password]:focus ~ .button.password-view {
+  box-shadow: inset -1px 1px 1px rgba(0, 0, 0, 0.2);
+  border: 1px solid #2894DF;
+  border-left: 0;
 }
 .input-password-wrapper .actions.inline {
   float: right;
@@ -4140,15 +4154,6 @@ MIT License, https://github.com/harvesthq/chosen/blob/master/LICENSE.md
   -webkit-box-shadow: 0 4px 5px rgba(0, 0, 0, 0.15);
   box-shadow: 0 4px 5px rgba(0, 0, 0, 0.15);
   display: none;
-}
-.chosen-container.chosen-container-single {
-  padding: 0;
-  width: 100%;
-  max-width: 64rem;
-}
-.chosen-container.chosen-container-single.connection-type {
-  float: left;
-  width: 25%;
 }
 .chosen-container.chosen-with-drop .chosen-drop {
   display: block;
@@ -4612,51 +4617,27 @@ MIT License, https://github.com/harvesthq/chosen/blob/master/LICENSE.md
  - a host name text field
  - a port text field
  */
-.singleline.connection_info.protocol_host_port .input.text.field_protocol_host {
-  border: 0;
-  padding: 0;
-  width: 70%;
+.singleline.connection_info .input.text:first-child,
+.singleline.connection_info .input.text.first-field {
+  margin-right: 0;
 }
-.singleline.connection_info.protocol_host_port .input.text.field_protocol_host .input.text {
-  padding: 0;
-  margin: 0;
+.singleline.connection_info .input.text.protocol {
+  flex: 0 0 2.5rem;
 }
-.singleline.connection_info.protocol_host_port .input.text.field_protocol_host .input.text input {
-  margin: 0;
-  border-left: none;
-}
-.singleline.connection_info.protocol_host_port .input.text.field_protocol_host .input.text.host {
-  width: 75%;
-}
-.singleline.connection_info.protocol_host_port .input.text.field_protocol_host .input.text.host input[type=text] {
-  width: 95%;
-}
-.singleline.connection_info.protocol_host_port .input.text.field_protocol_host .input.text.protocol {
-  width: 25%;
-  position: relative;
-}
-.singleline.connection_info.protocol_host_port .input.text.field_protocol_host .input.text.protocol .chosen-container {
+.singleline.connection_info .input.text.protocol .chosen-container {
   display: block;
 }
-.singleline.connection_info.protocol_host_port .input.text.field_protocol_host .input.text.protocol .chosen-container a.chosen-single {
-  height: 3.8rem;
+.singleline.connection_info .input.text.protocol .chosen-container a.chosen-single div b {
+  background-position: 0 0.8rem;
 }
-.singleline.connection_info.protocol_host_port .input.text.field_protocol_host .input.text.protocol .chosen-container a.chosen-single div b {
-  background-position: 0 1rem;
+.singleline.connection_info .input.text.protocol .chosen-container-active.chosen-with-drop a.chosen-single div b {
+  background-position: -1.8rem 0.8rem;
 }
-.singleline.connection_info.protocol_host_port .input.text.field_protocol_host .input.text.protocol .chosen-container a.chosen-single span {
-  font-size: 1.6rem;
-  padding: 0.6rem 0 0 0;
+.singleline.connection_info .input.text.host {
+  flex: 1 0 auto;
 }
-.singleline.connection_info.protocol_host_port .input.text.field_protocol_host .input.text.protocol .chosen-container-active.chosen-with-drop a.chosen-single div b {
-  background-position: -1.8rem 1rem;
-}
-.singleline.connection_info.protocol_host_port .input.text.port {
-  width: 9%;
-  margin-left: 1%;
-}
-.singleline.connection_info.protocol_host_port .input.text.port input[type=number] {
-  width: 100%;
+.singleline.connection_info .input.text.port {
+  flex: 0 0 9.5rem;
 }
 .autocomplete-suggestions {
   text-align: left;
@@ -5008,9 +4989,9 @@ MIT License, https://github.com/harvesthq/chosen/blob/master/LICENSE.md
   margin-bottom: 0.5em;
 }
 .page.settings .profile-choose-security-token .input-security-token .input.text {
-  -webkit-border-radius: 0.214em;
-  -moz-border-radius: 0.214em;
-  border-radius: 0.214em;
+  -webkit-border-radius: 0.3rem;
+  -moz-border-radius: 0.3rem;
+  border-radius: 0.3rem;
   font-size: 3.8rem;
   max-width: 12rem;
   float: left;
@@ -5243,9 +5224,9 @@ html.launching .launching-screen p {
 }
 .mfa.iframe .mfa-providers li {
   float: left;
-  -webkit-border-radius: 0.214em;
-  -moz-border-radius: 0.214em;
-  border-radius: 0.214em;
+  -webkit-border-radius: 0.3rem;
+  -moz-border-radius: 0.3rem;
+  border-radius: 0.3rem;
   width: 12.5em;
   margin-bottom: 2em;
   margin-right: 2em;
@@ -5320,6 +5301,9 @@ html.launching .launching-screen p {
   overflow-y: scroll;
 }
 .ldap-settings input[type=text] {
+  max-width: 100%;
+}
+.ldap-settings .singleline {
   max-width: 100%;
 }
 .dialog .ldap-test-settings-report .directory-list span.error {

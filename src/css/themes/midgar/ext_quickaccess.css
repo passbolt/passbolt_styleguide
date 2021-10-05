@@ -390,9 +390,9 @@ html body .hidden {
  * Border radius
  */
 .rounded {
-  -webkit-border-radius: 0.214em;
-  -moz-border-radius: 0.214em;
-  border-radius: 0.214em;
+  -webkit-border-radius: 0.3rem;
+  -moz-border-radius: 0.3rem;
+  border-radius: 0.3rem;
 }
 /* ellipsis */
 .ellipsis {
@@ -537,9 +537,9 @@ button,
   text-shadow: 0 1px 0 #000000;
   background: #444442;
   background-image: linear-gradient(top, #444442, #444442);
-  -webkit-border-radius: 0.214em;
-  -moz-border-radius: 0.214em;
-  border-radius: 0.214em;
+  -webkit-border-radius: 0.3rem;
+  -moz-border-radius: 0.3rem;
+  border-radius: 0.3rem;
   box-sizing: border-box;
 }
 /* sizes */
@@ -654,9 +654,9 @@ button,
   background: #30302D url('../../../img/controls/loading_dark.svg') center center no-repeat;
   background-size: auto 50% ;
   border: 1px solid #0C0C0A;
-  -webkit-border-radius: 0.214em;
-  -moz-border-radius: 0.214em;
-  border-radius: 0.214em;
+  -webkit-border-radius: 0.3rem;
+  -moz-border-radius: 0.3rem;
+  border-radius: 0.3rem;
 }
 input[type=submit].button.processing {
   font-size: 0;
@@ -743,7 +743,7 @@ textarea {
   vertical-align: middle;
 }
 input[type=number] {
-  box-sizing: initial;
+  box-sizing: border-box;
 }
 input[type=file] {
   box-sizing: border-box;
@@ -786,6 +786,13 @@ input[type=email]:disabled {
   box-shadow: 0 0 0 0;
   cursor: default;
   background: #444442;
+}
+/*
+	Always visible arrow for Chrome to be coherent with Firefox
+*/
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  opacity: 1;
 }
 /*
 	Textarea Textfield
@@ -1183,6 +1190,8 @@ h6 .input.toggle-switch {
      * 2. The use of `table` rather than `block` is only necessary if using
      *	`:before` to contain the top-margins of child elements.
      */
+  display: flex;
+  max-width: 64rem;
 }
 .singleline:before,
 .singleline:after {
@@ -1201,18 +1210,11 @@ h6 .input.toggle-switch {
   clear: both;
 }
 .singleline .input {
-  float: left;
-  width: 49%;
+  flex: 1;
 }
 .singleline .input:first-child,
 .singleline .input.first-field {
   margin-right: 2%;
-}
-.singleline .input input[type="text"],
-.singleline .input input[type="email"],
-.singleline .input input[type="password"],
-.singleline .input input[type="search"] {
-  width: 100%;
 }
 .slider {
   display: flex;
@@ -1253,8 +1255,9 @@ h6 .input.toggle-switch {
   cursor: pointer;
 }
 .slider input[type=number] {
-  width: 3em;
-  margin-left: 1em;
+  width: 6.5rem;
+  margin-left: 1.6rem;
+  padding: 0.8rem;
 }
 .svg-icon {
   display: inline-flex;
@@ -2318,26 +2321,29 @@ html {
 }
 .quickaccess h2 {
   margin: 0;
-  font-size: 1.4rem;
+  font-size: 1.5rem;
   font-weight: normal;
-  padding: 0.2rem 1.8rem;
+  padding: 0.4rem 1.6rem;
+  line-height: 2rem;
 }
 .quickaccess label {
-  font-size: 1.4rem;
+  font-size: 1.5rem;
   padding-top: 0.8rem;
   padding-bottom: 0.2rem;
+  line-height: 2rem;
 }
 .quickaccess input[type="text"],
 .quickaccess input[type="email"],
 .quickaccess input[type="password"],
 .quickaccess input[type="search"],
 .quickaccess textarea {
-  font-size: 1.4rem;
-  padding: 0.4rem 0.8rem;
-  margin: 0.2rem 0 0.4rem 0;
+  font-size: 1.5rem;
+  padding: 0.8rem 0.8rem;
+  margin: 0.9rem 0 0.4rem 0;
+  height: 3.6rem;
 }
 .quickaccess .error-message {
-  font-size: 1.2rem;
+  font-size: 1.3rem;
   margin-bottom: 0.4rem;
   color: #FF6B70;
 }
@@ -2347,7 +2353,7 @@ html {
 }
 .quickaccess .security-token {
   width: 4.5rem;
-  font-size: 1.4rem;
+  font-size: 1.5rem;
   margin-top: -0.2rem;
   padding: 0.4rem 0.8rem;
 }
@@ -2396,6 +2402,7 @@ html {
      *	`:before` to contain the top-margins of child elements.
      */
   background: #3B3B39;
+  line-height: 2rem;
 }
 .quickaccess .back-link:before,
 .quickaccess .back-link:after {
@@ -2418,21 +2425,23 @@ html {
   border: 0;
   float: left;
   width: 18rem;
-  padding: 1.4rem 1.8rem 1.4rem 1.8rem;
+  padding: 1.6rem;
 }
 .quickaccess .back-link .primary-action .primary-action-title {
-  font-size: 1.4rem;
+  font-size: 1.5rem;
 }
 .quickaccess .back-link .primary-action .icon {
   float: left;
-  margin-right: 0.8rem;
+  margin-right: 1rem;
+}
+.quickaccess .back-link .primary-action svg {
+  vertical-align: middle;
 }
 .quickaccess .back-link .primary-action svg path {
   fill: #8B8B89;
 }
 .quickaccess .back-link .secondary-action {
-  margin-top: 0.6rem;
-  margin-right: 1rem;
+  padding: 1.6rem;
 }
 .quickaccess .back-link .secondary-action .icon {
   float: right;
@@ -2460,7 +2469,7 @@ html {
      * 2. The use of `table` rather than `block` is only necessary if using
      *	`:before` to contain the top-margins of child elements.
      */
-  margin-top: 1.6rem;
+  padding: 1.6rem;
 }
 .quickaccess .submit-wrapper:before,
 .quickaccess .submit-wrapper:after {
@@ -2477,9 +2486,12 @@ html {
 }
 .quickaccess .submit-wrapper:after {
   clear: both;
+}
+.quickaccess .submit-wrapper .button.primary.big {
+  line-height: 2.3rem;
 }
 .quickaccess .submit-wrapper .cancel {
-  margin-right: 3rem;
+  padding-right: 3rem;
   border: none;
   color: #FFFFFC;
 }
@@ -2499,7 +2511,7 @@ html {
 }
 .quickaccess .processing-wrapper .processing-text {
   position: relative;
-  padding-left: 1em;
+  padding-left: 1rem;
 }
 .quickaccess .processing-wrapper .processing-text:before {
   width: 100%;
@@ -2534,7 +2546,10 @@ html {
      * 2. The use of `table` rather than `block` is only necessary if using
      *	`:before` to contain the top-margins of child elements.
      */
-  padding: 1.8rem 1.8rem 1rem 1.8rem;
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  margin: 0;
 }
 .quickaccess .quickaccess-header:before,
 .quickaccess .quickaccess-header:after {
@@ -2553,12 +2568,12 @@ html {
   clear: both;
 }
 .quickaccess .quickaccess-header .logo {
-  margin: 0;
-  float: left;
+  margin: 1.6rem;
   background: transparent url('../../../img/logo/logo_white.svg') 0 0 no-repeat;
   background-size: 10rem auto;
   width: 10rem;
-  height: 2.2rem;
+  height: 1.75rem;
+  flex: 1 1 auto;
 }
 .quickaccess .quickaccess-header .logo a {
   display: block;
@@ -2567,7 +2582,7 @@ html {
   border: 0;
 }
 .quickaccess .quickaccess-header .option-link {
-  margin: -0.8rem -0.8rem 0 0;
+  padding: 1.6rem;
 }
 .quickaccess .fa.icon svg {
   width: 1.6rem;
@@ -2575,9 +2590,6 @@ html {
 }
 .quickaccess .fa.icon svg path {
   fill: #8B8B89;
-}
-.quickaccess .index-list .submit-wrapper {
-  padding: 0 1.8rem 1.8rem 1.8rem;
 }
 .quickaccess .index-list .list-container {
   /*
@@ -2602,7 +2614,7 @@ html {
      * 2. The use of `table` rather than `block` is only necessary if using
      *	`:before` to contain the top-margins of child elements.
      */
-  max-height: 28rem;
+  max-height: 30rem;
 }
 .quickaccess .index-list .list-container:before,
 .quickaccess .index-list .list-container:after {
@@ -2639,7 +2651,8 @@ html {
 }
 .quickaccess .index-list .empty-entry p {
   position: relative;
-  margin: 0.8rem 3rem 0.8rem 1.6rem;
+  margin: 1.6rem;
+  line-height: 2rem;
 }
 .quickaccess .index-list .suggested-resource-entry {
   display: flex;
@@ -2647,11 +2660,12 @@ html {
 }
 .quickaccess .index-list .suggested-resource-entry .resource-details {
   color: #FFFFFC;
-  padding: 1.4rem 2rem 1.4rem 1.8rem;
+  padding: 1.6rem;
   box-sizing: border-box;
   border-bottom: 1px solid #0C0C0A;
   width: 80%;
   flex: 1 1 auto;
+  font-size: 1.5rem;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -2667,7 +2681,7 @@ html {
 }
 .quickaccess .index-list .suggested-resource-entry .resource-details .url {
   display: block;
-  font-size: 1.2rem;
+  font-size: 1.3rem;
   padding-top: 0.4rem;
   color: #cacac9;
   white-space: nowrap;
@@ -2692,11 +2706,13 @@ html {
   background-image: linear-gradient(rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0.6)), url('../../../img/controls/chevron-right_white.svg');
 }
 .quickaccess .index-list .browse-resource-entry a .inline-resource-entry {
-  display: inline-block;
+  flex: 1 1 auto;
+  width: 80%;
+  font-size: 1.5rem;
 }
 .quickaccess .index-list .browse-resource-entry a .inline-resource-entry .url {
   display: block;
-  font-size: 1.2rem;
+  font-size: 1.3rem;
   padding-top: 0.4rem;
   color: #cacac9;
   white-space: nowrap;
@@ -2711,20 +2727,21 @@ html {
 .quickaccess .index-list .filter-entry a,
 .quickaccess .index-list .browse-resource-entry a {
   color: #FFFFFC;
-  display: block;
+  display: flex;
+  align-items: center;
   border-bottom: 1px solid #0C0C0A;
-  padding: 1.4rem 0rem 1.4rem 1.8rem;
+  padding: 1.6rem;
   position: relative;
+  font-size: 1.5rem;
 }
 .quickaccess .index-list .filter-entry a:after,
 .quickaccess .index-list .browse-resource-entry a:after {
-  background: transparent url('../../../img/controls/chevron-right_white.svg') center center no-repeat;
+  background: transparent url('../../../img/controls/chevron-right_white.svg') center right no-repeat;
   background-size: 1.6rem 1.6rem;
   width: 4rem;
   height: 2rem;
   content: "";
   opacity: 0.1;
-  float: right;
 }
 .quickaccess .index-list .filter-entry a:hover,
 .quickaccess .index-list .browse-resource-entry a:hover {
@@ -2738,7 +2755,11 @@ html {
 .quickaccess .index-list .filter-entry .icon svg,
 .quickaccess .index-list .browse-resource-entry .icon svg {
   float: left;
-  margin-right: 0.8rem;
+  margin-right: 1.6rem;
+}
+.quickaccess .index-list .filter-entry .filter,
+.quickaccess .index-list .browse-resource-entry .filter {
+  flex: 1 1 auto;
 }
 .quickaccess .index-list .option-entry a {
   color: #FFFFFC;
@@ -2758,37 +2779,37 @@ html {
   float: left;
   margin-right: 0.8rem;
 }
-.login-form {
-  padding: 0 1.8rem 1.8rem 1.8rem;
+.login-form .form-container {
+  padding: 0 1.6rem 0.8rem 1.6rem;
+}
+.login-form .checkbox.small {
+  padding-top: 1.2rem;
 }
 .quickaccess .passphrase input[type=password] {
   box-sizing: border-box;
   width: calc(100% - 4.5rem);
 }
 .quickaccess .passphrase .form-container {
-  padding: 0 1.8rem 0 1.8rem;
-}
-.quickaccess .passphrase .submit-wrapper {
-  padding: 0 1.8rem 1.8rem 1.8rem;
+  padding: 1.6rem 1.6rem 0.8rem 1.6rem;
 }
 .quickaccess .passphrase .too-many-attempts-error {
   margin: 0.8rem 3rem 0.8rem 1.6rem;
 }
+.quickaccess .passphrase .checkbox.small {
+  padding-top: 1.2rem;
+}
 .quickaccess .security-token {
   width: 4.5rem;
-  font-size: 1.4rem;
-  margin-top: -0.2rem;
-  padding: 0.4rem 0.8rem;
+  font-size: 1.5rem;
+  margin-top: 0.5rem;
+  padding: 0.5rem 0.4rem;
   text-align: center;
   display: inline-block;
-  margin-left: -0.4rem;
+  margin-left: -0.1rem;
   border: 1px solid #30302D;
   line-height: 2.4rem;
   vertical-align: middle;
   box-sizing: border-box;
-}
-.quickaccess .item-browse .properties {
-  padding: 1.2rem 0 0 0;
 }
 .quickaccess .item-browse .properties .property {
   /*
@@ -2850,7 +2871,8 @@ html {
 .quickaccess .item-browse .properties .property-value {
   width: 28rem;
   float: left;
-  padding: 0 1rem 1.6rem 1.8rem;
+  padding: 0 1rem 1.6rem 1.6rem;
+  font-size: 1.5rem;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -2866,11 +2888,11 @@ html {
   color: #8B8B89;
   width: 28rem;
   float: left;
-  padding: 0.8rem 1rem 0.4rem 1.8rem;
+  padding: 1.6rem 1rem 0.4rem 1.6rem;
 }
 .quickaccess .item-browse .properties .property-action {
-  margin-top: 2rem;
-  margin-right: 1rem;
+  margin-top: 1.6rem;
+  padding: 1.6rem;
 }
 .quickaccess .item-browse .properties .property-action.disabled path {
   fill: #444442;
@@ -2880,11 +2902,11 @@ html {
   height: 0.8rem;
   float: left;
   border: 0;
-  margin-left: 1.8rem;
-  margin-bottom: 1rem;
+  margin-left: 1.6rem;
+  margin-bottom: 0.9rem;
 }
 .quickaccess .item-browse .properties .secret.secret-copy {
-  width: 10.3rem;
+  width: 10.5rem;
   background: transparent url('../../../img/controls/dot_white.svg') repeat-x left 3px;
 }
 .quickaccess .item-browse .properties .secret.secret-copy:hover {
@@ -2896,18 +2918,8 @@ html {
   margin-left: 0;
   padding-right: 0;
 }
-.quickaccess .item-browse .submit-wrapper {
-  margin-top: 0;
-  padding: 1.8rem;
-}
-.quickaccess .resource-create .resource-create-form {
-  max-height: 35.1rem;
-}
 .quickaccess .resource-create .form-container {
-  padding: 0 1.8rem 0.8rem 1.8rem;
-}
-.quickaccess .resource-create .submit-wrapper {
-  padding: 0 1.8rem 1.8rem 1.8rem;
+  padding: 0.8rem 1.6rem;
 }
 .quickaccess .resource-create .password {
   /*
@@ -2949,18 +2961,24 @@ html {
 .quickaccess .resource-create .password:after {
   clear: both;
 }
+.quickaccess .resource-create .password .flex-row {
+  display: flex;
+  flex-direction: row;
+}
+.quickaccess .resource-create .password .password-management {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+}
 .quickaccess .resource-create .password input {
-  float: left;
   box-sizing: border-box;
-  width: calc(100% - 10.2rem);
 }
 .quickaccess .resource-create .password .password-view {
-  float: left;
-  margin-top: 0.2rem;
+  margin-top: 0.9rem;
   margin-left: -0.1rem;
-  height: 2rem;
+  height: 2.2rem;
   border-radius: 0;
-  padding: 0.6rem 0.8rem 0.6rem 1rem;
+  padding: 0.7rem 0.8rem 0.5rem 1rem;
   background: #0C0C0A;
   border: 1px solid #222220;
   border-left: 0;
@@ -2975,8 +2993,8 @@ html {
   border-left: 0;
 }
 .quickaccess .resource-create .password .password-generate {
-  margin-top: 0.3rem;
-  float: right;
+  margin-top: 0.9rem;
+  margin-left: 0.5rem;
 }
 .quickaccess .resource-create .password .password-strength .password-strength-value,
 .quickaccess .resource-create .password .password-strength .password-strength-label {
@@ -3005,15 +3023,15 @@ html {
   width: auto;
 }
 .quickaccess .resource-create .password .password-strength .password-strength-bar {
-  float: left;
   display: block;
   box-sizing: border-box;
-  width: calc(100% - 6.8rem);
+  width: 100%;
   height: 0.6rem;
   border: 1px solid #0C0C0A;
+  margin-top: 1rem;
+  margin-bottom: 1.8rem;
 }
 .quickaccess .resource-create .password .password-strength .password-strength-bar-value {
-  float: left;
   height: 0.2rem;
   display: block;
   margin: 0.1rem;
@@ -3042,14 +3060,8 @@ html {
   padding: 0 1.8rem 0.8rem 1.8rem;
   margin: 0;
 }
-.quickaccess .resource-auto-save .resource-auto-save-form {
-  max-height: 35.1rem;
-}
 .quickaccess .resource-auto-save .form-container {
   padding: 0 1.8rem 0.8rem 1.8rem;
-}
-.quickaccess .resource-auto-save .submit-wrapper {
-  padding: 0 1.8rem 1.8rem 1.8rem;
 }
 .quickaccess .resource-auto-save .password {
   /*
@@ -3200,7 +3212,7 @@ html {
      *	`:before` to contain the top-margins of child elements.
      */
   background: #444442;
-  padding: 1.2rem 1.4rem 1rem 1.4rem;
+  padding: 1.6rem;
 }
 .quickaccess .search:before,
 .quickaccess .search:after {
@@ -3223,10 +3235,11 @@ html {
   width: calc(100% - 4rem);
   float: left;
   border-right: 0;
+  padding-left: 1.6rem;
+  margin: 0;
 }
 .quickaccess .search .search-submit {
-  margin-top: 0.2rem;
-  height: 2rem;
+  height: 2.2rem;
   border-radius: 0;
   padding: 0.6rem 0.8rem 0.6rem 1.5rem;
   background: #0C0C0A;
@@ -3333,12 +3346,6 @@ html {
     opacity: 1;
   }
 }
-.quickaccess .generate-password .form-container {
-  padding: 0 1.8rem 0 1.8rem;
-}
-.quickaccess .generate-password .submit-wrapper {
-  padding: 0 1.8rem 1.8rem 1.8rem;
-}
 .quickaccess .generate-password .password {
   /*
      * Clearfix: contain floats
@@ -3362,6 +3369,7 @@ html {
      * 2. The use of `table` rather than `block` is only necessary if using
      *	`:before` to contain the top-margins of child elements.
      */
+  padding: 0.8rem 1.6rem 0 1.6rem;
 }
 .quickaccess .generate-password .password:before,
 .quickaccess .generate-password .password:after {
@@ -3386,11 +3394,11 @@ html {
 }
 .quickaccess .generate-password .password .password-view {
   float: left;
-  margin-top: 0.2rem;
+  margin-top: 0.9rem;
   margin-left: -0.1rem;
-  height: 2rem;
+  height: 2.2rem;
   border-radius: 0;
-  padding: 0.6rem 0.8rem 0.6rem 1rem;
+  padding: 0.7rem 0.8rem 0.5rem 1rem;
   background: #0C0C0A;
   border: 1px solid #222220;
   border-left: 0;
@@ -3414,7 +3422,7 @@ html {
 .quickaccess .generate-password .password .actions.inline .copy-to-clipboard {
   margin-right: 0;
   margin-left: 0.4rem;
-  margin-top: 0.2rem;
+  margin-top: 0.9rem;
   line-height: 1.1rem;
 }
 .quickaccess .generate-password .password .password-complexity .progress {
@@ -3427,12 +3435,33 @@ html {
 .quickaccess .generate-password .password .password-complexity .complexity-text .text--nowrap {
   white-space: nowrap;
 }
+.quickaccess .generate-password .tabs-nav {
+  padding: 0 1.6rem;
+}
+.quickaccess .generate-password .tabs-active-content {
+  padding: 1.6rem;
+  margin: 0;
+}
+.quickaccess .generate-password .slider input[type=number] {
+  font-size: 1.5rem;
+  line-height: 2rem;
+}
 .quickaccess .generate-password #configure-password-generator-form-exclude-look-alike {
   position: fixed;
 }
+.quickaccess .generate-password #configure-password-generator-form-exclude-look-alike + label {
+  padding: 0.13rem 0 0 0;
+}
+.quickaccess .generate-password #configure-passphrase-generator-form-words-case {
+  margin-top: 0.9rem;
+}
+.quickaccess .generate-password .button-group {
+  padding-top: 0.8rem;
+}
 .quickaccess .generate-password .button-group .button {
-  margin-left: 0;
-  margin-right: 0.3em;
+  margin: 0 0.525rem 1.2rem 0;
+  padding: 0.8rem 0.8rem;
+  font-size: 1.5rem;
 }
 /* tabs */
 .tabs {
@@ -3451,7 +3480,7 @@ html {
   display: inline-block;
   padding: 0.4em 1.75em;
   margin-left: 1.25em;
-  font-size: 15px;
+  font-size: 1.5rem;
   border: 0;
 }
 .tabs-nav li a.selected {
@@ -3459,9 +3488,9 @@ html {
   border: 1px solid #0C0C0A;
   border-bottom: 1px solid #30302D;
   background: #30302D;
-  -webkit-border-radius: 0.214em;
-  -moz-border-radius: 0.214em;
-  border-radius: 0.214em;
+  -webkit-border-radius: 0.3rem;
+  -moz-border-radius: 0.3rem;
+  border-radius: 0.3rem;
   border-bottom-left-radius: 0;
   border-bottom-right-radius: 0;
 }
@@ -3469,6 +3498,7 @@ html {
   background-color: #3B3B39;
   margin-right: 0.5rem;
   display: inline-block;
+  border-radius: 0.3em 0.3rem 0 0;
 }
 .tabs-nav--bordered li a {
   margin-left: 0;
@@ -3493,7 +3523,7 @@ html {
   float: right;
   clear: right;
   width: 30%;
-  font-size: 11px;
+  font-size: 1rem;
   text-align: left;
   padding-left: 0;
 }

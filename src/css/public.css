@@ -609,9 +609,9 @@ html body .hidden {
  * Border radius
  */
 .rounded {
-  -webkit-border-radius: 0.214em;
-  -moz-border-radius: 0.214em;
-  border-radius: 0.214em;
+  -webkit-border-radius: 0.3rem;
+  -moz-border-radius: 0.3rem;
+  border-radius: 0.3rem;
 }
 /* position shortcuts */
 .left {
@@ -3318,9 +3318,9 @@ button,
   font-weight: normal;
   text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.5);
   background: #F3F3F3;
-  -webkit-border-radius: 0.214em;
-  -moz-border-radius: 0.214em;
-  border-radius: 0.214em;
+  -webkit-border-radius: 0.3rem;
+  -moz-border-radius: 0.3rem;
+  border-radius: 0.3rem;
 }
 /* size and position adjustments */
 .submit {
@@ -5010,6 +5010,7 @@ article video {
   font-size: 1.2rem;
   font-weight: normal;
   color: #333;
+  line-height: 1em;
 }
 .dialog .dialog-header .tooltip-alt .tooltip-text {
   white-space: normal;
@@ -5147,9 +5148,9 @@ article video {
   border: 0;
 }
 .dialog-close:active {
-  -webkit-border-radius: 0.214em;
-  -moz-border-radius: 0.214em;
-  border-radius: 0.214em;
+  -webkit-border-radius: 0.3rem;
+  -moz-border-radius: 0.3rem;
+  border-radius: 0.3rem;
   box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.2);
 }
 .dialog-close .fa-close {
@@ -5161,9 +5162,9 @@ article video {
   vertical-align: baseline;
   line-height: 0;
   border: 1px solid #EEE;
-  -webkit-border-radius: 0.214em;
-  -moz-border-radius: 0.214em;
-  border-radius: 0.214em;
+  -webkit-border-radius: 0.3rem;
+  -moz-border-radius: 0.3rem;
+  border-radius: 0.3rem;
 }
 .dialog-close .svg-icon {
   padding: 7px 0 7px 0;
@@ -5174,16 +5175,16 @@ article video {
   vertical-align: baseline;
   line-height: 15px;
   border: 1px solid #EEE;
-  -webkit-border-radius: 0.214em;
-  -moz-border-radius: 0.214em;
-  border-radius: 0.214em;
+  -webkit-border-radius: 0.3rem;
+  -moz-border-radius: 0.3rem;
+  border-radius: 0.3rem;
 }
 .dialog-close:hover .fa-close,
 .dialog-close:hover .svg-icon {
   border: 1px solid #DDD;
-  -webkit-border-radius: 0.214em;
-  -moz-border-radius: 0.214em;
-  border-radius: 0.214em;
+  -webkit-border-radius: 0.3rem;
+  -moz-border-radius: 0.3rem;
+  border-radius: 0.3rem;
 }
 /* reduce font-size for small screen */
 @media all and (max-width: 480px) {
@@ -5869,9 +5870,9 @@ input[type="search"]::-webkit-search-cancel-button {
   padding-top: 0;
   min-height: 5.8em;
   position: relative;
-  -webkit-border-radius: 0.214em;
-  -moz-border-radius: 0.214em;
-  border-radius: 0.214em;
+  -webkit-border-radius: 0.3rem;
+  -moz-border-radius: 0.3rem;
+  border-radius: 0.3rem;
   /*
      * For IE 6/7 only
      * Include this rule to trigger hasLayout and contain floats.
@@ -6822,15 +6823,6 @@ MIT License, https://github.com/harvesthq/chosen/blob/master/LICENSE.md
   -webkit-box-shadow: 0 4px 5px rgba(0, 0, 0, 0.15);
   box-shadow: 0 4px 5px rgba(0, 0, 0, 0.15);
   display: none;
-}
-.chosen-container.chosen-container-single {
-  padding: 0;
-  width: 100%;
-  max-width: 64rem;
-}
-.chosen-container.chosen-container-single.connection-type {
-  float: left;
-  width: 25%;
 }
 .chosen-container.chosen-with-drop .chosen-drop {
   display: block;

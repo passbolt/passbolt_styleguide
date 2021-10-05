@@ -390,9 +390,9 @@ html body .hidden {
  * Border radius
  */
 .rounded {
-  -webkit-border-radius: 0.214em;
-  -moz-border-radius: 0.214em;
-  border-radius: 0.214em;
+  -webkit-border-radius: 0.3rem;
+  -moz-border-radius: 0.3rem;
+  border-radius: 0.3rem;
 }
 /* ellipsis */
 .ellipsis {
@@ -537,9 +537,9 @@ button,
   text-shadow: 0 1px 0 #000000;
   background: #444442;
   background-image: linear-gradient(top, #444442, #444442);
-  -webkit-border-radius: 0.214em;
-  -moz-border-radius: 0.214em;
-  border-radius: 0.214em;
+  -webkit-border-radius: 0.3rem;
+  -moz-border-radius: 0.3rem;
+  border-radius: 0.3rem;
   box-sizing: border-box;
 }
 /* sizes */
@@ -654,9 +654,9 @@ button,
   background: #30302D url('../../../img/controls/loading_dark.svg') center center no-repeat;
   background-size: auto 50% ;
   border: 1px solid #0C0C0A;
-  -webkit-border-radius: 0.214em;
-  -moz-border-radius: 0.214em;
-  border-radius: 0.214em;
+  -webkit-border-radius: 0.3rem;
+  -moz-border-radius: 0.3rem;
+  border-radius: 0.3rem;
 }
 input[type=submit].button.processing {
   font-size: 0;
@@ -743,7 +743,7 @@ textarea {
   vertical-align: middle;
 }
 input[type=number] {
-  box-sizing: initial;
+  box-sizing: border-box;
 }
 input[type=file] {
   box-sizing: border-box;
@@ -786,6 +786,13 @@ input[type=email]:disabled {
   box-shadow: 0 0 0 0;
   cursor: default;
   background: #444442;
+}
+/*
+	Always visible arrow for Chrome to be coherent with Firefox
+*/
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  opacity: 1;
 }
 /*
 	Textarea Textfield
@@ -1183,6 +1190,8 @@ h6 .input.toggle-switch {
      * 2. The use of `table` rather than `block` is only necessary if using
      *	`:before` to contain the top-margins of child elements.
      */
+  display: flex;
+  max-width: 64rem;
 }
 .singleline:before,
 .singleline:after {
@@ -1201,18 +1210,11 @@ h6 .input.toggle-switch {
   clear: both;
 }
 .singleline .input {
-  float: left;
-  width: 49%;
+  flex: 1;
 }
 .singleline .input:first-child,
 .singleline .input.first-field {
   margin-right: 2%;
-}
-.singleline .input input[type="text"],
-.singleline .input input[type="email"],
-.singleline .input input[type="password"],
-.singleline .input input[type="search"] {
-  width: 100%;
 }
 .slider {
   display: flex;
@@ -1253,8 +1255,9 @@ h6 .input.toggle-switch {
   cursor: pointer;
 }
 .slider input[type=number] {
-  width: 3em;
-  margin-left: 1em;
+  width: 6.5rem;
+  margin-left: 1.6rem;
+  padding: 0.8rem;
 }
 .svg-icon {
   display: inline-flex;
@@ -2276,15 +2279,14 @@ html {
 body {
   background: transparent;
 }
-.web-integration {
-  background: #30302D;
-}
 .web-integration .in-form-menu {
+  background: #30302D;
   font-size: 1.4rem;
   color: #FFFFFC;
   width: 35rem;
-  border: 1px solid #0C0C0A;
-  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+  border-top: 1px solid #0C0C0A;
+  box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.15);
+  margin: auto;
 }
 .web-integration .in-form-menu--scrollable {
   overflow-y: scroll;
@@ -2303,6 +2305,40 @@ body {
   padding: 1rem;
   text-decoration: none;
   border-bottom: 0;
+  /* disabled */
+}
+.web-integration .in-form-menu-item.disabled {
+  cursor: default;
+  text-shadow: none;
+  font-weight: normal;
+}
+.web-integration .in-form-menu-item.disabled:hover,
+.web-integration .in-form-menu-item.disabled:active,
+.web-integration .in-form-menu-item.disabled:focus {
+  box-shadow: 0 0 0;
+  top: 0;
+  color: #8B8B89;
+  background: #3B3B39;
+  border: 1px solid #0C0C0A;
+}
+.web-integration .in-form-menu-item.disabled .in-form-menu-item-content {
+  color: #8B8B89;
+}
+.web-integration .in-form-menu-item.disabled .in-form-menu-item-content-description {
+  color: #8B8B89;
+}
+.web-integration .in-form-menu-item .processing-wrapper {
+  background-color: #30302D;
+  display: inline-flex;
+  align-self: center;
+  justify-content: center;
+  flex-basis: 4rem;
+}
+.web-integration .in-form-menu-item .processing-wrapper .processing {
+  width: 1.8rem;
+  height: 1.8rem;
+  background: transparent url('../../../img/controls/loading_dark.svg') left center no-repeat;
+  background-size: contain;
 }
 .web-integration .in-form-menu-item:not(:last-child) {
   border-bottom: 1px solid #0C0C0A;
@@ -2338,6 +2374,22 @@ body {
   flex: 1;
   color: #FFFFFC;
 }
+.web-integration .in-form-menu-item-content-header {
+  width: 280px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -o-text-overflow: ellipsis;
+  -ms-text-overflow: ellipsis;
+}
+.web-integration .in-form-menu-item-content-subheader {
+  width: 280px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -o-text-overflow: ellipsis;
+  -ms-text-overflow: ellipsis;
+}
 .web-integration .in-form-menu-item-content-subheader-password {
   position: relative;
 }
@@ -2352,5 +2404,11 @@ body {
   /* so the text is still selectable */
 }
 .web-integration .in-form-menu-item-content-description {
+  width: 280px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -o-text-overflow: ellipsis;
+  -ms-text-overflow: ellipsis;
   color: #cacac9;
 }
