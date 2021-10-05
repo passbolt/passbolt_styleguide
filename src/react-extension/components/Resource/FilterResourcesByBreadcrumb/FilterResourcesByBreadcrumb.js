@@ -38,7 +38,7 @@ class FilterResourcesByBreadcrumb extends Component {
       case ResourceWorkspaceFilterTypes.TEXT: {
         const isEmptySearchText = !this.props.resourceWorkspaceContext.filter.payload;
         const filterText = this.props.resourceWorkspaceContext.filter.payload;
-        return isEmptySearchText ? items : [...items, this.getLastBreadcrumb(this.translate("Search: {{filterText}}", {filterText}))];
+        return isEmptySearchText ? items : [...items, this.getLastBreadcrumb(`${this.translate("Search:")} ${filterText}`)];
       }
       case ResourceWorkspaceFilterTypes.FAVORITE:
         return [...items, this.getLastBreadcrumb(this.translate("Favorite"))];
@@ -50,7 +50,7 @@ class FilterResourcesByBreadcrumb extends Component {
         return [...items, this.getLastBreadcrumb(this.translate("Items I own"))];
       case ResourceWorkspaceFilterTypes.TAG: {
         const filteredTagName = this.props.resourceWorkspaceContext.filter.payload.tag.slug;
-        return [...items, this.getLastBreadcrumb(this.translate("{{filteredTagName}} (tag)", {filteredTagName}))];
+        return [...items, this.getLastBreadcrumb(`${filteredTagName} ${this.translate("(tag)")}`)];
       }
       case ResourceWorkspaceFilterTypes.ROOT_FOLDER: {
         return [...items, this.getLastBreadcrumb(this.translate("root (folder)"))];
@@ -58,12 +58,12 @@ class FilterResourcesByBreadcrumb extends Component {
       case ResourceWorkspaceFilterTypes.FOLDER: {
         const folder = this.props.resourceWorkspaceContext.filter.payload.folder;
         const currentFolderName = (folder && folder.name) || this.translate("N/A");
-        return [...items, this.getLastBreadcrumb(this.translate("{{currentFolderName}} (folder)", {currentFolderName}))];
+        return [...items, this.getLastBreadcrumb(`${currentFolderName} ${this.translate("(folder)")}`)];
       }
       case ResourceWorkspaceFilterTypes.GROUP: {
         const group = this.props.resourceWorkspaceContext.filter.payload.group;
         const currentGroupName = (group && group.name) || this.translate("N/A");
-        return [...items, this.getLastBreadcrumb(this.translate("{{currentGroupName}} (group)", {currentGroupName}))];
+        return [...items, this.getLastBreadcrumb(`${currentGroupName} ${this.translate("(group)")}`)];
       }
     }
 
