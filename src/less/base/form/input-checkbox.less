@@ -25,7 +25,7 @@
             vertical-align: text-top;
             width: 1.4rem;
             height: 1.4rem;
-            background: @input-background;
+            background: @input-checkbox-background;
             border: 1px solid @border-default;
         }
 
@@ -41,7 +41,7 @@
 
         // Box checked
         &:checked + label:before {
-            background: @input-background;
+            background: @input-checkbox-background;
             border: 1px solid @border-input-light;
         }
 
@@ -67,6 +67,7 @@
             height: 1rem;
             background-size: 1rem 1rem;
             background-color: @font-default;
+            background-image: @controls-check;
             -webkit-mask-image: @controls-check;
             mask-image: @controls-check;
         }
