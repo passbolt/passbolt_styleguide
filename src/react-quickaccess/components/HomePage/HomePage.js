@@ -269,8 +269,10 @@ class HomePage extends React.Component {
                       <li className="browse-resource-entry" key={resource.id}>
                         <Link to={`/data/quickaccess/resources/view/${resource.id}`}>
                           <div className="inline-resource-entry">
-                            <span className="title">{resource.name}</span>
-                            <span className="username"> {resource.username ? `(${resource.username})` : ""}</span>
+                            <div className='inline-resource-name'>
+                              <span className="title">{resource.name}</span>
+                              <span className="username"> {resource.username ? `(${resource.username})` : ""}</span>
+                            </div>
                             <span className="url">{resource.uri}</span>
                           </div>
                         </Link>
@@ -316,7 +318,7 @@ class HomePage extends React.Component {
             </div>
           }
         </SimpleBar>
-        <div className="submit-wrapper">
+        <div className="submit-wrapper button-after-list">
           <Link to={`/data/quickaccess/resources/create`} id="popupAction" className="button primary big full-width" role="button">
             <Trans>Create new</Trans>
           </Link>
