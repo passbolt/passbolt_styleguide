@@ -77,7 +77,7 @@
     "start-ext-app-dev-server": "webpack serve --env debug=true --env demo=true --config webpack-ext.config.js",
     "start-in-form-menu-app-dev-server": "webpack serve --env debug=true --env demo=true --config webpack-in-form-menu.config.js",
     "test": "jest --config .jest.config.json --no-cache ./src --maxWorkers=4",
-    "test-coverage": "jest --config .jest.config.json --no-cache ./src --maxWorkers=4 --coverage",
+    "test-coverage": "jest --config .jest.config.json --no-cache ./src --maxWorkers=4 --coverage --collectCoverageFrom=src/**/*.{js,jsx}",
     "eslint": "eslint -c .eslintrc.json src/react-extension/*",
     "eslint-fix": "eslint -c .eslintrc.json --fix src/react-extension/*",
     "storybook": "start-storybook -p 6006",
