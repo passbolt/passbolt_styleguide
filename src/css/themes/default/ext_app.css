@@ -455,6 +455,7 @@ h2 {
 h3 {
   font-size: 1.6rem;
   line-height: 2.4rem;
+  border-bottom: 1px dotted #DDD;
 }
 p {
   font-size: 1.5rem;
@@ -529,7 +530,7 @@ button,
   text-decoration: none;
   border-top: 1px solid #CCC;
   border-right: 1px solid #CCC;
-  border-bottom: 1px solid #BBB;
+  border-bottom: 1px solid #CCC;
   border-left: 1px solid #CCC;
   color: #333;
   font-weight: normal;
@@ -854,6 +855,7 @@ textarea {
   height: 1rem;
   background-size: 1rem 1rem;
   background-color: #333;
+  background-image: url('../../../img/controls/check_black.svg');
   -webkit-mask-image: url('../../../img/controls/check_black.svg');
   mask-image: url('../../../img/controls/check_black.svg');
 }
@@ -3410,7 +3412,7 @@ input[type="search"]::-webkit-search-cancel-button {
   z-index: 990;
   padding: 0.4rem;
   width: 16rem;
-  background-color: hsla(0, 0%, 20%, 0.9);
+  background-color: hsla(0, 0%, 0%, 0.9);
   color: #FFF;
   content: attr(data-tooltip);
   font-size: 1.4rem;
@@ -5804,6 +5806,7 @@ MIT License, https://github.com/harvesthq/chosen/blob/master/LICENSE.md
   height: 2.8rem;
 }
 .panel.aside .description-content {
+  word-wrap: break-word;
   white-space: pre-line;
 }
 .panel.aside .description-editor .actions {

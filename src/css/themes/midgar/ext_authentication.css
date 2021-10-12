@@ -456,6 +456,7 @@ h2 {
 h3 {
   font-size: 1.6rem;
   line-height: 2.4rem;
+  border-bottom: 1px dotted #0C0C0A;
 }
 p {
   font-size: 1.5rem;
@@ -530,7 +531,7 @@ button,
   text-decoration: none;
   border-top: 1px solid #222220;
   border-right: 1px solid #222220;
-  border-bottom: 1px solid #8B8B89;
+  border-bottom: 1px solid #222220;
   border-left: 1px solid #222220;
   color: #FFFFFC;
   font-weight: normal;
@@ -827,7 +828,7 @@ textarea {
   vertical-align: text-top;
   width: 1.4rem;
   height: 1.4rem;
-  background: #0C0C0A;
+  background: #F3F3F3;
   border: 1px solid #0C0C0A;
 }
 .checkbox input[type=checkbox]:hover + label:before {
@@ -837,7 +838,7 @@ textarea {
   box-shadow: 0 0 0 0.3rem rgba(0, 0, 0, 0.12);
 }
 .checkbox input[type=checkbox]:checked + label:before {
-  background: #0C0C0A;
+  background: #F3F3F3;
   border: 1px solid #30302D;
 }
 .checkbox input[type=checkbox]:disabled + label {
@@ -857,8 +858,9 @@ textarea {
   height: 1rem;
   background-size: 1rem 1rem;
   background-color: #FFFFFC;
-  -webkit-mask-image: url('../../../img/controls/check_white.svg');
-  mask-image: url('../../../img/controls/check_white.svg');
+  background-image: url('../../../img/controls/check_black.svg');
+  -webkit-mask-image: url('../../../img/controls/check_black.svg');
+  mask-image: url('../../../img/controls/check_black.svg');
 }
 .checkbox.medium input[type=checkbox] {
   cursor: pointer;
@@ -2329,7 +2331,7 @@ html {
   z-index: 990;
   padding: 0.4rem;
   width: 16rem;
-  background-color: hsla(0, 0%, 20%, 0.9);
+  background-color: hsla(0, 0%, 0%, 0.9);
   color: #EEEEEC;
   content: attr(data-tooltip);
   font-size: 1.4rem;

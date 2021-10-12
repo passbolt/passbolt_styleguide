@@ -645,6 +645,7 @@ h2 {
 h3 {
   font-size: 1.6rem;
   line-height: 2.4rem;
+  border-bottom: 1px dotted #DDD;
 }
 p {
   font-size: 1.5rem;
@@ -979,6 +980,7 @@ textarea {
   height: 1rem;
   background-size: 1rem 1rem;
   background-color: #333;
+  background-image: url('../../../img/controls/check_black.svg');
   -webkit-mask-image: url('../../../img/controls/check_black.svg');
   mask-image: url('../../../img/controls/check_black.svg');
 }
@@ -1399,7 +1401,7 @@ button,
   text-decoration: none;
   border-top: 1px solid #CCC;
   border-right: 1px solid #CCC;
-  border-bottom: 1px solid #BBB;
+  border-bottom: 1px solid #CCC;
   border-left: 1px solid #CCC;
   color: #333;
   font-weight: normal;

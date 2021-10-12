@@ -455,6 +455,7 @@ h2 {
 h3 {
   font-size: 1.6rem;
   line-height: 2.4rem;
+  border-bottom: 1px dotted #DDD;
 }
 p {
   font-size: 1.5rem;
@@ -529,7 +530,7 @@ button,
   text-decoration: none;
   border-top: 1px solid #CCC;
   border-right: 1px solid #CCC;
-  border-bottom: 1px solid #BBB;
+  border-bottom: 1px solid #CCC;
   border-left: 1px solid #CCC;
   color: #333;
   font-weight: normal;
@@ -854,6 +855,7 @@ textarea {
   height: 1rem;
   background-size: 1rem 1rem;
   background-color: #333;
+  background-image: url('../../../img/controls/check_black.svg');
   -webkit-mask-image: url('../../../img/controls/check_black.svg');
   mask-image: url('../../../img/controls/check_black.svg');
 }
@@ -2421,8 +2423,13 @@ html {
   display: block;
   border: 0;
   float: left;
-  width: 18rem;
+  width: 28rem;
   padding: 1.6rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -o-text-overflow: ellipsis;
+  -ms-text-overflow: ellipsis;
 }
 .quickaccess .back-link .primary-action .primary-action-title {
   font-size: 1.5rem;
@@ -2707,6 +2714,13 @@ html {
   width: 80%;
   font-size: 1.5rem;
 }
+.quickaccess .index-list .browse-resource-entry a .inline-resource-entry .inline-resource-name {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -o-text-overflow: ellipsis;
+  -ms-text-overflow: ellipsis;
+}
 .quickaccess .index-list .browse-resource-entry a .inline-resource-entry .url {
   display: block;
   font-size: 1.3rem;
@@ -2717,9 +2731,6 @@ html {
   text-overflow: ellipsis;
   -o-text-overflow: ellipsis;
   -ms-text-overflow: ellipsis;
-}
-.quickaccess .index-list .browse-resource-entry a:after {
-  margin-top: 1.4rem;
 }
 .quickaccess .index-list .filter-entry a,
 .quickaccess .index-list .browse-resource-entry a {
@@ -2777,10 +2788,14 @@ html {
   margin-right: 0.8rem;
 }
 .login-form .form-container {
-  padding: 0 1.6rem 0.8rem 1.6rem;
+  padding: 0 1.6rem 1.6rem 1.6rem;
 }
 .login-form .checkbox.small {
   padding-top: 1.2rem;
+}
+.login-form .checkbox.small label {
+  padding-top: 0.2rem;
+  margin: 0;
 }
 .quickaccess .passphrase input[type=password] {
   box-sizing: border-box;
@@ -2916,7 +2931,7 @@ html {
   padding-right: 0;
 }
 .quickaccess .resource-create .form-container {
-  padding: 0.8rem 1.6rem;
+  padding: 1.6rem;
 }
 .quickaccess .resource-create .password {
   /*
@@ -2991,7 +3006,7 @@ html {
 }
 .quickaccess .resource-create .password .password-generate {
   margin-top: 0.9rem;
-  margin-left: 0.5rem;
+  margin-left: 0.8rem;
 }
 .quickaccess .resource-create .password .password-strength .password-strength-value,
 .quickaccess .resource-create .password .password-strength .password-strength-label {
@@ -3026,7 +3041,6 @@ html {
   height: 0.6rem;
   border: 1px solid #DDD;
   margin-top: 1rem;
-  margin-bottom: 1.8rem;
 }
 .quickaccess .resource-create .password .password-strength .password-strength-bar-value {
   height: 0.2rem;
