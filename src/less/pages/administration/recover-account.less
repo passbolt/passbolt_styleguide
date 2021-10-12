@@ -1,4 +1,4 @@
-.recover-account-settings {
+.recover-account-settings, .save-recovery-account-settings-dialog {
   .input.radio {
     display: flex;
     align-items: center;
@@ -47,6 +47,35 @@
       .empty-value {
         color: @font-light;
       }
+    }
+  }
+}
+
+.save-recovery-account-settings-dialog {
+  label {
+    padding-bottom: 0;
+  }
+  .radiolist-alt {
+    .input.radio:hover {
+        border: 1px solid @border-default;
+    }
+
+    label {
+      padding: 0;
+    }
+  }
+  .recovery-key-details {
+    margin-top: 1.6rem;
+  }
+  .submit-wrapper .button {
+    padding: 1.2rem 2.4rem;
+    &.button-left {
+      float: left;
+      margin-left: 1.6rem;
+      background: @background-default;
+    }
+    &.cancel {
+      margin-top: 0;
     }
   }
 }
