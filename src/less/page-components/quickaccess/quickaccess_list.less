@@ -81,6 +81,9 @@
               flex: 1 1 auto;
               width: 80%;
               font-size: 1.5rem;
+              .inline-resource-name {
+                .ellipsis();
+              }
               .url {
                 display:block;
                 font-size:1.3rem;
@@ -88,9 +91,6 @@
                 color:@font-dim;
                 .ellipsis();
               }
-            }
-            &:after {
-              margin-top: 1.4rem;
             }
           }
         }
