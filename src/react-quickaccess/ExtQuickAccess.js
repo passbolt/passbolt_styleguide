@@ -179,6 +179,7 @@ class ExtQuickAccess extends React.Component {
 
   loginSuccessCallback() {
     if (!this.isInFeature('login')) {
+      this.getSiteSettings();
       this.setState({isAuthenticated: true});
     } else {
       window.close();
