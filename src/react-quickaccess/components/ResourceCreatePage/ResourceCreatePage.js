@@ -17,8 +17,8 @@ class ResourceCreatePage extends React.Component {
     this.createInputRef();
   }
 
-  componentDidMount() {
-    this.loadPasswordMetaFromTabInfo();
+  async componentDidMount() {
+    await this.loadPasswordMetaFromTabInfo();
     this.handleLastGeneratedPassword()
   }
 
