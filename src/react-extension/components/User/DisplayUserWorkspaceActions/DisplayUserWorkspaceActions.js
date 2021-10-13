@@ -263,6 +263,21 @@ class DisplayUserWorkspaceActions extends React.Component {
   }
 
   /**
+   * Check if the user can use the review recovery request capability.
+   */
+  canIReviewAccountRecoveryRequest() {
+    return this.props.context.siteSettings.canIUse("accountRecovery") && this.isLoggedInUserAdmin();
+  }
+
+  /**
+   * Has a pending account recovery for the user.
+   * @returns {boolean}
+   */
+  hasPendingAccountRecoveryRequest() {
+    return this.selectedUser && this.selectedUser.temporaryHasPendingAccountRecoveryRequest;
+  }
+
+  /**
    * Check if the users workspace has one user selected.
    * @return {boolean}
    */
@@ -428,6 +443,17 @@ class DisplayUserWorkspaceActions extends React.Component {
                           className={this.canDisableMfaForUser ? '' : 'disabled'}>
                           <span><Trans>Disable MFA</Trans></span>
                         </a>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+                }
+                {this.canIReviewAccountRecoveryRequest() &&
+                <li key="review-recovery-user" className="ready">
+                  <div className="row">
+                    <div className="main-cell-wrapper">
+                      <div className="main-cell">
+                        <a id="review-recovery" className={`${!this.hasPendingAccountRecoveryRequest() ? "disabled" : ""}`}><span><Trans>Review recovery request</Trans></span></a>
                       </div>
                     </div>
                   </div>

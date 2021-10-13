@@ -11,6 +11,9 @@ export function defaultAppContext(appContext) {
     siteSettings: {
       canIUse: () => true
     },
+    userSettings: {
+      getTrustedDomain: () => 'https://passbolt.local'
+    },
     loggedInUser: {
       id: "220ebc06-5ec1-5322-a1ae-6120ed2f3a74",
       role: {
@@ -134,5 +137,14 @@ export function propsWithSelectedActiveUser() {
 export function propsWithSelectedMFADisabledUser() {
   const props = propsWithSelectedUser();
   props.userWorkspaceContext.selectedUsers[0].is_mfa_enabled = false;
+  return props;
+}
+
+/**
+ * Props with temporary pending account recovery selected user
+ */
+export function propsWithSelectedUserTemporaryHasPendingAccountRecovery() {
+  const props = propsWithSelectedUser();
+  props.userWorkspaceContext.selectedUsers[0].temporaryHasPendingAccountRecoveryRequest = true;
   return props;
 }
