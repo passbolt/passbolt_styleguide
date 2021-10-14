@@ -28,7 +28,7 @@ import ManageQuickAccessMode from "./components/ManageQuickAccessMode/ManageQuic
 import PrivateRoute from "./components/PrivateRoute/PrivateRoute";
 import SaveResource from "./components/ResourceAutoSave/SaveResource";
 import GeneratePasswordPage from "./components/GeneratePasswordPage/GeneratePasswordPage";
-import PasswordGeneratorContextProvider from "./contexts/PasswordGeneratorContext";
+import PrepareResourceContextProvider from "./contexts/PrepareResourceContext";
 
 const SEARCH_VISIBLE_ROUTES = [
   '/data/quickaccess.html',
@@ -247,7 +247,7 @@ class ExtQuickAccess extends React.Component {
                   <Route path={SEARCH_VISIBLE_ROUTES} render={() => (
                     <Search ref={el => this.searchRef = el}/>
                   )}/>
-                  <PasswordGeneratorContextProvider>
+                  <PrepareResourceContextProvider>
                     <AnimatedSwitch>
                       <Route path="/data/quickaccess/login" render={() => (
                         <LoginPage loginSuccessCallback={this.loginSuccessCallback} canRememberMe={this.canRememberMe}/>
@@ -268,7 +268,7 @@ class ExtQuickAccess extends React.Component {
                       <PrivateRoute path="/data/quickaccess/resources/generate-password" component={GeneratePasswordPage}/>
                       <PrivateRoute exact path="/data/quickaccess.html" component={HomePage}/>
                     </AnimatedSwitch>
-                  </PasswordGeneratorContextProvider>
+                  </PrepareResourceContextProvider>
                 </div>
               </React.Fragment>
               }

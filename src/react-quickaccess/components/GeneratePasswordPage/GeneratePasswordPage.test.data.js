@@ -4,7 +4,7 @@
  */
 export function defaultProps() {
   return {
-    passwordGeneratorContext: {
+    prepareResourceContext: {
       settings: {
         default_generator: "passphrase",
         generators: [

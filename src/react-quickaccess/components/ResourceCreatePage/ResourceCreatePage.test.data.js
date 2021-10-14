@@ -24,9 +24,11 @@ export function defaultAppContext(appContext) {
  */
 export function defaultProps() {
   return {
-    passwordGeneratorContext: {
+    prepareResourceContext: {
       getSettings: () => settingsPasswordGenerator,
-      settings: settingsPasswordGenerator
+      settings: settingsPasswordGenerator,
+      getPreparedResource: jest.fn(),
+      getLastGeneratedPassword: () => "Password"
     }
   };
 }

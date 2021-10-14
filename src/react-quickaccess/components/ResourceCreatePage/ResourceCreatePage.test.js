@@ -6,7 +6,6 @@ import "../../../shared/lib/Secret/SecretComplexity";
 import {waitFor} from "@testing-library/dom";
 import MockTranslationProvider
   from "../../../react-extension/test/mock/components/Internationalisation/MockTranslationProvider";
-import MockPort from "../../../react-extension/test/mock/MockPort";
 import "../../../react-extension/test/lib/crypto/cryptoGetRandomvalues";
 import {defaultAppContext, defaultProps} from "./ResourceCreatePage.test.data";
 
@@ -44,7 +43,7 @@ describe("ResourceCreatePage", () => {
       const component = render(
         <MockTranslationProvider>
           <StaticRouter context={context}>
-            <ResourceCreatePage context={context} passwordGeneratorContext={props.passwordGeneratorContext} debug />
+            <ResourceCreatePage context={context} prepareResourceContext={props.prepareResourceContext} debug />
           </StaticRouter>
         </MockTranslationProvider>
       );
@@ -78,12 +77,13 @@ describe("ResourceCreatePage", () => {
       };
 
       const context = defaultAppContext();
+      const props = defaultProps();
 
       jest.useFakeTimers();
       const component = render(
         <MockTranslationProvider>
           <StaticRouter context={context}>
-            <ResourceCreatePage context={context} debug />
+            <ResourceCreatePage context={context} prepareResourceContext={props.prepareResourceContext} debug />
           </StaticRouter>
         </MockTranslationProvider>
       );

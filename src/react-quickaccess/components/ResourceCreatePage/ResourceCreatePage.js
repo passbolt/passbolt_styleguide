@@ -7,7 +7,7 @@ import {Trans, withTranslation} from "react-i18next";
 import {withAppContext} from "../../contexts/AppContext";
 import {SecretGenerator} from "../../../shared/lib/SecretGenerator/SecretGenerator";
 import {SecretGeneratorComplexity} from "../../../shared/lib/SecretGenerator/SecretGeneratorComplexity";
-import {withPasswordGeneratorContext} from "../../contexts/PasswordGeneratorContext";
+import {withPrepareResourceContext} from "../../contexts/PrepareResourceContext";
 
 class ResourceCreatePage extends React.Component {
   constructor(props) {
@@ -18,8 +18,8 @@ class ResourceCreatePage extends React.Component {
   }
 
   async componentDidMount() {
-    await this.loadPasswordMetaFromTabInfo();
-    this.handleLastGeneratedPassword()
+    await this.handlePreparedResource();
+    this.handleLastGeneratedPassword();
   }
 
   initEventHandlers() {
@@ -71,19 +71,30 @@ class ResourceCreatePage extends React.Component {
    * =============================================================
    */
   async getCurrentGeneratorConfiguration() {
-    const type = (await this.props.passwordGeneratorContext.getSettings()).default_generator;
-    return this.props.passwordGeneratorContext.settings.generators.find(generator => generator.type === type);
+    const type = (await this.props.prepareResourceContext.getSettings()).default_generator;
+    return this.props.prepareResourceContext.settings.generators.find(generator => generator.type === type);
   }
 
   /**
    * Whenever a new password has been generated through the generator
    */
   handleLastGeneratedPassword() {
-    const currentLastGeneratedPassword = this.props.passwordGeneratorContext.lastGeneratedPassword;
+    const currentLastGeneratedPassword = this.props.prepareResourceContext.getLastGeneratedPassword();
     if (currentLastGeneratedPassword?.length > 0) {
       this.loadPassword(currentLastGeneratedPassword)
-      // clear the generated password
-      this.props.passwordGeneratorContext.onLastGeneratedPasswordCleared();
+    }
+  }
+
+  /**
+   * Whenever a resource has been prepared
+   */
+  async handlePreparedResource() {
+    const resource = this.props.prepareResourceContext.getPreparedResource();
+    if (resource) {
+      this.setState({name: resource.name, uri: resource.uri, username: resource.username});
+      this.loadPassword(resource.password);
+    } else {
+      await this.loadPasswordMetaFromTabInfo();
     }
   }
 
@@ -269,6 +280,13 @@ class ResourceCreatePage extends React.Component {
     if (this.state.processing) {
       return;
     }
+    const resource = {
+      name: this.state.name,
+      username: this.state.username,
+      uri: this.state.uri,
+      password: this.state.password
+    };
+    this.props.prepareResourceContext.onPrepareResource(resource);
     this.props.history.push('/data/quickaccess/resources/generate-password');
   }
 
@@ -394,10 +412,10 @@ class ResourceCreatePage extends React.Component {
 
 ResourceCreatePage.propTypes = {
   context: PropTypes.any, // The application context
-  passwordGeneratorContext: PropTypes.any, // The password generator context
+  prepareResourceContext: PropTypes.any, // The password generator context
   history: PropTypes.object,
   location: PropTypes.any,
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withRouter(withPasswordGeneratorContext(withTranslation('common')(ResourceCreatePage))));
+export default withAppContext(withRouter(withPrepareResourceContext(withTranslation('common')(ResourceCreatePage))));

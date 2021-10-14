@@ -17,20 +17,24 @@ import PropTypes from "prop-types";
 import {withAppContext} from "./AppContext";
 
 /**
- * Context related to resources ( filter, current selections, etc.)
+ * Context related to prepare a resource ( name, url, username, password.)
  */
-export const PasswordGeneratorContext = React.createContext({
+export const PrepareResourceContext = React.createContext({
   settings: null, // The current settings of generators
   lastGeneratedPassword: null, // The last password generated
+  resourcePrepared: null, // The resource prepared
+  onPrepareResource: () => {}, // Whenever a resource has been prepared
   onPasswordGenerated: () => {}, // Whenever the a password has been generated with the generator
   onLastGeneratedPasswordCleared: () => {}, // Whenever the last generated password must be cleared
-  getSettings: () => {} // Whenever the settings must be get
+  getSettings: () => {}, // Whenever the settings must be get
+  getLastGeneratedPassword: () => {}, // Whenever the last generated password must be get
+  getPreparedResource: () => {} // Whenever the prepared resource must be get
 });
 
 /**
  * The related context provider
  */
-class PasswordGeneratorContextProvider extends React.Component {
+class PrepareResourceContextProvider extends React.Component {
   /**
    * Default constructor
    * @param props The component props
@@ -47,9 +51,12 @@ class PasswordGeneratorContextProvider extends React.Component {
     return {
       settings: null, // The current settings of generators
       lastGeneratedPassword: null, // The last password generated
+      resourcePrepared: null, // The resource prepared
+      onPrepareResource: this.onPrepareResource.bind(this), // Whenever a resource has been prepared
       onPasswordGenerated: this.onPasswordGenerated.bind(this), // Whenever the a password has been generated with the generator
-      onLastGeneratedPasswordCleared: this.onLastGeneratedPasswordCleared.bind(this), // Whenever the last generated password must be cleared
-      getSettings: this.getSettings.bind(this) // Whenever the settings must be get
+      getSettings: this.getSettings.bind(this), // Whenever the settings must be get
+      getLastGeneratedPassword: this.getLastGeneratedPassword.bind(this), // Whenever the last generated password must be get
+      getPreparedResource: this.getPreparedResource.bind(this) // Whenever the prepared resource must be get
     };
   }
 
@@ -102,10 +109,25 @@ class PasswordGeneratorContextProvider extends React.Component {
   }
 
   /**
+   * Whenever a resource has been prepared by the user
+   * @param resource The prepared resource
+   */
+  async onPrepareResource(resource) {
+    this.setState({resourcePrepared: resource});
+  }
+
+  /**
    * Whenever the last generated password must be cleared
    */
-  onLastGeneratedPasswordCleared() {
-    this.setState({lastGeneratedPassword: {}});
+  clearLastGeneratedPassword() {
+    this.setState({lastGeneratedPassword: null});
+  }
+
+  /**
+   * Whenever the prepared resource must be cleared
+   */
+  clearPreparedResource() {
+    this.setState({resourcePrepared: null});
   }
 
   /**
@@ -139,40 +161,60 @@ class PasswordGeneratorContextProvider extends React.Component {
   }
 
   /**
+   * Get the last generated password
+   * @returns {null|*}
+   */
+  getLastGeneratedPassword() {
+    const lastGeneratedPassword =  this.state.lastGeneratedPassword;
+    this.clearLastGeneratedPassword();
+    return lastGeneratedPassword;
+  }
+
+  /**
+   * Get the prepared resource
+   * @returns {null|*}
+   */
+  getPreparedResource() {
+    const resourcePrepared =  this.state.resourcePrepared;
+    this.clearPreparedResource();
+    return resourcePrepared;
+  }
+
+  /**
    * Render the component
    * @returns {JSX}
    */
   render() {
     return (
-      <PasswordGeneratorContext.Provider value={this.state}>
+      <PrepareResourceContext.Provider value={this.state}>
         {this.props.children}
-      </PasswordGeneratorContext.Provider>
+      </PrepareResourceContext.Provider>
     );
   }
 }
 
-PasswordGeneratorContextProvider.displayName = 'PasswordGeneratorContextProvider';
-PasswordGeneratorContextProvider.propTypes = {
+PrepareResourceContextProvider.displayName = 'PrepareResourceContextProvider';
+PrepareResourceContextProvider.propTypes = {
   context: PropTypes.any, // The application context
   children: PropTypes.any,
 };
 
 
-export default withAppContext(PasswordGeneratorContextProvider);
+export default withAppContext(PrepareResourceContextProvider);
 
 /**
  * Generate Password Context Consumer HOC
  * @param WrappedComponent
  */
-export function withPasswordGeneratorContext(WrappedComponent) {
-  return class WithPasswordGenerator extends React.Component {
+export function withPrepareResourceContext(WrappedComponent) {
+  return class WithPrepareResource extends React.Component {
     render() {
       return (
-        <PasswordGeneratorContext.Consumer>
+        <PrepareResourceContext.Consumer>
           {
-            PasswordGeneratorContext => <WrappedComponent passwordGeneratorContext={PasswordGeneratorContext} {...this.props} />
+            PrepareResourceContext => <WrappedComponent prepareResourceContext={PrepareResourceContext} {...this.props} />
           }
-        </PasswordGeneratorContext.Consumer>
+        </PrepareResourceContext.Consumer>
       );
     }
   };
