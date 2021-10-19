@@ -3117,18 +3117,24 @@ html {
 .quickaccess .resource-auto-save .password:after {
   clear: both;
 }
+.quickaccess .resource-auto-save .password .flex-row {
+  display: flex;
+  flex-direction: row;
+}
+.quickaccess .resource-auto-save .password .password-management {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+}
 .quickaccess .resource-auto-save .password input {
-  float: left;
   box-sizing: border-box;
-  width: calc(100% - 3.5rem);
 }
 .quickaccess .resource-auto-save .password .password-view {
-  float: left;
-  margin-top: 0.2rem;
+  margin-top: 0.9rem;
   margin-left: -0.1rem;
-  height: 2rem;
+  height: 2.2rem;
   border-radius: 0;
-  padding: 0.6rem 0.8rem 0.6rem 1rem;
+  padding: 0.7rem 0.8rem 0.5rem 1rem;
   background: #0C0C0A;
   border: 1px solid #222220;
   border-left: 0;
@@ -3169,15 +3175,14 @@ html {
   width: auto;
 }
 .quickaccess .resource-auto-save .password .password-strength .password-strength-bar {
-  float: left;
   display: block;
   box-sizing: border-box;
-  width: 34.3rem;
+  width: 100%;
   height: 0.6rem;
   border: 1px solid #0C0C0A;
+  margin-top: 1rem;
 }
 .quickaccess .resource-auto-save .password .password-strength .password-strength-bar-value {
-  float: left;
   height: 0.2rem;
   display: block;
   margin: 0.1rem;
