@@ -37,7 +37,7 @@ describe("Generate password", () => {
       expect(page.title).toBe('Generate password');
       expect(page.complexityText).toBe('Complexity: fairEntropy: 103.6 bits');
       await page.applyGeneratePassword();
-      expect(props.passwordGeneratorContext.onPasswordGenerated).toHaveBeenCalledWith(page.password, props.passwordGeneratorContext.settings.generators[1]);
+      expect(props.prepareResourceContext.onPasswordGenerated).toHaveBeenCalledWith(page.password, props.prepareResourceContext.settings.generators[1]);
       expect(props.history.goBack).toHaveBeenCalled();
     });
 

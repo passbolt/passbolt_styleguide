@@ -8,7 +8,7 @@ import ConfigurePassphraseGenerator from "./ConfigurePassphraseGenerator";
 import ConfigurePasswordGenerator from "./ConfigurePasswordGenerator";
 import {SecretGenerator} from "../../../shared/lib/SecretGenerator/SecretGenerator";
 import {SecretGeneratorComplexity} from "../../../shared/lib/SecretGenerator/SecretGeneratorComplexity";
-import {withPasswordGeneratorContext} from "../../contexts/PasswordGeneratorContext";
+import {withPrepareResourceContext} from "../../contexts/PrepareResourceContext";
 import Transition from "react-transition-group/cjs/Transition";
 
 class GeneratePasswordPage extends React.Component {
@@ -32,7 +32,7 @@ class GeneratePasswordPage extends React.Component {
    * Whenever the component has been mounted
    */
   async componentDidMount() {
-    const type = this.props.passwordGeneratorContext.settings.default_generator;
+    const type = this.props.prepareResourceContext.settings.default_generator;
     const initialGenerator = this.generators.find(generator => generator.type === type);
     await this.handleGeneratorChanged(initialGenerator);
   }
@@ -54,7 +54,7 @@ class GeneratePasswordPage extends React.Component {
    * Returns the possible generators
    */
   get generators() {
-    return  this.props.passwordGeneratorContext.settings.generators;
+    return  this.props.prepareResourceContext.settings.generators;
   }
 
   /**
@@ -104,7 +104,7 @@ class GeneratePasswordPage extends React.Component {
   async handleSubmit(event) {
     event.preventDefault();
     await this.setState({processing: true});
-    await this.props.passwordGeneratorContext.onPasswordGenerated(this.state.password, this.state.generator);
+    await this.props.prepareResourceContext.onPasswordGenerated(this.state.password, this.state.generator);
     this.props.history.goBack();
   }
 
@@ -296,9 +296,9 @@ class GeneratePasswordPage extends React.Component {
 }
 
 GeneratePasswordPage.propTypes = {
-  passwordGeneratorContext: PropTypes.any, // The password generator context
+  prepareResourceContext: PropTypes.any, // The password generator context
   history: PropTypes.any, // The history router
   t: PropTypes.func, // The translation function
 };
 
-export default withRouter(withPasswordGeneratorContext(withTranslation('common')(GeneratePasswordPage)));
+export default withRouter(withPrepareResourceContext(withTranslation('common')(GeneratePasswordPage)));
