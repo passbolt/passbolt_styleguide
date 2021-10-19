@@ -80,7 +80,7 @@
     "test-coverage": "jest --config .jest.config.json --no-cache ./src --maxWorkers=4 --coverage --collectCoverageFrom=src/**/*.{js,jsx}",
     "eslint": "eslint -c .eslintrc.json src/react-extension/*",
     "eslint-fix": "eslint -c .eslintrc.json --fix src/react-extension/*",
-    "storybook": "start-storybook -p 6006",
+    "storybook": "start-storybook -p 6006 -s ./src",
     "build-storybook": "build-storybook",
     "preversion": "npm test && npm run eslint",
     "version": "npx grunt && git add -A",
