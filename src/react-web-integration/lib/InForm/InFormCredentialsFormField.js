@@ -16,13 +16,14 @@ import InFormCallToActionField from "./InFormCallToActionField";
 import DomUtils from "../Dom/DomUtils";
 import {v4 as uuidv4} from "uuid";
 
+/** Button submit selector */
+const SUBMIT_BUTTON_SELECTOR = "button[type='submit'], input[type='submit']";
+
 /**
  * An InFormCredentialsFormField is represented by a DOM element identified as credentials form DOM element which once filled
  * can be auto-saved by Passbolt
  */
 class InFormCredentialsFormField {
-  /** Button submit select */
-  static SUBMIT_BUTTON_SELECTOR = "button[type='submit'], input[type='submit']"
   /**
    * Retrieve all the DOM elements which can be an credentials form fields
    */
@@ -44,18 +45,6 @@ class InFormCredentialsFormField {
       .flat();
   }
 
-  /** The field to which the in-form is attached */
-  field;
-
-  /** The username field attached to the form */
-  usernameField;
-
-  /** The password field attached to the form */
-  passwordField;
-
-  /** Flag telling whether the form submission has already been performed (and avoid twice autosave call) */
-  hasAlreadySubmitted;
-
   /**
    * Default constructor
    * @param field The DOM field which represents the field
@@ -63,10 +52,15 @@ class InFormCredentialsFormField {
    * @param passwordField The password DOM field into the form
    */
   constructor(field, usernameField, passwordField) {
+    /** The field to which the in-form is attached */
     this.field = field;
+    /** The username field attached to the form */
     this.usernameField = usernameField;
+    /** The password field attached to the form */
     this.passwordField = passwordField;
+    /** Flag telling whether the form submission has already been performed (and avoid twice autosave call) */
     this.hasAlreadySubmitted = false;
+
     this.bindCallbacks();
   }
 
@@ -74,7 +68,7 @@ class InFormCredentialsFormField {
    * Returns the submit button (if exists)
    */
   get submitButton() {
-    return this.field.querySelector(InFormCredentialsFormField.SUBMIT_BUTTON_SELECTOR);
+    return this.field.querySelector(SUBMIT_BUTTON_SELECTOR);
   }
 
   /**

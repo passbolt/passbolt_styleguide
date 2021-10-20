@@ -43,40 +43,27 @@ class InFormCallToActionField {
       .flat();
   }
 
-  /** The field to which the in-form is attached */
-  field;
-
-  /** Type of the field ("username" or "password") */
-  fieldType;
-
-  /** An unique identifier for the iframe */
-  iframeId;
-
-  /** The scrollable field parent */
-  scrollableFieldParent;
-
-  /** Flag telling if the user is mousing over the call-to-action (iframe) */
-  isCallToActionMousingOver;
-
-  /** In-form call-to-action click watcher */
-  callToActionClickWatcher;
-
-  /** In-form call-to-action click listener callback */
-  callToActionClickCallback;
-
   /**
    * Default constructor
    * @param field The DOM element
    * @param fieldType The type of field
    */
   constructor(field, fieldType) {
+    /** The field to which the in-form is attached */
     this.field = field;
+    /** Type of the field ("username" or "password") */
     this.fieldType = fieldType;
+    /** An unique identifier for the iframe */
     this.iframeId = uuidv4();
+    /** The scrollable field parent */
     this.scrollableFieldParent = null;
+    /** Flag telling if the user is mousing over the call-to-action (iframe) */
     this.isCallToActionMousingOver = false;
+    /** In-form call-to-action click watcher */
     this.callToActionClickWatcher = null;
+    /** In-form call-to-action click listener callback */
     this.callToActionClickCallback = null;
+
     this.bindCallbacks();
     this.handleInsertionEvent();
     this.handleRemoveEvent();

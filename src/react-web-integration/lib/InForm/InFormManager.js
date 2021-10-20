@@ -21,27 +21,19 @@ import InFormCredentialsFormField from "./InFormCredentialsFormField";
  * Manages the in-form web integration including call-to-action and menu
  */
 class InFormManager {
-
-  /** In-form username and password callToActionFields in the target page*/
-  callToActionFields;
-
-  /** In-form menu menuField in the target page*/
-  menuField;
-
-  /** In-form form fields in the target page*/
-  credentialsFormFields;
-
-  /** Mutation observer to detect any change on the DOM */
-  mutationObserver;
-
   /**
    * Default constructor
    */
   constructor() {
+    /** In-form username and password callToActionFields in the target page*/
     this.callToActionFields = [];
+    /** In-form menu menuField in the target page*/
     this.menuField = null;
+    /** In-form form fields in the target page*/
     this.credentialsFormFields = [];
+    /** Mutation observer to detect any change on the DOM */
     this.mutationObserver = null;
+
     this.bindCallbacks();
   }
 

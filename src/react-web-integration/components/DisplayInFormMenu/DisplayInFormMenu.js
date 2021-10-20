@@ -19,15 +19,15 @@ import DisplayInFormMenuItem from "./DisplayInFormMenuItem";
 import {withAppContext} from "../../contexts/AppContext";
 import {SecretGenerator} from "../../../shared/lib/SecretGenerator/SecretGenerator";
 
+/** The maximum length of visibility of a generated password */
+const TRUNCATED_GENERATED_PASSWORD_MAX_LENGTH = 15;
+
 /**
  * This component is a menu integrated into a target web page which includes
  * an identified authentication form. After the call-to-action performed,
  * the menu proposes different available actions given the situation
  */
 class DisplayInFormMenu extends React.Component {
-  /** The maximum length of visibility of a generated password */
-  static TRUNCATED_GENERATED_PASSWORD_MAX_LENGTH = 15;
-
   /**
    * Default constructor
    * @param props Component props
@@ -153,7 +153,7 @@ class DisplayInFormMenu extends React.Component {
    */
   get truncatedGeneratedPassword() {
     if (this.state.generatedPassword) {
-      const uplimitIndex = Math.min(DisplayInFormMenu.TRUNCATED_GENERATED_PASSWORD_MAX_LENGTH, Math.floor(this.state.generatedPassword.length/2));
+      const uplimitIndex = Math.min(TRUNCATED_GENERATED_PASSWORD_MAX_LENGTH, Math.floor(this.state.generatedPassword.length/2));
       return this.state.generatedPassword.substring(0,uplimitIndex);
     }
     return this.state.generatedPassword;
