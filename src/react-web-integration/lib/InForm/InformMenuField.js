@@ -20,31 +20,22 @@ import DomUtils from "../Dom/DomUtils";
  * An InFormMenuField is represented by a DOM element identified as a menu field
  */
 class InFormMenuField {
-  /** The field to which the in-form is attached */
-  field;
-
-  /** An unique identifier for the iframe */
-  iframeId;
-
-  /** Flag telling if the user is mousing over the menu (iframe) */
-  isMenuMousingOver;
-
-  /** In-form menu click watcher */
-  menuClickWatcher;
-
-  /** The scrollable field parent */
-  scrollableFieldParent;
-
   /**
    * Default constructor
    * @param field
    */
   constructor(field) {
+    /** The field to which the in-form is attached */
     this.field = field;
+    /** An unique identifier for the iframe */
     this.iframeId = uuidv4();
+    /** Flag telling if the user is mousing over the menu (iframe) */
     this.isMenuMousingOver = false;
+    /** In-form menu click watcher */
     this.menuClickWatcher = null;
+    /** The scrollable field parent */
     this.scrollableFieldParent = null;
+
     this.bindCallbacks();
     this.insertInformMenuIframe();
     this.handleRemoveEvent();
