@@ -11,4 +11,33 @@
           margin: 0;
         }
     }
+
+    /** Passphrase input with security token **/
+    .password.with-token {
+      display: flex;
+      align-items: center;
+
+      input[type=text],
+      input[type=password] {
+        width: 100%;
+      }
+
+      .password-view {
+        width: 3rem;
+        margin: .5rem .8rem 0 -.1rem;
+        height: 2.2rem;
+        border-radius:0;
+        padding: .7rem .8rem .5rem 1rem;
+        background: @input-background;
+        border: 1px solid @border-input;
+        border-left:0;
+        border-top: 1px solid @border-input-light;
+      }
+
+      input:focus + .password-view {
+        box-shadow: inset -1px 1px 1px rgba(0, 0, 0, .2);
+        border: 1px solid @border-focus;
+        border-left:0;
+      }
+    }
 }
