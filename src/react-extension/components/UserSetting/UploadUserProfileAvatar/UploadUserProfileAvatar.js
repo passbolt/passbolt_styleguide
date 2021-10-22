@@ -340,7 +340,7 @@ class UploadUserProfileAvatar extends React.Component {
                   </a>
                 </div>
                 {this.state.errors.message &&
-                <div className="error message">{this.state.errors.message}</div>
+                <div className="error-message">{this.state.errors.message}</div>
                 }
               </div>
             </div>
