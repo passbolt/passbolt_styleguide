@@ -76,7 +76,7 @@ describe("DisplayProgress", () => {
     // Details message.
     const progressStepLabel = container.querySelector(".progress-step-label");
     // &nbsp; translate to unix code \u00a0
-    expect(progressStepLabel.textContent).toBe("\u00a0 Step 0");
+    expect(progressStepLabel.textContent).toBe("Step 0");
 
     // Details percent.
     const progressPercent = container.querySelector(".progress-percent");

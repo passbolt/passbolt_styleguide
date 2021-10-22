@@ -60,7 +60,7 @@ class DisplayProgress extends Component {
               </div>
               {displayDetailsSection &&
               <div className="progress-details">
-                <span className="progress-step-label">&nbsp; {this.props.context.progressDialogProps.message ||  this.translate("Please wait...") }</span>
+                <span className="progress-step-label">{this.props.context.progressDialogProps.message ||  this.translate("Please wait...") }</span>
                 <span style={progressLabelStyle} className="progress-percent">{progress}%</span>
               </div>
               }
