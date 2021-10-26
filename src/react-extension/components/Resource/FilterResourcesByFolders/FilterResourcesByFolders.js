@@ -515,8 +515,7 @@ class FilterResourcesByFolders extends React.Component {
             length={rootFolders.length}
             pageSize={20}
             minSize={20}
-            type="uniform"
-            useStaticSize={true}
+            type="simple"
             ref={this.listElement}>
           </ReactList>
           }
