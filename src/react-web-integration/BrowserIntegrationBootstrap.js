@@ -54,7 +54,7 @@ async function isBrowserExtensionConfigured() {
  */
 async function getSiteSettings() {
   try {
-    const siteSettingsDto = await port.request('passbolt.organization-settings.get');
+    const siteSettingsDto = await port.request('passbolt.organization-settings.get', false);
     return new SiteSettings(siteSettingsDto);
   } catch(error) {
     console.error(error);
