@@ -438,7 +438,7 @@ class DisplayEmailNotificationsAdministration extends React.Component {
               <div className="col6">
                 <label><Trans>Group membership</Trans></label>
                 <span className="input toggle-switch form-element">
-                  <label htmlFor="send-group-delete-toggle-button"><Trans>When a group is deleted, notify the users who were member of it.</Trans></label>
+                  <label htmlFor="send-group-delete-toggle-button"><Trans>When a group is deleted, notify the users who were members of it.</Trans></label>
                   <input type="checkbox" className="toggle-switch-checkbox checkbox" name="groupDelete" disabled={this.hasAllInputDisabled()}
                     onChange={this.handleInputChange} checked={this.state.groupDelete} id="send-group-delete-toggle-button"/>
                   <label className="toggle-switch-button" htmlFor="send-group-delete-toggle-button"/>

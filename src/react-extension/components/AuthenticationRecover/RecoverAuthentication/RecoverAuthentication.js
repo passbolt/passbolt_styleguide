@@ -78,7 +78,7 @@ class RecoverAuthentication extends Component {
       case AuthenticationContextState.RECOVER_INITIALIZED:
       case AuthenticationContextState.INTRODUCE_SETUP_EXTENSION_COMPLETED:
         return <ImportGpgKey
-          title={this.translate("Welcome back, please enter your private key to begin with the recovery process.")}
+          title={this.translate("Welcome back, please enter your private key to begin the recovery process.")}
           secondaryAction={<HelpOnPrivateKeyLostSecondaryAction/>}/>;
       case AuthenticationContextState.GPG_KEY_VALIDATED:
         return <CheckPassphrase canRememberMe={this.canRememberMe} secondaryAction={<HelpOnPassphraseLostSecondaryAction/>}/>;

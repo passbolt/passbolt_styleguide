@@ -238,7 +238,7 @@ class ImportResourcesResult extends Component {
       result += `----------------------------\n${this.translate("Resources errors")}\n----------------------------\n${JSON.stringify(this.resultErrorsResources, null, 4)}\n\n`;
     }
     if (this.resultHasErrorsFolders) {
-      result += `----------------------------\n${this.translate("Folders errors")}\n----------------------------\n${JSON.stringify(this.resultErrorsFolders, null, 4)}`;
+      result += `----------------------------\n${this.translate("Folder errors")}\n----------------------------\n${JSON.stringify(this.resultErrorsFolders, null, 4)}`;
     }
 
     return result;
@@ -310,7 +310,7 @@ class ImportResourcesResult extends Component {
             <div className="accordion error-details">
               <div className="accordion-header">
                 <a onClick={this.handleErrorDetailsToggle}>
-                  <Trans>Errors details</Trans>
+                  <Trans>Error details</Trans>
                   <Icon baseline={true} name={this.state.showErrorDetails ? "caret-up" : "caret-down"}/>
                 </a>
               </div>
@@ -320,7 +320,7 @@ class ImportResourcesResult extends Component {
                   <label
                     htmlFor="js_field_debug"
                     className="visuallyhidden">
-                    <Trans>Errors details</Trans>
+                    <Trans>Error details</Trans>
                   </label>
                   <textarea
                     id="js_field_debug"
