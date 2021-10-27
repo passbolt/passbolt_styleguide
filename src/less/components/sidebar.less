@@ -62,10 +62,24 @@
             line-height: 3em;
             text-align: center;
             border-radius: 50%;
-            .svg-icon svg {
-                width: 2.4rem;
-                height: 2.4rem;
-                margin-top:1.2rem;
+            &.attention-required {
+                border-color: @orange-light;
+            }
+            .svg-icon {
+                &.exclamation {
+                  position: absolute;
+                  width: 1.2rem;
+                  margin-top: 1.5rem;
+                  margin-left: -1.2rem;
+                  svg {
+                    color: @orange-light;
+                  }
+                }
+                svg {
+                    width: 2.4rem;
+                    height: 2.4rem;
+                    margin-top:1.2rem;
+                }
             }
             img {
                 width: 4.8rem;
