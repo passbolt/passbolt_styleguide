@@ -18,7 +18,7 @@ import PropTypes from "prop-types";
 import {Trans, withTranslation} from "react-i18next";
 
 const CHROME_STORE_BROWSER_EXTENSION_URL = "https://chrome.google.com/webstore/detail/passbolt-extension/didegimhafipceonhjepacocaffmoppf";
-const FIREFOX_STORE_BROWSER_EXTENSION_URL = "https://addons.mozilla.org/fr/firefox/addon/passbolt";
+const FIREFOX_STORE_BROWSER_EXTENSION_URL = "https://addons.mozilla.org/firefox/addon/passbolt";
 
 class InstallExtension extends Component {
   constructor(props) {
