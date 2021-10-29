@@ -42,7 +42,3 @@ Initial.argTypes = {
     }
   }
 };
-
-
-
-

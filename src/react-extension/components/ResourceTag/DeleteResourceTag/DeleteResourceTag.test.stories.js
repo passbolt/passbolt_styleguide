@@ -43,4 +43,3 @@ Initial.argTypes = {
     }
   }
 };
-

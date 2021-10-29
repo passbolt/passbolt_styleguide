@@ -30,7 +30,6 @@ Template.propTypes = {
 };
 
 
-
 export const Initial = Template.bind({});
 Initial.args = {
   context: defaultContext
@@ -43,8 +42,3 @@ Initial.argTypes = {
     }
   }
 };
-
-
-
-
-

@@ -89,7 +89,3 @@ export const SuggestedResources = Template.bind({});
 SuggestedResources.args = {
   context: defaultAppContext(contextResources)
 };
-
-
-
-

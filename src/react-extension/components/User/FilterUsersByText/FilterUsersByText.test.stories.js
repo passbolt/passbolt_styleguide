@@ -16,5 +16,4 @@ const Template = args =>
   </MemoryRouter>;
 
 
-
 export const Initial = Template.bind({});

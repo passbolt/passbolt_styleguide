@@ -2,7 +2,6 @@ import {MemoryRouter, Route} from "react-router-dom";
 import React from "react";
 import AppContext from "../../../contexts/AppContext";
 import PropTypes from "prop-types";
-import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import {defaultAppContext} from "./DisplayUserGroupDetailsMembers.test.data";
 import DisplayUserGroupDetailsMembers from "./DisplayUserGroupDetailsMembers";
 
@@ -15,17 +14,15 @@ export default {
 const context = defaultAppContext();
 
 const Template = args =>
-  <MockTranslationProvider>
-    <AppContext.Provider value={context}>
-      <div className="panel aside">
-        <div className="detailed-information">
-          <MemoryRouter initialEntries={['/']}>
-            <Route component={routerProps => <DisplayUserGroupDetailsMembers {...args} {...routerProps}/>}></Route>
-          </MemoryRouter>
-        </div>
+  <AppContext.Provider value={context}>
+    <div className="panel aside">
+      <div className="detailed-information">
+        <MemoryRouter initialEntries={['/']}>
+          <Route component={routerProps => <DisplayUserGroupDetailsMembers {...args} {...routerProps}/>}></Route>
+        </MemoryRouter>
       </div>
-    </AppContext.Provider>
-  </MockTranslationProvider>;
+    </div>
+  </AppContext.Provider>;
 
 Template.propTypes = {
   context: PropTypes.object,

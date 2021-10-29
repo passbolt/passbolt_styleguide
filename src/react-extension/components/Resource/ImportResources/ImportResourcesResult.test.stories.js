@@ -3,7 +3,6 @@ import {MemoryRouter, Route} from "react-router-dom";
 import "../../../../css/themes/default/ext_app.css";
 import ImportResourcesResult from "./ImportResourcesResult";
 import AppContext from "../../../contexts/AppContext";
-import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 
 
 export default {
@@ -19,14 +18,11 @@ const context = {
 
 
 const Template = args =>
-  <MockTranslationProvider>
-    <AppContext.Provider value={context}>
-      <MemoryRouter initialEntries={['/']}>
-        <Route component={routerProps => <ImportResourcesResult {...args} {...routerProps}/>}></Route>
-      </MemoryRouter>
-    </AppContext.Provider>
-  </MockTranslationProvider>;
-
+  <AppContext.Provider value={context}>
+    <MemoryRouter initialEntries={['/']}>
+      <Route component={routerProps => <ImportResourcesResult {...args} {...routerProps}/>}></Route>
+    </MemoryRouter>
+  </AppContext.Provider>;
 
 
 export const Initial = Template.bind({});
@@ -40,4 +36,3 @@ Initial.args = {
     }
   }
 };
-

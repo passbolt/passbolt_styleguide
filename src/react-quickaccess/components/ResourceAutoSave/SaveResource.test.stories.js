@@ -24,7 +24,6 @@ Template.propTypes = {
 };
 
 
-
 export const Initial = Template.bind({});
 Initial.args = {
   context: defaultAppContext(),
@@ -39,6 +38,3 @@ export const SaveResourceFromTab = Template.bind({});
 SaveResourceFromTab.args = {
   context: defaultAppContext(contextMock)
 };
-
-
-

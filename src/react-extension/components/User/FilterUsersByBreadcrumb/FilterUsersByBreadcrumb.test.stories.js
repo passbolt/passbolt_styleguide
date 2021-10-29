@@ -4,7 +4,6 @@ import AppContext from "../../../contexts/AppContext";
 import PropTypes from "prop-types";
 import FilterUsersByBreadcrumb from "./FilterUsersByBreadcrumb";
 import {UserWorkspaceFilterTypes} from "../../../contexts/UserWorkspaceContext";
-import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 
 
 export default {
@@ -16,13 +15,11 @@ const context = {};
 
 
 const Template = args =>
-  <MockTranslationProvider>
-    <AppContext.Provider value={context}>
-      <MemoryRouter initialEntries={['/']}>
-        <Route component={routerProps => <FilterUsersByBreadcrumb {...args} {...routerProps}/>}></Route>
-      </MemoryRouter>
-    </AppContext.Provider>
-  </MockTranslationProvider>;
+  <AppContext.Provider value={context}>
+    <MemoryRouter initialEntries={['/']}>
+      <Route component={routerProps => <FilterUsersByBreadcrumb {...args} {...routerProps}/>}></Route>
+    </MemoryRouter>
+  </AppContext.Provider>;
 
 Template.propTypes = {
   context: PropTypes.object,

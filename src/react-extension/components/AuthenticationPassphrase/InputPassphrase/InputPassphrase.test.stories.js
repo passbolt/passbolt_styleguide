@@ -1,7 +1,6 @@
 import React from "react";
 import {MemoryRouter, Route} from "react-router-dom";
 import "../../../../css/themes/default/ext_authentication.css";
-import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import InputPassphrase from "./InputPassphrase";
 import AppContext from "../../../contexts/AppContext";
 
@@ -25,15 +24,11 @@ const context = {
 
 
 const Template = args =>
-  <MockTranslationProvider>
-    <AppContext.Provider value={context}>
-      <MemoryRouter initialEntries={['/']}>
-        <Route component={routerProps => <InputPassphrase {...args} {...routerProps}/>}></Route>
-      </MemoryRouter>
-    </AppContext.Provider>
-  </MockTranslationProvider>;
-
+  <AppContext.Provider value={context}>
+    <MemoryRouter initialEntries={['/']}>
+      <Route component={routerProps => <InputPassphrase {...args} {...routerProps}/>}></Route>
+    </MemoryRouter>
+  </AppContext.Provider>;
 
 
 export const Initial = Template.bind({});
-

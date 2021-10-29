@@ -24,7 +24,6 @@ Template.propTypes = {
 };
 
 
-
 export const InitialLoad = Template.bind({});
 InitialLoad.args = {
   context: defaultAppContext()
@@ -49,7 +48,3 @@ export const SharedWithMeResources = Template.bind({});
 SharedWithMeResources.args = {
   context: defaultAppContext(contextResources)
 };
-
-
-
-

@@ -24,7 +24,6 @@ Template.propTypes = {
 };
 
 
-
 export const InitialLoad = Template.bind({});
 InitialLoad.args = {
   context: defaultAppContext()
@@ -53,7 +52,3 @@ export const RecentlyModifiedResources = Template.bind({});
 RecentlyModifiedResources.args = {
   context: defaultAppContext(contextResources)
 };
-
-
-
-

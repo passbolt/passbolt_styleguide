@@ -4,7 +4,6 @@ import AppContext from "../../../contexts/AppContext";
 import PropTypes from "prop-types";
 import CreateUserGroup from "./CreateUserGroup";
 import {mockGpgKey, mockUsers} from "./CreateUserGroup.test.data";
-import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 
 
 export default {
@@ -33,13 +32,11 @@ const context = {
 
 
 const Template = args =>
-  <MockTranslationProvider>
-    <AppContext.Provider value={context}>
-      <MemoryRouter initialEntries={['/']}>
-        <Route component={routerProps => <CreateUserGroup {...args} {...routerProps}/>}></Route>
-      </MemoryRouter>
-    </AppContext.Provider>
-  </MockTranslationProvider>;
+  <AppContext.Provider value={context}>
+    <MemoryRouter initialEntries={['/']}>
+      <Route component={routerProps => <CreateUserGroup {...args} {...routerProps}/>}></Route>
+    </MemoryRouter>
+  </AppContext.Provider>;
 
 Template.propTypes = {
   context: PropTypes.object,

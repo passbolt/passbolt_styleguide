@@ -46,7 +46,7 @@ describe("See the test user directory administration Dialog", () => {
     it('As AD I should see the number of user(s) and group(s) founds on the LDAP server in the dialog for my Test settings report', async() => {
       expect(page.title.hyperlink.textContent).toBe("Test settings report");
       expect(page.displayTestUserDirectoryAdministrationDialog.exists()).toBeTruthy();
-      expect(page.displayTestUserDirectoryAdministrationDialog.usersAndGroupsFound).toBe('12 user and 58 group have been found.');
+      expect(page.displayTestUserDirectoryAdministrationDialog.usersAndGroupsFound).toBe('12 users and 58 groups have been found.');
       await page.displayTestUserDirectoryAdministrationDialog.click(page.displayTestUserDirectoryAdministrationDialog.buttonOk);
       expect(props.onClose).toBeCalled();
     });
@@ -60,9 +60,8 @@ describe("See the test user directory administration Dialog", () => {
       expect(page.displayTestUserDirectoryAdministrationDialog.structureGroups.length).toBe(60);
       expect(page.displayTestUserDirectoryAdministrationDialog.structureUsers.length).toBe(25);
       await page.displayTestUserDirectoryAdministrationDialog.click(page.displayTestUserDirectoryAdministrationDialog.errorsList);
-      expect(page.displayTestUserDirectoryAdministrationDialog.errors).toBe('7 entry had errors and will be ignored during synchronization.');
+      expect(page.displayTestUserDirectoryAdministrationDialog.errors).toBe('7 entries had errors and will be ignored during synchronization.');
       expect(page.displayTestUserDirectoryAdministrationDialog.errorsTextarea).not.toBeNull();
-      expect(props.onClose).toBeCalled();
     });
   });
 });
