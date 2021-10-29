@@ -4,7 +4,6 @@ import AppContext from "../../../contexts/AppContext";
 import PropTypes from "prop-types";
 import DisplaySimulateSynchronizeUserDirectoryAdministration
   from "./DisplaySimulateSynchronizeUserDirectoryAdministration";
-import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 
 export default {
   title: 'Passbolt/Administration/DisplaySimulateSynchronizeUserDirectoryAdministration',
@@ -15,13 +14,11 @@ const context = {};
 
 
 const Template = args =>
-  <MockTranslationProvider>
-    <AppContext.Provider value={context}>
-      <MemoryRouter initialEntries={['/']}>
-        <Route component={routerProps => <DisplaySimulateSynchronizeUserDirectoryAdministration {...args} {...routerProps}/>}></Route>
-      </MemoryRouter>
-    </AppContext.Provider>
-  </MockTranslationProvider>;
+  <AppContext.Provider value={context}>
+    <MemoryRouter initialEntries={['/']}>
+      <Route component={routerProps => <DisplaySimulateSynchronizeUserDirectoryAdministration {...args} {...routerProps}/>}></Route>
+    </MemoryRouter>
+  </AppContext.Provider>;
 
 Template.propTypes = {
   context: PropTypes.object,

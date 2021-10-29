@@ -25,7 +25,6 @@ Template.propTypes = {
 };
 
 
-
 export const InitialLoad = Template.bind({});
 InitialLoad.args = {
   context: defaultAppContext(),

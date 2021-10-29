@@ -3,7 +3,6 @@ import React from "react";
 import AppContext from "../../../contexts/AppContext";
 import PropTypes from "prop-types";
 import {defaultProps, mockGpgKey, mockUsers} from "./EditUserGroup.test.data";
-import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import EditUserGroup from "./EditUserGroup";
 
 
@@ -40,13 +39,11 @@ const context = {
 
 
 const Template = args =>
-  <MockTranslationProvider>
-    <AppContext.Provider value={context}>
-      <MemoryRouter initialEntries={['/']}>
-        <Route component={routerProps => <EditUserGroup {...args} {...routerProps}/>}></Route>
-      </MemoryRouter>
-    </AppContext.Provider>
-  </MockTranslationProvider>;
+  <AppContext.Provider value={context}>
+    <MemoryRouter initialEntries={['/']}>
+      <Route component={routerProps => <EditUserGroup {...args} {...routerProps}/>}></Route>
+    </MemoryRouter>
+  </AppContext.Provider>;
 
 Template.propTypes = {
   context: PropTypes.object,

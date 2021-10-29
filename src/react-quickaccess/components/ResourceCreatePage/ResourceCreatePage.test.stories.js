@@ -23,7 +23,6 @@ Template.propTypes = {
 };
 
 
-
 export const Initial = Template.bind({});
 Initial.args = {
   context: defaultAppContext(),
@@ -38,6 +37,3 @@ export const CreateResourceFromTab = Template.bind({});
 CreateResourceFromTab.args = {
   context: defaultAppContext(contextMock)
 };
-
-
-

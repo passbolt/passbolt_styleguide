@@ -34,4 +34,3 @@ Initial.args = {
     })
   }
 };
-
