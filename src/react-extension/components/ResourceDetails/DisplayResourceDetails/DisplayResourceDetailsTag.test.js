@@ -246,7 +246,7 @@ describe("See tags", () => {
       await page.passwordSidebarTagSection.input(page.tagEditor.component, "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
 
       await page.passwordSidebarTagSection.click(page.tagEditor.saveButton);
-      expect(page.tagEditor.errorMessage).toBe("This tag can't be added, the length cannot exceeds 128");
+      expect(page.tagEditor.errorMessage).toBe("This tag can't be added, the length cannot exceed 128");
     });
 
     it('Trim tag', async() => {

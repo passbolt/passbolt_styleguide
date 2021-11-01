@@ -58,7 +58,7 @@ describe("As LU I should see the password import result dialog", () => {
 
       const errorDebugValue = "----------------------------\nResources errors\n----------------------------\n" +
         "[\n    {\n        \"name\": \"resource1\"\n    },\n    {\n        \"name\": \"resource2\"\n    }\n" +
-        "]\n\n----------------------------\nFolders errors\n----------------------------\n[\n    {\n" +
+        "]\n\n----------------------------\nFolder errors\n----------------------------\n[\n    {\n" +
         "        \"name\": \"folder1\"\n    }\n]";
 
       expect(page.errorDebug).toBe(errorDebugValue);

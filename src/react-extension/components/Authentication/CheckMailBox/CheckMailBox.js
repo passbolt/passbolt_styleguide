@@ -34,8 +34,8 @@ class CheckMailBox extends Component {
         <div className="email-sent-bg">
         </div>
         <h1><Trans>Check your mailbox!</Trans></h1>
-        <p><Trans>We send you a link to verify your email.</Trans><br/>
-          <Trans>Check your spam folder if you do not see hear from us after a while.</Trans></p>
+        <p><Trans>We sent you a link to verify your email.</Trans><br/>
+          <Trans>Check your spam folder if you do not hear from us after a while.</Trans></p>
       </div>
     );
   }

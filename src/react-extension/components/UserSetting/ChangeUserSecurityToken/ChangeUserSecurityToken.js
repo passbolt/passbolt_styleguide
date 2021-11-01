@@ -379,7 +379,7 @@ class ChangeUserSecurityToken extends Component {
               <p>
                 <Trans>This security token will be displayed when your passphrase is requested,
                   so you can verify quickly the form is coming from passbolt.</Trans>&nbsp;
-                <Trans>This will help protect you from phishing attack</Trans>
+                <Trans>This will help protect you from phishing attacks</Trans>
               </p>
             </div>
           </div>
