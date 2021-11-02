@@ -38,6 +38,7 @@ describe("Display Users Contextual Menu", () => {
   let page; // The page to test against
   const context = defaultAppContext(); // The applicative context
   const props = defaultProps(); // The props to pass
+  props.hide = jest.fn();
 
   it("As LU I should copy an user permalink", async() => {
     page = new DisplayUsersContextualMenuPage(context, props);
@@ -47,7 +48,7 @@ describe("Display Users Contextual Menu", () => {
     jest.spyOn(props.actionFeedbackContext, 'displaySuccess').mockImplementationOnce(() => {});
     jest.spyOn(props, 'hide').mockImplementationOnce(() => {});
     await page.copyPermalink();
-    expect(context.port.request).toHaveBeenCalledWith("passbolt.clipboard.copy", "some url/app/users/view/640ebc06-5ec1-5322-a1ae-6120ed2f3a74");
+    expect(context.port.request).toHaveBeenCalledWith("passbolt.clipboard.copy", `${context.userSettings.getTrustedDomain()}/app/users/view/640ebc06-5ec1-5322-a1ae-6120ed2f3a74`);
     expect(props.actionFeedbackContext.displaySuccess).toHaveBeenCalled();
     expect(props.hide).toHaveBeenCalled();
   });

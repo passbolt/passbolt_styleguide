@@ -210,11 +210,26 @@ class DisplayUsersContextualMenu extends React.Component {
   }
 
   /**
+   * Check if the user can use the review recovery request capability.
+   */
+  canIReviewAccountRecoveryRequest() {
+    return this.props.context.siteSettings.canIUse("accountRecovery") && this.isLoggedInUserAdmin();
+  }
+
+  /**
    * Can delete the user. A user cannot deleted its own account.
    * @returns {boolean}
    */
   canDeleteUser() {
     return this.props.context.loggedInUser.id !== this.user.id;
+  }
+
+  /**
+   * Has a pending account recovery for the user.
+   * @returns {boolean}
+   */
+  hasPendingAccountRecoveryRequest() {
+    return this.user && this.user.temporaryHasPendingAccountRecoveryRequest;
   }
 
   /**
@@ -367,6 +382,17 @@ class DisplayUsersContextualMenu extends React.Component {
             <div className="main-cell-wrapper">
               <div className="main-cell">
                 <a id="delete" onClick={this.handleDeleteClickEvent} className={`${!this.canDeleteUser() ? "disabled" : ""}`}><span><Trans>Delete</Trans></span></a>
+              </div>
+            </div>
+          </div>
+        </li>
+        }
+        {this.canIReviewAccountRecoveryRequest() &&
+        <li key="review-recovery-user" className="ready">
+          <div className="row">
+            <div className="main-cell-wrapper">
+              <div className="main-cell">
+                <a id="review-recovery" className={`${!this.hasPendingAccountRecoveryRequest() ? "disabled" : ""}`}><span><Trans>Review recovery request</Trans></span></a>
               </div>
             </div>
           </div>

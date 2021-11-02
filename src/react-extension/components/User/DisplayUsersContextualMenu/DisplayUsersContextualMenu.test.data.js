@@ -12,14 +12,14 @@ export function defaultAppContext(appContext) {
       canIUse: () => true
     },
     userSettings: {
-      getTrustedDomain: () => 'some url'
+      getTrustedDomain: () => 'https://passbolt.local'
     },
     loggedInUser: {
       role: {
         name: 'admin'
       }
     },
-    setContext: jest.fn()
+    setContext: () => {}
   };
   return Object.assign(defaultAppContext, appContext || {});
 }
@@ -67,12 +67,12 @@ export function contextWithoutDelete() {
 export function defaultProps() {
   return {
     actionFeedbackContext: {
-      displaySuccess: jest.fn()
+      displaySuccess: () => {}
     },
     dialogContext: {
-      open: jest.fn()
+      open: () => {}
     },
-    hide: jest.fn(),
+    hide: () => {},
     user: {
       "id": "640ebc06-5ec1-5322-a1ae-6120ed2f3a74",
       "role_id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
@@ -117,7 +117,16 @@ export function defaultProps() {
       },
       "__placeholder_last_logged_in__": "",
       "last_logged_in": "",
-      is_mfa_enabled: false
+      "is_mfa_enabled": false
     }
   };
+}
+
+/**
+ * Props with temporary pending account recovery user
+ */
+export function propsWithUserTemporaryHasPendingAccountRecovery() {
+  const props = defaultProps();
+  props.user.temporaryHasPendingAccountRecoveryRequest = true;
+  return props;
 }
