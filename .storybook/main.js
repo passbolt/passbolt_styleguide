@@ -4,8 +4,14 @@ module.exports = {
     "../src/**/*.stories.@(js|jsx|ts|tsx)"
   ],
   "addons": [
-    "@storybook/addon-links",
-    "@storybook/addon-essentials"
+    { name: "@storybook/addon-links" },
+    {
+      name: "@storybook/addon-essentials",
+      options: {
+        backgrounds: false
+      }
+    },
+    'storybook-addon-themes',
   ],
   "core": {
     "builder": "webpack5"

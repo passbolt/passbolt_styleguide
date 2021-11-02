@@ -154,6 +154,7 @@ npm install \
     @storybook/builder-webpack5@next \
     @storybook/manager-webpack5@next \
     @storybook/react@next \
+    storybook-addon-themes \
     --no-save
 ```
 
