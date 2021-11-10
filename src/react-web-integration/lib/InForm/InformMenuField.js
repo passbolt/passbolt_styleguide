@@ -97,7 +97,7 @@ class InFormMenuField {
     let y = 0;
     let currentElement = this.field;
     const {height, width} = this.field.getBoundingClientRect();
-    const {top: topBody, left: leftBody} = document.body.getBoundingClientRect();
+    const {top: topBody, left: leftBody} = document.documentElement.getBoundingClientRect();
     // We loop to calculate the cumulated position of the field
     // from its ancestors and itself differential offset / scroll position
     while( currentElement && !isNaN( currentElement.offsetLeft ) && !isNaN( currentElement.offsetTop ) ) {
