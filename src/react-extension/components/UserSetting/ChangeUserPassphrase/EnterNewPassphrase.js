@@ -355,9 +355,6 @@ class EnterNewPassphrase extends React.Component {
               <h3><Trans>Tips for choosing a good passphrase</Trans></h3>
               <p><Trans>Make sure your passphrase is hard to guess but also that is long enough. For example you can use your favorite lyric from a song,
                 grab the first couple of characters from the words in your favorite line.</Trans></p>
-              <a className="button">
-                <span><Trans>Learn more</Trans></span>
-              </a>
             </div>
           </div>
         </div>
