@@ -879,8 +879,8 @@ class DisplayUserDirectoryAdministration extends React.Component {
                         </div>
                         <div className="input text port ad openldap">
                           <input id="port-input" type="number" className="required fluid form-element" name="port"
-                                 value={this.state.port} onChange={this.handleInputChange} onKeyUp={this.handlePortInputKeyUp} placeholder={this.translate("port")}
-                                 disabled={this.hasAllInputDisabled()}/>
+                            value={this.state.port} onChange={this.handleInputChange} onKeyUp={this.handlePortInputKeyUp} placeholder={this.translate("port")}
+                            disabled={this.hasAllInputDisabled()}/>
                           {this.state.portError &&
                           <div id="port-input-feedback" className="error-message">{this.state.portError}</div>
                           }

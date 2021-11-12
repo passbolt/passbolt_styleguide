@@ -285,20 +285,20 @@ class DefineResourceFolderMoveStrategy extends Component {
           <div className="form-content">
             <p>{this.getIntroMessage()}</p>
             <div className="radiolist-alt">
-              <div className="input radio">
+              <div className={`input radio ${this.state.moveOption === "change" ? 'checked' : ''}`}>
                 <input name="moveOption" value="change" id="moveOptionChange" type="radio"
                   onChange={this.handleInputChange} ref={this.moveOptionChangeRef} checked={this.state.moveOption === 'change'} />
                 <label htmlFor="moveOptionChange">
-                  <span className="strategy-name"><Trans>Change permissions</Trans></span>
-                  <span className="strategy-info"><Trans>Remove old inherited permissions and apply the new destination folder permissions recursively.</Trans></span>
+                  <span className="name"><Trans>Change permissions</Trans></span>
+                  <span className="info"><Trans>Remove old inherited permissions and apply the new destination folder permissions recursively.</Trans></span>
                 </label>
               </div>
-              <div className="input radio last">
+              <div className={`input radio last ${this.state.moveOption === "keep" ? 'checked' : ''}`}>
                 <input name="moveOption" value="keep" id="moveOptionKeep" type="radio"
                   onChange={this.handleInputChange} ref={this.moveOptionKeepRef}  checked={this.state.moveOption === 'keep'}/>
                 <label htmlFor="moveOptionKeep">
-                  <span className="strategy-name"><Trans>Keep existing permissions</Trans></span>
-                  <span className="strategy-info"><Trans>Keep the original permissions, do not apply the destination folder permissions.</Trans></span>
+                  <span className="name"><Trans>Keep existing permissions</Trans></span>
+                  <span className="info"><Trans>Keep the original permissions, do not apply the destination folder permissions.</Trans></span>
                 </label>
               </div>
             </div>
