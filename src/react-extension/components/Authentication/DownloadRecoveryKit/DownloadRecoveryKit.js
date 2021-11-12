@@ -98,7 +98,7 @@ class DownloadRecoveryKit extends Component {
             className={`button primary big full-width`}
             onClick={this.handleNext}
             role="button">
-            Next
+            <Trans>Next</Trans>
           </button>
           <a
             id="download-kit"
