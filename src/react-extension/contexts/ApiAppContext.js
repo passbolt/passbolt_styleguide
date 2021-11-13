@@ -207,7 +207,7 @@ class ApiAppContextProvider extends React.Component {
       return true;
     } catch (error) {
       if (error instanceof PassboltApiFetchError) {
-        if (error.data.code === 403) {
+        if (error.data.code === 401) {
           return false;
         }
       }
