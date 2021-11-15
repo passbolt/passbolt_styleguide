@@ -12,6 +12,7 @@
  * @since         2.13.0
  */
 import React from "react";
+import {Trans} from "react-i18next";
 
 /**
  * This component displays a waiting loading spinner
@@ -27,7 +28,7 @@ class LoadingSpinner extends React.Component {
           <div  className="processing">
           </div>
         </div>
-        <h1>Please wait...</h1>
+        <h1><Trans>Please wait...</Trans></h1>
       </div>
     );
   }
