@@ -1,3 +1,4 @@
+
 /**
  * Passbolt ~ Open source password manager for teams
  * Copyright (c) 2020 Passbolt SA (https://www.passbolt.com)
@@ -18,6 +19,7 @@ import {BrowserRouter as Router} from 'react-router-dom';
 import {FilterResourcesByFoldersItemPageObject} from "./FilterResourcesByFoldersItem.test.page";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import FilterResourcesByFolders from "./FilterResourcesByFolders";
+import {DragContext} from "../../../contexts/DragContext";
 
 /**
  * The FilterResourcesByFolders component represented as a page
@@ -33,7 +35,9 @@ export default class FilterResourcesByFoldersPage {
       <MockTranslationProvider>
         <AppContext.Provider value={appContext}>
           <Router>
-            <FilterResourcesByFolders.WrappedComponent {...props}/>
+            <DragContext.Provider value={props.dragContext}>
+              <FilterResourcesByFolders.WrappedComponent {...props}/>
+            </DragContext.Provider>
           </Router>
         </AppContext.Provider>
       </MockTranslationProvider>

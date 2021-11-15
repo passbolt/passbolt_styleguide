@@ -29,6 +29,8 @@ import {withContextualMenu} from "../../../contexts/ContextualMenuContext";
 import sanitizeUrl, {urlProtocols} from "../../../lib/Sanitize/sanitizeUrl";
 import {Trans, withTranslation} from "react-i18next";
 import {DateTime} from "luxon";
+import {withDrag} from "../../../contexts/DragContext";
+import DisplayDragResource from "./DisplayDragResource";
 
 /**
  * This component allows to display the filtered resources into a grid
@@ -53,7 +55,6 @@ class DisplayResourcesList extends React.Component {
     return {
       resources: [], // The current list of resources to display
       selectStrategy: "",
-      previewedPassword: null, // The previewed password.
     };
   }
 
@@ -109,7 +110,6 @@ class DisplayResourcesList extends React.Component {
    */
   createRefs() {
     this.listRef = React.createRef();
-    this.dragFeedbackElement = React.createRef();
   }
 
   /**
@@ -378,17 +378,15 @@ class DisplayResourcesList extends React.Component {
     if (!this.isResourceSelected(resource)) {
       await this.props.resourceWorkspaceContext.onResourceSelected.single(resource);
     }
-    event.dataTransfer.setDragImage(this.dragFeedbackElement.current, 5, 5);
     const draggedItems = {resources:  this.props.resourceWorkspaceContext.selectedResources, folders: []};
-    const triggerEvent = document.createEvent("CustomEvent");
-    triggerEvent.initCustomEvent("passbolt.resources.drag-start", true, true, draggedItems);
-    document.dispatchEvent(triggerEvent);
+    this.props.dragContext.onDragStart(event, DisplayDragResource, draggedItems);
   }
 
+  /**
+   * Handle when the user stop dragging content.
+   */
   handleDragEndEvent() {
-    const trigerEvent = document.createEvent("CustomEvent");
-    trigerEvent.initCustomEvent("passbolt.resources.drag-end", true, true);
-    document.dispatchEvent(trigerEvent);
+    this.props.dragContext.onDragEnd();
   }
 
   /**
@@ -612,37 +610,6 @@ class DisplayResourcesList extends React.Component {
   }
 
   /**
-   * Render the drag tooltip of the selected resources
-   * @returns {JSX.Element}
-   */
-  renderDragFeedback() {
-    const isSelected = this.props.resourceWorkspaceContext.selectedResources.length > 0;
-    const isMultipleSelected = this.props.resourceWorkspaceContext.selectedResources.length > 1;
-    let dragFeedbackText = "";
-    let dragElementClassname = "";
-
-    if (isSelected) {
-      const isSelected = resource => resource.id === this.props.resourceWorkspaceContext.selectedResources[0].id;
-      const firstSelectedResource = this.resources.find(isSelected);
-      if (firstSelectedResource) {
-        dragElementClassname = isMultipleSelected ? "drag-and-drop-multiple" : "drag-and-drop";
-        dragFeedbackText = firstSelectedResource.name;
-      }
-    }
-
-    return (
-      <div ref={this.dragFeedbackElement} className={dragElementClassname}>
-        {dragFeedbackText}
-        {isMultipleSelected &&
-        <span className="count">
-          {this.props.resourceWorkspaceContext.selectedResources.length}
-        </span>
-        }
-      </div>
-    );
-  }
-
-  /**
    * Get the translate function
    * @returns {function(...[*]=)}
    */
@@ -709,7 +676,6 @@ class DisplayResourcesList extends React.Component {
           }
           {!isEmpty &&
           <React.Fragment>
-            {this.renderDragFeedback()}
             <div className="tableview-header">
               <table>
                 <thead>
@@ -846,7 +812,8 @@ DisplayResourcesList.propTypes = {
   actionFeedbackContext: PropTypes.any, // The action feedback context
   contextualMenuContext: PropTypes.any, // The contextual menu context
   history: PropTypes.any,
+  dragContext: PropTypes.any,
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withRouter(withActionFeedback(withContextualMenu(withResourceWorkspace(withTranslation('common')(DisplayResourcesList))))));
+export default withAppContext(withRouter(withActionFeedback(withContextualMenu(withResourceWorkspace(withDrag(withTranslation('common')(DisplayResourcesList)))))));

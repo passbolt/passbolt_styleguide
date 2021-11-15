@@ -18,12 +18,13 @@
 import {
   defaultAppContext,
   defaultProps,
-  defaultResourceWorkspaceContext,
+  defaultResourceWorkspaceContext, resource,
   tagsMock
 } from "./FilterResourcesByTags.test.data";
 import FilterResourcesByTags from "./FilterResourcesByTags.test.page";
 import MockPort from "../../../test/mock/MockPort";
 import {ResourceWorkspaceFilterTypes} from "../../../contexts/ResourceWorkspaceContext";
+import PassboltApiFetchError from "../../../../shared/lib/Error/PassboltApiFetchError";
 
 beforeEach(() => {
   jest.resetModules();
@@ -47,6 +48,9 @@ describe("See tags", () => {
     };
     const context = defaultAppContext(appContext); // The applicative context
     const resourceWorkspaceContext = defaultResourceWorkspaceContext();
+    const requestMockImpl = jest.fn((message, data) => data);
+    const mockContextRequest = (context, implementation) => jest.spyOn(context.port, 'request').mockImplementation(implementation);
+    mockContextRequest(context, requestMockImpl);
     /**
      * Given an organization with 5 tags
      * Then I should see the 5 tags on the left sidebar
@@ -58,17 +62,44 @@ describe("See tags", () => {
       page = new FilterResourcesByTags(context, props, resourceWorkspaceContext);
     });
 
-    it('I should see the 5 tags made on the resource', () => {
+    it('As LU I should see the 5 tags made on the resource', () => {
       expect(page.sidebarTagFilterSection.exists()).toBeTruthy();
       expect(page.sidebarTagFilterSection.count()).toBe(5);
     });
 
-    it('I should be able to identify each tag name', () => {
+    it('As LU I should be able to identify each tag name', () => {
       expect(page.sidebarTagFilterSection.name(1)).toBe('#git');
       expect(page.sidebarTagFilterSection.name(2)).toBe('gpg');
       expect(page.sidebarTagFilterSection.name(3)).toBe('slug');
       expect(page.sidebarTagFilterSection.name(4)).toBe('test');
       expect(page.sidebarTagFilterSection.name(5)).toBe('there’s always something to look at if you open your eyes!');
+    });
+
+    it('As LU I should be able to drop a resource on tag', async() => {
+      await page.sidebarTagFilterSection.onDropTag(3);
+      expect(context.port.request).toHaveBeenCalledWith("passbolt.tags.add-resources-tag", {"resources": [resource.id],"tag": tagsMock[1]});
+    });
+
+    it('As LU I should see tags disabled if a resource is dragging', async() => {
+      await page.sidebarTagFilterSection.onDropTag(3);
+      expect(page.sidebarTagFilterSection.tagClassname(1)).toBe('row  disabled');
+      expect(page.sidebarTagFilterSection.tagClassname(2)).toBe('row');
+      expect(page.sidebarTagFilterSection.tagClassname(3)).toBe('row');
+      expect(page.sidebarTagFilterSection.tagClassname(4)).toBe('row selected');
+      expect(page.sidebarTagFilterSection.tagClassname(5)).toBe('row');
+    });
+
+    it('As LU I should see an error dialog if the drop operation fails for an unexpected reason', async() => {
+      // Mock the request function to make it return an error.
+      jest.spyOn(context.port, 'request').mockImplementationOnce(() => {
+        throw new PassboltApiFetchError("Jest simulate API error.");
+      });
+
+      await page.sidebarTagFilterSection.onDropTag(3);
+
+      // Throw general error message
+      expect(page.sidebarTagFilterSection.errorDialogExist).toBeTruthy();
+      expect(page.sidebarTagFilterSection.errorDialogExist).toBeTruthy();
     });
 
     it('As LU I filter the tags in the resources workspace primary sidebar by personal tag', async() => {

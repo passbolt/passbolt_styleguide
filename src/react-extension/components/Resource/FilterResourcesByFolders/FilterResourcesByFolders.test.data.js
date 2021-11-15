@@ -1,5 +1,5 @@
-import MockPort from "../../../test/mock/MockPort";
 import {ResourceWorkspaceFilterTypes} from "../../../contexts/ResourceWorkspaceContext";
+import MockPort from "../../../test/mock/MockPort";
 
 /**
  * Returns the default app context for the unit test
@@ -20,10 +20,6 @@ export function defaultAppContext(appContext) {
  */
 export function defaultProps() {
   return {
-    context: {
-      port: new MockPort(),
-      folders: foldersMock
-    },
     resourceWorkspaceContext: {
       filter: {
         type: ResourceWorkspaceFilterTypes.FOLDER,
@@ -31,6 +27,15 @@ export function defaultProps() {
           folder: foldersMock[0]
         }
       }
+    },
+    dragContext: {
+      dragging: true,
+      draggedItems: {
+        folders: [foldersMock[3]],
+        resources: []
+      },
+      onDragStart: jest.fn(),
+      onDragEnd: jest.fn(),
     },
     history: {
       push: jest.fn()

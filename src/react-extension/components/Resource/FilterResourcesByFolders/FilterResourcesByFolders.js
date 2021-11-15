@@ -23,6 +23,7 @@ import PropTypes from "prop-types";
 import {withDialog} from "../../../contexts/DialogContext";
 import ReactList from "react-list";
 import {Trans, withTranslation} from "react-i18next";
+import {withDrag} from "../../../contexts/DragContext";
 
 // Root virtual folder identifier.
 const ROOT = null;
@@ -37,7 +38,6 @@ class FilterResourcesByFolders extends React.Component {
     this.state = this.getDefaultState();
     this.createElementsRef();
     this.bindCallbacks();
-    this.initEventHandlers();
   }
 
   /**
@@ -46,14 +46,9 @@ class FilterResourcesByFolders extends React.Component {
    */
   getDefaultState() {
     return {
-      draggedItems: {
-        folders: [],
-        resources: []
-      },
-      dragging: false,
       draggingOverTitle: false,
+      draggingOverTitleSince: null,
       open: true,
-      openFolders: []
     };
   }
 
@@ -68,7 +63,6 @@ class FilterResourcesByFolders extends React.Component {
    * Create DOM nodes or React elements references in order to be able to access them programmatically.
    */
   createElementsRef() {
-    this.dragFeedbackElementRef = React.createRef();
     this.listElement = React.createRef();
     this.titleElementRef = React.createRef();
   }
@@ -82,46 +76,7 @@ class FilterResourcesByFolders extends React.Component {
     this.handleDragLeaveTitle = this.handleDragLeaveTitle.bind(this);
     this.handleDragOverTitle = this.handleDragOverTitle.bind(this);
     this.handleDropTitle = this.handleDropTitle.bind(this);
-    this.handleFolderCloseEvent = this.handleFolderCloseEvent.bind(this);
-    this.handleFolderDragEndEvent = this.handleFolderDragEndEvent.bind(this);
-    this.handleFolderDragStartEvent = this.handleFolderDragStartEvent.bind(this);
-    this.handleFolderDropEvent = this.handleFolderDropEvent.bind(this);
-    this.handleFolderOpenEvent = this.handleFolderOpenEvent.bind(this);
-    this.handleFolderSelectEvent = this.handleFolderSelectEvent.bind(this);
-    this.handleGridDragStartEvent = this.handleGridDragStartEvent.bind(this);
-    this.handleGridDragEndEvent = this.handleGridDragEndEvent.bind(this);
     this.handleTitleMoreClickEvent = this.handleTitleMoreClickEvent.bind(this);
-  }
-
-  /**
-   * Initialize event listeners.
-   */
-  initEventHandlers() {
-    document.addEventListener('passbolt.resources.drag-start', this.handleGridDragStartEvent);
-    document.addEventListener('passbolt.resources.drag-end', this.handleGridDragEndEvent);
-  }
-
-  /**
-   * Handle when the user opens a folder.
-   * @param {ReactEvent} event The event
-   * @param {Object} folder The open folder
-   */
-  handleFolderCloseEvent(event, folder) {
-    const openFolders = this.state.openFolders;
-    const folderIndex = openFolders.findIndex(item => item.id === folder.id);
-    openFolders.splice(folderIndex, 1);
-    this.setState({openFolders});
-  }
-
-  /**
-   * Handle when the user opens a folder.
-   * @param {ReactEvent} event The event
-   * @param {Object} folder The open folder
-   */
-  handleFolderOpenEvent(event, folder) {
-    const openFolders = this.state.openFolders;
-    openFolders.push(folder);
-    this.setState({openFolders});
   }
 
   /**
@@ -170,7 +125,8 @@ class FilterResourcesByFolders extends React.Component {
    */
   handleDragLeaveTitle() {
     const draggingOverTitle = false;
-    this.setState({draggingOverTitle});
+    const draggingOverTitleSince = null;
+    this.setState({draggingOverTitle, draggingOverTitleSince});
   }
 
   /**
@@ -185,114 +141,42 @@ class FilterResourcesByFolders extends React.Component {
     event.preventDefault();
 
     if (this.state.draggingOverTitle) {
+      this.openTitleOnLongDragOver();
       return;
     }
     const draggingOverTitle = true;
-    this.setState({draggingOverTitle});
+    const draggingOverTitleSince = Date.now();
+    this.setState({draggingOverTitle, draggingOverTitleSince});
+  }
+
+  /**
+   * Open the root folder when the user is dragging for a defined period on it.
+   * @param {ReactEvent} event The event
+   */
+  openTitleOnLongDragOver() {
+    const period = 2000;
+
+    // If already open, leave.
+    if (!this.state.open) {
+      const now = Date.now();
+      if (now - this.state.draggingOverTitleSince > period) {
+        this.handleSectionTitleClickCaretEvent();
+      }
+    }
   }
 
   /**
    * Handle when the user is dropping the content on the title.
    */
   handleDropTitle() {
-    const folders = this.state.draggedItems.folders.map(folder => folder.id);
-    const resources = this.state.draggedItems.resources.map(resource => resource.id);
+    const folders = this.props.dragContext.draggedItems.folders.map(folder => folder.id);
+    const resources = this.props.dragContext.draggedItems.resources.map(resource => resource.id);
     const folderParentId = null;
     this.props.context.port.request("passbolt.folders.open-move-confirmation-dialog", {folders, resources, folderParentId});
 
     // The dragLeave event is not fired when a drop is happening. Cancel the state manually.
     const draggingOverTitle = false;
     this.setState({draggingOverTitle});
-  }
-
-  /**
-   * Handle when the user stop dragging a folder.
-   */
-  handleFolderDragEndEvent() {
-    const draggedItems = {
-      folders: [],
-      resources: [],
-    };
-    const dragging = false;
-    this.setState({draggedItems, dragging});
-  }
-
-  /**
-   * Handle when the user starts dragging a folder.
-   * @param {ReactEvent} event The event
-   * @param {Object} folder The dragged folder
-   */
-  handleFolderDragStartEvent(event, folder) {
-    const dragging = true;
-    const draggedItems = {
-      folders: [folder],
-      resources: []
-    };
-    this.setState({dragging, draggedItems});
-    event.dataTransfer.setDragImage(this.dragFeedbackElementRef.current, 5, 5);
-  }
-
-  /**
-   * Handle when the user drop the content on a folder.
-   * @param {ReactEvent} event The event
-   * @param {Object} folder The drop folder
-   */
-  handleFolderDropEvent(event, dropFolder) {
-    const folders = this.state.draggedItems.folders.map(folder => folder.id);
-    const resources = this.state.draggedItems.resources.map(resource => resource.id);
-    const folderParentId = dropFolder.id;
-    this.props.context.port.request("passbolt.folders.open-move-confirmation-dialog", {folders, resources, folderParentId});
-  }
-
-  /**
-   * Handle the user selects a folder from the list.
-   * @param {ReactEvent} event The event
-   * @param {Object} folder The folder
-   */
-  handleFolderSelectEvent(event, folder) {
-    this.props.history.push(`/app/folders/view/${folder.id}`);
-  }
-
-  /**
-   * Handle when the user is dragging content from the grid.
-   * @param {ReactEvent} event The event
-   * event.details should be formatted as following:
-   * {
-   *   array folders The list of dragged folders
-   *   array resources The list of dragged resources
-   * }
-   */
-  handleGridDragStartEvent(event) {
-    const draggedItems = event.detail;
-    this.setState({draggedItems});
-  }
-
-  /**
-   * Handle when the user stops dragging content from the grid.
-   */
-  handleGridDragEndEvent() {
-    const draggedItems = {
-      folders: [],
-      resources: []
-    };
-    this.setState({draggedItems});
-  }
-
-  /**
-   * Open the tree until a given folder
-   * @param {object} folder The folder to scroll to
-   */
-  openFolderTree(folder) {
-    let openFolders = this.state.openFolders;
-
-    // If the selected folder has a parent. Open it if not yet open.
-    if (folder.folder_parent_id) {
-      const folderParent = this.props.context.folders.folders.find(item => item.id === folder.folder_parent_id);
-      if (folderParent) {
-        openFolders = Array.from(new Set([...openFolders, folderParent]));
-        this.setState({openFolders}, () => this.openFolderTree(folderParent));
-      }
-    }
   }
 
   /**
@@ -341,38 +225,6 @@ class FilterResourcesByFolders extends React.Component {
   }
 
   /**
-   * Render the drag feedback
-   * @returns {JSX}
-   */
-  renderDragFeedback() {
-    let error = false;
-    let dragFeedbackText = "";
-    if (this.state.dragging) {
-      const canDrag = this.canDragItems(this.state.draggedItems);
-      if (canDrag) {
-        dragFeedbackText = this.state.draggedItems.folders[0].name;
-      } else {
-        error = true;
-        dragFeedbackText = this.translate("You are not allowed to move this content");
-      }
-    }
-
-    /*
-     * We display the drag feedback element even if there is no drag event happening.
-     * The start drag event can start using the element before the render is completely rendered, not sure the waiting
-     * the status to be updated will be sufficient.
-     */
-    return (
-      <div ref={this.dragFeedbackElementRef} className="drag-and-drop">
-        {error &&
-        <Icon name="ban"/>
-        }
-        <span className={`message ${error ? "not-allowed" : ""}`}>{dragFeedbackText}</span>
-      </div>
-    );
-  }
-
-  /**
    * Check if the component is loading.
    * @returns {boolean}
    */
@@ -416,10 +268,18 @@ class FilterResourcesByFolders extends React.Component {
 
   /**
    * Check if the user is currently dragging content.
-   * @returns {number}
+   * @returns {boolean}
    */
   isDragging() {
-    return this.state.draggedItems.folders.length !== 0 || this.state.draggedItems.resources.length !== 0;
+    return this.props.dragContext.dragging;
+  }
+
+  /**
+   * return dragged items
+   * @returns {*}
+   */
+  get draggedItems() {
+    return this.props.dragContext.draggedItems;
   }
 
   /**
@@ -443,7 +303,7 @@ class FilterResourcesByFolders extends React.Component {
     let disabled = false;
 
     if (isDragging && this.state.draggingOverTitle) {
-      const canDragItems = this.canDragItems(this.state.draggedItems);
+      const canDragItems = this.canDragItems(this.draggedItems);
       if (canDragItems) {
         showDropFocus = true;
       } else {
@@ -454,7 +314,6 @@ class FilterResourcesByFolders extends React.Component {
 
     return (
       <div className="navigation-secondary-tree navigation-secondary navigation-folders accordion">
-        {this.renderDragFeedback()}
         <div className="accordion-header">
           <div className={`${isOpen ? "open" : "close"} node root`}>
             <div className={`row title ${showDropFocus ? "drop-focus" : ""} ${disabled ? "disabled" : ""}`}>
@@ -498,18 +357,7 @@ class FilterResourcesByFolders extends React.Component {
           <ReactList
             itemRenderer={(index, key) => <FilterResourcesByFoldersItem
               key={key}
-              draggedItems={this.state.draggedItems}
-              folder={rootFolders[index]}
-              folders={this.props.context.folders}
-              isDragging={isDragging}
-              onClose={this.handleFolderCloseEvent}
-              onDragEnd={this.handleFolderDragEndEvent}
-              onDragStart={this.handleFolderDragStartEvent}
-              onDrop={this.handleFolderDropEvent}
-              onOpen={this.handleFolderOpenEvent}
-              openFolders={this.state.openFolders}
-              onSelect={this.handleFolderSelectEvent}
-              selectedFolder={this.selectedFolder}/>
+              folder={rootFolders[index]}/>
             }
             itemsRenderer={(items, ref) => <ul ref={ref} className="folders-tree">{items}</ul>}
             length={rootFolders.length}
@@ -532,7 +380,8 @@ FilterResourcesByFolders.propTypes = {
   history: PropTypes.object,
   resourceWorkspaceContext: PropTypes.object,
   dialogContext: PropTypes.any,
+  dragContext: PropTypes.any,
   t: PropTypes.func, // The translation function
 };
 
-export default withRouter(withDialog(withContextualMenu(withResourceWorkspace(withAppContext(withTranslation('common')(FilterResourcesByFolders))))));
+export default withRouter(withDialog(withContextualMenu(withResourceWorkspace(withAppContext(withDrag(withTranslation('common')(FilterResourcesByFolders)))))));

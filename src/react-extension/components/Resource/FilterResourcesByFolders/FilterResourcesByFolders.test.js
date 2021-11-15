@@ -28,8 +28,9 @@ describe("See Folders", () => {
   let page; // The page to test against
   const context = defaultAppContext(); // The applicative context
   const props = defaultProps(); // The props to pass
-
-  const mockContextRequest = implementation => jest.spyOn(props.context.port, 'request').mockImplementation(implementation);
+  const requestMockImpl = jest.fn((message, data) => data);
+  const mockContextRequest = (context, implementation) => jest.spyOn(context.port, 'request').mockImplementation(implementation);
+  mockContextRequest(context, requestMockImpl);
 
   describe('As LU I see the folders', () => {
     /**
@@ -69,27 +70,23 @@ describe("See Folders", () => {
     });
 
     it('As LU I should be able to drag and drop a folder on the root folder', async() => {
-      const requestMockImpl = jest.fn();
-      mockContextRequest(requestMockImpl);
       await page.filterResourcesByFoldersItem.dragStartOnFolder(1);
       await page.filterResourcesByFoldersItem.dragEndOnFolder(1);
       await page.filterResourcesByFolders.onDragOver;
       await page.filterResourcesByFolders.onDragLeave;
       await page.filterResourcesByFolders.onDragOver;
       await page.filterResourcesByFolders.onDrop;
-      const data = {folders: [], resources: [], folderParentId: null};
-      expect(props.context.port.request).toHaveBeenCalledWith("passbolt.folders.open-move-confirmation-dialog", data);
-    });
+      expect(props.dragContext.onDragStart).toHaveBeenCalled();
+      expect(context.port.request).toHaveBeenCalledWith("passbolt.folders.open-move-confirmation-dialog", {folders: ["3ed65efd-7c41-5906-9c02-71e2d95951db"], resources: [], folderParentId: null});
+      expect(props.dragContext.onDragEnd).toHaveBeenCalled();    });
 
     it('As LU I should be able to drag and drop a folder on another folder', async() => {
-      const requestMockImpl = jest.fn();
-      mockContextRequest(requestMockImpl);
       await page.filterResourcesByFoldersItem.toggleDisplayChildFolders(2);
       await page.filterResourcesByFoldersItem.dragStartOnFolder(3);
       await page.filterResourcesByFoldersItem.dragEndOnFolder(3);
       await page.filterResourcesByFoldersItem.onDropFolder(1);
-      const data = {folders: [], resources: [], folderParentId: '9e03fd73-04c0-5514-95fa-1a6cf2c7c093'};
-      expect(props.context.port.request).toHaveBeenCalledWith("passbolt.folders.open-move-confirmation-dialog", data);
+      expect(props.dragContext.onDragStart).toHaveBeenCalled();
+      expect(context.port.request).toHaveBeenCalledWith("passbolt.folders.open-move-confirmation-dialog", {folders: ["3ed65efd-7c41-5906-9c02-71e2d95951db"], resources: [], folderParentId: null});
     });
 
     it('As LU I should be able to open and close folder to see or not the child folders', async() => {
@@ -104,7 +101,7 @@ describe("See Folders", () => {
   describe('As LU I should see the Folder section empty', () => {
     const context = defaultAppContext(); // The applicative context
     const props = defaultProps();
-    props.context.folders = [];
+    context.folders = [];
     /**
      * Given an organization with 0 Folders
      * Then I should see the Folder section empty
