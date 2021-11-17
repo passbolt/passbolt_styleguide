@@ -27,12 +27,23 @@ class InstallExtension extends Component {
     this.bindCallbacks();
   }
 
+  componentDidMount() {
+    window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", this.handleThemeChange);
+  }
+
+  componentDidUnmount() {
+    window.matchMedia("(prefers-color-scheme: dark)").removeEventListener("change", this.handleThemeChange);
+  }
+
   /**
    * Returns the default component state
    */
   getDefaultState() {
+    const currentTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? "dark" : "light";
+
     return {
-      browserName: detectBrowserName()
+      browserName: detectBrowserName(),
+      theme: currentTheme
     };
   }
 
@@ -41,6 +52,7 @@ class InstallExtension extends Component {
    */
   bindCallbacks() {
     this.handleRefreshClick = this.handleRefreshClick.bind(this);
+    this.handleThemeChange = this.handleThemeChange.bind(this);
   }
 
   /**
@@ -50,13 +62,14 @@ class InstallExtension extends Component {
    * @returns {string}
    */
   get browserStoreThumbnailUrl() {
+    const color = this.state.theme === "dark" ? "white" : "black";
+
     switch (this.state.browserName) {
-      case BROWSER_NAMES.CHROME:
-        return `${this.props.context.trustedDomain}/img/third_party/ChromeWebStore_black.png`; // @todo _white if theme midgar
       case BROWSER_NAMES.FIREFOX:
-        return `${this.props.context.trustedDomain}/img/third_party/FirefoxAMO_black.svg`; // @todo _white if theme midgar
+        return `${this.props.context.trustedDomain}/img/third_party/FirefoxAMO_${color}.svg`;
+      case BROWSER_NAMES.CHROME:
       default:
-        return `${this.props.context.trustedDomain}/img/third_party/ChromeWebStore_black.png`;
+        return `${this.props.context.trustedDomain}/img/third_party/ChromeWebStore_${color}.svg`;
     }
   }
 
@@ -90,6 +103,14 @@ class InstallExtension extends Component {
    */
   handleRefreshClick() {
     window.location.reload();
+  }
+
+  /**
+   * Changes the displayed theme according to users OS theme preferences.
+   * This is useful to update images based on the theme.
+   */
+  handleThemeChange(e) {
+    this.setState({theme: e.matches ? "dark" : "light"});
   }
 
   /**
