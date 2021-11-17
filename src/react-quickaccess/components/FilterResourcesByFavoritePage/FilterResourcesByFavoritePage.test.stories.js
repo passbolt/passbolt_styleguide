@@ -1,6 +1,5 @@
 import React from "react";
 import {MemoryRouter, Route} from "react-router-dom";
-import "../../../css/themes/default/ext_quickaccess.css";
 import PropTypes from "prop-types";
 import FilterResourcesByFavoritePage from "./FilterResourcesByFavoritePage";
 import AppContext from "../../contexts/AppContext";
@@ -23,11 +22,15 @@ Template.propTypes = {
   context: PropTypes.object,
 };
 
+const parameters = {
+  css: "ext_quickaccess"
+};
 
 export const InitialLoad = Template.bind({});
 InitialLoad.args = {
   context: defaultAppContext()
 };
+InitialLoad.parameters = parameters;
 
 const contextNoResource = {
   port: {
@@ -38,6 +41,7 @@ export const NoFavoriteResource = Template.bind({});
 NoFavoriteResource.args = {
   context: defaultAppContext(contextNoResource)
 };
+NoFavoriteResource.parameters = parameters;
 
 const contextWithResources = {
   port: {
@@ -48,3 +52,4 @@ export const FavoriteResources = Template.bind({});
 FavoriteResources.args = {
   context: defaultAppContext(contextWithResources)
 };
+FavoriteResources.parameters = parameters;

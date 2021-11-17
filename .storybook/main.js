@@ -10,10 +10,10 @@ module.exports = {
       options: {
         backgrounds: false
       }
-    },
-    'storybook-addon-themes',
+    }
   ],
   "core": {
     "builder": "webpack5"
-  }
+  },
+  "staticDirs": ['../src']
 }

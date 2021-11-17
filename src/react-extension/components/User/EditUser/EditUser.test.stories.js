@@ -3,7 +3,6 @@ import React from "react";
 import AppContext from "../../../contexts/AppContext";
 import PropTypes from "prop-types";
 import EditUser from "./EditUser";
-import "../../../../css/themes/default/api_main.css";
 
 
 export default {
@@ -51,3 +50,6 @@ Template.propTypes = {
 };
 
 export const Initial = Template.bind({});
+Initial.parameters = {
+  css: "api_main"
+};

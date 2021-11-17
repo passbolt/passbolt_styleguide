@@ -1,6 +1,5 @@
 import React from "react";
 import {MemoryRouter, Route} from "react-router-dom";
-import "../../../../css/themes/default/ext_authentication.css";
 import AcceptLoginServerKeyChange from "./AcceptLoginServerKeyChange";
 import {AuthenticationContext} from "../../../contexts/AuthenticationContext";
 
@@ -30,3 +29,6 @@ const Template = args =>
 
 
 export const Initial = Template.bind({});
+Initial.parameters = {
+  css: "ext_authentication"
+};

@@ -1,6 +1,5 @@
 import React from "react";
 import {MemoryRouter, Route} from "react-router-dom";
-import "../../../css/themes/default/ext_quickaccess.css";
 import PropTypes from "prop-types";
 import FilterResourcesBySharedWithMePage from "./FilterResourcesBySharedWithMePage";
 import AppContext from "../../contexts/AppContext";
@@ -23,11 +22,15 @@ Template.propTypes = {
   context: PropTypes.object,
 };
 
+const parameters = {
+  css: "ext_quickaccess"
+};
 
 export const InitialLoad = Template.bind({});
 InitialLoad.args = {
   context: defaultAppContext()
 };
+InitialLoad.parameters = parameters;
 
 const contextNoResource = {
   port: {
@@ -38,6 +41,7 @@ export const NoSharedWithMeResource = Template.bind({});
 NoSharedWithMeResource.args = {
   context: defaultAppContext(contextNoResource)
 };
+NoSharedWithMeResource.parameters = parameters;
 
 const contextResources = {
   port: {
@@ -48,3 +52,4 @@ export const SharedWithMeResources = Template.bind({});
 SharedWithMeResources.args = {
   context: defaultAppContext(contextResources)
 };
+SharedWithMeResources.parameters = parameters;

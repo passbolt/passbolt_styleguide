@@ -1,6 +1,5 @@
 import React from "react";
 import {MemoryRouter, Route} from "react-router-dom";
-import "../../../css/themes/default/ext_quickaccess.css";
 import PropTypes from "prop-types";
 import FilterResourcesByGroupPage from "./FilterResourcesByGroupPage";
 import AppContext from "../../contexts/AppContext";
@@ -24,12 +23,16 @@ Template.propTypes = {
   initialEntries: PropTypes.array
 };
 
+const parameters = {
+  css: "ext_quickaccess"
+};
 
 export const InitialLoad = Template.bind({});
 InitialLoad.args = {
   context: defaultAppContext(),
   initialEntries: ['/']
 };
+InitialLoad.parameters = parameters;
 
 const contextNoGroup = {
   port: {
@@ -41,6 +44,7 @@ NoGroups.args = {
   context: defaultAppContext(contextNoGroup),
   initialEntries: ['/']
 };
+NoGroups.parameters = parameters;
 
 const contextGroupsAndResources = {
   port: {
@@ -52,3 +56,4 @@ GroupsResourcesMatched.args = {
   context: defaultAppContext(contextGroupsAndResources),
   initialEntries: ['/']
 };
+GroupsResourcesMatched.parameters = parameters;

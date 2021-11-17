@@ -15,7 +15,6 @@
 import React, {useEffect} from "react";
 import AskInFormMenuDisplay from "./AskInFormMenuDisplay";
 import ReactDOM from "react-dom";
-import "../../../css/themes/default/ext_in_form_cta.css";
 import AppContext from "../../contexts/AppContext";
 
 export default {
@@ -57,7 +56,9 @@ const Template = ({context}) =>
     <InFormAnchor context={context}/>
   </div>;
 
-
+const parameters = {
+  css: "ext_in_form_cta"
+};
 
 export const Inactive = Template.bind({});
 Inactive.args = {
@@ -67,6 +68,7 @@ Inactive.args = {
     }
   }
 };
+Inactive.parameters = parameters;
 
 export const ActiveWithNoSuggestion = Template.bind({});
 ActiveWithNoSuggestion.args = {
@@ -76,6 +78,7 @@ ActiveWithNoSuggestion.args = {
     }
   }
 };
+ActiveWithNoSuggestion.parameters = parameters;
 
 export const ActiveWithOneSuggestion = Template.bind({});
 ActiveWithOneSuggestion.args = {
@@ -85,3 +88,4 @@ ActiveWithOneSuggestion.args = {
     }
   }
 };
+ActiveWithOneSuggestion.parameters = parameters;
