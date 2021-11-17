@@ -19,6 +19,22 @@
 import InstallExtensionTestPage from "./InstallExtension.test.page";
 import {defaultProps} from "./InstallExtension.test.data";
 
+beforeAll(() => {
+  Object.defineProperty(window, 'matchMedia', {
+    writable: true,
+    value: jest.fn().mockImplementation(query => ({
+      matches: false,
+      media: query,
+      onchange: null,
+      addListener: jest.fn(),
+      removeListener: jest.fn(),
+      addEventListener: jest.fn(),
+      removeEventListener: jest.fn(),
+      dispatchEvent: jest.fn(),
+    })),
+  });
+});
+
 beforeEach(() => {
   jest.resetModules();
 });
