@@ -1,33 +1,22 @@
 import React from 'react';
 import MockTranslationProvider from "../src/react-extension/test/mock/components/Internationalisation/MockTranslationProvider";
-import { addDecorator } from '@storybook/react';
-import { withThemes } from 'storybook-addon-themes/react';
 
 const withLocalProvider = (Story, context) =>
   <MockTranslationProvider language={context.globals.locale}>
-    <Story {...context} />
+    <Story/>
   </MockTranslationProvider>;
 
-function ThemeDecorator(props) {
-  const { children, themeName } = props;
+function withStylesheet(Story, context) {
+  const themeName = context.globals.themes || "default";
+  const css = context.parameters.css || "ext_app";
+
   return (
     <>
-      {children}
-      {themeName && themeName !== '' && themeName !== 'default' && <>
-        <link rel="stylesheet" href={`/css/themes/${themeName}/api_main.css`}/>
-        <link rel="stylesheet" href={`/css/themes/${themeName}/api_reports.css`}/>
-        <link rel="stylesheet" href={`/css/themes/${themeName}/ext_app.css`}/>
-        <link rel="stylesheet" href={`/css/themes/${themeName}/ext_authentication.css`}/>
-        <link rel="stylesheet" href={`/css/themes/${themeName}/ext_in_form_cta.css`}/>
-        <link rel="stylesheet" href={`/css/themes/${themeName}/ext_in_form_menu.css`}/>
-        <link rel="stylesheet" href={`/css/themes/${themeName}/ext_quickaccess.css`}/>
-      </>}
+      <link rel="stylesheet" href={`/css/themes/${themeName}/${css}.css`}/>
+      <Story/>
     </>
   );
 };
-
-addDecorator(withLocalProvider);
-addDecorator(withThemes);
 
 export const globalTypes = {
   locale: {
@@ -43,6 +32,18 @@ export const globalTypes = {
       ],
     },
   },
+  themes: {
+    name: 'Theme',
+    description: 'Theme switcher',
+    defaultValue: 'default',
+    toolbar: {
+      icon: 'photo',
+      items: [
+        { value: 'default', title: 'Default'},
+        { value: 'midgar', title: 'Midgar'}
+      ],
+    },
+  }
 }
 
 export const parameters = {
@@ -52,13 +53,7 @@ export const parameters = {
       color: /(background|color)$/i,
       date: /Date$/,
     },
-  },
-  themes: {
-    default: 'default',
-    list: [
-      { name: 'default', class: '', color: '#fff' },
-      { name: 'midgar', class: 'midgar', color: '#30302d' }
-    ],
-    Decorator: ThemeDecorator
   }
 };
+
+export const decorators = [withLocalProvider, withStylesheet];

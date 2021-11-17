@@ -1,7 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
 import Icon from "./Icon";
-import "../../../../css/themes/default/api_main.css";
 
 
 export default {
@@ -74,3 +73,6 @@ Template.propTypes = {
 };
 
 export const Initial = Template.bind({});
+Initial.parameters = {
+  css: "api_main"
+};

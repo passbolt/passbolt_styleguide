@@ -1,6 +1,5 @@
 import React from "react";
 import {MemoryRouter, Route} from "react-router-dom";
-import "../../../css/themes/default/ext_quickaccess.css";
 import PropTypes from "prop-types";
 import AppContext from "../../contexts/AppContext";
 import PassphraseDialog from "./PassphraseDialog";
@@ -22,6 +21,9 @@ Template.propTypes = {
   context: PropTypes.object,
 };
 
+const parameters = {
+  css: "ext_quickaccess"
+};
 
 export const Initial = Template.bind({});
 Initial.args = {
@@ -30,6 +32,7 @@ Initial.args = {
   classname: "",
   onComplete: () => {},
 };
+Initial.parameters = parameters;
 
 const contextRequestError = {
   port: {
@@ -43,3 +46,4 @@ ErrorPassphrase.args = {
   classname: "",
   onComplete: () => {},
 };
+ErrorPassphrase.parameters = parameters;

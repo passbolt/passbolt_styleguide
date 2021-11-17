@@ -1,6 +1,5 @@
 import {MemoryRouter, Route} from "react-router-dom";
 import React from "react";
-import "../../../../css/themes/default/ext_app.css";
 import ConfigurePassphraseGenerator from "./ConfigurePassphraseGenerator";
 
 

@@ -1,6 +1,5 @@
 import React from "react";
 import {MemoryRouter, Route} from "react-router-dom";
-import "../../../../css/themes/default/ext_app.css";
 import AppContext from "../../../contexts/AppContext";
 import EditResourceDescription from "./EditResourceDescription";
 import SiteSettings from "../../../../shared/lib/Settings/SiteSettings";

@@ -15,7 +15,6 @@
 import React from "react";
 import DisplayInFormMenu from "./DisplayInFormMenu";
 import DisplayInFormMenuItem from "./DisplayInFormMenuItem";
-import "../../../css/themes/default/ext_in_form_menu.css";
 
 export default {
   title: 'Passbolt/WebIntegration/InFormMenu',
@@ -186,6 +185,14 @@ const TemplateWithScroll = () => {
   );
 }
 
+const parameters = {
+  css: "ext_in_form_menu"
+};
+
 export const AllMenuItems = TemplateAllItemsMenu.bind({});
 export const NoScrollItems = TemplateNoScroll.bind({});
 export const ScrollableMenu = TemplateWithScroll.bind({});
+
+AllMenuItems.parameters = parameters;
+NoScrollItems.parameters = parameters;
+ScrollableMenu.parameters = parameters;
