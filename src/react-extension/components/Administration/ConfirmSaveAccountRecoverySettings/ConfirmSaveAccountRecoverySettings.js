@@ -87,7 +87,7 @@ class ConfirmSaveAccountRecoverySettings extends Component {
    * Handle save operation success.
    */
   async handleSaveSuccess() {
-    await this.props.actionFeedbackContext.displaySuccess(this.translate("The account recovery organisation settings has been updated successfully"));
+    await this.props.actionFeedbackContext.displaySuccess(this.translate("The account recovery organization settings has been updated successfully"));
     this.props.onClose();
   }
 
@@ -255,7 +255,7 @@ class ConfirmSaveAccountRecoverySettings extends Component {
                       </tr>
                       <tr className="key-length">
                         <td className="label"><Trans>Key length</Trans></td>
-                        <td className="value">{this.props.accountRecovery.organisationRecoveryKey.value.keyLength}</td>
+                        <td className="value">{this.props.accountRecovery.organisationRecoveryKey.value.length}</td>
                       </tr>
                       <tr className="created">
                         <td className="label"><Trans>Created</Trans></td>

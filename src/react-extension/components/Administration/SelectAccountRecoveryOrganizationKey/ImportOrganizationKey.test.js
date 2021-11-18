@@ -179,10 +179,10 @@ describe("See the Confirm Save Account Recovery Settings", () => {
       const waitForFileReadCallback = () => expect(page.importKeyTextArea.value).not.toBe("");
       await page.userHasSelectedAFile('Key already used!', waitForFileReadCallback);
 
-      const waitForErrorMessageCallback = () => expect(page.errorMessage).not.toBeNull();
+      const waitForErrorMessageCallback = () => expect(page.importErrorMessage).not.toBeNull();
       await page.applyChanges(waitForErrorMessageCallback);
 
-      expect(page.errorMessage.textContent).toBe(errorMessage);
+      expect(page.importErrorMessage.textContent).toBe(errorMessage);
     });
   });
 });

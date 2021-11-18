@@ -41,7 +41,7 @@ export const mockAccountRecoveryDisabled = {
   accountRecovery: {
     policy: {
       value: 'disabled',
-      info: "Backup of the private key and passphrase will not be stored. This is the safest option.\nWarning: If users lose their private key and passphrase they will not be able to recover their account",
+      info: "Backup of the private key and passphrase will not be stored. This is the safest option.\nWarning: If users lose their private key and passphrase they will not be able to recover their account.",
       hasChanged: true
     },
     organisationRecoveryKey: {
@@ -93,14 +93,14 @@ export const mockAccountRecoveryDisableWithOrganisationKey = {
   accountRecovery: {
     policy: {
       value: 'disabled',
-      info: "Backup of the private key and passphrase will not be stored. This is the safest option.\nWarning: If users lose their private key and passphrase they will not be able to recover their account",
+      info: "Backup of the private key and passphrase will not be stored. This is the safest option.\nWarning: If users lose their private key and passphrase they will not be able to recover their account.",
       hasChanged: true
     },
     organisationRecoveryKey: {
       value: {
         fingerprint: "848E95CC7493129AD862583129B81CA8936023DD",
         algorithm: "RSA",
-        keyLength: 4096,
+        length: 4096,
         created: "2021-08-05T02:50:34.12",
         expires: "Never"
       },
@@ -120,7 +120,7 @@ export const mockAccountRecoveryMandatoryWithOrganisationKey = {
       value: {
         fingerprint: "848E95CC7493129AD862583129B81CA8936023DD",
         algorithm: "RSA",
-        keyLength: 4096,
+        length: 4096,
         created: "2021-08-05T02:50:34.12",
         expires: "Never"
       },
@@ -140,7 +140,7 @@ export const mockAccountRecoveryOptOutWithOrganisationKey = {
       value: {
         fingerprint: "848E95CC7493129AD862583129B81CA8936023DD",
         algorithm: "RSA",
-        keyLength: 4096,
+        length: 4096,
         created: "2021-08-05T02:50:34.12",
         expires: "Never"
       },
@@ -160,7 +160,7 @@ export const mockAccountRecoveryOptInWithOrganisationKey = {
       value: {
         fingerprint: "848E95CC7493129AD862583129B81CA8936023DD",
         algorithm: "RSA",
-        keyLength: 4096,
+        length: 4096,
         created: "2021-08-05T02:50:34.12",
         expires: "Never"
       },

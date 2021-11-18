@@ -21,6 +21,7 @@ import {withAdministrationWorkspace} from "../../../contexts/AdministrationWorks
 import {withDialog} from "../../../contexts/DialogContext";
 import SelectAccountRecoveryOrganizationKey from "../SelectAccountRecoveryOrganizationKey/SelectAccountRecoveryOrganizationKey";
 import ConfirmSaveAccountRecoverySettings from "../ConfirmSaveAccountRecoverySettings/ConfirmSaveAccountRecoverySettings";
+import DownloadOrganizationKey from "../SelectAccountRecoveryOrganizationKey/DownloadOrganizationKey";
 
 /**
  * This component allows to display the email notifications for the administration
@@ -46,12 +47,14 @@ class ManageAccountRecoveryAdministrationSettings extends React.Component {
       processing: false, // component is processing or not
       hasChangedSettings: false, // if the settings has changed
       organisationRecoveryKeyToggle: false,
-      accountRecoveryPolicy: null,
-      organisationRecoveryKey: null,
       organisationRecoveryKeyError: null,
-      newAccountRecoveryPolicy: {
+      currentAccountRecoverySettings: {
         policy: null,
-        organizationKey: null
+        organisationRecoveryKey: null
+      },
+      accountRecoverySettings: {
+        policy: null,
+        organisationRecoveryKey: null
       }
     };
   }
@@ -75,6 +78,7 @@ class ManageAccountRecoveryAdministrationSettings extends React.Component {
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleRotateOrkClick = this.handleRotateOrkClick.bind(this);
     this.handleUpdateOrganizationKey = this.handleUpdateOrganizationKey.bind(this);
+    this.doDownloadPrivateKey = this.doDownloadPrivateKey.bind(this);
   }
 
   /**
@@ -93,13 +97,18 @@ class ManageAccountRecoveryAdministrationSettings extends React.Component {
    * fetch the account recovery organization settings
    */
   async findRecoverAccountSettings() {
-    const accountRecovery = {policy: 'disabled'}; //await this.props.context.port.request("passbolt.account-recovery.organization.get");
-
+    const accountRecovery = await this.props.context.port.request("passbolt.account-recovery.organization.get");
     this.setState({
       loading: false,
-      accountRecoveryPolicy: accountRecovery.policy,
       organisationRecoveryKeyToggle: Boolean(accountRecovery.account_recovery_organization_key),
-      organisationRecoveryKey: accountRecovery.account_recovery_organization_key
+      currentAccountRecoverySettings: {
+        policy: accountRecovery.policy,
+        organisationRecoveryKey: accountRecovery.account_recovery_organization_key
+      },
+      accountRecoverySettings: {
+        policy: accountRecovery.policy,
+        organisationRecoveryKey: accountRecovery.account_recovery_organization_key
+      }
     });
   }
 
@@ -111,10 +120,9 @@ class ManageAccountRecoveryAdministrationSettings extends React.Component {
   async handleInputChange(event) {
     const target = event.target;
     this.setState({
-      [target.name]: target.value,
-      newAccountRecoveryPolicy: {
-        policy: target.value,
-        organisationRecoveryKey: this.state.newAccountRecoveryPolicy.organisationRecoveryKey
+      accountRecoverySettings: {
+        ...this.state.accountRecoverySettings,
+        policy: target.value
       }
     });
 
@@ -145,17 +153,29 @@ class ManageAccountRecoveryAdministrationSettings extends React.Component {
   /**
    * Handle registration in current state of the new Organization public key
    */
-  async handleUpdateOrganizationKey(newOrk) {
+  async handleUpdateOrganizationKey(newOrkPublicKey, newOrkPrivateKey) {
     this.setState({
-      newAccountRecoveryPolicy: {
-        policy: this.state.newAccountRecoveryPolicy.policy,
-        organisationRecoveryKey: await this.getKeyDetail(newOrk)
+      accountRecoverySettings: {
+        ...this.state.accountRecoverySettings,
+        organisationRecoveryKey: await this.getKeyDetail(newOrkPublicKey)
       }
     });
+
+    if (newOrkPrivateKey) {
+      await this.doDownloadPrivateKey(newOrkPrivateKey);
+      this.props.dialogContext.open(DownloadOrganizationKey, {
+        privateKey: newOrkPrivateKey,
+        handleDownloadAgain: async() => { await this.doDownloadPrivateKey(newOrkPrivateKey); }
+      });
+    }
 
     if (!this.props.administrationWorkspaceContext.can.save) {
       this.props.administrationWorkspaceContext.onSaveEnabled();
     }
+  }
+
+  async doDownloadPrivateKey(private_key) {
+    await this.props.context.port.request("passbolt.account-recovery.organization.download-generated-key", {armored_key: private_key});
   }
 
   /**
@@ -180,7 +200,7 @@ class ManageAccountRecoveryAdministrationSettings extends React.Component {
    * @returns {boolean}
    */
   hasOrganisationRecoveryKey() {
-    return Boolean(this.state.organisationRecoveryKey);
+    return Boolean(this.state.currentAccountRecoverySettings.organisationRecoveryKey);
   }
 
   /**
@@ -246,7 +266,7 @@ class ManageAccountRecoveryAdministrationSettings extends React.Component {
    * @returns {Boolean}
    */
   validateOrganisationRecoveryKey() {
-    if (this.state.accountRecoveryPolicy !== 'disabled') {
+    if (this.state.accountRecoverySettings.policy !== 'disabled') {
       return this.hasOrganisationRecoveryKey();
     }
     return false;
@@ -264,17 +284,28 @@ class ManageAccountRecoveryAdministrationSettings extends React.Component {
    * save account recovery organisation settings
    */
   saveAccountRecoveryOrganisationSettings() {
+    const policyChanged = this.state.currentAccountRecoverySettings.policy !== this.state.accountRecoverySettings.policy;
+    const orkChanged = this.state.currentAccountRecoverySettings.organisationRecoveryKey !== this.state.accountRecoverySettings.organisationRecoveryKey;
+    const policy = policyChanged
+      ? this.state.accountRecoverySettings.policy
+      : this.state.currentAccountRecoverySettings.policy;
+
+    const ork = orkChanged
+      ? this.state.accountRecoverySettings.organisationRecoveryKey
+      : this.state.currentAccountRecoverySettings.organisationRecoveryKey;
+
     const accountRecovery = {
       policy: {
-        value: this.state.accountRecoveryPolicy,
-        info: this.getPolicyInfo(this.state.accountRecoveryPolicy),
-        hasChanged: true // TODO check with an account recovery context if the policy has changed
+        value: policy,
+        info: this.getPolicyInfo(policy),
+        hasChanged: policyChanged
       },
       organisationRecoveryKey: {
-        value: this.state.organisationRecoveryKey,
-        hasChanged: false // TODO check with an account recovery context if the organisation recovery key has changed
+        value: ork,
+        hasChanged: orkChanged
       }
     };
+
     this.props.dialogContext.open(ConfirmSaveAccountRecoverySettings, {accountRecovery});
   }
 
@@ -288,7 +319,7 @@ class ManageAccountRecoveryAdministrationSettings extends React.Component {
       case 'mandatory': return `${this.translate("Every user is required to provide a copy of their private key and passphrase during setup.")}\n${this.translate("Warning: You should inform your users not to store personal passwords.")}`;
       case 'opt-out': return this.translate("Every user will be prompted to provide a copy of their private key and passphrase by default during the setup, but they can opt out.");
       case 'opt-in': return this.translate("Every user can decide to provide a copy of their private key and passphrase by default during the setup, but they can opt in.");
-      case 'disabled': return `${this.translate("Backup of the private key and passphrase will not be stored. This is the safest option.")}\n${this.translate("Warning: If users lose their private key and passphrase they will not be able to recover their account")}`;
+      case 'disabled': return `${this.translate("Backup of the private key and passphrase will not be stored. This is the safest option.")}\n${this.translate("Warning: If users lose their private key and passphrase they will not be able to recover their account.")}`;
       default: return '';
     }
   }
@@ -336,17 +367,28 @@ class ManageAccountRecoveryAdministrationSettings extends React.Component {
    * save account recovery organisation settings
    */
   saveAccountRecoveryOrganisationSettings() {
+    const policyChanged = this.state.currentAccountRecoverySettings.policy !== this.state.accountRecoverySettings.policy;
+    const orkChanged = this.state.currentAccountRecoverySettings.organisationRecoveryKey !== this.state.accountRecoverySettings.organisationRecoveryKey;
+    const policy = policyChanged
+      ? this.state.accountRecoverySettings.policy
+      : this.state.currentAccountRecoverySettings.policy;
+
+    const ork = orkChanged
+      ? this.state.accountRecoverySettings.organisationRecoveryKey
+      : this.state.currentAccountRecoverySettings.organisationRecoveryKey;
+
     const accountRecovery = {
       policy: {
-        value: this.state.accountRecoveryPolicy,
-        info: this.getPolicyInfo(this.state.accountRecoveryPolicy),
-        hasChanged: true // TODO check with an account recovery context if the policy has changed
+        value: policy,
+        info: this.getPolicyInfo(policy),
+        hasChanged: policyChanged
       },
       organisationRecoveryKey: {
-        value: this.state.organisationRecoveryKey,
-        hasChanged: false // TODO check with an account recovery context if the organisation recovery key has changed
+        value: ork,
+        hasChanged: orkChanged
       }
     };
+
     this.props.dialogContext.open(ConfirmSaveAccountRecoverySettings, {accountRecovery});
   }
 
@@ -360,7 +402,7 @@ class ManageAccountRecoveryAdministrationSettings extends React.Component {
       case 'mandatory': return `${this.translate("Every user is required to provide a copy of their private key and passphrase during setup.")}\n${this.translate("Warning: You should inform your users not to store personal passwords.")}`;
       case 'opt-out': return this.translate("Every user will be prompted to provide a copy of their private key and passphrase by default during the setup, but they can opt out.");
       case 'opt-in': return this.translate("Every user can decide to provide a copy of their private key and passphrase by default during the setup, but they can opt in.");
-      case 'disabled': return `${this.translate("Backup of the private key and passphrase will not be stored. This is the safest option.")}\n${this.translate("Warning: If users lose their private key and passphrase they will not be able to recover their account")}`;
+      case 'disabled': return `${this.translate("Backup of the private key and passphrase will not be stored. This is the safest option.")}\n${this.translate("Warning: If users lose their private key and passphrase they will not be able to recover their account.")}`;
       default: return '';
     }
   }
@@ -395,12 +437,12 @@ class ManageAccountRecoveryAdministrationSettings extends React.Component {
               <Trans>In this section you can choose the default behavior of account recovery for all users.</Trans>
             </p>
             <div className="radiolist-alt">
-              <div className={`input radio ${this.state.accountRecoveryPolicy === "mandatory" ? 'checked' : ''}`}>
+              <div className={`input radio ${this.state.accountRecoverySettings.policy === "mandatory" ? 'checked' : ''}`}>
                 <input type="radio"
                   value="mandatory"
                   onChange={this.handleInputChange}
                   name="accountRecoveryPolicy"
-                  checked={this.state.accountRecoveryPolicy === "mandatory"}
+                  checked={this.state.accountRecoverySettings.policy === "mandatory"}
                   id="accountRecoveryPolicyMandatory"
                   disabled={this.hasAllInputDisabled()} />
                 <label htmlFor="accountRecoveryPolicyMandatory">
@@ -410,12 +452,12 @@ class ManageAccountRecoveryAdministrationSettings extends React.Component {
                   </span>
                 </label>
               </div>
-              <div className={`input radio ${this.state.accountRecoveryPolicy === "opt-out" ? 'checked' : ''}`}>
+              <div className={`input radio ${this.state.accountRecoverySettings.policy === "opt-out" ? 'checked' : ''}`}>
                 <input type="radio"
                   value="opt-out"
                   onChange={this.handleInputChange}
                   name="accountRecoveryPolicy"
-                  checked={this.state.accountRecoveryPolicy === "opt-out"}
+                  checked={this.state.accountRecoverySettings.policy === "opt-out"}
                   id="accountRecoveryPolicyOptOut"
                   disabled={this.hasAllInputDisabled()} />
                 <label htmlFor="accountRecoveryPolicyOptOut">
@@ -425,12 +467,12 @@ class ManageAccountRecoveryAdministrationSettings extends React.Component {
                   </span>
                 </label>
               </div>
-              <div className={`input radio ${this.state.accountRecoveryPolicy === "opt-in" ? 'checked' : ''}`}>
+              <div className={`input radio ${this.state.accountRecoverySettings.policy === "opt-in" ? 'checked' : ''}`}>
                 <input type="radio"
                   value="opt-in"
                   onChange={this.handleInputChange}
                   name="accountRecoveryPolicy"
-                  checked={this.state.accountRecoveryPolicy === "opt-in"}
+                  checked={this.state.accountRecoverySettings.policy === "opt-in"}
                   id="accountRecoveryPolicyOptIn"
                   disabled={this.hasAllInputDisabled()} />
                 <label htmlFor="accountRecoveryPolicyOptIn">
@@ -440,12 +482,12 @@ class ManageAccountRecoveryAdministrationSettings extends React.Component {
                   </span>
                 </label>
               </div>
-              <div className={`input radio ${this.state.accountRecoveryPolicy === "disabled" ? 'checked' : ''}`}>
+              <div className={`input radio ${this.state.accountRecoverySettings.policy === "disabled" ? 'checked' : ''}`}>
                 <input type="radio"
                   value="disabled"
                   onChange={this.handleInputChange}
                   name="accountRecoveryPolicy"
-                  checked={this.state.accountRecoveryPolicy === "disabled"}
+                  checked={this.state.accountRecoverySettings.policy === "disabled"}
                   id="accountRecoveryPolicyDisable"
                   disabled={this.hasAllInputDisabled()} />
                 <label htmlFor="accountRecoveryPolicyDisable">
@@ -473,7 +515,7 @@ class ManageAccountRecoveryAdministrationSettings extends React.Component {
                     <tbody>
                       <tr className="fingerprint">
                         <td className="label">Fingerprint</td>
-                        <td className={`${this.hasOrganisationRecoveryKey() ? "value" : "empty-value"}`}>{(this.hasOrganisationRecoveryKey() && this.formatFingerprint(this.state.organisationRecoveryKey.fingerprint)) || 'not available'}</td>
+                        <td className={`${this.hasOrganisationRecoveryKey() ? "value" : "empty-value"}`}>{(this.hasOrganisationRecoveryKey() && this.formatFingerprint(this.state.currentAccountRecoverySettings.organisationRecoveryKey.fingerprint)) || 'not available'}</td>
                         <td className="table-button">
                           <button className="button primary medium" type="button" disabled={this.hasAllInputDisabled()} onClick={this.handleRotateOrkClick}>
                             {this.hasOrganisationRecoveryKey() &&
@@ -487,19 +529,19 @@ class ManageAccountRecoveryAdministrationSettings extends React.Component {
                       </tr>
                       <tr className="algorithm">
                         <td className="label">Algoritm</td>
-                        <td className={`${this.hasOrganisationRecoveryKey() ? "value" : "empty-value"}`}>{(this.hasOrganisationRecoveryKey() && this.state.organisationRecoveryKey.algorithm) || 'not available'}</td>
+                        <td className={`${this.hasOrganisationRecoveryKey() ? "value" : "empty-value"}`}>{(this.hasOrganisationRecoveryKey() && this.state.currentAccountRecoverySettings.organisationRecoveryKey.algorithm) || 'not available'}</td>
                       </tr>
                       <tr className="key-length">
                         <td className="label">Key length</td>
-                        <td className={`${this.hasOrganisationRecoveryKey() ? "value" : "empty-value"}`}>{(this.hasOrganisationRecoveryKey() && this.state.organisationRecoveryKey.keyLength) || 'not available'}</td>
+                        <td className={`${this.hasOrganisationRecoveryKey() ? "value" : "empty-value"}`}>{(this.hasOrganisationRecoveryKey() && this.state.currentAccountRecoverySettings.organisationRecoveryKey.keyLength) || 'not available'}</td>
                       </tr>
                       <tr className="created">
                         <td className="label">Created</td>
-                        <td className={`${this.hasOrganisationRecoveryKey() ? "value" : "empty-value"}`}>{(this.hasOrganisationRecoveryKey() && this.formatDateTimeAgo(this.state.organisationRecoveryKey.created)) || 'not available'}</td>
+                        <td className={`${this.hasOrganisationRecoveryKey() ? "value" : "empty-value"}`}>{(this.hasOrganisationRecoveryKey() && this.formatDateTimeAgo(this.state.currentAccountRecoverySettings.organisationRecoveryKey.created)) || 'not available'}</td>
                       </tr>
                       <tr className="expires">
                         <td className="label">Expires</td>
-                        <td className={`${this.hasOrganisationRecoveryKey() ? "value" : "empty-value"}`}>{(this.hasOrganisationRecoveryKey() && this.formatDateTimeAgo(this.state.organisationRecoveryKey.expires)) || 'not available'}</td>
+                        <td className={`${this.hasOrganisationRecoveryKey() ? "value" : "empty-value"}`}>{(this.hasOrganisationRecoveryKey() && this.formatDateTimeAgo(this.state.currentAccountRecoverySettings.organisationRecoveryKey.expires)) || 'not available'}</td>
                       </tr>
                     </tbody>
                   </table>

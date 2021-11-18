@@ -16,8 +16,10 @@ import React from "react";
 import SelectAccountRecoveryOrganizationKey from "./SelectAccountRecoveryOrganizationKey";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 
+const GENERATE_TAB_INDEX = 1;
+
 /**
- * The ConfirmSaveAccountRecoverySettings component represented as a page
+ * The SelectAccountRecoveryOrganizationKeyPage component represented as a page
  */
 export default class SelectAccountRecoveryOrganizationKeyPage {
   /**
@@ -31,6 +33,13 @@ export default class SelectAccountRecoveryOrganizationKeyPage {
         <SelectAccountRecoveryOrganizationKey {...props} />
       </MockTranslationProvider>
     );
+  }
+
+  /**
+   * Returns the Select Account Recovery Organization Key Dialog
+   */
+  get selectAccountRecoveryOrganizationKeyDialog() {
+    return this._page.container.querySelector('.organization-recover-key-dialog');
   }
 
   /**
@@ -99,15 +108,83 @@ export default class SelectAccountRecoveryOrganizationKeyPage {
   /**
    * Get the HTML element that holds the error message of the "Import" form
    */
-  get errorMessage() {
+  get importErrorMessage() {
     return this._page.container.querySelector('.organization-recover-key-dialog.dialog-wrapper .form-content.import-organization-key .error-message');
+  }
+
+  get nameField() {
+    return this._page.container.querySelector('#generate-organization-key-form-name');
+  }
+
+  get emailField() {
+    return this._page.container.querySelector('#generate-organization-key-form-email');
+  }
+
+  get algorithmField() {
+    return this._page.container.querySelector('#generate-organization-key-form-algorithm');
+  }
+
+  get keySizeField() {
+    return this._page.container.querySelector('#generate-organization-key-form-key-size');
+  }
+
+  get passphraseField() {
+    return this._page.container.querySelector('#generate-organization-key-form-password');
+  }
+
+  get showPassphraseButton() {
+    return this._page.container.querySelector('.organization-recover-key-dialog.dialog-wrapper .form-content.generate-organization-key .password-view');
+  }
+
+  get securityToken() {
+    return this._page.container.querySelector('.organization-recover-key-dialog.dialog-wrapper .form-content.generate-organization-key .security-token');
+  }
+
+  get passphraseStrength() {
+    return this._page.container.querySelector('.organization-recover-key-dialog.dialog-wrapper .form-content.generate-organization-key .password-complexity');
+  }
+
+  get warningImportInstead() {
+    return this._page.container.querySelector('#generate-organization-key-setting-overridden-banner');
+  }
+
+  get cancelButton() {
+    return this._page.container.querySelector('.organization-recover-key-dialog.dialog-wrapper .cancel');
+  }
+
+  get generateButton() {
+    return this._page.container.querySelector('.organization-recover-key-dialog.dialog-wrapper .submit-wrapper input[type="submit"]');
+  }
+
+  get generateTab() {
+    return this._page.container.querySelectorAll('.organization-recover-key-dialog.dialog-wrapper .tabs .tab a')[GENERATE_TAB_INDEX];
+  }
+
+  get algorithmTooltip() {
+    return this._page.container.querySelector('.organization-recover-key-dialog.dialog-wrapper .form-content.generate-organization-key [for="generate-organization-key-form-algorithm"] .tooltip');
+  }
+
+  get keySizeTooltip() {
+    return this._page.container.querySelector('.organization-recover-key-dialog.dialog-wrapper .form-content.generate-organization-key [for="generate-organization-key-form-keySize"] .tooltip');
+  }
+
+  get nameFieldError() {
+    return this._page.container.querySelector('.organization-recover-key-dialog.dialog-wrapper .form-content.generate-organization-key .name.error-message');
+  }
+
+  get emailFieldError() {
+    return this._page.container.querySelector('.organization-recover-key-dialog.dialog-wrapper .form-content.generate-organization-key .email.error-message');
+  }
+
+  get passphraseFieldError() {
+    return this._page.container.querySelector('.organization-recover-key-dialog.dialog-wrapper .form-content.generate-organization-key .password.error-message');
   }
 
   /**
    * Returns true if the page object exists in the container
    */
   exists() {
-    return this.accountRecoverySettings !== null;
+    return this.selectAccountRecoveryOrganizationKeyDialog !== null;
   }
 
   /**
@@ -116,6 +193,22 @@ export default class SelectAccountRecoveryOrganizationKeyPage {
    */
   isImportKeyTabSelected() {
     return this._page.container.querySelector(".organization-recover-key-dialog.dialog-wrapper .tabs-active-content form .import-organization-key") !== null;
+  }
+
+  /**
+   * Returns true if the current selected tab is the "Generate" one
+   * @returns bool
+   */
+  isGenerateTabSeletect() {
+    return this._page.container.querySelector(".organization-recover-key-dialog.dialog-wrapper .tabs-active-content .generate-organization-key") !== null;
+  }
+
+  /**
+   * Return true if the given field is marked as required
+   * @return bool
+   */
+  isFieldRequired(field) {
+    return field.className.indexOf("required") !== -1;
   }
 
   /**
@@ -141,6 +234,27 @@ export default class SelectAccountRecoveryOrganizationKeyPage {
   async applyChanges(waitForCallback) {
     const leftClick = {button: 0};
     fireEvent.click(this.applyButton, leftClick);
+
+    await waitFor(waitForCallback);
+  }
+
+  async clickOnGenerateTab(waitForCallback) {
+    const leftClick = {button: 0};
+    fireEvent.click(this.generateTab, leftClick);
+
+    await waitFor(waitForCallback);
+  }
+
+  async toggleShowPassword(waitForCallback) {
+    const leftClick = {button: 0};
+    fireEvent.click(this.showPassphraseButton, leftClick);
+
+    await waitFor(waitForCallback);
+  }
+
+  async clickOnGenerateButton(waitForCallback) {
+    const leftClick = {button: 0};
+    fireEvent.click(this.generateButton, leftClick);
 
     await waitFor(waitForCallback);
   }

@@ -13,17 +13,13 @@
  */
 import React from "react";
 import PropTypes from "prop-types";
-import {withTranslation} from "react-i18next";
+import {Trans, withTranslation} from "react-i18next";
 import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
-import Tab from "../../Common/Tab/Tab";
-import Tabs from "../../Common/Tab/Tabs";
-import ImportOrganizationKey from "./ImportOrganizationKey";
-import GenerateOrganizationKey from "./GenerateOrganizationKey";
 
 /**
  * This component allows to display the create recover account for the administration
  */
-class SelectAccountRecoveryOrganizationKey extends React.Component {
+class DownloadOrganizationKey extends React.Component {
   /**
    * Constructor
    * @param {Object} props
@@ -49,7 +45,6 @@ class SelectAccountRecoveryOrganizationKey extends React.Component {
    */
   bindCallbacks() {
     this.handleCloseClick = this.handleCloseClick.bind(this);
-    this.handleApplyChanges = this.handleApplyChanges.bind(this);
   }
 
   /**
@@ -57,14 +52,6 @@ class SelectAccountRecoveryOrganizationKey extends React.Component {
    */
   handleCloseClick() {
     this.props.onClose();
-  }
-
-  /**
-   * Handle apply button click.
-   */
-  handleApplyChanges(public_key, private_key) {
-    this.handleCloseClick();
-    this.props.handleUpdateOrganizationKey(public_key, private_key);
   }
 
   /**
@@ -82,39 +69,39 @@ class SelectAccountRecoveryOrganizationKey extends React.Component {
   render() {
     return (
       <DialogWrapper
-        title={this.translate("Organization Recovery Key")}
+        title={this.translate("Confirm Organization Recovery Key download")}
         onClose={this.handleCloseClick}
-        disabled={this.state.processing}
-        className="organization-recover-key-dialog">
-        <Tabs activeTabName='Import'>
-          <Tab
-            key='Import'
-            name='Import'
-            type='Import'>
-            <ImportOrganizationKey
-              {...this.props}
-              onClose={this.handleCloseClick}
-              onUpdateOrganizationKey={this.handleApplyChanges} />
-          </Tab>
-          <Tab
-            key='Generate'
-            name='Generate'
-            type='Generate'>
-            <GenerateOrganizationKey
-              {...this.props}
-              onClose={this.handleCloseClick}
-              onUpdateOrganizationKey={this.handleApplyChanges} />
-          </Tab>
-        </Tabs>
+        disabled={false}
+        className="organization-recover-key-download-dialog">
+        <div className="dialog-body">
+          <p><Trans>A download of the organization private key has automatically started.</Trans><br /><Trans>Make sure your print it or store it in a safe place. You may need it later!</Trans></p>
+        </div>
+        <div className="dialog-footer clearfix">
+          <button
+            className="button button-left cancel medium"
+            type="button"
+            onClick={this.props.handleDownloadAgain}>
+            <Trans>Download again</Trans>
+          </button>
+          <button
+            className="button primary"
+            role="button"
+            type='button'
+            onClick={this.handleCloseClick}
+            disabled={this.isProcessing}>
+            <span><Trans>Ok</Trans></span>
+          </button>
+        </div>
       </DialogWrapper>
     );
   }
 }
 
-SelectAccountRecoveryOrganizationKey.propTypes = {
-  handleUpdateOrganizationKey: PropTypes.func,
+DownloadOrganizationKey.propTypes = {
   onClose: PropTypes.func,
+  handleDownloadAgain: PropTypes.func,
+  privateKey: PropTypes.string,
   t: PropTypes.func, // The translation function
 };
 
-export default withTranslation('common')(SelectAccountRecoveryOrganizationKey);
+export default withTranslation('common')(DownloadOrganizationKey);
