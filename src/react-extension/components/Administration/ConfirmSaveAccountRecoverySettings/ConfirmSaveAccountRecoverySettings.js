@@ -165,6 +165,34 @@ class ConfirmSaveAccountRecoverySettings extends Component {
     return duration > -1000 && duration < 0 ? this.translate('Just now') : dateTime.toRelative({locale: this.props.context.locale});
   }
 
+  /**
+   * Format date
+   * @param {string} date The date to format
+   * @return {string}
+   */
+  formatDate(date) {
+    return DateTime.fromJSDate(new Date(date)).setLocale(this.props.context.locale).toLocaleString(DateTime.DATETIME_FULL);
+  }
+
+  get policy() {
+    switch (this.props.accountRecovery.policy.value) {
+      case 'mandatory': return this.translate('Mandatory');
+      case 'opt-out': return this.translate('Optional, Opt-out');
+      case 'opt-in': return this.translate('Optional, Opt-in');
+      case 'disabled': return this.translate('Disable');
+      default: return '';
+    }
+  }
+
+  /**
+   * Format date
+   * @param {string} date The date to format
+   * @return {string}
+   */
+  formatDate(date) {
+    return DateTime.fromJSDate(new Date(date)).setLocale(this.props.context.locale).toLocaleString(DateTime.DATETIME_FULL);
+  }
+
   get policy() {
     switch (this.props.accountRecovery.policy.value) {
       case 'mandatory': return this.translate('Mandatory');
@@ -213,7 +241,7 @@ class ConfirmSaveAccountRecoverySettings extends Component {
             }
             {this.hasNewOrganisationRecoveryKey() &&
               <>
-                <label><Trans>New Organisation Recovery Key</Trans></label>
+                <label><Trans>New Organization Recovery Key</Trans></label>
                 <div className="recovery-key-details">
                   <table className="table-info recovery-key">
                     <tbody>
@@ -231,7 +259,7 @@ class ConfirmSaveAccountRecoverySettings extends Component {
                       </tr>
                       <tr className="created">
                         <td className="label"><Trans>Created</Trans></td>
-                        <td className="value">{this.formatDateTimeAgo(this.props.accountRecovery.organisationRecoveryKey.value.created)}</td>
+                        <td className="value">{this.formatDate(this.props.accountRecovery.organisationRecoveryKey.value.created)}</td>
                       </tr>
                       <tr className="expires">
                         <td className="label"><Trans>Expires</Trans></td>

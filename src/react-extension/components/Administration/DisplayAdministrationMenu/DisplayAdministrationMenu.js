@@ -76,6 +76,7 @@ class DisplayAdministrationMenu extends React.Component {
    * @returns {boolean}
    */
   get canIUseAccountRecovery() {
+    return true; //MOCKED
     const siteSettings = this.props.context.siteSettings;
     return siteSettings && siteSettings.canIUse('accountRecovery');
   }

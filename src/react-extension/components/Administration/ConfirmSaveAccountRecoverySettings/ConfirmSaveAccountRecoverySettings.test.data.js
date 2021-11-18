@@ -33,6 +33,10 @@ export function formatDateTimeAgo(date) {
   return duration > -1000 && duration < 0 ? this.translate('Just now') : dateTime.toRelative();
 }
 
+export function formatDate(date) {
+  return DateTime.fromJSDate(new Date(date)).setLocale("en-UK").toLocaleString(DateTime.DATETIME_FULL);
+}
+
 export const mockAccountRecoveryDisabled = {
   accountRecovery: {
     policy: {

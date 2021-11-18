@@ -12,11 +12,12 @@
  * @since         3.4.0
  */
 import React from "react";
+import {Trans, withTranslation} from "react-i18next";
 import PropTypes from "prop-types";
 import Icon from "../../Common/Icons/Icon";
-import {Trans, withTranslation} from "react-i18next";
 import FormSubmitButton from "../../Common/Inputs/FormSubmitButton/FormSubmitButton";
 import FormCancelButton from "../../Common/Inputs/FormSubmitButton/FormCancelButton";
+import {withAppContext} from "../../../contexts/AppContext";
 
 /**
  * This component allows to display the import organization key for the administration
@@ -35,7 +36,7 @@ class ImportOrganizationKey extends React.Component {
 
   /**
    * Get default state
-   * @returns {*}
+   * @returns {Object}
    */
   get defaultState() {
     return {
@@ -52,7 +53,6 @@ class ImportOrganizationKey extends React.Component {
   bindCallbacks() {
     this.handleFormSubmit = this.handleFormSubmit.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
-    this.handleKeyInputKeyUp = this.handleKeyInputKeyUp.bind(this);
     this.handleSelectOrganizationKeyFile = this.handleSelectOrganizationKeyFile.bind(this);
   }
 
@@ -65,31 +65,19 @@ class ImportOrganizationKey extends React.Component {
   }
 
   /**
-   * Handle key input keyUp event.
-   */
-  handleKeyInputKeyUp() {
-    if (this.state.hasAlreadyBeenValidated) {
-      const state = this.validateKeyInput();
-      this.setState(state);
-    }
-  }
-
-  /**
    * Whenever the user select a organization key file
    * @param event The file dom event
    */
   async handleSelectOrganizationKeyFile(event) {
     const [organizationFile] = event.target.files;
     const organizationKey = await this.readOrganizationKeyFile(organizationFile);
-    await this.fillOrganizationKey(organizationKey);
-    if (this.state.hasAlreadyBeenValidated) {
-      await this.validate();
-    }
+    this.setState({key: organizationKey});
   }
 
   /**
-   * Read the selected subscription key file and returns its content in a base 64
-   * @param organizationFile A subscription key file
+   * Read the selected file and returns its content in text form
+   * @param organizationFile The given file
+   * @return {Promise}
    */
   readOrganizationKeyFile(organizationFile) {
     const reader = new FileReader();
@@ -106,31 +94,19 @@ class ImportOrganizationKey extends React.Component {
   }
 
   /**
-   * Fill the organization key
-   * @param organizationKey A subscription key
-   */
-  async fillOrganizationKey(organizationKey) {
-    await this.setState({key: organizationKey});
-  }
-
-  /**
    * Validate the key input.
    * @return {Promise}
    */
-  validateKeyInput() {
+  async validateKeyInput() {
     const key = this.state.key.trim();
-    let keyError = "";
-    if (!key.length) {
-      keyError = this.translate("An organization key is required.");
+    if (key === "") {
+      return Promise.reject(new Error(this.translate("The key can't be empty.")));
     }
-
-    return new Promise(resolve => {
-      this.setState({keyError}, resolve);
-    });
+    return await this.props.context.port.request('passbolt.account-recovery.organization.validate-key', {armored_key: key});
   }
 
   /**
-   * Validate the form.
+   * Check if the form is valid.
    * @return {Promise<boolean>}
    */
   async validate() {
@@ -139,10 +115,12 @@ class ImportOrganizationKey extends React.Component {
       keyError: "",
     });
 
-    // Validate the form inputs.
-    await this.validateKeyInput();
-
-    return this.state.keyError === "";
+    return await this.validateKeyInput()
+      .then(() => true)
+      .catch(error => {
+        this.setState({keyError: error.message});
+        return false;
+      });
   }
 
   /**
@@ -151,10 +129,8 @@ class ImportOrganizationKey extends React.Component {
    */
   handleInputChange(event) {
     const target = event.target;
-    const value = target.value;
-    const name = target.name;
     this.setState({
-      [name]: value
+      [target.name]: target.value
     });
   }
 
@@ -183,6 +159,8 @@ class ImportOrganizationKey extends React.Component {
       await this.toggleProcessing();
       return;
     }
+
+    await this.props.onUpdateOrganizationKey(this.state.key.trim());
   }
 
   /**
@@ -233,11 +211,11 @@ class ImportOrganizationKey extends React.Component {
       <form onSubmit={this.handleFormSubmit} noValidate>
         <div className="form-content import-organization-key">
           <div className={`input textarea required ${this.state.keyError ? "error" : ""}`}>
-            <label htmlFor="organization-recover-form-key"><Trans>Import an Open PGP Public key</Trans></label>
+            <label htmlFor="organization-recover-form-key"><Trans>Import an OpenPGP Public key</Trans></label>
             <textarea id="organization-recover-form-key" name="key" value={this.state.key}
               onKeyUp={this.handleKeyInputKeyUp} onChange={this.handleInputChange}
               disabled={this.hasAllInputDisabled()} ref={this.keyInputRef} className="required"
-              placeholder='Add Open PGP Public key' required="required" autoComplete="off" autoFocus={true}/>
+              placeholder='Add Open PGP Public key' required="required" autoComplete="off" autoFocus={true} />
           </div>
           <div className="input-file-chooser-wrapper">
             <div className="input text">
@@ -245,21 +223,21 @@ class ImportOrganizationKey extends React.Component {
                 type="file"
                 ref={this.fileUploaderRef}
                 disabled={this.hasAllInputDisabled()}
-                onChange={this.handleSelectOrganizationKeyFile}/>
+                onChange={this.handleSelectOrganizationKeyFile} />
               {this.state.keyError &&
-              <div className="key error-message">{this.state.keyError}</div>
+                <div className="key error-message">{this.state.keyError}</div>
               }
             </div>
           </div>
         </div>
         {!this.state.hasAlreadyBeenValidated &&
-        <div className="message notice">
-          <Icon baseline={true} name="info-circle"/>
-          <strong><Trans>Pro tip</Trans>:</strong> <Trans>Learn how to <a>generate a key separately.</a></Trans>
-        </div>
+          <div className="message notice">
+            <Icon baseline={true} name="info-circle" />
+            <strong><Trans>Pro tip</Trans>:</strong> <Trans>Learn how to <a href="https://help.passbolt.com/hosting/install/ce/from-source.html#generate-an-openpgp-key" target="_blank" rel="noopener noreferrer">generate a key separately.</a></Trans>
+          </div>
         }
         <div className="submit-wrapper clearfix">
-          <FormSubmitButton disabled={this.hasAllInputDisabled()} processing={this.state.processing} value={this.translate("Apply")}/>
+          <FormSubmitButton disabled={this.hasAllInputDisabled()} processing={this.state.processing} value={this.translate("Apply")} />
           <FormCancelButton disabled={this.hasAllInputDisabled()} onClick={this.props.onClose} />
         </div>
       </form>
@@ -268,8 +246,10 @@ class ImportOrganizationKey extends React.Component {
 }
 
 ImportOrganizationKey.propTypes = {
+  context: PropTypes.object,
+  onUpdateOrganizationKey: PropTypes.func,
   onClose: PropTypes.func,
   t: PropTypes.func, // The translation function
 };
 
-export default withTranslation('common')(ImportOrganizationKey);
+export default withAppContext(withTranslation('common')(ImportOrganizationKey));

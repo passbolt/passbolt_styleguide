@@ -28,7 +28,7 @@ const RESOURCE_PASSWORD_MAX_LENGTH = 4096;
 /**
  * This component allows to display the generate organization key for the administration
  */
-class ImportOrganizationKey extends React.Component {
+class GenerateOrganizationKey extends React.Component {
   /**
    * Constructor
    * @param {Object} props
@@ -430,10 +430,10 @@ class ImportOrganizationKey extends React.Component {
   }
 }
 
-ImportOrganizationKey.propTypes = {
+GenerateOrganizationKey.propTypes = {
   context: PropTypes.any, // The application context
   onClose: PropTypes.func,
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withTranslation('common')(ImportOrganizationKey));
+export default withAppContext(withTranslation('common')(GenerateOrganizationKey));

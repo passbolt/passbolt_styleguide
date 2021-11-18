@@ -19,7 +19,7 @@ import {ActionFeedbackContext} from "../../../contexts/ActionFeedbackContext";
 import PassboltApiFetchError from "../../../../shared/lib/Error/PassboltApiFetchError";
 import {waitFor} from "@testing-library/react";
 import {
-  defaultProps, formatDateTimeAgo,
+  defaultProps, formatDateTimeAgo, formatDate,
   mockAccountRecoveryMandatoryWithOrganisationKey, mockAccountRecoveryOptInWithOrganisationKey
 } from "./ConfirmSaveAccountRecoverySettings.test.data";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
@@ -74,7 +74,7 @@ describe("See the Confirm Save Account Recovery Settings", () => {
       expect(page.recoveryKeyDetailsFingerprint).toBe("848E 95CC 7493 129A D8625831 29B8 1CA8 9360 23DD ");
       expect(page.recoveryKeyDetailsAlgorithm).toBe(props.accountRecovery.organisationRecoveryKey.value.algorithm);
       expect(page.recoveryKeyDetailsKeyLength).toBe("4096");
-      expect(page.recoveryKeyDetailsCreated).toBe(formatDateTimeAgo(props.accountRecovery.organisationRecoveryKey.value.created));
+      expect(page.recoveryKeyDetailsCreated).toBe(formatDate(props.accountRecovery.organisationRecoveryKey.value.created));
       expect(page.recoveryKeyDetailsExpires).toBe(formatDateTimeAgo(props.accountRecovery.organisationRecoveryKey.value.expires));
     });
 
