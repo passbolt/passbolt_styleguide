@@ -78,16 +78,22 @@ class InFormManager {
   findAndSetUsernameAndPasswordFields() {
     /* We find the username / passwords DOM callToActionFields.
      * If it was previously found, we reuse the same InformUsernameField, otherwise we create one
+     * Else we clean and reset callToActionFields
      */
     const newUsernameFields = InFormCallToActionField.findAll(InFormFieldSelector.USERNAME_FIELD_SELECTOR);
     const newPasswordFields = InFormCallToActionField.findAll(InFormFieldSelector.PASSWORD_FIELD_SELECTOR);
     const newFields = newUsernameFields.concat(newPasswordFields);
-    this.callToActionFields = newFields.map(newField => {
-      const matchField = fieldToMatch => callToActionField => callToActionField.field === fieldToMatch;
-      const existingField = this.callToActionFields.find(matchField(newField));
-      const fieldType = newField.matches(InFormFieldSelector.USERNAME_FIELD_SELECTOR) ? 'username' : 'password';
-      return existingField || new InFormCallToActionField(newField, fieldType);
-    });
+    if (newFields.length > 0) {
+      this.callToActionFields = newFields.map(newField => {
+        const matchField = fieldToMatch => callToActionField => callToActionField.field === fieldToMatch;
+        const existingField = this.callToActionFields.find(matchField(newField));
+        const fieldType = newField.matches(InFormFieldSelector.USERNAME_FIELD_SELECTOR) ? 'username' : 'password';
+        return existingField || new InFormCallToActionField(newField, fieldType);
+      });
+    } else {
+      this.clean();
+      this.callToActionFields = [];
+    }
   }
 
   /**
