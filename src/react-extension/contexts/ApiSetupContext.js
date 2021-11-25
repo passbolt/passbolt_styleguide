@@ -102,7 +102,7 @@ class ApiSetupContextProvider extends React.Component {
    */
   isBrowserSupported() {
     const browserName = detectBrowserName();
-    const supportedBrowserNames = [BROWSER_NAMES.CHROME, BROWSER_NAMES.FIREFOX];
+    const supportedBrowserNames = [BROWSER_NAMES.CHROME, BROWSER_NAMES.FIREFOX, BROWSER_NAMES.EDGE];
     return supportedBrowserNames.includes(browserName);
   }
 
