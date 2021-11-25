@@ -84,6 +84,17 @@ describe("As AN I should see install extension page", () => {
       expect(page.linkContent).toBe('Refresh to detect extension');
     });
 
+    it('As AN I should see the install extension for Edge', () => {
+      Object.defineProperty(window, "navigator", {
+        value: {userAgent: "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.55 Safari/537.36 Edg/96.0.1054.34"},
+        writable: true
+      });
+      window.chrome = {runtime: "true"};
+      page = new InstallExtensionTestPage();
+      // browser image
+      expect(page.browser.className).toBe("browser-webstore edge");
+    });
+
     it('As AN I should be able to refresh the page', async() => {
       Object.defineProperty(window, "location", {
         value: {reload: jest.fn()},

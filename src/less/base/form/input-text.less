@@ -29,6 +29,11 @@ textarea {
     vertical-align: middle;
 }
 
+//Edge specific, not to show hide/show button on password as we handle it ourselves
+::-ms-reveal {
+  display: none;
+}
+
 input[type=number] {
   box-sizing: border-box;
 }

@@ -18,21 +18,14 @@ import PropTypes from "prop-types";
 import {Trans, withTranslation} from "react-i18next";
 
 const CHROME_STORE_BROWSER_EXTENSION_URL = "https://chrome.google.com/webstore/detail/passbolt-extension/didegimhafipceonhjepacocaffmoppf";
-const FIREFOX_STORE_BROWSER_EXTENSION_URL = "https://addons.mozilla.org/fr/firefox/addon/passbolt";
+const FIREFOX_STORE_BROWSER_EXTENSION_URL = "https://addons.mozilla.org/firefox/addon/passbolt";
+const EDGE_STORE_BROWSER_EXTENSION_URL = "https://microsoftedge.microsoft.com/addons/detail/passbolt-extension/ljeppgjhohmhpbdhjjjbiflabdgfkhpo";
 
 class InstallExtension extends Component {
   constructor(props) {
     super(props);
     this.state = this.getDefaultState();
     this.bindCallbacks();
-  }
-
-  componentDidMount() {
-    window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", this.handleThemeChange);
-  }
-
-  componentDidUnmount() {
-    window.matchMedia("(prefers-color-scheme: dark)").removeEventListener("change", this.handleThemeChange);
   }
 
   /**
@@ -52,7 +45,6 @@ class InstallExtension extends Component {
    */
   bindCallbacks() {
     this.handleRefreshClick = this.handleRefreshClick.bind(this);
-    this.handleThemeChange = this.handleThemeChange.bind(this);
   }
 
   /**
@@ -67,6 +59,8 @@ class InstallExtension extends Component {
     switch (this.state.browserName) {
       case BROWSER_NAMES.FIREFOX:
         return `${this.props.context.trustedDomain}/img/third_party/FirefoxAMO_${color}.svg`;
+      case BROWSER_NAMES.EDGE:
+        return `${this.props.context.trustedDomain}/img/third_party/edge-addon-${color}.svg`;
       case BROWSER_NAMES.CHROME:
       default:
         return `${this.props.context.trustedDomain}/img/third_party/ChromeWebStore_${color}.svg`;
@@ -85,6 +79,8 @@ class InstallExtension extends Component {
         return CHROME_STORE_BROWSER_EXTENSION_URL;
       case BROWSER_NAMES.FIREFOX:
         return FIREFOX_STORE_BROWSER_EXTENSION_URL;
+      case BROWSER_NAMES.EDGE:
+        return EDGE_STORE_BROWSER_EXTENSION_URL;
       default:
         return CHROME_STORE_BROWSER_EXTENSION_URL;
     }
@@ -103,14 +99,6 @@ class InstallExtension extends Component {
    */
   handleRefreshClick() {
     window.location.reload();
-  }
-
-  /**
-   * Changes the displayed theme according to users OS theme preferences.
-   * This is useful to update images based on the theme.
-   */
-  handleThemeChange(e) {
-    this.setState({theme: e.matches ? "dark" : "light"});
   }
 
   /**
