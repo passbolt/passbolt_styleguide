@@ -289,7 +289,7 @@ class DeleteUserWithConflicts extends Component {
   handleOnChangeManager(event, groupId) {
     const target = event.target;
     const permissionId = target.value;
-    const managers = this.state.owners;
+    const managers = this.state.managers;
     // assign the new folderId or resourceId with the permissionId
     Object.assign(managers, {[groupId]: permissionId});
     this.setState({managers});
