@@ -77,4 +77,13 @@ describe("As AD I can see the administration menu", () => {
     expect(page.menuSelected).toBe('Internationalisation');
     expect(props.navigationContext.onGoToAdministrationInternationalizationRequested).toHaveBeenCalled();
   });
+
+  it('As AD I should be able to go to account recovery', async() => {
+    const props = defaultProps(AdministrationWorkspaceMenuTypes.ACCOUNT_RECOVERY); // The props to pass
+    page = new DisplayAdministrationMenuPage(context, props);
+    expect(page.exists()).toBeTruthy();
+    await page.goToAccountRecovery();
+    expect(page.menuSelected).toBe('Account Recovery');
+    expect(props.navigationContext.onGoToAdministrationAccountRecoveryRequested).toHaveBeenCalled();
+  });
 });

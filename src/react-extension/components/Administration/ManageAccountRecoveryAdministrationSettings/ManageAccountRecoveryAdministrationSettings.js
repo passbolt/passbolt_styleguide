@@ -21,7 +21,7 @@ import {withAppContext} from "../../../contexts/AppContext";
 /**
  * This component allows to display the email notifications for the administration
  */
-class RecoverAccountAdministration extends React.Component {
+class ManageAccountRecoveryAdministrationSettings extends React.Component {
   /**
    * Constructor
    * @param {Object} props
@@ -294,10 +294,10 @@ class RecoverAccountAdministration extends React.Component {
   }
 }
 
-RecoverAccountAdministration.propTypes = {
+ManageAccountRecoveryAdministrationSettings.propTypes = {
   context: PropTypes.object, // Application context
   accountRecovery: PropTypes.any, // The account recovery
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withTranslation('common')(RecoverAccountAdministration));
+export default withAppContext(withTranslation('common')(ManageAccountRecoveryAdministrationSettings));

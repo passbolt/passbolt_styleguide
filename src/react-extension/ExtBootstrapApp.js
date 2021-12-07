@@ -121,6 +121,7 @@ class ExtBootstrapApp extends Component {
             </Route>
             <Route exact path={[
               "/app/administration/subscription",
+              "/app/administration/account-recovery",
               "/app/folders/view/:filterByFolderId",
               "/app/groups/view/:selectedGroupId",
               "/app/groups/edit/:selectedGroupId",

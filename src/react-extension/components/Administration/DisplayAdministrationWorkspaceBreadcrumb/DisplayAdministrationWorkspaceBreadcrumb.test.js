@@ -84,4 +84,13 @@ describe("As AD I can see a Breadcrumb", () => {
     expect(page.item(2)).toBe("Internationalisation");
     expect(page.item(3)).toBe("Settings");
   });
+
+  it('As AD I should see a breadcrumb for account recovery', () => {
+    const props = defaultProps(AdministrationWorkspaceMenuTypes.ACCOUNT_RECOVERY); // The props to pass
+    page = new DisplayAdministrationWorkspaceBreadcrumbPage(context, props);
+    expect(page.count).toBe(3);
+    expect(page.item(1)).toBe("Administration");
+    expect(page.item(2)).toBe("Account Recovery");
+    expect(page.item(3)).toBe("Settings");
+  });
 });

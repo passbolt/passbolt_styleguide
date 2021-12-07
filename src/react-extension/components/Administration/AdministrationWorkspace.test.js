@@ -29,6 +29,9 @@ jest.mock("./DisplayAdministrationWorkspaceBreadcrumb/DisplayAdministrationWorks
 jest.mock("./DisplayMfaAdministration/DisplayMfaAdministration", () => () => <span className="mfa-details"></span>);
 jest.mock("./DisplayUserDirectoryAdministration/DisplayUserDirectoryAdministration", () => () => <span className="user-directory-details"></span>);
 jest.mock("./DisplayEmailNotificationsAdministration/DisplayEmailNotificationsAdministration", () => () => <span className="email-notifications-details"></span>);
+jest.mock("./DisplaySubscriptionKey/DisplaySubscriptionKey", () => () => <span className="subscription-key-details"></span>);
+jest.mock("./DisplayInternationalizationAdministration/DisplayInternationalizationAdministration", () => () => <span className="internationalization-details"></span>);
+jest.mock("./ManageAccountRecoveryAdministrationSettings/ManageAccountRecoveryAdministrationSettings", () => () => <span className="account-recovery-details"></span>);
 
 beforeEach(() => {
   jest.resetModules();
@@ -44,6 +47,9 @@ describe("Display Administration Workspace", () => {
     expect(page.isMfaSelected).toBeTruthy();
     expect(page.isUserDirectorySelected).toBeFalsy();
     expect(page.isEmailNotificationsSelected).toBeFalsy();
+    expect(page.isSubscriptionKeySelected).toBeFalsy();
+    expect(page.isInternationalizationSelected).toBeFalsy();
+    expect(page.isAccountRecoverySelected).toBeFalsy();
   });
 
   it('As AD, I should see the user directory details area', async() => {
@@ -52,6 +58,9 @@ describe("Display Administration Workspace", () => {
     expect(page.isMfaSelected).toBeFalsy();
     expect(page.isUserDirectorySelected).toBeTruthy();
     expect(page.isEmailNotificationsSelected).toBeFalsy();
+    expect(page.isSubscriptionKeySelected).toBeFalsy();
+    expect(page.isInternationalizationSelected).toBeFalsy();
+    expect(page.isAccountRecoverySelected).toBeFalsy();
   });
 
   it('As AD, I should see the email notifications details area', async() => {
@@ -60,6 +69,42 @@ describe("Display Administration Workspace", () => {
     expect(page.isMfaSelected).toBeFalsy();
     expect(page.isUserDirectorySelected).toBeFalsy();
     expect(page.isEmailNotificationsSelected).toBeTruthy();
+    expect(page.isSubscriptionKeySelected).toBeFalsy();
+    expect(page.isInternationalizationSelected).toBeFalsy();
+    expect(page.isAccountRecoverySelected).toBeFalsy();
+  });
+
+  it('As AD, I should see the subscription key details area', async() => {
+    page = new AdministrationWorkspacePage(context, defaultProps(AdministrationWorkspaceMenuTypes.SUBSCRIPTION));
+    await waitFor(() => {});
+    expect(page.isMfaSelected).toBeFalsy();
+    expect(page.isUserDirectorySelected).toBeFalsy();
+    expect(page.isEmailNotificationsSelected).toBeFalsy();
+    expect(page.isSubscriptionKeySelected).toBeTruthy();
+    expect(page.isInternationalizationSelected).toBeFalsy();
+    expect(page.isAccountRecoverySelected).toBeFalsy();
+  });
+
+  it('As AD, I should see the internationalization details area', async() => {
+    page = new AdministrationWorkspacePage(context, defaultProps(AdministrationWorkspaceMenuTypes.INTERNATIONALIZATION));
+    await waitFor(() => {});
+    expect(page.isMfaSelected).toBeFalsy();
+    expect(page.isUserDirectorySelected).toBeFalsy();
+    expect(page.isEmailNotificationsSelected).toBeFalsy();
+    expect(page.isSubscriptionKeySelected).toBeFalsy();
+    expect(page.isInternationalizationSelected).toBeTruthy();
+    expect(page.isAccountRecoverySelected).toBeFalsy();
+  });
+
+  it('As AD, I should see the account recovery details area', async() => {
+    page = new AdministrationWorkspacePage(context, defaultProps(AdministrationWorkspaceMenuTypes.ACCOUNT_RECOVERY));
+    await waitFor(() => {});
+    expect(page.isMfaSelected).toBeFalsy();
+    expect(page.isUserDirectorySelected).toBeFalsy();
+    expect(page.isEmailNotificationsSelected).toBeFalsy();
+    expect(page.isSubscriptionKeySelected).toBeFalsy();
+    expect(page.isInternationalizationSelected).toBeFalsy();
+    expect(page.isAccountRecoverySelected).toBeTruthy();
   });
 });
 

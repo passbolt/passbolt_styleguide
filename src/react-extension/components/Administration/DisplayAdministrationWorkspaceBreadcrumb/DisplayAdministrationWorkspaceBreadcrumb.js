@@ -59,6 +59,8 @@ class DisplayAdministrationWorkspaceBreadcrumb extends Component {
         return this.translate("Subscription");
       case AdministrationWorkspaceMenuTypes.INTERNATIONALIZATION:
         return this.translate("Internationalisation");
+      case AdministrationWorkspaceMenuTypes.ACCOUNT_RECOVERY:
+        return this.translate("Account Recovery");
       default:
         return "";
     }

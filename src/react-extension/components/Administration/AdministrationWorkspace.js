@@ -33,6 +33,8 @@ import SearchBar from "../Common/Navigation/Search/SearchBar";
 import DisplaySubscriptionKey from "./DisplaySubscriptionKey/DisplaySubscriptionKey";
 import DisplayInternationalizationAdministration
   from "./DisplayInternationalizationAdministration/DisplayInternationalizationAdministration";
+import ManageAccountRecoveryAdministrationSettings
+  from "./ManageAccountRecoveryAdministrationSettings/ManageAccountRecoveryAdministrationSettings";
 
 class AdministrationWorkspace extends Component {
   /**
@@ -75,6 +77,14 @@ class AdministrationWorkspace extends Component {
     return AdministrationWorkspaceMenuTypes.INTERNATIONALIZATION === this.props.administrationWorkspaceContext.selectedAdministration;
   }
 
+  /**
+   * If Account Recovery menu is selected
+   * @returns {boolean}
+   */
+  isAccountRecoverySelected() {
+    return AdministrationWorkspaceMenuTypes.ACCOUNT_RECOVERY === this.props.administrationWorkspaceContext.selectedAdministration;
+  }
+
   render() {
     return (
       <div id="container" className="page administration">
@@ -115,6 +125,9 @@ class AdministrationWorkspace extends Component {
                     }
                     {this.isInternationalizationSelected() &&
                     <DisplayInternationalizationAdministration/>
+                    }
+                    {this.isAccountRecoverySelected() &&
+                    <ManageAccountRecoveryAdministrationSettings/>
                     }
                   </div>
                 </div>

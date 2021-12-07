@@ -90,6 +90,13 @@ export default class DisplayAdministrationMenuPage {
   }
 
   /**
+   * Returns the account recovery menu
+   */
+  get accountRecovery() {
+    return this._page.container.querySelector('#account_recovery_menu .row .main-cell-wrapper .main-cell a');
+  }
+
+  /**
    * Returns true if the page object exists in the container
    */
   exists() {
@@ -127,6 +134,11 @@ export default class DisplayAdministrationMenuPage {
   /** Click on the email notifications element */
   async goToInternationalization() {
     await this.click(this.internationalization);
+  }
+
+  /** Click on the email notifications element */
+  async goToAccountRecovery() {
+    await this.click(this.accountRecovery);
   }
 }
 

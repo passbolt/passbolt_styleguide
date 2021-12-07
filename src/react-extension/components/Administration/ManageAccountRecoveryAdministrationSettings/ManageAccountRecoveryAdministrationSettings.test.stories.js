@@ -1,12 +1,10 @@
 import {MemoryRouter, Route} from "react-router-dom";
 import React from "react";
-import RecoverAccountAdministration from "./RecoverAccountAdministration";
-import "../../../../css/themes/default/api_main.css";
-
+import ManageAccountRecoveryAdministrationSettings from "./ManageAccountRecoveryAdministrationSettings";
 
 export default {
-  title: 'Passbolt/Administration/RecoverAccountAdministration',
-  component: RecoverAccountAdministration
+  title: 'Passbolt/Administration/ManageAccountRecoveryAdministrationSettings',
+  component: ManageAccountRecoveryAdministrationSettings
 };
 
 const Template = args =>
@@ -15,7 +13,7 @@ const Template = args =>
       <div className="panel middle">
         <div className="workspace-main">
           <div className="grid grid-responsive-12">
-            <Route component={routerProps => <RecoverAccountAdministration {...args} {...routerProps}/>}></Route>
+            <Route component={routerProps => <ManageAccountRecoveryAdministrationSettings {...args} {...routerProps}/>}></Route>
           </div>
         </div>
       </div>

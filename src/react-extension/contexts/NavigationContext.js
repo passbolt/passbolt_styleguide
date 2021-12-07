@@ -31,6 +31,10 @@ export const NavigationContext = React.createContext({
   }, // Whenever the users wants to navigate to the administration workspace email notifications
   onGoToAdministrationSubscriptionRequested: () => {
   }, // Whenever the users wants to navigate to the administration workspace subscription
+  onGoToAdministrationInternationalizationRequested: () => {
+  }, // Whenever the users wants to navigate to the administration workspace internationalization
+  onGoToAdministrationAccountRecoveryRequested: () => {
+  }, // Whenever the users wants to navigate to the administration workspace account recovery
   // Passwords
   onGoToPasswordsRequested: () => {
   }, // Whenever the user wants to navigate to the passwords workspace
@@ -82,7 +86,8 @@ class NavigationContextProvider extends React.Component {
       onGoToAdministrationUsersDirectoryRequested: this.onGoToAdministrationUsersDirectoryRequested.bind(this), // Whenever the user wants to navigate to the administration workspace users directory
       onGoToAdministrationEmailNotificationsRequested: this.onGoToAdministrationEmailNotificationsRequested.bind(this), // Whenever the user wants to navigate to the administration workspace email notifications
       onGoToAdministrationSubscriptionRequested: this.onGoToAdministrationSubscriptionRequested.bind(this), // Whenever the user wants to navigate to the administration workspace subscription
-      onGoToAdministrationInternationalizationRequested: this.onGoToAdministrationInternationalizationRequested.bind(this), // Whenever the user wants to navigate to the administration workspace subscription
+      onGoToAdministrationInternationalizationRequested: this.onGoToAdministrationInternationalizationRequested.bind(this), // Whenever the user wants to navigate to the administration workspace internationalization
+      onGoToAdministrationAccountRecoveryRequested: this.onGoToAdministrationAccountRecoveryRequested.bind(this), // Whenever the user wants to navigate to the administration workspace account recovery
       // Passwords
       onGoToPasswordsRequested: this.onGoToPasswordsRequested.bind(this), // Whenever the user wants to navigate to the passwords workspace
       // Users
@@ -180,6 +185,14 @@ class NavigationContextProvider extends React.Component {
    */
   async onGoToAdministrationInternationalizationRequested() {
     await this.goTo("api", "/app/administration/internationalization");
+  }
+
+  /**
+   * Whenever the user wants to navigate to the administration workspace account recovery.
+   * @returns {Promise<void>}
+   */
+  async onGoToAdministrationAccountRecoveryRequested() {
+    await this.goTo("browser-extension", "/app/administration/account-recovery");
   }
 
   /**

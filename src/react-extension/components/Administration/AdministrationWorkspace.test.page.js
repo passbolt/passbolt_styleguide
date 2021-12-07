@@ -50,17 +50,38 @@ export default class AdministrationWorkspacePage {
   }
 
   /**
-   * Returns true if the mfa area is visible
+   * Returns true if the user directory area is visible
    */
   get isUserDirectorySelected() {
     return Boolean(this._page.container.querySelector('.user-directory-details'));
   }
 
   /**
-   * Returns true if the mfa area is visible
+   * Returns true if the email notifications area is visible
    */
   get isEmailNotificationsSelected() {
     return Boolean(this._page.container.querySelector('.email-notifications-details'));
+  }
+
+  /**
+   * Returns true if the subscription key area is visible
+   */
+  get isSubscriptionKeySelected() {
+    return Boolean(this._page.container.querySelector('.subscription-key-details'));
+  }
+
+  /**
+   * Returns true if the internationalization area is visible
+   */
+  get isInternationalizationSelected() {
+    return Boolean(this._page.container.querySelector('.internationalization-details'));
+  }
+
+  /**
+   * Returns true if the account recovery area is visible
+   */
+  get isAccountRecoverySelected() {
+    return Boolean(this._page.container.querySelector('.account-recovery-details'));
   }
 }
 

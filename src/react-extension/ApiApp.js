@@ -66,7 +66,8 @@ class ApiApp extends Component {
                           <Switch>
                             { /* The following routes are not handled by the browser extension application. */}
                             <Route exact path={[
-                              "/app/administration/subscription"
+                              "/app/administration/subscription",
+                              "/app/administration/account-recovery"
                             ]}/>
                             <Route path="/app/administration">
                               <AdministrationWorkspaceContextProvider>
