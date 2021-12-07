@@ -266,6 +266,7 @@ class DisplayUsers extends React.Component {
     const roleName = this.props.userWorkspaceContext.getTranslatedRoleName(user.role_id);
     const mfa = user.is_mfa_enabled ? this.translate("Enabled") : this.translate("Disabled");
     const rowClassName = `${isSelected ? "selected" : ""} ${user.active ? "" : "inactive"}`;
+    const hasUserAttentionRequired = user.hasUserAttentionRequired;
 
     return (
       <tr
@@ -285,6 +286,13 @@ class DisplayUsers extends React.Component {
             </div>
           </div>
         </td>
+        {this.isLoggedInUserAdmin() &&
+          <td className="s-cell attention-required">
+            {hasUserAttentionRequired &&
+            <Icon name="exclamation" baseline={true}/>
+            }
+          </td>
+        }
         <td className="cell-name l-cell">
           <div title={`${user.profile.first_name} ${user.profile.last_name}`}>
             {`${user.profile.first_name} ${user.profile.last_name}`}
@@ -368,6 +376,10 @@ class DisplayUsers extends React.Component {
                         </label>
                       </div>
                     </th>
+                    {this.isLoggedInUserAdmin() &&
+                    <th className="s-cell attention-required">
+                    </th>
+                    }
                     <th className="cell-name l-cell sortable">
                       <a onClick={ev => this.handleSortByColumnClick(ev, "name")}>
                         <div className="cell-header">

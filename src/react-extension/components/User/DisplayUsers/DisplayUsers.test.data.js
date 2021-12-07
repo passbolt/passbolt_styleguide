@@ -29,7 +29,7 @@ export function defaultAppContext(appContext) {
 export function defaultProps() {
   return {
     userWorkspaceContext: {
-      onUserScrolled: jest.fn(),
+      onUserScrolled: () => {},
       scrollTo: {
         user: {
           "id": "54c6278e-f824-5fda-91ff-3e946b18d994",
@@ -78,9 +78,9 @@ export function defaultProps() {
           is_mfa_enabled: false
         }
       },
-      onSorterChanged: jest.fn(),
+      onSorterChanged: () => {},
       onUserSelected: {
-        single: jest.fn()
+        single: () => {}
       },
       sorter: {
         propertyName: 'modified'
@@ -181,7 +181,7 @@ export function defaultProps() {
       filter: {
         type: UserWorkspaceFilterTypes.ALL
       },
-      getTranslatedRoleName: jest.fn(name => name),
+      getTranslatedRoleName: name => name,
     }
   };
 }
@@ -214,4 +214,14 @@ export function propsWithNoUsersWithTextSearch() {
       }
     }
   };
+}
+
+/**
+ * Props with no users using the text search
+ * @returns {any}
+ */
+export function propsWithFirstUserAttentionRequired() {
+  const props = defaultProps();
+  props.userWorkspaceContext.filteredUsers[0].hasUserAttentionRequired = true;
+  return props;
 }
