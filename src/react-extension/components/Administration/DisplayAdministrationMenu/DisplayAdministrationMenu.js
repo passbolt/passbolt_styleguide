@@ -72,6 +72,15 @@ class DisplayAdministrationMenu extends React.Component {
   }
 
   /**
+   * Can I use the account recovery plugin
+   * @returns {boolean}
+   */
+  get canIUseAccountRecovery() {
+    const siteSettings = this.props.context.siteSettings;
+    return siteSettings && siteSettings.canIUse('accountRecovery');
+  }
+
+  /**
    * Bind callbacks methods
    */
   bindCallbacks() {
@@ -80,6 +89,7 @@ class DisplayAdministrationMenu extends React.Component {
     this.handleEmailNotificationsClick = this.handleEmailNotificationsClick.bind(this);
     this.handleSubscriptionClick = this.handleSubscriptionClick.bind(this);
     this.handleInternationalizationClick = this.handleInternationalizationClick.bind(this);
+    this.handleAccountRecoveryClick = this.handleAccountRecoveryClick.bind(this);
   }
 
   /**
@@ -115,6 +125,13 @@ class DisplayAdministrationMenu extends React.Component {
    */
   handleInternationalizationClick() {
     this.props.navigationContext.onGoToAdministrationInternationalizationRequested();
+  }
+
+  /**
+   * Handle when the user click on the account recovery menu
+   */
+  handleAccountRecoveryClick() {
+    this.props.navigationContext.onGoToAdministrationAccountRecoveryRequested();
   }
 
   /**
@@ -155,6 +172,14 @@ class DisplayAdministrationMenu extends React.Component {
    */
   isInternationalizationSelected() {
     return AdministrationWorkspaceMenuTypes.INTERNATIONALIZATION === this.props.administrationWorkspaceContext.selectedAdministration;
+  }
+
+  /**
+   * If Account Recovery menu is selected
+   * @returns {boolean}
+   */
+  isAccountRecoverySelected() {
+    return AdministrationWorkspaceMenuTypes.ACCOUNT_RECOVERY === this.props.administrationWorkspaceContext.selectedAdministration;
   }
 
   /**
@@ -221,6 +246,17 @@ class DisplayAdministrationMenu extends React.Component {
               <div className="main-cell-wrapper">
                 <div className="main-cell">
                   <a onClick={this.handleSubscriptionClick}><span><Trans>Subscription</Trans></span></a>
+                </div>
+              </div>
+            </div>
+          </li>
+          }
+          {this.canIUseAccountRecovery &&
+          <li id="account_recovery_menu">
+            <div className={`row  ${this.isAccountRecoverySelected() ? "selected" : ""}`}>
+              <div className="main-cell-wrapper">
+                <div className="main-cell">
+                  <a onClick={this.handleAccountRecoveryClick}><span><Trans>Account Recovery</Trans></span></a>
                 </div>
               </div>
             </div>

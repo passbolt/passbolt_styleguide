@@ -219,6 +219,7 @@ class AdministrationWorkspaceContextProvider extends React.Component {
     const isEmailNotificationLocation = this.props.location.pathname.includes('email-notification');
     const isSubscriptionLocation = this.props.location.pathname.includes('subscription');
     const isInternationalizationLocation = this.props.location.pathname.includes('internationalization');
+    const isAccountRecoveryLocation = this.props.location.pathname.includes('account-recovery');
     const can = {
       save: false,
       test: false,
@@ -243,6 +244,8 @@ class AdministrationWorkspaceContextProvider extends React.Component {
       selectedAdministration =  AdministrationWorkspaceMenuTypes.SUBSCRIPTION;
     } else if (isInternationalizationLocation) {
       selectedAdministration =  AdministrationWorkspaceMenuTypes.INTERNATIONALIZATION;
+    } else if (isAccountRecoveryLocation) {
+      selectedAdministration =  AdministrationWorkspaceMenuTypes.ACCOUNT_RECOVERY;
     }
     await this.setState({selectedAdministration, can, must});
   }
@@ -431,4 +434,5 @@ export const AdministrationWorkspaceMenuTypes = {
   EMAIL_NOTIFICATION: 'EMAIL-NOTIFICATION', // Email notification administration menu selected
   SUBSCRIPTION: 'SUBSCRIPTION', // Subscription administration menu selected
   INTERNATIONALIZATION: 'INTERNATIONALIZATION', // Email notification administration menu selected
+  ACCOUNT_RECOVERY: 'ACCOUNT-RECOVERY', // Email notification administration menu selected
 };

@@ -166,8 +166,11 @@ class ExtApp extends Component {
                                   </div>
                                 </UserSettingsContextProvider>
                               </Route>
-                              {/* Subscription settings */}
-                              <Route exact path={"/app/administration/subscription"}>
+                              {/* Subscription and Account Recovery settings */}
+                              <Route exact path={[
+                                "/app/administration/subscription",
+                                "/app/administration/account-recovery"
+                              ]}>
                                 <AdministrationWorkspaceContextProvider>
                                   <ManageDialogs/>
                                   <AdministrationWorkspace/>
