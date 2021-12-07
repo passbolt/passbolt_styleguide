@@ -61,11 +61,11 @@ class ManageAccountRecoveryAdministrationSettings extends React.Component {
    * fetch the email notifications settings
    */
   async findRecoverAccountSettings() {
-    const accountRecovery = this.props.accountRecovery;
+    const accountRecovery = await this.props.context.port.request("passbolt.account-recovery.organization.get");
 
     this.setState({
       loading: false,
-      accountRecoveryPolicy: accountRecovery.policy,
+      accountRecoveryPolicy: accountRecovery.policy || 'Disable',
       organisationRecoveryKeyToggle: Boolean(accountRecovery.organisationRecoveryKey),
     });
   }
@@ -149,7 +149,7 @@ class ManageAccountRecoveryAdministrationSettings extends React.Component {
         <div className="recover-account-settings col8">
           <h3><Trans>Account Recovery</Trans></h3>
           {this.state.hasChangedSettings &&
-          <div className="warning message" id="email-notification-setting-overridden-banner">
+          <div className="warning message">
             <p>
               <Trans>Warning, Don&apos;t forget to save your settings to apply your modification.</Trans>
             </p>
