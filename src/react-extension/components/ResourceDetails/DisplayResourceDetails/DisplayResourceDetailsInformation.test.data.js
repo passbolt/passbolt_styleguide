@@ -1,6 +1,7 @@
 import SiteSettings from "../../../../shared/lib/Settings/SiteSettings";
 import siteSettingsFixture from "../../../test/fixture/Settings/siteSettings";
 import MockPort from "../../../test/mock/MockPort";
+import {DateTime} from "luxon";
 
 /**
  * Returns the default app context for the unit test
@@ -16,6 +17,16 @@ export function defaultAppContext(appContext) {
   return Object.assign(defaultAppContext, appContext || {});
 }
 
+/**
+ * Format date in time ago
+ * @param {string} date The date to format
+ * @return {string}
+ */
+export function formatDateTimeAgo(date) {
+  const dateTime = DateTime.fromISO(date);
+  const duration = dateTime.diffNow().toMillis();
+  return duration > -1000 && duration < 0 ? this.translate('Just now') : dateTime.toRelative();
+}
 
 /**
  * Default props

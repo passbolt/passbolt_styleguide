@@ -83,7 +83,7 @@ describe("As AD I should see the subscription", () => {
       expect(page.email).toBe(mockSubscriptionUsersExceeded.email);
       expect(page.users).toBe(`${mockSubscriptionUsersExceeded.users} (curently: ${mockUsers.length})`);
       expect(page.created).toBe(`${formatDate(mockSubscriptionUsersExceeded.created)}`);
-      expect(page.expiry).toBe(`${formatDate(mockSubscriptionUsersExceeded.expiry)} (${DateTime.fromISO(mockSubscriptionUsersExceeded.expiry).toRelative()})`);
+      expect(page.expiry).toBe(`${formatDate(mockSubscriptionUsersExceeded.expiry)} (expired ${DateTime.fromISO(mockSubscriptionUsersExceeded.expiry).toRelative()})`);
 
       await page.goToRenewKey();
       expect(props.navigationContext.onGoToNewTab).toHaveBeenCalledWith(`https://www.passbolt.com/subscription/ee/update/qty?subscription_id=${mockSubscriptionUsersExceeded.subscription_id}&customer_id=${mockSubscriptionUsersExceeded.customer_id}`);

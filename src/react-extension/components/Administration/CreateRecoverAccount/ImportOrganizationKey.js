@@ -19,9 +19,9 @@ import FormSubmitButton from "../../Common/Inputs/FormSubmitButton/FormSubmitBut
 import FormCancelButton from "../../Common/Inputs/FormSubmitButton/FormCancelButton";
 
 /**
- * This component allows to display the import organisation key for the administration
+ * This component allows to display the import organization key for the administration
  */
-class ImportOrganisationKey extends React.Component {
+class ImportOrganizationKey extends React.Component {
   /**
    * Constructor
    * @param {Object} props
@@ -53,7 +53,7 @@ class ImportOrganisationKey extends React.Component {
     this.handleFormSubmit = this.handleFormSubmit.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleKeyInputKeyUp = this.handleKeyInputKeyUp.bind(this);
-    this.handleSelectOrganisationKeyFile = this.handleSelectOrganisationKeyFile.bind(this);
+    this.handleSelectOrganizationKeyFile = this.handleSelectOrganizationKeyFile.bind(this);
   }
 
   /**
@@ -75,13 +75,13 @@ class ImportOrganisationKey extends React.Component {
   }
 
   /**
-   * Whenever the user select a organisation key file
+   * Whenever the user select a organization key file
    * @param event The file dom event
    */
-  async handleSelectOrganisationKeyFile(event) {
-    const [organisationFile] = event.target.files;
-    const organisationKey = await this.readOrganisationKeyFile(organisationFile);
-    await this.fillOrganisationKey(organisationKey);
+  async handleSelectOrganizationKeyFile(event) {
+    const [organizationFile] = event.target.files;
+    const organizationKey = await this.readOrganizationKeyFile(organizationFile);
+    await this.fillOrganizationKey(organizationKey);
     if (this.state.hasAlreadyBeenValidated) {
       await this.validate();
     }
@@ -89,9 +89,9 @@ class ImportOrganisationKey extends React.Component {
 
   /**
    * Read the selected subscription key file and returns its content in a base 64
-   * @param organisationFile A subscription key file
+   * @param organizationFile A subscription key file
    */
-  readOrganisationKeyFile(organisationFile) {
+  readOrganizationKeyFile(organizationFile) {
     const reader = new FileReader();
     return new Promise((resolve, reject) => {
       reader.onloadend = () => {
@@ -101,16 +101,16 @@ class ImportOrganisationKey extends React.Component {
           reject(e);
         }
       };
-      reader.readAsText(organisationFile);
+      reader.readAsText(organizationFile);
     });
   }
 
   /**
-   * Fill the organisation key
-   * @param organisationKey A subscription key
+   * Fill the organization key
+   * @param organizationKey A subscription key
    */
-  async fillOrganisationKey(organisationKey) {
-    await this.setState({key: organisationKey});
+  async fillOrganizationKey(organizationKey) {
+    await this.setState({key: organizationKey});
   }
 
   /**
@@ -121,7 +121,7 @@ class ImportOrganisationKey extends React.Component {
     const key = this.state.key.trim();
     let keyError = "";
     if (!key.length) {
-      keyError = this.translate("An organisation key is required.");
+      keyError = this.translate("An organization key is required.");
     }
 
     return new Promise(resolve => {
@@ -231,10 +231,10 @@ class ImportOrganisationKey extends React.Component {
   render() {
     return (
       <form onSubmit={this.handleFormSubmit} noValidate>
-        <div className="form-content import-organisation-key">
+        <div className="form-content import-organization-key">
           <div className={`input textarea required ${this.state.keyError ? "error" : ""}`}>
-            <label htmlFor="organisation-recover-form-key"><Trans>Import an Open PGP Public key</Trans></label>
-            <textarea id="organisation-recover-form-key" name="key" value={this.state.key}
+            <label htmlFor="organization-recover-form-key"><Trans>Import an Open PGP Public key</Trans></label>
+            <textarea id="organization-recover-form-key" name="key" value={this.state.key}
               onKeyUp={this.handleKeyInputKeyUp} onChange={this.handleInputChange}
               disabled={this.hasAllInputDisabled()} ref={this.keyInputRef} className="required"
               placeholder='Add Open PGP Public key' required="required" autoComplete="off" autoFocus={true}/>
@@ -245,7 +245,7 @@ class ImportOrganisationKey extends React.Component {
                 type="file"
                 ref={this.fileUploaderRef}
                 disabled={this.hasAllInputDisabled()}
-                onChange={this.handleSelectOrganisationKeyFile}/>
+                onChange={this.handleSelectOrganizationKeyFile}/>
               {this.state.keyError &&
               <div className="key error-message">{this.state.keyError}</div>
               }
@@ -267,9 +267,9 @@ class ImportOrganisationKey extends React.Component {
   }
 }
 
-ImportOrganisationKey.propTypes = {
+ImportOrganizationKey.propTypes = {
   onClose: PropTypes.func,
   t: PropTypes.func, // The translation function
 };
 
-export default withTranslation('common')(ImportOrganisationKey);
+export default withTranslation('common')(ImportOrganizationKey);

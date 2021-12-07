@@ -18,7 +18,7 @@
 
 import {
   defaultAppContext,
-  defaultProps,
+  defaultProps, formatDateTimeAgo,
 } from "./DisplayResourceDetailsInformation.test.data";
 import DisplayResourceDetailsInformationPage from "./DisplayResourceDetailsInformation.test.page";
 import {ActionFeedbackContext} from "../../../contexts/ActionFeedbackContext";
@@ -63,11 +63,11 @@ describe("See information", () => {
       expect(page.displayInformationList.uriLabel).toBe('URI');
       expect(page.displayInformationList.uri.textContent).toBe(props.resourceWorkspaceContext.details.resource.uri);
       expect(page.displayInformationList.modifiedLabel(1)).toBe('Modified');
-      expect(page.displayInformationList.modified(1).textContent).toBe('1 year ago');
+      expect(page.displayInformationList.modified(1).textContent).toBe(formatDateTimeAgo(props.resourceWorkspaceContext.details.resource.modified));
       expect(page.displayInformationList.modifiedByLabel(1)).toBe('Modified by');
       expect(page.displayInformationList.modifiedBy(1).textContent).toBe('ada@passbolt.com');
       expect(page.displayInformationList.modifiedLabel(2)).toBe('Created');
-      expect(page.displayInformationList.modified(2).textContent).toBe('1 year ago');
+      expect(page.displayInformationList.modified(2).textContent).toBe(formatDateTimeAgo(props.resourceWorkspaceContext.details.resource.modified));
       expect(page.displayInformationList.modifiedByLabel(2)).toBe('Created by');
       expect(page.displayInformationList.modifiedBy(2).textContent).toBe('ada@passbolt.com');
       expect(page.displayInformationList.locationLabel).toBe('Location');
