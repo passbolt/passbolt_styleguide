@@ -26,9 +26,9 @@ import {withAppContext} from "../../../contexts/AppContext";
 const RESOURCE_PASSWORD_MAX_LENGTH = 4096;
 
 /**
- * This component allows to display the generate organisation key for the administration
+ * This component allows to display the generate organization key for the administration
  */
-class ImportOrganisationKey extends React.Component {
+class ImportOrganizationKey extends React.Component {
   /**
    * Constructor
    * @param {Object} props
@@ -332,10 +332,10 @@ class ImportOrganisationKey extends React.Component {
      */
     return (
       <form onSubmit={this.handleFormSubmit} noValidate>
-        <div className="form-content generate-organisation-key">
+        <div className="form-content generate-organization-key">
           <div className={`input text required ${this.state.nameError ? "error" : ""}`}>
-            <label htmlFor="generate-organisation-key-form-name"><Trans>Name</Trans></label>
-            <input id="generate-organisation-key-form-name" name="name" type="text" value={this.state.name}
+            <label htmlFor="generate-organization-key-form-name"><Trans>Name</Trans></label>
+            <input id="generate-organization-key-form-name" name="name" type="text" value={this.state.name}
               onKeyUp={this.handleNameInputKeyUp} onChange={this.handleInputChange}
               disabled={this.hasAllInputDisabled()} ref={this.nameInputRef} className="required fluid" maxLength="64"
               required="required" autoComplete="off" autoFocus={true} placeholder={this.translate("Name")}/>
@@ -344,8 +344,8 @@ class ImportOrganisationKey extends React.Component {
             }
           </div>
           <div className={`input text required ${this.state.emailError ? "error" : ""}`}>
-            <label htmlFor="generate-organisation-key-form-email"><Trans>Email</Trans></label>
-            <input id="generate-organisation-key-form-email" name="email" ref={this.emailInputRef} className="fluid" maxLength="64" type="email"
+            <label htmlFor="generate-organization-key-form-email"><Trans>Email</Trans></label>
+            <input id="generate-organization-key-form-email" name="email" ref={this.emailInputRef} className="fluid" maxLength="64" type="email"
               autoComplete="off" value={this.state.email} onChange={this.handleInputChange} placeholder={this.translate("Email Address")}
               onKeyUp={this.handleEmailInputKeyUp} disabled={this.hasAllInputDisabled()}/>
             {this.state.emailError &&
@@ -353,29 +353,29 @@ class ImportOrganisationKey extends React.Component {
             }
           </div>
           <div className="input select">
-            <label htmlFor="generate-organisation-key-form-algorithm">
+            <label htmlFor="generate-organization-key-form-algorithm">
               <Trans>Algorithm</Trans>
               <Tooltip message={this.translate("Algorithm and key size cannot be changed at the moment. These are secure default")}
                 icon="info-circle"/>
             </label>
-            <input id="generate-organisation-key-form-algorithm" name="algorithm" value={this.state.algorithm}
+            <input id="generate-organization-key-form-algorithm" name="algorithm" value={this.state.algorithm}
               className="fluid" type="text"
               autoComplete="off" disabled={true}/>
           </div>
           <div className="input select">
-            <label htmlFor="generate-organisation-key-form-keySize">
+            <label htmlFor="generate-organization-key-form-keySize">
               <Trans>Key Size</Trans>
               <Tooltip message={this.translate("Algorithm and key size cannot be changed at the moment. These are secure default")}
                 icon="info-circle"/>
             </label>
-            <input id="generate-organisation-key-form-key-size" name="keySize" value={this.state.keySize}
+            <input id="generate-organization-key-form-key-size" name="keySize" value={this.state.keySize}
               className="fluid" type="text"
               autoComplete="off" disabled={true}/>
           </div>
           <div className={`input-password-wrapper input required ${this.state.passwordError ? "error" : ""}`}>
-            <label htmlFor="generate-organisation-key-form-password"><Trans>Organisation key passphrase</Trans></label>
+            <label htmlFor="generate-organization-key-form-password"><Trans>Organization key passphrase</Trans></label>
             <div className="input text password">
-              <input id="generate-organisation-key-form-password" name="password" className="required" maxLength="4096"
+              <input id="generate-organization-key-form-password" name="password" className="required" maxLength="4096"
                 placeholder={this.translate("Passphrase")} required="required" type={this.state.viewPassword ? "text" : "password"}
                 onKeyUp={this.handlePasswordInputKeyUp} value={this.state.password}
                 onFocus={this.handlePasswordInputFocus} onBlur={this.handlePasswordInputBlur}
@@ -415,9 +415,9 @@ class ImportOrganisationKey extends React.Component {
           </div>
         </div>
         {!this.state.hasAlreadyBeenValidated &&
-        <div className="warning message" id="generate-organisation-key-setting-overridden-banner">
+        <div className="warning message" id="generate-organization-key-setting-overridden-banner">
           <p>
-            <Trans>Warning, we encourage you to generate  your OpenPGP Organisation Recovery Key separately. Make sure you keep a backup in a safe place.</Trans>
+            <Trans>Warning, we encourage you to generate  your OpenPGP Organization Recovery Key separately. Make sure you keep a backup in a safe place.</Trans>
           </p>
         </div>
         }
@@ -430,10 +430,10 @@ class ImportOrganisationKey extends React.Component {
   }
 }
 
-ImportOrganisationKey.propTypes = {
+ImportOrganizationKey.propTypes = {
   context: PropTypes.any, // The application context
   onClose: PropTypes.func,
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withTranslation('common')(ImportOrganisationKey));
+export default withAppContext(withTranslation('common')(ImportOrganizationKey));

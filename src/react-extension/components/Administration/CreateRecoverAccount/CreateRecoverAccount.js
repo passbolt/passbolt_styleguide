@@ -17,8 +17,8 @@ import {withTranslation} from "react-i18next";
 import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
 import Tab from "../../Common/Tab/Tab";
 import Tabs from "../../Common/Tab/Tabs";
-import ImportOrganisationKey from "./ImportOrganisationKey";
-import GenerateOrganisationKey from "./GenerateOrganisationKey";
+import ImportOrganizationKey from "./ImportOrganizationKey";
+import GenerateOrganizationKey from "./GenerateOrganizationKey";
 
 /**
  * This component allows to display the create recover account for the administration
@@ -73,23 +73,23 @@ class CreateRecoverAccount extends React.Component {
   render() {
     return (
       <DialogWrapper
-        title={this.translate("Organisation Recovery Key")}
+        title={this.translate("Organization Recovery Key")}
         onClose={this.handleCloseClick}
         disabled={this.state.processing}
-        className="organisation-recover-key-dialog">
+        className="organization-recover-key-dialog">
         <Tabs activeTabName='Import'>
           <Tab
             key='Import'
             name='Import'
             type='Import'>
-            <ImportOrganisationKey
+            <ImportOrganizationKey
               onClose={this.handleCloseClick}/>
           </Tab>
           <Tab
             key='Generate'
             name='Generate'
             type='Generate'>
-            <GenerateOrganisationKey
+            <GenerateOrganizationKey
               onClose={this.handleCloseClick}/>
           </Tab>
         </Tabs>
