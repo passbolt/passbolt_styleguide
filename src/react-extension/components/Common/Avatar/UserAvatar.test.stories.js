@@ -43,5 +43,5 @@ const Template = args =>
 export const Initial = Template.bind({});
 Initial.args = defaultProps();
 
-export const PendingRecover = Template.bind({});
-PendingRecover.args = Object.assign(defaultProps(), {pendingRecover: true});
+export const AttentionRequired = Template.bind({});
+AttentionRequired.args = Object.assign(defaultProps(), {attentionRequired: true});

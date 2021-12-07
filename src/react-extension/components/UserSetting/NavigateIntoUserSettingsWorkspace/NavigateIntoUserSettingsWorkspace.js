@@ -18,6 +18,7 @@ import {withRouter} from "react-router-dom";
 import {withAppContext} from "../../../contexts/AppContext";
 import {withNavigationContext} from "../../../contexts/NavigationContext";
 import {Trans, withTranslation} from "react-i18next";
+import Icon from "../../Common/Icons/Icon";
 
 /**
  * This component allows to navigate throught the differents sections of the user settings workspace
@@ -138,6 +139,23 @@ class NavigateIntoUserSettingsWorkspace extends React.Component {
               </div>
             </li>
           }
+          <li>
+            <div
+              className={`row ${isSelected('account-recovery') ? 'selected' : ''}`}>
+              <div className="main-cell-wrapper">
+                <div className="main-cell">
+                  <a>
+                    <span>
+                      <Trans>Account Recovery</Trans>
+                      {this.props.pendingAccountRecovery &&
+                      <Icon name="exclamation"/>
+                      }
+                    </span>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </li>
           {this.canIUseMobileCapability &&
           <li>
             <div
@@ -163,6 +181,7 @@ NavigateIntoUserSettingsWorkspace.propTypes = {
   navigationContext: PropTypes.any, // The application navigation context
   history: PropTypes.object,
   location: PropTypes.object,
+  pendingAccountRecovery: PropTypes.bool,
   t: PropTypes.func, // The translation function
 };
 

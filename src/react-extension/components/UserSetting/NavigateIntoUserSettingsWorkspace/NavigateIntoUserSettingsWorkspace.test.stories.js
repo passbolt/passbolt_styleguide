@@ -31,3 +31,8 @@ Template.propTypes = {
 };
 
 export const Initial = Template.bind({});
+
+export const PendingAccountRecovery = Template.bind({});
+PendingAccountRecovery.args = {
+  pendingAccountRecovery: true
+};
