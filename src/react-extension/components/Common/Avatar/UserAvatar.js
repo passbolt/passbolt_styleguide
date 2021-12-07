@@ -132,7 +132,7 @@ class UserAvatar extends Component {
         {this.state.error &&
         <img src={this.getDefaultAvatarUrl()} alt={this.getAltText()}/>
         }
-        {this.props.pendingRecover &&
+        {this.props.attentionRequired &&
         <Icon name="exclamation"/>
         }
       </div>
@@ -147,7 +147,7 @@ UserAvatar.defaultProps = {
 UserAvatar.propTypes = {
   baseUrl: PropTypes.string,
   user: PropTypes.object,
-  pendingRecover: PropTypes.bool,
+  attentionRequired: PropTypes.bool,
   className: PropTypes.string
 };
 
