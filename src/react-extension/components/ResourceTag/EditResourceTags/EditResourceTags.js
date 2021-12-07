@@ -254,7 +254,7 @@ class EditResourceTags extends React.Component {
       return false;
     }
     if (this.isTagExceedMaxLength(slug.trim())) {
-      this.setErrorMessage(this.translate("This tag can't be added, the length cannot exceeds {{tagMaxLength}}", {tagMaxLength: TAG_MAX_LENGTH}));
+      this.setErrorMessage(this.translate("This tag can't be added, the length cannot exceed {{tagMaxLength}}", {tagMaxLength: TAG_MAX_LENGTH}));
       return false;
     }
     if (!this.props.isOwner && slug.startsWith("#")) {

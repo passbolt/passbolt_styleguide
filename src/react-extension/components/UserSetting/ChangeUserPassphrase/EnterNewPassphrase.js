@@ -24,6 +24,7 @@ import debounce from "debounce-promise";
 import SecurityComplexity from "../../../../shared/lib/Secret/SecretComplexity";
 import SecretComplexity from "../../../../shared/lib/Secret/SecretComplexity";
 import {Trans, withTranslation} from "react-i18next";
+import {withAppContext} from "../../../contexts/AppContext";
 
 /**
  * This component displays the user choose passphrase information
@@ -102,6 +103,8 @@ class EnterNewPassphrase extends React.Component {
   bindEventHandlers() {
     this.handlePassphraseChange = this.handlePassphraseChange.bind(this);
     this.handleToggleObfuscate = this.handleToggleObfuscate.bind(this);
+    this.handleFocusPassphrase = this.handleFocusPassphrase.bind(this);
+    this.handleBlurPassphrase = this.handleBlurPassphrase.bind(this);
     this.handleCancel = this.handleCancel.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
@@ -181,6 +184,48 @@ class EnterNewPassphrase extends React.Component {
   }
 
   /**
+   * Returns the security token code of the suer
+   */
+  get securityTokenCode() {
+    return this.props.context.userSettings.getSecurityTokenCode();
+  }
+
+  /**
+   * Returns the style of the security token (color and text color)
+   */
+  get securityTokenStyle() {
+    const {userSettings} = this.props.context;
+    const inverseStyle =  {background: userSettings.getSecurityTokenTextColor(), color: userSettings.getSecurityTokenBackgroundColor()};
+    const fullStyle =  {background: userSettings.getSecurityTokenBackgroundColor(), color: userSettings.getSecurityTokenTextColor()};
+    return this.state.hasPassphraseFocus ? inverseStyle : fullStyle;
+  }
+
+  /**
+   * Get the passphrase input style.
+   * @return {Object}
+   */
+  get passphraseInputStyle() {
+    const {userSettings} = this.props.context;
+    const emptyStyle =  {background: "", color: ""};
+    const fullStyle =  {background: userSettings.getSecurityTokenBackgroundColor(), color: userSettings.getSecurityTokenTextColor()};
+    return this.state.hasPassphraseFocus ? fullStyle : emptyStyle;
+  }
+
+  /**
+   * Whenever the user focus on the passphrase input
+   */
+  handleFocusPassphrase() {
+    this.setState({hasPassphraseFocus: true});
+  }
+
+  /**
+   * Whenever the user blurs on the passphrase input
+   */
+  handleBlurPassphrase() {
+    this.setState({hasPassphraseFocus: false});
+  }
+
+  /**
    * Evaluate if the passphrase is in dictionary
    * @param passphrase The passphrase to evaluate
    * @return {Promise<boolean>} Return true if the password is part of a dictionary, false otherwise
@@ -244,7 +289,7 @@ class EnterNewPassphrase extends React.Component {
     return (
       <div className="grid grid-responsive-12 profile-passphrase">
         <div className="row">
-          <div className="col6">
+          <div className="col7">
             <form className="enter-passphrase" onSubmit={this.handleSubmit}>
               <h3><Trans>Please enter a new passphrase</Trans></h3>
               <div className="form-content">
@@ -254,7 +299,10 @@ class EnterNewPassphrase extends React.Component {
                     type={this.state.isObfuscated ? "password" : "text"}
                     ref={this.passphraseInput}
                     value={this.state.passphrase}
+                    style={this.passphraseInputStyle}
                     onChange={this.handlePassphraseChange}
+                    onFocus={this.handleFocusPassphrase}
+                    onBlur={this.handleBlurPassphrase}
                     disabled={!this.areActionsAllowed}
                     autoFocus={true}
                     autoComplete="off"/>
@@ -265,13 +313,15 @@ class EnterNewPassphrase extends React.Component {
                     <Icon name="eye-open"/>
                     <span className="visually-hidden">view</span>
                   </a>
+                  <span className="security-token" style={this.securityTokenStyle}>
+                    {this.securityTokenCode}
+                  </span>
                   <div className="password-complexity">
                     <span className="progress">
                       <span className={`progress-bar ${this.state.passphraseStrength.id}`}/>
                     </span>
                   </div>
                 </div>
-
                 <div className="password-hints">
                   <ul>
                     <li className={this.state.hintClassNames.enoughLength}>
@@ -305,9 +355,6 @@ class EnterNewPassphrase extends React.Component {
               <h3><Trans>Tips for choosing a good passphrase</Trans></h3>
               <p><Trans>Make sure your passphrase is hard to guess but also that is long enough. For example you can use your favorite lyric from a song,
                 grab the first couple of characters from the words in your favorite line.</Trans></p>
-              <a className="button">
-                <span><Trans>Learn more</Trans></span>
-              </a>
             </div>
           </div>
         </div>
@@ -317,9 +364,10 @@ class EnterNewPassphrase extends React.Component {
 }
 
 EnterNewPassphrase.propTypes = {
+  context: PropTypes.any, // The application context
   userSettingsContext: PropTypes.object, // The user settings context
   dialogContext: PropTypes.any, // The dialog context
   t: PropTypes.func, // The translation function
 };
 
-export default withDialog(withUserSettings(withTranslation('common')(EnterNewPassphrase)));
+export default withAppContext(withDialog(withUserSettings(withTranslation('common')(EnterNewPassphrase))));

@@ -18,7 +18,8 @@ import PropTypes from "prop-types";
 import {Trans, withTranslation} from "react-i18next";
 
 const CHROME_STORE_BROWSER_EXTENSION_URL = "https://chrome.google.com/webstore/detail/passbolt-extension/didegimhafipceonhjepacocaffmoppf";
-const FIREFOX_STORE_BROWSER_EXTENSION_URL = "https://addons.mozilla.org/fr/firefox/addon/passbolt";
+const FIREFOX_STORE_BROWSER_EXTENSION_URL = "https://addons.mozilla.org/firefox/addon/passbolt";
+const EDGE_STORE_BROWSER_EXTENSION_URL = "https://microsoftedge.microsoft.com/addons/detail/passbolt-extension/ljeppgjhohmhpbdhjjjbiflabdgfkhpo";
 
 class InstallExtension extends Component {
   constructor(props) {
@@ -31,8 +32,11 @@ class InstallExtension extends Component {
    * Returns the default component state
    */
   getDefaultState() {
+    const currentTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? "dark" : "light";
+
     return {
-      browserName: detectBrowserName()
+      browserName: detectBrowserName(),
+      theme: currentTheme
     };
   }
 
@@ -50,13 +54,16 @@ class InstallExtension extends Component {
    * @returns {string}
    */
   get browserStoreThumbnailUrl() {
+    const color = this.state.theme === "dark" ? "white" : "black";
+
     switch (this.state.browserName) {
-      case BROWSER_NAMES.CHROME:
-        return `${this.props.context.trustedDomain}/img/third_party/ChromeWebStore_black.png`; // @todo _white if theme midgar
       case BROWSER_NAMES.FIREFOX:
-        return `${this.props.context.trustedDomain}/img/third_party/FirefoxAMO_black.svg`; // @todo _white if theme midgar
+        return `${this.props.context.trustedDomain}/img/third_party/FirefoxAMO_${color}.svg`;
+      case BROWSER_NAMES.EDGE:
+        return `${this.props.context.trustedDomain}/img/third_party/edge-addon-${color}.svg`;
+      case BROWSER_NAMES.CHROME:
       default:
-        return `${this.props.context.trustedDomain}/img/third_party/ChromeWebStore_black.png`;
+        return `${this.props.context.trustedDomain}/img/third_party/ChromeWebStore_${color}.svg`;
     }
   }
 
@@ -72,6 +79,8 @@ class InstallExtension extends Component {
         return CHROME_STORE_BROWSER_EXTENSION_URL;
       case BROWSER_NAMES.FIREFOX:
         return FIREFOX_STORE_BROWSER_EXTENSION_URL;
+      case BROWSER_NAMES.EDGE:
+        return EDGE_STORE_BROWSER_EXTENSION_URL;
       default:
         return CHROME_STORE_BROWSER_EXTENSION_URL;
     }

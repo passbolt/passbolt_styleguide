@@ -336,11 +336,11 @@ class UploadUserProfileAvatar extends React.Component {
                     className={`button primary ${this.areActionsAllowed ? "" : "disabled"}`}
                     onClick={this.handleSelectFile}>
                     <Icon name="upload-a"/>
-                    <span><Trans>Choose a file</Trans></span>
+                    <span className='ellipsis'><Trans>Choose a file</Trans></span>
                   </a>
                 </div>
                 {this.state.errors.message &&
-                <div className="error message">{this.state.errors.message}</div>
+                <div className="error-message">{this.state.errors.message}</div>
                 }
               </div>
             </div>

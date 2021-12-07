@@ -19,6 +19,10 @@ import {withContextualMenu} from "../../../contexts/ContextualMenuContext";
 import {withRouter} from "react-router-dom";
 import Icon from "../../Common/Icons/Icon";
 import {Trans, withTranslation} from "react-i18next";
+import {withDrag} from "../../../contexts/DragContext";
+import {withDialog} from "../../../contexts/DialogContext";
+import {withAppContext} from "../../../contexts/AppContext";
+import NotifyError from "../../Common/Error/NotifyError/NotifyError";
 
 class FilterResourcesByTagsList extends React.Component {
   /**
@@ -38,7 +42,8 @@ class FilterResourcesByTagsList extends React.Component {
   getDefaultState() {
     return {
       open: true,
-      selectedTag: null, //  tag selected for the contextual menu
+      selectedTag: null, // Tag selected for the contextual menu
+      draggingOverTagId: null // The dragging over tag id
     };
   }
 
@@ -48,6 +53,9 @@ class FilterResourcesByTagsList extends React.Component {
   bindCallbacks() {
     this.handleContextualMenuEvent = this.handleContextualMenuEvent.bind(this);
     this.handleMoreClickEvent = this.handleMoreClickEvent.bind(this);
+    this.handleDropEvent = this.handleDropEvent.bind(this);
+    this.handleDragOverEvent = this.handleDragOverEvent.bind(this);
+    this.handleDragLeaveEvent = this.handleDragLeaveEvent.bind(this);
   }
 
   /**
@@ -123,6 +131,56 @@ class FilterResourcesByTagsList extends React.Component {
     }
   }
 
+  /**
+   * Handle when the user drop content on this component.
+   * @param {ReactEvent} event The event
+   * @param {Object} tag The tag
+   */
+  async handleDropEvent(event, tag) {
+    this.setState({draggingOverTagId: null});
+    try {
+      const resources = this.props.dragContext.draggedItems.resources.map(resource => resource.id);
+      this.props.context.port.request("passbolt.tags.add-resources-tag", {resources, tag});
+    } catch (error) {
+      this.onUnexpectedError(error);
+    }
+  }
+
+  /**
+   * Whenever an unexpected error occured
+   * @param {object} error The error
+   * @returns {Promise<void>}
+   */
+  onUnexpectedError(error) {
+    const errorDialogProps = {
+      title: "There was an unexpected error...",
+      message: error.message
+    };
+    this.props.context.setContext({errorDialogProps});
+    this.props.dialogContext.open(NotifyError);
+  }
+
+  /**
+   * Handle when the user is dragging over the tag.
+   * @param {ReactEvent} event The event
+   * @param {string} tagId The tag ID
+   */
+  handleDragOverEvent(event, tagId) {
+    /*
+     * If you want to allow a drop, you must prevent the default handling by cancelling both the dragenter and dragover events.
+     * see: https://developer.mozilla.org/en-US/docs/Web/API/HTML_Drag_and_Drop_API/Drag_operations#droptargets
+     */
+    event.preventDefault();
+    this.setState({draggingOverTagId: tagId});
+  }
+
+  /**
+   * Handle when the user is dragging leave the tag.
+   */
+  handleDragLeaveEvent() {
+    this.setState({draggingOverTagId: null});
+  }
+
   // Zero conditional statements
   /**
    * get the filter according to the type of the filter
@@ -166,6 +224,62 @@ class FilterResourcesByTagsList extends React.Component {
   }
 
   /**
+   * Check if the user is currently dragging content.
+   * @returns {boolean}
+   */
+  isDragging() {
+    return this.props.dragContext.dragging;
+  }
+
+  /**
+   * Check if the component is disabled.
+   * @param {Object} tag
+   * @returns {boolean}
+   */
+  isDisabled(tag) {
+    /*
+     * If the user is dragging content, disable the component if:
+     * - The user is not allowed to drop content in the shared tag.
+     * - The user is not allowed to drop dragged items except resources;
+     */
+    if (this.isDragging()) {
+      if (tag.is_shared) {
+        return true;
+      }
+      if (!this.canDropInto()) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  /**
+   * Show the drop focus for a tag
+   * @param tag
+   * @returns {boolean}
+   */
+  showDropFocus(tag) {
+    return tag.id === this.state.draggingOverTagId && !this.isDisabled(tag)
+  }
+
+  /**
+   * Check if the user can drag all the items they are currently dragging.
+   * @returns {boolean}
+   */
+  canDropInto() {
+    return this.draggedItems.resources.length > 0;
+  }
+
+  /**
+   * return dragged items
+   * @returns {*}
+   */
+  get draggedItems() {
+    return this.props.dragContext.draggedItems;
+  }
+
+  /**
    * Get the translate function
    * @returns {function(...[*]=)}
    */
@@ -192,11 +306,14 @@ class FilterResourcesByTagsList extends React.Component {
         <ul className="tree ready">
           {this.filteredTags.map(tag =>
             <li className="open node root tag-item" key={tag.id}>
-              <div className={`row ${this.isSelected(tag.id) ? "selected" : ""}`}>
+              <div className={`row ${this.isSelected(tag.id) ? "selected" : ""} ${this.isDisabled(tag) ? "disabled" : ""} ${this.showDropFocus(tag) ? "drop-focus" : ""}`}
+                onDrop={ event => this.handleDropEvent(event, tag)}
+                onDragOver={ event => this.handleDragOverEvent(event, tag.id)}
+                onDragLeave={this.handleDragLeaveEvent}>
                 <div className="main-cell-wrapper" onClick={() => this.handleOnClickTag(tag)}
                   onContextMenu={event => this.handleContextualMenuEvent(event, tag)}>
                   <div className="main-cell">
-                    <a title={tag.slug}><span className="ellipsis">{tag.slug}</span></a>
+                    <a title={tag.slug}><span className="ellipsis tag-name">{tag.slug}</span></a>
                   </div>
                 </div>
                 {!tag.is_shared &&
@@ -218,15 +335,18 @@ class FilterResourcesByTagsList extends React.Component {
 }
 
 FilterResourcesByTagsList.propTypes = {
+  context: PropTypes.any, // The app context
   contextualMenuContext: PropTypes.any, // The contextual menu context
   tags: PropTypes.array,
   filterType: PropTypes.string,
   resourceWorkspaceContext: PropTypes.object,
   history: PropTypes.any,
+  dialogContext: PropTypes.any, // The dialog context
+  dragContext: PropTypes.any, // The drag and drop context
   t: PropTypes.func, // The translation function
 };
 
-export default withRouter(withResourceWorkspace(withContextualMenu(withTranslation('common')(FilterResourcesByTagsList))));
+export default withRouter(withAppContext(withDialog(withResourceWorkspace(withContextualMenu(withDrag(withTranslation('common')(FilterResourcesByTagsList)))))));
 
 export const filterByTagsOptions = {
   all: "all",

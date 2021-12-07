@@ -1,6 +1,5 @@
 import React from "react";
 import {MemoryRouter, Route} from "react-router-dom";
-import "../../../../css/themes/default/ext_app.css";
 import AppContext from "../../../contexts/AppContext";
 import PropTypes from "prop-types";
 import DeleteResourceFolder from "./DeleteResourceFolder";
@@ -42,7 +41,3 @@ Initial.argTypes = {
     }
   }
 };
-
-
-
-

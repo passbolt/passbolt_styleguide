@@ -1,21 +1,28 @@
-/*
-	image input is a 2 column fixed / fluid layout
-		with preview on the left
-		and info and input field on the right
-*/
-.input.file.image {
+.input-file-chooser-wrapper {
+  input[type="file"] {
+    display: none;
+  }
+  .input-file-inline {
+    display: flex;
 
-    .image-wrapper.avatar {
-        width: 50px;
-        float: left;
+    input[type="text"] {
+      flex: 1 1 auto;
+      width: auto;
+      text-overflow: ellipsis;
     }
-    .input-wrapper {
-        float: right;
-        width: 100%;
-        margin-left: -50px;
+
+    .button.primary {
+      display: flex;
+      flex: 0 1 auto;
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
+      margin-right: 0;
+      margin-bottom: 0.8rem;
+      align-items: center;
+
+      .svg-icon.upload-a svg {
+        top: 0;
+      }
     }
-    .input-wrapper-2 {
-        margin-left: 50px;
-        padding-left: 1em;
-    }
+  }
 }

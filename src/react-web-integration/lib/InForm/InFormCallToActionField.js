@@ -146,10 +146,10 @@ class InFormCallToActionField {
     let y = 0;
     let currentElement = this.field;
     const {height, width} = this.field.getBoundingClientRect();
-    const {top: topBody, left: leftBody} = document.body.getBoundingClientRect();
+    const {top: topBody, left: leftBody} = document.documentElement.getBoundingClientRect();
     // We loop to calculate the cumulated position of the field
     // from its ancestors and itself differential offset / scroll position
-    while( currentElement && !isNaN( currentElement.offsetLeft ) && !isNaN( currentElement.offsetTop ) ) {
+    while(currentElement && !isNaN(currentElement.offsetLeft) && !isNaN(currentElement.offsetTop)) {
       x += currentElement.offsetLeft - currentElement.scrollLeft;
       y += currentElement.offsetTop - currentElement.scrollTop;
       currentElement = currentElement.offsetParent;
@@ -157,7 +157,7 @@ class InFormCallToActionField {
     // Then we add the body offset (notably in case of window scroll) + some local adjustments (margin / vertical aligment )
     x = x + leftBody + width - 25;
     y = y + topBody + Math.floor(height / 2) - 9; // Calculate the middle position of the input, 9 is the half of the iframe height
-    return { top: y, left: x };
+    return {top: y, left: x};
   }
 
 

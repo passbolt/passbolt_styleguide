@@ -1,6 +1,5 @@
 import React from "react";
 import {MemoryRouter, Route} from "react-router-dom";
-import "../../../css/themes/default/ext_quickaccess.css";
 import PropTypes from "prop-types";
 import HomePage from "./HomePage";
 import AppContext from "../../contexts/AppContext";
@@ -23,10 +22,15 @@ Template.propTypes = {
   context: PropTypes.object,
 };
 
+const parameters = {
+  css: "ext_quickaccess"
+};
+
 export const Initial = Template.bind({});
 Initial.args = {
   context: defaultAppContext()
 };
+Initial.parameters = parameters;
 
 const contextNoResource = {
   storage: {
@@ -38,10 +42,11 @@ const contextNoResource = {
     }
   },
 };
-export const noResource = Template.bind({});
-noResource.args = {
+export const NoResource = Template.bind({});
+NoResource.args = {
   context: defaultAppContext(contextNoResource)
 };
+NoResource.parameters = parameters;
 
 const contextSearchNotFoundResource = {
   storage: {
@@ -54,10 +59,11 @@ const contextSearchNotFoundResource = {
   },
   search: "apache",
 };
-export const noFoundResource = Template.bind({});
-noFoundResource.args = {
+export const NoFoundResource = Template.bind({});
+NoFoundResource.args = {
   context: defaultAppContext(contextSearchNotFoundResource)
 };
+NoFoundResource.parameters = parameters;
 
 const contextSearchResources = {
   storage: {
@@ -74,6 +80,7 @@ export const SearchResources = Template.bind({});
 SearchResources.args = {
   context: defaultAppContext(contextSearchResources)
 };
+SearchResources.parameters = parameters;
 
 const contextResources = {
   storage: {
@@ -89,7 +96,4 @@ export const SuggestedResources = Template.bind({});
 SuggestedResources.args = {
   context: defaultAppContext(contextResources)
 };
-
-
-
-
+SuggestedResources.parameters = parameters;

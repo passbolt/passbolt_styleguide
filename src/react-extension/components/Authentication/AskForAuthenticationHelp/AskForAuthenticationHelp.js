@@ -68,7 +68,7 @@ class AskForAuthenticationHelp extends Component {
       <div className="ask-for-authentication-help">
         <h1><Trans>Sorry... maybe an administrator can help?</Trans></h1>
         <p>
-          <Trans>Both the private key and passphrase are required to perform an account recovery.</Trans> <Trans>If you do not access, you can request a new account to the administrator.</Trans>
+          <Trans>Both the private key and passphrase are required to perform an account recovery.</Trans> <Trans>If you do not have access, you can request a new account from the administrator.</Trans>
         </p>
         <div className="form-actions">
           <a

@@ -3,12 +3,19 @@ import React from "react";
 import AppContext from "../../../contexts/AppContext";
 import PropTypes from "prop-types";
 import CreateResource from "./CreateResource";
-import "../../../../css/themes/default/ext_app.css";
 
 
 export default {
   title: 'Passbolt/Resource/CreateResource',
-  component: CreateResource
+  component: CreateResource,
+  argTypes: {
+    language: {
+      control: {
+        type: 'select',
+        options: ['en-US', 'fr']
+      }
+    }
+  }
 };
 
 const context = {
@@ -80,7 +87,7 @@ const context = {
 };
 
 
-const Template = args =>
+const Template =  ({context, ...args})  =>
   <AppContext.Provider value={context}>
     <MemoryRouter initialEntries={['/']}>
       <Route component={routerProps => <CreateResource {...args} {...routerProps}/>}></Route>
@@ -88,7 +95,10 @@ const Template = args =>
   </AppContext.Provider>;
 
 Template.propTypes = {
-  context: PropTypes.object,
+  context: PropTypes.object
 };
 
 export const Initial = Template.bind({});
+Initial.args = {
+  context: context,
+};

@@ -37,8 +37,8 @@ describe("As LU I should see the password import result dialog", () => {
       expect(page.exists()).toBeTruthy();
       expect(page.title).toBe("Import success!");
 
-      expect(page.result(1)).toBe("10 password has been imported successfully.");
-      expect(page.result(2)).toBe("5 folder has been imported successfully.");
+      expect(page.result(1)).toBe("10 passwords have been imported successfully.");
+      expect(page.result(2)).toBe("5 folders have been imported successfully.");
 
       await page.acceptResult();
       expect(props.onClose).toBeCalled();
@@ -58,7 +58,7 @@ describe("As LU I should see the password import result dialog", () => {
 
       const errorDebugValue = "----------------------------\nResources errors\n----------------------------\n" +
         "[\n    {\n        \"name\": \"resource1\"\n    },\n    {\n        \"name\": \"resource2\"\n    }\n" +
-        "]\n\n----------------------------\nFolders errors\n----------------------------\n[\n    {\n" +
+        "]\n\n----------------------------\nFolder errors\n----------------------------\n[\n    {\n" +
         "        \"name\": \"folder1\"\n    }\n]";
 
       expect(page.errorDebug).toBe(errorDebugValue);

@@ -1,6 +1,5 @@
 import React from "react";
 import {MemoryRouter, Route} from "react-router-dom";
-import "../../../../css/themes/default/ext_app.css";
 import AppContext from "../../../contexts/AppContext";
 import PropTypes from "prop-types";
 import EditResourceTag from "./EditResourceTag";
@@ -31,7 +30,6 @@ Template.propTypes = {
 };
 
 
-
 export const Initial = Template.bind({});
 Initial.args = {
   context: defaultContext
@@ -44,5 +42,3 @@ Initial.argTypes = {
     }
   }
 };
-
-

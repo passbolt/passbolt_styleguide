@@ -363,7 +363,7 @@ class DisplaySubscriptionKey extends React.Component {
                   <span
                     className={`label ${this.hasLimitUsersExceeded() ? "error" : ""}`}><Trans>Users limit:</Trans></span>
                   <span
-                    className={`value ${this.hasLimitUsersExceeded() ? "error" : ""}`}>{this.state.users} (<Trans>curently:</Trans> {this.state.activeUsers})</span>
+                    className={`value ${this.hasLimitUsersExceeded() ? "error" : ""}`}>{this.state.users} (<Trans>currently:</Trans> {this.state.activeUsers})</span>
                 </li>
                 <li className="created">
                   <span className="label"><Trans>Valid from:</Trans></span>

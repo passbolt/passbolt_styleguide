@@ -55,6 +55,7 @@ import HandleFolderMoveStrategyEvents
 import HandleProgressEvents from "./components/Common/Progress/HandleProgressEvents/HandleProgressEvents";
 import HandleErrorEvents from "./components/Common/Error/HandleErrorEvents/HandleErrorEvents";
 import DisplayResourcesWorkspace from "./components/Resource/DisplayResourcesWorkspace/DisplayResourcesWorkspace";
+import DragContextProvider from "./contexts/DragContext";
 
 /**
  * The passbolt application served by the browser extension.
@@ -119,14 +120,16 @@ class ExtApp extends Component {
                                     <ManageDialogs/>
                                     <ManageContextualMenu/>
                                     <ManageAnnouncements/>
-                                    <div id="container" className="page password">
-                                      <div id="app" className="app ready" tabIndex="1000">
-                                        <div className="header first">
-                                          <DisplayMainMenu/>
+                                    <DragContextProvider>
+                                      <div id="container" className="page password">
+                                        <div id="app" className="app ready" tabIndex="1000">
+                                          <div className="header first">
+                                            <DisplayMainMenu/>
+                                          </div>
+                                          <DisplayResourcesWorkspace onMenuItemClick={this.handleWorkspaceSelect}/>
                                         </div>
-                                        <DisplayResourcesWorkspace onMenuItemClick={this.handleWorkspaceSelect}/>
                                       </div>
-                                    </div>
+                                    </DragContextProvider>
                                   </ResourcePasswordGeneratorContextProvider>
                                 </ResourceWorkspaceContextProvider>
                               </Route>

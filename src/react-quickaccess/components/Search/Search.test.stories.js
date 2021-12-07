@@ -1,6 +1,5 @@
 import React from "react";
 import {MemoryRouter, Route} from "react-router-dom";
-import "../../../css/themes/default/ext_quickaccess.css";
 import PropTypes from "prop-types";
 import AppContext from "../../contexts/AppContext";
 import Search from "./Search";
@@ -23,11 +22,10 @@ Template.propTypes = {
 };
 
 
-
 export const Initial = Template.bind({});
 Initial.args = {
   context: defaultAppContext(),
 };
-
-
-
+Initial.parameters = {
+  css: "ext_quickaccess"
+};

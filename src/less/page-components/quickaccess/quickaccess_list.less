@@ -57,20 +57,28 @@
                 }
             }
             .chevron-right {
-                background: linear-gradient(rgba(255, 255, 255, .9), rgba(255, 255, 255, .9)), @controls-chevron-right center center no-repeat;
-                background-size: 1.6rem 1.6rem;
+                background: transparent;
                 box-sizing: border-box;
                 border-bottom: 1px solid @border-lighter;
                 width: 4rem;
                 flex: 0 1 auto;
 
-                &:focus {
-                    background-image: linear-gradient(rgba(255, 255, 255, .6), rgba(255, 255, 255, .6)), @controls-chevron-right;
+                &::after {
+                    content: "";
+                    display: block;
+                    background: @controls-chevron-right center center no-repeat transparent;
+                    background-size: 1.6rem 1.6rem;
+                    opacity: .1;
+                    height:100%;
+                    width: 100%;
                 }
 
-                &:hover {
+                &:focus, &:hover {
                     background-color: @background-lighter;
-                    background-image: linear-gradient(rgba(255, 255, 255, .6), rgba(255, 255, 255, .6)), @controls-chevron-right;
+
+                    &::after {
+                        opacity: .4;
+                    }
                 }
             }
         }

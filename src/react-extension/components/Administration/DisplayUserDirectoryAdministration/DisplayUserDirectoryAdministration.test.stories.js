@@ -46,6 +46,3 @@ Initial.args = {
     open: () => {}
   }
 };
-
-
-

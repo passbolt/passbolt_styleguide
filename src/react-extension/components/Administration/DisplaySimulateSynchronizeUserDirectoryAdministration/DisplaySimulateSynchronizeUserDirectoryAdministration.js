@@ -289,7 +289,7 @@ class DisplaySimulateSynchronizeUserDirectoryAdministration extends Component {
           onClose={this.handleClose} disabled={this.isLoading()}>
           <div className="form-content" onSubmit={this.handleFormSubmit}>
             <p>
-              <strong><Trans>The operation was successfull.</Trans></strong>
+              <strong><Trans>The operation was successful.</Trans></strong>
             </p>
             <p></p>
             {this.hasSuccessResource() &&

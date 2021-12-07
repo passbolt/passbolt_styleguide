@@ -1,6 +1,5 @@
 import React from "react";
 import {MemoryRouter, Route} from "react-router-dom";
-import "../../../../css/themes/default/ext_app.css";
 import CreateResourceFolder from "./CreateResourceFolder";
 
 
@@ -15,5 +14,3 @@ const Template = args =>
   </MemoryRouter>;
 
 export const Initial = Template.bind({});
-
-

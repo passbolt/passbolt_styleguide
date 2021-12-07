@@ -243,16 +243,12 @@ class ExportResourcesCredentials extends Component {
                   ref={this.passwordInputRef}
                   disabled={!this.areActionsAllowed}
                   autoComplete="off"/>
-                <ul className="actions inline">
-                  <li>
-                    <a
-                      onClick={this.handlePasswordViewToggled}
-                      className={`password-view button button-icon toggle ${this.state.showPassword ? "selected" : ""} ${!this.areActionsAllowed ? "disabled" : ""}`}>
-                      <Icon name="eye-open" big={true}/>
-                      <span className="visually-hidden">view</span>
-                    </a>
-                  </li>
-                </ul>
+                <a
+                  onClick={this.handlePasswordViewToggled}
+                  className={`password-view button button-icon toggle ${this.state.showPassword ? "selected" : ""} ${!this.areActionsAllowed ? "disabled" : ""}`}>
+                  <Icon name="eye-open" big={true}/>
+                  <span className="visually-hidden">view</span>
+                </a>
               </div>
             </div>
 

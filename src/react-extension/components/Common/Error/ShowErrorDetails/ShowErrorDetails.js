@@ -101,7 +101,7 @@ class ShowErrorDetails extends Component {
         <div className="accordion-header">
           <a onClick={this.handleErrorDetailsToggle}>
             <Icon baseline={true} name={this.state.showErrorDetails ? "caret-down" : "caret-right"}/>
-            <Trans>Errors details</Trans>
+            <Trans>Error details</Trans>
           </a>
         </div>
         {this.state.showErrorDetails &&

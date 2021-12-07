@@ -1,6 +1,5 @@
 import React from "react";
 import {MemoryRouter, Route} from "react-router-dom";
-import "../../../css/themes/default/ext_quickaccess.css";
 import PropTypes from "prop-types";
 import Header from "./Header";
 import AppContext from "../../contexts/AppContext";
@@ -23,14 +22,12 @@ Template.propTypes = {
   context: PropTypes.object,
 };
 
-
-
 export const Initial = Template.bind({});
 Initial.args = {
   context: defaultAppContext(),
   logoutSuccessCallback: () => {}
 };
 
-
-
-
+Initial.parameters = {
+  css: "ext_quickaccess"
+};

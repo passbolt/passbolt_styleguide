@@ -1,6 +1,5 @@
 import React from "react";
 import {MemoryRouter, Route} from "react-router-dom";
-import "../../../../css/themes/default/ext_quickaccess.css";
 import SetupExtensionInProgress from "./SetupExtensionInProgress";
 import Header from "../../Header/Header";
 
@@ -15,10 +14,10 @@ const Template = () =>
   </MemoryRouter>;
 
 
-
 export const Initial = Template.bind({});
 Initial.args = {
 };
 
-
-
+Initial.parameters = {
+  css: "api_main"
+};

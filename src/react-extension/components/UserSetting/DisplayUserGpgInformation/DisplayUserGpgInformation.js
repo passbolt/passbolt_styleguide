@@ -94,13 +94,14 @@ class DisplayUserGpgInformation extends React.Component {
     // format the gpgkey info.
     const keyId = gpgkeyInfo.keyId;
     const type = this.gpgkeyType[gpgkeyInfo.algorithm];
+    const uIds = gpgkeyInfo.userIds;
     const created = this.formatDate(gpgkeyInfo.created);
     const expires = gpgkeyInfo.expires === "Never" ? "Never" : this.formatDate(gpgkeyInfo.expires);
     const armoredKey = gpgkeyInfo.key;
     const fingerprint = gpgkeyInfo.fingerprint;
     const length = gpgkeyInfo.length;
 
-    return {keyId, type, created, expires, armoredKey, fingerprint, length};
+    return {keyId, type, uIds, created, expires, armoredKey, fingerprint, length};
   }
 
   /**
@@ -154,11 +155,25 @@ class DisplayUserGpgInformation extends React.Component {
   }
 
   /**
-   * Get the user fullname
+   * Get fingerprint
+   * @returns {JSX.Element}
+   */
+  get fingerprint() {
+    let fingerprint = this.gpgKeyInfo.fingerprint;
+    if (fingerprint) {
+      fingerprint = fingerprint.toUpperCase().replace(/.{4}(?=.)/g, '$& ');
+      fingerprint = <>{fingerprint.substr(0, 24)}<br/>{fingerprint.substr(25)}</>;
+    }
+    return fingerprint;
+  }
+
+  /**
+   * Get the first uID of the GPG key
    * @returns {string}
    */
-  get userFullname() {
-    return this.user ? `${this.user.profile.first_name} ${this.user.profile.last_name}` : "";
+  get uId() {
+    const uId = this.gpgKeyInfo.uIds && this.gpgKeyInfo.uIds[0];
+    return uId ? `${uId.name} <${uId.email}>` : "";
   }
 
   /**
@@ -198,11 +213,11 @@ class DisplayUserGpgInformation extends React.Component {
                 </tr>
                 <tr>
                   <td><Trans>Uid</Trans></td>
-                  <td className="uid">{this.userFullname}</td>
+                  <td className="uid">{this.uId}</td>
                 </tr>
                 <tr>
                   <td><Trans>Fingerprint</Trans></td>
-                  <td className="fingerprint">{this.gpgKeyInfo.fingerprint}</td>
+                  <td className="fingerprint">{this.fingerprint}</td>
                 </tr>
                 <tr>
                   <td><Trans>Created</Trans></td>

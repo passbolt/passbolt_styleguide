@@ -26,7 +26,7 @@ class LoadingSpinner extends React.Component {
       <div className="login-processing">
         <h1>{this.props.title}</h1>
         <div className="processing-wrapper">
-          <div  className="processing">
+          <div className="processing">
           </div>
         </div>
       </div>

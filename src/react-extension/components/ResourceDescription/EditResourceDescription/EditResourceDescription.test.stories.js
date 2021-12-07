@@ -1,8 +1,6 @@
 import React from "react";
 import {MemoryRouter, Route} from "react-router-dom";
-import "../../../../css/themes/default/ext_app.css";
 import AppContext from "../../../contexts/AppContext";
-import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import EditResourceDescription from "./EditResourceDescription";
 import SiteSettings from "../../../../shared/lib/Settings/SiteSettings";
 import siteSettingsFixture from "../../../test/fixture/Settings/siteSettings";
@@ -32,18 +30,15 @@ const context = {
 
 
 const Template = args =>
-  <MockTranslationProvider>
-    <AppContext.Provider value={context}>
-      <MemoryRouter initialEntries={['/']}>
-        <div className="panel aside">
-          <div className="comments">
-            <Route component={routerProps => <EditResourceDescription {...args} {...routerProps}/>}></Route>
-          </div>
+  <AppContext.Provider value={context}>
+    <MemoryRouter initialEntries={['/']}>
+      <div className="panel aside">
+        <div className="comments">
+          <Route component={routerProps => <EditResourceDescription {...args} {...routerProps}/>}></Route>
         </div>
-      </MemoryRouter>
-    </AppContext.Provider>
-  </MockTranslationProvider>;
-
+      </div>
+    </MemoryRouter>
+  </AppContext.Provider>;
 
 
 export const Initial = Template.bind({});
@@ -52,5 +47,3 @@ Initial.args = {
     "resource_type_id": "669f8c64-242a-59fb-92fc-81f660975fd3"
   }
 };
-
-

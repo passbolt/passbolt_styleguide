@@ -21,6 +21,7 @@ import NotifyError from "../../Common/Error/NotifyError/NotifyError";
 import {withDialog} from "../../../contexts/DialogContext";
 import Icon from "../../Common/Icons/Icon";
 import {Trans, withTranslation} from "react-i18next";
+import {withAppContext} from "../../../contexts/AppContext";
 
 /**
  * This component displays the user confirm passphrase information
@@ -46,6 +47,7 @@ class ConfirmPassphrase extends React.Component {
       passphrase: "", // The passphrase input
       passphraseError: null, // The passphrase error input
       isObfuscated: true, // True if the passphrase should not be visible
+      hasPassphraseFocus: false, // The password input has focus
     };
   }
 
@@ -55,6 +57,8 @@ class ConfirmPassphrase extends React.Component {
   bindCallbacks() {
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleToggleObfuscate = this.handleToggleObfuscate.bind(this);
+    this.handleFocusPassphrase = this.handleFocusPassphrase.bind(this);
+    this.handleBlurPassphrase = this.handleBlurPassphrase.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleCancel = this.handleCancel.bind(this);
   }
@@ -97,6 +101,48 @@ class ConfirmPassphrase extends React.Component {
    */
   toggleObfuscate() {
     this.setState({isObfuscated: !this.state.isObfuscated});
+  }
+
+  /**
+   * Returns the security token code of the suer
+   */
+  get securityTokenCode() {
+    return this.props.context.userSettings.getSecurityTokenCode();
+  }
+
+  /**
+   * Returns the style of the security token (color and text color)
+   */
+  get securityTokenStyle() {
+    const {userSettings} = this.props.context;
+    const inverseStyle =  {background: userSettings.getSecurityTokenTextColor(), color: userSettings.getSecurityTokenBackgroundColor()};
+    const fullStyle =  {background: userSettings.getSecurityTokenBackgroundColor(), color: userSettings.getSecurityTokenTextColor()};
+    return this.state.hasPassphraseFocus ? inverseStyle : fullStyle;
+  }
+
+  /**
+   * Get the passphrase input style.
+   * @return {Object}
+   */
+  get passphraseInputStyle() {
+    const {userSettings} = this.props.context;
+    const emptyStyle =  {background: "", color: ""};
+    const fullStyle =  {background: userSettings.getSecurityTokenBackgroundColor(), color: userSettings.getSecurityTokenTextColor()};
+    return this.state.hasPassphraseFocus ? fullStyle : emptyStyle;
+  }
+
+  /**
+   * Whenever the user focus on the passphrase input
+   */
+  handleFocusPassphrase() {
+    this.setState({hasPassphraseFocus: true});
+  }
+
+  /**
+   * Whenever the user blurs on the passphrase input
+   */
+  handleBlurPassphrase() {
+    this.setState({hasPassphraseFocus: false});
   }
 
   /**
@@ -179,7 +225,7 @@ class ConfirmPassphrase extends React.Component {
     return (
       <div className="grid grid-responsive-12 profile-passphrase">
         <div className="row">
-          <div className="col6">
+          <div className="col7">
             <form className="enter-passphrase" onSubmit={this.handleSubmit}>
               <h3><Trans>Please enter your passphrase to continue</Trans></h3>
               <div className="form-content">
@@ -194,7 +240,10 @@ class ConfirmPassphrase extends React.Component {
                     className={`required ${this.state.passphraseError ? "error" : ""}`}
                     autoFocus={true}
                     value={this.state.passphrase}
+                    style={this.passphraseInputStyle}
                     onChange={this.handleInputChange}
+                    onFocus={this.handleFocusPassphrase}
+                    onBlur={this.handleBlurPassphrase}
                     disabled={this.hasAllInputDisabled()}
                     autoComplete="off"
                   />
@@ -205,6 +254,9 @@ class ConfirmPassphrase extends React.Component {
                     <Icon name="eye-open"/>
                     <span className="visually-hidden"><Trans>View</Trans></span>
                   </a>
+                  <span className="security-token" style={this.securityTokenStyle}>
+                    {this.securityTokenCode}
+                  </span>
                   {this.state.passphraseError &&
                     <div className="error-message">{this.state.passphraseError}</div>
                   }
@@ -245,9 +297,10 @@ class ConfirmPassphrase extends React.Component {
 }
 
 ConfirmPassphrase.propTypes = {
+  context: PropTypes.any, // The application context
   userSettingsContext: PropTypes.object, // The user settings context
   dialogContext: PropTypes.any, // The dialog context
   t: PropTypes.func, // The translation function
 };
 
-export default withDialog(withUserSettings(withTranslation('common')(ConfirmPassphrase)));
+export default withAppContext(withDialog(withUserSettings(withTranslation('common')(ConfirmPassphrase))));

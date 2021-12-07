@@ -1,6 +1,5 @@
 import React from "react";
 import {MemoryRouter, Route} from "react-router-dom";
-import "../../../css/themes/default/ext_quickaccess.css";
 import PropTypes from "prop-types";
 import AppContext from "../../contexts/AppContext";
 import SaveResource from "./SaveResource";
@@ -23,12 +22,15 @@ Template.propTypes = {
   context: PropTypes.object,
 };
 
-
+const parameters = {
+  css: "ext_quickaccess"
+};
 
 export const Initial = Template.bind({});
 Initial.args = {
   context: defaultAppContext(),
 };
+Initial.parameters = parameters;
 
 const contextMock = {
   port: {
@@ -39,6 +41,4 @@ export const SaveResourceFromTab = Template.bind({});
 SaveResourceFromTab.args = {
   context: defaultAppContext(contextMock)
 };
-
-
-
+SaveResourceFromTab.parameters = parameters;

@@ -61,7 +61,7 @@ describe("As AD I should see the subscription", () => {
       expect(page.customerId).toBe(mockSubscription.customer_id);
       expect(page.subscriptionId).toBe(mockSubscription.subscription_id);
       expect(page.email).toBe(mockSubscription.email);
-      expect(page.users).toBe(`${mockSubscription.users} (curently: ${mockUsers.length})`);
+      expect(page.users).toBe(`${mockSubscription.users} (currently: ${mockUsers.length})`);
       expect(page.created).toBe(`${formatDate(mockSubscription.created)}`);
       expect(page.expiry).toBe(`${formatDate(mockSubscription.expiry)} (${DateTime.fromISO(mockSubscription.expiry).toRelative()})`);
       expect(page.help).toBeTruthy();
@@ -81,7 +81,7 @@ describe("As AD I should see the subscription", () => {
       expect(page.customerId).toBe(mockSubscriptionUsersExceeded.customer_id);
       expect(page.subscriptionId).toBe(mockSubscriptionUsersExceeded.subscription_id);
       expect(page.email).toBe(mockSubscriptionUsersExceeded.email);
-      expect(page.users).toBe(`${mockSubscriptionUsersExceeded.users} (curently: ${mockUsers.length})`);
+      expect(page.users).toBe(`${mockSubscriptionUsersExceeded.users} (currently: ${mockUsers.length})`);
       expect(page.created).toBe(`${formatDate(mockSubscriptionUsersExceeded.created)}`);
       expect(page.expiry).toBe(`${formatDate(mockSubscriptionUsersExceeded.expiry)} (expired ${DateTime.fromISO(mockSubscriptionUsersExceeded.expiry).toRelative()})`);
 
@@ -102,7 +102,7 @@ describe("As AD I should see the subscription", () => {
       expect(page.customerId).toBe(mockSubscriptionExpired.customer_id);
       expect(page.subscriptionId).toBe(mockSubscriptionExpired.subscription_id);
       expect(page.email).toBe(mockSubscriptionExpired.email);
-      expect(page.users).toBe(`${mockSubscriptionExpired.users} (curently: ${mockUsers.length})`);
+      expect(page.users).toBe(`${mockSubscriptionExpired.users} (currently: ${mockUsers.length})`);
       expect(page.created).toBe(`${formatDate(mockSubscriptionExpired.created)}`);
       expect(page.expiry).toBe(`${formatDate(mockSubscriptionExpired.expiry)} (expired ${DateTime.fromISO(mockSubscriptionExpired.expiry).toRelative()})`);
 
@@ -183,7 +183,7 @@ describe("As AD I should see the subscription", () => {
       expect(page.customerId).toBe(mockSubscriptionUpdated.customer_id);
       expect(page.subscriptionId).toBe(mockSubscriptionUpdated.subscription_id);
       expect(page.email).toBe(mockSubscriptionUpdated.email);
-      expect(page.users).toBe(`${mockSubscriptionUpdated.users} (curently: ${mockUsers.length})`);
+      expect(page.users).toBe(`${mockSubscriptionUpdated.users} (currently: ${mockUsers.length})`);
       expect(page.created).toBe(`${formatDate(mockSubscriptionUpdated.created)}`);
       expect(page.expiry).toBe(`${formatDate(mockSubscriptionUpdated.expiry)} (${DateTime.fromISO(mockSubscriptionUpdated.expiry).toRelative()})`);
       expect(propsUpdated.administrationWorkspaceContext.onResetActionsSettings).toHaveBeenCalled();

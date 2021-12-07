@@ -1,6 +1,5 @@
 import React from "react";
 import {MemoryRouter, Route} from "react-router-dom";
-import "../../../css/themes/default/ext_quickaccess.css";
 import PropTypes from "prop-types";
 import FilterResourcesByItemsIOwnPage from "./FilterResourcesByItemsIOwnPage";
 import AppContext from "../../contexts/AppContext";
@@ -23,12 +22,15 @@ Template.propTypes = {
   context: PropTypes.object,
 };
 
-
+const parameters = {
+  css: "ext_quickaccess"
+};
 
 export const InitialLoad = Template.bind({});
 InitialLoad.args = {
   context: defaultAppContext()
 };
+InitialLoad.parameters = parameters;
 
 const contextNoItem = {
   port: {
@@ -39,6 +41,7 @@ export const NoItemsIOwnResource = Template.bind({});
 NoItemsIOwnResource.args = {
   context: defaultAppContext(contextNoItem)
 };
+NoItemsIOwnResource.parameters = parameters;
 
 const contextResources = {
   port: {
@@ -49,7 +52,4 @@ export const ItemsIOwnResources = Template.bind({});
 ItemsIOwnResources.args = {
   context: defaultAppContext(contextResources)
 };
-
-
-
-
+ItemsIOwnResources.parameters = parameters;

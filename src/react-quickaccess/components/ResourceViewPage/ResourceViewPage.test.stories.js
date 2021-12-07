@@ -1,6 +1,5 @@
 import React from "react";
 import {MemoryRouter, Route} from "react-router-dom";
-import "../../../css/themes/default/ext_quickaccess.css";
 import PropTypes from "prop-types";
 import ResourceViewPage from "./ResourceViewPage";
 import AppContext from "../../contexts/AppContext";
@@ -27,4 +26,7 @@ export const ResourceView = Template.bind({});
 ResourceView.args = {
   context: defaultAppContext(),
   initialEntries: ['/8e3874ae-4b40-590b-968a-418f704b9d9a']
+};
+ResourceView.parameters = {
+  css: "ext_quickaccess"
 };

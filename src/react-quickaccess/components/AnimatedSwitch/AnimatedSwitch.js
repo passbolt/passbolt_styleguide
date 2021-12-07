@@ -13,6 +13,7 @@ class AnimatedSwitch extends React.Component {
   getTransition(currentLocationPath, _previousLocationPathname) {
     let transition = null;
 
+    // Resource view transition
     if (currentLocationPath.indexOf("/data/quickaccess/resources/view") != -1 && this._previousLocationPathname === "/data/quickaccess.html") {
       transition = "slideLeft";
     }
@@ -164,7 +165,7 @@ class AnimatedSwitch extends React.Component {
       // The page has changed but not transition has been defined for it.
       // Use the default noTransition transition
       if (currentLocationPath !== this._previousLocationPathname) {
-        transition = "noTransition";
+        transition = "slideNoTransition";
       } else {
         // The transition is recalculated because of a status change.
         // Return the previous transition. The transition won't be played twice, and it will allow to complete it properly.
@@ -181,8 +182,7 @@ class AnimatedSwitch extends React.Component {
     const currentLocationPathname = this.props.location.pathname;
     const transition = this.getTransition(currentLocationPathname, this._previousLocationPathname);
     // If no transition, the previous component should be hidden immediately.
-    const transitionTimeout = transition !== "noTransition" ? 210 : 0;
-    console.debug(`AnimatedSwitch render from ${this._previousLocationPathname} to ${currentLocationPathname} with transition ${transition}`);
+    const transitionTimeout = transition !== "slideNoTransition" ? 210 : 0;
     this._previousLocationPathname = currentLocationPathname;
 
     return (

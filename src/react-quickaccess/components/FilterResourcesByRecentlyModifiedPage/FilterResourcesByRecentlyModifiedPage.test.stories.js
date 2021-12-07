@@ -1,6 +1,5 @@
 import React from "react";
 import {MemoryRouter, Route} from "react-router-dom";
-import "../../../css/themes/default/ext_quickaccess.css";
 import PropTypes from "prop-types";
 import FilterResourcesByRecentlyModifiedPage from "./FilterResourcesByRecentlyModifiedPage";
 import AppContext from "../../contexts/AppContext";
@@ -23,12 +22,15 @@ Template.propTypes = {
   context: PropTypes.object,
 };
 
-
+const parameters = {
+  css: "ext_quickaccess"
+};
 
 export const InitialLoad = Template.bind({});
 InitialLoad.args = {
   context: defaultAppContext()
 };
+InitialLoad.parameters = parameters;
 
 const contextNoResource = {
   storage: {
@@ -41,6 +43,7 @@ export const NoRecentlyModifiedResource = Template.bind({});
 NoRecentlyModifiedResource.args = {
   context: defaultAppContext(contextNoResource)
 };
+NoRecentlyModifiedResource.parameters = parameters;
 
 const contextResources = {
   storage: {
@@ -53,7 +56,4 @@ export const RecentlyModifiedResources = Template.bind({});
 RecentlyModifiedResources.args = {
   context: defaultAppContext(contextResources)
 };
-
-
-
-
+RecentlyModifiedResources.parameters = parameters;
