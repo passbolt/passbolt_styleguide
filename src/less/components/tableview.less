@@ -10,7 +10,7 @@
   /* header */
   .tableview-header {
     background: @tableview-header-background;
-    height: 3.8rem;
+    height: 3.2rem;
     overflow-y: scroll;
 
     table {
@@ -29,7 +29,6 @@
     top: 2.125em;
     bottom: 3.2rem;
     padding: 0;
-    position: absolute;
     width: 100%;
     border-top: 1px solid @border-default;
     overflow-y: scroll;
@@ -129,6 +128,17 @@
         label {
           padding:0;
           margin:0;
+        }
+      }
+    }
+
+    td.attention-required {
+      .svg-icon.exclamation {
+        position: relative;
+        top: -.10rem;
+        svg {
+          margin-left: .25rem;
+          color: @orange-light;
         }
       }
     }
