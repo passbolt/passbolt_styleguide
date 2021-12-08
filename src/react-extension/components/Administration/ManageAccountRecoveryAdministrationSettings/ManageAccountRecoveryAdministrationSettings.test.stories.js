@@ -2,12 +2,12 @@ import {MemoryRouter, Route} from "react-router-dom";
 import React from "react";
 import ManageAccountRecoveryAdministrationSettings from "./ManageAccountRecoveryAdministrationSettings";
 import {
-  mockAccountRecoveryDisableWithOrganisationKey,
+  mockAccountRecoveryDisableWithOrganizationKey,
   mockAccountRecoveryEmpty,
   mockAccountRecoveryMandatory,
-  mockAccountRecoveryMandatoryWithOrganisationKey,
-  mockAccountRecoveryOptIn, mockAccountRecoveryOptInWithOrganisationKey,
-  mockAccountRecoveryOptOut, mockAccountRecoveryOptOutWithOrganisationKey
+  mockAccountRecoveryMandatoryWithOrganizationKey,
+  mockAccountRecoveryOptIn, mockAccountRecoveryOptInWithOrganizationKey,
+  mockAccountRecoveryOptOut, mockAccountRecoveryOptOutWithOrganizationKey
 } from "./ManageAccountRecoveryAdministrationSettings.test.data";
 
 export default {
@@ -68,42 +68,42 @@ OptIn.args = {
   }
 };
 
-export const DefaultWithOrganisationRecoveryKey = Template.bind({});
-DefaultWithOrganisationRecoveryKey.args = {
+export const DefaultWithOrganizationRecoveryKey = Template.bind({});
+DefaultWithOrganizationRecoveryKey.args = {
   context: {
     locale: 'en-US',
     port: {
-      request: () => mockAccountRecoveryDisableWithOrganisationKey
+      request: () => mockAccountRecoveryDisableWithOrganizationKey
     }
   }
 };
 
-export const MandatoryWithOrganisationRecoveryKey = Template.bind({});
-MandatoryWithOrganisationRecoveryKey.args = {
+export const MandatoryWithOrganizationRecoveryKey = Template.bind({});
+MandatoryWithOrganizationRecoveryKey.args = {
   context: {
     locale: 'en-US',
     port: {
-      request: () => mockAccountRecoveryMandatoryWithOrganisationKey
+      request: () => mockAccountRecoveryMandatoryWithOrganizationKey
     }
   }
 };
 
-export const OptOutWithOrganisationRecoveryKey = Template.bind({});
-OptOutWithOrganisationRecoveryKey.args = {
+export const OptOutWithOrganizationRecoveryKey = Template.bind({});
+OptOutWithOrganizationRecoveryKey.args = {
   context: {
     locale: 'en-US',
     port: {
-      request: () => mockAccountRecoveryOptOutWithOrganisationKey
+      request: () => mockAccountRecoveryOptOutWithOrganizationKey
     }
   }
 };
 
-export const OptInWithOrganisationRecoveryKey = Template.bind({});
-OptInWithOrganisationRecoveryKey.args = {
+export const OptInWithOrganizationRecoveryKey = Template.bind({});
+OptInWithOrganizationRecoveryKey.args = {
   context: {
     locale: 'en-US',
     port: {
-      request: () => mockAccountRecoveryOptInWithOrganisationKey
+      request: () => mockAccountRecoveryOptInWithOrganizationKey
     }
   }
 };

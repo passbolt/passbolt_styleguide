@@ -176,6 +176,6 @@ describe('As AD I can generate an ORK', () => {
     await page.clickOnGenerateButton(() => expect(page.nameError).not.toBeNull());
 
     expect(page.passphraseFieldError).not.toBeNull();
-    expect(page.passphraseFieldError.textContent).toBe(`A strong passphrase is required. The minimum entropy required is 80`);
+    expect(page.passphraseFieldError.textContent).toBe(`A strong passphrase is required. The minimum complexity must be 'fair'`);
   });
 });

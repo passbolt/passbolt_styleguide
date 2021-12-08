@@ -188,7 +188,7 @@ class GenerateOrganizationKey extends React.Component {
     }
 
     if (SecretGenerator.entropy(this.state.password) < FAIR_STRENGTH_ENTROPY) {
-      passwordError = this.translate(`A strong passphrase is required. The minimum entropy required is ${FAIR_STRENGTH_ENTROPY}`);
+      passwordError = this.translate(`A strong passphrase is required. The minimum complexity must be 'fair'`);
     }
 
     this.setState({passwordError});

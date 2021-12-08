@@ -2,7 +2,7 @@ import {MemoryRouter, Route} from "react-router-dom";
 import React from "react";
 import ConfirmSaveAccountRecoverySettings from "./ConfirmSaveAccountRecoverySettings";
 import {
-  mockAccountRecoveryDisableWithOrganisationKey,
+  mockAccountRecoveryDisableWithOrganizationKey,
   mockAccountRecoveryMandatory
 } from "./ConfirmSaveAccountRecoverySettings.test.data";
 
@@ -25,16 +25,16 @@ Mandatory.args = {
   mockAccountRecoveryMandatory
 };
 
-export const MandatoryWithOrganisationKey = Template.bind({});
-MandatoryWithOrganisationKey.args = {
+export const MandatoryWithOrganizationKey = Template.bind({});
+MandatoryWithOrganizationKey.args = {
   context: {
     locale: 'en-US'
   },
-  mockAccountRecoveryDisableWithOrganisationKey
+  mockAccountRecoveryDisableWithOrganizationKey
 };
 
-export const OrganisationRecoveryKey = Template.bind({});
-OrganisationRecoveryKey.args = {
+export const OrganizationRecoveryKey = Template.bind({});
+OrganizationRecoveryKey.args = {
   context: {
     locale: 'en-US'
   },
@@ -44,7 +44,7 @@ OrganisationRecoveryKey.args = {
       info: "",
       hasChanged: false
     },
-    organisationRecoveryKey: {
+    organizationRecoveryKey: {
       value: {
         fingerprint: "848E95CC7493129AD862583129B81CA8936023DD",
         algorithm: "RSA",

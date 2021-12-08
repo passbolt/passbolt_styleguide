@@ -43,7 +43,8 @@ class ImportOrganizationKey extends React.Component {
       processing: false, // component is processing or not
       key: "", // The subscription key
       keyError: "", // The error subscription key
-      hasAlreadyBeenValidated: false, // true if the form has already validated once
+      hasAlreadyBeenValidated: false, // true if the form has already validated once,
+      selectedFile: null, // the file to import
     };
   }
 
@@ -51,6 +52,7 @@ class ImportOrganizationKey extends React.Component {
    * Bind callbacks methods
    */
   bindCallbacks() {
+    this.handleSelectFile = this.handleSelectFile.bind(this);
     this.handleFormSubmit = this.handleFormSubmit.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleSelectOrganizationKeyFile = this.handleSelectOrganizationKeyFile.bind(this);
@@ -71,7 +73,7 @@ class ImportOrganizationKey extends React.Component {
   async handleSelectOrganizationKeyFile(event) {
     const [organizationFile] = event.target.files;
     const organizationKey = await this.readOrganizationKeyFile(organizationFile);
-    this.setState({key: organizationKey});
+    this.setState({key: organizationKey, selectedFile: organizationFile});
   }
 
   /**
@@ -132,6 +134,13 @@ class ImportOrganizationKey extends React.Component {
     this.setState({
       [target.name]: target.value
     });
+  }
+
+  /**
+   * Handle the selection of a file by file explorer
+   */
+  handleSelectFile() {
+    this.fileUploaderRef.current.click();
   }
 
   /**
@@ -203,6 +212,13 @@ class ImportOrganizationKey extends React.Component {
   }
 
   /**
+   * Returns the selected file's name
+   */
+  get selectedFilename() {
+    return this.state.selectedFile ? this.state.selectedFile.name : "";
+  }
+
+  /**
    * Render the component
    * @returns {JSX}
    */
@@ -218,12 +234,30 @@ class ImportOrganizationKey extends React.Component {
               placeholder='Add Open PGP Public key' required="required" autoComplete="off" autoFocus={true} />
           </div>
           <div className="input-file-chooser-wrapper">
+            <input
+              type="file"
+              ref={this.fileUploaderRef}
+              disabled={this.hasAllInputDisabled()}
+              onChange={this.handleSelectOrganizationKeyFile} />
+
             <div className="input text">
-              <input
-                type="file"
-                ref={this.fileUploaderRef}
-                disabled={this.hasAllInputDisabled()}
-                onChange={this.handleSelectOrganizationKeyFile} />
+              <label htmlFor="dialog-import-private-key">
+                <Trans>Select a file to import</Trans>
+              </label>
+              <div className="input-file-inline">
+                <input
+                  type="text"
+                  disabled={true}
+                  placeholder={this.translate("No file selected")}
+                  defaultValue={this.selectedFilename} />
+                <a
+                  id="dialog-import-private-key-choose-file"
+                  className={`button primary ${this.hasAllInputDisabled() ? "disabled" : ""}`}
+                  onClick={this.handleSelectFile}>
+                  <Icon name="upload-a" />
+                  <span><Trans>Choose a file</Trans></span>
+                </a>
+              </div>
               {this.state.keyError &&
                 <div className="key error-message">{this.state.keyError}</div>
               }

@@ -44,7 +44,7 @@ export const mockAccountRecoveryDisabled = {
       info: "Backup of the private key and passphrase will not be stored. This is the safest option.\nWarning: If users lose their private key and passphrase they will not be able to recover their account.",
       hasChanged: true
     },
-    organisationRecoveryKey: {
+    organizationRecoveryKey: {
       hasChanged: false
     }
   }
@@ -57,7 +57,7 @@ export const mockAccountRecoveryMandatory = {
       info: "Every user is required to provide a copy of their private key and passphrase during setup.\nWarning: You should inform your users not to store personal passwords.",
       hasChanged: true
     },
-    organisationRecoveryKey: {
+    organizationRecoveryKey: {
       hasChanged: false
     }
   }
@@ -70,7 +70,7 @@ export const mockAccountRecoveryOptOut = {
       info: "Every user will be prompted to provide a copy of their private key and passphrase by default during the setup, but they can opt out.",
       hasChanged: true
     },
-    organisationRecoveryKey: {
+    organizationRecoveryKey: {
       hasChanged: false
     }
   }
@@ -83,86 +83,114 @@ export const mockAccountRecoveryOptIn = {
       info: "Every user can decide to provide a copy of their private key and passphrase by default during the setup, but they can opt in.",
       hasChanged: true
     },
-    organisationRecoveryKey: {
+    organizationRecoveryKey: {
       hasChanged: false
     }
   }
 };
 
-export const mockAccountRecoveryDisableWithOrganisationKey = {
+export const mockAccountRecoveryDisableWithOrganizationKey = {
   accountRecovery: {
     policy: {
       value: 'disabled',
       info: "Backup of the private key and passphrase will not be stored. This is the safest option.\nWarning: If users lose their private key and passphrase they will not be able to recover their account.",
       hasChanged: true
     },
-    organisationRecoveryKey: {
+    organizationRecoveryKey: {
       value: {
         fingerprint: "848E95CC7493129AD862583129B81CA8936023DD",
         algorithm: "RSA",
         length: 4096,
         created: "2021-08-05T02:50:34.12",
-        expires: "Never"
+        expires: "Never",
+        user_ids: [{
+          name: "ada",
+          email: "ada@passbolt.com"
+        }, {
+          name: "betty",
+          email: "betty@passbolt.com"
+        }]
       },
       hasChanged: true
     }
   }
 };
 
-export const mockAccountRecoveryMandatoryWithOrganisationKey = {
+export const mockAccountRecoveryMandatoryWithOrganizationKey = {
   accountRecovery: {
     policy: {
       value: 'mandatory',
       info: "Every user is required to provide a copy of their private key and passphrase during setup.\nWarning: You should inform your users not to store personal passwords.",
       hasChanged: true
     },
-    organisationRecoveryKey: {
+    organizationRecoveryKey: {
       value: {
         fingerprint: "848E95CC7493129AD862583129B81CA8936023DD",
         algorithm: "RSA",
         length: 4096,
         created: "2021-08-05T02:50:34.12",
-        expires: "Never"
+        expires: "Never",
+        user_ids: [{
+          name: "ada",
+          email: "ada@passbolt.com"
+        }, {
+          name: "betty",
+          email: "betty@passbolt.com"
+        }]
       },
       hasChanged: true
     }
   }
 };
 
-export const mockAccountRecoveryOptOutWithOrganisationKey = {
+export const mockAccountRecoveryOptOutWithOrganizationKey = {
   accountRecovery: {
     policy: {
       value: 'opt-out',
       info: "Every user will be prompted to provide a copy of their private key and passphrase by default during the setup, but they can opt out.",
       hasChanged: true
     },
-    organisationRecoveryKey: {
+    organizationRecoveryKey: {
       value: {
         fingerprint: "848E95CC7493129AD862583129B81CA8936023DD",
         algorithm: "RSA",
         length: 4096,
         created: "2021-08-05T02:50:34.12",
-        expires: "Never"
+        expires: "Never",
+        user_ids: [{
+          name: "ada",
+          email: "ada@passbolt.com"
+        }, {
+          name: "betty",
+          email: "betty@passbolt.com"
+        }]
       },
       hasChanged: true
     }
   }
 };
 
-export const mockAccountRecoveryOptInWithOrganisationKey = {
+export const mockAccountRecoveryOptInWithOrganizationKey = {
   accountRecovery: {
     policy: {
       value: 'opt-in',
       info: "Every user can decide to provide a copy of their private key and passphrase by default during the setup, but they can opt in.",
       hasChanged: true
     },
-    organisationRecoveryKey: {
+    organizationRecoveryKey: {
       value: {
         fingerprint: "848E95CC7493129AD862583129B81CA8936023DD",
         algorithm: "RSA",
         length: 4096,
         created: "2021-08-05T02:50:34.12",
-        expires: "Never"
+        expires: "Never",
+        user_ids: [{
+          name: "ada",
+          email: "ada@passbolt.com"
+        }, {
+          name: "betty",
+          email: "betty@passbolt.com"
+        }]
       },
       hasChanged: true
     }

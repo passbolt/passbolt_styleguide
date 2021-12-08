@@ -18,7 +18,7 @@
 
 
 import {
-  defaultProps, mockAccountRecoveryDisableWithOrganisationKey
+  defaultProps, mockAccountRecoveryDisableWithOrganizationKey
 } from "./ManageAccountRecoveryAdministrationSettings.test.data";
 import ManageAccountRecoveryAdministrationSettingsPage from "./ManageAccountRecoveryAdministrationSettings.test.page";
 import {waitFor} from "@testing-library/react";
@@ -35,7 +35,7 @@ describe("As AD I should see the account recovery settings", () => {
   const props = defaultProps(); // The props to pass
 
   const mockContextRequest = implementation => jest.spyOn(props.context.port, 'request').mockImplementation(implementation);
-  const accountRecoverySettingsFoundRequestMockImpl = jest.fn(() => Promise.resolve(mockAccountRecoveryDisableWithOrganisationKey));
+  const accountRecoverySettingsFoundRequestMockImpl = jest.fn(() => Promise.resolve(mockAccountRecoveryDisableWithOrganizationKey));
 
   it('As AD in the administration workspace, I can see the account recovery section populated with the default value', async() => {
     mockContextRequest(accountRecoverySettingsFoundRequestMockImpl);
@@ -112,14 +112,21 @@ describe("As AD I should see the account recovery settings", () => {
     page.rerender(propsUpdated);
     await waitFor(() => {});
     const accountRecovery = {
-      organisationRecoveryKey: {
+      organizationRecoveryKey: {
         hasChanged: false,
         value: {
           algorithm: "RSA",
           created: "2021-08-05T02:50:34.12",
           expires: "Never",
           fingerprint: "848E95CC7493129AD862583129B81CA8936023DD",
-          keyLength: 4096
+          keyLength: 4096,
+          user_ids: [{
+            name: 'A-Test',
+            email: 'a-test@passbolt.com'
+          }, {
+            name: 'B-Test',
+            email: 'b-test@passbolt.com'
+          }]
         }
       },
       policy: {

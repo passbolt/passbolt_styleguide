@@ -202,7 +202,7 @@ class ChooseAccountRecoveryPolicy extends Component {
                 <label htmlFor="statusRecoverAccountReject">
                   <span className="name"><Trans>Reject</Trans></span>
                   <span className="info">
-                    <Trans>I do not want to share a copy of my private key & passphrase with my organisation recovery contacts.</Trans>
+                    <Trans>I do not want to share a copy of my private key & passphrase with my organization recovery contacts.</Trans>
                   </span>
                 </label>
               </div>
@@ -218,7 +218,7 @@ class ChooseAccountRecoveryPolicy extends Component {
                 <label htmlFor="statusRecoverAccountAccept">
                   <span className="name"><Trans>Accept</Trans></span>
                   <span className="info">
-                    <Trans>I agree to share securely a copy of my private key & passphrase with my organisation recovery contacts.</Trans>
+                    <Trans>I agree to share securely a copy of my private key & passphrase with my organization recovery contacts.</Trans>
                   </span>
                 </label>
               </div>
