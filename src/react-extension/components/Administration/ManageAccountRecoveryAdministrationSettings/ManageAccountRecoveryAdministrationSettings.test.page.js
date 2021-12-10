@@ -113,6 +113,9 @@ export default class ManageAccountRecoveryAdministrationSettingsPage {
     return this._page.container.querySelector('#recovery-key-toggle-button');
   }
 
+  /**
+   * Returns the warning message element
+   */
   get warningMessage() {
     return this._page.container.querySelector('.warning.message').textContent;
   }

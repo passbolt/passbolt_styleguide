@@ -17,11 +17,12 @@
  */
 
 
-import {
-  defaultProps, mockAccountRecovery
-} from "./ManageAccountRecoveryAdministrationSettings.test.data";
+import {defaultProps} from "./ManageAccountRecoveryAdministrationSettings.test.data";
 import ManageAccountRecoveryAdministrationSettingsPage from "./ManageAccountRecoveryAdministrationSettings.test.page";
 import {waitFor} from "@testing-library/react";
+import MockPort from "../../../test/mock/MockPort";
+import ConfirmSaveAccountRecoverySettings
+  from "../ConfirmSaveAccountRecoverySettings/ConfirmSaveAccountRecoverySettings";
 
 beforeEach(() => {
   jest.resetModules();
@@ -32,7 +33,7 @@ describe("As AD I should see the account recovery settings", () => {
   const props = defaultProps(); // The props to pass
 
   const mockContextRequest = implementation => jest.spyOn(props.context.port, 'request').mockImplementation(implementation);
-  const accountRecoverySettingsFoundRequestMockImpl = jest.fn(() => Promise.resolve(mockAccountRecovery));
+  const accountRecoverySettingsFoundRequestMockImpl = jest.fn(() => Promise.resolve());
 
   it('As AD in the administration workspace, I can see the account recovery section populated with the default value', async() => {
     mockContextRequest(accountRecoverySettingsFoundRequestMockImpl);
@@ -75,5 +76,50 @@ describe("As AD I should see the account recovery settings", () => {
     await expect(page.mandatoryRadioButton.isChecked).toBeFalsy();
     await expect(page.optInRadioButton.isChecked).toBeFalsy();
     await expect(page.optOutRadioButton.isChecked).toBeFalsy();
+  });
+
+  it('As a logged in administrator in the administration workspace, I can save the account recovery policy', async() => {
+    mockContextRequest(accountRecoverySettingsFoundRequestMockImpl);
+    page = new ManageAccountRecoveryAdministrationSettingsPage(props);
+    await waitFor(() => {});
+    await page.selectPolicy(page.optInRadioButton);
+    await expect(page.optInRadioButton.isChecked).toBeTruthy();
+    await expect(page.mandatoryRadioButton.isChecked).toBeFalsy();
+    await expect(page.disableRadioButton.isChecked).toBeFalsy();
+    await expect(page.optOutRadioButton.isChecked).toBeFalsy();
+
+    expect(props.administrationWorkspaceContext.onSaveEnabled).toHaveBeenCalled();
+    const propsUpdated = {
+      context: {
+        port: new MockPort(),
+      },
+      administrationWorkspaceContext: {
+        must: {
+          save: true
+        },
+        onResetActionsSettings: jest.fn(),
+        can: {
+          save: true
+        },
+        onSaveEnabled: jest.fn(),
+      },
+      dialogContext: {
+        open: jest.fn()
+      }
+    };
+    page.rerender(propsUpdated);
+    await waitFor(() => {});
+    const accountRecovery = {
+      organisationRecoveryKey: {
+        hasChanged: false,
+      },
+      policy: {
+        hasChanged: true,
+        info: "Every user can decide to provide a copy of their private key and passphrase by default during the setup, but they can opt in.",
+        value: "opt-in"
+      }
+    };
+    expect(propsUpdated.dialogContext.open).toHaveBeenCalledWith(ConfirmSaveAccountRecoverySettings, {accountRecovery});
+    expect(propsUpdated.administrationWorkspaceContext.onResetActionsSettings).toHaveBeenCalled();
   });
 });
